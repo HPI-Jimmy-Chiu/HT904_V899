@@ -104,3 +104,47 @@ jobs:
           } else {
             Write-Host "cppcheck not installed, skipping."
           }
+
+  # ¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w
+  # Job 3: LINE Notify ³qª¾
+  # ¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w
+  notify:
+    name: "LINE Notify"
+    runs-on: [self-hosted, windows, bcb6]
+    needs: [build, static-analysis]
+    if: always()
+
+    steps:
+      - name: Send LINE notification
+        shell: pwsh
+        env:
+          LINE_TOKEN: ${{ secrets.LINE_NOTIFY_TOKEN }}
+          BUILD_RESULT: ${{ needs.build.result }}
+          ANALYSIS_RESULT: ${{ needs.static-analysis.result }}
+        run: |
+          if (-not $env:LINE_TOKEN) {
+            Write-Host "LINE_NOTIFY_TOKEN not set, skipping notification."
+            exit 0
+          }
+
+          $icon = if ($env:BUILD_RESULT -eq 'success') { [char]0x2705 } else { [char]0x274C }
+          $commit = "${{ github.sha }}".Substring(0, 7)
+          $msg = @"
+
+          $icon HT9045 V899 Build
+          Build: $($env:BUILD_RESULT)
+          Analysis: $($env:ANALYSIS_RESULT)
+          Commit: $commit
+          By: ${{ github.actor }}
+          Msg: ${{ github.event.head_commit.message }}
+          "@
+
+          $headers = @{ Authorization = "Bearer $env:LINE_TOKEN" }
+          $body = @{ message = $msg }
+          try {
+            Invoke-RestMethod -Uri "https://notify-api.line.me/api/notify" `
+              -Method POST -Headers $headers -Body $body
+            Write-Host "LINE notification sent."
+          } catch {
+            Write-Warning "LINE notify failed: $_"
+          }
