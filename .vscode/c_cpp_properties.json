@@ -1,0 +1,49 @@
+{
+    "configurations": [
+        {
+            "name": "BCB6 - HT9045 V899",
+            "includePath": [
+                "${workspaceFolder}/HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/**",
+                "${workspaceFolder}/HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/ARMS",
+                "${workspaceFolder}/HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/ATC",
+                "${workspaceFolder}/HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/Motor",
+                "${workspaceFolder}/HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/TempCtrl",
+                "${workspaceFolder}/HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/Automation",
+                "${workspaceFolder}/HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/SECSGEM",
+                "${workspaceFolder}/HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/CanBus",
+                "${workspaceFolder}/HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/EtherCAT",
+                "${workspaceFolder}/HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/CCLink",
+                "${workspaceFolder}/HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/MyPLC",
+                "${workspaceFolder}/HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/Public",
+                "${workspaceFolder}/HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/BarCode",
+                "${workspaceFolder}/HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/Interface",
+                "${workspaceFolder}/HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/Monitor",
+                "${workspaceFolder}/HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/HThreadCtrl",
+                "${workspaceFolder}/HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/Mes",
+                "${workspaceFolder}/HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/AutoClean",
+                "${workspaceFolder}/HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/RotateKit",
+                "${workspaceFolder}/HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/VacuumUnit",
+                "${workspaceFolder}/HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/HotPlate",
+                "${workspaceFolder}/HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/AutoAlignment",
+                "${workspaceFolder}/HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/ProductionInfo",
+                "${workspaceFolder}/HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/SortingBinTray",
+                "${workspaceFolder}/HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/BinDisplay",
+                "${workspaceFolder}/HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/PMAlarm",
+                "${workspaceFolder}/HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/AutoTeach",
+                "C:/Program Files (x86)/Borland/CBuilder6/Include",
+                "C:/Program Files (x86)/Borland/CBuilder6/Include/Vcl"
+            ],
+            "defines": [
+                "_WIN32",
+                "__BORLANDC__=0x0560",
+                "_RTLDLL",
+                "__cplusplus"
+            ],
+            "intelliSenseMode": "windows-msvc-x86",
+            "cStandard": "c99",
+            "cppStandard": "c++03",
+            "compilerPath": ""
+        }
+    ],
+    "version": 4
+}

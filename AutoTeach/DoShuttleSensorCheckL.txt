@@ -1,0 +1,14 @@
+Input Shuttle Double Device Sensor確認及調整步驟:
+
+1.將IC放入SHUTTLE POCKET 取SENSOR設定數值
+
+2.IC置偏或DOUBLE IC時確認SENSOR數值需低於設定值亮綠燈(圖一)
+
+3.如IC置偏或DOUBLE IC SENSOR數值無法低於設定值請調整SENSOR高度位置(圖二)
+
+
+
+
+
+
+

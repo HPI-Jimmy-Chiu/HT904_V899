@@ -1,0 +1,90 @@
+# ============================================
+# HT9045 .gitignore
+# ============================================
+
+# --- BCB6 Build Artifacts ---
+*.obj
+*.res
+*.tds
+*.map
+*.mak
+*.~*
+*.csm
+*.#00
+*.identcache
+*.local
+*.dsk
+
+# --- Compiled Output (tracked separately) ---
+# EXE/            # Uncomment if you don't want EXE in repo
+
+# --- OS & IDE ---
+Thumbs.db
+desktop.ini
+*.lnk
+__history/
+
+# --- Python ---
+__pycache__/
+*.pyc
+.venv/
+
+# --- SVN metadata ---
+.svn/
+
+# --- Other version directories (only V899 is tracked) ---
+# These are explicitly excluded so only the working version is in Git
+HT9011UC_Code_V3.33.893.0_*/
+HT9011UC_Code_V3.33.894.5_*/
+HT9011UC_Code_V3.33.895.0_*/
+HT9011UC_Code_V3.33.896.0_*/
+HT9011UC_Code_V3.33.897.0_*/
+HT9011UC_Code_V3.33.898.0_*/
+HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260416/
+HT9011UC_Code_V3.33.901.0_*/
+HT9046LS_Code_*/
+
+# --- Backup & Temp ---
+backup/
+*.bak
+*.tmp
+*.log
+
+# --- Large binary files ---
+*.exe
+*.dll
+*.lib
+*.mdb
+*.DB
+*.DB3
+*.7z
+*.zip
+*.rar
+
+# --- Data & Runtime ---
+Obj/
+hangup/
+machinerecord/
+Error/
+data/
+Barcode_File/
+PMAlarm/
+dmc_data/
+SECS/GPM/
+MDB/
+dclusr50/
+hklib/
+EXE/
+elec/
+document/
+Initial/
+SICON/
+Tool/
+ABS-3372/
+BVL-3766/
+
+# --- Large binary/image/ini directories ---
+IMG/
+bmp/
+IniData/
+system/

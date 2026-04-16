@@ -1,0 +1,409 @@
+customer: Greatek
+handler_type: HT-9045/46 Series
+footer_rev: Rev.4
+entries:
+- rev: HT9045_3.33.899.6
+  date: 2026/04/15
+  engineer: JimmyChiu
+  changes:
+  - 加入透過Socket遠端控制(Auto Start, Clear Lot, Start Lot)
+- rev: HT9045_3.33.899.3
+  date: 2026/04/09
+  engineer: JimmyChiu
+  changes:
+  - 修正Loader空盤倒退導致夾盤異常
+- rev: HT9045_3.33.899.1
+  date: 2026/03/27
+  engineer: JimmyChiu
+  changes:
+  - 修正Hang up異常
+- rev: HT9045_3.33.898.0
+  date: 2026/03/19
+  engineer: JimmyChiu
+  changes:
+  - 修正短時間內暫停只需輸入一次
+  - Config內容無法顯示問題
+- rev: HT9045_3.33.896.3
+  date: 2026/03/04
+  engineer: JimmyChiu
+  changes:
+  - 修正3rd面板控制問題
+  - 修正訊息重複彈跳問題
+- rev: HT9045_3.33.896.2
+  date: 2026/02/23
+  engineer: JimmyChiu
+  changes:
+  - 修正Jam0304 異常位置訊息
+- rev: HT9045_3.33.893.6
+  date: 2026/01/05
+  engineer: JimmyChiu
+  changes:
+  - 修正Clean out後Inarm suck pick up error
+- rev: HT9045_3.33.892.0
+  date: 2025/12/04
+  engineer: JimmyChiu
+  changes:
+  - 修正Start lot失敗問題
+- rev: HT9045_3.33.889.2
+  date: 2025/12/01
+  engineer: JimmyChiu
+  changes:
+  - 修正Inarm/Outarm Speed同動問題
+- rev: HT9045_3.33.889.1
+  date: 2025/11/18
+  engineer: JimmyChiu
+  changes:
+  - 修正Inarm Offset問題
+- rev: HT9045_3.33.886.10
+  date: 2025/11/14
+  engineer: JimmyChiu
+  changes:
+  - 修正軟體開啟容易跳Monitor連線異常訊息
+  - 修正Start lot後Alarm無法解除
+- rev: HT9045_3.33.886.10
+  date: 2025/11/12
+  engineer: JimmyChiu
+  changes:
+  - 修正Summary報表Bin5無資料異常，Version 2
+- rev: HT9045_3.33.886.9
+  date: 2025/11/11
+  engineer: JimmyChiu
+  changes:
+  - 修正Summary報表Bin5無資料異常
+- rev: HT9045_3.33.886.4
+  date: 2025/10/29
+  engineer: JimmyChiu
+  changes:
+  - 加入Ctrl + Alt + P啟動機台動作
+- rev: HT9045_3.33.886.3
+  date: 2025/10/22
+  engineer: JimmyChiu
+  changes:
+  - Lot End 報表輸出問題解決，Handler Summary
+- rev: HT9045_3.33.886.1
+  date: 2025/10/15
+  engineer: JimmyChiu
+  changes:
+  - Lot Start資料載入問題解決
+  - Lot End 報表輸出問題解決
+- rev: HT9045_3.33.885.0
+  date: 2025/10/07
+  engineer: JimmyChiu
+  changes: []
+- rev: HT9045_3.32.812.62
+  date: 2025/10/07
+  engineer: JimmyChiu
+  changes:
+  - 升級版本
+  - 32 Sites關單Arm所有Sites檢測異常解除
+- rev: HT9045_3.32.812.61
+  date: 2025/07/31
+  engineer: JimmyChiu
+  changes:
+  - 修正Auto Download 時，保留Tray form原資料
+  - 加入Ctrl + Alt + F5啟動機台動作
+  - 更新CClink程式碼，觀察是否繼續發生斷線異常
+- rev: HT9045_3.32.812.60
+  date: 2025/05/26
+  engineer: JimmyChiu
+  changes:
+  - 修正Test Arm drop IC Error message
+- rev: HT9045_3.32.812.59
+  date: 2025/04/02
+  engineer: JimmyChiu
+  changes:
+  - 修正Insert OP輸入特殊字元導致顯示異常
+- rev: HT9045_3.32.812.57
+  date: 2024/12/10
+  engineer: JimmyChiu
+  changes:
+  - Fixed the issue causing multiple alarms to crash the thread.
+- rev: HT9045_3.32.812.56
+  date: 2024/11/07
+  engineer: JimmyChiu
+  changes:
+  - Add [A58] Use Auto Clean Multiple.
+- rev: HT9045_3.32.812.54
+  date: 2024/10/18
+  engineer: JimmyChiu
+  changes:
+  - Fixed for 1x4 mode In Arm X move to limit error when closed sites.
+- rev: HT9045_3.32.812.52
+  date: 2024/09/02
+  engineer: JimmyChiu
+  changes:
+  - 'Auto Download function: 修正讀檔異常'
+- rev: HT9045_3.32.812.51
+  date: 2024/08/27
+  engineer: JimmyChiu
+  changes:
+  - 'Auto Download function: 原參數由人修改，改成固定數值不能修改'
+  - 'Auto Download function: 異常時不暫定作業，增加Alarm紀錄如以下'
+  - LoadSiteMapFromServer
+  - LoadBinCategoryFromServer
+  - LoadHotPlateFormFromServer
+  - LoadTrayFormFormFromServer
+- rev: HT9045_3.32.812.48
+  date: 2024/08/13
+  engineer: JimmyChiu
+  changes:
+  - Auto set up file function update. 當工單相同時不進行Auto teach function
+  - New - Only Skip When Checking Out Suck IC Fall Down
+- rev: HT9045_3.32.812.46
+  date: 2024/08/01
+  engineer: JimmyChiu
+  changes:
+  - Running狀態顯示文字綠色，底部紫色
+  - Auto Clean – Use Hotplate 改成跟隨工作檔
+- rev: HT9045_3.32.812.44
+  date: 2024/07/11
+  engineer: JimmyChiu
+  changes:
+  - RTC Auto Calibration
+  - RTC Auto Teaching
+- rev: HT9045_3.32.812.42
+  date: 2024/05/30
+  engineer: JimmyChiu
+  changes:
+  - Continue Pass Socket次方值提供設定
+- rev: HT9045_3.32.812.41
+  date: 2024/05/28
+  engineer: JimmyChiu
+  changes:
+  - Add AOA function
+- rev: HT9045_3.32.812.33
+  date: 2024/04/01
+  engineer: JimmyChiu
+  changes:
+  - Color Sensor 功能修復，FT和RT模式判斷方式修正
+- rev: HT9045_3.32.812.32
+  date: 2024/03/22
+  engineer: JimmyChiu
+  changes:
+  - Color sensor-加入可開關Alarm Skip流程
+  - Site map資料修正，關Arm無顯示問題
+- rev: HT9045_3.32.812.29
+  date: 2024/03/12
+  engineer: JimmyChiu
+  changes:
+  - Add Auto2、Auto3強制手動補盤
+  - TestFlow 為F、Q、C開頭的類型，需要關閉Color sensor check流程
+- rev: HT9045_3.32.812.28
+  date: 2024/03/08
+  engineer: JimmyChiu
+  changes:
+  - Loader安裝Color sensor 馬達控制撰寫
+  - IPSC異常修正-關Arm2不顯示run site問題
+- rev: HT9045_3.32.812.27
+  date: 2024/03/07
+  engineer: JimmyChiu
+  changes:
+  - Loader安裝Color sensor –馬達控制撰寫
+- rev: HT9045_3.32.812.26
+  date: 2024/02/26
+  engineer: JimmyChiu
+  changes:
+  - PM Alarm增加警報-判斷超過高低極限值
+  - Loader 安裝Tray顏色識別檢測-安全防護
+- rev: HT9045_3.32.812.25
+  date: 2024/02/21
+  engineer: JimmyChiu
+  changes:
+  - 顯示IPSC控制狀態
+  - 關閉不正常關閉軟體後檢查IC是否在吸嘴上
+  - Loader 安裝Tray顏色識別檢測-Car底部測試
+- rev: HT9045_3.32.812.22
+  date: 2024/02/02
+  engineer: JimmyChiu
+  changes:
+  - 開啟Handler TCP/IP Server
+- rev: HT9045_3.32.812.21
+  date: 2024/01/31
+  engineer: JimmyChiu
+  changes:
+  - 關閉新版Tray Map報表格式，等待Server上線後開放
+- rev: HT9045_3.32.812.21_Beta
+  date: 2024/01/31
+  engineer: JimmyChiu
+  changes:
+  - 新版Tray Map報表格式，Tray End資料紀錄修復
+- rev: HT9045_3.32.812.20
+  date: 2024/01/24
+  engineer: JimmyChiu
+  changes:
+  - Tray Map報表格式修改
+  - 移除TrayEnd紀錄
+  - 修正Schedule Name
+  - 統一時間格式
+  - 修復IPSC上傳的資料有負值
+- rev: HT9045_3.32.812.17
+  date: 2024/01/17
+  engineer: JimmyChiu
+  changes:
+  - Add Config Item - Enable Read Binary File for Password
+- rev: HT9045_3.32.812.15
+  date: 2024/01/11
+  engineer: JimmyChiu
+  changes:
+  - TrayMap Tray Map報表格式修改，新增24欄欄位資料，紀錄細部異常Log，部位包含Loader、hotplate、In/Out shuttle、Index
+  - GTK_Control中info.txt檔案內容修正
+  - a. 原Start時建立資料，改成開關Sites時建立
+  - b. Sites資料由原位置資料改成Channel資料
+- rev: HT9045_3.32.812.10
+  date: 2023/12/14
+  engineer: JimmyChiu
+  changes:
+  - 首頁顯示FT/RT模式
+  - Color Sensor 開放Skip功能
+  - Color Sensor異常內容加入FT/RT訊息
+- rev: HT9045_3.32.812.7
+  date: 2023/12/11
+  engineer: JimmyChiu
+  changes:
+  - Color Sensor設定由Server Mo File決定
+  - Color Sensor異常僅能Retry
+- rev: HT9045_3.32.812.0
+  date: 2023/11/29
+  engineer: JimmyChiu
+  changes:
+  - 修正功能，運行16sites時，Inarm Z軸吸嘴回Home異常且shuttle只放滿左側，右側未放滿，整機回Home會Hand up
+  - 新增功能，GPIB加入功能，當通訊順序不符合流程機制(包括0x41、fullsites)，需跳出異常訊息
+- rev: HT9045_3.32.719.37
+  date: 2023/11/22
+  engineer: JimmyChiu
+  changes:
+  - 新增Loader Tray手動移除Alarm分開，拆分三種Alarm和說明，
+  - MES09220=Please remove the loader tray manually!(Check whether cookies on the
+    Tray)
+  - MES09221=Please remove the loader tray manually!(Check whether cookies on the
+    Tray and under the Tray)
+  - MES09222=Please remove the loader tray manually!(Check whether cookies under the
+    Tray)
+- rev: HT9045_3.32.719.36
+  date: 2023/11/20
+  engineer: JimmyChiu
+  changes:
+  - 新增Loader Tray手動移除Alarm分開，並增加檢查說明
+- rev: HT9045_3.32.719.35
+  date: 2023/11/02
+  engineer: JimmyChiu
+  changes:
+  - 雷射殘料檢加入Auto Skip功能
+- rev: HT9045_3.32.719.34
+  date: 2023/10/25
+  engineer: JimmyChiu
+  changes:
+  - Add Laser remain ic check Yield record
+  - 暫停和Alarm產生臨時報表之時間需要由原分鐘改成秒
+  - 修改Consecutive Failure Count最大值，O07功能開啟
+  - 密碼本由原LevelLogin.bin改成LevelLogin.txt，讓現場OP能修改內容
+- rev: HT9045_3.32.719.33
+  date: 2023/09/22
+  engineer: JimmyChiu
+  changes:
+  - 打開CCD殘料檢功能
+- rev: HT9045_3.32.719.32
+  date: 2023/09/19
+  engineer: JimmyChiu
+  changes:
+  - Close continue fail alarm in RT mode
+  - 在殘料檢查功能加入重複自動校正功能
+- rev: HT9045_3.32.719.31
+  date: 2023/08/24
+  engineer: JimmyChiu
+  changes:
+  - OEE 時間格式秒數修正
+- rev: HT9045_3.32.719.30
+  date: 2023/08/11
+  engineer: JimmyChiu
+  changes:
+  - Color Sensor新增Jam code JAM09200
+- rev: HT9045_3.32.719.29
+  date: 2023/08/04
+  engineer: JimmyChiu
+  changes:
+  - 回HOME時，檢查Adam 連線是否正常
+- rev: HT9045_3.32.719.28
+  date: 2023/07/28
+  engineer: JimmyChiu
+  changes:
+  - '功能N14-14 Use alarm control machine優化: 顯示Alarm訊息後延遲再次偵測'
+- rev: HT9045_3.32.719.27
+  date: 2023/07/21
+  engineer: JimmyChiu
+  changes:
+  - 新增功能:優化Config儲存方式
+  - 新增功能:Note、Message訊息在處理前上傳訊息
+  - Color Sensor功能，區分FT和RT模式下顏色辨識設定
+- rev: HT9045_3.32.719.26
+  date: 2023/07/18
+  engineer: JimmyChiu
+  changes:
+  - Config雲端存讀功能新增開關
+  - SafeLock按鍵功能修正，功能啟動於面板亮燈且畫面狀態改變
+- rev: HT9045_3.32.71924
+  date: 2023/07/11
+  engineer: JimmyChiu
+  changes:
+  - 避免GTK_Control同時讀取檔案造成異常
+  - 新增IPSC功能，ShowMessageAndStop、DoOnecycle、DoPause、DoStart
+  - AutoSiteMap功能導入，加入勾選觸發條件，
+  - Lot start
+  - Initial Start
+  - Onecycle
+  - Pause
+  - Maintain Start
+- rev: HT9045_3.32.71923
+  date: 2023/06/15
+  engineer: JimmyChiu
+  changes:
+  - '修改功能: Config update from server 異常修復，更正上傳失敗，showmodel回傳值異常，改用一般變數判斷'
+  - '初始化: config update from server import/export預設路徑'
+- rev: HT9045_3.32.71921
+  date: 2023/06/12
+  engineer: JimmyChiu
+  changes:
+  - '修改功能: 當Index掉料時，Inarm移開讓工程能開門處理異常。IniConfig.bIndexJamInArmAway                =true;'
+- rev: HT9045_3.32.71920
+  date: 2023/06/08
+  engineer: JimmyChiu
+  changes:
+  - 新增訊息:當進行Index Check時，需要紀錄開始時間和結束時間，並上傳Server
+  - 新增功能:溫度補償參數增加一組且儲存於工單資料夾中
+  - 移除功能
+  - 原Config A57-2 SaveTemperatureByMachine已移除，因加入項目2. 後有邏輯衝突
+  - 原Config A57-3 SaveOffsetByMachine已移除，改用E45使用
+- rev: HT9045_3.32.71920
+  date: 2023/05/03
+  engineer: JimmyChiu
+  changes:
+  - AutoClean設定畫面拉大避免Item過擠
+  - FTP Download不分檔案大小寫
+- rev: HT9045_3.32.71919
+  date: 2023/04/12
+  engineer: JimmyChiu
+  changes:
+  - PMAlarm溫度補償無填值導致異常修復
+- rev: HT9045_3.32.71918
+  date: 2023/04/10
+  engineer: JimmyChiu
+  changes:
+  - 新增N14-22 Config update from server。重新開啟軟體時執行。排除更新B1、B2、E30
+  - 新增2x8模式，Onecycle時，Shuttle1 In/out無料且位於左側，Shuttle2 In/out有料且位於左側，Hang up，已加入排料機制
+- rev: HT9045_3.32.71917
+  date: 2023/03/23
+  engineer: JimmyChiu
+  changes:
+  - 開啟功能或修改。
+  - A. 特定error code by supervisor level解除，已現場教育訓練OK
+  - B. continus fail時自動執行one cycle，已設定Config並教育訓練OK
+  - C. index pickup error 執行skip時自動執行one cycle動作，已開啟功能並驗證OK
+  - D. index pickup error 執行skip& drop error at shuttle,此時吸嘴及socket會再check是否殘留ic，已開啟功能並驗證OK
+  - E. index arm如確認到socket有ic index arm會停在socket上keep現狀需權限解除，已開啟功能並驗證OK
+  - F. shuttle initial sensor功能失效偵測，已開啟功能並驗證OK
+  - G. 修正DUAL SITE時HANDLER產生 INFO.TXT內容(當DUAL SITE時原只會拋出SITE1,修正為SITE1,2)，現場測試無此問題，後續追蹤是否發生
+- rev: HT9045_3.32.7198
+  date: 2022/12/26
+  engineer: JimmyChiu
+  changes:
+  - SETUP FILE AUTO DOWN LOAD功能修改。

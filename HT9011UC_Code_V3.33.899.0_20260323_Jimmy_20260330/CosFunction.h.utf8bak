@@ -1,0 +1,477 @@
+#ifndef CosFunctionH
+#define CosFunctionH
+//-------------------------------------------------------------------------
+// HT9045_COUSTOMER_FUNCTION
+// �uFor�Ȥ�}�Ҫ��\��ﶵ
+//-------------------------------------------------------------------------
+typedef struct
+{
+    bool bOneCycleCanChangeArm;                                                 //ChungHung 20111108 Amb/Hot Mode OneCycle Can Change Arm
+    bool bOffLineBin;                                                           //Hung 20111110 �s�WOffline Bin
+    bool bFullTestBeforeContactHeight;                                          //ChungHung 20130122 add for SCK Contact Height�e��FullView
+    bool bEnable6Site;                                                          //ChungHung 20140115 add for 2x3_6
+    bool bEnableOctal_12Kit;                                                    //ChungHung 20140508 add �ϥ�12 layout kit Octal Shutle kit
+    bool bEnable12SiteUse16SLK;                                                 //Steven 20240807 : 12Site�ϥ�16Site Kit
+    bool bShowLastShuttleHigh;                                                  //ChungHung 20140516 add Show �W��Shuttle Auto Height ����
+    bool bChamberModeEvenBlowNeedWaitTime;                                      //ChungHung 20140519 add Chamber Mode Even Blow need Wait Initial Wait time in Temp_Set
+    bool bLoseDeviceOutShuttleServoOff;                                         //ChungHung 20140522 add OutShuttle lose devices can servo off
+    bool bEnableAfterTestedDelay;                                               //ChungHung 20140730 add for ATK function after tested delay time
+    bool bContinueAutoSkipAutoTrayEnd;                                          //ChungHung 20141014 add for KYEC AutoRetest
+    bool bIndexJamInArmMoveSafePostionByAutoClaen;                              //ChungHung 20150129 add when Index Jam SCK want to Inarm move to safe postion
+    bool bBuilderImportSingleFolder;                                            //ChungHung 20150414 add for TSMC
+//    bool bSendJamCodeByTcpIp;                                                 //ChungHung 20150518 add for SCK Send JamCode By TcpIp    //Steven 20161201 : Mark of SCK no use TCP IP
+    bool bOneCycleCanChangeContinuesFailBin;                                    //ChungHung 20150519 add Continues Failure BIN can select after "OneCycle".
+    bool bAutoSetContFailAfterInitialStart;                                     //ChungHung 20150519 add Auto Set ContFail After InitialStart.
+    bool bManualProcess;                                                        //ChungHung 20150526 add for QualComm US
+    bool bTopPogoPinMode;                                                       //ChungHung 20150528 add for ���� _8Site1x4
+    bool bEnableSoftWareControlButton;                                          //ChungHung 20150609 add only for TSMC
+    bool bContactHaveOffset;                                                    //ChungHung 20140327 add by Customer �j��Contact Offset��0
+
+    bool bUseLoadCellOffsetByHeater;                                            //2014-06-26    Dell    for TSMC ����Load cell offset
+
+    bool bIndexZDownToAboveSocket;                                              //Eliot 2015-02-25 Initial Check�ɤ��u�u�U����Above Socket Offset��m,�קK���aSocket pogoPin
+
+    bool bTTLCanUse8Site;                                                       //Alick 20161011 (Steven) : TTL�䴩8Site
+//    bool bAutoCleanUse2RowBy46LS;                                             //Alick 20170223 (wei) add 9046LS�i�}�����Ƨl�L��AutoClean
+
+    bool bJAM0301NeedOpenChamberDoor;                                           //Steven : JAM0301 & JAM0302�ݭn�}��Chamber��10��
+    bool bJAM0303NeedOpenChamberDoor;                                           //Steven : JAM0303 & JAM0403�ݭn�}��Chamber��10��
+    bool bEnableAutoSpeed;                                                      //Steven 20110526 : �}��Auto Speed�\��
+    bool bStopMustTestTimeOut;                                                  //Steven 20110920 : �Ȱ��ɤ]�n�p��Tester Time Out
+    bool bLastSetInSetUpFile;                                                   //Steven 20111019 : ��LastSet�ﶵ�s�bSet Up File    //Steven 20161211 : bLastSetInSetUpFile����CosFunction
+//    bool bEnableTimeOutCanSkip;                                               //Steven 20111220 : ����TimeOut�i�HSkip
+    bool bAutoKTemp;                                                            //Steven 20120719 : �۰�K��
+    bool bEnable12Site;                                                         //Steven 20120813 : �䴩12Site�Ҧ�
+    bool bEnable2x1Site;                                                        //Steven 20120814 : �䴩2x1Site�Ҧ�
+    bool bMES0101CanCleanOut;                                                   //Steven 20120830 : Loader�l�����`�i�H��CleanOut
+    bool bOnlyUseContactModeDiffSpeed;                                          //Steven 20131101 : �j��ϥΨ�q�tContact
+    bool bFixedDropSpeed;                                                       //Steven 20131101 : �ϥΩT�w��Drop�t��
+    int  iFixedDropSpeed;                                                       //Steven 20131101 : �ϥΩT�w��Drop�t��
+    bool bLimitMaxSpeed;                                                        //Steven 20131101 : ����̰��t��
+    int  iLimitMaxSpeed;                                                        //Steven 20131101 : ����̰��t��
+    bool bPiggyBackForASE;                                                      //Steven 20131101 : ����ASE���nContinual Pass Bin(Total )�� Continual Loader���
+    bool bPiggyBackShowMainForm;                                                //Steven 20131101 : PiggyBack�ƶq��F��,��ܦbMain Form�W��
+    bool bAutoCleanOnHotPlate;                                                  //Steven 20131101 : �NClean Pad��bHotPlate�W,�]�N�O������
+    double dLimitMinDropOffset;                                                 //Steven 20131101 : ����̤p�Z��
+    bool bEnableOctal_16Kit;                                                    //Steven 20140312 : 8Site�ϥ�16Site Kit
+    bool bContactShowOffset;                                                    //Steven 20140409 : ���~�n�DContact�e�����Offset
+    bool bShowLastContactHigh;                                                  //Steven 20140409 : ��ܤ��e��Contact����
+    bool bHaveIndexContactDelay;                                                //Steven 20140519 : [D29] Index�U����hDelay 0.4�� (For SPIL Low Yield)
+    bool bAfterRTChangeToInitialStart;                                          //Steven 20140521 : RT��۰ʤ��^FT
+    bool bRTCFullViewErrorOnlyRetry;                                            //Steven 20140529
+    bool bTechComUseComboBox;                                                   //Steven 20140530 : �ϥαK�X����,�ΤU�Կ���ϥΪ�
+    bool bLockF06ByFile;                                                        //Steven 20140627 : Add for ASE-CL
+    bool bLockD41ByFile;                                                        //Steven 20140627 : Add for ASE-CL
+    bool bUseNew12Site;                                                         //Steven 20140716
+    bool bUseLowYieldAlarmByBin;                                                //Steven 20140828 : By Bin Yield Monitor
+    bool bYieldAlarmClearAllCount;                                              //Steven 20140830 : Yield������Alarm, �n�M��������Ignore��Count����
+    bool bTemperatureMax130;                                                    //Steven 20140911 : Xilinx�̰��u�n130��
+    bool bArm2ForFingerPrintTest;                                               //Steven 20140922 : Arm2���@��������  (Arm 1�n�����դ@��,�~��Arm2��)
+    bool bUseIndividulTempSet;                                                  //Steven 20140924 : �U�ӥ[���ϿW�ߦ��ۤv���]�w��
+    bool bRCMDStart;                                                            //Steven 20141006 : SECS GEM�ϥ�Remote Start�\��
+    bool bEnable_SECS_GEM;                                                      //Steven 20141008 : By�Ȥ�ҥ�SECS GEM�\��
+    bool bIndexAreaOnlyCanUseSkip;                                              //Steven 20141105 : Index�����Ҧ����`���u���Skip
+    bool bYieldControlUseContactCount;                                          //Steven 20141212 : Yield����ϥ�Contact Count
+    bool bOLPFunction;                                                          //Steven 20141229 : OLP�\��
+    bool bOneCycleCanChangeBin;                                                 //Steven 20150304 : ATK Young Jeon keep asking the Continues Failure BIN can select after "OneCycle".
+    bool bBin1CanNotInFix;                                                      //Steven 20150427 : Bin1������Fix�L
+    bool bAmbientNoShowTemp;                                                    //Steven 20150518 : Ĭ�{���~�n�D�`�Ť���ܷū�
+    bool b12SiteCloseSiteRun2x4;                                                //Steven 20150721 : 12Site��Site�]2x4 Mode
+    bool b16SiteCloseSiteRun2x4;                                                //Steven 20191124 : 16Site��Site�]2x4 Mode
+    bool bUseGPIB_V108Command;                                                  //Steven 20150901 : For GPIB V1.08 Command
+    bool bManualSortMode;                                                       //Steven 20150915 : For TSMC ��ʾ�L�\��
+    bool bHiSiliconFunction;                                                    //Steven 20151029 : ����M�Υ\��
+    bool bOutShuttleSensorCanNotDisable;                                        //Steven 20151202 : Out Shuttle Sensor���������ˬd
+    bool bHaveFIFOMode;                                                         //Steven 20160303 : FIFO Mode
+    bool bKnockerSetBySetupFile;                                                //Steven 20160329 : �V���T���Ѽƽվ�i�f�t�u�@�ɳB�z
+    bool bUseERMS;                                                              //Steven 20160711 : �ϥζi����RMS
+    bool bUseSCKART;                                                            //Steven 20161201 : For SCK 93K ART
+    bool bUseLoginDatToSetLevel;                                                //Steven 20170301 (wei) : �ϥ�Login.dat���K�X��
+    bool bLowYieldDoOneCycle;                                                   //Steven 20170308 (wei) : �}�v����������One Cycle
+    bool bUseInitialDelayAsSoakTime;                                            //Steven 20170329 (Wei) : �ϥ�initial delay�� Soak time
+    bool bUse32ChanelSiteMap;                                                   //Steven 20170530 (wei) : Use 32CH site map
+    bool bUseDynamicKitDiameter;                                                //Steven 20170605 (wei) : �i�H�۩w�qKit���|
+    bool b2x4SupportCenterPitch;                                                //Steven 20170706 (wei) : 2x4������Pitch���P for SCC
+    bool bLowYieldAutoSiteOff;                                                  //Steven 20170905 (wei) : Low Yield Auto Site Off for Ambient
+    bool bAmkorFunction;                                                        //Steven 20171017 (wei) : Functions for Amkor Group
+
+    bool bAutoCleanShuttleDisable;                                              //jou 2013-02-27 Auto Clean disable shuttle sensor detect
+    bool bSecurityHave5Level;                                                   //jou 2014-06-19 Security Have 5 Level
+    bool bRTCAutoModelVerify;                                                   //jou 2014-06-24 RTC �۰ʶi��Model����
+    bool bSiteCmpYield;                                                         //jou 2014-08-14 Site Compare Low Yield alarm
+    bool bFuncStateStopFirtDelay;                                               //jou 2014-09-03 Function State Stop Firt Initital Delay Time
+    bool bConAlarmNeedKeyInPassword;                                            //jou 2014-09-04 Continuous Same Alarm N time Need KeyIn Password
+    bool bConAlarmInTimeLevelUp;                                                //Steven 20210127 : �h���n�D�b���ɶ����ۦPAlarm�o�ͦh��,���@�Ѱ�alarm�v��
+    bool bShowHandlerStopTime;                                                  //jou 2014-09-21 Show Handler Stop Time
+    bool bTesterLowYieldOneCycle;                                               //jou 2014-09-23 Tester Low Yield Handler need One Cycle & Alarm
+    bool bConFailFoolProofing;                                                  //jou 2014-09-28 continue fail ���b����,�`�}���}�Ҭ�On��,BIN�O���Ŀ����continue fail alarm
+    bool bQAmodeSupplyTrayDir;                                                  //jou 2014-10-24 QA mode �W�[�䴩�lTray��V
+    bool bTempLess30degShowLight;                                               //jou 2014-12-19 Temperature Less 30 deg. Show Light
+    bool bInitTempOffsetByWorkFile;                                             //jou 2015-06-13 Initial Temperture Offset by WorkFile
+    bool bAutoCleanAutoSelIndexArm;                                             //jou 2015-08-12 Auto Clean Auto Select Index Arm
+    bool bAutoRetestGPIBmode;                                                   //jou 2015-10-02 Auto Retest GPIB mode
+    bool bDownloadRecipeLevelMode;                                              //jou 2016-01-06 download recipe �W�[�v���Ҧ����
+    bool bRTCalarmUnload;                                                       //jou 20170210 (Steven) : RTC alarm image unload
+    bool bInOutArmUseBackRowSuck;                                               //jou 20161122 (Steven) In & Out arm use back row suck
+
+    bool bStartESDAutoDecayFunction;                                            //Ifor 20150924 :Start ESD Auto Decay Test Function
+    bool bESDAutoDecayTeachFunction;                                            //Ifor 20151222 :�s�WCoustomer ESD Auto Decay Teach Function
+    bool bUseLogUploadToFTPFunction;                                            //Ifor 20160304 :�s�WLog Up to FTP Function
+    bool bUse1_16KgEPForm;                                                      //Ifor 20160712 add Use 1~16 Kg EP��Ӫ��\��
+    bool bUsePEModelFunction;                                                   //Ifor 20160822 Use PE Model Function (PE �u�{�Ҧ�)
+    bool bUseFixTryCheckRemainingAmount;                                        //Ifor 20160829 add Use Fix Try Check Remaining Amount
+//    bool bUseLoaderTryFeedContinueRun;                                        //Ifor 20160829 add Use Loader Try Feed Continue Run
+    bool bUseMonitorView;                                                       //Ifor 20160930 add MonitorView CosFunction
+    bool bUseFix3FullTray;                                                      //Ifor 20161121 add Fix3 Full Tray �\��
+    bool bUseAlarmUnlockPassWord;                                               //Ifor 20170214 (wei) add �Ѱ�Alarm �ݭn�W�߱K�X
+    bool bUseARTSortCount;                                                      //Ifor 20170315 (wei) add �s�W�ϥ�ART Sort Count �p�ƥ\��
+    bool bUseEmptyColorTrayPreAlarm;                                            //Ifor 20170315 (wei) add �s�WEmpty/Color Tray Pre Alarm �\��
+    bool bUseAutoTrayPreAlarm;                                                  //Ifor 20170315 (wei) add �s�WAuto Tray Pre Alarm �\��
+    bool bUseMRTMode;                                                           //Ifor 20170316 (wei) add KYEC MRT Mode
+    bool bUseAutoBackUpSetupFile;                                               //Ifor 20170620 (wei) add Auto BackUp Setup File & Last Data
+    bool bUseARMSFunction;                                                      //Ifor 20170621 (wei) add ARMS Function
+    bool bHisiLogUploadNetwork;                                                 //Ifor 20170913 (wei) add ���� Log �W�Ǧܺ����Ϻ�
+    bool bAutoSiteMappingUseHotPlate;                                           //Ifor 20170919 (wei) : add Auto Site Mapping Hotplate Mode
+    bool bUseAuto1OnlyBin1;                                                     //Ifor 20171018 (wei) : Only Bin 1 is allowed to set to Auto 1
+    bool bUseDefineAutoCleanOffset;                                             //Ifor 20181106 add �s�WAuto Clean Offset By ����
+    bool bUse12SiteAutoCleanFixedPosition;                                      //Ifor 20181222 add �s�WAuto Clean 12 site�����m�T�w
+    bool bUseAutoCleanCloseSiteAlsoDo;                                          //Ifor 20181222 add �s�WAuto Clean Close Site �@�˰���
+    bool bCanChangeAutoCleanCount;                                              //Ifor 20171024 (wei) : add �i���Auto Clean �p��
+    bool bFTPDownLoadSiteBySetupFile;                                           //Ifor 20171123 (Steven) : add FTP DownLoad Site By SetupFile
+    bool bAutoSiteMappingUseFailBinSetting;                                     //Ifor 20171128 (Steven) : add Auto Site Mapping Use Fail Bin Setting
+    bool bUsePassBinOnlyCanSetOneBin;                                           //Ifor 20171213 (Steven) : Auto Tray �]�wPass�ɶȥi�]�w�@��Bin
+    bool bUseFTPDownloadDataCheck;                                              //Ifor 20180125 (Steven) : Use FTP Download Data Check
+    bool bFTPDownLoadTempModeBySetupFile;                                       //Ifor 20180212 (Steven) : add FTP DownLoad Temp Mode By SetupFile
+    bool bFTPDataTrayFeedAutoUpdata;                                            //Ifor 20181214 (Steven) : add Tray Feed ��۰ʤW�Ǯ����ɮצ�FTP
+    bool bUseOneByOneIndexCheck;                                                //Ifor 20180322 : add Use One By One Index Check
+    bool bUseYieldControlFunction;                                              //Ifor 20180731 : add Use Yield Control Function
+    bool bUseOpenCloseSiteMapAtAnyTime;                                         //Ifor 20190308 add Open/Close Site Mapping Function at Any Time
+    bool bUseLocalRecipeOffset;                                                 //Ifor 20181211 : add Use Local Recipe Offset
+    bool bATC32UseTJMode;                                                       //Ifor 20190121 : add ATC32 Use TJ Mode
+    bool bATCUseTempAdjustment;                                                 //Ifor 20190215 : add ATC �ϥ� �T�I�ե��\��
+    bool bATCUsePackageOffset;                                                  //Ifor 20190215 : add ATC �ϥ� Package Offset �\��
+    bool bUseATCTJControlMode;                                                  //Ifor 20190328 : add TJ Temp Over Range
+    bool bUseHandShakeCommunication;                                            //Ifor 20190225 :add Bar Code Use HandShake Communication
+    bool bSortingBinTraywhenCleanOut;                                           //JerryYang 20151001 : ��L�\��
+    bool bSortingBinTrayWhenTrayFeed;                                           //JerryYang 20170911 (Steven) : ��L�\��,����ɾ���clean out���tray feed�e
+    bool bResetModeIncludeCleanOut;                                             //JerryYang 20151007 : ResetMode�i��OneCycle��CleanOut
+    bool bInitTestHeadByTestSiteUse;                                            //JerryYang 20151016 : TestSuck�ˬd ��Site�ɴN���}�u�Ű���
+    bool bRecipeCheck;                                                          //JerryYang 20151028 add for Amkor �p�Gdownload���u�@�ɤ��@��,�n�D��Height Calibration��~��start
+    bool bForceSetAuto3Fix3SideHasNullIC;                                       //JerryYang 20151120 add for �ʤ�Xilinx, IC �j�� 40x40mm�ɷ|�V��,Auto3�MFix3�̥k��n�]�� HasNullIC
+    bool bNotClearAllHotBuffer;                                                 //JerryYang 20151226 For ���� ��GPIB�]�w���ū׫�A�|���W�A�ݤ@���ūסC�ҥH���M���Ȧs�ū�
+    bool bLockD42ByFile;                                                        //JerryYang 20160220 add for Amkor-Philippine
+    bool bLockD43ByFile;                                                        //JerryYang 20160220 add for Amkor-Philippine
+    bool bLockD44ByFile;                                                        //JerryYang 20160220 add for Amkor-Philippine
+    bool bLockRTC;                                                              //JerryYang 20160220 add for Amkor-Philippine
+    bool bPickupErrorAtLoaderNeedOpenDoor;                                      //JerryYang 20160220 add for Amkor-Philippine,In ARM��Loader�l�����`�n�}���T�{��~���~��
+    bool bLockF19AlwaysOn;                                                      //JerryYang 20160224  add for Amkor-Philippine
+    bool bOutShuttleLoseICNeedHome;                                             //JerryYang 20160224 add for Amkor-Philippine, OutShuttle lose IC�n�^Home ���F�ˬdindex arm�W���ݮ�
+    bool bContactTestVacOffByCloseSite;                                         //JerryYang 20160328 Contact test��auto height��,��site���������l��IC
+    bool bFullTestBeforeAutoClean;                                              //JerryYang 20160331 Auto Clean���e�n����Full view check
+    bool bYieldAlmNeedOneCycle;                                                 //JerryYang 20160407 Yield����Alarm�n������one cycle�~show alarm
+    bool bContinueFailNeedAlarmDirectly;                                        //Steven 20230831 : ���ϥ�bYieldAlmNeedOneCycle, �s��Fail�n����Alarm
+    bool bG09NeedPasswordWhenEditSiteMap;                                       //JerryYang 20160425 �ק�Site map�ݭn�K�X
+    bool bLockP24ByFile;                                                        //JerryYang 20160425 Lock P24
+    bool bYieldAlarmUseDouble;                                                  //JerryYang 20160615 Yield����limit�i�H�]�w��p���I
+    bool bRTCAlarmSetIndexToErrBin;                                             //JerryYang 20160712 for �O��,�o��RTC Alarm�ɧ�Index�W�Ҧ�IC�]��Errorbin
+    bool bShowAlarmIfCCLinkConnectFail;                                         //JerryYang 20160729 for ���~, CC-link�s�u���`�nShow alarm
+    bool bAutoFullDoNotStopImmediately;                                         //JerryYang 20160810 ��Auto��tray��,�n��show message��s�B�~��Ͳ�,���n���W����show alrm
+    bool bIndexArmVacOffErrNeedPiggyBack;                                       //JerryYang 20160815 for ���~, Index arm �o��Vaccum off error�n��piggy back
+//    bool bRotateDetectErrNeedShake;                                           //JerryYang 20160825 Rotate sensor�������`,�n���յ۱���T���A��alarm      //Steven 20161116 : Mark
+    bool bAllSiteSameFailBinShowAlarm;                                          //JerryYang 20160913 ���~�n�D�����յ��G���Ҧ�site��bin���O�ҳ]�w�@�˪�fail bin�n��alarm
+    bool bPurgeBeforePickShuttle;                                               //JerryYang 20160906 PurgeBeforePickShuttle
+    bool bBeforeAutoCleanOnlyUseRTC;                                            //JerryYang 20161216 auto clean���e��u�aRTC���ˬdsocket,����index�U����socket�l�u��
+    bool bAfterAutoCleanNoIndexCheck;                                           //Steven 20191212 : �B���w��Auto Clean�u�n�@�@��Index Check
+    bool bIndexCheckCanTurnOff;                                                 //Isaac 20211019 : �i��ܰ�index check���ɾ�
+    bool bOPCanPressStepAndTStart;                                              //JerryYang 20170417 (wei) OP�v���]���Step��T.Start
+    bool bSuckDevicesDuringTest;                                                //JerryYang 20170522 drop contact�אּ��l���
+    bool bFTRTDifferentDutOnOff;                                                //JerryYang 20170516 (wei) JSCC�n�DFT RT�n�����P���}��site
+    bool bIndexPickErrSkipNeedCheckVac;                                         //JerryYang 20170610 (wei) JSCC�n�Dindex pick up error �ݦA�C�t�U���l�@��
+    bool bOutShtLoseICSetErrUntilOneCycle;                                      //JerryYang 20170610 (wei) JSCC�n�DOut shuttle lose IC�ݦ۰�one cycle,�ñN������site�]��Error bin
+    bool bBySiteByBinPercentCompare;                                            //JerryYang 20170712 (Steven) by site by bin compare percent
+    bool bNewAutoTrayDetect;                                                    //JerryYang 20170822 (Steven)���Auto�ϰ���tray�L�ɾ� �קKout arm�l�L�U���ɳy���~�P
+//    bool bSaveAutoCleanCnt;                                                   //JerryYang 20171031 (wei) �x�sauto clean count�p�� //Steven 20180525 : �x�sauto clean count�p�ƥ\��אּ�j��}��
+    bool bUniversalKit;                                                         //JerryYang 20171102 (wei) UniversalKit�令�Ȥ�\��
+    bool bIndexProtect;                                                         //JerryYang 20180410 (jou) : �[�Jindex arm���ʫe��m�O�@
+    bool bPopAutoClean;                                                         //JerryYang 20190918 add pop auto clean
+    bool bSteupTeach;                                                           //JerryYang 20180921 Setup Teach�\��
+    bool bSortingBy2DList;                                                      //JerryYang 20190313 : 2D sorting
+//    bool bLowYieldAutoClean;                                                  //wei 20141201 Low Yield Auto Clean
+    bool bEPUseNSSLK;                                                           //wei 20150303   �ʤ�NS�B���Y
+    bool bDisableRTBinSet;                                                      //wei 20150622 ����ܳ]�wRT Bin set
+    bool bYieldAlarmNoWait1Min;                                                 //wei 20150820  Yield Alarm No Wait 1Min
+    bool bSECS_GEM_OneCycle;                                                    //wei 20150824 Secs_Gem �_�uOnecycle
+    bool bTrayOCR;                                                              //wei 20150926 TSMC Tray Arm OCR
+    bool bLowYeildByTotal;                                                      //wei 20151116 Low Yield By Total
+    bool bUseTrayUpDownSet;                                                     //wei 20160224 TSMC FIX UPDOWN      //�o���ܼƧ��ܷ|�v�T��BIN, �����ɭn�����Ȥ�`�N!!!
+    bool bUsePMAlarmFunction;                                                   //wei 20160225 PMAlarmFunction
+    bool bContactTestWaitSoakTime;                                              //wei 20160329 Contact Test Wait SoakTime
+    bool bYieldAlarm4;                                                          //wei 20160406 Yield Alarm4
+    bool bYieldAlarm5;                                                          //Sam 20171213 (Steven) : �W�ר}�v�ʱ�
+    bool bCheckInOutArmZHomeSensor;                                             //Frank 20160612 add Check In/Out Arm Home Sensor Function
+    bool bEnableBarcodeReader;                                                  //Frank 20150909 : CC_AMKOR �ݭn�ϥ�BarcodeReaderŪ���u�@�� //Ifor 20161213 IniConfig -> CosFunction
+
+    bool bCancelErrorBin;                                                       //kevin 20160706 ���� ERROR BIN�]�w
+    bool bHWBinBox;                                                             //kevin 20160819 ��7�� HARD WARE BIN support Bin Box
+    bool bSetupStep;                                                            //wei 20180614 TSMC Setup Step
+
+//    bool bResetFirstTestToErr;                                                //jou 20180103 : Reset�Ĥ@�Ӵ��է���IC�n���Error bin
+    bool bTempHeaterOkShowLight;                                                //jou 20180529 : Temperature Heater Ok Show Light
+
+    bool bUseLotIDWithoutSECS;                                                  //RogerYang 20170327 (Steven) �}��LotID���S���ϥ�SECS/GEM
+
+    bool bInShuttleDetectByLatch;                                               //Isaac 201704:  //Isaac 20170418 ��Y Latch�˴�Inshuttle���LIC
+    bool bRecipeParameterDefault;                                               //Isaac 20170527 defalut�Ȥ���\��
+    bool bRecipeParameterDefaultLog;                                            //Sam 20201209 : Default Recipe ChangeLog
+    bool bProgramStartOnLine;                                                   //Sam 20210423 : �{���}�Үɤ����� OnLine/Real
+    bool bPiggybackFunctionByHandler;                                           //Isaac 20170712 (wei) :Piggyback function By Handlder(save file to config.ini)
+    bool bEnableHandlerResultServer;                                            //Isaac 20170613 (wei) TCP/IP
+    int iHandlerCommandServerPort;                                              //Isaac 20170613 (wei) TCP/IP
+    int iHandlerResultServerPort;                                               //Isaac 20170613 (wei) TCP/IP
+    bool bFTBin2RTBinNoYield;                                                   //jou 20170925 (wei) : FT/RT Bin�]�w����,yield control�i�]�w.
+    bool bSetupFileNameControlByLevel;                                          //jou 20171011 (wei) : bSetupFileName Control By Level
+    bool bByBinAlarmFromYieldForm;                                              //jou 20180113 (Steven) : By Site By Bin Percent Compare From Yield form
+    bool bOEEFunction;                                                          //Steven 20180417 (Jou) : OEE�\��
+    bool bRemoteLotStart;                                                       //AI(ht9045-v899) 20260331: Greatek TCP Remote Start Lot (HTSET 720)
+//    bool bSLTReportFunction;                                                  //Steven 20180420 : SLT�����\��
+    bool bRTC_ROICount;                                                         //jou 20171201 (Steven) : RTC ROI �T�{�ƶq�O�_���T
+    bool bStatisticsJamCount;                                                   //jou 20171201 (Steven) : �s�W�έpjam code alarm����,�F��]�w�ƶq�ᴣ���@���v���~��Ѷ}alarm
+//    bool bIndexPickErrNeedPiggyBack;                                          //jou 20171211 (Steven) : After index pick up error, device go to Error bin ,follow by Index check or piggy back check
+    bool bIndexPickErrSkipBlowAirTime;                                          //Frank 20171213 (Steven) : Index Pick Err In Shuttle Skip and Blow Air
+    bool bInOutArmZCalibration;                                                 //Frank 20171213 (Steven) : In/OutArmZCalibration
+    bool bColorSensorUseCCLink;                                                 //wei 20180409 color sensor
+    bool bRotateNoUseFix1;                                                      //Frank 20170531 (Steven) add Open Rotate�����Fix1
+    bool bYieldControlUseEACount;                                               //wei 20180606 Yield����ϥ�EA Count
+    bool IntervalYieldCount;                                                    //wei 20180606 Interval Low Yield By Site
+    bool bTestTimeOutOnlyShowSkip;                                              //Steven 20180627 : Time out�w�]�u���SKIP
+    bool bTestTimeOutShowSkipAndHome;                                           //JerryYang 20231208
+    bool bIncludeMTBA;                                                          //JerryYang 20180619 : �s�W�i�۩w�qJam code�O�_�C�JMTBA�p��
+    bool bAfterInitialDelayUseOtherArm;                                         //Jerryyang 20180607 : Initail delay�ᤣ��������,���Υt�~�@��arm�U�h��,�ηN�O�קKdevice�ū׳Qsocket�a���᪽�����ծe��fail
+    bool bTTLUseUSec;                                                           //Steven 20180808 (wei) : TTL���ɶ����令microsecond
+    bool bCCLinkValueSaveFile;                                                  //wei 20180622 (Steven) : CCLink Value Save File
+    bool bYPitchNotUseSearchLastMode;                                           //JerryYang 20181112 (Steven) : ATP�n�D�ק�unloader�\��覡�A�ɶq���n���Ů�
+    bool bDLLCommands;                                                          //JerryYang 20181126 (Steven) : support Epson DLL function
+    bool bFTPFunction;                                                          //FTP�\��   //Steven 20181224 : ����m
+    bool bGPIBLotEnd;                                                           //Sam 20181030 : �z�L GPIB �e LotEnd �����վ��C
+    bool bSiteStopVisblieSpecialColor;                                          //Sam 20181112 : �}�� Site �S�N Site ����ɥH�S�O�C����ܡC
+    bool bUseOldATCTempOffset;                                                  //JerryYang 20190123 ATC Offset UI�ϥ��ª�
+    bool bCanUseSearch2DIDByLot;                                                //Steven 20190508
+    bool bFTPDownloadAlwaysCover;                                               //JerryYang 20190523 KYEC download�u�@�ɦ]���Oby���x�W��, �Ҧ��Ѽ�always�Hserver�����D
+    bool bCanUse2x2Bias;                                                        //Steven 20190724 : 2x2���߶}��
+    bool bCanUse2x2NNMode;                                                      //Steven 20200722 : 2x2 NN mode
+    bool bCanUse2x3NNMode;                                                      //Steven 20220425 : 2x3 NN mode
+    bool bCanUse2x4NNMode;                                                      //Wei 20231211 : 2X4NN Mode
+    bool bForecePerPinKGf;                                                      //JerryYang 20180515 : ��J�C��pin���O�q,���Hkgf���D,�קK�ഫ�����y�S���^KGf�|���p���I��쪺�t��
+    bool bCanUseBias;                                                           //Steven 20190801 : SCC����X���n����BIAS�ﶵ
+    bool bNextTrayNeedManualRemoveTray;                                         //Sam 20190731 : �� Load �o�� Pickup Error Skip �ɡA���e�o�L���F�n��ʲ����A�U�@�L�]�n��ʲ����C
+    bool bAMDFunction;
+    bool bUseHeadContactCount;                                                  //Ifor 20160516 �ʤ��n�D䡤� Life Time �\��
+    bool bHeadContactCountByRecipe;                                             //Steven 20241030 : 䡤� Life Time �\��by�u�@��
+    bool bDeviceMapTest;                                                        //Steven 20190910 : Qualcomm�\��
+    bool bSetupTeach;                                                           //JerryYang 20180921 Setup Teach�\��
+    bool bBarcodeTrayRecFile;                                                   //jou 20190930 : Barcode Tray record file
+    bool bBarcodeErrNoTestAndShowH;                                             //jou 20191007 : Barcode Error No Test & Show "H"
+    bool bBarcodeDuplicateFileByOutArm;                                         //jou 20191008 : Barcode duplicate file by out arm
+    bool bUseChangeLogByLot;                                                    //Ifor 20191002 : add Change Log By Lot
+    bool bUseFFCTempOffset;                                                     //Ifor 20190730 : add FFC Temperature Offset
+    bool bUseFTPDownLoadATCRecipe;                                              //Ifor 20191115 : add FTP DownLoad ATC Recipe
+    bool bUseChamberBoostMode;                                                  //Steven 20191128 : Chamber Boost Function
+    bool bATCUseHandlerRecipeName;                                              //Ifor 20191126 : add ATC Use Handler Recipe Name
+    int  iAutoRetestTCPmode;                                                    //RogerYang 20251110 : change bool->int //Sam 20191113 : TCP ART
+    bool bUnloaderEditTrayLevelSet;                                             //Steven 20191224 : Unloader�s��Tray��Υt�~�@���v��
+    bool bAutoCloseSiteWhenRT;                                                  //Steven 20200225 : ����RT���ɭ�,�n����Socket
+    bool bAutoSkipNoDropError;
+    bool bUseN07_5;                                                             //Steven 20200309 : [N07-5]�令by�Ȥ�}��
+    bool bAutoHeightSHTReleaseByFile;                                           //Sam 20200217 : K���� Shuuttle Release Height offset By SetupFile
+    bool bCleanOutCanTrayEndBySetupFile;                                        //Steven 20200317 : CleanOut��,�i�H���Tray End, �B�n�h��Tray�n�b�u�@�ɳ]�w
+    bool bCanDisableQAMode;                                                     //JerryYang 20200312 EQC mode�s�Wfunction on/off�A�\�������ɵL�k��EQC mode
+    bool bEnableDual_1x4Kit;                                                    //Isaac 20200311 : 1x2Site�ϥ�1x4Site Kit
+    bool bEnable_1x3Kit;                                                        //KevinC 20260109 : 1x2Site and 2x2 NN mode �ϥ�1x3Site Kit
+    bool bSaveProductionLogByUnloaderTray;                                      //Steven 20200330 : production log by unloader tray�s��
+    bool bUseHandlerSetChillerTemp;                                             //Ifor 20191218 : add ATC Chiller �ūץ�Handler�]�w
+    bool bUseEditLDTrayNeedManualRemoveTray;                                    //Ifor 20200331 : add Edit Loader Tray Need Manual Remove Tray
+    bool bKeepOnly1SetupFile;                                                   //Steven 20200511 : �令�Ȥ�\�� //wei 20131115 FTP�U����O�d�U���ɮסA��lData�R��
+    bool bContactHeightSaveToContactIni;                                        //Steven 20200616 : JSCC�n�D��Contact Height���O���ɮ�
+    bool bShakeShuttleEveryTime;                                                //Steven 20200616 : ATK�n�D�C����Ƴ��n�n�n���Y
+    bool bAutoSiteMappingSetOpenBIN;                                            //jou 20200928 : Auto Site Mapping Set Open BIN
+    bool bECChangeEventReportCanOnOff;                                          //JerryYang 20200520 �¹q����DoReportECDataChangeCheck�禡�|�v�TUPH,�令�\��ﶵ
+    bool bOutShtLoseICInArmAway;                                                //JerryYang 20200610 Out shuttle lose IC�ݥ�����A�o�Xalarm
+    bool bNonCenterModeCanUseShtOffset;                                         //Steven 20200715 : for Tinton
+    bool bThickTrayNoNeedCover;                                                 //Steven 20200723 : �ӫp��Tray����\�\�l
+    bool b1x4OnlyAaUse1x1Mode;                                                  //Steven 20200720 : 1x4�u�}site Ac, �]1x1�Ҧ�
+    bool bQAModeFinishOfflineShowOnLinePicture;                                 //Sam 20200804 : QA �Ҧ���������^ OffLine �ɡA�j����� OnLine �Ϥ��C
+    bool bUse2DIDAllSiteFailSetToErrBin;                                        //Steven 20200825 : 2DID all site fail
+    bool bEnableMulti2D;                                                        //Steven 20200810 : �@��IC�ϥΦh��2DID
+    bool b32SiteYOffsetMode;
+    bool bShow0Xbin;                                                            //jou 20220719 : show 0X bin
+    bool bTempCalByRecipe;                                                      //jou 20220725 : Temperature calibration by recipe
+//    bool bLoadPickUpErrorMES0101Record;                                         //Sam 20200922 : Pick up Error Production_Log �]�n�O��
+    bool bAutoTrayFullAlarmCanNotSkip;                                          //Steven 20210219 : Unloader���Lalarm����Skip
+    bool bIndexCycleTimeRecord;                                                 //Sam 20200916 : Add Index Cycle Time Record
+    bool bUseAfterHomeShtChkLoseICNeedSlow;                                     //Sam 20201020 : �^ Home �Ĥ@���� Shuttle Check IC lose �ݭn�ܺC�C
+    bool LoaderFloating;
+    bool bRecordVacuumOnOffTime;                                                //Sam 20210204 : Auto Teach Loader Z Record Vacuum On off time
+    bool bI21EnableASMByRecipe;                                                 //Steven 20210518 : �d�p�K�Ʊ�Auto site map�q�u�@�ɶ}��
+    bool bUseMDB;                                                               //Steven 20210526 : �����Ȥ�����ϥ�MDB
+    bool bSpecailLowYeild;                                                      //Sam 20210505 : PTI �n�D����q Low Yeild
+    bool bTraySortCntFunc;                                                      //Steven 20210608 : Tray���w�ƶq�h�L�\��
+    bool bIOTriggerIonFanAutoClean;                                             //Isaac 20210609 : IOĲ�oIonFan�M�w
+    bool bUSEJCETSiteMapMode;                                                   //Ifor 20190215 : add ATC �ϥ� Package Offset �\��
+    bool bAutoCleanUseHPSetByRecipe;                                            //Steven 20210825 : Auto Clean�ϥΥ[���L�n�令�b�u�@�ɳ]�w
+    bool b2DUseSubJobFunction;                                                  //Ifor 20200807 add:In House 2D Use Sub Job Function
+    bool bFTPUseBarcodeReader;                                                  //Ifor 20210413 add:FTP Use Barcode Reader
+    bool b2DUseAnyCharFunction;                                                 //Ifor 20210723 add:2D Use Any Char ����2D��Ƥ��P�_
+    bool bOpenAutoCloseSiteInNormal;                                            //JimmyChiu 20211015 : only user disabled site keep disabled and other sites change to enabled
+    bool bManualSteplAutoTeach;                                                 //JimmyChiu 20211020 : Auto alignment mode
+    bool ShowLotCategoryCount;                                                  //KaiChen 20181002 �GCategory Count by Lot
+    bool ShowLotCount;                                                          //KaiChen 20181002 �G�令CosFunction   //wei 20171130 Count By Lot
+    bool bYieldControlBinSelectUseContactCount;                                 //KaiChen 20181115 : BinSelect�̭� Yield����ϥ� Contact Count
+    bool bSaveEventLogByLotID;                                                  //KaiChen 20181121 �G����-�_�� Save Event Log by Lot ID
+    bool bConfigStandard;                                                       //Sam 20210324 : �{���}�ҡA����Ū�� config_Standard.ini
+    bool bRotateUseHT7000HPKit;                                                 //Sam 20210416 : �s�W�S���Ҧ� For Rotate Function HT7000 HP Kit
+    bool bUseJamRawData;                                                        //Sam 20210224 : Auto Upload FTP JAMRawData �\��
+    bool bUseAlarmLogXml;                                                       //Sam 20210621 : �s�W Event Log xml  Updata
+    bool bUse1CableLayoutKitByConfig;                                           //Sam 20210715 : Use 1CableLayoutKit By Config
+    bool bTempSetDisenableNotUseHeater;                                         //Sam 20210805 : TempSet �[���Ϧa��S�Ψ쪺�N����
+    bool bNeedToRestartGroundWhenInitialStart;                                  //Sam 20220107 : ����_�� Initail Start �n���� GroundMan
+    bool bOffsetContactForce;                                                   //JimmyChiu 20220114 : Index �`���O Offset�A�[�`��ƭȤ���ܩ�Contact Form
+    bool bRTCHalfViewAutoVerify;                                                //JerryYang 20220215 : RTC Auto Verify half view check
+    bool bCylinderOnOffTimeLog;                                                 //JerryYang 20220215 : cylinder�@�ʦ��ƭp��
+    bool b2DUsePinInspection;                                                   //Ifor 20230207 add:In House 2D Use Pin1 Inspection Function
+    bool bUseATCRecordFileBy2DIDFunction;                                       //ben 20240927 : add CCD Bar Code to ATC
+    bool bS5F1UseJamRate;                                                       //Steven 20220331 : S5F1��ALTX�̭��[�WJAM Rate�P�_
+    bool bF18F22InshuttleDetectSaveByRecipe;                                    //JimmyChiu 20220601 : F18/F22 in shuttle A7 sensor�i�X�˴��\����Hrecipe�O�_�ҥ�
+    bool bLowYieldAlarmIntervalTimeBySetting;                                   //JimmyChiu 20220601 : �ק�low yield��ĵ�ɶ��޿�A��ĵ���j�ɶ��T�w1min�אּ�i�H�ۦ�]�w��ĵ���j�ɶ�
+    bool bAlarmForIonFanCleaning;                                               //JimmyChiu 20220606 : �W�[�@�����l�����M���ĵ�A�ɶ����j�i�]�w�C�ݳ�ĵ���ܡA�ݿ�J�K�X�~�i����
+    bool bRecordGroundESDByTestIC;                                              //Sam 20211223 : �C�� IC ���է������n�O�����ɪ� Ground & ESD �ƭȡC
+    bool b2DCodeCheckByCoustomerLot;                                            //Sam 20220223 : 2D Code Check by Coustomer Lot
+    bool bAutoTmpeOfsByFTP;                                                     //Sam 20220406 : �ūצ۰ʸ��v�\�� By FTP
+    bool bLockF26ByFile;                                                        //Sam 20220527 : ��� Enable �u�ʤH�ק�
+    bool bLockI06ByFile;                                                        //Sam 20220527 : for ����-�_��
+    bool bManuallyRemoveForceInColor;                                           //Sam 20220530 : �� Loader �o�� Skip/Edit �ɡA���L������h�� Empty �y�D��A�|���L�_�Өó�ĵ���ܤH�����L(�s��L)
+    bool bUnloadTrayModeByRecipe;                                               //Steven 20220710 : �i���n�DUnload Tray Mode by���x�]�m
+    bool bFullTrayAlarmAfterUnloadEnd;                                          //Sam 20210602 : Unload ������A Alarm
+    bool PassworDownloadByFTP;                                                  //Sam 20210526 : �q N06 DownloadPath �U���K�X��
+    bool bShowYieldMonitor;                                                     //Sam 20210916 : �s�W Yiled Monitor ��e���W
+    bool RecordIndexAirOnTime;                                                  //Sam 20220329 : Record Index Air On Time
+    bool bUse2X4_4AutoCleanFixedPosition;                                       //Sam 20220423 : �s�W Auto Clean 2X4_4 �Ҧ������m�T�w
+    bool bAutoCleanOffsetUseSingleSetting;                                      //Sam 20220720 : AutoClean Offset �Ȩϥ� Clean �]�w Offset �Ӹ��v
+    bool bUseSocketContactCount;                                                //Sam 20220720 : �s�W�@�� Socket Count
+    bool bDownloadUpdateAutomatically;                                          //Sam 20220824 : FTP �۰ʤU���w�˧�s�]
+    bool bTrayDeviceCheckFromLoader;                                            //JimmyChiu 20220219 : �ݮ��ˬd From Loader
+    bool bTrayMapFromLoader;                                                    //JimmyChiu 20220219 : �ݮ��ˬd From Loader
+    bool bSaveArmSpeedByMachine;                                                //JimmyChiu 20220618 : save by machine
+    bool bSaveTemperatureByMachine;                                             //JimmyChiu 20220618 : save by machine
+    bool bSaveOffsetByMachine;                                                  //JimmyChiu 20220618 : save by machine
+    bool bUnloadCylinerUpRelief;                                                //Sam 20220916 : �h Tray �e Unloader �W�ɨT���]�����ʧ@����_�L�C
+    bool bD44Once4Suck;                                                         //Sam 20220920 : D44 Index �^�H�ˬd�@���̦h�l�|��
+    bool bART_SECSGEM_93K;                                                      //JerryYang 20220923 : SECS GEM����ART
+    bool bOutArmPickUpErrBySetup;                                               //JerryYang 20220923 : E50�令�ﶵ
+    bool bNonATCSupportLBFunction;                                              //JerryYang 20220923 : LB�j��function
+    bool bIndexDropICSetErrUntilOneCycle;                                       //JerryYang 20220923 : index arm drop error�]ERROR BIN
+    bool bFTRTDiffInitStartDelayTime;                                           //JerryYang 20220330 : FT RT�i�]�w���P��initial delay time
+    bool bUseTrayThickAdjustZHeight;                                            //Ifor 20221214 add: �ϥ�Tray �p�צ۰ʮե��l�L����
+    bool bUseShuttlePickShiftDetect;                                            //Ifor 20221220 add: Shuttle �l�ƫ� ���W�ɳ]�w���צA�ˬd���LIC
+    bool bLowYieldUseContactCounts;                                             //Sam 20221020 : LowYield ��ϥ� ContactCounts ����ƨӭp��
+    bool bShowHPICCount;                                                        //Steven 20221228 : �p��[���LIC�ƶq
+    bool bTesterSidePushFunction;                                               //Richard 20220321 : ���Side Push
+    bool bUserDefineIndexZSafePos;                                              //Richard 20230107 : SPIL�Ȥ�۩w�q���x�w�˰���(200~800��)
+    bool bAutoSideFixerCheckAlarmAutoRetry;                                     //Sam 20220929 : �W�[ AutoSideFixer Check Alarm Auto Retry
+    bool bAutoOpenConfigA01;                                                    //Sam 20220929 : Config A01 �۰ʶ}�ҡC
+    bool bVerifyMode;                                                           //Sam 20221012 : �s�W VerifyMode �\��
+    bool bLoginShowUserName;                                                    //Steven 20230317 : �n�J����ܱb���W��
+    bool bMaualRemoveTray3Alarm;                                                //Jimmychiu 20231116 : add detail MES code for Previous tray pick up error
+    bool bSmartAutoClean;                                                       //Sam 20230111 : Smart Auto Clean
+    bool bAdaptiveYield;                                                        //Sam 20230914 : �۾A���ʨ}�v�ʱ�
+    bool bAfterOneCycleShowTrayQty;                                             //Sam 202221101 : OneCycle ��������ܩҦ� Tray �U�O��IC�ƶq
+    bool bUseBarCoderAutoLogin;                                                 //Sam 20221101 : �ϥ� BarCoder �۰ʵn��
+    bool bUseBarCoderChangeSetupFile;                                           //Sam 20230320 : �ϥ� BarCodeReader �ӿ�J���� SetupFile�C
+    bool bSpecialP24;                                                           //Sam 20230320 : ��X P24 �_�������W�ߥ\��X
+    bool bHandlerStateChangeUploadServer;                                       //Sam 20230511 : ���x����ܧ�ᶷ�W�� FTP
+    bool bLimitSensorOnNeedManualMove;                                          //Sam 20230522 : InOutArm Server Off ��A���s Server On ���ˬd CCW CW �Y�� On �ɻݭn��ʱư����`�C
+    bool bQAModeUseUnloadCnt;                                                   //JerryYang 20221005 : QA mode count ��BIN1�ƶq�p��
+    bool bTemp5PointKitOffset;                                                  //JerryYang 20221005 : �s�W�ū�5�Ioffset by recipe�x�s
+    bool bLotStartLockCriticalPara;                                             //JerryYang 20220310 : ATP�n�D��wcritical parameter
+    bool bTowerLightUseLD;                                                      //JerryYang 20230721 : LD/ULD�Ϥ����P�����`����
+    bool bThickTrayUseDiffHeight;                                               //JerryYang 20230620 : add�ptray�ﶵ
+    bool bRead2DIDFromServer;                                                   //Jimmychiu 20230925 : read 2did in json file
+    bool bMakeWhite2DIDList;                                                    //RogerYang 20251202 : JCET 2D FT1�զW��/FT2���\��
+    bool bATC_SlopeSaveOnHandler;                                               //JerryYang 20231016 : Add handler�ݳ]�wTJ�Ѽ�(Slope�BOffset)
+    bool bUseSecondATCTempOffset;                                               //Ifor 20241118 : ���դ��ܷ�
+    bool bPassBinNoRotate;                                                      //jou 20231020 : Pass bin no rotate
+    bool bGPIB_Command_DOPAUSE;                                                 //Jimmychiu 20231102 : GPIB Command SETHANDLERDOPAUSE
+    bool bRotateUseRTmode;                                                      //jou 20231122 : Rotate Use RT mode
+    bool bCategoryInfoByContactCT;                                              //Sam 20240131 : �s�W�@�� CategoryInfo ������ƨϥ� ContactCT
+    bool bShowCloseSiteAlarmWhenStart;                                          //Jimmychiu 20230925 : Show Close Sites Alarm When Start
+    bool bA67TriggerOneCycleWhenAlarm;                                          //JerryYang 20241028 : ���~���ƭn�D �S�wALARM�nĲ�oONE CYCLE
+    bool bSECSGEM_UseKeyPro;                                                    //Ifor 20230721 : add SECS GEM �ϥ� KeyPro ����
+    bool bLockF11ByFile;                                                        //Sam 20240202 : �s�W F11 Lock by file �\��
+    bool bLockRTCByFile;                                                        //Sam 20240311 : �s�W RTC Lock by file �\��
+
+    bool bRTCAutoTuning;                                                        //Sam 20230419 : �s�W RTC Auto Tuning �\��
+    bool bRTCStepAsideForPhoto;                                                 //Ifor 20230803 add : �s�W RTC Step Aside For Photo�\��
+    bool bSmartSetup;
+
+    bool bUseSECSGEMAutoStart;                                                  //Ifor 20200521 add: SECS/GEM Auto Start
+    bool bUseEESUGOffsetFunction;                                               //Ifor 20200529 add: SECS/GEM EESUG Offset Function
+    bool bUseIndexCheckHasICNeedPurge;                                          //Ifor 20200622 add:Index Check Has IC Need Purge
+    bool bUseIndexPickShuttleErrNeedPurge;                                      //Ifor 20200622 add:Index Pick Shuttle Err Need Purge
+    bool bUseLocalTraySpeed;                                                    //Ifor 20200825 add: Use Local Tray Speed
+    bool bUseBarcodeAutoAdjustLight;                                            //Ifor 20210408 add:Barcode �۰ʽվ����
+    bool bUseLoaderToEmptyColorToAuto;                                          //Ifor 20211104 add: Loader �j���Empty Auto �j���Color
+    bool bUseSimcoESDGiveWayFunction;                                           //Ifor 20211108 add: SIMCO ESD Give Way Function
+    bool bContactModeNeedCheckIndexHasIC;                                       //Ifor 20221020 add: Contact Mode�C��START �ˬd�O�_��IC�b���u�W�A��IC�ݤ�ʨ���
+    bool bContactModeNeedOneByOneCheckIC;                                       //Ifor 20221104 add:Contact Mode �t���ϥ�One By One Check IC
+
+    bool bCreateManualEOCAP;                                                    //jou 20221104 : VTest CreateManualEOCAP function;
+    bool bAutoSiteMappingSetPassBIN;                                            //jou 20230221 : Auto Site Mapping Set Pass BIN
+
+    bool bLotIDVerify;                                                          //Steven 20240704 : Lot Verification function for ATK
+    bool bFixNameOfForcePerPinG;                                                //Steven 20240821 : �⤤�߻��n�ץ��s�ɦW��
+
+    bool bART_RT_NoRotate;                                                      //Sam 20240809 : ART RT No Rotate
+    bool bUseTSVFunction;                                                       //Steven 20240904 : for ATK��TSV�\��
+    bool bCheckTempDuringIndexArmTesting;                                       //Jimmychiu 20240916 : Check the temperature during index arm testing
+    bool bNeedAlarmAfterUnloaderFull;                                           //Jimmychiu 20240902 : Need Alarm After Unloader Full
+    bool bRMSNoNeedToDownloadEveryTime;                                         //Steven 20240926 : RMS���n�C���U���]���\��    //ChungHung 20130621 add SCK RMS SCK ���n�C�����J�ɮ�   //ChungHung 20130621 add CC_SPIL_SHINCHU RMS CC_SPIL_SHINCHU ���n�C�����J�ɮ�
+    bool bGPIBUseSECSGENData;                                                   //Sam 20240826 : GPIB �q�T��ƨϥ� SECSGEM Data
+    bool bEnableSocketSensorByPassIndexCheck;                                   //Ifor 20230731 add: �}��Socket Sensor Index Check���ϥίu���ˬd�ݮ�
+    bool bFillTheTrayAfterOutArmPlace;                                          //Jimmychiu 20240726 : Fill The Tray After Out Arm Place
+    bool bDisableOpenAllSiteWhenChangeShtMod;                                   //Jimmychiu 20241203 : Disable opening all sites when changing shuttle mode.
+    bool bContactAlmNeedOneCycle;                                               //Sam 20241226 : Contact Alarm �ݭn���� OneCycle
+    bool bEnableRMS;                                                            //Jimmychiu 20241213 : add coustomer func EnableRMS
+    bool bContactCountSavedByRecipe;                                            //Jimmychiu 20240826 : Contact count saved by recipe
+    bool bScanBarcodeAndDownloadFileInRMS;                                      //Jimmychiu 20241226 : Scan Barcode And Download File In RMS
+    bool bAutoCleanTimeCT;                                                      //jou 20250102 : auto clean triger time count
+    bool bUploadLogByTypeFolder;                                                //Steven 20250217 : �ھ�Log���e�@��Ƨ�����
+    bool bRunModeFollowLotInfo;                                                 //Steven 20250603 : �ھ�Lot Info��Run mode�i�����
+    bool bUploadTestArmTorqueLog;                                               //Steven 20250609 : �Τ@��z
+    bool bCanRemoteStart;                                                       //Steven 20250712 : ���q�L���I�i���i�H����start���Ȥ�
+    bool bEndLotAfterTrayFeed;                                                  //Jimmychiu 20250115 : Auto End Lot After Tray Feed
+    bool bUseRenesasServer;                                                     //RogerYang 20250812 : ����FT-CT
+    bool bReadClipCodeFromUnloader;                                             //Jimmychiu 20250818 : Read Clip Code From Unloader(Auto1-3�BFix1-3)
+    bool bSocketSensorCheckICAtArmDown;                                         //Jimmychiu 20250826 : �C���U���T�{��IC�bsocket
+    bool bOpenDoorCheckLoaderAfterTrayEnd;                                      //Jimmychiu 20250826 : Open Door Check Loader After TrayEnd
+    bool bOneByOneWhenPickErrAtLoader;                                          //Jimmychiu 20250924 : Suck one by one when a pickup error occurs at the loader.
+    bool bSetContactForceToAutoClean;                                           //Steven 20250915 : �ƻsContact Force��Auto Clean��
+    bool bTempAlarmBinNeedToError;                                              //Steven 20251022 : Temp alarm need put to error bin
+    bool bInspectSuckICWhenSoftStart;                                           //Jimmychiu 20240217 : �Z�ۭn�D�����ˬd
+    bool bCheckOutSuckICFallDownOnlySkip;                                       //Jimmychiu 20240813 : Only Skip When Checking Out Suck IC Fall Down
+    bool bAutoTeachOutShuttleLantch;                                            //Jimmychiu 20240923 : Auto teach in/out shuttle site kit position
+    bool bMonitorLBonAmbient;                                                   //Jimmychiu 20251030 : Monitor the LB temperature under ambient temperature
+    bool bLoaderTrayToAuto1;
+    bool bFirstTrayCheckOnUnloader;                                             //Jimmychiu 20251205 : First Tray Check On Unloader
+    bool bDeviceMapTestPandP;                                                   //Jimmychiu 20251222 : Device Map Test By P&P
+    bool bATCModeNoUseCheckHeaterFunction;                                      //Ifor 20260113 add:ATC Mode No Use CheckHeater Function
+    bool bOffsetTempByRecipeMinMaxLimit;                                        //StevenHong 20260119 : Add Offset By Recipe Max Limit    
+    bool bCleanCountAlarmByMin;                                                 //Jimmychiu 20260212 : Gigas Clear alarms based on minimum usage count
+} HT9045_COUSTOMER_FUNCTION;
+extern HT9045_COUSTOMER_FUNCTION CosFunction;
+extern void InitialCosFunction();
+extern void VTEST_Funtion();
+extern void SPILFunction();
+extern void KoreaFunction();
+extern void SIGURDFunction();
+extern void MaximFunction();
+#endif
+

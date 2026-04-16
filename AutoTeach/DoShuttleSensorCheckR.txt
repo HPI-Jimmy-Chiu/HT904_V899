@@ -1,0 +1,12 @@
+Output Shuttle Sensor確認及調整步驟:
+
+1.將IC放入POCKET內有偵測IC時SENSOR需亮綠燈,I/O為SITE NO(圖一)
+
+2.無偵測IC SENSOR為反灰,I/O為X請調整SENSOR高度位置
+
+
+
+
+
+
+

@@ -1,0 +1,27 @@
+# Release Note YAML 格式範例
+# 每個客戶一份檔案，放在 changelogs/ 目錄下
+
+customer: "範例客戶"                  # 客戶名稱
+handler_type: "HT-9045/46 Series"    # Handler 機型
+footer_rev: "Rev.4"                   # 頁尾版本號（選填）
+
+entries:
+  # --- 最新的放最上面 ---
+  - rev: "HT9045_3.33.899.6"
+    date: "2026/04/15"
+    engineer: "JimmyChiu"
+    changes:
+      - "加入透過Socket遠端控制(Auto Start, Clear Lot, Start Lot)"
+
+  - rev: "HT9045_3.33.899.3"
+    date: "2026/04/09"
+    engineer: "JimmyChiu"
+    changes:
+      - "修正Loader空盤倒退導致夾盤異常"
+
+  - rev: "HT9045_3.33.898.0"
+    date: "2026/03/19"
+    engineer: "JimmyChiu"
+    changes:
+      - "修正短時間內暫停只需輸入一次"
+      - "Config內容無法顯示問題"

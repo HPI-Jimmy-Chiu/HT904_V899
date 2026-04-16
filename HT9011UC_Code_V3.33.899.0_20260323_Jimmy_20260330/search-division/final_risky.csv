@@ -1,0 +1,6 @@
+﻿"File","FullPath","Line","Code","Divisor"
+"cMyDB.cpp","D:\HT9045\HT9011UC_Code_V3.33.898.0_20260313_Steven\cMyDB.cpp","368","LastSet.SystemAccSecond[iDataType][stJamTime])/1000) / LastSet.iJamCount[2];","LastSet"
+"SortingBinTray.cpp","D:\HT9045\HT9011UC_Code_V3.33.898.0_20260313_Steven\SortingBinTray\SortingBinTray.cpp","1481","iTX = iLineX + (iPosXSuck / TrayData.iXPitch);","TrayData"
+"SortingBinTray.cpp","D:\HT9045\HT9011UC_Code_V3.33.898.0_20260313_Steven\SortingBinTray\SortingBinTray.cpp","1485","iTY = iLineY + (iPosYSuck / TrayData.iYPitch);","TrayData"
+"SortingBinTray.cpp","D:\HT9045\HT9011UC_Code_V3.33.898.0_20260313_Steven\SortingBinTray\SortingBinTray.cpp","1647","iTX = iLineX + (iPosXSuck / TrayData.iXPitch);","TrayData"
+"SortingBinTray.cpp","D:\HT9045\HT9011UC_Code_V3.33.898.0_20260313_Steven\SortingBinTray\SortingBinTray.cpp","1652","iTY = iLineY + (iPosYSuck / TrayData.iYPitch);","TrayData"

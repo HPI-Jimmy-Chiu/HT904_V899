@@ -1,0 +1,106 @@
+# =============================================================
+# HT9045 V899 CI — Phase 1: 自動編譯驗證
+# 需求: self-hosted Windows runner + BCB6 已安裝
+# =============================================================
+name: "Build V899"
+
+on:
+  push:
+    paths:
+      - "HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/**"
+      - ".github/workflows/build-v899.yml"
+  pull_request:
+    paths:
+      - "HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/**"
+  workflow_dispatch:         # 允許手動觸發
+
+env:
+  SRC_DIR: HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330
+  BPR_FILE: HT9045.bpr
+
+jobs:
+  # ─────────────────────────────────────────────
+  # Job 1: 編譯
+  # ─────────────────────────────────────────────
+  build:
+    name: "BCB6 Build"
+    runs-on: [self-hosted, windows, bcb6]
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Ensure Obj & EXE directories
+        shell: cmd
+        run: |
+          if not exist "Obj" mkdir Obj
+          if not exist "EXE" mkdir EXE
+
+      - name: Build V899
+        shell: cmd
+        run: |
+          call scripts\build_bcb.bat "%SRC_DIR%" "%BPR_FILE%"
+        env:
+          BCB_ROOT: ${{ vars.BCB_ROOT || 'D:\ProgramFiles\Borland\CBuilder6' }}
+
+      - name: Verify EXE output
+        shell: pwsh
+        run: |
+          $exe = Get-ChildItem -Path "EXE\HT9045.exe" -ErrorAction SilentlyContinue
+          if (-not $exe) {
+            Write-Error "HT9045.exe not found in EXE\"
+            exit 1
+          }
+          Write-Host "Build artifact: $($exe.FullName)"
+          Write-Host "Size: $([math]::Round($exe.Length / 1MB, 2)) MB"
+          Write-Host "Timestamp: $($exe.LastWriteTime)"
+
+      - name: Upload build artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: HT9045-V899-${{ github.sha }}
+          path: EXE/HT9045.exe
+          retention-days: 14
+
+  # ─────────────────────────────────────────────
+  # Job 2: 靜態分析 & 規範檢查 (Phase 2)
+  # ─────────────────────────────────────────────
+  static-analysis:
+    name: "Static Analysis"
+    runs-on: [self-hosted, windows, bcb6]
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run code-quality checks
+        shell: pwsh
+        run: |
+          python scripts/ci/check_code_quality.py "$env:SRC_DIR"
+
+      - name: Run cppcheck (if available)
+        shell: pwsh
+        continue-on-error: true    # cppcheck 尚未安裝時不擋 pipeline
+        run: |
+          $cppcheck = Get-Command cppcheck -ErrorAction SilentlyContinue
+          if ($cppcheck) {
+            cppcheck --enable=warning,style --inconclusive `
+              --suppress=missingIncludeSystem `
+              --suppress=unusedFunction `
+              --language=c++ `
+              --std=c++03 `
+              -j 4 `
+              --output-file=cppcheck-report.txt `
+              "$env:SRC_DIR"
+            Get-Content cppcheck-report.txt
+          } else {
+            Write-Host "cppcheck not installed, skipping."
+          }

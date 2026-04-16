@@ -1,0 +1,5 @@
+AutoCleanEnable=1
+Setup File Name=R003_MT6899_HOT_HB-MUFPOP14X15_HWASHU
+Socket sensor on/off=1
+Start Mode=0
+Shuttle Mode=1

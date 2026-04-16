@@ -1,0 +1,96 @@
+{
+    // ═══════════════════════════════════════════════════
+    // HT9045 Insiders 高效率工作區設定
+    // ═══════════════════════════════════════════════════
+
+    // ── 搜尋與檔案排除：大幅加速全域搜尋 ──
+    "search.exclude": {
+        "**/.svn":       true,
+        "**/Obj":        true,
+        "**/EXE":        true,
+        "**/hklib":      true,
+        "**/MDB":        true,
+        "**/backup":     true,
+        "**/*.lib":      true,
+        "**/*.dll":      true,
+        "**/*.exe":      true,
+        "**/*.res":      true,
+        "**/*.obj":      true,
+        "**/*.tds":      true,
+        "**/*.bcc32pch": true,
+        "**/*.mak":      true,
+        "**/*.utf8bak":  true,
+        "**/*.~cpp":     true,
+        "**/*.~h":       true,
+        "**/*.steven":   true,
+        // 唯讀版本資料夾（僅保留 V899 目標版本可搜尋）
+        "HT9011UC_Code_V3.33.893*": true,
+        "HT9011UC_Code_V3.33.894*": true,
+        "HT9011UC_Code_V3.33.895*": true,
+        "HT9011UC_Code_V3.33.896*": true,
+        "HT9011UC_Code_V3.33.897*": true,
+        "HT9011UC_Code_V3.33.898*": true,
+        "HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260409": true,
+        "HT9011UC_Code_V3.33.901*": true,
+        "HT9046LS_Code_*": true
+    },
+    "files.exclude": {
+        "**/.svn":       true,
+        "**/Obj":        true,
+        "**/*.utf8bak":  true,
+        "**/*.~cpp":     true,
+        "**/*.~h":       true,
+        "**/*.steven":   true,
+        "**/*.bcc32pch": true,
+        "**/*.tds":      true
+    },
+    "files.watcherExclude": {
+        "**/.svn/**":  true,
+        "**/Obj/**":   true,
+        "**/EXE/**":   true,
+        "**/hklib/**": true,
+        "**/MDB/**":   true
+    },
+
+    // ── 編輯器效能：大型檔案友善 ──
+    "editor.largeFileOptimizations": true,
+    "editor.bracketPairColorization.enabled": true,
+    "editor.guides.bracketPairs": "active",
+    "editor.minimap.enabled": false,
+
+    // ── C/C++ 檔案關聯 ──
+    "files.associations": {
+        "*.h":   "cpp",
+        "*.cpp": "cpp",
+        "*.dfm": "plaintext",
+        "*.bpr": "xml",
+        "*.inf": "ini",
+        "*.dat": "plaintext"
+    },
+
+    // ── 搜尋增強 ──
+    "search.smartCase": true,
+    "search.showLineNumbers": true,
+    "search.defaultViewMode": "tree",
+
+    // ── 終端機 (PowerShell) ──
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "terminal.integrated.scrollback": 10000,
+    "terminal.integrated.cwd": "${workspaceFolder}",
+    "terminal.integrated.env.windows": {
+        "BCB6": "C:\\Program Files (x86)\\Borland\\CBuilder6"
+    },
+
+    // ── Copilot / Chat（Insiders 加速項目）──
+    "chat.agent.enabled": true,
+    "github.copilot.chat.localeOverride": "zh-tw",
+
+    // ── 檔案編碼（保持 BIG5 相容性）──
+    "files.encoding": "big5",
+    "files.autoGuessEncoding": true,
+
+    // ── 保留原有 terminal autoApprove 設定 ──
+    "chat.tools.terminal.autoApprove": {
+        "ForEach-Object": true
+    }
+}

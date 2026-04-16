@@ -1,0 +1,11 @@
+Unloader AUTO2 Position確認及調整步驟:
+
+1.依E支吸嘴為基準將X/Y軸調至Tray Pocket中心(圖一)
+
+2.Z軸調至IC表面切齊Tray Pocket上緣
+
+3.檢視A/C/G吸嘴位置,如有偏差請調整X PITCH
+
+NOTE:
+
+1.PITCH調整方式,依基準吸嘴為基準檢視A/C/G吸嘴位置內縮為-外擴為+

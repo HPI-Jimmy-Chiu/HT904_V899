@@ -1,0 +1,48 @@
+{
+  "allowedWriteRoots": [
+    "HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/",
+    ".github/",
+    ".agents/",
+    "docs/",
+    "scripts/",
+    "memories/"
+  ],
+  "readonlyRoots": [
+    "HT9011UC_Code_V3.33.893.0_20251204_Jimmy_20251217 - 2x2new_method/",
+    "HT9011UC_Code_V3.33.894.5_20260114_Jimmy_20260119/",
+    "HT9011UC_Code_V3.33.895.0_20260116_Jimmy_20260206/",
+    "HT9011UC_Code_V3.33.896.0_20260204_Jimmy_20260310_AI/",
+    "HT9011UC_Code_V3.33.897.0_20260304_Jimmy_20260312/",
+    "HT9011UC_Code_V3.33.898.0_20260313_Jimmy_20260323/",
+    "HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260331/",
+    "HT9046LS_Code_V3.31.A201.715_20260115_SIGURD_01(HT9045_V3.31A201.715_20260115/",
+    "HT9046LS_Code_V3.32.745_20250224_PTI_01(HT9045_V3.32A028.Beta.745_20250304)(合入864)/",
+    "HT9046LS_Code_V3.32.810_20251015_A8_01_Frank_machine_combin/",
+    "HT9046LS_Code_V3.32.812_20231128/",
+    "HT9046LS_Code_V3.32.812_20231128_Jimmychiu_20251128/",
+    "HT9046LS_Code_V3.32.812_20231128_Jimmychiu_BottomAOI_2024822/",
+    "hklib/",
+    "EXE/",
+    "MDB/",
+    "Obj/"
+  ],
+  "backupRequiredRoots": [
+    "system/",
+    "config/",
+    "CFG/",
+    "IniData/",
+    "SECS/"
+  ],
+  "backupRequiredExtensions": [
+    ".ini",
+    ".csv",
+    ".dat",
+    ".db",
+    ".DB",
+    ".inf",
+    ".cfg",
+    ".def",
+    ".conf"
+  ],
+  "confirmOutsideAllowed": false
+}

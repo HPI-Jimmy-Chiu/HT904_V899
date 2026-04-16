@@ -1,0 +1,46 @@
+object dmTrayMotor: TdmTrayMotor
+  OldCreateOrder = False
+  OnDestroy = DataModuleDestroy
+  Left = 752
+  Top = 341
+  Height = 165
+  Width = 215
+  object tmrTrayStepMotor: TTimer
+    Enabled = False
+    Interval = 20
+    OnTimer = tmrTrayStepMotorTimer
+    Left = 116
+    Top = 8
+  end
+  object comTrayStepMotor: TComm
+    CommName = 'COM2'
+    BaudRate = 115200
+    ParityCheck = False
+    Outx_CtsFlow = False
+    Outx_DsrFlow = False
+    DtrControl = DtrEnable
+    DsrSensitivity = False
+    TxContinueOnXoff = True
+    Outx_XonXoffFlow = False
+    Inx_XonXoffFlow = False
+    ReplaceWhenParityError = False
+    IgnoreNullChar = False
+    RtsControl = RtsEnable
+    XonLimit = 500
+    XoffLimit = 500
+    ByteSize = _8
+    Parity = None
+    StopBits = _1
+    XonChar = #17
+    XoffChar = #19
+    ReplacedChar = #0
+    ReadIntervalTimeout = 100
+    ReadTotalTimeoutMultiplier = 0
+    ReadTotalTimeoutConstant = 0
+    WriteTotalTimeoutMultiplier = 0
+    WriteTotalTimeoutConstant = 0
+    OnReceiveData = comTrayStepMotorReceiveData
+    Left = 26
+    Top = 6
+  end
+end

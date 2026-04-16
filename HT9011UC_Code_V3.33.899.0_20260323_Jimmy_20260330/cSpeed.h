@@ -1,0 +1,547 @@
+//---------------------------------------------------------------------------
+
+#ifndef cSpeedH
+#define cSpeedH
+//---------------------------------------------------------------------------
+#include <Buttons.hpp>
+#include <Classes.hpp>
+#include <ComCtrls.hpp>
+#include <Controls.hpp>
+#include <ExtCtrls.hpp>
+#include <ImgList.hpp>
+#include <StdCtrls.hpp>
+//---------------------------------------------------------------------------
+class TfSpeed : public TForm
+{
+__published:    // IDE-managed Components
+    TPageControl *PageControl1;
+    TTabSheet *tsAllSpeed;
+    TTabSheet *tsInArm;
+    TTabSheet *tsShuttle;
+    TTabSheet *tsIndex;
+    TTabSheet *tsOutArm;
+    TTabSheet *tsTrayArm;
+    TGroupBox *gpSpeed;
+    TTrackBar *tbAllSpeed;
+    TEdit *edAllSpeed;
+    TGroupBox *gbAcc;
+    TEdit *edAllAccSpeed;
+    TTrackBar *tbAccSpeed;
+    TGroupBox *gbUnitForChange;
+    TCheckBox *cbIndexArm;
+    TCheckBox *cbInArm;
+    TCheckBox *cbOutArm;
+    TCheckBox *cbShuttle;
+    TCheckBox *cbTrayArm;
+    TCheckBox *cbInArmZ;
+    TCheckBox *cbOutArmZ;
+    TRadioGroup *rgAutoSpeed;
+    TSpeedButton *spbSpeedAdd;
+    TSpeedButton *spbSpeedDec;
+    TSpeedButton *spbSelectAll;
+    TPanel *Panel1;
+    TSpeedButton *spbSave;
+    TSpeedButton *sbtExit;
+    TCheckBox *cbInRotate;
+    TCheckBox *cbOutRotate;
+    TGroupBox *gbEPControl;
+    TTrackBar *tbEPControl;
+    TEdit *edEPControl;
+    TSpeedButton *spbSetToDef;
+    TPanel *palInArmLeft;
+    TGroupBox *gbInArmSpeed;
+    TLabel *Label1;
+    TLabel *Label4;
+    TLabel *Label5;
+    TLabel *Label2;
+    TLabel *Label3;
+    TEdit *edInXYSpd;
+    TEdit *edInXYAcc;
+    TUpDown *udInXSpd;
+    TUpDown *udInXAcc;
+    TEdit *edInZSpd;
+    TEdit *edInZAcc;
+    TUpDown *udInZSpd;
+    TUpDown *udInZAcc;
+    TEdit *edInPitchSpd;
+    TEdit *edInPitchAcc;
+    TUpDown *udInPitchSpd;
+    TUpDown *udInPitchAcc;
+    TPanel *palInRotate;
+    TLabel *Label59;
+    TEdit *edInRotSpd;
+    TUpDown *udInRotSpd;
+    TEdit *edInRotAcc;
+    TUpDown *udInRotAcc;
+    TGroupBox *gbInVacuumOnFunc;
+    TCheckBox *chkInArmPreSuck;
+    TRadioGroup *rgInArmPitch;
+    TGroupBox *gbAutoSkip;
+    TLabel *labAutoSkip;
+    TRadioGroup *rgInArmAutoSpeed;
+    TEdit *edtAutoSkipCT;
+    TGroupBox *gbInArmReleaseDelay;
+    TLabel *Label57;
+    TLabel *Label58;
+    TRadioGroup *rgReleaseDelayTime;
+    TEdit *edRelaseDelay;
+    TPanel *palInArmRight;
+    TGroupBox *gbInArmRetry;
+    TLabel *Label6;
+    TLabel *Label7;
+    TLabel *Label8;
+    TEdit *edInArmRetryCount;
+    TEdit *edInArmRetryMM;
+    TGroupBox *gbInArmWaitTime;
+    TGroupBox *gbInArmVacuumCheck;
+    TLabel *Label9;
+    TCheckBox *cbInVacuumCheckOptimize;
+    TEdit *edInVacumCheckTime;
+    TGroupBox *gbInArmDestoryTime;
+    TLabel *Label49;
+    TLabel *Label50;
+    TLabel *Label51;
+    TLabel *Label52;
+    TEdit *edInArmDestroyAgainTime;
+    TEdit *edInArmDestroyAgainCount;
+    TGroupBox *gbInDestoryCheck;
+    TLabel *Label65;
+    TLabel *Label66;
+    TCheckBox *ckb_PauseCheck_In;
+    TEdit *Edt_CheckTime_In;
+    TGroupBox *gbTwoSpeed_In;
+    TLabel *labTwoSpeedDistance_In;
+    TLabel *labSecondSpeedIn;
+    TLabel *labSecondADCIn;
+    TRadioGroup *rgTwoSpeedOnOff_In;
+    TEdit *edTwoSpeedDistance_In;
+    TEdit *edSecondSpeedIn;
+    TEdit *edSecondADCIn;
+    TPanel *palOutLeft;
+    TGroupBox *gbOutArmSpeed;
+    TLabel *Label24;
+    TLabel *Label25;
+    TLabel *Label26;
+    TLabel *Label27;
+    TLabel *Label28;
+    TEdit *edOutXSpd;
+    TEdit *edOutXAcc;
+    TUpDown *udOutXSpd;
+    TUpDown *udOutXAcc;
+    TEdit *edOutZSpd;
+    TEdit *edOutZAcc;
+    TUpDown *udOutZSpd;
+    TUpDown *udOutZAcc;
+    TEdit *edOutPitchSpd;
+    TEdit *edOutPitchAcc;
+    TUpDown *udOutPitchSpd;
+    TUpDown *udOutPitchAcc;
+    TPanel *palOutRotate;
+    TLabel *Label63;
+    TEdit *edOutRotSpd;
+    TUpDown *udOutRotSpd;
+    TEdit *edOutRotAcc;
+    TUpDown *udOutRotAcc;
+    TGroupBox *gbOutVacuumOnFunc;
+    TLabel *Label44;
+    TCheckBox *chkOutArmPreSuck;
+    TEdit *edtOutArmPreSuck;
+    TRadioGroup *rgOutArmPitch;
+    TGroupBox *gbOutPickErrAct;
+    TLabel *Label60;
+    TCheckBox *cbOutPickErrAct;
+    TComboBox *cobOutPickErrAct;
+    TPanel *palOutRight;
+    TGroupBox *gbOutArmRetry;
+    TLabel *Label29;
+    TLabel *Label30;
+    TLabel *Label31;
+    TEdit *edOutArmRetryCount;
+    TEdit *edOutArmRetryMM;
+    TGroupBox *gbOutArmWaitTime;
+    TGroupBox *gbOutArmVacuumCheck;
+    TLabel *Label32;
+    TCheckBox *cbOutVacuumCheckOptimize;
+    TEdit *edOutVacumCheckTime;
+    TGroupBox *gbOutArmAirOnTime;
+    TLabel *Label33;
+    TEdit *edOutArmAirOnTime;
+    TGroupBox *gbOutArmDestoryTime;
+    TLabel *Label53;
+    TLabel *Label54;
+    TLabel *Label55;
+    TLabel *Label56;
+    TEdit *edOutArmDestroyAgainTime;
+    TEdit *edOutArmDestroyAgainCount;
+    TGroupBox *gbOutDestoryCheck;
+    TLabel *Label67;
+    TLabel *Label68;
+    TCheckBox *ckb_PauseCheck_Out;
+    TEdit *Edt_CheckTime_Out;
+    TGroupBox *gbTwoSpeed_Out;
+    TLabel *labTwoSpeedDistance_Out;
+    TLabel *labSecondSpeedOut;
+    TLabel *labSecondADCOut;
+    TRadioGroup *rgTwoSpeedOnOff_Out;
+    TEdit *edTwoSpeedDistance_Out;
+    TEdit *edSecondSpeedOut;
+    TEdit *edSecondADCOut;
+    TPanel *palIndexLeft;
+    TGroupBox *gbIndexArmSpeed;
+    TLabel *Label17;
+    TLabel *Label18;
+    TLabel *Label20;
+    TLabel *Label19;
+    TEdit *edIndexSpeed;
+    TUpDown *udIndexSpd;
+    TEdit *edIndexAccDec;
+    TUpDown *udIndexAcc;
+    TGroupBox *grpIndexPreSuck;
+    TCheckBox *chkIndexPreSuck;
+    TPanel *palIndexRight;
+    TGroupBox *gbIndexWaitTime;
+    TGroupBox *gbIndexVacuumCheck;
+    TLabel *Label21;
+    TCheckBox *cbIndexVacuumCheckOptimize;
+    TEdit *edIndexVacumCheckTime;
+    TGroupBox *gbIndexAirOnTime;
+    TLabel *Label22;
+    TEdit *edIndexAirOnTime;
+    TGroupBox *gbIndexRetry;
+    TLabel *Label23;
+    TLabel *Label42;
+    TLabel *Label43;
+    TEdit *edIndexRetryCount;
+    TEdit *edIndexArmRetryMM;
+    TRadioGroup *rgSocketCheck;
+    TGroupBox *gbIndexDestoryTime;
+    TLabel *Label45;
+    TLabel *Label47;
+    TLabel *Label46;
+    TLabel *Label48;
+    TEdit *edIndexDestroyAgainTime;
+    TEdit *edIndexDestroyAgainCount;
+    TPanel *palTrayArmLeft;
+    TGroupBox *gbTrayArmSpeed;
+    TLabel *Label34;
+    TLabel *Label35;
+    TLabel *Label36;
+    TLabel *Label37;
+    TEdit *edTrayXSpd;
+    TUpDown *udTrayXSpd;
+    TEdit *edTrayXAcc;
+    TUpDown *udTrayXAcc;
+    TPanel *palTrayArmRight;
+    TGroupBox *gbTrayArmWaitTime;
+    TGroupBox *gbTrayArmVacuumCheck;
+    TLabel *Label39;
+    TEdit *edTrayVacumCheckTime;
+    TGroupBox *gbTrayArmAirOnTime;
+    TLabel *Label40;
+    TEdit *edTrayArmAirOnTime;
+    TGroupBox *gbTrayArmHandDown;
+    TLabel *Label41;
+    TEdit *edTrayArmHandDown;
+    TGroupBox *gbTrayArmRetryCount;
+    TLabel *Label38;
+    TEdit *edTrayArmRetryCount;
+    TPanel *palShuttleLeft;
+    TGroupBox *gbShuttleSpeed;
+    TLabel *Label12;
+    TLabel *Label13;
+    TLabel *Label14;
+    TLabel *Label15;
+    TEdit *edSht1Spd;
+    TEdit *edSht1Acc;
+    TUpDown *udSht1Spd;
+    TUpDown *udSht1Acc;
+    TEdit *edSht2Spd;
+    TEdit *edSht2Acc;
+    TUpDown *udSht2Spd;
+    TUpDown *udSht2Acc;
+    TRadioGroup *rgStepShuttle;
+    TPanel *palShuttleRight;
+    TGroupBox *gbShtDeviceCheckTime;
+    TLabel *Label16;
+    TEdit *edShtDeviceCheckTime;
+    TCheckBox *ckb_HeightCheck_In;
+    TEdit *Edt_HeightCheck_In;
+    TRadioGroup *gbOutarmDeviveConfirm;
+    TRadioGroup *gbInarmDeviveConfirm;
+    TGroupBox *grpIndexUPHTryRun;
+    TLabel *Label61;
+    TLabel *Label62;
+    TEdit *edtTryAcc;
+    TEdit *edtTrySpeed;
+    TGroupBox *grpIndexCycleTimeMonitoring;
+    TLabel *Label69;
+    TLabel *Label70;
+    TLabel *Label71;
+    TLabel *Label72;
+    TLabel *Label73;
+    TLabel *Label74;
+    TCheckBox *chkEnableIndexCycleTimeMonitoring;
+    TEdit *edtMonitoringIndexCycletime;
+    TEdit *edtMonitoringOutlier;
+    TEdit *edtMonitoringWindow;
+    TPanel *Panel2;
+    TGroupBox *gbInArmAirOnTime;
+    TLabel *Label10;
+    TEdit *edInArmAirOnTime;
+    TGroupBox *gbInArmWaitOnSht;
+    TLabel *Label11;
+    TEdit *edInArmShtWaitTime;
+    TGroupBox *grpHPVacuumDelay;
+    TLabel *Label64;
+    TEdit *edtHPVacuumDelay;
+    TCheckBox *chkUseHPVacuumDelay;
+    TRadioGroup *rgSearchLastModeForYPitch;
+    TCheckBox *chkTwoSpeedOnlyLoader;
+    TRadioGroup *gbIndexeviveConfirm;
+    TTabSheet *tsLoader;
+    TPanel *Panel3;
+    TGroupBox *grpLoader;
+    TGroupBox *grpAuto2;
+    TGroupBox *grpAuto3;
+    TGroupBox *grpAuto1;
+    TGroupBox *grpColor;
+    TGroupBox *grpEmpty;
+    TRadioGroup *rgShakeShuttle;
+    TPanel *pnlpnlLoaderZ;
+    TPanel *pnlLoaderY;
+    TLabeledEdit *edtLoaderSpeed1;
+    TLabel *Lab_LoaderVer;
+    TUpDown *udLoaderSpeed1;
+    TLabeledEdit *edtLoaderSpeedZ;
+    TUpDown *udLoaderSpeedZ;
+    TPanel *pnEmptyY;
+    TPanel *pnlColorY;
+    TPanel *pnlAuto1Y;
+    TPanel *pnlAuto2Y;
+    TPanel *pnlAuto3Y;
+    TLabeledEdit *edtEmptySpeed1;
+    TUpDown *udEmptySpeed1;
+    TLabel *Lab_EmptyVer;
+    TLabeledEdit *edtColorSpeed1;
+    TUpDown *udColorSpeed1;
+    TLabel *Lab_ColorVer;
+    TLabeledEdit *edtAuto1Speed1;
+    TUpDown *udAuto1Speed1;
+    TLabel *Lab_Auto1Ver;
+    TLabeledEdit *edtAuto2Speed1;
+    TUpDown *udAuto2Speed1;
+    TLabel *Lab_Auto2Ver;
+    TPanel *pnEmptyZ;
+    TLabeledEdit *edtAuto3Speed1;
+    TUpDown *udAuto3Speed1;
+    TLabel *Lab_Auto3Ver;
+    TLabeledEdit *edtEmptySpeedZ;
+    TUpDown *udEmptySpeedZ;
+    TPanel *pnlColorZ;
+    TLabeledEdit *edtColorSpeedZ;
+    TUpDown *udColorSpeedZ;
+    TPanel *pnlAuto1Z;
+    TLabeledEdit *edtAuto1SpeedZ;
+    TUpDown *udAuto1SpeedZ;
+    TPanel *pnlAuto2Z;
+    TLabeledEdit *edtAuto2SpeedZ;
+    TUpDown *udAuto2SpeedZ;
+    TPanel *pnlAuto3Z;
+    TLabeledEdit *edtAuto3SpeedZ;
+    TUpDown *udAuto3SpeedZ;
+    TGroupBox *gbInArmDieClean;
+    TLabel *Label75;
+    TLabel *Label76;
+    TLabel *Label77;
+    TLabel *Label78;
+    TRadioGroup *rgInArmDieClean;
+    TEdit *edInArmDieCleanDelay;
+    TEdit *edInArmDieCleanHeight;
+    TGroupBox *gbOutArmDieClean;
+    TLabel *Label79;
+    TLabel *Label80;
+    TRadioGroup *rgOutArmDieClean;
+    TEdit *edOutArmDieCleanDelay;
+    TGroupBox *GroupBox1;
+    TLabel *Label81;
+    TEdit *edOutArmShtWaitTime;
+    TRadioGroup *rgSearchInarmLastModeForYPitch;
+    TRadioGroup *rgOutArmPickupErrMode;
+    TLabel *labIndexCycleTimeTolerance;
+    TEdit *edtIndexCycleTimetolerance;
+    TLabel *Label84;
+    TCheckBox *chkPickAfterOutArm;
+    TTabSheet *tsMagazine;
+    TGroupBox *GroupBox2;
+    TLabel *Label85;
+    TLabel *Label86;
+    TLabel *Label87;
+    TLabel *Label88;
+    TEdit *edMagCatchYSpd;
+    TEdit *edMagCatchYAcc;
+    TUpDown *udMagCatchYSpd;
+    TUpDown *udMagCatchYAcc;
+    TEdit *edMagZSpd;
+    TEdit *edMagZAcc;
+    TUpDown *udMagZSpd;
+    TUpDown *udMagZAcc;
+    TGroupBox *GroupBox3;
+    TLabel *Label89;
+    TLabel *Label90;
+    TLabel *Label91;
+    TEdit *edTwoSpeedDistanceCatchY;
+    TEdit *edSecondSpeedCatchY;
+    TEdit *edSecondADCCatchY;
+    TRadioButton *rbTemp;
+    TGroupBox *gbInArmCylinderDelay;
+    TLabel *Label92;
+    TEdit *edInArmCylinderDelay;
+    TLabel *Label93;
+    TGroupBox *gbOutArmCylinderDelay;
+    TLabel *Label94;
+    TLabel *Label95;
+    TEdit *edOutArmCylinderDelay;
+    TPanel *Panel4;
+    TLabel *Label82;
+    TLabel *Label83;
+    TEdit *edAutoSpeedLow;
+    TPanel *Panel5;
+    TLabel *lblTrayStepSpeedByMachine;
+    TLabeledEdit *edtLoaderSpeed2;
+    TGroupBox *grpAuto6;
+    TPanel *pnlAuto6Y;
+    TLabel *Lab_Auto6Ver;
+    TLabeledEdit *edtAuto6Speed1;
+    TUpDown *udAuto6Speed1;
+    TPanel *pnlAuto6Z;
+    TLabeledEdit *edtAuto6SpeedZ;
+    TUpDown *udAuto6SpeedZ;
+    TGroupBox *grpAuto5;
+    TPanel *pnlAuto5Y;
+    TLabel *Lab_Auto5Ver;
+    TLabeledEdit *edtAuto5Speed1;
+    TUpDown *udAuto5Speed1;
+    TPanel *pnlAuto5Z;
+    TLabeledEdit *edtAuto5SpeedZ;
+    TUpDown *udAuto5SpeedZ;
+    TGroupBox *grpAuto4;
+    TPanel *pnlAuto4Y;
+    TLabel *Lab_Auto4Ver;
+    TLabeledEdit *edtAuto4Speed1;
+    TUpDown *udAuto4Speed1;
+    TPanel *pnlAuto4Z;
+    TLabeledEdit *edtAuto4SpeedZ;
+    TUpDown *udAuto4SpeedZ;
+    TPanel *Panel12;
+    TRadioGroup *rgIndexCycleTime;
+    TRadioGroup *rgTT_SetSpeed;
+    TRadioGroup *rgInShtOrder;
+    TGroupBox *gbEnableDelayTimeZero;
+    TCheckBox *cbEnableDelayTimeZero;
+    TGroupBox *grpShake;
+    TLabel *lblShakeAccDec;
+    TLabel *lblShakeDistance;
+    TLabel *lblShakeDelay;
+    TLabel *lblShakeCycles;
+    TEdit *edShakeAccDec;
+    TEdit *edShakeDistance;
+    TEdit *edShakeDelay;
+    TEdit *edShakeCycles;
+    void __fastcall FormShow(TObject *Sender);
+    void __fastcall tbAllSpeedChange(TObject *Sender);
+    void __fastcall edInArmRetryCountKeyPress(TObject *Sender, char &Key);
+    void __fastcall edInVacumCheckTimeKeyPress(TObject *Sender, char &Key);
+    void __fastcall edInArmRetryCountMouseDown(TObject *Sender, TMouseButton Button,
+          TShiftState Shift, int X, int Y);
+    void __fastcall edInVacumCheckTimeMouseDown(TObject *Sender, TMouseButton Button,
+          TShiftState Shift, int X, int Y);
+    void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
+    void __fastcall tbAccSpeedChange(TObject *Sender);
+    void __fastcall spbSpeedAddClick(TObject *Sender);
+    void __fastcall spbSpeedDecClick(TObject *Sender);
+    void __fastcall cbIndexArmClick(TObject *Sender);
+    void __fastcall edIndexArmRetryMMMouseDown(TObject *Sender, TMouseButton Button,
+          TShiftState Shift, int X, int Y);
+    void __fastcall edIndexArmRetryMMKeyPress(TObject *Sender, char &Key);
+    void __fastcall edIndexSpeedMouseDown(TObject *Sender, TMouseButton Button,
+          TShiftState Shift, int X, int Y);
+    void __fastcall spbSaveClick(TObject *Sender);
+    void __fastcall sbtExitClick(TObject *Sender);
+    void __fastcall spbSelectAllClick(TObject *Sender);
+    void __fastcall spbSetToDefClick(TObject *Sender);
+    void __fastcall Edt_CheckTime_InKeyPress(TObject *Sender, char &Key);
+    void __fastcall Edt_CheckTime_InMouseDown(TObject *Sender,
+          TMouseButton Button, TShiftState Shift, int X, int Y);
+    void __fastcall edIndexAccDecMouseDown(TObject *Sender,
+          TMouseButton Button, TShiftState Shift, int X, int Y);
+    void __fastcall edtAutoSkipCTMouseDown(TObject *Sender,
+          TMouseButton Button, TShiftState Shift, int X, int Y);
+    void __fastcall edSecondSpeedInMouseDown(TObject *Sender,
+          TMouseButton Button, TShiftState Shift, int X, int Y);
+    void __fastcall edSecondADCInMouseDown(TObject *Sender,
+          TMouseButton Button, TShiftState Shift, int X, int Y);
+    void __fastcall edSecondSpeedOutMouseDown(TObject *Sender,
+          TMouseButton Button, TShiftState Shift, int X, int Y);
+    void __fastcall edSecondADCOutMouseDown(TObject *Sender,
+          TMouseButton Button, TShiftState Shift, int X, int Y);
+    void __fastcall tbEPControlChange(TObject *Sender);
+    void __fastcall edRelaseDelayMouseDown(TObject *Sender,
+          TMouseButton Button, TShiftState Shift, int X, int Y);
+    void __fastcall edRelaseDelayKeyPress(TObject *Sender, char &Key);
+    void __fastcall Edt_HeightCheck_InMouseDown(TObject *Sender,
+          TMouseButton Button, TShiftState Shift, int X, int Y);
+    void __fastcall edtMonitoringIndexCycletimeKeyPress(TObject *Sender,
+          char &Key);
+    void __fastcall edtMonitoringOutlierKeyPress(TObject *Sender,
+          char &Key);
+    void __fastcall edtMonitoringWindowKeyPress(TObject *Sender,
+          char &Key);
+    void __fastcall edtMonitoringIndexCycletimeMouseDown(TObject *Sender,
+          TMouseButton Button, TShiftState Shift, int X, int Y);
+    void __fastcall edtMonitoringOutlierMouseDown(TObject *Sender,
+          TMouseButton Button, TShiftState Shift, int X, int Y);
+    void __fastcall edtMonitoringWindowMouseDown(TObject *Sender,
+          TMouseButton Button, TShiftState Shift, int X, int Y);
+    void __fastcall edtLoaderSpeed1MouseDown(TObject *Sender,
+          TMouseButton Button, TShiftState Shift, int X, int Y);
+    void __fastcall edInArmDieCleanHeightMouseDown(TObject *Sender,
+          TMouseButton Button, TShiftState Shift, int X, int Y);
+    void __fastcall edInArmDieCleanDelayMouseDown(TObject *Sender,
+          TMouseButton Button, TShiftState Shift, int X, int Y);
+    void __fastcall edOutArmShtWaitTimeMouseDown(TObject *Sender,
+          TMouseButton Button, TShiftState Shift, int X, int Y);
+    void __fastcall edtIndexCycleTimetoleranceKeyPress(TObject *Sender,
+          char &Key);
+    void __fastcall edtIndexCycleTimetoleranceMouseDown(TObject *Sender,
+          TMouseButton Button, TShiftState Shift, int X, int Y);
+    void __fastcall edAutoSpeedLowMouseDown(TObject *Sender,
+          TMouseButton Button, TShiftState Shift, int X, int Y);
+    void __fastcall edTwoSpeedDistanceCatchYMouseDown(TObject *Sender,
+          TMouseButton Button, TShiftState Shift, int X, int Y);          
+    void __fastcall edShakeCyclesMouseDown(TObject *Sender,
+          TMouseButton Button, TShiftState Shift, int X, int Y);
+    void __fastcall edShakeDistanceMouseDown(TObject *Sender,
+          TMouseButton Button, TShiftState Shift, int X, int Y);
+    void __fastcall edShakeDelayMouseDown(TObject *Sender,
+          TMouseButton Button, TShiftState Shift, int X, int Y);
+    void __fastcall edShakeDelayKeyPress(TObject *Sender, char &Key);
+    void __fastcall edShakeAccDecMouseDown(TObject *Sender,
+          TMouseButton Button, TShiftState Shift, int X, int Y);
+private:    // User declarations
+    AnsiString LastFileName;
+    AnsiString OrgStr;
+public:     // User declarations
+    __fastcall TfSpeed(TComponent* Owner);
+    void __fastcall ReadFile();
+    void __fastcall ReadWriteFile(bool bRead, AnsiString szDir);
+    void __fastcall DoIniDataToForm();
+    bool fShow;
+    void __fastcall DoSetRPDefault(TWinControl *PCtrl,int iSection);
+    void __fastcall DoReplyDefaultToForm(TWinControl *PCtrl,int iSection);
+    void __fastcall SearchRecipeParameter(TWinControl *PCtrl,int iSection );
+    void __fastcall SaveSetupFile(AnsiString szDir);  //kevin 20180824 add
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TfSpeed *fSpeed;
+//---------------------------------------------------------------------------
+#endif

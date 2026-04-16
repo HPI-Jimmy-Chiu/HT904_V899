@@ -1,0 +1,172 @@
+customer: DRAFT
+handler_type: HT-9045/46 Series
+footer_rev: Rev.4
+_note: 此為自動產生的草稿，請手動：(1) 填入正確 rev 版號 (2) 將技術描述改為客戶友好的中文描述 (3) 移除檔名標記
+entries:
+- rev: HT9045_3.33.899.x
+  date: 2026/04/15
+  engineer: JimmyChiu
+  changes:
+  - dynamic stack layout for tsIndex tab to prevent overlapping panels [cShowBinSelect.cpp]
+  - dynamic height for tsIndex based on visible panel stack [cShowBinSelect.cpp]
+  - forward-declare MNetLog before first use at UpDataToServer_KYEC [HS_Function.cpp]
+  - swap SystemDate to yesterday before GetProdLog to fix cross-midnight filename
+    mismatch [HS_Function.cpp]
+  - swap SystemDate to yesterday before GetGPIBLog to fix cross-midnight filename
+    mismatch [HS_Function.cpp]
+- rev: HT9045_3.33.899.x
+  date: 2026/04/14
+  engineer: JimmyChiu
+  changes:
+  - trace daily-upload entry only (iLog>=5) to avoid timer-driven log bloat [HS_Function.cpp]
+  - trace skip reason [HS_Function.cpp]
+  - diagnostic log only on daily-upload path to avoid timer-driven bloat [HS_Function.cpp]
+  - trace success [HS_Function.cpp]
+  - trace failure [HS_Function.cpp]
+  - trace missing file [HS_Function.cpp]
+  - trace connect failure [HS_Function.cpp]
+  - pack MNetLog into StateRecord when N10-3 daily upload enabled for FTP diagnostic
+    [main.cpp]
+  - zero all pad counts when DevicePices or tray layout changes to prevent stale counts
+    causing false WAR1922 [AutoClean\uCleaning.cpp]
+  - fix operator precedence - was iDeviceNum==24 always true [AutoClean\uCleaning.cpp]
+- rev: HT9045_3.33.899.x
+  date: 2026/04/10
+  engineer: JimmyChiu
+  changes:
+  - enable SortingBinTray when CleanOut for FOREHOPE_NINGBO [CosFunction.cpp]
+  - Y position calculation mirroring MoveInArmXYPickCleanKit logic [AutoClean\AutoClean.cpp]
+  - cross-verify motor actual position vs plan-calculated position [AutoClean\AutoClean.cpp]
+  - verify all active slots in one call, returns false if any fails [AutoClean\AutoClean.cpp]
+  - plan-driven coordinate - use plan's lead slot directly [AutoClean\AutoClean.cpp]
+  - anti-hang guard - cap search-retry loops (case 3100->10 cycle) [AutoClean\AutoClean.cpp]
+  - reset anti-hang counter on restart [AutoClean\AutoClean.cpp]
+  - enhanced position cross-verification (200-condition tolerance) [AutoClean\AutoClean.cpp]
+  - post-pick position consistency check [AutoClean\AutoClean.cpp]
+  - anti-hang guard - if search retried too many times, force finish pick [AutoClean\AutoClean.cpp]
+  - reset anti-hang on normal finish [AutoClean\AutoClean.cpp]
+  - cross-verify place position before destroy [AutoClean\AutoClean.cpp]
+  - Y position calculation for cross-verification [AutoClean\cCleanKitPickPlan.h]
+  - cross-verify motor position vs plan-calculated position per slot [AutoClean\cCleanKitPickPlan.h]
+- rev: HT9045_3.33.899.x
+  date: 2026/04/09
+  engineer: JimmyChiu
+  changes:
+  - DIAG LOG - DoSupplyNewICTray startup sensor states (temp) [asendic_Loader.cpp]
+  - DIAG LOG - last tray detected (temp) [asendic_Loader.cpp]
+  - interlock guard - wait for TrayArm DoCatchFromLoader to finish before clear-empty
+    sequence [asendic_Loader.cpp]
+  - recycle CLEAN_FINISH_IC -> HAS_CLEAN_IC before search so returned pads are reusable
+    [AutoClean\AutoClean.cpp]
+- rev: HT9045_3.33.899.x
+  date: 2026/04/08
+  engineer: JimmyChiu
+  changes:
+  - global plan instance shared across pick/move/check functions [AutoClean\AutoClean.cpp,
+    AutoClean\cCleanKitPickPlan.h]
+  - check if current shuttle group has any sucker demand [AutoClean\AutoClean.cpp]
+  - plan-driven pick - iterate plan slots instead of hardcoded j=0..3 [AutoClean\AutoClean.cpp]
+  - kit empty but arm has partial pick - skip 3000-3100 loop, go finish (S6) [AutoClean\AutoClean.cpp]
+  - safety net - if CKPP plan not found, return pick complete [AutoClean\AutoClean.cpp]
+  - unified plan-driven contact count + completion check (S5) [AutoClean\AutoClean.cpp]
+  - purge phantom HAS_NULL_CLEAN_IC from InArm before dispatch [AutoClean\AutoClean.cpp]
+  - skip all remaining groups with no sucker demand [AutoClean\AutoClean.cpp]
+  - check if current shuttle group has sucker demand [AutoClean\cCleanKitPickPlan.h]
+  - accessors for downstream plan-driven functions [AutoClean\cCleanKitPickPlan.h]
+- rev: HT9045_3.33.899.x
+  date: 2026/04/07
+  engineer: JimmyChiu
+  changes:
+  - add diagnostic info before WAR0152 [ainarm9045.cpp]
+  - add for CheckInArmDestroyICFail return value [ainarm9045_1x1_1.cpp, ainarm9045_2x4_16.cpp]
+  - align with 2x4_8 baseline — add bCheckInarmPlaceShuttle + CheckInArmDestroyICFail
+    [ainarm9045_1x1_1.cpp]
+  - align with 2x4_8 baseline — add CheckInArmDestroyICFail for SHT2 [ainarm9045_1x1_1.cpp,
+    ainarm9045_2x4_16.cpp]
+  - align with 2x4_8 baseline — add HAS_TRY_SUCK_IC/HAS_SUCK_IC branch for HotPlate
+    verify [ainarm9045_1x1_1.cpp, ainarm9045_2x2_8_Hot.cpp, ainarm9045_2x8_32.cpp]
+  - align with 2x4_8 baseline — add bCheckInarmPlaceShuttle guard [ainarm9045_1x2_4_Hot.cpp,
+    ainarm9045_2x2_4.cpp, ainarm9045_2x2_4_12.cpp, ainarm9045_2x2_8_Hot.cpp, ainarm9045_2x4_4.cpp,
+    ainarm9045_2x8_32.cpp]
+  - align with 2x4_8 baseline — add bCheckInarmPlaceShuttle=false [ainarm9045_1x3_2_14.cpp,
+    ainarm9045_1x4_2.cpp]
+  - integrate CompactSearch for anti-fragmentation HP placement [ainarm9045_1x4_4.cpp]
+  - integrate CompactSearch for post-place re-search [ainarm9045_1x4_4.cpp]
+  - pre-Loader limit gate - skip if no reachable HP cell [ainarm9045_1x4_4.cpp]
+  - integrate CompactSearch for HP-check search [ainarm9045_1x4_4.cpp]
+  - align with 2x4_8 baseline — add bCheckInarmPlaceShuttle=true [ainarm9045_1x4_8_Hot.cpp]
+  - align with 2x4_8 baseline — add CheckInArmDestroyICFail for SHT1 [ainarm9045_2x2_8_Hot.cpp,
+    ainarm9045_2x4_16.cpp]
+  - force enable for 1x4_4, other modes use INI setting [cSiteUseManager.cpp]
+  - force 1x1 single-cell search for starting position. [cSiteUseManager.cpp]
+  - scan Y outer, X inner (left-to-right then top-to-bottom) [cSiteUseManager.cpp]
+  - dump all diagnostic info on search failure for root cause analysis [cSiteUseManager.cpp]
+  - DISABLED ��� iPitchSpan=iXpitchMaxX3 is too conservative [cSiteUseManager.cpp]
+  - diagnostic dump on CompactSearch failure ��� log all decision params + HP grid
+    [cSiteUseManager.cpp]
+  - fix dump to use correct struct for XPitch/YPitch [cSiteUseManager.cpp]
+  - diagnostic dump on CompactSearch failure [cSiteUseManager.h]
+  - only Pause when Note closed via BtnPauseClick (SoftStop==true), skip when closed
+    via Start to prevent false MES2111 [note.cpp]
+  - cCleanKitPickPlan implementation [AutoClean\AutoClean.cpp]
+  - runtime switch for new/old auto clean search logic [AutoClean\AutoClean.cpp]
+  - dual-path switch  bUseCKPP selects new class vs old logic [AutoClean\AutoClean.cpp]
+  - AC debug log - X position breakdown [AutoClean\AutoClean.cpp]
+  - skip phantom marking for negative-offset suckers to preserve pads for future rounds
+    [AutoClean\AutoClean.cpp]
+  - prevent hang when no clean pads remain [AutoClean\AutoClean.cpp]
+  - AC debug log - PickfromCleanKit Task20 result [AutoClean\AutoClean.cpp]
+  - allow partial pick when inactive suckers have no pad (Fix H) [AutoClean\AutoClean.cpp]
+  - break outer loop when clean kit is empty [AutoClean\AutoClean.cpp]
+  - recycle CLEAN_FINISH_IC pads before re-entry to prevent hang [AutoClean\AutoClean.cpp]
+  - recycle CLEAN_FINISH_IC pads before re-entry (ARM2) [AutoClean\AutoClean.cpp]
+  - new class to replace SearchCleanKitUpDown search/plan/assign logic [AutoClean\cCleanKitPickPlan.h]
+  - runtime flag to switch between new class and old logic [AutoClean\cCleanKitPickPlan.h]
+- rev: HT9045_3.33.899.x
+  date: 2026/04/05
+  engineer: JimmyChiu
+  changes:
+  - Phase5C switchable search with HangUp on failure [ainarm9045_2x4_8.cpp]
+  - Phase1 shadow log HP state after search [ainarm9045_2x4_8.cpp]
+  - Phase2 validate search result position [ainarm9045_2x4_8.cpp]
+  - Phase1 shadow log after each nozzle placement decision [ainarm9045_2x4_8.cpp]
+  - Phase6D pre-Loader limit gate - skip Loader pick if no reachable HP cell [ainarm9045_2x4_8.cpp]
+  - Phase4 init SiteUseMgr after HP setup complete [cinitial.cpp]
+  - Phase0 SiteUseManager implementation - read-only queries over existing globals
+    [cSiteUseManager.cpp]
+  - Phase4 load switch from Gerneral.ini [SiteUseMgr] section [cSiteUseManager.cpp]
+  - Phase1 shadow verification - log HP state before SearchPlateToPlace [cSiteUseManager.cpp]
+  - Phase1 shadow verification - log HP cell state after place attempt [cSiteUseManager.cpp]
+  - Phase2 validate SearchPlateToPlace result [cSiteUseManager.cpp]
+  - Phase3 algorithm switch accessors [cSiteUseManager.cpp]
+  - Phase5 compact search with edge-case protection [cSiteUseManager.cpp]
+  - Phase5B bPitchOver12000 downgrade to 1x1 scan [cSiteUseManager.cpp]
+  - Phase5B Row2CanPutHP/HotPlateYPitchCanPutAll guard [cSiteUseManager.cpp]
+  - Phase5B AutoClean HP2 Y-offset skip [cSiteUseManager.cpp]
+  - Phase5B skip AutoClean reserved zone on HP2(plate=0) [cSiteUseManager.cpp]
+  - Phase6 skip positions that would exceed motor soft limit [cSiteUseManager.cpp]
+  - Phase6 motor soft limit pre-check [cSiteUseManager.cpp, cSiteUseManager.h]
+  - Phase6 check if ANY HP cell is reachable by current nozzles [cSiteUseManager.cpp]
+  - Phase0 SiteUseManager read-only facade for nozzle/HP site queries [cSiteUseManager.h]
+  - Phase1 shadow verification logging [cSiteUseManager.h]
+  - Phase2 SearchPlateToPlace result validation [cSiteUseManager.h]
+  - Phase3 switchable compact search algorithm [cSiteUseManager.h]
+  - Phase5A return bool for failure detection [cSiteUseManager.h]
+- rev: HT9045_3.33.899.x
+  date: 2026/04/04
+  engineer: JimmyChiu
+  changes:
+  - skip HP cell for HAS_NULL_IC to reduce fragmentation [ainarm9045_2x4_8.cpp]
+- rev: HT9045_3.33.899.x
+  date: 2026/04/01
+  engineer: JimmyChiu
+  changes:
+  - Add LB Up/Down temperature and limits for SECS collection [SECSGEM\uHGemHT9045_SV.cpp]
+- rev: HT9045_3.33.899.x
+  date: 2026/03/31
+  engineer: JimmyChiu
+  changes:
+  - 擴展支援 bRemoteLotStart (Greatek/OEE) [Command.cpp]
+  - Greatek TCP Remote Start Lot [Command.cpp]
+  - Greatek TCP Remote End Lot [Command.cpp]
+  - Greatek TCP Remote Start Lot (HTSET 720) [CosFunction.cpp, CosFunction.h]

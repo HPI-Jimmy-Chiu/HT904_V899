@@ -1,0 +1,72 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "BCB6: Build V899",
+            "type": "shell",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "cd /d \"${workspaceFolder}\\HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330\" && \"${env:BCB6}\\Bin\\bpr2mak.exe\" HT9045.bpr && \"${env:BCB6}\\Bin\\make.exe\" -f HT9045.mak"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": {
+                "owner": "bcb6",
+                "fileLocation": ["relative", "${workspaceFolder}\\HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330"],
+                "pattern": {
+                    "regexp": "^(.+?)\\((\\d+)\\):\\s+(Error|Warning)\\s+(.+):\\s+(.+)$",
+                    "file": 1,
+                    "line": 2,
+                    "severity": 3,
+                    "code": 4,
+                    "message": 5
+                }
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            }
+        },
+        {
+            "label": "BCB6: Clean V899",
+            "type": "shell",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "cd /d \"${workspaceFolder}\\HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330\" && \"${env:BCB6}\\Bin\\make.exe\" -f HT9045.mak clean"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Quick: 搜尋函式定義",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-NoProfile",
+                "-Command",
+                "Get-ChildItem -Path '${workspaceFolder}\\HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330' -Recurse -Include '*.cpp','*.h' | Select-String -Pattern '${input:funcName}' | Select-Object -First 30 | Format-Table -Property Path,LineNumber,Line -AutoSize"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            }
+        }
+    ],
+    "inputs": [
+        {
+            "id": "funcName",
+            "description": "要搜尋的函式名稱",
+            "type": "promptString",
+            "default": "DoInArm"
+        }
+    ]
+}

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>除法安全替換報告 — HT9045 V3.33.897.0_20260306</title>
+<style>
+body { font-family: "Microsoft JhengHei", "Segoe UI", sans-serif; margin: 40px auto; max-width: 1100px; line-height: 1.7; color: #222; background: #f8f9fa; }
+h1 { color: #1a237e; border-bottom: 3px solid #1a237e; padding-bottom: 10px; }
+h2 { color: #283593; border-bottom: 1px solid #ccc; padding-bottom: 6px; margin-top: 40px; }
+h3 { color: #3949ab; margin-top: 28px; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; }
+th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; }
+th { background: #e8eaf6; color: #1a237e; font-weight: 600; }
+tr:nth-child(even) { background: #f5f5f5; }
+tr:hover { background: #e3f2fd; }
+code { background: #e8eaf6; padding: 2px 6px; border-radius: 3px; font-family: Consolas, monospace; font-size: 0.9em; }
+pre { background: #263238; color: #eeffff; padding: 16px; border-radius: 6px; overflow-x: auto; font-size: 0.88em; line-height: 1.5; }
+pre code { background: none; color: inherit; padding: 0; }
+.summary-box { background: #e8eaf6; border: 2px solid #3f51b5; border-radius: 8px; padding: 20px; margin: 20px 0; }
+.summary-box table { margin: 0; }
+.summary-box th { background: #c5cae9; }
+.highlight { background: #fff9c4; font-weight: bold; }
+.success { color: #2e7d32; font-weight: bold; }
+.fail { color: #c62828; font-weight: bold; }
+.warn { color: #e65100; }
+blockquote { background: #fff3e0; border-left: 4px solid #ff9800; padding: 12px 20px; margin: 16px 0; font-style: italic; }
+.flowchart { text-align: center; margin: 20px 0; }
+.flowchart img { max-width: 100%; }
+.example-box { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin: 16px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.meta-info { color: #666; font-size: 0.9em; }
+hr { border: none; border-top: 1px solid #ddd; margin: 30px 0; }
+.badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.85em; font-weight: 600; }
+.badge-ok { background: #c8e6c9; color: #1b5e20; }
+.badge-fix { background: #fff9c4; color: #e65100; }
+.badge-skip { background: #e0e0e0; color: #424242; }
+</style>
+</head>
+<body>
+
+<h1>除法安全替換報告</h1>
+
+<p class="meta-info">
+<strong>專案</strong>：HT9045 (<code>HT9011UC_Code_V3.33.897.0_20260306</code>)<br>
+<strong>日期</strong>：2026-03-06 11:51:22<br>
+<strong>作者</strong>：Steven<br>
+<strong>使用模板</strong>：<code>ChangeToFloatNonPcnt&lt;T&gt;(Numerator, Denominator)</code>（定義於 MachineType.h）<br>
+<strong>模板行為</strong>：除數為 0 時回傳 0，否則回傳 <code>(double)Numerator/(double)Denominator</code>
+</p>
+
+<hr>
+
+<h2>摘要</h2>
+
+<div class="summary-box">
+<table>
+<tr><th>項目</th><th>數量</th></tr>
+<tr><td>掃描 .cpp 檔案數</td><td>327</td></tr>
+<tr><td>原始除法候選</td><td>362</td></tr>
+<tr><td>已有保護（排除）</td><td>79</td></tr>
+<tr><td>未受保護的有風險除法</td><td>283</td></tr>
+<tr><td>編譯時常數（跳過）</td><td>27</td></tr>
+<tr><td>空分子警告（手動處理）</td><td>10</td></tr>
+<tr><td>fixCases 手動補正</td><td>6</td></tr>
+<tr><td>if 保護跳過（警告中）</td><td>4</td></tr>
+<tr class="highlight"><td><strong>實際替換數</strong></td><td><strong>262</strong></td></tr>
+<tr class="highlight"><td><strong>修改檔案數</strong></td><td><strong>47</strong></td></tr>
+<tr><td>編譯錯誤修正</td><td>3</td></tr>
+<tr><td>驗證修復（模式A+B）</td><td>0</td></tr>
+<tr><td>最終編譯結果</td><td class="success">EXIT=0（成功）</td></tr>
+</table>
+</div>
+
+<hr>
+
+<h2>流程圖</h2>
+
+<div class="flowchart">
+<pre style="background:#fff; color:#333; text-align:left; border:1px solid #ccc;">
+┌─────────────────────────────────┐
+│  階段1：搜尋除法位置             │
+│  find_divisions.ps1              │
+│  → 362 個候選除法                │
+│  → division_candidates.csv      │
+└──────────────┬──────────────────┘
+               ▼
+┌─────────────────────────────────┐
+│  階段2：上下文分析與風險過濾     │
+│  前後 20 行保護偵測              │
+│  → 79 個已有保護排除            │
+│  → 283 個有風險                  │
+│  → final_risky.csv              │
+└──────────────┬──────────────────┘
+               ▼
+┌─────────────────────────────────┐
+│  階段3.1：產生替換對             │
+│  generate_replacements           │
+│  → 256 個替換對                  │
+│  → 10 個警告                     │
+│  → replacement_pairs.csv        │
+└──────────────┬──────────────────┘
+               ▼
+┌─────────────────────────────────┐
+│  檢查警告 &amp; 手動補正 fixCases    │
+│  → 6 個手動補正                  │
+│  → 4 個 if 保護跳過             │
+└──────────────┬──────────────────┘
+               ▼
+┌─────────────────────────────────┐
+│  階段3.2：套用替換               │
+│  apply_replacements (Big5)       │
+│  → 262 成功 / 0 失敗            │
+│  → 47 個檔案修改                │
+│  → replacement_report.csv       │
+└──────────────┬──────────────────┘
+               ▼
+┌─────────────────────────────────┐
+│  階段3.5：驗證修復破損模式       │
+│  模式A (.ChangeToFloatNonPcnt)  │
+│  模式B ((double)(func))(args))  │
+│  → 0 修復                       │
+└──────────────┬──────────────────┘
+               ▼
+┌─────────────────────────────────┐
+│  階段6：測試與編譯 (BCB6)        │
+│  bpr2mak → make → bcc32/ilink32│
+├─────────────────────────────────┤
+│  ❌ 第1次編譯：EXIT=1 (2錯誤)   │
+│  修正 cMyDB.cpp、uCleaning.cpp  │
+│  ❌ 第2次編譯：EXIT=1 (2錯誤)   │
+│  修正 uPAT_Function.cpp         │
+│  ✅ 第3次編譯：EXIT=0（成功）    │
+└──────────────┬──────────────────┘
+               ▼
+┌─────────────────────────────────┐
+│  階段7：驗證殘留破損             │
+│  → 0 殘留                       │
+└──────────────┬──────────────────┘
+               ▼
+┌─────────────────────────────────┐
+│  階段4：產出報告                 │
+│  → .md + .html                  │
+└─────────────────────────────────┘
+</pre>
+</div>
+
+<hr>
+
+<h2>跳過的編譯時常數</h2>
+
+<p>以下除數為 <code>MachineType.h</code> 中定義的編譯時常數，絕不會為 0，故排除替換：</p>
+
+<table>
+<tr><th>常數名稱</th><th>排除原因</th></tr>
+<tr><td><code>MAX_SAFE_DOOR_CNT</code></td><td>編譯時常數，不會為 0</td></tr>
+<tr><td><code>MAX_HATCH_DOOR_CNT</code></td><td>編譯時常數，不會為 0</td></tr>
+<tr><td><code>MAX_ARM_Row</code> / <code>MAX_ARM_Col</code></td><td>編譯時常數，不會為 0</td></tr>
+<tr><td><code>MAX_Index_Row</code> / <code>MAX_Index_Col</code></td><td>編譯時常數，不會為 0</td></tr>
+<tr><td><code>MAX_SOCKET_ROW</code> / <code>COL</code> / <code>TOTAL</code></td><td>編譯時常數，不會為 0</td></tr>
+<tr><td><code>MAX_SENSOR_ITEM</code></td><td>編譯時常數，不會為 0</td></tr>
+<tr><td><code>MAX_TTL_BIT</code></td><td>編譯時常數，不會為 0</td></tr>
+<tr><td><code>MAX_IONFAN</code></td><td>編譯時常數，不會為 0</td></tr>
+<tr><td><code>MAX_AUTO_TRAY</code> / <code>MAX_TRACK</code></td><td>編譯時常數，不會為 0</td></tr>
+<tr><td><code>MAX_FIX_TRAY</code> / <code>MAX_UNLOAD_TRAY</code></td><td>編譯時常數，不會為 0</td></tr>
+<tr><td><code>MAX_MGZ_TRAY</code></td><td>編譯時常數，不會為 0</td></tr>
+<tr><td><code>RecordTrayCnt</code></td><td>編譯時常數，不會為 0</td></tr>
+</table>
+
+<hr>
+
+<h2>特殊案例</h2>
+
+<h3>編譯錯誤修正</h3>
+
+<table>
+<tr><th>檔案:行號</th><th>原因</th><th>處理方式</th></tr>
+<tr>
+<td><code>cMyDB.cpp:368</code></td>
+<td>多行運算式跨 3 行，分子反向掃描只處理行 368 產生斷裂括弧；且該除法已在 line 364 受 <code>if(LastSet.iJamCount[2]!=0)</code> 保護</td>
+<td><span class="badge badge-fix">還原為原始程式碼</span></td>
+</tr>
+<tr>
+<td><code>uCleaning.cpp:2045</code></td>
+<td>原始碼 <code>(iPos/udDeviceCT-&gt;Increment)%2</code> 使用整數除法結果做模運算，替換後 <code>ChangeToFloatNonPcnt</code> 回傳 float 不可用 <code>%</code></td>
+<td><span class="badge badge-fix">加 (int) 轉型</span>：<code>((int)ChangeToFloatNonPcnt(...))%2</code></td>
+</tr>
+<tr>
+<td><code>uPAT_Function.cpp:428</code></td>
+<td>分子反向掃描將 <code>LastSet.SystemAccSecond[0][stPauseTime]</code> 中的 <code>[stPauseTime]</code> 誤判為獨立分子，產生斷裂的替換結果</td>
+<td><span class="badge badge-fix">修正分子</span>：完整包含 <code>LastSet.SystemAccSecond[0][stPauseTime]</code></td>
+</tr>
+</table>
+
+<h3>fixCases 手動補正（空分子）</h3>
+
+<table>
+<tr><th>檔案:行號</th><th>原始除法</th><th>分子</th><th>分母</th></tr>
+<tr><td><code>ainarm9045.cpp:5849</code></td><td><code>MOT[MMTrayY].Tray.XItem / LoadForm-&gt;BlockXItem</code></td><td><code>MOT[MMTrayY].Tray.XItem</code></td><td><code>LoadForm-&gt;BlockXItem</code></td></tr>
+<tr><td><code>ainarm9045.cpp:5850</code></td><td><code>MOT[MMTrayY].Tray.YItem / LoadForm-&gt;BlockYItem</code></td><td><code>MOT[MMTrayY].Tray.YItem</code></td><td><code>LoadForm-&gt;BlockYItem</code></td></tr>
+<tr><td><code>Magazine.cpp:585</code></td><td><code>MOT[Motor].Tray.XItem / AutoForm[iWhichAuto]-&gt;BlockXItem</code></td><td><code>MOT[Motor].Tray.XItem</code></td><td><code>AutoForm[iWhichAuto]-&gt;BlockXItem</code></td></tr>
+<tr><td><code>Magazine.cpp:586</code></td><td><code>MOT[Motor].Tray.YItem / AutoForm[iWhichAuto]-&gt;BlockYItem</code></td><td><code>MOT[Motor].Tray.YItem</code></td><td><code>AutoForm[iWhichAuto]-&gt;BlockYItem</code></td></tr>
+<tr><td><code>mySYNTEKmotor.cpp:273</code></td><td><code>dScaleSpeed / PJogHighSpeed</code></td><td><code>dScaleSpeed</code></td><td><code>PJogHighSpeed</code></td></tr>
+<tr><td><code>SortingBinTray.cpp:1736</code></td><td><code>(CalData.iUseTray[iTX][iTY]-1 - iSX) / SuckData-&gt;iXItem</code></td><td><code>(CalData.iUseTray[iTX][iTY]-1 - iSX)</code></td><td><code>SuckData-&gt;iXItem</code></td></tr>
+</table>
+
+<h3>跳過的警告（已有 if 保護）</h3>
+
+<table>
+<tr><th>檔案:行號</th><th>原因</th></tr>
+<tr><td><code>SortingBinTray.cpp:1481</code></td><td>位於 <code>if(TrayData.iXPitch != 0)</code> 區塊內</td></tr>
+<tr><td><code>SortingBinTray.cpp:1485</code></td><td>位於 <code>if(TrayData.iXPitch != 0)</code> 區塊內</td></tr>
+<tr><td><code>SortingBinTray.cpp:1647</code></td><td>位於 <code>if(TrayData.iYPitch != 0)</code> 區塊內</td></tr>
+<tr><td><code>SortingBinTray.cpp:1652</code></td><td>位於 <code>if(TrayData.iYPitch != 0)</code> 區塊內</td></tr>
+</table>
+
+<hr>
+
+<h2>各檔案替換明細</h2>
+
+<table>
+<tr><th>#</th><th>檔案名稱</th><th>替換數</th></tr>
+<tr><td>1</td><td>CAlignmentB.cpp</td><td>28</td></tr>
+<tr><td>2</td><td>InOutArmZteach.cpp</td><td>25</td></tr>
+<tr><td>3</td><td>cinitial.cpp</td><td>16</td></tr>
+<tr><td>4</td><td>ainarm9045.cpp</td><td>15</td></tr>
+<tr><td>5</td><td>SortingBinTray.cpp</td><td>13</td></tr>
+<tr><td>6</td><td>AutoAlignment.cpp</td><td>12</td></tr>
+<tr><td>7</td><td>uHGemEquipment.cpp</td><td>11</td></tr>
+<tr><td>8</td><td>main.cpp</td><td>11</td></tr>
+<tr><td>9</td><td>aoutarm.cpp</td><td>11</td></tr>
+<tr><td>10</td><td>mySMCmotor.cpp</td><td>10</td></tr>
+<tr><td>11</td><td>fRotate.cpp</td><td>8</td></tr>
+<tr><td>12</td><td>csystem.cpp</td><td>7</td></tr>
+<tr><td>13</td><td>HTMC88X1Motor.cpp</td><td>7</td></tr>
+<tr><td>14</td><td>aoutarm9045.cpp</td><td>7</td></tr>
+<tr><td>15</td><td>myMN200motor.cpp</td><td>5</td></tr>
+<tr><td>16</td><td>AutoClean.cpp</td><td>5</td></tr>
+<tr><td>17</td><td>cpublic.cpp</td><td>5</td></tr>
+<tr><td>18</td><td>Magazine.cpp</td><td>5</td></tr>
+<tr><td>19</td><td>cContact.cpp</td><td>5</td></tr>
+<tr><td>20</td><td>uCleaning.cpp</td><td>3</td></tr>
+<tr><td>21</td><td>mymotor.cpp</td><td>3</td></tr>
+<tr><td>22</td><td>SECSGEM.cpp</td><td>3</td></tr>
+<tr><td>23</td><td>mySYNTEKmotor.cpp</td><td>3</td></tr>
+<tr><td>24</td><td>ProductionInfo.cpp</td><td>3</td></tr>
+<tr><td>25</td><td>fDTME08.cpp</td><td>3</td></tr>
+<tr><td>26</td><td>uPAT_Function.cpp</td><td>3</td></tr>
+<tr><td>27</td><td>aTester_Rear.cpp</td><td>3</td></tr>
+<tr><td>28</td><td>aTester_Front.cpp</td><td>3</td></tr>
+<tr><td>29</td><td>cContactCT.cpp</td><td>3</td></tr>
+<tr><td>30</td><td>myTimer.cpp</td><td>3</td></tr>
+<tr><td>31</td><td>uMotorTest.cpp</td><td>3</td></tr>
+<tr><td>32</td><td>cObserver.cpp</td><td>2</td></tr>
+<tr><td>33</td><td>mykitsuck.cpp</td><td>2</td></tr>
+<tr><td>34</td><td>cMyDB.cpp</td><td>2</td></tr>
+<tr><td>35</td><td>uYieldMonitoring.cpp</td><td>2</td></tr>
+<tr><td>36</td><td>uHGemClass.cpp</td><td>1</td></tr>
+<tr><td>37</td><td>tools.cpp</td><td>1</td></tr>
+<tr><td>38</td><td>cConfiguration.cpp</td><td>1</td></tr>
+<tr><td>39</td><td>AutoTemperature.cpp</td><td>1</td></tr>
+<tr><td>40</td><td>atester.cpp</td><td>1</td></tr>
+<tr><td>41</td><td>note.cpp</td><td>1</td></tr>
+<tr><td>42</td><td>ATCSystem.cpp</td><td>1</td></tr>
+<tr><td>43</td><td>uLotInfo.cpp</td><td>1</td></tr>
+<tr><td>44</td><td>FixAICCD.cpp</td><td>1</td></tr>
+<tr><td>45</td><td>cTrayMapping.cpp</td><td>1</td></tr>
+<tr><td>46</td><td>BarCode.cpp</td><td>1</td></tr>
+<tr><td>47</td><td>mymessbox.cpp</td><td>1</td></tr>
+</table>
+
+<hr>
+
+<h2>替換範例</h2>
+
+<div class="example-box">
+<h3>範例 1：CAlignmentB.cpp:1235 — 簡單變數除法</h3>
+<p><strong>替換前</strong></p>
+<pre><code>iX120PitchCountAvg/iCnt</code></pre>
+<p><strong>替換後</strong></p>
+<pre><code>ChangeToFloatNonPcnt((double)(iX120PitchCountAvg), (double)(iCnt))</code></pre>
+<p><strong>說明</strong>：<code>iCnt</code> 為計數器變數，當無有效計數時可能為 0，導致除以零崩潰。</p>
+</div>
+
+<div class="example-box">
+<h3>範例 2：ainarm9045.cpp:7905 — 括號運算式分子</h3>
+<p><strong>替換前</strong></p>
+<pre><code>(iMotPulse-Prod.iInArmY15Pitch)/m</code></pre>
+<p><strong>替換後</strong></p>
+<pre><code>ChangeToFloatNonPcnt((double)((iMotPulse-Prod.iInArmY15Pitch)), (double)(m))</code></pre>
+<p><strong>說明</strong>：分子為括號包覆的減法運算式，分母 <code>m</code> 為動態計算的間距值。</p>
+</div>
+
+<div class="example-box">
+<h3>範例 3：main.cpp:32497 — 結構成員存取除法</h3>
+<p><strong>替換前</strong></p>
+<pre><code>(sgTemp[i]-&gt;Width-10)/sgTemp[i]-&gt;ColCount</code></pre>
+<p><strong>替換後</strong></p>
+<pre><code>ChangeToFloatNonPcnt((double)((sgTemp[i]-&gt;Width-10)), (double)(sgTemp[i]-&gt;ColCount))</code></pre>
+<p><strong>說明</strong>：分母為 UI 元件的欄位數 <code>ColCount</code>，若 StringGrid 未初始化則可能為 0。</p>
+</div>
+
+<div class="example-box">
+<h3>範例 4：mySMCmotor.cpp:865 — 馬達齒輪比</h3>
+<p><strong>替換前</strong></p>
+<pre><code>lValue/GearRatio</code></pre>
+<p><strong>替換後</strong></p>
+<pre><code>ChangeToFloatNonPcnt((double)(lValue), (double)(GearRatio))</code></pre>
+<p><strong>說明</strong>：<code>GearRatio</code> 為馬達齒輪比參數，若設定檔載入失敗可能為 0。</p>
+</div>
+
+<div class="example-box">
+<h3>範例 5：cinitial.cpp:14120 — 函式呼叫分子 + 成員鏈分母</h3>
+<p><strong>替換前</strong></p>
+<pre><code>GetSHCHKPos(iLineNo, SThreadPara.base_InposY[iShuttleNo])/MOT[MInShuttle1].Motor-&gt;GearRatio</code></pre>
+<p><strong>替換後</strong></p>
+<pre><code>ChangeToFloatNonPcnt((double)(GetSHCHKPos(iLineNo, SThreadPara.base_InposY[iShuttleNo])), (double)(MOT[MInShuttle1].Motor-&gt;GearRatio))</code></pre>
+<p><strong>說明</strong>：分子為帶有複雜引數的函式呼叫，分母為多層成員存取鏈 <code>MOT[].Motor-&gt;GearRatio</code>。此案例展示了分子反向掃描對函式呼叫的完整解析能力，以及分母正向掃描對 <code>[]</code> <code>.</code> <code>-&gt;</code> 成員鏈的支援。</p>
+</div>
+
+<hr>
+
+<h2>安全除法模板定義</h2>
+
+<pre><code>// MachineType.h
+template &lt;class T&gt;
+float ChangeToFloatNonPcnt(const T Numerator, const T Denominator)
+{
+    double str=0.00;
+    if(Denominator!=0)
+       str= ((double)Numerator/(double)Denominator);
+    return str;
+};</code></pre>
+
+<hr>
+
+<h2>中繼檔案</h2>
+
+<table>
+<tr><th>檔案</th><th>說明</th></tr>
+<tr><td>search-division/division_candidates.csv</td><td>原始除法候選清單（362 筆）</td></tr>
+<tr><td>search-division/final_risky.csv</td><td>過濾後的有風險除法清單（283 筆）</td></tr>
+<tr><td>search-division/replacement_pairs.csv</td><td>替換對 — 舊→新（256 筆）</td></tr>
+<tr><td>search-division/replacement_report.csv</td><td>替換執行結果（262 筆，全部成功）</td></tr>
+</table>
+
+<hr>
+
+<h2>AI 使用提示詞</h2>
+
+<blockquote>
+跟據 SKILL.md 尋找cpp檔案中, 針對可能會除以0的條列, 將上面找到的地方都使用ChangeToFloatNonPcnt模板取代。<br>
+請製作一份新的報告, 格式為 .md 與 .html, 內容包含5個 .cpp範例。<br>
+將上面的全部動作做成一個流程圖。<br>
+並且在報告中加上我對AI使用的提示詞。<br>
+報告內容必須使用繁體中文。
+</blockquote>
+
+<hr>
+
+<h2>執行步驟摘要</h2>
+
+<table>
+<tr><th>步驟</th><th>動作</th><th>結果</th></tr>
+<tr><td>1</td><td>確認目標目錄 <code>HT9011UC_Code_V3.33.897.0_20260306</code></td><td>327 個 .cpp 檔案</td></tr>
+<tr><td>2</td><td>階段1 — 搜尋除法位置</td><td>362 個候選除法</td></tr>
+<tr><td>3</td><td>階段2 — 上下文保護過濾</td><td>283 個有風險（79 個已有保護排除）</td></tr>
+<tr><td>4</td><td>階段3.1 — 產生替換對</td><td>256 個替換對 + 10 個警告</td></tr>
+<tr><td>5</td><td>檢查警告，補正 fixCases</td><td>6 個手動補正，4 個 if 保護跳過</td></tr>
+<tr><td>6</td><td>階段3.2 — 套用替換</td><td>262 成功 / 0 失敗，47 個檔案修改</td></tr>
+<tr><td>7</td><td>階段3.5 — 驗證修復</td><td>模式A=0，模式B=0</td></tr>
+<tr><td>8</td><td>測試與編譯 (BCB6)</td><td>3 個編譯錯誤修正後 <span class="success">EXIT=0</span></td></tr>
+<tr><td>9</td><td>驗證殘留破損</td><td>0 殘留</td></tr>
+<tr><td>10</td><td>產出報告</td><td>.md + .html</td></tr>
+</table>
+
+<hr>
+<p class="meta-info" style="text-align:center;">
+報告產生時間：2026-03-06 11:51:22 | 工具：GitHub Copilot + search-division SKILL
+</p>
+
+</body>
+</html>
