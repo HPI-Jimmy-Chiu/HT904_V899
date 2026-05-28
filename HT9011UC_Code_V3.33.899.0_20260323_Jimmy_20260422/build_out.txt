@@ -1,0 +1,4 @@
+MAKE Version 5.2  Copyright (c) 1987, 2000 Borland
+	D:\ProgramFiles\Borland\CBuilder6\BIN\ilink32 @MAKE0000.@@@
+Turbo Incremental Link 5.64 Copyright (c) 1997-2002 Borland
+Fatal: User break.  Link aborted.
