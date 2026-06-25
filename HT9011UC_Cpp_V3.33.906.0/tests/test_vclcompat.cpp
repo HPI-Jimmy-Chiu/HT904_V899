@@ -333,6 +333,101 @@ int main() {
     }
 
     // ===================================================================
+    //  HexStrToInt : BCB6 project-local hex parser (EJ1N/TextProcess.cpp)
+    //  Net behaviour: ensure "0x" prefix then hex-parse, -1 on failure.
+    // ===================================================================
+    {
+        // bare hex digits (the IO_Table Port / ISABase column form)
+        CHECK(HexStrToInt(AnsiString("FF"))   == 255);
+        CHECK(HexStrToInt(AnsiString("10"))   == 16);     // hex 10 == 16
+        CHECK(HexStrToInt(AnsiString("0"))    == 0);
+        CHECK(HexStrToInt(AnsiString("280"))  == 0x280);  // 640
+        CHECK(HexStrToInt(AnsiString("a"))    == 10);     // lower-case ok
+        // explicit "0x" / "$" prefixes both accepted
+        CHECK(HexStrToInt(AnsiString("0xFF")) == 255);
+        CHECK(HexStrToInt(AnsiString("$1F"))  == 31);
+        // whitespace tolerated
+        CHECK(HexStrToInt(AnsiString("  20  ")) == 0x20);
+        // unparseable -> -1 ; empty -> -1
+        CHECK(HexStrToInt(AnsiString("GZ"))   == -1);
+        CHECK(HexStrToInt(AnsiString(""))     == -1);
+    }
+
+    // ===================================================================
+    //  FindFirst / FindNext / FindClose + TSearchRec (BCB6 semantics)
+    //  Build a temp dir tree, enumerate it, assert the BCB6 contract:
+    //    FindFirst==0 on match, FindNext==0 while more, sr.Name/sr.Attr,
+    //    faAnyFile matches dirs+files, attr==0 filters out directories.
+    // ===================================================================
+    {
+        // constant values must match BCB6 SysUtils.hpp
+        CHECK(faDirectory == 0x10);
+        CHECK(faAnyFile   == 0x3F);
+        CHECK(faReadOnly  == 0x01);
+        CHECK(faArchive   == 0x20);
+
+        AnsiString base("vclcompat_findtest_dir");
+        RemoveDir(base + "\\sub");                 // best-effort pre-clean
+        DeleteFile(base + "\\a.txt");
+        DeleteFile(base + "\\b.dat");
+        RemoveDir(base);
+        CHECK(ForceDirectories(base));
+        CHECK(CreateDir(base + "\\sub"));
+        // two files
+        { FILE* f = std::fopen((base + "\\a.txt").c_str(), "wb");
+          if (f) { std::fputs("hi", f); std::fclose(f); } }
+        { FILE* f = std::fopen((base + "\\b.dat").c_str(), "wb");
+          if (f) { std::fputs("yo", f); std::fclose(f); } }
+
+        // faAnyFile : enumerate everything (".", "..", sub, a.txt, b.dat)
+        {
+            int files = 0, dirs = 0, dots = 0;
+            TSearchRec sr;
+            int r = FindFirst(base + "\\*.*", faAnyFile, sr);
+            CHECK(r == 0);                                  // BCB6: 0 == match
+            if (r == 0) {
+                do {
+                    if (sr.Name == "." || sr.Name == "..") { ++dots; continue; }
+                    if ((sr.Attr & faDirectory) != 0) ++dirs;
+                    else                              ++files;
+                } while (FindNext(sr) == 0);                // BCB6: loop while 0
+                FindClose(sr);
+            }
+            CHECK(files == 2);                              // a.txt + b.dat
+            CHECK(dirs  == 1);                              // sub
+            CHECK(dots  == 2);                              // . and ..
+        }
+
+        // attr == 0 : directories (and . / ..) are filtered OUT; files only.
+        {
+            int files = 0, dirs = 0;
+            TSearchRec sr;
+            if (FindFirst(base + "\\*.*", 0, sr) == 0) {
+                do {
+                    if ((sr.Attr & faDirectory) != 0) ++dirs;
+                    else                              ++files;
+                } while (FindNext(sr) == 0);
+                FindClose(sr);
+            }
+            CHECK(files == 2);
+            CHECK(dirs  == 0);                              // sub + . + .. filtered
+        }
+
+        // no-match path : FindFirst returns non-zero (BCB6).
+        {
+            TSearchRec sr;
+            CHECK(FindFirst(base + "\\nope_*.xyz", faAnyFile, sr) != 0);
+            FindClose(sr);   // safe even on failed FindFirst
+        }
+
+        // cleanup
+        DeleteFile(base + "\\a.txt");
+        DeleteFile(base + "\\b.dat");
+        RemoveDir(base + "\\sub");
+        CHECK(RemoveDir(base));                             // dir now empty
+    }
+
+    // ===================================================================
     //  summary
     // ===================================================================
     std::printf("\nvclcompat harness: %d/%d checks passed\n",

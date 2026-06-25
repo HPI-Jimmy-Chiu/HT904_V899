@@ -25,8 +25,9 @@
 - ✅ **W1 第一批 Public 葉工具**：`ExternFunction`(純函式部分)、`WinSocketErrorCode`(GetErrorMsg)、`cBootLog`；ctest 7/7。
 - ✅ **W2 邏輯島（部分）**：`Common/PickPlanner` 通用引擎 cArmPickPlan（與 golden 幾乎逐字同，僅換 include）+ 兩個 scaffold adapter（gated off）；`cUnitConvert` 純轉換部分。ctest 9/9。
 - ✅ **W0 尾段＝全域標頭完成**：`MachineType.h`/`Config.h`/`CosFunction.h`/`myTimer.h`/`cpublic.h`/`cprod.h`/`cmydef.h`/`MachineDefine.h` 全部去 VCL 化、**單一 TU 一起編可過**（ctest 11/11，含 globals：PROD_INFO_ST 的 static_assert/offsetof 錨點 + enum/#define 值對拍）。**瓶頸已解除**。form 指標前置宣告→W7；.cpp 觸及狀態機的 body `#if 0`→W3/W6。
-- ▶ **下一步：W3 config/DB/base services**（`cinitial` 讀 Gerneral.ini/Mot_Table.csv/IO_Table.csv→IniConfig/Prod；`cMyDB`+sqlite3；`common.cpp` SGDToCSV 等；`MyStringList`（globals 已備）；補 vclcompat FindFirst/TSearchRec 解 DeleteDirectory）。
-- ⏳ 待：W4 HAL、W5 comms、W6 root 狀態機、W7 UI。
+- ◐ **W3 config/DB — 前置已備，readers 待續**：已加 vclcompat 檔案系統 API（FindFirst/FindNext/FindClose/TSearchRec/fa*/RemoveDir/FileSetAttr/FileGetAttr/HexStrToInt）、`third_party/sqlite3/` 外部相依 scaffold（現 header-only stub；待 vendor amalgamation）、`tests/test_config_db.cpp` 真檔 oracle（鎖定 45 SMC/MOTION=1/IO=2/IO_Table 644:24）、修 vclcompat TStringList SetCommaText/SetDelimitedText 尾分隔重複計數 bug。ctest 12/12。
+- ▶ **下一步：W3-cont = TIniFile/TMemIniFile vclcompat shim → common.cpp ini-helper 家族（CheckAndReadIniDataGeneral…）→ database.cpp 的 config 讀取**。這是 config readers 的閘門（W3 發現 readers 卡在沒有 ini-shim）。
+- ⏳ 待：cMyDB（待 vendor sqlite amalgamation）、MyStringList（待 __property 模擬+MyMemo）、W4 HAL、W5 comms、W6 root、W7 UI。
 
 ## 延後項目追蹤（DEFERRED — 完整性，勿遺漏，全部轉移用）
 > 部分檔案只翻了 leaf 部分，耦合段延到對應波次。最終各波結束前要回頭補完這些。

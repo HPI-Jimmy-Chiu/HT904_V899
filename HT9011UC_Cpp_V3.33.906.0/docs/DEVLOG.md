@@ -83,8 +83,16 @@
 - 處理：form 指標→前置宣告(W7)；前置宣告 TMyLog/TMyStringList/TColor=int/uPoint2D/TLargeInteger；ARM_OFFSET `_fastcall` typo 修；丟未用 include；`.cpp` 觸及狀態機 body `#if 0`→W3/W6（DEFERRED 表已記）。
 - 驗證（獨立）：clean build、**ctest 11/11**（10 prior + globals）。無 vclcompat 缺口、Verify 階段 0 修補（headers 一次到位）。
 
+## 2026-06-26 — W3 config/DB：前置已備（readers 待續）
+- 誠實結果：production config/DB readers（cinitial/database.cpp/cMyDB/common.cpp）**本批未翻**——它們卡在缺少 TIniFile/TMemIniFile shim、且 database.cpp ReadGeneralIni 牽連 SECS/GEM + 數百全域。沒有硬翻，改先補前置：
+  - vclcompat 檔案系統 API：FindFirst/FindNext/FindClose/TSearchRec/faAnyFile/faDirectory/faReadOnly/RemoveDir/FileSetAttr/FileGetAttr/HexStrToInt。
+  - `third_party/sqlite3/`（CMake 模組，優先序：vendored amalgamation→find_package→header-only stub；現為 stub，因 SRC 只有 sqlite3.h+OMF lib、無 sqlite3.c）。
+  - `tests/test_config_db.cpp` 真檔 oracle：對拍真實 system/ 檔（MOTION=1、IO=2、Mot 45 列全 SMC[名稱式 col22]、IO 15 欄 668 列 ISABase 644:24[名稱式 col8]），runtime-skip if absent。
+  - 修 vclcompat TStringList SetCommaText/SetDelimitedText 尾分隔重複計數 fidelity bug。
+- 驗證（獨立）：clean build、**ctest 12/12**。
+
 ### 🔖 RESUME（最新）
-- 已完成：C++ pivot、鏡射慣例、ContactForce、**W0 基礎+尾段(全域標頭)**、**W1 Public 批1**、**W2 邏輯島(部分)**。全 green、已 commit。**全域型別/define 契約已可在 C++ 編譯 → 瓶頸解除**。
-- **下一步：W3 config/DB/base services** = `cinitial`(讀 Gerneral.ini/Mot_Table.csv/IO_Table.csv→IniConfig/Prod；**我對此邏輯熟，之前做過對應分析**)、`cMyDB`+sqlite3、`common.cpp`(SGDToCSV)、`MyStringList`(globals 已備)、補 vclcompat FindFirst/TSearchRec 解 DeleteDirectory。
-- **完整性**：ROADMAP DEFERRED 表（含 W0-tail 新增的 gated .cpp bodies、TMyLog→W7、5×TMyStringList*→W3）最終回補。
+- 已完成：C++ pivot、鏡射、ContactForce、**W0 基礎+尾段(全域標頭)**、**W1 Public 批1**、**W2 邏輯島(部分)**、**W3 前置(fs-compat/sqlite scaffold/config oracle/TStringList fix)**。全 green、已 commit。
+- **下一步：W3-cont** = 加 `TIniFile`/`TMemIniFile` 到 vclcompat（**config readers 的閘門**）→ 翻 `common.cpp` 的 ini-helper 家族（CheckAndReadIniDataGeneral 多載、OpenIniFile…）→ 翻 `database.cpp` 的 ReadGeneralIni/config 讀取（用真檔 oracle 對拍）。之後 cMyDB（需先 vendor sqlite amalgamation）、MyStringList（需 __property 模擬+MyMemo）。
+- 觀察：早期波次多為「補前置/shim」，每波會揭露下一個前置（globals→ini-shim→readers）；前置補齊後模組翻譯會加速。
 - 驗證指令：`cd HT9011UC_Cpp_V3.33.906.0 && export PATH=/c/MinGW/bin:$PATH && cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=C:/MinGW/bin/g++.exe -DCMAKE_C_COMPILER=C:/MinGW/bin/gcc.exe && cmake --build build && ctest --test-dir build`。

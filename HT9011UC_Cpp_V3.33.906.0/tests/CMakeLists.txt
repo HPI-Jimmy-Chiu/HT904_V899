@@ -123,3 +123,23 @@ add_executable(test_globals
 target_link_libraries(test_globals PRIVATE vclcompat ht9045_globals)
 
 add_test(NAME globals COMMAND test_globals)
+
+# ===========================================================================
+#  W3 config/DB
+# ===========================================================================
+# --- test_config_db: REAL machine-config oracle ---------------------------
+#   Parses the REAL D:\HT9045\system files (Gerneral.ini / Mot_Table.csv /
+#   IO_Table.csv) through the vclcompat layer (TStringList::CommaText name-based
+#   column resolution mirroring database.cpp SetIOTableNo/SetMOTTableNo) and
+#   asserts the ground-truth oracle values: 45 SMC axes, MOTION_CARD_TYPE=1 /
+#   IO_CARD_TYPE=2, IO_Table 15 cols / 668 rows / ISABase=0 dominant (644:24).
+#   Runtime-SKIPs (exit 0) when the real config dir is absent.
+#   NOTE: the production readers (cinitial/database.cpp) are not translated yet
+#   (later W3); this test verifies the vclcompat foundation + locks the oracle.
+add_executable(test_config_db
+    test_config_db.cpp
+)
+
+target_link_libraries(test_config_db PRIVATE vclcompat)
+
+add_test(NAME config_db COMMAND test_config_db)

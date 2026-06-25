@@ -13,6 +13,21 @@
 #if defined(_WIN32)
 #  include <windows.h>
 #  include <direct.h>
+// windows.h defines A/W macros that would rename our function DEFINITIONS to
+// their *A variants (e.g. `#define DeleteFile DeleteFileA`), so the public
+// vclcompat::DeleteFile / CopyFile symbols would never be emitted and callers
+// would fail to link. Undefine the ones that collide with our API names; the
+// real Win32 entry points are still reachable via their explicit *A spellings
+// (CopyFileA / DeleteFileA / etc.) used inside the implementations below.
+#  undef DeleteFile
+#  undef CopyFile
+#  undef RemoveDirectory
+#  undef CreateDirectory
+#  undef FindFirstFile
+#  undef FindNextFile
+#  undef FindClose
+#  undef SetFileAttributes
+#  undef GetFileAttributes
 #else
 #  include <unistd.h>
 #  include <sys/types.h>
@@ -54,6 +69,35 @@ AnsiString IntToHex(int value, int digits) {
 
 int    StrToInt(const AnsiString& s)            { return s.ToInt(); }
 int    StrToIntDef(const AnsiString& s, int d)  { return s.ToIntDef(d); }
+
+// HexStrToInt : faithful net behaviour of the golden-ref project function
+//   (EJ1N/TextProcess.cpp:347)
+//       AnsiString S = (str.AnsiPos("0x")==0) ? "0x"+str : str;
+//       return StrToIntDef(S, -1);
+//   i.e. ensure a "0x" prefix, then hex-parse with a -1 default.  BCB6's
+//   StrToIntDef also accepts the Pascal '$' hex prefix, so we honour both.
+//   Leading/trailing whitespace is trimmed (BCB6 StrToInt tolerates it).
+int HexStrToInt(const AnsiString& s) {
+    AnsiString t = s.Trim();
+    if (t.IsEmpty()) return -1;
+    const std::string& raw = t.str();
+
+    // strip an existing "0x"/"0X" or "$" prefix; parse the remaining digits.
+    std::string digits;
+    if (raw.size() >= 2 && raw[0] == '0' && (raw[1] == 'x' || raw[1] == 'X')) {
+        digits = raw.substr(2);
+    } else if (raw[0] == '$') {
+        digits = raw.substr(1);
+    } else {
+        digits = raw;          // bare hex digits ("0x" gets conceptually prepended)
+    }
+    if (digits.empty()) return -1;
+
+    char* end = 0;
+    long v = std::strtol(digits.c_str(), &end, 16);   // base-16 parse
+    if (end == digits.c_str() || *end != '\0') return -1;  // unparseable -> -1
+    return static_cast<int>(v);
+}
 double StrToFloat(const AnsiString& s)          { return s.ToDouble(); }
 
 double StrToFloatDef(const AnsiString& s, double def) {
@@ -285,6 +329,211 @@ AnsiString IncludeTrailingBackslash(const AnsiString& path) {
     char last = p[p.size() - 1];
     if (last == '\\' || last == '/') return path;
     return AnsiString(p + "\\");
+}
+
+// ---------------------------------------------------------------------------
+//  directory removal / file attributes
+// ---------------------------------------------------------------------------
+bool RemoveDir(const AnsiString& path) {
+#if defined(_WIN32)
+    return ::RemoveDirectoryA(path.c_str()) != 0;
+#else
+    return rmdir(path.c_str()) == 0;
+#endif
+}
+
+int FileSetAttr(const AnsiString& path, int attr) {
+#if defined(_WIN32)
+    // BCB6 FileSetAttr: 0 on success, otherwise a Win32 error code.
+    if (::SetFileAttributesA(path.c_str(), static_cast<DWORD>(attr)) != 0) return 0;
+    return static_cast<int>(::GetLastError());
+#else
+    (void)path; (void)attr;   // no attribute model on POSIX; treat as success.
+    return 0;
+#endif
+}
+
+int FileGetAttr(const AnsiString& path) {
+#if defined(_WIN32)
+    DWORD a = ::GetFileAttributesA(path.c_str());
+    if (a == INVALID_FILE_ATTRIBUTES) return -1;
+    return static_cast<int>(a);
+#else
+    struct stat st;
+    if (stat(path.c_str(), &st) != 0) return -1;
+    int attr = 0;
+    if ((st.st_mode & S_IFMT) == S_IFDIR) attr |= faDirectory;
+    return attr;
+#endif
+}
+
+// ---------------------------------------------------------------------------
+//  FILE-SYSTEM SEARCH (FindFirst/FindNext/FindClose + TSearchRec)
+//  Win32-backed (FindFirstFileA/FindNextFileA/FindClose).  BCB6 VCL semantics
+//  reproduced exactly (see SysUtils.h header comment for the filter rule).
+// ---------------------------------------------------------------------------
+#if defined(_WIN32)
+
+// Map a WIN32_FIND_DATAA into the BCB6-visible TSearchRec fields, masking the
+// attribute to the fa* bit set the way BCB6 does (Win32 attrs are a superset).
+static void fillSearchRec(TSearchRec& sr, const WIN32_FIND_DATAA& fd) {
+    sr.Name = AnsiString(fd.cFileName);
+    sr.Attr = static_cast<int>(fd.dwFileAttributes) & faAnyFile;  // mask to fa* bits
+    // size: combine high/low into __int64
+    sr.Size = (static_cast<long long>(fd.nFileSizeHigh) << 32)
+            | static_cast<long long>(fd.nFileSizeLow);
+    // time: BCB6 stores a DOS-packed last-write time (Integer).
+    FILETIME lft;
+    WORD dosDate = 0, dosTime = 0;
+    if (::FileTimeToLocalFileTime(&fd.ftLastWriteTime, &lft) &&
+        ::FileTimeToDosDateTime(&lft, &dosDate, &dosTime)) {
+        sr.Time = (static_cast<int>(dosDate) << 16) | static_cast<int>(dosTime);
+    } else {
+        sr.Time = 0;
+    }
+}
+
+// BCB6 ExcludeAttr: bits that, if present on an entry, REJECT it. Computed as
+//   (NOT Attr) AND (faHidden | faSysFile | faVolumeID | faDirectory).
+// (Archive/ReadOnly are never filtered -- they are "always allowed" volatiles.)
+static int computeExcludeAttr(int attr) {
+    const int filterable = faHidden | faSysFile | faVolumeID | faDirectory;
+    return (~attr) & filterable;
+}
+
+// Advance until the current FindData satisfies the ExcludeAttr filter.
+// Returns 0 if a matching entry is in sr.FindData, non-zero when exhausted.
+static int skipExcluded(TSearchRec& sr) {
+    WIN32_FIND_DATAA* fd = static_cast<WIN32_FIND_DATAA*>(sr.FindData);
+    for (;;) {
+        int entryAttr = static_cast<int>(fd->dwFileAttributes) & faAnyFile;
+        if ((entryAttr & sr.ExcludeAttr) == 0) {     // not excluded -> keep
+            fillSearchRec(sr, *fd);
+            return 0;
+        }
+        if (!::FindNextFileA(static_cast<HANDLE>(sr.FindHandle), fd)) {
+            return static_cast<int>(::GetLastError());   // exhausted
+        }
+    }
+}
+
+int FindFirst(const AnsiString& path, int attr, TSearchRec& sr) {
+    // (re)initialise the record's search state.
+    if (sr.FindHandle && sr.FindHandle != INVALID_HANDLE_VALUE)
+        ::FindClose(static_cast<HANDLE>(sr.FindHandle));
+    if (!sr.FindData) sr.FindData = new WIN32_FIND_DATAA;
+    sr.FindHandle  = INVALID_HANDLE_VALUE;
+    sr.ExcludeAttr = computeExcludeAttr(attr);
+
+    WIN32_FIND_DATAA* fd = static_cast<WIN32_FIND_DATAA*>(sr.FindData);
+    HANDLE h = ::FindFirstFileA(path.c_str(), fd);
+    if (h == INVALID_HANDLE_VALUE) {
+        return static_cast<int>(::GetLastError());   // non-zero: no match (BCB6)
+    }
+    sr.FindHandle = h;
+    return skipExcluded(sr);   // honour the attribute filter on the first hit
+}
+
+int FindNext(TSearchRec& sr) {
+    if (!sr.FindHandle || sr.FindHandle == INVALID_HANDLE_VALUE || !sr.FindData)
+        return -1;
+    WIN32_FIND_DATAA* fd = static_cast<WIN32_FIND_DATAA*>(sr.FindData);
+    if (!::FindNextFileA(static_cast<HANDLE>(sr.FindHandle), fd))
+        return static_cast<int>(::GetLastError());   // exhausted -> non-zero
+    return skipExcluded(sr);
+}
+
+void FindClose(TSearchRec& sr) {
+    if (sr.FindHandle && sr.FindHandle != INVALID_HANDLE_VALUE) {
+        ::FindClose(static_cast<HANDLE>(sr.FindHandle));
+        sr.FindHandle = INVALID_HANDLE_VALUE;
+    }
+    if (sr.FindData) {
+        delete static_cast<WIN32_FIND_DATAA*>(sr.FindData);
+        sr.FindData = 0;
+    }
+}
+
+#else   // ----- non-Windows fallback (not the production target) -------------
+// The migration target is Windows/MinGW; a POSIX implementation is provided
+// only so the unit can compile in a portable test sandbox. It honours Name/
+// Attr (file-vs-dir) and the faDirectory filter bit; Size/Time are best-effort.
+} // namespace vclcompat  (re-open after including dirent below)
+#include <dirent.h>
+#include <fnmatch.h>
+namespace vclcompat {
+struct PosixFind {
+    DIR*        dir;
+    std::string dirPath;     // directory portion (with trailing sep)
+    std::string pattern;     // glob portion (e.g. "*.txt")
+};
+static int posixNext(TSearchRec& sr) {
+    PosixFind* pf = static_cast<PosixFind*>(sr.FindData);
+    struct dirent* de;
+    while ((de = readdir(pf->dir)) != 0) {
+        if (fnmatch(pf->pattern.c_str(), de->d_name, 0) != 0) continue;
+        std::string full = pf->dirPath + de->d_name;
+        struct stat st;
+        int attr = 0;
+        long long size = 0;
+        if (stat(full.c_str(), &st) == 0) {
+            if ((st.st_mode & S_IFMT) == S_IFDIR) attr |= faDirectory;
+            else size = static_cast<long long>(st.st_size);
+        }
+        if ((attr & sr.ExcludeAttr) != 0) continue;   // honour filter
+        sr.Name = AnsiString(de->d_name);
+        sr.Attr = attr;
+        sr.Size = size;
+        sr.Time = 0;
+        return 0;
+    }
+    return -1;
+}
+int FindFirst(const AnsiString& path, int attr, TSearchRec& sr) {
+    if (sr.FindData) { /* stale */ FindClose(sr); }
+    std::string p = path.str();
+    std::string dirPart, pat;
+    int s = lastSepPos(p);
+    if (s < 0) { dirPart = "./"; pat = p; }
+    else { dirPart = p.substr(0, static_cast<size_t>(s) + 1); pat = p.substr(static_cast<size_t>(s) + 1); }
+    if (pat.empty()) pat = "*";
+    PosixFind* pf = new PosixFind;
+    pf->dir = opendir(dirPart.c_str());
+    pf->dirPath = dirPart;
+    pf->pattern = pat;
+    if (!pf->dir) { delete pf; return -1; }
+    sr.FindData = pf;
+    sr.FindHandle = pf;
+    sr.ExcludeAttr = (~attr) & (faHidden | faSysFile | faVolumeID | faDirectory);
+    return posixNext(sr);
+}
+int FindNext(TSearchRec& sr) {
+    if (!sr.FindData) return -1;
+    return posixNext(sr);
+}
+void FindClose(TSearchRec& sr) {
+    if (sr.FindData) {
+        PosixFind* pf = static_cast<PosixFind*>(sr.FindData);
+        if (pf->dir) closedir(pf->dir);
+        delete pf;
+        sr.FindData = 0;
+        sr.FindHandle = 0;
+    }
+}
+#endif  // _WIN32
+
+// TSearchRec destructor: release any dangling Win32/POSIX search state so a
+// rec going out of scope without an explicit FindClose does not leak.
+TSearchRec::~TSearchRec() {
+    if (FindData || (FindHandle && FindHandle !=
+#if defined(_WIN32)
+            INVALID_HANDLE_VALUE
+#else
+            0
+#endif
+        )) {
+        FindClose(*this);
+    }
 }
 
 // ---------------------------------------------------------------------------

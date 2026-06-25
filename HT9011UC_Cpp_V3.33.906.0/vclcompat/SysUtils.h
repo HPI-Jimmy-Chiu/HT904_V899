@@ -21,6 +21,14 @@ namespace vclcompat {
 
 // ---- numbers <-> strings --------------------------------------------------
 AnsiString IntToStr(int v);
+// HexStrToInt : project-local hex parser (golden ref EJ1N/TextProcess.cpp:347
+//   int HexStrToInt(AnsiString)).  Net BCB6 semantics, faithfully reproduced:
+//   if the string has no "0x" prefix, one is prepended, then StrToIntDef(s,-1)
+//   parses it as hex; an unparseable value yields -1.  Used by the CSV config
+//   readers (database.cpp SetIOTableNo / cinitial.cpp) for the IO_Table
+//   Port / OnPort / ISABase hex columns.  A bare "$"-prefixed BCB6 hex literal
+//   is also accepted (BCB6 StrToInt understands '$').
+int        HexStrToInt(const AnsiString& s);
 // BCB6 IntToHex(Value, Digits): uppercase hex, zero-padded to >= Digits width.
 // Overloaded for the integer widths the V906 source passes (int / __int64).
 AnsiString IntToHex(long long value, int digits);
@@ -65,6 +73,81 @@ AnsiString ExtractFileName(const AnsiString& path);  // last component
 AnsiString ExtractFileExt(const AnsiString& path);   // incl. leading '.', "" if none
 AnsiString ChangeFileExt(const AnsiString& path, const AnsiString& newExt);
 AnsiString IncludeTrailingBackslash(const AnsiString& path);
+
+// ---- directory removal / file attributes (BCB6 SysUtils) ------------------
+// Companions of the FindFirst/FindNext family below: ExternFunction::
+// DeleteDirectory (golden ref Public/ExternFunction.cpp:279) ends with
+// RemoveDir(sDir), and csystem.cpp Del_Tree (csystem.cpp:23101) calls
+// FileSetAttr(...,faArchive) before DeleteFile.  Added here so the recursive
+// directory-removal callers translate without further shim work.
+bool RemoveDir(const AnsiString& path);                 // rmdir; true on success
+// FileSetAttr/FileGetAttr operate on the Win32 file-attribute bitmask (the same
+// fa* bits below).  FileSetAttr returns 0 on success (BCB6 semantics);
+// FileGetAttr returns the attribute mask, or -1 on failure.
+int  FileSetAttr(const AnsiString& path, int attr);
+int  FileGetAttr(const AnsiString& path);
+
+// ===========================================================================
+//  FILE-SYSTEM SEARCH  (BCB6 SysUtils FindFirst/FindNext/FindClose)
+//
+//  Faithful re-creation of the BCB6 directory-enumeration API used by the
+//  golden ref (Public/ExternFunction.cpp DeleteDirectory, csystem.cpp Del_Tree,
+//  cDataHandling.cpp, cBuilder.cpp, HS_Function.cpp, main.cpp, ...).
+//
+//  BCB6 semantics replicated EXACTLY:
+//    * FindFirst returns 0 on success, non-zero (a Win32 error code) on no
+//      match / error.  Callers test `FindFirst(...)==0`.
+//    * FindNext returns 0 while more entries exist, non-zero when exhausted.
+//      Callers loop `do {...} while (FindNext(sr)==0);`.
+//    * FindClose releases the search handle (callers always pair it).
+//    * The `attr` argument is a FILTER: entries whose attributes are a subset
+//      of (faAnyFile-masked) `attr` are returned.  faAnyFile (0x3F) matches
+//      everything (incl. directories); the BCB6 filter rule is
+//          (Attr & not_in_filter) == 0  ->  entry kept,
+//      where the "always-returned" volatile bits (Archive/ReadOnly) are not
+//      filtered against.  We reproduce BCB6's actual VCL FindMatchingFile rule.
+//    * sr.Attr is the entry's attribute mask AND-ed to the fa* bits.
+//    * sr.Name is the bare file name (no path), as AnsiString.
+//    * sr.Size is the file size (__int64; BCB6 uses Integer historically but
+//      modern BCB6 RTL exposes __int64 -- callers here only use Name/Attr).
+//    * sr.Time is the DOS-packed last-write time (Integer), via FileTime->DOS.
+// ===========================================================================
+
+// BCB6 file-attribute constants (SysUtils.hpp values).
+const int faReadOnly  = 0x00000001;
+const int faHidden    = 0x00000002;
+const int faSysFile   = 0x00000004;
+const int faVolumeID  = 0x00000008;
+const int faDirectory = 0x00000010;
+const int faArchive   = 0x00000020;
+const int faAnyFile   = 0x0000003F;   // ReadOnly|Hidden|SysFile|VolumeID|Directory|Archive
+
+// BCB6 TSearchRec.  Field names/types match the BCB6 record so callers compile
+// unchanged (sr.Attr, sr.Name, sr.Size, sr.Time).  `Handle`/`FindData` are the
+// opaque Win32 search state, kept as void* so this header need not pull
+// windows.h (the .cpp owns the WIN32_FIND_DATA).
+struct TSearchRec {
+    int           Time;       // DOS-packed last-write time
+    long long     Size;       // file size in bytes (BCB6 __int64)
+    int           Attr;       // attribute mask (fa* bits)
+    AnsiString    Name;       // bare file name
+    // ---- opaque Win32 search state (do not touch from translated code) ----
+    int           ExcludeAttr;// the FindFirst filter (BCB6 keeps it in the rec)
+    void*         FindHandle; // HANDLE from FindFirstFile (INVALID == none)
+    void*         FindData;   // heap WIN32_FIND_DATAA carrying the current entry
+
+    TSearchRec()
+        : Time(0), Size(0), Attr(0), ExcludeAttr(0),
+          FindHandle(0), FindData(0) {}
+    ~TSearchRec();                 // frees FindData / closes a dangling handle
+private:
+    TSearchRec(const TSearchRec&);            // non-copyable (owns Win32 state)
+    TSearchRec& operator=(const TSearchRec&);
+};
+
+int  FindFirst(const AnsiString& path, int attr, TSearchRec& sr); // 0 == match
+int  FindNext(TSearchRec& sr);                                    // 0 == match
+void FindClose(TSearchRec& sr);
 
 // ---- date/time (re-exported; defined in TDateTime) ------------------------
 // Now()/Date()/Time()/FormatDateTime()/Decode*/Encode*/Str<->DateTime are

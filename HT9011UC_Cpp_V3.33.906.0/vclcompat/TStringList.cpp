@@ -198,7 +198,13 @@ static void parseDelimited(const std::string& s, char delim, char quote,
                 field.erase(field.size() - 1);
         }
         out.push_back(AnsiString(field));
-        if (i < n && s[i] == delim) { ++i; if (i == n) out.push_back(AnsiString()); continue; }
+        // On a delimiter, step past it and continue. The outer loop guard is
+        // `i <= n`, so a TRAILING delimiter (e.g. "a,b,") re-enters the loop
+        // once more with i==n and emits the single trailing empty field -- this
+        // matches BCB6 CommaText, which turns "a,b," into 3 strings {a,b,""}.
+        // (Do NOT push the trailing empty here as well, or it would be counted
+        //  twice and every CSV row ending in ',' would gain a phantom column.)
+        if (i < n && s[i] == delim) { ++i; continue; }
         break;
     }
     // BCB6: an empty source yields an empty list.

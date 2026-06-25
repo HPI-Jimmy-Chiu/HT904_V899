@@ -167,6 +167,19 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 endif()
 
 # ---------------------------------------------------------------------------
+# third_party: sqlite3  (W3 external dependency)
+#   The golden ref links a prebuilt sqlite3.lib and ships only sqlite3.h (no
+#   sqlite3.c).  Per the migration plan, sqlite3 is an EXTERNAL portable
+#   dependency, NOT hand-translated -- cMyDB (the WRAPPER) is what we translate
+#   (scheduled W3).  This subdir creates an `sqlite3` target resolved as:
+#   vendored amalgamation  ->  system find  ->  header-only stub.
+#   No executable links it yet (cMyDB is not translated this wave), so the
+#   stub path keeps the build green while documenting the dependency.
+# ---------------------------------------------------------------------------
+add_subdirectory(third_party/sqlite3)
+message(STATUS "sqlite3 resolution: ${SQLITE3_RESOLUTION}")
+
+# ---------------------------------------------------------------------------
 # Tests
 # ---------------------------------------------------------------------------
 enable_testing()
