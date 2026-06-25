@@ -77,5 +77,16 @@
 - build green（net48，0/0）。已 commit。
 
 ### 🔖 RESUME 更新
-- 進度：Phase 0(待 log)、**Phase 1 ✅、Phase 2 config-load ✅**。下一塊 W1：報表/資料分析 PoC + LotInfo + SECS 組裝（PoC/對拍需使用者提供實機 log → 屬 Phase 0 安全網）。
+- 進度：Phase 0(log 已就位)、**Phase 1 ✅、Phase 2 config-load ✅**。下一塊 W1：報表/資料分析 PoC + LotInfo + SECS 組裝（PoC/對拍需使用者提供實機 log → 屬 Phase 0 安全網）。
 - 即可動工而不需 log 的：續補 Gerneral.ini 其餘鍵的 typed 對應、或 LotInfo/SECS 的「結構與組裝」骨架（驗證待 log）。
+
+### ✅ Phase 2（W1 PoC：EventLog 分析）完成
+- 使用者提供 log：大部分 `D:\HT9045_Log`、SECS `D:\SECS_GEM_LOGS`（見 KNOWLEDGE「Log 語料位置」）。
+- 新增 `src/HT9045.Analysis`：`EventLogRow`、`EventLogReader`（Big5、逗號+TAB、`(null)`/空正規化、Message 末欄 join）、`EventLogAnalyzer`+`EventLogSummary`（per-UnitName 計數、top AlarmCode、StopedTime sum/max、Duplicate 分佈、日期範圍）、`EventLogSqliteStore`（Ingest→SQLite、QuerySummary 從 SQLite 重算，證 C#↔SQLite↔Big5 全鏈）。
+- **格式由 9011UC 寫入端確認**（回應使用者指令）：`SGDToCSV`(common.cpp:2050)；逗號被 escape 成 `;`，故 Message 不含逗號；grid-export vs tail-append `EventLogTxt` 是兩種檔。詳見 KNOWLEDGE。
+- 測試：12 新（EventLogPocTests）含對拍**真實檔** `HT9045_EventLogBackup_2023_07_*.csv`（3409 列、UnitName 計數、MES2108、日期範圍）+ SQLite round-trip + Big5；加既有 = **68 通過 / 0 失敗**，build 0/0。已 commit。
+
+### 🔖 RESUME（最新）
+- 已完成：Phase 1 骨架、Phase 2 config-load、Phase 2 EventLog PoC。三者皆 build green、測試全過、已 commit。
+- 下一步候選：(a) SECS log 分析（W2，對拍 `D:\SECS_GEM_LOGS`，先讀 9011UC SECS 寫入端 uHGemHT9045/SECSGEM 確認格式）；(b) LotInfo 結構/組裝（uLotInfo/TfLotInfo）；(c) 續補 config Port-HEX(ISABase∈{1,2,4}) + Gerneral.ini 其餘鍵。
+- 驗證指令：`cd HT9011UC_CSharp_V3.33.906.0` → `dotnet build HT9045.sln` / `dotnet test`。專案數：HardwareAbstraction/Presentation.Abstraction/Core/Hardware.Sim/Hardware.Native/Views.Stub/Infrastructure/**Analysis**/App + Tests。

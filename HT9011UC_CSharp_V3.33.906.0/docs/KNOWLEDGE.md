@@ -45,4 +45,14 @@
 - 本機關閉（出範圍）：Syntek/Aurotek/CC-Link/EtherCAT/RFID/AOI/AGV/FTP/Moxa 等。
 - Tester 模式統計（54 recipe）：GPIB 50 / RS232 3 / TCP 1 / TTL 0，Handler 端全 green。
 
+## Log 語料位置（Phase 0 golden baseline / 對拍來源）
+- 大部分 log：`D:\HT9045_Log`（~3.0GB、9259 檔、107 子夾；多為 csv/txt/xls）。
+  - EventLog（告警/事件）CSV：`D:\HT9045_Log\EventLog\HT9045_EventLogBackup_*.csv`，欄位 `No, UnitName, AlarmCode, Date, Time, Recovery, StopedTime, Duplicate, Message`（Big5）→ **W1 PoC 已完成**。
+    - **格式由 9011UC 寫入端確認**（非臆測）：此 CSV 是 **DB-grid 匯出**（非 tail-append），由 `SGDToCSV(grid, ",", ";", path)`（`common.cpp:2050-2064`，呼叫於 `cObserver.cpp:2410`/`cMyDB.cpp:452`）寫出。欄分隔＝**逗號+TAB**（0x2C 0x09）：空欄以字面 `\t` 佔位（cMyDB `SL->Add("\t")`），join 再補逗號 → 空欄呈現 `,\t`。**每個 cell 內的逗號在寫出時被 StringReplace escape 成 `;`（common.cpp:2059）**——所以真實 Message 不會含逗號（reader 的「逗號 in message」處理只是防禦）。解析規則：split on `",\t"`，空白/`\t`/`(null)` 視為空。
+    - 注意另有**不同格式**的 live tail-append log `EventLogTxt`（`slEventLog`，main.cpp:1503，欄序不同：Date,Time,UnitName,...；由 `MyStringList::MySaveToFileShareMode` 寫），與本 grid-export CSV 是兩種檔，勿混。
+    - 對拍真實檔（2023_07，唯一現存）：3409 資料列（3410 行-1 header）、UnitName Process=3382/Motion=19/Message=8、含 MES2108 'Program Start'、日期 2022-06-06~30。
+  - 其他：EventLogTxt（INI 式計數，如 SGJamCount/LoaderCount.txt）、Test_TCPIP（TCP log）、Alarm.txt、各模組 csv/xls。
+- SECS log：`D:\SECS_GEM_LOGS`（依年份；`SECSGEM_TextLog_*.txt`，`[Send]/[Receive]` 訊息 trace + 時戳）→ W2（SECS）對拍來源。
+- **原則（使用者指令）**：log 格式/語意不清楚時，務必檢閱 9011UC 寫入端 C++ 程式碼（handlerlog/csystem/database 等）確認，勿臆測。
+
 > 參考：對外計畫 `D:\HT9045\docs\migration\RD5軟體_HT9045_906_CSharp遷移計畫_20260625_201101.md`；C++ 接縫分析見 `RD5軟體_HT9045_906_64bit遷移計畫_20260625_193240.md` §9。

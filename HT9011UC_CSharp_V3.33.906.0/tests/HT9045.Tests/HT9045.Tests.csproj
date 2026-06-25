@@ -11,6 +11,11 @@
     <AssemblyName>HT9045.Tests</AssemblyName>
     <!-- Override Directory.Build.props OutputType default; tests must stay classlib. -->
     <IsPackable>false</IsPackable>
+    <!-- net48 needs binding redirects for the SQLitePCLRaw / System.Memory chain
+         (it references System.Runtime.CompilerServices.Unsafe 6.0.0.0). Emit them
+         into HT9045.Tests.dll.config so the test host resolves the deployed asm. -->
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,6 +25,22 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <!-- Phase-2 W1: SQLite round-trip test needs the native e_sqlite3 payload
+         copied to the test output (carried by the package's build targets). -->
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.0" />
+    <!-- Deploy the 6.0.0.0 assembly that System.Memory (used by SQLitePCLRaw)
+         binds against; without it the test host has only 4.0.4.1 and throws
+         FileLoadException at SqliteConnection.Open(). -->
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
+  </ItemGroup>
+
+  <!-- Disable xUnit app-domain shadow copy so the SQLitePCLRaw dynamic loader
+       finds runtimes\win-x64\native\e_sqlite3.dll next to the test assembly
+       (shadow copy omits the runtimes\ folder, causing "Library e_sqlite3 not found"). -->
+  <ItemGroup>
+    <None Include="xunit.runner.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <!-- Phase-2 config-load test fixtures: ASCII-only so Big5 decode is a no-op.
@@ -34,6 +55,11 @@
     <Content Include="TestData\IO_Table.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <!-- Phase-2 W1 EventLog PoC fixture: header + 6 data rows, ASCII only.
+         Mirrors the real comma+tab on-disk layout from SGDToCSV (common.cpp:2050). -->
+    <Content Include="TestData\EventLogSample.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -43,6 +69,8 @@
     <ProjectReference Include="..\..\src\HT9045.Hardware.Sim\HT9045.Hardware.Sim.csproj" />
     <ProjectReference Include="..\..\src\HT9045.Views.Stub\HT9045.Views.Stub.csproj" />
     <ProjectReference Include="..\..\src\HT9045.Infrastructure\HT9045.Infrastructure.csproj" />
+    <!-- Phase-2 W1 PoC: EventLog (alarm/event) CSV analysis. -->
+    <ProjectReference Include="..\..\src\HT9045.Analysis\HT9045.Analysis.csproj" />
   </ItemGroup>
 
 </Project>
