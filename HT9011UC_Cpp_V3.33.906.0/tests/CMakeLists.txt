@@ -377,3 +377,72 @@ add_executable(test_cpublic_foundation
 target_link_libraries(test_cpublic_foundation PRIVATE ht9045_globals ht9045_public vclcompat)
 
 add_test(NAME CpublicFoundation COMMAND test_cpublic_foundation)
+
+# ===========================================================================
+#  W6.1 CANARY -- asendic_Empty (Empty-tray stack feed) state machine
+# ===========================================================================
+# --- test_w6_1_empty_canary: drive the first ROOT SM over the W6 substrate ---
+#   Proves the W6 decoupling stack links + RUNS with NO hardware:
+#     ht9045_sm  -- the Empty-tray SM (asendic_Empty) + csystem predicates +
+#                   FormsFacade (fAGV) + asendic sim helpers + canary_support.
+#     ht9045_io  -- Cylinder[] / SW[] / Sen[] / MyLaneIO (TSimIOBackend default).
+#     ht9045_motor -- MOT[] (TTrayMotor sim).
+#     ht9045_db  -- database.cpp (provides ShowMyMessage's sibling-TU agreement
+#                   + pulled into the RESCAN group for cross-archive ctors).
+#     ht9045_globals -- Prod/IniConfig/CosFunction/TrayForm/RunInfo/Ld_UldDelayTime/
+#                   TrayID + the enum/const universe (DUMMY/NULL_IC/K_RETRY/...).
+#   The RESCAN link group lets GNU ld re-scan the archive set so the
+#   cprod<->cpublic<->cmydef ctor cross-references settle (same idiom as the
+#   W4 motor/IO tests).  Drives DoAutoEmpty/DoAutoEmpty1/DoLoadNewEmptyTrayToCar
+#   in DUMMY for hundreds of iterations and asserts no crash + sane cursors.
+add_executable(test_w6_1_empty_canary
+    test_w6_1_empty_canary.cpp
+)
+
+target_link_libraries(test_w6_1_empty_canary PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w6_1_empty_canary PRIVATE ws2_32)
+endif()
+
+add_test(NAME W6_1_EmptyCanary COMMAND test_w6_1_empty_canary)
+
+# ===========================================================================
+#  W6 VERIFY -- dedicated predicate-API + canary-stepper acceptance proof
+# ===========================================================================
+# --- test_w6_canary: the task-mandated W6 verify TU -------------------------
+#   Companion to test_w6_1_empty_canary above.  Where that one proves the stack
+#   LINKS + does not crash, this one pins two concrete contracts:
+#     PART A -- PREDICATE: set a KNOWN Sim HAL state (Sen[] sensors via
+#       TSimIOBackend + MOT[] tray flags) and assert the frozen csystem.h
+#       HasIC-family predicates return the EXPECTED bool -- the conservative
+#       gated-leaf baseline (all false), the LIVE InputShuttleRearHasIC /
+#       OutputShuttleRearHasIC IniConfig/TestIF_File guard branches (both ways),
+#       the composite OR-aggregation shape, and predicate PURITY (no HAL perturb).
+#     PART B -- CANARY: set iAutoEmptyTask to the ENTRY state (1), pump
+#       DoAutoEmpty() over the Sim HAL, and assert the stepper ADVANCES out of
+#       entry and CONVERGES back to the terminal/recurring state (Task==1) while
+#       staying on the documented cursor set; then drives DoLoadNewEmptyTrayToCar()
+#       to convergence (lifter + Cylinder[] HAL) and DoAutoEmpty1()/fAGV.
+#   Links the SAME orchestration stack as the W6.1 canary: ht9045_sm IS the W6
+#   orchestration lib (asendic_Empty + csystem_predicates + FormsFacade + the
+#   asendic/canary_support sim helpers); it links the substrate (globals/motor/
+#   io/vclcompat) with NO vendor SDK and NO TfMain.  Re-using it (vs. a second
+#   lib over the same .cpp set) avoids duplicate-symbol ODR conflicts at link.
+#   The RESCAN link group lets GNU ld settle the cprod<->cpublic<->cmydef ctor
+#   cross-references (same idiom as the W4 motor/IO tests).
+add_executable(test_w6_canary
+    test_w6_canary.cpp
+)
+
+target_link_libraries(test_w6_canary PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w6_canary PRIVATE ws2_32)
+endif()
+
+add_test(NAME W6_Canary COMMAND test_w6_canary)

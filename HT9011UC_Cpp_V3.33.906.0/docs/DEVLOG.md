@@ -131,7 +131,8 @@
 - 已完成：…W3、W4 馬達/IO HAL、KeyPro+TComm、**cpublic 基礎 ungate(stub 移除)**。HAL Sim 層完整。全 green、已 commit（branch 19 commits）。
 - 中文註解亂碼：**確認 100% 在 `//` 註解內、無 string literal 受損**（非功能性缺陷；golden 有原文）→ 降為低優先 cosmetic TODO（ROADMAP DEFERRED），go-forward 規則已記。
 - **W6 recon 完成**（見 ROADMAP「W6 計畫」）：單根 fan-out、csystem.h predicate 介面、iXXXTask 各 arm 自有、main.h/TfMain→FormsFacade 解耦。子波 W6.0 scaffold→W6.1 canary(asendic_Empty)→W6.2 in-arm→…→W6.6 hub。
-- **下一步：W6.0 SCAFFOLD** = 凍結 csystem.h 為介面 + csystem_predicates.cpp(over Sim HAL) + 各 arm header shim + 非 VCL FormsFacade/satellite stub。這是所有 W6 SM 翻譯的前置。然後 W6.1 首單元 asendic_Empty。
-- ⚠ Big5：W6 多檔有中文註解，翻譯 agent 須照 go-forward 規則(cp950 讀 golden / gloss+ref)，勿再生 U+FFFD。
+- **W6.0 SCAFFOLD + W6.1 CANARY 完成（W6 解耦策略端到端證明）**：csystem.h 凍結為介面、`csystem_predicates.cpp`(15 個 HasIC 於 Sim HAL+Prod)、`aArmHeader.h` shim(god-header gated)、非 VCL `FormsFacade`(TfAGV stub)、新 `mycylin`(TMyCylinder over Sim IO，substrate 補洞)、asendic/canary_support helpers。**canary `asendic_Empty` 翻譯+收斂**：DoAutoEmpty 經 Sim HAL pump 走 1→20→…→70→100→150→1 收斂(wall-clock 計時 gated，Sleep(5)/6s deadline 過 timer)、無 crash、自帶 cursor、無 TfMain/vendor。predicates 21 斷言(OR-aggregation+purity)。**mojibake=0**(go-forward Big5 規則奏效)。ctest 23/23、新 lib ht9045_sm。
+- **下一步：W6.2 IN-ARM 引擎** = 先 `ainarm_SearchPickPlate`(1399行,fMain=6)+`ainarm_SearchPlacePlate`(共用 HP 幾何 sub-task)，再 ainarm9045 核心 + ~30 site variants(iInArmType 分派)。同樣套 scaffold 縫(predicate/FormsFacade/自有 cursor)。
+- ⚠ Big5 go-forward 規則持續(cp950/gloss，0 U+FFFD)。
 - 驗證指令同前（cmake MinGW Makefiles + ctest）。
 - 驗證指令：`cd HT9011UC_Cpp_V3.33.906.0 && export PATH=/c/MinGW/bin:$PATH && cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=C:/MinGW/bin/g++.exe -DCMAKE_C_COMPILER=C:/MinGW/bin/gcc.exe && cmake --build build && ctest --test-dir build`。

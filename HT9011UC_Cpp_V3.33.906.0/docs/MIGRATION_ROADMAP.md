@@ -38,8 +38,9 @@
 **拓樸**：單根 fan-out（非 peer mesh）。`csystem::MainProc()→DoAllProcess()` 每 tick 固定序 pump：DoLoad→DoInArm→Do_Auto_SHT1/2/3→DoTestHeadMotor→DoCatchTray→DoOutArm/DoSortArm。`csystem.cpp` 25,483 行 god-file（~257 Prod、**301 fMain**）。`iXXXTask` 非中央表，各 arm 自有 cursor（iArmTask@ainarm2、OutArmTask@aoutarm、iTestHeadMotorTask@atester、AutoSHTnTask@acarry、CatchTrayTask@acatchtray、**iIndexTask@cContact**）。SM 間**不互相 Do-call**，只透過 `csystem.h` predicate API(IndexHasIC/ShuttleHasIC/TestSocketHasIC…)協調。真正阻礙＝`main.h/TfMain`(每個 .cpp include、heavy 模組 deref fMain->)。
 **解耦三縫**：(1) `csystem.h` 凍結為介面 + 薄 `csystem_predicates.cpp`(predicate 實作於 Sim HAL+Prod)；(2) iXXXTask 各 SM 自帶 cursor；(3) `main.h/TfMain`→非 VCL **FormsFacade**(只暴露 SM 用到的 run-control 方法 Pause/Home/Start/DoStateRecord/SendMSG_CMD + cInplace=cInArmPlacement 邏輯)+ satellite 表單 stub。全部靠既有 Sim HAL 讓 SM 無 W7 也可編可跑。
 **子波序**：
-- **W6.0 SCAFFOLD（前置）**：csystem.h 介面 + csystem_predicates.cpp + 各 arm header shim + FormsFacade/satellite stub。
-- **W6.1 CANARY**：`asendic_Empty`(0 fMain)、asendic_Auto_RT/Auto2/Loader_RT — 證明縫。**首單元＝asendic_Empty**(純 tray-stack stepper，行使 predicate 縫+satellite shim+task-int cursor 全鏈)。
+- ✅ **W6.0 SCAFFOLD 完成**：csystem.h 介面 + csystem_predicates.cpp(15 HasIC over Sim HAL) + aArmHeader.h shim + 非 VCL FormsFacade(TfAGV) + 新 mycylin(TMyCylinder over Sim IO) + asendic/canary_support helpers。
+- ✅ **W6.1 CANARY 完成（策略證明）**：`asendic_Empty` 翻譯+Sim HAL 收斂(ctest 23/23、mojibake 0)。三縫(predicate 介面/FormsFacade/自有 cursor)端到端有效。剩餘 canary 葉(asendic_Auto_RT/Auto2/Loader_RT)可隨後批。
+- ▶ **下一步：W6.2 IN-ARM 引擎**(ainarm_SearchPickPlate+SearchPlacePlate 先 → ainarm9045 核心 + ~30 site variants)。
 - **W6.2 IN-ARM**：ainarm_SearchPickPlate(1399行,fMain=6)+SearchPlacePlate 先，再 ainarm 核心+~30 site variants(iInArmType 分派)。
 - **W6.3 CATCHTRAY+FEED**：acatchtray DoCatchTray、asendic_Color/Loader…（注意 acatchtray 的 ainarm include 是 stale dead）。
 - **W6.4 INDEX/TESTER STAR**：atester result-decode anchor 先(fMain-free,SOFT_SIMULTE skip HAL)→DoTestHeadMotor→Front/Rear/32Site(Front↔Rear 互依不可拆)。iIndexTask@cContact 需先 stub。

@@ -330,6 +330,12 @@ add_library(ht9045_io STATIC
     MyLaneIo.cpp
     myswitch.cpp
     mysensor.cpp
+    # --- W6.0: TMyCylinder HAL piece (the one real substrate gap the W6.1
+    #   Empty-tray canary needs).  The W4-IO note above DEFERRED TMyCylinder
+    #   Push/Pop/On/Off to "W4-IO-part2 / W6"; this is that wave.  Routes over
+    #   the Sim IO HAL (MyLaneIO) exactly like myswitch/mysensor; the alarm /
+    #   SmartDiagnostic / VCL-widget god-stack is stubbed/gated in mycylin.cpp.
+    mycylin.cpp
 )
 
 target_include_directories(ht9045_io PUBLIC
@@ -340,6 +346,57 @@ target_link_libraries(ht9045_io PUBLIC vclcompat ht9045_globals)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(ht9045_io PRIVATE
+        -Wall -Wextra -Wno-conversion-null -Wno-write-strings -Wno-unused-parameter)
+endif()
+
+# ---------------------------------------------------------------------------
+# Library: ht9045_sm  (W6 state-machine wave -- W6.1 Empty-tray CANARY)
+#
+#   The first ROOT state machine translated over the W6 substrate, plus the
+#   W6 decoupling scaffold that lets it stand alone:
+#
+#     asendic_Empty.cpp     -- the Empty-tray stack-feed SM (CANARY).  Faithful
+#                              switch(Task) steppers; each Do* owns its cursor int.
+#     csystem_predicates.cpp-- the frozen csystem.h HasIC predicate interface
+#                              (implemented over the Sim HAL; canary uses none,
+#                              but they link the contract for later sub-waves).
+#     FormsFacade.cpp       -- non-VCL fAGV satellite stub (the canary's only
+#                              form-pointer deref: fAGV->IsATK_AMR()).
+#     asendic.cpp           -- SIM bodies for CylinderUp/Middle/Lower + TrayMove*
+#                              tray-move/lifter helpers (manipulate Cylinder[]/
+#                              MOT[]; full lifter SM deferred W6.x).
+#     canary_support.cpp    -- minimal LastSet shim + sim bodies for the free
+#                              functions the canary calls that have no shared
+#                              target header (ShowErrorMessage/RecordProcess/
+#                              ShowUnloaderTrayMessage/WhichAutoNeedTray/
+#                              ShowMyMessage/ReadWriteTrayID).
+#
+#   Depends on the full substrate: ht9045_io (Cylinder[]/SW[]/Sen[]/MyLaneIO),
+#   ht9045_motor (MOT[]), ht9045_globals (Prod/IniConfig/CosFunction/TrayForm/
+#   RunInfo/Ld_UldDelayTime/TrayID/enums), ht9045_db (database.cpp -- pulled by
+#   the RESCAN group for cross-archive ctor resolution), vclcompat.
+# ---------------------------------------------------------------------------
+add_library(ht9045_sm STATIC
+    asendic_Empty.cpp
+    csystem_predicates.cpp
+    FormsFacade.cpp
+    asendic.cpp
+    canary_support.cpp
+)
+
+target_include_directories(ht9045_sm PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+target_link_libraries(ht9045_sm PUBLIC
+    ht9045_io ht9045_motor ht9045_globals vclcompat)
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    # The SM carries BCB6 idioms inherited from the global headers (AnsiString
+    # brace-init etc.).  Match the ht9045_io / ht9045_globals warning posture so
+    # the translated stepper compiles without tripping on already-accepted
+    # global-header idioms, while still flagging genuine porting mistakes.
+    target_compile_options(ht9045_sm PRIVATE
         -Wall -Wextra -Wno-conversion-null -Wno-write-strings -Wno-unused-parameter)
 endif()
 
