@@ -6,6 +6,15 @@ target_link_libraries(test_ContactForce PRIVATE ht9045_core)
 
 add_test(NAME ContactForce COMMAND test_ContactForce)
 
+# --- cUnitConvert: iUnitMultiply100 / iUnitMultiply1000 (W2 pure extract) ---
+add_executable(test_cUnitConvert
+    test_cUnitConvert.cpp
+)
+
+target_link_libraries(test_cUnitConvert PRIVATE ht9045_core)
+
+add_test(NAME cUnitConvert COMMAND test_cUnitConvert)
+
 # --- vclcompat semantics harness (W0) --------------------------------------
 add_executable(test_vclcompat
     test_vclcompat.cpp
@@ -68,3 +77,19 @@ add_executable(test_cBootLog
 target_link_libraries(test_cBootLog PRIVATE ht9045_public)
 
 add_test(NAME cBootLog COMMAND test_cBootLog)
+
+# ===========================================================================
+#  W2 Common logic islands
+# ===========================================================================
+
+# --- PickPlanner: cArmPickPlan engine + Loader/OutArm scaffold adapters -----
+#   Stub IArmPickPlanContext drives the generic enumerate-and-score engine;
+#   asserts best-plan selection, strict-'>' tie-break, boundary guards, and
+#   the shipped scaffolds' zero-side-effect (Search()==false) behaviour.
+add_executable(test_PickPlanner
+    test_PickPlanner.cpp
+)
+
+target_link_libraries(test_PickPlanner PRIVATE ht9045_common)
+
+add_test(NAME PickPlanner COMMAND test_PickPlanner)

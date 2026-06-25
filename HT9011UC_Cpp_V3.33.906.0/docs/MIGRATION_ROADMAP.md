@@ -23,8 +23,9 @@
 - ✅ C++ pivot、檔案鏡射慣例、ContactForce 計算核心（W2 先行示範）。
 - ✅ **W0 基礎完成**：vclcompat 層（AnsiString 1-based 等）+ CMake 鏡射骨架 + Public/cJSON + Public/HTMD5；ctest 4/4、MD5 命中 RFC1321。
 - ✅ **W1 第一批 Public 葉工具**：`ExternFunction`(純函式部分)、`WinSocketErrorCode`(GetErrorMsg)、`cBootLog`；ctest 7/7。
-- ▶ 進行：**W2 邏輯島**（`Common/PickPlanner`：cArmPickPlan/cInArmLoaderPickPlanner/cOutArmPlacePlanner，介面導向；+ cUnitConvert/SortingBinTray）。
-- ⏳ 待：W0 尾段全域標頭（MachineType.h/cmydef.h/cprod.h/cpublic.h）去 VCL 化（大、排在邏輯主波 W6 前；PickPlanner 經 IArmPickPlanContext 抽象故 W2 可先做）。
+- ✅ **W2 邏輯島（部分）**：`Common/PickPlanner` 通用引擎 cArmPickPlan（與 golden 幾乎逐字同，僅換 include）+ 兩個 scaffold adapter（gated off）；`cUnitConvert` 純轉換部分。ctest 9/9。
+- ▶ **下一步：W0 尾段＝全域定義/型別標頭去 VCL 化**（`cmydef.h`/`cprod.h`/`cpublic.h`/`MachineType.h`/`MachineDefine.h`）。**W2 已證實這是瓶頸**：cUnitConvert glue、SortingBinTray、PickPlanner adapters 全卡在「等這些標頭」。翻完才能解鎖 W3/W6 大量邏輯。
+- ⏳ 待：W3 config/DB、W4 HAL、W5 comms、W6 root 狀態機、W7 UI。
 
 ## 延後項目追蹤（DEFERRED — 完整性，勿遺漏，全部轉移用）
 > 部分檔案只翻了 leaf 部分，耦合段延到對應波次。最終各波結束前要回頭補完這些。
@@ -39,3 +40,6 @@
 | Public/MemoryAlarm | 整檔（本身是 TForm）| W7 | VCL 表單 |
 | Public/HTEdit, HTEditList | 整檔 | W7 | VCL 編輯控制項 |
 | vclcompat 待補 | SysUtils FindFirst/FindNext/TSearchRec、faAnyFile/faDirectory | W3 前 | DeleteDirectory 等檔案搜尋需要 |
+| cUnitConvert | Do*Convert glue (DoTestIFConvert/DoDeviceConvert/DoHotPlateConvert/DoArmOffsetConvert/…) | W6 | 依 cprod.h/cmydef.h 結構 + fShowMessage/ATC VCL form |
+| SortingBinTray | 整檔 | W6 | main.h/MyMotor/mycylin/atester/uLotInfo + cmydef TSortingBinTray_* + AutoForm[] VCL form |
+| Common/PickPlanner adapters | cInArmLoaderPickPlanner/cOutArmPlacePlanner 的 Search 本體（現為 scaffold，gate 預設 false）| W6 | 綁 MOT[].Tray.Data / InArmSuck / OutArmSuck（未翻全域）|

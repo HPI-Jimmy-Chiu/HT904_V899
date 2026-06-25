@@ -71,8 +71,14 @@
 - Verify 抓並修一個真 bug：`WinSocketErrorCode.h` 的 `#include` 缺引號（translate 階段誤報正確）。
 - 驗證（獨立）：CMake+g++ clean build、**ctest 7/7**（W0 4 + W1 3；新 67 斷言）。對拍 golden 源語意（角度正規化、JustNumber、erase、MD5、WSA 錯誤碼），Big5 位元保留。
 
+## 2026-06-26 — W2 邏輯島（部分）完成
+- 翻譯：`Common/PickPlanner/`（IArmPickPlanContext.h、cArmPickPlan 通用 enumerate-and-score 引擎＝與 golden 幾乎逐字同，僅 include 換；cInArmLoaderPickPlanner/cOutArmPlacePlanner 為 **scaffold**，Search() 回 false、runtime gate 預設 false，本體綁 MOT[]/Prod/Suck → 延 W6）；`cUnitConvert`（純轉換翻了，Do*Convert glue 延 W6）。
+- **SortingBinTray 整檔略過 → W6**（耦合 main.h/MyMotor/mycylin/atester/uLotInfo + cmydef TSortingBinTray_* + VCL AutoForm[]）。
+- 無 vclcompat 新增。驗證（獨立）：clean build、**ctest 9/9**（含 test_PickPlanner 72/72，用 stub IArmPickPlanContext 驅動引擎＋邊界守則）。
+- **重要瓶頸發現**：W2 多處延後都卡在「等全域標頭」→ 下一步必須先翻全域定義/型別標頭。
+
 ### 🔖 RESUME（最新）
-- 已完成：C++ pivot、鏡射慣例、ContactForce、**W0 基礎**、**W1 Public 葉工具批 1**。全 green、已 commit。
-- **下一步：W2 邏輯島** = `Common/PickPlanner`（cArmPickPlan/cInArmLoaderPickPlanner/cOutArmPlacePlanner，IArmPickPlanContext 介面導向，最好測）+ cUnitConvert/SortingBinTray。
-- **完整性**：DEFERRED 表（ROADMAP）追蹤所有「只翻一半」與「略過」的檔，最終各波要回補；vclcompat 待補 FindFirst/TSearchRec(W3 前)。
-- 驗證指令：`cd HT9011UC_Cpp_V3.33.906.0 && export PATH=/c/MinGW/bin:$PATH && cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=C:/MinGW/bin/g++.exe -DCMAKE_C_COMPILER=C:/MinGW/bin/gcc.exe && cmake --build build && ctest --test-dir build`。每批完成自動 commit + 更新 docs。
+- 已完成：C++ pivot、鏡射慣例、ContactForce、**W0 基礎**、**W1 Public 批1**、**W2 邏輯島(部分)**。全 green、已 commit。
+- **下一步：W0 尾段＝全域標頭去 VCL 化**（`cmydef.h`/`cprod.h`/`cpublic.h`/`MachineType.h`/`MachineDefine.h`）。這是目前最大瓶頸（解鎖 cUnitConvert glue / SortingBinTray / PickPlanner adapters / W3 / W6）。注意 PROD_INFO_ST ~770 行、大量 enum/extern/`extern PACKAGE TfXxx*`（VCL form 指標→前置宣告/守起來，UI 在 W7）。
+- **完整性**：ROADMAP DEFERRED 表追蹤所有半翻/略過項，最終回補。vclcompat 待補 FindFirst/TSearchRec(W3 前)。
+- 驗證指令：`cd HT9011UC_Cpp_V3.33.906.0 && export PATH=/c/MinGW/bin:$PATH && cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=C:/MinGW/bin/g++.exe -DCMAKE_C_COMPILER=C:/MinGW/bin/gcc.exe && cmake --build build && ctest --test-dir build`。

@@ -31,6 +31,7 @@ target_include_directories(vclcompat PUBLIC
 # ---------------------------------------------------------------------------
 add_library(ht9045_core
     ContactForce.cpp
+    cUnitConvert.cpp      # W2 partial: iUnitMultiply100/iUnitMultiply1000
 )
 
 target_include_directories(ht9045_core PUBLIC
@@ -95,6 +96,40 @@ endif()
 
 # ht9045_core also benefits from public utilities.
 target_link_libraries(ht9045_core PUBLIC ht9045_public)
+
+# ---------------------------------------------------------------------------
+# Library: ht9045_common
+#   Translated logic islands under Common/ that are interface-driven and free
+#   of Prod/cmydef/MachineType/hardware/VCL-form coupling.
+#
+#   PickPlanner -- generic enumerate-and-score Arm pick/place planner
+#     (cArmPickPlan) plus two production adapters that are interface-driven
+#     via IArmPickPlanContext:
+#       cInArmLoaderPickPlanner -- Phase 3 scaffold (Search() returns false)
+#       cOutArmPlacePlanner     -- Phase 4 scaffold (Search() returns false)
+#     The adapters ship as scaffolds: the Phase 3.1 / 4.1 bodies that would
+#     pull MOT[]/InArmSuck/OutArmSuck globals are deferred to W6 and remain
+#     inline TODOs.  Nothing here reaches an untranslated global, so the whole
+#     subtree compiles standalone against vclcompat only.
+# ---------------------------------------------------------------------------
+add_library(ht9045_common
+    Common/PickPlanner/cArmPickPlan.cpp
+    Common/PickPlanner/cInArmLoaderPickPlanner.cpp
+    Common/PickPlanner/cOutArmPlacePlanner.cpp
+)
+
+target_include_directories(ht9045_common PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/Common/PickPlanner
+)
+
+# PickPlanner .cpp files swap <vcl.h> for the vclcompat umbrella header, so the
+# compat layer must be on the include path even though no VCL type is used.
+target_link_libraries(ht9045_common PUBLIC vclcompat)
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(ht9045_common PRIVATE ${HT9045_WARNFLAGS})
+endif()
 
 # ---------------------------------------------------------------------------
 # Tests
