@@ -331,6 +331,7 @@ void sDataTimelog(AnsiString &Msg);                                             
 void SetSocketHandlerID(AnsiString strID);                                      //Jimmychiu 20220805 SocketHandlerID can not be NULL
 void ShuttleLog();                                                              //kevin 20220912 add shuttle sensor record
 
+unsigned int CRC_Check(unsigned char *ary, unsigned int len);           //AI(ht9045-v899) 20260626: declare for test access (no header in golden)
 double Round(double x, double point);                                           //ChungHung 20210113 add for Alignment CCD
 int Round(double x);                                                            //KenHsieh 20210813 : add CCD AUTO ALIGNMENT
 AnsiString GetBundleInfo(int iAuto);                                            //JerryYang 20240318 : add
@@ -383,5 +384,13 @@ class VerInfo                                                                   
         void m_GetVerInfo(void);
         void m_ClearData(void);
 };
+//------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+//  DTK4848 serial seam (ungated cpublic.cpp foundation)
+//  Set g_pDTKComm before calling DTK4848WordWriteNoSucm/ReadNoSucm.
+//  rs232 wiring (W5) will point this at COM2->Comm2; tests use a SIM TComm.
+// ---------------------------------------------------------------------------
+#include "vclcompat/Comm.h"                //AI(ht9045-v899) 20260626: Spcomm::TComm for g_pDTKComm seam
+extern Spcomm::TComm* g_pDTKComm;         //AI(ht9045-v899) 20260626: injectable seam (replaces COM2->Comm2)
 //------------------------------------------------------------------------------
 #endif

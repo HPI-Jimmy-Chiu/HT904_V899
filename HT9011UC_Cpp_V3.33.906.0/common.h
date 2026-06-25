@@ -340,4 +340,14 @@ typedef struct
 } SPEEDBUTTON_PTR;
 #endif // TODO(wave-ui)
 
+// ---------------------------------------------------------------------------
+//  VKINFO -- Win32 version-resource key/value pair (golden common.h:275-279)
+//  Used by VerInfo::m_GetVerInfo in cpublic.cpp.
+// ---------------------------------------------------------------------------
+typedef struct _VersionKeyInfo                                                  //Sam 20230328
+{
+    TCHAR const *szKey;
+    TCHAR *szValue;
+} VKINFO, *LPVKINFO;  //AI(ht9045-v899) 20260626: moved from golden common.h:275-279, required by VerInfo::m_GetVerInfo
+
 #endif // COMMON_H

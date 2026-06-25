@@ -122,8 +122,13 @@
 - 驗證（獨立）：clean build、**ctest 20/20**（test_keypro_tcomm 26 斷言：KeyPro_GetLevel(3)==1 offline、TComm sim tx buffer + rx callback）。
 - 待辦註記：TComm real \\.\COMx 路徑已編未測(無硬體)；WriteCommData(char*) vs c_str()const 之 const-correctness 待 W7 consumer 調和。
 
+## 2026-06-26 — ungate cpublic.cpp 基礎完成
+- ungate 6 區（依賴僅 globals+vclcompat+TComm）：DTK4848 溫控 seam(LRC/WordWrite/WordRead 經 TComm，frame/LRC sim 驗證 exact memcmp ':0106470100FAB7\r\n')、queue 本體(TMyQueue10/100/StrQueue100/TimerQueue100，ring MAX_Q_10=500 對 golden)、ByteUnionBit/CRC_Check(Modbus CRC-16)、time/format/math/string util、VerInfo、Win32/file util。**移除 cpublic_ctors_stub.cpp**（real queue ctor 現由 cpublic.cpp 提供，nm 驗證 cmydef 全域解析到真 T 符號）。god-stack（logging/UT100/E5DC/temp-parse 需 T_ASXII2HEX）續 gate→W5/W6。
+- 驗證（獨立）：clean build、**ctest 21/21**（test_cpublic_foundation 87 斷言）。
+- **⚠ 發現中文註解亂碼**：cprod.cpp(283)/cpublic.cpp(62) U+FFFD（Read 工具 cp950→UTF-8 解錯所致；只在註解、編譯OK、golden 有原文）。見 KNOWLEDGE go-forward 規則。
+
 ### 🔖 RESUME（最新）
-- 已完成：…W3(config 全鏈)、W4 馬達 HAL、W4-IO HAL、**KeyPro+TComm enablers**。HAL Sim 層：馬達✓/IO✓/license✓/serial✓。全 green、已 commit（branch 18 commits）。
-- **下一步：ungate cpublic.cpp 基礎**（queue/VerInfo/DTK4848 溫控協定/util 中只依賴 globals+vclcompat+TComm 的部分；god-stack 續 gate）→ 移除 cmydef queue-ctor stub workaround + 提供溫控協定。之後 W5 comms、**W6 root 狀態機（解鎖最多 deferred：品牌馬達/mymotor 助手/cylinder-sucker 狀態機/TMyKitSuck）**、W7 UI。
+- 已完成：…W3、W4 馬達/IO HAL、KeyPro+TComm、**cpublic 基礎 ungate(stub 移除)**。HAL Sim 層完整。全 green、已 commit（branch 19 commits）。
+- **下一步：(a) 中文註解亂碼補救（cprod.cpp/cpublic.cpp，cp950→UTF-8，from golden）→ (b) W6 root 狀態機**（最大、解鎖最多 deferred；先 recon 依賴圖再分子波）。
 - 驗證指令同前（cmake MinGW Makefiles + ctest）。
 - 驗證指令：`cd HT9011UC_Cpp_V3.33.906.0 && export PATH=/c/MinGW/bin:$PATH && cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=C:/MinGW/bin/g++.exe -DCMAKE_C_COMPILER=C:/MinGW/bin/gcc.exe && cmake --build build && ctest --test-dir build`。

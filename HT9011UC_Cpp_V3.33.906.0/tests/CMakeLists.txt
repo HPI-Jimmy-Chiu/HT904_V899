@@ -347,3 +347,33 @@ add_executable(test_keypro_tcomm
 target_link_libraries(test_keypro_tcomm PRIVATE ht9045_public vclcompat)
 
 add_test(NAME KeyProTComm COMMAND test_keypro_tcomm)
+
+# ===========================================================================
+#  cpublic.cpp foundation wave (W4/W5/W6/W7 ungated sections)
+# ===========================================================================
+# --- test_cpublic_foundation: acceptance proof for all ungated W4 bodies ----
+#   [A] DTK4848 frame format via TComm SIM (g_pDTKComm seam):
+#       DTK4848_LRC(":0106470100FA")=="B7";
+#       DTK4848WordWriteNoSucm(0,250) -> SimTxBuffer==":0106470100FAB7\r\n\0";
+#       DTK4848WordReadNoSucm(0) -> SimTxBuffer==":010347000002B3\r\n\0".
+#   [B] ByteUnionBit: SetByte(0xA5)->Bit(0..7) assertions; BitCount(true)==4;
+#       BitString()=="10100101"; Hex()=="A5"; SetBit/range-guard.
+#   [C] Queue method bodies: TMyQueue10 Add/Get/Show/SetAliasAndTask/ring-wrap;
+#       TMyQueue100 Add/Get; TMyStrQueue100 Add/Get; TMyTimerQueue100
+#       Add/GetTimeString (ConvertMSecToSPC("00:00:01.234")).
+#   [D] VerInfo: m_ClearData leaves FixedFileVersion=="0.0.0.0"; bad path
+#       -> graceful no-crash; GetAppVersion on own exe no-crash.
+#   [E] Foundation free functions: ConvertSecondToSPC/ConvertMSecToSPC;
+#       GetFloatFormatString/ConvertToMMType/Get0_01MMType;
+#       ConvertDoubleStrToInt; sDataTimelog; Round x2; RotationCoordinates;
+#       CRC_Check Modbus-CRC on known vector; GetScreenPos; VC8ToKpa/KpaToVC8
+#       round-trip; IsDoubleEqual.
+#   Links ht9045_globals (ungated queue/VerInfo/DTK4848 bodies) PUBLIC-links
+#   psapi + version (Win32 version API); vclcompat for TComm SIM.
+add_executable(test_cpublic_foundation
+    test_cpublic_foundation.cpp
+)
+
+target_link_libraries(test_cpublic_foundation PRIVATE ht9045_globals ht9045_public vclcompat)
+
+add_test(NAME CpublicFoundation COMMAND test_cpublic_foundation)

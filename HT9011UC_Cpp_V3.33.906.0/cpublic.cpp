@@ -59,8 +59,8 @@ void TMyQueue100::ClearData()
         dData[i]    = 0.0;
         DateTime[i] = "";
     }
-    iIndex = -1;
-    iCount = -1;
+    iIndex = 0; //AI(ht9045-v899) 20260626: Queue100 init 0 not -1; Add() uses iData[iCount] as write slot
+    iCount = 0; //AI(ht9045-v899) 20260626: same
 }
 
 // ---------------------------------------------------------------------------
@@ -107,8 +107,59 @@ void TMyTimerQueue100::ClearData()
     iCount = -1;
 }
 
-#if 0 // TODO(W3/W5/W6/W7): remaining bodies depend on untranslated globals + app headers
+// =============================================================================
+//  AI(ht9045-v899) 20260626: UNGATE foundation-only bodies.
+//
+//  This wave ungates everything that depends only on:
+//    vclcompat (AnsiString / TStringList / TDateTime / SysUtils / Comm.h)
+//    windows.h (Win32 version/process API)
+//    cpublic.h (own class declarations + VKINFO / VERSION_INFO_KEY macros)
+//    cmydef.h  (System* time globals, QueueXxx, tXxxTimer, StartXxxTime)
+//    common.h  (asGalilCmdPath, IniConfig)
+//    Public/HTMD5.h  (md5_Folder, SearchFile)
+//    cUnitConvert.h  (ChangeToFloatNonPcnt)
+//
+//  Additional headers needed for the ungated bodies:
+// =============================================================================
+#include "cmydef.h"           // SystemYear/Month/Date/Hour/Min/Sec/MSec, QueueXxx, tXxxTimer
+#include "common.h"           // asGalilCmdPath, IniConfig, cUnitConvert via include chain
+#include "Public/HTMD5.h"     // md5_Folder, SearchFile
+#include "cUnitConvert.h"     // ChangeToFloatNonPcnt
+#include <psapi.h>            // EnumProcesses / GetModuleBaseName
+#include <stdexcept>          // std::runtime_error (substitute for BCB6 Exception)
+#include <cmath>              // fabs, pow, cos, sin
 
+// ---------------------------------------------------------------------------
+//  Local shims for SysUtils helpers not yet in vclcompat
+// ---------------------------------------------------------------------------
+// IncludeTrailingPathDelimiter -- BCB6 synonym for IncludeTrailingBackslash
+static inline AnsiString IncludeTrailingPathDelimiter(const AnsiString& p)
+{
+    return IncludeTrailingBackslash(p);
+}
+// ExtractFileDir -- BCB6: returns path without trailing separator.
+// IncludeTrailingBackslash(asDir) ends in '\', so ExtractFilePath of that
+// returns the same string (already a dir).  Strip the trailing sep.
+static inline AnsiString ExtractFileDir(const AnsiString& p)
+{
+    AnsiString s = ExtractFilePath(p);
+    if (s.Length() > 0 && (s[s.Length()] == '\\' || s[s.Length()] == '/'))
+        s = s.SubString(1, s.Length() - 1);
+    return s;
+}
+
+// ---------------------------------------------------------------------------
+//  DTK4848 serial seam
+//  Foundation-level pointer set by rs232 wiring (W5) or by tests.
+//  cpublic.h declares: extern Spcomm::TComm* g_pDTKComm;
+// ---------------------------------------------------------------------------
+Spcomm::TComm* g_pDTKComm = nullptr;
+
+// =============================================================================
+//  FOUNDATION free functions  (no app/UI/rs232/motor deps)
+// =============================================================================
+
+//AI(ht9045-v899) 20260626: ungated -- pure arithmetic, no external deps
 //------------------------------------------------------------------------------
 AnsiString ConvertSecondToSPC(long s)                                           //Steven 20141111 : ���ର�ɤ���
 {
@@ -207,6 +258,7 @@ typedef struct
 }TEMP_CONTROL;
 TEMP_CONTROL Temp_Control;
 //------------------------------------------------------------------------------
+//AI(ht9045-v899) 20260626: ungated -- pure HexStrToInt/IntToHex, no I/O
 // �p��LRC (�ˬd�X)
 //------------------------------------------------------------------------------
 AnsiString DTK4848_LRC(AnsiString str)                                          //KaiHuang 20190821 : �s�W�x�F DTK4848�ű���
@@ -225,6 +277,7 @@ AnsiString DTK4848_LRC(AnsiString str)                                          
     str=str.SubString(str.Length()-1, 2) ;
     return str;
 }
+#if 0 // TODO(W5: GetEveryCode/Change_Tempture_Value need T_ASXII2HEX table; UT100 needs A_Create_LCR/T_HEX2ASCII_Mac + COM2)
 //------------------------------------------------------------------------------
 void GetEveryCode(AnsiString AnsiData)                                          //Steven 20111028 : �令AnsiString
 {
@@ -281,6 +334,8 @@ void UT100WordReadNoSucm(int Addr, int Command)
     READBUFF[14]=T_HEX2ASCII_Mac(Btmp1);
     COM2->Comm2->WriteCommData(READBUFF, ::strlen(READBUFF));
 }
+#endif // TODO(W5)
+//AI(ht9045-v899) 20260626: ungated DTK4848WordWriteNoSucm -- COM2->Comm2 rerouted to g_pDTKComm seam
 //------------------------------------------------------------------------------
 //KaiHuang 20190821 : �s�W�x�F DTK4848�ű���
 //------------------------------------------------------------------------------
@@ -289,13 +344,15 @@ void DTK4848WordWriteNoSucm(int Addr, int Value)
     int iCommand = 4701;
     AnsiString TempStr="";
     char SENDBUFF_DTK[1024];
-    ::sprintf(SENDBUFF_DTK, ":%02X06%04d%s", Addr+1, iCommand, IntToHex(Value, 4)); //Steven 20210511 : for Delta DT4848 %02d --> %02X
+    ::sprintf(SENDBUFF_DTK, ":%02X06%04d%s", Addr+1, iCommand, IntToHex(Value, 4).c_str()); //Steven 20210511 : for Delta DT4848 %02d --> %02X
 
     AnsiString LRC = DTK4848_LRC(SENDBUFF_DTK);
-    ::sprintf(SENDBUFF_DTK, ":%02X06%04d%s%s\r\n", Addr+1, iCommand, IntToHex(Value, 4), LRC);
+    ::sprintf(SENDBUFF_DTK, ":%02X06%04d%s%s\r\n", Addr+1, iCommand, IntToHex(Value, 4).c_str(), LRC.c_str()); //AI(ht9045-v899) 20260626: .c_str() for AnsiString->%s in vclcompat (no implicit const char*)
 
-    COM2->Comm2->WriteCommData(SENDBUFF_DTK, ::strlen(SENDBUFF_DTK)+1);         //+1
+    //AI(ht9045-v899) 20260626: rerouted from COM2->Comm2 to g_pDTKComm seam
+    if (g_pDTKComm) g_pDTKComm->WriteCommData(SENDBUFF_DTK, (Word)(::strlen(SENDBUFF_DTK)+1)); //+1 (preserve NUL on wire)
 }
+//AI(ht9045-v899) 20260626: ungated DTK4848WordReadNoSucm -- COM2->Comm2 rerouted to g_pDTKComm seam
 //------------------------------------------------------------------------------
 void DTK4848WordReadNoSucm(int Addr)
 {
@@ -305,10 +362,12 @@ void DTK4848WordReadNoSucm(int Addr)
     ::sprintf(READBUFF_DTK, ":%02X03%04d0002", Addr+1, iCommand);               //Steven 20210511 : for Delta DT4848 %02d --> %02X
 
     AnsiString LRC = DTK4848_LRC(READBUFF_DTK);
-    ::sprintf(READBUFF_DTK, ":%02X03%04d0002%s\r\n", Addr+1, iCommand, LRC);    //Polling �{�b�ū�
+    ::sprintf(READBUFF_DTK, ":%02X03%04d0002%s\r\n", Addr+1, iCommand, LRC.c_str()); //AI(ht9045-v899) 20260626: same; Polling
 
-    COM2->Comm2->WriteCommData(READBUFF_DTK, ::strlen(READBUFF_DTK)+1);
+    //AI(ht9045-v899) 20260626: rerouted from COM2->Comm2 to g_pDTKComm seam
+    if (g_pDTKComm) g_pDTKComm->WriteCommData(READBUFF_DTK, (Word)(::strlen(READBUFF_DTK)+1));
 }
+//AI(ht9045-v899) 20260626: ungated foundation free functions (ConvertGearValue..CRC_Check, all pure logic)
 //------------------------------------------------------------------------------
 void ConvertGearValue(int *Ref, double GearRatio)
 {
@@ -387,7 +446,7 @@ void GetTimeInfo()
 void GetYesterdayInfo()
 {
     static TDateTime dtPresent;
-    dtPresent=Now()-1;
+    dtPresent=TDateTime(Now().Val()-1.0); //AI(ht9045-v899) 20260626: Now()-1 ambiguous -> Val()-1.0 (TDateTime has no operator-(int))
     DecodeDate(dtPresent, SystemYearYesterday, SystemMonthYesterday, SystemDateYesterday);
 }
 //------------------------------------------------------------------------------
@@ -501,6 +560,7 @@ unsigned int CRC_Check(unsigned char *ary, unsigned int len)
     return (crc);
 }
 //------------------------------------------------------------------------------
+#if 0 // TODO(W5: TMC401WriteTemp/ReadTemp/E5DCReadTemp/WriteTemp need COM2->Comm2)
 void TMC401WriteTemp(int Addr, int CH, int Temp)
 {
     unsigned char CRCL,CRCH;
@@ -568,6 +628,8 @@ void E5DCWriteTemp(int Addr, int Temp)
     Str.sprintf("%c%s%c%c\r\n", STX, Command, ETX, BCC);
     COM2->Comm2->WriteCommData(Str.c_str(), Str.Length());
 }
+#endif // TODO(W5)
+#if 0 // TODO(W6: TTLLog/HeaterLog/HeaterSVLog/OutShuttleLog/HomeLog/RespondASECom/ProductionLog need fMain UI + TestIF/SW[])
 //------------------------------------------------------------------------------
 void TTLLog(AnsiString Message)                                                 //Steven 20161115 : TTL Log��s���s��
 {
@@ -703,13 +765,15 @@ void ProductionLog(AnsiString Message, bool bSaveToFile, AnsiString JamCode)    
         }
     }
 }
+#endif // TODO(W6)
+//AI(ht9045-v899) 20260626: ungated ExecZipCommand -- Win32 CreateProcess only
 //------------------------------------------------------------------------------
 bool ExecZipCommand(AnsiString Path, AnsiString Param)                          //Steven 20160205 : �s�ɮɭԤ��n��DOS����
 {
     STARTUPINFO  FStartupInfo;
     PROCESS_INFORMATION  FProcessInformation;
 
-    BOOL result=False;
+    BOOL result=FALSE; //AI(ht9045-v899) 20260626: BCB6 False->Win32 FALSE
     ZeroMemory(&FStartupInfo, sizeof(STARTUPINFO));
     ZeroMemory(&FProcessInformation,sizeof(PROCESS_INFORMATION));
     GetStartupInfo(&FStartupInfo);
@@ -720,7 +784,7 @@ bool ExecZipCommand(AnsiString Path, AnsiString Param)                          
     if(ExecFile!="")
     {
         result=CreateProcess(NULL,
-        ExecFile.c_str(),
+        const_cast<char*>(ExecFile.c_str()), //AI(ht9045-v899) 20260626: BCB6 implicit const cast -> explicit const_cast
         NULL,
         NULL,
         false,
@@ -736,6 +800,7 @@ bool ExecZipCommand(AnsiString Path, AnsiString Param)                          
         return false;
     }
 }
+//AI(ht9045-v899) 20260626: ungated GetOnlyTimeInfoByString/GetDateInfoByString -- System* globals only
 //------------------------------------------------------------------------------
 AnsiString GetOnlyTimeInfoByString(AnsiString asSign)                           //ChungHung 20151125 modify for KYEC  //ChungHung 20150902 add
 {
@@ -758,6 +823,7 @@ AnsiString GetDateInfoByString(AnsiString asSign)                               
         Str.sprintf("%04d%s%02d%s%02d", SystemYear, asSign, SystemMonth, asSign, SystemDate);
     return Str;
 }
+#if 0 // TODO(W6: ProductionDataLog needs fSCKART/fLotInfo/LastSet + MyForceDirectories (gated))
 //------------------------------------------------------------------------------
 // kevin 20160724 �Ͳ����
 //------------------------------------------------------------------------------
@@ -831,6 +897,8 @@ void ProductionDataLog()
         fclose(pFile);
     }
 }
+#endif // TODO(W6)
+//AI(ht9045-v899) 20260626: ungated CompareMD5ByFolder/SetMD5ByFolder -- HTMD5 (md5_Folder/SearchFile) active
 //------------------------------------------------------------------------------
 //V3.27N.546 Steven 20170927 (wei) : ���u�@�ɪ��ˬd�X�O�_���T -1:�S��MD5,  1:Pass, 0:Fail
 //------------------------------------------------------------------------------
@@ -846,7 +914,7 @@ int CompareMD5ByFolder(AnsiString FolderName)
     if(tsFileName->Count==1)
     {
         AnsiString exMsg=md5_Folder(FolderName);
-        if(tsFileName->Strings[0].AnsiPos(exMsg)!=0)
+        if(AnsiString(tsFileName->Strings[0]).Pos(exMsg)!=0) //AI(ht9045-v899) 20260626: StringsProxy has no Pos -> explicit AnsiString cast
         {
             bResult=1;
         }
@@ -895,6 +963,7 @@ void SetMD5ByFolder(AnsiString FolderName)
 }
 //------------------------------------------------------------------------------
 //union��Byte�PBit����
+//AI(ht9045-v899) 20260626: ungated ByteUnionBit methods -- pure bit ops + IntToHex
 //------------------------------------------------------------------------------
 int ByteUnionBit::Bit(int i)
 {
@@ -972,6 +1041,7 @@ int ByteUnionBit::BitCount(bool bOn)
     }
     return iCount;
 }
+#if 0 // TODO(W3-dup: TMyQueue10 ctor/ClearData already ungated at file top (L27-44))
 //------------------------------------------------------------------------------
 TMyQueue10::TMyQueue10()
 {
@@ -991,6 +1061,8 @@ void TMyQueue10::ClearData()
     iIndex=-1;
     iCount=-1;
 }
+#endif // TODO(W3-dup)
+//AI(ht9045-v899) 20260626: ungated TMyQueue10 method bodies (Add/CheckTaskChange/GetData/GetDateTime/GetLastData/ShowCommaText/SetAliasAndTask)
 //------------------------------------------------------------------------------
 void TMyQueue10::Add(int data)
 {
@@ -1160,6 +1232,7 @@ void TMyQueue10::SetAliasAndTask(AnsiString sAlias, int *Task)
     Alias=sAlias;
     iTask=Task;
 }
+#if 0 // TODO(W3-dup: TMyQueue100 ctor/ClearData already ungated at file top (L49-64))
 //------------------------------------------------------------------------------
 TMyQueue100::TMyQueue100()
 {
@@ -1179,6 +1252,8 @@ void TMyQueue100::ClearData()
     iIndex=0;
     iCount=0;
 }
+#endif // TODO(W3-dup)
+//AI(ht9045-v899) 20260626: ungated TMyQueue100 method bodies (Add/GetData/GetDateTime/ShowCommaText)
 //------------------------------------------------------------------------------
 void TMyQueue100::Add(int data)
 {
@@ -1271,6 +1346,7 @@ AnsiString TMyQueue100::ShowCommaText(bool bWithDateTime)
     }
     return Str;
 }
+#if 0 // TODO(W3-dup: TMyStrQueue100 ctor/ClearData already ungated at file top (L69-85))
 //------------------------------------------------------------------------------
 TMyStrQueue100::TMyStrQueue100()
 {
@@ -1289,6 +1365,8 @@ void TMyStrQueue100::ClearData()
     iIndex=0;
     iCount=0;
 }
+#endif // TODO(W3-dup)
+//AI(ht9045-v899) 20260626: ungated TMyStrQueue100 method bodies (Add/GetData/GetDateTime/ShowCommaText)
 //------------------------------------------------------------------------------
 void TMyStrQueue100::Add(AnsiString data1, AnsiString data2)
 {
@@ -1355,6 +1433,7 @@ AnsiString TMyStrQueue100::ShowCommaText(bool bWithDateTime)
     }
     return Str;
 }
+#if 0 // TODO(W5-safe: TMyStrQueue100::SafeData needs MyForceDirectories (gated in common.cpp TODO(wave-file)))
 //------------------------------------------------------------------------------
 void TMyStrQueue100::SafeData()
 {
@@ -1429,6 +1508,8 @@ void TMyStrQueue100::SafeData()
     ClearData();
     delete List;
 }
+#endif // TODO(W5-safe)
+#if 0 // TODO(W3-dup: TMyTimerQueue100 ctor/ClearData already ungated at file top (L90-108))
 //------------------------------------------------------------------------------
 TMyTimerQueue100::TMyTimerQueue100()
 {
@@ -1449,6 +1530,8 @@ void TMyTimerQueue100::ClearData()
     iIndex=-1;
     iCount=-1;
 }
+#endif // TODO(W3-dup)
+//AI(ht9045-v899) 20260626: ungated TMyTimerQueue100 method bodies (Add/GetTimeData/GetStartTime/GetEndTime/GetTimeString/GetDateTime/ShowCommaText)
 //------------------------------------------------------------------------------
 void TMyTimerQueue100::Add(AnsiString sTime, AnsiString eTime, int iCurrTime)
 {
@@ -1568,6 +1651,7 @@ AnsiString TMyTimerQueue100::ShowCommaText(bool bWithDateTime)
     }
     return Str;
 }
+#if 0 // TODO(W5-safe: TMyTimerQueue100::SafeData needs MyForceDirectories (gated))
 //------------------------------------------------------------------------------
 void TMyTimerQueue100::SafeData()
 {
@@ -1600,6 +1684,8 @@ void TMyTimerQueue100::SafeData()
     ClearData();
     delete List;
 }
+#endif // TODO(W5-safe)
+//AI(ht9045-v899) 20260626: ungated StartTestTimeStamp/EndTestTimeStamp -- System* + QueueCycleTime/QueueTestTime + tXxxTimer
 //------------------------------------------------------------------------------
 void StartTestTimeStamp(bool bAdd)
 {
@@ -1626,6 +1712,7 @@ void EndTestTimeStamp(int iAdd)
         tCycleTimer.LatchCycleTime(true);
     }
 }
+//AI(ht9045-v899) 20260626: ungated FindAndKillProcess -- Win32 psapi only
 //------------------------------------------------------------------------------
 int FindAndKillProcess(LPCTSTR lpszProcessName)                                 //JerryYang 20200430 Kill Eventlogsaver
 {
@@ -1635,7 +1722,7 @@ int FindAndKillProcess(LPCTSTR lpszProcessName)                                 
     int x=0;
     if(!EnumProcesses(dwProcessIdentify, MAX_PATH*sizeof(DWORD), &dwTrueBytes))
     {
-        cout<<"enum process fail "<<endl;
+        std::cout<<"enum process fail "<<std::endl; //AI(ht9045-v899) 20260626: BCB6 implicit using->std:: qualified
         return x;
     }
     int nProcessNum=dwTrueBytes/sizeof(DWORD);
@@ -1646,7 +1733,7 @@ int FindAndKillProcess(LPCTSTR lpszProcessName)                                 
         hProcess=OpenProcess(PROCESS_ALL_ACCESS, false, dwProcessIdentify[nIndex]);
         memset(moduleBaseName, 0, MAX_PATH*sizeof(TCHAR));
         GetModuleBaseName(hProcess, NULL, moduleBaseName, MAX_PATH);
-        if(!_tcscmp(moduleBaseName, lpszProcessName))
+        if(!strcmp(moduleBaseName, lpszProcessName)) //AI(ht9045-v899) 20260626: _tcscmp->strcmp (ANSI, not UNICODE)
         {
             x=1;
             TerminateProcess(hProcess, 0);
@@ -1661,6 +1748,7 @@ int FindAndKillProcess(LPCTSTR lpszProcessName)                                 
     }
     return x;
 }
+#if 0 // TODO(W6: LogIndexMaxMinPos needs fMain->slIndexYMaxMinShift + iMax/MinCommandY* globals + InitialMaxMinValue)
 //------------------------------------------------------------------------------
 void LogIndexMaxMinPos(AnsiString str)                                          //Isaac 20201012 : �p��Encoder�Mcommandpos/Teaching���t�ȡA�O���æs�ɡA�@�Ltray�O���@��
 {
@@ -1680,6 +1768,8 @@ void LogIndexMaxMinPos(AnsiString str)                                          
 
     InitialMaxMinValue(str);                                                    //Isaac 20201012 : �p��Encoder�Mcommandpos/Teaching���t�ȡA�k�s
 }
+#endif // TODO(W6)
+//AI(ht9045-v899) 20260626: ungated Round(double,double), Round(double), RotationCoordinates -- pure math
 //------------------------------------------------------------------------------
 double Round(double x, double point)                                            //ChungHung 20210113 add for Alignment CCD start
 {
@@ -1718,6 +1808,7 @@ void RotationCoordinates(double px, double py, double &px1, double &py1, double 
         //py1 = py;
     }
 }
+#if 0 // TODO(W6: UDPErrorLog needs asUDPLogPath + MyForceDirectories (gated) + WriteDataToFile (gated))
 //------------------------------------------------------------------------------
 void UDPErrorLog(AnsiString aTitle, AnsiString Command)                         //kevin 20211020 UDP error log
 {
@@ -1730,6 +1821,8 @@ void UDPErrorLog(AnsiString aTitle, AnsiString Command)                         
     asLog.sprintf("%s,   %s, %s", sMegTime, aTitle, Command);
     WriteDataToFile(sFileName.c_str(), asLog.c_str());
 }
+#endif // TODO(W6)
+#if 0 // TODO(W6: RecordErrorLog case 1 needs fMain->ListBox14; WriteDataToFile (gated))
 //==============================================================================
 void RecordErrorLog(int iSaveToFile,AnsiString FilePth, AnsiString Command)     //kevin 20211022 any error log
 {
@@ -1751,6 +1844,8 @@ void RecordErrorLog(int iSaveToFile,AnsiString FilePth, AnsiString Command)     
             break;
     }
 }
+#endif // TODO(W6)
+//AI(ht9045-v899) 20260626: ungated sDataTimelog -- System* + GetTimeInfo + AnsiString only
 //==============================================================================
 void sDataTimelog(AnsiString &Msg)                                              //kevin 20211027 log + DataTime
 {
@@ -1760,6 +1855,7 @@ void sDataTimelog(AnsiString &Msg)                                              
     asLog.sprintf("%s : %s", sMegTime, Msg);
     Msg= asLog;
 }
+//AI(ht9045-v899) 20260626: ungated b_Check_Dir_Exist_And_Creak_Dir -- local shims for ExtractFileDir/IncludeTrailingPathDelimiter at file top
 //==============================================================================
 //��ܻ���:�ˬd�����ؿ��O�_�s�b�A�åB���s�إ�
 //V1.0 :Kirin 20170206 (han) �H�e�N�� 20170206 ���s�ק�C
@@ -1781,7 +1877,7 @@ bool b_Check_Dir_Exist_And_Creak_Dir(AnsiString asDir)
             }
             else
             {
-                throw Exception(asStr);
+                throw std::runtime_error(asStr.c_str()); //AI(ht9045-v899) 20260626: BCB6 Exception->std::runtime_error
             }
         }
         else
@@ -1791,6 +1887,7 @@ bool b_Check_Dir_Exist_And_Creak_Dir(AnsiString asDir)
     }
     return false;
 }
+//AI(ht9045-v899) 20260626: ungated SetSocketHandlerID -- IniConfig.SocketHandlerID (active)
 //==============================================================================
 void SetSocketHandlerID(AnsiString strID)                                       //Jimmychiu 20220805 SocketHandlerID can not be NULL
 {
@@ -1798,6 +1895,7 @@ void SetSocketHandlerID(AnsiString strID)                                       
         strID=AnsiString(" ");
     IniConfig.SocketHandlerID=strID;
 }
+#if 0 // TODO(W6: ShuttleLog needs iSensor[][]/ UseCanBusOrEtherCAT (HAL) + WriteDataToFile (gated) + asShtSenLogPath)
 //==============================================================================
 void ShuttleLog()                                                               //kevin 20220912 add shuttle sensor record
 {
@@ -1845,6 +1943,8 @@ void ShuttleLog()                                                               
     Sbuffer1.sprintf("End",SystemHour, SystemMin, SystemSec);
     WriteDataToFile(Sbuffer0.c_str(), Sbuffer1.c_str());
 }
+#endif // TODO(W6)
+//AI(ht9045-v899) 20260626: ungated GetSoftwareFileVersion -- uses VerInfo (Win32 version API)
 //------------------------------------------------------------------------------
 //Sam 20230328 : �۰ʧ�s�W�[�����ˬd
 //==>
@@ -1852,11 +1952,12 @@ AnsiString GetSoftwareFileVersion(AnsiString sFilePatch)                        
 {
     AnsiString sFileVer="";
     VerInfo *myVerInfo=new VerInfo();
-    myVerInfo->FileName=sFilePatch;
-    sFileVer=myVerInfo->ProductVersion;
+    myVerInfo->SetFileName(sFilePatch); //AI(ht9045-v899) 20260626: __property FileName=->SetFileName() (no BCB6 prop)
+    sFileVer=myVerInfo->ProductVersion(); //AI(ht9045-v899) 20260626: __property ProductVersion->getter call
     delete myVerInfo;
     return sFileVer;
 }
+//AI(ht9045-v899) 20260626: ungated VerInfo ctor/m_ClearData/m_SetFileName/m_strGetFixed*/GetAppVersion -- Win32 GetFileVersionInfo
 //------------------------------------------------------------------------------
 VerInfo::VerInfo()
 {
@@ -1932,6 +2033,7 @@ void VerInfo::GetAppVersion(AnsiString sAppExeName, WORD& major, WORD& minor, WO
     revision=LOWORD(fileInfo->dwFileVersionLS);
     free(data);
 }
+#if 0 // TODO(W5: GetSVNRev/GetFileVersion/GetMainVersion need Application->ExeName (VCL singleton, no stub in foundation))
 //------------------------------------------------------------------------------
 AnsiString VerInfo::GetSVNRev()
 {
@@ -1970,6 +2072,8 @@ AnsiString VerInfo::GetMainVersion()
     }
     return sret;
 }
+#endif // TODO(W5)
+//AI(ht9045-v899) 20260626: ungated m_GetVerInfo -- Win32 GetFileVersionInfo + GlobalAlloc, no app/UI deps
 //------------------------------------------------------------------------------
 void VerInfo::m_GetVerInfo(void)
 {
@@ -2046,8 +2150,8 @@ void VerInfo::m_GetVerInfo(void)
     {
         m_wLangID   =((WORD *)lpInfo)[0];
         m_wCharsetID=((WORD *)lpInfo)[1];
-        strLangID   =strLangID.IntToHex((int)m_wLangID, 4);
-        strCharset  =strCharset.IntToHex((int)m_wCharsetID, 4);
+        strLangID   =IntToHex((int)m_wLangID, 4); //AI(ht9045-v899) 20260626: BCB6 AnsiString::IntToHex->free fn IntToHex
+        strCharset  =IntToHex((int)m_wCharsetID, 4); //AI(ht9045-v899) 20260626: same
     }
     else
     {
@@ -2093,6 +2197,7 @@ void VerInfo::m_GetVerInfo(void)
 
     m_dwLastError = GetLastError();
 }
+#if 0 // TODO(W7: GetBundleInfo needs cJSON + TestSocket/LotSummary/Prod/fSCKART/fNote + asBundleTrayID/bUnloading)
 //<==
 //Sam 20230328 : �۰ʧ�s�W�[�����ˬd
 //------------------------------------------------------------------------------
@@ -2261,6 +2366,8 @@ AnsiString GetBundleInfo(int iAuto)                                             
 //    cJSON_Delete(root);
     return cJSON_Print(root);
 }
+#endif // TODO(W7)
+//AI(ht9045-v899) 20260626: ungated GetErrorMessage -- Win32 FormatMessage only
 //------------------------------------------------------------------------------
 AnsiString GetErrorMessage(DWORD dwErrorMessageCode)                            //Steven 20240911 : ����t�ο��~���T��
 {
@@ -2276,11 +2383,12 @@ AnsiString GetErrorMessage(DWORD dwErrorMessageCode)                            
                    NULL);
 
     strMsg.sprintf(("Error Code : 0x%02X ==> Error Message : %s "), dwErrorMessageCode, lpMsgBuf);
-    strMsg=StringReplace(strMsg, "\r", "", TReplaceFlags()<<rfReplaceAll);
-    strMsg=StringReplace(strMsg, "\n", "", TReplaceFlags()<<rfReplaceAll);
+    { AnsiString t; for(int i=1;i<=strMsg.Length();i++){char c=strMsg[i];if(c!='\r'&&c!='\n')t+=c;} strMsg=t; } //AI(ht9045-v899) 20260626: StringReplace(rfReplaceAll)->manual CR/LF strip (vclcompat has no TReplaceFlags)
+    // (CR and LF both stripped in loop above)
     LocalFree(lpMsgBuf);                                                        // �O�ofree���Ŷ��A�i���n�ߺD
     return strMsg;
 }
+//AI(ht9045-v899) 20260626: ungated VC8ToKpa/KpaToVC8/IsDoubleEqual -- pure math
 //------------------------------------------------------------------------------
 double VC8ToKpa(int iVal) //intput 0~32767         output -116.0~148.0 Kpa      //Sam 20230210 : �s�W VacuumUnit �q�T�Ҳ�
 {
@@ -2316,5 +2424,3 @@ bool IsDoubleEqual(const double a, const double b, const double tolerance)
     return fabs(a-b)<=tolerance;
 }
 //------------------------------------------------------------------------------
-//AI(W0-TAIL) 20260626: close whole-body gate
-#endif // TODO(W3/W5/W6/W7)

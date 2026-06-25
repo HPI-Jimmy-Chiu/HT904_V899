@@ -26,6 +26,11 @@
 - INI：`IniFiles.h/.cpp` 的 `TIniFile`(write-through，每次寫即 flush)/`TMemIniFile`(eager load，僅 UpdateFile/dtor flush)，共用 TIniStore（插入序、raw-byte Big5-safe、section/key 大小寫不敏）；default-fallback verbatim；ReadInteger 支援十進位與 $/0x hex；ReadFloat 用 '.' 小數；double 以 `%0.4f` 文字存。已 43/43 測試。
 - **⚠ Win32 巨集衝突（重要 gotcha）**：`<windows.h>`（經 common.h→MachineType.h 帶入）`#define DeleteFile DeleteFileA`、`CopyFile CopyFileA`，會 shadow vclcompat 的 `DeleteFile(AnsiString)`/`CopyFile` 多載（巨集先改 token，命名空間限定救不了）。暫以呼叫端 `#undef DeleteFile/CopyFile`（include 後）解。**待辦：在 vclcompat 傘狀標頭 vcl_compat.h 統一 `#undef` 這些 A/W 巨集（或改名 vclcompat 函式）**。
 
+## ⚠ 翻譯中文註解亂碼（U+FFFD）— 根因 + go-forward 規則
+- **根因**：Read 工具把 Big5(cp950) 原始碼當 UTF-8 解→中文變 U+FFFD，agent「看到的」就是亂碼，故無法忠實重現中文註解。已中招：`cprod.cpp`(283)、`cpublic.cpp`(62)（皆只在註解，編譯不受影響；golden 唯讀樹仍有原中文於同 path:line 可反查）。其餘 67 檔乾淨。
+- **go-forward 規則（翻譯 agent 必遵）**：翻含中文註解的檔時，**以 cp950 感知方式讀 golden**（`iconv -f CP950 -t UTF-8` 或 python `open(encoding='cp950')`）取得真中文，譯出檔註解寫成**正確 UTF-8**；若不便，則以**英文 gloss + golden file:line 出處**取代該中文註解（精確中文留在唯讀 golden）。**勿用 Read 工具直接搬中文註解**。
+- 補救（低優先，已追蹤）：對 cprod.cpp/cpublic.cpp 跑一次 cp950→UTF-8 註解轉碼修復（見 ROADMAP DEFERRED）。
+
 ## 已翻譯模組 + 領域發現
 - **Public/HTMD5（W0）**：`class MD5` + `md5()/md5_File()/md5_Folder()`（回 AnsiString）+ SearchFile/SearchFolder。翻譯時：VCL `TMask` 萬用字元比對→重建簡易 matcher；`std::auto_ptr`→`unique_ptr`；`MyDBIProcess` log→stub；`FindFirstFile` 用 MinGW windows.h（可攜）；保留 Ifor 20200826 buffer-overflow fix。MD5 演算法 bit-exact（命中 RFC1321 向量）。
 - **Public/cJSON（W0）**：標準可攜 C，原樣翻、extern "C"、以 C 編譯，parse/print round-trip 過。

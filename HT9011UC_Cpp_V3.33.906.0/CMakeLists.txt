@@ -181,6 +181,13 @@ target_include_directories(ht9045_globals PUBLIC
 
 target_link_libraries(ht9045_globals PUBLIC vclcompat)
 
+# AI(ht9045-v899) 20260626: cpublic.cpp now ungates FindAndKillProcess (psapi) and
+# VerInfo::GetAppVersion/m_GetVerInfo (version.lib).  Both ship with MinGW but
+# must be listed explicitly -- the linker does not auto-pull them.
+if(WIN32)
+    target_link_libraries(ht9045_globals PUBLIC psapi version)
+endif()
+
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     # The translated globals carry the original BCB6 idioms (e.g. AnsiString
     # array brace-init with NULL).  Keep them compiling without the strict
