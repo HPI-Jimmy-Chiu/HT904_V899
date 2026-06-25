@@ -1,4 +1,0 @@
-IOType,Alias,Lane,ModuleType,IP,Port,Bit,InType,ISABase,Enable,OnAlarmTime,OffAlarmTime,OnDelayTime,OffDelayTime,Note
-Sucker,BTestSuckAA,0,1,7,0,4,1,0,1,50,10,1,1,
-Sensor,InArmSuckSn,0,0,7,1,2,1,0,1,0,0,0,0,
-Switch,SwClear0,0,0,0,0,1,1,1,1,0,0,0,0,

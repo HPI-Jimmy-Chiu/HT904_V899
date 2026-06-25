@@ -1,9 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <RootNamespace>HT9045.Hardware.Native</RootNamespace>
-    <AssemblyName>HT9045.Hardware.Native</AssemblyName>
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\HT9045.HardwareAbstraction\HT9045.HardwareAbstraction.csproj" />
-  </ItemGroup>
-</Project>

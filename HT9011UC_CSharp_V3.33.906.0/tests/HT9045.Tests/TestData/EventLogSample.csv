@@ -1,7 +1,0 @@
-No,	UnitName,	AlarmCode,	Date,	Time,	Recovery,	StopedTime,	Duplicate,	Message
-1,	Process,	,	2022-06-30,	12:45:20,	,	,	,	IPSC Can Not Find Execute File => C:\GTK\IPSC.exe
-2,	Motion,	JAM0312,	2022-06-30,	11:00:00,	RETRY,	12.5,	0,	AutoClean contact fail, retry now, then home
-3,	Motion,	WAR240004,	2022-06-30,	10:30:00,	HOME,	7.5,	1,	Motor CCW limit,	sensor triggered
-4,	Message,	MES2108,	2022-06-29,	09:00:00,	,	,	,	Program Start
-5,	Process,	(null),	2022-06-29,	08:00:00,	,	,	,	Change bin mode
-6,	Process,	MES2107,	2022-06-28,	07:00:00,	,	,	,	Change Start Mode

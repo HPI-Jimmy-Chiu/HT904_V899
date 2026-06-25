@@ -1,4 +1,0 @@
-Motorname,Alias,BoardID,Port,Direction,IP,GearRatio,HomeDirectior,HomeHighSpeed,HomeLowSpeed,InitSpeed,JogHighSpeed,JogLowSpeed,Rate,SoftLimitN,SoftLimitP,Enable,ServoAlarmOn,Range,1P2P,SensorType,SimulateSpeed,CardModel,Acc,Dec,EncodeType,PickLimit,LimitLogic,In1Logic
-M00,MInArmX,0,0,0,,0.1992,1,500,100,100,20000,2500,90,-1234,41201,1,1,50,3,0,10000,SMC,100,100,2,,1,1
-M01,MInArmY,1,2,1,,0.5,1,400,80,120,18000,2000,80,-2000,42000,1,1,40,3,0,10000,SMC,90,90,2,,0,0
-M143,MFix3Full,3,6,1,,1,1,200,150,200,2000,300,50,-999999,999999,0,0,30,0,0,10000,SMC,90,90,2,,0,0
