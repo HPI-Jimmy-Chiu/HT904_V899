@@ -265,3 +265,59 @@ if(WIN32)
 endif()
 
 add_test(NAME sim_motor COMMAND test_sim_motor)
+
+# ===========================================================================
+#  W4-IO HAL IO layer
+# ===========================================================================
+# --- test_lane_io_sim: IO HARDWARE INTERFACE-CUT acceptance proof -----------
+#   Dedicated, self-contained proof that the offline IO HAL works with NO
+#   vendor SDK and NO hardware.
+#   Part A: TSimIOBackend direct round-trip (WriteBit/ReadBit/WriteByte/ReadByte).
+#   Part B: TLaneIO facade: IOBitOn->IOOutBitStatus cache; IOByteOut returns true;
+#           IOInputBit round-trip through TSimIOBackend; CheckPortRangeErr==0
+#           when InitialOK==false or iISABase!=eMotionNet; GetIOErrStr 0..5.
+#   Part C: TMySwitch.On() sets OutPortData via MyLaneIO; Status() reads it back.
+#   Part D: TMySensor.IsOn()/IsOff() round-trip through TSimIOBackend; Type
+#           inversion; Enable==false -> false; CopySensor field copy.
+#   Same RESCAN link group as test_motor_w4 (cprod<->cpublic<->cmydef ctors).
+#   Links with zero vendor libraries (all HAVE_xxx default OFF).
+add_executable(test_lane_io_sim
+    test_lane_io_sim.cpp
+)
+
+target_link_libraries(test_lane_io_sim PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_lane_io_sim PRIVATE ws2_32)
+endif()
+
+add_test(NAME LaneIOSim COMMAND test_lane_io_sim)
+
+# --- test_sim_io: DEDICATED Sim-IO interface-cut acceptance proof -----------
+#   Task-spec proof (mirrors test_sim_motor.cpp for the IO layer):
+#     [1] select TSimIOBackend; via TLaneIO IOBitOn/IOBitOff then IOOutBitStatus
+#         reflects the OutPortData cache (per-bit mask precision verified).
+#     [2] IOByteOut / IOInputByte round-trip through the Sim port (IO_CARD_TYPE=1
+#         MN200 read path so *Value is used directly, not the IO_CARD_TYPE==0
+#         ret-quirk); OutPortData bit pattern cross-checked.
+#     [3] IOInputBit returns the Sim value (write Sim bit -> read via facade).
+#     [4] range/error path: drives CheckPortRangeErr documented codes 0..5
+#         (InitialOK=true + iISABase=eMotionNet + iUseMNetIP device types) and
+#         the InitialOK==false / iISABase!=eMotionNet early-return guards, plus
+#         GetIOErrStr 0..5 string mapping.
+#   Same RESCAN link group as test_lane_io_sim; zero vendor libraries (HAVE_xxx OFF).
+add_executable(test_sim_io
+    test_sim_io.cpp
+)
+
+target_link_libraries(test_sim_io PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_sim_io PRIVATE ws2_32)
+endif()
+
+add_test(NAME SimIO COMMAND test_sim_io)

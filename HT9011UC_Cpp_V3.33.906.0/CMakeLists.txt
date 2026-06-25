@@ -258,6 +258,64 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 endif()
 
 # ---------------------------------------------------------------------------
+# Library: ht9045_io  (W4-IO HAL IO layer)
+#
+#   IOBackend.{h,cpp}   -- abstract port TIOBackend (WriteBit/WriteByte/ReadBit/
+#                          ReadByte, int<0=fail) + TSimIOBackend (offline in-memory
+#                          default, always active) + real backends TMN200Backend /
+#                          TPci1203Backend / TMnetLegacyBackend / TRawPortBackend
+#                          (bodies behind #if HAVE_MN200 / HAVE_PCI1203 / HAVE_MNET /
+#                          (HAVE_RAWPORT && x86), all OFF by default).
+#   MyLaneIo.{h,cpp}    -- TLaneIO facade: keeps the 6 BCB6 method names + signatures
+#                          + OutPortData cache + CheckPortRangeErr + ret<0 / SOFT_SIMULTE
+#                          bookkeeping; routes vendor calls through TIOBackend* pIO.
+#                          Default: pIO = new TSimIOBackend() (offline).
+#   myswitch.{h,cpp}    -- TMySwitch On/Off/Status/OnOff/CopySwitch; eMotionNet||
+#                          ePCI1203 -> MyLaneIO (active); pad/raw branches gated
+#                          #if 0 // TODO(W6).
+#   mysensor.{h,cpp}    -- TMySensor Status/IsOn/IsOff/CopySensor via MyLaneIO;
+#                          same pad gate; raw branch stub.
+#
+#   Sim path (default): compiles + links with NO vendor SDK; no HAVE_xxx macros
+#   needed.  The real backends compile as stubs (each method {return 0;}) and
+#   never link to vendor symbols.
+#
+#   Depends on:
+#     * vclcompat       -- AnsiString / windows.h (byte)
+#     * ht9045_globals  -- InitialOK, IO_CARD_TYPE, MyBitMask, MachineTypeChoice,
+#                          uiDevhand, iPLCSafetyVer, eMotionNet/ePCI1203/etc.
+#                          (cmydef.h / MachineType.h / cprod.h resolved here)
+#
+#   DEFER to W4-IO-part2 / W6 (NOT compiled now):
+#     * TMyCylinder Push/Pop/On/Off/SetSimulateCompoment (Alarm/SystemStart/
+#       bHandlerPause/TControl god-stack)
+#     * TMySucker Suck()/Destroy() state machines (TQPF_Timer/alarm)
+#     * Entire TMyKitSuck data grid (TALed/pLed/TMyProductionRecord/TTrayMotor/
+#       cprod/MyDBIProcess)
+#     * myio.cpp raw-port free funcs (outportb/IOSetOutport/TTL_CARD_TYPE +
+#       2-arg IdleCheckSafeDoorByCylinder)
+#     * Real backend wiring/selection in cinitial by IO_CARD_TYPE
+#     * MyPLC_IO_Modbus/ModbusTCPClient PLC input state
+# ---------------------------------------------------------------------------
+add_library(ht9045_io STATIC
+    IOBackend.cpp
+    MyLaneIo.cpp
+    myswitch.cpp
+    mysensor.cpp
+)
+
+target_include_directories(ht9045_io PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+target_link_libraries(ht9045_io PUBLIC vclcompat ht9045_globals)
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(ht9045_io PRIVATE
+        -Wall -Wextra -Wno-conversion-null -Wno-write-strings -Wno-unused-parameter)
+endif()
+
+# ---------------------------------------------------------------------------
 # Tests
 # ---------------------------------------------------------------------------
 enable_testing()

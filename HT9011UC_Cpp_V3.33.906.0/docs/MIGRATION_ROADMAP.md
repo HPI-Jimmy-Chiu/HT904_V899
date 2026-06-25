@@ -29,8 +29,9 @@
 - ✅ **W3-cont 閘門完成**：vclcompat `TIniFile`/`TMemIniFile`（IniFiles.h/.cpp，write-through/eager-load、Big5-safe、case-insensitive、default-fallback；43/43 shim 測試）+ `common.cpp` ini-helper 家族 38 函式（OpenGeneralIniFile/CheckAndReadIniDataGeneral 多載/WriteIniDataGeneral）。**真檔 oracle 過**：經譯後 helper 鏈讀真 Gerneral.ini 得 MOTION=1/IO=2/TTL=2/INDEX=0/HEATER=4、missing→default。ctest 14/14。
 - ✅ **W3-cont2 config-table loaders 完成**：database.cpp 的 LoadMotData/LoadIoData/SetMOTTableNo/SetIOTableNo/TIODATA/TMOTDATA（8 函式）翻譯，**真檔 oracle 過**（45 列全 SMC、名稱式 col 解析證實、IO 668 列 ISABase 644:24、M00→MInArmX）。Win32 巨集 guard 進 vcl_compat.h。修 AnsiString 缺 operator=(int) bug。ctest 15/15。
 - ✅ **W4 HAL 馬達層完成（interface-cut 離線證明）**：HTMotor(虛擬基底)+TMyMotor+新 `TMySimMotor` 翻譯，**離線零 vendor SDK 可編可跑**（test_sim_motor 33/33：home→0、MoveToPos(N)→N、no alarm、MotorHome 狀態機收斂；nm/strings 稽核零 vendor 符號）。**6 個品牌驅動 → W4-part2**（每個 .cpp 都拉 ~30 模組 god-stack [main/csystem/sensors/cylinders]，故卡在 W6，與 vendor SDK 無關；Sim 先頂著）。mymotor 大量 motion/Galil/sensor 方法 gated TODO(W6)、pHTray→W7。ctest 17/17。
-- ▶ **下一步：W4-IO HAL（IO 層 interface-cut）** = `TLaneIO`(現 switch-on-typecode) 抽 `TIOBackend` 虛基底 + 新 `TSimIOBackend`（離線）+ myswitch/mysensor/mycylin/mykitsuck 物件層；vendor IO 呼叫(mn_*/Acm_*) `#if HAVE_xxx` 守。是 sensors/cylinders/W6 的前置。
-- ⏳ 待：W4-part2 品牌馬達驅動(需 W6)、database.cpp ReadGeneralIni/SECS、cMyDB(待 vendor sqlite)、MyStringList、common.cpp 其餘、W5 comms、W6 root、W7 UI。
+- ✅ **W4-IO HAL 完成（IO interface-cut 離線證明）**：`IOBackend.h/.cpp`（TIOBackend 虛基底 + TSimIOBackend 離線；real backends mn_*/Acm_*/_mnet_*/raw `#if HAVE_xxx` 預設 OFF）+ `MyLaneIo`(facade，6 method 經 pIO 派發、保留 range/OutPortData 記帳) + `myswitch`(TMySwitch)/`mysensor`(TMySensor) 物件層路由到 facade。test_sim_io 等通過、ctest 19/19。
+- ▶ **下一步：HAL Sim 收尾（KeyPro + TempCtrl）** 補齊本機 active 硬體的離線 Sim 層（馬達✓/IO✓/license/溫控），讓 W6 狀態機能對全 Sim HAL 離線端到端跑。tester 較纏(歸 W5/SECS)。
+- ⏳ 待：W4-part2 品牌馬達驅動(需 W6)、cylinder/sucker 狀態機+TMyKitSuck(W6)、database.cpp ReadGeneralIni/SECS、cMyDB(待 vendor sqlite)、MyStringList、common.cpp 其餘、W5 comms、W6 root、W7 UI。
 
 ## 延後項目追蹤（DEFERRED — 完整性，勿遺漏，全部轉移用）
 > 部分檔案只翻了 leaf 部分，耦合段延到對應波次。最終各波結束前要回頭補完這些。
@@ -56,3 +57,6 @@
 | cpublic.cpp | queue/union/VerInfo 方法本體（現整檔 #if 0）| W6/W7 | cmydef.cpp 的 active queue 全域(QueueTaskList[]…)需其 ctor；**任何用到 queue 的 exe 連結前必須先 ungate**（目前測試用 stub ctor 繞過）|
 | Motor 品牌驅動 ×6 (mySMCmotor/myGALILmotor/myMN200motor/mySYNTEKmotor/myEthercatmotor/HTMC88X1Motor) | 整檔 | W4-part2(需 W6) | 各 .cpp 拉 main.h/csystem/sensors/cylinders god-stack（卡 W6）+ vendor 呼叫需 #if HAVE_CSMC/GALIL/MN200/SYNTEK/ETHERCAT/MC88X1(預設 OFF，無 SDK)。vendor 符號族見 W4 workflow 紀錄 |
 | Motor/mymotor.cpp | MotorMovePosition/MotorMove/Galil 分支(~80)/sensor compare/TrayArm/continuous-move 本體（gated）| W6 | 拉 sensor/cylinder/狀態機；pHTray(VCL)→W7 |
+| mycylin (TMyCylinder) | Push/Pop/On/Off/SetSimulateCompoment 狀態機（IO 路由 method 已翻）| W6 | 拉 Alarm/SystemStart/bHandlerPause/SmartDiagnostic/VCL TControl |
+| MyKitSuck | TMySucker Suck()/Destroy() 狀態機；**TMyKitSuck 整個 item-state grid（2894 行）** | W6 | TQPF_Timer/alarm；TMyKitSuck 拉 TALed/TMyProductionRecord/TTrayMotor/MyMotor/cprod IC 常數（god-stack，非 IO-HAL）|
+| myio.cpp | raw-port free funcs（outportb/IOSetOutport/TTL_CARD_TYPE）| W6/x86-dead | 本機 TTL_CARD_TYPE>0 短路、ISABase 全 0→實際不走；x64 無 |

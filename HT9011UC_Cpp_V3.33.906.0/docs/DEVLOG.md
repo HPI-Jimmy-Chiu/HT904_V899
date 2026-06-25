@@ -111,8 +111,12 @@
 - mymotor.cpp gated：MotorMovePosition/MotorMove/Galil 分支/sensor compare/TrayArm/continuous-move 本體 TODO(W6)；pHTray(VCL)→W7。
 - 驗證（獨立，fresh build/）：clean build、**ctest 17/17**。
 
+## 2026-06-26 — W4-IO HAL：IO interface-cut 離線證明
+- 新 `IOBackend.h/.cpp`：TIOBackend 虛基底 + TSimIOBackend(離線記憶體 bit/port map)；real backends(mn_*/Acm_*/_mnet_*/raw) `#if HAVE_MN200/PCI1203/MNET/RAWPORT` 預設 OFF。`MyLaneIo`(facade)6 method 經 `pIO->` 派發、保留 IdleCheckSafeDoor/CheckPortRangeErr/OutPortData/MyBitMask 記帳，ctor 預設 `new TSimIOBackend`。`myswitch`(TMySwitch)/`mysensor`(TMySensor) 路由到 facade（pad/raw 分支 #if 0→W6）。
+- 驗證（獨立）：clean build、**ctest 19/19**（+test_sim_io 28 斷言：IOBitOn→IOOutBitStatus 反映、IOByteOut/IOInputBit round-trip、TMySwitch.On→bit、TMySensor.IsOn 讀回）。無 vendor SDK。
+- gated→W6：mycylin Push/Pop 狀態機、TMySucker Suck/Destroy、TMyKitSuck item grid(2894行 god-stack)、myio raw-port。
+
 ### 🔖 RESUME（最新）
-- 已完成：…W0 基礎+尾段、W1、W2、W3(前置+ini+config-loaders)、**W4 HAL 馬達層(interface-cut 離線證明)**。全 green、已 commit。
-- **下一步：W4-IO HAL** = `TLaneIO` 抽 `TIOBackend` 虛基底 + 新 `TSimIOBackend`(離線) + myswitch/mysensor/mycylin/mykitsuck 物件層；vendor IO(mn_*/Acm_*) `#if HAVE_xxx` 守。是 sensors/cylinders/W6 前置。之後 W4-part2(品牌馬達,需W6)、W5 comms、W6 root、W7 UI。
-- **重要 ordering 發現**：品牌驅動/部分 mymotor 方法 include main.h/csystem/sensors → 它們其實在「狀態機之上」的 include 依賴，故須先 W6(sensors/cylinders/狀態機)再回補品牌驅動本體；Sim 路徑讓一切先可編可跑。
+- 已完成：…W3(config 全鏈)、**W4 馬達 HAL**、**W4-IO HAL**（兩 HAL 皆 interface-cut 離線 Sim 可跑）。全 green、已 commit（branch 17 commits）。
+- **下一步：HAL Sim 收尾 = KeyPro shim（IKeyPro LoadLibrary，Sim 回 level 1）+ TempCtrl DTK4848(serial 讀寫)**，補齊本機 active 硬體離線 Sim 層。tester 歸 W5(纏 SECS)。之後 W6 狀態機（解鎖最多 deferred：品牌馬達/mymotor 助手/cylinder-sucker 狀態機/TMyKitSuck）。
 - 驗證指令：`cd HT9011UC_Cpp_V3.33.906.0 && export PATH=/c/MinGW/bin:$PATH && cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=C:/MinGW/bin/g++.exe -DCMAKE_C_COMPILER=C:/MinGW/bin/gcc.exe && cmake --build build && ctest --test-dir build`。
