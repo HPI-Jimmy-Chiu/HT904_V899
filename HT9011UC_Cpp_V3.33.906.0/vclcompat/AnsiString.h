@@ -74,6 +74,20 @@ public:
     AnsiString& operator=(const char* s)       { data_ = (s ? s : ""); return *this; }
     AnsiString& operator=(char c)              { data_.assign(1, c); return *this; }
 
+    // BCB6 AnsiString has operator=(int)/operator=(double) that FORMAT the
+    // number (e.g. `s = 7;` -> "7"), mirroring the AnsiString(int) ctor above.
+    // Without these explicit overloads, `s = 7;` would bind to operator=(char)
+    // (int->char is a standard conversion, preferred over the user-defined
+    // int->AnsiString ctor path), silently storing a control byte instead of
+    // the decimal text.  This bit the translated database.cpp loaders, whose
+    // `mapMotTable[key] = i-1;` (database.cpp:1646) and `mapIOTable[key] = i-1;`
+    // (database.cpp:1578) store the row index as formatted text in BCB6.
+    AnsiString& operator=(int v)          { assignInt(static_cast<long long>(v)); return *this; }
+    AnsiString& operator=(unsigned int v) { assignInt(static_cast<long long>(v)); return *this; }
+    AnsiString& operator=(long v)         { assignInt(static_cast<long long>(v)); return *this; }
+    AnsiString& operator=(long long v)    { assignInt(v); return *this; }
+    AnsiString& operator=(double v)       { assignDouble(v); return *this; }
+
     // ---- basics ------------------------------------------------------------
     const char* c_str()  const { return data_.c_str(); }
     int         Length() const { return static_cast<int>(data_.size()); }

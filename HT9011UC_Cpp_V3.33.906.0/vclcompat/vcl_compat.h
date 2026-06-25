@@ -74,6 +74,47 @@
 #include "vclcompat/SysUtils.h"
 #include "vclcompat/IniFiles.h"
 
+// ---------------------------------------------------------------------------
+//  Win32 A/W macro guard
+//
+//  windows.h #defines several file/string function names to their *A variants
+//  (e.g. DeleteFile -> DeleteFileA, CopyFile -> CopyFileA, MoveFile ->
+//  MoveFileA).  These macros would silently shadow the vclcompat AnsiString
+//  overloads that the `using` declarations below bring into the global
+//  namespace, causing "undefined reference to vclcompat::DeleteFile" or
+//  silent name corruption at the call site.
+//
+//  Strategy: include <windows.h> centrally here (it was already being pulled
+//  in by individual TUs such as SysUtils.cpp anyway) and immediately undefine
+//  the colliding macros using guarded #ifdef / #undef so the header is safe
+//  whether or not windows.h happened to be included earlier.  The real Win32
+//  entry points remain reachable through their explicit *A spellings
+//  (CopyFileA / DeleteFileA / MoveFileA).
+//
+//  NOT undefined: FindClose (real Win32 function, not a macro; vclcompat
+//  FindClose(TSearchRec&) has a different signature and overload resolution
+//  disambiguates); Sleep (Win32 real function, different signature).
+// ---------------------------------------------------------------------------
+#if defined(_WIN32)
+// Do NOT define WIN32_LEAN_AND_MEAN here: some consumers (cmydef.h) rely on
+// rpcndr.h's `byte` typedef that the lean build omits.  Include the full
+// windows.h and let each consumer opt into LEAN themselves if desired.
+#  include <windows.h>
+// DeleteFile  -> DeleteFileA  -- shadows vclcompat::DeleteFile(AnsiString)
+#  ifdef DeleteFile
+#    undef DeleteFile
+#  endif
+// CopyFile    -> CopyFileA    -- shadows vclcompat::CopyFile(AnsiString,AnsiString,bool)
+#  ifdef CopyFile
+#    undef CopyFile
+#  endif
+// MoveFile    -> MoveFileA    -- preventive: vclcompat has no MoveFile yet but
+//                                 a future Rename/MoveFile shim would collide.
+#  ifdef MoveFile
+#    undef MoveFile
+#  endif
+#endif // _WIN32
+
 // BCB6 spelling alias: a lot of code uses `String` as a synonym for AnsiString.
 #ifndef VCLCOMPAT_NO_GLOBAL_USING
 using vclcompat::AnsiString;

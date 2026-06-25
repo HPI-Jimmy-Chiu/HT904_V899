@@ -27,8 +27,9 @@
 - ✅ **W0 尾段＝全域標頭完成**：`MachineType.h`/`Config.h`/`CosFunction.h`/`myTimer.h`/`cpublic.h`/`cprod.h`/`cmydef.h`/`MachineDefine.h` 全部去 VCL 化、**單一 TU 一起編可過**（ctest 11/11，含 globals：PROD_INFO_ST 的 static_assert/offsetof 錨點 + enum/#define 值對拍）。**瓶頸已解除**。form 指標前置宣告→W7；.cpp 觸及狀態機的 body `#if 0`→W3/W6。
 - ◐ **W3 config/DB — 前置已備，readers 待續**：已加 vclcompat 檔案系統 API（FindFirst/FindNext/FindClose/TSearchRec/fa*/RemoveDir/FileSetAttr/FileGetAttr/HexStrToInt）、`third_party/sqlite3/` 外部相依 scaffold（現 header-only stub；待 vendor amalgamation）、`tests/test_config_db.cpp` 真檔 oracle（鎖定 45 SMC/MOTION=1/IO=2/IO_Table 644:24）、修 vclcompat TStringList SetCommaText/SetDelimitedText 尾分隔重複計數 bug。ctest 12/12。
 - ✅ **W3-cont 閘門完成**：vclcompat `TIniFile`/`TMemIniFile`（IniFiles.h/.cpp，write-through/eager-load、Big5-safe、case-insensitive、default-fallback；43/43 shim 測試）+ `common.cpp` ini-helper 家族 38 函式（OpenGeneralIniFile/CheckAndReadIniDataGeneral 多載/WriteIniDataGeneral）。**真檔 oracle 過**：經譯後 helper 鏈讀真 Gerneral.ini 得 MOTION=1/IO=2/TTL=2/INDEX=0/HEATER=4、missing→default。ctest 14/14。
-- ▶ **下一步：W3-cont2 = database.cpp 的 config 讀取**（ReadGeneralIni 中只讀 ini→IniConfig/全域 的部分；SECS/GEM 與狀態機指派 #if 0），用真檔 oracle 對拍。順手把 Win32 巨集衝突（見 KNOWLEDGE）一行 guard 加進 vclcompat 傘狀標頭。
-- ⏳ 待：cMyDB（待 vendor sqlite amalgamation）、MyStringList（待 __property 模擬+MyMemo）、common.cpp 其餘區（path/file/timing/canvas/ui…各 wave）、W4 HAL、W5 comms、W6 root、W7 UI。
+- ✅ **W3-cont2 config-table loaders 完成**：database.cpp 的 LoadMotData/LoadIoData/SetMOTTableNo/SetIOTableNo/TIODATA/TMOTDATA（8 函式）翻譯，**真檔 oracle 過**（45 列全 SMC、名稱式 col 解析證實、IO 668 列 ISABase 644:24、M00→MInArmX）。Win32 巨集 guard 進 vcl_compat.h。修 AnsiString 缺 operator=(int) bug。ctest 15/15。
+- ▶ **下一步：W4 HAL（馬達層，示範硬體 interface-cut）** = HTMotor 虛擬基底 + TMySimMotor（Sim，離線可跑）+ mymotor 派發；品牌驅動 wrapper（TMySMCMotor 等）翻譯但 vendor 呼叫 `#if HAVE_xxx` 守（無 vendor SDK 無法連結→Sim 先行、real 後接）。
+- ⏳ 待：database.cpp ReadGeneralIni(~1240行)/SECS/BDE → 後續；cMyDB（待 vendor sqlite）、MyStringList、common.cpp 其餘、W5 comms、W6 root、W7 UI。
 
 ## 延後項目追蹤（DEFERRED — 完整性，勿遺漏，全部轉移用）
 > 部分檔案只翻了 leaf 部分，耦合段延到對應波次。最終各波結束前要回頭補完這些。
@@ -50,3 +51,5 @@
 | cmydef.cpp | `TMyLog myLog` 全域實例定義（header 已前置宣告）| W7 | TMyLog 綁 VCL form/TWinControl |
 | cmydef.cpp | 5 個 `TMyStringList*` 目標定義 | W3 | TMyStringList 在 Public/MyStringList.h(__property+MyMemo.h) |
 | MachineDefine.h | driver/app include 區塊 | W3/W6/W7 | 等驅動/app 模組 |
+| database.cpp | ReadGeneralIni(~1240行)、SystemModularInitial(SECS HT9045Gem)、TDataModule1(BDE)、InstallColorBinDisplay | W5/W6/W7 | 牽連 SECS/BDE/UI；本批只翻 config-table loaders |
+| cpublic.cpp | queue/union/VerInfo 方法本體（現整檔 #if 0）| W6/W7 | cmydef.cpp 的 active queue 全域(QueueTaskList[]…)需其 ctor；**任何用到 queue 的 exe 連結前必須先 ungate**（目前測試用 stub ctor 繞過）|

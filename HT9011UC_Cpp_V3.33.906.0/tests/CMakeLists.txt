@@ -176,3 +176,38 @@ add_executable(test_ini_helpers
 target_link_libraries(test_ini_helpers PRIVATE ht9045_core)
 
 add_test(NAME ini_helpers COMMAND test_ini_helpers)
+
+# ===========================================================================
+#  W3-cont2 config-table LOADERS (translated database.cpp)
+# ===========================================================================
+# --- test_config_loaders: drive the TRANSLATED LoadMotData / LoadIoData ----
+#   Exercises the ACTUAL translated production loaders (not a re-impl):
+#     HSys.LoadMotData() -> SetMOTTableNo (name-based) -> TMOTDATA -> MotTable
+#     HSys.LoadIoData()  -> SetIOTableNo  (name-based) -> TIODATA  -> IOTable
+#   over the REAL D:\HT9045\system\{Mot_Table,IO_Table}.csv and asserts the
+#   ground-truth oracle: Mot 45 rows all CardModel==SMC (CardModel NAME-resolved
+#   to physical col 22, not enum fallback 9); M00/MInArmX BoardID==0/Port==0;
+#   IO 668 rows, 15 cols, ISABase NAME-resolved to col 8, distribution 644:24.
+#   Links ht9045_db (database.cpp) which PUBLIC-links vclcompat + ht9045_globals
+#   (INDEX_MOTION_CARD, TQPF_Timer).  The TU supplies the two gated externals
+#   (MyDBIProcess / ShowMyMessage) as local stubs.  Runtime-SKIPs (exit 0) when
+#   the real config files are absent.
+add_executable(test_config_loaders
+    test_config_loaders.cpp
+)
+
+# Link map:
+#   ht9045_db      -- the translated database.cpp loaders.
+#   ht9045_core    -- defines IoTablePath / MotTablePath (common.cpp), which the
+#                     loaders hardcode/assign (database.cpp:1552 / 1620).
+#   ht9045_globals -- INDEX_MOTION_CARD (cmydef.cpp) + the queue-object ctors
+#                     (cpublic.cpp).  cmydef.cpp.obj's static queue globals
+#                     (QueueTaskList[] etc.) need ctors from cpublic.cpp.obj in
+#                     the SAME archive; GNU ld's single-pass archive scan can't
+#                     back-resolve that, so wrap the libs in a LINK_GROUP to make
+#                     ld re-scan the archive set until all refs settle.
+target_link_libraries(test_config_loaders PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_db,ht9045_core,ht9045_globals>"
+)
+
+add_test(NAME config_loaders COMMAND test_config_loaders)

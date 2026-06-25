@@ -182,6 +182,44 @@ add_subdirectory(third_party/sqlite3)
 message(STATUS "sqlite3 resolution: ${SQLITE3_RESOLUTION}")
 
 # ---------------------------------------------------------------------------
+# Library: ht9045_db  (W3-cont2 config-table loaders)
+#   PARTIAL translation of database.cpp: the Mot_Table.csv / IO_Table.csv
+#   parsers (SYSTEM_MODULAR::LoadMotData / LoadIoData + the TMOTDATA / TIODATA
+#   row ctors + the name-based column resolvers TMOTNO::SetMOTTableNo /
+#   TIOTABLENO::SetIOTableNo).  All other database.cpp regions (TDataModule1,
+#   SYSTEM_MODULAR ctor/dtor, ReadGeneralIni, SystemModularInitial body,
+#   InstallColorBinDisplay) are gated #if 0 // TODO(wave) inside the .cpp.
+#
+#   Depends on:
+#     * vclcompat       -- AnsiString / TStringList / FileExists / HexStrToInt
+#     * ht9045_globals  -- INDEX_MOTION_CARD (cmydef.cpp), the cmydef/MachineType
+#                          headers, and TQPF_Timer (myTimer.o) for HSys.SysTimer.
+#
+#   NOT linked into an executable directly here; the test_config_loaders target
+#   links it and supplies the two stubbed externals (MyDBIProcess / ShowMyMessage)
+#   that the gated UI/DB waves will provide for real.
+# ---------------------------------------------------------------------------
+add_library(ht9045_db
+    database.cpp
+)
+
+target_include_directories(ht9045_db PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+target_link_libraries(ht9045_db PUBLIC vclcompat ht9045_globals)
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    # database.cpp carries the original BCB6 idioms inherited from the global
+    # headers (AnsiString brace-init etc. pulled via cmydef/cprod).  Match the
+    # ht9045_globals warning posture so the translated loaders compile without
+    # tripping on idioms that live in the (already-accepted) global headers,
+    # while still flagging genuine porting mistakes in the loader bodies.
+    target_compile_options(ht9045_db PRIVATE
+        -Wall -Wextra -Wno-conversion-null -Wno-write-strings)
+endif()
+
+# ---------------------------------------------------------------------------
 # Tests
 # ---------------------------------------------------------------------------
 enable_testing()

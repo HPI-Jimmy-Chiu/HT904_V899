@@ -98,8 +98,15 @@
 - **發現 Win32 巨集衝突**（DeleteFile/CopyFile→…A shadow vclcompat 多載）→ 見 KNOWLEDGE，待在 vcl_compat.h 加 undef guard。
 - 驗證（獨立）：clean build、**ctest 14/14**（+ini_helpers 25/25、IniFiles 43/43）。
 
+## 2026-06-26 — W3-cont2：config-table loaders（真檔解析成功）
+- 翻 database.cpp 8 個 config-table 函式（LoadMotData/LoadIoData/SetMOTTableNo/SetIOTableNo/TIODATA/TMOTDATA ctor）。**真檔 oracle 過**：LoadMotData 45 列、CardModel **名稱式** col22 解析(enum fallback 9→證明非位置式)、全 SMC(41 讀+4 index 因 INDEX_MOTION_CARD==0 強制 SMC)、M00→MInArmX/0/0；LoadIoData 668 列、ISABase 名稱式 col8、644:24。保留 faithful：catch log copy-paste bug、HomeDirectior 拼錯、SetMOTTableNo 的 `// else` 註解掉故 scan 無條件跑。
+- Win32 巨集 guard 進 vcl_compat.h（undef DeleteFile/CopyFile/MoveFile，probe 確認、不破既有 TU）。
+- **修 compat bug**：AnsiString 有 ctor(int) 但無 operator=(int)→`s=7` 綁到 operator=(char)(int→char 勝 user-defined)→存控制位元。加 operator=(int/uint/long/long long/double) 比照 BCB6。
+- 已知連結缺口：cpublic.cpp 整檔 gated→cmydef.cpp 的 active queue 全域 ctor 未定義（測試用 stub 繞）；用 queue 的 exe 連結前須先 ungate cpublic 的 queue 方法(W6/W7)。
+- 驗證（獨立，fresh build/）：clean build、**ctest 15/15**（config_loaders 22/22）。
+
 ### 🔖 RESUME（最新）
-- 已完成：…**W0 基礎+尾段**、**W1**、**W2(部分)**、**W3 前置**、**W3-cont(ini shim+helpers，config readers 閘門)**。全 green、已 commit。
-- **下一步：W3-cont2** = 翻 `database.cpp` ReadGeneralIni 的 config 讀取部分（只讀 ini→IniConfig/全域；SECS/GEM/狀態機指派 #if 0）+ 在 `vcl_compat.h` 加 `#undef DeleteFile/CopyFile` guard。再 cMyDB(需 vendor sqlite amalgamation)、MyStringList(需 __property 模擬)。
-- 觀察：globals→ini-shim→readers 前置鏈已通；config readers 現可實作。
+- 已完成：…W0 基礎+尾段、W1、W2(部分)、W3 前置、W3-cont(ini shim)、**W3-cont2(config-table loaders，真檔解析成功)**。48 個譯出源檔、全 green、已 commit。
+- **下一步：W4 HAL 馬達層（示範硬體 interface-cut）** = HTMotor(已是虛擬基底) + 新增 TMySimMotor(離線) + mymotor 派發；品牌 wrapper(TMySMCMotor 等)翻譯但 vendor 呼叫(SmcW*/DMC*/Acm_*) `#if HAVE_xxx` 守(無 vendor SDK 無法連結→Sim 先行)。
+- 待：database.cpp ReadGeneralIni/SECS、cMyDB(待 vendor sqlite)、MyStringList、common.cpp 其餘、cpublic queue ungate、W5/W6/W7。
 - 驗證指令：`cd HT9011UC_Cpp_V3.33.906.0 && export PATH=/c/MinGW/bin:$PATH && cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=C:/MinGW/bin/g++.exe -DCMAKE_C_COMPILER=C:/MinGW/bin/gcc.exe && cmake --build build && ctest --test-dir build`。
