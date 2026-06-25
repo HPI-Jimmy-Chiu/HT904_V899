@@ -29,6 +29,8 @@
 2. **Big5 原始碼檔案編碼**：含繁中字面值的 C# 檔（如 Big5RoundTripTests.cs）必須存成 **UTF-8**（編譯器讀檔用 UTF-8），但**執行期**對外 Big5 資料一律經 `Big5Codec`（`Encoding.GetEncoding(950)`）轉 UTF-16，含 U+FFFD 亂碼檢查。勿混淆「原始碼檔編碼」與「執行期資料編碼」。
 3. **Native 佔位**：Hardware.Native 各方法 throw NotImplementedException，是 Phase 3 接 HwInterop 的佔位；離線路徑（Sim）不會碰到。
 4. **ProdInfo 切片**：真實 PROD_INFO_ST ~770 行（cprod.h:368-1136），勿一次搬整包（接縫盤點 §B：Prod native 權威 + C# 唯讀快取）。
+5. **CSV 名稱式解析（重要）**：C++ `database.cpp`（SetMOTTableNo/SetIOTableNo）用 **header 名稱**（AnsiPos substring、last-match-wins）解析 Mot_Table/IO_Table 欄位，**不是固定位置**；且 **Mot_Table 實體欄序 ≠ emot* enum 序**（database.cpp:2047-2079）——位置式複製 enum 序會錯。C# 端用 `CsvHeaderMap`（exact、case-insensitive、last-wins）名稱式解析 → 耐客戶檔欄位重排，對所有合法 header 行為等價 C++。**勿退回位置式 loader**（會 silently 誤對馬達/IO 映射，正是計畫 R 風險）。`FromFields`(位置式)僅留作 fallback。真實 header（已核）：Mot_Table 29 欄、IO_Table 15 欄（見 Config/*.cs 註解）。
+6. **config 解析語意細節**（database.cpp）：IO 欄數須嚴格 ==15（eioTotal）；Mot 接受 >=28；空 cell：IO 的 Lane/ModuleType/IP/Port/Bit→-1、InType→0、ISABase→0(eMotionNet)、Enable→0；Port 當 ISABase∈{1,2,4} 時以 **HEX** 解析，否則十進位（database.cpp:1825-1830，**此細節 Phase 2 尚未實作，續補時注意**）。INI 用 CheckAndReadIniDataGeneral(Group,Name,Default) 多載讀取。
 
 ## 接縫 / Marshalling（Phase 3 接實體控制時用）
 - HwInterop 為薄 C-ABI 層，接在既有 C++ wrapper（非原始 vendor DLL）。

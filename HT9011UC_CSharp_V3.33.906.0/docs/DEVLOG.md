@@ -53,3 +53,29 @@
 - Phase 0 golden baseline：待使用者提供實機 log（Task_ListWithTime / EventLog / State Record / SECS / GPIB）。
 - Phase 2：搬 W1 非即時（報表/資料分析 PoC → config 載入 → LotInfo → SECS 組裝），與 C++ 並行對拍。
 - 待實機確認：Galil index 卡、MN200 IO 卡是否實體存在（影響 Phase 3 範圍）。
+
+---
+
+## 2026-06-25 — Phase 1 已 commit；開始 Phase 2（config 載入）
+
+- ✅ Phase 1 已自動 commit：`140f1a7`（分支 `feat/csharp-906-migration`）。
+- 進行中：**Phase 2 W1 第一塊 ＝ config 載入模組**（Gerneral.ini / Mot_Table.csv / IO_Table.csv）。選這塊先做，因為可**對拍真實 `D:\HT9045\system\` 檔案**驗證（不需機台 log，最腳踏實地）。
+- 報表/資料分析 PoC、LotInfo、SECS 組裝待後續（PoC 對拍需使用者提供實機 log）。
+
+### 🔖 下次接續（RESUME — 若中斷/換 session 先看這裡）
+1. `cd /d/HT9045 && git log --oneline -5` 看最後 commit；C# 專案在 `HT9011UC_CSharp_V3.33.906.0`，分支 `feat/csharp-906-migration`。
+2. 建置/驗證：`cd HT9011UC_CSharp_V3.33.906.0` → `dotnet build HT9045.sln` / `dotnet test HT9045.sln` / `dotnet run --project src/HT9045.App`（離線 smoke，預設 Sim+Stub）。
+3. 進行到哪：見本檔最後一則「Phase 2」條目的狀態；config 載入模組在 `src/HT9045.Infrastructure`，對拍測試在 `tests/HT9045.Tests`。
+4. 之後：config-load 完成→ LotInfo / SECS（需實機 log）→ Phase 3（HwInterop + 實機接線，待 Galil/MN200 卡確認）。
+5. 慣例：每完成一塊就 append DEVLOG + 自動 commit（使用者要求）。
+
+### ✅ Phase 2（config 載入）完成
+- 新增 `src/HT9045.Infrastructure/Config/`：`IniFile`、`HandlerHardwareConfig`（14 個硬體鍵 + MotionCardType/IoCardType/IoBaseType enum）、`MotTableRow`/`MotTable`、`IoTableRow`/`IoTable`、`CsvHeaderMap`。
+- 測試：ConfigLoadTests（23 單元）+ RealConfigTests（3 整合，對拍**真實 `D:\HT9045\system\` 檔**）+ ConfigColumnReorderTests（4，欄位重排回歸）+ 既有 26 = **共 56 通過 / 0 失敗**。
+- 對拍真實檔確認：Mot_Table 45 列全 CardModel=SMC；Gerneral.ini MOTION_CARD_TYPE=1/IO_CARD_TYPE=2/TTL_CARD_TYPE=2/INDEX_MOTION_CARD=0/HEATER_CTRL_TYPE=4；IO_Table 668 列 15 欄、ISABase=0 主導（644/668，24 個=1）。
+- **重要修正（correctness）**：spec 發現 C++（database.cpp）是**用 header 名稱**解析 CSV 欄位（AnsiPos，last-match），且 Mot_Table 實體欄序 ≠ enum 序；workflow 初版 loader 是**位置式**（重排會誤對）。已改成 **`CsvHeaderMap` 名稱式解析**（exact、case-insensitive、last-wins，對所有合法 header 行為等價 C++ 且耐重排），並加 4 個重排回歸測試。詳見 KNOWLEDGE「CSV 名稱式解析」。
+- build green（net48，0/0）。已 commit。
+
+### 🔖 RESUME 更新
+- 進度：Phase 0(待 log)、**Phase 1 ✅、Phase 2 config-load ✅**。下一塊 W1：報表/資料分析 PoC + LotInfo + SECS 組裝（PoC/對拍需使用者提供實機 log → 屬 Phase 0 安全網）。
+- 即可動工而不需 log 的：續補 Gerneral.ini 其餘鍵的 typed 對應、或 LotInfo/SECS 的「結構與組裝」骨架（驗證待 log）。

@@ -22,6 +22,20 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
   </ItemGroup>
 
+  <!-- Phase-2 config-load test fixtures: ASCII-only so Big5 decode is a no-op.
+       Copied next to the test assembly so ConfigLoadTests can read them by path. -->
+  <ItemGroup>
+    <Content Include="TestData\Gerneral.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Mot_Table.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\IO_Table.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\src\HT9045.Core\HT9045.Core.csproj" />
     <ProjectReference Include="..\..\src\HT9045.HardwareAbstraction\HT9045.HardwareAbstraction.csproj" />
