@@ -1,58 +1,52 @@
-# HT9045 V906 → C# 累積知識（KNOWLEDGE）
+# HT9045 V906 BCB6 → C++（Visual C++）累積知識（KNOWLEDGE）
 
-> 開發過程的決策、接縫/marshalling 知識、與 gotcha。逐步累積，供備查。逐步紀錄見 `DEVLOG.md`。
+> 決策、接縫知識、gotcha。逐步累積，供備查。逐步紀錄見 `DEVLOG.md`。
+> 目標：把 BCB6/VCL C++ 翻譯成標準/Visual C++（脫離 Borland 方言），硬體與 UI 用 interface 切割（先 stub 後接）。**非 C#**（C# 方向已停用，git `326df6c` 可回溯）。
 
-## 架構（ports-and-adapters / 六角）
-- `Core`（編排/狀態機）只依賴抽象專案（HardwareAbstraction、Presentation.Abstraction），**永不**引用 WinForms / P/Invoke / SQLite。
-- 每個硬體 port 與每個 UI 介面都有兩個可互換轉接器：Sim/Stub（開發）與 Real/WinForms（之後）。
-- 切換只在 `HT9045.App` 組合根一處，依旗標選擇（取代 C++ `cinitial.cpp:3454-3565` 的 dispatch ladder）。
-- 依賴方向（無環）：App→全部；Core→{HardwareAbstraction, Presentation.Abstraction}；Sim/Native→HardwareAbstraction；Presentation.Abstraction 不依賴 Core（見下方 gotcha）。
+## 架構（ports-and-adapters，以 C++ 實作）
+- 「port」＝**C++ 抽象基底類別（純虛擬）**。能沿用既有 C++ 多型基底就沿用（如運動的 `HTMotor` 本來就是虛擬基底）。
+- 編排/邏輯層只依賴抽象基底，不直接依賴具體驅動或 UI 框架。
+- 每個硬體 port 與每個 UI view 都有兩個可換實作：**Sim/Stub（開發、無硬體）** 與 **Real/真 UI（之後接）**。
+- 由一處 **composition root / factory** 依設定選 Sim↔Real、Stub↔真UI（取代 `cinitial.cpp:3454-3565` 的 dispatch ladder）。
+- 即時硬體核心策略（沿用 §9 HAL）：先以 stub/SOFT_SIMULTE 讓離線版可編可跑，再逐接縫換真實驅動、邊測邊接。
 
-## 命名對照（鏡射 BCB6，供反查）
-- `HTMotor`(Motor/HTMotor.h) → `IMotorPort`：InitMotor / MoveToPos / ReadPos / HomeObject / HomeFlag / Stop / MotionDone / GetAlarm / SetSpeed(uint,bool=false) / **ServerOnOff**(保留 BCB6 拼法，非 ServoOnOff) / SetSoftLimit / JogP / JogN / ScanMotorStatus。
-- `TLaneIO`(MyLaneIo.h) → `IIoPort`：IOBitOn / IOBitOff / IOByteOut / IOOutBitStatus / IOInputBit / IOInputByte（int 回傳，<0=fail，沿用 C++ `ret` 慣例）。
-- `KEYPRO_GET_LEVEL`(Public/HTKeyPro.h, HS_Function.cpp:4933) → `IKeyProPort.GetLevel(uint)`。
-- `ITesterInterface`（main.h:1213/1277/1337/1392/1400）：Find / RunTestProgram / SendMSG_CMD / CloseGpibProgram / GetTesterResult。
-- `PROD_INFO_ST`(cprod.h) → `ProdInfo`（目前僅代表性切片）。
+## 命名對照（鏡射 BCB6，供反查；C++ 端保留原名/原方法名）
+- 運動：`HTMotor`(Motor/HTMotor.h) 已是虛擬基底（~50 virtual）；方法保留 InitMotor/MoveToPos/ReadPos/HomeObject/HomeFlag/Stop/MotionDone/GetAlarm/SetSpeed(uint,bool=false)/**ServerOnOff**(BCB6 拼法)/SetSoftLimit/JogP/JogN/ScanMotorStatus。加一個 Sim 子類即可。
+- IO：`TLaneIO`(MyLaneIo.h)：IOBitOn/IOBitOff/IOByteOut/IOOutBitStatus/IOInputBit/IOInputByte（int 回傳，<0=fail）。
+- 授權：`KEYPRO_GET_LEVEL`(Public/HTKeyPro.h, HS_Function.cpp:4933)。
+- Tester：`ITesterInterface` 概念（main.h:1213/1277/1337/1392/1400）：Find/RunTestProgram/SendMSG_CMD/CloseGpibProgram/GetTesterResult。
+- 全域：`PROD_INFO_ST Prod`(cprod.h)；`iArmTask` 系列。
 
-## 建置 / 工具
-- 平台 net48；用 dotnet SDK 10（無 Visual Studio）即可 headless 編譯，關鍵是 `Directory.Build.props` 內的 `Microsoft.NETFramework.ReferenceAssemblies 1.0.3`（PrivateAssets=all）。
-- 常用指令（cwd = 專案根）：
-  - `dotnet build HT9045.sln -c Debug`
-  - `dotnet run --project src/HT9045.App`（離線 smoke，預設 Sim+Stub）
-  - `dotnet test HT9045.sln`
-- DI 旗標：環境變數 / args `HT9045_HW=Sim|Real`、`HT9045_UI=Stub|WinForms`（預設 Sim+Stub）。
-- LangVersion 7.3（保守，pre-modern；避免 net48 record/init-only polyfill）。
+## 建置 / 工具（本機）
+- **g++ 6.3.0 (MinGW) + CMake 4.0.2；無 MSVC/clang**。翻譯成**可攜標準 C++**（建議 C++14/17），用 CMake + g++ 編譯驗證可攜性；最終 Visual C++/MSVC build 在開發機驗。
+- 純邏輯/計算 class 可獨立 CMake target + g++ 編譯 + 簡單測試框架（或自寫 assert main）驗證，無需 VCL/硬體。
 
 ## Gotcha（踩過/要注意）
-1. **專案循環參考**：.NET 不允許 ProjectReference 循環。Core 與 Presentation.Abstraction 不可互參考 → 單向 Core→Presentation.Abstraction，`PresenterBase<TView>` 泛型化；IView 只用基本型別避免洩漏 Core 型別。
-2. **Big5 原始碼檔案編碼**：含繁中字面值的 C# 檔（如 Big5RoundTripTests.cs）必須存成 **UTF-8**（編譯器讀檔用 UTF-8），但**執行期**對外 Big5 資料一律經 `Big5Codec`（`Encoding.GetEncoding(950)`）轉 UTF-16，含 U+FFFD 亂碼檢查。勿混淆「原始碼檔編碼」與「執行期資料編碼」。
-3. **Native 佔位**：Hardware.Native 各方法 throw NotImplementedException，是 Phase 3 接 HwInterop 的佔位；離線路徑（Sim）不會碰到。
-4. **ProdInfo 切片**：真實 PROD_INFO_ST ~770 行（cprod.h:368-1136），勿一次搬整包（接縫盤點 §B：Prod native 權威 + C# 唯讀快取）。
-5. **CSV 名稱式解析（重要）**：C++ `database.cpp`（SetMOTTableNo/SetIOTableNo）用 **header 名稱**（AnsiPos substring、last-match-wins）解析 Mot_Table/IO_Table 欄位，**不是固定位置**；且 **Mot_Table 實體欄序 ≠ emot* enum 序**（database.cpp:2047-2079）——位置式複製 enum 序會錯。C# 端用 `CsvHeaderMap`（exact、case-insensitive、last-wins）名稱式解析 → 耐客戶檔欄位重排，對所有合法 header 行為等價 C++。**勿退回位置式 loader**（會 silently 誤對馬達/IO 映射，正是計畫 R 風險）。`FromFields`(位置式)僅留作 fallback。真實 header（已核）：Mot_Table 29 欄、IO_Table 15 欄（見 Config/*.cs 註解）。
-6. **config 解析語意細節**（database.cpp）：IO 欄數須嚴格 ==15（eioTotal）；Mot 接受 >=28；空 cell：IO 的 Lane/ModuleType/IP/Port/Bit→-1、InType→0、ISABase→0(eMotionNet)、Enable→0；Port 當 ISABase∈{1,2,4} 時以 **HEX** 解析，否則十進位（database.cpp:1825-1830，**此細節 Phase 2 尚未實作，續補時注意**）。INI 用 CheckAndReadIniDataGeneral(Group,Name,Default) 多載讀取。
+1. **AnsiString 1-based vs std::string 0-based（最高風險）**：`AnsiString.Pos()`/`.SubString()` 是 **1-based**（全專案 ~1,910 處）。直翻成 `std::string`(0-based, npos) 會 off-by-one／切錯字串且**編得過**。翻譯時逐處改 index，或先做一個 1-based 相容的 AnsiString-like 包裝（`.Length()/.Pos()/.SubString()/.UpperCase()/.sprintf()` 同名同語意）降低風險。`.UpperCase/.LowerCase/.sprintf/.Trim/.Delete` 在 std::string 無對應，需 helper。
+2. **Big5 編碼**：906 原始碼是 Big5。翻譯出的 C++ 檔若含繁中字面值，需確保編譯器以正確 code page 讀（MSVC `/source-charset`；或避免在碼裡放中文、字串走外部資源/Big5 I/O 邊界）。執行期：外部 Big5 資料在 I/O 邊界轉碼，內部統一一種表示；加 U+FFFD 檢查。勿把 Big5 原始碼整檔轉 UTF-8（見記憶 ht9045-big5-edit-corruption）。
+3. **CSV 名稱式解析**：`database.cpp`(SetMOTTableNo/SetIOTableNo) 用 **header 名稱**(AnsiPos、last-match) 解析 Mot_Table/IO_Table，**非固定位置**；**Mot_Table 實體欄序 ≠ emot* enum 序**(database.cpp:2047-2079)。翻譯時務必做名稱式解析，勿位置式（會 silently 誤對馬達/IO）。真實 header：Mot_Table 29 欄、IO_Table 15 欄。
+4. **config 語意細節**(database.cpp)：IO 欄數須 ==15；Mot 接受 >=28；空 cell：IO Lane/ModuleType/IP/Port/Bit→-1、InType→0、ISABase→0(eMotionNet)、Enable→0；**Port 當 ISABase∈{1,2,4} 以 HEX 解析**(database.cpp:1825-1830)，否則十進位。
+5. **全域狀態耦合**：`PROD_INFO_ST Prod`(~770 行 cprod.h:368-1136)、`iXXXTask`、`HotTime[2][50][50]`、offset 陣列是跨模組/跨執行緒耦合熱點（接縫盤點 §B TOP-5），翻譯時先切邊界，勿整包搬。
 
-## 接縫 / Marshalling（Phase 3 接實體控制時用）
-- HwInterop 為薄 C-ABI 層，接在既有 C++ wrapper（非原始 vendor DLL）。
-- 結構一律 `[StructLayout(LayoutKind.Sequential)]` + 對齊單元測試（如 MN200 `SPEED_PAR`）；`HANDLEDMC`→`IntPtr`；陣列 `Marshal.AllocHGlobal` + 明確釋放。
-- **KeyPro/SECS 用 char*+length，禁 std::string 跨界**；KeyPro 匯出名可能為 `_KEYPRO_GET_LEVEL@4`（先 dumpbin 確認再 GetProcAddress）。
-- **跨位元地雷**：GPIB 橋為 32-bit 外部程序、走 WM_COPYDATA；`MessageDef.h` 的 `MV`/`VM` 內嵌 `HWND`(行 259-260) 指標寬度會錯位 → 改 `DWORD`+`HandleToLong` 或移出；扁平 `M_V`(InterfaceSYS.h:222) 才安全。
+## 接縫（HAL）與 64-bit 跨位元
+- 即時硬體（運動/IO/互鎖/ATC）保留 native C++（既有已驗證 wrapper），翻譯後的 C++ **同程序直接呼叫**（無 P/Invoke、無 managed 邊界）。「interface 切割」＝抽象基底 + Sim/Real 子類。
+- **64-bit 跨位元地雷**：若 64-bit Handler 與 **32-bit GPIB 橋**走 WM_COPYDATA，`MessageDef.h` 的 `MV`/`VM` 內嵌 `HWND`(行 259-260) 指標寬度會錯位 → 改 `DWORD`+`HandleToLong` 或移出；扁平 `M_V`(InterfaceSYS.h:222) 才安全。
+- KeyPro：64-bit 需自家出 64-bit DLL；`HTKeyPro.h` 以值傳 `std::string` 跨界（綁 Borland RTL）→ 改純 C ABI(char*+len)。906 只用 `KEYPRO_GET_LEVEL`(純 int，C 安全)。
 
-## 本機（CC_CSAMQ / GPIB recipe）實際啟用硬體 = 64-bit/接線範圍
-- 運動：CONTEC SMC 41 軸 + Galil DMC index 4 軸（INDEX_MOTION_CARD=0 覆寫，待實機確認有無 Galil 卡）。
-- 數位 IO 389 點：MN200 MotionNet（待確認獨立卡 vs 走 SMC）。
-- 溫控 Delta DTK4848（serial）、震動 2 板、條碼、Tester=GPIB 橋、sqlite3、KeyPro（自家 dongle，只用 GET_LEVEL）。
-- 本機關閉（出範圍）：Syntek/Aurotek/CC-Link/EtherCAT/RFID/AOI/AGV/FTP/Moxa 等。
-- Tester 模式統計（54 recipe）：GPIB 50 / RS232 3 / TCP 1 / TTL 0，Handler 端全 green。
+## 本機（CUSTOMER_CODE=838 CC_CSAMQ / GPIB recipe）實際啟用硬體 = 64-bit/接線範圍
+- 運動：CONTEC SMC 41 軸 + Galil DMC index 4 軸（INDEX_MOTION_CARD=0 覆寫 SMC 馬達表，cinitial.cpp:3464，**待實機確認有無 Galil 卡**）。
+- 數位 IO 389 點：MN200 MotionNet（IO_CARD_TYPE=2，mn_set/get_port_bit，**待確認獨立卡 vs 走 SMC**）。
+- 溫控 Delta DTK4848(serial, HEATER_CTRL_TYPE=4)、震動 2 板(serial)、條碼(serial)、Tester=GPIB 橋(外部 32-bit, WM_COPYDATA)、sqlite3、KeyPro(自家 dongle, 只用 GET_LEVEL)。
+- 本機關閉(出範圍)：Syntek/Aurotek/PCI-1203/1735U/CC-Link/EtherCAT/RFID-MR/Laser/AOI-CCD/ESD/AGV/TrayMap/FTP/Moxa(EJ1N 2020 改 TComm)。
+- Tester 模式(54 recipe)：GPIB 50/RS232 3/TCP 1/TTL 0，Handler 端全可攜(green)。
 
-## Log 語料位置（Phase 0 golden baseline / 對拍來源）
-- 大部分 log：`D:\HT9045_Log`（~3.0GB、9259 檔、107 子夾；多為 csv/txt/xls）。
-  - EventLog（告警/事件）CSV：`D:\HT9045_Log\EventLog\HT9045_EventLogBackup_*.csv`，欄位 `No, UnitName, AlarmCode, Date, Time, Recovery, StopedTime, Duplicate, Message`（Big5）→ **W1 PoC 已完成**。
-    - **格式由 9011UC 寫入端確認**（非臆測）：此 CSV 是 **DB-grid 匯出**（非 tail-append），由 `SGDToCSV(grid, ",", ";", path)`（`common.cpp:2050-2064`，呼叫於 `cObserver.cpp:2410`/`cMyDB.cpp:452`）寫出。欄分隔＝**逗號+TAB**（0x2C 0x09）：空欄以字面 `\t` 佔位（cMyDB `SL->Add("\t")`），join 再補逗號 → 空欄呈現 `,\t`。**每個 cell 內的逗號在寫出時被 StringReplace escape 成 `;`（common.cpp:2059）**——所以真實 Message 不會含逗號（reader 的「逗號 in message」處理只是防禦）。解析規則：split on `",\t"`，空白/`\t`/`(null)` 視為空。
-    - 注意另有**不同格式**的 live tail-append log `EventLogTxt`（`slEventLog`，main.cpp:1503，欄序不同：Date,Time,UnitName,...；由 `MyStringList::MySaveToFileShareMode` 寫），與本 grid-export CSV 是兩種檔，勿混。
-    - 對拍真實檔（2023_07，唯一現存）：3409 資料列（3410 行-1 header）、UnitName Process=3382/Motion=19/Message=8、含 MES2108 'Program Start'、日期 2022-06-06~30。
-  - 其他：EventLogTxt（INI 式計數，如 SGJamCount/LoaderCount.txt）、Test_TCPIP（TCP log）、Alarm.txt、各模組 csv/xls。
-- SECS log：`D:\SECS_GEM_LOGS`（依年份；`SECSGEM_TextLog_*.txt`，`[Send]/[Receive]` 訊息 trace + 時戳）→ W2（SECS）對拍來源。
-- **原則（使用者指令）**：log 格式/語意不清楚時，務必檢閱 9011UC 寫入端 C++ 程式碼（handlerlog/csystem/database 等）確認，勿臆測。
+## Log 語料位置（驗證/對拍來源）
+- 大部分：`D:\HT9045_Log`（~3.0GB、9259 檔；csv/txt/xls）。
+  - EventLog 告警/事件 CSV：`D:\HT9045_Log\EventLog\HT9045_EventLogBackup_*.csv`，欄 `No, UnitName, AlarmCode, Date, Time, Recovery, StopedTime, Duplicate, Message`（Big5）。
+    - **格式由 9011UC 寫入端確認**：`SGDToCSV(grid, ",", ";", path)`(common.cpp:2050-2064，呼叫於 cObserver.cpp:2410/cMyDB.cpp:452)，DB-grid 匯出非 tail-append；欄分隔逗號+TAB；空欄字面 `\t`；**cell 內逗號被 escape 成 `;`(common.cpp:2059)→真實 Message 不含逗號**。另有不同格式的 live tail-append `EventLogTxt`(slEventLog, main.cpp:1503, MyStringList::MySaveToFileShareMode)。
+    - 真實檔(2023_07，唯一現存)：3409 資料列、UnitName Process=3382/Motion=19/Message=8、含 MES2108、日期 2022-06-06~30。
+  - 其他：EventLogTxt(INI 計數)、Test_TCPIP(TCP log)、Alarm.txt、各模組 csv/xls。
+- SECS log：`D:\SECS_GEM_LOGS`（依年份；`SECSGEM_TextLog_*.txt`，`[Send]/[Receive]` trace+時戳）。
+- **原則（使用者指令）**：log/行為格式不清楚時，務必檢閱 9011UC 寫入端 C++（handlerlog/csystem/database/cMyDB 等），勿臆測。原始碼是 source of truth，log 是驗證的尺。
 
-> 參考：對外計畫 `D:\HT9045\docs\migration\RD5軟體_HT9045_906_CSharp遷移計畫_20260625_201101.md`；C++ 接縫分析見 `RD5軟體_HT9045_906_64bit遷移計畫_20260625_193240.md` §9。
+> 參考：C++ 接縫分析見 `D:\HT9045\docs\migration\RD5軟體_HT9045_906_64bit遷移計畫_20260625_193240.md` §9（HAL、三道牆、硬體 64-bit 稽核）。
