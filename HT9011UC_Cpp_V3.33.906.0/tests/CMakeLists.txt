@@ -143,3 +143,36 @@ add_executable(test_config_db
 target_link_libraries(test_config_db PRIVATE vclcompat)
 
 add_test(NAME config_db COMMAND test_config_db)
+
+# --- test_IniFiles: TIniFile / TMemIniFile shim semantics ------------------
+#   W3-cont CONFIG-READERS GATEWAY. Verifies BCB6 ini semantics the common.cpp
+#   ini-helper family relies on: default fallback, case-insensitive match,
+#   integer/float/bool/datetime parse + '%0.4f' double round-trip, section/key
+#   existence, TMemIniFile flush-on-UpdateFile, Big5 byte preservation, plus a
+#   runtime-SKIP real-config oracle over D:\HT9045\system\Gerneral.ini.
+add_executable(test_IniFiles
+    test_IniFiles.cpp
+)
+
+target_link_libraries(test_IniFiles PRIVATE vclcompat)
+
+add_test(NAME IniFiles COMMAND test_IniFiles)
+
+# --- test_ini_helpers: translated common.cpp *General* helper chain ---------
+#   END-TO-END: drives OpenGeneralIniFile() + CheckAndReadIniDataGeneral(int/
+#   bool/AnsiString) over a SCRATCH COPY of the REAL D:\HT9045\system\Gerneral.ini
+#   (copied so seeding writes never touch the read-only real file) and asserts
+#   the known-truth oracle ([System] MOTION_CARD_TYPE=1 / IO_CARD_TYPE=2 /
+#   TTL_CARD_TYPE=2 / INDEX_MOTION_CARD=0, [TempCtrl] HEATER_CTRL_TYPE=4) plus
+#   missing-key -> supplied-default.  Also a direct TIniFile/TMemIniFile shim
+#   round-trip (write-through vs flush-on-UpdateFile, %0.4f double round-trip).
+#   Links ht9045_core for the translated common.cpp helpers + asGeneralPath
+#   global (ht9045_core PUBLIC-links vclcompat + ht9045_public transitively).
+#   The real-config block runtime-SKIPs (exit 0) when the ini is absent.
+add_executable(test_ini_helpers
+    test_ini_helpers.cpp
+)
+
+target_link_libraries(test_ini_helpers PRIVATE ht9045_core)
+
+add_test(NAME ini_helpers COMMAND test_ini_helpers)

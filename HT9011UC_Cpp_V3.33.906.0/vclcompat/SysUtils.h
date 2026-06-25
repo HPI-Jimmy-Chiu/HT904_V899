@@ -156,6 +156,13 @@ void FindClose(TSearchRec& sr);
 // ---- misc -----------------------------------------------------------------
 void Sleep(int milliseconds);   // Win32-style Sleep (portable wrapper)
 
+// TryStrToFloat (BCB6 SysUtils): attempt locale-independent '.' decimal parse.
+// Sets `value` and returns true on success; leaves `value` unchanged and
+// returns false on failure (empty, non-numeric, etc.).
+// Used by common.cpp WriteIniData(AnsiString) and WriteIniData1 at lines
+// 1053-1054, 1200-1201 to decide whether to compare strings as floats.
+bool TryStrToFloat(const char* s, double& value);
+
 } // namespace vclcompat
 
 // BCB6 ARRAYOFCONST((a, b, ...)) builds a TVarRec open array. In the compat

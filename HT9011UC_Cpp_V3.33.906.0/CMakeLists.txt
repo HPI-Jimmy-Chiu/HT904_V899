@@ -17,6 +17,7 @@ add_library(vclcompat
     vclcompat/TStringList.cpp
     vclcompat/TDateTime.cpp
     vclcompat/SysUtils.cpp
+    vclcompat/IniFiles.cpp
 )
 
 target_include_directories(vclcompat PUBLIC
@@ -32,6 +33,7 @@ target_include_directories(vclcompat PUBLIC
 add_library(ht9045_core
     ContactForce.cpp
     cUnitConvert.cpp      # W2 partial: iUnitMultiply100/iUnitMultiply1000
+    common.cpp            # W3 partial: ini-helper family only; other regions gated #if 0
 )
 
 target_include_directories(ht9045_core PUBLIC

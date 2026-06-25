@@ -21,6 +21,11 @@
 - `TStringList`/`TStrings`、`TDateTime`(OLE double, days since 1899-12-30)、`SysUtils`（IntToStr/StrToInt/StrToIntDef/StrToFloat/FloatToStr/FloatToStrF/Format/FileExists/ExtractFileName/Path/Now/FormatDateTime…）。只實作專案用到的子集；要新方法就照 BCB6 補。
 - 建置：CMake 把 vclcompat 編成 static lib `vclcompat`，各模組 lib 連它；cJSON.c 以 C 編（`set_source_files_properties LANGUAGE C` + 標頭 extern "C"）。
 
+## vclcompat 補充（W3）
+- 檔案系統：`SysUtils` 加 FindFirst/FindNext/FindClose/TSearchRec/faAnyFile/faDirectory/faReadOnly/RemoveDir/FileSetAttr/FileGetAttr/HexStrToInt（backed by MinGW windows.h）。
+- INI：`IniFiles.h/.cpp` 的 `TIniFile`(write-through，每次寫即 flush)/`TMemIniFile`(eager load，僅 UpdateFile/dtor flush)，共用 TIniStore（插入序、raw-byte Big5-safe、section/key 大小寫不敏）；default-fallback verbatim；ReadInteger 支援十進位與 $/0x hex；ReadFloat 用 '.' 小數；double 以 `%0.4f` 文字存。已 43/43 測試。
+- **⚠ Win32 巨集衝突（重要 gotcha）**：`<windows.h>`（經 common.h→MachineType.h 帶入）`#define DeleteFile DeleteFileA`、`CopyFile CopyFileA`，會 shadow vclcompat 的 `DeleteFile(AnsiString)`/`CopyFile` 多載（巨集先改 token，命名空間限定救不了）。暫以呼叫端 `#undef DeleteFile/CopyFile`（include 後）解。**待辦：在 vclcompat 傘狀標頭 vcl_compat.h 統一 `#undef` 這些 A/W 巨集（或改名 vclcompat 函式）**。
+
 ## 已翻譯模組 + 領域發現
 - **Public/HTMD5（W0）**：`class MD5` + `md5()/md5_File()/md5_Folder()`（回 AnsiString）+ SearchFile/SearchFolder。翻譯時：VCL `TMask` 萬用字元比對→重建簡易 matcher；`std::auto_ptr`→`unique_ptr`；`MyDBIProcess` log→stub；`FindFirstFile` 用 MinGW windows.h（可攜）；保留 Ifor 20200826 buffer-overflow fix。MD5 演算法 bit-exact（命中 RFC1321 向量）。
 - **Public/cJSON（W0）**：標準可攜 C，原樣翻、extern "C"、以 C 編譯，parse/print round-trip 過。

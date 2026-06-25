@@ -91,8 +91,15 @@
   - 修 vclcompat TStringList SetCommaText/SetDelimitedText 尾分隔重複計數 fidelity bug。
 - 驗證（獨立）：clean build、**ctest 12/12**。
 
+## 2026-06-26 — W3-cont：config readers 閘門完成
+- vclcompat `TIniFile`/`TMemIniFile`（IniFiles.h/.cpp）+ `common.cpp` ini-helper 家族 38 函式翻譯。真檔 oracle 過（譯後 CheckAndReadIniDataGeneral 鏈讀真 Gerneral.ini：MOTION=1/IO=2/TTL=2/INDEX=0/HEATER=4、missing→default；用 scratch copy 不動唯讀原檔；iconv CP950 交叉核對；原檔 mtime/size 未變）。
+- 保留 faithful bug：CloseGeneralIniFile delete 後未 null INIFileGeneral（同 golden）。
+- GetLastOpenFN/WriteLastDataFN 仍 `#if 0`（VCL ShowMyMessage/BCB6 FileCreate）；common.cpp 其餘區（path/file/timing/canvas/ui）gated。
+- **發現 Win32 巨集衝突**（DeleteFile/CopyFile→…A shadow vclcompat 多載）→ 見 KNOWLEDGE，待在 vcl_compat.h 加 undef guard。
+- 驗證（獨立）：clean build、**ctest 14/14**（+ini_helpers 25/25、IniFiles 43/43）。
+
 ### 🔖 RESUME（最新）
-- 已完成：C++ pivot、鏡射、ContactForce、**W0 基礎+尾段(全域標頭)**、**W1 Public 批1**、**W2 邏輯島(部分)**、**W3 前置(fs-compat/sqlite scaffold/config oracle/TStringList fix)**。全 green、已 commit。
-- **下一步：W3-cont** = 加 `TIniFile`/`TMemIniFile` 到 vclcompat（**config readers 的閘門**）→ 翻 `common.cpp` 的 ini-helper 家族（CheckAndReadIniDataGeneral 多載、OpenIniFile…）→ 翻 `database.cpp` 的 ReadGeneralIni/config 讀取（用真檔 oracle 對拍）。之後 cMyDB（需先 vendor sqlite amalgamation）、MyStringList（需 __property 模擬+MyMemo）。
-- 觀察：早期波次多為「補前置/shim」，每波會揭露下一個前置（globals→ini-shim→readers）；前置補齊後模組翻譯會加速。
+- 已完成：…**W0 基礎+尾段**、**W1**、**W2(部分)**、**W3 前置**、**W3-cont(ini shim+helpers，config readers 閘門)**。全 green、已 commit。
+- **下一步：W3-cont2** = 翻 `database.cpp` ReadGeneralIni 的 config 讀取部分（只讀 ini→IniConfig/全域；SECS/GEM/狀態機指派 #if 0）+ 在 `vcl_compat.h` 加 `#undef DeleteFile/CopyFile` guard。再 cMyDB(需 vendor sqlite amalgamation)、MyStringList(需 __property 模擬)。
+- 觀察：globals→ini-shim→readers 前置鏈已通；config readers 現可實作。
 - 驗證指令：`cd HT9011UC_Cpp_V3.33.906.0 && export PATH=/c/MinGW/bin:$PATH && cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=C:/MinGW/bin/g++.exe -DCMAKE_C_COMPILER=C:/MinGW/bin/gcc.exe && cmake --build build && ctest --test-dir build`。

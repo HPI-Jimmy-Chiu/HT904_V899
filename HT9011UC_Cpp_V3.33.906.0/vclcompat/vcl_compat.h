@@ -72,6 +72,7 @@
 #include "vclcompat/TStringList.h"
 #include "vclcompat/TDateTime.h"
 #include "vclcompat/SysUtils.h"
+#include "vclcompat/IniFiles.h"
 
 // BCB6 spelling alias: a lot of code uses `String` as a synonym for AnsiString.
 #ifndef VCLCOMPAT_NO_GLOBAL_USING
@@ -82,6 +83,10 @@ using vclcompat::TDateTime;
 using vclcompat::TObject;
 using vclcompat::Word;
 
+// IniFiles shims (BCB6 TIniFile / TMemIniFile)
+using vclcompat::TIniFile;
+using vclcompat::TMemIniFile;
+
 // SysUtils free functions
 using vclcompat::IntToStr;
 using vclcompat::IntToHex;
@@ -90,6 +95,7 @@ using vclcompat::StrToInt;
 using vclcompat::StrToIntDef;
 using vclcompat::StrToFloat;
 using vclcompat::StrToFloatDef;
+using vclcompat::TryStrToFloat;
 using vclcompat::FloatToStr;
 using vclcompat::FloatToStrF;
 using vclcompat::FormatFloat;

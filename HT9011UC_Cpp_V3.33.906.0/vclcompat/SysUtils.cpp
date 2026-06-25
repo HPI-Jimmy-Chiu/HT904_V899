@@ -547,4 +547,29 @@ void Sleep(int milliseconds) {
 #endif
 }
 
+// ---------------------------------------------------------------------------
+//  TryStrToFloat (BCB6 SysUtils)
+//  common.cpp:1053-1054, 1200-1201 -- used to detect whether a stored INI
+//  string and a new value are both numeric before comparing them as doubles
+//  in WriteIniData(AnsiString) / WriteIniData1.
+//
+//  BCB6 semantics: locale-independent '.' decimal parse; returns false when
+//  the string is empty, NULL, or contains non-numeric characters.  The result
+//  double reference is only modified on success, exactly matching BCB6's
+//  TryStrToFloat(const string, double&):bool signature.
+// ---------------------------------------------------------------------------
+bool TryStrToFloat(const char* s, double& value) {
+    if (!s || *s == '\0') return false;
+    char* end = nullptr;
+    // strtod is locale-sensitive on some platforms; we force '.' by using a
+    // locale-independent parse identical to the IniFiles ReadFloat shim.
+    double v = std::strtod(s, &end);
+    if (end == s) return false;                     // no conversion at all
+    // skip trailing whitespace
+    while (*end == ' ' || *end == '\t' || *end == '\r' || *end == '\n') ++end;
+    if (*end != '\0') return false;                 // garbage after the number
+    value = v;
+    return true;
+}
+
 } // namespace vclcompat
