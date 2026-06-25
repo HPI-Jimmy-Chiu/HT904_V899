@@ -211,3 +211,57 @@ target_link_libraries(test_config_loaders PRIVATE
 )
 
 add_test(NAME config_loaders COMMAND test_config_loaders)
+
+# ===========================================================================
+#  W4 HAL motor layer
+# ===========================================================================
+# --- test_motor_w4: HTMotor / TMySimMotor / TMyMotor / TTrayMotor / MOT[] ---
+#   Exercises the INTERFACE-CUT end-to-end with NO vendor SDK:
+#     * TMySimMotor as HTMotor* (polymorphic dispatch, all overridden methods)
+#     * TMyMotor routing through the sim (ReadPos / MotorHome state machine /
+#       ScanMotorStatus / GetErrorIndex / PCIL132_* / JogP/JogN / Lock*)
+#     * TTrayMotor tray data helpers (InitNewTray / HasIC / FullIC /
+#       HowManyDevice / MoveTrayAllItem / SetNullIcToHasNullIc)
+#     * MOT[] global array wiring (MOT[MInArmX] via sim, boundary check)
+#   Links ht9045_motor which RESCAN-links ht9045_globals (cmydef/cprod/cpublic
+#   ctors needed by mymotor.cpp's static iEncoderTorence / global MOT[]).
+add_executable(test_motor_w4
+    test_motor_w4.cpp
+)
+
+# ht9045_motor PUBLIC-links ht9045_globals; ht9045_db PUBLIC-links ht9045_globals
+# and ht9045_core. The RESCAN group ensures intra-globals cross-references
+# (cprod <-> cpublic <-> cmydef) are resolved across archive re-scans.
+target_link_libraries(test_motor_w4 PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_motor_w4 PRIVATE ws2_32)
+endif()
+
+add_test(NAME motor_w4 COMMAND test_motor_w4)
+
+# --- test_sim_motor: HARDWARE INTERFACE-CUT acceptance proof ----------------
+#   Dedicated, self-contained proof that the offline motor HAL works with NO
+#   vendor SDK and NO hardware.  Creates a TMySimMotor via HTMotor* (and through
+#   TMyMotor) and asserts the exact acceptance contract:
+#     InitMotor ok; HomeObject()->HomeFlag() true & ReadPos()==0;
+#     MoveToPos(N)->MotionDone() true & ReadPos()==N; GetAlarm()==false; Stop() ok.
+#   Plus a full MotorHome() state-machine convergence over the sim.
+#   Same RESCAN link group as test_motor_w4 (cprod<->cpublic<->cmydef ctors must
+#   resolve across archive re-scans).  The brand drivers are NOT in ht9045_motor,
+#   so this links with zero vendor libraries.
+add_executable(test_sim_motor
+    test_sim_motor.cpp
+)
+
+target_link_libraries(test_sim_motor PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_sim_motor PRIVATE ws2_32)
+endif()
+
+add_test(NAME sim_motor COMMAND test_sim_motor)

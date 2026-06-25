@@ -220,6 +220,44 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 endif()
 
 # ---------------------------------------------------------------------------
+# Library: ht9045_motor  (W4 HAL motor layer)
+#
+#   HTMotor.{h,cpp}    -- abstract port (virtual base, no vendor SDK)
+#   mySimMotor.{h,cpp} -- TMySimMotor : offline sim adapter (default brand)
+#   mymotor.{h,cpp}    -- TMyMotor / TTrayMotor (PARTIAL: motion-routing core)
+#
+#   Sim path (default): compiles + links with NO vendor SDK; no HAVE_xxx macros
+#   needed.  The brand drivers (SMC/Galil/MN200/SYNTEK/EtherCAT/MC88X1) are
+#   deferred to W4-part2 -- their .cpp files are NOT translated yet because they
+#   pull the same W6 god-stack (main.h / cinitial.h / mycylin.h / etc.) as
+#   mymotor.cpp.  They will be translated with #if HAVE_xxx vendor guards once
+#   the W6 sensor layer lands.
+#
+#   mymotor.cpp pulls sIC_Type[] (cmydef.h), iYRegNum (cmydef.h), bTestSiteUse[]
+#   (cmydef.h), HAS_IC/NULL_IC/HAS_NULL_IC (cprod/cmydef), INDEX_MOTION_CARD
+#   (cmydef), MOTION_CARD_TYPE (cmydef), ChangeToFloatNonPcnt (MachineType.h),
+#   Prod.* (cprod) -- all resolved by ht9045_globals.
+#   mytray.h (TMyTray): NOT yet in Motor/ -- include path is project root.
+# ---------------------------------------------------------------------------
+add_library(ht9045_motor STATIC
+    Motor/HTMotor.cpp
+    Motor/mySimMotor.cpp
+    Motor/mymotor.cpp
+    mytray.cpp          # TMyTray: required by TTrayMotor in mymotor.cpp (W4 partial)
+)
+
+target_include_directories(ht9045_motor PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+target_link_libraries(ht9045_motor PUBLIC vclcompat ht9045_globals)
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(ht9045_motor PRIVATE
+        -Wall -Wextra -Wno-conversion-null -Wno-write-strings -Wno-unused-parameter)
+endif()
+
+# ---------------------------------------------------------------------------
 # Tests
 # ---------------------------------------------------------------------------
 enable_testing()

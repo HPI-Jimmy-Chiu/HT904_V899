@@ -28,8 +28,9 @@
 - ◐ **W3 config/DB — 前置已備，readers 待續**：已加 vclcompat 檔案系統 API（FindFirst/FindNext/FindClose/TSearchRec/fa*/RemoveDir/FileSetAttr/FileGetAttr/HexStrToInt）、`third_party/sqlite3/` 外部相依 scaffold（現 header-only stub；待 vendor amalgamation）、`tests/test_config_db.cpp` 真檔 oracle（鎖定 45 SMC/MOTION=1/IO=2/IO_Table 644:24）、修 vclcompat TStringList SetCommaText/SetDelimitedText 尾分隔重複計數 bug。ctest 12/12。
 - ✅ **W3-cont 閘門完成**：vclcompat `TIniFile`/`TMemIniFile`（IniFiles.h/.cpp，write-through/eager-load、Big5-safe、case-insensitive、default-fallback；43/43 shim 測試）+ `common.cpp` ini-helper 家族 38 函式（OpenGeneralIniFile/CheckAndReadIniDataGeneral 多載/WriteIniDataGeneral）。**真檔 oracle 過**：經譯後 helper 鏈讀真 Gerneral.ini 得 MOTION=1/IO=2/TTL=2/INDEX=0/HEATER=4、missing→default。ctest 14/14。
 - ✅ **W3-cont2 config-table loaders 完成**：database.cpp 的 LoadMotData/LoadIoData/SetMOTTableNo/SetIOTableNo/TIODATA/TMOTDATA（8 函式）翻譯，**真檔 oracle 過**（45 列全 SMC、名稱式 col 解析證實、IO 668 列 ISABase 644:24、M00→MInArmX）。Win32 巨集 guard 進 vcl_compat.h。修 AnsiString 缺 operator=(int) bug。ctest 15/15。
-- ▶ **下一步：W4 HAL（馬達層，示範硬體 interface-cut）** = HTMotor 虛擬基底 + TMySimMotor（Sim，離線可跑）+ mymotor 派發；品牌驅動 wrapper（TMySMCMotor 等）翻譯但 vendor 呼叫 `#if HAVE_xxx` 守（無 vendor SDK 無法連結→Sim 先行、real 後接）。
-- ⏳ 待：database.cpp ReadGeneralIni(~1240行)/SECS/BDE → 後續；cMyDB（待 vendor sqlite）、MyStringList、common.cpp 其餘、W5 comms、W6 root、W7 UI。
+- ✅ **W4 HAL 馬達層完成（interface-cut 離線證明）**：HTMotor(虛擬基底)+TMyMotor+新 `TMySimMotor` 翻譯，**離線零 vendor SDK 可編可跑**（test_sim_motor 33/33：home→0、MoveToPos(N)→N、no alarm、MotorHome 狀態機收斂；nm/strings 稽核零 vendor 符號）。**6 個品牌驅動 → W4-part2**（每個 .cpp 都拉 ~30 模組 god-stack [main/csystem/sensors/cylinders]，故卡在 W6，與 vendor SDK 無關；Sim 先頂著）。mymotor 大量 motion/Galil/sensor 方法 gated TODO(W6)、pHTray→W7。ctest 17/17。
+- ▶ **下一步：W4-IO HAL（IO 層 interface-cut）** = `TLaneIO`(現 switch-on-typecode) 抽 `TIOBackend` 虛基底 + 新 `TSimIOBackend`（離線）+ myswitch/mysensor/mycylin/mykitsuck 物件層；vendor IO 呼叫(mn_*/Acm_*) `#if HAVE_xxx` 守。是 sensors/cylinders/W6 的前置。
+- ⏳ 待：W4-part2 品牌馬達驅動(需 W6)、database.cpp ReadGeneralIni/SECS、cMyDB(待 vendor sqlite)、MyStringList、common.cpp 其餘、W5 comms、W6 root、W7 UI。
 
 ## 延後項目追蹤（DEFERRED — 完整性，勿遺漏，全部轉移用）
 > 部分檔案只翻了 leaf 部分，耦合段延到對應波次。最終各波結束前要回頭補完這些。
@@ -53,3 +54,5 @@
 | MachineDefine.h | driver/app include 區塊 | W3/W6/W7 | 等驅動/app 模組 |
 | database.cpp | ReadGeneralIni(~1240行)、SystemModularInitial(SECS HT9045Gem)、TDataModule1(BDE)、InstallColorBinDisplay | W5/W6/W7 | 牽連 SECS/BDE/UI；本批只翻 config-table loaders |
 | cpublic.cpp | queue/union/VerInfo 方法本體（現整檔 #if 0）| W6/W7 | cmydef.cpp 的 active queue 全域(QueueTaskList[]…)需其 ctor；**任何用到 queue 的 exe 連結前必須先 ungate**（目前測試用 stub ctor 繞過）|
+| Motor 品牌驅動 ×6 (mySMCmotor/myGALILmotor/myMN200motor/mySYNTEKmotor/myEthercatmotor/HTMC88X1Motor) | 整檔 | W4-part2(需 W6) | 各 .cpp 拉 main.h/csystem/sensors/cylinders god-stack（卡 W6）+ vendor 呼叫需 #if HAVE_CSMC/GALIL/MN200/SYNTEK/ETHERCAT/MC88X1(預設 OFF，無 SDK)。vendor 符號族見 W4 workflow 紀錄 |
+| Motor/mymotor.cpp | MotorMovePosition/MotorMove/Galil 分支(~80)/sensor compare/TrayArm/continuous-move 本體（gated）| W6 | 拉 sensor/cylinder/狀態機；pHTray(VCL)→W7 |

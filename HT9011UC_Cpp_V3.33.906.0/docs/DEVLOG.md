@@ -105,8 +105,14 @@
 - 已知連結缺口：cpublic.cpp 整檔 gated→cmydef.cpp 的 active queue 全域 ctor 未定義（測試用 stub 繞）；用 queue 的 exe 連結前須先 ungate cpublic 的 queue 方法(W6/W7)。
 - 驗證（獨立，fresh build/）：clean build、**ctest 15/15**（config_loaders 22/22）。
 
+## 2026-06-26 — W4 HAL 馬達層：interface-cut 離線證明
+- 翻 Motor/HTMotor.h(.cpp) 虛擬基底 + Motor/mymotor(.h/.cpp 部分) + 新 Motor/mySimMotor(.h/.cpp)。**離線零 vendor SDK 可編可跑**：test_sim_motor 33/33（HTMotor* 與 TMyMotor 兩路徑：InitMotor ok、HomeObject→HomeFlag true+ReadPos 0、MoveToPos(N)→MotionDone+ReadPos N、GetAlarm false、Stop ok；含完整 MotorHome() 多 tick 狀態機收斂）。nm/strings 稽核：lib 零 vendor 符號、exe 零 vendor DLL import。**interface-cut 成立**（TMySimMotor 可頂任何品牌驅動於同一 HTMotor*）。
+- **決策：6 個品牌驅動延 W4-part2**——每個 .cpp 都拉 ~30 模組 god-stack(main/csystem/sensors/cylinders/UI)，**卡在 W6 與 vendor SDK 無關**；故 #if HAVE_xxx 不足以解鎖、需先 W6。各品牌 vendor 符號族已記於 W4 workflow 輸出。cinitial 品牌派發(日後)預設 `new TMySimMotor()`。
+- mymotor.cpp gated：MotorMovePosition/MotorMove/Galil 分支/sensor compare/TrayArm/continuous-move 本體 TODO(W6)；pHTray(VCL)→W7。
+- 驗證（獨立，fresh build/）：clean build、**ctest 17/17**。
+
 ### 🔖 RESUME（最新）
-- 已完成：…W0 基礎+尾段、W1、W2(部分)、W3 前置、W3-cont(ini shim)、**W3-cont2(config-table loaders，真檔解析成功)**。48 個譯出源檔、全 green、已 commit。
-- **下一步：W4 HAL 馬達層（示範硬體 interface-cut）** = HTMotor(已是虛擬基底) + 新增 TMySimMotor(離線) + mymotor 派發；品牌 wrapper(TMySMCMotor 等)翻譯但 vendor 呼叫(SmcW*/DMC*/Acm_*) `#if HAVE_xxx` 守(無 vendor SDK 無法連結→Sim 先行)。
-- 待：database.cpp ReadGeneralIni/SECS、cMyDB(待 vendor sqlite)、MyStringList、common.cpp 其餘、cpublic queue ungate、W5/W6/W7。
+- 已完成：…W0 基礎+尾段、W1、W2、W3(前置+ini+config-loaders)、**W4 HAL 馬達層(interface-cut 離線證明)**。全 green、已 commit。
+- **下一步：W4-IO HAL** = `TLaneIO` 抽 `TIOBackend` 虛基底 + 新 `TSimIOBackend`(離線) + myswitch/mysensor/mycylin/mykitsuck 物件層；vendor IO(mn_*/Acm_*) `#if HAVE_xxx` 守。是 sensors/cylinders/W6 前置。之後 W4-part2(品牌馬達,需W6)、W5 comms、W6 root、W7 UI。
+- **重要 ordering 發現**：品牌驅動/部分 mymotor 方法 include main.h/csystem/sensors → 它們其實在「狀態機之上」的 include 依賴，故須先 W6(sensors/cylinders/狀態機)再回補品牌驅動本體；Sim 路徑讓一切先可編可跑。
 - 驗證指令：`cd HT9011UC_Cpp_V3.33.906.0 && export PATH=/c/MinGW/bin:$PATH && cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=C:/MinGW/bin/g++.exe -DCMAKE_C_COMPILER=C:/MinGW/bin/gcc.exe && cmake --build build && ctest --test-dir build`。
