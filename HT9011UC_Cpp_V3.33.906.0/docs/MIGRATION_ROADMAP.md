@@ -32,7 +32,20 @@
 - ✅ **W4-IO HAL 完成（IO interface-cut 離線證明）**：`IOBackend.h/.cpp`（TIOBackend 虛基底 + TSimIOBackend 離線；real backends mn_*/Acm_*/_mnet_*/raw `#if HAVE_xxx` 預設 OFF）+ `MyLaneIo`(facade，6 method 經 pIO 派發、保留 range/OutPortData 記帳) + `myswitch`(TMySwitch)/`mysensor`(TMySensor) 物件層路由到 facade。test_sim_io 等通過、ctest 19/19。
 - ✅ **HAL enablers：KeyPro shim + TComm serial shim**：`Public/HTKeyProShim`(KeyPro_GetLevel→LoadLibrary/GetProcAddress，離線回 1，非靜態連結；decoration 為 undecorated 已 objdump 確認) + `vclcompat/Comm`(TComm 14-method，Win32 \\.\COMx + SIM 模式)。ctest 20/20。HAL Sim 層：馬達✓/IO✓/license✓/serial✓。
 - ▶ **下一步：ungate cpublic.cpp 基礎**（queue/VerInfo/DTK4848 溫控協定/簡單 util——只依賴 globals+vclcompat+TComm 的部分；god-stack 部分續 gate）。解鎖：移除 queue-ctor stub workaround + 提供溫控協定。之後 W5 comms、W6 root 狀態機（解鎖最多 deferred）、W7 UI。
-- ⏳ 待：W4-part2 品牌馬達驅動(需 W6)、cylinder/sucker 狀態機+TMyKitSuck(W6)、database.cpp ReadGeneralIni/SECS、cMyDB(待 vendor sqlite)、MyStringList、common.cpp 其餘、W5 comms、W6 root、W7 UI。
+- ⏳ 待：W4-part2 品牌馬達驅動(需 W6)、cylinder/sucker 狀態機+TMyKitSuck(W6)、database.cpp ReadGeneralIni/SECS、cMyDB(待 vendor sqlite)、MyStringList、common.cpp 其餘、W5 comms、**W6 root(見下方計畫)**、W7 UI。
+
+## W6 計畫（root 狀態機，recon 產出）
+**拓樸**：單根 fan-out（非 peer mesh）。`csystem::MainProc()→DoAllProcess()` 每 tick 固定序 pump：DoLoad→DoInArm→Do_Auto_SHT1/2/3→DoTestHeadMotor→DoCatchTray→DoOutArm/DoSortArm。`csystem.cpp` 25,483 行 god-file（~257 Prod、**301 fMain**）。`iXXXTask` 非中央表，各 arm 自有 cursor（iArmTask@ainarm2、OutArmTask@aoutarm、iTestHeadMotorTask@atester、AutoSHTnTask@acarry、CatchTrayTask@acatchtray、**iIndexTask@cContact**）。SM 間**不互相 Do-call**，只透過 `csystem.h` predicate API(IndexHasIC/ShuttleHasIC/TestSocketHasIC…)協調。真正阻礙＝`main.h/TfMain`(每個 .cpp include、heavy 模組 deref fMain->)。
+**解耦三縫**：(1) `csystem.h` 凍結為介面 + 薄 `csystem_predicates.cpp`(predicate 實作於 Sim HAL+Prod)；(2) iXXXTask 各 SM 自帶 cursor；(3) `main.h/TfMain`→非 VCL **FormsFacade**(只暴露 SM 用到的 run-control 方法 Pause/Home/Start/DoStateRecord/SendMSG_CMD + cInplace=cInArmPlacement 邏輯)+ satellite 表單 stub。全部靠既有 Sim HAL 讓 SM 無 W7 也可編可跑。
+**子波序**：
+- **W6.0 SCAFFOLD（前置）**：csystem.h 介面 + csystem_predicates.cpp + 各 arm header shim + FormsFacade/satellite stub。
+- **W6.1 CANARY**：`asendic_Empty`(0 fMain)、asendic_Auto_RT/Auto2/Loader_RT — 證明縫。**首單元＝asendic_Empty**(純 tray-stack stepper，行使 predicate 縫+satellite shim+task-int cursor 全鏈)。
+- **W6.2 IN-ARM**：ainarm_SearchPickPlate(1399行,fMain=6)+SearchPlacePlate 先，再 ainarm 核心+~30 site variants(iInArmType 分派)。
+- **W6.3 CATCHTRAY+FEED**：acatchtray DoCatchTray、asendic_Color/Loader…（注意 acatchtray 的 ainarm include 是 stale dead）。
+- **W6.4 INDEX/TESTER STAR**：atester result-decode anchor 先(fMain-free,SOFT_SIMULTE skip HAL)→DoTestHeadMotor→Front/Rear/32Site(Front↔Rear 互依不可拆)。iIndexTask@cContact 需先 stub。
+- **W6.5 SHUTTLE 生產 SM**：acarry Do_Auto_SHT1/2/3（最差耦合：79 fMain + VCL worker thread HThreadCtrlShuttle + aArmHeader 全圖）。
+- **W6.6 ORCHESTRATION HUB**：csystem DoAllProcess/MainProc + ckernel（**拆**成 interface-impl / hub / UI-glue，勿整檔 25k 行；與 W7 邊界共譯）。
+**風險**：aArmHeader.h 分解(最高槓桿+風險)；csystem.cpp 必須拆；FormsFacade scope-creep(fMain 1000+ deref/~12 member 類)；SOFT_SIMULTE gating 下實機路徑未測；Front↔Rear 不可跨非相鄰子波；stale include 兩向誤導；iIndexTask@cContact；Big5 亂碼；acarry VCL thread。
 
 ## 延後項目追蹤（DEFERRED — 完整性，勿遺漏，全部轉移用）
 > 部分檔案只翻了 leaf 部分，耦合段延到對應波次。最終各波結束前要回頭補完這些。
@@ -61,3 +74,4 @@
 | mycylin (TMyCylinder) | Push/Pop/On/Off/SetSimulateCompoment 狀態機（IO 路由 method 已翻）| W6 | 拉 Alarm/SystemStart/bHandlerPause/SmartDiagnostic/VCL TControl |
 | MyKitSuck | TMySucker Suck()/Destroy() 狀態機；**TMyKitSuck 整個 item-state grid（2894 行）** | W6 | TQPF_Timer/alarm；TMyKitSuck 拉 TALed/TMyProductionRecord/TTrayMotor/MyMotor/cprod IC 常數（god-stack，非 IO-HAL）|
 | myio.cpp | raw-port free funcs（outportb/IOSetOutport/TTL_CARD_TYPE）| W6/x86-dead | 本機 TTL_CARD_TYPE>0 短路、ISABase 全 0→實際不走；x64 無 |
+| cprod.cpp(283)/cpublic.cpp(62) 中文**註解**亂碼(U+FFFD) | 低優先 cosmetic transcode | 任意(收尾) | 確認 100% 在 `//` 註解、無 string-literal 受損(非功能)；golden 有原文。修法：from golden 以 cp950→UTF-8 重寫註解，或英文 gloss+golden ref。go-forward 規則已防再發 |

@@ -129,6 +129,9 @@
 
 ### 🔖 RESUME（最新）
 - 已完成：…W3、W4 馬達/IO HAL、KeyPro+TComm、**cpublic 基礎 ungate(stub 移除)**。HAL Sim 層完整。全 green、已 commit（branch 19 commits）。
-- **下一步：(a) 中文註解亂碼補救（cprod.cpp/cpublic.cpp，cp950→UTF-8，from golden）→ (b) W6 root 狀態機**（最大、解鎖最多 deferred；先 recon 依賴圖再分子波）。
+- 中文註解亂碼：**確認 100% 在 `//` 註解內、無 string literal 受損**（非功能性缺陷；golden 有原文）→ 降為低優先 cosmetic TODO（ROADMAP DEFERRED），go-forward 規則已記。
+- **W6 recon 完成**（見 ROADMAP「W6 計畫」）：單根 fan-out、csystem.h predicate 介面、iXXXTask 各 arm 自有、main.h/TfMain→FormsFacade 解耦。子波 W6.0 scaffold→W6.1 canary(asendic_Empty)→W6.2 in-arm→…→W6.6 hub。
+- **下一步：W6.0 SCAFFOLD** = 凍結 csystem.h 為介面 + csystem_predicates.cpp(over Sim HAL) + 各 arm header shim + 非 VCL FormsFacade/satellite stub。這是所有 W6 SM 翻譯的前置。然後 W6.1 首單元 asendic_Empty。
+- ⚠ Big5：W6 多檔有中文註解，翻譯 agent 須照 go-forward 規則(cp950 讀 golden / gloss+ref)，勿再生 U+FFFD。
 - 驗證指令同前（cmake MinGW Makefiles + ctest）。
 - 驗證指令：`cd HT9011UC_Cpp_V3.33.906.0 && export PATH=/c/MinGW/bin:$PATH && cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=C:/MinGW/bin/g++.exe -DCMAKE_C_COMPILER=C:/MinGW/bin/gcc.exe && cmake --build build && ctest --test-dir build`。
