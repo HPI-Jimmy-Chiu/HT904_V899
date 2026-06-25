@@ -65,7 +65,14 @@
 
 **驗證**（獨立重跑）：CMake+g++ 6.3 clean build 零警告、**ctest 4/4 PASS**（ContactForce、vclcompat 語意、HTMD5、cJSON）。**MD5 命中 RFC1321 標準向量**（真 golden：""=d41d8c…、"abc"=900150…、"message digest"=f96b69…），cJSON parse/print/re-parse round-trip 14/14。限制：MinGW-only、無 Borland binary diff。
 
+## 2026-06-26 — W1 第一批 Public 葉工具完成
+- 翻譯（鏡射路徑）：`Public/ExternFunction`(純函式：Math_AdjustAngle/String_JustNumber/String_EraseL/RSpace/RecordTime)、`Public/WinSocketErrorCode`(GetErrorMsg switch)、`Public/cBootLog`(boot log，never-throw)。用 vclcompat，無需新增 compat 方法。
+- **紀律點**：ReadPlan 正確**略過非 leaf**（MyStringList/HonNewDel/MemoryAlarm/MyProductionRecord/HTEdit*），延到對應波（見 ROADMAP DEFERRED 表）；部分檔只翻 leaf 段、耦合段延後。
+- Verify 抓並修一個真 bug：`WinSocketErrorCode.h` 的 `#include` 缺引號（translate 階段誤報正確）。
+- 驗證（獨立）：CMake+g++ clean build、**ctest 7/7**（W0 4 + W1 3；新 67 斷言）。對拍 golden 源語意（角度正規化、JustNumber、erase、MD5、WSA 錯誤碼），Big5 位元保留。
+
 ### 🔖 RESUME（最新）
-- 已完成：C++ pivot、檔案鏡射慣例、ContactForce 計算核心、**W0 基礎（vclcompat + CMake + cJSON/HTMD5）**。全 build green、已 commit。
-- **下一步：W1 續翻 Public/ 葉工具**（`MyStringList`、`HonNewDel`、`MemoryAlarm`、`WinSocketErrorCode`、`systools` 等，鏡射路徑，用 vclcompat，golden/邏輯測試），然後 W2 邏輯島。
-- 基礎已穩→後續波次翻譯應更快。驗證指令同上（含 `-DCMAKE_C_COMPILER`）。每批完成自動 commit + 更新 DEVLOG/KNOWLEDGE/ROADMAP。
+- 已完成：C++ pivot、鏡射慣例、ContactForce、**W0 基礎**、**W1 Public 葉工具批 1**。全 green、已 commit。
+- **下一步：W2 邏輯島** = `Common/PickPlanner`（cArmPickPlan/cInArmLoaderPickPlanner/cOutArmPlacePlanner，IArmPickPlanContext 介面導向，最好測）+ cUnitConvert/SortingBinTray。
+- **完整性**：DEFERRED 表（ROADMAP）追蹤所有「只翻一半」與「略過」的檔，最終各波要回補；vclcompat 待補 FindFirst/TSearchRec(W3 前)。
+- 驗證指令：`cd HT9011UC_Cpp_V3.33.906.0 && export PATH=/c/MinGW/bin:$PATH && cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=C:/MinGW/bin/g++.exe -DCMAKE_C_COMPILER=C:/MinGW/bin/gcc.exe && cmake --build build && ctest --test-dir build`。每批完成自動 commit + 更新 docs。

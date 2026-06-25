@@ -64,6 +64,11 @@ set_source_files_properties(Public/cJSON.c PROPERTIES LANGUAGE C)
 add_library(ht9045_public
     Public/cJSON.c
     Public/HTMD5.cpp
+    # --- W1 Public leaf utilities (BCB6 -> standard C++17) ------------------
+    Public/ExternFunction.cpp      # Math_AdjustAngle / String_JustNumber /
+                                   # String_Erase[LR]Space / RecordTime  (pure logic)
+    Public/WinSocketErrorCode.cpp  # GetErrorMsg(Winsock code -> AnsiString); needs ws2_32 headers
+    Public/cBootLog.cpp            # Win32 file-based boot tracer (WriteBootLog / Rotate)
 )
 
 # cJSON.c uses WIN32 FindFirstFile indirectly (via cJSON.h guards); HTMD5.cpp

@@ -22,5 +22,20 @@
 ## 進度
 - ✅ C++ pivot、檔案鏡射慣例、ContactForce 計算核心（W2 先行示範）。
 - ✅ **W0 基礎完成**：vclcompat 層（AnsiString 1-based 等）+ CMake 鏡射骨架 + Public/cJSON + Public/HTMD5；ctest 4/4、MD5 命中 RFC1321。
-- ▶ 進行：**W1 Public/ 葉工具續翻**（MyStringList、HonNewDel、MemoryAlarm、WinSocketErrorCode、systools…）。
-- ⏳ 待：W0 尾段全域標頭（MachineType.h/cmydef.h/cprod.h/cpublic.h）去 VCL 化（大、排在邏輯波次前）。
+- ✅ **W1 第一批 Public 葉工具**：`ExternFunction`(純函式部分)、`WinSocketErrorCode`(GetErrorMsg)、`cBootLog`；ctest 7/7。
+- ▶ 進行：**W2 邏輯島**（`Common/PickPlanner`：cArmPickPlan/cInArmLoaderPickPlanner/cOutArmPlacePlanner，介面導向；+ cUnitConvert/SortingBinTray）。
+- ⏳ 待：W0 尾段全域標頭（MachineType.h/cmydef.h/cprod.h/cpublic.h）去 VCL 化（大、排在邏輯主波 W6 前；PickPlanner 經 IArmPickPlanContext 抽象故 W2 可先做）。
+
+## 延後項目追蹤（DEFERRED — 完整性，勿遺漏，全部轉移用）
+> 部分檔案只翻了 leaf 部分，耦合段延到對應波次。最終各波結束前要回頭補完這些。
+| 來源 | 延後的部分 | 目標波 | 原因 |
+|------|-----------|--------|------|
+| Public/ExternFunction | StringGrid_Insert_Row/Delete_Row、StatusBar_ItemText、ShowRecordTime | W7 | VCL TStringGrid/TStatusBar/TEdit |
+| Public/ExternFunction | DeleteDirectory | W3 | 需 SysUtils FindFirst/FindNext/TSearchRec shim（未在 vclcompat） |
+| Public/WinSocketErrorCode | LogClientSocketExceptionError | W5 | 耦合 VCL TClientSocket(Name/Address/Port)+MyDBIProcess |
+| Public/MyStringList | 整檔 | W3 | 耦合 IniConfig/RunInfo/LastSet/CUSTOMER_CODE、VCL 表單、Win32 file |
+| Public/MyProductionRecord | 整檔 | W6 | Prod/IniConfig/RunInfo/CUSTOMER_CODE、state-machine 消費端 |
+| Public/HonNewDel | 整檔 | W7 | template 依賴 MemoryAlarmForm（VCL form）|
+| Public/MemoryAlarm | 整檔（本身是 TForm）| W7 | VCL 表單 |
+| Public/HTEdit, HTEditList | 整檔 | W7 | VCL 編輯控制項 |
+| vclcompat 待補 | SysUtils FindFirst/FindNext/TSearchRec、faAnyFile/faDirectory | W3 前 | DeleteDirectory 等檔案搜尋需要 |

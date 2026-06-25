@@ -32,3 +32,39 @@ add_executable(test_cJSON
 target_link_libraries(test_cJSON PRIVATE ht9045_public)
 
 add_test(NAME cJSON COMMAND test_cJSON)
+
+# ===========================================================================
+#  W1 Public leaf utilities
+# ===========================================================================
+
+# --- ExternFunction: Math_AdjustAngle / String_JustNumber / Erase* / RecordTime
+add_executable(test_ExternFunction
+    test_ExternFunction.cpp
+)
+
+target_link_libraries(test_ExternFunction PRIVATE ht9045_public)
+
+add_test(NAME ExternFunction COMMAND test_ExternFunction)
+
+# --- WinSocketErrorCode: GetErrorMsg(Winsock code -> AnsiString) ------------
+add_executable(test_WinSocketErrorCode
+    test_WinSocketErrorCode.cpp
+)
+
+target_link_libraries(test_WinSocketErrorCode PRIVATE ht9045_public)
+# winsock2 constants come from <winsock2.h>; no functions are called, but link
+# ws2_32 defensively in case a future expansion calls a WSA* function.
+if(WIN32)
+    target_link_libraries(test_WinSocketErrorCode PRIVATE ws2_32)
+endif()
+
+add_test(NAME WinSocketErrorCode COMMAND test_WinSocketErrorCode)
+
+# --- cBootLog: WriteBootLog / RotateBootLogIfNeeded (Win32 file tracer) -----
+add_executable(test_cBootLog
+    test_cBootLog.cpp
+)
+
+target_link_libraries(test_cBootLog PRIVATE ht9045_public)
+
+add_test(NAME cBootLog COMMAND test_cBootLog)
