@@ -41,6 +41,12 @@ public:
                         int iXPos = 0, int iYPos = 0,
                         int iXPitch = 0, int iXPitch2 = 0, int iYPitch = 0);
     void AddErrorLog(AnsiString ErrorLog);                   // Steven 20200518
+    // AI(W6.2-INARM) 20260626: two records the W6.2 HP pick/place geometry
+    // leaves (ainarm_SearchPickPlate/PlacePlate) call.  Golden homes:
+    //   AddInArmHotplatePickRecord -- golden MyProductionRecord.h (Sam 20200716)
+    //   GetInRotationAngRecord     -- golden MyProductionRecord.h (Sam 20221103)
+    void       AddInArmHotplatePickRecord(int iSuckR, int iSuckC);  // Sam 20200716
+    AnsiString GetInRotationAngRecord();                            // Sam 20221103
 };
 
 #endif // MyProductionRecordH

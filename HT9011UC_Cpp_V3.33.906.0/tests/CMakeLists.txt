@@ -446,3 +446,60 @@ if(WIN32)
 endif()
 
 add_test(NAME W6_Canary COMMAND test_w6_canary)
+
+# ===========================================================================
+#  W6.2 VERIFY -- shared InArm HotPlate pick/place geometry leaves
+# ===========================================================================
+# --- test_w6_2_inarm_canary: drive the shared HP-geometry leaf library -------
+#   Proves ainarm_SearchPickPlate.cpp + ainarm_SearchPlacePlate.cpp +
+#   aHotPlateSubstrate.cpp (all in ht9045_sm) LINK + RUN with NO hardware, and
+#   pins faithful geometry-leaf values over a KNOWN Sim substrate:
+#     GetHotPlateColStep / GetInArmToHPYPitch_9045 / GetHeaterWaitTime /
+#     HotPlateYPitchCanPutAll / Row2CanPutHP / ArmRow1AllHasIC, plus the SM
+#     DoInArmPickFromHotPlate_9045() converging to entry over the empty offline
+#     team list, the W7-gated DoPlaceToHotPlate_9045() stub returning false, and
+#     the DoPlaceToHPSwapData / DoPlaceToHPBackupData data-swap leaves running
+#     without crash.  Same RESCAN link group as the W6.1 canary so the
+#     cprod<->cpublic<->cmydef ctor cross-references settle.
+add_executable(test_w6_2_inarm_canary
+    test_w6_2_inarm_canary.cpp
+)
+
+target_link_libraries(test_w6_2_inarm_canary PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w6_2_inarm_canary PRIVATE ws2_32)
+endif()
+
+add_test(NAME W6_2_InArmCanary COMMAND test_w6_2_inarm_canary)
+
+# --- test_w6_2_inarm_search: drive the Search/Do functions with golden oracle -
+#   The task-mandated W6.2 *search* verify TU (companion to the canary above).
+#   Sets a KNOWN Sim HAL state and drives the SearchPickPlate/SearchPlacePlate
+#   Do*/Search*/geometry functions, asserting the HP-geometry RESULT and the SM
+#   stepping against the GOLDEN FORMULA as oracle:
+#     GetPlaceToHotPlateCol (XDiv 4/6/8/16 default-picker branches),
+#     GetPlaceToHotPlateSuckCol (default + 1x1), GetInArmToHPOffset_9045
+#     (AutoAlignment/SameOne/iP branches -> InOfsHP1/HP2/InSh1/-1),
+#     GetVariableYInHotPlateData (manual pitch -> TestIF.iARM_Y_PITCH),
+#     GetVariableXInHotPlateData (1x1 -> iXpitchMaxX3 + bPitchOver12000=false),
+#     ResetHotPlateSearchParameter post-state, the DoInArmPickFromHotPlate_9045
+#     SM stepping over the Sim HAL, and SearchPlateToPlace /
+#     SearchPlacePlateXItem4_8Suck / CheckHasSpaceToPlace_9045 pumped without
+#     crash.  Same RESCAN link group as the W6.1/W6.2 canaries so the
+#     cprod<->cpublic<->cmydef ctor cross-references settle.
+add_executable(test_w6_2_inarm_search
+    test_w6_2_inarm_search.cpp
+)
+
+target_link_libraries(test_w6_2_inarm_search PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w6_2_inarm_search PRIVATE ws2_32)
+endif()
+
+add_test(NAME W6_2_InArmSearch COMMAND test_w6_2_inarm_search)

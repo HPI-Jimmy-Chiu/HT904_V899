@@ -382,6 +382,16 @@ add_library(ht9045_sm STATIC
     FormsFacade.cpp
     asendic.cpp
     canary_support.cpp
+    # --- W6.2 (IN-ARM foundation): shared HotPlate pick/place geometry leaves ---
+    #   ainarm_SearchPickPlate.cpp  -- HP-pick geometry + DoInArmPickFromHotPlate_9045 SM
+    #   ainarm_SearchPlacePlate.cpp -- HP-place geometry + search-planner + data-swap leaves
+    #   aHotPlateSubstrate.cpp      -- the W6.2 in-arm substrate the leaves pump
+    #                                  (InArmSuck/FLCarryKit/.. TMyKitSuck grid +
+    #                                   PickFromHPList uPlateInfo + ainarm2 cursors +
+    #                                   in-arm engine helper stubs + tRotate/Laser)
+    ainarm_SearchPickPlate.cpp
+    ainarm_SearchPlacePlate.cpp
+    aHotPlateSubstrate.cpp
 )
 
 target_include_directories(ht9045_sm PUBLIC

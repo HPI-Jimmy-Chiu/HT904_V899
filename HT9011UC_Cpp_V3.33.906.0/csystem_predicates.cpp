@@ -208,3 +208,28 @@ bool HasAnyICInMachine()                                                        
     return (HasICUnderMachine() || HasAutoICInMachine());
 }
 //==============================================================================
+//  W6.2 additions: frozen csystem predicates/helpers the shared HP geometry
+//  leaves (ainarm_SearchPickPlate/PlacePlate) consult.  These are declared in
+//  csystem.h; the golden bodies live in csystem.cpp (gated #if 0).  Offline sim
+//  bodies follow -- conservative, matching a handler with shuttles not docked
+//  and the safe door closed.  AI(W6.2-INARM) 20260626.
+//==============================================================================
+//  InSHT1InLF / InSHT2InLF (golden csystem.cpp:413/498): the input shuttle is in
+//  its left-feed position.  Offline there is no shuttle motion -> not in LF.
+bool InSHT1InLF() { return false; }
+bool InSHT2InLF() { return false; }
+//------------------------------------------------------------------------------
+//  CheckSafeDoorIsClosed (golden csystem.cpp:2599): offline (no PLC / no door
+//  sensor) the door is treated as CLOSED so the #ifndef SOFT_SIMULTE guard the
+//  leaves call is non-blocking.
+bool CheckSafeDoorIsClosed() { return true; }
+//------------------------------------------------------------------------------
+//  DoAutoSiteMappingDropError (golden csystem.cpp:23361): only acts when
+//  bRunAutoSiteMapping==true.  Offline ASM is off -> the golden body is a no-op;
+//  keep the guard shape faithful (re-reads bRunAutoSiteMapping at the call).
+void DoAutoSiteMappingDropError()
+{
+    // TODO(W6.x/W7): full ASM drop-error recovery (InitInArmTask + grid reset)
+    // lands with the ainarm core.  Offline ASM is off, so this is a no-op.
+}
+//==============================================================================

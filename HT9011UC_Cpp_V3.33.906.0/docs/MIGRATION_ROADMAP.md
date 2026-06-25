@@ -40,8 +40,9 @@
 **子波序**：
 - ✅ **W6.0 SCAFFOLD 完成**：csystem.h 介面 + csystem_predicates.cpp(15 HasIC over Sim HAL) + aArmHeader.h shim + 非 VCL FormsFacade(TfAGV) + 新 mycylin(TMyCylinder over Sim IO) + asendic/canary_support helpers。
 - ✅ **W6.1 CANARY 完成（策略證明）**：`asendic_Empty` 翻譯+Sim HAL 收斂(ctest 23/23、mojibake 0)。三縫(predicate 介面/FormsFacade/自有 cursor)端到端有效。剩餘 canary 葉(asendic_Auto_RT/Auto2/Loader_RT)可隨後批。
-- ▶ **下一步：W6.2 IN-ARM 引擎**(ainarm_SearchPickPlate+SearchPlacePlate 先 → ainarm9045 核心 + ~30 site variants)。
-- **W6.2 IN-ARM**：ainarm_SearchPickPlate(1399行,fMain=6)+SearchPlacePlate 先，再 ainarm 核心+~30 site variants(iInArmType 分派)。
+- ✅ **W6.2 IN-ARM 基礎完成**：`ainarm_SearchPickPlate`+`ainarm_SearchPlacePlate` 翻譯；新 `aHotPlateSubstrate`(InArmSuck=TMyKitSuck/PickFromHPList/ainarm2 cursors+HP arrays，最小 scope 部分材料化原 W6 deferred KitSuck grid)；FormsFacade 擴 5 form；DoInArmPickFromHotPlate_9045 Sim HAL pump 過(cursor 守 documented set、fall-through 保留)；DoPlaceToHotPlate_9045 dispatcher gated#if0→W7 stub。ctest 25/25、mojibake 0。
+- ▶ **下一步：W6.2 cont = ainarm9045 核心 + ~30 site variants**(iInArmType 分派)；或 W6.1 餘 canary；或 W6.3 catchtray。
+- **W6.2 IN-ARM**：基礎(2 模組+substrate)已完成；剩 ainarm 核心+~30 site variants(iInArmType 分派)。
 - **W6.3 CATCHTRAY+FEED**：acatchtray DoCatchTray、asendic_Color/Loader…（注意 acatchtray 的 ainarm include 是 stale dead）。
 - **W6.4 INDEX/TESTER STAR**：atester result-decode anchor 先(fMain-free,SOFT_SIMULTE skip HAL)→DoTestHeadMotor→Front/Rear/32Site(Front↔Rear 互依不可拆)。iIndexTask@cContact 需先 stub。
 - **W6.5 SHUTTLE 生產 SM**：acarry Do_Auto_SHT1/2/3（最差耦合：79 fMain + VCL worker thread HThreadCtrlShuttle + aArmHeader 全圖）。

@@ -52,6 +52,12 @@
 struct LAST_GENERAL_SET
 {
     int iRealDummy;     // golden LastSet.h:54.  ==DUMMY(0) in the sim canary path.
+    // AI(W6.2-INARM) 20260626: the W6.2 HP pick/place geometry leaves
+    // (ainarm_SearchPickPlate/PlacePlate) deref three more LastSet fields.
+    // Added to this shared minimal shim (golden field types from LastSet.h):
+    int iRunStartMode;  // golden LastSet.h -- run-start mode (rsmAutoSiteMap/rsmQAMode/...)
+    int iTemperature;   // golden LastSet.h -- temperature mode (Tempture_Hot/...)
+    int iTester;        // golden LastSet.h -- tester link (OFF_LINE/...)
     // TODO(W6.x): the other ~460 LAST_GENERAL_SET fields land with the full
     //             translated LastSet.h.
 };

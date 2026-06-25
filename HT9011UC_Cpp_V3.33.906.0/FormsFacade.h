@@ -1,32 +1,41 @@
 // =============================================================================
 //  FormsFacade.h  --  non-VCL stand-in for the VCL form pointers the SMs deref
 //
-//  Translation wave: W6.0 (decoupling scaffold for the W6.1 Empty-tray canary)
-//  Translator: AI(W6.0-SCAFFOLD) 20260626
+//  Translation wave: W6.0 (scaffold) ; EXTENDED W6.2 (in-arm HP geometry)
+//  Translator: AI(W6.0-SCAFFOLD) 20260626 ; AI(W6.2-INARM) 20260626
 //
 //  W6 DECOUPLING STRATEGY (form-pointer cut)
 //  -----------------------------------------
 //  The BCB6 state machines reach UI/automation state through global VCL TForm
-//  pointers (fMain / fAGV / ...).  Those forms cannot be pulled into the
-//  portable build (they derive from VCL TForm).  Instead we expose ONLY the
-//  members a given sub-wave's SM actually dereferences, on a non-VCL facade,
-//  and grow it per sub-wave.
+//  pointers (fMain / fAGV / fSortCT / fLotInfo / fOffSet / fSCKART / ...).  Those
+//  forms cannot be pulled into the portable build (they derive from VCL TForm).
+//  Instead we expose ONLY the members a given sub-wave's SM actually
+//  dereferences, on a non-VCL facade, and grow it per sub-wave.
 //
-//  W6.1 SURFACE = fAGV ONLY.
-//    The Empty-tray canary (asendic_Empty.cpp) has 0 fMain-> derefs (verified)
-//    and exactly ONE satellite deref: fAGV->IsATK_AMR() at golden
-//    asendic_Empty.cpp:827 (DoAutoEmpty case 70, the DUMMY non-AMR branch).
-//    The golden TfAGV is a VCL TForm (Automation/AGV.h:15
-//    `class TfAGV : public TForm`, fAGV ptr at :210) -> cannot be pulled in.
+//  W6.1 SURFACE = fAGV ONLY (Empty-tray canary).  -- unchanged below.
 //
-//  Do NOT add TfMain / main.h members here -- the canary needs none.  Keep this
-//  facade strictly minimal; later sub-waves extend it as their SMs require.
+//  W6.2 ADDITIONS (HP pick/place geometry leaves -- exactly the members
+//  ainarm_SearchPickPlate.cpp / ainarm_SearchPlacePlate.cpp deref):
+//    TfMain    fMain    : DebugOneCycleHotPlate / Pause / ShowTestHeadComp /
+//                         ReStartAutoSiteMapping / slAutoSiteMapLog
+//    TfSortCT  fSortCT  : pnlHP1.Caption / pnlHP2.Caption
+//    TfLotInfo fLotInfo : cbRunMode.Visible / cbRunMode.Text
+//    TfOffSet  fOffSet  : UseAutoOffsetFunction / UseInArmSetupTeach
+//    TfSCKART  fSCKART  : iInputJamCnt
+//  Each member is documented [DATA]/[METHOD] with its golden home.  All methods
+//  are offline no-ops / false (a handler with no UI / no auto-offset / no pause).
+//  The sbStateRecordClick(sbStateRecord) line in CheckHasSpaceToPlace_9045 is
+//  gated #if 0 in the .cpp, so TSpeedButton/TObject are NOT pulled in and those
+//  two TfMain members are intentionally NOT added.  cb1 is referenced only
+//  inside #ifdef SOFT_SIMULTE (undefined) so it is not added either.
 // =============================================================================
 #ifndef FormsFacadeH
 #define FormsFacadeH
 
+#include "vclcompat/vcl_compat.h"   // AnsiString
+
 // ---------------------------------------------------------------------------
-//  TfAGV -- non-VCL stub.  Mirrors ONLY the one method the canary calls.
+//  TfAGV -- non-VCL stub (W6.1).  Mirrors ONLY the one method the canary calls.
 //  Golden: bool TfAGV::IsATK_AMR();  (Automation/AGV.h:205)
 //  In the offline sim there is no ATK AMR present, so IsATK_AMR() returns false
 //  (the DUMMY non-AMR path -- faithful to a handler with no AMR attached).
@@ -38,5 +47,89 @@ public:
 };
 
 extern TfAGV *fAGV;     // golden: extern PACKAGE TfAGV *fAGV; (AGV.h:210)
+
+// ===========================================================================
+//  W6.2 -- TMyStringList facade-local stub for slAutoSiteMapLog
+//  Golden type is TMyStringList (cmydef), which in the target is only
+//  forward-declared (cmydef.h:15).  The leaves call exactly ONE method on it:
+//  AddTextWithDateTime(AnsiString).  Provide a tiny facade-local type exposing
+//  only that, as an append/log no-op (offline -> no file/UI sink).
+// ===========================================================================
+class TfMainSiteMapLog
+{
+public:
+    void AddTextWithDateTime(AnsiString /*S*/) {}   // golden TMyStringList::AddTextWithDateTime
+};
+
+// ===========================================================================
+//  TfMain -- non-VCL stub (golden main.h, TfMain:public TForm)
+//  ONLY the members the W6.2 HP geometry leaves deref.
+// ===========================================================================
+class TfMain
+{
+public:
+    void DebugOneCycleHotPlate(AnsiString sfunc); // [METHOD] golden main.h:1565 -- debug log sink (empty)
+    bool Pause(AnsiString Func);                  // [METHOD] golden main.h:1249 -- offline never pauses -> false
+    void ShowTestHeadComp(bool bRefresh);         // [METHOD] golden main.h:1296 -- empty
+    void ReStartAutoSiteMapping(bool bStart);     // [METHOD] golden main.h:1331 -- empty
+    TfMainSiteMapLog *slAutoSiteMapLog;           // [DATA]   golden main.h:1486 (TMyStringList*) -- new in ctor
+    TfMain();
+};
+extern TfMain *fMain;
+
+// ===========================================================================
+//  TfSortCT -- non-VCL stub (golden cSortCT.h).  pnlHP1/pnlHP2 are TPanel* in
+//  the golden; the leaves only assign ->Caption an AnsiString (HowManyIC()).
+//  Stub each as a tiny {AnsiString Caption;} so `fSortCT->pnlHP1->Caption=...`
+//  compiles.  Used inside `if(CosFunction.bShowHPICCount)` (default false).
+// ===========================================================================
+struct TfSortCTPanel { AnsiString Caption; };     // [DATA] golden TPanel* (cSortCT.h:61/63)
+class TfSortCT
+{
+public:
+    TfSortCTPanel *pnlHP1;
+    TfSortCTPanel *pnlHP2;
+    TfSortCT();
+};
+extern TfSortCT *fSortCT;
+
+// ===========================================================================
+//  TfLotInfo -- non-VCL stub (golden uLotInfo.h).  cbRunMode is TComboBox* in
+//  the golden; the leaves deref ->Visible (bool) and ->Text.Pos("RT")
+//  (AnsiString).  Stub cbRunMode as {bool Visible; AnsiString Text;}.
+//  Used inside the iResetSiteMappingStep==2 ASM path (offline: Visible=false).
+// ===========================================================================
+struct TfLotInfoRunMode { bool Visible; AnsiString Text; TfLotInfoRunMode():Visible(false){} };
+class TfLotInfo
+{
+public:
+    TfLotInfoRunMode *cbRunMode;                  // [DATA] golden uLotInfo.h:307 (TComboBox*)
+    TfLotInfo();
+};
+extern TfLotInfo *fLotInfo;
+
+// ===========================================================================
+//  TfOffSet -- non-VCL stub (golden cOffSet.h).  Both methods return false
+//  offline (no auto-offset / no setup-teach configured).
+// ===========================================================================
+class TfOffSet
+{
+public:
+    bool UseAutoOffsetFunction(AnsiString sName);  // [METHOD] golden cOffSet.h:488 -> false
+    bool UseInArmSetupTeach(int iWhich);           // [METHOD] golden cOffSet.h:489 -> false
+};
+extern TfOffSet *fOffSet;
+
+// ===========================================================================
+//  TfSCKART -- non-VCL stub (golden Automation/SCK_ART.h).  iInputJamCnt is
+//  only incremented (inside `if(CosFunction.bUseSCKART)`, default false).
+// ===========================================================================
+class TfSCKART
+{
+public:
+    int iInputJamCnt;                              // [DATA] golden SCK_ART.h:288
+    TfSCKART();
+};
+extern TfSCKART *fSCKART;
 
 #endif // FormsFacadeH
