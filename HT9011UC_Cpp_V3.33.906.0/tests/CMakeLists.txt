@@ -321,3 +321,29 @@ if(WIN32)
 endif()
 
 add_test(NAME SimIO COMMAND test_sim_io)
+
+# ===========================================================================
+#  HAL enablers: KeyPro license shim + TComm serial shim
+# ===========================================================================
+# --- test_keypro_tcomm: offline acceptance proof for both HAL enablers ------
+#   [1] KeyPro shim (Public/HTKeyProShim.cpp, in ht9045_public): asserts
+#       KeyPro_GetLevel(3)==1 via the GENUINE offline fallback -- there is no
+#       KeyProDLL.dll in the C++ target tree, so LoadLibraryA fails and the
+#       shim returns 1 (valid dongle).  The test first asserts the DLL is
+#       absent so the fallback path is the one under test.  KeyProDLL.lib is
+#       NOT static-linked (the shim resolves the export at run time).
+#   [2] TComm sim (vclcompat/Comm.cpp, in vclcompat): opens in SIM mode with no
+#       hardware; WriteCommData buffers into the tx sink (read back + content
+#       checked); SimInjectReceive drives OnReceiveData (Sender/len/exact bytes
+#       verified, multi-fire + no-handler no-op + Stop/re-Start).
+#   Links ht9045_public (KeyPro_GetLevel) which PUBLIC-links vclcompat
+#   (Spcomm::TComm); vclcompat listed explicitly for clarity.  On Win32 the
+#   shims use kernel32 serial / LoadLibrary APIs that are in the default link
+#   set, so no extra libraries are required.
+add_executable(test_keypro_tcomm
+    test_keypro_tcomm.cpp
+)
+
+target_link_libraries(test_keypro_tcomm PRIVATE ht9045_public vclcompat)
+
+add_test(NAME KeyProTComm COMMAND test_keypro_tcomm)

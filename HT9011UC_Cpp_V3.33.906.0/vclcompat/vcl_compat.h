@@ -73,6 +73,7 @@
 #include "vclcompat/TDateTime.h"
 #include "vclcompat/SysUtils.h"
 #include "vclcompat/IniFiles.h"
+#include "vclcompat/Comm.h"        // Spcomm::TComm serial shim (SPComm.hpp)
 
 // ---------------------------------------------------------------------------
 //  Win32 A/W macro guard

@@ -116,7 +116,14 @@
 - 驗證（獨立）：clean build、**ctest 19/19**（+test_sim_io 28 斷言：IOBitOn→IOOutBitStatus 反映、IOByteOut/IOInputBit round-trip、TMySwitch.On→bit、TMySensor.IsOn 讀回）。無 vendor SDK。
 - gated→W6：mycylin Push/Pop 狀態機、TMySucker Suck/Destroy、TMyKitSuck item grid(2894行 god-stack)、myio raw-port。
 
+## 2026-06-26 — HAL enablers：KeyPro shim + TComm serial shim
+- `Public/HTKeyProShim.{h,cpp}`：`KeyPro_GetLevel(unsigned)`→LoadLibraryA("KeyProDLL.dll")+GetProcAddress("KEYPRO_GET_LEVEL"，fallback "_..@4")，離線回 1（valid dongle stub），**非靜態連結 OMF lib**。decoration＝undecorated（objdump 真 DLL 確認）；std::string 那幾支 906 零呼叫不翻。call site CheckKeyPro(VCL form)→W7。
+- `vclcompat/Comm.{h,cpp}`：TComm shim（14 method：CommName/BaudRate/Parity/.../StartComm/StopComm/WriteCommData/OnReceiveData/...），Win32 \\.\COMx + SIM 模式（WriteCommData 入 SimTxBuffer、SimInjectReceive 觸發 OnReceiveData）。加入 vcl_compat.h 傘狀。
+- 驗證（獨立）：clean build、**ctest 20/20**（test_keypro_tcomm 26 斷言：KeyPro_GetLevel(3)==1 offline、TComm sim tx buffer + rx callback）。
+- 待辦註記：TComm real \\.\COMx 路徑已編未測(無硬體)；WriteCommData(char*) vs c_str()const 之 const-correctness 待 W7 consumer 調和。
+
 ### 🔖 RESUME（最新）
-- 已完成：…W3(config 全鏈)、**W4 馬達 HAL**、**W4-IO HAL**（兩 HAL 皆 interface-cut 離線 Sim 可跑）。全 green、已 commit（branch 17 commits）。
-- **下一步：HAL Sim 收尾 = KeyPro shim（IKeyPro LoadLibrary，Sim 回 level 1）+ TempCtrl DTK4848(serial 讀寫)**，補齊本機 active 硬體離線 Sim 層。tester 歸 W5(纏 SECS)。之後 W6 狀態機（解鎖最多 deferred：品牌馬達/mymotor 助手/cylinder-sucker 狀態機/TMyKitSuck）。
+- 已完成：…W3(config 全鏈)、W4 馬達 HAL、W4-IO HAL、**KeyPro+TComm enablers**。HAL Sim 層：馬達✓/IO✓/license✓/serial✓。全 green、已 commit（branch 18 commits）。
+- **下一步：ungate cpublic.cpp 基礎**（queue/VerInfo/DTK4848 溫控協定/util 中只依賴 globals+vclcompat+TComm 的部分；god-stack 續 gate）→ 移除 cmydef queue-ctor stub workaround + 提供溫控協定。之後 W5 comms、**W6 root 狀態機（解鎖最多 deferred：品牌馬達/mymotor 助手/cylinder-sucker 狀態機/TMyKitSuck）**、W7 UI。
+- 驗證指令同前（cmake MinGW Makefiles + ctest）。
 - 驗證指令：`cd HT9011UC_Cpp_V3.33.906.0 && export PATH=/c/MinGW/bin:$PATH && cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=C:/MinGW/bin/g++.exe -DCMAKE_C_COMPILER=C:/MinGW/bin/gcc.exe && cmake --build build && ctest --test-dir build`。

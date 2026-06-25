@@ -18,6 +18,17 @@ add_library(vclcompat
     vclcompat/TDateTime.cpp
     vclcompat/SysUtils.cpp
     vclcompat/IniFiles.cpp
+    # --- HAL enabler: SPComm TComm serial shim (Spcomm::TComm) --------------
+    #   Faithful stand-in for the SPComm VCL serial component
+    #   (D:/HT9045/elec/Component/spcomm.hpp:154-277) used by the temp /
+    #   barcode / EJ1N / RS232-tester code.  REAL mode drives \\.\COMx via
+    #   Win32 CreateFile/SetCommState/ReadFile/WriteFile + a Win32 reader
+    #   thread; SIM mode (auto fallback / SetSimMode) needs no hardware so the
+    #   compat layer compiles/links/runs offline.  Lives in the vclcompat lib
+    #   because it derives from vclcompat::TComponent and is pulled in via the
+    #   vcl_compat.h umbrella.  On Win32 the .cpp uses the kernel32 serial API
+    #   (already in the default MinGW link set -- no extra target_link needed).
+    vclcompat/Comm.cpp
 )
 
 target_include_directories(vclcompat PUBLIC
@@ -72,6 +83,16 @@ add_library(ht9045_public
                                    # String_Erase[LR]Space / RecordTime  (pure logic)
     Public/WinSocketErrorCode.cpp  # GetErrorMsg(Winsock code -> AnsiString); needs ws2_32 headers
     Public/cBootLog.cpp            # Win32 file-based boot tracer (WriteBootLog / Rotate)
+    # --- HAL enabler: KeyPro license interface-cut --------------------------
+    #   KeyPro_GetLevel(unsigned) -- portable stand-in for the SOLE KeyPro entry
+    #   the V906 source calls (KEYPRO_GET_LEVEL(3) at HS_Function.cpp:4933).
+    #   Resolves the export from KeyProDLL.dll at RUN TIME (LoadLibrary/
+    #   GetProcAddress) and returns 1 (valid dongle) when the DLL is absent
+    #   (offline).  Deliberately does NOT static-link KeyProDLL.lib (32-bit OMF
+    #   Borland import lib, unusable by MinGW) -- no extra target_link_libraries
+    #   entry is added for it.  The std::string-returning KeyPro exports are
+    #   NEVER called in 906 and are NOT ported.
+    Public/HTKeyProShim.cpp
 )
 
 # cJSON.c uses WIN32 FindFirstFile indirectly (via cJSON.h guards); HTMD5.cpp

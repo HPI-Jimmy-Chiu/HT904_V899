@@ -30,7 +30,8 @@
 - ✅ **W3-cont2 config-table loaders 完成**：database.cpp 的 LoadMotData/LoadIoData/SetMOTTableNo/SetIOTableNo/TIODATA/TMOTDATA（8 函式）翻譯，**真檔 oracle 過**（45 列全 SMC、名稱式 col 解析證實、IO 668 列 ISABase 644:24、M00→MInArmX）。Win32 巨集 guard 進 vcl_compat.h。修 AnsiString 缺 operator=(int) bug。ctest 15/15。
 - ✅ **W4 HAL 馬達層完成（interface-cut 離線證明）**：HTMotor(虛擬基底)+TMyMotor+新 `TMySimMotor` 翻譯，**離線零 vendor SDK 可編可跑**（test_sim_motor 33/33：home→0、MoveToPos(N)→N、no alarm、MotorHome 狀態機收斂；nm/strings 稽核零 vendor 符號）。**6 個品牌驅動 → W4-part2**（每個 .cpp 都拉 ~30 模組 god-stack [main/csystem/sensors/cylinders]，故卡在 W6，與 vendor SDK 無關；Sim 先頂著）。mymotor 大量 motion/Galil/sensor 方法 gated TODO(W6)、pHTray→W7。ctest 17/17。
 - ✅ **W4-IO HAL 完成（IO interface-cut 離線證明）**：`IOBackend.h/.cpp`（TIOBackend 虛基底 + TSimIOBackend 離線；real backends mn_*/Acm_*/_mnet_*/raw `#if HAVE_xxx` 預設 OFF）+ `MyLaneIo`(facade，6 method 經 pIO 派發、保留 range/OutPortData 記帳) + `myswitch`(TMySwitch)/`mysensor`(TMySensor) 物件層路由到 facade。test_sim_io 等通過、ctest 19/19。
-- ▶ **下一步：HAL Sim 收尾（KeyPro + TempCtrl）** 補齊本機 active 硬體的離線 Sim 層（馬達✓/IO✓/license/溫控），讓 W6 狀態機能對全 Sim HAL 離線端到端跑。tester 較纏(歸 W5/SECS)。
+- ✅ **HAL enablers：KeyPro shim + TComm serial shim**：`Public/HTKeyProShim`(KeyPro_GetLevel→LoadLibrary/GetProcAddress，離線回 1，非靜態連結；decoration 為 undecorated 已 objdump 確認) + `vclcompat/Comm`(TComm 14-method，Win32 \\.\COMx + SIM 模式)。ctest 20/20。HAL Sim 層：馬達✓/IO✓/license✓/serial✓。
+- ▶ **下一步：ungate cpublic.cpp 基礎**（queue/VerInfo/DTK4848 溫控協定/簡單 util——只依賴 globals+vclcompat+TComm 的部分；god-stack 部分續 gate）。解鎖：移除 queue-ctor stub workaround + 提供溫控協定。之後 W5 comms、W6 root 狀態機（解鎖最多 deferred）、W7 UI。
 - ⏳ 待：W4-part2 品牌馬達驅動(需 W6)、cylinder/sucker 狀態機+TMyKitSuck(W6)、database.cpp ReadGeneralIni/SECS、cMyDB(待 vendor sqlite)、MyStringList、common.cpp 其餘、W5 comms、W6 root、W7 UI。
 
 ## 延後項目追蹤（DEFERRED — 完整性，勿遺漏，全部轉移用）
