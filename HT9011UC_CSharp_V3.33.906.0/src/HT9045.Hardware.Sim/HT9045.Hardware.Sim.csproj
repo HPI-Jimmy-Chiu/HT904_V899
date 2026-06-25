@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    HT9045.Hardware.Sim
+    Simulation adapters for all hardware ports. Implements every port interface
+    in HardwareAbstraction with in-memory / deterministic behaviour so the Phase-1
+    offline smoke test runs with zero hardware and zero native DLL.
+  -->
+
+  <PropertyGroup>
+    <RootNamespace>HT9045.Hardware.Sim</RootNamespace>
+    <AssemblyName>HT9045.Hardware.Sim</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HT9045.HardwareAbstraction\HT9045.HardwareAbstraction.csproj" />
+  </ItemGroup>
+
+</Project>

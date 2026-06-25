@@ -1,0 +1,7 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+
+# Rider / VS user files
+.vs/
+*.user

@@ -1,6 +1,7 @@
 {
   "allowedWriteRoots": [
-    "HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/",
+    "HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422/",
+    "HT9011UC_CSharp_V3.33.906.0/",
     ".github/",
     ".agents/",
     "docs/",
@@ -8,6 +9,7 @@
     "memories/"
   ],
   "readonlyRoots": [
+    "HT9011UC_Code_V3.33.906.0_20260618/",
     "HT9011UC_Code_V3.33.893.0_20251204_Jimmy_20251217 - 2x2new_method/",
     "HT9011UC_Code_V3.33.894.5_20260114_Jimmy_20260119/",
     "HT9011UC_Code_V3.33.895.0_20260116_Jimmy_20260206/",
