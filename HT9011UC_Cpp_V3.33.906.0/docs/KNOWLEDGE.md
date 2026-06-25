@@ -10,6 +10,16 @@
 - 由一處 **composition root / factory** 依設定選 Sim↔Real、Stub↔真UI（取代 `cinitial.cpp:3454-3565` 的 dispatch ladder）。
 - 即時硬體核心策略（沿用 §9 HAL）：先以 stub/SOFT_SIMULTE 讓離線版可編可跑，再逐接縫換真實驅動、邊測邊接。
 
+## 檔案位置與命名（鏡射 BCB6，使用者指令）
+- **翻譯出的 .cpp/.h 一律鏡射 BCB6 原始檔的相對路徑＋檔名**，方便 1:1 反查。例：原 `HT9011UC_Code_..._20260618\ContactForce.cpp` → 譯為 `HT9011UC_Cpp_V3.33.906.0\ContactForce.cpp`（同在 root、同名）；原 `Motor\mymotor.cpp` → `Motor\mymotor.cpp`。**不要另開 src/ 改路徑**。
+- 無 BCB6 對應的「附加檔」可用新結構：`CMakeLists.txt`、`tests/`、`docs/`（這些原本是 .bpr/無對應）。`.bpr` → 以 CMake 取代（建置系統不同，屬合理偏離）。
+- 例外（無法照做時提出）：含特殊字元/空白的原路徑（如 `ASE_K Socket\`）照樣鏡射但建置需處理空白；`.dfm` 表單不直接鏡射成 .cpp（UI 走介面承接，另議）。
+
+## 已翻譯模組 + 領域發現
+- **ContactForce（已翻計算核心）**：`ContactForce.cpp/.h` 其實是 **VCL 表單 `TfContactForce` + 四個 SLK 元件類別**（THTSLKClass / THTSLKIndClass / THTDieForceSLKClass / THTDieForceOneByOneSLKClass），是 **SLK 直徑→力 的資料產生端**。文件常提的 `CalculateTotalAirForce`/`GetMinForce`/`GetMaxIndexForceLimit` 其實在 **`cContact.cpp`（VCL 表單 TfContact，計算消費端）**，讀 `fContactForce->SLKClass[i]->dDiameter/dMinForce/dMaxForce`。已抽出 ContactForce 的純計算核心為 C++（`SlkForceData`/`ComputeSlkForce`/`ComputeEpMaxVoltage`，root 鏡射）。
+- 翻譯慣例（已確立）：extract-calc-core（VCL 表單/widget/IO 不翻，純算抽成可測函式，輸入用 struct/參數）；保留字面常數（如 `3.14` 不換 M_PI 以維數值同一）；特例綁對的類別（如 402 僅 STANDARD）；caption-only 變數（iCount）不影響數值。
+- 驗證模式（無 Borland）：CMake(MinGW Makefiles)+g++ 6.3 編譯（`-Wall -Wextra -Wshadow -Wconversion -Wpedantic` 零警告）+ CTest；數值對「手算 BCB6 公式值」（非 live diff，已標限制）。
+
 ## 命名對照（鏡射 BCB6，供反查；C++ 端保留原名/原方法名）
 - 運動：`HTMotor`(Motor/HTMotor.h) 已是虛擬基底（~50 virtual）；方法保留 InitMotor/MoveToPos/ReadPos/HomeObject/HomeFlag/Stop/MotionDone/GetAlarm/SetSpeed(uint,bool=false)/**ServerOnOff**(BCB6 拼法)/SetSoftLimit/JogP/JogN/ScanMotorStatus。加一個 Sim 子類即可。
 - IO：`TLaneIO`(MyLaneIo.h)：IOBitOn/IOBitOff/IOByteOut/IOOutBitStatus/IOInputBit/IOInputByte（int 回傳，<0=fail）。

@@ -27,3 +27,28 @@
 4. 下一步：用 workflow 翻譯第一個 leaf logic class（建議 **ContactForce / cContact**：計算明確、可用已知數值驗證；或 Common/PickPlanner）BCB6→標準 C++，含 interface 切割。
 5. 待決（不擋 leaf 邏輯翻譯）：UI 框架（MFC / Qt / Win32）留到觸及表單再定；實機確認 Galil/MN200 卡。
 6. 慣例：每完成一塊 append DEVLOG + 自動 commit。
+
+---
+
+## 2026-06-25 — 第一個類別翻譯：ContactForce 計算核心（完成、g++ 驗證）
+
+**目標**：示範「讀懂 9011UC class → 忠實翻譯成標準 C++ → 編譯/數值驗證」，並確立**檔案鏡射 BCB6 位置/檔名**慣例。
+
+**讀碼修正（重要，回應「不清楚就看 9011UC 程式碼」）**：原以為 `ContactForce.cpp` 是 Contact Force 計算類別，實際讀碼發現：
+- `ContactForce.cpp/.h` 是 **VCL 表單 `TfContactForce` + 四個 SLK 元件類別**（`THTSLKClass`/`THTSLKIndClass`/`THTDieForceSLKClass`/`THTDieForceOneByOneSLKClass`）——是 **SLK 直徑→力 的「資料產生端」**，不是計算消費端。
+- 文件提到的 `CalculateTotalAirForce`/`GetMinForce`/`GetMaxIndexForceLimit` 實際在 **`cContact.cpp`（VCL 表單 TfContact，計算消費端，本次不翻）**，它讀 `fContactForce->SLKClass[i]->dDiameter/dMinForce/dMaxForce`。
+
+**翻譯範圍（extract-calc-core）**：把 ContactForce 的純計算核心抽出成可攜 C++：
+- 檔案（**鏡射根目錄**）：`HT9011UC_Cpp_V3.33.906.0\ContactForce.h` + `ContactForce.cpp`（同 BCB6 root 同名）。附加：`CMakeLists.txt`、`tests/`、`.gitignore`。
+- API：`struct SlkForceData`、`enum SlkVariant`、`SlkForceData ComputeSlkForce(dia, tag, bDefault, epInstall, variant)`、`double ComputeEpMaxVoltage(dMinVol, dMidVol)`。
+- 忠實點：**1-based→0-based 修正**（`Dia.Pos("Arm2_")==0`=未找到 → `find()==npos`；`SubString(6,..)`→`substr(5)`，且保留「Arm2_ 不在時才 strip」的 quirk 並加測試）；**402 特例僅 STANDARD 類**；**字面 `3.14` 保留**（不換 M_PI，維持數值同一）；DIEFORCE_OBO 的 `iCount` 只影響 caption 不影響數值。
+- VCL 表單/widget/ReadFile/WriteFile/ShowValue/ini 欄位（dLoadRate/dContactOffset…）**未翻**（待 UI/IO port）；但 struct 保留這些欄位供日後填。
+
+**驗證**（獨立重跑）：CMake(MinGW Makefiles)+g++ 6.3.0、`-Wall -Wextra -Wshadow -Wconversion -Wpedantic` 零警告、build OK、CTest 1/1、harness 45/45。輸出全等於**手算 BCB6 公式值**（STD Dia30→141.3、40→251.2、60→565.2、40x2→dMaxForce 25371.828、EP 1.0/2.0→2.8…）。
+**限制**：無 Borland 編譯器→無法跑原 BCB6 binary 對 live diff；等價性＝g++ 乾淨編譯＋輸出等於手算公式值。
+
+### 🔖 RESUME（最新）
+- 已完成：(C# 已作廢移除) → C++ pivot、ContactForce 計算核心翻譯（root 鏡射、g++ 驗證、已 commit）。
+- 慣例確立：**翻譯檔鏡射 BCB6 相對路徑/檔名**（見 KNOWLEDGE「檔案位置與命名」）；CMake+g++/CTest 驗證；無 Borland 故對手算公式值驗證。
+- 下一步候選：(a) 翻 `cContact.cpp` 的計算消費端（CalculateTotalAirForce/GetMinForce/GetMaxIndexForceLimit，消費 ContactForce 的 SLK 資料；但 cContact 是 VCL 表單，需抽 calc-core）；(b) 翻另一個 leaf（Common/PickPlanner 或 Public 工具如 HTMD5/cJSON）；(c) 補 ContactForce 的 ReadFile/ini 載入（接 config）。
+- 驗證指令：`cd HT9011UC_Cpp_V3.33.906.0 && export PATH=/c/MinGW/bin:$PATH && cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=C:/MinGW/bin/g++.exe && cmake --build build && ctest --test-dir build`。
