@@ -10,7 +10,7 @@
 PROD_INFO_ST     Prod;
 SYSTEM_DEVICE_FORM DeviceForm;
 SYSTEM_DEVICE_FORM DeviceForm_File;
-SYSTEM_DEVICE_FORM DeviceForm_NET;                                              //Ifor 20181023 add SCC­n¨DFTP¸ê®Æ¥d±±¥[¤JContact¬ÛÃö¸ê®Æ
+SYSTEM_DEVICE_FORM DeviceForm_NET;                                              //Ifor 20181023 add SCCï¿½nï¿½DFTPï¿½ï¿½Æ¥dï¿½ï¿½ï¿½[ï¿½JContactï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 SYSTEM_TRAY_FORM TrayForm;
 TRAY_TYPE_PARA HotPlateForm;
 TRAY_TYPE_PARA HotPlateForm_File;
@@ -64,9 +64,9 @@ RUN_OFFSET Offset_File;
 RUN_INFO RunInfo;
 INVISIBLE_OFFSET InvisibleOffset;
 //RUN_INFO RunInfo2;
-class ARM_OFFSET *InArmOffSet[InOfsTotal];                                      //Steven 20140425 : ­«¾ãOffset
+class ARM_OFFSET *InArmOffSet[InOfsTotal];                                      //Steven 20140425 : ï¿½ï¿½ï¿½ï¿½Offset
 class ARM_OFFSET *OutArmOffSet[OutOfsTotal];
-class ARM_OFFSET *InArmOffSet_File[InOfsTotal];                                 //Steven 20140425 : ­«¾ãOffset
+class ARM_OFFSET *InArmOffSet_File[InOfsTotal];                                 //Steven 20140425 : ï¿½ï¿½ï¿½ï¿½Offset
 class ARM_OFFSET *OutArmOffSet_File[OutOfsTotal];
 class ARM_OFFSET *SortArmOffSet[SortOfsTotal];                                  //RogerYang 20250417 for HT9046AU add
 class ARM_OFFSET *SortArmOffSet_File[SortOfsTotal];                             //RogerYang 20250417 for HT9046AU add
@@ -94,16 +94,16 @@ const int OnLine=1;
 
 bool bInstallRotate=false;
 const int IFaceErr=555;
-RESERVE_EMPTY_POINT ReserverEmptyPoint[1000];                                   //ChungHung 20111215 ¹Á¸Õ±NFix3©ñº¡
+RESERVE_EMPTY_POINT ReserverEmptyPoint[1000];                                   //ChungHung 20111215 ï¿½ï¿½ï¿½Õ±NFix3ï¿½ï¿½
 RESERVE_EMPTY_POINT ReserverEmptyPointAutoClean[20];
-SHUTTLE_THREAD SThreadPara;                                                     //Steven 20110407 : Shuttle ThreadªºÅÜ¼Æ
+SHUTTLE_THREAD SThreadPara;                                                     //Steven 20110407 : Shuttle Threadï¿½ï¿½ï¿½Ü¼ï¿½
 
 const bool bReadFile=true;
 const bool bWriteFile=false;
 SYSTEM_SCANNER_AOI_IF ScannerAOIIF;                                             // 2012.12.10 , Joye , AMD HT-7046M
-const AnsiString asFileNameConfigByRecipe=AnsiString("configByRecipe.ini");     //JimmyChiu 20220601 : configÀx¦s¸òÀHrecipe
+const AnsiString asFileNameConfigByRecipe=AnsiString("configByRecipe.ini");     //JimmyChiu 20220601 : configï¿½xï¿½sï¿½ï¿½ï¿½Hrecipe
 
-AnsiString asNoRTBinFix[3]={"", "", ""};                                        //RogerYang 20250604 °¶´ú¤£¥i½Æ´úbin¥\¯à
+AnsiString asNoRTBinFix[3]={"", "", ""};                                        //RogerYang 20250604 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½iï¿½Æ´ï¿½binï¿½\ï¿½ï¿½
 
 //KenHsieh 20210813 : add CCD AUTO ALIGNMENT
 //==>
@@ -119,6 +119,63 @@ TDateTime dtEndLot=0.0;
 bool bNeedManualCheckEmptyTray=false;                                           //Jimmychiu 20250826 : Open Door Check Loader After TrayEnd
 bool bNeedOneByOnePickInArm=false;                                              //Jimmychiu 20250924 : Suck one by one when a pickup error occurs at the loader.
 TQPF_Timer tP62MachineStopTimer;                                                //Jimmychiu 20251205 : First Tray Check On Unloader
+// =============================================================================
+//  AI(W4) 20260626: Ungated RUN_INFO ctor/dtor + InitialData.
+//
+//  RUN_INFO RunInfo is a static global (defined above).  Its ctor fires at
+//  static-init time and requires RUN_INFO::RUN_INFO(), ~RUN_INFO(), and
+//  InitialData() to be linked.  All three are self-contained (TStringList,
+//  AnsiString, std::vector, enum constants -- all already available).
+//  Without them test_motor_w4 link fails with "undefined reference to ctor".
+// =============================================================================
+#include "cmydef.h"     // AI(W4) 20260626: tcTotalCount, SystemDate etc. used in InitialData
+
+RUN_INFO::RUN_INFO()
+{
+    slEventLogFile = new TStringList();
+    slExe          = new TStringList();
+    InitialData();
+}
+
+RUN_INFO::~RUN_INFO()
+{
+    slEventLogFile->Clear();
+    slExe->Clear();
+    delete slEventLogFile;
+    delete slExe;
+}
+
+void RUN_INFO::InitialData()
+{
+    iUPH         = 0;
+    iAvgUPH      = "0";
+    iUnloadCount = 0;
+    for (int i = 0; i < eTrayCount; i++)
+        sT6AutoYield[i] = "";
+    SystemTime      = "";
+    MTBA            = "";
+    MUBA            = "";
+    SoftwareDate    = "";
+    Factory         = "";
+    MachineDefine   = "";
+    SoftwareVersion = "";
+    for (int i = 0; i < tcTotalCount; i++)
+        ShowTempComp[i] = "";
+    LotStartTime   = "2020-01-01 00:00:00";
+    LotStartYear   = 2020;   // Sam 20240426: BarCoder Inspection Report
+    LotStartMonth  = 1;
+    LotStartDate   = 1;
+    LotStartHour   = 0;
+    LotStartMin    = 0;
+    LotStartSec    = 0;
+    LotEndTime     = "";
+    LotNo          = "";
+    SECSGEMVersion = "";
+    slEventLogFile->Clear();
+    vByLotJam.clear();
+    JamRateFileName = "";
+}
+
 //------------------------------------------------------------------------------
 //AI(W0-TAIL) 20260626: ==== begin gated function bodies (TODO W6) ====
 //  All defs below pull untranslated app headers/globals (mymotor/common/csystem/
@@ -150,9 +207,9 @@ _fastcall ARM_OFFSET::~ARM_OFFSET()
 {
     try
     {
-        tArmOffset->Clear();                                                    //Ifor 20170603 (wei) TStringList §R°£«e¥ý Clean
-        tArmPickOffset->Clear();                                                //Ifor 20170603 (wei) TStringList §R°£«e¥ý Clean
-        tArmPlaceOffset->Clear();                                               //Ifor 20170603 (wei) TStringList §R°£«e¥ý Clean
+        tArmOffset->Clear();                                                    //Ifor 20170603 (wei) TStringList ï¿½Rï¿½ï¿½ï¿½eï¿½ï¿½ Clean
+        tArmPickOffset->Clear();                                                //Ifor 20170603 (wei) TStringList ï¿½Rï¿½ï¿½ï¿½eï¿½ï¿½ Clean
+        tArmPlaceOffset->Clear();                                               //Ifor 20170603 (wei) TStringList ï¿½Rï¿½ï¿½ï¿½eï¿½ï¿½ Clean
         delete SingleOffSet;
         delete tArmOffset;
         delete tArmPickOffset;
@@ -217,21 +274,21 @@ void ARM_OFFSET::SetVariable2(double Pos)
     dArmVariable2=Pos;
     dXPitch[1]=Pos;
     tArmOffset->Strings[ofsArmPitch2]=AnsiString(Pos);                          //Steven 20140510 : Secs Gem
-}                                                                               //Steven 20131002 : XYÅÜ¶Z
+}                                                                               //Steven 20131002 : XYï¿½Ü¶Z
 //------------------------------------------------------------------------------
 void ARM_OFFSET::SetVariable3(double Pos)
 {
     dArmVariable3=Pos;
     dXPitch[2]=Pos;
     tArmOffset->Strings[ofsArmPitch3]=AnsiString(Pos);                          //Steven 20140510 : Secs Gem
-}                                                                               //Steven 20131002 : XYÅÜ¶Z
+}                                                                               //Steven 20131002 : XYï¿½Ü¶Z
 //------------------------------------------------------------------------------
 void ARM_OFFSET::SetVariable4(double Pos)
 {
     dArmVariable4=Pos;
     dXPitch[3]=Pos;
     tArmOffset->Strings[ofsArmPitch4]=AnsiString(Pos);                          //Steven 20140510 : Secs Gem
-}                                                                               //Steven 20131002 : XYÅÜ¶Z
+}                                                                               //Steven 20131002 : XYï¿½Ü¶Z
 //------------------------------------------------------------------------------
 void ARM_OFFSET::SetPickUp(double Pos)
 {
@@ -264,7 +321,7 @@ int GetSiteCount(bool IncludeCloseSite)
             iSiteCount=3;
         }
         else if(TestIF_File.iTestMode==QualSite1X4 ||
-                TestIF_File.iTestMode==_8Site1X4)                               //ChungHung 20150528 add for ®ü«ä _8Site1x4 //1x4
+                TestIF_File.iTestMode==_8Site1X4)                               //ChungHung 20150528 add for ï¿½ï¿½ï¿½ï¿½ _8Site1x4 //1x4
         {
             iSiteCount=4;
         }
@@ -301,7 +358,7 @@ int GetSiteCount(bool IncludeCloseSite)
             iSiteCount=16;
         }
         else if(TestIF_File.iTestMode==_32Site4X8M ||
-                TestIF_File.iTestMode==_32Site4X8N)                             //4x8   //ChungHung 20130627 alter TestIF--->TestIF_File ­×¥¿µLªk¶]32Site
+                TestIF_File.iTestMode==_32Site4X8N)                             //4x8   //ChungHung 20130627 alter TestIF--->TestIF_File ï¿½×¥ï¿½ï¿½Lï¿½kï¿½]32Site
         {
             iSiteCount=32;
         }
@@ -312,7 +369,7 @@ int GetSiteCount(bool IncludeCloseSite)
         {
             for(int j=0; j<MAX_SOCKET_COL; j++)
             {
-                if(TestIF_File.iSiteMap[i][j]>0)                                //Steven 20170302 (wei) : ½T»{­þ­ÓSite¦³¶}, ±q1¶}©l~32
+                if(TestIF_File.iSiteMap[i][j]>0)                                //Steven 20170302 (wei) : ï¿½Tï¿½{ï¿½ï¿½ï¿½ï¿½Siteï¿½ï¿½ï¿½}, ï¿½q1ï¿½}ï¿½l~32
                     iSiteCount++;
             }
         }
@@ -321,7 +378,7 @@ int GetSiteCount(bool IncludeCloseSite)
     return iSiteCount;
 }
 //------------------------------------------------------------------------------
-//Steven 20170901 (wei) : For ATK­n·s¼W¤u§@ÀÉ¤ñ¹ï¥ÎªºÀÉ®×
+//Steven 20170901 (wei) : For ATKï¿½nï¿½sï¿½Wï¿½uï¿½@ï¿½É¤ï¿½ï¿½Îªï¿½ï¿½É®ï¿½
 //------------------------------------------------------------------------------
 ATK_RECIPE_INFO *ATKRecipeInfo;
 ATK_RECIPE_INFO::ATK_RECIPE_INFO()
@@ -474,7 +531,7 @@ void ATK_RECIPE_INFO::SaveFile()
     int iSitemap=0,iRow=0,iCol=0;
     GetSiteNumberString(iSitemap, iRow, iCol);
     int iDir=SiteMapDirection();
-    AnsiString sSmartBin=AMR.GetNormalFailBin();                                //Spencerlin 20260202 : ¨ú¥X«D AutoRetest ©Î CateR ¤§ Fail Bin ¬° SmartBin
+    AnsiString sSmartBin=AMR.GetNormalFailBin();                                //Spencerlin 20260202 : ï¿½ï¿½ï¿½Xï¿½D AutoRetest ï¿½ï¿½ CateR ï¿½ï¿½ Fail Bin ï¿½ï¿½ SmartBin
     AnsiString sUsedSitesNumber=GetUsedSitesNumber(iDir);
     sSitemap="Sitemap=";
     sSitemap+=GetParameterFormat("s", IntToStr(iSitemap));
@@ -491,9 +548,9 @@ void ATK_RECIPE_INFO::SaveFile()
     SL->Add("Binprofile="+slBinPassFail->CommaText);
     SL->Add(sSortgate);
     SL->Add(sSitemap);                                                          //Jimmychiu 20230807 : #R230804-ATK-H9-01 , V3.21.792.1 ,Add the Sitemap items in information.txt
-    SL->Add("Smartbin="+sSmartBin);                                             //RogerYang 20260407: §ï¤j¤p¼g //Spencerlin 20260202 : ¨ú¥X«D AutoRetest ©Î CateR ¤§ Fail Bin ¬° SmartBin
+    SL->Add("Smartbin="+sSmartBin);                                             //RogerYang 20260407: ï¿½ï¿½jï¿½pï¿½g //Spencerlin 20260202 : ï¿½ï¿½ï¿½Xï¿½D AutoRetest ï¿½ï¿½ CateR ï¿½ï¿½ Fail Bin ï¿½ï¿½ SmartBin
     SL->SaveToFile(FileName);
-    SL->SaveToFile(FileName2);                                                  //Steven 20200317 : ATK»¡­n¦s¨â¥÷
+    SL->SaveToFile(FileName2);                                                  //Steven 20200317 : ATKï¿½ï¿½ï¿½nï¿½sï¿½ï¿½ï¿½
 }
 //------------------------------------------------------------------------------
 void ATK_RECIPE_INFO::GetSiteNumberString(int &iSitemap, int &iRow, int &iCol)  //Jimmychiu 20230807 : #R230804-ATK-H9-01 , V3.21.792.1 ,Add the Sitemap items in information.txt
@@ -620,10 +677,10 @@ AnsiString ATK_RECIPE_INFO::GetUsedSitesNumber(int iDir)                        
 //------------------------------------------------------------------------------
 int ATK_RECIPE_INFO::SiteMapDirection()                                         //Jimmychiu 20230807 : #R230804-ATK-H9-01 , V3.21.792.1 ,Add the Sitemap items in information.txt
 {
-    //³æ¦C¥Ñ¥ª¨ì¥k¬O1¡A³æ¦æ¥Ñ¤W¨ì¤U¬O2¡A³æ¦C¥Ñ¥k¨ì¥ª¬O3¡A³æ¦æ¥Ñ¤U¨ì¤W¬O4¡A¥Ñ¤W¨ì¤U¥B¥Ñ¥ª¨ì¥k¬O5¡A¥Ñ¥k¨ì¥ª¥B¥Ñ¤U¨ì¤W¬O6¡A¥Ñ¤W¨ì¤U¥B¥Ñ¥ª¨ì¥k¬O7¡A¥Ñ¤U¨ì¤W¥B¥Ñ¥k¨ì¥ª¬O8¡A¥Ñ¥k¨ì¥ª¥B¥Ñ¤W¨ì¤U¬O9¡A¥Ñ¥ª¨ì¥k¥B¥Ñ¤U¨ì¤W¬O10¡A¥Ñ¤W¨ì¤U¥B¥Ñ¥k¨ì¥ª¬O11¡A¥Ñ¤U¨ì¤W¥B¥Ñ¥ª¨ì¥k¬O12
+    //ï¿½ï¿½Cï¿½Ñ¥ï¿½ï¿½ï¿½kï¿½O1ï¿½Aï¿½ï¿½ï¿½Ñ¤Wï¿½ï¿½Uï¿½O2ï¿½Aï¿½ï¿½Cï¿½Ñ¥kï¿½ì¥ªï¿½O3ï¿½Aï¿½ï¿½ï¿½Ñ¤Uï¿½ï¿½Wï¿½O4ï¿½Aï¿½Ñ¤Wï¿½ï¿½Uï¿½Bï¿½Ñ¥ï¿½ï¿½ï¿½kï¿½O5ï¿½Aï¿½Ñ¥kï¿½ì¥ªï¿½Bï¿½Ñ¤Uï¿½ï¿½Wï¿½O6ï¿½Aï¿½Ñ¤Wï¿½ï¿½Uï¿½Bï¿½Ñ¥ï¿½ï¿½ï¿½kï¿½O7ï¿½Aï¿½Ñ¤Uï¿½ï¿½Wï¿½Bï¿½Ñ¥kï¿½ì¥ªï¿½O8ï¿½Aï¿½Ñ¥kï¿½ì¥ªï¿½Bï¿½Ñ¤Wï¿½ï¿½Uï¿½O9ï¿½Aï¿½Ñ¥ï¿½ï¿½ï¿½kï¿½Bï¿½Ñ¤Uï¿½ï¿½Wï¿½O10ï¿½Aï¿½Ñ¤Wï¿½ï¿½Uï¿½Bï¿½Ñ¥kï¿½ì¥ªï¿½O11ï¿½Aï¿½Ñ¤Uï¿½ï¿½Wï¿½Bï¿½Ñ¥ï¿½ï¿½ï¿½kï¿½O12
     int order=0, iExpectedValue=1;
     bool bCompliant=false;
-    //§PÂ_¬O§_ÃöSite¡A¦³Ãö¬°0
+    //ï¿½Pï¿½_ï¿½Oï¿½_ï¿½ï¿½Siteï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½0
     for(int i=0; i<TestSocket.iShtRow; i++)
     {
         for(int j=0; j<TestSocket.iShtCol; j++)
@@ -635,9 +692,9 @@ int ATK_RECIPE_INFO::SiteMapDirection()                                         
         }
     }
 
-    if(TestSocket.iShtRow==1)                                                   //³æ¦C
+    if(TestSocket.iShtRow==1)                                                   //ï¿½ï¿½C
     {
-        //³æ¦C¥Ñ¥ª¨ì¥k¬O1
+        //ï¿½ï¿½Cï¿½Ñ¥ï¿½ï¿½ï¿½kï¿½O1
         iExpectedValue=1;
         bCompliant=true;
         for(int i=0; i<TestSocket.iShtCol; i++)
@@ -652,7 +709,7 @@ int ATK_RECIPE_INFO::SiteMapDirection()                                         
 
         if(bCompliant==true)
             return 1;
-        //³æ¦C¥Ñ¥k¨ì¥ª¬O3
+        //ï¿½ï¿½Cï¿½Ñ¥kï¿½ì¥ªï¿½O3
         iExpectedValue=1;
         bCompliant=true;
         for(int i=TestSocket.iShtCol-1; i>=0; i--)
@@ -668,9 +725,9 @@ int ATK_RECIPE_INFO::SiteMapDirection()                                         
         if(bCompliant==true)
             return 3;
     }
-    else if(TestSocket.iShtCol==1)                                              //³æ¦æ
+    else if(TestSocket.iShtCol==1)                                              //ï¿½ï¿½ï¿½
     {
-        //³æ¦æ¥Ñ¤W¨ì¤U¬O2
+        //ï¿½ï¿½ï¿½Ñ¤Wï¿½ï¿½Uï¿½O2
         iExpectedValue=1;
         bCompliant=true;
         for(int i=0; i<TestSocket.iShtRow; i++)
@@ -685,7 +742,7 @@ int ATK_RECIPE_INFO::SiteMapDirection()                                         
 
         if(bCompliant==true)
             return 2;
-        //³æ¦æ¥Ñ¤U¨ì¤W¬O4
+        //ï¿½ï¿½ï¿½Ñ¤Uï¿½ï¿½Wï¿½O4
         iExpectedValue=1;
         bCompliant=true;
         for(int i=TestSocket.iShtRow-1; i>=0; i--)
@@ -703,7 +760,7 @@ int ATK_RECIPE_INFO::SiteMapDirection()                                         
     }
     else
     {
-        //¥Ñ¤W¨ì¤U¥B¥Ñ¥ª¨ì¥k¬O5
+        //ï¿½Ñ¤Wï¿½ï¿½Uï¿½Bï¿½Ñ¥ï¿½ï¿½ï¿½kï¿½O5
         iExpectedValue=1;
         bCompliant=true;
         for(int i=0; i<TestSocket.iShtRow; i++)
@@ -721,7 +778,7 @@ int ATK_RECIPE_INFO::SiteMapDirection()                                         
 
         if(bCompliant==true)
             return 5;
-        //¥Ñ¥k¨ì¥ª¥B¥Ñ¤U¨ì¤W¬O6
+        //ï¿½Ñ¥kï¿½ì¥ªï¿½Bï¿½Ñ¤Uï¿½ï¿½Wï¿½O6
         iExpectedValue=1;
         bCompliant=true;
         for(int i=TestSocket.iShtRow-1; i>=0; i--)
@@ -739,7 +796,7 @@ int ATK_RECIPE_INFO::SiteMapDirection()                                         
 
         if(bCompliant==true)
             return 6;
-        //¥Ñ¤W¨ì¤U¥B¥Ñ¥ª¨ì¥k¬O7
+        //ï¿½Ñ¤Wï¿½ï¿½Uï¿½Bï¿½Ñ¥ï¿½ï¿½ï¿½kï¿½O7
         iExpectedValue=1;
         bCompliant=true;
         for(int j=0; j<TestSocket.iShtCol; j++)
@@ -757,7 +814,7 @@ int ATK_RECIPE_INFO::SiteMapDirection()                                         
 
         if(bCompliant==true)
             return 7;
-        //¥Ñ¤U¨ì¤W¥B¥Ñ¥k¨ì¥ª¬O8
+        //ï¿½Ñ¤Uï¿½ï¿½Wï¿½Bï¿½Ñ¥kï¿½ì¥ªï¿½O8
         iExpectedValue=1;
         bCompliant=true;
         for(int j=TestSocket.iShtCol-1; j>=0; j--)
@@ -775,7 +832,7 @@ int ATK_RECIPE_INFO::SiteMapDirection()                                         
 
         if(bCompliant==true)
             return 8;
-        //¥Ñ¥k¨ì¥ª¥B¥Ñ¤W¨ì¤U¬O9
+        //ï¿½Ñ¥kï¿½ì¥ªï¿½Bï¿½Ñ¤Wï¿½ï¿½Uï¿½O9
         iExpectedValue=1;
         bCompliant=true;
         for(int i=0; i<TestSocket.iShtRow; i++)
@@ -793,7 +850,7 @@ int ATK_RECIPE_INFO::SiteMapDirection()                                         
 
         if(bCompliant==true)
             return 9;
-        //¥Ñ¥ª¨ì¥k¥B¥Ñ¤U¨ì¤W¬O10
+        //ï¿½Ñ¥ï¿½ï¿½ï¿½kï¿½Bï¿½Ñ¤Uï¿½ï¿½Wï¿½O10
         iExpectedValue=1;
         bCompliant=true;
         for(int i=TestSocket.iShtRow-1; i>=0; i--)
@@ -811,7 +868,7 @@ int ATK_RECIPE_INFO::SiteMapDirection()                                         
 
         if(bCompliant==true)
             return 10;
-        //¥Ñ¤W¨ì¤U¥B¥Ñ¥k¨ì¥ª¬O11
+        //ï¿½Ñ¤Wï¿½ï¿½Uï¿½Bï¿½Ñ¥kï¿½ì¥ªï¿½O11
         iExpectedValue=1;
         bCompliant=true;
         for(int j=TestSocket.iShtCol-1; j>=0; j--)
@@ -829,7 +886,7 @@ int ATK_RECIPE_INFO::SiteMapDirection()                                         
 
         if(bCompliant==true)
             return 11;
-        //¥Ñ¤U¨ì¤W¥B¥Ñ¥ª¨ì¥k¬O12
+        //ï¿½Ñ¤Uï¿½ï¿½Wï¿½Bï¿½Ñ¥ï¿½ï¿½ï¿½kï¿½O12
         iExpectedValue=1;
         bCompliant=true;
         for(int i=0; i<TestSocket.iShtRow; i++)
@@ -979,7 +1036,7 @@ void RUN_INFO::SaveJamRateByDay(bool bUpload)                                   
     MyForceDirectories(sDailyJamPath);
 
     sFileName.sprintf("%s_%s_%s_DailyJamRate.txt", IniConfig.sMachineType, IniConfig.SocketHandlerID, sToday);
-    DailyJamFileName=FileInfo().PathCombin(sDailyJamPath, sFileName);           //Steven 20250812 : ­×¥¿¤W¶ÇÀÉ¦W
+    DailyJamFileName=FileInfo().PathCombin(sDailyJamPath, sFileName);           //Steven 20250812 : ï¿½×¥ï¿½ï¿½Wï¿½ï¿½ï¿½É¦W
 
     str.sprintf("Date: %s", sToday);
     slReport->Add(str);
@@ -1034,7 +1091,7 @@ void RUN_INFO::SaveJamRateByDay(bool bUpload)                                   
     delete slReport;
 
     if(bUpload==true &&
-       IniConfig.bN10_DailyUploadProdData==true)                                //Steven 20250527 : ¤W¶ÇJam Rate
+       IniConfig.bN10_DailyUploadProdData==true)                                //Steven 20250527 : ï¿½Wï¿½ï¿½Jam Rate
     {
         if(FileExists(DailyJamFileName)==true)
         {
@@ -1095,7 +1152,7 @@ void RUN_INFO::ReadJamRateByDay()                                               
     MyForceDirectories(sDailyJamPath);
 
     sFileName.sprintf("%s_%s_%s_DailyJamRate.txt", IniConfig.sMachineType, IniConfig.SocketHandlerID, sToday);
-    DailyJamFileName=FileInfo().PathCombin(sDailyJamPath, sFileName);           //Steven 20250812 : ­×¥¿¤W¶ÇÀÉ¦W
+    DailyJamFileName=FileInfo().PathCombin(sDailyJamPath, sFileName);           //Steven 20250812 : ï¿½×¥ï¿½ï¿½Wï¿½ï¿½ï¿½É¦W
 
     if(FileExists(DailyJamFileName)==false)
         return;
@@ -1145,7 +1202,7 @@ void RUN_INFO::ReadJamRateByDay()                                               
     delete sList;
 }
 //------------------------------------------------------------------------------
-void RUN_INFO::SaveJamRateByLot(bool bUpload)                                   //Steven 20200415 : SCC­nBy Lot Jam Rate
+void RUN_INFO::SaveJamRateByLot(bool bUpload)                                   //Steven 20200415 : SCCï¿½nBy Lot Jam Rate
 {
     AnsiString str, sFileName, sPath;
     int iJamCount=0, iTag;
@@ -1154,7 +1211,7 @@ void RUN_INFO::SaveJamRateByLot(bool bUpload)                                   
     if(bLotStart==false || LotNo=="")
         return ;
 
-    if(IniConfig.bVTESTFunction==true)                                          //jou 20241015 : by lot jamstat³ø§i­n¨D
+    if(IniConfig.bVTESTFunction==true)                                          //jou 20241015 : by lot jamstatï¿½ï¿½ï¿½iï¿½nï¿½D
     {
         sJamRatePath="D:\\PnPh\\report\\LotAlarm";
         sFileName.sprintf("%s-%s-%s-%s-%s-%s-%04d%02d%02d%02d%02d%02d.txt",     IniConfig.SocketHandlerID,
@@ -1167,7 +1224,7 @@ void RUN_INFO::SaveJamRateByLot(bool bUpload)                                   
     }
     else
     {
-        sFileName.sprintf("%s_%s_%04d%02d%02d-%02d%02d%02d_%s_%s_%s_JamRateByLot.txt",                                  //Steven 20250812 : ­×¥¿¤W¶ÇÀÉ¦W
+        sFileName.sprintf("%s_%s_%04d%02d%02d-%02d%02d%02d_%s_%s_%s_JamRateByLot.txt",                                  //Steven 20250812 : ï¿½×¥ï¿½ï¿½Wï¿½ï¿½ï¿½É¦W
                                                                                 IniConfig.sMachineType,
                                                                                 IniConfig.SocketHandlerID,
                                                                                 SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec,
@@ -1358,7 +1415,7 @@ void ReadPassword()
     }
     else
     {
-        memset(&USER.RecordCT, 0, sizeof(PASS_WORD));                           //Steven 20200514 : USER.ID[0][0] --> USER.RecordCT ¸Ñ°£°O¾ÐÅé¯}Ãa
+        memset(&USER.RecordCT, 0, sizeof(PASS_WORD));                           //Steven 20200514 : USER.ID[0][0] --> USER.RecordCT ï¿½Ñ°ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½}ï¿½a
     }
 }
 //------------------------------------------------------------------------------
@@ -1386,7 +1443,7 @@ bool CheckFileCanAccess(char *cFName)
 //------------------------------------------------------------------------------
 void InitialReserveEmptyPoint()
 {
-    for(int j=0; j<1000; j++)                                                   //ChungHung 20111215 ¹Á¸Õ±NFix3©ñº¡
+    for(int j=0; j<1000; j++)                                                   //ChungHung 20111215 ï¿½ï¿½ï¿½Õ±NFix3ï¿½ï¿½
     {
         ReserverEmptyPoint[j].bHasData=false;
     }
@@ -1407,10 +1464,10 @@ void ReserveEmptyPoint(int iAutoTray, int iXpos, int iYpos)
     if((EnableFix3UseCylinder()) && iAutoTray==MManualTray3)                    //ChungHung 20140722 add for HT9046LA
         return;
 
-    if(iAutoTray==MMAuto1 ||iAutoTray==iAutoRight ||                            //jou 20170719 (wei) : ­×¥¿outarm ©ñ¸m¨ì Auto3 ®É·|ªÅ®æ²§±`
+    if(iAutoTray==MMAuto1 ||iAutoTray==iAutoRight ||                            //jou 20170719 (wei) : ï¿½×¥ï¿½outarm ï¿½ï¿½mï¿½ï¿½ Auto3 ï¿½É·|ï¿½Å®æ²§ï¿½`
        iAutoTray==iFixRight || iFixRightHalf)
     {
-        for(int i=0; i<1000; i++)                                               //ChungHung 20111215 ¹Á¸Õ±NFix3©ñº¡
+        for(int i=0; i<1000; i++)                                               //ChungHung 20111215 ï¿½ï¿½ï¿½Õ±NFix3ï¿½ï¿½
         {
             if(ReserverEmptyPoint[i].bHasData==false)
             {
@@ -1430,10 +1487,10 @@ void ReversionEmptyPoint()
 
     if(MOT[MMAuto1].Tray.FullIC())
     {
-        for(int i=0; i<1000; i++)                                               //ChungHung 20111215 ¹Á¸Õ±NFix3©ñº¡
+        for(int i=0; i<1000; i++)                                               //ChungHung 20111215 ï¿½ï¿½ï¿½Õ±NFix3ï¿½ï¿½
         {
             if(ReserverEmptyPoint[i].bHasData &&
-               ReserverEmptyPoint[i].iWhichAuto==MMAuto1)                       //ChungHung 20111215 ¹Á¸Õ±NFix3©ñº¡
+               ReserverEmptyPoint[i].iWhichAuto==MMAuto1)                       //ChungHung 20111215 ï¿½ï¿½ï¿½Õ±NFix3ï¿½ï¿½
             {
                 ReserverEmptyPoint[i].bHasData=false;
             }
@@ -1441,7 +1498,7 @@ void ReversionEmptyPoint()
         return;
     }
 
-    for(int i=0; i<1000; i++)                                                   //ChungHung 20111215 ¹Á¸Õ±NFix3©ñº¡
+    for(int i=0; i<1000; i++)                                                   //ChungHung 20111215 ï¿½ï¿½ï¿½Õ±NFix3ï¿½ï¿½
     {
         if(ReserverEmptyPoint[i].bHasData)
         {
@@ -1540,8 +1597,8 @@ void TestModeDutOnOffToLastSetUseTestSocket()                                   
 //---------------------------------------------------------------------------
 void LastSetUseTestSocketToTestModeDutOnOff()                                   //Steven 20231018 : fixed for bLastSetInSetUpFile
 {
-    if(HasICUnderMachine() ||                                                   //Steven 20160518 : ¾÷¥x¤º¦³®Æªº¸Ü, ¤£¯àÅÜ§óª¬ºA
-       HasAnyICInMachine())                                                     //kevin 20160818 ¾÷¥x¥Í²£¤¤¤£¯à§ï¸ê®Æ
+    if(HasICUnderMachine() ||                                                   //Steven 20160518 : ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½Æªï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½Ü§óª¬ºA
+       HasAnyICInMachine())                                                     //kevin 20160818 ï¿½ï¿½ï¿½xï¿½Í²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     {
         TestMode.iTemperatureMode   =LastSet.iTemperature;
         TestMode.iRunMode           =LastSet.iRealDummy;
@@ -1584,15 +1641,15 @@ bool ReadLastDataFile()
     DWORD rdfz;
     HANDLE Fp;
 
-    ReadTestMode();                                                             //Ifor 20161116 Fix ¶}ÃöSite Even ¬ö¿ý²§±`  //Steven 20231018 : move up
-    LastSet.bD41TestSocketICCheckSkip=false;                                    //Steven 20160328 : [D41]±j¨îfalse, ´N¬O¤£¯à¸õ¹Lindex check
+    ReadTestMode();                                                             //Ifor 20161116 Fix ï¿½}ï¿½ï¿½Site Even ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½`  //Steven 20231018 : move up
+    LastSet.bD41TestSocketICCheckSkip=false;                                    //Steven 20160328 : [D41]ï¿½jï¿½ï¿½false, ï¿½Nï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Lindex check
     //ChungHung 20120829 add
     iSize1 = GetFileLength("D:\\HT9045\\system\\lastdata.dat");
     iSize2 = GetFileLength("d:\\HT9045\\system\\lastdata_backup.dat");
     FILE *Fp3;
     if(iSize1==0 && iSize2==0)
     {
-        //Åª¨ú³Æ¥÷ªº¸ê®Æ
+        //Åªï¿½ï¿½ï¿½Æ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         Fp3=std::fopen("D:\\HT9045\\system\\lastdata_backup2.dat", "rb");
         if(Fp3!=NULL)
         {
@@ -1668,7 +1725,7 @@ bool ReadLastDataFile()
 
     if(CosFunction.bLastSetInSetUpFile)                                         //Steven 20111019
     {
-        //Ifor 20161229add ¶}±ÒLast Set In SetUp File ¥\¯à®É,Setup File ¤¤µLTestMode¸ê®Æ¾É­P²§±`°ÝÃD
+        //Ifor 20161229add ï¿½}ï¿½ï¿½Last Set In SetUp File ï¿½\ï¿½ï¿½ï¿½,Setup File ï¿½ï¿½ï¿½LTestModeï¿½ï¿½Æ¾É­Pï¿½ï¿½ï¿½`ï¿½ï¿½ï¿½D
         //==>
         AnsiString szDir=GetRecipeFileName("TestMode.Data");
         if(FileExists(szDir)==true)
@@ -1676,21 +1733,21 @@ bool ReadLastDataFile()
             if(CosFunction.bProgramStartOnLine &&
                SystemInitialOK==false &&
                LastSet.iTester!=ON_LINE &&
-               LastSet.iRealDummy!=REALLY)                                      //Sam 20210423 : µ{¦¡¶}±Ò®É¤Á´«¬° OnLine/Real
+               LastSet.iRealDummy!=REALLY)                                      //Sam 20210423 : ï¿½{ï¿½ï¿½ï¿½}ï¿½Ò®É¤ï¿½ï¿½ï¿½ï¿½ï¿½ OnLine/Real
             {
                 LastSet.iTester=ON_LINE;
                 LastSet.iRealDummy=REALLY;
             }
 
             LastSetUseTestSocketToTestModeDutOnOff();                           //Steven 20231018 : fixed for bLastSetInSetUpFile
-            if(bLoadMachineRecord)                                              //JerryYang 20160614 ¥Î¨Ó§PÂ_¬O§_°õ¦æ¹LLoadMachineRecord¨ç¦¡ Á×§KÁÙ¨SÅª¨ú¨ì¾÷¥x¸ê®ÆLastset´N³Q§ï±¼
+            if(bLoadMachineRecord)                                              //JerryYang 20160614 ï¿½Î¨Ó§Pï¿½_ï¿½Oï¿½_ï¿½ï¿½ï¿½ï¿½LLoadMachineRecordï¿½ç¦¡ ï¿½×§Kï¿½Ù¨SÅªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½Lastsetï¿½Nï¿½Qï¿½ï±¼
             {
-                if(LastSet.iTester!=TestMode.iTestConnection)                   //Steven 20211103 : ·s¼WLog,Á×§KÅªÀÉ§ïª¬ºA¨S¦³¬ö¿ý
+                if(LastSet.iTester!=TestMode.iTestConnection)                   //Steven 20211103 : ï¿½sï¿½WLog,ï¿½×§KÅªï¿½É§ïª¬ï¿½Aï¿½Sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 {
                     if(TestMode.iTestConnection==OFF_LINE)                      //Steven 20140815
                     {
                         if(IniConfig.bI27_ManualSortMode &&
-                           bRunManualSortMode==true)                            //Steven 20150915 : For TSMC ¤â°Ê¾ã½L¥\¯à
+                           bRunManualSortMode==true)                            //Steven 20150915 : For TSMC ï¿½ï¿½Ê¾ï¿½Lï¿½\ï¿½ï¿½
                             NewRecordProcess("MES2145", "XXXX  Tester MANUAL MODE  XXXX");
                         else
                             NewRecordProcess("MES2146", "XXXX  Tester OFF-Line  XXXX");
@@ -1717,7 +1774,7 @@ bool ReadLastDataFile()
                     {
                         NewRecordProcess("MES2151", "Change Hot Mode");
                     }
-                    else if(TestMode.iTemperatureMode==Tempture_AmbientHot)     //kevin 20140918 ±`·Å¥[¼ö «í·Å±±¨î
+                    else if(TestMode.iTemperatureMode==Tempture_AmbientHot)     //kevin 20140918 ï¿½`ï¿½Å¥[ï¿½ï¿½ ï¿½ï¿½ï¿½Å±ï¿½ï¿½ï¿½
                     {
                         NewRecordProcess("MES2152", "Change Ambient Hot Mode");
                     }
@@ -1727,7 +1784,7 @@ bool ReadLastDataFile()
                     }
                 }
 
-//                bLoadMachineRecord=false;   //jou 20170926    //Steven 20200703 : mark, §ï¦¨false·|¾É­P«á­±³£¤£§ó·s
+//                bLoadMachineRecord=false;   //jou 20170926    //Steven 20200703 : mark, ï¿½ï¦¨falseï¿½|ï¿½É­Pï¿½á­±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½s
                 LastSet.iTemperature    =TestMode.iTemperatureMode;
                 LastSet.iRealDummy      =TestMode.iRunMode;
                 LastSet.iTester         =TestMode.iTestConnection;
@@ -1735,19 +1792,19 @@ bool ReadLastDataFile()
             TestModeDutOnOffToLastSetUseTestSocket();                           //Steven 20231018 : fixed for bLastSetInSetUpFile
         }
         //<==
-        //Ifor 20161229 (Steven) add ¶}±ÒLast Set In SetUp File ¥\¯à®É,Setup File ¤¤µLTestMode¸ê®Æ¾É­P²§±`°ÝÃD
+        //Ifor 20161229 (Steven) add ï¿½}ï¿½ï¿½Last Set In SetUp File ï¿½\ï¿½ï¿½ï¿½,Setup File ï¿½ï¿½ï¿½LTestModeï¿½ï¿½Æ¾É­Pï¿½ï¿½ï¿½`ï¿½ï¿½ï¿½D
     }
 
-    if(LastSet.iRunStartMode==rsmQAMode && bQAModeFinishCleanOut==true)         //Steven 20141023 : QA°µ§¹«áªºBin
+    if(LastSet.iRunStartMode==rsmQAMode && bQAModeFinishCleanOut==true)         //Steven 20141023 : QAï¿½ï¿½ï¿½ï¿½ï¿½áªºBin
     {
         if(fMain!=NULL &&
-           CUSTOMER_CODE!=CC_KYEC_LEE)                                          //Ifor 20201027 add:KYEC QA Mode ¤£¤ÁOffline ¼Ò¦¡
+           CUSTOMER_CODE!=CC_KYEC_LEE)                                          //Ifor 20201027 add:KYEC QA Mode ï¿½ï¿½ï¿½ï¿½Offline ï¿½Ò¦ï¿½
         {
-            fMain->ModifyTester(OFF_LINE);                                      //Steven 20191218 : ¾ã¦X­×§ïLastSet.iTester
+            fMain->ModifyTester(OFF_LINE);                                      //Steven 20191218 : ï¿½ï¿½Xï¿½×§ï¿½LastSet.iTester
         }
     }
 
-    if(LastSet.__bBinData32==false)                                             //Steven 20121112 : RS232¤ä´©32Bin ¥Î¨Ó±NÂÂªº¸ê®ÆÂà¨ì·sªº
+    if(LastSet.__bBinData32==false)                                             //Steven 20121112 : RS232ï¿½ä´©32Bin ï¿½Î¨Ó±Nï¿½Âªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½
     {
         for(int i=0; i<4; i++)
         {
@@ -1756,11 +1813,11 @@ bool ReadLastDataFile()
                 LastSet.iBinData32[i][j]=LastSet.iBinData[i][j];
             }
         }
-        LastSet.__bBinData32=true;                                              //Steven 20140403 : 256Bin ¥Î¨Ó±NÂÂªº¸ê®ÆÂà¨ì·sªº
-        LastSet.bBinData32=true;                                                //Steven 20140403 : 256Bin ¥Î¨Ó±NÂÂªº¸ê®ÆÂà¨ì·sªº
+        LastSet.__bBinData32=true;                                              //Steven 20140403 : 256Bin ï¿½Î¨Ó±Nï¿½Âªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½
+        LastSet.bBinData32=true;                                                //Steven 20140403 : 256Bin ï¿½Î¨Ó±Nï¿½Âªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½
     }
 
-    if(LastSet.bBinData32==false)                                               //Steven 20140403 : 256Bin ¥Î¨Ó±NÂÂªº¸ê®ÆÂà¨ì·sªº
+    if(LastSet.bBinData32==false)                                               //Steven 20140403 : 256Bin ï¿½Î¨Ó±Nï¿½Âªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½
     {
         for(int i=0; i<4; i++)
         {
@@ -1773,8 +1830,8 @@ bool ReadLastDataFile()
         LastSet.bBinData32=true;
     }
 
-    if(CUSTOMER_CODE==CC_SCS ||                                                 //Steven 20130610 : SCS­n¨D±j¨î¶}±Ò
-       CUSTOMER_CODE==CC_ASE_M)                                                 //Ifor 20190926 : add ASEM±j¨î¶}±Ò[A03]
+    if(CUSTOMER_CODE==CC_SCS ||                                                 //Steven 20130610 : SCSï¿½nï¿½Dï¿½jï¿½ï¿½}ï¿½ï¿½
+       CUSTOMER_CODE==CC_ASE_M)                                                 //Ifor 20190926 : add ASEMï¿½jï¿½ï¿½}ï¿½ï¿½[A03]
     {
         IniConfig.bA03UseAfterHomeCarryAndSuckIcToRBin=true;
     }
@@ -1784,7 +1841,7 @@ bool ReadLastDataFile()
         LastSet.SoftSpeed[i]=(LastSet.SoftSpeed[i]<=1000)?10000:LastSet.SoftSpeed[i];                                   //Steven 20161211 : provide initial soft speed as 10000
     #endif
 
-    if(IniConfig.bSPILFunction==true)                                           //JerryYang 20170328 (Jou) ª¿«~«È¤á½X²Î¤@¥ÎSPILFunction
+    if(IniConfig.bSPILFunction==true)                                           //JerryYang 20170328 (Jou) ï¿½ï¿½ï¿½~ï¿½È¤ï¿½Xï¿½Î¤@ï¿½ï¿½SPILFunction
     {                                                                           //jou 2014-03-28 SPIL Handler  On-line & Offline Switch Flow
         LastSet.MusicSelect[6]=3;
         LastSet.MessageLight[6][0]=0;
@@ -1792,7 +1849,7 @@ bool ReadLastDataFile()
         LastSet.MessageLight[6][2]=2;
     }
 
-    bool bflag=false;                                                           //ChungHung 20140401 add fix LastSet ¶}ÃöSite ·Ó¦¨ªºHangUp ¦]¬°¦P®É§ï¨ìLastSet©Ò·Ó¦¨
+    bool bflag=false;                                                           //ChungHung 20140401 add fix LastSet ï¿½}ï¿½ï¿½Site ï¿½Ó¦ï¿½ï¿½ï¿½HangUp ï¿½]ï¿½ï¿½ï¿½Pï¿½É§ï¿½ï¿½LastSetï¿½Ò·Ó¦ï¿½
     for(int i=0; i<2; i++)
     {
         for(int j=0; j<4; j++)
@@ -1818,9 +1875,9 @@ bool ReadLastDataFile()
         }
 
         if(fMain!=NULL)
-            fMain->ShowTestHeadComp(false);                                     //jou 2015-06-02 ¦³­×§ï¶}ÃöSite»Ý­n­«Ã¸µe­±
+            fMain->ShowTestHeadComp(false);                                     //jou 2015-06-02 ï¿½ï¿½ï¿½×§ï¿½}ï¿½ï¿½Siteï¿½Ý­nï¿½ï¿½Ã¸ï¿½eï¿½ï¿½
     }
-    LastSet.bD41TestSocketICCheckSkip=false;                                    //Steven 20160328 : [D41]±j¨îfalse, ´N¬O¤£¯à¸õ¹Lindex check
+    LastSet.bD41TestSocketICCheckSkip=false;                                    //Steven 20160328 : [D41]ï¿½jï¿½ï¿½false, ï¿½Nï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Lindex check
     if(Tri_Temp_Machine==1)                                                     //Ztex 2024.02.19 Add Temp Pos Shift For Shuttle
     {
         LastSet.TempPosShift_Shuttle[0][0]=15;
@@ -1828,7 +1885,7 @@ bool ReadLastDataFile()
         LastSet.TempPosShift_Shuttle[1][0]=15;
         LastSet.TempPosShift_Shuttle[1][1]=-40;
     }
-    else if(FIX3_FULL_PLACE==Fix3K_ShortShuttle)                                //wei 20160328 ­×§ï¤@¶}©l´NÅª¨ú¸ê®Æ
+    else if(FIX3_FULL_PLACE==Fix3K_ShortShuttle)                                //wei 20160328 ï¿½×§ï¿½@ï¿½}ï¿½lï¿½NÅªï¿½ï¿½ï¿½ï¿½ï¿½
     {
         LastSet.TempPosShift_Shuttle[0][0]=15;
         LastSet.TempPosShift_Shuttle[0][1]=90;
@@ -1868,7 +1925,7 @@ bool ReadLastDataFile()
         }
     }
 
-    if(CUSTOMER_CODE==CC_KYEC_LEE)                                              //Ifor 20210112 add: KYEC ­n¨DStart Mode ¸ê®Æ¼g¦º¤£¥i­×§ï
+    if(CUSTOMER_CODE==CC_KYEC_LEE)                                              //Ifor 20210112 add: KYEC ï¿½nï¿½DStart Mode ï¿½ï¿½Æ¼gï¿½ï¿½ï¿½ï¿½ï¿½iï¿½×§ï¿½
     {
         LastSet.iStartMode=2;
         LastSet.bCTClear[0][0]=true;
@@ -1888,7 +1945,7 @@ bool WriteLastDataFile(bool BackUp2, bool bNotContact)
 {
     bool flag=true;
 
-    LastSet.bBinData32=true;                                                    //Steven 20121112 : RS232¤ä´©32Bin ¥Î¨Ó±NÂÂªº¸ê®ÆÂà¨ì·sªº
+    LastSet.bBinData32=true;                                                    //Steven 20121112 : RS232ï¿½ä´©32Bin ï¿½Î¨Ó±Nï¿½Âªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½
 
     DWORD wtfz;
     HANDLE Fp;
@@ -1913,7 +1970,7 @@ bool WriteLastDataFile(bool BackUp2, bool bNotContact)
     {
         Fp=CreateFile("D:\\HT9045\\system\\lastdata.dat", FILE_SHARE_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
     }
-    try                                                                         //JerryYang 20220923 : add ¨Ò¥~³B²z
+    try                                                                         //JerryYang 20220923 : add ï¿½Ò¥~ï¿½Bï¿½z
     {
         if(Fp!=INVALID_HANDLE_VALUE)
         {
@@ -1959,7 +2016,7 @@ bool WriteLastDataFile(bool BackUp2, bool bNotContact)
 
     if(bNotContact==false)
     {
-        AnsiString sRecipePath="";                                              //AI(ht9045-config) 20260508 (RogerYang) : VTESTä¡¤ù¸ê®Æ¸òÀHRecipe
+        AnsiString sRecipePath="";                                              //AI(ht9045-config) 20260508 (RogerYang) : VTESTä¡¤ï¿½ï¿½ï¿½Æ¸ï¿½ï¿½HRecipe
         if(IniConfig.bVTESTFunction && CosFunction.bUseHeadContactCount)
             sRecipePath=GetRecipeFileName("HandlerCondition.Data");
 
@@ -1971,8 +2028,8 @@ bool WriteLastDataFile(bool BackUp2, bool bNotContact)
                 str2.sprintf("HeadContactCount%d_%d", i, j);
                 str3.sprintf("HeadContactCountHistory%d_%d", i, j);
 
-                //Steven 20211215 : §ï¦¨¤£¦sChange Log
-                if(sRecipePath!="")                                             //AI(ht9045-config) 20260508 (RogerYang) : VTEST x=0ä¡¤ù¼g¤JRecipe
+                //Steven 20211215 : ï¿½ï¦¨ï¿½ï¿½ï¿½sChange Log
+                if(sRecipePath!="")                                             //AI(ht9045-config) 20260508 (RogerYang) : VTEST x=0ä¡¤ï¿½ï¿½gï¿½JRecipe
                 {
                     WriteIniDataNoLog(sRecipePath, "O_Count", "O_14"+AnsiString(str1), IniConfig.ContactSet[0][i][j]              );
                     WriteIniDataNoLog(sRecipePath, "O_Count", "O_14"+AnsiString(str2), IniConfig.HeadContactCount[0][i][j]        );
@@ -1994,7 +2051,7 @@ bool WriteLastDataFile(bool BackUp2, bool bNotContact)
         }
     }
 
-    if(IniConfig.iVibratorHP1>100000000)                                        //JerryYang 20200612 ®¶°Ê°¨¹F§@°Ê®É¶¡²Ö­p
+    if(IniConfig.iVibratorHP1>100000000)                                        //JerryYang 20200612 ï¿½ï¿½ï¿½Ê°ï¿½ï¿½Fï¿½@ï¿½Ê®É¶ï¿½ï¿½Ö­p
     {
         IniConfig.iVibratorHP1=0;
         RecordProcess("Clear HP vibrator time");
@@ -2018,13 +2075,13 @@ bool WriteLastDataFile(bool BackUp2, bool bNotContact)
         RecordProcess("Clear Unloader vibrator time");
     }
 
-    //Steven 20211215 : §ï¦¨¤£¦sChange Log
+    //Steven 20211215 : ï¿½ï¦¨ï¿½ï¿½ï¿½sChange Log
     WriteIniDataNoLog(sPath, "Vibrate_Time", "iVibratorHP1",        IniConfig.iVibratorHP1     );
     WriteIniDataNoLog(sPath, "Vibrate_Time", "iVibratorSht1",       IniConfig.iVibratorSht1    );
     WriteIniDataNoLog(sPath, "Vibrate_Time", "iVibratorSht2",       IniConfig.iVibratorSht2    );
     WriteIniDataNoLog(sPath, "Vibrate_Time", "iVibratorUnloader",   IniConfig.iVibratorUnloader);
 
-    if(CosFunction.bUseSocketContactCount)                                      //Sam 20220720 : ·s¼W¤@²Õ Socket Count
+    if(CosFunction.bUseSocketContactCount)                                      //Sam 20220720 : ï¿½sï¿½Wï¿½@ï¿½ï¿½ Socket Count
     {
         for(int i=0; i<TestSocket.iShtRow; i++)
         {
@@ -2054,7 +2111,7 @@ bool WriteLastDataFile(bool BackUp2, bool bNotContact)
     return flag;
 }
 //---------------------------------------------------------------------------
-//  ¥H¤U¬OSteven±N­ì¥»ªº lastdata.dat§ï¦¨ LastSet.ini 20100811
+//  ï¿½Hï¿½Uï¿½OStevenï¿½Nï¿½ì¥»ï¿½ï¿½ lastdata.datï¿½ï¦¨ LastSet.ini 20100811
 //---------------------------------------------------------------------------
 void ProcessLastSetIni_RMS(bool bRead)
 {
@@ -2067,24 +2124,24 @@ void ProcessLastSetIni_RMS(bool bRead)
     {
         if(IniConfig.bShowLotInfo)
         {
-            if(CUSTOMER_CODE==CC_KYEC_LEE)                                      //Ifor 20161229 (Steven) dd KYEC ³ì´¼­n¨D Ãö³¬N05¥\¯à¿ï¶µ
+            if(CUSTOMER_CODE==CC_KYEC_LEE)                                      //Ifor 20161229 (Steven) dd KYEC ï¿½ì´¼ï¿½nï¿½D ï¿½ï¿½ï¿½ï¿½N05ï¿½\ï¿½ï¿½ï¶µ
             {
-                IniConfig.bEnableRms  = false;                                  //Ifor 20161229 KYEC ³ì´¼­n¨D±j¨îÃö³¬ Enable RMS ¥\¯à
-                IniConfig.bCheckFile  = false;                                  //Ifor 20161229 KYEC ³ì´¼­n¨D±j¨îÃö³¬ Enable check file ¥\¯à
-                IniConfig.bEnableRmsCheckSetupFile=false;                       //Ifor 20230516 add: TFAMD ­n¨D¤u§@ÀÉÅçÃÒ
+                IniConfig.bEnableRms  = false;                                  //Ifor 20161229 KYEC ï¿½ì´¼ï¿½nï¿½Dï¿½jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Enable RMS ï¿½\ï¿½ï¿½
+                IniConfig.bCheckFile  = false;                                  //Ifor 20161229 KYEC ï¿½ì´¼ï¿½nï¿½Dï¿½jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Enable check file ï¿½\ï¿½ï¿½
+                IniConfig.bEnableRmsCheckSetupFile=false;                       //Ifor 20230516 add: TFAMD ï¿½nï¿½Dï¿½uï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             }
             else
             {
                 IniConfig.bEnableRms  =CheckAndReadIniData(sPath, str, str+" Enable",       false);
                 IniConfig.bCheckFile  =CheckAndReadIniData(sPath, str, "Enable Check File", false);                     //Steven 20101208
-                IniConfig.bEnableRmsCheckSetupFile  =CheckAndReadIniData(sPath, str, "Enable Check Setup File", false);                                         //Ifor 20230516 add: TFAMD ­n¨D¤u§@ÀÉÅçÃÒ
+                IniConfig.bEnableRmsCheckSetupFile  =CheckAndReadIniData(sPath, str, "Enable Check Setup File", false);                                         //Ifor 20230516 add: TFAMD ï¿½nï¿½Dï¿½uï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             }
 
             IniConfig.sRmsPath    =CheckAndReadIniData(sPath, str, str+" Path",         AnsiString("D:\\RMS"));
             IniConfig.fAmbientTemp=CheckAndReadIniData(sPath, str, "Ambient Temp",      40.0);                          //Steven 20101208
             if(CosFunction.bUseERMS)
             {
-                IniConfig.bEnableErms =CheckAndReadIniData(sPath, str, "ERMS Enable",   false);                         //Steven 20160711 : ¨Ï¥Î¶i¶¥ª©RMS
+                IniConfig.bEnableErms =CheckAndReadIniData(sPath, str, "ERMS Enable",   false);                         //Steven 20160711 : ï¿½Ï¥Î¶iï¿½ï¿½ï¿½ï¿½RMS
                 IniConfig.sErmsPath   =CheckAndReadIniData(sPath, str, "ERMS Path",     AnsiString("D:\\RMS"));
                 if(IniConfig.bEnableErms)
                     IniConfig.bEnableRms=false;
@@ -2113,9 +2170,9 @@ void ProcessLastSetIni_RMS(bool bRead)
 
             if(CUSTOMER_CODE==CC_SCC ||
                CUSTOMER_CODE==CC_SCK ||
-               CUSTOMER_CODE==CC_ETRENDTECH ||                                  //Steven 20230302 : add for ¶h©÷
+               CUSTOMER_CODE==CC_ETRENDTECH ||                                  //Steven 20230302 : add for ï¿½hï¿½ï¿½
                CUSTOMER_CODE==CC_AMD_M ||                                       //Ifor 20200915 add: TF_AMD download recipe
-               CosFunction.bDownloadRecipeLevelMode)                            //jou 2016-01-06 download recipe ¼W¥[Åv­­¼Ò¦¡¿ï¾Ü
+               CosFunction.bDownloadRecipeLevelMode)                            //jou 2016-01-06 download recipe ï¿½Wï¿½[ï¿½vï¿½ï¿½ï¿½Ò¦ï¿½ï¿½ï¿½ï¿½
             {
                 IniConfig.sRmsDownPath=CheckAndReadIniData(sPath, str, str+" Download Path", AnsiString("D:\\HT9045"));
                 iLength=IniConfig.sRmsDownPath.Length();
@@ -2124,7 +2181,7 @@ void ProcessLastSetIni_RMS(bool bRead)
                     IniConfig.sRmsDownPath=IniConfig.sRmsDownPath.SubString(1, iLength-1);
                 }
             }
-            else if(IniConfig.bSPILFunction==true)                              //JerryYang 20170328 (Jou) ª¿«~«È¤á½X²Î¤@¥ÎSPILFunction
+            else if(IniConfig.bSPILFunction==true)                              //JerryYang 20170328 (Jou) ï¿½ï¿½ï¿½~ï¿½È¤ï¿½Xï¿½Î¤@ï¿½ï¿½SPILFunction
             {
                 if(IniConfig.bEnableRms)
                 {
@@ -2150,8 +2207,8 @@ void ProcessLastSetIni_RMS(bool bRead)
                 IniConfig.asMesSyACodePath  =CheckAndReadIniData(sPath, str, "asMesSyACodePath",    AnsiString("123"));
                 IniConfig.asMesSyActionPath =CheckAndReadIniData(sPath, str, "asMesSyActionPath",   AnsiString("456"));
 
-//                #ifdef BETA_VTestSummaryFile                                            //RogerYang 20250809 °¶´úSummary¤å¥ó­×§ï
-                IniConfig.asSummaryReportPath =AnsiString("D:\\HandlerSummary");                                        //RogerYang 20251011 : ¨ú®øªÅ®æ
+//                #ifdef BETA_VTestSummaryFile                                            //RogerYang 20250809 ï¿½ï¿½ï¿½ï¿½Summaryï¿½ï¿½ï¿½×§ï¿½
+                IniConfig.asSummaryReportPath =AnsiString("D:\\HandlerSummary");                                        //RogerYang 20251011 : ï¿½ï¿½ï¿½ï¿½ï¿½Å®ï¿½
 //                #else
 //                    IniConfig.asSummaryReportPath =CheckAndReadIniData(sPath, str, "asSummaryReportPath",  IniConfig.sN10UploadDrivePath );
 //                #endif
@@ -2164,7 +2221,7 @@ void ProcessLastSetIni_RMS(bool bRead)
                 IniConfig.asCreateManualEOCAP_URL =CheckAndReadIniData(sPath, str, "asCreateManualEOCAP_URL", AnsiString("http://192.168.10.216/vt_mes/MesWebService.asmx"));
                 IniConfig.asQueryEocapStatusURL   =CheckAndReadIniData(sPath, str, "asQueryEocapStatusURL", AnsiString("http://192.168.115.133:9014/api/mes/queryEocapStatus"));
 
-                //jou 20230621 : VTEST Handler§Y®ÉºÊ±± GetRcsCheckingResult
+                //jou 20230621 : VTEST Handlerï¿½Yï¿½ÉºÊ±ï¿½ GetRcsCheckingResult
                 IniConfig.asGetRcsCheckingResultUrl      =CheckAndReadIniData(sPath, str, "asGetRcsCheckingResultUrl",     AnsiString("http://192.168.10.216/vt_mes/ajaxprocess.aspx?"));
                 IniConfig.asGetRcsCheckingResultACode    =CheckAndReadIniData(sPath, str, "asGetRcsCheckingResultACode",   AnsiString("65195845153489435181"));
                 IniConfig.asGetRcsCheckingResultAction   =CheckAndReadIniData(sPath, str, "asGetRcsCheckingResultAction",  AnsiString("GetRcsCheckingResult"));
@@ -2178,7 +2235,7 @@ void ProcessLastSetIni_RMS(bool bRead)
         {
             if(CosFunction.bUseERMS)
             {
-                WriteIniData(sPath, str, "ERMS Enable",       IniConfig.bEnableErms);                                   //Steven 20160711 : ¨Ï¥Î¶i¶¥ª©RMS
+                WriteIniData(sPath, str, "ERMS Enable",       IniConfig.bEnableErms);                                   //Steven 20160711 : ï¿½Ï¥Î¶iï¿½ï¿½ï¿½ï¿½RMS
                 WriteIniData(sPath, str, "ERMS Path",         IniConfig.sErmsPath);
                 if(IniConfig.bEnableErms)
                     IniConfig.bEnableRms=false;
@@ -2190,18 +2247,18 @@ void ProcessLastSetIni_RMS(bool bRead)
                 WriteIniData(sPath, str, "RTC alarm unload Path",   IniConfig.asN05_RTCalarmUnload);
             }
 
-            if(IniConfig.sRmsPath=="")                                          //Steven 20110528 : ¹w¨¾¸ô®|®ø¥¢
+            if(IniConfig.sRmsPath=="")                                          //Steven 20110528 : ï¿½wï¿½ï¿½ï¿½ï¿½ï¿½|ï¿½ï¿½ï¿½ï¿½
                 IniConfig.sRmsPath=CheckAndReadIniData(sPath, str, str+" Path", AnsiString("D:\\HT9045"));
             else
                 WriteIniData(sPath, str, str+" Path", IniConfig.sRmsPath);
 
             if(CUSTOMER_CODE==CC_SCC ||
                CUSTOMER_CODE==CC_SCK ||
-               CUSTOMER_CODE==CC_ETRENDTECH ||                                  //Steven 20230302 : add for ¶h©÷
+               CUSTOMER_CODE==CC_ETRENDTECH ||                                  //Steven 20230302 : add for ï¿½hï¿½ï¿½
                CUSTOMER_CODE==CC_AMD_M ||                                       //Ifor 20200915 add: TF_AMD download recipe
-               CosFunction.bDownloadRecipeLevelMode)                            //jou 2016-01-06 download recipe ¼W¥[Åv­­¼Ò¦¡¿ï¾Ü
+               CosFunction.bDownloadRecipeLevelMode)                            //jou 2016-01-06 download recipe ï¿½Wï¿½[ï¿½vï¿½ï¿½ï¿½Ò¦ï¿½ï¿½ï¿½ï¿½
             {
-                if(IniConfig.sRmsDownPath=="")                                  //Steven 20110528 : ¹w¨¾¸ô®|®ø¥¢
+                if(IniConfig.sRmsDownPath=="")                                  //Steven 20110528 : ï¿½wï¿½ï¿½ï¿½ï¿½ï¿½|ï¿½ï¿½ï¿½ï¿½
                     IniConfig.sRmsDownPath=CheckAndReadIniData(sPath, str, str+" Download Path", AnsiString("D:\\HT9045"));
                 else
                     WriteIniData(sPath, str, str+" Download Path", IniConfig.sRmsDownPath);
@@ -2209,10 +2266,10 @@ void ProcessLastSetIni_RMS(bool bRead)
 
             WriteIniData(sPath, str, "Ambient Temp", IniConfig.fAmbientTemp);   //Steven 20110421
 
-            if(CUSTOMER_CODE==CC_KYEC_LEE)                                      //Ifor 20161229 (Steven) add KYEC ³ì´¼­n¨D Ãö³¬N05¥\¯à¿ï¶µ
+            if(CUSTOMER_CODE==CC_KYEC_LEE)                                      //Ifor 20161229 (Steven) add KYEC ï¿½ì´¼ï¿½nï¿½D ï¿½ï¿½ï¿½ï¿½N05ï¿½\ï¿½ï¿½ï¶µ
             {
-                WriteIniData(sPath, str, str+" Enable"      , false);           //Ifor 20161229 KYEC ³ì´¼­n¨D±j¨îÃö³¬ Enable RMS ¥\¯à
-                WriteIniData(sPath, str, "Enable Check File", false);           //Ifor 20161229 KYEC ³ì´¼­n¨D±j¨îÃö³¬ Enable check file ¥\¯à
+                WriteIniData(sPath, str, str+" Enable"      , false);           //Ifor 20161229 KYEC ï¿½ì´¼ï¿½nï¿½Dï¿½jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Enable RMS ï¿½\ï¿½ï¿½
+                WriteIniData(sPath, str, "Enable Check File", false);           //Ifor 20161229 KYEC ï¿½ì´¼ï¿½nï¿½Dï¿½jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Enable check file ï¿½\ï¿½ï¿½
                 WriteIniData(sPath, str, "Enable Check Setup File", false);
             }
             else
@@ -2227,7 +2284,7 @@ void ProcessLastSetIni_RMS(bool bRead)
     if(IniConfig.bSPILFunction==true ||
        CUSTOMER_CODE==CC_HANA_MICRON ||
        CUSTOMER_CODE==CC_SCK)
-        IniConfig.bClearLotInfoWhenTrayFeed=CheckAndReadIniData(sPath, str, "ClearLotInfoWhenTrayFeed", false);         //Steven 20240916 : Tray Feed¤§«á, ­n¤£­n²M°£Device Name
+        IniConfig.bClearLotInfoWhenTrayFeed=CheckAndReadIniData(sPath, str, "ClearLotInfoWhenTrayFeed", false);         //Steven 20240916 : Tray Feedï¿½ï¿½ï¿½ï¿½, ï¿½nï¿½ï¿½ï¿½nï¿½Mï¿½ï¿½Device Name
     else
         IniConfig.bClearLotInfoWhenTrayFeed=CheckAndReadIniData(sPath, str, "ClearLotInfoWhenTrayFeed", true);
 }
@@ -2254,12 +2311,12 @@ void ProcessLastSetIni_FTP(bool bRead)
         IniConfig.FtpUplaodPath     =ReadWriteIni(sPath, "FTP", "FTP Upload Path",   IniConfig.FtpUplaodPath,   "/",                                                bRead);
         IniConfig.iHDEnable         =ReadWriteIni(sPath, "FTP", "FTP HD Enable",     IniConfig.iHDEnable,       1,                                                  bRead);
         IniConfig.iServerEnable     =ReadWriteIni(sPath, "FTP", "FTP Server Enable", IniConfig.iServerEnable,   0,                                                  bRead);
-        IniConfig.N06_FtpPort       =ReadWriteIni(sPath, "FTP", "FTP Port",          IniConfig.N06_FtpPort,     "21",                                               bRead);  //Ifor 20201015 add:¨Ï¥ÎªÌ¦Û©w¸q FTP Port
+        IniConfig.N06_FtpPort       =ReadWriteIni(sPath, "FTP", "FTP Port",          IniConfig.N06_FtpPort,     "21",                                               bRead);  //Ifor 20201015 add:ï¿½Ï¥ÎªÌ¦Û©wï¿½q FTP Port
 
         if(IniConfig.bVTESTFunction==true)
-            IniConfig.FtpTransMode      =ReadWriteIni(sPath, "FTP", "FTP Transfer Mode", IniConfig.FtpTransMode,    2,                                              bRead);  //Steven 20230719 : ¥[¤JFTP¶Ç¿é¼Ò¦¡
+            IniConfig.FtpTransMode      =ReadWriteIni(sPath, "FTP", "FTP Transfer Mode", IniConfig.FtpTransMode,    2,                                              bRead);  //Steven 20230719 : ï¿½[ï¿½JFTPï¿½Ç¿ï¿½Ò¦ï¿½
         else
-            IniConfig.FtpTransMode      =ReadWriteIni(sPath, "FTP", "FTP Transfer Mode", IniConfig.FtpTransMode,    0,                                              bRead);  //Steven 20230719 : ¥[¤JFTP¶Ç¿é¼Ò¦¡
+            IniConfig.FtpTransMode      =ReadWriteIni(sPath, "FTP", "FTP Transfer Mode", IniConfig.FtpTransMode,    0,                                              bRead);  //Steven 20230719 : ï¿½[ï¿½JFTPï¿½Ç¿ï¿½Ò¦ï¿½
 
         //Landam 20110704
         if(IniConfig.FtpDownloadPath!="/")
@@ -2274,7 +2331,7 @@ void ProcessLastSetIni_FTP(bool bRead)
                 IniConfig.FtpUplaodPath=IniConfig.FtpUplaodPath + "/";
         }
 
-        //Sam 20210526 : ±q N06 DownloadPath ¤U¸ü±K½X¥»
+        //Sam 20210526 : ï¿½q N06 DownloadPath ï¿½Uï¿½ï¿½ï¿½Kï¿½Xï¿½ï¿½
         IniConfig.bFtpPasswordDownload      =ReadWriteIni(sPath, "FTP", "Enable FTP Password Download",  IniConfig.bFtpPasswordDownload,    false,  bRead);
         IniConfig.FtpPasswordDownloadPath   =ReadWriteIni(sPath, "FTP", "FTP Password Download Path",    IniConfig.FtpPasswordDownloadPath, "/",    bRead);
         if(IniConfig.FtpPasswordDownloadPath!="/")
@@ -2287,15 +2344,15 @@ void ProcessLastSetIni_FTP(bool bRead)
     if(fLotInfo!=NULL)                                                          //Steven 20181224 : For ASE-CL
     {
         fLotInfo->tsASECLEventLog->TabVisible=IniConfig.bN22Enable_EventLog;
-        fLotInfo->ts2DSort->TabVisible=(CosFunction.bSortingBy2DList &&         //JerryYang 20230322 : 2D sort lot info UI­×§ï
+        fLotInfo->ts2DSort->TabVisible=(CosFunction.bSortingBy2DList &&         //JerryYang 20230322 : 2D sort lot info UIï¿½×§ï¿½
                                         (IniConfig.iN23DownloadMethod==3 ||
-                                         IniConfig.bN23UseLotInfoFile==true));  //Steven 20240830 : 2D sort ¤â°Ê¿ïÀÉ®×¤è¦¡
+                                         IniConfig.bN23UseLotInfoFile==true));  //Steven 20240830 : 2D sort ï¿½ï¿½Ê¿ï¿½ï¿½É®×¤è¦¡
 
         fLotInfo->grpManualSet2D->Visible=(IniConfig.iN23DownloadMethod==3);
         fLotInfo->grp2DLotInfo->Visible=(IniConfig.bN23UseLotInfoFile==true);
     }
 
-    if(CUSTOMER_CODE==CC_Murata)                                                //Steven 20200409 : Murata 2DID¤ñ¹ï¥\¯à
+    if(CUSTOMER_CODE==CC_Murata)                                                //Steven 20200409 : Murata 2DIDï¿½ï¿½ï¿½\ï¿½ï¿½
     {
         if(fLotInfo!=NULL)
         {
@@ -2305,7 +2362,7 @@ void ProcessLastSetIni_FTP(bool bRead)
         }
     }
 
-//    IniConfig.sN23_4_URL        =ReadWriteIni(sPath, "2DID Search Function", "sN23_4_URL",              IniConfig.sN23_4_URL,               AnsiString("D:\\RMS\\"), bRead);  //JerryYang 20241104 : ¤ä´©2DID¥Õ¦W³æ¥\¯à  //JerryYang 20250521 : Mark±¼
+//    IniConfig.sN23_4_URL        =ReadWriteIni(sPath, "2DID Search Function", "sN23_4_URL",              IniConfig.sN23_4_URL,               AnsiString("D:\\RMS\\"), bRead);  //JerryYang 20241104 : ï¿½ä´©2DIDï¿½Õ¦Wï¿½ï¿½\ï¿½ï¿½  //JerryYang 20250521 : Markï¿½ï¿½
 //    IniConfig.sN23_5_UploadPath =ReadWriteIni(sPath, "2DID White list", "sN23_5_UploadPath",            IniConfig.sN23_5_UploadPath,        AnsiString("D:\\RMS\\"), bRead);
     if(bRead)
     {
@@ -2365,15 +2422,15 @@ void ProcessLastSetIni_EventLog(bool bRead)
         for(int i=0; i<7; i++)
         {
             str.sprintf("bAutoSaveLogWeek[%d]", i);                             //Steven 20140902 : Fixed
-            IniConfig.bAutoSaveLogWeek[i]=ReadWriteIni(sPath, "Event Log", str, IniConfig.bAutoSaveLogWeek[i], true, bRead);                                    //jou 2012-10-15 Auto Save Log ¤ä´© Week ¿ï¾Ü
+            IniConfig.bAutoSaveLogWeek[i]=ReadWriteIni(sPath, "Event Log", str, IniConfig.bAutoSaveLogWeek[i], true, bRead);                                    //jou 2012-10-15 Auto Save Log ï¿½ä´© Week ï¿½ï¿½ï¿½
         }
-        IniConfig.iO15_SaveFilePeriod = ReadWriteIni(sPath, "Event Log", "iO15_SaveFilePeriod", IniConfig.iO15_SaveFilePeriod, 0, bRead);                       //StevenHong 20260128 : «È¤áTESNA§âEventlog³]©w¦¨¤@­Ó¤ë
+        IniConfig.iO15_SaveFilePeriod = ReadWriteIni(sPath, "Event Log", "iO15_SaveFilePeriod", IniConfig.iO15_SaveFilePeriod, 0, bRead);                       //StevenHong 20260128 : ï¿½È¤ï¿½TESNAï¿½ï¿½Eventlogï¿½]ï¿½wï¿½ï¿½ï¿½@ï¿½Ó¤ï¿½
         IniConfig.bO10UseEventLogSaver=IniConfig.bO06_EventLogAutoSave;
     }
 
     if(fMain!=NULL)
     {
-        if(IniConfig.bN10_DailyUploadProdData)                                  //Steven 20180514 : JCET§d¦p¬K­n¨D¨C¤é¤W¶ÇEvent Log, Jam²Î­pªí, MTBF, MUBF¸ê®Æ
+        if(IniConfig.bN10_DailyUploadProdData)                                  //Steven 20180514 : JCETï¿½dï¿½pï¿½Kï¿½nï¿½Dï¿½Cï¿½ï¿½Wï¿½ï¿½Event Log, Jamï¿½Î­pï¿½ï¿½, MTBF, MUBFï¿½ï¿½ï¿½
             str.sprintf("%s_%s_EventLogTxt", IniConfig.sMachineType, IniConfig.SocketHandlerID);
         else if(IniConfig.bO15_EventLogFileNameWithMachineID)
             str.sprintf("EventLogTxt_%s", IniConfig.SocketHandlerID);
@@ -2406,27 +2463,27 @@ void ProcessLastSetIni_EventLog(bool bRead)
                 slEventLog->SaveType=TBy8Hour;
             else if(IniConfig.iO15_SaveFilePeriod==5)
                 slEventLog->SaveType=TBy12Hour;
-            else if(IniConfig.iO15_SaveFilePeriod==8)                           //StevenHong 20260128 : «È¤áTESNA§âEventlog³]©w¦¨¤@­Ó¤ë
+            else if(IniConfig.iO15_SaveFilePeriod==8)                           //StevenHong 20260128 : ï¿½È¤ï¿½TESNAï¿½ï¿½Eventlogï¿½]ï¿½wï¿½ï¿½ï¿½@ï¿½Ó¤ï¿½
                 slEventLog->SaveType=TByMonth;
-//            else if(IniConfig.iO15_SaveFilePeriod==7)                         //Steven 20250520 : ¥[¤JBy Lot¦sÀÉ
+//            else if(IniConfig.iO15_SaveFilePeriod==7)                         //Steven 20250520 : ï¿½[ï¿½JBy Lotï¿½sï¿½ï¿½
 //                slEventLog->SaveType=TByLot;
-            else                                                                //if(IniConfig.iO15_SaveFilePeriod==6)                         //Steven 20230705 : Event log¤£¥i¥Hby¤ë¥÷¦sÀÉ, ÀÉ®×¤Ó¤j·|¥´¤£¶}
+            else                                                                //if(IniConfig.iO15_SaveFilePeriod==6)                         //Steven 20230705 : Event logï¿½ï¿½ï¿½iï¿½Hbyï¿½ï¿½ï¿½ï¿½sï¿½ï¿½, ï¿½É®×¤Ó¤jï¿½|ï¿½ï¿½ï¿½ï¿½ï¿½}
                 slEventLog->SaveType=TByDay;
         }
 
-        slEventLog->SaveSameFolder=IniConfig.bO15_EventLogSaveSameFolder;       //KaiChen 20180322 ¡Gª¿®æ-´ò¤f ·s¼W ±N Event Log ©ñ¦b¦P­Ó¸ê®Æ§¨
+        slEventLog->SaveSameFolder=IniConfig.bO15_EventLogSaveSameFolder;       //KaiChen 20180322 ï¿½Gï¿½ï¿½ï¿½ï¿½-ï¿½ï¿½f ï¿½sï¿½W ï¿½N Event Log ï¿½ï¿½bï¿½Pï¿½Ó¸ï¿½Æ§ï¿½
         slEventLog->SaveByLotID=(CosFunction.bHiSiliconFunction ||
-                                 CosFunction.bSaveEventLogByLotID ||            //KaiChen 20181121 ¡Gª¿®æ-¥_¿³ Save Event Log by Lot ID
+                                 CosFunction.bSaveEventLogByLotID ||            //KaiChen 20181121 ï¿½Gï¿½ï¿½ï¿½ï¿½-ï¿½_ï¿½ï¿½ Save Event Log by Lot ID
                                  IniConfig.iO15_SaveFilePeriod==7);
     }
 
-    if(IniConfig.iO15_SaveFilePeriod==8)                                        //Stevenhong 20260318 : TESNA §âEventlog report summarize by month
+    if(IniConfig.iO15_SaveFilePeriod==8)                                        //Stevenhong 20260318 : TESNA ï¿½ï¿½Eventlog report summarize by month
     {
         TAlarm1 helper;
         helper.SummarizeJAMreportbymonth();
     }
     //<==
-    //Steven 20170829 (wei) : Event LogÀÉ®×¦sÀÉ³]©w
+    //Steven 20170829 (wei) : Event Logï¿½É®×¦sï¿½É³]ï¿½w
 }
 //---------------------------------------------------------------------------
 void ProcessLastSetIni_Count(bool bRead)
@@ -2439,7 +2496,7 @@ void ProcessLastSetIni_Count(bool bRead)
     AnsiString str2;
     AnsiString str3;
 
-    AnsiString sRecipePath="";                                                  //AI(ht9045-config) 20260508 (RogerYang) : VTESTä¡¤ù¸ê®Æ¸òÀHRecipe
+    AnsiString sRecipePath="";                                                  //AI(ht9045-config) 20260508 (RogerYang) : VTESTä¡¤ï¿½ï¿½ï¿½Æ¸ï¿½ï¿½HRecipe
     if(IniConfig.bVTESTFunction && CosFunction.bUseHeadContactCount)
         sRecipePath=GetRecipeFileName("HandlerCondition.Data");
 
@@ -2451,7 +2508,7 @@ void ProcessLastSetIni_Count(bool bRead)
             str2.sprintf("HeadContactCount%d_%d", i, j);
             str3.sprintf("HeadContactCountHistory%d_%d", i, j);
 
-            if(sRecipePath!="")                                                 //AI(ht9045-config) 20260508 (RogerYang) : VTEST x=0ä¡¤ù¸òRecipe
+            if(sRecipePath!="")                                                 //AI(ht9045-config) 20260508 (RogerYang) : VTEST x=0ä¡¤ï¿½ï¿½ï¿½Recipe
             {
                 IniConfig.ContactSet[0][i][j]               = ReadWriteIni(sRecipePath, "O_Count","O_14"+AnsiString(str1), IniConfig.ContactSet[0][i][j],              6000, bRead);
                 IniConfig.HeadContactCount[0][i][j]         = ReadWriteIni(sRecipePath, "O_Count","O_14"+AnsiString(str2), IniConfig.HeadContactCount[0][i][j],           0, bRead);
@@ -2474,12 +2531,12 @@ void ProcessLastSetIni_Count(bool bRead)
         }
     }
 
-    IniConfig.iVibratorHP1      =ReadWriteIni(sPath, "Vibrate_Time", "iVibratorHP1",        IniConfig.iVibratorHP1,      0, bRead);                             //JerryYang 20200612 ®¶°Ê°¨¹F§@°Ê®É¶¡²Ö­p
+    IniConfig.iVibratorHP1      =ReadWriteIni(sPath, "Vibrate_Time", "iVibratorHP1",        IniConfig.iVibratorHP1,      0, bRead);                             //JerryYang 20200612 ï¿½ï¿½ï¿½Ê°ï¿½ï¿½Fï¿½@ï¿½Ê®É¶ï¿½ï¿½Ö­p
     IniConfig.iVibratorSht1     =ReadWriteIni(sPath, "Vibrate_Time", "iVibratorSht1",       IniConfig.iVibratorSht1,     0, bRead);
     IniConfig.iVibratorSht2     =ReadWriteIni(sPath, "Vibrate_Time", "iVibratorSht2",       IniConfig.iVibratorSht2,     0, bRead);
     IniConfig.iVibratorUnloader =ReadWriteIni(sPath, "Vibrate_Time", "iVibratorUnloader",   IniConfig.iVibratorUnloader, 0, bRead);
 
-    for(int i=0; i<4; i++)                                                      //Sam 20220720 : ·s¼W¤@²Õ Socket Count
+    for(int i=0; i<4; i++)                                                      //Sam 20220720 : ï¿½sï¿½Wï¿½@ï¿½ï¿½ Socket Count
     {
         for(int j=0; j<8; j++)
         {
@@ -2499,7 +2556,7 @@ void ProcessLastSetIni_Tester(bool bRead)
     AnsiString sPath=AuthPath+"config.ini";
 
     if(IniConfig.bI36TestTimeOut)
-        IniConfig.bD52InterFaceErrHeadNeedUp=true;                              //kevin 20161108 test timer out ARM ¤W¤É Åý¤uµ{®v¤â°Ê¨ú¤UIC
+        IniConfig.bD52InterFaceErrHeadNeedUp=true;                              //kevin 20161108 test timer out ARM ï¿½Wï¿½ï¿½ ï¿½ï¿½ï¿½uï¿½{ï¿½vï¿½ï¿½Ê¨ï¿½ï¿½UIC
 
     if(CosFunction.bHaveFIFOMode)                                               //Steven 20170302 (wei) : FIFO MODE
     {
@@ -2526,10 +2583,10 @@ void ProcessLastSetIni_Index(bool bRead)
 {
     AnsiString sPath=AuthPath+"config.ini";
 
-    IniConfig.iLotIDLength                              =ReadWriteIni(sPath, "Configuration", "Lot ID Length",  IniConfig.iLotIDLength,      10, true, true, 1, 10);  //Frank 20170531 (Steven) add LotID 7½X
+    IniConfig.iLotIDLength                              =ReadWriteIni(sPath, "Configuration", "Lot ID Length",  IniConfig.iLotIDLength,      10, true, true, 1, 10);  //Frank 20170531 (Steven) add LotID 7ï¿½X
 
-    IniConfig.iD36_RTCAutoVerifyReleaseHeight           =ReadWriteIni(sPath, "Index", "iD36_RTCAutoVerifyReleaseHeight",            IniConfig.iD36_RTCAutoVerifyReleaseHeight,              0,      bRead);  //jou 2014-06-24 RTC ¦Û°Ê¶i¦æModelÅçÃÒ
-    IniConfig.iD36_RTCAutoVerifyPickHeight              =ReadWriteIni(sPath, "Index", "iD36_RTCAutoVerifyPickHeight",               IniConfig.iD36_RTCAutoVerifyPickHeight,                 0,      bRead);  //jou 2014-06-24 RTC ¦Û°Ê¶i¦æModelÅçÃÒ
+    IniConfig.iD36_RTCAutoVerifyReleaseHeight           =ReadWriteIni(sPath, "Index", "iD36_RTCAutoVerifyReleaseHeight",            IniConfig.iD36_RTCAutoVerifyReleaseHeight,              0,      bRead);  //jou 2014-06-24 RTC ï¿½Û°Ê¶iï¿½ï¿½Modelï¿½ï¿½ï¿½ï¿½
+    IniConfig.iD36_RTCAutoVerifyPickHeight              =ReadWriteIni(sPath, "Index", "iD36_RTCAutoVerifyPickHeight",               IniConfig.iD36_RTCAutoVerifyPickHeight,                 0,      bRead);  //jou 2014-06-24 RTC ï¿½Û°Ê¶iï¿½ï¿½Modelï¿½ï¿½ï¿½ï¿½
     IniConfig.iD36_RTCAutoVerifyReleaseHeight           =CheckRange(IniConfig.iD36_RTCAutoVerifyReleaseHeight, 30, -30);
     IniConfig.iD36_RTCAutoVerifyPickHeight              =CheckRange(IniConfig.iD36_RTCAutoVerifyPickHeight, 30, 0);
 
@@ -2544,38 +2601,38 @@ void ProcessLastSetIni_Index(bool bRead)
     {
         IniConfig.iD44TestHeadCheckVacuumTime               =ReadWriteIni(sPath, "Index", "iD44TestHeadCheckVacuumTime",                IniConfig.iD44TestHeadCheckVacuumTime,             (int)LastSet.iTestHeadCheckVacuumTime,  bRead, true, 100000, 100);
     }
-    IniConfig.bIndexAddPressEP                          =ReadWriteIni(sPath, "Index", "bIndexAddPressEP",                           IniConfig.bIndexAddPressEP,                                 false,  true);  //jou 20171026 (wei) : ´ú¸Õ¤¤¥[À£EP
-    IniConfig.iIndexAddPressEP_Time                     =ReadWriteIni(sPath, "Index", "iIndexAddPressEP_Time",                      IniConfig.iIndexAddPressEP_Time,                            3,      true,true, 1, 10);  //jou 20171026 (wei) : ´ú¸Õ¤¤¥[À£EP
-    IniConfig.dIndexAddPressEP_Kg                       =ReadWriteIni(sPath, "Index", "dIndexAddPressEP_Kg",                        IniConfig.dIndexAddPressEP_Kg,                              1.0,    true,true, 0.1, 3.0);  //jou 20171026 (wei) : ´ú¸Õ¤¤¥[À£EP
-    IniConfig.dIndexVibrateEP_Kg                        =ReadWriteIni(sPath, "Index", "dIndexVibrateEP_Kg",                         IniConfig.dIndexVibrateEP_Kg,                               0.2,    true,true, 0.1, 2.0);  //jou 20171026 (wei) : ´ú¸Õ¤¤¥[À£EP
+    IniConfig.bIndexAddPressEP                          =ReadWriteIni(sPath, "Index", "bIndexAddPressEP",                           IniConfig.bIndexAddPressEP,                                 false,  true);  //jou 20171026 (wei) : ï¿½ï¿½ï¿½Õ¤ï¿½ï¿½[ï¿½ï¿½EP
+    IniConfig.iIndexAddPressEP_Time                     =ReadWriteIni(sPath, "Index", "iIndexAddPressEP_Time",                      IniConfig.iIndexAddPressEP_Time,                            3,      true,true, 1, 10);  //jou 20171026 (wei) : ï¿½ï¿½ï¿½Õ¤ï¿½ï¿½[ï¿½ï¿½EP
+    IniConfig.dIndexAddPressEP_Kg                       =ReadWriteIni(sPath, "Index", "dIndexAddPressEP_Kg",                        IniConfig.dIndexAddPressEP_Kg,                              1.0,    true,true, 0.1, 3.0);  //jou 20171026 (wei) : ï¿½ï¿½ï¿½Õ¤ï¿½ï¿½[ï¿½ï¿½EP
+    IniConfig.dIndexVibrateEP_Kg                        =ReadWriteIni(sPath, "Index", "dIndexVibrateEP_Kg",                         IniConfig.dIndexVibrateEP_Kg,                               0.2,    true,true, 0.1, 2.0);  //jou 20171026 (wei) : ï¿½ï¿½ï¿½Õ¤ï¿½ï¿½[ï¿½ï¿½EP
 
     IniConfig.iGalilSpeedAcc                            =ReadWriteIni(sPath, "Index", "iGalilSpeedAcc",                             IniConfig.iGalilSpeedAcc,                             45000000,     true,true, 45000000, 900000000);
     IniConfig.iGalilSpeedDec                            =ReadWriteIni(sPath, "Index", "iGalilSpeedDec",                             IniConfig.iGalilSpeedDec,                             45000000,     true,true, 45000000, 900000000);
 
-    if(CUSTOMER_CODE==CC_GIGAS)                                                 //Isaac 20210604 : IndexY°»´ú½d³ò¦W¤l²Î¤@¦¨IniConfig.GaliPosRange
+    if(CUSTOMER_CODE==CC_GIGAS)                                                 //Isaac 20210604 : IndexYï¿½ï¿½ï¿½ï¿½ï¿½dï¿½ï¿½Wï¿½lï¿½Î¤@ï¿½ï¿½IniConfig.GaliPosRange
     {
-        IniConfig.GaliPosRange        =ReadWriteIni(sPath, "Index", "GaliPosRange",             IniConfig.GaliPosRange,                10,    bRead,true, 5, 100);  //Isaac 20201012 : index Y¶W¹L½d³ò¡A°µ¤@¦¸Tmode
+        IniConfig.GaliPosRange        =ReadWriteIni(sPath, "Index", "GaliPosRange",             IniConfig.GaliPosRange,                10,    bRead,true, 5, 100);  //Isaac 20201012 : index Yï¿½Wï¿½Lï¿½dï¿½ï¿½Aï¿½ï¿½ï¿½@ï¿½ï¿½Tmode
     }
     else
     {
-        IniConfig.GaliPosRange        =ReadWriteIni(sPath, "Index", "GaliPosRange",             IniConfig.GaliPosRange,                50,    bRead,true, 50, 100);  //Isaac 20201012 : index Y¶W¹L½d³ò¡A°µ¤@¦¸Tmode
+        IniConfig.GaliPosRange        =ReadWriteIni(sPath, "Index", "GaliPosRange",             IniConfig.GaliPosRange,                50,    bRead,true, 50, 100);  //Isaac 20201012 : index Yï¿½Wï¿½Lï¿½dï¿½ï¿½Aï¿½ï¿½ï¿½@ï¿½ï¿½Tmode
     }
 
     if(LastSet.bUpdateIndexLoadRateToLastSet==false)
     {
-        //Steven 20160329 : §âLoad RateÂà¦¨LastSet, «e­±¬O 0: HT, 1: NS, 2: Offset; «á­±¬O 0:60, 1:56, 2:40, 3:30
+        //Steven 20160329 : ï¿½ï¿½Load Rateï¿½à¦¨LastSet, ï¿½eï¿½ï¿½ï¿½O 0: HT, 1: NS, 2: Offset; ï¿½á­±ï¿½O 0:60, 1:56, 2:40, 3:30
         LastSet.dIndexLoadRate[0][0]                        =ReadWriteIni(sPath, "Index", "Index60mmLoadRate",                          IniConfig.dIndex60mmLoadRate,                           1.03,   bRead, true, 1.5, 0.5);  //jou 2011-06-10
         LastSet.dIndexLoadRate[0][1]                        =ReadWriteIni(sPath, "Index", "Index56mmLoadRate",                          IniConfig.dIndex56mmLoadRate,                           0.90,   bRead, true, 1.5, 0.5);  //wei 20151005 add 56mm
         LastSet.dIndexLoadRate[0][2]                        =ReadWriteIni(sPath, "Index", "Index40mmLoadRate",                          IniConfig.dIndex40mmLoadRate,                           1.03,   bRead, true, 1.5, 0.5);  //Steven 20110704
         LastSet.dIndexLoadRate[0][3]                        =ReadWriteIni(sPath, "Index", "Index30mmLoadRate",                          IniConfig.dIndex30mmLoadRate,                           0.90,   bRead, true, 1.5, 0.5);  //jou 2011-06-10
-        LastSet.dIndexLoadRate[1][0]                        =ReadWriteIni(sPath, "Index", "Index60mmLoadRate_NS",                       IniConfig.dIndex60mmLoadRate_NS,                        1.03,   bRead, true, 1.5, 0.5);  //wei 20150303   ¨Ê¤¸NS¯B°ÊÀY
+        LastSet.dIndexLoadRate[1][0]                        =ReadWriteIni(sPath, "Index", "Index60mmLoadRate_NS",                       IniConfig.dIndex60mmLoadRate_NS,                        1.03,   bRead, true, 1.5, 0.5);  //wei 20150303   ï¿½Ê¤ï¿½NSï¿½Bï¿½ï¿½ï¿½Y
         LastSet.dIndexLoadRate[1][1]                        =ReadWriteIni(sPath, "Index", "Index56mmLoadRate_NS",                       IniConfig.dIndex56mmLoadRate_NS,                        0.90,   bRead, true, 1.5, 0.5);  //wei 20151005 add 56mm
-        LastSet.dIndexLoadRate[1][2]                        =ReadWriteIni(sPath, "Index", "Index40mmLoadRate_NS",                       IniConfig.dIndex40mmLoadRate_NS,                        1.03,   bRead, true, 1.5, 0.5);  //wei 20150303   ¨Ê¤¸NS¯B°ÊÀY
-        LastSet.dIndexLoadRate[1][3]                        =ReadWriteIni(sPath, "Index", "Index30mmLoadRate_NS",                       IniConfig.dIndex30mmLoadRate_NS,                        0.90,   bRead, true, 1.5, 0.5);  //wei 20150303   ¨Ê¤¸NS¯B°ÊÀY
-        LastSet.dIndexLoadRate[2][0]                        =ReadWriteIni(sPath, "Index", "Index60mmLoadRate_Offset",                   IniConfig.dIndex60mmLoadRate_Offset,                    0.0,    bRead, true, 0.5, -0.5);  //2014-06-26    Dell    for TSMC °ª·ÅLoad cell offset
+        LastSet.dIndexLoadRate[1][2]                        =ReadWriteIni(sPath, "Index", "Index40mmLoadRate_NS",                       IniConfig.dIndex40mmLoadRate_NS,                        1.03,   bRead, true, 1.5, 0.5);  //wei 20150303   ï¿½Ê¤ï¿½NSï¿½Bï¿½ï¿½ï¿½Y
+        LastSet.dIndexLoadRate[1][3]                        =ReadWriteIni(sPath, "Index", "Index30mmLoadRate_NS",                       IniConfig.dIndex30mmLoadRate_NS,                        0.90,   bRead, true, 1.5, 0.5);  //wei 20150303   ï¿½Ê¤ï¿½NSï¿½Bï¿½ï¿½ï¿½Y
+        LastSet.dIndexLoadRate[2][0]                        =ReadWriteIni(sPath, "Index", "Index60mmLoadRate_Offset",                   IniConfig.dIndex60mmLoadRate_Offset,                    0.0,    bRead, true, 0.5, -0.5);  //2014-06-26    Dell    for TSMC ï¿½ï¿½ï¿½ï¿½Load cell offset
         LastSet.dIndexLoadRate[2][1]                        =ReadWriteIni(sPath, "Index", "Index56mmLoadRate_Offset",                   IniConfig.dIndex56mmLoadRate_Offset,                    0.0,    bRead, true, 0.5, -0.5);  //wei 20151005 add 56mm
-        LastSet.dIndexLoadRate[2][2]                        =ReadWriteIni(sPath, "Index", "Index40mmLoadRate_Offset",                   IniConfig.dIndex40mmLoadRate_Offset,                    0.0,    bRead, true, 0.5, -0.5);  //2014-06-26    Dell    for TSMC °ª·ÅLoad cell offset
-        LastSet.dIndexLoadRate[2][3]                        =ReadWriteIni(sPath, "Index", "Index30mmLoadRate_Offset",                   IniConfig.dIndex30mmLoadRate_Offset,                    0.0,    bRead, true, 0.5, -0.5);  //2014-06-26    Dell    for TSMC °ª·ÅLoad cell offset
+        LastSet.dIndexLoadRate[2][2]                        =ReadWriteIni(sPath, "Index", "Index40mmLoadRate_Offset",                   IniConfig.dIndex40mmLoadRate_Offset,                    0.0,    bRead, true, 0.5, -0.5);  //2014-06-26    Dell    for TSMC ï¿½ï¿½ï¿½ï¿½Load cell offset
+        LastSet.dIndexLoadRate[2][3]                        =ReadWriteIni(sPath, "Index", "Index30mmLoadRate_Offset",                   IniConfig.dIndex30mmLoadRate_Offset,                    0.0,    bRead, true, 0.5, -0.5);  //2014-06-26    Dell    for TSMC ï¿½ï¿½ï¿½ï¿½Load cell offset
         LastSet.bUpdateIndexLoadRateToLastSet=true;
         WriteLastDataFile();
     }
@@ -2583,7 +2640,7 @@ void ProcessLastSetIni_Index(bool bRead)
     if(CUSTOMER_CODE==CC_ASE_KaohSiung)
         IniConfig.bL09HotTempShuttleNoAddPos=true;                              //JerryYang 20230204 : L23 -> L09   //kevin 20200812 no use shuttle offset
 
-//    IniConfig.bL09HotTempShuttleNoAddPos                    =ReadWriteIni(sPath, "Tempture", "bL23HotTempShuttlenoAddPos",              IniConfig.bL09HotTempShuttleNoAddPos,                   0.0,     false,true, 0.0, 0.0);  //JerryYang 20230204 : ¦h¾lªº, Mark±¼     //kevin 20200812 add
+//    IniConfig.bL09HotTempShuttleNoAddPos                    =ReadWriteIni(sPath, "Tempture", "bL23HotTempShuttlenoAddPos",              IniConfig.bL09HotTempShuttleNoAddPos,                   0.0,     false,true, 0.0, 0.0);  //JerryYang 20230204 : ï¿½hï¿½lï¿½ï¿½, Markï¿½ï¿½     //kevin 20200812 add
 }
 //---------------------------------------------------------------------------
 void ProcessLastSetIni_InOutArm(bool bRead)
@@ -2591,7 +2648,7 @@ void ProcessLastSetIni_InOutArm(bool bRead)
     AnsiString sPath=AuthPath+"config.ini";
     AnsiString szDir="", szDir1="";
 
-    if(CUSTOMER_CODE==CC_KYEC_LEE)                                              //wei 20151022 ±j¨î¨Ï¥Î¥»¾÷ªºOffset
+    if(CUSTOMER_CODE==CC_KYEC_LEE)                                              //wei 20151022 ï¿½jï¿½ï¿½Ï¥Î¥ï¿½ï¿½ï¿½ï¿½ï¿½Offset
     {
         szDir.sprintf("%sDefineOffset", DefaultPath);
         szDir1.sprintf("%s%s", OffsetPath, GetLastOpenFN());
@@ -2607,8 +2664,8 @@ void ProcessLastSetIni_InOutArm(bool bRead)
 
     //Ifor 20161121 add Use Fix3 Full Tray By CosFunction
     //==>
-    if(FIX3_FULL_PLACE!=Fix3K_Uninstall)                                        //Ifor 20161209 ¦pªG¦³¦w¸Ë Fix3 Full Place ±j¨îÃö³¬ Fix3 Full Tray ¥\¯à
-        CosFunction.bUseFix3FullTray=false;                                     //Steven 20250911 : Mark for µwÅé fix3 full ¥i¥HÃö³¬
+    if(FIX3_FULL_PLACE!=Fix3K_Uninstall)                                        //Ifor 20161209 ï¿½pï¿½Gï¿½ï¿½ï¿½wï¿½ï¿½ Fix3 Full Place ï¿½jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Fix3 Full Tray ï¿½\ï¿½ï¿½
+        CosFunction.bUseFix3FullTray=false;                                     //Steven 20250911 : Mark for ï¿½wï¿½ï¿½ fix3 full ï¿½iï¿½Hï¿½ï¿½ï¿½ï¿½
 }
 //---------------------------------------------------------------------------
 void ProcessLastSetIni_QA_Mode(bool bRead)
@@ -2631,7 +2688,7 @@ void ProcessLastSetIni_SingleTempLimit(bool bRead)
 
     for(int i=tcHotPlate1; i<tcTotalCount; i++)                                 //Steven 20111013
     {
-        if(IniConfig.bVTESTFunction==true)                                      //jou 20231101 : «È¤á­n¨D temp­¶­± Single Limit ¤£¨Ï¥Î
+        if(IniConfig.bVTESTFunction==true)                                      //jou 20231101 : ï¿½È¤ï¿½nï¿½D tempï¿½ï¿½ï¿½ï¿½ Single Limit ï¿½ï¿½ï¿½Ï¥ï¿½
         {
             IniConfig.dSingleTempLimit[i]=0;
         }
@@ -2647,14 +2704,14 @@ void ProcessLastSetIni_Contact_Force(bool bRead)
 {
     AnsiString sPath=AuthPath+"config.ini";
 
-    IniConfig.iContactForceMap[0][0]    =ReadWriteIni(sPath, "Contact Force", "30MM_10KG", IniConfig.iContactForceMap[0][0], 196, bRead, true, 0,                                 4095);  //Steven 20111107 : Contact Forceªº¤½¦¡
-    IniConfig.iContactForceMap[0][1]    =ReadWriteIni(sPath, "Contact Force", "30MM_60KG", IniConfig.iContactForceMap[0][1], 933, bRead, true, IniConfig.iContactForceMap[0][0],  4095);  //Steven 20111107 : Contact Forceªº¤½¦¡
-    IniConfig.iContactForceMap[1][0]    =ReadWriteIni(sPath, "Contact Force", "40MM_10KG", IniConfig.iContactForceMap[1][0], 163, bRead, true, 0,                                 4095);  //Steven 20111107 : Contact Forceªº¤½¦¡
-    IniConfig.iContactForceMap[1][1]    =ReadWriteIni(sPath, "Contact Force", "40MM_60KG", IniConfig.iContactForceMap[1][1], 873, bRead, true, IniConfig.iContactForceMap[1][0],  4095);  //Steven 20111107 : Contact Forceªº¤½¦¡
-    IniConfig.iContactForceMap[2][0]    =ReadWriteIni(sPath, "Contact Force", "60MM_10KG", IniConfig.iContactForceMap[2][0], 130, bRead, true, 0,                                 4095);  //Steven 20111107 : Contact Forceªº¤½¦¡
-    IniConfig.iContactForceMap[2][1]    =ReadWriteIni(sPath, "Contact Force", "60MM_60KG", IniConfig.iContactForceMap[2][1], 813, bRead, true, IniConfig.iContactForceMap[2][0],  4095);  //Steven 20111107 : Contact Forceªº¤½¦¡
-    IniConfig.iContactForceMap[3][0]    =ReadWriteIni(sPath, "Contact Force", "56MM_10KG", IniConfig.iContactForceMap[3][0], 130, bRead, true, 0,                                 4095);  //Steven 20111107 : Contact Forceªº¤½¦¡    //wei 20151005 add 56mm
-    IniConfig.iContactForceMap[3][1]    =ReadWriteIni(sPath, "Contact Force", "56MM_60KG", IniConfig.iContactForceMap[3][1], 813, bRead, true, IniConfig.iContactForceMap[3][0],  4095);  //Steven 20111107 : Contact Forceªº¤½¦¡    //wei 20151005 add 56mm
+    IniConfig.iContactForceMap[0][0]    =ReadWriteIni(sPath, "Contact Force", "30MM_10KG", IniConfig.iContactForceMap[0][0], 196, bRead, true, 0,                                 4095);  //Steven 20111107 : Contact Forceï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    IniConfig.iContactForceMap[0][1]    =ReadWriteIni(sPath, "Contact Force", "30MM_60KG", IniConfig.iContactForceMap[0][1], 933, bRead, true, IniConfig.iContactForceMap[0][0],  4095);  //Steven 20111107 : Contact Forceï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    IniConfig.iContactForceMap[1][0]    =ReadWriteIni(sPath, "Contact Force", "40MM_10KG", IniConfig.iContactForceMap[1][0], 163, bRead, true, 0,                                 4095);  //Steven 20111107 : Contact Forceï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    IniConfig.iContactForceMap[1][1]    =ReadWriteIni(sPath, "Contact Force", "40MM_60KG", IniConfig.iContactForceMap[1][1], 873, bRead, true, IniConfig.iContactForceMap[1][0],  4095);  //Steven 20111107 : Contact Forceï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    IniConfig.iContactForceMap[2][0]    =ReadWriteIni(sPath, "Contact Force", "60MM_10KG", IniConfig.iContactForceMap[2][0], 130, bRead, true, 0,                                 4095);  //Steven 20111107 : Contact Forceï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    IniConfig.iContactForceMap[2][1]    =ReadWriteIni(sPath, "Contact Force", "60MM_60KG", IniConfig.iContactForceMap[2][1], 813, bRead, true, IniConfig.iContactForceMap[2][0],  4095);  //Steven 20111107 : Contact Forceï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    IniConfig.iContactForceMap[3][0]    =ReadWriteIni(sPath, "Contact Force", "56MM_10KG", IniConfig.iContactForceMap[3][0], 130, bRead, true, 0,                                 4095);  //Steven 20111107 : Contact Forceï¿½ï¿½ï¿½ï¿½ï¿½ï¿½    //wei 20151005 add 56mm
+    IniConfig.iContactForceMap[3][1]    =ReadWriteIni(sPath, "Contact Force", "56MM_60KG", IniConfig.iContactForceMap[3][1], 813, bRead, true, IniConfig.iContactForceMap[3][0],  4095);  //Steven 20111107 : Contact Forceï¿½ï¿½ï¿½ï¿½ï¿½ï¿½    //wei 20151005 add 56mm
 //    IniConfig.bD04MinForceByFile        =ReadWriteIni(sPath, "Contact Force", "bD04MinForceByFile", IniConfig.bD04MinForceByFile, 0, bRead, false);                                             //Steven 20190314 : Min force is read from file
 //    IniConfig.dD04MinForceByFile        =ReadWriteIni(sPath, "Contact Force", "dD04MinForceByFile", IniConfig.dD04MinForceByFile, 1.0, bRead, true, 1.0, 120.0);
 
@@ -2701,7 +2758,7 @@ void ProcessLastSetIni_Auto_Clean(bool bRead)
         {
             if(CUSTOMER_CODE==CC_KYEC_LEE       ||
                CosFunction.bHiSiliconFunction   ||
-               CUSTOMER_CODE==CC_KYEC_XILINX    )                               //wei 20160308 Auto clean ±j¨î¶}±Òshuttle sensor°»´ú
+               CUSTOMER_CODE==CC_KYEC_XILINX    )                               //wei 20160308 Auto clean ï¿½jï¿½ï¿½}ï¿½ï¿½shuttle sensorï¿½ï¿½ï¿½ï¿½
                 IniConfig.bAutoCleanShuttleDisable=false;
             else
                 IniConfig.bAutoCleanShuttleDisable=ReadWriteIni(sPath, "Auto Clean", "bAutoCleanShuttleDisable", IniConfig.bAutoCleanShuttleDisable, true, bRead);  //jou 2013-02-27 Auto Clean disable shuttle sensor detect
@@ -2716,7 +2773,7 @@ void ProcessLastSetIni_Barcode_Reader(bool bRead)
     if(CUSTOMER_CODE==CC_KYEC_LEE ||
        CUSTOMER_CODE==CC_KYEC_XILINX)
     {
-        IniConfig.iA11BarcodeTime  =180;                                        //wei 20150909 ±j¨î³]©w180s
+        IniConfig.iA11BarcodeTime  =180;                                        //wei 20150909 ï¿½jï¿½ï¿½]ï¿½w180s
         IniConfig.bA11BarcodeTime  =true;
     }
 }
@@ -2724,25 +2781,25 @@ void ProcessLastSetIni_Barcode_Reader(bool bRead)
 void ProcessLastSetIni_Specific(bool bRead)
 {
     AnsiString sPath=AuthPath+"config.ini";
-    //Sam 20221018 : ­×¥¿ LockByFile °ÝÃD Mark
-    //IniConfig.bF06_Active       =ReadWriteIni(sPath, "Specific", "F06_Active",      IniConfig.bF06_Active,      true,   bRead);                     //Steven 20140627 : Add for ASE-CL -- F06 ¥´¤Ä
+    //Sam 20221018 : ï¿½×¥ï¿½ LockByFile ï¿½ï¿½ï¿½D Mark
+    //IniConfig.bF06_Active       =ReadWriteIni(sPath, "Specific", "F06_Active",      IniConfig.bF06_Active,      true,   bRead);                     //Steven 20140627 : Add for ASE-CL -- F06 ï¿½ï¿½ï¿½ï¿½
     //IniConfig.bF06_Enable       =ReadWriteIni(sPath, "Specific", "F06_Enabled",     IniConfig.bF06_Enable,      false,  bRead);                     //Steven 20140627 : Add for ASE-CL -- F06 Enable
-    IniConfig.bD41_Active       =ReadWriteIni(sPath, "Specific", "D41_Active",      IniConfig.bD41_Active,      false,  bRead);                                 //Steven 20140627 : Add for ASE-CL -- D41 ¥´¤Ä  //jou 2015-10-19 bD41_Active true->false
+    IniConfig.bD41_Active       =ReadWriteIni(sPath, "Specific", "D41_Active",      IniConfig.bD41_Active,      false,  bRead);                                 //Steven 20140627 : Add for ASE-CL -- D41 ï¿½ï¿½ï¿½ï¿½  //jou 2015-10-19 bD41_Active true->false
     IniConfig.bD41_Enable       =ReadWriteIni(sPath, "Specific", "D41_Enabled",     IniConfig.bD41_Enable,      false,  bRead);                                 //Steven 20140627 : Add for ASE-CL -- D41 Enable
     IniConfig.iD41_Position     =ReadWriteIni(sPath, "Specific", "D41_Position",    IniConfig.iD41_Position,    1,      bRead, true, 0,   1);                   //Steven 20140627 : Add for ASE-CL -- D41 Inside/Above
-    IniConfig.dD41_Offset       =ReadWriteIni(sPath, "Specific", "D41_Offset",      IniConfig.dD41_Offset,      2.0,    bRead, true, 0.0, 10.0);                //Steven 20140627 : Add for ASE-CL -- D41 °ª«×
-    IniConfig.bD42_Active       =ReadWriteIni(sPath, "Specific", "D42_Active",      IniConfig.bD42_Active,      true,   bRead);                                 //JerryYang 20160220 add for Amkor-Philipine -- D42 ¥´¤Ä
+    IniConfig.dD41_Offset       =ReadWriteIni(sPath, "Specific", "D41_Offset",      IniConfig.dD41_Offset,      2.0,    bRead, true, 0.0, 10.0);                //Steven 20140627 : Add for ASE-CL -- D41 ï¿½ï¿½ï¿½ï¿½
+    IniConfig.bD42_Active       =ReadWriteIni(sPath, "Specific", "D42_Active",      IniConfig.bD42_Active,      true,   bRead);                                 //JerryYang 20160220 add for Amkor-Philipine -- D42 ï¿½ï¿½ï¿½ï¿½
     IniConfig.bD42_Enable       =ReadWriteIni(sPath, "Specific", "D42_Enabled",     IniConfig.bD42_Enable,      false,  bRead);                                 //JerryYang 20160220 add for Amkor-Philipine -- D42 Enable
-    IniConfig.bD44_Active       =ReadWriteIni(sPath, "Specific", "D44_Active",      IniConfig.bD44_Active,      true,   bRead);                                 //JerryYang 20160220 add for Amkor-Philipine -- D44 ¥´¤Ä
+    IniConfig.bD44_Active       =ReadWriteIni(sPath, "Specific", "D44_Active",      IniConfig.bD44_Active,      true,   bRead);                                 //JerryYang 20160220 add for Amkor-Philipine -- D44 ï¿½ï¿½ï¿½ï¿½
     IniConfig.bD44_Enable       =ReadWriteIni(sPath, "Specific", "D44_Enabled",     IniConfig.bD44_Enable,      false,  bRead);                                 //JerryYang 20160220 add for Amkor-Philipine -- D44 Enable
-    //Sam 20221018 : ­×¥¿ LockByFile °ÝÃD Mark
-    //IniConfig.bP24_Active       =ReadWriteIni(sPath, "Specific", "P24_Active",      IniConfig.bP24_Active,      true,   bRead);                     //JerryYang 20160220 add for ª¿®æ¥_¿³ -- P24 ¥´¤Ä
-    //IniConfig.bP24_Enable       =ReadWriteIni(sPath, "Specific", "P24_Enabled",     IniConfig.bP24_Enable,      false,  bRead);                     //JerryYang 20160220 add for ª¿®æ¥_¿³ -- P24 Enable
+    //Sam 20221018 : ï¿½×¥ï¿½ LockByFile ï¿½ï¿½ï¿½D Mark
+    //IniConfig.bP24_Active       =ReadWriteIni(sPath, "Specific", "P24_Active",      IniConfig.bP24_Active,      true,   bRead);                     //JerryYang 20160220 add for ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ -- P24 ï¿½ï¿½ï¿½ï¿½
+    //IniConfig.bP24_Enable       =ReadWriteIni(sPath, "Specific", "P24_Enabled",     IniConfig.bP24_Enable,      false,  bRead);                     //JerryYang 20160220 add for ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ -- P24 Enable
 
-    IniConfig.bF26_Enable       =ReadWriteIni(sPath, "Specific", "F26_Enabled",     IniConfig.bF26_Enable,      false,  bRead);                                 //Sam 20220527 : for ª¿®æ´ò¤f -- F26 Enable
-    //Sam 20221018 : ­×¥¿ LockByFile °ÝÃD Mark
-    //IniConfig.bI06_Active       =ReadWriteIni(sPath, "Specific", "I06_Active",      IniConfig.bI06_Active,      true,   bRead);                     //Sam 20220527 : for ª¿®æ¥_¿³ -- I06 ¥´¤Ä
-    //IniConfig.bI06_Enable       =ReadWriteIni(sPath, "Specific", "I06_Enabled",     IniConfig.bI06_Enable,      false,  bRead);                     //Sam 20220527 : for ª¿®æ¥_¿³ -- I06 Enable
+    IniConfig.bF26_Enable       =ReadWriteIni(sPath, "Specific", "F26_Enabled",     IniConfig.bF26_Enable,      false,  bRead);                                 //Sam 20220527 : for ï¿½ï¿½ï¿½ï¿½ï¿½f -- F26 Enable
+    //Sam 20221018 : ï¿½×¥ï¿½ LockByFile ï¿½ï¿½ï¿½D Mark
+    //IniConfig.bI06_Active       =ReadWriteIni(sPath, "Specific", "I06_Active",      IniConfig.bI06_Active,      true,   bRead);                     //Sam 20220527 : for ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ -- I06 ï¿½ï¿½ï¿½ï¿½
+    //IniConfig.bI06_Enable       =ReadWriteIni(sPath, "Specific", "I06_Enabled",     IniConfig.bI06_Enable,      false,  bRead);                     //Sam 20220527 : for ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ -- I06 Enable
     if(CUSTOMER_CODE==CC_TSMC_TAINAN ||                                         //kevin 20180214 add
        CUSTOMER_CODE==CC_ASE_KaohSiung)                                         //wei 20160726 TSMC GPIB Lot End
     {
@@ -2763,17 +2820,17 @@ void ProcessLastSetIni_Specific(bool bRead)
         IniConfig.bI31_2GPIBLotStart =false;                                    //kevin 20190613 add
     }
 
-    if(IniConfig.bSPILFunction==true)                                           //JerryYang 20170328 (Jou) ª¿«~«È¤á½X²Î¤@¥ÎSPILFunction
+    if(IniConfig.bSPILFunction==true)                                           //JerryYang 20170328 (Jou) ï¿½ï¿½ï¿½~ï¿½È¤ï¿½Xï¿½Î¤@ï¿½ï¿½SPILFunction
         IniConfig.bD41_Active=false;
     else
-        IniConfig.bD41_Active       =ReadWriteIni(sPath, "Specific", "D41_Active",      IniConfig.bD41_Active,      false,  bRead);                             //Steven 20140627 : Add for ASE-CL -- D41 ¥´¤Ä  //jou 2015-10-19 bD41_Active true->false
+        IniConfig.bD41_Active       =ReadWriteIni(sPath, "Specific", "D41_Active",      IniConfig.bD41_Active,      false,  bRead);                             //Steven 20140627 : Add for ASE-CL -- D41 ï¿½ï¿½ï¿½ï¿½  //jou 2015-10-19 bD41_Active true->false
 
     if(CosFunction.bLockD41ByFile)                                              //Steven 20140627 : Add for ASE-CL
     {
         IniConfig.iD41SocketInitialICCheckPosition        =IniConfig.iD41_Position;
         IniConfig.dD41SocketInitialCheckOffset            =IniConfig.dD41_Offset;
     }
-    //Sam 20221018 : ­×¥¿ LockByFile °ÝÃD Mark
+    //Sam 20221018 : ï¿½×¥ï¿½ LockByFile ï¿½ï¿½ï¿½D Mark
 }
 //---------------------------------------------------------------------------
 void SetCustomerLimitationForConfig()
@@ -2793,7 +2850,7 @@ void SetCustomerLimitationForConfig()
     if(elConfig!=NULL)
     {
         elConfig->ReadEditTextFromFile(AuthPath, "config.ini");
-        ADAM_Rang(IniConfig.iD26EPEncoderRange);                                //Steven 20250113 : ­×¥¿¨S¶Ç¤JAdam range³]©w­È
+        ADAM_Rang(IniConfig.iD26EPEncoderRange);                                //Steven 20250113 : ï¿½×¥ï¿½ï¿½Sï¿½Ç¤JAdam rangeï¿½]ï¿½wï¿½ï¿½
 
         #ifdef SOFT_SIMULTE
         IniConfig.bM01EnableMonitorFunction=false;
@@ -2819,7 +2876,7 @@ void SetCustomerLimitationForConfig()
         }
 
         if(IniConfig.bA09_ByArmCloseSite &&
-           IniConfig.bA09_1_AutoCloseArm)                                       //Steven 20220819 : ³æArm Site¥þÃö®É, ´N§âArmÃö¤F
+           IniConfig.bA09_1_AutoCloseArm)                                       //Steven 20220819 : ï¿½ï¿½Arm Siteï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½Nï¿½ï¿½Armï¿½ï¿½ï¿½F
         {
             IniConfig.bD30EnableSiteModeSelect=true;
         }
@@ -2832,26 +2889,26 @@ void SetCustomerLimitationForConfig()
             if(IniConfig.iA01ChangeOpTime<=60)
                 IniConfig.iA01ChangeOpTime=60;                                  //kevin 20171024 add
         }
-        else if(CUSTOMER_CODE==CC_KYEC_LEE)                                     //wei 20150903 Âê©wA01
+        else if(CUSTOMER_CODE==CC_KYEC_LEE)                                     //wei 20150903 ï¿½ï¿½wA01
         {
-            IniConfig.iA01ChangeOpTime=600;                                     //Ifor 20170808 (wei) KYEC ³ì´¼­n¨D 360 => 600
+            IniConfig.iA01ChangeOpTime=600;                                     //Ifor 20170808 (wei) KYEC ï¿½ì´¼ï¿½nï¿½D 360 => 600
         }
 
-        if(CUSTOMER_CODE==CC_TSMC_TAINAN)                                       //wei 20170216 (Steven) TSMC ATR ¥u°µ¤@¦¸RT
+        if(CUSTOMER_CODE==CC_TSMC_TAINAN)                                       //wei 20170216 (Steven) TSMC ATR ï¿½uï¿½ï¿½ï¿½@ï¿½ï¿½RT
             IniConfig.iAutoRetestLimit=1;
 
         if(CUSTOMER_CODE==CC_KYEC_LEE ||
            CUSTOMER_CODE==CC_KYEC_XILINX)
         {
-            IniConfig.iA11BarcodeTime=180;                                      //wei 20150909 ±j¨î³]©w180s
+            IniConfig.iA11BarcodeTime=180;                                      //wei 20150909 ï¿½jï¿½ï¿½]ï¿½w180s
         }
 
         if(Temperature.fWorkTemperBase+IniConfig.iSocketTemptureRangeOver+10>=TempFuseLimitType)
-        {                                                                       //Steven 20170711 (Wei) : ­×¥¿¯QÀsÄÑ»¡¤@ª½Alarm socket·Å«×²§±`ªº°ÝÃD
+        {                                                                       //Steven 20170711 (Wei) : ï¿½×¥ï¿½ï¿½Qï¿½sï¿½Ñ»ï¿½ï¿½@ï¿½ï¿½Alarm socketï¿½Å«×²ï¿½ï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½D
             IniConfig.iSocketTemptureRangeOver=TempFuseLimitType-Temperature.fWorkTemperBase-11;
         }
 
-        if(IniConfig.bL11_8ATCUseTemperatureCompare==true &&                    //Ifor 20151029 µL¶}±Ò[L11_5]¥\¯à¤£¥i¶}±Ò[L11_8]¥\¯à
+        if(IniConfig.bL11_8ATCUseTemperatureCompare==true &&                    //Ifor 20151029 ï¿½Lï¿½}ï¿½ï¿½[L11_5]ï¿½\ï¿½à¤£ï¿½iï¿½}ï¿½ï¿½[L11_8]ï¿½\ï¿½ï¿½
            Temperature.bUseReferTempSensor==false)
         {
             IniConfig.bL11_8ATCUseTemperatureCompare=false;
@@ -2869,7 +2926,7 @@ void SetCustomerLimitationForConfig()
                 IniConfig.asN12_FtpUplaodPath=IniConfig.asN12_FtpUplaodPath + "/";
         }
 
-        if(CosFunction.bTestTimeOutShowSkipAndHome)                             //JerryYang 20231208 SPIL test timeout¥u¯à¿ïSKIP©Î¬OHOME
+        if(CosFunction.bTestTimeOutShowSkipAndHome)                             //JerryYang 20231208 SPIL test timeoutï¿½uï¿½ï¿½ï¿½SKIPï¿½Î¬OHOME
         {
             if(IniConfig.iI22TestTimeOutOption==1 || IniConfig.iI22TestTimeOutOption==2)
             {
@@ -2888,15 +2945,15 @@ void SetCustomerLimitationForConfig()
             }
         }
     }
-    ReadConfigByRecipe();                                                       //JimmyChiu 20220601 : configÀx¦s¸òÀHrecipe
+    ReadConfigByRecipe();                                                       //JimmyChiu 20220601 : configï¿½xï¿½sï¿½ï¿½ï¿½Hrecipe
     if(fMain!=NULL)                                                             //Steven 20240124 : Add protection
-        fMain->ShowFunctions();                                                 //Steven 20240123 : Åã¥Ü¥\¯à¦Cªí
+        fMain->ShowFunctions();                                                 //Steven 20240123 : ï¿½ï¿½Ü¥\ï¿½ï¿½Cï¿½ï¿½
 }
 //---------------------------------------------------------------------------
-void ReadConfigByRecipe()                                                       //JimmyChiu 20220601 : configÀx¦s¸òÀHrecipe
+void ReadConfigByRecipe()                                                       //JimmyChiu 20220601 : configï¿½xï¿½sï¿½ï¿½ï¿½Hrecipe
 {
     AnsiString szDir=GetRecipePath();
-    if(elConfig_byRecipe!=NULL)                                                 //JimmyChiu 20220601 : configÀx¦s¸òÀHrecipe
+    if(elConfig_byRecipe!=NULL)                                                 //JimmyChiu 20220601 : configï¿½xï¿½sï¿½ï¿½ï¿½Hrecipe
     {
         elConfig_byRecipe->ReadEditTextFromFile(szDir, asFileNameConfigByRecipe);
         elConfig_byRecipe->InitialDataToEdit();
@@ -2915,7 +2972,7 @@ int GetColorSensorOnLoaderByMUN()                                               
 bool GetColorSensorIsMapping(AnsiString &sErrorMsg)                             //Jimmychiu 20230630 : add color sensor MU-N in Loader
 {
     int iColorSenNum=GetColorSensorOnLoaderByMUN();
-    bool bReturn=true;                                                          //«D¥H¤W¼Ò¦¡¤£§PÂ_¥B¤£Äµ³ø
+    bool bReturn=true;                                                          //ï¿½Dï¿½Hï¿½Wï¿½Ò¦ï¿½ï¿½ï¿½ï¿½Pï¿½_ï¿½Bï¿½ï¿½Äµï¿½ï¿½
     if(iTestRunMode==FT)
     {
         bReturn=fTrayForm->GetColorSensor("ColorSensor_FT")->IsColorEable(iColorSenNum,sErrorMsg);
@@ -2937,9 +2994,9 @@ void ReadLastSetIni()
     AnsiString sPath=AuthPath+"config.ini";                                     //JerryYang 20160603
 
     if(fConfiguration!=NULL)
-        fConfiguration->ChangeCBListProperty();                                 //Steven 20190813 : ¥²¶·¥ý­×§ïÅv­­¤~¯à­×§ïÅã¥Ü
+        fConfiguration->ChangeCBListProperty();                                 //Steven 20190813 : ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×§ï¿½ï¿½vï¿½ï¿½ï¿½~ï¿½ï¿½×§ï¿½ï¿½ï¿½ï¿½
 
-    CustomerFunctionSelect();                                                   //  «È¤á¥\¯à¿ï¾Ü°Ï
+    CustomerFunctionSelect();                                                   //  ï¿½È¤ï¿½\ï¿½ï¿½ï¿½Ü°ï¿½
     ReadLastDataFile();
 
     IniConfig.sMachineType                                  =CheckAndReadIniDataGeneral("Version",          "Model",        AnsiString("HT-9046"));             //kevin 20130425  //Steven 20140606 : For Secs Gem
@@ -2950,8 +3007,8 @@ void ReadLastSetIni()
     AnsiString szDir=GetRecipePath();
     if(CUSTOMER_CODE==CC_ASE_CL)
     {
-        char PcName[255] ;                                                      //Steven 20110131 : ¹q¸£¦WºÙ
-        unsigned long PcNameLen=255;                                            //Steven 20110131 : ¹q¸£¦WºÙªø«×
+        char PcName[255] ;                                                      //Steven 20110131 : ï¿½qï¿½ï¿½ï¿½Wï¿½ï¿½
+        unsigned long PcNameLen=255;                                            //Steven 20110131 : ï¿½qï¿½ï¿½ï¿½Wï¿½Ùªï¿½ï¿½ï¿½
         GetComputerName(PcName, &PcNameLen);                                    //Steven 20110131
         IniConfig.SocketHandlerID=AnsiString(PcName);
     }
@@ -2959,7 +3016,7 @@ void ReadLastSetIni()
     if(!DirectoryExists(szDir))
     {
         MyForceDirectories(szDir);
-        bSetupFileNotExist=true;                                                //Ifor 20160822 add ±Ò°Ê§ä¤£¨ì³]©w¤¤ªºSetup FileÀÉ®×Alarm Äµ¥Ü
+        bSetupFileNotExist=true;                                                //Ifor 20160822 add ï¿½Ò°Ê§ä¤£ï¿½ï¿½]ï¿½wï¿½ï¿½ï¿½ï¿½Setup Fileï¿½É®ï¿½Alarm Äµï¿½ï¿½
     }
 
     szDir=GetRecipeFileName("HotPlate.Data");
@@ -2970,7 +3027,7 @@ void ReadLastSetIni()
         WriteIniData(szDir, "Hotplate Form", "Using Flag", HotPlateForm.iPlateSelect);
     }
 
-    if(IniConfig.bRecordSkipPosition==true)                                     //JerryYang 20160603 ±j¨î¶}±ÒbRecordSkipPosition«á­n¥ý¦sÀÉ¦AÅª¨ú,Á×§Kini¤¤¨S±Ò¥Î®É¦¹¥\¯à·|¥¢®Ä
+    if(IniConfig.bRecordSkipPosition==true)                                     //JerryYang 20160603 ï¿½jï¿½ï¿½}ï¿½ï¿½bRecordSkipPositionï¿½ï¿½nï¿½ï¿½ï¿½sï¿½É¦AÅªï¿½ï¿½,ï¿½×§Kiniï¿½ï¿½ï¿½Sï¿½Ò¥Î®É¦ï¿½ï¿½\ï¿½ï¿½|ï¿½ï¿½ï¿½ï¿½
     {
         WriteIniData(sPath, "Tray", "bRecordSkipPosition", IniConfig.bRecordSkipPosition);                              //jou 2013-05-30 Record Skip
     }
@@ -2978,7 +3035,7 @@ void ReadLastSetIni()
     if(HSys.MyGem!=NULL)
         HSys.MyGem->UpdateDataPath("D:\\HT9045\\IniData\\Data\\");              //Steven 20140902 : SECS GEM
 
-    if(IniConfig.bA09_ByArmCloseSite==true)                                     //ChungHung 20130910 alter for SCK can close site by Index ¨â­Ó¦³½Ä¬ð
+    if(IniConfig.bA09_ByArmCloseSite==true)                                     //ChungHung 20130910 alter for SCK can close site by Index ï¿½ï¿½Ó¦ï¿½ï¿½Ä¬ï¿½
         CosFunction.bOneCycleCanChangeArm=false;                                //ChungHung 20140505 alter ==--->=
 
     if(CUSTOMER_CODE==CC_ASE_KaohSiung)                                         //kevin 20180918 add
@@ -2988,7 +3045,7 @@ void ReadLastSetIni()
 
     if(InitialOK==true && fMain!=NULL)
     {
-        fMain->pnlUnitSpeedDisplay->Visible=IniConfig.bA26MotorSpeedSortDisplay;                                        //Ifor 20171228 (Steven) : add §PÂ_¬O§_Åã¥Ü Motor Speed Display
+        fMain->pnlUnitSpeedDisplay->Visible=IniConfig.bA26MotorSpeedSortDisplay;                                        //Ifor 20171228 (Steven) : add ï¿½Pï¿½_ï¿½Oï¿½_ï¿½ï¿½ï¿½ Motor Speed Display
     }
 
     ProcessLastSetIni_RMS               (bReadFile);
@@ -3009,7 +3066,7 @@ void ReadLastSetIni()
     ProcessLastSetIni_Specific          (bReadFile);
     SetCustomerLimitationForConfig();
 
-    if(USE_SOCKET_SENSOR==999)                                                  //JerryYang 20200408 socket sensor§ï¬°µwÅé¿ï¶µ,¹w³]­È¨Ï¥ÎÂÂª© Config C08¥\¯à
+    if(USE_SOCKET_SENSOR==999)                                                  //JerryYang 20200408 socket sensorï¿½ï¬°ï¿½wï¿½ï¿½ï¶µ,ï¿½wï¿½]ï¿½È¨Ï¥ï¿½ï¿½Âªï¿½ Config C08ï¿½\ï¿½ï¿½
     {
         WriteIniDataGeneral("System", "USE_SOCKET_SENSOR", IniConfig.bC08_SocketSensor);
         USE_SOCKET_SENSOR=CheckAndReadIniDataGeneral("System",   "USE_SOCKET_SENSOR", 0);
@@ -3019,7 +3076,7 @@ void ReadLastSetIni()
         }
         else
         {
-            if(USE_COLOR_TRAY_SENSOR)                                           //¸ËColor sensor¹w³]4 ea
+            if(USE_COLOR_TRAY_SENSOR)                                           //ï¿½ï¿½Color sensorï¿½wï¿½]4 ea
             {
                 SOCKET_AMP_QTY=CheckRange(CheckAndReadIniDataGeneral("System",   "SocketSenAmpQty",  4), 0, iSnSocketCnt);
             }
@@ -3031,7 +3088,7 @@ void ReadLastSetIni()
     }
 
     if(Cylinder[C_Shuttle_Knocker_1].Enable==false &&
-       Cylinder[C_Shuttle_Knocker_2].Enable==false)                             //Steven 20160509 : ®ð¬û¨S¸Ë´N¤£­n±Ò¥Î¥\¯à
+       Cylinder[C_Shuttle_Knocker_2].Enable==false)                             //Steven 20160509 : ï¿½ï¿½ï¿½ï¿½Sï¿½Ë´Nï¿½ï¿½ï¿½nï¿½Ò¥Î¥\ï¿½ï¿½
     {
         IniConfig.bF14KnockShuttle=false;
         IniConfig.bF14_1KnockShuttleFirst=false;
@@ -3070,9 +3127,9 @@ void SaveLastSetIni()
     ProcessLastSetIni_Auto_Clean        (bWriteFile);
     ProcessLastSetIni_Barcode_Reader    (bWriteFile);
     ProcessLastSetIni_Specific          (bWriteFile);
-//    if(IniConfig.bEnable_SECS_GEM==true)                                      //JerryYang 20170215 (Steven) Mark for ­×§ïRun checkÄ²µo±ø¥ó
+//    if(IniConfig.bEnable_SECS_GEM==true)                                      //JerryYang 20170215 (Steven) Mark for ï¿½×§ï¿½Run checkÄ²ï¿½oï¿½ï¿½ï¿½ï¿½
 //    {
-//        bHasSaveSet=true;                                                     //Ifor 20151204 ·s¼W§PÂ_¾÷¥x¦³µL­×§ï³]©wÀÉ
+//        bHasSaveSet=true;                                                     //Ifor 20151204 ï¿½sï¿½Wï¿½Pï¿½_ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½Lï¿½×§ï¿½]ï¿½wï¿½ï¿½
 //    }
 
     if(cbLastSet!=NULL)
@@ -3087,7 +3144,7 @@ void SaveLastSetIni()
 
     if(elConfig!=NULL)
     {
-        if(IniConfig.bSPILFunction==true &&                                     //JerryYang 20250423 : SPIL¶¶«H­n¨D, °»´ú¨ìRun check³QÃö³¬­n¸õalarm
+        if(IniConfig.bSPILFunction==true &&                                     //JerryYang 20250423 : SPILï¿½ï¿½ï¿½Hï¿½nï¿½D, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Run checkï¿½Qï¿½ï¿½ï¿½ï¿½ï¿½nï¿½ï¿½alarm
             fConfiguration->cbN07_EnableHostStart->Checked==false &&
             IniConfig.bRCMDStart==true)
         {
@@ -3099,7 +3156,7 @@ void SaveLastSetIni()
     }
 
     AnsiString szDir=GetRecipePath();
-    if(elConfig_byRecipe!=NULL)                                                 //Sam 20220921 : configÀx¦s¸òÀHrecipe
+    if(elConfig_byRecipe!=NULL)                                                 //Sam 20220921 : configï¿½xï¿½sï¿½ï¿½ï¿½Hrecipe
     {
         elConfig_byRecipe->SaveEditTextToFile(szDir, asFileNameConfigByRecipe);
     }
@@ -3138,7 +3195,7 @@ void SaveEventLogAutoSaveInfo()                                                 
     if(IniConfig.bEventLogAutoSaveFunction)
     {
         WriteIniData(sPath, "Event Log", "EventLogRecordDate", IniConfig.dtEventLogLastRecordDate);
-        IniConfig.sEvenLogDataTime=IniConfig.dtEventLogLastRecordDate.FormatString("yyyy/mm/dd hh:mm:ss");              //Ifor 20160621 ·s¼WEven Log Record Date Time ¦r¦ê®æ¦¡ Á×§K¤£¦P¨t²Î²£¥Í²§±`°ÝÃD
+        IniConfig.sEvenLogDataTime=IniConfig.dtEventLogLastRecordDate.FormatString("yyyy/mm/dd hh:mm:ss");              //Ifor 20160621 ï¿½sï¿½WEven Log Record Date Time ï¿½rï¿½ï¿½æ¦¡ ï¿½×§Kï¿½ï¿½ï¿½Pï¿½tï¿½Î²ï¿½ï¿½Í²ï¿½ï¿½`ï¿½ï¿½ï¿½D
         WriteIniData(sPath, "Event Log", "sEvenLogDataTime", IniConfig.sEvenLogDataTime);
     }
 }
@@ -3152,7 +3209,7 @@ void ReadEventLogAutoSaveInfo()                                                 
     {
         try
         {
-            IniConfig.sEvenLogDataTime=CheckAndReadIniData(sPath, "Event Log", "sEvenLogDataTime", SDate);              //¯uªº¨S¦³¸ê®Æªº¸Ü´N°l®Ò1¤Ñ //Ifor 20160621 EventLogRecordDate ­×§ï¥Ñ sEvenLogDataTime ¦r¦êÂà´«¦¨¨t²Î®É¶¡¡AÁ×§K¤£¦P¨t²Î&®É¶¡®æ¦¡¤£¦Pµo¥Í²§±`
+            IniConfig.sEvenLogDataTime=CheckAndReadIniData(sPath, "Event Log", "sEvenLogDataTime", SDate);              //ï¿½uï¿½ï¿½ï¿½Sï¿½ï¿½ï¿½ï¿½Æªï¿½ï¿½Ü´Nï¿½lï¿½ï¿½1ï¿½ï¿½ //Ifor 20160621 EventLogRecordDate ï¿½×§ï¿½ï¿½ sEvenLogDataTime ï¿½rï¿½ï¿½ï¿½à´«ï¿½ï¿½ï¿½tï¿½Î®É¶ï¿½ï¿½Aï¿½×§Kï¿½ï¿½ï¿½Pï¿½tï¿½ï¿½&ï¿½É¶ï¿½ï¿½æ¦¡ï¿½ï¿½ï¿½Pï¿½oï¿½Í²ï¿½ï¿½`
         }
         catch(...)
         {
@@ -3161,21 +3218,21 @@ void ReadEventLogAutoSaveInfo()                                                 
         }
 
         if(IniConfig.sEvenLogDataTime=="" ||
-           IniConfig.sEvenLogDataTime=="NULL")                                  //Ifor 20160621 sEvenLogDataTime¦r¦ê®É¶¡­YµL¸ê®Æ©¹«e°l®Ò1¤Ñ
+           IniConfig.sEvenLogDataTime=="NULL")                                  //Ifor 20160621 sEvenLogDataTimeï¿½rï¿½ï¿½É¶ï¿½ï¿½Yï¿½Lï¿½ï¿½Æ©ï¿½ï¿½eï¿½lï¿½ï¿½1ï¿½ï¿½
             IniConfig.sEvenLogDataTime=SDate;
 
         try
         {
-            SYSTEMTIME SysTime;                                                 //Ifor 20160621 EvenLog Recode Data ­×§ï©T©w®æ¦¡ yyyy/mm/dd hh:mm:ss
-            GetLocalTime(&SysTime);                                             //Ifor 20160829 add µLµ¹ªì©l¤Æ·|¦³­t¼Æ¥X²{¾É­P²§±`
+            SYSTEMTIME SysTime;                                                 //Ifor 20160621 EvenLog Recode Data ï¿½×§ï¿½Tï¿½wï¿½æ¦¡ yyyy/mm/dd hh:mm:ss
+            GetLocalTime(&SysTime);                                             //Ifor 20160829 add ï¿½Lï¿½ï¿½ï¿½ï¿½lï¿½Æ·|ï¿½ï¿½ï¿½tï¿½Æ¥Xï¿½{ï¿½É­Pï¿½ï¿½ï¿½`
             SysTime.wYear   = atoi(IniConfig.sEvenLogDataTime.SubString(1, 4).c_str());
             SysTime.wMonth  = atoi(IniConfig.sEvenLogDataTime.SubString(6, 2).c_str());
             SysTime.wDay    = atoi(IniConfig.sEvenLogDataTime.SubString(9, 2).c_str());
             SysTime.wHour   = atoi(IniConfig.sEvenLogDataTime.SubString(12,2).c_str());
             SysTime.wMinute = atoi(IniConfig.sEvenLogDataTime.SubString(15,2).c_str());
             SysTime.wSecond = atoi(IniConfig.sEvenLogDataTime.SubString(18,2).c_str());
-            IniConfig.dtEventLogLastRecordDate=SystemTimeToDateTime(SysTime);   //Ifor 20160621 ¦r¦ê®É¶¡Âà¥Ø«e¨t²Î®É¶¡®æ¦¡
-            IniConfig.sEventLogLastRecordDate=IniConfig.dtEventLogLastRecordDate.FormatString("yyyy/mm/dd hh:mm:ss");   //Ifor 20160621 ­×§ïSecs Gem ®É¶¡®æ¦¡©T©w yyyy/mm/dd hh:mm:ss
+            IniConfig.dtEventLogLastRecordDate=SystemTimeToDateTime(SysTime);   //Ifor 20160621 ï¿½rï¿½ï¿½É¶ï¿½ï¿½ï¿½Ø«eï¿½tï¿½Î®É¶ï¿½ï¿½æ¦¡
+            IniConfig.sEventLogLastRecordDate=IniConfig.dtEventLogLastRecordDate.FormatString("yyyy/mm/dd hh:mm:ss");   //Ifor 20160621 ï¿½×§ï¿½Secs Gem ï¿½É¶ï¿½ï¿½æ¦¡ï¿½Tï¿½w yyyy/mm/dd hh:mm:ss
         }
         catch(...)
         {
@@ -3189,13 +3246,13 @@ void SaveTasterInfo()                                                           
     AnsiString sPath=AuthPath+"config.ini", str="";
     if(CosFunction.bFTPFunction)
     {
-        WriteIniData(sPath, "Taster", "Taster Map File",        IniConfig.N06_TasterListMap);                           //Steven 20121018 : Handler»P´ú¸Õ¾÷³s½uªºIP
+        WriteIniData(sPath, "Taster", "Taster Map File",        IniConfig.N06_TasterListMap);                           //Steven 20121018 : Handlerï¿½Pï¿½ï¿½ï¿½Õ¾ï¿½ï¿½sï¿½uï¿½ï¿½IP
         WriteIniData(sPath, "Taster", "Taster List File",       IniConfig.N06_TasterListFile);
         WriteIniData(sPath, "Taster", "N06 Taster Recipe Path", IniConfig.asN06_TesterPath);
-        WriteIniData(sPath, "Taster", "Taster Input Method",    IniConfig.TasterInputMethod);                           //Steven 20110311 : Taster¿é¤J¤èªk
-        WriteIniData(sPath, "Taster", "Taster Type",            IniConfig.TasterType);                                  //Steven 20110305 : Taster«¬¸¹
-        WriteIniData(sPath, "Taster", "Taster No",              IniConfig.TasterNo);                                    //Steven 20110305 : Taster¸¹½X
-        WriteIniData(sPath, "Taster", "Taster Name",            IniConfig.TasterName);                                  //Steven 20110311 : Taster¦WºÙ
+        WriteIniData(sPath, "Taster", "Taster Input Method",    IniConfig.TasterInputMethod);                           //Steven 20110311 : Tasterï¿½ï¿½Jï¿½ï¿½k
+        WriteIniData(sPath, "Taster", "Taster Type",            IniConfig.TasterType);                                  //Steven 20110305 : Tasterï¿½ï¿½ï¿½ï¿½
+        WriteIniData(sPath, "Taster", "Taster No",              IniConfig.TasterNo);                                    //Steven 20110305 : Tasterï¿½ï¿½ï¿½X
+        WriteIniData(sPath, "Taster", "Taster Name",            IniConfig.TasterName);                                  //Steven 20110311 : Tasterï¿½Wï¿½ï¿½
     }
 }
 //---------------------------------------------------------------------------
@@ -3209,7 +3266,7 @@ void ReadTasterInfo()                                                           
             IniConfig.N06_TasterListMap     ="";
             IniConfig.N06_TasterListFile    ="";
         }
-        else if(CUSTOMER_CODE==CC_JSCC_OS)                                      //ªø¹q·L¹q¤l (JSCC OS³¡ªù)
+        else if(CUSTOMER_CODE==CC_JSCC_OS)                                      //ï¿½ï¿½ï¿½qï¿½Lï¿½qï¿½l (JSCC OSï¿½ï¿½ï¿½ï¿½)
         {
             IniConfig.asN06_TesterPath      =CheckAndReadIniData(sPath, "Taster", "N06 Taster Recipe Path",  AnsiString("Z:\\"));
             IniConfig.N06_TasterListFile    ="";
@@ -3217,13 +3274,13 @@ void ReadTasterInfo()                                                           
         }
         else
         {
-            IniConfig.N06_TasterListMap     =CheckAndReadIniData(sPath, "Taster", "Taster Map File",  AnsiString("D:\\KyecData\\Mapping\\TestMap.txt"));        //Steven 20121018 : Handler»P´ú¸Õ¾÷³s½uªºIP
+            IniConfig.N06_TasterListMap     =CheckAndReadIniData(sPath, "Taster", "Taster Map File",  AnsiString("D:\\KyecData\\Mapping\\TestMap.txt"));        //Steven 20121018 : Handlerï¿½Pï¿½ï¿½ï¿½Õ¾ï¿½ï¿½sï¿½uï¿½ï¿½IP
             IniConfig.N06_TasterListFile    =CheckAndReadIniData(sPath, "Taster", "Taster List File", AnsiString("D:\\RMS\\tester list.txt"));
         }
-        IniConfig.TasterInputMethod =CheckAndReadIniData(sPath, "Taster", "Taster Input Method",  0);                   //Steven 20110311 : Taster¿é¤J¤èªk
-        IniConfig.TasterType        =CheckAndReadIniData(sPath, "Taster", "Taster Type", AnsiString(""));               //Steven 20110305 : Taster«¬¸¹
-        IniConfig.TasterNo          =CheckAndReadIniData(sPath, "Taster", "Taster No",   AnsiString(""));               //Steven 20110305 : Taster¸¹½X
-        IniConfig.TasterName        =CheckAndReadIniData(sPath, "Taster", "Taster Name", AnsiString(""));               //Steven 20110311 : Taster¦WºÙ
+        IniConfig.TasterInputMethod =CheckAndReadIniData(sPath, "Taster", "Taster Input Method",  0);                   //Steven 20110311 : Tasterï¿½ï¿½Jï¿½ï¿½k
+        IniConfig.TasterType        =CheckAndReadIniData(sPath, "Taster", "Taster Type", AnsiString(""));               //Steven 20110305 : Tasterï¿½ï¿½ï¿½ï¿½
+        IniConfig.TasterNo          =CheckAndReadIniData(sPath, "Taster", "Taster No",   AnsiString(""));               //Steven 20110305 : Tasterï¿½ï¿½ï¿½X
+        IniConfig.TasterName        =CheckAndReadIniData(sPath, "Taster", "Taster Name", AnsiString(""));               //Steven 20110311 : Tasterï¿½Wï¿½ï¿½
     }
 }
 //---------------------------------------------------------------------------
@@ -3235,7 +3292,7 @@ void ReadRmsPath()                                                              
     str=(CUSTOMER_CODE==CC_SCC || CUSTOMER_CODE==CC_SCK)?"RMS":"Server";        //ChungHung 20130621 add SCK RMS
     if(IniConfig.bShowLotInfo)
     {
-        if(CosFunction.bDownloadRecipeLevelMode)                                //jou 2016-01-06 download recipe ¼W¥[Åv­­¼Ò¦¡¿ï¾Ü
+        if(CosFunction.bDownloadRecipeLevelMode)                                //jou 2016-01-06 download recipe ï¿½Wï¿½[ï¿½vï¿½ï¿½ï¿½Ò¦ï¿½ï¿½ï¿½ï¿½
         {
             if(fLotInfo->coLevelMode->Text!="Normal")
                 IniConfig.sRmsPath=CheckAndReadIniData(sPath, str, str+" Download Path",    AnsiString("D:\\RMS"));
@@ -3255,7 +3312,7 @@ void ReadRmsPath()                                                              
 
         if(CUSTOMER_CODE==CC_SCC ||
            CUSTOMER_CODE==CC_SCK ||                                             //ChungHung 20130621 add SCK RMS
-           CUSTOMER_CODE==CC_AMD_M)                                             //Ifor 20200915 add: TF_AMD KLª© ·s¼W RMS
+           CUSTOMER_CODE==CC_AMD_M)                                             //Ifor 20200915 add: TF_AMD KLï¿½ï¿½ ï¿½sï¿½W RMS
         {
             IniConfig.sRmsDownPath=CheckAndReadIniData(sPath, str, str+" Download Path", AnsiString("D:\\HT9045"));
             iLength=IniConfig.sRmsDownPath.Length();
@@ -3267,12 +3324,12 @@ void ReadRmsPath()                                                              
     }
 }
 //---------------------------------------------------------------------------
-//ª`·N!! ¶}ÃöSite¼Ò¦¡¡A­×§ï®É­n¤p¤ß
+//ï¿½`ï¿½N!! ï¿½}ï¿½ï¿½Siteï¿½Ò¦ï¿½ï¿½Aï¿½×§ï¿½É­nï¿½pï¿½ï¿½
 //---------------------------------------------------------------------------
 void SaveTestMode()                                                             //Steven 20111019
 {
     AnsiString S;
-    if(InitialOK==false)                                                        //jou 20171019 (wei) : ­×¥¿uTemp_set¥¼Åª¨ú´N¶i¤J¦¹function
+    if(InitialOK==false)                                                        //jou 20171019 (wei) : ï¿½×¥ï¿½uTemp_setï¿½ï¿½Åªï¿½ï¿½ï¿½Nï¿½iï¿½Jï¿½ï¿½function
         return;
 
     if(CosFunction.bLastSetInSetUpFile==false)                                  //Steven 20161211 Add
@@ -3294,7 +3351,7 @@ void SaveTestMode()                                                             
         for(int j=0; j<TestSocket.iMaxCol; j++)
         {
             S.sprintf("Dut %s2", IndexSuckName[0][j]);
-            if(CosFunction.bFTRTDifferentDutOnOff==true)                        //JerryYang 20170516 (wei) JSCC­n¨DFT RT­n¦³¤£¦Pªº¶}Ãösite
+            if(CosFunction.bFTRTDifferentDutOnOff==true)                        //JerryYang 20170516 (wei) JSCCï¿½nï¿½DFT RTï¿½nï¿½ï¿½ï¿½ï¿½ï¿½Pï¿½ï¿½ï¿½}ï¿½ï¿½site
             {
                 if(iRunStartMode==FT)
                     WriteIniData(szDir, "DutOnOff", S, TestMode.iDutOnOff[1][0][j]);
@@ -3320,7 +3377,7 @@ void SaveTestMode()                                                             
         for(int j=0; j<TestSocket.iMaxCol; j++)
         {
             S.sprintf("Dut %s", IndexSuckName[1][j]);
-            if(CosFunction.bFTRTDifferentDutOnOff==true)                        //JerryYang 20170516 (wei) JSCC­n¨DFT RT­n¦³¤£¦Pªº¶}Ãösite
+            if(CosFunction.bFTRTDifferentDutOnOff==true)                        //JerryYang 20170516 (wei) JSCCï¿½nï¿½DFT RTï¿½nï¿½ï¿½ï¿½ï¿½ï¿½Pï¿½ï¿½ï¿½}ï¿½ï¿½site
             {
                 if(iRunStartMode==FT)
                     WriteIniData(szDir, "DutOnOff", S, TestMode.iDutOnOff[0][0][j]);
@@ -3345,7 +3402,7 @@ void SaveTestMode()                                                             
     }
     else
     {
-        if(TestIF.iShuttleMode==1 && TestIF.iShuttle_Sel==1)                    //Steven 20170111 : ¨S¥Î¨ìªºArm¤£¦s¨ú¸ê®Æ
+        if(TestIF.iShuttleMode==1 && TestIF.iShuttle_Sel==1)                    //Steven 20170111 : ï¿½Sï¿½Î¨ìªºArmï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½
         {
         }
         else
@@ -3355,7 +3412,7 @@ void SaveTestMode()                                                             
                 for(int j=0; j<TestSocket.iMaxCol; j++)
                 {
                     S.sprintf("Dut %s", IndexSuckName[i][j]);
-                    if(CosFunction.bFTRTDifferentDutOnOff==true)                //JerryYang 20170516 (wei) JSCC­n¨DFT RT­n¦³¤£¦Pªº¶}Ãösite
+                    if(CosFunction.bFTRTDifferentDutOnOff==true)                //JerryYang 20170516 (wei) JSCCï¿½nï¿½DFT RTï¿½nï¿½ï¿½ï¿½ï¿½ï¿½Pï¿½ï¿½ï¿½}ï¿½ï¿½site
                     {
                         if(iRunStartMode==FT)
                             WriteIniData(szDir, "DutOnOff", S, TestMode.iDutOnOff[0][i][j]);
@@ -3380,7 +3437,7 @@ void SaveTestMode()                                                             
             }
         }
 
-        if(TestIF.iShuttleMode==1 && TestIF.iShuttle_Sel==0)                    //Steven 20170111 : ¨S¥Î¨ìªºArm¤£¦s¨ú¸ê®Æ
+        if(TestIF.iShuttleMode==1 && TestIF.iShuttle_Sel==0)                    //Steven 20170111 : ï¿½Sï¿½Î¨ìªºArmï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½
         {
         }
         else                                                                    //ChungHung 20130910 alter for SCK can close site by Index
@@ -3390,7 +3447,7 @@ void SaveTestMode()                                                             
                 for(int j=0; j<TestSocket.iMaxCol; j++)
                 {
                     S.sprintf("Dut %s2", IndexSuckName[i][j]);
-                    if(CosFunction.bFTRTDifferentDutOnOff==true)                //JerryYang 20170516 (wei) JSCC­n¨DFT RT­n¦³¤£¦Pªº¶}Ãösite
+                    if(CosFunction.bFTRTDifferentDutOnOff==true)                //JerryYang 20170516 (wei) JSCCï¿½nï¿½DFT RTï¿½nï¿½ï¿½ï¿½ï¿½ï¿½Pï¿½ï¿½ï¿½}ï¿½ï¿½site
                     {
                         if(iRunStartMode==FT)
                             WriteIniData(szDir, "DutOnOff", S, TestMode.iDutOnOff[1][i][j]);
@@ -3417,7 +3474,7 @@ void SaveTestMode()                                                             
     }
 }
 //---------------------------------------------------------------------------
-//ª`·N!! ¶}ÃöSite¼Ò¦¡¡A­×§ï®É­n¤p¤ß
+//ï¿½`ï¿½N!! ï¿½}ï¿½ï¿½Siteï¿½Ò¦ï¿½ï¿½Aï¿½×§ï¿½É­nï¿½pï¿½ï¿½
 //---------------------------------------------------------------------------
 void ReadTestMode()                                                             //Steven 20111019
 {
@@ -3427,8 +3484,8 @@ void ReadTestMode()                                                             
         {
             for(int j=0; j<MAX_SOCKET_COL; j++)
             {
-                iCloseSiteMap[0][i][j]=LastSet.bUseTestSocket[0][i][j];         //kevin 20161003 Site ¶¶§Ç
-                iCloseSiteMap[1][i][j]=LastSet.bUseTestSocket[1][i][j];         //kevin 20161003 Site ¶¶§Ç
+                iCloseSiteMap[0][i][j]=LastSet.bUseTestSocket[0][i][j];         //kevin 20161003 Site ï¿½ï¿½ï¿½ï¿½
+                iCloseSiteMap[1][i][j]=LastSet.bUseTestSocket[1][i][j];         //kevin 20161003 Site ï¿½ï¿½ï¿½ï¿½
             }
         }
         return;
@@ -3437,13 +3494,13 @@ void ReadTestMode()                                                             
     AnsiString S, S2="", szDir=GetRecipeFileName("TestMode.Data");
 
     TestMode.iTestConnection    =ReadIniData(szDir, "TestMode", "Tester Connection", ON_LINE);
-    TestMode.iTemperatureMode   =ReadIniData(szDir, "TestMode", "Temperature Mode", Tempture_Hot);                      //kevin 20141202 ³y¦¨µL ªk¤Á«í·Å
+    TestMode.iTemperatureMode   =ReadIniData(szDir, "TestMode", "Temperature Mode", Tempture_Hot);                      //kevin 20141202 ï¿½yï¿½ï¿½ï¿½L ï¿½kï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     TestMode.iRunMode           =ReadIniData(szDir, "TestMode", "Running Mode", REALLY);
 
     if(CosFunction.bProgramStartOnLine &&
        SystemInitialOK==false &&
        TestMode.iTestConnection!=ON_LINE &&
-       TestMode.iRunMode!=REALLY)                                               //Sam 20210423 : µ{¦¡¶}±Ò®É¤Á´«¬° OnLine/Real
+       TestMode.iRunMode!=REALLY)                                               //Sam 20210423 : ï¿½{ï¿½ï¿½ï¿½}ï¿½Ò®É¤ï¿½ï¿½ï¿½ï¿½ï¿½ OnLine/Real
     {
         TestMode.iTestConnection=ON_LINE;
         TestMode.iRunMode=REALLY;
@@ -3456,7 +3513,7 @@ void ReadTestMode()                                                             
         for(int j=0; j<MAX_SOCKET_COL; j++)
         {
             S2.sprintf("Dut %s2", IndexSuckName[0][j]);
-            if(CosFunction.bFTRTDifferentDutOnOff==true)                        //JerryYang 20170516 (wei) JSCC­n¨DFT RT­n¦³¤£¦Pªº¶}Ãösite
+            if(CosFunction.bFTRTDifferentDutOnOff==true)                        //JerryYang 20170516 (wei) JSCCï¿½nï¿½DFT RTï¿½nï¿½ï¿½ï¿½ï¿½ï¿½Pï¿½ï¿½ï¿½}ï¿½ï¿½site
             {
                 if(iRunStartMode==FT)
                     TestMode.iDutOnOff[1][0][j] =ReadIniData(szDir, "DutOnOff", S2, LastSet.bUseTestSocket[1][0][j]);
@@ -3479,7 +3536,7 @@ void ReadTestMode()                                                             
             }
 
             S.sprintf("Dut %s", IndexSuckName[1][j]);
-            if(CosFunction.bFTRTDifferentDutOnOff==true)                        //JerryYang 20170516 (wei) JSCC­n¨DFT RT­n¦³¤£¦Pªº¶}Ãösite
+            if(CosFunction.bFTRTDifferentDutOnOff==true)                        //JerryYang 20170516 (wei) JSCCï¿½nï¿½DFT RTï¿½nï¿½ï¿½ï¿½ï¿½ï¿½Pï¿½ï¿½ï¿½}ï¿½ï¿½site
             {
                 if(iRunStartMode==FT)
                     TestMode.iDutOnOff[0][0][j]=ReadIniData(szDir, "DutOnOff", S, LastSet.bUseTestSocket[0][0][j]);
@@ -3506,8 +3563,8 @@ void ReadTestMode()                                                             
             LastSet.bUseTestSocketEE[1][0][j]=TestMode.iDutOnOffEE[1][0][j];    //Steven 20241220 : add
             LastSet.bUseTestSocketEE[0][0][j]=TestMode.iDutOnOffEE[0][0][j];
 
-            iCloseSiteMap[0][0][j]=TestMode.iDutOnOff[0][0][j];                 //kevin 20161003 Site ¶¶§Ç
-            iCloseSiteMap[1][0][j]=TestMode.iDutOnOff[1][0][j];                 //kevin 20161003 Site ¶¶§Ç
+            iCloseSiteMap[0][0][j]=TestMode.iDutOnOff[0][0][j];                 //kevin 20161003 Site ï¿½ï¿½ï¿½ï¿½
+            iCloseSiteMap[1][0][j]=TestMode.iDutOnOff[1][0][j];                 //kevin 20161003 Site ï¿½ï¿½ï¿½ï¿½
         }
     }
     else
@@ -3516,11 +3573,11 @@ void ReadTestMode()                                                             
         {
             for(int j=0; j<MAX_SOCKET_COL; j++)
             {
-                if(TestIF_File.iShuttleMode==1 && TestIF_File.iShuttle_Sel==1)  //Sam 20170515 (wei) TestIF §ï¬° TestIF_File ­×¥¿¤Á´«¤u§@ÀÉ¶}Ãö Sit ªº°ÝÃD //Steven 20170111 : ¨S¥Î¨ìªºArm¤£¦s¨ú¸ê®Æ
+                if(TestIF_File.iShuttleMode==1 && TestIF_File.iShuttle_Sel==1)  //Sam 20170515 (wei) TestIF ï¿½ï¬° TestIF_File ï¿½×¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½uï¿½@ï¿½É¶}ï¿½ï¿½ Sit ï¿½ï¿½ï¿½ï¿½ï¿½D //Steven 20170111 : ï¿½Sï¿½Î¨ìªºArmï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½
                 {
-                    if(CUSTOMER_CODE==CC_KYEC_LEE ||                            //Ifor 20170608 (wei) add ¶}ÃöARM ·|³y¦¨¦Û°ÊÃöSite°ÝÃD
-                       CUSTOMER_CODE==CC_SIGURD_PeiXing ||                      //KaiChen 20190123 ¡GFix ¶}Ãö ARM ·|³y¦¨¦Û°ÊÃö Site °ÝÃD
-                       TestIF_File.bArm1PickPlaceArm2Test==true)                //JerryYang 20290901 : ­×¥¿¤@¥á¤@´úATC ARM2¨S¦³·Å«×ªº°ÝÃD
+                    if(CUSTOMER_CODE==CC_KYEC_LEE ||                            //Ifor 20170608 (wei) add ï¿½}ï¿½ï¿½ARM ï¿½|ï¿½yï¿½ï¿½ï¿½Û°ï¿½ï¿½ï¿½Siteï¿½ï¿½ï¿½D
+                       CUSTOMER_CODE==CC_SIGURD_PeiXing ||                      //KaiChen 20190123 ï¿½GFix ï¿½}ï¿½ï¿½ ARM ï¿½|ï¿½yï¿½ï¿½ï¿½Û°ï¿½ï¿½ï¿½ Site ï¿½ï¿½ï¿½D
+                       TestIF_File.bArm1PickPlaceArm2Test==true)                //JerryYang 20290901 : ï¿½×¥ï¿½ï¿½@ï¿½ï¿½@ï¿½ï¿½ATC ARM2ï¿½Sï¿½ï¿½ï¿½Å«×ªï¿½ï¿½ï¿½ï¿½D
                     {
                     }
                     else
@@ -3532,7 +3589,7 @@ void ReadTestMode()                                                             
                 else
                 {
                     S.sprintf("Dut %s", IndexSuckName[i][j]);
-                    if(CosFunction.bFTRTDifferentDutOnOff==true)                //JerryYang 20170516 (wei) JSCC­n¨DFT RT­n¦³¤£¦Pªº¶}Ãösite
+                    if(CosFunction.bFTRTDifferentDutOnOff==true)                //JerryYang 20170516 (wei) JSCCï¿½nï¿½DFT RTï¿½nï¿½ï¿½ï¿½ï¿½ï¿½Pï¿½ï¿½ï¿½}ï¿½ï¿½site
                     {
                         if(iRunStartMode==FT)
                             TestMode.iDutOnOff[0][i][j]=ReadIniData(szDir, "DutOnOff", S, LastSet.bUseTestSocket[0][i][j]);
@@ -3555,15 +3612,15 @@ void ReadTestMode()                                                             
                     }
                 }
 
-                if(TestIF_File.iShuttleMode==1 && TestIF_File.iShuttle_Sel==0)  //Sam 20170515 (wei) TestIF §ï¬° TestIF_File ­×¥¿¤Á´«¤u§@ÀÉ¶}Ãö Sit ªº°ÝÃD //Steven 20170111 : ¨S¥Î¨ìªºArm¤£¦s¨ú¸ê®Æ
+                if(TestIF_File.iShuttleMode==1 && TestIF_File.iShuttle_Sel==0)  //Sam 20170515 (wei) TestIF ï¿½ï¬° TestIF_File ï¿½×¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½uï¿½@ï¿½É¶}ï¿½ï¿½ Sit ï¿½ï¿½ï¿½ï¿½ï¿½D //Steven 20170111 : ï¿½Sï¿½Î¨ìªºArmï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½
                 {
-                    TestMode.iDutOnOff[1][i][j]=false;                          //JerryYang 20251017 : ÃöARM2 ATCÀ³¸Ó­nÃöSITE
+                    TestMode.iDutOnOff[1][i][j]=false;                          //JerryYang 20251017 : ï¿½ï¿½ARM2 ATCï¿½ï¿½ï¿½Ó­nï¿½ï¿½SITE
                     TestMode.iDutOnOffEE[1][i][j]=false;
                 }
                 else
                 {
                     S2.sprintf("Dut %s2", IndexSuckName[i][j]);
-                    if(CosFunction.bFTRTDifferentDutOnOff==true)                //JerryYang 20170516 (wei) JSCC­n¨DFT RT­n¦³¤£¦Pªº¶}Ãösite
+                    if(CosFunction.bFTRTDifferentDutOnOff==true)                //JerryYang 20170516 (wei) JSCCï¿½nï¿½DFT RTï¿½nï¿½ï¿½ï¿½ï¿½ï¿½Pï¿½ï¿½ï¿½}ï¿½ï¿½site
                     {
                         if(iRunStartMode==FT)
                             TestMode.iDutOnOff[1][i][j] =ReadIniData(szDir, "DutOnOff", S2, LastSet.bUseTestSocket[1][i][j]);
@@ -3591,8 +3648,8 @@ void ReadTestMode()                                                             
                 LastSet.bUseTestSocketEE[1][i][j]=TestMode.iDutOnOffEE[1][i][j];                                        //Steven 20241220 : add
                 LastSet.bUseTestSocketEE[0][i][j]=TestMode.iDutOnOffEE[0][i][j];
 
-                iCloseSiteMap[0][i][j]=TestMode.iDutOnOff[0][i][j];             //kevin 20161003 Site ¶¶§Ç
-                iCloseSiteMap[1][i][j]=TestMode.iDutOnOff[1][i][j];             //kevin 20161003 Site ¶¶§Ç
+                iCloseSiteMap[0][i][j]=TestMode.iDutOnOff[0][i][j];             //kevin 20161003 Site ï¿½ï¿½ï¿½ï¿½
+                iCloseSiteMap[1][i][j]=TestMode.iDutOnOff[1][i][j];             //kevin 20161003 Site ï¿½ï¿½ï¿½ï¿½
             }
         }
     }
@@ -3624,21 +3681,21 @@ void SaveTempModeByDLL()                                                        
     WriteIniData(szDir, "Mode",       "Mode", Temperature.iMachineTempMode);
 }
 //------------------------------------------------------------------------------
-//  «È¤á¥\¯à¿ï¾Ü°Ï
+//  ï¿½È¤ï¿½\ï¿½ï¿½ï¿½Ü°ï¿½
 //------------------------------------------------------------------------------
 void CustomerFunctionSelect()
 {
-    InitialCosFunction();                                                       //Steven 20240926 : ­«·s¾ã²z«È¤á¥\¯à
+    InitialCosFunction();                                                       //Steven 20240926 : ï¿½ï¿½ï¿½sï¿½ï¿½zï¿½È¤ï¿½\ï¿½ï¿½
 
     if(USE_AUTO_RETEST==eartInstall)                                            //ChungHung 20141002 add for KYEC AutoRetest
         CosFunction.bOffLineBin=true;
 
-    if(IniConfig.bIndexArm2SupplyLight==true ||                                 //jou 2012-10-19 Index Arm 2 ¨ÑÀ³¥ú·½ for CMOS
-       TestIF_File.bForEgisTecTest==true     ||                                 //Steven 20140922 : Arm2·í§@«ü¯¾´ú¸Õ
-       (IniConfig.bD58UseArm1PickPlaceArm2Test==true &&                         //kevin 20150127 Arm1 ¤UÀ£ arm2 ´ú¸Õ
-        TestIF_File.bArm1PickPlaceArm2Test==true))                              //Ifor 20200811 Fix: Arm1 Pick Place Arm2Test »Ý¥d¨â­Ó±ø¥ó
+    if(IniConfig.bIndexArm2SupplyLight==true ||                                 //jou 2012-10-19 Index Arm 2 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ for CMOS
+       TestIF_File.bForEgisTecTest==true     ||                                 //Steven 20140922 : Arm2ï¿½ï¿½ï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+       (IniConfig.bD58UseArm1PickPlaceArm2Test==true &&                         //kevin 20150127 Arm1 ï¿½Uï¿½ï¿½ arm2 ï¿½ï¿½ï¿½ï¿½
+        TestIF_File.bArm1PickPlaceArm2Test==true))                              //Ifor 20200811 Fix: Arm1 Pick Place Arm2Test ï¿½Ý¥dï¿½ï¿½Ó±ï¿½ï¿½ï¿½
     {
-        IniConfig.bShuttleMode50=false;                                         //»P IniConfig.bIndexArm2SupplyLight ¥\¯à¤¬¥¸
+        IniConfig.bShuttleMode50=false;                                         //ï¿½P IniConfig.bIndexArm2SupplyLight ï¿½\ï¿½à¤¬ï¿½ï¿½
     }
 
     if(IniConfig.bKoreaFunction==true)
@@ -3651,24 +3708,24 @@ void CustomerFunctionSelect()
         VTEST_Funtion();
     }
 
-    if(IniConfig.bSingaporeFunction)                                            //Steven 20120910 : ·s¥[©Y¥N²z°Óªº»Ý¨D
+    if(IniConfig.bSingaporeFunction)                                            //Steven 20120910 : ï¿½sï¿½[ï¿½Yï¿½Nï¿½zï¿½Óªï¿½ï¿½Ý¨D
     {
         SingaporeFunction();
     }
 
-    if(IniConfig.bSPILFunction==true)                                           //JerryYang 20170328 (Jou) ª¿«~«È¤á½X²Î¤@¥ÎSPILFunction
+    if(IniConfig.bSPILFunction==true)                                           //JerryYang 20170328 (Jou) ï¿½ï¿½ï¿½~ï¿½È¤ï¿½Xï¿½Î¤@ï¿½ï¿½SPILFunction
     {
         SPILFunction();
-        if(CUSTOMER_CODE==CC_XINYUN)                                            //Steven 20230222 : ­n¥i¥H©Ô°Ê
+        if(CUSTOMER_CODE==CC_XINYUN)                                            //Steven 20230222 : ï¿½nï¿½iï¿½Hï¿½Ô°ï¿½
             IniConfig.bShowFormByInitPos=false;
     }
 
-    if(IniConfig.bMaximFunction==true)                                          //JerryYang 20190522 Maxim²Î¤@³nÅé¥\¯à
+    if(IniConfig.bMaximFunction==true)                                          //JerryYang 20190522 Maximï¿½Î¤@ï¿½nï¿½ï¿½\ï¿½ï¿½
     {
         MaximFunction();
     }
 
-    if(IniConfig.bSIGURDFunction==true)                                         //KaiChen 20200506 ¡Gª¿®æ²Î¤@³nÅé¥\¯à
+    if(IniConfig.bSIGURDFunction==true)                                         //KaiChen 20200506 ï¿½Gï¿½ï¿½ï¿½ï¿½Î¤@ï¿½nï¿½ï¿½\ï¿½ï¿½
     {
         SIGURDFunction();
     }
@@ -3676,27 +3733,27 @@ void CustomerFunctionSelect()
     if(USE_ROTATE_KIT)                                                          //kevin rotate motor     //Steven 20131202
         IniConfig.bHaveRotateShuttle=false;
 
-    if(USE_IN_Y_IS_AUTO_PITCH==true)                                            //Steven 20170424 (wei) : new XYÅÜ¶Z  //JerryYang 20251218 : IN/OUT ARM¤ä´©¤£¦P¼Ò²Õ
+    if(USE_IN_Y_IS_AUTO_PITCH==true)                                            //Steven 20170424 (wei) : new XYï¿½Ü¶Z  //JerryYang 20251218 : IN/OUT ARMï¿½ä´©ï¿½ï¿½ï¿½Pï¿½Ò²ï¿½
         IniConfig.bDisableSelectSearchLast=true;
 
-    if(CosFunction.bHiSiliconFunction ||                                        //Ifor 20160516 ¨Ê¤¸­n¨Dä¡¤ù Life Time ¥\¯à
-       (IniConfig.bVTESTFunction && ATC_SYSTEM > eATCUninstall))                //AI(ht9045-config) 20260507 (RogerYang) : VTESTä¡¤ùLifeTime¥\¯à
+    if(CosFunction.bHiSiliconFunction ||                                        //Ifor 20160516 ï¿½Ê¤ï¿½ï¿½nï¿½Dä¡¤ï¿½ Life Time ï¿½\ï¿½ï¿½
+       (IniConfig.bVTESTFunction && ATC_SYSTEM > eATCUninstall))                //AI(ht9045-config) 20260507 (RogerYang) : VTESTä¡¤ï¿½LifeTimeï¿½\ï¿½ï¿½
     {
         CosFunction.bUseHeadContactCount=true;
-//        CosFunction.bHeadContactCountByRecipe=true;                             //Steven 20241030 : ä¡¤ù Life Time ¥\¯àby¤u§@ÀÉ  //RogerYang 20260515 : dead flag, ¥¼³Q¥ô¦óÅÞ¿èÅª¨ú
+//        CosFunction.bHeadContactCountByRecipe=true;                             //Steven 20241030 : ä¡¤ï¿½ Life Time ï¿½\ï¿½ï¿½byï¿½uï¿½@ï¿½ï¿½  //RogerYang 20260515 : dead flag, ï¿½ï¿½ï¿½Qï¿½ï¿½ï¿½ï¿½ï¿½Þ¿ï¿½Åªï¿½ï¿½
     }
 
-    if(AUTO3_IS_MAGAZINE==1)                                                    //JerryYang 20230515 : P27¸òMagazine½Ä¬ð¡A¥ý¤£¨Ï¥Î
+    if(AUTO3_IS_MAGAZINE==1)                                                    //JerryYang 20230515 : P27ï¿½ï¿½Magazineï¿½Ä¬ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½Ï¥ï¿½
     {
         CosFunction.bSortingBinTraywhenCleanOut=false;
         CosFunction.bSortingBinTrayWhenTrayFeed=false;
     }
 
-    if(REAL_TIME_CCD==true)                                                     //Steven 20110705 : ¨Ï¥ÎReal CCD­n±j¨îÃö¤º«Øªº
-    {                                                                           //Ifor 20150720 :©ñ¦b³Ì¤U­±
+    if(REAL_TIME_CCD==true)                                                     //Steven 20110705 : ï¿½Ï¥ï¿½Real CCDï¿½nï¿½jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øªï¿½
+    {                                                                           //Ifor 20150720 :ï¿½ï¿½bï¿½Ì¤Uï¿½ï¿½
         IniConfig.bEnableCCDUSETCPIP=false;
-        if(!COM2->bCCDDummyRum)                                                 //Steven 20230109 : RTC¨S¶}Index´N¤£­n°Ê
-            IniConfig.bShuttleMode50=true;                                      //¼È®É¥ý¥´¶}¡Aµ¥RTCÃöArm¥\¯à§ï¦n
+        if(!COM2->bCCDDummyRum)                                                 //Steven 20230109 : RTCï¿½Sï¿½}Indexï¿½Nï¿½ï¿½ï¿½nï¿½ï¿½
+            IniConfig.bShuttleMode50=true;                                      //ï¿½È®É¥ï¿½ï¿½ï¿½ï¿½}ï¿½Aï¿½ï¿½RTCï¿½ï¿½Armï¿½\ï¿½ï¿½ï¿½n
         else
             IniConfig.bShuttleMode50=false;
     }
@@ -3714,7 +3771,7 @@ void CustomerFunctionSelect()
 
     if(IniConfig.bShowLotInfo ||
        CosFunction.bFTPFunction ||
-       USE_AUTO_RETEST==eartInstall)                                            //kevin 20150819 add ARTµe­±©w¦ì
+       USE_AUTO_RETEST==eartInstall)                                            //kevin 20150819 add ARTï¿½eï¿½ï¿½ï¿½wï¿½ï¿½
     {
         IniConfig.bShowLotInfo=true;
     }
@@ -3747,19 +3804,19 @@ void CustomerFunctionSelect()
         IniConfig.bShowLotInfo=true;
     }
 
-    if(IniConfig.bI28_OnOffSiteOnTheFly ||                                      //Steven 20150924 : ÀH®É¶}ÃöSite¥\¯à
+    if(IniConfig.bI28_OnOffSiteOnTheFly ||                                      //Steven 20150924 : ï¿½Hï¿½É¶}ï¿½ï¿½Siteï¿½\ï¿½ï¿½
        (CosFunction.bLowYieldAutoSiteOff && iRunStartMode==FT &&
         (TestIF_File.bLowYieldAutoSiteOff ||                                    //Steven 20170905 (wei) : Low Yield Auto Site Off for Ambient
          TestIF_File.bLowYieldAutoSiteOffByContiFail)))                         //Steven 20200420 : Continue fail, auto site off
     {
-        bCanAutoCloseSite=true;                                                 //Steven 20200420 : ¾ã¦XAuto Site Off
+        bCanAutoCloseSite=true;                                                 //Steven 20200420 : ï¿½ï¿½XAuto Site Off
     }
     else
     {
         bCanAutoCloseSite=false;
     }
 
-    if(fTemp_Set!=NULL)                                                         //Steven 20240206 : ¹w¥ý¨M©wIndex Heat Mode¬O§_­nÅã¥Ü
+    if(fTemp_Set!=NULL)                                                         //Steven 20240206 : ï¿½wï¿½ï¿½ï¿½Mï¿½wIndex Heat Modeï¿½Oï¿½_ï¿½nï¿½ï¿½ï¿½
     {
         bool bOldStatus=fTemp_Set->rgIndexHeatMode->Enabled;
         fTemp_Set->rgIndexHeatMode->Enabled=true;
@@ -3767,7 +3824,7 @@ void CustomerFunctionSelect()
         fTemp_Set->rgIndexHeatMode->Controls[ChamberOnly       ]->Visible=(ATC_SYSTEM==eATCUninstall);
         fTemp_Set->rgIndexHeatMode->Controls[HeadChamber       ]->Visible=(ATC_SYSTEM==eATCUninstall && IniConfig.bNoHeadaddChamberOption==false);
         fTemp_Set->rgIndexHeatMode->Controls[SocketChamber     ]->Visible=(ATC_SYSTEM==eATCUninstall);
-        fTemp_Set->rgIndexHeatMode->Controls[HeadSocket        ]->Visible=(IniConfig.bHeadSocketMode);                  //jou 2012-05-30 ¼W¥[ Head + Socket Mode
+        fTemp_Set->rgIndexHeatMode->Controls[HeadSocket        ]->Visible=(IniConfig.bHeadSocketMode);                  //jou 2012-05-30 ï¿½Wï¿½[ Head + Socket Mode
         fTemp_Set->rgIndexHeatMode->Controls[HeadChamberSocket ]->Visible=(ATC_SYSTEM==eATCUninstall && IniConfig.bHeadChamberSocketMode);                      //2013-11-20    Dell    for TSMC Add Chamber + Head +Socket
         fTemp_Set->rgIndexHeatMode->Enabled=bOldStatus;
     }
@@ -3787,7 +3844,7 @@ AnsiString asInArmAOAFileName_Cal[TotalInArmAOAType]={"D:\\HT9045\\System\\AutoT
                                                       "D:\\HT9045\\System\\AutoTeach_Shuttle2_Cal.dat",
                                                       "D:\\HT9045\\System\\AutoTeach_AutoClean_Cal.dat"};
 //------------------------------------------------------------------------------
-bool ReadAutoTeachTable_InArm()                                                 //KenHsieh 20211208 : In/Out Arm¤À¶}ÅªÀÉ¡AÁ×§KInArm°µ§¹ª½±µ¼g¤J¾É­POutArmÂI¦ì¿ù»~
+bool ReadAutoTeachTable_InArm()                                                 //KenHsieh 20211208 : In/Out Armï¿½ï¿½ï¿½}Åªï¿½É¡Aï¿½×§KInArmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½Jï¿½É­POutArmï¿½Iï¿½ï¿½ï¿½ï¿½~
 {
     for(int i=0; i<TotalInArmAOAType; i++)                                      //JerryYang 20241119 : fix AOA
     {
@@ -3832,7 +3889,7 @@ AnsiString asOutArmAOAFileName_Cal[TotalOutArmAOAType]={"D:\\HT9045\\System\\Aut
                                                         "D:\\HT9045\\System\\AutoTeach_OutShuttle1_Cal.dat",
                                                         "D:\\HT9045\\System\\AutoTeach_OutShuttle2_Cal.dat"};
 //------------------------------------------------------------------------------
-bool ReadAutoTeachTable_OutArm()                                                //KenHsieh 20211208 : In/Out Arm¤À¶}ÅªÀÉ¡AÁ×§KInArm°µ§¹ª½±µ¼g¤J¾É­POutArmÂI¦ì¿ù»~
+bool ReadAutoTeachTable_OutArm()                                                //KenHsieh 20211208 : In/Out Armï¿½ï¿½ï¿½}Åªï¿½É¡Aï¿½×§KInArmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½Jï¿½É­POutArmï¿½Iï¿½ï¿½ï¿½ï¿½~
 {
     for(int i=0; i<TotalOutArmAOAType; i++)
     {
@@ -3928,7 +3985,7 @@ bool MyIndexArmRec::GetSuckTempErr(int iSuckRow, int iSuckCol)
     return bSuckTempErr[iSuckRow][iSuckCol];
 }
 //------------------------------------------------------------------------------
-void __fastcall TAlarm1::SummarizeJAMreportbymonth()                            //Stevenhong 20260318 : TESNA §âEventlog report summarize by month
+void __fastcall TAlarm1::SummarizeJAMreportbymonth()                            //Stevenhong 20260318 : TESNA ï¿½ï¿½Eventlog report summarize by month
 {
     Word y, m, d;
     DecodeDate(Now(), y, m, d);

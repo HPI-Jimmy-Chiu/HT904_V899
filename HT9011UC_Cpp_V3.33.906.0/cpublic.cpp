@@ -10,10 +10,107 @@
 #include "vclcompat/vcl_compat.h"
 #include <windows.h>
 #include "cpublic.h"
-#if 0 // TODO(W3/W5/W6/W7): bodies depend on untranslated globals + app headers
+// =============================================================================
+//  AI(W4) 20260626: Ungated queue ctors/dtors + ClearData helpers.
+//
+//  These are required because cmydef.cpp defines static global objects of these
+//  types (QueueTaskList[], QueueGalilCmd, QueueTestTime, etc.) whose constructors
+//  fire at static-init time.  The ctors and their ClearData helpers have NO
+//  external dependencies (only zero-fill loops and AnsiString assignment), so
+//  they can be activated now even though the rest of cpublic.cpp is gated W6/W7.
+//  Without these the test_motor_w4 link fails with "undefined reference to ctor".
+// =============================================================================
+
+// ---------------------------------------------------------------------------
+//  TMyQueue10
+// ---------------------------------------------------------------------------
+TMyQueue10::TMyQueue10()
+{
+    Alias = "";
+    ClearData();
+    bInt = true;
+}
+
+void TMyQueue10::ClearData()
+{
+    for (int i = 0; i < MAX_Q_10; i++)
+    {
+        iData[i]    = 0;
+        dData[i]    = 0.0;
+        DateTime[i] = "";
+    }
+    iIndex = -1;
+    iCount = -1;
+}
+
+// ---------------------------------------------------------------------------
+//  TMyQueue100
+// ---------------------------------------------------------------------------
+TMyQueue100::TMyQueue100()
+{
+    ClearData();
+}
+
+void TMyQueue100::ClearData()
+{
+    for (int i = 0; i < MAX_Q_100; i++)
+    {
+        iData[i]    = 0;
+        dData[i]    = 0.0;
+        DateTime[i] = "";
+    }
+    iIndex = -1;
+    iCount = -1;
+}
+
+// ---------------------------------------------------------------------------
+//  TMyStrQueue100
+// ---------------------------------------------------------------------------
+TMyStrQueue100::TMyStrQueue100()
+{
+    sLastFileName = "";
+    ClearData();
+}
+
+void TMyStrQueue100::ClearData()
+{
+    for (int i = 0; i < MAX_Q_100; i++)
+    {
+        sData1[i]   = "";
+        sData2[i]   = "";
+        DateTime[i] = "";
+    }
+    iIndex = 0;
+    iCount = 0;
+}
+
+// ---------------------------------------------------------------------------
+//  TMyTimerQueue100
+// ---------------------------------------------------------------------------
+TMyTimerQueue100::TMyTimerQueue100()
+{
+    sLastFileName = "";
+    ClearData();
+}
+
+void TMyTimerQueue100::ClearData()
+{
+    for (int i = 0; i < MAX_Q_100; i++)
+    {
+        sStartTime[i] = "";
+        sEndTime[i]   = "";
+        DateTime[i]   = "";
+        sTimeStr[i]   = "";
+        iTime[i]      = 0;
+    }
+    iIndex = -1;
+    iCount = -1;
+}
+
+#if 0 // TODO(W3/W5/W6/W7): remaining bodies depend on untranslated globals + app headers
 
 //------------------------------------------------------------------------------
-AnsiString ConvertSecondToSPC(long s)                                           //Steven 20141111 : ¬íÂà¬°®É¤À¬í
+AnsiString ConvertSecondToSPC(long s)                                           //Steven 20141111 : ï¿½ï¿½ï¿½à¬°ï¿½É¤ï¿½ï¿½ï¿½
 {
     AnsiString str;
     long secs, mins, hours;
@@ -26,7 +123,7 @@ AnsiString ConvertSecondToSPC(long s)                                           
     return str;
 }
 //------------------------------------------------------------------------------
-AnsiString ConvertMSecToSPC(long s)                                             //Steven 20190714 : MS®É¶¡Âà´«¦¨®É¤À¬í
+AnsiString ConvertMSecToSPC(long s)                                             //Steven 20190714 : MSï¿½É¶ï¿½ï¿½à´«ï¿½ï¿½ï¿½É¤ï¿½ï¿½ï¿½
 {
     AnsiString str;
     long MS, secs, mins, hours;
@@ -41,7 +138,7 @@ AnsiString ConvertMSecToSPC(long s)                                             
     return str;
 }
 //------------------------------------------------------------------------------
-AnsiString ConvertMSecToTime(long s)                                            //Steven 20190714 : MS®É¶¡Âà´«¦¨¤é®É¤À¬í
+AnsiString ConvertMSecToTime(long s)                                            //Steven 20190714 : MSï¿½É¶ï¿½ï¿½à´«ï¿½ï¿½ï¿½ï¿½É¤ï¿½ï¿½ï¿½
 {
     AnsiString str;
     long MS, secs, mins, hours, days;
@@ -78,7 +175,7 @@ void CutSpaceAtHead(char *S)
         pos++;
         i++;
     }
-    strcpy(S, str2);                                                            //«ü¼Ð¤£¯à¨Ï¥Î strncpy
+    strcpy(S, str2);                                                            //ï¿½ï¿½ï¿½Ð¤ï¿½ï¿½ï¿½Ï¥ï¿½ strncpy
 }
 //------------------------------------------------------------------------------
 char *ConvertSecondToTime(long s)
@@ -110,26 +207,26 @@ typedef struct
 }TEMP_CONTROL;
 TEMP_CONTROL Temp_Control;
 //------------------------------------------------------------------------------
-// ­pºâLRC (ÀË¬d½X)
+// ï¿½pï¿½ï¿½LRC (ï¿½Ë¬dï¿½X)
 //------------------------------------------------------------------------------
-AnsiString DTK4848_LRC(AnsiString str)                                          //KaiHuang 20190821 : ·s¼W¥x¹F DTK4848·Å±±¾¹
+AnsiString DTK4848_LRC(AnsiString str)                                          //KaiHuang 20190821 : ï¿½sï¿½Wï¿½xï¿½F DTK4848ï¿½Å±ï¿½ï¿½ï¿½
 {
     AnsiString str2="";
-    str=str.SubString(2, 12);                                                   //²¾°£²Ä¤@­Ó:
+    str=str.SubString(2, 12);                                                   //ï¿½ï¿½ï¿½ï¿½ï¿½Ä¤@ï¿½ï¿½:
     int LRC=0;
     for(int i=1; i<str.Length(); i+=2)
     {
-        str2=str.SubString(i, 2);                                               //¨ú±o¨â­Ó¦r¤¸
-        LRC+=HexStrToInt(str2.c_str());                                         //­pºâ¨â­Ó¦r¤¸ªº16¶i¦ìÂà10¶i¦ì
+        str2=str.SubString(i, 2);                                               //ï¿½ï¿½ï¿½oï¿½ï¿½Ó¦rï¿½ï¿½
+        LRC+=HexStrToInt(str2.c_str());                                         //ï¿½pï¿½ï¿½ï¿½Ó¦rï¿½ï¿½ï¿½ï¿½16ï¿½iï¿½ï¿½ï¿½ï¿½10ï¿½iï¿½ï¿½
     }
 
-    LRC=0xFF-LRC+1;                                                             //­pºâ2¸É¼Æ
+    LRC=0xFF-LRC+1;                                                             //ï¿½pï¿½ï¿½2ï¿½É¼ï¿½
     str=IntToHex(LRC, 2);
     str=str.SubString(str.Length()-1, 2) ;
     return str;
 }
 //------------------------------------------------------------------------------
-void GetEveryCode(AnsiString AnsiData)                                          //Steven 20111028 : §ï¦¨AnsiString
+void GetEveryCode(AnsiString AnsiData)                                          //Steven 20111028 : ï¿½ï¦¨AnsiString
 {
     sprintf(Temp_Control.cHeader   , "%s", AnsiData.SubString(1, 1));
     sprintf(Temp_Control.cAddress  , "%s", AnsiData.SubString(2, 2));
@@ -150,7 +247,7 @@ int Change_Tempture_Value()
         iData[3]=T_ASXII2HEX[Temp_Control.cData[3]-'0'];
         return iData[1]*256 + iData[2]*16 + iData[3];
     }
-    else                                                                        //¦pªGµ¥©óFªí¥Ü­t­È
+    else                                                                        //ï¿½pï¿½Gï¿½ï¿½ï¿½ï¿½Fï¿½ï¿½ï¿½Ü­tï¿½ï¿½
     {
         iData[1]=T_ASXII2HEX[Temp_Control.cData[1]-'0'];
         iData[2]=T_ASXII2HEX[Temp_Control.cData[2]-'0'];
@@ -185,7 +282,7 @@ void UT100WordReadNoSucm(int Addr, int Command)
     COM2->Comm2->WriteCommData(READBUFF, ::strlen(READBUFF));
 }
 //------------------------------------------------------------------------------
-//KaiHuang 20190821 : ·s¼W¥x¹F DTK4848·Å±±¾¹
+//KaiHuang 20190821 : ï¿½sï¿½Wï¿½xï¿½F DTK4848ï¿½Å±ï¿½ï¿½ï¿½
 //------------------------------------------------------------------------------
 void DTK4848WordWriteNoSucm(int Addr, int Value)
 {
@@ -208,7 +305,7 @@ void DTK4848WordReadNoSucm(int Addr)
     ::sprintf(READBUFF_DTK, ":%02X03%04d0002", Addr+1, iCommand);               //Steven 20210511 : for Delta DT4848 %02d --> %02X
 
     AnsiString LRC = DTK4848_LRC(READBUFF_DTK);
-    ::sprintf(READBUFF_DTK, ":%02X03%04d0002%s\r\n", Addr+1, iCommand, LRC);    //Polling ²{¦b·Å«×
+    ::sprintf(READBUFF_DTK, ":%02X03%04d0002%s\r\n", Addr+1, iCommand, LRC);    //Polling ï¿½{ï¿½bï¿½Å«ï¿½
 
     COM2->Comm2->WriteCommData(READBUFF_DTK, ::strlen(READBUFF_DTK)+1);
 }
@@ -450,12 +547,12 @@ void E5DCReadTemp(int Addr)
     int BCC = 0;
     AnsiString Command, Str;
     Command.sprintf("%02d0000101C00000000002", Addr+1);
-                  // %02d000 : ³æ¤¸½s¸¹+SID
-                  // 0101    : Åª¨ú¦h­Ó³sÄò°Ñ¼Æ
-                  // C0      : Ãþ«¬
-                  // 0000    : 0000->PV­È       // 0001    : ª¬ºA
-                  // 00      : ¦ìªº¦ì¸m
-                  // 0002    : ¤¸¯À¼Æ¶q, 2­Ó
+                  // %02d000 : ï¿½æ¤¸ï¿½sï¿½ï¿½+SID
+                  // 0101    : Åªï¿½ï¿½ï¿½hï¿½Ó³sï¿½ï¿½Ñ¼ï¿½
+                  // C0      : ï¿½ï¿½ï¿½ï¿½
+                  // 0000    : 0000->PVï¿½ï¿½       // 0001    : ï¿½ï¿½ï¿½A
+                  // 00      : ï¿½ìªºï¿½ï¿½m
+                  // 0002    : ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶q, 2ï¿½ï¿½
 
     BCC=SetBCC(Command);
     Str.sprintf("%c%s%c%c\r\n", STX, Command, ETX, BCC);
@@ -472,7 +569,7 @@ void E5DCWriteTemp(int Addr, int Temp)
     COM2->Comm2->WriteCommData(Str.c_str(), Str.Length());
 }
 //------------------------------------------------------------------------------
-void TTLLog(AnsiString Message)                                                 //Steven 20161115 : TTL Log§ï·sª©¦sÀÉ
+void TTLLog(AnsiString Message)                                                 //Steven 20161115 : TTL Logï¿½ï¿½sï¿½ï¿½ï¿½sï¿½ï¿½
 {
     AnsiString Str;
 
@@ -543,7 +640,7 @@ void OutShuttleLog(bool bFlag)                                                  
     }
 }
 //------------------------------------------------------------------------------
-// ¬ö¿ýHomeªº¬yµ{¸ê®Æ
+// ï¿½ï¿½ï¿½ï¿½Homeï¿½ï¿½ï¿½yï¿½{ï¿½ï¿½ï¿½
 //------------------------------------------------------------------------------
 void HomeLog(AnsiString Message)                                                //Kevin  20110525
 {
@@ -565,28 +662,28 @@ void HomeLog(AnsiString Message)                                                
     }
 }
 //------------------------------------------------------------------------------
-// kevin 20150415 ¦^À³ ase ª¬ªp
+// kevin 20150415 ï¿½^ï¿½ï¿½ ase ï¿½ï¿½ï¿½p
 //------------------------------------------------------------------------------
 bool RespondASECom(AnsiString S1)
 {
     if(CUSTOMER_CODE==CC_ASE_KaohSiung)
     {
-        ASESendMessage->SendToASEData(S1);                                      //kevin 20150415 ¦^À³ ase Reset finish
+        ASESendMessage->SendToASEData(S1);                                      //kevin 20150415 ï¿½^ï¿½ï¿½ ase Reset finish
         return true;
     }
     return false;
 }
 //------------------------------------------------------------------------------
-void ProductionLog(AnsiString Message, bool bSaveToFile, AnsiString JamCode)    //JerryYang 20151225 Production log for SPIL Ä¬¦{
+void ProductionLog(AnsiString Message, bool bSaveToFile, AnsiString JamCode)    //JerryYang 20151225 Production log for SPIL Ä¬ï¿½{
 {
     AnsiString sFileName;
     AnsiString Str;
-    if(IniConfig.bO06SaveLogTimePeriod==false)                                  //JerryYang 20160217 ¨S¶}±Ò´N¤£°OLog
+    if(IniConfig.bO06SaveLogTimePeriod==false)                                  //JerryYang 20160217 ï¿½Sï¿½}ï¿½Ò´Nï¿½ï¿½ï¿½OLog
         return;
     GetTimeInfo();
 
     sFileName.sprintf("%s\\%s_%04d%02d%02d.logs", asProductionLogPath, IniConfig.SocketHandlerID, SystemYear, SystemMonth, SystemDate);
-    if(FileExists(sFileName)==false)                                            //JerryYang 20160120 ¸ó¤é®É¤£­«½Æ°O¿ý,¥ý²M±¼Memo¤º®e
+    if(FileExists(sFileName)==false)                                            //JerryYang 20160120 ï¿½ï¿½ï¿½É¤ï¿½ï¿½ï¿½ï¿½Æ°Oï¿½ï¿½,ï¿½ï¿½ï¿½Mï¿½ï¿½Memoï¿½ï¿½ï¿½e
     {
         fMain->MemoProductionLog->Clear();
     }
@@ -596,18 +693,18 @@ void ProductionLog(AnsiString Message, bool bSaveToFile, AnsiString JamCode)    
     else
         Str.sprintf("%04d-%02d-%02d %02d:%02d:%02d.%d %s --> %s", SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec, SystemMSec, JamCode, Message);
     fMain->MemoProductionLog->Lines->Add(Str);
-    if(fMain->MemoProductionLog->Lines->Count>32768 ||                          //JerryYang 20160303 ¤@¤Ñ¦s¤@­ÓlogÀÉ¡A1024->32768¦æ
+    if(fMain->MemoProductionLog->Lines->Count>32768 ||                          //JerryYang 20160303 ï¿½@ï¿½Ñ¦sï¿½@ï¿½ï¿½logï¿½É¡A1024->32768ï¿½ï¿½
        Message=="Close" || bSaveToFile)
     {
         fMain->MemoProductionLog->Lines->SaveToFile(sFileName);
-        if(fMain->MemoProductionLog->Lines->Count>32768)                        //JerryYang 20160303 ¤@¤Ñ¦s¤@­ÓlogÀÉ¡A1024->32768¦æ
+        if(fMain->MemoProductionLog->Lines->Count>32768)                        //JerryYang 20160303 ï¿½@ï¿½Ñ¦sï¿½@ï¿½ï¿½logï¿½É¡A1024->32768ï¿½ï¿½
         {
             fMain->MemoProductionLog->Clear();
         }
     }
 }
 //------------------------------------------------------------------------------
-bool ExecZipCommand(AnsiString Path, AnsiString Param)                          //Steven 20160205 : ¦sÀÉ®É­Ô¤£­n¸õDOSµøµ¡
+bool ExecZipCommand(AnsiString Path, AnsiString Param)                          //Steven 20160205 : ï¿½sï¿½É®É­Ô¤ï¿½ï¿½nï¿½ï¿½DOSï¿½ï¿½ï¿½ï¿½
 {
     STARTUPINFO  FStartupInfo;
     PROCESS_INFORMATION  FProcessInformation;
@@ -662,7 +759,7 @@ AnsiString GetDateInfoByString(AnsiString asSign)                               
     return Str;
 }
 //------------------------------------------------------------------------------
-// kevin 20160724 ¥Í²£¸ê®Æ
+// kevin 20160724 ï¿½Í²ï¿½ï¿½ï¿½ï¿½
 //------------------------------------------------------------------------------
 void ProductionDataLog()
 {
@@ -683,10 +780,10 @@ void ProductionDataLog()
         tmps1="RT";
     }
 
-    if(fSCKART->bShow==true && fSCKART->palLotNumber->Caption!="")              //Steven 20210517 : ¸É¤WARTªºLot No.
+    if(fSCKART->bShow==true && fSCKART->palLotNumber->Caption!="")              //Steven 20210517 : ï¿½É¤WARTï¿½ï¿½Lot No.
         str1.sprintf("%s_%s_%s_%s_%s.ini", IniConfig.SocketHandlerID, fSCKART->palLotNumber->Caption, tmps1, GetDateInfoByString(), GetOnlyTimeInfoByString());
     else
-        str1.sprintf("%s_%s_%s_%s_%s.ini", IniConfig.SocketHandlerID, fLotInfo->edtSysLotID->Text, tmps1, GetDateInfoByString(), GetOnlyTimeInfoByString());    //Steven 20210517 : ÀÉ¦W¥[¤W®É¶¡ÂW°O
+        str1.sprintf("%s_%s_%s_%s_%s.ini", IniConfig.SocketHandlerID, fLotInfo->edtSysLotID->Text, tmps1, GetDateInfoByString(), GetOnlyTimeInfoByString());    //Steven 20210517 : ï¿½É¦Wï¿½[ï¿½Wï¿½É¶ï¿½ï¿½Wï¿½O
 
     MyForceDirectories(asPath);
 
@@ -726,7 +823,7 @@ void ProductionDataLog()
             fputs(tmps.c_str(), pFile);
         }
 
-        if(CUSTOMER_CODE==CC_PTI)                                               //Jimmychiu 20251208 : PTI ¨ä©ú­n¨DBin Summary³øªí¥[¤JError bin
+        if(CUSTOMER_CODE==CC_PTI)                                               //Jimmychiu 20251208 : PTI ï¿½ï¿½ï¿½ï¿½nï¿½DBin Summaryï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½JError bin
         {
             tmps.sprintf("Error Bin=%d\n", LastSet.iBinData32[0][iTestBinCount]);
             fputs(tmps.c_str(), pFile);
@@ -735,7 +832,7 @@ void ProductionDataLog()
     }
 }
 //------------------------------------------------------------------------------
-//V3.27N.546 Steven 20170927 (wei) : ¤ñ¹ï¤u§@ÀÉªºÀË¬d½X¬O§_¥¿½T -1:¨S¦³MD5,  1:Pass, 0:Fail
+//V3.27N.546 Steven 20170927 (wei) : ï¿½ï¿½ï¿½uï¿½@ï¿½Éªï¿½ï¿½Ë¬dï¿½Xï¿½Oï¿½_ï¿½ï¿½ï¿½T -1:ï¿½Sï¿½ï¿½MD5,  1:Pass, 0:Fail
 //------------------------------------------------------------------------------
 int CompareMD5ByFolder(AnsiString FolderName)
 {
@@ -773,7 +870,7 @@ int CompareMD5ByFolder(AnsiString FolderName)
     return bResult;
 }
 //------------------------------------------------------------------------------
-//V3.27N.546 Steven 20170927 (wei) : ±N¤u§@ÀÉ¥[¤JÀË¬d½X
+//V3.27N.546 Steven 20170927 (wei) : ï¿½Nï¿½uï¿½@ï¿½É¥[ï¿½Jï¿½Ë¬dï¿½X
 //------------------------------------------------------------------------------
 void SetMD5ByFolder(AnsiString FolderName)
 {
@@ -797,7 +894,7 @@ void SetMD5ByFolder(AnsiString FolderName)
     delete tsFileName;
 }
 //------------------------------------------------------------------------------
-//unionªºByte»PBit¤¬´«
+//unionï¿½ï¿½Byteï¿½PBitï¿½ï¿½ï¿½ï¿½
 //------------------------------------------------------------------------------
 int ByteUnionBit::Bit(int i)
 {
@@ -904,7 +1001,7 @@ void TMyQueue10::Add(int data)
     }
 
     iIndex++;
-    if(iIndex>=MAX_Q_10 || iIndex<0)                                            //Steven 20200826 : ·s¼W«OÅ@,Á×§K·¸¦ì
+    if(iIndex>=MAX_Q_10 || iIndex<0)                                            //Steven 20200826 : ï¿½sï¿½Wï¿½Oï¿½@,ï¿½×§Kï¿½ï¿½ï¿½ï¿½
         iIndex=0;
     iData[iIndex]=data;
     DateTime[iIndex].sprintf("%02d:%02d:%02d.%03d", SystemHour, SystemMin, SystemSec, SystemMSec);
@@ -920,7 +1017,7 @@ void TMyQueue10::Add(double data)
     }
 
     iIndex++;
-    if(iIndex>=MAX_Q_10 || iIndex<0)                                            //Steven 20200826 : ·s¼W«OÅ@,Á×§K·¸¦ì
+    if(iIndex>=MAX_Q_10 || iIndex<0)                                            //Steven 20200826 : ï¿½sï¿½Wï¿½Oï¿½@,ï¿½×§Kï¿½ï¿½ï¿½ï¿½
         iIndex=0;
     dData[iIndex]=data;
     DateTime[iIndex].sprintf("%02d:%02d:%02d.%03d", SystemHour, SystemMin, SystemSec, SystemMSec);
@@ -942,7 +1039,7 @@ bool TMyQueue10::CheckTaskChange()
         }
         else
         {
-            if(iIndex>=0 && iIndex<MAX_Q_10)                                    //Steven 20200826 : ·s¼W«OÅ@,Á×§K·¸¦ì
+            if(iIndex>=0 && iIndex<MAX_Q_10)                                    //Steven 20200826 : ï¿½sï¿½Wï¿½Oï¿½@,ï¿½×§Kï¿½ï¿½ï¿½ï¿½
             {
                 if(*iTask!=iData[iIndex])
                 {
@@ -963,7 +1060,7 @@ double TMyQueue10::GetData(int i)
 {
     if(i<=iCount)
     {
-        if(iCount<MAX_Q_10)                                                     //Steven 20200730 : ­×¥¿Task List¬ö¿ý¶¶§Ç
+        if(iCount<MAX_Q_10)                                                     //Steven 20200730 : ï¿½×¥ï¿½Task Listï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         {
             if(i>=0)
             {
@@ -979,7 +1076,7 @@ double TMyQueue10::GetData(int i)
         }
         else
         {
-            if(((iIndex+i)%MAX_Q_10)<MAX_Q_10 || ((iIndex+i)%MAX_Q_10)>=0)      //Steven 20200826 : ·s¼W«OÅ@,Á×§K·¸¦ì
+            if(((iIndex+i)%MAX_Q_10)<MAX_Q_10 || ((iIndex+i)%MAX_Q_10)>=0)      //Steven 20200826 : ï¿½sï¿½Wï¿½Oï¿½@,ï¿½×§Kï¿½ï¿½ï¿½ï¿½
             {
                 if(bInt)
                     return iData[((iIndex+i)%MAX_Q_10)];
@@ -996,7 +1093,7 @@ AnsiString TMyQueue10::GetDateTime(int i)
     AnsiString Str="";
     int flag=((iIndex+i)%MAX_Q_10);
 
-    if(i<=iCount)                                                               //Steven 20200730 : ­×¥¿Task List¬ö¿ý¶¶§Ç
+    if(i<=iCount)                                                               //Steven 20200730 : ï¿½×¥ï¿½Task Listï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     {
         if(iCount<MAX_Q_10)
         {
@@ -1014,7 +1111,7 @@ AnsiString TMyQueue10::GetDateTime(int i)
         }
         else
         {
-            if(flag>=0)                                                         //Steven 20200826 : ·s¼W«OÅ@,Á×§K·¸¦ì
+            if(flag>=0)                                                         //Steven 20200826 : ï¿½sï¿½Wï¿½Oï¿½@,ï¿½×§Kï¿½ï¿½ï¿½ï¿½
             {
                 if(bInt)
                     Str.sprintf("%s, %d",  DateTime[flag], iData[flag]);
@@ -1038,7 +1135,7 @@ double TMyQueue10::GetLastData()
 AnsiString TMyQueue10::ShowCommaText(bool bWithDateTime)
 {
     AnsiString Str=Alias+",", Str2;
-    for(int i=0; i<=iCount; i++)                                                //Steven 20200730 : ­×¥¿Task List¬ö¿ý¶¶§Ç
+    for(int i=0; i<=iCount; i++)                                                //Steven 20200730 : ï¿½×¥ï¿½Task Listï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     {
         if(bWithDateTime)
         {
@@ -1565,7 +1662,7 @@ int FindAndKillProcess(LPCTSTR lpszProcessName)                                 
     return x;
 }
 //------------------------------------------------------------------------------
-void LogIndexMaxMinPos(AnsiString str)                                          //Isaac 20201012 : ­pºâEncoder©Mcommandpos/Teachingªº®t­È¡A°O¿ý¨Ã¦sÀÉ¡A¤@½Ltray°O¿ý¤@¦¸
+void LogIndexMaxMinPos(AnsiString str)                                          //Isaac 20201012 : ï¿½pï¿½ï¿½Encoderï¿½Mcommandpos/Teachingï¿½ï¿½ï¿½tï¿½È¡Aï¿½Oï¿½ï¿½ï¿½Ã¦sï¿½É¡Aï¿½@ï¿½Ltrayï¿½Oï¿½ï¿½ï¿½@ï¿½ï¿½
 {
     AnsiString Message="", StrPosRecord="";
 
@@ -1581,7 +1678,7 @@ void LogIndexMaxMinPos(AnsiString str)                                          
 
     fMain->slIndexYMaxMinShift->MySaveToFile();
 
-    InitialMaxMinValue(str);                                                    //Isaac 20201012 : ­pºâEncoder©Mcommandpos/Teachingªº®t­È¡AÂk¹s
+    InitialMaxMinValue(str);                                                    //Isaac 20201012 : ï¿½pï¿½ï¿½Encoderï¿½Mcommandpos/Teachingï¿½ï¿½ï¿½tï¿½È¡Aï¿½kï¿½s
 }
 //------------------------------------------------------------------------------
 double Round(double x, double point)                                            //ChungHung 20210113 add for Alignment CCD start
@@ -1664,16 +1761,16 @@ void sDataTimelog(AnsiString &Msg)                                              
     Msg= asLog;
 }
 //==============================================================================
-//¨ç¥Ü»¡©ú:ÀË¬d¥»¾÷¥Ø¿ý¬O§_¦s¦b¡A¨Ã¥B­«·s«Ø¥ß
-//V1.0 :Kirin 20170206 (han) ¥H«e´N¦³ 20170206 ­«·s­×§ï¡C
-//V1.1 :Kirin 20170210 (han) ¼W¥[¸É¤W½T»{µ²§À¡C
+//ï¿½ï¿½Ü»ï¿½ï¿½ï¿½:ï¿½Ë¬dï¿½ï¿½ï¿½ï¿½ï¿½Ø¿ï¿½ï¿½Oï¿½_ï¿½sï¿½bï¿½Aï¿½Ã¥Bï¿½ï¿½ï¿½sï¿½Ø¥ï¿½
+//V1.0 :Kirin 20170206 (han) ï¿½Hï¿½eï¿½Nï¿½ï¿½ 20170206 ï¿½ï¿½ï¿½sï¿½×§ï¿½C
+//V1.1 :Kirin 20170210 (han) ï¿½Wï¿½[ï¿½É¤Wï¿½Tï¿½{ï¿½ï¿½ï¿½ï¿½ï¿½C
 //==============================================================================
 bool b_Check_Dir_Exist_And_Creak_Dir(AnsiString asDir)
-{                                                                               //«Ø¥ß»PÀË¬d¥Ø¿ý¬O§_¦s¦b.
+{                                                                               //ï¿½Ø¥ß»Pï¿½Ë¬dï¿½Ø¿ï¿½ï¿½Oï¿½_ï¿½sï¿½b.
     AnsiString asStr;
     asStr.sprintf("Cannot create %s.", asDir);
 
-    AnsiString asDir1=ExtractFileDir(IncludeTrailingPathDelimiter(asDir));      //Kirin 20170210.12 (han) ¼W¥[¸É¤W½T»{µ²§À
+    AnsiString asDir1=ExtractFileDir(IncludeTrailingPathDelimiter(asDir));      //Kirin 20170210.12 (han) ï¿½Wï¿½[ï¿½É¤Wï¿½Tï¿½{ï¿½ï¿½ï¿½ï¿½
     if(asDir1.Length()>0)
     {
         if(DirectoryExists(asDir1)==false)
@@ -1749,9 +1846,9 @@ void ShuttleLog()                                                               
     WriteDataToFile(Sbuffer0.c_str(), Sbuffer1.c_str());
 }
 //------------------------------------------------------------------------------
-//Sam 20230328 : ¦Û°Ê§ó·s¼W¥[ª©¥»ÀË¬d
+//Sam 20230328 : ï¿½Û°Ê§ï¿½sï¿½Wï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Ë¬d
 //==>
-AnsiString GetSoftwareFileVersion(AnsiString sFilePatch)                        //²£«~ª©¥»
+AnsiString GetSoftwareFileVersion(AnsiString sFilePatch)                        //ï¿½ï¿½ï¿½~ï¿½ï¿½ï¿½ï¿½
 {
     AnsiString sFileVer="";
     VerInfo *myVerInfo=new VerInfo();
@@ -1863,7 +1960,7 @@ AnsiString VerInfo::GetMainVersion()
     AnsiString strFilePath=Application->ExeName;
     VerInfo().GetAppVersion(strFilePath, iFileVerMajor, iFileVerMinor, iFileVerRelease, iFileVerBuild);
 
-    if(IniConfig.bSPILFunction==true)       //JeryYang 20260611 : SPILÅã¥Ü§¹¾ãª©¥»¸¹
+    if(IniConfig.bSPILFunction==true)       //JeryYang 20260611 : SPILï¿½ï¿½Ü§ï¿½ï¿½ãª©ï¿½ï¿½ï¿½ï¿½
     {
         sret=AnsiString().sprintf("V%d.%d.%d.%d", iFileVerMajor, iFileVerMinor, iFileVerRelease, iFileVerBuild);
     }
@@ -1997,7 +2094,7 @@ void VerInfo::m_GetVerInfo(void)
     m_dwLastError = GetLastError();
 }
 //<==
-//Sam 20230328 : ¦Û°Ê§ó·s¼W¥[ª©¥»ÀË¬d
+//Sam 20230328 : ï¿½Û°Ê§ï¿½sï¿½Wï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Ë¬d
 //------------------------------------------------------------------------------
 AnsiString GetBundleInfo(int iAuto)                                             //JerryYang 20240318 : add
 {
@@ -2165,7 +2262,7 @@ AnsiString GetBundleInfo(int iAuto)                                             
     return cJSON_Print(root);
 }
 //------------------------------------------------------------------------------
-AnsiString GetErrorMessage(DWORD dwErrorMessageCode)                            //Steven 20240911 : §ì¨ú¨t²Î¿ù»~ªº°T®§
+AnsiString GetErrorMessage(DWORD dwErrorMessageCode)                            //Steven 20240911 : ï¿½ï¿½ï¿½ï¿½tï¿½Î¿ï¿½ï¿½~ï¿½ï¿½ï¿½Tï¿½ï¿½
 {
     AnsiString strMsg;
     LPVOID lpMsgBuf;
@@ -2173,7 +2270,7 @@ AnsiString GetErrorMessage(DWORD dwErrorMessageCode)                            
     FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
                    NULL,
                    dwErrorMessageCode,
-                   MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),                   // ¹w³]»y¨¥
+                   MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),                   // ï¿½wï¿½]ï¿½yï¿½ï¿½
                    (LPTSTR) &lpMsgBuf,
                    0,
                    NULL);
@@ -2181,17 +2278,17 @@ AnsiString GetErrorMessage(DWORD dwErrorMessageCode)                            
     strMsg.sprintf(("Error Code : 0x%02X ==> Error Message : %s "), dwErrorMessageCode, lpMsgBuf);
     strMsg=StringReplace(strMsg, "\r", "", TReplaceFlags()<<rfReplaceAll);
     strMsg=StringReplace(strMsg, "\n", "", TReplaceFlags()<<rfReplaceAll);
-    LocalFree(lpMsgBuf);                                                        // °O±ofree±¼ªÅ¶¡¡A¾i¦¨¦n²ßºD
+    LocalFree(lpMsgBuf);                                                        // ï¿½Oï¿½ofreeï¿½ï¿½ï¿½Å¶ï¿½ï¿½Aï¿½iï¿½ï¿½ï¿½nï¿½ßºD
     return strMsg;
 }
 //------------------------------------------------------------------------------
-double VC8ToKpa(int iVal) //intput 0~32767         output -116.0~148.0 Kpa      //Sam 20230210 : ·s¼W VacuumUnit ³q°T¼Ò²Õ
+double VC8ToKpa(int iVal) //intput 0~32767         output -116.0~148.0 Kpa      //Sam 20230210 : ï¿½sï¿½W VacuumUnit ï¿½qï¿½Tï¿½Ò²ï¿½
 {
     double dKpa=0.0;
     double dValue=0.0;
     dValue=(double)iVal;
 
-    dKpa=((3.3*(dValue/32767.0))-1.45)/0.0125;                                  //ªl®æ´£¨Ñªº¤½¦¡
+    dKpa=((3.3*(dValue/32767.0))-1.45)/0.0125;                                  //ï¿½lï¿½æ´£ï¿½Ñªï¿½ï¿½ï¿½ï¿½ï¿½
 
     if(dKpa>148)
         dKpa=148.0;
@@ -2200,11 +2297,11 @@ double VC8ToKpa(int iVal) //intput 0~32767         output -116.0~148.0 Kpa      
     return dKpa;
 }
 //------------------------------------------------------------------------------
-int KpaToVC8(double dKpa) //intput -116.0~148.0 Kpa    output 0~32767           //Sam 20230210 : ·s¼W VacuumUnit ³q°T¼Ò²Õ
+int KpaToVC8(double dKpa) //intput -116.0~148.0 Kpa    output 0~32767           //Sam 20230210 : ï¿½sï¿½W VacuumUnit ï¿½qï¿½Tï¿½Ò²ï¿½
 {
     int iVal=0;
 
-    iVal=32767.0*(((0.0125*dKpa)+1.45)/3.3);                                    //ªl®æ´£¨Ñªº¤½¦¡
+    iVal=32767.0*(((0.0125*dKpa)+1.45)/3.3);                                    //ï¿½lï¿½æ´£ï¿½Ñªï¿½ï¿½ï¿½ï¿½ï¿½
 
     if(iVal>32767)
         iVal=32767.0;
