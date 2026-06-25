@@ -51,4 +51,21 @@
 - 已完成：(C# 已作廢移除) → C++ pivot、ContactForce 計算核心翻譯（root 鏡射、g++ 驗證、已 commit）。
 - 慣例確立：**翻譯檔鏡射 BCB6 相對路徑/檔名**（見 KNOWLEDGE「檔案位置與命名」）；CMake+g++/CTest 驗證；無 Borland 故對手算公式值驗證。
 - 下一步候選：(a) 翻 `cContact.cpp` 的計算消費端（CalculateTotalAirForce/GetMinForce/GetMaxIndexForceLimit，消費 ContactForce 的 SLK 資料；但 cContact 是 VCL 表單，需抽 calc-core）；(b) 翻另一個 leaf（Common/PickPlanner 或 Public 工具如 HTMD5/cJSON）；(c) 補 ContactForce 的 ReadFile/ini 載入（接 config）。
-- 驗證指令：`cd HT9011UC_Cpp_V3.33.906.0 && export PATH=/c/MinGW/bin:$PATH && cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=C:/MinGW/bin/g++.exe && cmake --build build && ctest --test-dir build`。
+- 驗證指令：`cd HT9011UC_Cpp_V3.33.906.0 && export PATH=/c/MinGW/bin:$PATH && cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=C:/MinGW/bin/g++.exe -DCMAKE_C_COMPILER=C:/MinGW/bin/gcc.exe && cmake --build build && ctest --test-dir build`。
+
+---
+
+## 2026-06-26 — W0 基礎完成（vclcompat 層 + CMake + 首批 Public 葉工具）
+
+**全面遷移啟動**（目標：全部轉移；順序見 `MIGRATION_ROADMAP.md`）。W0 = 載體最重的基礎：
+- **`vclcompat/` 相容層**（附加目錄）：`AnsiString`（28 個實際用到的方法/運算子，**1-based** Pos/SubString/operator[]/Delete/Insert、int/double 建構格式化、operator+ 串接、UpperCase/Trim/sprintf 等）、`TStringList`、`TDateTime`(OLE double)、`SysUtils`(IntToStr/StrToInt/Format/FileExists/Now/FormatDateTime…)、`vcl_compat.h` 傘狀標頭（中和 __fastcall/__closure/__property/PACKAGE/DELPHICLASS；翻譯檔以此取代 `<vcl.h>`）。**第一次編譯就過，1-based 語意正確、無需修補**。
+- **CMake 鏡射骨架** + tests/。
+- **首批 Public 葉工具（鏡射路徑）**：`Public/cJSON.c/.h`（純 C，extran "C"，以 C 編譯）、`Public/HTMD5.cpp/.h`（用 compat AnsiString，MD5 演算法 bit-exact）。
+- HTMD5 翻譯時處理的相依：VCL Masks `TMask` 萬用字元比對（重建簡易 matcher）、`std::auto_ptr`→`unique_ptr`(C++17)、`MyDBIProcess` logging stub、Win32 FindFirstFile（MinGW windows.h 可攜）；保留既有 buffer-overflow fix 註解。
+
+**驗證**（獨立重跑）：CMake+g++ 6.3 clean build 零警告、**ctest 4/4 PASS**（ContactForce、vclcompat 語意、HTMD5、cJSON）。**MD5 命中 RFC1321 標準向量**（真 golden：""=d41d8c…、"abc"=900150…、"message digest"=f96b69…），cJSON parse/print/re-parse round-trip 14/14。限制：MinGW-only、無 Borland binary diff。
+
+### 🔖 RESUME（最新）
+- 已完成：C++ pivot、檔案鏡射慣例、ContactForce 計算核心、**W0 基礎（vclcompat + CMake + cJSON/HTMD5）**。全 build green、已 commit。
+- **下一步：W1 續翻 Public/ 葉工具**（`MyStringList`、`HonNewDel`、`MemoryAlarm`、`WinSocketErrorCode`、`systools` 等，鏡射路徑，用 vclcompat，golden/邏輯測試），然後 W2 邏輯島。
+- 基礎已穩→後續波次翻譯應更快。驗證指令同上（含 `-DCMAKE_C_COMPILER`）。每批完成自動 commit + 更新 DEVLOG/KNOWLEDGE/ROADMAP。

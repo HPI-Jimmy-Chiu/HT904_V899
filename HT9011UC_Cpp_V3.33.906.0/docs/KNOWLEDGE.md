@@ -15,7 +15,15 @@
 - 無 BCB6 對應的「附加檔」可用新結構：`CMakeLists.txt`、`tests/`、`docs/`（這些原本是 .bpr/無對應）。`.bpr` → 以 CMake 取代（建置系統不同，屬合理偏離）。
 - 例外（無法照做時提出）：含特殊字元/空白的原路徑（如 `ASE_K Socket\`）照樣鏡射但建置需處理空白；`.dfm` 表單不直接鏡射成 .cpp（UI 走介面承接，另議）。
 
+## vclcompat 相容層（W0，載體最重，勿亂動）
+- 位置 `vclcompat/`（附加，非鏡射）。翻譯檔以 `#include "vclcompat/vcl_compat.h"` 取代 `<vcl.h>`。
+- `AnsiString`（backed by std::string）**1-based 語意**：`s[1]`=首字、`Pos`回 1-based 或 0、`SubString(start1,len)`、`Delete/Insert` 1-based；`AnsiString(int/double)` 格式化；`operator+` 串接；`UpperCase/LowerCase/Trim` 回新；`sprintf` 就地。**已通過語意測試 test_vclcompat**。新增方法時務必維持 1-based 與 BCB6 語意。
+- `TStringList`/`TStrings`、`TDateTime`(OLE double, days since 1899-12-30)、`SysUtils`（IntToStr/StrToInt/StrToIntDef/StrToFloat/FloatToStr/FloatToStrF/Format/FileExists/ExtractFileName/Path/Now/FormatDateTime…）。只實作專案用到的子集；要新方法就照 BCB6 補。
+- 建置：CMake 把 vclcompat 編成 static lib `vclcompat`，各模組 lib 連它；cJSON.c 以 C 編（`set_source_files_properties LANGUAGE C` + 標頭 extern "C"）。
+
 ## 已翻譯模組 + 領域發現
+- **Public/HTMD5（W0）**：`class MD5` + `md5()/md5_File()/md5_Folder()`（回 AnsiString）+ SearchFile/SearchFolder。翻譯時：VCL `TMask` 萬用字元比對→重建簡易 matcher；`std::auto_ptr`→`unique_ptr`；`MyDBIProcess` log→stub；`FindFirstFile` 用 MinGW windows.h（可攜）；保留 Ifor 20200826 buffer-overflow fix。MD5 演算法 bit-exact（命中 RFC1321 向量）。
+- **Public/cJSON（W0）**：標準可攜 C，原樣翻、extern "C"、以 C 編譯，parse/print round-trip 過。
 - **ContactForce（已翻計算核心）**：`ContactForce.cpp/.h` 其實是 **VCL 表單 `TfContactForce` + 四個 SLK 元件類別**（THTSLKClass / THTSLKIndClass / THTDieForceSLKClass / THTDieForceOneByOneSLKClass），是 **SLK 直徑→力 的資料產生端**。文件常提的 `CalculateTotalAirForce`/`GetMinForce`/`GetMaxIndexForceLimit` 其實在 **`cContact.cpp`（VCL 表單 TfContact，計算消費端）**，讀 `fContactForce->SLKClass[i]->dDiameter/dMinForce/dMaxForce`。已抽出 ContactForce 的純計算核心為 C++（`SlkForceData`/`ComputeSlkForce`/`ComputeEpMaxVoltage`，root 鏡射）。
 - 翻譯慣例（已確立）：extract-calc-core（VCL 表單/widget/IO 不翻，純算抽成可測函式，輸入用 struct/參數）；保留字面常數（如 `3.14` 不換 M_PI 以維數值同一）；特例綁對的類別（如 402 僅 STANDARD）；caption-only 變數（iCount）不影響數值。
 - 驗證模式（無 Borland）：CMake(MinGW Makefiles)+g++ 6.3 編譯（`-Wall -Wextra -Wshadow -Wconversion -Wpedantic` 零警告）+ CTest；數值對「手算 BCB6 公式值」（非 live diff，已標限制）。

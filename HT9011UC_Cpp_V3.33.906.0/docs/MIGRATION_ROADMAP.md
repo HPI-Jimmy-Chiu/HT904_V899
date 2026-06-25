@@ -20,5 +20,7 @@
 - **W7 — UI（133 .dfm 表單）**：先定 UI 框架（MFC 最近 VCL / Qt 現代 / Win32）＝**獨立大決策**；逐表單重建於 view 介面後，接已翻邏輯。最大、最後。
 
 ## 進度
-- ✅ C++ pivot、檔案鏡射慣例、ContactForce 計算核心（W2 一部分，先行示範）。
-- ▶ 進行：**W0 基礎**（vclcompat 層 + CMake 骨架 + 首批 Public 葉工具 HTMD5/cJSON 驗證）。
+- ✅ C++ pivot、檔案鏡射慣例、ContactForce 計算核心（W2 先行示範）。
+- ✅ **W0 基礎完成**：vclcompat 層（AnsiString 1-based 等）+ CMake 鏡射骨架 + Public/cJSON + Public/HTMD5；ctest 4/4、MD5 命中 RFC1321。
+- ▶ 進行：**W1 Public/ 葉工具續翻**（MyStringList、HonNewDel、MemoryAlarm、WinSocketErrorCode、systools…）。
+- ⏳ 待：W0 尾段全域標頭（MachineType.h/cmydef.h/cprod.h/cpublic.h）去 VCL 化（大、排在邏輯波次前）。
