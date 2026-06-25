@@ -21,6 +21,10 @@ namespace vclcompat {
 
 // ---- numbers <-> strings --------------------------------------------------
 AnsiString IntToStr(int v);
+// BCB6 IntToHex(Value, Digits): uppercase hex, zero-padded to >= Digits width.
+// Overloaded for the integer widths the V906 source passes (int / __int64).
+AnsiString IntToHex(long long value, int digits);
+AnsiString IntToHex(int value, int digits);
 int        StrToInt(const AnsiString& s);              // throws on bad input
 int        StrToIntDef(const AnsiString& s, int def);
 double     StrToFloat(const AnsiString& s);            // throws on bad input

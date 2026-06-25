@@ -132,6 +132,41 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 endif()
 
 # ---------------------------------------------------------------------------
+# Library: ht9045_globals  (W0-TAIL keystone)
+#   The de-VCL'd GLOBAL define/type headers + the .cpp regions that define the
+#   contract globals. These headers (MachineType / Config / CosFunction / cprod /
+#   cpublic / cmydef / myTimer / MachineDefine) gate most downstream logic.
+#
+#   Each .cpp keeps its active global var DEFINITIONS (Prod / IniConfig /
+#   CosFunction / Offset / ARM_OFFSET* arrays / name-tables / TQPF_Timer) while
+#   the function bodies that reach untranslated state machines / app headers are
+#   gated behind '#if 0 // TODO(Wx)'.  Built as a static library: it must COMPILE
+#   standalone (verified), but is NOT linked into an executable here because the
+#   active globals construct objects whose ctors live in the gated regions
+#   (those resolve in W3/W6/W7).  myTimer.cpp is fully translated this wave.
+# ---------------------------------------------------------------------------
+add_library(ht9045_globals STATIC
+    myTimer.cpp
+    cprod.cpp
+    cpublic.cpp
+    cmydef.cpp
+)
+
+target_include_directories(ht9045_globals PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+target_link_libraries(ht9045_globals PUBLIC vclcompat)
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    # The translated globals carry the original BCB6 idioms (e.g. AnsiString
+    # array brace-init with NULL).  Keep them compiling without the strict
+    # -Werror-style flags used on freshly-written modules.
+    target_compile_options(ht9045_globals PRIVATE
+        -Wno-conversion-null -Wno-write-strings)
+endif()
+
+# ---------------------------------------------------------------------------
 # Tests
 # ---------------------------------------------------------------------------
 enable_testing()

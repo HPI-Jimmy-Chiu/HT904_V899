@@ -84,6 +84,7 @@ using vclcompat::Word;
 
 // SysUtils free functions
 using vclcompat::IntToStr;
+using vclcompat::IntToHex;
 using vclcompat::StrToInt;
 using vclcompat::StrToIntDef;
 using vclcompat::StrToFloat;

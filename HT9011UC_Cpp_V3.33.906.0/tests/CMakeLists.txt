@@ -93,3 +93,33 @@ add_executable(test_PickPlanner
 target_link_libraries(test_PickPlanner PRIVATE ht9045_common)
 
 add_test(NAME PickPlanner COMMAND test_PickPlanner)
+
+# ===========================================================================
+#  W0-TAIL global define/type headers compile gate
+# ===========================================================================
+# Includes all 5 target headers + Config/CosFunction/myTimer/MachineDefine and
+# static_asserts a spot-check of preserved enum/#define values. Links against
+# vclcompat (IntToHex etc.) + myTimer.o (TQPF_Timer ctor). Does NOT pull the
+# cprod/cmydef/cpublic active globals (their ctors are W6-gated).
+add_executable(test_w0tail_headers
+    w0tail_headers_compile.cpp
+)
+
+target_link_libraries(test_w0tail_headers PRIVATE vclcompat)
+# myTimer.cpp lives in ht9045_globals; pull just its TQPF_Timer ctor via the lib.
+target_link_libraries(test_w0tail_headers PRIVATE ht9045_globals)
+
+add_test(NAME w0tail_headers COMMAND test_w0tail_headers)
+
+# --- W0-TAIL VERIFY: standalone-compile + value/layout spot-check -----------
+#   #includes every in-scope translated global header and asserts the
+#   define/enum -> value pairs + PROD_INFO_ST sizeof/offsetof layout anchors
+#   (static_assert at compile time + a runtime self-check). Links vclcompat
+#   (IntToHex / value types) + ht9045_globals (TQPF_Timer ctor in myTimer.o).
+add_executable(test_globals
+    test_globals.cpp
+)
+
+target_link_libraries(test_globals PRIVATE vclcompat ht9045_globals)
+
+add_test(NAME globals COMMAND test_globals)

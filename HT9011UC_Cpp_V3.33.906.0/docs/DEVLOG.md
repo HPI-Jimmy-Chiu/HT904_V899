@@ -77,8 +77,14 @@
 - 無 vclcompat 新增。驗證（獨立）：clean build、**ctest 9/9**（含 test_PickPlanner 72/72，用 stub IArmPickPlanContext 驅動引擎＋邊界守則）。
 - **重要瓶頸發現**：W2 多處延後都卡在「等全域標頭」→ 下一步必須先翻全域定義/型別標頭。
 
+## 2026-06-26 — W0 尾段：全域標頭去 VCL 化完成（瓶頸解除）
+- 翻譯（鏡射 root）：`MachineType.h`、`Config.h`、`CosFunction.h`、`myTimer.h`(+.cpp)、`cpublic.h`(+.cpp)、`cprod.h`(+.cpp)、`cmydef.h`(+.cpp)、`MachineDefine.h`。全部去 VCL 化、單一 TU 一起編可過（lib `ht9045_globals`）。
+- **契約逐位保留**：PROD_INFO_ST 欄位 layout、enum 值/序、~250 個 CC_* 與 eTestMode/eContactMode/eInArmType… #define——用 static_assert/offsetof + runtime self-check 對拍。
+- 處理：form 指標→前置宣告(W7)；前置宣告 TMyLog/TMyStringList/TColor=int/uPoint2D/TLargeInteger；ARM_OFFSET `_fastcall` typo 修；丟未用 include；`.cpp` 觸及狀態機 body `#if 0`→W3/W6（DEFERRED 表已記）。
+- 驗證（獨立）：clean build、**ctest 11/11**（10 prior + globals）。無 vclcompat 缺口、Verify 階段 0 修補（headers 一次到位）。
+
 ### 🔖 RESUME（最新）
-- 已完成：C++ pivot、鏡射慣例、ContactForce、**W0 基礎**、**W1 Public 批1**、**W2 邏輯島(部分)**。全 green、已 commit。
-- **下一步：W0 尾段＝全域標頭去 VCL 化**（`cmydef.h`/`cprod.h`/`cpublic.h`/`MachineType.h`/`MachineDefine.h`）。這是目前最大瓶頸（解鎖 cUnitConvert glue / SortingBinTray / PickPlanner adapters / W3 / W6）。注意 PROD_INFO_ST ~770 行、大量 enum/extern/`extern PACKAGE TfXxx*`（VCL form 指標→前置宣告/守起來，UI 在 W7）。
-- **完整性**：ROADMAP DEFERRED 表追蹤所有半翻/略過項，最終回補。vclcompat 待補 FindFirst/TSearchRec(W3 前)。
+- 已完成：C++ pivot、鏡射慣例、ContactForce、**W0 基礎+尾段(全域標頭)**、**W1 Public 批1**、**W2 邏輯島(部分)**。全 green、已 commit。**全域型別/define 契約已可在 C++ 編譯 → 瓶頸解除**。
+- **下一步：W3 config/DB/base services** = `cinitial`(讀 Gerneral.ini/Mot_Table.csv/IO_Table.csv→IniConfig/Prod；**我對此邏輯熟，之前做過對應分析**)、`cMyDB`+sqlite3、`common.cpp`(SGDToCSV)、`MyStringList`(globals 已備)、補 vclcompat FindFirst/TSearchRec 解 DeleteDirectory。
+- **完整性**：ROADMAP DEFERRED 表（含 W0-tail 新增的 gated .cpp bodies、TMyLog→W7、5×TMyStringList*→W3）最終回補。
 - 驗證指令：`cd HT9011UC_Cpp_V3.33.906.0 && export PATH=/c/MinGW/bin:$PATH && cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=C:/MinGW/bin/g++.exe -DCMAKE_C_COMPILER=C:/MinGW/bin/gcc.exe && cmake --build build && ctest --test-dir build`。

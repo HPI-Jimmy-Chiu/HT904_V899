@@ -25,6 +25,33 @@ namespace vclcompat {
 // ---------------------------------------------------------------------------
 AnsiString IntToStr(int v) { return AnsiString(v); }
 
+// BCB6 IntToHex: uppercase hex, zero-padded to at least `digits` chars.
+// (e.g. IntToHex(255,2) -> "FF", IntToHex(10,4) -> "000A".)
+AnsiString IntToHex(long long value, int digits) {
+    if (digits < 0) digits = 0;
+    // Build uppercase hex manually (no 'll' printf modifier -- MinGW's msvcrt
+    // printf mishandles %llX, so format the 64-bit value digit-by-digit).
+    unsigned long long v = static_cast<unsigned long long>(value);
+    char tmp[24];
+    int n = 0;
+    if (v == 0ULL) {
+        tmp[n++] = '0';
+    } else {
+        while (v != 0ULL && n < (int)sizeof(tmp)) {
+            int d = static_cast<int>(v & 0xFULL);
+            tmp[n++] = static_cast<char>(d < 10 ? ('0' + d) : ('A' + d - 10));
+            v >>= 4;
+        }
+    }
+    std::string out;
+    for (int pad = n; pad < digits; ++pad) out += '0';   // zero-pad to >= digits
+    for (int i = n - 1; i >= 0; --i) out += tmp[i];       // reverse to MSB-first
+    return AnsiString(out);
+}
+AnsiString IntToHex(int value, int digits) {
+    return IntToHex(static_cast<long long>(static_cast<unsigned int>(value)), digits);
+}
+
 int    StrToInt(const AnsiString& s)            { return s.ToInt(); }
 int    StrToIntDef(const AnsiString& s, int d)  { return s.ToIntDef(d); }
 double StrToFloat(const AnsiString& s)          { return s.ToDouble(); }

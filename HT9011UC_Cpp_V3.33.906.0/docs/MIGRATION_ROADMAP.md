@@ -24,8 +24,9 @@
 - ✅ **W0 基礎完成**：vclcompat 層（AnsiString 1-based 等）+ CMake 鏡射骨架 + Public/cJSON + Public/HTMD5；ctest 4/4、MD5 命中 RFC1321。
 - ✅ **W1 第一批 Public 葉工具**：`ExternFunction`(純函式部分)、`WinSocketErrorCode`(GetErrorMsg)、`cBootLog`；ctest 7/7。
 - ✅ **W2 邏輯島（部分）**：`Common/PickPlanner` 通用引擎 cArmPickPlan（與 golden 幾乎逐字同，僅換 include）+ 兩個 scaffold adapter（gated off）；`cUnitConvert` 純轉換部分。ctest 9/9。
-- ▶ **下一步：W0 尾段＝全域定義/型別標頭去 VCL 化**（`cmydef.h`/`cprod.h`/`cpublic.h`/`MachineType.h`/`MachineDefine.h`）。**W2 已證實這是瓶頸**：cUnitConvert glue、SortingBinTray、PickPlanner adapters 全卡在「等這些標頭」。翻完才能解鎖 W3/W6 大量邏輯。
-- ⏳ 待：W3 config/DB、W4 HAL、W5 comms、W6 root 狀態機、W7 UI。
+- ✅ **W0 尾段＝全域標頭完成**：`MachineType.h`/`Config.h`/`CosFunction.h`/`myTimer.h`/`cpublic.h`/`cprod.h`/`cmydef.h`/`MachineDefine.h` 全部去 VCL 化、**單一 TU 一起編可過**（ctest 11/11，含 globals：PROD_INFO_ST 的 static_assert/offsetof 錨點 + enum/#define 值對拍）。**瓶頸已解除**。form 指標前置宣告→W7；.cpp 觸及狀態機的 body `#if 0`→W3/W6。
+- ▶ **下一步：W3 config/DB/base services**（`cinitial` 讀 Gerneral.ini/Mot_Table.csv/IO_Table.csv→IniConfig/Prod；`cMyDB`+sqlite3；`common.cpp` SGDToCSV 等；`MyStringList`（globals 已備）；補 vclcompat FindFirst/TSearchRec 解 DeleteDirectory）。
+- ⏳ 待：W4 HAL、W5 comms、W6 root 狀態機、W7 UI。
 
 ## 延後項目追蹤（DEFERRED — 完整性，勿遺漏，全部轉移用）
 > 部分檔案只翻了 leaf 部分，耦合段延到對應波次。最終各波結束前要回頭補完這些。
@@ -43,3 +44,7 @@
 | cUnitConvert | Do*Convert glue (DoTestIFConvert/DoDeviceConvert/DoHotPlateConvert/DoArmOffsetConvert/…) | W6 | 依 cprod.h/cmydef.h 結構 + fShowMessage/ATC VCL form |
 | SortingBinTray | 整檔 | W6 | main.h/MyMotor/mycylin/atester/uLotInfo + cmydef TSortingBinTray_* + AutoForm[] VCL form |
 | Common/PickPlanner adapters | cInArmLoaderPickPlanner/cOutArmPlacePlanner 的 Search 本體（現為 scaffold，gate 預設 false）| W6 | 綁 MOT[].Tray.Data / InArmSuck / OutArmSuck（未翻全域）|
+| cmydef.cpp / cprod.cpp / cpublic.cpp | 觸及 main.h/csystem/rs232/MyMotor/state machine 的函式 body（現 `#if 0`）| W3/W5/W6 | 等對應模組翻完 |
+| cmydef.cpp | `TMyLog myLog` 全域實例定義（header 已前置宣告）| W7 | TMyLog 綁 VCL form/TWinControl |
+| cmydef.cpp | 5 個 `TMyStringList*` 目標定義 | W3 | TMyStringList 在 Public/MyStringList.h(__property+MyMemo.h) |
+| MachineDefine.h | driver/app include 區塊 | W3/W6/W7 | 等驅動/app 模組 |
