@@ -69,6 +69,9 @@ extern void DoInArm_9045_2x4_8();       extern void DoInArm_9045_2x4_8_SuckerMap
 extern void DoInArm_9045_2x5_8();       extern void DoInArm_9045_2x5_8_SuckerMap();
 extern void DoInArm_9045_2x6_8();       extern void DoInArm_9045_2x6_8_SuckerMap();
 extern void DoInArm_9045_2x8_8();       extern void DoInArm_9045_2x8_8_SuckerMap();
+// W6.2c batch-5 S-family callees (now LIVE; IRREGULAR func names -- copy EXACTLY).
+extern void DoInArm_9045S_1x4_4();      extern void DoInArm_9045S_1x4_4_SuckerMap();
+extern void DoInArm_9045_2x4_4_13();    extern void DoInArm_9045_2x4_4_13_SuckerMap();
 
 // ---------------------------------------------------------------------------
 //  Minimal PASS / FAIL harness (same style as the other W6 verify TUs)
@@ -170,26 +173,40 @@ int main()
     }
 
     // =======================================================================
-    //  PART D-gate -- a STILL-gated iInArmType hits the Program-Error else and
-    //  leaves the cursor UNCHANGED (proving only the intended arms were un-gated).
+    //  PART D-route(S) -- W6.2c batch-5 made the 2 S-family arms LIVE.  Both
     //  e9045_2x4_4_13 (=21) -> DoInArm_9045_2x4_4_13 and e9045_1x4_4_13 ->
-    //  DoInArm_9045S_1x4_4 both remain inside the #if 0 gate after batch-4.
+    //  DoInArm_9045S_1x4_4 now dispatch through the engine ladder (no longer the
+    //  Program-Error else).  Witness: DoInArm_9045()@type leaves iArmTask IDENTICAL
+    //  to a direct call of the variant's own callee from the SAME entry state.
+    //  (Was: D-gate UNCHANGED assertion -- stale after batch-5 un-gated these arms.)
     // =======================================================================
-    printf("[D-gate] still-gated iInArmType -> Program-Error else -> cursor UNCHANGED\n");
+    printf("[D-route(S)] e9045_2x4_4_13 / e9045_1x4_4_13 now route to their LIVE S-family callees (batch-5)\n");
     {
         resetInArmBaseline();
-        iInArmType = e9045_2x4_4_13;     // =21, still GATED
+        iInArmType = e9045_2x4_4_13;
         iArmTask   = 1;
-        DoInArm_9045();
-        CHECK(iArmTask == 1,
-              "D-gate e9045_2x4_4_13 still GATED: Program-Error else -> iArmTask UNCHANGED");
+        DoInArm_9045_2x4_4_13();
+        int cursorDirect2x4 = iArmTask;
 
         resetInArmBaseline();
-        iInArmType = e9045_1x4_4_13;     // -> DoInArm_9045S_1x4_4, still GATED
+        iInArmType = e9045_2x4_4_13;
         iArmTask   = 1;
         DoInArm_9045();
-        CHECK(iArmTask == 1,
-              "D-gate e9045_1x4_4_13 still GATED: Program-Error else -> iArmTask UNCHANGED");
+        CHECK(iArmTask == cursorDirect2x4,
+              "D-route(S) e9045_2x4_4_13: engine ladder == direct DoInArm_9045_2x4_4_13 (batch-5 LIVE)");
+
+        resetInArmBaseline();
+        iInArmType = e9045_1x4_4_13;
+        iArmTask   = 1;
+        DoInArm_9045S_1x4_4();
+        int cursorDirect1x4 = iArmTask;
+
+        resetInArmBaseline();
+        iInArmType = e9045_1x4_4_13;
+        iArmTask   = 1;
+        DoInArm_9045();
+        CHECK(iArmTask == cursorDirect1x4,
+              "D-route(S) e9045_1x4_4_13: engine ladder == direct DoInArm_9045S_1x4_4 (batch-5 LIVE)");
     }
 
     // The 5 *_SuckerMap() builder symbols are real, defined, callable (no crash).

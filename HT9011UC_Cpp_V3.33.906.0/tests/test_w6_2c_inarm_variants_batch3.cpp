@@ -201,25 +201,28 @@ int main()
               "D-pick(a) e9045_2x4_4_14(=20) enters DoInArm_9045_2x4_4 (engine==direct, NOT _2x4_4_13)");
     }
 
-    // (b) e9045_2x4_4_13 (=21) still GATED -> Program-Error else, cursor UNCHANGED.
+    // (b) e9045_2x4_4_13 (=21) is now LIVE (W6.2c batch-5 un-gated the S-family arm
+    //     -> DoInArm_9045_2x4_4_13); under !ep1Picker it dispatches via the engine
+    //     ladder and advances the cursor out of entry (NOT the Program-Error else).
     {
         USE_PICKER_COUNT = ep4Picker;
         resetInArmBaseline();
         iInArmType = e9045_2x4_4_13;
         iArmTask   = 1;
         DoInArm_9045();
-        CHECK(iArmTask == 1,
-              "D-pick(b) e9045_2x4_4_13(=21) still GATED -> Program-Error else -> iArmTask UNCHANGED");
+        CHECK(iArmTask != 1,
+              "D-pick(b) e9045_2x4_4_13(=21) LIVE -> DoInArm_9045_2x4_4_13 -> cursor advanced (batch-5 un-gated)");
     }
 
-    // (c) ep1Picker -> All_1Pick is the FIRST arm regardless of iInArmType.
-    //     Witness with a GATED iInArmType so the only way the cursor can advance
-    //     is the leading `if(USE_PICKER_COUNT==ep1Picker)` arm.
+    // (c) ep1Picker -> All_1Pick is the FIRST arm regardless of iInArmType.  The
+    //     leading `if(USE_PICKER_COUNT==ep1Picker)` arm short-circuits BEFORE the
+    //     iInArmType chain, so even with e9045_2x4_4_13 (now LIVE after batch-5) set,
+    //     ep1Picker routes to All_1Pick -- proving picker-count precedence.
     {
         // direct All_1Pick advance from a clean entry state
         USE_PICKER_COUNT = ep1Picker;
         resetInArmBaseline();
-        iInArmType = e9045_2x4_4_13;     // GATED type (still gated after W6.2c batch-4)
+        iInArmType = e9045_2x4_4_13;     // LIVE type, but ep1Picker arm fires first
         iArmTask   = 1;
         DoInArm_9045_All_1Pick();
         int cAllDirect = iArmTask;
@@ -234,27 +237,29 @@ int main()
         CHECK(cEngineP1 == cAllDirect && cAllDirect != 1,
               "D-pick(c) ep1Picker: FIRST arm == DoInArm_9045_All_1Pick (cursor advances, ignores gated iInArmType)");
 
-        // control: same gated type WITHOUT ep1Picker -> Program-Error else, UNCHANGED
+        // control: same type WITHOUT ep1Picker -> now routes to its own LIVE
+        // S-family arm (DoInArm_9045_2x4_4_13), cursor advances out of entry.
+        // (Pre-batch-5 this hit the Program-Error else and stayed UNCHANGED.)
         USE_PICKER_COUNT = ep4Picker;
         resetInArmBaseline();
         iInArmType = e9045_2x4_4_13;
         iArmTask   = 1;
         DoInArm_9045();
-        CHECK(iArmTask == 1,
-              "D-pick(c-ctrl) NO ep1Picker + gated e9045_2x4_4_13 -> Program-Error else -> iArmTask UNCHANGED");
+        CHECK(iArmTask != 1,
+              "D-pick(c-ctrl) NO ep1Picker + e9045_2x4_4_13 LIVE -> DoInArm_9045_2x4_4_13 -> cursor advanced");
     }
 
-    // A STILL-GATED iInArmType (e9045_2x4_4_13 = 21, remains gated after W6.2c
-    // batch-4 un-gated 2x4_8/2x8_8/...) must hit the Program-Error else and leave
-    // the cursor at its entry value (1) under the normal !ep1Picker path --
-    // restating the gate witness for completeness.
+    // e9045_2x4_4_13 (=21) is LIVE after W6.2c batch-5 (-> DoInArm_9045_2x4_4_13);
+    // under the normal !ep1Picker path it dispatches via the engine ladder and
+    // advances the cursor out of entry -- restating the LIVE-route witness for
+    // completeness.  (Was a still-GATED UNCHANGED assertion pre-batch-5.)
     USE_PICKER_COUNT = ep4Picker;
     resetInArmBaseline();
     iInArmType = e9045_2x4_4_13;
     iArmTask   = 1;
     DoInArm_9045();
-    CHECK(iArmTask == 1,
-          "D-gate [e9045_2x4_4_13 still GATED]: Program-Error else -> iArmTask UNCHANGED (only intended arms un-gated)");
+    CHECK(iArmTask != 1,
+          "D-route [e9045_2x4_4_13 LIVE]: routed to DoInArm_9045_2x4_4_13 -> cursor advanced (batch-5 un-gated)");
 
     // The 6 *_SuckerMap() builder symbols are real, defined, callable (no crash).
     // All_1Pick_SuckerMap is DEFINED (faithful) though the golden engine never

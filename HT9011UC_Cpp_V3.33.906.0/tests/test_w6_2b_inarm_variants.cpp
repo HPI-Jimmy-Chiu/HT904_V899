@@ -193,26 +193,27 @@ int main()
     CHECK(inArm1x1CursorSane(d2Task),
           "D2 e9045_1x4_1_Ac: cursor in documented set");
 
-    // ---- D3: gated type e9045_2x4_4_13 -> Program-Error else, cursor UNCHANGED -
-    //   (2x4_8 was un-gated by W6.2c batch-4; e9045_2x4_4_13 remains gated.)
+    // ---- D3: e9045_2x4_4_13 is now LIVE (W6.2c batch-5 un-gated the S-family arm
+    //   -> DoInArm_9045_2x4_4_13); it dispatches via the engine ladder and advances
+    //   the cursor out of entry (NOT the Program-Error else, which leaves it UNCHANGED).
     resetInArmBaseline();
-    iInArmType = e9045_2x4_4_13;                 // =21, still GATED
+    iInArmType = e9045_2x4_4_13;                 // =21, now LIVE (batch-5)
     iArmTask   = 1;
-    DoInArm_9045();                              // expect Program-Error else (no dispatch)
-    printf("    [D3] after 1 tick @e9045_2x4_4_13 (gated): iArmTask=%d\n", iArmTask);
-    CHECK(iArmTask == 1,
-          "D3 e9045_2x4_4_13 (gated): Program-Error else -> iArmTask UNCHANGED");
+    DoInArm_9045();                              // dispatches to DoInArm_9045_2x4_4_13
+    printf("    [D3] after 1 tick @e9045_2x4_4_13 (LIVE): iArmTask=%d\n", iArmTask);
+    CHECK(iArmTask != 1,
+          "D3 e9045_2x4_4_13 (LIVE): routed to DoInArm_9045_2x4_4_13 -> cursor advanced (batch-5 un-gated)");
 
-    // ---- D4: still-gated type e9045_1x4_4_13 -> Program-Error else, UNCHANGED --
-    //   (e9045_2x8_32 now routes to the LIVE 2x8_8 family after W6.2c batch-4;
-    //    e9045_1x4_4_13 -> DoInArm_9045S_1x4_4 remains gated, so use it here.)
+    // ---- D4: e9045_1x4_4_13 is now LIVE (W6.2c batch-5 un-gated -> DoInArm_9045S_1x4_4,
+    //   IRREGULAR func name with 'S'); it dispatches via the engine ladder and advances
+    //   the cursor out of entry (NOT the Program-Error else).
     resetInArmBaseline();
-    iInArmType = e9045_1x4_4_13;                 // routes to DoInArm_9045S_1x4_4 in golden -> GATED here
+    iInArmType = e9045_1x4_4_13;                 // -> DoInArm_9045S_1x4_4, now LIVE (batch-5)
     iArmTask   = 1;
     DoInArm_9045();
-    printf("    [D4] after 1 tick @e9045_1x4_4_13 (gated): iArmTask=%d\n", iArmTask);
-    CHECK(iArmTask == 1,
-          "D4 e9045_1x4_4_13 (gated): Program-Error else -> iArmTask UNCHANGED (DoInArm_9045S_1x4_4 not translated)");
+    printf("    [D4] after 1 tick @e9045_1x4_4_13 (LIVE): iArmTask=%d\n", iArmTask);
+    CHECK(iArmTask != 1,
+          "D4 e9045_1x4_4_13 (LIVE): routed to DoInArm_9045S_1x4_4 -> cursor advanced (batch-5 un-gated)");
 
     // ---- D5: pump the 1x1_1 master SM directly for N ticks (cursor bounded) --
     //   Drive DoInArm_9045_1x1_1() from entry; assert the cursor never escapes
@@ -270,16 +271,21 @@ int main()
           Prod.iSiteMap[0][0][0]      == 7,
           "S2a DoInArm_9045_SuckerMap @e9045_1x1_1: routes to 1x1_1 builder -> Prod grid written");
 
-    // ---- S2b: DoInArm_9045_SuckerMap() with a gated type -> grid stays clear -
-    //   (2x4_8 was un-gated by W6.2c batch-4; e9045_2x4_4_13 remains gated.)
+    // ---- S2b: DoInArm_9045_SuckerMap() with e9045_2x4_4_13 -- now LIVE (W6.2c
+    //   batch-5 un-gated DoInArm_9045_2x4_4_13_SuckerMap).  The builder runs (NOT
+    //   the Program-Error else): for j=0 GetShuttleCol(0,0)==0 (<8) and TestMode
+    //   != _16Site4X4 -> fInArmSuck4x8[0][0][0] = bUseTestSocket[0][0][0].  Witness
+    //   the through-write.  (The 2x4_4_13 builder never touches iSiteMap, so it
+    //   stays at the engine pre-clear value -1.)
     clearProdSuckGrid();
-    iInArmType                      = e9045_2x4_4_13;  // gated -> Program-Error else
+    iInArmType                      = e9045_2x4_4_13;  // now LIVE (batch-5)
+    TestIF.iTestMode                = _16Site2X8;      // any non-_16Site4X4 branch
     LastSet.bUseTestSocket[0][0][0] = true;
     TestIF.iSiteMap[0][0]           = 7;
-    DoInArm_9045_SuckerMap();                          // the engine pre-clears + Program-Error
-    CHECK(Prod.bInSuckUse[0][0][0] == false &&
-          Prod.iSiteMap[0][0][0]   == -1,
-          "S2b DoInArm_9045_SuckerMap @gated type: Program-Error else -> grid stays cleared (no 1x1_1 write)");
+    DoInArm_9045_SuckerMap();                          // routes to 2x4_4_13 builder
+    CHECK(Prod.fInArmSuck4x8[0][0][0] == true &&
+          Prod.iSiteMap[0][0][0]      == -1,
+          "S2b DoInArm_9045_SuckerMap @e9045_2x4_4_13 (LIVE): builder ran -> fInArmSuck4x8[0][0][0]=bUseTestSocket (no iSiteMap write)");
 
     // ---- S3: BONUS bSingleUseOtherSuck=true -> iSuckCol=1 -> writes at [.][0][1]
     clearProdSuckGrid();

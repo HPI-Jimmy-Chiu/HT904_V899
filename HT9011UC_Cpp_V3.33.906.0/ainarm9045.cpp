@@ -821,6 +821,13 @@ extern void DoInArm_9045_2x6_8();                                               
 extern void DoInArm_9045_2x6_8_SuckerMap();                                     //golden :4673
 extern void DoInArm_9045_2x8_8();                                               //golden :4414
 extern void DoInArm_9045_2x8_8_SuckerMap();                                     //golden :4674
+// W6.2c batch-5: 2 S-family (HT-9045S AutoClean) variants made live.  IRREGULAR
+// func names -- copy EXACTLY: file ainarm9045S_1x4_4 defines DoInArm_9045S_1x4_4
+// (S in func), file ainarm9045S_2x4_4_13 defines DoInArm_9045_2x4_4_13 (NO S in func).
+extern void DoInArm_9045S_1x4_4();              //golden ainarm9045.cpp:4569 callee (def ainarm9045S_1x4_4.cpp:1528)
+extern void DoInArm_9045S_1x4_4_SuckerMap();    //golden :4734 callee (def ainarm9045S_1x4_4.cpp:1497)
+extern void DoInArm_9045_2x4_4_13();            //golden :4617 callee (def ainarm9045S_2x4_4_13.cpp:1818)
+extern void DoInArm_9045_2x4_4_13_SuckerMap();  //golden :4782 callee (def ainarm9045S_2x4_4_13.cpp:1783)
 
 void DoInArm_9045()                                                             //Steven 20240223 : 重新整理DoInArm_9045
 {
@@ -984,10 +991,9 @@ void DoInArm_9045()                                                             
     else if(iInArmType==e9045_2x6_8)             { DoInArm_9045_2x6_8();      }  //AI(W6.2c-INARM-batch4) 20260626: golden :4631
     else if(iInArmType==e9045_2x8_8)             { DoInArm_9045_2x8_8();      }  //AI(W6.2c-INARM-batch4) 20260626: golden :4635
     else if(iInArmType==e9045_2x8_32)            { DoInArm_9045_2x8_8();      }  //AI(W6.2c-INARM-batch4) 20260626: golden :4639 (routes 2x8_32 -> 2x8_8 callee)
-#if 0 // TODO(W6.2b variants) -- golden :4535-4641 (remaining per-layout DoInArm_9045_* arms; un-gate as each variant lands)
-    else if(iInArmType==e9045_1x4_4_13)          { DoInArm_9045S_1x4_4();     }
-    else if(iInArmType==e9045_2x4_4_13)          { DoInArm_9045_2x4_4_13();   }
-#endif
+    // --- W6.2c batch-5: 2 S-family (HT-9045S) variant arms made ACTIVE. ---
+    else if(iInArmType==e9045_1x4_4_13)          { DoInArm_9045S_1x4_4();     }  //AI(W6.2c-INARM-batch5) 20260626: golden :4567 (HT-9045S; S in func name)
+    else if(iInArmType==e9045_2x4_4_13)          { DoInArm_9045_2x4_4_13();   }  //AI(W6.2c-INARM-batch5) 20260626: golden :4615 (NO S in func name)
     else
     {
         Str.sprintf("iInArmType=%d", iInArmType);                               //Steven 20220620 : add log message
@@ -1067,6 +1073,9 @@ void DoInArm_9045_SuckerMap()                                                   
     else if(iInArmType==e9045_2x6_8)     { DoInArm_9045_2x6_8_SuckerMap();     }                          //AI(W6.2c-INARM-batch4) 20260626: golden :4796
     else if(iInArmType==e9045_2x8_8)     { DoInArm_9045_2x8_8_SuckerMap();     }                          //AI(W6.2c-INARM-batch4) 20260626: golden :4800
     else if(iInArmType==e9045_2x8_32)    { DoInArm_9045_2x8_8_SuckerMap();     }                          //AI(W6.2c-INARM-batch4) 20260626: golden :4804 (routes 2x8_32 -> 2x8_8 callee)
+    // --- W6.2c batch-5: 2 S-family SuckerMap arms made ACTIVE (transcribed from golden; no picker-prefix). ---
+    else if(iInArmType==e9045_1x4_4_13)  { DoInArm_9045S_1x4_4_SuckerMap();    }                          //AI(W6.2c-INARM-batch5) 20260626: golden :4732 (no picker-prefix)
+    else if(iInArmType==e9045_2x4_4_13)  { DoInArm_9045_2x4_4_13_SuckerMap();  }                          //AI(W6.2c-INARM-batch5) 20260626: golden :4780 (no picker-prefix)
 #if 0 // TODO(W6.2b variants) -- golden :4704-4830 (remaining per-layout *_SuckerMap arms; un-gate as each variant lands)
     /* ... further per-iInArmType *_SuckerMap dispatch arms ... */
 #endif

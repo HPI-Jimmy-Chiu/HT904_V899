@@ -157,16 +157,16 @@ int main()
         CHECK(cursorEngine == cursorDirect, buf);
     }
 
-    // A STILL-GATED iInArmType (e9045_2x4_4_13 = 21, remains in the #if 0 gate
-    // after W6.2c batch-4 un-gated 2x4_8/2x8_8/...) must hit the Program-Error else
-    // and leave the cursor at its entry value (1) -- proving only the intended arms
-    // were un-gated.  This is deterministic: the else branch does NOT touch iArmTask.
+    // e9045_2x4_4_13 (=21) is now LIVE: W6.2c batch-5 un-gated the S-family arm
+    // (-> DoInArm_9045_2x4_4_13).  It dispatches through the engine ladder and
+    // advances the cursor out of entry (NOT the Program-Error else, which leaves
+    // iArmTask UNCHANGED).  (Was a still-GATED UNCHANGED assertion pre-batch-5.)
     resetInArmBaseline();
     iInArmType = e9045_2x4_4_13;
     iArmTask   = 1;
     DoInArm_9045();
-    CHECK(iArmTask == 1,
-          "D-gate [e9045_2x4_4_13 still GATED]: Program-Error else -> iArmTask UNCHANGED (only intended arms un-gated)");
+    CHECK(iArmTask != 1,
+          "D-route [e9045_2x4_4_13 LIVE]: routed to DoInArm_9045_2x4_4_13 -> cursor advanced (batch-5 un-gated)");
 
     // The 6 *_SuckerMap() builder symbols are real, defined, callable (no crash).
     DoInArm_9045_1x4_2_SuckerMap();

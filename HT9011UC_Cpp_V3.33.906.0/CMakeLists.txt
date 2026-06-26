@@ -464,6 +464,12 @@ add_library(ht9045_sm STATIC
     ainarm9045_2x5_8.cpp
     ainarm9045_2x6_8.cpp
     ainarm9045_2x8_8.cpp
+    # --- W6.2c batch-5 (2 S-family HT-9045S in-arm variants made ACTIVE; dispatch
+    #     arms un-gated in BOTH ladders of ainarm9045.cpp).  IRREGULAR func names:
+    #     ainarm9045S_1x4_4.cpp defines DoInArm_9045S_1x4_4(+_SuckerMap) (S in func);
+    #     ainarm9045S_2x4_4_13.cpp defines DoInArm_9045_2x4_4_13(+_SuckerMap) (NO S).
+    ainarm9045S_1x4_4.cpp
+    ainarm9045S_2x4_4_13.cpp
     # --- W6.2b-canary (IN-ARM shared helpers): the two ainarm2.cpp leaves the
     #     site-variant SMs call but that had no body yet -- SetInArmUseSuckToHas
     #     NullIC (golden ainarm2.cpp:201) + InitInArmPickFromHotPlateTask (golden

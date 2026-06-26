@@ -706,6 +706,35 @@ endif()
 
 add_test(NAME W6_2c_InArmVariantsBatch4 COMMAND test_w6_2c_inarm_variants_batch4)
 
+# --- test_w6_2c_inarm_Sfamily: prove the 2 S-family in-arm variant files ----
+#   Independently proves the LAST 2 in-arm dispatch arms (the former residents of
+#   the DoInArm_9045 "#if 0 // TODO(W6.2b variants)" gate, un-gated in batch-5):
+#     ainarm9045S_1x4_4.cpp     (e9045_1x4_4_13; IRREGULAR func name DoInArm_9045S_1x4_4 -- S IN func)
+#     ainarm9045S_2x4_4_13.cpp  (e9045_2x4_4_13; func DoInArm_9045_2x4_4_13 -- NO S)
+#   Proves:
+#     [D1/D2] BOTH engine ladders (DoInArm_9045 / DoInArm_9045_SuckerMap) route each
+#          S-family iInArmType to its OWN IRREGULAR-named callee via the SOUND
+#          engine==direct differential witness; neither hits the Program-Error else.
+#     [O2] pure-const XPHSuckToSht_1x4_13 (golden ainarm9045S_1x4_4.cpp:32-33) +
+#          XPHSuckToSht_2x4_13 (golden ainarm9045S_2x4_4_13.cpp:32-34).
+#     [O3] picker-count witness: SetInOutArmParameter_1x4_4_13 -> SetPickerCount
+#          (2,2,1,4,2,0,0); SetInOutArmParameter_2x4_4_13 iShtCol 4 (non-special) /
+#          8 (_16Site2X8) -> SetPickerCount(2,2,2,{4|8},2,2,2).
+#   Same RESCAN link group as the W6.1/W6.2/W6.2b/W6.2c-batch1..4 canaries.
+add_executable(test_w6_2c_inarm_Sfamily
+    test_w6_2c_inarm_Sfamily.cpp
+)
+
+target_link_libraries(test_w6_2c_inarm_Sfamily PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w6_2c_inarm_Sfamily PRIVATE ws2_32)
+endif()
+
+add_test(NAME W6_2c_InArmSfamily COMMAND test_w6_2c_inarm_Sfamily)
+
 # ===========================================================================
 #  W6.2c VERIFY -- the OUT-ARM ENGINE core SMs (aoutarm9045.cpp)
 # ===========================================================================
