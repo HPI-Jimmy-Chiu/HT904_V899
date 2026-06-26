@@ -288,6 +288,19 @@ public:
     // faithful body (remap Item==Type1 -> Type2 over the pick grid) offline-safe.
     void SetType1ToType2ByPickCol(int Type1, int Type2); // golden-by-name (2x4_16-local)
 #endif
+
+    // -- W6.2c(1x2_4_Hot) ADD: golden TMyKitSuck "have real IC" side-scan API the
+    //    1x2_4_Hot in-arm place-to-shuttle SM derefs (golden mykitsuck.cpp).  All
+    //    are genuine golden API (cited per line); guarded so a parallel sibling
+    //    variant editing this header does not double-declare.  FAITHFUL bodies are
+    //    in aHotPlateSubstrate.cpp (Item-grid scans only -- no HAL).
+#ifndef HT9045_KITSUCK_HAVEREALIC_ADDED
+#define HT9045_KITSUCK_HAVEREALIC_ADDED
+    bool ArmUpSideHaveRealIC(bool left=true);    // golden mykitsuck.cpp (ChungHung 20130708 left=true)
+    bool ArmDownSideHaveRealIC(bool left=true);  // golden mykitsuck.cpp (ChungHung 20130708 left=true)
+    bool ArmLeftSideHaveRealIC(int MiddleValue); // golden mykitsuck.cpp
+    bool ArmRightSideHaveRealIC(int MiddleValue);// golden mykitsuck.cpp (For 1x2 & 2x2)
+#endif
 };
 
 extern TMyKitSuck InArmSuck;     // golden MyKitSuck.h:357
@@ -359,6 +372,13 @@ extern int iPlacePlate[2], iPlacePlateX[2], iPlacePlateY[2];           // golden
 extern bool InArmSuckUse[MAX_ARM_Row][MAX_ARM_Col];                    // golden ainarm2.h:67
 extern bool bPickFromHotplate;                                          // golden ainarm2.h:53
 extern bool bInArmCheckDestroyACT[MAX_ARM_Row][MAX_ARM_Col];           // golden ainarm2.h:39
+// W6.2c ADD: 1x2_* HotPlate XDivision==3 flag pair shared by 1x2_2/1x2_2_14/
+// 1x2_4_Hot in-arm SMs.  Single canonical decl (def in aHotPlateSubstrate.cpp);
+// guarded so a sibling variant's local extern is harmless.  AI(W6.2c-INARM) 20260626.
+#ifndef HT9045_flag1_1x2_2_DECLARED
+#define HT9045_flag1_1x2_2_DECLARED
+extern bool flag1_1x2_2[2];                                            // golden ainarm2.cpp:41 / ainarm2.h:9
+#endif
 
 extern int iHotCount;                                                   // golden ainarm2.h:77 (同一次 Shuttle 的 IC 計數)
 extern int iHotPlateCount  [2][50][50];                                 // golden ainarm2.h:78
@@ -625,6 +645,46 @@ extern const bool ZAxisNotDown;                                             // g
 // CheckInArmDestroyICFail is declared in csystem.h:88; redeclared here so the
 // substrate TU can DEFINE the offline body (no built csystem.cpp definition).
 extern bool CheckInArmDestroyICFail();                                      // golden csystem.cpp (Steven 20111223)
+
+// ----------------------------------------------------------------------------
+//  W6.2c batch-1: cross-variant in-arm shim symbols the 1x2_2 / 1x2_2_14 /
+//  1x2_4_Hot / 1x3_2_14 / 1x3_4 SMs deref but that had no single shared home.
+//  Reusing existing offline definitions where they exist; defining the genuinely
+//  missing ones ONCE (aHotPlateSubstrate.cpp).  AI(W6.2c-INARM) 20260626.
+// ----------------------------------------------------------------------------
+// These offline shim symbols are already DEFINED in the 2x4_16 shim TU
+// (ainarm9045_2x4_16_shims.cpp).  Declare the exact ones the W6.2c variants deref
+// HERE (NOT by including ainarm9045_2x4_16_shims.h, which carries default-arg
+// decls that collide with the engine's own definitions in ainarm9045.cpp).
+extern void AdjustShuttlePlaceOrder_AutoSiteMapping();                      // golden ainarm2.h (def ainarm9045_2x4_16_shims.cpp)
+extern void InitInArmTryPickFromHotPlateTask100();                          // golden ainarm2.h (def ainarm9045_2x4_16_shims.cpp)
+extern void DoJudgeInputShuttleNeedChangeToNullIC();                        // golden (def ainarm9045_2x4_16_shims.cpp)
+extern DWORD MyTickCount();                                                 // golden common.h:259 (def ainarm9045_2x4_16_shims.cpp)
+// fYieldMonitoring: the live def (ainarm9045_2x4_16_shims.cpp) is typed
+// TfYieldMonitoring_2x4_16*.  Mirror that exact type + decl so the variant
+// `fYieldMonitoring->DoAutoCloseSite(..)` call binds to the same symbol.
+#ifndef HT9045_YIELDMON_FACADE_DECLARED
+#define HT9045_YIELDMON_FACADE_DECLARED
+class TfYieldMonitoring_2x4_16 { public: void DoAutoCloseSite(bool /*bFlag*/) {} };
+extern TfYieldMonitoring_2x4_16 *fYieldMonitoring;                          // golden uYieldMonitoring.h:fYieldMonitoring
+#endif // HT9045_YIELDMON_FACADE_DECLARED
+// Shuttle-soak start ticks (golden atester.h:81/:83; DEFINED in atester.cpp).
+extern DWORD dwStartShuttle1Soak;                                           // golden atester.h:81
+extern DWORD dwStartShuttle2Soak;                                           // golden atester.h:83
+// AutoTeach Z form pointer (golden InOutArmZteach.h: TfInOutArmZteach* Zteach).
+// Only Zteach->fShow is read (false offline).  Minimal offline facade; single
+// canonical decl + def (aHotPlateSubstrate.cpp).  Guarded so the 1x2_2 local
+// stand-in (now removed) cannot double-declare.
+#ifndef HT9045_Zteach_DECLARED
+#define HT9045_Zteach_DECLARED
+struct TfInOutArmZteach_Facade { bool fShow; TfInOutArmZteach_Facade():fShow(false){} };
+extern TfInOutArmZteach_Facade *Zteach;                                     // golden InOutArmZteach.h:Zteach
+#endif
+// ainarm2 helpers with NO live golden home (golden ainarm2.cpp:2812 / :533).
+// Offline-safe: the Auto-Site-Mapping side-effect is skipped; the "clear-all-hot-IC
+// then pick-load-IC" gate reports not-satisfied (conservative "nothing to do").
+extern void DoCheckAutoSiteMappingPosition();                               // golden ainarm2.h:198 / ainarm2.cpp:2812
+extern bool CheckClearAllHotICThenPickLoadIC();                             // golden ainarm2.h:168 / ainarm2.cpp:533
 
 #endif // HT9045_AINARM2_INARM_SHIMS
 

@@ -580,6 +580,38 @@ endif()
 add_test(NAME W6_2b_InArmVariants COMMAND test_w6_2b_inarm_variants)
 
 # ===========================================================================
+#  W6.2c batch-1 VERIFY -- the 5 in-arm SITE-VARIANT batch (active arms)
+# ===========================================================================
+# --- test_w6_2c_inarm_variants: prove the 5-variant batch over the Sim HAL ---
+#   Independently proves the W6.2c batch-1 of 5 in-arm site variants
+#   (1x3_4, 1x2_2, 1x2_2_14, 1x2_4_Hot, 1x3_2_14).  Proves:
+#     [D] the engine ladders (DoInArm_9045 / DoInArm_9045_SuckerMap) route each
+#         of the 5 active iInArmType values to its OWN DoInArm_9045_<v>() /
+#         _SuckerMap() arm (cursor advances), while a still-gated type
+#         (e9045_2x4_8) hits the Program-Error else (cursor UNCHANGED) -- so only
+#         the intended arms were un-gated; all 5 *_SuckerMap symbols defined+callable.
+#     [O1] pure const table XPHSuckToSht_1x2_4 (golden 1x2_4_Hot:32; read by the
+#          engine at ainarm9045.cpp:513) carries the exact golden values.
+#     [O2] TMyKitSuck Arm{Up,Down,Left,Right}SideHaveRealIC Item-grid scans
+#          (transcribed verbatim from golden mykitsuck.cpp; drive 1x2_4_Hot) match.
+#     [O3] GetShuttleState_1x3_4 pick branch (golden ainarm9045_1x3_4.cpp:2965)
+#          returns 0 (all NULL_IC) / 1 (left-top HAS_IC).
+#   Same RESCAN link group as the W6.1/W6.2/W6.2b canaries + core TUs.
+add_executable(test_w6_2c_inarm_variants
+    test_w6_2c_inarm_variants.cpp
+)
+
+target_link_libraries(test_w6_2c_inarm_variants PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w6_2c_inarm_variants PRIVATE ws2_32)
+endif()
+
+add_test(NAME W6_2c_InArmVariants COMMAND test_w6_2c_inarm_variants)
+
+# ===========================================================================
 #  W6.2c VERIFY -- the OUT-ARM ENGINE core SMs (aoutarm9045.cpp)
 # ===========================================================================
 # --- test_w6_2_outarm_core: pump the OUT-ARM central task SMs over Sim HAL ---

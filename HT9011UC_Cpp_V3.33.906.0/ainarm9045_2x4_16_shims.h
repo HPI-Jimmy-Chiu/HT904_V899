@@ -99,14 +99,19 @@ extern int  iAutoSiteMapHPRow;                                                  
 extern int  iAutoSiteMapHPCol;                                                  // golden (call-only) -- JCET ASM: HP col of the site being mapped
 
 // ---- Yield-monitoring UI facade (golden uYieldMonitoring.h TfYieldMonitoring*)
-//  Referenced only by the 2x4_16 / 2x8_32 dead variants (case 2000 calls
-//  fYieldMonitoring->DoAutoCloseSite(false)).  Minimal offline stand-in.
+//  Referenced by the 2x4_16 / 2x8_32 + W6.2c 1x2_*/1x3_* in-arm variants (case
+//  2000 calls fYieldMonitoring->DoAutoCloseSite(..)).  Minimal offline stand-in.
+//  W6.2c: dedicated guard so aHotPlateSubstrate.h can mirror the SAME definition
+//  without a double-definition when a TU includes both headers in either order.
+#ifndef HT9045_YIELDMON_FACADE_DECLARED
+#define HT9045_YIELDMON_FACADE_DECLARED
 class TfYieldMonitoring_2x4_16
 {
 public:
     void DoAutoCloseSite(bool /*bFlag*/) {}   // offline: no low-yield auto site-off
 };
 extern TfYieldMonitoring_2x4_16 *fYieldMonitoring;                              // golden uYieldMonitoring.h:fYieldMonitoring
+#endif // HT9045_YIELDMON_FACADE_DECLARED
 
 #endif // HT9045_2x4_16_SHIMS_DECLARED
 

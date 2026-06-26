@@ -30,6 +30,7 @@
 #include "ainarm_SearchPlacePlate.h"// iHPHangUpCount / sHPHangUpFunc / ClearHotPlateHangUp()
 #include "canary_support.h"         // RecordProcess / ShowErrorMessage
 #include "FormsFacade.h"            // fMain->DoStateRecord
+#include "csystem.h"                // XPitchIsStand / DoSiteMappingCHK / AutoSiteMappingCheckShuttle decls
 
 // ---------------------------------------------------------------------------
 //  bShuttleShake -- golden ainarm2.cpp:78.  Offline default false (no shake).
@@ -143,3 +144,85 @@ bool DoOutArmTeachAlignmentProcess(unsigned long & /*lAction*/) { return true; }
 // ===========================================================================
 void DoOneCycleFinishCheck() {}   // golden csystem.cpp:12813 (bulk gated; offline no-op)
 void DoCleanOutFinishCheck() {}   // golden csystem.cpp:14713 (bulk gated; offline no-op)
+
+// ===========================================================================
+//  W6.2c batch-1: csystem predicates/actions the 1x2_*/1x3_* in-arm variants
+//  call in ACTIVE code (the dead 2x4_16/2x8_32 variants only call them in gated
+//  blocks, so they were never needed before).  AI(W6.2c-INARM) 20260626.
+// ===========================================================================
+// XPitchIsStand (golden csystem.cpp:264): pure config predicate over TestIF /
+// CosFunction / iXpitch* -- transcribed VERBATIM (all inputs are config globals,
+// no HW).  Offline-faithful: returns the exact golden value for the live config.
+bool XPitchIsStand()
+{
+    if(CosFunction.b2x4SupportCenterPitch==true &&                              //Steven 20170706 (wei) : 2x4中間的Pitch不同 for SCC
+      (TestIF.iTestMode==_8Site2X4 || TestIF.iTestMode==_16Site4X4) &&          //Sam 20190226 : 16Site4X4
+       TestIF_File.bEnableUseXCenterPitch==true)
+    {
+        return false;
+    }
+    else if(TestIF.iTestMode==_10Site2X5)                                       //wei 20190614 10 site
+    {
+        return false;
+    }
+    else if(TestIF.iTestMode==QualSite1X4 || TestIF.iTestMode==_8Site2X4 ||
+            TestIF.iTestMode==_16Site2X8  || TestIF.iTestMode==_12Site2X6 ||
+            TestIF.iTestMode==_6Site2X3   ||                                    //ChungHung 20140115 add for 2x3
+            TestIF.iTestMode==_8Site1X4   ||                                    //ChungHung 20150528 add for 海思 _8Site1x4
+            TestIF.iTestMode==_16Site4X4  ||                                    //Sam 20190226 : 16Site4X4
+            TestIF.iTestMode==_32Site4X8N ||                                    //2013-01-15    Dell    Add nn Mode
+            TestIF.iTestMode==_8Site2X4N)                                       //Wei 20231211 : 2X4NN Mode
+    {
+        if(TestIF.dSiteXPitch>iXpitchMax)                                       //Isaac 20171204 (Steven) : Xpitch40->50mm
+            return false;
+    }
+    else if(TestIF.iTestMode==TriSite1X3 ||                                     //Frank 20160329 add for 1x3_4
+            TestIF.iTestMode==_6Site2X3N)                                       //Steven 20220425 : 2X3NN Mode
+    {
+        if(iInArmType==e9045_1x3_2_14)
+        {
+            if(TestIF.dSiteXPitch>iXpitchMaxX3)
+                return false;
+        }
+        else
+        {
+            if(TestIF.dSiteXPitch>iXpitchMax)
+                return false;
+        }
+    }
+    else if(TestIF.iTestMode==DualSite2x1)
+    {
+        return false;
+    }
+    else if(TestIF.iTestMode==QualSite2X2)
+    {
+        if(iInArmType==e9045_2x2_4_14)                                          //Steven 20191023 : fixed for 2x2_14 with Y-Pitch
+        {
+            if(TestIF.dSiteXPitch>iXpitchMaxX3)
+                return false;
+        }
+        else if(TestIF.dSiteXPitch>iXpitchMaxX2)                                //Isaac 20171204 (Steven) : Xpitch40->50mm, 12000->iXpitchMaxX3
+        {
+            return false;
+        }
+    }
+    else if(iInArmType==e9045_1x2_2_13 ||
+            iInArmType==e9045_1x2_4_Hot)                                        //Steven 20150505 : 1x2加大支援X-Pitch 120mm
+    {
+        if(TestIF.dSiteXPitch>iXpitchMaxX2)                                     //Isaac 20171204 (Steven) : Xpitch40->50mm, 8000->iXpitchMaxX2
+            return false;
+    }
+    else if(iInArmType==e9045_1x2_2_14)                                         //Steven 20220926 : for 1x2_14
+    {
+        if(TestIF.dSiteXPitch>iXpitchMaxX3)
+            return false;
+    }
+    return true;
+}
+// DoSiteMappingCHK (golden csystem.cpp:20183) / AutoSiteMappingCheckShuttle
+// (golden csystem.cpp:22202): JCET/ASE Auto-Site-Mapping HW side-effect routines
+// (site-map check + which-shuttle select).  Offline-safe no-ops -- there is no
+// site-map HW offline and the bRunAutoSiteMapping path is inert (consistent with
+// DoCheckAutoSiteMappingPosition's offline no-op in aHotPlateSubstrate.cpp).
+void DoSiteMappingCHK(bool /*bAdd*/) {}
+void AutoSiteMappingCheckShuttle(bool /*bWhich32*/) {}

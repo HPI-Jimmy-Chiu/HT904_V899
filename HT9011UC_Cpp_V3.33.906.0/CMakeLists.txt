@@ -417,6 +417,13 @@ add_library(ht9045_sm STATIC
     ainarm9045_2x4_16.cpp
     ainarm9045_2x4_16_shims.cpp
     ainarm9045_2x8_32.cpp
+    # --- W6.2c batch-1 (5 IN-ARM site variants made ACTIVE; dispatch arms pulled
+    #     out of the "#if 0 // TODO(W6.2b variants)" gate in ainarm9045.cpp):
+    ainarm9045_1x3_4.cpp
+    ainarm9045_1x2_2.cpp
+    ainarm9045_1x2_2_14.cpp
+    ainarm9045_1x2_4_Hot.cpp
+    ainarm9045_1x3_2_14.cpp
     # --- W6.2b-canary (IN-ARM shared helpers): the two ainarm2.cpp leaves the
     #     site-variant SMs call but that had no body yet -- SetInArmUseSuckToHas
     #     NullIC (golden ainarm2.cpp:201) + InitInArmPickFromHotPlateTask (golden

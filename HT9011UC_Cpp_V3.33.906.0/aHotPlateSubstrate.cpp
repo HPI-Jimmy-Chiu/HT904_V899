@@ -575,6 +575,10 @@ int  iInArmPlaceToHotPlateTask    = 1;   // golden ainarm2.h (cursor; InitInArmP
 int  iInArmPlaceToShuttleTask     = 1;   // golden ainarm2.h (cursor; InitInArmPlaceToShuttleTask sets 1)
 int  iInArmTryPickFromHotPlateTask = 1;  // golden ainarm2.h (cursor; InitInArmTryPickFromHotPlateTask sets 1)
 int  iBackupPlate = 0, iBackupPlateC = 0, iBackupPlateR = 0; // golden ainarm2.h (HP-check backup pos)
+// flag1_1x2_2[2] (golden ainarm2.cpp:41 / ainarm2.h:9): plain process-state flag
+// pair shared by the 1x2_2 / 1x2_2_14 / 1x2_4_Hot in-arm SMs (HotPlate XDivision==3
+// path).  Offline-safe: zero-init, no hardware.  AI(W6.2c-INARM) 20260626.
+bool flag1_1x2_2[2] = {false,false};                          // golden ainarm2.cpp:41
 
 // -- TMyKitSuck methods (golden MyKitSuck.cpp) --------------------------------
 // FAITHFUL: small HAL-free row scan (golden MyKitSuck.cpp:881).
@@ -586,6 +590,112 @@ bool TMyKitSuck::ArmUpSideAllTypeIC(int IC_TYPE, int iOffset, int iCol)         
             return false;
     }
     return true;
+}
+// FAITHFUL Item-grid side-scans (golden MyKitSuck.cpp:730/:768/:853/:943).
+// Used by the 1x2_4_Hot in-arm place-to-shuttle SM (DoInArmPlaceToShuttle).
+// Pure offline scan over the present Item grid -- no HAL.  Declared in
+// aHotPlateSubstrate.h (left=true default lives there, NOT here).
+// AI(W6.2c-INARM-1x2_4_Hot) 20260626.
+bool TMyKitSuck::ArmLeftSideHaveRealIC(int MiddleValue)
+{
+    int iHasNullICCount=0;
+    int iNullICCount=0;
+    int iOtherCount=0;
+    for(int i=0; i<iMaxRow; i++)
+    {
+        for(int j=0; j<MiddleValue; j++)
+        {
+            if(Item[i][j*2]==HAS_NULL_IC)
+                iHasNullICCount++;
+            else if(Item[i][j*2]==NULL_IC)
+                iNullICCount++;
+            else
+                iOtherCount++;
+        }
+    }
+
+    if(iOtherCount)
+        return true;
+    else
+        return false;
+}
+bool TMyKitSuck::ArmRightSideHaveRealIC(int MiddleValue)                        //For 1x2 & 2x2使用的
+{
+    int iHasNullICCount=0;
+    int iNullICCount=0;
+    int iOtherCount=0;
+
+    for(int i=0; i<iMaxRow; i++)
+    {
+        for(int j=0; j<MiddleValue; j++)
+        {
+            if(Item[i][1+j*2]==HAS_NULL_IC)
+                iHasNullICCount++;
+            else if(Item[i][1+j*2]==NULL_IC)
+                iNullICCount++;
+            else
+                iOtherCount++;
+        }
+    }
+
+    if(iOtherCount)                                                             //JerryYang 20170703 (Steven) Fix 2x2_8 Hang up
+        return true;
+    else
+        return false;
+}
+bool TMyKitSuck::ArmUpSideHaveRealIC(bool left)                                 //ChungHung 20130708 add left=true
+{
+    int iHasNullICCount=0;
+    int iNullICCount=0;
+    int iOtherCount=0;
+
+    int offset=0;
+    if(left)
+        offset=0;
+    else
+        offset=4;
+
+    for(int j=0; j<4; j++)
+    {
+        if(Item[0][j+offset]==HAS_NULL_IC)                                      //ChungHung 20130708 add left=true
+            iHasNullICCount++;
+        else if(Item[0][j+offset]==NULL_IC)                                     //ChungHung 20130708 add left=true
+            iNullICCount++;
+        else
+            iOtherCount++;
+    }
+
+    if(iOtherCount)
+        return true;
+    else
+        return false;
+}
+bool TMyKitSuck::ArmDownSideHaveRealIC(bool left)                               //ChungHung 20130708 add left=true;
+{
+    int iHasNullICCount=0;
+    int iNullICCount=0;
+    int iOtherCount=0;
+
+    int offset=0;
+    if(left)
+        offset=0;
+    else
+        offset=4;
+
+    for(int j=0; j<4; j++)
+    {
+        if(Item[1][j+offset]==HAS_NULL_IC)
+            iHasNullICCount++;
+        else if(Item[1][j+offset]==NULL_IC)
+            iNullICCount++;
+        else
+            iOtherCount++;
+    }
+
+    if(iOtherCount)
+        return true;
+    else
+        return false;
 }
 // FAITHFUL topology setter (golden MyKitSuck.cpp:206).
 void TMyKitSuck::SetPickerCount(int _iPickRow, int _iPickCol, int _iShtRow, int _iShtCol, int _iPickStep, int _iKitStep, int _iShtStep)
@@ -673,6 +783,20 @@ void InitArmPickFromLoadStageTask() { iPickFromLoadStageTask=1; }
 // nozzles into NULL_IC before HP place.  Offline conservative no-op (the Sim grid
 // is driven by the engine pick SM; nothing to reclassify offline).
 void SetInArm_Unuse_SuckToNullICForHP() {}
+
+// W6.2c: cross-variant in-arm shims with NO live golden home.  AI(W6.2c-INARM) 20260626.
+// Zteach (golden InOutArmZteach.h): AutoTeach Z form.  Offline stand-in; fShow==false
+// so the variant SMs take the non-teach path verbatim.  Single canonical def.
+TfInOutArmZteach_Facade  g_ZteachFacade;
+TfInOutArmZteach_Facade *Zteach = &g_ZteachFacade;                               // golden InOutArmZteach.h:Zteach
+// DoCheckAutoSiteMappingPosition (golden ainarm2.cpp:2812): drives the JCET/ASE
+// Auto-Site-Mapping step on a HW-bound site-map check.  Offline-safe no-op (no
+// site-map HW; bRunAutoSiteMapping path is inert offline).
+void DoCheckAutoSiteMappingPosition() {}
+// CheckClearAllHotICThenPickLoadIC (golden ainarm2.cpp:533): true iff the HP grid
+// still holds >= iLimit real ICs (so "clear all hot IC before picking load IC").
+// Offline conservative: report not-satisfied so the SM takes the normal pick path.
+bool CheckClearAllHotICThenPickLoadIC() { return false; }
 
 // AdjustShuttleWhichKitOrder (golden ainarm2.cpp:849): re-orders which Shuttle/Kit
 // the in-arm targets next.  Offline no-op (single-site: order is invariant).
