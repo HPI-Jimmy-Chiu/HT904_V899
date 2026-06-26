@@ -193,23 +193,26 @@ int main()
     CHECK(inArm1x1CursorSane(d2Task),
           "D2 e9045_1x4_1_Ac: cursor in documented set");
 
-    // ---- D3: gated type e9045_2x4_8 -> Program-Error else, cursor UNCHANGED --
+    // ---- D3: gated type e9045_2x4_4_13 -> Program-Error else, cursor UNCHANGED -
+    //   (2x4_8 was un-gated by W6.2c batch-4; e9045_2x4_4_13 remains gated.)
     resetInArmBaseline();
-    iInArmType = e9045_2x4_8;                    // =22, still GATED this wave
+    iInArmType = e9045_2x4_4_13;                 // =21, still GATED
     iArmTask   = 1;
     DoInArm_9045();                              // expect Program-Error else (no dispatch)
-    printf("    [D3] after 1 tick @e9045_2x4_8 (gated): iArmTask=%d\n", iArmTask);
+    printf("    [D3] after 1 tick @e9045_2x4_4_13 (gated): iArmTask=%d\n", iArmTask);
     CHECK(iArmTask == 1,
-          "D3 e9045_2x4_8 (gated): Program-Error else -> iArmTask UNCHANGED (only 1x1_1 un-gated)");
+          "D3 e9045_2x4_4_13 (gated): Program-Error else -> iArmTask UNCHANGED");
 
-    // ---- D4: gated type e9045_2x8_32 -> Program-Error else, cursor UNCHANGED -
+    // ---- D4: still-gated type e9045_1x4_4_13 -> Program-Error else, UNCHANGED --
+    //   (e9045_2x8_32 now routes to the LIVE 2x8_8 family after W6.2c batch-4;
+    //    e9045_1x4_4_13 -> DoInArm_9045S_1x4_4 remains gated, so use it here.)
     resetInArmBaseline();
-    iInArmType = e9045_2x8_32;                   // =25, routes to 2x8_8 in golden -> GATED here
+    iInArmType = e9045_1x4_4_13;                 // routes to DoInArm_9045S_1x4_4 in golden -> GATED here
     iArmTask   = 1;
     DoInArm_9045();
-    printf("    [D4] after 1 tick @e9045_2x8_32 (gated): iArmTask=%d\n", iArmTask);
+    printf("    [D4] after 1 tick @e9045_1x4_4_13 (gated): iArmTask=%d\n", iArmTask);
     CHECK(iArmTask == 1,
-          "D4 e9045_2x8_32 (gated): Program-Error else -> iArmTask UNCHANGED (golden routes 2x8_32->2x8_8, not translated)");
+          "D4 e9045_1x4_4_13 (gated): Program-Error else -> iArmTask UNCHANGED (DoInArm_9045S_1x4_4 not translated)");
 
     // ---- D5: pump the 1x1_1 master SM directly for N ticks (cursor bounded) --
     //   Drive DoInArm_9045_1x1_1() from entry; assert the cursor never escapes
@@ -268,8 +271,9 @@ int main()
           "S2a DoInArm_9045_SuckerMap @e9045_1x1_1: routes to 1x1_1 builder -> Prod grid written");
 
     // ---- S2b: DoInArm_9045_SuckerMap() with a gated type -> grid stays clear -
+    //   (2x4_8 was un-gated by W6.2c batch-4; e9045_2x4_4_13 remains gated.)
     clearProdSuckGrid();
-    iInArmType                      = e9045_2x4_8;     // gated -> Program-Error else
+    iInArmType                      = e9045_2x4_4_13;  // gated -> Program-Error else
     LastSet.bUseTestSocket[0][0][0] = true;
     TestIF.iSiteMap[0][0]           = 7;
     DoInArm_9045_SuckerMap();                          // the engine pre-clears + Program-Error

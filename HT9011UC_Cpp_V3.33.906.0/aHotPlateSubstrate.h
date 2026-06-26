@@ -313,6 +313,19 @@ public:
     bool ArmLeftSideHaveRealIC(int MiddleValue); // golden mykitsuck.cpp
     bool ArmRightSideHaveRealIC(int MiddleValue);// golden mykitsuck.cpp (For 1x2 & 2x2)
 #endif
+
+    // -- W6.2c(2x2_8_Hot) ADD: golden TMyKitSuck "NULL_IC -> HAS_NULL_IC" grid
+    //    promotion the 2x2_8_Hot in-arm place-to-shuttle SM derefs (4 call sites:
+    //    FLCarryKit x2 / BLCarryKit x2).  Genuine golden API (MyKitSuck.h:280 /
+    //    MyKitSuck.cpp:340-352).  FAITHFUL body in aHotPlateSubstrate.cpp (pure
+    //    Item-grid scan over iShtRow/iShtCol -- no HAL).  Guarded so a parallel
+    //    sibling variant editing this header does not double-declare.  NOTE: a
+    //    same-named method also exists on TTrayMotor (Motor/mymotor.h:359) -- a
+    //    DIFFERENT class; this one is TMyKitSuck (FLCarryKit/BLCarryKit).
+#ifndef HT9045_KITSUCK_SETNULLIC2HASNULLIC_ADDED
+#define HT9045_KITSUCK_SETNULLIC2HASNULLIC_ADDED
+    void SetNullIcToHasNullIc();                 // golden MyKitSuck.h:280 (Steven 20150203)
+#endif
 };
 
 extern TMyKitSuck InArmSuck;     // golden MyKitSuck.h:357
@@ -484,9 +497,34 @@ extern void ResetShuttleWhichKit();                                     //golden
 // per-site close-site-mode selectors referenced by HotPlateYPitchCanPutAll().
 // Golden homes: ainarm9045_2x6_8.h / ainarm9045_2x8_8.h (per-site modules, W6.x/W7).
 // e2x8OneByOne already lives in target MachineType.h; only these are missing:
-extern int iCloseSiteModeFor2x6;        //golden ainarm9045_2x6_8.h:23 (Steven 20240417)
-extern int iCloseSiteModeFor2x8;        //golden ainarm9045_2x8_8.h:28 (JerryYang 20190729)
+extern int iCloseSiteModeFor2x6;        //golden ainarm9045_2x6_8.h:23 (Steven 20240417)  (REAL def: ainarm9045_2x6_8.cpp)
+extern int iCloseSiteModeFor2x8;        //golden ainarm9045_2x8_8.h:28 (JerryYang 20190729) (REAL def: ainarm9045_2x8_8.cpp)
+//AI(W6.2c-INARM-batch4) 20260626: e2x6OneByOne now lives in the FULL `enum e2x6Mode`
+// owned by ainarm9045_2x6_8.h (the per-site variant landed ACTIVE this batch).
+// Keep this bare e2x6OneByOne=2 placeholder ONLY for TUs that include
+// aHotPlateSubstrate.h but NOT ainarm9045_2x6_8.h (acarry.cpp:3252 +
+// ainarm_SearchPlacePlate.cpp:302).  Guard it out when the variant header is
+// present (it is included BEFORE this header in ainarm9045_2x6_8.cpp) so the
+// enumerator is not redeclared; value (2) is identical so numeric behavior is
+// unchanged.  (Mirrors the e1x4CloseAbAc / ainarm9045_1x4_4H guard above.)
+#ifndef ainarm9045_2x6_8H
 enum { e2x6OneByOne = 2 };              //golden ainarm9045_2x6_8.h:10 (enum e2x6Mode)
+#endif
+// -- W6.2c(2x2_8_Hot) ADD: engine-sibling row-dual-site predicate the 2x2_8_Hot
+//    place-to-HP SM derefs (3 sites: GetPlaceHotPlate_4/_8/_8All).  Golden home
+//    ainarm2.cpp:1554 (ainarm2.h).  FAITHFUL offline body in aHotPlateSubstrate.cpp
+//    returns false (the dominant golden outcome: 3 of 4 returns are false; the only
+//    `true` early-out is gated on ArmCanSuck4IC(0)==false which the Sim HAL does not
+//    model).  2x2_8_Hot.cpp also forward-declares this under #ifndef
+//    ROWCANDUALSITE_DECLARED so it compiles standalone; the two coexist (same proto).
+extern bool RowCanDualSite();                                          //golden ainarm2.cpp:1554 (ChungHung 20150528)
+// -- W6.2c(2x8_8) ADD: out-arm 2x8 special-close-site map WRITTEN-TO by the in-arm
+//    2x8_8 CheckSTMMode_2x8_8 (5 sites).  Golden home aoutarm9045_2x8_8.h:7 /
+//    defined aoutarm9045_2x8_8.cpp:31 (JerryYang 20250711) -- the out-arm 2x8_8
+//    wave is NOT translated yet, so home an OFFLINE definition here (zero-init) so
+//    the in-arm family links now; when the out-arm 2x8_8 file lands it OWNS the def
+//    and this offline one is removed.  e2x8ModeTotal comes from MachineType.h.
+extern int XPHSuckToSht_2x8_8_OutArm[e2x8ModeTotal][2][8];             //golden aoutarm9045_2x8_8.h:7 (JerryYang 20250711)
 extern int  CloseSiteState(bool bPlace=true);                          //golden ainarm2.h:156
 extern void InitInArmTask();
 extern void SetRunStartMode(int iMode);

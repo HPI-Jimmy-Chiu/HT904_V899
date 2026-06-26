@@ -677,6 +677,35 @@ endif()
 
 add_test(NAME W6_2c_InArmVariantsBatch3 COMMAND test_w6_2c_inarm_variants_batch3)
 
+# --- test_w6_2c_inarm_variants_batch4: prove the 5-variant batch-4 over Sim HAL
+#   Independently proves the W6.2c batch-4 of 5 in-arm site variants
+#   (2x2_8_Hot, 2x4_8, 2x5_8, 2x6_8, 2x8_8).  Proves:
+#     [D]  the engine ladder (DoInArm_9045) routes each of the 5 active variant
+#          iInArmType values to its OWN DoInArm_9045_<v>() arm via the SOUND
+#          engine==direct differential witness; all 5 *_SuckerMap symbols callable.
+#     [D-route] golden routing fact (golden ainarm9045.cpp :4639): e9045_2x8_32
+#          routes to the SAME DoInArm_9045_2x8_8 callee as e9045_2x8_8.
+#     [D-gate] still-gated e9045_2x4_4_13 / e9045_1x4_4_13 -> Program-Error else,
+#          cursor UNCHANGED.
+#     [O1] pure-const XPHSuckToSht_2x6_6 (golden ainarm9045_2x6_8.cpp:75) standard /
+#          Steven-20250123-fix / close-center-2x4 rows.
+#     [O2] pure-const XPHSuckToSht_2x8_8 (golden ainarm9045_2x8_8.cpp:112) identity
+#          standard + JerryYang-20190729 STM interleave.
+#   Same RESCAN link group as the W6.1/W6.2/W6.2b/W6.2c-batch1/2/3 canaries.
+add_executable(test_w6_2c_inarm_variants_batch4
+    test_w6_2c_inarm_variants_batch4.cpp
+)
+
+target_link_libraries(test_w6_2c_inarm_variants_batch4 PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w6_2c_inarm_variants_batch4 PRIVATE ws2_32)
+endif()
+
+add_test(NAME W6_2c_InArmVariantsBatch4 COMMAND test_w6_2c_inarm_variants_batch4)
+
 # ===========================================================================
 #  W6.2c VERIFY -- the OUT-ARM ENGINE core SMs (aoutarm9045.cpp)
 # ===========================================================================

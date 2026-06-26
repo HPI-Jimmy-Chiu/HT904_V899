@@ -450,8 +450,20 @@ std::vector<TInLaserCheck*> LaserCheckPos;
 //==============================================================================
 //  per-site close-site-mode selectors (golden ainarm9045_2x6_8.h / _2x8_8.h)
 //==============================================================================
-int iCloseSiteModeFor2x6 = 0;       // e2x6Standard
-int iCloseSiteModeFor2x8 = 0;
+//AI(W6.2c-INARM-batch4) 20260626: the placeholder DEFINITIONS of iCloseSiteModeFor2x6
+// (was =0, e2x6Standard) and iCloseSiteModeFor2x8 (was =0, e2x8Standard) were REMOVED.
+// The per-site variants ainarm9045_2x6_8.cpp (iCloseSiteModeFor2x6=e2x6Standard) and
+// ainarm9045_2x8_8.cpp (iCloseSiteModeFor2x8=e2x8Standard) now own the REAL defs; the
+// extern decls in aHotPlateSubstrate.h satisfy consumers (acarry.cpp / ainarm2.cpp).
+// Values identical (both e*Standard==0) so numeric behavior is unchanged.
+//==============================================================================
+//  XPHSuckToSht_2x8_8_OutArm (golden aoutarm9045_2x8_8.h:7 / aoutarm9045_2x8_8.cpp:31,
+//  JerryYang 20250711) -- OFFLINE home for the in-arm 2x8_8 family until the out-arm
+//  2x8_8 wave lands.  Zero-init (the in-arm CheckSTMMode_2x8_8 writes the live cells
+//  before any read; no read precedes a write offline).  When the out-arm file is
+//  translated it OWNS this def and this offline one is removed.
+//==============================================================================
+int XPHSuckToSht_2x8_8_OutArm[e2x8ModeTotal][2][8] = {{{0}}};
 
 //==============================================================================
 //  (A) [W6.2b] in-arm ENGINE cursors owned by ainarm2.cpp (not-yet-translated).
@@ -544,6 +556,13 @@ bool bInArmTryPickFromHotPlateFinish = false;   //ChungHung 20120206
 //==============================================================================
 void ResetShuttleWhichKit() {}                             //golden ainarm2.h:133
 int  CloseSiteState(bool /*bPlace*/) { return 0; }         // no site closed offline
+// RowCanDualSite (golden ainarm2.cpp:1554, ChungHung 20150528).  W6.2c batch-4: the
+// 2x2_8_Hot place-to-HP SM derefs it (GetPlaceHotPlate_4/_8/_8All).  The golden body
+// reads TestIF.iTestMode/iUseSuckMode + ArmCanSuck4IC(0) + HotPlateForm.XDivision and
+// returns false on every branch EXCEPT the ArmCanSuck4IC(0)==false early-out (which
+// the Sim HAL does not model); 3 of 4 returns are false.  Offline: false (the
+// dominant/faithful outcome -- no dual-site over the Sim Suck grid).
+bool RowCanDualSite() { return false; }                    //golden ainarm2.cpp:1554
 void InitInArmTask()  {}
 void SetRunStartMode(int) {}
 void TransferHotPlateRatio(bool, int *, int *) {}          //Steven 20110324 : ratio xform no-op
@@ -743,6 +762,23 @@ bool TMyKitSuck::ArmDownSideHaveRealIC(bool left)                               
         return true;
     else
         return false;
+}
+// FAITHFUL "NULL_IC -> HAS_NULL_IC" grid promotion (golden MyKitSuck.cpp:340-352,
+// Steven 20150203 : Fixed for Sucker Status).  W6.2c batch-4: used by the 2x2_8_Hot
+// in-arm place-to-shuttle SM (FLCarryKit/BLCarryKit, 4 sites).  Pure Item-grid scan
+// over iShtRow/iShtCol -- no HAL.
+void TMyKitSuck::SetNullIcToHasNullIc()
+{
+    for(int i=0; i<iShtRow; i++)
+    {
+        for(int j=0; j<iShtCol; j++)
+        {
+            if(Item[i][j]==NULL_IC)
+            {
+                SetItemData(i, j, HAS_NULL_IC);                                 //Steven 20150203 : Fixed for Sucker Status
+            }
+        }
+    }
 }
 // FAITHFUL topology setter (golden MyKitSuck.cpp:206).
 void TMyKitSuck::SetPickerCount(int _iPickRow, int _iPickCol, int _iShtRow, int _iShtCol, int _iPickStep, int _iKitStep, int _iShtStep)

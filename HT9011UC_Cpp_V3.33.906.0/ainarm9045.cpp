@@ -807,6 +807,20 @@ extern void DoInArm_9045_2x4_4();                                               
 extern void DoInArm_9045_2x4_4_SuckerMap();                                     //golden :4669
 extern void DoInArm_9045_All_1Pick();                                           //golden :4415
 extern void DoInArm_9045_All_1Pick_SuckerMap();                                 //golden :4675 (declared; NEVER dispatched -- faithful to golden)
+// W6.2c batch-4: 5 variants made live -- declare their now-live dispatch callees
+// (defined in ainarm9045_<v>.cpp).  AI(W6.2c-INARM-batch4) 20260626.  NOTE:
+// e9045_2x8_32 has NO own callee -- the golden engine routes it to the 2x8_8 family
+// (golden :4639/:4804), so no extra extern is needed for it.
+extern void DoInArm_9045_2x2_8_Hot();                                           //golden :4406
+extern void DoInArm_9045_2x2_8_Hot_SuckerMap();                                 //golden :4666
+extern void DoInArm_9045_2x4_8();                                               //golden :4411
+extern void DoInArm_9045_2x4_8_SuckerMap();                                     //golden :4671
+extern void DoInArm_9045_2x5_8();                                               //golden :4412
+extern void DoInArm_9045_2x5_8_SuckerMap();                                     //golden :4672
+extern void DoInArm_9045_2x6_8();                                               //golden :4413
+extern void DoInArm_9045_2x6_8_SuckerMap();                                     //golden :4673
+extern void DoInArm_9045_2x8_8();                                               //golden :4414
+extern void DoInArm_9045_2x8_8_SuckerMap();                                     //golden :4674
 
 void DoInArm_9045()                                                             //Steven 20240223 : 重新整理DoInArm_9045
 {
@@ -961,15 +975,18 @@ void DoInArm_9045()                                                             
     else if(iInArmType==e9045_2x3_6)             { DoInArm_9045_2x3_6();      }  //AI(W6.2c-INARM-batch3) 20260626: golden :4613
     else if(iInArmType==e9045_2x3_6_14)          { DoInArm_9045_2x3_6_14();   }  //AI(W6.2c-INARM-batch3) 20260626: golden :4607
     else if(iInArmType==e9045_2x4_4_14)          { DoInArm_9045_2x4_4();      }  //AI(W6.2c-INARM-batch3) 20260626: golden :4619
+    // --- W6.2c batch-4: 6 variant arms pulled out of the #if 0 gate (ACTIVE);
+    //     e9045_2x8_32 routes to the SAME DoInArm_9045_2x8_8() callee (golden :4639-4641),
+    //     so both 2x8_8 and 2x8_32 arms are active and both call the 2x8_8 family. ---
+    else if(iInArmType==e9045_2x2_8_Hot)         { DoInArm_9045_2x2_8_Hot();  }  //AI(W6.2c-INARM-batch4) 20260626: golden :4603
+    else if(iInArmType==e9045_2x4_8)             { DoInArm_9045_2x4_8();      }  //AI(W6.2c-INARM-batch4) 20260626: golden :4623
+    else if(iInArmType==e9045_2x5_8)             { DoInArm_9045_2x5_8();      }  //AI(W6.2c-INARM-batch4) 20260626: golden :4627
+    else if(iInArmType==e9045_2x6_8)             { DoInArm_9045_2x6_8();      }  //AI(W6.2c-INARM-batch4) 20260626: golden :4631
+    else if(iInArmType==e9045_2x8_8)             { DoInArm_9045_2x8_8();      }  //AI(W6.2c-INARM-batch4) 20260626: golden :4635
+    else if(iInArmType==e9045_2x8_32)            { DoInArm_9045_2x8_8();      }  //AI(W6.2c-INARM-batch4) 20260626: golden :4639 (routes 2x8_32 -> 2x8_8 callee)
 #if 0 // TODO(W6.2b variants) -- golden :4535-4641 (remaining per-layout DoInArm_9045_* arms; un-gate as each variant lands)
     else if(iInArmType==e9045_1x4_4_13)          { DoInArm_9045S_1x4_4();     }
-    else if(iInArmType==e9045_2x2_8_Hot)         { DoInArm_9045_2x2_8_Hot();  }
     else if(iInArmType==e9045_2x4_4_13)          { DoInArm_9045_2x4_4_13();   }
-    else if(iInArmType==e9045_2x4_8)             { DoInArm_9045_2x4_8();      }
-    else if(iInArmType==e9045_2x5_8)             { DoInArm_9045_2x5_8();      }
-    else if(iInArmType==e9045_2x6_8)             { DoInArm_9045_2x6_8();      }
-    else if(iInArmType==e9045_2x8_8)             { DoInArm_9045_2x8_8();      }
-    else if(iInArmType==e9045_2x8_32)            { DoInArm_9045_2x8_8();      }
 #endif
     else
     {
@@ -1041,6 +1058,15 @@ void DoInArm_9045_SuckerMap()                                                   
     else if(iInArmType==e9045_2x3_6)      { DoInArm_9045_2x3_6_SuckerMap();    }                          //AI(W6.2c-INARM-batch3) 20260626: golden :4778
     else if(iInArmType==e9045_2x3_6_14)   { DoInArm_9045_2x3_6_14_SuckerMap(); }                          //AI(W6.2c-INARM-batch3) 20260626: golden :4774
     else if(iInArmType==e9045_2x4_4_14)   { DoInArm_9045_2x4_4_SuckerMap();    }                          //AI(W6.2c-INARM-batch3) 20260626: golden :4784
+    // --- W6.2c batch-4: 6 variant SuckerMap arms made ACTIVE (no picker-prefix;
+    //     verified golden :4768-4806).  e9045_2x8_32 routes to the SAME
+    //     DoInArm_9045_2x8_8_SuckerMap() callee (golden :4804-4806). ---
+    else if(iInArmType==e9045_2x2_8_Hot) { DoInArm_9045_2x2_8_Hot_SuckerMap(); }                          //AI(W6.2c-INARM-batch4) 20260626: golden :4768
+    else if(iInArmType==e9045_2x4_8)     { DoInArm_9045_2x4_8_SuckerMap();     }                          //AI(W6.2c-INARM-batch4) 20260626: golden :4788
+    else if(iInArmType==e9045_2x5_8)     { DoInArm_9045_2x5_8_SuckerMap();     }                          //AI(W6.2c-INARM-batch4) 20260626: golden :4792
+    else if(iInArmType==e9045_2x6_8)     { DoInArm_9045_2x6_8_SuckerMap();     }                          //AI(W6.2c-INARM-batch4) 20260626: golden :4796
+    else if(iInArmType==e9045_2x8_8)     { DoInArm_9045_2x8_8_SuckerMap();     }                          //AI(W6.2c-INARM-batch4) 20260626: golden :4800
+    else if(iInArmType==e9045_2x8_32)    { DoInArm_9045_2x8_8_SuckerMap();     }                          //AI(W6.2c-INARM-batch4) 20260626: golden :4804 (routes 2x8_32 -> 2x8_8 callee)
 #if 0 // TODO(W6.2b variants) -- golden :4704-4830 (remaining per-layout *_SuckerMap arms; un-gate as each variant lands)
     /* ... further per-iInArmType *_SuckerMap dispatch arms ... */
 #endif

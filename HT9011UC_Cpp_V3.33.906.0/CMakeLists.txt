@@ -447,6 +447,23 @@ add_library(ht9045_sm STATIC
     ainarm9045_2x4_4.cpp
     ainarm9045_All_1Pick.cpp
     cSiteUseManager.cpp
+    # --- W6.2c batch-4 (5 IN-ARM site variants made ACTIVE; dispatch arms pulled
+    #     out of the "#if 0 // TODO(W6.2b variants)" gate in ainarm9045.cpp).
+    #     2x2_8_Hot drove the substrate add of TMyKitSuck::SetNullIcToHasNullIc
+    #     (golden MyKitSuck.h:280/.cpp:340) + the engine predicate RowCanDualSite
+    #     (golden ainarm2.cpp:1554, offline false).  2x8_8 drove the offline homes
+    #     of IsMoveInArm2XYToShuttle2Wait (golden ainarm2.h:142 -> acatchtray_shims)
+    #     + XPHSuckToSht_2x8_8_OutArm (golden aoutarm9045_2x8_8.h:7 -> substrate).
+    #     The golden engine routes e9045_2x8_32 -> DoInArm_9045_2x8_8 (the LIVE
+    #     family), so the DEAD ainarm9045_2x8_32.cpp (line 419) stays compiled-but-
+    #     never-dispatched -- do NOT remove it.  iCloseSiteModeFor2x6/2x8 +
+    #     iCloseSiteStep_2x8 placeholder definitions in aHotPlateSubstrate.cpp /
+    #     acatchtray_shims.cpp were removed (the variant .cpp own the real defs).
+    ainarm9045_2x2_8_Hot.cpp
+    ainarm9045_2x4_8.cpp
+    ainarm9045_2x5_8.cpp
+    ainarm9045_2x6_8.cpp
+    ainarm9045_2x8_8.cpp
     # --- W6.2b-canary (IN-ARM shared helpers): the two ainarm2.cpp leaves the
     #     site-variant SMs call but that had no body yet -- SetInArmUseSuckToHas
     #     NullIC (golden ainarm2.cpp:201) + InitInArmPickFromHotPlateTask (golden

@@ -157,16 +157,16 @@ int main()
         CHECK(cursorEngine == cursorDirect, buf);
     }
 
-    // A STILL-GATED iInArmType (e9045_2x4_8 = 22, remains in the #if 0 gate) must
-    // hit the Program-Error else and leave the cursor at its entry value (1) --
-    // proving only the intended arms were un-gated.  This is deterministic: the
-    // else branch does NOT touch iArmTask.
+    // A STILL-GATED iInArmType (e9045_2x4_4_13 = 21, remains in the #if 0 gate
+    // after W6.2c batch-4 un-gated 2x4_8/2x8_8/...) must hit the Program-Error else
+    // and leave the cursor at its entry value (1) -- proving only the intended arms
+    // were un-gated.  This is deterministic: the else branch does NOT touch iArmTask.
     resetInArmBaseline();
-    iInArmType = e9045_2x4_8;
+    iInArmType = e9045_2x4_4_13;
     iArmTask   = 1;
     DoInArm_9045();
     CHECK(iArmTask == 1,
-          "D-gate [e9045_2x4_8 still GATED]: Program-Error else -> iArmTask UNCHANGED (only intended arms un-gated)");
+          "D-gate [e9045_2x4_4_13 still GATED]: Program-Error else -> iArmTask UNCHANGED (only intended arms un-gated)");
 
     // The 6 *_SuckerMap() builder symbols are real, defined, callable (no crash).
     DoInArm_9045_1x4_2_SuckerMap();

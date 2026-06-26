@@ -219,7 +219,7 @@ int main()
         // direct All_1Pick advance from a clean entry state
         USE_PICKER_COUNT = ep1Picker;
         resetInArmBaseline();
-        iInArmType = e9045_2x4_8;        // GATED type
+        iInArmType = e9045_2x4_4_13;     // GATED type (still gated after W6.2c batch-4)
         iArmTask   = 1;
         DoInArm_9045_All_1Pick();
         int cAllDirect = iArmTask;
@@ -227,7 +227,7 @@ int main()
         // engine ladder with ep1Picker + the SAME gated type
         USE_PICKER_COUNT = ep1Picker;
         resetInArmBaseline();
-        iInArmType = e9045_2x4_8;
+        iInArmType = e9045_2x4_4_13;
         iArmTask   = 1;
         DoInArm_9045();
         int cEngineP1 = iArmTask;
@@ -237,23 +237,24 @@ int main()
         // control: same gated type WITHOUT ep1Picker -> Program-Error else, UNCHANGED
         USE_PICKER_COUNT = ep4Picker;
         resetInArmBaseline();
-        iInArmType = e9045_2x4_8;
+        iInArmType = e9045_2x4_4_13;
         iArmTask   = 1;
         DoInArm_9045();
         CHECK(iArmTask == 1,
-              "D-pick(c-ctrl) NO ep1Picker + gated e9045_2x4_8 -> Program-Error else -> iArmTask UNCHANGED");
+              "D-pick(c-ctrl) NO ep1Picker + gated e9045_2x4_4_13 -> Program-Error else -> iArmTask UNCHANGED");
     }
 
-    // A STILL-GATED iInArmType (e9045_2x4_8 = 22) must hit the Program-Error else
-    // and leave the cursor at its entry value (1) under the normal !ep1Picker
-    // path -- restating the gate witness for completeness.
+    // A STILL-GATED iInArmType (e9045_2x4_4_13 = 21, remains gated after W6.2c
+    // batch-4 un-gated 2x4_8/2x8_8/...) must hit the Program-Error else and leave
+    // the cursor at its entry value (1) under the normal !ep1Picker path --
+    // restating the gate witness for completeness.
     USE_PICKER_COUNT = ep4Picker;
     resetInArmBaseline();
-    iInArmType = e9045_2x4_8;
+    iInArmType = e9045_2x4_4_13;
     iArmTask   = 1;
     DoInArm_9045();
     CHECK(iArmTask == 1,
-          "D-gate [e9045_2x4_8 still GATED]: Program-Error else -> iArmTask UNCHANGED (only intended arms un-gated)");
+          "D-gate [e9045_2x4_4_13 still GATED]: Program-Error else -> iArmTask UNCHANGED (only intended arms un-gated)");
 
     // The 6 *_SuckerMap() builder symbols are real, defined, callable (no crash).
     // All_1Pick_SuckerMap is DEFINED (faithful) though the golden engine never

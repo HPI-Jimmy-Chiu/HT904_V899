@@ -83,6 +83,7 @@ bool MoveInArm2XYToWait()                       { return true;  }
 bool MoveInArm2XYToShuttle2Wait()               { return true;  }
 bool CheckInArmFinishAllPickerAction()          { return true;  }
 bool IsMoveInArm2XYToWait()                     { return true;  }
+bool IsMoveInArm2XYToShuttle2Wait()             { return false; }  // golden ainarm2.h:142 (Sam 20250522) -- offline: NOT at wait
 bool CheckOutArmAutoAlignmentTrayModeBeUse(int) { return false; }
 void InitProcessSingleMotorTask(int)            {}
 bool ProcessSingleMotorHome(int)                { return true;  }

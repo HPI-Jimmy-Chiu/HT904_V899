@@ -120,15 +120,15 @@ int main()
         CHECK(iArmTask != 1, buf);
     }
 
-    // A STILL-GATED iInArmType (e9045_2x4_8 = 22, remains in the #if 0 gate) must
-    // hit the Program-Error else and leave the cursor UNCHANGED -- proving only
-    // the intended arms were un-gated.
+    // A STILL-GATED iInArmType (e9045_2x4_4_13 = 21, remains in the #if 0 gate
+    // after W6.2c batch-4 un-gated 2x4_8/2x8_8/...) must hit the Program-Error else
+    // and leave the cursor UNCHANGED -- proving only the intended arms were un-gated.
     resetInArmBaseline();
-    iInArmType = e9045_2x4_8;
+    iInArmType = e9045_2x4_4_13;
     iArmTask   = 1;
     DoInArm_9045();
     CHECK(iArmTask == 1,
-          "D-gate [e9045_2x4_8 still GATED]: Program-Error else -> iArmTask UNCHANGED (only the 5 + 1x1_1 un-gated)");
+          "D-gate [e9045_2x4_4_13 still GATED]: Program-Error else -> iArmTask UNCHANGED (only the 5 + 1x1_1 un-gated)");
 
     // The SuckerMap ladder: each variant routes to its own builder without crash;
     // a gated type -> Program-Error, grid stays cleared.  Drive the builder arms

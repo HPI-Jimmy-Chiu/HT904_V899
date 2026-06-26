@@ -152,7 +152,10 @@ bool  MoveOutArmToAutoSafe()                       { return true; }   // golden 
 DWORD MySleepEx(DWORD /*dwMilliseconds*/, bool /*bAlertable*/) { return 0; } // golden common.h:260
 void  MySleep(DWORD /*dwMilliseconds*/)            {}                 // golden common.h:261
 bool  SystemNG = false;                            // golden main-side global
-int   iCloseSiteStep_2x8 = 0;                      // golden ainarm9045_2x8_8.h:27
+//AI(W6.2c-INARM-batch4) 20260626: the placeholder DEFINITION of iCloseSiteStep_2x8
+// (was =0) was REMOVED -- ainarm9045_2x8_8.cpp now owns the REAL def (=0, golden
+// ainarm9045_2x8_8.cpp:110).  The extern decl in acarry_shims.h:234 still satisfies
+// acarry.cpp.  Value identical (0) so numeric behavior is unchanged.
 
 // ---------------------------------------------------------------------------
 //  Cross-module GLOBALS + LOG functions owned by aoutarm.cpp / cpublic.cpp /

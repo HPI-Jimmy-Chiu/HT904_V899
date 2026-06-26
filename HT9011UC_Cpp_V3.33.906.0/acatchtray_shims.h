@@ -192,6 +192,10 @@ bool MoveInArm2XYToWait();                       // golden -- offline: reached (
 bool MoveInArm2XYToShuttle2Wait();               // golden -- offline: reached (true)
 bool CheckInArmFinishAllPickerAction();          // golden -- offline: finished (true)
 bool IsMoveInArm2XYToWait();                     // golden -- offline: at wait (true)
+// W6.2c batch-4 (2x8_8): golden ainarm2.h:142 (Sam 20250522).  Offline: return FALSE
+// so the golden guard `if(IsMoveInArm2XYToShuttle2Wait()==false) MoveInArm2XYToShuttle2Wait();`
+// runs the offline-available move (the faithful not-already-at-wait path).
+bool IsMoveInArm2XYToShuttle2Wait();             // golden ainarm2.h:142 -- offline: NOT at wait (false)
 //  out-arm auto-alignment selector (golden aoutarm*.h)
 bool CheckOutArmAutoAlignmentTrayModeBeUse(int iMode);  // golden -- offline false
 //  single-motor home helpers for under-conveyor Z (golden mymotor/main)
