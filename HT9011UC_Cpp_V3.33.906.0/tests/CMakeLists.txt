@@ -580,3 +580,65 @@ if(WIN32)
 endif()
 
 add_test(NAME W6_2_OutArmCore COMMAND test_w6_2_outarm_core)
+
+# --- test_w6_3_catchtray_core: pump the TRAY-ARM central task SMs over Sim HAL ---
+#   The task-mandated W6.3 *core engine* verify TU (mirror of the out-arm core TU).
+#   Proves acatchtray.cpp (the TrayArm ENGINE, in ht9045_sm) LINKS + its ACTIVE
+#   task SMs PUMP over the Sim HAL with NO hardware:
+#     DoSlapTray (iSlapTrayTask, golden:5877) -- the simplest fully-pumpable
+#       sub-SM; DoSlapTray(true) re-inits to 1; the pump stays inside the
+#       documented {1,5,10,20,50,100,200,300,400,450,500} set (golden:5889);
+#     DoCatchTray (CatchTrayTask, golden:6000) -- the central dispatcher pumps
+#       from entry without crash, cursor stays in a sane range;
+#     WhichAutoNeedTray() (golden:410) ORACLE -- the real engine body (NOT the
+#       deleted canary stub) returns 0 on the Clean-Out/no-IC path (golden:463)
+#       and on the Tray-Feed/no-IC path (golden:417).
+#   Same RESCAN link group as the W6.1/W6.2 canaries + core TUs.
+add_executable(test_w6_3_catchtray_core
+    test_w6_3_catchtray_core.cpp
+)
+
+target_link_libraries(test_w6_3_catchtray_core PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w6_3_catchtray_core PRIVATE ws2_32)
+endif()
+
+add_test(NAME W6_3_CatchTrayCore COMMAND test_w6_3_catchtray_core)
+
+# --- test_w6_3_catchtray: TrayArm ENGINE acceptance proof (5 golden oracles) -
+#   The task-mandated W6.3 acceptance verify TU (COMPANION to the core TU above;
+#   mirror of the in/out-arm core verifies).  Sets a KNOWN Sim HAL state
+#   (CatchTraySuck items, the per-SM entry cursors, MOT[].Position/Led via the
+#   offline Motor==NULL knob, Prod tray-X geometry, iPauseBackUp) and asserts the
+#   FIVE hand-derived golden oracles from the task brief:
+#     [O1] DoSlapTray 200->300 FALL-THROUGH in one tick (golden 5925-5929 //break;)
+#          + init guard (5883-5887) + case1->5 (5891-5897);
+#     [O2] DoCatchFromLoader 1->10 FALL-THROUGH: one call from Task=1 with
+#          MTrayXCanSafeMove()==true lands at 50 via case10 else (golden 1499-1539);
+#     [O3] WhichAutoNeedTray()==0 on the Tray-Feed (golden 417) + Clean-Out
+#          (golden 463) deterministic short-circuit paths;
+#     [O4] WhichAutoNeedTray() AMR i+1 path documented as offline-unreachable
+#          (TfAGV::Use_AMR()==false, FormsFacade.cpp:24) -- pinned, not faked;
+#     [O5] DoCatchTray entry guard: iPauseBackUp!=-1 -> cursor unchanged
+#          (golden 6015-6019); iPauseBackUp==-1 -> case1 eUnderCoveyor dispatch
+#          Task=50 (golden 6076-6079).
+#   Plus BONUS geometry oracles (IsTrayArmAtEmptyOrColor golden 7992-8004 /
+#   IsTrayArmMoveAvoidOutArmCrash golden 7979-7990) and DoSlapTray + DoCatchTray
+#   cursor-universe pumps (no escape / no crash).
+#   Same RESCAN link group as the W6.1/W6.2 canaries + core TUs.
+add_executable(test_w6_3_catchtray
+    test_w6_3_catchtray.cpp
+)
+
+target_link_libraries(test_w6_3_catchtray PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w6_3_catchtray PRIVATE ws2_32)
+endif()
+
+add_test(NAME W6_3_CatchTray COMMAND test_w6_3_catchtray)

@@ -20,16 +20,28 @@ bool TfAGV::IsATK_AMR()
     // AMR-mode state when the AGV/AMR subsystem is translated.
     return false;
 }
+// --- W6.3 ADD --------------------------------------------------------------
+bool TfAGV::Use_AMR() { return false; }     // offline: no AMR present -> false
 
 // --- W6.2: TfMain ----------------------------------------------------------
+// --- W6.3 ADD: TfMainHanaART --------------------------------------------------
+bool TfMainHanaART::IsHanaArtAvailable() { return false; }     // offline: no HANA link
+void TfMainHanaART::AddNewTrayHead(int /*iAuto*/) {}           // offline: no-op
 TfMain::TfMain()
 {
     slAutoSiteMapLog = new TfMainSiteMapLog();      // golden main.h:1486 (TMyStringList*)
+    // -- W6.3 ADD --
+    mtAuto1 = new TfMainTrayPanel();
+    mtAuto2 = new TfMainTrayPanel();
+    mtAuto3 = new TfMainTrayPanel();
+    hanaART = new TfMainHanaART();
 }
 void TfMain::DebugOneCycleHotPlate(AnsiString /*sfunc*/) {}     // debug log sink (offline no-op)
 bool TfMain::Pause(AnsiString /*Func*/) { return false; }      // offline never pauses
 void TfMain::ShowTestHeadComp(bool /*bRefresh*/) {}
 void TfMain::ReStartAutoSiteMapping(bool /*bStart*/) {}
+void TfMain::CleanOut(AnsiString /*Func*/) {}                  // W6.3: offline clean-out no-op
+void TfMain::DoStateRecord(int /*i*/, bool /*b*/) {}           // W6.3: offline state-record sink
 TfMain *fMain = new TfMain();
 
 // --- W6.2: TfSortCT --------------------------------------------------------
@@ -37,6 +49,11 @@ TfSortCT::TfSortCT()
 {
     pnlHP1 = new TfSortCTPanel();
     pnlHP2 = new TfSortCTPanel();
+    // -- W6.3 ADD --
+    pnlLoad       = new TfSortCTPanel();
+    pnlLoadCID    = new TfSortCTPanel();
+    pnlCoverTrayD = new TfSortCTPanel();
+    for(int i=0;i<6;i++) pnlTrayCnt[i] = new TfSortCTPanel();
 }
 TfSortCT *fSortCT = new TfSortCT();
 
@@ -44,7 +61,11 @@ TfSortCT *fSortCT = new TfSortCT();
 TfLotInfo::TfLotInfo()
 {
     cbRunMode = new TfLotInfoRunMode();             // offline: Visible=false
+    // -- W6.3 ADD --
+    labNowLoaderTrayID = new TfLotInfoLabel();
+    edtSysLotID        = new TfLotInfoEdit();
 }
+void TfLotInfo::InitialUnLoaderTask(int /*iUnloader*/) {}      // W6.3: offline AMR-task no-op
 TfLotInfo *fLotInfo = new TfLotInfo();
 
 // --- W6.2: TfOffSet --------------------------------------------------------
@@ -53,5 +74,6 @@ bool TfOffSet::UseInArmSetupTeach(int /*iWhich*/)          { return false; }  //
 TfOffSet *fOffSet = new TfOffSet();
 
 // --- W6.2: TfSCKART --------------------------------------------------------
-TfSCKART::TfSCKART() : iInputJamCnt(0) {}
+TfSCKART::TfSCKART() : iInputJamCnt(0), iFTRTCount(0), iInputCount(0) {}
+int  TfSCKART::CheckLoadingCount() { return 0; }              // W7: offline -> 0 (no ART loading mismatch)
 TfSCKART *fSCKART = new TfSCKART();

@@ -47,9 +47,14 @@
 #include "cprod.h"
 #include "cpublic.h"
 #include "cmydef.h"
-#include "canary_support.h"     // LastSet, ShowErrorMessage, etc.
+#include "canary_support.h"     // LastSet, ShowErrorMessage, WhichAutoNeedTray
 #include "FormsFacade.h"        // fAGV
 #include <cstdio>
+
+// [W6.3] bAutoNeedTray[] is owned by the TrayArm engine (acatchtray.cpp); it has
+// no shared-header extern, so forward-declare it here to drive WhichAutoNeedTray()
+// into its 0-return path for the "nobody needs a tray" guard check below.
+extern bool bAutoNeedTray[MAX_AUTO_TRAY];
 
 // InitLoadNewEmptyTrayToCarTask is a file-scope (external-linkage) function in
 // asendic_Empty.cpp that the golden header does NOT export (the golden calls it
@@ -215,14 +220,37 @@ static void test_supply_gate()
           "DoAutoEmpty no-ops while fEmptyCanSupplyNewTray==false (early return)");
 
     // "nobody needs a tray" guard: with a tray on MMTrayY (no IC) and no auto
-    // needing a tray (WhichAutoNeedTray()==0 in sim), case 1 stays at Task==1.
+    // needing a tray (WhichAutoNeedTray()==0), case 1 stays at Task==1.
+    //
+    // [W6.3] WhichAutoNeedTray() is no longer a return-0 stub -- the real TrayArm
+    // engine (acatchtray.cpp) now owns it.  To exercise the guard faithfully we
+    // must first drive the REAL WhichAutoNeedTray() into its 0-return path: it
+    // short-circuits to iWhichAutoNeedTray=0 when a Clean-Out is in progress with
+    // no IC left under the machine (golden acatchtray.cpp:463).  Set iCleanOut=1
+    // and clear the auto-need flags so no Auto demands a tray, assert it returns
+    // 0, then check the DoAutoEmpty guard.  Restore iCleanOut afterwards.
     setupDummyFeed();
     InitAutoEmptyTask();
     MOT[MMEmpty].ClearTray("test_w6_1");
     MOT[MMTrayY].SetTray(NULL_IC, "test_w6_1");   // tray present, no IC
+    // [W7] DoAutoEmpty case-1's first guard also reads the Empty stack sensors
+    //   (Sen[SenEmptyHasTray].IsOn() && Sen[SenEmptyCWDete].IsOn()) -> if either
+    //   reads "on" it jumps to Task=20 (a tray is present) instead of the
+    //   "nobody needs tray" guard.  Earlier sub-tests ([2]/[3]) leave those sim
+    //   sensors enabled, so disable them here to faithfully model "Empty stack
+    //   empty" before exercising the guard (TMySensor::IsOn() returns false when
+    //   Enable==false -- mysensor.cpp:127).
+    Sen[SenEmptyHasTray].Enable = false;
+    Sen[SenEmptyCWDete].Enable  = false;
+    int savedCleanOut = iCleanOut;
+    iCleanOut = 1;                                 // Clean-Out in progress
+    for (int i = 0; i < MAX_AUTO_TRAY; ++i) bAutoNeedTray[i] = false;
+    CHECK(WhichAutoNeedTray() == 0,
+          "WhichAutoNeedTray()==0 on the Clean-Out/no-IC path (real engine, golden 463)");
     DoAutoEmpty();                                 // case 1 -> guard -> Task=1
     CHECK(iAutoEmptyTask == 1,
           "DoAutoEmpty case-1 'nobody needs tray' guard holds Task==1");
+    iCleanOut = savedCleanOut;                     // restore
     MOT[MMTrayY].ClearTray("test_w6_1");
 }
 

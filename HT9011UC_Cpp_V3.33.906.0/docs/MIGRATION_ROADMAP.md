@@ -43,9 +43,10 @@
 - ✅ **W6.2 IN-ARM 基礎完成**：`ainarm_SearchPickPlate`+`ainarm_SearchPlacePlate` 翻譯；新 `aHotPlateSubstrate`(InArmSuck=TMyKitSuck/PickFromHPList/ainarm2 cursors+HP arrays，最小 scope 部分材料化原 W6 deferred KitSuck grid)；FormsFacade 擴 5 form；DoInArmPickFromHotPlate_9045 Sim HAL pump 過(cursor 守 documented set、fall-through 保留)；DoPlaceToHotPlate_9045 dispatcher gated#if0→W7 stub。ctest 25/25、mojibake 0。
 - ✅ **W6.2-CORE IN-ARM 引擎完成**：`ainarm9045.cpp`(9222 行,302 iInArmType 分派)+`.h` 忠實翻譯；3 核心 SM(AdditionalFunction/IonFanGiveWay/SCKARTLoadingCount) Sim HAL pump 過；DoInArm_9045/_SuckerMap 分派 ladder ACTIVE；21 `#if 0` gate 全平衡(25 variant arm→W6.2b、GetShuttleCol 表→W7、4 整體 SM→W7)；8 oracle 過(含 float→int 截斷)。ctest 26/26、mojibake 0。
 - ✅ **W6.2-OUT 出料臂引擎完成**：`aoutarm9045.cpp`(golden 4753 行)+`.h`(in-arm 鏡像)；4 核心 SM(PlaceToAuto/AfterPlaceToAuto/AdditionalFunction/IonFanGiveWay) Sim HAL pump 過；DoOutArm_9045/DoPickFromShuttle_9045 分派 ladder ACTIVE；substrate 擴 OutArmSuck/OutArm2Suck/FRCarryKit/BRCarryKit；22 #if gate 全平衡；oracle 過(truncation/零除)。ctest 27/27、mojibake 0。
-- ▶ **下一步：W6.3 catchtray/feed**(acatchtray.cpp 9142 行)；或 W6.2b in/out site variants(25+26) pipeline；或 W6.4 index/tester。
+- ✅ **W6.3 CATCHTRAY (TrayArm) 引擎完成**：`acatchtray.cpp`(golden 9142 行)+`.h` 忠實翻譯；6 核心 SM 全 ACTIVE(中央 DoCatchTray 分派 5 子 SM DoCatchFromLoader/CatchNewTrayFromBuffer/DoPlaceTrayToAuto/DoPlaceToBuffer/DoSlapTray)；**config 分派**(TRAY_ARM_MODE/TrayForm/IniConfig)非變體分派；DoSlapTray/DoCatchTray Sim HAL pump 過；5 oracle 過(+100/-100 整數視窗等)；只有 2 真 #if0(BinDisCtrl→W7-UI)、32 SOFT_SIMULTE verbatim、36/36 平衡；新 `acatchtray_shims.{h,cpp}`(fTrayMapping/Magazine/OCR/AMR/cassette gated)；WhichAutoNeedTray ODR 解決(真本體移入 acatchtray.cpp、canary stub 刪)。ctest 29/29、mojibake 0。
+- ▶ **下一步：W6.4 index/tester**(atester.cpp+atester_32Site.cpp+atester_ProcessCount.cpp+cContact iIndexTask)；或 W6.5 shuttle/carry(acarry.cpp)；或 W6.2b in/out site variants(25+26) pipeline。
 - **W6.2 IN/OUT-ARM**：in-arm(幾何 2 模組+引擎 ainarm9045)+out-arm(引擎 aoutarm9045)已完成；剩 25+26 site variants(W6.2b) + W7-gated 整體 SM(需 MOT/sensor/prod home)。
-- **W6.3 CATCHTRAY+FEED**：acatchtray DoCatchTray、asendic_Color/Loader…（注意 acatchtray 的 ainarm include 是 stale dead）。
+- **W6.3 CATCHTRAY+FEED**：✅ acatchtray DoCatchTray + 5 子 SM 已完成；剩 asendic_Color/Loader… 其餘 feed canary 葉、fTrayMapping/Magazine/OCR/AMR/cassette 本體(W7+AMR)。
 - **W6.4 INDEX/TESTER STAR**：atester result-decode anchor 先(fMain-free,SOFT_SIMULTE skip HAL)→DoTestHeadMotor→Front/Rear/32Site(Front↔Rear 互依不可拆)。iIndexTask@cContact 需先 stub。
 - **W6.5 SHUTTLE 生產 SM**：acarry Do_Auto_SHT1/2/3（最差耦合：79 fMain + VCL worker thread HThreadCtrlShuttle + aArmHeader 全圖）。
 - **W6.6 ORCHESTRATION HUB**：csystem DoAllProcess/MainProc + ckernel（**拆**成 interface-impl / hub / UI-glue，勿整檔 25k 行；與 W7 邊界共譯）。
@@ -55,6 +56,10 @@
 > 部分檔案只翻了 leaf 部分，耦合段延到對應波次。最終各波結束前要回頭補完這些。
 | 來源 | 延後的部分 | 目標波 | 原因 |
 |------|-----------|--------|------|
+| acatchtray.cpp / acatchtray_shims | fTrayMapping(63)/Magazine(59)/OCR(47)/uHGemHT9045 SECS/uteach 呼叫本體（現 offline shim 回 false/0/no-op）| W7 + W5 | TfTrayMapping/Magazine/OCR/SECS form/類別未翻 |
+| acatchtray.cpp / acatchtray_shims | KYEC-AMR cover-tray + cassette SM 本體(DoCoverTray/CatchCoverTray/PlaceCoverTray/ReceiveCoverTray/DoLoadToCassette/DoCassetteToAuto, Eastsun F011/F016 + Frank cassette) + DoLoadCarRotArmReadRFID；SM skeleton ACTIVE，cross-module 本體 gated(fAGV->IsATK_AMR 離線 false 故 dormant) | AMR 波 | Magazine/HSys.BinDisCtrl/database/RFID home 未備 |
+| acatchtray.cpp | 2× `#if 0` BinDisCtrl(FlashPro/ClearAutoChangingWarn) NULL-guard 呼叫 | W7-UI | HSys.BinDisCtrl(UI)未翻；離線 NULL 本就 dead，行為保留 |
+| acatchtray.cpp | `WhichAutoNeedTray` 真本體已翻入但 MOT[]/Magazine/fAGV 內層 gated(離線回 0) | W7 | 需 Magazine/AMR home |
 | ainarm9045.cpp | 25 個 `DoInArm_9045_<layout>()` + `*_SuckerMap()` per-variant 分派本體（現 #if 0，分派 ladder 結構已活）| W6.2b | 各 site variant 在 ainarm9045_<layout>.cpp（尚未翻），pipeline 平行翻 |
 | ainarm9045.cpp | 4 個整體 gated SM：`DoInArmPickFromLoadStage_9045`(中央取料,含 goto IN_ARM_LOADER+suck loop)、`DoInArmCheckShuttleFloating`、`CheckInShuttleSensor_Latch`、`DoInArmAutoCalSuckZ`（保 cursor+golden default，本體 #if 0）| W7 | 需 MOT[]/sensor/encoder/fProductionInfo home 才能端到端 pump |
 | ainarm9045.cpp | `GetShuttleCol` per-iInArmType `XPHSuckToSht_*` 查表分支（ep1Picker early-return 活、default iShtCol=0）| W7 | variant 表陣列未定義 |

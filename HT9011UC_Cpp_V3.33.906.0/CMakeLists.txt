@@ -406,6 +406,21 @@ add_library(ht9045_sm STATIC
     #     Pumps the same aHotPlateSubstrate (OutArmSuck/FRCarryKit/BRCarryKit/
     #     OutArm2Suck + out-arm cursor ints) as the in-arm engine.
     aoutarm9045.cpp
+    # --- W7 (TRAY-ARM engine): the top dispatcher DoCatchTray (flat switch) + 8
+    #     pumpable task SM skeletons (DoCatchFromLoader / CatchNewTrayFromBuffer /
+    #     DoPlaceTrayToAuto / DoPlaceToBuffer / DoSlapTray / DoCatchUnderTray /
+    #     DoSupportUnderTray / DoPlaceBufferTray) + cover-tray/RFID/cassette SMs +
+    #     the pure decision helpers (WhichAutoNeedTray/IsOutArmSafe/...).  No
+    #     site-variant dispatch in this file.  Hardware behind the Sim HAL
+    #     (MOT[]/Cylinder[]/Sen[]/SW[]/CatchTraySuck); cross-module/UI surface
+    #     (fTrayMapping/LoadCCD/MyMessageBox/AMR/HSys.BinDisCtrl) behind offline
+    #     shims + ACTIVE stubs; see the file-head gate documentation.  OWNS the
+    #     real WhichAutoNeedTray() (the canary_support.cpp sim stub was removed).
+    acatchtray.cpp
+    # --- W6.3 TRAY-ARM cross-module offline shims (fTrayMapping / MyMessageBox /
+    #     LoadCCD / AMR / SECS_EVENT+EventReport / Tray-Mapping-laser / AMR-feed /
+    #     NewRecordProcess / BoolToStr / iCoverTrayIDTask / iReadCIDAction).
+    acatchtray_shims.cpp
 )
 
 target_include_directories(ht9045_sm PUBLIC

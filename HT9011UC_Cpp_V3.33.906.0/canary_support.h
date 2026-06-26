@@ -58,7 +58,20 @@ struct LAST_GENERAL_SET
     int iRunStartMode;  // golden LastSet.h -- run-start mode (rsmAutoSiteMap/rsmQAMode/...)
     int iTemperature;   // golden LastSet.h -- temperature mode (Tempture_Hot/...)
     int iTester;        // golden LastSet.h -- tester link (OFF_LINE/...)
-    // TODO(W6.x): the other ~460 LAST_GENERAL_SET fields land with the full
+    // AI(W7-CATCHTRAY) 20260626: the TrayArm engine (acatchtray.cpp) derefs the
+    // ART tray-count + ATK-tray-feed + Loader-count LastSet fields.  Added to this
+    // shared minimal shim (golden field TYPES verbatim from LastSet.h):
+    int  iUnloaderTrayCount_ART[256];   // golden LastSet.h:205 -- per-Auto ART unload tray count
+    int  iEmptyTrayCount_ART;           // golden LastSet.h:373
+    int  iColorTrayCount_ART;           // golden LastSet.h:374
+    bool bLoaderTrayCount_ART;          // golden LastSet.h:370
+    bool bCleanOut_ART;                 // golden LastSet.h:377
+    int  iUnloadFixTray;                // golden LastSet.h:120 -- ATK AMR tray-feed mode (eAtkTf*)
+    int  iOutTrayNum[256];              // golden LastSet.h:458 -- production-log output tray serial
+    int  iSCKARTInputCT;                // golden LastSet.h:406 -- SCK ART input count
+    int  iP57_InputCT;                  // golden LastSet.h:496 -- P57 Loader-count AutoCleanOut
+    long SendCT[4];                     // golden LastSet.h:14  -- per-port send count
+    // TODO(W6.x): the other ~450 LAST_GENERAL_SET fields land with the full
     //             translated LastSet.h.
 };
 extern LAST_GENERAL_SET LastSet;    // golden: extern LAST_GENERAL_SET LastSet; (LastSet.h:514)

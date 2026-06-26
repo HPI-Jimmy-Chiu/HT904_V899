@@ -125,6 +125,14 @@ public:
     int  iMotNo;                // golden :138  -- the Z motor index for this nozzle
     int  iMyRow;                // golden :139  -- physical row of this nozzle
     int  iMyCol;                // golden :140  -- physical col of this nozzle
+
+    // -- W6.3 ADD: members the TRAY-ARM ENGINE (acatchtray.cpp) derefs ----------
+    //    golden MyKitSuck.h member names verbatim.  CatchTraySuck.Suck[0][0] reads
+    //    .Enable (whether this vacuum line is configured) + .OnAlarmTime (vacuum-on
+    //    alarm window, centi-sec) and calls Reset() (golden MyKitSuck.h).
+    bool Enable;                // golden :55   -- vacuum line configured/installed
+    int  OnAlarmTime;           // golden :63   -- vacuum-on alarm window (centi-sec)
+    void Reset();               // golden :94   -- reset this nozzle's suck/destroy task
 };
 
 // ---- TMyKitSuck (golden MyKitSuck.h:151) -- MINIMAL mirror ------------------
@@ -182,6 +190,14 @@ public:
     bool bAlreadyAOI;           // :351  (DoOutArmAdditionalFunction AOI done flag)
     bool bAlreadyFixAI;         // :353  (DoOutArmAdditionalFunction FixAI done flag)
 
+    // -- W6.3 ADD: members the TRAY-ARM ENGINE (acatchtray.cpp) derefs ----------
+    //    golden MyKitSuck.h member names verbatim.  CatchTraySuck.iWhichTray (15x:
+    //    記錄Tray從哪來的) + IsShtSuckFinish()/IsShtDestroyFinish() (DoCatchTray
+    //    early-out guard, golden acatchtray.cpp:6017-6018).
+    int  iWhichTray;            // :194  (which tray this kit picked: 0 loader/1 empty/2 color/4 auto2)
+    bool IsShtSuckFinish();     // :337  (shuttle-side suck finished -- offline true)
+    bool IsShtDestroyFinish();  // :338  (shuttle-side destroy finished -- offline true)
+
     // methods the leaves call (golden signatures preserved) -------------------
     void ResetAll();                                                    // :289
     bool HasIC();                                                       // :310
@@ -208,6 +224,8 @@ extern TMyKitSuck OutArmSuck;    // golden MyKitSuck.h:366
 extern TMyKitSuck OutArm2Suck;   // golden MyKitSuck.h:366 (HT-9046AU sort arm; DoOutArmAfterPlaceToAuto case 5000)
 extern TMyKitSuck FRCarryKit;    // golden MyKitSuck.h:359 (DoOutArmIonFanGiveWay FRCarryKit.HasIC())
 extern TMyKitSuck BRCarryKit;    // golden MyKitSuck.h:361 (DoOutArmIonFanGiveWay BRCarryKit.HasIC())
+// -- W6.3 ADD: the TRAY-ARM KitSuck object the catchtray engine SMs read --------
+extern TMyKitSuck CatchTraySuck; // golden MyKitSuck.h:367 (TrayArm dual-suck grid; DoCatchTray/DoCatchFromLoader/...)
 
 // ============================================================================
 //  (b) uPlateInfo (PickFromHPList)  -- golden HTEditList.h

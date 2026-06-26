@@ -2562,7 +2562,7 @@ typedef struct
     double dICTTolerance;                                                       //JerryYang 20220923 : Index cycle time監控
     int    iICTAction;                                                          //Steven 20250521 : 可以選擇要不要停機
 
-    int    iInArmToShtReleaseMode;                                              //Steven 20250630 : 力旺要照順序擺
+    int    iInArmToShtReleaseMode;                                              //Steven 20250630 : 力旺要照順序擺/
     bool   bRENESAS_EnableFTCT;                                                 //RogerYang 20250916 : 瑞薩FT-CT
 
     bool bEnableE84;

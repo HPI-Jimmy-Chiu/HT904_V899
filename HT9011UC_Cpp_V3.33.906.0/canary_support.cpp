@@ -69,13 +69,12 @@ void ShowUnloaderTrayMessage(AnsiString S1, AnsiString S2)
 }
 
 // ---------------------------------------------------------------------------
-//  WhichAutoNeedTray -- golden acatchtray.h:8.  Sim: 0 (no auto needs a tray)
-//  so DoAutoEmpty's "stop supplying when nobody needs a tray" guard is faithful.
+//  WhichAutoNeedTray -- golden acatchtray.cpp:410.  W7: the REAL definition now
+//  lives in the translated acatchtray.cpp (the TrayArm engine OWNS it).  The
+//  W6.1 sim stub that used to live here (return 0) was REMOVED to avoid an ODR /
+//  link collision (mirrors how the in-arm engine removed pitch-helper stubs from
+//  aHotPlateSubstrate.cpp).  The decl remains in canary_support.h / acatchtray.h.
 // ---------------------------------------------------------------------------
-int WhichAutoNeedTray()
-{
-    return 0;       // TODO(W6.x): walk Auto-tray demand (acatchtray)
-}
 
 // ---------------------------------------------------------------------------
 //  ShowMyMessage -- golden mymessbox.h:58.  Sim: log (no modal dialog).

@@ -36,6 +36,8 @@ TMyKitSuck OutArmSuck;
 TMyKitSuck OutArm2Suck;
 TMyKitSuck FRCarryKit;
 TMyKitSuck BRCarryKit;
+// -- W6.3 ADD: TRAY-ARM KitSuck object (golden MyKitSuck.h:367) -----------------
+TMyKitSuck CatchTraySuck;
 
 // ---- TMySucker bodies -------------------------------------------------------
 //  Offline: no real vacuum line.  Suck() never reports "finished" (the leaves
@@ -54,6 +56,10 @@ void TMySucker::OnDestroy()  {}
 void TMySucker::OffDestroy() {}
 void TMySucker::Normal()     {}
 bool TMySucker::GetStatus()  { return false; }   // offline: vacuum sensor reads "no IC"
+// -- W6.3 ADD: tray-arm-touched TMySucker surface (golden MyKitSuck.h) ----------
+//    Offline: Reset() clears the suck/destroy task (no-op over the Sim HAL).
+//    Enable/OnAlarmTime are plain data members (default-init below by the object).
+void TMySucker::Reset()      {}
 
 // ---- TMyKitSuck bodies (only the called methods) ----------------------------
 void TMyKitSuck::ResetAll() {}                              // golden :289 -- reset SuckTask
@@ -127,6 +133,12 @@ void TMyKitSuck::ClearAll()
             Item[i][j]=NULL_IC;
 }
 void TMyKitSuck::SetAllToNullIC()      { ClearAll(); }       // golden :286
+// -- W6.3 ADD: tray-arm-touched TMyKitSuck predicates (golden MyKitSuck.h) ------
+//    Offline: the tray-arm shuttle-side suck/destroy have no real vacuum line, so
+//    both report "finished" -> DoCatchTray's early-out guard (golden :6017-6018)
+//    takes its deterministic "not waiting on suck/destroy" branch.
+bool TMyKitSuck::IsShtSuckFinish()     { return true; }      // golden :337
+bool TMyKitSuck::IsShtDestroyFinish()  { return true; }      // golden :338
 
 //==============================================================================
 //  (e) TMyProductionRecord bodies the leaves call (Public/MyProductionRecord.h
