@@ -110,6 +110,7 @@ public:
     AnsiString sName;           // golden :158  -- nozzle position label
 
     bool Suck();                // golden :89   -- vacuum ON / destroy OFF (returns "suck finished")
+    bool Destroy();             // golden :90   -- destroy(blow) ON (returns "destroy finished")  // W6.2b: ProcessSCKARTLoadingCount case 1
     void On();                  // golden :91   -- vacuum solenoid ON
     void Off();                 // golden :92   -- vacuum solenoid OFF
 };
@@ -126,6 +127,24 @@ public:
     int                 Item   [_MAX_SUCK_ROW_ITEM][_MAX_SUCK_COL_ITEM]; // :180
     int                 iWhichSite[_MAX_SUCK_ROW_ITEM][_MAX_SUCK_COL_ITEM]; // :188
     TMyProductionRecord PordRec[_MAX_SUCK_ROW_ITEM][_MAX_SUCK_COL_ITEM]; // :246
+
+    // -- W6.2b ADD: members the in-arm ENGINE (ainarm9045.cpp) SMs deref --------
+    //    golden MyKitSuck.h member names verbatim.  Added only because the
+    //    engine task SMs / dispatch ladder read them; offline-safe defaults.
+    int  iMaxRow;               // :159  (DoInArm_9045 guard `i<InArmSuck.iMaxRow`)
+    // additional-function SM (DoInArmAdditionalFunction) "already done" flags
+    bool bAlreadyDieClean;      // :220  (Die Clean done)
+    bool bAlreadyPreciser;      // :221  (Preciser done)
+    bool bAlready2DID;          // :222  (Bottom 2DID done)
+    bool bAlreadyRotate;        // :223  (Rotate done)
+    // pick SM / DoInArm_9045 predicates
+    bool HasRealIC();           // :312  (any nozzle carries a real IC)
+    bool NoIC();                // :316  (no nozzle carries any IC)
+    bool IsPickSuckFinish();    // :360  (all pick-suck done)
+    bool IsPickDestroyFinish(); // :362  (all pick-destroy done)
+    bool IsPickFinish();        // :364  (pick cycle finished)
+    void ClearAll();            // :290  (clear the whole grid)
+    void SetAllToNullIC();      // :286  (set every nozzle to NULL_IC)
 
     // scalar topology / shuttle-kit selectors (golden :167-205)
     int  iMaxCol;               // :160
@@ -275,10 +294,17 @@ extern std::vector<TInLaserCheck*> LaserCheckPos;
 //  (d) in-arm engine helper externs  (bodies live in the later ainarm core,
 //      W6.x/W7; offline sim bodies are in aHotPlateSubstrate.cpp)
 // ============================================================================
+// These overlap with ainarm9045.h (the engine's public header, where they now
+// have REAL bodies + default args).  When ainarm9045.h is already included
+// (e.g. in ainarm9045.cpp) skip the redeclaration so the default args are not
+// given twice.  The already-translated leaves include only this header and rely
+// on the InArmLeftSide* default arg (=2), so keep the decls for them.
+#ifndef ainarm9045H
 extern bool bUseAxExPicker();                                           //golden ainarm9045.h
 extern bool bUseAxxGPicker();                                           //golden ainarm9045.h
 extern bool InArmLeftSideHasIC(int iRow=2);                             //golden ainarm9045.h:109
 extern bool InArmLeftSideNoIC(int iRow=2);                              //golden ainarm9045.h:108
+#endif
 extern void ResetShuttleWhichKit();                                     //golden ainarm2.h:133 (Steven 20140710)
 
 // per-site close-site-mode selectors referenced by HotPlateYPitchCanPutAll().
@@ -302,9 +328,53 @@ extern void SetInArmHome();
 extern void AddInArmPickerCount(int iSuckR, int iSuckC);
 extern void InArmSubSpeed();
 extern void InArmAddSpeed();
-extern int  GetInArmPitchX_9045(int iMovePitchX, int i, int iOffsetPos);
-extern int  GetInArmPitchY_9045(int iMovePitchY, int iOffsetPos);
+// NOTE (W6.2b): GetInArmPitchX_9045 / GetInArmPitchY_9045 / bUseAxExPicker /
+//   bUseAxxGPicker / InArmLeftSideHasIC / InArmLeftSideNoIC / InspectInArmPosition
+//   / IsCheckInArmDestroyActiveFinish / DoInArm_9045_SuckerMap /
+//   SetShuttleToHasNullIC_9045 / AddInArmPickerCount are now REAL-DEFINED in
+//   ainarm9045.cpp (the in-arm engine).  Their offline stub bodies were removed
+//   from aHotPlateSubstrate.cpp to avoid ODR/link collisions.  The extern decls
+//   for those symbols remain valid (same prototypes); the two pitch helpers the
+//   already-translated leaves call are forward-declared here so they keep
+//   compiling against the engine definition:
+#ifndef ainarm9045H   // default args live in ainarm9045.h; leaves pass all args explicitly
+extern int  GetInArmPitchX_9045(int iMovePitchX, int i, int iOffsetPos);        //golden ainarm9045.h:23 (REAL home: ainarm9045.cpp)
+extern int  GetInArmPitchY_9045(int iMovePitchY, int iOffsetPos);               //golden ainarm9045.h:25 (REAL home: ainarm9045.cpp)
+#endif
 extern void StopAllMotor();
 extern void MyDBIProcess(AnsiString S1, AnsiString S2);
+
+// ============================================================================
+//  (A) [W6.2b] in-arm ENGINE cursors owned by not-yet-translated ainarm2.cpp.
+//      The central pick SM binds `int &Task=iPickFromLoadStageTask`; DoInArm_9045
+//      guards read iArmTask.  Golden ainarm2.h:97/101.  init to 1 (matching
+//      golden InitInArmTask()).  Defined in aHotPlateSubstrate.cpp.
+// ============================================================================
+extern int iArmTask;                    //golden ainarm2.h:97  : master in-arm SM cursor
+extern int iPickFromLoadStageTask;      //golden ainarm2.h:101 : central pick SM cursor
+extern bool bPickFromLoader;            //golden ainarm2.h:54  : "Loader 吸取完成" flag (ProcessSCKARTLoadingCount)
+
+// ============================================================================
+//  (B) [W6.2b] per-variant close-site selector for 1x4, mirroring the
+//      iCloseSiteModeFor2x6 / 2x8 pattern above.  GetJStep() reads it.
+//      Golden home: ainarm9045_1x4_4.h:11/19 (per-site module, W7).
+// ============================================================================
+extern int iCloseSiteModeFor1x4;        //golden ainarm9045_1x4_4.h:11
+enum { e1x4CloseAbAc = 3 };             //golden ainarm9045_1x4_4.h:19
+
+// ============================================================================
+//  (D) [W6.2b] fBarCode form-pointer for the additional-function SM (Bottom
+//      2DID).  Mirrors the FormsFacade offline-stub pattern: every scan returns
+//      false offline (no CCD).  Golden home: BarCode.h (TfBarCode).
+//      Only the three methods the SM derefs are mirrored.
+// ============================================================================
+class TfBarCode_Shim
+{
+public:
+    void InitBottom2DIDScan();          //golden BarCode.h : init bottom-2DID scan
+    bool DoBottom2DIDScan();            //golden BarCode.h : 1-CCD bottom 2DID scan
+    bool DoBottom2DID_8CCD_Scan();      //golden BarCode.h : 8-CCD bottom 2DID scan  //KaiChen 20200513
+};
+extern TfBarCode_Shim *fBarCode;        //golden BarCode.h : TfBarCode *fBarCode
 
 #endif // aHotPlateSubstrateH

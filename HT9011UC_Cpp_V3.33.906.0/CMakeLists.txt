@@ -392,6 +392,11 @@ add_library(ht9045_sm STATIC
     ainarm_SearchPickPlate.cpp
     ainarm_SearchPlacePlate.cpp
     aHotPlateSubstrate.cpp
+    # --- W6.2b (IN-ARM engine): the central pick SM + iInArmType dispatch
+    #     ladders + pure pitch/offset geometry + 3 pumpable task SMs.  Variant
+    #     dispatch bodies + dense MOT[]/sensor/UI SMs are gated (#if 0) with
+    #     active stubs; see the file-head gate documentation.
+    ainarm9045.cpp
 )
 
 target_include_directories(ht9045_sm PUBLIC

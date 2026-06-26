@@ -503,3 +503,39 @@ if(WIN32)
 endif()
 
 add_test(NAME W6_2_InArmSearch COMMAND test_w6_2_inarm_search)
+
+# ===========================================================================
+#  W6.2b VERIFY -- the IN-ARM ENGINE core SMs (ainarm9045.cpp)
+# ===========================================================================
+# --- test_w6_2_inarm_core: pump the engine's central task SMs over Sim HAL ---
+#   The task-mandated W6.2b *core engine* verify TU.  Proves ainarm9045.cpp
+#   (the in-arm ENGINE, in ht9045_sm) LINKS + its 3 ACTIVE central task state
+#   machines PUMP over the Sim HAL with NO hardware:
+#     DoInArmAdditionalFunction (iInArmAdditionalFunctionTask, golden:3209) --
+#       case 1 falls through to case 100; offline selector flags gated -> the
+#       else-path sets bResult=true, cursor settles at 100;
+#     DoInArmIonFanGiveWay (iInArmIonFanGiveWayTask, golden:9166) -- entry
+#       else-path Task->5; InSHT*InLF false guard -> settles at 5;
+#     ProcessSCKARTLoadingCount (iProcessSCKARTLoadingCountTask, golden:7305) --
+#       1->100->200 over the destroy/Z-safe stubs, case 200 returns true and
+#       clears bPickFromLoader.
+#   Each cursor is asserted to stay inside the documented switch(Task) state set
+#   and to match the golden entry/early-out (golden line cited per assert), plus
+#   the geometry/numeric ORACLEs: GetInArmPitch_9045 interpolation endpoints +
+#   float->int TRUNCATION (5000.625 -> 5000), GetJStep default mode == 1,
+#   FindCentorPointIndex, GetShtStartPos.
+#   Same RESCAN link group as the W6.1/W6.2 canaries so the
+#   cprod<->cpublic<->cmydef ctor cross-references settle.
+add_executable(test_w6_2_inarm_core
+    test_w6_2_inarm_core.cpp
+)
+
+target_link_libraries(test_w6_2_inarm_core PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w6_2_inarm_core PRIVATE ws2_32)
+endif()
+
+add_test(NAME W6_2_InArmCore COMMAND test_w6_2_inarm_core)

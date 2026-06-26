@@ -162,6 +162,48 @@ int main()
     DoPlaceToHPBackupData(0, 0, 0, 0, 0);
     CHECK(true, "DoPlaceToHPSwapData / DoPlaceToHPBackupData: callable (no crash)");
 
+    // =======================================================================
+    //  PART C -- W6.2b IN-ARM ENGINE helpers (faithful golden formulas).
+    //  Forward-declared here (not via ainarm9045.h) to avoid the default-arg
+    //  double-declaration with aHotPlateSubstrate.h already included above.
+    // =======================================================================
+    extern double FindCentorPointIndex(int iItemCount);                 // golden :9071
+    extern int    GetShtStartPos(int iCentorABSPostion, double dCentorIndex, int iGap); // golden :9078
+    extern int    GetJStep();                                           // golden :8341
+    extern int    GetShuttleCol(int iSuckRow, int iSuckCol, bool bOutArm); // golden :8360
+    extern int    GetInArmPitch_9045(int w);                            // golden :129
+
+    // FindCentorPointIndex: iPitchCount=(n-1); ret=(double)iPitchCount/2 -------
+    //   n=4 -> 3/2 = 1.5 ; n=1 -> 0/2 = 0.0  (golden :9073-9075, verbatim).
+    CHECK(FindCentorPointIndex(4) == 1.5, "FindCentorPointIndex(4) == 1.5 (golden 9071)");
+    CHECK(FindCentorPointIndex(1) == 0.0, "FindCentorPointIndex(1) == 0.0 (golden 9071)");
+
+    // GetShtStartPos(center,index,gap)=center-(int)(index*gap)  (golden :9080) --
+    //   center=1000, index=1.5, gap=600 -> 1000-(int)(900)=100.
+    CHECK(GetShtStartPos(1000, 1.5, 600) == 100, "GetShtStartPos(1000,1.5,600) == 100 (golden 9078)");
+
+    // GetJStep: default picker mode (no Ax* / no 1x4-close) -> 1 (golden :8353) -
+    iInArmType            = e9045_1x1_1;   // not in any Ax*/ACEG ladder
+    iCloseSiteModeFor2x8  = 0;
+    iCloseSiteModeFor1x4  = 0;
+    bRunAutoClean         = false;
+    CHECK(GetJStep() == 1, "GetJStep() default mode == 1 (golden 8341)");
+
+    // GetShuttleCol ep1Picker early-return == iSuckCol  (golden :8364) ---------
+    {
+        int savedPicker = USE_PICKER_COUNT;
+        USE_PICKER_COUNT = ep1Picker;
+        CHECK(GetShuttleCol(0, 3, false) == 3, "GetShuttleCol ep1Picker -> iSuckCol (golden 8364)");
+        USE_PICKER_COUNT = savedPicker;
+    }
+
+    // GetInArmPitch_9045 interpolation (golden :131-134):
+    //   m = (X120-X40)/iPitch_Max_minus_Min ; r = X40 + m*(w - iXpitchMinX3).
+    //   Set X40=1000, X120=1000 (m=0) -> r = 1000 + 0 = 1000 for any w.
+    Prod.iInArmX40Pitch  = 1000;
+    Prod.iInArmX120Pitch = 1000;
+    CHECK(GetInArmPitch_9045(iXpitchMinX3) == 1000, "GetInArmPitch_9045 m==0 -> X40 (golden 129)");
+
     // -----------------------------------------------------------------------
     printf("==== W6.2 verify: %d passed, %d failed ====\n", g_pass, g_fail);
     return (g_fail == 0) ? 0 : 1;

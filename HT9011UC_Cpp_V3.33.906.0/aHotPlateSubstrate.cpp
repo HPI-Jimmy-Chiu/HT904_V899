@@ -36,9 +36,10 @@ TMyKitSuck OutArmSuck;
 // ---- TMySucker bodies -------------------------------------------------------
 //  Offline: no real vacuum line.  Suck() never reports "finished" (the leaves
 //  treat that as "still building vacuum"); On()/Off() are no-ops.
-bool TMySucker::Suck() { return false; }
-void TMySucker::On()   {}
-void TMySucker::Off()  {}
+bool TMySucker::Suck()    { return false; }
+bool TMySucker::Destroy() { return false; }   // W6.2b: offline destroy never "finished" -> SM holds
+void TMySucker::On()      {}
+void TMySucker::Off()     {}
 
 // ---- TMyKitSuck bodies (only the called methods) ----------------------------
 void TMyKitSuck::ResetAll() {}                              // golden :289 -- reset SuckTask
@@ -90,6 +91,28 @@ void TMyKitSuck::CopyToTray(int iSuckR, int iSuckC, int iSuckData,
     if(iSuckR<0||iSuckR>=_MAX_SUCK_ROW_ITEM||iSuckC<0||iSuckC>=_MAX_SUCK_COL_ITEM) return;
     Item[iSuckR][iSuckC]=iSuckData;                         // faithful: nozzle cleared to iSuckData
 }
+
+// ---- W6.2b: members/methods the in-arm ENGINE SMs deref (golden MyKitSuck.h)
+//      Offline: the grid is empty (no real vacuum line); predicates report
+//      "no IC / finished" so the engine SMs take their deterministic path.
+bool TMyKitSuck::HasRealIC()
+{
+    for(int i=0;i<_MAX_SUCK_ROW_ITEM;i++)
+        for(int j=0;j<_MAX_SUCK_COL_ITEM;j++)
+            if(Item[i][j]==HAS_IC || Item[i][j]==HAS_HOT_IC) return true;
+    return false;
+}
+bool TMyKitSuck::NoIC()                { return !HasRealIC(); }
+bool TMyKitSuck::IsPickSuckFinish()    { return true; }     // offline: nothing left to suck
+bool TMyKitSuck::IsPickDestroyFinish() { return true; }     // offline: nothing left to destroy
+bool TMyKitSuck::IsPickFinish()        { return true; }     // offline: pick cycle done
+void TMyKitSuck::ClearAll()
+{
+    for(int i=0;i<_MAX_SUCK_ROW_ITEM;i++)
+        for(int j=0;j<_MAX_SUCK_COL_ITEM;j++)
+            Item[i][j]=NULL_IC;
+}
+void TMyKitSuck::SetAllToNullIC()      { ClearAll(); }       // golden :286
 
 //==============================================================================
 //  (e) TMyProductionRecord bodies the leaves call (Public/MyProductionRecord.h
@@ -184,6 +207,32 @@ int iCloseSiteModeFor2x6 = 0;       // e2x6Standard
 int iCloseSiteModeFor2x8 = 0;
 
 //==============================================================================
+//  (A) [W6.2b] in-arm ENGINE cursors owned by ainarm2.cpp (not-yet-translated).
+//      init to 1 (golden InitInArmTask()).  Defined here so ainarm9045.cpp's
+//      central pick SM (`int &Task=iPickFromLoadStageTask`) and DoInArm_9045
+//      (reads iArmTask) link.  Golden ainarm2.h:97/101.
+//==============================================================================
+int iArmTask               = 1;
+int iPickFromLoadStageTask = 1;
+bool bPickFromLoader       = false;     //golden ainarm2.h:54
+
+//==============================================================================
+//  (B) [W6.2b] per-variant close-site selector for 1x4 (golden ainarm9045_1x4_4.h)
+//==============================================================================
+int iCloseSiteModeFor1x4 = 0;       // e1x4Standard (offline: not closing 2 site)
+
+//==============================================================================
+//  (D) [W6.2b] fBarCode shim (golden BarCode.h TfBarCode) -- offline: no CCD,
+//      every bottom-2DID scan reports "finished" so the additional-fn SM
+//      advances rather than hangs.
+//==============================================================================
+void TfBarCode_Shim::InitBottom2DIDScan()       {}
+bool TfBarCode_Shim::DoBottom2DIDScan()         { return true; }
+bool TfBarCode_Shim::DoBottom2DID_8CCD_Scan()   { return true; }
+static TfBarCode_Shim g_fBarCode;
+TfBarCode_Shim *fBarCode = &g_fBarCode;
+
+//==============================================================================
 //  HP pick/place "part OK" / retry flags.  These are EXPORTED by
 //  ainarm_SearchPickPlate.h but the golden DEFINES them in ainarm9045.cpp (the
 //  in-arm core, W6.x/W7).  Define them here for W6.2 so the leaf modules link.
@@ -199,26 +248,24 @@ bool bInArmTryPickFromHotPlateFinish = false;   //ChungHung 20120206
 //      W6.x/W7).  Offline defaults keep the geometry leaves linkable and the
 //      canary deterministic.
 //==============================================================================
-bool bUseAxExPicker() { return false; }                    // default picker layout (ACEG)
-bool bUseAxxGPicker() { return false; }
-bool InArmLeftSideHasIC(int /*iRow*/) { return false; }    //golden ainarm9045.h:109 (offline: no IC)
-bool InArmLeftSideNoIC(int /*iRow*/)  { return true;  }    //golden ainarm9045.h:108
+//  [W6.2b PRE-STEP] 11 stubs REMOVED from here -- ainarm9045.cpp now REAL-defines
+//  them (avoid ODR/link collision):
+//    bUseAxExPicker, bUseAxxGPicker, InArmLeftSideHasIC, InArmLeftSideNoIC,
+//    InspectInArmPosition, IsCheckInArmDestroyActiveFinish,
+//    DoInArm_9045_SuckerMap, SetShuttleToHasNullIC_9045, AddInArmPickerCount,
+//    GetInArmPitchX_9045, GetInArmPitchY_9045.
+//  The remaining stubs below stay -- their real bodies live in not-yet-translated
+//  modules (ainarm2.cpp / cmydef.cpp / motor speed ctrl, W7).
+//==============================================================================
 void ResetShuttleWhichKit() {}                             //golden ainarm2.h:133
 int  CloseSiteState(bool /*bPlace*/) { return 0; }         // no site closed offline
 void InitInArmTask()  {}
 void SetRunStartMode(int) {}
 void TransferHotPlateRatio(bool, int *, int *) {}          //Steven 20110324 : ratio xform no-op
-void InspectInArmPosition(int, int, int, int, int, bool) {}//座標偏差檢測 (offline no-op)
 bool MoveInArmZToPlateSafe(int) { return true; }           // offline: Z reaches safe immediately
-bool IsCheckInArmDestroyActiveFinish() { return true; }    //ChungHung 20111229 (offline: destroy done)
-void DoInArm_9045_SuckerMap() {}                           //Steven 20220531
-void SetShuttleToHasNullIC_9045(int, int) {}
 void AdjustShuttlePlaceOrder(int) {}
 void SetInArmHome() {}
-void AddInArmPickerCount(int, int) {}
 void InArmSubSpeed() {}
 void InArmAddSpeed() {}
-int  GetInArmPitchX_9045(int /*iMovePitchX*/, int /*i*/, int /*iOffsetPos*/) { return 0; }
-int  GetInArmPitchY_9045(int /*iMovePitchY*/, int /*iOffsetPos*/) { return 0; }
 void StopAllMotor() {}
 void MyDBIProcess(AnsiString, AnsiString) {}
