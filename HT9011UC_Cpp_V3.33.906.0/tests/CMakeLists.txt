@@ -739,3 +739,57 @@ if(WIN32)
 endif()
 
 add_test(NAME W6_5_Shuttle COMMAND test_w6_5_shuttle)
+
+# --- test_w6_6_hub: pump the csystem ORCHESTRATION HUB over the Sim HAL -------
+#   The task-mandated W6.6 verify TU.  Proves csystem.cpp (the integration HUB,
+#   in ht9045_sm) LINKS against the five engines + its DoAllProcess main loop
+#   PUMPS the WHOLE machine cycle over the Sim HAL with NO hardware, ticking the
+#   engines in the documented 2-phase order (the bDoProcess interleave), and that
+#   the tick-sequence ORACLE (g_csystemTrace, via CSYSTEM_TICK_ORACLE on
+#   ht9045_sm) confirms the exact engine order:
+#     [O1] TICK A = SensorScan,DoLoad,DoInArm,SHT1,TestHead,CatchTray
+#          TICK B = SensorScan,DoLoad,SHT2,TestHead,CatchTray,DoOutArm (golden 9115-10255)
+#     [O2] DoInArm only on A, DoOutArm only on B, SHT1/SHT2 mutually exclusive
+#     [O3] MainProc alive-instrumentation (CallCount++/IsMainProcAlive) (golden 16677-16729)
+#     [O4] 64-cycle pump stability + sustained A/B alternation, no crash
+#   Same RESCAN link group as the W6.1..W6.5 canaries + core TUs.
+add_executable(test_w6_6_hub
+    test_w6_6_hub.cpp
+)
+
+target_link_libraries(test_w6_6_hub PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w6_6_hub PRIVATE ws2_32)
+endif()
+
+add_test(NAME W6_6_Hub COMMAND test_w6_6_hub)
+
+# --- test_w6_6_csystem_cycle: the INTEGRATED MACHINE CYCLE pumps over Sim HAL --
+#   The task-mandated W6.6 *cycle* verify TU (companion to test_w6_6_hub).  Sets a
+#   KNOWN Sim HAL state, pumps the main process loop fn (DoAllProcess/MainProc)
+#   for N=64 cycles, and asserts -- against values HAND-DERIVED from the golden
+#   csystem.cpp -- that the integrated cycle ticks the FIVE engines in the
+#   documented order without crash, the entry/guard behaviour matches the golden,
+#   and the numeric/cursor oracles hold:
+#     [O1] 4-tick (T,F,T,F) engine-order stream + invariants (golden :9115-10255)
+#     [O2] MainProc instrumentation: CallCount 0->5, alive flips (golden :16687-16728)
+#     [O3] master-guard early-return emits ONLY [SensorScan], zero engines (golden :10049)
+#     [O4] 64-cycle pump: clean A/B each tick + strict bDoProcess toggle, no crash (golden :10254)
+#   Same RESCAN link group as test_w6_6_hub (ht9045_sm carries the CSYSTEM_TICK_ORACLE
+#   trace; the other archives settle the cprod<->cpublic<->cmydef ctor cross-refs).
+add_executable(test_w6_6_csystem_cycle
+    test_w6_6_csystem_cycle.cpp
+)
+
+target_link_libraries(test_w6_6_csystem_cycle PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w6_6_csystem_cycle PRIVATE ws2_32)
+endif()
+
+add_test(NAME W6_6_CSystemCycle COMMAND test_w6_6_csystem_cycle)

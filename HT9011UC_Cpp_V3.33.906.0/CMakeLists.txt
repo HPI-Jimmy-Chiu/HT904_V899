@@ -450,6 +450,27 @@ add_library(ht9045_sm STATIC
     #     Empty/MustHas/Prominent checks / Check32site* / MoveOutArmXY_To* /
     #     SendHTTPRequest / MoveSortArmToAutoSafe / Win32 thread tokens).
     acarry_shims.cpp
+    # --- W6.6 (csystem ORCHESTRATION HUB): the integration SPINE that ties the
+    #     five already-translated engines together.  csystem.cpp realizes the
+    #     frozen csystem.h spine free-functions: MainProc (slim) + DoAllProcess
+    #     (THE per-tick engine driver -- bDoProcess 2-tick alternation + master
+    #     guards + the 5 engine calls in documented order + DoLoad/DoCatchTray/
+    #     DoAutoReceiveBinTray loop + tail loops) + the alive-instrumentation
+    #     (GetMainProc*/IsMainProcAlive) + InitAllProcessTask + CheckMotorHome +
+    #     SetInitialICCheck + InitCleanOutFunction/InitOneCycle/InitTrayEndFunction.
+    #     The ~24K-line god-file bulk (AutoRetest/OCR/AutoClean/mode-ladder/
+    #     DoOneCycleFinishCheck/DoCleanOutFinishCheck/...) is GATED #if 0
+    #     // TODO(W7).  Predicates (HasIC family) stay in csystem_predicates.cpp
+    #     (ODR-skipped here).  See the file-head documentation.
+    csystem.cpp
+    # --- W6.6 HUB cross-module offline shims (DoInArm->DoInArm_9045 /
+    #     DoOutArm->DoOutArm_9045 / DoLoad / DoSortArm / bShuttleShake +
+    #     InitLoadTask / InitOutArmTask / InitialDoLockUnloader /
+    #     Initial_Auto_BinTray_Task / InitAutoColorTask / Magazine inits /
+    #     DoAuto3Magazine / NewDoAutoTrayEdgeCylinderLoop / DoAuto2 / DoAutoEmpty1 /
+    #     DoInArm/OutArmTeachAlignmentProcess / SetFixTrayMiddleDtata /
+    #     DoOneCycleFinishCheck / DoCleanOutFinishCheck).
+    csystem_shims.cpp
 )
 
 target_include_directories(ht9045_sm PUBLIC
@@ -467,6 +488,13 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(ht9045_sm PRIVATE
         -Wall -Wextra -Wno-conversion-null -Wno-write-strings -Wno-unused-parameter)
 endif()
+
+# W6.6: enable the csystem.cpp tick-sequence ORACLE hook (compiles a tiny
+# std::vector trace into DoAllProcess so the W6.6 verify TU can confirm the
+# documented per-tick engine ORDER).  The CSYS_TICK macro is a NO-OP unless this
+# is defined, so the faithful golden body is untouched in spirit; the trace is
+# write-only instrumentation read only by the integration test.
+target_compile_definitions(ht9045_sm PRIVATE CSYSTEM_TICK_ORACLE)
 
 # ---------------------------------------------------------------------------
 # Tests

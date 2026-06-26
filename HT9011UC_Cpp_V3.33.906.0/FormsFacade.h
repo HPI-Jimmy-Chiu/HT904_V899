@@ -153,6 +153,8 @@ public:
     void BtnResetClick(void *Sender);                         // [METHOD] golden main.h -- offline: no-op
     void JSCC_ResetForShuttleLoseIC();                        // [METHOD] golden main.h -- offline: no-op (0-arg)
     void ResetRecordforPiggyBack(AnsiString S);               // [METHOD] golden main.h -- offline: no-op
+    // -- W6.6 ADD: the per-tick sensor scan the HUB main loop calls -------------
+    void ProcessSensorScan();                                 // [METHOD] golden main.h -- DoAllProcess():9130 every tick; offline no-op
     TfMain();
 };
 extern TfMain *fMain;

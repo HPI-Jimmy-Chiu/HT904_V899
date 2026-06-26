@@ -70,6 +70,7 @@ void TfMain::BtnOneCycleClick(void * /*Sender*/) {}
 void TfMain::BtnResetClick(void * /*Sender*/) {}
 void TfMain::JSCC_ResetForShuttleLoseIC() {}
 void TfMain::ResetRecordforPiggyBack(AnsiString /*S*/) {}
+void TfMain::ProcessSensorScan() {}                            // W6.6: HUB main-loop per-tick sensor scan (offline no-op)
 TfMain *fMain = new TfMain();
 
 // --- W6.2: TfSortCT --------------------------------------------------------
