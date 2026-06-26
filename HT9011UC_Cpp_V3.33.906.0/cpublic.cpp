@@ -1845,6 +1845,22 @@ void RecordErrorLog(int iSaveToFile,AnsiString FilePth, AnsiString Command)     
     }
 }
 #endif // TODO(W6)
+//AI(W6.2c-INARM-batch3) 20260626: FAITHFUL offline definition of RecordErrorLog
+// (declared cpublic.h:329; golden body above gated -- case 0 writes a dated log
+// file via WriteDataToFile, case 1 needs fMain->ListBox14, both offline-unsafe).
+// First ACTIVE consumer: ainarm9045_1x4_4.cpp's SiteUseMgr "no reachable HP cell"
+// log (RecordErrorLog(0,"SiteUseMgr",...)).  Offline: emit the same dated message
+// line to stdout (mirror canary_support RecordProcess) instead of touching the
+// filesystem / fMain VCL form -- behaviour-preserving for the log content, no HAL.
+void RecordErrorLog(int iSaveToFile, AnsiString FilePth, AnsiString Command)    //kevin 20211022 any error log
+{
+    AnsiString sMegTime="", asLog="";
+    GetTimeInfo();
+    sMegTime.sprintf("%04d-%02d-%02d %02d:%02d:%02d %03d", SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec, SystemMSec);
+    asLog.sprintf("%s, :, %s", sMegTime, Command);                              //golden cpublic.cpp:1835 line format
+    (void)iSaveToFile;
+    printf("  [RecordErrorLog] %s | %s\n", FilePth.c_str(), asLog.c_str());
+}
 //AI(ht9045-v899) 20260626: ungated sDataTimelog -- System* + GetTimeInfo + AnsiString only
 //==============================================================================
 void sDataTimelog(AnsiString &Msg)                                              //kevin 20211027 log + DataTime

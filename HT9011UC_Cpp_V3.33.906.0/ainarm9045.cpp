@@ -793,6 +793,20 @@ extern void DoInArm_9045_2x2_4_12();                                            
 extern void DoInArm_9045_2x2_4_12_SuckerMap();                                  //golden :4664
 extern void DoInArm_9045_2x2_4_14();                                            //golden :4405
 extern void DoInArm_9045_2x2_4_14_SuckerMap();                                  //golden :4665
+// W6.2c batch-3: 6 variants made live -- declare their now-live dispatch callees.
+// AI(W6.2c-INARM-batch3) 20260626.
+extern void DoInArm_9045_1x4_4();                                               //golden :4408
+extern void DoInArm_9045_1x4_4_SuckerMap();                                     //golden :4658
+extern void DoInArm_9045_1x4_4_Back();                                          //golden :4407
+extern void DoInArm_9045_1x4_4_Back_SuckerMap();                                //golden :4659
+extern void DoInArm_9045_2x3_6();                                               //golden :4411
+extern void DoInArm_9045_2x3_6_SuckerMap();                                     //golden :4666
+extern void DoInArm_9045_2x3_6_14();                                            //golden :4412
+extern void DoInArm_9045_2x3_6_14_SuckerMap();                                  //golden :4667
+extern void DoInArm_9045_2x4_4();                                               //golden :4409
+extern void DoInArm_9045_2x4_4_SuckerMap();                                     //golden :4669
+extern void DoInArm_9045_All_1Pick();                                           //golden :4415
+extern void DoInArm_9045_All_1Pick_SuckerMap();                                 //golden :4675 (declared; NEVER dispatched -- faithful to golden)
 
 void DoInArm_9045()                                                             //Steven 20240223 : 重新整理DoInArm_9045
 {
@@ -922,7 +936,10 @@ void DoInArm_9045()                                                             
     // and routes e9045_2x8_32 -> DoInArm_9045_2x8_8() (golden :4639-4641), so the
     // ainarm9045_2x4_16.cpp / _2x8_32.cpp files are DEAD -- registered to compile,
     // never dispatched (see CMakeLists ht9045_sm + each variant file head).
-    if(iInArmType==e9045_1x1_1 ||                                               //AI(W6.2b-canary) 20260626: un-gate ONLY the translated 1x1_1 arm
+    //AI(W6.2c-INARM-batch3) 20260626: All_1Pick is the FIRST golden ladder arm
+    //(golden :4535-4537), evaluated by picker-count BEFORE the iInArmType chain.
+    if(USE_PICKER_COUNT==ep1Picker)             { DoInArm_9045_All_1Pick();  }  //AI(W6.2c-INARM-batch3) 20260626: golden :4535
+    else if(iInArmType==e9045_1x1_1 ||                                          //AI(W6.2b-canary) 20260626: un-gate ONLY the translated 1x1_1 arm
        iInArmType==e9045_1x4_1_Ac)              { DoInArm_9045_1x1_1();      }  //golden :4536 (e9045_1x1_1) + :4563 (e9045_1x4_1_Ac both call DoInArm_9045_1x1_1)
     // --- W6.2c batch-1: 5 variant arms pulled out of the #if 0 gate (ACTIVE) ---
     else if(iInArmType==e9045_1x2_2_13)          { DoInArm_9045_1x2_2();      }  //AI(W6.2c-INARM) 20260626: golden :4538
@@ -937,16 +954,17 @@ void DoInArm_9045()                                                             
     else if(iInArmType==e9045_2x2_4_12)          { DoInArm_9045_2x2_4_12();   }  //AI(W6.2c-INARM-batch2) 20260626: golden :4591
     else if(iInArmType==e9045_2x2_4_13)          { DoInArm_9045_2x2_4();      }  //AI(W6.2c-INARM-batch2) 20260626: golden :4595
     else if(iInArmType==e9045_2x2_4_14)          { DoInArm_9045_2x2_4_14();   }  //AI(W6.2c-INARM-batch2) 20260626: golden :4599
-#if 0 // TODO(W6.2b variants) -- golden :4535-4641 (remaining 11 per-layout DoInArm_9045_* arms; un-gate as each variant lands)
-    else if(USE_PICKER_COUNT==ep1Picker)         { DoInArm_9045_All_1Pick();  }
+    // --- W6.2c batch-3: 5 variant arms pulled out of the #if 0 gate (ACTIVE);
+    //     All_1Pick is the leading picker-count `if` above (golden :4535) ---
+    else if(iInArmType==e9045_1x4_4_Back)        { DoInArm_9045_1x4_4_Back(); }  //AI(W6.2c-INARM-batch3) 20260626: golden :4575
+    else if(iInArmType==e9045_1x4_4)             { DoInArm_9045_1x4_4();      }  //AI(W6.2c-INARM-batch3) 20260626: golden :4579
+    else if(iInArmType==e9045_2x3_6)             { DoInArm_9045_2x3_6();      }  //AI(W6.2c-INARM-batch3) 20260626: golden :4613
+    else if(iInArmType==e9045_2x3_6_14)          { DoInArm_9045_2x3_6_14();   }  //AI(W6.2c-INARM-batch3) 20260626: golden :4607
+    else if(iInArmType==e9045_2x4_4_14)          { DoInArm_9045_2x4_4();      }  //AI(W6.2c-INARM-batch3) 20260626: golden :4619
+#if 0 // TODO(W6.2b variants) -- golden :4535-4641 (remaining per-layout DoInArm_9045_* arms; un-gate as each variant lands)
     else if(iInArmType==e9045_1x4_4_13)          { DoInArm_9045S_1x4_4();     }
-    else if(iInArmType==e9045_1x4_4_Back)        { DoInArm_9045_1x4_4_Back(); }
-    else if(iInArmType==e9045_1x4_4)             { DoInArm_9045_1x4_4();      }
     else if(iInArmType==e9045_2x2_8_Hot)         { DoInArm_9045_2x2_8_Hot();  }
-    else if(iInArmType==e9045_2x3_6_14)          { DoInArm_9045_2x3_6_14();   }
-    else if(iInArmType==e9045_2x3_6)             { DoInArm_9045_2x3_6();      }
     else if(iInArmType==e9045_2x4_4_13)          { DoInArm_9045_2x4_4_13();   }
-    else if(iInArmType==e9045_2x4_4_14)          { DoInArm_9045_2x4_4();      }
     else if(iInArmType==e9045_2x4_8)             { DoInArm_9045_2x4_8();      }
     else if(iInArmType==e9045_2x5_8)             { DoInArm_9045_2x5_8();      }
     else if(iInArmType==e9045_2x6_8)             { DoInArm_9045_2x6_8();      }
@@ -1014,8 +1032,17 @@ void DoInArm_9045_SuckerMap()                                                   
     else if(iInArmType==e9045_2x2_4_12)  { DoInArm_9045_2x2_4_12_SuckerMap(); }                          //AI(W6.2c-INARM-batch2) 20260626: golden :4756
     else if(iInArmType==e9045_2x2_4_13)  { DoInArm_9045_2x2_4_SuckerMap();    }                          //AI(W6.2c-INARM-batch2) 20260626: golden :4760
     else if(iInArmType==e9045_2x2_4_14)  { DoInArm_9045_2x2_4_14_SuckerMap(); }                          //AI(W6.2c-INARM-batch2) 20260626: golden :4764
-#if 0 // TODO(W6.2b variants) -- golden :4704-4830 (remaining 11 per-layout *_SuckerMap arms; un-gate as each variant lands)
-    /* ... 17 further per-iInArmType *_SuckerMap dispatch arms ... */
+    // --- W6.2c batch-3: 5 variant SuckerMap arms made ACTIVE (no picker-prefix; verified golden :4740/:4744/:4774/:4778/:4784).
+    //     All_1Pick has NO SuckerMap arm: the golden engine declares the extern
+    //     (golden :4675) but NEVER dispatches DoInArm_9045_All_1Pick_SuckerMap() --
+    //     faithful, do NOT add one and add NO ep1Picker guard to this ladder. ---
+    else if(iInArmType==e9045_1x4_4_Back) { DoInArm_9045_1x4_4_Back_SuckerMap();}                         //AI(W6.2c-INARM-batch3) 20260626: golden :4740
+    else if(iInArmType==e9045_1x4_4)      { DoInArm_9045_1x4_4_SuckerMap();    }                          //AI(W6.2c-INARM-batch3) 20260626: golden :4744
+    else if(iInArmType==e9045_2x3_6)      { DoInArm_9045_2x3_6_SuckerMap();    }                          //AI(W6.2c-INARM-batch3) 20260626: golden :4778
+    else if(iInArmType==e9045_2x3_6_14)   { DoInArm_9045_2x3_6_14_SuckerMap(); }                          //AI(W6.2c-INARM-batch3) 20260626: golden :4774
+    else if(iInArmType==e9045_2x4_4_14)   { DoInArm_9045_2x4_4_SuckerMap();    }                          //AI(W6.2c-INARM-batch3) 20260626: golden :4784
+#if 0 // TODO(W6.2b variants) -- golden :4704-4830 (remaining per-layout *_SuckerMap arms; un-gate as each variant lands)
+    /* ... further per-iInArmType *_SuckerMap dispatch arms ... */
 #endif
     else { Str.sprintf("iInArmType=%d", iInArmType); ShowMyMessage("Program Error in DoInArm_9045_SuckerMap()", Str); }
 }

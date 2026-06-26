@@ -61,6 +61,12 @@ extern void DoInArm_9045_2x2_4();         extern void DoInArm_9045_2x2_4_SuckerM
 extern void DoInArm_9045_2x2_4_12();      extern void DoInArm_9045_2x2_4_12_SuckerMap();
 extern void DoInArm_9045_2x2_4_14();      extern void DoInArm_9045_2x2_4_14_SuckerMap();
 
+// O4: the pure geometry helper GetNowSiteKitMode_2x1_2 is a file-local
+// (external-linkage, non-static) function in the 2x1_2 leaf -- NOT on its .h
+// surface (golden keeps it file-local).  Declared here for the direct geometry
+// assertion below.  golden ainarm9045_2x1_2.cpp:57.
+extern int GetNowSiteKitMode_2x1_2(int iSht, bool bPlace);
+
 // ---------------------------------------------------------------------------
 //  Minimal PASS / FAIL harness (same style as the other W6 verify TUs)
 // ---------------------------------------------------------------------------
@@ -281,6 +287,38 @@ int main()
         int s2 = GetShuttleState_2x2_4(0, bAutoPick);
         CHECK(s2 == 2, "O3b Item[1][1]=HAS_IC pick branch: GetShuttleState_2x2_4(0,bAutoPick)==2 (left-bottom IC)");
         clearKitItem(FLCarryKit, 1);   // restore clean baseline
+    }
+
+    // =======================================================================
+    //  PART O4 -- ORACLE 2 (this wave's NEW assertion): the pure geometry
+    //  helper GetNowSiteKitMode_2x1_2() place-branch.  golden
+    //  ainarm9045_2x1_2.cpp:57.  With the offline-clean substrate
+    //  (Zteach->fShow==false [facade default], bRunAutoClean==false [cmydef.cpp
+    //  global default] -> iX=HAS_TESTING_IC, and the AutoClean guard
+    //  `iAutoClean_Function && !bUse8Picker && bRunAutoClean` is FALSE because
+    //  bRunAutoClean==false), the place branch reduces to the simple else:
+    //      InArmSuck.Item[0][0] >= HAS_IC  ?  return 10000  :  return 11000 .
+    //  This is side-effect-free integer geometry (no HAL motion), so the value
+    //  is a deterministic witness that the 2x1_2 leaf's helper was translated
+    //  with the >=HAS_IC comparison + the exact 10000/11000 magic returns intact
+    //  (NULL_IC==0 < HAS_IC==2, verified cmydef.cpp:153-155).
+    // =======================================================================
+    printf("[O4] GetNowSiteKitMode_2x1_2 place branch (golden ainarm9045_2x1_2.cpp:57)\n");
+    {
+        bRunAutoClean = false;                       // ensure AutoClean guard off
+        // else case: Item[0][0] (NULL_IC) < HAS_IC -> 11000
+        InArmSuck.SetAllToNullIC();
+        int m0 = GetNowSiteKitMode_2x1_2(0, true);
+        CHECK(m0 == 11000,
+              "O4 place, InArmSuck.Item[0][0]=NULL_IC: GetNowSiteKitMode_2x1_2(0,true)==11000");
+
+        // if case: Item[0][0] >= HAS_IC -> 10000
+        InArmSuck.SetAllToNullIC();
+        InArmSuck.Item[0][0] = HAS_IC;
+        int m1 = GetNowSiteKitMode_2x1_2(0, true);
+        CHECK(m1 == 10000,
+              "O4 place, InArmSuck.Item[0][0]=HAS_IC: GetNowSiteKitMode_2x1_2(0,true)==10000");
+        InArmSuck.SetAllToNullIC();                  // restore clean baseline
     }
 
     // -----------------------------------------------------------------------

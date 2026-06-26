@@ -643,6 +643,40 @@ endif()
 
 add_test(NAME W6_2c_InArmVariantsBatch2 COMMAND test_w6_2c_inarm_variants_batch2)
 
+# --- test_w6_2c_inarm_variants_batch3: prove the 6-variant batch-3 over Sim HAL
+#   Independently proves the W6.2c batch-3 of 6 in-arm site variants
+#   (1x4_4, 1x4_4_Back, 2x3_6, 2x3_6_14, 2x4_4, All_1Pick).  Proves:
+#     [D]  the engine ladder (DoInArm_9045) routes each of the 5 iInArmType-routed
+#          active variant values to its OWN DoInArm_9045_<v>() arm via the SOUND
+#          engine==direct differential witness; all 6 *_SuckerMap symbols (incl.
+#          the faithful-never-dispatched All_1Pick_SuckerMap) defined+callable.
+#     [D-pick] ORACLE 3 (load-bearing): with USE_PICKER_COUNT!=ep1Picker,
+#          e9045_2x4_4_14(=20) enters DoInArm_9045_2x4_4 (NOT _2x4_4_13) and
+#          e9045_2x4_4_13(=21) hits the still-GATED Program-Error else (cursor
+#          UNCHANGED); with USE_PICKER_COUNT==ep1Picker the FIRST ladder arm enters
+#          DoInArm_9045_All_1Pick REGARDLESS of iInArmType (witnessed against a
+#          gated type so only the leading picker-count `if` can advance the cursor).
+#     [O1] pure-const tables XPHSuckToSht_2x3_6 / _OutArm carry the golden swap
+#          (row1 {3,1,0,2,..} in-arm / {0,2,1,3,..} out-arm).
+#     [O2] pure-const XPHSuckToSht_2x4_14[3][8] all rows == {0,4,5,1,2,6,7,3}.
+#     [O3] GetShuttleState_2x3_6 pick branch == 0/1/2 (golden :3505), driving the
+#          substrate ArmUpSideAllTypeIC/ArmDownSideAllTypeIC over the (NULL_IC,0,4)
+#          6-site scan range.
+#   Same RESCAN link group as the W6.1/W6.2/W6.2b/W6.2c-batch1/batch2 canaries.
+add_executable(test_w6_2c_inarm_variants_batch3
+    test_w6_2c_inarm_variants_batch3.cpp
+)
+
+target_link_libraries(test_w6_2c_inarm_variants_batch3 PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w6_2c_inarm_variants_batch3 PRIVATE ws2_32)
+endif()
+
+add_test(NAME W6_2c_InArmVariantsBatch3 COMMAND test_w6_2c_inarm_variants_batch3)
+
 # ===========================================================================
 #  W6.2c VERIFY -- the OUT-ARM ENGINE core SMs (aoutarm9045.cpp)
 # ===========================================================================

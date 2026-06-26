@@ -434,6 +434,19 @@ add_library(ht9045_sm STATIC
     ainarm9045_2x1_2.cpp
     ainarm9045_2x2_4.cpp
     ainarm9045_2x2_4_14.cpp
+    # --- W6.2c batch-3 (6 IN-ARM site variants made ACTIVE; dispatch arms pulled
+    #     out of the "#if 0 // TODO(W6.2b variants)" gate in ainarm9045.cpp).
+    #     1x4_4 also drove the substrate add of cSiteUseManager (SiteUseMgr) +
+    #     RecordErrorLog (see substrate note).  All_1Pick's DoInArm arm is the
+    #     FIRST ladder arm (USE_PICKER_COUNT==ep1Picker), and its *_SuckerMap()
+    #     is declared-but-NEVER-dispatched by the golden engine (faithful).
+    ainarm9045_1x4_4.cpp
+    ainarm9045_1x4_4_Back.cpp
+    ainarm9045_2x3_6.cpp
+    ainarm9045_2x3_6_14.cpp
+    ainarm9045_2x4_4.cpp
+    ainarm9045_All_1Pick.cpp
+    cSiteUseManager.cpp
     # --- W6.2b-canary (IN-ARM shared helpers): the two ainarm2.cpp leaves the
     #     site-variant SMs call but that had no body yet -- SetInArmUseSuckToHas
     #     NullIC (golden ainarm2.cpp:201) + InitInArmPickFromHotPlateTask (golden

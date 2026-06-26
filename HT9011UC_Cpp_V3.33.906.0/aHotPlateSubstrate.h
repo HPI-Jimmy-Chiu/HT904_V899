@@ -266,6 +266,13 @@ public:
     //    ACTIVE consumer: GetShuttleState_2x2_4 / _2x2_4_14 (the gated 2x8_32
     //    sibling also derefs it).  AI(W6.2c-INARM-batch2) 20260626.
     bool ArmDownSideAllTypeIC(int IC_TYPE, int iOffset, int iCol);     // :335 (Steven 20220930)
+    // -- W6.2c batch-3 ADD: per-row "has the specified IC?" query; golden
+    //    MyKitSuck.h:298 `bool RowHasDefineIC(int iRow, int IC_TYPE);` (Steven
+    //    20221005).  FAITHFUL pure Item[iRow][*] scan (no HAL).  First ACTIVE
+    //    consumers: GetShuttleState_1x4_4 / _2x3_6 / _All_1Pick (InArmSuck.
+    //    RowHasDefineIC(0/1, NULL_IC)); the gated 2x8_32 sibling also derefs it.
+    //    AI(W6.2c-INARM-batch3) 20260626.
+    bool RowHasDefineIC(int iRow, int IC_TYPE);                        // :298 (Steven 20221005)
     void SetPickerCount(int _iPickRow, int _iPickCol, int _iShtRow,
                         int _iShtCol, int _iPickStep, int _iKitStep,
                         int _iShtStep);                                // :250
@@ -391,6 +398,17 @@ extern int iHotWhichKit    [2][50][50];                                 // golde
 extern int iHotWhichShuttle [2][50][50];                                // golden ainarm2.h:84
 
 extern bool bPitchOver12000;                                            // golden ainarm2.h:162 (jou 20100120)
+
+//AI(W6.2c-INARM-batch3) 20260626: ainarm2 debug latch the in-arm variant SMs
+// clear (golden ainarm2.cpp:52 `bool bInArmHasHotIC=false;` / decl ainarm2.h:60).
+// First ACTIVE consumers: DoInArm_9045_2x3_6_14 + DoInArm_9045_2x4_4 (both set it
+// false; pure debug flag, NO offline hardware effect).  Defined once in
+// aHotPlateSubstrate.cpp.  The HT9045_SUBSTRATE_bInArmHasHotIC guard matches the
+// guarded forward-decl those variant .cpp files carry, so theirs collapses here.
+#ifndef HT9045_SUBSTRATE_bInArmHasHotIC
+#define HT9045_SUBSTRATE_bInArmHasHotIC
+extern bool bInArmHasHotIC;                                             // golden ainarm2.h:60 (Sam 20211012 : Debug 用)
+#endif
 
 // strAUTOSITEMAP (golden ainarm2.h:10) + InArmSiteMapData (golden ainarm2.h:34)
 typedef struct                                                          //Sam 20181201 : Auto Alignment
@@ -529,7 +547,15 @@ extern int iFix3CanFullTask;               //golden aoutarm.h:51  : Fix3 full-tr
 //      Golden home: ainarm9045_1x4_4.h:11/19 (per-site module, W7).
 // ============================================================================
 extern int iCloseSiteModeFor1x4;        //golden ainarm9045_1x4_4.h:11
+//AI(W6.2c-INARM-batch3) 20260626: e1x4Mode now lives in ainarm9045_1x4_4.h (the
+// per-site variant landed ACTIVE this batch and owns the FULL e1x4Mode enum +
+// the iCloseSiteModeFor1x4 definition).  Keep this bare e1x4CloseAbAc=3 constant
+// ONLY for TUs that include aHotPlateSubstrate.h but NOT ainarm9045_1x4_4.h
+// (ainarm9045.cpp:476 + the W6.2 inarm tests).  Guard it out when the variant
+// header is present so the enumerator is not redeclared (golden value preserved).
+#ifndef ainarm9045_1x4_4H
 enum { e1x4CloseAbAc = 3 };             //golden ainarm9045_1x4_4.h:19
+#endif
 
 // ============================================================================
 //  (D) [W6.2b] fBarCode form-pointer for the additional-function SM (Bottom

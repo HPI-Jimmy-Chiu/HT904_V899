@@ -431,6 +431,10 @@ int iHotWhichKit   [2][50][50] = {{{0}}};
 int iHotWhichShuttle[2][50][50]= {{{0}}};
 
 bool bPitchOver12000 = false;                              // golden ainarm2.h:162
+//AI(W6.2c-INARM-batch3) 20260626: single definition of the ainarm2 debug latch
+// (golden ainarm2.cpp:52).  Cleared by DoInArm_9045_2x3_6_14 / _2x4_4; offline
+// default false, no hardware side effect.  extern in aHotPlateSubstrate.h.
+bool bInArmHasHotIC = false;                               // golden ainarm2.cpp:52 (Sam 20211012)
 
 strAUTOSITEMAP InArmSiteMapData = { -1, -1, -1, -1, -1 };  //Steven 20211209 : 紀錄Site map資料
 
@@ -473,7 +477,11 @@ int iFix3CanFullTask              = 1;
 //==============================================================================
 //  (B) [W6.2b] per-variant close-site selector for 1x4 (golden ainarm9045_1x4_4.h)
 //==============================================================================
-int iCloseSiteModeFor1x4 = 0;       // e1x4Standard (offline: not closing 2 site)
+//AI(W6.2c-INARM-batch3) 20260626: definition moved to ainarm9045_1x4_4.cpp:111
+// (`int iCloseSiteModeFor1x4=e1x4Standard;`) -- that variant landed ACTIVE this
+// batch and now OWNS the symbol.  Removed the duplicate substrate definition to
+// avoid a multiple-definition link error; the extern in aHotPlateSubstrate.h:531
+// still serves the substrate-only consumers (ainarm9045.cpp / inarm tests).
 
 //==============================================================================
 //  (D) [W6.2b] fBarCode shim (golden BarCode.h TfBarCode) -- offline: no CCD,
@@ -601,6 +609,34 @@ bool TMyKitSuck::ArmDownSideAllTypeIC(int IC_TYPE, int iOffset, int iCol)       
             return false;
     }
     return true;
+}
+//----------------------------------------------------------------------------
+//AI(W6.2c-INARM-batch3) 20260626: golden MyKitSuck.cpp:514 (Steven 20221005).
+// FAITHFUL per-row "has the specified IC?" query -- pure Item[iRow][*] scan, no
+// HAL.  Added for GetShuttleState_1x4_4 / _2x3_6 / _All_1Pick (batch-3) which
+// call InArmSuck.RowHasDefineIC(0/1, NULL_IC).  Body verbatim from golden.
+bool TMyKitSuck::RowHasDefineIC(int iRow, int IC_TYPE)                          //Steven 20221005 : 針對上下排判斷有沒有指定的IC
+{
+    bool bHasDefineIC=false;
+    for(int j=0; j<iMaxCol; j++)
+    {
+        if(IC_TYPE==NULL_IC && Item[iRow][j]==IC_TYPE)
+        {
+            bHasDefineIC=true;
+        }
+        else
+        {
+            if(Item[iRow][j]!=NULL_IC)
+            {
+                if(Item[iRow][j]==IC_TYPE)
+                {
+                    bHasDefineIC=true;
+                }
+            }
+        }
+    }
+
+    return bHasDefineIC;
 }
 // FAITHFUL Item-grid side-scans (golden MyKitSuck.cpp:730/:768/:853/:943).
 // Used by the 1x2_4_Hot in-arm place-to-shuttle SM (DoInArmPlaceToShuttle).
