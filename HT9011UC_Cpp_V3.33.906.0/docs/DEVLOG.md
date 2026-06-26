@@ -159,8 +159,16 @@
 - 既有 W6_6_Hub(前一階段建)亦續綠。**mojibake=0**(本波全 6 檔：test_w6_6_csystem_cycle.cpp / tests/CMakeLists.txt / csystem.cpp / csystem_shims.{cpp,h} / test_w6_6_hub.cpp)。csystem.cpp 真 line-leading #if/#endif **7/7 平衡**。
 - **驗證(fresh from-scratch dir `build_w6_6_verify`，最大 build—5 引擎+hub)**：clean configure+build+link `ht9045_sm`、**ctest 34/34 PASS**(prior baseline 32 全綠無回歸 + W6_6_Hub + 本波 W6_6_CSystemCycle)。
 
+## 2026-06-26 — W6.2c batch-1：5 個 in-arm site variants（接手平行途徑 in-flight 工作）
+- **接手脈絡**：暫停期間平行途徑已 commit W6.4/W6.5/W6.6(csystem HUB)；工作區留有 in-flight 未提交的 `ainarm9045_1x3_4.cpp`(2996 行,完整) + 4 個 header stub + substrate +13 行。使用者指示「繼續未完成」→ 我接手 W6.2b in-arm 變體 fan-out。
+- **記取 W6.4 教訓的安全架構**：atester.cpp(11819 行)單 agent 翻譯曾在 ~105 分連線中斷。本波改 **parallel translate（每變體 ~3000 行,各 agent 只寫自己的 .cpp/.h、不碰共享檔、回報 substrate 需求）→ serial integrate（單一 agent 統一改 CMake/ainarm9045.cpp dispatch/substrate，杜絕平行撞車）→ clean verify**。
+- **本批 5 變體**：`1x3_4`(incorporate in-flight,validated faithful) + `1x2_2`/`1x2_2_14`/`1x2_4_Hot`/`1x3_2_14`(新翻)。整合：10 externs + 5 DoInArm arms + 5 SuckerMap arms 移出 `#if 0 // TODO(W6.2b variants)` 區塊到 active(1x2_2 測 e9045_1x2_2_13；三個 1x2_* SuckerMap 帶 i1x2_4UseACEGPicker=0 prefix verbatim；剩 17 變體續 gated)。substrate 新增忠實本體：ArmUp/Down/Left/RightSideHaveRealIC(golden mykitsuck.cpp Item-grid 掃描)、flag1_1x2_2、**Zteach facade 單例(全專案首個 Zteach 編譯參考)**、csystem_shims 的 XPitchIsStand/DoSiteMappingCHK/AutoSiteMappingCheckShuttle。
+- **驗證(獨立 clean from-scratch)**：build green、**ctest 36/36**(prior 35 + 新 W6_2c 22 斷言:XPHSuckToSht_1x2_4 表/Arm*SideHaveRealIC grid/GetShuttleState_1x3_4/dispatch routing + gated Program-Error witness)、mojibake 0(15 檔)、directive 21/21 平衡、126 譯出源檔。commit `168db2a`(30 ahead)。
+- **下一步：W6.2c batch-2**(剩 17 個 in-arm 變體分批,同架構) → 26 個 out-arm 變體 → W7。
+
 ### 🔖 RESUME（最新）
-- **🏁 W6 CORE LAYER 完成**：五引擎(in/out-arm/tray-arm/tester/shuttle) **+ csystem 整合 HUB** 全 over Sim HAL pump。**W6.6 完成**：csystem.cpp(25,483 行)spine 672 行 active(~16 方法/~6%)、DoAllProcess 主迴圈把 5 引擎以記錄 A/B tick 序串起來、64 cycle pump=32A+32B 無 crash、4 oracle 過(20 PASS)、ctest **34/34**。下一步=W7(MainProc mode/SECS/AGV/temp ladder + end-of-lot finish-check 本體 + home/setup) 解 gated 大宗。
+- **▶ W6.2b/c in-arm 變體 fan-out 進行中**：25 個中 **8 live**(canary 3:1x1_1/2x4_16/2x8_32 + batch-1 5:1x3_4/1x2_2/1x2_2_14/1x2_4_Hot/1x3_2_14)。剩 **17**：1x4_2/1x4_4/1x4_4_Back/1x4_8_Hot/2x1_2/2x2_4/2x2_4_12/2x2_4_14/2x2_8_Hot/2x3_6/2x3_6_14/2x4_4/2x4_8/2x5_8/2x6_8/2x8_8/All_1Pick。**架構=parallel translate(只寫自己檔)→serial integrate(統一改共享檔)→clean verify**(記取 atester 11819 行單 agent 連線中斷教訓:單檔別超 ~6-8K、批次有界)。之後 26 個 out-arm 變體、W7。
+- **🏁 W6 CORE LAYER 完成**：五引擎(in/out-arm/tray-arm/tester/shuttle) **+ csystem 整合 HUB** 全 over Sim HAL pump。**W6.6 完成**：csystem.cpp(25,483 行)spine 672 行 active(~16 方法/~6%)、DoAllProcess 主迴圈把 5 引擎以記錄 A/B tick 序串起來、64 cycle pump=32A+32B 無 crash、4 oracle 過(20 PASS)、ctest **34/34**。W7=(MainProc mode/SECS/AGV/temp ladder + end-of-lot finish-check 本體 + home/setup) 解 gated 大宗。
 - 已完成：…W3、W4 馬達/IO HAL、KeyPro+TComm、cpublic 基礎、**W6.0→W6.5 全 root 引擎(in-arm/out-arm/tray-arm/tester/shuttle)over Sim HAL**。全 green。
 - **W6.5 SHUTTLE 完成**：acarry.cpp(8521 行)136/136 case ACTIVE、0 `#if 0`(本波最高覆蓋)；Do_Auto_SHT1 1→10 pump 過、5 oracle 過(truncation 11001/zero-guard/sensor-broken left-pass)；acarry_shims 修譯期連結缺口；ctest 32/32。
 - 已完成：…W3、W4 馬達/IO HAL、KeyPro+TComm、**cpublic 基礎 ungate(stub 移除)**。HAL Sim 層完整。全 green、已 commit（branch 19 commits）。
