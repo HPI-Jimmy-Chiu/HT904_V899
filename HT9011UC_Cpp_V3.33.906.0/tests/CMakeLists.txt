@@ -539,3 +539,44 @@ if(WIN32)
 endif()
 
 add_test(NAME W6_2_InArmCore COMMAND test_w6_2_inarm_core)
+
+# ===========================================================================
+#  W6.2c VERIFY -- the OUT-ARM ENGINE core SMs (aoutarm9045.cpp)
+# ===========================================================================
+# --- test_w6_2_outarm_core: pump the OUT-ARM central task SMs over Sim HAL ---
+#   The task-mandated W6.2c *core engine* verify TU (DIRECT mirror of the in-arm
+#   core TU above).  Proves aoutarm9045.cpp (the out-arm ENGINE, in ht9045_sm)
+#   LINKS + its ACTIVE central task state machines PUMP over the Sim HAL with NO
+#   hardware:
+#     DoOutArmAdditionalFunction (iOutArmAdditionalFunctionTask, golden:2246) --
+#       case 1 FALLS THROUGH to case 100; the ACTIVE MoveOutArmToAutoSafe() stub
+#       returns true and the Rotate/AOI/FixAI branches are W7-gated -> the
+#       else-path sets bResult=true on the FIRST tick, cursor settles at 100;
+#     DoOutArmIonFanGiveWay (iOutArmIonFanGiveWayTask, golden:4613) --
+#       (2a) ESD-off PRE-SWITCH guard returns true + forces cursor==1 (golden
+#            1312-1316); (2b) ESD-on entry case 1 with empty carry kits + no real
+#            IC -> inner-else Task 1->2 (golden 1332); the full pump stays inside
+#            the documented {1,2,3,5} set (no escape / no crash).
+#   Each cursor is asserted to stay inside the documented switch(Task) state set
+#   and to match the golden entry/early-out (golden line cited per assert), plus
+#   the geometry/numeric ORACLEs: GetOutArmPitch_9045 interpolation endpoints +
+#   float->int TRUNCATION (5000.125 -> 5000) + GetOutArmPitchY_9045 zero-guard
+#   (denom==0 -> iOutArmY15Pitch, no div-by-zero).
+#   This TU reaches the IonFan case-1/case-5 OutSHT1InRT/OutSHT2InRT predicates,
+#   which had no offline home before this wave; csystem_predicates.cpp now
+#   supplies them (delegating to InSHT*InRT, golden csystem.cpp:699/701).
+#   Same RESCAN link group as the W6.1/W6.2 canaries so the
+#   cprod<->cpublic<->cmydef ctor cross-references settle.
+add_executable(test_w6_2_outarm_core
+    test_w6_2_outarm_core.cpp
+)
+
+target_link_libraries(test_w6_2_outarm_core PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w6_2_outarm_core PRIVATE ws2_32)
+endif()
+
+add_test(NAME W6_2_OutArmCore COMMAND test_w6_2_outarm_core)

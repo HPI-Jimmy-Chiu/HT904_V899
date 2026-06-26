@@ -397,6 +397,15 @@ add_library(ht9045_sm STATIC
     #     dispatch bodies + dense MOT[]/sensor/UI SMs are gated (#if 0) with
     #     active stubs; see the file-head gate documentation.
     ainarm9045.cpp
+    # --- W6.2c (OUT-ARM engine): the central place-to-Auto SM + iInArmType
+    #     dispatch ladders (DoOutArm_9045 / DoPickFromShuttle_9045) + pure
+    #     pitch/offset geometry + 4 pumpable task SMs (DoOutArmAdditionalFunction /
+    #     DoOutArmPlaceToAuto_9045 / DoOutArmAfterPlaceToAuto / DoOutArmIonFanGiveWay).
+    #     Variant dispatch bodies + dense MOT[]/sensor/Magazine/AOI/Rotate SMs are
+    #     gated (#if 0) with active stubs; see the file-head gate documentation.
+    #     Pumps the same aHotPlateSubstrate (OutArmSuck/FRCarryKit/BRCarryKit/
+    #     OutArm2Suck + out-arm cursor ints) as the in-arm engine.
+    aoutarm9045.cpp
 )
 
 target_include_directories(ht9045_sm PUBLIC

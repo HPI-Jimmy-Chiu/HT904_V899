@@ -113,6 +113,18 @@ public:
     bool Destroy();             // golden :90   -- destroy(blow) ON (returns "destroy finished")  // W6.2b: ProcessSCKARTLoadingCount case 1
     void On();                  // golden :91   -- vacuum solenoid ON
     void Off();                 // golden :92   -- vacuum solenoid OFF
+
+    // -- W6.2c ADD: members the OUT-ARM ENGINE (aoutarm9045.cpp) derefs ----------
+    //    golden MyKitSuck.h member names verbatim.  Added only because the
+    //    out-arm destroy-confirm / safe-move / init-state code reads them.
+    void OnSuck();              // golden :95   -- vacuum-on (suck) solenoid
+    void OnDestroy();           // golden :97   -- destroy(blow) solenoid ON
+    void OffDestroy();          // golden :98   -- destroy(blow) solenoid OFF
+    void Normal();              // golden :99   -- return nozzle to idle/normal
+    bool GetStatus();           // golden :103  -- read vacuum sensor (true=still holding)
+    int  iMotNo;                // golden :138  -- the Z motor index for this nozzle
+    int  iMyRow;                // golden :139  -- physical row of this nozzle
+    int  iMyCol;                // golden :140  -- physical col of this nozzle
 };
 
 // ---- TMyKitSuck (golden MyKitSuck.h:151) -- MINIMAL mirror ------------------
@@ -161,6 +173,15 @@ public:
     int  iWhichShuttleBackup;   // :234
     int  iWhichKitBackup;       // :235
 
+    // -- W6.2c ADD: members the OUT-ARM ENGINE (aoutarm9045.cpp) derefs ----------
+    //    golden MyKitSuck.h member names verbatim.  Added only because the
+    //    out-arm safe-move / cell-pos / additional-fn SM read them.
+    int  iMotRow;               // :156  (MoveOutArmToAutoSafe_9045 motor-grid walk)
+    int  iMotCol;               // :157  (MoveOutArmToAutoSafe_9045 motor-grid walk)
+    int  iPickStep;             // :166  (GetOutArmToShtCellPos col step)
+    bool bAlreadyAOI;           // :351  (DoOutArmAdditionalFunction AOI done flag)
+    bool bAlreadyFixAI;         // :353  (DoOutArmAdditionalFunction FixAI done flag)
+
     // methods the leaves call (golden signatures preserved) -------------------
     void ResetAll();                                                    // :289
     bool HasIC();                                                       // :310
@@ -183,6 +204,10 @@ extern TMyKitSuck InArmSuck;     // golden MyKitSuck.h:357
 extern TMyKitSuck FLCarryKit;    // golden MyKitSuck.h:358
 extern TMyKitSuck BLCarryKit;    // golden MyKitSuck.h:360
 extern TMyKitSuck OutArmSuck;    // golden MyKitSuck.h:366
+// -- W6.2c ADD: the OUT-ARM KitSuck objects the out-arm engine SMs read --------
+extern TMyKitSuck OutArm2Suck;   // golden MyKitSuck.h:366 (HT-9046AU sort arm; DoOutArmAfterPlaceToAuto case 5000)
+extern TMyKitSuck FRCarryKit;    // golden MyKitSuck.h:359 (DoOutArmIonFanGiveWay FRCarryKit.HasIC())
+extern TMyKitSuck BRCarryKit;    // golden MyKitSuck.h:361 (DoOutArmIonFanGiveWay BRCarryKit.HasIC())
 
 // ============================================================================
 //  (b) uPlateInfo (PickFromHPList)  -- golden HTEditList.h
@@ -353,6 +378,19 @@ extern void MyDBIProcess(AnsiString S1, AnsiString S2);
 extern int iArmTask;                    //golden ainarm2.h:97  : master in-arm SM cursor
 extern int iPickFromLoadStageTask;      //golden ainarm2.h:101 : central pick SM cursor
 extern bool bPickFromLoader;            //golden ainarm2.h:54  : "Loader 吸取完成" flag (ProcessSCKARTLoadingCount)
+
+// ============================================================================
+//  (A2) [W6.2c] OUT-ARM ENGINE cursors owned by not-yet-translated aoutarm2.cpp.
+//      DoOutArmPlaceToAuto_9045 binds `int &Task=iPlaceToAutoTask`;
+//      DoOutArmAfterPlaceToAuto binds iDoOutArmAfterPlaceToAutoTask; the place SM
+//      reads iWhichAuto/iWhichBuff/iWhichMag (golden aoutarm.h:18-20 -- but those
+//      are ALREADY in cmydef.h, so only the three task cursors + the Fix3 cursor
+//      live here).  init to 1 (golden InitOutArmTask/InitPlaceToAutoTask).
+//      Golden aoutarm.h:49/15/51.  Defined in aHotPlateSubstrate.cpp.
+// ============================================================================
+extern int iPlaceToAutoTask;               //golden aoutarm.h:49  : central out-place SM cursor
+extern int iDoOutArmAfterPlaceToAutoTask;  //golden aoutarm.h:15  : after-place SM cursor
+extern int iFix3CanFullTask;               //golden aoutarm.h:51  : Fix3 full-tray SM cursor
 
 // ============================================================================
 //  (B) [W6.2b] per-variant close-site selector for 1x4, mirroring the

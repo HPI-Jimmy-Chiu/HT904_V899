@@ -32,6 +32,10 @@ TMyKitSuck InArmSuck;
 TMyKitSuck FLCarryKit;
 TMyKitSuck BLCarryKit;
 TMyKitSuck OutArmSuck;
+// -- W6.2c ADD: OUT-ARM KitSuck objects (golden MyKitSuck.h:359/361/366) -------
+TMyKitSuck OutArm2Suck;
+TMyKitSuck FRCarryKit;
+TMyKitSuck BRCarryKit;
 
 // ---- TMySucker bodies -------------------------------------------------------
 //  Offline: no real vacuum line.  Suck() never reports "finished" (the leaves
@@ -40,6 +44,16 @@ bool TMySucker::Suck()    { return false; }
 bool TMySucker::Destroy() { return false; }   // W6.2b: offline destroy never "finished" -> SM holds
 void TMySucker::On()      {}
 void TMySucker::Off()     {}
+// -- W6.2c ADD: out-arm-touched TMySucker surface (golden MyKitSuck.h) ---------
+//    Offline: no real vacuum line.  OnSuck/OnDestroy/OffDestroy/Normal are
+//    solenoid no-ops; GetStatus() reports "no IC held" (false) so the out-arm
+//    destroy-confirm SM (CheckOutArmDestroyActive case 300) takes its
+//    "destroy finished" branch deterministically.
+void TMySucker::OnSuck()     {}
+void TMySucker::OnDestroy()  {}
+void TMySucker::OffDestroy() {}
+void TMySucker::Normal()     {}
+bool TMySucker::GetStatus()  { return false; }   // offline: vacuum sensor reads "no IC"
 
 // ---- TMyKitSuck bodies (only the called methods) ----------------------------
 void TMyKitSuck::ResetAll() {}                              // golden :289 -- reset SuckTask
@@ -215,6 +229,17 @@ int iCloseSiteModeFor2x8 = 0;
 int iArmTask               = 1;
 int iPickFromLoadStageTask = 1;
 bool bPickFromLoader       = false;     //golden ainarm2.h:54
+
+//==============================================================================
+//  (A2) [W6.2c] OUT-ARM ENGINE cursors owned by aoutarm2.cpp (not-yet-translated).
+//      init to 1 (golden InitOutArmTask/InitPlaceToAutoTask/InitialFix3CanFullTask).
+//      Defined here so aoutarm9045.cpp's DoOutArmPlaceToAuto_9045
+//      (`int &Task=iPlaceToAutoTask`) and DoOutArmAfterPlaceToAuto link.
+//      Golden aoutarm.h:49/15/51.
+//==============================================================================
+int iPlaceToAutoTask              = 1;
+int iDoOutArmAfterPlaceToAutoTask = 1;
+int iFix3CanFullTask              = 1;
 
 //==============================================================================
 //  (B) [W6.2b] per-variant close-site selector for 1x4 (golden ainarm9045_1x4_4.h)

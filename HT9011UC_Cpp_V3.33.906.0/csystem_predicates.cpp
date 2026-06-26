@@ -219,6 +219,19 @@ bool HasAnyICInMachine()                                                        
 bool InSHT1InLF() { return false; }
 bool InSHT2InLF() { return false; }
 //------------------------------------------------------------------------------
+//  InSHT1InRT / InSHT2InRT (golden csystem.cpp:458/542): the shuttle is in its
+//  right-transfer position.  The golden body reads MOT[MInShuttle*].Led[iInposLed]
+//  (the in-position LED) + the Offset-change-right encoder compare.  Offline
+//  there is no shuttle motion docked at the right station -> not in RT.
+//  OutSHT1InRT / OutSHT2InRT (golden csystem.cpp:699/701) DELEGATE verbatim to
+//  the InSHT*InRT predicates.  Added because the out-arm ENGINE
+//  (DoOutArmIonFanGiveWay case 1/5, aoutarm9045.cpp:1325/1361) consults them and
+//  they had no offline home.  AI(W6.2c-OUTARM) 20260626.
+bool InSHT1InRT() { return false; }
+bool InSHT2InRT() { return false; }
+bool OutSHT1InRT() { return InSHT1InRT(); }                                      // golden csystem.cpp:699
+bool OutSHT2InRT() { return InSHT2InRT(); }                                      // golden csystem.cpp:701
+//------------------------------------------------------------------------------
 //  CheckSafeDoorIsClosed (golden csystem.cpp:2599): offline (no PLC / no door
 //  sensor) the door is treated as CLOSED so the #ifndef SOFT_SIMULTE guard the
 //  leaves call is non-blocking.

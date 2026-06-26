@@ -42,8 +42,9 @@
 - ✅ **W6.1 CANARY 完成（策略證明）**：`asendic_Empty` 翻譯+Sim HAL 收斂(ctest 23/23、mojibake 0)。三縫(predicate 介面/FormsFacade/自有 cursor)端到端有效。剩餘 canary 葉(asendic_Auto_RT/Auto2/Loader_RT)可隨後批。
 - ✅ **W6.2 IN-ARM 基礎完成**：`ainarm_SearchPickPlate`+`ainarm_SearchPlacePlate` 翻譯；新 `aHotPlateSubstrate`(InArmSuck=TMyKitSuck/PickFromHPList/ainarm2 cursors+HP arrays，最小 scope 部分材料化原 W6 deferred KitSuck grid)；FormsFacade 擴 5 form；DoInArmPickFromHotPlate_9045 Sim HAL pump 過(cursor 守 documented set、fall-through 保留)；DoPlaceToHotPlate_9045 dispatcher gated#if0→W7 stub。ctest 25/25、mojibake 0。
 - ✅ **W6.2-CORE IN-ARM 引擎完成**：`ainarm9045.cpp`(9222 行,302 iInArmType 分派)+`.h` 忠實翻譯；3 核心 SM(AdditionalFunction/IonFanGiveWay/SCKARTLoadingCount) Sim HAL pump 過；DoInArm_9045/_SuckerMap 分派 ladder ACTIVE；21 `#if 0` gate 全平衡(25 variant arm→W6.2b、GetShuttleCol 表→W7、4 整體 SM→W7)；8 oracle 過(含 float→int 截斷)。ctest 26/26、mojibake 0。
-- ▶ **下一步：W6.2b = 25 in-arm site variants**(ainarm9045_<layout>.cpp 分派本體，pipeline 平行)；或 W6.3 catchtray/feed；或 W6.1 餘 canary。
-- **W6.2 IN-ARM**：基礎(2 幾何模組+substrate)+引擎核心(ainarm9045)已完成；剩 25 site variants(W6.2b) + 4 個 W7-gated 整體 SM(需 MOT/sensor/prod home)。
+- ✅ **W6.2-OUT 出料臂引擎完成**：`aoutarm9045.cpp`(golden 4753 行)+`.h`(in-arm 鏡像)；4 核心 SM(PlaceToAuto/AfterPlaceToAuto/AdditionalFunction/IonFanGiveWay) Sim HAL pump 過；DoOutArm_9045/DoPickFromShuttle_9045 分派 ladder ACTIVE；substrate 擴 OutArmSuck/OutArm2Suck/FRCarryKit/BRCarryKit；22 #if gate 全平衡；oracle 過(truncation/零除)。ctest 27/27、mojibake 0。
+- ▶ **下一步：W6.3 catchtray/feed**(acatchtray.cpp 9142 行)；或 W6.2b in/out site variants(25+26) pipeline；或 W6.4 index/tester。
+- **W6.2 IN/OUT-ARM**：in-arm(幾何 2 模組+引擎 ainarm9045)+out-arm(引擎 aoutarm9045)已完成；剩 25+26 site variants(W6.2b) + W7-gated 整體 SM(需 MOT/sensor/prod home)。
 - **W6.3 CATCHTRAY+FEED**：acatchtray DoCatchTray、asendic_Color/Loader…（注意 acatchtray 的 ainarm include 是 stale dead）。
 - **W6.4 INDEX/TESTER STAR**：atester result-decode anchor 先(fMain-free,SOFT_SIMULTE skip HAL)→DoTestHeadMotor→Front/Rear/32Site(Front↔Rear 互依不可拆)。iIndexTask@cContact 需先 stub。
 - **W6.5 SHUTTLE 生產 SM**：acarry Do_Auto_SHT1/2/3（最差耦合：79 fMain + VCL worker thread HThreadCtrlShuttle + aArmHeader 全圖）。
@@ -58,6 +59,9 @@
 | ainarm9045.cpp | 4 個整體 gated SM：`DoInArmPickFromLoadStage_9045`(中央取料,含 goto IN_ARM_LOADER+suck loop)、`DoInArmCheckShuttleFloating`、`CheckInShuttleSensor_Latch`、`DoInArmAutoCalSuckZ`（保 cursor+golden default，本體 #if 0）| W7 | 需 MOT[]/sensor/encoder/fProductionInfo home 才能端到端 pump |
 | ainarm9045.cpp | `GetShuttleCol` per-iInArmType `XPHSuckToSht_*` 查表分支（ep1Picker early-return 活、default iShtCol=0）| W7 | variant 表陣列未定義 |
 | ainarm9045 / aHotPlateSubstrate | `bInArmCheckDestroyACT`+4×`bPickFormHotplate*` 暫由 aHotPlateSubstrate.cpp 持有（避 ODR），所有權待還給 ainarm9045.cpp | W6.2b/整合時 | ainarm2/leaves 尚未 reconcile |
+| aoutarm9045.cpp | 26 個 `DoOutArm_9045_<layout>()` + `DoPickFromShuttle_9045_<layout>()` per-variant 分派本體（現 #if 0，分派 ladder 結構已活）| W6.2b | 各 site variant 在 aoutarm9045_<layout>.cpp（尚未翻），pipeline 平行翻 |
+| aoutarm9045.cpp | 20 個 W7-gated 硬體/cross-module 本體（MOT[].ReadPos encoder、OutArmSuck destroy SM、Rotate/AOI/FixAI predicate+action、fNote/fAutoTeach VCL、MOT[MMPlate]）保 cursor+stub | W7 | 需 MOT[]/sensor/encoder/VCL form home |
+| aoutarm9045.cpp | `EnableFix3UseCylinder`→false / `ReversionEmptyPoint`→no-op 暫由 aoutarm9045.cpp stub（cprod.h 有宣告但 cprod.cpp 本體在 #if0 W6 區）| W6（cprod ungate 時）| cprod.cpp 對應本體尚未 ungate；ungate 後移除這兩個 stub |
 | Public/ExternFunction | StringGrid_Insert_Row/Delete_Row、StatusBar_ItemText、ShowRecordTime | W7 | VCL TStringGrid/TStatusBar/TEdit |
 | Public/ExternFunction | DeleteDirectory | W3 | 需 SysUtils FindFirst/FindNext/TSearchRec shim（未在 vclcompat） |
 | Public/WinSocketErrorCode | LogClientSocketExceptionError | W5 | 耦合 VCL TClientSocket(Name/Address/Port)+MyDBIProcess |
