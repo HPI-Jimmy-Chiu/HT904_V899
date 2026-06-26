@@ -155,6 +155,10 @@ class TfContactShim
 public:
     bool fShow;                                 // golden cContact.h -- form visible? (offline false)
     bool Do_ROILearning();                      // golden -- RTC ROI learning (offline: done=true)
+    // -- W6.2b1x1 ADD: in-arm 1x1_1 place SM (DoInArmPlaceToShuttle_9045_1x1_1)
+    //    reads fContact->IsRun2DCheck() (golden cContact.h:627).  Offline: not
+    //    running a 2DID re-check -> false.
+    bool IsRun2DCheck();                        // golden cContact.h:627 -- offline false
     TfContactShim();
 };
 extern TfContactShim *fContact;                 // golden cContact.h:667 (PACKAGE TfContact* fContact)
@@ -226,6 +230,10 @@ class TfObserverShim
 {
 public:
     bool bTestIndexZ;                            // golden cObserver.h:544 (OEE)
+    // -- W6.2b1x1 ADD: in-arm 1x1_1 place/cycle SMs call these OEE recorders
+    //    (golden cObserver.h:515/516).  Offline: time bookkeeping no-ops.
+    void RecordInArmTime();                      // golden cObserver.h:515
+    void AddTimeData(int iRow, double Time);     // golden cObserver.h:516
     TfObserverShim();
 };
 extern TfObserverShim *fObserver;                // golden cObserver.h

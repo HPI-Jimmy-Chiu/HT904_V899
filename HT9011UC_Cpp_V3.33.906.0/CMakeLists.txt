@@ -397,6 +397,32 @@ add_library(ht9045_sm STATIC
     #     dispatch bodies + dense MOT[]/sensor/UI SMs are gated (#if 0) with
     #     active stubs; see the file-head gate documentation.
     ainarm9045.cpp
+    # --- W6.2b-canary (IN-ARM site variants): 3 per-site-config variant files
+    #     translated faithfully from the golden BCB6 tree ROOT (mirror name/path).
+    #       ainarm9045_1x1_1.cpp -- single-site 1x1_1 (THE buildable, live arm;
+    #                               defines DoInArm_9045_1x1_1 + _SuckerMap, called
+    #                               by the un-gated dispatch arm in ainarm9045.cpp).
+    #       ainarm9045_2x4_16.cpp + _shims -- 16-site variant; faithful translation
+    #                               but DEAD by the golden engine design (no
+    #                               e9045_2x4_16 enum, no dispatch arm; references a
+    #                               file-local NN-site map -- golden member absent by
+    #                               design).  Registered so it compiles/links; never
+    #                               dispatched.
+    #       ainarm9045_2x8_32.cpp -- 32-site variant; whole golden body GATED (needs
+    #                               Prod.fInArmSuckUse_TwoArm32Site, absent from
+    #                               golden cprod.h by design) + the golden engine
+    #                               routes e9045_2x8_32 -> 2x8_8 (DEAD).  Active
+    #                               offline stubs make the TU link; never dispatched.
+    ainarm9045_1x1_1.cpp
+    ainarm9045_2x4_16.cpp
+    ainarm9045_2x4_16_shims.cpp
+    ainarm9045_2x8_32.cpp
+    # --- W6.2b-canary (IN-ARM shared helpers): the two ainarm2.cpp leaves the
+    #     site-variant SMs call but that had no body yet -- SetInArmUseSuckToHas
+    #     NullIC (golden ainarm2.cpp:201) + InitInArmPickFromHotPlateTask (golden
+    #     :623), FAITHFUL pure-grid/cursor logic over the Sim HAL.  Also hosts the
+    #     single ACTIVE definition of bDestoryOnSht (cmydef.cpp's is gated #if 0).
+    ainarm2.cpp
     # --- W6.2c (OUT-ARM engine): the central place-to-Auto SM + iInArmType
     #     dispatch ladders (DoOutArm_9045 / DoPickFromShuttle_9045) + pure
     #     pitch/offset geometry + 4 pumpable task SMs (DoOutArmAdditionalFunction /

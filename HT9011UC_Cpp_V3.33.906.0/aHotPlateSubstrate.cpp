@@ -76,6 +76,10 @@ TMyKitSuck::TMyKitSuck()
 {
     iShtRow = 2;                 // golden :163 -- default shuttle-site rows
     iShtCol = 1;                 // golden :164 -- default shuttle-site cols
+    // W6.2b(2x4_16): pitch-step selectors the 2x4_16 SMs read (golden :167-170).
+    iXStep = 1;                  // default 1x step (loader pulls overwrite via cinitial)
+    iYStep = 1;
+    iPickKitStep = 0;
     for(int i=0;i<_MAX_SUCK_ROW_ITEM;i++)
         for(int j=0;j<_MAX_SUCK_COL_ITEM;j++)
         {
@@ -175,6 +179,22 @@ bool TMyKitSuck::PartAlreadyTest()                                              
 // "no IC present" -> conservative.
 bool TMyKitSuck::UseSiteHasIC()              { return false; }
 bool TMyKitSuck::UseSiteNoIC()               { return true;  }   // no IC => "no IC at use sites" true
+// W6.2b1x1: FAITHFUL golden MyKitSuck.cpp:273 -- "all use-sites carry an IC"
+// (true iff no NULL_IC over the iShtRow x iShtCol shuttle grid).
+bool TMyKitSuck::UseSiteFullIC()                                                //Ifor 20161215
+{
+    for(int i=0; i<iShtRow; i++)
+    {
+        for(int j=0; j<iShtCol; j++)
+        {
+            if(Item[i][j]==NULL_IC)
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
 bool TMyKitSuck::LeftSideNoIC(int)           { return true;  }
 bool TMyKitSuck::RightSideNoIC(int)          { return true;  }
 bool TMyKitSuck::ArmUpSideNoIC()             { return true;  }
@@ -223,6 +243,34 @@ void TMyKitSuck::ClearAll()
             Item[i][j]=NULL_IC;
 }
 void TMyKitSuck::SetAllToNullIC()      { ClearAll(); }       // golden :286
+
+// -- W6.2b(2x4_16) ADD: golden TMyKitSuck methods the 2x4_16 in-arm SMs call.
+//    Guarded so a parallel sibling variant that adds the same body does not
+//    produce a duplicate definition.
+#ifndef HT9045_KITSUCK_2x4_16_BODIES
+#define HT9045_KITSUCK_2x4_16_BODIES
+void TMyKitSuck::SetAll(int Type)                                              // golden MyKitSuck.cpp ::SetAll
+{
+    for(int i=0; i<iMaxRow; i++)
+        for(int j=0; j<iMaxCol; j++)
+            SetItemData(i, j, Type);
+}
+bool TMyKitSuck::All_HasIC()                                                   // golden MyKitSuck.cpp ::All_HasIC (UI bLed/pLed gate dropped offline)
+{
+    for(int i=0; i<iMaxRow; i++)
+        for(int j=0; j<iMaxCol; j++)
+            if(Item[i][j]==NULL_IC)
+                return false;
+    return true;
+}
+void TMyKitSuck::SetType1ToType2ByPickCol(int Type1, int Type2)               // golden-by-name (2x4_16 dead-by-design; faithful remap)
+{
+    for(int i=0; i<iPickRow; i++)
+        for(int j=0; j<iPickCol; j++)
+            if(Item[i][j]==Type1)
+                SetItemData(i, j, Type2);
+}
+#endif
 // -- W6.3 ADD: tray-arm-touched TMyKitSuck predicates (golden MyKitSuck.h) ------
 //    Offline: the tray-arm shuttle-side suck/destroy have no real vacuum line, so
 //    both report "finished" -> DoCatchTray's early-out guard (golden :6017-6018)
@@ -310,6 +358,7 @@ TMyProductionRecord::TMyProductionRecord() {}                       // golden ct
 void TMyProductionRecord::AddErrorRecord(AnsiString, bool, int, int, int, int, int) {}
 void TMyProductionRecord::AddHPRecord(int, int, int) {}
 void TMyProductionRecord::AddInArmHotplatePickRecord(int, int) {}   //Sam 20200716
+void TMyProductionRecord::AddTestRecord(int, int) {}               // W6.2b(2x4_16): golden dead method; offline no-op
 AnsiString TMyProductionRecord::GetInRotationAngRecord() { return ""; } //Sam 20221103
 
 //==============================================================================
@@ -354,6 +403,8 @@ bool uPlateInfo::GetHPFirstTeamToList(int *iP, TList *) { if(iP) *iP=0; return f
 bool uPlateInfo::DataForwardAndNextTeam() { return false; }
 bool uPlateInfo::SetPlateSuck(int, int, int, bool) { return false; }
 void uPlateInfo::SetArrPlateXY(int, int, int, int, int, int) {}
+void uPlateInfo::AddHPSuckGroup() {}                                        // W6.2b1x1: golden HTEditList.h:202 -- offline list no-op
+void uPlateInfo::UpdateHPSuckGroup(int, int, int, int, int) {}             // W6.2b1x1: golden HTEditList.h:204 -- offline list no-op
 void uPlateInfo::SaveFile(AnsiString) {}
 
 uPlateInfo  g_PickFromHPList;
@@ -495,3 +546,208 @@ void InArmSubSpeed() {}
 void InArmAddSpeed() {}
 void StopAllMotor() {}
 void MyDBIProcess(AnsiString, AnsiString) {}
+
+//==============================================================================
+//  (E) [W6.2b1x1] ainarm2.h engine shims the in-arm per-site VARIANT SMs call.
+//      Shared across every in-arm variant; defined ONCE here.  golden homes
+//      cited per symbol.  Cursor-init + small row-scan helpers are FAITHFUL
+//      translations; HAL/UI-bound bodies are conservative offline stubs whose
+//      terminal value keeps the variant SM cursor flowing (never hangs).
+//      AI(W6.2b-INARM-1x1_1) 20260626.
+//==============================================================================
+
+// -- data ---------------------------------------------------------------------
+TMyKitSuck  ptrInSHTBackup;              // golden MyKitSuck.h:380
+TMyKitSuck *ptrInSHT = &FLCarryKit;      // golden MyKitSuck.h:379 -- point at a LIVE grid so
+                                         //   GetShuttleState_1x1_1's ptrInSHT->ArmUpSideAllTypeIC() is non-null offline.
+TMyKitSuck  OutArmSuckBackup;            // golden MyKitSuck.h (SetInOutArmParameter_* target)
+int  iInXPToSht[X_PITCH_COUNT]                = {0};   // golden ainarm2.h:36
+int  iZPosToSht[MAX_ARM_Row][MAX_ARM_Col]     = {{0}}; // golden ainarm2.h:37
+bool bZFlgToSht[MAX_ARM_Row][MAX_ARM_Col]     = {{false}}; // golden ainarm2.h:38
+TQPF_Timer InArmReleaseDelayToHot;       // golden ainarm2.h:45
+TQPF_Timer InArmReleaseDelay;            // golden ainarm2.h:46
+TQPF_Timer MyInArmAtShuttleTimer;        // golden ainarm2.h:47
+TQPF_Timer hInArmYpitchHomeTimer;        // golden ainarm2.h:212 (offline: TQPF_Timer, see .h note)
+int  iBackInArmHotCount  = 0;            // golden ainarm2.h:76
+bool InArmXMoveSafe      = false;        // golden ainarm2.h:83
+bool bPlaceToShuttle2Step = false;       // golden ainarm2.h:56
+int  iInArmPlaceToHotPlateTask    = 1;   // golden ainarm2.h (cursor; InitInArmPlaceToHotPlateTask sets 1)
+int  iInArmPlaceToShuttleTask     = 1;   // golden ainarm2.h (cursor; InitInArmPlaceToShuttleTask sets 1)
+int  iInArmTryPickFromHotPlateTask = 1;  // golden ainarm2.h (cursor; InitInArmTryPickFromHotPlateTask sets 1)
+int  iBackupPlate = 0, iBackupPlateC = 0, iBackupPlateR = 0; // golden ainarm2.h (HP-check backup pos)
+
+// -- TMyKitSuck methods (golden MyKitSuck.cpp) --------------------------------
+// FAITHFUL: small HAL-free row scan (golden MyKitSuck.cpp:881).
+bool TMyKitSuck::ArmUpSideAllTypeIC(int IC_TYPE, int iOffset, int iCol)         //Steven 20220930
+{
+    for(int j=0; j<iCol; j++)
+    {
+        if(Item[0][j+iOffset]!=IC_TYPE)
+            return false;
+    }
+    return true;
+}
+// FAITHFUL topology setter (golden MyKitSuck.cpp:206).
+void TMyKitSuck::SetPickerCount(int _iPickRow, int _iPickCol, int _iShtRow, int _iShtCol, int _iPickStep, int _iKitStep, int _iShtStep)
+{
+    iPickRow    =_iPickRow;
+    iPickCol    =_iPickCol;
+    iShtRow     =_iShtRow;
+    iShtCol     =_iShtCol;
+    iShtCnt     =iShtRow*iShtCol;
+    iPickStep   =_iPickStep;                                                    //Pitch倍數, 13吸嘴就寫2, 14吸嘴就寫3
+    iPickKitStep=_iKitStep;
+    iShtKitStep =_iShtStep;
+}
+
+// -- functions ----------------------------------------------------------------
+// CopyInitSuck (golden MyKitSuck.cpp:1111): the golden body copies ~30 grid
+// members; the offline substrate TMyKitSuck carries the subset the in-arm SMs
+// actually read.  Conservative offline body: copy the present members so the
+// OutArmSuck<->OutArmSuckBackup round-trip in SetInOutArmParameter_1x1_1 is
+// data-faithful for those fields.
+void CopyInitSuck(TMyKitSuck *Source, TMyKitSuck *Target, int SourceR, int SourceC, int TargetR, int TargetC)
+{
+    if(Source==0 || Target==0) return;
+    Target->Item     [TargetR][TargetC] = Source->Item     [SourceR][SourceC];
+    Target->iWhichSite[TargetR][TargetC]= Source->iWhichSite[SourceR][SourceC];
+    Target->iBinData [TargetR][TargetC] = Source->iBinData [SourceR][SourceC];
+    Target->bPass    [TargetR][TargetC] = Source->bPass    [SourceR][SourceC];
+    Target->bNeedReTest[TargetR][TargetC]=Source->bNeedReTest[SourceR][SourceC];
+    Target->cDeviceInf[TargetR][TargetC]= Source->cDeviceInf[SourceR][SourceC];
+    Target->cSBin    [TargetR][TargetC] = Source->cSBin    [SourceR][SourceC];
+}
+
+// ResetInToShtFlag (golden ainarm2.cpp:124): zero the in->shuttle pitch/Z flags.
+void ResetInToShtFlag()
+{
+    for(int i=0;i<X_PITCH_COUNT;i++) iInXPToSht[i]=0;
+    for(int i=0;i<MAX_ARM_Row;i++)
+        for(int j=0;j<MAX_ARM_Col;j++){ iZPosToSht[i][j]=0; bZFlgToSht[i][j]=false; }
+}
+
+// cursor-init helpers (golden ainarm2.cpp) -- FAITHFUL.
+void InitInArmPickFromHotPlateTask340() { iInArmPickFromHotPlateTask=340; }     // golden :628
+void InitInArmPickFromHotPlateTask50()                                          // golden :633
+{
+    if(bPickFormHotplateRetry==true)                                            //Ifor 20160616
+        iInArmPickFromHotPlateTask=190;
+    else
+        iInArmPickFromHotPlateTask=50;
+}
+void InitInArmPlaceToShuttleTask()                                              // golden :647
+{
+    iInArmPlaceToShuttleTask=1;
+    if(TestIF_File.UseRotateForHT7000HPKit==false)                              //Sam 20250428
+        iInRotateFinish=2;                                                      //Ifor 20211220
+}
+void InitInArmPlaceToHotPlateTask()    { iInArmPlaceToHotPlateTask=1;   }       // golden :1539
+void InitInArmPlaceToHotPlateTask400() { iInArmPlaceToHotPlateTask=400; }       // golden :1544
+void InitInArmPlaceToHotPlateTask100() { iInArmPlaceToHotPlateTask=100; }       // golden :1549
+void InitInArmTryPickFromHotPlateTask(){ iInArmTryPickFromHotPlateTask=1; }     // golden :613
+
+// BackupPlacePos / RestorePlacePos (golden ainarm2.cpp:2185/:2192) -- FAITHFUL.
+void BackupPlacePos()
+{
+    iBackupPlate =iPlacePlate[0];
+    iBackupPlateC=iPlacePlateX[0];
+    iBackupPlateR=iPlacePlateY[0];
+}
+void RestorePlacePos()
+{
+    iPlacePlate[0] =iBackupPlate;
+    iPlacePlateX[0]=iBackupPlateC;
+    iPlacePlateY[0]=iBackupPlateR;
+}
+
+// speed-display nudgers (golden ainarm2.cpp:2934/:2939) -- FAITHFUL.
+void InArmAddSpeedDisplay() { iInArmSpeed1++; }                                 //KaiChen 20171225
+void InArmSubSpeedDisplay() { iInArmSpeed1--; }                                 //KaiChen 20171225
+
+// InitArmPickFromLoadStageTask (golden ainarm2.cpp:1016): the golden body resets
+// the central pick cursor + several Loader-search statics (HAL-bound).  Offline:
+// reset the cursor so the engine's DoInArmPickFromLoadStage_9045 SM restarts.
+void InitArmPickFromLoadStageTask() { iPickFromLoadStageTask=1; }
+
+// SetInArm_Unuse_SuckToNullICForHP (golden ainarm2.cpp:320): turns unused-site
+// nozzles into NULL_IC before HP place.  Offline conservative no-op (the Sim grid
+// is driven by the engine pick SM; nothing to reclassify offline).
+void SetInArm_Unuse_SuckToNullICForHP() {}
+
+// AdjustShuttleWhichKitOrder (golden ainarm2.cpp:849): re-orders which Shuttle/Kit
+// the in-arm targets next.  Offline no-op (single-site: order is invariant).
+void AdjustShuttleWhichKitOrder() {}
+
+// AdjustShtOrderWhenPlaceToSht (golden ainarm2.cpp:772): post-place shuttle-order
+// adjust.  Offline no-op (single-site).
+void AdjustShtOrderWhenPlaceToSht(int /*iMode*/) {}
+
+// SetInArmNeedDestory (golden ainarm2.cpp:3897): marks a nozzle as needing a
+// destroy (blow-off) before/after place.  Offline no-op (no real vacuum line;
+// TMySucker::Destroy() already reports "not finished" so the SM is consistent).
+void SetInArmNeedDestory(bool /*bPlace*/, int /*iShtRow*/, int /*iShtCol*/, int /*iRow*/, int /*iCol*/) {}
+
+// TransferInShuttleRatio (golden ainarm2.cpp:1972): in-shuttle software gear-ratio
+// X/Y transform.  Offline: identity (gear ratio applies a 1:1 mapping when the
+// ratio params are unset).  Pointers are caller-owned and non-null at the call site.
+void TransferInShuttleRatio(int /*iSht*/, int * /*iXPos*/, int * /*iYPos*/, int /*iRow*/, int /*iCol*/) {}
+
+// CheckInArmFloating (golden OmronLaser/LaserSensorInArm.h:30): laser float check.
+// Offline: no laser -> report "finished/ok" (true) so the place SM advances.
+bool CheckInArmFloating(bool /*bReset*/) { return true; }
+
+// SetShuttlefCanMoveL (golden ainarm2.cpp:3910): set per-shuttle can-move-left
+// interlock flag.  Offline: write the engine-visible MOT[] flag faithfully so the
+// in-arm/shuttle handshake is consistent.
+void SetShuttlefCanMoveL(int iShuttle, bool bCanMoveL, AnsiString /*sFun*/, AnsiString /*sTask*/)
+{
+    int mot = (iShuttle==0) ? MInShuttle1 : MInShuttle2;
+    MOT[mot].fCanMoveL = bCanMoveL;
+}
+
+// InitInOCRWaitTask / OCRMoveInArm2XYToWait (golden ainarm2.cpp:3950/:3955): OCR
+// tray-arm wait handshake.  Offline: no OCR -> the move "completes" immediately.
+void InitInOCRWaitTask() {}
+bool OCRMoveInArm2XYToWait() { return true; }
+
+// IsHotPlateCheckFinsih (golden ainarm2.cpp:2199): scans the HP grids vs a
+// site-mode count to decide whether the HP try-pick sweep is done.  The golden
+// body reads HotPlateForm / TestIF.iTestMode / MOT[MMPlate*] (HAL+form bound).
+// Offline conservative: report finished (true) so the try-pick sweep terminates
+// rather than looping over a HotPlate that is never populated offline.
+bool IsHotPlateCheckFinsih() { return true; }
+
+// CheckInArmSuckInitial (golden ainarm2.cpp:1207): integrates all suck-init errors
+// into one alarm; reads the vacuum sensors.  Offline: vacuum is idealized -> no
+// init error -> report ready (true) so DoInArm_9045_1x1_1 case 10 proceeds.
+bool CheckInArmSuckInitial() { return true; }
+
+// SetInArmUseSuckToHasTrySuckIC (golden ainarm2.cpp:261): mark in-use nozzles
+// HAS_TRY_SUCK_IC for the HotPlate try-pick.  Offline conservative: the single
+// 1-picker path (the only one this single-site variant drives) sets nozzle (0,0).
+void SetInArmUseSuckToHasTrySuckIC(int /*iSht*/, int /*iKit*/)
+{
+    InArmSuck.SetItemData(0, 0, HAS_TRY_SUCK_IC);                               //JerryYang 20251013 (offline subset of golden)
+}
+
+// DisableAutoSiteMapWhenCleanOut (golden ainarm2.cpp:2786): clears the auto-site-
+// map run flag when Loader has no IC during clean-out.  Offline no-op (auto site
+// map is not exercised offline).
+void DisableAutoSiteMapWhenCleanOut() {}
+
+// SetMotorSpeed (golden cinitial.cpp:5022): pushes the configured motor speed
+// table to the controllers.  Offline no-op (no real controllers).
+void SetMotorSpeed() {}
+
+// DoInArmAutoSiteMapping (declared csystem.h:200): auto-site-map step pump.
+// Offline: not running auto-site-map -> false (DoInArm_9045_1x1_1 falls through).
+bool DoInArmAutoSiteMapping() { return false; }
+
+// ZAxisNotDown (golden ainarm2.h:43): the "Z stays up" flag passed to
+// MoveInArmXYToWaitTrayArm.  Sibling of ZAxisDown (already defined above).
+const bool ZAxisNotDown = false;
+
+// CheckInArmDestroyICFail (golden csystem.cpp / declared csystem.h:88): checks
+// whether a blown-off (destroyed) IC is stuck.  Offline: no real vacuum -> no
+// destroy failure -> report ok (true) so the place SM proceeds.
+bool CheckInArmDestroyICFail() { return true; }

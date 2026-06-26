@@ -541,6 +541,45 @@ endif()
 add_test(NAME W6_2_InArmCore COMMAND test_w6_2_inarm_core)
 
 # ===========================================================================
+#  W6.2b-canary VERIFY -- the in-arm SITE-VARIANT dispatch (1x1_1 live arm)
+# ===========================================================================
+# --- test_w6_2b_inarm_variants: prove the variant DISPATCH over the Sim HAL ---
+#   The task-mandated W6.2b-canary *variant dispatch* verify TU.  Proves the
+#   in-arm ENGINE's two dispatch ladders (DoInArm_9045 / DoInArm_9045_SuckerMap)
+#   route e9045_1x1_1 / e9045_1x4_1_Ac to the translated 1x1_1 variant
+#   (ainarm9045_1x1_1.cpp), that the 1x1_1 master pick SM + SuckerMap builder
+#   PUMP/RUN over the Sim HAL, and that ONLY the 1x1_1 arm was un-gated (a still-
+#   gated iInArmType -- e9045_2x4_8 / e9045_2x8_32 -- hits the Program-Error else
+#   and leaves the master cursor UNCHANGED).  Oracles (hand-derived from the
+#   golden 1x1_1 source):
+#     [D1] e9045_1x1_1, iArmTask=1, no IC -> single-tick 1->10->50->75 fall-through
+#          (golden 1x1_1 :1770/:1861/:1871); cursor in documented set.
+#     [D2] e9045_1x4_1_Ac -> SAME DoInArm_9045_1x1_1() advance (golden :4563).
+#     [D3/D4] gated types -> Program-Error else, iArmTask UNCHANGED.
+#     [S1] SuckerMap default branch numeric oracle: seed bUseTestSocket[0][0][0]=
+#          true, iSiteMap[0][0]=7 -> Prod.fInArmSuck4x8[0][0][0]/bInSuckUse/iSiteMap
+#          written + GetShuttleCol(0,0)==0 (golden :1428-1433/:507-510).
+#     [S2/S3] dispatch routing + iSuckCol=1 column-shift bonus.
+#   RECONCILIATION: there is NO e9045_2x4_16 enum + the golden routes e9045_2x8_32
+#   -> 2x8_8, so ainarm9045_2x4_16.cpp / _2x8_32.cpp are DEAD (registered to
+#   compile, never dispatched); no routing oracle is derivable for them -- they
+#   serve as the "still-gated type -> Program-Error" witnesses instead.
+#   Same RESCAN link group as the W6.1/W6.2 canaries + core TUs.
+add_executable(test_w6_2b_inarm_variants
+    test_w6_2b_inarm_variants.cpp
+)
+
+target_link_libraries(test_w6_2b_inarm_variants PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w6_2b_inarm_variants PRIVATE ws2_32)
+endif()
+
+add_test(NAME W6_2b_InArmVariants COMMAND test_w6_2b_inarm_variants)
+
+# ===========================================================================
 #  W6.2c VERIFY -- the OUT-ARM ENGINE core SMs (aoutarm9045.cpp)
 # ===========================================================================
 # --- test_w6_2_outarm_core: pump the OUT-ARM central task SMs over Sim HAL ---

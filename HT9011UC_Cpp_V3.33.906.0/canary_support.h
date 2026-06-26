@@ -82,6 +82,9 @@ struct LAST_GENERAL_SET
     // LastSet.iShuttlePurgeCount (golden acarry.cpp:3693).  Added to this shared
     // minimal shim (golden field TYPE verbatim from LastSet.h:199):
     int  iShuttlePurgeCount;            // golden LastSet.h:199 -- In-Shuttle purge-fan threshold
+    // AI(W6.2b-2x4_16) 20260626: the in-arm place-to-shuttle SM increments the
+    // place-to-shuttle counter (golden DoPlaceToShuttle_9045_* :LastSet.lShuttleCount++).
+    long lShuttleCount;                 // golden LastSet.h:393 -- count place to shuttle
     // TODO(W6.x): the other ~450 LAST_GENERAL_SET fields land with the full
     //             translated LastSet.h.
 };

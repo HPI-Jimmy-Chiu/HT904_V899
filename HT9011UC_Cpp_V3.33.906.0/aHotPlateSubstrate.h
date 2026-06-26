@@ -109,6 +109,12 @@ public:
     bool       Error;           // golden :57   -- pick/place vacuum error flag
     int        OnDelayTime;     // golden :64   -- HP vacuum on-delay (centi-sec)
     AnsiString sName;           // golden :158  -- nozzle position label
+    // -- W6.2b-canary ADD: CheckInArmSuckICFallDownToHasNullIC (csystem.cpp,
+    //    golden csystem.cpp:1677) reads .SenUsing!="" to decide whether this
+    //    vacuum line has a sensor wired before drop-detecting.  golden
+    //    MyKitSuck.h:81 verbatim.  Offline-safe: plain data, default empty ->
+    //    the drop-detect loop skips every nozzle (no sensor configured).
+    AnsiString SenUsing;        // golden :81   -- the vacuum sensor name this nozzle uses ("" = none)
 
     bool Suck();                // golden :89   -- vacuum ON / destroy OFF (returns "suck finished")
     bool Destroy();             // golden :90   -- destroy(blow) ON (returns "destroy finished")  // W6.2b: ProcessSCKARTLoadingCount case 1
@@ -134,6 +140,15 @@ public:
     bool Enable;                // golden :55   -- vacuum line configured/installed
     int  OnAlarmTime;           // golden :63   -- vacuum-on alarm window (centi-sec)
     void Reset();               // golden :94   -- reset this nozzle's suck/destroy task
+
+    // -- W6.2b(2x4_16) ADD: the in-arm place-to-shuttle SM reads the per-nozzle
+    //    "needs destroy(blow-off)" flag (golden MyKitSuck.h:120/124, inline body).
+    //    Offline-safe: the flag is plain data, default-false; no HW touched.
+#ifndef HT9045_SUCKER_NEEDDESTROY_ADDED
+#define HT9045_SUCKER_NEEDDESTROY_ADDED
+    bool bNeedDestroy;          // golden MyKitSuck.h:120
+    bool GetNeedDestroyStatus() { return bNeedDestroy; }   // golden MyKitSuck.h:124
+#endif
 };
 
 // ---- TMyKitSuck (golden MyKitSuck.h:151) -- MINIMAL mirror ------------------
@@ -235,16 +250,44 @@ public:
     bool PartAlreadyTest();                                            // :320 (W6.4: DoTestY case 50)
     bool UseSiteHasIC();                                               // :340 (=W6.0 gated predicate leaf)
     bool UseSiteNoIC();                                                // :341
+    bool UseSiteFullIC();                                             // :339 (W6.2b1x1: FAITHFUL -- iShtRow/iShtCol scan)
     bool LeftSideNoIC(int MiddleValue);                                // :349
     bool RightSideNoIC(int MiddleValue);                               // :348
     bool ArmUpSideNoIC();                                              // :352
     bool ArmDownSideNoIC();                                            // :353
+    // -- W6.2b1x1 ADD: members the in-arm 1x1_1 variant SMs deref.  golden
+    //    MyKitSuck.h names verbatim.  ArmUpSideAllTypeIC (golden :334) is a small
+    //    HAL-free row scan -> FAITHFUL body.  SetPickerCount(7-arg, golden :250)
+    //    is a topology setter -> FAITHFUL body (writes the present scalar members;
+    //    iShtCnt/iPickKitStep added below because the golden body assigns them).
+    bool ArmUpSideAllTypeIC(int IC_TYPE, int iOffset, int iCol);       // :334 (Steven 20220930)
+    void SetPickerCount(int _iPickRow, int _iPickCol, int _iShtRow,
+                        int _iShtCol, int _iPickStep, int _iKitStep,
+                        int _iShtStep);                                // :250
+    int  iShtCnt;                // :165 (=iShtRow*iShtCol; SetPickerCount writes it).
+                                 //       iPickKitStep already declared below (W6.2b 2x4_16).
     void SetItemData(int iRow, int iCol, int data, int iTarget=-1);    // :283
     void CopyFromTray(int iSuckR, int iSuckC, int iSuckData, class TTrayMotor &Mot,
                       int TrayR, int TrayC, int iTrayData, int iTarget=-1,
                       bool bHP2Inarm=false);                            // :276
     void CopyToTray  (int iSuckR, int iSuckC, int iSuckData, class TTrayMotor &Mot,
                       int TrayR, int TrayC, int iTrayData, int iTarget=-1); // :277
+
+    // -- W6.2b(2x4_16) ADD: golden TMyKitSuck members the 2x4_16 in-arm SMs deref.
+    //    All are genuine golden MyKitSuck.h API (cited per line); guarded so a
+    //    parallel sibling variant editing this header does not double-declare.
+#ifndef HT9045_KITSUCK_2x4_16_ADDED
+#define HT9045_KITSUCK_2x4_16_ADDED
+    int  iXStep;                // golden MyKitSuck.h:169 (X pitch 要設幾格)
+    int  iYStep;                // golden MyKitSuck.h:170 (Y pitch 要設幾格)
+    int  iPickKitStep;          // golden MyKitSuck.h:167
+    void SetAll(int Type);      // golden MyKitSuck.h:274 / .cpp -- set every nozzle to Type
+    bool All_HasIC();           // golden MyKitSuck.h:307 / .cpp -- every used nozzle has IC
+    // golden has the type1->type2 remap; in golden it is referenced only by the
+    // 2x4_16 family and never defined (dead-by-design); we supply the obvious
+    // faithful body (remap Item==Type1 -> Type2 over the pick grid) offline-safe.
+    void SetType1ToType2ByPickCol(int Type1, int Type2); // golden-by-name (2x4_16-local)
+#endif
 };
 
 extern TMyKitSuck InArmSuck;     // golden MyKitSuck.h:357
@@ -292,6 +335,12 @@ public:
     void SetArrPlateXY(int iSuckRow, int iSuckCol, int _iP, int iPlateR,
                        int iPlateC, int _iSite=-1);
     void SaveFile(AnsiString sFileName);
+    // -- W6.2b1x1 ADD: HP-suck-group recorders the in-arm HP-place SM
+    //    (DoPlaceToHotPlate_9045_1x1_1) calls (golden HTEditList.h:202/204).
+    //    Offline: list bookkeeping no-ops (the placed-group record is not
+    //    consumed offline; the SM only needs the calls to be linkable/no-throw).
+    void AddHPSuckGroup();                                              // golden HTEditList.h:202
+    void UpdateHPSuckGroup(int iP, int iR, int iC, int iSht, int iKit); // golden HTEditList.h:204
 };
 
 extern uPlateInfo *PickFromHPList;   // golden HTEditList.h:294
@@ -349,9 +398,13 @@ extern strAUTOSITEMAP InArmSiteMapData;                                 //Steven
 //  (e) Rotate / Laser micro-shims  -- golden aRotateKIT.h + laser-distance list
 // ============================================================================
 //  tRotate.ActiveRotate -- the only member the place-swap leaf reads.
-struct tRotateShim                                                      // golden aRotateKIT.h tRotate
+struct tRotateShim                                                      // golden RotateKit/fRotate.h (TRotate tRotate)
 {
     bool ActiveRotate;
+    // -- W6.2b1x1 ADD: members the in-arm SuckerMap (DoInArm_9045_1x1_1_SuckerMap)
+    //    reads for rotator DUT-data routing.  golden RotateKit/fRotate.h:33/51.
+    int  RotateDutDate[4][4][8];                                        // golden :33 (0:In 1:Out 2:In RT 3:Out RT)
+    bool bRotateUseRTmode;                                              // golden :51 (jou 20231122)
 };
 extern tRotateShim tRotate;
 
@@ -491,5 +544,88 @@ public:
     bool IsSHT2DIDScanFinish(int SHT);                         // golden BarCode.h:942
 };
 extern TfBarCode_Shim *fBarCode;        //golden BarCode.h : TfBarCode *fBarCode
+
+// ============================================================================
+//  (E) [W6.2b1x1] ainarm2.h engine shims the per-site in-arm VARIANT SMs call.
+//      These symbols live in the not-yet-translated ainarm2.cpp (W7) and are
+//      SHARED across every in-arm variant; they are therefore defined ONCE here
+//      (single TU -> no ODR collision when sibling variant files are translated
+//      in the same parallel batch).  Each cites its golden home; every body is
+//      offline-safe.  Guards are belt-and-braces against a future direct ainarm2
+//      translation also declaring them.  AI(W6.2b-INARM-1x1_1) 20260626.
+// ============================================================================
+#ifndef HT9045_AINARM2_INARM_SHIMS
+#define HT9045_AINARM2_INARM_SHIMS
+
+// -- data (golden ainarm2.h) -------------------------------------------------
+extern TMyKitSuck *ptrInSHT;            // golden MyKitSuck.h:379 (Auto Clean Kit use; GetShuttleState_1x1_1 derefs)
+extern TMyKitSuck  ptrInSHTBackup;      // golden MyKitSuck.h:380
+extern TMyKitSuck  OutArmSuckBackup;    // golden MyKitSuck.h (SetInOutArmParameter_* CopyInitSuck target)
+extern int  iInXPToSht[X_PITCH_COUNT];  // golden ainarm2.h:36
+extern int  iZPosToSht[MAX_ARM_Row][MAX_ARM_Col];   // golden ainarm2.h:37
+extern bool bZFlgToSht[MAX_ARM_Row][MAX_ARM_Col];   // golden ainarm2.h:38
+extern TQPF_Timer InArmReleaseDelayToHot;           // golden ainarm2.h:45 (JerryYang 20160127)
+extern TQPF_Timer InArmReleaseDelay;                // golden ainarm2.h:46
+extern TQPF_Timer MyInArmAtShuttleTimer;            // golden ainarm2.h:47 (Steven 20151201)
+extern int  iBackInArmHotCount;         // golden ainarm2.h:76
+extern bool InArmXMoveSafe;             // golden ainarm2.h:83
+extern bool bPlaceToShuttle2Step;       // golden ainarm2.h:56 (Steven 20160721)
+// golden type is HTimer (cpublic.h fwd); offline we use TQPF_Timer (same Off()/
+// SetSecAndOn() surface the SM calls) to avoid a cross-include of atester_shims.h.
+extern TQPF_Timer hInArmYpitchHomeTimer; // golden ainarm2.h:212 (kevin 20180822 Ypitch)
+// per-site task cursors the variant SMs bind `int &Task=...` to (golden ainarm2.h)
+extern int  iInArmPlaceToHotPlateTask;  // golden ainarm2.h (DoPlaceToHotPlate_9045_* cursor)
+extern int  iInArmPlaceToShuttleTask;   // golden ainarm2.h (DoInArmPlaceToShuttle_9045_* cursor)
+extern int  iInArmTryPickFromHotPlateTask; // golden ainarm2.h (DoInArmTryPickFromHotPlate_* cursor)
+extern int  iInArmPickFromHotPlateTask;  // golden ainarm2.h (DoInArmPickFromHotPlate_* cursor; DEFINED in ainarm_SearchPickPlate.cpp)
+// HotPlate-check backup-position scalars (golden ainarm2.h; BackupPlacePos/RestorePlacePos)
+extern int  iBackupPlate, iBackupPlateC, iBackupPlateR;
+
+// -- functions (golden ainarm2.cpp) ------------------------------------------
+extern void CopyInitSuck(TMyKitSuck *Source, TMyKitSuck *Target,
+                         int SourceR, int SourceC, int TargetR, int TargetC); // golden MyKitSuck.cpp:1111
+extern void SetInArmNeedDestory(bool bPlace, int iShtRow, int iShtCol, int iRow, int iCol); // golden ainarm2.h:230
+extern void TransferInShuttleRatio(int iSht, int *iXPos, int *iYPos, int iRow, int iCol);   // golden ainarm2.h:159
+extern void ResetInToShtFlag();                                              // golden ainarm2.h:40
+extern void SetInArm_Unuse_SuckToNullICForHP();                              // golden ainarm2.h:153
+extern void AdjustShuttleWhichKitOrder();                                    // golden ainarm2.h:130
+extern bool CheckInArmFloating(bool bReset=false);                           // golden OmronLaser/LaserSensorInArm.h:30
+extern void SetShuttlefCanMoveL(int iShuttle, bool bCanMoveL, AnsiString sFun, AnsiString sTask=""); // golden ainarm2.h:231
+extern void AdjustShtOrderWhenPlaceToSht(int iMode);                         // golden ainarm2.h:132
+extern void InArmAddSpeedDisplay();                                          // golden ainarm2.h:206
+extern void InArmSubSpeedDisplay();                                          // golden ainarm2.h:207
+extern void InitInOCRWaitTask();                                             // golden ainarm2.h:232
+extern bool OCRMoveInArm2XYToWait();                                         // golden ainarm2.h:233
+extern bool IsHotPlateCheckFinsih();                                         // golden ainarm2.h:166
+extern void BackupPlacePos();                                               // golden ainarm2.h:164
+extern void RestorePlacePos();                                              // golden ainarm2.h:165
+extern void InitInArmPickFromHotPlateTask340();                             // golden ainarm2.cpp:628
+extern void InitInArmPickFromHotPlateTask50();                              // golden ainarm2.cpp:633
+extern void InitInArmPlaceToShuttleTask();                                  // golden ainarm2.cpp:647
+extern void InitInArmPlaceToHotPlateTask();                                 // golden ainarm2.cpp:1539
+extern void InitInArmPlaceToHotPlateTask400();                              // golden ainarm2.cpp:1544
+extern void InitInArmPlaceToHotPlateTask100();                              // golden ainarm2.cpp:1549
+extern void InitArmPickFromLoadStageTask();                                 // golden ainarm2.cpp:1016
+extern void InitInArmTryPickFromHotPlateTask();                             // golden ainarm2.cpp:613
+extern bool CheckInArmSuckInitial();                                        // golden ainarm2.cpp:1207
+extern void SetInArmUseSuckToHasTrySuckIC(int iSht, int iKit);              // golden ainarm2.cpp:261
+extern void DisableAutoSiteMapWhenCleanOut();                               // golden ainarm2.cpp:2786
+extern void SetMotorSpeed();                                                // golden cinitial.cpp:5022
+extern bool DoInArmAutoSiteMapping();                                       // golden (declared csystem.h:200)
+extern void SearchPlateToPlace();                                           // golden ainarm2.h:112 (DEFINED in ainarm_SearchPlacePlate.cpp)
+extern void InitInArmPickFromHotPlateTask();                                // golden ainarm2.h:115 (DEFINED in ainarm_SearchPickPlate.cpp)
+extern void SetInArmUseSuckToHasNullIC(int iSht, int iKit);                 // golden ainarm2.h:151 (DEFINED in ainarm9045.cpp engine)
+// in-arm phase flags the DoInArm_9045_1x1_1 master SM toggles (golden ainarm2.h
+// :51/:53; DEFINED in acatchtray.cpp this wave).  Declared here so the variant TU sees them.
+extern bool bPlaceToHotplate;                                               // golden ainarm2.h:51
+extern bool bPlaceShuttle;                                                  // golden ainarm2.h:53
+extern int  iInRotateFinish;                                               // golden (DEFINED in acatchtray.cpp)
+extern bool bHangTimePause;                                                // golden (also declared atester.h:43; DEFINED in ainarm9045.cpp)
+extern const bool ZAxisNotDown;                                             // golden ainarm2.h:43 (sibling of ZAxisDown)
+// CheckInArmDestroyICFail is declared in csystem.h:88; redeclared here so the
+// substrate TU can DEFINE the offline body (no built csystem.cpp definition).
+extern bool CheckInArmDestroyICFail();                                      // golden csystem.cpp (Steven 20111223)
+
+#endif // HT9045_AINARM2_INARM_SHIMS
 
 #endif // aHotPlateSubstrateH

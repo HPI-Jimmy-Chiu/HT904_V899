@@ -758,8 +758,15 @@ void SetShuttleToHasNullIC_9045(int iSht, int iKit)                             
 //==  call-arms are GATED (variants out of scope) so the live offline behavior
 //==  is the final else Program-Error path.
 //==============================================================================
-// golden :4391-4415 declares the 25 variant externs; not re-declared here since
-// every call to them is gated below.
+// golden :4391-4415 declares the 25 variant externs.  W6.2b-canary: only the
+// e9045_1x1_1 / e9045_1x4_1_Ac arm is un-gated this wave -> declare ONLY the two
+// now-live callees (defined in ainarm9045_1x1_1.cpp -- file-local in the golden,
+// consumed via this dispatch ladder, so NOT in ainarm9045_1x1_1.h).  golden :4391
+// `extern void DoInArm_9045_1x1_1();` + golden :4650 `extern void
+// DoInArm_9045_1x1_1_SuckerMap();`.  The remaining 23 externs are still inside
+// the #if 0 gate below, so they need no declaration.
+extern void DoInArm_9045_1x1_1();                                               //AI(W6.2b-canary) 20260626: golden :4391 -- now-live dispatch callee
+extern void DoInArm_9045_1x1_1_SuckerMap();                                     //AI(W6.2b-canary) 20260626: golden :4650 -- now-live SuckerMap callee
 
 void DoInArm_9045()                                                             //Steven 20240223 : 重新整理DoInArm_9045
 {
@@ -879,20 +886,25 @@ void DoInArm_9045()                                                             
     }
 
     // --- iInArmType dispatch ladder ---------------------------------------
-    // STRUCTURE kept ACTIVE.  The 25 per-variant callees
-    // (DoInArm_9045_<layout>()) are NOT translated this wave (W6.2b variants);
-    // their bodies live in ainarm9045_<layout>.cpp.  Gate every call-arm so the
-    // engine links; the final else Program-Error path is the live offline
-    // behavior (reachable, exercises ShowMyMessage sink via RecordProcess).
-#if 0 // TODO(W6.2b variants) -- golden :4535-4641 (25 per-layout DoInArm_9045_* externs)
-    if(USE_PICKER_COUNT==ep1Picker)              { DoInArm_9045_All_1Pick();  }
-    else if(iInArmType==e9045_1x1_1)             { DoInArm_9045_1x1_1();      }
+    // STRUCTURE kept ACTIVE.  W6.2b-canary UN-GATES ONLY the e9045_1x1_1 /
+    // e9045_1x4_1_Ac arm -- the SOLE per-site variant translated + buildable
+    // this wave (ainarm9045_1x1_1.cpp; golden :4536/:4563 both route here).
+    // The other 23 arms (DoInArm_9045_<layout>()) are NOT translated yet -> they
+    // stay GATED (#if 0) below so the engine still links; for any still-gated
+    // iInArmType the final else Program-Error path is the live offline behavior.
+    // NOTE (verified, not assumed): the golden ladder has NO e9045_2x4_16 enum
+    // and routes e9045_2x8_32 -> DoInArm_9045_2x8_8() (golden :4639-4641), so the
+    // ainarm9045_2x4_16.cpp / _2x8_32.cpp files are DEAD -- registered to compile,
+    // never dispatched (see CMakeLists ht9045_sm + each variant file head).
+    if(iInArmType==e9045_1x1_1 ||                                               //AI(W6.2b-canary) 20260626: un-gate ONLY the translated 1x1_1 arm
+       iInArmType==e9045_1x4_1_Ac)              { DoInArm_9045_1x1_1();      }  //golden :4536 (e9045_1x1_1) + :4563 (e9045_1x4_1_Ac both call DoInArm_9045_1x1_1)
+#if 0 // TODO(W6.2b variants) -- golden :4535-4641 (remaining 23 per-layout DoInArm_9045_* externs; un-gate as each variant lands)
+    else if(USE_PICKER_COUNT==ep1Picker)         { DoInArm_9045_All_1Pick();  }
     else if(iInArmType==e9045_1x2_2_13)          { DoInArm_9045_1x2_2();      }
     else if(iInArmType==e9045_1x2_2_14)          { DoInArm_9045_1x2_2_14();   }
     else if(iInArmType==e9045_1x2_4_Hot)         { DoInArm_9045_1x2_4_Hot();  }
     else if(iInArmType==e9045_1x3_2_14)          { DoInArm_9045_1x3_2_14();   }
     else if(iInArmType==e9045_1x3_4)             { DoInArm_9045_1x3_4();      }
-    else if(iInArmType==e9045_1x4_1_Ac)          { DoInArm_9045_1x1_1();      }
     else if(iInArmType==e9045_1x4_4_13)          { DoInArm_9045S_1x4_4();     }
     else if(iInArmType==e9045_1x4_2_14)          { DoInArm_9045_1x4_2();      }
     else if(iInArmType==e9045_1x4_4_Back)        { DoInArm_9045_1x4_4_Back(); }
@@ -912,8 +924,8 @@ void DoInArm_9045()                                                             
     else if(iInArmType==e9045_2x6_8)             { DoInArm_9045_2x6_8();      }
     else if(iInArmType==e9045_2x8_8)             { DoInArm_9045_2x8_8();      }
     else if(iInArmType==e9045_2x8_32)            { DoInArm_9045_2x8_8();      }
-    else
 #endif
+    else
     {
         Str.sprintf("iInArmType=%d", iInArmType);                               //Steven 20220620 : add log message
         ShowMyMessage("Program Error in DoInArm_9045()", Str);
@@ -954,15 +966,18 @@ void DoInArm_9045_SuckerMap()                                                   
     }
     (void)bSiteMapHotplateReady;
 
-    // The 25 per-variant *_SuckerMap() picker-map builders are NOT translated
-    // this wave -> gate the whole ladder; offline the cleared grids above are
-    // the live state (no picker map set).
-#if 0 // TODO(W6.2b variants) -- golden :4704-4830 (25 per-layout *_SuckerMap externs)
-    if(iInArmType==e9045_1x1_1 || iInArmType==e9045_1x4_1_Ac) { DoInArm_9045_1x1_1_SuckerMap(); }
+    // W6.2b-canary: UN-GATE ONLY the e9045_1x1_1 / e9045_1x4_1_Ac arm (the SOLE
+    // translated variant; golden :4705).  The remaining 23 *_SuckerMap() picker-
+    // map builders are NOT translated yet -> they stay GATED below; for any
+    // still-gated iInArmType the else Program-Error path is the live offline
+    // behavior and the cleared Prod grids above remain the live state.
+    if(iInArmType==e9045_1x1_1 ||                                               //AI(W6.2b-canary) 20260626: un-gate ONLY the translated 1x1_1 SuckerMap arm
+       iInArmType==e9045_1x4_1_Ac)              { DoInArm_9045_1x1_1_SuckerMap(); }  //golden :4705
+#if 0 // TODO(W6.2b variants) -- golden :4704-4830 (remaining 23 per-layout *_SuckerMap externs; un-gate as each variant lands)
     else if(iInArmType==e9045_1x2_2_13) { i1x2_4UseACEGPicker=0; DoInArm_9045_1x2_2_SuckerMap(); }
-    /* ... 23 further per-iInArmType *_SuckerMap dispatch arms ... */
-    else { Str.sprintf("iInArmType=%d", iInArmType); ShowMyMessage("Program Error in DoInArm_9045_SuckerMap()", Str); }
+    /* ... 22 further per-iInArmType *_SuckerMap dispatch arms ... */
 #endif
+    else { Str.sprintf("iInArmType=%d", iInArmType); ShowMyMessage("Program Error in DoInArm_9045_SuckerMap()", Str); }
 }
 
 //==============================================================================

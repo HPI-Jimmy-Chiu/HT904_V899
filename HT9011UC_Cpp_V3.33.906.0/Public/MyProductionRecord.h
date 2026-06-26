@@ -26,6 +26,10 @@ public:
                        AnsiString Name, AnsiString Time);    // Sam 20250211
     void AddHPRecord(int iPlate, int iR, int iC);
     void AddArmSiteRecord(int iArm, int iSite);              // Steven 20201204
+    // AI(W6.2b-2x4_16) 20260626: golden MyProductionRecord.h:19 declares this
+    // COMMENTED-OUT (`//void AddTestRecord(int iArm, int iSite);`); the dead
+    // 2x4_16 in-arm place-to-shuttle SM still calls it.  Offline no-op record.
+    void AddTestRecord(int iArm, int iSite);                // golden MyProductionRecord.h:19 (commented-out/dead)
     void AddTestResultRecord(int iBin, AnsiString SBin, AnsiString ErrorLog = "");
     void AddUnloadRecord(int iWhichAuto, int iNum, int iTrayRow, int iTrayCol,
                          int iXPos, int iYPos, AnsiString ascode,

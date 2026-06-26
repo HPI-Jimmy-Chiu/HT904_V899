@@ -151,6 +151,7 @@ public:
     void Reset(AnsiString Func);                              // [METHOD] golden main.h -- offline: no-op
     void BtnOneCycleClick(void *Sender);                      // [METHOD] golden main.h -- offline: no-op
     void BtnResetClick(void *Sender);                         // [METHOD] golden main.h -- offline: no-op
+    void BtnCleanOutClick(void *Sender);                      // [METHOD] golden main.h -- W6.2b(2x4_16): clean-out button; offline no-op
     void JSCC_ResetForShuttleLoseIC();                        // [METHOD] golden main.h -- offline: no-op (0-arg)
     void ResetRecordforPiggyBack(AnsiString S);               // [METHOD] golden main.h -- offline: no-op
     // -- W6.6 ADD: the per-tick sensor scan the HUB main loop calls -------------

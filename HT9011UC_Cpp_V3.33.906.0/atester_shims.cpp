@@ -142,6 +142,7 @@ bool DoBRTCAutoModelVerify(bool /*bInitial*/){ return true; }
 // ---- fContact (offline contact-mode form) ----------------------------------
 TfContactShim::TfContactShim() : fShow(false) {}
 bool TfContactShim::Do_ROILearning() { return true; }   // offline: ROI learning "done"
+bool TfContactShim::IsRun2DCheck()   { return false; }  // W6.2b1x1: offline -> not running 2DID re-check
 TfContactShim *fContact = new TfContactShim();
 
 // ---- ADAM_* EP DAQ (offline: no DAQ card) ----------------------------------
@@ -180,6 +181,8 @@ TfAutomationShim *fAutomation = new TfAutomationShim();
 
 // ---- fObserver (offline OEE observer) --------------------------------------
 TfObserverShim::TfObserverShim() : bTestIndexZ(false) {}
+void TfObserverShim::RecordInArmTime()                {}  // W6.2b1x1: OEE time bookkeeping no-op
+void TfObserverShim::AddTimeData(int /*iRow*/, double /*Time*/) {} // W6.2b1x1: OEE time bookkeeping no-op
 TfObserverShim *fObserver = new TfObserverShim();
 
 // ---- fiosetview (offline index-suck IO view) -------------------------------

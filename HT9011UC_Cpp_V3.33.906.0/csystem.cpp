@@ -670,3 +670,209 @@ void DoLoaderVibrateLoop()
 #if 0 // TODO(W7): loader vibration-motor loop (golden csystem.cpp) -- MOT[MLoader*] vibrate + timing
 #endif
 }
+
+// ===========================================================================
+//  CheckInArmSuckICFallDownToHasNullIC -- golden csystem.cpp:1677 (declared
+//  csystem.h:86).  W6.2b-canary: the in-arm site-variant SMs (ainarm9045_1x1_1
+//  / _2x4_16 / _2x8_32) call this drop-detect/recover predicate, so it must be
+//  defined to link.  FAITHFUL line-for-line translation -- names, formulas,
+//  branches and Chinese comments preserved verbatim.
+//
+//  Offline-safe over the Sim HAL: it walks the InArmSuck grid reading each
+//  nozzle's vacuum sensor (Suck[][].GetStatus(), sim=false=no IC), the Z-axis
+//  home LED (MOT[].Led[iHomeLed]) and IniConfig flags; only on a real drop
+//  (bHasErr && bAlarm) does it call ShowErrorMessage (canary_support: offline
+//  K_SKIP) and re-classify the grid -- all data over the substrate, no hardware.
+//  The #ifdef SOFT_SIMULTE injection block (BCB6 sim flag, NOT defined in this
+//  build) compiles out, exactly as in the BCB6 non-sim release.
+//  Steven 20110516 : 修改成整合式Alarm  //JerryYang 20200422 修正掉料可能檢查不出來的問題, 檢查到有掉料要重新再確認全部吸嘴
+// ===========================================================================
+bool CheckInArmSuckICFallDownToHasNullIC(bool bAlarm)                           //Steven 20110516 : 修改成整合式Alarm  //JerryYang 20200422 修正掉料可能檢查不出來的問題, 檢查到有掉料要重新再確認全部吸嘴
+{
+    AnsiString ErrPart="", sRetryLog="";;
+    int ret=0;
+    bool bHasErr=false;
+    bool bIsSuckICFallDown[MAX_ARM_Row][MAX_ARM_Col]={{false, false, false, false},
+                                                      {false, false, false, false}};
+
+    static int iSuckICFallDownCnt[MAX_ARM_Row][MAX_ARM_Col]={{0, 0, 0, 0},      //Sam 20221006 : In/Out Arm IC 掉落狀態多檢查幾次再報警
+                                                             {0, 0, 0, 0}};
+
+    if(LastSet.iRealDummy==REALLY)
+    {
+        if(IniConfig.bInOutArmPlaceSkipSuckDetect==true)                        //Steven 20171219 (Wei) : 修正[E35], 改成判斷Z軸是不是在Home點
+        {
+            for(int i=0; i<InArmSuck.iMaxRow; i++)
+            {
+                for(int j=0; j<InArmSuck.iMaxCol; j++)
+                {
+                    if(MOT[InArmZIndex[i][j]].Motor->Enable==true   &&
+                       MOT[InArmZIndex[i][j]].Led[iHomeLed]==true   &&
+                       InArmSuck.Suck[i][j].Enable                  &&
+                       InArmSuck.Suck[i][j].SenUsing!=""            &&
+                       InArmSuck.Item[i][j]!=HAS_NULL_IC            &&
+                       InArmSuck.Item[i][j]!=HAS_NULL_CLEAN_IC      &&          //JerryYang 20160217 AutoClean hang up問題
+                       InArmSuck.Item[i][j]!=NULL_IC)
+                    {
+                        if(InArmSuck.Suck[i][j].GetStatus()==false)
+                        {
+                            iSuckICFallDownCnt[i][j]++;
+                            if(IniConfig.bE68RecheckInOutArmICFallDown &&       //Sam 20221006 : In/Out Arm IC 掉落狀態多檢查幾次再報警
+                               iSuckICFallDownCnt[i][j]>IniConfig.iE68RecheckInOutArmICFallDown)
+                            {
+                                bHasErr=true;
+                            }
+                            else
+                            {
+                                bIsSuckICFallDown[i][j]=true;
+                                ErrPart+=InArmSuck.Suck[i][j].sName;
+                                bHasErr=true;
+                            }
+                        }
+                        else
+                        {
+                            if(IniConfig.bE68RecheckInOutArmICFallDown &&
+                               iSuckICFallDownCnt[i][j]>0)                      //Sam 20221006 : In/Out Arm IC 掉落狀態多檢查幾次再報警
+                            {
+                                sRetryLog.sprintf("iSuckICFallDownCnt[%d][%d]=%d", i, j, iSuckICFallDownCnt[i][j]);
+                                NewRecordProcess("", "InArm E68 retry record", sRetryLog);
+                            }
+                            iSuckICFallDownCnt[i][j]=0;
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            for(int i=0; i<InArmSuck.iMaxRow; i++)
+            {
+                for(int j=0; j<InArmSuck.iMaxCol; j++)
+                {
+                    if(InArmSuck.Suck[i][j].Enable                  &&
+                       InArmSuck.Suck[i][j].SenUsing!=""            &&
+                       InArmSuck.Item[i][j]!=HAS_NULL_IC            &&
+                       InArmSuck.Item[i][j]!=HAS_NULL_CLEAN_IC      &&          //JerryYang 20160217 AutoClean hang up問題
+                       InArmSuck.Item[i][j]!=NULL_IC)
+                    {
+                        #ifdef SOFT_SIMULTE
+                        if(fMain->chkInToShtDrop->Checked &&
+                           i==atoi(fMain->edHPY->Text.c_str()) &&
+                           j==atoi(fMain->edHPX->Text.c_str()))
+                        {
+                            bIsSuckICFallDown[i][j]=true;
+                            ErrPart+=InArmSuck.Suck[i][j].sName;
+                            bHasErr=true;
+                        }
+                        #endif
+                        if(InArmSuck.Suck[i][j].GetStatus()==false)
+                        {
+                            iSuckICFallDownCnt[i][j]++;
+                            if(IniConfig.bE68RecheckInOutArmICFallDown &&       //Sam 20221006 : In/Out Arm IC 掉落狀態多檢查幾次再報警
+                               iSuckICFallDownCnt[i][j]>IniConfig.iE68RecheckInOutArmICFallDown)
+                            {
+                                bHasErr=true;
+                            }
+                            else
+                            {
+                                bIsSuckICFallDown[i][j]=true;
+                                ErrPart+=InArmSuck.Suck[i][j].sName;
+                                bHasErr=true;
+                            }
+                        }
+                        else
+                        {
+                            if(IniConfig.bE68RecheckInOutArmICFallDown &&
+                               iSuckICFallDownCnt[i][j]>0)                      //Sam 20221006 : In/Out Arm IC 掉落狀態多檢查幾次再報警
+                            {
+                                sRetryLog.sprintf("iSuckICFallDownCnt[%d][%d]=%d", i, j, iSuckICFallDownCnt[i][j]);
+                                NewRecordProcess("", "InArm E68 retry record", sRetryLog);
+                            }
+                            iSuckICFallDownCnt[i][j]=0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if(bHasErr && bAlarm)
+    {
+        if(IniConfig.bE68RecheckInOutArmICFallDown)                             //Sam 20221006 : In/Out Arm IC 掉落狀態多檢查幾次再報警
+        {
+            ErrPart="";
+            for(int i=0; i<InArmSuck.iMaxRow; i++)
+            {
+                for(int j=0; j<InArmSuck.iMaxCol; j++)
+                {
+                    if(iSuckICFallDownCnt[i][j]>0)
+                    {
+                        iSuckICFallDownCnt[i][j]=0;
+                        bIsSuckICFallDown[i][j]=true;
+                        ErrPart+=InArmSuck.Suck[i][j].sName;
+                    }
+                }
+            }
+        }
+
+        if(IniConfig.bNewResetFunction==true && bResetInArm==true)
+        {
+            bResetInArm=false;
+            ret=K_SKIP;
+        }
+        else
+        {
+            if(fContact->IsRun2DCheck())                                        //JerryYang 20250220 : 2DID硬體順序檢查功能
+            {
+                ret=ShowErrorMessage("JAM0126", K_SKIP, MInArmX, false, ErrPart);                                       //kevin 20120418 //Steven 20091123 : Device Drop Error
+            }
+            else if(bRunAutoClean)                                              //kevin 20121020 add //Steven 20121015 : Auto Clean有Alarm要開後門
+            {
+                bAutoCleanCheckOpenDoor=true;
+                ret=ShowErrorMessage("JAM0128", K_SKIP, MInArmX, false, ErrPart);                                       //JerryYang 20160511 Auto Clean時要show出 clean pad 掉料異常
+            }
+            else
+            {
+                ret=ShowErrorMessage("JAM0126", K_SKIP, MInArmX, false, ErrPart);                                       //kevin 20120418 //Steven 20091123 : Device Drop Error
+            }
+        }
+
+        if(SoftStop)
+            fMain->Pause("CheckInArmSuckICFallDownToHasNullIC");
+
+        if(ret==K_SKIP)
+        {
+            bAutoSiteMapWaitTestResult=false;                                   //Ifor 20180115 (Steven) : add Site Mapping SKIP 需清除旗標
+            for(int i=0; i<InArmSuck.iMaxRow; i++)
+            {
+                for(int j=0; j<InArmSuck.iMaxCol; j++)
+                {
+                    if(bIsSuckICFallDown[i][j])
+                    {
+                        if(bAutoCleaning==true)                                 //JerryYang 20160217 AutoClean中掉Clean pad, skip後要設為HAS_NULL_CLEAN_IC
+                        {
+                            InArmSuck.SetItemData(i, j, HAS_NULL_CLEAN_IC);
+                        }
+                        else
+                        {
+                            if(CosFunction.bUseSCKART)                          //Steven 20161214 (wei) : For SCK ART
+                                fSCKART->iInputJamCnt++;
+                            InArmSuck.PordRec[i][j].AddErrorRecord("JAM0126");  //Steven 20161214 : Add Jam Record
+                            InArmSuck.SetItemData(i, j, HAS_NULL_IC);           //Isaac 20170706 (Steven) AutoClean HangUp fix
+                        }
+
+//                        InArmSuck.SetItemData(i, j, HAS_NULL_IC);             //Isaac 20170706 (Steven) AutoClean HangUp fix，往上移
+                        InArmSuck.Suck[i][j].Normal();                          //Steven 20101112    //Steven 20120612 : index掉料跟in Arm掉料同時發生會Hang Up
+                    }
+                }
+            }
+
+            if(bRunAutoSiteMapping==true)
+            {
+                DoAutoSiteMappingDropError();                                   //Ifor 20210524 add 避免補料時掉料導致Site Mapping Hang up
+                bPlaceToHotplate=false;
+            }
+        }
+    }
+    return bHasErr;
+}

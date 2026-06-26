@@ -68,6 +68,7 @@ void TfMain::AddShuttleMessage(int /*iSht*/, AnsiString /*S*/) {}
 void TfMain::Reset(AnsiString /*Func*/) {}
 void TfMain::BtnOneCycleClick(void * /*Sender*/) {}
 void TfMain::BtnResetClick(void * /*Sender*/) {}
+void TfMain::BtnCleanOutClick(void * /*Sender*/) {}   // W6.2b(2x4_16): offline clean-out no-op
 void TfMain::JSCC_ResetForShuttleLoseIC() {}
 void TfMain::ResetRecordforPiggyBack(AnsiString /*S*/) {}
 void TfMain::ProcessSensorScan() {}                            // W6.6: HUB main-loop per-tick sensor scan (offline no-op)
