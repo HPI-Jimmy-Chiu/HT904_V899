@@ -642,3 +642,34 @@ if(WIN32)
 endif()
 
 add_test(NAME W6_3_CatchTray COMMAND test_w6_3_catchtray)
+
+# --- test_w6_4_tester: pump the TESTER/INDEX (test-head) engine over Sim HAL ---
+#   The task-mandated W6.4 verify TU (mirror of the in/out/tray-arm core TUs).
+#   Proves atester.cpp (the TESTER/INDEX ENGINE, in ht9045_sm) LINKS + its ACTIVE
+#   core test-head task SMs PUMP over the Sim HAL with NO hardware, and that the
+#   geometry/numeric oracles match values hand-derived from the golden formula:
+#     [SM1] DoTestY()         iTestYTask 1 -> 50 (golden :4890) -> 100 FALLS
+#           THROUGH to 110 in one tick (golden :5180 no-break); cursor stays in
+#           the documented switch(Task) set under a 128-tick pump.
+#     [SM2] DoTestHeadMotor()  from case 4 (bC02InstallCCD==false) walks
+#           4 -> 9 -> 10 -> 15 over Sim HAL (offline Motor==NULL -> Gali Z/Y moves
+#           complete + ISNormal()==true); cursor stays in the documented set.
+#     [N3]  ArrayConvertSite(1,2)@_8Site2X4==6 / (1,1)@DualSite2x1==3 / (0,2)@DualSite==2.
+#     [N4]  GetRowCol@_8Site2X4 -> 2,4 ret4 / @SingleSite -> 1,1 ret0 / @QualSite2X2 -> 2,2 ret3.
+#     [N5]  GetIndexZSpeed INTEGER division: !slowdown -> GailSpeed; slowdown scale=30
+#           -> 50000*30/100==15000; scale=0 clamp 1 -> 500 (sim HTMotor* attached,
+#           then detached to restore the Motor==NULL offline knob).
+#   Same RESCAN link group as the W6.1/W6.2/W6.3 canaries + core TUs.
+add_executable(test_w6_4_tester
+    test_w6_4_tester.cpp
+)
+
+target_link_libraries(test_w6_4_tester PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w6_4_tester PRIVATE ws2_32)
+endif()
+
+add_test(NAME W6_4_Tester COMMAND test_w6_4_tester)

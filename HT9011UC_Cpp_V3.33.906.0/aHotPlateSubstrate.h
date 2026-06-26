@@ -198,10 +198,24 @@ public:
     bool IsShtSuckFinish();     // :337  (shuttle-side suck finished -- offline true)
     bool IsShtDestroyFinish();  // :338  (shuttle-side destroy finished -- offline true)
 
+    // -- W6.4 ADD: members the TESTER/INDEX ENGINE (atester.cpp) derefs ----------
+    //    golden MyKitSuck.h member names verbatim.  The result-decode consumer
+    //    (GetTesterResult / ProcessTestResult / CheckIndexArmInitState) walks the
+    //    shuttle-site result grid via iShtRow/iShtCol (iShtRow already above) and
+    //    stores decoded bin / barcode / sub-bin into iBinData / cDeviceInf / cSBin.
+    int  iShtCol;               // :164  (decode loop column bound)
+    int  iBinData [_MAX_SUCK_ROW_ITEM][_MAX_SUCK_COL_ITEM];  // :189  (decoded bin number)
+    AnsiString cDeviceInf[_MAX_SUCK_ROW_ITEM][_MAX_SUCK_COL_ITEM]; // :228 (per-site 2DID/barcode)
+    AnsiString cSBin     [_MAX_SUCK_ROW_ITEM][_MAX_SUCK_COL_ITEM]; // :230 (per-site software-bin label)
+    TMyKitSuck();               // ctor: home iShtRow/iShtCol + init grids offline-safe
+
     // methods the leaves call (golden signatures preserved) -------------------
     void ResetAll();                                                    // :289
     bool HasIC();                                                       // :310
     bool HasType(int);                                                  // :324
+    bool AlreadyTest();                                                 // :318 (W6.4: DoTestY case 50)
+    bool AlreadyTestNotIncludeErrorBin();                              // :319 (W6.4)
+    bool PartAlreadyTest();                                            // :320 (W6.4: DoTestY case 50)
     bool UseSiteHasIC();                                               // :340 (=W6.0 gated predicate leaf)
     bool UseSiteNoIC();                                                // :341
     bool LeftSideNoIC(int MiddleValue);                                // :349
@@ -226,6 +240,10 @@ extern TMyKitSuck FRCarryKit;    // golden MyKitSuck.h:359 (DoOutArmIonFanGiveWa
 extern TMyKitSuck BRCarryKit;    // golden MyKitSuck.h:361 (DoOutArmIonFanGiveWay BRCarryKit.HasIC())
 // -- W6.3 ADD: the TRAY-ARM KitSuck object the catchtray engine SMs read --------
 extern TMyKitSuck CatchTraySuck; // golden MyKitSuck.h:367 (TrayArm dual-suck grid; DoCatchTray/DoCatchFromLoader/...)
+// -- W6.4 ADD: the TESTER/INDEX KitSuck objects the tester engine SMs read -------
+extern TMyKitSuck TestSocket;    // golden MyKitSuck.h:368 (the test-result grid; decode/ProcessTestResult target)
+extern TMyKitSuck FTestSuck;     // golden MyKitSuck.h:363 (front test-head suck grid)
+extern TMyKitSuck BTestSuck;     // golden MyKitSuck.h:364 (rear  test-head suck grid)
 
 // ============================================================================
 //  (b) uPlateInfo (PickFromHPList)  -- golden HTEditList.h

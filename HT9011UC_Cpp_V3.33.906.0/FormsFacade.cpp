@@ -35,7 +35,10 @@ TfMain::TfMain()
     mtAuto2 = new TfMainTrayPanel();
     mtAuto3 = new TfMainTrayPanel();
     hanaART = new TfMainHanaART();
+    // -- W6.4 ADD --
+    lbCCDStatus = new TfMainTrayPanel();           // golden main.h (TLabel* lbCCDStatus)
 }
+void TfMain::LightOn() {}                                       // W6.4: CCD light sink (offline no-op)
 void TfMain::DebugOneCycleHotPlate(AnsiString /*sfunc*/) {}     // debug log sink (offline no-op)
 bool TfMain::Pause(AnsiString /*Func*/) { return false; }      // offline never pauses
 void TfMain::ShowTestHeadComp(bool /*bRefresh*/) {}

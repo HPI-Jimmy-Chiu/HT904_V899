@@ -886,14 +886,19 @@ void TMyMotor::Gali_MotHome_HighSpeed(AnsiString, int)       {}
 void TMyMotor::Gali_MotHomeFindZ(AnsiString)                 {}
 bool TMyMotor::Gali_SingalHome(bool)                         { return false; }
 bool TMyMotor::Gali_FindZPhase()                             { return false; }
-bool TMyMotor::Gali_Two_ZAxis_Move(int,int,AnsiString,bool,int) { return false; }
+// AI(W6.4-TESTER) 20260626: Motor==NULL offline fast-path -- no vendor backend
+// means there is no hardware to wait on, so the Galil-Z move reports COMPLETE
+// immediately (matches the W4 HAL design: offline ReadPos preserves Position,
+// ScanMotorStatus is a no-op).  Lets the test-head SM (DoTestHeadMotor) pump
+// over the Sim HAL; with a real HTMotor* attached the body is gated TODO(W6-Galil).
+bool TMyMotor::Gali_Two_ZAxis_Move(int,int,AnsiString,bool,int) { return (Motor==NULL); }
 void TMyMotor::Gali_JogP(int)          {}
 void TMyMotor::Gali_JogPSetup(int)     {}
 void TMyMotor::Gali_JogPAndCount(int, int) {}
 void TMyMotor::Gali_JogN(int)          {}
 void TMyMotor::Gali_JogNSetup(int)     {}
 void TMyMotor::Gali_JogNAndCount(int, int) {}
-bool TMyMotor::ISNormal()                 { return false; }
+bool TMyMotor::ISNormal()                 { return (Motor==NULL); }   // AI(W6.4-TESTER) 20260626: offline (no backend) -> axis treated normal/in-position
 bool TMyMotor::ISZ1Up_Z2Down()            { return false; }
 bool TMyMotor::ISZ1Down_Z2Up()            { return false; }
 bool TMyMotor::ISZ1Up_Z2DownNoWait()      { return false; }
@@ -903,7 +908,7 @@ bool TMyMotor::Gali_ReadEncoderInRandgeNoWait(long)      { return false; }
 bool TMyMotor::Gali_ReadEncoderOver(long)                { return false; }
 bool TMyMotor::Gali_ReadEncoderMaxRandge(long)           { return false; }
 bool TMyMotor::Gali_ReadEncoderInRandgeMinLimit(long)    { return false; }
-bool TMyMotor::GalilTwoY_Move(int,int,int,AnsiString)    { return false; }
+bool TMyMotor::GalilTwoY_Move(int,int,int,AnsiString)    { return (Motor==NULL); }   // AI(W6.4-TESTER) 20260626: offline (no backend) -> Y move reports complete
 bool TMyMotor::Gali_ReadEncoderBelowCheckHeight(long)    { return false; }
 bool TMyMotor::Gali_nnMode_Z1Z2_Down(int, bool)          { return false; }
 bool TMyMotor::Gali_nnMode_Z1Z2_Up(int, bool)            { return false; }

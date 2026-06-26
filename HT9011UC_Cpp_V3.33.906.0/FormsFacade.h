@@ -72,7 +72,7 @@ public:
 //  ->Color as an int (TColor is an int RGB code in the VCL).  TColor + the
 //  clWhite/clYellow constants live in vclcompat (vcl_compat.h).
 // ---------------------------------------------------------------------------
-struct TfMainTrayPanel { int Color; TfMainTrayPanel():Color(0){} };  // [DATA] golden main.h (TPanel* mtAutoN)
+struct TfMainTrayPanel { int Color; bool Visible; TfMainTrayPanel():Color(0),Visible(false){} };  // [DATA] golden main.h (TPanel* mtAutoN / TLabel* lbCCDStatus->Visible W6.4)
 
 // ---------------------------------------------------------------------------
 //  W6.3: TfMainHanaART -- fMain->hanaART (golden main.h, HANA ART helper).  The
@@ -102,6 +102,9 @@ public:
     TfMainTrayPanel *mtAuto2;                     // [DATA]   golden main.h (TPanel* mtAuto2)
     TfMainTrayPanel *mtAuto3;                     // [DATA]   golden main.h (TPanel* mtAuto3)
     TfMainHanaART   *hanaART;                     // [DATA]   golden main.h (HANA ART helper)
+    // -- W6.4 ADD: members the TESTER/INDEX ENGINE (atester.cpp) derefs ----------
+    void LightOn();                               // [METHOD] golden main.h -- offline: CCD light no-op (DoTestHeadMotor CCD path)
+    TfMainTrayPanel *lbCCDStatus;                 // [DATA]   golden main.h (TLabel* lbCCDStatus); reuse panel stub (->Visible via .Color)
     TfMain();
 };
 extern TfMain *fMain;

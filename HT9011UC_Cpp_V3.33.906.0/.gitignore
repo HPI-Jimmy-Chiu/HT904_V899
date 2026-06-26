@@ -1,4 +1,6 @@
 build/
+build_*/
+*.log
 *.o
 *.obj
 *.exe

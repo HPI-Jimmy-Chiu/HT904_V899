@@ -71,6 +71,12 @@ struct LAST_GENERAL_SET
     int  iSCKARTInputCT;                // golden LastSet.h:406 -- SCK ART input count
     int  iP57_InputCT;                  // golden LastSet.h:496 -- P57 Loader-count AutoCleanOut
     long SendCT[4];                     // golden LastSet.h:14  -- per-port send count
+    // AI(W6.4-TESTER) 20260626: the TESTER/INDEX engine (atester.cpp DoTestY case
+    // 60/260 + CheckTwoArmSiteMap/CheckIndexArmInitState) derefs the socket-purge
+    // count + the per-arm use-socket map.  Added to this shared minimal shim
+    // (golden field TYPES verbatim from LastSet.h; [2][MAX_SOCKET_ROW=4][MAX_SOCKET_COL=8]):
+    int  iD47SocketTestedCount;         // golden LastSet.h -- socket-purge tested count (D47)
+    bool bUseTestSocket[2][4][8];       // golden LastSet.h -- per-arm[0/1] site enable map
     // TODO(W6.x): the other ~450 LAST_GENERAL_SET fields land with the full
     //             translated LastSet.h.
 };

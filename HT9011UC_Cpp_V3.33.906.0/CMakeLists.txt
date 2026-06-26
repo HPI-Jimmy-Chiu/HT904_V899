@@ -421,6 +421,19 @@ add_library(ht9045_sm STATIC
     #     LoadCCD / AMR / SECS_EVENT+EventReport / Tray-Mapping-laser / AMR-feed /
     #     NewRecordProcess / BoolToStr / iCoverTrayIDTask / iReadCIDAction).
     acatchtray_shims.cpp
+    # --- W6.4 (TESTER/INDEX engine): the test-result-DECODE anchor (GetBinaryData /
+    #     GetOneByOneData fed by Test_GetTestResulSub/Test_GetTestResul) + its
+    #     consumers (Check_TTL_Status / CheckTestSocketIsError / ProcessTestResult)
+    #     + the central index SMs DoTestY / DoTestHeadMotor (entry faithful, deep
+    #     MOT[]/EP/torque/Front-Rear/32Site bodies gated) + pure site geometry
+    #     (ArrayConvertSite / GetRowCol / GetRTCSiteMap).  Pumps the same Sim HAL +
+    #     aHotPlateSubstrate (TestSocket/FTestSuck/BTestSuck/InArmSuck/FRCarryKit/
+    #     BRCarryKit + iTestYTask/iTestHeadMotorTask cursors).  See the file-head
+    #     gate documentation.
+    atester.cpp
+    # --- W6.4 TESTER/INDEX cross-module offline shims (atester_32Site /
+    #     atester_ProcessCount / aTester_Front / aTester_Rear / fContact / ADAM_*).
+    atester_shims.cpp
 )
 
 target_include_directories(ht9045_sm PUBLIC

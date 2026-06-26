@@ -38,6 +38,10 @@ TMyKitSuck FRCarryKit;
 TMyKitSuck BRCarryKit;
 // -- W6.3 ADD: TRAY-ARM KitSuck object (golden MyKitSuck.h:367) -----------------
 TMyKitSuck CatchTraySuck;
+// -- W6.4 ADD: TESTER/INDEX KitSuck objects (golden MyKitSuck.h:363/364/368) -----
+TMyKitSuck TestSocket;
+TMyKitSuck FTestSuck;
+TMyKitSuck BTestSuck;
 
 // ---- TMySucker bodies -------------------------------------------------------
 //  Offline: no real vacuum line.  Suck() never reports "finished" (the leaves
@@ -61,6 +65,26 @@ bool TMySucker::GetStatus()  { return false; }   // offline: vacuum sensor reads
 //    Enable/OnAlarmTime are plain data members (default-init below by the object).
 void TMySucker::Reset()      {}
 
+// ---- W6.4 ADD: TMyKitSuck ctor (homes the tester decode grid) ----------------
+//  Offline-safe init.  The golden TMyKitSuck has many more members; we only home
+//  the ones the translated engines actually read.  iShtRow/iShtCol default to a
+//  small 2-row x 1-col shuttle-site grid (any real load overwrites them via
+//  cinitial), so the decode loops run a deterministic (small, in-bounds) pass and
+//  the empty grid yields "no result yet" (-1).  iBinData/cDeviceInf/cSBin start
+//  cleared; Item/iWhichSite are int grids left to the loader.
+TMyKitSuck::TMyKitSuck()
+{
+    iShtRow = 2;                 // golden :163 -- default shuttle-site rows
+    iShtCol = 1;                 // golden :164 -- default shuttle-site cols
+    for(int i=0;i<_MAX_SUCK_ROW_ITEM;i++)
+        for(int j=0;j<_MAX_SUCK_COL_ITEM;j++)
+        {
+            iBinData[i][j]  = -1;     // -1 = no decoded bin yet
+            cDeviceInf[i][j]= "";
+            cSBin[i][j]     = "";
+        }
+}
+
 // ---- TMyKitSuck bodies (only the called methods) ----------------------------
 void TMyKitSuck::ResetAll() {}                              // golden :289 -- reset SuckTask
 
@@ -78,6 +102,68 @@ bool TMyKitSuck::HasType(int IC_TYPE)
         for(int j=0;j<_MAX_SUCK_COL_ITEM;j++)
             if(Item[i][j]==IC_TYPE) return true;
     return false;
+}
+
+// -- W6.4 ADD: tested-state predicates the test-cycle dispatcher (DoTestY case
+//    50) derefs.  Faithful golden bodies (MyKitSuck.cpp :1663/:1685/:1701) -- the
+//    AlreadyTest() side effect that clamps over-range bins to TEST_PASS+iTestBin
+//    Count is preserved verbatim.
+bool TMyKitSuck::AlreadyTest()                                                  // golden MyKitSuck.cpp:1663
+{
+    bool flag=false;                                                            //Steven 20180907 : 修正避免完全沒IC也回True
+    for(int i=0; i<iMaxRow; i++)
+    {
+        for(int j=0; j<iMaxCol; j++)
+        {
+            if(Item[i][j]>=TEST_PASS)                                           // && Item[i][j]<(TEST_PASS+iTestBinCount))//Steven 20200507 : 修正Test time out之後按SKIP,機台會hang up
+            {
+                flag=true;
+            }
+
+            if(Item[i][j]>(TEST_PASS+iTestBinCount-1) &&
+               Item[i][j]!=(TEST_PASS+iTestBinCount))                           //Steven 20121112 : RS232支援32Bin 14->iTestBinCount-1, 1016->TEST_PASS+iTestBinCount
+            {
+                Item[i][j]=TEST_PASS+iTestBinCount;
+            }
+        }
+    }
+    return flag;
+}
+bool TMyKitSuck::AlreadyTestNotIncludeErrorBin()                                //Steven 20200611 : for Murata, 2DID NG不測試  golden :1685
+{
+    bool flag=false;
+    for(int i=0; i<iMaxRow; i++)
+    {
+        for(int j=0; j<iMaxCol; j++)
+        {
+            if(Item[i][j]>=TEST_PASS && Item[i][j]<(TEST_PASS+iTestBinCount))
+            {
+                flag=true;
+            }
+        }
+    }
+    return flag;
+}
+bool TMyKitSuck::PartAlreadyTest()                                              // golden MyKitSuck.cpp:1701
+{
+    bool flag1=false, flag2=false;
+
+    for(int i=0; i<iMaxRow; i++)
+    {
+        for(int j=0; j<iMaxCol; j++)
+        {
+            if(Item[i][j]==HAS_IC)
+                flag1=true;
+
+            if(Item[i][j]>=TEST_PASS)
+                flag2=false;
+        }
+    }
+
+    if(flag1 && flag2)
+        return true;
+    else
+        return false;
 }
 
 // Carry-kit presence leaves: this is the W6.0-gated "KitSuck grid" predicate
