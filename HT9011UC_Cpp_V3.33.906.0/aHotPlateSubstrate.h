@@ -261,6 +261,11 @@ public:
     //    is a topology setter -> FAITHFUL body (writes the present scalar members;
     //    iShtCnt/iPickKitStep added below because the golden body assigns them).
     bool ArmUpSideAllTypeIC(int IC_TYPE, int iOffset, int iCol);       // :334 (Steven 20220930)
+    // -- W6.2c batch-2 ADD: twin of ArmUpSideAllTypeIC; golden MyKitSuck.h:335
+    //    (Steven 20220930).  FAITHFUL down-side (Item[1][..]) row scan.  First
+    //    ACTIVE consumer: GetShuttleState_2x2_4 / _2x2_4_14 (the gated 2x8_32
+    //    sibling also derefs it).  AI(W6.2c-INARM-batch2) 20260626.
+    bool ArmDownSideAllTypeIC(int IC_TYPE, int iOffset, int iCol);     // :335 (Steven 20220930)
     void SetPickerCount(int _iPickRow, int _iPickCol, int _iShtRow,
                         int _iShtCol, int _iPickStep, int _iKitStep,
                         int _iShtStep);                                // :250

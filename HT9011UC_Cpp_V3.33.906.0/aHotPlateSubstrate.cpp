@@ -591,6 +591,17 @@ bool TMyKitSuck::ArmUpSideAllTypeIC(int IC_TYPE, int iOffset, int iCol)         
     }
     return true;
 }
+// FAITHFUL: twin of ArmUpSideAllTypeIC, scans the down-side row Item[1][..]
+// (golden MyKitSuck.cpp:971, Steven 20220930).  AI(W6.2c-INARM-batch2) 20260626.
+bool TMyKitSuck::ArmDownSideAllTypeIC(int IC_TYPE, int iOffset, int iCol)       //Steven 20220930
+{
+    for(int j=0; j<iCol; j++)
+    {
+        if(Item[1][j+iOffset]!=IC_TYPE)
+            return false;
+    }
+    return true;
+}
 // FAITHFUL Item-grid side-scans (golden MyKitSuck.cpp:730/:768/:853/:943).
 // Used by the 1x2_4_Hot in-arm place-to-shuttle SM (DoInArmPlaceToShuttle).
 // Pure offline scan over the present Item grid -- no HAL.  Declared in

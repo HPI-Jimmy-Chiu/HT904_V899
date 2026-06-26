@@ -779,6 +779,20 @@ extern void DoInArm_9045_1x3_4();                                               
 extern void DoInArm_9045_1x3_4_SuckerMap();                                     //golden :4655
 extern void DoInArm_9045_1x3_2_14();                                            //golden :4396
 extern void DoInArm_9045_1x3_2_14_SuckerMap();                                  //golden :4654
+// W6.2c batch-2: 6 variants made live -- declare their now-live dispatch callees
+// (defined in ainarm9045_<v>.cpp).  AI(W6.2c-INARM-batch2) 20260626.
+extern void DoInArm_9045_1x4_2();                                               //golden :4397
+extern void DoInArm_9045_1x4_2_SuckerMap();                                     //golden :4657
+extern void DoInArm_9045_1x4_8_Hot();                                           //golden :4401
+extern void DoInArm_9045_1x4_8_Hot_SuckerMap();                                 //golden :4661
+extern void DoInArm_9045_2x1_2();                                              //golden :4402
+extern void DoInArm_9045_2x1_2_SuckerMap();                                     //golden :4662
+extern void DoInArm_9045_2x2_4();                                              //golden :4403
+extern void DoInArm_9045_2x2_4_SuckerMap();                                     //golden :4663
+extern void DoInArm_9045_2x2_4_12();                                            //golden :4404
+extern void DoInArm_9045_2x2_4_12_SuckerMap();                                  //golden :4664
+extern void DoInArm_9045_2x2_4_14();                                            //golden :4405
+extern void DoInArm_9045_2x2_4_14_SuckerMap();                                  //golden :4665
 
 void DoInArm_9045()                                                             //Steven 20240223 : 重新整理DoInArm_9045
 {
@@ -916,17 +930,18 @@ void DoInArm_9045()                                                             
     else if(iInArmType==e9045_1x2_4_Hot)         { DoInArm_9045_1x2_4_Hot();  }  //AI(W6.2c-INARM) 20260626: golden :4540
     else if(iInArmType==e9045_1x3_2_14)          { DoInArm_9045_1x3_2_14();   }  //AI(W6.2c-INARM) 20260626: golden :4541
     else if(iInArmType==e9045_1x3_4)             { DoInArm_9045_1x3_4();      }  //AI(W6.2c-INARM) 20260626: golden :4559
-#if 0 // TODO(W6.2b variants) -- golden :4535-4641 (remaining 17 per-layout DoInArm_9045_* arms; un-gate as each variant lands)
+    // --- W6.2c batch-2: 6 variant arms pulled out of the #if 0 gate (ACTIVE) ---
+    else if(iInArmType==e9045_1x4_2_14)          { DoInArm_9045_1x4_2();      }  //AI(W6.2c-INARM-batch2) 20260626: golden :4571
+    else if(iInArmType==e9045_1x4_8_Hot)         { DoInArm_9045_1x4_8_Hot();  }  //AI(W6.2c-INARM-batch2) 20260626: golden :4583
+    else if(iInArmType==e9045_2x1_2_13)          { DoInArm_9045_2x1_2();      }  //AI(W6.2c-INARM-batch2) 20260626: golden :4587
+    else if(iInArmType==e9045_2x2_4_12)          { DoInArm_9045_2x2_4_12();   }  //AI(W6.2c-INARM-batch2) 20260626: golden :4591
+    else if(iInArmType==e9045_2x2_4_13)          { DoInArm_9045_2x2_4();      }  //AI(W6.2c-INARM-batch2) 20260626: golden :4595
+    else if(iInArmType==e9045_2x2_4_14)          { DoInArm_9045_2x2_4_14();   }  //AI(W6.2c-INARM-batch2) 20260626: golden :4599
+#if 0 // TODO(W6.2b variants) -- golden :4535-4641 (remaining 11 per-layout DoInArm_9045_* arms; un-gate as each variant lands)
     else if(USE_PICKER_COUNT==ep1Picker)         { DoInArm_9045_All_1Pick();  }
     else if(iInArmType==e9045_1x4_4_13)          { DoInArm_9045S_1x4_4();     }
-    else if(iInArmType==e9045_1x4_2_14)          { DoInArm_9045_1x4_2();      }
     else if(iInArmType==e9045_1x4_4_Back)        { DoInArm_9045_1x4_4_Back(); }
     else if(iInArmType==e9045_1x4_4)             { DoInArm_9045_1x4_4();      }
-    else if(iInArmType==e9045_1x4_8_Hot)         { DoInArm_9045_1x4_8_Hot();  }
-    else if(iInArmType==e9045_2x1_2_13)          { DoInArm_9045_2x1_2();      }
-    else if(iInArmType==e9045_2x2_4_12)          { DoInArm_9045_2x2_4_12();   }
-    else if(iInArmType==e9045_2x2_4_13)          { DoInArm_9045_2x2_4();      }
-    else if(iInArmType==e9045_2x2_4_14)          { DoInArm_9045_2x2_4_14();   }
     else if(iInArmType==e9045_2x2_8_Hot)         { DoInArm_9045_2x2_8_Hot();  }
     else if(iInArmType==e9045_2x3_6_14)          { DoInArm_9045_2x3_6_14();   }
     else if(iInArmType==e9045_2x3_6)             { DoInArm_9045_2x3_6();      }
@@ -992,7 +1007,14 @@ void DoInArm_9045_SuckerMap()                                                   
     else if(iInArmType==e9045_1x2_4_Hot) { i1x2_4UseACEGPicker=0; DoInArm_9045_1x2_4_Hot_SuckerMap();}  //AI(W6.2c-INARM) 20260626: golden :4711
     else if(iInArmType==e9045_1x3_4)     { DoInArm_9045_1x3_4_SuckerMap();    }                          //AI(W6.2c-INARM) 20260626: golden :4724
     else if(iInArmType==e9045_1x3_2_14)  { DoInArm_9045_1x3_2_14_SuckerMap(); }                          //AI(W6.2c-INARM) 20260626: golden :4712
-#if 0 // TODO(W6.2b variants) -- golden :4704-4830 (remaining 17 per-layout *_SuckerMap arms; un-gate as each variant lands)
+    // --- W6.2c batch-2: 6 variant SuckerMap arms made ACTIVE (no picker-prefix; verified golden :4736-4767) ---
+    else if(iInArmType==e9045_1x4_2_14)  { DoInArm_9045_1x4_2_SuckerMap();    }                          //AI(W6.2c-INARM-batch2) 20260626: golden :4736
+    else if(iInArmType==e9045_1x4_8_Hot) { DoInArm_9045_1x4_8_Hot_SuckerMap();}                          //AI(W6.2c-INARM-batch2) 20260626: golden :4748
+    else if(iInArmType==e9045_2x1_2_13)  { DoInArm_9045_2x1_2_SuckerMap();    }                          //AI(W6.2c-INARM-batch2) 20260626: golden :4752
+    else if(iInArmType==e9045_2x2_4_12)  { DoInArm_9045_2x2_4_12_SuckerMap(); }                          //AI(W6.2c-INARM-batch2) 20260626: golden :4756
+    else if(iInArmType==e9045_2x2_4_13)  { DoInArm_9045_2x2_4_SuckerMap();    }                          //AI(W6.2c-INARM-batch2) 20260626: golden :4760
+    else if(iInArmType==e9045_2x2_4_14)  { DoInArm_9045_2x2_4_14_SuckerMap(); }                          //AI(W6.2c-INARM-batch2) 20260626: golden :4764
+#if 0 // TODO(W6.2b variants) -- golden :4704-4830 (remaining 11 per-layout *_SuckerMap arms; un-gate as each variant lands)
     /* ... 17 further per-iInArmType *_SuckerMap dispatch arms ... */
 #endif
     else { Str.sprintf("iInArmType=%d", iInArmType); ShowMyMessage("Program Error in DoInArm_9045_SuckerMap()", Str); }

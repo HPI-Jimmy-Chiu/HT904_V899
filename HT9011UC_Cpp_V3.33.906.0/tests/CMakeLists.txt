@@ -611,6 +611,38 @@ endif()
 
 add_test(NAME W6_2c_InArmVariants COMMAND test_w6_2c_inarm_variants)
 
+# --- test_w6_2c_inarm_variants_batch2: prove the 6-variant batch-2 over Sim HAL
+#   Independently proves the W6.2c batch-2 of 6 in-arm site variants
+#   (1x4_2, 1x4_8_Hot, 2x2_4_12, 2x1_2, 2x2_4, 2x2_4_14).  Proves:
+#     [D]  the engine ladders (DoInArm_9045 / DoInArm_9045_SuckerMap) route each
+#          of the 6 active iInArmType values to its OWN DoInArm_9045_<v>() /
+#          _SuckerMap() arm (cursor advances), while a still-gated type
+#          (e9045_2x4_8) hits the Program-Error else (cursor UNCHANGED); all 6
+#          *_SuckerMap symbols defined+callable.
+#     [O1] pure-const picker->shuttle permutation maps XPHSuckToSht_2x2_12[8] /
+#          XPHSuckToSht_2x2_13[3][8] / XPHSuckToSht_2x2_14[3][8] carry the exact
+#          golden values (identity / {0,2,1,3,..} / {0,2,3,1,..}).
+#     [O2] DoInArm_9045_2x1_2_SuckerMap via the engine ladder: engine grid-clear
+#          (bInSuckUse=false, iSiteMap=-1) + per-variant fill compose -- only
+#          cols 0,2 of row 0 used, iSiteMap routed from TestIF.
+#     [O3a] DoInArm_9045_2x1_2() advances the SHARED iArmTask global (int &Task).
+#     [O3b] GetShuttleState_2x2_4 pick branch == 0/1/2 (golden :2965), driving
+#           the substrate ArmUpSideAllTypeIC / ArmDownSideAllTypeIC twins.
+#   Same RESCAN link group as the W6.1/W6.2/W6.2b/W6.2c-batch1 canaries + cores.
+add_executable(test_w6_2c_inarm_variants_batch2
+    test_w6_2c_inarm_variants_batch2.cpp
+)
+
+target_link_libraries(test_w6_2c_inarm_variants_batch2 PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w6_2c_inarm_variants_batch2 PRIVATE ws2_32)
+endif()
+
+add_test(NAME W6_2c_InArmVariantsBatch2 COMMAND test_w6_2c_inarm_variants_batch2)
+
 # ===========================================================================
 #  W6.2c VERIFY -- the OUT-ARM ENGINE core SMs (aoutarm9045.cpp)
 # ===========================================================================
