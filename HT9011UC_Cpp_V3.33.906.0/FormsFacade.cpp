@@ -27,6 +27,13 @@ bool TfAGV::Use_AMR() { return false; }     // offline: no AMR present -> false
 // --- W6.3 ADD: TfMainHanaART --------------------------------------------------
 bool TfMainHanaART::IsHanaArtAvailable() { return false; }     // offline: no HANA link
 void TfMainHanaART::AddNewTrayHead(int /*iAuto*/) {}           // offline: no-op
+// --- W6.5 ADD: TfMainInplace ----------------------------------------------
+TfMainInplace::TfMainInplace()
+{
+    iNo9ShtErrICCt[0]=0; iNo9ShtErrICCt[1]=0;
+    for(int i=0;i<2;i++) for(int j=0;j<8;j++) bNo9ShtErrNo[i][j]=false;
+}
+bool TfMainInplace::InArmPlacementEnable() { return false; }   // offline: No9 placement disabled
 TfMain::TfMain()
 {
     slAutoSiteMapLog = new TfMainSiteMapLog();      // golden main.h:1486 (TMyStringList*)
@@ -37,6 +44,17 @@ TfMain::TfMain()
     hanaART = new TfMainHanaART();
     // -- W6.4 ADD --
     lbCCDStatus = new TfMainTrayPanel();           // golden main.h (TLabel* lbCCDStatus)
+    // -- W6.5 ADD: shuttle-engine sub-objects --
+    cbShowShuttleSensor    = new TfMainCheckBox();
+    cbTestOutShuttleSensor = new TfMainCheckBox();
+    cbShowInShuttleSensor  = new TfMainCheckBox();
+    htShullte0 = new TfMainGrid();
+    htShullte1 = new TfMainGrid();
+    meShuttle1 = new TfMainMemo();
+    meShuttle2 = new TfMainMemo();
+    cInplace   = new TfMainInplace();
+    pgMain     = new TfMainPageControl();          // ActivePageIndex==0 offline
+    emp7TabSheet21 = 0;                            // ==pgMain->ActivePageIndex offline
 }
 void TfMain::LightOn() {}                                       // W6.4: CCD light sink (offline no-op)
 void TfMain::DebugOneCycleHotPlate(AnsiString /*sfunc*/) {}     // debug log sink (offline no-op)
@@ -45,6 +63,13 @@ void TfMain::ShowTestHeadComp(bool /*bRefresh*/) {}
 void TfMain::ReStartAutoSiteMapping(bool /*bStart*/) {}
 void TfMain::CleanOut(AnsiString /*Func*/) {}                  // W6.3: offline clean-out no-op
 void TfMain::DoStateRecord(int /*i*/, bool /*b*/) {}           // W6.3: offline state-record sink
+// -- W6.5 ADD: shuttle-engine method sinks (all offline no-op) --
+void TfMain::AddShuttleMessage(int /*iSht*/, AnsiString /*S*/) {}
+void TfMain::Reset(AnsiString /*Func*/) {}
+void TfMain::BtnOneCycleClick(void * /*Sender*/) {}
+void TfMain::BtnResetClick(void * /*Sender*/) {}
+void TfMain::JSCC_ResetForShuttleLoseIC() {}
+void TfMain::ResetRecordforPiggyBack(AnsiString /*S*/) {}
 TfMain *fMain = new TfMain();
 
 // --- W6.2: TfSortCT --------------------------------------------------------
@@ -79,4 +104,5 @@ TfOffSet *fOffSet = new TfOffSet();
 // --- W6.2: TfSCKART --------------------------------------------------------
 TfSCKART::TfSCKART() : iInputJamCnt(0), iFTRTCount(0), iInputCount(0) {}
 int  TfSCKART::CheckLoadingCount() { return 0; }              // W7: offline -> 0 (no ART loading mismatch)
+void TfSCKART::AddOutputJamCnt(int /*row*/, int /*col*/, int /*ret*/, int /*iBinOnCarryKit*/) {}  // W6.5: offline no-op
 TfSCKART *fSCKART = new TfSCKART();

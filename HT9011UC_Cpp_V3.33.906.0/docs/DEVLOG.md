@@ -127,7 +127,19 @@
 - 驗證（獨立）：clean build、**ctest 21/21**（test_cpublic_foundation 87 斷言）。
 - **⚠ 發現中文註解亂碼**：cprod.cpp(283)/cpublic.cpp(62) U+FFFD（Read 工具 cp950→UTF-8 解錯所致；只在註解、編譯OK、golden 有原文）。見 KNOWLEDGE go-forward 規則。
 
+## 2026-06-26 — W6.5 SHUTTLE/CARRY（InShuttle/OutShuttle 飛梭）引擎完成
+- `acarry.cpp`(golden 8521 行) + `.h` 忠實翻譯，名稱/簽章/預設參數全保留。**CASE 覆蓋率 136/136 ACTIVE（100%）、acarry.cpp 內 0 個 `#if 0` gate**——本波的低外部耦合(0 tester-comm、0 cContact、fMain 走 FormsFacade)讓 shuttle 移動 case 本體全部 ACTIVE 翻譯，非 stub（如 prompt 所預期，類 acatchtray 全尺寸）。
+- **核心 shuttle task SM 保持 ACTIVE 並 Sim HAL pump 過**：`Do_Auto_SHT1()`(cursor AutoSHT1Task) 從 entry 一 tick **1→10**(case 1 final `Task=10;`，golden:3342)；64-tick pump 後 cursor 落在 120(左移主線 100→…→120) 全程留在記錄的 switch(Task) universe {1,10,100,105,110,115,120,124,125,130,135,140,200,201,202,203,210,211,212,220,225,230,235,250,251,252,300,400,500,2300,2400,2500,2600,3000,3100,3101,3102,5000,5100}、無 crash、無逃逸。`Do_Auto_SHT2`(對稱 BRCarryKit/BLCarryKit/MInShuttle2) + 9046AU `Do_Auto_SHT3` 亦 ACTIVE 並連結。case 200→201 fall-through、所有 goto/fall-through verbatim。
+- **5 個 oracle 全過(12 斷言)**：(O1) cursor 1→10；(O3) `GetShuttle1Pitch_9045` double→int **截斷**：w=12000→8000、w=18000→14000、i1180=14003/w=15000→r=11001.5→(int)**11001 不進位成 11002**；(O4) `CheckShuttleOutputHasICError` 零偵測位防護(Tech.*DetectPos=0 離線)→switch 前回 false、即使 bShuttleHasIC 標殘料也不誤報；(O5) `CheckShuttleSensorBroken_1(_,false)` 左向 pass：static iCheckCount=0 跳過 bRight 聚合臂→回 false。
+- **uShuttleThread**：SM 邏輯 verbatim 翻；Win32 thread wrapper(HThreadCtrlShuttle::ThreadProcess + Initial/Start/EndShuttleThread)做成薄離線 driver（MySleepEx/MySleep 離線 no-op、HANDLE/DWORD token 走 acarry_shims）。
+- 新增 `acarry_shims.{h,cpp}`（透明命名離線 cross-module shim，本體全 ACTIVE 無 `#if 0`）：Tech(6 偵測位 int=0)、fLtcSensor(latch count=0)、OutSht3Kit、ATC_InterfaceForm/ATC_Data(無 flood-gate)、CheckShtFloating 系列(false)、InShtInLF/RT(int) 路由真 predicate、SortSHT*/Check32site*(false)、DoStepShuttleCheck/EmptyIC/MustHasIC/Prominent、MoveOutArmXY_ToShuttleAlarmArea/SendHTTPRequest/MoveSortArmToAutoSafe。**修譯期連結缺口**(prompt 翻譯階段遺留)：IsNNMode/SetMotorScaleSpeed 改 forward-decl(真本體在 sibling shim)、MoveOutArmToAutoSafe/MySleep/MySleepEx/SystemNG/iCloseSiteStep_2x8/bCarryControlOutarm1/2/bPickShuttleError/OutShuttleLog/LogSoftwareOffTime 改離線 shim 定義(golden 初值 false/0/no-op)。
+- substrate 擴：TMyKitSuck 加 iWhichAuto/bPass/bNeedReTest grid + TQPF_Timer TSoakTime + **忠實 golden 本體** SetAllRealIC2InterfaceBin/CountRealIC/HasDefineIC(僅讀 iMaxRow/iMaxCol/Item，離線 global grid 0 自然 no-op)；TfBarCode_Shim 加 17 個 in/out-shuttle 2D-barcode + float-check method(離線 false/no-op、IsSHT2DIDScanFinish 回 true 不卡死)；LastSet 加 iShuttlePurgeCount。**ODR 解決**：IsFLCarrKitAllHasIC/IsBLCarrKitAllHasIC 由 acarry.cpp 真本體(golden:175/197)持有，aHotPlateSubstrate.cpp 的 W6.2 placeholder stub 改 `#if 0` 移除。
+- **mojibake=0**(全 9 檔)；acarry.cpp 真 line-leading #if/#endif 15/15 平衡、**SOFT_SIMULTE 11/11 directive 與 golden verbatim 全等**(本波低耦合無 gate 大 SM，故 SOFT_SIMULTE 全保=golden，異於 arm/tester 引擎的 gating 必然減損)。
+- 新 test `tests/test_w6_5_shuttle.cpp`(W6_5_Shuttle)。**驗證(fresh from-scratch dir build_w6_5_clean)：clean build、ctest 32/32**(原 30/30 committed baseline 全綠無回歸 + 工作樹 W6_4_TesterAnchor + 本波 W6_5_Shuttle)。
+
 ### 🔖 RESUME（最新）
+- 已完成：…W3、W4 馬達/IO HAL、KeyPro+TComm、cpublic 基礎、**W6.0→W6.5 全 root 引擎(in-arm/out-arm/tray-arm/tester/shuttle)over Sim HAL**。全 green。
+- **W6.5 SHUTTLE 完成**：acarry.cpp(8521 行)136/136 case ACTIVE、0 `#if 0`(本波最高覆蓋)；Do_Auto_SHT1 1→10 pump 過、5 oracle 過(truncation 11001/zero-guard/sensor-broken left-pass)；acarry_shims 修譯期連結缺口；ctest 32/32。
 - 已完成：…W3、W4 馬達/IO HAL、KeyPro+TComm、**cpublic 基礎 ungate(stub 移除)**。HAL Sim 層完整。全 green、已 commit（branch 19 commits）。
 - 中文註解亂碼：**確認 100% 在 `//` 註解內、無 string literal 受損**（非功能性缺陷；golden 有原文）→ 降為低優先 cosmetic TODO（ROADMAP DEFERRED），go-forward 規則已記。
 - **W6 recon 完成**（見 ROADMAP「W6 計畫」）：單根 fan-out、csystem.h predicate 介面、iXXXTask 各 arm 自有、main.h/TfMain→FormsFacade 解耦。子波 W6.0 scaffold→W6.1 canary(asendic_Empty)→W6.2 in-arm→…→W6.6 hub。

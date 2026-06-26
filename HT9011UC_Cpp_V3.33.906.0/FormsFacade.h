@@ -87,6 +87,37 @@ public:
     void AddNewTrayHead(int iAuto); // [METHOD] golden -- offline: no-op
 };
 
+// ---------------------------------------------------------------------------
+//  W6.5: SHUTTLE-ENGINE (acarry.cpp) fMain sub-objects.
+//    * TfMainCheckBox  -- golden TCheckBox* (cbShowShuttleSensor /
+//      cbTestOutShuttleSensor / cbShowInShuttleSensor).  Engine reads .Checked
+//      (offline false -> the debug-log / sensor-confirm paths are skipped, the
+//      proven DUMMY posture).
+//    * TfMainGrid      -- golden THeatTable* (htShullte0 / htShullte1).  Engine
+//      calls SetCellColorIndex(col,row,idx) only inside the Motor-View page
+//      guard (pgMain->ActivePageIndex==emp7TabSheet21, both 0 offline so equal --
+//      but SetCellColorIndex is a harmless no-op so it is safe either way).
+//    * TfMainMemoLines / TfMainMemo -- golden TMemo* (meShuttle1 / meShuttle2).
+//      Engine calls ->Lines->Add / ->Lines->Count / ->Clear inside the
+//      cbShowInShuttleSensor.Checked guard (false offline) -> no-op.
+//    * TfMainInplace   -- golden cInplace (InArmPlacementEnable()/iNo9ShtErrICCt/
+//      bNo9ShtErrNo).  Offline InArmPlacementEnable()==false makes the No9
+//      sub-blocks inert (the AutoLatch checks still run their main path).
+// ---------------------------------------------------------------------------
+struct TfMainCheckBox { bool Checked; TfMainCheckBox():Checked(false){} };       // [DATA] golden TCheckBox*
+struct TfMainGrid     { void SetCellColorIndex(int /*col*/,int /*row*/,int /*idx*/){} }; // [METHOD] golden THeatTable*
+struct TfMainMemoLines{ int Count; void Add(AnsiString /*s*/){} TfMainMemoLines():Count(0){} }; // [DATA] golden TStrings*
+struct TfMainMemo     { TfMainMemoLines *Lines; void Clear(){} TfMainMemo(){ Lines=new TfMainMemoLines(); } }; // [DATA] golden TMemo*
+struct TfMainPageControl { int ActivePageIndex; TfMainPageControl():ActivePageIndex(0){} };      // [DATA] golden TPageControl* (pgMain)
+class TfMainInplace
+{
+public:
+    int  iNo9ShtErrICCt[2];          // [DATA]   golden cInplace -- per-shuttle No9 err count
+    bool bNo9ShtErrNo[2][8];         // [DATA]   golden cInplace -- per-site No9 err flag
+    bool InArmPlacementEnable();     // [METHOD] golden cInplace -- offline: false (No9 inert)
+    TfMainInplace();
+};
+
 class TfMain
 {
 public:
@@ -105,6 +136,23 @@ public:
     // -- W6.4 ADD: members the TESTER/INDEX ENGINE (atester.cpp) derefs ----------
     void LightOn();                               // [METHOD] golden main.h -- offline: CCD light no-op (DoTestHeadMotor CCD path)
     TfMainTrayPanel *lbCCDStatus;                 // [DATA]   golden main.h (TLabel* lbCCDStatus); reuse panel stub (->Visible via .Color)
+    // -- W6.5 ADD: members the SHUTTLE ENGINE (acarry.cpp) derefs ----------------
+    TfMainCheckBox *cbShowShuttleSensor;          // [DATA]   golden main.h (TCheckBox*) -- offline Checked=false
+    TfMainCheckBox *cbTestOutShuttleSensor;       // [DATA]   golden main.h (TCheckBox*) -- offline Checked=false
+    TfMainCheckBox *cbShowInShuttleSensor;        // [DATA]   golden main.h (TCheckBox*) -- offline Checked=false
+    TfMainGrid     *htShullte0;                   // [DATA]   golden main.h (THeatTable* shuttle-1 grid)
+    TfMainGrid     *htShullte1;                   // [DATA]   golden main.h (THeatTable* shuttle-2 grid)
+    TfMainMemo     *meShuttle1;                   // [DATA]   golden main.h (TMemo* shuttle-1 log)
+    TfMainMemo     *meShuttle2;                   // [DATA]   golden main.h (TMemo* shuttle-2 log)
+    TfMainInplace  *cInplace;                     // [DATA]   golden main.h (cInplace placement helper)
+    TfMainPageControl *pgMain;                    // [DATA]   golden main.h (TPageControl*) -- ActivePageIndex==0 offline
+    int emp7TabSheet21;                           // [DATA]   golden main.h (Motor-View tab index) -- 0 offline (==pgMain->ActivePageIndex)
+    void AddShuttleMessage(int iSht, AnsiString S);            // [METHOD] golden main.h -- offline log sink no-op
+    void Reset(AnsiString Func);                              // [METHOD] golden main.h -- offline: no-op
+    void BtnOneCycleClick(void *Sender);                      // [METHOD] golden main.h -- offline: no-op
+    void BtnResetClick(void *Sender);                         // [METHOD] golden main.h -- offline: no-op
+    void JSCC_ResetForShuttleLoseIC();                        // [METHOD] golden main.h -- offline: no-op (0-arg)
+    void ResetRecordforPiggyBack(AnsiString S);               // [METHOD] golden main.h -- offline: no-op
     TfMain();
 };
 extern TfMain *fMain;
@@ -177,6 +225,8 @@ public:
     int iFTRTCount;                                // [DATA] golden SCK_ART.h (FT/RT count; CC_TERAPOWER ART)
     int iInputCount;                               // [DATA] golden SCK_ART.h (ART input count)
     int  CheckLoadingCount();                      // [METHOD] golden SCK_ART.h -- offline: 0 (no ART loading mismatch; golden compares ==0/==1/==2)
+    // -- W6.5 ADD: member the SHUTTLE ENGINE (acarry.cpp) derefs ----------------
+    void AddOutputJamCnt(int row, int col, int ret, int iBinOnCarryKit=0);  // [METHOD] golden Automation/SCK_ART.h:302 -- offline: no-op (inside if(bUseSCKART), default false)
     TfSCKART();
 };
 extern TfSCKART *fSCKART;

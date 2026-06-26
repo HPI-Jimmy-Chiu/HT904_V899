@@ -77,6 +77,11 @@ struct LAST_GENERAL_SET
     // (golden field TYPES verbatim from LastSet.h; [2][MAX_SOCKET_ROW=4][MAX_SOCKET_COL=8]):
     int  iD47SocketTestedCount;         // golden LastSet.h -- socket-purge tested count (D47)
     bool bUseTestSocket[2][4][8];       // golden LastSet.h -- per-arm[0/1] site enable map
+    // AI(W6.5-CARRY) 20260626: the SHUTTLE/CARRY engine (acarry.cpp Do_Auto_SHT1/2
+    // case 250 purge-fan branch) compares the local purge counter vs
+    // LastSet.iShuttlePurgeCount (golden acarry.cpp:3693).  Added to this shared
+    // minimal shim (golden field TYPE verbatim from LastSet.h:199):
+    int  iShuttlePurgeCount;            // golden LastSet.h:199 -- In-Shuttle purge-fan threshold
     // TODO(W6.x): the other ~450 LAST_GENERAL_SET fields land with the full
     //             translated LastSet.h.
 };

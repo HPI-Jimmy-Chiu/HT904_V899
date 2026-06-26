@@ -673,3 +673,69 @@ if(WIN32)
 endif()
 
 add_test(NAME W6_4_Tester COMMAND test_w6_4_tester)
+
+# --- test_w6_4_tester_core: the SALVAGED RESULT-DECODE ANCHOR concrete oracle -
+#   The task-mandated W6.4a *decode-anchor* verify TU (companion to the SM/
+#   geometry W6_4_Tester above).  Pins the high-value fMain-free TTL bin-decode
+#   trio that is the reason the partial atester.cpp was salvaged, all ACTIVE
+#   (no #if 0): GetBinaryData (golden :670) / GetOneByOneData (golden :621) fed
+#   by Test_GetTestResulSub/Test_GetTestResul (golden :759/:789) + ArrayConvertSite
+#   (golden :504).  Asserts the CONCRETE ORACLE hand-derived from the golden
+#   formula (HexData={1,2,4,8,16}, IOCT[_5Bit=4]=5):
+#     [O1] Binary  _5Bit/CHBinary  iSite=0 ScanPort[0]&[2] -> 1+4 == 5;
+#     [O2] OneByOne _5Bit/CHOneByOne iSite=0 only ScanPort[2] -> idx2+1 == 3;
+#     [O3] OneByOne ScanPort[1]&[2] -> sum!=1 -> iTestBinCount == 16;
+#   plus the decode CONTRACT corroborators (Sum==0 -> -1; no-bit -> -1; full
+#   weight table -> 31; Data=iSite*5 site offset) and the Test_GetTestResulSub
+#   CHBinary/CHOneByOne dispatch driven THROUGH the Sim HAL Sen[] read path
+#   (Sen[SenBit0+0..4] mapped onto an injected TSimIOBackend, SOFT_SIMULTE not
+#   defined so the #ifndef Sen-repopulate block is live).
+#   Same RESCAN link group as the W6.1/W6.2/W6.3/W6.4 canaries + core TUs.
+add_executable(test_w6_4_tester_core
+    test_w6_4_tester_core.cpp
+)
+
+target_link_libraries(test_w6_4_tester_core PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w6_4_tester_core PRIVATE ws2_32)
+endif()
+
+add_test(NAME W6_4_TesterAnchor COMMAND test_w6_4_tester_core)
+
+# --- test_w6_5_shuttle: pump the SHUTTLE/CARRY engine over Sim HAL -----------
+#   The task-mandated W6.5 verify TU (mirror of the in/out/tray-arm + tester
+#   core TUs).  Proves acarry.cpp (the SHUTTLE/CARRY ENGINE, in ht9045_sm)
+#   LINKS + its ACTIVE core shuttle task SM PUMPS over the Sim HAL with NO
+#   hardware (136/136 case labels ACTIVE, 0 #if 0 gates), and that the
+#   geometry/numeric/zero-guard oracles match values hand-derived from the
+#   golden formula:
+#     [O1] Do_Auto_SHT1()  AutoSHT1Task 1 -> 10 from entry over the Sim HAL
+#          (case 1 final Task=10, golden :3342); cursor stays in the documented
+#          switch(Task) universe {1,10,100,105,110,115,120,124,125,130,135,140,
+#          200,201,202,203,210,211,212,220,225,230,235,250,251,252,300,400,500,
+#          2300,2400,2500,2600,3000,3100,3101,3102,5000,5100} under a 64-tick pump.
+#     [O3] GetShuttle1Pitch_9045 double->int TRUNCATION (golden :7540):
+#          w=12000 -> 8000; w=18000 -> 14000; i1180=14003,w=15000 -> r=11001.5
+#          -> (int)==11001 (toward-zero, NOT 11002).
+#     [O4] CheckShuttleOutputHasICError zero-detect-pos guard (golden :2076-2097):
+#          Tech.*DetectPos==0 offline -> returns false before the residual switch
+#          even with bShuttleHasIC flagged (no spurious residual alarm).
+#     [O5] CheckShuttleSensorBroken_1(_,false) left pass: iCheckCount==0 skips the
+#          bRight error-aggregation arm -> returns false (golden :7322-7360).
+#   Same RESCAN link group as the W6.1/W6.2/W6.3/W6.4 canaries + core TUs.
+add_executable(test_w6_5_shuttle
+    test_w6_5_shuttle.cpp
+)
+
+target_link_libraries(test_w6_5_shuttle PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w6_5_shuttle PRIVATE ws2_32)
+endif()
+
+add_test(NAME W6_5_Shuttle COMMAND test_w6_5_shuttle)

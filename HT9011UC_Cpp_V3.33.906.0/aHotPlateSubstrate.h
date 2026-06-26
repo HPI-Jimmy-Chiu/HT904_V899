@@ -67,6 +67,7 @@
 #include "cmydef.h"                 // MAX_ARM_Row/Col, X_PITCH_COUNT, IC consts
 #include "Motor/mymotor.h"          // class TTrayMotor (CopyFromTray/CopyToTray)
 #include "Public/MyProductionRecord.h"  // TMyProductionRecord (golden by-value PordRec)
+#include "myTimer.h"                // TQPF_Timer (W6.5: TMyKitSuck::TSoakTime)
 
 // ---------------------------------------------------------------------------
 //  TList  -- golden VCL Classes.hpp TList (pointer array).  Not in vcl_compat;
@@ -207,6 +208,22 @@ public:
     int  iBinData [_MAX_SUCK_ROW_ITEM][_MAX_SUCK_COL_ITEM];  // :189  (decoded bin number)
     AnsiString cDeviceInf[_MAX_SUCK_ROW_ITEM][_MAX_SUCK_COL_ITEM]; // :228 (per-site 2DID/barcode)
     AnsiString cSBin     [_MAX_SUCK_ROW_ITEM][_MAX_SUCK_COL_ITEM]; // :230 (per-site software-bin label)
+
+    // -- W6.5 ADD: members the SHUTTLE/CARRY ENGINE (acarry.cpp) derefs ----------
+    //    golden MyKitSuck.h member names verbatim.  The shuttle clean-out /
+    //    realIC->interface-bin conversion (Do_Auto_SHT1/2 + DoCheckShuttle*EmptyIC)
+    //    writes iWhichAuto/bPass/bNeedReTest, reads the soak timer TSoakTime, and
+    //    calls SetAllRealIC2InterfaceBin/CountRealIC/HasDefineIC.  All grids
+    //    offline-zeroed in the ctor; the methods carry the FAITHFUL golden bodies
+    //    (they touch only iMaxRow/iMaxCol/Item/iBinData -- all present here).
+    int  iWhichAuto  [_MAX_SUCK_ROW_ITEM][_MAX_SUCK_COL_ITEM]; // :178 (per-site Auto-bin target)
+    bool bPass       [_MAX_SUCK_ROW_ITEM][_MAX_SUCK_COL_ITEM]; // :187 (per-site pass flag)
+    bool bNeedReTest [_MAX_SUCK_ROW_ITEM][_MAX_SUCK_COL_ITEM]; // :188 (per-site retest flag)
+    TQPF_Timer  TSoakTime;      // :242  (Index Pick up need wait Soak Time)
+    void SetAllRealIC2InterfaceBin();   // :276  (faithful golden body)
+    int  CountRealIC();                 // :315  (faithful golden body)
+    bool HasDefineIC(int IC_TYPE);      // :297  (faithful golden body)
+
     TMyKitSuck();               // ctor: home iShtRow/iShtCol + init grids offline-safe
 
     // methods the leaves call (golden signatures preserved) -------------------
@@ -448,6 +465,30 @@ public:
     void InitBottom2DIDScan();          //golden BarCode.h : init bottom-2DID scan
     bool DoBottom2DIDScan();            //golden BarCode.h : 1-CCD bottom 2DID scan
     bool DoBottom2DID_8CCD_Scan();      //golden BarCode.h : 8-CCD bottom 2DID scan  //KaiChen 20200513
+
+    // -- W6.5 ADD: in/out-shuttle 2D-barcode + shuttle-float-check methods the
+    //    SHUTTLE/CARRY engine (acarry.cpp Do_Auto_SHT1/2) derefs.  golden
+    //    BarCode/BarCode.h signatures verbatim (default args preserved).  Offline:
+    //    every scan / trigger / float-check returns false (no CCD); the Initial*
+    //    are no-ops; IsSHT2DIDScanFinish returns true (no 2DID pending) so the SM
+    //    does not park forever waiting on a scan that never arrives.
+    void InitialBarcodeScanInShuttle1(bool bClear2DID=true);   // golden BarCode.h:799
+    void InitialBarcodeScanInShuttle2(bool bClear2DID=true);   // golden BarCode.h:800
+    void InitialBarcodeScanOutShuttle1();                      // golden BarCode.h:801
+    void InitialBarcodeScanOutShuttle2();                      // golden BarCode.h:802
+    bool DoBarcodeScanInShuttle_1(bool bErrorSkip=false);      // golden BarCode.h:803
+    bool DoBarcodeScanInShuttle_2(bool bErrorSkip=false);      // golden BarCode.h:804
+    bool DoBarcodeTriggerInShuttle_1();                        // golden BarCode.h:805
+    bool DoBarcodeTriggerInShuttle_2();                        // golden BarCode.h:806
+    bool DoBarcodeCCDInShuttle_1(bool bVerify=false);          // golden BarCode.h:807
+    bool DoBarcodeCCDInShuttle_2(bool bVerify=false);          // golden BarCode.h:808
+    bool DoBarcodeScanOutShuttle_1();                          // golden BarCode.h:810
+    bool DoBarcodeScanOutShuttle_2();                          // golden BarCode.h:811
+    void InitialShuttleFloatCheck1();                          // golden BarCode.h:888
+    void InitialShuttleFloatCheck2();                          // golden BarCode.h:889
+    bool DoShuttleFloatCheck_1();                              // golden BarCode.h:890
+    bool DoShuttleFloatCheck_2();                              // golden BarCode.h:891
+    bool IsSHT2DIDScanFinish(int SHT);                         // golden BarCode.h:942
 };
 extern TfBarCode_Shim *fBarCode;        //golden BarCode.h : TfBarCode *fBarCode
 

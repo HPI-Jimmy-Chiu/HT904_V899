@@ -82,6 +82,10 @@ TMyKitSuck::TMyKitSuck()
             iBinData[i][j]  = -1;     // -1 = no decoded bin yet
             cDeviceInf[i][j]= "";
             cSBin[i][j]     = "";
+            // W6.5: zero the shuttle clean-out grids the carry engine writes.
+            iWhichAuto[i][j]  = 0;
+            bPass[i][j]       = false;
+            bNeedReTest[i][j] = false;
         }
 }
 
@@ -226,6 +230,78 @@ void TMyKitSuck::SetAllToNullIC()      { ClearAll(); }       // golden :286
 bool TMyKitSuck::IsShtSuckFinish()     { return true; }      // golden :337
 bool TMyKitSuck::IsShtDestroyFinish()  { return true; }      // golden :338
 
+// -- W6.5 ADD: shuttle clean-out / realIC->interface-bin TMyKitSuck methods -----
+//    FAITHFUL translations of the golden MyKitSuck.cpp bodies (NOT stubs): they
+//    walk Item[i][j] over [iMaxRow][iMaxCol] -- both members already on this
+//    substrate.  Offline the global carry-kits have iMaxRow==iMaxCol==0 (value-
+//    initialized) so the loops naturally no-op: CountRealIC->0, HasDefineIC->false,
+//    SetAllRealIC2InterfaceBin->no write -- the deterministic empty-grid result.
+//    With a populated grid (a test seeding iMaxRow/iMaxCol+Item) the bodies behave
+//    exactly as golden.
+void TMyKitSuck::SetAllRealIC2InterfaceBin()                                    // golden MyKitSuck.cpp:SetAllRealIC2InterfaceBin
+{
+    for(int i=0; i<iMaxRow; i++)
+    {
+        for(int j=0; j<iMaxCol; j++)
+        {
+            if(Item[i][j]!=NULL_IC && Item[i][j]!=HAS_NULL_IC)
+            {
+                SetItemData(i, j, TEST_PASS+iTestBinCount);                     //Steven 20150203 : Fixed for Sucker Status
+                iBinData[i][j]=iTestBinCount;
+                bPass[i][j]=false;
+                bNeedReTest[i][j]=false;
+            }
+        }
+    }
+}
+//------------------------------------------------------------------------------
+int TMyKitSuck::CountRealIC()                                                   // golden MyKitSuck.cpp:CountRealIC
+{
+    int iHasNullICCount=0;
+    int iNullICCount=0;
+    int iOtherCount=0;
+    for(int i=0; i<iMaxRow; i++)
+    {
+        for(int j=0; j<iMaxCol; j++)
+        {
+            if(Item[i][j]==HAS_NULL_IC)
+                iHasNullICCount++;
+            else if(Item[i][j]==NULL_IC)
+                iNullICCount++;
+            else
+                iOtherCount++;
+        }
+    }
+
+    return iOtherCount;
+}
+//------------------------------------------------------------------------------
+bool TMyKitSuck::HasDefineIC(int IC_TYPE)                                       //Steven 20130620 : 增加Function  (golden MyKitSuck.cpp:HasDefineIC)
+{
+    bool bHasDefineIC=false;
+    for(int i=0; i<iMaxRow; i++)
+    {
+        for(int j=0; j<iMaxCol; j++)
+        {
+            if(IC_TYPE==NULL_IC && Item[i][j]==IC_TYPE)                         //Steven 20160530 : fixed for HasDefineIC
+            {
+                bHasDefineIC=true;
+            }
+            else
+            {
+                if(Item[i][j]!=NULL_IC)
+                {
+                    if(Item[i][j]==IC_TYPE)
+                    {
+                        bHasDefineIC=true;
+                    }
+                }
+            }
+        }
+    }
+    return bHasDefineIC;
+}
+
 //==============================================================================
 //  (e) TMyProductionRecord bodies the leaves call (Public/MyProductionRecord.h
 //      is declaration-only; supply the four touched bodies as offline no-ops).
@@ -239,11 +315,15 @@ AnsiString TMyProductionRecord::GetInRotationAngRecord() { return ""; } //Sam 20
 //==============================================================================
 //  IsFLCarrKitAllHasIC / IsBLCarrKitAllHasIC -- EXPORTED by
 //  ainarm_SearchPickPlate.h but DEFINED in the golden ainarm core
-//  (ainarm9045.cpp / acarry.cpp, W6.x/W7).  Offline: the carry-kit grid has no
-//  IC -> "not all has IC" is false.  AI(W6.2-INARM) 20260626.
+//  (ainarm9045.cpp / acarry.cpp, W6.x/W7).
+//  AI(W6.5-CARRY) 20260626: the W6.5 wave landed acarry.cpp, which carries the
+//  REAL golden bodies (acarry.cpp:175 / :197).  Removed the W6.2 placeholder
+//  stubs here to resolve the multiple-definition (the real bodies now own them).
 //==============================================================================
+#if 0 // W6.5: superseded by the real bodies translated into acarry.cpp (:175/:197)
 bool IsFLCarrKitAllHasIC() { return false; }                       //ChungHung 20111230
 bool IsBLCarrKitAllHasIC() { return false; }                       //ChungHung 20111230
+#endif
 
 //==============================================================================
 //  (b) uPoint2D + uPlateInfo (PickFromHPList) -- empty offline team list
@@ -352,6 +432,29 @@ int iCloseSiteModeFor1x4 = 0;       // e1x4Standard (offline: not closing 2 site
 void TfBarCode_Shim::InitBottom2DIDScan()       {}
 bool TfBarCode_Shim::DoBottom2DIDScan()         { return true; }
 bool TfBarCode_Shim::DoBottom2DID_8CCD_Scan()   { return true; }
+
+// -- W6.5 ADD: in/out-shuttle 2D-barcode + shuttle-float-check bodies the carry
+//    engine derefs (golden BarCode/BarCode.h).  Offline: no CCD hardware, so the
+//    Initial* are no-ops, the scan/trigger/CCD/float checks report false (nothing
+//    detected), and IsSHT2DIDScanFinish reports true (scan considered complete) so
+//    Do_Auto_SHT1/2 never parks forever on a 2DID that never arrives.
+void TfBarCode_Shim::InitialBarcodeScanInShuttle1(bool /*bClear2DID*/)  {}      // golden :799
+void TfBarCode_Shim::InitialBarcodeScanInShuttle2(bool /*bClear2DID*/)  {}      // golden :800
+void TfBarCode_Shim::InitialBarcodeScanOutShuttle1()                    {}      // golden :801
+void TfBarCode_Shim::InitialBarcodeScanOutShuttle2()                    {}      // golden :802
+bool TfBarCode_Shim::DoBarcodeScanInShuttle_1(bool /*bErrorSkip*/) { return false; }  // golden :803
+bool TfBarCode_Shim::DoBarcodeScanInShuttle_2(bool /*bErrorSkip*/) { return false; }  // golden :804
+bool TfBarCode_Shim::DoBarcodeTriggerInShuttle_1()                 { return false; }  // golden :805
+bool TfBarCode_Shim::DoBarcodeTriggerInShuttle_2()                 { return false; }  // golden :806
+bool TfBarCode_Shim::DoBarcodeCCDInShuttle_1(bool /*bVerify*/)     { return false; }  // golden :807
+bool TfBarCode_Shim::DoBarcodeCCDInShuttle_2(bool /*bVerify*/)     { return false; }  // golden :808
+bool TfBarCode_Shim::DoBarcodeScanOutShuttle_1()                   { return false; }  // golden :810
+bool TfBarCode_Shim::DoBarcodeScanOutShuttle_2()                   { return false; }  // golden :811
+void TfBarCode_Shim::InitialShuttleFloatCheck1()                   {}                 // golden :888
+void TfBarCode_Shim::InitialShuttleFloatCheck2()                   {}                 // golden :889
+bool TfBarCode_Shim::DoShuttleFloatCheck_1()                       { return false; }  // golden :890
+bool TfBarCode_Shim::DoShuttleFloatCheck_2()                       { return false; }  // golden :891
+bool TfBarCode_Shim::IsSHT2DIDScanFinish(int /*SHT*/)              { return true;  }  // golden :942
 static TfBarCode_Shim g_fBarCode;
 TfBarCode_Shim *fBarCode = &g_fBarCode;
 

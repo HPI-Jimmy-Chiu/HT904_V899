@@ -434,6 +434,22 @@ add_library(ht9045_sm STATIC
     # --- W6.4 TESTER/INDEX cross-module offline shims (atester_32Site /
     #     atester_ProcessCount / aTester_Front / aTester_Rear / fContact / ADAM_*).
     atester_shims.cpp
+    # --- W6.5 (SHUTTLE/CARRY engine): the two input-shuttle master SMs
+    #     Do_Auto_SHT1 / Do_Auto_SHT2 (39 cases each, ALL ACTIVE; case 200->201
+    #     fall-through preserved) + the 9046AU sort-shuttle Do_Auto_SHT3 + the
+    #     residual/sensor-broken/null-IC/floating checks (switch TestIF.iTestMode)
+    #     + the In/Out-arm-vs-shuttle move-safe interlocks + pure pitch geometry +
+    #     the uShuttleThread sensor-poll LOGIC (verbatim; the Win32 wrapper is a
+    #     thin offline driver).  Pumps the same Sim HAL + aHotPlateSubstrate
+    #     (FLCarryKit/BLCarryKit/FRCarryKit/BRCarryKit + AutoSHT1/2/3Task cursors).
+    #     NO #if 0 gates -- every golden case body is ACTIVE.  See the file head.
+    acarry.cpp
+    # --- W6.5 SHUTTLE/CARRY cross-module offline shims (Tech / fLtcSensor /
+    #     OutSht3Kit / ATC_InterfaceForm+ATC_Data / CheckShtFloating /
+    #     InShtInLF-RT(int) / SortSHTInLF-RT / DoStepShuttleCheck / shuttle
+    #     Empty/MustHas/Prominent checks / Check32site* / MoveOutArmXY_To* /
+    #     SendHTTPRequest / MoveSortArmToAutoSafe / Win32 thread tokens).
+    acarry_shims.cpp
 )
 
 target_include_directories(ht9045_sm PUBLIC
