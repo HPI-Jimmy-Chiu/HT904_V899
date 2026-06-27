@@ -532,6 +532,22 @@ add_library(ht9045_sm STATIC
     #     FixAICCD) are not translated yet.  Offline-safe non-static defs so an exe
     #     linking ht9045_sm resolves them; the variants forward-declare each.
     aoutarm_shims.cpp
+    # --- W6.2c-OUT batch-4 (DEAD): 6 out-arm site variants that are NEVER
+    #     dispatched -- compiled as dead weight only (like in-arm 2x4_16/2x8_32).
+    #     1x4_4_Back (enum present but DoOutArm ladder arm is an EMPTY //-body and
+    #     DoPickFromShuttle routes it to LIVE 1x4_4); 2x2_4_14 (enum present, BOTH
+    #     ladders route to LIVE 2x2_4); 2x2_4_23 / 2x4_16 / 2x8_16 (enums ABSENT
+    #     from MachineType.h -> no dispatch arm); 2x8_32 (enum present, BOTH ladders
+    #     route to LIVE 2x8_8).  Each carries the full _<deadv> suffix on its
+    #     DoOutArm_9045_<deadv> + helpers so all symbols are UNIQUE never-called
+    #     globals.  CMake-only: NO static-stub removal, NO extern un-gate, NO
+    #     dispatch-ladder edit to aoutarm9045.cpp (the ladders are already 100% live).
+    aoutarm9045_1x4_4_Back.cpp
+    aoutarm9045_2x2_4_14.cpp
+    aoutarm9045_2x2_4_23.cpp
+    aoutarm9045_2x4_16.cpp
+    aoutarm9045_2x8_16.cpp
+    aoutarm9045_2x8_32.cpp
     # --- W7 (TRAY-ARM engine): the top dispatcher DoCatchTray (flat switch) + 8
     #     pumpable task SM skeletons (DoCatchFromLoader / CatchNewTrayFromBuffer /
     #     DoPlaceTrayToAuto / DoPlaceToBuffer / DoSlapTray / DoCatchUnderTray /

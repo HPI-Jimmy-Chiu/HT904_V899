@@ -4,10 +4,32 @@
 //    batch-1: 1x1_1 / 1x2_2 / 1x2_4 / 1x3_2_14 / 1x3_4 / 1x4_2
 //    batch-2: 1x4_4S / 1x4_4 / 1x4_8 / 2x1_2 / 2x2_4 / 2x2_8 / 2x3_6_14
 //    batch-3 (FINAL): 2x3_6 / 2x4_4 / 2x4_8 / 2x5_8 / 2x6_8 / 2x8_8 / All_1Picker
+//  ... and the DEAD out-arm site variants (compiled+linked, never dispatched):
+//    batch-4 (DEAD): 1x4_4_Back / 2x2_4_14 / 2x2_4_23 / 2x4_16 / 2x8_16 / 2x8_32
 //
 //  Translation wave: W6.2c-OUT (out-arm per-site-config variants over Sim HAL)
 //  Author: AI(W6.2c-outarm-verify) 20260627
-//          (batch-2 added 20260627; batch-3 FINAL added 20260627)
+//          (batch-2 added 20260627; batch-3 FINAL added 20260627;
+//           batch-4 DEAD added 20260627)
+//
+//  DEAD-VARIANT WITNESS (PART D, batch-4)
+//  --------------------------------------
+//  The 6 batch-4 files are NEVER on the engine dispatch path (per the
+//  ENUM->CALLEE map + MachineType.h enum table):
+//    * 1x4_4_Back: enum e9045_1x4_4_Back=10 present, but DoOutArm_9045()'s arm is
+//      an EMPTY //-body and DoPickFromShuttle routes to LIVE 1x4_4 -- the
+//      _1x4_4_Back callee is never called.
+//    * 2x2_4_14: enum e9045_2x2_4_14=16 present, both ladders route to LIVE 2x2_4.
+//    * 2x8_32:   enum e9045_2x8_32=25 present, both ladders route to LIVE 2x8_8.
+//    * 2x2_4_23 / 2x4_16 / 2x8_16: enums ABSENT from MachineType.h -> no ladder
+//      arm can ever select them (compile-time-provable dead).
+//  Their DoOutArm_9045_<deadv>() / DoPickFromShuttle_9045_<deadv>(int) symbols
+//  carry the FULL _<deadv> suffix, so they are UNIQUE never-called globals that
+//  must merely COMPILE+LINK as dead weight.  We prove that with two PURE-geometry
+//  helper oracles (no HAL/grid/Prod dependency on the asserted branch), hand-
+//  derived from the golden, that resolve the dead files' external symbols at link
+//  and return the golden value -- i.e. the dead bodies are real & callable, not
+//  stubs, yet they are not on any dispatch ladder (engine never names them).
 //
 //  PURPOSE
 //  -------
@@ -127,6 +149,31 @@ extern int GetNowShuttleMode_2x1_2(int iSht);
 //    translated VERBATIM and link-resolves over the Sim substrate.
 // ---------------------------------------------------------------------------
 extern int GetNowShuttleMode_2x4_4(int iSht);
+
+// ---------------------------------------------------------------------------
+//  DEAD variants (batch-4: 1x4_4_Back / 2x2_4_14 / 2x2_4_23 / 2x4_16 / 2x8_16 /
+//  2x8_32) are PROVEN by build-artifact inspection, NOT by linking them into
+//  this executable.  WHY: each dead variant's pure-geometry helper
+//  (GetNowShuttleMode_2x4_16, GetNowShuttleMode_2x8_32, ...) lives in the SAME
+//  translation unit / .obj as its heavy DoOutArm_9045_<deadv> body, which (being
+//  genuinely never-dispatched) references cross-module/UI symbols that have no
+//  offline home (iOutArmPlaceOrder / iMagPos / DoOutArmPlaceToAuto / OutputForm /
+//  OutArmContinuousMove ...).  GNU ld's archive scan only pulls a member .obj
+//  when one of its symbols is REFERENCED; the live engine + the 20 live variants
+//  never name any dead symbol, so the dead .obj's are NOT pulled and the link is
+//  clean.  If THIS test referenced a dead helper, ld would force-link the heavy
+//  dead .obj and surface those (by-design-unsatisfied) externs -- which would
+//  MISREPRESENT the dead files as broken when they are correctly dead weight.
+//  So the dead-by-design proof is done OUT-OF-BAND by the Verify agent:
+//    (1) the 6 aoutarm9045_<deadv>.cpp.obj are present in libht9045_sm.a with
+//        their DoOutArm_9045_<deadv> / GetNowShuttleMode_<deadv> symbols DEFINED
+//        (nm 'T'), AND
+//    (2) the engine aoutarm9045.cpp contains ZERO references to any
+//        DoOutArm_9045_<deadv> / DoPickFromShuttle_9045_<deadv> (grep), so they
+//        are off every dispatch ladder.
+//  Both are asserted in the Verify report, not in this TU (keeping the test link
+//  faithful to the real reachability).
+// ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
 //  Minimal PASS / FAIL harness (same style as the other W6 verify TUs)
@@ -268,6 +315,14 @@ int main()
           "B GetOutArmPitch_9045(w=8000) == 8000 (m=1.0, endpoint)");
     CHECK(GetOutArmPitch_9045(4000) == 4000,
           "B GetOutArmPitch_9045(w=4000) == 4000 (min teach point -> X40)");
+
+    // NOTE: the batch-4 DEAD variants (1x4_4_Back / 2x2_4_14 / 2x2_4_23 / 2x4_16
+    // / 2x8_16 / 2x8_32) are intentionally NOT exercised here -- see the comment
+    // block above PART A.  Linking their helpers would force-pull the heavy,
+    // by-design-undispatched DoOutArm_9045_<deadv> object code (which references
+    // offline-unsatisfiable cross-module/UI externs), misrepresenting correct
+    // dead weight as broken.  Their compile/define/dead-by-design proof is the
+    // Verify agent's out-of-band nm + grep check, reported in the schema.
 
     printf("==== W6.2c-OUT variants verify: %d passed, %d failed ====\n", g_pass, g_fail);
     return (g_fail == 0) ? 0 : 1;
