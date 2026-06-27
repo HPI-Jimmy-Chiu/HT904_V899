@@ -3,9 +3,11 @@
 //  variants
 //    batch-1: 1x1_1 / 1x2_2 / 1x2_4 / 1x3_2_14 / 1x3_4 / 1x4_2
 //    batch-2: 1x4_4S / 1x4_4 / 1x4_8 / 2x1_2 / 2x2_4 / 2x2_8 / 2x3_6_14
+//    batch-3 (FINAL): 2x3_6 / 2x4_4 / 2x4_8 / 2x5_8 / 2x6_8 / 2x8_8 / All_1Picker
 //
 //  Translation wave: W6.2c-OUT (out-arm per-site-config variants over Sim HAL)
-//  Author: AI(W6.2c-outarm-verify) 20260627  (batch-2 added 20260627)
+//  Author: AI(W6.2c-outarm-verify) 20260627
+//          (batch-2 added 20260627; batch-3 FINAL added 20260627)
 //
 //  PURPOSE
 //  -------
@@ -56,6 +58,11 @@
 //  compile/link + the variant bodies are DEFINED (not stubbed) + the dispatch
 //  reaches them (cursor/flag side effect) over the Sim HAL with no crash.
 // =============================================================================
+// MachineType.h FIRST: it owns the global enum e2x8ModeTotal that the golden
+// aoutarm9045_2x8_8.h extern array decl (XPHSuckToSht_2x8_8_OutArm[e2x8ModeTotal]
+// [2][8]) mirrors.  The variant .cpp files pull MachineType.h before their own
+// .h; this TU includes the variant .h directly, so it must do the same.
+#include "MachineType.h"            // global enums (e2x8ModeTotal, eInArmType ...)
 #include "aoutarm9045_1x1_1.h"      // void DoOutArm_9045_1x1_1();
 #include "aoutarm9045_1x2_2.h"      // void DoOutArm_9045_1x2_2();
 #include "aoutarm9045_1x2_4.h"      // void DoOutArm_9045_1x2_4();
@@ -70,7 +77,16 @@
 #include "aoutarm9045_2x2_4.h"      // void DoOutArm_9045_2x2_4();
 #include "aoutarm9045_2x2_8.h"      // void DoOutArm_9045_2x2_8();
 #include "aoutarm9045_2x3_6_14.h"   // void DoOutArm_9045_2x3_6_14();
+// --- W6.2c-OUT batch-3 FINAL (2x3_6/2x4_4/2x4_8/2x5_8/2x6_8/2x8_8/All_1Picker) ---
+#include "aoutarm9045_2x3_6.h"      // void DoOutArm_9045_2x3_6();
+#include "aoutarm9045_2x4_4.h"      // void DoOutArm_9045_2x4_4();
+#include "aoutarm9045_2x4_8.h"      // void DoOutArm_9045_2x4_8();
+#include "aoutarm9045_2x5_8.h"      // void DoOutArm_9045_2x5_8();
+#include "aoutarm9045_2x6_8.h"      // void DoOutArm_9045_2x6_8();
+#include "aoutarm9045_2x8_8.h"      // void DoOutArm_9045_2x8_8();
+#include "aoutarm9045_All_1Picker.h"// void DoOutArm_9045_All_1Picker(); (DoOutArm-ONLY carve-out)
 #include "aoutarm9045.h"            // GetOutArmPitch_9045 (engine geometry oracle)
+#include "aHotPlateSubstrate.h"     // OutArmSuck (iXStep/iYStep) for Oracle 2
 #include "cprod.h"                  // Prod / IniConfig (via Config.h)
 #include "cmydef.h"                 // bSortingAllBinTrayFinish / iPitch_Max_minus_Min / iXpitchMinX3
 #include <cstdio>
@@ -98,6 +114,19 @@ extern bool bCarryControlOutarm2;
 //    GetNowShuttleMode_2x1_2(0)==0 AND ==1)==0 deterministically.  EXPECT 0.
 // ---------------------------------------------------------------------------
 extern int GetNowShuttleMode_2x1_2(int iSht);
+
+// ---------------------------------------------------------------------------
+//  Oracle-2 pure mode helper from the 2x4_4 variant (external linkage, NOT on
+//  the variant .h surface -- forward-declared here, defined in
+//  aoutarm9045_2x4_4.cpp:158, golden aoutarm9045_2x4_4.cpp:38).
+//    GetNowShuttleMode_2x4_4(iSht): the VERY FIRST branch is
+//      if(OutArmSuck.iXStep==1 && OutArmSuck.iYStep==1) return 2;
+//    (single-pick mode), taken UNCONDITIONALLY of FR/BRCarryKit grid contents
+//    or any Prod dependency.  We seed OutArmSuck.iXStep=iYStep=1 and EXPECT 2.
+//    This proves the 2x4_4 variant's helper (and its 2x4_4 batch-3 file) was
+//    translated VERBATIM and link-resolves over the Sim substrate.
+// ---------------------------------------------------------------------------
+extern int GetNowShuttleMode_2x4_4(int iSht);
 
 // ---------------------------------------------------------------------------
 //  Minimal PASS / FAIL harness (same style as the other W6 verify TUs)
@@ -135,7 +164,7 @@ static void witnessRouting(const char* name, void (*fn)())
 
 int main()
 {
-    printf("==== W6.2c-OUT variants verify (batch: 1x1_1/1x2_2/1x2_4/1x3_2_14/1x3_4/1x4_2) ====\n");
+    printf("==== W6.2c-OUT variants verify (b1: 1x1_1.. b2: 1x4_4S.. b3 FINAL: 2x3_6/2x4_4/2x4_8/2x5_8/2x6_8/2x8_8/All_1Picker) ====\n");
 
     // =======================================================================
     //  PART A -- dispatch-routing witness for all 6 LIVE variants
@@ -167,6 +196,48 @@ int main()
     witnessRouting("2x2_4",    DoOutArm_9045_2x2_4);
     witnessRouting("2x2_8",    DoOutArm_9045_2x2_8);
     witnessRouting("2x3_6_14", DoOutArm_9045_2x3_6_14);
+
+    // =======================================================================
+    //  PART A3 -- dispatch-routing witness for the 7 W6.2c-OUT batch-3 (FINAL)
+    //  LIVE variants.  Each variant's DoOutArm_9045_<v>() opens with the SAME
+    //  verbatim golden task-1 entry (confirmed in each variant .cpp:
+    //  case 1: bSortingAllBinTrayFinish=false; Task=5; falling 5->10->50 via the
+    //  offline MoveOutArmToAutoSafe()/CheckOutArmInitState()==true stubs).  The
+    //  engine ladders route each enum to exactly these callees (ENUM->CALLEE,
+    //  Oracle 3 / MachineType.h enum eInArmType): iInArmType=18 e9045_2x3_6
+    //  ->_2x3_6; 20 e9045_2x4_4_14 OR 21 e9045_2x4_4_13 ->_2x4_4; 22->_2x4_8;
+    //  23->_2x5_8; 24->_2x6_8; 26 e9045_2x8_8 AND 25 e9045_2x8_32 BOTH ->_2x8_8.
+    //  All_1Picker is NOT enum-routed: it is the FIRST ladder branch, taken when
+    //  USE_PICKER_COUNT==ep1Picker (DoOutArm-ONLY -- no DoPickFromShuttle arm).
+    //  Their static no-op stubs were removed in aoutarm9045.cpp -- these resolve
+    //  to the REAL translated bodies in ht9045_sm.  This batch empties BOTH the
+    //  static-stub and the extern-gate blocks -> out-arm fan-out is now 100% live.
+    // =======================================================================
+    printf("[A3] dispatch routes to the REAL DoOutArm_9045_<v> (batch-3 FINAL, stubs removed)\n");
+    witnessRouting("2x3_6",      DoOutArm_9045_2x3_6);
+    witnessRouting("2x4_4",      DoOutArm_9045_2x4_4);
+    witnessRouting("2x4_8",      DoOutArm_9045_2x4_8);
+    witnessRouting("2x5_8",      DoOutArm_9045_2x5_8);
+    witnessRouting("2x6_8",      DoOutArm_9045_2x6_8);
+    witnessRouting("2x8_8",      DoOutArm_9045_2x8_8);
+    // All_1Picker: DoOutArm-ONLY (picker-gated FIRST ladder branch, no DoPick arm)
+    witnessRouting("All_1Picker", DoOutArm_9045_All_1Picker);
+
+    // =======================================================================
+    //  PART C2 -- Oracle 2: pure mode helper for 2x4_4 (golden :38 early-return).
+    //  GetNowShuttleMode_2x4_4(iSht) returns 2 IMMEDIATELY when
+    //  OutArmSuck.iXStep==1 && OutArmSuck.iYStep==1 (single-pick), DETERMINISTIC,
+    //  no FR/BRCarryKit grid or Prod dependency.  We seed both steps to 1 and
+    //  EXPECT 2 for BOTH shuttles -- proving the real batch-3 2x4_4 helper body
+    //  (not a stub) is linked and the early-return formula is verbatim.
+    // =======================================================================
+    printf("[C2] Oracle 2: GetNowShuttleMode_2x4_4 early-return (golden aoutarm9045_2x4_4.cpp:38)\n");
+    OutArmSuck.iXStep = 1;
+    OutArmSuck.iYStep = 1;
+    CHECK(GetNowShuttleMode_2x4_4(0) == 2,
+          "C2 GetNowShuttleMode_2x4_4(0) == 2 (iXStep==iYStep==1 single-pick early-return)");
+    CHECK(GetNowShuttleMode_2x4_4(1) == 2,
+          "C2 GetNowShuttleMode_2x4_4(1) == 2 (iXStep==iYStep==1 single-pick early-return)");
 
     // =======================================================================
     //  PART C -- Oracle 1: pure geometry/shuttle-mode helper for 2x1_2.

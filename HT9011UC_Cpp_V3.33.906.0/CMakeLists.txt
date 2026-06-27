@@ -511,6 +511,21 @@ add_library(ht9045_sm STATIC
     aoutarm9045_2x2_4.cpp
     aoutarm9045_2x2_8.cpp
     aoutarm9045_2x3_6_14.cpp
+    # --- W6.2c-OUT batch-3 (FINAL 7 OUT-ARM site variants made ACTIVE; LIVE mode):
+    #     2x3_6/2x4_4/2x4_8/2x5_8/2x6_8/2x8_8/All_1Picker.  This empties BOTH the
+    #     gated-extern and static-stub blocks in aoutarm9045.cpp -- all out-arm
+    #     variants now resolve to real translated funcs.  Drove the substrate add of
+    #     TMyKitSuck::HasRealIC_Left/Right (golden MyKitSuck.h:294-295) used by
+    #     2x5_8/2x6_8/2x8_8, and the REMOVAL of the temp MoveOutArmToShuttleIncludeZ_
+    #     9045_2x4_4 stub (now defined for real in aoutarm9045_2x4_4.cpp).
+    #     All_1Picker is DoOutArm-ONLY (picker-gated; no DoPickFromShuttle callee).
+    aoutarm9045_2x3_6.cpp
+    aoutarm9045_2x4_4.cpp
+    aoutarm9045_2x4_8.cpp
+    aoutarm9045_2x5_8.cpp
+    aoutarm9045_2x6_8.cpp
+    aoutarm9045_2x8_8.cpp
+    aoutarm9045_All_1Picker.cpp
     # --- W6.2c-OUT cross-module offline shims: the out-arm ENGINE free-functions
     #     + SM-cursor globals the 6 variants call but whose golden bodies (aoutarm.cpp
     #     / aoutarm9045.cpp engine helpers / Magazine / aRotateKIT_Out / AutoTeach /

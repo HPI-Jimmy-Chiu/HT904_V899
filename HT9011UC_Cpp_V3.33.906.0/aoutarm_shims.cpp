@@ -55,13 +55,9 @@ int  OutArmPickShuttleAlarm(int, bool, AnsiString) { return 0; }               /
 bool CheckTesterZ(int)                             { return true; }            // golden aoutarm9045.cpp -- offline: tester Z safe
 bool CheckShuttleICPos(int)                        { return true; }            // golden aoutarm9045.cpp -- offline: shuttle IC pos OK
 bool CheckDuplicateBarCode()                       { return true; }            // golden aoutarm.h:130 -- offline: barcode OK / not duplicate (so the case-3000 guard `==false` never forces Task=3000); only called by 1x4_4 under CosFunction.bBarcodeDuplicateFileByOutArm (false offline)
-// CROSS-VARIANT (W6.2c-OUT batch-2): DoPickFromShuttle_9045_2x3_6_14 case-1 calls the
-// SIBLING export MoveOutArmToShuttleIncludeZ_9045_2x4_4 (golden aoutarm9045_2x3_6_14.cpp:472)
-// whose REAL home is aoutarm9045_2x4_4.cpp -- NOT translated/added yet (a later batch).
-// Offline-safe stub so ht9045_sm links now; arm "reached shuttle" -> true (matches the
-// MoveOutArmToShuttleIncludeZ_9045_<layout> offline convention).  REMOVE this when
-// aoutarm9045_2x4_4.cpp is added live (it will define the real symbol -> duplicate).
-bool MoveOutArmToShuttleIncludeZ_9045_2x4_4(int,int,bool) { return true; }      // golden aoutarm9045_2x4_4.h -- offline: reached
+// (W6.2c-OUT batch-3) The temp MoveOutArmToShuttleIncludeZ_9045_2x4_4 stub that lived
+// here is REMOVED -- aoutarm9045_2x4_4.cpp is now translated/added live and DEFINES the
+// real symbol (golden aoutarm9045_2x4_4.cpp:486); keeping the stub = duplicate symbol.
 
 // SetOutArmNeedDestory: 4-arg (golden aoutarm9045.cpp) + 5-arg (RogerYang 20250516
 // 9046AU, default bPlace).  Both overloads referenced across the variant set.
@@ -114,3 +110,37 @@ void SetOutArmHome()                               {}                          /
 class TfFixAICCD { public: void OutArmCycleCounterUpdate(); };                 // golden FixAICCD.h form (offline single-method mirror)
 void TfFixAICCD::OutArmCycleCounterUpdate() {}                                 // golden FixAICCD.cpp -- offline: cycle-counter UI no-op
 TfFixAICCD *fFixAICCD = 0;                                                      // golden FixAICCD.h:152 -- offline: null (never derefed offline)
+
+//==============================================================================
+//  (W6.2c-OUT batch-3) 9046AU SORT-ARM/SORT-SHUTTLE engine surface (golden
+//  aoutarm9045.cpp / aoutarm.h, RogerYang 20250513-20250710).  Called by
+//  aoutarm9045_2x4_8 / 2x8_8 only under USE_OUT_SORT_ARM != eartUninstall, which
+//  is never true offline -> these branches are inert; defined here ONCE so
+//  ht9045_sm links.  Faithful offline end-state (no AU sort dispatch).
+//==============================================================================
+int  iPlaceToSortShtTask = 0;                                                  // golden aoutarm.h (9046AU) -- offline SM cursor
+void InitPlaceToSortShtTask()                                  {}              // golden aoutarm9045.h (9046AU) -- offline: no-op
+bool NeedPlaceToSort()                                         { return false; } // golden aoutarm9045.h (9046AU) -- offline: no AU dispatch
+int  GetSortArmToSortShuttleOffset()                           { return 0; }   // golden aoutarm9045.cpp (9046AU) -- offline: 0
+int  GetSortArmPitchX(int /*iMovePitchX*/, int /*iOffsetPos*/) { return 0; }   // golden aoutarm9045.cpp (9046AU) -- offline: 0
+void GetSortShuttleStatus_Pick(int /*iZPos*/[][MAX_ARM_Col], bool /*bZDown*/, bool /*bZFlag*/[][MAX_ARM_Col]) {} // golden aoutarm9045.cpp (9046AU) -- offline: leave caller arrays untouched (zeroed by caller)
+bool IsCheckSortArmDestroyActiveFinish(int /*iXPos*/, int /*iYPos*/) { return true; } // golden aoutarm9045.cpp (9046AU) -- offline: finished
+void DoSortArmSuckPreOn(int /*iKit*/, int /*iXPos*/, int /*iYPos*/, bool /*bZDown*/) {} // golden aoutarm9045.cpp (9046AU) -- offline: no-op
+bool CheckSortArmXYPitch_2x4_8(int * /*iX*/, int * /*iY*/, int /*iMovePitchX*/) { return true; } // golden aoutarm9045_2x4_8.cpp (9046AU; engine def) -- offline: pitch OK
+void SetSortShuttleStatus_Place(int /*iShtRow*/, int /*iShtCol*/, int /*iSuckRow*/, int /*iSuckCol*/) {} // golden aoutarm9045.h:33 (9046AU) -- offline: no-op
+
+//==============================================================================
+//  (W6.2c-OUT batch-3) AutoTeach close-pitch geometry (golden aoutarm.h AutoTeach
+//  surface).  Used by aoutarm9045_2x8_8 close-site placement; offline returns 0 /
+//  inert so the normal (non-auto-teach) placement path is taken.
+//==============================================================================
+int    AutoCalculateOutArmXClosePitch(int /*iWhichAuto*/, bool /*bUseDeviceDinemsion*/) { return 0; } // golden aoutarm.h -- offline: 0
+int    AutoCalculateOutArmYClosePitch(int /*iWhichAuto*/) { return 0; }        // golden aoutarm.h -- offline: 0
+double dOutArmXPitch_1Step = 0.0;                                              // golden aoutarm.h -- offline: 0
+int    iOutArmYPosition    = 0;                                                // golden aoutarm.h -- offline: 0
+
+//==============================================================================
+//  (W6.2c-OUT batch-3) Out-rotate kit (golden aRotateKIT_Out.h, Ifor 20251215).
+//  Used by aoutarm9045_All_1Picker rotate cases 110/120; offline: rotate "done".
+//==============================================================================
+bool MoveOutRotateToDegreeAtSameTime(int /*iDegree*/, bool /*bInit*/) { return true; } // golden aRotateKIT_Out.h -- offline: rotate done

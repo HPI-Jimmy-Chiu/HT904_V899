@@ -232,6 +232,63 @@ bool TMyKitSuck::HasRealIC()
             if(Item[i][j]==HAS_IC || Item[i][j]==HAS_HOT_IC) return true;
     return false;
 }
+// -- W6.2c(OUT-ARM) batch-3 ADD: golden MyKitSuck.cpp:458/486 VERBATIM (pure Item
+//    scan, no HAL). Left-half uses j2=j, right-half uses j2=j+Mid; HAS_NULL_IC /
+//    HAS_NULL_CLEAN_IC / NULL_IC are not "real"; any other -> real IC present.
+bool TMyKitSuck::HasRealIC_Left(int iRow, int Mid)                              //golden MyKitSuck.cpp:458
+{
+    int iHasNullICCount=0;
+    int iNullICCount=0;
+    int iOtherCount=0;
+    int j2;
+    for(int i=0; i<iRow; i++)
+    {
+        for(int j=0; j<Mid; j++)
+        {
+            j2=j;
+            if(Item[i][j2]==HAS_NULL_IC)
+                iHasNullICCount++;
+            else if(Item[i][j2]==HAS_NULL_CLEAN_IC)                             //wei 20160130
+                iHasNullICCount++;
+            else if(Item[i][j2]==NULL_IC)
+                iNullICCount++;
+            else
+                iOtherCount++;
+        }
+    }
+
+    if(iOtherCount)
+        return true;
+    else
+        return false;
+}
+bool TMyKitSuck::HasRealIC_Right(int iRow, int Mid)                             //golden MyKitSuck.cpp:486
+{
+    int iHasNullICCount=0;
+    int iNullICCount=0;
+    int iOtherCount=0;
+    int j2;
+    for(int i=0; i<iRow; i++)
+    {
+        for(int j=0; j<Mid; j++)
+        {
+            j2=j+Mid;
+            if(Item[i][j2]==HAS_NULL_IC)
+                iHasNullICCount++;
+            else if(Item[i][j2]==HAS_NULL_CLEAN_IC)                             //wei 20160130
+                iHasNullICCount++;
+            else if(Item[i][j2]==NULL_IC)
+                iNullICCount++;
+            else
+                iOtherCount++;
+        }
+    }
+
+    if(iOtherCount)
+        return true;
+    else
+        return false;
+}
 bool TMyKitSuck::NoIC()                { return !HasRealIC(); }
 bool TMyKitSuck::IsPickSuckFinish()    { return true; }     // offline: nothing left to suck
 bool TMyKitSuck::IsPickDestroyFinish() { return true; }     // offline: nothing left to destroy
@@ -478,13 +535,14 @@ std::vector<TInLaserCheck*> LaserCheckPos;
 // extern decls in aHotPlateSubstrate.h satisfy consumers (acarry.cpp / ainarm2.cpp).
 // Values identical (both e*Standard==0) so numeric behavior is unchanged.
 //==============================================================================
-//  XPHSuckToSht_2x8_8_OutArm (golden aoutarm9045_2x8_8.h:7 / aoutarm9045_2x8_8.cpp:31,
-//  JerryYang 20250711) -- OFFLINE home for the in-arm 2x8_8 family until the out-arm
-//  2x8_8 wave lands.  Zero-init (the in-arm CheckSTMMode_2x8_8 writes the live cells
-//  before any read; no read precedes a write offline).  When the out-arm file is
-//  translated it OWNS this def and this offline one is removed.
+//  XPHSuckToSht_2x8_8_OutArm (golden aoutarm9045_2x8_8.h:7 / aoutarm9045_2x8_8.cpp:332,
+//  JerryYang 20250711).
+//AI(W6.2c-OUT-batch3) 20260627: ownership TRANSFERRED -- the out-arm 2x8_8 wave has
+//  landed ACTIVE this batch and aoutarm9045_2x8_8.cpp now OWNS the REAL golden def
+//  (full special-關SITE pick map). Removed the offline zero-init placeholder here to
+//  avoid a multiple-definition link error; the extern in aHotPlateSubstrate.h still
+//  serves the substrate-only in-arm consumers (ainarm9045.cpp / inarm 2x8_8 family).
 //==============================================================================
-int XPHSuckToSht_2x8_8_OutArm[e2x8ModeTotal][2][8] = {{{0}}};
 
 //==============================================================================
 //  (A) [W6.2b] in-arm ENGINE cursors owned by ainarm2.cpp (not-yet-translated).

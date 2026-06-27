@@ -185,6 +185,11 @@ public:
     bool bAlreadyRotate;        // :223  (Rotate done)
     // pick SM / DoInArm_9045 predicates
     bool HasRealIC();           // :312  (any nozzle carries a real IC)
+    // -- W6.2c(OUT-ARM) batch-3 ADD: golden MyKitSuck.h:294-295 (bodies .cpp:458/486).
+    //    Left-/right-half real-IC predicate, used by DoOutArm_9045_2x5_8/2x6_8/2x8_8
+    //    (FR/BRCarryKit.HasRealIC_Left/Right). Pure Item-grid scan, no HAL.
+    bool HasRealIC_Left(int iRow, int Mid);   // :294
+    bool HasRealIC_Right(int iRow, int Mid);  // :295
     bool NoIC();                // :316  (no nozzle carries any IC)
     bool IsPickSuckFinish();    // :360  (all pick-suck done)
     bool IsPickDestroyFinish(); // :362  (all pick-destroy done)
