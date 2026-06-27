@@ -149,6 +149,16 @@ public:
     bool bNeedDestroy;          // golden MyKitSuck.h:120
     bool GetNeedDestroyStatus() { return bNeedDestroy; }   // golden MyKitSuck.h:124
 #endif
+
+    // -- W6.2c(OUT-ARM) ADD: the out-arm pick SM reads/writes the per-nozzle
+    //    "needs suck(vacuum)" flag (golden MyKitSuck.h:119/121/123, inline bodies).
+    //    Offline-safe: plain data, default-false; no HW touched.
+#ifndef HT9045_SUCKER_NEEDSUCK_ADDED
+#define HT9045_SUCKER_NEEDSUCK_ADDED
+    bool bNeedSuck;             // golden MyKitSuck.h:119
+    void SetNeedSuck(bool Value) { bNeedSuck = Value; }    // golden MyKitSuck.h:121
+    bool GetNeedSuckStatus()     { return bNeedSuck; }     // golden MyKitSuck.h:123
+#endif
 };
 
 // ---- TMyKitSuck (golden MyKitSuck.h:151) -- MINIMAL mirror ------------------
@@ -181,6 +191,10 @@ public:
     bool IsPickFinish();        // :364  (pick cycle finished)
     void ClearAll();            // :290  (clear the whole grid)
     void SetAllToNullIC();      // :286  (set every nozzle to NULL_IC)
+    // -- W6.2c(OUT-ARM) ADD: golden MyKitSuck.cpp:369 (Steven 20241017): clear
+    //    unused nozzles + HAS_NULL_IC -> NULL_IC over the pick grid.  Item-grid
+    //    scan only (no HAL).  Used by DoOutArm_9045_<v> after FR/BRCarryKit pick.
+    void SetUnuseAndHasNullICToNullIC();  // :279
 
     // scalar topology / shuttle-kit selectors (golden :167-205)
     int  iMaxCol;               // :160
@@ -662,6 +676,12 @@ extern bool bPlaceToShuttle2Step;       // golden ainarm2.h:56 (Steven 20160721)
 // golden type is HTimer (cpublic.h fwd); offline we use TQPF_Timer (same Off()/
 // SetSecAndOn() surface the SM calls) to avoid a cross-include of atester_shims.h.
 extern TQPF_Timer hInArmYpitchHomeTimer; // golden ainarm2.h:212 (kevin 20180822 Ypitch)
+// -- W6.2c(OUT-ARM) ADD: out-arm Ypitch-home timer sibling (golden aoutarm.h:213,
+//    HTimer); offline TQPF_Timer.  Defined once in aHotPlateSubstrate.cpp.
+#ifndef HT9045_OUTARM_YPITCH_TIMER_DECLARED
+#define HT9045_OUTARM_YPITCH_TIMER_DECLARED
+extern TQPF_Timer hOutArmYpitchHomeTimer; // golden aoutarm.h:213 (offline TQPF_Timer)
+#endif
 // per-site task cursors the variant SMs bind `int &Task=...` to (golden ainarm2.h)
 extern int  iInArmPlaceToHotPlateTask;  // golden ainarm2.h (DoPlaceToHotPlate_9045_* cursor)
 extern int  iInArmPlaceToShuttleTask;   // golden ainarm2.h (DoInArmPlaceToShuttle_9045_* cursor)

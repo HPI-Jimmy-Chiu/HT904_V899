@@ -93,19 +93,24 @@ int  iOutArmIonFanGiveWayTask;                                                  
 //==  this wave.  Below: the real golden prototypes behind `#if 0`, then an ACTIVE
 //==  compiling stub block (mirror ainarm9045.cpp:887).
 //==============================================================================
-#if 0 // TODO(W6.2b variants) -- golden per-layout DoOutArm_9045_<layout> externs (aoutarm9045_<layout>.h)
-void DoOutArm_9045_All_1Picker();
+// --- W6.2c-OUT batch: 6 site variants made ACTIVE -- their real per-layout
+//     externs un-gated here (translated bodies live in aoutarm9045_<layout>.cpp,
+//     registered in CMake lib ht9045_sm); their static no-op stubs removed below.
 void DoOutArm_9045_1x1_1();      void DoOutArm_9045_1x2_2();     void DoOutArm_9045_1x2_4();
 void DoOutArm_9045_1x3_2_14();   void DoOutArm_9045_1x3_4();     void DoOutArm_9045_1x4_2();
+bool DoPickFromShuttle_9045_1x1_1(int);     bool DoPickFromShuttle_9045_1x2_2(int);
+bool DoPickFromShuttle_9045_1x2_4(int);     bool DoPickFromShuttle_9045_1x3_2_14(int);
+bool DoPickFromShuttle_9045_1x3_4(int);     bool DoPickFromShuttle_9045_1x4_2(int);
+
+#if 0 // TODO(W6.2b variants) -- golden per-layout DoOutArm_9045_<layout> externs (aoutarm9045_<layout>.h)
+void DoOutArm_9045_All_1Picker();
 void DoOutArm_9045_1x4_4S();     void DoOutArm_9045_1x4_4();     void DoOutArm_9045_1x4_8();
 void DoOutArm_9045_2x1_2();      void DoOutArm_9045_2x2_4();     void DoOutArm_9045_2x2_8();
 void DoOutArm_9045_2x3_6_14();   void DoOutArm_9045_2x3_6();     void DoOutArm_9045_2x4_4();
 void DoOutArm_9045_2x4_8();      void DoOutArm_9045_2x5_8();     void DoOutArm_9045_2x6_8();
 void DoOutArm_9045_2x8_8();
-bool DoPickFromShuttle_9045_1x1_1(int);     bool DoPickFromShuttle_9045_1x2_2(int);
-bool DoPickFromShuttle_9045_1x2_4(int);     bool DoPickFromShuttle_9045_1x3_2_14(int);
-bool DoPickFromShuttle_9045_1x3_4(int);     bool DoPickFromShuttle_9045_1x4_4S(int);
-bool DoPickFromShuttle_9045_1x4_2(int);     bool DoPickFromShuttle_9045_1x4_4(int);
+bool DoPickFromShuttle_9045_1x4_4S(int);
+bool DoPickFromShuttle_9045_1x4_4(int);
 bool DoPickFromShuttle_9045_1x4_8(int);     bool DoPickFromShuttle_9045_2x1_2(int);
 bool DoPickFromShuttle_9045_2x2_4(int);     bool DoPickFromShuttle_9045_2x2_8(int);
 bool DoPickFromShuttle_9045_2x3_6_14(int);  bool DoPickFromShuttle_9045_2x3_6(int);
@@ -113,21 +118,19 @@ bool DoPickFromShuttle_9045_2x4_4(int);     bool DoPickFromShuttle_9045_2x4_8(in
 bool DoPickFromShuttle_9045_2x5_8(int);     bool DoPickFromShuttle_9045_2x6_8(int);
 bool DoPickFromShuttle_9045_2x8_8(int);
 #else
-// ACTIVE per-layout stubs (variant bodies out of scope this wave -- W6.2b variants)
-static void DoOutArm_9045_All_1Picker(){} static void DoOutArm_9045_1x1_1(){}
-static void DoOutArm_9045_1x2_2(){}       static void DoOutArm_9045_1x2_4(){}
-static void DoOutArm_9045_1x3_2_14(){}    static void DoOutArm_9045_1x3_4(){}
-static void DoOutArm_9045_1x4_2(){}       static void DoOutArm_9045_1x4_4S(){}
+// ACTIVE per-layout stubs (variant bodies out of scope this wave -- W6.2b variants).
+// The 6 W6.2c-OUT batch variants (1x1_1/1x2_2/1x2_4/1x3_2_14/1x3_4/1x4_2) have had
+// their stubs REMOVED -- they now resolve to the real translated funcs.
+static void DoOutArm_9045_All_1Picker(){}
+static void DoOutArm_9045_1x4_4S(){}
 static void DoOutArm_9045_1x4_4(){}       static void DoOutArm_9045_1x4_8(){}
 static void DoOutArm_9045_2x1_2(){}       static void DoOutArm_9045_2x2_4(){}
 static void DoOutArm_9045_2x2_8(){}       static void DoOutArm_9045_2x3_6_14(){}
 static void DoOutArm_9045_2x3_6(){}       static void DoOutArm_9045_2x4_4(){}
 static void DoOutArm_9045_2x4_8(){}       static void DoOutArm_9045_2x5_8(){}
 static void DoOutArm_9045_2x6_8(){}       static void DoOutArm_9045_2x8_8(){}
-static bool DoPickFromShuttle_9045_1x1_1(int){return false;}    static bool DoPickFromShuttle_9045_1x2_2(int){return false;}
-static bool DoPickFromShuttle_9045_1x2_4(int){return false;}    static bool DoPickFromShuttle_9045_1x3_2_14(int){return false;}
-static bool DoPickFromShuttle_9045_1x3_4(int){return false;}    static bool DoPickFromShuttle_9045_1x4_4S(int){return false;}
-static bool DoPickFromShuttle_9045_1x4_2(int){return false;}    static bool DoPickFromShuttle_9045_1x4_4(int){return false;}
+static bool DoPickFromShuttle_9045_1x4_4S(int){return false;}
+static bool DoPickFromShuttle_9045_1x4_4(int){return false;}
 static bool DoPickFromShuttle_9045_1x4_8(int){return false;}    static bool DoPickFromShuttle_9045_2x1_2(int){return false;}
 static bool DoPickFromShuttle_9045_2x2_4(int){return false;}    static bool DoPickFromShuttle_9045_2x2_8(int){return false;}
 static bool DoPickFromShuttle_9045_2x3_6_14(int){return false;} static bool DoPickFromShuttle_9045_2x3_6(int){return false;}
@@ -159,6 +162,12 @@ bool DetectAutoTray(int,int*)                      { return true;  }  // golden 
 void SendDataToASE(AnsiString)                     {}                 // golden csystem.h:245 -- ASE log no-op
 bool MagazineBufferIsEmpty(int)                    { return true;  }  // golden csystem.h:290 -- no magazine present
 int  WhichMagazineBufferIsFull()                   { return -1;    }  // golden csystem.h:289 -- no magazine full
+// -- W6.2c-OUT ADD: out-arm engine cross-module surface the 6 site-variant
+//    DoOutArm/DoPickFromShuttle SMs call (golden aoutarm.h:124 / aoutarm9045.cpp
+//    Steven 20161214).  No translated home yet -> offline-safe non-static defs so
+//    the variant TUs link.  TODO(W7): wire to the real bin-box / JAM0201 skip SMs.
+bool ErrorBinBoxDetect(int)                        { return false; }  // golden aoutarm.h:124 -- offline: no error bin-box detected
+void PorcessJAM0201OutArmPickUpErrorSkip(int,int,int,int,int) {}      // golden aoutarm9045.cpp (Steven 20161214) -- offline: pick-up error skip ErrorLog no-op
 //  (ii) functions with NO target home at all -> file-local static stubs.
 static bool MoveOutArmToAutoSafe()                 { return true;  }  // golden aoutarm.h:52 -- offline: Z reaches safe immediately
 static bool MoveOutArmZToPlateSafe()               { return true;  }  // golden -- offline: Z reaches plate-safe immediately

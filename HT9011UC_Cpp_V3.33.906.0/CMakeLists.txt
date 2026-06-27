@@ -485,6 +485,25 @@ add_library(ht9045_sm STATIC
     #     Pumps the same aHotPlateSubstrate (OutArmSuck/FRCarryKit/BRCarryKit/
     #     OutArm2Suck + out-arm cursor ints) as the in-arm engine.
     aoutarm9045.cpp
+    # --- W6.2c-OUT batch (6 OUT-ARM site variants made ACTIVE; dispatch arms
+    #     pulled out of the "#if 0 // TODO(W6.2b variants)" gate in aoutarm9045.cpp
+    #     + their 2 static no-op stubs removed).  All 6 route to a LIVE callee per
+    #     the golden ENUM->CALLEE map.  These drove the substrate adds of
+    #     TMySucker::GetNeedSuckStatus/SetNeedSuck/bNeedSuck (golden MyKitSuck.h:
+    #     119/121/123) + TMyKitSuck::SetUnuseAndHasNullICToNullIC (golden
+    #     MyKitSuck.cpp:369) in aHotPlateSubstrate.{h,cpp}.
+    aoutarm9045_1x1_1.cpp
+    aoutarm9045_1x2_2.cpp
+    aoutarm9045_1x2_4.cpp
+    aoutarm9045_1x3_2_14.cpp
+    aoutarm9045_1x3_4.cpp
+    aoutarm9045_1x4_2.cpp
+    # --- W6.2c-OUT cross-module offline shims: the out-arm ENGINE free-functions
+    #     + SM-cursor globals the 6 variants call but whose golden bodies (aoutarm.cpp
+    #     / aoutarm9045.cpp engine helpers / Magazine / aRotateKIT_Out / AutoTeach /
+    #     FixAICCD) are not translated yet.  Offline-safe non-static defs so an exe
+    #     linking ht9045_sm resolves them; the variants forward-declare each.
+    aoutarm_shims.cpp
     # --- W7 (TRAY-ARM engine): the top dispatcher DoCatchTray (flat switch) + 8
     #     pumpable task SM skeletons (DoCatchFromLoader / CatchNewTrayFromBuffer /
     #     DoPlaceTrayToAuto / DoPlaceToBuffer / DoSlapTray / DoCatchUnderTray /

@@ -776,6 +776,31 @@ endif()
 
 add_test(NAME W6_2_OutArmCore COMMAND test_w6_2_outarm_core)
 
+# --- test_w6_2_outarm_variants: prove the LIVE out-arm site variants DISPATCH ---
+#   W6.2c-OUT batch (1x1_1/1x2_2/1x2_4/1x3_2_14/1x3_4/1x4_2).  Independent witness
+#   that the engine dispatch arm for each layout resolves to the REAL translated
+#   DoOutArm_9045_<v>() body (in ht9045_sm) -- NOT the removed file-local no-op
+#   `static void ...(){}` stub.  Each variant's golden task-1 entry writes the
+#   global bSortingAllBinTrayFinish=false and advances OutArmTask off 1 (case
+#   1->5->10->50 via the offline MoveOutArmToAutoSafe()/CheckOutArmInitState()
+#   stubs); the deleted no-op stub would have left both untouched.  Plus the
+#   engine GetOutArmPitch_9045 interpolation oracle as a link-regression guard.
+#   Same RESCAN link group as test_w6_2_outarm_core so the cprod<->cpublic<->
+#   cmydef ctor cross-references settle and ht9045_sm carries the variant bodies.
+add_executable(test_w6_2_outarm_variants
+    test_w6_2_outarm_variants.cpp
+)
+
+target_link_libraries(test_w6_2_outarm_variants PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w6_2_outarm_variants PRIVATE ws2_32)
+endif()
+
+add_test(NAME W6_2_OutArmVariants COMMAND test_w6_2_outarm_variants)
+
 # --- test_w6_3_catchtray_core: pump the TRAY-ARM central task SMs over Sim HAL ---
 #   The task-mandated W6.3 *core engine* verify TU (mirror of the out-arm core TU).
 #   Proves acatchtray.cpp (the TrayArm ENGINE, in ht9045_sm) LINKS + its ACTIVE

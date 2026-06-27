@@ -244,6 +244,27 @@ void TMyKitSuck::ClearAll()
 }
 void TMyKitSuck::SetAllToNullIC()      { ClearAll(); }       // golden :286
 
+// -- W6.2c(OUT-ARM) ADD: golden MyKitSuck.cpp:369 (Steven 20241017) verbatim.
+//    Clears unused nozzles (beyond iShtRow/iShtCol) + maps HAS_NULL_IC->NULL_IC.
+#ifndef HT9045_KITSUCK_SETUNUSE_BODY
+#define HT9045_KITSUCK_SETUNUSE_BODY
+void TMyKitSuck::SetUnuseAndHasNullICToNullIC()                                 //Steven 20241017 : 清除沒用到的料 與 HAS_NULL_IC的料
+{
+    for(int i=0; i<iMaxRow; i++)
+    {
+        for(int j=0; j<iMaxCol; j++)
+        {
+            if(i>=iShtRow ||
+               j>=iShtCol ||
+               Item[i][j]==HAS_NULL_IC)
+            {
+                SetItemData(i, j, NULL_IC);
+            }
+        }
+    }
+}
+#endif
+
 // -- W6.2b(2x4_16) ADD: golden TMyKitSuck methods the 2x4_16 in-arm SMs call.
 //    Guarded so a parallel sibling variant that adds the same body does not
 //    produce a duplicate definition.
@@ -595,6 +616,11 @@ TQPF_Timer InArmReleaseDelayToHot;       // golden ainarm2.h:45
 TQPF_Timer InArmReleaseDelay;            // golden ainarm2.h:46
 TQPF_Timer MyInArmAtShuttleTimer;        // golden ainarm2.h:47
 TQPF_Timer hInArmYpitchHomeTimer;        // golden ainarm2.h:212 (offline: TQPF_Timer, see .h note)
+// -- W6.2c(OUT-ARM) ADD: out-arm sibling of hInArmYpitchHomeTimer.  Golden
+//    aoutarm.h:213 (HTimer); exposed offline as TQPF_Timer (same Off()/
+//    SetSecAndOn() surface), mirroring the in-arm precedent above.  Single
+//    definition; the 6 out-arm variants forward-declare `extern TQPF_Timer`.
+TQPF_Timer hOutArmYpitchHomeTimer;       // golden aoutarm.h:213 (offline: TQPF_Timer)
 int  iBackInArmHotCount  = 0;            // golden ainarm2.h:76
 bool InArmXMoveSafe      = false;        // golden ainarm2.h:83
 bool bPlaceToShuttle2Step = false;       // golden ainarm2.h:56
