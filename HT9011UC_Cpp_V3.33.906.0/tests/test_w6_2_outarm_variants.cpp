@@ -1,9 +1,11 @@
 // =============================================================================
 //  test_w6_2_outarm_variants.cpp  --  W6.2c-OUT VERIFY: the LIVE out-arm site
-//  variants (batch-1: 1x1_1 / 1x2_2 / 1x2_4 / 1x3_2_14 / 1x3_4 / 1x4_2)
+//  variants
+//    batch-1: 1x1_1 / 1x2_2 / 1x2_4 / 1x3_2_14 / 1x3_4 / 1x4_2
+//    batch-2: 1x4_4S / 1x4_4 / 1x4_8 / 2x1_2 / 2x2_4 / 2x2_8 / 2x3_6_14
 //
 //  Translation wave: W6.2c-OUT (out-arm per-site-config variants over Sim HAL)
-//  Author: AI(W6.2c-outarm-verify) 20260627
+//  Author: AI(W6.2c-outarm-verify) 20260627  (batch-2 added 20260627)
 //
 //  PURPOSE
 //  -------
@@ -60,6 +62,14 @@
 #include "aoutarm9045_1x3_2_14.h"   // void DoOutArm_9045_1x3_2_14();
 #include "aoutarm9045_1x3_4.h"      // void DoOutArm_9045_1x3_4();
 #include "aoutarm9045_1x4_2.h"      // void DoOutArm_9045_1x4_2();
+// --- W6.2c-OUT batch-2 (1x4_4S/1x4_4/1x4_8/2x1_2/2x2_4/2x2_8/2x3_6_14) ---
+#include "aoutarm9045_1x4_4S.h"     // void DoOutArm_9045_1x4_4S();
+#include "aoutarm9045_1x4_4.h"      // void DoOutArm_9045_1x4_4();
+#include "aoutarm9045_1x4_8.h"      // void DoOutArm_9045_1x4_8();
+#include "aoutarm9045_2x1_2.h"      // void DoOutArm_9045_2x1_2();
+#include "aoutarm9045_2x2_4.h"      // void DoOutArm_9045_2x2_4();
+#include "aoutarm9045_2x2_8.h"      // void DoOutArm_9045_2x2_8();
+#include "aoutarm9045_2x3_6_14.h"   // void DoOutArm_9045_2x3_6_14();
 #include "aoutarm9045.h"            // GetOutArmPitch_9045 (engine geometry oracle)
 #include "cprod.h"                  // Prod / IniConfig (via Config.h)
 #include "cmydef.h"                 // bSortingAllBinTrayFinish / iPitch_Max_minus_Min / iXpitchMinX3
@@ -76,6 +86,18 @@
 extern int  OutArmTask;
 extern bool bCarryControlOutarm1;
 extern bool bCarryControlOutarm2;
+
+// ---------------------------------------------------------------------------
+//  Oracle-1 pure-geometry helper from the 2x1_2 variant (external linkage,
+//  NOT on the variant .h surface -- forward-declared here, defined in
+//  aoutarm9045_2x1_2.cpp:310, golden aoutarm9045_2x1_2.cpp:30).
+//    GetNowShuttleMode_2x1_2(iSht): first branch is
+//      if(ptrOutSHT->UseSiteNoIC()) return 0;
+//    Offline TMyKitSuck::UseSiteNoIC() == true (aHotPlateSubstrate.cpp:181),
+//    ptrOutSHT bound to FRCarryKit/BRCarryKit (both all-NULL_IC offline) ->
+//    GetNowShuttleMode_2x1_2(0)==0 AND ==1)==0 deterministically.  EXPECT 0.
+// ---------------------------------------------------------------------------
+extern int GetNowShuttleMode_2x1_2(int iSht);
 
 // ---------------------------------------------------------------------------
 //  Minimal PASS / FAIL harness (same style as the other W6 verify TUs)
@@ -125,6 +147,40 @@ int main()
     witnessRouting("1x3_2_14", DoOutArm_9045_1x3_2_14);
     witnessRouting("1x3_4",    DoOutArm_9045_1x3_4);
     witnessRouting("1x4_2",    DoOutArm_9045_1x4_2);
+
+    // =======================================================================
+    //  PART A2 -- dispatch-routing witness for the 7 W6.2c-OUT batch-2 LIVE
+    //  variants.  Same golden task-1 entry (verified in each variant .cpp:
+    //  case 1: bSortingAllBinTrayFinish=false; Task=5; falling through 5->10->50
+    //  via offline MoveOutArmToAutoSafe()/CheckOutArmInitState()==true).  The
+    //  engine ladder routes each enum to exactly these callees (ENUM->CALLEE:
+    //  1x4_4_13->1x4_4S; 1x4_4->1x4_4; 1x4_8_Hot->1x4_8; 2x1_2_13->2x1_2;
+    //  2x2_4_12|13|14->2x2_4; 2x2_8_Hot->2x2_8; 2x3_6_14->2x3_6_14).  Their
+    //  static no-op stubs were removed in aoutarm9045.cpp -- these resolve to
+    //  the REAL translated bodies in ht9045_sm.
+    // =======================================================================
+    printf("[A2] dispatch routes to the REAL DoOutArm_9045_<v> (batch-2, stubs removed)\n");
+    witnessRouting("1x4_4S",   DoOutArm_9045_1x4_4S);
+    witnessRouting("1x4_4",    DoOutArm_9045_1x4_4);
+    witnessRouting("1x4_8",    DoOutArm_9045_1x4_8);
+    witnessRouting("2x1_2",    DoOutArm_9045_2x1_2);
+    witnessRouting("2x2_4",    DoOutArm_9045_2x2_4);
+    witnessRouting("2x2_8",    DoOutArm_9045_2x2_8);
+    witnessRouting("2x3_6_14", DoOutArm_9045_2x3_6_14);
+
+    // =======================================================================
+    //  PART C -- Oracle 1: pure geometry/shuttle-mode helper for 2x1_2.
+    //  GetNowShuttleMode_2x1_2(iSht) -> 0 offline for BOTH shuttles because the
+    //  first branch `if(ptrOutSHT->UseSiteNoIC()) return 0;` is taken (offline
+    //  TMyKitSuck::UseSiteNoIC()==true).  Golden aoutarm9045_2x1_2.cpp:30-44.
+    //  This proves the 2x1_2 variant's helper formula was translated VERBATIM
+    //  and link-resolves (external linkage) over the Sim substrate.
+    // =======================================================================
+    printf("[C] Oracle 1: GetNowShuttleMode_2x1_2 (golden aoutarm9045_2x1_2.cpp:30)\n");
+    CHECK(GetNowShuttleMode_2x1_2(0) == 0,
+          "C GetNowShuttleMode_2x1_2(0) == 0 (FRCarryKit->UseSiteNoIC() true offline)");
+    CHECK(GetNowShuttleMode_2x1_2(1) == 0,
+          "C GetNowShuttleMode_2x1_2(1) == 0 (BRCarryKit->UseSiteNoIC() true offline)");
 
     // =======================================================================
     //  PART B -- engine geometry oracle still holds with variants linked

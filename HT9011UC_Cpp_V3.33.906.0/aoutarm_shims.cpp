@@ -54,6 +54,14 @@ bool SwapShuttleDataToOutArm(int,int,int,int,int,int*) { return true; }         
 int  OutArmPickShuttleAlarm(int, bool, AnsiString) { return 0; }               // golden aoutarm9045.cpp -- offline: no alarm action
 bool CheckTesterZ(int)                             { return true; }            // golden aoutarm9045.cpp -- offline: tester Z safe
 bool CheckShuttleICPos(int)                        { return true; }            // golden aoutarm9045.cpp -- offline: shuttle IC pos OK
+bool CheckDuplicateBarCode()                       { return true; }            // golden aoutarm.h:130 -- offline: barcode OK / not duplicate (so the case-3000 guard `==false` never forces Task=3000); only called by 1x4_4 under CosFunction.bBarcodeDuplicateFileByOutArm (false offline)
+// CROSS-VARIANT (W6.2c-OUT batch-2): DoPickFromShuttle_9045_2x3_6_14 case-1 calls the
+// SIBLING export MoveOutArmToShuttleIncludeZ_9045_2x4_4 (golden aoutarm9045_2x3_6_14.cpp:472)
+// whose REAL home is aoutarm9045_2x4_4.cpp -- NOT translated/added yet (a later batch).
+// Offline-safe stub so ht9045_sm links now; arm "reached shuttle" -> true (matches the
+// MoveOutArmToShuttleIncludeZ_9045_<layout> offline convention).  REMOVE this when
+// aoutarm9045_2x4_4.cpp is added live (it will define the real symbol -> duplicate).
+bool MoveOutArmToShuttleIncludeZ_9045_2x4_4(int,int,bool) { return true; }      // golden aoutarm9045_2x4_4.h -- offline: reached
 
 // SetOutArmNeedDestory: 4-arg (golden aoutarm9045.cpp) + 5-arg (RogerYang 20250516
 // 9046AU, default bPlace).  Both overloads referenced across the variant set.

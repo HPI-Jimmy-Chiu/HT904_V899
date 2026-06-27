@@ -498,6 +498,19 @@ add_library(ht9045_sm STATIC
     aoutarm9045_1x3_2_14.cpp
     aoutarm9045_1x3_4.cpp
     aoutarm9045_1x4_2.cpp
+    # --- W6.2c-OUT batch-2 (7 more OUT-ARM site variants made ACTIVE; LIVE mode):
+    #     1x4_4S/1x4_4/1x4_8/2x1_2/2x2_4/2x2_8/2x3_6_14.  Their dispatch arms were
+    #     already active in aoutarm9045.cpp; here their 2 static no-op stubs are
+    #     removed + their 2 extern decls un-gated.  All route to a LIVE callee per
+    #     the golden ENUM->CALLEE map.  Drove the substrate add of CheckDuplicateBarCode
+    #     (golden aoutarm.h:130, offline true) in aoutarm_shims.cpp -- used by 1x4_4.
+    aoutarm9045_1x4_4S.cpp
+    aoutarm9045_1x4_4.cpp
+    aoutarm9045_1x4_8.cpp
+    aoutarm9045_2x1_2.cpp
+    aoutarm9045_2x2_4.cpp
+    aoutarm9045_2x2_8.cpp
+    aoutarm9045_2x3_6_14.cpp
     # --- W6.2c-OUT cross-module offline shims: the out-arm ENGINE free-functions
     #     + SM-cursor globals the 6 variants call but whose golden bodies (aoutarm.cpp
     #     / aoutarm9045.cpp engine helpers / Magazine / aRotateKIT_Out / AutoTeach /

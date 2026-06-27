@@ -101,39 +101,34 @@ void DoOutArm_9045_1x3_2_14();   void DoOutArm_9045_1x3_4();     void DoOutArm_9
 bool DoPickFromShuttle_9045_1x1_1(int);     bool DoPickFromShuttle_9045_1x2_2(int);
 bool DoPickFromShuttle_9045_1x2_4(int);     bool DoPickFromShuttle_9045_1x3_2_14(int);
 bool DoPickFromShuttle_9045_1x3_4(int);     bool DoPickFromShuttle_9045_1x4_2(int);
+// --- W6.2c-OUT batch-2: 7 more variants made ACTIVE (LIVE) -- externs un-gated here.
+void DoOutArm_9045_1x4_4S();  void DoOutArm_9045_1x4_4();  void DoOutArm_9045_1x4_8();
+void DoOutArm_9045_2x1_2();   void DoOutArm_9045_2x2_4();  void DoOutArm_9045_2x2_8();
+void DoOutArm_9045_2x3_6_14();
+bool DoPickFromShuttle_9045_1x4_4S(int); bool DoPickFromShuttle_9045_1x4_4(int);
+bool DoPickFromShuttle_9045_1x4_8(int);  bool DoPickFromShuttle_9045_2x1_2(int);
+bool DoPickFromShuttle_9045_2x2_4(int);  bool DoPickFromShuttle_9045_2x2_8(int);
+bool DoPickFromShuttle_9045_2x3_6_14(int);
 
 #if 0 // TODO(W6.2b variants) -- golden per-layout DoOutArm_9045_<layout> externs (aoutarm9045_<layout>.h)
 void DoOutArm_9045_All_1Picker();
-void DoOutArm_9045_1x4_4S();     void DoOutArm_9045_1x4_4();     void DoOutArm_9045_1x4_8();
-void DoOutArm_9045_2x1_2();      void DoOutArm_9045_2x2_4();     void DoOutArm_9045_2x2_8();
-void DoOutArm_9045_2x3_6_14();   void DoOutArm_9045_2x3_6();     void DoOutArm_9045_2x4_4();
+void DoOutArm_9045_2x3_6();      void DoOutArm_9045_2x4_4();
 void DoOutArm_9045_2x4_8();      void DoOutArm_9045_2x5_8();     void DoOutArm_9045_2x6_8();
 void DoOutArm_9045_2x8_8();
-bool DoPickFromShuttle_9045_1x4_4S(int);
-bool DoPickFromShuttle_9045_1x4_4(int);
-bool DoPickFromShuttle_9045_1x4_8(int);     bool DoPickFromShuttle_9045_2x1_2(int);
-bool DoPickFromShuttle_9045_2x2_4(int);     bool DoPickFromShuttle_9045_2x2_8(int);
-bool DoPickFromShuttle_9045_2x3_6_14(int);  bool DoPickFromShuttle_9045_2x3_6(int);
+bool DoPickFromShuttle_9045_2x3_6(int);
 bool DoPickFromShuttle_9045_2x4_4(int);     bool DoPickFromShuttle_9045_2x4_8(int);
 bool DoPickFromShuttle_9045_2x5_8(int);     bool DoPickFromShuttle_9045_2x6_8(int);
 bool DoPickFromShuttle_9045_2x8_8(int);
 #else
 // ACTIVE per-layout stubs (variant bodies out of scope this wave -- W6.2b variants).
-// The 6 W6.2c-OUT batch variants (1x1_1/1x2_2/1x2_4/1x3_2_14/1x3_4/1x4_2) have had
-// their stubs REMOVED -- they now resolve to the real translated funcs.
+// The W6.2c-OUT batch variants (1x1_1/1x2_2/1x2_4/1x3_2_14/1x3_4/1x4_2) + batch-2
+// (1x4_4S/1x4_4/1x4_8/2x1_2/2x2_4/2x2_8/2x3_6_14) have had their stubs REMOVED --
+// they now resolve to the real translated funcs.
 static void DoOutArm_9045_All_1Picker(){}
-static void DoOutArm_9045_1x4_4S(){}
-static void DoOutArm_9045_1x4_4(){}       static void DoOutArm_9045_1x4_8(){}
-static void DoOutArm_9045_2x1_2(){}       static void DoOutArm_9045_2x2_4(){}
-static void DoOutArm_9045_2x2_8(){}       static void DoOutArm_9045_2x3_6_14(){}
 static void DoOutArm_9045_2x3_6(){}       static void DoOutArm_9045_2x4_4(){}
 static void DoOutArm_9045_2x4_8(){}       static void DoOutArm_9045_2x5_8(){}
 static void DoOutArm_9045_2x6_8(){}       static void DoOutArm_9045_2x8_8(){}
-static bool DoPickFromShuttle_9045_1x4_4S(int){return false;}
-static bool DoPickFromShuttle_9045_1x4_4(int){return false;}
-static bool DoPickFromShuttle_9045_1x4_8(int){return false;}    static bool DoPickFromShuttle_9045_2x1_2(int){return false;}
-static bool DoPickFromShuttle_9045_2x2_4(int){return false;}    static bool DoPickFromShuttle_9045_2x2_8(int){return false;}
-static bool DoPickFromShuttle_9045_2x3_6_14(int){return false;} static bool DoPickFromShuttle_9045_2x3_6(int){return false;}
+static bool DoPickFromShuttle_9045_2x3_6(int){return false;}
 static bool DoPickFromShuttle_9045_2x4_4(int){return false;}    static bool DoPickFromShuttle_9045_2x4_8(int){return false;}
 static bool DoPickFromShuttle_9045_2x5_8(int){return false;}    static bool DoPickFromShuttle_9045_2x6_8(int){return false;}
 static bool DoPickFromShuttle_9045_2x8_8(int){return false;}
