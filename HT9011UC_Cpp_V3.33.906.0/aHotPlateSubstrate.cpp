@@ -177,8 +177,24 @@ bool TMyKitSuck::PartAlreadyTest()                                              
 // Carry-kit presence leaves: this is the W6.0-gated "KitSuck grid" predicate
 // surface (csystem_predicates.cpp HT9045_KITSUCK_GRID_AVAILABLE).  Offline =
 // "no IC present" -> conservative.
-bool TMyKitSuck::UseSiteHasIC()              { return false; }
-bool TMyKitSuck::UseSiteNoIC()               { return true;  }   // no IC => "no IC at use sites" true
+//AI(ht9045-v906) 20260629: W7 substrate staging -- replace conservative stub with faithful golden Item-scan (golden MyKitSuck.cpp:288). UseSiteHasIC true iff any use-site cell != NULL_IC over iShtRow x iShtCol. Empty grid (zero-init==NULL_IC) still returns false, behavior-identical to old stub.
+bool TMyKitSuck::UseSiteHasIC()
+{
+    for(int i=0; i<iShtRow; i++)
+        for(int j=0; j<iShtCol; j++)
+            if(Item[i][j]!=NULL_IC)
+                return true;
+    return false;
+}
+//AI(ht9045-v906) 20260629: W7 substrate staging -- replace conservative stub with faithful golden Item-scan (golden MyKitSuck.cpp:297). UseSiteNoIC true iff every use-site cell == NULL_IC over iShtRow x iShtCol. Empty grid (zero-init==NULL_IC) still returns true, behavior-identical to old stub.
+bool TMyKitSuck::UseSiteNoIC()
+{
+    for(int i=0; i<iShtRow; i++)
+        for(int j=0; j<iShtCol; j++)
+            if(Item[i][j]!=NULL_IC)
+                return false;
+    return true;
+}
 // W6.2b1x1: FAITHFUL golden MyKitSuck.cpp:273 -- "all use-sites carry an IC"
 // (true iff no NULL_IC over the iShtRow x iShtCol shuttle grid).
 bool TMyKitSuck::UseSiteFullIC()                                                //Ifor 20161215

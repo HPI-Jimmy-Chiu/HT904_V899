@@ -38,11 +38,19 @@
 #include "csystem.h"
 #include "cmydef.h"     // IniConfig, MOT[]-adjacent globals, consts
 #include "cprod.h"      // Prod, TestIF_File
+//AI(ht9045-v906) 20260629: W7 substrate staging -- with HT9045_KITSUCK_GRID_AVAILABLE flipped ON,
+// the leaf predicates now reference the TMyKitSuck carry-kit globals. Pull in their extern decls
+// (FLCarryKit/BLCarryKit/FRCarryKit/BRCarryKit/FTestSuck/BTestSuck/TestSocket from aHotPlateSubstrate.h,
+// OutSht3Kit from acarry_shims.h). No predicate body changed; these were only unneeded while gated OFF.
+#include "aHotPlateSubstrate.h"
+#include "acarry_shims.h"
 
-// When the TMyKitSuck grid is translated (W6.x), define this to re-activate the
-// real Kit.UseSiteHasIC()/HasRealIC() reads.  Until then the leaves return the
-// conservative "no IC present" answer.
-#define HT9045_KITSUCK_GRID_AVAILABLE 0
+//AI(ht9045-v906) 20260629: W7 substrate staging -- TMyKitSuck grid is now translated and
+// UseSiteHasIC()/UseSiteNoIC() carry the faithful golden Item-scan (golden MyKitSuck.cpp:288/297);
+// HasRealIC()/CountRealIC()/HasDefineIC()/UseSiteFullIC() were already faithful Item-scans.
+// Flip the gate ON so the leaves consult the real (seedable) Item grid. The #else conservative-false
+// branches are now dead. Empty/zero-init grids are all-NULL_IC, so this is behavior-identical until seeded.
+#define HT9045_KITSUCK_GRID_AVAILABLE 1
 
 //==============================================================================
 //  Input shuttle (front carry-kit FLCarryKit)

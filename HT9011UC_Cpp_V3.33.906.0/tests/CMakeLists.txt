@@ -1073,3 +1073,40 @@ if(WIN32)
 endif()
 
 add_test(NAME W7_S0_MotorConvergence COMMAND test_w7_s0_motor_convergence)
+
+# ===========================================================================
+#  W7 SUBSTRATE STAGING VERIFY -- the cross-arm KitSuck occupancy grid (ON)
+# ===========================================================================
+# --- test_w7_grid_occupancy: prove the flag-flip wired the predicates to grid --
+#   Proves the W7 substrate-staging change (csystem_predicates.cpp
+#   HT9045_KITSUCK_GRID_AVAILABLE 0->1 + faithful golden UseSiteHasIC()/UseSiteNoIC()
+#   Item-scan bodies in aHotPlateSubstrate.cpp) makes the csystem HasIC predicate
+#   family consult the REAL (seedable) TMyKitSuck Item grid instead of returning a
+#   hard-coded false.
+#     PART A -- UNIT: a LOCAL TMyKitSuck: fresh (all NULL_IC) -> UseSiteHasIC false /
+#       UseSiteNoIC true / HasRealIC false; seed a use-site (iShtRow x iShtCol) to
+#       HAS_IC + widen iMaxRow/iMaxCol -> UseSiteHasIC true / UseSiteNoIC false /
+#       HasRealIC true / CountRealIC>=1; ClearAll -> UseSiteHasIC false again.
+#     PART B -- END-TO-END flag-flip proof: seed the GLOBAL FLCarryKit use-site that
+#       InputShuttleFrontHasIC() reads -> InputShuttleFrontHasIC()==true AND
+#       ShuttleHasIC()==true; clear -> false. Second witness: seed FTestSuck ->
+#       IndexHasRealIC()==true; clear -> false. Globals are saved/restored so sibling
+#       suites are unaffected. With the flag OFF these leaves were a hard-coded
+#       `return false`; seeding making them true proves the wiring.
+#   The csystem predicates live in ht9045_sm (csystem_predicates.cpp); the TMyKitSuck
+#   bodies + the kit globals live in ht9045_sm too (aHotPlateSubstrate.cpp). Same
+#   RESCAN link group as the other W6/W7 state-machine tests so the
+#   cprod<->cpublic<->cmydef ctor cross-references settle.
+add_executable(test_w7_grid_occupancy
+    test_w7_grid_occupancy.cpp
+)
+
+target_link_libraries(test_w7_grid_occupancy PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w7_grid_occupancy PRIVATE ws2_32)
+endif()
+
+add_test(NAME W7_GridOccupancy COMMAND test_w7_grid_occupancy)
