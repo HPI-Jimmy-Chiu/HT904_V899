@@ -70,6 +70,11 @@
 #include "aHotPlateSubstrate.h"    // InArmSuck/FLCarryKit/BLCarryKit, fBarCode, cursors, tRotate
 #include "FormsFacade.h"           // fMain/fSortCT/fSCKART offline stand-ins
 #include "canary_support.h"        // LastSet / ShowMyMessage / ShowErrorMessage / RecordProcess
+#include "myswitch.h"              // W7-A1: SW[] (SwShuttleVibration1+iSht .Off())
+#include "acarry.h"                // W7-A1: IsFLCarrKitAllHasIC (shuttle floating force-vibrate guard)
+#include "acarry_shims.h"          // W7-A1: fLtcSensor (TfLtcSensor* Get/Set/ClearLtcSensor)
+#include "csystem_shims.h"         // W7-A1: bShuttleShake (floating SM 9000-terminal reset)
+#include "ainarm9045_w7_shims.h"   // W7-A1 INTEGRATE: shuttle-motion seam decls (defines AINARM_W7A1_SHUTTLEMOTION_FWD -> suppresses the inline block below)
 
 //---------------------------------------------------------------------------
 //  golden file globals (verbatim)  -- golden ainarm9045.cpp:46-59
@@ -1367,33 +1372,861 @@ bool ProcessSCKARTLoadingCount(bool bReset=false)
 //==  can drive it) and returns the golden "still working / not finished"
 //==  default so the engine LINKS and the higher-level loop does not crash.
 //==============================================================================
-int iInArmInArmCheckShtFloatTask;
+// =============================================================================
+//  W7-A1 SEAM forward-decls (SUBSTRATE EXTERNs the two un-gated SMs below
+//  reference but that have NO translated home yet).  Each is #ifndef-guarded so
+//  it cannot ODR-collide with a sibling TU's identical forward-decl, and is
+//  REPORTED in seamNeeds for the serial Integrate to land its real home.
+//    * DoShakeShuttle/DoKnockShuttle/DoKnockShuttleFirst/DoVibrateShuttle,
+//      RecordShtSuperflous, IndexZCanMove[2], bShuttleKnock -- golden ainarm2.h
+//      :189/190/191/214/218/48/85 (the SHUTTLE-motion engine, not yet translated).
+//  Offline behavior once Integrate lands them: shake/knock/vibrate helpers are
+//  no-ops returning true (motion converges immediately on the Sim HAL);
+//  RecordShtSuperflous is a log no-op; IndexZCanMove[]/bShuttleKnock are plain
+//  globals.
+// =============================================================================
+#ifndef AINARM_W7A1_SHUTTLEMOTION_FWD
+#define AINARM_W7A1_SHUTTLEMOTION_FWD
+extern bool DoShakeShuttle(int iShuttle, bool bNeedInitial=false);              //Steven 20120801 : 修改抖抖功能  // golden ainarm2.h:189
+extern bool DoKnockShuttle(int iShuttle, bool bNeedInitial=false);             //Jou 2013-03-08 修改敲敲功能      // golden ainarm2.h:190
+extern bool DoKnockShuttleFirst(int iShuttle, bool bNeedInitial=false);        //jou 2015-12-09 Shuttle 每次入料前敲擊 // golden ainarm2.h:191
+extern bool DoVibrateShuttle(int iShuttle, bool bNeedInitial=false);          //JerryYang 20190123 shuttle震動馬達 // golden ainarm2.h:214
+extern void RecordShtSuperflous(int iShuttle);                                 //JerryYang 20181121 : add log     // golden ainarm2.h:218
+extern bool IndexZCanMove[2];                                                  // golden ainarm2.h:48
+extern bool bShuttleKnock;                                                     //Jou 2013-03-08 修改敲敲功能      // golden ainarm2.h:85
+// golden ainarm9045.cpp:3759-3760 -- the golden TU forward-declares these two
+// itself (no header decl).  Real home: acarry.cpp (confirmed in tree).  Mirrored.
+extern bool IsTestZ1NotSafeShuttle1CanNotMove(int &iRetryCT);
+extern bool IsTestZ2NotSafeShuttle2CanNotMove(int &iRetryCT);
+#endif
+
+// W7-A1 SEAM (INTEGRATED 20260629 by Integrate step):
+//   * bNo9Action  -- golden cInArmPlacement.h:63 -- is now a REAL member of the
+//     TfMainInplace facade (FormsFacade.h), so its READ (W7A1_NO9_ACTION()) and
+//     its case-9000 WRITE are wired to the real member.  W7A1_NO9_MEMBERS_DONE
+//     gates the bNo9Action write so it is independent of the still-pending pair.
+//   * bRunNo9 / DoSuckToRecycleFromShuttle (golden cInArmPlacement.h:62/48) are
+//     NOT added to the facade this wave (out of W7-A1 scope); their write/call
+//     sites stay #ifdef W7A1_NO9_MEMBERS_PENDING (undefined -> compiled out).
+//     Both sit inside InArmPlacementEnable()==false No9 placement blocks, so the
+//     region is never entered at runtime offline -> offline behavior identical.
+#define W7A1_NO9_MEMBERS_DONE 1                                                 // W7-A1: bNo9Action member landed on TfMainInplace
+#define W7A1_NO9_ACTION() (fMain->cInplace->bNo9Action)                        // golden cInArmPlacement.h:63 (offline always false)
+
+// golden ainarm9045.cpp:3343 -- file-scope place-OK delay timer (owned by this TU).
+TQPF_Timer hPutOKDelay1;
+
+int iInArmInArmCheckShtFloatTask;                                              // golden :3343-ctx (cursor for DoInArmCheckShuttleFloating)
 void InitDoInArmCheckShtFloatTask()                                             // golden :3344
 {
     iInArmInArmCheckShtFloatTask=1;
 }
-// golden :3349 -- dense MOT[]/CCLink/Ltc sensor SM with 2 goto/label pairs
-// (IN_ARM_CHECK_SHUTTLE label@3357 / goto@3389).  GATED whole-body.
+// golden ainarm9045.cpp:3349-3757 -- place-to-shuttle FLOATING quality SM.
+// Un-gated W7-A1.  Verbatim cursor flow (1->1260/1300->1301->1410->1411 shake/
+// vibrate/knock loop->2000/2100 No9->3000 latch->9000 Finish), the
+// IN_ARM_CHECK_SHUTTLE goto/label pair, and every SOFT-state branch preserved.
+// The 3 cInplace No9 member-touches (bRunNo9 / bNo9Action / DoSuckToRecycleFromShuttle)
+// are kept VERBATIM but #ifndef-guarded (W7A1_NO9_MEMBERS_PENDING undefined here)
+// because TfMainInplace (FormsFacade.h, off-limits this wave) lacks them; they sit
+// behind InArmPlacementEnable() which is false offline so the guarded region is
+// never entered at runtime anyway -- offline behavior is identical.  REPORTED in
+// seamNeeds.
 bool DoInArmCheckShuttleFloating(int iSht, bool bPlaceOtherShuttle, bool bNeedCheck)
 {
-#if 0 // TODO(W7) -- golden :3349-3758 (MOT[]/sensor SM + goto IN_ARM_CHECK_SHUTTLE)
-#endif
-    (void)iSht; (void)bPlaceOtherShuttle; (void)bNeedCheck;
-    return false;                                                              // golden default: floating-check not finished
+    static bool bShakeFlag[2]={false, false}, bVibration[2]={false, false};
+
+    int &Task=iInArmInArmCheckShtFloatTask;
+    int ret=0, iret=0, iLtcMoveAct=0, iCheckSHPos=0;
+    bool bResult=false, flag=false, bLtcAlarm=true;
+    AnsiString ErrorPickup=AnsiString("");
+    IN_ARM_CHECK_SHUTTLE:
+
+    switch(Task)
+    {
+        case 1:
+            if(MoveInArmZToPlateSafe(Task))
+            {
+                if(bNeedCheck==true)
+                {
+                    Task=1300;
+                }
+                else if(iSht==0 &&
+                   (InSHT1InLF()==false ||                                      //Steven 20250314 : add protection to avoid picker hit shuttle
+                    FLCarryKit.HasRealIC()==false))
+                {
+                    Task=9000;
+                }
+                else if(iSht==1 &&
+                        (InSHT2InLF()==false ||                                 //Steven 20250314 : add protection to avoid picker hit shuttle
+                         BLCarryKit.HasRealIC()==false))
+                {
+                    Task=9000;
+                }
+                else if(IniConfig.bF14_1KnockShuttleFirst)
+                {
+                    DoKnockShuttleFirst(iSht, true);                            //jou 2015-12-09 SCS 要求 Shuttle 每次入料前 敲擊
+                    Task=1260;
+                }
+                else
+                {
+                    Task=1300;
+                }
+                goto IN_ARM_CHECK_SHUTTLE;
+            }
+            break;
+        case 1260:
+            if(DoKnockShuttleFirst(iSht))                                       //jou 2015-12-09 SCS 要求 Shuttle 每次入料前 敲擊
+            {
+                Task=1300;
+            }
+
+            if(Task!=1300)
+                break;
+        case 1300:                                                              //kevin 20141206 start
+            if(iInArmType==e9045_1x4_8_Hot)                                     //Steven 20220522 : fixed for 8吸嘴模式
+            {
+                for(int j=0; j<MAX_ARM_Col; j++)
+                {
+                    if(bPlaceOtherShuttle==false)
+                        InArmSuck.SetItemData(1, j, NULL_IC);
+                    else
+                        InArmSuck.SetItemData(0, j, NULL_IC);
+                }
+            }
+            else if(iInArmType==e9045_1x2_4_Hot)
+            {
+                if(i1x2_4UseACEGPicker==0)                                      //Steven 20230530 : 1x2_4改用Row A
+                {
+                    for(int j=0; j<MAX_ARM_Col; j++)
+                    {
+                        if(bPlaceOtherShuttle)
+                            InArmSuck.SetItemData(1, j, NULL_IC);
+                        else
+                            InArmSuck.SetItemData(0, j, NULL_IC);
+                    }
+                }
+                else
+                {
+                    for(int j=0; j<2; j++)
+                    {
+                        if(bPlaceOtherShuttle)
+                            InArmSuck.SetItemData(0, j*2+1, NULL_IC);
+                        else
+                            InArmSuck.SetItemData(0, j*2, NULL_IC);
+                    }
+                }
+            }
+            else if(iInArmType==e9045_2x2_8_Hot)
+            {
+                for(int i=0; i<MAX_ARM_Row; i++)
+                {
+                    for(int j=0; j<MAX_ARM_Col/2; j++)
+                    {
+                        if(bPlaceOtherShuttle)
+                            InArmSuck.SetItemData(i, j*2+1, NULL_IC);
+                        else
+                            InArmSuck.SetItemData(i, j*2, NULL_IC);
+                    }
+                }
+            }
+            else
+            {
+                InArmSuck.SetAllToNullIC();
+            }
+            hPutOKDelay1.SetSecAndOn(ArmSpeed[InArm].dWaitOnSH);
+            Task=1301;
+        case 1301:                                                              //kevin 20131011 在下黏貨誤判
+            if(hPutOKDelay1.Off())
+            {
+                flag=CheckInArmDestroyICFail();                                 //Steven 20111223 : 檢查破壞錯誤
+                if(flag==false)
+                {
+                    RecordProcess("VOFTask=1301");
+                    return false;
+                }
+
+                if(In_Shuttle_Auto_Latch==eInSHAutoLtc)                         //KenHsieh 20250722 : InSht sensor 改為2頭，並用Latch 判別疊料以及飛料
+                {
+                    InitAutoChkInSHLatchTask();
+                    bInSHLtcFin[iSht]=false;                                    //KenHsieh 20251106 : fix close site don't do In Sht Latch
+                    Task=3000;
+                    break;
+                }
+                else
+                {
+                    Task=1410;
+                }
+            }
+            else
+            {
+                break;
+            }
+        case 1410:
+            if(CUSTOMER_CODE==CC_ASE_KaohSiung &&
+               IniConfig.bF23ShuttleVibration)                                  //kevin 20210415 IN Arm Vibrate shuttle
+                SW[SwShuttleVibration1+iSht].Off();
+
+            bShakeFlag[iSht]=false;
+            bVibration[iSht]=false;                                             //JerryYang 20180711 (wei) Shuttle震動後還是置偏要接著搖
+            if(IniConfig.bF01ShakeShuttleWhenJam==false &&
+               IniConfig.bF23ShuttleVibration==false)                           //JerryYang 20171205 (Steven) shuttle震動馬達功能
+                bShakeFlag[iSht]=true;
+
+            if(CosFunction.bShakeShuttleEveryTime &&                            //Steven 20200616 : ATK要求每次放料都要搖搖蝦頭
+               (TestIF_File.iShakeShuttleWhenPlaceIC==1 ||
+                TestIF_File.iShakeShuttleWhenPlaceIC==3))                       //Steven 20220427 : 每次放料都要抖抖馬達
+            {
+                if(TestIF_File.iShakeShuttleWhenPlaceIC==3)
+                    bVibration[iSht]=true;
+                DoShakeShuttle(iSht, true);
+                Task=1420;
+                break;
+            }
+            else if(CosFunction.bShakeShuttleEveryTime &&
+                    TestIF_File.iShakeShuttleWhenPlaceIC==2)                    //Steven 20220427 : 每次放料都要抖抖馬達
+            {
+                DoVibrateShuttle(iSht, true);
+                Task=1440;
+                break;
+            }
+            else
+            {
+                for(int i=0; i<9; i++)
+                    iInShuttleJam[iSht][i]=0;                                   //kevin 20220819 shuttle Jam  紀錄位置後續，要做放到垃圾桶動作
+                Task=1411;
+            }
+        case 1411:
+            if(TestIF.iTestMode==SingleSite || TestIF.iTestMode==DualSite2x1)
+                ret=CheckShuttleSensor_9045_1x1(iSht, bShakeFlag[iSht]);
+            else if(TestIF.iTestMode==DualSite || TestIF.iTestMode==QualSite2X2N)
+                ret=CheckShuttleSensor_9045_1x2(iSht, bShakeFlag[iSht]);
+            else if(TestIF.iTestMode==QualSite1X4 || TestIF.iTestMode==_8Site2X4N)                                      //Wei 20231211 : 2X4NN Mode
+                ret=CheckShuttleSensor_9045_1x4(iSht, bShakeFlag[iSht]);
+            else if(TestIF.iTestMode==QualSite2X2)
+                ret=CheckShuttleSensor_9045_2x2(iSht, bShakeFlag[iSht]);
+            else if(TestIF.iTestMode==TriSite1X3 || TestIF.iTestMode==_6Site2X3 || TestIF.iTestMode==_6Site2X3N)
+                ret=CheckShuttleSensor_9045_2x3(iSht, bShakeFlag[iSht]);
+            else if(TestIF.iTestMode==_10Site2X5)
+                ret=CheckShuttleSensor_9045_2x5(iSht, bShakeFlag[iSht]);
+            else if(TestIF.iTestMode==_12Site2X6)
+                ret=CheckShuttleSensor_9045_2x6(iSht, bShakeFlag[iSht]);
+            else if(TestIF.iTestMode==_16Site2X8 || TestIF.iTestMode==_32Site4X8N)
+                ret=CheckShuttleSensor_9045_2x8(iSht, bShakeFlag[iSht]);
+            else
+                ret=CheckShuttleSensor_9045_2x4(iSht, bShakeFlag[iSht]);
+
+            if(ret==1)                                                                                                  //Steven 20160411 : 不然不會搖
+            {
+                bShakeFlag[iSht]=false;
+                bVibration[iSht]=false;                                                                                 //JerryYang 20180711 (wei) Shuttle震動後還是置偏要接著搖
+                iShuttleLog=0;                                                                                          //JerryYang 20181121 (Steven) : add log,記錄in shuttle device是被震動馬達or搖搖功能導正
+            }
+            else if(ret==3)
+            {
+                break;
+            }
+            else if(ret==2 ||
+                    (IniConfig.bF29AlwaysVibrateOnShuttle &&
+                     bShakeFlag[iSht]==false &&
+                     bVibration[iSht]==false &&
+                     IsFLCarrKitAllHasIC()))                                                                            //Sam 20210602 : 每次都要強制震動
+            {
+                if(IniConfig.bF23ShuttleVibration &&
+                   ((IniConfig.bF01ShakeShuttleWhenJam==true && bVibration[iSht]==false) ||
+                     IniConfig.bF01ShakeShuttleWhenJam==false))                                                         //JerryYang 20180711 (wei) Shuttle震動後還是置偏要接著搖
+                {
+                    if(IniConfig.bF01ShakeShuttleWhenJam==true)
+                    {
+                        bShakeFlag[iSht]=false;
+                    }
+                    else
+                    {
+                        bShakeFlag[iSht]=true;
+                    }
+                    bVibration[iSht]=true;
+                    Task=1440;
+                    DoVibrateShuttle(iSht, true);                                                                       //JerryYang 20190123 shuttle震動馬達
+                }
+                else if(bShuttleKnock==false)                                                                           //Jou 2013-03-08 修改敲敲功能
+                {
+                    if(IniConfig.bF01ShakeShuttleWhenJam==false &&
+                       IniConfig.bF23ShuttleVibration==false)                                                           //kevin 20190731 不使用搖搖
+                    {
+                        bShakeFlag[iSht]=true;
+                        break;
+                    }
+                    Task=1420;
+                    DoShakeShuttle(iSht, true);                                                                         //Steven 20120801 : 修改抖抖功能 (true為初始化)
+                }
+                else
+                {
+                    bShakeFlag[iSht]=true;
+                    DoKnockShuttle(iSht, true);                                                                         //jou 2013-07-17 Knock Shuttle(true為初始化)
+                    Task=1430;
+                }
+                break;
+            }
+            else
+            {
+                Task=9000;                                                                                              //JimmyChiu 20220908 add Pickup Error Placement
+            }
+            break;
+        case 1420:
+            if(iSht==0 && InSHT1InLF()==false)                                  //Steven 20250314 : add protection to avoid picker hit shuttle
+            {
+                break;
+            }
+            else if(iSht==1 && InSHT2InLF()==false)
+            {
+                break;
+            }
+            else
+            {
+                Task=1401;
+            }
+        case 1401:
+            if(DoShakeShuttle(iSht))                                            //Steven 20120801 : 修改抖抖功能
+            {
+                if(CosFunction.bShakeShuttleEveryTime &&                        //Steven 20220427 : 每次放料都要抖抖馬達
+                   TestIF_File.iShakeShuttleWhenPlaceIC==3 &&
+                   bVibration[iSht]==true)
+                {
+                    DoVibrateShuttle(iSht, true);
+                    Task=1430;
+                }
+                else if(fMain->cInplace->InArmPlacementEnable())                //JimmyChiu 20220908 add Pickup Error Placement
+                {
+                    Task=2000;
+                }
+                else
+                {
+                    Task=1411;
+                }
+            }
+            break;
+        case 1430:
+            if(DoKnockShuttle(iSht))                                            //Jou 2013-03-08 修改敲敲功能
+            {
+                Task=1411;
+            }
+            break;
+        case 1440:
+            if(DoVibrateShuttle(iSht))                                          //JerryYang 20190123 shuttle震動馬達
+            {
+                Task=1411;
+            }
+            break;
+        case 2000:
+            if(fMain->cInplace->InArmPlacementEnable())                         //JimmyChiu 20220908 add Pickup Error Placement
+            {
+                #ifdef W7A1_NO9_MEMBERS_PENDING
+                fMain->cInplace->DoSuckToRecycleFromShuttle(true,ErrorPickup);  // W7-A1 SEAM: TfMainInplace lacks DoSuckToRecycleFromShuttle offline (golden cInArmPlacement.h:48)
+                #endif
+            }
+            Task=2100;
+        case 2100:
+            if(fMain->cInplace->InArmPlacementEnable())
+            {
+                #ifdef W7A1_NO9_MEMBERS_PENDING
+                if(fMain->cInplace->DoSuckToRecycleFromShuttle(false,ErrorPickup))  // W7-A1 SEAM (golden cInArmPlacement.h:48)
+                {
+                    fMain->cInplace->bRunNo9=false;                             //KenHsieh 20240131 : add No9作動畫面 // W7-A1 SEAM (golden cInArmPlacement.h:62)
+                    bInSHLtcFin[iSht]=true;                                     //KenHsieh 20251106 : fix close site don't do In Sht Latch
+                    Task=9000;
+                }
+                #endif
+                break;
+            }
+            else
+            {
+                #ifdef W7A1_NO9_MEMBERS_PENDING
+                fMain->cInplace->bRunNo9=false;                                 //KenHsieh 20240131 : add No9作動畫面 // W7-A1 SEAM (golden cInArmPlacement.h:62)
+                #endif
+            }
+
+            if(In_Shuttle_Auto_Latch==eInSHAutoLtc)                             //back to check shuttle sensor //KenHsieh 20251105 : Auto In shuttle latch combine No9 func.
+            {
+                InitAutoChkInSHLatchTask();
+                Task=3000;
+            }
+            else
+            {
+                Task=1411;
+            }
+            break;
+        //JimmyChiu 20220908 add Pickup Error Placement
+        //<==
+        case 3000:                                                              //KenHsieh 20250722 : InSht sensor 改為2顆，並用Latch 判別疊料以及飛料
+            if(((iSht==0 && FLCarryKit.UseSiteFullIC()) ||
+               (iSht==1 && BLCarryKit.UseSiteFullIC())) ||                      //Nomal 放滿data
+               ((iOneCycle==1 || iCleanOut==1) &&                               //OneCycle or CleanOut
+               ((iSht==0 &&
+                 FLCarryKit.HasIC() &&
+                 FLCarryKit.UseSiteFullIC()==false) ||
+                (iSht==1 &&
+                 BLCarryKit.HasIC() &&
+                 BLCarryKit.UseSiteFullIC()==false)) &&                         //OneCycle or CleanOut下有IC
+                ((MOT[MMTrayY].fHasTray==false &&
+                 MOT[MMPlate1].HasIC()==false &&
+                 MOT[MMPlate2].HasIC()==false &&                                //OneCycle or CleanOut下 Loader & HP 無料
+                (iCleanOut!=1 ||
+                (iCleanOut==1 && MOT[MMTrayY_Car].fHasTray==false))) ||         //Cleanout 下要判斷Car
+                (iOneCycle==1 && IniConfig.bP17InArmFullPickFromLoader==false))))   //Onecycle + Close P17  //KenHsieh 20251014 : fix onecycle or cleanout 時，跑Latch問題
+            {
+                if(((BAR_CODE_INSTALL==ebctInShtIntel ||
+                     BAR_CODE_INSTALL==ebctUseCCDMode ||
+                     BAR_CODE_INSTALL==ebctEtherNetCCD ||
+                     BAR_CODE_INSTALL==ebcUseOCR) &&
+                     TestIF_File.bEnableBarCode   &&
+                    ((iSht==0 && FLCarryKit.HasIC())  ||
+                     (iSht==1 && BLCarryKit.HasIC())) &&                        //Ifor 20190129 : add Cognex EtherNet 通訊   //Ifor 20210407 add: 自製OCR
+                    (BOTTOM_2DID==0 || TestIF_File.bEnableBottom2D==false)) ||  //KenHsieh 20251008 : Fix Auto InSht Latch for 2D hangup, need to move left
+                     DeviceForm.bShuttleWaitingOutSiteChamber)                  //KenHsieh 20260320 : 此功能開啟，Shuttle 必須回到左邊，避免Hanhgup
+                {
+                    iLtcMoveAct=1;
+                }
+
+                if(fMain->cInplace->InArmPlacementEnable())                     //KenHsieh 20251105 : Auto In shuttle latch combine No9 func.
+                {
+                    bLtcAlarm=false;
+                }
+
+                iret=CheckInShuttleSensor_Latch(iSht, iLtcMoveAct, bLtcAlarm);  //KenHsieh 20251105 : Auto In shuttle latch combine No9 func.
+                if(iret==1)
+                {
+                    bInSHLtcFin[iSht]=true;                                     //KenHsieh 20251106 : fix close site don't do In Sht Latch
+
+                    if(iSht==0)                                                 //KenHsieh 20251118 : 修改Out Sht 會重新GetLtc 導致Lose IC 異常
+                    {
+                        iCheckSHPos=MOT[MInShuttle1].ReadPos();
+                        if(iLtcMoveAct==1)                                      //KenHsieh 20251121 : 修正跑barcode 未清除ltc 導致誤判out lose IC
+                        {
+                            fLtcSensor->ClearLtcSensor(0);
+                            fLtcSensor->SetLtcSensor(0);
+                        }
+                    }
+                    else
+                    {
+                        iCheckSHPos=MOT[MInShuttle2].ReadPos();
+                        if(iLtcMoveAct==1)                                      //KenHsieh 20251121 : 修正跑barcode 未清除ltc 導致誤判out lose IC
+                        {
+                            fLtcSensor->ClearLtcSensor(1);
+                            fLtcSensor->SetLtcSensor(1);
+                        }
+                    }
+
+                    if(iCheckSHPos!=Prod.InSHT[iSht].iLeft)
+                        bNeedGetSHRightLtc[iSht]=false;
+                    else
+                        bNeedGetSHRightLtc[iSht]=true;
+                    Task=9000;
+                }
+                else if(iret==2)
+                {
+                    InitAutoChkInSHLatchTask();                                 //有異常皆會跑到左邊，固可Init後重跑一次
+                    Task=3000;
+                }
+            }
+            else
+            {
+                Task=9000;
+            }
+            break;
+        case 9000:                                                              //JimmyChiu 20220908 add Pickup Error Placement
+            RecordShtSuperflous(iSht);                                          //JerryYang 20181121 (Steven) : add log,記錄in shuttle device是被震動馬達or搖搖功能導正
+            IndexZCanMove[0]=true;
+            IndexZCanMove[1]=true;
+            bShuttleShake=false;
+            bShuttleKnock=false;                                                //Jou 2013-03-08 修改敲敲功能
+            bVibration[iSht]=false;                                             //JerryYang 20180711 (wei) Shuttle震動後還是置偏要接著搖
+            #ifdef W7A1_NO9_MEMBERS_DONE
+            fMain->cInplace->bNo9Action=false;                                  //KenHsieh 20251105 : Auto In shuttle latch combine No9 func. // W7-A1 SEAM (golden cInArmPlacement.h:63)
+            #endif
+            bResult=true;
+            Task=1;
+            break;
+    }
+    return bResult;
 }
 //------------------------------------------------------------------------------
+// golden ainarm9045.cpp:3762 -- file-scope Auto-retry counter (owned by this TU).
+int iLtcErrRetryCt[2];                                                          //KenHsieh 20260402 : add Auto retry 1 times
 int iAutoChkInSHLatchTask;
 void InitAutoChkInSHLatchTask()                                                 // golden :3763
 {
     iAutoChkInSHLatchTask=1;
+    iLtcErrRetryCt[0]=0;                                                        //KenHsieh 20260402 : add Auto retry 1 times
+    iLtcErrRetryCt[1]=0;
 }
-// golden :3810 -- CCLink/Ltc 2-sensor latch detect SM.  GATED whole-body.
-int CheckInShuttleSensor_Latch(int iShuttle, int iMoveAct, bool bAlarm)         //0:NotFin 1:Finish 2:Error
+// golden ainarm9045.cpp:3810-4174 -- the IN-SHUTTLE LATCH interlock.  Un-gated
+// W7-A1.  CRUX: opens with the VERBATIM golden entry guard; offline the sim
+// canary LastSet.iRealDummy==DUMMY(0)!=REALLY self-disables this to return 1
+// (Finish) BEFORE any CCLink/Ltc/MOT body runs -> crash-free, zero motion dep.
+// The two #ifndef SOFT_SIMULTE blocks (1250/2250) are preserved verbatim and
+// ACTIVE (SOFT_SIMULTE not defined).
+int CheckInShuttleSensor_Latch(int iShuttle, int iMoveAct, bool bAlarm)         //0:NotFin 1:Finish 2:Error  //KenHsieh 20251104 : add 檢測後動作 & alarm 變數  //KenHsieh 20250722 : InSht sensor 改為2顆，並用Latch 判別疊料以及飛料
 {
-#if 0 // TODO(W7) -- golden :3810-4174 (CCLink/Ltc latch sensor SM)
-#endif
-    (void)iShuttle; (void)iMoveAct; (void)bAlarm;
-    return 0;                                                                  // golden 0 = NotFinish
+    if(MOTION_CARD_TYPE!=MotionCard_Contec ||
+       LastSet.iRealDummy!=REALLY)
+        return 1;
+
+    int &Task=iAutoChkInSHLatchTask;
+    int iResult=0;
+    bool bInSHLtcZFlag[2]={false, false};
+    bool bflag=false, bCheckData=true, bDuplicateErr=false;
+    AnsiString asStr1="";
+    static int iSHAutoLtcErr=0, iRetryCT=0;
+    static AnsiString ErrPart_InSHLtc="";
+    static bool bfCanMoveLChange[2]={false, false}, bDupErrFlag[2][10]={{false}};
+
+    switch(Task)
+    {
+        case 1:
+            if(iShuttle==0)
+            {
+                if(IsTestZ1NotSafeShuttle1CanNotMove(iRetryCT))                 //KenHsieh 20251112 : 修改Index 判斷方式，避免Hangup與無謂的等待
+                    break;
+                iRetryCT=0;
+                fLtcSensor->ClearLtcSensor(0);                                  //KenHsieh 20260402 : SH1增加Clear，避免檢測失敗
+                fLtcSensor->SetLtcSensor(0);
+                bInSh1DoLtc=true;
+                Task=1000;
+            }
+
+            if(iShuttle==1)
+            {
+                if(IsTestZ2NotSafeShuttle2CanNotMove(iRetryCT))                 //KenHsieh 20251112 : 修改Index 判斷方式，避免Hangup與無謂的等待
+                    break;
+                iRetryCT=0;
+                fLtcSensor->SetLtcSensor(1);
+                bInSh2DoLtc=true;
+                Task=2000;
+            }
+            bfCanMoveLChange[iShuttle]=false;
+            break;
+        case 1000:
+            bInSHLtcZFlag[0]=MOT[MInSh1LtcSenZ1].MotorMove(Prod.iInSH1SenICDetectZ1+Prod.iInSH1SenICAddPos);
+            bInSHLtcZFlag[1]=MOT[MInSh1LtcSenZ2].MotorMove(Prod.iInSH1SenICDetectZ2+Prod.iInSH1SenICAddPos);
+
+            if(bInSHLtcZFlag[0]==true && bInSHLtcZFlag[1]==true)
+                Task=1100;
+            break;
+        case 1100:
+            if(IsTestZ1NotSafeShuttle1CanNotMove(iRetryCT)==false)              //KenHsieh 20251112 : 修改Index 判斷方式，避免Hangup與無謂的等待
+            {
+                iRetryCT=0;
+                if(MOT[MInShuttle1].fCanMoveL==false)
+                {
+                    SetShuttlefCanMoveL(iShuttle, true, __FUNC__, "1100");
+                    bfCanMoveLChange[iShuttle]=true;
+                }
+                Task=1200;
+            }
+            break;
+        case 1200:
+            if(IsTestZ1NotSafeShuttle1CanNotMove(iRetryCT))                     //KenHsieh 20251112 : 修改Index 判斷方式，避免Hangup與無謂的等待
+                break;
+
+            iRetryCT=0;
+            bflag=MOT[MInShuttle1].MotorMove(Prod.InSHT[0].iRight-200);         //KenHsieh 20260120 : Add Shuttle move 保護
+
+            if(bflag)
+            {
+                if(bfCanMoveLChange[iShuttle]==true)
+                {
+                    SetShuttlefCanMoveL(iShuttle, false, __FUNC__, "1200");
+                    bfCanMoveLChange[iShuttle]=false;
+                }
+                Task=1250;
+            }
+            break;
+        case 1250:
+            iSHAutoLtcErr=0;
+            fLtcSensor->GetLtcSensor(0);
+            ErrPart_InSHLtc="";
+            #ifndef SOFT_SIMULTE
+            if(fMain->cInplace->InArmPlacementEnable() &&
+               W7A1_NO9_ACTION())                                              //KenHsieh 20251105 : Auto In shuttle latch combine No9 func. // W7-A1 SEAM: cInplace->bNo9Action (golden cInArmPlacement.h:63)
+            {
+                bCheckData=false;
+            }
+
+            if(LastSet.iRealDummy!=REALLY)                                      //KenHsieh 20260506 : 模式有IC才需要判斷
+                iSHAutoLtcErr=0;
+            else
+                iSHAutoLtcErr=DoCheckShuttle1ICByLTC_AutoLatch(ErrPart_InSHLtc, bCheckData);
+            if(iSHAutoLtcErr!=0)
+            {
+                if(MOT[MInShuttle1].fCanMoveL==false)
+                {
+                    SetShuttlefCanMoveL(iShuttle, true, __FUNC__, "1250");
+                    bfCanMoveLChange[iShuttle]=true;
+                }
+                Task=1260;
+            }
+            else
+            #endif
+            {
+                iLtcErrRetryCt[0]=0;                                            //KenHsieh 20260402 : add Auto retry 1 times
+                if(iMoveAct==1)                                                 //KenHsieh 20251104 : add 檢測後動作 & alarm 變數
+                {
+                    if(MOT[MInShuttle1].fCanMoveL==false)
+                    {
+                        SetShuttlefCanMoveL(iShuttle, true, __FUNC__, "1250_iMoveAct=1");
+                        bfCanMoveLChange[iShuttle]=true;
+                    }
+                    Task=1260;
+                }
+                else
+                {
+                    Task=9900;
+                }
+            }
+            break;
+        case 1260:
+            bflag=MOT[MInShuttle1].MotorMove(Prod.InSHT[0].iLeft);       //KenHsieh 20260120 : Add Shuttle move 保護
+            if(bflag)
+            {
+                if(bfCanMoveLChange[iShuttle]==true)
+                {
+                    SetShuttlefCanMoveL(iShuttle, false, __FUNC__, "1260");
+                    bfCanMoveLChange[iShuttle]=false;
+                }
+
+                if(iSHAutoLtcErr!=0)                                            //KenHsieh 20251008 : Fix Auto InSht Latch for 2D hangup, need to move left
+                {
+                    if(bAlarm)                                                  //KenHsieh 20251104 : add 檢測後動作 & alarm 變數
+                    {
+                        Task=1265;
+                    }
+                    else
+                    {
+                        InitDoInShZHome();
+                        Task=1270;
+                    }
+                }
+                else
+                {
+                    Task=9900;
+                }
+            }
+            break;
+        case 1265:
+            for(int i=0; i<FLCarryKit.iShtCol; i++)                             //KenHsieh 20251128 : InShtLtc 新增異常重複判斷  //KenHsieh 20260518 : SThreadPara.iXItem → FLCarryKit.iShtCol
+            {
+                if(bInSHLtcErrNo[iShuttle][i] &&
+                   bDupErrFlag[iShuttle][i])
+                    bDuplicateErr=true;
+
+                if(bInSHLtcErrNo[iShuttle][i])
+                    bDupErrFlag[iShuttle][i]=true;
+                else
+                    bDupErrFlag[iShuttle][i]=false;
+            }
+
+            iLtcErrRetryCt[0]++;                                                //KenHsieh 20260402 : add Auto retry 1 times
+            if(iLtcErrRetryCt[0]>1)
+            {
+                if(iSHAutoLtcErr==1)
+                    ShowErrorMessage("JAM0401", K_RETRY, MInShuttle1, bDuplicateErr, ErrPart_InSHLtc);
+                else
+                    ShowErrorMessage("JAM0403", K_RETRY, MInShuttle1, bDuplicateErr, ErrPart_InSHLtc);
+            }
+            else
+            {
+                asStr1.sprintf("Auto retry for In shuttle1 latch error : %s", ErrPart_InSHLtc);
+                RecordProcess(asStr1);
+            }
+
+            InitDoInShZHome();
+            Task=1270;
+            break;
+        case 1270:
+            if(DoInShZHome(iShuttle))
+            {
+                if(bAlarm)                                                      //KenHsieh 20251104 : add 檢測後動作 & alarm 變數
+                {
+                    iResult=0;
+                    Task=1;
+                }
+                else
+                {
+                    fLtcSensor->SetLtcSensor(0);                                //JerryYang 20230406 : 重置shuttle1的latch
+                    fLtcSensor->ClearLtcSensor(0);                              //Sam 20221101 : Latch 清除都要確認是否清清乾淨
+                    Task=9901;
+                }
+            }
+            break;
+        case 2000:
+            bInSHLtcZFlag[0]=MOT[MInSh2LtcSenZ1].MotorMove(Prod.iInSH2SenICDetectZ1+Prod.iInSH2SenICAddPos);
+            bInSHLtcZFlag[1]=MOT[MInSh2LtcSenZ2].MotorMove(Prod.iInSH2SenICDetectZ2+Prod.iInSH2SenICAddPos);
+
+            if(bInSHLtcZFlag[0]==true && bInSHLtcZFlag[1]==true)
+                Task=2100;
+            break;
+        case 2100:
+            if(IsTestZ2NotSafeShuttle2CanNotMove(iRetryCT)==false)              //KenHsieh 20251112 : 修改Index 判斷方式，避免Hangup與無謂的等待
+            {
+                iRetryCT=0;
+                if(MOT[MInShuttle2].fCanMoveL==false)
+                {
+                    SetShuttlefCanMoveL(iShuttle, true, __FUNC__, "2100");
+                    bfCanMoveLChange[iShuttle]=true;
+                }
+                Task=2200;
+            }
+            break;
+        case 2200:
+            if(IsTestZ2NotSafeShuttle2CanNotMove(iRetryCT))                     //KenHsieh 20251112 : 修改Index 判斷方式，避免Hangup與無謂的等待
+                break;
+
+            iRetryCT=0;
+            bflag=MOT[MInShuttle2].MotorMove(Prod.InSHT[1].iRight-200);  //KenHsieh 20260120 : Add Shuttle move 保護
+            if(bflag)
+            {
+                if(bfCanMoveLChange[iShuttle]==true)
+                {
+                    SetShuttlefCanMoveL(iShuttle, false, __FUNC__, "2200");
+                    bfCanMoveLChange[iShuttle]=false;
+                }
+                Task=2250;
+            }
+            break;
+        case 2250:
+            iSHAutoLtcErr=0;
+            fLtcSensor->GetLtcSensor(1);
+            ErrPart_InSHLtc="";
+            #ifndef SOFT_SIMULTE
+            if(fMain->cInplace->InArmPlacementEnable() &&
+               W7A1_NO9_ACTION())                                              //KenHsieh 20251105 : Auto In shuttle latch combine No9 func. // W7-A1 SEAM: cInplace->bNo9Action (golden cInArmPlacement.h:63)
+            {
+                bCheckData=false;
+            }
+
+            if(LastSet.iRealDummy!=REALLY)                                      //KenHsieh 20260506 : 模式有IC才需要判斷
+                iSHAutoLtcErr=0;
+            else
+                iSHAutoLtcErr=DoCheckShuttle2ICByLTC_AutoLatch(ErrPart_InSHLtc, bCheckData);
+            if(iSHAutoLtcErr!=0)
+            {
+                if(MOT[MInShuttle2].fCanMoveL==false)
+                {
+                    SetShuttlefCanMoveL(iShuttle, true, __FUNC__, "2250");
+                    bfCanMoveLChange[iShuttle]=true;
+                }
+                Task=2260;
+            }
+            else
+            #endif
+            {
+                iLtcErrRetryCt[1]=0;                                            //KenHsieh 20260402 : add Auto retry 1 times
+                if(iMoveAct==1)
+                {
+                    if(MOT[MInShuttle2].fCanMoveL==false)
+                    {
+                        SetShuttlefCanMoveL(iShuttle, true, __FUNC__, "2250_iMoveAct=1");
+                        bfCanMoveLChange[iShuttle]=true;
+                    }
+                    Task=2260;
+                }
+                else
+                {
+                    Task=9900;
+                }
+            }
+            break;
+        case 2260:
+            bflag=MOT[MInShuttle2].MotorMove(Prod.InSHT[1].iLeft);       //KenHsieh 20260120 : Add Shuttle move 保護
+            if(bflag)
+            {
+                if(bfCanMoveLChange[iShuttle]==true)
+                {
+                    SetShuttlefCanMoveL(iShuttle, false, __FUNC__, "2260");
+                    bfCanMoveLChange[iShuttle]=false;
+                }
+
+                if(iSHAutoLtcErr!=0)                                            //KenHsieh 20251008 : Fix Auto InSht Latch for 2D hangup, need to move left
+                {
+                    if(bAlarm)                                                  //KenHsieh 20251104 : add 檢測後動作 & alarm 變數
+                    {
+                        Task=2265;
+                    }
+                    else
+                    {
+                        InitDoInShZHome();
+                        Task=2270;
+                    }
+                }
+                else
+                {
+                    Task=9900;
+                }
+            }
+            break;
+        case 2265:
+            for(int i=0; i<BLCarryKit.iShtCol; i++)                             //KenHsieh 20251128 : InShtLtc 新增異常重複判斷  //KenHsieh 20260518 : SThreadPara.iXItem → BLCarryKit.iShtCol
+            {
+                if(bInSHLtcErrNo[iShuttle][i] &&
+                   bDupErrFlag[iShuttle][i])
+                    bDuplicateErr=true;
+
+                if(bInSHLtcErrNo[iShuttle][i])
+                    bDupErrFlag[iShuttle][i]=true;
+                else
+                    bDupErrFlag[iShuttle][i]=false;
+            }
+
+            iLtcErrRetryCt[1]++;                                                //KenHsieh 20260402 : add Auto retry 1 times
+            if(iLtcErrRetryCt[1]>1)
+            {
+                if(iSHAutoLtcErr==1)
+                    ShowErrorMessage("JAM0404", K_RETRY, MInShuttle2, bDuplicateErr, ErrPart_InSHLtc);
+                else
+                    ShowErrorMessage("JAM0406", K_RETRY, MInShuttle2, bDuplicateErr, ErrPart_InSHLtc);
+            }
+            else
+            {
+                asStr1.sprintf("Auto retry for In shuttle2 latch error : %s", ErrPart_InSHLtc);
+                RecordProcess(asStr1);
+            }
+
+            InitDoInShZHome();
+            Task=2270;
+            break;
+        case 2270:
+            if(DoInShZHome(iShuttle))
+            {
+                if(bAlarm)                                                      //KenHsieh 20251104 : add 檢測後動作 & alarm 變數
+                {
+                    iResult=0;
+                    Task=1;
+                }
+                else
+                {
+                    fLtcSensor->ClearLtcSensor(1);                              //Sam 20221101 : Latch 清除都要確認是否清清乾淨
+                    fLtcSensor->SetLtcSensor(1);                                //JerryYang 20230406 : 重置shuttle1的latch
+                    Task=9901;
+                }
+            }
+            break;
+        case 9900:
+            bInSh1DoLtc=false;
+            bInSh2DoLtc=false;
+            bfCanMoveLChange[iShuttle]=false;
+            for(int i=0; i<(iShuttle==0 ? FLCarryKit.iShtCol : BLCarryKit.iShtCol); i++)     //KenHsieh 20251128 : InShtLtc 新增異常重複判斷  //KenHsieh 20260518 : SThreadPara.iXItem → kit-aware iShtCol
+                bDupErrFlag[iShuttle][i]=false;
+
+            iResult=1;
+            break;
+        case 9901:
+            bInSh1DoLtc=false;
+            bInSh2DoLtc=false;
+            bfCanMoveLChange[iShuttle]=false;
+            iResult=2;
+            break;
+    }
+
+    return iResult;
 }
 //------------------------------------------------------------------------------
 // golden :7619 -- THE central pick SM (iPickFromLoadStageTask, switch@7653,

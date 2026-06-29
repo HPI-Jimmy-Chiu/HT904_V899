@@ -1013,3 +1013,37 @@ if(WIN32)
 endif()
 
 add_test(NAME W6_6_CSystemCycle COMMAND test_w6_6_csystem_cycle)
+
+# ===========================================================================
+#  W7-A1 VERIFY -- the in-arm shuttle FLOATING + LATCH pair (un-gated)
+# ===========================================================================
+# --- test_w7_a1_inarm_floating_latch: pump the un-gated PAIR over Sim HAL ----
+#   Proves the two W7-A1 un-gated in-arm SMs in ainarm9045.cpp (ht9045_sm) LINK
+#   and converge over the Sim HAL with NO hardware:
+#     CheckInShuttleSensor_Latch  (golden ainarm9045.cpp:3810-4174) -- the latch
+#       interlock; the VERBATIM entry guard (MOTION_CARD_TYPE!=Contec ||
+#       iRealDummy!=REALLY) self-disables it to return 1 (Finish) BEFORE any
+#       CCLink/Ltc/MOT body runs offline (sim canary iRealDummy==DUMMY).
+#     DoInArmCheckShuttleFloating (golden ainarm9045.cpp:3349-3757) -- the
+#       place-to-shuttle floating quality SM; with empty Sim grids it converges
+#       1 -> 9000 -> (Task=1, bResult=true) over the MoveInArmZToPlateSafe stub +
+#       the FLCarryKit/BLCarryKit HasRealIC()/UseSiteHasIC() empty-grid predicates.
+#   Oracles (golden-cited): (a) latch self-guard -> 1, no cursor advance/MOT touch;
+#   (b) floating convergence + case-9000 side-effects (IndexZCanMove[0/1]=true,
+#   bShuttleKnock=false, cInplace->bNo9Action=false); (c) no-floating-no-IC takes
+#   the no-alarm branch (never enters the shake/vibrate/knock loop nor the latch).
+#   Same RESCAN link group as the other W6 in-arm tests (ht9045_sm carries the
+#   floating/latch bodies + the W7-A1 shuttle-motion shims).
+add_executable(test_w7_a1_inarm_floating_latch
+    test_w7_a1_inarm_floating_latch.cpp
+)
+
+target_link_libraries(test_w7_a1_inarm_floating_latch PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w7_a1_inarm_floating_latch PRIVATE ws2_32)
+endif()
+
+add_test(NAME W7_A1_InArmFloatingLatch COMMAND test_w7_a1_inarm_floating_latch)

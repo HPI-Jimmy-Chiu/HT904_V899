@@ -397,6 +397,12 @@ add_library(ht9045_sm STATIC
     #     dispatch bodies + dense MOT[]/sensor/UI SMs are gated (#if 0) with
     #     active stubs; see the file-head gate documentation.
     ainarm9045.cpp
+    # --- W7-A1 INTEGRATE: offline link stubs for the shuttle-motion engine seam
+    #     symbols the un-gated in-arm floating/latch PAIR references (golden
+    #     ainarm2.h: DoShakeShuttle/DoKnockShuttle/DoKnockShuttleFirst/
+    #     DoVibrateShuttle/RecordShtSuperflous + IndexZCanMove[2]/bShuttleKnock).
+    #     IsTestZ1/Z2NotSafe... are NOT here (defined in acarry.cpp).
+    ainarm9045_w7_shims.cpp
     # --- W6.2b-canary (IN-ARM site variants): 3 per-site-config variant files
     #     translated faithfully from the golden BCB6 tree ROOT (mirror name/path).
     #       ainarm9045_1x1_1.cpp -- single-site 1x1_1 (THE buildable, live arm;

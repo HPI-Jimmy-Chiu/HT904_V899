@@ -114,6 +114,15 @@ class TfMainInplace
 public:
     int  iNo9ShtErrICCt[2];          // [DATA]   golden cInplace -- per-shuttle No9 err count
     bool bNo9ShtErrNo[2][8];         // [DATA]   golden cInplace -- per-site No9 err flag
+    // W7-A1 ADD: the In-Sht-Latch / No9 combine flag the floating + latch SMs touch
+    // (golden cInArmPlacement.h:63, KenHsieh 20251105).  Golden-faithful default is
+    // FALSE: DoInArmCheckShuttleFloating case 9000 SETS bNo9Action=false (golden
+    // ainarm9045.cpp:3744-ctx) and NO offline path sets it true (the only true-set
+    // sites live inside InArmPlacementEnable()==false No9 placement blocks, dead
+    // offline).  The latch reads (golden :3941/:4045, via W7A1_NO9_ACTION()) are all
+    // guarded by InArmPlacementEnable() && bNo9Action, so an always-false member is
+    // behaviorally identical to the offline (false) macro.  No other TU references it.
+    bool bNo9Action;                 // [DATA]   golden cInArmPlacement.h:63 -- default false
     bool InArmPlacementEnable();     // [METHOD] golden cInplace -- offline: false (No9 inert)
     TfMainInplace();
 };

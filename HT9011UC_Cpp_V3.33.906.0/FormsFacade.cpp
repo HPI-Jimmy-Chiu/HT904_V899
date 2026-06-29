@@ -32,6 +32,7 @@ TfMainInplace::TfMainInplace()
 {
     iNo9ShtErrICCt[0]=0; iNo9ShtErrICCt[1]=0;
     for(int i=0;i<2;i++) for(int j=0;j<8;j++) bNo9ShtErrNo[i][j]=false;
+    bNo9Action=false;   // W7-A1: golden-faithful default (floating case 9000 sets false; no offline true-set)
 }
 bool TfMainInplace::InArmPlacementEnable() { return false; }   // offline: No9 placement disabled
 TfMain::TfMain()
