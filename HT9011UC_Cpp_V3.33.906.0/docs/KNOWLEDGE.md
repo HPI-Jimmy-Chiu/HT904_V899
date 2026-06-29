@@ -79,3 +79,17 @@
 - **原則（使用者指令）**：log/行為格式不清楚時，務必檢閱 9011UC 寫入端 C++（handlerlog/csystem/database/cMyDB 等），勿臆測。原始碼是 source of truth，log 是驗證的尺。
 
 > 參考：C++ 接縫分析見 `D:\HT9045\docs\migration\RD5軟體_HT9045_906_64bit遷移計畫_20260625_193240.md` §9（HAL、三道牆、硬體 64-bit 稽核）。
+
+## 工具導入評估決策（2026-06-29）：CodeGraph / Superpowers → 不導入為常設工具
+
+> 多角度評估（4 平行調查 + 對抗式 skeptic，交叉驗證）後的決議，記此避免日後重複討論。
+
+**CodeGraph（符號/邊/呼叫路徑索引 MCP）：預設不導入。**
+- 反對理由（皆有實證）：(1) golden 是凍結樹，全樹 grep 實測 ~0.45s 且已分好定義/讀寫點，索引省的是 sub-second，省不掉後面一定要做的「讀懂語意」；(2) 源碼 Big5，codegraph 逐字回傳會跟 Read 工具一樣把中文註解變 U+FFFD（本樹已實際中招 cprod.cpp 283 行 / cpublic.cpp 62 行），忠實翻譯仍須走 cp950-aware 讀檔；(3) tree-sitter 不跑前處理器，`__property`(18 檔，`={read=...}`→ERROR node)/`__fastcall`(363 檔)/`__closure` 的解析風險「恰好集中在價值最高的 VCL form 檔（如 cContact）」，殘缺/錯接的圖比沒有圖更糟（在安全關鍵翻譯上給假信心）；(4) SM 之間是 predicate(IndexHasIC… ~312 處)+全域資料流耦合，符號圖抓不到資料流語意、不比 grep 強；(5) nm 稽核是 link 層真相，source 圖取代不了。
+- 唯一可選動作（需使用者授權 `codegraph init`，預設不做）：對 golden 一個純邏輯子樹（ainarm9045.cpp + headers）+ 一個 `__property` 重 header 做時間盒 spike。採用門檻高：符號/邊須明顯勝過 grep 且 `__property`/`__closure` 不漏接成員；任一不過即丟棄；只索引凍結 golden、絕不索引會 stale 的新樹。
+
+**Superpowers（obra/superpowers 技能集）：跳過大宗，維持現狀。**
+- 已裝 3 個通用方法論技能（brainstorming / systematic-debugging / writing-plans，均已 defer 到本專案 CLAUDE.md；systematic-debugging 已內含「只在實機驗證」caveat）。其餘多為冗餘或不合本專案約束：`executing-plans`/`verification-before-completion` 已被「每波 ReadPlan→Translate→Verify→commit + 5 道閘 ratchet + DEFERRED 表」更強實現；`test-driven-development` 前提反了（golden 已是 spec、refactor 會偏離 golden、無實機 binary）；通用 `subagent`/`dispatching-parallel-agents` 不懂 ODR/nm 邊界，比本專案三段式（平行翻→序列整合→clean verify）更不安全；code-review/writing-skills 與內建 `/code-review` 及 bespoke `skill-creator` 重複。
+- 注意：`defense-in-depth`/`root-cause-tracing`/`condition-based-waiting` 不是獨立技能，已內含於 systematic-debugging，勿當名字裝。
+
+**真正標的不是導航效率，是覆蓋率/驗證深度（兩工具皆無解）**：W7 的 `#if 0` gated 大宗（csystem MainProc ladder ~2000 行、DoOneCycleFinishCheck/DoCleanOutFinishCheck ~2900 行、cContact 22761 行 index SM、W5 comms ~22k LOC）從未端到端在真實 HAL pump 過。降風險只能靠「盡早接真實/半真實 HAL pump gated 主路徑 + 持續 golden-cited oracle」。下一階段規劃重點應從「再多翻 site variant（純機械 clone）」挪向此。
