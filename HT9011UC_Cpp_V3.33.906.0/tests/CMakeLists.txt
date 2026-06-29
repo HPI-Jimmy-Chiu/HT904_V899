@@ -1047,3 +1047,29 @@ if(WIN32)
 endif()
 
 add_test(NAME W7_A1_InArmFloatingLatch COMMAND test_w7_a1_inarm_floating_latch)
+
+# --- test_w7_s0_motor_convergence: OFFLINE move-family CONVERGENCE enabler ---
+#   Proves the W7 S0 change in Motor/mymotor.cpp makes the offline move family
+#   ARRIVE over the Sim HAL (Motor==NULL convergence shortcut):
+#     (a) CONVERGE  -- MotorMove(N) -> 1 (Move Success) AND ReadPos()==N (was a
+#                      no-op stub returning 0/Moving forever before S0);
+#     (b) PICKER    -- MotorMove2SpeedForPicker(FinalPos,NULL) -> true & arrives;
+#     (c) HOME      -- MotorHome offline still converges Position->0 (regression
+#                      guard; S0 did NOT touch the home path);
+#     (d) FAST-PATH -- Gali_Two_ZAxis_Move / ISNormal / GalilTwoY_Move stay true
+#                      offline (atester one-liners; NOT part of the move family).
+#   Same RESCAN link group as test_sim_motor / test_motor_w4 -- only the motor
+#   layer is exercised (no state-machine archive needed), zero vendor libraries.
+add_executable(test_w7_s0_motor_convergence
+    test_w7_s0_motor_convergence.cpp
+)
+
+target_link_libraries(test_w7_s0_motor_convergence PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w7_s0_motor_convergence PRIVATE ws2_32)
+endif()
+
+add_test(NAME W7_S0_MotorConvergence COMMAND test_w7_s0_motor_convergence)

@@ -356,39 +356,89 @@ void TMyMotor::InitMOTParameter()
 //  -2 = Target > LimitP | -3 = Target < LimitN | -4 = PServoAlarmOn
 //  -5 = WAR1639 Motor encoder error | -6 = MOT Home sensor error
 // ---------------------------------------------------------------------------
-int TMyMotor::MotorMovePosition(int & /*Position*/, int /*speed*/, int /*Tar*/)
+int TMyMotor::MotorMovePosition(int &Position, int /*speed*/, int Tar)
 {
+    // AI(ht9045-v906) 20260629: W7 OFFLINE convergence shortcut so the move
+    // family ARRIVES over the Sim HAL. Mirrors the golden offline terminal
+    // (BCB6 mymotor.cpp:821-823, #ifndef SOFT_SIMULTE { Position=Tar; return 1; }):
+    // with no real driver attached the hardware block is skipped and the move
+    // reports Move Success at the commanded target.
+    if (Motor == NULL || !Motor->Enable)
+    {
+        Position = Tar;
+        return 1;   // 1 = Move Success (golden mymotor.cpp:823)
+    }
+
     // TODO(W6-state-machine): translate full body from BCB6 mymotor.cpp:549-860
     // Depends on: ShowMyMessage, Cylinder[], C_Shuttle1/2Floodgate,
     //             ShowErrorMessage("WAR1639",...), SetInArmHome/SetOutArmHome,
     //             SOFT_SIMULTE branch (hardware sim), CompareCommandPos.
+    // Real-driver path (Motor!=NULL && Enable); never taken in the offline build.
     return 0;
 }
 
 // ---------------------------------------------------------------------------
 //  MotorMove -- W4 STUB
 // ---------------------------------------------------------------------------
-int TMyMotor::MotorMove(int /*p*/)
+int TMyMotor::MotorMove(int p)
 {
+    // AI(ht9045-v906) 20260629: W7 OFFLINE convergence shortcut. With no real
+    // driver attached, snap the stored Position to the commanded target and
+    // report Move Success (golden MotorMove returns 1 on arrival, mymotor.cpp:953-956,
+    // via the MotorMovePosition offline terminal mymotor.cpp:821-823). Also refresh
+    // ScreenPos exactly as ReadPos() does so panel geometry stays consistent.
+    if (Motor == NULL || !Motor->Enable)
+    {
+        Position  = p;
+        ScreenPos = (int)(Scale * (Position - FactStart)) + RefStart;
+        fCMD      = false;
+        return 1;   // 1 = Move Success (golden mymotor.cpp:953-956)
+    }
+
     // TODO(W6-state-machine): translate full body (BCB6 mymotor.cpp:871-962)
+    // Real-driver path (Motor!=NULL && Enable); never taken in the offline build.
     return 0;
 }
 
 // ---------------------------------------------------------------------------
 //  MotorMove2SpeedForPicker -- W4 STUB
 // ---------------------------------------------------------------------------
-bool TMyMotor::MotorMove2SpeedForPicker(int /*FinalPos*/, ARM_CONDITION * /*ARM*/, bool /*bIsLoader*/)
+bool TMyMotor::MotorMove2SpeedForPicker(int FinalPos, ARM_CONDITION * /*ARM*/, bool /*bIsLoader*/)
 {
+    // AI(ht9045-v906) 20260629: W7 OFFLINE convergence shortcut. The golden body
+    // funnels every two-speed branch through MotorMove(FinalPos) and returns its
+    // iFlag (1==arrived, mymotor.cpp:971/988/995/999); offline that arrives at once.
+    if (Motor == NULL || !Motor->Enable)
+    {
+        Position  = FinalPos;
+        ScreenPos = (int)(Scale * (Position - FactStart)) + RefStart;
+        fCMD      = false;
+        return true;   // iFlag==1 Move Success (golden mymotor.cpp:999)
+    }
+
     // TODO(W6-state-machine): translate full body (BCB6 mymotor.cpp:964-999)
+    // Real-driver path (Motor!=NULL && Enable); never taken in the offline build.
     return false;
 }
 
 // ---------------------------------------------------------------------------
 //  MotorMoveShuttleShake -- W4 STUB
 // ---------------------------------------------------------------------------
-bool TMyMotor::MotorMoveShuttleShake(int /*p*/)
+bool TMyMotor::MotorMoveShuttleShake(int p)
 {
+    // AI(ht9045-v906) 20260629: W7 OFFLINE convergence shortcut. The shake
+    // sequence completes instantly with no real driver, so report done and snap
+    // the stored Position to the commanded target (golden returns true when the
+    // shake command finishes, BCB6 mymotor.cpp MotorMoveShuttleShake).
+    if (Motor == NULL || !Motor->Enable)
+    {
+        Position  = p;
+        ScreenPos = (int)(Scale * (Position - FactStart)) + RefStart;
+        return true;
+    }
+
     // TODO(W6-state-machine)
+    // Real-driver path (Motor!=NULL && Enable); never taken in the offline build.
     return false;
 }
 
