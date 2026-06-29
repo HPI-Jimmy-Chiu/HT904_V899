@@ -109,6 +109,7 @@ struct TfMainGrid     { void SetCellColorIndex(int /*col*/,int /*row*/,int /*idx
 struct TfMainMemoLines{ int Count; void Add(AnsiString /*s*/){} TfMainMemoLines():Count(0){} }; // [DATA] golden TStrings*
 struct TfMainMemo     { TfMainMemoLines *Lines; void Clear(){} TfMainMemo(){ Lines=new TfMainMemoLines(); } }; // [DATA] golden TMemo*
 struct TfMainPageControl { int ActivePageIndex; TfMainPageControl():ActivePageIndex(0){} };      // [DATA] golden TPageControl* (pgMain)
+struct TfMainSpeedButton { bool Down; TfMainSpeedButton():Down(false){} };                        // [DATA] golden TSpeedButton* (W7-C1: BtnOneCycle->Down, offline false)
 class TfMainInplace
 {
 public:
@@ -165,6 +166,15 @@ public:
     void ResetRecordforPiggyBack(AnsiString S);               // [METHOD] golden main.h -- offline: no-op
     // -- W6.6 ADD: the per-tick sensor scan the HUB main loop calls -------------
     void ProcessSensorScan();                                 // [METHOD] golden main.h -- DoAllProcess():9130 every tick; offline no-op
+    // -- W7-C1 ADD: members the END-OF-LOT CLEAN-OUT FINISH-CHECK (DoCleanOutFinishCheck)
+    //    derefs.  golden main.h.  All offline no-op / sane default (a handler that
+    //    is draining clean-out with no UI never re-starts/re-levels/re-tests).
+    //    AI(W7C1-Integrate) 20260629.
+    void Start(AnsiString Func);                              // [METHOD] golden main.h -- offline: do NOT auto re-start (no-op); ~6 sites
+    void ChangeLevelAttr();                                   // [METHOD] golden main.h -- offline: level-attr UI no-op
+    void ModifyTester(int iWhich);                            // [METHOD] golden main.h:Steven 20191218 -- offline: QA tester-modify no-op
+    void CleanYieldCount();                                   // [METHOD] golden main.h -- offline: yield-count clear no-op
+    TfMainSpeedButton *BtnOneCycle;                           // [DATA]   golden main.h (TSpeedButton* BtnOneCycle); offline Down=false
     TfMain();
 };
 extern TfMain *fMain;

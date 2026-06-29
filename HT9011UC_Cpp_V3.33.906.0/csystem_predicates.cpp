@@ -254,3 +254,77 @@ void DoAutoSiteMappingDropError()
     // lands with the ainarm core.  Offline ASM is off, so this is a no-op.
 }
 //==============================================================================
+//  W7-C1 ADD: csystem.h predicates the end-of-lot CLEAN OUT drain finish-check
+//  (DoCleanOutFinishCheck, csystem.cpp) consults in its ACTIVE path.  These had
+//  NO offline home before W7-C1 (the empty stub referenced neither); the real
+//  body does, so translate them FAITHFULLY here over the existing MOT[]/kit
+//  substrate.  AI(W7C1-Integrate) 20260629.
+//------------------------------------------------------------------------------
+//  AllArmZIsSafe -- golden csystem.cpp:343.  Every in/out-arm Z motor must be at
+//  a non-negative (safe/up) position.  Offline a fresh kit has iMotRow/iMotCol==0
+//  so the loop is empty -> returns true (all Z safe), which is the faithful
+//  "arms parked up" posture for an idle/empty handler.  The Sim motor ReadPos()
+//  is >=0 once homed, so a homed offline machine is also safe.
+bool AllArmZIsSafe()                                                            // golden csystem.cpp:343
+{
+    #ifdef SOFT_SIMULTE
+    return true;
+    #else
+    int iMotNoIn, iMotNoOut;
+    for(int i=0; i<InArmSuck.iMotRow; i++)
+    {
+        for(int j=0; j<InArmSuck.iMotCol; j++)
+        {
+            iMotNoIn =(USE_PICKER_COUNT==ep16Picker && InOutArmPickerUseMotor==eptUseMotCyn)?MInArmZA:InArmSuck.Suck[i][j].iMotNo;
+            iMotNoOut=(USE_PICKER_COUNT==ep16Picker && InOutArmPickerUseMotor==eptUseMotCyn)?MOutArmZA:OutArmSuck.Suck[i][j].iMotNo;
+            if(MOT[iMotNoIn].ReadPos()<0)                                       //Steven 20210713 : Prod.ZInArmSafe[i][j] --> 0
+                return false;
+            if(MOT[iMotNoOut].ReadPos()<0)                                      //Steven 20210713 : Prod.ZOutArmSafe[i][j] --> 0
+                return false;
+        }
+    }
+    return true;
+    #endif
+}
+//------------------------------------------------------------------------------
+//  CheckIndexIsNormal -- golden csystem.cpp:12676.  The two test-head Z motors
+//  must be within their safe encoder window and not moving.  Translated VERBATIM
+//  (the golden has the well-known MTestZ1.MovFlag double-OR typo at :12697-12698;
+//  preserved exactly).  Offline the Sim Gali_ReadEncoderInRandge returns true at
+//  the home/safe window and MovFlag is false when idle -> a parked index reads
+//  Normal.
+bool CheckIndexIsNormal()                                                       // golden csystem.cpp:12676
+{
+    if(MOT[MTestZ1].Gali_ReadEncoderInRandge(Prod.TestZ1_Safe)==false  ||
+       MOT[MTestZ2].Gali_ReadEncoderInRandge(Prod.TestZ2_Safe)==false)
+    {
+        if(MOT[MTestZ1].Gali_ReadEncoderInRandge(0)==false  ||
+           MOT[MTestZ2].Gali_ReadEncoderInRandge(0)==false)
+        {
+            return false;
+        }
+    }
+
+    if(IniConfig.bD51UseOnecycleCleanOutFinishTestArmAtRear)                    //marc 2007/10/11 start
+    {
+        if(MOT[MTestY1].Gali_ReadEncoderInRandge(Prod.TestY1_Middle)==false)
+        {
+            return false;
+        }
+    }
+
+    if(MOT[MTestZ1].MovFlag ||
+       MOT[MTestZ1].MovFlag ||                                                  //golden double-OR on MTestZ1 (verbatim)
+       MOT[MTestY1].MovFlag)
+    {
+        return false;
+    }
+    return true;
+}
+//------------------------------------------------------------------------------
+//  hAutoCleanHangUp -- golden csystem.cpp:157 (TQPF_Timer global, Steven
+//  20220702).  Declared extern in csystem.h; the C1 finish-check arms it
+//  (SetSecAndOn) on the auto-clean-at-finish branch.  Single ODR definition
+//  here (no other TU defines the csystem timer globals yet).
+TQPF_Timer hAutoCleanHangUp;                                                    // golden csystem.cpp:157
+//==============================================================================

@@ -143,7 +143,9 @@ bool DoOutArmTeachAlignmentProcess(unsigned long & /*lAction*/) { return true; }
 //  csystem.cpp).  ACTIVE no-op stubs so MainProc's tail calls link + pump.
 // ===========================================================================
 void DoOneCycleFinishCheck() {}   // golden csystem.cpp:12813 (bulk gated; offline no-op)
-void DoCleanOutFinishCheck() {}   // golden csystem.cpp:14713 (bulk gated; offline no-op)
+// DoCleanOutFinishCheck() : REAL faithful body now lives in csystem.cpp (golden
+// csystem.cpp:14713-15748) as of W7-C1.  The no-op stub here was REMOVED to keep
+// a single ODR definition.  The prototype stays in csystem_shims.h:87.  AI(W7C1-Integrate) 20260629.
 
 // ===========================================================================
 //  W6.2c batch-1: csystem predicates/actions the 1x2_*/1x3_* in-arm variants

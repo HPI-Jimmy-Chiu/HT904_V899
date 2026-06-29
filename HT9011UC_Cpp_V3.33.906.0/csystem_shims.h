@@ -84,6 +84,7 @@ void SetFixTrayMiddleDtata();                                 // golden aoutarm.
 //  csystem.cpp; these ACTIVE no-op stubs keep the loop pumping (NOT spine).
 // ---------------------------------------------------------------------------
 void DoOneCycleFinishCheck();                                 // golden csystem.cpp:12813 (gated; offline no-op)
-void DoCleanOutFinishCheck();                                 // golden csystem.cpp:14713 (gated; offline no-op)
+// DoCleanOutFinishCheck() : decl MOVED to csystem.h (W7-C1); the REAL body lives
+// in csystem.cpp now. The no-op stub here was removed (single ODR definition).
 
 #endif

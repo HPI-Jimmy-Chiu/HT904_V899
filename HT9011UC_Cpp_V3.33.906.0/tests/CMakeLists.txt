@@ -1110,3 +1110,39 @@ if(WIN32)
 endif()
 
 add_test(NAME W7_GridOccupancy COMMAND test_w7_grid_occupancy)
+
+# ===========================================================================
+#  W7-C1 VERIFY -- the end-of-lot CLEAN OUT drain finish-check (REAL body)
+# ===========================================================================
+# --- test_w7_c1_cleanout_finish: prove DoCleanOutFinishCheck does REAL work ---
+#   Proves the W7-C1 change (the faithful golden DoCleanOutFinishCheck body,
+#   csystem.cpp:14713-15748, now lives in the translated csystem.cpp -- replacing
+#   the no-op stub) does REAL work over the now-seedable cross-arm occupancy grid:
+#     (a) EMPTY machine (iCleanOut=1/iOneCycle=0/IndexStatus=Z1_Z2_Normal, all
+#         kits cleared) -> the body does NOT park on the residual-IC cursor 1001;
+#         clean-out can DRAIN toward finish.
+#     (b) FALSE-FINISH GUARD (the new capability): seed InArmSuck use-site=HAS_IC
+#         -> iCleanOutCycleTask==1001 (golden residual gate :14739) + iCleanOut
+#         stays 1 (NO false instant-finish, unlike the old stub).
+#     (c) DRAIN: clear the seed -> next call no longer parks on 1001.
+#     (d)/(e) NO-REGRESSION: the entry guard (golden :14720-14721) gates the work
+#         -- iOneCycle=1 leaves the cursor untouched, and iCleanOut=0 (the W6.6
+#         hub posture) sets no clean-out drain cursor.
+#   The DoCleanOutFinishCheck body + the iCleanOut/iOneCycle/iCleanOutCycleTask
+#   globals + the TMyKitSuck kit globals all live in ht9045_sm (csystem.cpp /
+#   cmydef / aHotPlateSubstrate.cpp).  Same RESCAN link group as the other W6/W7
+#   state-machine tests so the cprod<->cpublic<->cmydef ctor cross-references
+#   settle.  All seeded globals are saved/restored so sibling suites are unaffected.
+add_executable(test_w7_c1_cleanout_finish
+    test_w7_c1_cleanout_finish.cpp
+)
+
+target_link_libraries(test_w7_c1_cleanout_finish PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w7_c1_cleanout_finish PRIVATE ws2_32)
+endif()
+
+add_test(NAME W7_C1_CleanOutFinish COMMAND test_w7_c1_cleanout_finish)

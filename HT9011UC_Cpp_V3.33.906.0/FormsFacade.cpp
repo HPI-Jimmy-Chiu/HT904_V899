@@ -56,6 +56,8 @@ TfMain::TfMain()
     cInplace   = new TfMainInplace();
     pgMain     = new TfMainPageControl();          // ActivePageIndex==0 offline
     emp7TabSheet21 = 0;                            // ==pgMain->ActivePageIndex offline
+    // -- W7-C1 ADD --
+    BtnOneCycle = new TfMainSpeedButton();         // offline Down=false (else-branch one-cycle trigger inert)
 }
 void TfMain::LightOn() {}                                       // W6.4: CCD light sink (offline no-op)
 void TfMain::DebugOneCycleHotPlate(AnsiString /*sfunc*/) {}     // debug log sink (offline no-op)
@@ -73,6 +75,11 @@ void TfMain::BtnCleanOutClick(void * /*Sender*/) {}   // W6.2b(2x4_16): offline 
 void TfMain::JSCC_ResetForShuttleLoseIC() {}
 void TfMain::ResetRecordforPiggyBack(AnsiString /*S*/) {}
 void TfMain::ProcessSensorScan() {}                            // W6.6: HUB main-loop per-tick sensor scan (offline no-op)
+// -- W7-C1 ADD: end-of-lot clean-out finish-check fMain methods (all offline no-op) --
+void TfMain::Start(AnsiString /*Func*/) {}                     // W7-C1: offline do NOT auto re-start
+void TfMain::ChangeLevelAttr() {}                              // W7-C1: offline level-attr UI no-op
+void TfMain::ModifyTester(int /*iWhich*/) {}                   // W7-C1: offline QA tester-modify no-op
+void TfMain::CleanYieldCount() {}                              // W7-C1: offline yield-count clear no-op
 TfMain *fMain = new TfMain();
 
 // --- W6.2: TfSortCT --------------------------------------------------------
