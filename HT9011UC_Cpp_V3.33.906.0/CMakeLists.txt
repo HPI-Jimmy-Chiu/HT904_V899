@@ -548,6 +548,15 @@ add_library(ht9045_sm STATIC
     aoutarm9045_2x4_16.cpp
     aoutarm9045_2x8_16.cpp
     aoutarm9045_2x8_32.cpp
+    # --- W6.2c-OUT B5 (S-prefix, dead-but-compiled): the LAST out-arm variant
+    #     file.  aoutarm9045S_1x4_4.cpp carries the IRREGULAR _9045S_1x4_4 infix
+    #     on its top-level export DoOutArm_9045S_1x4_4() AND all helpers.  VERIFIED
+    #     DEAD: zero external callers in the golden tree (out-arm dispatch ladders
+    #     route to the SUFFIX-S DoOutArm_9045_1x4_4S, defined in the DIFFERENT
+    #     already-committed aoutarm9045_1x4_4S.cpp).  Compiled-only, like in-arm
+    #     2x8_32: NO static-stub removal, NO extern un-gate, NO dispatch-ladder
+    #     edit to aoutarm9045.cpp (dispatch unchanged -- file never dispatched).
+    aoutarm9045S_1x4_4.cpp
     # --- W7 (TRAY-ARM engine): the top dispatcher DoCatchTray (flat switch) + 8
     #     pumpable task SM skeletons (DoCatchFromLoader / CatchNewTrayFromBuffer /
     #     DoPlaceTrayToAuto / DoPlaceToBuffer / DoSlapTray / DoCatchUnderTray /
