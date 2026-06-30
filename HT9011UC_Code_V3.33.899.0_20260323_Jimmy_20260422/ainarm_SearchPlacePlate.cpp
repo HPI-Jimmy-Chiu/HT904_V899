@@ -2381,14 +2381,15 @@ void SearchPlacePlateXItem_1x2Suck()
                     iy=0;
                     ix+=2;
                     if(ix>spacX)
-                        ix=0;
-
-                    if(HotPlateForm.iPlateSelect==0x03)
                     {
-                        if(iPlate==0)
-                            iPlate=1;
-                        else
-                            iPlate=0;
+                        ix=0;
+                        if(HotPlateForm.iPlateSelect==0x03)
+                        {
+                            if(iPlate==0)
+                                iPlate=1;
+                            else
+                                iPlate=0;
+                        }
                     }
                 }
             }
@@ -2805,14 +2806,15 @@ void SearchPlacePlateXItem_2x2Suck()
                         iy=0;
                         ix+=2;
                         if(ix>spacX)
-                            ix=0;
-
-                        if(HotPlateForm.iPlateSelect==0x03)
                         {
-                            if(iPlate==0)
-                                iPlate=1;
-                            else
-                                iPlate=0;
+                            ix=0;
+                            if(HotPlateForm.iPlateSelect==0x03)
+                            {
+                                if(iPlate==0)
+                                    iPlate=1;
+                                else
+                                    iPlate=0;
+                            }
                         }
                     }
                 }

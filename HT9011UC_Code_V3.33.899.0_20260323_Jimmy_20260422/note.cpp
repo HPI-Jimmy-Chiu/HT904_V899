@@ -3478,6 +3478,10 @@ void __fastcall TfNote::Timer1Timer(TObject *Sender)
         {
             fNote->BringToFront();
         }
+        else                                                                    //AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): MyMessageBox 顯示時(Lot End/Alarm)改拉它到前,接在既有置頂鏈尾,只用 app 內 BringToFront 不用 TOPMOST/SetForegroundWindow
+        {
+            MyMessageBox->BringToFront();
+        }
     }
 
     if(IniConfig.bIndexDropErrCanMove==true)

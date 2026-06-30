@@ -1047,45 +1047,139 @@ void __fastcall TfTesterTCP::ProcessOSTrayData(bool bViewOnly)
     }
 }
 //------------------------------------------------------------------------------
-void __fastcall TfTesterTCP::CopyRecipeToTester(AnsiString FileName)            //Steven 20250612 : for OS Tester.
+//AI(ht9045-v899) 20260625: 新增去重式記錄器，N06 recipe 同步成敗寫入既有 EventLog，避免靜默失敗且不膨脹日誌
+static void LogN06Result(AnsiString FileName, bool bOk, AnsiString sReason)
 {
-    HINSTANCE hInstance;
-    AnsiString str1, str2, str3;
-    if(IniConfig.bN06_CopyTesterFile==true)                                     //Steven 20250327 : OS測試機的工作檔也要上傳
-    {
-        str1.sprintf("%s%s\\OS_Setting.zip", DataPath, FileName);               //Steven 20230710 : OS測試機的工作檔也要上傳
-        str2.sprintf("%s", IncludeTrailingPathDelimiter(IniConfig.asN06_TesterPath));
-        if(FileExists(str1))
-        {
-            str3.sprintf("e \"%s\" -o\"%s\" -y", str1, str2);
-            hInstance=ShellExecute(this, "open", "D:\\HT9045\\7z.exe", str3.c_str(), NULL, SW_HIDE);
-            if(int(hInstance)<=32)
-            {
-                ;
-            }
-            MySleep(500);
-        }
-    }
+    static AnsiString sLastKey="";
+    AnsiString sKey = FileName + "|" + (bOk ? AnsiString("OK") : sReason);
+    if(sKey==sLastKey) return;                                                  // 連續相同結果只記第一次
+    sLastKey=sKey;
+    if(bOk)
+        SaveEventLogInfo("N06000001", AnsiString("Recipe synced to OS Tester: ")+FileName, 20, "OK");
+    else
+        SaveEventLogInfo("N06000002", AnsiString("Recipe sync to OS Tester FAIL [")+sReason+"]: "+FileName, 0, "NG");
 }
 //------------------------------------------------------------------------------
-void __fastcall TfTesterTCP::CopyRecipeFromTester(AnsiString FileName)          //Steven 20250612 : for OS Tester.
+//AI(ht9045-v899) 20260625: 取 7z 完整路徑(不硬編碼)，FileExists 為 false 才 fallback
+static AnsiString Get7zPath()
+{
+    AnsiString s7z = ExtractFilePath(Application->ExeName)+"7z.exe";
+    if(FileExists(s7z)==false)
+        s7z="D:\\HT9045\\7z.exe";
+    return s7z;
+}
+//------------------------------------------------------------------------------
+//AI(ht9045-v899) 20260625: 同步執行 7z 並取得 exit code(沿用 main.cpp ShellExecuteEx+WaitForSingleObject 模式)；回傳 false 代表失敗，pdwExit 帶回程序結束碼
+static bool RunSevenZipSync(AnsiString s7z, AnsiString sParam, unsigned long *pdwExit)
+{
+    SHELLEXECUTEINFO execinfo;
+    memset(&execinfo, 0, sizeof(execinfo));
+    execinfo.cbSize=sizeof(execinfo);
+    execinfo.fMask=SEE_MASK_NOCLOSEPROCESS;
+    execinfo.lpVerb="open";
+    execinfo.lpFile=s7z.c_str();
+    execinfo.lpParameters=sParam.c_str();
+    execinfo.nShow=SW_HIDE;
+
+    if(ShellExecuteEx(&execinfo)==FALSE || execinfo.hProcess==NULL)
+        return false;
+
+    unsigned long dwWait = WaitForSingleObject(execinfo.hProcess, 10000);       // timeout 10s
+    bool bOk=false;
+    unsigned long dwExit=0xFFFFFFFF;
+    if(dwWait==WAIT_OBJECT_0)
+    {
+        if(GetExitCodeProcess(execinfo.hProcess, &dwExit))
+            bOk=true;                                                           // 順利取得 exit code，由呼叫端判定 0=OK
+    }
+    if(pdwExit) *pdwExit=dwExit;
+    CloseHandle(execinfo.hProcess);
+    return bOk;
+}
+//------------------------------------------------------------------------------
+//AI(ht9045-v899) 20260625: 改回傳 bool + 同步等待 + 取 exit code + 存在性檢查，避免 N06 上傳靜默失敗
+bool __fastcall TfTesterTCP::CopyRecipeToTester(AnsiString FileName)            //Steven 20250612 : for OS Tester.
 {
     AnsiString str1, str2, str3;
-    if(IniConfig.bN06_CopyTesterFile==true)                                     //Steven 20250327 : OS測試機的工作檔也要上傳
+    if(IniConfig.bN06_CopyTesterFile==false)                                    //Steven 20250327 : OS測試機的工作檔也要上傳
+        return false;
+
+    str1.sprintf("%s%s\\OS_Setting.zip", DataPath, FileName);                   //Steven 20230710 : OS測試機的工作檔也要上傳
+    str2.sprintf("%s", IncludeTrailingPathDelimiter(IniConfig.asN06_TesterPath));
+
+    if(FileExists(str1)==false)                                                 // 來源 zip 不存在 -> 記錄後返回，不可靜默
     {
-        str1.sprintf("%s%s\\OS_Setting.zip", DataPath, FileName);               //Steven 20230710 : OS測試機的工作檔也要上傳
-        str2.sprintf("%s%s.ini", IncludeTrailingPathDelimiter(IniConfig.asN06_TesterPath), FileName);
-        if(FileExists(str2))
-        {
-            str3.sprintf("a -tzip \"%s\" \"%s\"", str1, str2);
-            ShellExecute(this, "open", "D:\\HT9045\\7z.exe", str3.c_str(), NULL, SW_HIDE);
-            MySleep(2000);                                                      //Steven 20240105 : add delay
-        }
-        else
-        {
-//          str.sprintf("N06, step 1 : File %s does not exists!", str2);
-        }
+        LogN06Result(FileName, false, "SRC_ZIP_MISSING");
+        return false;
     }
+    if(DirectoryExists(IniConfig.asN06_TesterPath)==false)                      // 目的網路磁碟不存在 -> 記錄後返回
+    {
+        LogN06Result(FileName, false, "DEST_PATH_MISSING");
+        return false;
+    }
+
+    AnsiString s7z = Get7zPath();
+    if(FileExists(s7z)==false)
+    {
+        LogN06Result(FileName, false, "7Z_MISSING");
+        return false;
+    }
+
+    str3.sprintf("e \"%s\" -o\"%s\" -y", str1, str2);
+    unsigned long dwExit=0xFFFFFFFF;
+    if(RunSevenZipSync(s7z, str3, &dwExit)==false)                              // 啟動或等待逾時失敗
+    {
+        LogN06Result(FileName, false, "EXEC_FAIL_OR_TIMEOUT");
+        return false;
+    }
+    if(dwExit!=0)                                                               // 7z: 0=OK,1=warn,>=2=error
+    {
+        AnsiString sR; sR.sprintf("7Z_EXIT_%u", dwExit);
+        LogN06Result(FileName, false, sR);
+        return false;
+    }
+    LogN06Result(FileName, true, "");
+    return true;
+}
+//------------------------------------------------------------------------------
+//AI(ht9045-v899) 20260625: 同 CopyRecipeToTester，改 bool 回傳 + 同步取 exit code + 存在性檢查 + 去重記錄
+bool __fastcall TfTesterTCP::CopyRecipeFromTester(AnsiString FileName)          //Steven 20250612 : for OS Tester.
+{
+    AnsiString str1, str2, str3;
+    if(IniConfig.bN06_CopyTesterFile==false)                                    //Steven 20250327 : OS測試機的工作檔也要上傳
+        return false;
+
+    str1.sprintf("%s%s\\OS_Setting.zip", DataPath, FileName);                   //Steven 20230710 : OS測試機的工作檔也要上傳
+    str2.sprintf("%s%s.ini", IncludeTrailingPathDelimiter(IniConfig.asN06_TesterPath), FileName);
+
+    if(FileExists(str2)==false)                                                 //AI(ht9045-v899) 20260625: 原註解掉的 log 改為呼叫去重記錄器
+    {
+        LogN06Result(FileName, false, "SRC_INI_MISSING");
+        return false;
+    }
+
+    AnsiString s7z = Get7zPath();
+    if(FileExists(s7z)==false)
+    {
+        LogN06Result(FileName, false, "7Z_MISSING");
+        return false;
+    }
+
+    str3.sprintf("a -tzip \"%s\" \"%s\"", str1, str2);
+    unsigned long dwExit=0xFFFFFFFF;
+    if(RunSevenZipSync(s7z, str3, &dwExit)==false)                              // 啟動或等待逾時失敗
+    {
+        LogN06Result(FileName, false, "EXEC_FAIL_OR_TIMEOUT");
+        return false;
+    }
+    if(dwExit!=0)                                                               // 7z: 0=OK,1=warn,>=2=error
+    {
+        AnsiString sR; sR.sprintf("7Z_EXIT_%u", dwExit);
+        LogN06Result(FileName, false, sR);
+        return false;
+    }
+    LogN06Result(FileName, true, "");
+    return true;
 }
 //------------------------------------------------------------------------------
 void __fastcall TfTesterTCP::btnSaveClick(TObject *Sender)                      //RogerYang 20260210 : 田揚志需求，有設定的才可以一次放全部，OS報表要照Tray盤放料順序顯示

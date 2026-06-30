@@ -64,9 +64,9 @@
       ..\Obj\uShowMessage.obj ..\Obj\cAuthority.obj ..\Obj\cMyDB.obj 
       ..\Obj\MyBinDisp.obj ..\Obj\MyCCLinkSensor.obj ..\Obj\MyCCLink.obj 
       ..\Obj\MyCCLinkBoard.obj ..\Obj\uYieldMonitoring.obj 
-      ..\Obj\CCDInterface.obj ..\Obj\FTPClient.obj ..\Obj\LtcSensor.obj 
-      ..\Obj\PowerSavingMode.obj ..\Obj\cObserver.obj ..\Obj\ContactForce.obj 
-      ..\Obj\AutoTemperature.obj ..\Obj\DynamicTemp.obj 
+      ..\Obj\CCDInterface.obj ..\Obj\FTPClient.obj ..\Obj\uFtpUploadThread.obj 
+      ..\Obj\LtcSensor.obj ..\Obj\PowerSavingMode.obj ..\Obj\cObserver.obj 
+      ..\Obj\ContactForce.obj ..\Obj\AutoTemperature.obj ..\Obj\DynamicTemp.obj 
       ..\Obj\myQwertyKeyBoard.obj ..\Obj\Password.obj ..\Obj\QAMode.obj 
       ..\Obj\Socket_ASE_KR.obj ..\Obj\aseTest.obj ..\Obj\aRotateKIT.obj 
       ..\Obj\fRotate.obj ..\Obj\aRotateDegreeClass.obj ..\Obj\aRotateKIT_In.obj 
@@ -169,7 +169,7 @@
       teeui.bpi teedb.bpi tee.bpi teeqr.bpi dclusr60.bpi bcbsmp.bpi adortl.bpi 
       ibsmp.bpi qrpt.bpi ibxpress.bpi dsnap.bpi inet.bpi inetdb.bpi nmfast.bpi 
       bcbie.bpi bcb2kaxserver.bpi vclie.bpi dss.bpi webdsnap.bpi dclocx.bpi"/>
-    <PATHCPP value=".;Motor;EJ1N;Public;HThreadCtrl;Interface;ATC;BinDisplay;CCLink;KYECFTP;&quot;ASE_K Socket&quot;;RotateKit;AutoClean;AutoTeach;OmronLaser;SECSGEM;SortingBinTray;BarCode;PMAlarm;Monitor;Automation;ARMS;ProductionInfo;CanBus;TempCtrl;GroundMan;LoadCCD;Mes;AutoAlignment;EtherCAT;MyPLC;VacuumUnit;Common\PickPlanner"/>
+    <PATHCPP value=".;Motor;EJ1N;Public;HThreadCtrl;Interface;ATC;BinDisplay;CCLink;KYECFTP;FTPUpload;&quot;ASE_K Socket&quot;;RotateKit;AutoClean;AutoTeach;OmronLaser;SECSGEM;SortingBinTray;BarCode;PMAlarm;Monitor;Automation;ARMS;ProductionInfo;CanBus;TempCtrl;GroundMan;LoadCCD;Mes;AutoAlignment;EtherCAT;MyPLC;VacuumUnit;Common\PickPlanner"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
@@ -179,8 +179,8 @@
     <USERDEFINES value="_DEBUG;_VER6;"/>
     <SYSDEFINES value="NO_STRICT"/>
     <MAINSOURCE value="HT9045.cpp"/>
-    <INCLUDEPATH value="C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;VacuumUnit;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;SECSGEM;Public;PMAlarm;SortingBinTray;Motor;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;&quot;ASE_K Socket&quot;;FingerprintRead;KYECFTP;Automation;CCLink;BinDisplay;Interface;ATC;EJ1N;HThreadCtrl;Common\PickPlanner;D:\HT9045\Obj;$(BCB)\include;$(BCB)\include\vcl;D:\ProgramFiles\Borland\CBuilder6\Projects"/>
-    <LIBPATH value="Common\PickPlanner;C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;VacuumUnit;BinDisplay;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;Public;PMAlarm;SortingBinTray;SECSGEM;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;&quot;ASE_K Socket&quot;;FingerprintRead;KYECFTP;Automation;CCLink;Interface;ATC;EJ1N;HThreadCtrl;Motor;D:\HT9045\Obj;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\lib\Psdk;D:\ProgramFiles\Borland\CBuilder6\Projects"/>
+    <INCLUDEPATH value="C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;VacuumUnit;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;SECSGEM;Public;PMAlarm;SortingBinTray;Motor;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;&quot;ASE_K Socket&quot;;FingerprintRead;KYECFTP;FTPUpload;Automation;CCLink;BinDisplay;Interface;ATC;EJ1N;HThreadCtrl;Common\PickPlanner;D:\HT9045\Obj;$(BCB)\include;$(BCB)\include\vcl;D:\ProgramFiles\Borland\CBuilder6\Projects"/>
+    <LIBPATH value="Common\PickPlanner;C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;VacuumUnit;BinDisplay;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;Public;PMAlarm;SortingBinTray;SECSGEM;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;&quot;ASE_K Socket&quot;;FingerprintRead;KYECFTP;FTPUpload;Automation;CCLink;Interface;ATC;EJ1N;HThreadCtrl;Motor;D:\HT9045\Obj;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\lib\Psdk;D:\ProgramFiles\Borland\CBuilder6\Projects"/>
     <WARNINGS value="-w8092 -w8091 -w8090 -w8089 -w8087 -wuse -wstu -w-par -wnod -wdef -w-cpt 
       -wamp"/>
     <OTHERFILES value=""/>
@@ -191,9 +191,9 @@
       -IProductionInfo -IARMS -ID:\HT9045\elec\myvcl -ID:\HT9045\elec\Component 
       -IMonitor -ISECSGEM -IPublic -IPMAlarm -ISortingBinTray -IMotor 
       -IOmronLaser -IAutoTeach -IBarCode -IRotateKit -IAutoClean 
-      -I&quot;ASE_K Socket&quot; -IFingerprintRead -IKYECFTP -IAutomation -ICCLink 
-      -IBinDisplay -IInterface -IATC -IEJ1N -IHThreadCtrl -ICommon\PickPlanner 
-      -ID:\HT9045\Obj -I$(BCB)\include -I$(BCB)\include\vcl 
+      -I&quot;ASE_K Socket&quot; -IFingerprintRead -IKYECFTP -IFTPUpload -IAutomation 
+      -ICCLink -IBinDisplay -IInterface -IATC -IEJ1N -IHThreadCtrl 
+      -ICommon\PickPlanner -ID:\HT9045\Obj -I$(BCB)\include -I$(BCB)\include\vcl 
       -ID:\ProgramFiles\Borland\CBuilder6\Projects -src_suffix cpp -D_DEBUG 
       -D_VER6 -boa"/>
     <CFLAG1 value="-Od -H=D:\HT9045\Obj\vcl60.csm -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
@@ -399,6 +399,7 @@
       <FILE FILENAME="uYieldMonitoring.cpp" FORMNAME="fYieldMonitoring" UNITNAME="uYieldMonitoring" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="CCDInterface.cpp" FORMNAME="CCDInterfaceForm" UNITNAME="CCDInterface" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="KYECFTP\FTPClient.cpp" FORMNAME="fFTPClient" UNITNAME="FTPClient" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="FTPUpload\uFtpUploadThread.cpp" FORMNAME="" UNITNAME="uFtpUploadThread" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="LtcSensor.cpp" FORMNAME="fLtcSensor" UNITNAME="LtcSensor" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="PowerSavingMode.cpp" FORMNAME="" UNITNAME="PowerSavingMode" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="cObserver.cpp" FORMNAME="fObserver" UNITNAME="cObserver" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
@@ -556,7 +557,7 @@ AutoIncBuild=0
 MajorVer=3
 MinorVer=33
 Release=899
-Build=22
+Build=32
 Debug=0
 PreRelease=0
 Special=0
@@ -568,7 +569,7 @@ CodePage=950
 [Version Info Keys]
 CompanyName=Honprec
 FileDescription=HT-9xxx Series Logic Handler
-FileVersion=3.33.899.22
+FileVersion=3.33.899.32
 InternalName=
 LegalCopyright=
 LegalTrademarks=
@@ -579,14 +580,14 @@ Comments=
 
 [HistoryLists\hlIncludePath]
 Count=30
-Item0=C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;VacuumUnit;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;SECSGEM;Public;PMAlarm;SortingBinTray;Motor;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;Automation;CCLink;BinDisplay;Interface;ATC;EJ1N;HThreadCtrl;Common\PickPlanner;D:\HT9045\Obj;$(BCB)\include;$(BCB)\include\vcl;D:\ProgramFiles\Borland\CBuilder6\Projects
-Item1=C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;VacuumUnit;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;SECSGEM;Public;PMAlarm;SortingBinTray;Motor;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;Automation;CCLink;BinDisplay;Interface;ATC;EJ1N;HThreadCtrl;D:\HT9045\Obj;$(BCB)\include;$(BCB)\include\vcl;D:\ProgramFiles\Borland\CBuilder6\Projects
-Item2=VacuumUnit;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;SECSGEM;Public;PMAlarm;SortingBinTray;Motor;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;Automation;CCLink;BinDisplay;Interface;ATC;EJ1N;HThreadCtrl;D:\HT9045\Obj;$(BCB)\include;$(BCB)\include\vcl;D:\ProgramFiles\Borland\CBuilder6\Projects
-Item3=VacuumUnit;d:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\Program Files\Borland\CBuilder6\Projects;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;SECSGEM;Public;PMAlarm;SortingBinTray;Motor;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;Automation;CCLink;BinDisplay;Interface;ATC;EJ1N;HThreadCtrl;$(BCB)\include;$(BCB)\include\vcl;D:\HT9045\Obj;D:\ProgramFiles\Borland\CBuilder6\Projects
-Item4=d:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\Program Files\Borland\CBuilder6\Projects;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;SECSGEM;Public;PMAlarm;SortingBinTray;Motor;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;Automation;CCLink;BinDisplay;Interface;ATC;EJ1N;HThreadCtrl;$(BCB)\include;$(BCB)\include\vcl;D:\HT9045\Obj;D:\ProgramFiles\Borland\CBuilder6\Projects
-Item5=C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\Program Files\Borland\CBuilder6\Projects;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;SECSGEM;Public;PMAlarm;SortingBinTray;Motor;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;Automation;CCLink;BinDisplay;Interface;ATC;EJ1N;HThreadCtrl;$(BCB)\include;$(BCB)\include\vcl;D:\HT9045\Obj;D:\ProgramFiles\Borland\CBuilder6\Projects
-Item6=MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\Program Files\Borland\CBuilder6\Projects;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;SECSGEM;Public;PMAlarm;SortingBinTray;Motor;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;Automation;CCLink;BinDisplay;Interface;ATC;EJ1N;HThreadCtrl;$(BCB)\include;$(BCB)\include\vcl;D:\HT9045\Obj;D:\ProgramFiles\Borland\CBuilder6\Projects;C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6
-Item7=
+Item0=C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;VacuumUnit;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;SECSGEM;Public;PMAlarm;SortingBinTray;Motor;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;FTPUpload;Automation;CCLink;BinDisplay;Interface;ATC;EJ1N;HThreadCtrl;Common\PickPlanner;D:\HT9045\Obj;$(BCB)\include;$(BCB)\include\vcl;D:\ProgramFiles\Borland\CBuilder6\Projects
+Item1=C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;VacuumUnit;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;SECSGEM;Public;PMAlarm;SortingBinTray;Motor;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;Automation;CCLink;BinDisplay;Interface;ATC;EJ1N;HThreadCtrl;Common\PickPlanner;D:\HT9045\Obj;$(BCB)\include;$(BCB)\include\vcl;D:\ProgramFiles\Borland\CBuilder6\Projects
+Item2=C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;VacuumUnit;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;SECSGEM;Public;PMAlarm;SortingBinTray;Motor;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;Automation;CCLink;BinDisplay;Interface;ATC;EJ1N;HThreadCtrl;D:\HT9045\Obj;$(BCB)\include;$(BCB)\include\vcl;D:\ProgramFiles\Borland\CBuilder6\Projects
+Item3=VacuumUnit;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;SECSGEM;Public;PMAlarm;SortingBinTray;Motor;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;Automation;CCLink;BinDisplay;Interface;ATC;EJ1N;HThreadCtrl;D:\HT9045\Obj;$(BCB)\include;$(BCB)\include\vcl;D:\ProgramFiles\Borland\CBuilder6\Projects
+Item4=VacuumUnit;d:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\Program Files\Borland\CBuilder6\Projects;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;SECSGEM;Public;PMAlarm;SortingBinTray;Motor;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;Automation;CCLink;BinDisplay;Interface;ATC;EJ1N;HThreadCtrl;$(BCB)\include;$(BCB)\include\vcl;D:\HT9045\Obj;D:\ProgramFiles\Borland\CBuilder6\Projects
+Item5=d:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\Program Files\Borland\CBuilder6\Projects;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;SECSGEM;Public;PMAlarm;SortingBinTray;Motor;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;Automation;CCLink;BinDisplay;Interface;ATC;EJ1N;HThreadCtrl;$(BCB)\include;$(BCB)\include\vcl;D:\HT9045\Obj;D:\ProgramFiles\Borland\CBuilder6\Projects
+Item6=C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\Program Files\Borland\CBuilder6\Projects;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;SECSGEM;Public;PMAlarm;SortingBinTray;Motor;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;Automation;CCLink;BinDisplay;Interface;ATC;EJ1N;HThreadCtrl;$(BCB)\include;$(BCB)\include\vcl;D:\HT9045\Obj;D:\ProgramFiles\Borland\CBuilder6\Projects
+Item7=MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\Program Files\Borland\CBuilder6\Projects;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;SECSGEM;Public;PMAlarm;SortingBinTray;Motor;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;Automation;CCLink;BinDisplay;Interface;ATC;EJ1N;HThreadCtrl;$(BCB)\include;$(BCB)\include\vcl;D:\HT9045\Obj;D:\ProgramFiles\Borland\CBuilder6\Projects;C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6
 Item8=
 Item9=
 Item10=
@@ -612,14 +613,14 @@ Item29=
 
 [HistoryLists\hlLibraryPath]
 Count=30
-Item0=Common\PickPlanner;C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;VacuumUnit;BinDisplay;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;Public;PMAlarm;SortingBinTray;SECSGEM;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;Automation;CCLink;Interface;ATC;EJ1N;HThreadCtrl;Motor;D:\HT9045\Obj;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\lib\Psdk;D:\ProgramFiles\Borland\CBuilder6\Projects
-Item1=C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;VacuumUnit;BinDisplay;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;Public;PMAlarm;SortingBinTray;SECSGEM;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;Automation;CCLink;Interface;ATC;EJ1N;HThreadCtrl;Motor;D:\HT9045\Obj;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\lib\Psdk;D:\ProgramFiles\Borland\CBuilder6\Projects
-Item2=VacuumUnit;BinDisplay;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;Public;PMAlarm;SortingBinTray;SECSGEM;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;Automation;CCLink;Interface;ATC;EJ1N;HThreadCtrl;Motor;D:\HT9045\Obj;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\lib\Psdk;D:\ProgramFiles\Borland\CBuilder6\Projects
-Item3=VacuumUnit;d:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;BinDisplay;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\Program Files\Borland\CBuilder6\Projects;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;Public;PMAlarm;SortingBinTray;SECSGEM;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;Automation;CCLink;Interface;ATC;EJ1N;HThreadCtrl;Motor;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\lib\Psdk;D:\HT9045\Obj;D:\ProgramFiles\Borland\CBuilder6\Projects
-Item4=d:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;BinDisplay;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\Program Files\Borland\CBuilder6\Projects;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;Public;PMAlarm;SortingBinTray;SECSGEM;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;Automation;CCLink;Interface;ATC;EJ1N;HThreadCtrl;Motor;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\lib\Psdk;D:\HT9045\Obj;D:\ProgramFiles\Borland\CBuilder6\Projects
-Item5=C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;BinDisplay;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\Program Files\Borland\CBuilder6\Projects;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;Public;PMAlarm;SortingBinTray;SECSGEM;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;Automation;CCLink;Interface;ATC;EJ1N;HThreadCtrl;Motor;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\lib\Psdk;D:\HT9045\Obj;D:\ProgramFiles\Borland\CBuilder6\Projects
-Item6=BinDisplay;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\Program Files\Borland\CBuilder6\Projects;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;Public;PMAlarm;SortingBinTray;SECSGEM;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;Automation;CCLink;Interface;ATC;EJ1N;HThreadCtrl;Motor;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\lib\Psdk;D:\HT9045\Obj;D:\ProgramFiles\Borland\CBuilder6\Projects;C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6
-Item7=
+Item0=Common\PickPlanner;C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;VacuumUnit;BinDisplay;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;Public;PMAlarm;SortingBinTray;SECSGEM;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;FTPUpload;Automation;CCLink;Interface;ATC;EJ1N;HThreadCtrl;Motor;D:\HT9045\Obj;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\lib\Psdk;D:\ProgramFiles\Borland\CBuilder6\Projects
+Item1=Common\PickPlanner;C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;VacuumUnit;BinDisplay;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;Public;PMAlarm;SortingBinTray;SECSGEM;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;Automation;CCLink;Interface;ATC;EJ1N;HThreadCtrl;Motor;D:\HT9045\Obj;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\lib\Psdk;D:\ProgramFiles\Borland\CBuilder6\Projects
+Item2=C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;VacuumUnit;BinDisplay;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;Public;PMAlarm;SortingBinTray;SECSGEM;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;Automation;CCLink;Interface;ATC;EJ1N;HThreadCtrl;Motor;D:\HT9045\Obj;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\lib\Psdk;D:\ProgramFiles\Borland\CBuilder6\Projects
+Item3=VacuumUnit;BinDisplay;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;Public;PMAlarm;SortingBinTray;SECSGEM;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;Automation;CCLink;Interface;ATC;EJ1N;HThreadCtrl;Motor;D:\HT9045\Obj;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\lib\Psdk;D:\ProgramFiles\Borland\CBuilder6\Projects
+Item4=VacuumUnit;d:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;BinDisplay;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\Program Files\Borland\CBuilder6\Projects;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;Public;PMAlarm;SortingBinTray;SECSGEM;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;Automation;CCLink;Interface;ATC;EJ1N;HThreadCtrl;Motor;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\lib\Psdk;D:\HT9045\Obj;D:\ProgramFiles\Borland\CBuilder6\Projects
+Item5=d:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;BinDisplay;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\Program Files\Borland\CBuilder6\Projects;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;Public;PMAlarm;SortingBinTray;SECSGEM;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;Automation;CCLink;Interface;ATC;EJ1N;HThreadCtrl;Motor;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\lib\Psdk;D:\HT9045\Obj;D:\ProgramFiles\Borland\CBuilder6\Projects
+Item6=C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;BinDisplay;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\Program Files\Borland\CBuilder6\Projects;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;Public;PMAlarm;SortingBinTray;SECSGEM;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;Automation;CCLink;Interface;ATC;EJ1N;HThreadCtrl;Motor;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\lib\Psdk;D:\HT9045\Obj;D:\ProgramFiles\Borland\CBuilder6\Projects
+Item7=BinDisplay;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\Program Files\Borland\CBuilder6\Projects;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;Public;PMAlarm;SortingBinTray;SECSGEM;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;ASE_K Socket;FingerprintRead;KYECFTP;Automation;CCLink;Interface;ATC;EJ1N;HThreadCtrl;Motor;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\lib\Psdk;D:\HT9045\Obj;D:\ProgramFiles\Borland\CBuilder6\Projects;C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6
 Item8=
 Item9=
 Item10=

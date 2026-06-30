@@ -8,6 +8,8 @@
 #include "MyMotor.h"
 #include "uTrayEditForm.h"
 #include "cShowBinSelect.h"
+//AI(ht9045-v899) 20260605: 改用 ShowMyMessageBox_YES_NO 需引入 mymessbox.h
+#include "mymessbox.h"
 #include "main.h"
 #include "csystem.h"
 #include "cCounterClear.h"
@@ -571,6 +573,9 @@ void __fastcall TfSortCT::btnClearCountClick(TObject *Sender)
     if(SystemStart)
         return;
 
+    //AI(ht9045-v899) 20260605: Sender==btnClearCount 為人工按鈕觸發,程式呼叫(Lot End/SECS/MES)傳入其他物件,後續清除提示僅人工觸發才跳
+    bool bManualClear=(Sender==btnClearCount);
+
     if(CUSTOMER_CODE!=CC_Greatek)                                               //Sam 201700915 (Steven) : 超豐清除不用權限
     {
         if(fSecurity->Insufficient(108)==false)                                 //wei 20151022 Bin Clean Count權限設定
@@ -603,9 +608,9 @@ void __fastcall TfSortCT::btnClearCountClick(TObject *Sender)
             return;
         }
     }
-    else if(CUSTOMER_CODE!=CC_Greatek)                                          //Sam 20171006 (wei) : 超豐不顯示提示
+    else if(bManualClear && CUSTOMER_CODE!=CC_Greatek)                          //AI(ht9045-v899) 20260605: 僅人工按鈕觸發才提示,程式呼叫不跳詢問避免誤清
     {
-        if(Application->MessageBox("Clear Sort Count? (確定要清空計數？)", "Confirm", MB_YESNO | MB_TOPMOST)!=IDYES)
+        if(ShowMyMessageBox_YES_NO("Clear Sort Count?", "確定要清空計數？")!=1)  //AI(ht9045-v899) 20260605: 改用 ShowMyMessageBox_YES_NO 留下操作紀錄
         {
             return;
         }

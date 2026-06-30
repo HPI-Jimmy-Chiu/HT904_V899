@@ -255,8 +255,9 @@ public:     // User declarations
     void __fastcall PlaceOSTestResultToTray(int iSuckRow, int iSuckCol, int iTrayRow, int iTrayCol, int iAuto);
     void __fastcall ProcessOSPrint(bool bViewOnly=false);
     void __fastcall ProcessOSTrayData(bool bViewOnly=false);
-    void __fastcall CopyRecipeToTester(AnsiString FileName);
-    void __fastcall CopyRecipeFromTester(AnsiString FileName);
+    //AI(ht9045-v899) 20260625: 回傳型別 void->bool，配合 N06 recipe 同步成敗回報
+    bool __fastcall CopyRecipeToTester(AnsiString FileName);
+    bool __fastcall CopyRecipeFromTester(AnsiString FileName);
     AnsiString OSRecipe;                                                        //Steven 20230116 : OS測試機傳送工作檔名
     bool bOutArmVariAuto_OS[3];                                                 //RogerYang 20260210 : 田揚志需求，有設定的才可以一次放全部，OS報表要照Tray盤放料順序顯示
     AnsiString LastFileName;

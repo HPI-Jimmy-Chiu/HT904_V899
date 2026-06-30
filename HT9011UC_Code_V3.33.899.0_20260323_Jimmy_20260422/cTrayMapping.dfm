@@ -24,7 +24,7 @@ object fTrayMapping: TfTrayMapping
     Top = 0
     Width = 975
     Height = 700
-    ActivePage = tsLoaderDeviceCheck
+    ActivePage = tsTraySetting
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -32,7 +32,7 @@ object fTrayMapping: TfTrayMapping
     Font.Name = 'MS Sans Serif'
     Font.Style = []
     ParentFont = False
-    TabIndex = 4
+    TabIndex = 1
     TabOrder = 0
     TabWidth = 150
     OnChange = PageControl1Change

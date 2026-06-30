@@ -351,6 +351,36 @@ void __fastcall TfTrayAssignment::ReadFile()
         }
     }
 
+    if(TrayForm.iFixTrayMode==1)                                               //AI(ht9045-v899) 20260611(CASE-20260611-001): 上面迴圈只讀到iFixRight為止,Fix下半盤(eFix4~6 / eFix7~12)的Direction/iTrayType從未設定,預設停在0導致下半盤(如Fix5)擺放方向與上半盤不一致;此處仿bTrayUpDownSet同步,使下半盤方向/盤型跟隨對應上半盤
+    {
+        if(AUTO_EMPTY_COLOR>=3)
+        {
+            TrayForm.Auto[eFix7 ].Direction=TrayForm.Auto[eFix1].Direction;
+            TrayForm.Auto[eFix8 ].Direction=TrayForm.Auto[eFix2].Direction;
+            TrayForm.Auto[eFix9 ].Direction=TrayForm.Auto[eFix3].Direction;
+            TrayForm.Auto[eFix10].Direction=TrayForm.Auto[eFix4].Direction;
+            TrayForm.Auto[eFix11].Direction=TrayForm.Auto[eFix5].Direction;
+            TrayForm.Auto[eFix12].Direction=TrayForm.Auto[eFix6].Direction;
+
+            TrayForm.Auto[eFix7 ].iTrayType=TrayForm.Auto[eFix1].iTrayType;
+            TrayForm.Auto[eFix8 ].iTrayType=TrayForm.Auto[eFix2].iTrayType;
+            TrayForm.Auto[eFix9 ].iTrayType=TrayForm.Auto[eFix3].iTrayType;
+            TrayForm.Auto[eFix10].iTrayType=TrayForm.Auto[eFix4].iTrayType;
+            TrayForm.Auto[eFix11].iTrayType=TrayForm.Auto[eFix5].iTrayType;
+            TrayForm.Auto[eFix12].iTrayType=TrayForm.Auto[eFix6].iTrayType;
+        }
+        else
+        {
+            TrayForm.Auto[eFix4 ].Direction=TrayForm.Auto[eFix1].Direction;
+            TrayForm.Auto[eFix5 ].Direction=TrayForm.Auto[eFix2].Direction;
+            TrayForm.Auto[eFix6 ].Direction=TrayForm.Auto[eFix3].Direction;
+
+            TrayForm.Auto[eFix4 ].iTrayType=TrayForm.Auto[eFix1].iTrayType;
+            TrayForm.Auto[eFix5 ].iTrayType=TrayForm.Auto[eFix2].iTrayType;
+            TrayForm.Auto[eFix6 ].iTrayType=TrayForm.Auto[eFix3].iTrayType;
+        }
+    }
+
     if(bUseAuto2Empty==true)                                                    //kevin 20120726 Auto2 送空tray auto3 強至用 auto2空tray
     {
         if(TrayForm.AutoFromEmptyColor[FT][eAuto2]==2)

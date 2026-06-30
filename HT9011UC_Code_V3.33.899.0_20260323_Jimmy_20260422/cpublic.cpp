@@ -652,6 +652,43 @@ bool ExecZipCommand(AnsiString Path, AnsiString Param)                          
     }
 }
 //------------------------------------------------------------------------------
+//AI(ht9045-v899) 20260630: ExecZipCommand 的 handle 版,回傳子行程 process handle(失敗回 NULL),
+//  讓呼叫端可非阻塞輪詢(WaitForSingleObject(h,0))確認批次已結束;不需要的 thread handle 先關閉,
+//  本函式關閉 thread handle、回傳 process handle(原 ExecZipCommand 維持不動,未一併修其 handle 洩漏);呼叫端 poll/wait 完成後須自行 CloseHandle(hProcess)。
+HANDLE ExecZipCommandHandle(AnsiString Path, AnsiString Param)
+{
+    STARTUPINFO  FStartupInfo;
+    PROCESS_INFORMATION  FProcessInformation;
+
+    BOOL result=False;
+    ZeroMemory(&FStartupInfo, sizeof(STARTUPINFO));
+    ZeroMemory(&FProcessInformation,sizeof(PROCESS_INFORMATION));
+    GetStartupInfo(&FStartupInfo);
+    FStartupInfo.dwFlags=STARTF_USESHOWWINDOW;
+    FStartupInfo.wShowWindow=SW_HIDE;
+    AnsiString ExecFile=Path+" "+Param;
+    AnsiString ExecPath=ExtractFilePath(Path);
+    if(ExecFile!="")
+    {
+        result=CreateProcess(NULL,
+        ExecFile.c_str(),
+        NULL,
+        NULL,
+        false,
+        NORMAL_PRIORITY_CLASS,
+        NULL,
+        ExecPath.c_str(),
+        &FStartupInfo,
+        &FProcessInformation);
+        if(result)
+        {
+            CloseHandle(FProcessInformation.hThread);
+            return FProcessInformation.hProcess;
+        }
+    }
+    return NULL;
+}
+//------------------------------------------------------------------------------
 AnsiString GetOnlyTimeInfoByString(AnsiString asSign)                           //ChungHung 20151125 modify for KYEC  //ChungHung 20150902 add
 {
     AnsiString Str;
@@ -726,7 +763,23 @@ void ProductionDataLog()
         fputs(tmps.c_str(), pFile);
         tmps.sprintf("Fix2=%d\n",   LastSet.BinCT[0][e3Fix2]);
         fputs(tmps.c_str(), pFile);
-        tmps.sprintf("Fix3=%d\n\n", LastSet.BinCT[0][e3Fix3]);
+        tmps.sprintf("Fix3=%d\n",   LastSet.BinCT[0][e3Fix3]);
+        fputs(tmps.c_str(), pFile);
+        //AI(ht9045-v899) 20260630: 為 PTI 在 Sort Summary 補出 Fix4-6 與 Total 出料加總欄（PTI 恆輸出，非 PTI 輸出不變）
+        if(CUSTOMER_CODE==CC_PTI)
+        {
+            tmps.sprintf("Fix4=%d\n",   LastSet.BinCT[0][e3Fix4]);
+            fputs(tmps.c_str(), pFile);
+            tmps.sprintf("Fix5=%d\n",   LastSet.BinCT[0][e3Fix5]);
+            fputs(tmps.c_str(), pFile);
+            tmps.sprintf("Fix6=%d\n",   LastSet.BinCT[0][e3Fix6]);
+            fputs(tmps.c_str(), pFile);
+            tmps.sprintf("Total=%d\n",  LastSet.BinCT[0][e3Auto1]+LastSet.BinCT[0][e3Auto2]+LastSet.BinCT[0][e3Auto3]
+                                        +LastSet.BinCT[0][e3Fix1]+LastSet.BinCT[0][e3Fix2]+LastSet.BinCT[0][e3Fix3]
+                                        +LastSet.BinCT[0][e3Fix4]+LastSet.BinCT[0][e3Fix5]+LastSet.BinCT[0][e3Fix6]);
+            fputs(tmps.c_str(), pFile);
+        }
+        tmps.sprintf("\n");
         fputs(tmps.c_str(), pFile);
 
         tmps.sprintf("[Bin Summary]\n");

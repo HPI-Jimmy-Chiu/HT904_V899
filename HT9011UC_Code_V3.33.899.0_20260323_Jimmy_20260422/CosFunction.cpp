@@ -2777,6 +2777,7 @@ void FUNC_CC_ARDENTEC()
 {
     CosFunction.bTrayDeviceCheckFromLoader                                      =true;  //JimmyChiu 20220219 : ¥›Æ∆¿À¨d From Loader
     CosFunction.bTrayOCR                                                        =true;
+    CosFunction.bFTPFunction                                                    =true;
 }
 //------------------------------------------------------------------------------
 void FUNC_CC_FULCAP()

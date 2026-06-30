@@ -1,11 +1,11 @@
 object fSortCT: TfSortCT
-  Left = 833
-  Top = 0
+  Left = 829
+  Top = 132
   BorderIcons = []
   BorderStyle = bsToolWindow
   Caption = 'Sort Count'
-  ClientHeight = 1002
-  ClientWidth = 484
+  ClientHeight = 1113
+  ClientWidth = 487
   Color = clBtnFace
   DragKind = dkDock
   Font.Charset = DEFAULT_CHARSET
@@ -21,8 +21,8 @@ object fSortCT: TfSortCT
   object PageControl1: TPageControl
     Left = 0
     Top = 0
-    Width = 484
-    Height = 1002
+    Width = 487
+    Height = 1113
     ActivePage = SortCount
     Align = alClient
     TabHeight = 25
@@ -33,7 +33,7 @@ object fSortCT: TfSortCT
       object pnlLoadingBG: TPanel
         Left = 0
         Top = 0
-        Width = 476
+        Width = 479
         Height = 36
         Align = alTop
         BevelInner = bvLowered
@@ -111,7 +111,7 @@ object fSortCT: TfSortCT
       object pnlTotalBG: TPanel
         Left = 0
         Top = 36
-        Width = 476
+        Width = 479
         Height = 36
         Align = alTop
         BevelInner = bvLowered
@@ -188,7 +188,7 @@ object fSortCT: TfSortCT
       object pnlUnloadBG: TPanel
         Left = 0
         Top = 72
-        Width = 476
+        Width = 479
         Height = 849
         Align = alTop
         BevelInner = bvLowered
@@ -2058,7 +2058,7 @@ object fSortCT: TfSortCT
       object gbLotID: TGroupBox
         Left = 0
         Top = 921
-        Width = 476
+        Width = 479
         Height = 86
         Align = alTop
         Caption = 'Lot ID'
@@ -2138,7 +2138,7 @@ object fSortCT: TfSortCT
       object pnlLoadingARTBG: TPanel
         Left = 0
         Top = 0
-        Width = 476
+        Width = 479
         Height = 36
         Align = alTop
         BevelInner = bvLowered
@@ -2178,7 +2178,7 @@ object fSortCT: TfSortCT
       object pnlTotalARTBG: TPanel
         Left = 0
         Top = 36
-        Width = 476
+        Width = 479
         Height = 36
         Align = alTop
         BevelInner = bvLowered
@@ -2234,7 +2234,7 @@ object fSortCT: TfSortCT
       object pnlUnloadingARTBG: TPanel
         Left = 0
         Top = 72
-        Width = 476
+        Width = 479
         Height = 801
         Align = alTop
         BevelInner = bvLowered

@@ -340,6 +340,9 @@ void __fastcall TMyMessageBox::FormShow(TObject *Sender)
     {
         fMain->machineTime.Pause();
     }
+
+    //AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): 將 MyMessageBox 拉到 z-order 最前但不搆焦點(NOACTIVATE),不用 HWND_TOPMOST 以免蓋住 app 外視窗
+    SetWindowPos(Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 }
 //---------------------------------------------------------------------------
 extern TQPF_Timer tGalilTwoYMoveDelay;
@@ -937,6 +940,7 @@ int ShowLotEndMessage(AnsiString S1, AnsiString S2, bool bFullLotEnd)           
         bAutoRestartAfterFTCTAlarm=false;
         fMain->RENESAS_Server->FTCTManStartUnlock();
     }
+    MyMessageBox->BringToFront();                                              //AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): Lot End 訊息框 ShowModal 前拉到 app 內 z-order 最前,避免被其他視窗搆住導致看不到
     MyMessageBox->ShowModal();
 
     if(iValue==1)

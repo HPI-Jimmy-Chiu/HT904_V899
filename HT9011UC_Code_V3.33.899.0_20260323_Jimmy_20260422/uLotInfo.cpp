@@ -73,6 +73,7 @@
 #include "acatchtray.h"
 #include "AMR.h"
 #include "AGV.h"
+#include "uFtpUploadThread.h"                                                   //AI(ht9045-v899) 20260612(CASE-20260611-001): 背景FTP上傳執行緒(FtpUploadThd/EnqueueUpload),供Lot End上傳分流用
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "ALed"
@@ -1915,7 +1916,7 @@ void __fastcall TfLotInfo::SetLotEnd(AnsiString sFunc)                          
         fMain->slInputDataLog->MySaveFileByFileNameAndType(IniConfig.asN06_FileName, fLotInfo->edtSysLotID->Text, "INPUT");
         slInputQuantity->Clear();
         delete slInputQuantity;
-        fSortCT->btnClearCountClick(fSortCT);
+//        fSortCT->btnClearCountClick(fSortCT);
 
         AnsiString asJamCodeFilePath, asJamCodeFileName;                        //RogerYang 20170508 (wei) 拿掉static
         asJamCodeFilePath.sprintf("D:\\HT9045_Log\\JamAlarmLogTxt\\%s", edtSysLotID->Text);
@@ -1929,14 +1930,44 @@ void __fastcall TfLotInfo::SetLotEnd(AnsiString sFunc)                          
             }while(FindNext(sr)==0);
             FindClose(sr);
 
-            for(int i=0; i<lstFiles->Count; i++)
+            if(IniConfig.bFtpUploadBackground==true)                           //AI(ht9045-v899) 20260612(CASE-20260611-001): 開關開(PTI預設) → 走背景FTP上傳執行緒,fire-and-forget;丟完即返回,不MySleep/不等/不break,避免Lot End主執行緒被同步上傳阻塞造成卡站或alarm無法消除
             {
-                 if(lstFiles->Strings[i]!="." && lstFiles->Strings[i]!="..")
-                 {
-                    MySleep(1000);                                              //Sam 20240308 : 上傳延遲一下
-                    asJamCodeFileName.sprintf("%s\\%s", asJamCodeFilePath, lstFiles->Strings[i]);
-                    fFTPClient->UploadFileToServer2(IniConfig.FtpUplaodPath, asJamCodeFileName);
-                 }
+                if(FtpUploadThd!=NULL)                                          //AI(ht9045-v899) 20260612(CASE-20260611-001): 保險,背景執行緒未建立則略過(不退回同步,避免同一批檔重複上傳)
+                {
+                    AnsiString asBgHost = IniConfig.FtpHost;                    //AI(ht9045-v899) 20260612(CASE-20260611-001): 迴圈外取一次連線參數(值拷貝),對應UploadFileToServer2非Sigurd分支(FtpHost/FtpUserName/FtpPassword/N06_FtpPort)
+                    AnsiString asBgUser = IniConfig.FtpUserName;
+                    AnsiString asBgPwd  = IniConfig.FtpPassword;
+                    int        iBgPort  = StrToInt(IniConfig.N06_FtpPort);
+                    for(int i=0; i<lstFiles->Count; i++)
+                    {
+                        if(lstFiles->Strings[i]!="." && lstFiles->Strings[i]!="..")
+                        {
+                            asJamCodeFileName.sprintf("%s\\%s", asJamCodeFilePath, lstFiles->Strings[i]);
+                            AnsiString asBgRemote = IniConfig.FtpUplaodPath + lstFiles->Strings[i]; //AI(ht9045-v899) 20260612(CASE-20260611-001): 遠端=FtpUplaodPath+純檔名,比照原同步UploadFileToServer2內部 str02=FtpPath+Source(Source已砍成純檔名);先前只給FtpUplaodPath會少檔名導致FtpPutFile遠端目標錯誤
+                            FtpUploadThd->EnqueueUpload(0, asJamCodeFileName, asBgRemote,  //jobKind=0(JamAlarm),local=完整路徑,remote=FtpUplaodPath+檔名,retry=2(比照S2語意)
+                                                        asBgHost, asBgUser, asBgPwd, iBgPort, 2);
+                        }
+                    }
+                }
+                else                                                           //AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): FtpUploadThd 尚未建立時記 log 並跳過,寧可不傳也不落至同步阻塞 Lot End
+                {
+                    MyDBIProcess("Process", "FtpUploadThd null, skip background JamAlarm upload", edtSysLotID->Text);
+                }
+            }
+            else                                                               //AI(ht9045-v899) 20260612(CASE-20260611-001): 開關關(非PTI/預設) → 維持原同步上傳路徑,行為一字不改
+            {
+                fFTPClient->bError=false;                                           //AI(ht9045-v899) 20260611(CASE-20260611-001): 上傳前清旗標,作為連線失敗判斷依據
+                for(int i=0; i<lstFiles->Count; i++)
+                {
+                     if(lstFiles->Strings[i]!="." && lstFiles->Strings[i]!="..")
+                     {
+                        MySleep(1000);                                              //Sam 20240308 : 上傳延遲一下
+                        asJamCodeFileName.sprintf("%s\\%s", asJamCodeFilePath, lstFiles->Strings[i]);
+                        fFTPClient->UploadFileToServer2(IniConfig.FtpUplaodPath, asJamCodeFileName);
+                        if(fFTPClient->bError==true)                                //AI(ht9045-v899) 20260611(CASE-20260611-001): N06/FTP 連線失敗(socket 10038)即中止整批上傳,避免每個檔重複 blocking connect/retry 在主執行緒卡住 Lot End 導致 alarm 無法消除/hang
+                            break;
+                     }
+                }
             }
         }
         lstFiles->Clear();                                                      //Ifor 20170603 (wei) TStringList 刪除前先 Clean
@@ -1967,8 +1998,30 @@ void __fastcall TfLotInfo::SetLotEnd(AnsiString sFunc)                          
 
         if(IniConfig.bN12_EnableSocketIdProductDataFTP==true)
         {
-            MySleep(1000);                                                      //Sam 20240308 : 上傳延遲一下
-            fFTPClient->UpSocketIdPoductDataToServerByFTP(asSocketIdProductDataPath, asSocketIdProductDataFileName);
+            if(IniConfig.bFtpUploadBackground==true)                           //AI(ht9045-v899) 20260612(CASE-20260611-001): 開關開(PTI預設) → SocketID CSV 走背景FTP上傳執行緒,fire-and-forget;丟完即返回,不MySleep/不等待,避免Lot End主執行緒被同步上傳阻塞造成卡站或alarm無法消除
+            {
+                if(FtpUploadThd!=NULL)                                          //AI(ht9045-v899) 20260612(CASE-20260611-001): 保險,背景執行緒未建立則略過(不退回同步,避免同一檔重複上傳)
+                {
+                    //AI(ht9045-v899) 20260612(CASE-20260611-001): 組本地完整路徑(asDirPath+"\\"+sFileName,比照UpSocketIdPoductDataToServerByFTP內asFileName,FTPClient.cpp L2236)與遠端完整路徑(asN12_FtpUplaodPath+sFileName,比照同函式asCSV,FTPClient.cpp L2267);連線參數用N12專用host/user/pwd,port=21(同步版NMFTP2->Port=21固定值,FTPClient.cpp L2247)
+                    AnsiString asBgLocal  = asSocketIdProductDataPath + "\\" + asSocketIdProductDataFileName;
+                    AnsiString asBgRemote = IniConfig.asN12_FtpUplaodPath + asSocketIdProductDataFileName;
+                    FtpUploadThd->EnqueueUpload(1, asBgLocal, asBgRemote,       //jobKind=1(SocketID CSV),local=完整路徑,remote=完整遠端檔路徑,retry=2(比照S6語意)
+                                                IniConfig.asN12_FtpHost, IniConfig.asN12_FtpUserName, IniConfig.asN12_FtpPassword, 21, 2);
+
+                    for(int i=0; i<4; i++)                                      //AI(ht9045-v899) 20260612(CASE-20260611-001): 丟佇列即清(決議2):不等上傳成功就清SocketID count;此段為UpSocketIdPoductDataToServerByFTP上傳成功後清除程式碼之複製(FTPClient.cpp L2271-2278),背景分支不呼叫該函式故須在呼叫端補清,僅背景分支這樣做
+                    {
+                        for(int j=0; j<8; j++)
+                        {
+                            LastSet.iSocketContactCount[i][j]=0;
+                        }
+                    }
+                }
+            }
+            else                                                               //AI(ht9045-v899) 20260612(CASE-20260611-001): 開關關(非PTI/預設) → 維持原同步上傳路徑,行為一字不改(MySleep+呼叫函式,SocketID count清除仍在函式內部上傳成功後執行)
+            {
+                MySleep(1000);                                                      //Sam 20240308 : 上傳延遲一下
+                fFTPClient->UpSocketIdPoductDataToServerByFTP(asSocketIdProductDataPath, asSocketIdProductDataFileName);
+            }
         }
     }
 
@@ -7188,6 +7241,17 @@ void __fastcall TfLotInfo::sbSECSLotStartClick(TObject *Sender)
     ZeroMemory(iExceptAutoCnt, sizeof(iExceptAutoCnt));
     mmo2DLotInfo->Clear();
     dtStartLot=Now();
+
+    //AI(ht9045-v899) 20260528: block PTI operator Lot Start while tester is offline
+    if(CUSTOMER_CODE==CC_PTI &&
+       OFFLINE_ALARM &&
+       LastSet.iTester==OFF_LINE &&
+       AccessLevel<iDefSupervisorLevel)
+    {
+        WritePTILotStartTrace(this, "OfflineOperatorBlocked", "Reason=AccessLevelBelowSupervisor");
+        ShowMyMessage("Please check the tester mode is connected"); //AI(ht9045-v899) 20260529: clarify PTI offline tester mode prompt
+        return;
+    }
 
     //AI(ht9045-v899) 20260525: normalize PTI RunMode before local validation blocks TesterTCP Lot Start
     NormalizePTIRunModeBeforeLotStart(this);

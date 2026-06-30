@@ -398,7 +398,7 @@ void __fastcall TfFTPClient::UploadFileToServer2(AnsiString FtpPath, AnsiString 
 
         //設定參數----
         NMFTP2->Vendor                  =NMOS_AUTO;
-        NMFTP2->TimeOut                 =20000;                                 //Landam
+        NMFTP2->TimeOut                 =(CUSTOMER_CODE==CC_PTI)?5000:20000;    //AI(ht9045-v899) 20260609: PTI 縮短 timeout 5s,避免 FTP server 不可達時 Lot End 主執行緒長時間阻塞 //Landam
         NMFTP2->Passive                 =true;                                  //Steven 20121020 : 實驗看看
 
         if(bSigurdUpload_Jamcode==true || bSigurdUpload_Recipe==true)           //KaiChen 20190530 ：Sigurd FTP Automation
@@ -472,7 +472,10 @@ void __fastcall TfFTPClient::UploadFileToServer2(AnsiString FtpPath, AnsiString 
 
             if(!NMFTP2->Connected)
             {
-                 ShowMyMessage("FTP Server is not connected","");
+                 if(CUSTOMER_CODE==CC_PTI)                                      //AI(ht9045-v899) 20260609: PTI 連線失敗只記 log,不彈阻塞 modal(避免 Lot End 卡住消音/動作)
+                     MyDBIProcess("Process", "TfFTPClient::UploadFileToServer2", "FTP Server is not connected, skip upload");
+                 else
+                     ShowMyMessage("FTP Server is not connected","");
                  NMFTP2->Abort();
                  NMFTP2->RequestCloseSocket();
                  delete NMFTP2;
@@ -789,6 +792,10 @@ void __fastcall TfFTPClient::UploadFileToServer2(AnsiString FtpPath, AnsiString 
             str="FTP Server is not connected Error No : " + AnsiString(NMFTP2->LastErrorNo);
             NewRecordProcess("Message", str, e.Message);
         }
+        else if(CUSTOMER_CODE==CC_PTI)                                          //AI(ht9045-v899) 20260609: PTI Lot End 上傳失敗只記 log,不彈阻塞 modal(避免停機卡住消音/動作),且不讀 LastErrorNo 避免存取異常 socket 觸發崩潰
+        {
+            MyDBIProcess("Exception", "TfFTPClient::UploadFileToServer2", e.Message);
+        }
         else
         {
             ShowMyMessage(e.Message);
@@ -805,8 +812,15 @@ void __fastcall TfFTPClient::UploadFileToServer2(AnsiString FtpPath, AnsiString 
     }
     catch(...)
     {
-        str="FTP Server is not connected Error No : " + AnsiString(NMFTP2->LastErrorNo);
-        MyDBIProcess("Exception", str);
+        if(CUSTOMER_CODE==CC_PTI)                                               //AI(ht9045-v899) 20260609: PTI 上傳失敗只記 log,不讀 LastErrorNo 避免存取異常 socket 觸發崩潰
+        {
+            MyDBIProcess("Exception", "TfFTPClient::UploadFileToServer2 unknown error");
+        }
+        else
+        {
+            str="FTP Server is not connected Error No : " + AnsiString(NMFTP2->LastErrorNo);
+            MyDBIProcess("Exception", str);
+        }
         bError=true;
         fNote->bSendJamCodeToFTP=false;                                         //Steven 20140526 : bSendJamCodeToFTP 改為Timer處理
         delete NMFTP2;
@@ -2226,7 +2240,7 @@ void __fastcall TfFTPClient::UpSocketIdPoductDataToServerByFTP(AnsiString asDirP
         NMFTP2=new TNMFTP(this);
         NMFTP2->Vendor = NMOS_AUTO;
 
-        NMFTP2->TimeOut=20000; //Landam
+        NMFTP2->TimeOut=5000; //AI(ht9045-v899) 20260605: 縮短 timeout 20s->5s 避免 Lot End 主執行緒長時間阻塞
         if(IniConfig.asN12_FtpHost!="")
             NMFTP2->Host = IniConfig.asN12_FtpHost;
         NMFTP2->UserID = IniConfig.asN12_FtpUserName;
@@ -2243,7 +2257,8 @@ void __fastcall TfFTPClient::UpSocketIdPoductDataToServerByFTP(AnsiString asDirP
 
         if(!NMFTP2->Connected)
         {
-            ShowMyMessage("FTP Server is not connected");
+            //AI(ht9045-v899) 20260605: FTP 連線失敗只記 log,不彈 modal 避免停機卡住消音/動作
+            MyDBIProcess("Process", "TfFTPClient::UpSocketIdPoductDataToServerByFTP", "FTP Server is not connected, skip upload");
             delete NMFTP2;
             return;
         }
@@ -2268,14 +2283,14 @@ void __fastcall TfFTPClient::UpSocketIdPoductDataToServerByFTP(AnsiString asDirP
     {
         MyDBIProcess("Exception", "TfFTPClient::UpSocketIdPoductDataToServerByFTP", e.Message);
         DeleteFile(asFileName);                                                 //Sam 20170602 (wei) 將上傳 FTP 失敗的檔案刪除
-        ShowMyMessage("Socket ID Product Data Upload To FTP Upload Fail");      //Sam 20170602 (wei) 修改提示
+        //AI(ht9045-v899) 20260605: 上傳失敗只記 log,不彈 modal 避免停機卡住消音/動作
         delete NMFTP2;
     }
     catch(...)
     {
         MyDBIProcess("Exception", "TfFTPClient::UpSocketIdPoductDataToServerByFTP");
         DeleteFile(asFileName);                                                 //Sam 20170602 (wei) 將上傳 FTP 失敗的檔案刪除
-        ShowMyMessage("Socket ID Product Data Upload To FTP Upload Fail");      //Sam 20170602 (wei) 修改提示
+        //AI(ht9045-v899) 20260605: 上傳失敗只記 log,不彈 modal 避免停機卡住消音/動作
         delete NMFTP2;
     }
 }

@@ -265,7 +265,7 @@
 #define CC_CYUEAN               868 //CYUEAN 确安科技
 #define CC_PANTHER              869 //PANTHER 鴻谷科技
 
-#define CC_ARDENTEC             870 //欣詮                                      //20160805 Mylin Modify Show Only Ambient or High for ARDENTEC
+#define CC_ARDENTEC             870 //欣詮 欣銓                                 //20160805 Mylin Modify Show Only Ambient or High for ARDENTEC
 #define CC_FULCAP               871 //詮容                                      //2016.06.30 ,Brian
 #define CC_AOSL                 872 //萬有半導體
 #define CC_Nuvoton_Israel       873 //新唐 以色列
@@ -1626,6 +1626,15 @@ template <class T> float ChangeToFloatNonPcnt(const T Numerator, const T Denomin
     if(Denominator!=0)
        str= ((double)Numerator/(double)Denominator);
     return str;
+};
+//------------------------------------------------------------------------------
+//AI(ht9045-v899) 20260623: 新增整數安全除法(零防護+取整),供格線欄號/索引等整數情境使用,避免誤用浮點版造成階梯式位移
+template <class T> int ChangeToIntNonPcnt(const T Numerator, const T Denominator)
+{
+    int iResult=0;
+    if(Denominator!=0)
+       iResult= (int)((double)Numerator/(double)Denominator);
+    return iResult;
 };
 //------------------------------------------------------------------------------
 template<typename T>

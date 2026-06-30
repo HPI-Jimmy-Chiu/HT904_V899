@@ -3307,39 +3307,48 @@ bool __fastcall TfContact::DoZ1PickFromShuttle()
                         bool bGigasContactTestPartialPick=false;
                         bool bHasGuardSite=false;
 
+                        //AI(ht9045-v899) 20260608: 將全智 partial pick 豁免由僅 CONTACT_TEST 放寬至 AUTO_CONTACT_TEST/CONTACT_AUTO_GET_HEIGHT，保留 CUSTOMER_CODE==CC_GIGAS 前置條件確保只改變全智行為(全智雙Arm Contact掉料防護放寬, CASE-20260608-001)
                         bGigasContactTestPartialPick=(CUSTOMER_CODE==CC_GIGAS &&
-                                                      iContactMode==CONTACT_TEST);
-                        //AI(ht9045-v899) 20260518: skip closed Contact Test sites in the drop guard
+                                                      (iContactMode==CONTACT_TEST ||
+                                                       iContactMode==AUTO_CONTACT_TEST ||
+                                                       iContactMode==CONTACT_AUTO_GET_HEIGHT));
+                        //AI(ht9045-v899) 20260608: 全智改用該site IC資料是否==HAS_IC(實際吸取成功)當守護門檻，不再用recipe site開關LastSet.bUseTestSocket；HAS_IC於case3050僅在REALLY且真空sensor ON時SetItemData，代表實際吸到的site，故只檢查這些site有無掉料，其餘site一律不檢查不報錯(全智改用HAS_IC判斷掉料, CASE-20260608-001)
                         for(int i=0; i<FTestSuck.iShtRow; i++)
                         {
                             for(int j=0; j<FTestSuck.iShtCol; j++)
                             {
-                                if(LastSet.bUseTestSocket[0][i+iNN][j])
+                                bool bNeedGuard;
+
+                                if(bGigasContactTestPartialPick)
+                                    bNeedGuard=(FTestSuck.Item[i][j]==HAS_IC);
+                                else
+                                    bNeedGuard=(LastSet.bUseTestSocket[0][i+iNN][j]==true);   //AI(ht9045-v899) 20260608: 非全智維持原依recipe site開關檢查行為不變(全智改用HAS_IC判斷掉料, CASE-20260608-001)
+
+                                if(bNeedGuard)
                                 {
-                                    bool bNeedGuard=true;
-
-                                    //AI(ht9045-v899) 20260522: GIGAS Contact Test allows partial manual shuttle loading; guard only picked IC data and keep non-GIGAS open-site behavior unchanged
-                                    if(bGigasContactTestPartialPick)
-                                    {
-                                        bNeedGuard=(FTestSuck.Item[i][j]!=NULL_IC &&
-                                                    FTestSuck.Item[i][j]!=HAS_NULL_IC);
-                                    }
-
-                                    if(bNeedGuard)
-                                    {
-                                        bHasGuardSite=true;
-                                        if(FTestSuck.Suck[i][j].GetStatus()==false)
-                                            bDropDetected=true;
-                                    }
+                                    bHasGuardSite=true;
+                                    if(FTestSuck.Suck[i][j].GetStatus()==false)
+                                        bDropDetected=true;
                                 }
                             }
                         }
 
-                        if(bGigasContactTestPartialPick && bHasGuardSite==false)
-                            bDropDetected=true;
+                        //AI(ht9045-v899) 20260608: 移除整臂無守護site即強制報掉料的致命fallback，全智允許整臂本輪不上料(部分手動上料)時跳過防護不報掉料，非全智不受影響(全智雙Arm Contact掉料防護放寬, CASE-20260608-001)
+                        //(原: if(bGigasContactTestPartialPick && bHasGuardSite==false) bDropDetected=true;)
 
                         if(bDropDetected==true)
                         {
+                            //AI(ht9045-v899) 20260608: 真實掉料中止前將全智本臂(Z1=Front)本次pick暫存資料還原回進站前狀態(iFTestBackItem)，避免殘留IC觸發IndexHasIC()互鎖鎖死contact模式，比照Exit還原寫法且僅全智路徑生效(全智雙Arm Contact掉料防護放寬, CASE-20260608-001)
+                            if(bGigasContactTestPartialPick)
+                            {
+                                for(int ci=0; ci<FTestSuck.iShtRow; ci++)
+                                {
+                                    for(int cj=0; cj<FTestSuck.iShtCol; cj++)
+                                    {
+                                        FTestSuck.SetItemData(ci, cj, iFTestBackItem[ci][cj]);
+                                    }
+                                }
+                            }
                             ShowMyMessage("Z1 Contact/Auto Height pick fail or IC drop, stop pressing",
                                           "Z1 Contact/Auto Height 吸取失敗或掉料，已停止下壓以保護 IC 與配件",
                                           "DoZ1PickFromShuttle 3050");
@@ -4331,39 +4340,48 @@ bool __fastcall TfContact::DoZ2PickFromShuttle()
                         bool bGigasContactTestPartialPick=false;
                         bool bHasGuardSite=false;
 
+                        //AI(ht9045-v899) 20260608: 將全智 partial pick 豁免由僅 CONTACT_TEST 放寬至 AUTO_CONTACT_TEST/CONTACT_AUTO_GET_HEIGHT，保留 CUSTOMER_CODE==CC_GIGAS 前置條件確保只改變全智行為(全智雙Arm Contact掉料防護放寬, CASE-20260608-001)
                         bGigasContactTestPartialPick=(CUSTOMER_CODE==CC_GIGAS &&
-                                                      iContactMode==CONTACT_TEST);
-                        //AI(ht9045-v899) 20260518: skip closed Contact Test sites in the drop guard
+                                                      (iContactMode==CONTACT_TEST ||
+                                                       iContactMode==AUTO_CONTACT_TEST ||
+                                                       iContactMode==CONTACT_AUTO_GET_HEIGHT));
+                        //AI(ht9045-v899) 20260608: 全智改用該site IC資料是否==HAS_IC(實際吸取成功)當守護門檻，不再用recipe site開關LastSet.bUseTestSocket；HAS_IC於case3050僅在REALLY且真空sensor ON時SetItemData，代表實際吸到的site，故只檢查這些site有無掉料，其餘site一律不檢查不報錯(全智改用HAS_IC判斷掉料, CASE-20260608-001)
                         for(int i=0; i<BTestSuck.iShtRow; i++)
                         {
                             for(int j=0; j<BTestSuck.iShtCol; j++)
                             {
-                                if(LastSet.bUseTestSocket[1][i][j])
+                                bool bNeedGuard;
+
+                                if(bGigasContactTestPartialPick)
+                                    bNeedGuard=(BTestSuck.Item[i][j]==HAS_IC);
+                                else
+                                    bNeedGuard=(LastSet.bUseTestSocket[1][i][j]==true);   //AI(ht9045-v899) 20260608: 非全智維持原依recipe site開關檢查行為不變(全智改用HAS_IC判斷掉料, CASE-20260608-001)
+
+                                if(bNeedGuard)
                                 {
-                                    bool bNeedGuard=true;
-
-                                    //AI(ht9045-v899) 20260522: GIGAS Contact Test allows partial manual shuttle loading; guard only picked IC data and keep non-GIGAS open-site behavior unchanged
-                                    if(bGigasContactTestPartialPick)
-                                    {
-                                        bNeedGuard=(BTestSuck.Item[i][j]!=NULL_IC &&
-                                                    BTestSuck.Item[i][j]!=HAS_NULL_IC);
-                                    }
-
-                                    if(bNeedGuard)
-                                    {
-                                        bHasGuardSite=true;
-                                        if(BTestSuck.Suck[i][j].GetStatus()==false)
-                                            bDropDetected=true;
-                                    }
+                                    bHasGuardSite=true;
+                                    if(BTestSuck.Suck[i][j].GetStatus()==false)
+                                        bDropDetected=true;
                                 }
                             }
                         }
 
-                        if(bGigasContactTestPartialPick && bHasGuardSite==false)
-                            bDropDetected=true;
+                        //AI(ht9045-v899) 20260608: 移除整臂無守護site即強制報掉料的致命fallback，全智允許整臂本輪不上料(部分手動上料)時跳過防護不報掉料，非全智不受影響(全智雙Arm Contact掉料防護放寬, CASE-20260608-001)
+                        //(原: if(bGigasContactTestPartialPick && bHasGuardSite==false) bDropDetected=true;)
 
                         if(bDropDetected==true)
                         {
+                            //AI(ht9045-v899) 20260608: 真實掉料中止前將全智本臂(Z2=Rear)本次pick暫存資料還原回進站前狀態(iBTestBackItem)，避免殘留IC觸發IndexHasIC()互鎖鎖死contact模式，比照Exit還原寫法且僅全智路徑生效(全智雙Arm Contact掉料防護放寬, CASE-20260608-001)
+                            if(bGigasContactTestPartialPick)
+                            {
+                                for(int ci=0; ci<BTestSuck.iShtRow; ci++)
+                                {
+                                    for(int cj=0; cj<BTestSuck.iShtCol; cj++)
+                                    {
+                                        BTestSuck.SetItemData(ci, cj, iBTestBackItem[ci][cj]);
+                                    }
+                                }
+                            }
                             ShowMyMessage("Z2 Contact/Auto Height pick fail or IC drop, stop pressing",
                                           "Z2 Contact/Auto Height 吸取失敗或掉料，已停止下壓以保護 IC 與配件",
                                           "DoZ2PickFromShuttle 3050");

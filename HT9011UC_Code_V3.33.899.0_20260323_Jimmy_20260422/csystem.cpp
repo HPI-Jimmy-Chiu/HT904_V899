@@ -21788,13 +21788,27 @@ void Del_Tree(AnsiString Dir)
                 if ((SearchRec.Name!=".") && (SearchRec.Name!=".."))
                 {
                     Del_Tree(d+SearchRec.Name);                                 //遞迴呼叫
-                    RemoveDir(d+SearchRec.Name);
+                    //AI(ht9045-v899) 20260630: 子目錄移除同樣重試,與最後 RemoveDir 對稱(子層已先清空檔案)
+                    for(int iSubRetry=0; iSubRetry<3; iSubRetry++)
+                    {
+                        if(RemoveDir(d+SearchRec.Name))
+                            break;
+                        MySleep(100);
+                    }
                 }
             }
             else
             {
-                FileSetAttr(d+SearchRec.Name,faArchive);
-                DeleteFile(d+SearchRec.Name);
+                //AI(ht9045-v899) 20260630: 檔案被占用時 DeleteFile 會失敗,原本直接略過會留下殘缺
+                //  同名資料夾(State Record 殘留問題)。失敗時重試最多 3 次,每次間隔 100ms 等鎖釋放
+                AnsiString asDelFile=d+SearchRec.Name;
+                for(int iDelRetry=0; iDelRetry<3; iDelRetry++)
+                {
+                    FileSetAttr(asDelFile,faArchive);
+                    if(DeleteFile(asDelFile))
+                        break;
+                    MySleep(100);
+                }
             }
         }
         while(FindNext(SearchRec)==0);
@@ -21802,7 +21816,13 @@ void Del_Tree(AnsiString Dir)
         FindClose(SearchRec);
     }
 
-    RemoveDir(d);
+    //AI(ht9045-v899) 20260630: 目錄移除同樣重試最多 3 次,確保被占用檔案造成的非空失敗在鎖釋放後能成功
+    for(int iRmRetry=0; iRmRetry<3; iRmRetry++)
+    {
+        if(RemoveDir(d))
+            break;
+        MySleep(100);
+    }
 }
 //------------------------------------------------------------------------------
 void InitialDoLockUnloader(int iAuto)                                           //JerryYang 20191210 優化Auto定位方式

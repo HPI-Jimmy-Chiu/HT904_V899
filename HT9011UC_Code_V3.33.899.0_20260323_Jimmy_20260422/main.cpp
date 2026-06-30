@@ -177,6 +177,7 @@
 #include <Menus.hpp>                                                            //TShortCut 修飾符如 scCtrl, scAlt
 #include "AMR.h"
 #include "AGV.h"
+#include "uFtpUploadThread.h"                                                  //AI(ht9045-v899) 20260612(CASE-20260611-001): FTP 背景上傳 thread（fire-and-forget）
 //------------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "ALed"
@@ -211,6 +212,9 @@ bool bRefreshEng1=false;                                                        
 //----- by dell ccd realtime-------------
 ScanBtn *ScanBtnThd;
 
+//AI(ht9045-v899) 20260612(CASE-20260611-001): FTP 背景上傳 thread 全域單例「唯一正式定義」
+//  （extern 宣告於 uFtpUploadThread.h）。原暫時定義在 uFtpUploadThread.cpp，移至此處避免 duplicate symbol。
+TFtpUploadThread *FtpUploadThd = NULL;
 HWND HReceveFuleWnd;
 bool ProcessReceveFuleWndConnect();                                             //kevin 20110317 回傳先判斷程式是否存在
 bool Respone(AnsiString Data);                                                  //kevin 20110317 回傳開檔成功 關閉Refresh
@@ -2624,6 +2628,20 @@ void __fastcall TfMain::Timer1Timer(TObject *Sender)
 
     StringGrid4->Cells[0][0]=2;
 
+    //AI(ht9045-v899) 20260612(CASE-20260611-001): S8 撈背景 FTP 上傳「放棄(GIVEUP)」回報寫主 EventLog
+    //   （iType=20 WARNING：可見但不跳 alarm、不計入錯誤統計）。本段在主執行緒執行，撈出後由主執行緒寫 log，
+    //   故安全呼叫 SaveEventLogInfo（碰 fMain/fLotInfo）。每 tick 上限 10 筆，避免一次塞爆 timer。
+    if(FtpUploadThd!=NULL)
+    {
+        AnsiString asFtpRpt;
+        int iFtpDrain=0;
+        while(iFtpDrain<10 && FtpUploadThd->FetchResult(asFtpRpt))
+        {
+            SaveEventLogInfo("FTP_UPLOAD_FAIL", asFtpRpt, 20, " ");
+            iFtpDrain++;
+        }
+    }
+
     ProcessICHotTime();
 
     if(MyMessageBox->fShow==false)                                              //JerryYang 20250220 : AUTO IN OUT
@@ -4886,8 +4904,10 @@ bool __fastcall TfMain::Start(AnsiString Func)
        LastSet.bHasDownloadFile==false)
     {
         iStartIn=0;
+        #ifndef SOFT_SIMULTE
         ShowErrorMessage("MES1680", 0, MMSystem, false, "Main--Start");         //Please enter the device name and download set up file first!!
         return false;
+        #endif
     }
 
     if(IniConfig.bEnable_SECS_GEM==true &&                                      //JerryYang 20190709 只判斷客戶功能就好     //Steven 20190723 : 移到外面
@@ -5616,11 +5636,10 @@ bool __fastcall TfMain::Start(AnsiString Func)
     {
         if(TestIF_File.bEnSocketSensor==false)
         {
-            #ifdef SOFT_SIMULTE
+            //AI(ht9045-v899) 20260623: 移除 #ifdef SOFT_SIMULTE 包裝，使 C08_1 Socket Sensor 偵測在正式 build 也生效（原僅模擬 build 編入導致正式機失效）
             iStartIn=0;
             ShowMyMessage("SocketSensor Detect Function is OFF. Please turn ON!");
             return false;
-            #endif
         }
     }
 
@@ -9948,6 +9967,11 @@ void __fastcall TfMain::FormShow(TObject *Sender)
 
     //----- by dell ccd realtime-------------
     ScanBtnThd=NULL;
+
+    //AI(ht9045-v899) 20260612(CASE-20260611-001): 無條件建立 FTP 背景上傳 thread（fire-and-forget），
+    //  讓 PTI Lot End 不必等 FTP 上傳完成；非 PTI 客戶僅閒置等事件，不影響。生命週期仿 ScanBtn。
+    FtpUploadThd = new TFtpUploadThread(false);
+
     if(REAL_TIME_CCD)
     {
         ScanBtnThd = new ScanBtn(false);
@@ -10886,6 +10910,16 @@ void __fastcall TfMain::FormClose(TObject *Sender, TCloseAction &Action)
             ScanBtnThd->EndThread();
             ScanBtnThd->WaitFor();
         }
+    }
+
+    //AI(ht9045-v899) 20260612(CASE-20260611-001): 關閉 FTP 背景上傳 thread（無條件，所有客戶都建立）。
+    //  EndThread 喚醒 + WaitFor 等 drain 完，再 delete，避免殘留 thread / handle 洩漏。
+    if(FtpUploadThd!=NULL)
+    {
+        FtpUploadThd->EndThread();
+        FtpUploadThd->WaitFor();
+        delete FtpUploadThd;
+        FtpUploadThd=NULL;
     }
 
     LogSoftwareOffTime("TfMain, DoReleaseAndInspEnd");                          //Steven 20210526 : 紀錄軟體執行時間
@@ -25116,10 +25150,18 @@ void __fastcall TfMain::edtSetZ1Click(TObject *Sender)
     }
 }
 //------------------------------------------------------------------------------
+//AI(ht9045-v899) 20260630: State Record 用—1.bat(複製)與整包壓縮 7z 各自的 process handle、
+//  輪詢起始時間(GetTickCount)與分段旗標;讓 case 6 以非阻塞輪詢等兩段非同步工作依序完成,
+//  全程不凍結 UI/SECS/motion(month-end 大量 log 的整包 7z 也不會擋住 SECS 30s timer)。
+static HANDLE g_hStateRecordBat=NULL;
+static HANDLE g_hStateRecordZip=NULL;
+static DWORD  g_dwStateRecordWaitStart=0;
+static int    g_iStateRecordStage=0;
 void TfMain::StateRecordImage()
 {
     AnsiString str1="";                                                         //KenHsieh 20230105 : 新增StateRecord 另存路徑
-    int iret=-1;                                                                //KenHsieh 20230105 : 新增StateRecord 另存路徑
+    DWORD dwWaitRet=0;                                                          //AI(ht9045-v899) 20260630: case 6 兩段非阻塞輪詢的 WaitForSingleObject 回傳暫存
+    DWORD dwZipExit=1;                                                          //AI(ht9045-v899) 20260630: 整包壓縮 7z 結束碼(預設1=未成功;壓縮成功才設0並刪資料夾,維持原 iret==0 條件)
 
     switch(iSaveImageTask)
     {
@@ -25180,33 +25222,75 @@ void TfMain::StateRecordImage()
             sbReturnToMainClick(this);
             break;
         case 6:
-            if(iSaveImgae==1)
+            //AI(ht9045-v899) 20260630: case 6 改成「分段非阻塞輪詢」收尾,全程不擋 UI/SECS/motion:
+            //  stage0=先把(若有)JAM0316/0317/加熱盤格式 alarm 顯示出來(維持原本在壓縮前提示的時機);
+            //  stage1=輪詢 1.bat(非同步 XCOPY/7z 複製)結束,完成後再「非同步」啟動整包 7z;
+            //  stage2=輪詢整包 7z 結束,壓縮成功(exit==0)才 Del_Tree。未結束就 break,讓 timer 下一拍重入。
+            //  以 GetTickCount 設 5 分鐘上限保護:逾時記 log 後 best-effort 往下(不卡死,極端時退回原 race)。
+            if(g_iStateRecordStage==0)
             {
-                ShowErrorMessage("JAM0316", K_SKIP, MTestZ1);
+                if(iSaveImgae==1)
+                    ShowErrorMessage("JAM0316", K_SKIP, MTestZ1);
+                else if(iSaveImgae==2)
+                    ShowErrorMessage("JAM0317", K_SKIP, MTestZ2);
+                else if(iSaveImgae==3)
+                    ShowMyMessage("Not support Hot Plate matrix!!", "不支援的加熱盤格式");
+                g_dwStateRecordWaitStart=GetTickCount();
+                g_iStateRecordStage=1;
             }
-            else if(iSaveImgae==2)
+            if(g_iStateRecordStage==1)
             {
-                ShowErrorMessage("JAM0317", K_SKIP, MTestZ2);
+                if(g_hStateRecordBat!=NULL)
+                {
+                    dwWaitRet=WaitForSingleObject(g_hStateRecordBat, 0);
+                    if(dwWaitRet==WAIT_TIMEOUT && (GetTickCount()-g_dwStateRecordWaitStart)<300000)
+                    {
+                        iSaveImageCT=0;
+                        break;
+                    }
+                    if(dwWaitRet==WAIT_TIMEOUT)
+                        RecordProcess("State Record: 1.bat copy wait timeout(>300s), proceed best-effort.");
+                    CloseHandle(g_hStateRecordBat);
+                    g_hStateRecordBat=NULL;
+                }
+                g_hStateRecordZip=NULL;
+                if(FileExists("d:\\HT9045\\7z.exe"))                                //KenHsieh 20230105 : 新增StateRecord 另存路徑
+                {
+                    //AI(ht9045-v899) 20260630: 整包壓縮改非同步啟動,避免大檔 7z 同步擋住 UI 而拖垮 SECS 30s timer
+                    str1.sprintf("a -tzip \"%s.zip\" \"%s\"", NewPath, NewPath);
+                    g_hStateRecordZip=ExecZipCommandHandle("d:\\HT9045\\7z.exe", str1);
+                }
+                g_dwStateRecordWaitStart=GetTickCount();
+                g_iStateRecordStage=2;
+                iSaveImageCT=0;
+                break;
             }
-            else if(iSaveImgae==3)
+            if(g_iStateRecordStage==2)
             {
-                ShowMyMessage("Not support Hot Plate matrix!!", "不支援的加熱盤格式");
+                if(g_hStateRecordZip!=NULL)
+                {
+                    dwWaitRet=WaitForSingleObject(g_hStateRecordZip, 0);
+                    if(dwWaitRet==WAIT_TIMEOUT && (GetTickCount()-g_dwStateRecordWaitStart)<300000)
+                    {
+                        iSaveImageCT=0;
+                        break;
+                    }
+                    if(dwWaitRet==WAIT_TIMEOUT)
+                        RecordProcess("State Record: archive 7z wait timeout(>300s), skip Del_Tree.");
+                    else
+                        GetExitCodeProcess(g_hStateRecordZip, &dwZipExit);
+                    CloseHandle(g_hStateRecordZip);
+                    g_hStateRecordZip=NULL;
+                    if(dwZipExit==0)                                            //壓縮成功才刪除目錄(維持原 iret==0 才刪的安全條件)
+                        Del_Tree(NewPath);
+                }
+                iSaveImgae=-1;
+                iSaveImageTask++;
+                iSaveImageCT=0;
+                g_iStateRecordStage=0;
+                if(bManualStateRecord)                                          //KenHsieh 20230105 : 新增StateRecord 另存路徑
+                    ShellExecute(NULL, "open", SDataPath.c_str(), NULL, NULL, SW_SHOW); //顯示目錄
             }
-
-            iSaveImgae=-1;
-            iSaveImageTask++;
-            iSaveImageCT=0;
-
-            if(FileExists("d:\\HT9045\\7z.exe"))                                //KenHsieh 20230105 : 新增StateRecord 另存路徑
-            {
-                str1.sprintf("d:\\HT9045\\7z.exe a -tzip \"%s.zip\" \"%s\"", NewPath, NewPath);
-                iret=system(str1.c_str());                                      //壓縮StateRecord
-                MySleep(500);
-                if(iret==0)                                                     //壓縮成功
-                    Del_Tree(NewPath);                                          //刪除目錄
-            }
-            if(bManualStateRecord)                                              //KenHsieh 20230105 : 新增StateRecord 另存路徑
-                ShellExecute(NULL, "open", SDataPath.c_str(), NULL, NULL, SW_SHOW); //顯示目錄
             break;
     }
 }
@@ -25214,6 +25298,172 @@ void TfMain::StateRecordImage()
 void __fastcall TfMain::sbStateRecordClick(TObject *Sender)
 {
     DoStateRecord(0, true);                                                     //KenHsieh 20230116 : 區分手動或自動(sbclick -> Function)
+}
+//------------------------------------------------------------------------------
+//AI(ht9045-v899) 20260604: 將原本內嵌在 DoStateRecord 的 MainForm 變數快照獨立成函式,
+//  方便辨識與維護; 並新增 Loader/TrayArm 交接診斷區, 記錄 WAR16122 空盤無法自動回收
+//  (InArm InArmPickFromLoadTask case10<->15 silent loop) 必看的旗標,
+//  解決 Task_ListWithTime.csv 無變數值無法判定觸發分支的問題.
+void DumpMainFormSnapshot(AnsiString sBasePath)
+{
+    try
+    {
+        AnsiString sSnapPath = sBasePath + "\\MainFormSnapshot.txt";
+        TStringList *slSnap = new TStringList;
+        try
+        {
+            AnsiString s;
+            slSnap->Add("==== HT9045 MainForm Snapshot ====");
+            s.sprintf("Time: %04d-%02d-%02d %02d:%02d:%02d",
+                      SystemYear, SystemMonth, SystemDate,
+                      SystemHour, SystemMin, SystemSec);
+            slSnap->Add(s);
+            slSnap->Add("");
+
+            slSnap->Add("---- Task ----");
+            s.sprintf("InArm.iArmTask=%d  OutArmTask=%d", iArmTask, OutArmTask);
+            slSnap->Add(s);
+            s.sprintf("AutoSHT1Task=%d  AutoSHT2Task=%d", AutoSHT1Task, AutoSHT2Task);
+            slSnap->Add(s);
+            s.sprintf("iPickFromShuttle1Task=%d  iPickFromShuttle2Task=%d",
+                      iPickFromShuttle1Task, iPickFromShuttle2Task);
+            slSnap->Add(s);
+            slSnap->Add("");
+
+            slSnap->Add("---- InArmSuck ----");
+            s.sprintf("iModeX=%d iXStep=%d iYStep=%d iPickRow=%d iPickCol=%d iMaxRow=%d iMaxCol=%d",
+                      InArmSuck.iModeX, InArmSuck.iXStep, InArmSuck.iYStep,
+                      InArmSuck.iPickRow, InArmSuck.iPickCol,
+                      InArmSuck.iMaxRow, InArmSuck.iMaxCol);
+            slSnap->Add(s);
+            for(int i=0; i<InArmSuck.iMaxRow && i<_MAX_SUCK_ROW_ITEM; i++)
+            {
+                AnsiString sItem="Item r"+IntToStr(i)+":";
+                AnsiString sNeed="Need r"+IntToStr(i)+":";
+                for(int j=0; j<InArmSuck.iMaxCol && j<_MAX_SUCK_COL_ITEM; j++)
+                {
+                    sItem += " " + IntToStr(InArmSuck.Item[i][j]);
+                    sNeed += " " + IntToStr(InArmSuck.Suck[i][j].GetNeedSuckStatus()?1:0);
+                }
+                slSnap->Add(sItem);
+                slSnap->Add(sNeed);
+            }
+            slSnap->Add("");
+
+            slSnap->Add("---- OutArmSuck ----");
+            s.sprintf("iModeX=%d iXStep=%d iYStep=%d iPickRow=%d iPickCol=%d iMaxRow=%d iMaxCol=%d",
+                      OutArmSuck.iModeX, OutArmSuck.iXStep, OutArmSuck.iYStep,
+                      OutArmSuck.iPickRow, OutArmSuck.iPickCol,
+                      OutArmSuck.iMaxRow, OutArmSuck.iMaxCol);
+            slSnap->Add(s);
+            for(int i=0; i<OutArmSuck.iMaxRow && i<_MAX_SUCK_ROW_ITEM; i++)
+            {
+                AnsiString sItem="Item r"+IntToStr(i)+":";
+                AnsiString sNeed="Need r"+IntToStr(i)+":";
+                for(int j=0; j<OutArmSuck.iMaxCol && j<_MAX_SUCK_COL_ITEM; j++)
+                {
+                    sItem += " " + IntToStr(OutArmSuck.Item[i][j]);
+                    sNeed += " " + IntToStr(OutArmSuck.Suck[i][j].GetNeedSuckStatus()?1:0);
+                }
+                slSnap->Add(sItem);
+                slSnap->Add(sNeed);
+            }
+            slSnap->Add("");
+
+            slSnap->Add("---- Shuttle Item (FL/FR/BL/BR) ----");
+            int iShRow = FRCarryKit.iMaxRow;
+            int iShCol = FRCarryKit.iMaxCol;
+            for(int i=0; i<iShRow && i<_MAX_SUCK_ROW_ITEM; i++)
+            {
+                AnsiString sFL="FL r"+IntToStr(i)+":";
+                AnsiString sFR="FR r"+IntToStr(i)+":";
+                AnsiString sBL="BL r"+IntToStr(i)+":";
+                AnsiString sBR="BR r"+IntToStr(i)+":";
+                for(int j=0; j<iShCol && j<_MAX_SUCK_COL_ITEM; j++)
+                {
+                    sFL += " " + IntToStr(FLCarryKit.Item[i][j]);
+                    sFR += " " + IntToStr(FRCarryKit.Item[i][j]);
+                    sBL += " " + IntToStr(BLCarryKit.Item[i][j]);
+                    sBR += " " + IntToStr(BRCarryKit.Item[i][j]);
+                }
+                slSnap->Add(sFL);
+                slSnap->Add(sFR);
+                slSnap->Add(sBL);
+                slSnap->Add(sBR);
+            }
+
+            //AI(ht9045-v899) 20260604: Loader / TrayArm 交接診斷區
+            //  WAR16122 空盤無法自動回收時, 用來判定卡在哪個交接分支:
+            //    branch A = 空盤狀態落在 Car/Z (fHasTray) 但 MMTrayY.fHasTray=false
+            //               -> InArm 視為有盤 (case15 三位置 OR), TrayArm 只看 MMTrayY -> silent loop
+            //    branch B = manual-remove 旗標已設, 但 iInArmWaitPosition != 3 -> 交接前置 gate 永久 break
+            slSnap->Add("");
+            slSnap->Add("---- Loader / TrayArm Handoff Diag ----");
+            s.sprintf("iPickFromLoadStageTask=%d  CatchTrayTask=%d  iCatchFromLoaderTask=%d  iTrayZLoadTrayToWaitTask=%d",
+                      iPickFromLoadStageTask, CatchTrayTask, iCatchFromLoaderTask, iTrayZLoadTrayToWaitTask);
+            slSnap->Add(s);
+            s.sprintf("MMTrayY.fHasTray=%d  MMTrayY.HasIC=%d  MMTrayY_Car.fHasTray=%d  MMTrayZ.fHasTray=%d",
+                      MOT[MMTrayY].fHasTray?1:0, MOT[MMTrayY].Tray.HasIC()?1:0,
+                      MOT[MMTrayY_Car].fHasTray?1:0, MOT[MMTrayZ].fHasTray?1:0);
+            slSnap->Add(s);
+            s.sprintf("iInArmWaitPosition=%d (0:Wait 1:LoaderWait 2:DecayWait 3:Shuttle2)", iInArmWaitPosition);
+            slSnap->Add(s);
+            s.sprintf("bNeedManualRemoveTray=%d  bLoaderHasSkip=%d  iManualRemoveLoader=%d  iManualRemoveTrayCnt=%d  iLDTrayNeedManualRemoveTray=%d",
+                      bNeedManualRemoveTray?1:0, bLoaderHasSkip?1:0,
+                      TrayForm.iManualRemoveLoader, iManualRemoveTrayCnt, iLDTrayNeedManualRemoveTray);
+            slSnap->Add(s);
+
+            slSnap->Add("");
+            //AI(ht9045-v899) 20260629(CASE-PTI-20260629-001): 新增 Home/Buzzer/Modal 診斷 dump,供 auto-init 回HOME hang 偶發時定位早退點與 modal 來源
+            slSnap->Add("---- Home / Buzzer / Modal Diag ----");
+            s.sprintf("CheckOutArmDestory=%d (i*100+j+1, 0=none)", CheckOutArmDestory());
+            slSnap->Add(s);
+            s.sprintf("fAllMotorHome=%d  iHome=%d  InitialOK=%d", fAllMotorHome?1:0, iHome, InitialOK?1:0);
+            slSnap->Add(s);
+            s.sprintf("SoftStart=%d  SystemStart=%d  bAlarmBuzzer=%d  RunState=%d", SoftStart?1:0, SystemStart?1:0, bAlarmBuzzer?1:0, RunState);
+            slSnap->Add(s);
+            s.sprintf("bFinshTest=%d  bI01TesterFinishThenHome=%d  bHomeinitialCheckPushZ1=%d  bContactModeNeedOpenDoor=%d", bFinshTest?1:0, IniConfig.bI01TesterFinishThenHome?1:0, bHomeinitialCheckPushZ1?1:0, bContactModeNeedOpenDoor?1:0);
+            slSnap->Add(s);
+            s.sprintf("LastSet.iTester=%d (0:OFF_LINE 1:ON_LINE)", LastSet.iTester);
+            slSnap->Add(s);
+            if(fNote)
+            {
+                s.sprintf("fNote.fShow=%d  fNote.AlarmType=%d  fNote.edErrorCode=%s", fNote->fShow?1:0, fNote->AlarmType, fNote->edErrorCode->Text.c_str());
+                slSnap->Add(s);
+            }
+            if(MyMessageBox)
+            {
+                s.sprintf("MyMessageBox.fShow=%d", MyMessageBox->fShow?1:0);
+                slSnap->Add(s);
+            }
+            if(fMain)
+            {
+                s.sprintf("palMainStatus.Caption=%s", fMain->palMainStatus->Caption.c_str());
+                slSnap->Add(s);
+            }
+            s.sprintf("HomeFlag InArmX=%d OutArmX=%d TestY1=%d InShuttle1=%d OutShuttle1=%d LoaderY=%d TrayX=%d", MOT[MInArmX].HomeFlag, MOT[MOutArmX].HomeFlag, MOT[MTestY1].HomeFlag, MOT[MInShuttle1].HomeFlag, MOT[MOutShuttle1].HomeFlag, MOT[MLoaderY].HomeFlag, MOT[MTrayX].HomeFlag);
+            slSnap->Add(s);
+            s.sprintf("Buzzer SwMusic Status: %d %d %d %d", SW[SwMusic1+0].Status()?1:0, SW[SwMusic1+1].Status()?1:0, SW[SwMusic1+2].Status()?1:0, SW[SwMusic1+3].Status()?1:0);
+            slSnap->Add(s);
+            for(int i=0; i<4; i++)
+            {
+                AnsiString sOAP="bOutArmPlaceDevice r"+IntToStr(i)+":";
+                for(int j=0; j<8; j++)
+                    sOAP += " " + IntToStr(bOutArmPlaceDevice[i][j]?1:0);
+                slSnap->Add(sOAP);
+            }
+
+            slSnap->SaveToFile(sSnapPath);
+        }
+        __finally
+        {
+            delete slSnap;
+        }
+    }
+    catch(...)
+    {
+        // never let snapshot dump break state record
+    }
 }
 //------------------------------------------------------------------------------
 void __fastcall TfMain::DoStateRecord(int iShowAlarm, bool bManual)             //Steven 20220716 : 把State record獨立出來, 避免抓圖的時候被Alarm擋住  //KenHsieh 20230116 : 區分手動或自動
@@ -25409,6 +25659,26 @@ void __fastcall TfMain::DoStateRecord(int iShowAlarm, bool bManual)             
         TestList->Add(str);
     }
 
+    //AI(ht9045-v899) 20260612(CASE-20260611-001): 把 FTP 背景上傳 log 打包進 StateRecord，
+    //  供「背景 FTP 上傳放棄/重試」診斷用。背景 log 為 D:\HT9045_Log\FtpUpload\YYYYMMDD\*.log（按日分子夾），
+    //  故整夾遞迴複製 + 7z 遞迴壓縮（壓資料夾本身會遞迴含子夾），跨日不漏；壓完刪展開夾避免 StateRecord 過大。
+    //  以 bFtpUploadBackground gating：背景上傳有開才需打包其診斷 log（PTI 預設開、其餘預設關）。
+    if(IniConfig.bFtpUploadBackground)
+    {
+        AnsiString asFtpSrc, asFtpDst;
+        asFtpSrc = "D:\\HT9045_Log\\FtpUpload";
+        asFtpDst.sprintf("%s\\FtpUpload", NewPath);
+        if(DirectoryExists(asFtpSrc))
+        {
+            str.sprintf("XCOPY /y/a/e/c/i/h/f/r \"%s\" \"%s\"", asFtpSrc, asFtpDst);
+            TestList->Add(str);
+            str.sprintf("d:\\HT9045\\7z.exe a -tzip \"%s\\FtpUpload.7z\" \"%s\\FtpUpload\"", NewPath, NewPath);
+            TestList->Add(str);
+            str.sprintf("RMDIR /s/q \"%s\\FtpUpload\"", NewPath);
+            TestList->Add(str);
+        }
+    }
+
     if(bRunAutoClean && TestIF_File.iAutoClean_Function)                        //Sam 20230616 : Add Auto Clean Record
     {
         for(int iRow=0; iRow<2 ;iRow++)
@@ -25444,7 +25714,13 @@ void __fastcall TfMain::DoStateRecord(int iShowAlarm, bool bManual)             
             DeleteFile(BatFile);
 
         TestList->SaveToFile(BatFile);
-        ExecZipCommand(BatFile, " ");                                           //Steven 20160205 : 存檔時候不要跳DOS視窗
+        //AI(ht9045-v899) 20260630: 啟動前先清掉前一次未收尾的 State Record handle/stage(避免重入時洩漏
+        //  handle 或丟失上一份 NewPath 收尾);再保留 1.bat handle 供 case 6 兩段非阻塞輪詢(複製→整包壓縮→刪)。
+        if(g_hStateRecordBat!=NULL) { CloseHandle(g_hStateRecordBat); g_hStateRecordBat=NULL; }
+        if(g_hStateRecordZip!=NULL) { CloseHandle(g_hStateRecordZip); g_hStateRecordZip=NULL; }
+        g_iStateRecordStage=0;
+        g_dwStateRecordWaitStart=GetTickCount();
+        g_hStateRecordBat = ExecZipCommandHandle(BatFile, " ");                  //Steven 20160205 : 存檔時候不要跳DOS視窗
     }
     catch(...)
     {
@@ -25498,106 +25774,8 @@ void __fastcall TfMain::DoStateRecord(int iShowAlarm, bool bManual)             
 //    #endif
     LogIndexMaxMinPos("StateRecord");                                           //Isaac 20201012 : 計算Encoder和commandpos/Teaching的差值，記錄並存檔
 
-    //AI(ht9045-v899) 20260512: dump key MainForm vars (task / suck / shuttle / NeedSuck) to MainFormSnapshot.txt
-    //  目的: Task_ListWithTime.csv 沒有變數值, MainForm.bmp 又難以 OCR;
-    //  將分析 hangup 必看的關鍵欄位另存為純文字, 加速根因分析.
-    try
-    {
-        AnsiString sSnapPath = NewPath + "\\MainFormSnapshot.txt";
-        TStringList *slSnap = new TStringList;
-        try
-        {
-            AnsiString s;
-            slSnap->Add("==== HT9045 MainForm Snapshot ====");
-            s.sprintf("Time: %04d-%02d-%02d %02d:%02d:%02d",
-                      SystemYear, SystemMonth, SystemDate,
-                      SystemHour, SystemMin, SystemSec);
-            slSnap->Add(s);
-            slSnap->Add("");
-
-            slSnap->Add("---- Task ----");
-            s.sprintf("InArm.iArmTask=%d  OutArmTask=%d", iArmTask, OutArmTask);
-            slSnap->Add(s);
-            s.sprintf("AutoSHT1Task=%d  AutoSHT2Task=%d", AutoSHT1Task, AutoSHT2Task);
-            slSnap->Add(s);
-            s.sprintf("iPickFromShuttle1Task=%d  iPickFromShuttle2Task=%d",
-                      iPickFromShuttle1Task, iPickFromShuttle2Task);
-            slSnap->Add(s);
-            slSnap->Add("");
-
-            slSnap->Add("---- InArmSuck ----");
-            s.sprintf("iModeX=%d iXStep=%d iYStep=%d iPickRow=%d iPickCol=%d iMaxRow=%d iMaxCol=%d",
-                      InArmSuck.iModeX, InArmSuck.iXStep, InArmSuck.iYStep,
-                      InArmSuck.iPickRow, InArmSuck.iPickCol,
-                      InArmSuck.iMaxRow, InArmSuck.iMaxCol);
-            slSnap->Add(s);
-            for(int i=0; i<InArmSuck.iMaxRow && i<_MAX_SUCK_ROW_ITEM; i++)
-            {
-                AnsiString sItem="Item r"+IntToStr(i)+":";
-                AnsiString sNeed="Need r"+IntToStr(i)+":";
-                for(int j=0; j<InArmSuck.iMaxCol && j<_MAX_SUCK_COL_ITEM; j++)
-                {
-                    sItem += " " + IntToStr(InArmSuck.Item[i][j]);
-                    sNeed += " " + IntToStr(InArmSuck.Suck[i][j].GetNeedSuckStatus()?1:0);
-                }
-                slSnap->Add(sItem);
-                slSnap->Add(sNeed);
-            }
-            slSnap->Add("");
-
-            slSnap->Add("---- OutArmSuck ----");
-            s.sprintf("iModeX=%d iXStep=%d iYStep=%d iPickRow=%d iPickCol=%d iMaxRow=%d iMaxCol=%d",
-                      OutArmSuck.iModeX, OutArmSuck.iXStep, OutArmSuck.iYStep,
-                      OutArmSuck.iPickRow, OutArmSuck.iPickCol,
-                      OutArmSuck.iMaxRow, OutArmSuck.iMaxCol);
-            slSnap->Add(s);
-            for(int i=0; i<OutArmSuck.iMaxRow && i<_MAX_SUCK_ROW_ITEM; i++)
-            {
-                AnsiString sItem="Item r"+IntToStr(i)+":";
-                AnsiString sNeed="Need r"+IntToStr(i)+":";
-                for(int j=0; j<OutArmSuck.iMaxCol && j<_MAX_SUCK_COL_ITEM; j++)
-                {
-                    sItem += " " + IntToStr(OutArmSuck.Item[i][j]);
-                    sNeed += " " + IntToStr(OutArmSuck.Suck[i][j].GetNeedSuckStatus()?1:0);
-                }
-                slSnap->Add(sItem);
-                slSnap->Add(sNeed);
-            }
-            slSnap->Add("");
-
-            slSnap->Add("---- Shuttle Item (FL/FR/BL/BR) ----");
-            int iShRow = FRCarryKit.iMaxRow;
-            int iShCol = FRCarryKit.iMaxCol;
-            for(int i=0; i<iShRow && i<_MAX_SUCK_ROW_ITEM; i++)
-            {
-                AnsiString sFL="FL r"+IntToStr(i)+":";
-                AnsiString sFR="FR r"+IntToStr(i)+":";
-                AnsiString sBL="BL r"+IntToStr(i)+":";
-                AnsiString sBR="BR r"+IntToStr(i)+":";
-                for(int j=0; j<iShCol && j<_MAX_SUCK_COL_ITEM; j++)
-                {
-                    sFL += " " + IntToStr(FLCarryKit.Item[i][j]);
-                    sFR += " " + IntToStr(FRCarryKit.Item[i][j]);
-                    sBL += " " + IntToStr(BLCarryKit.Item[i][j]);
-                    sBR += " " + IntToStr(BRCarryKit.Item[i][j]);
-                }
-                slSnap->Add(sFL);
-                slSnap->Add(sFR);
-                slSnap->Add(sBL);
-                slSnap->Add(sBR);
-            }
-
-            slSnap->SaveToFile(sSnapPath);
-        }
-        __finally
-        {
-            delete slSnap;
-        }
-    }
-    catch(...)
-    {
-        // never let snapshot dump break state record
-    }
+    //AI(ht9045-v899) 20260604: 改呼叫獨立函式 DumpMainFormSnapshot (內含 Loader/TrayArm 交接診斷區)
+    DumpMainFormSnapshot(NewPath);
 }
 //------------------------------------------------------------------------------
 void __fastcall TfMain::AppException(TObject *Sender, Exception *E)             //ChungHung 20141226 add catch exception
@@ -26379,6 +26557,10 @@ void __fastcall TfMain::sbSetupClick(TObject *Sender)
 void __fastcall TfMain::sbYieldClick(TObject *Sender)
 {
     sbYield->Down=false;
+
+    //AI(ht9045-v899) 20260528: guard Yield Monitoring entry with security level 39
+    if(fSecurity->Insufficient(39)==false)
+        return;
 
     NewRecordProcess("MES2178", "Enter Yield Monitoring");
     fYieldMonitoring->ShowModal();

@@ -654,7 +654,7 @@ int ATK_RECIPE_INFO::SiteMapDirection()                                         
         }
     }
 
-    if(TestSocket.iShtRow==1) //單列
+    if(TestSocket.iShtRow==1)                                                   //單列
     {
         //單列由左到右是1
         iExpectedValue=1;
@@ -687,7 +687,7 @@ int ATK_RECIPE_INFO::SiteMapDirection()                                         
         if(bCompliant==true)
             return 3;
     }
-    else if(TestSocket.iShtCol==1) //單行
+    else if(TestSocket.iShtCol==1)                                              //單行
     {
         //單行由上到下是2
         iExpectedValue=1;
@@ -869,7 +869,7 @@ int ATK_RECIPE_INFO::SiteMapDirection()                                         
     return order;
 }
 //------------------------------------------------------------------------------
-AnsiString ATK_RECIPE_INFO::GetParameterFormat(AnsiString sName, AnsiString sValue)//Jimmychiu 20230807 : #R230804-ATK-H9-01 , V3.21.792.1 ,Add the Sitemap items in information.txt
+AnsiString ATK_RECIPE_INFO::GetParameterFormat(AnsiString sName, AnsiString sValue)                                     //Jimmychiu 20230807 : #R230804-ATK-H9-01 , V3.21.792.1 ,Add the Sitemap items in information.txt
 {
     return AnsiString().sprintf("%s:%s%s", sName, sValue, GetForwardSlash());
 }
@@ -1880,7 +1880,7 @@ bool ReadLastDataFile()
     {
         AnsiString S=GetLastOpenFN();
         AnsiString szDir=AnsiString().sprintf("%s%s\\TestMode.Data", DataPath, S);
-        for(int i=0; i<2; i++)  //jou 2012-06-05
+        for(int i=0; i<2; i++)                                                  //jou 2012-06-05
         {
             LastSet.ContactSet[i]    =ReadIniData(szDir, "TestMode", AnsiString().sprintf("ContactSet_%d",i), 0);
             LastSet.iContactCT[i]    =ReadIniData(szDir, "TestMode", AnsiString().sprintf("ContactCT_%d",i), 0);
@@ -2048,7 +2048,7 @@ bool WriteLastDataFile(bool BackUp2, bool bNotContact)
     {
         AnsiString S=GetLastOpenFN();
         AnsiString szDir=AnsiString().sprintf("%s%s\\TestMode.Data", DataPath, S);
-        for(int i=0; i<2; i++)  //jou 2012-06-05
+        for(int i=0; i<2; i++)                                                  //jou 2012-06-05
         {
             WriteIniData(szDir, "TestMode", AnsiString().sprintf("ContactSet_%d",i),   LastSet.ContactSet[i]);
             WriteIniData(szDir, "TestMode", AnsiString().sprintf("ContactCT_%d",i),    LastSet.iContactCT[i]);
@@ -2242,6 +2242,8 @@ void ProcessLastSetIni_FTP(bool bRead)
     if(CosFunction.bFTPFunction || IniConfig.bFTPJamCodeUpload)
     {
         IniConfig.bEnableFTP        =ReadWriteIni(sPath, "FTP", "Enable FTP",        IniConfig.bEnableFTP,      false,                                              bRead);
+        //AI(ht9045-v899) 20260612(CASE-20260611-001): 新增FTP上傳背景化開關, 預設依客戶碼(PTI=true其餘false), INI可覆寫; 供Lot End上傳走背景EnqueueUpload或原同步路徑分流
+        IniConfig.bFtpUploadBackground=ReadWriteIni(sPath, "FTP", "FTP Upload Background", IniConfig.bFtpUploadBackground, (CUSTOMER_CODE==CC_PTI),                  bRead);
         if(CUSTOMER_CODE==CC_KYEC_LEE || IniConfig.bSPILFunction==true)
         {
             IniConfig.FtpUserName       =ReadWriteIni(sPath, "FTP", "FTP User Name",     IniConfig.FtpUserName,     (IniConfig.bFTPJamCodeUpload)?"SPIL":"KYEC",    bRead);
@@ -2264,10 +2266,6 @@ void ProcessLastSetIni_FTP(bool bRead)
         else
             IniConfig.FtpTransMode      =ReadWriteIni(sPath, "FTP", "FTP Transfer Mode", IniConfig.FtpTransMode,    0,                                              bRead); //Steven 20230719 : 加入FTP傳輸模式
 
-        if(CUSTOMER_CODE==CC_PTI)                                               //RogerYang 20170406 (Steven) 力成FTP檔案名稱
-        {
-            IniConfig.asN06_FileName    =ReadWriteIni(sPath, "FTP", "FTP File Name", IniConfig.asN06_FileName,   "UnKnown",                                         bRead);
-        }
         //Landam 20110704
         if(IniConfig.FtpDownloadPath!="/")
         {

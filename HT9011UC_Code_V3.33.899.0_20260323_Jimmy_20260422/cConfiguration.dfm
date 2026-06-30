@@ -456,7 +456,7 @@ object fConfiguration: TfConfiguration
         Top = 0
         Width = 929
         Height = 798
-        ActivePage = tsI00
+        ActivePage = tsN00
         Align = alClient
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
@@ -466,7 +466,7 @@ object fConfiguration: TfConfiguration
         MultiLine = True
         ParentFont = False
         Style = tsButtons
-        TabIndex = 7
+        TabIndex = 10
         TabOrder = 0
         TabWidth = 123
         OnChange = pcConfigChange
@@ -14299,10 +14299,10 @@ object fConfiguration: TfConfiguration
               Top = 2
               Width = 565
               Height = 570
-              ActivePage = tsN12
+              ActivePage = tsN10
               Align = alClient
               MultiLine = True
-              TabIndex = 7
+              TabIndex = 5
               TabOrder = 0
               TabWidth = 55
               Visible = False
@@ -15212,9 +15212,9 @@ object fConfiguration: TfConfiguration
                   Top = 0
                   Width = 557
                   Height = 497
-                  ActivePage = tsN10_1_10
+                  ActivePage = tsN10_11_20
                   Align = alClient
-                  TabIndex = 0
+                  TabIndex = 1
                   TabOrder = 0
                   object tsN10_1_10: TTabSheet
                     Caption = '[N1]-[N10]'
