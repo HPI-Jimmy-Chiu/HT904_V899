@@ -969,8 +969,13 @@ static void W7C1_ResetInArmParam(){}                                    // golde
 #define ResetInArmParam        W7C1_ResetInArmParam
 static bool W7C1_MoveInArm2XYToLoaderWait(){ return true; }             // golden -- E61 in-arm->loader; offline: done (true)
 #define MoveInArm2XYToLoaderWait     W7C1_MoveInArm2XYToLoaderWait
-static bool W7C1_DoART_AfterCleanOut(int &/*ret*/){ return true; }      // golden -- ART post-clean-out; gated USE_AUTO_RETEST(off)
-#define DoART_AfterCleanOut    W7C1_DoART_AfterCleanOut
+// W7-C2 INTEGRATED: the W7C1 W7C1_DoART_AfterCleanOut stub + `#define
+// DoART_AfterCleanOut W7C1_DoART_AfterCleanOut` were REMOVED here.  The REAL
+// DoART_AfterCleanOut body now lives at csystem.cpp:3626 (golden csystem.cpp:
+// 14049) and is declared in csystem.h, so DoCleanOutFinishCheck's call
+// (csystem.cpp:1707) binds to the single real definition.  The former `#undef
+// DoART_AfterCleanOut` that preceded the real body is likewise removed (nothing
+// left to un-define).  AI(W7C2-Integrate) 20260701.
 static void W7C1_SetInArmSpeed(bool /*a*/, bool /*b*/){}                 // golden -- in-arm speed reset
 #define SetInArmSpeed          W7C1_SetInArmSpeed
 static void W7C1_SetOutArmSpeed(bool /*a*/){}                           // golden -- out-arm speed reset
@@ -2133,3 +2138,2180 @@ void DoCleanOutFinishCheck()
         }
     }
 }
+
+// ===========================================================================
+//  W7-C2 SEAM BLOCK  -- TU-local forward declarations / offline stand-ins for
+//  the substrate symbols DoOneCycleFinishCheck + DoART_AfterCleanOut (below)
+//  reference that are NOT yet present in the translated tree (mirrors the
+//  W7-C1 SEAM block convention above).  Each stand-in is config-gated (false
+//  offline) or a small reset target; they make this TU SYNTAX-COMPILE so the
+//  faithful golden bodies can land NOW.  The serial Integrate must:
+//    (a) replace every W7C2_* stand-in with the REAL translated symbol / real
+//        facade member (extend LAST_GENERAL_SET / TfSCKART / TfMain / uHANA_ART /
+//        TRENESAS_Server / fLotInfo / fSortCT / LotSummary / fSocketCommunication),
+//    (b) remove the csystem_shims.cpp:145 `void DoOneCycleFinishCheck() {}`
+//        no-op stub (ODR), and
+//    (c) remove the W7C1_DoART_AfterCleanOut seam (csystem.cpp:960-961 region)
+//        so DoCleanOutFinishCheck's DoART_AfterCleanOut(ret) call binds to the
+//        REAL body translated here.
+//  NO-REGRESSION KEY: DoOneCycleFinishCheck's real work is gated on the global
+//  iOneCycle (never set to 1 by the W6.6 hub or any existing suite; the only
+//  flipping seam, fMain->BtnOneCycle->Down, is offline-false), so the body is
+//  INERT for every currently-passing suite.  DoART_AfterCleanOut is reached only
+//  via DoCleanOutFinishCheck's iCleanOut==1 ART branch, whose guards
+//  (bAutoReTest_ART / CosFunction.bUseSCKART / CosFunction.bAutoRetestGPIBmode)
+//  are all false offline -- so every W7C2 stand-in below is unreachable at
+//  runtime offline; gating them changes NO offline behaviour.
+// ===========================================================================
+#ifndef W7C2_SEAM
+#define W7C2_SEAM
+
+// --- fSCKART extended members (golden Automation/SCK_ART.h) absent from the
+//     W6 TfSCKART stub.  A SEPARATE inert seam object (the golden fSCKART->X
+//     references for absent members were routed to W7C2_SCKART; the members
+//     present on the real TfSCKART -- iInputJamCnt/iFTRTCount/iInputCount/
+//     CheckLoadingCount -- stay on fSCKART).  All methods inert / all fields 0. -
+struct W7C2_TPanelSeam { AnsiString Caption; };                 // golden TPanel* (palOutputCnt/palRejectCnt)
+struct W7C2_TfSCKARTSeam {
+    int    iNeedRT;        int iLotCount;       int iTesterType;
+    int    iCurrentStatus; int iLOTSTATUS_W;    int iLOTSTATUS_R;   int iLOTSTATUS_A;
+    int    iWaitGPIBLotR;  int iOutputJamCnt;   double dCurrYield;
+    W7C2_TPanelSeam *palOutputCnt; W7C2_TPanelSeam *palRejectCnt;
+    void   SetLotStatus(int /*iStatus*/){}
+    void   AccessFile(bool /*bRead*/, int /*iAccess*/=-1){}
+    void   UpdateCount(){}
+    void   CheckNeedRT(){}
+    void   DoAutoSocketOff(bool /*bAllSiteOn*/=false){}
+    void   SaveTestSummary(int /*iSaveData*/=0){}
+    bool   DoChkInputCntAlarm(bool /*bExcess*/){ return false; }
+    W7C2_TfSCKARTSeam():iNeedRT(0),iLotCount(0),iTesterType(0),iCurrentStatus(0),
+        iLOTSTATUS_W(0),iLOTSTATUS_R(0),iLOTSTATUS_A(0),iWaitGPIBLotR(0),iOutputJamCnt(0),
+        dCurrYield(0.0){ palOutputCnt=new W7C2_TPanelSeam(); palRejectCnt=new W7C2_TPanelSeam(); }
+};
+static W7C2_TfSCKARTSeam    W7C2_fSCKART_ext;
+#define W7C2_SCKART          (&W7C2_fSCKART_ext)
+
+// --- fMain->hanaART extended members (golden uHANA_ART) absent from TfMainHanaART
+//     (which has only IsHanaArtAvailable / AddNewTrayHead -> both stay on
+//     fMain->hanaART).  Inert seam: IsContactAvailable=false, NeedToRT=0. --------
+struct W7C2_TfHanaSeam {
+    bool IsContactAvailable(){ return false; }
+    bool IsPrimeTest(){ return false; }
+    void EndPrimeTest(){}
+    void EndReTest(){}
+    int  NeedToRT(){ return 0; }              // 0:Waiting command,1:Need RT,2:Lot End
+};
+static W7C2_TfHanaSeam      W7C2_fHana_ext;
+#define W7C2_HANAART         (&W7C2_fHana_ext)
+
+// --- fMain->RENESAS_Server (golden uRENESAS_Server.h TRENESAS_Server) absent. --
+struct W7C2_TfRenesasSeam {
+    int  iHaveRecvTestEnd;
+    bool Check71CommandDuring50(){ return false; }
+    void SendTestEnd(){}
+    W7C2_TfRenesasSeam():iHaveRecvTestEnd(0){}
+};
+static W7C2_TfRenesasSeam   W7C2_fRenesas_ext;
+#define W7C2_RENESAS         (&W7C2_fRenesas_ext)
+
+// --- LastSet extended members (golden LastSet.h) absent from LAST_GENERAL_SET
+//     shim.  golden field TYPES verbatim.  All inert (touched only in the ART
+//     branches, false offline). --------------------------------------------------
+static unsigned int W7C2_LastSet_BinCT[4][256];      // golden LastSet.h:106
+static unsigned int W7C2_LastSet_BinCT_ART[4][256];  // golden LastSet.h:107
+static int          W7C2_LastSet_iContactCT[2];      // golden LastSet.h:354
+static int          W7C2_LastSet_iAutoRetestCount_ART = 0;  // golden LastSet.h:372
+static int          W7C2_LastSet_iRetestFlagART = 0;        // golden LastSet.h:404
+static int          W7C2_LastSet_iSCKART_RTUnitCount = 0;   // golden LastSet.h:410
+static long         W7C2_LastSet_lSCKARTBinCT[256];         // golden LastSet.h:507
+static bool         W7C2_LastSet_bWaitEndLotAutoRetestGPIB = false; // golden LastSet.h:401
+static bool         W7C2_LastSet_bEndLotAutoRetestGPIB = false;     // golden LastSet.h:402
+static bool         W7C2_LastSet_bFinEndLotAutoRetestGPIB = false;  // golden LastSet.h:403
+static bool         W7C2_LastSet_bFirstTestAutoRetestGPIB = false;  // golden LastSet.h:405
+static bool         W7C2_LastSet_bBreakSCKART = false;             // golden LastSet.h:420
+#define W7C2_LS_BinCT                     W7C2_LastSet_BinCT
+#define W7C2_LS_BinCT_ART                 W7C2_LastSet_BinCT_ART
+#define W7C2_LS_iContactCT                W7C2_LastSet_iContactCT
+#define W7C2_LS_iAutoRetestCount_ART      W7C2_LastSet_iAutoRetestCount_ART
+#define W7C2_LS_iRetestFlagART            W7C2_LastSet_iRetestFlagART
+#define W7C2_LS_iSCKART_RTUnitCount       W7C2_LastSet_iSCKART_RTUnitCount
+#define W7C2_LS_lSCKARTBinCT              W7C2_LastSet_lSCKARTBinCT
+#define W7C2_LS_bWaitEndLotAutoRetestGPIB W7C2_LastSet_bWaitEndLotAutoRetestGPIB
+#define W7C2_LS_bEndLotAutoRetestGPIB     W7C2_LastSet_bEndLotAutoRetestGPIB
+#define W7C2_LS_bFinEndLotAutoRetestGPIB  W7C2_LastSet_bFinEndLotAutoRetestGPIB
+#define W7C2_LS_bFirstTestAutoRetestGPIB  W7C2_LastSet_bFirstTestAutoRetestGPIB
+#define W7C2_LS_bBreakSCKART              W7C2_LastSet_bBreakSCKART
+
+// --- fMain absent members (golden main.h) not on the FormsFacade TfMain --------
+//     slLowYieldAlarm : golden TMyStringList* (low-yield alarm list).  Inert
+//     stand-in exposing Count / Strings[] / Clear() (offline: empty list). ------
+struct W7C2_TStrListSeam {
+    int Count;
+    AnsiString *Strings;      // indexable; empty offline
+    W7C2_TStrListSeam():Count(0),Strings(new AnsiString[1]){}
+    void Clear(){ Count=0; }
+};
+static W7C2_TStrListSeam    W7C2_fMain_slLowYieldAlarm;
+#define W7C2_FMAIN_SLLOWYIELD   (&W7C2_fMain_slLowYieldAlarm)
+//     cbRunStartMode : golden TComboBox* (run-start-mode combo; ->Text read). ---
+struct W7C2_TComboSeam { AnsiString Text; };
+static W7C2_TComboSeam      W7C2_fMain_cbRunStartMode;
+#define W7C2_FMAIN_CBRUNSTARTMODE (&W7C2_fMain_cbRunStartMode)
+//     Label12 : golden TLabel* Caption (ART retest-count display).  lvalue. -----
+static AnsiString           W7C2_fMain_Label12_Caption;
+#define W7C2_FMAIN_LABEL12      W7C2_fMain_Label12_Caption
+//     method stand-ins (offline no-op). ----------------------------------------
+#define W7C2_FMAIN_INITIALTRAYFEED(s)      do { (void)(s); } while(0)   // golden fMain->InitialTrayFeedTask(AnsiString)
+#define W7C2_FMAIN_DISABLESITEMAP(b,f)     do { (void)(b); (void)(f); } while(0) // golden fMain->DisableSiteMappingCheck(bool,AnsiString)
+#define W7C2_FMAIN_CHANGETESTERCONNECT(n)  do { (void)(n); } while(0)   // golden fMain->ChangeTesterConnect(int)
+#define W7C2_FMAIN_SETLOTSTATE(n)          do { (void)(n); } while(0)   // golden fMain->SetLotState(int)
+#define W7C2_FMAIN_CLARNDATA(n,s)          do { (void)(n); (void)(s); } while(0) // golden fMain->Clarn_Data(int,AnsiString)
+#define W7C2_FMAIN_BTNPAUSECLICK()         do { } while(0)   // golden fMain->BtnPauseClick(fMain) (inside if(fAutoTeach->IsRun()), false offline)
+
+// --- BLCarryKit.SetHasNullIcToNullIc (golden MyKitSuck.h) -- absent on the
+//     translated TMyKitSuck (it has SetNullIcToHasNullIc, the INVERSE).  Gate
+//     (inside if(bD58UseArm1PickPlaceArm2Test && bArm1PickPlaceArm2Test), false
+//     offline).  Integrate: add the real SetHasNullIcToNullIc to TMyKitSuck. -----
+#define W7C2_BLCARRYKIT_SETHASNULLIC()     do { } while(0)   // golden BLCarryKit.SetHasNullIcToNullIc()
+
+// --- fContact->rgHandlerMode->Enabled (golden cContact.h TRadioGroup*).  fContact
+//     exists (atester_shims TfContactShim) but rgHandlerMode is absent.  Gate. ---
+#define W7C2_FCONTACT_RGHANDLER_ENABLE()   do { } while(0)   // golden fContact->rgHandlerMode->Enabled=true
+
+// --- fHome->GaliMotorServoOff (golden uHome.h) -- fHome absent.  Gate. ----------
+#define W7C2_FHOME_SERVOOFF(f)             do { (void)(f); } while(0) // golden fHome->GaliMotorServoOff(AnsiString)
+
+// --- fAutoTeach->IsRun (golden AutoTeach.h) -- fAutoTeach absent.  offline: false
+#define W7C2_FAUTOTEACH_ISRUN()            (false)          // golden fAutoTeach->IsRun()
+
+// --- fSocketCommunication (golden cSocketCommunication.h) absent.  bOneCycleFormServer
+//     offline false so the OneCycle-from-server branch is never taken; ErrorMessage
+//     empty.  Inert seam object. -------------------------------------------------
+struct W7C2_TfSocketCommSeam { bool bOneCycleFormServer; AnsiString ErrorMessage;
+    W7C2_TfSocketCommSeam():bOneCycleFormServer(false){} };
+static W7C2_TfSocketCommSeam W7C2_fSocketComm;
+#define W7C2_FSOCKETCOMM        (&W7C2_fSocketComm)
+
+// --- fYieldMonitoring->ClearYieldCount / fCounterClear->WriteCTInfo /
+//     fContactCT->ClearData_AutoClean : the objects exist (aHotPlateSubstrate /
+//     W7C1 seam) but these specific members are absent.  Gate each (offline
+//     no-op). --------------------------------------------------------------------
+#define W7C2_FYIELD_CLEARCOUNT()           do { } while(0)   // golden fYieldMonitoring->ClearYieldCount()
+#define W7C2_FCOUNTER_WRITECTINFO()        do { } while(0)   // golden fCounterClear->WriteCTInfo()
+#define W7C2_FCONTACTCT_CLEARAUTOCLEAN()   do { } while(0)   // golden fContactCT->ClearData_AutoClean()
+
+// --- fLotInfo absent members (golden uLotInfo.h) -------------------------------
+#define W7C2_FLOTINFO_PRODTESTERREPORT()      do { } while(0)  // golden fLotInfo->ProductTesterReport()
+#define W7C2_FLOTINFO_CBRUNMODE_ITEMINDEX(x)  do { (void)(x); } while(0) // golden fLotInfo->cbRunMode->ItemIndex=x
+#define W7C2_FLOTINFO_CLEARBARCODE()          do { } while(0)  // golden fLotInfo->btClearBarcodeList->Click()
+
+// --- fSortCT absent members (golden cSortCT.h) ---------------------------------
+#define W7C2_FSORTCT_SHOWLOADING()         do { } while(0)   // golden fSortCT->ShowLoadingIC()
+#define W7C2_FSORTCT_SHOWSORT()            do { } while(0)   // golden fSortCT->ShowSortIC()
+
+// --- fTrayMapping->ClearTrayIDByLot (golden TrayMapping.h) -- member absent.  Gate.
+#define W7C2_FTRAYMAP_CLEARTRAYIDBYLOT()   do { } while(0)   // golden fTrayMapping->ClearTrayIDByLot()
+
+// --- LotSummary (golden cLotSummary.h) absent.  Gate ClearRTData(). -------------
+#define W7C2_LOTSUMMARY_CLEARRTDATA()      do { } while(0)   // golden LotSummary.ClearRTData()
+
+// --- EventReport(SECS_EVENT.X) : SECS_EVENT (ETypeStruct) lacks the OneCycleFinish
+//     / ArtFTFinish / ArtRTFinish members (mirrors the W7C1 CleanOutFinish gate).
+//     All three calls are inside if(IniConfig.bEnable_SECS_GEM) (false offline). -
+#define W7C2_EVENTREPORT_ONECYCLEFINISH()  do { } while(0)   // golden EventReport(SECS_EVENT.OneCycleFinish) // 41 One Cycle Finish
+#define W7C2_EVENTREPORT_ARTFTFINISH()     do { } while(0)   // golden EventReport(SECS_EVENT.ArtFTFinish)    // 63 ART FT finish
+#define W7C2_EVENTREPORT_ARTRTFINISH()     do { } while(0)   // golden EventReport(SECS_EVENT.ArtRTFinish)    // 61 ART RT finish
+
+// --- absent FREE functions -----------------------------------------------------
+static bool W7C2_InArmSuckState(){ return false; }        // golden -- any in-arm picker vacuum on? offline none
+#define InArmSuckState         W7C2_InArmSuckState
+static bool W7C2_OutArmSuckState(){ return false; }       // golden -- any out-arm picker vacuum on? offline none
+#define OutArmSuckState        W7C2_OutArmSuckState
+static bool W7C2_DoLoaderTrayFeed(){ return true; }       // golden -- loader clean-out tray feed; offline: done (true)
+#define DoLoaderTrayFeed       W7C2_DoLoaderTrayFeed
+static void W7C2_DoInArm_SuckerMap(){}                    // golden -- rebuild in-arm sucker map after site mapping
+#define DoInArm_SuckerMap      W7C2_DoInArm_SuckerMap
+static bool W7C2_CheckNeedToRT(){ return false; }         // golden -- need auto-retest? offline: no
+#define CheckNeedToRT          W7C2_CheckNeedToRT
+static int  W7C2_ShowMyMessageBox_YES_NO(AnsiString /*s1*/, AnsiString /*s2*/=""){ return 0; } // golden mymessbox.h -- offline: NO(0)
+#define ShowMyMessageBox_YES_NO W7C2_ShowMyMessageBox_YES_NO
+static void W7C2_DoAutoRetest(bool /*b*/){}               // golden -- kick auto-retest sequence
+#define DoAutoRetest           W7C2_DoAutoRetest
+static void W7C2_MySleep(unsigned long /*ms*/){}          // golden common.h:261 MySleep -- offline no-op (acarry_shims/common not included here)
+#define MySleep                W7C2_MySleep
+
+// --- absent FREE globals -------------------------------------------------------
+static bool W7C2_bOnecycleTrayFeed = false;   // golden cmydef -- one-cycle tray-feed request (Steven 20110525)
+#define bOnecycleTrayFeed      W7C2_bOnecycleTrayFeed
+static bool W7C2_bFix3_OneCycleTimeSet = false; // golden cmydef -- Fix3 one-cycle alarm timer set flag
+#define bFix3_OneCycleTimeSet  W7C2_bFix3_OneCycleTimeSet
+
+// --- header-declared, GATED-body leaves the finish path calls (link-only) ------
+//  W7-C2 INTEGRATE: these are declared in csystem.h / cprod.h but their REAL
+//  bodies are #if 0-gated in the untranslated app code (csystem.cpp finish-path
+//  ladder / cprod.cpp:184 TODO(W6) gate), so they are UNDEFINED at link.  Only
+//  csystem.cpp references them (verified: no other linked TU does), so a TU-local
+//  `#define realname W7C2_realname` + static offline stand-in is safe and matches
+//  the seam convention.  Every one sits on the ONE CYCLE FINISH terminal path
+//  (reached only after all wait cursors 1..21/1003 pass) or the offline-false
+//  AutoSiteMap sub-path, so it is inert offline; Integrate binds the real bodies
+//  when those units are translated.  AI(W7C2-Integrate) 20260701.
+static void W7C2_DoSiteMappingResult(){}                        // golden csystem.cpp -- Auto Site Mapping result write
+#define DoSiteMappingResult    W7C2_DoSiteMappingResult
+static void W7C2_ReadWriteBinCountMode(bool /*bRead*/){}        // golden csystem.cpp -- Bin1/Bin2... count record
+#define ReadWriteBinCountMode  W7C2_ReadWriteBinCountMode
+static void W7C2_AutoTrayCylinderFree(){}                       // golden csystem.cpp -- release Auto-Tray cylinders
+#define AutoTrayCylinderFree   W7C2_AutoTrayCylinderFree
+static bool W7C2_EmptySocketCheckModeBeUse(){ return false; }   // golden csystem.cpp -- offline: no empty-socket-check mode
+#define EmptySocketCheckModeBeUse W7C2_EmptySocketCheckModeBeUse
+static bool W7C2_WriteLastDataFile(bool /*BackUp2*/=false, bool /*bNotContact*/=false){ return true; } // golden cprod.cpp:1944 (gated); offline: write ok
+#define WriteLastDataFile      W7C2_WriteLastDataFile
+static int  W7C2_iClearSocketFunctionTask = 0;                  // golden csystem.h:61 (extern int) -- clear-socket sub-task cursor
+#define iClearSocketFunctionTask W7C2_iClearSocketFunctionTask
+
+#endif // W7C2_SEAM
+
+// ===========================================================================
+//  DoOneCycleFinishCheck  -- golden csystem.cpp:12813-14047 (~1235 lines).
+//  THE one-cycle-finish check FSM.  Translated FAITHFULLY this wave (W7-C2):
+//  the if(iOneCycle) entry guard, every iOneCycleTask cursor transition (0..21
+//  plus 1003), every grid-backed predicate read, the customer/mode branches
+//  (KYEC Fix3 / bUseTwoArm32Site / Rotate / AOI / AutoSiteMap / SCK AutoClean /
+//  QA-Mode / SECS EventReport / Low-Yield / Contact / PickerLife / ART), and
+//  the ONE SOFT_SIMULTE region (the commented //#ifndef SOFT_SIMULTE MES1650
+//  block) are reproduced VERBATIM.  The #ifdef DEBUG_DUTONOFF /
+//  #ifdef DEBUG_OneCycleContinous blocks are reproduced verbatim (both macros
+//  undefined -> those blocks compile OUT, matching the golden default build).
+//  Those branches are INERT offline (their guards CUSTOMER_CODE / IniConfig.* /
+//  CosFunction.* / iOneCycle-gating are false) but must compile+link -- the
+//  W7C2_SEAM block above supplies stand-ins for symbols not yet in the tree.
+//
+//  NO-REGRESSION KEY: the whole body is gated on the global iOneCycle, which
+//  the W6.6 hub and every existing suite leave 0 (the only flipping seam,
+//  fMain->BtnOneCycle->Down, is offline-false), so the body is INERT for every
+//  currently-passing suite (byte-identical).  The final else-branch (golden
+//  :14025) reproduces the BtnOneCycle->Down latch that would set iOneCycle=1.
+// ===========================================================================
+void DoOneCycleFinishCheck()
+{
+    bool bCleanOut=false;
+    bool bNeedTrayFeed=false;
+    bool bI09_NeedOneCycleAgain=false;                                          //JerryYang 20220923 : yield alarm時觸發half one cycle(shuttle保留IC不測試跳ONE CYCLE FINISH)
+    int ret=0;
+    bool bQAModeTrayEnd=false;                                                  //Steven 20120615
+    AnsiString AlarmCode, ErrPart;
+
+    if(iOneCycle)
+    {
+        if(CUSTOMER_CODE==CC_KYEC_LEE)                                          //Ifor 20190516 :add KYEC 避免Fix3 Full功能導致無預警Hang up 新增Alarm
+        {
+            if(FIX3_FULL_PLACE==Fix3K_UseCylinder && Cylinder[C_FixTray_FullPlace].OffSensor()==false)                  //Steven 20150914 : Fixed for FIX3_FULL_PLACE==2  //JerryYang 20180129 (Steven) Mark掉,改用Pop判斷
+            {
+                iOneCycleTask=1;
+                ShowMyMessage("Please Check the Cylinder 'C_FixTray_FullPlace'.", "請確認汽缸'C_FixTray_FullPlace'。");
+                return;
+            }
+        }
+
+        if(IniConfig.bD51UseOnecycleCleanOutFinishTestArmAtRear)
+        {
+            if(IndexStatus!=IndexIsBack)
+            {
+                iOneCycleTask=2;
+                return;
+            }
+        }
+        else
+        {
+            if(IndexStatus!=Z1_Z2_Normal)
+            {
+                iOneCycleTask=3;
+                return;
+            }
+        }
+
+        if(bNeedOneCycleByYieldAlm==true &&                                     //ChungHung 矽格湖口 20110602 IC未交換完成照程掉料
+           CanYieldAlarmRemainInSHT())                                          //JerryYang 20230131 : fix one cycle hang up
+        {
+            if(OutArmSuckState())
+            {                                                                   //新增偵測所有吸嘴狀態
+                iOneCycleTask=4;
+                return;
+            }
+        }
+        else
+        {
+            if(InArmSuckState() || OutArmSuckState())
+            {
+                iOneCycleTask=4;
+                return;
+            }
+        }
+
+        if(bUseTwoArm32Site==true)                                              //kevin 20190710 32 Site use add onecycle 後 arm 在下
+        {
+            if(bRunAutoClean)                                                   //Steven 20220920 : Fix for auto clean close site hang up
+            {
+                iOneCycleTask=16;
+                return;
+            }
+
+            if(InArmSuck.HasIC()==false &&
+               IndexHasIC()==false &&
+               OutArmSuck.HasIC()==false &&                                     //Steven 20220712 : 修正one cycle之後, shuttle上面遺留HAS_NULL_IC造成Hang up
+               FRCarryKit.UseSiteHasIC()==false &&
+               BRCarryKit.UseSiteHasIC()==false &&
+               AllArmZIsSafe())
+            {
+                if(FLCarryKit.HasRealIC()==false &&
+                   BLCarryKit.HasRealIC()==false)                               //Steven 20230309 : fixed for NN mode hang up
+                {
+                    FLCarryKit.ClearAll();
+                    BLCarryKit.ClearAll();
+                }
+
+                iOneCycleTask=16;
+            }
+
+            if(iTestTwoArm32SiteTask==230)
+            {
+                iOneCycleTask=10;
+                return;
+            }
+        }
+
+        if(IndexStatus==Z1_Z2_Normal)                                           //Steven 20240110 : 修正one cycle之後, socket上面遺留HAS_NULL_IC造成Hang up
+        {
+            if(InArmSuck.HasIC()==false &&
+               IndexHasRealIC()==false &&                                       //Steven 20240217 : Fixed for one cycle / clean out hang up
+               OutArmSuck.HasIC()==false &&
+               FRCarryKit.UseSiteHasIC()==false &&
+               BRCarryKit.UseSiteHasIC()==false &&
+               AllArmZIsSafe())
+            {
+                if(TestSocket.HasRealIC()==false)
+                {
+                    TestSocket.ClearAll();
+                }
+            }
+        }
+
+        if(bNeedOneCycleByYieldAlm==true && CanYieldAlarmRemainInSHT())         //JerryYang 20220923 : yield alarm時觸發half one cycle(shuttle保留IC不測試跳ONE CYCLE FINISH)
+        {
+            if(OutArmSuck.HasIC() || OutputShuttleHasIC() ||
+               IndexHasIC() || AllArmZIsSafe()==false)
+            {
+                iOneCycleTask=5;
+                return;
+            }
+        }
+        else
+        {
+            if(InArmSuck.HasIC() ||                                             //ChungHung 20130426 add
+               OutArmSuck.HasIC() ||
+               ShuttleHasIC() ||
+               IndexHasIC() || AllArmZIsSafe()==false)
+            {
+                iOneCycleTask=5;
+                return;
+            }
+        }
+
+        if(USE_ROTATE_KIT==1  && tRotate.ActiveRotate)                          //kevin 20130812 有ROTATE裝置沒有使用ROTATE功能  //jou 2013-03-01 Rotate kit
+        {
+            if(iRotate_Type==eInOutArm1Motor)
+            {
+            }
+            else if(MOT[MInRotateKit].HasIC() || MOT[MOutRotateKit].HasIC())
+            {
+                iOneCycleTask=6;
+                return;
+            }
+        }
+
+        if(USE_AOI_Inspection)
+        {
+            if(AOIKit.HasIC())
+            {
+                iOneCycleTask=7;
+                return;
+            }
+        }
+
+        if(PitchCylinderState[0]!=0 ||
+           PitchCylinderState[1]!=0 ||
+           PitchCylinderState[2]!=0)
+        {
+            iOneCycleTask=8;
+            return;
+        }
+
+        if(CheckIndexIsNormal()==false)
+        {
+            iOneCycleTask=9;
+            return;
+        }
+
+        if(IsNNMode()==NN_1Row)                                                 //kevin 20190710 32 Site use add onecycle 後 arm 在下
+        {
+            if(iTestTwoArm32SiteTask==230)
+            {
+                iOneCycleTask=10;
+                return;
+            }
+        }
+
+        if(IsTrayArmMoveAvoidOutArmCrash() ||
+           iCatchTrayControlManual>=2)                                          //jou 2011-02-17
+        {
+            iOneCycleTask=11;
+            return;
+        }
+
+        if(AllArmZIsSafe()==false)
+        {
+            iOneCycleTask=12;
+            return;
+        }
+
+        if(InSHT1InLF()==false)
+        {
+            iOneCycleTask=13;
+            return;
+        }
+
+        if(IniConfig.bIndexArm2SupplyLight==false &&                            //jou 2012-10-19 Index Arm 2 供應光源 for CMOS
+           TestIF_File.bForEgisTecTest==false     &&                            //Steven 20140922 : Arm2當作指紋測試
+           TestIF_File.bArm1PickPlaceArm2Test==false)                           //kevin 20150127 Arm1 下壓 arm2 測試
+        {
+            if(InSHT2InLF()==false)
+            {
+                iOneCycleTask=14;
+                return;
+            }
+        }
+
+        if(bRunAutoClean==true && fContact->IsRun2DCheck()==false)              //JerryYang 20250328 : fix auto clean 與2D Gating同時觸發one cycle hang up
+        {
+            iOneCycleTask=15;
+            return;
+        }
+
+        if(FIX3_FULL_PLACE==Fix3K_UseCylinder)                                  //Ifor 20190516 :add KYEC 避免Fix3 Full功能導致無預警Hang up 新增Alarm
+        {
+            if(bShuttleMoveToLeftforFix3)                                       //Steven 20220526 : 修正Fix3氣缸要在One Cycle之前打回去
+            {
+                iOneCycleTask=17;
+                return;
+            }
+            else if(Cylinder[C_FixTray_FullPlace].OffSensor()==false)
+            {
+                Cylinder[C_FixTray_FullPlace].Off();                            //Steven 20200730 : 修正One Cycle會死雞的問題
+                if(bFix3_OneCycleTimeSet==false)                                //避免汽缸移動時兩顆 Sensor Off時誤報Alarm
+                {
+                    bFix3_OneCycleTimeSet=true;
+                    FixTrayAlarmCheck.SetSecAndOn(5);
+                }
+
+                if(FixTrayAlarmCheck.Off())
+                {
+                    ShowMyMessage("Please Check the Cylinder 'C_FixTray_FullPlace'.", "請確認汽缸'C_FixTray_FullPlace'。");
+                    bFix3_OneCycleTimeSet=false;
+                }
+                iOneCycleTask=17;
+                return;
+            }
+        }
+        else if(FIX3_FULL_PLACE==Fix3K_UseStepperMotor &&
+                Fix3MoveToLeft(false)==false)                                   //Jimmychiu 20240401 : FIX3回到右側
+        {
+            iOneCycleTask=1003;
+            return;
+        }
+
+        bFix3_OneCycleTimeSet=false;
+
+        if(MOT[MMAuto1_Car].fHasTray ||                                         //JerryYang 20191113 Auto退完tray再跳出one cycle finish
+           MOT[MMAuto2_Car].fHasTray ||
+           MOT[MMAuto3_Car].fHasTray ||
+           MOT[MMAuto4_Car].fHasTray ||
+           MOT[MMAuto5_Car].fHasTray ||
+           MOT[MMAuto6_Car].fHasTray)
+        {
+            iOneCycleTask=18;
+            return;
+        }
+
+        if(bPlaceToHotplate==true)
+        {
+            iOneCycleTask=19;
+            return;
+        }
+
+        if(FIX3_FULL_PLACE==Fix3K_UseCylinder &&                                //JerryYang 20220718 : 修正汽缸流程還沒把shuttle canMove的flag解開就跳one cycle finish, 造成後續hang up
+           (iFix3CanFullTask==50 || iFix3CanFullTask==51 || iFix3CanFullTask==65))
+        {
+            iOneCycleTask=20;
+            return;
+        }
+
+        if(AUTO3_IS_MAGAZINE==1 && (bChaneMagTrayflag || bMagGetNewTrayflag))   //Ifor 20240905 add:MAGAZINE 動作完成後才可OneCycle Finish
+        {
+            iOneCycleTask=21;
+            return;
+        }
+
+        if(bDoLoaderCleanOut)                                                   //kevin 20211106 確認吸取數量完收load tray  //pig 2011.11.08
+        {
+            if(DoLoaderTrayFeed()==false)
+                return;
+            else
+                bDoLoaderCleanOut=false;
+        }
+        InitInArmTask();
+        InitOutArmTask();
+        bIndexArmNoTestting=false;                                              //ChungHung 20140730 add ContinuousFailHaveOneCycle
+        for(int i=0; i<4; i++)
+            Temperature.iATCCurrentFailCount[i]=0;                              //Steven 20151123 : Continue Fail Temp Offset for ATC
+
+        iOneCycleTask=0;
+        if(CUSTOMER_CODE==CC_ASE_CL)                                            //JerryYang 20250728 : Thomas要求只有跳出ONE CYCLE FINISH視窗才發報Event
+        {
+        }
+        else
+        {
+            if(IniConfig.bEnable_SECS_GEM==true)                                //Steven 20140528 : Secs Gem
+                W7C2_EVENTREPORT_ONECYCLEFINISH();                         //41     One Cycle Finish
+        }
+
+        W7C1_FLTCSENSOR_CLEAR(1);                                          //Steven 20140805 : 將Latch清空，確保沒有問題
+        W7C1_FLTCSENSOR_CLEAR(0);                                          //Sam 20221101 : Latch 清除都要確認是否清清乾淨
+
+        if(IniConfig.bSPILFunction==true)                                       //JerryYang 20220927 : Jovie要求要跳ONE CYCLE FINISH並開門按Z1
+        {
+        }
+        else
+        {
+            bOutShtLoseICNeedSetErrBin=false;                                   //JerryYang 20170609 (wei) for JSCC 清除旗標
+            bIndexDropICNeedSetErrBin=false;
+            ZeroMemory(bTestSiteNeedSetErrBin, sizeof(bTestSiteNeedSetErrBin));
+        }
+
+        ResetShuttleWhichKit();                                                 //Steven 20220319 : 換到下面
+
+        ZeroMemory(bPickLoaderDuplicateErr, sizeof(bPickLoaderDuplicateErr));
+        ZeroMemory(bPickHPDuplicateErr, sizeof(bPickHPDuplicateErr));
+        ZeroMemory(bTryPickHPDuplicateErr, sizeof(bTryPickHPDuplicateErr));
+        if(IniConfig.bD58UseArm1PickPlaceArm2Test==true &&
+           TestIF_File.bArm1PickPlaceArm2Test==true     )
+        {
+            if(Prod.TestY2_Middle==Prod.TestY2_Rear ||
+               Prod.TestZ2_Test==Prod.TestZ2_Safe ||
+               iBackUpZ2DownPosition==Prod.TestZ2_Safe)
+            {
+                Prod.TestY2_Middle      =iBackupTestY2_Middle;
+                Prod.TestZ2_Test        =iBackupTestZ2_Test;
+                Prod.TestZ2_Drop_Offset =iBackupTestZ2_Drop;
+                iBackUpZ2DownPosition   =Prod.TestZ2_Test;
+            }
+        }
+        bCheckGiveWay=false;                                                    //Ifor 20200521 Fix:清除RTC旗標
+        bNeedCheckRTCReport=false;                                              //Ifor 20200521 Fix:清除RTC旗標
+
+        if(IniConfig.bEnableSocketCommunication &&
+           W7C2_FSOCKETCOMM->bOneCycleFormServer)                           //ChungHung 20130112 add for ASE_KR Socket Tester
+        {
+            W7C2_FSOCKETCOMM->bOneCycleFormServer=false;
+
+            ShowMyMessage("OneCycle Form Server", W7C2_FSOCKETCOMM->ErrorMessage, W7C2_FSOCKETCOMM->ErrorMessage);
+            ret=K_RETRY;                                                        //Steven 20260612 : Fix == to = (was comparison, not assignment)
+        }
+        else if(_bHomeNeedOnecycle==false && iClearSocketFunction==0)
+        {
+            if(bSECSOneCycleComm==true)                                         //RogerYang 20170705 (wei) 避免 SECS 下 OneCycle 後，AutoClean 結束時不跳 OneCycle Finish
+            {
+                if(IniConfig.bSPILFunction==true)
+                {
+                    bIsAutoOneCycle=false;
+                }
+                bSECSOneCycleComm=false;
+            }
+
+            if(CosFunction.bUSEJCETSiteMapMode==true &&                         //jou 2016-11-02 JCET要求Auto Site mapping mode做完接續測
+               IniConfig.bUseAutoSiteMapping &&
+               LastSet.iRunStartMode==rsmAutoSiteMap &&
+               bASMFinishOneCycle==true &&
+               bAutoSiteMapWaitTestPass==true)
+            {
+                if(bSiteMappingCHKOK==false)
+                {
+                    DoSiteMappingResult();
+                    DoInArm_SuckerMap();
+                    bASMFinishOneCycle=false;
+                }
+            }
+            else if((CUSTOMER_CODE==CC_ASE_M || CUSTOMER_CODE==CC_ASE_CL) &&    //JerryYang 20250120 : add   //Ifor 20180417 :add ASE_M Auto Site mapping mode做完接續測試
+                    IniConfig.bUseAutoSiteMapping &&
+                    LastSet.iRunStartMode==rsmAutoSiteMap &&
+                    bASMFinishOneCycle==true && bAutoSiteMapWaitTestPass==true)
+            {
+                if(bSiteMappingCHKOK==false)
+                {
+                    DoSiteMappingResult();
+                    DoInArm_SuckerMap();
+                    bASMFinishOneCycle=false;
+                }
+            }
+            else if(LastSet.iRunStartMode==rsmAutoSiteMap &&                    //Steven 20120830 : AutoSiteMapping, 手動移除Loader Tray
+                    bASMFinishOneCycle &&
+                    CUSTOMER_CODE!=CC_ASE_CL)                                   //JerryYang 20250120 : add
+            {
+                ret=K_TRAY_FEED;
+            }
+            else if(bIsAutoOneCycle ||
+                    bResetMode ||                                               //kevin 20151112 add Reset 起動 Autoclean 起動 造成RESET 無法關閉
+                    bDoEmptySocketOneCycle ||
+                    bIsASMAutoOneCycle)                                         //JerryYang 20161121 拿掉bNeedOneCycleByYieldAlm==false, one cycle finish時要判斷是否show yield alarm  //JerryYang 20250120 : add
+            {
+                if(bDoEmptySocketOneCycle)                                      //Steven 20201022 : For RFMD Empty Socket Check Funstion.
+                {
+                    bDoEmptySocketOneCycle=false;
+
+                    if(REAL_TIME_CCD==true && !COM2->bCCDDummyRum)              //Steven 20120222 : Real Time CCD 新增One cycle完成時送出@END+動作來停止檢測動作, 要在Alarm之前,給OA喘息的機會
+                    {
+                        COM2->DoReleaseAndInspEnd();
+                    }
+                    //---------------------------------------
+
+                    if(INSTALL_OCR!=eocrUninstal && TestIF.bOcrFunction)        //Steven 20120716 : OCR    //ChungHung 20120830 add OCR Function
+                    {
+                        W7C1_FOCR_RELEASEINSPEND();
+                    }
+                    bResetMode=false;
+                    InitialIndexSocketCheckTask();
+                    bDoEmptySocketCheck=true;
+
+                    RecordProcess("EmptySocketOneCycle Finsih");
+                    RecordProcess("Start EmptySocketCheck");
+                }
+
+                if(bResetMode)                                                  //kevin 20151112 add
+                {
+                    if(REAL_TIME_CCD==true && !COM2->bCCDDummyRum)              //Steven 20120222 : Real Time CCD 新增One cycle完成時送出@END+動作來停止檢測動作, 要在Alarm之前,給OA喘息的機會
+                    {
+                        COM2->DoReleaseAndInspEnd();
+                    }
+                    //---------------------------------------
+
+                    if(INSTALL_OCR!=eocrUninstal && TestIF.bOcrFunction)        //Steven 20120716 : OCR    //ChungHung 20120830 add OCR Function
+                    {
+                        W7C1_FOCR_RELEASEINSPEND();
+                    }
+
+                    if(IniConfig.bOneCycleNeedPowerOff==true)                   //Steven 20110214 : OneCycle時要Poewr Off
+                    {
+                        ret=ShowErrorMessage("MES1641", K_RETRY|K_HOME|K_CLEAN_OUT, MMSystem, false);                   //reset finish  //Steven 20240328 : K_SKIP --> K_HOME
+                    }
+                    else
+                    {
+                         ret=ShowErrorMessage("MES1641", K_RETRY|K_CLEAN_OUT, MMSystem, false);                         //kevin 20140412 cancel skip  //reset finish
+                    }
+
+                    if(ret==K_CLEAN_OUT &&
+                       IniConfig.bA17_1RESETCleanOutWithoutTest)                //JimmuyChiu 20211012   Add Reset->Clean out with no testing
+                    {
+                        bResetModeAndCleanOutAndNoTest=true;
+                    }
+                    else
+                    {
+                        bResetModeAndCleanOutAndNoTest=false;
+                    }
+                    bReOpenGpib=true;                                           //Steven 20101013
+                    bInitialMaxTime=true;                                       //jou 2011-11-09 增加initial max time set
+                    bResetMode=false;
+                    bLampReset=false;
+                    bOutShuttleMissIC=false;                                    //wei 20160509 Out Shuttle Miss IC
+                    bTestEPaddKg=false;                                         //jou 20171024
+                }
+
+                if(bIsAutoOneCycle && LastSet.iRunStartMode!=rsmAutoSiteMap)
+                {
+                    bFirstDeviceInitialTestDelayWhichOutAfterAutoClean=true;    //ChungHung 20140105 add for SCK
+
+                    if(LastSet.iTemperature==Tempture_Hot && MOT[MMPlate1].HasIC()==false && MOT[MMPlate2].HasIC()==false)                                      //JerryYang 20251124 : 修正non hot plate模式觸發auto clean後，沒有優先使用auto clean預熱秒數進行預熱
+                        bFirstDeviceInitialTestDelayWhichOutAfterAutoClean=false;
+
+                    RecordProcess("ONE CYCLE Finished by Auto Clean.");         //Steven 20130618 : 紀錄Auto Clean
+                    if(CosFunction.bYieldAlmNeedOneCycle &&
+                       bNeedOneCycleByYieldAlm)                                 //JerryYang 20161121 one cycle finish時要判斷是否show yield alarm
+                    {
+                        W7C2_FYIELD_CLEARCOUNT();                    //JerryYang 20160401 : Yield相關的Alarm, 要清掉全部的Ignore的Count重算
+                        for(int i=0; i<W7C2_FMAIN_SLLOWYIELD->Count; i++)
+                        {
+                            AlarmCode=W7C2_FMAIN_SLLOWYIELD->Strings[i].SubString(1, W7C2_FMAIN_SLLOWYIELD->Strings[i].AnsiPos(",")-1);
+                            ErrPart=W7C2_FMAIN_SLLOWYIELD->Strings[i].SubString(W7C2_FMAIN_SLLOWYIELD->Strings[i].AnsiPos(",")+1, W7C2_FMAIN_SLLOWYIELD->Strings[i].Length());
+                            ShowErrorMessage(AlarmCode, 0, MMInterface, 0, ErrPart);
+                        }
+                        W7C2_FMAIN_SLLOWYIELD->Clear();
+                    }
+
+                    if(TestIF.iAutoClean_Function)                              //Eliot 2008_07_29
+                    {
+                        //if(CosFunction.bSmartAutoClean && bRunACAdaptive)      //Sam 20240726 : AI Clean Mark //Sam 20230914 : 自適應性良率監控
+                        //{
+                                                                                //不要清除
+                        //}
+                        //else
+                        //{
+                            //Steven 20260427 : ATK P260427-ATK-H9-01 disable redundant reset
+                            //                  AutoClean.cpp:5153 already resets after Auto Clean Finish.
+                            //                  This second reset on Clean Out path was the perceived double reset.
+                            //iAutoClean_IndexContactCount=0;
+                        //}
+                        lAutoClean_TimeCount=0;                                 //jou 20250102 : auto clean triger time count
+                        W7C2_FCONTACTCT_CLEARAUTOCLEAN();                      //ChungHung 20131225 add for SCK
+                        bRunAutoClean=true;
+                        hAutoCleanHangUp.SetSecAndOn(Prod.iHangupMaxTime);      //Steven 20220702 : 針對Auto Clean的Hang Up偵測
+                    }
+
+                    if(IniConfig.bE53LowYieldAutoClean)                         //wei 20141201 Low Yield Auto Clean(%) start
+                    {
+                        if(bLowYieldCleanOut)
+                        {
+                            ret=K_CLEAN_OUT;
+                        }
+                        else
+                        {
+                            bLowYieldAutoCleanEnd=false;                        //wei 20141216  LowYieldautoclean  避免重複進去
+                        }
+                    }
+                    else
+                    {
+                        if(CosFunction.bYieldAlmNeedOneCycle &&
+                           bNeedOneCycleByYieldAlm)                             //JerryYang 20161118 避免show yield alarm後沒按start就開始做auto clean
+                            bNeedOneCycleByYieldAlm=false;
+                        else
+                            W7C1_FMAIN_START("DoOneCycleFinishCheck 1");
+                    }
+
+                    if(CosFunction.bYieldAlmNeedOneCycle &&
+                       bNeedOneCycleByYieldAlm)                                 //JerryYang 20161118 show完yield Alarm 要把旗標清成false
+                        bNeedOneCycleByYieldAlm=false;
+                    bIsAutoOneCycle=false;                                      //Eliot 2007_0926
+                    bIsAutoOneCycleAutoclean=false;                             //kevin 20120710 autoclean
+                }
+                else if(bIsASMAutoOneCycle)                                     //JerryYang 20250120 : add
+                {
+                    if(IniConfig.bUseAutoSiteMapping && IniConfig.bI21EnableASM && bIsAutoOneCycle==false)
+                    {
+                        if(MOT[MMTrayY].fHasTray==true || MOT[MMTrayY_Car].fHasTray==true)
+                        {
+                            if(W7C2_FMAIN_CBRUNSTARTMODE->Text==StartModeName[rsmContinuStart] || W7C2_FMAIN_CBRUNSTARTMODE->Text==StartModeName[rsmContinuRetest])
+                            {
+                                if(CosFunction.bUseOpenCloseSiteMapAtAnyTime==true && bSiteMappingNeedCheck==false)     //Ifor 20190308 : add 隨時開關 Site Mapping
+                                {
+                                }
+                                else
+                                {
+                                    SetRunStartMode(rsmAutoSiteMap);
+                                }
+                            }
+                        }
+                    }
+                    bIsASMAutoOneCycle=false;
+                    RecordProcess("ONE CYCLE Finished by Auto Site Mapping.");  //Steven 20130618 : 紀錄Auto Clean
+                }
+            }
+            else
+            {
+                SetInArmSpeed(false, true);                                     //jou 2014-10-08 One Cycle後要重置 Auto Speed down Speed
+                if(bTrySuckHotPlateOneCycle==true &&                            //ChungHung 20120206 Hotplate check
+                   LastSet.iTemperature==Tempture_Hot)
+                {
+                    bHotPlateCheckNeedTrayFeed=false;
+                    bOneTimeHotPlateCheckAll=false;
+                    bTrySuckHotPlateOneCycle=false;
+                    bNeedTrySuckHotPlate=false;                                 //ChungHung 20120206 Hotplate check
+                    ret=K_RETRY;
+                    ShowMyMessage("Plase Check Hotplate First", "請確認Hotplate");
+                }
+                else if(bQAModeQuickCleanOut)
+                {
+                    if(Prod.iQAModeRunType==1)                                  //Steven 20120612 : QA做完後的動作
+                    {
+                        if(LastSet.iTemperature==Tempture_Hot ||                //Steven 20121016 : QA Mode
+                           LastSet.iTemperature==Tempture_AmbientHot)           //kevin 20180811 (Steven) : add 恆溫控制
+                        {
+                            ret=K_CLEAN_OUT;
+                        }
+                        else
+                        {
+                            if(CUSTOMER_CODE==CC_SCS)                           //wei 20121227  4b)After QA Mode finished, Stats required the Tray Feed option only.
+                            {
+                                ret=ShowErrorMessage("MES1648", K_TRAY_FEED, MMSystem, false);                          //QA Mode finish
+
+                                MOT[MMTrayY].ClearTray(__FUNC__);               //jou 2013-07-19 SCS要求QA mode做完要把Loader汽缸放開
+                                Cylinder[C_TrayY_Fixer].Off();
+                                Cylinder[C_LoaderEdgePush].Off();
+                                Cylinder[C_LoaderUpPress].Off();                //JerryYang 20181120 (Steven) : (Steven) : 獨立控制loader壓tray
+                            }
+                            else
+                            {
+                                ret=ShowErrorMessage("MES1648", K_RETRY|K_SKIP|K_CLEAN_OUT|K_TRAY_FEED|K_TRAY_END, MMSystem, false);                            //QA Mode finish
+                            }
+                            SetRunStartMode(rsmContinuStart);
+
+                            IniConfig.bQAModeFirstIn    =true;
+                            LastSet.iTester             =IniConfig.iBackUpTesterMode;
+
+                            if(LastSet.iTester==ON_LINE)                        //Steven 20150713 : 整理LastSet.iTester
+                                NewRecordProcess("MES2157", "Change to On_Line", "by OneCycle QAModeQuickCleanOut QAMode");                                     //ChungHung 20140722 add add record
+                            else
+                                NewRecordProcess("MES2155", "Change to Off_Line", "by OneCycle QAModeQuickCleanOut QAMode");                                    //ChungHung 20140722 add add record
+
+                            ArmSpeed[InArm].bVariModeFIX=IniConfig.bBackUpInArmMode;
+                            TrayForm.bAutoFeed          =IniConfig.bBackUpAutoFeed;
+                            bQAModeFinishCleanOut       =false;
+                            bQAModeQuickCleanOut=false;
+                        }
+                    }
+                    else
+                    {
+                        ret=K_CLEAN_OUT;
+                    }
+                }
+                else if(bCheckIndex)                                            //Steven 20101116
+                {
+                    InitialPiggyBackFunction();                                 //Steven 20110725 : 重置Piggy Back的狀態
+                    bPiggyBackIndexCheck=true;                                  //jou 2014-09-03 Function State Stop Firt Initital Delay Time
+                    W7C1_FMAIN_START("DoOneCycleFinishCheck 2");
+                }
+              #ifdef DEBUG_DUTONOFF
+                else if(fAutomation->bOneCycle)                                 //Steven 20110902 : 自動找蟲蟲模式
+                {
+                    AnsiString Data[2]={0, 0};
+                    fAutomation->CommandProcess("ONECYCLE_REPLY", 1, Data);
+                    fAutomation->bOneCycle=false;
+                    W7C1_FBARCODE_CHANGE2D();                              //Steven 20160425 : 重置2DSys時間
+                    W7C1_FTRAYMAP_CHANGETRAY();                        //wei 20161219 Tray Mapping
+                    fMain->Pause("fAutomation");
+                }
+              #endif
+                else
+                {
+                    if(IniConfig.bUseAutoSiteMapping==true &&
+                       IniConfig.bI21EnableASM==true &&
+                       bASMFinishOneCycle==false && bCheckIndex==false &&
+                       bIsAutoOneCycle==false && bQAModeQuickCleanOut==false)
+                    {
+                        if(CUSTOMER_CODE==CC_ASE_CL)                            //JerryYang 20250120 : add
+                        {
+                        }
+                        else
+                        {
+                        if(IniConfig.bI50_EnableAutoSiteMappingTrigger==true &&                                         //Jimmychiu 20230707 : Auto Site Mapping Trigger Function
+                           IniConfig.bI50_OnyCycle==true)                       //Steven 20241205 : 修正one cycle後觸發auto site map
+                        {
+                            if(LastSet.iRunStartMode==rsmAutoSiteMap)           //Steven 20220602 : for Auto Site map
+                            {
+                                if(LastSet.iTemperature==Tempture_Hot ||
+                                   LastSet.iTemperature==Tempture_AmbientHot)
+                                {
+                                    if(bAutoSiteMapHasPickHP)
+                                        iResetSiteMappingStep=1;
+//                                    else
+//                                        iDoSiteMappingStep=0;
+                                }
+                                /*
+                                else
+                                {
+                                    iDoSiteMappingStep=0;
+                                }
+                                iAutoSiteMapCount=-1;                           //Steven 20220811 : 紀錄目前是哪個Shuttle
+                                iAutoSiteCurrStep=-1;
+                                AdjustShuttlePlaceOrderForASM(true);            //Steven 20250206 : fixed ASM之中作one cycle會造成關arm 1時異常
+                                RecordProcess("Reset step of auto site map", "DoOneCycleFinishCheck 1");
+                                */
+                                fMain->ReStartAutoSiteMapping(true);            //Steven 20250910 : fixed for Auto site map
+                                QueueTaskList[266].CheckTaskChange();           //Steven 20220708 : 針對Auto Site Map作紀錄
+                            }
+                            else
+                            {
+                                if((W7C2_FMAIN_CBRUNSTARTMODE->Text==StartModeName[rsmContinuStart]) ||
+                                   (W7C2_FMAIN_CBRUNSTARTMODE->Text==StartModeName[rsmContinuRetest] &&
+                                    IniConfig.bI50_RT==true))
+                                {
+                                    RecordProcess("Trigger Auto Site Map after OneCycle [I50]");
+                                    SetRunStartMode(rsmAutoSiteMap);
+                                }
+                            }
+                        }
+                        else if(CosFunction.bUSEJCETSiteMapMode==true ||        //jou 2016-11-02 JCET要求One Cycle後自動切換至Auto Site mapping mode
+                                CUSTOMER_CODE==CC_ASE_M)                        //Ifor 20180417 : add ASE_M
+                        {
+                            if(LastSet.iRunStartMode==rsmAutoSiteMap)           //Steven 20220602 : for Auto Site map
+                            {
+                                if(LastSet.iTemperature==Tempture_Hot ||
+                                   LastSet.iTemperature==Tempture_AmbientHot)
+                                {
+                                    if(bAutoSiteMapHasPickHP)
+                                        iResetSiteMappingStep=1;
+//                                    else
+//                                        iDoSiteMappingStep=0;
+                                }
+                                /* else
+                                {
+                                    iDoSiteMappingStep=0;
+                                }
+                                iAutoSiteMapCount=-1;                           //Steven 20220811 : 紀錄目前是哪個Shuttle
+                                iAutoSiteCurrStep=-1;
+                                AdjustShuttlePlaceOrderForASM(true);            //Steven 20250206 : fixed ASM之中作one cycle會造成關arm 1時異常
+                                RecordProcess("Reset step of auto site map", "DoOneCycleFinishCheck 2");
+                                */
+                                fMain->ReStartAutoSiteMapping(true);            //Steven 20250910 : fixed for Auto site map
+                                QueueTaskList[266].CheckTaskChange();           //Steven 20220708 : 針對Auto Site Map作紀錄
+                            }
+                            else
+                            {
+                                if(bSiteMappingCHKOK==true ||
+                                   (CosFunction.bUseOpenCloseSiteMapAtAnyTime==true &&
+                                    bSiteMappingNeedCheck==true))               //Ifor 20190308 : add 隨時開關 Site Mapping
+                                {
+                                    if(MOT[MMTrayY].fHasTray==true ||
+                                       MOT[MMTrayY_Car].fHasTray==true)
+                                    {
+                                        if(W7C2_FMAIN_CBRUNSTARTMODE->Text==StartModeName[rsmContinuStart] ||
+                                           W7C2_FMAIN_CBRUNSTARTMODE->Text==StartModeName[rsmContinuRetest])                //Sam 20230314 : RT都需要做 auto site mapping
+                                        {
+                                            if(CosFunction.bUseOpenCloseSiteMapAtAnyTime==true &&
+                                               bSiteMappingNeedCheck==false)    //Ifor 20190308 : add 隨時開關 Site Mapping
+                                            {
+                                            }
+                                            else if(IniConfig.bI50_EnableAutoSiteMappingTrigger==false ||
+                                                   (IniConfig.bI50_EnableAutoSiteMappingTrigger==true && IniConfig.bI50_OnyCycle) ||                            //Sam 20250115 : 修正 I50 功能
+                                                   (CUSTOMER_CODE==CC_SIGURD_HUKOU && iOneCycleFinishShowMsg>0))        //Sam 20250115 : 矽格湖口 GPIB OneCycle 要強制切 ASM
+                                            {
+                                                RecordProcess("Trigger Auto Site Map after One Cycle 1");
+                                                SetRunStartMode(rsmAutoSiteMap);
+                                            }
+                                        }
+
+                                        if(CUSTOMER_CODE==CC_ASE_M &&
+                                           W7C2_FMAIN_CBRUNSTARTMODE->Text==StartModeName[rsmContinuRetest])
+                                        {
+                                            if(CosFunction.bUseOpenCloseSiteMapAtAnyTime==true &&
+                                               bSiteMappingNeedCheck==false)    //Ifor 20190308 : add 隨時開關 Site Mapping
+                                            {
+                                            }
+                                            else if(IniConfig.bI50_EnableAutoSiteMappingTrigger==false)
+                                            {
+                                                RecordProcess("Trigger Auto Site Map after OneCycle 2");
+                                                SetRunStartMode(rsmAutoSiteMap);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        }
+                    }
+
+                    bReOpenGpib=true;                                           //Steven 20101013
+
+                    if(REAL_TIME_CCD==true && !COM2->bCCDDummyRum)              //Steven 20120222 : Real Time CCD 新增One cycle完成時送出@END+動作來停止檢測動作, 要在Alarm之前,給OA喘息的機會
+                    {
+                        COM2->DoReleaseAndInspEnd();
+                    }
+                    //---------------------------------------
+
+                    if(iAseOneCycle!=0)                                         //kevin 20150925
+                    {
+                        iAseOneCycle=0;
+                        RespondASECom("@e02110Done");                           //kevin 20150415 回應 ase Onecycle finish
+                    }
+                    iAddInitStartDelayCT=0;                                     //kevin 20180308 add 動作完成
+                    bFinishInitStartDelay =false;                               //kevin 20180308 add 動作完成
+
+                    if(IniConfig.bE61InArmStandbyPosOnLoader)                   //JerryYang 20200206 one cycle, clean out, tray feed時in arm移動到loader
+                    {
+                        bOneCycleInArmToLoader=true;
+
+                        if(MoveInArm2XYToLoaderWait())
+                        {
+                            bOneCycleInArmToLoader=false;
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
+
+                    if(CosFunction.bTesterLowYieldOneCycle==true &&
+                       bTesterLowYieldOneCycle==true)                           //jou 2014-09-23 Tester Low Yield Handler need One Cycle & Alarm
+                    {
+                        ret=ShowErrorMessage("MES1649", K_RETRY, MMSystem, false);
+                    }
+                    else if(IniConfig.bOneCycleCanTrayFeed)                     //Steven 20110518
+                    {
+                        if(IniConfig.bOneCycleNeedPowerOff==true)               //Steven 20110214 : OneCycle時要Poewr Off
+                            ret=ShowErrorMessage("MES1640", K_RETRY|K_HOME|K_CLEAN_OUT|K_TRAY_FEED, MMSystem, false);   //one cycle finish   //Steven 20240328 : K_SKIP --> K_HOME
+                        else
+                            ret=ShowErrorMessage("MES1640", K_RETRY|K_CLEAN_OUT|K_TRAY_FEED, MMSystem, false);          //kevin 20140412 cancel skip one cycle finish
+                    }
+                    else
+                    {
+                        if(IniConfig.bOneCycleNeedPowerOff==true)               //Steven 20110214 : OneCycle時要Poewr Off
+                        {
+                            ret=ShowErrorMessage("MES1640", K_RETRY|K_HOME|K_CLEAN_OUT, MMSystem, false);               //one cycle finish  //Steven 20240328 : K_SKIP --> K_HOME
+                        }
+                        else
+                        {
+                            if(IniConfig.bEnable_SECS_GEM==true &&              //JerryYang 20190709 只判斷客戶功能就好      //wei 20150817 SECSGEM 斷線 顯示MES1650
+                               CosFunction.bSECS_GEM_OneCycle && IniConfig.bSECS_GEM_OneCycle &&
+                               bSECSGEMConnectionFailOneCycle)
+                            {
+//                                #ifndef SOFT_SIMULTE
+                                if(bSECSGEMConnectionFail)
+                                    ret=ShowErrorMessage("MES1650", K_RETRY, MMSystem, false);                          //kevin 20140412 cancel skip one cycle finish
+                                else
+                                    ret=K_RETRY;
+                                bSECSGEMConnectionFailOneCycle=false;           //wei 20150825 SECSGEM Connection Fail One Cycle
+//                                #endif
+                            }
+                            else if(CosFunction.bYieldAlmNeedOneCycle && bNeedOneCycleByYieldAlm)                       //JerryYang 20161121 簡化Yied alarm的判斷
+                            {
+                                MyDBIProcess("Process", "One Cycle Finished, after yield alarm");
+                                bNeedOneCycleByYieldAlm=false;
+                                W7C2_FYIELD_CLEARCOUNT();            //JerryYang 20160401 : Yield相關的Alarm, 要清掉全部的Ignore的Count重算
+                                for(int i=0; i<W7C2_FMAIN_SLLOWYIELD->Count; i++)
+                                {
+                                    AlarmCode=W7C2_FMAIN_SLLOWYIELD->Strings[i].SubString(0, W7C2_FMAIN_SLLOWYIELD->Strings[i].AnsiPos(",")-1);
+                                    ErrPart=W7C2_FMAIN_SLLOWYIELD->Strings[i].SubString(W7C2_FMAIN_SLLOWYIELD->Strings[i].AnsiPos(",")+1, W7C2_FMAIN_SLLOWYIELD->Strings[i].Length()-1);
+                                    ShowErrorMessage(AlarmCode, 0, MMInterface, 0, ErrPart);
+                                }
+                                W7C2_FMAIN_SLLOWYIELD->Clear();
+                                if(IniConfig.bI09LowYieldOneCycleDontCleanShuttle &&                                    //JerryYang 20220923 : yield alarm時觸發half one cycle(shuttle保留IC不測試跳ONE CYCLE FINISH)
+                                  (FLCarryKit.UseSiteHasIC() ||
+                                   BLCarryKit.UseSiteHasIC() ||
+                                   InArmSuck.HasIC()))
+                                {
+                                    bI09_NeedOneCycleAgain=true;
+                                }
+                            }
+                            else if(CosFunction.bContactAlmNeedOneCycle &&      //Sam 20241226 : Contact Alarm 需要先做 OneCycle
+                                    (bNeedOneCycleByContactWar1 ||
+                                     bNeedOneCycleByContactWar2 ||
+                                     bNeedOneCycleByContactAlm1 ||
+                                     bNeedOneCycleByContactAlm2))
+                            {
+                                AnsiString sMsg="";
+                                MyDBIProcess("Process", "One Cycle Finished, after contact alarm");
+                                if(bNeedOneCycleByContactWar1)
+                                {
+                                    sMsg.sprintf("Head1 Contact Count Over %d Warnning", W7C2_LS_iContactCT[0]);
+                                    ShowMyMessage(sMsg,"Please Check indium");
+                                }
+
+                                if(bNeedOneCycleByContactWar2)
+                                {
+                                    sMsg.sprintf("Head2 Contact Count Over %d Warnning", W7C2_LS_iContactCT[1]);
+                                    ShowMyMessage(sMsg,"Please Check indium");
+                                }
+
+                                if(bNeedOneCycleByContactAlm1)
+                                {
+                                    sMsg.sprintf("Head1 Contact Count Over %d Alarm", W7C2_LS_iContactCT[0]);
+                                    ShowMyMessage(sMsg,"Please Check indium");
+                                }
+
+                                if(bNeedOneCycleByContactAlm2)
+                                {
+                                    sMsg.sprintf("Head2 Contact Count Over %d Alarm", W7C2_LS_iContactCT[1]);
+                                    ShowMyMessage(sMsg,"Please Check indium");
+                                }
+                                bNeedOneCycleByContactWar1=false;
+                                bNeedOneCycleByContactWar2=false;
+                                bNeedOneCycleByContactAlm1=false;
+                                bNeedOneCycleByContactAlm2=false;
+                            }
+                            else if(CosFunction.bPickerLifeAlmNeedOneCycle &&   //AI(ht9045-config) 20260521 (RogerYang) : SCC吸嘴壽命報警OneCycle優化
+                                    bNeedOneCycleByPickerLifeAlm)
+                            {
+                                AnsiString sMsg="";
+                                MyDBIProcess("Process", "One Cycle Finished, after picker life alarm");
+                                sMsg="Picker suck count over limit, please clear in [In/out arm picker] tab";
+                                ShowMyMessage(sMsg, "Picker Life Alarm");
+                                MyDBIProcess("Process", sMsg.c_str());
+                                bNeedOneCycleByPickerLifeAlm=false;
+                            }
+                            else if(bRTCModelNG)                                //wei 20170504 (Steven) RTC Model NG
+                            {
+                                ret=ShowErrorMessage("MES1654", K_RETRY, MMSystem, false);
+                            }
+                            else if((CUSTOMER_CODE==CC_KYEC_LEE &&
+                                     USE_AUTO_RETEST==eartInstall &&
+                                     IniConfig.bA10_AutoReTest &&
+                                     (LastSet.iRunStartMode==rsmInitial_ART ||
+                                      LastSet.iRunStartMode==rsmContinuStart_ART ||
+                                      LastSet.iRunStartMode==rsmContinuRetest_ART)))                                    //wei 20150821 KYEC在ART模式退Pass Bin //Ifor 20191127 :移至最後面避免Yield相關的Alarm無法顯示
+                            {
+                                ret=ShowErrorMessage("MES1640", K_RETRY|K_CLEAN_OUT|K_TRAY_END, MMSystem, false);
+                                bPassTrayFeed=true;
+                            }
+                            else if(W7C2_FAUTOTEACH_ISRUN())                        //JimmyChiu 20211020 : Auto alignment mode
+                            {
+                                W7C2_FMAIN_BTNPAUSECLICK();
+                                ret=K_RETRY;
+                            }
+                            else if(bOneCycleAfterSHLossIC)                     //KaiChen 20200304 ：矽格-湖口，要求OutShuttle Loss IC 時機台上的IC放到R道
+                            {
+                                bOneCycleAfterSHLossIC=false;
+                                ret=ShowErrorMessage("MES1640", K_RETRY, MMSystem, false);
+                                ShowMyMessage("Please Check IC On Machine");
+                            }
+                            else
+                            {
+                                if(TestIF_File.bAutoOnecycleHomStart==true &&
+                                   bIsAvoidIndexShiftOneCycle==true &&
+                                    CUSTOMER_CODE==CC_GIGAS)                    //Isaac 20210821 : 全智要求定時onecycle回home,start
+                                {
+                                    bIsAvoidIndexShiftOneCycle=false;
+                                    bHomeByStart=true;
+                                    fAllMotorHome=false;
+                                }
+                                else if(CUSTOMER_CODE==CC_ASE_KaohSiung)        //kevin 20201116
+                                {
+                                    ret=ShowErrorMessage("MES1640", K_RETRY|K_CLEAN_OUT, MMSystem, false);              //kevin 20140412 cancel skip one cycle finish
+                                    fMain->Pause("DoOneCycleFinishCheck MES1640");
+                                }
+                                else
+                                {
+                                    #ifdef DEBUG_OneCycleContinous              //Sam 20221124 : 新增連續 OneCycle 功能 Debug
+                                    if(fMain->chkOneCycleContinous->Checked==true)
+                                    {
+                                        ret=K_RETRY;
+                                    }
+                                    else
+                                    {
+                                        ret=ShowErrorMessage("MES1640", K_RETRY|K_CLEAN_OUT, MMSystem, false);          //kevin 20140412 cancel skip one cycle finish
+                                    }
+                                    #else
+                                    if(LastSet.iRunStartMode==rsmQAMode && bQAModeFinishCleanOut)                       //JerryYang 20221004 : Maxim版本QA mode
+                                    {
+                                        ret=ShowErrorMessage("MES1640", K_CLEAN_OUT, MMSystem, false);                  //kevin 20140412 cancel skip one cycle finish
+                                    }
+                                    else
+                                    {
+                                        ret=ShowErrorMessage("MES1640", K_RETRY|K_CLEAN_OUT, MMSystem, false);          //kevin 20140412 cancel skip one cycle finish
+                                    }
+                                    #endif
+                                }
+                            }
+
+                            if(TestIF_File.bEnableReadAndCheckTorque)           //kevin 20210804
+                            {
+                                bResetArm1Value=true;
+                                bResetArm2Value=true;
+                            }
+                            bLowYeildAlarm=false;                               //wei 20151116 Low Yield Onecycle中不alarm
+                            iallSitCount=0;                                     //kevin 20180721 add clean
+                        }
+                        ReadWriteBinCountMode(false);                           //kevin 20210825 寫 Bin 1  Bin 2...記錄
+                    }
+
+                    bASMFinishOneCycle=false;                                   //Steven 20230117 : 修正One Cycle之後不執行Auto Site Map的問題
+
+                    if(CosFunction.bPiggyBackShowMainForm)                      //Steven 20131101 : PiggyBack數量到達時,顯示在Main Form上面
+                    {
+                        bContinuoussPass=true;
+                        bContactCounOven=true;
+                        fMain->CleanYieldCount();                               //kevin 20131009 清除yield 計數
+                    }
+
+                    if(CosFunction.bRTCAutoModelVerify==true &&
+                       IniConfig.bD36EnableRTCAutoModelVerify==true &&
+                       IniConfig.bD36_2AfterOneCycleNeedAutoVerify==true &&
+                       bNeedWaitRTCAutoVerify==false)
+                    {
+                        bRTCAutoModelVerifyFirstTime=true;                      //JerryYang 20201210 one cycle時要觸發 RTC auto verification
+                    }
+
+                    bPiggyBackIndexCheck=true;                                  //jou 2014-09-03 Function State Stop Firt Initital Delay Time
+                    bInitialMaxTime=true;                                       //jou 2011-11-09 增加initial max time set
+                    iWhoTriggerPiggyBack=pbtOneCycle;                           //Steven 20111207 : 誰觸發了Piggy Back
+
+                    W7C2_FCOUNTER_WRITECTINFO();                               //jou 2012-10-15 one cycle 寫入一次histroy contact,避免中途被不正常關閉程式
+                    W7C1_FBARCODE_CHANGE2D();                              //Steven 20160425 : 重置2DSys時間
+                    W7C1_FTRAYMAP_CHANGETRAY();                        //wei 20161219 Tray Mapping
+                    if(IniConfig.bD58UseArm1PickPlaceArm2Test==true &&          //JerryYang 20180518 : add
+                       TestIF_File.bArm1PickPlaceArm2Test==true)                //Ifor 20200811 Fix: Arm1 Pick Place Arm2Test 需卡兩個條件
+                        W7C2_BLCARRYKIT_SETHASNULLIC();
+                }
+
+                InitialPiggyBackFunction();                                     //Steven 20110725 : 重置Piggy Back的狀態
+                bCheckGiveWay=false;                                            //Ifor 20200521 Fix:清除RTC旗標
+                bNeedCheckRTCReport=false;                                      //Ifor 20200521 Fix:清除RTC旗標
+                bBinDispAlarm=false;                                            //Ifor 20220714 add:Bin Disp 異常報警 每次Onecycle 檢查一次
+
+                if(bBackupCleanOut==true)                                       //jou 2010-12-07 : 防止index check oncyle與clean out funtion衝突
+                {                                                               //jou 2011-07-06 : 改成任何狀況下,都要紀錄clean out模式,不然會hang up
+                    bBackupCleanOut=false;                                      //Steven 20260612 : Fix == to = (was comparison, not assignment)
+                    ret=K_CLEAN_OUT;
+                }
+
+                bOneTimeWait=true;
+                W7C2_FCONTACT_RGHANDLER_ENABLE();
+
+                bResetMode=false;                                               //jou 981219 start : reset mode
+                bLampReset=false;
+                bSecondTimeLoaderCheckNoTray=false;                             //ChungHung 20130528 SCK要求AutoClean後要自動檢測是否Loader有補Tray
+                bLoaderNoTrayAutoCleanOut=false;                                //jou 2010-09-01 Loader沒有tray時,Loader不再進Tray,Tran End時自動clean out
+            }
+
+            if(CosFunction.bUseOpenCloseSiteMapAtAnyTime==true)                 //Steven 20230117 : One Cycle後要取消打勾
+            {
+                W7C2_FMAIN_DISABLESITEMAP(false, __FUNC__);                //Steven 20230130 : 加上紀錄
+            }
+
+            ReadWriteBinCountMode(false);                                       //kevin 20210906 寫 Bin 1  Bin 2...記錄
+            SW[SwPurgeAir].Off();                                               //kevin 20180928 (Steven) : add blower load board
+            iContractCount=0;                                                   //kevin 20180928 (Steven) : add blower load board
+
+//            fProductionInfo->DoOneCycleFinishShowMsg();                         //JimmyChiu 20211020 : Auto alignment mode
+
+            if(ret==K_RETRY)                                                    //jou 2010-06-25 start : 解除mark，OneCycle後不能直接按CleanOut
+            {                                                                   //jou 2010-07-27 one cycle後,會將unload的tray盤釋放,方便OP取tray盤.
+//                if(CUSTOMER_CODE==CC_ASE_KaohSiung)                           //kevin 20131101 add    //Steven 20220623 : Mark
+                {
+                    if(IniConfig.bI40_bStartProductOnLine &&
+                       LastSet.iTester==OFF_LINE && AccessLevel<1)              //kevin 20180517 change config setup
+                    {                                                           //kevin20140621 卡 OFF_LINE模式 operatpr 變成 ON_LINE
+                        iOff_LINE_Mode=1;
+                        bOneCycleOperateChangeON_line=true;                     //kevin 20140411
+                        W7C2_FMAIN_CHANGETESTERCONNECT(10);                         //切換 on-line
+                    }
+                }
+
+                if(IniConfig.bEnableUnloadTrayFree)                             //kevin 20180716 add ASE_KH no use  onecycle 釋放所有軌道夾TRAY汽缸
+                    AutoTrayCylinderFree();                                     //jou 2010-01-25 start : 釋放Auto Tray上的汽缸
+            }
+            else if(ret==K_CLEAN_OUT)
+            {
+                if(bQAModeQuickCleanOut==false)                                 //Steven 20111019
+                {
+                    if(IniConfig.bOneCycleDoQuickCleanOut==true)                //Steven 20110524
+                    {
+                        bOnecycleTrayFeed=true;                                 //Steven 20110525
+                        bNeedQuickCleanOut=TrayForm.bAutoFeed;
+                        TrayForm.bAutoFeed=false;
+                    }
+                }
+
+                if(IniConfig.bI40_bStartProductOnLine &&                        //kevin 20180517 change config setup 生產前OP OFF_LINE 強制 On line
+                   LastSet.iTester==OFF_LINE)
+                {
+                    TrayForm.bAutoFeed=true;                                    //kevin 20140412 off_line 需將所有IC清出
+                }
+                bCleanOut=true;
+            }
+            else if(ret==K_SKIP ||
+                    ret==K_HOME)                                                //Steven 20240328 : K_SKIP --> K_HOME
+            {
+                if(IniConfig.bOneCycleNeedPowerOff==true)                       //Steven 20110214 : OneCycle時要Poewr Off
+                {
+                    W7C2_FHOME_SERVOOFF("DoOneCycleFinishCheck");          //Steven 20230712 : 修正SwServoOn.Off時, 要抓住Z煞車
+                    RecordProcess("K_SKIP");                                    //kevin 20180319 add log
+                }
+            }
+            else if(ret==K_TRAY_FEED)
+            {
+                bOnecycleTrayFeed=true;                                         //Steven 20110525
+                bNeedTrayFeed=true;
+                tUPH_PauseTime=0;
+            }
+            else if(ret==K_TRAY_END)                                            //jou 2010-12-15
+            {
+                if(IniConfig.bCleanOutCanTrayEnd)
+                {
+                    bOnecycleTrayFeed=true;                                     //Steven 20110525
+                    bNeedTrayFeed=true;
+                    tUPH_PauseTime=0;
+                    iTrayFeed=1;
+                    iTrayFeedTask=1;
+                    bCleanOutTrayEnd=true;
+                    bQAModeTrayEnd=true;
+                }
+            }
+        }
+        else
+        {
+            if(bDoEmptySocketOneCycle)                                          //Steven 20201022 : For RFMD Empty Socket Check Funstion.
+            {
+                bDoEmptySocketOneCycle=false;
+                bResetMode=false;
+                InitialIndexSocketCheckTask();
+                bDoEmptySocketCheck=true;
+
+                RecordProcess("EmptySocketOneCycle Finsih");
+                RecordProcess("Start EmptySocketCheck");
+            }
+            else if(bResetMode==true)
+            {
+                MyDBIProcess("Process", "Do reset finish.");                    //jou 2010-11-23
+                InitialPiggyBackFunction();                                     //Steven 20110725 : 重置Piggy Back的狀態
+                bResetMode=false;
+                bLampReset=false;
+            }
+            bBackupCleanOut=false;                                              //jou 2010-12-07 : 防止index check oncyle與clean out funtion衝突
+        }
+
+        if(iClearSocketFunction==1)
+        {
+            iClearSocketFunction=2;
+            iClearSocketFunctionTask=1;
+        }
+        _bHomeNeedOnecycle=false;
+        fMain->DebugOneCycleHotPlate("OneCycleFinish");                         //Sam 20210915 : 增加 OneCycle Hotpalte Debug Log
+        iOneCycle=0;
+        InitOneCycle("One Cycle Finish", bQAModeTrayEnd);
+
+        if(EmptySocketCheckModeBeUse() && IniConfig.bI41_3_AfterContactorTeminated)
+        {
+            InitialIndexSocketCheckTask();
+            bDoEmptySocketCheck=true;
+            bDoEmptySocketOneCycle=false;
+            bIsAutoOneCycle=false;                                              //ChungHung 20151012 modify again RFMD Empty Socket Check
+            RecordProcess("Start EmptySocketCheck for AfterContactorTeminated");                                        //ChungHung 20160803 add for RFMD add EmptyScoket log
+        }
+        else if(IniConfig.bI41EnableEmptySocketCheck && bDoEmptySocketOneCycle==true)
+        {
+            InitialIndexSocketCheckTask();
+            bDoEmptySocketCheck=true;
+            bDoEmptySocketOneCycle=false;
+            bIsAutoOneCycle=false;
+            RecordProcess("Start EmptySocketCheck for EmptySocketOneCycle Finish");                                     //ChungHung 20160803 add for RFMD add EmptyScoket log
+        }
+
+        if(bBackupCleanOut==true)                                               //jou 2012-05-03 start : Clean Out到最後一顆,準備放到shuttle時,這時候按home,home完會繼續放IC,未把clean out做完,Hang up
+        {                                                                       //此段必須放在 InitOneCycle()之後, if(bCleanOut ) 之前
+            bBackupCleanOut=false;
+            bCleanOut=true;
+        }
+
+        if(IniConfig.bSPILFunction==true)                                       //JerryYang 20220927 : Jovie要求要跳ONE CYCLE FINISH並開門按Z1
+        {
+            if(bOutShtLoseICNeedSetErrBin || bIndexDropICNeedSetErrBin)         //JerryYang 20220923 : index arm drop error設ERROR BIN
+            {
+                ShowErrorMessage("MES1640", K_RETRY, MMSystem, false);
+                bOutShtLoseICNeedSetErrBin=false;
+                bIndexDropICNeedSetErrBin=false;
+                for(int i=0; i<MAX_Index_Row; i++)
+                {
+                    for(int j=0; j<MAX_Index_Col; j++)
+                    {
+                        bTestSiteNeedSetErrBin[i][j]=false;
+                    }
+                }
+            }
+        }
+
+        fMain->BtnOneCycle->Down=false;
+        InitialTestHeadMotorTask();
+        if(AsebLoadCellTest)
+        {
+            AsebLoadCellTest = false;
+            bLoadCellTest = true;                                               //kevin 20190305 add one cycle run arm 1 arm 2 load cell test
+        }
+        SW[SwFKOneCycle].Off();
+        SW[SwRKOneCycle].Off();
+        MOT[MTestY1].MovFlag=false;
+        MOT[MTestY2].MovFlag=false;
+        MOT[MTestZ1].MovFlag=false;
+        MOT[MTestZ2].MovFlag=false;
+        SetInitialICCheck();
+        bLampOneCycle=false;
+        bIndexPickUpErrorWaitRetry=false;                                       //Ifor 20171119 (Steven) : add 避免Index Pick Up Err Inarm 偷跑造成資料異常導致Hangup
+        iOneCycleFinishShowMsg=0;                                               //Sam 20250115 : 矽格湖口 GPIB OneCycle 要強制切 ASM
+
+        if(TestIF_File.iTestType==TTL_MODE && (TTL_CARD_TYPE==2 || TTL_CARD_TYPE==3))
+            SendTTLRS232CSOTsignal();
+
+        if(bCleanOut || bCleanoutStart)                                         //kevin 20130506
+        {
+            fMain->CleanOut("DoOneCycleFinishCheck");
+        }
+
+        if(bCleanHotplate_ART==2 &&LastSet.iTemperature==Tempture_Hot)
+        {
+            bCleanHotplate_ART=3;                                               //kevin 20150722
+            bMustCleanAllTray=false;
+        }
+        else
+        {
+            bCleanHotplate_ART=0;                                               //kevin 20150722
+        }
+
+        if(IniConfig.bQAMode==true && bQAModeQuickCleanOut==true)               //Steven 20111019
+        {
+            W7C1_FMAIN_START("DoOneCycleFinishCheck 3");
+        }
+
+        InitialPiggyBackFunction();                                             //Steven 20110725 : 重置Piggy Back的狀態
+
+        if(bNeedTrayFeed)                                                       //Steven 20110518
+        {
+            if(bCleanOutTrayEnd)
+                W7C2_FMAIN_INITIALTRAYFEED("DoOneCycleFinish_TrayEnd");
+            else
+                W7C2_FMAIN_INITIALTRAYFEED("DoOneCycleFinish_TrayFeed");
+        }
+
+//        bChangeSiteMAP=true;                                                  //kevin 201300506 可以改變sitemap
+        if(IniConfig.bI09LowYieldOneCycleDontCleanShuttle &&
+           bI09_NeedOneCycleAgain)                                              //JerryYang 20220923 : yield alarm時觸發half one cycle(shuttle保留IC不測試跳ONE CYCLE FINISH)
+        {
+            iWhoTriggerPiggyBack=pbtOneCycleRemainSht;
+            ProcessPiggyBackFunction();
+        }
+
+        if(bNeedOneCycleByAutoAlignment==false)                                 //KenHsieh 20211202 : 修改重新打開AOA後，先做Onecycle再回Home重做AOA
+        {
+            VerifyNeedDoAlignment(AutoAlignmentTray_AfterOneCycle, AutoAlignmentCK_AfterOneCycle);                      //KenHsieh 20210813 : add CCD AUTO ALIGNMENT
+        }
+        else
+        {
+            bNeedOneCycleByAutoAlignment=false;
+            fAllMotorHome=false;
+            W7C1_FMAIN_START("DoOneCycleFinishCheck 4");
+        }
+        #ifdef DEBUG_OneCycleContinous                                          //Sam 20221124 : 新增連續 OneCycle 功能 Debug
+        if(fMain->chkOneCycleContinous->Checked==true)
+             W7C1_FMAIN_START("DoOneCycleFinishCheck 5");
+        #endif
+        bTT_SetSpeed_Check=false;                                               //Ztex 2024.08.11 Add Test Time Set Speed
+        if(IniConfig.bL46_AStreamErrorCompressOnecycle &&
+           iAStreamErrorCompressOnecycle==1)                                    //Ztex 2024.10.01 Add AStream Error Compress Onecycle
+        {
+            iAStreamErrorCompressOnecycle=2;
+        }
+    }
+    else if(iCleanOut==1)
+    {
+        if(bDoLoaderCleanOut    ||                                              //kevin 20211106 確認吸取數量完收load tray  //pig 2011.11.08
+           bLoadBFBackTray)                                                     //KenHsieh 20230325 : CleanOut時Loader BF 退Tray
+        {
+            if(DoLoaderTrayFeed()==false)
+            {
+                return;
+            }
+            else
+            {
+                bDoLoaderCleanOut=false;
+                bLoadBFBackTray=false;                                          //KenHsieh 20230325 : CleanOut時Loader BF 退Tray
+            }
+        }
+    }
+    else
+    {
+        if(fMain->BtnOneCycle->Down && iOneCycle==0 && bOneCycle_BackUp==false)                                         //ChungHung 20150514 add for 12 site full shuttle //ChungHung 20150213 add fix 2x6 if open munt full issue hangup
+        {
+            if(bRunAutoSiteMapping==true)                                       //Ifor 20180518 : add 簡化Site Mapping 旗標
+            {
+                iOneCycle=1;
+            }
+            else
+            {
+                fMain->DebugOneCycleHotPlate("DoOneCycleFinishCheck");          //Sam 20210915 : 增加 OneCycle Hotpalte Debug Log
+                iOneCycle=1;
+            }
+        }
+    }
+}
+//------------------------------------------------------------------------------
+
+// W7-C2 INTEGRATED: the former `#undef DoART_AfterCleanOut` was removed together
+// with the W7C1 seam alias (csystem.cpp:972 region) -- there is no macro left to
+// un-define.  The DoCleanOutFinishCheck call (csystem.cpp:1707) now binds to the
+// REAL body below via the csystem.h declaration.  golden csystem.cpp:14049.
+
+// ===========================================================================
+//  DoART_AfterCleanOut  -- golden csystem.cpp:14049-14711 (~663 lines).
+//  Auto-ReTest (ART) post-clean-out lot-flow decision (returns whether to
+//  continue).  Translated FAITHFULLY this wave (W7-C2), REPLACING the W7C1
+//  W7C1_DoART_AfterCleanOut seam stub: every bAutoReTest_ART / CosFunction.
+//  bAutoRetestGPIBmode / CosFunction.bUseSCKART / HANA-ART / RENESAS FT-CT /
+//  SPIL / TSMC branch, the SPBin yield-alarm block, the FT/RT fail-yield model
+//  ladder, and the SECOND SOFT_SIMULTE region (the /* #ifdef SOFT_SIMULTE
+//  hanaART */ block-comment) are reproduced VERBATIM.
+//
+//  NO-REGRESSION KEY: DoART_AfterCleanOut is CALLED ONLY by DoCleanOutFinishCheck
+//  inside its iCleanOut==1 ART branch (DoART_AfterCleanOut(ret)), whose guards
+//  (bAutoReTest_ART / CosFunction.bUseSCKART / CosFunction.bAutoRetestGPIBmode)
+//  are all false offline, so this function is UNREACHABLE at runtime offline.
+//  Every W7C2 stand-in it touches is therefore inert; the immediate entry
+//  else-branch (golden :14506) returns bRet after resetting LastSet ART flags.
+// ===========================================================================
+bool DoART_AfterCleanOut(int &ret)                                              //return result
+{
+    static int iFirstIn=0;
+    bool bRet=false, bNeedRetest=false;
+    int iHanaNeedToRt=0;
+    AnsiString S1="";
+    LastSet.bCleanOut_ART=false;
+    bART_needRT2=false;                                                         //kevin 20150717  RT 完成還需要rt2
+    bART_RT2RunNoChangeMode=true;                                               //kevin 20150717  只退fail RT2 不能更改測試模式
+
+    if(bAutoReTest_ART)                                                         //kevin 20150611  自動化要使用 ase-kaosh
+    {
+        if(W7C2_LS_iAutoRetestCount_ART>=iAutoRetestLimit ||
+           LastSet.iRunStartMode==rsmContinuRetest_ART)                         //kevin 20150613  已作各分 tray動作
+        {
+            if(bCleanHotplate_ART==3 &&
+               LastSet.iTemperature==Tempture_Hot)                              //kevin 20150722
+            {
+                bMustCleanAllTray=true;
+                bCleanHotplate_ART=0;
+                ret=2;
+                ShowMyMessage("Clean hotplate finish !!");
+                ret=K_RETRY;                                                    //kevin 20150716
+            }
+            ret=1;
+            bRet=true;                                                          //kevin 20170831
+        }
+        else
+        {
+            if(bCleanHotplate_ART==3 &&
+               LastSet.iTemperature==Tempture_Hot)                              //kevin 20150722
+            {
+                bMustCleanAllTray=true;
+                bCleanHotplate_ART=0;                                           //kevin 20150722
+                ret=2;
+                ShowMyMessage("Clean hotplate finish !!");
+            }
+            else
+            {
+                RespondASECom("@e02008Done");                                   //kevin 20170830 (Steven) 回應 ase ART Clean out finish
+                ret=ShowMyMessageBox_YES_NO("Load No Tray? Yes,Please Print Summary", "Load 沒有tray確定要做 AutoRetest 嗎？,YES ,請結批報表");
+            }
+
+            if(ret==1)
+                bRet=true;                                                      //kevin 20150717
+            else
+                ret=K_RETRY;                                                    //kevin 20150716
+        }
+    }
+    else
+    {
+        if(CosFunction.bAutoRetestGPIBmode==true)                               //jou 2015-10-02 Auto Retest GPIB mode
+        {
+            if(LastSet.iTemperature==Tempture_Hot)
+            {
+                if(MOT[MMPlate1].HasIC()==false && MOT[MMPlate2].HasIC()==false &&
+                   (MOT[MMTrayZ].fHasTray==true || MOT[MMTrayY].fHasTray==true || MOT[MMTrayY_Car].fHasTray==true))
+                {
+                    if(W7C2_LS_bBreakSCKART)                                    //Sam 20200311 : Fix TCP ART MODE
+                    {
+                    }
+                    else
+                    {
+                        iCleanOut=0;
+                        ShowMyMessage("Clean hotplate finish !!");
+                        return false;
+                    }
+                }
+            }
+
+            if(W7C2_LS_bEndLotAutoRetestGPIB==false)
+            {
+                iSCKARTLoadingStatus=fSCKART->CheckLoadingCount();
+                if(CUSTOMER_CODE==CC_PTI &&                                     //Sam 20240809 : PTI ART 模式
+                   IniConfig.bB03_TesterReport &&
+                   (fSCKART->iFTRTCount==0 || TestIF_File.iSCKART_TryCnt<fSCKART->iFTRTCount))
+                {
+                                                                                //第一次 FT 不用檢查數量 or 測試完再拿來回重測
+                }
+/*                #ifdef SOFT_SIMULTE
+                else if(fMain->hanaART->IsHanaArtAvailable()==true)             //Steven 20250415 : mark
+                {
+                    //
+                }
+                #endif*/
+                else if(TestIF_File.bSCKART_LotDeviceCheck &&                   //RogerYang 20250918 : 瑞薩FT-CT 不要進入，這時候如果收到RT會死(已經更新新的數量)，數量卡控交給FT-CT判斷
+                        TestIF_File.bRENESAS_EnableFTCT==false)
+                {
+                    if(iSCKARTLoadingStatus==2)
+                    {
+                        if(W7C2_SCKART->DoChkInputCntAlarm(true)==true)             //RogerYang 20251224 : Rf360需求 lotcheck加入上下限設定
+                        {
+                            ShowErrorMessage("WAR0120", K_RETRY, MInArmX, false, "DoCleanOutFinishCheck 2");
+                            return false;
+                        }
+                    }
+                    else if(iSCKARTLoadingStatus==0)
+                    {
+                        if(W7C2_SCKART->DoChkInputCntAlarm(false)==true)            //RogerYang 20251224 : Rf360需求 lotcheck加入上下限設定
+                        {
+                            ret=ShowErrorMessage("WAR0119", K_RETRY|K_SKIP, MInArmX, false, "DoCleanOutFinishCheck 2");
+                            if(ret==K_RETRY)
+                            {
+                                iCleanOut=0;
+                                bLoaderNoTrayAutoCleanOut=false;                //Steven 20170320 (wei) : fixed for check loader tray again
+                            }
+                            return false;
+                        }
+                    }
+                }
+
+                if((fSCKART->iInputJamCnt!=0 ||
+                   W7C2_SCKART->iOutputJamCnt!=0) &&                                //Steven 20170320 (wei) : Must after check load count
+                    TestIF_File.bRENESAS_EnableFTCT==false)                     //RogerYang 20251014 : 瑞薩FT-CT 不要進入
+                {
+                    ret=ShowErrorMessage("WAR0121", K_RETRY|K_SKIP, MMSystem, false, "DoCleanOutFinishCheck 2");
+                    if(ret==K_RETRY)
+                    {
+                        iCleanOut=0;
+                        bLoaderNoTrayAutoCleanOut=false;                        //Steven 20170320 : fixed for check loader tray again
+                        return false;
+                    }
+                    else
+                    {
+                        return false;                                           //Steven 20170331 (wei) : Add for re-check count
+                    }
+                }
+
+                if(CosFunction.bUseSCKART)                                      //Steven 20161201 (wei) : For SCK 93K ART
+                {
+                    if(fMain->hanaART->IsHanaArtAvailable()==true)              //Steven 20250415 : HANA ART Function
+                    {
+                        if(W7C2_HANAART->IsContactAvailable())
+                        {
+                            W7C2_LS_bFirstTestAutoRetestGPIB=false;             //Steven 20260612 : Fix == to = (was comparison, not assignment)
+                            if(W7C2_HANAART->IsPrimeTest())
+                                W7C2_HANAART->EndPrimeTest();
+                            else
+                                W7C2_HANAART->EndReTest();
+                            return false;
+                        }
+                        else
+                        {
+                            iHanaNeedToRt=W7C2_HANAART->NeedToRT();           //0:Waiting command, 1:Need to RT, 2:Lot End
+                            if(iHanaNeedToRt==0)
+                                return false;
+                        }
+                        W7C2_SCKART->CheckNeedRT();
+                    }
+                    else if(TestIF_File.bRENESAS_EnableFTCT==true)              //RogerYang 20250915 : 瑞薩 FT-CT
+                    {
+                        if(W7C2_RENESAS->Check71CommandDuring50()==false)                                      //RogerYang 20251019 : FT-CT "send 71"
+                            return false;
+                    }
+                    else
+                    {
+                        if(iFirstIn==0)
+                        {
+                            W7C2_SCKART->CheckNeedRT();
+                            iFirstIn++;
+                        }
+                    }
+
+                    if(W7C2_SCKART->iNeedRT>0)
+                    {
+                        W7C2_LS_bFirstTestAutoRetestGPIB=true;
+                        S1.sprintf("iNeedRT=%d, iFTRTCount=%d, iInputCount=%d, dCurrYield=%f", W7C2_SCKART->iNeedRT, fSCKART->iFTRTCount, fSCKART->iInputCount, W7C2_SCKART->dCurrYield);
+                        RecordProcess("Need RT.", S1);
+
+                        if(CosFunction.bART_SECSGEM_93K==true)
+                        {
+                            W7C2_SCKART->SaveTestSummary(1);                        //JerryYang 20220923 : SECS GEM版本ART
+                        }
+                        else
+                        {
+                            W7C2_SCKART->SaveTestSummary(0);                        //Steven 20190521 : ATK lot count
+                        }
+                        W7C2_SCKART->DoAutoSocketOff(false);
+
+                        if(IniConfig.bB03_TesterReport)                         //Sam 20240809 : PTI ART 模式
+                        {
+                            if(fSCKART->iFTRTCount<=1)
+                            {
+                                W7C2_SCKART->UpdateCount();
+                                W7C2_SCKART->iLotCount  =atoi(W7C2_SCKART->palOutputCnt->Caption.c_str());
+                                fSCKART->iInputCount=atoi(W7C2_SCKART->palRejectCnt->Caption.c_str());
+                                W7C2_SCKART->AccessFile(false, 1);
+                            }
+                            W7C2_FLOTINFO_PRODTESTERREPORT();
+                            W7C2_FLOTINFO_CBRUNMODE_ITEMINDEX(fSCKART->iFTRTCount);
+                        }
+                    }
+                    else
+                    {
+                        W7C2_LS_bFirstTestAutoRetestGPIB=false;
+                        W7C2_SCKART->SaveTestSummary(1);                            //Steven 20190521 : ATK lot count
+                        W7C2_SCKART->DoAutoSocketOff(true);
+                        S1.sprintf("iNeedRT=%d, iFTRTCount=%d, iInputCount=%d, dCurrYield=%f", W7C2_SCKART->iNeedRT, fSCKART->iFTRTCount, fSCKART->iInputCount, W7C2_SCKART->dCurrYield);
+                        RecordProcess("Final lot end.", S1);                    //Steven 20190722 : add TSV log
+                    }
+                }
+
+                if(CosFunction.bUseSCKART &&
+                   TestIF_File.bSCKART_EnableSPBinAlarm==true &&
+                   bSPBinYieldAlarm==true &&                                    //Isaac 20171113 (Steven) : add ATK Special Bin Yield alarm
+                   W7C2_LS_bFirstTestAutoRetestGPIB==true &&
+                   fSCKART->iFTRTCount<=1)                                      //Only FT need to check
+                {
+                    S1.sprintf("Category %d count over limit %2.1f%% ", Prod.iSCKART_SPBinSelect, Prod.dSCKART_SPBinAlarmYield);
+                    ret=ShowErrorMessage("WAR07360", K_TRAY_FEED|K_RETRY, MMInterface, 0, S1);
+
+                    if(ret==K_RETRY)                                            //Retry 繼續流程
+                    {
+                        W7C2_LS_bFirstTestAutoRetestGPIB=false;
+                        W7C2_FMAIN_SETLOTSTATE(8);                                  //ART Low Yield Lot End
+                    }
+                    else                                                        //TRAY_FEED 不做RT,直接tray feed
+                    {
+                        W7C2_LS_iSCKART_RTUnitCount=0;
+                        W7C2_SCKART->CheckNeedRT();
+                        W7C2_FMAIN_SETLOTSTATE(10);                                 //ART Low Yield Final Lot End
+                    }
+                }
+                else if(CosFunction.bUseSCKART &&
+                        TestIF_File.iSCKART_RTStartMode==1 &&
+                        W7C2_LS_bFirstTestAutoRetestGPIB==true)
+                {
+                    if(CosFunction.bART_SECSGEM_93K &&                          //JerryYang 20220923 : SECS GEM版本ART
+                       (W7C2_SCKART->iTesterType==1 ||
+                        W7C2_SCKART->iCurrentStatus!=W7C2_SCKART->iLOTSTATUS_A))
+                    {
+                        W7C2_FMAIN_CLARNDATA(2, "ART_LOTRETESTCLEARED");
+
+                        if(LastSet.iTester==OFF_LINE)
+                        {
+                            if(BinSelect[OffT].bAutoRetest[eAuto1])
+                                W7C2_LS_BinCT[0][e3Auto1]=0;
+                            if(BinSelect[OffT].bAutoRetest[eAuto2])
+                                W7C2_LS_BinCT[0][e3Auto2]=0;
+                            if(BinSelect[OffT].bAutoRetest[eAuto3])
+                                W7C2_LS_BinCT[0][e3Auto3]=0;
+                        }
+                        else
+                        {
+                            if(BinSelect[FT].bAutoRetest[eAuto1])
+                                W7C2_LS_BinCT[0][e3Auto1]=0;
+                            if(BinSelect[FT].bAutoRetest[eAuto2])
+                                W7C2_LS_BinCT[0][e3Auto2]=0;
+                            if(BinSelect[FT].bAutoRetest[eAuto3])
+                                W7C2_LS_BinCT[0][e3Auto3]=0;
+                        }
+
+                        for(int i=0; i<10; i++)
+                        {
+                            W7C2_LS_lSCKARTBinCT[i]=0;
+                        }
+                        LastSet.iSCKARTInputCT=0;
+                        LastSet.lShuttleCount=0;
+                        W7C2_LOTSUMMARY_CLEARRTDATA();
+
+                        WriteLastDataFile(false);                               //kevin 20141030
+                        W7C2_FSORTCT_SHOWLOADING();
+                        W7C2_FSORTCT_SHOWSORT();
+
+                        if(W7C2_SCKART->iTesterType==0)
+                        {
+                            fSCKART->iInputCount=W7C2_LS_iSCKART_RTUnitCount;
+                            W7C2_LS_iSCKART_RTUnitCount=0;
+                        }
+                        fSCKART->iInputJamCnt    =0;
+                        W7C2_SCKART->iOutputJamCnt   =0;
+
+                        if(W7C2_SCKART->iCurrentStatus==W7C2_SCKART->iLOTSTATUS_R)
+                        {
+                            W7C2_SCKART->SetLotStatus(W7C2_SCKART->iLOTSTATUS_W);
+                            W7C2_SCKART->iWaitGPIBLotR=3;
+                        }
+                        W7C2_SCKART->AccessFile(false, -1);
+                        RecordProcess("ART LOTRETESTCLEARED.");
+                        W7C2_FLOTINFO_CLEARBARCODE();                  //Steven 20190214 : 統一清除2DID方式
+                    }
+
+                    if(IniConfig.bSPILFunction==true && bStopART==true)         //JerryYang 20220923 : SECS GEM版本ART
+                    {
+                        ret=K_TRAY_FEED;
+                        bStopART=false;
+                    }
+                    else if((CUSTOMER_CODE==CC_PTI &&
+                            IniConfig.bB03_TesterReport) ||                     //Sam 20240809 : PTI ART 模式
+                            TestIF_File.bRENESAS_EnableFTCT==true)              //RogerYang 20250922 : 瑞薩FT-CT
+                    {
+                        ret=K_RETRY;
+                    }
+                    else
+                    {
+                        ret=ShowErrorMessage("MES1655", K_TRAY_FEED|K_RETRY, MMSystem, 0);      //ART Loading devices finish
+                    }
+
+                    if(ret==K_RETRY)                                            //Retry 繼續流程
+                    {
+                        W7C2_LS_bFirstTestAutoRetestGPIB=false;
+                        W7C2_FMAIN_SETLOTSTATE(8);                                  //ART FT Lot End when loading devices finish
+                    }
+                    else                                                        //TRAY_FEED 不做RT,直接tray feed
+                    {
+                        W7C2_LS_iSCKART_RTUnitCount=0;
+                        W7C2_SCKART->CheckNeedRT();
+                        W7C2_FMAIN_SETLOTSTATE(10);                                 //ART Final Lot End when loading devices finish
+                    }
+                }
+                else
+                {
+                    if(CosFunction.bART_SECSGEM_93K &&                          //JerryYang 20220923 : SECS GEM版本ART
+                       (W7C2_SCKART->iTesterType==1 ||
+                        W7C2_SCKART->iCurrentStatus!=W7C2_SCKART->iLOTSTATUS_A))
+                    {
+                        W7C2_FMAIN_CLARNDATA(2, "ART_LOTRETESTCLEARED");
+
+                        if(LastSet.iTester==OFF_LINE)
+                        {
+                            if(BinSelect[OffT].bAutoRetest[eAuto1])
+                                W7C2_LS_BinCT[0][e3Auto1]=0;
+                            if(BinSelect[OffT].bAutoRetest[eAuto2])
+                                W7C2_LS_BinCT[0][e3Auto2]=0;
+                            if(BinSelect[OffT].bAutoRetest[eAuto3])
+                                W7C2_LS_BinCT[0][e3Auto3]=0;
+                        }
+                        else
+                        {
+                            if(BinSelect[FT].bAutoRetest[eAuto1])
+                                W7C2_LS_BinCT[0][e3Auto1]=0;
+                            if(BinSelect[FT].bAutoRetest[eAuto2])
+                                W7C2_LS_BinCT[0][e3Auto2]=0;
+                            if(BinSelect[FT].bAutoRetest[eAuto3])
+                                W7C2_LS_BinCT[0][e3Auto3]=0;
+                        }
+
+                        for(int i=0; i<10; i++)
+                        {
+                            W7C2_LS_lSCKARTBinCT[i]=0;
+                        }
+                        LastSet.iSCKARTInputCT=0;
+                        LastSet.lShuttleCount=0;
+                        W7C2_LOTSUMMARY_CLEARRTDATA();
+
+                        WriteLastDataFile(false);                               //kevin 20141030
+                        W7C2_FSORTCT_SHOWLOADING();
+                        W7C2_FSORTCT_SHOWSORT();
+
+                        if(W7C2_SCKART->iTesterType==0)
+                        {
+                            fSCKART->iInputCount=W7C2_LS_iSCKART_RTUnitCount;
+                            W7C2_LS_iSCKART_RTUnitCount=0;
+                        }
+                        fSCKART->iInputJamCnt    =0;
+                        W7C2_SCKART->iOutputJamCnt   =0;
+
+                        if(W7C2_SCKART->iCurrentStatus==W7C2_SCKART->iLOTSTATUS_R)
+                        {
+                            W7C2_SCKART->SetLotStatus(W7C2_SCKART->iLOTSTATUS_W);
+                            W7C2_SCKART->iWaitGPIBLotR=3;
+                        }
+                        W7C2_SCKART->AccessFile(false, -1);
+                        RecordProcess("ART LOTRETESTCLEARED.");
+                        W7C2_FLOTINFO_CLEARBARCODE();                  //Steven 20190214 : 統一清除2DID方式
+                    }
+
+                    if(W7C2_LS_bBreakSCKART)                                    //Sam 20202015 : TCP ART 增加 OneCycle 可手動強制中斷流程
+                    {
+                        W7C2_LS_bBreakSCKART=false;
+                        W7C2_LS_iSCKART_RTUnitCount=0;
+                        W7C2_SCKART->CheckNeedRT();
+                        W7C2_FMAIN_SETLOTSTATE(10);                                 //TCP ART Final Lot End
+                    }
+                    else
+                    {
+                        if(W7C2_LS_bFirstTestAutoRetestGPIB==true)
+                        {
+                            if(IniConfig.bSPILFunction==true && bStopART==true)                                         //JerryYang 20220923 : SECS GEM版本ART
+                            {
+                                bStopART=false;
+                                W7C2_LS_iSCKART_RTUnitCount=0;
+                                W7C2_SCKART->CheckNeedRT();
+                                W7C2_FMAIN_SETLOTSTATE(10);                         //SPIL ART Final Lot End
+                            }
+                            else
+                            {
+                                W7C2_LS_bFirstTestAutoRetestGPIB=false;
+                                W7C2_FMAIN_SETLOTSTATE(8);                          //ART Lot End
+                            }
+                        }
+                        else
+                        {
+                            bStopART=false;                                     //JerryYang 20220923 : SECS GEM版本ART
+                            W7C2_FMAIN_SETLOTSTATE(10);                             //ART Final Lot End
+                        }
+                    }
+                }
+
+                W7C2_LS_bEndLotAutoRetestGPIB=true;
+                if(TestIF_File.bSCKART_RunARTWithoutCmd==false)                 //JerryYang 20200318 fix選擇RunARTWithoutCmd發生hang up
+                {
+                    W7C2_LS_bWaitEndLotAutoRetestGPIB=false;
+                }
+                iFirstIn=0;
+                return false;
+            }
+            else
+            {
+                if(fMain->hanaART->IsHanaArtAvailable()==true)                  //JimmyChiu 20241023 HANA ART Function
+                {
+//                    if(W7C2_HANAART->IsContactAvailable()==false)           //Steven 20250415 : mark
+//                    {
+//                        return false;
+//                    }
+                }
+                else if(TestIF_File.bRENESAS_EnableFTCT==true)                  //RogerYang 20250913 : FT-CT
+                {
+//                    if(W7C2_RENESAS->iHaveRecvTestEnd==1)              //RogerYang 20250913 : FT-CT "send 71"
+//                    {
+//                        W7C2_RENESAS->SendTestEnd();
+//                        W7C2_FMAIN_SETLOTSTATE(8);
+//                        W7C2_RENESAS->iHaveRecvTestEnd=0;  //這裡才能清0
+//                    }
+//                    else
+//                    {
+//                        ShowMyMessage("(FT-CT)未先收到70 TESTEND 命令");
+//                        return false;
+//                    }
+                }
+                else if(TestIF_File.bSCKART_RunARTWithoutCmd==false &&
+                        W7C2_LS_bWaitEndLotAutoRetestGPIB==false)               //JerryYang 20200318 fix選擇RunARTWithoutCmd發生hang up
+                {
+                    return false;
+                }
+                ret=1;
+                bRet=true;
+            }
+        }
+        else if(CosFunction.bUseSCKART &&
+                W7C2_SCKART->iTesterType==0)                                        //Steven 20161201 (wei) : For SCK 93K ART
+        {
+            if(W7C2_SCKART->iWaitGPIBLotR==3)
+            {
+                W7C2_LS_iRetestFlagART=1;
+                bRet=true;                                                      //kevin 20150717
+            }
+            else if(W7C2_SCKART->iWaitGPIBLotR==4)
+            {
+                W7C2_LS_iRetestFlagART=-1;
+                ret=K_TRAY_FEED;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if(IniConfig.bEnable_SECS_GEM)
+            {
+                if(LastSet.iRunStartMode!=rsmInitial_ART &&
+                   LastSet.iRunStartMode!=rsmContinuRetest_ART)
+                    bSecsGemCanStart=true;                                      //wei 20150630  SecsGem Can Start
+            }
+            else
+            {
+                ShowMyMessage("Please Print Summary ", "請結批報表");
+            }
+            ret=1;
+            bRet=true;                                                          //kevin 20150717
+        }
+    }
+
+    if(bRet)                                                                    //kevin 20150717
+    {
+        if(CosFunction.bUseSCKART)                                              //Steven 20161201 (wei) : For SCK 93K ART
+        {
+            if(W7C2_SCKART->iNeedRT>0)
+            {
+                bNeedRetest=true;
+            }
+            else
+            {
+                bNeedRetest=false;
+                ret=K_TRAY_FEED;
+            }
+        }
+        else
+        {
+            bNeedRetest=CheckNeedToRT();                                        //Steven 20161127 : change to function
+            if(CosFunction.bAutoRetestGPIBmode==true)                           //jou 2015-10-02 Auto Retest GPIB mode
+            {
+                if(W7C2_LS_iRetestFlagART==3)                                   //RETESTFLAG==00 not need retest
+                {
+                    bNeedRetest=false;
+                    W7C2_LS_bFinEndLotAutoRetestGPIB=false;
+                    W7C1_LS_bWaitStartLotAutoRetestGPIB=true;                   //Frank 20161212 (Jou) 若Stop Testing後須做HP Check時
+                }
+                else if(W7C2_LS_iRetestFlagART==1)                              //RETESTFLAG==11 need Auto retest
+                {
+                    W7C2_LS_bFinEndLotAutoRetestGPIB=false;
+                    W7C2_FLOTINFO_CLEARBARCODE();                      //Frank 20170505 (Steven) : add for Xilinx 2DID
+                }
+                else if(W7C2_LS_iRetestFlagART==2)                              //RETESTFLAG==12 Auto retest Finish
+                {
+                    W7C2_LS_bFinEndLotAutoRetestGPIB=true;
+                    W7C2_FLOTINFO_CLEARBARCODE();                      //Frank 20170505 (Steven) : add for Xilinx 2DID
+                }
+                W7C2_LS_iRetestFlagART=-1;
+            }
+        }
+
+        W7C2_FTRAYMAP_CLEARTRAYIDBYLOT();                                       //JerryYang 20250120 : add
+
+        if(bNeedRetest==false)                                                  //ChungHung 20141002 add for KYEC AutoRetest
+        {
+            if(W7C2_LS_iAutoRetestCount_ART>=1)                                 //wei 20150923 add ART計數
+                W7C2_EVENTREPORT_ARTRTFINISH();                            //61     每輪RT結束發報Event給Host
+            if(TrayForm.bEnableAMR==false)                                      //Eastsun 20260514 F010 AMR ART guard
+            W7C1_LS_iLoaderTrayCount_ART=0;
+            ret=K_TRAY_FEED;                                                    //Auto Tray Feed
+        }
+        else if(LastSet.iRunStartMode==rsmContinuStart_ART)                     //第一次FT (Pass && Faill )測試
+        {
+            W7C1_LS_iLoaderTrayCount_ART=0;
+            W7C2_LS_iAutoRetestCount_ART++;
+
+            if(IniConfig.bEnable_SECS_GEM==true)
+            {
+                if(W7C2_LS_iAutoRetestCount_ART==1)                             //ChungHung 20150511 modify
+                {
+                    W7C2_EVENTREPORT_ARTFTFINISH();                        //63     正測流程結束發報Event給Host
+                }
+                else
+                {
+                    W7C2_EVENTREPORT_ARTRTFINISH();                        //61     每輪RT結束發報Event給Host
+                }
+            }
+            W7C2_FMAIN_LABEL12=W7C2_LS_iAutoRetestCount_ART;
+
+            if(bUseFailNoDistinction)
+            {
+                int iFailYield=0, Sum_ART=0, iFail_ART=0;                       //ChungHung 20141002 add for KYEC AutoRetest
+
+                double iPass=0.0,iPassYield=0.0;
+                for(int i=0; i<eTrayCount; i++)
+                {
+                    Sum_ART+=W7C2_LS_BinCT_ART[0][iTo3Unload[i]];
+                    if(Prod.iIsFailT6[i]==1)                                    //Steven 20240105 : Prod.bIsPass --> Prod.iIsFailT6
+                    {
+                        iFail_ART+=W7C2_LS_BinCT_ART[0][iTo3Unload[i]];         //wei 20150923 add ART計數
+                    }
+                    else
+                    {
+                        iPass+=W7C2_LS_BinCT[0][iTo3Unload[i]];                 //kevin 20150613
+                    }
+                }
+
+                iFailYield=ChangeToFloatNonPcnt((double)(iFail_ART*100), (double)(Sum_ART));                            //wei 20150923 add ART計數
+                iPassYield=100-iFailYield;                                      //kevin 20150706 add yield
+
+                if(bAutoLeastRetestFile && W7C2_LS_iAutoRetestCount_ART<=iAutoLeastRetestLimitFile)
+                {
+                    DoAutoRetest(true);
+                    SetRunStartMode(rsmAutoRetest);
+                    W7C1_FMAIN_START("DoART_AfterCleanOut 1");
+                    if(bAutoReTest_ART)                                         //kevin 20150605
+                        bLoaderNoTrayAutoCleanOut=false;                        //kevin 20150605 load 可以再new tray
+                }
+                else if(W7C2_LS_iAutoRetestCount_ART==1 &&
+                        ((iUseFTFailYield==0 &&
+                         ((iUseFTFailYieldModel==0 && iPassYield>=dFailYieldRate_ARTFTFile[1]) ||
+                         (iUseFTFailYieldModel==1 && iPassYield>dFailYieldRate_ARTFTFile[1]) ||
+                         (iUseFTFailYieldModel==2 && iPassYield<dFailYieldRate_ARTFTFile[1]) ||
+                         (iUseFTFailYieldModel==3 && iPassYield<=dFailYieldRate_ARTFTFile[1]))) ||
+                         (iUseFTFailYield==1 && (iPassYield>=dFailYieldRate_ARTFTFile[0] && iPassYield<=dFailYieldRate_ARTFTFile[2]))))
+                {
+                    if(IniConfig.bEnable_SECS_GEM==true)
+                    {
+                        W7C2_EVENTREPORT_ARTRTFINISH();                    //61     每輪RT結束發報Event給Host
+                        MySleep(100);
+                    }
+
+                    if(TrayForm.bEnableAMR==false)                              //Eastsun 20260514 F010 AMR ART guard
+                        W7C1_LS_iLoaderTrayCount_ART=0;
+                    ret=K_TRAY_FEED;
+                    W7C1_FMAIN_START("DoART_AfterCleanOut 2");
+                }
+                else if(W7C2_LS_iAutoRetestCount_ART>=1 &&
+                        ((iUseRTFailYield==0 &&
+                        ((iUseRTFailYieldModel==0 && iPassYield>=dFailYieldRate_ARTRTFile[1]) ||
+                         (iUseRTFailYieldModel==1 && iPassYield>dFailYieldRate_ARTRTFile[1]) ||
+                         (iUseRTFailYieldModel==2 && iPassYield<dFailYieldRate_ARTRTFile[1]) ||
+                         (iUseRTFailYieldModel==3 && iPassYield<=dFailYieldRate_ARTRTFile[1]))) ||
+                         (iUseRTFailYield==1 && (iPassYield>=dFailYieldRate_ARTRTFile[0] && iPassYield<=dFailYieldRate_ARTRTFile[2]))))
+                {
+                    if(IniConfig.bEnable_SECS_GEM==true)
+                    {
+                        W7C2_EVENTREPORT_ARTRTFINISH();                    //61     每輪RT結束發報Event給Host
+                        MySleep(100);
+                    }
+
+                    if(TrayForm.bEnableAMR==false)                              //Eastsun 20260514 F010 AMR ART guard
+                        W7C1_LS_iLoaderTrayCount_ART=0;
+                    ret=K_TRAY_FEED;
+                    W7C1_FMAIN_START("DoART_AfterCleanOut 3");
+                }
+                else
+                {
+                    DoAutoRetest(true);
+                    SetRunStartMode(rsmAutoRetest);
+                    W7C1_FMAIN_START("DoART_AfterCleanOut 4");
+                    if(bAutoReTest_ART)                                         //kevin 20150605
+                        bLoaderNoTrayAutoCleanOut=false;                        //kevin 20150605 load 可以再new tray
+                }
+            }
+            else
+            {
+                if(CUSTOMER_CODE==CC_TSMC_TAINAN)                               //wei 20170119 (jou) ATR等待Secs Gem指令
+                {
+                    if(IniConfig.bEnable_SECS_GEM==true)
+                    {
+                        fMain->Pause("DoART_AfterCleanOut TSMC");
+                    }
+                    else
+                    {
+                        DoAutoRetest(true);
+                        SetRunStartMode(rsmAutoRetest);
+                        W7C1_FMAIN_START("DoART_AfterCleanOut 5");
+                        if(bAutoReTest_ART)                                     //kevin 20150605
+                            bLoaderNoTrayAutoCleanOut=false;                    //kevin 20150605 load 可以再new tray
+                    }
+                }
+                else
+                {
+                    DoAutoRetest(true);
+                    SetRunStartMode(rsmAutoRetest);
+                    if(IniConfig.bSPILFunction==false)                          //JerryYang 20220923 : SPIL半套ART
+                    {
+                        W7C1_FMAIN_START("DoART_AfterCleanOut 6");
+                    }
+
+                    if(bAutoReTest_ART)                                         //kevin 20150605
+                        bLoaderNoTrayAutoCleanOut=false;                        //kevin 20150605 load 可以再new tray
+                }
+            }
+        }
+        else if(LastSet.iRunStartMode==rsmContinuRetest_ART)                    //最後一次 Finial Testting
+        {
+            if(IniConfig.bEnable_SECS_GEM==true)
+            {
+                W7C2_EVENTREPORT_ARTRTFINISH();                            //61     每輪RT結束發報Event給Host
+                MySleep(100);
+            }
+            bART_RT2RunNoChangeMode=false;
+            if(TrayForm.bEnableAMR==false)                                      //Eastsun 20260514 F010 AMR ART guard
+                W7C1_LS_iLoaderTrayCount_ART=0;
+            ret=K_TRAY_FEED;                                                    //Auto Tray Feed
+        }
+    }
+    return true;
+}
+//------------------------------------------------------------------------------

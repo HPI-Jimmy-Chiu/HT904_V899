@@ -76,6 +76,15 @@ void InitCleanOutFunction();
 // 15748). Declared here so callers (the MainProc/DoAllProcess spine + the W7-C1
 // verify) bind the single ODR definition. AI(W7C1-Integrate) 20260629.
 void DoCleanOutFinishCheck();
+// W7-C2: the REAL faithful body lives in csystem.cpp (golden csystem.cpp:12813-
+// 14047). Declared here so callers (the MainProc spine + the W7-C2 verify) bind
+// the single ODR definition -- the no-op stub in csystem_shims.cpp was removed.
+// AI(W7C2-Integrate) 20260701.
+void DoOneCycleFinishCheck();
+// W7-C2: DoART_AfterCleanOut REAL body (golden csystem.cpp:14049-14711) lives in
+// csystem.cpp; declared here so DoCleanOutFinishCheck's call binds to it (the
+// W7C1 seam alias was removed). AI(W7C2-Integrate) 20260701.
+bool DoART_AfterCleanOut(int &ret);
 void InitOneCycle(AnsiString sFunc, bool bQAModeTrayEnd=false);
 void TrayEndFunction();
 void InitTrayEndFunction();

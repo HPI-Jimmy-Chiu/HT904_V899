@@ -80,11 +80,12 @@ void SetFixTrayMiddleDtata();                                 // golden aoutarm.
 
 // ---------------------------------------------------------------------------
 //  End-of-lot bookkeeping FSMs the HUB ticks after DoAllProcess (golden
-//  csystem.cpp:12813 / :14713 -- ~2900 lines).  Bodies are GATED #if 0 in
-//  csystem.cpp; these ACTIVE no-op stubs keep the loop pumping (NOT spine).
+//  csystem.cpp:12813 / :14713).  Their REAL faithful bodies now live in
+//  csystem.cpp (W7-C1 DoCleanOutFinishCheck / W7-C2 DoOneCycleFinishCheck) and
+//  their prototypes MOVED to csystem.h; the no-op stubs here were removed to
+//  keep a single ODR definition each.
 // ---------------------------------------------------------------------------
-void DoOneCycleFinishCheck();                                 // golden csystem.cpp:12813 (gated; offline no-op)
-// DoCleanOutFinishCheck() : decl MOVED to csystem.h (W7-C1); the REAL body lives
-// in csystem.cpp now. The no-op stub here was removed (single ODR definition).
+// DoOneCycleFinishCheck() : decl MOVED to csystem.h (W7-C2); REAL body in csystem.cpp.
+// DoCleanOutFinishCheck() : decl MOVED to csystem.h (W7-C1); REAL body in csystem.cpp.
 
 #endif

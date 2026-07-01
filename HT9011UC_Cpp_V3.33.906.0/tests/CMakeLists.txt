@@ -1146,3 +1146,42 @@ if(WIN32)
 endif()
 
 add_test(NAME W7_C1_CleanOutFinish COMMAND test_w7_c1_cleanout_finish)
+
+# ===========================================================================
+#  W7-C2 VERIFY -- the end-of-lot ONE CYCLE finish-check (REAL body)
+# ===========================================================================
+# --- test_w7_c2_onecycle_finish: prove DoOneCycleFinishCheck does REAL work ---
+#   Proves the W7-C2 change (the faithful golden DoOneCycleFinishCheck body,
+#   csystem.cpp:12813-14047, now lives in the translated csystem.cpp -- replacing
+#   the no-op stub at csystem_shims.cpp:145) does REAL work over the now-seedable
+#   cross-arm occupancy grid:
+#     (a) EMPTY machine (iOneCycle=1/IndexStatus=Z1_Z2_Normal/CUSTOMER_CODE=0, all
+#         kits cleared) -> the body does NOT park on the residual-IC wait cursor 5;
+#         one-cycle can proceed toward finish.
+#     (b) FALSE-FINISH GUARD (the new capability): seed InArmSuck use-site=HAS_IC
+#         -> iOneCycleTask==5 (golden residual wait gate :12933) + iOneCycle stays
+#         1 (NO false instant-finish -- the finish path that clears iOneCycle=0 at
+#         golden :13931 is unreached, unlike the old stub).
+#     (c) DRAIN: clear the seed -> next call no longer parks on 5.
+#     (d) NO-REGRESSION: the entry guard (golden :12820) gates the work -- iOneCycle=0
+#         (the W6.6 hub posture) takes the else-branch (golden :14025), leaving the
+#         cursor untouched and iOneCycle at 0 (BtnOneCycle->Down offline-false).
+#   The DoOneCycleFinishCheck body + the iOneCycle/iOneCycleTask/IndexStatus/
+#   CUSTOMER_CODE globals + the TMyKitSuck kit globals all live in ht9045_sm
+#   (csystem.cpp / cmydef / aHotPlateSubstrate.cpp).  Same RESCAN link group as
+#   the other W6/W7 state-machine tests so the cprod<->cpublic<->cmydef ctor
+#   cross-references settle.  All seeded globals are saved/restored so sibling
+#   suites are unaffected.
+add_executable(test_w7_c2_onecycle_finish
+    test_w7_c2_onecycle_finish.cpp
+)
+
+target_link_libraries(test_w7_c2_onecycle_finish PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w7_c2_onecycle_finish PRIVATE ws2_32)
+endif()
+
+add_test(NAME W7_C2_OneCycleFinish COMMAND test_w7_c2_onecycle_finish)
