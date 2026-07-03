@@ -5486,7 +5486,9 @@ int CheckInitStartSuckStatus()                                                  
        (USE_CATCH_TRAY_MODEL==3 && bDetectTrayArmCatch==false))                 //Steven 20170623 (wei) : Add for catch tray with cover
     {                                                                           //kevin 20150810 add
         iReturn=5;                                                              //kevin 20160616
-        if(USE_CATCH_TRAY_MODEL==2 ||                                           //jou 2011-11-08 retry -> skip字義上比較恰當
+        if(USE_CATCH_TRAY_MODEL==2 && Cylinder[C_CatchTray_FixOn].OnStatus())   //AI(ht9045-v899) 20260703: ART夾爪在夾緊位(FixOn ON=有盤)→報WAR0614提示取盤,不再誤報WAR0615(原查C_CatchTray_Fix非ART缸漏認夾緊位)
+            ShowErrorMessage("WAR0614", K_SKIP, MTrayX, false, __FUNC__);
+        else if(USE_CATCH_TRAY_MODEL==2 ||                                           //jou 2011-11-08 retry -> skip字義上比較恰當
            USE_CATCH_TRAY_MODEL==3)                                             //Steven 20170623 (wei) : Add for catch tray with cover
             ShowErrorMessage("WAR0615", K_SKIP, MTrayX, false, __FUNC__);       //kevin 20150811 add   'ART_TrayARM ON/OFF cyclinder Sensor error
         else
@@ -5560,7 +5562,9 @@ bool DoReTesetStart()
             }
             else if(hDoInitialStartTim.Off())                                   //kevin 20160616 夾tray機構異常
             {
-                  if(USE_CATCH_TRAY_MODEL==2 ||
+                  if(USE_CATCH_TRAY_MODEL==2 && Cylinder[C_CatchTray_FixOn].OnStatus())   //AI(ht9045-v899) 20260703: ART夾爪在夾緊位(FixOn ON=有盤)→報WAR0614提示取盤,不再誤報WAR0615(原查C_CatchTray_Fix非ART缸漏認夾緊位)
+                      ShowErrorMessage("WAR0614", K_SKIP, MTrayX, false, __FUNC__);
+                  else if(USE_CATCH_TRAY_MODEL==2 ||
                      USE_CATCH_TRAY_MODEL==3)                                   //Steven 20170623 (wei) : Add for catch tray with cover
                       ShowErrorMessage("WAR0615", K_SKIP, MTrayX, false, __FUNC__);       //kevin 20150811 add   'ART_TrayARM ON/OFF cyclinder Sensor error
                   else
@@ -6212,7 +6216,9 @@ bool DoInitialStart()
             }
             else if(hDoInitialStartTim.Off())                                   //kevin 20160616 夾tray機構異常
             {
-                if(USE_CATCH_TRAY_MODEL==2 ||
+                if(USE_CATCH_TRAY_MODEL==2 && Cylinder[C_CatchTray_FixOn].OnStatus())   //AI(ht9045-v899) 20260703: ART夾爪在夾緊位(FixOn ON=有盤)→報WAR0614提示取盤,不再誤報WAR0615(原查C_CatchTray_Fix非ART缸漏認夾緊位)
+                    ShowErrorMessage("WAR0614", K_SKIP, MTrayX, false, __FUNC__);
+                else if(USE_CATCH_TRAY_MODEL==2 ||
                    USE_CATCH_TRAY_MODEL==3)                                     //Steven 20170623 (wei) : Add for catch tray with cover
                       ShowErrorMessage("WAR0615", K_SKIP, MTrayX, false, __FUNC__); //kevin 20150811 add   'ART_TrayARM ON/OFF cyclinder Sensor error
                   else
