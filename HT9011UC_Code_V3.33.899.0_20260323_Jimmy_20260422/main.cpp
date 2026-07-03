@@ -4551,6 +4551,7 @@ bool __fastcall TfMain::Start(AnsiString Func)
     }
 
 #ifndef SOFT_SIMULTE
+    //AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 閘門已於函式端(CheckSmartAutoCleanCanStart)改為恆放行(return true), 此呼叫不再擋 START, 下一行 return false 實際不會執行；外殼與呼叫保持不動。
     if(fCleaning->CheckSmartAutoCleanCanStart()==false)                         //Sam 20250916 : Alarm後需要清除資料才能Start
         return false;
 
@@ -25716,6 +25717,8 @@ void __fastcall TfMain::DoStateRecord(int iShowAlarm, bool bManual)             
         TestList->SaveToFile(BatFile);
         //AI(ht9045-v899) 20260630: 啟動前先清掉前一次未收尾的 State Record handle/stage(避免重入時洩漏
         //  handle 或丟失上一份 NewPath 收尾);再保留 1.bat handle 供 case 6 兩段非阻塞輪詢(複製→整包壓縮→刪)。
+        //  注:極少數「前一份還在輪詢時又觸發新一份」的重入,舊 1.bat 不會被 kill(僅關 handle),舊 NewPath 夾
+        //  會被放棄(不壓縮/不刪)留成孤兒夾;屬低機率且僅磁碟殘留,非控制/SECS 風險,故不強制 kill/queue。
         if(g_hStateRecordBat!=NULL) { CloseHandle(g_hStateRecordBat); g_hStateRecordBat=NULL; }
         if(g_hStateRecordZip!=NULL) { CloseHandle(g_hStateRecordZip); g_hStateRecordZip=NULL; }
         g_iStateRecordStage=0;

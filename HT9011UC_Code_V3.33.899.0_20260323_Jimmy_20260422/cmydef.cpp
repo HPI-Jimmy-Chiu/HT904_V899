@@ -5454,6 +5454,10 @@ int iAdaptiveContsLowerCnt=0;                                                   
 AnsiString sACRecAlarmCode="";                                                  //Sam 20250916 : Alarm後需要清除資料才能Start
 AnsiString sACRecEPortCode="";
 bool bShowNoteCleanSocket=false;
+//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 Smart Auto Clean 警報改非阻塞提示並週期性重置偵測；新增原因/處置文字(EN/CH)全域供 note.cpp 面板動態帶入。提示必須留在觸發當下/CheckSmartAutoClean，不得移到會 StopAllMotor 的路徑。
+AnsiString sACSmartNoteEN="";                                                   //AI(ht9045-v899) 20260703: pnlCleanSocket 動態英文提示(空=用預設)
+AnsiString sACSmartNoteCH="";                                                   //AI(ht9045-v899) 20260703: pnlCleanSocket 動態中文提示(空=用預設)
+bool bACSmartNeedReset=false;                                                   //AI(ht9045-v899) 20260703: iACUseParam==0 觸發時置位，於 START 閘門重置偵測計數，避免每 cycle 重複觸發同一 alarm
 bool bBarCoderAutoLogin=false;                                                  //Sam 20221101 : 使用 BarCoder 自動登錄
 bool bBarCoderSetupFile=false;                                                  //Sam 20230320 : 使用 BarCodeReader 來輸入切換 SetupFile。
 bool bADAM6024FWIsNew[3]={false, false, false};                                 //Nickliu 20230314 Add Check Adam FW Is New

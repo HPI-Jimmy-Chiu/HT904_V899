@@ -557,7 +557,7 @@ AutoIncBuild=0
 MajorVer=3
 MinorVer=33
 Release=899
-Build=32
+Build=33
 Debug=0
 PreRelease=0
 Special=0
@@ -569,7 +569,7 @@ CodePage=950
 [Version Info Keys]
 CompanyName=Honprec
 FileDescription=HT-9xxx Series Logic Handler
-FileVersion=3.33.899.32
+FileVersion=3.33.899.33
 InternalName=
 LegalCopyright=
 LegalTrademarks=

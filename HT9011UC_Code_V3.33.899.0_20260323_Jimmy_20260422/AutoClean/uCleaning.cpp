@@ -2647,6 +2647,17 @@ bool __fastcall TfCleaning::CheckSmartAutoClean(AnsiString aAlarmCode, AnsiStrin
         if(iACUseParam==0)
         {
             bShowNoteCleanSocket=true;
+            //AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 觸發當下做非阻塞提示(原因=alarm 描述+code, 處置=自動清潔已暫停/已重新初始化偵測, 續低良率請清潔 Socket)並置位重置旗標。只做一次(bACSmartNeedReset 防重複)。提示必須留在此觸發當下/CheckSmartAutoClean, 不得改用 ShowMyMessage(會 StopAllMotor)。
+            if(bACSmartNeedReset==false)
+            {
+                AnsiString sACAlmMsg=GetMyDBIMessage(aAlarmCode);
+                AnsiString sACLog="";
+                sACLog.sprintf("Smart auto clean alarm[%s] %s : auto clean paused, detection re-initialized, offline clean socket if yield keeps low", aAlarmCode, sACAlmMsg);
+                NewRecordProcess("", sACLog, aAlarmCode);                        //非阻塞記錄原因+處置
+                sACSmartNoteEN.sprintf("Alarm[%s] %s : auto clean paused, detection re-initialized. Offline clean socket if yield keeps low.", aAlarmCode, sACAlmMsg);
+                sACSmartNoteCH.sprintf("警報[%s] %s：自動清潔已暫停，系統已重新初始化偵測。續低良率請開後門離線清潔 Socket。", aAlarmCode, sACAlmMsg);
+                bACSmartNeedReset=true;                                          //於 START 閘門重置偵測計數
+            }
             bFlag=false;                                                        //直接報警
         }
         else
@@ -2849,11 +2860,20 @@ bool TfCleaning::CheckSmartAutoCleanCanStart()                                  
 
         if(bCanStart==false)                                                    //Sam 20250916 : Alarm後需要清除資料才能Start
         {
-            ShowErrorMessage(sACRecAlarmCode, K_RETRY, MMInterface, false, sACRecEPortCode);
+            //AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 需求1 移除此處「重貼 alarm 擋機」ShowErrorMessage(客戶否決的鎖機行為)。改為函式尾恆放行 START。
             //ShowMyMessage("Please Reset AI AutoClean","");
         }
 
-        return bCanStart;
+        //AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 需求3 若偵測待重置(前一輪 iACUseParam==0 觸發)則於放行前呼叫 ResetSmartAutoClean 週期性重置偵測(歸零 iACSmartCount/iACSmartCount_CTF/iACUseParam)並清面板提示；需求1 恆放行(return true)不再擋 START。
+        if(bACSmartNeedReset)
+        {
+            ResetSmartAutoClean();                                               //歸零偵測計數, 讓下一輪從頭累計
+            bACSmartNeedReset=false;
+            bShowNoteCleanSocket=false;
+            sACSmartNoteEN="";
+            sACSmartNoteCH="";
+        }
+        return true;                                                            //恆放行 START, 不鎖機
     }
     return true;
 }
