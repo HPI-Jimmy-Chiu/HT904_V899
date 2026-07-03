@@ -2677,14 +2677,29 @@ bool ProcessMotorHome(bool Flag2)
                     }
                     else
                     {
-                        if(MOT[MTrayX].fHasTray==false)                         //JerryYang 20251014 : tray arm嚙磅嚙踝蕭あ嚙踝蕭O嚙踝蕭嚙踝蕭嚙趣有tray嚙盤嚙踝蕭嚙褕候賂蕭嚙瑾嚙磊alarm
+                        //AI(ht9045-v899) 20260703: Home時FixOn讀ON但軟體無盤記錄,原邏輯不經確認即夾持+標記有盤走自動退盤,造成非預期夾爪動作;改為防抖100次後跳WAR0614由操作員確認,RETRY=已取下盤重新檢查,SKIP=確認有盤維持舊有自動退盤
+                        if(MOT[MTrayX].fHasTray==false)
                         {
-                            Str.sprintf("Tray arm detect a tray on it. Please check if there is a tray!(C_CatchTray_FixOn_On)");
-                            ShowMyMessage(Str);
+                            static int iFixOnDetCnt=0;
+                            iFixOnDetCnt++;
+                            if(iFixOnDetCnt>100)
+                            {
+                                iFixOnDetCnt=0;
+                                int iAlmRet=ShowErrorMessage("WAR0614", K_SKIP|K_RETRY, MTrayX, false, "ProcessMotorHome_400");
+                                if(iAlmRet==K_SKIP)
+                                {
+                                    MOT[MTrayX].fHasTray=true;
+                                    Cylinder[C_CatchTray_FixOn].On();
+                                    Cylinder[C_CatchTray_FixOff].Off();
+                                }
+                            }
                         }
-                        MOT[MTrayX].fHasTray=true;                              //ChungHung 20141208 add for AutoRetest mode 嚙踝蕭嚙羯嚙踝蕭嚙緹嚙踝蕭 catch Tray 嚙緯嚙篁嚙踝蕭loader
-                        Cylinder[C_CatchTray_FixOn].On();
-                        Cylinder[C_CatchTray_FixOff].Off();
+                        else
+                        {
+                            MOT[MTrayX].fHasTray=true;
+                            Cylinder[C_CatchTray_FixOn].On();
+                            Cylinder[C_CatchTray_FixOff].Off();
+                        }
                     }
                 }
                 else

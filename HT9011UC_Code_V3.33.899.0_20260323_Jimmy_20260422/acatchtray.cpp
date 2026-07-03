@@ -2004,7 +2004,19 @@ int DoCatchFromLoader()
                     if(ret==K_RETRY)
                         MOT[MTrayX].fHasTray=true;
                     else if(ret==K_SKIP)
+                    {
                         MOT[MTrayX].fHasTray=false;
+                        //AI(ht9045-v899) 20260703: SKIP後補釋放夾爪,避免空夾閉合殘留(FixOn/FixOff到位sensor皆OFF)造成下次Initial Start/ART自檢WAR0615循環
+                        if(USE_AUTO_RETEST==eartInstall)
+                        {
+                            Cylinder[C_CatchTray_FixOn].Off();
+                            Cylinder[C_CatchTray_FixOff].On();
+                        }
+                        else
+                        {
+                            Cylinder[C_CatchTray_Fix].Off();
+                        }
+                    }
                 }
             }
             if(TrayArmMotorMove(pos))
@@ -3597,6 +3609,16 @@ bool DoPlaceTrayToAuto(int AutoTarget)
                     if(ret==K_SKIP)
                     {
                         MOT[MTrayX].fHasTray=false;
+                        //AI(ht9045-v899) 20260703: SKIP後補釋放夾爪,避免空夾閉合殘留(FixOn/FixOff到位sensor皆OFF)造成下次Initial Start/ART自檢WAR0615循環
+                        if(USE_AUTO_RETEST==eartInstall)
+                        {
+                            Cylinder[C_CatchTray_FixOn].Off();
+                            Cylinder[C_CatchTray_FixOff].On();
+                        }
+                        else
+                        {
+                            Cylinder[C_CatchTray_Fix].Off();
+                        }
                         Task=1;
                         return true;
                     }
@@ -4550,6 +4572,16 @@ bool DoPlaceToBuffer()
                     if(ret==K_SKIP)
                     {
                         MOT[MTrayX].fHasTray=false;
+                        //AI(ht9045-v899) 20260703: SKIP後補釋放夾爪,避免空夾閉合殘留(FixOn/FixOff到位sensor皆OFF)造成下次Initial Start/ART自檢WAR0615循環
+                        if(USE_AUTO_RETEST==eartInstall)
+                        {
+                            Cylinder[C_CatchTray_FixOn].Off();
+                            Cylinder[C_CatchTray_FixOff].On();
+                        }
+                        else
+                        {
+                            Cylinder[C_CatchTray_Fix].Off();
+                        }
                         Task=1;
                         return true;
                     }
