@@ -1218,6 +1218,7 @@ int DoCatchFromLoader()
     static int SuckLoaderErrRetryCT=0;
     AnsiString sBuffer="";                                                      //kevin 20210623
     static int iTrayCount=0;                                                    //JerryYang 20220923 : add
+    static int iCnt=0;                                                          //AI(ht9045-v899) 20260703: case 570 JAM0610 防抖計數,比照 DoPlaceTrayToAuto_250
 
     switch(Task)
     {
@@ -1998,25 +1999,35 @@ int DoCatchFromLoader()
             }
             else
             {
-                if(MOT[MTrayX].fHasTray && IsTrayArmCatchTrayFail())            //JerryYang 20200926 包成函式,偵測tray arm夾tray是否異常
+                //AI(ht9045-v899) 20260703: 補 iCnt>100 防抖,避免搬運中 FixOn sensor 單次彈跳即誤報 JAM0610(頻繁 Alarm 頂層主因);比照 DoPlaceTrayToAuto_250
+                if(MOT[MTrayX].fHasTray && IsTrayArmCatchTrayFail())            //JerryYang 20200926
                 {
-                    ret=ShowErrorMessage("JAM0610", K_SKIP|K_RETRY, MTrayX, false, "DoCatchFromLoader_570");
-                    if(ret==K_RETRY)
-                        MOT[MTrayX].fHasTray=true;
-                    else if(ret==K_SKIP)
+                    iCnt++;
+                    if(iCnt>100)
                     {
-                        MOT[MTrayX].fHasTray=false;
-                        //AI(ht9045-v899) 20260703: SKIP後補釋放夾爪,避免空夾閉合殘留(FixOn/FixOff到位sensor皆OFF)造成下次Initial Start/ART自檢WAR0615循環
-                        if(USE_AUTO_RETEST==eartInstall)
+                        iCnt=0;
+                        ret=ShowErrorMessage("JAM0610", K_SKIP|K_RETRY, MTrayX, false, "DoCatchFromLoader_570");
+                        if(ret==K_RETRY)
+                            MOT[MTrayX].fHasTray=true;
+                        else if(ret==K_SKIP)
                         {
-                            Cylinder[C_CatchTray_FixOn].Off();
-                            Cylinder[C_CatchTray_FixOff].On();
-                        }
-                        else
-                        {
-                            Cylinder[C_CatchTray_Fix].Off();
+                            MOT[MTrayX].fHasTray=false;
+                            //AI(ht9045-v899) 20260703: SKIP後補釋放夾爪,避免空夾閉合殘留(FixOn/FixOff到位sensor皆OFF)造成下次Initial Start/ART自檢WAR0615循環
+                            if(USE_AUTO_RETEST==eartInstall)
+                            {
+                                Cylinder[C_CatchTray_FixOn].Off();
+                                Cylinder[C_CatchTray_FixOff].On();
+                            }
+                            else
+                            {
+                                Cylinder[C_CatchTray_Fix].Off();
+                            }
                         }
                     }
+                }
+                else
+                {
+                    iCnt=0;
                 }
             }
             if(TrayArmMotorMove(pos))
