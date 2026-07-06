@@ -163,7 +163,7 @@ bool CheckTestSocketIsError(int i, int j);                                      
 bool GetTesterResult(int Type);                                                 //golden atester.cpp:849  (result-acquisition SM)
 void DoTestY();                                                                 //golden atester.cpp:4789 (test-cycle dispatcher SM)
 void DoTestHeadMotor();                                                         //golden atester.cpp:5562 (central index/test SM)
-void IndexEveryTimeCheckEP();                                                   // (golden returns bool; see .cpp)
+bool IndexEveryTimeCheckEP();                                                   // AI(W7T1-Integrate) 20260701: golden bool sig (atester.cpp:9158); un-gated case 30000 calls if(IndexEveryTimeCheckEP())
 void InitIndexEveryTimeCheckEP();                                               //golden atester.cpp:9151
 extern int iTestTask;                                                           //golden atester.cpp:592
 extern int iTestHeadMotorTask;                                                  //golden atester.cpp:5346

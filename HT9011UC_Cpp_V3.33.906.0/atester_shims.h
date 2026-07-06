@@ -193,7 +193,10 @@ int  IsNNMode();                                 // golden cinitial.h:60 -- offl
 // acatchtray_shims.cpp (do NOT define in atester_shims.cpp -> multiple-definition).
 bool CheckInArmFinishAllPickerAction();          // golden ainarm2.h:95  -- offline true (finished)
 bool MoveInArm2XYToWait();                       // golden ainarm2.h:146 -- offline true (at wait pos)
-extern const int iCASE_REAL_CCD2;                // golden cinitial.h (RTC-CCD index-check entry case id)
+// AI(W7T1-Integrate) 20260701: iCASE_REAL_CCD2 moved to its golden file-scope home in
+// atester.cpp (const int iCASE_REAL_CCD2..6 = 40200..40510, golden atester.cpp:5551-5555).
+// The W6.4 shim value =9 was valid only while the RTC case tree was gated; the tree is now
+// ACTIVE so =9 would collide with `case 9:`.  extern removed here; definition removed in .cpp.
 
 // ===========================================================================
 //  Untranslated VCL forms the tester engine derefs on its ACTIVE entry preamble

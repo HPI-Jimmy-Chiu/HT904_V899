@@ -85,6 +85,12 @@ struct LAST_GENERAL_SET
     // AI(W6.2b-2x4_16) 20260626: the in-arm place-to-shuttle SM increments the
     // place-to-shuttle counter (golden DoPlaceToShuttle_9045_* :LastSet.lShuttleCount++).
     long lShuttleCount;                 // golden LastSet.h:393 -- count place to shuttle
+    // AI(W7T1-Integrate) 20260701: the un-gated DoTestHeadMotor down-press / socket-IC-check
+    // tree derefs the D41 test-socket IC-check-skip flag + the initial-IC-check-position mode
+    // (golden atester.cpp case 12000/14000/600 socket-check branches).  Added to this shared
+    // minimal shim (golden field TYPES verbatim from LastSet.h:132 bool / :274 int).
+    bool bD41TestSocketICCheckSkip;     // golden LastSet.h:132 -- [D41] skip test-socket IC vacuum check
+    int  iD41SocketInitialICCheckPosition; // golden LastSet.h:274 -- [D41] initial IC-check position (1=above socket)
     // TODO(W6.x): the other ~450 LAST_GENERAL_SET fields land with the full
     //             translated LastSet.h.
 };

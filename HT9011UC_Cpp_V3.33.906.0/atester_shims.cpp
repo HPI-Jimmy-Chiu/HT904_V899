@@ -161,7 +161,10 @@ int  IsNNMode()                                       { return 0; }     // offli
 // so atester.cpp sees them, but NOT re-defined here (would be a multiple-definition
 // ODR clash at link).  TODO(W6.4b): real bodies golden ainarm2.cpp; both shims drop
 // together when the in-arm give-way SM is translated.
-const int iCASE_REAL_CCD2 = 9;                        // golden RTC-CCD entry -> reuse the plain index-check case (9); RTC gated offline
+// AI(W7T1-Integrate) 20260701: iCASE_REAL_CCD2 definition REMOVED -- moved to its golden
+// file-scope home in atester.cpp (const int iCASE_REAL_CCD2..6 = 40200..40510, golden
+// atester.cpp:5551-5555).  The W6.4 =9 remap was valid only while the RTC case tree was
+// gated; the tree is now ACTIVE so =9 would collide with the active `case 9:`.
 
 // ---- CCDInterfaceForm (offline CCD identification form) ---------------------
 TCCDInterfaceFormShim::TCCDInterfaceFormShim() : bAtestScanCCDProgram(false) {}

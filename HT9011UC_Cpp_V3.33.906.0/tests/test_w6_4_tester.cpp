@@ -87,11 +87,18 @@ static bool testYCursorSane(int t)
 static bool testHeadCursorSane(int t)
 {   // golden atester.cpp:5562-8655 DOCUMENTED switch(Task) universe.  The ACTIVE
     //  oracle window (1,2,3,4,5,6,7,9,10,15,20,21 + the 200000..600000 self-check
-    //  entry) is reproduced verbatim; the dense down-press/test cases (30..600,
-    //  12000.., 14000.., 122100.., 142.., 1500.., 10000.., 20000.., 30000.., 40000..,
-    //  50000.., 60000.., 80000..) are GATED but case 21 legitimately advances the
-    //  cursor INTO them (e.g. Task=100), where they park at the default terminal --
-    //  those are all VALID golden cursor values, so they belong in the sane set.
+    //  entry) is reproduced verbatim.  AI(W7T1-Integrate) 20260701: the dense
+    //  down-press/test cases (30..600, 12000.., 14000.., 122100.., 142.., 1500..,
+    //  10000.., 20000.., 30000.., 40000.., 50000.., 60000.., 80000..) are NO LONGER
+    //  GATED -- W7-T1 un-gated the full tree, so the sane-loop below now walks LIVE
+    //  from case 21 INTO them (empirically: 1->200000..600000->9->10->15->20->21->
+    //  100->120->12100->12101, then settles).  Every literal Task= target in the
+    //  live tree is a VALID golden cursor value and belongs in this set.  The only
+    //  tree values deliberately OMITTED are iCASE_REAL_CCD2..6 (=40200/40300/40400/
+    //  40500/40510): their entry (case 600000) needs REAL_TIME_CCD==true &&
+    //  !COM2->bCCDDummyRum, which is UNREACHABLE offline (REAL_TIME_CCD false +
+    //  bCCDDummyRum true -> Task=9), so the loop never reaches them.  If a future
+    //  wave enables REAL_TIME_CCD, add 40200/40300/40400/40500/40510 here.
     switch (t) {
         case 1: case 2: case 3: case 4: case 5: case 6: case 7:
         case 9: case 10: case 11: case 15: case 20: case 21:
