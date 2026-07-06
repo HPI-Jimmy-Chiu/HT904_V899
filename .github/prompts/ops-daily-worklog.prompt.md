@@ -21,8 +21,8 @@ description: "Use when: 記錄每日工作日誌、工作交接、Session 收尾
 
 ## HT9045 專案脈絡
 
-- 目前版本：V3.33.899.0_20260323_Jimmy_20260330
-- 版本目錄：HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/
+- 目前版本：V3.33.899.0_20260323_Jimmy_20260422
+- 版本目錄：HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422/
 - 共用設定：system/、config/、CFG/、IniData/
 - 16 個 Skill 位於 .agents/skills/、3 個 Instruction 位於 .github/instructions/
 

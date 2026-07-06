@@ -1,6 +1,6 @@
 ---
 description: "Use when: adding or changing HT9045 V899 C/C++ code that must carry AI modification comments. 適用於 //AI(...) YYYYMMDD: 描述 規則。"
-applyTo: "HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/**/*.{cpp,h,hpp}"
+applyTo: "HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422/**/*.{cpp,h,hpp}"
 ---
 
 # HT9045 V899 AI Annotation Rules

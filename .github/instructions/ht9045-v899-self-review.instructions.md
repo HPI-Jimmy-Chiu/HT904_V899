@@ -1,6 +1,6 @@
 ---
 description: "Use when: completing or reviewing HT9045 V899 C/C++ edits and needing a fixed validation checklist. 適用於 V899 變更後自我審查、編譯檢查、最小回歸驗證。"
-applyTo: "HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/**/*.{cpp,h,hpp}"
+applyTo: "HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422/**/*.{cpp,h,hpp}"
 ---
 
 # HT9045 V899 Self Review
@@ -28,7 +28,7 @@ applyTo: "HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/**/*.{cpp,h,hpp}"
 
 | 項目 | 規則 | 範例 |
 |------|------|------|
-| 專案目標 | 以 V899 根目錄的 HT9045.bpr 為主，不使用其他版本的專案檔 | HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/HT9045.bpr |
+| 專案目標 | 以 V899 根目錄的 HT9045.bpr 為主，不使用其他版本的專案檔 | HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422/HT9045.bpr |
 | 建構模式 | 一般變更先做增量 build；懷疑中間產物汙染或改動大範圍標頭時再做 rebuild | 先 build，必要時 rebuild |
 | 前置條件 | 若缺少 BCB6 工具或必要輸出目錄，需在回覆中說明而非假設成功 | 說明未找到 bpr2mak 或 make |
 | 結果呈現 | 簡要回報是否執行 build、成功或失敗、失敗重點訊息 | build failed at ilink32 unresolved external |

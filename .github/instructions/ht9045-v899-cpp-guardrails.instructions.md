@@ -1,6 +1,6 @@
 ---
 description: "Use when: editing HT9045 V899 C/C++ source under the only writable version folder. 適用於 BCB6、Big5、VCL、pre-C++11、寫入邊界控管。"
-applyTo: "HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/**/*.{cpp,h,hpp}"
+applyTo: "HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422/**/*.{cpp,h,hpp}"
 ---
 
 # HT9045 V899 C/C++ Guardrails
@@ -9,7 +9,7 @@ applyTo: "HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/**/*.{cpp,h,hpp}"
 
 | 項目 | 規則 | 範例 |
 |------|------|------|
-| 可寫程式碼 | 只允許修改 HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330 內的 C/C++ 原始碼 | 可修改 ainarm9045_2x4_16.cpp |
+| 可寫程式碼 | 只允許修改 HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422 內的 C/C++ 原始碼 | 可修改 ainarm9045_2x4_16.cpp |
 | 其他版本 | 其他 HT9011UC_Code_* 與 HT9046LS_Code_* 一律視為唯讀參考 | 可讀不可改 |
 | 共用參數 | system、config、CFG、IniData、setup.inf、CurrentSetupData.txt 預設只讀，除非使用者明確要求 | 先分析再確認 |
 | 禁改檔 | 驅動與定義檔依 AGENTS.md 禁改清單處理 | 不修改 CSmc.h、sqlite3.h |

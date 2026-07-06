@@ -7,15 +7,15 @@ name: "Build V899"
 on:
   push:
     paths:
-      - "HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/**"
+      - "HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422/**"
       - ".github/workflows/build-v899.yml"
   pull_request:
     paths:
-      - "HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330/**"
+      - "HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422/**"
   workflow_dispatch:         # 允許手動觸發
 
 env:
-  SRC_DIR: HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330
+  SRC_DIR: HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422
   BPR_FILE: HT9045.bpr
 
 jobs:

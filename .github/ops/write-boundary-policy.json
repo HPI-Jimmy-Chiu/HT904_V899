@@ -1,7 +1,7 @@
 {
   "allowedWriteRoots": [
     "HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422/",
-    "HT9011UC_CSharp_V3.33.906.0/",
+    "HT9011UC_Cpp_V3.33.906.0/",
     ".github/",
     ".agents/",
     "docs/",
