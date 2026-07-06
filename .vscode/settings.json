@@ -92,5 +92,24 @@
     // ── 保留原有 terminal autoApprove 設定 ──
     "chat.tools.terminal.autoApprove": {
         "ForEach-Object": true
-    }
+    },
+
+    // ═══════════════════════════════════════════════════
+    // ⚠ Debug 攔中斷設定（鎖定，請勿關閉）
+    // ───────────────────────────────────────────────────
+    // 用途：確保 VS Code 偵錯時能停在中斷點 / 例外。
+    // 註：VS Code 的「Raised / Uncaught Exceptions」勾選狀態
+    //     存在 workspace storage，不在 settings.json，
+    //     只能透過 Run and Debug → Breakpoints 面板勾選。
+    //     若要每次都自動勾，必須寫進對應 launch.json 的設定中。
+    // ═══════════════════════════════════════════════════
+    "debug.allowBreakpointsEverywhere": true,        // 任何檔案都可下中斷點，請勿關閉
+    "debug.showBreakpointsInOverviewRuler": true,    // 捲軸顯示中斷點
+    "debug.showInlineBreakpointCandidates": true,    // 同行多點位顯示
+    "debug.openDebug": "openOnDebugBreak",           // 中斷時自動切到 Debug View
+    "debug.focusEditorOnBreak": true,                // 中斷時自動把游標跳到該行
+    "debug.inlineValues": "auto",                    // 中斷時行內顯示變數值
+    "debug.terminal.clearBeforeReusing": false,      // 中斷後保留終端內容方便追
+    // Python 偵錯：Just My Code 關掉，才會在第三方/自家函式都能停
+    "debugpy.debugJustMyCode": false
 }

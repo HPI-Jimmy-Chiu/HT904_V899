@@ -2,20 +2,37 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Guard: Check BCB6 Debug Flags",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-NoProfile",
+                "-ExecutionPolicy", "Bypass",
+                "-File", "${workspaceFolder}\\.vscode\\check_bcb_debug.ps1"
+            ],
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
             "label": "BCB6: Build V899",
             "type": "shell",
             "command": "cmd",
             "args": [
                 "/c",
-                "cd /d \"${workspaceFolder}\\HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330\" && \"${env:BCB6}\\Bin\\bpr2mak.exe\" HT9045.bpr && \"${env:BCB6}\\Bin\\make.exe\" -f HT9045.mak"
+                "cd /d \"${workspaceFolder}\\HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422\" && \"${env:BCB6}\\Bin\\bpr2mak.exe\" HT9045.bpr && \"${env:BCB6}\\Bin\\make.exe\" -f HT9045.mak"
             ],
+            "dependsOn": "Guard: Check BCB6 Debug Flags",
+            "dependsOrder": "sequence",
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
             "problemMatcher": {
                 "owner": "bcb6",
-                "fileLocation": ["relative", "${workspaceFolder}\\HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330"],
+                "fileLocation": ["relative", "${workspaceFolder}\\HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422"],
                 "pattern": {
                     "regexp": "^(.+?)\\((\\d+)\\):\\s+(Error|Warning)\\s+(.+):\\s+(.+)$",
                     "file": 1,
@@ -38,7 +55,7 @@
             "command": "cmd",
             "args": [
                 "/c",
-                "cd /d \"${workspaceFolder}\\HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330\" && \"${env:BCB6}\\Bin\\make.exe\" -f HT9045.mak clean"
+                "cd /d \"${workspaceFolder}\\HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422\" && \"${env:BCB6}\\Bin\\make.exe\" -f HT9045.mak clean"
             ],
             "group": "build",
             "presentation": {
@@ -53,12 +70,74 @@
             "args": [
                 "-NoProfile",
                 "-Command",
-                "Get-ChildItem -Path '${workspaceFolder}\\HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330' -Recurse -Include '*.cpp','*.h' | Select-String -Pattern '${input:funcName}' | Select-Object -First 30 | Format-Table -Property Path,LineNumber,Line -AutoSize"
+                "Get-ChildItem -Path '${workspaceFolder}\\HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422' -Recurse -Include '*.cpp','*.h' | Select-String -Pattern '${input:funcName}' | Select-Object -First 30 | Format-Table -Property Path,LineNumber,Line -AutoSize"
             ],
             "presentation": {
                 "reveal": "always",
                 "panel": "dedicated"
             }
+        },
+        {
+            "label": "Tool: 版本差異比對 (version_diff)",
+            "type": "shell",
+            "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "args": [
+                "${workspaceFolder}\\scripts\\version_diff.py",
+                "${input:versionA}",
+                "${input:versionB}",
+                "--module",
+                "${input:moduleFilter}"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Tool: //AI 註解檢查 (全資料夾)",
+            "type": "shell",
+            "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "args": [
+                "${workspaceFolder}\\scripts\\check_ai_annotation.py"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Tool: //AI 註解檢查 (git diff)",
+            "type": "shell",
+            "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "args": [
+                "${workspaceFolder}\\scripts\\check_ai_annotation.py",
+                "--diff",
+                "${input:gitBaseRef}"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Tool: 除法風險掃描 (scan_div_zero)",
+            "type": "shell",
+            "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "args": [
+                "${workspaceFolder}\\scripts\\scan_div_zero.py"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            },
+            "problemMatcher": []
         }
     ],
     "inputs": [
@@ -67,6 +146,30 @@
             "description": "要搜尋的函式名稱",
             "type": "promptString",
             "default": "DoInArm"
+        },
+        {
+            "id": "versionA",
+            "description": "來源版本（例 V897 或完整資料夾名）",
+            "type": "promptString",
+            "default": "V897"
+        },
+        {
+            "id": "versionB",
+            "description": "目標版本（例 V899 或完整資料夾名）",
+            "type": "promptString",
+            "default": "V899"
+        },
+        {
+            "id": "moduleFilter",
+            "description": "模組過濾關鍵字（例 InArm、SECSGEM；留空輸入 . 即可全比對）",
+            "type": "promptString",
+            "default": "InArm"
+        },
+        {
+            "id": "gitBaseRef",
+            "description": "git diff 基準 ref（HEAD、HEAD~1、main 等）",
+            "type": "promptString",
+            "default": "HEAD"
         }
     ]
 }
