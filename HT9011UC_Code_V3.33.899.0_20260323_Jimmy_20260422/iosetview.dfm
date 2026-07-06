@@ -24,7 +24,7 @@ object fiosetview: Tfiosetview
     Top = 0
     Width = 922
     Height = 899
-    ActivePage = tsIndex
+    ActivePage = tsUnLoader
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -34,7 +34,7 @@ object fiosetview: Tfiosetview
     MultiLine = True
     ParentFont = False
     Style = tsFlatButtons
-    TabIndex = 8
+    TabIndex = 1
     TabOrder = 0
     TabWidth = 90
     object tsLoader: TTabSheet
@@ -55,10 +55,10 @@ object fiosetview: Tfiosetview
           Top = 31
           Width = 906
           Height = 797
-          ActivePage = tsStack1_Cassette
+          ActivePage = tsStack1_Above
           Align = alClient
           Style = tsFlatButtons
-          TabIndex = 2
+          TabIndex = 0
           TabOrder = 1
           TabWidth = 150
           object tsStack1_Above: TTabSheet
@@ -5164,10 +5164,10 @@ object fiosetview: Tfiosetview
           Top = 31
           Width = 906
           Height = 797
-          ActivePage = tsStack2_Cassette
+          ActivePage = tsStack2_Above
           Align = alClient
           Style = tsFlatButtons
-          TabIndex = 2
+          TabIndex = 0
           TabOrder = 1
           TabWidth = 150
           object tsStack2_Above: TTabSheet
