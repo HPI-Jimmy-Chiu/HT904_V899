@@ -58,12 +58,12 @@ GitHub Actions 需要一台 **Windows self-hosted runner**，條件：
 ```powershell
 # 直接使用現有 VS Code task
 # 或手動：
-scripts\build_bcb.bat "HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330" "HT9045.bpr"
+scripts\build_bcb.bat "HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422" "HT9045.bpr"
 ```
 
 ### 測試 Phase 2（靜態分析）
 ```powershell
-python scripts/ci/check_code_quality.py "HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330"
+python scripts/ci/check_code_quality.py "HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422"
 ```
 
 ## 未來擴充

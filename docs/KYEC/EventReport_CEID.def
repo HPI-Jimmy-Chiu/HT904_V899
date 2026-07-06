@@ -1,0 +1,1025 @@
+CEID	Enable	Alias	ReportID	
+1	1	1 Start Pressed	1	
+2	1	2 Pause Pressed	2	
+3	1	3 OneCycle Pressed	3	
+4	1	4 CleanOut Pressed	4	
+5	1	5 ClearCount Pressed	5	
+6	1	6 Lot Start	6	
+7	1	7 Lot	7	
+8	1	8 Lot End	8	
+9	1	9 Switch Real Dummy Mode	9	
+10	1	10 Switch Tester Online	10	
+11	1	11 Switch Production Mode	11	
+12	1	12 Switch Engineer Mode	12	
+13	1	13 Switch Temperature Mode	13	
+14	1	14 Switch StartMode	14	
+15	1	15 Switch Setup File	15	
+16	1	16 Switch UserLevel	16	
+17	1	17 Enter Tool Page	17	
+18	1	18 Enter Maintenance Page	18	
+19	1	19 Enter Offset Page	19	
+20	1	20 Enter Speed Page	20	
+21	1	21 Enter IO Page	21	
+22	1	22 Enter Message Page	22	
+23	1	23 Enter Debug Page	23	
+24	1	24 Exit Pressed	24	
+25	1	25 Home Pressed	25	
+26	1	26 Get Test Result	26	
+27	1	27 Change Machine State	27	
+28	1	28 Retry Pressed	28	
+29	1	29 Skip Pressed	29	
+30	1	30 Alarm Reset Pressed	30	
+31	1	31 Tray End Pressed	31	
+32	1	32 Tray Feed Pressed	32	
+33	1	33 Reset Pressed	33	
+34	1	34 Auto Clean Start	34	
+35	1	35 Auto1 Full	35	
+36	1	36 Auto2 Full	36	
+37	1	37 Auto3 Full	37	
+38	1	38 Fix1 Full	38	
+39	1	39 Fix2 Full	39	
+40	1	40 Fix3 Full	40	
+41	1	41 One Cycle Finish	41	
+42	1	42 Clean Out Finish	42	
+43	1	43 DownLoadRecipe	43	
+44	1	44 Site On Off	44	
+45	1	45 Arm On Off	45	
+46	1	46 Change Temp Defaultand Soak Time	46	
+47	1	47 Change HandlerSpeed	47	
+48	1	48 Change EC	48	
+49	1	49 Tray Feed Finish	49	
+50	1	50 Auto Clean Finish	50	
+51	1	51 Site Mapping Start	51	
+52	1	52 Site Mapping End	52	
+53	1	53 UPH Record Start	53	
+54	1	54 UPH Record End	54	
+55	1	55 Initial ART Start	55	
+56	1	56 Change Tester Program to FT	56	
+57	1	57 Change Tester Program to RT	57	
+58	1	58 Ready for ART	58	
+59	1	59 ART Receive Tray OK	59	
+60	1	60 ART Receive Tray START	60	
+61	1	61 RT Finish	61	
+62	1	62 ART Finish	62	
+63	1	63 FT Finish	63	
+64	1	64 DownLoad Recipe by FTP OK	64	
+65	1	65 DownLoad Recipe by FTP NG	65	
+66	1	66 Load Tray Finish	66	
+67	1	67 Tray Test Finish	67	
+68	1	68 Auto Clean Clear Count	68	
+69	1	69 Site Mapping Stop	69	
+70	1	70 Barcode Reader Enter	70	
+71	1	71 OTD Lock	71	
+72	1	72 OTD UnLock	72	
+73	1	73 Mymessbox OK	73	
+74	1	74	74	
+75	1	75	75	
+76	1	76 Start Pressed HasIC	76	
+77	1	77 Read Current ESD Data	77	
+78	1	78 Jam Skip IC Count	78	
+79	1	79 	79	
+80	1	80 Read Now Handler Data	80	
+81	1	81 Read ATC Temperature	81	
+82	1	82 Read ATC Ref Temperature	82	
+83	1	83 Read Now EP Penconder	83	
+84	1	84 Run Status FT	84	
+85	1	85 Run Status RT	85	
+86	1	86 Map No Device Arm Has Device	86	
+87	1	87 Map Has Device Arm Error Retry	87	
+88	1	88 Map Has Device Arm Error Skip	88	
+89	1	89 Pre Alarm Message	89	
+90	1	90 Get TestResult And Barcode	90	
+91	1	91 SECS/GEM Offline	91	
+92	1	92 SECS/GEM Online	92	
+93	1	93 SECS/GEM Online Remote	93	
+94	1	94 Transfer Blocked	94	
+95	1	95 Cassette Load Complete	95	
+96	1	96 Cassette ID Read Complete	96	
+97	1	97 Ready To Process Complete	97	
+98	1	98 Ready To Carrier Out Lot	98	
+99	1	99 Cassette Out Complete	99	
+100	1	100 Cassette Unclamped	100	
+101	1	101 Ready To Unload	101	
+102	1	102 Unload Complete	102	
+103	1	103 Ready To Carrier Out Tray	103	
+104	1	104 Ready To Combine Pass	104	
+105	1	105 Ready To Combine Fail	105	
+106	1	106 Machine No Start	106	
+107	1	107 Ready To Combine Pass Lot End	107	
+108	1	108 Cassette Lot Start	108	
+109	1	109 Die Count Fail Message Close	109	
+110	1	110 Clean Out Tray Feed Finish	110	
+111	1	111 Map No Device Arm Auto Skip	111	
+112	1	112 MR Run Mode Change	112	
+113	1	113 Access Mode Change	113	
+114	1	114 Software Bin	114	
+115	1	115 Tray ID Change	115	
+116	1	116 Ready To Load No Lot	116	
+117	1	117 Ready To Load No Tray	117	
+118	1	118 Ready To Load No Cassette	118	
+119	1	119 ART SRQKIND2 FT LOTSTART	119	
+120	1	120 ART SRQKIND4 RT LOTSTART	120	
+121	1	121 ART SRQKIND6 LOTEND	121	
+122	1	122 FINAL LOTEND	122	
+123	1	123 Safe Door On Off	123	
+124	1	124 Save Recipe	124	
+125	1	125 EESUG Offest Select	125	
+126	1	126 EESUG Offest Modify	126	
+127	1	127 Back To Normal	127	
+128	1	128 Test Start	128	
+129	1	129 Test Finish	129	
+130	1	130 Material Receive	130	
+131	1	131 Slot Map Count OK	131	
+132	1	132 CHECK IN	132	
+133	1	133 CHECK OUT	133	
+134	1	134 Ready To Combine Fail Lot End	134	
+135	1	135 Ready To OHT Lot End	135	
+136	1	136 Auto 1 Unloading tray	136	
+137	1	137 Auto 2 Unloading tray	137	
+138	1	138 Auto 3 Unloading tray	138	
+139	1	139 Click lot start button for visual sort mode	139	
+140	1	140 Prepare Load Tray	140	
+141	1	141 GEM Control State Change	141	
+142	1		142	
+143	1		143	
+144	1		144	
+145	1	145 Auto 4 Unloading tray	145	
+146	1	146 Auto 5 Unloading tray	146	
+147	1	147 Auto 6 Unloading tray	147	
+148	1	148 Auto 4 Full	148	
+149	1	149 Auto 5 Full	149	
+150	1	150 Auto 6 Full	150	
+151	1	151 Fix 4 Full	151	
+152	1	152 Fix 5 Full	152	
+153	1	153 Fix 6 Full	153	
+154	1	154 Loader hasn't tray	154	
+155	1	155 Loader full of tray	155	
+156	1	156 Loader only one tray	156	
+157	1	157 Loader ready to unload	157	
+158	1	158 Loader finish unload	158	
+159	1	159 Empty Prepare Load Tray	159	
+160	1	160 Empty only one tray	160	
+161	1	161 Empty hasn't tray	161	
+162	1	162 Empty full of tray	162	
+163	1	163 Color Prepare Load Tray	163	
+164	1	164 Color only one tray	164	
+165	1	165 Color hasn't tray	165	
+166	1	166 Empty put tray to Auto1	166	
+167	1	167 Empty put tray to Auto2	167	
+168	1	168 Empty put tray to Auto3	168	
+169	1	169 Empty put tray to Auto4	169	
+170	1	170 Empty put tray to Auto5	170	
+171	1	171 Empty put tray to Auto6	171	
+172	1	172 Empty put cover to Auto1	172	
+173	1	173 Empty put cover to Auto2	173	
+174	1	174 Empty put cover to Auto3	174	
+175	1	175 Empty put cover to Auto4	175	
+176	1	176 Empty put cover to Auto5	176	
+177	1	177 Empty put cover to Auto6	177	
+178	1	178 Color put tray to Auto1	178	
+179	1	179 Color put tray to Auto2	179	
+180	1	180 Color put tray to Auto3	180	
+181	1	181 Color put tray to Auto4	181	
+182	1	182 Color put tray to Auto5	182	
+183	1	183 Color put tray to Auto6	183	
+184	1	184 Color put cover to Auto1	184	
+185	1	185 Color put cover to Auto2	185	
+186	1	186 Color put cover to Auto3	186	
+187	1	187 Color put cover to Auto4	187	
+188	1	188 Color put cover to Auto5	188	
+189	1	189 Color put cover to Auto6	189	
+190	1	190 Auto1 load tray finish	190	
+191	1	191 Auto2 load tray finish	191	
+192	1	192 Auto3 load tray finish	192	
+193	1	193 Auto4 load tray finish	193	
+194	1	194 Auto5 load tray finish	194	
+195	1	195 Auto6 load tray finish	195	
+196	1	196 Auto1 ready to unload	196	
+197	1	197 Auto2 ready to unload	197	
+198	1	198 Auto3 ready to unload	198	
+199	1	199 Auto4 ready to unload	199	
+200	1	200 Auto5 ready to unload	200	
+201	1	201 Auto6 ready to unload	201	
+202	1	202 Auto1 hasn't tray	202	
+203	1	203 Auto2 hasn't tray	203	
+204	1	204 Auto3 hasn't tray	204	
+205	1	205 Auto4 hasn't tray	205	
+206	1	206 Auto5 hasn't tray	206	
+207	1	207 Auto6 hasn't tray	207	
+208	1	208 Color full of tray	208	
+209	1	209 Tray End Finish	209	
+210	1	210 Empty finish unload	210	
+211	1	211 Color finish unload	211	
+212	1	212 Energy Saving Start	212	
+213	1	213 Energy Saving End	213	
+214	1	214 Reserved_03	214	
+215	1	215 Reserved_04	215	
+216	1	216 Reserved_05	216	
+217	1	217 Reserved_06	217	
+218	1	218 Reserved_07	218	
+219	1	219 Reserved_08	219	
+220	1	220 Reserved_09	220	
+221	1	221 Reserved_10	221	
+222	1	222 Reserved_11	222	
+223	1	223 Reserved_12	223	
+224	1	224 Reserved_13	224	
+225	1	225 Reserved_14	225	
+226	1	226 Reserved_15	226	
+227	1	227 Reserved_16	227	
+228	1	228 Reserved_17	228	
+229	1	229 Reserved_18	229	
+230	1	230 Reserved_19	230	
+231	1	231 Reserved_20	231	
+232	1	232 Reserved_21	232	
+233	1	233 Reserved_22	233	
+234	1	234 Reserved_23	234	
+235	1	235 Reserved_24	235	
+236	1	236 Reserved_25	236	
+237	1	237 Reserved_26	237	
+238	1	238 Reserved_27	238	
+239	1	239 Reserved_28	239	
+240	1	240 Reserved_29	240	
+241	1	241 Reserved_30	241	
+242	1	242 Reserved_31	242	
+243	1	243 Reserved_32	243	
+244	1	244 Reserved_33	244	
+245	1	245 Reserved_34	245	
+246	1	246 Reserved_35	246	
+247	1	247 Reserved_36	247	
+248	1	248 Reserved_37	248	
+249	1	249 Reserved_38	249	
+250	1	250 START Auto contact height	250	
+251	1	251 SECS GEM consecutive failure	251	
+252	1	252 Reserved_39	252	
+253	1	253 Reserved_40	253	
+254	1	254 Reserved_41	254	
+255	1	255 Reserved_42	255	
+256	1	256 Reserved_43	256	
+257	1	257 Reserved_44	257	
+258	1	258 Reserved_45	258	
+259	1	259 Reserved_46	259	
+260	1	260 Reserved_47	260	
+261	1	261 Reserved_48	261	
+262	1	262 Reserved_49	262	
+263	1	263 Reserved_50	263	
+264	1	264 Reserved_51	264	
+265	1	265 Reserved_52	265	
+266	1	266 Reserved_53	266	
+267	1	267 Reserved_54	267	
+268	1	268 Reserved_55	268	
+269	1	269 Reserved_56	269	
+270	1	270 Reserved_57	270	
+271	1	271 Reserved_58	271	
+272	1	272 AMR Supplement	272	
+273	1	273 AMR LDUnLD Status	273	
+274	1	274 AMR LDUnLD Finish	274	
+275	1	275 AMR LD ID	275	
+276	1	276 Loader_Buffer_NoTray	276	
+277	1	277 OutputPort1BinCode	277	
+278	1	278 OutputPort2BinCode	278	
+279	1	279 OutputPort3BinCode	279	
+280	1	280 OutputPort4BinCode	280	
+281	1	281 OutputPort5BinCode	281	
+282	1	282 OutputPort6BinCode	282	
+283	1	283 MaterialModeChange	283	
+284	1	284 PortStateUpdated	284	
+285	1	285 UnloaderTrayIDReadOK	285	
+286	1	286 UnloaderTrayIDReadFail	286	
+287	1	287 LoaderTrayIDReadFail	287	
+288	1	288 MaximumOutputPortReport	288	
+289	1	289 RunCheckRequest	289	
+290	1	290 AGVLDUnLDFinish	290	
+291	1	291 AGVLdID	291	
+292	1	292 DoSecsGemIndexFail	292	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8"/>
+<title>HT9045 Handler 遠端控制操作說明書 V2.0</title>
+<style>
+  :root {
+    --hp-red:    #C8102E;     /* 鴻勁紅 */
+    --hp-red-dk: #9A0C23;
+    --hp-navy:   #1F3864;     /* 標題深藍 */
+    --hp-navy-2: #2E5BA8;
+    --hp-bg:     #FFFFFF;
+    --hp-bg-alt: #FAFBFC;
+    --hp-border: #D9DEE6;
+    --hp-text:   #1A1A1A;
+    --hp-muted:  #6B7280;
+    --hp-warn:   #FFFBEB;
+    --hp-warn-b: #F59E0B;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Microsoft JhengHei","Segoe UI","Noto Sans TC",Arial,sans-serif;
+    max-width: 1080px; margin: 0 auto; padding: 0;
+    color: var(--hp-text); line-height: 1.65; background: var(--hp-bg);
+  }
+  .hp-banner {
+    background: linear-gradient(135deg, var(--hp-red) 0%, var(--hp-red-dk) 100%);
+    color: #fff; padding: 28px 36px; margin-bottom: 0;
+    border-bottom: 4px solid var(--hp-navy);
+  }
+  .hp-banner .brand { font-size: 13px; letter-spacing: 2px; opacity: 0.9; }
+  .hp-banner h1 {
+    margin: 8px 0 4px 0; font-size: 28px; color: #fff; border: none; padding: 0;
+  }
+  .hp-banner .subtitle { font-size: 14px; opacity: 0.95; }
+  .hp-content { padding: 24px 36px 60px 36px; }
+  h1 {
+    color: var(--hp-navy); border-bottom: 3px solid var(--hp-red);
+    padding-bottom: 8px; margin-top: 32px; font-size: 24px;
+  }
+  h2 {
+    color: var(--hp-navy); margin-top: 32px; padding: 8px 0 8px 14px;
+    border-left: 6px solid var(--hp-red); font-size: 20px; background: var(--hp-bg-alt);
+  }
+  h3 { color: var(--hp-navy-2); margin-top: 24px; font-size: 17px; }
+  h4 { color: var(--hp-navy-2); font-size: 15px; }
+  table {
+    border-collapse: collapse; width: 100%;
+    margin: 12px 0 20px; font-size: 14px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  th, td { border: 1px solid var(--hp-border); padding: 8px 12px; vertical-align: top; }
+  th {
+    background: var(--hp-navy); color: #fff; text-align: left; font-weight: 600;
+  }
+  tr:nth-child(even) td { background: var(--hp-bg-alt); }
+  tr:hover td { background: #FFF5F6; }
+  code {
+    background: #F3F4F6; padding: 1px 6px; border-radius: 3px;
+    font-family: Consolas,"Courier New",monospace; font-size: 13px; color: var(--hp-red-dk);
+  }
+  pre {
+    background: #0F172A; color: #E2E8F0; padding: 14px 18px;
+    border-radius: 6px; overflow-x: auto; font-size: 13px; line-height: 1.5;
+    border-left: 4px solid var(--hp-red);
+  }
+  pre code { background: transparent; color: inherit; padding: 0; }
+  blockquote {
+    border-left: 4px solid var(--hp-warn-b);
+    background: var(--hp-warn); padding: 10px 14px; margin: 14px 0;
+    color: #78350F; border-radius: 0 4px 4px 0;
+  }
+  hr { border: 0; border-top: 1px dashed var(--hp-border); margin: 28px 0; }
+  ul, ol { padding-left: 24px; }
+  li { margin: 4px 0; }
+  strong { color: var(--hp-red-dk); }
+  .hp-footer {
+    margin-top: 48px; padding: 18px 36px; background: var(--hp-navy);
+    color: #fff; font-size: 12px; text-align: center;
+  }
+  .hp-footer .conf { color: #FCA5A5; font-weight: 600; }
+  @media print {
+    body { max-width: none; }
+    .hp-banner { break-after: avoid; }
+    h2 { break-after: avoid; }
+    table { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="hp-banner">
+  <div class="brand">Hon.Precision · 鴻勁精密 · RD5</div>
+  <h1>HT9045 Handler 遠端控制操作說明書</h1>
+  <div class="subtitle">TCP Socket 遠端控制功能 — 客戶端操作指南　|　適用客戶：Greatek（超豐電子）　|　文件版本 V2.0　|　2026-05-15</div>
+</div>
+<div class="hp-content">
+<h1>HT9045 Handler 遠端控制操作說明書</h1>
+
+<p><strong>TCP Socket 遠端控制功能 — 客戶端操作指南</strong></p>
+
+<table>
+<thead><tr><th>欄位</th><th>內容</th></tr></thead>
+<tbody>
+<tr><td>適用客戶</td><td>Greatek（超豐電子）</td></tr>
+<tr><td>適用機種</td><td>HT9045 / HT9046（OEE Function 開啟）</td></tr>
+<tr><td>文件版本</td><td>V2.0</td></tr>
+<tr><td>制訂日期</td><td>2026-05-15</td></tr>
+<tr><td>發行日期</td><td>2026-05-15</td></tr>
+<tr><td>制訂單位</td><td>RD5（鴻勁精密 HonPrecision, Inc.）</td></tr>
+<tr><td>對應 SPEC</td><td>F899-008 LotInfo_REQUEST 內嵌 OEE Start Lot（v3）</td></tr>
+<tr><td>機密等級</td><td>HonPrecision Confidential Information</td></tr>
+</tbody></table>
+
+<hr/>
+
+<h2>目 錄</h2>
+
+<ol><li>功能概述與實作狀態</li><li>Handler 端設定</li><li>客戶端 Socket 通訊規格</li><li>指令集說明</li><li>完整操作流程</li><li>錯誤處理與注意事項</li><li>附錄：快速參考表</li><li>V2.0 變更說明（vs. V1.0 2026-04-15）</li><li>修訂歷史</li></ol>
+
+<hr/>
+
+<h2>1. 功能概述</h2>
+
+<p>HT9045 Handler 支援透過 TCP Socket 進行遠端控制，允許客戶端程式（Agent）執行：</p>
+
+<ul><li><strong>遠端啟動 (Auto Start)</strong>：遠端觸發機台從閒置進入運行狀態</li><li><strong>清除計數器 (Clear Counters)</strong>：清除上一批次累計的計數器（時間、裝載、TraySort、Contact、Tester 分類）</li><li><strong>啟動批次 (Start Lot)</strong>：建立新批次並由 OEE 雲端 MO file 自動帶入 LotID/OperatorID/RunMode/Recipe/Setup File 等資料</li><li><strong>安全鎖定 / 解鎖</strong>：遠端鎖定或解鎖機台，防止意外啟動</li><li><strong>機台狀態查詢</strong>：查詢機台運行狀態、批次資訊、軟體版本等</li></ul>
+
+<h3>1.1 功能實作狀態</h3>
+
+<table>
+<thead><tr><th>功能</th><th>規格書需求</th><th>實作狀態</th><th>備註</th></tr></thead>
+<tbody>
+<tr><td>Auto Start（遠端啟動）</td><td>Requirement #1</td><td>已完成</td><td>機台需處於 HALT</td></tr>
+<tr><td>Safety Interlock（Lock/Unlock）</td><td>Requirement #3</td><td>已完成</td><td>Lock 時無法啟動</td></tr>
+<tr><td>Clear Counters（清除計數器）</td><td>Requirement #5</td><td>已完成</td><td>支援全清及分項；<strong>僅清計數，不關 OEE 雲端 Lot</strong></td></tr>
+<tr><td>OEE Lot End（關閉雲端 Lot）</td><td>—</td><td><strong>未提供 OLP 指令</strong></td><td>由操作員於 Handler UI 按 <code>Lot End</code> 按鈕觸發</td></tr>
+<tr><td>Start Lot — 批次資訊</td><td>Requirement #4-1</td><td>已完成（v3 更新）</td><td><strong>Handler 忽略 Data 欄位</strong>，由 OEE MO file 帶入</td></tr>
+<tr><td>Start Lot — Setup File</td><td>Requirement #4-2</td><td>已完成</td><td>zip 壓縮格式，亦可由 MO file 自動下載</td></tr>
+<tr><td>Start Lot — 內嵌 OEE Start Lot</td><td>F899-008（v3 新增）</td><td>已完成</td><td><code>LotInfo_REQUEST</code> 成功即完成 OEE Start Lot</td></tr>
+</tbody></table>
+
+<blockquote><strong>V2.0 重點</strong>：超豐 OEE 模式下，<code>LotInfo_REQUEST</code> 內嵌 silent OEE Start Lot；<code>LotID / OperatorID / FT-RT</code> 三欄位由雲端 MO file 帶入，Handler 忽略客戶送入的 Data。</blockquote>
+
+<hr/>
+
+<h2>2. Handler 端設定</h2>
+
+<h3>2.1 客戶碼確認</h3>
+
+<ul><li>Handler 需設定為 <strong>Greatek（超豐）客戶碼</strong>，系統啟動時自動開啟 OLP Server</li><li>設定由設備供應商在出廠或維護時配置，<strong>客戶端無需調整</strong></li></ul>
+
+<h3>2.2 通訊服務狀態確認</h3>
+
+<ul><li>Handler 啟動後，在 Automation 監控畫面確認 <strong>OLP 狀態已開啟</strong></li><li>客戶端成功連線時，畫面會顯示連線狀態</li></ul>
+
+<h3>2.3 網路環境要求</h3>
+
+<ul><li>Handler PC 需具備乙太網路連線</li><li><strong>防火牆需開放 TCP Port 6671（入站規則）</strong></li><li>客戶端 PC 與 Handler PC 需在同一網段或可路由網段</li></ul>
+
+<h3>2.4 OEE 系統前置（v3 新增）</h3>
+
+<table>
+<thead><tr><th>項目</th><th>要求</th><th>備註</th></tr></thead>
+<tbody>
+<tr><td><code>bN14_1_EnableOEEFunction</code></td><td><code>1</code>（啟用）</td><td><code>system/Gerneral.ini</code></td></tr>
+<tr><td><code>bN14_3_OEEFTPUpload</code></td><td><code>1</code>（啟用）</td><td>OEE FTP 同步必須開</td></tr>
+<tr><td>Machine ID</td><td>不可空</td><td>對應雲端 MO file 識別</td></tr>
+<tr><td>OEE FTP server</td><td>可連線、帳密正確</td><td>MO file / Setup File 來源</td></tr>
+<tr><td>對應 Machine ID 的 MO file</td><td>雲端存在且格式正確</td><td>含 PASSBIN / InterfaceType / Temperature 等欄位</td></tr>
+</tbody></table>
+
+<blockquote>上述任一條件不符，<code>LotInfo_REQUEST</code> 將回傳 Reply Code <code>60 / 61 / 62 / 90</code>（見 §4.3 Reply Code 對應表）。</blockquote>
+
+<hr/>
+
+<h2>3. 客戶端 Socket 通訊規格</h2>
+
+<table>
+<thead><tr><th>參數</th><th>值</th></tr></thead>
+<tbody>
+<tr><td>通訊協定</td><td>TCP/IP</td></tr>
+<tr><td>連線模式</td><td>Client → Server（客戶端主動連線 Handler）</td></tr>
+<tr><td>Handler IP</td><td>Handler PC 的 IP 位址（請洽設備管理人員）</td></tr>
+<tr><td>Port</td><td><strong>6671</strong></td></tr>
+<tr><td>編碼</td><td>ASCII</td></tr>
+<tr><td>最大連線數</td><td><strong>1</strong>（同一時間僅允許一個客戶端連線）</td></tr>
+</tbody></table>
+
+<blockquote>若連線數超過上限，Handler 將自動重置 OLP Server。請確保只有一個客戶端連線。</blockquote>
+
+<h3>3.1 封包格式</h3>
+
+<p>所有指令與回傳均採用以下固定封包格式：</p>
+
+<pre><code>
+[STX] + Command + [SOH] + V_Total + [SOH] + Data[0] + ... + [ETX]
+</code></pre>
+
+<p>控制字元定義：</p>
+
+<table>
+<thead><tr><th>符號</th><th>Hex</th><th>說明</th></tr></thead>
+<tbody>
+<tr><td>STX</td><td><code>0x02</code></td><td>封包起始（Start of Text）</td></tr>
+<tr><td>SOH</td><td><code>0x01</code></td><td>欄位分隔符（Start of Heading）</td></tr>
+<tr><td>ETX</td><td><code>0x03</code></td><td>封包結束（End of Text）</td></tr>
+</tbody></table>
+
+<p>封包組裝範例：</p>
+
+<pre><code>
+Auto Start : 0x02 &quot;START_REQUEST&quot;        0x01 &quot;0&quot; 0x03
+End Lot    : 0x02 &quot;CLEAR_REPORT_REQUEST&quot; 0x01 &quot;1&quot; 0x01 &quot;1111&quot; 0x03
+Start Lot  : 0x02 &quot;LotInfo_REQUEST&quot;      0x01 &quot;0&quot; 0x03
+             ↑ V2.0：Data 欄位皆可省略，Handler 由 OEE MO file 帶資料
+</code></pre>
+
+<hr/>
+
+<h2>4. 指令集說明</h2>
+
+<h3>4.1 Safety Unlock / Lock</h3>
+
+<h4>Safety Unlock — 解除安全鎖定</h4>
+
+<p>啟動機台前，必須先解除安全鎖定。</p>
+
+<table>
+<thead><tr><th>方向</th><th>內容</th></tr></thead>
+<tbody>
+<tr><td>發送</td><td><code>RESUME_REQUEST</code> <code>V_Total=0</code></td></tr>
+<tr><td>回傳</td><td><code>RESUME_REPLY</code> <code>Data[0]=0</code>（成功）</td></tr>
+</tbody></table>
+
+<h4>Safety Lock — 安全鎖定</h4>
+
+<p>良率異常或需緊急停止時，鎖定機台。鎖定狀態下 Auto Start 將被拒絕。</p>
+
+<table>
+<thead><tr><th>方向</th><th>內容</th></tr></thead>
+<tbody>
+<tr><td>發送</td><td><code>PAUSE_REQUEST</code> <code>V_Total=0</code></td></tr>
+<tr><td>回傳</td><td><code>PAUSE_REPLY</code> <code>Data[0]=0</code>（成功）</td></tr>
+</tbody></table>
+
+<blockquote><strong>注意</strong>：Lock 效果立即生效，運行中機台將觸發 <strong>Soft Stop</strong>。</blockquote>
+
+<h3>4.2 Clear Counters（清除計數器）</h3>
+
+<p>清除上一批次累計的計數器，為新批次做準備。</p>
+
+<blockquote><strong>重要說明</strong>：本指令<strong>僅清除 Handler 端的計數器</strong>（時間 / 裝載 / TraySort / Contact / Tester 分類），<strong>不會關閉 OEE 雲端的 Lot、不會送 SECS LotEnd Event、不會上傳 BinQty/Socket/TrayMapping 報告</strong>。OEE 雲端 Lot 須由操作員於 Handler UI 按 <code>Lot End</code> 按鈕結束（詳見 §6.3 注意事項 8）。</blockquote>
+
+<blockquote><strong>前提條件</strong>：機台必須處於停止狀態（非運行中）</blockquote>
+
+<table>
+<thead><tr><th>方向</th><th>內容</th></tr></thead>
+<tbody>
+<tr><td>發送</td><td><code>CLEAR_REPORT_REQUEST</code> <code>V_Total=1</code> <code>Data[0]=清除代碼</code></td></tr>
+<tr><td>回傳</td><td><code>CLEAR_REPORT_REPLY</code> <code>Data[0]=0</code>（成功）</td></tr>
+</tbody></table>
+
+<p>清除代碼：</p>
+
+<table>
+<thead><tr><th>代碼</th><th>清除範圍</th></tr></thead>
+<tbody>
+<tr><td><strong>1111</strong></td><td>全部計數器清除（推薦用於批次切換）</td></tr>
+<tr><td>2</td><td>僅清除時間資料（TimeData）</td></tr>
+<tr><td>3</td><td>僅清除裝載計數（LoadingCounts）</td></tr>
+<tr><td>4</td><td>僅清除 Tray Sort 計數</td></tr>
+<tr><td>5</td><td>僅清除 Contact 計數</td></tr>
+<tr><td>6</td><td>僅清除測試分類計數（Tester Category）</td></tr>
+</tbody></table>
+
+<h3>4.3 Start Lot（V2.0 重大更新）</h3>
+
+<p>本指令為 V2.0 核心：以單一 <code>LotInfo_REQUEST</code> 內嵌 OEE Start Lot，並可由雲端 MO file 自動帶入 Setup File，無需客戶端額外發送下載指令。</p>
+
+<blockquote><strong>前提條件</strong>：機台非運行中，且內部無殘留 IC。</blockquote>
+
+<h4>發送格式</h4>
+
+<table>
+<thead><tr><th>欄位</th><th>V1.0 規格</th><th>V2.0 規格（v3）</th></tr></thead>
+<tbody>
+<tr><td>Command</td><td><code>LotInfo_REQUEST</code></td><td><code>LotInfo_REQUEST</code></td></tr>
+<tr><td>V_Total</td><td><code>3</code></td><td><strong><code>0</code> ~ <code>3</code> 皆可</strong></td></tr>
+<tr><td>Data[0]</td><td>Lot ID（必填）</td><td><strong>保留欄位</strong>，Handler <strong>忽略</strong>，由 OEE MO file 帶入</td></tr>
+<tr><td>Data[1]</td><td>Operator ID（必填）</td><td><strong>保留欄位</strong>，Handler <strong>忽略</strong>，由 OEE MO file 帶入</td></tr>
+<tr><td>Data[2]</td><td><code>0</code> (FT) / <code>1</code> (RT)（必填）</td><td><strong>保留欄位</strong>，Handler <strong>忽略</strong>，由 OEE MO file 帶入</td></tr>
+</tbody></table>
+
+<p>封包範例（皆合法）：</p>
+
+<pre><code>
+0x02 &quot;LotInfo_REQUEST&quot; 0x01 &quot;0&quot; 0x03                                        ← V2.0 推薦
+0x02 &quot;LotInfo_REQUEST&quot; 0x01 &quot;3&quot; 0x01 &quot;&quot; 0x01 &quot;&quot; 0x01 &quot;&quot; 0x03                ← V2.0 三欄空值
+0x02 &quot;LotInfo_REQUEST&quot; 0x01 &quot;3&quot; 0x01 &quot;LOT001&quot; 0x01 &quot;OP001&quot; 0x01 &quot;0&quot; 0x03    ← V1.0 寫法（向後相容）
+</code></pre>
+
+<blockquote><strong>重要</strong>：V2.0 維持 framing 向後相容，客戶 Agent 即使繼續送 V1.0 寫法也不會錯，但 Handler 不會讀取任何 Data 欄位。所有 Lot 資訊一律由 OEE 雲端 MO file 帶入。</blockquote>
+
+<h4>回傳格式</h4>
+
+<table>
+<thead><tr><th>情境</th><th>V_Total</th><th>Data[0]</th><th>Data[1]</th></tr></thead>
+<tbody>
+<tr><td>成功</td><td>1</td><td><code>0</code></td><td>（無）</td></tr>
+<tr><td>失敗</td><td>2</td><td>Reply Code</td><td>Detail Message（英文）</td></tr>
+</tbody></table>
+
+<h4>Reply Code 對應表（V2.0 簡化版）</h4>
+
+<table>
+<thead><tr><th>Code</th><th>觸發條件</th><th>Detail Message</th><th>客戶端建議處理</th></tr></thead>
+<tbody>
+<tr><td><strong>0</strong></td><td>Start Lot 成功</td><td>（無）</td><td>繼續送 <code>START_REQUEST</code></td></tr>
+<tr><td><strong>2</strong></td><td>機台 Run 中 / 有殘料</td><td><code>Machine running or has residual IC</code></td><td>操作員 (1) 退出殘料 (2) <strong>於 Handler UI 按 <code>Lot End</code> 按鈕</strong>結束舊 OEE Lot；Agent 再重送 <code>LotInfo_REQUEST</code>（單送 <code>CLEAR_REPORT_REQUEST</code> 不會解此狀態）</td></tr>
+<tr><td><strong>60</strong></td><td>Monitor 軟體未連線</td><td><code>Please check Monitor connect</code></td><td>通知操作員檢查 Monitor 軟體</td></tr>
+<tr><td><strong>61</strong></td><td>OEE MO file 下載 / 解析失敗</td><td><code>TfProductionInfo::OEE_StartLot Set MO Information Fail!</code> 或 <code>Load MO Information Fail!</code></td><td>通知 RD/FAE 檢查 OEE FTP / 雲端 MO file</td></tr>
+<tr><td><strong>62</strong></td><td>OEE Machine ID 為空</td><td><code>Machine ID is Empty in LoadMOInformation</code></td><td>檢查 <code>system/Gerneral.ini</code> Machine ID</td></tr>
+<tr><td><strong>90</strong></td><td>OEE_StartLot 內部其他失敗</td><td>帶 Handler 回傳的英文錯誤字串</td><td>將 Detail Message 完整提供給 RD 分析</td></tr>
+</tbody></table>
+
+<blockquote>V1.0 的 <code>20 / 21 / 24 / 30 / 31 / 40 / 41 / 50 / 51 / 91</code> 等代碼在 V2.0 已<strong>收斂入 0/2/60/61/62/90</strong>，客戶端可移除對應分支判斷。</blockquote>
+
+<h4>Setup File 下載（選用）</h4>
+
+<p>若雲端 MO file 內含 <code>SetupFileName</code> 欄位，Handler 會由 <code>AutoDownloadSetupFileByMO</code> 在 <code>LotInfo_REQUEST</code> 處理流程中自動下載對應 Setup File，<strong>客戶端可省略此步驟</strong>。</p>
+
+<p>以下 <code>PP_DL_REQUEST</code> 僅在「雲端 MO file 未指定 Setup File」或「需手動下傳測試」時使用，與 §4.3 上方 <code>LotInfo_REQUEST</code> 屬同一 Start Lot 流程的選用補強：</p>
+
+<table>
+<thead><tr><th>方向</th><th>內容</th></tr></thead>
+<tbody>
+<tr><td>發送</td><td><code>PP_DL_REQUEST</code> <code>V_Total=3</code></td></tr>
+<tr><td>Data[0]</td><td>檔案名稱（含 <code>.zip</code> 副檔名）</td></tr>
+<tr><td>Data[1]</td><td>檔案大小（byte，字串）</td></tr>
+<tr><td>Data[2]</td><td>檔案內容（Hex 字串編碼，每 byte 以 2 碼 hex 表示，例 byte <code>0xAB</code> → 字串 <code>&quot;AB&quot;</code>）</td></tr>
+<tr><td>回傳</td><td><code>PP_DL_REPLY</code> <code>Data[0]=1</code>（成功）/ <code>Data[0]=0</code>（失敗）</td></tr>
+</tbody></table>
+
+<h3>4.4 Auto Start — 遠端啟動</h3>
+
+<p>觸發機台從閒置狀態進入運行狀態。</p>
+
+<table>
+<thead><tr><th>方向</th><th>內容</th></tr></thead>
+<tbody>
+<tr><td>發送</td><td><code>START_REQUEST</code> <code>V_Total=0</code></td></tr>
+<tr><td>回傳</td><td><code>START_REPLY</code> <code>Data[0]=0</code>（固定回傳）</td></tr>
+</tbody></table>
+
+<p>執行條件：</p>
+
+<table>
+<thead><tr><th>執行條件</th><th>說明</th></tr></thead>
+<tbody>
+<tr><td>機台狀態 = HALT</td><td>機台必須處於閒置停止狀態</td></tr>
+<tr><td>未運行中</td><td>機台尚未啟動</td></tr>
+<tr><td>未被鎖定</td><td>安全鎖定必須已解除（需先送 <code>RESUME_REQUEST</code>）</td></tr>
+</tbody></table>
+
+<blockquote>若條件不滿足，Handler 仍回傳 <code>START_REPLY</code>，但<strong>不會實際啟動機台</strong>。建議先送 <code>MAIN_STATUS_INQUIRE</code> 確認狀態為 <code>HALT</code> 再送 Auto Start。</blockquote>
+
+<h3>4.5 狀態查詢（INQUIRE）</h3>
+
+<h4>機台狀態查詢</h4>
+
+<table>
+<thead><tr><th>方向</th><th>內容</th></tr></thead>
+<tbody>
+<tr><td>發送</td><td><code>MAIN_STATUS_INQUIRE</code> <code>V_Total=0</code></td></tr>
+<tr><td>回傳</td><td><code>MAIN_STATUS_GRANT</code> <code>Data[0]=狀態字串</code></td></tr>
+</tbody></table>
+
+<table>
+<thead><tr><th>狀態值</th><th>說明</th></tr></thead>
+<tbody>
+<tr><td><code>RUN</code></td><td>運行中</td></tr>
+<tr><td><code>PAUSE</code></td><td>暫停中</td></tr>
+<tr><td><code>HALT</code></td><td>停止（可接受 Auto Start）</td></tr>
+<tr><td><code>LOCK</code></td><td>鎖定中（需先解鎖）</td></tr>
+</tbody></table>
+
+<h4>其他查詢指令</h4>
+
+<table>
+<thead><tr><th>Inquire</th><th>Grant</th><th>說明</th></tr></thead>
+<tbody>
+<tr><td><code>LotInfo_INQUIRE</code></td><td><code>LotInfo_GRANT</code></td><td>批次資訊</td></tr>
+<tr><td><code>SETUP_FILE_NAME_INQUIRE</code></td><td><code>SETUP_FILE_NAME_GRANT</code></td><td>Setup File 名稱</td></tr>
+<tr><td><code>VERSION_INQUIRE</code></td><td><code>VERSION_GRANT</code></td><td>軟體版本</td></tr>
+</tbody></table>
+
+<hr/>
+
+<h2>5. 完整操作流程</h2>
+
+<h3>5.1 標準 Auto Start 流程（依序執行）</h3>
+
+<table>
+<thead><tr><th>步驟</th><th>動作</th><th>指令</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>建立 TCP 連線</td><td>Client 連線至 Handler IP:6671</td></tr>
+<tr><td>2</td><td>查詢機台狀態（建議）</td><td><code>MAIN_STATUS_INQUIRE</code> → 確認為 <code>HALT</code></td></tr>
+<tr><td>3</td><td>清除計數器（Clear Counters）</td><td><code>CLEAR_REPORT_REQUEST [1111]</code>；<strong>註</strong>：上一個 OEE Lot 須由操作員按 Handler UI <code>Lot End</code>，或由 Tray Feed 流程關閉，本指令不負責</td></tr>
+<tr><td>4</td><td><strong>設定批次資訊（內嵌 OEE Start Lot）</strong></td><td><code>LotInfo_REQUEST</code> → 確認回傳碼 = <code>0</code>（V2.0：Data 可省略）</td></tr>
+<tr><td>5</td><td>下載 Setup File（如需要）</td><td><code>PP_DL_REQUEST [filename.zip, size, hex]</code> → 確認回傳碼 = <code>1</code></td></tr>
+<tr><td>6</td><td>解除安全鎖定</td><td><code>RESUME_REQUEST</code> → <code>RESUME_REPLY</code></td></tr>
+<tr><td>7</td><td>遠端啟動（Auto Start）</td><td><code>START_REQUEST</code> → <code>START_REPLY</code></td></tr>
+<tr><td>8</td><td>確認機台已啟動（建議）</td><td><code>MAIN_STATUS_INQUIRE</code> → 確認為 <code>RUN</code></td></tr>
+</tbody></table>
+
+<blockquote><strong>V2.0 提醒</strong>：步驟 4 的 <code>LotInfo_REQUEST</code> 在 v3 後<strong>已內嵌 OEE Start Lot</strong>，成功回傳 <code>0</code> 即代表「Lot Info 寫入 + OEE Start Lot」皆完成。客戶端<strong>不需要</strong>也<strong>不應該</strong>再呼叫額外指令觸發 OEE Start Lot。</blockquote>
+
+<h3>5.2 緊急鎖定 / 解除後重新啟動</h3>
+
+<h4>緊急鎖定流程</h4>
+
+<p>當偵測到異常（如良率異常）時：</p>
+
+<ol><li>發送 <code>PAUSE_REQUEST</code> → Handler 立即鎖定</li><li>運行中的機台將執行 Soft Stop</li><li>等待 <code>PAUSE_REPLY</code></li></ol>
+
+<h4>解除鎖定後重新啟動</h4>
+
+<ol><li>發送 <code>RESUME_REQUEST</code> → 解除鎖定</li><li>查詢 <code>MAIN_STATUS_INQUIRE</code> → 確認為 <code>HALT</code></li><li>發送 <code>START_REQUEST</code> → 重新啟動</li></ol>
+
+<hr/>
+
+<h2>6. 錯誤處理與注意事項</h2>
+
+<h3>6.1 常見情境</h3>
+
+<table>
+<thead><tr><th>情境</th><th>現象</th><th>處理建議</th></tr></thead>
+<tbody>
+<tr><td>非 HALT 狀態送 Auto Start</td><td>不執行啟動，仍回傳 <code>REPLY</code></td><td>先查詢確認為 HALT</td></tr>
+<tr><td>機台運行中送 LotInfo</td><td>回傳碼 = <code>2</code>（失敗）</td><td>等待停止後再設定</td></tr>
+<tr><td><strong>OEE MO file 下載失敗（v3 新增）</strong></td><td>LotInfo 回傳碼 = <code>61</code></td><td>檢查 OEE FTP / Machine ID / 雲端 MO file</td></tr>
+<tr><td><strong>Machine ID 為空（v3 新增）</strong></td><td>LotInfo 回傳碼 = <code>62</code></td><td>檢查 <code>system/Gerneral.ini</code> Machine ID</td></tr>
+<tr><td>Monitor 軟體未連線</td><td>LotInfo 回傳碼 = <code>60</code></td><td>通知操作員啟動 Monitor 軟體</td></tr>
+<tr><td>Setup File 解壓失敗</td><td><code>PP_DL_REPLY</code> 回傳 <code>0</code></td><td>檢查 zip 完整性與格式</td></tr>
+<tr><td>連線中斷</td><td>無回傳</td><td>重新建立 TCP 連線</td></tr>
+<tr><td>安全鎖定未解除送 Auto Start</td><td>機台不啟動</td><td>先送 <code>RESUME_REQUEST</code></td></tr>
+</tbody></table>
+
+<h3>6.2 建議逾時（V2.0 更新）</h3>
+
+<table>
+<thead><tr><th>指令</th><th>V1.0 建議逾時</th><th><strong>V2.0 建議逾時</strong></th><th>原因</th></tr></thead>
+<tbody>
+<tr><td>一般指令（Start/Pause/Resume/Clear）</td><td>5 秒</td><td>5 秒</td><td>—</td></tr>
+<tr><td><strong><code>LotInfo_REQUEST</code></strong></td><td>5 秒</td><td><strong>&gt;= 30 秒</strong></td><td>v3 內嵌 OEE Start Lot，含 MO file 下載 + Recipe 處理；RD 端 OLP simulator 實測達 11.32 秒</td></tr>
+<tr><td><code>PP_DL_REQUEST</code>（Setup File）</td><td>30 秒</td><td>30 秒</td><td>—</td></tr>
+<tr><td>狀態查詢（INQUIRE）</td><td>3 秒</td><td>3 秒</td><td>—</td></tr>
+</tbody></table>
+
+<h3>6.3 重要注意事項</h3>
+
+<ol><li><strong>同一時間僅允許一個客戶端連線</strong>，多重連線將導致 Server 重置</li><li><strong>指令需逐一發送</strong>，等待前一個指令回傳後再發送下一個</li><li><strong>Safety Lock (<code>PAUSE_REQUEST</code>) 效果立即生效</strong>，運行中機台將觸發 Soft Stop</li><li>Setup File 必須為 zip 格式，檔案內容以 Hex 字串傳送</li><li>批次切換時建議使用清除代碼 <strong>1111</strong>（全部清除），確保上一批計數器完全清空</li><li><strong>V2.0 新增</strong>：<code>LotInfo_REQUEST</code> 與 <code>START_REQUEST</code> 之間建議間隔 <strong>&gt;= 500 ms</strong></li><li><strong>V2.0 新增</strong>：所有 Lot 欄位由 OEE 雲端 MO file 帶入，請於雲端維護正確的 Machine ID 對應 MO file</li><li><strong>V2.0 新增（OEE Lot End 範圍說明）</strong>：本版本未提供「關閉 OEE 雲端 Lot」的 OLP 指令。<code>CLEAR_REPORT_REQUEST</code> <strong>僅清 Handler 計數器</strong>，不會呼叫 <code>OEE_EndLot()</code>、不會送 SECS <code>LotEnd</code> Event、不會上傳 BinQty/SocketLifeTime/TrayMapping。OEE 雲端 Lot 結束須由操作員於 Handler UI 按 <code>Lot End</code> 按鈕完成；Agent 應在操作員結束舊 Lot 之後再送下一個 <code>LotInfo_REQUEST</code>，否則將收到 Reply Code <code>2</code></li></ol>
+
+<hr/>
+
+<h2>7. 附錄</h2>
+
+<h3>7.1 指令速查表</h3>
+
+<table>
+<thead><tr><th>功能</th><th>指令（Request）</th><th>回傳（Reply）</th></tr></thead>
+<tbody>
+<tr><td>安全解鎖</td><td><code>RESUME_REQUEST</code></td><td><code>RESUME_REPLY</code></td></tr>
+<tr><td>安全鎖定</td><td><code>PAUSE_REQUEST</code></td><td><code>PAUSE_REPLY</code></td></tr>
+<tr><td>清除計數器（不關 OEE Lot）</td><td><code>CLEAR_REPORT_REQUEST</code></td><td><code>CLEAR_REPORT_REPLY</code></td></tr>
+<tr><td>設定批次（內嵌 OEE Start Lot）</td><td><code>LotInfo_REQUEST</code></td><td><code>LotInfo_REPLY</code></td></tr>
+<tr><td>下載 Setup File</td><td><code>PP_DL_REQUEST</code></td><td><code>PP_DL_REPLY</code></td></tr>
+<tr><td>遠端啟動</td><td><code>START_REQUEST</code></td><td><code>START_REPLY</code></td></tr>
+<tr><td>查詢狀態</td><td><code>MAIN_STATUS_INQUIRE</code></td><td><code>MAIN_STATUS_GRANT</code></td></tr>
+<tr><td>查詢批次</td><td><code>LotInfo_INQUIRE</code></td><td><code>LotInfo_GRANT</code></td></tr>
+<tr><td>查詢版本</td><td><code>VERSION_INQUIRE</code></td><td><code>VERSION_GRANT</code></td></tr>
+<tr><td>查詢 Setup File</td><td><code>SETUP_FILE_NAME_INQUIRE</code></td><td><code>SETUP_FILE_NAME_GRANT</code></td></tr>
+</tbody></table>
+
+<h3>7.2 TCP 連線速查</h3>
+
+<pre><code>
+Protocol  : TCP/IP
+IP        : [Handler PC IP]
+Port      : 6671
+Mode      : Client connects to Handler (Server)
+Encoding  : ASCII
+Max Conn  : 1
+</code></pre>
+
+<p>封包格式：</p>
+
+<pre><code>
+STX(0x02) + Command + SOH(0x01) + V_Total + [SOH(0x01) + Data]... + ETX(0x03)
+</code></pre>
+
+<hr/>
+
+<h2>8. V2.0 變更說明（vs. V1.0 2026-04-15）</h2>
+
+<p>依超豐 2026-05-15 確認決議，本版本對 V1.0 做下列調整：</p>
+
+<table>
+<thead><tr><th>項目</th><th>V1.0（2026-04-15）</th><th>V2.0（2026-05-15）</th></tr></thead>
+<tbody>
+<tr><td><code>LotInfo_REQUEST</code> Data</td><td>三欄必填（LotID / OperatorID / FT-RT）</td><td>Handler <strong>完全忽略</strong>，由 OEE MO file 帶入</td></tr>
+<tr><td><code>V_Total</code></td><td>必為 <code>3</code></td><td><code>0</code> ~ <code>3</code> 皆可</td></tr>
+<tr><td>Reply Code</td><td>多個</td><td><strong>僅 0 / 2 / 60 / 61 / 62 / 90</strong></td></tr>
+<tr><td>內嵌 OEE Start Lot</td><td>無</td><td><strong><code>LotInfo_REQUEST</code> 成功即完成 OEE Start Lot</strong></td></tr>
+<tr><td>客戶端必送指令</td><td>LotInfo + START</td><td>LotInfo + START（不變，但 LotInfo Data 可省略）</td></tr>
+<tr><td><code>LotInfo_REQUEST</code> 逾時建議</td><td>5 秒</td><td><strong>&gt;= 30 秒</strong></td></tr>
+<tr><td>Setup File 下載</td><td>必送 <code>PP_DL_REQUEST</code></td><td>可由雲端 MO file 自動下載</td></tr>
+</tbody></table>
+
+<blockquote>客戶端 Agent 若已實作 V1.0，<strong>僅需放寬 LotInfo timeout 至 30 秒、移除 20~51 區段的 Reply Code 判斷</strong>即可向後相容；framing、序列、欄位皆不變。</blockquote>
+
+<hr/>
+
+<h2>9. 修訂歷史</h2>
+
+<table>
+<thead><tr><th>版本</th><th>日期</th><th>修訂者</th><th>內容</th></tr></thead>
+<tbody>
+<tr><td>V1.0</td><td>2026-04-15</td><td>RD5</td><td>初版發行（PPT 格式寄送客戶）</td></tr>
+<tr><td>V2.0</td><td>2026-05-15</td><td>RD5</td><td>依 2026-05-15 超豐確認決議：<code>LotInfo_REQUEST</code> 內嵌 OEE Start Lot；Handler 忽略 Data 欄位；Reply Code 簡化為 0/2/60/61/62/90；timeout 建議延長至 30 秒；對應 SPEC F899-008 v3</td></tr>
+</tbody></table>
+
+<hr/>
+
+<p><strong>Headquarters</strong></p>
+<p>鴻勁精密股份有限公司　HON.PRECISION, INC. (HPI)</p>
+<p>No. 11, Ln. 758, Sec. 3, Zhongqing Rd. Daya Dist., Taichung City, Taiwan 428012</p>
+<p>Mail: sales@honprec.com / Tel: +886-425608752 / Fax: +886-4-25608755</p>
+<p>www.honprec.com</p>
+
+<p>Copyright (c) Hon. Precision, Inc. All Rights Reserved. — HonPrecision Confidential Information</p>
+</div>
+<div class="hp-footer">
+  鴻勁精密股份有限公司　HON.PRECISION, INC. (HPI)　|　No. 11, Ln. 758, Sec. 3, Zhongqing Rd. Daya Dist., Taichung City, Taiwan 428012<br/>
+  Mail: sales@honprec.com　|　Tel: +886-425608752　|　Fax: +886-4-25608755　|　www.honprec.com<br/>
+  Copyright (c) Hon. Precision, Inc. All Rights Reserved. — <span class="conf">HonPrecision Confidential Information</span>
+</div>
+</body>
+</html>

@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>HT9046LS V810_B01 AMR / E84 深度分析報告</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: "微軟正黑體","Microsoft JhengHei","Calibri",sans-serif;
+  background:#f4f6f9; padding:32px 24px; color:#2c2c2c; line-height:1.7; font-size:14px; }
+.page { max-width: 1100px; margin: 0 auto; }
+header { display:flex; align-items:center; gap:18px; border-left:6px solid #c0392b;
+  padding:14px 18px; margin-bottom:28px; background:#fff; border-radius:0 6px 6px 0;
+  box-shadow:0 1px 4px rgba(0,0,0,.08); }
+header img { height:56px; object-fit:contain; }
+header h1 { font-size:20px; color:#c0392b; margin-bottom:4px; }
+header p { font-size:12px; color:#888; }
+h1 { font-size:22px; color:#c0392b; margin:24px 0 12px; }
+h2 { font-size:15px; background:#c0392b; color:#fff; padding:6px 14px;
+  border-radius:4px; margin:28px 0 12px 0; }
+h3 { font-size:14px; color:#c0392b; margin:18px 0 8px;
+  border-bottom:1px dashed #e6b3ad; padding-bottom:4px; }
+h4 { font-size:13px; color:#7d2018; margin:14px 0 6px; }
+table { width:100%; border-collapse:collapse; background:#fff; margin-bottom:16px; }
+th, td { border:1px solid #e0e0e0; padding:9px 14px; font-size:13px; vertical-align:top; }
+th { background:#fbe9e7; font-weight:bold; color:#7d2018; text-align:left; }
+tr.hi td { background:#fff8f5; }
+code { background:#f0f0f0; padding:1px 6px; border-radius:3px;
+  font-family:Consolas,monospace; font-size:12px; color:#7d2018; }
+pre { background:#fafafa; border:1px solid #ddd; border-left:4px solid #c0392b;
+  padding:12px 16px; border-radius:4px; overflow-x:auto;
+  font-family:Consolas,monospace; font-size:12px; line-height:1.55; }
+ul, ol { padding-left:24px; margin-bottom:14px; }
+li { margin-bottom:6px; line-height:1.7; }
+hr { border:none; border-top:1px solid #ddd; margin:20px 0; }
+blockquote { border-left:4px solid #c0392b; padding:10px 16px; background:#fff8f5;
+  color:#555; margin:12px 0; }
+.tag { display:inline-block; color:#fff; font-size:11px;
+  padding:2px 8px; border-radius:10px; margin-right:6px; background:#c0392b; }
+.tag.gray { background:#888; }
+.tag.amber { background:#e67e22; }
+.tag.green { background:#27ae60; }
+.callout { background:#fff8f5; border:1px solid #f0c8c0; padding:12px 16px;
+  border-radius:4px; margin:12px 0; }
+.callout strong { color:#c0392b; }
+.toc { background:#fff; border:1px solid #e0e0e0; border-left:4px solid #c0392b;
+  padding:14px 22px; margin-bottom:24px; border-radius:0 4px 4px 0; }
+.toc ol { padding-left:20px; }
+.toc li { margin-bottom:4px; font-size:13px; }
+.grid2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.grid2 .card { background:#fff; border:1px solid #e0e0e0;
+  padding:12px 16px; border-radius:4px; }
+.grid2 .card h4 { margin-top:0; color:#c0392b; }
+footer { margin-top:36px; font-size:11px; color:#bbb;
+  border-top:1px solid #ddd; padding-top:10px; text-align:center; }
+.signal-table td:first-child { font-family:Consolas,monospace;
+  font-weight:bold; color:#c0392b; width:140px; }
+.dir { font-weight:bold; }
+.dir.up { color:#27ae60; }
+.dir.down { color:#c0392b; }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <img src="data:image/png;base64,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" alt="鴻勁精密 Logo">
+  <div>
+    <h1>HT9046LS V810_B01　AMR / E84 / SECS 自動化通訊深度分析</h1>
+    <p>鴻勁精密股份有限公司　HONPREC INC.　／　RD5 軟體</p>
+  </div>
+</header>
+
+<h1>分析報告</h1>
+<table>
+<tr><th width="160">項目</th><th>內容</th></tr>
+<tr><td>分析版本</td><td><code>HT9046LS_Code_V3.32.810_B01_20260427KeyPro_01_AutoUP</code></td></tr>
+<tr><td>對應產品</td><td>HT9046 / HT9045 自動化測試 Handler</td></tr>
+<tr><td>主題</td><td>AMR（自走車）召車 → 對接 → 取／放料 → 結束 → 異常處理 完整鏈路</td></tr>
+<tr><td>涵蓋層級</td><td>SECS/GEM（HSMS 應用層）＋ SEMI E84（電氣層手交）＋ 內部排程器（uLotInfo）</td></tr>
+<tr><td>發行日期</td><td>2026-04-28 17:16:12</td></tr>
+<tr><td>受眾</td><td>客戶 IT / MES / AMHS 整合工程師</td></tr>
+<tr><td>作者</td><td>JimmyChiu（RD5）</td></tr>
+</table>
+
+<div class="toc">
+<strong>目錄</strong>
+<ol>
+  <li>系統角色與責任邊界</li>
+  <li>完整生命週期時序（召車→對接→取放→結束）</li>
+  <li>SECS/GEM 通訊規格（RCMD / CEID / SVID）</li>
+  <li>SEMI E84 電氣層手交流程</li>
+  <li>Handler 內部排程器（uLotInfo / csystem）</li>
+  <li>異常處理與 Timeout 設計</li>
+  <li>互鎖與安全（Safety Interlock）</li>
+  <li>對 IT 與 MES／AMHS 整合的建議與風險點</li>
+  <li>附錄：原始碼對照</li>
+</ol>
+</div>
+
+<h2>1. 系統角色與責任邊界</h2>
+<table>
+<tr><th width="200">角色</th><th>負責內容</th><th>對外介面</th></tr>
+<tr><td>Host / MES</td><td>批次調度、配方下載、Lot Start／End</td><td>SECS/GEM（HSMS over TCP/IP）</td></tr>
+<tr><td>AMHS / 派車系統 (HCS / FleetMgmt)</td><td>接到 Handler 的 <code>AGVSupplement</code> 事件後派遣 AMR 至指定 LoadPort</td><td>SECS/GEM；對 AMR 走自家協定</td></tr>
+<tr><td>AMR（自走車）</td><td>導航至 Handler、執行 E84 對接、取／放料盤</td><td>SEMI E84 並行 IO 對接（硬接線）</td></tr>
+<tr><td>HT9046LS Handler（本機）</td><td>產生 SECS 事件、執行 E84 timing、控制 LoadPort 機構、IC 計數</td><td>SECS（北向）＋ E84（西向）＋ 內部 IO/Cylinder（南向）</td></tr>
+</table>
+
+<div class="callout">
+<strong>關鍵設計：</strong>Handler 是「事件發起者」也是「E84 從屬端」。
+SECS 層用於 <em>事件通知 + Carrier ID + 計數</em>；E84 層才是真正握手交接料盤的物理協定。
+兩條路徑互不依賴但需時序對齊。
+</div>
+
+<h2>2. 完整生命週期時序</h2>
+
+<h3>2.1 召車（Handler 主動）</h3>
+<ol>
+  <li>機台執行中發現某 LoadPort（Loader / Empty / Color）感測器顯示無料盤：
+      <code>Sen[SnLoaderTrayHasTray_AGV].IsOff()</code>。</li>
+  <li><code>TfLotInfo::CheckLDLevel(iAuto)</code> 將位置編碼成
+      <code>P1:1,P2:0,P3:0,P4:0,P5:0,P6:0</code>
+      （P1=Loader, P2=Empty, P3=Color, P4=Auto1, P5=Auto2, P6=Auto3），寫入全域字串 <code>asSupplementBin</code>。</li>
+  <li>呼叫 <code>EventReport(SECS_EVENT.AGVSupplement)</code> → 觸發 <strong>CEID 272</strong> → SECS S6F11 送出。</li>
+  <li>Host／HCS 收到後派遣 AMR。</li>
+</ol>
+
+<h3>2.2 Host 下達補盤指令（Host 主動，可選）</h3>
+<ol>
+  <li>Host 透過 SECS S2F41 RCMD <code>START_AGV</code> 帶 L 結構參數：
+      <pre>L,2
+  L,2  &lt;A "Loader"&gt;          &lt;A "Action"&gt;
+  L,2  &lt;A "LoaderTrayCount"&gt;  &lt;A "12"&gt;</pre></li>
+  <li>Handler 端 <code>uHGemHT9045.cpp</code> L1655 解析後設旗標：
+      <ul>
+        <li><code>bLoaderSECSActionFlag[0]=true</code> 啟動 Loader 補盤序列</li>
+        <li><code>iSECSSetTrayCount=12</code> 寫入計數</li>
+      </ul>
+  </li>
+</ol>
+
+<h3>2.3 AMR 抵達 → E84 對接</h3>
+<ol>
+  <li>AMR 機械對位完成，硬接線拉起 E84 信號 <code>HO_AVBL / CS_0 / VALID</code>，最終 <code>SnE84GO</code> ON。</li>
+  <li>Handler 端 <code>DoE84Load()</code> 從 Task=1 進入握手狀態機（詳見 §4）。</li>
+  <li>Handler 依序回應 <code>SwE84LREQ ON → READY ON → ...</code>，AMR 按其節奏放下料盤。</li>
+</ol>
+
+<h3>2.4 LoadPort 狀態確認 → SECS 動作回報</h3>
+<ol>
+  <li>料盤到位：<code>Sen[SnLoaderTrayHasTray_AGV].IsOn()</code>。</li>
+  <li><code>LoaderAction()</code> 進入 case 100：發 <strong>CEID 273 AGVLDUnLDStatus</strong>（動作開始）。</li>
+  <li>Sensor ON 後進入 case 200：發 <strong>CEID 274 AGVLDUnLDFinish</strong>（動作完成）。</li>
+  <li>case 300：刷新 <code>iAMRLDSECSTrayCount</code>、<code>LabDiffTrayCount</code>，並設 <code>bAMRReceiveAGVStart=true</code>。</li>
+</ol>
+
+<h3>2.5 退盤（Auto1/2/3）對稱流程</h3>
+<ol>
+  <li>滿盤偵測：<code>csystem.cpp</code> L6573 起 <code>SearchNeedAMRUnload()</code>，命中後同樣發
+      <code>AGVLDUnLDStatus / Finish / Supplement</code> 三段式。</li>
+  <li>對應 SVID 38234~38236 的 <code>asAMRBinSetting[0..2]</code> 由 <code>AMRUnloadBin()</code> 即時寫入分類 BIN 號。</li>
+</ol>
+
+<h3>2.6 結束</h3>
+<ul>
+  <li>Lot 結束時 Host 下 <code>END</code> RCMD 或機台主動發 CEID 76 <code>DoLotEnd</code>。</li>
+  <li>清除旗標：
+      <code>bAMRReceiveLoaderTotalTray=false; bAMRReceiveAGVStart=false; bAMRReceiveStart=false;</code>
+      （uLotInfo.cpp L13265）。</li>
+</ul>
+
+<h2>3. SECS/GEM 通訊規格</h2>
+
+<h3>3.1 Host → Handler：S2F41 Remote Command (RCMD)</h3>
+<table>
+<tr><th width="180">RCMD</th><th>必要參數</th><th>動作</th><th>原始碼位置</th></tr>
+<tr><td><code>START_AGV</code></td>
+    <td>L 結構，可帶多筆 (CPNAME, CPVAL) Pair：
+        <ul>
+          <li>("Loader","Action") / ("Empty","Action") / ("Color","Action")</li>
+          <li>("AUTO1","Action") / ("AUTO2","Action") / ("AUTO3","Action")</li>
+          <li>("LoaderTrayCount", "<i>n</i>")</li>
+        </ul>
+    </td>
+    <td>啟動對應 LoadPort 的補／退盤序列；HCACK=0 成功 / 1 失敗</td>
+    <td><code>uHGemHT9045.cpp</code> L1655–1724</td></tr>
+<tr><td><code>REMOTE_START</code></td>
+    <td>—</td>
+    <td>AMR 模式（<code>TrayForm.bEnableAMR=true</code>）下需 <code>RunInfo.bLotStart==true</code> 才允許啟動</td>
+    <td><code>uHGemHT9045.cpp</code> L1725–1747</td></tr>
+<tr><td><code>START</code></td>
+    <td>—</td>
+    <td>AMR 模式設 <code>bAMRReceiveStart=true</code>，等 LotStart 後再實際啟動</td>
+    <td><code>uHGemHT9045.cpp</code> L1748–1780</td></tr>
+<tr><td><code>INITIAL_START_MRT</code> / <code>RETEST_MRT</code> / <code>CONTINUE_START_MRT</code></td>
+    <td>—</td>
+    <td>進入 Mobile Robot Test 三種模式 (<code>rsmInitial_MRT / rsmRetest_MRT / rsmContinuStart_MRT</code>)</td>
+    <td><code>uHGemHT9045.cpp</code> L1270–1321</td></tr>
+<tr><td><code>TRAY_FEED</code> / <code>INITIAL_START</code> / <code>AUTO_RETEST</code> / <code>AUTOSITEMAP</code></td>
+    <td>—</td>
+    <td>其他標準流程，AMR 模式下都有 <code>if(TrayForm.bEnableAMR)</code> 分支保護</td>
+    <td><code>uHGemHT9045.cpp</code> L1333–1413</td></tr>
+</table>
+
+<h3>3.2 Handler → Host：CEID（Collection Event ID）— S6F11 Event Report</h3>
+<table>
+<tr><th width="80">CEID</th><th width="220">EventName</th><th>觸發時機</th><th>關鍵 SVID</th></tr>
+<tr class="hi"><td><strong>272</strong></td><td><code>AGVSupplement</code></td><td>偵測到任一 LoadPort 沒料盤、或 Auto Bin 滿盤需退；Handler 主動跟 Host 要派車</td><td>38219 <code>asSupplementBin</code></td></tr>
+<tr class="hi"><td><strong>273</strong></td><td><code>AGVLDUnLDStatus</code></td><td>SECS 收到 START_AGV 後動作開始 / Sensor 偵測時上報「位置請求」</td><td>38220 <code>asLDUnLDCheckAGV</code></td></tr>
+<tr class="hi"><td><strong>274</strong></td><td><code>AGVLDUnLDFinish</code></td><td>料盤實體就位（或退盤完成）</td><td>38221 <code>asLDUnLDFinsihAGV</code></td></tr>
+<tr><td>275</td><td><code>AGVLdID</code></td><td>Loader Tray ID 讀取完成</td><td>38202</td></tr>
+<tr><td>112</td><td><code>MRRunModeChange</code></td><td>MR 執行模式切換</td><td>—</td></tr>
+<tr><td>95</td><td><code>CassetteLoadComplete</code></td><td>Cassette 上機完成</td><td>38202</td></tr>
+<tr><td>96</td><td><code>CassetteIDReadComplete</code></td><td>Carrier ID 讀取完成</td><td>38202</td></tr>
+<tr><td>98</td><td><code>ReadyToCarrierOutLot</code></td><td>準備整批 Carrier 退出</td><td>—</td></tr>
+<tr><td>99</td><td><code>CassetteOutComplete</code></td><td>Cassette 退出完成</td><td>—</td></tr>
+<tr><td>100</td><td><code>CassetteUnclamped</code></td><td>Cassette Unclamp（可被 AMR 取走）</td><td>—</td></tr>
+<tr><td>103</td><td><code>ReadyToCarrierOutTray</code></td><td>準備退 Tray</td><td>—</td></tr>
+</table>
+
+<h4>位置編碼（asSupplementBin / asLDUnLDCheckAGV / asLDUnLDFinsihAGV 共用）</h4>
+<pre>P1:&lt;Loader&gt;,P2:&lt;Empty&gt;,P3:&lt;Color&gt;,P4:&lt;Auto1&gt;,P5:&lt;Auto2&gt;,P6:&lt;Auto3&gt;</pre>
+<p>每個 P 欄位 1=該位置為動作目標 / 0=不涉及。
+例：補 Loader 為 <code>P1:1,P2:0,P3:0,P4:0,P5:0,P6:0</code>；
+退 Auto2 為 <code>P1:0,P2:0,P3:0,P4:0,P5:1,P6:0</code>。</p>
+
+<h3>3.3 SVID（Status Variable）— Host 可隨時 S1F3 查詢</h3>
+<table class="signal-table">
+<tr><th width="80">SVID</th><th width="260">名稱</th><th>說明</th></tr>
+<tr><td>38202</td><td>Load Port Carrier ID</td><td>當前 Loader Carrier ID</td></tr>
+<tr><td>38205~38207</td><td>Auto1/2/3 carrier ID</td><td>三組 Auto 出料盤 Carrier ID</td></tr>
+<tr><td>38219</td><td>Supplement Bin</td><td>送 CEID 272 時的位置碼</td></tr>
+<tr><td>38220</td><td>LD UnLD Check AGV</td><td>送 CEID 273 時的位置碼</td></tr>
+<tr><td>38221</td><td>LD UnLD Finish AGV</td><td>送 CEID 274 時的位置碼</td></tr>
+<tr><td>38222~38227</td><td>AMR Loader/Empty/Color/Auto1/2/3 Tray Count</td><td>各位置目前盤數</td></tr>
+<tr><td>38228~38233</td><td>AMR Loader/Empty/Color/Auto1/2/3 Device Count</td><td>各位置 IC 數累計</td></tr>
+<tr><td>38234~38236</td><td>AMR Auto1/2/3 Bin Setting</td><td>該 Auto 對應之分類 Bin（由 <code>AMRUnloadBin()</code> 寫入）</td></tr>
+</table>
+
+<h2>4. SEMI E84 電氣層手交流程</h2>
+<p>檔案位置：<code>HT9046LS_Code_V3.32.810_B01_..._AutoUP/MR/RFID.cpp</code></p>
+
+<h3>4.1 信號對照表</h3>
+<table class="signal-table">
+<tr><th width="120">方向</th><th>信號</th><th>內部名稱</th><th>意義</th></tr>
+<tr><td><span class="dir up">Handler→AMR</span></td><td>L_REQ</td><td>SwE84LREQ</td><td>Load Request — 請求載入</td></tr>
+<tr><td><span class="dir up">Handler→AMR</span></td><td>U_REQ</td><td>SwE84UREQ</td><td>Unload Request — 請求卸載</td></tr>
+<tr><td><span class="dir up">Handler→AMR</span></td><td>READY</td><td>SwE84READY</td><td>準備好接收 / 釋出料盤</td></tr>
+<tr><td><span class="dir up">Handler→AMR</span></td><td>HO_AVBL</td><td>SwE84HOAVBL</td><td>Handoff Available — 此 Port 可用</td></tr>
+<tr><td><span class="dir up">Handler→AMR</span></td><td>ES</td><td>SwE84ES</td><td>Emergency Stop（持續輸出，安全門打開或 EMG 按下時 OFF）</td></tr>
+<tr><td><span class="dir up">Handler→AMR</span></td><td>VS_0/VS_1, VA</td><td>SwE84VS0/VS1, SwE84VA</td><td>選位 / 有效</td></tr>
+<tr><td><span class="dir down">AMR→Handler</span></td><td>VALID</td><td>SnE84VALID</td><td>AMR 已選定 Port</td></tr>
+<tr><td><span class="dir down">AMR→Handler</span></td><td>CS_0 / CS_1</td><td>SnE84CS0/CS1</td><td>Carrier Stage Select</td></tr>
+<tr><td><span class="dir down">AMR→Handler</span></td><td>TR_REQ</td><td>SnE84TRREQ</td><td>Transfer Request — 請求開始傳送</td></tr>
+<tr><td><span class="dir down">AMR→Handler</span></td><td>BUSY</td><td>SnE84BUSY</td><td>傳送進行中</td></tr>
+<tr><td><span class="dir down">AMR→Handler</span></td><td>COMPT</td><td>SnE84COMPT</td><td>Complete — 傳送完成</td></tr>
+<tr><td><span class="dir down">AMR→Handler</span></td><td>CONT</td><td>SnE84CONT</td><td>Continuous</td></tr>
+<tr><td><span class="dir down">AMR→Handler</span></td><td>GO</td><td>SnE84GO</td><td>Handler 內部 Trigger（整體流程啟停）</td></tr>
+<tr><td><span class="dir down">AMR→Handler</span></td><td>AM_AVBL</td><td>SnE84AMAVBL</td><td>AMR Available</td></tr>
+</table>
+
+<h3>4.2 Load 流程狀態機 <code>DoE84Load()</code>（RFID.cpp L288–386）</h3>
+<table>
+<tr><th width="60">Task</th><th width="320">前置條件 (進入此 Task 後等待)</th><th>本 Task 動作</th><th>下一 Task</th><th>對應 Timeout</th></tr>
+<tr><td>1</td><td><code>SnE84GO == ON</code></td><td>等待 AMR 觸發整體流程</td><td>100</td><td>—</td></tr>
+<tr><td>100</td><td><code>SnE84CS0 == ON</code></td><td>啟動 0.1s 計時</td><td>200</td><td>—</td></tr>
+<tr><td>200</td><td><code>SnE84VALID == ON</code></td><td>啟動 2.0s 計時</td><td>300</td><td>—</td></tr>
+<tr><td>300</td><td>LoadPort 必須 <strong>無料</strong>：<br><code>SnLoadPortPresent OFF &amp;&amp; SnLoadPortPlacement1 OFF</code></td><td><code>SwE84LREQ.On()</code></td><td>400</td><td><code>iE84TimeOut[0]</code> (TP1)</td></tr>
+<tr><td>400</td><td><code>SnE84TRREQ == ON</code></td><td>等 AMR 表示要開始傳送</td><td>500</td><td>—</td></tr>
+<tr><td>500</td><td>LoadPort 仍 <strong>無料</strong></td><td><code>SwE84READY.On()</code></td><td>600</td><td><code>iE84TimeOut[1]</code> (TP2)</td></tr>
+<tr><td>600</td><td><code>SnE84BUSY == ON</code></td><td>—（AMR 正在放料）</td><td>700</td><td><code>iE84TimeOut[2]</code> (TP3)</td></tr>
+<tr><td>700</td><td>LoadPort <strong>有料</strong>：<br><code>SnLoadPortPresent ON &amp;&amp; SnLoadPortPlacement1 ON</code></td><td><code>SwE84LREQ.Off()</code></td><td>800</td><td><code>iE84TimeOut[3]</code> (TP4)</td></tr>
+<tr><td>800</td><td><code>SnE84BUSY OFF &amp;&amp; SnE84TRREQ OFF &amp;&amp; SnE84COMPT ON</code></td><td>啟動 2.0s 計時</td><td>1100</td><td>—</td></tr>
+<tr><td>1100</td><td>LoadPort <strong>有料</strong></td><td><code>SwE84READY.Off()</code></td><td>1200</td><td><code>iE84TimeOut[4]</code> (TP5)</td></tr>
+<tr><td>1200</td><td><code>SnE84VALID OFF &amp;&amp; SnE84COMPT OFF &amp;&amp; SnE84CS0 OFF</code></td><td>—</td><td>1500</td><td>—</td></tr>
+<tr><td>1500</td><td><code>SnE84GO == OFF</code></td><td>循環結束</td><td>1</td><td>—</td></tr>
+</table>
+
+<h3>4.3 Unload 流程 <code>DoE84UnLoad()</code>（RFID.cpp L389–487）</h3>
+<p>結構完全對稱於 Load，僅差異：</p>
+<ul>
+  <li>使用 <code>SwE84UREQ</code> 取代 <code>SwE84LREQ</code>。</li>
+  <li>case 300 / 500 進入時 LoadPort 必須 <strong>有料</strong>（待取走）。</li>
+  <li>case 700 / 1100 進入時 LoadPort 必須 <strong>無料</strong>（已被取走）。</li>
+</ul>
+
+<h3>4.4 ES（Emergency Stop）持續輸出邏輯</h3>
+<pre>// 每個 Tick 都先判斷
+if (CheckSafeDoor() == false || IsEMGPressed())
+    SW[SwE84ES].Off();
+else
+    SW[SwE84ES].On();</pre>
+<div class="callout">
+<strong>意義：</strong>只要安全門打開或機台 EMG 按下，<code>ES</code> 即時 OFF。
+E84 規範規定 AMR 偵測到 ES 拉低時必須立即停止任何進入 Port 的動作，這是雙方安全互鎖的最終一道防線。
+</div>
+
+<h3>4.5 Timeout（TP1~TP6）設定</h3>
+<table>
+<tr><th>變數</th><th>UI / Ini Key</th><th>對應階段</th><th>意義</th></tr>
+<tr><td><code>iE84TimeOut[0]</code></td><td>edTP1 / "E84 Time Out 1"</td><td>L/U_REQ ON 後等 TR_REQ</td><td>AMR 確認可開始傳送</td></tr>
+<tr><td><code>iE84TimeOut[1]</code></td><td>edTP2</td><td>READY ON 後等 BUSY</td><td>AMR 開始實際 pick/place</td></tr>
+<tr><td><code>iE84TimeOut[2]</code></td><td>edTP3</td><td>BUSY ON 後等 LoadPort sensor</td><td>料盤實體到位</td></tr>
+<tr><td><code>iE84TimeOut[3]</code></td><td>edTP4</td><td>L/U_REQ OFF 後等 BUSY OFF + COMPT ON</td><td>AMR 釋放</td></tr>
+<tr><td><code>iE84TimeOut[4]</code></td><td>edTP5</td><td>READY OFF 後等 VALID/COMPT/CS_0 全 OFF</td><td>清線</td></tr>
+<tr><td><code>iE84TimeOut[5]</code></td><td>edTP6</td><td>保留</td><td>—</td></tr>
+</table>
+
+<h2>5. Handler 內部排程器</h2>
+
+<h3>5.1 主排程：<code>TfLotInfo::CheckAMRAction()</code>（uLotInfo.cpp L13182）</h3>
+<pre>void __fastcall TfLotInfo::Timer4Timer(TObject *Sender)
+{
+    CheckActionFlag();
+    CheckAMRAction();
+    ReflashInfo();
+}
+
+void TfLotInfo::CheckAMRAction()
+{
+    for (int i = 0; i &lt; 3; i++)
+    {
+        LoaderAction(i);     // i=0:Loader, 1:Empty, 2:Color
+        UnLoaderAction(i);   // i=0:Auto1,  1:Auto2, 2:Auto3
+        if (bLoaderActionFlag[i] == false)
+            CheckLDLevel(i); // 主動偵測缺料 → CEID 272
+    }
+}</pre>
+
+<h3>5.2 LoaderAction 狀態機（補盤）</h3>
+<table>
+<tr><th width="60">Case</th><th width="320">條件</th><th>動作</th></tr>
+<tr><td>1</td><td><code>bLoaderSECSActionFlag[i] == true</code>（由 SECS START_AGV 啟動）</td><td>RecordProcess("AMR LoaderAction")</td></tr>
+<tr><td>100</td><td>對應 Middle Cylinder OFF</td><td>設動作鎖、啟動 <strong>300 秒超時</strong>、發 CEID 273</td></tr>
+<tr><td>200</td><td><code>SnLoaderTrayHasTray_AGV ON</code>（料盤到位）</td><td>發 CEID 274；i==0 進 case 300，否則跳 case 400</td></tr>
+<tr><td>300</td><td>—</td><td>更新 <code>iAMRLDSECSTrayCount = iSECSSetTrayCount + iAMRCoverTray</code>；設 <code>bAMRReceiveAGVStart=true</code></td></tr>
+<tr><td>400</td><td>—</td><td>清旗標、回到 case 1</td></tr>
+</table>
+
+<h3>5.3 Magazine 整合（csystem.cpp L6573–6660）</h3>
+<ul>
+  <li><code>SearchNeedAMRUnload(true)</code> 找出需要退的 Magazine 編號。</li>
+  <li><code>DoMagazineAMRTrayFeed(iwhichMagazine)</code> 執行退盤搬運。</li>
+  <li>14 顆 Magazine 的 IC 計數陣列：<code>TestIF_File.iAMRMagzineDeviceCount[14]</code>。</li>
+  <li>退完同步發 <code>AGVSupplement</code> CEID 272 通知 Host 補空盤回來。</li>
+</ul>
+
+<h2>6. 異常處理與 Timeout 設計</h2>
+<table>
+<tr><th width="240">異常情境</th><th>偵測方式</th><th>動作</th></tr>
+<tr class="hi"><td>AMR 抵達後 300 秒內無料盤到位</td><td><code>LoadActionDelay[iAuto].Off()</code></td><td>程式碼留有 <code>// Error</code> 區塊（目前空實作） <span class="tag amber">建議補強</span></td></tr>
+<tr class="hi"><td>E84 任一階段 timeout（TP1~TP5）</td><td><code>HTimer E84LoadDelay</code> 計時但 <strong>未在 case 條件中檢查 .Off()</strong></td><td>目前 timeout 只啟動不判定，狀態機會卡住直到 sensor 觸發或外部清除 <span class="tag amber">建議補強</span></td></tr>
+<tr><td>安全門開啟 / EMG</td><td>每 Tick 檢查 <code>CheckSafeDoor() / IsEMGPressed()</code></td><td>立即拉 <code>SwE84ES OFF</code>，AMR 應停止</td></tr>
+<tr><td>SECS 連線斷</td><td>HSMS keep-alive 失效</td><td>Handler 進 OFFLINE，SECS 排隊等重連；E84 流程不受影響（獨立進行）</td></tr>
+<tr><td>RFID 讀失敗</td><td><code>bRFIDReaderOK[i]==false</code></td><td>Carrier ID 為空，但 LoadPort 機構動作仍會繼續 <span class="tag amber">建議補強</span></td></tr>
+<tr><td>料盤計數不一致</td><td><code>LabDiffTrayCount</code> 與實際差</td><td>Operator 手動 Button9 清零（uLotInfo.cpp L13252）</td></tr>
+</table>
+
+<h2>7. 互鎖與安全（Safety Interlock）</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>機械層</h4>
+    <ul>
+      <li>Middle Cylinder OFF 才允許進入 LoaderAction case 100</li>
+      <li>LoadPort sensor 與 Placement1 必須一致才視為料盤到位</li>
+      <li>料盤計數差異不為 0 時鎖定退盤動作</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>電氣層 (E84)</h4>
+    <ul>
+      <li><code>SwE84ES</code> 為持續輸出 + Tick-by-Tick 重判</li>
+      <li>READY 信號必須在 LoadPort 物理狀態正確時才 ON</li>
+      <li>Timeout 結束時 LREQ/UREQ/READY 應強制 OFF（建議補強）</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>SECS 層</h4>
+    <ul>
+      <li>AMR 模式啟動：<code>TrayForm.bEnableAMR == true</code></li>
+      <li>REMOTE_START 需 <code>RunInfo.bLotStart == true</code></li>
+      <li>START 需先進入 LotStart 狀態才會真正啟動 (<code>bAMRReceiveStart</code>)</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>軟體層</h4>
+    <ul>
+      <li>Lot 結束統一清旗標：<code>bAMRReceiveLoaderTotalTray / bAMRReceiveAGVStart / bAMRReceiveStart</code></li>
+      <li><code>RecordProcess()</code> 軌跡記錄供 hangup 分析</li>
+    </ul>
+  </div>
+</div>
+
+<h2>8. 對 IT 與 MES／AMHS 整合的建議</h2>
+
+<h3>8.1 整合驗收必跑案例</h3>
+<ol>
+  <li><strong>正常召料：</strong>機台主動發 CEID 272 (P1:1) → HCS 派車 → AMR 對接 → CEID 273 → 274 → SVID 38222 +1。</li>
+  <li><strong>SECS 主動補盤：</strong>Host 下 <code>S2F41 START_AGV [["Loader","Action"],["LoaderTrayCount","12"]]</code> → 機台應回 HCACK=0 並進入 LoaderAction → 完成後 SVID 38222 = 12。</li>
+  <li><strong>退盤滿盤：</strong>連續測試直到 Auto1 滿盤 → CEID 272 (P4:1) → HCS 派空車 → CEID 273/274 → SVID 38225 歸零、38234 紀錄該盤 BIN 名。</li>
+  <li><strong>E84 完整握手：</strong>對接時觀察 LREQ→TR_REQ→READY→BUSY→COMPT→READY off→CS_0/VALID/COMPT 全 off→GO off 全部 12 個轉移點。</li>
+  <li><strong>EMG 中斷：</strong>對接到一半按 EMG → 確認 ES 立即 OFF、AMR 停止、機台 SECS 發 ALARM。</li>
+  <li><strong>SECS 斷線：</strong>kill HSMS → 確認 E84 流程不中斷、重連後狀態同步。</li>
+</ol>
+
+<h3>8.2 風險點 / 待確認事項</h3>
+<table>
+<tr><th width="40">#</th><th width="240">議題</th><th>說明 / 建議</th></tr>
+<tr class="hi"><td>R1</td><td>E84 timeout 未生效</td><td>各 case 中 <code>E84LoadDelay.SetSecAndOn(TPx)</code> 只啟動計時，沒有在後續 case 條件中檢查 <code>.Off()</code> 來跳轉 error。<strong>建議客戶 IT 在驗收時實機驗證</strong> TP1~TP5 timeout 後機台是否真會發 ALARM；若否須由 RD5 補 timeout error 處理。</td></tr>
+<tr class="hi"><td>R2</td><td>LoaderAction 300 秒固定</td><td>case 100 寫死 <code>SetSecAndOn(300)</code>，無法由 SECS／INI 調整。若客戶 AMR 派車時間波動大需可配置。</td></tr>
+<tr><td>R3</td><td>Carrier ID 讀失敗時無 retry</td><td>RFID.cpp <code>RFID_1ReceiveData</code> 失敗只在 Memo1 顯示，沒有觸發 retry／ALARM。建議 Host 端用 SVID 38202 為空字串作為例外條件。</td></tr>
+<tr><td>R4</td><td>P1~P6 編碼僅 0/1，多目標時順序</td><td>同時補 Loader+Empty 時 <code>P1:1,P2:1,...</code>；HCS 端必須能解析多 P 同時為 1 並依序派車。</td></tr>
+<tr><td>R5</td><td>SVID 38234~38236 BIN 字串格式</td><td>由 <code>AMRUnloadBin()</code> 動態產生，建議 IT 提供樣本給 MES 解析測試。</td></tr>
+<tr><td>R6</td><td>MRT vs AMR vs AGV 命名混用</td><td>本版為歷史合併產物：MR=Mobile Robot 原始命名、AGV=舊代號、AMR=新代號，三者在 SVID/CEID/變數名混用。建議 IT 對照本報告表 §3.2、§3.3 使用，<strong>不要</strong>依字面分類功能。</td></tr>
+<tr><td>R7</td><td><code>TrayForm.bEnableAMR</code> 為單一全域開關</td><td>關閉時所有 AMR 流程降級為手動模式，但 SECS RCMD 解析仍會接受 START_AGV，僅旗標不會被內部排程器處理。建議 IT 驗收時兩種模式都跑。</td></tr>
+</table>
+
+<h3>8.3 推薦監控指標（IT/MES Dashboard）</h3>
+<ul>
+  <li>SVID 38222~38227（六位置料盤數）：&lt; 1 時主動觸發排程</li>
+  <li>SVID 38228~38233（六位置 IC 累計）：用於 OEE 與 throughput 計算</li>
+  <li>CEID 272 觸發頻率：過高 = 配料策略需優化</li>
+  <li>CEID 273 → 274 間隔時間：實測 AMR 派車 + 對接時間，作 SLA 基準</li>
+  <li>ALARM CEID（30 DoAlarmReset 等）：與 AMR 對接失敗的相關性分析</li>
+</ul>
+
+<h2>9. 附錄：原始碼對照</h2>
+<table>
+<tr><th width="320">檔案</th><th>內容</th></tr>
+<tr><td><code>MR/RFID.cpp</code></td><td>E84 完整 12 階 Load/Unload 狀態機（L262–487）、RFID Carrier ID 讀取（L125–149）、TP1~TP6 Ini 讀寫（L185–231）</td></tr>
+<tr><td><code>MR/RFID.h</code></td><td>UI 表單定義：<code>tsE84</code>、<code>edTP1~edTP6</code>、<code>Memo3</code>(E84 Log)、<code>tsDelta</code></td></tr>
+<tr><td><code>MR/Delta.h</code></td><td>Delta 伺服 Modbus 通訊（與 LoadPort 升降結構相關）</td></tr>
+<tr><td><code>SECSGEM/uHGemHT9045.cpp</code></td><td>S2F41 RCMD 解析中樞：<code>START_AGV</code>(L1655)、<code>REMOTE_START</code>(L1725)、<code>START</code>(L1748)、<code>*_MRT</code>(L1270)</td></tr>
+<tr><td><code>SECSGEM/uHGemHT9045.cpp</code> L106–360</td><td>所有 CEID EventDescription 註冊（含 95~103, 112, 272~275）</td></tr>
+<tr><td><code>SECSGEM/uHGemHT9045_SV.cpp</code> L800–820</td><td>AMR 相關 SVID 38202~38236 註冊</td></tr>
+<tr><td><code>uLotInfo.cpp</code> L12936–13280</td><td>AMR 排程器：<code>LoaderAction</code>、<code>UnLoaderAction</code>、<code>CheckLDLevel</code>、<code>CheckAMRAction</code>、<code>Timer4Timer</code></td></tr>
+<tr><td><code>csystem.cpp</code> L6573–6660</td><td>Magazine + AMR 退盤整合 (<code>SearchNeedAMRUnload</code>、<code>DoMagazineAMRTrayFeed</code>)</td></tr>
+<tr><td><code>cmydef.cpp / cmydef.h</code></td><td>E84 IO 點位定義（SwE84*, SnE84*）、<code>iAMRTrayCount[6]</code>、<code>iAMRDeviceCount[6]</code>、<code>iAMRMagzineDeviceCount[14]</code></td></tr>
+<tr><td><code>cinitial.cpp</code></td><td>E84 IO 與 Mot_Table.csv / IO_Table.csv 對應載入</td></tr>
+</table>
+
+<footer>
+  本報告由 RD5 軟體（JimmyChiu）於 2026-04-28 17:16:12 產出，僅供客戶 IT／MES 整合會議參考。<br>
+  資料來源：<code>HT9046LS_Code_V3.32.810_B01_20260427KeyPro_01_AutoUP</code> 原始碼靜態分析。<br>
+  © 鴻勁精密股份有限公司　HONPREC INC.
+</footer>
+
+</div>
+</body>
+</html>

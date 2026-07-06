@@ -16,7 +16,8 @@
 | ht9045-index-flow | 機構流程 | ~350 | ✓ | Index, DoTestY, TestHead, Socket 下壓, FTestSuck, BTestSuck, MTestY, MTestZ, 32-site | Jimmy | 2026-04-14 | 2026-04-14 | Active | §4-5 → refs/child-state-machines.md |
 | ht9045-shuttle-flow | 機構流程 | 410 | ✗ | Shuttle, Do_Auto_SHT1, Do_Auto_SHT2, Floating, Null IC, 2D Barcode | Jimmy | 2026-03-30 | 2026-04-04 | Active | — |
 | ht9045-catchtray-flow | 機構流程 | 470 | ✗ | CatchTray, DoCatchTray, Loader/Empty/Color 補盤, Auto 放盤, TrayID, RFID | Jimmy | 2026-03-30 | 2026-04-04 | Active | — |
-| ht9045-contact-force | 深度邏輯 | 420 | ✗ | Contact Force, SLK, Kit Diameter, Air Force, EP 壓力, Index Press, D25 | Jimmy | 2026-03-30 | 2026-04-04 | Active | — |
+| ht9045-contact-force | 深度邏輯 | 420 | ✗ | Contact Force, SLK, Kit Diameter, Air Force, EP 壓力, Index Press, D25 | Jimmy | 2026-03-30 | 2026-04-04 | Active | Contact 取料/互鎖 → ht9045-contact-pick-interlock |
+| ht9045-contact-pick-interlock | 深度邏輯 | ~210 | ✗ | Contact 切不回, Please finish ONE CYCLE, 機台有IC不能切換模式, DoZ1PickFromShuttle, DoZ2PickFromShuttle, case 3050, bContactTestICDropGuard, IndexHasIC, ShuttleHasIC, TestSocketHasIC, FTestSuck, BTestSuck, FLCarryKit, SetItemData, MoveSuckData, iFTestBackItem, HAS_IC, 掉料防護, 部分上料, 客戶碼隔離, CC_GIGAS | Jimmy | 2026-06-08 | 2026-06-08 | Active | 源自 CASE-20260608-001；問題b真兇(Socket/CarryKit殘留)待現場確認 |
 | ht9045-autostart-flow | 通訊 | ~180 | ✓ | AutoStart, GTK Loader, Handshake, HTSET 700/702/333, SOT, EOT | Jimmy | 2026-04-14 | 2026-04-14 | Active | 重複內容已移除，指向 refs/ |
 | ht9045-lotinfo-flow | 通訊 | 455 | ✓ | LotInfo, Lot Start/End, Recipe 下載, PP_DL_REQUEST, FTP, Security_new.def | Jimmy | 2026-04-04 | 2026-04-04 | Active | frontmatter 已修復 |
 | ht9045-secsgem | 通訊 | 355 | ✗ | SECS, GEM, SVID, ECID, CEID, S1F1, S2F15, AddSV, AddEC, uHGemHT9045 | Jimmy | 2026-03-30 | 2026-04-04 | Active | — |
@@ -29,6 +30,7 @@
 | ht9045-sorting-bintray | 機構流程 | 230 | ✗ | SortingBinTray, DoSortingBinTray, P27, bSortingBinTraywhenCleanOut, bSortingBinTrayWhenTrayFeed, DoFix3FullTray, Unloader 整盤, Clean Out 整盤, Tray Feed 整盤 | Jimmy | 2026-04-10 | 2026-04-10 | Active | — |
 | skill-creator | 工具 | 395 | ✗ | Skill 建立, SKILL.md, skill factory, 技能工廠 | Jimmy | 2026-03-30 | 2026-04-04 | Active | — |
 | ht9045-tray-group-mechanism | 機構原理 | 65 | ✓ | Tray Group, GoUp, GoDown, Loader, Color, Empty, C_Color_Up, C_Empty_Up, 料盤升降, CylinderUp, CylinderMiddle, asendic_Loader, asendic_Color, asendic_Empty | Jimmy | 2026-04-14 | 2026-04-14 | Active | — |
+| ht9045-atc-interface | 通訊 | 220 | ✓ | ATC, ATC_SET_TEMP, ATC_SET_TOFS, ATC_SITE_ENABLED, ATC_Handler_Side, @1002, @1003, @1004, @1016, @1105, HANDLER_2DID, ATC Recipe, TJ Offset, FFC, PFC, MTK ASIF, TSMC Hulk | Jimmy | 2026-04-17 | 2026-04-17 | Active | 137 commands (1001-1137) 已收錄於 refs/atc-commands.md |
 
 ## 狀態定義
 
