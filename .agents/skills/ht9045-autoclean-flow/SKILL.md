@@ -19,7 +19,7 @@ description: HT9045 IC Test Handler Auto Clean（自動清潔 Socket）流程知
 
 ## 專案資訊
 
-- **原始碼根路徑**: `d:\HT9045\HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330\`
+- **原始碼根路徑**: `d:\HT9045\HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422\`
 - **語言**: C++ (BCB6, VCL, AnsiString)
 - **架構**: State Machine pattern — `switch(Task)` 搭配 `int &Task`
 

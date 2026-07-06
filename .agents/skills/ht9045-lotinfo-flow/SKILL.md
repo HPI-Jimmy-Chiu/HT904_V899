@@ -23,7 +23,7 @@ description: "HT9045 LotInfo 批次管理流程知識庫。當使用者詢問 uL
 | 主類別 | `TfLotInfo` |
 | 主檔案 | `uLotInfo.cpp` (V899: ~11,886 行) |
 | 表單檔 | `uLotInfo.dfm` |
-| V899 路徑 | `d:\HT9045\HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330\uLotInfo.cpp` |
+| V899 路徑 | `d:\HT9045\HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422\uLotInfo.cpp` |
 | 持久化路徑 | `AuthPath + "config.ini"` → `[Lot Info]` |
 
 ### 主要職能

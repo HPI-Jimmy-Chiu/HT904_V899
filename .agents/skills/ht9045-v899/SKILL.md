@@ -1,14 +1,22 @@
 ---
 name: ht9045-v899
-description: "HT9045 V3.33.899.0 版本知識庫。涵蓋版本編譯旗標、模組索引、iInArmType 分派表、HotPlate DataSwap 觸發邏輯、iArmTask 狀態機。Use when: 分析 V899 版本程式碼、查 HotPlate Data Swap error、追蹤 InArm 16-site 流程、比對版本差異。關鍵字：V899, V3.33.899, HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330, HotPlate Data Swap, ainarm_SearchPlacePlate, DoPlaceToHPSwapData, iArmTask, iInArmType, 2x4_16, 2x8_32"
+description: "HT9045 V3.33.899.0 版本知識庫。涵蓋版本編譯旗標、模組索引、iInArmType 分派表、HotPlate DataSwap 觸發邏輯、iArmTask 狀態機。Use when: 分析 V899 版本程式碼、查 HotPlate Data Swap error、追蹤 InArm 16-site 流程、比對版本差異。關鍵字：V899, V3.33.899, HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422, HotPlate Data Swap, ainarm_SearchPlacePlate, DoPlaceToHPSwapData, iArmTask, iInArmType, 2x4_16, 2x8_32"
 ---
 
 # HT9045 V3.33.899.0 版本知識庫
 
+## 與 Weekly_AI 的分工
+
+本 skill / agent 負責 V899 程式與異常分析：定位 alarm、比對版本差異、修改 V899 C/C++、提供 root cause / fix / validation / Weekly 備註建議。
+
+週報、case 狀態、release note、鴻勁紅 / 鴻勁藍產物不由本 skill 產出。若使用者要求「結案」、「週報」、「release note」、「鴻勁紅」、「鴻勁藍」、「提供安裝包紀錄」，應交給 Weekly_AI / weekly-report agent 處理，正式產物路徑為 `Customer/<客戶>/<CASE>/04_release/`。
+
+handoff 給 Weekly_AI 時至少包含：客戶、機型、版本、CASE-ID（若有）、問題現象、根因、修正檔案與函式、驗證結果、對外描述。
+
 ## 版本路徑
 
 ```
-d:\HT9045\HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330\
+d:\HT9045\HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422\
 ```
 
 ## 編譯旗標

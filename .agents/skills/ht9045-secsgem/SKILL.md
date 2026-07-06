@@ -5,6 +5,16 @@ description: HT9045 SECS/GEM 通訊模組知識庫。當使用者詢問 SECS/GEM
 
 # HT9045 SECS/GEM 模組知識庫
 
+## 完整 SV / EC 對照表（逐筆查詢）
+
+> 逐筆 SVID/ECID → 名稱/型態/資料來源/註解的對照表已自動產生，查特定 ID 或變數時用這份，
+> 不要只看下方的「範圍區段」概覽。
+>
+> - 說明：`references/SECS_SV_EC_Reference.md`
+> - SV（772 筆）：`references/sv_table.csv`
+> - EC（1671 筆）：`references/ec_table.csv`
+> - 重新產生：`python scripts/extract_secs_sv_ec.py`
+
 ## 檔案結構
 
 | 檔案 | 說明 |

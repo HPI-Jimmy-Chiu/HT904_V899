@@ -7,7 +7,7 @@ description: HT9045 InArm 吸取 / 真空判定 / HotPlate 放料邏輯知識庫
 
 ## 適用範圍
 
-- 預設分析版本：`d:\HT9045\HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330\`
+- 預設分析版本：`d:\HT9045\HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422\`
 - 預設機型配置：`e9045_2x4_16`（16-site）
 - 問題類型：InArm 吸取失敗、真空異常、HAS_NULL_IC 流向、HotPlate pick/place 資料轉換、吸嘴對位與 Auto Site Mapping
 
