@@ -1,7 +1,7 @@
 param()
 $ErrorActionPreference = 'Stop'
 
-$filePath = "d:\HT9045\HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330\AutoClean\AutoClean.cpp"
+$filePath = "d:\HT9045\HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422\AutoClean\AutoClean.cpp"
 $enc = [System.Text.Encoding]::GetEncoding(950)
 $raw = [System.IO.File]::ReadAllLines($filePath, $enc)
 $list = New-Object System.Collections.Generic.List[string]

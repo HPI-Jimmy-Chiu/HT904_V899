@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Fix V899_20260330 encoding damage.
+Fix V899_20260422 encoding damage.
 
 Problem: 19 files were accidentally saved as UTF-8, corrupting BIG5 Chinese
 comments (U+FFFD replacement characters).
@@ -23,7 +23,7 @@ import re
 import difflib
 
 # --- Configuration ---
-BASE_330 = r"d:\HT9045\HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330"
+BASE_330 = r"d:\HT9045\HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422"
 BASE_407 = r"d:\HT9045\HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260407"
 BASE_898 = r"d:\HT9045\HT9011UC_Code_V3.33.898.0_20260313_Jimmy_20260323"
 

@@ -1,0 +1,773 @@
+﻿SVID,Type,Name,Unit,Pointer,Comment,Line,SourceRef
+1000,ASCII_TYPE,Machine Define,,&RunInfo.MachineDefine,機台定義,63,SECSGEM/uHGemHT9045_SV.cpp#L63
+1001,ASCII_TYPE,Machine Model,,&IniConfig.sMachineType,Machine Type,64,SECSGEM/uHGemHT9045_SV.cpp#L64
+1002,ASCII_TYPE,Machine ID,,&IniConfig.sGPIBMachineID,Machine ID,65,SECSGEM/uHGemHT9045_SV.cpp#L65
+1003,ASCII_TYPE,Software Version,,&RunInfo.SoftwareVersion,Software Version,66,SECSGEM/uHGemHT9045_SV.cpp#L66
+1004,ASCII_TYPE,Software Release Date,,&RunInfo.SoftwareDate,Software Release Date,67,SECSGEM/uHGemHT9045_SV.cpp#L67
+1005,ASCII_TYPE,Factory,,&RunInfo.Factory,Factory,68,SECSGEM/uHGemHT9045_SV.cpp#L68
+1009,ASCII_TYPE,Lot Start Time,,&RunInfo.LotStartTime,Lot Start Time,69,SECSGEM/uHGemHT9045_SV.cpp#L69
+1010,ASCII_TYPE,Machine Pre State,,&sMachinePreState,Machine Pre State,70,SECSGEM/uHGemHT9045_SV.cpp#L70
+1011,ASCII_TYPE,Machine State,,fMain->palMainStatus,Machine Status,71,SECSGEM/uHGemHT9045_SV.cpp#L71
+1012,ASCII_TYPE,Index Arm1 Torque,,fMain->edTorue0,Index Arm1 Torque,72,SECSGEM/uHGemHT9045_SV.cpp#L72
+1013,ASCII_TYPE,Index Arm2 Torque,,fMain->edTorue1,Index Arm2 Torque,73,SECSGEM/uHGemHT9045_SV.cpp#L73
+1014,INT_4_TYPE,Tower Light Red,,&iSECS_GEM_PPSIGNALTOWER_CONTROL_RED,三色燈-紅; 0:關; 1:開; 2:閃爍,74,SECSGEM/uHGemHT9045_SV.cpp#L74
+1015,INT_4_TYPE,Tower Light Yellow,,&iSECS_GEM_PPSIGNALTOWER_CONTROL_YELLOW,三色燈-紅; 0:關; 1:開; 2:閃爍,75,SECSGEM/uHGemHT9045_SV.cpp#L75
+1016,INT_4_TYPE,Tower Light Green,,&iSECS_GEM_PPSIGNALTOWER_CONTROL_GREEN,三色燈-紅; 0:關; 1:開; 2:閃爍,76,SECSGEM/uHGemHT9045_SV.cpp#L76
+1017,INT_4_TYPE,Number of RT,,&LastSet.iAutoRetestCount_ART,Number of RT,77,SECSGEM/uHGemHT9045_SV.cpp#L77
+1018,ASCII_TYPE,Galil_Driver_Version,,&RunInfo.GalilVersion,Gaili Driver Version,78,SECSGEM/uHGemHT9045_SV.cpp#L78
+1019,INT_4_TYPE,Machine Pre Status,,&iSECSGEMMachinePreState,Machine PreStatus,79,SECSGEM/uHGemHT9045_SV.cpp#L79
+1020,INT_4_TYPE,Machine Pre State,,&iSECSGEMMachineState,Machine Pre State,80,SECSGEM/uHGemHT9045_SV.cpp#L80
+1021,INT_4_TYPE,UPH,,&RunInfo.iUPH,UPH,81,SECSGEM/uHGemHT9045_SV.cpp#L81
+1023,ASCII_TYPE,Index Time,,&RunInfo.IndexTime,Index Time,82,SECSGEM/uHGemHT9045_SV.cpp#L82
+1024,ASCII_TYPE,Index Cycle Time,,&RunInfo.IndexCycleTime,Index Cycle Time,83,SECSGEM/uHGemHT9045_SV.cpp#L83
+1025,ASCII_TYPE,Test Time,,&RunInfo.TestTime,Test Time,84,SECSGEM/uHGemHT9045_SV.cpp#L84
+1026,ASCII_TYPE,MTBA,,&RunInfo.MTBA,MTBA,85,SECSGEM/uHGemHT9045_SV.cpp#L85
+1027,ASCII_TYPE,System Time,,&RunInfo.SystemTime,System Time,86,SECSGEM/uHGemHT9045_SV.cpp#L86
+1028,ASCII_TYPE,Avg UPH,,&RunInfo.iAvgUPH,Average UPH,87,SECSGEM/uHGemHT9045_SV.cpp#L87
+1031,ASCII_TYPE,MUBA,,&RunInfo.MUBA,MUBA,88,SECSGEM/uHGemHT9045_SV.cpp#L88
+1032,INT_4_TYPE,Power On Time,,&LastSet.SystemAccSecond[0][stPowerOn],Power On Time,89,SECSGEM/uHGemHT9045_SV.cpp#L89
+1033,INT_4_TYPE,Running Time,,&LastSet.SystemAccSecond[0][stStartTime],Running Time,90,SECSGEM/uHGemHT9045_SV.cpp#L90
+1034,INT_4_TYPE,Production Time,,&LastSet.SystemAccSecond[0][stProductTime],Production Time,91,SECSGEM/uHGemHT9045_SV.cpp#L91
+1035,INT_4_TYPE,Pause Time,,&LastSet.SystemAccSecond[0][stPauseTime],Pause Time,92,SECSGEM/uHGemHT9045_SV.cpp#L92
+1036,INT_4_TYPE,Jam Count,,&LastSet.iJamCount[1],Jam Count,93,SECSGEM/uHGemHT9045_SV.cpp#L93
+1040,INT_4_TYPE,ATC SYSTEM,,&ATC_SYSTEM,ATC SYSTEM,94,SECSGEM/uHGemHT9045_SV.cpp#L94
+1041,ASCII_TYPE,EP Penconder,,fMain->lbEPenconder,EP Penconder,95,SECSGEM/uHGemHT9045_SV.cpp#L95
+1043,BOOLEAN_TYPE,ATC State,,&iATCOnLine,ATC State,96,SECSGEM/uHGemHT9045_SV.cpp#L96
+1044,BOOLEAN_TYPE,ATC RUN,,&bRunATC,ATC RUN,97,SECSGEM/uHGemHT9045_SV.cpp#L97
+1045,ASCII_TYPE,ATC Chiller,,&bRunATC,ATC Chiller,98,SECSGEM/uHGemHT9045_SV.cpp#L98
+1046,ASCII_TYPE,Chiller Temp,,&Temperature.iATCChillerTemp,Chiller Temp,99,SECSGEM/uHGemHT9045_SV.cpp#L99
+1047,FT_8_TYPE,Read KG,,fContact->lblEPValueKg,Read KG,100,SECSGEM/uHGemHT9045_SV.cpp#L100
+1048,ASCII_TYPE,Test Arm EP value transform to Kg,,fContact->lblEPValueKg,Test Arm EP value transform to Kg,101,SECSGEM/uHGemHT9045_SV.cpp#L101
+1049,INT_4_TYPE,Which Arm is in socket area,,&iWhichArmDown,Which Arm is in socket area,102,SECSGEM/uHGemHT9045_SV.cpp#L102
+1050,ASCII_TYPE,Lot End Time,,&RunInfo.LotEndTime,Lot End Time,103,SECSGEM/uHGemHT9045_SV.cpp#L103
+1051,ASCII_TYPE,Hot Plate1 Temperature,,&RunInfo.ShowTempComp[tcHotPlate1],Hot Plate1 Temperature,104,SECSGEM/uHGemHT9045_SV.cpp#L104
+1052,ASCII_TYPE,Hot Plate2 Temperature,,&RunInfo.ShowTempComp[tcHotPlate2],Hot Plate2 Temperature,105,SECSGEM/uHGemHT9045_SV.cpp#L105
+1053,ASCII_TYPE,Shuttle1 Temperature,,&RunInfo.ShowTempComp[tcShuttle1],Shuttle1 Temperature,106,SECSGEM/uHGemHT9045_SV.cpp#L106
+1054,ASCII_TYPE,Shuttle2 Temperature,,&RunInfo.ShowTempComp[tcShuttle2],Shuttle2 Temperature,107,SECSGEM/uHGemHT9045_SV.cpp#L107
+1055,ASCII_TYPE,Head1 Temperature,,&RunInfo.ShowTempComp[tcHead1],Head1 Temperature,108,SECSGEM/uHGemHT9045_SV.cpp#L108
+1056,ASCII_TYPE,Head2 Temperature,,&RunInfo.ShowTempComp[tcHead2],Head2 Temperature,109,SECSGEM/uHGemHT9045_SV.cpp#L109
+1057,ASCII_TYPE,Head5 Temperature,,&RunInfo.ShowTempComp[tcHead3],Head5 Temperature,110,SECSGEM/uHGemHT9045_SV.cpp#L110
+1058,ASCII_TYPE,Head6 Temperature,,&RunInfo.ShowTempComp[tcHead4],Head6 Temperature,111,SECSGEM/uHGemHT9045_SV.cpp#L111
+1059,ASCII_TYPE,DUT1 Temperature,,&RunInfo.ShowTempComp[tcDUT1],DUT1 Temperature,112,SECSGEM/uHGemHT9045_SV.cpp#L112
+1060,ASCII_TYPE,DUT2 Temperature,,&RunInfo.ShowTempComp[tcDUT2],DUT2 Temperature,113,SECSGEM/uHGemHT9045_SV.cpp#L113
+1061,ASCII_TYPE,Chamber Temperature,,&RunInfo.ShowTempComp[tcChamber],Chamber Temperature,114,SECSGEM/uHGemHT9045_SV.cpp#L114
+1062,ASCII_TYPE,CCD Temperature,,&RunInfo.ShowTempComp[tcCCD],CCD Temperature,115,SECSGEM/uHGemHT9045_SV.cpp#L115
+1063,ASCII_TYPE,Aa 1 Temperature,,&RunInfo.ShowTempComp[tcAa1],Aa 1 Temperature,116,SECSGEM/uHGemHT9045_SV.cpp#L116
+1064,ASCII_TYPE,Ab 1 Temperature,,&RunInfo.ShowTempComp[tcAb1],Ab 1 Temperature,117,SECSGEM/uHGemHT9045_SV.cpp#L117
+1065,ASCII_TYPE,Ac 1 Temperature,,&RunInfo.ShowTempComp[tcAc1],Ac 1 Temperature,118,SECSGEM/uHGemHT9045_SV.cpp#L118
+1066,ASCII_TYPE,Ad 1 Temperature,,&RunInfo.ShowTempComp[tcAd1],Ad 1 Temperature,119,SECSGEM/uHGemHT9045_SV.cpp#L119
+1067,ASCII_TYPE,Ba 1 Temperature,,&RunInfo.ShowTempComp[tcBa1],Ba 1 Temperature,120,SECSGEM/uHGemHT9045_SV.cpp#L120
+1068,ASCII_TYPE,Bb 1 Temperature,,&RunInfo.ShowTempComp[tcBb1],Bb 1 Temperature,121,SECSGEM/uHGemHT9045_SV.cpp#L121
+1069,ASCII_TYPE,Bc 1 Temperature,,&RunInfo.ShowTempComp[tcBc1],Bc 1 Temperature,122,SECSGEM/uHGemHT9045_SV.cpp#L122
+1070,ASCII_TYPE,Bd 1 Temperature,,&RunInfo.ShowTempComp[tcBd1],Bd 1 Temperature,123,SECSGEM/uHGemHT9045_SV.cpp#L123
+1071,ASCII_TYPE,Aa 2 Temperature,,&RunInfo.ShowTempComp[tcAa2],Aa 2 Temperature,124,SECSGEM/uHGemHT9045_SV.cpp#L124
+1072,ASCII_TYPE,Ab 2 Temperature,,&RunInfo.ShowTempComp[tcAb2],Ab 2 Temperature,125,SECSGEM/uHGemHT9045_SV.cpp#L125
+1073,ASCII_TYPE,Ac 2 Temperature,,&RunInfo.ShowTempComp[tcAc2],Ac 2 Temperature,126,SECSGEM/uHGemHT9045_SV.cpp#L126
+1074,ASCII_TYPE,Ad 2 Temperature,,&RunInfo.ShowTempComp[tcAd2],Ad 2 Temperature,127,SECSGEM/uHGemHT9045_SV.cpp#L127
+1075,ASCII_TYPE,Ba 2 Temperature,,&RunInfo.ShowTempComp[tcBa2],Ba 2 Temperature,128,SECSGEM/uHGemHT9045_SV.cpp#L128
+1076,ASCII_TYPE,Bb 2 Temperature,,&RunInfo.ShowTempComp[tcBb2],Bb 2 Temperature,129,SECSGEM/uHGemHT9045_SV.cpp#L129
+1077,ASCII_TYPE,Bc 2 Temperature,,&RunInfo.ShowTempComp[tcBc2],Bc 2 Temperature,130,SECSGEM/uHGemHT9045_SV.cpp#L130
+1078,ASCII_TYPE,Bd 2 Temperature,,&RunInfo.ShowTempComp[tcBd2],Bd 2 Temperature,131,SECSGEM/uHGemHT9045_SV.cpp#L131
+1079,ASCII_TYPE,Heat Gun 1 Temperature,,&RunInfo.ShowTempComp[tcHeatGun1],Heat Gun 1 Temperature,132,SECSGEM/uHGemHT9045_SV.cpp#L132
+1080,ASCII_TYPE,Heat Gun 2 Temperature,,&RunInfo.ShowTempComp[tcHeatGun2],Heat Gun 2 Temperature,133,SECSGEM/uHGemHT9045_SV.cpp#L133
+1081,ASCII_TYPE,DUT 3 Temperature,,&RunInfo.ShowTempComp[tcDUT3],DUT 3 Temperature,134,SECSGEM/uHGemHT9045_SV.cpp#L134
+1082,ASCII_TYPE,DUT 4 Temperature,,&RunInfo.ShowTempComp[tcDUT4],DUT 4 Temperature,135,SECSGEM/uHGemHT9045_SV.cpp#L135
+1083,ASCII_TYPE,Socket Temperature,,&RunInfo.ShowTempComp[tcSocket],Socket Temperature,136,SECSGEM/uHGemHT9045_SV.cpp#L136
+1084,ASCII_TYPE,Ae 1 Temperature,,&RunInfo.ShowTempComp[tcAe1],Ae 1 Temperature,137,SECSGEM/uHGemHT9045_SV.cpp#L137
+1085,ASCII_TYPE,Af 1 Temperature,,&RunInfo.ShowTempComp[tcAf1],Af 1 Temperature,138,SECSGEM/uHGemHT9045_SV.cpp#L138
+1086,ASCII_TYPE,Ag 1 Temperature,,&RunInfo.ShowTempComp[tcAg1],Ag 1 Temperature,139,SECSGEM/uHGemHT9045_SV.cpp#L139
+1087,ASCII_TYPE,Ah 1 Temperature,,&RunInfo.ShowTempComp[tcAh1],Ah 1 Temperature,140,SECSGEM/uHGemHT9045_SV.cpp#L140
+1088,ASCII_TYPE,Be 1 Temperature,,&RunInfo.ShowTempComp[tcBe1],Be 1 Temperature,141,SECSGEM/uHGemHT9045_SV.cpp#L141
+1089,ASCII_TYPE,Bf 1 Temperature,,&RunInfo.ShowTempComp[tcBf1],Bf 1 Temperature,142,SECSGEM/uHGemHT9045_SV.cpp#L142
+1090,ASCII_TYPE,Bg 1 Temperature,,&RunInfo.ShowTempComp[tcBg1],Bg 1 Temperature,143,SECSGEM/uHGemHT9045_SV.cpp#L143
+1091,ASCII_TYPE,Bh 1 Temperature,,&RunInfo.ShowTempComp[tcBh1],Bh 1 Temperature,144,SECSGEM/uHGemHT9045_SV.cpp#L144
+1092,ASCII_TYPE,Ae 2 Temperature,,&RunInfo.ShowTempComp[tcAe2],Ae 2 Temperature,145,SECSGEM/uHGemHT9045_SV.cpp#L145
+1093,ASCII_TYPE,Af 2 Temperature,,&RunInfo.ShowTempComp[tcAf2],Af 2 Temperature,146,SECSGEM/uHGemHT9045_SV.cpp#L146
+1094,ASCII_TYPE,Ag 2 Temperature,,&RunInfo.ShowTempComp[tcAg2],Ag 2 Temperature,147,SECSGEM/uHGemHT9045_SV.cpp#L147
+1095,ASCII_TYPE,Ah 2 Temperature,,&RunInfo.ShowTempComp[tcAh2],Ah 2 Temperature,148,SECSGEM/uHGemHT9045_SV.cpp#L148
+1096,ASCII_TYPE,Be 2 Temperature,,&RunInfo.ShowTempComp[tcBe2],Be 2 Temperature,149,SECSGEM/uHGemHT9045_SV.cpp#L149
+1097,ASCII_TYPE,Bf 2 Temperature,,&RunInfo.ShowTempComp[tcBf2],Bf 2 Temperature,150,SECSGEM/uHGemHT9045_SV.cpp#L150
+1098,ASCII_TYPE,Bg 2 Temperature,,&RunInfo.ShowTempComp[tcBg2],Bg 2 Temperature,151,SECSGEM/uHGemHT9045_SV.cpp#L151
+1099,ASCII_TYPE,Bh 2 Temperature,,&RunInfo.ShowTempComp[tcBh2],Bh 2 Temperature,152,SECSGEM/uHGemHT9045_SV.cpp#L152
+1101,INT_4_TYPE,Loader Count,,&LastSet.SendCT[0],Loading Count,153,SECSGEM/uHGemHT9045_SV.cpp#L153
+1102,INT_4_TYPE,Output Total Count,,&RunInfo.iUnloadCount,Unloading Count,154,SECSGEM/uHGemHT9045_SV.cpp#L154
+1103,INT_4_TYPE,Auto1 Count,,&LastSet.BinCT[0][e3Auto1],Auto1 Count,155,SECSGEM/uHGemHT9045_SV.cpp#L155
+1104,INT_4_TYPE,Auto2 Count,,&LastSet.BinCT[0][e3Auto2],Auto2 Count,156,SECSGEM/uHGemHT9045_SV.cpp#L156
+1105,INT_4_TYPE,Auto3 Count,,&LastSet.BinCT[0][e3Auto3],Auto3 Count,157,SECSGEM/uHGemHT9045_SV.cpp#L157
+1106,INT_4_TYPE,Fix1 Count,,&LastSet.BinCT[0][e3Fix1 ],Fix1 Count,158,SECSGEM/uHGemHT9045_SV.cpp#L158
+1107,INT_4_TYPE,Fix2 Count,,&LastSet.BinCT[0][e3Fix2 ],Fix2 Count,159,SECSGEM/uHGemHT9045_SV.cpp#L159
+1108,INT_4_TYPE,Fix3 Count,,&LastSet.BinCT[0][e3Fix3 ],Fix3 Count,160,SECSGEM/uHGemHT9045_SV.cpp#L160
+1109,INT_4_TYPE,Fix4 Count,,&LastSet.BinCT[0][e3Fix4 ],Fix4 Count,161,SECSGEM/uHGemHT9045_SV.cpp#L161
+1110,INT_4_TYPE,Fix5 Count,,&LastSet.BinCT[0][e3Fix5 ],Fix5 Count,162,SECSGEM/uHGemHT9045_SV.cpp#L162
+1111,INT_4_TYPE,Fix6 Count,,&LastSet.BinCT[0][e3Fix6 ],Fix6 Count,163,SECSGEM/uHGemHT9045_SV.cpp#L163
+1112,INT_4_TYPE,Loader Count ART,,&LastSet.SendCT_ART[0],ART Loading Count,164,SECSGEM/uHGemHT9045_SV.cpp#L164
+1113,INT_4_TYPE,Output Total Count ART,,&RunInfo.iUnloadCount_ART,ART Unloading Count,165,SECSGEM/uHGemHT9045_SV.cpp#L165
+1114,INT_4_TYPE,Auto1 Count ART,,&LastSet.BinCT_ART[0][e3Auto1],ART Auto1 Count,166,SECSGEM/uHGemHT9045_SV.cpp#L166
+1115,INT_4_TYPE,Auto2 Count ART,,&LastSet.BinCT_ART[0][e3Auto2],ART Auto2 Count,167,SECSGEM/uHGemHT9045_SV.cpp#L167
+1116,INT_4_TYPE,Auto3 Count ART,,&LastSet.BinCT_ART[0][e3Auto3],ART Auto3 Count,168,SECSGEM/uHGemHT9045_SV.cpp#L168
+1117,INT_4_TYPE,Fix1 Count ART,,&LastSet.BinCT_ART[0][e3Fix1 ],ART Fix1 Count,169,SECSGEM/uHGemHT9045_SV.cpp#L169
+1118,INT_4_TYPE,Fix2 Count ART,,&LastSet.BinCT_ART[0][e3Fix2 ],ART Fix2 Count,170,SECSGEM/uHGemHT9045_SV.cpp#L170
+1119,INT_4_TYPE,Fix3 Count ART,,&LastSet.BinCT_ART[0][e3Fix3 ],ART Fix3 Count,171,SECSGEM/uHGemHT9045_SV.cpp#L171
+1120,INT_4_TYPE,Fix4 Count ART,,&LastSet.BinCT_ART[0][e3Fix4 ],ART Fix4 Count,172,SECSGEM/uHGemHT9045_SV.cpp#L172
+1121,INT_4_TYPE,Fix5 Count ART,,&LastSet.BinCT_ART[0][e3Fix5 ],ART Fix5 Count,173,SECSGEM/uHGemHT9045_SV.cpp#L173
+1122,INT_4_TYPE,Fix6 Count ART,,&LastSet.BinCT_ART[0][e3Fix6 ],ART Fix6 Count,174,SECSGEM/uHGemHT9045_SV.cpp#L174
+1123,INT_4_TYPE,Bin 0 Count ART,,&LastSet.iBinData32_ART[0][0],ART Bin 0 Count,175,SECSGEM/uHGemHT9045_SV.cpp#L175
+1124,INT_4_TYPE,Bin 1 Count ART,,&LastSet.iBinData32_ART[0][1],ART Bin 1 Count,176,SECSGEM/uHGemHT9045_SV.cpp#L176
+1125,INT_4_TYPE,Bin 2 Count ART,,&LastSet.iBinData32_ART[0][2],ART Bin 2 Count,177,SECSGEM/uHGemHT9045_SV.cpp#L177
+1126,INT_4_TYPE,Bin 3 Count ART,,&LastSet.iBinData32_ART[0][3],ART Bin 3 Count,178,SECSGEM/uHGemHT9045_SV.cpp#L178
+1127,INT_4_TYPE,Bin 4 Count ART,,&LastSet.iBinData32_ART[0][4],ART Bin 4 Count,179,SECSGEM/uHGemHT9045_SV.cpp#L179
+1128,INT_4_TYPE,Bin 5 Count ART,,&LastSet.iBinData32_ART[0][5],ART Bin 5 Count,180,SECSGEM/uHGemHT9045_SV.cpp#L180
+1129,INT_4_TYPE,Bin 6 Count ART,,&LastSet.iBinData32_ART[0][6],ART Bin 6 Count,181,SECSGEM/uHGemHT9045_SV.cpp#L181
+1130,INT_4_TYPE,Bin 7 Count ART,,&LastSet.iBinData32_ART[0][7],ART Bin 7 Count,182,SECSGEM/uHGemHT9045_SV.cpp#L182
+1131,INT_4_TYPE,Bin 8 Count ART,,&LastSet.iBinData32_ART[0][8],ART Bin 8 Count,183,SECSGEM/uHGemHT9045_SV.cpp#L183
+1132,INT_4_TYPE,Bin 9 Count ART,,&LastSet.iBinData32_ART[0][9],ART Bin 9 Count,184,SECSGEM/uHGemHT9045_SV.cpp#L184
+1133,INT_4_TYPE,Bin 10 Count ART,,&LastSet.iBinData32_ART[0][10],ART Bin 10 Count,185,SECSGEM/uHGemHT9045_SV.cpp#L185
+1134,INT_4_TYPE,Bin 11 Count ART,,&LastSet.iBinData32_ART[0][11],ART Bin 11 Count,186,SECSGEM/uHGemHT9045_SV.cpp#L186
+1135,INT_4_TYPE,Bin 12 Count ART,,&LastSet.iBinData32_ART[0][12],ART Bin 12 Count,187,SECSGEM/uHGemHT9045_SV.cpp#L187
+1136,INT_4_TYPE,Bin 13 Count ART,,&LastSet.iBinData32_ART[0][13],ART Bin 13 Count,188,SECSGEM/uHGemHT9045_SV.cpp#L188
+1137,INT_4_TYPE,Bin 14 Count ART,,&LastSet.iBinData32_ART[0][14],ART Bin 14 Count,189,SECSGEM/uHGemHT9045_SV.cpp#L189
+1138,INT_4_TYPE,Bin 15 Count ART,,&LastSet.iBinData32_ART[0][15],ART Bin 15 Count,190,SECSGEM/uHGemHT9045_SV.cpp#L190
+1139,INT_4_TYPE,ATR FT PassCount,,&iATRPassCount[0],ATR FT Pass TotalCount,192,SECSGEM/uHGemHT9045_SV.cpp#L192
+1140,INT_4_TYPE,ATR FT FailCount,,&iATRFailCount[0],ATR FT Fail TotalCount,193,SECSGEM/uHGemHT9045_SV.cpp#L193
+1141,INT_4_TYPE,ATR FT LoaderCount,,&iATRTotalCount[0],ATR FT Loader TotalCount,194,SECSGEM/uHGemHT9045_SV.cpp#L194
+1142,INT_4_TYPE,ATR RT PassCount,,&iATRPassCount[1],ATR RT Pass TotalCount,195,SECSGEM/uHGemHT9045_SV.cpp#L195
+1143,INT_4_TYPE,ATR RT FailCount,,&iATRFailCount[1],ATR RT Fail TotalCount,196,SECSGEM/uHGemHT9045_SV.cpp#L196
+1144,INT_4_TYPE,ATR RT LoaderCount,,&iATRTotalCount[1],ATR RT Loader TotalCount,197,SECSGEM/uHGemHT9045_SV.cpp#L197
+1151,ASCII_TYPE,Auto1 Yield,,&RunInfo.sT6AutoYield[eAuto1],Auto 1 Yield,199,SECSGEM/uHGemHT9045_SV.cpp#L199
+1152,ASCII_TYPE,Auto2 Yield,,&RunInfo.sT6AutoYield[eAuto2],Auto 2 Yield,200,SECSGEM/uHGemHT9045_SV.cpp#L200
+1153,ASCII_TYPE,Auto3 Yield,,&RunInfo.sT6AutoYield[eAuto3],Auto 3 Yield,201,SECSGEM/uHGemHT9045_SV.cpp#L201
+1154,ASCII_TYPE,Fix1 Yield,,&RunInfo.sT6AutoYield[eFix1 ],Fix 1 Yield,202,SECSGEM/uHGemHT9045_SV.cpp#L202
+1155,ASCII_TYPE,Fix2 Yield,,&RunInfo.sT6AutoYield[eFix2 ],Fix 2 Yield,203,SECSGEM/uHGemHT9045_SV.cpp#L203
+1156,ASCII_TYPE,Fix3 Yield,,&RunInfo.sT6AutoYield[eFix3 ],Fix 3 Yield,204,SECSGEM/uHGemHT9045_SV.cpp#L204
+1157,ASCII_TYPE,Fix4 Yield,,&RunInfo.sT6AutoYield[eFix4 ],Fix 4 Yield,205,SECSGEM/uHGemHT9045_SV.cpp#L205
+1158,ASCII_TYPE,Fix5 Yield,,&RunInfo.sT6AutoYield[eFix5 ],Fix 5 Yield,206,SECSGEM/uHGemHT9045_SV.cpp#L206
+1159,ASCII_TYPE,Fix6 Yield,,&RunInfo.sT6AutoYield[eFix6 ],Fix 6 Yield,207,SECSGEM/uHGemHT9045_SV.cpp#L207
+1160,INT_4_TYPE,PassTotalCount,,&iSECSGEMPass,Pass Total Count,208,SECSGEM/uHGemHT9045_SV.cpp#L208
+1161,INT_4_TYPE,FailTotalCount,,&iSECSGEMFail,Fail Total,209,SECSGEM/uHGemHT9045_SV.cpp#L209
+1164,INT_4_TYPE,Bin 0 Count,,&LastSet.iBinData32[0][0],Bin 0 Count,210,SECSGEM/uHGemHT9045_SV.cpp#L210
+1165,INT_4_TYPE,Bin 1 Count,,&LastSet.iBinData32[0][1],Bin 1 Count,211,SECSGEM/uHGemHT9045_SV.cpp#L211
+1166,INT_4_TYPE,Bin 2 Count,,&LastSet.iBinData32[0][2],Bin 2 Count,212,SECSGEM/uHGemHT9045_SV.cpp#L212
+1167,INT_4_TYPE,Bin 3 Count,,&LastSet.iBinData32[0][3],Bin 3 Count,213,SECSGEM/uHGemHT9045_SV.cpp#L213
+1168,INT_4_TYPE,Bin 4 Count,,&LastSet.iBinData32[0][4],Bin 4 Count,214,SECSGEM/uHGemHT9045_SV.cpp#L214
+1169,INT_4_TYPE,Bin 5 Count,,&LastSet.iBinData32[0][5],Bin 5 Count,215,SECSGEM/uHGemHT9045_SV.cpp#L215
+1170,INT_4_TYPE,Bin 6 Count,,&LastSet.iBinData32[0][6],Bin 6 Count,216,SECSGEM/uHGemHT9045_SV.cpp#L216
+1171,INT_4_TYPE,Bin 7 Count,,&LastSet.iBinData32[0][7],Bin 7 Count,217,SECSGEM/uHGemHT9045_SV.cpp#L217
+1172,INT_4_TYPE,Bin 8 Count,,&LastSet.iBinData32[0][8],Bin 8 Count,218,SECSGEM/uHGemHT9045_SV.cpp#L218
+1173,INT_4_TYPE,Bin 9 Count,,&LastSet.iBinData32[0][9],Bin 9 Count,219,SECSGEM/uHGemHT9045_SV.cpp#L219
+1174,INT_4_TYPE,Bin 10 Count,,&LastSet.iBinData32[0][10],Bin 10 Count,220,SECSGEM/uHGemHT9045_SV.cpp#L220
+1175,INT_4_TYPE,Bin 11 Count,,&LastSet.iBinData32[0][11],Bin 11 Count,221,SECSGEM/uHGemHT9045_SV.cpp#L221
+1176,INT_4_TYPE,Bin 12 Count,,&LastSet.iBinData32[0][12],Bin 12 Count,222,SECSGEM/uHGemHT9045_SV.cpp#L222
+1177,INT_4_TYPE,Bin 13 Count,,&LastSet.iBinData32[0][13],Bin 13 Count,223,SECSGEM/uHGemHT9045_SV.cpp#L223
+1178,INT_4_TYPE,Bin 14 Count,,&LastSet.iBinData32[0][14],Bin 14 Count,224,SECSGEM/uHGemHT9045_SV.cpp#L224
+1179,INT_4_TYPE,Bin 15 Count,,&LastSet.iBinData32[0][15],Bin 15 Count,225,SECSGEM/uHGemHT9045_SV.cpp#L225
+1190,ASCII_TYPE,GET OS Tester Data,,&fMain->SVID1190_OSSetup,"Data= Workfile, ClampV, UpLimit, LowLimit, Current, delayms",226,SECSGEM/uHGemHT9045_SV.cpp#L226
+1220,INT_4_TYPE,Loader Count AUTO,,&LastSet.SendCT_ART[0],MRT Loading Count,229,SECSGEM/uHGemHT9045_SV.cpp#L229
+1221,INT_4_TYPE,Output Total Count AUTO,,&RunInfo.iUnloadCount_ART,MRT Unloading Count,230,SECSGEM/uHGemHT9045_SV.cpp#L230
+1222,INT_4_TYPE,Auto1 Count AUTO,,&LastSet.BinCT_ART[0][e3Auto1],MRT Auto1 Count,231,SECSGEM/uHGemHT9045_SV.cpp#L231
+1223,INT_4_TYPE,Auto2 Count AUTO,,&LastSet.BinCT_ART[0][e3Auto2],MRT Auto2 Count,232,SECSGEM/uHGemHT9045_SV.cpp#L232
+1224,INT_4_TYPE,Auto3 Count AUTO,,&LastSet.BinCT_ART[0][e3Auto3],MRT Auto3 Count,233,SECSGEM/uHGemHT9045_SV.cpp#L233
+1225,INT_4_TYPE,Fix1 Count AUTO,,&LastSet.BinCT_ART[0][e3Fix1 ],MRT Fix1 Count,234,SECSGEM/uHGemHT9045_SV.cpp#L234
+1226,INT_4_TYPE,Fix2 Count AUTO,,&LastSet.BinCT_ART[0][e3Fix2 ],MRT Fix2 Count,235,SECSGEM/uHGemHT9045_SV.cpp#L235
+1227,INT_4_TYPE,Fix3 Count AUTO,,&LastSet.BinCT_ART[0][e3Fix3 ],MRT Fix3 Count,236,SECSGEM/uHGemHT9045_SV.cpp#L236
+1228,INT_4_TYPE,Fix4 Count AUTO,,&LastSet.BinCT_ART[0][e3Fix4 ],MRT Fix4 Count,237,SECSGEM/uHGemHT9045_SV.cpp#L237
+1229,INT_4_TYPE,Fix5 Count AUTO,,&LastSet.BinCT_ART[0][e3Fix5 ],MRT Fix5 Count,238,SECSGEM/uHGemHT9045_SV.cpp#L238
+1230,INT_4_TYPE,Fix6 Count AUTO,,&LastSet.BinCT_ART[0][e3Fix6 ],MRT Fix6 Count,239,SECSGEM/uHGemHT9045_SV.cpp#L239
+1231,INT_4_TYPE,Bin 0 Count AUTO,,&LastSet.iBinData32_ART[0][0],MRT Bin 0 Count,240,SECSGEM/uHGemHT9045_SV.cpp#L240
+1232,INT_4_TYPE,Bin 1 Count AUTO,,&LastSet.iBinData32_ART[0][1],MRT Bin 1 Count,241,SECSGEM/uHGemHT9045_SV.cpp#L241
+1233,INT_4_TYPE,Bin 2 Count AUTO,,&LastSet.iBinData32_ART[0][2],MRT Bin 2 Count,242,SECSGEM/uHGemHT9045_SV.cpp#L242
+1234,INT_4_TYPE,Bin 3 Count AUTO,,&LastSet.iBinData32_ART[0][3],MRT Bin 3 Count,243,SECSGEM/uHGemHT9045_SV.cpp#L243
+1235,INT_4_TYPE,Bin 4 Count AUTO,,&LastSet.iBinData32_ART[0][4],MRT Bin 4 Count,244,SECSGEM/uHGemHT9045_SV.cpp#L244
+1236,INT_4_TYPE,Bin 5 Count AUTO,,&LastSet.iBinData32_ART[0][5],MRT Bin 5 Count,245,SECSGEM/uHGemHT9045_SV.cpp#L245
+1237,INT_4_TYPE,Bin 6 Count AUTO,,&LastSet.iBinData32_ART[0][6],MRT Bin 6 Count,246,SECSGEM/uHGemHT9045_SV.cpp#L246
+1238,INT_4_TYPE,Bin 7 Count AUTO,,&LastSet.iBinData32_ART[0][7],MRT Bin 7 Count,247,SECSGEM/uHGemHT9045_SV.cpp#L247
+1239,INT_4_TYPE,Bin 8 Count AUTO,,&LastSet.iBinData32_ART[0][8],MRT Bin 8 Count,248,SECSGEM/uHGemHT9045_SV.cpp#L248
+1240,INT_4_TYPE,Bin 9 Count AUTO,,&LastSet.iBinData32_ART[0][9],MRT Bin 9 Count,249,SECSGEM/uHGemHT9045_SV.cpp#L249
+1241,INT_4_TYPE,Bin 10 Count AUTO,,&LastSet.iBinData32_ART[0][10],MRT Bin 10 Count,250,SECSGEM/uHGemHT9045_SV.cpp#L250
+1242,INT_4_TYPE,Bin 11 Count AUTO,,&LastSet.iBinData32_ART[0][11],MRT Bin 11 Count,251,SECSGEM/uHGemHT9045_SV.cpp#L251
+1243,INT_4_TYPE,Bin 12 Count AUTO,,&LastSet.iBinData32_ART[0][12],MRT Bin 12 Count,252,SECSGEM/uHGemHT9045_SV.cpp#L252
+1244,INT_4_TYPE,Bin 13 Count AUTO,,&LastSet.iBinData32_ART[0][13],MRT Bin 13 Count,253,SECSGEM/uHGemHT9045_SV.cpp#L253
+1245,INT_4_TYPE,Bin 14 Count AUTO,,&LastSet.iBinData32_ART[0][14],MRT Bin 14 Count,254,SECSGEM/uHGemHT9045_SV.cpp#L254
+1246,INT_4_TYPE,Bin 15 Count AUTO,,&LastSet.iBinData32_ART[0][15],MRT Bin 15 Count,255,SECSGEM/uHGemHT9045_SV.cpp#L255
+1250,INT_4_TYPE,Enabled Site Count,,&iEnabledSiteCount,Enabled Site Count,259,SECSGEM/uHGemHT9045_SV.cpp#L259
+1259,INT_4_TYPE,Auto 4 Count,,&LastSet.BinCT[0][e3Auto4],Auto 4 Count,262,SECSGEM/uHGemHT9045_SV.cpp#L262
+1260,INT_4_TYPE,Auto 5 Count,,&LastSet.BinCT[0][e3Auto5],Auto 5 Count,263,SECSGEM/uHGemHT9045_SV.cpp#L263
+1261,INT_4_TYPE,Auto 6 Count,,&LastSet.BinCT[0][e3Auto6],Auto 6 Count,264,SECSGEM/uHGemHT9045_SV.cpp#L264
+1262,INT_4_TYPE,Fix 7 Count,,&LastSet.BinCT[0][e3Fix7 ],Fix 7 Count,265,SECSGEM/uHGemHT9045_SV.cpp#L265
+1263,INT_4_TYPE,Fix 8 Count,,&LastSet.BinCT[0][e3Fix8 ],Fix 8 Count,266,SECSGEM/uHGemHT9045_SV.cpp#L266
+1264,INT_4_TYPE,Fix 9 Count,,&LastSet.BinCT[0][e3Fix9 ],Fix 9 Count,267,SECSGEM/uHGemHT9045_SV.cpp#L267
+1265,INT_4_TYPE,Fix 10 Count,,&LastSet.BinCT[0][e3Fix10],Fix 10 Count,268,SECSGEM/uHGemHT9045_SV.cpp#L268
+1266,INT_4_TYPE,Fix 11 Count,,&LastSet.BinCT[0][e3Fix11],Fix 11 Count,269,SECSGEM/uHGemHT9045_SV.cpp#L269
+1267,INT_4_TYPE,Fix 12 Count,,&LastSet.BinCT[0][e3Fix12],Fix 12 Count,270,SECSGEM/uHGemHT9045_SV.cpp#L270
+1268,INT_4_TYPE,Auto 4 Count ART,,&LastSet.BinCT_ART[0][e3Auto4],ART Auto 4 Count,272,SECSGEM/uHGemHT9045_SV.cpp#L272
+1269,INT_4_TYPE,Auto 5 Countunt ART,,&LastSet.BinCT_ART[0][e3Auto6],ART Auto 6 Count,273,SECSGEM/uHGemHT9045_SV.cpp#L273
+1271,INT_4_TYPE,Fix 7 Count ART,,&LastSet.BinCT_ART[0][e3Fix7 ],ART Fix 7 Count,274,SECSGEM/uHGemHT9045_SV.cpp#L274
+1272,INT_4_TYPE,Fix 8 Count ART,,&LastSet.BinCT_ART[0][e3Fix8 ],ART Fix 8 Count,275,SECSGEM/uHGemHT9045_SV.cpp#L275
+1273,INT_4_TYPE,Fix 9 Count ART,,&LastSet.BinCT_ART[0][e3Fix9 ],ART Fix 9 Count,276,SECSGEM/uHGemHT9045_SV.cpp#L276
+1274,INT_4_TYPE,Fix 10 Count ART,,&LastSet.BinCT_ART[0][e3Fix10],ART Fix 10 Count,277,SECSGEM/uHGemHT9045_SV.cpp#L277
+1275,INT_4_TYPE,Fix 11 Count ART,,&LastSet.BinCT_ART[0][e3Fix11],ART Fix 11 Count,278,SECSGEM/uHGemHT9045_SV.cpp#L278
+1276,INT_4_TYPE,Fix 12 Count ART,,&LastSet.BinCT_ART[0][e3Fix12],ART Fix 12 Count,279,SECSGEM/uHGemHT9045_SV.cpp#L279
+1277,ASCII_TYPE,Auto 4 Yield,,&RunInfo.sT6AutoYield[eAuto4],Auto 4 Yield,281,SECSGEM/uHGemHT9045_SV.cpp#L281
+1278,ASCII_TYPE,Auto 5 Yield,,&RunInfo.sT6AutoYield[eAuto5],Auto 5 Yield,282,SECSGEM/uHGemHT9045_SV.cpp#L282
+1279,ASCII_TYPE,Auto 6 Yield,,&RunInfo.sT6AutoYield[eAuto6],Auto 6 Yield,283,SECSGEM/uHGemHT9045_SV.cpp#L283
+1280,ASCII_TYPE,Fix 7 Yield,,&RunInfo.sT6AutoYield[eFix7 ],Fix 7 Yield,284,SECSGEM/uHGemHT9045_SV.cpp#L284
+1281,ASCII_TYPE,Fix 8 Yield,,&RunInfo.sT6AutoYield[eFix8 ],Fix 8 Yield,285,SECSGEM/uHGemHT9045_SV.cpp#L285
+1282,ASCII_TYPE,Fix 9 Yield,,&RunInfo.sT6AutoYield[eFix9 ],Fix 9 Yield,286,SECSGEM/uHGemHT9045_SV.cpp#L286
+1283,ASCII_TYPE,Fix 10 Yield,,&RunInfo.sT6AutoYield[eFix10],Fix 10 Yield,287,SECSGEM/uHGemHT9045_SV.cpp#L287
+1284,ASCII_TYPE,Fix 11 Yield,,&RunInfo.sT6AutoYield[eFix11],Fix 11 Yield,288,SECSGEM/uHGemHT9045_SV.cpp#L288
+1285,ASCII_TYPE,Fix 12 Yield,,&RunInfo.sT6AutoYield[eFix12],Fix 12 Yield,289,SECSGEM/uHGemHT9045_SV.cpp#L289
+1286,INT_4_TYPE,Auto 4 Count AUTO,,&LastSet.BinCT_ART[0][e3Auto4],MRTAuto 4 Count,291,SECSGEM/uHGemHT9045_SV.cpp#L291
+1287,INT_4_TYPE,Auto 5 Count AUTO,,&LastSet.BinCT_ART[0][e3Auto5],MRTAuto 5 Count,292,SECSGEM/uHGemHT9045_SV.cpp#L292
+1288,INT_4_TYPE,Auto 6 Count AUTO,,&LastSet.BinCT_ART[0][e3Auto6],MRTAuto 6 Count,293,SECSGEM/uHGemHT9045_SV.cpp#L293
+1289,INT_4_TYPE,Fix 7 Count AUTO,,&LastSet.BinCT_ART[0][e3Fix7 ],MRTFix 7 Count,294,SECSGEM/uHGemHT9045_SV.cpp#L294
+1290,INT_4_TYPE,Fix 8 Count AUTO,,&LastSet.BinCT_ART[0][e3Fix8 ],MRTFix 8 Count,295,SECSGEM/uHGemHT9045_SV.cpp#L295
+1291,INT_4_TYPE,Fix 9 Count AUTO,,&LastSet.BinCT_ART[0][e3Fix9 ],MRTFix 9 Count,296,SECSGEM/uHGemHT9045_SV.cpp#L296
+1292,INT_4_TYPE,Fix 10 Count AUTO,,&LastSet.BinCT_ART[0][e3Fix10],MRTFix 10 Count,297,SECSGEM/uHGemHT9045_SV.cpp#L297
+1293,INT_4_TYPE,Fix 11 Count AUTO,,&LastSet.BinCT_ART[0][e3Fix11],MRTFix 11 Count,298,SECSGEM/uHGemHT9045_SV.cpp#L298
+1294,INT_4_TYPE,Fix 12 Count AUTO,,&LastSet.BinCT_ART[0][e3Fix12],MRTFix 12 Count,299,SECSGEM/uHGemHT9045_SV.cpp#L299
+1351,ASCII_TYPE,ATC Arm1 Head 1,,fLotInfo->pl_ATCTempHead01,ATC Arm1 Head 1,303,SECSGEM/uHGemHT9045_SV.cpp#L303
+1351,ASCII_TYPE,ATC Arm1 Head 1,,fLotInfo->pl_ATCTempHead01,ATC Arm1 Head 1,314,SECSGEM/uHGemHT9045_SV.cpp#L314
+1352,ASCII_TYPE,ATC Arm1 Head 2,,fLotInfo->pl_ATCTempHead02,ATC Arm1 Head 2,304,SECSGEM/uHGemHT9045_SV.cpp#L304
+1352,ASCII_TYPE,ATC Arm1 Head 2,,fLotInfo->pl_ATCTempHead02,ATC Arm1 Head 2,315,SECSGEM/uHGemHT9045_SV.cpp#L315
+1353,ASCII_TYPE,ATC Arm1 Head 3,,fLotInfo->pl_ATCTempHead03,ATC Arm1 Head 3,316,SECSGEM/uHGemHT9045_SV.cpp#L316
+1354,ASCII_TYPE,ATC Arm1 Head 4,,fLotInfo->pl_ATCTempHead04,ATC Arm1 Head 4,317,SECSGEM/uHGemHT9045_SV.cpp#L317
+1355,ASCII_TYPE,ATC Arm2 Head 1,,fLotInfo->pl_ATCTempHead03,ATC Arm2 Head 1,305,SECSGEM/uHGemHT9045_SV.cpp#L305
+1355,ASCII_TYPE,ATC Arm2 Head 1,,fLotInfo->pl_ATCTempHead05,ATC Arm2 Head 1,318,SECSGEM/uHGemHT9045_SV.cpp#L318
+1356,ASCII_TYPE,ATC Arm2 Head 2,,fLotInfo->pl_ATCTempHead04,ATC Arm2 Head 2,306,SECSGEM/uHGemHT9045_SV.cpp#L306
+1356,ASCII_TYPE,ATC Arm2 Head 2,,fLotInfo->pl_ATCTempHead06,ATC Arm2 Head 2,319,SECSGEM/uHGemHT9045_SV.cpp#L319
+1357,ASCII_TYPE,ATC Arm2 Head 3,,fLotInfo->pl_ATCTempHead07,ATC Arm2 Head 3,320,SECSGEM/uHGemHT9045_SV.cpp#L320
+1358,ASCII_TYPE,ATC Arm2 Head 4,,fLotInfo->pl_ATCTempHead08,ATC Arm2 Head 4,321,SECSGEM/uHGemHT9045_SV.cpp#L321
+1359,ASCII_TYPE,ATC Arm1 Ref Head 1,,fLotInfo->pl_ATCRefHead01,ATC Arm1 Ref Head 1,307,SECSGEM/uHGemHT9045_SV.cpp#L307
+1359,ASCII_TYPE,ATC Arm1 Ref Head 1,,fLotInfo->pl_ATCRefHead01,ATC Arm1 Ref Head 1,322,SECSGEM/uHGemHT9045_SV.cpp#L322
+1360,ASCII_TYPE,ATC Arm1 Ref Head 2,,fLotInfo->pl_ATCRefHead02,ATC Arm1 Ref Head 2,308,SECSGEM/uHGemHT9045_SV.cpp#L308
+1360,ASCII_TYPE,ATC Arm1 Ref Head 2,,fLotInfo->pl_ATCRefHead02,ATC Arm1 Ref Head 2,323,SECSGEM/uHGemHT9045_SV.cpp#L323
+1361,ASCII_TYPE,ATC Arm1 Ref Head 3,,fLotInfo->pl_ATCRefHead03,ATC Arm1 Ref Head 3,324,SECSGEM/uHGemHT9045_SV.cpp#L324
+1362,ASCII_TYPE,ATC Arm1 Ref Head 4,,fLotInfo->pl_ATCRefHead04,ATC Arm1 Ref Head 4,325,SECSGEM/uHGemHT9045_SV.cpp#L325
+1363,ASCII_TYPE,ATC Arm2 Ref Head 1,,fLotInfo->pl_ATCRefHead03,ATC Arm2 Ref Head 1,309,SECSGEM/uHGemHT9045_SV.cpp#L309
+1363,ASCII_TYPE,ATC Arm2 Ref Head 1,,fLotInfo->pl_ATCRefHead05,ATC Arm2 Ref Head 1,326,SECSGEM/uHGemHT9045_SV.cpp#L326
+1364,ASCII_TYPE,ATC Arm2 Ref Head 2,,fLotInfo->pl_ATCRefHead04,ATC Arm2 Ref Head 2,310,SECSGEM/uHGemHT9045_SV.cpp#L310
+1364,ASCII_TYPE,ATC Arm2 Ref Head 2,,fLotInfo->pl_ATCRefHead06,ATC Arm2 Ref Head 2,327,SECSGEM/uHGemHT9045_SV.cpp#L327
+1365,ASCII_TYPE,ATC Arm2 Ref Head 3,,fLotInfo->pl_ATCRefHead07,ATC Arm2 Ref Head 3,328,SECSGEM/uHGemHT9045_SV.cpp#L328
+1366,ASCII_TYPE,ATC Arm2 Ref Head 4,,fLotInfo->pl_ATCRefHead08,ATC Arm2 Ref Head 4,329,SECSGEM/uHGemHT9045_SV.cpp#L329
+1420,ASCII_TYPE,Site 1 to 32 Test Result,,fMain->tTestResult,Site 1 to 32 Test Result; Bin -1 is no test; CSV Format,331,SECSGEM/uHGemHT9045_SV.cpp#L331
+1432,INT_4_TYPE,Arm 1 Contact Count,,&LastSet.iContactCT[0],Arm 1 Contact Count,333,SECSGEM/uHGemHT9045_SV.cpp#L333
+1433,INT_4_TYPE,Arm 2 Contact Count,,&LastSet.iContactCT[1],Arm 2 Contact Count,334,SECSGEM/uHGemHT9045_SV.cpp#L334
+1451,ASCII_TYPE,Auto1 Test Bin,,&sSVBinAssign[eAuto1],Auto 1 Test Bin,336,SECSGEM/uHGemHT9045_SV.cpp#L336
+1452,ASCII_TYPE,Auto2 Test Bin,,&sSVBinAssign[eAuto2],Auto 2 Test Bin,337,SECSGEM/uHGemHT9045_SV.cpp#L337
+1453,ASCII_TYPE,Auto3 Test Bin,,&sSVBinAssign[eAuto3],Auto 3 Test Bin,338,SECSGEM/uHGemHT9045_SV.cpp#L338
+1454,ASCII_TYPE,Fix1 Test Bin,,&sSVBinAssign[eFix1],Fix 1 Test Bin,339,SECSGEM/uHGemHT9045_SV.cpp#L339
+1455,ASCII_TYPE,Fix2 Test Bin,,&sSVBinAssign[eFix2],Fix 2 Test Bin,340,SECSGEM/uHGemHT9045_SV.cpp#L340
+1456,ASCII_TYPE,Fix3 Test Bin,,&sSVBinAssign[eFix3],Fix 3 Test Bin,341,SECSGEM/uHGemHT9045_SV.cpp#L341
+1457,ASCII_TYPE,Fix4 Test Bin,,&sSVBinAssign[eFix4],Fix 4 Test Bin,342,SECSGEM/uHGemHT9045_SV.cpp#L342
+1458,ASCII_TYPE,Fix5 Test Bin,,&sSVBinAssign[eFix5],Fix 5 Test Bin,343,SECSGEM/uHGemHT9045_SV.cpp#L343
+1459,ASCII_TYPE,Fix6 Test Bin,,&sSVBinAssign[eFix6],Fix 6 Test Bin,344,SECSGEM/uHGemHT9045_SV.cpp#L344
+1460,ASCII_TYPE,Auto4 Test Bin,,&sSVBinAssign[eAuto4],Auto 4 Test Bin,346,SECSGEM/uHGemHT9045_SV.cpp#L346
+1461,ASCII_TYPE,Auto5 Test Bin,,&sSVBinAssign[eAuto5],Auto 5 Test Bin,347,SECSGEM/uHGemHT9045_SV.cpp#L347
+1462,ASCII_TYPE,Auto6 Test Bin,,&sSVBinAssign[eAuto6],Auto 6 Test Bin,348,SECSGEM/uHGemHT9045_SV.cpp#L348
+1463,ASCII_TYPE,Fix7 Test Bin,,&sSVBinAssign[eFix7],Fix 7 Test Bin,349,SECSGEM/uHGemHT9045_SV.cpp#L349
+1464,ASCII_TYPE,Fix8 Test Bin,,&sSVBinAssign[eFix8],Fix 8 Test Bin,350,SECSGEM/uHGemHT9045_SV.cpp#L350
+1465,ASCII_TYPE,Fix9 Test Bin,,&sSVBinAssign[eFix9],Fix 9 Test Bin,351,SECSGEM/uHGemHT9045_SV.cpp#L351
+1466,ASCII_TYPE,Fix10 Test Bin,,&sSVBinAssign[eFix10],Fix 10 Test Bin,352,SECSGEM/uHGemHT9045_SV.cpp#L352
+1467,ASCII_TYPE,Fix11 Test Bin,,&sSVBinAssign[eFix11],Fix 11 Test Bin,353,SECSGEM/uHGemHT9045_SV.cpp#L353
+1468,ASCII_TYPE,Fix12 Test Bin,,&sSVBinAssign[eFix12],Fix 12 Test Bin,354,SECSGEM/uHGemHT9045_SV.cpp#L354
+1470,ASCII_TYPE,CCD2 Temperature,,&RunInfo.ShowTempComp[tcCCD_2],CCD2 Temperature,356,SECSGEM/uHGemHT9045_SV.cpp#L356
+1471,ASCII_TYPE,2DID Temperature,,&RunInfo.ShowTempComp[tc2D],2DID Temperature,357,SECSGEM/uHGemHT9045_SV.cpp#L357
+1472,ASCII_TYPE,LB Temperature,,&RunInfo.ShowTempComp[tcLB],LB Temperature,358,SECSGEM/uHGemHT9045_SV.cpp#L358
+1473,ASCII_TYPE,ESD Air Temperature,,&RunInfo.ShowTempComp[tcIndexESD],ESD Air Temperature,359,SECSGEM/uHGemHT9045_SV.cpp#L359
+1474,ASCII_TYPE,LB Up Temperature,,&RunInfo.ShowTempComp[tcLBUp],LB Up Temperature,361,SECSGEM/uHGemHT9045_SV.cpp#L361
+1475,ASCII_TYPE,LB Down Temperature,,&RunInfo.ShowTempComp[tcLBDown],LB Down Temperature,362,SECSGEM/uHGemHT9045_SV.cpp#L362
+1476,FT_8_TYPE,LB Up Temp High Limit,,&Temperature.dLBTempHighSettingValue,LB Top Surface Upper Limit Temperature,363,SECSGEM/uHGemHT9045_SV.cpp#L363
+1477,FT_8_TYPE,LB Up Temp Low Limit,,&Temperature.dLBTempLowSettingValue,LB Top Surface Lower Limit Temperature,364,SECSGEM/uHGemHT9045_SV.cpp#L364
+1478,FT_8_TYPE,LB Down Temp High Limit,,&Temperature.dLBTempHighSettingValue,LB Bottom Surface Upper Limit Temperature,365,SECSGEM/uHGemHT9045_SV.cpp#L365
+1479,FT_8_TYPE,LB Down Temp Low Limit,,&Temperature.dLBTempLowSettingValue,LB Bottom Surface Lower Limit Temperature,366,SECSGEM/uHGemHT9045_SV.cpp#L366
+1702,INT_4_TYPE,Auto1 car Count,,&iAuto_CarCarDeviceCnt[eAuto1],Auto1 car Count,368,SECSGEM/uHGemHT9045_SV.cpp#L368
+1703,INT_4_TYPE,Auto2 car Count,,&iAuto_CarCarDeviceCnt[eAuto2],Auto2 car Count,369,SECSGEM/uHGemHT9045_SV.cpp#L369
+1704,INT_4_TYPE,Auto3 car Count,,&iAuto_CarCarDeviceCnt[eAuto3],Auto3 car Count,370,SECSGEM/uHGemHT9045_SV.cpp#L370
+1705,INT_4_TYPE,Auto4 car Count,,&iAuto_CarCarDeviceCnt[eAuto4],Auto4 car Count,371,SECSGEM/uHGemHT9045_SV.cpp#L371
+1706,INT_4_TYPE,Auto5 car Count,,&iAuto_CarCarDeviceCnt[eAuto5],Auto5 car Count,372,SECSGEM/uHGemHT9045_SV.cpp#L372
+1707,INT_4_TYPE,Auto6 car Count,,&iAuto_CarCarDeviceCnt[eAuto6],Auto6 car Count,373,SECSGEM/uHGemHT9045_SV.cpp#L373
+2003,FT_8_TYPE,Force Per Device KG,,fContact->edForcePerDeviceKG,Force Per Device KG,375,SECSGEM/uHGemHT9045_SV.cpp#L375
+2004,FT_8_TYPE,Force Per Pin N,,fContact->edForcePerPinN,Force Per Pin N,376,SECSGEM/uHGemHT9045_SV.cpp#L376
+2005,FT_8_TYPE,Arm Total Force N,,fContact->edAirForceN,Arm Total Force N,377,SECSGEM/uHGemHT9045_SV.cpp#L377
+2007,FT_8_TYPE,Force Per Device N,,fContact->edForcePerDeviceN,Force Per Device N,378,SECSGEM/uHGemHT9045_SV.cpp#L378
+2015,INT_4_TYPE,Contact Alarm Count Setting Grop 1,,&TestIF_File.iContactAlarmCount[0],Contact Alarm Count Setting Grop 1,380,SECSGEM/uHGemHT9045_SV.cpp#L380
+2016,INT_4_TYPE,Contact Alarm Count Setting Grop 2,,&TestIF_File.iContactAlarmCount[1],Contact Alarm Count Setting Grop 2,381,SECSGEM/uHGemHT9045_SV.cpp#L381
+2017,INT_4_TYPE,Contact Alarm Count Setting Grop 3,,&TestIF_File.iContactAlarmCount[2],Contact Alarm Count Setting Grop 3,382,SECSGEM/uHGemHT9045_SV.cpp#L382
+2018,FT_8_TYPE,Contact Air Force,,fContact->edAirKPA,Contact Air Force,384,SECSGEM/uHGemHT9045_SV.cpp#L384
+2019,FT_8_TYPE,Contact Air Force Feedback,,fContact->lblReadEP,Contact Air Force Feedback,385,SECSGEM/uHGemHT9045_SV.cpp#L385
+2020,FT_8_TYPE,Contact Set KG,,fContact->edSetKg,Contact Set KG,386,SECSGEM/uHGemHT9045_SV.cpp#L386
+2024,FT_8_TYPE,Die Force Feedback,,fContact->lblDieForceEP,Die Force Feedback,387,SECSGEM/uHGemHT9045_SV.cpp#L387
+2101,FT_8_TYPE,Arm1 Contact Height,,&DeviceForm_File.IndexContact[0],Arm1 Contact Height,389,SECSGEM/uHGemHT9045_SV.cpp#L389
+2102,FT_8_TYPE,Arm2 Contact Height,,&DeviceForm_File.IndexContact[1],Arm2 Contact Height,390,SECSGEM/uHGemHT9045_SV.cpp#L390
+2103,FT_8_TYPE,Shuttle1 Pick Height,,&DeviceForm_File.IndexArmPick[0],Shuttle1 Pick Height,391,SECSGEM/uHGemHT9045_SV.cpp#L391
+2104,FT_8_TYPE,Shuttle2 Pick Height,,&DeviceForm_File.IndexArmPick[1],Shuttle2 Release Height,392,SECSGEM/uHGemHT9045_SV.cpp#L392
+2105,FT_8_TYPE,Shuttle1 Release Height,,&DeviceForm_File.IndexPlace[0],Shuttle1 Release Height,393,SECSGEM/uHGemHT9045_SV.cpp#L393
+2106,FT_8_TYPE,Shuttle2 Release Height,,&DeviceForm_File.IndexPlace[1],Shuttle2 Release Height,394,SECSGEM/uHGemHT9045_SV.cpp#L394
+2631,INT_4_TYPE,Height Calibration Mode,,fContact->rgHandlerMode,0:Normal; 1:Auto Height; 2:Contact Test; 3:Manual Test; ,395,SECSGEM/uHGemHT9045_SV.cpp#L395
+2665,ASCII_TYPE,Auto 4 Tray From Alias,,fTrayAssignment->edAuto4Type,Auto 4 Tray From Alias,397,SECSGEM/uHGemHT9045_SV.cpp#L397
+2666,ASCII_TYPE,Auto 5 Tray From Alias,,fTrayAssignment->edAuto5Type,Auto 5 Tray From Alias,398,SECSGEM/uHGemHT9045_SV.cpp#L398
+2667,ASCII_TYPE,Auto 6 Tray From Alias,,fTrayAssignment->edAuto6Type,Auto 6 Tray From Alias,399,SECSGEM/uHGemHT9045_SV.cpp#L399
+2754,ASCII_TYPE,Auto 1 Tray From Alias,,fTrayAssignment->edAuto1Type,Auto 1 Tray From Alias,401,SECSGEM/uHGemHT9045_SV.cpp#L401
+2755,ASCII_TYPE,Auto 2 Tray From Alias,,fTrayAssignment->edAuto2Type,Auto 2 Tray From Alias,402,SECSGEM/uHGemHT9045_SV.cpp#L402
+2756,ASCII_TYPE,Auto 3 Tray From Alias,,fTrayAssignment->edAuto3Type,Auto 3 Tray From Alias,403,SECSGEM/uHGemHT9045_SV.cpp#L403
+6001,INT_4_TYPE,Arm1 Total Contact Count,,&ArmData[0]->iContactCT,Arm1 Total Contact Count,404,SECSGEM/uHGemHT9045_SV.cpp#L404
+6002,INT_4_TYPE,Arm2 Total Contact Count,,&ArmData[1]->iContactCT,Arm2 Total Contact Count,405,SECSGEM/uHGemHT9045_SV.cpp#L405
+9001,INT_4_TYPE,Auto Clean Cleaning Count,,fCleaning->edCleaningCount,Auto Clean Cleaning Count,406,SECSGEM/uHGemHT9045_SV.cpp#L406
+9003,ASCII_TYPE,Auto Clean Arm Total Force(KG),,fCleaning->edAutoCleanAirForce_Kg,Auto Clean Arm Total Force(KG),407,SECSGEM/uHGemHT9045_SV.cpp#L407
+9004,ASCII_TYPE,Auto Clean Arm Total Force(N),,fCleaning->edAutoCleanAirForce_N,Auto Clean Arm Total Force(N),408,SECSGEM/uHGemHT9045_SV.cpp#L408
+15500,INT_4_TYPE,Pre Alarm Message,,&RunInfo.iPreAlarmPosition,Pre Alarm Message,410,SECSGEM/uHGemHT9045_SV.cpp#L410
+16200,ASCII_TYPE,Site Aa Bin 0-255 Total,,ArmData[2]->ArmSKET[0][0]->sBinCT,Site Aa Bin 0-255 TotalCSV Format,412,SECSGEM/uHGemHT9045_SV.cpp#L412
+16201,ASCII_TYPE,Site Ab Bin 0-255 Total,,ArmData[2]->ArmSKET[0][1]->sBinCT,Site Ab Bin 0-255 TotalCSV Format,413,SECSGEM/uHGemHT9045_SV.cpp#L413
+16202,ASCII_TYPE,Site Ac Bin 0-255 Total,,ArmData[2]->ArmSKET[0][2]->sBinCT,Site Ac Bin 0-255 TotalCSV Format,414,SECSGEM/uHGemHT9045_SV.cpp#L414
+16203,ASCII_TYPE,Site Ad Bin 0-255 Total,,ArmData[2]->ArmSKET[0][3]->sBinCT,Site Ad Bin 0-255 TotalCSV Format,415,SECSGEM/uHGemHT9045_SV.cpp#L415
+16204,ASCII_TYPE,Site Ae Bin 0-255 Total,,ArmData[2]->ArmSKET[0][4]->sBinCT,Site Ae Bin 0-255 TotalCSV Format,416,SECSGEM/uHGemHT9045_SV.cpp#L416
+16205,ASCII_TYPE,Site Af Bin 0-255 Total,,ArmData[2]->ArmSKET[0][5]->sBinCT,Site Af Bin 0-255 TotalCSV Format,417,SECSGEM/uHGemHT9045_SV.cpp#L417
+16206,ASCII_TYPE,Site Ag Bin 0-255 Total,,ArmData[2]->ArmSKET[0][6]->sBinCT,Site Ag Bin 0-255 TotalCSV Format,418,SECSGEM/uHGemHT9045_SV.cpp#L418
+16207,ASCII_TYPE,Site Ah Bin 0-255 Total,,ArmData[2]->ArmSKET[0][7]->sBinCT,Site Ah Bin 0-255 TotalCSV Format,419,SECSGEM/uHGemHT9045_SV.cpp#L419
+16208,ASCII_TYPE,Site Ba Bin 0-255 Total,,ArmData[2]->ArmSKET[1][0]->sBinCT,Site Ba Bin 0-255 TotalCSV Format,420,SECSGEM/uHGemHT9045_SV.cpp#L420
+16209,ASCII_TYPE,Site Bb Bin 0-255 Total,,ArmData[2]->ArmSKET[1][1]->sBinCT,Site Bb Bin 0-255 TotalCSV Format,421,SECSGEM/uHGemHT9045_SV.cpp#L421
+16210,ASCII_TYPE,Site Bc Bin 0-255 Total,,ArmData[2]->ArmSKET[1][2]->sBinCT,Site Bc Bin 0-255 TotalCSV Format,422,SECSGEM/uHGemHT9045_SV.cpp#L422
+16211,ASCII_TYPE,Site Bd Bin 0-255 Total,,ArmData[2]->ArmSKET[1][3]->sBinCT,Site Bd Bin 0-255 TotalCSV Format,423,SECSGEM/uHGemHT9045_SV.cpp#L423
+16212,ASCII_TYPE,Site Be Bin 0-255 Total,,ArmData[2]->ArmSKET[1][4]->sBinCT,Site Be Bin 0-255 TotalCSV Format,424,SECSGEM/uHGemHT9045_SV.cpp#L424
+16213,ASCII_TYPE,Site Bf Bin 0-255 Total,,ArmData[2]->ArmSKET[1][5]->sBinCT,Site Bf Bin 0-255 TotalCSV Format,425,SECSGEM/uHGemHT9045_SV.cpp#L425
+16214,ASCII_TYPE,Site Bg Bin 0-255 Total,,ArmData[2]->ArmSKET[1][6]->sBinCT,Site Bg Bin 0-255 TotalCSV Format,426,SECSGEM/uHGemHT9045_SV.cpp#L426
+16215,ASCII_TYPE,Site Bh Bin 0-255 Total,,ArmData[2]->ArmSKET[1][7]->sBinCT,Site Bh Bin 0-255 TotalCSV Format,427,SECSGEM/uHGemHT9045_SV.cpp#L427
+16216,ASCII_TYPE,Site Ca Bin 0-255 Total,,ArmData[2]->ArmSKET[2][0]->sBinCT,Site Ca Bin 0-255 TotalCSV Format,428,SECSGEM/uHGemHT9045_SV.cpp#L428
+16217,ASCII_TYPE,Site Cb Bin 0-255 Total,,ArmData[2]->ArmSKET[2][1]->sBinCT,Site Cb Bin 0-255 TotalCSV Format,429,SECSGEM/uHGemHT9045_SV.cpp#L429
+16218,ASCII_TYPE,Site Cc Bin 0-255 Total,,ArmData[2]->ArmSKET[2][2]->sBinCT,Site Cc Bin 0-255 TotalCSV Format,430,SECSGEM/uHGemHT9045_SV.cpp#L430
+16219,ASCII_TYPE,Site Cd Bin 0-255 Total,,ArmData[2]->ArmSKET[2][3]->sBinCT,Site Cd Bin 0-255 TotalCSV Format,431,SECSGEM/uHGemHT9045_SV.cpp#L431
+16220,ASCII_TYPE,Site Ce Bin 0-255 Total,,ArmData[2]->ArmSKET[2][4]->sBinCT,Site Ce Bin 0-255 TotalCSV Format,432,SECSGEM/uHGemHT9045_SV.cpp#L432
+16221,ASCII_TYPE,Site Cf Bin 0-255 Total,,ArmData[2]->ArmSKET[2][5]->sBinCT,Site Cf Bin 0-255 TotalCSV Format,433,SECSGEM/uHGemHT9045_SV.cpp#L433
+16222,ASCII_TYPE,Site Cg Bin 0-255 Total,,ArmData[2]->ArmSKET[2][6]->sBinCT,Site Cg Bin 0-255 TotalCSV Format,434,SECSGEM/uHGemHT9045_SV.cpp#L434
+16223,ASCII_TYPE,Site Ch Bin 0-255 Total,,ArmData[2]->ArmSKET[2][7]->sBinCT,Site Ch Bin 0-255 TotalCSV Format,435,SECSGEM/uHGemHT9045_SV.cpp#L435
+16224,ASCII_TYPE,Site Da Bin 0-255 Total,,ArmData[2]->ArmSKET[3][0]->sBinCT,Site Da Bin 0-255 TotalCSV Format,436,SECSGEM/uHGemHT9045_SV.cpp#L436
+16225,ASCII_TYPE,Site Db Bin 0-255 Total,,ArmData[2]->ArmSKET[3][1]->sBinCT,Site Db Bin 0-255 TotalCSV Format,437,SECSGEM/uHGemHT9045_SV.cpp#L437
+16226,ASCII_TYPE,Site Dc Bin 0-255 Total,,ArmData[2]->ArmSKET[3][2]->sBinCT,Site Dc Bin 0-255 TotalCSV Format,438,SECSGEM/uHGemHT9045_SV.cpp#L438
+16227,ASCII_TYPE,Site Dd Bin 0-255 Total,,ArmData[2]->ArmSKET[3][3]->sBinCT,Site Dd Bin 0-255 TotalCSV Format,439,SECSGEM/uHGemHT9045_SV.cpp#L439
+16228,ASCII_TYPE,Site De Bin 0-255 Total,,ArmData[2]->ArmSKET[3][4]->sBinCT,Site De Bin 0-255 TotalCSV Format,440,SECSGEM/uHGemHT9045_SV.cpp#L440
+16229,ASCII_TYPE,Site Df Bin 0-255 Total,,ArmData[2]->ArmSKET[3][5]->sBinCT,Site Df Bin 0-255 TotalCSV Format,441,SECSGEM/uHGemHT9045_SV.cpp#L441
+16230,ASCII_TYPE,Site Dg Bin 0-255 Total,,ArmData[2]->ArmSKET[3][6]->sBinCT,Site Dg Bin 0-255 TotalCSV Format,442,SECSGEM/uHGemHT9045_SV.cpp#L442
+16231,ASCII_TYPE,Site Dh Bin 0-255 Total,,ArmData[2]->ArmSKET[3][7]->sBinCT,Site Dh Bin 0-255 TotalCSV Format,443,SECSGEM/uHGemHT9045_SV.cpp#L443
+16232,ASCII_TYPE,Arm 1 Site Aa Bin 0-255 Total,,ArmData[0]->ArmSKET[0][0]->sBinCT,Arm 1 Site Aa Bin 0-255 TotalCSV Format,444,SECSGEM/uHGemHT9045_SV.cpp#L444
+16233,ASCII_TYPE,Arm 1 Site Ab Bin 0-255 Total,,ArmData[0]->ArmSKET[0][1]->sBinCT,Arm 1 Site Ab Bin 0-255 TotalCSV Format,445,SECSGEM/uHGemHT9045_SV.cpp#L445
+16234,ASCII_TYPE,Arm 1 Site Ac Bin 0-255 Total,,ArmData[0]->ArmSKET[0][2]->sBinCT,Arm 1 Site Ac Bin 0-255 TotalCSV Format,446,SECSGEM/uHGemHT9045_SV.cpp#L446
+16235,ASCII_TYPE,Arm 1 Site Ad Bin 0-255 Total,,ArmData[0]->ArmSKET[0][3]->sBinCT,Arm 1 Site Ad Bin 0-255 TotalCSV Format,447,SECSGEM/uHGemHT9045_SV.cpp#L447
+16236,ASCII_TYPE,Arm 1 Site Ae Bin 0-255 Total,,ArmData[0]->ArmSKET[0][4]->sBinCT,Arm 1 Site Ae Bin 0-255 TotalCSV Format,448,SECSGEM/uHGemHT9045_SV.cpp#L448
+16237,ASCII_TYPE,Arm 1 Site Af Bin 0-255 Total,,ArmData[0]->ArmSKET[0][5]->sBinCT,Arm 1 Site Af Bin 0-255 TotalCSV Format,449,SECSGEM/uHGemHT9045_SV.cpp#L449
+16238,ASCII_TYPE,Arm 1 Site Ag Bin 0-255 Total,,ArmData[0]->ArmSKET[0][6]->sBinCT,Arm 1 Site Ag Bin 0-255 TotalCSV Format,450,SECSGEM/uHGemHT9045_SV.cpp#L450
+16239,ASCII_TYPE,Arm 1 Site Ah Bin 0-255 Total,,ArmData[0]->ArmSKET[0][7]->sBinCT,Arm 1 Site Ah Bin 0-255 TotalCSV Format,451,SECSGEM/uHGemHT9045_SV.cpp#L451
+16240,ASCII_TYPE,Arm 1 Site Ba Bin 0-255 Total,,ArmData[0]->ArmSKET[1][0]->sBinCT,Arm 1 Site Ba Bin 0-255 TotalCSV Format,452,SECSGEM/uHGemHT9045_SV.cpp#L452
+16241,ASCII_TYPE,Arm 1 Site Bb Bin 0-255 Total,,ArmData[0]->ArmSKET[1][1]->sBinCT,Arm 1 Site Bb Bin 0-255 TotalCSV Format,453,SECSGEM/uHGemHT9045_SV.cpp#L453
+16242,ASCII_TYPE,Arm 1 Site Bc Bin 0-255 Total,,ArmData[0]->ArmSKET[1][2]->sBinCT,Arm 1 Site Bc Bin 0-255 TotalCSV Format,454,SECSGEM/uHGemHT9045_SV.cpp#L454
+16243,ASCII_TYPE,Arm 1 Site Bd Bin 0-255 Total,,ArmData[0]->ArmSKET[1][3]->sBinCT,Arm 1 Site Bd Bin 0-255 TotalCSV Format,455,SECSGEM/uHGemHT9045_SV.cpp#L455
+16244,ASCII_TYPE,Arm 1 Site Be Bin 0-255 Total,,ArmData[0]->ArmSKET[1][4]->sBinCT,Arm 1 Site Be Bin 0-255 TotalCSV Format,456,SECSGEM/uHGemHT9045_SV.cpp#L456
+16245,ASCII_TYPE,Arm 1 Site Bf Bin 0-255 Total,,ArmData[0]->ArmSKET[1][5]->sBinCT,Arm 1 Site Bf Bin 0-255 TotalCSV Format,457,SECSGEM/uHGemHT9045_SV.cpp#L457
+16246,ASCII_TYPE,Arm 1 Site Bg Bin 0-255 Total,,ArmData[0]->ArmSKET[1][6]->sBinCT,Arm 1 Site Bg Bin 0-255 TotalCSV Format,458,SECSGEM/uHGemHT9045_SV.cpp#L458
+16247,ASCII_TYPE,Arm 1 Site Bh Bin 0-255 Total,,ArmData[0]->ArmSKET[1][7]->sBinCT,Arm 1 Site Bh Bin 0-255 TotalCSV Format,459,SECSGEM/uHGemHT9045_SV.cpp#L459
+16248,ASCII_TYPE,Arm 1 Site Ca Bin 0-255 Total,,ArmData[0]->ArmSKET[2][0]->sBinCT,Arm 1 Site Ca Bin 0-255 TotalCSV Format,460,SECSGEM/uHGemHT9045_SV.cpp#L460
+16249,ASCII_TYPE,Arm 1 Site Cb Bin 0-255 Total,,ArmData[0]->ArmSKET[2][1]->sBinCT,Arm 1 Site Cb Bin 0-255 TotalCSV Format,461,SECSGEM/uHGemHT9045_SV.cpp#L461
+16250,ASCII_TYPE,Arm 1 Site Cc Bin 0-255 Total,,ArmData[0]->ArmSKET[2][2]->sBinCT,Arm 1 Site Cc Bin 0-255 TotalCSV Format,462,SECSGEM/uHGemHT9045_SV.cpp#L462
+16251,ASCII_TYPE,Arm 1 Site Cd Bin 0-255 Total,,ArmData[0]->ArmSKET[2][3]->sBinCT,Arm 1 Site Cd Bin 0-255 TotalCSV Format,463,SECSGEM/uHGemHT9045_SV.cpp#L463
+16252,ASCII_TYPE,Arm 1 Site Ce Bin 0-255 Total,,ArmData[0]->ArmSKET[2][4]->sBinCT,Arm 1 Site Ce Bin 0-255 TotalCSV Format,464,SECSGEM/uHGemHT9045_SV.cpp#L464
+16253,ASCII_TYPE,Arm 1 Site Cf Bin 0-255 Total,,ArmData[0]->ArmSKET[2][5]->sBinCT,Arm 1 Site Cf Bin 0-255 TotalCSV Format,465,SECSGEM/uHGemHT9045_SV.cpp#L465
+16254,ASCII_TYPE,Arm 1 Site Cg Bin 0-255 Total,,ArmData[0]->ArmSKET[2][6]->sBinCT,Arm 1 Site Cg Bin 0-255 TotalCSV Format,466,SECSGEM/uHGemHT9045_SV.cpp#L466
+16255,ASCII_TYPE,Arm 1 Site Ch Bin 0-255 Total,,ArmData[0]->ArmSKET[2][7]->sBinCT,Arm 1 Site Ch Bin 0-255 TotalCSV Format,467,SECSGEM/uHGemHT9045_SV.cpp#L467
+16256,ASCII_TYPE,Arm 1 Site Da Bin 0-255 Total,,ArmData[0]->ArmSKET[3][0]->sBinCT,Arm 1 Site Da Bin 0-255 TotalCSV Format,468,SECSGEM/uHGemHT9045_SV.cpp#L468
+16257,ASCII_TYPE,Arm 1 Site Db Bin 0-255 Total,,ArmData[0]->ArmSKET[3][1]->sBinCT,Arm 1 Site Db Bin 0-255 TotalCSV Format,469,SECSGEM/uHGemHT9045_SV.cpp#L469
+16258,ASCII_TYPE,Arm 1 Site Dc Bin 0-255 Total,,ArmData[0]->ArmSKET[3][2]->sBinCT,Arm 1 Site Dc Bin 0-255 TotalCSV Format,470,SECSGEM/uHGemHT9045_SV.cpp#L470
+16259,ASCII_TYPE,Arm 1 Site Dd Bin 0-255 Total,,ArmData[0]->ArmSKET[3][3]->sBinCT,Arm 1 Site Dd Bin 0-255 TotalCSV Format,471,SECSGEM/uHGemHT9045_SV.cpp#L471
+16260,ASCII_TYPE,Arm 1 Site De Bin 0-255 Total,,ArmData[0]->ArmSKET[3][4]->sBinCT,Arm 1 Site De Bin 0-255 TotalCSV Format,472,SECSGEM/uHGemHT9045_SV.cpp#L472
+16261,ASCII_TYPE,Arm 1 Site Df Bin 0-255 Total,,ArmData[0]->ArmSKET[3][5]->sBinCT,Arm 1 Site Df Bin 0-255 TotalCSV Format,473,SECSGEM/uHGemHT9045_SV.cpp#L473
+16262,ASCII_TYPE,Arm 1 Site Dg Bin 0-255 Total,,ArmData[0]->ArmSKET[3][6]->sBinCT,Arm 1 Site Dg Bin 0-255 TotalCSV Format,474,SECSGEM/uHGemHT9045_SV.cpp#L474
+16263,ASCII_TYPE,Arm 1 Site Dh Bin 0-255 Total,,ArmData[0]->ArmSKET[3][7]->sBinCT,Arm 1 Site Dh Bin 0-255 TotalCSV Format,475,SECSGEM/uHGemHT9045_SV.cpp#L475
+16264,ASCII_TYPE,Arm 2 Site Aa Bin 0-255 Total,,ArmData[1]->ArmSKET[0][0]->sBinCT,Arm 2 Site Aa Bin 0-255 TotalCSV Format,476,SECSGEM/uHGemHT9045_SV.cpp#L476
+16265,ASCII_TYPE,Arm 2 Site Ab Bin 0-255 Total,,ArmData[1]->ArmSKET[0][1]->sBinCT,Arm 2 Site Ab Bin 0-255 TotalCSV Format,477,SECSGEM/uHGemHT9045_SV.cpp#L477
+16266,ASCII_TYPE,Arm 2 Site Ac Bin 0-255 Total,,ArmData[1]->ArmSKET[0][2]->sBinCT,Arm 2 Site Ac Bin 0-255 TotalCSV Format,478,SECSGEM/uHGemHT9045_SV.cpp#L478
+16267,ASCII_TYPE,Arm 2 Site Ad Bin 0-255 Total,,ArmData[1]->ArmSKET[0][3]->sBinCT,Arm 2 Site Ad Bin 0-255 TotalCSV Format,479,SECSGEM/uHGemHT9045_SV.cpp#L479
+16268,ASCII_TYPE,Arm 2 Site Ae Bin 0-255 Total,,ArmData[1]->ArmSKET[0][4]->sBinCT,Arm 2 Site Ae Bin 0-255 TotalCSV Format,480,SECSGEM/uHGemHT9045_SV.cpp#L480
+16269,ASCII_TYPE,Arm 2 Site Af Bin 0-255 Total,,ArmData[1]->ArmSKET[0][5]->sBinCT,Arm 2 Site Af Bin 0-255 TotalCSV Format,481,SECSGEM/uHGemHT9045_SV.cpp#L481
+16270,ASCII_TYPE,Arm 2 Site Ag Bin 0-255 Total,,ArmData[1]->ArmSKET[0][6]->sBinCT,Arm 2 Site Ag Bin 0-255 TotalCSV Format,482,SECSGEM/uHGemHT9045_SV.cpp#L482
+16271,ASCII_TYPE,Arm 2 Site Ah Bin 0-255 Total,,ArmData[1]->ArmSKET[0][7]->sBinCT,Arm 2 Site Ah Bin 0-255 TotalCSV Format,483,SECSGEM/uHGemHT9045_SV.cpp#L483
+16272,ASCII_TYPE,Arm 2 Site Ba Bin 0-255 Total,,ArmData[1]->ArmSKET[1][0]->sBinCT,Arm 2 Site Ba Bin 0-255 TotalCSV Format,484,SECSGEM/uHGemHT9045_SV.cpp#L484
+16273,ASCII_TYPE,Arm 2 Site Bb Bin 0-255 Total,,ArmData[1]->ArmSKET[1][1]->sBinCT,Arm 2 Site Bb Bin 0-255 TotalCSV Format,485,SECSGEM/uHGemHT9045_SV.cpp#L485
+16274,ASCII_TYPE,Arm 2 Site Bc Bin 0-255 Total,,ArmData[1]->ArmSKET[1][2]->sBinCT,Arm 2 Site Bc Bin 0-255 TotalCSV Format,486,SECSGEM/uHGemHT9045_SV.cpp#L486
+16275,ASCII_TYPE,Arm 2 Site Bd Bin 0-255 Total,,ArmData[1]->ArmSKET[1][3]->sBinCT,Arm 2 Site Bd Bin 0-255 TotalCSV Format,487,SECSGEM/uHGemHT9045_SV.cpp#L487
+16276,ASCII_TYPE,Arm 2 Site Be Bin 0-255 Total,,ArmData[1]->ArmSKET[1][4]->sBinCT,Arm 2 Site Be Bin 0-255 TotalCSV Format,488,SECSGEM/uHGemHT9045_SV.cpp#L488
+16277,ASCII_TYPE,Arm 2 Site Bf Bin 0-255 Total,,ArmData[1]->ArmSKET[1][5]->sBinCT,Arm 2 Site Bf Bin 0-255 TotalCSV Format,489,SECSGEM/uHGemHT9045_SV.cpp#L489
+16278,ASCII_TYPE,Arm 2 Site Bg Bin 0-255 Total,,ArmData[1]->ArmSKET[1][6]->sBinCT,Arm 2 Site Bg Bin 0-255 TotalCSV Format,490,SECSGEM/uHGemHT9045_SV.cpp#L490
+16279,ASCII_TYPE,Arm 2 Site Bh Bin 0-255 Total,,ArmData[1]->ArmSKET[1][7]->sBinCT,Arm 2 Site Bh Bin 0-255 TotalCSV Format,491,SECSGEM/uHGemHT9045_SV.cpp#L491
+16280,ASCII_TYPE,Arm 2 Site Ca Bin 0-255 Total,,ArmData[1]->ArmSKET[2][0]->sBinCT,Arm 2 Site Ca Bin 0-255 TotalCSV Format,492,SECSGEM/uHGemHT9045_SV.cpp#L492
+16281,ASCII_TYPE,Arm 2 Site Cb Bin 0-255 Total,,ArmData[1]->ArmSKET[2][1]->sBinCT,Arm 2 Site Cb Bin 0-255 TotalCSV Format,493,SECSGEM/uHGemHT9045_SV.cpp#L493
+16282,ASCII_TYPE,Arm 2 Site Cc Bin 0-255 Total,,ArmData[1]->ArmSKET[2][2]->sBinCT,Arm 2 Site Cc Bin 0-255 TotalCSV Format,494,SECSGEM/uHGemHT9045_SV.cpp#L494
+16283,ASCII_TYPE,Arm 2 Site Cd Bin 0-255 Total,,ArmData[1]->ArmSKET[2][3]->sBinCT,Arm 2 Site Cd Bin 0-255 TotalCSV Format,495,SECSGEM/uHGemHT9045_SV.cpp#L495
+16284,ASCII_TYPE,Arm 2 Site Ce Bin 0-255 Total,,ArmData[1]->ArmSKET[2][4]->sBinCT,Arm 2 Site Ce Bin 0-255 TotalCSV Format,496,SECSGEM/uHGemHT9045_SV.cpp#L496
+16285,ASCII_TYPE,Arm 2 Site Cf Bin 0-255 Total,,ArmData[1]->ArmSKET[2][5]->sBinCT,Arm 2 Site Cf Bin 0-255 TotalCSV Format,497,SECSGEM/uHGemHT9045_SV.cpp#L497
+16286,ASCII_TYPE,Arm 2 Site Cg Bin 0-255 Total,,ArmData[1]->ArmSKET[2][6]->sBinCT,Arm 2 Site Cg Bin 0-255 TotalCSV Format,498,SECSGEM/uHGemHT9045_SV.cpp#L498
+16287,ASCII_TYPE,Arm 2 Site Ch Bin 0-255 Total,,ArmData[1]->ArmSKET[2][7]->sBinCT,Arm 2 Site Ch Bin 0-255 TotalCSV Format,499,SECSGEM/uHGemHT9045_SV.cpp#L499
+16288,ASCII_TYPE,Arm 2 Site Da Bin 0-255 Total,,ArmData[1]->ArmSKET[3][0]->sBinCT,Arm 2 Site Da Bin 0-255 TotalCSV Format,500,SECSGEM/uHGemHT9045_SV.cpp#L500
+16289,ASCII_TYPE,Arm 2 Site Db Bin 0-255 Total,,ArmData[1]->ArmSKET[3][1]->sBinCT,Arm 2 Site Db Bin 0-255 TotalCSV Format,501,SECSGEM/uHGemHT9045_SV.cpp#L501
+16290,ASCII_TYPE,Arm 2 Site Dc Bin 0-255 Total,,ArmData[1]->ArmSKET[3][2]->sBinCT,Arm 2 Site Dc Bin 0-255 TotalCSV Format,502,SECSGEM/uHGemHT9045_SV.cpp#L502
+16291,ASCII_TYPE,Arm 2 Site Dd Bin 0-255 Total,,ArmData[1]->ArmSKET[3][3]->sBinCT,Arm 2 Site Dd Bin 0-255 TotalCSV Format,503,SECSGEM/uHGemHT9045_SV.cpp#L503
+16292,ASCII_TYPE,Arm 2 Site De Bin 0-255 Total,,ArmData[1]->ArmSKET[3][4]->sBinCT,Arm 2 Site De Bin 0-255 TotalCSV Format,504,SECSGEM/uHGemHT9045_SV.cpp#L504
+16293,ASCII_TYPE,Arm 2 Site Df Bin 0-255 Total,,ArmData[1]->ArmSKET[3][5]->sBinCT,Arm 2 Site Df Bin 0-255 TotalCSV Format,505,SECSGEM/uHGemHT9045_SV.cpp#L505
+16294,ASCII_TYPE,Arm 2 Site Dg Bin 0-255 Total,,ArmData[1]->ArmSKET[3][6]->sBinCT,Arm 2 Site Dg Bin 0-255 TotalCSV Format,506,SECSGEM/uHGemHT9045_SV.cpp#L506
+16295,ASCII_TYPE,Arm 2 Site Dh Bin 0-255 Total,,ArmData[1]->ArmSKET[3][7]->sBinCT,Arm 2 Site Dh Bin 0-255 TotalCSV Format,507,SECSGEM/uHGemHT9045_SV.cpp#L507
+16296,ASCII_TYPE,Total Pass Count by Site Aa to Dh,,ArmData[2]->sPass,Pass Count by Site Aa to DhCSV Format,508,SECSGEM/uHGemHT9045_SV.cpp#L508
+16297,ASCII_TYPE,Total Fail Count by Site Aa to Dh,,ArmData[2]->sFail,Fail Count by Site Aa to DhCSV Format,509,SECSGEM/uHGemHT9045_SV.cpp#L509
+16298,ASCII_TYPE,Total IF Error Count by Site Aa to Dh,,ArmData[2]->iIFErr,IF Error Count by Site Aa to DhCSV Format,510,SECSGEM/uHGemHT9045_SV.cpp#L510
+16299,ASCII_TYPE,Total Count by Site Aa to Dh,,ArmData[2]->sTotal,Total Count by Site Aa to DhCSV Format,511,SECSGEM/uHGemHT9045_SV.cpp#L511
+16300,ASCII_TYPE,Arm 1 Pass Count by Site Aa to Dh,,ArmData[0]->sPass,Arm 1 Pass Count by Site Aa to DhCSV Format,512,SECSGEM/uHGemHT9045_SV.cpp#L512
+16301,ASCII_TYPE,Arm 1 Fail Count by Site Aa to Dh,,ArmData[0]->sFail,Arm 1 Fail Count by Site Aa to DhCSV Format,513,SECSGEM/uHGemHT9045_SV.cpp#L513
+16302,ASCII_TYPE,Arm 1 IF Error Count by Site Aa to Dh,,ArmData[0]->iIFErr,Arm 1 IF Error Count by Site Aa to DhCSV Format,514,SECSGEM/uHGemHT9045_SV.cpp#L514
+16303,ASCII_TYPE,Arm 1 Total Count by Site Aa to Dh,,ArmData[0]->sTotal,Arm 1 Total Count by Site Aa to DhCSV Format,515,SECSGEM/uHGemHT9045_SV.cpp#L515
+16304,ASCII_TYPE,Arm 2 Pass Count by Site Aa to Dh,,ArmData[1]->sPass,Arm 2 Pass Count by Site Aa to DhCSV Format,516,SECSGEM/uHGemHT9045_SV.cpp#L516
+16305,ASCII_TYPE,Arm 2 Fail Count by Site Aa to Dh,,ArmData[1]->sFail,Arm 2 Fail Count by Site Aa to DhCSV Format,517,SECSGEM/uHGemHT9045_SV.cpp#L517
+16306,ASCII_TYPE,Arm 2 IF Error Count by Site Aa to Dh,,ArmData[1]->iIFErr,Arm 2 IF Error Count by Site Aa to DhCSV Format,518,SECSGEM/uHGemHT9045_SV.cpp#L518
+16307,ASCII_TYPE,Arm 2 Total Count by Site Aa to Dh,,ArmData[1]->sTotal,Arm 2 Total Count by Site Aa to DhCSV Format,519,SECSGEM/uHGemHT9045_SV.cpp#L519
+16308,ASCII_TYPE,Site Aa Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[0][0]->sBinCT,Site Aa Bin 0-255 Total (History)CSV Format,520,SECSGEM/uHGemHT9045_SV.cpp#L520
+16309,ASCII_TYPE,Site Ab Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[0][1]->sBinCT,Site Ab Bin 0-255 Total (History)CSV Format,521,SECSGEM/uHGemHT9045_SV.cpp#L521
+16310,ASCII_TYPE,Site Ac Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[0][2]->sBinCT,Site Ac Bin 0-255 Total (History)CSV Format,522,SECSGEM/uHGemHT9045_SV.cpp#L522
+16311,ASCII_TYPE,Site Ad Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[0][3]->sBinCT,Site Ad Bin 0-255 Total (History)CSV Format,523,SECSGEM/uHGemHT9045_SV.cpp#L523
+16312,ASCII_TYPE,Site Ae Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[0][4]->sBinCT,Site Ae Bin 0-255 Total (History)CSV Format,524,SECSGEM/uHGemHT9045_SV.cpp#L524
+16313,ASCII_TYPE,Site Af Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[0][5]->sBinCT,Site Af Bin 0-255 Total (History)CSV Format,525,SECSGEM/uHGemHT9045_SV.cpp#L525
+16314,ASCII_TYPE,Site Ag Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[0][6]->sBinCT,Site Ag Bin 0-255 Total (History)CSV Format,526,SECSGEM/uHGemHT9045_SV.cpp#L526
+16315,ASCII_TYPE,Site Ah Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[0][7]->sBinCT,Site Ah Bin 0-255 Total (History)CSV Format,527,SECSGEM/uHGemHT9045_SV.cpp#L527
+16316,ASCII_TYPE,Site Ba Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[1][0]->sBinCT,Site Ba Bin 0-255 Total (History)CSV Format,528,SECSGEM/uHGemHT9045_SV.cpp#L528
+16317,ASCII_TYPE,Site Bb Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[1][1]->sBinCT,Site Bb Bin 0-255 Total (History)CSV Format,529,SECSGEM/uHGemHT9045_SV.cpp#L529
+16318,ASCII_TYPE,Site Bc Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[1][2]->sBinCT,Site Bc Bin 0-255 Total (History)CSV Format,530,SECSGEM/uHGemHT9045_SV.cpp#L530
+16319,ASCII_TYPE,Site Bd Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[1][3]->sBinCT,Site Bd Bin 0-255 Total (History)CSV Format,531,SECSGEM/uHGemHT9045_SV.cpp#L531
+16320,ASCII_TYPE,Site Be Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[1][4]->sBinCT,Site Be Bin 0-255 Total (History)CSV Format,532,SECSGEM/uHGemHT9045_SV.cpp#L532
+16321,ASCII_TYPE,Site Bf Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[1][5]->sBinCT,Site Bf Bin 0-255 Total (History)CSV Format,533,SECSGEM/uHGemHT9045_SV.cpp#L533
+16322,ASCII_TYPE,Site Bg Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[1][6]->sBinCT,Site Bg Bin 0-255 Total (History)CSV Format,534,SECSGEM/uHGemHT9045_SV.cpp#L534
+16323,ASCII_TYPE,Site Bh Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[1][7]->sBinCT,Site Bh Bin 0-255 Total (History)CSV Format,535,SECSGEM/uHGemHT9045_SV.cpp#L535
+16324,ASCII_TYPE,Site Ca Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[2][0]->sBinCT,Site Ca Bin 0-255 Total (History)CSV Format,536,SECSGEM/uHGemHT9045_SV.cpp#L536
+16325,ASCII_TYPE,Site Cb Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[2][1]->sBinCT,Site Cb Bin 0-255 Total (History)CSV Format,537,SECSGEM/uHGemHT9045_SV.cpp#L537
+16326,ASCII_TYPE,Site Cc Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[2][2]->sBinCT,Site Cc Bin 0-255 Total (History)CSV Format,538,SECSGEM/uHGemHT9045_SV.cpp#L538
+16327,ASCII_TYPE,Site Cd Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[2][3]->sBinCT,Site Cd Bin 0-255 Total (History)CSV Format,539,SECSGEM/uHGemHT9045_SV.cpp#L539
+16328,ASCII_TYPE,Site Ce Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[2][4]->sBinCT,Site Ce Bin 0-255 Total (History)CSV Format,540,SECSGEM/uHGemHT9045_SV.cpp#L540
+16329,ASCII_TYPE,Site Cf Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[2][5]->sBinCT,Site Cf Bin 0-255 Total (History)CSV Format,541,SECSGEM/uHGemHT9045_SV.cpp#L541
+16330,ASCII_TYPE,Site Cg Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[2][6]->sBinCT,Site Cg Bin 0-255 Total (History)CSV Format,542,SECSGEM/uHGemHT9045_SV.cpp#L542
+16331,ASCII_TYPE,Site Ch Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[2][7]->sBinCT,Site Ch Bin 0-255 Total (History)CSV Format,543,SECSGEM/uHGemHT9045_SV.cpp#L543
+16332,ASCII_TYPE,Site Da Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[3][0]->sBinCT,Site Da Bin 0-255 Total (History)CSV Format,544,SECSGEM/uHGemHT9045_SV.cpp#L544
+16333,ASCII_TYPE,Site Db Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[3][1]->sBinCT,Site Db Bin 0-255 Total (History)CSV Format,545,SECSGEM/uHGemHT9045_SV.cpp#L545
+16334,ASCII_TYPE,Site Dc Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[3][2]->sBinCT,Site Dc Bin 0-255 Total (History)CSV Format,546,SECSGEM/uHGemHT9045_SV.cpp#L546
+16335,ASCII_TYPE,Site Dd Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[3][3]->sBinCT,Site Dd Bin 0-255 Total (History)CSV Format,547,SECSGEM/uHGemHT9045_SV.cpp#L547
+16336,ASCII_TYPE,Site De Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[3][4]->sBinCT,Site De Bin 0-255 Total (History)CSV Format,548,SECSGEM/uHGemHT9045_SV.cpp#L548
+16337,ASCII_TYPE,Site Df Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[3][5]->sBinCT,Site Df Bin 0-255 Total (History)CSV Format,549,SECSGEM/uHGemHT9045_SV.cpp#L549
+16338,ASCII_TYPE,Site Dg Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[3][6]->sBinCT,Site Dg Bin 0-255 Total (History)CSV Format,550,SECSGEM/uHGemHT9045_SV.cpp#L550
+16339,ASCII_TYPE,Site Dh Bin 0-255 Total (History),,ArmHistory[2]->ArmSKET[3][7]->sBinCT,Site Dh Bin 0-255 Total (History)CSV Format,551,SECSGEM/uHGemHT9045_SV.cpp#L551
+16340,ASCII_TYPE,Arm 1 Site Aa Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[0][0]->sBinCT,Arm 1 Site Aa Bin 0-255 Total (History)CSV Format,552,SECSGEM/uHGemHT9045_SV.cpp#L552
+16341,ASCII_TYPE,Arm 1 Site Ab Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[0][1]->sBinCT,Arm 1 Site Ab Bin 0-255 Total (History)CSV Format,553,SECSGEM/uHGemHT9045_SV.cpp#L553
+16342,ASCII_TYPE,Arm 1 Site Ac Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[0][2]->sBinCT,Arm 1 Site Ac Bin 0-255 Total (History)CSV Format,554,SECSGEM/uHGemHT9045_SV.cpp#L554
+16343,ASCII_TYPE,Arm 1 Site Ad Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[0][3]->sBinCT,Arm 1 Site Ad Bin 0-255 Total (History)CSV Format,555,SECSGEM/uHGemHT9045_SV.cpp#L555
+16344,ASCII_TYPE,Arm 1 Site Ae Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[0][4]->sBinCT,Arm 1 Site Ae Bin 0-255 Total (History)CSV Format,556,SECSGEM/uHGemHT9045_SV.cpp#L556
+16345,ASCII_TYPE,Arm 1 Site Af Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[0][5]->sBinCT,Arm 1 Site Af Bin 0-255 Total (History)CSV Format,557,SECSGEM/uHGemHT9045_SV.cpp#L557
+16346,ASCII_TYPE,Arm 1 Site Ag Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[0][6]->sBinCT,Arm 1 Site Ag Bin 0-255 Total (History)CSV Format,558,SECSGEM/uHGemHT9045_SV.cpp#L558
+16347,ASCII_TYPE,Arm 1 Site Ah Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[0][7]->sBinCT,Arm 1 Site Ah Bin 0-255 Total (History)CSV Format,559,SECSGEM/uHGemHT9045_SV.cpp#L559
+16348,ASCII_TYPE,Arm 1 Site Ba Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[1][0]->sBinCT,Arm 1 Site Ba Bin 0-255 Total (History)CSV Format,560,SECSGEM/uHGemHT9045_SV.cpp#L560
+16349,ASCII_TYPE,Arm 1 Site Bb Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[1][1]->sBinCT,Arm 1 Site Bb Bin 0-255 Total (History)CSV Format,561,SECSGEM/uHGemHT9045_SV.cpp#L561
+16350,ASCII_TYPE,Arm 1 Site Bc Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[1][2]->sBinCT,Arm 1 Site Bc Bin 0-255 Total (History)CSV Format,562,SECSGEM/uHGemHT9045_SV.cpp#L562
+16351,ASCII_TYPE,Arm 1 Site Bd Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[1][3]->sBinCT,Arm 1 Site Bd Bin 0-255 Total (History)CSV Format,563,SECSGEM/uHGemHT9045_SV.cpp#L563
+16352,ASCII_TYPE,Arm 1 Site Be Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[1][4]->sBinCT,Arm 1 Site Be Bin 0-255 Total (History)CSV Format,564,SECSGEM/uHGemHT9045_SV.cpp#L564
+16353,ASCII_TYPE,Arm 1 Site Bf Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[1][5]->sBinCT,Arm 1 Site Bf Bin 0-255 Total (History)CSV Format,565,SECSGEM/uHGemHT9045_SV.cpp#L565
+16354,ASCII_TYPE,Arm 1 Site Bg Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[1][6]->sBinCT,Arm 1 Site Bg Bin 0-255 Total (History)CSV Format,566,SECSGEM/uHGemHT9045_SV.cpp#L566
+16355,ASCII_TYPE,Arm 1 Site Bh Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[1][7]->sBinCT,Arm 1 Site Bh Bin 0-255 Total (History)CSV Format,567,SECSGEM/uHGemHT9045_SV.cpp#L567
+16356,ASCII_TYPE,Arm 1 Site Ca Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[2][0]->sBinCT,Arm 1 Site Ca Bin 0-255 Total (History)CSV Format,568,SECSGEM/uHGemHT9045_SV.cpp#L568
+16357,ASCII_TYPE,Arm 1 Site Cb Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[2][1]->sBinCT,Arm 1 Site Cb Bin 0-255 Total (History)CSV Format,569,SECSGEM/uHGemHT9045_SV.cpp#L569
+16358,ASCII_TYPE,Arm 1 Site Cc Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[2][2]->sBinCT,Arm 1 Site Cc Bin 0-255 Total (History)CSV Format,570,SECSGEM/uHGemHT9045_SV.cpp#L570
+16359,ASCII_TYPE,Arm 1 Site Cd Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[2][3]->sBinCT,Arm 1 Site Cd Bin 0-255 Total (History)CSV Format,571,SECSGEM/uHGemHT9045_SV.cpp#L571
+16360,ASCII_TYPE,Arm 1 Site Ce Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[2][4]->sBinCT,Arm 1 Site Ce Bin 0-255 Total (History)CSV Format,572,SECSGEM/uHGemHT9045_SV.cpp#L572
+16361,ASCII_TYPE,Arm 1 Site Cf Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[2][5]->sBinCT,Arm 1 Site Cf Bin 0-255 Total (History)CSV Format,573,SECSGEM/uHGemHT9045_SV.cpp#L573
+16362,ASCII_TYPE,Arm 1 Site Cg Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[2][6]->sBinCT,Arm 1 Site Cg Bin 0-255 Total (History)CSV Format,574,SECSGEM/uHGemHT9045_SV.cpp#L574
+16363,ASCII_TYPE,Arm 1 Site Ch Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[2][7]->sBinCT,Arm 1 Site Ch Bin 0-255 Total (History)CSV Format,575,SECSGEM/uHGemHT9045_SV.cpp#L575
+16364,ASCII_TYPE,Arm 1 Site Da Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[3][0]->sBinCT,Arm 1 Site Da Bin 0-255 Total (History)CSV Format,576,SECSGEM/uHGemHT9045_SV.cpp#L576
+16365,ASCII_TYPE,Arm 1 Site Db Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[3][1]->sBinCT,Arm 1 Site Db Bin 0-255 Total (History)CSV Format,577,SECSGEM/uHGemHT9045_SV.cpp#L577
+16366,ASCII_TYPE,Arm 1 Site Dc Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[3][2]->sBinCT,Arm 1 Site Dc Bin 0-255 Total (History)CSV Format,578,SECSGEM/uHGemHT9045_SV.cpp#L578
+16367,ASCII_TYPE,Arm 1 Site Dd Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[3][3]->sBinCT,Arm 1 Site Dd Bin 0-255 Total (History)CSV Format,579,SECSGEM/uHGemHT9045_SV.cpp#L579
+16368,ASCII_TYPE,Arm 1 Site De Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[3][4]->sBinCT,Arm 1 Site De Bin 0-255 Total (History)CSV Format,580,SECSGEM/uHGemHT9045_SV.cpp#L580
+16369,ASCII_TYPE,Arm 1 Site Df Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[3][5]->sBinCT,Arm 1 Site Df Bin 0-255 Total (History)CSV Format,581,SECSGEM/uHGemHT9045_SV.cpp#L581
+16370,ASCII_TYPE,Arm 1 Site Dg Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[3][6]->sBinCT,Arm 1 Site Dg Bin 0-255 Total (History)CSV Format,582,SECSGEM/uHGemHT9045_SV.cpp#L582
+16371,ASCII_TYPE,Arm 1 Site Dh Bin 0-255 Total (History),,ArmHistory[0]->ArmSKET[3][7]->sBinCT,Arm 1 Site Dh Bin 0-255 Total (History)CSV Format,583,SECSGEM/uHGemHT9045_SV.cpp#L583
+16372,ASCII_TYPE,Arm 2 Site Aa Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[0][0]->sBinCT,Arm 2 Site Aa Bin 0-255 Total (History)CSV Format,584,SECSGEM/uHGemHT9045_SV.cpp#L584
+16373,ASCII_TYPE,Arm 2 Site Ab Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[0][1]->sBinCT,Arm 2 Site Ab Bin 0-255 Total (History)CSV Format,585,SECSGEM/uHGemHT9045_SV.cpp#L585
+16374,ASCII_TYPE,Arm 2 Site Ac Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[0][2]->sBinCT,Arm 2 Site Ac Bin 0-255 Total (History)CSV Format,586,SECSGEM/uHGemHT9045_SV.cpp#L586
+16375,ASCII_TYPE,Arm 2 Site Ad Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[0][3]->sBinCT,Arm 2 Site Ad Bin 0-255 Total (History)CSV Format,587,SECSGEM/uHGemHT9045_SV.cpp#L587
+16376,ASCII_TYPE,Arm 2 Site Ae Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[0][4]->sBinCT,Arm 2 Site Ae Bin 0-255 Total (History)CSV Format,588,SECSGEM/uHGemHT9045_SV.cpp#L588
+16377,ASCII_TYPE,Arm 2 Site Af Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[0][5]->sBinCT,Arm 2 Site Af Bin 0-255 Total (History)CSV Format,589,SECSGEM/uHGemHT9045_SV.cpp#L589
+16378,ASCII_TYPE,Arm 2 Site Ag Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[0][6]->sBinCT,Arm 2 Site Ag Bin 0-255 Total (History)CSV Format,590,SECSGEM/uHGemHT9045_SV.cpp#L590
+16379,ASCII_TYPE,Arm 2 Site Ah Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[0][7]->sBinCT,Arm 2 Site Ah Bin 0-255 Total (History)CSV Format,591,SECSGEM/uHGemHT9045_SV.cpp#L591
+16380,ASCII_TYPE,Arm 2 Site Ba Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[1][0]->sBinCT,Arm 2 Site Ba Bin 0-255 Total (History)CSV Format,592,SECSGEM/uHGemHT9045_SV.cpp#L592
+16381,ASCII_TYPE,Arm 2 Site Bb Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[1][1]->sBinCT,Arm 2 Site Bb Bin 0-255 Total (History)CSV Format,593,SECSGEM/uHGemHT9045_SV.cpp#L593
+16382,ASCII_TYPE,Arm 2 Site Bc Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[1][2]->sBinCT,Arm 2 Site Bc Bin 0-255 Total (History)CSV Format,594,SECSGEM/uHGemHT9045_SV.cpp#L594
+16383,ASCII_TYPE,Arm 2 Site Bd Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[1][3]->sBinCT,Arm 2 Site Bd Bin 0-255 Total (History)CSV Format,595,SECSGEM/uHGemHT9045_SV.cpp#L595
+16384,ASCII_TYPE,Arm 2 Site Be Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[1][4]->sBinCT,Arm 2 Site Be Bin 0-255 Total (History)CSV Format,596,SECSGEM/uHGemHT9045_SV.cpp#L596
+16385,ASCII_TYPE,Arm 2 Site Bf Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[1][5]->sBinCT,Arm 2 Site Bf Bin 0-255 Total (History)CSV Format,597,SECSGEM/uHGemHT9045_SV.cpp#L597
+16386,ASCII_TYPE,Arm 2 Site Bg Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[1][6]->sBinCT,Arm 2 Site Bg Bin 0-255 Total (History)CSV Format,598,SECSGEM/uHGemHT9045_SV.cpp#L598
+16387,ASCII_TYPE,Arm 2 Site Bh Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[1][7]->sBinCT,Arm 2 Site Bh Bin 0-255 Total (History)CSV Format,599,SECSGEM/uHGemHT9045_SV.cpp#L599
+16388,ASCII_TYPE,Arm 2 Site Ca Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[2][0]->sBinCT,Arm 2 Site Ca Bin 0-255 Total (History)CSV Format,600,SECSGEM/uHGemHT9045_SV.cpp#L600
+16389,ASCII_TYPE,Arm 2 Site Cb Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[2][1]->sBinCT,Arm 2 Site Cb Bin 0-255 Total (History)CSV Format,601,SECSGEM/uHGemHT9045_SV.cpp#L601
+16390,ASCII_TYPE,Arm 2 Site Cc Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[2][2]->sBinCT,Arm 2 Site Cc Bin 0-255 Total (History)CSV Format,602,SECSGEM/uHGemHT9045_SV.cpp#L602
+16391,ASCII_TYPE,Arm 2 Site Cd Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[2][3]->sBinCT,Arm 2 Site Cd Bin 0-255 Total (History)CSV Format,603,SECSGEM/uHGemHT9045_SV.cpp#L603
+16392,ASCII_TYPE,Arm 2 Site Ce Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[2][4]->sBinCT,Arm 2 Site Ce Bin 0-255 Total (History)CSV Format,604,SECSGEM/uHGemHT9045_SV.cpp#L604
+16393,ASCII_TYPE,Arm 2 Site Cf Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[2][5]->sBinCT,Arm 2 Site Cf Bin 0-255 Total (History)CSV Format,605,SECSGEM/uHGemHT9045_SV.cpp#L605
+16394,ASCII_TYPE,Arm 2 Site Cg Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[2][6]->sBinCT,Arm 2 Site Cg Bin 0-255 Total (History)CSV Format,606,SECSGEM/uHGemHT9045_SV.cpp#L606
+16395,ASCII_TYPE,Arm 2 Site Ch Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[2][7]->sBinCT,Arm 2 Site Ch Bin 0-255 Total (History)CSV Format,607,SECSGEM/uHGemHT9045_SV.cpp#L607
+16396,ASCII_TYPE,Arm 2 Site Da Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[3][0]->sBinCT,Arm 2 Site Da Bin 0-255 Total (History)CSV Format,608,SECSGEM/uHGemHT9045_SV.cpp#L608
+16397,ASCII_TYPE,Arm 2 Site Db Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[3][1]->sBinCT,Arm 2 Site Db Bin 0-255 Total (History)CSV Format,609,SECSGEM/uHGemHT9045_SV.cpp#L609
+16398,ASCII_TYPE,Arm 2 Site Dc Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[3][2]->sBinCT,Arm 2 Site Dc Bin 0-255 Total (History)CSV Format,610,SECSGEM/uHGemHT9045_SV.cpp#L610
+16399,ASCII_TYPE,Arm 2 Site Dd Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[3][3]->sBinCT,Arm 2 Site Dd Bin 0-255 Total (History)CSV Format,611,SECSGEM/uHGemHT9045_SV.cpp#L611
+16400,ASCII_TYPE,Arm 2 Site De Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[3][4]->sBinCT,Arm 2 Site De Bin 0-255 Total (History)CSV Format,612,SECSGEM/uHGemHT9045_SV.cpp#L612
+16401,ASCII_TYPE,Arm 2 Site Df Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[3][5]->sBinCT,Arm 2 Site Df Bin 0-255 Total (History)CSV Format,613,SECSGEM/uHGemHT9045_SV.cpp#L613
+16402,ASCII_TYPE,Arm 2 Site Dg Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[3][6]->sBinCT,Arm 2 Site Dg Bin 0-255 Total (History)CSV Format,614,SECSGEM/uHGemHT9045_SV.cpp#L614
+16403,ASCII_TYPE,Arm 2 Site Dh Bin 0-255 Total (History),,ArmHistory[1]->ArmSKET[3][7]->sBinCT,Arm 2 Site Dh Bin 0-255 Total (History)CSV Format,615,SECSGEM/uHGemHT9045_SV.cpp#L615
+16404,ASCII_TYPE,Total Pass Count by Site Aa to Dh (History),,ArmHistory[2]->sPass,Pass Count by Site Aa to Dh (History)CSV Format,616,SECSGEM/uHGemHT9045_SV.cpp#L616
+16405,ASCII_TYPE,Total Fail Count by Site Aa to Dh (History),,ArmHistory[2]->sFail,Fail Count by Site Aa to Dh (History)CSV Format,617,SECSGEM/uHGemHT9045_SV.cpp#L617
+16406,ASCII_TYPE,Total IF Error Count by Site Aa to Dh (History),,ArmHistory[2]->iIFErr,IF Error Count by Site Aa to Dh (History)CSV Format,618,SECSGEM/uHGemHT9045_SV.cpp#L618
+16407,ASCII_TYPE,Total Count by Site Aa to Dh (History),,ArmHistory[2]->sTotal,Total Count by Site Aa to Dh (History)CSV Format,619,SECSGEM/uHGemHT9045_SV.cpp#L619
+16408,ASCII_TYPE,Arm 1 Pass Count by Site Aa to Dh (History),,ArmHistory[0]->sPass,Arm 1 Pass Count by Site Aa to Dh (History)CSV Format,620,SECSGEM/uHGemHT9045_SV.cpp#L620
+16409,ASCII_TYPE,Arm 1 Fail Count by Site Aa to Dh (History),,ArmHistory[0]->sFail,Arm 1 Fail Count by Site Aa to Dh (History)CSV Format,621,SECSGEM/uHGemHT9045_SV.cpp#L621
+16410,ASCII_TYPE,Arm 1 IF Error Count by Site Aa to Dh (History),,ArmHistory[0]->iIFErr,Arm 1 IF Error Count by Site Aa to Dh (History)CSV Format,622,SECSGEM/uHGemHT9045_SV.cpp#L622
+16411,ASCII_TYPE,Arm 1 Total Count by Site Aa to Dh (History),,ArmHistory[0]->sTotal,Arm 1 Total Count by Site Aa to Dh (History)CSV Format,623,SECSGEM/uHGemHT9045_SV.cpp#L623
+16412,ASCII_TYPE,Arm 2 Pass Count by Site Aa to Dh (History),,ArmHistory[1]->sPass,Arm 2 Pass Count by Site Aa to Dh (History)CSV Format,624,SECSGEM/uHGemHT9045_SV.cpp#L624
+16413,ASCII_TYPE,Arm 2 Fail Count by Site Aa to Dh (History),,ArmHistory[1]->sFail,Arm 2 Fail Count by Site Aa to Dh (History)CSV Format,625,SECSGEM/uHGemHT9045_SV.cpp#L625
+16414,ASCII_TYPE,Arm 2 IF Error Count by Site Aa to Dh (History),,ArmHistory[1]->iIFErr,Arm 2 IF Error Count by Site Aa to Dh (History)CSV Format,626,SECSGEM/uHGemHT9045_SV.cpp#L626
+16415,ASCII_TYPE,Arm 2 Total Count by Site Aa to Dh (History),,ArmHistory[1]->sTotal,Arm 2 Total Count by Site Aa to Dh (History)CSV Format,627,SECSGEM/uHGemHT9045_SV.cpp#L627
+20001,ASCII_TYPE,EC Change ID,,&SYS_ECChangeID,機台EC改變的ID,628,SECSGEM/uHGemHT9045_SV.cpp#L628
+20002,ASCII_TYPE,EC Change Origina Value,,&SYS_ECChangeIDOriginaValue,機台EC改變ID原本的值,629,SECSGEM/uHGemHT9045_SV.cpp#L629
+20003,ASCII_TYPE,EC Change New Value,,&SYS_ECChangeIDNewValue,機台EC改變ID新的值,630,SECSGEM/uHGemHT9045_SV.cpp#L630
+21023,BOOLEAN_TYPE,Enable Tester Dry Air Control,,&TestIF_File.bUseTesterDry,Enable Tester Dry Air Control,781,SECSGEM/uHGemHT9045_SV.cpp#L781
+35915,INT_4_TYPE,USE BARCODE MODE,,&BAR_CODE_INSTALL,,631,SECSGEM/uHGemHT9045_SV.cpp#L631
+37000,BOOLEAN_TYPE,Enable LoaderTrayCount_ART,,&LastSet.bLoaderTrayCount_ART,,632,SECSGEM/uHGemHT9045_SV.cpp#L632
+37001,INT_4_TYPE,LoaderTrayCount_ART,,&LastSet.iLoaderTrayCount_ART,,633,SECSGEM/uHGemHT9045_SV.cpp#L633
+37002,INT_4_TYPE,AutoRetestCount_ART,,&LastSet.iAutoRetestCount_ART,,634,SECSGEM/uHGemHT9045_SV.cpp#L634
+37003,INT_4_TYPE,UnloaderTrayCount_ART_Auto1,,&LastSet.iUnloaderTrayCount_ART[eAuto1],,635,SECSGEM/uHGemHT9045_SV.cpp#L635
+37004,INT_4_TYPE,UnloaderTrayCount_ART_Auto2,,&LastSet.iUnloaderTrayCount_ART[eAuto2],,636,SECSGEM/uHGemHT9045_SV.cpp#L636
+37005,INT_4_TYPE,UnloaderTrayCount_ART_Auto3,,&LastSet.iUnloaderTrayCount_ART[eAuto3],,637,SECSGEM/uHGemHT9045_SV.cpp#L637
+37006,INT_4_TYPE,Input Loader Count,,&LastSet.iInputLoaderCount,,638,SECSGEM/uHGemHT9045_SV.cpp#L638
+37007,INT_4_TYPE,LoaderTotalTray,,&LastSet.iLoaderTotalTray,,639,SECSGEM/uHGemHT9045_SV.cpp#L639
+37008,ASCII_TYPE,Enter Barcode Reader,,&asSecsGemBarCode,,640,SECSGEM/uHGemHT9045_SV.cpp#L640
+37009,BOOLEAN_TYPE,USE AUTO RETEST,,&USE_AUTO_RETEST,,641,SECSGEM/uHGemHT9045_SV.cpp#L641
+37010,INT_4_TYPE,Enter Skip IC Count,,&iJamSkipIC,,642,SECSGEM/uHGemHT9045_SV.cpp#L642
+37012,ASCII_TYPE,Enter Barcode Reader Password,,&asSecsGemBarCodePasswoed,,643,SECSGEM/uHGemHT9045_SV.cpp#L643
+37013,INT_4_TYPE,UnloaderTrayCount_ART_Auto4,,&LastSet.iUnloaderTrayCount_ART[eAuto4],,645,SECSGEM/uHGemHT9045_SV.cpp#L645
+37014,INT_4_TYPE,UnloaderTrayCount_ART_Auto5,,&LastSet.iUnloaderTrayCount_ART[eAuto5],,646,SECSGEM/uHGemHT9045_SV.cpp#L646
+37015,INT_4_TYPE,UnloaderTrayCount_ART_Auto6,,&LastSet.iUnloaderTrayCount_ART[eAuto6],,647,SECSGEM/uHGemHT9045_SV.cpp#L647
+37200,ASCII_TYPE,SIMCO Ion fan Data,,fLotInfo->lbESDReportData,,649,SECSGEM/uHGemHT9045_SV.cpp#L649
+37201,ASCII_TYPE,SIMCO Ion fan Decay Data,,fLotInfo->lbESDDecayReportData,,650,SECSGEM/uHGemHT9045_SV.cpp#L650
+37202,ASCII_TYPE,ATC Software Version,,&RunInfo.ATCSoftwareVersion,ATC Software Version,651,SECSGEM/uHGemHT9045_SV.cpp#L651
+37203,ASCII_TYPE,GPIB Software Version,,&RunInfo.GPIBSoftwareVersion,GPIB Software Version,652,SECSGEM/uHGemHT9045_SV.cpp#L652
+37204,INT_4_TYPE,ION FAN 1 Status,,&iIONFANStatus_Secs[0],ION FAN 1 Status,654,SECSGEM/uHGemHT9045_SV.cpp#L654
+37205,INT_4_TYPE,ION FAN 2 Status,,&iIONFANStatus_Secs[1],ION FAN 2 Status,655,SECSGEM/uHGemHT9045_SV.cpp#L655
+37206,INT_4_TYPE,ION FAN 3 Status,,&iIONFANStatus_Secs[2],ION FAN 3 Status,656,SECSGEM/uHGemHT9045_SV.cpp#L656
+37207,INT_4_TYPE,ION FAN 4 Status,,&iIONFANStatus_Secs[3],ION FAN 4 Status,657,SECSGEM/uHGemHT9045_SV.cpp#L657
+37208,INT_4_TYPE,ION FAN 5 Status,,&iIONFANStatus_Secs[4],ION FAN 5 Status,658,SECSGEM/uHGemHT9045_SV.cpp#L658
+37209,INT_4_TYPE,ION FAN 6 Status,,&iIONFANStatus_Secs[5],ION FAN 6 Status,659,SECSGEM/uHGemHT9045_SV.cpp#L659
+37210,INT_4_TYPE,ION FAN 7 Status,,&iIONFANStatus_Secs[6],ION FAN 7 Status,660,SECSGEM/uHGemHT9045_SV.cpp#L660
+37211,INT_4_TYPE,ION FAN 8 Status,,&iIONFANStatus_Secs[7],ION FAN 8 Status,661,SECSGEM/uHGemHT9045_SV.cpp#L661
+37212,INT_4_TYPE,ION FAN 9 Status,,&iIONFANStatus_Secs[8],ION FAN 9 Status,662,SECSGEM/uHGemHT9045_SV.cpp#L662
+37213,INT_4_TYPE,ION FAN 10 Status,,&iIONFANStatus_Secs[9],ION FAN 10 Status,663,SECSGEM/uHGemHT9045_SV.cpp#L663
+37214,INT_4_TYPE,ION FAN 11 Status,,&iIONFANStatus_Secs[10],ION FAN 11 Status,664,SECSGEM/uHGemHT9045_SV.cpp#L664
+37215,INT_4_TYPE,ION FAN 12 Status,,&iIONFANStatus_Secs[11],ION FAN 12 Status,665,SECSGEM/uHGemHT9045_SV.cpp#L665
+37216,INT_4_TYPE,ION FAN 1 Power,,&iIONFANPower_Secs[0],ION FAN 1 Power,667,SECSGEM/uHGemHT9045_SV.cpp#L667
+37217,INT_4_TYPE,ION FAN 2 Power,,&iIONFANPower_Secs[1],ION FAN 2 Power,668,SECSGEM/uHGemHT9045_SV.cpp#L668
+37218,INT_4_TYPE,ION FAN 3 Power,,&iIONFANPower_Secs[2],ION FAN 3 Power,669,SECSGEM/uHGemHT9045_SV.cpp#L669
+37219,INT_4_TYPE,ION FAN 4 Power,,&iIONFANPower_Secs[3],ION FAN 4 Power,670,SECSGEM/uHGemHT9045_SV.cpp#L670
+37220,INT_4_TYPE,ION FAN 5 Power,,&iIONFANPower_Secs[4],ION FAN 5 Power,671,SECSGEM/uHGemHT9045_SV.cpp#L671
+37221,INT_4_TYPE,ION FAN 6 Power,,&iIONFANPower_Secs[5],ION FAN 6 Power,672,SECSGEM/uHGemHT9045_SV.cpp#L672
+37222,INT_4_TYPE,ION FAN 7 Power,,&iIONFANPower_Secs[6],ION FAN 7 Power,673,SECSGEM/uHGemHT9045_SV.cpp#L673
+37223,INT_4_TYPE,ION FAN 8 Power,,&iIONFANPower_Secs[7],ION FAN 8 Power,674,SECSGEM/uHGemHT9045_SV.cpp#L674
+37224,INT_4_TYPE,ION FAN 9 Power,,&iIONFANPower_Secs[8],ION FAN 9 Power,675,SECSGEM/uHGemHT9045_SV.cpp#L675
+37225,INT_4_TYPE,ION FAN 10 Power,,&iIONFANPower_Secs[9],ION FAN 10 Power,676,SECSGEM/uHGemHT9045_SV.cpp#L676
+37226,INT_4_TYPE,ION FAN 11 Power,,&iIONFANPower_Secs[10],ION FAN 11 Power,677,SECSGEM/uHGemHT9045_SV.cpp#L677
+37227,INT_4_TYPE,ION FAN 12 Power,,&iIONFANPower_Secs[11],ION FAN 12 Power,678,SECSGEM/uHGemHT9045_SV.cpp#L678
+37228,ASCII_TYPE,ESD Software Version,,&RunInfo.ESDSoftwareVersion,ESD Software Version,679,SECSGEM/uHGemHT9045_SV.cpp#L679
+37501,ASCII_TYPE,ATC Power Supply Serial Number 01,,fObserver->lbSerialNumber01,ATC Power Supply Serial Number 01,683,SECSGEM/uHGemHT9045_SV.cpp#L683
+37502,ASCII_TYPE,ATC Power Supply Serial Number 02,,fObserver->lbSerialNumber02,ATC Power Supply Serial Number 02,684,SECSGEM/uHGemHT9045_SV.cpp#L684
+37503,ASCII_TYPE,ATC Power Supply Serial Number 03,,fObserver->lbSerialNumber03,ATC Power Supply Serial Number 03,685,SECSGEM/uHGemHT9045_SV.cpp#L685
+37504,ASCII_TYPE,ATC Power Supply Serial Number 04,,fObserver->lbSerialNumber04,ATC Power Supply Serial Number 04,686,SECSGEM/uHGemHT9045_SV.cpp#L686
+37505,ASCII_TYPE,ATC Power Supply Firmware Version 01,,fObserver->lbFirmwareNumber01,ATC Power Supply Firmware Version 01,687,SECSGEM/uHGemHT9045_SV.cpp#L687
+37506,ASCII_TYPE,ATC Power Supply Firmware Version 02,,fObserver->lbFirmwareNumber02,ATC Power Supply Firmware Version 02,688,SECSGEM/uHGemHT9045_SV.cpp#L688
+37507,ASCII_TYPE,ATC Power Supply Firmware Version 03,,fObserver->lbFirmwareNumber03,ATC Power Supply Firmware Version 03,689,SECSGEM/uHGemHT9045_SV.cpp#L689
+37508,ASCII_TYPE,ATC Power Supply Firmware Version 04,,fObserver->lbFirmwareNumber04,ATC Power Supply Firmware Version 04,690,SECSGEM/uHGemHT9045_SV.cpp#L690
+37600,INT_4_TYPE,In Arm Picker A Count,,&TestIF_File.InArmPickerLifeCnt[0][0],In Arm Picker A Count,695,SECSGEM/uHGemHT9045_SV.cpp#L695
+37601,INT_4_TYPE,In Arm Picker C Count,,&TestIF_File.InArmPickerLifeCnt[0][1],In Arm Picker C Count,696,SECSGEM/uHGemHT9045_SV.cpp#L696
+37602,INT_4_TYPE,In Arm Picker E Count,,&TestIF_File.InArmPickerLifeCnt[0][2],In Arm Picker E Count,697,SECSGEM/uHGemHT9045_SV.cpp#L697
+37603,INT_4_TYPE,In Arm Picker G Count,,&TestIF_File.InArmPickerLifeCnt[0][3],In Arm Picker G Count,698,SECSGEM/uHGemHT9045_SV.cpp#L698
+37604,INT_4_TYPE,In Arm Picker B Count,,&TestIF_File.InArmPickerLifeCnt[1][0],In Arm Picker B Count,699,SECSGEM/uHGemHT9045_SV.cpp#L699
+37605,INT_4_TYPE,In Arm Picker D Count,,&TestIF_File.InArmPickerLifeCnt[1][1],In Arm Picker D Count,700,SECSGEM/uHGemHT9045_SV.cpp#L700
+37606,INT_4_TYPE,In Arm Picker F Count,,&TestIF_File.InArmPickerLifeCnt[1][2],In Arm Picker F Count,701,SECSGEM/uHGemHT9045_SV.cpp#L701
+37607,INT_4_TYPE,In Arm Picker H Count,,&TestIF_File.InArmPickerLifeCnt[1][3],In Arm Picker H Count,702,SECSGEM/uHGemHT9045_SV.cpp#L702
+37650,INT_4_TYPE,Out Arm Picker A Count,,&TestIF_File.OutArmPickerLifeCnt[0][0],Out Arm Picker A Count,704,SECSGEM/uHGemHT9045_SV.cpp#L704
+37651,INT_4_TYPE,Out Arm Picker C Count,,&TestIF_File.OutArmPickerLifeCnt[0][1],Out Arm Picker C Count,705,SECSGEM/uHGemHT9045_SV.cpp#L705
+37652,INT_4_TYPE,Out Arm Picker E Count,,&TestIF_File.OutArmPickerLifeCnt[0][2],Out Arm Picker E Count,706,SECSGEM/uHGemHT9045_SV.cpp#L706
+37653,INT_4_TYPE,Out Arm Picker G Count,,&TestIF_File.OutArmPickerLifeCnt[0][3],Out Arm Picker G Count,707,SECSGEM/uHGemHT9045_SV.cpp#L707
+37654,INT_4_TYPE,Out Arm Picker B Count,,&TestIF_File.OutArmPickerLifeCnt[1][0],Out Arm Picker B Count,708,SECSGEM/uHGemHT9045_SV.cpp#L708
+37655,INT_4_TYPE,Out Arm Picker D Count,,&TestIF_File.OutArmPickerLifeCnt[1][1],Out Arm Picker D Count,709,SECSGEM/uHGemHT9045_SV.cpp#L709
+37656,INT_4_TYPE,Out Arm Picker F Count,,&TestIF_File.OutArmPickerLifeCnt[1][2],Out Arm Picker F Count,710,SECSGEM/uHGemHT9045_SV.cpp#L710
+37657,INT_4_TYPE,Out Arm Picker H Count,,&TestIF_File.OutArmPickerLifeCnt[1][3],Out Arm Picker H Count,711,SECSGEM/uHGemHT9045_SV.cpp#L711
+37700,ASCII_TYPE,PC_NAME,,&PC_NAME,PC_NAME,713,SECSGEM/uHGemHT9045_SV.cpp#L713
+37701,INT_4_TYPE,Index Arm 1 Picker Aa Count,,&TestIF_File.Arm1PickerLifeCnt[0][0],Index Arm 1 Picker Aa Count,715,SECSGEM/uHGemHT9045_SV.cpp#L715
+37702,INT_4_TYPE,Index Arm 1 Picker Ab Count,,&TestIF_File.Arm1PickerLifeCnt[0][1],Index Arm 1 Picker Ab Count,716,SECSGEM/uHGemHT9045_SV.cpp#L716
+37703,INT_4_TYPE,Index Arm 1 Picker Ac Count,,&TestIF_File.Arm1PickerLifeCnt[0][2],Index Arm 1 Picker Ac Count,717,SECSGEM/uHGemHT9045_SV.cpp#L717
+37704,INT_4_TYPE,Index Arm 1 Picker Ad Count,,&TestIF_File.Arm1PickerLifeCnt[0][3],Index Arm 1 Picker Ad Count,718,SECSGEM/uHGemHT9045_SV.cpp#L718
+37705,INT_4_TYPE,Index Arm 1 Picker Ae Count,,&TestIF_File.Arm1PickerLifeCnt[0][4],Index Arm 1 Picker Ae Count,719,SECSGEM/uHGemHT9045_SV.cpp#L719
+37706,INT_4_TYPE,Index Arm 1 Picker Af Count,,&TestIF_File.Arm1PickerLifeCnt[0][5],Index Arm 1 Picker Af Count,720,SECSGEM/uHGemHT9045_SV.cpp#L720
+37707,INT_4_TYPE,Index Arm 1 Picker Ag Count,,&TestIF_File.Arm1PickerLifeCnt[0][6],Index Arm 1 Picker Ag Count,721,SECSGEM/uHGemHT9045_SV.cpp#L721
+37708,INT_4_TYPE,Index Arm 1 Picker Ah Count,,&TestIF_File.Arm1PickerLifeCnt[0][7],Index Arm 1 Picker Ah Count,722,SECSGEM/uHGemHT9045_SV.cpp#L722
+37709,INT_4_TYPE,Index Arm 1 Picker Ba Count,,&TestIF_File.Arm1PickerLifeCnt[1][0],Index Arm 1 Picker Ba Count,724,SECSGEM/uHGemHT9045_SV.cpp#L724
+37710,INT_4_TYPE,Index Arm 1 Picker Bb Count,,&TestIF_File.Arm1PickerLifeCnt[1][1],Index Arm 1 Picker Bb Count,725,SECSGEM/uHGemHT9045_SV.cpp#L725
+37711,INT_4_TYPE,Index Arm 1 Picker Bc Count,,&TestIF_File.Arm1PickerLifeCnt[1][2],Index Arm 1 Picker Bc Count,726,SECSGEM/uHGemHT9045_SV.cpp#L726
+37712,INT_4_TYPE,Index Arm 1 Picker Bd Count,,&TestIF_File.Arm1PickerLifeCnt[1][3],Index Arm 1 Picker Bd Count,727,SECSGEM/uHGemHT9045_SV.cpp#L727
+37713,INT_4_TYPE,Index Arm 1 Picker Be Count,,&TestIF_File.Arm1PickerLifeCnt[1][4],Index Arm 1 Picker Be Count,728,SECSGEM/uHGemHT9045_SV.cpp#L728
+37714,INT_4_TYPE,Index Arm 1 Picker Bf Count,,&TestIF_File.Arm1PickerLifeCnt[1][5],Index Arm 1 Picker Bf Count,729,SECSGEM/uHGemHT9045_SV.cpp#L729
+37715,INT_4_TYPE,Index Arm 1 Picker Bg Count,,&TestIF_File.Arm1PickerLifeCnt[1][6],Index Arm 1 Picker Bg Count,730,SECSGEM/uHGemHT9045_SV.cpp#L730
+37716,INT_4_TYPE,Index Arm 1 Picker Bh Count,,&TestIF_File.Arm1PickerLifeCnt[1][7],Index Arm 1 Picker Bh Count,731,SECSGEM/uHGemHT9045_SV.cpp#L731
+37717,INT_4_TYPE,Index Arm 2 Picker Aa Count,,&TestIF_File.Arm2PickerLifeCnt[0][0],Index Arm 2 Picker Aa Count,733,SECSGEM/uHGemHT9045_SV.cpp#L733
+37718,INT_4_TYPE,Index Arm 2 Picker Ab Count,,&TestIF_File.Arm2PickerLifeCnt[0][1],Index Arm 2 Picker Ab Count,734,SECSGEM/uHGemHT9045_SV.cpp#L734
+37719,INT_4_TYPE,Index Arm 2 Picker Ac Count,,&TestIF_File.Arm2PickerLifeCnt[0][2],Index Arm 2 Picker Ac Count,735,SECSGEM/uHGemHT9045_SV.cpp#L735
+37720,INT_4_TYPE,Index Arm 2 Picker Ad Count,,&TestIF_File.Arm2PickerLifeCnt[0][3],Index Arm 2 Picker Ad Count,736,SECSGEM/uHGemHT9045_SV.cpp#L736
+37721,INT_4_TYPE,Index Arm 2 Picker Ae Count,,&TestIF_File.Arm2PickerLifeCnt[0][4],Index Arm 2 Picker Ae Count,737,SECSGEM/uHGemHT9045_SV.cpp#L737
+37722,INT_4_TYPE,Index Arm 2 Picker Af Count,,&TestIF_File.Arm2PickerLifeCnt[0][5],Index Arm 2 Picker Af Count,738,SECSGEM/uHGemHT9045_SV.cpp#L738
+37723,INT_4_TYPE,Index Arm 2 Picker Ag Count,,&TestIF_File.Arm2PickerLifeCnt[0][6],Index Arm 2 Picker Ag Count,739,SECSGEM/uHGemHT9045_SV.cpp#L739
+37724,INT_4_TYPE,Index Arm 2 Picker Ah Count,,&TestIF_File.Arm2PickerLifeCnt[0][7],Index Arm 2 Picker Ah Count,740,SECSGEM/uHGemHT9045_SV.cpp#L740
+37725,INT_4_TYPE,Index Arm 2 Picker Ba Count,,&TestIF_File.Arm2PickerLifeCnt[1][0],Index Arm 2 Picker Ba Count,742,SECSGEM/uHGemHT9045_SV.cpp#L742
+37726,INT_4_TYPE,Index Arm 2 Picker Bb Count,,&TestIF_File.Arm2PickerLifeCnt[1][1],Index Arm 2 Picker Bb Count,743,SECSGEM/uHGemHT9045_SV.cpp#L743
+37727,INT_4_TYPE,Index Arm 2 Picker Bc Count,,&TestIF_File.Arm2PickerLifeCnt[1][2],Index Arm 2 Picker Bc Count,744,SECSGEM/uHGemHT9045_SV.cpp#L744
+37728,INT_4_TYPE,Index Arm 2 Picker Bd Count,,&TestIF_File.Arm2PickerLifeCnt[1][3],Index Arm 2 Picker Bd Count,745,SECSGEM/uHGemHT9045_SV.cpp#L745
+37729,INT_4_TYPE,Index Arm 2 Picker Be Count,,&TestIF_File.Arm2PickerLifeCnt[1][4],Index Arm 2 Picker Be Count,746,SECSGEM/uHGemHT9045_SV.cpp#L746
+37730,INT_4_TYPE,Index Arm 2 Picker Bf Count,,&TestIF_File.Arm2PickerLifeCnt[1][5],Index Arm 2 Picker Bf Count,747,SECSGEM/uHGemHT9045_SV.cpp#L747
+37731,INT_4_TYPE,Index Arm 2 Picker Bg Count,,&TestIF_File.Arm2PickerLifeCnt[1][6],Index Arm 2 Picker Bg Count,748,SECSGEM/uHGemHT9045_SV.cpp#L748
+37732,INT_4_TYPE,Index Arm 2 Picker Bh Count,,&TestIF_File.Arm2PickerLifeCnt[1][7],Index Arm 2 Picker Bh Count,749,SECSGEM/uHGemHT9045_SV.cpp#L749
+38120,INT_4_TYPE,Load Port Transfer State - LOADER,,&iPortStatus[ePortLoader],Load Port Transfer State - LOADER,751,SECSGEM/uHGemHT9045_SV.cpp#L751
+38121,INT_4_TYPE,Load Port Transfer State - EMPTY,,&iPortStatus[ePortEmpty],Load Port Transfer State - EMPTY,752,SECSGEM/uHGemHT9045_SV.cpp#L752
+38122,INT_4_TYPE,Load Port Transfer State - COLOR,,&iPortStatus[ePortColor],Load Port Transfer State - COLOR,753,SECSGEM/uHGemHT9045_SV.cpp#L753
+38123,INT_4_TYPE,Load Port Transfer State - AUTO1,,&iPortStatus[ePortAuto1],Load Port Transfer State - AUTO1,754,SECSGEM/uHGemHT9045_SV.cpp#L754
+38124,INT_4_TYPE,Load Port Transfer State - AUTO2,,&iPortStatus[ePortAuto2],Load Port Transfer State - AUTO2,755,SECSGEM/uHGemHT9045_SV.cpp#L755
+38125,INT_4_TYPE,Load Port Transfer State - AUTO3,,&iPortStatus[ePortAuto3],Load Port Transfer State - AUTO3,756,SECSGEM/uHGemHT9045_SV.cpp#L756
+38126,INT_4_TYPE,Load Port Transfer State - FIX1,,&iPortStatus[ePortFix1],Load Port Transfer State - FIX1,757,SECSGEM/uHGemHT9045_SV.cpp#L757
+38127,INT_4_TYPE,Load Port Transfer State - FIX2,,&iPortStatus[ePortFix2],Load Port Transfer State - FIX2,758,SECSGEM/uHGemHT9045_SV.cpp#L758
+38128,INT_4_TYPE,Load Port Transfer State - FIX3,,&iPortStatus[ePortFix3],Load Port Transfer State - FIX3,759,SECSGEM/uHGemHT9045_SV.cpp#L759
+38129,INT_4_TYPE,Load Port Transfer State - AUTO4,,&iPortStatus[ePortAuto4],Load Port Transfer State - AUTO4,760,SECSGEM/uHGemHT9045_SV.cpp#L760
+38130,INT_4_TYPE,Load Port Transfer State - AUTO5,,&iPortStatus[ePortAuto5],Load Port Transfer State - AUTO5,761,SECSGEM/uHGemHT9045_SV.cpp#L761
+38131,INT_4_TYPE,Load Port Transfer State - AUTO6,,&iPortStatus[ePortAuto6],Load Port Transfer State - AUTO6,762,SECSGEM/uHGemHT9045_SV.cpp#L762
+38132,INT_4_TYPE,Load Port Transfer State - FIX4,,&iPortStatus[ePortFix4],Load Port Transfer State - FIX4,763,SECSGEM/uHGemHT9045_SV.cpp#L763
+38133,INT_4_TYPE,Load Port Transfer State - FIX5,,&iPortStatus[ePortFix5],Load Port Transfer State - FIX5,764,SECSGEM/uHGemHT9045_SV.cpp#L764
+38134,INT_4_TYPE,Load Port Transfer State - FIX6,,&iPortStatus[ePortFix6],Load Port Transfer State - FIX6,765,SECSGEM/uHGemHT9045_SV.cpp#L765
+38303,BOOLEAN_TYPE,Empty Tray Count,,&LastSet.iEmptyTrayCount_ART,Empty Tray Count,767,SECSGEM/uHGemHT9045_SV.cpp#L767
+38304,BOOLEAN_TYPE,Output BIN Code,,&sOutputBinCode,Output BIN Code,768,SECSGEM/uHGemHT9045_SV.cpp#L768
+38305,INT_4_TYPE,Input Port State,,&iLoadStateATK[etLoader],Input Port State,770,SECSGEM/uHGemHT9045_SV.cpp#L770
+38306,INT_4_TYPE,Empty Port State,,&iLoadStateATK[etEmpty],Empty Port State,771,SECSGEM/uHGemHT9045_SV.cpp#L771
+38307,INT_4_TYPE,Output 1 Port State,,&iLoadStateATK[etAuto1],Output 1 Port State,772,SECSGEM/uHGemHT9045_SV.cpp#L772
+38308,INT_4_TYPE,Output 2 Port State,,&iLoadStateATK[etAuto2],Output 2 Port State,773,SECSGEM/uHGemHT9045_SV.cpp#L773
+38309,INT_4_TYPE,Output 3 Port State,,&iLoadStateATK[etAuto3],Output 3 Port State,774,SECSGEM/uHGemHT9045_SV.cpp#L774
+38310,INT_4_TYPE,Output 4 Port State,,&iLoadStateATK[etAuto4],Output 4 Port State,775,SECSGEM/uHGemHT9045_SV.cpp#L775
+38311,INT_4_TYPE,Output 5 Port State,,&iLoadStateATK[etAuto5],Output 5 Port State,776,SECSGEM/uHGemHT9045_SV.cpp#L776
+38312,INT_4_TYPE,Output 6 Port State,,&iLoadStateATK[etAuto6],Output 6 Port State,777,SECSGEM/uHGemHT9045_SV.cpp#L777
+38313,INT_4_TYPE,CoverTray Port State,,&iLoadStateATK[etColor],CoverTray Port State,778,SECSGEM/uHGemHT9045_SV.cpp#L778
+38314,ASCII_TYPE,PC_NAME,,&PC_NAME,PC_NAME,779,SECSGEM/uHGemHT9045_SV.cpp#L779
+62105,BOOLEAN_TYPE,SafeDoorStatus,,&RunInfo.bSafeDoorIsOpen,Safe Door Status,783,SECSGEM/uHGemHT9045_SV.cpp#L783
+62106,BOOLEAN_TYPE,SenSafeDoor_1,,&RunInfo.bSafeDoor[0],SenSafeDoor_1,784,SECSGEM/uHGemHT9045_SV.cpp#L784
+62107,BOOLEAN_TYPE,SenSafeDoor_2,,&RunInfo.bSafeDoor[1],SenSafeDoor_2,785,SECSGEM/uHGemHT9045_SV.cpp#L785
+62108,BOOLEAN_TYPE,SenSafeDoor_3,,&RunInfo.bSafeDoor[2],SenSafeDoor_3,786,SECSGEM/uHGemHT9045_SV.cpp#L786
+62109,BOOLEAN_TYPE,SenSafeDoor_4,,&RunInfo.bSafeDoor[3],SenSafeDoor_4,787,SECSGEM/uHGemHT9045_SV.cpp#L787
+62110,BOOLEAN_TYPE,SenSafeDoor_5,,&RunInfo.bSafeDoor[4],SenSafeDoor_5,788,SECSGEM/uHGemHT9045_SV.cpp#L788
+62111,BOOLEAN_TYPE,SenSafeDoor_6,,&RunInfo.bSafeDoor[5],SenSafeDoor_6,789,SECSGEM/uHGemHT9045_SV.cpp#L789
+62112,BOOLEAN_TYPE,SenSafeDoor_7,,&RunInfo.bSafeDoor[6],SenSafeDoor_7,790,SECSGEM/uHGemHT9045_SV.cpp#L790
+62113,BOOLEAN_TYPE,SenSafeDoor_8,,&RunInfo.bSafeDoor[7],SenSafeDoor_8,791,SECSGEM/uHGemHT9045_SV.cpp#L791
+62114,BOOLEAN_TYPE,SenSafeDoor_9,,&RunInfo.bSafeDoor[8],SenSafeDoor_9,792,SECSGEM/uHGemHT9045_SV.cpp#L792
+62115,BOOLEAN_TYPE,SenSafeDoor_10,,&RunInfo.bSafeDoor[9],SenSafeDoor_10,793,SECSGEM/uHGemHT9045_SV.cpp#L793
+65000,INT_4_TYPE,HeadCondition1 Head 1 Contact Count Aa,,&IniConfig.HeadContactCount[0][0][0],HeadCondition1 Head 1 Contact Count Aa,795,SECSGEM/uHGemHT9045_SV.cpp#L795
+65001,INT_4_TYPE,HeadCondition1 Head 1 Contact Count Ab,,&IniConfig.HeadContactCount[0][0][2],HeadCondition1 Head 1 Contact Count Ab,796,SECSGEM/uHGemHT9045_SV.cpp#L796
+65002,INT_4_TYPE,HeadCondition1 Head 1 Contact Count Ac,,&IniConfig.HeadContactCount[0][0][4],HeadCondition1 Head 1 Contact Count Ac,797,SECSGEM/uHGemHT9045_SV.cpp#L797
+65003,INT_4_TYPE,HeadCondition1 Head 1 Contact Count Ad,,&IniConfig.HeadContactCount[0][0][6],HeadCondition1 Head 1 Contact Count Ad,798,SECSGEM/uHGemHT9045_SV.cpp#L798
+65004,INT_4_TYPE,HeadCondition1 Head 1 Contact Count Ae,,&IniConfig.HeadContactCount[0][0][8],HeadCondition1 Head 1 Contact Count Ae,799,SECSGEM/uHGemHT9045_SV.cpp#L799
+65005,INT_4_TYPE,HeadCondition1 Head 1 Contact Count Af,,&IniConfig.HeadContactCount[0][0][10],HeadCondition1 Head 1 Contact Count Af,800,SECSGEM/uHGemHT9045_SV.cpp#L800
+65006,INT_4_TYPE,HeadCondition1 Head 1 Contact Count Ag,,&IniConfig.HeadContactCount[0][0][12],HeadCondition1 Head 1 Contact Count Ag,801,SECSGEM/uHGemHT9045_SV.cpp#L801
+65007,INT_4_TYPE,HeadCondition1 Head 1 Contact Count Ah,,&IniConfig.HeadContactCount[0][0][14],HeadCondition1 Head 1 Contact Count Ah,802,SECSGEM/uHGemHT9045_SV.cpp#L802
+65008,INT_4_TYPE,HeadCondition1 Head 1 Contact Count Ba,,&IniConfig.HeadContactCount[0][0][1],HeadCondition1 Head 1 Contact Count Ba,803,SECSGEM/uHGemHT9045_SV.cpp#L803
+65009,INT_4_TYPE,HeadCondition1 Head 1 Contact Count Bb,,&IniConfig.HeadContactCount[0][0][3],HeadCondition1 Head 1 Contact Count Bb,804,SECSGEM/uHGemHT9045_SV.cpp#L804
+65010,INT_4_TYPE,HeadCondition1 Head 1 Contact Count Bc,,&IniConfig.HeadContactCount[0][0][5],HeadCondition1 Head 1 Contact Count Bc,805,SECSGEM/uHGemHT9045_SV.cpp#L805
+65011,INT_4_TYPE,HeadCondition1 Head 1 Contact Count Bd,,&IniConfig.HeadContactCount[0][0][7],HeadCondition1 Head 1 Contact Count Bd,806,SECSGEM/uHGemHT9045_SV.cpp#L806
+65012,INT_4_TYPE,HeadCondition1 Head 1 Contact Count Be,,&IniConfig.HeadContactCount[0][0][9],HeadCondition1 Head 1 Contact Count Be,807,SECSGEM/uHGemHT9045_SV.cpp#L807
+65013,INT_4_TYPE,HeadCondition1 Head 1 Contact Count Bf,,&IniConfig.HeadContactCount[0][0][11],HeadCondition1 Head 1 Contact Count Bf,808,SECSGEM/uHGemHT9045_SV.cpp#L808
+65014,INT_4_TYPE,HeadCondition1 Head 1 Contact Count Bg,,&IniConfig.HeadContactCount[0][0][13],HeadCondition1 Head 1 Contact Count Bg,809,SECSGEM/uHGemHT9045_SV.cpp#L809
+65015,INT_4_TYPE,HeadCondition1 Head 1 Contact Count Bh,,&IniConfig.HeadContactCount[0][0][15],HeadCondition1 Head 1 Contact Count Bh,810,SECSGEM/uHGemHT9045_SV.cpp#L810
+65016,INT_4_TYPE,HeadCondition1 Head 2 Contact Count Aa,,&IniConfig.HeadContactCount[0][1][0],HeadCondition1 Head 2 Contact Count Aa,811,SECSGEM/uHGemHT9045_SV.cpp#L811
+65017,INT_4_TYPE,HeadCondition1 Head 2 Contact Count Ab,,&IniConfig.HeadContactCount[0][1][2],HeadCondition1 Head 2 Contact Count Ab,812,SECSGEM/uHGemHT9045_SV.cpp#L812
+65018,INT_4_TYPE,HeadCondition1 Head 2 Contact Count Ac,,&IniConfig.HeadContactCount[0][1][4],HeadCondition1 Head 2 Contact Count Ac,813,SECSGEM/uHGemHT9045_SV.cpp#L813
+65019,INT_4_TYPE,HeadCondition1 Head 2 Contact Count Ad,,&IniConfig.HeadContactCount[0][1][6],HeadCondition1 Head 2 Contact Count Ad,814,SECSGEM/uHGemHT9045_SV.cpp#L814
+65020,INT_4_TYPE,HeadCondition1 Head 2 Contact Count Ae,,&IniConfig.HeadContactCount[0][1][8],HeadCondition1 Head 2 Contact Count Ae,815,SECSGEM/uHGemHT9045_SV.cpp#L815
+65021,INT_4_TYPE,HeadCondition1 Head 2 Contact Count Af,,&IniConfig.HeadContactCount[0][1][10],HeadCondition1 Head 2 Contact Count Af,816,SECSGEM/uHGemHT9045_SV.cpp#L816
+65022,INT_4_TYPE,HeadCondition1 Head 2 Contact Count Ag,,&IniConfig.HeadContactCount[0][1][12],HeadCondition1 Head 2 Contact Count Ag,817,SECSGEM/uHGemHT9045_SV.cpp#L817
+65023,INT_4_TYPE,HeadCondition1 Head 2 Contact Count Ah,,&IniConfig.HeadContactCount[0][1][14],HeadCondition1 Head 2 Contact Count Ah,818,SECSGEM/uHGemHT9045_SV.cpp#L818
+65024,INT_4_TYPE,HeadCondition1 Head 2 Contact Count Ba,,&IniConfig.HeadContactCount[0][1][1],HeadCondition1 Head 2 Contact Count Ba,819,SECSGEM/uHGemHT9045_SV.cpp#L819
+65025,INT_4_TYPE,HeadCondition1 Head 2 Contact Count Bb,,&IniConfig.HeadContactCount[0][1][3],HeadCondition1 Head 2 Contact Count Bb,820,SECSGEM/uHGemHT9045_SV.cpp#L820
+65026,INT_4_TYPE,HeadCondition1 Head 2 Contact Count Bc,,&IniConfig.HeadContactCount[0][1][5],HeadCondition1 Head 2 Contact Count Bc,821,SECSGEM/uHGemHT9045_SV.cpp#L821
+65027,INT_4_TYPE,HeadCondition1 Head 2 Contact Count Bd,,&IniConfig.HeadContactCount[0][1][7],HeadCondition1 Head 2 Contact Count Bd,822,SECSGEM/uHGemHT9045_SV.cpp#L822
+65028,INT_4_TYPE,HeadCondition1 Head 2 Contact Count Be,,&IniConfig.HeadContactCount[0][1][9],HeadCondition1 Head 2 Contact Count Be,823,SECSGEM/uHGemHT9045_SV.cpp#L823
+65029,INT_4_TYPE,HeadCondition1 Head 2 Contact Count Bf,,&IniConfig.HeadContactCount[0][1][11],HeadCondition1 Head 2 Contact Count Bf,824,SECSGEM/uHGemHT9045_SV.cpp#L824
+65030,INT_4_TYPE,HeadCondition1 Head 2 Contact Count Bg,,&IniConfig.HeadContactCount[0][1][13],HeadCondition1 Head 2 Contact Count Bg,825,SECSGEM/uHGemHT9045_SV.cpp#L825
+65031,INT_4_TYPE,HeadCondition1 Head 2 Contact Count Bh,,&IniConfig.HeadContactCount[0][1][15],HeadCondition1 Head 2 Contact Count Bh,826,SECSGEM/uHGemHT9045_SV.cpp#L826
+65032,INT_4_TYPE,HeadCondition2 Head 1 Contact Count Aa,,&IniConfig.HeadContactCount[1][0][0],HeadCondition2 Head 1 Contact Count Aa,827,SECSGEM/uHGemHT9045_SV.cpp#L827
+65033,INT_4_TYPE,HeadCondition2 Head 1 Contact Count Ab,,&IniConfig.HeadContactCount[1][0][2],HeadCondition2 Head 1 Contact Count Ab,828,SECSGEM/uHGemHT9045_SV.cpp#L828
+65034,INT_4_TYPE,HeadCondition2 Head 1 Contact Count Ac,,&IniConfig.HeadContactCount[1][0][4],HeadCondition2 Head 1 Contact Count Ac,829,SECSGEM/uHGemHT9045_SV.cpp#L829
+65035,INT_4_TYPE,HeadCondition2 Head 1 Contact Count Ad,,&IniConfig.HeadContactCount[1][0][6],HeadCondition2 Head 1 Contact Count Ad,830,SECSGEM/uHGemHT9045_SV.cpp#L830
+65036,INT_4_TYPE,HeadCondition2 Head 1 Contact Count Ae,,&IniConfig.HeadContactCount[1][0][8],HeadCondition2 Head 1 Contact Count Ae,831,SECSGEM/uHGemHT9045_SV.cpp#L831
+65037,INT_4_TYPE,HeadCondition2 Head 1 Contact Count Af,,&IniConfig.HeadContactCount[1][0][10],HeadCondition2 Head 1 Contact Count Af,832,SECSGEM/uHGemHT9045_SV.cpp#L832
+65038,INT_4_TYPE,HeadCondition2 Head 1 Contact Count Ag,,&IniConfig.HeadContactCount[1][0][12],HeadCondition2 Head 1 Contact Count Ag,833,SECSGEM/uHGemHT9045_SV.cpp#L833
+65039,INT_4_TYPE,HeadCondition2 Head 1 Contact Count Ah,,&IniConfig.HeadContactCount[1][0][14],HeadCondition2 Head 1 Contact Count Ah,834,SECSGEM/uHGemHT9045_SV.cpp#L834
+65040,INT_4_TYPE,HeadCondition2 Head 1 Contact Count Ba,,&IniConfig.HeadContactCount[1][0][1],HeadCondition2 Head 1 Contact Count Ba,835,SECSGEM/uHGemHT9045_SV.cpp#L835
+65041,INT_4_TYPE,HeadCondition2 Head 1 Contact Count Bb,,&IniConfig.HeadContactCount[1][0][3],HeadCondition2 Head 1 Contact Count Bb,836,SECSGEM/uHGemHT9045_SV.cpp#L836
+65042,INT_4_TYPE,HeadCondition2 Head 1 Contact Count Bc,,&IniConfig.HeadContactCount[1][0][5],HeadCondition2 Head 1 Contact Count Bc,837,SECSGEM/uHGemHT9045_SV.cpp#L837
+65043,INT_4_TYPE,HeadCondition2 Head 1 Contact Count Bd,,&IniConfig.HeadContactCount[1][0][7],HeadCondition2 Head 1 Contact Count Bd,838,SECSGEM/uHGemHT9045_SV.cpp#L838
+65044,INT_4_TYPE,HeadCondition2 Head 1 Contact Count Be,,&IniConfig.HeadContactCount[1][0][9],HeadCondition2 Head 1 Contact Count Be,839,SECSGEM/uHGemHT9045_SV.cpp#L839
+65045,INT_4_TYPE,HeadCondition2 Head 1 Contact Count Bf,,&IniConfig.HeadContactCount[1][0][11],HeadCondition2 Head 1 Contact Count Bf,840,SECSGEM/uHGemHT9045_SV.cpp#L840
+65046,INT_4_TYPE,HeadCondition2 Head 1 Contact Count Bg,,&IniConfig.HeadContactCount[1][0][13],HeadCondition2 Head 1 Contact Count Bg,841,SECSGEM/uHGemHT9045_SV.cpp#L841
+65047,INT_4_TYPE,HeadCondition2 Head 1 Contact Count Bh,,&IniConfig.HeadContactCount[1][0][15],HeadCondition2 Head 1 Contact Count Bh,842,SECSGEM/uHGemHT9045_SV.cpp#L842
+65048,INT_4_TYPE,HeadCondition2 Head 2 Contact Count Aa,,&IniConfig.HeadContactCount[1][1][0],HeadCondition2 Head 2 Contact Count Aa,843,SECSGEM/uHGemHT9045_SV.cpp#L843
+65049,INT_4_TYPE,HeadCondition2 Head 2 Contact Count Ab,,&IniConfig.HeadContactCount[1][1][2],HeadCondition2 Head 2 Contact Count Ab,844,SECSGEM/uHGemHT9045_SV.cpp#L844
+65050,INT_4_TYPE,HeadCondition2 Head 2 Contact Count Ac,,&IniConfig.HeadContactCount[1][1][4],HeadCondition2 Head 2 Contact Count Ac,845,SECSGEM/uHGemHT9045_SV.cpp#L845
+65051,INT_4_TYPE,HeadCondition2 Head 2 Contact Count Ad,,&IniConfig.HeadContactCount[1][1][6],HeadCondition2 Head 2 Contact Count Ad,846,SECSGEM/uHGemHT9045_SV.cpp#L846
+65052,INT_4_TYPE,HeadCondition2 Head 2 Contact Count Ae,,&IniConfig.HeadContactCount[1][1][8],HeadCondition2 Head 2 Contact Count Ae,847,SECSGEM/uHGemHT9045_SV.cpp#L847
+65053,INT_4_TYPE,HeadCondition2 Head 2 Contact Count Af,,&IniConfig.HeadContactCount[1][1][10],HeadCondition2 Head 2 Contact Count Af,848,SECSGEM/uHGemHT9045_SV.cpp#L848
+65054,INT_4_TYPE,HeadCondition2 Head 2 Contact Count Ag,,&IniConfig.HeadContactCount[1][1][12],HeadCondition2 Head 2 Contact Count Ag,849,SECSGEM/uHGemHT9045_SV.cpp#L849
+65055,INT_4_TYPE,HeadCondition2 Head 2 Contact Count Ah,,&IniConfig.HeadContactCount[1][1][14],HeadCondition2 Head 2 Contact Count Ah,850,SECSGEM/uHGemHT9045_SV.cpp#L850
+65056,INT_4_TYPE,HeadCondition2 Head 2 Contact Count Ba,,&IniConfig.HeadContactCount[1][1][1],HeadCondition2 Head 2 Contact Count Ba,851,SECSGEM/uHGemHT9045_SV.cpp#L851
+65057,INT_4_TYPE,HeadCondition2 Head 2 Contact Count Bb,,&IniConfig.HeadContactCount[1][1][3],HeadCondition2 Head 2 Contact Count Bb,852,SECSGEM/uHGemHT9045_SV.cpp#L852
+65058,INT_4_TYPE,HeadCondition2 Head 2 Contact Count Bc,,&IniConfig.HeadContactCount[1][1][5],HeadCondition2 Head 2 Contact Count Bc,853,SECSGEM/uHGemHT9045_SV.cpp#L853
+65059,INT_4_TYPE,HeadCondition2 Head 2 Contact Count Bd,,&IniConfig.HeadContactCount[1][1][7],HeadCondition2 Head 2 Contact Count Bd,854,SECSGEM/uHGemHT9045_SV.cpp#L854
+65060,INT_4_TYPE,HeadCondition2 Head 2 Contact Count Be,,&IniConfig.HeadContactCount[1][1][9],HeadCondition2 Head 2 Contact Count Be,855,SECSGEM/uHGemHT9045_SV.cpp#L855
+65061,INT_4_TYPE,HeadCondition2 Head 2 Contact Count Bf,,&IniConfig.HeadContactCount[1][1][11],HeadCondition2 Head 2 Contact Count Bf,856,SECSGEM/uHGemHT9045_SV.cpp#L856
+65062,INT_4_TYPE,HeadCondition2 Head 2 Contact Count Bg,,&IniConfig.HeadContactCount[1][1][13],HeadCondition2 Head 2 Contact Count Bg,857,SECSGEM/uHGemHT9045_SV.cpp#L857
+65063,INT_4_TYPE,HeadCondition2 Head 2 Contact Count Bh,,&IniConfig.HeadContactCount[1][1][15],HeadCondition2 Head 2 Contact Count Bh,858,SECSGEM/uHGemHT9045_SV.cpp#L858
+65064,INT_4_TYPE,HeadCondition3 Head 1 Contact Count Aa,,&IniConfig.HeadContactCount[2][0][0],HeadCondition3 Head 1 Contact Count Aa,859,SECSGEM/uHGemHT9045_SV.cpp#L859
+65065,INT_4_TYPE,HeadCondition3 Head 1 Contact Count Ab,,&IniConfig.HeadContactCount[2][0][2],HeadCondition3 Head 1 Contact Count Ab,860,SECSGEM/uHGemHT9045_SV.cpp#L860
+65066,INT_4_TYPE,HeadCondition3 Head 1 Contact Count Ac,,&IniConfig.HeadContactCount[2][0][4],HeadCondition3 Head 1 Contact Count Ac,861,SECSGEM/uHGemHT9045_SV.cpp#L861
+65067,INT_4_TYPE,HeadCondition3 Head 1 Contact Count Ad,,&IniConfig.HeadContactCount[2][0][6],HeadCondition3 Head 1 Contact Count Ad,862,SECSGEM/uHGemHT9045_SV.cpp#L862
+65068,INT_4_TYPE,HeadCondition3 Head 1 Contact Count Ae,,&IniConfig.HeadContactCount[2][0][8],HeadCondition3 Head 1 Contact Count Ae,863,SECSGEM/uHGemHT9045_SV.cpp#L863
+65069,INT_4_TYPE,HeadCondition3 Head 1 Contact Count Af,,&IniConfig.HeadContactCount[2][0][10],HeadCondition3 Head 1 Contact Count Af,864,SECSGEM/uHGemHT9045_SV.cpp#L864
+65070,INT_4_TYPE,HeadCondition3 Head 1 Contact Count Ag,,&IniConfig.HeadContactCount[2][0][12],HeadCondition3 Head 1 Contact Count Ag,865,SECSGEM/uHGemHT9045_SV.cpp#L865
+65071,INT_4_TYPE,HeadCondition3 Head 1 Contact Count Ah,,&IniConfig.HeadContactCount[2][0][14],HeadCondition3 Head 1 Contact Count Ah,866,SECSGEM/uHGemHT9045_SV.cpp#L866
+65072,INT_4_TYPE,HeadCondition3 Head 1 Contact Count Ba,,&IniConfig.HeadContactCount[2][0][1],HeadCondition3 Head 1 Contact Count Ba,867,SECSGEM/uHGemHT9045_SV.cpp#L867
+65073,INT_4_TYPE,HeadCondition3 Head 1 Contact Count Bb,,&IniConfig.HeadContactCount[2][0][3],HeadCondition3 Head 1 Contact Count Bb,868,SECSGEM/uHGemHT9045_SV.cpp#L868
+65074,INT_4_TYPE,HeadCondition3 Head 1 Contact Count Bc,,&IniConfig.HeadContactCount[2][0][5],HeadCondition3 Head 1 Contact Count Bc,869,SECSGEM/uHGemHT9045_SV.cpp#L869
+65075,INT_4_TYPE,HeadCondition3 Head 1 Contact Count Bd,,&IniConfig.HeadContactCount[2][0][7],HeadCondition3 Head 1 Contact Count Bd,870,SECSGEM/uHGemHT9045_SV.cpp#L870
+65076,INT_4_TYPE,HeadCondition3 Head 1 Contact Count Be,,&IniConfig.HeadContactCount[2][0][9],HeadCondition3 Head 1 Contact Count Be,871,SECSGEM/uHGemHT9045_SV.cpp#L871
+65077,INT_4_TYPE,HeadCondition3 Head 1 Contact Count Bf,,&IniConfig.HeadContactCount[2][0][11],HeadCondition3 Head 1 Contact Count Bf,872,SECSGEM/uHGemHT9045_SV.cpp#L872
+65078,INT_4_TYPE,HeadCondition3 Head 1 Contact Count Bg,,&IniConfig.HeadContactCount[2][0][13],HeadCondition3 Head 1 Contact Count Bg,873,SECSGEM/uHGemHT9045_SV.cpp#L873
+65079,INT_4_TYPE,HeadCondition3 Head 1 Contact Count Bh,,&IniConfig.HeadContactCount[2][0][15],HeadCondition3 Head 1 Contact Count Bh,874,SECSGEM/uHGemHT9045_SV.cpp#L874
+65080,INT_4_TYPE,HeadCondition3 Head 2 Contact Count Aa,,&IniConfig.HeadContactCount[2][1][0],HeadCondition3 Head 2 Contact Count Aa,875,SECSGEM/uHGemHT9045_SV.cpp#L875
+65081,INT_4_TYPE,HeadCondition3 Head 2 Contact Count Ab,,&IniConfig.HeadContactCount[2][1][2],HeadCondition3 Head 2 Contact Count Ab,876,SECSGEM/uHGemHT9045_SV.cpp#L876
+65082,INT_4_TYPE,HeadCondition3 Head 2 Contact Count Ac,,&IniConfig.HeadContactCount[2][1][4],HeadCondition3 Head 2 Contact Count Ac,877,SECSGEM/uHGemHT9045_SV.cpp#L877
+65083,INT_4_TYPE,HeadCondition3 Head 2 Contact Count Ad,,&IniConfig.HeadContactCount[2][1][6],HeadCondition3 Head 2 Contact Count Ad,878,SECSGEM/uHGemHT9045_SV.cpp#L878
+65084,INT_4_TYPE,HeadCondition3 Head 2 Contact Count Ae,,&IniConfig.HeadContactCount[2][1][8],HeadCondition3 Head 2 Contact Count Ae,879,SECSGEM/uHGemHT9045_SV.cpp#L879
+65085,INT_4_TYPE,HeadCondition3 Head 2 Contact Count Af,,&IniConfig.HeadContactCount[2][1][10],HeadCondition3 Head 2 Contact Count Af,880,SECSGEM/uHGemHT9045_SV.cpp#L880
+65086,INT_4_TYPE,HeadCondition3 Head 2 Contact Count Ag,,&IniConfig.HeadContactCount[2][1][12],HeadCondition3 Head 2 Contact Count Ag,881,SECSGEM/uHGemHT9045_SV.cpp#L881
+65087,INT_4_TYPE,HeadCondition3 Head 2 Contact Count Ah,,&IniConfig.HeadContactCount[2][1][14],HeadCondition3 Head 2 Contact Count Ah,882,SECSGEM/uHGemHT9045_SV.cpp#L882
+65088,INT_4_TYPE,HeadCondition3 Head 2 Contact Count Ba,,&IniConfig.HeadContactCount[2][1][1],HeadCondition3 Head 2 Contact Count Ba,883,SECSGEM/uHGemHT9045_SV.cpp#L883
+65089,INT_4_TYPE,HeadCondition3 Head 2 Contact Count Bb,,&IniConfig.HeadContactCount[2][1][3],HeadCondition3 Head 2 Contact Count Bb,884,SECSGEM/uHGemHT9045_SV.cpp#L884
+65090,INT_4_TYPE,HeadCondition3 Head 2 Contact Count Bc,,&IniConfig.HeadContactCount[2][1][5],HeadCondition3 Head 2 Contact Count Bc,885,SECSGEM/uHGemHT9045_SV.cpp#L885
+65091,INT_4_TYPE,HeadCondition3 Head 2 Contact Count Bd,,&IniConfig.HeadContactCount[2][1][7],HeadCondition3 Head 2 Contact Count Bd,886,SECSGEM/uHGemHT9045_SV.cpp#L886
+65092,INT_4_TYPE,HeadCondition3 Head 2 Contact Count Be,,&IniConfig.HeadContactCount[2][1][9],HeadCondition3 Head 2 Contact Count Be,887,SECSGEM/uHGemHT9045_SV.cpp#L887
+65093,INT_4_TYPE,HeadCondition3 Head 2 Contact Count Bf,,&IniConfig.HeadContactCount[2][1][11],HeadCondition3 Head 2 Contact Count Bf,888,SECSGEM/uHGemHT9045_SV.cpp#L888
+65094,INT_4_TYPE,HeadCondition3 Head 2 Contact Count Bg,,&IniConfig.HeadContactCount[2][1][13],HeadCondition3 Head 2 Contact Count Bg,889,SECSGEM/uHGemHT9045_SV.cpp#L889
+65095,INT_4_TYPE,HeadCondition3 Head 2 Contact Count Bh,,&IniConfig.HeadContactCount[2][1][15],HeadCondition3 Head 2 Contact Count Bh,890,SECSGEM/uHGemHT9045_SV.cpp#L890

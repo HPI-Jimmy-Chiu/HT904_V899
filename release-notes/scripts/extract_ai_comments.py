@@ -11,7 +11,7 @@ from collections import defaultdict
 
 DEFAULT_SRC = os.path.join(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
-    "HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260330"
+    "HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422"
 )
 
 AI_PATTERN = re.compile(

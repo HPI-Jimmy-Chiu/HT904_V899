@@ -181,7 +181,15 @@ function Collect-ToolPaths {
         "paths",
         "targetPath",
         "sourcePath",
-        "destinationPath"
+        "destinationPath",
+        # Claude Code tool_input uses snake_case keys (Write/Edit/MultiEdit/NotebookEdit)
+        "file_path",
+        "file_paths",
+        "notebook_path",
+        "dir_path",
+        "target_path",
+        "source_path",
+        "destination_path"
     )
 
     foreach ($propertyName in $pathPropertyNames) {
