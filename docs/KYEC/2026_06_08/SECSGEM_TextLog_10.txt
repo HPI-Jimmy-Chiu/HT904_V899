@@ -1,0 +1,2937 @@
+[Send]    2026-06-08 09:59:32.303
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 09:59:37.599
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 09:59:42.910
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 09:59:47.910
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 09:59:52.909
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 09:59:58.221
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:00:03.223
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:00:07.597
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:00:07.607
+
+.
+
+[Send]    2026-06-08 10:00:08.223
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:00:13.538
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:00:18.535
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:00:23.851
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:00:28.846
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:00:33.848
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:00:39.164
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:00:42.909
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:00:42.920
+
+.
+
+[Send]    2026-06-08 10:00:44.159
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:00:49.471
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:00:54.476
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:00:59.471
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:01:04.785
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:01:09.786
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:01:15.099
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:01:18.223
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:01:18.234
+
+.
+
+[Send]    2026-06-08 10:01:20.098
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:01:25.413
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:01:30.411
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:01:35.411
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:01:40.722
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:01:45.723
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:01:51.035
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:01:53.225
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:01:53.236
+
+.
+
+[Send]    2026-06-08 10:01:56.035
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:02:01.349
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:02:06.348
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:02:11.660
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:02:16.663
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:02:21.660
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:02:26.972
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:02:28.544
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:02:28.554
+
+.
+
+[Send]    2026-06-08 10:02:31.974
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:02:37.288
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:02:42.289
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:02:47.596
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:02:52.601
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:02:57.914
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:03:02.910
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:03:03.848
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:03:03.859
+
+.
+
+[Send]    2026-06-08 10:03:08.223
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:03:13.222
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:03:18.222
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:03:23.538
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:03:28.536
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:03:33.847
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:03:38.847
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:03:39.165
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:03:39.175
+
+.
+
+[Send]    2026-06-08 10:03:44.162
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:03:49.165
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:03:54.471
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:03:59.474
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:04:04.474
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:04:07.284
+[S2F41] Remote Command with Parameters
+<L[2]
+  <A[13] "ENERGY_SAVING">
+  <L[1]
+    <L[2]
+      <A[5] "STATE">
+      <U4[1] 0>
+    >
+  >
+>
+.
+
+---------------------------------------------------
+[Send]    2026-06-08 10:04:07.303
+[S2F42] Remote Command Acknowledge
+<L[2]
+  <B[1] 0x02>
+  <L[0]
+  >
+>
+.
+
+[Send]    2026-06-08 10:04:09.788
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:04:14.787
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:04:20.103
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:04:25.098
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:04:30.412
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:04:35.413
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:04:40.723
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:04:42.601
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:04:42.610
+
+.
+
+[Send]    2026-06-08 10:04:45.721
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:04:51.034
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:04:56.036
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:05:01.035
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:05:06.347
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:05:11.347
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:05:16.660
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:05:17.914
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:05:17.924
+
+.
+
+[Send]    2026-06-08 10:05:21.660
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:05:26.974
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:05:31.972
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:05:37.285
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:05:42.287
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:05:47.285
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:05:52.597
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:05:53.222
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:05:53.233
+
+.
+
+[Send]    2026-06-08 10:05:57.597
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:06:02.914
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:06:07.910
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:06:13.227
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:06:18.222
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:06:23.536
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:06:28.534
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:06:28.545
+
+.
+
+[Send]    2026-06-08 10:06:28.549
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:06:33.847
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:06:38.850
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:06:43.847
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:06:49.162
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:06:54.161
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:06:59.478
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:07:03.848
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:07:03.858
+
+.
+
+[Send]    2026-06-08 10:07:04.472
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:07:09.785
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:07:14.785
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:07:20.096
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:07:25.097
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:07:30.098
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:07:35.410
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:07:39.161
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:07:39.171
+
+.
+
+[Send]    2026-06-08 10:07:40.413
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:07:45.726
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:07:50.721
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:07:56.034
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:08:01.037
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:08:06.347
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:08:11.349
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:08:14.472
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:08:14.483
+
+.
+
+[Send]    2026-06-08 10:08:16.659
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:08:21.663
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:08:26.660
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:08:31.973
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:08:36.972
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:08:42.285
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:08:47.284
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:08:49.786
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:08:49.796
+
+.
+
+[Send]    2026-06-08 10:08:52.600
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:08:57.599
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:09:02.913
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:09:07.910
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:09:12.909
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:09:18.223
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:09:23.224
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:09:25.098
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:09:25.108
+
+.
+
+[Send]    2026-06-08 10:09:28.535
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:09:33.536
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:09:38.848
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:09:44.164
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:09:49.161
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:09:54.159
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:09:59.471
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:10:00.410
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:10:00.421
+
+.
+
+[Send]    2026-06-08 10:10:04.475
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:10:09.786
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:10:14.787
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:10:20.098
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:10:25.098
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:10:30.410
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:10:35.410
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:10:35.722
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:10:35.764
+
+.
+
+[Send]    2026-06-08 10:10:40.409
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:10:45.721
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:10:50.723
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:10:55.722
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:11:01.037
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:11:06.036
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:11:11.034
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:11:11.044
+
+.
+
+[Send]    2026-06-08 10:11:11.356
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:11:16.346
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:11:21.659
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:11:26.662
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:11:31.972
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:11:36.971
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:11:42.285
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:11:46.039
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:11:46.049
+
+.
+
+[Send]    2026-06-08 10:11:47.285
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:11:52.285
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:11:57.597
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:12:02.598
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:12:07.918
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:12:12.909
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:12:18.224
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:12:21.349
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:12:21.360
+
+.
+
+[Send]    2026-06-08 10:12:23.223
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:12:28.536
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:12:33.554
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:12:38.534
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:12:43.846
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:12:48.847
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:12:54.160
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:12:56.659
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:12:56.669
+
+.
+
+[Send]    2026-06-08 10:12:59.160
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:13:04.497
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:13:09.476
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:13:14.787
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:13:19.786
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:13:25.097
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:13:30.097
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:13:31.972
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:13:31.982
+
+.
+
+[Send]    2026-06-08 10:13:35.098
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:13:40.410
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:13:45.413
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:13:50.723
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:13:55.721
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:14:01.035
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:14:06.036
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:14:07.285
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:14:07.295
+
+.
+
+[Send]    2026-06-08 10:14:11.348
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:14:16.349
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:14:21.349
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:14:26.661
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:14:31.682
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:14:36.977
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:14:41.981
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:14:42.599
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:14:42.609
+
+.
+
+[Send]    2026-06-08 10:14:47.284
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:14:52.285
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:14:57.615
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:15:02.598
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:15:07.909
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:15:12.910
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:15:17.911
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:15:17.922
+
+.
+
+[Send]    2026-06-08 10:15:17.926
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:15:23.225
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:15:28.224
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:15:33.537
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:15:38.534
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:15:43.849
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:15:48.847
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:15:53.224
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:15:53.235
+
+.
+
+[Send]    2026-06-08 10:15:54.160
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:15:59.163
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:16:04.160
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:16:09.474
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:16:14.472
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:16:19.785
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:16:24.785
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:16:28.536
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:16:28.546
+
+.
+
+[Send]    2026-06-08 10:16:30.096
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:16:35.097
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:16:40.410
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:16:45.411
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:16:50.724
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:16:55.747
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:17:00.721
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:17:03.851
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:17:03.861
+
+.
+
+[Send]    2026-06-08 10:17:06.036
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:17:11.036
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:17:16.347
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:17:21.350
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:17:26.662
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:17:31.659
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:17:36.971
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:17:39.165
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:17:39.176
+
+.
+
+[Send]    2026-06-08 10:17:41.982
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:17:46.972
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:17:52.285
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:17:57.285
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:18:02.602
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:18:07.599
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:18:12.911
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:18:14.475
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:18:14.485
+
+.
+
+[Send]    2026-06-08 10:18:17.915
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:18:23.222
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:18:28.225
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:18:33.534
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:18:38.536
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:18:43.534
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:18:48.847
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:18:49.786
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:18:49.796
+
+.
+
+[Send]    2026-06-08 10:18:53.847
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:18:59.159
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:19:04.164
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:19:09.472
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:19:14.472
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:19:19.786
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:19:24.787
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:19:25.101
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:19:25.111
+
+.
+
+[Send]    2026-06-08 10:19:29.784
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:19:35.101
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:19:40.412
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:19:45.411
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:19:50.723
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:19:55.723
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:20:00.409
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:20:00.420
+
+.
+
+[Send]    2026-06-08 10:20:01.034
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:20:06.034
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:20:11.036
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:20:16.353
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:20:21.349
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:20:26.662
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:20:31.659
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:20:35.722
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:20:35.733
+
+.
+
+[Send]    2026-06-08 10:20:36.974
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:20:41.972
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:20:47.285
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:20:52.287
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:20:57.288
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:21:02.599
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:21:07.600
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:21:11.035
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:21:11.046
+
+.
+
+[Send]    2026-06-08 10:21:12.916
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:21:17.910
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:21:23.222
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:21:28.223
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:21:33.536
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:21:38.539
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:21:43.848
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:21:46.348
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:21:46.358
+
+.
+
+[Send]    2026-06-08 10:21:48.848
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:21:53.846
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:21:59.159
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:22:04.187
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:22:09.471
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:22:14.472
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:22:19.788
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:22:21.661
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:22:21.671
+
+.
+
+[Send]    2026-06-08 10:22:24.786
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:22:30.099
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:22:35.099
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:22:40.098
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:22:45.409
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:22:50.412
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:22:55.723
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:22:56.972
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:22:56.982
+
+.
+
+[Send]    2026-06-08 10:23:00.723
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:23:06.036
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:23:11.034
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:23:16.347
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:23:21.348
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:23:26.662
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:23:31.661
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:23:32.288
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:23:32.298
+
+.
+
+[Send]    2026-06-08 10:23:36.660
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:23:41.972
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:23:46.972
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:23:52.286
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:23:57.285
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:24:02.596
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:24:07.596
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:24:07.607
+
+.
+
+[Send]    2026-06-08 10:24:07.611
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:24:12.909
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:24:17.911
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:24:22.912
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:24:28.223
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:24:33.224
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:24:38.536
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:24:42.912
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:24:42.924
+
+.
+
+[Send]    2026-06-08 10:24:43.535
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:24:48.847
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:24:53.849
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:24:59.161
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:25:04.161
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:25:09.472
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:25:14.476
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:25:18.222
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:25:18.232
+
+.
+
+[Send]    2026-06-08 10:25:19.474
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:25:24.789
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:25:29.799
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:25:35.096
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:25:40.409
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:25:45.410
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:25:50.411
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:25:53.536
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:25:53.577
+
+.
+
+[Send]    2026-06-08 10:25:55.721
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:26:00.724
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:26:06.036
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:26:11.353
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:26:16.348
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:26:21.661
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:26:26.672
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:26:28.847
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:26:28.858
+
+.
+
+[Send]    2026-06-08 10:26:31.659
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:26:36.976
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:26:41.972
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:26:47.287
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:26:52.286
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:26:57.598
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:27:02.596
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:27:04.163
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:27:04.173
+
+.
+
+[Send]    2026-06-08 10:27:07.910
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:27:12.910
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:27:17.909
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:27:23.225
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:27:28.222
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:27:33.538
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:27:38.536
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:27:39.473
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:27:39.484
+
+.
+
+[Send]    2026-06-08 10:27:43.847
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:27:48.849
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:27:54.159
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:27:59.162
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:28:04.474
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:28:09.471
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:28:14.474
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:28:14.787
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:28:14.798
+
+.
+
+[Send]    2026-06-08 10:28:19.785
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:28:24.788
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:28:30.098
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:28:35.101
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:28:40.410
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:28:45.414
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:28:50.098
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:28:50.110
+
+.
+
+[Send]    2026-06-08 10:28:50.728
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:28:55.724
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:29:00.721
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:29:06.034
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:29:11.037
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:29:16.359
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:29:21.349
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:29:25.409
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:29:25.419
+
+.
+
+[Send]    2026-06-08 10:29:26.662
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:29:31.662
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:29:36.973
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:29:41.972
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:29:47.286
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:29:52.287
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:29:57.285
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:30:00.726
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:30:00.736
+
+.
+
+[Send]    2026-06-08 10:30:02.597
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:30:07.912
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:30:12.912
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:30:18.226
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:30:23.222
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:30:28.223
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:30:33.534
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:30:36.036
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:30:36.046
+
+.
+
+[Send]    2026-06-08 10:30:38.538
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:30:43.848
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:30:48.985
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:30:54.160
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:30:59.161
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:31:04.473
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:31:09.475
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:31:11.347
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:31:11.357
+
+.
+
+[Send]    2026-06-08 10:31:14.785
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:31:19.789
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:31:24.789
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:31:30.098
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:31:35.096
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:31:40.411
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:31:45.410
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:31:46.663
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:31:46.673
+
+.
+
+[Send]    2026-06-08 10:31:50.723
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:31:55.724
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:32:01.035
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:32:06.037
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:32:11.035
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:32:16.347
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:32:21.347
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:32:21.972
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:32:21.982
+
+.
+
+[Send]    2026-06-08 10:32:26.660
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:32:31.663
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:32:36.973
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:32:41.973
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:32:47.286
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:32:52.286
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:32:57.034
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:32:57.044
+
+.
+
+[Send]    2026-06-08 10:32:57.597
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:33:02.596
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:33:07.598
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:33:12.909
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:33:17.911
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:33:23.223
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:33:28.221
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:33:32.286
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:33:32.297
+
+.
+
+[Send]    2026-06-08 10:33:33.536
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:33:38.538
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:33:43.848
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:33:48.848
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:33:53.846
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:33:54.163
+[S2F41] Remote Command with Parameters
+<L[2]
+  <A[13] "ENERGY_SAVING">
+  <L[1]
+    <L[2]
+      <A[5] "STATE">
+      <U4[1] 0>
+    >
+  >
+>
+.
+
+---------------------------------------------------
+[Send]    2026-06-08 10:33:54.182
+[S2F42] Remote Command Acknowledge
+<L[2]
+  <B[1] 0x02>
+  <L[0]
+  >
+>
+.
+
+[Send]    2026-06-08 10:33:59.159
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:34:04.161
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:34:09.472
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:34:14.484
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:34:19.786
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:34:24.786
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:34:29.474
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:34:29.485
+
+.
+
+[Send]    2026-06-08 10:34:30.097
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:34:35.099
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:34:40.409
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:34:45.410
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:34:50.722
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:34:55.721
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:35:01.035
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:35:04.785
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:35:04.796
+
+.
+
+[Send]    2026-06-08 10:35:06.036
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:35:11.036
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:35:16.347
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:35:21.347
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:35:26.672
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:35:31.661
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:35:36.973
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:35:40.098
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:35:40.108
+
+.
+
+[Send]    2026-06-08 10:35:41.972
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:35:47.284
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:35:52.288
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:35:57.600
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:36:02.597
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:36:07.911
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:36:12.912
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:36:15.411
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:36:15.422
+
+.
+
+[Send]    2026-06-08 10:36:17.910
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:36:23.222
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:36:28.223
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:36:33.536
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:36:38.535
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:36:43.850
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:36:48.864
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:36:50.728
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:36:50.738
+
+.
+
+[Send]    2026-06-08 10:36:54.162
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:36:59.161
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:37:04.161
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:37:09.472
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:37:14.474
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:37:19.786
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:37:24.786
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:37:26.038
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:37:26.049
+
+.
+
+[Send]    2026-06-08 10:37:30.097
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:37:35.097
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:37:40.414
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:37:45.409
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:37:50.721
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:37:55.724
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:38:00.722
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:38:01.347
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:38:01.357
+
+.
+
+[Send]    2026-06-08 10:38:06.035
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:38:11.038
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:38:16.348
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:38:21.348
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:38:26.661
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:38:31.662
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:38:36.434
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:38:36.444
+
+.
+
+[Send]    2026-06-08 10:38:36.976
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:38:41.975
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:38:46.975
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:38:52.286
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:38:57.286
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:39:02.597
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:39:07.597
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:39:11.662
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:39:11.673
+
+.
+
+[Send]    2026-06-08 10:39:12.909
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:39:17.910
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:39:23.226
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:39:28.223
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:39:33.535
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:39:38.536
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:39:43.534
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:39:46.988
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:39:46.999
+
+.
+
+[Send]    2026-06-08 10:39:48.847
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:39:53.847
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:39:59.162
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:40:04.161
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:40:09.475
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:40:14.473
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:40:19.787
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:40:22.287
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:40:22.298
+
+.
+
+[Send]    2026-06-08 10:40:24.789
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:40:29.786
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:40:35.098
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:40:40.097
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:40:45.414
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:40:50.413
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:40:55.723
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:40:57.597
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:40:57.638
+
+.
+
+[Send]    2026-06-08 10:41:01.037
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:41:06.035
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:41:11.035
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:41:16.348
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:41:21.347
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:41:26.661
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:41:31.660
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:41:32.910
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:41:32.921
+
+.
+
+[Send]    2026-06-08 10:41:36.989
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:41:41.974
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:41:47.284
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:41:52.286
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:41:57.287
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:42:02.603
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:42:07.600
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:42:08.222
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:42:08.232
+
+.
+
+[Send]    2026-06-08 10:42:12.910
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:42:17.911
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:42:23.223
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:42:28.222
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:42:33.538
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:42:38.537
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:42:43.535
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:42:43.545
+
+.
+
+[Send]    2026-06-08 10:42:43.850
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:42:48.848
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:42:53.847
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:42:59.160
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:43:04.160
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:43:09.473
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:43:14.472
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:43:18.847
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:43:18.857
+
+.
+
+[Send]    2026-06-08 10:43:19.787
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:43:24.785
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:43:30.097
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:43:35.097
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:43:40.097
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:43:45.411
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:43:50.412
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:43:54.161
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:43:54.171
+
+.
+
+[Send]    2026-06-08 10:43:55.722
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:44:00.726
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:44:06.034
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:44:11.070
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:44:16.348
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:44:21.349
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:44:26.659
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+---------------------------------------------------
+[Send]    2026-06-08 10:44:27.285
+[S6F11] Event Report Send
+<L[3]
+  <U4[1] 1>
+  <U4[1] 70>
+  <L[1]
+    <L[2]
+      <U4[1] 515>
+      <L[1]
+        <A[7] "1130356">
+      >
+    >
+  >
+>
+.
+
+===================================================
+[Receive] 2026-06-08 10:44:27.354
+[S6F12] Event Report Acknowledge
+<B[1] 0x00>
+.
+
+[Send]    2026-06-08 10:44:31.662
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:44:36.660
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:44:41.973
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:44:46.974
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:44:52.286
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+---------------------------------------------------
+[Send]    2026-06-08 10:44:57.398
+[S6F11] Event Report Send
+<L[3]
+  <U4[1] 1>
+  <U4[1] 2>
+  <L[0]
+  >
+>
+.
+
+---------------------------------------------------
+[Send]    2026-06-08 10:44:58.154
+[S6F11] Event Report Send
+<L[3]
+  <U4[1] 1>
+  <U4[1] 44>
+  <L[2]
+    <L[2]
+      <U4[1] 507>
+      <L[4]
+        <A[63] "1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0">
+        <A[63] "1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0">
+        <A[63] "1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0">
+        <A[11] "Single Site">
+      >
+    >
+    <L[2]
+      <U4[1] 502>
+      <L[8]
+        <A[0] "">
+        <A[0] "">
+        <A[5] "SLEEP">
+        <A[16] "2026060810445739">
+        <A[30] "1080_3781--HT_H9046_11_040_V01">
+        <I4[1] 1>
+        <I4[1] 2>
+        <I4[1] 1>
+      >
+    >
+  >
+>
+.
+
+---------------------------------------------------
+[Send]    2026-06-08 10:44:59.195
+[S6F11] Event Report Send
+<L[3]
+  <U4[1] 1>
+  <U4[1] 25>
+  <L[0]
+  >
+>
+.
+
+---------------------------------------------------
+[Send]    2026-06-08 10:44:59.497
+[S6F11] Event Report Send
+<L[3]
+  <U4[1] 1>
+  <U4[1] 27>
+  <L[1]
+    <L[2]
+      <U4[1] 502>
+      <L[8]
+        <A[0] "">
+        <A[0] "">
+        <A[5] "Alarm">
+        <A[16] "2026060810445919">
+        <A[30] "1080_3781--HT_H9046_11_040_V01">
+        <I4[1] 1>
+        <I4[1] 2>
+        <I4[1] 1>
+      >
+    >
+  >
+>
+.
+
+---------------------------------------------------
+[Send]    2026-06-08 10:44:59.508
+[S5F1] Alarm Report Send
+<L[6]
+  <A[14] "20260608104459">
+  <U4[1] 2>
+  <U4[1] 203000329>
+  <A[33] "EP die force is not enough alarm!">
+  <A[10] "Index Unit">
+  <A[37] "0,0,EP die force is not enough alarm!">
+>
+.
+
+[Send]    2026-06-08 10:44:59.508
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:44:59.686
+[S6F12] Event Report Acknowledge
+<B[1] 0x00>
+.
+
+===================================================
+[Receive] 2026-06-08 10:44:59.692
+[S6F12] Event Report Acknowledge
+<B[1] 0x00>
+.
+
+===================================================
+[Receive] 2026-06-08 10:44:59.697
+[S6F12] Event Report Acknowledge
+<B[1] 0x00>
+.
+
+===================================================
+[Receive] 2026-06-08 10:44:59.702
+[S6F12] Event Report Acknowledge
+<B[1] 0x00>
+.
+
+===================================================
+[Receive] 2026-06-08 10:44:59.708
+[S5F2] Alarm Report Acknowledge
+<B[1] 0x00>
+.
+
+---------------------------------------------------
+[Send]    2026-06-08 10:45:00.368
+[S6F11] Event Report Send
+<L[3]
+  <U4[1] 1>
+  <U4[1] 213>
+  <L[1]
+    <L[2]
+      <U4[1] 523>
+      <L[6]
+        <Boolean[1] 0x00>
+        <Boolean[1] 0x00>
+        <Boolean[1] 0x00>
+        <Boolean[1] 0x00>
+        <Boolean[1] 0x00>
+        <A[19] "2026/06/08 10:45:00">
+      >
+    >
+  >
+>
+.
+
+===================================================
+[Receive] 2026-06-08 10:45:00.418
+[S6F12] Event Report Acknowledge
+<B[1] 0x00>
+.
+
+---------------------------------------------------
+[Send]    2026-06-08 10:45:03.171
+[S6F11] Event Report Send
+<L[3]
+  <U4[1] 1>
+  <U4[1] 28>
+  <L[0]
+  >
+>
+.
+
+===================================================
+[Receive] 2026-06-08 10:45:03.225
+[S6F12] Event Report Acknowledge
+<B[1] 0x00>
+.
+
+[Send]    2026-06-08 10:45:04.785
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:45:09.786
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:45:15.099
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:45:20.097
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:45:25.098
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:45:30.411
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:45:35.410
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:45:38.222
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:45:38.233
+
+.
+
+[Send]    2026-06-08 10:45:40.722
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:45:45.726
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:45:51.034
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:45:56.347
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:46:01.348
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:46:06.347
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:46:11.660
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:46:13.318
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:46:13.328
+
+.
+
+[Send]    2026-06-08 10:46:16.660
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:46:21.972
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:46:26.971
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:46:32.286
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:46:37.286
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:46:42.596
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:46:47.599
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:46:48.535
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:46:48.545
+
+.
+
+[Send]    2026-06-08 10:46:52.912
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:46:57.911
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:47:02.911
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:47:08.222
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:47:13.535
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:47:18.535
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:47:23.675
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:47:23.686
+
+.
+
+[Send]    2026-06-08 10:47:23.850
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:47:28.848
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:47:33.847
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:47:39.159
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:47:44.293
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:47:49.473
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:47:54.472
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:47:58.847
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:47:58.856
+
+.
+
+[Send]    2026-06-08 10:47:59.786
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:48:04.785
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:48:10.105
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:48:15.097
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:48:20.098
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:48:25.410
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:48:30.721
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:48:34.160
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:48:34.170
+
+.
+
+[Send]    2026-06-08 10:48:35.722
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:48:41.036
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:48:46.035
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:48:51.347
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:48:56.348
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:49:01.659
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:49:06.660
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:49:09.473
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:49:09.483
+
+.
+
+[Send]    2026-06-08 10:49:11.974
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:49:17.027
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:49:22.284
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:49:27.286
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:49:32.285
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:49:37.659
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:49:42.599
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:49:44.786
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:49:44.796
+
+.
+
+[Send]    2026-06-08 10:49:47.912
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:49:52.909
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:49:58.221
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:50:03.534
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:50:08.536
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:50:13.535
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:50:18.847
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:50:20.098
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:50:20.108
+
+.
+
+[Send]    2026-06-08 10:50:23.848
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:50:29.160
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:50:34.159
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:50:39.474
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:50:44.472
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:50:49.785
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:50:54.785
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:50:55.409
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:50:55.420
+
+.
+
+[Send]    2026-06-08 10:50:59.785
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+---------------------------------------------------
+[Send]    2026-06-08 10:51:02.845
+[S6F11] Event Report Send
+<L[3]
+  <U4[1] 1>
+  <U4[1] 2>
+  <L[0]
+  >
+>
+.
+
+===================================================
+[Receive] 2026-06-08 10:51:02.952
+[S6F12] Event Report Acknowledge
+<B[1] 0x00>
+.
+
+---------------------------------------------------
+[Send]    2026-06-08 10:51:03.592
+[S6F11] Event Report Send
+<L[3]
+  <U4[1] 1>
+  <U4[1] 27>
+  <L[1]
+    <L[2]
+      <U4[1] 502>
+      <L[8]
+        <A[0] "">
+        <A[0] "">
+        <A[4] "HALT">
+        <A[16] "2026060810510353">
+        <A[30] "1080_3781--HT_H9046_11_040_V01">
+        <I4[1] 1>
+        <I4[1] 2>
+        <I4[1] 1>
+      >
+    >
+  >
+>
+.
+
+===================================================
+[Receive] 2026-06-08 10:51:03.853
+[S6F12] Event Report Acknowledge
+<B[1] 0x00>
+.
+
+[Send]    2026-06-08 10:51:05.112
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:51:10.097
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:51:15.410
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:51:20.410
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:51:25.721
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:51:30.727
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:51:36.037
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+---------------------------------------------------
+[Send]    2026-06-08 10:51:37.096
+[S6F11] Event Report Send
+<L[3]
+  <U4[1] 1>
+  <U4[1] 123>
+  <L[0]
+  >
+>
+.
+
+===================================================
+[Receive] 2026-06-08 10:51:37.291
+[S6F12] Event Report Acknowledge
+<B[1] 0x00>
+.
+
+---------------------------------------------------
+[Send]    2026-06-08 10:51:39.740
+[S6F11] Event Report Send
+<L[3]
+  <U4[1] 1>
+  <U4[1] 123>
+  <L[0]
+  >
+>
+.
+
+===================================================
+[Receive] 2026-06-08 10:51:39.788
+[S6F12] Event Report Acknowledge
+<B[1] 0x00>
+.
+
+[Send]    2026-06-08 10:51:41.035
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:51:46.348
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:51:51.348
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:51:56.348
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:52:01.660
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:52:06.661
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:52:11.972
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:52:14.784
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:52:14.794
+
+.
+
+[Send]    2026-06-08 10:52:16.974
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:52:22.286
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:52:27.286
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:52:32.597
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:52:37.597
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:52:42.597
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:52:47.910
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+---------------------------------------------------
+[Send]    2026-06-08 10:52:50.088
+[S6F11] Event Report Send
+<L[3]
+  <U4[1] 1>
+  <U4[1] 123>
+  <L[0]
+  >
+>
+.
+
+===================================================
+[Receive] 2026-06-08 10:52:50.100
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:52:50.110
+
+.
+
+===================================================
+[Receive] 2026-06-08 10:52:50.118
+[S6F12] Event Report Acknowledge
+<B[1] 0x00>
+.
+
+---------------------------------------------------
+[Send]    2026-06-08 10:52:51.366
+[S6F11] Event Report Send
+<L[3]
+  <U4[1] 1>
+  <U4[1] 123>
+  <L[0]
+  >
+>
+.
+
+===================================================
+[Receive] 2026-06-08 10:52:51.670
+[S6F12] Event Report Acknowledge
+<B[1] 0x00>
+.
+
+[Send]    2026-06-08 10:52:52.911
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:52:58.226
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:53:03.222
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:53:08.535
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:53:13.536
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:53:18.847
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:53:23.846
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:53:26.661
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:53:26.671
+
+.
+
+[Send]    2026-06-08 10:53:29.159
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:53:34.162
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:53:39.160
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:53:44.477
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:53:49.474
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:53:54.784
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:53:59.785
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:54:01.972
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:54:01.983
+
+.
+
+[Send]    2026-06-08 10:54:05.097
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:54:10.097
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:54:15.410
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:54:20.412
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:54:25.726
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:54:30.722
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:54:36.039
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:54:37.284
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:54:37.294
+
+.
+
+[Send]    2026-06-08 10:54:41.036
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:54:46.347
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:54:51.346
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:54:56.659
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:55:01.660
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:55:06.659
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:55:11.971
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:55:12.598
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:55:12.608
+
+.
+
+[Send]    2026-06-08 10:55:16.972
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:55:22.286
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:55:27.284
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:55:32.597
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:55:37.597
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:55:42.912
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:55:47.911
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:55:47.921
+
+.
+
+[Send]    2026-06-08 10:55:47.928
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:55:52.909
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:55:58.221
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:56:03.224
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:56:08.535
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:56:13.535
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:56:18.848
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:56:23.237
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:56:23.247
+
+.
+
+[Send]    2026-06-08 10:56:23.851
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:56:29.160
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:56:34.159
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:56:39.472
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:56:44.472
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:56:49.471
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:56:54.784
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:56:58.537
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:56:58.578
+
+.
+
+[Send]    2026-06-08 10:56:59.785
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:57:05.096
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:57:10.097
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:57:15.412
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:57:20.409
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:57:25.723
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:57:30.722
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:57:33.847
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:57:33.857
+
+.
+
+[Send]    2026-06-08 10:57:35.722
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:57:41.035
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:57:46.035
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:57:51.351
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:57:56.347
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:58:01.660
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:58:06.660
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:58:08.852
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:58:08.862
+
+.
+
+[Send]    2026-06-08 10:58:11.973
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:58:16.972
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:58:22.284
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:58:27.286
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:58:32.284
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:58:37.598
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:58:42.911
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:58:44.160
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:58:44.170
+
+.
+
+[Send]    2026-06-08 10:58:47.909
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:58:53.223
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:58:58.254
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:59:03.222
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:59:08.535
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:59:13.535
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:59:18.850
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:59:19.473
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:59:19.483
+
+.
+
+[Send]    2026-06-08 10:59:23.869
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:59:29.159
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:59:34.160
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:59:39.472
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:59:44.474
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+[Send]    2026-06-08 10:59:49.785
+Event Report(6,11) , DataID=1 , CEID=80 be disabled , abort send !!!
+===================================================
+[Receive] 2026-06-08 10:59:54.785
+
+.
+
+[Receive] Linktest.req
+[Send]    Linktest.rsp
+---------------------------------------------------
+[Send]    2026-06-08 10:59:54.796
+
+.
+
