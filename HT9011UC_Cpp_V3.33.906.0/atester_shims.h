@@ -76,7 +76,8 @@ void ProcessAutoloadcellMeasureCount();
 // ===========================================================================
 //  -- Front cursors (golden aTester_Front.h) --
 extern int iFTestSuckTestICTask;
-extern int iFrontTestDestroyICTask;
+// AI(W64b-Integrate) 20260706: iFrontTestDestroyICTask now defined for real in
+// aTester_Front.cpp/.h (golden aTester_Front.h:300) -- extern moved there.
 extern int iFrontTestSuckICTask;
 extern int iTestYFrontTask;
 extern int iFRTCUseSocketFloatTask;
@@ -91,26 +92,25 @@ int  CheckAnyCaseNeedToDoArm1();               // golden -- offline 0
 void InitTestYFrontTask();
 void InitFTestSuckTestICTask();                // (also declared in atester.h)
 void InitFrontTestSuckICTask();
-void InitFrontTestDestroyICTask();
+// AI(W64b-Integrate) 20260706: InitFrontTestDestroyICTask/TestZ1SetPos/
+// DoFrontTestDestroyIC/CheckZ1IsDown/TestZ1OutRandge now defined for real in
+// aTester_Front.cpp; declarations moved to aTester_Front.h (golden aTester_Front.h).
 void InitFrontTestPurgBeforePickShuttle();
-void TestZ1SetPos();
 void DoArm1Suck();
 void DoArm1D44VacCheck();
 bool FTestNeedDestroy();
-bool DoFrontTestDestroyIC(bool bCheckZ2);      // golden -- offline complete (true)
 bool DoFrontTestSuckIC();
 bool DoFTestSuckTestIC();                       // golden -- offline complete (true)
-bool CheckZ1IsDown();
 bool DoFrontTestPurgBeforePickShuttle(int isp);
 bool DoTestYFront();                            // golden -- offline complete (true)
-bool TestZ1OutRandge();
 bool TestZ1OutRandge2();
 bool FTestSeparateSLK(bool bReset=false);
 bool FTestCombineSLK(bool bReset=false);
 bool DoFRTCAutoModelVerify(bool bInitial);
 //  -- Rear cursors (golden aTester_Rear.h) --
 extern int iBTestSuckTestICTask;
-extern int iRearTestDestroyICTask;
+// AI(W64b-Integrate) 20260706: iRearTestDestroyICTask now defined for real in
+// aTester_Rear.cpp/.h (golden aTester_Rear.h:300) -- extern moved there.
 extern int iRearTestSuckICTask;
 extern int iTestYRearTask;
 extern int iBRTCUseSocketFloatTask;
@@ -125,19 +125,17 @@ int  CheckAnyCaseNeedToDoArm2();               // golden -- offline 0
 void InitTestYRearTask();
 void InitBTestSuckTestICTask();
 void InitRearTestSuckICTask();
-void InitRearTestDestroyICTask();
+// AI(W64b-Integrate) 20260706: InitRearTestDestroyICTask/TestZ2SetPos/
+// DoRearTestDestroyIC/CheckZ2IsDown/TestZ2OutRandge now defined for real in
+// aTester_Rear.cpp; declarations moved to aTester_Rear.h (golden aTester_Rear.h).
 void InitRearTestPurgBeforePickShuttle();
-void TestZ2SetPos();
 void DoArm2Suck();
 void DoArm2D44VacCheck();
 bool BTestNeedDestroy();
-bool DoRearTestDestroyIC(bool bCheckZ1);       // golden -- offline complete (true)
 bool DoRearTestSuckIC();
 bool DoBTestSuckTestIC();                        // golden -- offline complete (true)
-bool CheckZ2IsDown();
 bool DoRearTestPurgBeforePickShuttle(int isp);
 bool DoTestYRear();                             // golden -- offline complete (true)
-bool TestZ2OutRandge();
 bool TestZ2OutRandge2();
 bool BTestCombineSLK(bool bReset=false);
 bool BTestSeparateSLK(bool bReset=false);

@@ -18,6 +18,9 @@
 #include "atester_shims.h"
 #include "csystem.h"                 // IsInArmCleanOutFinish / IsInArmOneCycleFinish /
                                      // CanYieldAlarmRemainInSHT / CheckIndexConnect declarations
+// AI(W64b-Integrate) 20260706: TestIF_File / site-mode enums for the GetSiteCount
+// shim below (golden home cprod.cpp, whole function-body region gated -- see there).
+#include "cprod.h"
 
 // ===========================================================================
 //  csystem.h cross-module predicates referenced ONLY by the tester/index engine
@@ -38,6 +41,71 @@ int  CheckIndexConnect()                        { return 0; }      // golden csy
 //   TTL board.  Offline: no RS232/TTL board wired -> no-op (the SOT pulse is a
 //   hardware side-effect; the index SM advances regardless of its return).
 void SendTTLRS232CSOTsignal()                   {}                 // golden csystem.h:280 (Isaac 20210309)
+
+// AI(W64b-Integrate) 20260706: GetSiteCount (golden cprod.cpp:305, declared
+// cprod.h:3299) -- discovered as an undefined-reference link error while
+// integrating aTester_Front.cpp/aTester_Rear.cpp (case 650/750:
+// `CosFunction.bD44Use4ea && GetSiteCount()>4`).  The real golden body is a
+// pure TestIF_File.iTestMode/iSiteMap[][] computation with NO untranslated
+// substrate dependency, BUT it textually lives inside cprod.cpp's whole-file
+// `#if 0 // TODO(W6): function bodies depend on untranslated state machines +
+// globals` region (cprod.cpp:184-4036), so it never actually compiles into
+// libht9045_globals.a today.  Faithful duplicate here (same pattern already
+// used a few lines up for IsInArmCleanOutFinish/IsInArmOneCycleFinish, which
+// are ALSO real csystem.cpp bodies shimmed here for the identical reason).
+// TODO(W6): delete this duplicate once cprod.cpp's #if 0 gate lifts (would
+// otherwise ODR-conflict with the real definition).
+int GetSiteCount(bool IncludeCloseSite)                             // golden cprod.cpp:305
+{
+    int iSiteCount=0;
+
+    if(IncludeCloseSite==true)
+    {
+        if(TestIF_File.iTestMode==SingleSite)
+            iSiteCount=1;
+        else if(TestIF_File.iTestMode==DualSite)
+            iSiteCount=2;
+        else if(TestIF_File.iTestMode==TriSite1X3)
+            iSiteCount=3;
+        else if(TestIF_File.iTestMode==QualSite1X4 ||
+                TestIF_File.iTestMode==_8Site1X4)
+            iSiteCount=4;
+        else if(TestIF_File.iTestMode==QualSite2X2 ||
+                TestIF_File.iTestMode==QualSite2X2N)
+            iSiteCount=4;
+        else if(TestIF_File.iTestMode==DualSite2x1)
+            iSiteCount=2;
+        else if(TestIF_File.iTestMode==_6Site2X3 ||
+                TestIF_File.iTestMode==_6Site2X3N)
+            iSiteCount=6;
+        else if(TestIF_File.iTestMode==_8Site2X4 ||
+                TestIF_File.iTestMode==_8Site2X4N)
+            iSiteCount=8;
+        else if(TestIF_File.iTestMode==_10Site2X5)
+            iSiteCount=10;
+        else if(TestIF_File.iTestMode==_12Site2X6)
+            iSiteCount=12;
+        else if(TestIF_File.iTestMode==_16Site2X8 ||
+                TestIF_File.iTestMode==_16Site4X4)
+            iSiteCount=16;
+        else if(TestIF_File.iTestMode==_32Site4X8M ||
+                TestIF_File.iTestMode==_32Site4X8N)
+            iSiteCount=32;
+    }
+    else
+    {
+        for(int i=0; i<MAX_SOCKET_ROW; i++)
+        {
+            for(int j=0; j<MAX_SOCKET_COL; j++)
+            {
+                if(TestIF_File.iSiteMap[i][j]>0)
+                    iSiteCount++;
+            }
+        }
+    }
+
+    return iSiteCount;
+}
 
 // ---- atester_32Site cursors + bodies ---------------------------------------
 int i32RTCAutoModelVerifyTask        = 1;   // golden Init home =1
@@ -71,7 +139,8 @@ void ProcessAutoloadcellMeasureCount()      {}
 
 // ---- aTester_Front cursors + bodies ----------------------------------------
 int iFTestSuckTestICTask                  = 1;
-int iFrontTestDestroyICTask               = 1;
+// AI(W64b-Integrate) 20260706: iFrontTestDestroyICTask now defined for real in
+// aTester_Front.cpp (golden aTester_Front.cpp:300) -- stub definition removed.
 int iFrontTestSuckICTask                  = 1;
 int iTestYFrontTask                       = 1;
 int iFRTCUseSocketFloatTask               = 1;
@@ -86,19 +155,17 @@ int  CheckAnyCaseNeedToDoArm1()             { return 0; }
 void InitTestYFrontTask()                   {}
 void InitFTestSuckTestICTask()              {}
 void InitFrontTestSuckICTask()              {}
-void InitFrontTestDestroyICTask()           {}
+// AI(W64b-Integrate) 20260706: InitFrontTestDestroyICTask/TestZ1SetPos/
+// DoFrontTestDestroyIC/CheckZ1IsDown/TestZ1OutRandge now defined for real in
+// aTester_Front.cpp (golden aTester_Front.cpp:170-298,309-865) -- stub bodies removed.
 void InitFrontTestPurgBeforePickShuttle()   {}
-void TestZ1SetPos()                         {}
 void DoArm1Suck()                           {}
 void DoArm1D44VacCheck()                    {}
 bool FTestNeedDestroy()                     { return false; }
-bool DoFrontTestDestroyIC(bool /*bCheckZ2*/){ return true;  }
 bool DoFrontTestSuckIC()                    { return true;  }
 bool DoFTestSuckTestIC()                    { return true;  }
-bool CheckZ1IsDown()                        { return false; }
 bool DoFrontTestPurgBeforePickShuttle(int /*isp*/) { return true; }
 bool DoTestYFront()                         { return true;  }
-bool TestZ1OutRandge()                      { return false; }
 bool TestZ1OutRandge2()                     { return false; }
 bool FTestSeparateSLK(bool /*bReset*/)      { return true;  }
 bool FTestCombineSLK(bool /*bReset*/)       { return true;  }
@@ -106,7 +173,8 @@ bool DoFRTCAutoModelVerify(bool /*bInitial*/){ return true; }
 
 // ---- aTester_Rear cursors + bodies -----------------------------------------
 int iBTestSuckTestICTask                  = 1;
-int iRearTestDestroyICTask                = 1;
+// AI(W64b-Integrate) 20260706: iRearTestDestroyICTask now defined for real in
+// aTester_Rear.cpp (golden aTester_Rear.cpp:300) -- stub definition removed.
 int iRearTestSuckICTask                   = 1;
 int iTestYRearTask                        = 1;
 int iBRTCUseSocketFloatTask               = 1;
@@ -121,19 +189,17 @@ int  CheckAnyCaseNeedToDoArm2()             { return 0; }
 void InitTestYRearTask()                    {}
 void InitBTestSuckTestICTask()              {}
 void InitRearTestSuckICTask()               {}
-void InitRearTestDestroyICTask()            {}
+// AI(W64b-Integrate) 20260706: InitRearTestDestroyICTask/TestZ2SetPos/
+// DoRearTestDestroyIC/CheckZ2IsDown/TestZ2OutRandge now defined for real in
+// aTester_Rear.cpp (golden aTester_Rear.cpp:170-298,309-886) -- stub bodies removed.
 void InitRearTestPurgBeforePickShuttle()    {}
-void TestZ2SetPos()                         {}
 void DoArm2Suck()                           {}
 void DoArm2D44VacCheck()                    {}
 bool BTestNeedDestroy()                     { return false; }
-bool DoRearTestDestroyIC(bool /*bCheckZ1*/) { return true;  }
 bool DoRearTestSuckIC()                     { return true;  }
 bool DoBTestSuckTestIC()                    { return true;  }
-bool CheckZ2IsDown()                        { return false; }
 bool DoRearTestPurgBeforePickShuttle(int /*isp*/) { return true; }
 bool DoTestYRear()                          { return true;  }
-bool TestZ2OutRandge()                      { return false; }
 bool TestZ2OutRandge2()                     { return false; }
 bool BTestCombineSLK(bool /*bReset*/)       { return true;  }
 bool BTestSeparateSLK(bool /*bReset*/)      { return true;  }

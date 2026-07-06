@@ -588,8 +588,19 @@ add_library(ht9045_sm STATIC
     #     BRCarryKit + iTestYTask/iTestHeadMotorTask cursors).  See the file-head
     #     gate documentation.
     atester.cpp
+    # --- W64b (TESTER/INDEX engine): the Front (Z1/Arm1) and Rear (Z2/Arm2)
+    #     "Destroy IC" down-press state machines (DoFrontTestDestroyIC /
+    #     DoRearTestDestroyIC + CheckZ1IsDown/CheckZ2IsDown/TestZ1OutRandge/
+    #     TestZ2OutRandge/TestZ1SetPos/TestZ2SetPos leaf deps), faithfully
+    #     translated -- no longer offline shims for these symbols (see
+    #     atester_shims.cpp note below for what of Front/Rear is still shimmed).
+    aTester_Front.cpp
+    aTester_Rear.cpp
     # --- W6.4 TESTER/INDEX cross-module offline shims (atester_32Site /
-    #     atester_ProcessCount / aTester_Front / aTester_Rear / fContact / ADAM_*).
+    #     atester_ProcessCount / fContact / ADAM_*; aTester_Front/Rear's Destroy
+    #     pair is real as of W64b -- see aTester_Front.cpp/aTester_Rear.cpp above --
+    #     every OTHER Front/Rear export, e.g. DoFrontTestSuckIC/DoTestYFront/
+    #     TestZ1OutRandge2, is still an offline shim here).
     atester_shims.cpp
     # --- W6.5 (SHUTTLE/CARRY engine): the two input-shuttle master SMs
     #     Do_Auto_SHT1 / Do_Auto_SHT2 (39 cases each, ALL ACTIVE; case 200->201

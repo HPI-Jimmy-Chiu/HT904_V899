@@ -44,6 +44,9 @@
 // OutSht3Kit from acarry_shims.h). No predicate body changed; these were only unneeded while gated OFF.
 #include "aHotPlateSubstrate.h"
 #include "acarry_shims.h"
+// AI(W64b-Integrate) 20260706: LastSet.iRealDummy (CheckIndexAllSuckICFallDown
+// golden guard) needs canary_support.h; not previously included here.
+#include "canary_support.h"
 
 //AI(ht9045-v906) 20260629: W7 substrate staging -- TMyKitSuck grid is now translated and
 // UseSiteHasIC()/UseSiteNoIC() carry the faithful golden Item-scan (golden MyKitSuck.cpp:288/297);
@@ -239,6 +242,69 @@ bool InSHT1InRT() { return false; }
 bool InSHT2InRT() { return false; }
 bool OutSHT1InRT() { return InSHT1InRT(); }                                      // golden csystem.cpp:699
 bool OutSHT2InRT() { return InSHT2InRT(); }                                      // golden csystem.cpp:701
+// AI(W64b-Integrate) 20260706: OutSHT1InLF/OutSHT2InLF (golden csystem.cpp:698,700)
+// were declared in csystem.h but had no defined body anywhere in the translated
+// tree -- discovered as an undefined-reference link error while integrating
+// aTester_Front.cpp/aTester_Rear.cpp (case 1: `if(OutSHT1InLF()==false)`).
+// Golden bodies are trivial one-line delegates; translated verbatim (not a gate).
+bool OutSHT1InLF() { return InSHT1InLF(); }                                      // golden csystem.cpp:698
+bool OutSHT2InLF() { return InSHT2InLF(); }                                      // golden csystem.cpp:700
+//------------------------------------------------------------------------------
+// AI(W64b-Integrate) 20260706: CheckIndexAllSuckICFallDown (golden csystem.cpp:2417,
+// "Steven 20110725 修改檢查方式") -- declared in csystem.h but had no defined body
+// anywhere in the translated tree; discovered as an undefined-reference link error
+// while integrating aTester_Front.cpp/aTester_Rear.cpp (case 1/200 drop-detect
+// calls).  Translated FAITHFULLY (not a gate/stub) over the already-translated
+// FTestSuck/BTestSuck substrate + bIndex1Suck/bIndex2Suck (cmydef.h) +
+// LastSet.iRealDummy/REALLY.  SOFT_SIMULTE not defined -> the #ifndef body is LIVE,
+// exactly as golden.
+bool CheckIndexAllSuckICFallDown(bool bCheckArm1, bool bCheckArm2)              //Steven 20110725 : 修改檢查方式
+{
+    bool bFail=false;
+    #ifndef SOFT_SIMULTE
+    if(LastSet.iRealDummy==REALLY)
+    {
+        for(int i=0; i<FTestSuck.iShtRow; i++)
+        {
+            for(int j=0; j<FTestSuck.iShtCol; j++)
+            {
+                if(bCheckArm1 && bIndex1Suck==false)                            //kevin 20220105 Index 在下壓時建立 pause 保護條件
+                {
+                    if(FTestSuck.Suck[i][j].Enable       &&
+                       FTestSuck.Suck[i][j].SenUsing!="" &&
+                       FTestSuck.Item[i][j]!=HAS_NULL_IC &&
+                       FTestSuck.Item[i][j]!=NULL_IC)
+                    {
+                        if(FTestSuck.Suck[i][j].GetStatus()==false)
+                        {
+                            if(INDEX_SUCKER_TYPE==1)
+                                FTestSuck.Suck[i][j].Normal();
+                            bFail=true;                                         //Steven 20110707 : 只要有一個True就True
+                        }
+                    }
+                }
+
+                if(bCheckArm2 && bIndex2Suck==false)                            //kevin 20220105 Index 在下壓時建立 pause 保護條件
+                {
+                    if(BTestSuck.Suck[i][j].Enable       &&
+                       BTestSuck.Suck[i][j].SenUsing!="" &&
+                       BTestSuck.Item[i][j]!=HAS_NULL_IC &&
+                       BTestSuck.Item[i][j]!=NULL_IC)
+                    {
+                        if(BTestSuck.Suck[i][j].GetStatus()==false)
+                        {
+                            if(INDEX_SUCKER_TYPE==1)
+                                BTestSuck.Suck[i][j].Normal();
+                            bFail=true;                                         //Steven 20110707 : 只要有一個True就True
+                        }
+                    }
+                }
+            }
+        }
+    }
+    #endif
+    return bFail;
+}
 //------------------------------------------------------------------------------
 //  CheckSafeDoorIsClosed (golden csystem.cpp:2599): offline (no PLC / no door
 //  sensor) the door is treated as CLOSED so the #ifndef SOFT_SIMULTE guard the

@@ -925,6 +925,34 @@ endif()
 
 add_test(NAME W6_4_TesterAnchor COMMAND test_w6_4_tester_core)
 
+# --- test_w6_4b_front_rear_destroy: Front (Z1/Arm1) / Rear (Z2/Arm2) "Destroy IC"
+#   down-press SM pair -- W64b-Translate wave (aTester_Front.cpp/aTester_Rear.cpp),
+#   now real translations (no longer atester_shims.cpp offline stubs).  Asserts:
+#     (a) Init*TestDestroyICTask() -> cursor=1, bZ1/2Isdownflag=false (golden :300-305).
+#     (b) CheckZ1/2IsDown()==true and TestZ1/2OutRandge()==false under the same
+#         MOT[axis].Motor->Enable==false offline convergence knob test_w6_4_tester.cpp
+#         uses (sim HTMotor attached, default Enable=false).
+#     (c) DoFrontTestDestroyIC()/DoRearTestDestroyIC() PARK at Task=100 (case1
+#         OutSHT1/2InLF()==false -> Task=100; case100's Gali_MotMove() stub,
+#         mymotor.cpp:920 TODO(W6-Galil), unconditionally returns false so the SM
+#         cannot progress further offline -- a pre-existing Galil-stub limitation,
+#         not a W64b defect) + a 128-tick pump-sanity check (cursor never escapes
+#         the documented switch(Task) label set).
+#   Same RESCAN link group as the W6.4 Tester canaries.
+add_executable(test_w6_4b_front_rear_destroy
+    test_w6_4b_front_rear_destroy.cpp
+)
+
+target_link_libraries(test_w6_4b_front_rear_destroy PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w6_4b_front_rear_destroy PRIVATE ws2_32)
+endif()
+
+add_test(NAME W6_4b_FrontRearDestroy COMMAND test_w6_4b_front_rear_destroy)
+
 # --- test_w6_5_shuttle: pump the SHUTTLE/CARRY engine over Sim HAL -----------
 #   The task-mandated W6.5 verify TU (mirror of the in/out/tray-arm + tester
 #   core TUs).  Proves acarry.cpp (the SHUTTLE/CARRY ENGINE, in ht9045_sm)

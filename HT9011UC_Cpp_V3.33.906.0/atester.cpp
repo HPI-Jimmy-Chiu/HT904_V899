@@ -42,8 +42,12 @@
 //      MOT[]/Suck/Socket/EP/tester-comm beyond the oracle window.             W7.
 //    * cContact / iIndexTask (the index-press SM is in cContact.cpp, a VCL FORM,
 //      22761 lines -- NOT in scope; never derefed from atester.cpp).          W7.
-//    * atester_32Site.cpp / atester_ProcessCount.cpp / aTester_Front/Rear ->
+//    * atester_32Site.cpp / atester_ProcessCount.cpp ->
 //      routed to atester_shims (Do* report COMPLETE, Init* no-op).       W6.4b.
+//    * aTester_Front.cpp / aTester_Rear.cpp (Front/Rear "Destroy IC" SM pair) --
+//      AI(W64b-Integrate) 20260706: now translated for real (no longer an
+//      atester_shims stub); every OTHER Front/Rear export (DoFrontTestSuckIC,
+//      DoTestYFront, TestZ1OutRandge2, ...) still routes through atester_shims.
 //    * the contact-mode form fContact + the ADAM_* EP DAQ API -> atester_shims.
 //
 //  TRANSLATION RULES
@@ -62,7 +66,13 @@
 #include "MachineDefine.h"
 
 #include "atester.h"
-#include "atester_shims.h"          // 32Site/Front/Rear/ProcessCount/fContact/ADAM_* offline shims
+#include "atester_shims.h"          // 32Site/ProcessCount/fContact/ADAM_* offline shims (Front/Rear destroy SM now real, see below)
+// AI(W64b-Integrate) 20260706: mirrors golden atester.cpp:7-8, which #include
+// "aTester_Front.h"/"aTester_Rear.h" directly right after atester.h -- the
+// Front/Rear "Destroy IC" state machines are now translated for real (no
+// longer routed through atester_shims' offline stubs for these 6 symbols).
+#include "aTester_Front.h"
+#include "aTester_Rear.h"
 #include "aArmHeader.h"             // __FUNC__ shim
 
 #include "MachineType.h"
