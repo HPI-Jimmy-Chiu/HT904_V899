@@ -7333,7 +7333,14 @@ bool IsTrayArmCatchTrayFail()                                                   
                 break;
             case 2:                                                             //2 Sensor(ART)
             case 4:                                                             //2 Sensor(ART & No Cover)  //Steven 20241211 : add
-                if(Cylinder[C_CatchTray_FixOn].OnStatus()==false)               //wei 20150415 前後夾Alarm
+                //AI(ht9045-v899) 20260703: Greatek硬體極性校正-正常持盤=FixOn/FixOff兩顆到位皆OFF;任一到位ON即非正常持盤(FixOn ON=空夾掉盤/FixOff ON=放開)→fail;非Greatek維持原判斷
+                if(CUSTOMER_CODE==CC_Greatek)
+                {
+                    if(Cylinder[C_CatchTray_FixOn].OnStatus() ||
+                       Cylinder[C_CatchTray_FixOff].OnStatus())
+                        return true;
+                }
+                else if(Cylinder[C_CatchTray_FixOn].OnStatus()==false)               //wei 20150415
                 {
                     return true;
                 }
