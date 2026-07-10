@@ -1726,7 +1726,12 @@ int DoCatchFromLoader()
                        Cylinder[C_TrayCover].Enable)                            //ChungHung 20140624 add AutoRetest catch Tray use 2 Output
                     {
                         MOT[MMTrayY_Car].fCanMove=true;
-                        if(Cylinder[C_CatchTray_FixOn].OnSensor()==false)       //kevin 20150606
+                        if(CUSTOMER_CODE==CC_Greatek && USE_CATCH_TRAY_MODEL==2)//AI(ht9045-v899) 20260703: Greatek極性校正-有盤時FixOn_On不會到位,不靠FixOn確認直接進Task=310略過JAM0613;夾到與否由下游IsTrayArmCatchTrayFail(兩顆到位OFF=有盤)判定;非Greatek維持原FixOn到位檢查
+                        {
+                            Task=310;
+                            break;
+                        }
+                        else if(Cylinder[C_CatchTray_FixOn].OnSensor()==false)       //kevin 20150606
                         {
                             Task=400;
                             break;

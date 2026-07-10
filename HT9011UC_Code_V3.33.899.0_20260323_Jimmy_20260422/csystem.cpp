@@ -5486,7 +5486,7 @@ int CheckInitStartSuckStatus()                                                  
        (USE_CATCH_TRAY_MODEL==3 && bDetectTrayArmCatch==false))                 //Steven 20170623 (wei) : Add for catch tray with cover
     {                                                                           //kevin 20150810 add
         iReturn=5;                                                              //kevin 20160616
-        if(CUSTOMER_CODE==CC_Greatek && USE_CATCH_TRAY_MODEL==2)   //AI(ht9045-v899) 20260703: Greatek極性校正-啟動應在放開位;FixOn ON=空夾/掉盤→WAR0615,兩顆到位OFF=有盤→WAR0614取盤;非Greatek還原原始WAR0615
+        if(CUSTOMER_CODE==CC_Greatek && USE_CATCH_TRAY_MODEL==2)                //AI(ht9045-v899) 20260703: Greatek極性校正-啟動應在放開位;FixOn ON=空夾/掉盤→WAR0615,兩顆到位OFF=有盤→WAR0614取盤;非Greatek還原原始WAR0615
         {
             if(Cylinder[C_CatchTray_FixOn].OnStatus())
                 ShowErrorMessage("WAR0615", K_SKIP, MTrayX, false, __FUNC__);
