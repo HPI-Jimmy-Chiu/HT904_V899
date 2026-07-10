@@ -45,6 +45,13 @@ add_library(ht9045_core
     ContactForce.cpp
     cUnitConvert.cpp      # W2 partial: iUnitMultiply100/iUnitMultiply1000
     common.cpp            # W3 partial: ini-helper family only; other regions gated #if 0
+    # --- W64b (TESTER/INDEX force-calc extract): TfContact::GetMaxIndexForceLimit /
+    #   GetMinForce turned into free functions (ComputeMaxIndexForceLimit / ComputeMinForce).
+    #   Only #includes MachineType.h (header-only enum/macro header per KNOWLEDGE.md W0); every
+    #   other external read (dDutCount, TestIF.iTestMode, IniConfig.*, fContactForce->SLKClass[i]->
+    #   dContactOffset*) is passed in as an explicit scalar parameter, so this TU needs NO link to
+    #   ht9045_globals (confirmed empirically: the clean build below links fine without it).
+    cContact.cpp
 )
 
 target_include_directories(ht9045_core PUBLIC
@@ -59,6 +66,16 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     set(HT9045_WARNFLAGS -Wall -Wextra -Wshadow -Wconversion -Wpedantic)
     target_compile_options(vclcompat   PRIVATE ${HT9045_WARNFLAGS})
     target_compile_options(ht9045_core PRIVATE ${HT9045_WARNFLAGS})
+
+    # AI(W64b-ForceCalc-Translate) 20260710: cContact.cpp is the first ht9045_core TU to
+    # #include MachineType.h under full -Wpedantic.  MachineType.h (already-accepted W0
+    # keystone header) carries several BCB6-preserved `};` stray-semicolon idioms after
+    # free-function template bodies (e.g. ChangeToFloatNonPcnt) that ISO C++ pedantically
+    # flags as "extra ';'" at namespace scope -- harmless, but not this wave's file to fix.
+    # Narrowly suppress -Wpedantic on this ONE translation unit only (same precedent as
+    # ht9045_public's HTMD5.cpp / ht9045_globals' idiom carve-outs); every other warning
+    # class (-Wall -Wextra -Wshadow -Wconversion) still applies in full to cContact.cpp.
+    set_source_files_properties(cContact.cpp PROPERTIES COMPILE_FLAGS "-Wno-pedantic")
 endif()
 
 # ---------------------------------------------------------------------------

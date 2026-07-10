@@ -6,6 +6,18 @@ target_link_libraries(test_ContactForce PRIVATE ht9045_core)
 
 add_test(NAME ContactForce COMMAND test_ContactForce)
 
+# --- cContact: ComputeMaxIndexForceLimit / ComputeMinForce (W64b force-calc extract) -----
+#   Same simple link shape as test_ContactForce above: cContact.cpp only #includes
+#   MachineType.h (header-only) and takes every other external read as an explicit
+#   parameter, so it needs no ht9045_globals / RESCAN link group.
+add_executable(test_cContact
+    test_cContact.cpp
+)
+
+target_link_libraries(test_cContact PRIVATE ht9045_core)
+
+add_test(NAME cContact COMMAND test_cContact)
+
 # --- cUnitConvert: iUnitMultiply100 / iUnitMultiply1000 (W2 pure extract) ---
 add_executable(test_cUnitConvert
     test_cUnitConvert.cpp
