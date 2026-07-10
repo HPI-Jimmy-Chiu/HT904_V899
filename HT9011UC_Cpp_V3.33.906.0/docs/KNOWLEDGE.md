@@ -21,6 +21,10 @@
 - `TStringList`/`TStrings`、`TDateTime`(OLE double, days since 1899-12-30)、`SysUtils`（IntToStr/StrToInt/StrToIntDef/StrToFloat/FloatToStr/FloatToStrF/Format/FileExists/ExtractFileName/Path/Now/FormatDateTime…）。只實作專案用到的子集；要新方法就照 BCB6 補。
 - 建置：CMake 把 vclcompat 編成 static lib `vclcompat`，各模組 lib 連它；cJSON.c 以 C 編（`set_source_files_properties LANGUAGE C` + 標頭 extern "C"）。
 
+## vclcompat 補充（W5）
+- **`ClientSocket.h/.cpp`**（TCP client shim，2026-07-11 新增）：仿 `Comm.h`(TComm serial shim) 的 Sim/Real 二分模式——Sim 預設(離線可測、in-memory loopback)、Real 走 WinSock2(MinGW 內建，同 `Public/WinSocketErrorCode.cpp` 既有 WSA 錯誤碼轉譯可共用)。由 `MyPLC/ModbusTCPClient.cpp` 首次引入，**未來 TesterTCP.cpp/SECSGEM 協定引擎(uHGemEquipment.cpp 的 HSMS TClientSocket/TServerSocket)波次應重用此元件，不要重新發明**——三者都需要類似的 TCP client/server 需求，recon 已標記這是共用基礎設施。
+- 新增元件前務必先檢查 `vclcompat/` 現有檔案，避免重複發明（本波前先核實過僅 MyPLC 這個 unit 真的需要 TCP client，其餘同批 unit 皆不需要）。
+
 ## vclcompat 補充（W3）
 - 檔案系統：`SysUtils` 加 FindFirst/FindNext/FindClose/TSearchRec/faAnyFile/faDirectory/faReadOnly/RemoveDir/FileSetAttr/FileGetAttr/HexStrToInt（backed by MinGW windows.h）。
 - INI：`IniFiles.h/.cpp` 的 `TIniFile`(write-through，每次寫即 flush)/`TMemIniFile`(eager load，僅 UpdateFile/dtor flush)，共用 TIniStore（插入序、raw-byte Big5-safe、section/key 大小寫不敏）；default-fallback verbatim；ReadInteger 支援十進位與 $/0x hex；ReadFloat 用 '.' 小數；double 以 `%0.4f` 文字存。已 43/43 測試。
@@ -68,6 +72,8 @@
 - 溫控 Delta DTK4848(serial, HEATER_CTRL_TYPE=4)、震動 2 板(serial)、條碼(serial)、Tester=GPIB 橋(外部 32-bit, WM_COPYDATA)、sqlite3、KeyPro(自家 dongle, 只用 GET_LEVEL)。
 - 本機關閉(出範圍)：Syntek/Aurotek/PCI-1203/1735U/CC-Link/EtherCAT/RFID-MR/Laser/AOI-CCD/ESD/AGV/TrayMap/FTP/Moxa(EJ1N 2020 改 TComm)。
 - Tester 模式(54 recipe)：GPIB 50/RS232 3/TCP 1/TTL 0，Handler 端全可攜(green)。
+- **⚠ 修正（2026-07-11 W5 recon）**：上面「CC-Link 出範圍」是**執行期設定關閉**，不是死碼——`TfCCLink` 表單仍會在啟動時**無條件被實例化**，部分方法無論設定為何都會跑一次；翻譯時不能因為「本機關閉」就當作可以整段跳過，仍需 `#if HAVE_CCLINK` 執行期 Sim 分支處理（同 IOBackend.cpp 既有 HAVE_MN200/HAVE_PCI1203 慣例），而非編譯期排除。
+- **RFID-MR 是真死碼**（與上面不同）：2026-07-11 recon+主迴圈核實，`MR\` 目錄全部檔案(acatchcassette.cpp/RFID.cpp/Cassette.cpp/Delta.cpp)完全不在 `HT9045.bpr` 的 FILELIST 內——不是「設定關閉」，是根本沒編進這支 exe。除非未來有明確客戶需求，不排入任何波次。
 
 ## Log 語料位置（驗證/對拍來源）
 - 大部分：`D:\HT9045_Log`（~3.0GB、9259 檔；csv/txt/xls）。
