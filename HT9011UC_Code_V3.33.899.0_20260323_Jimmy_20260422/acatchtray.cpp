@@ -7230,7 +7230,16 @@ bool C_CatchTray_Fix_Puch(bool bInitial)                                        
         case 100:
             Cylinder[C_CatchTray_FixOff].Off();
             if(bflag==false)
-                bflag=Cylinder[C_CatchTray_FixOn].Push();
+            {
+                //AI(ht9045-v899) 20260703: Greatek極性校正-夾緊有盤時FixOn_On不會到位,用On()直接驅動不等sensor,避免Push()到位逾時誤觸JAM31047(缸47);夾到與否由IsTrayArmCatchTrayFail(兩顆到位OFF=有盤)判定;非Greatek維持Push()
+                if(CUSTOMER_CODE==CC_Greatek)
+                {
+                    Cylinder[C_CatchTray_FixOn].On();
+                    bflag=true;
+                }
+                else
+                    bflag=Cylinder[C_CatchTray_FixOn].Push();
+            }
 
             if(bNewCatchTrayblock)                                              //kevin 20200512 夾tray遮版削短
             {
