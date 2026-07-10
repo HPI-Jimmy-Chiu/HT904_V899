@@ -101,10 +101,23 @@
 #include "atester.h"                 // DoTestHeadMotor + InitialTestHeadMotorTask
 #include "acatchtray.h"              // DoCatchTray + InitialCatchTrayTask
 #include "asendic_Empty.h"           // DoAutoEmpty / DoAutoColor / InitAutoEmptyTask / DoAutoEmpty1(shim)
-#include "atester_shims.h"           // InitFrontTestSuckICTask / InitBTestSuckTestICTask
+#include "atester_shims.h"           // InitBTestSuckTestICTask
+// AI(W5-Automation-Integrate) 20260710: InitFrontTestSuckICTask is now declared
+// in aTester_Front.h for real (removed from atester_shims.h -- see that file).
+#include "aTester_Front.h"
+// AI(W5-Automation-Integrate) 20260710: InitialPiggyBackFunction/
+// ProcessPiggyBackFunction/DoLowYieldAlarm (atester_ProcessCount.h) and
+// iTestTwoArm32SiteTask (atester_32Site.h) are now declared in their own real
+// headers (removed from atester_shims.h -- see that file).
+#include "atester_ProcessCount.h"
+#include "atester_32Site.h"
 #include "acatchtray_shims.h"        // DoAutoReceiveBinTray / DoAutoColor
 #include "canary_support.h"          // LastSet / RecordProcess / REALLY (SetInitialICCheck / InitOneCycle)
 #include "FormsFacade.h"             // fMain (DoAllProcess :9130 ProcessSensorScan; gated branches)
+#include "SECSGEM/SecsEventType.h"   // SECS_EVENT (ETypeStruct) -- CleanOutFinish/AGVSupplement/OneCycleFinish/ArtFTFinish/ArtRTFinish
+#include "SECSGEM/SecsEventReport.h" // EventReport(unsigned) -- Sim-first entry point (W5-comms INTEGRATE)
+#include "Automation/SCK_ART.h"      // SckArtState / SckArt_SetLotStatus / SckArt_DoChkInputCntAlarm / SckArt_CheckNeedRT / SckArt_DoAutoSocketOff (W7C1/W7C2 SCKART seams)
+#include "Automation/HANA_ART.h"     // uHANA_ART (W7C2 Hana seam)
 
 #include <cstdio>
 
@@ -1023,11 +1036,14 @@ static void W7C1_WriteIniData(AnsiString,AnsiString,AnsiString,double){}// golde
 //  the offline stubs; gate (offline: 2D/Tray-mapping setup-file reset no-op).
 #define W7C1_FBARCODE_CHANGE2D()      do { } while(0)   // golden fBarCode->Change2DSetupFile()
 #define W7C1_FTRAYMAP_CHANGETRAY()    do { } while(0)   // golden fTrayMapping->ChangeTraySetupFile()
-//  SECS_EVENT (ETypeStruct) lacks CleanOutFinish / AGVSupplement members; the
-//  EventReport calls are inside if(IniConfig.bEnable_SECS_GEM)/if(TrayForm.bEnableAMR)
-//  (both false offline).  Gate the two reports (offline: no SECS event emitted).
-#define W7C1_EVENTREPORT_CLEANOUTFINISH()  do { } while(0)  // golden EventReport(SECS_EVENT.CleanOutFinish)
-#define W7C1_EVENTREPORT_AGVSUPPLEMENT()   do { } while(0)  // golden EventReport(SECS_EVENT.AGVSupplement)
+//  W5-comms INTEGRATE (20260710): SECS_EVENT (SECSGEM/SecsEventType.h) now
+//  carries CleanOutFinish/AGVSupplement, and EventReport() (SecsEventReport.h)
+//  is a real, offline-safe Sim entry point -- wire the two reports directly.
+//  Both calls are still reached only inside if(IniConfig.bEnable_SECS_GEM)/
+//  if(TrayForm.bEnableAMR) (both false offline by default), so this is a
+//  behavior-neutral no-op for every existing offline test.
+#define W7C1_EVENTREPORT_CLEANOUTFINISH()  EventReport(SECS_EVENT.CleanOutFinish)
+#define W7C1_EVENTREPORT_AGVSUPPLEMENT()   EventReport(SECS_EVENT.AGVSupplement)
 
 // --- facade members ABSENT from FormsFacade.h (gate the deref statements) -----
 //  These reside in CONFIG-GATED branches (false offline) so gating the access
@@ -1042,11 +1058,21 @@ static void W7C1_WriteIniData(AnsiString,AnsiString,AnsiString,double){}// golde
 #define W7C1_FMAIN_BTNONECYCLE_DOWN  (fMain->BtnOneCycle->Down)
 
 //  fSCKART extended members (golden Automation/SCK_ART.h) absent from the W6 stub.
+//  AI(W5-Automation-Integrate) 20260710: SetLotStatus/DoChkInputCntAlarm are now
+//  wired to the REAL Automation/SCK_ART.cpp free functions (SckArt_SetLotStatus/
+//  SckArt_DoChkInputCntAlarm) over an embedded SckArtState -- see that unit's
+//  translate report ("WHY FREE FUNCTIONS, NOT A CLASS": FormsFacade.h already
+//  owns a different, offline-stub `class TfSCKART`, so this TU-local seam gets
+//  its own private SckArtState core instead). SaveTestSummary is NOT one of the
+//  8 translated functions -- stays a no-op. Both wired calls are reached only
+//  inside `if(CosFunction.bUseSCKART...)` (default false offline), so this is
+//  behavior-neutral for every currently-passing suite.
 struct W7C1_TfSCKARTSeam {
     int  iTesterType;       int iLOTSTATUS_L;        int iWaitGPIBLotR;
     int  iCurrentFlexARTStep; int iInputJamCnt;      int iOutputJamCnt;
-    void SetLotStatus(int){}
-    bool DoChkInputCntAlarm(bool){ return false; }
+    SckArtState core;
+    void SetLotStatus(int iStatus){ SckArt_SetLotStatus(core, iStatus); }
+    bool DoChkInputCntAlarm(bool bExcess){ return SckArt_DoChkInputCntAlarm(core, bExcess); }
     void SaveTestSummary(int){}
     W7C1_TfSCKARTSeam():iTesterType(0),iLOTSTATUS_L(0),iWaitGPIBLotR(0),
                         iCurrentFlexARTStep(0),iInputJamCnt(0),iOutputJamCnt(0){}
@@ -1054,10 +1080,11 @@ struct W7C1_TfSCKARTSeam {
 static W7C1_TfSCKARTSeam    W7C1_fSCKART_ext;
 #define W7C1_SCKART          (&W7C1_fSCKART_ext)
 
-//  fAGV->IsSPIL_AMR (golden Automation/AGV.h) absent (only IsATK_AMR present).
-struct W7C1_TfAGVSeam { bool IsSPIL_AMR(){ return false; } };
-static W7C1_TfAGVSeam       W7C1_fAGV_ext;
-#define W7C1_FAGV_ISSPIL()   W7C1_fAGV_ext.IsSPIL_AMR()
+//  fAGV->IsSPIL_AMR (golden Automation/AGV.h) -- AI(W5-Automation-Integrate)
+//  20260710: now a REAL method on FormsFacade's TfAGV (wired to
+//  Automation/AGV_predicates.cpp) -- dispatch straight to fAGV instead of the
+//  former always-false seam.
+#define W7C1_FAGV_ISSPIL()   fAGV->IsSPIL_AMR()
 
 //  fLotInfo tray-count labels (golden uLotInfo.h) absent from the W6 stub.
 struct W7C1_TfLotInfoLabelSeam { AnsiString Caption; };
@@ -2172,18 +2199,34 @@ void DoCleanOutFinishCheck()
 //     present on the real TfSCKART -- iInputJamCnt/iFTRTCount/iInputCount/
 //     CheckLoadingCount -- stay on fSCKART).  All methods inert / all fields 0. -
 struct W7C2_TPanelSeam { AnsiString Caption; };                 // golden TPanel* (palOutputCnt/palRejectCnt)
+// AI(W5-Automation-Integrate) 20260710: SetLotStatus/CheckNeedRT/DoAutoSocketOff/
+// DoChkInputCntAlarm are now wired to the REAL Automation/SCK_ART.cpp free
+// functions over an embedded SckArtState `core` (self-contained per seam
+// instance -- see W7C1_TfSCKARTSeam above for the identical pattern/rationale).
+// iNeedRT/iTesterType/dCurrYield stay top-level fields (read directly at other
+// W7C2_SCKART-> call sites in this file) and are synced with `core` around each
+// wired call so those other reads observe the real function's effect.
+// AccessFile/UpdateCount/SaveTestSummary are NOT among the 8 translated
+// functions -- stay no-ops. Every call site is reached only inside
+// CosFunction.bAutoRetestGPIBmode==true (default false offline), so this is
+// behavior-neutral for every currently-passing suite.
 struct W7C2_TfSCKARTSeam {
     int    iNeedRT;        int iLotCount;       int iTesterType;
     int    iCurrentStatus; int iLOTSTATUS_W;    int iLOTSTATUS_R;   int iLOTSTATUS_A;
     int    iWaitGPIBLotR;  int iOutputJamCnt;   double dCurrYield;
     W7C2_TPanelSeam *palOutputCnt; W7C2_TPanelSeam *palRejectCnt;
-    void   SetLotStatus(int /*iStatus*/){}
+    SckArtState core;
+    void   SetLotStatus(int iStatus){ SckArt_SetLotStatus(core, iStatus); iCurrentStatus=core.iCurrentStatus; }
     void   AccessFile(bool /*bRead*/, int /*iAccess*/=-1){}
     void   UpdateCount(){}
-    void   CheckNeedRT(){}
-    void   DoAutoSocketOff(bool /*bAllSiteOn*/=false){}
+    void   CheckNeedRT(){
+        core.iTesterType=iTesterType; core.dCurrYield=dCurrYield;
+        SckArt_CheckNeedRT(core);
+        iNeedRT=core.iNeedRT;
+    }
+    void   DoAutoSocketOff(bool bAllSiteOn=false){ SckArt_DoAutoSocketOff(core, bAllSiteOn); }
     void   SaveTestSummary(int /*iSaveData*/=0){}
-    bool   DoChkInputCntAlarm(bool /*bExcess*/){ return false; }
+    bool   DoChkInputCntAlarm(bool bExcess){ return SckArt_DoChkInputCntAlarm(core, bExcess); }
     W7C2_TfSCKARTSeam():iNeedRT(0),iLotCount(0),iTesterType(0),iCurrentStatus(0),
         iLOTSTATUS_W(0),iLOTSTATUS_R(0),iLOTSTATUS_A(0),iWaitGPIBLotR(0),iOutputJamCnt(0),
         dCurrYield(0.0){ palOutputCnt=new W7C2_TPanelSeam(); palRejectCnt=new W7C2_TPanelSeam(); }
@@ -2193,13 +2236,23 @@ static W7C2_TfSCKARTSeam    W7C2_fSCKART_ext;
 
 // --- fMain->hanaART extended members (golden uHANA_ART) absent from TfMainHanaART
 //     (which has only IsHanaArtAvailable / AddNewTrayHead -> both stay on
-//     fMain->hanaART).  Inert seam: IsContactAvailable=false, NeedToRT=0. --------
+//     fMain->hanaART).
+//     AI(W5-Automation-Integrate) 20260710: wired to a REAL embedded uHANA_ART
+//     instance (Automation/HANA_ART.cpp) -- 1:1 method-signature match
+//     (IsContactAvailable/IsPrimeTest/EndPrimeTest/EndReTest/NeedToRT), so this
+//     seam simply delegates. Only reached from DoART_AfterCleanOut, which is
+//     itself dead offline (see that function's own header comment,
+//     csystem.cpp:3654-3659) -- behavior-neutral for every currently-passing
+//     suite. Retiring this seam entirely (retyping fMain->hanaART to
+//     uHANA_ART*) is a FormsFacade.h change, flagged but not done here (see
+//     HANA_ART.cpp's own cross-unit wiring note).
 struct W7C2_TfHanaSeam {
-    bool IsContactAvailable(){ return false; }
-    bool IsPrimeTest(){ return false; }
-    void EndPrimeTest(){}
-    void EndReTest(){}
-    int  NeedToRT(){ return 0; }              // 0:Waiting command,1:Need RT,2:Lot End
+    uHANA_ART real;
+    bool IsContactAvailable(){ return real.IsContactAvailable(); }
+    bool IsPrimeTest(){ return real.IsPrimeTest(); }
+    void EndPrimeTest(){ real.EndPrimeTest(); }
+    void EndReTest(){ real.EndReTest(); }
+    int  NeedToRT(){ return real.NeedToRT(); }              // 0:Waiting command,1:Need RT,2:Lot End
 };
 static W7C2_TfHanaSeam      W7C2_fHana_ext;
 #define W7C2_HANAART         (&W7C2_fHana_ext)
@@ -2315,12 +2368,14 @@ static W7C2_TfSocketCommSeam W7C2_fSocketComm;
 // --- LotSummary (golden cLotSummary.h) absent.  Gate ClearRTData(). -------------
 #define W7C2_LOTSUMMARY_CLEARRTDATA()      do { } while(0)   // golden LotSummary.ClearRTData()
 
-// --- EventReport(SECS_EVENT.X) : SECS_EVENT (ETypeStruct) lacks the OneCycleFinish
-//     / ArtFTFinish / ArtRTFinish members (mirrors the W7C1 CleanOutFinish gate).
-//     All three calls are inside if(IniConfig.bEnable_SECS_GEM) (false offline). -
-#define W7C2_EVENTREPORT_ONECYCLEFINISH()  do { } while(0)   // golden EventReport(SECS_EVENT.OneCycleFinish) // 41 One Cycle Finish
-#define W7C2_EVENTREPORT_ARTFTFINISH()     do { } while(0)   // golden EventReport(SECS_EVENT.ArtFTFinish)    // 63 ART FT finish
-#define W7C2_EVENTREPORT_ARTRTFINISH()     do { } while(0)   // golden EventReport(SECS_EVENT.ArtRTFinish)    // 61 ART RT finish
+// --- EventReport(SECS_EVENT.X) : W5-comms INTEGRATE (20260710) -- mirrors the
+//     W7C1 CleanOutFinish wiring above; SECS_EVENT now carries OneCycleFinish/
+//     ArtFTFinish/ArtRTFinish and EventReport() is a real Sim entry point.
+//     All three calls are still reached only inside if(IniConfig.bEnable_SECS_GEM)
+//     (false offline by default) -- behavior-neutral for existing offline tests.
+#define W7C2_EVENTREPORT_ONECYCLEFINISH()  EventReport(SECS_EVENT.OneCycleFinish) // 41 One Cycle Finish
+#define W7C2_EVENTREPORT_ARTFTFINISH()     EventReport(SECS_EVENT.ArtFTFinish)    // 63 ART FT finish
+#define W7C2_EVENTREPORT_ARTRTFINISH()     EventReport(SECS_EVENT.ArtRTFinish)    // 61 ART RT finish
 
 // --- absent FREE functions -----------------------------------------------------
 static bool W7C2_InArmSuckState(){ return false; }        // golden -- any in-arm picker vacuum on? offline none

@@ -650,6 +650,17 @@ public:
     bool DoShuttleFloatCheck_1();                              // golden BarCode.h:890
     bool DoShuttleFloatCheck_2();                              // golden BarCode.h:891
     bool IsSHT2DIDScanFinish(int SHT);                         // golden BarCode.h:942
+
+    // -- W5-comms INTEGRATE ADD: members Interface/InterfaceSYS.cpp's
+    //    _GPIBGetCommand_TEST "BARCODEERR:" decode derefs (golden
+    //    BarCode/BarCode.h:782-784).  fBarCode is a `static TfBarCode_Shim
+    //    g_fBarCode;` (below) with no user-declared ctor, so these
+    //    zero-initialize (bool->false) / default-construct (AnsiString[32])
+    //    at static-init time -- no explicit ctor needed.  AI(W5-comms-Integrate)
+    //    20260710.
+    bool       bGPIBTestBarCodeError;          // golden BarCode.h:782
+    AnsiString iBinReturnMess[32];             // golden BarCode.h:783
+    bool       bGPIBTestBarCodeFormatError;    // golden BarCode.h:784
 };
 extern TfBarCode_Shim *fBarCode;        //golden BarCode.h : TfBarCode *fBarCode
 

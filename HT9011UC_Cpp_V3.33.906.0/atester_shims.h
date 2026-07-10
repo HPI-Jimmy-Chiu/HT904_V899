@@ -32,41 +32,38 @@
 #include "MachineType.h"            // MAX_SOCKET_ROW / MAX_SOCKET_COL
 
 // ===========================================================================
-//  atester_32Site.cpp  -- golden atester_32Site.h.  4 call sites in DoTestHeadMotor
-//  / DoTestY.  Offline: Do* = "complete" (true) so the 32-site path falls through;
-//  Init* = no-op; the cursor ints are owned here (golden Init*Task home =1).
+//  atester_32Site.cpp -- AI(W5-Automation-Integrate) 20260710: ALL 10 symbols
+//  formerly shimmed here are now REAL (atester_32Site.h/.cpp, added to
+//  ht9045_sm -- see CMakeLists.txt).  atester.cpp now
+//  `#include "atester_32Site.h"` directly for these declarations; the offline
+//  stand-ins that used to live here have been REMOVED (would otherwise
+//  duplicate-define InitTestSuckTestIC_TwoArm32Site_Task/InitTestYTwoArm32SiteTask/
+//  DoInterFaceErrorStep_TwoArm32Site/DoTestSuckTestIC_TwoArm32Site/
+//  DoTestY_TwoArm32Site/Do32SiteTestDestroyIC/Do32SiteTestSuckIC/
+//  i32RTCAutoModelVerifyTask/iTestSuckTestIC_TwoArm32Site_Task/
+//  iTestTwoArm32SiteTask).
 // ===========================================================================
-void InitTestSuckTestIC_TwoArm32Site_Task();   // golden atester_32Site.h
-void InitTestYTwoArm32SiteTask();              // golden atester_32Site.h
-bool DoInterFaceErrorStep_TwoArm32Site();      // golden -- offline: handled (true)
-bool DoTestSuckTestIC_TwoArm32Site();          // golden -- offline: complete (true)
-bool DoTestY_TwoArm32Site();                   // golden -- offline: complete (true)
-bool Do32SiteTestDestroyIC();                  // golden -- offline: complete (true)
-bool Do32SiteTestSuckIC();                     // golden -- offline: complete (true)
-extern int i32RTCAutoModelVerifyTask;          // golden atester_32Site.h
-extern int iTestSuckTestIC_TwoArm32Site_Task;  // golden atester_32Site.h
-extern int iTestTwoArm32SiteTask;              // golden atester_32Site.h
 
 // ===========================================================================
-//  atester_ProcessCount.cpp  -- golden atester_ProcessCount.h.  7+ call sites.
-//  Offline: void bodies no-op; int body (DoLowYieldAlarm) returns 0 (no alarm).
+//  atester_ProcessCount.cpp -- AI(W5-Automation-Integrate) 20260710: 11 of the
+//  symbols formerly shimmed here are now REAL (atester_ProcessCount.h/.cpp,
+//  added to ht9045_sm) -- InitialPiggyBackFunction/ProcessPiggyBackFunction/
+//  RecordPiggyBackStartEnd/ProcessSocketPurgeCount/CheckContinuoussFail/
+//  ProcessContinuoussFailForATC/CheckContinuoussPassBySocket/
+//  CheckContinuoussPass/DoLowYieldAlarm/DoLowYieldAlarmFirst/
+//  ProcessAutoloadcellMeasureCount -- REMOVED from here (would otherwise
+//  duplicate-define).  atester.cpp now `#include "atester_ProcessCount.h"`
+//  directly for those.  The remaining 5 golden atester_ProcessCount.cpp
+//  exports are STILL out of scope this wave and STAY here exactly as before
+//  (do NOT re-declare them in atester_ProcessCount.h -- see that header's own
+//  scope note): ProcessShowTestStatus / ProcessCount / ProcessStartTestData /
+//  RecordHistroy / ProcessQASampling.
 // ===========================================================================
-void InitialPiggyBackFunction();               // golden atester_ProcessCount.h
-void ProcessPiggyBackFunction();
-void RecordPiggyBackStartEnd(bool bStart);     // (also declared in atester.h; real home is ProcessCount)
-void ProcessSocketPurgeCount();
 void ProcessShowTestStatus(int Index);         // (also declared in atester.h)
-void CheckContinuoussFail(int Index);
-void ProcessContinuoussFailForATC(int Index);
-void CheckContinuoussPassBySocket(int Index);
-void CheckContinuoussPass(int Index);
 void ProcessCount(int Index, bool bHasIC=true);// (also declared in atester.h)  //Eastsun 20260515 F022: D7
 void ProcessStartTestData(int Direct);
 void RecordHistroy(int attr);                  // golden -- (__fastcall removed)
-int  DoLowYieldAlarm(AnsiString AlarmCode, AnsiString ErrPart);        // golden -- offline 0
-int  DoLowYieldAlarmFirst(AnsiString AlarmCode, AnsiString ErrPart);   // golden -- offline 0
 void ProcessQASampling(int Index);
-void ProcessAutoloadcellMeasureCount();
 
 // ===========================================================================
 //  aTester_Front.cpp / aTester_Rear.cpp  -- golden aTester_Front.h / aTester_Rear.h.
@@ -78,7 +75,8 @@ void ProcessAutoloadcellMeasureCount();
 extern int iFTestSuckTestICTask;
 // AI(W64b-Integrate) 20260706: iFrontTestDestroyICTask now defined for real in
 // aTester_Front.cpp/.h (golden aTester_Front.h:300) -- extern moved there.
-extern int iFrontTestSuckICTask;
+// AI(W5-Automation-Integrate) 20260710: iFrontTestSuckICTask now defined for
+// real in aTester_Front.cpp/.h too -- extern moved there (REMOVED here).
 extern int iTestYFrontTask;
 extern int iFRTCUseSocketFloatTask;
 extern int iFRTCAutoModelVerifyTask;
@@ -91,15 +89,16 @@ extern bool bArm1SuckFinish[4][8];
 int  CheckAnyCaseNeedToDoArm1();               // golden -- offline 0
 void InitTestYFrontTask();
 void InitFTestSuckTestICTask();                // (also declared in atester.h)
-void InitFrontTestSuckICTask();
 // AI(W64b-Integrate) 20260706: InitFrontTestDestroyICTask/TestZ1SetPos/
 // DoFrontTestDestroyIC/CheckZ1IsDown/TestZ1OutRandge now defined for real in
 // aTester_Front.cpp; declarations moved to aTester_Front.h (golden aTester_Front.h).
+// AI(W5-Automation-Integrate) 20260710: InitFrontTestSuckICTask/DoFrontTestSuckIC
+// now defined for real in aTester_Front.cpp too -- declarations moved there
+// (REMOVED here).
 void InitFrontTestPurgBeforePickShuttle();
 void DoArm1Suck();
 void DoArm1D44VacCheck();
 bool FTestNeedDestroy();
-bool DoFrontTestSuckIC();
 bool DoFTestSuckTestIC();                       // golden -- offline complete (true)
 bool DoFrontTestPurgBeforePickShuttle(int isp);
 bool DoTestYFront();                            // golden -- offline complete (true)
@@ -111,7 +110,8 @@ bool DoFRTCAutoModelVerify(bool bInitial);
 extern int iBTestSuckTestICTask;
 // AI(W64b-Integrate) 20260706: iRearTestDestroyICTask now defined for real in
 // aTester_Rear.cpp/.h (golden aTester_Rear.h:300) -- extern moved there.
-extern int iRearTestSuckICTask;
+// AI(W5-Automation-Integrate) 20260710: iRearTestSuckICTask now defined for
+// real in aTester_Rear.cpp/.h too -- extern moved there (REMOVED here).
 extern int iTestYRearTask;
 extern int iBRTCUseSocketFloatTask;
 extern int iBRTCGiveWayCheckTask;
@@ -124,15 +124,16 @@ extern bool bArm2SuckFinish[MAX_SOCKET_ROW][MAX_SOCKET_COL];
 int  CheckAnyCaseNeedToDoArm2();               // golden -- offline 0
 void InitTestYRearTask();
 void InitBTestSuckTestICTask();
-void InitRearTestSuckICTask();
 // AI(W64b-Integrate) 20260706: InitRearTestDestroyICTask/TestZ2SetPos/
 // DoRearTestDestroyIC/CheckZ2IsDown/TestZ2OutRandge now defined for real in
 // aTester_Rear.cpp; declarations moved to aTester_Rear.h (golden aTester_Rear.h).
+// AI(W5-Automation-Integrate) 20260710: InitRearTestSuckICTask/DoRearTestSuckIC
+// now defined for real in aTester_Rear.cpp too -- declarations moved there
+// (REMOVED here).
 void InitRearTestPurgBeforePickShuttle();
 void DoArm2Suck();
 void DoArm2D44VacCheck();
 bool BTestNeedDestroy();
-bool DoRearTestSuckIC();
 bool DoBTestSuckTestIC();                        // golden -- offline complete (true)
 bool DoRearTestPurgBeforePickShuttle(int isp);
 bool DoTestYRear();                             // golden -- offline complete (true)

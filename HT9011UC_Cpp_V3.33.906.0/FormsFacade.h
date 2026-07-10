@@ -43,6 +43,7 @@
 class TfAGV
 {
 public:
+    bool IsSPIL_AMR();               // [METHOD] golden AGV.h:204 -- W5-Automation INTEGRATE: real (Automation/AGV_predicates.cpp)
     bool IsATK_AMR();
     bool Use_AMR();                 // [METHOD] golden AGV.h -- W6.3: offline no AMR -> false
 };
@@ -175,6 +176,25 @@ public:
     void ModifyTester(int iWhich);                            // [METHOD] golden main.h:Steven 20191218 -- offline: QA tester-modify no-op
     void CleanYieldCount();                                   // [METHOD] golden main.h -- offline: yield-count clear no-op
     TfMainSpeedButton *BtnOneCycle;                           // [DATA]   golden main.h (TSpeedButton* BtnOneCycle); offline Down=false
+    // -- W5-comms INTEGRATE ADD: members Interface/InterfaceSYS.cpp derefs ------
+    //    (the WM_COPYDATA IPC bridge to the ESD / Auto-Update / Event-Log-
+    //    Analyzer helper programs).  golden main.h:1216/1217/1218/1220.  Offline
+    //    default NULL/0 preserves golden's own "no window found yet" safe path
+    //    (FindWindow is called lazily at each send site, matching golden).
+    //    AI(W5-comms-Integrate) 20260710.
+    HWND HESDWnd;                                 // [DATA] golden main.h:1216 (HWND) -- offline NULL
+    HWND HEventLogWnd;                            // [DATA] golden main.h:1217 (HWND) -- offline NULL
+    HWND HAutoUpdateWnd;                          // [DATA] golden main.h:1218 (HWND) -- offline NULL
+    int  oldGpibAddress;                          // [DATA] golden main.h:1220 (int)  -- offline 0
+    // -- W5-Automation INTEGRATE ADD: members Automation/HANA_ART.cpp derefs -----
+    //    (the HANA-ART tester-side SRQ helper).  golden main.h:1400/1401/1531/
+    //    1532/1370.  Offline: no real GPIB-bridge process / no SamSung-specific
+    //    map or soak-time source / no arm-status telemetry sink.
+    void SendMSG_CMD(int CMD);                                // [METHOD] golden main.h:1400 -- offline no-op
+    void SendMSG_CMD(int CMD, AnsiString Message);            // [METHOD] golden main.h:1401 -- offline no-op
+    AnsiString GetSamSungMap(bool bSend=true);                // [METHOD] golden main.h:1531 (body Command.cpp:10137) -- offline: ""
+    AnsiString GetSamSungSoakTime(bool bSend=true);           // [METHOD] golden main.h:1532 (body Command.cpp:10305) -- offline: "0"
+    AnsiString ArmStatusStrings();                            // [METHOD] golden main.h:1370 (body Command.cpp:1497) -- offline: ""
     TfMain();
 };
 extern TfMain *fMain;
@@ -219,6 +239,11 @@ public:
     TfLotInfoLabel   *labNowLoaderTrayID;         // [DATA] golden uLotInfo.h (loader tray-ID label)
     TfLotInfoEdit    *edtSysLotID;                // [DATA] golden uLotInfo.h (system lot-ID edit)
     void InitialUnLoaderTask(int iUnloader);      // [METHOD] golden uLotInfo.h -- offline: no-op (SOFT_SIMULTE AMR path)
+    // -- W5-Automation INTEGRATE ADD: members Automation/AMR.cpp + HANA_ART.cpp derefs --
+    TfLotInfoRunMode *cbProcess;                  // [DATA] golden uLotInfo.h (TComboBox*; only ->Text used) -- reuse TfLotInfoRunMode shape
+    void RefreshAMR();                            // [METHOD] golden uLotInfo.h:1416 -- offline: no UI to refresh (no-op)
+    void SetLotID(AnsiString ID, bool bReadFromFile=false);       // [METHOD] golden uLotInfo.h:1310 -- offline no-op
+    void SetLotStart(AnsiString sFunc, bool bReadFromFile=false); // [METHOD] golden uLotInfo.h:1311 -- offline no-op
     TfLotInfo();
 };
 extern TfLotInfo *fLotInfo;
@@ -249,6 +274,17 @@ public:
     int  CheckLoadingCount();                      // [METHOD] golden SCK_ART.h -- offline: 0 (no ART loading mismatch; golden compares ==0/==1/==2)
     // -- W6.5 ADD: member the SHUTTLE ENGINE (acarry.cpp) derefs ----------------
     void AddOutputJamCnt(int row, int col, int ret, int iBinOnCarryKit=0);  // [METHOD] golden Automation/SCK_ART.h:302 -- offline: no-op (inside if(bUseSCKART), default false)
+    // -- W5-Automation INTEGRATE ADD: members Automation/AMR.cpp + HANA_ART.cpp derefs --
+    int  iCurrent93KARTStep;                       // [DATA] golden SCK_ART.h:263 -- needed by both AMR.cpp and HANA_ART.cpp
+    AnsiString sLotID;                              // [DATA] golden SCK_ART.h:237
+    AnsiString sProcessCode;                        // [DATA] golden SCK_ART.h:238
+    void DoARTLotStart(AnsiString _sLotID, AnsiString _sProcessCode, int _iLotCount);  // [METHOD] golden SCK_ART.h:347 -- offline no-op
+    void AccessFile(bool bRead, int iAccess=-1);    // [METHOD] golden SCK_ART.h:271 -- offline no-op
+    TfSortCTPanel *palLotNumber;                    // [DATA] golden SCK_ART.h (TPanel* lot-number caption) -- reuse TfSortCTPanel {AnsiString Caption;}
+    TfSortCTPanel *palTestCnt;                      // [DATA] golden SCK_ART.h (TPanel* FT/RT test-count caption)
+    TfSortCTPanel *palRTTryCnt;                      // [DATA] golden SCK_ART.h (TPanel* RT-try-count caption)
+    TfSortCTPanel *pnlProcessCode;                   // [DATA] golden SCK_ART.h (TPanel* process-code caption)
+    TfLotInfoEdit  *edlRTTryCnt;                     // [DATA] golden SCK_ART.h (TEdit* RT-try-count edit) -- reuse TfLotInfoEdit {AnsiString Text;}
     TfSCKART();
 };
 extern TfSCKART *fSCKART;

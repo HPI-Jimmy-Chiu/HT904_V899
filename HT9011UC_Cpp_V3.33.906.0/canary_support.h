@@ -91,7 +91,26 @@ struct LAST_GENERAL_SET
     // minimal shim (golden field TYPES verbatim from LastSet.h:132 bool / :274 int).
     bool bD41TestSocketICCheckSkip;     // golden LastSet.h:132 -- [D41] skip test-socket IC vacuum check
     int  iD41SocketInitialICCheckPosition; // golden LastSet.h:274 -- [D41] initial IC-check position (1=above socket)
-    // TODO(W6.x): the other ~450 LAST_GENERAL_SET fields land with the full
+    // AI(W5-Automation-Integrate) 20260710: fields required by the W5 Automation
+    // wave's TeraPower AMR tray-count bridge (Automation/AMR.cpp) + HANA-ART SRQ
+    // helper (Automation/HANA_ART.cpp) -- both are REAL compile dependencies (not
+    // TU-local gates), added per those units' translate reports (golden field
+    // TYPES verbatim from LastSet.h).
+    int  iAMRTrayConut[9];              // golden LastSet.h:502 -- per-Auto/Loader AMR tray-in-flight count
+    int  iAMRTrayLoaderTotal;           // golden LastSet.h:503 -- total Loader trays carried in by AMR
+    bool bAMRTrayFeedWait;              // golden LastSet.h:504 -- waiting for AMR tray-feed completion
+    bool bAMRLoaderLast;                // golden LastSet.h:505 -- Loader is down to its last cover tray
+    bool bAMRRequestSupplyTray;         // golden LastSet.h:506 -- AMR supply-tray request pending
+    int  iBinData32[4][260];            // golden LastSet.h:366 -- per-[arm/category] bin-count grid (also read by HANA_ART.cpp)
+    int  iASEContact;                   // golden LastSet.h:379 -- ASE contact-count log index (HANA_ART.cpp)
+    // AI(W5-Automation-Integrate) 20260710: fields required by
+    // atester_ProcessCount.cpp (Low-Yield-AutoClean / ART load count / per-site
+    // socket-contact count) -- REAL compile dependencies, golden field TYPES
+    // verbatim from LastSet.h.
+    int  iIndexCount;                   // golden LastSet.h:381 -- Low Yield Auto Clean index count
+    long SendCT_ART[4];                 // golden LastSet.h:384 -- per-port ART LOAD count
+    int  iSocketContactCount[4][8];     // golden LastSet.h:396 -- per-[row][col] socket contact count
+    // TODO(W6.x): the other ~437 LAST_GENERAL_SET fields land with the full
     //             translated LastSet.h.
 };
 extern LAST_GENERAL_SET LastSet;    // golden: extern LAST_GENERAL_SET LastSet; (LastSet.h:514)

@@ -23,9 +23,11 @@ AnsiString BoolToStr(bool B, bool /*UseBoolStrs*/)
     return B ? AnsiString("True") : AnsiString("False");
 }
 
-// ---- SECS_EVENT + EventReport ----------------------------------------------
-struct ETypeStruct SECS_EVENT;                  // golden uHGemHT9045.h:313
-void EventReport(unsigned /*Ceid*/) {}          // offline: no SECS link
+// ---- SECS_EVENT + EventReport -----------------------------------------------
+// AI(W5-comms-Integrate) 20260710: now provided for real by ht9045_secsgem
+// (SECSGEM/SecsEventType.cpp defines SECS_EVENT; SECSGEM/SecsEventReport.cpp
+// defines EventReport()) -- see acatchtray_shims.h.  Removed the local
+// placeholder definitions (would otherwise duplicate-define both symbols).
 
 // ---- TfTrayMapping (offline: no CCD / laser / RFID) ------------------------
 TLdRFIDShim::TLdRFIDShim()
@@ -74,9 +76,9 @@ int  TLoadCCDShim::LoadCCDData()   { return 0; }    // offline: no remain IC -> 
 void TLoadCCDShim::InitialLoadCCD(){}
 TLoadCCDShim *LoadCCD = new TLoadCCDShim();
 
-// ---- AMR (golden AMR.h) ----------------------------------------------------
-void TAMRShim::SupplyCover(int /*iAuto*/) {}
-TAMRShim AMR;
+// ---- AMR (golden AMR.h) -- AI(W5-Automation-Integrate) 20260710: TAMRShim/AMR
+//      stopgap REMOVED (ODR collision with the real Automation/AMR.cpp `AMR`
+//      global now that it exists) -- see acatchtray_shims.h comment.
 
 // ---- missing free functions (offline-safe) ---------------------------------
 bool MoveInArm2XYToWait()                       { return true;  }

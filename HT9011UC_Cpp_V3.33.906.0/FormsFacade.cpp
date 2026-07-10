@@ -10,18 +10,21 @@
 //        member documentation + golden homes.
 // =============================================================================
 #include "FormsFacade.h"
+#include "Automation/AGV_predicates.h"      // AI(W5-Automation-Integrate) 20260710: real AMR-mode predicates
 
 // --- W6.1 ------------------------------------------------------------------
 TfAGV *fAGV = new TfAGV();
 
-bool TfAGV::IsATK_AMR()
-{
-    // Offline sim: no ATK AMR is connected.  TODO(W6.x/W7): wire to the real
-    // AMR-mode state when the AGV/AMR subsystem is translated.
-    return false;
-}
+// AI(W5-Automation-Integrate) 20260710: wired to the real, faithfully-translated
+// predicates (Automation/AGV_predicates.cpp) instead of the previous hardcoded
+// false stand-ins -- see that unit's translate report.  Behaviourally identical
+// offline TODAY (USE_COVER_TRAYID defaults tCIDNotUse / IniConfig.bA65_BundleIDList
+// defaults false, so every predicate still evaluates false on the untouched
+// baseline), but now evaluates the REAL condition once those globals are set.
+bool TfAGV::IsSPIL_AMR() { return AGV_IsSPIL_AMR(); }
+bool TfAGV::IsATK_AMR()  { return AGV_IsATK_AMR();  }
 // --- W6.3 ADD --------------------------------------------------------------
-bool TfAGV::Use_AMR() { return false; }     // offline: no AMR present -> false
+bool TfAGV::Use_AMR()    { return AGV_Use_AMR();    }
 
 // --- W6.2: TfMain ----------------------------------------------------------
 // --- W6.3 ADD: TfMainHanaART --------------------------------------------------
@@ -58,6 +61,11 @@ TfMain::TfMain()
     emp7TabSheet21 = 0;                            // ==pgMain->ActivePageIndex offline
     // -- W7-C1 ADD --
     BtnOneCycle = new TfMainSpeedButton();         // offline Down=false (else-branch one-cycle trigger inert)
+    // -- W5-comms INTEGRATE ADD: Interface/InterfaceSYS.cpp IPC window handles --
+    HESDWnd        = NULL;
+    HEventLogWnd   = NULL;
+    HAutoUpdateWnd = NULL;
+    oldGpibAddress = 0;
 }
 void TfMain::LightOn() {}                                       // W6.4: CCD light sink (offline no-op)
 void TfMain::DebugOneCycleHotPlate(AnsiString /*sfunc*/) {}     // debug log sink (offline no-op)
@@ -80,6 +88,12 @@ void TfMain::Start(AnsiString /*Func*/) {}                     // W7-C1: offline
 void TfMain::ChangeLevelAttr() {}                              // W7-C1: offline level-attr UI no-op
 void TfMain::ModifyTester(int /*iWhich*/) {}                   // W7-C1: offline QA tester-modify no-op
 void TfMain::CleanYieldCount() {}                              // W7-C1: offline yield-count clear no-op
+// -- W5-Automation ADD: HANA_ART.cpp method sinks (all offline no-op / empty) --
+void TfMain::SendMSG_CMD(int /*CMD*/) {}                                    // offline: no real GPIB-bridge process
+void TfMain::SendMSG_CMD(int /*CMD*/, AnsiString /*Message*/) {}            // offline: no real GPIB-bridge process
+AnsiString TfMain::GetSamSungMap(bool /*bSend*/) { return AnsiString(""); } // offline: no SamSung map source
+AnsiString TfMain::GetSamSungSoakTime(bool /*bSend*/) { return AnsiString("0"); } // offline: no soak-time source
+AnsiString TfMain::ArmStatusStrings() { return AnsiString(""); }            // offline: no arm-status telemetry
 TfMain *fMain = new TfMain();
 
 // --- W6.2: TfSortCT --------------------------------------------------------
@@ -102,8 +116,14 @@ TfLotInfo::TfLotInfo()
     // -- W6.3 ADD --
     labNowLoaderTrayID = new TfLotInfoLabel();
     edtSysLotID        = new TfLotInfoEdit();
+    // -- W5-Automation ADD --
+    cbProcess          = new TfLotInfoRunMode();
 }
 void TfLotInfo::InitialUnLoaderTask(int /*iUnloader*/) {}      // W6.3: offline AMR-task no-op
+// -- W5-Automation ADD: AMR.cpp + HANA_ART.cpp method sinks (all offline no-op) --
+void TfLotInfo::RefreshAMR() {}                                            // offline: no UI to refresh
+void TfLotInfo::SetLotID(AnsiString /*ID*/, bool /*bReadFromFile*/) {}     // offline no-op
+void TfLotInfo::SetLotStart(AnsiString /*sFunc*/, bool /*bReadFromFile*/) {} // offline no-op
 TfLotInfo *fLotInfo = new TfLotInfo();
 
 // --- W6.2: TfOffSet --------------------------------------------------------
@@ -112,7 +132,18 @@ bool TfOffSet::UseInArmSetupTeach(int /*iWhich*/)          { return false; }  //
 TfOffSet *fOffSet = new TfOffSet();
 
 // --- W6.2: TfSCKART --------------------------------------------------------
-TfSCKART::TfSCKART() : iInputJamCnt(0), iFTRTCount(0), iInputCount(0) {}
+TfSCKART::TfSCKART() : iInputJamCnt(0), iFTRTCount(0), iInputCount(0), iCurrent93KARTStep(0)
+{
+    // -- W5-Automation ADD --
+    palLotNumber   = new TfSortCTPanel();
+    palTestCnt     = new TfSortCTPanel();
+    palRTTryCnt    = new TfSortCTPanel();
+    pnlProcessCode = new TfSortCTPanel();
+    edlRTTryCnt    = new TfLotInfoEdit();
+}
 int  TfSCKART::CheckLoadingCount() { return 0; }              // W7: offline -> 0 (no ART loading mismatch)
 void TfSCKART::AddOutputJamCnt(int /*row*/, int /*col*/, int /*ret*/, int /*iBinOnCarryKit*/) {}  // W6.5: offline no-op
+// -- W5-Automation ADD: AMR.cpp + HANA_ART.cpp method sinks (all offline no-op) --
+void TfSCKART::DoARTLotStart(AnsiString /*_sLotID*/, AnsiString /*_sProcessCode*/, int /*_iLotCount*/) {}
+void TfSCKART::AccessFile(bool /*bRead*/, int /*iAccess*/) {}
 TfSCKART *fSCKART = new TfSCKART();

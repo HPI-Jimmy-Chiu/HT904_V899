@@ -412,7 +412,7 @@ add_executable(test_w6_1_empty_canary
 )
 
 target_link_libraries(test_w6_1_empty_canary PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -450,7 +450,7 @@ add_executable(test_w6_canary
 )
 
 target_link_libraries(test_w6_canary PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -478,7 +478,7 @@ add_executable(test_w6_2_inarm_canary
 )
 
 target_link_libraries(test_w6_2_inarm_canary PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -507,7 +507,7 @@ add_executable(test_w6_2_inarm_search
 )
 
 target_link_libraries(test_w6_2_inarm_search PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -543,7 +543,7 @@ add_executable(test_w6_2_inarm_core
 )
 
 target_link_libraries(test_w6_2_inarm_core PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -582,7 +582,7 @@ add_executable(test_w6_2b_inarm_variants
 )
 
 target_link_libraries(test_w6_2b_inarm_variants PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -614,7 +614,7 @@ add_executable(test_w6_2c_inarm_variants
 )
 
 target_link_libraries(test_w6_2c_inarm_variants PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -646,7 +646,7 @@ add_executable(test_w6_2c_inarm_variants_batch2
 )
 
 target_link_libraries(test_w6_2c_inarm_variants_batch2 PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -680,7 +680,7 @@ add_executable(test_w6_2c_inarm_variants_batch3
 )
 
 target_link_libraries(test_w6_2c_inarm_variants_batch3 PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -709,7 +709,7 @@ add_executable(test_w6_2c_inarm_variants_batch4
 )
 
 target_link_libraries(test_w6_2c_inarm_variants_batch4 PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -738,7 +738,7 @@ add_executable(test_w6_2c_inarm_Sfamily
 )
 
 target_link_libraries(test_w6_2c_inarm_Sfamily PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -779,7 +779,7 @@ add_executable(test_w6_2_outarm_core
 )
 
 target_link_libraries(test_w6_2_outarm_core PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -804,7 +804,7 @@ add_executable(test_w6_2_outarm_variants
 )
 
 target_link_libraries(test_w6_2_outarm_variants PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -831,7 +831,7 @@ add_executable(test_w6_3_catchtray_core
 )
 
 target_link_libraries(test_w6_3_catchtray_core PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -866,7 +866,7 @@ add_executable(test_w6_3_catchtray
 )
 
 target_link_libraries(test_w6_3_catchtray PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -897,7 +897,7 @@ add_executable(test_w6_4_tester
 )
 
 target_link_libraries(test_w6_4_tester PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -928,7 +928,7 @@ add_executable(test_w6_4_tester_core
 )
 
 target_link_libraries(test_w6_4_tester_core PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -956,7 +956,7 @@ add_executable(test_w6_4b_front_rear_destroy
 )
 
 target_link_libraries(test_w6_4b_front_rear_destroy PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -991,7 +991,7 @@ add_executable(test_w6_5_shuttle
 )
 
 target_link_libraries(test_w6_5_shuttle PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1018,7 +1018,7 @@ add_executable(test_w6_6_hub
 )
 
 target_link_libraries(test_w6_6_hub PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1045,7 +1045,7 @@ add_executable(test_w6_6_csystem_cycle
 )
 
 target_link_libraries(test_w6_6_csystem_cycle PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1079,7 +1079,7 @@ add_executable(test_w7_a1_inarm_floating_latch
 )
 
 target_link_libraries(test_w7_a1_inarm_floating_latch PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1142,7 +1142,7 @@ add_executable(test_w7_grid_occupancy
 )
 
 target_link_libraries(test_w7_grid_occupancy PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1178,7 +1178,7 @@ add_executable(test_w7_c1_cleanout_finish
 )
 
 target_link_libraries(test_w7_c1_cleanout_finish PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1217,7 +1217,7 @@ add_executable(test_w7_c2_onecycle_finish
 )
 
 target_link_libraries(test_w7_c2_onecycle_finish PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1225,3 +1225,254 @@ if(WIN32)
 endif()
 
 add_test(NAME W7_C2_OneCycleFinish COMMAND test_w7_c2_onecycle_finish)
+
+# ===========================================================================
+#  W5 comms wave -- SECSGEM base / Interface / CCLink / CanBus / MyPLC /
+#  EtherCAT-comms (6-unit parallel translate batch, wired by the serial
+#  integrate pass, 2026-07-10)
+# ===========================================================================
+
+# --- test_uHGemClass: HTGem ctor/dtor/UpdateDataPath + IsCorrectDateFormat +
+#   the already-inline virtuals + derived-override polymorphism + the 57 gated
+#   stubs' conservative defaults + every SECS_EVENT enumerator's exact golden
+#   value.  Zero THGem/uHGemEquipment dependency -- links vclcompat only (via
+#   ht9045_secsgem).  Supplies its own local MyDBIProcess(3-arg) stub.
+add_executable(test_uHGemClass
+    test_uHGemClass.cpp
+)
+
+target_link_libraries(test_uHGemClass PRIVATE ht9045_secsgem)
+
+add_test(NAME uHGemClass COMMAND test_uHGemClass)
+
+# --- test_interfacesys: GPIBInterface_Data + outbound builders + inbound
+#   decoder + WM_COPYDATA dispatcher, exercised with NO real external program
+#   attached (FindWindow legitimately returns NULL -- golden's own safe
+#   default).  Interface/InterfaceSYS.cpp lives inside ht9045_sm (see root
+#   CMakeLists.txt comment on why it is not part of ht9045_comms); ht9045_sm
+#   PUBLIC-links ht9045_secsgem so EventReport()/SECS_EVENT resolve too, but
+#   this test does not touch those.  Defines LOCAL stand-in globals
+#   bGPIBError/bEcho/bUnderTest/bExist/iBin[4][8] that golden main.cpp owns
+#   (main.cpp itself untranslated, W7).
+add_executable(test_interfacesys
+    test_interfacesys.cpp
+)
+
+target_link_libraries(test_interfacesys PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_interfacesys PRIVATE ws2_32)
+endif()
+
+add_test(NAME Interface_InterfaceSYS COMMAND test_interfacesys)
+
+# --- test_MyCCLink: offline acceptance proof (HAVE_CCLINK not defined) ------
+#   Exercises TMyCCLinkCtrl/TMyCCLinkBoard/UseCanBusOrEtherCAT/UseSensorMod3
+#   entirely over the offline Mdfunc stub path.  Links the combined
+#   ht9045_comms library (see root CMakeLists.txt); only this unit's own
+#   translation units are extracted from that archive.  Supplies local stub
+#   definitions for MySleep/MySleepEx/MyDBIProcess so it links standalone.
+add_executable(test_MyCCLink
+    test_MyCCLink.cpp
+)
+
+target_link_libraries(test_MyCCLink PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_comms,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_MyCCLink PRIVATE ws2_32)
+endif()
+
+add_test(NAME MyCCLink COMMAND test_MyCCLink)
+
+# --- CanBus cMyNUDN1: TMyNUDN1 NUDN1 station wrapper (W5-CanBus leaf) -------
+#   Links the combined ht9045_comms library; cMyNUDN1.cpp itself needs only
+#   vclcompat (confirmed leaf), so ht9045_globals here is just along for the
+#   ride via ht9045_comms's own PUBLIC link (harmless).
+add_executable(test_cMyNUDN1
+    test_cMyNUDN1.cpp
+)
+
+target_link_libraries(test_cMyNUDN1 PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_comms,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+add_test(NAME CanBus_cMyNUDN1 COMMAND test_cMyNUDN1)
+
+# --- test_myplc_modbus: SIM-only acceptance proof, no hardware/network -----
+#   [1] vclcompat/ClientSocket Sim-mode connect/disconnect/SendBuf/SimPushReceive.
+#   [2] MyPLC::ModbusTCPClient SendData/Connect/DisConnect + byte-level frame-
+#       parse oracle driving SocketRead/SocketConnect/SocketDisConnect/SocketError.
+#   [3] MyPLC_IO_Modbus InitPLCIO/PLCIOTaskCycle/PLCStatusCheck pumped without
+#       crash; TMyPLC_IO_Modbus IsOn()/IsOff(); TPLCIOThread offline-inert.
+#   Links the combined ht9045_comms library (MyPLC_IO_Modbus.cpp's real
+#   bPLCInData/bPLCIO + local MySleepEx fallback are unconditionally compiled
+#   in -- no HAVE_PLC_IO/HAVE_MYSLEEPEX flags needed since ht9045_comms is
+#   never linked alongside ht9045_io/ht9045_sm in the SAME executable).
+add_executable(test_myplc_modbus
+    test_myplc_modbus.cpp
+)
+
+target_link_libraries(test_myplc_modbus PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_comms,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_myplc_modbus PRIVATE ws2_32 psapi version)
+endif()
+
+add_test(NAME MyPLCModbus COMMAND test_myplc_modbus)
+
+# --- test_MyNUEC1: EtherCAT/MyNUEC1 FS-N12 amplifier slave (W5 comms leaf) --
+#   Offline stub path (HAVE_PCI1203 not defined); links the combined
+#   ht9045_comms library.
+add_executable(test_MyNUEC1
+    test_MyNUEC1.cpp
+)
+
+target_link_libraries(test_MyNUEC1 PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_comms,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+add_test(NAME MyNUEC1 COMMAND test_MyNUEC1)
+
+# ===========================================================================
+#  W5 Automation wave (8-unit parallel translate batch, wired by the serial
+#  integrate pass, 2026-07-10) -- AMR/AGV predicates, HANA-ART, SCK_ART
+#  extract, uRENESAS_Other data shapes, 32-Site engine, ProcessCount leaf
+#  subset, Front/Rear "Suck IC" state machines.
+# ===========================================================================
+
+# --- test_amr: TeraPower AMR bridge (Automation/AMR.cpp) + the 3 AGV AMR-mode
+#   predicates (AGV_predicates.cpp), driven over a KNOWN global-state baseline.
+#   Same RESCAN link group as the other ht9045_sm verify TUs (AMR.cpp/HANA_ART.cpp/
+#   SCK_ART.cpp are all now part of ht9045_sm -- see root CMakeLists.txt).
+add_executable(test_amr
+    test_amr.cpp
+)
+
+target_link_libraries(test_amr PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_amr PRIVATE ws2_32)
+endif()
+
+add_test(NAME AMR COMMAND test_amr)
+
+# --- test_hana_art: uHANA_ART (Automation/HANA_ART.cpp) SRQ protocol helper --
+#   black-box coverage via the public API (GetHanaSRQStr/ParseLOTONStr/
+#   IsHanaArtAvailable/GetHD_CT/GetHD_Tempset/GetHD_T|J|A-DATA/DoSETUP_INFORM/
+#   StartPrimeTest+EndPrimeTest/RecoveryARTStatus/IsContactAvailable).
+add_executable(test_hana_art
+    test_hana_art.cpp
+)
+
+target_link_libraries(test_hana_art PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_hana_art PRIVATE ws2_32)
+endif()
+
+add_test(NAME HanaART COMMAND test_hana_art)
+
+# --- test_SCK_ART: Automation/SCK_ART.cpp 8-function ART extract (W5-SckArt-Translate) -------
+#   Needs the ht9045_sm substrate (aHotPlateSubstrate.cpp's TestSocket, FormsFacade.cpp's fMain,
+#   canary_support.cpp's LastSet/ShowErrorMessage) + ht9045_globals. SCK_ART.cpp is compiled
+#   into ht9045_sm (see root CMakeLists.txt) -- do NOT also add it to this executable's own
+#   sources (would duplicate-define every SckArt_* symbol at link time).
+add_executable(test_SCK_ART
+    test_SCK_ART.cpp
+)
+
+target_link_libraries(test_SCK_ART PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_SCK_ART PRIVATE ws2_32)
+endif()
+
+add_test(NAME SCK_ART COMMAND test_SCK_ART)
+
+# --- test_urenesas_other: RENESAS host-protocol data shapes + cmd/status/err tables ---
+#   Pure data shapes, zero global/HAL coupling -- its own small standalone library
+#   (ht9045_automation, see root CMakeLists.txt), not part of ht9045_sm.
+add_executable(test_urenesas_other
+    test_urenesas_other.cpp
+)
+
+target_link_libraries(test_urenesas_other PRIVATE ht9045_automation)
+
+add_test(NAME uRENESAS_Other COMMAND test_urenesas_other)
+
+# --- test_atester_32site: 32-Site dual-arm test-head engine (W5-atester32site) -
+#   All 8 golden functions real; retires the atester_shims.cpp offline stubs for
+#   these symbols (see atester_shims.cpp/.h comments). Same RESCAN link group as
+#   the other ht9045_sm verify TUs.
+add_executable(test_atester_32site
+    test_atester_32site.cpp
+)
+
+target_link_libraries(test_atester_32site PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_atester_32site PRIVATE ws2_32)
+endif()
+
+add_test(NAME W5_Atester32Site COMMAND test_atester_32site)
+
+# --- test_atester_front_suckic: DoFrontTestSuckIC/InitFrontTestSuckICTask SM --
+#   W64b-Translate-Wave2 (aTester_Front.cpp additions). Asserts:
+#     (a) InitFrontTestSuckICTask() -> cursor=1, bZ1Isdownflag=false (golden :870-875).
+#     (b) DoFrontTestSuckIC() over an empty Sim HAL (no real IC anywhere) PARKS
+#         at Task=1 (case 1's only advance is gated by FLCarryKit.UseSiteHasIC(),
+#         golden :919 -- genuinely "nothing to pick", not a translation defect)
+#         + a 128-tick pump-sanity check (cursor never escapes the documented
+#         switch(Task) label set).
+#   Same RESCAN link group as the sibling W64b Front/Rear Destroy suite.
+add_executable(test_atester_front_suckic
+    test_atester_front_suckic.cpp
+)
+
+target_link_libraries(test_atester_front_suckic PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_atester_front_suckic PRIVATE ws2_32)
+endif()
+
+add_test(NAME W64b_FrontSuckIC COMMAND test_atester_front_suckic)
+
+# --- test_atester_rear_suckic: DoRearTestSuckIC (Wave 2, aTester_Rear.cpp) ----
+#   Mirrors test_atester_front_suckic.cpp (sibling parallel unit).  Asserts:
+#     (a) InitRearTestSuckICTask() -> cursor=1 (golden :891-895; NOTE golden
+#         asymmetry vs Front -- Rear's Init does NOT reset an "isdownflag",
+#         unlike InitFrontTestSuckICTask).
+#     (b) DoRearTestSuckIC() PARKS at Task=1 over an empty Sim HAL (case 1's
+#         only advance is guarded by BLCarryKit.UseSiteHasIC()==false) + a
+#         128-tick pump-sanity check (cursor never escapes the documented
+#         switch(Task) label set).
+#   Same RESCAN link group as the W6.4b Front/Rear Destroy-IC suite.
+add_executable(test_atester_rear_suckic
+    test_atester_rear_suckic.cpp
+)
+
+target_link_libraries(test_atester_rear_suckic PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_atester_rear_suckic PRIVATE ws2_32)
+endif()
+
+add_test(NAME W64b_RearSuckIC COMMAND test_atester_rear_suckic)

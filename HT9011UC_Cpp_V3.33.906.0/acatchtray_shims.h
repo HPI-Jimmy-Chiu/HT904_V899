@@ -52,34 +52,23 @@ const TColor clYellow = 0x0000FFFF;         // golden Graphics.hpp clYellow
 AnsiString BoolToStr(bool B, bool UseBoolStrs = false);   // golden SysUtils.hpp
 
 // ===========================================================================
-//  SECS_EVENT (ETypeStruct)  -- golden SECSGEM/uHGemHT9045.h:313.  The engine
-//  reads SECS_EVENT.<CEID> (an anonymous-enum value accessed via the instance)
-//  and passes it to EventReport(unsigned).  MINIMAL mirror: only the CEID names
-//  the TrayArm engine references.  Values match the golden enum ordinals so any
-//  future log comparison stays faithful.
+//  SECS_EVENT (ETypeStruct) + EventReport -- AI(W5-comms-Integrate) 20260710:
+//  this used to be a MINIMAL local mirror (only the dozen CEID names acatchtray
+//  .cpp references, values hand-copied from golden uHGemHT9045.h:313).  The W5
+//  SECSGEM-base translate unit has since landed the REAL, complete extraction
+//  (SECSGEM/SecsEventType.h -- every CEID, golden line-for-line) plus a real
+//  Sim-first EventReport() entry point (SECSGEM/SecsEventReport.h), both linked
+//  via ht9045_secsgem (see root CMakeLists.txt).  Verified every CEID name this
+//  file used to declare locally exists in the real enum with the IDENTICAL
+//  value (TrayTestFinish=67 / AGVSupplement=272 / UnloaderTrayIDReadOK=285 /
+//  LoaderTrayIDReadFail=287 / AGVLdID=291 / BundleCompleteIDRead=242 /
+//  BundleEnd_IDREAD_Auto1..6=246/248/252/254/256/258) -- switching to the real
+//  header is behavior-identical for every acatchtray.cpp call site, and
+//  resolves what would otherwise be a duplicate `struct ETypeStruct`/SECS_EVENT/
+//  EventReport definition now that the real translation exists.
 // ===========================================================================
-struct ETypeStruct
-{
-    enum
-    {
-        TrayTestFinish          = 67,   // golden uHGemHT9045.h
-        AGVSupplement           = 272,
-        UnloaderTrayIDReadOK    = 285,
-        LoaderTrayIDReadFail    = 287,
-        AGVLdID                 = 291,
-        BundleCompleteIDRead    = 242,
-        BundleEnd_IDREAD_Auto1  = 246,
-        BundleEnd_IDREAD_Auto2  = 248,
-        BundleEnd_IDREAD_Auto3  = 252,
-        BundleEnd_IDREAD_Auto4  = 254,
-        BundleEnd_IDREAD_Auto5  = 256,
-        BundleEnd_IDREAD_Auto6  = 258
-    };
-};
-extern struct ETypeStruct SECS_EVENT;       // golden uHGemHT9045.h:313
-
-//  EventReport -- golden SECSGEM/UsecegemMainFrom.h:327.  Offline: no SECS link.
-void EventReport(unsigned Ceid);
+#include "SECSGEM/SecsEventType.h"
+#include "SECSGEM/SecsEventReport.h"
 
 // ===========================================================================
 //  TfTrayMapping (fTrayMapping)  -- golden cTrayMapping.h.  The TrayArm engine
@@ -176,10 +165,15 @@ extern TLoadCCDShim *LoadCCD;                   // golden LoadCCDMap.h
 
 // ===========================================================================
 //  AMR  -- golden AMR.h (TAMR AMR).  DoPlaceTrayToAuto case 510 calls
-//  AMR.SupplyCover(AutoTarget).  Offline: no-op.
+//  AMR.SupplyCover(AutoTarget).
+//  AI(W5-Automation-Integrate) 20260710: the REAL TTeraPowerAMR/AMR (Automation/
+//  AMR.cpp) now exists and defines a global `AMR` object -- the TAMRShim stopgap
+//  that used to live here has been REMOVED (it declared the SAME global name
+//  `AMR` with a DIFFERENT type, which would ODR-collide/duplicate-symbol at link
+//  once Automation/AMR.cpp joined this library). acatchtray.cpp now
+//  `#include "Automation/AMR.h"` directly and calls the real AMR.SupplyCover(int)
+//  (identical signature, so the one call site is unchanged).
 // ===========================================================================
-class TAMRShim { public: void SupplyCover(int iAuto); };
-extern TAMRShim AMR;                            // golden AMR.h: TAMR AMR
 
 // ===========================================================================
 //  Missing free functions the engine calls (no translated home this wave).

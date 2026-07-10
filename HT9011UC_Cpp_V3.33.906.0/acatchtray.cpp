@@ -98,7 +98,8 @@
 #include "FormsFacade.h"            // fMain / fAGV / fSortCT / fLotInfo / fSCKART offline stand-ins
 #include "canary_support.h"         // LastSet (+ART fields) / ShowErrorMessage / ShowMyMessage / RecordProcess / ShowUnloaderTrayMessage
 #include "myTimer.h"                // TQPF_Timer
-#include "acatchtray_shims.h"       // W7 cross-module shims: SECS_EVENT/EventReport/fTrayMapping/MyMessageBox/LoadCCD/AMR/TColor/BoolToStr/free funcs
+#include "acatchtray_shims.h"       // W7 cross-module shims: SECS_EVENT/EventReport/fTrayMapping/MyMessageBox/LoadCCD/TColor/BoolToStr/free funcs
+#include "Automation/AMR.h"         // AI(W5-Automation-Integrate) 20260710: real TTeraPowerAMR AMR (was TAMRShim in acatchtray_shims)
 
 //==============================================================================
 //==  (W7) HTimer  -- golden HTimer.h (a high-precision timer).  HTimer.h is gated

@@ -21,6 +21,8 @@
 // AI(W64b-Integrate) 20260706: TestIF_File / site-mode enums for the GetSiteCount
 // shim below (golden home cprod.cpp, whole function-body region gated -- see there).
 #include "cprod.h"
+// AI(W5-Automation-Integrate) 20260710: TMyKitSuck (CheckTestSuckICOn stand-in below).
+#include "aHotPlateSubstrate.h"
 
 // ===========================================================================
 //  csystem.h cross-module predicates referenced ONLY by the tester/index engine
@@ -41,6 +43,31 @@ int  CheckIndexConnect()                        { return 0; }      // golden csy
 //   TTL board.  Offline: no RS232/TTL board wired -> no-op (the SOT pulse is a
 //   hardware side-effect; the index SM advances regardless of its return).
 void SendTTLRS232CSOTsignal()                   {}                 // golden csystem.h:280 (Isaac 20210309)
+
+// AI(W5-Automation-Integrate) 20260710: 3 more csystem.h-declared bodies atester_32Site.cpp
+// needs (golden home csystem.cpp, whole regions not translated this wave -- HeadContactCount/
+// temperature-log/index-time-log subsystems).  Same "these are the csystem.h-declared bodies;
+// no other translated TU defines them" contract as the 4 above.
+//   CheckContactOver -> false: golden guards its whole body on CosFunction.bUseHeadContactCount
+//     (default false offline), so false matches the feature-disabled golden outcome exactly.
+//   ShowIndexTime -> no-op: pure debug index-timing log, no control-flow effect on callers.
+//   TemperatureStorageLog -> false: golden's own first statement is `if(InitialOK==false) return
+//     false;` (offline InitialOK is false), matching the not-yet-initialized golden outcome.
+bool CheckContactOver()                         { return false; }  // golden csystem.h:156
+void ShowIndexTime(int /*Item*/)                {}                 // golden csystem.h:200
+bool TemperatureStorageLog(int /*iRecord*/)     { return false; }  // golden csystem.h:275
+
+// AI(W5-Automation-Integrate) 20260710: atester_32Site.cpp's own local `extern` globals/
+// predicate (golden main.cpp-owned bEcho/bExist/bUnderTest/bEchoStop -- same untranslated-main.cpp
+// gap already documented in Interface/InterfaceSYS.cpp's file header; CheckTestSuckICOn is a
+// golden atester.cpp-family leaf with no translated home yet).  Offline-safe defaults: the bools
+// start false (no echo/exist/under-test/stop-request pending, matching a freshly-started handler);
+// CheckTestSuckICOn->false (no per-site suck-IC-on-during-drop alarm) -- and its only call site
+// (atester_32Site.cpp :1063/:1069) is itself guarded by `if(LastSet.iRealDummy==REALLY)` (false
+// in the Sim canary), so this is inert offline either way.
+bool bEcho=false, bExist=false, bUnderTest=false;                  // golden main.cpp (untranslated)
+bool bEchoStop=false;                                              // golden main.cpp (untranslated) //ChungHung 20130326 add
+bool CheckTestSuckICOn(TMyKitSuck &/*Ptr*/, int /*iR*/, int /*iC*/) { return false; }
 
 // AI(W64b-Integrate) 20260706: GetSiteCount (golden cprod.cpp:305, declared
 // cprod.h:3299) -- discovered as an undefined-reference link error while
@@ -107,41 +134,26 @@ int GetSiteCount(bool IncludeCloseSite)                             // golden cp
     return iSiteCount;
 }
 
-// ---- atester_32Site cursors + bodies ---------------------------------------
-int i32RTCAutoModelVerifyTask        = 1;   // golden Init home =1
-int iTestSuckTestIC_TwoArm32Site_Task= 1;
-int iTestTwoArm32SiteTask            = 1;
-void InitTestSuckTestIC_TwoArm32Site_Task() {}
-void InitTestYTwoArm32SiteTask()            {}
-bool DoInterFaceErrorStep_TwoArm32Site()    { return true; }
-bool DoTestSuckTestIC_TwoArm32Site()        { return true; }
-bool DoTestY_TwoArm32Site()                 { return true; }
-bool Do32SiteTestDestroyIC()                { return true; }
-bool Do32SiteTestSuckIC()                   { return true; }
+// ---- atester_32Site: AI(W5-Automation-Integrate) 20260710: ALL bodies that
+// used to live here are now REAL (atester_32Site.cpp) -- REMOVED (would
+// otherwise duplicate-define).
 
-// ---- atester_ProcessCount bodies -------------------------------------------
-void InitialPiggyBackFunction()             {}
-void ProcessPiggyBackFunction()             {}
-void RecordPiggyBackStartEnd(bool /*bStart*/) {}
-void ProcessSocketPurgeCount()              {}
+// ---- atester_ProcessCount: AI(W5-Automation-Integrate) 20260710: 11 bodies
+// that used to live here are now REAL (atester_ProcessCount.cpp) -- REMOVED
+// (would otherwise duplicate-define).  The 5 still-out-of-scope exports keep
+// their offline no-op bodies here exactly as before.
 void ProcessShowTestStatus(int /*Index*/)   {}
-void CheckContinuoussFail(int /*Index*/)    {}
-void ProcessContinuoussFailForATC(int /*Index*/) {}
-void CheckContinuoussPassBySocket(int /*Index*/) {}
-void CheckContinuoussPass(int /*Index*/)    {}
 void ProcessCount(int /*Index*/, bool /*bHasIC*/) {}    //Eastsun 20260515 F022: D7
 void ProcessStartTestData(int /*Direct*/)   {}
 void RecordHistroy(int /*attr*/)            {}
-int  DoLowYieldAlarm(AnsiString /*AlarmCode*/, AnsiString /*ErrPart*/)      { return 0; }
-int  DoLowYieldAlarmFirst(AnsiString /*AlarmCode*/, AnsiString /*ErrPart*/) { return 0; }
 void ProcessQASampling(int /*Index*/)       {}
-void ProcessAutoloadcellMeasureCount()      {}
 
 // ---- aTester_Front cursors + bodies ----------------------------------------
 int iFTestSuckTestICTask                  = 1;
 // AI(W64b-Integrate) 20260706: iFrontTestDestroyICTask now defined for real in
 // aTester_Front.cpp (golden aTester_Front.cpp:300) -- stub definition removed.
-int iFrontTestSuckICTask                  = 1;
+// AI(W5-Automation-Integrate) 20260710: iFrontTestSuckICTask now defined for
+// real in aTester_Front.cpp too -- stub definition removed.
 int iTestYFrontTask                       = 1;
 int iFRTCUseSocketFloatTask               = 1;
 int iFRTCAutoModelVerifyTask              = 1;
@@ -154,15 +166,15 @@ bool bArm1SuckFinish[4][8]                = {{false}};
 int  CheckAnyCaseNeedToDoArm1()             { return 0; }
 void InitTestYFrontTask()                   {}
 void InitFTestSuckTestICTask()              {}
-void InitFrontTestSuckICTask()              {}
 // AI(W64b-Integrate) 20260706: InitFrontTestDestroyICTask/TestZ1SetPos/
 // DoFrontTestDestroyIC/CheckZ1IsDown/TestZ1OutRandge now defined for real in
 // aTester_Front.cpp (golden aTester_Front.cpp:170-298,309-865) -- stub bodies removed.
+// AI(W5-Automation-Integrate) 20260710: InitFrontTestSuckICTask/DoFrontTestSuckIC
+// now defined for real in aTester_Front.cpp too -- stub bodies removed.
 void InitFrontTestPurgBeforePickShuttle()   {}
 void DoArm1Suck()                           {}
 void DoArm1D44VacCheck()                    {}
 bool FTestNeedDestroy()                     { return false; }
-bool DoFrontTestSuckIC()                    { return true;  }
 bool DoFTestSuckTestIC()                    { return true;  }
 bool DoFrontTestPurgBeforePickShuttle(int /*isp*/) { return true; }
 bool DoTestYFront()                         { return true;  }
@@ -175,7 +187,8 @@ bool DoFRTCAutoModelVerify(bool /*bInitial*/){ return true; }
 int iBTestSuckTestICTask                  = 1;
 // AI(W64b-Integrate) 20260706: iRearTestDestroyICTask now defined for real in
 // aTester_Rear.cpp (golden aTester_Rear.cpp:300) -- stub definition removed.
-int iRearTestSuckICTask                   = 1;
+// AI(W5-Automation-Integrate) 20260710: iRearTestSuckICTask now defined for
+// real in aTester_Rear.cpp too -- stub definition removed.
 int iTestYRearTask                        = 1;
 int iBRTCUseSocketFloatTask               = 1;
 int iBRTCGiveWayCheckTask                 = 1;
@@ -188,15 +201,15 @@ bool bArm2SuckFinish[MAX_SOCKET_ROW][MAX_SOCKET_COL] = {{false}};
 int  CheckAnyCaseNeedToDoArm2()             { return 0; }
 void InitTestYRearTask()                    {}
 void InitBTestSuckTestICTask()              {}
-void InitRearTestSuckICTask()               {}
 // AI(W64b-Integrate) 20260706: InitRearTestDestroyICTask/TestZ2SetPos/
 // DoRearTestDestroyIC/CheckZ2IsDown/TestZ2OutRandge now defined for real in
 // aTester_Rear.cpp (golden aTester_Rear.cpp:170-298,309-886) -- stub bodies removed.
+// AI(W5-Automation-Integrate) 20260710: InitRearTestSuckICTask/DoRearTestSuckIC
+// now defined for real in aTester_Rear.cpp too -- stub bodies removed.
 void InitRearTestPurgBeforePickShuttle()    {}
 void DoArm2Suck()                           {}
 void DoArm2D44VacCheck()                    {}
 bool BTestNeedDestroy()                     { return false; }
-bool DoRearTestSuckIC()                     { return true;  }
 bool DoBTestSuckTestIC()                    { return true;  }
 bool DoRearTestPurgBeforePickShuttle(int /*isp*/) { return true; }
 bool DoTestYRear()                          { return true;  }

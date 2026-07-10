@@ -29,6 +29,16 @@ add_library(vclcompat
     #   vcl_compat.h umbrella.  On Win32 the .cpp uses the kernel32 serial API
     #   (already in the default MinGW link set -- no extra target_link needed).
     vclcompat/Comm.cpp
+    # --- W5 comms enabler: Scktcomp TClientSocket/TCustomWinSocket shim -------
+    #   Faithful stand-in for the VCL Scktcomp::TClientSocket (Winsock2 TCP
+    #   client) used by MyPLC/ModbusTCPClient.cpp.  Default is SIM mode (no
+    #   real connect attempted); Real mode is an explicit composition-root
+    #   opt-in (SetSimMode(false)) -- see the file header for why this does
+    #   NOT auto-fall-back to Sim on a failed Real connect (Enable_PLCSafety_IO
+    #   is a safety-interlock read; masking a real connect failure would be
+    #   unsafe).  Lives here (not in MyPLC/ or a new library) because it is
+    #   general vclcompat infra, matching Comm.cpp's precedent.
+    vclcompat/ClientSocket.cpp
 )
 
 target_include_directories(vclcompat PUBLIC
@@ -367,6 +377,159 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 endif()
 
 # ---------------------------------------------------------------------------
+# Library: ht9045_secsgem  (W5 SECSGEM base layer + Sim EventReport seam)
+#
+#   uHGemClass.{h,cpp}   -- HTGem: abstract SECS/GEM S,F-handler base (~90
+#                           virtuals; the ~33 golden already left fully inline
+#                           carry verbatim, the 57 that need THGem/uHGemEquipment
+#                           (out of scope) are #if 0-gated with a conservative
+#                           ACTIVE stub -- link-complete today).
+#   SecsEventType.{h,cpp}-- SECS_EVENT (ETypeStruct): the CEID enum extracted
+#                           standalone from uHGemHT9045.h, verbatim values.
+#   SecsEventReport.{h,cpp} -- NEW (integrate-agent addition, not a golden
+#                           translation): a minimal Sim-first free function
+#                           `EventReport(unsigned Ceid)` that gives csystem.cpp's
+#                           W7C1_EVENTREPORT_*/W7C2_EVENTREPORT_* seam macros a
+#                           REAL, offline-safe call target (records last-CEID +
+#                           a running count) instead of a no-op.  Deliberately
+#                           does NOT instantiate HTGem -- see its file header:
+#                           HTGem::~HTGem() needs a 3-arg MyDBIProcess overload
+#                           that only tests/test_uHGemClass.cpp stubs today, and
+#                           forcing every ht9045_sm-linked executable to resolve
+#                           that too is not worth it for a Sim counter.
+#
+#   ht9045_sm links this library so csystem.cpp can call EventReport()/read
+#   SECS_EVENT directly; only SecsEventType.o + SecsEventReport.o are ever
+#   extracted from this archive for that link (uHGemClass.o stays a dormant,
+#   unreferenced archive member there -- same "compiled but not pulled in"
+#   shape as other inert files elsewhere in this tree). tests/test_uHGemClass
+#   links this library directly to exercise HTGem itself.
+# ---------------------------------------------------------------------------
+add_library(ht9045_secsgem
+    SECSGEM/uHGemClass.cpp
+    SECSGEM/SecsEventType.cpp
+    SECSGEM/SecsEventReport.cpp
+)
+
+target_include_directories(ht9045_secsgem PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/SECSGEM
+)
+
+target_link_libraries(ht9045_secsgem PUBLIC vclcompat)
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(ht9045_secsgem PRIVATE ${HT9045_WARNFLAGS})
+
+    # AI(W5-SECSGEM-Integrate) 20260711: uHGemClass.h/.cpp carry 2 golden BCB6
+    # idioms (an intentionally-unused virtual-override parameter; a trailing
+    # ';' after a ctor body) -- same class of carve-out already accepted for
+    # cContact.cpp. Narrowly suppress just these two warning classes on this
+    # file; every other warning class (-Wall -Wextra -Wshadow -Wconversion)
+    # still applies in full.
+    set_source_files_properties(SECSGEM/uHGemClass.cpp PROPERTIES COMPILE_FLAGS
+        "-Wno-pedantic -Wno-unused-parameter")
+endif()
+
+# ---------------------------------------------------------------------------
+# Library: ht9045_automation  (W5 Automation wave -- RENESAS host-protocol data shapes)
+#
+#   Automation/uRENESAS_Other.{h,cpp} -- ~22 plain-old-data record/reply classes
+#     (TRENESAS_OnLine/_ProdInfo/_ModeStart/_HandlerStart/_ModeEnd/_LotEnd/_TestEnd/
+#     _SendAlarm/_SendCleanOut + their _Reply counterparts + the aggregate
+#     TRENESAS_RECV_CMD_DATA/_Send_CMD_DATA containers), the TRENESAS_CMD /
+#     TRENESAS_Status_Code / TRENESAS_Err_Index command/status/error-code constant
+#     tables, and TRENESAS_EndFileData (the only class with real logic). Zero
+#     hardware/VCL/global coupling -- pure data shapes prerequisite for the FUTURE
+#     Automation/uRENESAS_Server.cpp wave (not yet scheduled, not yet a consumer),
+#     so this gets its own small standalone library (matching the unit's own
+#     translate report) rather than being folded into ht9045_sm's larger link
+#     surface for no reason.
+# ---------------------------------------------------------------------------
+add_library(ht9045_automation STATIC
+    Automation/uRENESAS_Other.cpp
+)
+
+target_include_directories(ht9045_automation PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+target_link_libraries(ht9045_automation PUBLIC vclcompat)
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(ht9045_automation PRIVATE ${HT9045_WARNFLAGS})
+endif()
+
+# ---------------------------------------------------------------------------
+# Library: ht9045_comms  (W5 comms wave -- CCLink / CanBus / MyPLC / EtherCAT)
+#
+#   CCLink/MyCCLink.{h,cpp}       -- TMyCCLinkCtrl (top-level comm state machine)
+#   CCLink/MyCCLinkBoard.{h,cpp}  -- TMyCCLinkBoard (Mdfunc vendor board wrapper;
+#                                    real vendor calls behind #if HAVE_CCLINK,
+#                                    default OFF -- mirrors IOBackend.cpp's
+#                                    HAVE_MN200/HAVE_PCI1203/HAVE_MNET).
+#   CCLink/MyCCLinkSensor_predicates.{h,cpp} -- UseCanBusOrEtherCAT/UseSensorMod3.
+#   CanBus/cMyNUDN1.{h,cpp}       -- TMyNUDN1 (NUDN1 DeviceNet amplifier station
+#                                    wrapper); real vendor calls behind
+#                                    #if HAVE_DNM100, default OFF.
+#   MyPLC/ModbusTCPClient.{h,cpp} -- Modbus-TCP-ish framing client over
+#                                    vclcompat/ClientSocket.h (above).
+#   MyPLC/MyPLC_IO_Modbus.{h,cpp} -- PLC safety-IO polling (InitPLCIO/
+#                                    PLCIOTaskCycle/PLCStatusCheck) + TPLCIOThread
+#                                    (offline-inert driver, no real OS thread).
+#   EtherCAT/MyNUEC1.{h,cpp}      -- TMyNUEC1 (FS-N12 EtherCAT current-sense
+#                                    amplifier slave); real vendor calls behind
+#                                    #if HAVE_PCI1203 (REUSES the flag
+#                                    IOBackend.cpp/MyLaneIo.cpp already
+#                                    established for the same Advantech API
+#                                    family), default OFF.
+#
+#   Interface/InterfaceSYS.cpp is DELIBERATELY NOT part of this library: its
+#   own translate report found it both depends on (TestSocket/LastSet/
+#   FormsFacade) and unblocks (atester.cpp's GetTesterResult/ProcessTesterTimeOut)
+#   symbols that live in ht9045_sm -- making it a separate library here would
+#   create a circular ht9045_comms<->ht9045_sm CMake target dependency (CMake
+#   rejects cycles in the target link graph, unlike the linker's own archive
+#   re-scanning). It is instead compiled directly into ht9045_sm's own source
+#   list (see that library below) -- the integrate agent's own resolution of
+#   this unit's flagged conflict.
+#
+#   No cross-unit archive-selection conflicts: the four units here never
+#   reference each other's symbols (verified by grep during integrate); each
+#   unit's own dedicated test below links this whole library, and only that
+#   unit's own translation units are ever extracted from the archive.
+# ---------------------------------------------------------------------------
+add_library(ht9045_comms STATIC
+    CCLink/MyCCLink.cpp
+    CCLink/MyCCLinkBoard.cpp
+    CCLink/MyCCLinkSensor_predicates.cpp
+    CanBus/cMyNUDN1.cpp
+    MyPLC/ModbusTCPClient.cpp
+    MyPLC/MyPLC_IO_Modbus.cpp
+    EtherCAT/MyNUEC1.cpp
+)
+
+target_include_directories(ht9045_comms PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+target_link_libraries(ht9045_comms PUBLIC vclcompat ht9045_globals)
+
+if(WIN32)
+    target_link_libraries(ht9045_comms PUBLIC ws2_32)
+endif()
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    # BCB6-idiom-heavy new comms code (narrowing int->short/byte at vendor call
+    # boundaries, empty golden event handlers, etc.) -- match the ht9045_io /
+    # ht9045_motor relaxed posture rather than ht9045_core's strict one (none of
+    # these files is the "genuinely idiom-free" case that earned cContact.cpp
+    # its stricter flags).
+    target_compile_options(ht9045_comms PRIVATE
+        -Wall -Wextra -Wno-conversion-null -Wno-write-strings -Wno-unused-parameter)
+endif()
+
+# ---------------------------------------------------------------------------
 # Library: ht9045_sm  (W6 state-machine wave -- W6.1 Empty-tray CANARY)
 #
 #   The first ROOT state machine translated over the W6 substrate, plus the
@@ -409,6 +572,16 @@ add_library(ht9045_sm STATIC
     ainarm_SearchPickPlate.cpp
     ainarm_SearchPlacePlate.cpp
     aHotPlateSubstrate.cpp
+    # --- W5-comms INTEGRATE: Interface/InterfaceSYS.cpp (WM_COPYDATA IPC bridge
+    #     to the GPIB/Tester bridge / ESD / Auto-Update / Event-Log-Analyzer
+    #     helper programs).  Lives HERE, not in ht9045_comms, per that unit's own
+    #     translate report: it depends on TestSocket/LastSet (aHotPlateSubstrate.
+    #     cpp/canary_support.cpp, just above) + fMain/fBarCode (FormsFacade.cpp,
+    #     above) and in turn unblocks atester.cpp's still-gated GetTesterResult/
+    #     ProcessTesterTimeOut (both also in this library) -- a standalone
+    #     library here would create a circular ht9045_comms<->ht9045_sm target
+    #     dependency.  See CMakeLists.txt's ht9045_comms comment block.
+    Interface/InterfaceSYS.cpp
     # --- W6.2b (IN-ARM engine): the central pick SM + iInArmType dispatch
     #     ladders + pure pitch/offset geometry + 3 pumpable task SMs.  Variant
     #     dispatch bodies + dense MOT[]/sensor/UI SMs are gated (#if 0) with
@@ -580,6 +753,21 @@ add_library(ht9045_sm STATIC
     #     2x8_32: NO static-stub removal, NO extern un-gate, NO dispatch-ladder
     #     edit to aoutarm9045.cpp (dispatch unchanged -- file never dispatched).
     aoutarm9045S_1x4_4.cpp
+    # --- W5 Automation wave (Automation network unit): TeraPower AMR tray-count
+    #     bridge (TTeraPowerAMR / global `AMR`) + the 3 pure AGV AMR-mode
+    #     predicates (AGV_IsSPIL_AMR/AGV_IsATK_AMR/AGV_Use_AMR, wired into
+    #     FormsFacade's TfAGV -- see FormsFacade.cpp) + the HANA-ART SRQ protocol
+    #     helper (uHANA_ART) + the 8-function SCK/ATK "Auto Retest" extract
+    #     (Automation/SCK_ART.cpp, wired into csystem.cpp's W7C1/W7C2 SCKART
+    #     seams -- see csystem.cpp).  Same footprint already carried by
+    #     ht9045_sm: ht9045_globals/ht9045_motor/FormsFacade.h/canary_support.h.
+    #     NOTE: Automation/AMR.cpp's global `AMR` retires acatchtray_shims.cpp's
+    #     TAMRShim/AMR stopgap (ODR: same name, different type) -- see that
+    #     file's comment.
+    Automation/AGV_predicates.cpp
+    Automation/AMR.cpp
+    Automation/HANA_ART.cpp
+    Automation/SCK_ART.cpp
     # --- W7 (TRAY-ARM engine): the top dispatcher DoCatchTray (flat switch) + 8
     #     pumpable task SM skeletons (DoCatchFromLoader / CatchNewTrayFromBuffer /
     #     DoPlaceTrayToAuto / DoPlaceToBuffer / DoSlapTray / DoCatchUnderTray /
@@ -587,12 +775,13 @@ add_library(ht9045_sm STATIC
     #     the pure decision helpers (WhichAutoNeedTray/IsOutArmSafe/...).  No
     #     site-variant dispatch in this file.  Hardware behind the Sim HAL
     #     (MOT[]/Cylinder[]/Sen[]/SW[]/CatchTraySuck); cross-module/UI surface
-    #     (fTrayMapping/LoadCCD/MyMessageBox/AMR/HSys.BinDisCtrl) behind offline
-    #     shims + ACTIVE stubs; see the file-head gate documentation.  OWNS the
-    #     real WhichAutoNeedTray() (the canary_support.cpp sim stub was removed).
+    #     (fTrayMapping/LoadCCD/MyMessageBox/HSys.BinDisCtrl) behind offline
+    #     shims + ACTIVE stubs; AMR is REAL now (Automation/AMR.cpp above); see
+    #     the file-head gate documentation.  OWNS the real WhichAutoNeedTray()
+    #     (the canary_support.cpp sim stub was removed).
     acatchtray.cpp
     # --- W6.3 TRAY-ARM cross-module offline shims (fTrayMapping / MyMessageBox /
-    #     LoadCCD / AMR / SECS_EVENT+EventReport / Tray-Mapping-laser / AMR-feed /
+    #     LoadCCD / SECS_EVENT+EventReport / Tray-Mapping-laser / AMR-feed /
     #     NewRecordProcess / BoolToStr / iCoverTrayIDTask / iReadCIDAction).
     acatchtray_shims.cpp
     # --- W6.4 (TESTER/INDEX engine): the test-result-DECODE anchor (GetBinaryData /
@@ -606,18 +795,35 @@ add_library(ht9045_sm STATIC
     #     gate documentation.
     atester.cpp
     # --- W64b (TESTER/INDEX engine): the Front (Z1/Arm1) and Rear (Z2/Arm2)
-    #     "Destroy IC" down-press state machines (DoFrontTestDestroyIC /
-    #     DoRearTestDestroyIC + CheckZ1IsDown/CheckZ2IsDown/TestZ1OutRandge/
-    #     TestZ2OutRandge/TestZ1SetPos/TestZ2SetPos leaf deps), faithfully
-    #     translated -- no longer offline shims for these symbols (see
-    #     atester_shims.cpp note below for what of Front/Rear is still shimmed).
+    #     "Destroy IC" + "Suck IC" down-press state machines (DoFrontTestDestroyIC /
+    #     DoRearTestDestroyIC / DoFrontTestSuckIC / DoRearTestSuckIC +
+    #     CheckZ1IsDown/CheckZ2IsDown/TestZ1OutRandge/TestZ2OutRandge/
+    #     TestZ1SetPos/TestZ2SetPos leaf deps), faithfully translated -- no
+    #     longer offline shims for these symbols (see atester_shims.cpp note
+    #     below for what of Front/Rear is still shimmed).
     aTester_Front.cpp
     aTester_Rear.cpp
-    # --- W6.4 TESTER/INDEX cross-module offline shims (atester_32Site /
-    #     atester_ProcessCount / fContact / ADAM_*; aTester_Front/Rear's Destroy
-    #     pair is real as of W64b -- see aTester_Front.cpp/aTester_Rear.cpp above --
-    #     every OTHER Front/Rear export, e.g. DoFrontTestSuckIC/DoTestYFront/
-    #     TestZ1OutRandge2, is still an offline shim here).
+    # --- W5-atester32site / W5-ProcessCount-Translate: the 32-Site dual-arm
+    #     test-head engine (all 8 golden functions, 2 vision islands internally
+    #     gated -- see the file's own header) + the ProcessCount/low-yield-alarm
+    #     leaf subset (14 golden functions: RecordPiggyBackStartEnd/
+    #     ProcessPiggyBackFunction/InitialPiggyBackFunction/ProcessSocketPurgeCount/
+    #     DoLowYieldAlarm/DoLowYieldAlarmFirst/CheckContinuoussFail/
+    #     ProcessContinuoussFailForATC/GetMultiplierNum/CheckContinuoussPassBySocket/
+    #     CheckContinuoussPass/ProcessHeadContactCount/ProcessSocketCount/
+    #     ProcessAutoloadcellMeasureCount).  Both retire their corresponding
+    #     stub entries from atester_shims.cpp/.h (see that file's remaining
+    #     scope note below).
+    atester_32Site.cpp
+    atester_ProcessCount.cpp
+    # --- W6.4 TESTER/INDEX cross-module offline shims (fContact / ADAM_* /
+    #     CCDInterfaceForm / fAutomation / fObserver / fiosetview / COM2 / IsNNMode /
+    #     CheckHeaterOK; aTester_Front/Rear's Destroy+Suck pairs and the whole of
+    #     atester_32Site/atester_ProcessCount are real now -- see above -- every
+    #     OTHER Front/Rear export, e.g. DoTestYFront/TestZ1OutRandge2, plus the
+    #     ProcessCount exports still out of this wave's scope [ProcessShowTestStatus/
+    #     ProcessCount/ProcessStartTestData/RecordHistroy/ProcessQASampling], stay
+    #     offline shims here).
     atester_shims.cpp
     # --- W6.5 (SHUTTLE/CARRY engine): the two input-shuttle master SMs
     #     Do_Auto_SHT1 / Do_Auto_SHT2 (39 cases each, ALL ACTIVE; case 200->201
@@ -663,7 +869,10 @@ target_include_directories(ht9045_sm PUBLIC
 )
 
 target_link_libraries(ht9045_sm PUBLIC
-    ht9045_io ht9045_motor ht9045_globals vclcompat)
+    ht9045_io ht9045_motor ht9045_globals vclcompat
+    # W5-comms INTEGRATE: EventReport()/SECS_EVENT (csystem.cpp) + link-
+    # completeness for Interface/InterfaceSYS.cpp (see source-list comment above).
+    ht9045_secsgem)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     # The SM carries BCB6 idioms inherited from the global headers (AnsiString

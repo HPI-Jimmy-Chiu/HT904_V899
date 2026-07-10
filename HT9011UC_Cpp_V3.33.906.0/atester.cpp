@@ -66,13 +66,18 @@
 #include "MachineDefine.h"
 
 #include "atester.h"
-#include "atester_shims.h"          // 32Site/ProcessCount/fContact/ADAM_* offline shims (Front/Rear destroy SM now real, see below)
+#include "atester_shims.h"          // fContact/ADAM_*/CCDInterfaceForm/fAutomation/fObserver/fiosetview/COM2 offline shims (32Site/ProcessCount/Front/Rear now real, see below)
 // AI(W64b-Integrate) 20260706: mirrors golden atester.cpp:7-8, which #include
 // "aTester_Front.h"/"aTester_Rear.h" directly right after atester.h -- the
 // Front/Rear "Destroy IC" state machines are now translated for real (no
 // longer routed through atester_shims' offline stubs for these 6 symbols).
 #include "aTester_Front.h"
 #include "aTester_Rear.h"
+// AI(W5-Automation-Integrate) 20260710: atester_32Site.cpp / atester_ProcessCount.cpp
+// are now real translations (added to ht9045_sm) -- include their own headers
+// directly instead of relying on atester_shims.h's (now-removed) declarations.
+#include "atester_32Site.h"
+#include "atester_ProcessCount.h"
 #include "aArmHeader.h"             // __FUNC__ shim
 
 #include "MachineType.h"
