@@ -862,6 +862,31 @@ add_library(ht9045_sm STATIC
     #     DoInArm/OutArmTeachAlignmentProcess / SetFixTrayMiddleDtata /
     #     DoOneCycleFinishCheck / DoCleanOutFinishCheck).
     csystem_shims.cpp
+    # --- W5-BarCode (BarCode front, 2026-07-11): real bodies for 18 of the 20
+    #     TfBarCode_Shim methods (aHotPlateSubstrate.h:623-664).  7 parallel
+    #     translate units extracting SPECIFIC functions from the still-largely-
+    #     untranslated ~24,500-line BarCode/{BarCode,BarCode_Sh1,BarCode_Sh2,
+    #     BarcodeXML}.cpp VCL-form core (see MIGRATION_ROADMAP.md DEFERRED
+    #     table).  DoBarcodeScanInShuttle_2/DoShuttleFloatCheck_2 were NOT
+    #     delivered this wave (clean hand-off, BarCode_Shuttle2_Scan's own
+    #     report) -- those 2 TfBarCode_Shim methods keep their pre-existing
+    #     offline stub.  BarCode_Bottom2DID8CCD.{h,cpp} intentionally live at
+    #     project ROOT (not under BarCode/), per that unit's exact task-brief
+    #     path -- see its own file banner.
+    #     INTEGRATE FIX: resolved 2 real cross-unit ODR conflicts before wiring
+    #     (BarCode_Shuttle2_Scan.cpp's own bCCDcheckShuttle[2] vs. the existing
+    #     cmydef.cpp global; BarCode_Shuttle2_CCDScan.cpp's independent
+    #     redefinition of 8 golden TfBarCode-member globals already owned by
+    #     BarCode_Bottom2DID.cpp) -- both units' own translate reports flagged
+    #     these; see aHotPlateSubstrate.cpp's include-block comment for the
+    #     resolution.
+    BarCode/BarCode_Helpers.cpp
+    BarCode/BarCode_Bottom2DID.cpp
+    BarCode_Bottom2DID8CCD.cpp
+    BarCode/BarCode_Shuttle1_Scan.cpp
+    BarCode/BarCode_Shuttle2_Scan.cpp
+    BarCode/BarCode_Shuttle1_CCDScan.cpp
+    BarCode/BarCode_Shuttle2_CCDScan.cpp
 )
 
 target_include_directories(ht9045_sm PUBLIC

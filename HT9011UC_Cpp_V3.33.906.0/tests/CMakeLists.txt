@@ -1476,3 +1476,116 @@ if(WIN32)
 endif()
 
 add_test(NAME W64b_RearSuckIC COMMAND test_atester_rear_suckic)
+
+# ===========================================================================
+#  W5-BarCode (BarCode front, 2026-07-11) -- 7 parallel translate units giving
+#  real bodies to 18 of the 20 TfBarCode_Shim methods (aHotPlateSubstrate.h:
+#  623-664).  All 7 link the same RESCAN group as the other ht9045_sm-linked
+#  suites above (cprod<->cpublic<->cmydef ctor cross-references).
+# ===========================================================================
+
+# --- test_barcode_helpers: TfHIKROBOTcmd / uCCDUnloaderClip / IsSHT2DIDScanFinish
+add_executable(test_barcode_helpers
+    test_barcode_helpers.cpp
+)
+
+target_link_libraries(test_barcode_helpers PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_barcode_helpers PRIVATE ws2_32)
+endif()
+
+add_test(NAME BarCodeHelpers COMMAND test_barcode_helpers)
+
+# --- test_barcode_bottom2did: InitBottom2DIDScan / DoBottom2DIDScan (1-CCD) --
+add_executable(test_barcode_bottom2did
+    test_barcode_bottom2did.cpp
+)
+
+target_link_libraries(test_barcode_bottom2did PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_barcode_bottom2did PRIVATE ws2_32)
+endif()
+
+add_test(NAME BarCodeBottom2DID COMMAND test_barcode_bottom2did)
+
+# --- test_barcode_bottom2did8ccd: DoBottom2DID_8CCD_Scan (8-CCD sibling) ----
+add_executable(test_barcode_bottom2did8ccd
+    test_barcode_bottom2did8ccd.cpp
+)
+
+target_link_libraries(test_barcode_bottom2did8ccd PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_barcode_bottom2did8ccd PRIVATE ws2_32)
+endif()
+
+add_test(NAME BarCode_Bottom2DID8CCD COMMAND test_barcode_bottom2did8ccd)
+
+# --- test_barcode_shuttle1_scan: 7 Shuttle-1 scan/trigger/float-check methods
+add_executable(test_barcode_shuttle1_scan
+    test_barcode_shuttle1_scan.cpp
+)
+
+target_link_libraries(test_barcode_shuttle1_scan PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_barcode_shuttle1_scan PRIVATE ws2_32)
+endif()
+
+add_test(NAME BarCode_Shuttle1_Scan COMMAND test_barcode_shuttle1_scan)
+
+# --- test_barcode_shuttle2_scan: 5 of 7 Shuttle-2 scan/trigger/float-check --
+#   (DoBarcodeScanInShuttle_2/DoShuttleFloatCheck_2 handed off, not delivered)
+add_executable(test_barcode_shuttle2_scan
+    test_barcode_shuttle2_scan.cpp
+)
+
+target_link_libraries(test_barcode_shuttle2_scan PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_barcode_shuttle2_scan PRIVATE ws2_32)
+endif()
+
+add_test(NAME BarCode_Shuttle2Scan COMMAND test_barcode_shuttle2_scan)
+
+# --- test_barcode_shuttle1_ccdscan: DoBarcodeCCDInShuttle_1 (largest unit) --
+add_executable(test_barcode_shuttle1_ccdscan
+    test_barcode_shuttle1_ccdscan.cpp
+)
+
+target_link_libraries(test_barcode_shuttle1_ccdscan PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_barcode_shuttle1_ccdscan PRIVATE ws2_32)
+endif()
+
+add_test(NAME BarCode_Shuttle1_CCDScan COMMAND test_barcode_shuttle1_ccdscan)
+
+# --- test_barcode_shuttle2_ccdscan: DoBarcodeCCDInShuttle_2 -----------------
+add_executable(test_barcode_shuttle2_ccdscan
+    test_barcode_shuttle2_ccdscan.cpp
+)
+
+target_link_libraries(test_barcode_shuttle2_ccdscan PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_barcode_shuttle2_ccdscan PRIVATE ws2_32)
+endif()
+
+add_test(NAME W5_BarCode_Shuttle2CCDScan COMMAND test_barcode_shuttle2_ccdscan)
