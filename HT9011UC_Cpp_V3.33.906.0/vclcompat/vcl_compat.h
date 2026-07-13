@@ -75,6 +75,17 @@
 #include "vclcompat/SysUtils.h"
 #include "vclcompat/IniFiles.h"
 #include "vclcompat/Comm.h"        // Spcomm::TComm serial shim (SPComm.hpp)
+// AI(W906-ServerSocket) 20260713: TServerSocket/TServerWinSocket (multi-
+// connection ScktComp server shim). Transitively pulls in ClientSocket.h too
+// (TClientSocket/TCustomWinSocket -- not otherwise listed in this umbrella;
+// see ClientSocket.h's own header note on why it wasn't wired here directly).
+// Naming-collision check done first (per TList.h's own precedent below):
+// grepped the whole Cpp tree for TServerSocket/TServerWinSocket/
+// TCustomWinSocket/TClientSocket/TErrorEvent/TSocketNotifyEvent/
+// TSocketErrorEvent -- no existing class definitions anywhere outside
+// vclcompat/ (only comments referencing the eventual golden translation),
+// so no TList-style exclusion is needed for this include.
+#include "vclcompat/ServerSocket.h"
 
 // ---------------------------------------------------------------------------
 //  Win32 A/W macro guard

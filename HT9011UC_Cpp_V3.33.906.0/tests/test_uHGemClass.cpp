@@ -175,14 +175,16 @@ int main()
     }
 
     // -----------------------------------------------------------------------
-    // Gated stubs (57 methods) -- spot-check a representative sample across
-    // void / int-ack / AnsiString-param shapes; every one must be callable
-    // without crashing and return its documented conservative default.
+    // Gated stubs (47 of the original 57 remain gated after the 20260713
+    // integrate wave -- see uHGemClass.cpp's file-head "INTEGRATE WAVE" note)
+    // -- spot-check a representative sample across void / int-ack /
+    // AnsiString-param shapes; every one must be callable without crashing
+    // and return its documented conservative default.
     // -----------------------------------------------------------------------
     printf("\n-- gated stubs: conservative defaults, no crash (sample) --\n");
     {
         HTGem g;
-        // void, no-arg (representative of ~40 such stubs)
+        // void, no-arg (representative of the still-gated void/no-arg stubs)
         g.S1F1_AreYouThereRequest();
         g.S1F2_OnLineData();
         g.S1F24_CollectionEventNamelist();
@@ -191,25 +193,16 @@ int main()
         printf("PASS  void/no-arg gated stubs callable without crash\n");
         ++g_pass;
 
-        // void, AnsiString-arg
-        g.S9F1_UnrecognizedDeviceID("unit test S");
-        g.S9F3_Unrecognized_Stream_Function_Type("unit test S");
-        g.S9F5_UnrecognizedFunctionType("unit test S");
-        g.S9F7_IllegalData("unit test S");
-        g.S9F9_TransactionTimerTimeout("unit test S");
-        printf("PASS  void/AnsiString-arg gated stubs callable without crash\n");
-        ++g_pass;
-
         // int-returning ack stubs -- conservative default documented in each
-        // uHGemClass.cpp stub comment.
+        // uHGemClass.cpp stub comment. (S2F42_Host_Command_Acknowledge and
+        // CheckECValue moved out of this sample -- see the UN-GATED section
+        // below, they are no longer blanket stubs.)
         check_i("S2F24_TraceInitializeAcknowledgeSub() conservative default",
                 g.S2F24_TraceInitializeAcknowledgeSub(), 1);
         check_i("S2F34_DefineReportAcknowledgeSub() conservative default",
                 g.S2F34_DefineReportAcknowledgeSub(), 1);
         check_i("S2F36_LinkEventReportAcknowledgeSub() conservative default",
                 g.S2F36_LinkEventReportAcknowledgeSub(), 1);
-        check_i("S2F42_Host_Command_Acknowledge() conservative default",
-                g.S2F42_Host_Command_Acknowledge(), 1);
         check_i("S7F2_ProcessProgramLoadGrant() conservative default",
                 g.S7F2_ProcessProgramLoadGrant(), 1);
         check_i("S2F15_UpdateNewEquipmentConstant() conservative default",
@@ -217,15 +210,147 @@ int main()
         check_i("S2F15_CheckNewEquipmentConstant() conservative default",
                 g.S2F15_CheckNewEquipmentConstant(), 1);
 
-        // CheckECValue -- matches golden's OWN not-found default (golden :3559)
-        check_i("CheckECValue(\"999\", NULL) matches golden not-found default",
-                g.CheckECValue("999", NULL), 1);
-
         // SetECValue -- void, two args, must not crash even with a NULL sink.
+        // STILL gated (see uHGemClass.cpp's own comment on this method: the
+        // IsVCL==1 dynamic_cast branch needs vclcompat widget types
+        // [TPanel/TCustomEdit/TComboBox/TLabel/TCheckBox/TRadioGroup] that
+        // don't exist, and -- unlike SecsSvEcRegistration.cpp's analogous
+        // GetECDataValue gate -- there is no reachability proof available
+        // to safely gate just that one sub-branch).
         int dummy = 0;
         g.SetECValue(70, &dummy);
         printf("PASS  SetECValue callable without crash\n");
         ++g_pass;
+    }
+
+    // -----------------------------------------------------------------------
+    // UN-GATED (10 methods, integrate wave 20260713): S9F1/S9F3/S9F5/S9F7/
+    // S9F9_*, S2F24_TraceInitializeAcknowledge, S2F26_DiagnosticLoopbackData,
+    // S2F42_Host_Command_Acknowledge, S2F44_ResetSpoolingAcknowledge,
+    // CheckECValue. These now call HTGem's own `WireCodec`/`SvEcReg` engine
+    // members for real instead of returning a blanket conservative default --
+    // verified here via WireCodec/SvEcReg OBSERVABLE STATE, not just
+    // "does not crash". See uHGemClass.cpp's file-head "INTEGRATE WAVE" note
+    // for exactly why these 10 (of 57) and not more.
+    // -----------------------------------------------------------------------
+    printf("\n-- UN-GATED methods: real WireCodec/SvEcReg behavior --\n");
+    {
+        // S9F1/S9F3/S9F5/S9F7/S9F9 -- identical 4-call shape (StringOut +
+        // InitLocalHead(9,<F>,0) + DataItemOut(ASCII,S) + SendLocalData).
+        // Verify the real StringOut side effect (LogDataString gains the
+        // exact message) and the real InitLocalHead side effect (Local.
+        // MessageID_S/F set from the S,F code) -- a blanket stub could do
+        // neither.
+        HTGem g;
+        g.S9F7_IllegalData("format error test");
+        check_i("S9F7_IllegalData: WireCodec.LogDataString gained a line",
+                g.WireCodec.LogDataString->Count, 1);
+        check_s("S9F7_IllegalData: LogDataString[0] == the message",
+                g.WireCodec.LogDataString->GetString(0).c_str(), "format error test");
+        check_i("S9F7_IllegalData: Local.MessageID_S == 9 (InitLocalHead(9,7,0))",
+                g.WireCodec.Local.MessageID_S, 9);
+        check_i("S9F7_IllegalData: Local.MessageID_F == 7",
+                g.WireCodec.Local.MessageID_F, 7);
+
+        g.S9F1_UnrecognizedDeviceID("dev id test");
+        check_i("S9F1_UnrecognizedDeviceID: Local.MessageID_F == 1", g.WireCodec.Local.MessageID_F, 1);
+        g.S9F3_Unrecognized_Stream_Function_Type("s9f3 test");
+        check_i("S9F3_Unrecognized_Stream_Function_Type: Local.MessageID_F == 3", g.WireCodec.Local.MessageID_F, 3);
+        g.S9F5_UnrecognizedFunctionType("s9f5 test");
+        check_i("S9F5_UnrecognizedFunctionType: Local.MessageID_F == 5", g.WireCodec.Local.MessageID_F, 5);
+        g.S9F9_TransactionTimerTimeout("s9f9 test");
+        check_i("S9F9_TransactionTimerTimeout: Local.MessageID_F == 9", g.WireCodec.Local.MessageID_F, 9);
+
+        // S2F44_ResetSpoolingAcknowledge -- pure InitLocalHead+DataItemOut
+        // burst; verify the wire cursor actually advanced past the bare
+        // 14-byte header (proves DataItemOut really ran, not just InitLocalHead).
+        g.S2F44_ResetSpoolingAcknowledge();
+        check_i("S2F44_ResetSpoolingAcknowledge: Local.MessageID_S == 2", g.WireCodec.Local.MessageID_S, 2);
+        check_i("S2F44_ResetSpoolingAcknowledge: Local.MessageID_F == 44", g.WireCodec.Local.MessageID_F, 44);
+        check_b("S2F44_ResetSpoolingAcknowledge: LocalLength_4 advanced past bare header",
+                g.WireCodec.LocalLength_4 > 14, true);
+
+        // S2F26_DiagnosticLoopbackData -- format-error path: seed a
+        // NON-BINARY item (ASCII) so GetDataItemLenAndType's peek is fully
+        // deterministic (Type gets a real value, no uninitialized-read
+        // risk) and the `Type==HType.BINARY_TYPE` check is reliably false ->
+        // falls to S9F7_IllegalData.
+        {
+            HTGem g2;
+            g2.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+            g2.WireCodec.SReceiveData->Add(AnsiString(3));
+            g2.S2F26_DiagnosticLoopbackData();
+            check_i("S2F26 with non-BINARY peeked item -> falls to S9F7 (MessageID_F==7)",
+                    g2.WireCodec.Local.MessageID_F, 7);
+        }
+        // S2F26_DiagnosticLoopbackData -- success path: seed a real
+        // BINARY_TYPE item (Type token, len token, len data-value tokens) so
+        // GetDataItemLenAndType + DataItemIn both succeed -> real
+        // InitLocalHead(2,26,0)+DataItemOut(BINARY)+SendLocalData echo.
+        {
+            HTGem g3;
+            g3.WireCodec.SReceiveData->Add(AnsiString((int)HType.BINARY_TYPE));
+            g3.WireCodec.SReceiveData->Add(AnsiString(3));
+            g3.WireCodec.SReceiveData->Add(AnsiString(0xAA));
+            g3.WireCodec.SReceiveData->Add(AnsiString(0xBB));
+            g3.WireCodec.SReceiveData->Add(AnsiString(0xCC));
+            g3.S2F26_DiagnosticLoopbackData();
+            check_i("S2F26 with seeded BINARY item -> real echo (MessageID_S==2)",
+                    g3.WireCodec.Local.MessageID_S, 2);
+            check_i("S2F26 with seeded BINARY item -> real echo (MessageID_F==26)",
+                    g3.WireCodec.Local.MessageID_F, 26);
+        }
+
+        // S2F42_Host_Command_Acknowledge -- empty SReceiveData -> DataItemIn
+        // returns -1 immediately (SReceiveData->Count==0 is the very FIRST
+        // check, before any local variable is touched -- deterministic, no
+        // uninitialized-read risk) -> HCACK=3 (golden's own quirk: this path
+        // never calls InitLocalHead first, preserved verbatim).
+        {
+            HTGem g4;
+            check_i("S2F42 with empty SReceiveData -> HCACK=3 (format error, golden quirk)",
+                    g4.S2F42_Host_Command_Acknowledge(), 3);
+        }
+        // S2F42_Host_Command_Acknowledge -- seeded success path: <L,2 <A,3
+        // "ABC">> so DataItemIn(2,LIST,NULL) then the ASCII decode both
+        // succeed -> HCACK=1 (golden's own dead if(HCACK==0)/else split,
+        // where HCACK is unconditionally 1 either way, preserved verbatim).
+        {
+            HTGem g5;
+            g5.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+            g5.WireCodec.SReceiveData->Add(AnsiString(2));
+            g5.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+            g5.WireCodec.SReceiveData->Add(AnsiString(3));
+            g5.WireCodec.SReceiveData->Add(AnsiString("ABC"));
+            check_i("S2F42 with seeded LIST+ASCII command -> HCACK=1 (accept)",
+                    g5.S2F42_Host_Command_Acknowledge(), 1);
+        }
+
+        // S2F24_TraceInitializeAcknowledge -- thin wrapper: its own Sub()
+        // sibling stays gated (returns its conservative default, 1), so this
+        // always takes the `else` branch -> a real LocalAcknowledge(2,24,1)
+        // burst (InitLocalHead+DataItemOut+SendLocalData, all via WireCodec).
+        {
+            HTGem g6;
+            g6.S2F24_TraceInitializeAcknowledge();
+            check_i("S2F24_TraceInitializeAcknowledge: Local.MessageID_S == 2", g6.WireCodec.Local.MessageID_S, 2);
+            check_i("S2F24_TraceInitializeAcknowledge: Local.MessageID_F == 24", g6.WireCodec.Local.MessageID_F, 24);
+        }
+
+        // CheckECValue -- not-found path matches golden's own default (1),
+        // now reached via a REAL SvEcReg.EC_ID->IndexOf lookup instead of a
+        // blanket stub -- proved by ALSO exercising the found/in-range/
+        // out-of-range paths, which a blanket stub could never do.
+        check_i("CheckECValue(\"999\", NULL): not registered -> golden not-found default",
+                g.CheckECValue("999", NULL), 1);
+
+        int ecRaw = 50;
+        g.SvEcReg.SetECDataPointer(AnsiString("100"), HType.INT_4_TYPE, "TestEC", "unit",
+                                    (void*)&ecRaw, 0, 100, 50, "remark");
+        int inRange = 30, outHigh = 999, outLow = -5;
+        check_i("CheckECValue: 30 in [0,100] -> 0 (ok)", g.CheckECValue("100", &inRange), 0);
+        check_i("CheckECValue: 999 > max 100 -> 3 (out of range)", g.CheckECValue("100", &outHigh), 3);
+        check_i("CheckECValue: -5 < min 0 -> 3 (out of range)", g.CheckECValue("100", &outLow), 3);
     }
 
     // -----------------------------------------------------------------------

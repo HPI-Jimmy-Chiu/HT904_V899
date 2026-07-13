@@ -111,9 +111,10 @@ int iReadCIDAction       = 0;                   // golden -- ePortTotal at rest 
 //  are DEFINED in acatchtray.cpp (it owns them this wave) -- not here (ODR).
 //  NOTE: the TrayArm-subsystem globals (bEject / bPurgeOutAllDevice / iThisPortNo
 //  / iThisPortStatus / iPortStatus / ASE_OutTrayNum / iReceiveAutoTrayTask /
-//  bOldAutoHasTray / bBoatChangeCasset) + the Tray-Mapping inits + the out-arm
-//  MoveOutArmXY_ToFix_Tray_Full(bool) are DEFINED below in the consolidated W7
-//  block -- not duplicated here.
+//  bOldAutoHasTray / bBoatChangeCasset / bPortIsBusy / bAskStopPort /
+//  iLastPortStatus / bForceSendLoaderIsEmpty) + the Tray-Mapping inits + the
+//  out-arm MoveOutArmXY_ToFix_Tray_Full(bool) are DEFINED below in the
+//  consolidated W7 block -- not duplicated here.
 
 // ---- W7 ADD: per-Auto receive / stack-cylinder helpers (offline-safe) ------
 bool DoAutoReceiveBinTray(int /*iWhichAuto*/)        { return false; }   // offline: no receive
@@ -144,6 +145,19 @@ int  iThisPortNo                     = 0;                     // golden cmydef.c
 int  iThisPortStatus                 = 0;                     // golden cmydef.cpp:5844
 int  iPortStatus[ePortTotal]         = {0};                   // golden cmydef.cpp:5845
 int  iReceiveAutoTrayTask[MAX_AUTO_TRAY] = {0};               // golden csystem.h:67 (auto-receive cursors)
+// AI(W906-AGV-PortScan-Integrate) 20260713: same-neighborhood siblings of the
+// iThisPortNo/iThisPortStatus/iPortStatus trio just above (golden cmydef.cpp
+// :5916-5924, all still inside this tree's cmydef.cpp "#if 0 // TODO(W6)"
+// tail gate -- declared `extern` in cmydef.h so any TU compiles, but with NO
+// active definition anywhere) -- needed by Automation/AGV_PortScan.cpp
+// (bIsStackBusy/bScanLoadPortState_SPIL/bScanUnLoadPortState_SPIL/
+// DoE84LoaderScan/DoE84UnloaderScan etc., all in this same ht9045_sm
+// library), which a fresh from-scratch link caught as undefined references.
+// Offline-safe zero-init, same idiom as every other stand-in in this block.
+bool bAskStopPort[ePortTotal]        = {false};                // golden cmydef.cpp:5916 (JerryYang 20250521 : For AMR)
+bool bPortIsBusy[ePortTotal]         = {false};                 // golden cmydef.cpp:5917
+int  iLastPortStatus[ePortTotal]     = {0};                    // golden cmydef.cpp:5921
+bool bForceSendLoaderIsEmpty         = false;                   // golden cmydef.cpp:5924 (JerryYang 20250618 : add)
 
 // -- functions (offline-safe) -------------------------------------------------
 bool DoLockUnloader(int /*iAuto*/)         { return true; }   // golden csystem.h:259 -- offline: unloader locked OK

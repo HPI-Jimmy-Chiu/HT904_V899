@@ -50,6 +50,14 @@ struct TCustomWinSocket::Impl {
     bool bSim;
     bool bConnected;
 
+    // AI(W906-ServerSocket) 20260713: generic hooks (see ClientSocket.h's
+    // file-header EXTENSION note). Independent of `owner` above -- a given
+    // instance is owned by EITHER a TClientSocket (uses `owner`) OR is one of
+    // a TServerSocket's per-connection objects (uses these instead); never
+    // both, but both paths are always checked (each is a no-op when unset).
+    std::function<void(TCustomWinSocket*)> readNotify;
+    std::function<void(TCustomWinSocket*)> closeNotify;
+
 #if defined(_WIN32)
     SOCKET            sock;         // INVALID_SOCKET when not connected
     HANDLE            hReader;      // reader-thread handle (0 when none)
@@ -85,6 +93,11 @@ struct TCustomWinSocket::Impl {
 
 TCustomWinSocket::TCustomWinSocket()
     : RemotePort(0)
+    , Connected(false)     // AI(W906-ServerSocket) 20260713: see ClientSocket.h EXTENSION note
+    , LocalAddress()
+    , LocalPort(0)
+    , Handle(0)
+    , SocketHandle(0)
     , pImpl_(new Impl())
 {
 }
@@ -188,6 +201,15 @@ void TCustomWinSocket::Disconnect(int /*Port*/)
     }
 #endif
     pImpl_->bConnected = false;
+
+    // AI(W906-ServerSocket) 20260713: public Connected mirror + generic
+    // close-notify (see ClientSocket.h EXTENSION note). No-op for existing
+    // TClientSocket-owned sockets (closeNotify unset there) -- this is how
+    // vclcompat/ServerSocket.cpp's SimDropConnection()/real-mode teardown
+    // learns a connection went away and updates its Connections[] bookkeeping.
+    Connected = false;
+    if (pImpl_->closeNotify)
+        pImpl_->closeNotify(this);
 }
 
 void TCustomWinSocket::SimPushReceive(const void* pData, int len)
@@ -206,10 +228,80 @@ void TCustomWinSocket::SimPushReceive(const void* pData, int len)
 
     if (pImpl_->owner && pImpl_->owner->OnRead)
         pImpl_->owner->OnRead(pImpl_->owner, this);
+
+    // AI(W906-ServerSocket) 20260713: generic read-notify (see EXTENSION
+    // note) -- fires in ADDITION to the owner->OnRead path above, never
+    // instead of it; unset (no-op) for plain TClientSocket connections.
+    if (pImpl_->readNotify)
+        pImpl_->readNotify(this);
 }
 
 const std::vector<char>& TCustomWinSocket::SimTxBuffer() const { return pImpl_->simTx; }
 void TCustomWinSocket::SimClearTx() { pImpl_->simTx.clear(); }
+
+// AI(W906-ServerSocket) 20260713: see ClientSocket.h file-header EXTENSION
+// note for the full rationale of these four additions.
+void TCustomWinSocket::SetReadNotifyHook(const std::function<void(TCustomWinSocket*)>& fn)
+{
+    pImpl_->readNotify = fn;
+}
+
+void TCustomWinSocket::SetCloseNotifyHook(const std::function<void(TCustomWinSocket*)>& fn)
+{
+    pImpl_->closeNotify = fn;
+}
+
+void TCustomWinSocket::StartReaderThread()
+{
+#if defined(_WIN32)
+    if (pImpl_->bSim)
+        return;                 // Sim mode has no OS socket to read from
+    if (pImpl_->hReader != 0)
+        return;                 // already running -- idempotent
+
+    ::InterlockedExchange(&pImpl_->bStopReader, 0);
+    DWORD tid = 0;
+    pImpl_->hReader = ::CreateThread(
+        0, 0,
+        reinterpret_cast<LPTHREAD_START_ROUTINE>(&TCustomWinSocket::ReaderProc_),
+        this, 0, &tid);
+#endif
+}
+
+// AI(W906-ServerSocket-fix) 20260713: same shutdown/join/CloseHandle sequence
+// as TClientSocket::DoClose_'s inline block below, factored into a method
+// external owners (ServerSocket.cpp) can call without friend access to Impl.
+// See ClientSocket.h's declaration comment for the use-after-free this closes.
+void TCustomWinSocket::StopReaderThread()
+{
+#if defined(_WIN32)
+    if (pImpl_->bSim)
+        return;   // Sim mode never spawned a reader thread
+
+    ::InterlockedExchange(&pImpl_->bStopReader, 1);
+    if (pImpl_->sock != INVALID_SOCKET)
+        ::shutdown(pImpl_->sock, SD_BOTH);   // unblock a pending recv()
+    if (pImpl_->hReader != 0)
+    {
+        ::WaitForSingleObject(pImpl_->hReader, 2000);
+        ::CloseHandle(pImpl_->hReader);
+        pImpl_->hReader = 0;
+    }
+#endif
+}
+
+void TCustomWinSocket::AttachRealSocket_(intptr_t osSocketHandle, int remotePort)
+{
+#if defined(_WIN32)
+    pImpl_->bSim       = false;
+    pImpl_->sock       = static_cast<SOCKET>(osSocketHandle);
+    pImpl_->bConnected = true;
+#else
+    (void)osSocketHandle;
+#endif
+    RemotePort = remotePort;
+    Connected  = true;
+}
 
 // ---------------------------------------------------------------------------
 //  Real-mode reader thread (private static member -> can touch pImpl_).
@@ -237,11 +329,30 @@ unsigned long __stdcall TCustomWinSocket::ReaderProc_(void* param)
 
             if (sk->pImpl_->owner && sk->pImpl_->owner->OnRead)
                 sk->pImpl_->owner->OnRead(sk->pImpl_->owner, sk);
+
+            // AI(W906-ServerSocket) 20260713: see ClientSocket.h EXTENSION
+            // note -- no-op (unset) for plain TClientSocket connections.
+            if (sk->pImpl_->readNotify)
+                sk->pImpl_->readNotify(sk);
         }
         else
         {
             break;   // n==0 (peer closed) or SOCKET_ERROR: stop the loop
         }
+    }
+
+    // AI(W906-ServerSocket) 20260713: natural EOF/error/stop exit -- mark
+    // disconnected + fire the generic close-notify hook (no-op/unset for a
+    // plain TClientSocket connection, so its existing behavior -- the loop
+    // simply stops without any disconnect notification -- is UNCHANGED here;
+    // vclcompat/ServerSocket.cpp's per-connection bookkeeping is what
+    // actually consumes this for a Real-mode server connection).
+    if (sk != 0)
+    {
+        sk->pImpl_->bConnected = false;
+        sk->Connected = false;
+        if (sk->pImpl_->closeNotify)
+            sk->pImpl_->closeNotify(sk);
     }
 #else
     (void)param;
@@ -339,13 +450,13 @@ void TClientSocket::DoConnect_()
                     Socket->pImpl_->sock      = s;
                     Socket->pImpl_->bConnected = true;
                     Socket->RemotePort = Port;
+                    Socket->Connected  = true;   // AI(W906-ServerSocket) 20260713: keep the new public mirror in lockstep
 
-                    ::InterlockedExchange(&Socket->pImpl_->bStopReader, 0);
-                    DWORD tid = 0;
-                    Socket->pImpl_->hReader = ::CreateThread(
-                        0, 0,
-                        reinterpret_cast<LPTHREAD_START_ROUTINE>(&TCustomWinSocket::ReaderProc_),
-                        Socket, 0, &tid);
+                    // AI(W906-ServerSocket) 20260713: was an inline CreateThread
+                    // call; now factored into TCustomWinSocket::StartReaderThread()
+                    // (identical CreateThread(ReaderProc_) call) so
+                    // ServerSocket.cpp's accept path can reuse it verbatim.
+                    Socket->StartReaderThread();
 
                     if (OnConnect) OnConnect(this, Socket);
                     return;
@@ -374,6 +485,7 @@ void TClientSocket::DoConnect_()
     Socket->pImpl_->bSim       = true;
     Socket->pImpl_->bConnected = true;
     Socket->RemotePort = Port;
+    Socket->Connected  = true;   // AI(W906-ServerSocket) 20260713: keep the new public mirror in lockstep
     if (OnConnect) OnConnect(this, Socket);
 }
 
@@ -407,6 +519,7 @@ void TClientSocket::DoClose_()
 #endif
 
     Socket->pImpl_->bConnected = false;
+    Socket->Connected = false;   // AI(W906-ServerSocket) 20260713: keep the new public mirror in lockstep
     if (OnDisconnect) OnDisconnect(this, Socket);
     // Restore the sim flag to the last explicitly-requested policy for the
     // next DoConnect_() (mirrors Comm.h's StopComm -> bSim=bSimForced).

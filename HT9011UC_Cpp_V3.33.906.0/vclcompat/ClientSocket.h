@@ -112,6 +112,48 @@
 //          the caller's job, e.g. golden's own `StringReplace(...,"\r\n",
 //          "")` right after the call).
 //
+//  AI(W906-ServerSocket) 20260713: EXTENSION for the new sibling shim
+//  vclcompat/ServerSocket.h (TServerSocket/TServerWinSocket -- the
+//  multi-connection server side of ScktComp). Real Delphi ScktComp.pas has
+//  TServerWinSocket.Connections[i] declared as plain TCustomWinSocket, and
+//  golden CONFIRMS this by wiring the identical event handler function to
+//  both a TClientSocket's OnRead and a TServerSocket's OnClientRead
+//  (SECSGEM/uHGemEquipment.dfm:550 `OnRead = clientGemRead` and :569
+//  `OnClientRead = clientGemRead` -- one function assigned to two
+//  std::function-typed slots only type-checks if both carry the same
+//  Socket parameter type) -- so ServerSocket.h REUSES this class for its
+//  per-connection objects rather than defining a parallel/mirrored type.
+//  Added, all cited directly by SECSGEM/uHGemEquipment.cpp and
+//  Automation/automation.cpp (see ServerSocket.h's own file-header for the
+//  full citation list):
+//      bool       Connected     -- golden Connections[0]->Connected (uHGemEquipment.cpp:2006)
+//      AnsiString LocalAddress  -- golden Connections[i]->LocalAddress (:6818) and the
+//                                  event's own Socket->LocalAddress (:6824)
+//      int        LocalPort     -- golden event Socket->LocalPort (:6822)
+//      int        Handle        -- golden Connections[0]->Handle (automation.cpp:636)
+//      int        SocketHandle  -- golden Connections[i]->SocketHandle (automation.cpp:824/
+//                                  829/847); golden's own :817-820 comment expects
+//                                  iHandle==iSocketHandle (used only for a mismatch-debug
+//                                  log), i.e. golden itself treats these as the same
+//                                  underlying connection identity spelled two ways -- this
+//                                  shim keeps them numerically identical, not two identities.
+//  Plus generic (non-golden, additive plumbing) hooks so ONE TCustomWinSocket
+//  class can be owned by either a TClientSocket OR a TServerSocket connection
+//  slot without hard-coding a TClientSocket* back-pointer:
+//      SetReadNotifyHook(fn) / SetCloseNotifyHook(fn) -- fire in ADDITION to
+//          (never instead of) the pre-existing TClientSocket owner->OnRead
+//          path, so existing TClientSocket behavior is bit-for-bit unchanged
+//          when neither hook is set (the default).
+//      StartReaderThread() -- Real-mode-only background reader; factored out
+//          of TClientSocket::DoConnect_()'s inline CreateThread call (now a
+//          thin wrapper around this) so ServerSocket.cpp's accept path can
+//          spawn the identical per-connection reader for each accepted peer
+//          without needing friend access to the private Impl.
+//      AttachRealSocket_(intptr_t osSocketHandle, int remotePort) -- lets
+//          ServerSocket.cpp's Real-mode accept() path wrap an already-live OS
+//          socket handle into a fresh TCustomWinSocket from outside the
+//          class, again without friend access.
+//
 //  BACKING -- Sim/Real, SAFETY-MOTIVATED POLICY (deliberately DIFFERENT from
 //  the Comm.h auto-fallback precedent -- see rationale below):
 //    * SIM mode (the DEFAULT, unconditionally, until a caller opts in to
@@ -152,6 +194,7 @@
 #include "vclcompat/Comm.h"          // vclcompat::TComponent (reuse, per Comm.h)
 #include <vector>
 #include <functional>
+#include <cstdint>   // intptr_t -- AttachRealSocket_ (AI(W906-ServerSocket))
 
 namespace Scktcomp {
 
@@ -181,6 +224,18 @@ public:
     // ---- properties ---------------------------------------------------
     int RemotePort;   // golden Socket->RemotePort; 0 until connected
 
+    // AI(W906-ServerSocket) 20260713: added for the TServerSocket-family shim
+    // -- see this header's own file-header EXTENSION note above for the
+    // exact golden call-shape citations (SECSGEM/uHGemEquipment.cpp,
+    // Automation/automation.cpp). Plain fields (never assigned by golden,
+    // read-only from a consumer's point of view), matching this class's
+    // existing plain-field idiom for RemotePort.
+    bool       Connected;
+    AnsiString LocalAddress;
+    int        LocalPort;
+    int        Handle;
+    int        SocketHandle;
+
     // ---- methods (faithful signatures per the SCOPED API SURFACE above) ---
     int  ReceiveLength() const;               // bytes currently queued
     int  ReceiveBuf(void* Buf, int BufSize);   // dequeue up to BufSize bytes
@@ -208,6 +263,42 @@ public:
                                                        // fires owner->OnRead
     const std::vector<char>& SimTxBuffer() const;     // bytes SendBuf captured (sim)
     void SimClearTx();
+
+    // AI(W906-ServerSocket) 20260713: generic notify hooks + Real-mode
+    // plumbing -- see file-header EXTENSION note above. Fire IN ADDITION to
+    // the pre-existing TClientSocket owner->OnRead path (never instead of),
+    // so existing TClientSocket callers are unaffected when unset (default).
+    void SetReadNotifyHook(const std::function<void(TCustomWinSocket*)>& fn);
+    void SetCloseNotifyHook(const std::function<void(TCustomWinSocket*)>& fn);
+
+    // Real-mode-only: spawns the background reader thread (no-op / idempotent
+    // in Sim mode or if already running). Factored out of
+    // TClientSocket::DoConnect_()'s inline CreateThread call so
+    // ServerSocket.cpp's accept path can reuse the identical reader for each
+    // accepted connection without needing friend access to Impl.
+    void StartReaderThread();
+
+    // AI(W906-ServerSocket-fix) 20260713: Real-mode-only: signals + joins this
+    // socket's OWN reader thread (mirrors TClientSocket::DoClose_'s inline
+    // shutdown/WaitForSingleObject/CloseHandle sequence, factored out here so
+    // an external owner -- ServerSocket.cpp, which only sees this public
+    // interface, not TClientSocket's private Impl -- can guarantee a
+    // connection's reader thread has fully exited before deleting the
+    // TCustomWinSocket object it runs against. No-op/idempotent in Sim mode
+    // or once already joined (hReader==0). MUST be called (per-connection,
+    // for every entry ever created, not just currently-"live" ones) before
+    // any external deleter destroys a TCustomWinSocket that was ever handed
+    // to StartReaderThread() -- see ServerSocket.cpp's ~TServerSocket() for
+    // the motivating use-after-free this closes (an independent fidelity
+    // review of the triple-front wave found ~TServerSocket() deleting live
+    // connections without first joining their reader threads).
+    void StopReaderThread();
+
+    // Real-mode-only: wraps an already-connected OS socket handle (from
+    // ServerSocket.cpp's accept() loop) into this (freshly-constructed,
+    // otherwise-Sim-default) instance. Sets bSim=false, Connected=true,
+    // RemotePort=remotePort. Never called by Sim-mode code paths.
+    void AttachRealSocket_(intptr_t osSocketHandle, int remotePort);
 
 private:
     TCustomWinSocket(const TCustomWinSocket&);

@@ -69,6 +69,9 @@ TfMain::TfMain()
     HEventLogWnd   = NULL;
     HAutoUpdateWnd = NULL;
     oldGpibAddress = 0;
+    // -- W5-Automation ADD (AGV_PortScan unit, 20260713) -----------------------
+    ALed1         = new TfLedValue();
+    labAutomation = new TfMainPanel();
 }
 void TfMain::LightOn() {}                                       // W6.4: CCD light sink (offline no-op)
 void TfMain::DebugOneCycleHotPlate(AnsiString /*sfunc*/) {}     // debug log sink (offline no-op)
@@ -128,6 +131,10 @@ TfLotInfo::TfLotInfo()
     // -- W5-Final-TesterTCPSocket ADD --
     labTCPIPStatus = new TfLotInfoStatusLabel();
     mmTesterLog    = new TfMainMemo();
+    // -- W5-Automation ADD (AGV_PortScan unit, 20260713) -----------------------
+    ALedLoader    = new TfLedValue();
+    for(int i=0;i<3;i++) aLedAuto[i] = new TfLedValue();
+    palRemoveTray = new TfLotInfoPanel();
 }
 void TfLotInfo::InitialUnLoaderTask(int /*iUnloader*/) {}      // W6.3: offline AMR-task no-op
 // -- W5-Automation ADD: AMR.cpp + HANA_ART.cpp method sinks (all offline no-op) --

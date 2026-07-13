@@ -122,6 +122,26 @@ struct TfMainMemoLines{ int Count; void Add(AnsiString /*s*/){} TfMainMemoLines(
 struct TfMainMemo     { TfMainMemoLines *Lines; void Clear(){} TfMainMemo(){ Lines=new TfMainMemoLines(); } }; // [DATA] golden TMemo*
 struct TfMainPageControl { int ActivePageIndex; TfMainPageControl():ActivePageIndex(0){} };      // [DATA] golden TPageControl* (pgMain)
 struct TfMainSpeedButton { bool Down; TfMainSpeedButton():Down(false){} };                        // [DATA] golden TSpeedButton* (W7-C1: BtnOneCycle->Down, offline false)
+// ---------------------------------------------------------------------------
+//  W5-Automation (AGV_PortScan unit, 20260713): TfLedValue -- golden TALed*
+//  ->Value (bool) shape.  Deliberately SHARED across TfMain (ALed1, main.h:355)
+//  AND TfLotInfo (ALedLoader / aLedAuto1-3, uLotInfo.h:965-971) -- all four
+//  golden fields are the exact same VCL component type (TALed), not four
+//  different widgets, so one stand-in avoids near-duplicate types.
+//  Consumer: Automation/AGV_PortScan.cpp (bScanLoadPortState_SPIL /
+//  bScanUnLoadPortState_SPIL).
+// ---------------------------------------------------------------------------
+struct TfLedValue { bool Value; TfLedValue():Value(false){} };  // [DATA] golden TALed*
+// ---------------------------------------------------------------------------
+//  W5-Automation (AGV_PortScan unit, 20260713): TfMainPanel -- golden TPanel*
+//  with only ->Caption read (fMain->labAutomation, main.h:802; compared
+//  against the literal "SECS GEM 4:Enable"). Same shape as the existing
+//  TfSortCTPanel/TfLotInfoLabel Caption-only stand-ins (kept as its own tiny
+//  type here purely to avoid a forward-declaration/ordering dance with
+//  TfLotInfoLabel, which is defined later in this same file).  Consumer:
+//  Automation/AGV_PortScan.cpp (DoE84LoaderScan / DoE84UnloaderScan).
+// ---------------------------------------------------------------------------
+struct TfMainPanel { AnsiString Caption; };  // [DATA] golden TPanel* (main.h:802 labAutomation)
 class TfMainInplace
 {
 public:
@@ -213,6 +233,11 @@ public:
     void SetStartModeData();                                  // [METHOD] golden main.h -- offline: recipe start-mode UI refresh no-op
     void LoadTestModePicture();                                // [METHOD] golden main.h -- offline: test-mode picture UI refresh no-op
     void BackupSetupFile();                                    // [METHOD] golden main.h -- offline: setup-file backup no-op (Ifor 20170620)
+    // -- W5-Automation ADD (AGV_PortScan unit, 20260713): members
+    //    Automation/AGV_PortScan.cpp derefs (AMR SPIL port-scan LED +
+    //    E84 loader/unloader tray-count scan's SECS-link panel) -----------------
+    TfLedValue *ALed1;                                        // [DATA] golden main.h:355 (TALed*) -- bScanLoadPortState_SPIL reads ->Value
+    TfMainPanel *labAutomation;                               // [DATA] golden main.h:802 (TPanel*) -- DoE84LoaderScan/DoE84UnloaderScan compare ->Caption
     TfMain();
 };
 extern TfMain *fMain;
@@ -254,6 +279,12 @@ struct TfLotInfoEdit    { AnsiString Text; };     // [DATA] golden uLotInfo.h (T
 //    no default-visibility meaning here, only a colour code -- kept as its own
 //    tiny struct to match golden's actual TLabel (not TPanel) member type.
 struct TfLotInfoStatusLabel { AnsiString Caption; int Color; TfLotInfoStatusLabel():Color(0){} };
+// -- W5-Automation ADD (AGV_PortScan unit, 20260713): golden TPanel* shape
+//    (fLotInfo->palRemoveTray, uLotInfo.h:828) -- both ->Enabled and
+//    ->Visible are written (DoE84UnloaderScan case 1200), never read anywhere
+//    in the translated tree yet; defaulted true/true (ordinary VCL TPanel
+//    design-time defaults) since no consumer depends on the initial value.
+struct TfLotInfoPanel { bool Enabled; bool Visible; TfLotInfoPanel():Enabled(true),Visible(true){} };
 class TfLotInfo
 {
 public:
@@ -271,6 +302,12 @@ public:
     //    derefs (golden TesterTCP.cpp:170/180/621 labTCPIPStatus, :290/294 mmTesterLog) --
     TfLotInfoStatusLabel *labTCPIPStatus;         // [DATA] golden uLotInfo.h (TLabel* TCP/IP link-status)
     TfMainMemo           *mmTesterLog;            // [DATA] golden uLotInfo.h (TMemo* tester comm-log) -- reuse TfMainMemo shape (fAGV->mmE84Log precedent)
+    // -- W5-Automation ADD (AGV_PortScan unit, 20260713): members
+    //    Automation/AGV_PortScan.cpp derefs (AMR SPIL port-scan LEDs +
+    //    E84 unloader tray-count scan's "remove tray" prompt panel) ----------
+    TfLedValue     *ALedLoader;                   // [DATA] golden uLotInfo.h:971 (TALed*)
+    TfLedValue     *aLedAuto[3];                  // [DATA] golden uLotInfo.h:965,969,970 (TALed* aLedAuto1/2/3, consolidated into an array -- same convention as fSortCT->pnlTrayCnt[6])
+    TfLotInfoPanel *palRemoveTray;                 // [DATA] golden uLotInfo.h:828 (TPanel*, Enabled+Visible)
     TfLotInfo();
 };
 extern TfLotInfo *fLotInfo;

@@ -44,13 +44,22 @@
 #ifndef uHGemClassH
 #define uHGemClassH
 #include "vclcompat/vcl_compat.h"
+#include "SECSGEM/SecsWireCodec.h"
+#include "SECSGEM/SecsSvEcRegistration.h"
 //---------------------------------------------------------------------------
 
 // AI(W5-SECSGEM-Translate) 20260710: THGem (uHGemEquipment.h) is the SECS
 // engine VCL form -- out of scope for this unit (see file-head note above).
 // Forward declaration only; HTGem never dereferences it in ACTIVE code (all
-// HGemPtr-dereferencing method bodies are gated in uHGemClass.cpp pending a
-// dedicated future wave that translates uHGemEquipment.h/.cpp).
+// remaining HGemPtr-dereferencing method bodies are gated in uHGemClass.cpp
+// pending a dedicated future wave that translates uHGemEquipment.h/.cpp).
+//
+// AI(W906-uHGemClass-Unlock) 20260713: as of the uHGemClass integrate wave, a SUBSET of
+// methods (see uHGemClass.cpp file-head "INTEGRATE WAVE" note) no longer go
+// through HGemPtr at all -- they call the two THGem-slice engines below
+// instead (WireCodec / SvEcReg), which are real, already-translated stand-ins
+// for the pieces of THGem those methods actually needed. HGemPtr itself is
+// untouched and still exists for the remaining gated methods.
 class THGem;
 
 extern AnsiString SYS_ECChangeID             ;    //pig 2014.04.23 KYEC SECS
@@ -68,6 +77,40 @@ class HTGem
         HTGem(AnsiString Path);
         THGem *HGemPtr;
         TStringList *SecsAlarmMessage;   //Steven 20150519 : 修正SECS GEM使用ShowMyMessage會出現記憶體破壞
+
+        // AI(W906-uHGemClass-Unlock) 20260713: DESIGN -- uHGemClass integrate wave.
+        // golden's HTGem methods reach into `HGemPtr`/the global `HGem`
+        // (both `THGem*`, out of scope -- see file-head note) for almost
+        // every statement: InitLocalHead/DataItemOut/DataItemIn/SendLocalData/
+        // GetDataItemLenAndType (byte-level wire codec) and EC_ID/EC_TYPE/
+        // EC_Ptr_Max/EC_Ptr_Min/... (SV/EC registration bookkeeping). Two
+        // prior waves already translated exactly those two THGem slices as
+        // standalone, real, non-copyable engine classes: `SecsWireCodec` and
+        // `SecsSvEcRegistration` (see each header's own file-head note; their
+        // own docs already flagged them as future-THGem-member prerequisites
+        // -- this is that future arriving early, one class at a time, for
+        // just the methods that need nothing else). HTGem embeds one
+        // instance of EACH BY VALUE (RAII, no manual new/delete pair to
+        // leak/double-free -- same "own it outright" style already used by
+        // this project's other interface-cut engines, e.g. TMySimMotor
+        // holding its own persistent motion state as instance members rather
+        // than free-function statics or a pointer the caller must manage).
+        // Methods whose FULL golden dependency chain resolves entirely
+        // within these two engines now call `WireCodec.`/`SvEcReg.` instead
+        // of `HGemPtr->`/`HGem->` -- see uHGemClass.cpp's file-head
+        // "INTEGRATE WAVE" note for exactly which ones and why the other 47
+        // still cannot. Both are non-copyable (deleted copy ctor/assign, see
+        // their own headers); embedding them by value makes HTGem itself
+        // implicitly non-copyable too (the compiler deletes HTGem's
+        // implicit copy ctor/assignment) -- a harmless, arguably-corrective
+        // side effect, since HTGem's OTHER raw-pointer-owned members
+        // (SecsAlarmMessage/FMessageList above) would already double-free
+        // under a naive shallow copy today; not attempting to fix that
+        // pre-existing latent issue further here, just noting the
+        // incidental improvement.
+        SecsWireCodec WireCodec;
+        SecsSvEcRegistration SvEcReg;
+
         void UpdateDataPath(AnsiString Path);
         virtual ~HTGem()                        ;
         virtual void AddSV()                    {};

@@ -1344,6 +1344,23 @@ endif()
 
 add_test(NAME ClientSocketExt COMMAND test_clientsocket_ext)
 
+# --- test_serversocket: vclcompat/ServerSocket Sim-mode acceptance test ------
+#   TServerSocket/TServerWinSocket (Front C of the W906 uHGemClass/AGV_PortScan/
+#   ServerSocket triple-front wave, 2026-07-13). Sim-only (no real network I/O),
+#   same posture as test_clientsocket_ext.cpp just above. Links vclcompat only
+#   (ServerSocket.cpp lives in the vclcompat library, see root CMakeLists.txt).
+add_executable(test_serversocket
+    test_serversocket.cpp
+)
+
+target_link_libraries(test_serversocket PRIVATE vclcompat)
+
+if(WIN32)
+    target_link_libraries(test_serversocket PRIVATE ws2_32)
+endif()
+
+add_test(NAME ServerSocket COMMAND test_serversocket)
+
 # --- test_MyNUEC1: EtherCAT/MyNUEC1 FS-N12 amplifier slave (W5 comms leaf) --
 #   Offline stub path (HAVE_PCI1203 not defined); links the combined
 #   ht9045_comms library.
@@ -1732,6 +1749,19 @@ if(WIN32)
     target_link_libraries(test_agv_e84 PRIVATE ws2_32)
 endif()
 add_test(NAME AGV_E84 COMMAND test_agv_e84)
+
+# --- test_agv_portscan: Automation/AGV_PortScan.cpp (the second AGV.cpp slice,
+#     E84 sensor-status telemetry + AMR/AGV port-scan dispatcher family) -------
+add_executable(test_agv_portscan
+    test_agv_portscan.cpp
+)
+target_link_libraries(test_agv_portscan PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+if(WIN32)
+    target_link_libraries(test_agv_portscan PRIVATE ws2_32)
+endif()
+add_test(NAME AGV_PortScan COMMAND test_agv_portscan)
 
 # --- test_SCK_ART_Remainder: Automation/SCK_ART_Remainder.cpp (next contiguous
 #     golden slice after the sibling SCK_ART.cpp 8-function extract) ---------

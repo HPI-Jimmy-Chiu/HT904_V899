@@ -39,6 +39,20 @@ add_library(vclcompat
     #   unsafe).  Lives here (not in MyPLC/ or a new library) because it is
     #   general vclcompat infra, matching Comm.cpp's precedent.
     vclcompat/ClientSocket.cpp
+    # --- W906-ServerSocket enabler: Scktcomp TServerSocket/TServerWinSocket
+    #   shim (multi-connection server sibling of ClientSocket.cpp above).
+    #   Faithful stand-in for the VCL ScktComp::TServerSocket used by
+    #   SECSGEM/uHGemEquipment.cpp's srvGem (passive-HSMS role) and
+    #   Automation/automation.cpp's OLPServer -- see ServerSocket.h's own
+    #   file-head for both golden call-shape citations.  No production
+    #   consumer wired yet (prerequisite infra, same shape as the earlier
+    #   SecsWireCodec/SecsSvEcRegistration slices); reuses ClientSocket.h's
+    #   TCustomWinSocket for its per-connection objects (see that header's
+    #   own EXTENSION note), so it must link/compile alongside ClientSocket.cpp
+    #   in the same library, not standalone.  Default is Sim mode; Real mode
+    #   is an explicit SetSimMode(false) opt-in (WinSock2 listen/accept +
+    #   a background acceptor thread + per-connection reader threads).
+    vclcompat/ServerSocket.cpp
 )
 
 target_include_directories(vclcompat PUBLIC
@@ -807,6 +821,19 @@ add_library(ht9045_sm STATIC
     #     canary_support.h); additionally now uses fAGV->mmE84Log (see
     #     FormsFacade.h/.cpp TfAGV::mmE84Log, added this integrate).
     Automation/AGV_E84.cpp
+    # --- W5-Automation-cont INTEGRATE: Automation/AGV_PortScan.cpp -- the
+    #     second AGV.cpp slice (after AGV_E84.cpp's E84 handshake core and
+    #     AGV_predicates.cpp's 3 AMR predicates, both above): E84 sensor-status
+    #     telemetry (NowE84Status/E84StatusChange) + the AMR/AGV port-scan
+    #     dispatcher family (ScanLoadPort + 8 bScan*/bIsStackBusy free functions),
+    #     13 functions total.  Same footprint as the AGV_E84.cpp/AGV_predicates.cpp
+    #     cluster (ht9045_globals/ht9045_motor/FormsFacade.h/canary_support.h),
+    #     plus 3 new FormsFacade stand-in members this unit added (TfMain::ALed1/
+    #     labAutomation, TfLotInfo::ALedLoader/aLedAuto[3]/palRemoveTray -- see
+    #     FormsFacade.h/.cpp "W5-Automation ADD" blocks) and #includes AGV_E84.h
+    #     (reuses its iLoaderScanTask[]/iUnloaderScanTask[]/bE84Loaderflag[]/
+    #     bE84Unloaderflag[] externs, does not redeclare) + AGV_predicates.h.
+    Automation/AGV_PortScan.cpp
     # --- W5-Final-SckArtRemainder INTEGRATE: Automation/SCK_ART_Remainder.cpp --
     #     the next contiguous golden slice (SetSetupFilePath/AccessFile/
     #     SetGPIBVersion/UpdateCount/AddAlarmCode/ClearLotInfo/AddOutputJamCnt/
