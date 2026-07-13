@@ -6,6 +6,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <cctype>
 #include <cmath>
 #include <string>
 #include <sys/stat.h>
@@ -218,6 +219,45 @@ AnsiString FloatToStrF(double v, TFloatFormat fmt, int precision, int digits) {
             std::snprintf(buf, sizeof(buf), "%.*g", (precision > 0 ? precision : 15), v);
             return AnsiString(std::string(buf));
     }
+}
+
+// ---------------------------------------------------------------------------
+//  StringReplace (AI(W5-Final-TesterTCPSocket) 20260711 -- see SysUtils.h)
+// ---------------------------------------------------------------------------
+AnsiString StringReplace(const AnsiString& S, const AnsiString& OldPattern,
+                         const AnsiString& NewPattern, TReplaceFlags Flags) {
+    const std::string& oldp = OldPattern.str();
+    if (oldp.empty()) return S;   // no-op guard: avoids an infinite replace loop
+
+    std::string hay = S.str();
+    const std::string& newp = NewPattern.str();
+    bool ignoreCase = Flags.Has(rfIgnoreCase);
+
+    std::string hayCmp = hay;
+    std::string oldCmp = oldp;
+    if (ignoreCase) {
+        for (size_t i = 0; i < hayCmp.size(); ++i) hayCmp[i] = static_cast<char>(std::tolower(static_cast<unsigned char>(hayCmp[i])));
+        for (size_t i = 0; i < oldCmp.size(); ++i) oldCmp[i] = static_cast<char>(std::tolower(static_cast<unsigned char>(oldCmp[i])));
+    }
+
+    std::string out;
+    size_t pos = 0;
+    bool all = Flags.Has(rfReplaceAll);
+    for (;;) {
+        size_t found = hayCmp.find(oldCmp, pos);
+        if (found == std::string::npos) {
+            out += hay.substr(pos);
+            break;
+        }
+        out += hay.substr(pos, found - pos);
+        out += newp;
+        pos = found + oldp.size();
+        if (!all) {
+            out += hay.substr(pos);
+            break;
+        }
+    }
+    return AnsiString(out);
 }
 
 // ---------------------------------------------------------------------------

@@ -40,6 +40,11 @@
 #include "BarCode/BarCode_Shuttle2_Scan.h"    // BarCode_Sh2_* (InitialBarcodeScanIn/OutShuttle2, DoBarcodeTriggerInShuttle_2, DoBarcodeScanOutShuttle_2, InitialShuttleFloatCheck2)
 #include "BarCode/BarCode_Shuttle1_CCDScan.h" // BarCode_DoBarcodeCCDInShuttle_1
 #include "BarCode/BarCode_Shuttle2_CCDScan.h" // BarCode_DoBarcodeCCDInShuttle_2
+// -- W5-BarCode-Final INTEGRATE ADD (20260711): the 2 leftover TfBarCode_Shim
+//    methods flagged "REMAINING / HANDED OFF" by BarCode_Shuttle2_Scan.h --
+//    now delivered by 2 separate hand-off translate units, completing 20/20.
+#include "BarCode/BarCode_Shuttle2_ScanRemainder1.h" // BarCode_Sh2_DoBarcodeScanInShuttle_2
+#include "BarCode/BarCode_Shuttle2_ScanRemainder2.h" // BarCode_Sh2_DoShuttleFloatCheck_2
 
 //==============================================================================
 //  (a) KitSuck grid objects (golden MyKitSuck.h:357-366) -- offline instances
@@ -619,25 +624,25 @@ int iFix3CanFullTask              = 1;
 //      advances rather than hangs.
 //==============================================================================
 // AI(W5-BarCode-Integrate) 20260711: delegate to the real W5-BarCode translate-
-// unit bodies (see includes above). DoBarcodeScanInShuttle_2/DoShuttleFloatCheck_2
-// were NOT delivered this wave (BarCode_Shuttle2_Scan's own translate report --
-// a clean, documented hand-off, see BarCode_Shuttle2_Scan.h "REMAINING / HANDED
-// OFF") -- those 2 keep their pre-existing offline-safe stub bodies unchanged.
+// unit bodies (see includes above).
+// AI(W5-BarCode-Final-Integrate) 20260711: DoBarcodeScanInShuttle_2/
+// DoShuttleFloatCheck_2 were the 2-method "REMAINING / HANDED OFF" hand-off
+// flagged by BarCode_Shuttle2_Scan.h -- both are now delivered by 2 separate
+// completion units (BarCode_Shuttle2_ScanRemainder1/2) and wired below.
+// TfBarCode_Shim is 20/20 real methods as of this integrate.
 void TfBarCode_Shim::InitBottom2DIDScan()       { BarCode_InitBottom2DIDScan(); }
 bool TfBarCode_Shim::DoBottom2DIDScan()         { return BarCode_DoBottom2DIDScan(); }
 bool TfBarCode_Shim::DoBottom2DID_8CCD_Scan()   { return BarCode_DoBottom2DID_8CCD_Scan(); }
 
 // -- W6.5 ADD: in/out-shuttle 2D-barcode + shuttle-float-check bodies the carry
-//    engine derefs (golden BarCode/BarCode.h).  18 of 20 now delegate to real
-//    W5-BarCode bodies; the 2 NOT delivered this wave keep the original
-//    offline-safe stub (no CCD -> false/no-op) so Do_Auto_SHT1/2 never parks
-//    forever on a 2DID scan path that has no real body yet.
+//    engine derefs (golden BarCode/BarCode.h).  20 of 20 now delegate to real
+//    W5-BarCode bodies (see W5-BarCode-Final-Integrate note above).
 void TfBarCode_Shim::InitialBarcodeScanInShuttle1(bool bClear2DID)  { ::InitialBarcodeScanInShuttle1(bClear2DID); }      // golden :799
 void TfBarCode_Shim::InitialBarcodeScanInShuttle2(bool bClear2DID)  { BarCode_Sh2_InitialBarcodeScanInShuttle2(bClear2DID); } // golden :800
 void TfBarCode_Shim::InitialBarcodeScanOutShuttle1()                { ::InitialBarcodeScanOutShuttle1(); }              // golden :801
 void TfBarCode_Shim::InitialBarcodeScanOutShuttle2()                { BarCode_Sh2_InitialBarcodeScanOutShuttle2(); }    // golden :802
 bool TfBarCode_Shim::DoBarcodeScanInShuttle_1(bool bErrorSkip)     { return ::DoBarcodeScanInShuttle_1(bErrorSkip); }  // golden :803
-bool TfBarCode_Shim::DoBarcodeScanInShuttle_2(bool /*bErrorSkip*/) { return false; }  // golden :804 -- NOT delivered this wave (see banner)
+bool TfBarCode_Shim::DoBarcodeScanInShuttle_2(bool bErrorSkip)     { return BarCode_Sh2_DoBarcodeScanInShuttle_2(bErrorSkip); } // golden :804
 bool TfBarCode_Shim::DoBarcodeTriggerInShuttle_1()                 { return ::DoBarcodeTriggerInShuttle_1(); }         // golden :805
 bool TfBarCode_Shim::DoBarcodeTriggerInShuttle_2()                 { return BarCode_Sh2_DoBarcodeTriggerInShuttle_2(); } // golden :806
 bool TfBarCode_Shim::DoBarcodeCCDInShuttle_1(bool bVerify)         { return BarCode_DoBarcodeCCDInShuttle_1(bVerify); } // golden :807
@@ -647,7 +652,7 @@ bool TfBarCode_Shim::DoBarcodeScanOutShuttle_2()                   { return BarC
 void TfBarCode_Shim::InitialShuttleFloatCheck1()                   { ::InitialShuttleFloatCheck1(); }                  // golden :888
 void TfBarCode_Shim::InitialShuttleFloatCheck2()                   { BarCode_Sh2_InitialShuttleFloatCheck2(); }        // golden :889
 bool TfBarCode_Shim::DoShuttleFloatCheck_1()                       { return ::DoShuttleFloatCheck_1(); }               // golden :890
-bool TfBarCode_Shim::DoShuttleFloatCheck_2()                       { return false; }  // golden :891 -- NOT delivered this wave (see banner)
+bool TfBarCode_Shim::DoShuttleFloatCheck_2()                       { return BarCode_Sh2_DoShuttleFloatCheck_2(); }        // golden :891
 bool TfBarCode_Shim::IsSHT2DIDScanFinish(int SHT)                  { return BarCode_IsSHT2DIDScanFinish(SHT); }        // golden :942
 static TfBarCode_Shim g_fBarCode;
 TfBarCode_Shim *fBarCode = &g_fBarCode;

@@ -252,7 +252,11 @@ bool TCCDInterfaceFormShim::CCDRunExec()               { return false; }
 TCCDInterfaceFormShim *CCDInterfaceForm = new TCCDInterfaceFormShim();
 
 // ---- fAutomation (offline host-command form) -------------------------------
-TfAutomationShim::TfAutomationShim() {}
+// -- W5-Final-Auto9045 INTEGRATE ADD: TestMode/sATKSendMessage/sATKSendMessageCount --
+TfAutomationShim::TfAutomationShim() : TestMode(0), sATKSendMessageCount(0)
+{
+    for(int i=0;i<256;i++) sATKSendMessage[i]=0;
+}
 void TfAutomationShim::DoCommandBuffer(AnsiString /*Command*/, AnsiString /*SubCommand*/,
                                        AnsiString /*AlarmMessage*/, int /*ErrType*/, AnsiString /*AlarmID*/) {}
 bool TfAutomationShim::GetEventNum(int & /*num*/, AnsiString /*cmdstr*/, AnsiString /*numstr*/) { return false; }
@@ -262,7 +266,18 @@ void TfAutomationShim::ClearEvent(int /*num*/)         {}
 TfAutomationShim *fAutomation = new TfAutomationShim();
 
 // ---- fObserver (offline OEE observer) --------------------------------------
-TfObserverShim::TfObserverShim() : bTestIndexZ(false) {}
+TfObserverShim::TfObserverShim() : bTestIndexZ(false)
+{
+    // -- W5-Final-Auto9045 INTEGRATE ADD: Memo1Lines + 7 label stand-ins --
+    Memo1Lines      = new TfObserverMemoLines0();
+    labModel        = new TfObserverLabel();
+    labPowerOnTime  = new TfObserverLabel();
+    labRunningTime  = new TfObserverLabel();
+    labProductTime  = new TfObserverLabel();
+    labLoadingCount = new TfObserverLabel();
+    labMUBA         = new TfObserverLabel();
+    labMTBA         = new TfObserverLabel();
+}
 void TfObserverShim::RecordInArmTime()                {}  // W6.2b1x1: OEE time bookkeeping no-op
 void TfObserverShim::AddTimeData(int /*iRow*/, double /*Time*/) {} // W6.2b1x1: OEE time bookkeeping no-op
 TfObserverShim *fObserver = new TfObserverShim();

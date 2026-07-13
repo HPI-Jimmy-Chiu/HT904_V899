@@ -404,11 +404,30 @@ endif()
 #   unreferenced archive member there -- same "compiled but not pulled in"
 #   shape as other inert files elsewhere in this tree). tests/test_uHGemClass
 #   links this library directly to exercise HTGem itself.
+#
+#   SecsWireCodec.{h,cpp} -- W5-Final: THGem's pure byte-level SECS-II item
+#     codec slice (GetLengthOfType/GetLengthByte/GetSMLLenthByte/DataItemOut
+#     x2/DataItemInSub/DataItemIn x2/DataItemInNew/GetDataItemLenAndType(Sub)/
+#     StringOut), plus the shared `HType`/HTypeStruct global (the canonical
+#     home for HTypeStruct/STypeStruct/HSMS_Head_Struct -- see its own file
+#     header). Zero dependency beyond vclcompat.
+#   SecsSvEcRegistration.{h,cpp} -- W5-Final: THGem's SV/EC registration API
+#     (SetSVDataPointer x4 / SetECDataPointer x4 / GetECDataValue). A
+#     deliberately SEPARATE class from SecsWireCodec (reuses its `HType`
+#     global via #include, does not extend it -- see that file's own
+#     "DESIGN: SEPARATE CLASS" note); depends on SecsWireCodec.h + vclcompat/
+#     TList.h (vclcompat::TList, used qualified -- never brought into the
+#     global namespace, per that shim's own ODR note re aHotPlateSubstrate.h).
+#   Both slices are prerequisites -- not yet consumers -- of a FUTURE full
+#   THGem/uHGemEquipment.cpp translation wave (out of scope here); see each
+#   file's own "INTEGRATE-AGENT WIRING POINT" note.
 # ---------------------------------------------------------------------------
 add_library(ht9045_secsgem
     SECSGEM/uHGemClass.cpp
     SECSGEM/SecsEventType.cpp
     SECSGEM/SecsEventReport.cpp
+    SECSGEM/SecsWireCodec.cpp
+    SECSGEM/SecsSvEcRegistration.cpp
 )
 
 target_include_directories(ht9045_secsgem PUBLIC
@@ -582,6 +601,18 @@ add_library(ht9045_sm STATIC
     #     library here would create a circular ht9045_comms<->ht9045_sm target
     #     dependency.  See CMakeLists.txt's ht9045_comms comment block.
     Interface/InterfaceSYS.cpp
+    # --- W5-Final-TesterTCPSocket INTEGRATE: Interface/TesterTCP_Socket.cpp
+    #     (bounded socket-management subset of Interface/TesterTCP.cpp --
+    #     Connect/Disconnect/Error/Read handlers, the 30-tick reconnect timer,
+    #     SendTCPIPCommand/AddTCPIPCommunicationLog). Same rationale as
+    #     InterfaceSYS.cpp just above: compiled directly into ht9045_sm (not a
+    #     separate library) since it depends on FormsFacade/canary_support/
+    #     common already carried here. Depends on vclcompat/ClientSocket.h's
+    #     TClientSocket/TCustomWinSocket/TErrorEvent shim (already present on
+    #     disk from an earlier front in this integrate sequence) + the
+    #     StringReplace/TReplaceFlags addition this unit made to
+    #     vclcompat/SysUtils.h/.cpp (additive only, no hard-boundary file touched).
+    Interface/TesterTCP_Socket.cpp
     # --- W6.2b (IN-ARM engine): the central pick SM + iInArmType dispatch
     #     ladders + pure pitch/offset geometry + 3 pumpable task SMs.  Variant
     #     dispatch bodies + dense MOT[]/sensor/UI SMs are gated (#if 0) with
@@ -768,6 +799,39 @@ add_library(ht9045_sm STATIC
     Automation/AMR.cpp
     Automation/HANA_ART.cpp
     Automation/SCK_ART.cpp
+    # --- W5-Final-AGV_E84 INTEGRATE: Automation/AGV_E84.cpp -- the E84
+    #     loader/unloader handshake core (DoE84Loader/DoE84Unloader, 15/15
+    #     case labels each, faithful) + ShowE84Log/E84StatusLog file logging.
+    #     Same footprint as the AGV_predicates/AMR/HANA_ART/SCK_ART quartet
+    #     just above (ht9045_globals/ht9045_motor/FormsFacade.h/
+    #     canary_support.h); additionally now uses fAGV->mmE84Log (see
+    #     FormsFacade.h/.cpp TfAGV::mmE84Log, added this integrate).
+    Automation/AGV_E84.cpp
+    # --- W5-Final-SckArtRemainder INTEGRATE: Automation/SCK_ART_Remainder.cpp --
+    #     the next contiguous golden slice (SetSetupFilePath/AccessFile/
+    #     SetGPIBVersion/UpdateCount/AddAlarmCode/ClearLotInfo/AddOutputJamCnt/
+    #     SaveTestSummary-dispatcher) continuing the sibling SCK_ART.cpp 8-
+    #     function extract just above.  Deliberately owns its OWN
+    #     SckArtRemainderState (NOT the sibling's SckArtState) -- see the
+    #     file's own header for the 3-way reconciliation debt this creates
+    #     (sibling SckArtState / this file's SckArtRemainderState / csystem.cpp's
+    #     W7C2_TfSCKARTSeam) for dCurrYield/iFTRTCount/iNeedRT/iInputCount/
+    #     iManualRejectCnt/iTesterType/sLOTSTATUS/iCurrentStatus -- NOT resolved
+    #     by this integrate (would require touching the sibling file's
+    #     internals, out of this front's scope; flagged for a future
+    #     TfSCKART/FormsFacade unification wave).
+    Automation/SCK_ART_Remainder.cpp
+    # --- W5-Final-Auto9045 INTEGRATE: Automation/auto9045.cpp -- the whole OLP/
+    #     GPIB host-command config-accessor layer (148 golden free functions,
+    #     confirmed NOT a VCL TForm). Same footprint as the Automation cluster
+    #     above; all VCL-form gaps this file reaches (fBinSel/fShowBinSelect/
+    #     fTrayAssignment/fTestCategory/fContactCT/fCounterClear/fMonitor/
+    #     fProductionInfo/fTemp_Set + extra fMain/fObserver/fLotInfo/fContact/
+    #     fAutomation members) stay as this file's own TU-local `W5FA_`
+    #     companion objects -- NOT folded into FormsFacade.h/atester_shims.h by
+    #     this integrate (would each need a brand-new shared form class with no
+    #     other consumer yet; deferred, see this integrate's own report).
+    Automation/auto9045.cpp
     # --- W7 (TRAY-ARM engine): the top dispatcher DoCatchTray (flat switch) + 8
     #     pumpable task SM skeletons (DoCatchFromLoader / CatchNewTrayFromBuffer /
     #     DoPlaceTrayToAuto / DoPlaceToBuffer / DoSlapTray / DoCatchUnderTray /
@@ -887,6 +951,33 @@ add_library(ht9045_sm STATIC
     BarCode/BarCode_Shuttle2_Scan.cpp
     BarCode/BarCode_Shuttle1_CCDScan.cpp
     BarCode/BarCode_Shuttle2_CCDScan.cpp
+    # --- W5-BarCode-Final (BarCode remainder front, 2026-07-11): the last 2/20
+    #     TfBarCode_Shim methods (DoBarcodeScanInShuttle_2/DoShuttleFloatCheck_2,
+    #     the exact "REMAINING / HANDED OFF" leftover flagged above) + the
+    #     8-CCD ClientSocket connection-lifecycle glue (SendCCDCommand's REAL
+    #     body + the 13 real TClientSocket globals + the Bottom-8CCD Connect/
+    #     Init timer pair).  TfBarCode_Shim is 20/20 real methods as of this
+    #     integrate.  See aHotPlateSubstrate.cpp's include-block comment.
+    #     INTEGRATE DECISION (BarCode-8CCD-Glue's own flagged question):
+    #     the 6 pre-existing per-unit gated Gated_SendCCDCommand-style no-op
+    #     stand-ins (BarCode_Bottom2DID.cpp, BarCode_Shuttle1_CCDScan.cpp,
+    #     BarCode_Shuttle1_Scan.cpp, BarCode_Shuttle2_CCDScan.cpp,
+    #     BarCode_Shuttle2_Scan.cpp, BarCode_Bottom2DID8CCD.cpp) are LEFT
+    #     SEPARATE, NOT retargeted onto the new real ::SendCCDCommand -- (1)
+    #     those 6 files are already-integrated production code outside this
+    #     front's 3-unit scope, and this campaign's whole premise is that
+    #     serial integrates avoid touching files another front owns; (2) each
+    #     already has a passing oracle test asserting its own no-op/log
+    #     behaviour -- retargeting risks a silent behavioural change (real
+    #     SendCCDCommand's own log format + Socket->Active/SendText branches)
+    #     for zero required benefit, since every gated stand-in is already
+    #     faithful to a disconnected-CCD machine; (3) consolidating call sites
+    #     is a cleanup, not a correctness fix -- better done as its own
+    #     deliberate follow-up wave with full re-verification of all 6 affected
+    #     test suites, not a side effect of this hand-off completion.
+    BarCode/BarCode_Shuttle2_ScanRemainder1.cpp
+    BarCode/BarCode_Shuttle2_ScanRemainder2.cpp
+    BarCode/BarCode_8CCD_Glue.cpp
 )
 
 target_include_directories(ht9045_sm PUBLIC
@@ -914,6 +1005,83 @@ endif()
 # is defined, so the faithful golden body is untouched in spirit; the trace is
 # write-only instrumentation read only by the integration test.
 target_compile_definitions(ht9045_sm PRIVATE CSYSTEM_TICK_ORACLE)
+
+# ---------------------------------------------------------------------------
+# Library: ht9045_kyecftp  (W5-Final KYECFTP wave -- FTP client engine +
+#   TfFTPClient session logic)
+#
+#   KYECFTP/MiniFtpEngine.{h,cpp}            -- Nmftp::TNMFTP: a from-scratch FTP
+#     protocol engine standing in for the closed BCB6 TNMFTP component (no vendor
+#     source exists anywhere in this repo -- see the file's own banner for every
+#     inferred wire-behavior judgment call: async->sync, PASV-only, Vendor/
+#     ParseList inert, CurrentDir's live PWD round-trip, Mode()'s MODE_BYTE->
+#     "TYPE L 8" mapping, 502->OnUnSupportedFunction classification). Built on
+#     vclcompat/ClientSocket.h (one control-channel connection + a fresh PASV
+#     data-channel connection per transfer). Zero dependency beyond vclcompat.
+#   KYECFTP/FTPClient_EventHandlers.{h,cpp}  -- TfFTPClient's NMFTP1 event-handler
+#     bodies (status/success/failure logging), as free functions matching
+#     TNMFTP's std::function callback-slot signatures. Needs CUSTOMER_CODE
+#     (cmydef.cpp) + MyDBIProcess (aHotPlateSubstrate.cpp) + ShowMyMessage
+#     (canary_support.cpp).
+#   KYECFTP/FTPClient_Transfer.{h,cpp}       -- the 4 real FTP-transfer session
+#     functions (LoadFileFormServer2/UploadFileToServer2/Download_2DSortingList/
+#     Download_2DID_WhiteList), built against both siblings above. Needs
+#     CUSTOMER_CODE/IniConfig/CosFunction/Temperature (cprod.cpp/cmydef.cpp) +
+#     DataPath/OffsetPath/DefaultPath/LastDataPath/asATCFileTransferPath/
+#     sWhite2DIDListLoc (common.cpp) + MyDBIProcess/NewRecordProcess/MySleep/
+#     ShowMyMessage/RecordProcess (aHotPlateSubstrate.cpp/acatchtray_shims.cpp/
+#     acarry_shims.cpp/canary_support.cpp, all in ht9045_sm).
+#
+#   PRODUCTION link surface: vclcompat (MiniFtpEngine's transport) + ht9045_sm
+#   (CUSTOMER_CODE/IniConfig/CosFunction/Temperature transitively via
+#   ht9045_globals, + the 5 real free-function bodies above) + ht9045_core
+#   (common.cpp's DataPath family -- ht9045_sm does NOT itself link ht9045_core,
+#   see that library's own link line above, so it must be named explicitly here
+#   too). NOT exercised end-to-end by this library's own unit tests below --
+#   see those targets' own comments in tests/CMakeLists.txt for why: each test
+#   supplies TU-local stand-in globals/functions instead, deliberately avoiding
+#   the cmydef/cprod/common/canary_support/aHotPlateSubstrate "god-stack" for a
+#   fast, focused unit test (same avoidance already established by
+#   tests/test_config_loaders.cpp / tests/test_MyCCLink.cpp) -- ht9045_kyecftp
+#   itself compiling clean here is what proves these 3 files type-check against
+#   the REAL header declarations (cmydef.h/cprod.h/Config.h/CosFunction.h/
+#   common.h/canary_support.h), which the units' own narrower manual
+#   verification could not check.
+#
+#   No circular dependency: grepped the whole tree (production + tests) for any
+#   existing caller of LoadFileFormServer2/UploadFileToServer2/
+#   Download_2DSortingList/Download_2DID_WhiteList/Nmftp:: outside KYECFTP/
+#   itself -- zero hits. ht9045_sm/ht9045_core need nothing from ht9045_kyecftp,
+#   so this is a clean one-way dependency (unlike Interface/InterfaceSYS.cpp,
+#   which had a genuine two-way need and was folded directly into ht9045_sm's
+#   own source list instead -- see that library's comment above).
+# ---------------------------------------------------------------------------
+add_library(ht9045_kyecftp
+    KYECFTP/MiniFtpEngine.cpp
+    KYECFTP/FTPClient_EventHandlers.cpp
+    KYECFTP/FTPClient_Transfer.cpp
+)
+
+target_include_directories(ht9045_kyecftp PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+target_link_libraries(ht9045_kyecftp PUBLIC vclcompat ht9045_sm ht9045_core)
+
+if(WIN32)
+    target_link_libraries(ht9045_kyecftp PUBLIC ws2_32)
+endif()
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    # Same relaxed posture as ht9045_sm/ht9045_comms: FTPClient_EventHandlers.cpp/
+    # FTPClient_Transfer.cpp #include the BCB6-idiom-heavy global headers
+    # (cmydef.h/cprod.h/Config.h/CosFunction.h/common.h). MiniFtpEngine.cpp itself
+    # (zero god-stack dependency) is independently clean under the full strict
+    # set per its own unit's report; no per-file carve-out is needed since the
+    # relaxed flags here are a strict subset of warnings, not additions.
+    target_compile_options(ht9045_kyecftp PRIVATE
+        -Wall -Wextra -Wno-conversion-null -Wno-write-strings -Wno-unused-parameter)
+endif()
 
 # ---------------------------------------------------------------------------
 # Tests

@@ -151,6 +151,31 @@ int TCustomWinSocket::SendBuf(void* Buf, int BufSize)
 #endif
 }
 
+// AI(W5-Final-ClientSocketExt) 20260711: SendText/ReceiveText -- see
+// ClientSocket.h's file-header EXTENSION note for golden call-shape
+// citations (Interface/TesterTCP.cpp:271/336, BarCode.cpp multiple sites).
+int TCustomWinSocket::SendText(const AnsiString& s)
+{
+    // AnsiString bytes pass through untouched (Big5-safe, single-byte) --
+    // SendBuf's void* is non-const only because it also serves as the
+    // real-mode ::send()/sim-capture sink; SendText never writes through it.
+    return SendBuf(const_cast<char*>(s.c_str()), s.Length());
+}
+
+AnsiString TCustomWinSocket::ReceiveText()
+{
+    int n = ReceiveLength();
+    if (n <= 0)
+        return AnsiString();
+
+    std::vector<char> buf(static_cast<size_t>(n));
+    int got = ReceiveBuf(&buf[0], n);
+    if (got <= 0)
+        return AnsiString();
+
+    return AnsiString(&buf[0], got);
+}
+
 void TCustomWinSocket::Disconnect(int /*Port*/)
 {
     // Faithful to golden `Socket->Disconnect(Socket->RemotePort)`
@@ -240,6 +265,7 @@ TClientSocket::TClientSocket(TComponent* AOwner)
     : TComponent(AOwner)
     , Address()
     , Port(0)
+    , Tag(0)   // AI(W5-Final-ClientSocketExt) 20260711: default 0, see ClientSocket.h
     , Active(this)
     , OnConnect()
     , OnDisconnect()
@@ -390,6 +416,16 @@ void TClientSocket::DoClose_()
 void TClientSocket::Close()
 {
     DoClose_();
+}
+
+// AI(W5-Final-ClientSocketExt) 20260711: thin alias -- see ClientSocket.h's
+// file-header EXTENSION note. Calls the SAME private DoConnect_() that
+// ActiveProxy::operator=(true) already calls (below), so Open() is
+// bit-for-bit the same connect path/idempotency/OnConnect firing as
+// `Active=true`, not a second implementation of it.
+void TClientSocket::Open()
+{
+    DoConnect_();
 }
 
 // ---------------------------------------------------------------------------

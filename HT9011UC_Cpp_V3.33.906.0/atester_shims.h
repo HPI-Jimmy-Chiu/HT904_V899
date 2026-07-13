@@ -224,9 +224,26 @@ public:
     bool GetEventResult(int num);                                       // golden automation.h:125 -- offline false
     int  GetEventStrResult(int num);                                   // golden automation.h:126 -- offline 0
     void ClearEvent(int num);                                          // golden automation.h:128 -- offline no-op
+    // -- W5-Final-Auto9045 INTEGRATE ADD: members Automation/auto9045.cpp's
+    //    AmkorUDPGetSiteAndTemp/GetSite/GetTemp + GetTesterMode/SetTesterMode
+    //    derefs (golden automation.h) -- ADDITIVE ONLY this integrate pass:
+    //    auto9045.cpp still uses its own TU-local W5FA_TfAutomationExt
+    //    equivalent (not retargeted here, see this integrate's own report for
+    //    the risk/scope rationale); these members are available for a future
+    //    consolidation wave.
+    int  TestMode;                      // golden automation.h -- host-selected tester mode echo
+    char sATKSendMessage[256];          // golden automation.h -- ATK UDP site/temp packet buffer
+    int  sATKSendMessageCount;          // golden automation.h -- current packet length
     TfAutomationShim();
 };
 extern TfAutomationShim *fAutomation;            // golden automation.h:151 (PACKAGE TfAutomation* fAutomation)
+
+// -- W5-Final-Auto9045 INTEGRATE ADD: tiny golden-shape stand-ins for TfObserver's
+//    label/memo widgets (golden cObserver.h) -- same {AnsiString Caption;} /
+//    Count-only-memo idiom already established elsewhere in this tree
+//    (FormsFacade.h's TfSortCTPanel / TfMainMemoLines).
+struct TfObserverLabel { AnsiString Caption; };            // golden TLabel* (Caption only)
+struct TfObserverMemoLines0 { AnsiString Strings0; };      // golden TMemo*->Lines->Strings[0] (only index used)
 
 class TfObserverShim
 {
@@ -236,6 +253,13 @@ public:
     //    (golden cObserver.h:515/516).  Offline: time bookkeeping no-ops.
     void RecordInArmTime();                      // golden cObserver.h:515
     void AddTimeData(int iRow, double Time);     // golden cObserver.h:516
+    // -- W5-Final-Auto9045 INTEGRATE ADD: members Automation/auto9045.cpp's
+    //    GetTesterMode/GetJamCount/GetLoadCount-family readers deref (golden
+    //    cObserver.h) -- ADDITIVE ONLY (see TfAutomationShim comment above for
+    //    the same not-yet-retargeted rationale).
+    TfObserverMemoLines0 *Memo1Lines;                                   // golden cObserver.h (TMemo* Memo1)
+    TfObserverLabel *labModel, *labPowerOnTime, *labRunningTime, *labProductTime,
+                    *labLoadingCount, *labMUBA, *labMTBA;                // golden cObserver.h (TLabel*)
     TfObserverShim();
 };
 extern TfObserverShim *fObserver;                // golden cObserver.h

@@ -34,6 +34,13 @@
 
 #include "vclcompat/vcl_compat.h"   // AnsiString
 
+// Forward declaration: TfMainMemo (golden TMemo* shape) is fully defined further
+// down this same header (W6.5 shuttle-log section) -- TfAGV only needs a
+// pointer to it (W5-Final-AGV_E84 INTEGRATE, see below), so a forward
+// declaration here is sufficient; FormsFacade.cpp includes this whole header
+// before constructing TfAGV, so the full type is visible where it's needed.
+struct TfMainMemo;
+
 // ---------------------------------------------------------------------------
 //  TfAGV -- non-VCL stub (W6.1).  Mirrors ONLY the one method the canary calls.
 //  Golden: bool TfAGV::IsATK_AMR();  (Automation/AGV.h:205)
@@ -46,6 +53,10 @@ public:
     bool IsSPIL_AMR();               // [METHOD] golden AGV.h:204 -- W5-Automation INTEGRATE: real (Automation/AGV_predicates.cpp)
     bool IsATK_AMR();
     bool Use_AMR();                 // [METHOD] golden AGV.h -- W6.3: offline no AMR -> false
+    // -- W5-Final-AGV_E84 INTEGRATE ADD: member the E84 loader/unloader
+    //    handshake engine (Automation/AGV_E84.cpp) derefs -----------------------
+    TfMainMemo *mmE84Log;            // [DATA] golden AGV.h:85 (TMemo* E84 log) -- reuse existing TfMainMemo/TfMainMemoLines shape (meShuttle1/2's shape)
+    TfAGV();
 };
 
 extern TfAGV *fAGV;     // golden: extern PACKAGE TfAGV *fAGV; (AGV.h:210)
@@ -195,6 +206,13 @@ public:
     AnsiString GetSamSungMap(bool bSend=true);                // [METHOD] golden main.h:1531 (body Command.cpp:10137) -- offline: ""
     AnsiString GetSamSungSoakTime(bool bSend=true);           // [METHOD] golden main.h:1532 (body Command.cpp:10305) -- offline: "0"
     AnsiString ArmStatusStrings();                            // [METHOD] golden main.h:1370 (body Command.cpp:1497) -- offline: ""
+    // -- W5-Final-SckArtRemainder INTEGRATE ADD: members Automation/SCK_ART_Remainder.cpp
+    //    (SckArtRem_AccessFile) derefs -- golden main.h, bodies in main.cpp (untranslated).
+    //    All 3 are UI-refresh-only in golden (recipe combo/test-mode picture/backup-on-write);
+    //    offline no-op, matching every other fMain UI-refresh sink above.
+    void SetStartModeData();                                  // [METHOD] golden main.h -- offline: recipe start-mode UI refresh no-op
+    void LoadTestModePicture();                                // [METHOD] golden main.h -- offline: test-mode picture UI refresh no-op
+    void BackupSetupFile();                                    // [METHOD] golden main.h -- offline: setup-file backup no-op (Ifor 20170620)
     TfMain();
 };
 extern TfMain *fMain;
@@ -231,6 +249,11 @@ extern TfSortCT *fSortCT;
 struct TfLotInfoRunMode { bool Visible; AnsiString Text; TfLotInfoRunMode():Visible(false){} };
 struct TfLotInfoLabel   { AnsiString Caption; };  // [DATA] golden uLotInfo.h (TLabel* labNowLoaderTrayID)
 struct TfLotInfoEdit    { AnsiString Text; };     // [DATA] golden uLotInfo.h (TEdit*  edtSysLotID)
+// -- W5-Final-TesterTCPSocket INTEGRATE ADD: golden TLabel* shape (Caption +
+//    Color); same {Caption;Color} shape as TfMainTrayPanel but int Color has
+//    no default-visibility meaning here, only a colour code -- kept as its own
+//    tiny struct to match golden's actual TLabel (not TPanel) member type.
+struct TfLotInfoStatusLabel { AnsiString Caption; int Color; TfLotInfoStatusLabel():Color(0){} };
 class TfLotInfo
 {
 public:
@@ -244,6 +267,10 @@ public:
     void RefreshAMR();                            // [METHOD] golden uLotInfo.h:1416 -- offline: no UI to refresh (no-op)
     void SetLotID(AnsiString ID, bool bReadFromFile=false);       // [METHOD] golden uLotInfo.h:1310 -- offline no-op
     void SetLotStart(AnsiString sFunc, bool bReadFromFile=false); // [METHOD] golden uLotInfo.h:1311 -- offline no-op
+    // -- W5-Final-TesterTCPSocket INTEGRATE ADD: members Interface/TesterTCP_Socket.cpp
+    //    derefs (golden TesterTCP.cpp:170/180/621 labTCPIPStatus, :290/294 mmTesterLog) --
+    TfLotInfoStatusLabel *labTCPIPStatus;         // [DATA] golden uLotInfo.h (TLabel* TCP/IP link-status)
+    TfMainMemo           *mmTesterLog;            // [DATA] golden uLotInfo.h (TMemo* tester comm-log) -- reuse TfMainMemo shape (fAGV->mmE84Log precedent)
     TfLotInfo();
 };
 extern TfLotInfo *fLotInfo;

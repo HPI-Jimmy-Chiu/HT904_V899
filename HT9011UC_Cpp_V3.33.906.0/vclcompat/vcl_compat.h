@@ -70,6 +70,7 @@
 // ---------------------------------------------------------------------------
 #include "vclcompat/AnsiString.h"
 #include "vclcompat/TStringList.h"
+#include "vclcompat/TList.h"       // VCL.Classes TList (generic void* list)
 #include "vclcompat/TDateTime.h"
 #include "vclcompat/SysUtils.h"
 #include "vclcompat/IniFiles.h"
@@ -121,6 +122,19 @@
 using vclcompat::AnsiString;
 using vclcompat::TStrings;       // abstract base (BCB6 TStrings*)
 using vclcompat::TStringList;
+// NOTE: vclcompat::TList is deliberately NOT brought into the global
+// namespace here (unlike the other compat types on this list). A DIFFERENT,
+// unrelated global-namespace `class TList` shim already exists in
+// aHotPlateSubstrate.h (a hard-boundary shared file -- see W6.2 substrate,
+// golden Public/HTEditList.h pointer-list usage) for a narrower touched
+// surface (Add/Clear/Count/Items[] read-only). A `using` here would collide
+// with that class's later `class TList { ... };` definition in the same
+// (global) scope wherever both headers are included in one TU --
+// confirmed by compiling aHotPlateSubstrate.h against this change before
+// finishing (redefinition error). Consumers of vclcompat::TList (e.g. the
+// planned SECSGEM SV/EC registration API) should use the qualified name
+// `vclcompat::TList`, or add their own local `using vclcompat::TList;` in a
+// TU that does NOT also include aHotPlateSubstrate.h.
 using vclcompat::TDateTime;
 using vclcompat::TObject;
 using vclcompat::Word;
@@ -145,6 +159,13 @@ using vclcompat::Format;
 using vclcompat::Trim;
 using vclcompat::UpperCase;
 using vclcompat::LowerCase;
+// AI(W5-Final-TesterTCPSocket) 20260711: StringReplace + its TReplaceFlags set
+// (golden SysUtils; see vclcompat/SysUtils.h for the exact call-shape citation).
+using vclcompat::TReplaceFlag;
+using vclcompat::rfReplaceAll;
+using vclcompat::rfIgnoreCase;
+using vclcompat::TReplaceFlags;
+using vclcompat::StringReplace;
 using vclcompat::FileExists;
 using vclcompat::DirectoryExists;
 using vclcompat::CreateDir;

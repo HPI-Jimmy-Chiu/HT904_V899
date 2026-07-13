@@ -13,6 +13,9 @@
 #include "Automation/AGV_predicates.h"      // AI(W5-Automation-Integrate) 20260710: real AMR-mode predicates
 
 // --- W6.1 ------------------------------------------------------------------
+// -- W5-Final-AGV_E84 INTEGRATE ADD: explicit ctor (was implicit) so mmE84Log
+//    is constructed -- see FormsFacade.h TfAGV::mmE84Log.
+TfAGV::TfAGV() { mmE84Log = new TfMainMemo(); }
 TfAGV *fAGV = new TfAGV();
 
 // AI(W5-Automation-Integrate) 20260710: wired to the real, faithfully-translated
@@ -94,6 +97,10 @@ void TfMain::SendMSG_CMD(int /*CMD*/, AnsiString /*Message*/) {}            // o
 AnsiString TfMain::GetSamSungMap(bool /*bSend*/) { return AnsiString(""); } // offline: no SamSung map source
 AnsiString TfMain::GetSamSungSoakTime(bool /*bSend*/) { return AnsiString("0"); } // offline: no soak-time source
 AnsiString TfMain::ArmStatusStrings() { return AnsiString(""); }            // offline: no arm-status telemetry
+// -- W5-Final-SckArtRemainder ADD: method sinks (all offline no-op) --
+void TfMain::SetStartModeData() {}                                          // offline: recipe start-mode UI refresh no-op
+void TfMain::LoadTestModePicture() {}                                       // offline: test-mode picture UI refresh no-op
+void TfMain::BackupSetupFile() {}                                           // offline: setup-file backup no-op
 TfMain *fMain = new TfMain();
 
 // --- W6.2: TfSortCT --------------------------------------------------------
@@ -118,6 +125,9 @@ TfLotInfo::TfLotInfo()
     edtSysLotID        = new TfLotInfoEdit();
     // -- W5-Automation ADD --
     cbProcess          = new TfLotInfoRunMode();
+    // -- W5-Final-TesterTCPSocket ADD --
+    labTCPIPStatus = new TfLotInfoStatusLabel();
+    mmTesterLog    = new TfMainMemo();
 }
 void TfLotInfo::InitialUnLoaderTask(int /*iUnloader*/) {}      // W6.3: offline AMR-task no-op
 // -- W5-Automation ADD: AMR.cpp + HANA_ART.cpp method sinks (all offline no-op) --

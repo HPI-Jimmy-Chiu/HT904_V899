@@ -49,8 +49,68 @@
 //
 //  NOT implemented (never called by the only 906 consumer; do NOT add):
 //      ClientType, LookupAddress/LookupPort/LocalPort, OnLookup, Handle,
-//      TCustomWinSocket::ReceiveText/SendText, Owner/Session, the whole
-//      TServerSocket/TServerWinSocket family.
+//      Owner/Session, the whole TServerSocket/TServerWinSocket family.
+//
+//  AI(W5-Final-ClientSocketExt) 20260711: EXTENSION for two Phase-2 consumers
+//  in the same migration batch -- BarCode's 8-CCD glue unit (BarCode.h's 12
+//  shared TClientSocket instances: ClientSocket_Shuttle1_A/_B,
+//  ClientSocket_Shuttle2_A/_B, ClientSocket_Bottom_1..8,
+//  ClientSocket_BarcodeChangeFile) and Automation's TesterTCP unit
+//  (Interface/TesterTCP.cpp). Added, with exact golden call-shape citations:
+//      TClientSocket::Tag                 int, public, default 0.
+//          Golden: BarCode.cpp:305 `Ptr->Tag=i;` (assign, .dfm-equivalent
+//          per-instance init) and read back at BarCode.cpp:3162
+//          `if(Ptr->Tag==iBarCode1_1)`, :3215 `int Tag=Ptr->Tag;`, etc. --
+//          Ptr is always `(TClientSocket*)Sender` (a cast of the OnConnect/
+//          OnDisconnect/OnError/OnRead event's TObject* Sender parameter),
+//          used to discriminate WHICH of the 12 shared sockets fired the
+//          event. Real VCL's TComponent natively carries a Tag:NativeInt
+//          property (Classes.pas) that every descendant inherits -- so this
+//          is the single most faithful placement in real-VCL terms. It is
+//          placed directly on TClientSocket here (NOT hoisted onto the
+//          shared vclcompat::TComponent base in Comm.h) because this unit's
+//          write scope is ClientSocket.h/.cpp only; Comm.h/TComm has zero
+//          golden call sites that read/write ->Tag (grepped), so TComm gains
+//          nothing from the hoist and this keeps the change minimal/scoped.
+//      TClientSocket::Open()               thin alias for Active=true.
+//          Golden: Interface/TesterTCP.cpp:228 `ClientSocket_TCPIP->Open();`
+//          (wrapped in try/catch by the caller) and BarCode-family callers
+//          via ->Open() at other shared-handler call sites (ASE_K Socket /
+//          AutoAlignment use the same Open() spelling on their own
+//          ClientSocket instances). Forwards straight to the SAME private
+//          DoConnect_() the ActiveProxy::operator=(true) path already calls
+//          -- so Open() reaches exactly the same connected state, fires the
+//          same OnConnect, and is just as idempotent (no-op while already
+//          connected) as `Active=true` would be. No new connect logic.
+//      TCustomWinSocket::SendText(const AnsiString&) -> int
+//          Golden: Interface/TesterTCP.cpp:271
+//          `ClientSocket_TCPIP->Socket->SendText(Msg2+"\r\n");` and 20+
+//          BarCode.cpp call sites (e.g. :5338 `...Socket->SendText(Msg2+
+//          "\r\n");`). Callers already append their own line terminator
+//          ("\r\n"/"\r") before calling -- SendText must NOT append a
+//          second one; it forwards the AnsiString's raw bytes verbatim to
+//          the existing SendBuf primitive. Return type is `int` (bytes
+//          sent, i.e. whatever SendBuf returns), matching real Delphi
+//          ScktComp (`function SendText(const S: string): Integer;` ==
+//          `SendBuf(Pointer(S)^, Length(S))`) -- confirmed independently by
+//          an OUT-OF-SCOPE golden call site, ATC\TCPData.cpp:187
+//          `int iSend = _client_socket->Socket->SendText(Data.c_str());`,
+//          which assigns the return value (would not compile against a
+//          void SendText). All 3 in-scope call sites for THIS batch discard
+//          the return value as a bare statement, which is source-compatible
+//          with either signature -- `int` was chosen for closer real-VCL
+//          fidelity and to not foreclose that other call site's needs.
+//      TCustomWinSocket::ReceiveText() -> AnsiString
+//          Golden: Interface/TesterTCP.cpp:336
+//          `EthernetBuffer=Socket->ReceiveText();` (called right after a
+//          `Socket->ReceiveLength()>0` guard) and BarCode.cpp:3295/:3465
+//          same pattern. Drains WHATEVER is currently queued (via the
+//          existing ReceiveLength()/ReceiveBuf() primitives) into a new
+//          AnsiString and returns it -- does not block, does not require a
+//          terminator (real VCL ReceiveText has no line-framing, it is a
+//          raw "give me what's arrived so far" call; framing, if any, is
+//          the caller's job, e.g. golden's own `StringReplace(...,"\r\n",
+//          "")` right after the call).
 //
 //  BACKING -- Sim/Real, SAFETY-MOTIVATED POLICY (deliberately DIFFERENT from
 //  the Comm.h auto-fallback precedent -- see rationale below):
@@ -126,6 +186,18 @@ public:
     int  ReceiveBuf(void* Buf, int BufSize);   // dequeue up to BufSize bytes
     int  SendBuf(void* Buf, int BufSize);      // send/capture bytes; -1 on fail
 
+    // AI(W5-Final-ClientSocketExt) 20260711: added for BarCode/TesterTCP (see
+    // the file-header EXTENSION note for golden call-shape citations).
+    // SendText: forwards the AnsiString's raw bytes to SendBuf verbatim (the
+    // caller supplies its own terminator, e.g. Msg2+"\r\n" -- do NOT append
+    // one here). Returns the byte count SendBuf reports (real-VCL-faithful).
+    int SendText(const AnsiString& s);
+    // ReceiveText: drains whatever is currently queued (ReceiveLength() +
+    // ReceiveBuf()) into a new AnsiString. Non-blocking; callers already
+    // guard with `if (Socket->ReceiveLength() > 0)` before calling, matching
+    // golden (Interface/TesterTCP.cpp:333-336).
+    AnsiString ReceiveText();
+
     // Faithful to golden `Socket->Disconnect(Socket->RemotePort)`
     // (SocketError handler). Closes the underlying connection; Port is
     // accepted for call-shape fidelity and not otherwise used.
@@ -168,6 +240,16 @@ public:
     AnsiString Address;
     int        Port;
 
+    // AI(W5-Final-ClientSocketExt) 20260711: added for BarCode's 12 shared
+    // TClientSocket instances (see file-header EXTENSION note). Real VCL's
+    // TComponent carries Tag:NativeInt natively; golden BarCode.dfm sets one
+    // per instance (0..7 range for the 8 "Bottom" sockets, per BarCode.cpp:305
+    // `Ptr->Tag=i;`) and event handlers read it back off the cast Sender to
+    // discriminate which physical socket fired. Plain public int, default 0
+    // (matches real VCL's Tag default and this shim's existing plain-field
+    // idiom for other formerly-__property members).
+    int Tag;
+
     // Active: BCB6 property with a connect/disconnect SIDE EFFECT on plain
     // assignment (`pClinetSocket->Active=true;`). Proxy-with-operator=
     // idiom, same pattern already established by vclcompat/TStringList.h's
@@ -183,6 +265,15 @@ public:
     ActiveProxy Active;
 
     void Close();   // golden also calls this explicitly right after Active=false
+
+    // AI(W5-Final-ClientSocketExt) 20260711: thin alias for the same connect
+    // path `Active=true` already drives (see file-header EXTENSION note).
+    // Golden: Interface/TesterTCP.cpp:228 `ClientSocket_TCPIP->Open();`
+    // (caller wraps it in try/catch defensively; DoConnect_() itself never
+    // throws, matching this shim's existing no-throw Real-mode-failure
+    // policy -- see the Sim/Real BACKING note above -- so the try/catch is
+    // harmless dead code here, not something this shim needs to satisfy).
+    void Open();
 
     // ---- events --------------------------------------------------------------
     TSocketNotifyEvent OnConnect;

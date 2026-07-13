@@ -60,6 +60,32 @@ inline AnsiString Trim(const AnsiString& s)      { return s.Trim(); }
 inline AnsiString UpperCase(const AnsiString& s) { return s.UpperCase(); }
 inline AnsiString LowerCase(const AnsiString& s) { return s.LowerCase(); }
 
+// AI(W5-Final-TesterTCPSocket) 20260711: BCB6 SysUtils StringReplace + its
+// TReplaceFlags/TReplaceFlag set. Golden callers build the flags set with the
+// Borland `Set<>` idiom `TReplaceFlags() << rfReplaceAll` (e.g.
+// Interface/TesterTCP.cpp:339 `StringReplace(EthernetBuffer, "\r\n", "",
+// TReplaceFlags()<<rfReplaceAll)`); this minimal re-creation supports exactly
+// that `<<`-building idiom plus a `Has()` query used internally. Only
+// rfReplaceAll/rfIgnoreCase are modeled (the two real Delphi TReplaceFlag
+// values); no other project call site was found needing a third.
+enum TReplaceFlag { rfReplaceAll = 0, rfIgnoreCase = 1 };
+class TReplaceFlags {
+public:
+    TReplaceFlags() : mask_(0u) {}
+    TReplaceFlags& operator<<(TReplaceFlag f) { mask_ |= (1u << static_cast<unsigned>(f)); return *this; }
+    bool Has(TReplaceFlag f) const { return (mask_ & (1u << static_cast<unsigned>(f))) != 0u; }
+private:
+    unsigned mask_;
+};
+// StringReplace(S, OldPattern, NewPattern, Flags): BCB6 SysUtils semantics --
+// replaces the first occurrence of OldPattern, or ALL non-overlapping
+// occurrences when rfReplaceAll is set; case-insensitive match when
+// rfIgnoreCase is set (case of the replacement text itself is never altered).
+// An empty OldPattern is a no-op (returns S unchanged) -- guards against an
+// infinite loop, matching Delphi's own documented behavior for that edge case.
+AnsiString StringReplace(const AnsiString& S, const AnsiString& OldPattern,
+                         const AnsiString& NewPattern, TReplaceFlags Flags);
+
 // ---- filesystem -----------------------------------------------------------
 bool FileExists(const AnsiString& path);
 bool DirectoryExists(const AnsiString& path);

@@ -110,6 +110,41 @@ struct LAST_GENERAL_SET
     int  iIndexCount;                   // golden LastSet.h:381 -- Low Yield Auto Clean index count
     long SendCT_ART[4];                 // golden LastSet.h:384 -- per-port ART LOAD count
     int  iSocketContactCount[4][8];     // golden LastSet.h:396 -- per-[row][col] socket contact count
+    // AI(W5-Final-Integrate) 20260711: fields required by Automation/auto9045.cpp
+    // (SetLotInfo/GetJamCount) -- ADDITIVE ONLY this integrate pass (auto9045.cpp
+    // itself still uses its own TU-local W5FA_LS_iJamCount/W5FA_LS_BinCT stand-ins,
+    // not retargeted here -- see this integrate's report for the rationale).
+    int          iJamCount[3];          // golden LastSet.h:182
+    unsigned int BinCT[4][256];         // golden LastSet.h:106
+    // AI(W5-Final-Integrate) 20260711: 12 fields required by
+    // Automation/SCK_ART_Remainder.cpp (UpdateCount/AddAlarmCode/ClearLotInfo) --
+    // ADDITIVE ONLY (same not-yet-retargeted rationale; that file's own gate #4
+    // TU-local stand-ins remain in place). CROSS-UNIT NOTE: the sibling
+    // Automation/SCK_ART.cpp ALREADY carries its OWN separate TU-local copies of
+    // iSCKART_RTUnitCount/lSCKARTBinCT[256] (same golden fields) -- when a future
+    // wave retargets either translated unit onto these real shim fields, retire
+    // BOTH TU-local copies so exactly one definition survives.
+    bool bBreakSCKART;                  // golden LastSet.h:420
+    int  iSCKART_RTUnitCount;           // golden LastSet.h:410
+    long lSCKARTBinCT[256];             // golden LastSet.h:507
+    int  iHdPass;                       // golden LastSet.h:20
+    int  iHdFail;                       // golden LastSet.h:21
+    int  iHdRejectATPass;               // golden LastSet.h:22
+    int  iHdRejectATFail;               // golden LastSet.h:23
+    int  iHdRejectBT;                   // golden LastSet.h:24
+    int  iTesterMatch;                  // golden LastSet.h:25
+    int  iTesterUnmatch;                // golden LastSet.h:26
+    int  iTestIgnore;                   // golden LastSet.h:27
+    int  iHdPickUp;                     // golden LastSet.h:28
+    // AI(W5-Final-Integrate) 20260711: 4 more fields SCK_ART_Remainder.cpp's own
+    // report flagged as "still owed" (needed by DoARTLotStart/DoAutoSocketOff,
+    // both out of that unit's translated-function set, not consumed by anything
+    // yet) -- added now since they are zero-risk, pure-additive POD fields and a
+    // future SCK_ART.cpp-remainder wave will need them regardless.
+    bool bWaitStartLotAutoRetestGPIB;   // golden LastSet.h:400
+    bool bEndLotAutoRetestGPIB;         // golden LastSet.h:402
+    bool bFirstTestAutoRetestGPIB;      // golden LastSet.h:405
+    bool bUseTestSocketEE[2][4][8];     // golden LastSet.h:392
     // TODO(W6.x): the other ~437 LAST_GENERAL_SET fields land with the full
     //             translated LastSet.h.
 };

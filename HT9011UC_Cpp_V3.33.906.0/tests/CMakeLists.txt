@@ -1326,6 +1326,24 @@ endif()
 
 add_test(NAME MyPLCModbus COMMAND test_myplc_modbus)
 
+# --- test_clientsocket_ext: Tag/Open()/SendText()/ReceiveText() acceptance --
+#   SIM-only proof of the 4 additions ClientSocket.h/.cpp gained for BarCode's
+#   8-CCD glue unit + Automation's TesterTCP unit (W5 final-fronts campaign,
+#   2026-07-11). AI(W5-Final-Integrate) 20260711: this test file existed on
+#   disk but was never wired in by any of the 4 integrate agents in that
+#   campaign -- added here after independent verification caught the gap.
+add_executable(test_clientsocket_ext
+    test_clientsocket_ext.cpp
+)
+
+target_link_libraries(test_clientsocket_ext PRIVATE vclcompat)
+
+if(WIN32)
+    target_link_libraries(test_clientsocket_ext PRIVATE ws2_32)
+endif()
+
+add_test(NAME ClientSocketExt COMMAND test_clientsocket_ext)
+
 # --- test_MyNUEC1: EtherCAT/MyNUEC1 FS-N12 amplifier slave (W5 comms leaf) --
 #   Offline stub path (HAVE_PCI1203 not defined); links the combined
 #   ht9045_comms library.
@@ -1589,3 +1607,234 @@ if(WIN32)
 endif()
 
 add_test(NAME W5_BarCode_Shuttle2CCDScan COMMAND test_barcode_shuttle2_ccdscan)
+
+# --- W5-BarCode-Final (BarCode remainder front, 2026-07-11): the last 2/20
+#     TfBarCode_Shim methods (hand-off completion) + the 8-CCD ClientSocket
+#     connection-lifecycle glue. TfBarCode_Shim is 20/20 real methods as of
+#     this integrate -- see CMakeLists.txt's ht9045_sm source-list comment.
+
+# --- test_barcode_shuttle2_scanremainder1: DoBarcodeScanInShuttle_2 ---------
+add_executable(test_barcode_shuttle2_scanremainder1
+    test_barcode_shuttle2_scanremainder1.cpp
+)
+
+target_link_libraries(test_barcode_shuttle2_scanremainder1 PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_barcode_shuttle2_scanremainder1 PRIVATE ws2_32)
+endif()
+
+add_test(NAME BarCode_Shuttle2ScanRemainder1 COMMAND test_barcode_shuttle2_scanremainder1)
+
+# --- test_barcode_shuttle2_scanremainder2: DoShuttleFloatCheck_2 ------------
+add_executable(test_barcode_shuttle2_scanremainder2
+    test_barcode_shuttle2_scanremainder2.cpp
+)
+
+target_link_libraries(test_barcode_shuttle2_scanremainder2 PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_barcode_shuttle2_scanremainder2 PRIVATE ws2_32)
+endif()
+
+add_test(NAME BarCode_Shuttle2ScanRemainder2 COMMAND test_barcode_shuttle2_scanremainder2)
+
+# --- test_barcode_8ccd_glue: 13 real TClientSocket + SendCCDCommand + the 2
+#     Bottom-8CCD timers -----------------------------------------------------
+add_executable(test_barcode_8ccd_glue
+    test_barcode_8ccd_glue.cpp
+)
+
+target_link_libraries(test_barcode_8ccd_glue PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_barcode_8ccd_glue PRIVATE ws2_32)
+endif()
+
+add_test(NAME BarCode8CCDGlue COMMAND test_barcode_8ccd_glue)
+
+# ===========================================================================
+#  W5-Final -- vclcompat::TList shim (BCB6 VCL.Classes TList, generic void*
+#  list) + the SECSGEM wire-codec / SV-EC-registration prerequisite slices
+# ===========================================================================
+
+# --- test_tlist: vclcompat::TList shim semantics ----------------------------
+#   Add/Count/IndexOf/Items[] (get+set)/Delete/Clear + the non-owning-list
+#   contract (TList never frees what it holds -- unlike TObjectList). Header-
+#   only shim (vclcompat/TList.h); links vclcompat for the umbrella header
+#   (vcl_compat.h) even though no vclcompat .cpp symbol is actually called.
+add_executable(test_tlist
+    test_tlist.cpp
+)
+
+target_link_libraries(test_tlist PRIVATE vclcompat)
+
+add_test(NAME TList COMMAND test_tlist)
+
+# --- test_SecsWireCodec: SecsWireCodec (THGem's wire-codec slice) ----------
+#   GetLengthOfType/GetLengthByte/GetSMLLenthByte/DataItemOut x2/DataItemInSub/
+#   DataItemIn x2/DataItemInNew/GetDataItemLenAndType(Sub)/StringOut + the
+#   shared HType global. Zero THGem/VCL/socket/grid dependency -- links
+#   ht9045_secsgem (which now carries SecsWireCodec.cpp) only.
+add_executable(test_SecsWireCodec
+    test_SecsWireCodec.cpp
+)
+
+target_link_libraries(test_SecsWireCodec PRIVATE ht9045_secsgem)
+
+add_test(NAME SecsWireCodec COMMAND test_SecsWireCodec)
+
+# --- test_SecsSvEcRegistration: SecsSvEcRegistration (THGem's SV/EC ---------
+#   registration API) -- SetSVDataPointer x4 / SetECDataPointer x4 /
+#   GetECDataValue. Links ht9045_secsgem (carries both SecsSvEcRegistration.cpp
+#   AND its sibling SecsWireCodec.cpp, needed for the shared HType global that
+#   GetECDataValue's Type-dispatch compares against). No THGem/VCL-form/
+#   socket/grid dependency.
+add_executable(test_SecsSvEcRegistration
+    test_SecsSvEcRegistration.cpp
+)
+
+target_link_libraries(test_SecsSvEcRegistration PRIVATE ht9045_secsgem)
+
+add_test(NAME SecsSvEcRegistration COMMAND test_SecsSvEcRegistration)
+
+# ===========================================================================
+#  W5-Final Automation-remainder INTEGRATE: auto9045 / AGV_E84 /
+#  SCK_ART_Remainder / Interface/TesterTCP_Socket
+# ===========================================================================
+
+# --- test_auto9045: Automation/auto9045.cpp whole-file OLP/GPIB config-accessor translation ---
+add_executable(test_auto9045
+    test_auto9045.cpp
+)
+target_link_libraries(test_auto9045 PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+if(WIN32)
+    target_link_libraries(test_auto9045 PRIVATE ws2_32)
+endif()
+add_test(NAME Auto9045 COMMAND test_auto9045)
+
+# --- test_agv_e84: Automation/AGV_E84.cpp E84 loader/unloader handshake core ---
+add_executable(test_agv_e84
+    test_agv_e84.cpp
+)
+target_link_libraries(test_agv_e84 PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+if(WIN32)
+    target_link_libraries(test_agv_e84 PRIVATE ws2_32)
+endif()
+add_test(NAME AGV_E84 COMMAND test_agv_e84)
+
+# --- test_SCK_ART_Remainder: Automation/SCK_ART_Remainder.cpp (next contiguous
+#     golden slice after the sibling SCK_ART.cpp 8-function extract) ---------
+add_executable(test_SCK_ART_Remainder
+    test_SCK_ART_Remainder.cpp
+)
+target_link_libraries(test_SCK_ART_Remainder PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+if(WIN32)
+    target_link_libraries(test_SCK_ART_Remainder PRIVATE ws2_32)
+endif()
+add_test(NAME SCK_ART_Remainder COMMAND test_SCK_ART_Remainder)
+
+# --- test_testertcp_socket: Interface/TesterTCP_Socket.cpp (bounded socket-
+#     management subset of Interface/TesterTCP.cpp) ---------------------------
+add_executable(test_testertcp_socket
+    test_testertcp_socket.cpp
+)
+target_link_libraries(test_testertcp_socket PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+if(WIN32)
+    target_link_libraries(test_testertcp_socket PRIVATE ws2_32)
+endif()
+add_test(NAME Interface_TesterTCPSocket COMMAND test_testertcp_socket)
+
+# ===========================================================================
+#  W5-Final KYECFTP: MiniFtpEngine (Phase 1) / FTPClient_EventHandlers
+#  (Phase 2a) / FTPClient_Transfer (Phase 2b)
+#
+#  All 3 targets below compile the relevant KYECFTP/*.cpp sources DIRECTLY
+#  (not via the production `ht9045_kyecftp` library in the root CMakeLists.txt)
+#  -- see each target's own comment for why.  `ht9045_kyecftp` itself still
+#  gets built (as part of the default `all` target) and is what proves these
+#  files type-check against the REAL cmydef.h/cprod.h/Config.h/CosFunction.h/
+#  common.h/canary_support.h declarations; these 3 tests instead verify BEHAVIOR
+#  fast and offline, each supplying its own minimal stand-ins per its file's own
+#  SCOPE NOTE (same established pattern as tests/test_config_loaders.cpp /
+#  tests/test_MyCCLink.cpp).
+# ===========================================================================
+
+# --- test_MiniFtpEngine: Nmftp::TNMFTP engine, Sim-mode fake-FTP-server, end to end ---
+#   Zero god-stack dependency (MiniFtpEngine.{h,cpp} only touch vclcompat) --
+#   compiles MiniFtpEngine.cpp directly and links vclcompat only.
+add_executable(test_MiniFtpEngine
+    test_MiniFtpEngine.cpp
+    ../KYECFTP/MiniFtpEngine.cpp
+)
+target_link_libraries(test_MiniFtpEngine PRIVATE vclcompat)
+if(WIN32)
+    target_link_libraries(test_MiniFtpEngine PRIVATE ws2_32)
+endif()
+add_test(NAME MiniFtpEngine COMMAND test_MiniFtpEngine)
+
+# --- test_FTPClient_EventHandlers: NMFTP1 event-handler bodies --------------
+#   Needs the REAL CUSTOMER_CODE (cmydef.cpp, via ht9045_globals) for test
+#   [G]'s CC_JSCC_OS gated-dependency case -- links ht9045_globals (+
+#   ht9045_public, its own established co-dependency; see test_cpublic_foundation
+#   above). Supplies its OWN local MyDBIProcess(2-arg)/ShowMyMessage stand-ins
+#   instead of linking ht9045_sm (avoids the aHotPlateSubstrate.cpp/
+#   canary_support.cpp god-stack for a focused unit test -- same avoidance as
+#   test_config_loaders.cpp/test_MyCCLink.cpp) -- ht9045_sm/ht9045_core are
+#   DELIBERATELY NOT linked here (nor is the production ht9045_kyecftp library,
+#   which PUBLIC-links both): pulling either in risks the REAL MyDBIProcess/
+#   ShowMyMessage bodies (aHotPlateSubstrate.cpp/canary_support.cpp, both inside
+#   ht9045_sm) getting extracted alongside this TU's own same-named stand-ins,
+#   a multiple-definition link error.
+add_executable(test_FTPClient_EventHandlers
+    test_FTPClient_EventHandlers.cpp
+    ../KYECFTP/MiniFtpEngine.cpp
+    ../KYECFTP/FTPClient_EventHandlers.cpp
+)
+target_link_libraries(test_FTPClient_EventHandlers PRIVATE ht9045_globals ht9045_public vclcompat)
+if(WIN32)
+    target_link_libraries(test_FTPClient_EventHandlers PRIVATE ws2_32)
+endif()
+add_test(NAME FTPClient_EventHandlers COMMAND test_FTPClient_EventHandlers)
+
+# --- test_FTPClient_Transfer: the 4 FTP-transfer session functions ----------
+#   Deliberately supplies ITS OWN TU-local stand-ins for EVERY extern global
+#   FTPClient_Transfer.cpp references (CUSTOMER_CODE/IniConfig/CosFunction/
+#   Temperature/DataPath/OffsetPath/DefaultPath/LastDataPath/
+#   asATCFileTransferPath/sWhite2DIDListLoc/sATCPath/ATC_SYSTEM/FTPAutomation_*/
+#   bSigurd*/iAMD_Function/bHasFTPDownload/asSetupFileCheckList) PLUS
+#   ShowMyMessage/RecordProcess/NewRecordProcess/MyDBIProcess(2-arg)/MySleep --
+#   see the test file's own SCOPE NOTE. This means it must NOT link
+#   ht9045_globals/ht9045_core/ht9045_sm (nor the production ht9045_kyecftp
+#   library, which PUBLIC-links all three): the REAL cmydef.cpp/cprod.cpp/
+#   common.cpp definitions of these SAME global names would collide with this
+#   TU's own the moment anything else in that link forces one of those (very
+#   large, densely cross-referenced -- see KNOWLEDGE.md's "全域狀態耦合"
+#   gotcha) object files to be extracted from its archive -- a real
+#   multiple-definition risk, not just a style preference. Compiles the 3
+#   KYECFTP sources directly instead, linking only vclcompat.
+add_executable(test_FTPClient_Transfer
+    test_FTPClient_Transfer.cpp
+    ../KYECFTP/MiniFtpEngine.cpp
+    ../KYECFTP/FTPClient_EventHandlers.cpp
+    ../KYECFTP/FTPClient_Transfer.cpp
+)
+target_link_libraries(test_FTPClient_Transfer PRIVATE vclcompat)
+if(WIN32)
+    target_link_libraries(test_FTPClient_Transfer PRIVATE ws2_32)
+endif()
+add_test(NAME FTPClient_Transfer COMMAND test_FTPClient_Transfer)
