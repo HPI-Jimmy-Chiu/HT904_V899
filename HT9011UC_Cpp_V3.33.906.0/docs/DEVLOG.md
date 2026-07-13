@@ -375,4 +375,50 @@ BarCode 分批(先切小 helper，核心留專屬波)；KYECFTP 的 TNMFTP shim 
 - ⚠ Windows build dir busy-handle race：clean build 若遇 `rm: build Device or resource busy`/`ranlib: libvclcompat.a No such file`，是檔案 handle race 非 source 缺陷；換新 build dir(build_v2)即過。
 - ⚠ Big5 go-forward 規則持續(cp950/gloss，0 U+FFFD)。99 譯出源檔、branch 27 commits。
 - 驗證指令同前（cmake MinGW Makefiles + ctest）。
+
+---
+
+## 2026-07-11(執行) / 2026-07-13(復原+複驗+commit) — W5-Final：KYECFTP + Automation 剩餘 + TesterTCP_Socket + BarCode 收尾(20/20) + SECSGEM codec/registration 前置切片
+
+**背景（workflow crash 復原案例）**：本波實際翻譯工作於 2026-07-11 11:13–13:30 執行完成（與同日稍早的 BarCode Wave 1 同一天，但是後續的另一場戰役），CMakeLists.txt/tests/CMakeLists.txt 已完整接上、每個檔案都留有詳盡的 integrate-agent 註解（golden 行號引註、依賴理由、ODR/命名衝突的明確判斷），且各自的獨立 verify build 目錄（`build_w5final_*`）也顯示個別單元測試通過——但主迴圈的「跨戰線合併複驗＋DEVLOG/ROADMAP 記錄＋commit」三步從未執行，工作樹留下 2 天未提交、未記錄的狀態。2026-07-13 接續時，**沒有相信任何殘留的 agent 文字或 cached 摘要**，改為直接檢視 git status/檔案時間戳/舊 build 目錄的 ctest log 逐一重建事實，再跑一次全新 from-scratch build 定案（見下方「主迴圈獨立複驗」）。
+
+**KYECFTP（新 library `ht9045_kyecftp`，3 檔，目前是前置切片、尚無真呼叫端消費）**：
+- `MiniFtpEngine.{h,cpp}`：`Nmftp::TNMFTP`，從零打造的 FTP 協定引擎，頂替 repo 內完全不存在原始碼的 BCB6 `TNMFTP` 元件（每個推斷的線路行為判斷都留檔頭記錄：async→sync、僅 PASV、`Vendor`/`ParseList` 閒置、`CurrentDir` 走真實 PWD round-trip、`Mode()` 的 MODE_BYTE→`"TYPE L 8"` 映射、502→`OnUnSupportedFunction` 分類）。建於 `vclcompat/ClientSocket.h` 之上（控制通道一條連線+每次傳輸開一條 PASV 資料通道）。
+- `FTPClient_EventHandlers.{h,cpp}`：`TfFTPClient` 的 NMFTP1 事件處理常式本體，改寫成符合 `TNMFTP` callback-slot 簽章的自由函式；需要 `CUSTOMER_CODE`/`MyDBIProcess`/`ShowMyMessage`。
+- `FTPClient_Transfer.{h,cpp}`：4 個真正的 FTP 傳輸階段函式（`LoadFileFormServer2`/`UploadFileToServer2`/`Download_2DSortingList`/`Download_2DID_WhiteList`）。
+- 3 個測試各自繞開 god-stack（自帶 TU-local stand-in 取代 `CUSTOMER_CODE`/`IniConfig`/`ShowMyMessage`/`MyDBIProcess` 等），比照 `test_config_loaders.cpp`/`test_MyCCLink.cpp` 既有慣例，避免與真本體發生 multiple-definition 連結衝突；production `ht9045_kyecftp` library 本身仍 PUBLIC-link 真依賴，用來證明這 3 檔對真標頭型別檢查過關。
+
+**Automation 剩餘（3 檔）**：
+- `auto9045.cpp/.h`：148 個 golden 自由函式，OLP/GPIB host-command 設定存取層，**確認非 VCL TForm**。觸及的 VCL 表單缺口（`fBinSel`/`fShowBinSelect`/`fTrayAssignment`/`fTestCategory`/`fContactCT`/`fCounterClear`/`fMonitor`/`fProductionInfo`/`fTemp_Set`等）暫由本檔自有 TU-local `W5FA_` 伴生物件承接，**本波刻意不併入** `FormsFacade.h`/`atester_shims.h`（需要全新共用表單類別、目前無其他消費端，留待未來整併波）。
+- `AGV_E84.cpp/.h`：E84 loader/unloader 握手核心（`DoE84Loader`/`DoE84Unloader`，各 15/15 case label 忠實譯入）+ `ShowE84Log`/`E84StatusLog` 檔案記錄；`FormsFacade.h` 的 `TfAGV` 新增 `mmE84Log` 成員（連帶補上原本隱式的 ctor，改為顯式建構以初始化該成員）。
+- `SCK_ART_Remainder.cpp/.h`：接續姊妹檔 `SCK_ART.cpp` 既有 8 函式抽取後的下一段連續 golden 切片（`SetSetupFilePath`/`AccessFile`/`SetGPIBVersion`/`UpdateCount`/`AddAlarmCode`/`ClearLotInfo`/`AddOutputJamCnt`/`SaveTestSummary`-dispatcher）。**刻意擁有自己獨立的 `SckArtRemainderState`**（非姊妹檔的 `SckArtState`）——留下明確的 3 方協調債（姊妹檔 `SckArtState` / 本檔 `SckArtRemainderState` / `csystem.cpp` 的 `W7C2_TfSCKARTSeam`，皆持有 `dCurrYield`/`iFTRTCount`/`iNeedRT`/`iInputCount`/`iManualRejectCnt`/`iTesterType`/`sLOTSTATUS`/`iCurrentStatus` 等同名欄位的各自副本），本波不解決（會需要動到姊妹檔內部，超出本前線範圍，記錄留給未來的 `TfSCKART`/FormsFacade 整併波）。
+
+**Interface/TesterTCP_Socket.cpp/.h**：`Interface/TesterTCP.cpp` 的有界 socket 管理子集（Connect/Disconnect/Error/Read 事件常式、30-tick 重連計時器、`SendTCPIPCommand`/`AddTCPIPCommunicationLog`）；`FormsFacade.h` 的 `TfLotInfo` 新增 `labTCPIPStatus`/`mmTesterLog`。依賴本波新增的 `vclcompat/ClientSocket.h` `Tag`/`Open()`/`SendText()`/`ReceiveText()` 四個擴充 + `vclcompat/SysUtils.h` 新增的 `StringReplace`/`TReplaceFlags`。
+
+**BarCode 收尾（`TfBarCode_Shim` 20/20 真本體達成）**：
+- `BarCode_Shuttle2_ScanRemainder1.cpp/.h`：`DoBarcodeScanInShuttle_2`（Wave 1 誠實交接延後的 2 個方法之一，golden ~1222 行）。
+- `BarCode_Shuttle2_ScanRemainder2.cpp/.h`：`DoShuttleFloatCheck_2`（另一個延後方法，golden ~474 行）。
+- `BarCode_8CCD_Glue.cpp/.h`：BarCode.h 13 個 `__published TClientSocket*` 成員首次材料化為真正的 `Scktcomp::TClientSocket*` 物件（Shuttle1_A/B、Shuttle2_A/B、Bottom_1..8、BarcodeChangeFile）+ 真本體 `SendCCDCommand`（依 index 派發到 13 個 socket 之一，寫入 `Msg2+"\r\n"`，OCR 安裝走裸 `Msg2`）+ `TimerBotton8CCDConnectTimer`/`TimerBottom8CCDInitialTimer` 兩個計時器狀態機（前者含一個忠實保留的 golden copy-paste 缺陷）。
+- **Integrate 決策**：既有 6 個各檔自帶的 gated `SendCCDCommand`-style 離線 stand-in（`BarCode_Bottom2DID.cpp`/`BarCode_Shuttle1_CCDScan.cpp`/`BarCode_Shuttle1_Scan.cpp`/`BarCode_Shuttle2_CCDScan.cpp`/`BarCode_Shuttle2_Scan.cpp`/`BarCode_Bottom2DID8CCD.cpp`）**刻意保持獨立、不重新導向到新的真 `SendCCDCommand`**：(1) 這 6 檔已是本前線範圍外、各自完成整合的既有產出；(2) 每個都有自己通過的 oracle 測試斷言其離線 no-op/log 行為，重新導向有零效益的行為改變風險；(3) 整併呼叫點是清理而非正確性修正，應留給有完整重驗證計畫的未來波次。
+
+**SECSGEM `THGem` 前置切片（2 檔，尚無真消費端，等待未來完整 `uHGemEquipment.cpp` 波）**：
+- `SecsWireCodec.{h,cpp}`：`THGem` 純位元組層 SECS-II item codec（`GetLengthOfType`/`GetLengthByte`/`GetSMLLenthByte`/`DataItemOut`×2/`DataItemInSub`/`DataItemIn`×2/`DataItemInNew`/`GetDataItemLenAndType(Sub)`/`StringOut`）+ 共用的 `HType`/`HTypeStruct`/`STypeStruct`/`HSMS_Head_Struct` 全域。零依賴（僅 vclcompat）。
+- `SecsSvEcRegistration.{h,cpp}`：`THGem` 的 SV/EC 註冊 API（`SetSVDataPointer`×4/`SetECDataPointer`×4/`GetECDataValue`）。**刻意與 `SecsWireCodec` 分成獨立類別**（透過 `#include` 重用其 `HType` 全域、非繼承擴充）；依賴本波新增的 `vclcompat/TList.h`（見下）。
+
+**vclcompat 新增/擴充**：
+- `TList.h`（新檔）：VCL.Classes `TList` 泛型 `void*` list shim（`Add`/`Count`/`IndexOf`/`Items[]` 讀寫/`Delete`/`Clear`，non-owning 語意——絕不釋放持有的指標，區別於 `TObjectList`）。**刻意不 `using` 進全域命名空間**（`vcl_compat.h` 只加 `#include`，未加 `using vclcompat::TList;`）——因為 `aHotPlateSubstrate.h`（硬邊界共用檔）已存在一個**不相關**、範圍較窄的全域 `class TList`（僅 Add/Clear/Count/Items[] 唯讀），兩者同時可見會在全域命名空間重定義衝突（已實測編譯確認）；後續消費端（如未來 SECSGEM 波）需用完整限定名 `vclcompat::TList`，或自行在不含 `aHotPlateSubstrate.h` 的 TU 內加 `using`。
+- `ClientSocket.h/.cpp`：新增 `Tag`（`int`，模擬真 VCL `TComponent.Tag`，供 BarCode 的 13 個共用 socket 與其事件處理常式透過 `(TClientSocket*)Sender)->Tag` 判斷是哪一個實際觸發）、`Open()`（`Active=true` 的薄別名，走同一條 `DoConnect_()` 私有路徑）、`SendText()`/`ReceiveText()`（原始位元組透傳，不附加/剝除行終止符——由呼叫端自行處理，同真 VCL `ScktComp` 語意）。
+- `SysUtils.h/.cpp`：新增 `StringReplace` + `TReplaceFlags`/`TReplaceFlag`(`rfReplaceAll`/`rfIgnoreCase`)，支援 Borland `Set<>` `TReplaceFlags()<<rfReplaceAll` 疊加寫法；空 `OldPattern` 視為 no-op（防止無窮迴圈，同 Delphi 官方文件行為）。
+
+### 主迴圈獨立複驗（2026-07-13，全新 from-scratch build、不沿用任何殘留 build_* 目錄）
+- **Clean build exit 0**（新建 `build_resume_verify_20260713`，非重用任何舊 build 目錄）。
+- **ctest 79/82 PASS**：14 個新增測試（`ClientSocketExt`/`BarCode_Shuttle2ScanRemainder1`/`BarCode_Shuttle2ScanRemainder2`/`BarCode8CCDGlue`/`TList`/`SecsWireCodec`/`SecsSvEcRegistration`/`Auto9045`/`AGV_E84`/`SCK_ART_Remainder`/`Interface_TesterTCPSocket`/`MiniFtpEngine`/`FTPClient_EventHandlers`/`FTPClient_Transfer`）**全數通過**；僅剩的 3 個失敗（`config_db`/`IniFiles`/`ini_helpers`）與前幾波完全同組——現場 `system/Gerneral.ini` 已被手動改成 `IO_CARD_TYPE=1`/`TTL_CARD_TYPE=0`/`HEATER_CTRL_TYPE=2`（測試 oracle 期待 `=2`/`=2`/`=4`），確認是既有環境漂移、非本波回歸。
+- **BarCodeBottom2DID 疑慮已排除**：本波整合期間某個較早、範圍較窄的中間 verify build（`build_w5final_barcode_verify`，只結合 BarCode 前線自己 3 檔）曾出現 `test_barcode_bottom2did.exe` 於全部 12 項斷言 PASS 之後、程式結束時丟出 `__gnu_cxx::recursive_init_error` 崩潰。本次獨立複驗**沒有只看「這次沒崩潰」就結案**，而是用 `nm` 逐一核對最終合併後的實際連結符號：`BarCode_Bottom2DID.cpp` 的 `SendCCDCommand`/`AddCCDCommunicationLog`/`ClearBuffer` 全在匿名命名空間內（internal linkage、TU-local），從未 `#include BarCode_8CCD_Glue.h`、也從未呼叫新的外部真 `SendCCDCommand`；`ht9045_sm` 是純 static archive，`test_barcode_bottom2did.exe` 的相依閉包內沒有任何符號需要 `BarCode_8CCD_Glue.cpp`，故連結器的選擇性 archive-member 抽取從未把該 `.o` 拉進這顆執行檔——`nm` 實測確認（`test_barcode_bottom2did.exe` 內只有各檔自己的匿名/gated stand-in 符號，`test_barcode_8ccd_glue.exe` 才含有 13 個 `ClientSocket_Bottom_*` 全域+`MakeCcdSocket`）。回頭核對舊崩潰 log：崩潰點在全部 PASS 訊息印出「之後」（程式退出/靜態解構期，非測試中途），與「當時的中間連結圖把 `BarCode_8CCD_Glue.cpp` 一起拉進同一顆執行檔、13 個新 `Scktcomp::TClientSocket*` 全域解構順序衝突」的假設吻合——**結構性排除，非僥倖過關**。
+- **mojibake 0**：本波 35 個新增/異動檔逐位元組掃描 U+FFFD，零命中。
+
+### 下一步候選（隨時可續，不預設暫停）
+SECSGEM 協定引擎本體（`uHGemEquipment.cpp`，需先設計 headless StringGrid helper + HSMS `TClientSocket`/`TServerSocket`，現在 `SecsWireCodec`/`SecsSvEcRegistration` 兩個前置切片已就緒可重用）；`uHGemHT9045.{h,cpp}`+`_SV`/`_EC` 站點覆寫層（全樹最寬表單 fan-out，需前者先完成）；`Interface/TesterTCP.cpp` 本體剩餘（70-85% VCL widget 穿插協定解析，`TesterTCP_Socket.cpp` 只取走了有界的 socket 管理子集）；`automation.cpp`(~5500行)；`AGV.cpp` E84 本體以外的其餘部分；或轉回 **W7**（csystem MainProc mode/SECS/AGV/temp dispatch ladder + cContact `CarlibrationTask`+6 sub-SM 下壓叢集）。
+
+### 🔖 RESUME（最新）
+- **✅ W5-Final 完成（2026-07-11 執行、2026-07-13 復原+獨立複驗+commit）**：KYECFTP(`ht9045_kyecftp` 新 library，3 檔)、Automation 剩餘(`auto9045.cpp` 148 函式、`AGV_E84.cpp` E84 握手核心、`SCK_ART_Remainder.cpp`)、`Interface/TesterTCP_Socket.cpp`(有界 socket 管理子集)、BarCode 收尾(`TfBarCode_Shim` **20/20 真本體達成**，`BarCode_8CCD_Glue.cpp` 13 真 TClientSocket)、SECSGEM `THGem` 前置切片(`SecsWireCodec`+`SecsSvEcRegistration`)、vclcompat 新增(`TList.h`+`ClientSocket` Tag/Open/SendText/ReceiveText+`SysUtils` StringReplace)。**流程教訓**：這整批工作在 2026-07-11 就已完成且各自驗證過，但因當時 session/workflow 中斷，主迴圈的合併複驗+文件+commit 三步從未執行，工作樹帶著 2 天未提交狀態——2026-07-13 接續時改用「直接查 git status/檔案時間戳/舊 build log 重建事實」而非相信任何殘留 agent 文字，這正是既有記憶「V906 workflow crash 復原」的又一實例，往後每次接續前應比照辦理。ctest 79/82(3 個既有無關環境漂移失敗、14 個新測試全過)、mojibake 0(35 檔)、BarCodeBottom2DID 疑似回歸經 `nm` 逐符號核對確認結構性排除。**下一步不預設暫停**：SECSGEM 協定引擎本體、TesterTCP.cpp 本體剩餘、automation.cpp、AGV E84 本體以外部分、或 W7 續。
 - 驗證指令：`cd HT9011UC_Cpp_V3.33.906.0 && export PATH=/c/MinGW/bin:$PATH && cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=C:/MinGW/bin/g++.exe -DCMAKE_C_COMPILER=C:/MinGW/bin/gcc.exe && cmake --build build && ctest --test-dir build`。

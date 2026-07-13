@@ -24,6 +24,9 @@
 ## vclcompat 補充（W5）
 - **`ClientSocket.h/.cpp`**（TCP client shim，2026-07-11 新增）：仿 `Comm.h`(TComm serial shim) 的 Sim/Real 二分模式——Sim 預設(離線可測、in-memory loopback)、Real 走 WinSock2(MinGW 內建，同 `Public/WinSocketErrorCode.cpp` 既有 WSA 錯誤碼轉譯可共用)。由 `MyPLC/ModbusTCPClient.cpp` 首次引入，**未來 TesterTCP.cpp/SECSGEM 協定引擎(uHGemEquipment.cpp 的 HSMS TClientSocket/TServerSocket)波次應重用此元件，不要重新發明**——三者都需要類似的 TCP client/server 需求，recon 已標記這是共用基礎設施。
 - 新增元件前務必先檢查 `vclcompat/` 現有檔案，避免重複發明（本波前先核實過僅 MyPLC 這個 unit 真的需要 TCP client，其餘同批 unit 皆不需要）。
+- **預測已兌現（2026-07-11 W5-Final）**：上一條「未來 TesterTCP.cpp 波次應重用此元件」如期發生——`Interface/TesterTCP_Socket.cpp` 直接建於 `ClientSocket.h` 之上，並反向擴充該 shim 4 項：`Tag`(int，模擬真 VCL `TComponent.Tag`，供 BarCode 的 13 個共用 socket 事件處理常式透過 `(TClientSocket*)Sender)->Tag` 判斷是哪個 socket 觸發)、`Open()`(`Active=true` 薄別名，同一條 `DoConnect_()` 路徑)、`SendText()`/`ReceiveText()`(原始位元組透傳，不處理行終止符——呼叫端自理，同真 VCL `ScktComp` 語意)。SECSGEM 的 HSMS TClientSocket/TServerSocket 波次仍待重用同一元件。
+- **`TList.h`**（VCL.Classes `TList` 泛型 `void*` list shim，2026-07-11 新增，SECSGEM SV/EC 註冊 API 前置需求）：**刻意不 `using` 進全域命名空間**——`aHotPlateSubstrate.h`（硬邊界共用檔）已存在一個不相關、範圍較窄的全域 `class TList`，兩者同時可見會在全域命名空間重定義衝突（已實測編譯確認）。消費端一律用完整限定名 `vclcompat::TList`，或在不含 `aHotPlateSubstrate.h` 的 TU 內自行 `using vclcompat::TList;`。**任何新翻譯單元若同時需要 golden `TList` 語意又會 `#include aHotPlateSubstrate.h`，務必先檢查這條命名衝突，不要重新踩。**
+- **`SysUtils::StringReplace`**（2026-07-11 新增，`TesterTCP_Socket.cpp`/BarCode 需求）：`TReplaceFlags`/`TReplaceFlag`(`rfReplaceAll`/`rfIgnoreCase`) 支援 Borland `Set<>` 疊加寫法 `TReplaceFlags()<<rfReplaceAll`；空 `OldPattern` 是 no-op(防無窮迴圈,同 Delphi 官方行為)。
 
 ## vclcompat 補充（W3）
 - 檔案系統：`SysUtils` 加 FindFirst/FindNext/FindClose/TSearchRec/faAnyFile/faDirectory/faReadOnly/RemoveDir/FileSetAttr/FileGetAttr/HexStrToInt（backed by MinGW windows.h）。
@@ -60,6 +63,7 @@
 3. **CSV 名稱式解析**：`database.cpp`(SetMOTTableNo/SetIOTableNo) 用 **header 名稱**(AnsiPos、last-match) 解析 Mot_Table/IO_Table，**非固定位置**；**Mot_Table 實體欄序 ≠ emot* enum 序**(database.cpp:2047-2079)。翻譯時務必做名稱式解析，勿位置式（會 silently 誤對馬達/IO）。真實 header：Mot_Table 29 欄、IO_Table 15 欄。
 4. **config 語意細節**(database.cpp)：IO 欄數須 ==15；Mot 接受 >=28；空 cell：IO Lane/ModuleType/IP/Port/Bit→-1、InType→0、ISABase→0(eMotionNet)、Enable→0；**Port 當 ISABase∈{1,2,4} 以 HEX 解析**(database.cpp:1825-1830)，否則十進位。
 5. **全域狀態耦合**：`PROD_INFO_ST Prod`(~770 行 cprod.h:368-1136)、`iXXXTask`、`HotTime[2][50][50]`、offset 陣列是跨模組/跨執行緒耦合熱點（接縫盤點 §B TOP-5），翻譯時先切邊界，勿整包搬。
+6. **workflow/session 中斷復原（2026-07-13 實例）**：一整批已完成、已 CMake 接上、各自 build 目錄驗證過的翻譯工作（W5-Final：KYECFTP+Automation 剩餘+TesterTCP_Socket+BarCode 收尾+SECSGEM 前置切片，2026-07-11 執行），因當時 session/workflow 中斷，跨戰線合併複驗+DEVLOG/ROADMAP 記錄+commit 三步從未執行，工作樹帶著 2 天未提交狀態。接續時**不可信任何殘留的 agent 文字或 cached 摘要**，必須：(1) `git status`/`git diff --stat` 看實際未提交變更，(2) 對照檔案時間戳判斷是同一批還是不同批工作，(3) 若有舊 build_* 目錄，讀 `Testing/Temporary/LastTest.log` 當線索但不當定論，(4) 一定要重跑一次全新 from-scratch build+ctest 拿到當下的 ground truth，才能決定是否可以安心 commit。
 
 ## 接縫（HAL）與 64-bit 跨位元
 - 即時硬體（運動/IO/互鎖/ATC）保留 native C++（既有已驗證 wrapper），翻譯後的 C++ **同程序直接呼叫**（無 P/Invoke、無 managed 邊界）。「interface 切割」＝抽象基底 + Sim/Real 子類。
