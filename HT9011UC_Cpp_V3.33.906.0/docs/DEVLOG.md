@@ -533,5 +533,32 @@ SECSGEM 協定引擎本體（`uHGemEquipment.cpp`，需先設計 headless String
 ### 下一步候選
 B 桶(~15 個小 widget stand-in，解鎖 `InitialHGem`/`SaveSystemDefault`/`DoUpdateStatus`)是自然的下一個小波；C 桶的 `clientGemRead`/`ProcessSocketReceiveData`/`Timer1Timer` 是本檔案最終、最大的剩餘難塊，需要先設計 `TCriticalSection`/`TMemoryStream` shim + `SecsWireCodec`/`SecsSvEcRegistration` 成員化。或轉 `uHGemClass.cpp` 剩 44/57、`TesterTCP.cpp` 的 `TimerProcessTCPDataTimer`、`automation.cpp` 的 `ProcessBuffer`、或 W7 續。**下一步不預設暫停**。
 
+### 🔖 RESUME（最新，已被下一條目取代，見下方新 RESUME）
+- **✅ uHGemEquipment 連線生命週期 Bucket A 完成（2026-07-17）**：新增 `clientGem`/`srvGem` 成員+連線狀態旗標、翻譯 28 個函式(`clientGem*`/`srvGem*` event handler、`DoOpenCommuncation`、`DoOnLine`、`OnlineLocalOrRemote`、`Connect`/`DisConnect`/`OnLine`/`OffLine` 家族、`ClearDefaultEvenReport`、`GetTimeInfo`半段、`SaveSECSGEMErrToLog`)，`ServerSocket.h` shim 首個真消費端。翻譯期間修正 1 個真 use-after-free(解構順序)。測試意外寫入真實 `D:\SECS_GEM_LOGS` 後，依使用者裁示修正測試做 capture/restore，確認連跑 2 次 byte-for-byte 不變。獨立 fidelity-review 0 discrepancies、親自複驗 ctest 83/87(4 個既有無關失敗)、mojibake 0。
+
+---
+
+## 2026-07-17 — uHGemEquipment 連線生命週期 Bucket B（~15 個小型 widget stand-in，InitialHGem/SaveSystemDefault/DoUpdateStatus/ProcessShow/FormClose/ManualCreatergRoleClick/FormShow）
+
+**背景**：緊接 Bucket A 完成後同日繼續（使用者要求「火力全開不要停」）。範圍延用先前 recon 的 B 桶清單。
+
+**範圍**：新增 7 個 widget stand-in struct(`THGemRadioGroup`/`THGemEdit`/`THGemCheckBox`/`THGemComboBox`/`THGemPanel`/`THGemSpeedButton`/`THGemMemo`，`TMemo` 版本內部真的用 `vclcompat::TStringList` 承接內容而非 no-op)+ `TColor` 型別 + `clRed`/`clLime`/`clYellow` 常數 + 全域單例指標 `extern THGem *HGem`(golden 本來就用這個全域指標而非 `this`)。翻譯：`StringOut`(2-arg,golden 409-417)、`InitialHGem`(5011-5099)、`SaveSystemDefault`(5101-5140)、`ProcessShow`(5165-5173)、`DoUpdateStatus`(4747-4985，含 KYEC 30 秒強制斷線分支)、`FormClose`(6887-6892)、`ManualCreatergRoleClick`(6915-6931)、`FormShow`(6936-6950，僅譯有實際行為的兩行；`Left/Top/PageControl1` 純 UI 座標視為此非真表單port的天生無 home，略過)、外加補上 Bucket A 遺留的 `srvGemClientConnect` 內 `TerminalMemoPtr` 分支(golden 6832-6835，Big5 訊息「有2台以上EAP連接Handler,請確認」逐位元組 cp950 解碼核對無誤)。
+
+**依賴擴大（誠實記錄，非隱性擴權）**：本波需要 `cmydef.h`(`CUSTOMER_CODE`/`CC_KYEC_LEE`/`CC_SIGURD_ChungXing`/`CC_MAXIM_THAILAND`/`CosFunction`/`bSECSGEMbyPass`/`bSECSGEMConnectionFail`)+ `common.h`(`ReadWriteIni`/`ReadIniData`/`WriteIniData`)，因此 `ht9045_secsgem` 首次連結 `ht9045_core`+`ht9045_globals`——比照既有 `KYECFTP/FTPClient_Transfer.cpp` 同形狀先例，且獨立複驗確認 `ht9045_core`/`ht9045_globals` 皆不回頭連結 `ht9045_secsgem`/`ht9045_public`，無循環依賴。
+
+**⚠️ 重要限制（KYEC 客戶實際部署前必讀）**：`DoUpdateStatus` 的 KYEC 30 秒強制斷線分支(golden :4805-4836，`CUSTOMER_CODE==CC_KYEC_LEE`)需要一個 `HTimer`(`bSECSGEM_DoSeparate`/`SECSGEM_DoSeparate`，golden 本身也是全域變數非 THGem 成員，已忠實對應)。本波沿用 `atester_shims.h` 既有的 `HTimer` stand-in——**該 stub 的 `Off()` 恆回 true(永遠報告「已到時」)**。`atester_shims.h` 原本的用途是一個很少被觸及的 gated 路徑，這個「恆真」瑕疵基本無害；**但這是本波第一次讓它從一個真實、無條件的客戶分支(KYEC)被觸發**——意味著這個翻譯版本目前對 KYEC 客戶不會真的等 30 秒，而是每次輪詢就立刻觸發強制斷線動作。已在程式碼三處(HTimer 定義處、KYEC 呼叫點、test [22])清楚註記，**非隱藏瑕疵，但在真正對 KYEC 機台上線前，必須先設計一個會真的計時的 `HTimer`**。
+
+**忠實保留的 golden bug**：`DoUpdateStatus` 的 client-active 分支即使 socket 真的變 Active 仍強制 `bConnect=false`(golden :4771-4776)；`StringOut(S,C)` 的顏色參數 `C` 全檔未使用(golden 本身如此)；`ManualCreatergRoleClick` 對應的 `rgRole->OnClick` 動態指定(golden 建構子:653)因 stand-in 無 callback slot 而未還原，已記錄為已知落差。
+
+### 獨立複驗
+- 獨立 fidelity-review agent：逐一核對 8 個函式的 golden 行號、KYEC/HTimer 限制的真實性與註記完整度、EventReport 重用正確性(沿用既有 `SecsEventReport.h` 而非另起爐灶)、Big5 訊息逐位元組核對、測試是否誤觸真實外部路徑(確認皆用 scratch 路徑，未重蹈 Bucket A 覆轍)、依賴擴大是否合理對應實際用量。**結論：clean，僅 1 處文件措辭上的小提醒**(review 指出「這是既有已知限制」的說法略微低估了本波是這個 stub 第一次從活的客戶分支被觸發，本 entry 已據此加重上面的 ⚠️ 標註)。
+- 親自(非再派 agent)全新 build 目錄(`build_bucketb_verify`)：clean build，**ctest 83/87**(同組 4 個既有環境漂移失敗，非本波回歸)；mojibake 掃描異動檔：**0**；確認 `D:\SECS_GEM_LOGS` 未被本波觸及(檔案內容與 Bucket A 結束時一致)。
+
+### ROADMAP DEFERRED 表更新
+- `SECSGEM/uHGemEquipment.cpp`(:124)：A+B 兩桶皆已交付(連線開通+ini 持久化+狀態面板刷新)。**仍未觸碰**：C 桶——`Timer1Timer`本體、`DoConnect`/`DoSelect`/`DoSeparate`、`DoProcessSFNoResponse`、`clientGemRead`/`ProcessSocketReceiveData`(真正協定解碼核心，需未設計的 `TCriticalSection`/`TMemoryStream` shim)。新增待辦：KYEC 客戶real deployment前需設計真計時 `HTimer`(目前 `atester_shims.h`/本檔共用的 stub 恆真)。
+
+### 下一步候選
+C 桶(`clientGemRead`/`ProcessSocketReceiveData`/`Timer1Timer`)是本檔案最終、最大的剩餘難塊，需先設計 `TCriticalSection`/`TMemoryStream` shim + `SecsWireCodec`/`SecsSvEcRegistration` 成員化——這也是解鎖 `uHGemClass.cpp` 剩餘 gated method 與 `automation.cpp`/`TesterTCP.cpp` 各自 Timer 核心的關鍵前置。或轉 `uHGemClass.cpp` 剩 44/57、`TesterTCP.cpp` 的 `TimerProcessTCPDataTimer`、`automation.cpp` 的 `ProcessBuffer`、真計時 `HTimer` 設計(小而獨立，可解上述 KYEC 限制)、或 W7 續。**下一步不預設暫停**。
+
 ### 🔖 RESUME（最新）
-- **✅ uHGemEquipment 連線生命週期 Bucket A 完成（2026-07-17）**：新增 `clientGem`/`srvGem` 成員+連線狀態旗標、翻譯 28 個函式(`clientGem*`/`srvGem*` event handler、`DoOpenCommuncation`、`DoOnLine`、`OnlineLocalOrRemote`、`Connect`/`DisConnect`/`OnLine`/`OffLine` 家族、`ClearDefaultEvenReport`、`GetTimeInfo`半段、`SaveSECSGEMErrToLog`)，`ServerSocket.h` shim 首個真消費端。翻譯期間修正 1 個真 use-after-free(解構順序)。測試意外寫入真實 `D:\SECS_GEM_LOGS` 後，依使用者裁示修正測試做 capture/restore，確認連跑 2 次 byte-for-byte 不變。獨立 fidelity-review 0 discrepancies、親自複驗 ctest 83/87(4 個既有無關失敗)、mojibake 0。**下一步不預設暫停**：B 桶 ~15 個小 widget stand-in(`InitialHGem`/`SaveSystemDefault`/`DoUpdateStatus`)、C 桶 `Timer1Timer`/`ProcessSocketReceiveData`(需新 shim)、`uHGemClass.cpp` 剩 44/57、`TesterTCP.cpp` 的 `TimerProcessTCPDataTimer`、`automation.cpp` 的 `ProcessBuffer`、或 W7 續。
+- **✅ uHGemEquipment 連線生命週期 Bucket A+B 皆完成（2026-07-17，同日連續兩波）**：A 桶(clientGem/srvGem 生命週期，28 函式)+ B 桶(7 個 widget stand-in、`InitialHGem`/`SaveSystemDefault`/`DoUpdateStatus`/`ProcessShow`/`FormClose`/`ManualCreatergRoleClick`/`FormShow`)。`ht9045_secsgem` 新連結 `ht9045_core`+`ht9045_globals`(確認無循環依賴)。**⚠️ KYEC 客戶部署前待辦**：`DoUpdateStatus` 的 30 秒強制斷線依賴的 `HTimer` 目前恆真(不會真的等 30 秒)，已三處清楚標註，尚未修。兩波皆獨立 fidelity-review clean、親自複驗 ctest 83/87(4 個既有無關失敗)、mojibake 0。**下一步不預設暫停**：C 桶 `Timer1Timer`/`clientGemRead`/`ProcessSocketReceiveData`(本檔最終難塊，需新 `TCriticalSection`/`TMemoryStream` shim)、真計時 `HTimer` 設計(可獨立解 KYEC 限制)、`uHGemClass.cpp` 剩 44/57、`TesterTCP.cpp` 的 `TimerProcessTCPDataTimer`、`automation.cpp` 的 `ProcessBuffer`、或 W7 續。
