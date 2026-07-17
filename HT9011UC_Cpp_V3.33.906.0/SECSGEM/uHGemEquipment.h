@@ -62,22 +62,51 @@
 //  srvGemClientConnect/GetSocketErrorMsg/Error/Disconnect, StringOut(1-arg)/
 //  StringBinaryOut, SaveSECSGEMErrToLog, ClearDefaultEvenReport, and
 //  GetTimeInfo's TimeString/GemClock half. See each method's own .cpp comment
-//  for golden line citations. Still explicitly OUT OF SCOPE (see below):
-//  clientGemRead/ProcessSocketReceiveData, DoConnect/DoSelect/DoSeparate,
-//  Timer1Timer, DoProcessSFNoResponse, DoLocalAllProcessLoop, FormCreate/
-//  InitialHGem/SaveSystemDefault/DoUpdateStatus/ProcessShow/FormClose/
-//  ManualCreatergRoleClick/FormShow (need the ~15 widget stand-ins + the wire
-//  codec/SV-EC embedding below) -- a future wave's job.
+//  for golden line citations.
+//
+//  AI(W906-uHGemEquipment-BucketB) 20260717: THIRD WAVE ("Bucket B" of the
+//  original triple-front recon) landed on this same class -- the ~15 small
+//  widget stand-ins (TRadioGroup/TEdit/TCheckBox/TComboBox/TPanel/
+//  TSpeedButton/TMemo shapes, see the THGemXxx structs below) plus their
+//  first real consumers: InitialHGem/SaveSystemDefault (ini-persisted widget
+//  state), DoUpdateStatus (status-panel/button refresh + EventReport on
+//  control-state transitions, INCLUDING the KYEC 30-second forced-disconnect
+//  dance), ProcessShow, FormClose, ManualCreatergRoleClick, FormShow (partial
+//  -- see its own .cpp comment), and the StringOut(AnsiString,TColor)
+//  2-arg overload. A GATED NO-OP STUB for DoSeparate() is added too (golden's
+//  real body is wire-codec/SML, out of scope -- DoUpdateStatus's KYEC branch
+//  unconditionally calls it, same "stub so the caller's control flow stays
+//  translatable" precedent as EnableDisableEventReportAcknowledgeError below).
+//  DEPENDENCY WIDENING (flagged explicitly -- a real deviation from Bucket
+//  A's own "does NOT include cmydef.h/common.h" claim above, which this wave
+//  narrows rather than removes): DoUpdateStatus/InitialHGem/SaveSystemDefault
+//  need CUSTOMER_CODE/CC_KYEC_LEE/CC_SIGURD_ChungXing/CC_MAXIM_THAILAND/
+//  CosFunction/bSECSGEMbyPass/bSECSGEMConnectionFail (cmydef.h, which itself
+//  pulls MachineType.h/cprod.h/cpublic.h) and ReadWriteIni/ReadIniData/
+//  WriteIniData (common.h, confirmed lightweight -- only vclcompat +
+//  MachineType.h, NOT the rest of golden's common.h). Both #includes are
+//  confined to the .cpp (this header stays free of them); see root
+//  CMakeLists.txt's ht9045_secsgem target for the matching new
+//  ht9045_core/ht9045_globals link deps (same shape already established by
+//  the KYECFTP/FTPClient_Transfer.cpp precedent for an identical need).
+//  Still explicitly OUT OF SCOPE (see below): clientGemRead/
+//  ProcessSocketReceiveData, DoConnect/DoSelect, Timer1Timer,
+//  DoProcessSFNoResponse, DoLocalAllProcessLoop, FormCreate, and the
+//  Left/Top/Width/Height/PageControl1 cosmetic half of FormShow (THGem is not
+//  modeled as a real window in this port).
 //
 //  MEMBERS DELIBERATELY NOT PRESENT YET (out of scope; a future wave adds
 //  them to this SAME class body, does not redefine it):
-//    - The wire-codec-dependent connection functions: DoConnect/DoSelect/
-//      DoSeparate (need SecsWireCodec embedded as a member first),
-//      clientGemRead/ProcessSocketReceiveData (need TMemoryStream/
-//      TFixedCriticalSection shims, not yet designed), DoProcessSFNoResponse
-//      (needs a TCriticalSection shim), Timer1Timer (its body calls into all
-//      of the above) -- see each's golden citation at uHGemEquipment.cpp's
-//      clientGemRead/DoConnect/Timer1Timer.
+//    - The wire-codec-dependent connection functions: DoConnect/DoSelect
+//      (need SecsWireCodec embedded as a member first), clientGemRead/
+//      ProcessSocketReceiveData (need TMemoryStream/TFixedCriticalSection
+//      shims, not yet designed), DoProcessSFNoResponse (needs a
+//      TCriticalSection shim), Timer1Timer (its body calls into all of the
+//      above) -- see each's golden citation at uHGemEquipment.cpp's
+//      clientGemRead/DoConnect/Timer1Timer. (DoSeparate itself IS now
+//      declared/defined -- as a GATED STUB, see above -- so it no longer
+//      belongs on this specific "not present" list, but its REAL wire-codec
+//      body is still deferred exactly like its DoConnect/DoSelect siblings.)
 //    - InitLocalHead/DataItemOut/DataItemInSub/DataItemIn/DataItemInNew/
 //      GetDataItemLenAndType(Sub)/StringOut/SendLocalData and
 //      SetSVDataPointer/SetECDataPointer/GetECDataValue -- per the project's
@@ -151,6 +180,140 @@ class GemTimer
 };
 
 //---------------------------------------------------------------------------
+//  AI(W906-uHGemEquipment-BucketB) 20260717: TColor -- golden Graphics.hpp
+//  TColor (a plain BGR-packed int RGB code, 0x00BBGGRR). vclcompat/
+//  vcl_compat.h has no such alias (confirmed by grep, matching this wave's
+//  own brief's own note). A separate `typedef int TColor;` ALREADY exists
+//  TU-locally in cmydef.h:16 and acatchtray_shims.h:41 (same underlying
+//  type, so no ODR conflict if both ever appear in one TU) -- declared again
+//  here, header-local, so uHGemEquipment.h stays independently compilable
+//  without pulling in either of those files just for a type alias (the .cpp
+//  separately #includes cmydef.h for the CUSTOMER_CODE/CosFunction family --
+//  see this header's own file-head "DEPENDENCY WIDENING" note -- so TColor
+//  would in practice resolve to the SAME identical typedef there too).
+//  Only the 3 clXxx constants golden's DoUpdateStatus actually reads are
+//  declared (verified by reading golden uHGemEquipment.cpp:4747-4985 -- NOT
+//  clBlack; StringOutColor's own clBlack use, golden :502/1992, is outside
+//  this wave's member set and not translated).
+//---------------------------------------------------------------------------
+typedef int TColor;
+const TColor clRed    = 0x000000FF;
+const TColor clLime   = 0x0000FF00;
+const TColor clYellow = 0x0000FFFF;
+
+//---------------------------------------------------------------------------
+//  AI(W906-uHGemEquipment-BucketB) 20260717: THGemXxx widget stand-ins --
+//  THGem was a TForm (golden uHGemEquipment.h:90); these tiny structs stand
+//  in for its real VCL components/externally-assigned pointers, matching the
+//  established per-owner-class idiom already used by vclcompat/StringGrid.h
+//  (TStringGrid, above) and FormsFacade.h's own TfMainTrayPanel{int
+//  Color;bool Visible;}-shaped stand-ins -- each struct here models ONLY the
+//  fields this wave's in-scope methods (InitialHGem/SaveSystemDefault/
+//  DoUpdateStatus/ProcessShow/ManualCreatergRoleClick/FormShow/StringOut)
+//  actually read or write; see each member declaration below for its exact
+//  golden field citation.
+//---------------------------------------------------------------------------
+
+// golden TRadioGroup* (EnableOrDisablePtr/OnLineOrOffLine/RemoteOrLocal/
+// rgRole) -- ->ItemIndex (int, r/w), ->Enabled (bool, w -- only
+// OnLineOrOffLine/RemoteOrLocal are ever ->Enabled-written, by FormShow's
+// KYEC branch), ->Items->Count (int, r -- InitialHGem/SaveSystemDefault pass
+// it as ReadWriteIni's Minimum bound; golden's own .dfm Items.Strings count
+// per radio group, e.g. 2 for OnLineOrOffLine/RemoteOrLocal/rgRole -- a
+// caller/test must set this explicitly, same "caller-set" idiom already
+// established by THGem::GemSystemPath above).
+struct THGemRadioGroup
+{
+    int ItemIndex;
+    bool Enabled;
+    struct { int Count; } Items;
+    THGemRadioGroup() : ItemIndex(0), Enabled(true) { Items.Count = 0; }
+};
+
+// golden TEdit* (edtIP/edtPort/edDeviceID/edtT3TimeOut/edtT5TimeOut/
+// edtT6TimeOut/edtT7TimeOut/edtT8TimeOut -- NOTE: golden has NO edtT4TimeOut,
+// confirmed by reading golden uHGemEquipment.h:117-129/123-129; T3/T5/T6/T7/T8
+// only) -- ->Text (AnsiString, r/w), ->Enabled (bool, w -- only edtIP is ever
+// ->Enabled-written).
+struct THGemEdit
+{
+    AnsiString Text;
+    bool Enabled;
+    THGemEdit() : Enabled(true) {}
+};
+
+// golden TCheckBox* (GemCheckBoxAcceptHostOnlineRequest/GemCheckBoxShowBinary/
+// GemCheckBoxShowHeadInformation/GemCheckBoxUseExtendedAlarm/
+// chkAnnotatedEventReport/chkMoreMessageAbortProcess/ckAddDefaultReport/
+// cbECChaneEventReport) -- ->Checked (bool, r/w); ->Visible (bool, w -- only
+// cbECChaneEventReport is ever ->Visible-written, by FormShow).
+struct THGemCheckBox
+{
+    bool Checked;
+    bool Visible;
+    THGemCheckBox() : Checked(false), Visible(true) {}
+};
+
+// golden TComboBox* (ComboBox1) -- ->ItemIndex (int, read only in this
+// wave's scope: DoUpdateStatus's `SECSCommunicationMode=ComboBox1->ItemIndex;`).
+struct THGemComboBox
+{
+    int ItemIndex;
+    THGemComboBox() : ItemIndex(0) {}
+};
+
+// golden TPanel* (SECSConnectionState/GEMCommunicatingState/
+// GemPanelControlState) -- externally-assigned (public, not __published;
+// confirmed by golden header: declared alongside GemTerminalSendEdit/
+// BtnEnableComm etc in THGem's plain `public:` section, NOT inside the
+// `__published:` IDE-component block) -- ->Caption (AnsiString, r/w,
+// compared against literals like "1:OffLine"/"SECS GEM Connection"),
+// ->Color (TColor, w).
+struct THGemPanel
+{
+    AnsiString Caption;
+    TColor Color;
+    THGemPanel() : Color(0) {}
+};
+
+// golden TSpeedButton* (BtnEnableComm/GemBtnOfflineRequest/
+// GemBtnOnlineRequest/GemBtnOnlineRemote/GemBtnOnlineLocal) -- externally
+// assigned (same public-not-__published category as THGemPanel above);
+// ->Enabled (bool, write only in this wave's scope -- DoUpdateStatus never
+// reads it back). UNLIKE the 3 TPanel*s above, golden's own DoUpdateStatus
+// body does NOT NULL-guard these 5 -- a genuine golden invariant ("must be
+// wired externally before DoUpdateStatus ever runs"), not a translation gap;
+// preserved as-is (a caller/test must assign a real instance to each before
+// calling DoUpdateStatus, exactly matching golden's own real-VCL risk).
+struct THGemSpeedButton
+{
+    bool Enabled;
+    THGemSpeedButton() : Enabled(true) {}
+};
+
+// golden TMemo* (DB/TerminalMemoPtr) -- ->Lines (a TStrings*; modeled here
+// directly as a real vclcompat::TStringList*, which already supports the
+// exact ->Add/->Assign(TStringList*)/->Count/->Clear() calls golden's own
+// ProcessShow/StringOut(2-arg) bodies make -- no extra "Lines" wrapper layer
+// needed, unlike FormsFacade.h's own no-op TfMainMemoLines shape, because
+// THIS wave's tests need to inspect REAL flushed content, not just a call
+// count), ->SelStart (int, w). Both DB and TerminalMemoPtr are externally
+// assigned in golden (DB via the out-of-scope SetDisplayPtr(TMemo*);
+// TerminalMemoPtr likewise, always NULL-guarded at its own call site per
+// this file's Bucket-A commentary) -- THGem does NOT allocate either; a
+// caller/test must `new` one and assign it (see THGem's own ctor note).
+struct THGemMemo
+{
+    TStringList *Lines;
+    int SelStart;
+    THGemMemo() : SelStart(0) { Lines = new TStringList(); }
+    ~THGemMemo() { delete Lines; }
+    THGemMemo(const THGemMemo&) = delete;
+    THGemMemo& operator=(const THGemMemo&) = delete;
+    void Clear() { Lines->Clear(); }
+};
+
+//---------------------------------------------------------------------------
 //  THGem -- see this header's own file-head note above for scope.
 //---------------------------------------------------------------------------
 class THGem
@@ -184,8 +347,9 @@ public:
 
     // ==== supporting state this wave's methods need ========================
     // golden AnsiString member (uHGemEquipment.h:428/429/430 area); populated
-    // for real by THGem::SaveSystemDefault/InitialHGem (both OUT OF SCOPE
-    // this wave -- see file-head note). Defaults to "" here; a caller/test
+    // for real by THGem::SaveSystemDefault/InitialHGem (AI(W906-uHGemEquipment-
+    // BucketB) 20260717: now in scope, see file-head note -- this comment's
+    // original "OUT OF SCOPE" is stale). Defaults to "" here; a caller/test
     // must set it explicitly before calling ReadAlamData/WriteAlamData.
     AnsiString GemSystemPath;
 
@@ -244,6 +408,106 @@ public:
     // reference it by this exact name).
     Word SystemYear, SystemMonth, SystemDate;           // golden :230
     Word SystemHour, SystemMin, SystemSec, SystemMSec;  // golden :231
+
+    // ==== Widget stand-ins (W906-uHGemEquipment-BucketB) ====================
+    // golden uHGemEquipment.h's __published block (:92-165) for the first 20
+    // (all real .dfm components -- allocated in THGem's own ctor, see the
+    // .cpp; never NULL in a normally-constructed THGem, matching real VCL's
+    // Owner/.dfm-streaming guarantee), and its plain `public:` section
+    // (:400-423) for the trailing 11 (externally-assigned pointers, default
+    // NULL -- a caller/test must wire one up before exercising the method
+    // that needs it; see each THGemXxx struct's own comment above for the
+    // exact golden field-category citation).
+    THGemRadioGroup *EnableOrDisablePtr;     // golden :413 (externally assigned, default NULL)
+    THGemRadioGroup *OnLineOrOffLine;        // golden :112 (__published)
+    THGemRadioGroup *RemoteOrLocal;          // golden :113 (__published)
+    THGemRadioGroup *rgRole;                 // golden :122 (__published)
+
+    THGemEdit *edtIP;                        // golden :123 (__published)
+    THGemEdit *edtPort;                      // golden :124 (__published)
+    THGemEdit *edDeviceID;                   // golden :161 (__published)
+    THGemEdit *edtT3TimeOut;                 // golden :125 (__published)
+    THGemEdit *edtT5TimeOut;                 // golden :126 (__published)
+    THGemEdit *edtT6TimeOut;                 // golden :127 (__published)
+    THGemEdit *edtT7TimeOut;                 // golden :128 (__published)
+    THGemEdit *edtT8TimeOut;                 // golden :129 (__published)
+
+    THGemCheckBox *GemCheckBoxAcceptHostOnlineRequest;   // golden :131 (__published)
+    THGemCheckBox *GemCheckBoxShowBinary;                // golden :132 (__published)
+    THGemCheckBox *GemCheckBoxShowHeadInformation;       // golden :133 (__published)
+    THGemCheckBox *GemCheckBoxUseExtendedAlarm;          // golden :134 (__published)
+    THGemCheckBox *chkAnnotatedEventReport;              // golden :135 (__published)
+    THGemCheckBox *chkMoreMessageAbortProcess;           // golden :136 (__published)
+    THGemCheckBox *ckAddDefaultReport;                   // golden :153 (__published)
+    THGemCheckBox *cbECChaneEventReport;                 // golden :162 (__published)
+
+    THGemComboBox *ComboBox1;                // golden :111 (__published)
+
+    THGemPanel *SECSConnectionState;         // golden :400 (externally assigned, default NULL)
+    THGemPanel *GEMCommunicatingState;       // golden :401 (externally assigned, default NULL)
+    THGemPanel *GemPanelControlState;        // golden :402 (externally assigned, default NULL)
+
+    THGemSpeedButton *BtnEnableComm;         // golden :405 (externally assigned, default NULL)
+    THGemSpeedButton *GemBtnOfflineRequest;  // golden :408 (externally assigned, default NULL)
+    THGemSpeedButton *GemBtnOnlineRequest;   // golden :407 (externally assigned, default NULL)
+    THGemSpeedButton *GemBtnOnlineRemote;    // golden :409 (externally assigned, default NULL)
+    THGemSpeedButton *GemBtnOnlineLocal;     // golden :410 (externally assigned, default NULL)
+
+    THGemMemo *DB;                // golden :300 (externally assigned via out-of-scope SetDisplayPtr, default NULL)
+    THGemMemo *TerminalMemoPtr;   // golden :677 (externally assigned, default NULL, always null-guarded at its call site)
+
+    // golden AnsiString members (:524-526); read by InitialHGem as the
+    // ReadIniData "DefaultValue" fallback for Address/Port/DeviceID when no
+    // ini entry exists yet. Ctor-inited to "" (golden ctor :451-453).
+    AnsiString DefaultAddress;
+    AnsiString DefaultPort;
+    AnsiString DefaultDeviceID;
+
+    // golden int members (:632-636, "pig 2014.07.28 KYEC_SECS"); ctor-inited
+    // to 30 (golden ctor :454-458).
+    int T3TimeOut;
+    int T5TimeOut;
+    int T6TimeOut;
+    int T7TimeOut;
+    int T8TimeOut;
+
+    // golden AnsiString member (:429); the ini file InitialHGem/SaveSystemDefault
+    // actually read/write (DISTINCT from GemSystemPath above, which
+    // ReadAlamData/WriteAlamData use for AlarmData.def). Defaults to ""; a
+    // caller/test must set it explicitly, same idiom as GemSystemPath.
+    AnsiString GemSystemIniPath;
+
+    // golden bool member (:... FormShow/ManualCreatergRoleClick's shared
+    // "has the form actually been shown yet" latch -- gates
+    // ManualCreatergRoleClick's whole body). Ctor-inited false (golden ctor
+    // :617, "bShow=false;").
+    bool bShow;
+
+    // ==== DoUpdateStatus's own supporting state (golden uHGemEquipment.h
+    // "GEM SV data" block :190-192, plus :... UpdateStatus locals) ==========
+    // AI(W906-uHGemEquipment-BucketB) 20260717: golden's own ctor NEVER
+    // explicitly assigns bClientSocketActive/bOldConnect/GemControlState/
+    // GemControlPreState/OldSUpdateStatus/ctUpdateStatus (grepped golden's
+    // whole ctor body, uHGemEquipment.cpp:444-674 -- confirmed absent) --
+    // real BCB6/VCL zero-initializes EVERY instance field before a ctor body
+    // even runs (TObject.NewInstance zeroes the block), so golden gets
+    // false/0/"" for these "for free" without an explicit assignment. C++
+    // gives no such guarantee, so (matching this file's own established
+    // "flagged deviation: zero-init defensively" precedent, see GemTimer's
+    // ctor note) all 6 are explicitly zero-initialized in THGem's own ctor
+    // below.
+    int ctUpdateStatus;                 // golden :... (the /10 update throttle counter)
+    bool bClientSocketActive;
+    int iServoConnectCT;                // golden ctor :492 (explicitly -1, NOT zero -- see ctor)
+    bool bOldConnect;
+    bool flag1UpdateStatus;             // golden ctor :489 (explicitly true, NOT zero -- see ctor)
+    bool flag2UpdateStatus;             // golden ctor :490 (explicitly true)
+    bool flag3UpdateStatus;             // golden ctor :491 (explicitly true)
+    bool bConnectUpdateStatus;          // golden ctor :493 (explicitly true)
+    AnsiString OldSUpdateStatus;
+    unsigned char GemControlState;
+    unsigned char GemControlPreState;
+    char SECSCommunicationMode;         // golden ctor :500 (explicitly 0)
 
     // ==== CEID / Report StringGrid-backed "database" family =================
     void SetCEIDContent(unsigned iCeid, AnsiString CeidAlias, unsigned iReportCount, unsigned *iReportIDData, int Mode);
@@ -323,6 +587,23 @@ public:
     void __fastcall ClearDefaultEvenReport();   // golden :4988-5008
 
     void GetTimeInfo();   // golden :315-348 (TimeString/GemClock half only -- see .cpp)
+
+    // ==== Widget-persisted state + status refresh (W906-uHGemEquipment-BucketB) ====
+    void __fastcall InitialHGem();        // golden :5011-5099
+    void __fastcall SaveSystemDefault();  // golden :5101-5140
+    void DoUpdateStatus();                // golden :4747-4985
+    void __fastcall ProcessShow();        // golden :5165-5173
+    void FormClose();                     // golden :6887-6892 (Sender/TCloseAction& dropped -- see .cpp)
+    void __fastcall ManualCreatergRoleClick(TObject *Sender);   // golden :6915-6931
+    void __fastcall FormShow(TObject *Sender);                  // golden :6936-6950 (partial -- see .cpp)
+    void __fastcall StringOut(AnsiString S, TColor C);          // golden :409-417
+
+    // golden uHGemEquipment.h:248 `void DoSeparate();` -- GATED NO-OP STUB
+    // (real body is wire-codec/SML, out of THIS wave's scope -- same
+    // treatment as EnableDisableEventReportAcknowledgeError above). Exists
+    // purely so DoUpdateStatus's own KYEC branch (which unconditionally
+    // calls this) is translatable without silently dropping the call.
+    void DoSeparate();
 };
 
 //---------------------------------------------------------------------------
@@ -335,5 +616,23 @@ public:
 //  exercise it directly -- no behavior change, source-compatible.
 //---------------------------------------------------------------------------
 bool SplitStrByTabOnly(char *str, char *dest, int Max);
+
+//---------------------------------------------------------------------------
+//  AI(W906-uHGemEquipment-BucketB) 20260717: HGem -- golden's own global
+//  singleton pointer (`extern PACKAGE THGem *HGem;`, golden uHGemEquipment.h's
+//  own tail declaration, right before `extern struct HTypeStruct HType;`).
+//  ProcessShow's own golden body (uHGemEquipment.cpp:5165-5173) dereferences
+//  `HGem->WaitShowString`/`HGem->DB` rather than an implicit `this->` --
+//  preserved verbatim (see ProcessShow's own .cpp comment) rather than
+//  "simplified" to `this->`, so a caller/test MUST set `HGem = &instance;`
+//  before calling ProcessShow (and DoUpdateStatus's own KYEC branch, which
+//  ALSO dereferences `HGem->srvGem`/`HGem->clientGem`) for either to behave
+//  sensibly -- exactly the same "must be wired externally" category already
+//  established by the THGemPanel*/THGemSpeedButton* members above. Defaults
+//  NULL here (golden itself never explicitly initializes this file-scope
+//  global; C++ static-storage globals zero-init by default regardless, so
+//  no deviation-flag needed, unlike THGem's own instance-field members).
+//---------------------------------------------------------------------------
+extern THGem *HGem;
 
 #endif // uHGemEquipmentH

@@ -470,6 +470,24 @@ endif()
 #     member/method still absent from this partial slice, so switching to a
 #     full #include would add a large new dependency for zero un-gating
 #     benefit today).
+#
+#   AI(W906-uHGemEquipment-BucketB) 20260717: THIRD wave on this same file --
+#     ~15 small widget stand-ins (THGemRadioGroup/THGemEdit/THGemCheckBox/
+#     THGemComboBox/THGemPanel/THGemSpeedButton/THGemMemo, uHGemEquipment.h) +
+#     InitialHGem/SaveSystemDefault/DoUpdateStatus/ProcessShow/FormClose/
+#     ManualCreatergRoleClick/FormShow/StringOut(2-arg). DEPENDENCY WIDENING:
+#     this slice needs CUSTOMER_CODE/CC_KYEC_LEE/CC_SIGURD_ChungXing/
+#     CC_MAXIM_THAILAND/CosFunction/bSECSGEMbyPass/bSECSGEMConnectionFail
+#     (cmydef.h -> ht9045_globals) and ReadWriteIni/ReadIniData/WriteIniData
+#     (common.h -> ht9045_core) -- see uHGemEquipment.cpp's own top-of-file
+#     note for the full reasoning (common.h confirmed to stay lightweight:
+#     ini-helper family only, does not itself drag in the rest of golden's
+#     common.h). Same "translated unit needs the global/ini-helper families"
+#     shape already established by KYECFTP/FTPClient_Transfer.cpp's own
+#     ht9045_core+ht9045_globals link (see that library's own comment above).
+#     No circular dependency: ht9045_core/ht9045_globals each only link
+#     vclcompat (+psapi/version for ht9045_globals on WIN32), neither links
+#     back to ht9045_secsgem or ht9045_public.
 # ---------------------------------------------------------------------------
 add_library(ht9045_secsgem
     SECSGEM/uHGemClass.cpp
@@ -492,7 +510,11 @@ target_include_directories(ht9045_secsgem PUBLIC
 # that library's own target above). GetErrorMsg only reads <winsock2.h>
 # constants (no WSA*/socket function calls -- see that .cpp's own header
 # note), so this adds no further transitive link requirement (no ws2_32 etc.).
-target_link_libraries(ht9045_secsgem PUBLIC vclcompat ht9045_public)
+# AI(W906-uHGemEquipment-BucketB) 20260717: ht9045_core (common.h's
+# ReadWriteIni/ReadIniData/WriteIniData) + ht9045_globals (cmydef.h's
+# CUSTOMER_CODE/CC_*/CosFunction/bSECSGEMbyPass/bSECSGEMConnectionFail) added
+# -- see this target's own comment above for the full reasoning.
+target_link_libraries(ht9045_secsgem PUBLIC vclcompat ht9045_public ht9045_core ht9045_globals)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(ht9045_secsgem PRIVATE ${HT9045_WARNFLAGS})

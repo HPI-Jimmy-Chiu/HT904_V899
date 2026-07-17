@@ -14,6 +14,22 @@
 //  StringGrid-only method family; pulling them in would drag in the entire
 //  untranslated Handler state-machine graph for no reason (same
 //  extract-calc-core discipline the project has used since Public/HTMD5).
+//
+//  AI(W906-uHGemEquipment-BucketB) 20260717: the above claim NO LONGER holds
+//  in full -- DoUpdateStatus/InitialHGem/SaveSystemDefault (this wave)
+//  genuinely need CUSTOMER_CODE/CC_KYEC_LEE/CC_SIGURD_ChungXing/
+//  CC_MAXIM_THAILAND/CosFunction/bSECSGEMbyPass/bSECSGEMConnectionFail
+//  (cmydef.h) and ReadWriteIni/ReadIniData/WriteIniData (common.h). Verified
+//  common.h stays lightweight (its own file-head note: "PARTIAL translation
+//  ... ini-helper family only", `#include`s just vclcompat + MachineType.h --
+//  NOT the rest of golden's common.h), so this does not reintroduce the
+//  "entire untranslated Handler state-machine graph" this note originally
+//  warned against; cmydef.h itself is a bigger pull (it includes MachineType.h/
+//  myTimer.h/cprod.h/cpublic.h) but is the SAME single include automation.cpp
+//  already uses for the identical CUSTOMER_CODE/CC_*/CosFunction need -- see
+//  root CMakeLists.txt's ht9045_secsgem target for the matching new
+//  ht9045_core/ht9045_globals link deps this requires (same shape already
+//  established by the KYECFTP/FTPClient_Transfer.cpp precedent).
 //---------------------------------------------------------------------------
 #include "SECSGEM/uHGemEquipment.h"
 
@@ -28,6 +44,14 @@
 // Public/WinSocketErrorCode.cpp (ht9045_public library; wired in this wave's
 // CMakeLists.txt change, see root CMakeLists.txt's ht9045_secsgem target).
 #include "Public/WinSocketErrorCode.h"   // GetErrorMsg(TObject*, int) -> AnsiString
+
+// AI(W906-uHGemEquipment-BucketB) 20260717: see this file's own top-of-file
+// note (above) for why these 2 includes are a deliberate, narrow widening of
+// this TU's dependency surface (DoUpdateStatus/InitialHGem/SaveSystemDefault
+// only).
+#include "cmydef.h"    // CUSTOMER_CODE / CC_KYEC_LEE / CC_SIGURD_ChungXing / CC_MAXIM_THAILAND / CosFunction / bSECSGEMbyPass / bSECSGEMConnectionFail
+#include "common.h"    // ReadWriteIni / ReadIniData / WriteIniData
+#include "SECSGEM/SecsEventReport.h"   // EventReport(unsigned Ceid) -- Sim-first free function, see DoUpdateStatus
 
 // ---------------------------------------------------------------------------
 //  MyDBIProcess -- process-wide diagnostics/log sink (no-op in this
@@ -190,7 +214,72 @@ THGem::THGem()
       iStartOnLineTask(1),           // golden ctor :528
       iTimeFormat(0),                // golden never inits this (see note above)
       WaitShowString(NULL),
-      LogDataString(NULL)
+      LogDataString(NULL),
+      // ---- Bucket B widget stand-ins (W906-uHGemEquipment-BucketB) --------
+      // __published widgets (allocated in the ctor body below, matching
+      // clientGem/srvGem's own established idiom -- NULL here purely as the
+      // pre-allocation placeholder):
+      EnableOrDisablePtr(NULL),        // golden ctor :616 (externally assigned, NOT allocated by THGem)
+      OnLineOrOffLine(NULL),
+      RemoteOrLocal(NULL),
+      rgRole(NULL),
+      edtIP(NULL),
+      edtPort(NULL),
+      edDeviceID(NULL),
+      edtT3TimeOut(NULL),
+      edtT5TimeOut(NULL),
+      edtT6TimeOut(NULL),
+      edtT7TimeOut(NULL),
+      edtT8TimeOut(NULL),
+      GemCheckBoxAcceptHostOnlineRequest(NULL),
+      GemCheckBoxShowBinary(NULL),
+      GemCheckBoxShowHeadInformation(NULL),
+      GemCheckBoxUseExtendedAlarm(NULL),
+      chkAnnotatedEventReport(NULL),
+      chkMoreMessageAbortProcess(NULL),
+      ckAddDefaultReport(NULL),
+      cbECChaneEventReport(NULL),
+      ComboBox1(NULL),
+      // externally-assigned pointers (golden ctor :611-613/616, and golden's
+      // own real-VCL-risk category for the 5 TSpeedButton*s/DB/TerminalMemoPtr
+      // -- see each THGemXxx struct's own header comment): stay NULL, never
+      // allocated by THGem itself.
+      SECSConnectionState(NULL),       // golden ctor :611
+      GEMCommunicatingState(NULL),     // golden ctor :612
+      GemPanelControlState(NULL),      // golden ctor :613
+      BtnEnableComm(NULL),
+      GemBtnOfflineRequest(NULL),
+      GemBtnOnlineRequest(NULL),
+      GemBtnOnlineRemote(NULL),
+      GemBtnOnlineLocal(NULL),
+      DB(NULL),                        // golden ctor :537
+      TerminalMemoPtr(NULL),
+      DefaultAddress(""),              // golden ctor :451
+      DefaultPort(""),                 // golden ctor :452
+      DefaultDeviceID(""),             // golden ctor :453
+      T3TimeOut(30),                   // golden ctor :454
+      T5TimeOut(30),                   // golden ctor :455
+      T6TimeOut(30),                   // golden ctor :456
+      T7TimeOut(30),                   // golden ctor :457
+      T8TimeOut(30),                   // golden ctor :458
+      GemSystemIniPath(""),
+      bShow(false),                    // golden ctor :617
+      // DoUpdateStatus's own supporting state -- see this file's header note
+      // on why all 6 are defensively zero/explicitly-initialized here even
+      // though golden's own ctor never touches most of them (real BCB6/VCL
+      // zero-inits every field for free; C++ does not).
+      ctUpdateStatus(0),
+      bClientSocketActive(false),
+      iServoConnectCT(-1),             // golden ctor :492 (explicitly -1)
+      bOldConnect(false),
+      flag1UpdateStatus(true),         // golden ctor :489 (explicitly true)
+      flag2UpdateStatus(true),         // golden ctor :490 (explicitly true)
+      flag3UpdateStatus(true),         // golden ctor :491 (explicitly true)
+      bConnectUpdateStatus(true),      // golden ctor :493 (explicitly true)
+      OldSUpdateStatus(""),
+      GemControlState(0),
+      GemControlPreState(0),
+      SECSCommunicationMode(0)         // golden ctor :500 (explicitly 0)
 {
     try
     {
@@ -235,6 +324,51 @@ THGem::THGem()
             { srvGemClientError(Sender, Socket, ErrorEvent, ErrorCode); };
         // OnClientRead = clientGemRead (golden .dfm:569): same OUT-OF-SCOPE
         // reason as clientGem->OnRead above -- NOT wired.
+
+        // ---- Bucket B __published widget stand-ins (W906-uHGemEquipment-
+        // BucketB) -- allocated here for the SAME reason clientGem/srvGem are
+        // above: real BCB6 __published components are VCL/.dfm-streamed
+        // BEFORE the ctor body runs, so a normally-constructed THGem never
+        // sees these as NULL; this translation has no streaming step, so they
+        // are `new`'d explicitly. No golden .dfm design-time property values
+        // are replicated here (unlike clientGem/srvGem's Address/Port) --
+        // InitialHGem (below) is the sole real initializer for every one of
+        // these widgets' actual content in this wave's scope, so a ctor-time
+        // .dfm-literal value would be immediately overwritten and is
+        // therefore inert; each stand-in's own default-constructed value is
+        // used instead.
+        EnableOrDisablePtr = NULL;   // externally assigned, see its own member comment -- deliberately NOT allocated here
+        OnLineOrOffLine    = new THGemRadioGroup();
+        RemoteOrLocal      = new THGemRadioGroup();
+        rgRole             = new THGemRadioGroup();
+        // golden ctor :653 `rgRole->OnClick=ManualCreatergRoleClick;` -- NOT
+        // reproduced: THGemRadioGroup has no OnClick callback slot (this
+        // minimal stand-in models data only, not VCL event dispatch) --
+        // ManualCreatergRoleClick (below) is still a real, directly-callable
+        // method; it is simply not auto-fired when ItemIndex changes. Same
+        // documented, acceptable gap as clientGem's own OnConnecting note
+        // above (this wave's own brief explicitly anticipated and accepted
+        // this exact gap for rgRole->OnClick).
+
+        edtIP           = new THGemEdit();
+        edtPort         = new THGemEdit();
+        edDeviceID      = new THGemEdit();
+        edtT3TimeOut    = new THGemEdit();
+        edtT5TimeOut    = new THGemEdit();
+        edtT6TimeOut    = new THGemEdit();
+        edtT7TimeOut    = new THGemEdit();
+        edtT8TimeOut    = new THGemEdit();
+
+        GemCheckBoxAcceptHostOnlineRequest = new THGemCheckBox();
+        GemCheckBoxShowBinary              = new THGemCheckBox();
+        GemCheckBoxShowHeadInformation     = new THGemCheckBox();
+        GemCheckBoxUseExtendedAlarm        = new THGemCheckBox();
+        chkAnnotatedEventReport            = new THGemCheckBox();
+        chkMoreMessageAbortProcess         = new THGemCheckBox();
+        ckAddDefaultReport                 = new THGemCheckBox();
+        cbECChaneEventReport               = new THGemCheckBox();
+
+        ComboBox1 = new THGemComboBox();
     }
     catch (...)
     {
@@ -243,6 +377,26 @@ THGem::THGem()
         // for why the order is load-bearing there.
         delete clientGem;
         delete srvGem;
+        delete OnLineOrOffLine;
+        delete RemoteOrLocal;
+        delete rgRole;
+        delete edtIP;
+        delete edtPort;
+        delete edDeviceID;
+        delete edtT3TimeOut;
+        delete edtT5TimeOut;
+        delete edtT6TimeOut;
+        delete edtT7TimeOut;
+        delete edtT8TimeOut;
+        delete GemCheckBoxAcceptHostOnlineRequest;
+        delete GemCheckBoxShowBinary;
+        delete GemCheckBoxShowHeadInformation;
+        delete GemCheckBoxUseExtendedAlarm;
+        delete chkAnnotatedEventReport;
+        delete chkMoreMessageAbortProcess;
+        delete ckAddDefaultReport;
+        delete cbECChaneEventReport;
+        delete ComboBox1;
         delete strGrdAlarmOld;
         delete strGrdCEID;
         delete stdGridReportID;
@@ -270,6 +424,34 @@ THGem::~THGem()
     // live WaitShowString/LogDataString/other members.
     delete clientGem;
     delete srvGem;
+    // AI(W906-uHGemEquipment-BucketB) 20260717: the 20 __published widget
+    // stand-ins THGem itself allocated (see the ctor) are deleted here too --
+    // same ownership rule as clientGem/srvGem above. The remaining widget
+    // pointers (EnableOrDisablePtr/SECSConnectionState/GEMCommunicatingState/
+    // GemPanelControlState/the 5 TSpeedButton*s/DB/TerminalMemoPtr) are
+    // EXTERNALLY assigned (never allocated by THGem, see each member's own
+    // header comment) -- deliberately NOT deleted here, matching golden
+    // semantics (THGem never owned them in the first place).
+    delete OnLineOrOffLine;
+    delete RemoteOrLocal;
+    delete rgRole;
+    delete edtIP;
+    delete edtPort;
+    delete edDeviceID;
+    delete edtT3TimeOut;
+    delete edtT5TimeOut;
+    delete edtT6TimeOut;
+    delete edtT7TimeOut;
+    delete edtT8TimeOut;
+    delete GemCheckBoxAcceptHostOnlineRequest;
+    delete GemCheckBoxShowBinary;
+    delete GemCheckBoxShowHeadInformation;
+    delete GemCheckBoxUseExtendedAlarm;
+    delete chkAnnotatedEventReport;
+    delete chkMoreMessageAbortProcess;
+    delete ckAddDefaultReport;
+    delete cbECChaneEventReport;
+    delete ComboBox1;
     delete strGrdAlarmOld;
     delete strGrdCEID;
     delete stdGridReportID;
@@ -1212,7 +1394,92 @@ void Gated_MyForceDirectories(AnsiString Directory)
         ForceDirectories(Directory);
 }
 
+// AI(W906-uHGemEquipment-BucketB) 20260717: AMENDMENT to
+// LogClientSocketExceptionError_'s own comment above -- this Bucket B wave
+// DOES now link ht9045_core (see root CMakeLists.txt), so "which
+// uHGemEquipment.cpp does not link" is no longer accurate for ht9045_core
+// itself. The underlying reasoning still holds, though: RecordProcess's real
+// definitions live in ht9045_sm (aHotPlateSubstrate.cpp/acatchtray_shims.cpp/
+// acarry_shims.cpp/canary_support.cpp -- confirmed per KYECFTP/
+// FTPClient_Transfer.cpp's own citation of the same functions), NOT
+// ht9045_core -- linking ht9045_core (for common.h's ReadWriteIni/
+// ReadIniData/WriteIniData, this wave's own real need) does not pull
+// RecordProcess in, so routing to SaveSECSGEMErrToLog instead of
+// RecordProcess is still the right call, for the still-valid reason.
+
+// ---------------------------------------------------------------------------
+// Gated_ShowMessage -- golden Dialogs.hpp `void ShowMessage(const AnsiString&)`,
+// the REAL VCL modal dialog (distinct from this project's own ShowMyMessage
+// wrapper in canary_support.h/mymessbox.h -- no stand-in for the real
+// ShowMessage global exists anywhere in the tree today). GATED per the
+// project's own established convention -- EXACT same idiom, same reasoning,
+// as SecsSvEcRegistration.cpp's own `Gated_ShowMessage` (see that file for
+// the precedent this mirrors). Golden's one call site in THIS file is
+// ManualCreatergRoleClick (uHGemEquipment.cpp:6919) -- a "need to restart the
+// program" advisory dialog after the operator flips rgRole; a no-op here
+// just means that advisory is silently skipped (the REAL state change,
+// bUseClientSocket/edtIP->Enabled, still happens exactly as golden does).
+// ---------------------------------------------------------------------------
+void Gated_ShowMessage(const AnsiString & /*S*/)
+{
+    // TODO(W7-UI): wire to a real modal ShowMessage dialog.
+}
+
+// ---------------------------------------------------------------------------
+// HTimer -- TU-local stand-in for golden cpublic.h's forward-declared
+// HTimer, matching atester_shims.h's own already-established minimal
+// stand-in (`struct HTimer { bool Off(){return true;} void
+// SetSecAndOn(double){} };`) -- duplicated here (anonymous-namespace-scoped,
+// so zero ODR/collision risk with atester_shims.h's own copy) rather than
+// `#include "atester_shims.h"`, which would drag in that file's entire
+// unrelated atester/iosetview/rs232/TCOM2 shim surface for a 2-line type.
+//
+// AI(W906-uHGemEquipment-BucketB) 20260717 -- FLAGGED LIMITATION (see
+// DoUpdateStatus's own KYEC branch below for the concrete call site): this
+// stand-in's Off() ALWAYS returns true, unconditionally, regardless of what
+// duration SetSecAndOn(...) was asked to wait -- it is an ALWAYS-FIRES stub,
+// not a real elapsed-time timer (unlike GemTimer above, which really does
+// track GetTickCount()). Golden's KYEC-specific 30-second forced-disconnect
+// wait (`SECSGEM_DoSeparate.SetSecAndOn(30)` then polling
+// `SECSGEM_DoSeparate.Off()`) will therefore fire on the SAME poll it was
+// armed on in this translated build -- the real 30-second wait this
+// customer's workaround depends on does NOT actually wait 30 seconds yet.
+// This is a pre-existing shim limitation (HTimer has never been designed for
+// real elapsed-time behavior anywhere in this tree), not something silently
+// fixed or hidden here -- a future wave needs to design a real HTimer (real
+// GetTickCount()-based elapsed-time semantics, like GemTimer already has)
+// before KYEC's disconnect-dance is trustworthy end-to-end. Flagged loudly
+// here, at the KYEC branch itself (below), and in this wave's own final
+// report.
+// ---------------------------------------------------------------------------
+struct HTimer
+{
+    bool Off() { return true; }
+    void SetSecAndOn(double) {}
+};
+
 } // anonymous namespace
+
+// AI(W906-uHGemEquipment-BucketB) 20260717: golden uHGemEquipment.cpp:24/4746
+// -- both are genuine FILE-SCOPE globals in golden itself (NOT THGem
+// members), shared by DoUpdateStatus (in THIS wave's scope, below) and
+// Timer1Timer (still out of scope -- needs SecsWireCodec embedded first; see
+// this header's own "Do NOT translate" list). This wave's own brief
+// suggested making these THGem members instead; verified against golden and
+// kept as plain globals here, matching golden exactly -- Timer1Timer's own
+// future wave will need to read/write the SAME globals, and a header change
+// now would only have to be undone/reconciled then for no fidelity benefit.
+bool bSECSGEM_DoSeparate = false;   // golden uHGemEquipment.cpp:24
+HTimer SECSGEM_DoSeparate;          // golden uHGemEquipment.cpp:4746
+
+// AI(W906-uHGemEquipment-BucketB) 20260717: golden's own global singleton
+// pointer (`extern PACKAGE THGem *HGem;`, uHGemEquipment.h's tail
+// declaration) -- see this header's own comment (near its `extern THGem
+// *HGem;`) for the ProcessShow/DoUpdateStatus call sites that dereference
+// this instead of an implicit `this->`. NULL by default (C++ static-storage
+// zero-init); a caller/test must set `HGem = &instance;` before exercising
+// either of those two call sites.
+THGem *HGem = NULL;
 
 //---------------------------------------------------------------------------
 // V 1.0
@@ -1714,13 +1981,18 @@ void __fastcall THGem::srvGemClientConnect(TObject *Sender, TCustomWinSocket *So
     if (srvGem->Socket->ActiveConnections > 1)
     {
         bReceiveMultiConnect = true;
-        // AI(W906-uHGemEquipment-ConnLifecycle) 20260717: golden's
+        // AI(W906-uHGemEquipment-BucketB) 20260717: golden's
         // `TerminalMemoPtr!=NULL` branch here (uHGemEquipment.cpp:6832-6835)
-        // writes a Big5 UI message into TerminalMemoPtr (the KYEC SECS/GEM
-        // terminal window) -- OUT OF SCOPE this wave (TerminalMemoPtr is not
-        // yet a member; see this header's own "MEMBERS DELIBERATELY NOT
-        // PRESENT YET" note). Omitted: the condition can never be reached
-        // without that member existing.
+        // was OUT OF SCOPE for the earlier ConnLifecycle wave (TerminalMemoPtr
+        // was not yet a member); wired up for real now that THGemMemo/
+        // TerminalMemoPtr exist (see uHGemEquipment.h). Message text extracted
+        // from golden's raw bytes via `.decode('cp950')` (golden's own on-disk
+        // encoding) to avoid this toolchain's Big5-mojibake risk on a direct
+        // copy/retype -- decodes to "有2台以上EAP連接Handler,請確認" (2013/09/30 lee).
+        if (TerminalMemoPtr != NULL)
+        {
+            TerminalMemoPtr->Lines->Add("有2台以上EAP連接Handler,請確認");
+        }
     }
 }
 //---------------------------------------------------------------------------
@@ -1793,4 +2065,531 @@ void __fastcall THGem::srvGemClientDisconnect(TObject *Sender, TCustomWinSocket 
     // whichever future wave translates Timer1Timer. Flagged loudly here so
     // that translator does not miss it. Only the in-scope half is done below.
     iOpenCommuncationTask = 1;
+}
+
+//===========================================================================
+//  Widget-persisted state + status refresh (W906-uHGemEquipment-BucketB wave)
+//  (golden uHGemEquipment.cpp:409-417, 4747-4985, 5011-5173, 6887-6950)
+//===========================================================================
+//---------------------------------------------------------------------------
+// V 1.0
+// 將 Data 從設計指定的 TMemo 內做 show 出（含色彩）(golden uHGemEquipment.cpp:409-417)
+//---------------------------------------------------------------------------
+void __fastcall THGem::StringOut(AnsiString S, TColor C)
+{
+    // AI(W906-uHGemEquipment-BucketB) 20260717: GOLDEN QUIRK, preserved
+    // verbatim -- the `C` (color) parameter is accepted but never actually
+    // used anywhere in golden's own body (uHGemEquipment.cpp:409-417 only
+    // ever touches DB->Lines/LogDataString/DB->SelStart; no DB->Font->Color
+    // or similar). Not "fixed" by applying C to DB somewhere golden doesn't.
+    (void)C;
+    if (DB != NULL)
+    {
+        DB->Lines->Add(S);
+        LogDataString->Add(S);
+        DB->SelStart = DB->Lines->Count - 1;
+    }
+}
+
+//---------------------------------------------------------------------------
+// V 1.0 (golden uHGemEquipment.cpp:5011-5099)
+//---------------------------------------------------------------------------
+void __fastcall THGem::InitialHGem()
+{
+    bool bRead = true;
+    bool bCompare = true;
+    AnsiString sPath = GemSystemIniPath;
+
+    if (EnableOrDisablePtr != NULL)
+    {
+        EnableOrDisablePtr->ItemIndex = ReadWriteIni(sPath, "GEM", "EnableOrDisable", 0, 0, bRead, bCompare, 0, EnableOrDisablePtr->Items.Count);
+    }
+
+    if (OnLineOrOffLine != NULL)
+    {
+        OnLineOrOffLine->ItemIndex = ReadWriteIni(sPath, "GEM", "OnLineOrOffLine", 0, 0, bRead, bCompare, 0, OnLineOrOffLine->Items.Count);
+        if (CUSTOMER_CODE == CC_KYEC_LEE)
+            OnLineOrOffLine->ItemIndex = 0;   // Eastsun 20260526 #026-1.73 Ifor 20210527 add: KYEC SECSGEM 強制Online Remote
+    }
+
+    if (RemoteOrLocal != NULL)
+    {
+        RemoteOrLocal->ItemIndex = ReadWriteIni(sPath, "GEM", "RemoteOrLocal", 0, 0, bRead, bCompare, 0, RemoteOrLocal->Items.Count);
+        if (CUSTOMER_CODE == CC_KYEC_LEE)
+            RemoteOrLocal->ItemIndex = 0;     // Eastsun 20260526 #026-1.73 Ifor 20210527 add: KYEC SECSGEM 強制Online Remote
+    }
+
+    rgRole->ItemIndex = ReadWriteIni(sPath, "GEM", "ActiveOrPassive", 0, 0, bRead, bCompare, 0, rgRole->Items.Count);
+    bUseClientSocket = (rgRole->ItemIndex == 1);
+
+    edtIP->Text = ReadIniData(sPath, "GEM", "Address", DefaultAddress);
+    if (CUSTOMER_CODE == CC_KYEC_LEE)             // wei 20160309 SecsGem Port 強制6000
+        edtPort->Text = 6000;
+    else
+        edtPort->Text = ReadIniData(sPath, "GEM", "Port", DefaultPort);
+
+    edDeviceID->Text = ReadIniData(sPath, "GEM", "DeviceID", DefaultDeviceID);
+    edtT3TimeOut->Text = ReadIniData(sPath, "GEM", "T3", T3TimeOut);   // pig 2014.07.28 KYEC_SECS start
+    edtT5TimeOut->Text = ReadIniData(sPath, "GEM", "T5", T5TimeOut);
+    edtT6TimeOut->Text = ReadIniData(sPath, "GEM", "T6", T6TimeOut);
+    edtT7TimeOut->Text = ReadIniData(sPath, "GEM", "T7", T7TimeOut);
+    edtT8TimeOut->Text = ReadIniData(sPath, "GEM", "T8", T8TimeOut);
+
+    T3TimeOut = atoi(edtT3TimeOut->Text.c_str());
+    T5TimeOut = atoi(edtT5TimeOut->Text.c_str());
+    T6TimeOut = atoi(edtT6TimeOut->Text.c_str());
+    T7TimeOut = atoi(edtT7TimeOut->Text.c_str());
+    T8TimeOut = atoi(edtT8TimeOut->Text.c_str());
+
+    clientGem->Address = edtIP->Text;
+    clientGem->Port = 0;
+    srvGem->Port = 0;
+    // AI(W906-uHGemEquipment-BucketB) 20260717: golden's own next line here
+    // is `Local.DeviceID=atoi(edDeviceID->Text.c_str());` -- OMITTED. `Local`
+    // (HSMS_Head_Struct) is not yet a THGem member this wave (it belongs to
+    // the wire-codec family SecsWireCodec.h already parallels -- see that
+    // header's own note); this exact write has ZERO in-scope reader (no
+    // function this wave translates ever reads Local.DeviceID back), so
+    // omitting it is behavior-neutral for everything this wave actually
+    // exercises/tests. Flagged here rather than silently dropped.
+    if (bUseClientSocket == true)
+    {
+        clientGem->Port = atoi(edtPort->Text.c_str());
+        edtIP->Enabled = true;
+    }
+    else
+    {
+        srvGem->Port = atoi(edtPort->Text.c_str());
+        edtIP->Enabled = false;
+    }
+
+    GemCheckBoxAcceptHostOnlineRequest->Checked = ReadIniData(sPath, "GEM", "AcceptHostOnlineRequest", true);
+    GemCheckBoxShowBinary->Checked = false;   // Steven 20211109 : SECS不再全部顯示binary code
+    GemCheckBoxShowHeadInformation->Checked = ReadIniData(sPath, "GEM", "ShowHeadInformation", false);
+    GemCheckBoxUseExtendedAlarm->Checked = ReadIniData(sPath, "GEM", "UseExtendedAlarm", false);
+    chkAnnotatedEventReport->Checked = ReadIniData(sPath, "GEM", "AnnotatedEventReport", false);
+    chkMoreMessageAbortProcess->Checked = ReadIniData(sPath, "GEM", "CheckMoreData", false);
+    if (CUSTOMER_CODE == CC_MAXIM_THAILAND)       // Ifor 20251018 add: Analog 該客戶要求AddDefaultReport需可設定
+    {
+        ckAddDefaultReport->Checked = ReadIniData(sPath, "GEM", "AddDefaultReport", true);   // 2013/11/20  lee
+    }
+    else
+    {
+        ckAddDefaultReport->Checked = true;   // 2014/01/01  lee
+    }
+
+    if (CosFunction.bECChangeEventReportCanOnOff)   // JerryYang 20200520 客戶提出DoReportECDataChangeCheck函式會影響UPH,改成功能選項
+    {
+        cbECChaneEventReport->Checked = ReadIniData(sPath, "GEM", "ECChangeEventReport", false);
+    }
+    else
+    {
+        cbECChaneEventReport->Checked = true;
+    }
+
+    ReadEventReportData();
+
+    if (ckAddDefaultReport->Checked == false)
+        ClearDefaultEvenReport();
+}
+
+//---------------------------------------------------------------------------
+// V 1.0 (golden uHGemEquipment.cpp:5101-5140)
+//---------------------------------------------------------------------------
+void __fastcall THGem::SaveSystemDefault()
+{
+    AnsiString sPath = GemSystemIniPath;
+    if (EnableOrDisablePtr != NULL)
+    {
+        WriteIniData(sPath, "GEM", "EnableOrDisable", EnableOrDisablePtr->ItemIndex);
+    }
+
+    if (OnLineOrOffLine != NULL)
+    {
+        if (CUSTOMER_CODE == CC_KYEC_LEE)
+            OnLineOrOffLine->ItemIndex = 0;   // Eastsun 20260526 #026-1.73 Ifor 20210527 add: KYEC SECSGEM 強制Online Remote
+        WriteIniData(sPath, "GEM", "OnLineOrOffLine", OnLineOrOffLine->ItemIndex);
+    }
+
+    if (RemoteOrLocal != NULL)
+    {
+        if (CUSTOMER_CODE == CC_KYEC_LEE)
+            RemoteOrLocal->ItemIndex = 0;     // Eastsun 20260526 #026-1.73 Ifor 20210527 add: KYEC SECSGEM 強制Online Remote
+        WriteIniData(sPath, "GEM", "RemoteOrLocal", RemoteOrLocal->ItemIndex);
+    }
+
+    WriteIniData(sPath, "GEM", "ActiveOrPassive", rgRole->ItemIndex);
+    WriteIniData(sPath, "GEM", "Address", edtIP->Text);
+    WriteIniData(sPath, "GEM", "Port", edtPort->Text);
+    WriteIniData(sPath, "GEM", "DeviceID", edDeviceID->Text);
+
+    WriteIniData(sPath, "GEM", "T3", edtT3TimeOut->Text);   // pig 2014.07.28 KYEC_SECS start
+    WriteIniData(sPath, "GEM", "T5", edtT5TimeOut->Text);
+    WriteIniData(sPath, "GEM", "T6", edtT6TimeOut->Text);
+    WriteIniData(sPath, "GEM", "T7", edtT7TimeOut->Text);
+    WriteIniData(sPath, "GEM", "T8", edtT8TimeOut->Text);
+
+    WriteIniData(sPath, "GEM", "AcceptHostOnlineRequest", GemCheckBoxAcceptHostOnlineRequest->Checked);
+    WriteIniData(sPath, "GEM", "ShowBinaryData", GemCheckBoxShowBinary->Checked);
+    WriteIniData(sPath, "GEM", "ShowHeadInformation", GemCheckBoxShowHeadInformation->Checked);
+    WriteIniData(sPath, "GEM", "UseExtendedAlarm", GemCheckBoxUseExtendedAlarm->Checked);
+    WriteIniData(sPath, "GEM", "AnnotatedEventReport", chkAnnotatedEventReport->Checked);
+    WriteIniData(sPath, "GEM", "CheckMoreData", chkMoreMessageAbortProcess->Checked);
+    WriteIniData(sPath, "GEM", "AddDefaultReport", ckAddDefaultReport->Checked);          // 2013/11/20  lee
+    WriteIniData(sPath, "GEM", "ECChangeEventReport", cbECChaneEventReport->Checked);     // JerryYang 20200520 客戶提出DoReportECDataChangeCheck函式會影響UPH,改成功能選項
+}
+
+//---------------------------------------------------------------------------
+// golden uHGemEquipment.h:248 `void DoSeparate();` -- GATED NO-OP STUB.
+// Real body sends the HSMS Separate.req message over the wire (SML/
+// wire-codec family, out of THIS wave's scope -- see this header's own
+// "Do NOT translate" list). Exists purely so DoUpdateStatus's own KYEC
+// branch (below), which unconditionally calls this, stays translatable
+// without silently dropping the call. Does NOT send anything over
+// clientGem/srvGem.
+//---------------------------------------------------------------------------
+void THGem::DoSeparate()
+{
+}
+
+//---------------------------------------------------------------------------
+// V 1.0
+// update application screen online,offline,connect status and so on
+// (golden uHGemEquipment.cpp:4747-4985)
+//---------------------------------------------------------------------------
+void THGem::DoUpdateStatus()
+{
+    int &ct = ctUpdateStatus;
+
+    AnsiString S;
+    static int iControlState = 0;
+    static bool bHasDisconnection = false;         // Ifor 20180913 (Steven) : add KYEC SECS GEM Connection狀態由OffLine離開時，等待30秒送出斷線命令後等待上層系統重新連線
+    static unsigned char OldGemControlState = 1;   // JerryYang 20230204 : SECS/GEM GControl State轉換的處理，這邊Event report
+
+    ct++;
+    if (ct < 10)
+        return;
+    ct = 0;
+    SECSCommunicationMode = static_cast<char>(ComboBox1->ItemIndex);
+
+    if (SECSConnectionState != NULL)
+    {
+        if (bUseClientSocket == true)
+        {
+            if (flag1UpdateStatus || bClientSocketActive != clientGem->Active)
+            {
+                bClientSocketActive = clientGem->Active;
+                if (bClientSocketActive == true)
+                {
+                    SECSConnectionState->Caption = "SECS GEM Connection";
+                    SECSConnectionState->Color = clLime;
+                    bConnect = false;
+                }
+                else
+                {
+                    SECSConnectionState->Caption = "SECS GEM Disconnection";
+                    SECSConnectionState->Color = clRed;
+                }
+            }
+            flag1UpdateStatus = false;
+        }
+        else
+        {
+            if (iServoConnectCT != srvGem->Socket->ActiveConnections)
+            {
+                iServoConnectCT = srvGem->Socket->ActiveConnections;
+                if (iServoConnectCT == 0)
+                {
+                    SECSConnectionState->Caption = "SECS GEM Disconnection";
+                    SECSConnectionState->Color = clRed;
+                    bConnect = false;
+                }
+                else
+                {
+                    SECSConnectionState->Caption = "SECS GEM Connection";
+                    SECSConnectionState->Color = clLime;
+                }
+            }
+        }
+        // Ifor 20180913 (Steven) : add KYEC SECS GEM Connection狀態由OffLine離開時，等待30秒送出斷線命令後等待上層系統重新連線
+        //==>
+        if (CUSTOMER_CODE == CC_KYEC_LEE &&
+            SECSConnectionState->Caption == "SECS GEM Connection" &&
+            GEMCommunicatingState->Caption == "1:OffLine")
+        {
+            if (bHasDisconnection == true && bSECSGEM_DoSeparate == false)
+            {
+                bHasDisconnection = false;
+                SECSGEM_DoSeparate.SetSecAndOn(30);
+            }
+
+            // AI(W906-uHGemEquipment-BucketB) 20260717: FLAGGED LIMITATION --
+            // `SECSGEM_DoSeparate` is the TU-local HTimer stand-in (see its
+            // own definition/comment above), whose Off() ALWAYS returns true
+            // immediately, regardless of the 30-second duration just armed by
+            // SetSecAndOn(30) on the line above. In THIS translated build,
+            // the branch below fires on the very SAME poll it was armed --
+            // KYEC's real 30-second forced-disconnect wait does NOT actually
+            // wait 30 seconds yet. This is a pre-existing shim limitation
+            // (HTimer has never been designed for real elapsed-time behavior
+            // anywhere in this tree), not silently fixed or hidden -- a
+            // future wave needs to design a real HTimer before this
+            // customer's flow is trustworthy end-to-end. See this wave's own
+            // final report for the same flag.
+            if (SECSGEM_DoSeparate.Off())
+            {
+                DoSeparate();
+                try
+                {
+                    HGem->srvGem->Close();
+                    HGem->clientGem->Close();
+                }
+                catch (...)
+                {
+                    MyDBIProcess("Exception", "THGem::DoUpdateStatus");
+                }
+                bSECSGEM_DoSeparate = true;
+                bHasDisconnection = true;
+            }
+        }
+        else
+        {
+            bHasDisconnection = true;
+        }
+        //<==
+    }
+
+    if (GEMCommunicatingState != NULL)
+    {
+        if (bOldConnect != bConnect || flag2UpdateStatus)
+        {
+            bOldConnect = bConnect;
+            if (bConnect == true)
+            {
+                if (CUSTOMER_CODE == CC_KYEC_LEE ||             // Ifor 20170531 (wei) KYEC 楊教授要求顯示連線狀態以利人員判斷
+                    CUSTOMER_CODE == CC_SIGURD_ChungXing)        // Sam 20250606 : 矽格中興也要變更SECSGEM狀態顯示
+                {
+                    GEMCommunicatingState->Caption = "4:OnLine";
+                }
+                else
+                {
+                    GEMCommunicatingState->Caption = "4:Enable";
+                }
+                GEMCommunicatingState->Color = clLime;
+                bSECSGEMbyPass = false;             // wei 20150817 SECSGEM 斷線後補入密碼
+                bSECSGEMConnectionFail = false;      // wei 20150817 SECSGEM 斷線
+            }
+            else
+            {
+                if (CUSTOMER_CODE == CC_KYEC_LEE ||
+                    CUSTOMER_CODE == CC_SIGURD_ChungXing)
+                {
+                    GEMCommunicatingState->Caption = "1:OffLine";
+                }
+                else
+                {
+                    GEMCommunicatingState->Caption = "1:Disable";
+                }
+                GEMCommunicatingState->Color = clRed;
+                bSECSGEMConnectionFail = true;       // wei 20150817 SECSGEM 斷線
+                bHasDisconnection = true;
+            }
+        }
+        flag2UpdateStatus = false;
+    }
+
+    if (GemPanelControlState != NULL)
+    {
+        if (bOnLine)
+        {
+            if (bOnLineLocal)
+                S = "On Line Local";
+            else
+                S = "On Line Remote";
+        }
+        else
+        {
+            S = "Off Line";
+        }
+
+        if (flag3UpdateStatus || S != OldSUpdateStatus)
+        {
+            OldSUpdateStatus = S;
+            flag3UpdateStatus = false;
+            GemPanelControlState->Caption = S;
+            if (S == "On Line Local")
+                GemPanelControlState->Color = clLime;
+            else if (S == "On Line Remote")
+                GemPanelControlState->Color = clYellow;
+            else
+                GemPanelControlState->Color = clRed;
+        }
+    }
+
+    if (IsOnLine())
+    {
+        GemBtnOfflineRequest->Enabled = true;
+        GemBtnOnlineRequest->Enabled = false;
+    }
+    else
+    {
+        GemBtnOfflineRequest->Enabled = false;
+        GemBtnOnlineRequest->Enabled = true;
+    }
+
+    if (GetOnLineMode())
+    {
+        GemBtnOnlineRemote->Enabled = true;
+        GemBtnOnlineLocal->Enabled = false;
+    }
+    else
+    {
+        GemBtnOnlineRemote->Enabled = false;
+        GemBtnOnlineLocal->Enabled = true;
+    }
+    // Ifor 20170803 (wei) Mark 避免斷電的系統延遲造成UPH下降 -- golden's own
+    // DB->Lines trim-to-3000-lines block here (uHGemEquipment.cpp:4928-4942)
+    // is ITSELF commented out in golden (dead code in golden, not a
+    // translation gap) -- not translated, matching golden exactly.
+
+    if (bConnectUpdateStatus != IsConnect())
+    {
+        bConnectUpdateStatus = IsConnect();
+        BtnEnableComm->Enabled = !IsConnect();
+    }
+
+    if (bOnLine == false)
+    {
+        GemControlState = 1;
+    }
+    else
+    {
+        if (bOnLineLocal == true)
+            GemControlState = 2;
+        else
+            GemControlState = 3;
+    }
+
+    if (iControlState != GemControlState)
+    {
+        GemControlPreState = static_cast<unsigned char>(iControlState);
+        iControlState = GemControlState;
+        EventReport(141);   // Ifor 20221018 add: GEM Control State Change Report
+    }
+
+    if (OldGemControlState != GemControlState)   // JerryYang 20230204 : SECS/GEM GControl State轉換的處理，這邊Event report
+    {
+        OldGemControlState = GemControlState;
+        if (GemControlState == 1)
+        {
+            EventReport(91);   // Offline
+        }
+        else if (GemControlState == 2)
+        {
+            EventReport(92);   // Online local
+        }
+        else if (GemControlState == 3)
+        {
+            EventReport(93);   // Online remote
+        }
+    }
+}
+
+//---------------------------------------------------------------------------
+// V 1.0
+// 顯示接收或傳送的資料 (golden uHGemEquipment.cpp:5165-5173)
+//---------------------------------------------------------------------------
+void __fastcall THGem::ProcessShow()
+{
+    // AI(W906-uHGemEquipment-BucketB) 20260717: golden's own body
+    // dereferences the GLOBAL `HGem->` pointer here, NOT an implicit
+    // `this->` (uHGemEquipment.cpp:5167-5171) -- preserved verbatim (see
+    // uHGemEquipment.h's own `extern THGem *HGem;` comment for why); a
+    // caller/test must set `HGem = &instance;` first.
+    if (HGem->WaitShowString->Count != 0)
+    {
+        HGem->DB->Clear();
+        HGem->DB->Lines->Assign(HGem->WaitShowString);
+        HGem->WaitShowString->Clear();
+    }
+}
+
+//---------------------------------------------------------------------------
+// 2013/05/27
+// V1.1 (golden uHGemEquipment.cpp:6887-6892)
+//---------------------------------------------------------------------------
+void THGem::FormClose()
+{
+    // AI(W906-uHGemEquipment-BucketB) 20260717: golden's own signature is
+    // `void __fastcall THGem::FormClose(TObject *Sender, TCloseAction
+    // &Action)` -- both parameters are UNUSED in golden's own body (only
+    // SaveSystemDefault()/SaveEventReportData()/bShow=false; run here) and no
+    // TCloseAction stand-in exists anywhere in this tree; dropped rather than
+    // inventing a new type for 2 always-unused parameters -- a documented,
+    // acceptable signature gap (same class of deviation this wave's own
+    // brief already accepted for ManualCreatergRoleClick's OnClick wiring).
+    SaveSystemDefault();
+    SaveEventReportData();
+    bShow = false;
+}
+
+//---------------------------------------------------------------------------
+// 2013/05/27
+// V1.1 (golden uHGemEquipment.cpp:6915-6931)
+//---------------------------------------------------------------------------
+void __fastcall THGem::ManualCreatergRoleClick(TObject *Sender)
+{
+    (void)Sender;
+    // AI(W906-uHGemEquipment-BucketB) 20260717: golden's own ctor assigns
+    // `rgRole->OnClick=ManualCreatergRoleClick;` dynamically (golden ctor
+    // :653, NOT via the .dfm's static event table) -- NOT reproduced here:
+    // THGemRadioGroup (this wave's minimal stand-in) has no OnClick callback
+    // slot/observer mechanism, so this method is a real, directly-callable
+    // method but is never auto-fired by an ItemIndex change. A documented,
+    // acceptable gap (per this wave's own brief) -- call it explicitly after
+    // changing rgRole->ItemIndex to get golden's real-world behavior.
+    if (bShow == true)
+    {
+        Gated_ShowMessage("Need Restart Program After Modify !!!");
+
+        if (rgRole->ItemIndex == 0)
+            bUseClientSocket = false;
+        else
+            bUseClientSocket = true;
+
+        if (bUseClientSocket == true)
+            edtIP->Enabled = true;
+        else
+            edtIP->Enabled = false;
+    }
+}
+
+//---------------------------------------------------------------------------
+// 2013/05/27
+// V1.1 (golden uHGemEquipment.cpp:6936-6950)
+//---------------------------------------------------------------------------
+void __fastcall THGem::FormShow(TObject *Sender)
+{
+    (void)Sender;
+    // AI(W906-uHGemEquipment-BucketB) 20260717: golden's own
+    // `Left=(1280-Width)/2; Top=(1024-Height)/2;` (window-centering) and
+    // `PageControl1->ActivePageIndex=0;` (tab reset) are OMITTED -- THGem is
+    // not modeled as a real window/form in this port (no Left/Top/Width/
+    // Height/PageControl1 members exist), so translating these would be
+    // inert busywork with nothing to observably affect. The 2 genuine
+    // non-cosmetic pieces below ARE translated: bShow (read by
+    // ManualCreatergRoleClick's own guard) and the KYEC-specific
+    // OnLineOrOffLine/RemoteOrLocal lock (real customer-specific UI-lock
+    // logic, not mere cosmetics).
+    bShow = true;
+
+    cbECChaneEventReport->Visible = CosFunction.bECChangeEventReportCanOnOff;   // JerryYang 20200520 客戶提出DoReportECDataChangeCheck函式會影響UPH,改成功能選項
+
+    //==> Eastsun 20260526 #026-1.78 Ifor 20210527 add: KYEC SECSGEM 強制Online Remote, UI鎖定
+    if (CUSTOMER_CODE == CC_KYEC_LEE)
+    {
+        OnLineOrOffLine->Enabled = false;
+        RemoteOrLocal->Enabled = false;
+    }
+    //<== Eastsun 20260526 #026-1.78
 }

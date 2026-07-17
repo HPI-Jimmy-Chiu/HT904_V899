@@ -1741,6 +1741,18 @@ add_test(NAME SecsSvEcRegistration COMMAND test_SecsSvEcRegistration)
 #   entries in this file) -- Real-mode code paths inside ClientSocket.cpp/
 #   ServerSocket.cpp reference WSAStartup/socket/connect/send/recv/etc. even
 #   though this test only ever exercises Sim mode.
+#   AI(W906-uHGemEquipment-BucketB) 20260717: ht9045_core (common.h's
+#   ReadWriteIni/ReadIniData/WriteIniData, real functions -- self-contained,
+#   own local RecordProcess no-op stub, see common.cpp's own header note) and
+#   ht9045_globals (cmydef.h's CUSTOMER_CODE/CC_*/CosFunction/
+#   bSECSGEMbyPass/bSECSGEMConnectionFail) added to the RESCAN group --
+#   InitialHGem/SaveSystemDefault/DoUpdateStatus (this wave) need the REAL
+#   symbols, and pulling uHGemEquipment.o into this executable (already
+#   happening, for the pre-existing CEID/Report tests) means ALL of that
+#   object file's external references must resolve, not just the ones this
+#   test happens to call -- same "must resolve the whole .o's symbols"
+#   reasoning already spelled out at test_TesterTCP's own entry below for an
+#   identical situation.
 add_executable(test_uHGemEquipment
     test_uHGemEquipment.cpp
 )
@@ -1754,7 +1766,7 @@ add_executable(test_uHGemEquipment
 # Same LINK_GROUP:RESCAN fix already established by this exact multi-hop-
 # static-lib-plus-ws2_32 shape at test_myplc_modbus's own entry in this file.
 target_link_libraries(test_uHGemEquipment PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_secsgem,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_secsgem,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 if(WIN32)
     target_link_libraries(test_uHGemEquipment PRIVATE ws2_32)

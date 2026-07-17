@@ -108,8 +108,27 @@
 //  should therefore leave D:\SECS_GEM_LOGS byte-for-byte unchanged.
 //  SaveSECSGEMErrToLog is otherwise NOT called directly by any other test
 //  below (matching the SaveEventReportData precedent).
+//
+//  AI(W906-uHGemEquipment-BucketB) 20260717: EXTENDED again for the ~15
+//  widget stand-ins (THGemRadioGroup/THGemEdit/THGemCheckBox/THGemComboBox/
+//  THGemPanel/THGemSpeedButton/THGemMemo) and their first real consumers:
+//  InitialHGem/SaveSystemDefault (scratch GemSystemIniPath, never the real
+//  D:\HT9045\SECS tree -- same scratch-path discipline as test [8]'s
+//  GemSystemPath), DoUpdateStatus (panel/button/EventReport refresh, INCLUDING
+//  the KYEC 30-second forced-disconnect branch -- structural only, see that
+//  test's own FLAGGED LIMITATION comment: this build's HTimer stand-in always
+//  fires immediately, it does not really wait 30 seconds), ManualCreatergRoleClick,
+//  ProcessShow, and StringOut(2-arg). New includes: cmydef.h (CUSTOMER_CODE/
+//  CC_KYEC_LEE/CC_MAXIM_THAILAND -- this test now links ht9045_core/
+//  ht9045_globals too, see tests/CMakeLists.txt's own updated comment) and
+//  SECSGEM/SecsEventReport.h (g_SimLastEventReportCeid/g_SimEventReportCount/
+//  ResetSimEventReport -- DoUpdateStatus's own EventReport(...) calls are
+//  observed through this existing Sim counter, same as csystem.cpp's already-
+//  established convention).
 // =============================================================================
 #include "SECSGEM/uHGemEquipment.h"
+#include "SECSGEM/SecsEventReport.h"   // g_SimLastEventReportCeid / g_SimEventReportCount / ResetSimEventReport
+#include "cmydef.h"                     // CUSTOMER_CODE / CC_KYEC_LEE / CC_MAXIM_THAILAND / CosFunction
 
 #include <cstdio>
 #include <cstring>
@@ -852,6 +871,258 @@ static void test_stringout_and_binaryout()
 }
 
 // ===========================================================================
+//  [18] InitialHGem / SaveSystemDefault round-trip -- scratch GemSystemIniPath
+//  (NOT the real D:\HT9045\SECS tree), same discipline as test [8]'s
+//  GemSystemPath. Runs under CUSTOMER_CODE==CC_MAXIM_THAILAND so
+//  ckAddDefaultReport's ReadIniData round-trip branch is the one actually
+//  exercised (golden forces ckAddDefaultReport->Checked=true unconditionally
+//  for every OTHER customer -- see InitialHGem's own definition).
+// ===========================================================================
+static void test_initialhgem_savesystemdefault_roundtrip()
+{
+    printf("\n[18] InitialHGem / SaveSystemDefault (scratch ini path)\n");
+
+    const AnsiString kScratchDir = "uHGemEquipment_test_scratch_ini";
+    ForceDirectories(kScratchDir);
+    const AnsiString kIniPath = kScratchDir + "\\GemTest.ini";
+    DeleteFile(kIniPath);   // start clean, in case a prior run left it behind
+
+    int savedCustomerCode = CUSTOMER_CODE;
+    CUSTOMER_CODE = CC_MAXIM_THAILAND;
+
+    THGem gemWriter;
+    gemWriter.GemSystemIniPath = kIniPath;
+    gemWriter.OnLineOrOffLine->Items.Count = 2;   // matches golden .dfm Items.Strings count
+    gemWriter.RemoteOrLocal->Items.Count = 2;
+    gemWriter.rgRole->Items.Count = 2;
+
+    gemWriter.rgRole->ItemIndex = 1;   // [2] Active role
+    gemWriter.edtIP->Text = "10.20.30.40";
+    gemWriter.edtPort->Text = "5100";
+    gemWriter.edDeviceID->Text = "7";
+    gemWriter.edtT3TimeOut->Text = "45";
+    gemWriter.GemCheckBoxAcceptHostOnlineRequest->Checked = false;
+    gemWriter.ckAddDefaultReport->Checked = false;
+    gemWriter.SaveSystemDefault();
+    CHECK(FileExists(kIniPath), "SaveSystemDefault created the scratch ini file");
+
+    THGem gemReader;
+    gemReader.GemSystemIniPath = kIniPath;
+    gemReader.OnLineOrOffLine->Items.Count = 2;
+    gemReader.RemoteOrLocal->Items.Count = 2;
+    gemReader.rgRole->Items.Count = 2;
+    gemReader.InitialHGem();
+
+    CHECK(gemReader.rgRole->ItemIndex == 1, "InitialHGem round-trips rgRole->ItemIndex (ActiveOrPassive)");
+    CHECK(gemReader.bUseClientSocket == true, "InitialHGem derives bUseClientSocket from rgRole->ItemIndex==1");
+    CHECK(gemReader.edtIP->Text == "10.20.30.40", "InitialHGem round-trips edtIP->Text (Address)");
+    CHECK(gemReader.clientGem->Address == "10.20.30.40", "InitialHGem also propagates edtIP->Text into clientGem->Address");
+    CHECK(gemReader.edtIP->Enabled == true, "InitialHGem: bUseClientSocket==true -> edtIP->Enabled=true");
+    CHECK(gemReader.edDeviceID->Text == "7", "InitialHGem round-trips edDeviceID->Text (DeviceID)");
+    CHECK(gemReader.T3TimeOut == 45, "InitialHGem round-trips T3TimeOut (re-parsed via atoi after ReadIniData)");
+    CHECK(gemReader.GemCheckBoxAcceptHostOnlineRequest->Checked == false, "InitialHGem round-trips AcceptHostOnlineRequest");
+    CHECK(gemReader.ckAddDefaultReport->Checked == false,
+          "InitialHGem round-trips AddDefaultReport under CC_MAXIM_THAILAND (the one customer where it's actually read from ini)");
+
+    CUSTOMER_CODE = savedCustomerCode;
+    DeleteFile(kIniPath);
+    RemoveDir(kScratchDir);
+}
+
+// ===========================================================================
+//  [19] ManualCreatergRoleClick -- bShow gate + bUseClientSocket/edtIP->Enabled toggle
+// ===========================================================================
+static void test_manualcreatergroleclick()
+{
+    printf("\n[19] ManualCreatergRoleClick\n");
+
+    THGem gem;
+    gem.bShow = false;
+    gem.rgRole->ItemIndex = 1;
+    gem.bUseClientSocket = false;
+    gem.ManualCreatergRoleClick(NULL);
+    CHECK(gem.bUseClientSocket == false, "ManualCreatergRoleClick: bShow==false -> guarded no-op (golden's own bShow gate)");
+
+    gem.bShow = true;
+    gem.ManualCreatergRoleClick(NULL);
+    CHECK(gem.bUseClientSocket == true, "ManualCreatergRoleClick: bShow==true, rgRole->ItemIndex==1 -> bUseClientSocket=true");
+    CHECK(gem.edtIP->Enabled == true, "ManualCreatergRoleClick: bUseClientSocket==true -> edtIP->Enabled=true");
+
+    gem.rgRole->ItemIndex = 0;
+    gem.ManualCreatergRoleClick(NULL);
+    CHECK(gem.bUseClientSocket == false, "ManualCreatergRoleClick: rgRole->ItemIndex==0 -> bUseClientSocket=false");
+    CHECK(gem.edtIP->Enabled == false, "ManualCreatergRoleClick: bUseClientSocket==false -> edtIP->Enabled=false");
+}
+
+// ===========================================================================
+//  [20] ProcessShow -- flushes WaitShowString into DB (via the global HGem
+//  pointer, matching golden's own `HGem->` dereference -- see this file's
+//  header comment on THGem::ProcessShow).
+// ===========================================================================
+static void test_processshow()
+{
+    printf("\n[20] ProcessShow\n");
+
+    THGem gem;
+    gem.DB = new THGemMemo();
+    THGem *savedHGem = HGem;
+    HGem = &gem;
+
+    gem.WaitShowString->Add("line1");
+    gem.WaitShowString->Add("line2");
+    gem.ProcessShow();
+    CHECK(gem.DB->Lines->Count == 2, "ProcessShow: DB->Lines receives the 2 flushed lines");
+    CHECK(gem.DB->Lines->GetString(0) == "line1" && gem.DB->Lines->GetString(1) == "line2",
+          "ProcessShow: DB->Lines content matches WaitShowString, in order");
+    CHECK(gem.WaitShowString->Count == 0, "ProcessShow clears WaitShowString after flushing");
+
+    gem.DB->Clear();
+    gem.ProcessShow();   // WaitShowString now empty -> golden's own `if(Count!=0)` guard -> no-op
+    CHECK(gem.DB->Lines->Count == 0, "ProcessShow: empty WaitShowString -> guarded no-op");
+
+    HGem = savedHGem;
+    delete gem.DB;
+    gem.DB = NULL;
+}
+
+// ===========================================================================
+//  [21] StringOut(AnsiString,TColor) 2-arg overload -- DB!=NULL guard, appends
+//  to both DB->Lines and LogDataString, sets DB->SelStart. The `C` (color)
+//  parameter is accepted but never actually used anywhere in golden's own
+//  body (verified by reading it) -- not asserted on here for that reason.
+// ===========================================================================
+static void test_stringout_2arg()
+{
+    printf("\n[21] StringOut(AnsiString,TColor) 2-arg overload\n");
+
+    THGem gem;
+    int before = gem.LogDataString->Count;
+    gem.StringOut("ignored-no-db", clRed);
+    CHECK(gem.LogDataString->Count == before, "StringOut(2-arg): DB==NULL -> guarded no-op");
+
+    gem.DB = new THGemMemo();
+    gem.StringOut("hello-color", clLime);
+    CHECK(gem.DB->Lines->Count == 1 && gem.DB->Lines->GetString(0) == "hello-color",
+          "StringOut(2-arg): DB!=NULL -> appends to DB->Lines");
+    CHECK(gem.LogDataString->GetString(gem.LogDataString->Count - 1) == "hello-color",
+          "StringOut(2-arg) also appends to LogDataString");
+    CHECK(gem.DB->SelStart == gem.DB->Lines->Count - 1, "StringOut(2-arg) sets DB->SelStart to the last line's index");
+
+    delete gem.DB;
+    gem.DB = NULL;
+}
+
+// ===========================================================================
+//  [22] DoUpdateStatus -- throttle, normal Disconnected/Offline refresh +
+//  EventReport(141), the client-socket-active + OnLine-Local transitions +
+//  EventReport(92), and the KYEC 30-second forced-disconnect branch
+//  (STRUCTURAL ONLY -- see the FLAGGED LIMITATION note below and at the
+//  HTimer stand-in's own definition in the .cpp: Off() always returns true,
+//  so this branch fires on the SAME poll it is armed, NOT after a real
+//  30-second wait. That is a pre-existing shim limitation, not fixed here.)
+// ===========================================================================
+static void test_do_update_status()
+{
+    printf("\n[22] DoUpdateStatus\n");
+
+    THGem gem;
+    gem.SECSConnectionState = new THGemPanel();
+    gem.GEMCommunicatingState = new THGemPanel();
+    gem.GemPanelControlState = new THGemPanel();
+    gem.BtnEnableComm = new THGemSpeedButton();
+    gem.GemBtnOfflineRequest = new THGemSpeedButton();
+    gem.GemBtnOnlineRequest = new THGemSpeedButton();
+    gem.GemBtnOnlineRemote = new THGemSpeedButton();
+    gem.GemBtnOnlineLocal = new THGemSpeedButton();
+
+    // --- throttle: only every 10th call does real work ---------------------
+    for (int i = 0; i < 9; ++i)
+        gem.DoUpdateStatus();
+    CHECK(gem.SECSConnectionState->Caption == "", "DoUpdateStatus: throttled (9 calls < 10) -- no refresh yet");
+
+    // --- 10th call: passive (srvGem) role, disconnected, offline -----------
+    ResetSimEventReport();
+    gem.DoUpdateStatus();
+    CHECK(gem.SECSConnectionState->Caption == "SECS GEM Disconnection" && gem.SECSConnectionState->Color == clRed,
+          "DoUpdateStatus: srvGem inactive -> \"SECS GEM Disconnection\" / clRed");
+    CHECK(gem.GEMCommunicatingState->Caption == "1:Disable" && gem.GEMCommunicatingState->Color == clRed,
+          "DoUpdateStatus: bConnect==false, non-KYEC/SIGURD -> \"1:Disable\" / clRed");
+    CHECK(gem.GemPanelControlState->Caption == "Off Line" && gem.GemPanelControlState->Color == clRed,
+          "DoUpdateStatus: bOnLine==false -> \"Off Line\" / clRed");
+    CHECK(gem.GemBtnOfflineRequest->Enabled == false && gem.GemBtnOnlineRequest->Enabled == true,
+          "DoUpdateStatus: IsOnLine()==false -> Offline button disabled, Online button enabled");
+    CHECK(gem.GemBtnOnlineRemote->Enabled == false && gem.GemBtnOnlineLocal->Enabled == true,
+          "DoUpdateStatus: GetOnLineMode()==false -> Remote button disabled, Local button enabled");
+    CHECK(gem.BtnEnableComm->Enabled == true, "DoUpdateStatus: !IsConnect() -> BtnEnableComm enabled");
+    CHECK(g_SimLastEventReportCeid == 141 && g_SimEventReportCount == 1,
+          "DoUpdateStatus: GemControlState 0->1 transition fires EventReport(141) exactly once");
+
+    // --- switch to client-socket role, becomes Active -----------------------
+    gem.bUseClientSocket = true;
+    gem.clientGem->Active = true;
+    gem.ctUpdateStatus = 9;
+    gem.DoUpdateStatus();
+    CHECK(gem.SECSConnectionState->Caption == "SECS GEM Connection" && gem.SECSConnectionState->Color == clLime,
+          "DoUpdateStatus: clientGem becomes Active -> \"SECS GEM Connection\" / clLime");
+    CHECK(gem.bConnect == false,
+          "DoUpdateStatus: golden quirk preserved verbatim -- bConnect forced false even while the client socket is Active");
+
+    // --- go OnLine (Local): GemControlState 1->2, EventReport(141) then (92) ---
+    gem.bOnLine = true;
+    gem.bOnLineLocal = true;
+    gem.ctUpdateStatus = 9;
+    gem.DoUpdateStatus();
+    CHECK(gem.GemPanelControlState->Caption == "On Line Local" && gem.GemPanelControlState->Color == clLime,
+          "DoUpdateStatus: bOnLine+bOnLineLocal -> \"On Line Local\" / clLime");
+    CHECK(gem.GemBtnOfflineRequest->Enabled == true && gem.GemBtnOnlineRequest->Enabled == false,
+          "DoUpdateStatus: IsOnLine()==true -> Offline button enabled, Online button disabled");
+    CHECK(gem.GemBtnOnlineRemote->Enabled == true && gem.GemBtnOnlineLocal->Enabled == false,
+          "DoUpdateStatus: GetOnLineMode()==true -> Remote button enabled, Local button disabled");
+    CHECK(g_SimLastEventReportCeid == 92 && g_SimEventReportCount == 3,
+          "DoUpdateStatus: GemControlState 1->2 fires EventReport(141), then the OldGemControlState change fires EventReport(92) -- 2 more reports (cumulative 3)");
+
+    // --- KYEC 30-second forced-disconnect branch (STRUCTURAL ONLY) ---------
+    // Needs 2 consecutive primed calls to observe for real: call A settles
+    // GEMCommunicatingState->Caption to "1:OffLine" (the KYEC guard inside
+    // THIS SAME call still reads the STALE pre-call Caption, so it does not
+    // yet fire); call B then sees the now-settled "1:OffLine" and the guard
+    // fires.
+    int savedCustomerCode = CUSTOMER_CODE;
+    THGem *savedHGem = HGem;
+    CUSTOMER_CODE = CC_KYEC_LEE;
+    HGem = &gem;
+
+    gem.flag2UpdateStatus = true;   // force the GEMCommunicatingState block to re-evaluate this call
+    gem.ctUpdateStatus = 9;
+    gem.DoUpdateStatus();   // call A
+    CHECK(gem.GEMCommunicatingState->Caption == "1:OffLine",
+          "DoUpdateStatus (KYEC): bConnect==false -> \"1:OffLine\" (not \"1:Disable\") once CUSTOMER_CODE==CC_KYEC_LEE");
+
+    gem.ctUpdateStatus = 9;
+    gem.DoUpdateStatus();   // call B: KYEC guard now sees "SECS GEM Connection" + "1:OffLine" -> fires
+    // FLAGGED LIMITATION (repeated from the HTimer stand-in's own .cpp
+    // comment): this assertion is only reachable AT ALL because Off() always
+    // returns true immediately -- a real HTimer would still be waiting out
+    // its 30-second arm at this point, and clientGem->Active would still be
+    // true. See this wave's own final report for the same flag.
+    CHECK(gem.clientGem->Active == false,
+          "DoUpdateStatus (KYEC): forced-disconnect branch called HGem->clientGem->Close() (Active now false) -- "
+          "NOTE: fired immediately, not after a real 30s wait (HTimer stand-in limitation, see .cpp comment)");
+
+    CUSTOMER_CODE = savedCustomerCode;
+    HGem = savedHGem;
+
+    delete gem.SECSConnectionState;
+    delete gem.GEMCommunicatingState;
+    delete gem.GemPanelControlState;
+    delete gem.BtnEnableComm;
+    delete gem.GemBtnOfflineRequest;
+    delete gem.GemBtnOnlineRequest;
+    delete gem.GemBtnOnlineRemote;
+    delete gem.GemBtnOnlineLocal;
+}
+
+// ===========================================================================
 int main()
 {
     printf("=== SECSGEM/uHGemEquipment (+ vclcompat/StringGrid) translation verification ===\n");
@@ -874,6 +1145,11 @@ int main()
     test_get_time_info();
     test_online_family_and_misc();
     test_stringout_and_binaryout();
+    test_initialhgem_savesystemdefault_roundtrip();
+    test_manualcreatergroleclick();
+    test_processshow();
+    test_stringout_2arg();
+    test_do_update_status();
 
     printf("\n=== RESULT: %d passed, %d failed ===\n", g_pass, g_fail);
     return (g_fail == 0) ? 0 : 1;
