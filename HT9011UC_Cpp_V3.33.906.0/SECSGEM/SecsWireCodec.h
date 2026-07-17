@@ -22,6 +22,19 @@
 //  see SecsWireCodec.cpp's own "WAVE 2" file-head block for the full
 //  quirks/gated-widget rundown.
 //
+//  WAVE 3 ADDENDUM (AI(W906-uHGemClass-Unlock2) 20260716): 3 more THGem
+//  methods added, all confirmed by direct golden read to be pure in-memory
+//  buffer bookkeeping / wire composition on state this class already owns --
+//  zero new dependency, zero VCL: GetDataItemLenAndTypeAndDeleteSub/
+//  GetDataItemLenAndTypeAndDelete (the destructive "AndDelete" siblings of
+//  the peek-only GetDataItemLenAndType(Sub) pair already above -- by far the
+//  single most common blocker recorded in uHGemClass.cpp's "INTEGRATE WAVE"
+//  note, ~20 of its 47 still-gated methods) and SendInvalidDataMessageToHost
+//  (a 3-line InitLocalHead+DataItemOut+SendLocalData composer, golden
+//  uHGemEquipment.cpp:7353-7358). See each declaration below for its own
+//  citation, and uHGemClass.cpp's own "INTEGRATE WAVE 2" note for exactly
+//  which previously-gated methods this un-blocks.
+//
 //  WHAT THIS FILE IS
 //  ------------------
 //  `THGem` (uHGemEquipment.h/.cpp) is the ~6200-line VCL TForm that is the
@@ -316,6 +329,31 @@ public:
     // enumerate. See .cpp file-head "SCOPE DISCREPANCY" note.
     int GetDataItemLenAndTypeSub(int &len, unsigned char &Type);  // golden :2440-2447
     int GetDataItemLenAndType(int &len, unsigned char &Type);     // golden :7290-7296 (sticky iReturnCode wrapper)
+
+    // Wave 3 (AI(W906-uHGemClass-Unlock2) 20260716): destructive (peek+consume)
+    // siblings of the peek-only pair immediately above -- SAME family (golden
+    // declares all 4 in uHGemEquipment.h: 435-436 are adjacent, but 448 and 452
+    // are separated from that pair and from each other by unrelated intervening
+    // declarations -- "same family", not literally back-to-back), just the
+    // "AndDelete" flavor that also pops the 2 tokens off SReceiveData instead
+    // of leaving them for a later re-peek. This is THE most common blocker
+    // across uHGemClass.cpp's still-gated methods (see that file's own
+    // "INTEGRATE WAVE" note, ~20 of 44) -- a future S,F-handler wave calls
+    // this instead of GetDataItemLenAndType once it has decided it's really
+    // going to consume the item (GetDataItemLenAndType alone would leave the
+    // Type/len tokens sitting in front of the next DataItemIn* call, double-
+    // reading them).
+    int GetDataItemLenAndTypeAndDeleteSub(int &len, unsigned char &Type);  // golden :2453-2462
+    int GetDataItemLenAndTypeAndDelete(int &len, unsigned char &Type);     // golden :7099-7106 (sticky iReturnCode wrapper)
+
+    // Wave 3 (AI(W906-uHGemClass-Unlock2) 20260716): golden uHGemEquipment.cpp
+    // :7353-7358 -- THGem's generic "malformed S,F body -> reply S9F7 Illegal
+    // Data" sender. Pure WireCodec composition (InitLocalHead+DataItemOut+
+    // SendLocalData, the identical 3-call shape LocalAcknowledge/S9F7_
+    // IllegalData already use) -- zero new dependency, confirmed by direct
+    // golden read (see uHGemClass.cpp's "INTEGRATE WAVE 2" note for which
+    // gated callers this un-blocks).
+    void SendInvalidDataMessageToHost(AnsiString S);                       // golden uHGemEquipment.cpp:7353-7358
 
     int DataItemInNew(AnsiString &P);                     // golden :7114-7122
     int DataItemIn(int len, unsigned char Type, void *P); // golden :7125-7130

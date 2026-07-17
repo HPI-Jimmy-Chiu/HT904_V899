@@ -974,6 +974,78 @@ int SecsWireCodec::GetDataItemLenAndType(int &len, unsigned char &Type)
     return ret;
 }
 
+//===========================================================================
+//  WAVE 3 -- destructive (peek+consume) GetDataItemLenAndType siblings +
+//  SendInvalidDataMessageToHost
+//
+//  Translator: AI(W906-uHGemClass-Unlock2) 20260716
+//  Golden source: HT9011UC_Code_V3.33.906.0_20260618/SECSGEM/uHGemEquipment.cpp
+//  (per-function citations below).
+//
+//  These 3 functions are declared (and defined) on golden's `THGem`, exactly
+//  like every other function already in this file -- they were simply never
+//  picked up by Wave 1/2's line-range scoping. Confirmed by direct read of
+//  golden: all 3 touch ONLY members this class already owns (SReceiveData /
+//  iReturnCode / LocalBuffer+LocalLength_4 via InitLocalHead+DataItemOut),
+//  zero VCL, zero new THGem-only state -- a faithful, natural extension of
+//  the existing GetDataItemLenAndType(Sub)/LocalAcknowledge family, per this
+//  project's established "engine slice" convention (see this file's own
+//  Wave-1/Wave-2 header notes).
+//===========================================================================
+
+//---------------------------------------------------------------------------
+// golden uHGemEquipment.cpp:2453-2462 (private in golden -- destructive
+// sibling of GetDataItemLenAndTypeSub above: reads the SAME 2 leading tokens
+// (Type, then length-of-data) but also Delete(0)s both off the front of
+// SReceiveData, unlike the peek-only Sub above which leaves them in place).
+//---------------------------------------------------------------------------
+int SecsWireCodec::GetDataItemLenAndTypeAndDeleteSub(int &len, unsigned char &Type)
+{
+    if (SReceiveData->Count < 2)
+        return -2;
+    Type = (unsigned char)atoi(SReceiveData->GetString(0).c_str());  // Type
+    len  = atoi(SReceiveData->GetString(1).c_str());                 // length of data
+    SReceiveData->Delete(0);
+    SReceiveData->Delete(0);
+    return 1;
+}
+
+//---------------------------------------------------------------------------
+// golden uHGemEquipment.cpp:7099-7106 -- sticky-iReturnCode public wrapper
+// around GetDataItemLenAndTypeAndDeleteSub, mirroring GetDataItemLenAndType's
+// own wrapper shape immediately above (identical "初始值=1,..." convention --
+// see that method's own comment for the gloss, not repeated here).
+//---------------------------------------------------------------------------
+int SecsWireCodec::GetDataItemLenAndTypeAndDelete(int &len, unsigned char &Type)
+{
+    int ret;
+    ret = GetDataItemLenAndTypeAndDeleteSub(len, Type);
+    if (iReturnCode == 1)
+        iReturnCode = ret;
+    return ret;
+}
+
+//---------------------------------------------------------------------------
+// golden uHGemEquipment.cpp:7353-7358
+//   void THGem::SendInvalidDataMessageToHost(AnsiString S)
+//   {
+//       InitLocalHead(9, 7, 0);
+//       DataItemOut(HType.ASCII_TYPE, S);
+//       SendLocalData();
+//   }
+// THGem's generic "malformed S,F body" reply sender -- an S9F7 Illegal Data
+// message built without the leading StringOut(S) trace call S9F7_IllegalData
+// (uHGemClass.cpp, already un-gated) has; golden itself keeps these as two
+// separate, textually near-identical functions (not one calling the other),
+// preserved as such here.
+//---------------------------------------------------------------------------
+void SecsWireCodec::SendInvalidDataMessageToHost(AnsiString S)
+{
+    InitLocalHead(9, 7, 0);
+    DataItemOut(HType.ASCII_TYPE, S);
+    SendLocalData();
+}
+
 //---------------------------------------------------------------------------
 // golden uHGemEquipment.cpp:7114-7122
 // Peeks the next token's (len,Type) then decodes+consumes it into an

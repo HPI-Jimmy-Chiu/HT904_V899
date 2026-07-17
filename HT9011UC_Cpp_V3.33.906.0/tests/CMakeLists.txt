@@ -1721,6 +1721,24 @@ target_link_libraries(test_SecsSvEcRegistration PRIVATE ht9045_secsgem)
 
 add_test(NAME SecsSvEcRegistration COMMAND test_SecsSvEcRegistration)
 
+# --- test_uHGemEquipment: THGem's first real slice (W906-uHGemEquipment) ----
+#   CEID/Report/Alarm StringGrid "database" family (26 methods) + GemTimer +
+#   vclcompat::TStringGrid. Links ht9045_secsgem (which now carries
+#   SECSGEM/uHGemEquipment.cpp) -- PUBLIC-links vclcompat transitively (the
+#   new vclcompat/StringGrid.cpp + AnsiString/TStringList this file needs).
+#   Supplies its own local MyDBIProcess(2-arg) stand-in (see the test file's
+#   own comment) rather than linking ht9045_sm's real aHotPlateSubstrate.cpp
+#   definition -- same "avoid the god-stack for a focused unit test" posture
+#   already established by test_config_loaders.cpp/test_MyCCLink.cpp. No
+#   THGem/VCL-form/socket dependency (this wave's THGem slice has none yet).
+add_executable(test_uHGemEquipment
+    test_uHGemEquipment.cpp
+)
+
+target_link_libraries(test_uHGemEquipment PRIVATE ht9045_secsgem)
+
+add_test(NAME uHGemEquipment COMMAND test_uHGemEquipment)
+
 # ===========================================================================
 #  W5-Final Automation-remainder INTEGRATE: auto9045 / AGV_E84 /
 #  SCK_ART_Remainder / Interface/TesterTCP_Socket
@@ -1788,6 +1806,53 @@ if(WIN32)
     target_link_libraries(test_testertcp_socket PRIVATE ws2_32)
 endif()
 add_test(NAME Interface_TesterTCPSocket COMMAND test_testertcp_socket)
+
+# ===========================================================================
+#  W906 fire-wave INTEGRATE: Automation/automation.cpp / Interface/TesterTCP.cpp
+# ===========================================================================
+
+# --- test_automation: Automation/automation.cpp (TfAutomation OLP host-
+#     command engine, "network wiring + small helpers" bucket) --------------
+#   Same RESCAN link shape as test_auto9045/test_agv_e84/test_SCK_ART_Remainder
+#   above (automation.cpp is compiled directly into ht9045_sm, alongside
+#   auto9045.cpp/FormsFacade.cpp/canary_support.cpp it depends on).
+add_executable(test_automation
+    test_automation.cpp
+)
+target_link_libraries(test_automation PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+if(WIN32)
+    target_link_libraries(test_automation PRIVATE ws2_32)
+endif()
+add_test(NAME Automation COMMAND test_automation)
+
+# --- test_TesterTCP: Interface/TesterTCP.cpp (sibling slice of
+#     Interface/TesterTCP_Socket.cpp -- CopyRecipeToTester/CopyRecipeFromTester
+#     OS-recipe zip-transfer pair + btnSaveClick arm-speed-save handler) -----
+#   Same RESCAN link shape as test_testertcp_socket above (TesterTCP.cpp is
+#   compiled directly into ht9045_sm, alongside acarry_shims.cpp/
+#   canary_support.cpp it depends on for the REAL MySleep/RecordProcess/
+#   ShowMyMessage bodies -- see TesterTCP.cpp's own extern-redeclaration
+#   comments). INTEGRATE FIX: the front's own test_TesterTCP.cpp originally
+#   supplied a LOCAL no-op `void MySleep(DWORD) {}` stand-in (written under the
+#   assumption this test would NOT link ht9045_sm, matching the test_
+#   FTPClient_Transfer.cpp/test_MyCCLink.cpp "avoid the god-stack" precedent).
+#   That stand-in was REMOVED here: linking the RESCAN group (needed anyway,
+#   for the real DataPath/sSaveByMachine/WriteIniData/ReadIniData in
+#   ht9045_core + CosFunction/IniConfig in ht9045_globals) pulls in
+#   acarry_shims.cpp's own real MySleep(DWORD) definition, and a second
+#   definition in the test's main() would be a multiple-definition link error.
+add_executable(test_TesterTCP
+    test_TesterTCP.cpp
+)
+target_link_libraries(test_TesterTCP PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+if(WIN32)
+    target_link_libraries(test_TesterTCP PRIVATE ws2_32)
+endif()
+add_test(NAME Interface_TesterTCP COMMAND test_TesterTCP)
 
 # ===========================================================================
 #  W5-Final KYECFTP: MiniFtpEngine (Phase 1) / FTPClient_EventHandlers

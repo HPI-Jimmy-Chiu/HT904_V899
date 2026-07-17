@@ -194,21 +194,17 @@ int main()
         ++g_pass;
 
         // int-returning ack stubs -- conservative default documented in each
-        // uHGemClass.cpp stub comment. (S2F42_Host_Command_Acknowledge and
-        // CheckECValue moved out of this sample -- see the UN-GATED section
-        // below, they are no longer blanket stubs.)
+        // uHGemClass.cpp stub comment. (S2F42_Host_Command_Acknowledge,
+        // CheckECValue, S7F2_ProcessProgramLoadGrant,
+        // S2F15_UpdateNewEquipmentConstant, S2F15_CheckNewEquipmentConstant
+        // moved out of this sample -- see the UN-GATED section below, they
+        // are no longer blanket stubs.)
         check_i("S2F24_TraceInitializeAcknowledgeSub() conservative default",
                 g.S2F24_TraceInitializeAcknowledgeSub(), 1);
         check_i("S2F34_DefineReportAcknowledgeSub() conservative default",
                 g.S2F34_DefineReportAcknowledgeSub(), 1);
         check_i("S2F36_LinkEventReportAcknowledgeSub() conservative default",
                 g.S2F36_LinkEventReportAcknowledgeSub(), 1);
-        check_i("S7F2_ProcessProgramLoadGrant() conservative default",
-                g.S7F2_ProcessProgramLoadGrant(), 1);
-        check_i("S2F15_UpdateNewEquipmentConstant() conservative default",
-                g.S2F15_UpdateNewEquipmentConstant(), 1);
-        check_i("S2F15_CheckNewEquipmentConstant() conservative default",
-                g.S2F15_CheckNewEquipmentConstant(), 1);
 
         // SetECValue -- void, two args, must not crash even with a NULL sink.
         // STILL gated (see uHGemClass.cpp's own comment on this method: the
@@ -232,6 +228,18 @@ int main()
     // verified here via WireCodec/SvEcReg OBSERVABLE STATE, not just
     // "does not crash". See uHGemClass.cpp's file-head "INTEGRATE WAVE" note
     // for exactly why these 10 (of 57) and not more.
+    //
+    // UN-GATED WAVE 2 (3 MORE, integrate wave 20260716, 13/57 total):
+    // S7F2_ProcessProgramLoadGrant, S2F15_UpdateNewEquipmentConstant,
+    // S2F15_CheckNewEquipmentConstant -- unblocked once SecsWireCodec gained
+    // GetDataItemLenAndTypeAndDelete + SendInvalidDataMessageToHost (see
+    // uHGemClass.cpp's "INTEGRATE WAVE 2" note). IMPORTANT: unlike the 47
+    // still-gated stubs, these 3 (like the first 10) no longer return a
+    // blanket conservative default on ANY input -- their return value now
+    // genuinely depends on what is seeded into WireCodec.SReceiveData, so
+    // each gets its own format-error-path AND success-path case below
+    // (see uHGemClass.cpp's "INTEGRATE WAVE 2" note for exactly why these 3
+    // and not more).
     // -----------------------------------------------------------------------
     printf("\n-- UN-GATED methods: real WireCodec/SvEcReg behavior --\n");
     {
@@ -351,6 +359,173 @@ int main()
         check_i("CheckECValue: 30 in [0,100] -> 0 (ok)", g.CheckECValue("100", &inRange), 0);
         check_i("CheckECValue: 999 > max 100 -> 3 (out of range)", g.CheckECValue("100", &outHigh), 3);
         check_i("CheckECValue: -5 < min 0 -> 3 (out of range)", g.CheckECValue("100", &outLow), 3);
+
+        // -------------------------------------------------------------------
+        // S7F2_ProcessProgramLoadGrant (golden uHGemClass.cpp:2081-2113,
+        // UN-GATED 20260716) -- format-error path (empty SReceiveData):
+        // WireCodec.DataItemIn(2,LIST_TYPE,NULL) hits SReceiveData->Count==0
+        // -> DataItemInSub's very first check -> -1 -> falls straight to
+        // S9F7_IllegalData("S7,F1 Data Format error !!!") -> return 0.
+        // -------------------------------------------------------------------
+        {
+            HTGem g7;
+            int ret = g7.S7F2_ProcessProgramLoadGrant();
+            check_i("S7F2 with empty SReceiveData -> 0 (format error)", ret, 0);
+            check_i("S7F2 format error: Local.MessageID_S == 9 (S9F7_IllegalData)",
+                    g7.WireCodec.Local.MessageID_S, 9);
+            check_i("S7F2 format error: Local.MessageID_F == 7",
+                    g7.WireCodec.Local.MessageID_F, 7);
+        }
+        // Success path: <L,2 <A,3 "ABC"> <U1,1 42>> -- a well-formed PPGNT
+        // body (PPID="ABC", a 1-byte numeric LENGTH item of any of the 8
+        // accepted numeric types).
+        {
+            HTGem g8;
+            g8.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+            g8.WireCodec.SReceiveData->Add(AnsiString(2));
+            g8.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+            g8.WireCodec.SReceiveData->Add(AnsiString(3));
+            g8.WireCodec.SReceiveData->Add(AnsiString("ABC"));
+            g8.WireCodec.SReceiveData->Add(AnsiString((int)HType.UINT_1_TYPE));
+            g8.WireCodec.SReceiveData->Add(AnsiString(1));
+            int ret = g8.S7F2_ProcessProgramLoadGrant();
+            check_i("S7F2 with well-formed PPGNT body -> 1 (grant)", ret, 1);
+            check_i("S7F2 grant: Local.MessageID_S == 7 (LocalAcknowledge(7,2,0))",
+                    g8.WireCodec.Local.MessageID_S, 7);
+            check_i("S7F2 grant: Local.MessageID_F == 2",
+                    g8.WireCodec.Local.MessageID_F, 2);
+            check_i("S7F2 grant: fully consumes its seeded burst",
+                    g8.WireCodec.SReceiveData->Count, 0);
+        }
+
+        // -------------------------------------------------------------------
+        // S2F15_UpdateNewEquipmentConstant (golden uHGemClass.cpp:2884-3024,
+        // UN-GATED 20260716).
+        // -------------------------------------------------------------------
+        {
+            // Format-error path: empty SReceiveData -> GetDataItemLenAndTypeAndDelete
+            // returns -2 (Count<2) -> outer if fails -> return -1.
+            HTGem g9;
+            check_i("S2F15_Update with empty SReceiveData -> -1", g9.S2F15_UpdateNewEquipmentConstant(), -1);
+        }
+        {
+            // EClen==0 (an empty <L,0>) -- golden's for-loop simply never
+            // runs; falls straight through to ReloadParameter()+return 0.
+            HTGem g10;
+            g10.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+            g10.WireCodec.SReceiveData->Add(AnsiString(0));
+            check_i("S2F15_Update with <L,0> (no ECs) -> 0 (success, no-op)",
+                    g10.S2F15_UpdateNewEquipmentConstant(), 0);
+        }
+        {
+            // Full single-EC round trip: <L,1 <L,2 <A,3 "100"> <U1,1 42>>> --
+            // one EC (ECID="100") set to a UINT_1 value of 42. SetECValue
+            // itself is STILL gated (no observable side effect from the set
+            // itself), so this test's oracle is that WireCodec correctly
+            // walks/consumes the ENTIRE nested burst without misparsing --
+            // proved by SReceiveData->Count==0 afterward -- and the function
+            // still returns golden's success code (0).
+            HTGem g11;
+            g11.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));   // outer <L,1
+            g11.WireCodec.SReceiveData->Add(AnsiString(1));
+            g11.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));   // per-EC <L,2
+            g11.WireCodec.SReceiveData->Add(AnsiString(2));
+            g11.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));  // ECID
+            g11.WireCodec.SReceiveData->Add(AnsiString(3));
+            g11.WireCodec.SReceiveData->Add(AnsiString("100"));
+            g11.WireCodec.SReceiveData->Add(AnsiString((int)HType.UINT_1_TYPE)); // EC value
+            g11.WireCodec.SReceiveData->Add(AnsiString(1));
+            g11.WireCodec.SReceiveData->Add(AnsiString(42));
+            int ret = g11.S2F15_UpdateNewEquipmentConstant();
+            check_i("S2F15_Update with 1 well-formed UINT_1 EC -> 0 (success)", ret, 0);
+            check_i("S2F15_Update fully consumes its seeded burst",
+                    g11.WireCodec.SReceiveData->Count, 0);
+        }
+        {
+            // Trailing "error format" else-branch: EC value Type byte
+            // matches none of golden's known HType constants -> falls to
+            // `WireCodec.SendInvalidDataMessageToHost("error format"); return -1;`
+            // (0x01 is not any HType.*_TYPE literal -- see SecsWireCodec.cpp's
+            // g_HTypeInit literal table).
+            HTGem g12;
+            g12.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+            g12.WireCodec.SReceiveData->Add(AnsiString(1));
+            g12.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+            g12.WireCodec.SReceiveData->Add(AnsiString(2));
+            g12.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+            g12.WireCodec.SReceiveData->Add(AnsiString(3));
+            g12.WireCodec.SReceiveData->Add(AnsiString("100"));
+            g12.WireCodec.SReceiveData->Add(AnsiString(1));    // unrecognized Type byte
+            g12.WireCodec.SReceiveData->Add(AnsiString(1));
+            int ret = g12.S2F15_UpdateNewEquipmentConstant();
+            check_i("S2F15_Update with unrecognized EC value Type -> -1 (error format)", ret, -1);
+            check_i("S2F15_Update error format: Local.MessageID_S == 9 (SendInvalidDataMessageToHost)",
+                    g12.WireCodec.Local.MessageID_S, 9);
+            check_i("S2F15_Update error format: Local.MessageID_F == 7",
+                    g12.WireCodec.Local.MessageID_F, 7);
+        }
+
+        // -------------------------------------------------------------------
+        // S2F15_CheckNewEquipmentConstant (golden uHGemClass.cpp:3026-3190,
+        // UN-GATED 20260716).
+        // -------------------------------------------------------------------
+        {
+            // Format-error path: empty SReceiveData -> -1 (same guard as Update).
+            HTGem g13;
+            check_i("S2F15_Check with empty SReceiveData -> -1", g13.S2F15_CheckNewEquipmentConstant(), -1);
+        }
+        {
+            // EClen==0: UNLIKE Update, Check has its own explicit
+            // `if(EClen<1) return -1;` guard (golden's own asymmetry between
+            // the two siblings, preserved verbatim).
+            HTGem g14;
+            g14.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+            g14.WireCodec.SReceiveData->Add(AnsiString(0));
+            check_i("S2F15_Check with <L,0> (EClen<1) -> -1 (golden's own guard)",
+                    g14.S2F15_CheckNewEquipmentConstant(), -1);
+        }
+        {
+            // Full single-EC round trip, in-range value -> CheckECValue's
+            // real registered-bounds check (via SvEcReg), not a stub --
+            // proves this un-gated method actually reaches CheckECValue.
+            HTGem g15;
+            int ecRaw2 = 50;
+            g15.SvEcReg.SetECDataPointer(AnsiString("200"), HType.INT_4_TYPE, "TestEC2", "unit",
+                                          (void*)&ecRaw2, 0, 100, 50, "remark2");
+            g15.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+            g15.WireCodec.SReceiveData->Add(AnsiString(1));
+            g15.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+            g15.WireCodec.SReceiveData->Add(AnsiString(2));
+            g15.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+            g15.WireCodec.SReceiveData->Add(AnsiString(3));
+            g15.WireCodec.SReceiveData->Add(AnsiString("200"));
+            g15.WireCodec.SReceiveData->Add(AnsiString((int)HType.INT_4_TYPE));
+            g15.WireCodec.SReceiveData->Add(AnsiString(1));
+            g15.WireCodec.SReceiveData->Add(AnsiString(30));   // in [0,100]
+            int ret = g15.S2F15_CheckNewEquipmentConstant();
+            check_i("S2F15_Check with in-range EC value -> 0 (via real CheckECValue)", ret, 0);
+        }
+        {
+            // Same EC, out-of-range value -> CheckECValue's real bounds check
+            // returns 3, and S2F15_CheckNewEquipmentConstant propagates it
+            // immediately (`if(ret!=0) return ret;`).
+            HTGem g16;
+            int ecRaw3 = 50;
+            g16.SvEcReg.SetECDataPointer(AnsiString("200"), HType.INT_4_TYPE, "TestEC2", "unit",
+                                          (void*)&ecRaw3, 0, 100, 50, "remark2");
+            g16.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+            g16.WireCodec.SReceiveData->Add(AnsiString(1));
+            g16.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+            g16.WireCodec.SReceiveData->Add(AnsiString(2));
+            g16.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+            g16.WireCodec.SReceiveData->Add(AnsiString(3));
+            g16.WireCodec.SReceiveData->Add(AnsiString("200"));
+            g16.WireCodec.SReceiveData->Add(AnsiString((int)HType.INT_4_TYPE));
+            g16.WireCodec.SReceiveData->Add(AnsiString(1));
+            g16.WireCodec.SReceiveData->Add(AnsiString(999));  // > max 100
+            int ret = g16.S2F15_CheckNewEquipmentConstant();
+            check_i("S2F15_Check with out-of-range EC value -> 3 (via real CheckECValue)", ret, 3);
+        }
     }
 
     // -----------------------------------------------------------------------

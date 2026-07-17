@@ -7,9 +7,12 @@
 //   HT9011UC_Code_V3.33.906.0_20260618/SECSGEM/uHGemEquipment.cpp
 //     (StringOut :392-396, GetLengthOfType :917-932, GetLengthByte :941-974,
 //      GetSMLLenthByte :1235-1244, DataItemOut :979-1183, DataItemInSub
-//      :2225-2432, GetDataItemLenAndTypeSub :2440-2447, DataItemInNew
+//      :2225-2432, GetDataItemLenAndTypeSub :2440-2447,
+//      GetDataItemLenAndTypeAndDeleteSub :2453-2462 (WAVE 3), DataItemInNew
 //      :7114-7122, DataItemIn(void*) :7125-7130, DataItemIn(AnsiString&)
-//      :7134-7281, GetDataItemLenAndType :7290-7296)
+//      :7134-7281, GetDataItemLenAndTypeAndDelete :7099-7106 (WAVE 3),
+//      GetDataItemLenAndType :7290-7296, SendInvalidDataMessageToHost
+//      :7353-7358 (WAVE 3))
 //
 // SCOPE: no THGem/VCL/socket/grid dependency at all -- this test links
 // SecsWireCodec.cpp against vclcompat ONLY (see its own trivial link line).
@@ -894,6 +897,122 @@ int main()
         check_b("ShowSML leaves bOutputBusy false when done", c.bOutputBusy, false);
         check_i("ShowSML produced at least one decoded trace line",
                 c.WaitShowString->Count > 0, true);
+    }
+
+    //=====================================================================
+    // WAVE 3 -- destructive (peek+consume) GetDataItemLenAndType siblings +
+    //           SendInvalidDataMessageToHost (golden citations at each block).
+    //=====================================================================
+
+    // -------------------------------------------------------------------
+    // GetDataItemLenAndTypeAndDeleteSub / GetDataItemLenAndTypeAndDelete
+    // (golden :2453-2462 / :7099-7106) -- PEEK-vs-DELETE oracle: same input
+    // burst, same decoded (len,Type), but this pair actually shrinks
+    // SReceiveData by exactly 2 tokens where GetDataItemLenAndType (above)
+    // left all 3 untouched.
+    // -------------------------------------------------------------------
+    printf("\n-- GetDataItemLenAndTypeAndDelete (peek+consume, oracle vs. the peek-only pair above) --\n");
+    {
+        SecsWireCodec c;
+        pushToken(c, HType.INT_4_TYPE);
+        pushToken(c, 1);
+        pushToken(c, 555);
+        int len = 0;
+        unsigned char type = 0;
+        int ret = c.GetDataItemLenAndTypeAndDelete(len, type);
+        check_i("delete ret", ret, 1);
+        check_i("delete len", len, 1);
+        check_u("delete type", type, HType.INT_4_TYPE);
+        check_i("delete consumes exactly 2 tokens (Type,len) -- 1 remains (the value)",
+                c.SReceiveData->Count, 1);
+    }
+    {
+        // Same 3-token burst through the PEEK-only sibling first, to make the
+        // peek-vs-delete contrast explicit within a single test run (not just
+        // "trust the two tests above separately").
+        SecsWireCodec c;
+        pushToken(c, HType.INT_4_TYPE);
+        pushToken(c, 1);
+        pushToken(c, 555);
+        int len = 0;
+        unsigned char type = 0;
+
+        int peekRet = c.GetDataItemLenAndType(len, type);
+        check_i("peek (GetDataItemLenAndType) ret", peekRet, 1);
+        check_i("peek leaves ALL 3 tokens in place", c.SReceiveData->Count, 3);
+
+        int delRet = c.GetDataItemLenAndTypeAndDelete(len, type);
+        check_i("delete (GetDataItemLenAndTypeAndDelete) ret on the SAME burst", delRet, 1);
+        check_i("delete len matches the peek", len, 1);
+        check_u("delete type matches the peek", type, HType.INT_4_TYPE);
+        check_i("delete THEN shrinks by exactly 2 (1 remains -- the value token)",
+                c.SReceiveData->Count, 1);
+    }
+    {
+        // Fewer than 2 tokens -> -2 (same guard as the peek-only Sub).
+        SecsWireCodec c;
+        pushToken(c, HType.INT_4_TYPE);
+        int len = 0;
+        unsigned char type = 0;
+        int ret = c.GetDataItemLenAndTypeAndDelete(len, type);
+        check_i("delete with <2 tokens -> -2", ret, -2);
+        check_i("delete with <2 tokens does NOT delete anything (guard fires first)",
+                c.SReceiveData->Count, 1);
+    }
+    {
+        // Sticky iReturnCode wrapper behavior (golden :7099-7106): once
+        // latched to a non-1 error, a LATER successful call must not
+        // overwrite it (same "初始值=1,...避免錯誤碼被後來的正確碼所取代"
+        // convention already exercised for GetDataItemLenAndType above).
+        SecsWireCodec c;
+        c.iReturnCode = 1;
+        pushToken(c, HType.INT_4_TYPE);   // only 1 token -> first call returns -2
+        int len = 0;
+        unsigned char type = 0;
+        int ret1 = c.GetDataItemLenAndTypeAndDelete(len, type);
+        check_i("first (underrun) call ret", ret1, -2);
+        check_i("iReturnCode latches to the error", c.iReturnCode, -2);
+
+        pushToken(c, HType.INT_4_TYPE);
+        pushToken(c, 1);
+        int ret2 = c.GetDataItemLenAndTypeAndDelete(len, type);
+        check_i("second (now-successful) call ret", ret2, 1);
+        check_i("iReturnCode stays latched to the earlier error, NOT overwritten",
+                c.iReturnCode, -2);
+    }
+
+    // -------------------------------------------------------------------
+    // SendInvalidDataMessageToHost (golden uHGemEquipment.cpp:7353-7358) --
+    // pure InitLocalHead(9,7,0)+DataItemOut(ASCII)+SendLocalData composition;
+    // SendLocalData is itself GATED (see its own comment), so the only
+    // observable in-scope effects are the wire header S,F code and the
+    // encoded ASCII payload sitting in LocalBuffer afterward.
+    // -------------------------------------------------------------------
+    printf("\n-- SendInvalidDataMessageToHost (S9F7-shaped composer, no leading StringOut) --\n");
+    {
+        SecsWireCodec c;
+        c.SendInvalidDataMessageToHost("bad format");
+        check_u("wire head S-code == 9 (Local.MessageID_S)", c.Local.MessageID_S, 9);
+        check_u("wire head F-code == 7 (Local.MessageID_F)", c.Local.MessageID_F, 7);
+        check_u("wire head W-bit == 0", c.Local.W_Bit, 0);
+        // LocalBuffer layout after InitLocalHead+DataItemOut: [0..3] length
+        // header, [4..13] 10-byte HSMS head, [14] Format|LenOfLen byte,
+        // [15] length-of-data byte, [16..] the "bad format" ASCII payload
+        // (10 chars) -- same layout DataItemOut's own tests already verify
+        // byte-by-byte elsewhere in this file, spot-checked here only for
+        // the payload itself.
+        check_u("encoded item Format byte == ASCII_TYPE|1 (1 length byte)",
+                c.LocalBuffer[14], (unsigned)(HType.ASCII_TYPE | 1));
+        check_u("encoded item length byte == 10 (\"bad format\")", c.LocalBuffer[15], 10);
+        std::string payload(reinterpret_cast<const char*>(&c.LocalBuffer[16]), 10);
+        check_s("encoded ASCII payload", payload, "bad format");
+        // golden's own SendLocalData (uHGemEquipment.cpp:1985-2107) is GATED
+        // here (comms layer out of scope) -- its one preserved in-scope
+        // effect, bReceiveData=false, is still faithfully reproduced.
+        c.bReceiveData = true;
+        c.SendInvalidDataMessageToHost("bad format 2");
+        check_b("SendLocalData's gated stub still resets bReceiveData=false",
+                c.bReceiveData, false);
     }
 
     // -------------------------------------------------------------------

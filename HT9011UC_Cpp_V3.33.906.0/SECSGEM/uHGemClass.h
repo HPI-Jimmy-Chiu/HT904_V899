@@ -60,6 +60,22 @@
 // instead (WireCodec / SvEcReg), which are real, already-translated stand-ins
 // for the pieces of THGem those methods actually needed. HGemPtr itself is
 // untouched and still exists for the remaining gated methods.
+//
+// AI(W906-fire-integrate) 20260716: EVALUATED AND DECLINED -- switching this
+// forward declaration to `#include "SECSGEM/uHGemEquipment.h"` now that a
+// real (but deliberately partial) `class THGem` exists there (W906-uHGemEquipment
+// front). Checked every one of uHGemClass.cpp's 44 still-gated methods against
+// that partial THGem's actual member/method list: NONE has its full dependency
+// chain satisfied yet -- each needs at least one more THGem member/method still
+// absent from this wave's slice (e.g. slTempReportID/lTempReportIDContent,
+// EnableDisableAlarmAll/EnableDisableAlarm, EnableDisableECDataAll/
+// EnableDisableECData, GemMDLN/GemSOFTREV/bOnLine/GemClock, or a VCL widget
+// type not in vclcompat) -- see uHGemClass.cpp's own "INTEGRATE WAVE 2" note
+// for the full per-method accounting. Including uHGemEquipment.h here today
+// would add a real new header dependency (StringGrid.h/SecsEventType.h) for
+// ZERO additional un-gating, so the forward declaration stays as-is per this
+// project's "don't force an include just to look more integrated" discipline.
+// Re-evaluate the next time uHGemEquipment.h's THGem slice grows.
 class THGem;
 
 extern AnsiString SYS_ECChangeID             ;    //pig 2014.04.23 KYEC SECS

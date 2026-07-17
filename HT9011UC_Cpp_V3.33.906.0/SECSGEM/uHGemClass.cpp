@@ -61,10 +61,13 @@
 //      global AnsiString definitions (never read by ACTIVE code in this
 //      file, but harmless, cheap, and matches golden 1:1).
 //
-//  GATED (47 of the original 57 methods remain gated, `#if 0` + cited golden
-//  range + ACTIVE default stub) -- see each stub's comment for its exact
-//  golden line range and (post integrate-wave) an honest note on exactly
-//  which missing piece still blocks it.
+//  GATED (44 of the original 57 methods remain gated as of INTEGRATE WAVE 2
+//  below, `#if 0` + cited golden range + ACTIVE default stub) -- see each
+//  stub's comment for its exact golden line range and (post integrate-wave)
+//  an honest note on exactly which missing piece still blocks it.
+//  AI(W906-fire-verify) 20260716: refreshed from the stale "47" left over from
+//  before INTEGRATE WAVE 2 un-gated 3 more methods (57-13=44, matching that
+//  wave's own note below); grep `^#if 0` count re-verified at 44.
 //
 //  TRANSLATION RULES
 //  ------------------
@@ -128,13 +131,105 @@
 //    CheckECValue (golden :3192-3560 -- the ONLY one of the 4
 //      SetECValue/S2F15_Update/S2F15_Check/CheckECValue "EC value" cluster
 //      with zero VCL-widget-cast branch and zero GetDataItemLenAndTypeAndDelete
-//      call; its 3 siblings stay gated for exactly those reasons).
+//      call at the time of THIS wave; its 3 siblings stayed gated for exactly
+//      those reasons back then -- see INTEGRATE WAVE 2 below for 2 of the 3
+//      un-gating once their sole remaining blocker was translated).
 //
 //  Every un-gated method's `HGemPtr->X(...)`/`HGem->X(...)` call became
 //  `WireCodec.X(...)` (wire-codec ops) or `SvEcReg.X(...)` (EC/SV lists);
 //  `HType`/`HTypeStruct` (shared global, already visible via
 //  SecsWireCodec.h) needed no change. Nothing else in these 10 bodies
 //  changed vs. golden.
+//---------------------------------------------------------------------------
+//
+//  INTEGRATE WAVE 2 (AI(W906-uHGemClass-Unlock2) 20260716) -- SecsWireCodec
+//  "WAVE 3" unlocks S7F2 + the S2F15 pair
+//  ---------------------------------------------------------------------------
+//  SecsWireCodec gained 3 more real methods this wave (see SecsWireCodec.h/.cpp
+//  own "WAVE 3" file-head notes): `GetDataItemLenAndTypeAndDeleteSub`/
+//  `GetDataItemLenAndTypeAndDelete` (the destructive sibling pair of the
+//  peek-only `GetDataItemLenAndType(Sub)` this file already had -- confirmed
+//  by direct golden read to be pure SReceiveData bookkeeping, zero new THGem
+//  member, zero VCL) and `SendInvalidDataMessageToHost` (a 3-call InitLocalHead
+//  +DataItemOut+SendLocalData composer, same shape as the already-un-gated
+//  S9F7_IllegalData). Re-reading every still-gated method's cited blocker list
+//  against this delta found exactly 3 whose ENTIRE remaining dependency chain
+//  now resolves through WireCodec (+ same-class virtual calls, which are not
+//  an HGemPtr/HGem dependency and were already permitted for CheckECValue in
+//  the prior wave):
+//
+//  UN-GATED (3 more, 13/57 total now):
+//    S7F2_ProcessProgramLoadGrant (golden uHGemClass.cpp:2081-2113 -- sole
+//      blocker was GetDataItemLenAndTypeAndDelete; error path was already
+//      un-gated S9F7_IllegalData);
+//    S2F15_UpdateNewEquipmentConstant (golden uHGemClass.cpp:2884-3024 -- both
+//      GetDataItemLenAndTypeAndDelete and SendInvalidDataMessageToHost were its
+//      only 2 recorded blockers; calls its own still-gated SetECValue, which
+//      simply no-ops for now, exactly as CheckECValue's un-gating already
+//      established as an acceptable interim state for this cluster);
+//    S2F15_CheckNewEquipmentConstant (golden uHGemClass.cpp:3026-3190 -- same
+//      2 blockers, same resolution; calls its own already-un-gated
+//      CheckECValue).
+//
+//  STILL GATED, checked and confirmed NOT resolvable by this wave's delta
+//  alone (each needs at least one more thing beyond WireCodec/SvEcReg, so
+//  landing them would be forcing a partial translation through):
+//    SetECValue itself (needs TPanel/TCustomEdit/TComboBox/TLabel/TCheckBox/
+//      TRadioGroup dynamic_cast targets, none in vclcompat -- see its own
+//      comment, unchanged reasoning);
+//    S7F18_DeleteProcessProgramAcknowledge / Process_S7F20_CurrentEPPIDData /
+//      S10F4/S10F6 TerminalDisplay* (need GetDataItemLenAndTypeAndDelete --
+//      now available -- PLUS a VCL widget/THGem-only-member this wave's
+//      SendInvalidDataMessageToHost addition does nothing for: UpLoadPath/
+//      DeleteDirectory, TCheckListBox GemRemoteReceipeList,
+//      TerminalDisplayIndex/TerminalMemoPtr/... respectively);
+//    S2F13/.../S2F30/S2F34/S2F36/S2F38 SV/EC-registration-DB family (need
+//      DataItemOutSV/-NameList/-EC/-NameList/-NameListWithValue, none of which
+//      this wave translates);
+//    S125F2_EnableDisableECDataAcknowledge (needs EnableDisableECDataAll/
+//      EnableDisableECData, both StringGrid-backed -- sgSECSECData, confirmed
+//      by direct golden read this wave (see stretch-goal recon below), out of
+//      this file's scope).
+//
+//  STRETCH-GOAL RECON (AI(W906-uHGemClass-Unlock2) 20260716): the hand-off
+//  also flagged 8 THGem methods as "worth a dedicated look" --
+//  CheckSFFormatOnlyHead, IsValidSVID, GetTimeInfo,
+//  SendInvalidDataMessageToHost, DeleteAllHostDefineReportID,
+//  DeleteAllHostDefineCeid, GetAlarmIndex, EnableDisableAlarmAll/
+//  EnableDisableAlarm, EnableDisableECDataAll/EnableDisableECData. Each was
+//  read against golden uHGemEquipment.cpp in full:
+//    SendInvalidDataMessageToHost: CLEAN (translated above into SecsWireCodec,
+//      see its own citation).
+//    CheckSFFormatOnlyHead: reads `chkMoreMessageAbortProcess->Checked` (VCL
+//      TCheckBox, golden uHGemEquipment.cpp:8684) before ever reaching
+//      GetDataItemLenAndTypeAndDelete -- a real VCL dependency this wave's
+//      scope (SecsWireCodec.h/.cpp + uHGemClass.h/.cpp only) has no home for;
+//      stays gated.
+//    IsValidSVID: `SV_ID->IndexOf(SVID)` (golden uHGemEquipment.cpp:3114) --
+//      SV_ID IS already a real SecsSvEcRegistration member (SvEcReg.SV_ID),
+//      but SecsSvEcRegistration.h/.cpp is OUTSIDE this wave's allowed-file
+//      list, so this method cannot be placed anywhere from here; moot anyway
+//      since its only caller in this file (golden uHGemClass.cpp:810-985) is
+//      blocked by 7 OTHER THGem-only members with no engine home regardless.
+//    GetTimeInfo: writes THGem-only members (SystemYear/Month/Date/Hour/Min/
+//      Sec/MSec, TimeString, GemClock, iTimeFormat, plus disk-space/memory-
+//      status globals -- golden uHGemEquipment.cpp:315-346) that belong to
+//      neither WireCodec nor SvEcReg's modeled scope and would be new,
+//      unrelated state bolted onto one or the other; its only caller in this
+//      file is ALSO blocked by CheckSFFormatOnlyHead above regardless --
+//      stays gated.
+//    DeleteAllHostDefineReportID / DeleteAllHostDefineCeid / GetAlarmIndex /
+//      EnableDisableAlarmAll / EnableDisableAlarm / EnableDisableECDataAll /
+//      EnableDisableECData: every one of these 7 iterates a live VCL
+//      TStringGrid (stdGridReportID / strGrdCEID / strGrdAlarm / sgSECSECData
+//      respectively, confirmed by direct golden read) -- exactly the
+//      "StringGrid-backed CEID/Report-ID/Alarm database" category the prior
+//      wave's note already named as out of WireCodec/SvEcReg's scope; none
+//      translated this wave.
+//  Net stretch-goal yield: 1 of 8 (SendInvalidDataMessageToHost) was
+//  genuinely clean; the other 7 all hit a real, confirmed blocker (6 VCL
+//  StringGrid, 1 VCL TCheckBox + THGem-only members) -- reported honestly
+//  rather than forced through.
 //---------------------------------------------------------------------------
 
 #include "vclcompat/vcl_compat.h"
@@ -576,12 +671,42 @@ void HTGem::S6F24_RequestSpooledDataAcknowledgementSend()
 }
 //---------------------------------------------------------------------------
 // [S7,F2] Process Program Load Grant (PPGNT).
+// AI(W906-uHGemClass-Unlock2) 20260716 UN-GATED (golden SECSGEM/uHGemClass.cpp:2081-2113):
+// its sole recorded blocker, GetDataItemLenAndTypeAndDelete, is now a real
+// WireCodec method (SecsWireCodec.h/.cpp "WAVE 3" addendum); everything else
+// in this body was already WireCodec-only (DataItemIn/GetDataItemLenAndType/
+// LocalAcknowledge), and its error path (S9F7_IllegalData) was un-gated back
+// in the first integrate wave. `HGemPtr->` -> `WireCodec.`, nothing else
+// changed vs. golden.
 //---------------------------------------------------------------------------
 int HTGem::S7F2_ProcessProgramLoadGrant()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs GetDataItemLenAndTypeAndDelete) -- golden SECSGEM/uHGemClass.cpp:2081-2113
-#endif
-    return 1;                                                                  // conservative default (not ready); real PPGNT decode gated above
+// L,2
+//    1. <PPID>          // ascii
+//    2. <LENGTH>        // int ,uint
+    int ret,len;
+    unsigned char Type;
+    AnsiString PPID;
+    if(WireCodec.DataItemIn(2, HType.LIST_TYPE, NULL)==1)
+    {
+        ret=WireCodec.GetDataItemLenAndType(len, Type);
+        if(ret==1 && Type==HType.ASCII_TYPE)
+        {
+            WireCodec.DataItemIn(len, Type, PPID);
+            ret=WireCodec.GetDataItemLenAndTypeAndDelete(len, Type);
+            if(ret==1 && len==1 &&
+                 (Type==HType.UINT_1_TYPE || Type==HType.UINT_2_TYPE ||
+                  Type==HType.UINT_4_TYPE || Type==HType.UINT_8_TYPE ||
+                  Type==HType.INT_1_TYPE  || Type==HType.INT_2_TYPE  ||
+                  Type==HType.INT_4_TYPE  || Type==HType.INT_8_TYPE))
+            {
+                WireCodec.LocalAcknowledge(7, 2, 0);
+                return 1;
+            }
+        }
+    }
+    S9F7_IllegalData("S7,F1 Data Format error !!!");
+    return 0;
 }
 //---------------------------------------------------------------------------
 void HTGem::S7F18_DeleteProcessProgramAcknowledge()                             // AI(W5-SECSGEM-Translate) 20260710: __fastcall dropped (see .h note)
@@ -749,15 +874,21 @@ void HTGem::S125F2_EnableDisableECDataAcknowledge()
 // TStringList -- none of the first 6 exist in vclcompat today. UNLIKE
 // SecsSvEcRegistration.cpp's GetECDataValue (which gates the analogous
 // dynamic_cast branch but has a rigorous registration-time proof that path
-// is provably unreachable from ITS OWN callers), SetECValue's caller
-// (S2F15_UpdateNewEquipmentConstant, itself still gated below) cannot offer
-// the same proof -- SecsSvEcRegistration.cpp's own TObject*-overload
+// is provably unreachable from ITS OWN callers), SetECValue cannot offer the
+// same proof -- SecsSvEcRegistration.cpp's own TObject*-overload
 // SetECDataPointer DOES register ECs with EC_VCL_NAME=="1", so IsVCL==1 is a
-// real, reachable case in a live system, just not exercised by anything in
-// this file's current scope. Gating only the IsVCL==1 sub-branch without
-// that same reachability proof would be forcing a partial translation
-// through on an unproven assumption -- left fully gated per this project's
-// "do not force it through" instruction instead.
+// real, reachable case in a live system. This remains true regardless of
+// whether SetECValue's caller is itself gated: AI(W906-uHGemClass-Unlock2)
+// 20260716 un-gated S2F15_UpdateNewEquipmentConstant below (a real caller of
+// this function now), which does NOT change SetECValue's own reachability
+// proof -- the IsVCL==1 branch is selected by whatever ECID happens to be
+// registered, not by the caller, so SetECValue stays fully gated here.
+// Gating only the IsVCL==1 sub-branch without a reachability proof would be
+// forcing a partial translation through on an unproven assumption -- left
+// fully gated per this project's "do not force it through" instruction
+// instead. (Safe either way: S2F15_UpdateNewEquipmentConstant's calls into
+// this still-gated stub simply no-op, exactly like CheckECValue's un-gating
+// in the prior wave already established as an acceptable interim state.)
 //---------------------------------------------------------------------------
 void HTGem::SetECValue(unsigned ECID, void *PtrSour)
 {
@@ -768,21 +899,322 @@ void HTGem::SetECValue(unsigned ECID, void *PtrSour)
 }
 //---------------------------------------------------------------------------
 // [S2,F15] Update New Equipment Constant.                //wei 20170417 (Steven)
+// AI(W906-uHGemClass-Unlock2) 20260716 UN-GATED (golden SECSGEM/uHGemClass.cpp:2884-3024):
+// both recorded blockers are now real WireCodec methods
+// (GetDataItemLenAndTypeAndDelete / SendInvalidDataMessageToHost, SecsWireCodec
+// "WAVE 3" addendum); every other call in this body was already
+// WireCodec-only (GetDataItemLenAndType/DataItemIn) or a same-class virtual
+// call (SetECValue -- still gated above, see its own comment; ReloadParameter
+// -- already an inline no-op in the header). `HGem->` -> `WireCodec.`,
+// nothing else changed vs. golden.
+// PRESERVED GOLDEN QUIRK (confirmed by direct read, not a translation bug):
+// the ASCII branch's `Str=new char[len+100]` is never `delete[]`d anywhere in
+// golden (uHGemClass.cpp's ASCII branch, ~golden :2955-2960) -- a genuine
+// golden per-call memory leak on every ASCII-typed EC update, preserved
+// verbatim (not "fixed" into a delete[]).
 //---------------------------------------------------------------------------
 int HTGem::S2F15_UpdateNewEquipmentConstant()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs GetDataItemLenAndTypeAndDelete + THGem::SendInvalidDataMessageToHost) -- golden SECSGEM/uHGemClass.cpp:2884-3024
-#endif
-    return 1;                                                                  // conservative default (deny); real EAC decode gated above
+    int EClen, i, len;
+    unsigned char Type;
+
+    __int64  int8EC;                                                            //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+    int   int4EC;
+    short int2EC;
+    char  int1EC;
+    unsigned __int64 uint8EC;                                                   //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+    unsigned int   uint4EC, ECID;
+    unsigned short uint2EC;
+    unsigned char  uint1EC;
+    float          floatEC;
+    double         doubleEC;
+    AnsiString S;
+
+    if(WireCodec.GetDataItemLenAndTypeAndDelete(EClen, Type)==1)
+    {
+        if(Type==HType.LIST_TYPE)
+        {
+            for(i=0; i<EClen; i++)
+            {
+                if(WireCodec.GetDataItemLenAndTypeAndDelete(len, Type)==1)
+                {
+                    if(Type!=HType.LIST_TYPE || len!=2)
+                        break;
+                    // get ECID
+
+                    WireCodec.GetDataItemLenAndType(len, Type);
+                    WireCodec.DataItemIn(len, Type, S);
+                    ECID=(unsigned)atoi(S.c_str());
+
+                    WireCodec.GetDataItemLenAndType(len, Type);
+
+                    if(Type==HType.UINT_1_TYPE)
+                    {
+                        if(WireCodec.DataItemIn(1, Type, &uint1EC)==1)
+                            SetECValue(ECID, &uint1EC);
+                    }
+                    else if(Type==HType.UINT_2_TYPE)
+                    {
+                        if(WireCodec.DataItemIn(1, Type, &uint2EC)==1)
+                            SetECValue(ECID, &uint2EC);
+                    }
+                    else if(Type==HType.UINT_4_TYPE)
+                    {
+                        if(WireCodec.DataItemIn(1, Type, &uint4EC)==1)
+                            SetECValue(ECID, &uint4EC);
+                    }
+                    else if(Type==HType.UINT_8_TYPE)                            //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+                    {
+                        if(WireCodec.DataItemIn(1, Type, &uint8EC)==1)
+                            SetECValue(ECID, &uint8EC);
+                    }
+                    else if(Type==HType.INT_1_TYPE)
+                    {
+                        if(WireCodec.DataItemIn(1, Type, &int1EC)==1)
+                            SetECValue(ECID, &int1EC);
+                    }
+                    else if(Type==HType.INT_2_TYPE)
+                    {
+                        if(WireCodec.DataItemIn(1, Type, &int2EC)==1)
+                            SetECValue(ECID, &int2EC);
+                    }
+                    else if(Type==HType.INT_4_TYPE)
+                    {
+                        if(WireCodec.DataItemIn(1, Type, &int4EC)==1)
+                            SetECValue(ECID, &int4EC);
+                    }
+                    else if(Type==HType.INT_8_TYPE)                             //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+                    {
+                        if(WireCodec.DataItemIn(1, Type, &int8EC)==1)
+                            SetECValue(ECID, &int8EC);
+                    }
+                    else if(Type==HType.ASCII_TYPE)
+                    {
+                        char *Str;
+                        Str=new char [(size_t)len+100];
+                        if(WireCodec.DataItemIn(len, Type, Str)==1)
+                            SetECValue(ECID, Str);
+                        // NOTE: golden never delete[]s Str here -- see this
+                        // function's own "PRESERVED GOLDEN QUIRK" comment above.
+                    }
+                    else if(Type==HType.BINARY_TYPE)
+                    {
+                        if(WireCodec.DataItemIn(len, Type, &int1EC)==1)
+                            SetECValue(ECID, &int1EC);
+                    }
+                    else if(Type==HType.BOOLEAN_TYPE)
+                    {
+                        if(WireCodec.DataItemIn(len, Type, &int1EC)==1)
+                        {
+                            SetECValue(ECID, &int1EC);
+                        }
+                    }
+                    else if(Type==HType.FT_4_TYPE)
+                    {
+                        if(WireCodec.DataItemIn(len, Type, &floatEC)==1)
+                            SetECValue(ECID, &floatEC);
+                    }
+                    else if(Type==HType.FT_8_TYPE)
+                    {
+                        if(WireCodec.DataItemIn(len, Type, &doubleEC)==1)
+                            SetECValue(ECID, &doubleEC);
+                    }
+                    else                                                        // error format (SECS-II ASCII code ir correct ,but ITRI is failure,need confirm with ITRI
+                    {
+                        WireCodec.SendInvalidDataMessageToHost("error format");
+                        return -1;
+                    }
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+        }
+        else
+        {
+            return -1;
+        }
+    }
+    else
+    {
+        return -1;
+    }
+    ReloadParameter();
+    return 0;                                                                   //sucess  //JerryYang 20250120 : modify
 }
 //---------------------------------------------------------------------------
 // [S2,F15] Check New Equipment Constant.                 //wei 20170417 (Steven)
+// AI(W906-uHGemClass-Unlock2) 20260716 UN-GATED (golden SECSGEM/uHGemClass.cpp:3026-3190):
+// same rationale as S2F15_UpdateNewEquipmentConstant immediately above --
+// both recorded blockers are now real WireCodec methods; the remaining calls
+// are WireCodec-only or a same-class virtual call (CheckECValue -- already
+// un-gated in the prior wave). `HGem->` -> `WireCodec.`, nothing else
+// changed vs. golden.
 //---------------------------------------------------------------------------
-int HTGem::S2F15_CheckNewEquipmentConstant()
+int HTGem::S2F15_CheckNewEquipmentConstant()                                    //wei 20170417 (Steven) add S2F15
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs GetDataItemLenAndTypeAndDelete + THGem::SendInvalidDataMessageToHost) -- golden SECSGEM/uHGemClass.cpp:3026-3190
-#endif
-    return 1;                                                                  // conservative default (deny); real EAC decode gated above
+    int EClen, i, len, ret;
+    unsigned char Type;
+    __int64  int8EC;                                                            //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+    int   int4EC;
+    short int2EC;
+    char  int1EC;
+    unsigned __int64  uint8EC;                                                  //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+    unsigned int   uint4EC;
+    AnsiString ECID;
+    unsigned short uint2EC;
+    unsigned char  uint1EC;
+    float          floatEC;
+    double         doubleEC;
+
+    /*
+        L,n
+        1. L,2
+        1. <ECID1>
+        2. <ECV1>
+        2. L,2
+        .
+        .
+        n. L,2
+        1. <ECIDn>
+        2. <ECVn>
+    */
+
+    if(WireCodec.GetDataItemLenAndTypeAndDelete(EClen, Type)!=1)
+        return -1;
+    if(Type!=HType.LIST_TYPE)
+        return -1;
+    if(EClen<1)
+        return -1;
+    for(i=0; i<EClen; i++)
+    {
+        if(WireCodec.GetDataItemLenAndTypeAndDelete(len, Type)!=1)
+            return -1;
+        if(Type!=HType.LIST_TYPE || len!=2)
+            return -1;
+        ret=1;
+        if(WireCodec.GetDataItemLenAndType(len, Type)==1)
+        {
+            if(WireCodec.DataItemIn(len, Type, ECID)!=1)
+                return -1;
+        }
+        else
+        {
+            return -1;
+        }
+
+        if(WireCodec.GetDataItemLenAndType(len, Type)==1)
+        {
+            if(Type==HType.UINT_1_TYPE)
+            {
+                if(WireCodec.DataItemIn(1, Type, &uint1EC)==1)
+                    ret=CheckECValue(ECID, &uint1EC);
+                else
+                    return -1;
+            }
+            else if(Type==HType.UINT_2_TYPE)
+            {
+                if(WireCodec.DataItemIn(1, Type, &uint2EC)==1)
+                    ret=CheckECValue(ECID, &uint2EC);
+                else
+                    return -1;
+            }
+            else if(Type==HType.UINT_4_TYPE)
+            {
+                if(WireCodec.DataItemIn(1, Type, &uint4EC)==1)
+                    ret=CheckECValue(ECID, &uint4EC);
+                else
+                    return -1;
+            }
+            else if(Type==HType.UINT_8_TYPE)                                    //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+            {
+                if(WireCodec.DataItemIn(1, Type, &uint8EC)==1)
+                    ret=CheckECValue(ECID, &uint8EC);
+                else
+                    return -1;
+            }
+            else if(Type==HType.INT_1_TYPE)
+            {
+                if(WireCodec.DataItemIn(1, Type, &int1EC)==1)
+                    ret=CheckECValue(ECID, &int1EC);
+                else
+                    return -1;
+            }
+            else if(Type==HType.INT_2_TYPE)
+            {
+                if(WireCodec.DataItemIn(1, Type, &int2EC)==1)
+                    ret=CheckECValue(ECID, &int2EC);
+                else
+                    return -1;
+            }
+            else if(Type==HType.INT_4_TYPE)
+            {
+                if(WireCodec.DataItemIn(1, Type, &int4EC)==1)
+                    ret=CheckECValue(ECID, &int4EC);
+                else
+                    return -1;
+            }
+            else if(Type==HType.INT_8_TYPE)                                     //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+            {
+                if(WireCodec.DataItemIn(1, Type, &int8EC)==1)
+                    ret=CheckECValue(ECID, &int8EC);
+                else
+                    return -1;
+            }
+            else if(Type==HType.ASCII_TYPE)
+            {
+                char *Str;
+                Str=new char [(size_t)len+100];
+                if(WireCodec.DataItemIn(len, Type, Str)==1)
+                    ret=CheckECValue(ECID, Str);
+                else
+                    return -1;
+            }
+            else if(Type==HType.BINARY_TYPE)
+            {
+                if(WireCodec.DataItemIn(len, Type, &int1EC)==1)
+                    ret=CheckECValue(ECID, &int1EC);
+                else
+                    return -1;
+            }
+            else if(Type==HType.BOOLEAN_TYPE)
+            {
+                if(WireCodec.DataItemIn(len, Type, &int1EC)==1)
+                    ret=CheckECValue(ECID, &int1EC);
+                else
+                    return -1;
+            }
+            else if(Type==HType.FT_4_TYPE)
+            {
+                if(WireCodec.DataItemIn(len, Type, &floatEC)==1)
+                    ret=CheckECValue(ECID, &floatEC);
+                else
+                    return -1;
+            }
+            else if(Type==HType.FT_8_TYPE)
+            {
+                if(WireCodec.DataItemIn(len, Type, &doubleEC)==1)
+                    ret=CheckECValue(ECID, &doubleEC);
+                else
+                    return -1;
+            }
+            else                                                                // error format (SECS-II ASCII code ir correct ,but ITRI is failure,need confirm with ITRI
+            {
+                WireCodec.SendInvalidDataMessageToHost("error format");
+                return -1;
+            }
+
+            if(ret!=0)
+                return ret;
+        }
+        else
+        {
+            WireCodec.SendInvalidDataMessageToHost("GetDataItemLenAndType Error");
+            return -1;
+        }
+    }
+    return 0;
 }
 //---------------------------------------------------------------------------
 // CheckECValue -- validates an ECID/value pair against its registered

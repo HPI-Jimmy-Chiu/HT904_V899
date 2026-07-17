@@ -270,8 +270,32 @@ bool FileExists(const AnsiString& path) {
 }
 
 bool DirectoryExists(const AnsiString& path) {
+    // AI(W906-fire-integrate) 20260716: BUG FIX -- this MinGW/msvcrt stat()
+    // implementation FAILS (returns nonzero / ENOENT) on a path with a
+    // trailing '/' or '\\' even when the directory genuinely exists
+    // (empirically reproduced: stat("dir") succeeds, stat("dir\\") and
+    // stat("dir/") both fail on this toolchain). Real BCB6/VCL
+    // DirectoryExists tolerates a trailing backslash fine, and this
+    // codebase's own directory-path globals (DataPath/sSaveByMachine/
+    // asN06_TesterPath/OffsetPath/DefaultPath/...) ALWAYS carry one (golden
+    // convention) -- so without this fix, DirectoryExists(anyOfThose) was
+    // unconditionally false even immediately after successfully creating
+    // that exact directory, and ForceDirectories' own final `return
+    // DirectoryExists(path);` inherited the same false-negative for any
+    // trailing-separator path. Surfaced by tests/test_TesterTCP.cpp's
+    // btnSaveClick(SaveByMachine branch) case (Interface/TesterTCP.cpp calls
+    // Gated_MyForceDirectories(sSaveByMachine) -- a trailing-backslash
+    // global -- and the test independently re-checks DirectoryExists on the
+    // same global). Strip a single trailing separator before stat() (down to
+    // length 1, so a bare "\\"/"/" root is left alone) -- matches real BCB6
+    // semantics without changing behavior for any already-passing caller
+    // (grepped: no existing test/production call site relies on
+    // DirectoryExists returning false for a trailing-separator path).
+    std::string p = path.str();
+    while (p.size() > 1 && (p[p.size() - 1] == '/' || p[p.size() - 1] == '\\'))
+        p.erase(p.size() - 1);
     struct stat st;
-    if (stat(path.c_str(), &st) != 0) return false;
+    if (stat(p.c_str(), &st) != 0) return false;
     return (st.st_mode & S_IFMT) == S_IFDIR;
 }
 

@@ -53,6 +53,17 @@ add_library(vclcompat
     #   is an explicit SetSimMode(false) opt-in (WinSock2 listen/accept +
     #   a background acceptor thread + per-connection reader threads).
     vclcompat/ServerSocket.cpp
+    # --- W906-uHGemEquipment enabler: headless TStringGrid shim (Grids.hpp) --
+    #   Faithful stand-in for the real VCL TStringGrid used by SECSGEM/
+    #   uHGemEquipment.h's CEID/Report/Alarm "StringGrid database" family
+    #   (strGrdCEID/stdGridReportID/strGrdAlarm/strGrdAlarmOld -- see that
+    #   header's own file-head note). Headless: Cells[ACol][ARow] (0-based,
+    #   unlike AnsiString's 1-based indexing) + growable RowCount/ColCount
+    #   property proxies; no rendering/FixedRows/Options. Zero dependency
+    #   beyond vclcompat/AnsiString.h + <vector>. NOT brought into the global
+    #   namespace by vcl_compat.h (consumers add their own `using
+    #   vclcompat::TStringGrid;` -- see that header's own note on why).
+    vclcompat/StringGrid.cpp
 )
 
 target_include_directories(vclcompat PUBLIC
@@ -435,6 +446,30 @@ endif()
 #   Both slices are prerequisites -- not yet consumers -- of a FUTURE full
 #   THGem/uHGemEquipment.cpp translation wave (out of scope here); see each
 #   file's own "INTEGRATE-AGENT WIRING POINT" note.
+#
+#   SECSGEM/uHGemEquipment.{h,cpp} -- W906-uHGemEquipment INTEGRATE: THGem's
+#     FIRST real slice (a deliberately partial class -- see that header's own
+#     file-head note for exactly what is/isn't modeled yet). This wave's slice
+#     is the CEID/Report/Alarm StringGrid "database" family (SetCEIDContent/
+#     GetCEIDContent/DeleteReportID/.../CopyStringGridAsTabFormat/SetAlamData/
+#     ReadAlamData/WriteAlamData, 26 methods) + the standalone GemTimer utility.
+#     Depends on vclcompat + the new vclcompat/StringGrid.h shim (see above) +
+#     SECSGEM/SecsEventType.h (SECS_EVENT.TotalEvent array bound). Deliberately
+#     does NOT yet embed SecsWireCodec/SecsSvEcRegistration (InitLocalHead/
+#     DataItemOut/GetDataItemLenAndType/SetSVDataPointer/... are still OUT of
+#     THGem's scope this wave -- a future wave should add them as by-value
+#     members, matching HTGem's own already-proven WireCodec/SvEcReg pattern;
+#     see uHGemEquipment.h's own "MEMBERS DELIBERATELY NOT PRESENT YET" note).
+#     INTEGRATE CHECK (this wave): confirmed zero ODR overlap with
+#     uHGemClass.cpp/SecsWireCodec.cpp's own GetDataItemLenAndTypeAndDelete(Sub)
+#     -- uHGemEquipment.cpp does not define or call either; THGem does not yet
+#     model that method at all. No production consumer wired yet (HTGem's
+#     `THGem *HGemPtr` in uHGemClass.h stays a forward declaration -- see that
+#     header's own comment on why an #include swap was evaluated and declined
+#     this wave: every currently-gated HTGem method needs at least one THGem
+#     member/method still absent from this partial slice, so switching to a
+#     full #include would add a large new dependency for zero un-gating
+#     benefit today).
 # ---------------------------------------------------------------------------
 add_library(ht9045_secsgem
     SECSGEM/uHGemClass.cpp
@@ -442,6 +477,7 @@ add_library(ht9045_secsgem
     SECSGEM/SecsEventReport.cpp
     SECSGEM/SecsWireCodec.cpp
     SECSGEM/SecsSvEcRegistration.cpp
+    SECSGEM/uHGemEquipment.cpp
 )
 
 target_include_directories(ht9045_secsgem PUBLIC
@@ -798,6 +834,43 @@ add_library(ht9045_sm STATIC
     #     2x8_32: NO static-stub removal, NO extern un-gate, NO dispatch-ladder
     #     edit to aoutarm9045.cpp (dispatch unchanged -- file never dispatched).
     aoutarm9045S_1x4_4.cpp
+    # --- W906-Automation INTEGRATE: Automation/automation.cpp -- TfAutomation,
+    #     the OLP host-command engine's "network wiring + small helpers" slice
+    #     (~34 methods + 6 free functions: CommandProcess/SendClient/SendServer,
+    #     OLPServerClient*/OLPClient* socket event handlers, tmrOLPTimer,
+    #     DoCommandBuffer, ShowCharHex/ShowRecord/SaveRecord/ShowMSG,
+    #     GetHTMLJSONDatas/GetMachineStatus/GetWorkOrder/GetMainTemp/
+    #     GetTemperatures, ...). Lives HERE (not a standalone library) because
+    #     it depends on FormsFacade.h (fMain->palMainStatus/cbSetupFileName/
+    #     edWorkTemperBase) + canary_support.h (RecordProcess) + auto9045.h
+    #     (GetHandlerType/GetDataPath/GetMainStatus/...), all already carried
+    #     by this library -- same rationale as Interface/InterfaceSYS.cpp /
+    #     Interface/TesterTCP_Socket.cpp above. ProcessBuffer/ProcessBuffer1/
+    #     SendReportRequest stay safe no-op stubs (deferred to a dedicated
+    #     future wave, see the file's own header). INTEGRATE CHECK: golden's
+    #     bare `fAutomation` global is already claimed by atester_shims.h's
+    #     TfAutomationShim (consumed by atester.cpp/atester_32Site.cpp) -- this
+    #     translation names its own real singleton `fAutomationEngine` instead
+    #     (see automation.h's own "GLOBAL-NAME COLLISION AVOIDED" note); no ODR
+    #     conflict confirmed by grep across the whole tree.
+    Automation/automation.cpp
+    # --- W906-D-Interface-TesterTCP INTEGRATE: Interface/TesterTCP.cpp -- a
+    #     SIBLING slice of Interface/TesterTCP_Socket.cpp above (same golden
+    #     TfTesterTCP form, a DISJOINT function subset: CopyRecipeToTester/
+    #     CopyRecipeFromTester OS-recipe zip-transfer pair + the per-machine
+    #     btnSaveClick arm-speed-save handler; TesterTCP_Socket.cpp keeps sole
+    #     ownership of the ClientSocket_TCPIP connect/timer/read/error family --
+    #     zero overlap, confirmed by both units' own translate reports). Lives
+    #     HERE for the identical reason as its sibling: depends on common.h
+    #     (DataPath/sSaveByMachine/WriteIniData, ht9045_core, transitively
+    #     needed at final-link time) + canary_support.h (RecordProcess/
+    #     ShowMyMessage) + the REAL offline MySleep(DWORD) already defined in
+    #     acarry_shims.cpp below (this file's own extern redeclaration now
+    #     resolves for real once compiled into this same library, matching the
+    #     precedent already established by Automation/auto9045.cpp/
+    #     CCLink/MyCCLink.cpp/KYECFTP/FTPClient_Transfer.cpp's identical
+    #     extern-redeclaration idiom for this exact symbol).
+    Interface/TesterTCP.cpp
     # --- W5 Automation wave (Automation network unit): TeraPower AMR tray-count
     #     bridge (TTeraPowerAMR / global `AMR`) + the 3 pure AGV AMR-mode
     #     predicates (AGV_IsSPIL_AMR/AGV_IsATK_AMR/AGV_Use_AMR, wired into

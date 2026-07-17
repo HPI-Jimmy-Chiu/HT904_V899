@@ -72,6 +72,10 @@ TfMain::TfMain()
     // -- W5-Automation ADD (AGV_PortScan unit, 20260713) -----------------------
     ALed1         = new TfLedValue();
     labAutomation = new TfMainPanel();
+    // -- W906-Automation ADD (20260716) ----------------------------------------
+    palMainStatus   = new TfMainPanel();
+    cbSetupFileName = new TfLotInfoRunMode();
+    edWorkTemperBase = new TfLotInfoEdit();
 }
 void TfMain::LightOn() {}                                       // W6.4: CCD light sink (offline no-op)
 void TfMain::DebugOneCycleHotPlate(AnsiString /*sfunc*/) {}     // debug log sink (offline no-op)
@@ -104,6 +108,17 @@ AnsiString TfMain::ArmStatusStrings() { return AnsiString(""); }            // o
 void TfMain::SetStartModeData() {}                                          // offline: recipe start-mode UI refresh no-op
 void TfMain::LoadTestModePicture() {}                                       // offline: test-mode picture UI refresh no-op
 void TfMain::BackupSetupFile() {}                                           // offline: setup-file backup no-op
+// -- W906-Automation ADD: golden main.h:1276 `bool __fastcall Home(AnsiString Func);`
+//    (kevin 20141108) -- runs a full motor Home cycle and reports success/
+//    failure. Offline: no real motors to home, so there is nothing to
+//    actually succeed -> false (same "offline never succeeds a hardware
+//    cycle" posture as Pause() above). Only current caller in the
+//    translated tree is auto9045.cpp's `#ifdef DEBUG_DUTONOFF` DoHomeAndStart
+//    (compiled out, DEBUG_DUTONOFF undefined) plus the still-GATED
+//    Automation/automation.cpp ProcessBuffer (golden :1522) -- added now per
+//    that front's task brief as a small additive cross-file gap ahead of
+//    ProcessBuffer's own future translation.
+bool TfMain::Home(AnsiString /*Func*/) { return false; }
 TfMain *fMain = new TfMain();
 
 // --- W6.2: TfSortCT --------------------------------------------------------

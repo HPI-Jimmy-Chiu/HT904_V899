@@ -145,6 +145,14 @@ struct LAST_GENERAL_SET
     bool bEndLotAutoRetestGPIB;         // golden LastSet.h:402
     bool bFirstTestAutoRetestGPIB;      // golden LastSet.h:405
     bool bUseTestSocketEE[2][4][8];     // golden LastSet.h:392
+    // AI(W906-Automation) 20260716: field required by the (still-GATED this
+    // wave) Automation/automation.cpp ProcessBuffer OLP command-dispatch
+    // ladder (golden automation.cpp:1645/1656/1667 -- CATEGORY_REQUEST/
+    // BINDEFINE_REQUEST/FIXTRAYDEFINE_REQUEST setting-error flags). Added now
+    // as a small additive cross-file gap ahead of ProcessBuffer's own future
+    // translation (per that front's task brief); not yet referenced by any
+    // ACTIVE translated code this wave.
+    int OLPSetBinErr[10];               // golden LastSet.h:472 -- Sam 20230921 : Bin 設定錯誤不能啟動 OLPSetBinErr[0]是CATEGORY_REQUEST設定錯誤。OLPSetBinErr[1]是BINDEFINE_REQUEST設定錯誤。OLPSetBinErr[2]是FIXTRAYDEFINE_REQUEST設定錯誤
     // TODO(W6.x): the other ~437 LAST_GENERAL_SET fields land with the full
     //             translated LastSet.h.
 };

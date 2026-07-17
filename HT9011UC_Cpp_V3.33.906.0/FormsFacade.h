@@ -41,6 +41,14 @@
 // before constructing TfAGV, so the full type is visible where it's needed.
 struct TfMainMemo;
 
+// AI(W906-Automation) 20260716: same forward-declaration idiom as
+// TfMainMemo above -- TfLotInfoRunMode/TfLotInfoEdit are fully defined
+// further down this header (TfLotInfo section) but TfMain (defined BEFORE
+// that section) now also needs pointers to them (cbSetupFileName/
+// edWorkTemperBase, see TfMain's own "W906-Automation ADD" block below).
+struct TfLotInfoRunMode;
+struct TfLotInfoEdit;
+
 // ---------------------------------------------------------------------------
 //  TfAGV -- non-VCL stub (W6.1).  Mirrors ONLY the one method the canary calls.
 //  Golden: bool TfAGV::IsATK_AMR();  (Automation/AGV.h:205)
@@ -238,6 +246,22 @@ public:
     //    E84 loader/unloader tray-count scan's SECS-link panel) -----------------
     TfLedValue *ALed1;                                        // [DATA] golden main.h:355 (TALed*) -- bScanLoadPortState_SPIL reads ->Value
     TfMainPanel *labAutomation;                               // [DATA] golden main.h:802 (TPanel*) -- DoE84LoaderScan/DoE84UnloaderScan compare ->Caption
+    // -- W906-Automation ADD (20260716): members Automation/automation.cpp
+    //    derefs (GetMachineStatus/GetWorkOrder/GetMainTemp + the deferred
+    //    ProcessBuffer's own fMain->Home("TfAutomation::ProcessBuffer") call,
+    //    golden automation.cpp:1522 -- ProcessBuffer itself is GATED this
+    //    wave, see Automation/automation.h, but Home() is added now per this
+    //    front's task brief as a small additive cross-file gap). Same
+    //    Caption/Text-stub shape already used elsewhere in this file --
+    //    palMainStatus reuses TfMainPanel {AnsiString Caption;} (golden
+    //    main.h:669 TPanel*), cbSetupFileName reuses TfLotInfoRunMode
+    //    {bool Visible; AnsiString Text;} (golden main.h:875 TComboBox*,
+    //    only ->Text read here), edWorkTemperBase reuses TfLotInfoEdit
+    //    {AnsiString Text;} (golden main.h:732 TEdit*).
+    TfMainPanel       *palMainStatus;                         // [DATA] golden main.h:669 (TPanel*)
+    TfLotInfoRunMode  *cbSetupFileName;                       // [DATA] golden main.h:875 (TComboBox*) -- only ->Text used
+    TfLotInfoEdit     *edWorkTemperBase;                      // [DATA] golden main.h:732 (TEdit*)
+    bool Home(AnsiString Func);                                // [METHOD] golden main.h:1276 -- offline: no real Home cycle to run -> false
     TfMain();
 };
 extern TfMain *fMain;
