@@ -12,18 +12,16 @@
 //      (GemTimer :250-309; CEID/Report family :7361-7967; Alarm-grid
 //       siblings :6211-6274; StringGrid tab-format :8034-8195,8615-8665)
 //
-//  BUILD (standalone -- CMakeLists.txt is NOT wired to this file this wave;
-//  per the task's build-wiring correction, that is the integrate stage's
-//  job). From D:/HT9045/HT9011UC_Cpp_V3.33.906.0, one single command (line
-//  breaks below are for readability only; join with spaces, no backslashes):
-//    g++ -std=c++14 -Wall -Wextra -I . -I vclcompat
-//        tests/test_uHGemEquipment.cpp SECSGEM/uHGemEquipment.cpp
-//        vclcompat/StringGrid.cpp vclcompat/AnsiString.cpp
-//        vclcompat/TStringList.cpp vclcompat/SysUtils.cpp
-//        vclcompat/TDateTime.cpp vclcompat/IniFiles.cpp
-//        SECSGEM/SecsEventType.cpp
-//        -o test_uHGemEquipment.exe
-//    ./test_uHGemEquipment.exe
+//  BUILD: wired into tests/CMakeLists.txt as the `test_uHGemEquipment` target
+//  (`ctest -R uHGemEquipment` or `ctest --test-dir build`), linking
+//  ht9045_secsgem + ht9045_public + vclcompat. AI(W906-uHGemEquipment-
+//  ConnLifecycle) 20260717: the connection-lifecycle slice added below pulls
+//  in ClientSocket.cpp/ServerSocket.cpp/WinSocketErrorCode.cpp transitively
+//  via those libraries -- if ever building this file standalone (outside
+//  CMake) for quick iteration, add those three .cpp files to the command
+//  alongside the ones already listed for the original StringGrid-family
+//  slice (uHGemEquipment.cpp, StringGrid.cpp, AnsiString.cpp, TStringList.cpp,
+//  SysUtils.cpp, TDateTime.cpp, IniFiles.cpp, SecsEventType.cpp).
 //
 //  *** SAFETY NOTE -- READ BEFORE EXTENDING THIS FILE ***
 //  ---------------------------------------------------------------------------
@@ -71,6 +69,45 @@
 //  `GemSystemPath` instance field (not hardcoded) -- this test points
 //  GemSystemPath at a throwaway scratch folder under the current working
 //  directory, never at the real D:\HT9045 tree.
+//
+//  AI(W906-uHGemEquipment-ConnLifecycle) 20260717: EXTENDED for the new
+//  TCP/IP connection-lifecycle slice (clientGem/srvGem event handlers,
+//  DoOpenCommuncation/DoOnLine/OnlineLocalOrRemote, Connect/DisConnect/
+//  IsConnect/OnLine family, CheckSocketActiveFalse, ClearDefaultEvenReport,
+//  GetTimeInfo). Golden reference for the new slice:
+//    HT9011UC_Code_V3.33.906.0_20260618/SECSGEM/uHGemEquipment.cpp
+//      (:315-348, 392-439, 2100-2142, 3382-3490, 3604-3645, 4988-5008,
+//       5146-5159, 5548-5644, 6812-6910)
+//
+//  *** SAFETY NOTE for the NEW tests -- read before extending further ***
+//  srvGemClientError (tested in [12] below) faithfully calls
+//  SaveSECSGEMErrToLog, which -- matching golden exactly -- unconditionally
+//  APPENDS to a hardcoded absolute path outside this repo/migration tree:
+//  D:\SECS_GEM_LOGS\<yyyy>\<mm_dd>\SECSGEM_ErrLog_<hh>.txt (creating that
+//  directory tree via ForceDirectories if absent). This is a real,
+//  unavoidable side effect of exercising srvGemClientError's genuine
+//  translated behavior (there is no GemSystemPath-style parameter to redirect
+//  it, unlike ReadAlamData/WriteAlamData above) -- but it is fundamentally
+//  LOWER RISK than SaveEventReportData's own hardcoded-path danger (which
+//  OVERWRITES real production CEID/ReportID configuration): this is a small,
+//  append-only diagnostic log line, never destructive to existing data, and
+//  no worse than what golden's own production binary already does on every
+//  real socket error.
+//
+//  AI(W906-uHGemEquipment-ConnLifecycle) 20260717: per explicit user
+//  direction, exercising this real path during dev/test is acceptable -- the
+//  actual requirement is that ctest must not leave the real archive dirtier
+//  after a run than before it (a first run of this test, before this note,
+//  did leave 2 stray lines behind in D:\SECS_GEM_LOGS\2026\07_17\
+//  SECSGEM_ErrLog_10.txt -- left in place per user decision, now treated as
+//  the accepted baseline). Test [12] below therefore captures that target
+//  file's exact pre-test byte content (using the same yyyy/mm_dd/hh tokens
+//  SaveSECSGEMErrToLog itself computes) and restores it verbatim immediately
+//  after the assertions -- deleting the file/newly-created parent
+//  directories entirely if none existed before this run. Repeat ctest runs
+//  should therefore leave D:\SECS_GEM_LOGS byte-for-byte unchanged.
+//  SaveSECSGEMErrToLog is otherwise NOT called directly by any other test
+//  below (matching the SaveEventReportData precedent).
 // =============================================================================
 #include "SECSGEM/uHGemEquipment.h"
 
@@ -480,6 +517,341 @@ static void test_alarm_read_write_roundtrip()
 }
 
 // ===========================================================================
+//  [9] Connect / DisConnect / IsConnect state transitions
+// ===========================================================================
+static void test_connect_lifecycle()
+{
+    printf("\n[9] Connect/DisConnect/IsConnect\n");
+
+    THGem gem;
+    CHECK(gem.IsConnect() == false, "fresh THGem: IsConnect()==false");
+
+    gem.Connect();
+    CHECK(gem.bStartConnect == true && gem.bAutoConnect == true, "Connect() sets bStartConnect/bAutoConnect");
+    CHECK(gem.IsConnect() == false, "Connect() alone does not flip bConnect (DoConnect's job, out of this wave's scope)");
+
+    // Guard: golden `if(bConnect==true) return;` -- Connect() while already
+    // connected is a no-op (does not even touch bStartConnect/bAutoConnect).
+    gem.bConnect = true;
+    gem.bStartConnect = false;
+    gem.bAutoConnect = false;
+    gem.Connect();
+    CHECK(gem.bStartConnect == false && gem.bAutoConnect == false,
+          "Connect() while bConnect==true early-returns (golden guard) -- leaves bStartConnect/bAutoConnect untouched");
+
+    gem.DisConnect();
+    CHECK(gem.IsConnect() == false && gem.bStartConnect == false && gem.bAutoConnect == false,
+          "DisConnect() clears bConnect/bStartConnect/bAutoConnect");
+}
+
+// ===========================================================================
+//  [10] clientGemConnect / Disconnect / Error / Connecting handler behavior
+// ===========================================================================
+static void test_clientgem_handlers()
+{
+    printf("\n[10] clientGemConnect/Disconnect/Error/Connecting\n");
+
+    THGem gem;
+
+    gem.clientGemConnect(gem.clientGem, gem.clientGem->Socket);
+    CHECK(gem.WaitShowString->Count > 0 && gem.WaitShowString->GetString(gem.WaitShowString->Count - 1) == "Connect",
+          "clientGemConnect logs \"Connect\" via StringOut (WaitShowString)");
+    CHECK(gem.LogDataString->GetString(gem.LogDataString->Count - 1) == "Connect",
+          "clientGemConnect's StringOut also appends to LogDataString");
+
+    gem.bConnect = true;
+    gem.clientGemDisconnect(gem.clientGem, gem.clientGem->Socket);
+    CHECK(gem.bConnect == false, "clientGemDisconnect clears bConnect");
+    CHECK(gem.bAutoConnect == true, "clientGemDisconnect sets bAutoConnect when bConnect was true (golden: reconnect-on-drop)");
+
+    gem.bConnect = false;
+    gem.bAutoConnect = false;
+    gem.clientGemDisconnect(gem.clientGem, gem.clientGem->Socket);
+    CHECK(gem.bAutoConnect == false, "clientGemDisconnect leaves bAutoConnect false when bConnect was already false");
+
+    int errCode = 123;
+    gem.clientGem->Active = true;   // Sim mode: pretend already connected
+    gem.clientGemError(gem.clientGem, gem.clientGem->Socket, Scktcomp::eeGeneral, errCode);
+    CHECK(gem.clientGem->Active == false, "clientGemError forces clientGem->Active=false");
+    CHECK(errCode == 0, "clientGemError zeroes the ErrorCode out-param");
+    CHECK(gem.bTCPIP_Error == true, "clientGemError sets bTCPIP_Error");
+
+    gem.clientGemConnecting(gem.clientGem, gem.clientGem->Socket);
+    CHECK(gem.WaitShowString->GetString(gem.WaitShowString->Count - 1) == "connecting",
+          "clientGemConnecting logs \"connecting\"");
+}
+
+// ===========================================================================
+//  [11] DoOpenCommuncation -- passive (srvGem) role open-guard behavior.
+//  SAFETY-CRITICAL golden behavior: srvGem->Open() is called ONLY when
+//  srvGem->Active==false -- never a blind Close()+Open() (see the .cpp's own
+//  citation of golden's "斷線重連的秘密" warning). Verified here by accepting a
+//  Sim connection and confirming it SURVIVES a re-entry into the state
+//  machine while already Active (a blind Close()+Open() would have dropped it).
+// ===========================================================================
+static void test_doopencommuncation_open_guard()
+{
+    printf("\n[11] DoOpenCommuncation -- passive (srvGem) open-guard behavior\n");
+
+    THGem gem;
+    gem.bUseClientSocket = false;
+    gem.srvGem->Port = 6000;
+    gem.bOpenCommuncation = true;
+
+    CHECK(gem.iOpenCommuncationTask == 1, "fresh THGem starts at iOpenCommuncationTask==1");
+    gem.DoOpenCommuncation();   // case 1: bOpenCommuncation==true -> arms 0.5s delay, Task=100
+    CHECK(gem.iOpenCommuncationTask == 100, "case 1: bOpenCommuncation==true advances Task to 100");
+
+    ::Sleep(600);   // let DelayOpenCommuncation's 0.5s arm elapse
+    CHECK(gem.srvGem->Active == false, "srvGem starts inactive (Sim default)");
+    gem.DoOpenCommuncation();   // case 100: timer elapsed, Port!=0, inactive -> Open() -> Task=200
+    CHECK(gem.srvGem->Active == true, "DoOpenCommuncation opens srvGem when it was inactive");
+    CHECK(gem.iOpenCommuncationTask == 200, "Task advances to 200 after a successful Open()");
+
+    // Accept a Sim connection so a blind Close()+Open() would be OBSERVABLE
+    // (it would drop this connection -- Close() always empties Connections[]).
+    gem.srvGem->SimAcceptConnection("10.1.1.5", 4000);
+    CHECK(gem.srvGem->Socket->ActiveConnections == 1, "Sim-accepted one connection");
+
+    // Re-enter case 100 with srvGem ALREADY Active.
+    gem.iOpenCommuncationTask = 100;
+    gem.DoOpenCommuncation();
+    CHECK(gem.srvGem->Active == true, "srvGem stays Active across a re-entry with Active==true already");
+    CHECK(gem.srvGem->Socket->ActiveConnections == 1,
+          "open-guard preserved: the Sim-accepted connection survives (no blind Close()+Open())");
+}
+
+// ===========================================================================
+//  [12] srvGemClientConnect / Disconnect / Error state updates
+// ===========================================================================
+static void test_srvgemclient_handlers()
+{
+    printf("\n[12] srvGemClientConnect/Disconnect/Error\n");
+
+    THGem gem;
+
+    // srvGemClientConnect needs an accepted connection so Socket->LocalPort/
+    // LocalAddress (the event's own Socket param) and srvGem->Socket->
+    // Connections[i] (the loop) are both meaningful.
+    TCustomWinSocket *conn = gem.srvGem->SimAcceptConnection("10.1.1.9", 5555);
+    gem.srvGemClientConnect(gem.srvGem, conn);
+    CHECK(gem.bServoSocketConnect == true, "srvGemClientConnect sets bServoSocketConnect");
+    CHECK(gem.bReceiveMultiConnect == false, "srvGemClientConnect: bReceiveMultiConnect stays false with only 1 connection");
+
+    TCustomWinSocket *conn2 = gem.srvGem->SimAcceptConnection("10.1.1.10", 5556);
+    gem.srvGemClientConnect(gem.srvGem, conn2);
+    CHECK(gem.bReceiveMultiConnect == true, "srvGemClientConnect sets bReceiveMultiConnect once ActiveConnections>1");
+
+    gem.iOpenCommuncationTask = 999;
+    gem.srvGemClientDisconnect(gem.srvGem, conn);
+    CHECK(gem.bServoSocketConnect == false, "srvGemClientDisconnect clears bServoSocketConnect");
+    CHECK(gem.iOpenCommuncationTask == 1,
+          "srvGemClientDisconnect resets iOpenCommuncationTask to 1 (Timer1Task's own reset is deferred, see .cpp comment)");
+
+    // srvGemClientError -- see this file's own top-of-file SAFETY NOTE: this
+    // real call appends one line to D:\SECS_GEM_LOGS\... via SaveSECSGEMErrToLog.
+    // AI(W906-uHGemEquipment-ConnLifecycle) 20260717: per explicit user
+    // direction, using the real D:\SECS_GEM_LOGS path during dev/test is fine
+    // -- what's NOT fine is leaving it dirtier after the test than before.
+    // Capture the exact target file's pre-test content (computed with the
+    // SAME yyyy/mm_dd/hh tokens SaveSECSGEMErrToLog itself uses) and restore
+    // it verbatim afterward, so repeat ctest runs don't keep appending lines
+    // to a real operational log forever.
+    TDateTime tdNow = Now();
+    AnsiString logDirYear = "D:\\SECS_GEM_LOGS\\" + FormatDateTime("yyyy", tdNow);
+    AnsiString logDirDay = logDirYear + "\\" + FormatDateTime("mm_dd", tdNow);
+    AnsiString logFilePath = logDirDay + "\\SECSGEM_ErrLog_" + FormatDateTime("hh", tdNow) + ".txt";
+    bool logFileExistedBefore = FileExists(logFilePath);
+    bool logDayDirExistedBefore = DirectoryExists(logDirDay);
+    bool logYearDirExistedBefore = DirectoryExists(logDirYear);
+    std::string logFileOriginalContent;
+    if (logFileExistedBefore)
+    {
+        FILE *rf = fopen(logFilePath.c_str(), "rb");
+        if (rf)
+        {
+            char buf[65536];
+            size_t n;
+            while ((n = fread(buf, 1, sizeof(buf), rf)) > 0)
+                logFileOriginalContent.append(buf, n);
+            fclose(rf);
+        }
+    }
+
+    int errCode = 42;
+    gem.bServoSocketConnect = true;
+    gem.srvGemClientError(gem.srvGem, conn, Scktcomp::eeGeneral, errCode);
+    CHECK(gem.bServoSocketConnect == false, "srvGemClientError clears bServoSocketConnect");
+    CHECK(errCode == 0, "srvGemClientError zeroes the ErrorCode out-param");
+    CHECK(gem.bTCPIP_Error == true, "srvGemClientError sets bTCPIP_Error");
+
+    // Restore D:\SECS_GEM_LOGS to exactly its pre-test state.
+    if (logFileExistedBefore)
+    {
+        FILE *wf = fopen(logFilePath.c_str(), "wb");
+        if (wf)
+        {
+            fwrite(logFileOriginalContent.data(), 1, logFileOriginalContent.size(), wf);
+            fclose(wf);
+        }
+    }
+    else
+    {
+        remove(logFilePath.c_str());
+        if (!logDayDirExistedBefore)
+            RemoveDir(logDirDay);
+        if (!logYearDirExistedBefore)
+            RemoveDir(logDirYear);
+    }
+}
+
+// ===========================================================================
+//  [13] CheckSocketActiveFalse
+// ===========================================================================
+static void test_check_socket_active_false()
+{
+    printf("\n[13] CheckSocketActiveFalse\n");
+
+    THGem gem;
+
+    gem.bUseClientSocket = true;
+    CHECK(gem.clientGem->Active == false, "fresh clientGem starts inactive (Sim default)");
+    CHECK(gem.CheckSocketActiveFalse() == true, "bUseClientSocket==true + clientGem inactive -> true");
+    gem.clientGem->Active = true;
+    CHECK(gem.CheckSocketActiveFalse() == false, "bUseClientSocket==true + clientGem active -> false");
+
+    gem.bUseClientSocket = false;
+    CHECK(gem.srvGem->Active == false, "fresh srvGem starts inactive (Sim default)");
+    CHECK(gem.CheckSocketActiveFalse() == true, "bUseClientSocket==false + srvGem inactive -> true");
+    gem.srvGem->Open();
+    CHECK(gem.CheckSocketActiveFalse() == false, "bUseClientSocket==false + srvGem active -> false");
+}
+
+// ===========================================================================
+//  [14] ClearDefaultEvenReport -- repeatedly deletes every Mode==1
+//  (Handler-defined) stdGridReportID row, and scrubs strGrdCEID's references
+//  to each deleted ReportID (via the already-tested DeleteReportID /
+//  DeleteReportIDOfCeid). No SaveEventReportData call in its own body
+//  (verified by reading its definition) -- safe to call directly.
+// ===========================================================================
+static void test_clear_default_even_report()
+{
+    printf("\n[14] ClearDefaultEvenReport\n");
+
+    THGem gem;
+    gem.stdGridReportID->Cells[0][1] = 10; gem.stdGridReportID->Cells[1][1] = 1;
+    gem.stdGridReportID->Cells[0][2] = 20; gem.stdGridReportID->Cells[1][2] = 0;
+    gem.stdGridReportID->Cells[0][3] = 30; gem.stdGridReportID->Cells[1][3] = 1;
+
+    gem.strGrdCEID->Cells[0][1] = 5;
+    gem.strGrdCEID->Cells[3][1] = 10;
+    gem.strGrdCEID->Cells[4][1] = 30;
+
+    gem.ClearDefaultEvenReport();
+
+    CHECK(gem.stdGridReportID->Cells[0][1] == "20", "ClearDefaultEvenReport removes every Mode==1 row (10,30); surviving row (20) shifts up");
+    CHECK(gem.stdGridReportID->Cells[0][2] == "", "no Mode==1 rows remain after ClearDefaultEvenReport");
+    CHECK(gem.strGrdCEID->Cells[3][1] == "" && gem.strGrdCEID->Cells[4][1] == "",
+          "ClearDefaultEvenReport also scrubs strGrdCEID's references to the deleted ReportIDs (10,30)");
+}
+
+// ===========================================================================
+//  [15] GetTimeInfo -- TimeString/GemClock population (the in-scope half;
+//  the disk-free-space/memory-status tail is a documented gated stub, see
+//  the .cpp's own comment at GetTimeInfo's definition).
+// ===========================================================================
+static void test_get_time_info()
+{
+    printf("\n[15] GetTimeInfo -- TimeString/GemClock population\n");
+
+    THGem gem;
+    CHECK(gem.TimeString == "", "fresh THGem: TimeString starts empty");
+
+    gem.GetTimeInfo();
+    CHECK(gem.TimeString.Length() == 23, "TimeString matches \"yyyy-mm-dd hh:nn:ss.zzz\" length (23 chars)");
+    CHECK(gem.TimeString[5] == '-' && gem.TimeString[8] == '-', "TimeString has '-' separators at the expected positions");
+
+    CHECK(gem.iTimeFormat == 0, "iTimeFormat defaults to 0 (gate-stub default -- golden's own ctor never inits it either, see header note)");
+    CHECK(gem.GemClock.Length() == 12, "default iTimeFormat -> GemClock is the 12-byte 'else' branch format");
+
+    gem.iTimeFormat = 2;   // 14-byte format
+    gem.GetTimeInfo();
+    CHECK(gem.GemClock.Length() == 14, "iTimeFormat==2 -> GemClock is the 14-byte format");
+
+    gem.iTimeFormat = 3;   // ISO8601-ish, 19 bytes
+    gem.GetTimeInfo();
+    CHECK(gem.GemClock.Length() == 19 && gem.GemClock[5] == '-' && gem.GemClock[11] == 'T',
+          "iTimeFormat==3 -> GemClock is the 19-byte ISO8601-ish format with a literal 'T'");
+}
+
+// ===========================================================================
+//  [16] OnLine family / DoOnLine / small setters (OnLine/OnLineLocal/
+//  OnLineRemote/OffLine/IsOnLine/GetOnLineMode/SetEstablishCommunicationsTryCount/
+//  SetCanAcceptHostOnLineRequest/CloseCommuncation)
+// ===========================================================================
+static void test_online_family_and_misc()
+{
+    printf("\n[16] OnLine family / DoOnLine / misc small setters\n");
+
+    THGem gem;
+
+    gem.OnLine(true);
+    CHECK(gem.GetOnLineMode() == true, "OnLine(true) sets OnLineLocal mode");
+    CHECK(gem.IsOnLine() == false, "OnLine(Mode) alone does not yet flip bOnLine (DoOnLine's job)");
+    CHECK(gem.iStartOnLineTask == 1, "OnLine(Mode) arms iStartOnLineTask=1");
+
+    bool r1 = gem.DoOnLine();   // case 1 -> Task=200
+    CHECK(r1 == false && gem.iStartOnLineTask == 200, "DoOnLine case 1 advances Task to 200, returns false");
+    bool r2 = gem.DoOnLine();   // case 200 -> OnlineLocalOrRemote(); bOnLine=true; return true
+    CHECK(r2 == true && gem.IsOnLine() == true && gem.bStartOnLine == false,
+          "DoOnLine case 200 completes: bOnLine=true, bStartOnLine=false, returns true");
+
+    gem.OffLine();
+    CHECK(gem.IsOnLine() == false && gem.bStartOnLine == false, "OffLine clears bOnLine/bStartOnLine");
+
+    gem.OnLineRemote();
+    CHECK(gem.GetOnLineMode() == false, "OnLineRemote sets OnLineLocal mode false");
+    gem.OnLineLocal();
+    CHECK(gem.GetOnLineMode() == true, "OnLineLocal sets OnLineLocal mode true");
+
+    gem.SetEstablishCommunicationsTryCount(7);
+    CHECK(gem.iEstablishCommunicationsTryCount == 7, "SetEstablishCommunicationsTryCount stores the value");
+
+    gem.SetCanAcceptHostOnLineRequest(true);   // golden: truly empty body -- must not crash
+    CHECK(true, "SetCanAcceptHostOnLineRequest (golden empty body) does not crash");
+
+    gem.clientGem->Active = true;
+    gem.bCloseCommuncation = false;
+    gem.CloseCommuncation();
+    CHECK(gem.bCloseCommuncation == true && gem.clientGem->Active == false,
+          "CloseCommuncation sets bCloseCommuncation and forces clientGem->Active=false");
+}
+
+// ===========================================================================
+//  [17] StringOut(1-arg) / StringBinaryOut -- SaveSECSGEMErrToLog is
+//  deliberately NOT called directly here (hardcoded absolute path outside
+//  the repo -- see this file's own SAVE-related SAFETY notes above and at
+//  the top of this file); it IS exercised indirectly via srvGemClientError
+//  in test [12] above.
+// ===========================================================================
+static void test_stringout_and_binaryout()
+{
+    printf("\n[17] StringOut(1-arg) / StringBinaryOut\n");
+
+    THGem gem;
+    int before = gem.WaitShowString->Count;
+    gem.StringOut("hello");
+    CHECK(gem.WaitShowString->Count == before + 1 && gem.WaitShowString->GetString(before) == "hello",
+          "StringOut appends to WaitShowString");
+    CHECK(gem.LogDataString->Count == before + 1 && gem.LogDataString->GetString(before) == "hello",
+          "StringOut also appends to LogDataString");
+
+    int logBefore = gem.LogDataString->Count;
+    gem.StringBinaryOut("ignored");
+    CHECK(gem.LogDataString->Count == logBefore, "StringBinaryOut (golden: fully commented-out body) is a true no-op");
+}
+
+// ===========================================================================
 int main()
 {
     printf("=== SECSGEM/uHGemEquipment (+ vclcompat/StringGrid) translation verification ===\n");
@@ -493,6 +865,15 @@ int main()
     test_report_delete_family();
     test_read_event_report_data_real_oracle();
     test_alarm_read_write_roundtrip();
+    test_connect_lifecycle();
+    test_clientgem_handlers();
+    test_doopencommuncation_open_guard();
+    test_srvgemclient_handlers();
+    test_check_socket_active_false();
+    test_clear_default_even_report();
+    test_get_time_info();
+    test_online_family_and_misc();
+    test_stringout_and_binaryout();
 
     printf("\n=== RESULT: %d passed, %d failed ===\n", g_pass, g_fail);
     return (g_fail == 0) ? 0 : 1;

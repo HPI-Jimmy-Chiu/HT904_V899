@@ -22,6 +22,13 @@
 #include <cstring>   // strcpy/strncpy
 #include <cstddef>   // NULL
 
+// AI(W906-uHGemEquipment-ConnLifecycle) 20260717: GetSocketErrorMsg (below)
+// is a thin forward to the already-real GetErrorMsg (golden
+// uHGemEquipment.cpp:6842-6845) -- its one implementation lives in
+// Public/WinSocketErrorCode.cpp (ht9045_public library; wired in this wave's
+// CMakeLists.txt change, see root CMakeLists.txt's ht9045_secsgem target).
+#include "Public/WinSocketErrorCode.h"   // GetErrorMsg(TObject*, int) -> AnsiString
+
 // ---------------------------------------------------------------------------
 //  MyDBIProcess -- process-wide diagnostics/log sink (no-op in this
 //  translation; see aHotPlateSubstrate.h:576 / aHotPlateSubstrate.cpp:703 for
@@ -136,12 +143,54 @@ bool GemTimer::TimerOff()
 // members and allocating in the body with an explicit try/catch that cleans
 // up whichever grids DID succeed before rethrowing (delete on a NULL pointer
 // is a safe no-op, so this is correct regardless of which `new` failed).
+// AI(W906-uHGemEquipment-ConnLifecycle) 20260717: ctor EXTENDED for this
+// wave's new members. golden's own ctor (uHGemEquipment.cpp:444-674) never
+// explicitly `new`s clientGem/srvGem -- real BCB6 __published components are
+// created by VCL's Owner/.dfm streaming mechanism BEFORE the ctor body even
+// runs. This translation has no such streaming step, so clientGem/srvGem are
+// allocated + wired here explicitly, matching the SAME established idiom
+// Automation/automation.cpp's own translated ctor already uses for its
+// TServerSocket/TClientSocket pair (OLPServer/OLPClient) -- design-time
+// Address/Port values copied from golden's own .dfm (uHGemEquipment.dfm:
+// 542-554 clientGem, :562-573 srvGem). Every bool/int explicitly initialized
+// below matches golden's own ctor-body assignment for that same field
+// (uHGemEquipment.cpp:461-530); iEstablishCommunicationsTryCount/iTimeFormat
+// are the two exceptions -- golden's own ctor never assigns them at all (set
+// later by SetEstablishCommunicationsTryCount/SetTimeFormat, both callable
+// but SetTimeFormat is out of this wave's scope) -- zero-initialized here
+// defensively (same "flagged deviation from golden's raw uninitialized
+// state" precedent already established by GemTimer's own ctor, see this
+// file's GemTimer note).
 THGem::THGem()
     : strGrdAlarmOld(NULL),
       strGrdCEID(NULL),
       stdGridReportID(NULL),
       strGrdAlarm(NULL),
-      GemSystemPath("")
+      GemSystemPath(""),
+      clientGem(NULL),
+      srvGem(NULL),
+      bConnect(false),               // golden ctor :523
+      bOnLine(false),                // golden ctor :530
+      bOnLineLocal(false),           // golden ctor :527
+      bAutoConnect(false),           // golden ctor :606
+      bStartConnect(false),          // golden ctor :525
+      bStartOnLine(false),           // golden ctor :529
+      bTCPIP_Error(false),           // golden ctor :608
+      bServoSocketConnect(false),    // golden ctor :461
+      bReceiveMultiConnect(false),   // golden ctor :654
+      bUseClientSocket(false),       // golden ctor :468
+      bOpenCommuncation(false),      // golden ctor :609
+      bCloseCommuncation(false),     // golden ctor :610
+      bS1F2_OnLineData(false),       // golden ctor :539
+      countConnect(0),               // golden ctor :478
+      iConnectTryCount(0),           // golden ctor :479
+      iEstablishCommunicationsTryCount(0),  // golden never inits this (see note above)
+      iOpenCommuncationTask(1),      // golden ctor :477
+      iStartConnectTask(1),          // golden ctor :524
+      iStartOnLineTask(1),           // golden ctor :528
+      iTimeFormat(0),                // golden never inits this (see note above)
+      WaitShowString(NULL),
+      LogDataString(NULL)
 {
     try
     {
@@ -149,23 +198,84 @@ THGem::THGem()
         strGrdCEID      = new TStringGrid(258, 1025);
         stdGridReportID = new TStringGrid(1026, 257);
         strGrdAlarm     = new TStringGrid(12, 5);
+
+        WaitShowString = new TStringList();   // golden ctor :661-662
+        LogDataString  = new TStringList();   // golden ctor :618,624
+
+        // ---- clientGem (active/client role) -- golden .dfm:542-554 --------
+        clientGem = new TClientSocket(NULL);
+        clientGem->Address = "192.168.1.3";   // golden .dfm:544
+        clientGem->Port = 5100;               // golden .dfm:546
+        // OnConnecting = clientGemConnecting (golden .dfm:547): vclcompat's
+        // TClientSocket has no OnConnecting event slot (documented API gap --
+        // see Automation/automation.cpp's own identical ADAPTATION note for
+        // its OLPClient/OLPClientConnecting). clientGemConnecting is still
+        // translated below as a real, directly-callable method; it is simply
+        // not auto-fired by this shim.
+        clientGem->OnConnect = [this](TObject *Sender, TCustomWinSocket *Socket)
+            { clientGemConnect(Sender, Socket); };
+        clientGem->OnDisconnect = [this](TObject *Sender, TCustomWinSocket *Socket)
+            { clientGemDisconnect(Sender, Socket); };
+        clientGem->OnError = [this](TObject *Sender, TCustomWinSocket *Socket,
+                                     TErrorEvent ErrorEvent, int &ErrorCode)
+            { clientGemError(Sender, Socket, ErrorEvent, ErrorCode); };
+        // OnRead = clientGemRead (golden .dfm:550): clientGemRead is OUT OF
+        // SCOPE this wave (needs TMemoryStream/TFixedCriticalSection shims --
+        // see this header's own "Do NOT translate" note) -- NOT wired.
+
+        // ---- srvGem (passive/server role) -- golden .dfm:562-573 ----------
+        srvGem = new TServerSocket(NULL);
+        srvGem->Port = 6000;   // golden .dfm:564
+        srvGem->OnClientConnect = [this](TObject *Sender, TCustomWinSocket *Socket)
+            { srvGemClientConnect(Sender, Socket); };
+        srvGem->OnClientDisconnect = [this](TObject *Sender, TCustomWinSocket *Socket)
+            { srvGemClientDisconnect(Sender, Socket); };
+        srvGem->OnClientError = [this](TObject *Sender, TCustomWinSocket *Socket,
+                                        TErrorEvent ErrorEvent, int &ErrorCode)
+            { srvGemClientError(Sender, Socket, ErrorEvent, ErrorCode); };
+        // OnClientRead = clientGemRead (golden .dfm:569): same OUT-OF-SCOPE
+        // reason as clientGem->OnRead above -- NOT wired.
     }
     catch (...)
     {
+        // Same delete ORDER as ~THGem() below (clientGem/srvGem first) for
+        // consistency/defense-in-depth -- see that destructor's own comment
+        // for why the order is load-bearing there.
+        delete clientGem;
+        delete srvGem;
         delete strGrdAlarmOld;
         delete strGrdCEID;
         delete stdGridReportID;
         delete strGrdAlarm;
+        delete WaitShowString;
+        delete LogDataString;
         throw;
     }
 }
 
 THGem::~THGem()
 {
+    // AI(W906-uHGemEquipment-ConnLifecycle) 20260717: ORDER IS LOAD-BEARING --
+    // clientGem/srvGem MUST be deleted FIRST, before WaitShowString/
+    // LogDataString. Root-caused via this wave's own test [11]
+    // (test_doopencommuncation_open_guard): ~TServerSocket() (via DoClose_())
+    // synchronously fires OnClientDisconnect for any still-open connection --
+    // wired in this ctor to srvGemClientDisconnect, which calls GetTimeInfo()/
+    // StringOut(...), which dereferences WaitShowString/LogDataString. With
+    // the original delete order (StringLists first, sockets last), that was a
+    // use-after-free -- manifested as a "pure virtual method called" abort
+    // when a THGem with an active Sim-accepted srvGem connection went out of
+    // scope. Deleting clientGem/srvGem BEFORE the StringLists ensures any
+    // synchronous teardown-time callback into THGem's own methods still sees
+    // live WaitShowString/LogDataString/other members.
+    delete clientGem;
+    delete srvGem;
     delete strGrdAlarmOld;
     delete strGrdCEID;
     delete stdGridReportID;
     delete strGrdAlarm;
+    delete WaitShowString;
+    delete LogDataString;
 }
 
 //===========================================================================
@@ -1036,4 +1146,651 @@ bool SplitStrByTabOnly(char *str, char *dest, int Max)
         }
     }
     return true;
+}
+
+//===========================================================================
+//  TCP/IP connection lifecycle (W906-uHGemEquipment-ConnLifecycle wave)
+//  (golden uHGemEquipment.cpp:315-348, 392-439, 2100-2142, 3382-3490,
+//   3604-3645, 4988-5008, 5146-5159, 5548-5644, 6812-6910)
+//===========================================================================
+
+namespace {
+
+// ---------------------------------------------------------------------------
+// LogClientSocketExceptionError_ -- stand-in for golden's DEFERRED
+// LogClientSocketExceptionError(Sender, "THGem") (Public/WinSocketErrorCode.h
+// explicitly documents this as DEFERRED -- couples to VCL
+// TClientSocket->Name/Address/Port + MyDBIProcess). Golden's one call site in
+// THIS file is srvGemClientError's catch(...) branch (uHGemEquipment.cpp:6870).
+//
+// Per this project's established per-TU handling of the identical gap (grepped
+// the tree, as directed): Automation/automation.cpp:67-76 routes to a real log
+// call (RecordProcess) rather than silently dropping the diagnostic;
+// Interface/TesterTCP_Socket.cpp:104-119 instead makes it a true no-op (its own
+// call sites are inside an already-fully-handled catch). This TU follows the
+// automation.cpp spirit (log something real, don't just drop it) but does NOT
+// reach for RecordProcess: RecordProcess's only current definition
+// (common.cpp) lives in the ht9045_core library, which uHGemEquipment.cpp does
+// not link and, per this very file's own top-of-file note, deliberately avoids
+// pulling in (extract-calc-core discipline -- MachineDefine.h/cMydef.h/
+// database.h/etc. are intentionally NOT included here either). Instead this
+// routes to SaveSECSGEMErrToLog (translated below, golden :422-439) -- a real,
+// already in-scope logging sink for exactly this situation -- with a
+// synthesized message, per this wave's own brief which explicitly offered that
+// as an acceptable alternative.
+// ---------------------------------------------------------------------------
+void LogClientSocketExceptionError_(THGem *inst, TObject *Sender, const AnsiString &Context)
+{
+    (void)Sender;
+    inst->SaveSECSGEMErrToLog("ClientSocketException: " + Context);
+}
+
+// ---------------------------------------------------------------------------
+// Gated_MyForceDirectories -- golden common.h:262, gated `#if 0` inside
+// common.h (not in this front's allowed file list). Same TU-local
+// re-implementation TECHNIQUE already established by Interface/TesterTCP.cpp's
+// own Gated_MyForceDirectories (each gated dependency in this project is
+// intentionally reproduced per-TU, not shared via a header -- see
+// docs/KNOWLEDGE.md) -- but SIMPLIFIED to match THIS file's one real call
+// site's actual shape (SaveSECSGEMErrToLog's `asPath`, below): always a bare,
+// guaranteed-non-empty directory path, never a path with a trailing filename
+// component -- the SAME simplification Automation/automation.cpp's own
+// W906Auto_MyForceDirectories already made for the identical reason (see that
+// file's own note). Diagnostic branch routes to MyDBIProcess (already
+// extern-declared above in this TU, established by the pre-existing
+// ReadAlamData) rather than RecordProcess/ShowMyMessage (canary_support.h) --
+// same minimal-dependency reasoning as LogClientSocketExceptionError_ above.
+// ---------------------------------------------------------------------------
+void Gated_MyForceDirectories(AnsiString Directory)
+{
+    if (Directory == "")
+    {
+        MyDBIProcess("Directory value is NULL!", "SaveSECSGEMErrToLog");
+        return;
+    }
+    if (DirectoryExists(Directory) == false)
+        ForceDirectories(Directory);
+}
+
+} // anonymous namespace
+
+//---------------------------------------------------------------------------
+// V 1.0
+// 設定 Time String Format and get pc information (golden uHGemEquipment.cpp:315-348)
+//---------------------------------------------------------------------------
+void THGem::GetTimeInfo()
+{
+    TDateTime dtPresent;
+
+    dtPresent = Now();
+    DecodeDate(dtPresent, SystemYear, SystemMonth, SystemDate);
+    DecodeTime(dtPresent, SystemHour, SystemMin, SystemSec, SystemMSec);
+    TimeString.sprintf("%04d-%02d-%02d %02d:%02d:%02d.%03d", SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec, SystemMSec);
+
+    if (iTimeFormat == 1)                                                       // 16 byte
+        GemClock.sprintf("%04d%02d%02d%02d%02d%02d%02d", SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec, SystemMSec / 10);
+    else if (iTimeFormat == 2)                                                  // 14 byte
+        GemClock.sprintf("%04d%02d%02d%02d%02d%02d", SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec);
+    else if (iTimeFormat == 3)                                                  // 19 byte
+        GemClock.sprintf("%04d-%02d-%02dT%02d:%02d:%02d", SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec);
+    else
+        GemClock.sprintf("%02d%02d%02d%02d%02d%02d", SystemYear % 100, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec);
+
+    // AI(W906-uHGemEquipment-ConnLifecycle) 20260717: GATED STUB -- golden's
+    // tail (uHGemEquipment.cpp:332-347) polls disk-free-space / global-memory-
+    // status every 5-10 minutes via GetDiskFreeSpaceMB(...)/
+    // GetGlobalMemoryStatusKB(...). Neither function exists anywhere in this
+    // codebase yet (grepped), and the LastGetDiskInfoMin/LastGetMemoryStatus/
+    // Disk_C_TotalSpaceMB/.../ulMemoryLoad/... members that tail reads/writes
+    // are not part of THIS wave's scope either. Same gated-stub precedent as
+    // EnableDisableEventReportAcknowledgeError above (this file's other GATED
+    // STUB): omitted outright (no member additions, no calls) rather than
+    // half-modeled -- exists purely so this comment documents WHY the tail is
+    // missing, so a future wave doesn't mistake the omission for an oversight.
+}
+
+//---------------------------------------------------------------------------
+// V 1.0
+// 將 Data 從設計指定的 TMemo 內做 show 出 (golden uHGemEquipment.cpp:392-396)
+//---------------------------------------------------------------------------
+void __fastcall THGem::StringOut(AnsiString S)
+{
+    WaitShowString->Add(S);
+    LogDataString->Add(S);
+}
+//---------------------------------------------------------------------------
+// V 1.0
+// 將 Data 從設計指定的 TMemo 內以 Binary show 出 (golden uHGemEquipment.cpp:401-404)
+//---------------------------------------------------------------------------
+void __fastcall THGem::StringBinaryOut(AnsiString S)
+{
+    // AI(W906-uHGemEquipment-ConnLifecycle) 20260717: golden's ENTIRE body is
+    // a commented-out `//LogDataString->Add(S);` -- a true no-op in golden
+    // itself, not a translation gap. Preserved verbatim.
+    (void)S;
+}
+//---------------------------------------------------------------------------
+// V 1.0
+// 儲存 SECS LOG (golden uHGemEquipment.cpp:422-439)
+//---------------------------------------------------------------------------
+void __fastcall THGem::SaveSECSGEMErrToLog(AnsiString asSaveStr)
+{
+    TDateTime tdSaveTime = Now();
+    AnsiString asPath, asFN;
+    FILE *P;
+
+    // AI(W906-uHGemEquipment-ConnLifecycle) 20260717: golden's
+    // `DateSeparator='_';` (a global BCB6 SysUtils setting) is OMITTED --
+    // vclcompat has no such global, and hand-tracing golden's own 3
+    // FormatString calls below confirms it is behaviorally INERT for this
+    // method anyway: none of "yyyy" / "mm_dd" / "hh" contain the '/' token
+    // DateSeparator would ever substitute into. Nothing to port, not a gap.
+    //
+    // Golden calls `tdSaveTime.FormatString(fmt)` (BCB6 TDateTime member-call
+    // syntax) -- vclcompat::TDateTime has no such member (see
+    // vclcompat/TDateTime.h). Adapted to the free-function
+    // FormatDateTime(fmt, dt) call style per this wave's own brief -- same
+    // token grammar, same output, syntax-only adaptation.
+    asPath.sprintf("D:\\SECS_GEM_LOGS\\%s\\%s", FormatDateTime("yyyy", tdSaveTime), FormatDateTime("mm_dd", tdSaveTime));
+    // golden: MyForceDirectories(asPath);  -- TU-local stand-in, see above.
+    Gated_MyForceDirectories(asPath);
+    asFN.sprintf("%s\\SECSGEM_ErrLog_%s.txt", asPath, FormatDateTime("hh", tdSaveTime));
+
+    P = fopen(asFN.c_str(), "a+");
+    if (P != NULL)
+    {
+        fputs(asSaveStr.c_str(), P);
+        fputs("\n", P);
+        fclose(P);
+    }
+}
+
+//---------------------------------------------------------------------------
+// V1.0 (golden uHGemEquipment.cpp:2100-2104)
+//---------------------------------------------------------------------------
+void __fastcall THGem::clientGemConnect(TObject *Sender, TCustomWinSocket *Socket)
+{
+    (void)Sender;
+    (void)Socket;
+    StringOut("Connect");
+}
+//---------------------------------------------------------------------------
+// V1.0 (golden uHGemEquipment.cpp:2108-2116)
+//---------------------------------------------------------------------------
+void __fastcall THGem::clientGemDisconnect(TObject *Sender, TCustomWinSocket *Socket)
+{
+    (void)Sender;
+    (void)Socket;
+    GetTimeInfo();
+    StringOut("disconnect  " + TimeString);   // JerryYang 20190411 : 斷線時要記錄時間
+    if (bConnect == true)
+        bAutoConnect = true;
+    bConnect = false;
+}
+//---------------------------------------------------------------------------
+// V1.0 (golden uHGemEquipment.cpp:2120-2134)
+//---------------------------------------------------------------------------
+void __fastcall THGem::clientGemError(TObject *Sender, TCustomWinSocket *Socket, TErrorEvent ErrorEvent, int &ErrorCode)
+{
+    (void)Sender;
+    (void)Socket;
+    (void)ErrorEvent;
+    clientGem->Active = false;
+    ErrorCode = 0;
+    bTCPIP_Error = true;
+    // AI(W906-uHGemEquipment-ConnLifecycle) 20260717: golden's own
+    // `try{clientGem->Close();}catch(...){LogClientSocketExceptionError(...);}`
+    // is ITSELF commented out in golden (uHGemEquipment.cpp:2126-2133) -- dead
+    // code in golden, preserved as dead (not translated to a live call, and
+    // NOT "resurrected").
+}
+//---------------------------------------------------------------------------
+// V1.0 (golden uHGemEquipment.cpp:2138-2142)
+//---------------------------------------------------------------------------
+void __fastcall THGem::clientGemConnecting(TObject *Sender, TCustomWinSocket *Socket)
+{
+    (void)Sender;
+    (void)Socket;
+    StringOut("connecting");
+}
+
+//=============================================================================
+// =            對 Host 的要求做 Polling 處理所用到的程式區塊                  =
+//=============================================================================
+//------------------------------------------------------------------------------
+// V 1.0
+// 對 Socket 做 Enable 處理 (golden uHGemEquipment.cpp:3382-3490)
+//------------------------------------------------------------------------------
+bool THGem::DoOpenCommuncation()
+{
+    int &Task = iOpenCommuncationTask;
+
+    if (bUseClientSocket == true)
+    {
+        switch (Task)
+        {
+            case 1:
+                if (bOpenCommuncation == true)
+                    Task = 100;
+                break;
+            case 100:
+                if (clientGem->Address == "" || clientGem->Port == 0)
+                    return false;
+
+                // 16.04.01.01s Roy Change
+                try
+                {
+                    clientGem->Active = true;
+                }
+                catch (...)
+                {
+                    MyDBIProcess("Exception", "THGem::DoOpenCommuncation");
+                }
+                // 16.04.01.01e
+
+                if (clientGem->Active == true)
+                {
+                    Task = 200;
+                }
+                else
+                {
+                    DelayOpenCommuncation.TimerSetSecAndOn(60);
+                    Task = 150;
+                }
+                break;
+            case 150:
+                if (DelayOpenCommuncation.TimerOff())
+                    Task = 100;
+                break;
+            case 200:
+                if (bTCPIP_Error == true)
+                {
+                    bTCPIP_Error = false;
+                    Task = 100;
+                }
+                else
+                {
+                    Task = 1;
+                    return true;
+                }
+                break;
+        }
+        return false;
+    }
+    else
+    {
+        switch (Task)
+        {
+            case 1:
+                if (bOpenCommuncation == true)
+                {
+                    // AI(W906-uHGemEquipment-ConnLifecycle) 20260717: golden's
+                    // own `//srvGem->Close();` right here is commented out in
+                    // golden itself ("斷線重連的秘密 2013/07/18 lee -- 把 Servo
+                    // Socket close 再 open 看看 -- 結果會當掉!!!!!!!!!!!", i.e.
+                    // "the secret of reconnect-after-disconnect ... closing
+                    // Servo Socket then reopening it -- turns out it WILL
+                    // HANG!!!"). Preserved as dead code, NOT resurrected -- see
+                    // srvGemClientDisconnect's own comment below for the fuller
+                    // quote and why this matters there too.
+                    DelayOpenCommuncation.TimerSetSecAndOn(0.5);
+                    Task = 100;
+                }
+                break;
+            case 100:
+                if (DelayOpenCommuncation.TimerOff() == false)
+                    break;
+
+                if (srvGem->Port == 0)
+                    return false;
+
+                // AI(W906-uHGemEquipment-ConnLifecycle) 20260717:
+                // SAFETY-CRITICAL, preserved verbatim (golden :3458-3459,
+                // "Eliot 2012_1108") -- Open() is called ONLY when NOT already
+                // Active. NEVER blind-close-then-reopen srvGem here (or
+                // anywhere else) -- see srvGemClientDisconnect's own comment
+                // for the golden warning this guards against.
+                if (srvGem->Active == false)
+                    srvGem->Open();
+
+                if (srvGem->Active == true)
+                {
+                    Task = 200;
+                }
+                else
+                {
+                    DelayOpenCommuncation.TimerSetSecAndOn(2);
+                    Task = 150;
+                }
+                break;
+            case 150:
+                if (DelayOpenCommuncation.TimerOff())
+                    Task = 100;
+                break;
+            case 200:
+                if (bTCPIP_Error == true)
+                {
+                    bTCPIP_Error = false;
+                    Task = 100;
+                }
+                else if (srvGem->Socket->ActiveConnections != 0)
+                {
+                    Task = 1;
+                    return true;
+                }
+                break;
+        }
+        return false;
+    }
+}
+//------------------------------------------------------------------------------
+// V 1.0
+// 與 remote 建立連線後的 Online[online local or remote] or offline 的要求送發
+// (golden uHGemEquipment.cpp:3604-3621)
+//------------------------------------------------------------------------------
+void THGem::OnlineLocalOrRemote()
+{
+    bS1F2_OnLineData = false;
+
+    // AI(W906-uHGemEquipment-ConnLifecycle) 20260717: below this point,
+    // golden's own if/else is ENTIRELY DEAD -- both the true and false
+    // branches contain ONLY a commented-out EventReport(...) call, annotated
+    // by golden's own author ("JerryYang 20230204: SECS/GEM GControl State
+    // 轉換的處理，這邊 Event report" -- roughly, "SECS/GEM GControl-State-
+    // transition handling; the Event Report used to fire here"). This is a
+    // genuine golden design choice (EventReport deliberately disabled here),
+    // not a translation gap -- translated as a genuinely inert branch, NOT
+    // "restored" to call EventReport (which is, besides, out of this wave's
+    // own scope).
+    if (bOnLineLocal == true)
+    {
+        // golden: //EventReport(1, 92);  -- dead in golden itself.
+    }
+    else
+    {
+        // golden: //EventReport(1, 93);  -- dead in golden itself.
+    }
+}
+//------------------------------------------------------------------------------
+// V 1.0
+// 與 remote 建立連線後的 Online[online local or remote] or offline 的要求送發
+// (golden uHGemEquipment.cpp:3626-3645)
+//------------------------------------------------------------------------------
+bool THGem::DoOnLine()
+{
+    int &Task = iStartOnLineTask;
+    switch (Task)
+    {
+        case 1:
+            Task = 200;
+            break;
+        case 100:
+            if (bS1F2_OnLineData)
+                Task = 200;
+            break;
+        case 200:
+            OnlineLocalOrRemote();
+            bOnLine = true;
+            bStartOnLine = false;
+            return true;
+    }
+    return false;
+}
+
+//2013/11/20  lee start
+//------------------------------------------------------------------------------
+// (golden uHGemEquipment.cpp:4988-5008)
+//------------------------------------------------------------------------------
+void __fastcall THGem::ClearDefaultEvenReport()
+{
+    unsigned iReportID;
+    bool bSearchOK;
+    do
+    {
+        bSearchOK = false;
+        for (int y = 1; y < stdGridReportID->RowCount; y++)
+        {
+            if (stdGridReportID->Cells[1][y] == "1")
+            {
+                iReportID = static_cast<unsigned>(atoi(stdGridReportID->Cells[0][y].c_str()));
+                DeleteReportID(iReportID, 1);
+                DeleteReportIDOfCeid(iReportID);
+                bSearchOK = true;
+                break;
+            }
+        }
+    } while (bSearchOK == true);
+}
+//2013/11/20  lee end
+
+//=============================================================================
+// =   V 1.0                                                                   =
+// =   對 Host 的要求做 Polling 處理  (golden uHGemEquipment.cpp:5146-5159)     =
+// =                                                                           =
+//=============================================================================
+bool THGem::CheckSocketActiveFalse()
+{
+    if (bUseClientSocket == true)
+    {
+        if (clientGem->Active == false)
+            return true;
+    }
+    else
+    {
+        if (srvGem->Active == false)
+            return true;
+    }
+    return false;
+}
+
+//==============================================================================
+// V 1.0
+// for Application call for disable TCP/IP port (golden uHGemEquipment.cpp:5548-5552)
+//==============================================================================
+void THGem::CloseCommuncation()
+{
+    bCloseCommuncation = true;
+    clientGem->Active = false;
+}
+//==============================================================================
+// V 1.0
+// for Application call for connect with remote (golden uHGemEquipment.cpp:5557-5563)
+//==============================================================================
+void THGem::Connect()
+{
+    if (bConnect == true)
+        return;
+    bStartConnect = true;
+    bAutoConnect = true;
+}
+//==============================================================================
+// V 1.0 (golden uHGemEquipment.cpp:5567-5572)
+//==============================================================================
+void THGem::DisConnect()
+{
+    bConnect = false;
+    bStartConnect = false;
+    bAutoConnect = false;
+}
+//==============================================================================
+// V 1.0 (golden uHGemEquipment.cpp:5576-5579)
+//==============================================================================
+bool THGem::IsConnect()
+{
+    return bConnect;
+}
+//==============================================================================
+// V 1.0 (golden uHGemEquipment.cpp:5583-5586)
+//==============================================================================
+void THGem::SetEstablishCommunicationsTryCount(int ct)
+{
+    iEstablishCommunicationsTryCount = ct;
+}
+//==============================================================================
+// V 1.0
+// Mode=true   OnLineLocal
+// Mode=false  OnLineRemote (golden uHGemEquipment.cpp:5592-5598)
+//==============================================================================
+void THGem::OnLine(bool Mode)
+{
+    bOnLineLocal = Mode;
+    iStartOnLineTask = 1;
+    bStartOnLine = true;
+    bOnLine = false;
+}
+//==============================================================================
+// V 1.0 (golden uHGemEquipment.cpp:5602-5606)
+//==============================================================================
+void THGem::OnLineLocal()
+{
+    bOnLineLocal = true;
+    OnlineLocalOrRemote();
+}
+//==============================================================================
+// V 1.0 (golden uHGemEquipment.cpp:5610-5614)
+//==============================================================================
+void THGem::OnLineRemote()
+{
+    bOnLineLocal = false;
+    OnlineLocalOrRemote();
+}
+//==============================================================================
+// V 1.1
+// 2013/04/02 Lee (golden uHGemEquipment.cpp:5619-5624)
+//==============================================================================
+void THGem::OffLine()
+{
+    bOnLine = false;
+    bStartOnLine = false;
+    // golden: //EventReport(1, 91);  -- dead in golden itself (same
+    // "JerryYang 20230204" disabling as OnlineLocalOrRemote above), not translated.
+}
+//==============================================================================
+// V 1.0 (golden uHGemEquipment.cpp:5628-5631)
+//==============================================================================
+bool THGem::IsOnLine()
+{
+    return bOnLine;
+}
+//==============================================================================
+// V 1.0 (golden uHGemEquipment.cpp:5635-5638)
+//==============================================================================
+bool THGem::GetOnLineMode()
+{
+    return bOnLineLocal;
+}
+//==============================================================================
+// V 1.0 (golden uHGemEquipment.cpp:5642-5644)
+//==============================================================================
+void THGem::SetCanAcceptHostOnLineRequest(bool flag)
+{
+    // AI(W906-uHGemEquipment-ConnLifecycle) 20260717: golden body is
+    // LITERALLY empty -- not a translation gap, preserved verbatim.
+    (void)flag;
+}
+
+//---------------------------------------------------------------------------
+// 2013/05/27
+// V1.1 (golden uHGemEquipment.cpp:6812-6837)
+//---------------------------------------------------------------------------
+void __fastcall THGem::srvGemClientConnect(TObject *Sender, TCustomWinSocket *Socket)
+{
+    (void)Sender;
+    AnsiString S;   // golden also declares S0,S1,S2,S3 here -- unused in
+                    // golden's own body (dead declarations), not translated.
+    for (int i = 0; i < srvGem->Socket->ActiveConnections; i++)
+    {
+        S = "Connect " + AnsiString(i) + ":" + srvGem->Socket->Connections[i]->LocalAddress;
+        StringOut(S);
+    }
+
+    S = "Local Port:" + AnsiString(Socket->LocalPort);
+    StringOut(S);
+    S = "Local Address:" + AnsiString(Socket->LocalAddress);
+    StringOut(S);
+    StringOut("==================");
+    StringOut("connect");
+    bServoSocketConnect = true;
+    if (srvGem->Socket->ActiveConnections > 1)
+    {
+        bReceiveMultiConnect = true;
+        // AI(W906-uHGemEquipment-ConnLifecycle) 20260717: golden's
+        // `TerminalMemoPtr!=NULL` branch here (uHGemEquipment.cpp:6832-6835)
+        // writes a Big5 UI message into TerminalMemoPtr (the KYEC SECS/GEM
+        // terminal window) -- OUT OF SCOPE this wave (TerminalMemoPtr is not
+        // yet a member; see this header's own "MEMBERS DELIBERATELY NOT
+        // PRESENT YET" note). Omitted: the condition can never be reached
+        // without that member existing.
+    }
+}
+//---------------------------------------------------------------------------
+// 2013/05/27
+// V1.1 (golden uHGemEquipment.cpp:6842-6845)
+//---------------------------------------------------------------------------
+AnsiString __fastcall THGem::GetSocketErrorMsg(TObject *Sender, int iErrCode)
+{
+    return GetErrorMsg(Sender, iErrCode);
+}
+//---------------------------------------------------------------------------
+// 2013/05/27
+// V1.1 (golden uHGemEquipment.cpp:6850-6874)
+//---------------------------------------------------------------------------
+void __fastcall THGem::srvGemClientError(TObject *Sender, TCustomWinSocket *Socket, TErrorEvent ErrorEvent, int &ErrorCode)
+{
+    (void)Socket;
+    (void)ErrorEvent;
+    // 20130308 Daver add
+    AnsiString S;
+    StringOut("---------------------------------------------------");
+    GetTimeInfo();
+    S = GetSocketErrorMsg(Sender, ErrorCode) + "  " + TimeString;
+    StringOut(S);
+    SaveSECSGEMErrToLog(S);
+    // ================
+
+    bServoSocketConnect = false;   // Eliot 2012_1105
+    try
+    {
+        srvGem->Close();
+    }
+    catch (...)
+    {
+        // Steven 20231113 : 記錄斷線例外 -- stand-in for golden's DEFERRED
+        // LogClientSocketExceptionError, see the file-scope note above.
+        LogClientSocketExceptionError_(this, Sender, "THGem");
+    }
+    ErrorCode = 0;
+    bTCPIP_Error = true;
+}
+//---------------------------------------------------------------------------
+// 2013/05/27
+// V1.1 (golden uHGemEquipment.cpp:6897-6910)
+//---------------------------------------------------------------------------
+void __fastcall THGem::srvGemClientDisconnect(TObject *Sender, TCustomWinSocket *Socket)
+{
+    (void)Sender;
+    (void)Socket;
+    bServoSocketConnect = false;
+    GetTimeInfo();
+    StringOut("disconnect  " + TimeString);   // JerryYang 20190411 : 斷線時要記錄時間
+
+    // AI(W906-uHGemEquipment-ConnLifecycle) 20260717: SAFETY-CRITICAL,
+    // preserved verbatim -- golden's own `srvGem->Close();` line right here is
+    // COMMENTED OUT in golden itself, under a comment block titled (Big5,
+    // paraphrased) "the secret of reconnect-after-disconnect" -- "2013/07/18
+    // lee: closing Servo Socket and reopening it from *inside this very
+    // disconnect handler* -- turns out it WILL HANG the application." DO NOT
+    // uncomment/add a srvGem->Close() call here. DoOpenCommuncation's own
+    // passive-role state machine (case 100 above) is the ONLY place that
+    // re-opens srvGem, and only when `!srvGem->Active` (see that function's
+    // own SAFETY-CRITICAL citation). Golden (uHGemEquipment.cpp:6904-6909):
+    //     //srvGem->Close();
+    //     Timer1Task=1;                // 要重新answer
+    //     iOpenCommuncationTask=1;     // 要重新answer
+    // Timer1Task is a Timer1Timer-owned state variable; Timer1Timer itself is
+    // OUT OF THIS WAVE'S SCOPE (needs SecsWireCodec embedded first -- see this
+    // header's own "Do NOT translate" list) -- that reset is DEFERRED to
+    // whichever future wave translates Timer1Timer. Flagged loudly here so
+    // that translator does not miss it. Only the in-scope half is done below.
+    iOpenCommuncationTask = 1;
 }

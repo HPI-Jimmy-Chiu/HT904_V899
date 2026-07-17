@@ -485,7 +485,14 @@ target_include_directories(ht9045_secsgem PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/SECSGEM
 )
 
-target_link_libraries(ht9045_secsgem PUBLIC vclcompat)
+# AI(W906-uHGemEquipment-ConnLifecycle) 20260717: THGem::GetSocketErrorMsg
+# (uHGemEquipment.cpp, golden :6842-6845) is a thin forward to the already-real
+# GetErrorMsg(TObject*, int) -- its one implementation is
+# Public/WinSocketErrorCode.cpp, which lives in the ht9045_public library (see
+# that library's own target above). GetErrorMsg only reads <winsock2.h>
+# constants (no WSA*/socket function calls -- see that .cpp's own header
+# note), so this adds no further transitive link requirement (no ws2_32 etc.).
+target_link_libraries(ht9045_secsgem PUBLIC vclcompat ht9045_public)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(ht9045_secsgem PRIVATE ${HT9045_WARNFLAGS})

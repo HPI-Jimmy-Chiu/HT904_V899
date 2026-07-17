@@ -1725,17 +1725,40 @@ add_test(NAME SecsSvEcRegistration COMMAND test_SecsSvEcRegistration)
 #   CEID/Report/Alarm StringGrid "database" family (26 methods) + GemTimer +
 #   vclcompat::TStringGrid. Links ht9045_secsgem (which now carries
 #   SECSGEM/uHGemEquipment.cpp) -- PUBLIC-links vclcompat transitively (the
-#   new vclcompat/StringGrid.cpp + AnsiString/TStringList this file needs).
+#   new vclcompat/StringGrid.cpp + AnsiString/TStringList this file needs) and,
+#   as of the W906-uHGemEquipment-ConnLifecycle wave, ht9045_public (GetErrorMsg,
+#   see ht9045_secsgem's own target in the root CMakeLists.txt).
 #   Supplies its own local MyDBIProcess(2-arg) stand-in (see the test file's
 #   own comment) rather than linking ht9045_sm's real aHotPlateSubstrate.cpp
 #   definition -- same "avoid the god-stack for a focused unit test" posture
-#   already established by test_config_loaders.cpp/test_MyCCLink.cpp. No
-#   THGem/VCL-form/socket dependency (this wave's THGem slice has none yet).
+#   already established by test_config_loaders.cpp/test_MyCCLink.cpp.
+#   AI(W906-uHGemEquipment-ConnLifecycle) 20260717: THGem now owns a real
+#   clientGem/srvGem pair (TClientSocket/TServerSocket, vclcompat/ClientSocket
+#   .cpp + ServerSocket.cpp) -- this test is THAT slice's first real consumer,
+#   so ws2_32 must be linked (WIN32) exactly like every other test that
+#   references vclcompat's socket internals (test_serversocket/
+#   test_clientsocket_ext/test_myplc_modbus/... all do the same, see their own
+#   entries in this file) -- Real-mode code paths inside ClientSocket.cpp/
+#   ServerSocket.cpp reference WSAStartup/socket/connect/send/recv/etc. even
+#   though this test only ever exercises Sim mode.
 add_executable(test_uHGemEquipment
     test_uHGemEquipment.cpp
 )
 
-target_link_libraries(test_uHGemEquipment PRIVATE ht9045_secsgem)
+# AI(W906-uHGemEquipment-ConnLifecycle) 20260717: plain
+# `target_link_libraries(... PRIVATE ht9045_secsgem)` (as this line used to
+# read) left ws2_32 placed BEFORE libvclcompat.a/libht9045_public.a on the
+# actual link line (confirmed via the generated linkLibs.rsp) -- GNU ld's
+# single left-to-right pass never re-visits ws2_32 once vclcompat's later
+# unresolved WSAStartup/socket/connect/etc. show up, so the link failed.
+# Same LINK_GROUP:RESCAN fix already established by this exact multi-hop-
+# static-lib-plus-ws2_32 shape at test_myplc_modbus's own entry in this file.
+target_link_libraries(test_uHGemEquipment PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_secsgem,ht9045_public,vclcompat>"
+)
+if(WIN32)
+    target_link_libraries(test_uHGemEquipment PRIVATE ws2_32)
+endif()
 
 add_test(NAME uHGemEquipment COMMAND test_uHGemEquipment)
 

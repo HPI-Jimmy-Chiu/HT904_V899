@@ -53,16 +53,31 @@
 //  below are allocated at the exact RowCount/ColCount their golden .dfm
 //  entries specify (uHGemEquipment.dfm:375-436) -- see the constructor.
 //
-//  MEMBERS DELIBERATELY NOT PRESENT YET (out of THIS wave's scope; a future
-//  wave adds them to this SAME class body, does not redefine it):
-//    - clientGem/srvGem (TClientSocket*/TServerSocket*) + their connection
-//      lifecycle (Connect/DisConnect/OnLine/OffLine/DoConnect/
-//      clientGemConnect/clientGemRead/srvGemClientConnect/Timer1Timer/
-//      ProcessReceiceData/ProcessSocketReceiceData) -- explicitly deferred to
-//      a follow-on wave per this wave's own synthesis note (a genuinely
-//      different, not-yet-designed TMemoryStream/TCriticalSection shim
-//      dependency; see that method family's golden citations at
-//      uHGemEquipment.cpp's clientGemRead/DoOpenCommuncation/DoOnLine).
+//  AI(W906-uHGemEquipment-ConnLifecycle) 20260717: SECOND WAVE landed on this
+//  same class -- the TCP/IP connection-lifecycle slice: clientGem/srvGem
+//  (TClientSocket*/TServerSocket*, allocated+wired in the ctor), their
+//  connection-state bools/ints/GemTimers, Connect/DisConnect/IsConnect/OnLine
+//  family/CloseCommuncation/CheckSocketActiveFalse, DoOpenCommuncation/
+//  OnlineLocalOrRemote/DoOnLine, clientGemConnect/Disconnect/Error/Connecting,
+//  srvGemClientConnect/GetSocketErrorMsg/Error/Disconnect, StringOut(1-arg)/
+//  StringBinaryOut, SaveSECSGEMErrToLog, ClearDefaultEvenReport, and
+//  GetTimeInfo's TimeString/GemClock half. See each method's own .cpp comment
+//  for golden line citations. Still explicitly OUT OF SCOPE (see below):
+//  clientGemRead/ProcessSocketReceiveData, DoConnect/DoSelect/DoSeparate,
+//  Timer1Timer, DoProcessSFNoResponse, DoLocalAllProcessLoop, FormCreate/
+//  InitialHGem/SaveSystemDefault/DoUpdateStatus/ProcessShow/FormClose/
+//  ManualCreatergRoleClick/FormShow (need the ~15 widget stand-ins + the wire
+//  codec/SV-EC embedding below) -- a future wave's job.
+//
+//  MEMBERS DELIBERATELY NOT PRESENT YET (out of scope; a future wave adds
+//  them to this SAME class body, does not redefine it):
+//    - The wire-codec-dependent connection functions: DoConnect/DoSelect/
+//      DoSeparate (need SecsWireCodec embedded as a member first),
+//      clientGemRead/ProcessSocketReceiveData (need TMemoryStream/
+//      TFixedCriticalSection shims, not yet designed), DoProcessSFNoResponse
+//      (needs a TCriticalSection shim), Timer1Timer (its body calls into all
+//      of the above) -- see each's golden citation at uHGemEquipment.cpp's
+//      clientGemRead/DoConnect/Timer1Timer.
 //    - InitLocalHead/DataItemOut/DataItemInSub/DataItemIn/DataItemInNew/
 //      GetDataItemLenAndType(Sub)/StringOut/SendLocalData and
 //      SetSVDataPointer/SetECDataPointer/GetECDataValue -- per the project's
@@ -174,6 +189,62 @@ public:
     // must set it explicitly before calling ReadAlamData/WriteAlamData.
     AnsiString GemSystemPath;
 
+    // ==== TCP/IP connection lifecycle (W906-uHGemEquipment-ConnLifecycle) ===
+    // golden uHGemEquipment.h:93-94 (clientGem/srvGem), :185-227/309/451-479/
+    // 591/693/700-701 (state bools/ints/AnsiStrings), .dfm:542-573 (clientGem/
+    // srvGem design-time defaults, applied in the ctor -- see the .cpp).
+    // TClientSocket/TServerSocket/TCustomWinSocket/TErrorEvent all come from
+    // vclcompat/ClientSocket.h + vclcompat/ServerSocket.h, already pulled in
+    // transitively by vclcompat/vcl_compat.h above (both headers' own
+    // `using namespace Scktcomp;` already brings these into global scope).
+    TClientSocket *clientGem;   // golden .dfm:542-554 (active/client role)
+    TServerSocket *srvGem;      // golden .dfm:562-573 (passive/server role)
+
+    bool bConnect;                // golden uHGemEquipment.h:309
+    bool bOnLine;                 // golden :693
+    bool bOnLineLocal;            // golden :224
+    bool bAutoConnect;            // golden :186
+    bool bStartConnect;           // golden :221
+    bool bStartOnLine;            // golden :226
+    bool bTCPIP_Error;            // golden :187
+    bool bServoSocketConnect;     // golden :457
+    bool bReceiveMultiConnect;    // golden :591
+    bool bUseClientSocket;        // golden :464
+    // AI(W906-uHGemEquipment-ConnLifecycle) 20260717: bOpenCommuncation/
+    // bCloseCommuncation/bS1F2_OnLineData are golden members (:397,398,393)
+    // not named in this wave's own header-additions list, but DoOpenCommuncation/
+    // CloseCommuncation/OnlineLocalOrRemote/DoOnLine (all explicitly in this
+    // wave's scope) directly read/write them -- added here as the minimal
+    // extra surface those in-scope functions require to compile at all.
+    bool bOpenCommuncation;       // golden :397
+    bool bCloseCommuncation;      // golden :398
+    bool bS1F2_OnLineData;        // golden :393
+
+    int countConnect;                       // golden :477
+    int iConnectTryCount;                   // golden :478
+    int iEstablishCommunicationsTryCount;    // golden :222
+    int iOpenCommuncationTask;               // golden :475
+    int iStartConnectTask;                  // golden :220
+    int iStartOnLineTask;                   // golden :225
+    // AI(W906-uHGemEquipment-ConnLifecycle) 20260717: iTimeFormat (golden
+    // :233) is likewise not in this wave's enumerated member list, but
+    // GetTimeInfo (in scope) branches on it directly.
+    int iTimeFormat;                        // golden :233
+
+    GemTimer DelayOpenCommuncation;   // golden :476
+    GemTimer ConnectDelay;            // golden :479
+
+    TStringList *WaitShowString;   // golden :597
+    TStringList *LogDataString;    // golden :447
+
+    AnsiString TimeString;   // golden :700
+    AnsiString GemClock;     // golden :302
+    // NOTE: golden's real 3rd field name is "SystemDate" (uHGemEquipment.h:230),
+    // not "SystemDay" -- kept as golden spells it (GetTimeInfo/DecodeDate both
+    // reference it by this exact name).
+    Word SystemYear, SystemMonth, SystemDate;           // golden :230
+    Word SystemHour, SystemMin, SystemSec, SystemMSec;  // golden :231
+
     // ==== CEID / Report StringGrid-backed "database" family =================
     void SetCEIDContent(unsigned iCeid, AnsiString CeidAlias, unsigned iReportCount, unsigned *iReportIDData, int Mode);
     void SetCEIDContent(unsigned iCeid, unsigned iReportCount, unsigned *iReportIDData, int Mode);
@@ -211,6 +282,47 @@ public:
     void SetAlamData(int iRowCount, AnsiString ALID, AnsiString Class, AnsiString ALTX, AnsiString Position);
     void ReadAlamData();
     void WriteAlamData();
+
+    // ==== TCP/IP connection lifecycle methods (W906-uHGemEquipment-ConnLifecycle) ====
+    void __fastcall clientGemConnect(TObject *Sender, TCustomWinSocket *Socket);        // golden :2100-2104
+    void __fastcall clientGemDisconnect(TObject *Sender, TCustomWinSocket *Socket);      // golden :2108-2116
+    void __fastcall clientGemError(TObject *Sender, TCustomWinSocket *Socket,
+                                    TErrorEvent ErrorEvent, int &ErrorCode);              // golden :2120-2134
+    void __fastcall clientGemConnecting(TObject *Sender, TCustomWinSocket *Socket);      // golden :2138-2142
+
+    bool DoOpenCommuncation();       // golden :3382-3490
+    void OnlineLocalOrRemote();      // golden :3604-3621 (mostly inert -- see .cpp)
+    bool DoOnLine();                 // golden :3626-3645
+
+    bool CheckSocketActiveFalse();   // golden :5146-5159
+
+    void CloseCommuncation();                              // golden :5548-5552
+    void Connect();                                        // golden :5557-5563
+    void DisConnect();                                      // golden :5567-5572
+    bool IsConnect();                                       // golden :5576-5579
+    void SetEstablishCommunicationsTryCount(int ct);        // golden :5583-5586
+    void OnLine(bool Mode);                                 // golden :5592-5598
+    void OnLineLocal();                                     // golden :5602-5606
+    void OnLineRemote();                                    // golden :5610-5614
+    void OffLine();                                         // golden :5619-5624
+    bool IsOnLine();                                        // golden :5628-5631
+    bool GetOnLineMode();                                   // golden :5635-5638
+    void SetCanAcceptHostOnLineRequest(bool flag);          // golden :5642-5644 (truly empty body)
+
+    void __fastcall srvGemClientConnect(TObject *Sender, TCustomWinSocket *Socket);      // golden :6812-6837
+    AnsiString __fastcall GetSocketErrorMsg(TObject *Sender, int iErrCode);               // golden :6842-6845
+    void __fastcall srvGemClientError(TObject *Sender, TCustomWinSocket *Socket,
+                                       TErrorEvent ErrorEvent, int &ErrorCode);           // golden :6850-6874
+    void __fastcall srvGemClientDisconnect(TObject *Sender, TCustomWinSocket *Socket);    // golden :6897-6910
+
+    void __fastcall StringOut(AnsiString S);          // golden :392-396
+    void __fastcall StringBinaryOut(AnsiString S);    // golden :401-404 (truly commented-out body)
+
+    void __fastcall SaveSECSGEMErrToLog(AnsiString asSaveStr);   // golden :422-439
+
+    void __fastcall ClearDefaultEvenReport();   // golden :4988-5008
+
+    void GetTimeInfo();   // golden :315-348 (TimeString/GemClock half only -- see .cpp)
 };
 
 //---------------------------------------------------------------------------
