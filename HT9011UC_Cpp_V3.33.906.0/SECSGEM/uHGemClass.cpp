@@ -248,7 +248,18 @@
 // that is a distinct overload, not a redeclaration, so both can coexist, but
 // it means the prior wave's declaration does not match golden's real
 // signature (flagged as a pre-existing discrepancy, not introduced here).
-extern void MyDBIProcess(AnsiString asTable, AnsiString S1, AnsiString S2 = "");
+// AI(W906-uHGemEquipment-BucketC) 20260717: added the missing `__fastcall` --
+// this declaration previously LACKED it while database.cpp:64 (and the test
+// stubs satisfying it) carry it. On i686 MinGW `__fastcall` is a real ABI
+// (`__attribute__((fastcall))`, @n-decorated symbol): the mismatch made ld
+// "resolve" the plain reference against the decorated definition with only a
+// warning, producing a call through the WRONG calling convention --
+// empirically reproduced as a segfault by the Bucket C fidelity review
+// (dormant only because the affected call sites are exception-path-only).
+// Root cause is vcl_compat.h's `#ifndef __fastcall` neutralization never
+// firing (`__fastcall` is a compiler-builtin macro on MinGW) -- systemic
+// follow-up tracked in MIGRATION_ROADMAP; this line fixes the one live edge.
+extern void __fastcall MyDBIProcess(AnsiString asTable, AnsiString S1, AnsiString S2 = "");
 
 //---------------------------------------------------------------------------
 AnsiString SYS_ECChangeID             = "";                                     //pig 2014.04.23 KYEC SECS

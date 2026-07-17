@@ -115,9 +115,7 @@
 //  InitialHGem/SaveSystemDefault (scratch GemSystemIniPath, never the real
 //  D:\HT9045\SECS tree -- same scratch-path discipline as test [8]'s
 //  GemSystemPath), DoUpdateStatus (panel/button/EventReport refresh, INCLUDING
-//  the KYEC 30-second forced-disconnect branch -- structural only, see that
-//  test's own FLAGGED LIMITATION comment: this build's HTimer stand-in always
-//  fires immediately, it does not really wait 30 seconds), ManualCreatergRoleClick,
+//  the KYEC 30-second forced-disconnect branch), ManualCreatergRoleClick,
 //  ProcessShow, and StringOut(2-arg). New includes: cmydef.h (CUSTOMER_CODE/
 //  CC_KYEC_LEE/CC_MAXIM_THAILAND -- this test now links ht9045_core/
 //  ht9045_globals too, see tests/CMakeLists.txt's own updated comment) and
@@ -125,23 +123,71 @@
 //  ResetSimEventReport -- DoUpdateStatus's own EventReport(...) calls are
 //  observed through this existing Sim counter, same as csystem.cpp's already-
 //  established convention).
+//
+//  AI(W906-uHGemEquipment-BucketC) 20260717: EXTENDED again -- see this
+//  file's own T1-T10 block near the end (socket receive pump / real HTimer /
+//  T3 timeout / HSMS control-message handshake / Timer1Timer). Test [22]'s
+//  own KYEC branch (previously "structural only" against an always-fires
+//  HTimer stand-in) is UPDATED here too: SECSGEM_DoSeparate is now the REAL
+//  elapsed-time HTimer (D6), so that assertion now correctly expects the
+//  30-second forced-disconnect to NOT fire on the same poll it was armed --
+//  see that test's own updated comment.
 // =============================================================================
 #include "SECSGEM/uHGemEquipment.h"
 #include "SECSGEM/SecsEventReport.h"   // g_SimLastEventReportCeid / g_SimEventReportCount / ResetSimEventReport
 #include "cmydef.h"                     // CUSTOMER_CODE / CC_KYEC_LEE / CC_MAXIM_THAILAND / CosFunction
+// AI(W906-uHGemEquipment-BucketC) 20260717: D3 -- HSys.MyGem seam. Needed so
+// this test binary can exercise the null-guard sites (DoConnect/
+// DoProcessSFNoResponse/ProcessSocketReceiveData's catch) AND (T7) wire a
+// REAL HTGem instance to HSys.MyGem to prove the SendLocalDataHook seam works
+// end-to-end.
+#include "database.h"            // HSys / SYSTEM_MODULAR
+#include "SECSGEM/uHGemClass.h"  // HTGem (T7)
+#include "Config.h"              // IniConfig.bEnable_SECS_GEM (T10)
 
 #include <cstdio>
 #include <cstring>
 #include <string>
+#include <vector>
+#include <stdexcept>
 #include <windows.h>   // ::Sleep (GemTimer elapsed-time test)
 
+// AI(W906-uHGemEquipment-BucketC) 20260717: bSECSGEM_DoSeparate has EXTERNAL
+// linkage in uHGemEquipment.cpp (a plain file-scope global, golden :24) --
+// not declared in uHGemEquipment.h itself (an internal implementation detail
+// shared between DoUpdateStatus and Timer1Timer). Declared here, test-only,
+// so T10 (below) can observe its latch behavior directly. Its siblings
+// `SECSGEM_DoSeparate`/`SECSGEM_DoSeparateWait` (the two HTimer globals right
+// next to it in that file) canNOT be similarly declared here -- HTimer is a
+// deliberately TU-local (anonymous-namespace) type, not nameable from this
+// separate translation unit; their behavior is instead observed indirectly
+// (test [22]'s KYEC-branch assertions, and T10's own bWaitHTimer-path check).
+extern bool bSECSGEM_DoSeparate;
+
 // ---------------------------------------------------------------------------
-//  MyDBIProcess -- this test binary does not link aHotPlateSubstrate.cpp (the
-//  one real definition elsewhere in this tree); ReadAlamData's catch-block
+//  MyDBIProcess (2-arg) -- this test binary does not link aHotPlateSubstrate.cpp
+//  (the one real definition elsewhere in this tree); ReadAlamData's catch-block
 //  needs SOME definition to link against (same pattern as
 //  tests/test_FTPClient_EventHandlers.cpp / test_uHGemClass.cpp).
 // ---------------------------------------------------------------------------
 void MyDBIProcess(AnsiString /*S1*/, AnsiString /*S2*/) {}
+
+// ---------------------------------------------------------------------------
+//  AI(W906-uHGemEquipment-BucketC) 20260717: MyDBIProcess (3-arg, EXTERNAL
+//  linkage) / ShowMyMessage -- as of this wave, uHGemEquipment.cpp's new
+//  `#include "database.h"` (D3) means this test binary now links ht9045_db
+//  (database.cpp, which defines the referenced-by-this-TU global `HSys`).
+//  Static-archive linking pulls in database.cpp's WHOLE object file once
+//  `HSys` is referenced -- which means database.cpp's OWN unresolved
+//  externals (LoadIoData/LoadMotData's calls to a 3-arg MyDBIProcess and
+//  ShowMyMessage, database.cpp:64-65) must ALSO resolve, even though this
+//  test never calls LoadIoData/LoadMotData itself. Same stub shape already
+//  established by tests/test_config_loaders.cpp for the identical situation.
+//  Distinct overload from the 2-arg MyDBIProcess just above (different
+//  arity -- no collision).
+// ---------------------------------------------------------------------------
+void __fastcall MyDBIProcess(AnsiString /*asTable*/, AnsiString /*S1*/, AnsiString /*S2*/) {}
+void ShowMyMessage(AnsiString /*S1*/, AnsiString /*S2*/, AnsiString /*S3*/, bool /*Ok*/, bool /*bServoOff*/) {}
 
 // ---------------------------------------------------------------------------
 //  Tiny PASS / FAIL harness (same style as tests/test_serversocket.cpp).
@@ -1015,11 +1061,10 @@ static void test_stringout_2arg()
 // ===========================================================================
 //  [22] DoUpdateStatus -- throttle, normal Disconnected/Offline refresh +
 //  EventReport(141), the client-socket-active + OnLine-Local transitions +
-//  EventReport(92), and the KYEC 30-second forced-disconnect branch
-//  (STRUCTURAL ONLY -- see the FLAGGED LIMITATION note below and at the
-//  HTimer stand-in's own definition in the .cpp: Off() always returns true,
-//  so this branch fires on the SAME poll it is armed, NOT after a real
-//  30-second wait. That is a pre-existing shim limitation, not fixed here.)
+//  EventReport(92), and the KYEC 30-second forced-disconnect branch (now
+//  exercised against the REAL elapsed-time HTimer, D6 -- see the assertion's
+//  own updated comment below for exactly what changed vs the prior
+//  always-fires stand-in).
 // ===========================================================================
 static void test_do_update_status()
 {
@@ -1099,15 +1144,20 @@ static void test_do_update_status()
           "DoUpdateStatus (KYEC): bConnect==false -> \"1:OffLine\" (not \"1:Disable\") once CUSTOMER_CODE==CC_KYEC_LEE");
 
     gem.ctUpdateStatus = 9;
-    gem.DoUpdateStatus();   // call B: KYEC guard now sees "SECS GEM Connection" + "1:OffLine" -> fires
-    // FLAGGED LIMITATION (repeated from the HTimer stand-in's own .cpp
-    // comment): this assertion is only reachable AT ALL because Off() always
-    // returns true immediately -- a real HTimer would still be waiting out
-    // its 30-second arm at this point, and clientGem->Active would still be
-    // true. See this wave's own final report for the same flag.
-    CHECK(gem.clientGem->Active == false,
-          "DoUpdateStatus (KYEC): forced-disconnect branch called HGem->clientGem->Close() (Active now false) -- "
-          "NOTE: fired immediately, not after a real 30s wait (HTimer stand-in limitation, see .cpp comment)");
+    gem.DoUpdateStatus();   // call B: KYEC guard now sees "SECS GEM Connection" + "1:OffLine" -> ARMS SECSGEM_DoSeparate.SetSecAndOn(30)
+    // AI(W906-uHGemEquipment-BucketC) 20260717: UPDATED -- SECSGEM_DoSeparate
+    // is now the REAL elapsed-time HTimer (D6), so arming it with
+    // SetSecAndOn(30) inside call B and polling Off() a few microseconds
+    // later (same call) correctly returns false -- the forced-disconnect
+    // does NOT fire immediately anymore (this is the FIX for the prior
+    // Bucket-B FLAGGED LIMITATION, where an always-fires stub made this
+    // branch trigger on the very same poll it was armed). clientGem->Active
+    // therefore stays true. Real elapsed-time semantics for THIS SAME HTimer
+    // type are separately verified for real in test [T2] below (which can
+    // afford a short real Sleep(); this 30-second golden constant cannot).
+    CHECK(gem.clientGem->Active == true,
+          "DoUpdateStatus (KYEC): forced-disconnect branch arms a REAL 30-second HTimer (D6) -- "
+          "does NOT fire on the same poll it was armed (clientGem->Active stays true)");
 
     CUSTOMER_CODE = savedCustomerCode;
     HGem = savedHGem;
@@ -1120,6 +1170,698 @@ static void test_do_update_status()
     delete gem.GemBtnOnlineRequest;
     delete gem.GemBtnOnlineRemote;
     delete gem.GemBtnOnlineLocal;
+}
+
+// =============================================================================
+//  Bucket C (W906-uHGemEquipment-BucketC 20260717): socket receive pump / T3
+//  timeout / HSMS control-message handshake / Timer1Timer master state
+//  machine. Golden reference: HT9011UC_Code_V3.33.906.0_20260618/SECSGEM/
+//  uHGemEquipment.cpp (clientGemRead :9008-9028; ProcessSocketReceiveData
+//  :9030-9207; Timer1Timer :5176-5527; DoConnect :3536-3599; DoSelect
+//  :3496-3509; DoSeparate :3518-3531; DoProcessSFNoResponse :4604-4694;
+//  SelectRsp/DeselectRsp/LinktestRsp :8707-8765; ProcessReceiceData
+//  :8772-8989; CheckSFCodeResponse :7020-7058; SendLocalData :1985-2107).
+//
+//  *** SIDE-EFFECT WARNING (read before extending) ***
+//  Every test below that pumps ProcessSocketReceiveData (directly or via
+//  Timer1Timer) reaches SaveSECSGEMTextToLog(), which -- like the
+//  already-committed SaveSECSGEMErrToLog -- unconditionally APPENDS to
+//  D:\SECS_GEM_LOGS\<yyyy>\<mm_dd>\SECSGEM_TextLog_<hh>.txt (creating the
+//  directory tree if absent). Same acceptable-risk posture as test [12]'s own
+//  SAFETY NOTE (append-only diagnostic text, not destructive to existing
+//  data) -- NOT separately byte-identity-guarded per test here (that would
+//  require the same capture/restore dance at every single call site below);
+//  instead this translation agent's own build+verify pass performs ONE
+//  before/after byte-identity check across the ENTIRE test run (see the
+//  final report) covering both SECSGEM_ErrLog_<hh>.txt (test [12]) and
+//  SECSGEM_TextLog_<hh>.txt (all of Bucket C).
+// =============================================================================
+
+// ---------------------------------------------------------------------------
+//  BucketCPanels -- RAII helper: the 3 panels + 5 speed buttons DoUpdateStatus
+//  unconditionally dereferences (golden does NOT null-guard the 5
+//  TSpeedButton*s -- see uHGemEquipment.h's own THGemSpeedButton comment).
+//  Needed by any test that calls Timer1Timer() (which calls DoUpdateStatus()
+//  on every pump) -- test [22] above wires the identical set inline; this
+//  factors it out for the several Bucket-C tests that need the same thing.
+// ---------------------------------------------------------------------------
+namespace {
+struct BucketCPanels
+{
+    THGem &g;
+    explicit BucketCPanels(THGem &gem) : g(gem)
+    {
+        g.SECSConnectionState = new THGemPanel();
+        g.GEMCommunicatingState = new THGemPanel();
+        g.GemPanelControlState = new THGemPanel();
+        g.BtnEnableComm = new THGemSpeedButton();
+        g.GemBtnOfflineRequest = new THGemSpeedButton();
+        g.GemBtnOnlineRequest = new THGemSpeedButton();
+        g.GemBtnOnlineRemote = new THGemSpeedButton();
+        g.GemBtnOnlineLocal = new THGemSpeedButton();
+    }
+    ~BucketCPanels()
+    {
+        delete g.SECSConnectionState; g.SECSConnectionState = NULL;
+        delete g.GEMCommunicatingState; g.GEMCommunicatingState = NULL;
+        delete g.GemPanelControlState; g.GemPanelControlState = NULL;
+        delete g.BtnEnableComm; g.BtnEnableComm = NULL;
+        delete g.GemBtnOfflineRequest; g.GemBtnOfflineRequest = NULL;
+        delete g.GemBtnOnlineRequest; g.GemBtnOnlineRequest = NULL;
+        delete g.GemBtnOnlineRemote; g.GemBtnOnlineRemote = NULL;
+        delete g.GemBtnOnlineLocal; g.GemBtnOnlineLocal = NULL;
+    }
+    BucketCPanels(const BucketCPanels&) = delete;
+    BucketCPanels& operator=(const BucketCPanels&) = delete;
+};
+} // anonymous namespace
+
+// ===========================================================================
+//  [T1] vclcompat::TMemoryStream shim -- write/read/seek/clear/LoadFromStream.
+// ===========================================================================
+static void test_memorystream_shim()
+{
+    printf("\n[T1] vclcompat::TMemoryStream shim\n");
+
+    TMemoryStream ms;
+    CHECK((int)ms.Size == 0, "fresh TMemoryStream: Size==0");
+    CHECK(ms.Position == 0, "fresh TMemoryStream: Position==0");
+
+    const char data1[] = "Hello";
+    ms.WriteBuffer(data1, 5);
+    CHECK((int)ms.Size == 5, "WriteBuffer(5 bytes) at Position 0 -> Size==5");
+    CHECK(ms.Position == 5, "WriteBuffer advances Position by Count");
+
+    // WriteBuffer at Position 0 with a SHORTER write must KEEP the longer
+    // existing tail (real VCL TStream::WriteBuffer semantics) -- only Clear()
+    // resets Size, not a short overwrite.
+    ms.Position = 0;
+    const char data2[] = "Wr";
+    ms.WriteBuffer(data2, 2);
+    CHECK((int)ms.Size == 5, "WriteBuffer at Position 0 with a SHORTER write keeps the longer existing tail (Size still 5)");
+    char readback[8] = {0};
+    ms.Position = 0;
+    ms.ReadBuffer(readback, 5);
+    CHECK(std::string(readback, 5) == "Wrllo", "content is \"Wr\"+\"llo\" (tail beyond the short write survived)");
+
+    // Seek(0, soFromEnd) append pattern.
+    ms.Seek(0, soFromEnd);
+    CHECK(ms.Position == 5, "Seek(0, soFromEnd) -> Position==Size");
+    const char data3[] = "!!";
+    ms.WriteBuffer(data3, 2);
+    CHECK((int)ms.Size == 7, "append via Seek(0,soFromEnd)+WriteBuffer grows Size");
+
+    ms.Seek(0, soFromBeginning);
+    CHECK(ms.Position == 0, "Seek(0, soFromBeginning) -> Position==0");
+    char full[16] = {0};
+    ms.ReadBuffer(full, 7);
+    CHECK(std::string(full, 7) == "Wrllo!!", "full round-trip content matches expected");
+
+    ms.Clear();
+    CHECK((int)ms.Size == 0 && ms.Position == 0, "Clear() resets Size and Position to 0");
+
+    // LoadFromStream: replaces dst's content wholesale, rewinds Source to 0.
+    TMemoryStream src;
+    const char data4[] = "abcdef";
+    src.WriteBuffer(data4, 6);
+    TMemoryStream dst;
+    const char preexisting[] = "XXXXXXXXXX";
+    dst.WriteBuffer(preexisting, 10);
+    dst.LoadFromStream(&src);
+    CHECK((int)dst.Size == 6, "LoadFromStream replaces dst's content with src's (Size==6, not 10)");
+    CHECK(dst.Position == 0, "LoadFromStream leaves dst->Position at 0");
+    CHECK(src.Position == 0, "LoadFromStream rewinds Source to 0 as a side effect");
+    char dstRead[8] = {0};
+    dst.ReadBuffer(dstRead, 6);
+    CHECK(std::string(dstRead, 6) == "abcdef", "dst content matches src's content byte-for-byte");
+
+    // ReadBuffer shortfall -> tripwire throw.
+    // NOTE: the obvious variable name `small` collides with a Windows
+    // <rpcndr.h> macro (`small` -> `char`, an old MIDL basic-type alias
+    // pulled in transitively via windows.h) -- named `tinyStream` instead.
+    bool threw = false;
+    TMemoryStream tinyStream;
+    const char tiny[] = "ab";
+    tinyStream.WriteBuffer(tiny, 2);
+    tinyStream.Position = 0;
+    char buf3[8];
+    try { tinyStream.ReadBuffer(buf3, 3); }
+    catch (const std::runtime_error&) { threw = true; }
+    CHECK(threw, "ReadBuffer shortfall throws std::runtime_error (EReadError tripwire)");
+}
+
+// ===========================================================================
+//  [T2] HTimer real elapsed-time semantics.
+//
+//  DEVIATION (flagged prominently, per this wave's own instructions): the
+//  REAL HTimer (D6, uHGemEquipment.cpp) is DELIBERATELY TU-local (anonymous
+//  namespace -- see that file's own comment on why: ODR-safety vs.
+//  atester_shims.h's own separate HTimer stub). It therefore has INTERNAL
+//  linkage and its type is not nameable from this SEPARATE translation unit
+//  -- `HTimer t;` cannot compile here. This test instead instantiates a
+//  byte-for-byte MIRROR of that exact struct (the SAME field list and
+//  Off()/SetSecAndOn() bodies, ported from the SAME golden
+//  D:\HT9045\elec\Component\htimer.cpp this wave's real HTimer itself was
+//  ported from) to verify the ALGORITHM directly with real short sleeps.
+//  This is NOT the same as testing the literal TU-local symbol -- if
+//  uHGemEquipment.cpp's own HTimer is ever edited, this mirror must be
+//  updated to match by hand; there is no compiler enforcement linking the
+//  two. The REAL TU-local instances' actual wiring/behavior is separately
+//  verified INDIRECTLY: test [22]'s KYEC branch (arms
+//  SECSGEM_DoSeparate.SetSecAndOn(30), confirms it does NOT fire on the same
+//  poll) and T10 below (SECSGEM_DoSeparateWait's 5-second window blocking
+//  Timer1Timer's pump, sleepless variant). A future wave should consider
+//  promoting a single shared vclcompat/HTimer (already flagged as a risk in
+//  the design brief) to close this testability gap for good.
+// ===========================================================================
+namespace {
+struct HTimerMirror
+{
+    DWORD ulStartTicks;
+    int   iTimeLen;
+    bool  Paused;
+    bool  InUsed;
+
+    HTimerMirror() : ulStartTicks(0), iTimeLen(0), Paused(false), InUsed(false) {}
+    void SetSec(double iTime) { iTimeLen = static_cast<int>(iTime * 1000.0); }
+    void On() { ulStartTicks = ::GetTickCount(); InUsed = true; }
+    void SetSecAndOn(double iTime)
+    {
+        ulStartTicks = 0; iTimeLen = 0; InUsed = false; Paused = false;
+        SetSec(iTime);
+        On();
+    }
+    bool Off()
+    {
+        if (Paused) return false;
+        if (ulStartTicks == 0) return false;
+        if (iTimeLen <= 0) return true;
+        DWORD ulLimited = ulStartTicks + static_cast<DWORD>(iTimeLen);
+        DWORD ulNowTicks = ::GetTickCount();
+        DWORD ulNowTicksOver = 0;
+        if (ulLimited < ulStartTicks)
+        {
+            ulLimited = 0xFFFFFFFF - ulStartTicks + static_cast<DWORD>(iTimeLen);
+            ulNowTicksOver = 0xFFFFFFFF - ulStartTicks + ulNowTicks;
+            if (ulNowTicksOver < ulStartTicks && ulNowTicksOver > ulLimited) { InUsed = false; return true; }
+        }
+        else
+        {
+            if (ulNowTicks >= (ulStartTicks + static_cast<DWORD>(iTimeLen))) { InUsed = false; return true; }
+        }
+        return false;
+    }
+};
+} // anonymous namespace
+
+static void test_htimer_real_semantics()
+{
+    printf("\n[T2] HTimer real elapsed-time semantics (mirror -- see this test's own DEVIATION comment above)\n");
+
+    HTimerMirror t1;
+    CHECK(t1.Off() == false, "never-armed HTimer -> Off()==false");
+
+    HTimerMirror t2;
+    t2.SetSecAndOn(0.2);   // 200ms
+    CHECK(t2.Off() == false, "SetSecAndOn(0.2) -> not yet elapsed immediately");
+    ::Sleep(250);
+    CHECK(t2.Off() == true, "SetSecAndOn(0.2) -> elapsed after a 250ms real sleep");
+    CHECK(t2.Off() == true, "re-poll after expiry stays true (InUsed=false does not change Off()'s return)");
+}
+
+// ===========================================================================
+//  [T3] Select handshake e2e (server role, Sim): clientGemRead (wired in the
+//  ctor, D... this wave) -> ProcessSocketReceiveData -> ProcessReceiceData
+//  (control head, real) -> SelectRsp -> SendLocalDataFrom -> real bytes on
+//  the wire, exercised through a full Timer1Timer pump.
+// ===========================================================================
+static void test_select_handshake_e2e()
+{
+    printf("\n[T3] Select handshake e2e (server role, Sim, via Timer1Timer)\n");
+
+    bool savedInitialOK = InitialOK;
+    bool savedEnableSecsGem = IniConfig.bEnable_SECS_GEM;
+    THGem *savedHGem = HGem;
+
+    THGem g;
+    BucketCPanels panels(g);
+    HGem = &g;
+    g.DB = new THGemMemo();
+    g.OnLineOrOffLine->Items.Count = 2;
+    g.RemoteOrLocal->Items.Count = 2;
+    g.rgRole->Items.Count = 2;
+    const AnsiString kScratchDir = "uHGemEquipment_test_scratch_t3";
+    ForceDirectories(kScratchDir);
+    g.GemSystemIniPath = kScratchDir + "\\Gem.ini";
+    InitialOK = true;
+    IniConfig.bEnable_SECS_GEM = true;
+
+    g.Timer1Timer(NULL);   // pump #1: Timer1Task 1->10 (case 1 is unconditional); InitialHGem() runs (bFirstEntry)
+    CHECK(g.Timer1Task == 10, "T3: after pump #1, Timer1Task advances 1->10");
+    CHECK(g.bUseClientSocket == false, "T3: server (passive) role -- rgRole->ItemIndex defaults to 0");
+
+    g.srvGem->Open();
+    TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.5.5.5", 4001);
+    CHECK(g.bServoSocketConnect == true, "T3: SimAcceptConnection fires srvGemClientConnect -> bServoSocketConnect=true");
+
+    // Frame layout re-verified against SecsWireCodec::ProcessRemoteHead
+    // (SecsWireCodec.cpp:1383-1398): [0..3]=length(=10, big-endian) [4..5]=
+    // DeviceID(0xFFFF) [6]=MessageID_S|W_Bit(0x00) [7]=MessageID_F(0x00)
+    // [8]=PType(0x00) [9]=SType(0x01=Select.req) [10..13]=SystemByte(=1).
+    unsigned char frame[14] = {
+        0x00,0x00,0x00,0x0A, 0xFF,0xFF, 0x00,0x00,0x00,0x01, 0x00,0x00,0x00,0x01
+    };
+    conn->SimPushReceive(frame, 14);   // -> clientGemRead (wired) -> RecvMemoryBuffer
+
+    g.Timer1Timer(NULL);   // pump #2: ProcessSocketReceiveData decodes + dispatches -> SelectRsp -> SendLocalDataFrom
+
+    const std::vector<char> &tx = conn->SimTxBuffer();
+    CHECK(tx.size() == 14, "T3: SelectRsp's reply is a 14-byte HSMS frame (control message, no data items)");
+    if (tx.size() == 14)
+    {
+        CHECK((unsigned char)tx[9] == 2, "T3: reply SType byte (offset 9) == 2 (Select.rsp)");
+        unsigned echoedSystemByte = (static_cast<unsigned>((unsigned char)tx[10]) << 24) |
+                                    (static_cast<unsigned>((unsigned char)tx[11]) << 16) |
+                                    (static_cast<unsigned>((unsigned char)tx[12]) << 8)  |
+                                     static_cast<unsigned>((unsigned char)tx[13]);
+        CHECK(echoedSystemByte == 1, "T3: reply SystemByte echoes the request's SystemByte (1)");
+    }
+    CHECK((int)g.RecvMemoryBuffer->Size == 0, "T3: RecvMemoryBuffer drained after processing");
+    CHECK((int)g.ProcBuffer->Size == 0, "T3: ProcBuffer cleared after a fully-consumed message");
+    CHECK(g.bFirstBlock == true, "T3: bFirstBlock restored to true after a fully-consumed message");
+
+    InitialOK = savedInitialOK;
+    IniConfig.bEnable_SECS_GEM = savedEnableSecsGem;
+    HGem = savedHGem;
+    DeleteFile(g.GemSystemIniPath);
+    RemoveDir(kScratchDir);
+    delete g.DB; g.DB = NULL;
+}
+
+// ===========================================================================
+//  [T4] Frame reassembly -- multiple messages in one read; a message split
+//  across two reads (TempProcBuffer partial-frame path); a too-short
+//  garbage read. Calls ProcessSocketReceiveData DIRECTLY (not via
+//  Timer1Timer) -- T3 above already proved the full pump wiring; these
+//  sub-tests focus on the reassembly bookkeeping itself.
+// ===========================================================================
+static void test_frame_reassembly()
+{
+    printf("\n[T4] Frame reassembly (multi-message / split-frame / garbage)\n");
+
+    // (a) two concatenated Select.req frames in ONE SimPushReceive -> BOTH
+    // get processed within a single ProcessSocketReceiveData call (its own
+    // do-while walks every complete message still in the buffer).
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.0.1", 4100);
+        g.srvGem->Open();
+        unsigned char frame1[14] = { 0,0,0,0x0A, 0xFF,0xFF, 0,0,0,0x01, 0,0,0,0x01 };   // SystemByte=1
+        unsigned char frame2[14] = { 0,0,0,0x0A, 0xFF,0xFF, 0,0,0,0x01, 0,0,0,0x02 };   // SystemByte=2
+        unsigned char both[28];
+        std::memcpy(both, frame1, 14);
+        std::memcpy(both + 14, frame2, 14);
+        conn->SimPushReceive(both, 28);
+        g.ProcessSocketReceiveData();
+
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() == 28, "T4(a): two concatenated Select.req frames -> two 14-byte Select.rsp replies (28 bytes total)");
+        if (tx.size() == 28)
+        {
+            CHECK((unsigned char)tx[9] == 2 && (unsigned char)tx[13] == 1, "T4(a): reply #1 SType==2 (Select.rsp), echoes SystemByte==1");
+            CHECK((unsigned char)tx[23] == 2 && (unsigned char)tx[27] == 2, "T4(a): reply #2 SType==2 (Select.rsp), echoes SystemByte==2");
+        }
+        CHECK((int)g.ProcBuffer->Size == 0, "T4(a): ProcBuffer fully drained after both messages consumed");
+    }
+
+    // (b) one frame split across two SimPushReceive calls -> the
+    // TempProcBuffer partial-frame path (golden :9123-9136) buffers the
+    // first chunk and waits; only the SECOND chunk completes the message.
+    //
+    // JUDGMENT CALL (flagged): a REAL, unpadded control message (Select.req)
+    // is ALWAYS exactly 14 bytes (Value==10 -- CreateLocalHead's own
+    // invariant; no DataItemOut call ever rides along a control message), so
+    // there is no way to split ONE at a byte boundary that both (i) supplies
+    // >=14 bytes up front (else the "<14 byte" ERROR path fires instead,
+    // clearing the buffer outright rather than waiting) and (ii) still has
+    // more to come. This test therefore uses an ARTIFICIALLY padded
+    // Select.req (declared Value=11 instead of 10, with one extra trailing
+    // byte) purely to give the frame a length beyond the 14-byte minimum --
+    // NOT a real protocol shape, just the minimum change needed to make the
+    // partial-frame path reachable at all with a hand-built buffer.
+    // ProcessReceiceData's control-message head only ever reads Remote.SType
+    // (a fixed-offset field within the first 14 bytes), so the trailing pad
+    // byte does not affect dispatch -- SelectRsp() still fires for real once
+    // reassembly completes.
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.0.2", 4101);
+        g.srvGem->Open();
+        unsigned char frame[15] = { 0,0,0,0x0B, 0xFF,0xFF, 0,0,0,0x01, 0,0,0,0x03, 0x99 };   // Value=11 (padded), SystemByte=3
+
+        conn->SimPushReceive(frame, 14);   // first 14 of 15 bytes -- 1 byte still missing
+        g.ProcessSocketReceiveData();
+        CHECK(conn->SimTxBuffer().size() == 0, "T4(b): no reply yet after only the first 14 of 15 bytes arrived");
+        CHECK(g.bFirstBlock == false, "T4(b): bFirstBlock cleared while a partial frame is buffered");
+
+        conn->SimPushReceive(frame + 14, 1);   // the missing trailing byte
+        g.ProcessSocketReceiveData();
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() == 14, "T4(b): reply appears ONLY after the second chunk completes the frame");
+        if (tx.size() == 14)
+            CHECK((unsigned char)tx[9] == 2 && (unsigned char)tx[13] == 3, "T4(b): reply is Select.rsp echoing SystemByte==3");
+        CHECK(g.bFirstBlock == true, "T4(b): bFirstBlock restored true once the reassembled frame is fully consumed");
+    }
+
+    // (c) garbage <14 bytes -> golden's own hardcoded error string, buffers cleared.
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.0.3", 4102);
+        unsigned char garbage[5] = { 1,2,3,4,5 };
+        conn->SimPushReceive(garbage, 5);
+        g.ProcessSocketReceiveData();
+        bool found = false;
+        for (int i = 0; i < g.WaitShowString->Count; i++)
+            if (g.WaitShowString->GetString(i) == "Err : Socket Buffer Length less than 14 byte ")
+                found = true;
+        CHECK(found, "T4(c): <14-byte garbage read logs golden's own hardcoded error string");
+        CHECK((int)g.ProcBuffer->Size == 0, "T4(c): ProcBuffer cleared after the malformed-length error path");
+        CHECK(conn->SimTxBuffer().size() == 0, "T4(c): no reply sent for malformed input");
+    }
+}
+
+// ===========================================================================
+//  [T5] Data message with gated dispatcher: a real, syntactically-valid
+//  S1F14 (W=0) frame, built via a throwaway SecsWireCodec's own real
+//  encoder (InitLocalHead/DataItemOut) rather than hand-encoded bytes.
+// ===========================================================================
+static void test_data_message_gated_dispatch()
+{
+    printf("\n[T5] Data message (S1F14, W=0) -- gated dispatcher: no crash, no reply, SReceiveData decoded\n");
+
+    THGem g;
+    TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.0.9", 4200);
+    g.srvGem->Open();
+
+    SecsWireCodec builder;
+    builder.InitLocalHead(1, 14, 0);   // S1,F14, W=0 -- shape of golden's own [S1F14] Connect Request Acknowledge
+    builder.DataItemOut(HType.ASCII_TYPE, AnsiString("OK"));
+    conn->SimPushReceive(builder.LocalBuffer.data(), static_cast<int>(builder.LocalLength_4));
+
+    bool threw = false;
+    try { g.ProcessSocketReceiveData(); }
+    catch (...) { threw = true; }
+    CHECK(threw == false, "T5: data-message path does not throw (Ifor-20260421 try/catch never needed to fire)");
+
+    CHECK(g.WireCodec.Remote.MessageID_S == 1 && g.WireCodec.Remote.MessageID_F == 14,
+          "T5: WireCodec.Remote decodes MessageID_S/F == 1/14");
+    CHECK(conn->SimTxBuffer().size() == 0, "T5: gated S,F dispatch tail sends no reply (HSys.MyGem stays NULL)");
+    CHECK(g.WireCodec.SReceiveData->Count > 0, "T5: ShowSML's real ProcessSML decode populated SReceiveData with tokens while bReceiveData was true");
+    CHECK(g.WireCodec.bReceiveData == false, "T5: bReceiveData reset to false once the message is fully consumed");
+}
+
+// ===========================================================================
+//  [T6] T3 send-side record: an outbound W=1 request records "S F+1
+//  SystemByte" into SFCodeResponseList/TimeLeft (T3TimeOut=30 golden ctor
+//  default -> TimeLeft "300").
+// ===========================================================================
+static void test_t3_send_side_record()
+{
+    printf("\n[T6] T3 send-side record (SFCodeResponseList/TimeLeft)\n");
+
+    THGem g;
+    TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.0.10", 4300);
+    g.srvGem->Open();
+    CHECK(g.bServoSocketConnect == true, "T6: SimAcceptConnection sets bServoSocketConnect (fixture precondition)");
+
+    g.WireCodec.InitLocalHead(1, 13, 1);   // S1,F13, W=1 -- a request expecting a reply -> T3 record armed
+    g.SendLocalData();
+
+    AnsiString expected = AnsiString(1) + " " + AnsiString(14) + " " + AnsiString(g.WireCodec.Local.SystemByte);
+    int idx = g.SFCodeResponseList->Items->IndexOf(expected);
+    CHECK(idx != -1, "T6: SendLocalData (W=1, odd F) records \"S F+1 SystemByte\" into SFCodeResponseList");
+    CHECK(idx >= 0 && g.TimeLeft->GetString(idx) == "300",
+          "T6: matching TimeLeft slot == \"300\" (T3TimeOut=30 golden ctor default * 10)");
+    CHECK(conn->SimTxBuffer().size() > 0, "T6: SendLocalData put real bytes on the wire (srvGem path)");
+}
+
+// ===========================================================================
+//  [T7] T3 timeout -> S9F9 through the cross-class seam: a REAL HTGem
+//  instance's own WireCodec, hooked to forward through THGem's real send --
+//  proving the SendLocalDataHook seam (D2) works end-to-end TODAY, without
+//  waiting for the future SystemModularInitial wiring wave.
+// ===========================================================================
+static void test_t3_timeout_s9f9_cross_class_seam()
+{
+    printf("\n[T7] T3 timeout -> S9F9 through the cross-class seam (HTGem.WireCodec.SendLocalDataHook)\n");
+
+    THGem g;
+    TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.0.11", 4400);
+    g.srvGem->Open();
+
+    HTGem hgem;
+    HSys.MyGem = &hgem;
+    hgem.WireCodec.SendLocalDataHook = [&g](SecsWireCodec &wc) { g.SendLocalDataFrom(wc); };
+
+    // Seed one T3 record via the SAME send path T6 exercises.
+    g.WireCodec.InitLocalHead(1, 13, 1);
+    g.SendLocalData();
+    AnsiString expected = AnsiString(1) + " " + AnsiString(14) + " " + AnsiString(g.WireCodec.Local.SystemByte);
+    int seededIndex = g.SFCodeResponseList->Items->IndexOf(expected);
+    CHECK(seededIndex != -1, "T7: fixture -- T3 record seeded (same pattern as T6)");
+
+    conn->SimClearTx();
+    g.TimeLeft->Strings[seededIndex] = "1";   // one tick from expiry
+    g.SystemSec = 1;                          // != iOldSecProcessSFNoResponse's ctor default (0)
+
+    g.DoProcessSFNoResponse();
+
+    CHECK(g.SFCodeResponseList->Items->IndexOf(expected) == -1, "T7: expired T3 record removed from SFCodeResponseList");
+    const std::vector<char> &tx = conn->SimTxBuffer();
+    CHECK(tx.size() >= 14, "T7: DoProcessSFNoResponse's S9F9 send produced real bytes on the wire via the cross-class hook");
+    if (tx.size() >= 14)
+        CHECK((unsigned char)tx[6] == 0x09 && (unsigned char)tx[7] == 0x09, "T7: reply header is S9F9 (Transaction Timer Timeout)");
+    std::string body(tx.begin() + 14, tx.end());
+    CHECK(body.find("T3   time out") != std::string::npos, "T7: S9F9 payload carries the \"T3   time out\" text");
+
+    HSys.MyGem = NULL;
+}
+
+// ===========================================================================
+//  [T8] CheckSFCodeResponse response-matching: exact match removes the
+//  record; a mismatch leaves it untouched; a TimeLeft/SFCodeResponseList
+//  COUNT mismatch clears both lists outright (golden's own recovery path).
+// ===========================================================================
+static void test_checksfcoderesponse()
+{
+    printf("\n[T8] CheckSFCodeResponse response-matching\n");
+
+    THGem g;
+
+    g.SFCodeResponseList->Items->Add("1 14 5");
+    g.TimeLeft->Add("300");
+    g.WireCodec.Remote.MessageID_S = 1;
+    g.WireCodec.Remote.MessageID_F = 14;
+    g.WireCodec.Remote.SystemByte = 5;
+    g.CheckSFCodeResponse();
+    CHECK(g.SFCodeResponseList->Items->Count == 0 && g.TimeLeft->Count == 0,
+          "T8: exact-match response removes the ONE seeded record from both lists");
+
+    g.SFCodeResponseList->Items->Add("1 14 5");
+    g.TimeLeft->Add("300");
+    g.WireCodec.Remote.SystemByte = 999;   // no longer matches "1 14 5"
+    g.CheckSFCodeResponse();
+    CHECK(g.SFCodeResponseList->Items->Count == 1 && g.TimeLeft->Count == 1,
+          "T8: mismatched response leaves the seeded record untouched");
+
+    g.TimeLeft->Add("150");   // now TimeLeft->Count(2) != SFCodeResponseList->Items->Count(1)
+    g.CheckSFCodeResponse();
+    CHECK(g.SFCodeResponseList->Items->Count == 0 && g.TimeLeft->Count == 0,
+          "T8: TimeLeft/SFCodeResponseList count mismatch -> CheckSFCodeResponse clears BOTH lists");
+}
+
+// ===========================================================================
+//  [T9] DoConnect state walk.
+// ===========================================================================
+static void test_doconnect_state_walk()
+{
+    printf("\n[T9] DoConnect state walk\n");
+
+    THGem g;
+    TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.0.20", 4500);
+    g.srvGem->Open();
+    conn->SimClearTx();
+
+    CHECK(g.iStartConnectTask == 1, "T9: fresh THGem starts at iStartConnectTask==1");
+    int ret1 = g.DoConnect();   // case 1: DoSelect() sends Select.req, arms ConnectDelay, Task=100
+    CHECK(ret1 == 0 && g.iStartConnectTask == 100, "T9: DoConnect case 1 sends Select.req and advances to Task 100");
+    CHECK(conn->SimTxBuffer().size() == 14, "T9: DoSelect's Select.req produced a 14-byte control frame on the wire");
+    if (conn->SimTxBuffer().size() == 14)
+        CHECK((unsigned char)conn->SimTxBuffer()[9] == 1, "T9: sent frame's SType byte == 1 (Select.req)");
+
+    g.bWaitSelectRsp = true;   // simulate a Select.rsp having arrived (bypassing a full T3-style e2e injection)
+    int ret2 = g.DoConnect();   // case 100: bWaitSelectRsp==true -> S1F13 (D3 null-guarded, HSys.MyGem==NULL) -> Task=200
+    CHECK(ret2 == 0 && g.iStartConnectTask == 200,
+          "T9: DoConnect case 100 (bWaitSelectRsp) advances to Task 200 -- S1F13 null-guard did not crash with HSys.MyGem==NULL");
+
+    g.bWaitEstablishCommunicationsResponse = true;
+    g.bWaitEstablishCommunicationsResponseError = false;
+    int ret3 = g.DoConnect();   // case 200: success -> bConnect=true, Task=1, return 1
+    CHECK(ret3 == 1 && g.bConnect == true && g.iStartConnectTask == 1,
+          "T9: DoConnect case 200 (no error) completes -- bConnect=true, Task resets to 1, returns 1");
+
+    // ConnectDelay timeout -> return 2 branch.
+    g.bConnect = false;
+    int ret4 = g.DoConnect();   // case 1 again: re-arms ConnectDelay.TimerSetSecAndOn(3), Task=100
+    CHECK(ret4 == 0 && g.iStartConnectTask == 100, "T9: DoConnect re-armed (case 1) for the ConnectDelay-timeout sub-test");
+    ::Sleep(3100);
+    int ret5 = g.DoConnect();   // case 100: bWaitSelectRsp==false, ConnectDelay elapsed -> Task=1, return 2
+    CHECK(ret5 == 2 && g.iStartConnectTask == 1, "T9: ConnectDelay's 3-second timeout -> DoConnect returns 2, resets Task to 1");
+}
+
+// ===========================================================================
+//  [T10] Timer1Timer's IniConfig.bEnable_SECS_GEM==false branch (forced
+//  disconnect) + the SECSGEM_DoSeparateWait 5-second re-arm window.
+//
+//  IMPORTANT (flagged): Timer1Timer's own `bSendDoSeparate`/
+//  `bSetDoSeparateWait`/`bWaitHTimer`/`bTimerRunning` are golden FUNCTION-STATIC
+//  locals (persist across EVERY THGem instance AND every call, for the
+//  process's entire lifetime -- a faithful translation of golden's own
+//  shape, not something this wave changed). `bSECSGEM_DoSeparate`/
+//  `SECSGEM_DoSeparate`/`SECSGEM_DoSeparateWait` are likewise genuine
+//  file-scope globals (golden :24/:4746/:5175). This test is written to be
+//  the FIRST (and only) one in this binary that ever drives
+//  IniConfig.bEnable_SECS_GEM==false through Timer1Timer -- every earlier
+//  Bucket-C test that pumps Timer1Timer (T3) runs with bEnable_SECS_GEM==true,
+//  so the disable branch below is never entered by them and these
+//  statics/globals are still at their process-start defaults when this test
+//  begins. Re-ordering the test sequence in main() below could break this
+//  assumption -- keep this test LAST among the Timer1Timer-pumping tests.
+// ===========================================================================
+static void test_timer1timer_disable_branch()
+{
+    printf("\n[T10] Timer1Timer disable branch (IniConfig.bEnable_SECS_GEM==false)\n");
+
+    bool savedEnableSecsGem = IniConfig.bEnable_SECS_GEM;
+    bool savedInitialOK = InitialOK;
+    THGem *savedHGem = HGem;
+
+    THGem g;
+    BucketCPanels panels(g);
+    HGem = &g;
+    g.DB = new THGemMemo();
+    InitialOK = true;
+
+    TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.0.30", 4600);
+    g.srvGem->Open();
+    g.clientGem->Active = true;   // so "both sockets closed" is observable on both
+
+    IniConfig.bEnable_SECS_GEM = false;
+    g.Timer1Timer(NULL);   // srvGem->Socket->ActiveConnections!=0 -> DoSeparate() + Close() both -> bSECSGEM_DoSeparate=true
+
+    CHECK(conn->SimTxBuffer().size() == 14, "T10: disable branch sends a real Separate_req control frame");
+    if (conn->SimTxBuffer().size() == 14)
+        CHECK((unsigned char)conn->SimTxBuffer()[9] == 9, "T10: sent frame's SType byte == 9 (Separate_req)");
+    CHECK(g.srvGem->Active == false && g.clientGem->Active == false,
+          "T10: disable branch closes BOTH srvGem and clientGem");
+    CHECK(bSECSGEM_DoSeparate == true, "T10: bSECSGEM_DoSeparate latches true after the forced disconnect");
+
+    // Re-enable: Timer1Timer's own `if(bSetDoSeparateWait && bSECSGEM_DoSeparate)`
+    // now arms SECSGEM_DoSeparateWait.SetSecAndOn(5) and takes the early-return
+    // "bWaitHTimer" path -- sleepless variant: confirm the pump returns
+    // immediately without advancing Timer1Task (the real 5-second wait, D6,
+    // has not elapsed).
+    IniConfig.bEnable_SECS_GEM = true;
+    int taskBefore = g.Timer1Task;
+    g.Timer1Timer(NULL);
+    CHECK(g.Timer1Task == taskBefore,
+          "T10: SECSGEM_DoSeparateWait's 5-second window blocks the pump -- Timer1Task does not advance on this call");
+
+    HGem = savedHGem;
+    InitialOK = savedInitialOK;
+    IniConfig.bEnable_SECS_GEM = savedEnableSecsGem;
+    delete g.DB; g.DB = NULL;
+}
+
+// ===========================================================================
+//  AI(W906-uHGemEquipment-BucketC) 20260717: T3/T4/T5 (via
+//  ProcessSocketReceiveData, directly or through Timer1Timer) all reach the
+//  now-real SaveSECSGEMTextToLog(), which -- exactly like the
+//  already-committed SaveSECSGEMErrToLog test [12] guards against -- APPENDS
+//  to a real, hardcoded, outside-the-repo path:
+//  D:\SECS_GEM_LOGS\<yyyy>\<mm_dd>\SECSGEM_TextLog_<hh>.txt. Per this wave's
+//  own hard test-hygiene rule (any test reaching that logger must leave the
+//  archive byte-for-byte unchanged afterward), this capture/restore pair
+//  wraps the WHOLE Bucket-C block in main() below in ONE shot (restoring
+//  after every individual SaveSECSGEMTextToLog call would be impractically
+//  invasive) -- same technique as test [12]'s own inline capture/restore,
+//  factored into two reusable functions here since it now brackets several
+//  tests instead of just one.
+// ===========================================================================
+struct TextLogSnapshot
+{
+    AnsiString filePath;
+    bool fileExistedBefore;
+    bool dayDirExistedBefore;
+    bool yearDirExistedBefore;
+    std::string originalContent;
+};
+
+static TextLogSnapshot CaptureTextLogSnapshot()
+{
+    TextLogSnapshot snap;
+    TDateTime tdNow = Now();
+    AnsiString dirYear = "D:\\SECS_GEM_LOGS\\" + FormatDateTime("yyyy", tdNow);
+    AnsiString dirDay = dirYear + "\\" + FormatDateTime("mm_dd", tdNow);
+    snap.filePath = dirDay + "\\SECSGEM_TextLog_" + FormatDateTime("hh", tdNow) + ".txt";
+    snap.fileExistedBefore = FileExists(snap.filePath);
+    snap.dayDirExistedBefore = DirectoryExists(dirDay);
+    snap.yearDirExistedBefore = DirectoryExists(dirYear);
+    if (snap.fileExistedBefore)
+    {
+        FILE *rf = fopen(snap.filePath.c_str(), "rb");
+        if (rf)
+        {
+            char buf[65536];
+            size_t n;
+            while ((n = fread(buf, 1, sizeof(buf), rf)) > 0)
+                snap.originalContent.append(buf, n);
+            fclose(rf);
+        }
+    }
+    return snap;
+}
+
+static void RestoreTextLogSnapshot(const TextLogSnapshot &snap)
+{
+    // Recompute the directory paths from the SAME captured filePath (avoids
+    // re-deriving yyyy/mm_dd separately and risking an hour-boundary mismatch
+    // between capture and restore -- same accepted latent limitation as
+    // test [12]'s own inline version, which this mirrors).
+    if (snap.fileExistedBefore)
+    {
+        FILE *wf = fopen(snap.filePath.c_str(), "wb");
+        if (wf)
+        {
+            fwrite(snap.originalContent.data(), 1, snap.originalContent.size(), wf);
+            fclose(wf);
+        }
+    }
+    else
+    {
+        remove(snap.filePath.c_str());
+        AnsiString dirDay = ExtractFilePath(snap.filePath);
+        // ExtractFilePath keeps the trailing backslash; strip it before
+        // ExtractFilePath'ing the parent again for the year directory.
+        AnsiString dirDayNoSlash = dirDay;
+        if (dirDayNoSlash.Length() > 0 && dirDayNoSlash[dirDayNoSlash.Length()] == '\\')
+            dirDayNoSlash.SetLength(dirDayNoSlash.Length() - 1);
+        AnsiString dirYear = ExtractFilePath(dirDayNoSlash);
+        if (!snap.dayDirExistedBefore)
+            RemoveDir(dirDayNoSlash);
+        if (!snap.yearDirExistedBefore)
+            RemoveDir(dirYear);
+    }
 }
 
 // ===========================================================================
@@ -1150,6 +1892,22 @@ int main()
     test_processshow();
     test_stringout_2arg();
     test_do_update_status();
+
+    // Bucket C (W906-uHGemEquipment-BucketC 20260717)
+    test_memorystream_shim();
+    test_htimer_real_semantics();
+    // T3/T4/T5 reach the real SaveSECSGEMTextToLog() -- see the
+    // CaptureTextLogSnapshot/RestoreTextLogSnapshot comment above.
+    TextLogSnapshot textLogSnap = CaptureTextLogSnapshot();
+    test_select_handshake_e2e();
+    test_frame_reassembly();
+    test_data_message_gated_dispatch();
+    RestoreTextLogSnapshot(textLogSnap);
+    test_t3_send_side_record();
+    test_t3_timeout_s9f9_cross_class_seam();
+    test_checksfcoderesponse();
+    test_doconnect_state_walk();
+    test_timer1timer_disable_branch();
 
     printf("\n=== RESULT: %d passed, %d failed ===\n", g_pass, g_fail);
     return (g_fail == 0) ? 0 : 1;

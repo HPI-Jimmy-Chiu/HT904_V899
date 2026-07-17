@@ -126,6 +126,31 @@
 //      above). Kept as a stub purely so EnableDisableEventReport's own
 //      control flow (which unconditionally calls it) is translatable without
 //      silently dropping the call.
+//
+//  AI(W906-uHGemEquipment-BucketC) 20260717: FOURTH wave ("Bucket C", the
+//  final wave of the original triple-front recon) landed on this same class
+//  -- the socket receive pump / T3 timeout machinery / HSMS control-message
+//  handshake / Timer1Timer master state machine. THGem now embeds
+//  `SecsWireCodec WireCodec;` BY VALUE (D1) -- codec state (LocalBuffer/
+//  Local/Remote/bReceiveData/...) lives there, NOT duplicated on THGem; see
+//  SendLocalDataFrom's own .cpp comment for the codec-state routing table.
+//  Real methods added: clientGemRead, ProcessSocketReceiveData, Timer1Timer
+//  (the ~350-line master SM), DoConnect, DoSelect, DoSeparate (REPLACES the
+//  Bucket-B gated stub), DoProcessSFNoResponse, SendLocalData/
+//  SendLocalDataFrom, DoLocalAllProcessLoop (shell + 4 gated callees),
+//  CheckSFCodeResponse, SaveSECSGEMTextToLog, ShowLocalBufferBinaryData/
+//  ShowLocalHeadInfo (each now 2 overloads), InitSTypeStruct, SelectRsp/
+//  DeselectRsp/LinktestRsp, and ProcessReceiceData -- but ProcessReceiceData
+//  is a SPLIT: the HSMS control-message head (Select/Deselect/Linktest/
+//  Separate) is real; the ~180-line S,F DATA-MESSAGE dispatch tail stays ONE
+//  gated `#if 0` block (needs live HSys.MyGem + ~15 flag members +
+//  MoveCheckCallBack -- see that method's own .cpp comment for the full
+//  rationale and the two-codec-instance boundary note it flags).
+//  Still explicitly OUT OF SCOPE: FormCreate's SV/EC registration (a future
+//  dedicated wave, brings SecsSvEcRegistration along), DoSpool/
+//  DoTraceDataResponse/DoUploadFileToHost/DoDownLoadRemoteFile (gated no-op
+//  stubs, same idiom as EnableDisableEventReportAcknowledgeError), and the
+//  ProcessReceiceData data-message tail above.
 //---------------------------------------------------------------------------
 #ifndef uHGemEquipmentH
 #define uHGemEquipmentH
@@ -134,12 +159,31 @@
 #include "vclcompat/StringGrid.h"
 #include "SECSGEM/SecsEventType.h"   // SECS_EVENT.TotalEvent (array bound in SetCEIDContent)
 
+// AI(W906-uHGemEquipment-BucketC) 20260717: D1 -- embed `SecsWireCodec
+// WireCodec;` by value (see the class body below), following the proven
+// HTGem precedent (uHGemClass.h:127). This header supplies HTypeStruct/
+// STypeStruct/HSMS_Head_Struct + `extern HType` per SecsWireCodec.h:99-107's
+// own "INTEGRATE-AGENT WIRING POINT" note -- they are NOT redeclared here.
+#include "SECSGEM/SecsWireCodec.h"
+// TCriticalSection (TFixedCriticalSection's base below; csSFCodeResponse).
+#include "vclcompat/SyncObjs.h"
+// TMemoryStream (RecvMemoryBuffer/ProcBuffer/TempProcBuffer below); already
+// brings TMemoryStream/soFromBeginning/soFromCurrent/soFromEnd into the
+// global namespace itself (see that header's own tail note).
+#include "vclcompat/MemoryStream.h"
+
 // This TU does not include aHotPlateSubstrate.h (the other place a global
 // `class TList` lives -- see vclcompat/vcl_compat.h's own TList.h precedent
 // note) and none of this wave's methods need vclcompat::TList, so bringing
 // TStringGrid into the global namespace here is collision-free (grepped: no
 // other `class TStringGrid` exists anywhere in this tree).
 using vclcompat::TStringGrid;
+// TCriticalSection is NOT auto-brought into the global namespace by
+// vclcompat/SyncObjs.h (matches TStringGrid.h's own posture) -- brought in
+// explicitly here, same idiom as the TStringGrid line above (golden spells
+// both types unqualified: `TCriticalSection *csSFCodeResponse;`,
+// `class TFixedCriticalSection : public TCriticalSection`).
+using vclcompat::TCriticalSection;
 
 //---------------------------------------------------------------------------
 //  GemTimer -- golden uHGemEquipment.h:31-42.
@@ -200,6 +244,10 @@ typedef int TColor;
 const TColor clRed    = 0x000000FF;
 const TColor clLime   = 0x0000FF00;
 const TColor clYellow = 0x0000FFFF;
+// AI(W906-uHGemEquipment-BucketC) 20260717: clBlack -- golden StringOutColor's
+// ctor default (golden :502, `StringOutColor=clBlack;`) and SendLocalDataFrom's
+// own reset (golden :1992). Real VCL clBlack is 0x00000000 (BGR-packed).
+const TColor clBlack  = 0x00000000;
 
 //---------------------------------------------------------------------------
 //  AI(W906-uHGemEquipment-BucketB) 20260717: THGemXxx widget stand-ins --
@@ -314,6 +362,36 @@ struct THGemMemo
 };
 
 //---------------------------------------------------------------------------
+//  AI(W906-uHGemEquipment-BucketC) 20260717: THGemListBox -- stand-in for
+//  golden TListBox *SFCodeResponseList (uHGemEquipment.h:138, __published).
+//  Fields actually used in this wave's scope: ->Items (Add :2062 /
+//  Strings[i] :4644 / Delete :4654 / Count :4617 / IndexOf :7040 / Clear
+//  :7037) and ->Clear() (:4624, real TListBox::Clear == Items.Clear).
+//  Same minimal-stand-in idiom as the Bucket-B THGemXxx widgets above.
+//---------------------------------------------------------------------------
+struct THGemListBox
+{
+    TStringList *Items;
+    THGemListBox() { Items = new TStringList(); }
+    ~THGemListBox() { delete Items; }
+    THGemListBox(const THGemListBox&) = delete;
+    THGemListBox& operator=(const THGemListBox&) = delete;
+    void Clear() { Items->Clear(); }
+};
+
+// AI(W906-uHGemEquipment-BucketC) 20260717: TFixedCriticalSection --
+// transcribed verbatim from golden uHGemEquipment.h:25-29 (golden `byte
+// FDummy[95];` -> `unsigned char FDummy[95];`, noted deviation -- `byte` is
+// a BCB6 Windows.pas alias for `unsigned char`, identical width/semantics).
+// Needs vclcompat/SyncObjs.h's TCriticalSection (included above) as its base.
+//---------------------------------------------------------------------------
+class TFixedCriticalSection : public TCriticalSection
+{
+    private:
+    unsigned char FDummy[95];
+};
+
+//---------------------------------------------------------------------------
 //  THGem -- see this header's own file-head note above for scope.
 //---------------------------------------------------------------------------
 class THGem
@@ -398,8 +476,19 @@ public:
     GemTimer DelayOpenCommuncation;   // golden :476
     GemTimer ConnectDelay;            // golden :479
 
-    TStringList *WaitShowString;   // golden :597
-    TStringList *LogDataString;    // golden :447
+    // AI(W906-uHGemEquipment-BucketC) 20260717: D4 -- these two are ALIASED
+    // (not separately allocated) as of this wave. WireCodec allocates its own
+    // WaitShowString/LogDataString (SecsWireCodec.cpp ctor); THGem's ctor
+    // assigns these two pointers to point at WireCodec's instances instead of
+    // `new`ing its own pair, so codec-side StringOut() calls (SendLocalDataFrom,
+    // ShowSML, ...) land in the SAME sink THGem's own ProcessShow/
+    // SaveSECSGEMTextToLog drain -- golden had exactly ONE such pair; before
+    // this wave the port had two (THGem's own + WireCodec's), so codec-side
+    // trace lines never reached ProcessShow/the log file. ~THGem does NOT
+    // delete these two (ownership = WireCodec; its dtor, which runs AFTER
+    // ~THGem's body per member-destruction order, deletes them for real).
+    TStringList *WaitShowString;   // golden :597 (ALIASED to WireCodec.WaitShowString, see ctor)
+    TStringList *LogDataString;    // golden :447 (ALIASED to WireCodec.LogDataString, see ctor)
 
     AnsiString TimeString;   // golden :700
     AnsiString GemClock;     // golden :302
@@ -408,6 +497,70 @@ public:
     // reference it by this exact name).
     Word SystemYear, SystemMonth, SystemDate;           // golden :230
     Word SystemHour, SystemMin, SystemSec, SystemMSec;  // golden :231
+
+    // ==== Bucket C: wire-codec-embedded engine + socket-receive-pump / ======
+    // ==== T3-timeout / HSMS-handshake / Timer1Timer master-SM state    ======
+    // (W906-uHGemEquipment-BucketC 20260717; golden line cites per-member.)
+    // D1: embedded BY VALUE, following HTGem's own already-proven precedent
+    // (uHGemClass.h:127). The WaitShowString/LogDataString raw pointers
+    // declared earlier in this class are ALIASED to WireCodec's own lists in
+    // the ctor BODY (which runs only after every member -- including this one
+    // -- has finished constructing, so relative declaration order between
+    // them is immaterial; the dtor likewise skips deleting the aliased pair,
+    // see ~THGem). Does NOT embed SecsSvEcRegistration this wave -- no
+    // in-scope method touches SV/EC registration state (FormCreate itself is
+    // out of scope, see file-head note) -- deferred to a future "SV/EC
+    // registration wave".
+    SecsWireCodec WireCodec;
+
+    STypeStruct SType;                              // golden :209 (InitSTypeStruct() populates it, ctor call below)
+    TColor StringOutColor;                           // golden :237 (ctor = clBlack)
+
+    bool bWaitSelectRsp;                             // golden :390 (ctor false)
+    bool bWaitDeSelectRsp;                           // golden :391 (ctor false)
+    bool bWaitEstablishCommunicationsResponse;       // golden :691 (ctor false)
+    bool bWaitEstablishCommunicationsResponseError;  // golden :692 (ctor false)
+    bool bReceiveEstablishCommunicationsRequest;     // golden :399 (ctor false)
+    bool bSeprate;                                   // golden :394 (ctor false)
+    // golden ctor-untouched (real BCB6 zero-inits for free; explicit here per
+    // this file's own established "flagged deviation" precedent, see
+    // DoUpdateStatus's own supporting-state note below).
+    bool bDataFormatOK;                              // golden :528
+    bool bFirstEntry;                                 // golden :454 (ctor :450 true)
+    bool bFirstBlock;                                 // golden :472 (ctor :472 true)
+
+    int  iFileCount;                                  // golden :721 (ctor :672 = 0)
+    int  Timer1Task, Timer1ct;                        // golden :519 (ctor :494-495 = 1, 0)
+    Word iOldSecProcessSFNoResponse;                  // golden :508 (ctor-untouched; zero-init, flag)
+    int  iAutoConnectSec, iAutoConnectDelay;          // golden :509 (ctor :485-486 = 0, 2)
+    unsigned int RemoteSystemByte;                    // golden :212 (ctor-untouched; zero-init, flag)
+
+    AnsiString Alias;                                 // golden :529
+    // golden TForm's own `Caption` property (Timer1Timer :5251 `Caption=Alias;`)
+    // -- THGem is not modeled as a real window in this port (same "not a real
+    // window" posture as FormShow's own dropped Left/Top/Width/Height) -- a
+    // plain AnsiString stand-in suffices since nothing reads it back except
+    // that same assignment's own right-hand side.
+    AnsiString Caption;
+
+    GemTimer DelayForServoError;                      // golden :592
+
+    // golden :473-474 (ctor :474-475 = 10240 + `new[]`; dtor `delete[]`).
+    // NOTE: ProcessSocketReceiveData's own LOCAL `unsigned char *EthernetBuffer`
+    // (golden :9035) SHADOWS this member inside that one function's body --
+    // a genuine golden quirk (the member is never actually read/written by
+    // that function; only the local is) -- preserved, see that method's own
+    // .cpp comment.
+    unsigned char *EthernetBuffer;
+    int iEthernetBufferLen;
+
+    THGemListBox *SFCodeResponseList;                 // golden :138 (__published; ctor-allocated)
+    TStringList  *TimeLeft;                           // golden :229 (ctor :584 new)
+    TFixedCriticalSection *pLockOnSocketRecvice;      // golden :717 (ctor :668 new)
+    TCriticalSection      *csSFCodeResponse;          // golden :723 (ctor :673 new)
+    TMemoryStream *RecvMemoryBuffer;                  // golden :718 (ctor :669 new)
+    TMemoryStream *ProcBuffer;                        // golden :719 (ctor :670 new)
+    TMemoryStream *TempProcBuffer;                    // golden :720 (ctor :671 new)
 
     // ==== Widget stand-ins (W906-uHGemEquipment-BucketB) ====================
     // golden uHGemEquipment.h's __published block (:92-165) for the first 20
@@ -598,12 +751,66 @@ public:
     void __fastcall FormShow(TObject *Sender);                  // golden :6936-6950 (partial -- see .cpp)
     void __fastcall StringOut(AnsiString S, TColor C);          // golden :409-417
 
-    // golden uHGemEquipment.h:248 `void DoSeparate();` -- GATED NO-OP STUB
-    // (real body is wire-codec/SML, out of THIS wave's scope -- same
-    // treatment as EnableDisableEventReportAcknowledgeError above). Exists
-    // purely so DoUpdateStatus's own KYEC branch (which unconditionally
-    // calls this) is translatable without silently dropping the call.
-    void DoSeparate();
+    // AI(W906-uHGemEquipment-BucketC) 20260717: golden uHGemEquipment.h:249
+    // `void DoSeparate();` -- REAL as of this wave (REPLACES the Bucket-B
+    // gated no-op stub that used to sit here -- golden's real body is
+    // wire-codec/SML, which needed WireCodec embedded first; see
+    // uHGemEquipment.cpp's own DoSeparate definition, golden :3518-3531).
+    // DoSelect is golden's sibling (golden :248, :3496-3509) -- was never
+    // declared at all before this wave (no stub existed for it).
+    void DoSelect();      // golden :3496-3509
+    void DoSeparate();    // golden :3518-3531 (now real -- see above)
+
+    // ==== Bucket C: socket receive pump / T3 timeout / HSMS control-message
+    // ==== handshake / Timer1Timer master state machine (W906-uHGemEquipment-
+    // ==== BucketC 20260717) ==================================================
+    void __fastcall clientGemRead(TObject *Sender, TCustomWinSocket *Socket);   // golden :9008-9028
+    void __fastcall ProcessSocketReceiveData();                                // golden :9030-9207
+    void __fastcall Timer1Timer(TObject *Sender);                              // golden :5176-5527
+
+    int  DoConnect();                          // golden :3536-3599
+    void __fastcall DoProcessSFNoResponse();   // golden :4604-4694
+    void DoLocalAllProcessLoop();              // golden :4699-4741 (shell; 4 callees gated, see .cpp)
+
+    // golden's private "S,F 主要處理" block (uHGemEquipment.h:292-295) --
+    // SelectRsp/DeselectRsp/LinktestRsp are pure WireCodec composition (REAL);
+    // ProcessReceiceData is a SPLIT -- the HSMS control-message head is real,
+    // the S,F data-message dispatch tail stays gated -- see the .cpp's own
+    // comment on ProcessReceiceData for the full rationale.
+    void LinktestRsp();          // golden :8751-8765
+    void SelectRsp();            // golden :8707-8723
+    void DeselectRsp();          // golden :8729-8745
+    void ProcessReceiceData();   // golden :8772-8989 (control head REAL; S,F tail GATED, see .cpp)
+
+    void SendLocalData();   // golden .h:318, uHGemEquipment.cpp:1985-2107 (now real -- forwards to SendLocalDataFrom(WireCodec))
+    // AI(W906-uHGemEquipment-BucketC) 20260717: ADDITIVE, not a golden method
+    // (D2) -- the REAL golden SendLocalData(1985-2107) body, parameterized
+    // over WHICH SecsWireCodec instance to send (THGem's own WireCodec, or --
+    // once a future wiring wave installs the identical hook on
+    // HSys.MyGem->WireCodec -- HTGem's). See the .cpp definition for the full
+    // golden-to-parameterized substitution table.
+    void SendLocalDataFrom(SecsWireCodec &wc);
+
+    void __fastcall CheckSFCodeResponse();       // golden :7020-7058
+    void __fastcall SaveSECSGEMTextToLog();      // golden :7068-7091
+    void InitSTypeStruct();                      // golden :376-387
+
+    // golden's zero-arg signatures (uHGemEquipment.h:263-264) forward to
+    // `(WireCodec)` below; the `(SecsWireCodec&)` overloads are ADDITIVE (not
+    // golden) so SendLocalDataFrom can trace the INVOKING codec's own buffer
+    // (needed once HTGem-originated sends are wired through the same hook).
+    void ShowLocalHeadInfo();                    // golden :1378-1405 (forwards to ShowLocalHeadInfo(WireCodec))
+    void ShowLocalHeadInfo(SecsWireCodec &wc);        // ADDITIVE (real body)
+    void ShowLocalBufferBinaryData();            // golden :1350-1373 (forwards to ShowLocalBufferBinaryData(WireCodec))
+    void ShowLocalBufferBinaryData(SecsWireCodec &wc); // ADDITIVE (real body)
+
+    // ==== Bucket C: gated no-op stubs (golden citation each; no in-scope
+    // ==== consumer needs a real body -- same idiom as
+    // ==== EnableDisableEventReportAcknowledgeError above) ====================
+    void DoSpool();                    // golden :4079 -- #if 0 TODO(W906-SECSGEM-spool), needs spool-file surface
+    void DoTraceDataResponse(int TR);  // golden :4190 -- #if 0 TODO(W906-SECSGEM-trace), needs TraceData[]/TraceDataResponseTask[]
+    void DoUploadFileToHost();         // golden :4591 -- #if 0 TODO(W906-SECSGEM-upload), needs FTP/file-transfer surface
+    void DoDownLoadRemoteFile();       // golden :6746 -- #if 0 TODO(W906-SECSGEM-download), needs FTP/file-transfer surface
 };
 
 //---------------------------------------------------------------------------

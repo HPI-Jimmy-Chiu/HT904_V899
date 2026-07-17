@@ -42,7 +42,10 @@ extern bool IsCorrectDateFormat(int y, int m, int d);
 // golden 3-arg signature (cMyDB.h:20), not the pre-existing 2-arg mismatch in
 // aHotPlateSubstrate.h:576 (see uHGemClass.cpp's extern-decl note).
 static int g_dbiCalls = 0;
-void MyDBIProcess(AnsiString /*asTable*/, AnsiString /*S1*/, AnsiString /*S2*/)
+// AI(W906-uHGemEquipment-BucketC) 20260717: __fastcall added in lockstep with
+// uHGemClass.cpp:251's ABI fix (see the note there) so this stub's decorated
+// symbol matches the now-fastcall extern reference this binary links against.
+void __fastcall MyDBIProcess(AnsiString /*asTable*/, AnsiString /*S1*/, AnsiString /*S2*/)
 {
     ++g_dbiCalls;
 }

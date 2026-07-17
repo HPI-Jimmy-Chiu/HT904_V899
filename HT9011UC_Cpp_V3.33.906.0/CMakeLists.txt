@@ -64,6 +64,15 @@ add_library(vclcompat
     #   namespace by vcl_compat.h (consumers add their own `using
     #   vclcompat::TStringGrid;` -- see that header's own note on why).
     vclcompat/StringGrid.cpp
+    # --- W906-uHGemEquipment-BucketC enabler: headless TMemoryStream shim
+    #   (Classes.hpp). Faithful stand-in for the real VCL TMemoryStream used
+    #   by SECSGEM/uHGemEquipment.cpp's RecvMemoryBuffer/ProcBuffer/
+    #   TempProcBuffer (clientGemRead/ProcessSocketReceiveData) -- see
+    #   vclcompat/MemoryStream.h's own file-head note for the exact API
+    #   surface + semantics. Zero dependency beyond <vector>/<cstring>.
+    #   vclcompat/SyncObjs.h (TCriticalSection) is header-only (inline) --
+    #   no matching .cpp, no separate CMake source entry needed for it.
+    vclcompat/MemoryStream.cpp
 )
 
 target_include_directories(vclcompat PUBLIC
@@ -514,7 +523,12 @@ target_include_directories(ht9045_secsgem PUBLIC
 # ReadWriteIni/ReadIniData/WriteIniData) + ht9045_globals (cmydef.h's
 # CUSTOMER_CODE/CC_*/CosFunction/bSECSGEMbyPass/bSECSGEMConnectionFail) added
 # -- see this target's own comment above for the full reasoning.
-target_link_libraries(ht9045_secsgem PUBLIC vclcompat ht9045_public ht9045_core ht9045_globals)
+# AI(W906-uHGemEquipment-BucketC) 20260717: ht9045_db added -- D3's HSys.MyGem
+# seam (`#include "database.h"`, `extern SYSTEM_MODULAR HSys;`) needs
+# database.cpp's one definition of `HSys` linked in. ht9045_db itself only
+# links vclcompat+ht9045_globals (see that library's own target above) --
+# no cycle (ht9045_db does not link back to ht9045_secsgem or ht9045_public).
+target_link_libraries(ht9045_secsgem PUBLIC vclcompat ht9045_public ht9045_core ht9045_globals ht9045_db)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(ht9045_secsgem PRIVATE ${HT9045_WARNFLAGS})

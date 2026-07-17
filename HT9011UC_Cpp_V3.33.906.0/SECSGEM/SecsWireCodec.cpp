@@ -1440,24 +1440,34 @@ void SecsWireCodec::LocalAcknowledge(unsigned char SCode, unsigned char FCode, u
 }
 
 //---------------------------------------------------------------------------
-// PREREQUISITE, GATED (see this file's Wave-2 header note + the .h
-// declaration comment): golden uHGemEquipment.cpp:1985-2107,
-// THGem::SendLocalData() -- dispatches LocalBuffer[0..LocalLength_4) over a
-// live HSMS TClientSocket/TServerSocket connection, with a try/catch
-// reconnect path, ShowSFDescription/ShowLocalBufferBinaryData/
-// ShowLocalHeadInfo/ShowSML tracing, and SFCodeResponseList/TimeLeft
-// retry-wait bookkeeping guarded by a TCriticalSection -- none of which
-// exists in this unit's scope (the comms layer is a future SECSGEM-engine
-// wave; KNOWLEDGE.md already flags vclcompat/ClientSocket.h as the shim to
-// reuse for it). Only the one piece of in-scope state golden mutates
-// unconditionally at entry is preserved.
+// golden uHGemEquipment.cpp:1985-2107, THGem::SendLocalData() -- dispatches
+// LocalBuffer[0..LocalLength_4) over a live HSMS TClientSocket/TServerSocket
+// connection, with a try/catch reconnect path, ShowSFDescription/
+// ShowLocalBufferBinaryData/ShowLocalHeadInfo/ShowSML tracing, and
+// SFCodeResponseList/TimeLeft retry-wait bookkeeping guarded by a
+// TCriticalSection -- all of that lives one level up, on THGem (the comms
+// layer + T3 state are THGem members, not SecsWireCodec's -- see
+// uHGemEquipment.h's own routing-table note). This class only owns the
+// wire-format buffer itself.
+//
+// AI(W906-uHGemEquipment-BucketC) 20260717: UPDATED (Bucket C design D2) --
+// this is no longer a dead-end stub. If SendLocalDataHook has been installed
+// (see its own .h comment), forward to it, passing *this so the hook sends
+// THIS instance's LocalBuffer for real (THGem::SendLocalDataFrom is the one
+// real implementation this wave adds; THGem's ctor installs the hook on its
+// own WireCodec member). If NOT installed (still true for uHGemClass.cpp's
+// HTGem::WireCodec until a future wiring wave installs the same hook there,
+// and for every existing test that never sets it), the prior Wave-2 gated
+// behavior is UNCHANGED: only bReceiveData is reset, nothing is dispatched.
 //---------------------------------------------------------------------------
 void SecsWireCodec::SendLocalData()
 {
-    bReceiveData = false;   // golden uHGemEquipment.cpp:1988
-    // TODO(W5 SECSGEM engine wave): real HSMS TClientSocket/TServerSocket
-    // dispatch of LocalBuffer[0..LocalLength_4) + trace + retry-wait
-    // bookkeeping.
+    if (SendLocalDataHook)
+    {
+        SendLocalDataHook(*this);
+        return;
+    }
+    bReceiveData = false;   // golden uHGemEquipment.cpp:1988 (unhooked = prior gated behavior, unchanged)
 }
 
 //---------------------------------------------------------------------------

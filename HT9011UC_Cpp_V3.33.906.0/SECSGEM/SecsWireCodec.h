@@ -111,6 +111,7 @@
 
 #include "vclcompat/vcl_compat.h"
 #include <vector>
+#include <functional>
 
 //---------------------------------------------------------------------------
 //  Golden uHGemEquipment.h:43-59 -- SECS-II format-byte lookup table shape.
@@ -373,11 +374,33 @@ public:
     // LocalAcknowledge -- see .cpp "PREREQUISITE ADDITIONS" note): golden
     // uHGemEquipment.cpp:1985-2107, THGem::SendLocalData() -- dispatches
     // LocalBuffer over a live HSMS TClientSocket/TServerSocket connection.
-    // GENUINELY out of scope for this wave (needs the comms layer the W5
-    // roadmap entry names as a future prerequisite); GATED here to a minimal
-    // stub that preserves the one piece of in-scope state golden mutates
-    // (bReceiveData=false) so LocalAcknowledge's call shape stays faithful.
-    void SendLocalData();                                         // golden :1985-2107 (GATED, see .cpp)
+    // GENUINELY out of scope for THIS class (the comms layer / THGem's
+    // socket+T3 state live one level up, see uHGemEquipment.h) -- but as of
+    // AI(W906-uHGemEquipment-BucketC) 20260717, an ADDITIVE injection seam
+    // below lets THGem's real translation forward through this exact call
+    // shape instead of duplicating a second codec. See SendLocalDataHook's
+    // own comment for the design.
+    void SendLocalData();                                         // golden :1985-2107 (gated when unhooked, see .cpp)
+
+    // AI(W906-uHGemEquipment-BucketC) 20260717: ADDITIVE, not a golden member.
+    // Real-send injection seam (Bucket C design decision D2) -- default-empty
+    // `std::function` (no ctor-list entry needed; std::function
+    // default-constructs empty). When empty, SendLocalData() keeps its prior
+    // Wave-2 gated behavior (bReceiveData=false only, no actual dispatch).
+    // When a caller assigns this (THGem's ctor installs
+    // `WireCodec.SendLocalDataHook = [this](SecsWireCodec &wc){ SendLocalDataFrom(wc); };`
+    // -- see uHGemEquipment.cpp), SendLocalData() forwards to it, passing
+    // *this so the hook sends THIS SecsWireCodec instance's own LocalBuffer.
+    // This is how BOTH live codec instances in this port (THGem::WireCodec
+    // AND HTGem::WireCodec, uHGemClass.h:127) end up funneling through the
+    // SAME real send implementation (THGem::SendLocalDataFrom) once a future
+    // wiring wave installs the identical hook on HSys.MyGem->WireCodec too --
+    // see uHGemEquipment.cpp's own SendLocalDataFrom comment for the full
+    // picture. Existing consumers that never install a hook (uHGemClass.cpp's
+    // HTGem today, test_SecsWireCodec.cpp, test_uHGemClass.cpp) are
+    // bit-for-bit unchanged: an empty std::function is falsy, so the
+    // unhooked branch below runs exactly as before.
+    std::function<void(SecsWireCodec&)> SendLocalDataHook;
 
     // ==== Wave 2: byte-stream decoder / pretty-printer (golden THGem methods)
 

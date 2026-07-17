@@ -49,8 +49,22 @@
 // note (above) for why these 2 includes are a deliberate, narrow widening of
 // this TU's dependency surface (DoUpdateStatus/InitialHGem/SaveSystemDefault
 // only).
-#include "cmydef.h"    // CUSTOMER_CODE / CC_KYEC_LEE / CC_SIGURD_ChungXing / CC_MAXIM_THAILAND / CosFunction / bSECSGEMbyPass / bSECSGEMConnectionFail
+#include "cmydef.h"    // CUSTOMER_CODE / CC_KYEC_LEE / CC_SIGURD_ChungXing / CC_MAXIM_THAILAND / CosFunction / bSECSGEMbyPass / bSECSGEMConnectionFail / InitialOK (cmydef.h:220)
 #include "common.h"    // ReadWriteIni / ReadIniData / WriteIniData
+
+// AI(W906-uHGemEquipment-BucketC) 20260717: D3 -- HSys.MyGem seam. `database.h`
+// is lightweight (vclcompat + map/vector + myTimer.h only -- confirmed by
+// reading it) and supplies `extern SYSTEM_MODULAR HSys;` (its `MyGem` member
+// is `HTGem *`, NULL until a future SystemModularInitial wiring wave -- see
+// database.h:235-239). `SECSGEM/uHGemClass.h` supplies the COMPLETE HTGem
+// type (only forward-declared by database.h) for the S1F13/S9F7/S9F9 calls
+// below -- it does NOT include uHGemEquipment.h back (forward-declares
+// `class THGem;` only, see its own file-head note), so no circular include.
+// `Config.h` supplies `extern HT9045_CONFIG IniConfig;` (Config.h:1499) --
+// same include precedent as aoutarm9045_1x2_2.cpp:67 and others.
+#include "database.h"            // HSys / SYSTEM_MODULAR / HSys.MyGem
+#include "SECSGEM/uHGemClass.h"  // HTGem (complete type, for HSys.MyGem->S1F13.../S9F7.../S9F9... calls)
+#include "Config.h"              // IniConfig.bEnable_SECS_GEM (Timer1Timer)
 #include "SECSGEM/SecsEventReport.h"   // EventReport(unsigned Ceid) -- Sim-first free function, see DoUpdateStatus
 
 // ---------------------------------------------------------------------------
@@ -215,6 +229,40 @@ THGem::THGem()
       iTimeFormat(0),                // golden never inits this (see note above)
       WaitShowString(NULL),
       LogDataString(NULL),
+      // ---- Bucket C (W906-uHGemEquipment-BucketC 20260717) ------------------
+      // WireCodec/SType are NOT listed here: WireCodec has its own default
+      // ctor (runs automatically in declaration order); SType's fields are
+      // populated for real by InitSTypeStruct() in the ctor body below
+      // (golden ctor :603), matching golden exactly (SType is never touched
+      // any other way in golden's own ctor either).
+      StringOutColor(clBlack),                          // golden ctor :502
+      bWaitSelectRsp(false),                             // golden ctor :532
+      bWaitDeSelectRsp(false),                           // golden ctor :533
+      bWaitEstablishCommunicationsResponse(false),       // golden ctor :535
+      bWaitEstablishCommunicationsResponseError(false),  // golden ctor :536
+      bReceiveEstablishCommunicationsRequest(false),     // golden ctor :614
+      bSeprate(false),                                   // golden ctor :541
+      bDataFormatOK(false),               // golden never inits this (see header note)
+      bFirstEntry(true),                                 // golden ctor :450
+      bFirstBlock(true),                                 // golden ctor :472
+      iFileCount(0),                                     // golden ctor :672
+      Timer1Task(1),                                      // golden ctor :494
+      Timer1ct(0),                                        // golden ctor :495
+      iOldSecProcessSFNoResponse(0),       // golden never inits this (see header note)
+      iAutoConnectSec(0),                                // golden ctor :485
+      iAutoConnectDelay(2),                              // golden ctor :486
+      RemoteSystemByte(0),                 // golden never inits this (see header note)
+      Alias(""),                                         // golden default AnsiString ""
+      Caption(""),                                       // stand-in default ""
+      EthernetBuffer(NULL),               // allocated in ctor body below (golden ctor :474-475)
+      iEthernetBufferLen(0),               // set to 10240 in ctor body below
+      SFCodeResponseList(NULL),
+      TimeLeft(NULL),
+      pLockOnSocketRecvice(NULL),
+      csSFCodeResponse(NULL),
+      RecvMemoryBuffer(NULL),
+      ProcBuffer(NULL),
+      TempProcBuffer(NULL),
       // ---- Bucket B widget stand-ins (W906-uHGemEquipment-BucketB) --------
       // __published widgets (allocated in the ctor body below, matching
       // clientGem/srvGem's own established idiom -- NULL here purely as the
@@ -288,8 +336,37 @@ THGem::THGem()
         stdGridReportID = new TStringGrid(1026, 257);
         strGrdAlarm     = new TStringGrid(12, 5);
 
-        WaitShowString = new TStringList();   // golden ctor :661-662
-        LogDataString  = new TStringList();   // golden ctor :618,624
+        // AI(W906-uHGemEquipment-BucketC) 20260717: D4 -- ALIASED into
+        // WireCodec's own WaitShowString/LogDataString (WireCodec, a
+        // by-value member, is already fully constructed by this point --
+        // member construction always precedes the ctor body -- so its own
+        // ctor has already allocated these two TStringLists). THGem no
+        // longer allocates its own separate pair (golden had exactly ONE
+        // WaitShowString/LogDataString; before this wave the port had two,
+        // so codec-side StringOut() calls -- SendLocalDataFrom, ShowSML,
+        // ... -- never reached ProcessShow/SaveSECSGEMTextToLog). See
+        // uHGemEquipment.h's own member-comment for the matching dtor-side
+        // ownership note (THGem does NOT delete these two -- WireCodec's own
+        // dtor, which runs AFTER ~THGem's body, does).
+        WaitShowString = WireCodec.WaitShowString;
+        LogDataString  = WireCodec.LogDataString;
+
+        // AI(W906-uHGemEquipment-BucketC) 20260717: D2 -- install the real
+        // send hook on THGem's own WireCodec (see SecsWireCodec.h's own
+        // SendLocalDataHook comment + SendLocalDataFrom's own comment below
+        // for the full design). Recursion-safe: SendLocalDataFrom never
+        // calls wc.SendLocalData() -- it IS the sender the hook forwards to.
+        WireCodec.SendLocalDataHook = [this](SecsWireCodec &wc) { SendLocalDataFrom(wc); };
+
+        InitSTypeStruct();   // golden ctor :603
+        // AI(W906-uHGemEquipment-BucketC) 20260717: golden ctor :602 also
+        // calls `InitHType();` here -- NOT reproduced: HType (the shared
+        // SECS-II format-byte table) is already seeded process-wide by a
+        // file-static initializer object in SecsWireCodec.cpp (:57-88,
+        // verified) that runs during static initialization, BEFORE main()
+        // even starts -- independent of any THGem/SecsWireCodec instance
+        // being constructed. A second InitHType() call would be redundant,
+        // not incorrect (same literal values either way).
 
         // ---- clientGem (active/client role) -- golden .dfm:542-554 --------
         clientGem = new TClientSocket(NULL);
@@ -308,9 +385,13 @@ THGem::THGem()
         clientGem->OnError = [this](TObject *Sender, TCustomWinSocket *Socket,
                                      TErrorEvent ErrorEvent, int &ErrorCode)
             { clientGemError(Sender, Socket, ErrorEvent, ErrorCode); };
-        // OnRead = clientGemRead (golden .dfm:550): clientGemRead is OUT OF
-        // SCOPE this wave (needs TMemoryStream/TFixedCriticalSection shims --
-        // see this header's own "Do NOT translate" note) -- NOT wired.
+        // AI(W906-uHGemEquipment-BucketC) 20260717: OnRead = clientGemRead
+        // (golden .dfm:550) -- NOW WIRED. clientGemRead was out of scope for
+        // the ConnLifecycle wave (needed TMemoryStream/TFixedCriticalSection
+        // shims, not yet designed then); both exist now (§7/§8). Lambda
+        // forwarding matches this ctor's own established event-wiring style.
+        clientGem->OnRead = [this](TObject *Sender, TCustomWinSocket *Socket)
+            { clientGemRead(Sender, Socket); };
 
         // ---- srvGem (passive/server role) -- golden .dfm:562-573 ----------
         srvGem = new TServerSocket(NULL);
@@ -322,8 +403,13 @@ THGem::THGem()
         srvGem->OnClientError = [this](TObject *Sender, TCustomWinSocket *Socket,
                                         TErrorEvent ErrorEvent, int &ErrorCode)
             { srvGemClientError(Sender, Socket, ErrorEvent, ErrorCode); };
-        // OnClientRead = clientGemRead (golden .dfm:569): same OUT-OF-SCOPE
-        // reason as clientGem->OnRead above -- NOT wired.
+        // AI(W906-uHGemEquipment-BucketC) 20260717: OnClientRead =
+        // clientGemRead (golden .dfm:569) -- NOW WIRED, same shared-handler
+        // pattern the socket shims were explicitly built for (ServerSocket.h
+        // :47-73's own "shared handler wiring" note; clientGemRead's real
+        // signature matches BOTH TSocketNotifyEvent slots).
+        srvGem->OnClientRead = [this](TObject *Sender, TCustomWinSocket *Socket)
+            { clientGemRead(Sender, Socket); };
 
         // ---- Bucket B __published widget stand-ins (W906-uHGemEquipment-
         // BucketB) -- allocated here for the SAME reason clientGem/srvGem are
@@ -369,6 +455,18 @@ THGem::THGem()
         cbECChaneEventReport               = new THGemCheckBox();
 
         ComboBox1 = new THGemComboBox();
+
+        // ---- Bucket C (W906-uHGemEquipment-BucketC 20260717) --------------
+        iEthernetBufferLen = 10240;
+        EthernetBuffer = new unsigned char[iEthernetBufferLen];   // golden ctor :474-475
+
+        SFCodeResponseList  = new THGemListBox();       // golden .h:138 (__published)
+        TimeLeft            = new TStringList();        // golden ctor :584
+        pLockOnSocketRecvice = new TFixedCriticalSection();   // golden ctor :668 (16.10.05.00 Roy Add)
+        csSFCodeResponse     = new TCriticalSection();        // golden ctor :673 (20221111 Joseph (Jason))
+        RecvMemoryBuffer     = new TMemoryStream();      // golden ctor :669
+        ProcBuffer           = new TMemoryStream();      // golden ctor :670
+        TempProcBuffer       = new TMemoryStream();      // golden ctor :671
     }
     catch (...)
     {
@@ -401,8 +499,22 @@ THGem::THGem()
         delete strGrdCEID;
         delete stdGridReportID;
         delete strGrdAlarm;
-        delete WaitShowString;
-        delete LogDataString;
+        // AI(W906-uHGemEquipment-BucketC) 20260717: WaitShowString/
+        // LogDataString are NO LONGER deleted here (D4 -- they are ALIASED
+        // to WireCodec's own instances, not separately owned; see the
+        // aliasing comment in the try block above). WireCodec itself is a
+        // fully-constructed member subobject by the time any exception here
+        // could fire, so its own destructor (invoked automatically during
+        // stack unwinding of this constructor) deletes them for real --
+        // deleting them here too would be a double-free.
+        delete SFCodeResponseList;
+        delete TimeLeft;
+        delete pLockOnSocketRecvice;
+        delete csSFCodeResponse;
+        delete RecvMemoryBuffer;
+        delete ProcBuffer;
+        delete TempProcBuffer;
+        delete[] EthernetBuffer;
         throw;
     }
 }
@@ -422,6 +534,16 @@ THGem::~THGem()
     // scope. Deleting clientGem/srvGem BEFORE the StringLists ensures any
     // synchronous teardown-time callback into THGem's own methods still sees
     // live WaitShowString/LogDataString/other members.
+    //
+    // AI(W906-uHGemEquipment-BucketC) 20260717: this ordering concern now has
+    // a SECOND, independent safety net -- WaitShowString/LogDataString are
+    // ALIASED to WireCodec's own TStringLists (D4) and are no longer
+    // `delete`d anywhere in THIS destructor's body at all; WireCodec (a
+    // by-value member) is only destroyed automatically AFTER this entire
+    // destructor body finishes running (standard C++ member-destruction
+    // timing), so WaitShowString/LogDataString stay valid for the WHOLE body
+    // regardless of the delete order below. The order is kept as-is anyway
+    // (harmless, and still correct for the ORIGINAL reason cited above).
     delete clientGem;
     delete srvGem;
     // AI(W906-uHGemEquipment-BucketB) 20260717: the 20 __published widget
@@ -456,8 +578,34 @@ THGem::~THGem()
     delete strGrdCEID;
     delete stdGridReportID;
     delete strGrdAlarm;
-    delete WaitShowString;
-    delete LogDataString;
+    // AI(W906-uHGemEquipment-BucketC) 20260717: WaitShowString/LogDataString
+    // are NO LONGER deleted here (D4 -- ALIASED to WireCodec's own instances,
+    // see the ctor's own aliasing comment). WireCodec's own destructor (runs
+    // AFTER this destructor's body, per C++ member-destruction order --
+    // members are destroyed in REVERSE declaration order, and WireCodec is
+    // declared before every pointer member here) deletes them for real.
+    //
+    // The 7 Bucket-C-owned pointers below ARE deleted here -- a DEVIATION
+    // from golden, flagged once: golden's own ~THGem() (uHGemEquipment.cpp:
+    // 676-688) deletes ONLY pLockOnSocketRecvice (+MulitBuffer, an unrelated
+    // member outside this wave's scope) and LEAKS SFCodeResponseList/
+    // TimeLeft/csSFCodeResponse/RecvMemoryBuffer/ProcBuffer/TempProcBuffer/
+    // EthernetBuffer outright (real BCB6 processes exit and the OS reclaims
+    // the memory regardless -- a THGem is a top-level VCL form, never
+    // destroyed except at process exit, in golden's real deployment). This
+    // port's THGem CAN be destroyed mid-process (test fixtures construct and
+    // destroy many), so this wave follows the port's own established
+    // "delete what you own" dtor convention instead of reproducing golden's
+    // leak -- matching the exact same already-accepted deviation class as
+    // this destructor's own pre-existing Bucket-B widget cleanup above.
+    delete SFCodeResponseList;
+    delete TimeLeft;
+    delete pLockOnSocketRecvice;    // golden DOES delete this one (:681, 16.10.05.00 Roy Add)
+    delete csSFCodeResponse;
+    delete RecvMemoryBuffer;
+    delete ProcBuffer;
+    delete TempProcBuffer;
+    delete[] EthernetBuffer;
 }
 
 //===========================================================================
@@ -1426,51 +1574,192 @@ void Gated_ShowMessage(const AnsiString & /*S*/)
 }
 
 // ---------------------------------------------------------------------------
-// HTimer -- TU-local stand-in for golden cpublic.h's forward-declared
-// HTimer, matching atester_shims.h's own already-established minimal
-// stand-in (`struct HTimer { bool Off(){return true;} void
-// SetSecAndOn(double){} };`) -- duplicated here (anonymous-namespace-scoped,
-// so zero ODR/collision risk with atester_shims.h's own copy) rather than
-// `#include "atester_shims.h"`, which would drag in that file's entire
-// unrelated atester/iosetview/rs232/TCOM2 shim surface for a 2-line type.
+// HTimer -- AI(W906-uHGemEquipment-BucketC) 20260717: UPGRADED to a REAL
+// elapsed-time timer, replacing the always-fires stub that used to live here
+// (see the Bucket-B FLAGGED LIMITATION this note replaces, and the identical
+// flag repeated at DoUpdateStatus's own KYEC branch below and at
+// Timer1Timer's SECSGEM_DoSeparateWait use, both now UPDATED to say so).
 //
-// AI(W906-uHGemEquipment-BucketB) 20260717 -- FLAGGED LIMITATION (see
-// DoUpdateStatus's own KYEC branch below for the concrete call site): this
-// stand-in's Off() ALWAYS returns true, unconditionally, regardless of what
-// duration SetSecAndOn(...) was asked to wait -- it is an ALWAYS-FIRES stub,
-// not a real elapsed-time timer (unlike GemTimer above, which really does
-// track GetTickCount()). Golden's KYEC-specific 30-second forced-disconnect
-// wait (`SECSGEM_DoSeparate.SetSecAndOn(30)` then polling
-// `SECSGEM_DoSeparate.Off()`) will therefore fire on the SAME poll it was
-// armed on in this translated build -- the real 30-second wait this
-// customer's workaround depends on does NOT actually wait 30 seconds yet.
-// This is a pre-existing shim limitation (HTimer has never been designed for
-// real elapsed-time behavior anywhere in this tree), not something silently
-// fixed or hidden here -- a future wave needs to design a real HTimer (real
-// GetTickCount()-based elapsed-time semantics, like GemTimer already has)
-// before KYEC's disconnect-dance is trustworthy end-to-end. Flagged loudly
-// here, at the KYEC branch itself (below), and in this wave's own final
-// report.
+// This is a faithful TU-local port of the canonical golden HTimer
+// (D:\HT9045\elec\Component\htimer.h/.cpp -- the component-library HTimer
+// golden's own `#include "HTimer.h"` resolves to; the 906 snapshot tree does
+// not carry the file itself, only the reference). Ported methods: ctor
+// (calls Clear()), Clear(), Set(int, 0.1s units), SetSec(double, seconds),
+// SetMS(int, milliseconds), On(), SetSecAndOn(double), Off(). Deliberately
+// SKIPPED (unused by this TU's two consumers, SECSGEM_DoSeparate/
+// SECSGEM_DoSeparateWait below -- both only ever call SetSecAndOn/Off):
+// SetTimer(int,int)/Pause()/ReStart()/ResetMSAndOn(int), and the global
+// HTimerList/ThMutex(HMutex) process-wide registry + ClearAllTimer/
+// PauseAllTimer/ReStartAllTimer free functions (that registry exists so a
+// running program can mass-pause/clear every live HTimer at once -- nothing
+// in this TU's scope needs that; the two consumers below are polled directly).
+//
+// Off()'s semantics are ported EXACTLY (htimer.cpp:129-173), including its
+// documented oddities, verbatim: Paused is always false here (Pause() isn't
+// ported, so it can never become true) but the check is kept for textual
+// fidelity; ulStartTicks==0 (never armed) -> false; iTimeLen<=0 (armed with
+// a zero/negative duration) -> true unconditionally ("jou 2012-01-04": guards
+// against a mis-entered duration hanging the caller forever); otherwise
+// expired iff now >= start+len (+pauseLen, always 0 here since Pause/ReStart
+// are not ported) -- WITH the DWORD-wraparound branch preserved verbatim
+// (including its own asymmetric `ulNowTicksOver < ulStartTicks` re-check,
+// copied as-is, not simplified); expiry sets InUsed=false and the method
+// KEEPS returning true on every subsequent re-poll (InUsed is otherwise
+// unread anywhere in the real htimer.cpp golden -- it exists for the
+// registry's own bookkeeping, which this port does not carry).
+//
+// TU-LOCAL BY DESIGN (anonymous namespace): atester_shims.h:292 keeps its
+// OWN separate always-fires `struct HTimer` stub, unchanged -- promoting
+// THAT one to a real elapsed-time timer would alter gated atester state
+// machines that are genuinely out of this wave's scope. ODR is not at risk:
+// an anonymous namespace gives this TU's `HTimer` INTERNAL linkage, a
+// distinct type per translation unit -- the exact same pattern
+// acatchtray.cpp's own `typedef TQPF_Timer HTimer` already relies on
+// elsewhere in this tree. FLAG (risk, not a defect): a future wave should
+// promote a single real vclcompat/HTimer shim and migrate the (now three)
+// TU-local variants deliberately, rather than this being decided ad hoc,
+// per-TU, forever.
 // ---------------------------------------------------------------------------
 struct HTimer
 {
-    bool Off() { return true; }
-    void SetSecAndOn(double) {}
+    DWORD ulStartTicks;
+    DWORD ulPauseTicks;
+    int   iTimeLen;
+    int   iPauseLen;
+    bool  Paused;
+    bool  InUsed;
+    int   iTimerID;
+
+    HTimer() { Clear(); }
+
+    void Clear()
+    {
+        ulStartTicks = 0;
+        ulPauseTicks = 0;
+        iTimeLen = 0;
+        InUsed = false;
+        Paused = false;
+        iPauseLen = 0;
+    }
+
+    void Set(int iTime) { iTimeLen = iTime * 100; }              // htimer.cpp:67-70 (0.1s units)
+    void SetSec(double iTime) { iTimeLen = static_cast<int>(iTime * 1000.0); }   // htimer.cpp:72-75
+    void SetMS(int iTime) { iTimeLen = iTime; }                  // htimer.cpp:113-116
+
+    void On() { ulStartTicks = ::GetTickCount(); InUsed = true; }   // htimer.cpp:120-125
+
+    void SetSecAndOn(double iTime)   // htimer.cpp:77-82
+    {
+        Clear();
+        SetSec(iTime);
+        On();
+    }
+
+    bool Off()   // htimer.cpp:129-173, verbatim (incl. the DWORD-wraparound branch)
+    {
+        if (Paused)
+            return false;
+
+        if (ulStartTicks == 0)
+            return false;
+
+        if (iTimeLen <= 0)
+        {
+            // jou 2012-01-04: guards against a mis-entered zero/negative
+            // duration hanging the caller forever.
+            return true;
+        }
+
+        DWORD ulLimited = ulStartTicks + iTimeLen + iPauseLen;
+        DWORD ulNowTicks = ::GetTickCount();
+        DWORD ulNowTicksOver = 0;
+        if (ulLimited < ulStartTicks)   // DWORD wraparound
+        {
+            ulLimited = 0xFFFFFFFF - ulStartTicks + iTimeLen + iPauseLen;
+            ulNowTicksOver = 0xFFFFFFFF - ulStartTicks + ulNowTicks;
+
+            if (ulNowTicksOver < ulStartTicks &&
+                ulNowTicksOver > ulLimited)
+            {
+                InUsed = false;
+                return true;
+            }
+        }
+        else
+        {
+            if (ulNowTicks >= (ulStartTicks + iTimeLen))
+            {
+                InUsed = false;
+                return true;
+            }
+        }
+        return false;
+    }
 };
+
+// ---------------------------------------------------------------------------
+// ScopedAcquire -- AI(W906-uHGemEquipment-BucketC) 20260717: D8, TU-local RAII
+// stand-in for golden's `try { cs->Acquire(); ... } __finally { cs->Release(); }`
+// pattern (__finally is a BCB6-only extension, not standard C++). One struct
+// covers BOTH TCriticalSection* and TFixedCriticalSection* (the latter
+// derives from the former) call sites -- e.g.
+// clientGemRead/DoProcessSFNoResponse/CheckSFCodeResponse/SendLocalDataFrom.
+// Every use site below keeps the golden Acquire()/Release() lines as
+// comments alongside the golden citation, per this project's convention.
+// ---------------------------------------------------------------------------
+struct ScopedAcquire
+{
+    TCriticalSection *cs;
+    explicit ScopedAcquire(TCriticalSection *c) : cs(c) { cs->Acquire(); }
+    ~ScopedAcquire() { cs->Release(); }
+    ScopedAcquire(const ScopedAcquire&) = delete;
+    ScopedAcquire& operator=(const ScopedAcquire&) = delete;
+};
+
+// ---------------------------------------------------------------------------
+// MyDBIProcess (3-arg overload) -- AI(W906-uHGemEquipment-BucketC) 20260717:
+// D10. Golden's real signature is `void __fastcall MyDBIProcess(AnsiString
+// asTable, AnsiString S1, AnsiString S2="")` (cMyDB.h:20); this port's only
+// definition is a 2-arg no-op (aHotPlateSubstrate.cpp:703, forward-declared
+// 2-arg at this file's own top). SendLocalDataFrom's golden 3-arg call sites
+// (:2035/:2078, `MyDBIProcess("Exception", "THGem::SendLocalData...", SFCode)`)
+// need a 3-arg overload to stay VERBATIM rather than being trimmed to 2 args
+// -- added here, TU-local (anonymous namespace), forwarding to the existing
+// 2-arg no-op (the 3rd argument is accepted for call-shape fidelity and
+// otherwise unused, matching the 2-arg definition's own no-op body).
+// ---------------------------------------------------------------------------
+void MyDBIProcess(AnsiString S1, AnsiString S2, AnsiString S3)
+{
+    // AI(W906-uHGemEquipment-BucketC) 20260717: `::` forces lookup to start
+    // at the GLOBAL namespace -- a bare `MyDBIProcess(S1, S2)` here would
+    // resolve to THIS SAME anonymous-namespace overload set first (ordinary
+    // unqualified lookup stops at the innermost scope where the name is
+    // found -- the anonymous namespace -- and never reaches the file-scope
+    // 2-arg `extern` declared above it), causing infinite self-recursion /
+    // an "too few arguments" mismatch. `::MyDBIProcess` explicitly targets
+    // the file-scope 2-arg no-op.
+    ::MyDBIProcess(S1, S2);
+    (void)S3;
+}
 
 } // anonymous namespace
 
 // AI(W906-uHGemEquipment-BucketB) 20260717: golden uHGemEquipment.cpp:24/4746
 // -- both are genuine FILE-SCOPE globals in golden itself (NOT THGem
-// members), shared by DoUpdateStatus (in THIS wave's scope, below) and
-// Timer1Timer (still out of scope -- needs SecsWireCodec embedded first; see
-// this header's own "Do NOT translate" list). This wave's own brief
+// members), shared by DoUpdateStatus and Timer1Timer. This wave's own brief
 // suggested making these THGem members instead; verified against golden and
-// kept as plain globals here, matching golden exactly -- Timer1Timer's own
-// future wave will need to read/write the SAME globals, and a header change
-// now would only have to be undone/reconciled then for no fidelity benefit.
+// kept as plain globals here, matching golden exactly.
 bool bSECSGEM_DoSeparate = false;   // golden uHGemEquipment.cpp:24
 HTimer SECSGEM_DoSeparate;          // golden uHGemEquipment.cpp:4746
+
+// AI(W906-uHGemEquipment-BucketC) 20260717: golden uHGemEquipment.cpp:5175
+// `HTimer SECSGEM_DoSeparateWait;` -- another genuine file-scope global
+// (immediately above golden's own Timer1Timer definition), Ifor 20180913
+// (Steven)'s own comment gloss: "add a 5-second wait after sending the KYEC
+// forced-disconnect SECS GEM command before allowing the upper system to
+// reconnect." Declared here, next to its sibling above, per this file's own
+// established convention for these two globals.
+HTimer SECSGEM_DoSeparateWait;      // golden uHGemEquipment.cpp:5175
 
 // AI(W906-uHGemEquipment-BucketB) 20260717: golden's own global singleton
 // pointer (`extern PACKAGE THGem *HGem;`, uHGemEquipment.h's tail
@@ -2239,17 +2528,963 @@ void __fastcall THGem::SaveSystemDefault()
     WriteIniData(sPath, "GEM", "ECChangeEventReport", cbECChaneEventReport->Checked);     // JerryYang 20200520 客戶提出DoReportECDataChangeCheck函式會影響UPH,改成功能選項
 }
 
+//===========================================================================
+//  Bucket C (W906-uHGemEquipment-BucketC 20260717): socket receive pump / T3
+//  timeout / HSMS control-message handshake / Timer1Timer master state
+//  machine. See uHGemEquipment.h's own file-head addendum for the full scope
+//  statement.
+//===========================================================================
 //---------------------------------------------------------------------------
-// golden uHGemEquipment.h:248 `void DoSeparate();` -- GATED NO-OP STUB.
-// Real body sends the HSMS Separate.req message over the wire (SML/
-// wire-codec family, out of THIS wave's scope -- see this header's own
-// "Do NOT translate" list). Exists purely so DoUpdateStatus's own KYEC
-// branch (below), which unconditionally calls this, stays translatable
-// without silently dropping the call. Does NOT send anything over
-// clientGem/srvGem.
+// V 1.0 (golden uHGemEquipment.cpp:376-387)
+// 對 Message Head 的 SType or PType 為主 0 為 system byte,保留給 connect
+// command 使用
+//---------------------------------------------------------------------------
+void THGem::InitSTypeStruct()
+{
+    SType.Data_Message = 0;
+    SType.Select_req   = 1;
+    SType.Select_rsp   = 2;
+    SType.Deselect_req = 3;
+    SType.Deselect_rsp = 4;
+    SType.Linktest_req = 5;
+    SType.Linktest_rsp = 6;
+    SType.Reject_req   = 7;
+    SType.Separate_req = 9;
+}
+//------------------------------------------------------------------------------
+// V 1.0 (golden uHGemEquipment.cpp:3496-3509)
+// 與 remote 建立連線的要求傳送 -- Select.req
+//------------------------------------------------------------------------------
+void THGem::DoSelect()
+{
+    WireCodec.Local.MessageID_S = 0;
+    WireCodec.Local.MessageID_F = 0;
+    WireCodec.Local.W_Bit = 0;
+    WireCodec.Local.PType = 0;
+    WireCodec.Local.SType = SType.Select_req;
+    WireCodec.EquipmentSystemByte++;
+    WireCodec.Local.SystemByte = WireCodec.EquipmentSystemByte;
+    WireCodec.LocalLength = 0;
+    WireCodec.CreateLocalHead();
+    StringOut("[Send]    Select.req");
+    SendLocalData();
+}
+//---------------------------------------------------------------------------
+// AI(W906-uHGemEquipment-BucketC) 20260717: DoSeparate is now REAL --
+// REPLACES the Bucket-B gated no-op stub that used to sit here (see
+// uHGemEquipment.h's own updated comment on the declaration). Real body
+// (golden uHGemEquipment.cpp:3518-3531) sends the HSMS Separate.req message.
 //---------------------------------------------------------------------------
 void THGem::DoSeparate()
 {
+    WireCodec.Local.MessageID_S = 0;
+    WireCodec.Local.MessageID_F = 0;
+    WireCodec.Local.W_Bit = 0;
+    WireCodec.Local.PType = 0;
+    WireCodec.Local.SType = SType.Separate_req;
+    WireCodec.EquipmentSystemByte++;
+    WireCodec.Local.SystemByte = WireCodec.EquipmentSystemByte;
+    WireCodec.LocalLength = 0;
+    WireCodec.CreateLocalHead();
+    StringOut("[Send]    Separate_req");
+    SendLocalData();
+}
+//------------------------------------------------------------------------------
+// V 1.0 (golden uHGemEquipment.cpp:3536-3599)
+// 與 remote 建立連線的要求傳送
+//------------------------------------------------------------------------------
+int THGem::DoConnect()
+{
+    int &Task = iStartConnectTask;
+
+    switch (Task)
+    {
+        case 1:
+            bWaitSelectRsp = false;
+            bTCPIP_Error = false;
+            DoSelect();
+            ConnectDelay.TimerSetSecAndOn(3);
+            Task = 100;
+            break;
+        case 100:
+            if (bWaitSelectRsp == true)
+            {
+                iConnectTryCount = iEstablishCommunicationsTryCount;
+                bWaitEstablishCommunicationsResponse = false;
+                bWaitEstablishCommunicationsResponseError = false;
+                // AI(W906-uHGemEquipment-BucketC) 20260717: D3 null-guard --
+                // golden calls this unguarded (uHGemEquipment.cpp:3555);
+                // HSys.MyGem is gated NULL until the SystemModularInitial
+                // wiring wave (database.h:238). Precedent: cprod.cpp:2199/
+                // 2398/3035 already null-guard HSys.MyGem in this port.
+                // NOTE: even fully wired, HTGem::S1F13_EstablishCommunications
+                // Request() is itself still a gated no-op (uHGemClass.cpp:369
+                // -373, needs GemMDLN/GemSOFTREV) -- so DoConnect stalls at
+                // Task=200 until a future wave un-gates THAT too (or a test
+                // sets bWaitEstablishCommunicationsResponse manually).
+                if (HSys.MyGem != NULL)
+                    HSys.MyGem->S1F13_EstablishCommunicationsRequest();
+                Task = 200;
+            }
+            else if (ConnectDelay.TimerOff())
+            {
+                Task = 1;
+                return 2;
+            }
+            break;
+        case 200:
+            if (bWaitEstablishCommunicationsResponse == true)
+            {
+                if (bWaitEstablishCommunicationsResponseError == true)
+                {
+                    if (iEstablishCommunicationsTryCount != 0)
+                    {
+                        if (iConnectTryCount > iEstablishCommunicationsTryCount)
+                            iConnectTryCount = iEstablishCommunicationsTryCount;
+                        iConnectTryCount--;
+                        if (iConnectTryCount <= 0)
+                            return 2;
+                    }
+                    countConnect = 0;
+                    Task = 500;
+                    break;
+                }
+                bConnect = true;
+                Task = 1;
+                return 1;
+            }
+            break;
+        case 500:
+            countConnect++;
+            if (countConnect > 100)
+                Task = 600;
+            break;
+        case 600:
+            bWaitEstablishCommunicationsResponse = false;
+            bWaitEstablishCommunicationsResponseError = false;
+            // D3 null-guard (golden :3594, retry) -- see case 100's own note.
+            if (HSys.MyGem != NULL)
+                HSys.MyGem->S1F13_EstablishCommunicationsRequest();
+            Task = 200;   // Ifor 20260420: Fix deadlock - was Task=400 (no such case), should wait for S1F14 response
+            break;
+    }
+    return 0;
+}
+//------------------------------------------------------------------------------
+// V 1.0 (golden uHGemEquipment.cpp:4604-4694)
+// 對 S,F check respone
+//------------------------------------------------------------------------------
+void __fastcall THGem::DoProcessSFNoResponse()
+{
+    int iT;
+    Word &iOldSec = iOldSecProcessSFNoResponse;
+    bool bClear = false;
+    AnsiString S;
+
+    if (iOldSec != SystemSec)
+    {
+        iOldSec = SystemSec;
+        do
+        {
+            bClear = false;
+            if (TimeLeft->Count != SFCodeResponseList->Items->Count)
+            {
+                // Joseph 20221111 (Jason) 新增 TCriticalSection S
+                //==>
+                {
+                    ScopedAcquire lk(csSFCodeResponse);   // golden :4621/:4629 try/__finally
+                    SFCodeResponseList->Clear();
+                    TimeLeft->Clear();
+                }
+                //<==
+                // Joseph 20221111 (Jason) 新增 TCriticalSection E
+            }
+            for (int i = 0; i < TimeLeft->Count; i++)
+            {
+                S = TimeLeft->Strings[i];
+                iT = atoi(S.c_str());
+                iT--;
+                if (iT <= 0)
+                {
+                    S = SFCodeResponseList->Items->Strings[i];
+                    S += "    T3   time out";
+                    StringOut(S);
+                    // Ifor 20260402: S9F9 Transaction Timer Timeout
+                    // D3 null-guard (golden :4647) -- see DoConnect's own note.
+                    if (HSys.MyGem != NULL)
+                        HSys.MyGem->S9F9_TransactionTimerTimeout(S);
+
+                    // Joseph 20221111 (Jason) 新增 TCriticalSection S
+                    //==>
+                    {
+                        ScopedAcquire lk(csSFCodeResponse);   // golden :4651/:4659 try/__finally
+                        SFCodeResponseList->Items->Delete(i);
+                        TimeLeft->Delete(i);
+                    }
+                    //<==
+                    // Joseph 20221111 (Jason) 新增 TCriticalSection E
+
+                    bClear = true;
+                    break;
+                }
+                else
+                {
+                    // Joseph 20221111 (Jason) 新增 TCriticalSection S
+                    //==>
+                    {
+                        ScopedAcquire lk(csSFCodeResponse);   // golden :4674/:4681 try/__finally
+                        TimeLeft->Strings[i] = iT;
+                    }
+                    //<==
+                    // Joseph 20221111 (Jason) 新增 TCriticalSection E
+                }
+            }
+
+            if (bClear == false)
+                break;
+        } while (1);
+    }
+}
+//------------------------------------------------------------------------------
+// V 1.0 (golden uHGemEquipment.cpp:4699-4741)
+// 對 remote 連線後資料回應[需要被用不同 S,F code 分辨]
+//------------------------------------------------------------------------------
+void THGem::DoLocalAllProcessLoop()
+{
+//    DoReportECDataChangeCheck();  //Steven 20200807 : mark for出貨Sleep的時候去檢查EC change report
+
+    if (bAutoConnect == false)
+        iAutoConnectDelay = 2;
+
+    if (bConnect == false && bAutoConnect)
+    {
+        if (SystemSec % 3 == 0)
+        {
+            if (iAutoConnectSec != SystemSec)
+            {
+                if (iAutoConnectDelay > 0)
+                    iAutoConnectDelay--;
+                if (iAutoConnectDelay < 0)
+                    iAutoConnectDelay = 1;
+                if (iAutoConnectDelay == 0)
+                {
+                    iAutoConnectSec = SystemSec;
+                    iStartConnectTask = 1;
+                    bStartConnect = true;
+                }
+            }
+        }
+    }
+
+    if (bConnect == true)
+        bAutoConnect = false;
+    DoSpool();
+    for (int i = 0; i < 10; i++)
+        DoTraceDataResponse(i);
+    if (bSeprate == true)
+    {
+        // AI(W906-uHGemEquipment-BucketC) 20260717: GOLDEN BUG, preserved
+        // verbatim (uHGemEquipment.cpp:4733-4736) -- BOTH branches of this
+        // if/else assign bSeprate=false; the bWaitEstablishCommunicationsResponse
+        // check has no observable effect either way. NOT fixed here.
+        if (bWaitEstablishCommunicationsResponse == false)
+            bSeprate = false;
+        else
+            bSeprate = false;
+    }
+    DoUploadFileToHost();   // need debug
+    DoProcessSFNoResponse();
+    DoDownLoadRemoteFile();
+}
+//---------------------------------------------------------------------------
+// AI(W906-uHGemEquipment-BucketC) 20260717: GATED STUB (golden
+// uHGemEquipment.cpp:4079-4189). Real body manages the spool-file retry
+// queue (WriteToSpoolFile/DoSpoolSendLocalData/GemSpoolPath/bSpoolActive/
+// bBeginTransferSpool/GemSpoolCountActual/...), none of which is part of
+// this wave's scope. No-op: DoLocalAllProcessLoop's own control flow
+// (which unconditionally calls this) stays translatable without silently
+// dropping the call.
+//---------------------------------------------------------------------------
+void THGem::DoSpool()
+{
+}
+//---------------------------------------------------------------------------
+// AI(W906-uHGemEquipment-BucketC) 20260717: GATED STUB (golden
+// uHGemEquipment.cpp:4190-4589, called once per index 0..9 from
+// DoLocalAllProcessLoop's own `for` loop). Real body manages the S6F1 Trace
+// Data Send retry state machine (TraceData[]/TraceDataResponseTask[]/
+// bTraceData[]/TraceDataResponseDelay[]/iTRID[]/...), none of which is part
+// of this wave's scope.
+//---------------------------------------------------------------------------
+void THGem::DoTraceDataResponse(int TR)
+{
+    (void)TR;
+}
+//---------------------------------------------------------------------------
+// AI(W906-uHGemEquipment-BucketC) 20260717: GATED STUB (golden
+// uHGemEquipment.cpp:4591-4589... actually :4591 is the call site inside
+// DoLocalAllProcessLoop; the real DoUploadFileToHost body is further down,
+// dispatching to DoUploadFileToHost_ForSingleFile/_ForMultiFile/
+// _ForDirectoryFile -- an FTP/file-transfer surface entirely out of this
+// wave's scope).
+//---------------------------------------------------------------------------
+void THGem::DoUploadFileToHost()
+{
+}
+//---------------------------------------------------------------------------
+// AI(W906-uHGemEquipment-BucketC) 20260717: GATED STUB (golden
+// uHGemEquipment.cpp:6746, called from Timer1Timer case 410's own `else`
+// branch). Real body manages the remote-recipe-download retry state machine
+// (DelayDownLoadRemoteFile/iDownLoadRemoteFileTask/iRetryCTDownLoadRemoteFile/
+// ...), an FTP/file-transfer surface entirely out of this wave's scope.
+//---------------------------------------------------------------------------
+void THGem::DoDownLoadRemoteFile()
+{
+}
+//---------------------------------------------------------------------------
+// 2013/05/27  V1.1 (golden uHGemEquipment.cpp:8707-8723)
+// control message SelectRequest Response
+//---------------------------------------------------------------------------
+void THGem::SelectRsp()
+{
+    unsigned short back;
+    WireCodec.Local.MessageID_S = 0;
+    WireCodec.Local.MessageID_F = 0;
+    WireCodec.Local.W_Bit = 0;
+    WireCodec.Local.PType = 0;
+    WireCodec.Local.SType = SType.Select_rsp;
+    WireCodec.Local.SystemByte = RemoteSystemByte;
+    back = WireCodec.Local.DeviceID;
+    WireCodec.Local.DeviceID = WireCodec.Remote.DeviceID;
+    WireCodec.LocalLength = 0;
+    WireCodec.CreateLocalHead();
+    StringOut("[Send]    Select.rsp");
+    SendLocalData();
+    WireCodec.Local.DeviceID = back;
+}
+//---------------------------------------------------------------------------
+// 2013/05/27  V1.1 (golden uHGemEquipment.cpp:8729-8745)
+// control message DeSelectRequest Response
+//---------------------------------------------------------------------------
+void THGem::DeselectRsp()
+{
+    unsigned short back;
+    WireCodec.Local.MessageID_S = 0;
+    WireCodec.Local.MessageID_F = 0;
+    WireCodec.Local.W_Bit = 0;
+    WireCodec.Local.PType = 0;
+    WireCodec.Local.SType = SType.Deselect_rsp;
+    WireCodec.Local.SystemByte = RemoteSystemByte;
+    back = WireCodec.Local.DeviceID;
+    WireCodec.Local.DeviceID = WireCodec.Remote.DeviceID;
+    WireCodec.LocalLength = 0;
+    WireCodec.CreateLocalHead();
+    StringOut("[Send]    Deselect.rsp");
+    SendLocalData();
+    WireCodec.Local.DeviceID = back;
+}
+//---------------------------------------------------------------------------
+// 2013/05/27  V1.1 (golden uHGemEquipment.cpp:8751-8765)
+// control message LinkTest Response
+//---------------------------------------------------------------------------
+void THGem::LinktestRsp()
+{
+    WireCodec.Local.MessageID_S = 0;
+    WireCodec.Local.MessageID_F = 0;
+    WireCodec.Local.W_Bit = 0;
+    WireCodec.Local.PType = 0;
+    WireCodec.Local.SType = SType.Linktest_rsp;
+    WireCodec.Local.SystemByte = RemoteSystemByte;
+    WireCodec.LocalLength = 0;
+    WireCodec.CreateLocalHead();
+    StringOut("[Send]    Linktest.rsp");
+    WireCodec.LocalBuffer[4] = 0xff;
+    WireCodec.LocalBuffer[5] = 0xff;
+    SendLocalData();
+}
+//==============================================================================
+// 2013/05/27  V1.1 (golden uHGemEquipment.cpp:8772-8989)
+// 主要對 Stream 和 function code 的處理
+//
+// AI(W906-uHGemEquipment-BucketC) 20260717: SPLIT -- the HSMS control-message
+// head below (Select/Deselect/Linktest/Separate) is REAL; the S,F
+// data-message dispatch tail stays ONE gated block (see the #if 0 comment
+// inside the final `else` for the full rationale + the two-codec-instance
+// boundary note).
+//==============================================================================
+void THGem::ProcessReceiceData()
+{
+    AnsiString S;
+
+    if (WireCodec.Remote.SType == SType.Select_req)
+    {
+        RemoteSystemByte = WireCodec.Remote.SystemByte;
+        StringOut("[Receive] Select.req");
+        SelectRsp();
+    }
+    else if (WireCodec.Remote.SType == SType.Select_rsp)
+    {
+        StringOut("[Receive] Select.rsp");
+        bWaitSelectRsp = true;
+    }
+    else if (WireCodec.Remote.SType == SType.Deselect_req)
+    {
+        RemoteSystemByte = WireCodec.Remote.SystemByte;
+        StringOut("[Receive] Deselect.req");
+        DeselectRsp();
+    }
+    else if (WireCodec.Remote.SType == SType.Deselect_rsp)
+    {
+        StringOut("[Receive] Deselect.rsp");
+        bWaitDeSelectRsp = true;
+    }
+    else if (WireCodec.Remote.SType == SType.Linktest_req)
+    {
+        RemoteSystemByte = WireCodec.Remote.SystemByte;
+        StringOut("[Receive] Linktest.req");
+        LinktestRsp();
+    }
+    else if (WireCodec.Remote.SType == SType.Separate_req)
+    {
+        RemoteSystemByte = WireCodec.Remote.SystemByte;
+        StringOut("[Receive] Separate.req");
+        if (bConnect == true)
+            bAutoConnect = true;
+        bConnect = false;
+    }
+    else
+    {
+#if 0 // TODO(W906-SECSGEM-dispatch, needs HSys.MyGem wiring + bReceive* flags (bReceiveS7F6/bReceiveS101F5/bReceiveS101F6/bReceiveS101F7/bReceiveS101F8/bReceiveS110F2) + MoveCheckCallBack) golden uHGemEquipment.cpp:8812-8988
+        // Golden's S,F data-message dispatch tail: bDataFormatOK check ->
+        // S9F7_IllegalData; CheckSFCodeResponse(); Remote.DeviceID check ->
+        // S9F1_UnrecognizedDeviceID; direct-dispatch quartet (S1F1/S1F2/
+        // S1F13/S1F17/S2F15); then a CUSTOMER_CODE-gated (CC_TFME_CHINA)
+        // MoveCheckCallBack guard, followed by a ~40-branch S,F if/else-if
+        // chain dispatching to HSys.MyGem->SxFy_... handlers; falls back to
+        // S9F3_Unrecognized_Stream_Function_Type / S9F5_UnrecognizedFunctionType
+        // for anything unrecognized (per-stream S,F0/even-F short-circuits
+        // preserved). Blocked on the SystemModularInitial wiring wave
+        // (HSys.MyGem stays NULL in production today, D3) plus ~15 THGem
+        // flag members and MoveCheckCallBack, none of which are part of this
+        // wave's member set.
+        //
+        // NOTE for whoever un-gates this: the dispatcher must resolve the
+        // TWO-CODEC-INSTANCE boundary this port introduced -- HTGem's own
+        // S,F handlers (uHGemClass.cpp) read HTGem::WireCodec.SReceiveData/
+        // Remote, but THIS function decodes into THGem::WireCodec (a
+        // DIFFERENT SecsWireCodec instance). SEND is already unified
+        // (SecsWireCodec::SendLocalDataHook, D2); RECEIVE is not yet.
+        // Recommended future fix (decided THEN, not now): give HTGem a
+        // `SecsWireCodec *ActiveWire` (or bind its WireCodec by reference at
+        // construction) so both classes share ONE live decode buffer.
+#endif
+    }
+}
+//---------------------------------------------------------------------------
+// 2013/05/27  V1.1  Lee (golden uHGemEquipment.cpp:7020-7058)
+// 檢查目前的 SF code 是否為 response code ,例如目前送 S1,F13 則是否為 S1,F14
+// 若是則把此 item delete ,否則一段時間沒有得到return code 要發出 T3 error
+//---------------------------------------------------------------------------
+void __fastcall THGem::CheckSFCodeResponse()
+{
+    int Index;
+    AnsiString S;
+
+    S = AnsiString(WireCodec.Remote.MessageID_S) + " " + AnsiString(WireCodec.Remote.MessageID_F) + " " + AnsiString(WireCodec.Remote.SystemByte);
+
+    // Joseph 20221111 (Jason) 新增 TCriticalSection S
+    //==>
+    {
+        ScopedAcquire lk(csSFCodeResponse);   // golden :7029/:7047 try/__finally
+        if (TimeLeft->Count != SFCodeResponseList->Items->Count)
+        {
+            SFCodeResponseList->Clear();
+            TimeLeft->Clear();
+        }
+        else
+        {
+            Index = SFCodeResponseList->Items->IndexOf(S);
+            if (Index != -1)
+            {
+                SFCodeResponseList->Items->Delete(Index);
+                TimeLeft->Delete(Index);
+            }
+        }
+    }
+    // golden's own commented-out pre-critical-section duplicate (:7052-7057)
+    // is dead code in golden itself -- not translated.
+    //<==
+    // Joseph 20221111 (Jason) 新增 TCriticalSection E
+}
+//---------------------------------------------------------------------------
+// 2013/05/27  V1.1  Daver (golden uHGemEquipment.cpp:7068-7091)
+// 把目前接收到的資料以 Text 方式做出存檔
+// 存檔格式為  \\程式目錄\\logs\\SECS_GEM\\目前的年_月_日\\時.txt
+//---------------------------------------------------------------------------
+void __fastcall THGem::SaveSECSGEMTextToLog()
+{
+    TDateTime tdSaveTime = Now();
+    AnsiString asPath, asFN;
+    FILE *P;
+    int i;
+
+    // AI(W906-uHGemEquipment-BucketC) 20260717: DateSeparator='_' omitted --
+    // same inert reasoning as the already-committed SaveSECSGEMErrToLog (see
+    // that method's own comment) -- FormatDateTime's "yyyy"/"mm_dd"/"hh"
+    // tokens never contain the '/' DateSeparator would substitute into.
+    asPath.sprintf("D:\\SECS_GEM_LOGS\\%s\\%s", FormatDateTime("yyyy", tdSaveTime), FormatDateTime("mm_dd", tdSaveTime));
+    Gated_MyForceDirectories(asPath);
+    asFN.sprintf("%s\\SECSGEM_TextLog_%s.txt", asPath, FormatDateTime("hh", tdSaveTime));
+
+    P = fopen(asFN.c_str(), "a+");
+    if (P != NULL)
+    {
+        for (i = 0; i < LogDataString->Count; i++)
+        {
+            // AI(W906-uHGemEquipment-BucketC) 20260717: golden is
+            // `LogDataString->Strings[i].c_str()`; vclcompat::TStringList's
+            // Strings[] proxy has no .c_str() (same accommodation already
+            // established at PasteStringGridAsTabFormat's own GetString(y)
+            // site, above) -- GetString(i) returns the real AnsiString.
+            fputs(LogDataString->GetString(i).c_str(), P);
+            fputs("\n", P);
+        }
+        fclose(P);
+        LogDataString->Clear();
+    }
+}
+//---------------------------------------------------------------------------
+// V1.0 (golden uHGemEquipment.cpp:1350-1373)
+// 依設定是否將要送出的資料 以 Binary 格式將全部資料印出
+//---------------------------------------------------------------------------
+void THGem::ShowLocalBufferBinaryData(SecsWireCodec &wc)
+{
+    if (GemCheckBoxShowBinary->Checked == false)
+        return;
+
+    AnsiString S = "";
+    AnsiString str;
+    StringOut("");
+
+    for (int i = 0; i < 4; i++)
+    {
+        str.sprintf("%02X,", wc.LocalBuffer[i]);
+        S += AnsiString(str);
+    }
+    StringBinaryOut(S);
+    S = "";
+    for (int i = 4; i < 14; i++)
+    {
+        str.sprintf("%02X,", wc.LocalBuffer[i]);
+        S += AnsiString(str);
+    }
+    StringBinaryOut(S);
+    wc.ShowSMLBinary(wc.LocalBuffer.data(), static_cast<int>(wc.LocalLength_4));
+}
+// AI(W906-uHGemEquipment-BucketC) 20260717: ADDITIVE overload -- golden's
+// zero-arg signature (uHGemEquipment.h:264) forwards to THGem's own WireCodec
+// (see uHGemEquipment.h's own note on why the (SecsWireCodec&) overload
+// exists: so SendLocalDataFrom can trace the INVOKING codec's buffer).
+void THGem::ShowLocalBufferBinaryData()
+{
+    ShowLocalBufferBinaryData(WireCodec);
+}
+//---------------------------------------------------------------------------
+// V1.0 (golden uHGemEquipment.cpp:1378-1405)
+// 依設定是否將要送出的資料 (local) 的 Head 結構資訊印出
+//---------------------------------------------------------------------------
+void THGem::ShowLocalHeadInfo(SecsWireCodec &wc)
+{
+    AnsiString S;
+    if (GemCheckBoxShowHeadInformation->Checked == true)
+    {
+        StringOut("");
+        S.sprintf("HSMS_Head.Length=%d", wc.LocalLength);
+        StringOut(S);
+
+        S.sprintf("HSMS_Head.DeviceID=%d", wc.Local.DeviceID);
+        StringOut(S);
+
+        S.sprintf("HSMS_MessageID=S%d F%d", wc.Local.MessageID_S & 0x7f, wc.Local.MessageID_F);
+        StringOut(S);
+        S.sprintf("WBit=%d", wc.Local.W_Bit);
+        StringOut(S);
+
+        S.sprintf("PType=%d", wc.Local.PType);
+        StringOut(S);
+
+        S.sprintf("SType=%d", wc.Local.SType);
+        StringOut(S);
+
+        S.sprintf("Remote.SystemByte=%d", wc.Local.SystemByte);
+        StringOut(S);
+        StringOut("");
+    }
+}
+// AI(W906-uHGemEquipment-BucketC) 20260717: ADDITIVE overload -- see
+// ShowLocalBufferBinaryData()'s own comment just above for the rationale.
+void THGem::ShowLocalHeadInfo()
+{
+    ShowLocalHeadInfo(WireCodec);
+}
+//---------------------------------------------------------------------------
+// V 1.0 (golden uHGemEquipment.cpp:1985-2107)
+// 1.將 Data 透過 TCP/IP 傳送
+// 2.show 出送出 stream 的資訊
+// 3.應要求將 Head struct 印出
+// 3.應要求將 Stram data 以 Hex 印出
+//
+// AI(W906-uHGemEquipment-BucketC) 20260717: D2 -- parameterized over WHICH
+// SecsWireCodec instance to send (`wc`), the REAL golden body translated
+// verbatim with this substitution: `bReceiveData`/`LocalBuffer`/
+// `LocalLength_4`/`Local` -> `wc.*` (LocalBuffer[i] -> wc.LocalBuffer[i],
+// a std::vector<unsigned char>); `ShowSFDescription`/`ShowSML` -> `wc.*`;
+// `ShowLocalBufferBinaryData()`/`ShowLocalHeadInfo()` -> the
+// `(SecsWireCodec&)` overloads just above, passing `wc`; everything else
+// (`bUseClientSocket`, `clientGem`, `srvGem`, `bServoSocketConnect`,
+// `bTCPIP_Error`, `StringOut`, `GetTimeInfo`, `TimeString`, `StringOutColor`,
+// `csSFCodeResponse`, `SFCodeResponseList`, `TimeLeft`, `T3TimeOut`) stays
+// `this->` (implicit) -- all genuinely THGem state, not codec state (see
+// this file's routing-table note in the header). `SendBuf(LocalBuffer,
+// LocalLength_4)` -> `SendBuf(wc.LocalBuffer.data(), (int)wc.LocalLength_4)`.
+// Called by both `SendLocalData()` below (THGem's own WireCodec) and, once
+// a future wiring wave installs the identical `SendLocalDataHook` on
+// `HSys.MyGem->WireCodec`, HTGem's own S9F7_IllegalData/
+// S9F9_TransactionTimerTimeout/LocalAcknowledge composers (uHGemClass.cpp:
+// 773-790) -- this is how ONE real send implementation serves both live
+// codec instances in this port. Recursion-safe: this method never calls
+// `wc.SendLocalData()` -- it IS the sender the hook forwards to.
+//---------------------------------------------------------------------------
+void THGem::SendLocalDataFrom(SecsWireCodec &wc)
+{
+    AnsiString S, SFCode;
+    wc.bReceiveData = false;
+
+    int SCode = wc.Local.MessageID_S & 0x7f;
+    int FCode = wc.Local.MessageID_F;
+    StringOutColor = clBlack;
+
+    try   // 20130204 Daver add
+    {
+        if (bUseClientSocket == true)
+        {
+            clientGem->Socket->SendBuf(wc.LocalBuffer.data(), static_cast<int>(wc.LocalLength_4));
+        }
+        else
+        {
+            if (srvGem->Active == true && bServoSocketConnect == true)
+            {
+                if (srvGem->Socket->ActiveConnections > 0)
+                {
+                    if (srvGem->Socket->Connections[0]->Connected)
+                    {
+                        if (srvGem->Socket->ActiveConnections == 1)
+                        {
+                            srvGem->Socket->Connections[0]->SendBuf(wc.LocalBuffer.data(), static_cast<int>(wc.LocalLength_4));
+                        }
+                    }
+                }
+                else
+                {
+                    bServoSocketConnect = false;
+                    srvGem->Close();
+                    srvGem->Open();
+                }
+            }
+            else
+            {
+                return;
+            }
+        }
+    }
+    catch (...)   // Daver 20130308 add
+    {
+        StringOut("--------------- Exception Start------------------------------------");
+        StringOut("clientGem->Socket->SendBuf Fail!!");
+        GetTimeInfo();
+        S = AnsiString("[Send]    Send Fail!");
+        StringOut(S);
+        SFCode = wc.ShowSFDescription(static_cast<unsigned char>(wc.LocalBuffer[6] & 0x7f), wc.LocalBuffer[7]);
+        MyDBIProcess("Exception", "THGem::SendLocalData - clientGem->Socket->SendBuf Fail!!", SFCode);
+        wc.ShowSML(wc.LocalBuffer.data(), static_cast<int>(wc.LocalLength_4));
+        bServoSocketConnect = false;
+        srvGem->Close();
+        srvGem->Open();
+        bTCPIP_Error = true;
+        StringOut("--------------- Exception End------------------------------------");
+        return;
+    }
+
+    try
+    {
+        StringOut("---------------------------------------------------");
+        GetTimeInfo();
+        S = AnsiString("[Send]    ") + TimeString;
+        StringOut(S);
+
+        SFCode = wc.ShowSFDescription(static_cast<unsigned char>(wc.LocalBuffer[6] & 0x7f), wc.LocalBuffer[7]);
+        ShowLocalBufferBinaryData(wc);
+        ShowLocalHeadInfo(wc);
+        wc.ShowSML(wc.LocalBuffer.data(), static_cast<int>(wc.LocalLength_4));
+        if ((FCode % 2) == 1 && wc.Local.W_Bit == 1)
+        {
+            S = AnsiString(SCode) + " " + AnsiString(FCode + 1) + " " + AnsiString(wc.Local.SystemByte);
+            // Joseph 20221111 (Jason) 新增 TCriticalSection S
+            {
+                ScopedAcquire lk(csSFCodeResponse);   // golden :2059/:2067 try/__finally
+                SFCodeResponseList->Items->Add(S);
+                TimeLeft->Add(T3TimeOut * 10);   // pig 2014.07.28 KYEC_SECS
+            }
+            // Joseph 20221111 (Jason) 新增 TCriticalSection E
+        }
+    }
+    catch (...)   // Daver 20130308 add
+    {
+        StringOut("--------------- Exception Start------------------------------------");
+        GetTimeInfo();
+        S = AnsiString("[Send]    Send Fail!");
+        StringOut(S);
+        SFCode = wc.ShowSFDescription(static_cast<unsigned char>(wc.LocalBuffer[6] & 0x7f), wc.LocalBuffer[7]);
+        MyDBIProcess("Exception", "THGem::SendLocalData", SFCode);
+        wc.ShowSML(wc.LocalBuffer.data(), static_cast<int>(wc.LocalLength_4));
+        bServoSocketConnect = false;
+        srvGem->Close();
+        srvGem->Open();
+        bTCPIP_Error = true;
+        StringOut("--------------- Exception End------------------------------------");
+        return;
+    }
+    //==========================================================================
+}
+// golden public signature (.h:318) -- forwards to SendLocalDataFrom over
+// THGem's own embedded WireCodec.
+void THGem::SendLocalData()
+{
+    SendLocalDataFrom(WireCodec);
+}
+// golden uHGemEquipment.cpp:8997-9006, `void reverae_array(...)` -- a bare
+// file-scope helper (byte-array reversal), NOT a THGem method. DEAD in
+// golden itself (zero callers anywhere in the 9353-line file -- grepped);
+// not translated.
+//---------------------------------------------------------------------------
+// (golden uHGemEquipment.cpp:9008-9028)
+//---------------------------------------------------------------------------
+void __fastcall THGem::clientGemRead(TObject *Sender, TCustomWinSocket *Socket)
+{
+    (void)Sender;
+    ScopedAcquire lk(pLockOnSocketRecvice);   // golden :9010/:9026 try/__finally -- 16.10.05.00 Roy Add (Debug from kirin)
+    unsigned char *EthernetBuffer;   // shadows THGem::EthernetBuffer -- golden quirk, see that member's own header comment
+    int iBufferLenght = 0;
+    iBufferLenght = Socket->ReceiveLength();
+    if (iBufferLenght > 0)   // 13.09.30.01 klutter
+    {
+        EthernetBuffer = new unsigned char[iBufferLenght];   // checked
+        Socket->ReceiveBuf(EthernetBuffer, iBufferLenght);
+        RecvMemoryBuffer->WriteBuffer(EthernetBuffer, iBufferLenght);
+        // AI(W906-uHGemEquipment-BucketC) 20260717: GOLDEN BUG, preserved
+        // verbatim -- this `new[]` block is NEVER deleted (golden's own
+        // comment here, 16.09.14.00 Roy Add, roughly "do NOT delete here!!"
+        // -- RecvMemoryBuffer takes its own COPY via WriteBuffer, but the
+        // ORIGINAL allocation above leaks on every call). NOT fixed here.
+        //delete []EthernetBuffer;
+    }
+}
+//------------------------------------------------------------------------------
+// (golden uHGemEquipment.cpp:9030-9207)
+//------------------------------------------------------------------------------
+void __fastcall THGem::ProcessSocketReceiveData()
+{
+    AnsiString S = "", SFCode;
+    char str[64];
+    int i, ret;
+    unsigned char *EthernetBuffer;   // shadows THGem::EthernetBuffer -- golden quirk, see that member's own header comment (SAME shadow as clientGemRead's own local above)
+    unsigned char *TempEthernetBuffer = NULL;
+    unsigned char *ProcessBuffer;
+    int Value, iBufferLenght = 0;
+    int TempLen = 0;
+    unsigned char *p;
+    static bool bInProcess = false;   // AI(W906-uHGemEquipment-BucketC) 20260717: GOLDEN QUIRK, preserved -- function-static -> single-instance assumption; a second live THGem would share this guard. NOT fixed here.
+    int iProcCount = 0;
+    AnsiString asFileName = "";
+
+    if (bInProcess)
+        return;
+
+    bInProcess = true;
+
+    if (srvGem->Socket->ActiveConnections > 1)   // 2013/09/30 lee
+    {
+        bInProcess = false;
+        return;   // 2013/09/30 lee
+    }
+
+    if (RecvMemoryBuffer->Size == 0 && ProcBuffer->Size == 0)
+    {
+        bInProcess = false;
+        return;
+    }
+
+    // AI(W906-uHGemEquipment-BucketC) 20260717: GOLDEN RACE, preserved
+    // verbatim -- RecvMemoryBuffer is read/cleared below WITHOUT taking
+    // pLockOnSocketRecvice, racing clientGemRead's own LOCKED write to the
+    // same stream. NOT fixed here (matches golden exactly; harmless in this
+    // port's single-threaded Sim tests, a real concern under Real-mode
+    // sockets -- see this wave's own risk note).
+    if (RecvMemoryBuffer->Size > 0)
+    {
+        TempLen = RecvMemoryBuffer->Size;
+        TempEthernetBuffer = new unsigned char[TempLen];
+        RecvMemoryBuffer->Position = 0;
+        RecvMemoryBuffer->ReadBuffer(TempEthernetBuffer, TempLen);
+        RecvMemoryBuffer->Clear();
+
+        ProcBuffer->Seek(0, soFromEnd);
+        ProcBuffer->WriteBuffer(TempEthernetBuffer, TempLen);
+
+        iFileCount++;
+        if (iFileCount == 0x7FFFFFFF)   // 16.11.04.01 s kirin
+        {
+            iFileCount = 0;
+        }   // 16.11.04.01 e kirin
+    }
+
+    iBufferLenght = ProcBuffer->Size;
+    EthernetBuffer = new unsigned char[iBufferLenght];   // test
+    ProcBuffer->Seek(0, soFromBeginning);
+    ProcBuffer->ReadBuffer(EthernetBuffer, iBufferLenght);
+
+    do
+    {
+        WireCodec.SReceiveData->Clear();   // 16.11.04.01 kirin
+        WireCodec.bReceiveData = true;     // 16.11.04.01 kirin
+        {
+            if ((iBufferLenght) < 14)   // 已收長度小於14 (因為 Size byte=4 ,Head Byte=10 至少要 14 byte) 2013/04/11 Lee
+            {
+                if (iBufferLenght != 0)
+                {
+                    ProcBuffer->Clear();   // test
+                    StringOut(AnsiString("Err : Socket Buffer Length less than 14 byte "));
+                    bInProcess = false;
+                    return;
+                }
+                else
+                {
+                    ProcBuffer->Clear();   // test
+                    bInProcess = false;
+                    return;
+                }
+            }
+            p = (unsigned char *)&Value;
+            for (i = 0; i < 4; i++)
+                p[3 - i] = EthernetBuffer[i + iProcCount];   // Value=收到這筆傳送的總長度
+
+            if (Value > 104857600)   // 若傳送的 size 封包長度大於100MB則程式是不正常
+            {
+                ProcBuffer->Clear();   // test
+                StringOut(AnsiString("Err : Size Length over 100M byte "));
+                bInProcess = false;
+                return;
+            }
+            else if ((iBufferLenght - iProcCount) >= (Value + 4))   // 至少有一筆資料進來了
+            {
+                // AI(W906-uHGemEquipment-BucketC) 20260717: GOLDEN LEAK (a),
+                // preserved verbatim -- `ProcessBuffer` is `new`'d fresh on
+                // every message and never `delete[]`'d anywhere in this
+                // function. NOT fixed here.
+                ProcessBuffer = new unsigned char[Value + 4];
+                memcpy(ProcessBuffer, &EthernetBuffer[iProcCount], Value + 4);
+                iProcCount += (Value + 4);
+            }
+            else if ((iBufferLenght - iProcCount) < (Value + 4))   // 若 Buffer 內資料不夠要傳的長度,表示會再切割(每個封包長度不一定) 16.11.02.01 kirin test
+            {
+                TempProcBuffer->Position = 0;
+                TempProcBuffer->WriteBuffer(&EthernetBuffer[iProcCount], iBufferLenght - iProcCount);
+                ProcBuffer->Clear();
+                TempProcBuffer->Position = 0;
+                ProcBuffer->LoadFromStream(TempProcBuffer);
+                TempProcBuffer->Clear();
+                bFirstBlock = false;
+                delete[] EthernetBuffer;   // 13.09.25.01 klutter
+                EthernetBuffer = NULL;     // test
+                bInProcess = false;
+                return;
+            }
+        }
+
+        StringOut("===================================================");
+        GetTimeInfo();
+        S = AnsiString("[Receive] ") + TimeString;
+        StringOut(S);
+
+        SFCode = WireCodec.ShowSFDescription(static_cast<unsigned char>(ProcessBuffer[6] & 0x7f), ProcessBuffer[7]);   // Steven 20180815
+
+        bDataFormatOK = true;
+        if (GemCheckBoxShowBinary->Checked == true)   // Steven 20211109 : SECS不再全部顯示binary code
+        {
+            StringBinaryOut("");
+            S = "";
+            for (i = 0; i < 4; i++)   // 長度4碼
+            {
+                sprintf(str, "%02X,", ProcessBuffer[i]);
+                S += AnsiString(str);
+            }
+            StringBinaryOut(S);
+            S = "";
+            for (i = 4; i < 14; i++)   // SF Code 10碼
+            {
+                sprintf(str, "%02X,", ProcessBuffer[i]);
+                S += AnsiString(str);
+            }
+            StringBinaryOut(S);
+        }
+        // Ifor 20260402: Always validate SML format (S9F7 detection must not depend on checkbox)
+        ret = WireCodec.ShowSMLBinary(ProcessBuffer, Value + 4);
+        if (ret == -2)
+            bDataFormatOK = false;
+        WireCodec.ProcessRemoteHead(ProcessBuffer);
+        WireCodec.SReceiveData->Clear();
+
+        if ((WireCodec.Remote.MessageID_S == 101 && WireCodec.Remote.MessageID_F == 5) ||   // pig 2014.04.01 ASEM SECS
+            (WireCodec.Remote.MessageID_S == 101 && WireCodec.Remote.MessageID_F == 11))
+            WireCodec.bDisableBinaryShow = true;
+
+        WireCodec.ShowSML(ProcessBuffer, Value + 4);
+
+        WireCodec.bDisableBinaryShow = false;
+        // Ifor 20260421: S9F3/S9F5 - Wrap ProcessReceiceData in try-catch to prevent communication thread crash
+        try
+        {
+            ProcessReceiceData();
+        }
+        catch (...)
+        {
+            AnsiString sExErr;
+            sExErr.sprintf("Exception in ProcessReceiceData S%dF%d", WireCodec.Remote.MessageID_S, WireCodec.Remote.MessageID_F);
+            StringOut(sExErr);
+            // Unhandled exception: report S9F7 to Host and keep connection alive.
+            // D3 null-guard (golden :9190) -- see DoConnect's own note.
+            if (HSys.MyGem != NULL)
+                HSys.MyGem->S9F7_IllegalData(sExErr);
+        }
+        SaveSECSGEMTextToLog();
+
+        if ((iBufferLenght - iProcCount) == 0)
+        {
+            if (bFirstBlock == true)
+            {
+                // AI(W906-uHGemEquipment-BucketC) 20260717: GOLDEN LEAK (b),
+                // preserved verbatim -- `EthernetBuffer` is set NULL here
+                // WITHOUT a preceding `delete[]` (the :9132 delete above only
+                // covers the partial-frame path). NOT fixed here.
+                EthernetBuffer = NULL;   // test
+            }
+            ProcBuffer->Clear();   // test
+            WireCodec.bReceiveData = false;
+            bFirstBlock = true;
+            bInProcess = false;
+            return;
+        }
+    } while (1);
 }
 
 //---------------------------------------------------------------------------
@@ -2323,19 +3558,18 @@ void THGem::DoUpdateStatus()
                 SECSGEM_DoSeparate.SetSecAndOn(30);
             }
 
-            // AI(W906-uHGemEquipment-BucketB) 20260717: FLAGGED LIMITATION --
-            // `SECSGEM_DoSeparate` is the TU-local HTimer stand-in (see its
-            // own definition/comment above), whose Off() ALWAYS returns true
-            // immediately, regardless of the 30-second duration just armed by
-            // SetSecAndOn(30) on the line above. In THIS translated build,
-            // the branch below fires on the very SAME poll it was armed --
-            // KYEC's real 30-second forced-disconnect wait does NOT actually
-            // wait 30 seconds yet. This is a pre-existing shim limitation
-            // (HTimer has never been designed for real elapsed-time behavior
-            // anywhere in this tree), not silently fixed or hidden -- a
-            // future wave needs to design a real HTimer before this
-            // customer's flow is trustworthy end-to-end. See this wave's own
-            // final report for the same flag.
+            // AI(W906-uHGemEquipment-BucketC) 20260717: FIXED -- `SECSGEM_DoSeparate`
+            // is now the REAL, TU-local elapsed-time HTimer (D6; see its own
+            // definition/comment above, ported verbatim from
+            // D:\HT9045\elec\Component\htimer.cpp). Off() genuinely tracks
+            // GetTickCount() now, so the 30-second duration armed by
+            // SetSecAndOn(30) above is honored for real -- this branch no
+            // longer fires on the same poll it was armed (the prior Bucket-B
+            // FLAGGED LIMITATION, an always-fires stub, is resolved by this
+            // wave). test_do_update_status (tests/test_uHGemEquipment.cpp)
+            // still only covers this STRUCTURALLY within a synchronous test
+            // (it cannot literally sleep 30s) -- see test [22]'s own updated
+            // comment.
             if (SECSGEM_DoSeparate.Off())
             {
                 DoSeparate();
@@ -2512,6 +3746,381 @@ void __fastcall THGem::ProcessShow()
         HGem->DB->Lines->Assign(HGem->WaitShowString);
         HGem->WaitShowString->Clear();
     }
+}
+
+//---------------------------------------------------------------------------
+// (golden uHGemEquipment.cpp:5176-5527) -- the master SECS/GEM connection
+// state machine. Translated verbatim, switch arm by arm, against golden
+// 5252-5525; the 5 near-identical bReceiveMultiConnect blocks (golden
+// :5270/:5321/:5412/:5447/:5504) are kept as 5 separate copies, NOT factored
+// into a shared helper (per this wave's own risk note -- a refactor here
+// would be an unrequested behavior-preserving-in-theory change to code this
+// migration's whole discipline is to leave alone). The Big5 message string
+// ("有2台以上EAP連接Handler,請確認", golden's own 13.09.30.01 klutter comment)
+// is the SAME UTF-8 string already committed at srvGemClientConnect's own
+// TerminalMemoPtr->Lines->Add call above -- reused verbatim here rather than
+// re-decoded, for zero mojibake risk.
+//---------------------------------------------------------------------------
+void __fastcall THGem::Timer1Timer(TObject *Sender)
+{
+    (void)Sender;
+    static bool bSendDoSeparate = false;
+    static bool bSetDoSeparateWait = true;   // Ifor 20180913 (Steven) : add 設定等待時間
+    static bool bWaitHTimer = false;          // Ifor 20180913 (Steven) : add 等待等待時間
+    static bool bTimerRunning = false;
+    if (InitialOK == false || bTimerRunning == true)
+    {
+        return;
+    }
+    bTimerRunning = true;
+
+    if (IniConfig.bEnable_SECS_GEM == true)   // Ifor 20170425 add 打開 SECS GEM Function 需先下斷線命令
+    {
+        bSendDoSeparate = false;
+    }
+    else
+    {
+        if (srvGem->Socket->ActiveConnections != 0)
+        {
+            if (bSendDoSeparate == false)
+            {
+                bSendDoSeparate = true;
+                DoSeparate();
+                try
+                {
+                    HGem->srvGem->Close();
+                    HGem->clientGem->Close();
+                }
+                catch (...)
+                {
+                    MyDBIProcess("Exception", "THGem::Timer1Timer");
+                }
+                bSECSGEM_DoSeparate = true;
+                bSetDoSeparateWait = true;
+            }
+        }
+        bTimerRunning = false;
+        return;
+    }
+
+    if (bSetDoSeparateWait && bSECSGEM_DoSeparate)   // Ifor 20180913 (Steven) : add SECS GEM 斷線等待期間避免造成無法連線的問題
+    {
+        bSetDoSeparateWait = false;
+        SECSGEM_DoSeparateWait.SetSecAndOn(5);
+        bWaitHTimer = true;
+    }
+
+    if (bWaitHTimer)
+    {
+        // AI(W906-uHGemEquipment-BucketC) 20260717: this 5-second window is
+        // now REAL (D6 -- SECSGEM_DoSeparateWait is the real elapsed-time
+        // HTimer, not the old always-fires stub); Off() genuinely waits.
+        if (SECSGEM_DoSeparateWait.Off())
+        {
+            bSetDoSeparateWait = true;
+            bSECSGEM_DoSeparate = false;
+            bWaitHTimer = false;
+        }
+        else
+        {
+            bTimerRunning = false;
+            return;
+        }
+    }
+
+    int &Task = Timer1Task;
+    int &ct = Timer1ct;
+    int ret;
+    if (bFirstEntry == true)
+    {
+        InitialHGem();
+        bFirstEntry = false;
+    }
+    ProcessShow();
+    ProcessSocketReceiveData();
+    GetTimeInfo();
+    DoUpdateStatus();
+    Caption = Alias;
+    switch (Task)
+    {
+        case 1:
+            DelayForServoError.TimerSet(100);
+            DelayForServoError.TimerOn();
+            Task = 10;
+            break;
+        case 10:
+            if (DoOpenCommuncation())
+            {
+                if (EnableOrDisablePtr != NULL)
+                {
+                    if (EnableOrDisablePtr->ItemIndex == 0)
+                        Connect();
+                }
+                Task = 100;
+            }
+
+            if (bReceiveMultiConnect == true && DelayForServoError.TimerOff())
+            {
+                try
+                {
+                    if (bUseClientSocket == false)
+                        srvGem->Close();
+                }
+                catch (...)
+                {
+                    MyDBIProcess("Exception", "THGem::Timer1Timer");
+                }
+                bReceiveMultiConnect = false;
+                iOpenCommuncationTask = 1;
+                Task = 1;
+                StringOut("有2台以上EAP連接Handler,請確認");   // 13.09.30.01 klutter
+            }
+            break;
+        case 100:
+            DelayForServoError.TimerSet(100);
+            DelayForServoError.TimerOn();
+            Task = 110;
+            break;
+        case 110:
+            if (CheckSocketActiveFalse())
+            {
+                iOpenCommuncationTask = 1;
+                Task = 1;
+                break;
+            }
+
+            if (bUseClientSocket && (bStartConnect == true || bAutoConnect == true))
+            {
+                bStartConnect = false;
+                iStartConnectTask = 1;
+                Task = 200;
+            }
+            else if (bReceiveEstablishCommunicationsRequest == true)
+            {
+                bReceiveEstablishCommunicationsRequest = false;
+                bConnect = true;
+                if (bOnLine)
+                {
+                    iStartOnLineTask = 1;
+                    Task = 300;
+                }
+                else
+                {
+                    Task = 250;
+                }
+            }
+
+            if (bReceiveMultiConnect == true && DelayForServoError.TimerOff())
+            {
+                try
+                {
+                    if (bUseClientSocket == false)
+                        srvGem->Close();
+                }
+                catch (...)
+                {
+                    MyDBIProcess("Exception", "THGem::Timer1Timer");
+                }
+                bReceiveMultiConnect = false;
+                iOpenCommuncationTask = 1;
+                Task = 1;
+                StringOut("有2台以上EAP連接Handler,請確認");   // 13.09.30.01 klutter
+            }
+            break;
+        case 200:
+            if (CheckSocketActiveFalse())
+            {
+                Task = 1;
+                break;
+            }
+
+            if (bReceiveEstablishCommunicationsRequest == true)
+            {
+                bReceiveEstablishCommunicationsRequest = false;
+                bConnect = true;
+                if (bOnLine)
+                {
+                    iStartOnLineTask = 1;
+                    Task = 300;
+                }
+                else
+                {
+                    Task = 250;
+                }
+                break;
+            }
+
+            ret = DoConnect();
+            if (ret == 1)
+            {
+                if (OnLineOrOffLine != NULL)
+                {
+                    if (OnLineOrOffLine->ItemIndex == 0)
+                        OnLine(0);
+                    else
+                        OffLine();
+                }
+
+                if (bOnLine)
+                {
+                    iStartOnLineTask = 1;
+                    Task = 300;
+                }
+                else
+                {
+                    Task = 250;
+                }
+            }
+            else if (ret == 2)
+                Task = 100;
+            break;
+        case 250:
+            DelayForServoError.TimerSet(100);
+            DelayForServoError.TimerOn();
+            Task = 260;
+            break;
+        case 260:
+            if (CheckSocketActiveFalse())
+            {
+                Task = 1;
+                break;
+            }
+            else if (bConnect == false)
+            {
+                Task = 100;
+                break;
+            }
+
+            if (bOnLine)
+            {
+                iStartOnLineTask = 1;
+                Task = 300;
+            }
+            else if (bStartOnLine == true)
+            {
+                Task = 300;
+            }
+
+            if (bReceiveMultiConnect == true && DelayForServoError.TimerOff())
+            {
+                try
+                {
+                    if (bUseClientSocket == false)
+                        srvGem->Close();
+                }
+                catch (...)
+                {
+                    MyDBIProcess("Exception", "THGem::Timer1Timer");
+                }
+                bReceiveMultiConnect = false;
+                iOpenCommuncationTask = 1;
+                Task = 1;
+                StringOut("有2台以上EAP連接Handler,請確認");   // 13.09.30.01 klutter
+            }
+            break;
+        case 300:
+            DelayForServoError.TimerSet(100);
+            DelayForServoError.TimerOn();
+            Task = 310;
+            break;
+        case 310:
+            bReceiveEstablishCommunicationsRequest = false;
+            if (CheckSocketActiveFalse())
+            {
+                Task = 1;
+                break;
+            }
+
+            if (DoOnLine() == true)
+            {
+                Task = 400;
+            }
+
+            if (bReceiveMultiConnect == true && DelayForServoError.TimerOff())
+            {
+                try
+                {
+                    if (bUseClientSocket == false)
+                        srvGem->Close();
+                }
+                catch (...)
+                {
+                    MyDBIProcess("Exception", "THGem::Timer1Timer");
+                }
+                bReceiveMultiConnect = false;
+                iOpenCommuncationTask = 1;
+                Task = 1;
+                StringOut("有2台以上EAP連接Handler,請確認");   // 13.09.30.01 klutter
+            }
+            break;
+        case 350:
+            // AI(W906-uHGemEquipment-BucketC) 20260717: golden itself never
+            // assigns Task=350 anywhere (grepped) -- this arm appears to be
+            // dead/unreachable code in golden. Translated verbatim anyway,
+            // per this wave's own "translate the switch arm by arm" risk
+            // note -- NOT removed, NOT "fixed".
+            if (RemoteOrLocal->ItemIndex == 0)
+                OnLineRemote();
+            else
+                OnLineLocal();
+            Task = 360;
+            ct = 0;
+            break;
+        case 360:
+            ct++;
+            if (ct > 30)
+                Task = 400;
+            break;
+        case 400:
+            DelayForServoError.TimerSet(100);
+            DelayForServoError.TimerOn();
+            Task = 410;
+            break;
+        case 410:
+            bReceiveEstablishCommunicationsRequest = false;
+            if (CheckSocketActiveFalse())
+            {
+                Task = 1;
+                break;
+            }
+
+            if (bCloseCommuncation == true)
+            {
+                bCloseCommuncation = false;
+                Task = 1;
+            }
+            else if (bConnect == false)
+            {
+                Task = 100;
+            }
+            else if (bOnLine == false)
+            {
+                iStartOnLineTask = 1;
+                Task = 250;
+            }
+            else if (bReceiveMultiConnect == true && DelayForServoError.TimerOff())
+            {
+                try
+                {
+                    if (bUseClientSocket == false)
+                        srvGem->Close();
+                }
+                catch (...)
+                {
+                    MyDBIProcess("Exception", "THGem::Timer1Timer");
+                }
+                bReceiveMultiConnect = false;
+                iOpenCommuncationTask = 1;
+                Task = 1;
+                StringOut("有2台以上EAP連接Handler,請確認");   // 13.09.30.01 klutter
+            }
+            else
+            {
+                DoLocalAllProcessLoop();
+            }
+            break;
+    }
+    bTimerRunning = false;
 }
 
 //---------------------------------------------------------------------------

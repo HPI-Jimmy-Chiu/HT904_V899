@@ -1765,8 +1765,12 @@ add_executable(test_uHGemEquipment
 # unresolved WSAStartup/socket/connect/etc. show up, so the link failed.
 # Same LINK_GROUP:RESCAN fix already established by this exact multi-hop-
 # static-lib-plus-ws2_32 shape at test_myplc_modbus's own entry in this file.
+# AI(W906-uHGemEquipment-BucketC) 20260717: ht9045_db added to the RESCAN
+# group -- D3's HSys.MyGem seam needs database.cpp's `HSys` definition
+# resolved (see root CMakeLists.txt's ht9045_secsgem target for the matching
+# new link dependency).
 target_link_libraries(test_uHGemEquipment PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_secsgem,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_secsgem,ht9045_core,ht9045_globals,ht9045_public,ht9045_db,vclcompat>"
 )
 if(WIN32)
     target_link_libraries(test_uHGemEquipment PRIVATE ws2_32)
