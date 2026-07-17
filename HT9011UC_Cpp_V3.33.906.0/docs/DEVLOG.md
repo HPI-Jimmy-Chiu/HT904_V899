@@ -560,5 +560,40 @@ B 桶(~15 個小 widget stand-in，解鎖 `InitialHGem`/`SaveSystemDefault`/`DoU
 ### 下一步候選
 C 桶(`clientGemRead`/`ProcessSocketReceiveData`/`Timer1Timer`)是本檔案最終、最大的剩餘難塊，需先設計 `TCriticalSection`/`TMemoryStream` shim + `SecsWireCodec`/`SecsSvEcRegistration` 成員化——這也是解鎖 `uHGemClass.cpp` 剩餘 gated method 與 `automation.cpp`/`TesterTCP.cpp` 各自 Timer 核心的關鍵前置。或轉 `uHGemClass.cpp` 剩 44/57、`TesterTCP.cpp` 的 `TimerProcessTCPDataTimer`、`automation.cpp` 的 `ProcessBuffer`、真計時 `HTimer` 設計(小而獨立，可解上述 KYEC 限制)、或 W7 續。**下一步不預設暫停**。
 
-### 🔖 RESUME（最新）
+### 🔖 RESUME（已被下方 Bucket C 條目取代）
 - **✅ uHGemEquipment 連線生命週期 Bucket A+B 皆完成（2026-07-17，同日連續兩波）**：A 桶(clientGem/srvGem 生命週期，28 函式)+ B 桶(7 個 widget stand-in、`InitialHGem`/`SaveSystemDefault`/`DoUpdateStatus`/`ProcessShow`/`FormClose`/`ManualCreatergRoleClick`/`FormShow`)。`ht9045_secsgem` 新連結 `ht9045_core`+`ht9045_globals`(確認無循環依賴)。**⚠️ KYEC 客戶部署前待辦**：`DoUpdateStatus` 的 30 秒強制斷線依賴的 `HTimer` 目前恆真(不會真的等 30 秒)，已三處清楚標註，尚未修。兩波皆獨立 fidelity-review clean、親自複驗 ctest 83/87(4 個既有無關失敗)、mojibake 0。**下一步不預設暫停**：C 桶 `Timer1Timer`/`clientGemRead`/`ProcessSocketReceiveData`(本檔最終難塊，需新 `TCriticalSection`/`TMemoryStream` shim)、真計時 `HTimer` 設計(可獨立解 KYEC 限制)、`uHGemClass.cpp` 剩 44/57、`TesterTCP.cpp` 的 `TimerProcessTCPDataTimer`、`automation.cpp` 的 `ProcessBuffer`、或 W7 續。
+
+---
+
+## 2026-07-17 — uHGemEquipment 連線生命週期 Bucket C（本檔最終難塊：Timer1Timer 主 SM + 協定解碼泵 + SendLocalData 真本體 + 真 HTimer）
+
+**設定聲明（依 2026-07-17 新規則）**：主迴圈 Fable 5 + xhigh；設計 recon 用 Fable subagent、翻譯 Sonnet 5、獨立審查 Sonnet 5——與建議表一致。
+
+**流程**：設計 agent 先產出 560 行可執行設計書（`SendLocalDataHook` 注入式設計、WireCodec 成員化、HSys.MyGem null-guard seam、ProcessReceiceData 部分真/部分 gate 切法、狀態別名路由、真 HTimer 移植來源、兩個新 shim 規格、T1-T10 測試計畫、~25 成員清單、7 步執行序）→ 翻譯 agent 照書執行 → 獨立審查 → 主迴圈親修審查發現 + 全新建置定案。
+
+**新 vclcompat shim**：`MemoryStream.{h,cpp}`（`TMemoryStream`：WriteBuffer 在 Position 覆寫保尾、ReadBuffer/Seek/Clear/LoadFromStream/Size/Position，API=golden 實際用到的 9 種呼叫形）+ `SyncObjs.h`（`TCriticalSection`，Win32 `CRITICAL_SECTION` 支撐——翻譯 agent 實測本機 MinGW libstdc++ 無 `<mutex>`，偏離設計書的 `std::recursive_mutex` 有據）。`TFixedCriticalSection` 依 golden 宣告位置(:25-29)直接進 uHGemEquipment.h。
+
+**真 HTimer（同時解掉 Bucket B 的 KYEC ⚠️ 待辦）**：設計 agent 找到 canonical golden 原始碼 `D:\HT9045\elec\Component\htimer.{h,cpp}`（component 庫檔，不在 golden snapshot 內），TU-local 移植含 never-armed→false、DWORD wraparound 分支逐字保留、「到期後 InUsed=false 但持續回 true」quirk。`atester_shims.h` 的恆真 stub 不動（其 gated 消費端依賴恆真語意）。test [22] 的 KYEC 斷言同步改為驗證「不會立刻觸發」的真行為。
+
+**SecsWireCodec 唯一增項**：`std::function<void(SecsWireCodec&)> SendLocalDataHook`——空則維持原 stub 行為（`bReceiveData=false`），零波及既有消費端（`test_SecsWireCodec` 226/226、`test_uHGemClass` 86/86 皆原樣通過佐證）。THGem ctor 對自己的 `WireCodec` 裝上 hook → `SendLocalDataFrom(SecsWireCodec&)` 承載 golden :1985-2107 真本體（client/server 送出分支、`bServoSocketConnect` close/reopen dance、`SFCodeResponseList`/`TimeLeft` T3 記錄、例外路徑全逐字）。
+
+**THGem 翻譯清單**（golden 行號見各函式註解）：`InitSTypeStruct`/`DoSelect`/`DoSeparate`(取代 Bucket B stub)/`DoConnect`(含 Ifor 20260420 Task=200 死結修正註解逐字保留)/`DoProcessSFNoResponse`(T3 每秒掃描+S9F9)/`DoLocalAllProcessLoop`(殼+4 gated 子系統 stub)/`SelectRsp`/`DeselectRsp`/`LinktestRsp`/`ProcessReceiceData`(control-message head 真翻譯——Select/Deselect/Linktest 握手 e2e 可測；S,F data-message tail 整塊 `#if 0` 待 SystemModularInitial 接線波)/`CheckSFCodeResponse`/`SaveSECSGEMTextToLog`/`ShowLocalBufferBinaryData`/`ShowLocalHeadInfo`/`clientGemRead`(RecvMemoryBuffer 上鎖汲取)/`ProcessSocketReceiveData`(訊框長度重組三段式+多訊息 do-while+Ifor 20260402/20260421 兩個 dated 加固逐字)/`Timer1Timer`(golden :5176-5527 主 SM，13 個 case 值全逐字含 KYEC 分支與死 case 350)。`WaitShowString`/`LogDataString` 改為 WireCodec 同名成員的別名（恢復 golden 單一顯示/log 流，dtor 跳過刪除別名對）。HSys.MyGem 4 個呼叫點以 `!=NULL` guard 接（比照 cprod.cpp:2199 先例；S9F9/S9F7 在 HTGem 已真、S1F13 仍 gated → DoConnect 忠實停在 Task=200）。
+
+**忠實保留的 golden bug**（各處已註記）：ProcessBuffer 逐訊息洩漏(:9119)、EthernetBuffer=NULL 不 delete[](:9198)、未上鎖的 RecvMemoryBuffer 讀取與上鎖寫入 race(:9062-9068)、bSeprate 兩分支皆 false(:4731-4737)、Timer1Timer case 350 死碼(全檔 grep 證實無人指派 350)、EthernetBuffer 成員/區域變數遮蔽。
+
+**獨立審查（10 項全查）＋主迴圈親修 2 個發現**：
+- **HIGH（休眠地雷，審查 agent 以獨立重現 segfault 證實）**：`MyDBIProcess` 3-arg 呼叫慣例不一致——`uHGemClass.cpp:251` 宣告無 `__fastcall`、`database.cpp:64` 有；本波新增的 `ht9045_secsgem→ht9045_db` 連結邊讓兩者首次同進一個 link，ld 以 fixup 啟發式「解決」並僅發警告，實際是錯誤呼叫慣例（i686 fastcall 走暫存器傳參）。現行測試全過只因受影響呼叫點全在例外路徑。**根因是系統性缺陷**：`vcl_compat.h` 的 `#ifndef __fastcall` 中和從未生效（`__fastcall` 是 MinGW 編譯器內建巨集，`#ifndef` 恆假）——已列 ROADMAP 追蹤。主迴圈親修：`uHGemClass.cpp:251`+`test_uHGemClass.cpp` stub 補上 `__fastcall`（golden cMyDB.h:20 正確形式），重連結證實 fixup 警告消失、86/86+252/252 續過。
+- **LOW**：uHGemEquipment.h D1 註解的成員宣告順序主張誤述——已改寫為正確的 C++ 語意說明（ctor body 在全部成員建構完才跑，宣告相對順序無關）。
+
+**測試**：`test_uHGemEquipment` 181→**252**（T1-T10：MemoryStream 語意/HTimer 鏡像行為/真 Select.req→Select.rsp Sim 握手/分割與併連訊框重組/T3 逾時→S9F9 經 hook seam/Timer1Timer pump）。測試衛生：新增 `TextLogSnapshot` capture/restore 包住會觸達 `SaveSECSGEMTextToLog` 的 T3/T4/T5（翻譯 agent 自己的 dev-loop 曾殘留一個 2872-byte TextLog，經確認為本 session 產物後刪除）；`D:\SECS_GEM_LOGS\2026\07_17\` 前後 md5 相同、僅存基準 128-byte ErrLog。
+**主迴圈親自定案**：全新 `build_bucketc_verify` from-scratch build exit 0、build log 全文 grep `resolving`=0、**ctest 83/87**（同組 4 個既有 `Gerneral.ini` 環境漂移失敗）、mojibake 0（12 檔）。
+
+### ROADMAP DEFERRED 表更新
+- `uHGemEquipment.cpp`：A+B+C 三桶皆完成。剩餘窄化為：ProcessReceiceData 的 S,F data-message dispatch tail(golden :8812-8988，`#if 0`，待 SystemModularInitial 接線波)+`DoSpool`/`DoTraceDataResponse`/`DoUploadFileToHost`/`DoDownLoadRemoteFile` 4 個獨立子系統+FormCreate SV 註冊(待 SvEcReg 成員化波)+two-codec-instance 收訊側合併(inline 已註記)。KYEC HTimer ⚠️ 已解除。
+- 新增系統性追蹤項：`vcl_compat.h` `__fastcall` 中和失效（編譯器內建巨集），全樹 `__fastcall` 標註宣告皆受影響，需獨立稽核波。
+
+### 下一步候選
+**SystemModularInitial 接線波**（接上 `HSys.MyGem`→un-gate ProcessReceiceData S,F tail+DoConnect S1F13，並處理 two-codec 收訊合併）現在是本檔收尾的天然下一步，也同時解鎖 `uHGemClass.cpp` 的實戰消費；或 `uHGemClass.cpp` 剩 44/57、`TesterTCP.cpp` 的 `TimerProcessTCPDataTimer`、`automation.cpp` 的 `ProcessBuffer`、`__fastcall` 系統性稽核（獨立小波）、或 W7 續。**下一步不預設暫停**。
+
+### 🔖 RESUME（最新）
+- **✅ uHGemEquipment Bucket A+B+C 全數完成（2026-07-17，同日三連波，本檔翻譯主體收尾）**：C 桶交付 Timer1Timer 主 SM(13 case 全逐字)+clientGemRead/ProcessSocketReceiveData 協定解碼泵+SendLocalData 真本體(hook 注入式)+Select/Deselect/Linktest 握手+T3 逾時機制+新 vclcompat `MemoryStream`/`SyncObjs` shim+真 `HTimer`(順帶解除 KYEC ⚠️)。獨立審查抓到 HIGH 級 `MyDBIProcess` `__fastcall` ABI 地雷(實證 segfault)，主迴圈已修並揭露系統性 `vcl_compat.h` 中和失效(入 ROADMAP 追蹤)。fresh build 83/87、630 斷言跨 4 套件全綠、mojibake 0、`SECS_GEM_LOGS` byte-identity 確認。**下一步不預設暫停**：SystemModularInitial 接線波(天然收尾)、`uHGemClass.cpp` 44/57、`TesterTCP.cpp` Timer 核心、`automation.cpp` ProcessBuffer、`__fastcall` 稽核小波、或 W7 續。
