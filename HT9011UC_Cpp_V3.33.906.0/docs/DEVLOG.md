@@ -595,5 +595,23 @@ C 桶(`clientGemRead`/`ProcessSocketReceiveData`/`Timer1Timer`)是本檔案最�
 ### 下一步候選
 **SystemModularInitial 接線波**（接上 `HSys.MyGem`→un-gate ProcessReceiceData S,F tail+DoConnect S1F13，並處理 two-codec 收訊合併）現在是本檔收尾的天然下一步，也同時解鎖 `uHGemClass.cpp` 的實戰消費；或 `uHGemClass.cpp` 剩 44/57、`TesterTCP.cpp` 的 `TimerProcessTCPDataTimer`、`automation.cpp` 的 `ProcessBuffer`、`__fastcall` 系統性稽核（獨立小波）、或 W7 續。**下一步不預設暫停**。
 
-### 🔖 RESUME（最新）
+### 🔖 RESUME（已被下方 2026-07-19 條目取代）
 - **✅ uHGemEquipment Bucket A+B+C 全數完成（2026-07-17，同日三連波，本檔翻譯主體收尾）**：C 桶交付 Timer1Timer 主 SM(13 case 全逐字)+clientGemRead/ProcessSocketReceiveData 協定解碼泵+SendLocalData 真本體(hook 注入式)+Select/Deselect/Linktest 握手+T3 逾時機制+新 vclcompat `MemoryStream`/`SyncObjs` shim+真 `HTimer`(順帶解除 KYEC ⚠️)。獨立審查抓到 HIGH 級 `MyDBIProcess` `__fastcall` ABI 地雷(實證 segfault)，主迴圈已修並揭露系統性 `vcl_compat.h` 中和失效(入 ROADMAP 追蹤)。fresh build 83/87、630 斷言跨 4 套件全綠、mojibake 0、`SECS_GEM_LOGS` byte-identity 確認。**下一步不預設暫停**：SystemModularInitial 接線波(天然收尾)、`uHGemClass.cpp` 44/57、`TesterTCP.cpp` Timer 核心、`automation.cpp` ProcessBuffer、`__fastcall` 稽核小波、或 W7 續。
+
+---
+
+## 2026-07-19 — SystemModularInitial 接線波啟動（in-flight 檢查點，使用者關機暫停）
+
+**設定聲明**：主迴圈 Fable 5 + xhigh；設計 agent Fable 5（背景執行中）；後續規劃：翻譯 Sonnet 5 + high、獨立審查 Sonnet 5。
+
+**波次範圍**（DEVLOG 2026-07-17 候選定案的「天然下一步」）：
+1. 接活 `HSys.MyGem`——golden `database.cpp:1539-1546`（`SystemModularInitial` 本體僅 8 行，核心是 `MyGem=new HT9045Gem("HT9045", HGem)`）；已譯樹 `database.cpp:148-155` 現為 `#if 0` gate、`database.h:235-238` MyGem 恆 NULL。
+2. 解閘 `ProcessReceiceData` S,F data-message dispatch tail——golden `uHGemEquipment.cpp:8812-8988`；已譯樹 `SECSGEM/uHGemEquipment.cpp:2957` gate（缺口：MyGem wiring + 6 個 bReceive* flag + MoveCheckCallBack + ~15 THGem method）。
+3. `DoConnect` S1F13 接活確認（已譯樹 uHGemEquipment.cpp:2617-2667 呼叫點已有 `!=NULL` guard）。
+4. two-codec 收訊側合併（`THGem.WireCodec` vs `HTGem.WireCodec`；inline 註記在 uHGemEquipment.cpp:3152 附近與 SecsWireCodec.h:397）。
+
+**設計書目標路徑**：`C:\Users\JIMMYC~1\AppData\Local\Temp\claude\D--HT9045\452108d5-1416-413a-b6dc-35801b9adf0d\scratchpad\DESIGN_SystemModularInitial_wiring.md`
+設計書須逐項定案 A-G：A=MyGem 具體型別（HT9045Gem ~9200 行未翻且本波不翻——THGem 直接實例化 vs 薄 shim 擇一，含 override 行為差異分析與未來換回路徑）；B=golden ctor 第二參數 `HGem` 是什麼+生命週期/所有權（SYSTEM_MODULAR ctor/dtor 皆仍 gated）；C=S,F tail 精確切法（缺口逐項盤點，部分真/部分 gate，比照 Bucket C 前例）；D=two-codec 定案；E=__fastcall ABI 配對檢查清單+強制 build log grep `resolving`=0（Bucket C 已實證系統性中和失效）；F=T1-Tn 測試計畫（沿用 test_uHGemEquipment 252 斷言+TextLogSnapshot 慣例）；G=翻譯 agent 施工序。
+
+### 🔖 RESUME（最新）
+- **▶ SystemModularInitial 接線波 in-flight（2026-07-19）**：程式碼零變更、工作樹乾淨（僅本 DEVLOG 條目）。下次接續：(1) 檢查上方 scratchpad 路徑的設計書是否存在——**存在**→直接派翻譯 agent（Sonnet 5 + high）照書施工→獨立審查（Sonnet 5，協定核心用 xhigh）→主迴圈親自 fresh from-scratch build + ctest + mojibake 0 + build log grep `resolving`=0 複驗→commit+更新 DEVLOG/ROADMAP/RESUME；**不存在**（關機時設計 agent 未完成即遺失）→依上方 A-G 清單重派設計 agent（Fable 5），prompt 要點全在本條目。(2) 驗證基準：ctest 83/87（4 個既有 Gerneral.ini 環境漂移失敗非回歸）、630 斷言跨 4 套件。(3) 分支 fix/v899.32-pti（勿信 feat/cpp-906-migration stale 指標）。
