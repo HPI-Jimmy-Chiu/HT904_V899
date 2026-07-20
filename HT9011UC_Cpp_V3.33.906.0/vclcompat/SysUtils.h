@@ -182,6 +182,19 @@ void FindClose(TSearchRec& sr);
 // ---- misc -----------------------------------------------------------------
 void Sleep(int milliseconds);   // Win32-style Sleep (portable wrapper)
 
+// AI(W906-TesterTCPTimer) 20260720: BCB6 RTL `random(int)` -- returns a
+// pseudo-random int in [0, range). Sole golden consumer is
+// TfTesterTCP::SimulateBin (Interface/TesterTCP.cpp:578-582, "2012-10-11
+// Dell Fix"). NOT the Borland LCG + `randomize()` reseed -- std::rand()-
+// backed, unseeded (deterministic/reproducible run-to-run); flagged as a
+// port deviation (design doc DESIGN_TesterTCP_TimerProcessTCPDataTimer.md
+// definition D-3 / behavior-diff table entry #2) since golden's own only
+// call path to this (Simulate尾巴, LastSet.iTester==OFF_LINE &&
+// SimulateStart) is itself a dead trigger in production (SimulateStart has
+// no golden true-setter). range<=0 returns 0 (defensive; Borland's own
+// random(0) also degenerates harmlessly).
+int random(int range);
+
 // TryStrToFloat (BCB6 SysUtils): attempt locale-independent '.' decimal parse.
 // Sets `value` and returns true on success; leaves `value` unchanged and
 // returns false on failure (empty, non-numeric, etc.).

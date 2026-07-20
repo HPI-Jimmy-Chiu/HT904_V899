@@ -11,6 +11,14 @@
 // =============================================================================
 #include "FormsFacade.h"
 #include "Automation/AGV_predicates.h"      // AI(W5-Automation-Integrate) 20260710: real AMR-mode predicates
+// AI(W906-TesterTCPTimer) 20260720: cprod.h (TestIF.iTestType) / cmydef.h
+// (asTCPIPTemperature, TCP_IP_MODE, MAX_SOCKET_TOTAL via cprod.h) -- needed by
+// TfMain::WritePERSITETemperature below (Interface/TesterTCP_Socket.cpp's new
+// TimerProcessTCPDataTimer wave). cprod.h itself #includes MachineType.h, which
+// is where MAX_SOCKET_TOTAL is #defined -- so this one include also covers the
+// ctor's tBarCodeList->Strings[MAX_SOCKET_TOTAL-1] use below.
+#include "cprod.h"
+#include "cmydef.h"
 
 // --- W6.1 ------------------------------------------------------------------
 // -- W5-Final-AGV_E84 INTEGRATE ADD: explicit ctor (was implicit) so mmE84Log
@@ -76,6 +84,23 @@ TfMain::TfMain()
     palMainStatus   = new TfMainPanel();
     cbSetupFileName = new TfLotInfoRunMode();
     edWorkTemperBase = new TfLotInfoEdit();
+    // -- W906-TesterTCPTimer ADD (20260720) ------------------------------------
+    tTestResult   = new TStringList();
+    tBarCodeList  = new TStringList();
+    for (int iW906T = 0; iW906T < 32; iW906T++)               // golden main.cpp:2236-2239
+    {
+        tTestResult->Add("-1");
+        tBarCodeList->Add("0");
+    }
+    tBarCodeList->Strings[MAX_SOCKET_TOTAL-1] = AnsiString("0;");   // golden main.cpp:2241 quirk
+                                                                     // (`+=";"` on a freshly-Add()ed
+                                                                     // "0" -- equivalent to a direct
+                                                                     // assignment here), PRESERVED:
+                                                                     // makes the default BARCODE?
+                                                                     // reply's last token "0;" (see
+                                                                     // TesterTCP_Socket.cpp quirk #13).
+    SVID1190_OSSetup = "";
+    W906_PERSITETemperatureStrings_Sim = "";
 }
 void TfMain::LightOn() {}                                       // W6.4: CCD light sink (offline no-op)
 void TfMain::DebugOneCycleHotPlate(AnsiString /*sfunc*/) {}     // debug log sink (offline no-op)
@@ -119,6 +144,29 @@ void TfMain::BackupSetupFile() {}                                           // o
 //    that front's task brief as a small additive cross-file gap ahead of
 //    ProcessBuffer's own future translation.
 bool TfMain::Home(AnsiString /*Func*/) { return false; }
+// -- W906-TesterTCPTimer ADD: golden TfMain::WritePERSITETemperature,
+//    Command.cpp:935-943 (void __fastcall) -- WRAPPER, translated faithfully.
+void TfMain::WritePERSITETemperature()
+{
+    AnsiString sRet="";
+    sRet=PERSITETemperatureStrings();
+    if(TestIF.iTestType==TCP_IP_MODE)                // golden Command.cpp:939 (wei 20211027 open short TCP/IP)
+        asTCPIPTemperature.sprintf("%s\r", sRet);    // golden :940 (Sam 20231205) -- NOTE: unconditional "%s\r"
+                                                     //   => even empty sRet yields "\r" != "" => the timer's
+                                                     //   TempArm? branch ALWAYS replies (min "TempArm:")
+    // AI(W906-TesterTCPTimer) 20260720: golden else-branch (Command.cpp:942)
+    //   SendMSG_CMD(MSG_CMD_TempArm, sRet+"\r") -- MSG_CMD_TempArm is an extern
+    //   const in untranslated MessageDef.h/.cpp and facade SendMSG_CMD is an
+    //   offline no-op anyway; branch gated with this note (no #if 0 needed:
+    //   nothing to compile). Un-gate together with MessageDef wave.
+}
+// -- W906-TesterTCPTimer ADD: golden TfMain::PERSITETemperatureStrings body,
+//    Command.cpp:945-1482 (+RefreshTempData main.h:1388) -- GATED LEAF, see
+//    FormsFacade.h member comment. Independent future wave (temp/GPIB surface).
+AnsiString TfMain::PERSITETemperatureStrings()
+{
+    return W906_PERSITETemperatureStrings_Sim;
+}
 TfMain *fMain = new TfMain();
 
 // --- W6.2: TfSortCT --------------------------------------------------------

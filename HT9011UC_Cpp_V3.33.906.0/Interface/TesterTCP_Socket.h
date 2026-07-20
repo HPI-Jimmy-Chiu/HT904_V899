@@ -32,6 +32,13 @@
 //                                  only other ClientSocket_TCPIP* handler in the
 //                                  whole file, included per the brief's explicit
 //                                  naming)
+//    TimerProcessTCPDataTimer      golden TesterTCP.cpp:349-552 (the protocol DECODE
+//                                  dispatcher: WORKFILE_OK/FAIL, BARCODE?, ECHOCODE:,
+//                                  Test Arm?, TempArm?, BINON:, ECHOOK, GETOSSETUP)
+//                                  -- AI(W906-TesterTCPTimer) 20260720: translated
+//                                  this wave; see DESIGN_TesterTCP_TimerProcessTCPDataTimer.md.
+//    SimulateBin                   golden TesterTCP.cpp:554-613 -- AI(W906-TesterTCPTimer)
+//                                  20260720: translated this wave (same design doc).
 //
 //  NOT attempted (per task brief, confirmed genuinely VCL-widget-bound / a
 //  different concern on a full read):
@@ -40,11 +47,25 @@
 //    - CopyOSTestResult / PlaceOSTestResultToTray / ProcessOSPrint /
 //      ProcessOSTrayData / CopyRecipeToTester / CopyRecipeFromTester
 //      (RichEdit/TMemo OS report-generation family).
-//    - TimerProcessTCPDataTimer (golden :349-613 -- the protocol DECODE
-//      dispatcher: WORKFILE_OK/FAIL, BARCODE?, LOTNUMBER, etc. -- confirmed on
-//      a full read to be widget-bound throughout (fMain->cbSetupFileName /
-//      fMain->tBarCodeList / fMain->tTestResult / fMain->SVID1190_OSSetup /
-//      fMain->WritePERSITETemperature -- see DISCREPANCY note below).
+//    - cbSiteOn[32] (golden TCheckBox* h:250; ctor sets it but neither
+//      TimerProcessTCPDataTimer nor SimulateBin ever reads/writes it --
+//      left for a real UI wave).
+//
+//  [RESOLVED -- AI(W906-TesterTCPTimer) 20260720] TimerProcessTCPDataTimer +
+//  SimulateBin (the two items this file's original banner flagged above as
+//  NOT attempted, pending "a future wave") are now translated -- see this
+//  file's SCOPE list above and TesterTCP_Socket.cpp. The original banner text
+//  here had two small inaccuracies, corrected by that same design doc's own
+//  recon: (1) the golden line range is :349-552 (timer) + :554-613
+//  (SimulateBin), not one contiguous ":349-613"; (2) "LOTNUMBER" was an
+//  erroneous mention -- LOTNUMBER is an OUTBOUND command built elsewhere
+//  (uLotInfo.cpp), it is not one of this timer's inbound dispatch branches.
+//  The 5 fMain-side members this DISCREPANCY note (below) said were used
+//  "ONLY inside TimerProcessTCPDataTimer, which this unit does NOT attempt"
+//  are consumed for real now that the timer itself is translated (definition
+//  B of the design doc: tTestResult/tBarCodeList/SVID1190_OSSetup/
+//  WritePERSITETemperature added to FormsFacade.h/.cpp this wave;
+//  cbSetupFileName was already added by the 2026-07-16 W906-Automation wave).
 //
 //  DISCREPANCY vs. this unit's task brief (golden/actual-code wins, per the
 //  ground rules): the brief listed "~7 new FormsFacade entries" needed --
@@ -110,6 +131,21 @@ struct TesterTCPSocket_Memo
 };
 
 //---------------------------------------------------------------------------
+//  AI(W906-TesterTCPTimer) 20260720: local widget stand-ins for the 3 golden
+//  TfTesterTCP per-site widget arrays TimerProcessTCPDataTimer/SimulateBin
+//  deref (golden TesterTCP.h:248-251, ctor TesterTCP.cpp:49-59). Same
+//  "LOCAL (non-FormsFacade) copy" judgment call as TesterTCPSocket_Memo above
+//  -- this unit's own not-yet-built form has no other home for them, and this
+//  unit's write scope is Interface/TesterTCP_Socket.{h,cpp} only. golden
+//  `cbSiteOn[32]` (TCheckBox*) is NOT stood in here -- ctor sets it but
+//  neither TimerProcessTCPDataTimer nor SimulateBin ever reads/writes it
+//  (verified full read); left for a real UI wave.
+//---------------------------------------------------------------------------
+struct TesterTCPSocket_Combo  { int ItemIndex; TesterTCPSocket_Combo():ItemIndex(0){} };  // golden TComboBox* ->ItemIndex
+struct TesterTCPSocket_Panel  { AnsiString Caption; };                                    // golden TPanel*    ->Caption (ctor "--")
+struct TesterTCPSocket_Label  { AnsiString Caption; };                                    // golden TLabel*    ->Caption (ctor "")
+
+//---------------------------------------------------------------------------
 //  TesterTCPSocketState -- the (single) golden TfTesterTCP instance's data
 //  members this bounded subset touches. Golden has exactly ONE TfTesterTCP
 //  instance ever (extern PACKAGE TfTesterTCP *fTesterTCP;), so a single
@@ -148,6 +184,20 @@ struct TesterTCPSocketState
     // decide whether to fire TesterTCPSocket_TimerTCPIPConnectTimer() at all,
     // exactly as a real VCL TTimer would gate its own OnTimer firing.
     bool       bTimerTCPIPConnectEnabled;
+
+    // -- W906-TesterTCPTimer ADD (20260720) ------------------------------------
+    bool SimulateStart;                       // golden TesterTCP.h:243 (ctor :64 false)
+                                              // GOLDEN QUIRK: full golden tree has NO true-setter
+                                              // (dead trigger) -- preserved faithfully; tests
+                                              // drive it directly (public bool, same golden shape).
+    bool bTimerProcessTCPDataEnabled;         // golden .dfm:2947-2953 TTimer Enabled=False, Interval=1
+                                              // state mirror (same idiom as bTimerTCPIPConnectEnabled
+                                              // above); real gate lives in untranslated
+                                              // cTesterIF.cpp:580-617 / main.cpp:10879/28726.
+    // -- widget stand-ins (golden TfTesterTCP own arrays, h:248-251, ctor :49-59) --
+    TesterTCPSocket_Combo cbSimulateBin[32];  // golden TComboBox* ->ItemIndex (ctor 0)
+    TesterTCPSocket_Panel plSite[32];         // golden TPanel*    ->Caption  (ctor "--")
+    TesterTCPSocket_Label labOcr[32];         // golden TLabel*    ->Caption  (ctor "")
 
     TesterTCPSocketState();
     ~TesterTCPSocketState();
@@ -209,6 +259,15 @@ void TesterTCPSocket_OnRead(TObject* Sender, TCustomWinSocket* Socket);
 // for params it keeps; here the param carries no information at all, so it
 // is simply omitted rather than kept-and-ignored).
 void TesterTCPSocket_TimerTCPIPConnectTimer();
+
+// golden TfTesterTCP::TimerProcessTCPDataTimer, TesterTCP.cpp:349-552.
+// golden signature void __fastcall (TObject *Sender); Sender unread -> dropped
+// here per the TimerTCPIPConnectTimer convention just above (extract-calc-core).
+void TesterTCPSocket_TimerProcessTCPDataTimer();
+
+// golden TfTesterTCP::SimulateBin, TesterTCP.cpp:554-613 (golden itself has NO
+// __fastcall on this one -- a plain method).
+void TesterTCPSocket_SimulateBin();
 
 // golden TfTesterTCP::SendTCPIPCommand(int,AnsiString,AnsiString=""), TesterTCP.cpp:241-274.
 void TesterTCPSocket_SendTCPIPCommand(int index, AnsiString Msg, AnsiString Msg2 = "");

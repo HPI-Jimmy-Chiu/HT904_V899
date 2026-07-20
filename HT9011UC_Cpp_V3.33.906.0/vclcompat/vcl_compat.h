@@ -231,6 +231,7 @@ using vclcompat::faDirectory;
 using vclcompat::faArchive;
 using vclcompat::faAnyFile;
 using vclcompat::Sleep;
+using vclcompat::random;         // AI(W906-TesterTCPTimer) 20260720: BCB6 RTL random(int) -- SimulateBin's Dell-Fix bin-count picker
 using vclcompat::TFloatFormat;
 using vclcompat::ffGeneral;
 using vclcompat::ffExponent;

@@ -29,9 +29,17 @@
 //  of those three would now be a duplicate-definition ODR clash at link, so
 //  they were REMOVED here; this test just reads/writes the ht9045_sm-owned
 //  globals instead (identical semantics -- extern bool, mutable, offline
-//  default false).  bGPIBError / iBin[4][8] have no such shim yet (nothing
-//  else in ht9045_sm defines them), so THIS test TU still supplies their
-//  one-and-only definition for the whole link.
+//  default false).
+//  AI(W906-TesterTCPTimer) 20260720: iBin[4][8] now DEFINED FOR REAL in
+//  atester_shims.cpp (ht9045_sm) too -- Interface/TesterTCP_Socket.cpp's new
+//  TimerProcessTCPDataTimer/SimulateBin write it directly, so test_testertcp_
+//  socket also needs a production definition, not just this test. This test
+//  TU's former local definition is REMOVED (would now be a duplicate-symbol
+//  link error) and replaced with an `extern` declaration below, same
+//  "iBin 現由 atester_shims.cpp (ht9045_sm) 持有" migration already applied to
+//  the bEcho family above. bGPIBError has no such shim yet (nothing else in
+//  ht9045_sm defines it), so THIS test TU still supplies its one-and-only
+//  definition for the whole link.
 // =============================================================================
 #include "Interface/InterfaceSYS.h"
 
@@ -73,7 +81,7 @@ static void check_s(const char* name, const std::string& got, const std::string&
 // -----------------------------------------------------------------------
 bool bGPIBError = false;
 extern bool bEcho, bExist, bUnderTest;
-unsigned int iBin[4][8];
+extern unsigned int iBin[4][8];   // AI(W906-TesterTCPTimer) 20260720: now defined in atester_shims.cpp
 
 int main()
 {

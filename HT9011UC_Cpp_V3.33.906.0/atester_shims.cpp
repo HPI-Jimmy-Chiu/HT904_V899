@@ -69,6 +69,20 @@ bool bEcho=false, bExist=false, bUnderTest=false;                  // golden mai
 bool bEchoStop=false;                                              // golden main.cpp (untranslated) //ChungHung 20130326 add
 bool CheckTestSuckICOn(TMyKitSuck &/*Ptr*/, int /*iR*/, int /*iC*/) { return false; }
 
+// AI(W906-TesterTCPTimer) 20260720: iBin[4][8] production definition -- golden
+// main.cpp:15156 (untranslated, file-scope, zero-initialized). Same
+// untranslated-main.cpp-owned-global family as bEcho/bExist/bUnderTest just
+// above (atester.cpp:652 and Interface/InterfaceSYS.cpp:77 both already
+// `extern unsigned int iBin[4][8];` this symbol). Until now the ONLY definition
+// lived test-locally in tests/test_interfacesys.cpp -- moved here (the real
+// ht9045_sm production home) because Interface/TesterTCP_Socket.cpp's new
+// TimerProcessTCPDataTimer/SimulateBin (this wave) write iBin directly, so
+// test_testertcp_socket now also needs a link-time definition, not just
+// test_interfacesys. tests/test_interfacesys.cpp's own local definition was
+// changed to `extern` in the same step to avoid a duplicate-symbol link error
+// (see that file's own comment).
+unsigned int iBin[4][8];
+
 // AI(W64b-Integrate) 20260706: GetSiteCount (golden cprod.cpp:305, declared
 // cprod.h:3299) -- discovered as an undefined-reference link error while
 // integrating aTester_Front.cpp/aTester_Rear.cpp (case 650/750:

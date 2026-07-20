@@ -31,14 +31,20 @@
 //      cross-file gap in Public/MyProductionRecord.cpp's GetSiteNo/
 //      GetOrderOfContact storage layer -- a different module's translation
 //      debt, not a small addition).
-//    - SimulateBin / ProcessOSPrint / ProcessOSTrayData (heavy
-//      TRichEdit/TMemo + two-form widget coupling, OS-report generation,
-//      not a live protocol path, low urgency).
-//    - TimerProcessTCPDataTimer (the file's true protocol-decode core, but
-//      genuinely mixed: needs 5 new TfMain FormsFacade members plus an
-//      entire untranslated WritePERSITETemperature sibling function --
-//      deserves its own dedicated future wave, see TesterTCP_Socket.h's
-//      identical assessment).
+//    - ProcessOSPrint / ProcessOSTrayData (heavy TRichEdit/TMemo + two-form
+//      widget coupling, OS-report generation, not a live protocol path, low
+//      urgency).
+//    - [RESOLVED -- AI(W906-TesterTCPTimer) 20260720] TimerProcessTCPDataTimer
+//      (the file's true protocol-decode core) and SimulateBin (previously
+//      listed here as not-yet-attempted, alongside ProcessOSPrint/
+//      ProcessOSTrayData above) are now both translated by the
+//      W906-TesterTCPTimer wave, in the SIBLING file
+//      Interface/TesterTCP_Socket.{h,cpp} (not this file) -- see that file's
+//      own SCOPE list and DESIGN_TesterTCP_TimerProcessTCPDataTimer.md. The
+//      "needs 5 new TfMain FormsFacade members" estimate below this note used
+//      to carry turned out to be 3 members + 1 method once resolved (see that
+//      design doc's own recon: cbSetupFileName was already added by the
+//      2026-07-16 W906-Automation wave).
 //    - ClientSocket_TCPIP* / TimerTCPIPConnectTimer / SendTCPIPCommand /
 //      AddTCPIPCommunicationLog / btTCPIP_*Click (already covered by the
 //      sibling Interface/TesterTCP_Socket.h/.cpp -- do not duplicate here).

@@ -611,6 +611,13 @@ void Sleep(int milliseconds) {
 #endif
 }
 
+// AI(W906-TesterTCPTimer) 20260720: see SysUtils.h declaration comment --
+// BCB6 RTL random(int), std::rand()-backed, unseeded on purpose.
+int random(int range) {
+    if (range <= 0) return 0;
+    return std::rand() % range;
+}
+
 // ---------------------------------------------------------------------------
 //  TryStrToFloat (BCB6 SysUtils)
 //  common.cpp:1053-1054, 1200-1201 -- used to detect whether a stored INI

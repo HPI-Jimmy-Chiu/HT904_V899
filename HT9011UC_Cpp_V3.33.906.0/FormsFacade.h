@@ -262,6 +262,24 @@ public:
     TfLotInfoRunMode  *cbSetupFileName;                       // [DATA] golden main.h:875 (TComboBox*) -- only ->Text used
     TfLotInfoEdit     *edWorkTemperBase;                      // [DATA] golden main.h:732 (TEdit*)
     bool Home(AnsiString Func);                                // [METHOD] golden main.h:1276 -- offline: no real Home cycle to run -> false
+    // -- W906-TesterTCPTimer ADD (20260720): members Interface/TesterTCP_Socket.cpp's
+    //    TimerProcessTCPDataTimer/SimulateBin deref -------------------------------
+    TStringList *tTestResult;       // [DATA] golden main.h:1392 (TStringList*) -- ctor pre-fills 32x"-1" (golden main.cpp:2236-2239)
+    TStringList *tBarCodeList;      // [DATA] golden main.h:1396 (TStringList*) -- ctor pre-fills 32x"0" then
+                                    //   Strings[31]+=";" => "0;" (golden main.cpp:2241 quirk, PRESERVED --
+                                    //   makes the default BARCODE? reply end "...,0;;")
+    AnsiString SVID1190_OSSetup;    // [DATA] golden main.h:1499 -- SECS SVID1190 backing store (SV consumer
+                                    //   uHGemHT9045_SV.cpp:231 untranslated; plain storage here)
+    void WritePERSITETemperature(); // [METHOD] golden main.h:1365 (void __fastcall; body Command.cpp:935-943)
+                                    //   -- WRAPPER translated faithfully; leaf gated (below)
+    AnsiString PERSITETemperatureStrings();  // [METHOD] golden main.h (body Command.cpp:945-1482, ~538 lines +
+                                    //   RefreshTempData) -- GATED LEAF: offline returns
+                                    //   W906_PERSITETemperatureStrings_Sim (default ""), real body is its own
+                                    //   future wave (temp/GPIB surface: fContact->fShow/IndexStatus/
+                                    //   iContactMode/asGPIBTempShow/bTestSiteUse)
+    AnsiString W906_PERSITETemperatureStrings_Sim;  // [PORT-ONLY SEAM] test-settable stand-in feed for the
+                                    //   gated leaf above (same data-driven-facade idiom as GetSamSungMap
+                                    //   ""-default / GetSamSungSoakTime "0"-default); default ""
     TfMain();
 };
 extern TfMain *fMain;
