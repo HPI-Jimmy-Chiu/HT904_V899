@@ -29,24 +29,31 @@
 //    GetHTMLJSONDatas / GetMachineStatus / GetWorkOrder / GetMainTemp /
 //      GetTemperatures
 //
-//  EXPLICITLY DEFERRED to a dedicated future wave (declared here, since
-//  in-scope callers -- OLPServerClientRead/tmrOLPTimer/btEventReportClick --
-//  reach them, but given SAFE NO-OP STUB BODIES in the .cpp, not real logic):
-//    ProcessBuffer   (golden :951-1979,  ~1030 lines) -- the OLP command-
+//  TRANSLATED (W906-AutoPB 20260720): the 3 methods below were GATED (safe
+//  no-op stubs) through the W906-Automation wave; this wave (W906-AutoPB, per
+//  DESIGN_automation_ProcessBuffer.md) replaced all three with real, golden-
+//  faithful bodies. Kept the original scope note below (now historical) for
+//  context on WHY these three were split into their own wave in the first
+//  place -- see the .cpp's own per-function AI(W906-AutoPB) comments for the
+//  full per-branch translation, the golden bug/quirk preservation list (P1-
+//  P18), and the 3 PORT-ONLY UB guards (D1-D3), all cross-referenced against
+//  the design doc.
+//    ProcessBuffer   (golden :951-1978,  ~1030 lines) -- the OLP command-
 //      dispatch ladder (~130 branch string literals: PP_LOAD_INQUIRE,
 //      HTMLJSON_INQUIRE, ACT_TEMP_INQUIRE, TRAY_INFO_INQUIRE, ... dozens more).
-//    ProcessBuffer1  (golden :1980-2045, ~66 lines)  -- PP_DL_REQUEST binary
+//    ProcessBuffer1  (golden :1980-2044, ~66 lines)  -- PP_DL_REQUEST binary
 //      file-receive sibling of the same ladder (writes a .zip via TCPstr).
-//    SendReportRequest (golden :2046-2131, ~86 lines) -- host EVENT/REPORT
+//    SendReportRequest (golden :2046-2130, ~86 lines) -- host EVENT/REPORT
 //      sender (ReportID 0001-0007 branches into GetProductivity/GetSortingCount/
 //      GetSocketCount/GetHeadCount etc).
-//  All three need the SAME byte-for-byte fidelity-review discipline the SML
-//  byte-decoder work got its own dedicated wave for (per this front's task
-//  brief) -- NOT folded in here just because SendReportRequest's own callees
-//  (auto9045.h's Get*/GetMainStatus) happen to already be translated. Noted
-//  for the next wave: SendReportRequest's dependency surface already looks
-//  fully ready (SendClient/SendServer, both real here, plus already-real
-//  auto9045.h accessors) -- a comparatively low-risk pickup candidate.
+//  NOTE (main-loop adjudication, W906-AutoPB): the once-planned 2-line
+//  btnConnectClick NULL/0-fidelity fix (design doc's D5 / §3.1-e) was pulled
+//  OUT of this wave for blame-isolation (to land as its own independent
+//  commit later) -- btnConnectClick's `!=0` comparisons are UNCHANGED by this
+//  wave. The NEW code these three methods introduce (ProcessBuffer's own
+//  entry guard + the two INITIATE_REQUEST edinputIP/edinputport comparisons)
+//  DOES use the AnsiString(0) fidelity form -- only the pre-existing shipped
+//  btnConnectClick lines were left alone.
 //
 //  NOT DECLARED AT ALL this wave (genuinely dead/unreachable from every
 //  in-scope method -- omitted rather than faked, matching this project's
@@ -282,14 +289,14 @@ public:
     TfAutomation(TComponent *Owner);
     void ShowCharHex(AnsiString S);
     void ShowRecord(bool bRead, AnsiString S, int iHandle);
-    // ---- GATED (deferred future wave -- see file-head note) ---------------
+    // ---- REAL as of W906-AutoPB (see file-head note) -----------------------
     void ProcessBuffer1();
     void ProcessBuffer(AnsiString Buffer, int iHandle);
     // -------------------------------------------------------------------
     void WriteTCPDataToTextFile();
     void SendClient(AnsiString S, AnsiString S2, int iHandle);
     void SendServer(AnsiString S, AnsiString S2);
-    // ---- GATED (deferred future wave -- see file-head note) ---------------
+    // ---- REAL as of W906-AutoPB (see file-head note) -----------------------
     void SendReportRequest(AnsiString ReportID, bool Standard = true);
     // -------------------------------------------------------------------
     void CommandProcess(AnsiString CMD, AnsiString V_TOTAL, AnsiString *Data,

@@ -8,6 +8,13 @@
 //                 note (in-scope method list, deferred bucket, omitted-widget
 //                 list, and the fAutomation/fAutomationEngine naming note).
 //
+//  Follow-up wave: W906-AutoPB (20260720) -- ProcessBuffer/ProcessBuffer1/
+//  SendReportRequest, the 3 methods this wave's own scope note originally
+//  deferred as safe no-op stubs, are now REAL (fully translated, ~1181 golden
+//  lines) -- see automation.h's own file-head note (now "TRANSLATED" rather
+//  than "EXPLICITLY DEFERRED") and each function's own AI(W906-AutoPB)
+//  comment for the per-branch decision log.
+//
 //  Big5: decoded via cp950 (python `open(path, encoding='cp950')`) before
 //  translation; reproduced here as correct UTF-8. Final gate: ZERO U+FFFD
 //  bytes (verified before hand-off).
@@ -63,6 +70,14 @@ extern void NewRecordProcess(AnsiString S1, AnsiString S2 = "", AnsiString S3 = 
 // visible unqualified in one TU, see KNOWLEDGE.md; this file avoids the
 // question entirely by not including that header).
 extern void MyDBIProcess(AnsiString S1, AnsiString S2);
+
+// ---- MySleep: golden common.h:261 (REAL definition: acarry_shims.cpp:153,
+// offline no-op). Redeclare the extern locally -- same reuse-not-duplicate
+// precedent as auto9045.cpp's own Gate #2 (auto9045.cpp:130) / CCLink/
+// MyCCLink.cpp / KYECFTP/FTPClient_Transfer.cpp / Interface/TesterTCP.cpp.
+// AI(W906-AutoPB) 20260720: added for ProcessBuffer's REPORT_INQUIRE branch
+// (golden :995 `MySleep(100);`).
+extern void MySleep(DWORD dwMilliseconds);
 
 // ---- LogClientSocketExceptionError: DEFERRED tree-wide ---------------------
 // Golden home Public/WinSocketErrorCode.h/.cpp explicitly documents this as
@@ -541,7 +556,7 @@ void TfAutomation::OLPServerClientRead(TObject * /*Sender*/, TCustomWinSocket *S
 
     if (bReceive)
     {
-        ProcessBuffer(TCPstr, iSocketHandle);   // GATED -- see automation.h file-head note //Sam 20200813 : 增加 Log debug //被動回傳
+        ProcessBuffer(TCPstr, iSocketHandle);   // REAL as of W906-AutoPB -- full OLP dispatch ladder //Sam 20200813 : 增加 Log debug //被動回傳
         bReceive = false;
 
         // 2011.09.05 , Joye , OLP ------------------------
@@ -694,7 +709,7 @@ void TfAutomation::tmrOLPTimer(TObject * /*Sender*/)   //主動回傳
 
     if (MainStatus != SysStatus)
     {
-        SendReportRequest("0001", bStandard);   // GATED -- see automation.h file-head note
+        SendReportRequest("0001", bStandard);   // REAL as of W906-AutoPB -- full OLP dispatch ladder
         SysStatus = MainStatus;
     }
 
@@ -772,7 +787,7 @@ void TfAutomation::tmrOLPTimer(TObject * /*Sender*/)   //主動回傳
             AnsiString sSubTCPstr = ReceiveString.SubString(StartPos, EndPos);
             ReceiveString.Delete(1, EndPos);
 
-            ProcessBuffer(sSubTCPstr, iSocketHandle);   // GATED -- see automation.h file-head note //Sam 20200813 : 增加 Log debug //被動回傳
+            ProcessBuffer(sSubTCPstr, iSocketHandle);   // REAL as of W906-AutoPB -- full OLP dispatch ladder //Sam 20200813 : 增加 Log debug //被動回傳
 
             if (ReceiveString.Length() > 0)
             {
@@ -860,11 +875,11 @@ void TfAutomation::btEventReportClick(TObject * /*Sender*/)
 
     if (CUSTOMER_CODE == CC_MTI || CUSTOMER_CODE == CC_PTI)   //Sam 20190429 : Add CC_PTI_NEWWORK
     {
-        SendReportRequest(cbbOLPCommand->Text, 0);   // GATED -- see automation.h file-head note
+        SendReportRequest(cbbOLPCommand->Text, 0);   // REAL as of W906-AutoPB -- full OLP dispatch ladder
     }
     else
     {
-        SendReportRequest(cbbOLPCommand->Text);   // GATED -- see automation.h file-head note
+        SendReportRequest(cbbOLPCommand->Text);   // REAL as of W906-AutoPB -- full OLP dispatch ladder
     }
 }
 //---------------------------------------------------------------------------
@@ -1139,40 +1154,1326 @@ void TfAutomation::DoCommandBuffer(AnsiString Command, AnsiString SubCommand, An
     CommandBuffer->Add(P1);
 }
 //---------------------------------------------------------------------------
+// AI(W906-AutoPB) 20260720: real translation, golden automation.cpp:1980-2044
+// (PP_DL_REQUEST binary file-receive sibling of ProcessBuffer's command-
+// dispatch ladder). Preserved golden quirk (P12, design §5.1): reads the
+// file-scope global `TCPstr`, NOT a parameter -- when reached via the
+// tmrOLPTimer leftover-data pump (rather than freshly off the wire), TCPstr
+// may be a stale prior frame at the moment this executes; not "fixed" here.
 void TfAutomation::ProcessBuffer1()
 {
-    // GATED (deferred future wave): golden body automation.cpp:1980-2045 --
-    // the PP_DL_REQUEST binary file-receive sibling of the ProcessBuffer OLP
-    // command-dispatch ladder (writes a received .zip via TCPstr byte-pair
-    // decoding). See automation.h's own file-head note. Safe no-op stub:
-    // this front's in-scope method set never calls ProcessBuffer1 (it has no
-    // in-scope caller at all -- declared here purely for class-shape
-    // fidelity with golden's header).
+    AnsiString Command, V_Total, Temp, ShowString, filename, filelength;
+    AnsiString Data[4];
+    int pos, ret = 0;
+    FILE *fs;
+
+    if (IsStartWord(TCPstr, STX))
+    {
+        ShowCharHex(TCPstr);
+        ShowString = stx;
+        pos = TCPstr.Pos('\x01');            //取得分隔符號位置
+        Command = TCPstr.SubString(1, pos - 1);   //取得Command
+        TCPstr.Delete(1, pos);                //刪除以擷取字串
+        ShowString = ShowString + AddBlock(Command) + soh;
+    }
+    else
+    {
+        Command = "";
+        return;
+    }
+
+    if (Command == "PP_DL_REQUEST")   //接收到Host傳送過來的壓縮檔
+    {
+        pos = TCPstr.Pos('\x01');
+        V_Total = TCPstr.SubString(1, pos - 1);
+        TCPstr.Delete(1, pos);   //取得資料筆數 並刪除已讀取字串
+        pos = TCPstr.AnsiPos('\x01');
+        sDLFileName = TCPstr.SubString(1, pos - 1);   //取得檔案名
+        // preserved golden quirk (P12/design §2 C-2): if sDLFileName has no
+        // ".zip" substring, Pos() returns 0 and Delete(0,4) is a documented
+        // BCB6/vclcompat 1-based no-op (index<1 -> no removal) -- not "fixed".
+        sDLFileName.Delete(sDLFileName.Pos(".zip"), 4);   //刪除附檔名
+        TCPstr.Delete(1, pos);   //刪除已讀取資料
+        pos = TCPstr.Pos('\x01');
+        filelength = TCPstr.SubString(1, pos - 1);   //取得檔案大小
+        TCPstr.Delete(1, pos);
+        ShowString = ShowString + AddBlock(V_Total) + soh + AddBlock(sDLFileName + ".zip") + soh + AddBlock(filelength);
+
+        int s;
+        AnsiString ddd;
+        filename = aDataPath + sDLFileName + ".zip";   //filename : 存放路徑
+        fs = fopen(filename.c_str(), "wb");   //開啟檔案
+        if (fs != NULL)   // 2009.07.30 , Joye
+        {
+            // preserved golden quirk (P11, design §5.1 -- "out-of-the-box
+            // broken" hex-pair decoder): `ddd="0x"+c1+c2` builds a string like
+            // "0x41", but atoi() does NOT parse a "0x" prefix (atoi stops at
+            // the first non-digit -- here, literally the 'x' right after
+            // the leading '0') -- so `s` is ALWAYS 0 regardless of the two
+            // hex-digit characters that follow. Every byte this loop ever
+            // fprintf's is therefore NUL (0x00): the .zip this writes out is
+            // golden-broken from the factory (all-zero bytes), not a
+            // translation defect. KYECFTP is the real-world file-transfer
+            // path customers actually use; this PP_DL path is legacy/
+            // unused. Not "fixed" here -- see design §5.1 P11.
+            for (int i = 0; i < (TCPstr.Length() - 2); i += 2)   //寫入檔案
+            {
+                ddd = "0x" + AnsiString(TCPstr.c_str()[i]) + AnsiString(TCPstr.c_str()[i + 1]);
+                s = atoi(ddd.c_str());
+                fprintf(fs, "%1c", s);
+            }
+            fclose(fs);   //關檔
+        }
+
+        ShowString = ShowString + soh + AddBlock(TCPstr) + etx;
+        ShowRecord(READ, ShowString, 0);
+
+        ret = DoDLRequest(sDLFileName);
+        if (ret == 0)
+            Data[0] = "0";
+        else
+            Data[0] = "1";
+        // preserved golden quirk (P13, design §5.1): 4th arg 0 -> Standard=
+        // false -> routes through SendServer (the OLPClient path), the
+        // OPPOSITE of every ProcessBuffer branch's bClient=true/SendClient --
+        // not "fixed" here.
+        CommandProcess("PP_DL_REPLY", 1, Data, 0);
+        TCPstr = "";
+        sDLFileName = "";
+    }
+    TCPstr = "";
 }
 //---------------------------------------------------------------------------
-void TfAutomation::ProcessBuffer(AnsiString /*Buffer*/, int /*iHandle*/)
+// AI(W906-AutoPB) 20260720: golden :949 `extern bool bLockByServer;` omitted
+// here -- this TU already has a real DEFINITION of the same symbol at this
+// file's own line ~48 (see that definition's own comment); redeclaring an
+// extern in the same TU as its own definition is legal C++ but adds nothing,
+// omitted for minimal diff. Kept for the record: golden line was
+// `extern bool bLockByServer;` immediately above ProcessBuffer.
+extern bool SoftStart;   // golden :950 -- dead declaration (design §5.1 P14):
+// the ONLY reference to this symbol anywhere in ProcessBuffer is the
+// commented-out `//SoftStart=true;` at golden :1572 (preserved below as a
+// comment, never executed). Real symbol home: cmydef.h:223/cmydef.cpp:288
+// (already visible via this file's own `#include "cmydef.h"`) -- this extern
+// is a harmless duplicate redeclaration, kept verbatim for golden shape
+// fidelity, not because anything here actually needs it.
+//---------------------------------------------------------------------------
+// AI(W906-AutoPB) 20260720: real translation, golden automation.cpp:951-1978
+// (the OLP command-dispatch ladder: ~60 *_INQUIRE branches + ~70 *_REQUEST
+// branches). See design doc DESIGN_automation_ProcessBuffer.md (W906-AutoPB)
+// for the full per-branch decision log; golden bugs/quirks are preserved
+// verbatim and flagged inline (P1-P18); the 3 PORT-ONLY UB guards (D1-D3) are
+// each flagged where they diverge from golden's literal (but undefined)
+// behavior.
+void TfAutomation::ProcessBuffer(AnsiString Buffer, int iHandle)   //Sam 20200813 : 增加 Log debug
 {
-    // GATED (deferred future wave): golden body automation.cpp:951-1979 --
-    // the ~1030-line OLP command-dispatch ladder (~130 branch string
-    // literals: PP_LOAD_INQUIRE, HTMLJSON_INQUIRE, ACT_TEMP_INQUIRE,
-    // TRAY_INFO_INQUIRE, ... dozens more). See automation.h's own file-head
-    // note. Safe no-op: does not parse/dispatch/reply. Both in-scope callers
-    // (OLPServerClientRead, tmrOLPTimer) tolerate a no-op here -- neither's
-    // OWN translated logic depends on this function actually doing anything
-    // (it only affects whether an OLP reply is ever sent back to the host).
+    int iType;
+    bool bClient = true;
+
+    // AI(W906-AutoPB) 20260720: golden `if(Buffer==NULL) return;` (:956) --
+    // rewritten as `AnsiString(0)` per this wave's NULL/0 BCB6-fidelity rule
+    // (design §2 definition B / §5.2 D4): vclcompat AnsiString's free-function
+    // `operator==(const AnsiString&, const char*)` binds a literal NULL/0 to
+    // the char* overload FIRST (standard conversion beats user conversion),
+    // comparing against "" -- but real BCB6 AnsiString has only the member
+    // `operator==(const AnsiString&)`, so NULL/0 there converts via
+    // AnsiString(int) and compares against the STRING "0". Writing
+    // AnsiString(0) explicitly reproduces the BCB6-correct comparison
+    // (verified by an independent compile experiment, design §1.2-4).
+    if (Buffer == AnsiString(0))   //如果Buffer是Null的話，就要跳開，不然會出現異常。
+        return;
+
+    AnsiString Command, V_Total, ShowString;
+    AnsiString Data[40];        //Sam 20200415 : fix 32 Site
+    int v_total;
+
+    ShowCharHex(Buffer);
+
+    if (IsStartWord(Buffer, STX))
+    {
+        ShowString = stx;
+        Command = SplitDataBySoh(Buffer);
+        ShowString = ShowString + AddBlock(Command);
+    }
+    else
+    {
+        Command = "";
+        return;
+    }
+
+    V_Total = SplitDataBySoh(Buffer);
+    ShowString = ShowString + soh + AddBlock(V_Total);
+    v_total = atoi(V_Total.c_str());
+
+    // AI(W906-AutoPB) 20260720: PORT-ONLY bounds guard (D1, design §2 C-4a) --
+    // golden loops to the wire-supplied v_total unchecked against
+    // `AnsiString Data[40]` (stack smash for v_total>40, UB). Guarded because
+    // vclcompat AnsiString makes the same overrun a hard crash (non-trivial,
+    // std::string-backed) where BCB6's stack layout might have "happened" to
+    // survive it. Observable delta exists ONLY inside golden-UB input space
+    // (hostile/corrupt frames); every legal OLP frame fits in 40 fields.
+    for (int i = 0; i < v_total && i < 40; i++)
+    {
+        Data[i] = SplitDataBySoh(Buffer);
+        ShowString = ShowString + soh + AddBlock(Data[i]);
+    }
+    ShowString = ShowString + etx;
+    ShowRecord(READ, ShowString, iHandle);   //Sam 20200813 : 增加 Log debug
+
+    if (Command.Pos("INQUIRE") != 0)   // preserved golden quirk (P1): SUBSTRING
+                                        // match -- any Command containing
+                                        // "INQUIRE" anywhere enters this ladder,
+                                        // not just a trailing "_INQUIRE" suffix.
+    {
+        if (Command == "REPORT_INQUIRE")
+        {
+            Data[0] = 0;
+            CommandProcess("REPORT_GRANT", 1, Data, bClient, iHandle);   //Sam 20200813 : 增加 Log debug
+            MySleep(100);           //Steven 20110902 : 動作太快可能只會做其中一個,所以要Delay一下
+            SendReportRequest(Data[2]);   // preserved golden quirk (P15): if
+                                           // v_total<3 the wire never supplied
+                                           // a 3rd field, so Data[2] is "" ->
+                                           // SendReportRequest's unknown-ID path.
+        }
+        else
+        {
+            TCPstr = "";   // preserved golden quirk (P16): clears the file-scope
+                            // global TCPstr on entry to the generic-INQUIRE path,
+                            // independent of ProcessBuffer1's own use of TCPstr.
+            int iInquire = 0;
+            AnsiString CMD = Command;
+            CMD.Delete(CMD.Length() - 6, 7);
+            CMD += "GRANT";
+
+            if (Command == "PP_LOAD_INQUIRE")
+            {
+                if (CheckCanChangeRealDummy())
+                {
+                    Data[0] = "0";
+                }
+                else
+                {
+                    Data[0] = "1";
+                }
+                iInquire = 1;
+            }
+            else if (Command == "HTMLJSON_INQUIRE")
+            {
+                Data[0] = GetHTMLJSONDatas();
+                iInquire = 2;
+            }
+            else if (Command == "VERSION_INQUIRE")
+            {
+                Data[0] = GetSoftwareVersion();
+                iInquire = 2;
+            }
+            else if (Command == "ACT_TEMP_INQUIRE")
+            {
+                for (int i = 0; i < 10; i++)
+                    Data[i] = GetActTemp(i);
+                Data[10] = "0";
+                iInquire = 11;
+            }
+            else if (Command == "TRAY_INFO_INQUIRE")
+            {
+                iInquire = GetTrayForm(Data) + 1;
+            }
+            else if (Command == "HANDMODE_INQUIRE")
+            {
+                iInquire = GetHandMode(Data) + 1;
+            }
+            else if (Command == "PLATE_INFO_INQUIRE")
+            {
+                iInquire = GetPlateForm(Data) + 1;
+            }
+            else if (Command == "SETUP_FILE_NAME_INQUIRE")
+            {
+                Data[0] = GetSetUpFileName();
+                iInquire = 2;
+            }
+            else if (Command == "JAM_COUNT_INQUIRE")
+            {
+                Data[0] = GetJamCount();
+                iInquire = 2;
+            }
+            else if (Command == "CATEGORY_INQUIRE")
+            {
+                iInquire = GetCategory(Data) + 1;
+            }
+            else if (Command == "BINDEFINE_INQUIRE")       //Sam 20230803 : 新增OLP指令
+            {
+                iInquire = GetBindefine(Data) + 1;
+            }
+            else if (Command == "FIXTRAYDEFINE_INQUIRE")   //Sam 20230921 : 新增 FixTray 指令
+            {
+                iInquire = GetFixTrayDefine(Data) + 1;
+            }
+            else if (Command == "MAPPING_INQUIRE")
+            {
+                iInquire = GetMapping(Data) + 1;
+            }
+            else if (Command == "DUT_INQUIRE")
+            {
+                iInquire = GetDutOnOff(Data) + 1;
+            }
+            else if (Command == "SOAK_TIME_INQUIRE")
+            {
+                Data[0] = GetSoakTime();
+                iInquire = 2;
+            }
+            else if (Command == "TEMPERATURE_INQUIRE")
+            {
+                Data[0] = GetTemperature();
+                iInquire = 2;
+            }
+            else if (Command == "TEMPMODE_INQUIRE")
+            {
+                Data[0] = GetTempMode();
+                iInquire = 2;
+            }
+            else if (Command == "CONNECTION_INQUIRE")
+            {
+                Data[0] = GetTesterConnect();
+                iInquire = 2;
+            }
+            else if (Command == "TESTMODE_INQUIRE")
+            {
+                Data[0] = GetTesterMode();
+                iInquire = 2;
+            }
+            else if (Command == "AlarmMode_INQUIRE")
+            {
+            }
+            else if (Command == "AllSiteFail_INQUIRE")
+            {
+            }
+            else if (Command == "ByHeadFail_INQUIRE")
+            {
+            }
+            else if (Command == "ByBinAll_INQUIRE")
+            {
+            }
+            else if (Command == "SetSiteYield_INQUIRE")
+            {
+            }
+            else if (Command == "BinOverLimitSelec_INQUIRE")
+            {
+            }
+            else if (Command == "BinOverLimitSet_INQUIRE")
+            {
+            }
+            else if (Command == "BinOverCountSet_INQUIRE")
+            {
+            }
+            else if (Command == "SetAutoHeight_INQUIRE")
+            {
+                Data[0] = GetAutoHeight(0);
+                Data[1] = GetAutoHeight(1);
+                iInquire = 3;
+            }
+            else if (Command == "SetContactOffset_INQUIRE")
+            {
+                Data[0] = GetContactOffset(0);
+                Data[1] = GetContactOffset(1);
+                iInquire = 3;
+            }
+            else if (Command == "SetContactTestMode_INQUIRE")
+            {
+                Data[0] = GetContactTestMode();
+                iInquire = 2;
+            }
+            else if (Command == "SetSecondSpeed_INQUIRE")
+            {
+                Data[0] = GetSecondSpeed();
+                iInquire = 2;
+            }
+            else if (Command == "SetContactWaitHeight_INQUIRE")
+            {
+                Data[0] = GetContactWaitHeight();
+                iInquire = 2;
+            }
+            else if (Command == "SetDropHeight_INQUIRE")
+            {
+                // preserved golden quirk (P2, design §5.1): the SECOND
+                // GetDropHeight(1) result is written to Data[0] again (a
+                // literal typo in golden -- should be Data[1]) -- this
+                // OVERWRITES GetDropHeight(0) rather than filling a second
+                // field. Combined with the trailing Data[iInquire-1]="0"
+                // append below, the reply's 2nd field ends up "0" (the
+                // append) with the FIRST field carrying GetDropHeight(1),
+                // and GetDropHeight(0)'s result is lost entirely. Not "fixed".
+                Data[0] = GetDropHeight(0);
+                Data[0] = GetDropHeight(1);
+                iInquire = 3;
+            }
+            else if (Command == "SetReleaseWait_INQUIRE")
+            {
+                Data[0] = GetReleaseWait();
+                iInquire = 2;
+            }
+            else if (Command == "SetShuttlePickOffset_INQUIRE")
+            {
+                // preserved golden quirk (P2): same double-write-to-Data[0]
+                // pattern as SetDropHeight_INQUIRE above -- not "fixed".
+                Data[0] = GetShuttlePickOffset(0);
+                Data[0] = GetShuttlePickOffset(1);
+                iInquire = 3;
+            }
+            else if (Command == "ShuttlePickHeight_INQUIRE")
+            {
+                // preserved golden quirk (P2): same pattern -- not "fixed".
+                Data[0] = GetShuttlePickHeight(0);
+                Data[0] = GetShuttlePickHeight(1);
+                iInquire = 3;
+            }
+            else if (Command == "ShuttleReleaseHeight_INQUIRE")
+            {
+                // preserved golden quirk (P2): same pattern -- not "fixed".
+                Data[0] = GetShuttleReleaseHeight(0);
+                Data[0] = GetShuttleReleaseHeight(1);
+                iInquire = 3;
+            }
+            else if (Command == "ArmTotalForce_INQUIRE ")   // preserved golden
+                // quirk (P3, design §5.1): literal TRAILING SPACE in this string
+                // literal -- no real incoming "ArmTotalForce_INQUIRE" command
+                // (without the trailing space) can ever match this branch; it
+                // always falls through to the unknown-INQUIRE path below. Kept
+                // exactly as golden wrote it (including the space), not "fixed".
+            {
+                // preserved golden quirk (P2, dead code due to P3 above): same
+                // double-write-to-Data[0] pattern -- not "fixed".
+                Data[0] = GetArmTotalForce(0);
+                Data[0] = GetArmTotalForce(1);
+                iInquire = 3;
+            }
+            else if (Command == "ClinderForce_INQUIRE")
+            {
+                // preserved golden quirk (P2): same pattern -- not "fixed".
+                Data[0] = GetClinderForce(0);
+                Data[0] = GetClinderForce(1);
+                iInquire = 3;
+            }
+            else if (Command == "ForcePerDevice_INQUIRE")
+            {
+                // preserved golden quirk (P2): same pattern -- not "fixed".
+                Data[0] = GetForcePerDevice(0);
+                Data[0] = GetForcePerDevice(1);
+                iInquire = 3;
+            }
+            else if (Command == "SetNoPerPin_INQUIRE")
+            {
+                Data[0] = GetSetNoPerPin();
+                iInquire = 2;
+            }
+            else if (Command == "SetForcePerPin_INQUIRE")
+            {
+                Data[0] = GetForcePerPin();
+                iInquire = 2;
+            }
+            else if (Command == "SetContactForcen_INQUIRE")
+            {
+                Data[0] = GetContactForcen();
+                iInquire = 2;
+            }
+            else if (Command == "GetStartPos_INQUIRE")
+            {
+                // preserved golden quirk (P2): same pattern -- not "fixed".
+                Data[0] = GetStartPos(0);
+                Data[0] = GetStartPos(1);
+                iInquire = 3;
+            }
+            else if (Command == "GetDivision_INQUIRE")
+            {
+                // preserved golden quirk (P2): same pattern -- not "fixed".
+                Data[0] = GetDivision(0);
+                Data[0] = GetDivision(1);
+                iInquire = 3;
+            }
+            else if (Command == "GetDimemsion_INQUIRE")
+            {
+                iInquire = GetDimemsion(Data) + 1;
+            }
+            else if (Command == "GetZThickness_INQUIRE")
+            {
+                Data[0] = GetZThickness();
+                iInquire = 2;
+            }
+            else if (Command == "SetTrayType_INQUIRE")
+            {
+                Data[0] = GetTrayType();
+                iInquire = 2;
+            }
+            else if (Command == "GetPitch_INQUIRE")
+            {
+                // preserved golden quirk (P4, design §5.1): fills Data[0..1]
+                // but iInquire=2 -- the trailing Data[iInquire-1]="0" append
+                // below (Data[1]="0") OVERWRITES GetPitch(1)'s result. Not "fixed".
+                Data[0] = GetPitch(0);
+                Data[1] = GetPitch(1);
+                iInquire = 2;
+            }
+            // preserved golden quirk (P6, design §5.1): this exact commented-
+            // out block (superseded by the real GetIP_INQUIRE/GetPort_INQUIRE/
+            // GetCusCode_INQUIRE branches further below, near golden :1468) is
+            // kept as a comment for shape fidelity -- not resurrected.
+            //            else if(Command=="GetIP_INQUIRE")
+            //            {
+            //                Data[0]=GetIP(Data);
+            //                iInquire=2;
+            //            }
+            //            else if(Command=="GetPort_INQUIRE")
+            //            {
+            //                Data[0]=GetPort(Data);
+            //                iInquire=2;
+            //            }
+            //            else if(Command=="GetCusCode_INQUIRE")
+            //            {
+            //                Data[0]=GetCusCode(Data);
+            //                iInquire=2;
+            //            }
+            //Sam 20190802 : Add New OLP For HT9045
+            //==>
+            else if (Command == "LowYield_INQUIRE")
+            {
+                iInquire = GetLowYield(Data) + 1;
+            }
+            else if (Command == "ByArmPerSiteDiffYield_INQUIRE")
+            {
+                iInquire = GetByArmPerSiteDiffYield(Data) + 1;
+            }
+            else if (Command == "ConsecutiveFailureAlarmByHead_INQUIRE")
+            {
+                iInquire = GetConsecutiveFailureAlarmByHead(Data) + 1;
+            }
+            else if (Command == "ConsecutiveFailureAlarmBySocket_INQUIRE")
+            {
+                iInquire = GetConsecutiveFailureAlarmBySocket(Data) + 1;
+            }
+            else if (Command == "AllSiteFailFor9045_INQUIRE")
+            {
+                iInquire = GetAllSiteFailFor9045(Data) + 1;
+            }
+            else if (Command == "TrayFormTypeInfo_INQUIRE")
+            {
+                iType = atoi(Data[0].c_str());
+                iInquire = GetTrayFormTypeInfo(Data, iType) + 1;
+            }
+            else if (Command == "TrayFormTypeThickness_INQUIRE")
+            {
+                iType = atoi(Data[0].c_str());
+                iInquire = GetTrayFormTypeThickness(Data, iType) + 1;
+            }
+            else if (Command == "TrayFormTypePickUp_INQUIRE")
+            {
+                iType = atoi(Data[0].c_str());
+                iInquire = GetTrayFormTypePickUp(Data, iType) + 1;
+            }
+            else if (Command == "TrayFormTypeName_INQUIRE")
+            {
+                iType = atoi(Data[0].c_str());
+                iInquire = GetTrayFormTypeName(Data, iType) + 1;
+            }
+            else if (Command == "ContactModeFor9045_INQUIRE")
+            {
+                iInquire = GetContactModeFor9045(Data) + 1;
+            }
+            else if (Command == "ContactVacuumMode_INQUIRE")
+            {
+                iInquire = GetContactVacuumMode(Data) + 1;
+            }
+            else if (Command == "ContactDropWait_INQUIRE")
+            {
+                iInquire = GetContactDropWait(Data) + 1;
+            }
+            else if (Command == "SlowContactSpeed_INQUIRE")
+            {
+                iInquire = GetSlowContactSpeed(Data) + 1;
+            }
+            else if (Command == "ShuttleWaitOutSideCamber_INQUIRE")
+            {
+                iInquire = GetShuttleWaitOutSideCamber(Data) + 1;
+            }
+            else if (Command == "PickShuttleDeviceAfterTested_INQUIRE")
+            {
+                iInquire = GetPickShuttleDeviceAfterTested(Data) + 1;
+            }
+            else if (Command == "PickShuttleDeviceThenWaitOnShuttle_INQUIRE")
+            {
+                iInquire = GetPickShuttleDeviceThenWaitOnShuttle(Data) + 1;
+            }
+            else if (Command == "PickShuttleDeviceTogetherFor32SiteN_INQUIRE")
+            {
+                iInquire = GetPickShuttleDeviceTogetherFor32SiteN(Data) + 1;
+            }
+            else if (Command == "IndexArm1Height_INQUIRE")
+            {
+                iInquire = GetIndexArm1Height(Data) + 1;
+            }
+            else if (Command == "IndexArm2Height_INQUIRE")
+            {
+                iInquire = GetIndexArm2Height(Data) + 1;
+            }
+            else if (Command == "TestICCheckMode_INQUIRE")
+            {
+                iInquire = GetTestICCheckMode(Data) + 1;
+            }
+            else if (Command == "AboveSocket_INQUIRE")
+            {
+                iInquire = GetAboveSocket(Data) + 1;
+            }
+            else if (Command == "ContactForceInfo_INQUIRE")
+            {
+                iInquire = GetContactForceInfo(Data) + 1;
+            }
+            else if (Command == "HotPlateFormName_INQUIRE")
+            {
+                iInquire = GetHotPlateFormName(Data) + 1;
+            }
+            else if (Command == "HotPlate1_INQUIRE")
+            {
+                iInquire = GetHotPlate1(Data) + 1;
+            }
+            else if (Command == "HotPlate2_INQUIRE")
+            {
+                iInquire = GetHotPlate2(Data) + 1;
+            }
+            else if (Command == "InterfaceType_INQUIRE")
+            {
+                iInquire = GetInterfaceType(Data) + 1;
+            }
+            else if (Command == "TesterInitialMaximumTest_INQUIRE")
+            {
+                iInquire = GetTesterInitialMaximumTest(Data) + 1;
+            }
+            else if (Command == "TesterMaximumTest_INQUIRE")
+            {
+                iInquire = GetTesterMaximumTest(Data) + 1;
+            }
+            else if (Command == "TesterDummyTest_INQUIRE")
+            {
+                iInquire = GetTesterDummyTest(Data) + 1;
+            }
+            else if (Command == "TesterStartDelay_INQUIRE")
+            {
+                iInquire = GetTesterStartDelay(Data) + 1;
+            }
+            else if (Command == "HotSoakTime_INQUIRE")
+            {
+                iInquire = GetHotSoakTime(Data) + 1;
+            }
+            else if (Command == "HotJamSoakTime_INQUIRE")
+            {
+                iInquire = GetHotJamSoakTime(Data) + 1;
+            }
+            else if (Command == "HotInitialWaitTime_INQUIRE")
+            {
+                iInquire = GetHotInitialWaitTime(Data) + 1;
+            }
+            else if (Command == "HotInitialStart1Time_INQUIRE")
+            {
+                iInquire = GetHotInitialStart1Time(Data) + 1;
+            }
+            else if (Command == "HotShuttleSoakTime_INQUIRE")
+            {
+                iInquire = GetHotShuttleSoakTime(Data) + 1;
+            }
+            else if (Command == "ChamberCoolingTemp_INQUIRE")
+            {
+                iInquire = GetChamberCoolingTemp(Data) + 1;
+            }
+            else if (Command == "HotIndexSoakTime_INQUIRE")
+            {
+                iInquire = GetHotIndexSoakTime(Data) + 1;
+            }
+            else if (Command == "HotOpenShortTime_INQUIRE")
+            {
+                iInquire = GetHotOpenShortTime(Data) + 1;
+            }
+            else if (Command == "HotZ1Down_INQUIRE")
+            {
+                iInquire = GetHotZ1Down(Data) + 1;
+            }
+            else if (Command == "HotShuttleSoakMode_INQUIRE")
+            {
+                iInquire = GetHotShuttleSoakMode(Data) + 1;
+            }
+            else if (Command == "MachineTempMode_INQUIRE")
+            {
+                iInquire = GetMachineTempMode(Data) + 1;
+            }
+            else if (Command == "AmbientCheck_INQUIRE")
+            {
+                iInquire = GetAmbientCheck(Data) + 1;
+            }
+            else if (Command == "AmbientCheckTemp_INQUIRE")
+            {
+                iInquire = GetAmbientCheckTemp(Data) + 1;
+            }
+            else if (Command == "TempeartureOffset_INQUIRE")
+            {
+                iInquire = GetTemperatureOffset(Data) + 1;
+            }
+            else if (Command == "ContactCountForOffsetPeriod_INQUIRE")
+            {
+                iInquire = GetContactCountForOffsetPeriod(Data) + 1;
+            }
+            else if (Command == "ContactCountForCoolDown_INQUIRE")
+            {
+                iInquire = GetContactCountForCoolDown(Data) + 1;
+            }
+            else if (Command == "InterfaceDIOInfo_INQUIRE")
+            {
+                iInquire = GetInterfaceDIOInfo(Data) + 1;
+            }
+            else if (Command == "InterfaceGPIBInfo_INQUIRE")
+            {
+                iInquire = GetInterfaceGPIBInfo(Data) + 1;
+            }
+            else if (Command == "InterfaceRS232Info_INQUIRE")
+            {
+                iInquire = GetInterfaceRS232Info(Data) + 1;
+            }
+            else if (Command == "LotInfo_INQUIRE")
+            {
+                iInquire = GetLotInfo(Data) + 1;
+            }
+            else if (Command == "GetIP_INQUIRE")
+            {
+                iInquire = GetIP(Data) + 1;
+            }
+            else if (Command == "GetPort_INQUIRE")
+            {
+                iInquire = GetPort(Data) + 1;
+            }
+            else if (Command == "GetCusCode_INQUIRE")
+            {
+                iInquire = GetCusCode(Data) + 1;
+            }
+            else if (Command == "StartMode_INQUIRE")   //Sam 20221212 : 新增 StartMode 指令
+            {
+                iInquire = GetStartMode(Data) + 1;
+            }
+            else if (Command == "LOTTOTAL_INQUIRE")    //Sam 20230803 : 新增OLP指令
+            {
+                iInquire = GetLotTotal(Data) + 1;
+            }
+
+            // AI(W906-AutoPB) 20260720: PORT-ONLY guard (D2, design §2 C-4b) --
+            // golden `if(iInquire!=1) Data[iInquire-1]="0";` writes Data[-1]
+            // (UB) whenever iInquire is still 0: the 8 empty *_INQUIRE
+            // branches above (AlarmMode_INQUIRE etc.), the unreachable
+            // ArmTotalForce_INQUIRE-with-trailing-space branch (P3), and any
+            // genuinely unknown Command all leave iInquire at its initial 0.
+            // BCB6 happened to hit an adjacent stack AnsiString there; under
+            // vclcompat's non-trivial AnsiString this is a near-certain
+            // crash. Guarded to the most conservative concrete outcome for
+            // this input space: skip the append entirely, so CommandProcess
+            // below is called with iInquire==0 (V_TOTAL="0", zero data
+            // fields) -- a legal, if empty, GRANT frame. Delta exists ONLY
+            // inside this golden-UB input space (design §5.2 D2).
+            if (iInquire != 1 && iInquire >= 1)
+                Data[iInquire - 1] = "0";
+            CommandProcess(CMD, iInquire, Data, bClient, iHandle);
+        }
+    }
+    else if (Command == "ON_LINE_REQUEST")  // 2008/05/23
+    {
+        DoOnLineReply(Data);
+        if (CUSTOMER_CODE == CC_MTI || CUSTOMER_CODE == CC_PTI)  //Sam 20190429 : Add CC_PTI_NEWWORK
+        {
+            CommandProcess("ON_LINE_REPLY", 5, Data, bClient, iHandle);//for sback
+        }
+        else
+        {
+            CommandProcess("ON_LINE_REPLY", 4, Data, bClient, iHandle);
+        }
+    }
+    else if (Command == "INITIATE_REQUEST")  //2008/05/23
+    {
+        SYSTEMTIME SysTime;
+        SysTime.wYear   = atoi(Data[0].SubString(1,  4).c_str());
+        SysTime.wMonth  = atoi(Data[0].SubString(5,  2).c_str());
+        SysTime.wDay    = atoi(Data[0].SubString(7,  2).c_str());
+        SysTime.wHour   = atoi(Data[0].SubString(9,  2).c_str());
+        SysTime.wMinute = atoi(Data[0].SubString(11, 2).c_str());
+        SysTime.wSecond = atoi(Data[0].SubString(13, 2).c_str());
+        SysTime.wMilliseconds = 0;
+        SetLocalTime(&SysTime);
+
+        Data[0] = 0;
+
+        if (CUSTOMER_CODE == CC_MTI || CUSTOMER_CODE == CC_PTI)                      //2016.03.24 , Brian   Add CC_PTI_NEWWORK
+        {
+           fMain->Home("TfAutomation::ProcessBuffer");
+        }
+        CommandProcess("INITIATE_REPLY", 1, Data, bClient, iHandle);
+        //Sam 20190429 : Add CC_PTI_NEWWORK
+        if (CUSTOMER_CODE == CC_MTI || CUSTOMER_CODE == CC_PTI)
+        {
+            OLPServer->Close();
+            OnLine->Enabled = false;
+
+            ShowOLPState(0);
+            btnConnect->Enabled = true;
+
+            // AI(W906-AutoPB) 20260720: NULL/0 BCB6-fidelity rule (design §2
+            // definition B / §5.2 D4/P18) applied to these two NEW comparisons
+            // -- same rationale as the Buffer==AnsiString(0) guard at entry.
+            if (edinputIP->Text != AnsiString(0))
+                OLPClient->Address = edinputIP->Text;
+            if (edinputport->Text != AnsiString(0))
+                OLPClient->Port = edinputport->Text.ToInt();
+            try
+            {
+                btnConnect->Enabled = false;
+                OLPServer->Open();
+                OLPServer->Active = true;
+                ShowOLPState(1);//Hsiong 2015.04.16 Add CC_MTI_NEWWORK
+            }
+            catch (...)
+            {
+                MyDBIProcess("Exception", "TfAutomation::ProcessBuffer");
+            }
+        }
+    }
+    else if (Command == "PAUSE_REQUEST")
+    {
+        bLockByServer = true;
+        SoftStop = true;
+
+        Data[0] = 0;
+        CommandProcess("PAUSE_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "RESUME_REQUEST")
+    {
+        bLockByServer = false;
+        // preserved golden quirk (P8, design §5.1): RESUME does NOT clear
+        // SoftStop (only PAUSE_REQUEST's bLockByServer is undone) -- not "fixed".
+
+        Data[0] = 0;
+        CommandProcess("RESUME_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "START_REQUEST")
+    {
+        if (fMain->palMainStatus->Caption == "HALT" && SystemStart == false)         //Sam 20240125 : 只能在閒置時啟動
+        {
+            MyDBIProcess("Message", "Automation Command Start succeed!!");
+            fMain->Start("TfAutomation::ProcessBuffer");
+            //SoftStart=true;
+        }
+        else
+        {
+            MyDBIProcess("Message", "Automation Command Start fail!!");
+        }
+        Data[0] = 0;
+        CommandProcess("START_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "PAUSE_REQUEST")
+    // preserved golden quirk (P7, design §5.1): a SECOND, unreachable
+    // `else if(Command=="PAUSE_REQUEST")` -- the first PAUSE_REQUEST branch
+    // (above, right after ON_LINE_REQUEST) always matches first, so this
+    // entire block is dead code. It ALSO replies with "START_REPLY" (not
+    // "PAUSE_REPLY"), which would be wrong even if it were ever reached.
+    // Not "fixed" -- kept verbatim for golden shape fidelity.
+    {
+        if (SystemStart == true)                                                   //Sam 20240125 : 只能在閒置時啟動
+        {
+            MyDBIProcess("Message", "Automation Command PAUSE succeed!!");
+            fMain->Pause("TfAutomation::ProcessBuffer");
+        }
+        else
+        {
+            MyDBIProcess("Message", "Automation Command PAUSE fail!!");
+        }
+        Data[0] = 0;
+        CommandProcess("START_REPLY", 1, Data, bClient, iHandle);
+    }
+  #ifdef DEBUG_DUTONOFF
+    else if (Command == "CLEANOUT_REQUEST")
+    {
+        iCleanOut = 1;
+        bCleanOut = true;
+        Data[0] = 0;
+//        CommandProcess("CLEANOUT_REPLY",1,Data);
+    }
+    else if (Command == "HOMEANDSTART_REQUEST")
+    {
+        DoHomeAndStart();
+
+        Data[0] = 0;
+        CommandProcess("CLEANOUT_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "ONECYCLE_REQUEST")
+    {
+        DoOneCycle();
+        Data[0] = 0;
+        bOneCycle = true;
+
+//        CommandProcess("ONECYCLE_REPLY",1,Data);
+    }
+    #endif
+    else if (Command == "CLEAR_REPORT_REQUEST")
+    {
+        int iSwitchCase = 0;
+        for (int i = 0; i < v_total; i++)
+        {
+            // preserved golden quirk (P9, design §5.1): reads Data[0] on EVERY
+            // iteration of this loop, never Data[i] -- so only the first
+            // supplied report-code field is ever consulted, v_total-1 times
+            // over (with no effect beyond the first pass, since
+            // DoClearReportRequest is presumably idempotent per code). Not "fixed".
+            iSwitchCase = atoi(Data[0].c_str());
+            DoClearReportRequest(iSwitchCase);
+        }
+
+        Data[0] = 0;
+        CommandProcess("CLEAR_REPORT_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "PP_UL_REQUEST")                                           //把工作檔送給HOST
+    {
+        DoULRequest(Data);
+        CommandProcess("PP_UL_REPLY", 4, Data, bClient, iHandle);
+    }
+    else if (Command == "PP_DL_REQUEST")                                           //收到檔案並解壓縮
+    {
+        ProcessBuffer1();
+    }
+    else if (Command == "CATEGORY_REQUEST")
+    {
+        NewRecordProcess("", "CATEGORY_REQUEST", ShowString);                     //Sam 20230803 : 客戶設定 Bin 要特別紀錄
+        Data[0] = SetCategory(Data);
+        if (atoi(Data[0].c_str()) >= 3)                                            //Sam 20230921 : Bin 設定錯誤不能啟動
+            LastSet.OLPSetBinErr[0] = atoi(Data[0].c_str());
+        else
+            LastSet.OLPSetBinErr[0] = 0;
+
+        CommandProcess("CATEGORY_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "BINDEFINE_REQUEST")                                       //Sam 20230803 : 新增OLP指令
+    {
+        NewRecordProcess("", "BINDEFINE_REQUEST", ShowString);                    //Sam 20230803 : 客戶設定 Bin 要特別紀錄
+        Data[0] = SetBinDefine(Data);
+        if (atoi(Data[0].c_str()) >= 3)                                            //Sam 20230921 : Bin 設定錯誤不能啟動
+            LastSet.OLPSetBinErr[1] = atoi(Data[0].c_str());
+        else
+            LastSet.OLPSetBinErr[1] = 0;
+
+        CommandProcess("BINDEFINE_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "FIXTRAYDEFINE_REQUEST")                                   //Sam 20230921 : 新增 FixTray 指令
+    {
+        NewRecordProcess("", "FIXTRAYDEFINE_REQUEST", ShowString);
+        Data[0] = SetFixTrayDefine(Data);
+        if (atoi(Data[0].c_str()) >= 3)    //Sam 20230921 : Bin 設定錯誤不能啟動
+            LastSet.OLPSetBinErr[2] = atoi(Data[0].c_str());
+        else
+            LastSet.OLPSetBinErr[2] = 0;
+
+        CommandProcess("FIXTRAYDEFINE_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "MAPPING_REQUEST")
+    {
+        if (CheckNeedCleanOut() == false)
+        {
+            Data[0] = AnsiString(SetMapping(Data));
+        }
+        else
+        {
+            Data[0] = "1";
+        }
+        CommandProcess("MAPPING_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "DUT_REQUEST")
+    {
+        if (CheckNeedCleanOut() == false)
+        {
+            Data[0] = AnsiString(SetDutOnOff(Data));
+        }
+        else
+        {
+            Data[0] = "1";
+        }
+        CommandProcess("DUT_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "SOAK_TIME_REQUEST")
+    {
+        if (CheckNeedCleanOut() == false)
+        {
+            SetSoakTime(Data);
+            Data[0] = "0";
+        }
+        else
+        {
+            Data[0] = "1";
+        }
+        CommandProcess("SOAK_TIME_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "TEMPERATURE_REQUEST")
+    {
+        if (CheckNeedCleanOut() == false)
+        {
+            SetTemperature(Data);
+            Data[0] = "0";
+        }
+        else
+        {
+            Data[0] = "1";
+        }
+        CommandProcess("TEMPERATURE_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "TEMPMODE_REQUEST")
+    {
+        if (CheckNeedCleanOut() == false)
+        {
+            SetTempMode(Data);
+            Data[0] = "0";
+        }
+        else
+        {
+            Data[0] = "1";
+        }
+        CommandProcess("TEMPMODE_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "CONNECTION_REQUEST")
+    {
+        if (CheckNeedCleanOut() == false)
+        {
+            Data[0] = SetTesterConnect(Data);
+        }
+        else
+        {
+            Data[0] = "1";
+        }
+        CommandProcess("CONNECTION_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "TESTMODE_REQUEST")
+    {
+        if (CheckNeedCleanOut() == false)
+        {
+            Data[0] = SetTesterMode(Data);
+        }
+        else
+        {
+            Data[0] = "1";
+        }
+        CommandProcess("TESTMODE_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "SETUP_FILE_NAME_REQUEST")
+    {
+        if (CheckNeedCleanOut() == false)
+        {
+            Data[0] = SetSetUpFileName(Data);
+        }
+        else
+        {
+            Data[0] = "1";
+        }
+        CommandProcess("SETUP_FILE_NAME_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "AlarmMode_REQUEST")
+    {
+    }
+    else if (Command == "AllSiteFail_REQUEST")
+    {
+    }
+    else if (Command == "ByHeadFail_REQUEST")
+    {
+    }
+    else if (Command == "ByBinAll_REQUEST")
+    {
+    }
+    else if (Command == "SetSiteYield_REQUEST")
+    {
+    }
+    else if (Command == "BinOverLimitSelec_REQUEST")
+    {
+    }
+    else if (Command == "BinOverLimitSet_REQUEST")
+    {
+    }
+    else if (Command == "BinOverCountSet_REQUEST")
+    {
+    }
+    else if (Command == "SetContactTestMode_REQUEST")
+    {
+    }
+    else if (Command == "SetDropHeight_REQUEST")
+    {
+    }
+    else if (Command == "SetReleaseWait_REQUEST")
+    {
+    }
+    else if (Command == "LowYield_REQUEST")
+    {
+        Data[0] = SetLowYield(Data);
+        CommandProcess("LowYield_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "ByArmPerSiteDiffYield_REQUEST")
+    {
+        Data[0] = SetByArmPerSiteDiffYield(Data);
+        CommandProcess("ByArmPerSiteDiffYield_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "ConsecutiveFailureAlarmByHead_REQUEST")
+    {
+        Data[0] = SetConsecutiveFailureAlarmByHead(Data);
+        CommandProcess("ConsecutiveFailureAlarmByHead_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "ConsecutiveFailureAlarmBySocket_REQUEST")
+    {
+        Data[0] = SetConsecutiveFailureAlarmBySocket(Data);
+        CommandProcess("ConsecutiveFailureAlarmBySocket_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "AllSiteFailFor9045_REQUEST")
+    {
+        Data[0] = SetAllSiteFailFor9045(Data);
+        CommandProcess("AllSiteFailFor9045_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "ContactModeFor9045_REQUEST")
+    {
+        Data[0] = SetContactModeFor9045(Data);
+        CommandProcess("ContactModeFor9045_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "ContactVacuumMode_REQUEST")
+    {
+        Data[0] = SetContactVacuumMode(Data);
+        CommandProcess("ContactVacuumMode_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "ContactDropWait_REQUEST")
+    {
+        Data[0] = SetContactDropWait(Data);
+        CommandProcess("ContactDropWait_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "SlowContactSpeed_REQUEST")
+    {
+        Data[0] = SetSlowContactSpeed(Data);
+        CommandProcess("SlowContactSpeed_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "ShuttleWaitOutSideCamber_REQUEST")
+    {
+        Data[0] = SetShuttleWaitOutSideCamber(Data);
+        CommandProcess("ShuttleWaitOutSideCamber_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "PickShuttleDeviceAfterTested_REQUEST")
+    {
+        Data[0] = SetPickShuttleDeviceAfterTested(Data);
+        CommandProcess("PickShuttleDeviceAfterTested_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "PickShuttleDeviceThenWaitOnShuttle_REQUEST")
+    {
+        Data[0] = SetPickShuttleDeviceThenWaitOnShuttle(Data);
+        CommandProcess("PickShuttleDeviceThenWaitOnShuttle_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "PickShuttleDeviceTogetherFor32SiteN_REQUEST")
+    {
+        Data[0] = SetPickShuttleDeviceTogetherFor32SiteN(Data);
+        CommandProcess("PickShuttleDeviceTogetherFor32SiteN_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "IndexArm1Height_REQUEST")
+    {
+        Data[0] = SetIndexArm1Height(Data);
+        CommandProcess("IndexArm1Height_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "IndexArm2Height_REQUEST")
+    {
+        Data[0] = SetIndexArm2Height(Data);
+        CommandProcess("IndexArm2Height_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "TestICCheckMode_REQUEST")
+    {
+        Data[0] = SetTestICCheckMode(Data);
+        CommandProcess("TestICCheckMode_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "AboveSocket_REQUEST")
+    {
+        Data[0] = SetAboveSocket(Data);
+        CommandProcess("AboveSocket_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "HotPlate1_REQUEST")
+    {
+        Data[0] = SetHotPlate1(Data);
+        CommandProcess("HotPlate1_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "HotPlate2_REQUEST")
+    {
+        Data[0] = SetHotPlate2(Data);
+        CommandProcess("HotPlate2_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "TesterInitialMaximumTest_REQUEST")
+    {
+        Data[0] = SetTesterInitialMaximumTest(Data);
+        CommandProcess("TesterInitialMaximumTest_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "TesterMaximumTest_REQUEST")
+    {
+        Data[0] = SetTesterMaximumTest(Data);
+        CommandProcess("TesterMaximumTest_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "TesterDummyTest_REQUEST")
+    {
+        Data[0] = SetTesterDummyTest(Data);
+        CommandProcess("TesterDummyTest_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "TesterStartDelay_REQUEST")
+    {
+        Data[0] = SetTesterStartDelay(Data);
+        CommandProcess("TesterStartDelay_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "HotZ1Down_REQUEST")
+    {
+        Data[0] = SetHotZ1Down(Data);
+        CommandProcess("HotZ1Down_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "HotShuttleSoakMode_REQUEST")
+    {
+        Data[0] = SetHotShuttleSoakMode(Data);
+        CommandProcess("HotShuttleSoakMode_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "AmbientCheck_REQUEST")
+    {
+        Data[0] = SetAmbientCheck(Data);
+        CommandProcess("AmbientCheck_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "AmbientCheckTemp_REQUEST")
+    {
+        Data[0] = SetAmbientCheckTemp(Data);
+        CommandProcess("AmbientCheckTemp_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "TempeartureOffset_REQUEST")
+    {
+        Data[0] = SetTemperatureOffset(Data);
+        CommandProcess("TempeartureOffset_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "ContactCountForOffsetPeriod_REQUEST")
+    {
+        Data[0] = SetContactCountForOffsetPeriod(Data);
+        CommandProcess("ContactCountForOffsetPeriod_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "ContactCountForCoolDown_REQUEST")
+    {
+        Data[0] = SetContactCountForCoolDown(Data);
+        CommandProcess("ContactCountForCoolDown_REPLY", 1, Data, bClient, iHandle);
+    }
+    else if (Command == "LotInfo_REQUEST")
+    {
+        if (CUSTOMER_CODE == CC_Greatek && CosFunction.bOEEFunction)               //AI(JimmyChiu) 20260515: F899-008 §6.2 超豐在 OEE 開啟才走內嵌 OEE Start Lot
+        {
+            AnsiString asErrorMsg = "";
+            Data[0] = SetLotInfoGreatekOEE(Data, asErrorMsg);
+            Data[1] = asErrorMsg;
+            if (Data[0] == "0")
+                CommandProcess("LotInfo_REPLY", 1, Data, bClient, iHandle);
+            else
+                CommandProcess("LotInfo_REPLY", 2, Data, bClient, iHandle);
+        }
+        else
+        {
+            Data[0] = SetLotInfo(Data);
+            CommandProcess("LotInfo_REPLY", 1, Data, bClient, iHandle);
+        }
+    }
+    else if (Command == "StartMode_REQUEST")   //Sam 20221212 : 新增 StartMode 指令
+    {
+        Data[0] = SetStartMode(Data);
+        CommandProcess("StartMode_REPLY", 1, Data, bClient, iHandle);
+    }
 }
 //---------------------------------------------------------------------------
-void TfAutomation::SendReportRequest(AnsiString /*ReportID*/, bool /*Standard*/)
+// AI(W906-AutoPB) 20260720: real translation, golden automation.cpp:2046-2130
+// (host EVENT/REPORT sender -- ReportID "0001".."0007").
+void TfAutomation::SendReportRequest(AnsiString ReportID, bool Standard)
 {
-    // GATED (deferred future wave): golden body automation.cpp:2046-2131 --
-    // sends a host EVENT/REPORT (ReportID "0001".."0007" branches into
-    // GetMainStatus/GetProductivity/GetLoadCount/GetSortingCount/
-    // GetSocketCount/GetHeadCount). See automation.h's own file-head note --
-    // this function's dependency surface already looks fully ready
-    // (SendClient/SendServer are both real here; its auto9045.h callees are
-    // already translated), flagged as a low-risk pickup for the next wave,
-    // but out of THIS front's assigned scope (bundled with ProcessBuffer/
-    // ProcessBuffer1 per the task brief's explicit deferral).
+    // AI(W906-AutoPB) 20260720: PORT-ONLY init guard (D3, design §2 C-4c) --
+    // golden `int iTotal, i;` leaves iTotal UNINITIALIZED (:2048); for any
+    // ReportID outside "0001".."0007" none of the branches below ever assigns
+    // it, so golden reads garbage there (UB: unbounded loop count at :2112).
+    // vclcompat AnsiString under that garbage loop count is a near-certain
+    // crash (out-of-bounds Data[i] read/heap corruption), not merely "wrong
+    // reply" the way BCB6's incidental stack layout might have gotten away
+    // with -- so this is guarded to the most conservative concrete value: an
+    // empty (SV_TOTAL="0", zero data fields) reply for any unknown ReportID.
+    // Delta exists ONLY inside golden-UB input space (see design §5.2 D3).
+    int iTotal = 0, i;
+    AnsiString CMD = "REPORT_REQUEST", SV_TOTAL;
+    AnsiString V_TOTAL = 2;
+    AnsiString HEAD, head, SendString, S2, cmd, v_total, sv_total;   //,ReportID;
+    AnsiString Data[100];
+    AnsiString R_TIME, r_time, S;
+
+    R_TIME = GetTimeInfo();
+    r_time = AddBlock(R_TIME);
+
+    cmd = AddBlock(CMD);
+    v_total = AddBlock(V_TOTAL);
+
+    HEAD = STX + CMD + SOH + V_TOTAL + SOH + R_TIME + SOH + ReportID + SOH;
+    head = stx + cmd + soh + v_total + soh + r_time + soh + AddBlock(ReportID) + soh;
+
+    if (ReportID == "0001")
+    {
+        iTotal = 1;
+        S = GetMainStatus();
+        Data[0] = S;
+    }
+    else if (ReportID == "0002")   //MTBF與MUBF
+    {
+        if (CUSTOMER_CODE == CC_MTI || CUSTOMER_CODE == CC_PTI)
+        {
+            iTotal = 7;
+        }
+        else
+        {
+            iTotal = 4;
+        }
+        GetProductivity(Data);
+    }
+    else if (ReportID == "0003")   //載入的IC數
+    {
+        iTotal = 1;
+        Data[0] = GetLoadCount();
+    }
+    else if (ReportID == "0004")   //每個Tray分幾顆IC
+    {
+        iTotal = 9;
+        GetSortingCount(Data);
+    }
+    else if (ReportID == "0005")
+    {
+        iTotal = GetSocketCount(Data);
+    }
+    else if (ReportID == "0006")
+    {
+        iTotal = GetHeadCount(Data);
+    }
+    else if (ReportID == "0007")
+    {
+        iTotal = 2;
+        Data[0] = "100";
+        Data[1] = "101";
+    }
+
+    SV_TOTAL = AnsiString(iTotal);
+    sv_total = AddBlock(SV_TOTAL);
+    HEAD = HEAD + SV_TOTAL;
+    head = head + sv_total;
+
+    for (i = 0; i < iTotal; i++)
+    {
+        HEAD = HEAD + SOH + Data[i];
+        head = head + soh + AddBlock(Data[i]);
+    }
+
+    SendString = HEAD + ETX;
+    S2 = head + etx;
+
+    if (CUSTOMER_CODE == CC_MTI || CUSTOMER_CODE == CC_PTI)   //Sam 20190429 : Add CC_PTI_NEWWORK
+    {
+        ShowOLPState(1);
+    }
+
+    if (Standard)
+        SendClient(SendString, S2, iSocketHandle);                                        //2007_0522
+    else
+        SendServer(SendString, S2);
 }
 //---------------------------------------------------------------------------
 void TfAutomation::OLPClientRead(TObject * /*Sender*/, TCustomWinSocket * /*Socket*/)
