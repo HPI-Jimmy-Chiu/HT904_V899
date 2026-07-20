@@ -634,5 +634,26 @@ C 桶(`clientGemRead`/`ProcessSocketReceiveData`/`Timer1Timer`)是本檔案最�
 - **`DESIGN_TesterTCP_TimerProcessTCPDataTimer.md`**：TimerProcessTCPDataTimer(:349-552)+SimulateBin 全 ACTIVE 翻譯，落點擴充 TesterTCP_Socket 切片#1，零新檔零 CMake；與 SysModWire 交集零。裁決：Q2 ECHOCODE oracle 施工時實跑定案 **接受**；Q3 `PERSITETemperatureStrings` 真本體（~538 行）留未來獨立波、本波只裝 seam **接受**（入 ROADMAP DEFERRED）。
 - 兩本設計書＋稽核報告皆在本 session scratchpad（路徑見上）；golden cp950 解碼中間產物同目錄。
 
-### 🔖 RESUME（最新）
+### 🔖 RESUME（已被下方 SysModWire 完成條目取代）
 - **▶ SysModWire 翻譯施工中；3 個唯讀交付物已完成並裁決（2026-07-20）**。下次接續：(1) 翻譯 agent 完成→派獨立審查（Sonnet 5，協定核心 xhigh，照設計書 §9 驗收清單＋fastcall 稽核的 `MyDBIProcess` 發現）→主迴圈親自 fresh build + ctest + mojibake 0 + grep `resolving`=0 →commit+更新 DEVLOG/ROADMAP。若關機遺失翻譯成果：工作樹 `HT9011UC_Cpp_V3.33.906.0` 若有半成品先 `git status`/diff 評估，設計書仍在 452108d5 scratchpad 可重派。(2) SysModWire commit 後的寫入波佇列（一次一波）：TesterTCP 切片#1（設計書就緒）→ automation W906-AutoPB（設計書就緒；開工前重取 ctest 基線）→ fastcall 修復小波（含 vcl_compat.h 中和段處置）。(3) 驗證基準 ctest 83/87、630 斷言跨 4 套件；分支 fix/v899.32-pti。(4) **golden＝`HT9011UC_Code_V3.33.906.0_20260618`，勿再誤植 V899**。
+
+---
+
+## 2026-07-20 — SysModWire 接線波完成（HSys.MyGem 接活 + S,F tail 解閘 + HT9045Gem shim + uHGemClass 21/57）
+
+**設定聲明**：主迴圈 Fable 5 + xhigh；翻譯 Sonnet 5；獨立審查 Sonnet 5；皆照 2026-07-19 設計書（Fable 5，452108d5 scratchpad）施工。
+
+**交付**（commit `799bcdb`，14 檔 +1648/-202）：`database.cpp/.h` SystemModularInitial 真本體（golden :1539-1546）+新 `SECSGEM/uHGemHT9045_Shim.{h,cpp}`（`HT9045Gem` 薄 shim，真 uHGemHT9045 波落地時先刪 shim 再編）；`ProcessReceiceData` S,F data-message dispatch tail（golden :8812-8988）整塊真解閘（單一 MyGem null-guard）；`DoConnect` S1F13 接活；two-codec 收訊側以 `HTGem.ActiveWire` 指標合併（預設自指，保留雙實例）；`uHGemClass.cpp` 再解 8 個 gated method（S1F1/S1F2/S1F13/S1F14/Process_S1F14/S1F16/S1F18/S2F18，13/57→**21/57**）；test_uHGemEquipment 252→**317** 斷言（W1-W10）。
+
+**翻譯 agent 自報偏離 5 項，獨立審查逐項裁定全部成立**：(1) test_uHGemClass.cpp 非零 diff——解閘後既有 NULL-HGemPtr stub 樣本會真 segfault，移出換 2 支仍 gated 者（審查讀碼證實）；(2) 新 link stubs 檔+RESCAN——跨 archive 循環真實存在（uHGemClass→uHGemEquipment→HSys(ht9045_db)→HT9045Gem(ht9045_secsgem)）；(3) test_config_loaders 2-arg 樁必要；(4) W6(f) 改用 check-before-read 的 -2 回傳點（原 oracle 依賴越界讀 UB 實測 flaky）；(5) 3 處 gate 註解缺口清單修準。另翻譯 agent 正確識別任務書兩處 V899 樣板誤植（golden 路徑、AI 註解 tag），依設計書權威處理（tag=`AI(W906-SysModWire)`）。
+
+**審查 findings 與處置**：
+- **HIGH（未解，裁定移交下一波）**：`MyDBIProcess` 3-arg ABI 雷未被本波解決——唯一本體仍在 uHGemEquipment.cpp 匿名 ns、無 `__fastcall`（=對外 undefined）；build 全綠只因 3 個測試各自帶本地 fastcall 樁搶先滿足符號（nm 證實生產提供者 0、無 fixup 候選→引爆=大聲連結失敗非無聲損壞）。此為 Bucket C（20260717）既有缺陷，本波未引入未惡化；為保 blame isolation 不混入本波，**fastcall 修復小波提前為下一波**。
+- **LOW（主迴圈親修後 commit）**：翻譯 agent 把 `ht9045_secsgem` 邊防禦性加到 5 個 motor/io 目標，但 nm 證實它們從不拉 `database.cpp.o`——已回退 5 個推測性邊+修正 root CMake 註解為準確 3 目標清單（config_loaders/uHGemClass/uHGemEquipment）；回退後全綠佐證邊確實未用。
+
+**主迴圈親自定案**（全新 `build_sysmodwire_final`，含 LOW 修正後）：from-scratch build exit 0、`grep -ic resolving`=**0**、ctest **83/87**（同 4 個既有環境漂移：config_db/IniFiles/ini_helpers/config_loaders）、test_uHGemEquipment **317/317**、mojibake **0/14**、`D:\SECS_GEM_LOGS` md5 **11 檔 byte-identical**。
+
+**ROADMAP 同步**：W5 進度段（含補修 C 桶完成後未同步的「剩」清單漂移）、下一步佇列、database.cpp/uHGemClass(36 剩)/uHGemEquipment/vcl_compat 四列 DEFERRED 表。
+
+### 🔖 RESUME（最新）
+- **✅ SysModWire 完成（2026-07-20，commit `799bcdb`+docs）。下一波佇列（寫入型一次一波）**：(1) **fastcall 修復小波**——`MyDBIProcess` 3-arg 本體移出匿名 ns+補 `__fastcall`（暫居 uHGemEquipment.cpp，註明 golden 家 cMyDB.cpp:788）＋刪 3 個測試 3-arg 樁（斷言捕捉遷 2-arg 樁，逐一檢查各樁是否被斷言消費）＋vcl_compat 無效 `#ifndef __fastcall` 段刪除改真實註記（方案 A；不做 `-D__fastcall=`）＋nm 驗證生產 obj 恰一定義＋全套五道閘。(2) TesterTCP `TimerProcessTCPDataTimer`（設計書 `DESIGN_TesterTCP_TimerProcessTCPDataTimer.md` 於 be8fe31a scratchpad）。(3) automation W906-AutoPB（`DESIGN_automation_ProcessBuffer.md` 同目錄；開工前重取 ctest 基線；btnConnectClick 2 行修正獨立 commit）。驗證基準更新：test_uHGemEquipment=317、四套件斷言 317+86+226+config；ctest 83/87（4 既有漂移）。golden=`HT9011UC_Code_V3.33.906.0_20260618`（勿再誤植 V899）；分支 fix/v899.32-pti。
