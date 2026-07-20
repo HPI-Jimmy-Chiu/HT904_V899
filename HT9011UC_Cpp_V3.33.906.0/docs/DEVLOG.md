@@ -670,3 +670,18 @@ C 桶(`clientGemRead`/`ProcessSocketReceiveData`/`Timer1Timer`)是本檔案最�
 
 ### 🔖 RESUME（最新）
 - **✅ SysModWire（`799bcdb`）+ FastcallFix（`7376490`）皆完成（2026-07-20）。下一波佇列（寫入型一次一波）**：(1) **TesterTCP `TimerProcessTCPDataTimer` 波**——設計書 `DESIGN_TesterTCP_TimerProcessTCPDataTimer.md`（be8fe31a scratchpad，golden cp950 解碼輔助檔同目錄）；裁決已定：golden=V906 snapshot、ECHOCODE oracle 施工時實跑定案、`cbSiteOn[32]` 不搬留真 UI 波；施工前重驗：ctest 基線以當下 fresh build 為準、確認 tests/CMakeLists 的 test_testertcp_socket/test_interfacesys target 未被前兩波改動。(2) automation W906-AutoPB（`DESIGN_automation_ProcessBuffer.md` 同目錄；btnConnectClick 2 行修正獨立 commit；開工前重取基線）。驗證基準：ctest 83/87（4 既有漂移：config_db/IniFiles/ini_helpers/config_loaders）、套件 317/86/226。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 fix/v899.32-pti；工作樹另有無關 V899/config 殘留變更（PTI 案）勿誤圈入 commit。
+
+---
+
+## 2026-07-20 — TesterTCP Timer 波完成（TimerProcessTCPDataTimer 十分支解碼 pump + SimulateBin，切片 #1 就地長大）
+
+**設定聲明**：主迴圈 Fable 5 + xhigh；翻譯 Sonnet 5；獨立審查 Sonnet 5；設計書為 2026-07-20 稍早 Fable 5 設計 agent 產出（be8fe31a scratchpad）。
+
+**交付**（commit `0dfecd9`，11 檔 +1044/-17，零新檔零 CMake）：`TimerProcessTCPDataTimer`（golden :349-552，WORKFILE_OK/FAIL、BARCODE?、ECHOCODE:、Test Arm?、TempArm?、BINON:、ECHOOK、GETOSSETUP、GetTPSVersionOK 註解死碼——十分支全 ACTIVE）+`SimulateBin`（:554-613）；FormsFacade +3 成員（`tTestResult`/`tBarCodeList` ctor `"0;"` quirk 對 golden main.cpp:2235-2240 逐字/`SVID1190_OSSetup`）+`WritePERSITETemperature` wrapper+`PERSITETemperatureStrings` seam；`iBin[4][8]` 生產定義入 atester_shims（nm：恰一定義三 extern）；vclcompat `random(int)`（Borland 0..n-1 語意）。test_testertcp_socket 27→**80** 斷言。16 條 golden quirk 逐字保留＋註記（含 bTimerRun 從未上膛、sBarCodeList/sBinList 每訊息洩漏、SimulateStart 死觸發）。**ECHOCODE oracle 實跑定案**：ctor 預設值 echo 回來=ECHOCODENG（slot 31 `"0;"` 內嵌分號讓 golden 解析器截斷第 32 token）——golden 演算法本身的必然行為，已寫入測試註解。
+
+**獨立審查：CLEAN 零 findings**——十分支+SimulateBin+facade ctor 預填逐行對 golden（cp950）核對逐字相符；16 quirk 逐條打勾；2 項自報偏離（T-A 測試繞道隔離 timer guard、check_i 改 check_b/check_s）裁定成立且僅測試層；ECHOCODE oracle 獨立手算+重現；全部數字獨立重跑一致；AI tag 100% `AI(W906-TesterTCPTimer) 20260720` 無混入。
+
+**主迴圈親自定案**（全新 `build_testertcp_final`）：build exit 0、`resolving`=0、ctest 83/87（同 4 既有漂移）、80/80、mojibake 0/11、SECS_GEM_LOGS md5 11 檔一致。
+
+### 🔖 RESUME（最新）
+- **✅ 2026-07-20 四波連發全落地**：SysModWire（`799bcdb`）→ FastcallFix（`7376490`）→ TesterTCP Timer（`0dfecd9`）＋各自 docs commit。**下一波（佇列最後一項）：automation W906-AutoPB**——設計書 `DESIGN_automation_ProcessBuffer.md`（be8fe31a scratchpad）；範圍=`ProcessBuffer`(:951-1978)+`ProcessBuffer1`(:1980-2044)+`SendReportRequest`(:2046-2130) 三支全真翻 ~1181 行、只動 3 檔零 CMake；裁決已定：PORT-ONLY UB 防護 D1-D3（最小防護+loud 註記）接受、btnConnectClick 2 行修正獨立 commit、dispatch 深處炸=回報不自修 auto9045；施工前重驗：fresh 基線（現為 ctest 83/87；test_testertcp_socket=80、uHGemEquipment=317、uHGemClass=86、SecsWireCodec=226、interfacesys=80、TesterTCP=16）、確認 tests/CMakeLists 的 test_automation link 行未變。之後候選見 ROADMAP 下一步段（uHGemClass 36 剩、W7 續、SECSGEM 子系統波等）。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 fix/v899.32-pti；工作樹另有無關 V899/config 殘留（PTI 案）勿圈入。
