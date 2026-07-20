@@ -685,3 +685,20 @@ C 桶(`clientGemRead`/`ProcessSocketReceiveData`/`Timer1Timer`)是本檔案最�
 
 ### 🔖 RESUME（最新）
 - **✅ 2026-07-20 四波連發全落地**：SysModWire（`799bcdb`）→ FastcallFix（`7376490`）→ TesterTCP Timer（`0dfecd9`）＋各自 docs commit。**下一波（佇列最後一項）：automation W906-AutoPB**——設計書 `DESIGN_automation_ProcessBuffer.md`（be8fe31a scratchpad）；範圍=`ProcessBuffer`(:951-1978)+`ProcessBuffer1`(:1980-2044)+`SendReportRequest`(:2046-2130) 三支全真翻 ~1181 行、只動 3 檔零 CMake；裁決已定：PORT-ONLY UB 防護 D1-D3（最小防護+loud 註記）接受、btnConnectClick 2 行修正獨立 commit、dispatch 深處炸=回報不自修 auto9045；施工前重驗：fresh 基線（現為 ctest 83/87；test_testertcp_socket=80、uHGemEquipment=317、uHGemClass=86、SecsWireCodec=226、interfacesys=80、TesterTCP=16）、確認 tests/CMakeLists 的 test_automation link 行未變。之後候選見 ROADMAP 下一步段（uHGemClass 36 剩、W7 續、SECSGEM 子系統波等）。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 fix/v899.32-pti；工作樹另有無關 V899/config 殘留（PTI 案）勿圈入。
+
+---
+
+## 2026-07-20 — automation W906-AutoPB 完成（ProcessBuffer 家族三支全真翻，OLP 派工核心落地；今日第四波）
+
+**設定聲明**：主迴圈 Fable 5 + xhigh；翻譯 Sonnet 5；獨立審查 Sonnet 5；設計書為 2026-07-20 稍早 Fable 5 產出。
+
+**交付**（wave commit `b810c0e`，3 檔 +1924/-53；D5 獨立 commit `e4808c2`）：`ProcessBuffer`(golden :951-1978，~130 分支 OLP 命令派工 ladder)+`ProcessBuffer1`(:1980-2044)+`SendReportRequest`(:2046-2130) 全真翻取代空殼 stub——auto9045 的 148 函式面**首次被真實 OLP 訊框實戰消費**，全部驅動路徑乾淨。P1-P18 golden quirk 逐字（Data[0] 雙寫外洩×9、PP_DL hex 恆 0 全 NUL zip、RESUME 不清 SoftStop、死 PAUSE 分支、stale TCPstr）；D1-D3 PORT-ONLY 防護（僅此三處不逐位，loud 註記+oracle 覆蓋）。test_automation 85→**127**（基線實測修正：85 非設計書估的 86）。D5=btnConnectClick `!=0`→`!=AnsiString(0)`（vclcompat char* overload 使裸 `!=0` 比對 ""，golden BCB6 比對 "0"——依裁決獨立 commit，並更正前波留下的錯誤註解=審查 LOW#2）。
+
+**實質偏離（審查裁定成立、揭露充分）**：Part 22 活測範圍縮小——`DoDLRequest`(auto9045.cpp:2274，前波 W5-Final 交付)有未防護真實檔案副作用（production `DataPath`/`OffsetPath`=repo 內 IniData 路徑、CopyFile 7z.exe、SetCurrentDirectory；`DoULRequest` :2197 更含 `system("del")`），`aDataPath` 重導防不到→PP_DL_REQUEST 不活跑，P11/P13 兩 quirk 改逐行核對（審查獨立重做核對，一致）。**已入 ROADMAP 追蹤列：防護 seam 落地前任何測試不得活跑 PP_DL/PP_UL_REQUEST。**
+
+**獨立審查：CLEAN**（2 個 LOW 文件級）——審查自寫 tokenizer 做註解/空白剝離後的 **token-level 全文 diff**：三支函式對 golden 除 `__fastcall` 移除+4 個已揭露偏離外**零未揭露差異**；175 個分支條件序列完全對齊；P1-P18/D1-D5 逐條打勾；Big5 7 段 CJK 逐字相符。LOW#1（Part 22 過時註解）主迴圈已修入波；LOW#2 併入 D5 commit。
+
+**主迴圈親自定案**（全新 `build_autopb_final`，波+D5 合併態）：build exit 0、`resolving`=0、ctest 83/87（同 4 既有漂移）、test_automation 127/127、mojibake 0/3、SECS_GEM_LOGS md5 一致、IniData 未被測試觸及。
+
+### 🔖 RESUME（最新）
+- **✅ 2026-07-20 全日五連發收官**：SysModWire(`799bcdb`)→FastcallFix(`7376490`)→TesterTCP Timer(`0dfecd9`)→automation W906-AutoPB(`b810c0e`)+D5(`e4808c2`)，各附 docs commit，全部獨立審查+主迴圈五道閘。**寫入佇列已清空。**驗證基準：ctest 83/87（4 既有漂移）；套件 317/86/226/80/80/16+automation 127。**下一輪候選**（無既成設計書，開波前先派設計 recon）：`uHGemClass.cpp` 剩 36、SECSGEM 4 子系統(DoSpool/Trace/上下傳)+FormCreate SV 註冊、`uHGemHT9045.*` 站點覆寫層(先刪 shim)、DoDLRequest/DoULRequest 防護 seam 小波、W7 csystem gated 大宗、或 KNOWLEDGE「真實/半真實 HAL pump」方向評估。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 fix/v899.32-pti；工作樹另有無關 V899/config 殘留（PTI 案）勿圈入。進度儀表板 artifact：https://claude.ai/code/artifact/26e3926c-c145-4699-9743-a7ae9db614e4（同 session 重發同檔路徑即可更新）。
