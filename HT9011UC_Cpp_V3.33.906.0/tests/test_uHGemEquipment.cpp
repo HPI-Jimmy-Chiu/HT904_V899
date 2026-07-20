@@ -173,20 +173,29 @@ extern bool bSECSGEM_DoSeparate;
 void MyDBIProcess(AnsiString /*S1*/, AnsiString /*S2*/) {}
 
 // ---------------------------------------------------------------------------
-//  AI(W906-uHGemEquipment-BucketC) 20260717: MyDBIProcess (3-arg, EXTERNAL
-//  linkage) / ShowMyMessage -- as of this wave, uHGemEquipment.cpp's new
-//  `#include "database.h"` (D3) means this test binary now links ht9045_db
-//  (database.cpp, which defines the referenced-by-this-TU global `HSys`).
-//  Static-archive linking pulls in database.cpp's WHOLE object file once
-//  `HSys` is referenced -- which means database.cpp's OWN unresolved
-//  externals (LoadIoData/LoadMotData's calls to a 3-arg MyDBIProcess and
-//  ShowMyMessage, database.cpp:64-65) must ALSO resolve, even though this
-//  test never calls LoadIoData/LoadMotData itself. Same stub shape already
-//  established by tests/test_config_loaders.cpp for the identical situation.
-//  Distinct overload from the 2-arg MyDBIProcess just above (different
-//  arity -- no collision).
+//  AI(W906-uHGemEquipment-BucketC) 20260717: ShowMyMessage -- as of this
+//  wave, uHGemEquipment.cpp's new `#include "database.h"` (D3) means this
+//  test binary now links ht9045_db (database.cpp, which defines the
+//  referenced-by-this-TU global `HSys`). Static-archive linking pulls in
+//  database.cpp's WHOLE object file once `HSys` is referenced -- which means
+//  database.cpp's OWN unresolved ShowMyMessage external (database.cpp:65)
+//  must ALSO resolve, even though this test never calls LoadIoData/
+//  LoadMotData itself.
+//
+//  AI(W906-FastcallFix) 20260720: this comment used to also cover a local
+//  MyDBIProcess (3-arg, __fastcall) stub that sat on the line right below,
+//  needed for the SAME database.cpp-pulled-in-whole reason (its OTHER
+//  unresolved external, database.cpp:64/75). That stub is REMOVED now:
+//  SECSGEM/uHGemEquipment.cpp itself supplies the real, externally-linkable,
+//  __fastcall-decorated definition of that overload as of this wave (moved
+//  out of an anonymous namespace and given __fastcall), and this test
+//  target already links ht9045_secsgem (the library that carries it, per
+//  the RESCAN link group above in tests/CMakeLists.txt) -- so a local stub
+//  here would now be a duplicate-definition link error, not a
+//  missing-symbol fix (2026-07-20 audit, AUDIT_fastcall_tree.md finding 1).
+//  The removed stub's body was a pure no-op (no capture/counter), so no test
+//  coverage is lost by this removal.
 // ---------------------------------------------------------------------------
-void __fastcall MyDBIProcess(AnsiString /*asTable*/, AnsiString /*S1*/, AnsiString /*S2*/) {}
 void ShowMyMessage(AnsiString /*S1*/, AnsiString /*S2*/, AnsiString /*S3*/, bool /*Ok*/, bool /*bServoOff*/) {}
 
 // ---------------------------------------------------------------------------

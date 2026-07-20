@@ -1727,33 +1727,57 @@ struct ScopedAcquire
     ScopedAcquire& operator=(const ScopedAcquire&) = delete;
 };
 
+} // anonymous namespace
+
 // ---------------------------------------------------------------------------
-// MyDBIProcess (3-arg overload) -- AI(W906-uHGemEquipment-BucketC) 20260717:
-// D10. Golden's real signature is `void __fastcall MyDBIProcess(AnsiString
-// asTable, AnsiString S1, AnsiString S2="")` (cMyDB.h:20); this port's only
-// definition is a 2-arg no-op (aHotPlateSubstrate.cpp:703, forward-declared
-// 2-arg at this file's own top). SendLocalDataFrom's golden 3-arg call sites
-// (:2035/:2078, `MyDBIProcess("Exception", "THGem::SendLocalData...", SFCode)`)
-// need a 3-arg overload to stay VERBATIM rather than being trimmed to 2 args
-// -- added here, TU-local (anonymous namespace), forwarding to the existing
-// 2-arg no-op (the 3rd argument is accepted for call-shape fidelity and
-// otherwise unused, matching the 2-arg definition's own no-op body).
+// MyDBIProcess (3-arg overload) -- AI(W906-FastcallFix) 20260720: moved OUT of
+// the anonymous namespace above (was here as of W906-uHGemEquipment-BucketC
+// 20260717) and given __fastcall, so this becomes the tree's ONE externally
+// linkable, fastcall-decorated definition of this overload -- matching
+// golden's role for it (cMyDB.cpp:788-789, declared cMyDB.h:20; not yet
+// translated in this port, so this stays the interim home until that wave
+// lands). Both `database.cpp:75` and `uHGemClass.cpp:310` forward-declare
+// this exact signature `extern`+`__fastcall` and call it (LoadIoData/
+// LoadMotData's catch blocks; ~HTGem), so THIS TU must supply the definition
+// they link against. The prior anonymous-namespace body compiled and ran
+// fine for calls made FROM this file, but had internal linkage and no
+// __fastcall -- a differently-mangled symbol than the fastcall-decorated one
+// those two TUs reference -- leaving them with an unresolved external at
+// link time (2026-07-20 audit, AUDIT_fastcall_tree.md finding 1). Forwarding
+// behavior is unchanged: still routes to the file-scope 2-arg no-op
+// (aHotPlateSubstrate.cpp:703) for the actual side effect; S3 remains
+// call-shape-fidelity only, preserving SendLocalDataFrom's golden 3-arg call
+// sites VERBATIM (this file's own `MyDBIProcess("Exception",
+// "THGem::SendLocalData...", SFCode)` calls, below). No default argument on
+// S3 here -- this TU's OTHER (2-arg) calls to MyDBIProcess must keep
+// resolving to the file-scope 2-arg extern above (line 80) unambiguously;
+// giving this overload a default would make it viable for those same 2-arg
+// call sites too and turn every one of them into an ambiguous-call compile
+// error. (Golden's own default lives only on the database.cpp/uHGemClass.cpp
+// forward declarations, matching where cMyDB.h:20 puts it too -- unaffected
+// by this TU's own choice here.)
 // ---------------------------------------------------------------------------
-void MyDBIProcess(AnsiString S1, AnsiString S2, AnsiString S3)
+void __fastcall MyDBIProcess(AnsiString S1, AnsiString S2, AnsiString S3)
 {
-    // AI(W906-uHGemEquipment-BucketC) 20260717: `::` forces lookup to start
-    // at the GLOBAL namespace -- a bare `MyDBIProcess(S1, S2)` here would
-    // resolve to THIS SAME anonymous-namespace overload set first (ordinary
-    // unqualified lookup stops at the innermost scope where the name is
-    // found -- the anonymous namespace -- and never reaches the file-scope
-    // 2-arg `extern` declared above it), causing infinite self-recursion /
-    // an "too few arguments" mismatch. `::MyDBIProcess` explicitly targets
-    // the file-scope 2-arg no-op.
+    // AI(W906-FastcallFix) 20260720: now that this function lives at file
+    // scope instead of inside the anonymous namespace above, the RECURSION
+    // risk the previous `::`-qualification comment warned about no longer
+    // applies in the same way: a bare unqualified `MyDBIProcess(S1, S2)` here
+    // would ALSO resolve correctly on its own, because overload resolution at
+    // file scope only ever finds the 2-arg extern (line 80, no default) as
+    // VIABLE for a 2-argument call -- this function's own 3-arg overload has
+    // no default for S3 (see the reasoning above) and so is never a
+    // candidate when only 2 arguments are supplied; there is no sibling
+    // 3-arg overload at this same scope to be mistaken for it either, unlike
+    // the anonymous namespace's self-contained overload set before the move.
+    // The `::` is kept anyway, now purely as defensive documentation of
+    // intent: it makes it unmistakable -- even to a future edit that adds a
+    // default to this S3 parameter -- that this call must always reach the
+    // file-scope 2-arg sink and never (accidentally, via a later change)
+    // itself.
     ::MyDBIProcess(S1, S2);
     (void)S3;
 }
-
-} // anonymous namespace
 
 // AI(W906-uHGemEquipment-BucketB) 20260717: golden uHGemEquipment.cpp:24/4746
 // -- both are genuine FILE-SCOPE globals in golden itself (NOT THGem

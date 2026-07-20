@@ -42,19 +42,28 @@
 // exactly as golden leaves it undeclared-in-any-header.
 extern bool IsCorrectDateFormat(int y, int m, int d);
 
-// This test target's own MyDBIProcess stub (same established pattern as
-// tests/test_config_loaders.cpp: "the TU supplies the two gated externals...
-// that the gated UI/DB waves will provide for real").  Matches the REAL
-// golden 3-arg signature (cMyDB.h:20), not the pre-existing 2-arg mismatch in
-// aHotPlateSubstrate.h:576 (see uHGemClass.cpp's extern-decl note).
-static int g_dbiCalls = 0;
-// AI(W906-uHGemEquipment-BucketC) 20260717: __fastcall added in lockstep with
-// uHGemClass.cpp:251's ABI fix (see the note there) so this stub's decorated
-// symbol matches the now-fastcall extern reference this binary links against.
-void __fastcall MyDBIProcess(AnsiString /*asTable*/, AnsiString /*S1*/, AnsiString /*S2*/)
-{
-    ++g_dbiCalls;
-}
+// AI(W906-FastcallFix) 20260720: this test's own local MyDBIProcess (3-arg,
+// __fastcall) stub -- previously here, matching the REAL golden 3-arg
+// signature (cMyDB.h:20) -- is REMOVED. SECSGEM/uHGemEquipment.cpp now
+// supplies the real, externally-linkable, __fastcall-decorated definition of
+// this overload (moved out of an anonymous namespace and given __fastcall
+// this same wave), and this target's RESCAN link group (tests/CMakeLists.txt)
+// already links ht9045_secsgem, the library that carries it, to satisfy
+// this file's own uHGemClass.cpp:310 extern+__fastcall declaration. Keeping
+// the local stub would now be a duplicate-definition link error, not a
+// missing-symbol fix (2026-07-20 audit, AUDIT_fastcall_tree.md finding 1).
+// The removed stub's call counter (g_dbiCalls) was incremented but never
+// read/asserted anywhere in this file -- confirmed before deletion that no
+// PASS/FAIL check depended on it, so no coverage is lost by this removal.
+//
+// NOTE: this edit knowingly breaks this file's own established "stays
+// byte-for-byte unchanged" convention (see tests/test_uHGemClass_link_stubs.cpp's
+// file-head note, citing design brief Sec.9 item 5) -- that convention was
+// adopted to avoid touching this file for an unrelated (SysModWire) reason;
+// it does not anticipate a defect fix that requires deleting code FROM this
+// file itself, which cannot be done any other way (a stub left in place here
+// collides at link time with the production definition this fix adds
+// elsewhere). Flagged explicitly rather than silently overridden.
 
 static int g_pass = 0;
 static int g_fail = 0;

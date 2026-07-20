@@ -21,10 +21,37 @@
 //  (Define BEFORE including anything that might use them.)
 // ---------------------------------------------------------------------------
 
-// Calling-convention + linkage keywords -> nothing (standard convention).
-#ifndef __fastcall
-#define __fastcall
-#endif
+// AI(W906-FastcallFix) 20260720: REMOVED a dead `#ifndef __fastcall /
+// #define __fastcall / #endif` neutralization block that used to sit here.
+// It was never effective: `__fastcall` is a compiler-BUILT-IN keyword/macro
+// on i686 MinGW GCC (a real calling-convention attribute, not a Borland-only
+// token this toolchain is ignorant of), so `#ifndef __fastcall` was always
+// false and the `#define` never fired -- ALL `__fastcall`-marked code in this
+// tree has always compiled under the REAL fastcall ABI, not a neutralized
+// no-op, contrary to what this block's old comment implied.
+//
+// Practical consequence (verified by the 2026-07-20 audit,
+// AUDIT_fastcall_tree.md): every function marked `__fastcall` in one
+// translation unit's DECLARATION must be marked `__fastcall` in whatever
+// translation unit provides its DEFINITION too (and vice versa) -- a mismatch
+// silently produces two DIFFERENTLY MANGLED symbols (fastcall decorates the
+// mangled name, e.g. `@_Z...@72`) instead of a compile error, which then
+// surfaces only as an unresolved-external at link time, or worse, as an ld
+// "fixup" heuristic silently binding mismatched ABI calling conventions. The
+// audit found exactly one such live inconsistency (`MyDBIProcess`'s 3-arg
+// overload, fixed this same wave -- see SECSGEM/uHGemEquipment.cpp) and
+// confirmed 91 other __fastcall-marked pairs across the tree were already
+// consistent.
+//
+// The guardrail going forward is procedural, not a macro: keep every
+// declaration/definition pair's `__fastcall` presence in lockstep, and treat
+// a nonzero `grep -ic resolving` hit in a fresh build's linker log as a
+// signal to go check for exactly this class of mismatch. Do NOT "fix" this
+// by defining `-D__fastcall=` (or an empty `#define __fastcall` here) as a
+// global neutralization -- that would flip the ACTUAL calling convention of
+// every one of those 91-plus already-consistent pairs tree-wide, a
+// deliberate large-scale ABI change this fix explicitly does not make; it
+// would need its own dedicated, carefully-verified wave.
 #ifndef __cdecl
 // keep __cdecl meaningful on MSVC; only neutralize where unknown (MinGW knows it)
 #endif

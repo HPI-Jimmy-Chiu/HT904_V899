@@ -44,16 +44,28 @@
 #include <cstdio>
 
 // ---------------------------------------------------------------------------
-//  Stubs for the two externals database.cpp forward-declares (cMyDB.h:20 /
-//  mymessbox.h:58).  Signatures MUST match the forward declarations in
-//  database.cpp exactly (incl. default args, which are stated only there).
+//  ShowMyMessage stub -- database.cpp forward-declares this external
+//  (mymessbox.h:58) for its LoadIoData/LoadMotData NULL-cell/error paths.
+//  Signature MUST match database.cpp's forward declaration exactly.
+//
+//  AI(W906-FastcallFix) 20260720: the sibling MyDBIProcess (3-arg,
+//  __fastcall) stub that used to live here (matching database.cpp's OTHER
+//  forward declaration, cMyDB.h:20) is REMOVED -- as of this wave,
+//  SECSGEM/uHGemEquipment.cpp supplies the real, externally-linkable,
+//  __fastcall-decorated definition of that overload (moved out of an
+//  anonymous namespace and given __fastcall this same wave; see that file's
+//  own note), and this target already links ht9045_secsgem (the library
+//  that carries it -- see this target's RESCAN link group in
+//  tests/CMakeLists.txt) to satisfy database.cpp:75/uHGemClass.cpp:310's own
+//  extern+__fastcall declarations of it. A local stub here would now be a
+//  duplicate-definition link error, not a missing-symbol fix. (2026-07-20
+//  audit, AUDIT_fastcall_tree.md finding 1, confirmed no other production
+//  definition of this fastcall-decorated symbol previously existed anywhere
+//  in the tree -- this test's own local stub was one of only three places
+//  providing it, all now redundant and removed the same way.)
 // ---------------------------------------------------------------------------
 static int g_msgCalls = 0;   // counts ShowMyMessage hits (NULL-cell / error paths)
 
-void __fastcall MyDBIProcess(AnsiString /*asTable*/, AnsiString /*S1*/, AnsiString /*S2*/)
-{
-    // gated DB wave; no-op stub.
-}
 void ShowMyMessage(AnsiString S1, AnsiString /*S2*/, AnsiString /*S3*/,
                    bool /*Ok*/, bool /*bServoOff*/)
 {
@@ -67,9 +79,11 @@ void ShowMyMessage(AnsiString S1, AnsiString /*S2*/, AnsiString /*S3*/,
 // (HTGem base ctor/dtor) -> uHGemEquipment.cpp.o (HTGem's 8 newly un-gated
 // methods call real out-of-line THGem methods) into this binary's link for
 // the first time. uHGemEquipment.cpp.o's own 2-arg MyDBIProcess extern
-// (declared uHGemEquipment.cpp:80, NO __fastcall -- a DIFFERENT overload from
-// the 3-arg one above) needs a definition too. Same no-op shape as
-// tests/test_uHGemEquipment.cpp's own (:173).
+// (declared uHGemEquipment.cpp:80, NO __fastcall -- a DIFFERENT overload,
+// by arity, from the 3-arg __fastcall one uHGemEquipment.cpp itself now
+// defines at file scope, see AI(W906-FastcallFix) 20260720 note above) needs
+// a definition too. Same no-op shape as tests/test_uHGemEquipment.cpp's own
+// (:173).
 void MyDBIProcess(AnsiString /*S1*/, AnsiString /*S2*/) {}
 
 // ---------------------------------------------------------------------------
