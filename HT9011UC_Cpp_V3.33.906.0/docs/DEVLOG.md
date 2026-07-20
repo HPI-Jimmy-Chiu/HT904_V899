@@ -657,3 +657,16 @@ C 桶(`clientGemRead`/`ProcessSocketReceiveData`/`Timer1Timer`)是本檔案最�
 
 ### 🔖 RESUME（最新）
 - **✅ SysModWire 完成（2026-07-20，commit `799bcdb`+docs）。下一波佇列（寫入型一次一波）**：(1) **fastcall 修復小波**——`MyDBIProcess` 3-arg 本體移出匿名 ns+補 `__fastcall`（暫居 uHGemEquipment.cpp，註明 golden 家 cMyDB.cpp:788）＋刪 3 個測試 3-arg 樁（斷言捕捉遷 2-arg 樁，逐一檢查各樁是否被斷言消費）＋vcl_compat 無效 `#ifndef __fastcall` 段刪除改真實註記（方案 A；不做 `-D__fastcall=`）＋nm 驗證生產 obj 恰一定義＋全套五道閘。(2) TesterTCP `TimerProcessTCPDataTimer`（設計書 `DESIGN_TesterTCP_TimerProcessTCPDataTimer.md` 於 be8fe31a scratchpad）。(3) automation W906-AutoPB（`DESIGN_automation_ProcessBuffer.md` 同目錄；開工前重取 ctest 基線；btnConnectClick 2 行修正獨立 commit）。驗證基準更新：test_uHGemEquipment=317、四套件斷言 317+86+226+config；ctest 83/87（4 既有漂移）。golden=`HT9011UC_Code_V3.33.906.0_20260618`（勿再誤植 V899）；分支 fix/v899.32-pti。
+
+---
+
+## 2026-07-20 — FastcallFix 小波完成（MyDBIProcess 3-arg 外部化，稽核 HIGH 結案）
+
+**設定聲明**：主迴圈 Fable 5 + xhigh；施工 Sonnet 5（過程中兩度停在等背景 build/ctest，主迴圈 SendMessage 喚醒接續——W6.2b 模式的良性變體，poller 有正常回喚）。
+
+**交付**（commit `7376490`，5 檔 +144/-61）：`uHGemEquipment.cpp` 3-arg `MyDBIProcess` 移出匿名 ns+補 `__fastcall`（全樹唯一生產提供者；**定義不帶 S3 預設值**——帶了會讓同 TU 8 處 2-arg 呼叫 ambiguous，預設值只在 database.cpp:75/uHGemClass.cpp:310 宣告端=golden cMyDB.h:20 同形；暫居此檔至 cMyDB.cpp 翻譯波）；刪 3 個遮蔽性測試樁（test_uHGemClass 的 `g_dbiCalls` 確認 dead-write 無斷言消費後連同移除）；`vcl_compat.h` 無效 `#ifndef __fastcall` 段刪除，改為配對紀律註記＋明文禁止 `-D__fastcall=`。唯一偏離（施工 agent 顯式標註）：`test_uHGemClass.cpp` 打破 SysModWire 波「diff 為空」舊約——重複定義連結錯誤無法迴避，裁定成立。
+
+**主迴圈親自定案**（diff 逐行親審+全新 `build_fastcallfix_final`）：build exit 0、`resolving`=0、ctest 83/87（同 4 既有漂移）、nm 全樹掃描 fastcall 裝飾 3-arg 符號恰 1 個 T（`ht9045_secsgem/uHGemEquipment.cpp.obj`）、317/86/226 全綠、mojibake 0/5、SECS_GEM_LOGS md5 11 檔一致。本波 diff 小，獨立審查以主迴圈親審 diff 取代（nm 證據齊備）。
+
+### 🔖 RESUME（最新）
+- **✅ SysModWire（`799bcdb`）+ FastcallFix（`7376490`）皆完成（2026-07-20）。下一波佇列（寫入型一次一波）**：(1) **TesterTCP `TimerProcessTCPDataTimer` 波**——設計書 `DESIGN_TesterTCP_TimerProcessTCPDataTimer.md`（be8fe31a scratchpad，golden cp950 解碼輔助檔同目錄）；裁決已定：golden=V906 snapshot、ECHOCODE oracle 施工時實跑定案、`cbSiteOn[32]` 不搬留真 UI 波；施工前重驗：ctest 基線以當下 fresh build 為準、確認 tests/CMakeLists 的 test_testertcp_socket/test_interfacesys target 未被前兩波改動。(2) automation W906-AutoPB（`DESIGN_automation_ProcessBuffer.md` 同目錄；btnConnectClick 2 行修正獨立 commit；開工前重取基線）。驗證基準：ctest 83/87（4 既有漂移：config_db/IniFiles/ini_helpers/config_loaders）、套件 317/86/226。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 fix/v899.32-pti；工作樹另有無關 V899/config 殘留變更（PTI 案）勿誤圈入 commit。
