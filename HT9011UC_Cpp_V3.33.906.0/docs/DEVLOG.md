@@ -725,5 +725,34 @@ C 桶(`clientGemRead`/`ProcessSocketReceiveData`/`Timer1Timer`)是本檔案最�
 **測試衛生**：HIGH#1 cBootLog 測試隔離(獨立小波)。
 **中長期(需前置波)**：FormsFacade/Handler-free-func 前置波(解 uHGemHT9045 牆②③)→uHGemHT9045 Bucket 1-5→W7 E0/M1/M2 HAL pump 群(含 AutoClean.cpp 大塊)。
 
-### 🔖 RESUME（最新）
+### 🔖 RESUME（已被下方 2026-07-20 關機交接條目取代）
 - **▶ SECSGEM Wave 1 寫入施工中；6 份唯讀交付物全數完成並裁決(2026-07-20)**。下次接續：(1) Wave 1 完成→審查+主迴圈五道閘+commit(SysModWire 以來的既定流程)。(2) 上列重排佇列施工，設計書全在 be8fe31a scratchpad(DESIGN_DoDLRequest_test_seam/VCL_widget_cast_wave/uHGemHT9045_siteoverride、RECON_W7_breakdown、AUDIT_test_hazards_tree/gated_inventory + gate_list.txt/gate_context.txt/extract_gates.py 可重用)。(3) 已裁決：DoDLRequest Q1=ctest 不起外部行程；uHGemHT9045 只 Bucket 0 近期可做(牆②③擋其餘)；common.cpp 完成波升為高槓桿優先。(4) 驗證基準 ctest 83/87(4 既有漂移)、套件 317/86/226/80/80/16/127；golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 fix/v899.32-pti；工作樹另有無關 V899/config 殘留(PTI 案)勿圈入。進度儀表板 https://claude.ai/code/artifact/26e3926c-c145-4699-9743-a7ae9db614e4。
+
+---
+
+## 2026-07-20 — SECSGEM Wave 1 完成 + 關機交接檢查點（今日收工）
+
+**設定聲明**：主迴圈 Fable 5 + xhigh；翻譯 Sonnet 5；獨立審查 Sonnet 5。
+
+**Wave 1 交付**（commit `21900fd`，7 檔 +2587/-50）：THGem 內嵌 `SecsSvEcRegistration SvEcReg`+DataItemOutSV/EC/NameList 族+Send* 4+FormCreate SV 註冊+新 `TasmInfo.{h,cpp}`(保守佔位:GetCPUFreq→0/GetManID→"GenuineIntel"/GetCPUType→""、disk/mem 真 Win32)。un-gate uHGemClass **13 支**(S1F4/S1F12/S1F24/S2F14/S2F30/S5F8/S6F16/S6F18/S6F20/S100F4/S101F6/S101F8/S103F12)，gated 36→**23**。test_uHGemEquipment 317→**390**。
+
+**獨立審查 CLEAN**（clean-room fresh build 重現全部閘）＋三偏離裁決：**(A) 設計書 Q4 錯、翻譯對**——審查親 cp950 讀 golden，`THGem::DataItemOutSV/EC`(:2472-3113)用 implicit `this->`；設計書誤把它和 `HTGem::SetECValue`(uHGemClass.cpp:2699，那支才用 `HGem->`)混為一談且行號誤植檔案。**日後用 DESIGN_SECSGEM_closing_waves.md 的 Wave 2/3 章節時，Q4 前綴描述不可信、須實讀 golden**。**(B) 新 golden bug**：S6F18 錯誤路徑送 `InitLocalHead(6,16,0)` 應為 6,18(S6F16 複製貼上)，逐字保留+註記。**(C)** CMake 落根(對)、NULL 替代(len==0 不解參照)、SaveEventReportData 未觸達(.def 停 7/16)。
+
+**主迴圈定案**：關機壓力下不跑第三次重建；秒級親驗 mojibake 0/7+SECS md5 一致，compile/ctest/resolving/390×3 由審查對抗性 clean-room build 背書後 commit。
+
+### 今日全日戰果（fix/v899.32-pti，7 個完整波次/交付 commit + docs）
+1. SysModWire 接線波 `799bcdb`（+docs `b703881`）— HSys.MyGem 接活、S,F tail 解閘、uHGemClass 13→21。
+2. FastcallFix 小波 `7376490`（+`57b0635`）— MyDBIProcess ABI 雷結案，稽核 HIGH 清除。
+3. TesterTCP Timer 波 `0dfecd9`（+`fd34995`）— TimerProcessTCPDataTimer 十分支 pump。
+4. automation W906-AutoPB `b810c0e` + D5 `e4808c2`（+`4c85a60`）— ProcessBuffer 家族 OLP 派工核心。
+5. 六路唯讀 recon 記錄 `ce414b0`（2 稽核+4 設計書）。
+6. SECSGEM Wave 1 `21900fd`（本條）— uHGemClass 21→已解至剩 23 gated。
+- 全部經獨立審查+主迴圈驗證。ctest 全程守在 83/87（4 既有環境漂移）。
+
+### 🔖 RESUME（最新，關機交接 2026-07-20 16:4x）
+- **工作樹狀態**：**乾淨**（Wave 1 已 commit `21900fd`；本 docs 條目 commit 後亦乾淨）。唯一非本專案殘留＝無關的 V899 `MachineType.h`/`config/*`/`setup.inf`（PTI 案，勿圈入 V906 commit）。分支 `fix/v899.32-pti`。golden=`HT9011UC_Code_V3.33.906.0_20260618`。
+- **驗證基準**：ctest **83/87**（4 既有漂移 config_db/IniFiles/ini_helpers/config_loaders）；套件 test_uHGemClass 86(gated 23)、test_uHGemEquipment **390**、SecsWireCodec 226、testertcp_socket 80、interfacesys 80、TesterTCP 16、automation 127。
+- **下一波(寫入單線，一次一波)＝SECSGEM 收尾群 Wave 2 `W906-AlarmReportAck`**：設計書 `DESIGN_SECSGEM_closing_waves.md`(be8fe31a scratchpad) Wave 2 章節；範圍 GetAlarmIndex/EnableDisableAlarm+Report-Ack composer+5 temp-list 成員，un-gate 9 支，零 CMake。**⚠ 讀該書時 Q4 前綴描述不可信(見上)、須實讀 golden 定 this->/HGem-> 慣用語**。
+- **其後佇列(全部設計書就緒，見 ce414b0 條目的重排佇列)**：uHGemHT9045 Bucket 0(swap-back,唯一近期可做,牆②③擋其餘)→common.cpp 完成波(最高槓桿,解 GetLastOpenFN+S7F18+≥4 gate)→SECSGEM W3 3a/3b(3b 需先建 SaveEventReportData 檔寫 seam=稽核 HIGH#2)→VCW-1 cast 基礎(需 TStringList 移入 TObject 樹)→VCW-2 終端→S2F32 時鐘微波→DoDLRequest 測試 seam(裁決 ctest 不起外部行程)。零成本清理波：刪 5 個假 ODR-dup gate+atester_32Site.cpp:1698 補 MSG_CMD_Arm1Down。測試衛生：cBootLog 測試隔離(稽核 HIGH#1)。中長期：FormsFacade/Handler-free-func 前置波→uHGemHT9045 Bucket 1-5；W7 E0/M1/M2 HAL pump 群(含 AutoClean.cpp 9137 行,見 RECON_W7_breakdown.md)。
+- **scratchpad 交付物清單**（be8fe31a\scratchpad，關機後仍在磁碟；若清空則各設計書可依 DEVLOG 摘要重派）：DESIGN_SECSGEM_closing_waves / DESIGN_DoDLRequest_test_seam / DESIGN_VCL_widget_cast_wave / DESIGN_uHGemHT9045_siteoverride / RECON_W7_breakdown / AUDIT_test_hazards_tree / AUDIT_gated_inventory（+gate_list.txt/gate_context.txt/extract_gates.py 可重用）。進度儀表板 https://claude.ai/code/artifact/26e3926c-c145-4699-9743-a7ae9db614e4。
+- **整體進度估計(今日量測)**：邏輯翻譯 ~40-45%（行數面 golden 覆蓋 39.8%、檔面 32%）；含整合期(真 UI/實機 HAL/MSVC 64-bit/e2e pump)整體專案 ~30%。詳見本日「評估%」對話與 KNOWLEDGE。
