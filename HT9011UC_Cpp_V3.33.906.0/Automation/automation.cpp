@@ -822,12 +822,19 @@ void TfAutomation::tmrOLPTimer(TObject * /*Sender*/)   //主動回傳
 //---------------------------------------------------------------------------
 void TfAutomation::btnConnectClick(TObject * /*Sender*/)
 {
-    // preserved golden quirk: `Text!=0` compares Text to the STRING "0" (via
-    // AnsiString's implicit int ctor), NOT "is text non-empty" -- golden
-    // automation.cpp:648-651 verbatim.
-    if (edinputIP->Text != 0)
+    // AI(W906-AutoPB-D5) 20260720: golden's `Text!=0` (automation.cpp:648-651)
+    // compares against the STRING "0" -- BCB6 resolves the bare 0 through
+    // AnsiString's int ctor. Under vclcompat, a bare `!=0` instead binds the
+    // const char* overload (0 == NULL pointer == empty string), silently
+    // changing the comparison to `!=""` -- the W906-AutoPB design's compile
+    // experiment (design doc S2-B) proved this divergence. Spelling
+    // `AnsiString(0)` forces the int ctor and restores golden's compare-with-
+    // "0" semantics, same as the P18/D4 sites translated in the ProcessBuffer
+    // wave. (The previous comment here claimed `!=0` already compared "0"
+    // under vclcompat -- that was factually wrong and is corrected herewith.)
+    if (edinputIP->Text != AnsiString(0))
         OLPClient->Address = edinputIP->Text;
-    if (edinputport->Text != 0)
+    if (edinputport->Text != AnsiString(0))
         OLPClient->Port = edinputport->Text.ToInt();
 
     try
