@@ -613,5 +613,19 @@ C 桶(`clientGemRead`/`ProcessSocketReceiveData`/`Timer1Timer`)是本檔案最�
 **設計書目標路徑**：`C:\Users\JIMMYC~1\AppData\Local\Temp\claude\D--HT9045\452108d5-1416-413a-b6dc-35801b9adf0d\scratchpad\DESIGN_SystemModularInitial_wiring.md`
 設計書須逐項定案 A-G：A=MyGem 具體型別（HT9045Gem ~9200 行未翻且本波不翻——THGem 直接實例化 vs 薄 shim 擇一，含 override 行為差異分析與未來換回路徑）；B=golden ctor 第二參數 `HGem` 是什麼+生命週期/所有權（SYSTEM_MODULAR ctor/dtor 皆仍 gated）；C=S,F tail 精確切法（缺口逐項盤點，部分真/部分 gate，比照 Bucket C 前例）；D=two-codec 定案；E=__fastcall ABI 配對檢查清單+強制 build log grep `resolving`=0（Bucket C 已實證系統性中和失效）；F=T1-Tn 測試計畫（沿用 test_uHGemEquipment 252 斷言+TextLogSnapshot 慣例）；G=翻譯 agent 施工序。
 
-### 🔖 RESUME（最新）
+### 🔖 RESUME（已被下方 2026-07-20 條目取代）
 - **▶ SystemModularInitial 接線波 in-flight（2026-07-19）**：程式碼零變更、工作樹乾淨（僅本 DEVLOG 條目）。下次接續：(1) 檢查上方 scratchpad 路徑的設計書是否存在——**存在**→直接派翻譯 agent（Sonnet 5 + high）照書施工→獨立審查（Sonnet 5，協定核心用 xhigh）→主迴圈親自 fresh from-scratch build + ctest + mojibake 0 + build log grep `resolving`=0 複驗→commit+更新 DEVLOG/ROADMAP/RESUME；**不存在**（關機時設計 agent 未完成即遺失）→依上方 A-G 清單重派設計 agent（Fable 5），prompt 要點全在本條目。(2) 驗證基準：ctest 83/87（4 個既有 Gerneral.ini 環境漂移失敗非回歸）、630 斷言跨 4 套件。(3) 分支 fix/v899.32-pti（勿信 feat/cpp-906-migration stale 指標）。
+
+---
+
+## 2026-07-20 — SysModWire 翻譯施工啟動 + 三路讀取型 pipeline 平行展開（in-flight 檢查點）
+
+**設定聲明**：主迴圈 Fable 5 + xhigh；翻譯 agent Sonnet 5（施工中）；設計 recon×2 Fable 5；`__fastcall` 稽核 Sonnet 5。
+
+**狀態**：設計書 `DESIGN_SystemModularInitial_wiring.md`（452108d5 scratchpad，50KB）確認存活且完整（定案 A–G/§7 執行序/§9 驗收清單俱全）→ 已派翻譯 agent 照書施工（背景）。同時依「讀取型可平行、寫入型單波」原則平行派出 3 個唯讀 agent，產出物路徑（本 session scratchpad `...\D--HT9045\be8fe31a-b61f-4841-9bc7-87c3a238ca62\scratchpad\`）：
+1. `DESIGN_TesterTCP_TimerProcessTCPDataTimer.md` — TesterTCP Timer 核心波設計書（Fable 5）。
+2. `DESIGN_automation_ProcessBuffer.md` — automation ProcessBuffer 波設計書（Fable 5）。
+3. `AUDIT_fastcall_tree.md` — 全樹 `__fastcall` ABI 靜態稽核（ROADMAP 追蹤項；純靜態不 build；volatile 檔標 post-SysModWire 重驗）。
+
+### 🔖 RESUME（最新）
+- **▶ SysModWire 翻譯施工中 + 3 個唯讀 pipeline agent 平行跑（2026-07-20）**。下次接續：(1) 翻譯 agent 完成→派獨立審查（Sonnet 5，協定核心 xhigh，照設計書 §9 驗收清單）→主迴圈親自 fresh build + ctest + mojibake 0 + grep `resolving`=0 →commit+更新 DEVLOG/ROADMAP。若關機遺失翻譯成果：工作樹 `HT9011UC_Cpp_V3.33.906.0` 若有半成品先 `git status`/diff 評估，設計書仍在 452108d5 scratchpad 可重派。(2) 上列 3 個唯讀產出物若存在→直接取用（TesterTCP/automation 兩本設計書即為後續兩波的施工依據；fastcall 稽核報告排獨立修復小波）；不存在→依本條目重派。(3) 驗證基準 ctest 83/87、630 斷言跨 4 套件；分支 fix/v899.32-pti。(4) 寫入型波一次只跑一個（blame isolation），下一寫入波在 SysModWire commit 後才啟動。
