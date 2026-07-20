@@ -338,8 +338,36 @@ THGem::THGem()
       OldSUpdateStatus(""),
       GemControlState(0),
       GemControlPreState(0),
-      SECSCommunicationMode(0)         // golden ctor :500 (explicitly 0)
+      SECSCommunicationMode(0),        // golden ctor :500 (explicitly 0)
+      // AI(W906-SvEcDataItem) 20260720: FormCreate's "system SV" targets --
+      // golden's own ctor never touches any of these (see header's own note
+      // on this member group); zero/empty-initialized here defensively,
+      // matching this file's established precedent.
+      GemLinkState(0),                 // golden ctor :499 (explicitly 0)
+      lCPUFreq(0),
+      Disk_C_TotalSpaceMB(0),
+      Disk_D_TotalSpaceMB(0),
+      Disk_C_TotalFreeSpaceMB(0),
+      Disk_D_TotalFreeSpaceMB(0),
+      ulMemoryLoad(0),
+      ulTotalPhys(0),
+      ulAvailPhys(0),
+      iMinTimeFormat(0),               // golden ctor :650 (explicitly 0)
+      iMaxTimeFormat(3),               // golden ctor :651 (explicitly 3)
+      iTimeFormatDefault(0),           // golden never inits this either -- flagged deviation, see header note
+      SV_70_UNT1_ReceipeStruct(0),
+      SV_71_ASCII_FilenameExtened(""),
+      GemSpoolCountActual(0)
 {
+    // AI(W906-SvEcDataItem) 20260720: szManID/szGetCPUType/GemSpoolStartTime
+    // are fixed char[256] buffers (not in the member-init list above --
+    // arrays cannot be initialized with a scalar in a ctor init list); golden
+    // never initializes them either (see header note) -- zeroed explicitly
+    // here, same defensive posture as every other member in this group.
+    szManID[0] = 0;
+    szGetCPUType[0] = 0;
+    GemSpoolStartTime[0] = 0;
+
     try
     {
         strGrdAlarmOld  = new TStringGrid(5, 1);
@@ -721,6 +749,1022 @@ void THGem::WriteAlamData()
     memoPtr->SaveToFile(Filename);
     memoPtr->Clear();
     delete memoPtr;
+}
+
+//===========================================================================
+//  SV/EC DataItem family (W906-SvEcDataItem 20260720)
+//  (golden uHGemEquipment.cpp:2472-3336, 7623-7688)
+//
+//  PORT NOTE (applies to every method below that walks SvEcReg's SV_*/EC_*
+//  lists): golden's THGem holds SV_ID/SV_TYPE/.../EC_OldValue as ITS OWN
+//  direct members; this port holds the identical bookkeeping one level down,
+//  inside the by-value `SvEcReg` member (SecsSvEcRegistration, see the
+//  header's own embed note) -- so every golden `SV_ID->...`/`EC_ID->...`
+//  etc. becomes `SvEcReg.SV_ID->...`/`SvEcReg.EC_ID->...` here (purely
+//  mechanical -- SvEcReg IS THGem's own SV/EC bookkeeping, not a different
+//  object). `->Strings[i].c_str()` becomes `->GetString(i).c_str()`
+//  (vclcompat's StringsProxy has no `.c_str()`, see SecsSvEcRegistration.cpp
+//  's own file-head note -- same accommodation already established there and
+//  in CheckECValue, uHGemClass.cpp). `DataItemOut`/`SendInvalidDataMessage
+//  ToHost` are wire-codec primitives -> `WireCodec.` (THGem's own embedded
+//  codec, D1 precedent, matching CheckSFFormatOnlyHead's own established
+//  idiom above). golden `_atoi64` -> `strtoll`/`strtoull` (MinGW <cstdlib>
+//  has no `_atoi64`; same portability substitution SecsSvEcRegistration.cpp
+//  already made, identical rationale).
+//
+//  GATE NOTE (design doc D2): golden's VCL-widget-cast sub-branch (IsVCL==1
+//  -> dynamic_cast onto TPanel/TCustomEdit/TComboBox/TLabel/TCheckBox/
+//  TRadioGroup/TStringList, none of which exist in vclcompat) is GATED
+//  (`#if 0`) in DataItemOutSV/DataItemOutEC below, following the EXACT same
+//  gate+conservative-fallback idiom SecsSvEcRegistration.cpp's own
+//  GetECDataValue already established for the identical golden branch
+//  (SecsSvEcRegistration.cpp:620-701) -- see that method for the precedent.
+//  Every SV/EC THGem::FormCreate registers this wave is raw-ptr (VCL_NAME/
+//  EC_VCL_NAME=="0"), so this gate is never reached by any in-scope caller;
+//  the IsVCL==2 (AnsiString*-backed) sibling branch stays REAL.
+//===========================================================================
+//---------------------------------------------------------------------------
+// V 1.0 (golden uHGemEquipment.cpp:2472-2761)
+// SV data output
+//---------------------------------------------------------------------------
+bool THGem::DataItemOutSV(AnsiString SVID)
+{
+    int i, Len;
+    unsigned char Type;
+    AnsiString SVName;
+    AnsiString SVUnit;
+    void *P;
+    AnsiString S, IsVCL, VCLStr, *SS;
+
+    char  VCL_ASCII[10000];
+    char  VCL_BINARY;
+    char  VCL_INT1;
+    short VCL_INT2;
+    int   VCL_INT4;
+    long long  VCL_INT8;                        // golden __int64
+    unsigned char  VCL_UINT1,VCL_BOOLEAN;
+    unsigned short VCL_UINT2;
+    unsigned int   VCL_UINT4;
+    unsigned long long  VCL_UINT8;               // golden unsigned __int64
+
+    float VCL_FT4;
+    double VCL_FT8;
+    bool ret=true;
+
+    i=SvEcReg.SV_ID->IndexOf(SVID);
+    if(i>=0)
+    {
+        Type    =(unsigned char)atoi(SvEcReg.SV_TYPE->GetString(i).c_str());
+        SVName  =SvEcReg.SV_NAME->GetString(i);
+        SVUnit  =SvEcReg.SV_UNIT->GetString(i);
+        IsVCL   =SvEcReg.VCL_NAME->GetString(i);
+        P       =SvEcReg.SV_Ptr->Items[i];
+        Len     =atoi(SvEcReg.SV_LEN->GetString(i).c_str());
+
+        if(IsVCL==1 || IsVCL==2)
+        {
+            if(IsVCL==1)
+            {
+#if 0
+                // AI(W906-SvEcDataItem) 20260720: GATED -- golden
+                // uHGemEquipment.cpp:2513-2585 (dynamic_cast cluster). See
+                // this method group's own file-head GATE NOTE.
+                TObject *VclP=(TObject *)P;
+
+                TPanel      *PanelPtr;
+                TCustomEdit *EditPtr;
+                TComboBox   *ComboBoxPtr;
+                TLabel      *LabelPtr;
+                TCheckBox   *CheckBoxPtr;
+                TRadioGroup *RadioGroupPtr;
+                TStringList *StringListPtr;
+
+                PanelPtr     =dynamic_cast<TPanel       *>(VclP);
+                EditPtr      =dynamic_cast<TCustomEdit  *>(VclP);
+                ComboBoxPtr  =dynamic_cast<TComboBox    *>(VclP);
+                LabelPtr     =dynamic_cast<TLabel       *>(VclP);
+                CheckBoxPtr  =dynamic_cast<TCheckBox    *>(VclP);
+                RadioGroupPtr=dynamic_cast<TRadioGroup  *>(VclP);
+                StringListPtr=dynamic_cast<TStringList  *>(VclP);
+
+                if(StringListPtr!=NULL)
+                    VCLStr=StringListPtr->CommaText;
+                else if(PanelPtr!=NULL)
+                    VCLStr=PanelPtr->Caption;
+                else if(EditPtr!=NULL)
+                    VCLStr=EditPtr->Text;
+                else if(ComboBoxPtr!=NULL)
+                {
+                    if(Type==HType.ASCII_TYPE)
+                        VCLStr=ComboBoxPtr->Text;
+                    else
+                        VCLStr=ComboBoxPtr->ItemIndex;
+                }
+                else if(RadioGroupPtr!=NULL)
+                {
+                    if(RadioGroupPtr->ItemIndex>=0)
+                    {
+                        if(Type==HType.ASCII_TYPE)
+                            VCLStr=RadioGroupPtr->Items->Strings[RadioGroupPtr->ItemIndex];
+                        else
+                            VCLStr=RadioGroupPtr->ItemIndex;
+                    }
+                    else
+                    {
+                        if(Type==HType.ASCII_TYPE)
+                            VCLStr="";
+                        else
+                            VCLStr="-1";
+                    }
+                }
+                else if(LabelPtr!=NULL)
+                    VCLStr=LabelPtr->Caption;
+                else if(CheckBoxPtr!=NULL)
+                {
+                    Type=HType.BOOLEAN_TYPE;
+                    if(CheckBoxPtr->Checked)
+                        VCLStr="1";
+                    else
+                        VCLStr="0";
+                }
+                else
+                    VCLStr="";
+#else
+                // Unreachable from this unit's scope (see GATE NOTE above).
+                // Conservative default matches golden's own final `else`
+                // tail (nothing dynamic_casts successfully -> "").
+                VCLStr="";
+#endif
+            }
+            else
+            {
+                SS=(AnsiString *)P;
+                VCLStr=*SS;
+            }
+
+            if(Type==HType.ASCII_TYPE)
+            {
+                strcpy(VCL_ASCII, VCLStr.c_str());
+                P=VCL_ASCII;
+            }
+            else if(Type==HType.BINARY_TYPE)
+            {
+                VCL_BINARY=(char)atoi(VCLStr.c_str());
+                P=&VCL_BINARY;
+            }
+            else if(Type==HType.BOOLEAN_TYPE)
+            {
+                VCL_BOOLEAN=(unsigned char)atoi(VCLStr.c_str());
+                P=&VCL_BOOLEAN;
+            }
+            else if(Type==HType.INT_1_TYPE)
+            {
+                VCL_INT1=(char)atoi(VCLStr.c_str());
+                P=&VCL_INT1;
+            }
+            else if(Type==HType.INT_2_TYPE)
+            {
+                VCL_INT2=(short)atoi(VCLStr.c_str());
+                P=&VCL_INT2;
+            }
+            else if(Type==HType.INT_4_TYPE)
+            {
+                VCL_INT4=atoi(VCLStr.c_str());
+                P=&VCL_INT4;
+            }
+            else if(Type==HType.INT_8_TYPE)                                    //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+            {
+                VCL_INT8=strtoll(VCLStr.c_str(), NULL, 10);   // golden: _atoi64 (MinGW substitution)
+                P=&VCL_INT8;
+            }
+            else if(Type==HType.UINT_1_TYPE)
+            {
+                VCL_UINT1=(unsigned char)atoi(VCLStr.c_str());
+                P=&VCL_UINT1;
+            }
+            else if(Type==HType.UINT_2_TYPE)
+            {
+                VCL_UINT2=(unsigned short)atoi(VCLStr.c_str());
+                P=&VCL_UINT2;
+            }
+            else if(Type==HType.UINT_4_TYPE)
+            {
+                VCL_UINT4=(unsigned)atoi(VCLStr.c_str());
+                P=&VCL_UINT4;
+            }
+            else if(Type==HType.UINT_8_TYPE)                                    //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+            {
+                VCL_UINT8=strtoull(VCLStr.c_str(), NULL, 10);   // golden: _atoi64 (MinGW substitution)
+                P=&VCL_UINT8;
+            }
+            else if(Type==HType.FT_4_TYPE)
+            {
+                VCL_FT4=(float)atof(VCLStr.c_str());
+                P=&VCL_FT4;
+            }
+            else if(Type==HType.FT_8_TYPE)
+            {
+                VCL_FT8=atof(VCLStr.c_str());
+                P=&VCL_FT8;
+            }
+        }
+        else
+        {
+            P=SvEcReg.SV_Ptr->Items[i];
+        }
+
+        if(Type==HType.LIST_TYPE)
+        {
+            int *Ptr;
+            Ptr=(int *)P;
+            WireCodec.DataItemOut(Len, HType.LIST_TYPE, NULL);
+            for(i=0; i<Len; i++)
+            {
+                ret=DataItemOutSV(Ptr[i]);
+                if(ret==false)
+                    return false;
+            }
+        }
+
+        if(Type==HType.ASCII_TYPE)
+        {
+            char *Ptr;
+            Ptr=(char *)P;
+            WireCodec.DataItemOut((int)strlen(Ptr), Type, Ptr);
+        }
+        else if(Type==HType.BINARY_TYPE)
+        {
+            char *Ptr;
+            Ptr=(char *)P;
+            WireCodec.DataItemOut(Len, Type, Ptr);
+        }
+        else if(Type==HType.BOOLEAN_TYPE)
+        {
+            unsigned char *Ptr;
+            Ptr=(unsigned char *)P;
+            WireCodec.DataItemOut(Len, Type, Ptr);
+        }
+        else if(Type==HType.INT_1_TYPE)
+        {
+            char *Ptr;
+            Ptr=(char *)P;
+            WireCodec.DataItemOut(Len, Type, Ptr);
+        }
+        else if(Type==HType.INT_2_TYPE)
+        {
+            short *Ptr;
+            Ptr=(short *)P;
+            WireCodec.DataItemOut(Len, Type, Ptr);
+        }
+        else if(Type==HType.INT_4_TYPE)
+        {
+            int *Ptr;
+            Ptr=(int *)P;
+            WireCodec.DataItemOut(Len, Type, Ptr);
+        }
+        else if(Type==HType.INT_8_TYPE)                                        //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+        {
+            long long *Ptr;                                                    // golden __int64
+            Ptr=(long long *)P;
+            WireCodec.DataItemOut(Len, Type, Ptr);
+        }
+        else if(Type==HType.UINT_1_TYPE)
+        {
+            unsigned char *Ptr;
+            Ptr=(unsigned char *)P;
+            WireCodec.DataItemOut(Len, Type, Ptr);
+        }
+        else if(Type==HType.UINT_2_TYPE)
+        {
+            unsigned short *Ptr;
+            Ptr=(unsigned short *)P;
+            WireCodec.DataItemOut(Len, Type, Ptr);
+        }
+        else if(Type==HType.UINT_4_TYPE)
+        {
+            unsigned int *Ptr;
+            Ptr=(unsigned int *)P;
+            WireCodec.DataItemOut(Len, Type, Ptr);
+        }
+        else if(Type==HType.UINT_8_TYPE)                                       //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+        {
+            unsigned long long *Ptr;                                          // golden unsigned __int64
+            Ptr=(unsigned long long *)P;
+            WireCodec.DataItemOut(Len, Type, Ptr);
+        }
+        else if(Type==HType.FT_4_TYPE)
+        {
+            float *Ptr;
+            Ptr=(float *)P;
+            WireCodec.DataItemOut(Len, Type, Ptr);
+        }
+        else if(Type==HType.FT_8_TYPE)
+        {
+            double *Ptr;
+            Ptr=(double *)P;
+            WireCodec.DataItemOut(Len, Type, Ptr);
+        }
+        return true;
+    }
+
+    S="SVID:"+SVID+" not define ";
+    WireCodec.SendInvalidDataMessageToHost(S);                                  // 2013_09_06 steven
+    DB->Lines->Add(S);
+    return false;
+}
+// ---------------------------------------------------------------------------
+// V 1.0 (golden uHGemEquipment.cpp:2765-2801)
+// ---------------------------------------------------------------------------
+bool THGem::DataItemOutSVNameList(AnsiString SVID)
+{
+    unsigned int j;
+    AnsiString SVName;
+    AnsiString SVUnit;
+    AnsiString S;
+
+    int iSV=SvEcReg.SV_ID->IndexOf(SVID);
+    if(iSV>=0)
+    {
+        SVName=SvEcReg.SV_NAME->GetString(iSV);
+        SVUnit=SvEcReg.SV_UNIT->GetString(iSV);
+
+        WireCodec.DataItemOut(3, HType.LIST_TYPE, NULL);
+
+        j=(unsigned int)atoi(SVID.c_str());
+        S=j;
+
+        if(SVID=="0" || S==SVID)
+        {
+            WireCodec.DataItemOut(1, HType.UINT_4_TYPE, &j);
+        }
+        else
+        {
+            WireCodec.DataItemOut(HType.ASCII_TYPE, SVID);
+        }
+
+        WireCodec.DataItemOut(HType.ASCII_TYPE, SVName);
+        WireCodec.DataItemOut(HType.ASCII_TYPE, SVUnit);
+        return true;
+    }
+
+    S="SVID:"+SVID+" not define ";
+    WireCodec.SendInvalidDataMessageToHost(S);                                  //2013_09_06  steven
+    DB->Lines->Add(S);
+    return false;
+}
+// ---------------------------------------------------------------------------
+// golden uHGemEquipment.cpp:2803-2840 -- Steven 20140911 : Add S103F11
+// ---------------------------------------------------------------------------
+bool THGem::DataItemOutSVNameListWithValue(AnsiString SVID)
+{
+    unsigned int j;
+    AnsiString SVName;
+    AnsiString SVUnit;
+    AnsiString S;
+
+    int iSV=SvEcReg.SV_ID->IndexOf(SVID);
+    if(iSV>=0)
+    {
+        SVName=SvEcReg.SV_NAME->GetString(iSV);
+        SVUnit=SvEcReg.SV_UNIT->GetString(iSV);
+
+        WireCodec.DataItemOut(4, HType.LIST_TYPE, NULL);
+
+        j=(unsigned int)atoi(SVID.c_str());
+        S=j;
+
+        if(SVID=="0" || S==SVID)
+        {
+            WireCodec.DataItemOut(1, HType.UINT_4_TYPE, &j);
+        }
+        else
+        {
+            WireCodec.DataItemOut(HType.ASCII_TYPE, SVID);
+        }
+
+        WireCodec.DataItemOut(HType.ASCII_TYPE, SVName);
+        WireCodec.DataItemOut(HType.ASCII_TYPE, SVUnit);
+        DataItemOutSV(SVID);
+        return true;
+    }
+
+    S="SVID:"+SVID+" not define ";
+    WireCodec.SendInvalidDataMessageToHost(S);                                  //2013_09_06  steven
+    DB->Lines->Add(S);
+    return false;
+}
+// ---------------------------------------------------------------------------
+// V 1.0 (golden uHGemEquipment.cpp:2845-3112)
+// EC output
+// ---------------------------------------------------------------------------
+void THGem::DataItemOutEC(AnsiString ECID)
+{
+    int i;
+    unsigned char Type;
+    AnsiString ECName;
+    AnsiString ECUnit;
+    void *P;
+    AnsiString S, IsVCL, VCLStr, *SS;
+
+    char  VCL_ASCII[10000];
+    char  VCL_BINARY;
+    char  VCL_INT1;
+    short VCL_INT2;
+    int   VCL_INT4;
+    long long  VCL_INT8;                        // golden __int64
+    unsigned char  VCL_UINT1,VCL_BOOLEAN;
+    unsigned short VCL_UINT2;
+    unsigned int   VCL_UINT4;
+    unsigned long long  VCL_UINT8;               // golden unsigned __int64
+
+    float VCL_FT4;
+    double VCL_FT8;
+
+    i=SvEcReg.EC_ID->IndexOf(ECID);
+    if(i>=0)
+    {
+        IsVCL   =SvEcReg.EC_VCL_NAME->GetString(i);
+        Type    =(unsigned char)atoi(SvEcReg.EC_TYPE->GetString(i).c_str());
+        ECName  =SvEcReg.EC_NAME->GetString(i);
+        ECUnit  =SvEcReg.EC_UNIT->GetString(i);
+        P       =SvEcReg.EC_Ptr->Items[i];
+
+        if(IsVCL==1 || IsVCL==2)
+        {
+            if(IsVCL==1)
+            {
+#if 0
+                // AI(W906-SvEcDataItem) 20260720: GATED -- golden
+                // uHGemEquipment.cpp:2885-2956 (dynamic_cast cluster). See
+                // this method group's own file-head GATE NOTE.
+                Type    =(unsigned char)atoi(SvEcReg.EC_TYPE->GetString(i).c_str());
+                ECName  =SvEcReg.EC_NAME->GetString(i);
+                ECUnit  =SvEcReg.EC_UNIT->GetString(i);
+                TObject *VclP=(TObject *)P;
+
+                TPanel      *PanelPtr;
+                TCustomEdit *EditPtr;
+                TComboBox   *ComboBoxPtr;
+                TLabel      *LabelPtr;
+                TCheckBox   *CheckBoxPtr;
+                TRadioGroup *RadioGroupPtr;
+                TStringList *StringListPtr;
+
+                PanelPtr     =dynamic_cast<TPanel       *>(VclP);
+                EditPtr      =dynamic_cast<TCustomEdit  *>(VclP);
+                ComboBoxPtr  =dynamic_cast<TComboBox    *>(VclP);
+                LabelPtr     =dynamic_cast<TLabel       *>(VclP);
+                CheckBoxPtr  =dynamic_cast<TCheckBox    *>(VclP);
+                RadioGroupPtr=dynamic_cast<TRadioGroup  *>(VclP);
+                StringListPtr=dynamic_cast<TStringList  *>(VclP);
+
+                if(StringListPtr!=NULL)
+                    VCLStr=StringListPtr->CommaText;
+                else if(PanelPtr!=NULL)
+                    VCLStr=PanelPtr->Caption;
+                else if(EditPtr!=NULL)
+                    VCLStr=EditPtr->Text;
+                else if(ComboBoxPtr!=NULL)
+                {
+                    if(Type==HType.ASCII_TYPE)
+                        VCLStr=ComboBoxPtr->Text;
+                    else
+                        VCLStr=ComboBoxPtr->ItemIndex;
+                }
+                else if(RadioGroupPtr!=NULL)
+                {
+                    if(RadioGroupPtr->ItemIndex>=0)
+                    {
+                        if(Type==HType.ASCII_TYPE)
+                            VCLStr=RadioGroupPtr->Items->Strings[RadioGroupPtr->ItemIndex];
+                        else
+                            VCLStr=RadioGroupPtr->ItemIndex;
+                    }
+                    else
+                    {
+                        if(Type==HType.ASCII_TYPE)
+                            VCLStr="";
+                        else
+                            VCLStr="-1";
+                    }
+                }
+                else if(LabelPtr!=NULL)
+                    VCLStr=LabelPtr->Caption;
+                else if(CheckBoxPtr!=NULL)
+                {
+                    Type=HType.BOOLEAN_TYPE;
+                    if(CheckBoxPtr->Checked)
+                        VCLStr="1";
+                    else
+                        VCLStr="0";
+                }
+                else
+                    VCLStr="";
+#else
+                // Unreachable from this unit's scope (see GATE NOTE above).
+                VCLStr="";
+#endif
+            }
+            else
+            {
+                SS=(AnsiString *)P;
+                VCLStr=*SS;
+            }
+
+            if(Type==HType.ASCII_TYPE)
+            {
+                strcpy(VCL_ASCII, VCLStr.c_str());
+                P=VCL_ASCII;
+            }
+            else if(Type==HType.BINARY_TYPE)
+            {
+                VCL_BINARY=(char)atoi(VCLStr.c_str());
+                P=&VCL_BINARY;
+            }
+            else if(Type==HType.BOOLEAN_TYPE)
+            {
+                VCL_BOOLEAN=(unsigned char)atoi(VCLStr.c_str());
+                P=&VCL_BOOLEAN;
+            }
+            else if(Type==HType.INT_1_TYPE)
+            {
+                VCL_INT1=(char)atoi(VCLStr.c_str());
+                P=&VCL_INT1;
+            }
+            else if(Type==HType.INT_2_TYPE)
+            {
+                VCL_INT2=(short)atoi(VCLStr.c_str());
+                P=&VCL_INT2;
+            }
+            else if(Type==HType.INT_4_TYPE)
+            {
+                VCL_INT4=atoi(VCLStr.c_str());
+                P=&VCL_INT4;
+            }
+            else if(Type==HType.INT_8_TYPE)                                    //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+            {
+                VCL_INT8=strtoll(VCLStr.c_str(), NULL, 10);   // golden: _atoi64 (MinGW substitution)
+                P=&VCL_INT8;
+            }
+            else if(Type==HType.UINT_1_TYPE)
+            {
+                VCL_UINT1=(unsigned char)atoi(VCLStr.c_str());
+                P=&VCL_UINT1;
+            }
+            else if(Type==HType.UINT_2_TYPE)
+            {
+                VCL_UINT2=(unsigned short)atoi(VCLStr.c_str());
+                P=&VCL_UINT2;
+            }
+            else if(Type==HType.UINT_4_TYPE)
+            {
+                VCL_UINT4=(unsigned)atoi(VCLStr.c_str());
+                P=&VCL_UINT4;
+            }
+            else if(Type==HType.UINT_8_TYPE)                                    //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+            {
+                VCL_UINT8=strtoull(VCLStr.c_str(), NULL, 10);   // golden: _atoi64 (MinGW substitution)
+                P=&VCL_UINT8;
+            }
+            else if(Type==HType.FT_4_TYPE)                                     // Lee
+            {
+                VCL_FT4=(float)atof(VCLStr.c_str());
+                P=&VCL_FT4;
+            }
+            else if(Type==HType.FT_8_TYPE)
+            {
+                VCL_FT8=atof(VCLStr.c_str());
+                P=&VCL_FT8;
+            }
+        }
+
+        if(Type==HType.ASCII_TYPE)
+        {
+            char *Ptr;
+            Ptr=(char *)P;
+            WireCodec.DataItemOut((int)strlen(Ptr), Type, Ptr);
+        }
+        else if(Type==HType.BINARY_TYPE)
+        {
+            char *Ptr;
+            Ptr=(char *)P;
+            WireCodec.DataItemOut(1, Type, Ptr);
+        }
+        else if(Type==HType.BOOLEAN_TYPE)
+        {
+            unsigned char *Ptr;
+            Ptr=(unsigned char *)P;
+            WireCodec.DataItemOut(1, Type, Ptr);
+        }
+        else if(Type==HType.INT_1_TYPE)
+        {
+            char *Ptr;
+            Ptr=(char *)P;
+            WireCodec.DataItemOut(1, Type, Ptr);
+        }
+        else if(Type==HType.INT_2_TYPE)
+        {
+            short *Ptr;
+            Ptr=(short *)P;
+            WireCodec.DataItemOut(1, Type, Ptr);
+        }
+        else if(Type==HType.INT_4_TYPE)
+        {
+            int *Ptr;
+            Ptr=(int *)P;
+            WireCodec.DataItemOut(1, Type, Ptr);
+        }
+        else if(Type==HType.INT_8_TYPE)                                        //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+        {
+            long long *Ptr;                                                    // golden __int64
+            Ptr=(long long *)P;
+            WireCodec.DataItemOut(1, Type, Ptr);
+        }
+        else if(Type==HType.UINT_1_TYPE)
+        {
+            unsigned char *Ptr;
+            Ptr=(unsigned char *)P;
+            WireCodec.DataItemOut(1, Type, Ptr);
+        }
+        else if(Type==HType.UINT_2_TYPE)
+        {
+            unsigned short *Ptr;
+            Ptr=(unsigned short *)P;
+            WireCodec.DataItemOut(1, Type, Ptr);
+        }
+        else if(Type==HType.UINT_4_TYPE)
+        {
+            unsigned int *Ptr;
+            Ptr=(unsigned int *)P;
+            WireCodec.DataItemOut(1, Type, Ptr);
+        }
+        else if(Type==HType.UINT_8_TYPE)                                       //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+        {
+            unsigned long long *Ptr;                                          // golden unsigned __int64
+            Ptr=(unsigned long long *)P;
+            WireCodec.DataItemOut(1, Type, Ptr);
+        }
+        else if(Type==HType.FT_4_TYPE)
+        {
+            float *Ptr;
+            Ptr=(float *)P;
+            WireCodec.DataItemOut(1, Type, Ptr);
+        }
+        else if(Type==HType.FT_8_TYPE)
+        {
+            double *Ptr;
+            Ptr=(double *)P;
+            WireCodec.DataItemOut(1, Type, Ptr);
+        }
+        return;
+    }
+    WireCodec.DataItemOut(0, HType.LIST_TYPE, NULL);
+}
+//------------------------------------------------------------------------------
+// golden uHGemEquipment.cpp:3114-3122
+//------------------------------------------------------------------------------
+bool THGem::IsValidSVID(AnsiString SVID)
+{
+    int i=SvEcReg.SV_ID->IndexOf(SVID);
+    if(i>=0)
+    {
+        return true;
+    }
+    return false;
+}
+//==============================================================================
+// V 1.0 (golden uHGemEquipment.cpp:3127-3332)
+// for EC Name List
+//==============================================================================
+void THGem::DataItemOutECNameList(AnsiString ECID)
+{
+    int i, j;
+    unsigned char Type;
+    AnsiString ECName;
+    AnsiString ECUnit;
+    char MaxForAscii[256], MinForAscii[256], DefaultForAscii[256];              // 2013/05/08 lee
+    void *PMax,*PMin,*PDefault;
+    AnsiString S;
+    AnsiString PMax_Value,PMin_Value,PDefault_Value;
+
+    i=SvEcReg.EC_ID->IndexOf(ECID);
+    if(i>=0)
+    {
+        Type  =(unsigned char)atoi(SvEcReg.EC_TYPE->GetString(i).c_str());
+        ECName=SvEcReg.EC_NAME->GetString(i);
+        ECUnit=SvEcReg.EC_UNIT->GetString(i);
+
+        PMax=SvEcReg.EC_Ptr_Max->Items[i];
+        PMin=SvEcReg.EC_Ptr_Min->Items[i];
+        PDefault=SvEcReg.EC_Ptr_Default->Items[i];
+
+        PMax_Value      =SvEcReg.EC_Ptr_Max_Value->GetString(i);
+        PMin_Value      =SvEcReg.EC_Ptr_Min_Value->GetString(i);
+        PDefault_Value  =SvEcReg.EC_Ptr_Default_Value->GetString(i);
+
+        if(PMax==NULL || PMin==NULL || PDefault==NULL)
+        {
+            if(Type==HType.ASCII_TYPE )                                         // 2013/05/08 lee
+            {
+                strcpy(MaxForAscii, PMax_Value.c_str());
+                strcpy(MinForAscii, PMin_Value.c_str());
+                strcpy(DefaultForAscii, PDefault_Value.c_str());
+                PMax=(void *)&MaxForAscii;
+                PMin=(void *)&MinForAscii;
+                PDefault=(void *)&DefaultForAscii;
+            }
+            else if(Type==HType.BINARY_TYPE)                                    // 2013/05/08 lee
+            {
+                unsigned char Max,Min,Default;
+                Max=(unsigned char)atoi(PMax_Value.c_str());
+                Min=(unsigned char)atoi(PMin_Value.c_str());
+                Default=(unsigned char)atoi(PDefault_Value.c_str());
+                PMax=(void *)&Max;
+                PMin=(void *)&Min;
+                PDefault=(void *)&Default;
+            }
+            else if(Type==HType.BOOLEAN_TYPE)
+            {
+                bool Max,Min,Default;
+                Max=atoi(PMax_Value.c_str())!=0;
+                Min=atoi(PMin_Value.c_str())!=0;
+                Default=atoi(PDefault_Value.c_str())!=0;
+                PMax=(void *)&Max;
+                PMin=(void *)&Min;
+                PDefault=(void *)&Default;
+            }
+            else if(Type==HType.UINT_1_TYPE ||
+                    Type==HType.UINT_2_TYPE ||
+                    Type==HType.UINT_4_TYPE )
+            {
+                unsigned int Max,Min,Default;
+                Max=(unsigned)atoi(PMax_Value.c_str());
+                Min=(unsigned)atoi(PMin_Value.c_str());
+                Default=(unsigned)atoi(PDefault_Value.c_str());
+                PMax=(void *)&Max;
+                PMin=(void *)&Min;
+                PDefault=(void *)&Default;
+            }
+            else if(Type==HType.UINT_8_TYPE)
+            {
+                unsigned long long Max,Min,Default;                            // golden unsigned __int64
+                Max=(unsigned long long)atoi(PMax_Value.c_str());
+                Min=(unsigned long long)atoi(PMin_Value.c_str());
+                Default=(unsigned long long)atoi(PDefault_Value.c_str());
+                PMax=(void *)&Max;
+                PMin=(void *)&Min;
+                PDefault=(void *)&Default;
+            }
+            else if(Type==HType.INT_1_TYPE ||
+                    Type==HType.INT_2_TYPE ||
+                    Type==HType.INT_4_TYPE )
+            {
+                int Max,Min,Default;
+                Max=atoi(PMax_Value.c_str());
+                Min=atoi(PMin_Value.c_str());
+                Default=atoi(PDefault_Value.c_str());
+                PMax=(void *)&Max;
+                PMin=(void *)&Min;
+                PDefault=(void *)&Default;
+            }
+            else if(Type==HType.INT_8_TYPE)
+            {
+                long long Max,Min,Default;                                     // golden __int64
+                Max=atoi(PMax_Value.c_str());
+                Min=atoi(PMin_Value.c_str());
+                Default=atoi(PDefault_Value.c_str());
+                PMax=(void *)&Max;
+                PMin=(void *)&Min;
+                PDefault=(void *)&Default;
+            }
+            else if(Type==HType.FT_4_TYPE)
+            {
+                float Max,Min,Default;
+                Max=(float)atoi(PMax_Value.c_str());
+                Min=(float)atoi(PMin_Value.c_str());
+                Default=(float)atoi(PDefault_Value.c_str());
+                PMax=(void *)&Max;
+                PMin=(void *)&Min;
+                PDefault=(void *)&Default;
+            }
+            else if(Type==HType.FT_8_TYPE)
+            {
+                double Max,Min,Default;
+                Max=atoi(PMax_Value.c_str());
+                Min=atoi(PMin_Value.c_str());
+                Default=atoi(PDefault_Value.c_str());
+                PMax=(void *)&Max;
+                PMin=(void *)&Min;
+                PDefault=(void *)&Default;
+            }
+        }
+        //2013/05/08 lee start
+
+        // 1. L,6
+        //    1. <ECID1>
+        //    2. <ECNAME1>
+        //    3. <ECMIN1>
+        //    4. <ECMAX1>
+        //    5. <ECDEF1>
+        //    6. <UNITS1>
+
+        //2013/05/08 lee end
+        WireCodec.DataItemOut(6, HType.LIST_TYPE, NULL);
+
+        j=atoi(ECID.c_str());
+        S=j;
+        if(ECID=="0" || S==ECID)
+        {
+            WireCodec.DataItemOut(1, HType.UINT_4_TYPE, &j);
+        }
+        else
+        {
+            WireCodec.DataItemOut(HType.ASCII_TYPE, ECID);
+        }
+
+        WireCodec.DataItemOut(HType.ASCII_TYPE, ECName);
+
+        if(PMin==NULL)
+        {
+            // AI(W906-SvEcDataItem) 20260720: golden `DataItemOut(0, Type, "")`
+            // -- a string literal cannot bind to WireCodec::DataItemOut's
+            // `void *P` param in standard C++ (dropping const on a
+            // `const char*` is not an implicit conversion). Substituted with
+            // NULL: SecsWireCodec::DataItemOut's own len==0 path never
+            // dereferences P (verified directly in that method's body -- the
+            // `for(i=0;i<len;i++)` loop bound by len==0 never executes), so
+            // this is byte-for-byte behaviorally identical to golden, not a
+            // behavior change -- same class of forced type-system
+            // accommodation as SecsSvEcRegistration.h's own documented
+            // `const char*` JUDGMENT CALL.
+            WireCodec.DataItemOut(0, Type, NULL);
+        }
+        else
+        {
+            if(Type==HType.ASCII_TYPE)
+                WireCodec.DataItemOut(Type, MinForAscii);                      // 2013/05/08 lee
+            else
+                WireCodec.DataItemOut(1, Type, PMin);
+        }
+
+        if(PMax==NULL)
+        {
+            WireCodec.DataItemOut(0, Type, NULL);                              // see NULL-for-"" note above
+        }
+        else
+        {
+            if(Type==HType.ASCII_TYPE)
+                WireCodec.DataItemOut(Type, MaxForAscii);                      // 2013/05/08 lee
+            else
+                WireCodec.DataItemOut(1, Type, PMax);
+        }
+
+        if(PDefault==NULL)
+        {
+            WireCodec.DataItemOut(0, Type, NULL);                              // see NULL-for-"" note above
+        }
+        else
+        {
+            if(Type==HType.ASCII_TYPE)                                         // 2013/05/08 lee
+                WireCodec.DataItemOut(Type, DefaultForAscii);
+            else
+                WireCodec.DataItemOut(1, Type, PDefault);
+        }
+
+        WireCodec.DataItemOut(HType.ASCII_TYPE, ECUnit);
+        return;
+    }
+    WireCodec.DataItemOut(6, HType.LIST_TYPE, NULL);
+    j=atoi(ECID.c_str());
+    S=j;
+    if(ECID=="0" || S==ECID)
+    {
+        WireCodec.DataItemOut(1, HType.UINT_4_TYPE, &j);
+    }
+    else
+    {
+        WireCodec.DataItemOut(HType.ASCII_TYPE, ECID);
+    }
+
+    WireCodec.DataItemOut(0, HType.ASCII_TYPE, NULL);                          // see NULL-for-"" note above
+    WireCodec.DataItemOut(0, HType.ASCII_TYPE, NULL);
+    WireCodec.DataItemOut(0, HType.ASCII_TYPE, NULL);
+    WireCodec.DataItemOut(0, HType.ASCII_TYPE, NULL);
+    WireCodec.DataItemOut(0, HType.ASCII_TYPE, NULL);
+}
+//------------------------------------------------------------------------------
+// golden uHGemEquipment.cpp:7623-7632 (__fastcall dropped, project convention)
+//------------------------------------------------------------------------------
+void THGem::SendRepoerID(unsigned iReportID)
+{
+    unsigned ct;
+    unsigned iSVIDData[1024];
+    ct=GetReportIDContent(iReportID, iSVIDData, 2);
+    WireCodec.DataItemOut(1, HType.UINT_4_TYPE, &iReportID);
+    WireCodec.DataItemOut((int)ct, HType.LIST_TYPE, NULL);
+    for(unsigned i=0; i<ct; i++)
+        DataItemOutSV(iSVIDData[i]);
+}
+//------------------------------------------------------------------------------
+// golden uHGemEquipment.cpp:7648-7662 (__fastcall dropped, project convention)
+//------------------------------------------------------------------------------
+void THGem::SendAnnotatedRepoerID(unsigned iReportID)
+{
+    unsigned ct, svid;
+    unsigned iSVIDData[10240];
+    ct=GetReportIDContent(iReportID, iSVIDData, 2);
+    WireCodec.DataItemOut(1, HType.UINT_4_TYPE, &iReportID);
+    WireCodec.DataItemOut((int)ct, HType.LIST_TYPE, NULL);
+    for(unsigned i=0; i<ct; i++)
+    {
+        WireCodec.DataItemOut(2, HType.LIST_TYPE, NULL);
+        svid=iSVIDData[i];
+        WireCodec.DataItemOut(1, HType.UINT_4_TYPE, &svid);
+        DataItemOutSV(iSVIDData[i]);
+    }
+}
+//------------------------------------------------------------------------------
+// golden uHGemEquipment.cpp:7664-7675 (__fastcall dropped, project convention)
+//------------------------------------------------------------------------------
+void THGem::SendCeid(unsigned iCeid)
+{
+    unsigned ct;
+    unsigned iReportIDData[10240];
+    ct=GetCEIDContent(iCeid, iReportIDData, 2);
+    WireCodec.DataItemOut((int)ct, HType.LIST_TYPE, NULL);
+    for(unsigned i=0; i<ct; i++)
+    {
+        WireCodec.DataItemOut(2, HType.LIST_TYPE, NULL);
+        SendRepoerID(iReportIDData[i]);
+    }
+}
+//------------------------------------------------------------------------------
+// golden uHGemEquipment.cpp:7677-7688 (__fastcall dropped, project convention)
+//------------------------------------------------------------------------------
+void THGem::SendAnnotatedCeid(unsigned iCeid)
+{
+    unsigned ct;
+    unsigned iReportIDData[10240];
+    ct=GetCEIDContent(iCeid, iReportIDData, 2);
+    WireCodec.DataItemOut((int)ct, HType.LIST_TYPE, NULL);
+    for(unsigned i=0; i<ct; i++)
+    {
+        WireCodec.DataItemOut(2, HType.LIST_TYPE, NULL);
+        SendAnnotatedRepoerID(iReportIDData[i]);
+    }
+}
+//-------------------------------------------------------------------------------
+// V 1.0 (golden uHGemEquipment.cpp:6165-6207)
+// FormCreate -- registers the "system SV/EC" family (clock/link-state/
+// comm-mode/CPU/disk/memory/model/software-rev/spool-count/spool-start-time/
+// time-format EC/receipe-struct/receipe-extend). The bulk of golden's SV/EC
+// registration (uHGemHT9045_SV.cpp/_EC.cpp, ~877+~1740 calls) is OUT OF
+// SCOPE (see SecsSvEcRegistration.h's own "INTEGRATE-AGENT WIRING POINT"
+// note) -- unaffected by this method.
+//-------------------------------------------------------------------------------
+void THGem::FormCreate(TObject *Sender)
+{
+    (void)Sender;
+    //2013/09/16 lee start
+    AnsiString S;
+    lCPUFreq=GetCPUFreq();
+    S=GetManID();
+    strcpy(szManID, S.c_str());
+    S=GetCPUType();
+    strcpy(szGetCPUType, S.c_str());
+//    2013/09/16 lee end
+
+    SvEcReg.SetSVDataPointer(3, HType.ASCII_TYPE,   "GemClock",                         "",         &GemClock,                      "Equipment 目前時鐘");
+    SvEcReg.SetSVDataPointer(4, HType.UINT_1_TYPE,  "GemControlState",                  "",         &GemControlState,               "Equipment 目前連線狀態    1: OffLine               , 2:OnLine Local                               , 3:OnLine Remote");
+    SvEcReg.SetSVDataPointer(5, HType.UINT_1_TYPE,  "GemLinkState",                     "",         &GemLinkState,                  "目前連接狀態    0:Disabled              , 1:Enabled/Not Communicating       , 2: Communicating");
+    SvEcReg.SetSVDataPointer(6, HType.INT_1_TYPE,   "SECSCommunicationMode",            "",         &SECSCommunicationMode,         "0:HSMS Mode        , 1:SECS Mode (Set By AP)");
+
+    SvEcReg.SetSVDataPointer(9, HType.UINT_1_TYPE,  "PreviousGemControlState",                  "", &GemControlPreState,            "Equipment 目前連線狀態    1: OffLine               , 2:OnLine Local                               , 3:OnLine Remote");
+    //2013/09/16 lee start
+    SvEcReg.SetSVDataPointer(10, HType.INT_4_TYPE,  "CPU Frequence",                    "",         &lCPUFreq,                      "CPU operate MHZ");
+    SvEcReg.SetSVDataPointer(11, HType.ASCII_TYPE,  "CPU  Manufacturer",                "",         szManID,                        "");
+    SvEcReg.SetSVDataPointer(12, HType.ASCII_TYPE,  "CPU  Type",                        "",         szGetCPUType,                   "");
+    //2013/09/16 lee end
+
+    //2013/09/30 lee start
+    SvEcReg.SetSVDataPointer(13, HType.INT_4_TYPE,  "Total Space Of Disk C",            "MB",       &Disk_C_TotalSpaceMB,           "Total Space Of Disk C");
+    SvEcReg.SetSVDataPointer(14, HType.INT_4_TYPE,  "Total Space Of Disk D",            "MB",       &Disk_D_TotalSpaceMB,           "Total Space Of Disk D");
+    SvEcReg.SetSVDataPointer(15, HType.INT_4_TYPE,  "Total FreeSpace Of Disk C",        "MB",       &Disk_C_TotalFreeSpaceMB,       "Total FreeSpace Of Disk C");
+    SvEcReg.SetSVDataPointer(16, HType.INT_4_TYPE,  "Total FreeSpace Of Disk D",        "MB",       &Disk_D_TotalFreeSpaceMB,       "Total FreeSpace Of Disk D");
+    SvEcReg.SetSVDataPointer(17, HType.UINT_4_TYPE, "Memory Load Percent",              "%",        &ulMemoryLoad,                  "Memory Load Percent");
+    SvEcReg.SetSVDataPointer(18, HType.UINT_4_TYPE, "Memory Total Physic",              "%",        &ulTotalPhys,                   "Memory Total Physic");
+    SvEcReg.SetSVDataPointer(19, HType.UINT_4_TYPE, "Memory Avail Physic",              "%",        &ulAvailPhys,                   "Memory Avail Physic");
+    //2013/09/30 lee end
+
+    SvEcReg.SetSVDataPointer(24, HType.ASCII_TYPE,  "GemMDLN",                          "",         &GemMDLN,                       "機台型號");
+    SvEcReg.SetSVDataPointer(25, HType.ASCII_TYPE,  "GemSOFTREV",                       "",         &GemSOFTREV,                    "軟體版本");
+    SvEcReg.SetSVDataPointer(54, HType.UINT_4_TYPE, "GemSpoolCountActual",              "record",   &GemSpoolCountActual,           "Spool enable or disable");
+    SvEcReg.SetSVDataPointer(57, HType.ASCII_TYPE,  "GemSpoolStartTime",                "",         GemSpoolStartTime,              "Spool start time");
+
+    SvEcReg.SetECDataPointer(68, HType.UINT_1_TYPE, "Time Format",                      "",         &iTimeFormat, iMinTimeFormat, iMaxTimeFormat, iTimeFormatDefault, "");
+
+    SvEcReg.SetSVDataPointer(70, HType.UINT_1_TYPE, "Receipe Struct",                   "",         &SV_70_UNT1_ReceipeStruct,      "用來定義目前工作檔的型態 0:單一File 的結構 1:多檔結構如 .BLD ,.OFF 等組合 2:以目錄當工作檔");
+    SvEcReg.SetSVDataPointer(71, HType.ASCII_TYPE,  "Receipe Extend",                   "",         &SV_71_ASCII_FilenameExtened,   "Receipe extend filename");
 }
 
 //===========================================================================

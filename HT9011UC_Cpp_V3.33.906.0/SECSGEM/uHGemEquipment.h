@@ -164,6 +164,29 @@
 //  this wave: GemMDLN/GemSOFTREV members + SetMachineTypeAndSoftwarseVer/
 //  CheckSFFormatOnlyHead methods (both prerequisites for 8 of uHGemClass.cpp's
 //  gated S,F handlers -- see that file's own un-gating note).
+//
+//  AI(W906-SvEcDataItem) 20260720: SIXTH wave -- SECSGEM closing-waves Wave 1
+//  (design doc DESIGN_SECSGEM_closing_waves.md). THGem now embeds
+//  `SecsSvEcRegistration SvEcReg;` BY VALUE (mirrors HTGem's own
+//  already-proven precedent, uHGemClass.h:137) -- SV/EC registration
+//  bookkeeping (SV_ID/SV_TYPE/.../EC_OldValue, SetSVDataPointer x4/
+//  SetECDataPointer x4/GetECDataValue) now lives there, reused (not
+//  reimplemented) via `#include "SECSGEM/SecsSvEcRegistration.h"`. Real
+//  methods added: DataItemOutSV/DataItemOutSVNameList/
+//  DataItemOutSVNameListWithValue/DataItemOutEC/DataItemOutECNameList (golden
+//  VCL-widget-cast sub-branch GATED, `#if 0` -- see .cpp; the non-VCL raw-
+//  ptr/AnsiString* path, which is ALL FormCreate ever registers, is real),
+//  IsValidSVID, SendRepoerID/SendAnnotatedRepoerID/SendCeid/
+//  SendAnnotatedCeid (Report/CEID data composers -- pure WireCodec+SV
+//  composition, no VCL), and FormCreate itself (the "system SV" registration
+//  block: GemClock/GemControlState/GemLinkState/SECSCommunicationMode/
+//  GemControlPreState/CPU-freq-manufacturer-type (via new SECSGEM/
+//  TasmInfo.{h,cpp})/disk-space/memory-status/GemMDLN/GemSOFTREV/
+//  GemSpoolCountActual/GemSpoolStartTime/Time-Format EC/Receipe-Struct/
+//  Receipe-Extend -- golden uHGemEquipment.cpp:6165-6207). The large bulk of
+//  golden's SV/EC registration (uHGemHT9045_SV.cpp/_EC.cpp, ~877+~1740 calls)
+//  stays OUT OF SCOPE (see SecsSvEcRegistration.h's own "INTEGRATE-AGENT
+//  WIRING POINT" note -- unaffected by this wave).
 //---------------------------------------------------------------------------
 #ifndef uHGemEquipmentH
 #define uHGemEquipmentH
@@ -178,6 +201,14 @@
 // STypeStruct/HSMS_Head_Struct + `extern HType` per SecsWireCodec.h:99-107's
 // own "INTEGRATE-AGENT WIRING POINT" note -- they are NOT redeclared here.
 #include "SECSGEM/SecsWireCodec.h"
+// AI(W906-SvEcDataItem) 20260720: SvEcReg embed (see file-head note) --
+// reuses SecsSvEcRegistration's own SetSVDataPointer/SetECDataPointer/
+// GetECDataValue + SV_*/EC_* bookkeeping lists rather than reimplementing
+// them on THGem. #include, not redeclare (ODR-safe, same reuse pattern
+// SecsSvEcRegistration.h itself already established for HType).
+#include "SECSGEM/SecsSvEcRegistration.h"
+// THGem::FormCreate's SV10-19 (CPU/disk/memory) source functions.
+#include "SECSGEM/TasmInfo.h"
 // TCriticalSection (TFixedCriticalSection's base below; csSFCodeResponse).
 #include "vclcompat/SyncObjs.h"
 // TMemoryStream (RecvMemoryBuffer/ProcBuffer/TempProcBuffer below); already
@@ -535,6 +566,12 @@ public:
     // registration wave".
     SecsWireCodec WireCodec;
 
+    // AI(W906-SvEcDataItem) 20260720: SvEcReg -- SV/EC registration
+    // bookkeeping (see file-head note above). By-value embed, default-
+    // constructed (SecsSvEcRegistration's own ctor allocates its 18 heap
+    // TStringList*/TList*s; nothing extra needed in THGem's own ctor).
+    SecsSvEcRegistration SvEcReg;
+
     STypeStruct SType;                              // golden :209 (InitSTypeStruct() populates it, ctor call below)
     TColor StringOutColor;                           // golden :237 (ctor = clBlack)
 
@@ -706,6 +743,36 @@ public:
     unsigned char GemControlPreState;
     char SECSCommunicationMode;         // golden ctor :500 (explicitly 0)
 
+    // ==== FormCreate's "system SV" targets (W906-SvEcDataItem 20260720) =====
+    // golden uHGemEquipment.h:191/196/198/235/303-304/602-604/608-617/701/707
+    // (member declarations) + uHGemEquipment.cpp:6165-6207 (FormCreate, the
+    // sole registration site -- see .cpp). None of these is ever explicitly
+    // assigned by golden's own ctor (uHGemEquipment.cpp:444-674, grepped) --
+    // real BCB6/VCL zero-inits every instance field for free; all are
+    // explicitly zero/empty-initialized in THIS port's ctor below, matching
+    // this file's own established "flagged deviation: zero-init defensively"
+    // precedent (see GemTimer/DoUpdateStatus's own ctor notes above).
+    unsigned char GemLinkState;                    // golden :191 (SV5)
+    long lCPUFreq;                                  // golden :602 (SV10, via TasmInfo::GetCPUFreq)
+    char szManID[256];                              // golden :603 (SV11, via TasmInfo::GetManID)
+    char szGetCPUType[256];                         // golden :604 (SV12, via TasmInfo::GetCPUType)
+    int Disk_C_TotalSpaceMB;                        // golden :608 (SV13)
+    int Disk_D_TotalSpaceMB;                        // golden :609 (SV14)
+    int Disk_C_TotalFreeSpaceMB;                    // golden :611 (SV15)
+    int Disk_D_TotalFreeSpaceMB;                    // golden :612 (SV16)
+    unsigned long ulMemoryLoad;                     // golden :615 (SV17)
+    unsigned long ulTotalPhys;                      // golden :616 (SV18)
+    unsigned long ulAvailPhys;                      // golden :617 (SV19)
+    // golden :303-304/235 (EC68 "Time Format" min/max/default bounds --
+    // iTimeFormat itself already exists above, golden :233).
+    int iMinTimeFormat;                             // golden ctor :650 (explicitly 0)
+    int iMaxTimeFormat;                             // golden ctor :651 (explicitly 3)
+    int iTimeFormatDefault;                         // golden NEVER inits this either (see note above) -- flagged deviation
+    int SV_70_UNT1_ReceipeStruct;                   // golden :707 (SV70)
+    AnsiString SV_71_ASCII_FilenameExtened;         // golden :701 (SV71)
+    int GemSpoolCountActual;                        // golden :196 (SV54)
+    char GemSpoolStartTime[256];                    // golden :198 (SV57)
+
     // ==== CEID / Report StringGrid-backed "database" family =================
     void SetCEIDContent(unsigned iCeid, AnsiString CeidAlias, unsigned iReportCount, unsigned *iReportIDData, int Mode);
     void SetCEIDContent(unsigned iCeid, unsigned iReportCount, unsigned *iReportIDData, int Mode);
@@ -743,6 +810,23 @@ public:
     void SetAlamData(int iRowCount, AnsiString ALID, AnsiString Class, AnsiString ALTX, AnsiString Position);
     void ReadAlamData();
     void WriteAlamData();
+
+    // ==== SV/EC DataItem family (W906-SvEcDataItem 20260720) ================
+    // golden uHGemEquipment.cpp:2472-3336 (SvEcReg-backed) + :7623-7688
+    // (Report/CEID composers, pure WireCodec+SV composition). See .cpp for
+    // the golden-VCL-branch gate note (design doc D2).
+    bool DataItemOutSV(AnsiString SVID);                          // golden :2472-2761
+    bool DataItemOutSVNameList(AnsiString SVID);                  // golden :2765-2801
+    bool DataItemOutSVNameListWithValue(AnsiString SVID);         // golden :2803-2840 (S103F11/F12)
+    void DataItemOutEC(AnsiString ECID);                          // golden :2845-3112
+    bool IsValidSVID(AnsiString SVID);                            // golden :3114-3122
+    void DataItemOutECNameList(AnsiString ECID);                  // golden :3127-3332
+    void FormCreate(TObject *Sender);                             // golden :6165-6207 (__fastcall dropped, project convention)
+
+    void SendRepoerID(unsigned iReportID);                        // golden :7623-7632 (__fastcall dropped)
+    void SendAnnotatedRepoerID(unsigned iReportID);                // golden :7648-7662 (__fastcall dropped)
+    void SendCeid(unsigned iCeid);                                 // golden :7664-7675 (__fastcall dropped)
+    void SendAnnotatedCeid(unsigned iCeid);                        // golden :7677-7688 (__fastcall dropped)
 
     // ==== TCP/IP connection lifecycle methods (W906-uHGemEquipment-ConnLifecycle) ====
     void __fastcall clientGemConnect(TObject *Sender, TCustomWinSocket *Socket);        // golden :2100-2104

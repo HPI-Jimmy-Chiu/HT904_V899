@@ -2251,11 +2251,18 @@ static void test_w906_sysmodwire_w7_flag_latch_movecheckcallback()
         delete HSys.MyGem; HSys.MyGem = NULL;
     }
 
-    // MoveCheckCallBack==0 -> lets the chain through; S1F4_SelectedStatusReply
-    // is itself still a gated no-op stub (uHGemClass.cpp), so there is still
-    // no reply -- but CheckSFCodeResponse (called unconditionally earlier in
-    // the tail, BEFORE this gate) demonstrably ran against THIS message,
-    // proving the pump reached this far (same seed/consume idiom as [T8]).
+    // MoveCheckCallBack==0 -> lets the chain through to S1F4_SelectedStatusReply,
+    // which W906-SvEcDataItem UN-GATED (was a no-op stub when this test was
+    // first written -- see that wave's own uHGemClass.cpp comment). The
+    // incoming S1,F3 frame below carries NO data-item body (10-byte HSMS
+    // header only), so real S1F4 hits its own `GetDataItemLenAndType(...)!=1`
+    // golden `else` branch and replies with a genuine S9F7 "S1,F3 data format
+    // error" frame (verified byte-for-byte: 39 bytes = 4-byte length prefix +
+    // 10-byte header (S,F=9,7) + 1-byte format/length (0x41,0x17=ASCII,len 23)
+    // + the 23-byte ASCII string "S1,F3 data format error") -- CheckSFCodeResponse
+    // (called unconditionally earlier in the tail, BEFORE S1F4 runs) still
+    // demonstrably ran against THIS message too, proving the pump reached
+    // this far (same seed/consume idiom as [T8]).
     {
         THGem g;
         TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.2.17", 4717);
@@ -2272,8 +2279,41 @@ static void test_w906_sysmodwire_w7_flag_latch_movecheckcallback()
         bool threw = false;
         try { g.ProcessSocketReceiveData(); } catch (...) { threw = true; }
         CHECK(threw == false, "W7: MoveCheckCallBack()==0 path does not throw");
-        CHECK(conn->SimTxBuffer().size() == 0, "W7: MoveCheckCallBack()==0 lets the chain through to S1F4 (still gated no-op) -- no reply either way");
-        CHECK(g.SFCodeResponseList->Items->Count == 0, "W7: CheckSFCodeResponse (called before the gate) consumed the pre-seeded \"1 3 7\" record -- the pump reached this message");
+        const std::vector<char> &tx1f4 = conn->SimTxBuffer();
+        CHECK(tx1f4.size() == 39, "W7: MoveCheckCallBack()==0 lets the chain through to now-real S1F4, which replies with a 39-byte S9F7 format-error frame (empty-body S1,F3 has no SVID list)");
+        CHECK((unsigned char)tx1f4[6] == 9 && (unsigned char)tx1f4[7] == 7, "W7: reply S,F == 9,7 (S9F7, not S1F4 -- the empty-body request itself is malformed)");
+        CHECK(g.SFCodeResponseList->Items->Count == 0, "W7: CheckSFCodeResponse (called before S1F4 runs) consumed the pre-seeded \"1 3 7\" record -- the pump reached this message");
+
+        delete HSys.MyGem; HSys.MyGem = NULL;
+    }
+    // MoveCheckCallBack==0, well-formed S1,F3 "request all SVs" (L,0) -> now-real
+    // S1F4_SelectedStatusReply walks SvEcReg.SV_ID (empty -- FormCreate was never
+    // called on this bare THGem) and replies with a genuine, empty S1F4 list.
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.2.18", 4718);
+        g.srvGem->Open();
+        HGem = &g;
+        HSys.SystemModularInitial();
+        g.MoveCheckCallBack = W906_SysModWire_MoveCheckCallBack_Ret0;
+
+        // S1,F3 body: L,0 -- golden `HType.LIST_TYPE`=0x00, SecsWireCodec::
+        // GetLengthByte(0,...) always emits exactly 1 length-byte even for
+        // len==0 (its do/while runs once regardless) -- so the wire encoding
+        // is exactly 2 bytes: format+lenbytecount=0x01 (LIST_TYPE(0x00)|1),
+        // length-value=0x00 (same "L[0]" shape test_SecsWireCodec.cpp:740
+        // already exercises). Matches golden's own "report all SVID" shape
+        // (SVlen==0).
+        unsigned char frame[16] = { 0,0,0,0x0C, 0,0, 1,3, 0,0, 0,0,0,8, 0x01,0x00 };
+        conn->SimPushReceive(frame, 16);
+        bool threw = false;
+        try { g.ProcessSocketReceiveData(); } catch (...) { threw = true; }
+        CHECK(threw == false, "W7b: well-formed empty-SVID-list S1F3 does not throw");
+        const std::vector<char> &tx1f4b = conn->SimTxBuffer();
+        // 4-byte length prefix + 10-byte header (S,F=1,4) + 2-byte L,0 (0x01,0x00).
+        CHECK(tx1f4b.size() == 16, "W7b: real S1F4 replies with a 16-byte frame (10-byte header + L,0 empty SVID list -- SvEcReg.SV_ID has zero entries, FormCreate never ran on this bare fixture)");
+        CHECK((unsigned char)tx1f4b[6] == 1 && (unsigned char)tx1f4b[7] == 4, "W7b: reply S,F == 1,4 (genuine S1F4, not an error path)");
+        CHECK((unsigned char)tx1f4b[14] == 0x01 && (unsigned char)tx1f4b[15] == 0x00, "W7b: reply body is L,0 (format=LIST_TYPE, count=0) -- SvEcReg.SV_ID->Count==0");
 
         delete HSys.MyGem; HSys.MyGem = NULL;
     }
@@ -2406,6 +2446,373 @@ static void test_w906_sysmodwire_w10_null_guard_regression()
     CHECK(g.WireCodec.Remote.MessageID_S == 1 && g.WireCodec.Remote.MessageID_F == 14,
           "W10: WireCodec.Remote still decodes MessageID_S/F == 1/14");
     CHECK(conn->SimTxBuffer().size() == 0, "W10: null-guarded tail sends no reply (HSys.MyGem stays NULL)");
+}
+
+// ===========================================================================
+//  W906-SvEcDataItem (design doc DESIGN_SECSGEM_closing_waves.md, Wave 1):
+//  SvEcReg embed + SV/EC DataItem family + FormCreate + 13 uHGemClass.cpp
+//  un-gated handlers. No file I/O anywhere in this bracket (FormCreate/
+//  DataItemOutSV/DataItemOutEC/DataItemOutECNameList/Send*/IsValidSVID are
+//  all pure in-memory wire-codec + SvEcReg composition) EXCEPT the dispatch-
+//  pump e2e tests below, which (like the W1-W10 SysModWire block above) reach
+//  the real SaveSECSGEMTextToLog() through ProcessSocketReceiveData -- wrapped
+//  in the same TextLogSnapshot capture/restore idiom in main().
+// ===========================================================================
+
+// ---------------------------------------------------------------------------
+//  [F1] FormCreate -- system SV/EC registration (golden uHGemEquipment.cpp:
+//  6165-6207). Pure in-memory (SvEcReg.SetSVDataPointer/SetECDataPointer);
+//  no file I/O, no snapshot needed.
+// ---------------------------------------------------------------------------
+static void test_w906_svecdataitem_formcreate()
+{
+    printf("\n[W906-SvEcDataItem.F1] FormCreate -- system SV/EC registration\n");
+
+    THGem g;
+    g.FormCreate(NULL);
+
+    static const char *kExpectedSV[] = {
+        "3","4","5","6","9","10","11","12","13","14","15","16","17","18","19",
+        "24","25","54","57","70","71"
+    };
+    for (size_t i = 0; i < sizeof(kExpectedSV)/sizeof(kExpectedSV[0]); ++i)
+    {
+        char msg[128];
+        snprintf(msg, sizeof(msg), "F1: SvEcReg.SV_ID contains SVID %s (FormCreate registered)", kExpectedSV[i]);
+        CHECK(g.SvEcReg.SV_ID->IndexOf(AnsiString(kExpectedSV[i])) >= 0, msg);
+    }
+    CHECK(g.SvEcReg.EC_ID->IndexOf(AnsiString("68")) >= 0, "F1: SvEcReg.EC_ID contains EC68 (Time Format)");
+    CHECK(g.SvEcReg.GetECDataValue("68") == "0", "F1: GetECDataValue(68) reads back iTimeFormat's default value (0)");
+
+    // szManID/GetCPUType/lCPUFreq -- PORT-ONLY placeholders (TasmInfo.cpp D1,
+    // see that file's own file-head note: inline-asm cpuid/RDTSC cannot be
+    // ported to MinGW's asm dialect; conservative fixed placeholders used
+    // instead since these 3 SVs are host-queried-only, zero machine-behavior
+    // consumer).
+    CHECK(std::string(g.szManID) == "GenuineIntel", "F1: szManID == PORT-ONLY placeholder \"GenuineIntel\" (TasmInfo D1)");
+    CHECK(std::string(g.szGetCPUType) == "", "F1: szGetCPUType == PORT-ONLY placeholder \"\" (TasmInfo D1)");
+    CHECK(g.lCPUFreq == 0, "F1: lCPUFreq == PORT-ONLY placeholder 0 (TasmInfo D1)");
+}
+
+// ---------------------------------------------------------------------------
+//  [E1] S1F3(SVID=4) -> real S1F4 -- exercises FormCreate's raw-ptr
+//  registration + DataItemOutSV's non-VCL numeric-encode path end-to-end
+//  through the real dispatch pump (ProcessSocketReceiceData -> HSys.MyGem->
+//  S1F4_SelectedStatusReply -> HGemPtr->DataItemOutSV). SendLocalData reaches
+//  SaveSECSGEMTextToLog -- TextLogSnapshot-wrapped by the caller in main().
+// ---------------------------------------------------------------------------
+static void test_w906_svecdataitem_e2e_s1f4_formcreate()
+{
+    printf("\n[W906-SvEcDataItem.E1] FormCreate + S1F4 e2e -- specific-SVID round-trip\n");
+
+    THGem *savedHGem = HGem;
+
+    THGem g;
+    TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.3.1", 4801);
+    g.srvGem->Open();
+    HGem = &g;
+    HSys.SystemModularInitial();
+
+    g.FormCreate(NULL);
+    g.GemControlState = 2;   // SVID 4, UINT_1_TYPE -- non-default value, proves live data flows through
+
+    SecsWireCodec builder;
+    builder.InitLocalHead(1, 3, 0);
+    builder.DataItemOut(1, HType.LIST_TYPE, NULL);
+    builder.DataItemOut(HType.ASCII_TYPE, AnsiString("4"));
+    conn->SimPushReceive(builder.LocalBuffer.data(), static_cast<int>(builder.LocalLength_4));
+
+    bool threw = false;
+    try { g.ProcessSocketReceiveData(); } catch (...) { threw = true; }
+    CHECK(threw == false, "E1: S1F3(SVID=4) does not throw");
+
+    const std::vector<char> &tx = conn->SimTxBuffer();
+    CHECK(tx.size() == 19, "E1: real S1F4 reply is 19 bytes (10-byte header + L,1[UINT_1(GemControlState)])");
+    CHECK((unsigned char)tx[6] == 1 && (unsigned char)tx[7] == 4, "E1: reply S,F == 1,4");
+    CHECK((unsigned char)tx[14] == 0x01 && (unsigned char)tx[15] == 0x01, "E1: reply body L,1 (one value)");
+    CHECK((unsigned char)tx[16] == (unsigned char)(HType.UINT_1_TYPE | 1), "E1: value item format byte == UINT_1_TYPE|1");
+    CHECK((unsigned char)tx[17] == 1, "E1: value item length byte == 1");
+    CHECK((unsigned char)tx[18] == 2, "E1: value payload == 2 (live GemControlState, flowed through real DataItemOutSV)");
+
+    delete HSys.MyGem; HSys.MyGem = NULL;
+    HGem = savedHGem;
+}
+
+// ---------------------------------------------------------------------------
+//  [E2] S1,F23 "report all" -> real S1F24 -- exercises strGrdCEID/
+//  stdGridReportID (hand-seeded, same layout as test_ceid_family) through the
+//  real dispatch pump.
+// ---------------------------------------------------------------------------
+static void test_w906_svecdataitem_e2e_s1f24()
+{
+    printf("\n[W906-SvEcDataItem.E2] S1,F23 \"report all\" e2e -- real S1F24\n");
+
+    THGem *savedHGem = HGem;
+
+    THGem g;
+    TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.3.2", 4802);
+    g.srvGem->Open();
+    HGem = &g;
+    HSys.SystemModularInitial();
+
+    // One CEID row: CEID=11, Alias="A", zero linked ReportIDs (cols 3+ blank)
+    // -- keeps the encoded reply small/predictable (SVIDList stays empty).
+    g.strGrdCEID->Cells[0][1] = 11;
+    g.strGrdCEID->Cells[2][1] = "A";
+
+    SecsWireCodec builder;
+    builder.InitLocalHead(1, 23, 0);
+    builder.DataItemOut(0, HType.LIST_TYPE, NULL);   // L,0 -- "report all CEID"
+    conn->SimPushReceive(builder.LocalBuffer.data(), static_cast<int>(builder.LocalLength_4));
+
+    bool threw = false;
+    try { g.ProcessSocketReceiveData(); } catch (...) { threw = true; }
+    CHECK(threw == false, "E2: S1,F23 \"report all\" does not throw");
+
+    const std::vector<char> &tx = conn->SimTxBuffer();
+    // header(14) + outer L,1(2) + inner L,3(2) + CEID UINT_4(6) + Alias ASCII"A"(3) + inner SVIDList L,0(2) = 29
+    CHECK(tx.size() == 29, "E2: real S1F24 reply is 29 bytes (one CEID row, empty linked-SVID list)");
+    CHECK((unsigned char)tx[6] == 1 && (unsigned char)tx[7] == 24, "E2: reply S,F == 1,24");
+    CHECK((unsigned char)tx[14] == 0x01 && (unsigned char)tx[15] == 0x01, "E2: outer L,1 (one CEID entry -- only row 1 is non-blank)");
+    CHECK((unsigned char)tx[16] == 0x01 && (unsigned char)tx[17] == 0x03, "E2: inner L,3 (CEID,Alias,ReportID-list)");
+    CHECK((unsigned char)tx[18] == (unsigned char)(HType.UINT_4_TYPE | 1) && (unsigned char)tx[19] == 4,
+          "E2: CEID field format/len == UINT_4_TYPE|1, 4 data bytes");
+    CHECK((unsigned char)tx[20] == 0 && (unsigned char)tx[21] == 0 && (unsigned char)tx[22] == 0 && (unsigned char)tx[23] == 11,
+          "E2: CEID value == 11 (big-endian u32)");
+    CHECK((unsigned char)tx[24] == (unsigned char)(HType.ASCII_TYPE | 1) && (unsigned char)tx[25] == 1 && (unsigned char)tx[26] == 'A',
+          "E2: Alias field == ASCII \"A\"");
+    CHECK((unsigned char)tx[27] == 0x01 && (unsigned char)tx[28] == 0x00, "E2: linked-ReportID list == L,0 (none seeded)");
+
+    delete HSys.MyGem; HSys.MyGem = NULL;
+    HGem = savedHGem;
+}
+
+// ---------------------------------------------------------------------------
+//  [E3] S6,F19 -> real S6F20 -- exercises stdGridReportID + SvEcReg.SV_ID
+//  (IndexOf) + DataItemOutSV together through the real dispatch pump.
+// ---------------------------------------------------------------------------
+static void test_w906_svecdataitem_e2e_s6f20()
+{
+    printf("\n[W906-SvEcDataItem.E3] S6,F19 e2e -- real S6F20 (stdGridReportID + SvEcReg.SV_ID + DataItemOutSV)\n");
+
+    THGem *savedHGem = HGem;
+
+    THGem g;
+    TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.3.3", 4803);
+    g.srvGem->Open();
+    HGem = &g;
+    HSys.SystemModularInitial();
+
+    // Register one raw-ptr SV (SVID "9", UINT_1_TYPE, live value 7) and link
+    // it into ReportID "100" (stdGridReportID row: ReportID=100, Mode=2,
+    // SVID at col2 -- same layout test_ceid_family already established).
+    static unsigned char liveVal = 7;
+    g.SvEcReg.SetSVDataPointer("9", HType.UINT_1_TYPE, "TestSV9", "", (void*)&liveVal, "e2e test SV");
+    g.stdGridReportID->Cells[0][1] = 100;
+    g.stdGridReportID->Cells[1][1] = 2;
+    g.stdGridReportID->Cells[2][1] = 9;
+
+    SecsWireCodec builder;
+    builder.InitLocalHead(6, 19, 0);
+    builder.DataItemOut(HType.ASCII_TYPE, AnsiString("100"));   // requested ReportID
+    conn->SimPushReceive(builder.LocalBuffer.data(), static_cast<int>(builder.LocalLength_4));
+
+    bool threw = false;
+    try { g.ProcessSocketReceiveData(); } catch (...) { threw = true; }
+    CHECK(threw == false, "E3: S6,F19(ReportID=100) does not throw");
+
+    const std::vector<char> &tx = conn->SimTxBuffer();
+    // header(14) + L,1(2) + UINT_1(liveVal)(3) = 19
+    CHECK(tx.size() == 19, "E3: real S6F20 reply is 19 bytes (10-byte header + L,1[UINT_1(liveVal)])");
+    CHECK((unsigned char)tx[6] == 6 && (unsigned char)tx[7] == 20, "E3: reply S,F == 6,20");
+    CHECK((unsigned char)tx[14] == 0x01 && (unsigned char)tx[15] == 0x01, "E3: reply body L,1 (one linked SVID)");
+    CHECK((unsigned char)tx[16] == (unsigned char)(HType.UINT_1_TYPE | 1) && (unsigned char)tx[17] == 1,
+          "E3: value item format/len == UINT_1_TYPE|1");
+    CHECK((unsigned char)tx[18] == 7, "E3: value payload == 7 (live SV9 value, flowed through DataItemOutSV via SvEcReg.SV_ID lookup)");
+
+    delete HSys.MyGem; HSys.MyGem = NULL;
+    HGem = savedHGem;
+}
+
+// ---------------------------------------------------------------------------
+//  [E4] S5,F7 -> real S5F8, and direct S100F4_ReportAllAlarm -- both walk
+//  strGrdAlarm (hand-seeded, same col layout uHGemClass.cpp's translated
+//  bodies read: col1=ALID, col2=Class/type flag, col4=ALTX, col7=Enable).
+//  S100F4 has no incoming-request trigger wired in ProcessReceiceData's own
+//  dispatch guard requiring a specific format (it is called unconditionally
+//  once S,F==100,3 matches), so it is exercised the SAME way as S5F8: via
+//  the real dispatch pump.
+// ---------------------------------------------------------------------------
+static void test_w906_svecdataitem_e2e_s5f8_s100f4()
+{
+    printf("\n[W906-SvEcDataItem.E4] S5,F7/S100,F3 e2e -- real S5F8 / S100F4 (strGrdAlarm)\n");
+
+    THGem *savedHGem = HGem;
+
+    // -- S5F8 --------------------------------------------------------------
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.3.4", 4804);
+        g.srvGem->Open();
+        HGem = &g;
+        HSys.SystemModularInitial();
+
+        // One enabled alarm row: ALID=42, ALTX="Hi", Enable(col7)="1".
+        g.strGrdAlarm->Cells[1][1] = 42;
+        g.strGrdAlarm->Cells[4][1] = "Hi";
+        g.strGrdAlarm->Cells[7][1] = "1";
+
+        SecsWireCodec builder;
+        builder.InitLocalHead(5, 7, 0);
+        // golden's S5F8_ListEnableAlarmAcknowledge only PEEKS one data item
+        // exists (GetDataItemLenAndType(...)!=1 -> format-error path) -- it
+        // never actually consumes/decodes it, so any well-formed item (here,
+        // the conventional L,0 "list everything" shape) satisfies the peek.
+        builder.DataItemOut(0, HType.LIST_TYPE, NULL);
+        conn->SimPushReceive(builder.LocalBuffer.data(), static_cast<int>(builder.LocalLength_4));
+
+        bool threw = false;
+        try { g.ProcessSocketReceiveData(); } catch (...) { threw = true; }
+        CHECK(threw == false, "E4a: S5,F7 does not throw");
+
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        // header(14) + outer L,1(2) + inner L,3(2) + BINARY(ALT=0x80)(3) + UINT_4(42)(6) + ASCII"Hi"(4) = 31
+        // (golden field order inside the inner L,3 is ALT, ALID, ALTX -- NOT
+        // ALID first; see THGem::S5F8_ListEnableAlarmAcknowledge/uHGemClass.cpp).
+        CHECK(tx.size() == 31, "E4a: real S5F8 reply is 31 bytes (one enabled alarm row)");
+        CHECK((unsigned char)tx[6] == 5 && (unsigned char)tx[7] == 8, "E4a: reply S,F == 5,8");
+        CHECK((unsigned char)tx[18] == (unsigned char)(HType.BINARY_TYPE | 1) && (unsigned char)tx[19] == 1
+              && (unsigned char)tx[20] == 0x80,
+              "E4a: ALT field == BINARY 0x80 (fixed alarm-type byte)");
+        CHECK((unsigned char)tx[21] == (unsigned char)(HType.UINT_4_TYPE | 1) && (unsigned char)tx[22] == 4,
+              "E4a: ALID field == UINT_4_TYPE|1, 4 bytes");
+        CHECK((unsigned char)tx[23] == 0 && (unsigned char)tx[24] == 0 && (unsigned char)tx[25] == 0 && (unsigned char)tx[26] == 42,
+              "E4a: ALID value == 42");
+        CHECK((unsigned char)tx[27] == (unsigned char)(HType.ASCII_TYPE | 1) && (unsigned char)tx[28] == 2
+              && (unsigned char)tx[29] == 'H' && (unsigned char)tx[30] == 'i',
+              "E4a: ALTX field == ASCII \"Hi\"");
+
+        delete HSys.MyGem; HSys.MyGem = NULL;
+    }
+
+    // -- S100F4 --------------------------------------------------------------
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.3.5", 4805);
+        g.srvGem->Open();
+        HGem = &g;
+        HSys.SystemModularInitial();
+
+        // One alarm row: ALID=7, Class(col2)="1"(true), ALTX(col4)="X".
+        g.strGrdAlarm->Cells[1][1] = 7;
+        g.strGrdAlarm->Cells[2][1] = "1";
+        g.strGrdAlarm->Cells[4][1] = "X";
+
+        SecsWireCodec builder;
+        builder.InitLocalHead(100, 3, 0);
+        conn->SimPushReceive(builder.LocalBuffer.data(), static_cast<int>(builder.LocalLength_4));
+
+        bool threw = false;
+        try { g.ProcessSocketReceiveData(); } catch (...) { threw = true; }
+        CHECK(threw == false, "E4b: S100,F3 does not throw");
+
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        // AI(W906-SvEcDataItem) 20260720: golden reports `strGrdAlarm->RowCount-1`
+        // rows UNCONDITIONALLY (design doc quirk Q11), NOT just non-blank ones
+        // -- strGrdAlarm's real RowCount is 5 (uHGemEquipment.cpp:376, `new
+        // TStringGrid(12,5)`), so the outer list is L,4 (rows 1..4), with
+        // rows 2-4 blank (ASCII "" pairs + BOOLEAN(0)). Exact byte offsets
+        // for the 3 blank-row triples are not hand-verified here (low value,
+        // high arithmetic-error risk); instead this test verifies the
+        // header(14) + outer L,4(2 bytes) shape and searches for row 1's own
+        // ALID("7")/ALTX("X")/BOOLEAN(1) triple as a byte substring, which
+        // still proves live strGrdAlarm data reached the wire via the real
+        // (un-gated) S100F4_ReportAllAlarm.
+        CHECK(tx.size() >= 16, "E4b: real S100F4 reply carries at least a header + outer-list shape");
+        CHECK((unsigned char)tx[6] == 100 && (unsigned char)tx[7] == 4, "E4b: reply S,F == 100,4");
+        CHECK((unsigned char)tx[14] == 0x01 && (unsigned char)tx[15] == 0x04,
+              "E4b: outer list == L,4 (golden's own RowCount-1 quirk, design doc Q11 -- unconditional, not row-count-aware)");
+        // row 1's own triple: L,3 / ASCII"7" / ASCII"X" / BOOLEAN(1).
+        const unsigned char row1[] = {
+            (unsigned char)(HType.LIST_TYPE | 1), 3,
+            (unsigned char)(HType.ASCII_TYPE | 1), 1, '7',
+            (unsigned char)(HType.ASCII_TYPE | 1), 1, 'X',
+            (unsigned char)(HType.BOOLEAN_TYPE | 1), 1, 1
+        };
+        bool found = false;
+        for (size_t off = 0; off + sizeof(row1) <= tx.size() && !found; ++off)
+        {
+            bool match = true;
+            for (size_t k = 0; k < sizeof(row1) && match; ++k)
+                if ((unsigned char)tx[off + k] != row1[k]) match = false;
+            if (match) found = true;
+        }
+        CHECK(found, "E4b: row 1's L,3[ASCII\"7\",ASCII\"X\",BOOLEAN(1)] triple is present verbatim in the reply");
+
+        delete HSys.MyGem; HSys.MyGem = NULL;
+    }
+
+    HGem = savedHGem;
+}
+
+// ---------------------------------------------------------------------------
+//  [E5] S101,F5/S101,F7 smoke -- S101F6/S101F8 are real (un-gated this wave),
+//  but their own S101F6_StoreHostUploadFile/S101F8_StoreHostUploadFile
+//  callees STAY gated no-op stubs (Wave 3b territory) -- proves the caller
+//  reaches ActiveWire->LocalAcknowledge cleanly despite the gated callee.
+// ---------------------------------------------------------------------------
+static void test_w906_svecdataitem_e2e_s101f6_s101f8_smoke()
+{
+    printf("\n[W906-SvEcDataItem.E5] S101,F5/S101,F7 smoke -- real S101F6/S101F8, gated *_StoreHostUploadFile callee\n");
+
+    THGem *savedHGem = HGem;
+
+    // S101F6 (S101,F5 request).
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.3.6", 4806);
+        g.srvGem->Open();
+        HGem = &g;
+        HSys.SystemModularInitial();
+
+        SecsWireCodec builder;
+        builder.InitLocalHead(101, 5, 0);
+        conn->SimPushReceive(builder.LocalBuffer.data(), static_cast<int>(builder.LocalLength_4));
+
+        bool threw = false;
+        try { g.ProcessSocketReceiveData(); } catch (...) { threw = true; }
+        CHECK(threw == false, "E5a: S101,F5 does not throw (S101F6 real, StoreHostUploadFile gated no-op)");
+        CHECK(g.bReceiveS101F5 == true, "E5a: bReceiveS101F5 latches true (S101F6's own tail)");
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() == 17, "E5a: LocalAcknowledge(101,6,0) produces a 17-byte ack frame (14-byte header + BINARY|1 fmt + len + 1 ack byte)");
+        CHECK((unsigned char)tx[6] == 101 && (unsigned char)tx[7] == 6, "E5a: reply S,F == 101,6");
+
+        delete HSys.MyGem; HSys.MyGem = NULL;
+    }
+    // S101F8 (S101,F7 request).
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.3.7", 4807);
+        g.srvGem->Open();
+        HGem = &g;
+        HSys.SystemModularInitial();
+
+        SecsWireCodec builder;
+        builder.InitLocalHead(101, 7, 0);
+        conn->SimPushReceive(builder.LocalBuffer.data(), static_cast<int>(builder.LocalLength_4));
+
+        bool threw = false;
+        try { g.ProcessSocketReceiveData(); } catch (...) { threw = true; }
+        CHECK(threw == false, "E5b: S101,F7 does not throw (S101F8 real, StoreHostUploadFile gated no-op)");
+        CHECK(g.bReceiveS101F7 == true, "E5b: bReceiveS101F7 latches true (S101F8's own tail)");
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() == 17, "E5b: LocalAcknowledge(101,8,0) produces a 17-byte ack frame");
+        CHECK((unsigned char)tx[6] == 101 && (unsigned char)tx[7] == 8, "E5b: reply S,F == 101,8");
+
+        delete HSys.MyGem; HSys.MyGem = NULL;
+    }
+
+    HGem = savedHGem;
 }
 
 // ===========================================================================
@@ -2615,6 +3022,22 @@ int main()
     test_w906_sysmodwire_w9_two_codec_merge_oracle();
     test_w906_sysmodwire_w10_null_guard_regression();
     RestoreTextLogSnapshot(sysModWireLogSnap);
+
+    // W906-SvEcDataItem (design doc Wave 1): FormCreate test is pure
+    // in-memory (no file I/O, no snapshot needed); the e2e dispatch-pump
+    // tests reach SaveSECSGEMTextToLog the SAME way the SysModWire block
+    // above does -- same TextLogSnapshot bracket idiom. Placed AFTER W10 and
+    // BEFORE [T10] -- none of these pump Timer1Timer (ProcessSocketReceiveData
+    // only), so T10's own "must stay LAST among Timer1Timer-pumping tests"
+    // invariant is unaffected.
+    test_w906_svecdataitem_formcreate();
+    TextLogSnapshot svEcDataItemLogSnap = CaptureTextLogSnapshot();
+    test_w906_svecdataitem_e2e_s1f4_formcreate();
+    test_w906_svecdataitem_e2e_s1f24();
+    test_w906_svecdataitem_e2e_s6f20();
+    test_w906_svecdataitem_e2e_s5f8_s100f4();
+    test_w906_svecdataitem_e2e_s101f6_s101f8_smoke();
+    RestoreTextLogSnapshot(svEcDataItemLogSnap);
 
     test_timer1timer_disable_branch();
 

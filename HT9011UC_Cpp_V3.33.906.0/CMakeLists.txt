@@ -505,6 +505,10 @@ add_library(ht9045_secsgem
     SECSGEM/SecsWireCodec.cpp
     SECSGEM/SecsSvEcRegistration.cpp
     SECSGEM/uHGemEquipment.cpp
+    # AI(W906-SvEcDataItem) 20260720: TasmInfo -- THGem::FormCreate's SV10-19
+    # (CPU/disk/memory) source functions. New, standalone (vclcompat only),
+    # zero new link edge (same archive as uHGemEquipment.cpp, which calls it).
+    SECSGEM/TasmInfo.cpp
     # AI(W906-SysModWire) 20260720: HT9045Gem thin shim (Decision A) -- the
     # ONLY definition of `HT9045Gem`, needed by database.cpp's now-real
     # SystemModularInitial (`new HT9045Gem(...)`). See that header's own

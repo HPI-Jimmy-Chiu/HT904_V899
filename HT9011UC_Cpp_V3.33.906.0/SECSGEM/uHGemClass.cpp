@@ -61,13 +61,16 @@
 //      global AnsiString definitions (never read by ACTIVE code in this
 //      file, but harmless, cheap, and matches golden 1:1).
 //
-//  GATED (36 of the original 57 methods remain gated as of INTEGRATE WAVE 3
+//  GATED (23 of the original 57 methods remain gated as of INTEGRATE WAVE 4
 //  below, `#if 0` + cited golden range + ACTIVE default stub) -- see each
 //  stub's comment for its exact golden line range and (post integrate-wave)
 //  an honest note on exactly which missing piece still blocks it.
 //  AI(W906-SysModWire) 20260720: refreshed from "44" (INTEGRATE WAVE 2's own
 //  count) -- INTEGRATE WAVE 3 un-gated 8 more methods (44-8=36, matching that
 //  wave's own note below); grep `^#if 0` count re-verified at 36.
+//  AI(W906-SvEcDataItem) 20260720: INTEGRATE WAVE 4 un-gated 13 more methods
+//  (36-13=23, matching that wave's own note below); grep `^#if 0` count
+//  re-verified at 23.
 //
 //  TRANSLATION RULES
 //  ------------------
@@ -270,6 +273,69 @@
 //  window (uHGemHT9045_SV.cpp:61 re-points HGemPtr=HGem there) -- not guarded,
 //  by design (see design brief risk R8).
 //---------------------------------------------------------------------------
+//
+//  INTEGRATE WAVE 4 (AI(W906-SvEcDataItem) 20260720) -- SECSGEM closing-waves
+//  Wave 1 (design doc DESIGN_SECSGEM_closing_waves.md): SvEcReg embed + SV/EC
+//  DataItem family unlocks 13 more S,F handlers
+//  ---------------------------------------------------------------------------
+//  uHGemEquipment.h's THGem now embeds `SecsSvEcRegistration SvEcReg;` (by
+//  value, mirroring HTGem's own already-proven WireCodec/SvEcReg precedent)
+//  and gained 5 new real methods (DataItemOutSV/DataItemOutSVNameList/
+//  DataItemOutSVNameListWithValue/DataItemOutEC/DataItemOutECNameList) +
+//  IsValidSVID + the Report/CEID composer family (SendRepoerID/
+//  SendAnnotatedRepoerID/SendCeid/SendAnnotatedCeid) + FormCreate (system SV/
+//  EC registration). This resolves every remaining blocker for 8 methods in
+//  the §2-category-② "small increment" bucket (S1F4, S1F12, S2F14, S2F30,
+//  S6F16, S6F18, S6F20, S103F12) PLUS the 5 §2-category-① "no defect"
+//  methods that were always resolvable through WireCodec/strGrdCEID/
+//  strGrdAlarm/stdGridReportID alone and simply hadn't been visited yet
+//  (S1F24, S5F8, S100F4, S101F6, S101F8) -- landed together in this one wave
+//  per the design doc's own bucketing (§3 Wave 1 scope item 4).
+//
+//  UN-GATED (13 more, 21->34/57 total now; 36->23 remaining-gated) -- golden
+//  SECSGEM/uHGemClass.cpp line ranges cited at each definition below:
+//    S1F4_SelectedStatusReply (:119-264), S1F12_StatusVariableNamelistReply
+//    (:266-324), S1F24_CollectionEventNamelist (:450-587),
+//    S2F14_EquipmentConstanData (:609-719), S2F30_EquipmentConstantNamelistReply
+//    (:1037-1080), S5F8_ListEnableAlarmAcknowledge (:1892-1923),
+//    S6F16_EventReportData (:1925-1960), S6F18_AnnotatedEventReportData
+//    (:1962-1997), S6F20_IndividualReportData (:1999-2052),
+//    S100F4_ReportAllAlarm (:2437-2450), S101F6 (:2505-2513), S101F8
+//    (:2583-2595), S103F12_StatusVariableNamelistReply (:3562-3625).
+//
+//  MECHANICAL RENAME RULE (same golden-derived split as prior waves): every
+//  golden `HGemPtr->InitLocalHead/DataItemOut/DataItemIn/GetDataItemLenAndType/
+//  GetDataItemLenAndTypeAndDelete/SendLocalData/LocalAcknowledge/
+//  bDisableBinaryShow` (wire-codec primitives/state) became `ActiveWire->...`;
+//  golden `HGemPtr->SV_ID`/`HGemPtr->EC_ID` (SV/EC bookkeeping, now living
+//  one level down inside THGem's embedded SvEcReg rather than as THGem's own
+//  direct members) became `HGemPtr->SvEcReg.SV_ID`/`HGemPtr->SvEcReg.EC_ID`
+//  (still routes through HGemPtr -- SvEcReg IS THGem's own state, just
+//  nested); golden `HGemPtr->DataItemOutSV/DataItemOutSVNameList/
+//  DataItemOutSVNameListWithValue/DataItemOutEC/DataItemOutECNameList/
+//  SendCeid/SendAnnotatedCeid/CheckCEIDExist/strGrdCEID/strGrdAlarm/
+//  stdGridReportID/MoveCheckCallBack/bReceiveS101F5/bReceiveS101F7` (real
+//  THGem methods/data members) stayed `HGemPtr->`, unchanged.
+//
+//  GOLDEN BUG DISCOVERED AND PRESERVED VERBATIM (flag for review, found via
+//  direct golden read while translating -- not previously catalogued):
+//  S6F18_AnnotatedEventReportData's "CEID not exist" error path
+//  (uHGemClass.cpp:1988) sends `InitLocalHead(6, 16, 0)` -- S,F 6,16, NOT
+//  6,18 -- an evident copy-paste bug from S6F16_EventReportData's own,
+//  textually-identical error path right above it in golden. NOT corrected
+//  here, per this project's faithful-translation mandate; see that method's
+//  own inline comment.
+//
+//  STILL GATED (23 remain; unaffected by this wave's delta, each needs at
+//  least one thing beyond SvEcReg/WireCodec/StringGrid): S2F24Sub (Trace
+//  member arrays), S2F32 (Borland dos.h clock), S2F34 family x5 (temp-list
+//  members), S2F36 family x2 (ditto), S2F38 (ditto), S6F24/S7F18/S7F20/
+//  Process_S7F20/S101F2/S101F4/S101F6_StoreHostUploadFile/
+//  S101F8_StoreHostUploadFile (spool/upload/recipe subsystem members --
+//  Wave 3/3b territory), S10F4/S10F6 (Terminal widget stand-ins),
+//  S125F2/SetECValue (VCL widget dynamic_cast cluster) -- see §2 DEFERRED
+//  in the design doc for the full breakdown.
+//---------------------------------------------------------------------------
 
 #include "vclcompat/vcl_compat.h"
 #include "uHGemClass.h"
@@ -427,18 +493,222 @@ void HTGem::S1F2_OnLineData()
 //---------------------------------------------------------------------------
 // [S1,F4] Selected Status Reply -- reports the value of each requested SVID.
 //---------------------------------------------------------------------------
+// AI(W906-SvEcDataItem) 20260720: UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 119-264). Wire primitives (GetDataItemLenAndType/GetDataItemLenAndTypeAndDelete/
+// InitLocalHead/DataItemOut/DataItemIn/SendLocalData) -> ActiveWire->;
+// DataItemOutSV is THGem's own method (HGemPtr->, unchanged).
 void HTGem::S1F4_SelectedStatusReply()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs GetDataItemLenAndTypeAndDelete + THGem::DataItemOutSV) -- golden SECSGEM/uHGemClass.cpp:119-264
-#endif
+    int SVlen, len, i;
+    unsigned char Type;
+    AnsiString S;
+
+    if(ActiveWire->GetDataItemLenAndType(SVlen, Type)==1)
+    {
+        if(Type==HType.LIST_TYPE || SVlen==0)                                   // new
+        {
+            ActiveWire->GetDataItemLenAndTypeAndDelete(SVlen, Type);
+            if(SVlen==0)                                                        // report all svid
+            {
+                ActiveWire->InitLocalHead(1, 4, 0);
+                len=HGemPtr->SvEcReg.SV_ID->Count;
+                ActiveWire->DataItemOut(len, HType.LIST_TYPE, NULL);
+                for(i=0; i<len; i++)
+                {
+                    HGemPtr->DataItemOutSV(atoi(HGemPtr->SvEcReg.SV_ID->GetString(i).c_str()));
+                }
+                ActiveWire->SendLocalData();
+            }
+            else
+            {
+                ActiveWire->InitLocalHead(1, 4, 0);
+                ActiveWire->DataItemOut(SVlen, HType.LIST_TYPE, NULL);
+                for(i=0; i<SVlen; i++)
+                {
+                    if(ActiveWire->GetDataItemLenAndType(len,Type)==1)
+                        if(ActiveWire->DataItemIn(len, Type, S)==1)              // only for ascii,i1,i2,i4,i5 ,u1,u2,u4,u8
+                            if(HGemPtr->DataItemOutSV(S)==false)
+                                return;
+                }
+                ActiveWire->SendLocalData();
+            }
+        }
+        else                                                                    // old type
+        {
+            ActiveWire->InitLocalHead(1, 4, 0);
+            ActiveWire->DataItemOut(SVlen, HType.LIST_TYPE, NULL);
+            if(Type==HType.UINT_2_TYPE)
+            {
+                unsigned short *P;
+                P=new unsigned short [SVlen];
+                if(ActiveWire->DataItemIn(SVlen, Type, P))
+                {
+                    for(i=0; i<SVlen; i++)
+                        if(HGemPtr->DataItemOutSV(P[i])==false)
+                        {
+                            delete[] P;
+                            return;
+                        }
+                }
+                delete[] P;
+            }
+            else if(Type==HType.UINT_4_TYPE)
+            {
+                unsigned *P;
+                P=new unsigned[SVlen];
+                if(ActiveWire->DataItemIn(SVlen, Type, P))
+                {
+                    for(i=0; i<SVlen; i++)
+                        if(HGemPtr->DataItemOutSV(P[i])==false)
+                        {
+                            delete[] P;
+                            return;
+                        }
+                }
+                delete[] P;
+            }
+            else if(Type==HType.UINT_8_TYPE)                                    //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+            {
+                unsigned long long *P;                                          // golden unsigned __int64
+                P=new unsigned long long[SVlen];
+                if(ActiveWire->DataItemIn(SVlen, Type, P))
+                {
+                    for(i=0; i<SVlen; i++)
+                        // AI(W906-SvEcDataItem) 20260720: explicit (long long)
+                        // cast -- vclcompat::AnsiString has ctors for
+                        // int/unsigned int/long/long long/double but none for
+                        // unsigned long long, so an implicit conversion here is
+                        // AMBIGUOUS (could go via the long long OR the double
+                        // ctor). SVIDs are always small positive integers in
+                        // practice (well within long long range), so this cast
+                        // is value-preserving for every real call; disambiguates
+                        // only, no behavior change.
+                        if(HGemPtr->DataItemOutSV((long long)P[i])==false)
+                        {
+                            delete[] P;
+                            return;
+                        }
+                }
+                delete[] P;
+            }
+            else if(Type==HType.INT_2_TYPE)
+            {
+                short *P;
+                P=new short[SVlen];
+                if(ActiveWire->DataItemIn(SVlen, Type, P))
+                {
+                    for(i=0; i<SVlen; i++)
+                        if(HGemPtr->DataItemOutSV(P[i])==false)
+                        {
+                            delete[] P;
+                            return;
+                        }
+                }
+                delete[] P;
+            }
+            else if(Type==HType.INT_4_TYPE)
+            {
+                int *P;
+                P=new int [SVlen];
+                if(ActiveWire->DataItemIn(SVlen, Type, P))
+                {
+                    for(i=0; i<SVlen; i++)
+                        if(HGemPtr->DataItemOutSV(P[i])==false)
+                        {
+                            delete[] P;
+                            return;
+                        }
+                }
+                delete[] P;
+            }
+            else if(Type==HType.INT_8_TYPE)                                     //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+            {
+                long long *P;                                                   // golden __int64
+                P=new long long [SVlen];
+                if(ActiveWire->DataItemIn(SVlen, Type, P))
+                {
+                    for(i=0; i<SVlen; i++)
+                        if(HGemPtr->DataItemOutSV(P[i])==false)
+                        {
+                            delete[] P;
+                            return;
+                        }
+                }
+                delete[] P;
+            }
+            else
+            {
+                S9F7_IllegalData("S1,F3 data format error");
+                return;
+            }
+            ActiveWire->SendLocalData();
+        }
+    }
+    else
+    {
+        S9F7_IllegalData("S1,F3 data format error");
+    }
 }
 //---------------------------------------------------------------------------
 // [S1,F12] Status Variable Namelist Reply.
 //---------------------------------------------------------------------------
+// AI(W906-SvEcDataItem) 20260720: UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 266-324). Same wire-primitive -> ActiveWire-> / THGem-method -> HGemPtr->
+// rule as S1F4 above.
 void HTGem::S1F12_StatusVariableNamelistReply()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs GetDataItemLenAndTypeAndDelete + THGem::DataItemOutSVNameList) -- golden SECSGEM/uHGemClass.cpp:266-324
-#endif
+    int SVlen, i, len;
+    unsigned char Type;
+    AnsiString S;
+
+    if(ActiveWire->GetDataItemLenAndTypeAndDelete(SVlen,Type)==1)
+    {
+        if(Type==HType.LIST_TYPE || SVlen==0)
+        {
+            ActiveWire->InitLocalHead(1,12,0);
+            if(SVlen==0)
+            {
+                len=HGemPtr->SvEcReg.SV_ID->Count;
+                ActiveWire->DataItemOut(len, HType.LIST_TYPE, NULL);
+                for(i=0; i<len; i++)
+                    HGemPtr->DataItemOutSVNameList(HGemPtr->SvEcReg.SV_ID->GetString(i));
+            }
+            else
+            {
+                ActiveWire->DataItemOut(SVlen, HType.LIST_TYPE, NULL);
+                for(i=0; i<SVlen; i++)
+                {
+                    if(ActiveWire->GetDataItemLenAndType(len,Type)==1)
+                    {
+                        if(ActiveWire->DataItemIn(len, Type, S)==1)
+                        {
+                            if(HGemPtr->DataItemOutSVNameList(S)==false)
+                                return;
+                        }
+                        else
+                        {
+                            S9F7_IllegalData("S1,F11 data format error");
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        S9F7_IllegalData("S1,F11 data format error");
+                        return;
+                    }
+                }
+            }
+            ActiveWire->SendLocalData();
+        }
+        else
+        {
+            S9F7_IllegalData("S1,F11 data format error");
+        }
+    }
+    else
+    {
+        S9F7_IllegalData("S1,F11 data format error");
+    }
 }
 //---------------------------------------------------------------------------
 // [S1,F13] Establish Communications Request.
@@ -581,18 +851,289 @@ void HTGem::S1F18_ONLINEAcknowledge()
 //---------------------------------------------------------------------------
 // [S1,F24] Collection Event Namelist.                          //2014/01/01 lee
 //---------------------------------------------------------------------------
+// AI(W906-SvEcDataItem) 20260720: UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 450-587) -- "no defect" method (§2 category ①): strGrdCEID/stdGridReportID
+// (THGem's own StringGrid members, HGemPtr->, unchanged) + wire primitives
+// (-> ActiveWire->) is the WHOLE dependency chain -- zero new THGem surface.
 void HTGem::S1F24_CollectionEventNamelist()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs VCL TStringGrid widgets strGrdCEID/stdGridReportID) -- golden SECSGEM/uHGemClass.cpp:450-587
-#endif
+    int SVlen, len;
+    unsigned char Type;
+
+    int   pos;
+    unsigned int   uint4SV;
+    bool ret;
+    AnsiString S;
+    TStringList *CEIDList,*SVIDList,*BackCeid;
+
+    CEIDList=new TStringList;
+    SVIDList=new TStringList;
+    BackCeid=new TStringList;
+
+    CEIDList->Clear();
+    BackCeid->Clear();
+
+    if(ActiveWire->GetDataItemLenAndTypeAndDelete(SVlen, Type)==1)
+    {
+        if(Type==HType.LIST_TYPE || SVlen==0)
+        {
+            ActiveWire->InitLocalHead(1, 24, 0);
+            if(SVlen==0)                                                        // report all CEID name and SVID
+            {
+                for(int i=1; i<HGemPtr->strGrdCEID->RowCount; i++)
+                {
+                    if(HGemPtr->strGrdCEID->Cells[0][i]!="" && HGemPtr->strGrdCEID->Cells[0][i]!=NULL)
+                        CEIDList->Add(i);
+                }
+                len=CEIDList->Count;
+
+                ActiveWire->DataItemOut(len, HType.LIST_TYPE, NULL);
+                for(int j=0; j<len; j++)
+                {
+                    ActiveWire->DataItemOut(3, HType.LIST_TYPE, NULL);
+                    pos=atoi(CEIDList->GetString(j).c_str());
+                    uint4SV=(unsigned)atoi(HGemPtr->strGrdCEID->Cells[0][pos].c_str());
+                    ActiveWire->DataItemOut(1, HType.UINT_4_TYPE, &uint4SV);
+                    ActiveWire->DataItemOut(HType.ASCII_TYPE, HGemPtr->strGrdCEID->Cells[2][pos]);
+                    SVIDList->Clear();
+                    for(int k=3; k<HGemPtr->strGrdCEID->ColCount; k++)
+                    {
+                        S=HGemPtr->strGrdCEID->Cells[k][pos];
+                        if(S!="")
+                        {
+                            for(int y=1; y<HGemPtr->stdGridReportID->RowCount; y++)
+                            {
+                                if(S==HGemPtr->stdGridReportID->Cells[0][y])
+                                {
+                                    for(int x=2; x<HGemPtr->stdGridReportID->ColCount; x++)
+                                    {
+                                        if(HGemPtr->stdGridReportID->Cells[x][y]!="")
+                                            SVIDList->Add(HGemPtr->stdGridReportID->Cells[x][y]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    ActiveWire->DataItemOut(SVIDList->Count, HType.LIST_TYPE, NULL);
+                    for(int k=0; k<SVIDList->Count; k++)
+                    {
+                        uint4SV=(unsigned)atoi(SVIDList->GetString(k).c_str());
+                        ActiveWire->DataItemOut(1, HType.UINT_4_TYPE, &uint4SV);
+                    }
+                }
+            }
+            else
+            {
+                for(int j=0; j<SVlen; j++)
+                {
+                    if(ActiveWire->GetDataItemLenAndType(len,Type)==1)
+                    {
+                        if(ActiveWire->DataItemIn(len, Type, S)==1)
+                        {
+                            ret=false;
+                            for(int i=1; i<HGemPtr->strGrdCEID->RowCount; i++)
+                            {
+                                if(HGemPtr->strGrdCEID->Cells[0][i]==S)
+                                {
+                                    CEIDList->Add(i);
+                                    ret=true;
+                                    break;
+                                }
+                            }
+                            BackCeid->Add(S);
+                            if(ret==false)
+                                CEIDList->Add(0);
+                        }
+                    }
+                }
+                len=CEIDList->Count;
+                ActiveWire->DataItemOut(len, HType.LIST_TYPE, NULL);
+                for(int j=0; j<len; j++)
+                {
+                    ActiveWire->DataItemOut(3, HType.LIST_TYPE, NULL);
+                    pos=atoi(CEIDList->GetString(j).c_str());
+                    if(pos==0)                                                  // no such CEID
+                    {
+                        uint4SV=(unsigned)atoi(BackCeid->GetString(j).c_str());
+                        ActiveWire->DataItemOut(1, HType.UINT_4_TYPE,&uint4SV);
+                        ActiveWire->DataItemOut(HType.ASCII_TYPE, AnsiString(""));
+                        ActiveWire->DataItemOut(0, HType.LIST_TYPE, NULL);
+                    }
+                    else
+                    {
+                        uint4SV=(unsigned)atoi(HGemPtr->strGrdCEID->Cells[0][pos].c_str());
+                        ActiveWire->DataItemOut(1, HType.UINT_4_TYPE,&uint4SV);
+                        ActiveWire->DataItemOut(HType.ASCII_TYPE, HGemPtr->strGrdCEID->Cells[2][pos]);
+                        SVIDList->Clear();
+                        for(int k=3; k<HGemPtr->strGrdCEID->ColCount; k++)
+                        {
+                            S=HGemPtr->strGrdCEID->Cells[k][pos];
+                            if(S!="")
+                            {
+                                for(int y=1; y<HGemPtr->stdGridReportID->RowCount; y++)
+                                {
+                                    if(S==HGemPtr->stdGridReportID->Cells[0][y])
+                                    {
+                                        for(int x=2; x<HGemPtr->stdGridReportID->ColCount; x++)
+                                        {
+                                            if(HGemPtr->stdGridReportID->Cells[x][y]!="")
+                                                SVIDList->Add(HGemPtr->stdGridReportID->Cells[x][y]);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        ActiveWire->DataItemOut(SVIDList->Count, HType.LIST_TYPE, NULL);
+                        for(int k=0; k<SVIDList->Count; k++)
+                        {
+                            uint4SV=(unsigned)atoi(SVIDList->GetString(k).c_str());
+                            ActiveWire->DataItemOut(1, HType.UINT_4_TYPE, &uint4SV);
+                        }
+                    }
+                }
+            }
+            ActiveWire->SendLocalData();
+        }
+        else
+        {
+            S9F7_IllegalData("S1,F11 data format error");
+        }
+    }
+    else
+    {
+        S9F7_IllegalData("S1,F11 data format error");
+    }
+    CEIDList->Clear();                                                          //Ifor 20170603 (wei) TStringList 刪除前先 Clean
+    SVIDList->Clear();                                                          //Ifor 20170603 (wei) TStringList 刪除前先 Clean
+    BackCeid->Clear();                                                          //Ifor 20170603 (wei) TStringList 刪除前先 Clean
+    delete CEIDList;
+    delete SVIDList;
+    delete BackCeid;
 }
 //---------------------------------------------------------------------------
 // [S2,F14] Equipment Constant Data.
 //---------------------------------------------------------------------------
+// AI(W906-SvEcDataItem) 20260720: UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 609-719). EC_ID -> HGemPtr->SvEcReg.EC_ID (SV/EC bookkeeping embed);
+// DataItemOutEC is THGem's own method (HGemPtr->, unchanged); wire
+// primitives -> ActiveWire->.
 void HTGem::S2F14_EquipmentConstanData()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs GetDataItemLenAndTypeAndDelete + THGem::DataItemOutEC) -- golden SECSGEM/uHGemClass.cpp:609-719
-#endif
+    int EClen, len;
+    unsigned char Type;
+    AnsiString S;
+
+    if(ActiveWire->GetDataItemLenAndType(EClen, Type)==1)
+    {
+        if(Type==HType.LIST_TYPE || EClen==0)
+        {
+            ActiveWire->GetDataItemLenAndTypeAndDelete(EClen, Type);
+            ActiveWire->InitLocalHead(2, 14, 0);
+            if(EClen==0)
+            {
+                len=HGemPtr->SvEcReg.EC_ID->Count;
+                ActiveWire->DataItemOut(len, HType.LIST_TYPE, NULL);
+                for(int i=0; i<len; i++)
+                    HGemPtr->DataItemOutEC(HGemPtr->SvEcReg.EC_ID->GetString(i));
+            }
+            else
+            {
+                ActiveWire->DataItemOut(EClen, HType.LIST_TYPE, NULL);
+                for(int i=0; i<EClen; i++)
+                {
+                    if(ActiveWire->GetDataItemLenAndType(len, Type)==1)
+                    {
+                        if(ActiveWire->DataItemIn(len, Type, S)==1)
+                            HGemPtr->DataItemOutEC(S);
+                    }
+                    else
+                    {
+                        S9F7_IllegalData("S2,F13 data format error");
+                        return;
+                    }
+                }
+            }
+            ActiveWire->SendLocalData();
+        }
+        else
+        {
+            ActiveWire->InitLocalHead(2, 14, 0);
+            ActiveWire->DataItemOut(EClen, HType.LIST_TYPE, NULL);
+            if(Type==HType.UINT_2_TYPE)
+            {
+                unsigned short *P;
+                P=new unsigned short [EClen];
+                if(ActiveWire->DataItemIn(EClen, Type, P))
+                    for(int i=0; i<EClen; i++)
+                        HGemPtr->DataItemOutEC(P[i]);
+                delete[] P;
+            }
+            else if(Type==HType.UINT_4_TYPE)
+            {
+                unsigned *P;
+                P=new unsigned [EClen];
+                if(ActiveWire->DataItemIn(EClen, Type, P))
+                    for(int i=0; i<EClen; i++)
+                        HGemPtr->DataItemOutEC(P[i]);
+                delete[] P;
+            }
+            else if(Type==HType.INT_2_TYPE)
+            {
+                short *P;
+                P=new short [EClen];
+                if(ActiveWire->DataItemIn(EClen, Type, P))
+                    for(int i=0; i<EClen; i++)
+                        HGemPtr->DataItemOutEC(P[i]);
+                delete[] P;
+            }
+            else if(Type==HType.INT_4_TYPE)
+            {
+                int *P;
+                P=new int[EClen];
+                if(ActiveWire->DataItemIn(EClen, Type, P))
+                    for(int i=0; i<EClen; i++)
+                        HGemPtr->DataItemOutEC(P[i]);
+                delete[] P;
+            }
+            else if(Type==HType.INT_8_TYPE)                                     //Steven 20130730 ADD
+            {
+                long long *P;                                                   // golden __int64
+                P=new long long[EClen];
+                if(ActiveWire->DataItemIn(EClen, Type, P))
+                    for(int i=0; i<EClen; i++)
+                        HGemPtr->DataItemOutEC(P[i]);
+                delete[] P;
+            }
+            else if(Type==HType.FT_4_TYPE)                                      //Steven 20130730 ADD
+            {
+                float *P;
+                P=new float[EClen];
+                if(ActiveWire->DataItemIn(EClen, Type, P))
+                    for(int i=0; i<EClen; i++)
+                        HGemPtr->DataItemOutEC(P[i]);
+                delete[] P;
+            }
+            else if(Type==HType.FT_8_TYPE)                                      //Steven 20130730 ADD
+            {
+                double *P;
+                P=new double[EClen];
+                if(ActiveWire->DataItemIn(EClen, Type, P))
+                    for(int i=0; i<EClen; i++)
+                        HGemPtr->DataItemOutEC(P[i]);
+                delete[] P;
+            }
+            else
+            {
+                S9F7_IllegalData("S21,F13 data format error");
+                return;
+            }
+            ActiveWire->SendLocalData();
+        }
+    }
+    else
+    {
+        S9F7_IllegalData("S2,F13 data format error");
+    }
 }
 //---------------------------------------------------------------------------
 // [S2,F16] New Equipment Constant Send Acknowledge.
@@ -690,10 +1231,62 @@ void HTGem::S2F26_DiagnosticLoopbackData()
 //---------------------------------------------------------------------------
 // [S2,F30] Equipment Constant Namelist Reply.
 //---------------------------------------------------------------------------
+// AI(W906-SvEcDataItem) 20260720: UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 1037-1080). Same EC_ID -> HGemPtr->SvEcReg.EC_ID / DataItemOutECNameList ->
+// HGemPtr-> / wire -> ActiveWire-> rule as S2F14 above.
 void HTGem::S2F30_EquipmentConstantNamelistReply()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs GetDataItemLenAndTypeAndDelete + THGem::DataItemOutECNameList) -- golden SECSGEM/uHGemClass.cpp:1037-1080
-#endif
+    int EClen, i, len;                                                          //,ret;
+    unsigned char Type;
+    AnsiString ECID;
+
+    if(ActiveWire->GetDataItemLenAndTypeAndDelete(EClen, Type)==1)
+    {
+        if(Type==HType.LIST_TYPE)
+        {
+            ActiveWire->InitLocalHead(2, 30, 0);
+            if(EClen==0)
+            {
+                len=HGemPtr->SvEcReg.EC_ID->Count;
+                ActiveWire->DataItemOut(len, HType.LIST_TYPE, NULL);
+                for(i=0; i<len; i++)
+                    HGemPtr->DataItemOutECNameList(HGemPtr->SvEcReg.EC_ID->GetString(i));
+            }
+            else
+            {
+                ActiveWire->DataItemOut(EClen, HType.LIST_TYPE, NULL);
+                for(i=0; i<EClen; i++)
+                {
+                    if(ActiveWire->GetDataItemLenAndType(len, Type)==1)
+                    {
+                        if(ActiveWire->DataItemIn(len, Type, ECID)==1)
+                        {
+                            HGemPtr->DataItemOutECNameList(ECID);
+                        }
+                        else
+                        {
+                            S9F7_IllegalData("S2,F29 Format error !!!");
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        S9F7_IllegalData("S2,F29 Format error !!!");
+                        return;
+                    }
+                }
+            }
+            ActiveWire->SendLocalData();
+        }
+        else
+        {
+            S9F7_IllegalData("S2,F29 Format error !!!");
+        }
+    }
+    else
+    {
+        S9F7_IllegalData("S2,F29 Format error !!!");
+    }
 }
 //---------------------------------------------------------------------------
 // [S2,F32] Date And Time Acknowledge (uses IsCorrectDateFormat, kept ACTIVE above).
@@ -832,28 +1425,178 @@ void HTGem::S5F6_ListAlarmData()
 #endif
 }
 //---------------------------------------------------------------------------
+// AI(W906-SvEcDataItem) 20260720: UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 1892-1923) -- "no defect" method (§2 category ①): strGrdAlarm (THGem's
+// own StringGrid, HGemPtr->, unchanged) + wire -> ActiveWire-> is the WHOLE
+// dependency chain -- zero new THGem surface.
 void HTGem::S5F8_ListEnableAlarmAcknowledge()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs VCL TStringGrid strGrdAlarm) -- golden SECSGEM/uHGemClass.cpp:1892-1923
-#endif
+    int SVlen, len;
+    unsigned char Type;
+    unsigned int   uint4SV;
+    unsigned char ALT=0x80;
+    if( ActiveWire->GetDataItemLenAndType(SVlen, Type)!=1)                       //pig 2014.08.01 SECS
+    {
+        S9F7_IllegalData("S5,F7 Data Format error !!!");
+        return;
+    }
+    ActiveWire->InitLocalHead(5,8,0);
+    len=0;
+    for(int i=1; i<HGemPtr->strGrdAlarm->RowCount; i++)
+        if(HGemPtr->strGrdAlarm->Cells[7][i]=="1")                              //wei 20180227 (Steven) S5F7 判斷位置錯誤 3-->7
+            len++;
+
+    ActiveWire->DataItemOut(len, HType.LIST_TYPE, NULL);
+
+    for(int i=1; i<HGemPtr->strGrdAlarm->RowCount; i++)
+    {
+        if(HGemPtr->strGrdAlarm->Cells[7][i]=="1")                              //wei 20180227 (Steven) S5F7 判斷位置錯誤 3-->7
+        {
+            ActiveWire->DataItemOut(3, HType.LIST_TYPE, NULL);
+            ActiveWire->DataItemOut(1, HType.BINARY_TYPE, &ALT);
+            uint4SV=(unsigned)atoi(HGemPtr->strGrdAlarm->Cells[1][i].c_str());
+            ActiveWire->DataItemOut(1, HType.UINT_4_TYPE, &uint4SV);
+            ActiveWire->DataItemOut(HType.ASCII_TYPE, HGemPtr->strGrdAlarm->Cells[4][i]);
+        }
+    }
+    ActiveWire->SendLocalData();
 }
 //---------------------------------------------------------------------------
+// AI(W906-SvEcDataItem) 20260720: UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 1925-1960). CheckCEIDExist/SendCeid are THGem's own methods (HGemPtr->,
+// unchanged); wire -> ActiveWire->.
 void HTGem::S6F16_EventReportData()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem::CheckCEIDExist/SendCeid) -- golden SECSGEM/uHGemClass.cpp:1925-1960
-#endif
+    int len, ret;
+    unsigned char Type;
+    AnsiString CEID;
+    AnsiString S;
+    unsigned iCeid,iDataID=1;
+
+    ret=ActiveWire->GetDataItemLenAndType(len,Type);
+    if(ret==1 && ActiveWire->DataItemIn(len, Type, CEID)==1)
+    {
+        iCeid=(unsigned)atoi(CEID.c_str());
+        if(HGemPtr->CheckCEIDExist(CEID))
+        {
+            //if(IsEnableEvent(1,iCeid))                                        // 若 Host 要求 Equipment 送回某一個 CEID
+            {                                                                   // 但此 CEID 並未被 enable 那麼依然回報嗎
+                ActiveWire->InitLocalHead(6, 16, 0);                            // 目前先寫一定回報,若要依　enable 來決定
+                ActiveWire->DataItemOut(3, HType.LIST_TYPE, NULL);              // 則以下的　mark 打開就好
+                ActiveWire->DataItemOut(1, HType.UINT_4_TYPE, &iDataID);
+                ActiveWire->DataItemOut(1, HType.UINT_4_TYPE, &iCeid);
+                HGemPtr->SendCeid(iCeid);
+                ActiveWire->SendLocalData();
+            }
+        }
+        else
+        {
+            ActiveWire->InitLocalHead(6, 16, 0);
+            ActiveWire->DataItemOut(0, HType.UINT_4_TYPE, &iCeid);
+            ActiveWire->SendLocalData();
+        }
+    }
+    else
+    {
+        S9F7_IllegalData("S6,F15 Data Format error !!!");
+    }
 }
 //---------------------------------------------------------------------------
+// AI(W906-SvEcDataItem) 20260720: UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 1962-1997). Same rule as S6F16 above. GOLDEN BUG preserved verbatim: the
+// "CEID not exist" error path below sends `InitLocalHead(6, 16, 0)` -- S,F
+// 6,16, NOT 6,18 (a real golden copy-paste bug from S6F16's own error path
+// right above it, confirmed by direct golden read, uHGemClass.cpp:1988) --
+// not "fixed" to (6,18,0) here, per this project's faithful-translation
+// mandate.
 void HTGem::S6F18_AnnotatedEventReportData()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem::CheckCEIDExist/SendAnnotatedCeid) -- golden SECSGEM/uHGemClass.cpp:1962-1997
-#endif
+    int len, ret;
+    unsigned char Type;
+    AnsiString CEID;
+    AnsiString S;
+    unsigned iCeid,iDataID=1;
+
+    ret=ActiveWire->GetDataItemLenAndType(len, Type);
+    if(ret==1 && ActiveWire->DataItemIn(len, Type, CEID)==1)
+    {
+        iCeid=(unsigned)atoi(CEID.c_str());
+        if(HGemPtr->CheckCEIDExist(CEID))
+        {
+            //if(IsEnableEvent(1,iCeid))                                        // 若 Host 要求 Equipment 送回某一個 CEID
+            {                                                                   // 但此 CEID 並未被 enable 那麼依然回報嗎
+                ActiveWire->InitLocalHead(6, 18, 0);                            // 目前先寫一定回報,若要依　enable 來決定
+                ActiveWire->DataItemOut(3, HType.LIST_TYPE,NULL);               // 則以下的　mark 打開就好
+                ActiveWire->DataItemOut(1, HType.UINT_4_TYPE,&iDataID);
+                ActiveWire->DataItemOut(1, HType.UINT_4_TYPE,&iCeid);
+                HGemPtr->SendAnnotatedCeid(iCeid);
+                ActiveWire->SendLocalData();
+            }
+        }
+        else
+        {
+            ActiveWire->InitLocalHead(6, 16, 0);                               // golden bug preserved -- see comment above
+            ActiveWire->DataItemOut(0, HType.UINT_4_TYPE, &iCeid);
+            ActiveWire->SendLocalData();
+        }
+    }
+    else
+    {
+        S9F7_IllegalData("S6,F17 Data Format error !!!");
+    }
 }
 //---------------------------------------------------------------------------
+// AI(W906-SvEcDataItem) 20260720: UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 1999-2052). stdGridReportID is THGem's own StringGrid (HGemPtr->,
+// unchanged); SV_ID -> HGemPtr->SvEcReg.SV_ID (SV/EC bookkeeping embed);
+// DataItemOutSV -> HGemPtr-> (THGem's own method); wire -> ActiveWire->.
 void HTGem::S6F20_IndividualReportData()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs VCL TStringGrid stdGridReportID + THGem::DataItemOutSV) -- golden SECSGEM/uHGemClass.cpp:1999-2052
-#endif
+    int ret, x, y, ict, len;
+    AnsiString RptID,SVID;
+    unsigned char Type;
+
+    ret=ActiveWire->GetDataItemLenAndType(len, Type);
+
+    if(ret==1 && ActiveWire->DataItemIn(len, Type, RptID)==1)
+    {
+        for(y=1; y<HGemPtr->stdGridReportID->RowCount; y++)
+        {
+            if(HGemPtr->stdGridReportID->Cells[0][y]==RptID)
+            {
+                ict=0;
+                for(x=2; x<HGemPtr->stdGridReportID->ColCount; x++)
+                {
+                    if(HGemPtr->stdGridReportID->Cells[x][y]!="")
+                    {
+                        SVID=HGemPtr->stdGridReportID->Cells[x][y];
+                        if(HGemPtr->SvEcReg.SV_ID->IndexOf(SVID)>=0)             //Ifor 20260402: fix IndexOf>=0 (was >0, would miss index 0)
+                        {
+                            ict++;
+                        }
+                        else
+                        {
+                            S9F7_IllegalData("S6,F19 Invalid SVID in Report ");
+                            return;
+                        }
+                    }
+                }
+                ActiveWire->InitLocalHead(6, 20, 0);
+                ActiveWire->DataItemOut(ict, HType.LIST_TYPE, NULL);
+                for(x=2; x<HGemPtr->stdGridReportID->ColCount; x++)
+                {
+                    if(HGemPtr->stdGridReportID->Cells[x][y]!="")
+                    {
+                        SVID=HGemPtr->stdGridReportID->Cells[x][y];
+                        HGemPtr->DataItemOutSV(SVID);
+                    }
+                }
+                ActiveWire->SendLocalData();
+                return;
+            }
+        }
+    }
+    S9F7_IllegalData("S6,F19 Data Format error !!!");
 }
 //---------------------------------------------------------------------------
 void HTGem::S6F24_RequestSpooledDataAcknowledgementSend()
@@ -999,10 +1742,23 @@ void HTGem::S10F6_TerminalDisplayMultiBlockAcknowledge()
 //---------------------------------------------------------------------------
 // [S100,F4] Report All Alarm.
 //---------------------------------------------------------------------------
+// AI(W906-SvEcDataItem) 20260720: UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 2437-2450) -- "no defect" method (§2 category ①): strGrdAlarm (HGemPtr->,
+// unchanged) + wire (-> ActiveWire->) is the WHOLE dependency chain.
 void HTGem::S100F4_ReportAllAlarm()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs VCL TStringGrid strGrdAlarm) -- golden SECSGEM/uHGemClass.cpp:2437-2450
-#endif
+    bool type;
+    ActiveWire->InitLocalHead(100, 4, 0);
+    ActiveWire->DataItemOut(HGemPtr->strGrdAlarm->RowCount-1, HType.LIST_TYPE, NULL);
+    for(int i=1; i<HGemPtr->strGrdAlarm->RowCount; i++)
+    {
+        ActiveWire->DataItemOut(3, HType.LIST_TYPE ,NULL);
+        ActiveWire->DataItemOut(HType.ASCII_TYPE, HGemPtr->strGrdAlarm->Cells[1][i]);
+        ActiveWire->DataItemOut(HType.ASCII_TYPE, HGemPtr->strGrdAlarm->Cells[4][i]);
+        type=atoi(HGemPtr->strGrdAlarm->Cells[2][i].c_str())!=0;
+        ActiveWire->DataItemOut(1, HType.BOOLEAN_TYPE, &type);
+    }
+    ActiveWire->SendLocalData();
 }
 //---------------------------------------------------------------------------
 // [S101,F2] Current EPPD Data (variant 1).
@@ -1021,20 +1777,28 @@ void HTGem::S101F4_CurrentEPPDData()
 #endif
 }
 //---------------------------------------------------------------------------
-// AI(W906-SysModWire) 20260720: gate comment narrowed -- MoveCheckCallBack
-// and bReceiveS101F5 (both this wave's new members) are no longer blockers
-// (golden :2510-2512 now satisfiable), but golden :2507/2509/2513 still need
-// THGem's own `bDisableBinaryShow` member and `LocalAcknowledge` method
-// (neither exposed directly on THGem in this port -- only SecsWireCodec has
-// analogues, SecsWireCodec.h:280/370 -- THGem itself doesn't forward them),
-// and golden :2508 calls the still-gated sibling S101F6_StoreHostUploadFile
-// (its own deep, unrelated blocker chain: UpLoadPath/GemRemoteReceipeList/
-// SV_70_UNT1_ReceipeStruct/SV_71_ASCII_FilenameExtened/bFinishDownloadFile,
-// none in this wave). Still gated.
+// AI(W906-SvEcDataItem) 20260720: UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 2505-2513) -- "no defect" method (§2 category ①): `bDisableBinaryShow`/
+// `LocalAcknowledge` are SecsWireCodec members/methods (-> ActiveWire->,
+// D1/D2 precedent, NOT THGem's own -- corrects this stub's own prior gate
+// comment, which assumed no engine home existed for them); MoveCheckCallBack/
+// bReceiveS101F5 are THGem's own members (HGemPtr->, unchanged, added by the
+// SysModWire wave). S101F6_StoreHostUploadFile itself STAYS GATED (needs
+// UpLoadPath/GemRemoteReceipeList/SV_70_UNT1_ReceipeStruct/
+// SV_71_ASCII_FilenameExtened/bFinishDownloadFile -- none in this wave's
+// scope, deferred to Wave 3b per design doc) -- calling a gated no-op stub
+// is itself unconditionally safe (matches the project's established
+// "caller un-gates independently of its gated callee" precedent, e.g.
+// S2F24_TraceInitializeAcknowledge/S2F24_TraceInitializeAcknowledgeSub).
 void HTGem::S101F6()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem::bDisableBinaryShow/LocalAcknowledge + calls still-gated S101F6_StoreHostUploadFile) -- golden SECSGEM/uHGemClass.cpp:2505-2513
-#endif
+    ActiveWire->bDisableBinaryShow=true;
+    S101F6_StoreHostUploadFile();
+    ActiveWire->bDisableBinaryShow=false;
+    if(HGemPtr->MoveCheckCallBack!=NULL)
+        HGemPtr->MoveCheckCallBack();
+    HGemPtr->bReceiveS101F5=true;
+    ActiveWire->LocalAcknowledge(101, 6, 0);
 }
 //---------------------------------------------------------------------------
 // [S101,F6] Store Host Upload File.
@@ -1045,14 +1809,18 @@ void HTGem::S101F6_StoreHostUploadFile()
 #endif
 }
 //---------------------------------------------------------------------------
-// AI(W906-SysModWire) 20260720: gate comment narrowed -- same shape as
-// S101F6's own note above (MoveCheckCallBack/bReceiveS101F7 resolved this
-// wave; THGem::bDisableBinaryShow/LocalAcknowledge still absent; calls the
-// still-gated sibling S101F8_StoreHostUploadFile). Still gated.
+// AI(W906-SvEcDataItem) 20260720: UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 2583-2595) -- same shape/reasoning as S101F6 above. S101F8_StoreHostUploadFile
+// itself STAYS GATED (same deferred blocker list, Wave 3b).
 void HTGem::S101F8()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem::bDisableBinaryShow/LocalAcknowledge + calls still-gated S101F8_StoreHostUploadFile) -- golden SECSGEM/uHGemClass.cpp:2583-2595
-#endif
+    ActiveWire->bDisableBinaryShow=true;
+    S101F8_StoreHostUploadFile();
+    ActiveWire->bDisableBinaryShow=false;
+    if(HGemPtr->MoveCheckCallBack!=NULL)
+        HGemPtr->MoveCheckCallBack();
+    HGemPtr->bReceiveS101F7=true;
+    ActiveWire->LocalAcknowledge(101, 8, 0);
 }
 //---------------------------------------------------------------------------
 // [S101,F8] Store Host Upload File (variant).
@@ -1819,8 +2587,62 @@ int HTGem::CheckECValue(AnsiString ECID, void *PtrSour)
 //---------------------------------------------------------------------------
 // [S103,F12] Status Variable Namelist Reply (with value).        //Steven 20140911
 //---------------------------------------------------------------------------
-void HTGem::S103F12_StatusVariableNamelistReply()
+// AI(W906-SvEcDataItem) 20260720: UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 3562-3625). SV_ID -> HGemPtr->SvEcReg.SV_ID; DataItemOutSVNameListWithValue
+// -> HGemPtr-> (THGem's own method); wire -> ActiveWire->.
+void HTGem::S103F12_StatusVariableNamelistReply()                               //Steven 20140911 : Add S103F11
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs GetDataItemLenAndTypeAndDelete + THGem::DataItemOutSVNameListWithValue) -- golden SECSGEM/uHGemClass.cpp:3562-3625
-#endif
+    int SVlen, i, len;
+    unsigned char Type;
+
+    AnsiString S;
+
+    if(ActiveWire->GetDataItemLenAndTypeAndDelete(SVlen,Type)==1)
+    {
+        if(Type==HType.LIST_TYPE || SVlen==0)
+        {
+            ActiveWire->InitLocalHead(103,12,0);
+            if(SVlen==0)
+            {
+                len=HGemPtr->SvEcReg.SV_ID->Count;
+                ActiveWire->DataItemOut(len, HType.LIST_TYPE, NULL);
+                for(i=0; i<len; i++)
+                    HGemPtr->DataItemOutSVNameListWithValue(HGemPtr->SvEcReg.SV_ID->GetString(i));
+            }
+            else
+            {
+                ActiveWire->DataItemOut(SVlen, HType.LIST_TYPE, NULL);
+                for(i=0; i<SVlen; i++)
+                {
+                    if(ActiveWire->GetDataItemLenAndType(len,Type)==1)
+                    {
+                        if(ActiveWire->DataItemIn(len, Type, S)==1)
+                        {
+                            if(HGemPtr->DataItemOutSVNameListWithValue(S)==false)
+                                return;
+                        }
+                        else
+                        {
+                            S9F7_IllegalData("S103,F11 data format error");
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        S9F7_IllegalData("S103,F11 data format error");
+                        return;
+                    }
+                }
+            }
+            ActiveWire->SendLocalData();
+        }
+        else
+        {
+            S9F7_IllegalData("S103,F11 data format error");
+        }
+    }
+    else
+    {
+        S9F7_IllegalData("S103,F11 data format error");
+    }
 }
