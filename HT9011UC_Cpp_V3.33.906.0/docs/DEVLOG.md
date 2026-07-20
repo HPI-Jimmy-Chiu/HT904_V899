@@ -702,3 +702,28 @@ C 桶(`clientGemRead`/`ProcessSocketReceiveData`/`Timer1Timer`)是本檔案最�
 
 ### 🔖 RESUME（最新）
 - **✅ 2026-07-20 全日五連發收官**：SysModWire(`799bcdb`)→FastcallFix(`7376490`)→TesterTCP Timer(`0dfecd9`)→automation W906-AutoPB(`b810c0e`)+D5(`e4808c2`)，各附 docs commit，全部獨立審查+主迴圈五道閘。**寫入佇列已清空。**驗證基準：ctest 83/87（4 既有漂移）；套件 317/86/226/80/80/16+automation 127。**下一輪候選**（無既成設計書，開波前先派設計 recon）：`uHGemClass.cpp` 剩 36、SECSGEM 4 子系統(DoSpool/Trace/上下傳)+FormCreate SV 註冊、`uHGemHT9045.*` 站點覆寫層(先刪 shim)、DoDLRequest/DoULRequest 防護 seam 小波、W7 csystem gated 大宗、或 KNOWLEDGE「真實/半真實 HAL pump」方向評估。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 fix/v899.32-pti；工作樹另有無關 V899/config 殘留（PTI 案）勿圈入。進度儀表板 artifact：https://claude.ai/code/artifact/26e3926c-c145-4699-9743-a7ae9db614e4（同 session 重發同檔路徑即可更新）。
+
+---
+
+## 2026-07-20 — 讀取型 pipeline 六路齊發（1 寫入波 Wave 1 在途時的火力全開；全部唯讀交付）
+
+**設定聲明**：主迴圈 Fable 5 + xhigh。6 個唯讀 agent 與 SECSGEM Wave 1 寫入波同時跑，零檔案碰撞（只讀 golden+譯樹、只寫 scratchpad、SECSGEM 檔標 volatile、稽核不 build）。產出物全在 be8fe31a scratchpad。
+
+### 兩份稽核（de-risk）
+- **`AUDIT_test_hazards_tree.md`**（HIGH 2/MED 4/LOW 9）：**HIGH#1 `Public/cBootLog.cpp`**——`test_cBootLog.cpp` 每跑一次就對硬編碼 `D:\HT9045\Error\BootLog.txt`(#define 非可重導)真 append/rotate，**是已提交、ctest 實跑的測試**，無隔離→需儘早修。**HIGH#2 `SaveEventReportData()`**(uHGemEquipment.cpp:2403)覆寫 production `EventReport_*.def`，僅靠測試作者「記得不呼叫」擋著，4 個呼叫點是後續波自然會補測的候選→SECSGEM W3 前須建結構性 seam。MED：cprod AddAlarm→ExecZipCommand(system/XCOPY)鏈零可達、no-op 宏擋著(W6 排定解除)；test_SCK_ART_Remainder.cpp:301 過時誤述。命名風險：`Gated_<Name>` 有兩義(no-op 樁 vs 忠實真 I/O)。
+- **`AUDIT_gated_inventory.md`**（338 gate/52 檔）：**假 gate/舊帳 7 處**——5 個真「已解決」ODR-dup(cpublic.cpp:1044/1235/1349/1512 + aHotPlateSubstrate.cpp:494，可安全刪、零功能增益)；atester_32Site.cpp:1698 部分過時(SendMSG_CMD 現已存在，只剩 MSG_CMD_Arm1Down 常數真缺)；2 處 golden-side dead ref(正確保留)。**MOT[] gate 非假**(MOT[] 陣列全樹未宣告，30 個 gate 正確擋著)。**最高槓桿零成本候選：common.cpp/h「wave-file」叢集**(WriteDataToFile/MyForceDirectories/CheckFileIsEmpty/ReadDataFromFile)——fan-out 最高，串聯解鎖 ≥5 個下游 gate(AGV_E84/HANA_ART/BarCode_Bottom2DID/cpublic/**SECSGEM S7F18**)，只需既有 vclcompat 檔案 API。
+
+### 四份設計書（前置寫入 pipeline）
+- **`DESIGN_DoDLRequest_test_seam.md`**：推薦候選 A(測試期重導 5 全域 DataPath/OffsetPath/**AuthPath**/LastDataPath/aDataPath)+C(golden zip-existence 守門)。**零 golden/common/CMake 變更**。關鍵發現：AuthPath 必須一併重導(CheckAndReadIniData 缺 key 會寫回預設值污染 config\Security_new.def)；W5FA_FMain 在匿名 ns→DoULRequest 檔名不可控。**主迴圈裁決 Q1：ctest 預設不起外部行程**(保 CI 可攜+符合零副作用紀律)→DoDLRequest 淺路徑重導+不餵 zip 活測(零行程)、深路徑與 DoULRequest 掛 7z-present 閘或維持手動核對。
+- **`DESIGN_VCL_widget_cast_wave.md`**：recon 校正前提——**只 4 位點真共用 7 型別 cast 叢集**(SetECValue+DataItemOutSV/EC+GetECDataValue 的 IsVCL==1 分支)。關鍵事實 RTTI 已可用、`vclcompat::TObject` 已在→直接真 `dynamic_cast`，golden cast 行逐字可編。定案新建 `vclcompat/Controls.h`(header-only 6 型別)+**R1：TStringList 須移入 TObject 樹(TStrings:TObject)**。桶切 VCW-1 核心(~550 行)/VCW-2 終端/分流 C→SECSGEM W3b/分流 D(S2F32 時鐘)→獨立微波。
+- **`DESIGN_uHGemHT9045_siteoverride.md`**：⚠**改寫 roadmap 假設的大發現**——真本體 ~9140 行(22 override)有**三道依賴牆，SECSGEM 收尾群只拆一道**：牆①(THGem/wire/SvEcReg，收尾群解)、**牆②(fMain ~22 未翻表單 fan-out，FormsFacade 缺 ~19，收尾群不涵蓋)**、**牆③(Handler 自由函式 GetAlarmCodeList/MyDBVProcess/ProcessLotInfo/DoAutoRetest/SaveAllFile 未翻，收尾群不涵蓋)**。**整檔無法一次 swap 全翻**。定案漸進式真類別：Bucket 0 一次性 swap-back(刪 shim→真骨架 header 只宣告已翻 method、未翻者繼承 base=與現 shim 逐位同行為→逐桶填 body 零 churn)。**只有 Bucket 0 在 W1 後可立即施工**；其餘 5 桶主阻塞是牆②③(比 W2/W3 更關鍵、需獨立 FormsFacade/free-func 前置波)。
+- **`RECON_W7_breakdown.md`**：W7=10 區(+1 vision)。cContact ~11478 行 0 譯(最破碎)；main.cpp 34972/uLotInfo 16613/ckernel+AutoClean 0 譯。建議 8 交付波(含 2 enabler)。**HAL pump 最小切入點：E0(半真實 timed-sensor 泵)→M1(MainProc 模式選擇器,泵頂)→M2(DoAllProcess 決策梯)**——現 Sim HAL 瞬間收斂會遮排序 bug，E0 讓覆蓋「有牙齒」。關鍵發現：**AutoClean.cpp 9137 行 0 譯是 Z2 最大 gate**；ScanSystemSensor 在 ckernel.cpp:359(非 csystem)；fMain-> seam=767 相異成員(258 純 widget/**509 method-like 含真業務邏輯，勿整包當 UI 跳過**)。最大不確定性=cContact 下壓 SM 的 widget-in-switch-case 可分離性。
+
+### 重排的寫入波佇列（一次一波；主迴圈裁決）
+**近期(設計就緒，可即施工)**：W1 SvEcDataItem(在途)→W2 AlarmReportAck→**uHGemHT9045 Bucket 0**(swap-back，零行為變更、消除未來 churn)→**common.cpp 完成波**(最高槓桿：解 GetLastOpenFN+S7F18+≥4 gate，先前 SECSGEM Q2 選 B 暫留的 S7F18 由此解)→W3 Subsystems(3a 純 wire/3b 檔寫+TCheckListBox+吸收 VCL 分流 C，需先建 SaveEventReportData/檔寫 seam=HIGH#2)→VCW-1 cast 基礎→VCW-2 終端→S2F32 時鐘微波→DoDLRequest 測試 seam(獨立)。
+**零成本清理波(可併)**：刪 5 個假 ODR-dup gate + atester_32Site.cpp:1698 補 MSG_CMD_Arm1Down + 修過時註解。
+**測試衛生**：HIGH#1 cBootLog 測試隔離(獨立小波)。
+**中長期(需前置波)**：FormsFacade/Handler-free-func 前置波(解 uHGemHT9045 牆②③)→uHGemHT9045 Bucket 1-5→W7 E0/M1/M2 HAL pump 群(含 AutoClean.cpp 大塊)。
+
+### 🔖 RESUME（最新）
+- **▶ SECSGEM Wave 1 寫入施工中；6 份唯讀交付物全數完成並裁決(2026-07-20)**。下次接續：(1) Wave 1 完成→審查+主迴圈五道閘+commit(SysModWire 以來的既定流程)。(2) 上列重排佇列施工，設計書全在 be8fe31a scratchpad(DESIGN_DoDLRequest_test_seam/VCL_widget_cast_wave/uHGemHT9045_siteoverride、RECON_W7_breakdown、AUDIT_test_hazards_tree/gated_inventory + gate_list.txt/gate_context.txt/extract_gates.py 可重用)。(3) 已裁決：DoDLRequest Q1=ctest 不起外部行程；uHGemHT9045 只 Bucket 0 近期可做(牆②③擋其餘)；common.cpp 完成波升為高槓桿優先。(4) 驗證基準 ctest 83/87(4 既有漂移)、套件 317/86/226/80/80/16/127；golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 fix/v899.32-pti；工作樹另有無關 V899/config 殘留(PTI 案)勿圈入。進度儀表板 https://claude.ai/code/artifact/26e3926c-c145-4699-9743-a7ae9db614e4。
