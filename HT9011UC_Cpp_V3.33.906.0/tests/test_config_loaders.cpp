@@ -61,6 +61,17 @@ void ShowMyMessage(AnsiString S1, AnsiString /*S2*/, AnsiString /*S3*/,
     std::printf("  [ShowMyMessage] %s\n", S1.c_str());
 }
 
+// AI(W906-SysModWire) 20260720: a THIRD gated external, needed as of this
+// wave -- database.cpp's SystemModularInitial is now real (`new
+// HT9045Gem(...)`), which pulls uHGemHT9045_Shim.cpp.o -> uHGemClass.cpp.o
+// (HTGem base ctor/dtor) -> uHGemEquipment.cpp.o (HTGem's 8 newly un-gated
+// methods call real out-of-line THGem methods) into this binary's link for
+// the first time. uHGemEquipment.cpp.o's own 2-arg MyDBIProcess extern
+// (declared uHGemEquipment.cpp:80, NO __fastcall -- a DIFFERENT overload from
+// the 3-arg one above) needs a definition too. Same no-op shape as
+// tests/test_uHGemEquipment.cpp's own (:173).
+void MyDBIProcess(AnsiString /*S1*/, AnsiString /*S2*/) {}
+
 // ---------------------------------------------------------------------------
 //  Link-satisfying stub ctors for the W6/W7-DEFERRED queue classes.
 //

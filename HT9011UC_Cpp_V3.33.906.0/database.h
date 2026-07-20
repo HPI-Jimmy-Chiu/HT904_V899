@@ -14,8 +14,6 @@
 //  WHAT IS GATED (#if 0 // TODO(wave)):
 //    TDataModule1 class + extern DataModule1
 //      -> BDE TTable / TDataModule / VCL form; needs DBTables.hpp. (database.h:139-187)
-//    HTGem *MyGem member of SYSTEM_MODULAR
-//      -> SECS wave; forward-declared opaque. (database.h:250)
 //    TMyBinDispCtrl *BinDisCtrl member of SYSTEM_MODULAR
 //      -> UI wave; forward-declared opaque. (database.h:204)
 //    ReadGeneralIni() method declaration
@@ -23,6 +21,10 @@
 //    All SYSTEM_MODULAR members not needed by the loader batch
 //      (com-ports, CCD/RFID arrays, etc.) (database.h:209-249 / 252-286)
 //    ATKRecipeInfo pointer + ATK_RECIPE_INFO include
+//
+//  AI(W906-SysModWire) 20260720: HTGem *MyGem member of SYSTEM_MODULAR is NO
+//  LONGER gated -- wired for real by SystemModularInitial (database.cpp),
+//  see that member's own comment below (database.h:~233).
 //
 //  ENCODING NOTE: original is Big5; this translation is UTF-8.  Chinese
 //  comments in the golden are replaced with their semantic equivalents in ASCII.
@@ -230,13 +232,13 @@ class SYSTEM_MODULAR
         // ...
 #endif
 
-        // SECS member -- forward-declared opaque; initialized in SystemModularInitial
-        // (database.h:250)
-#if 0 // TODO(wave-SECS): HTGem *MyGem -- uHGemClass.h / HT9045Gem ctor (database.cpp:1541)
+        // AI(W906-SysModWire) 20260720: wired for real -- SystemModularInitial
+        // (database.cpp) now assigns this (golden database.h:250). NULL via
+        // static zero-init of the global HSys ONLY -- do not stack-allocate
+        // SYSTEM_MODULAR (its implicit ctor leaves this pointer
+        // uninitialized; only the global HSys's static storage guarantees a
+        // zero start).
         HTGem *MyGem;
-#else
-        HTGem *MyGem;   // opaque pointer; NULL until SECS wave wires SystemModularInitial
-#endif
 
         // BinDisp member -- forward-declared opaque (database.h:204)
         TMyBinDispCtrl *BinDisCtrl;  // opaque; NULL until UI wave wires InstallColorBinDisplay
@@ -269,7 +271,7 @@ class SYSTEM_MODULAR
 #if 0 // TODO(wave): ReadGeneralIni -- ~1240 lines, needs full cmydef/cprod surface
         void ReadGeneralIni();
 #endif
-        void SystemModularInitial();    // gated in database.cpp; decl kept for compilation
+        void SystemModularInitial();    // real as of W906-SysModWire (wires MyGem) -- see database.cpp
 
 #if 0 // TODO(wave): array members dependent on iTotalFunction / CCD / RFID
       // (database.h:270-286)

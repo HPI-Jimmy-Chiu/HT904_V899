@@ -61,13 +61,13 @@
 //      global AnsiString definitions (never read by ACTIVE code in this
 //      file, but harmless, cheap, and matches golden 1:1).
 //
-//  GATED (44 of the original 57 methods remain gated as of INTEGRATE WAVE 2
+//  GATED (36 of the original 57 methods remain gated as of INTEGRATE WAVE 3
 //  below, `#if 0` + cited golden range + ACTIVE default stub) -- see each
 //  stub's comment for its exact golden line range and (post integrate-wave)
 //  an honest note on exactly which missing piece still blocks it.
-//  AI(W906-fire-verify) 20260716: refreshed from the stale "47" left over from
-//  before INTEGRATE WAVE 2 un-gated 3 more methods (57-13=44, matching that
-//  wave's own note below); grep `^#if 0` count re-verified at 44.
+//  AI(W906-SysModWire) 20260720: refreshed from "44" (INTEGRATE WAVE 2's own
+//  count) -- INTEGRATE WAVE 3 un-gated 8 more methods (44-8=36, matching that
+//  wave's own note below); grep `^#if 0` count re-verified at 36.
 //
 //  TRANSLATION RULES
 //  ------------------
@@ -231,9 +231,57 @@
 //  StringGrid, 1 VCL TCheckBox + THGem-only members) -- reported honestly
 //  rather than forced through.
 //---------------------------------------------------------------------------
+//
+//  INTEGRATE WAVE 3 (AI(W906-SysModWire) 20260720) -- SystemModularInitial
+//  wiring wave: ActiveWire indirection + 8 more S,F handlers unlocked
+//  ---------------------------------------------------------------------------
+//  Design D (see design brief): HTGem gained a `SecsWireCodec *ActiveWire`
+//  member (uHGemClass.h), defaulting to `&WireCodec` in all three ctors.
+//  MECHANICAL RENAME: every occurrence of `WireCodec.` in the (now) 13
+//  previously-un-gated ACTIVE method bodies below became `ActiveWire->`
+//  (90 call sites; verified none touch `SvEcReg.`, which is untouched --
+//  EC/SV registration state is HTGem's own, not a wire-codec concept, so it
+//  does not route through the indirection). Standalone callers (this file's
+//  own test, test_uHGemClass.cpp) are unaffected: ActiveWire defaults to
+//  &WireCodec, so `hgem.WireCodec.*` pokes remain read by the SAME object
+//  ActiveWire dereferences. Historical comments elsewhere in this file below
+//  that say "now calling WireCodec." describe THAT wave's own before/after
+//  (HGemPtr-> -> WireCodec.) and are left as their own historical record --
+//  not rewritten to "ActiveWire->" -- since the code they narrate has, in
+//  turn, been renamed uniformly by this note's own mechanical pass.
+//
+//  UN-GATED (8 more, 13->21/57 total now) -- golden SECSGEM/uHGemClass.cpp
+//  line ranges cited at each definition below: S1F1_AreYouThereRequest,
+//  S1F2_OnLineData, S1F13_EstablishCommunicationsRequest,
+//  S1F14_ConnectRequestAcknowledge, Process_S1F14_ConnectRequestAcknowledge,
+//  S1F16_OFFLINEAcknowledge, S1F18_ONLINEAcknowledge, S2F18_DateandTimeData.
+//  Every one of their `HGemPtr->InitLocalHead/DataItemOut/DataItemIn/
+//  SendLocalData/GetDataItemLenAndTypeAndDelete/StringOut` calls became
+//  `ActiveWire->...` (wire-codec ops, same rule as the mechanical rename
+//  above); `HGemPtr->GemMDLN/GemSOFTREV/bS1F2_OnLineData/bOnLine/
+//  bReceiveEstablishCommunicationsRequest/bWaitEstablishCommunications.../
+//  GemClock` (real THGem DATA members) and `HGemPtr->CheckSFFormatOnlyHead(...)/
+//  OffLine()/OnLine(...)/GetOnLineMode()/GetTimeInfo()` (real THGem OUT-OF-LINE
+//  METHODS, now defined in uHGemEquipment.cpp -- this is what makes this file
+//  #include "SECSGEM/uHGemEquipment.h" for the FIRST time, see uHGemClass.h's
+//  own updated forward-declaration note) all stay `HGemPtr->`, unchanged --
+//  real THGem state/behavior, not a wire-codec concept. HGemPtr==NULL at call
+//  time is undefined behavior, same as golden's own pre-AddSV construction
+//  window (uHGemHT9045_SV.cpp:61 re-points HGemPtr=HGem there) -- not guarded,
+//  by design (see design brief risk R8).
+//---------------------------------------------------------------------------
 
 #include "vclcompat/vcl_compat.h"
 #include "uHGemClass.h"
+// AI(W906-SysModWire) 20260720: FIRST include of uHGemEquipment.h in this file
+// -- see uHGemClass.h's own updated forward-declaration note for why: 8 newly
+// un-gated methods below call real out-of-line THGem methods
+// (CheckSFFormatOnlyHead/OffLine/OnLine/GetOnLineMode/GetTimeInfo), which
+// require THGem's complete type (not just the bare forward declaration the
+// header keeps). uHGemClass.h itself is UNCHANGED (still `class THGem;`) --
+// this include stays confined to the .cpp, matching this project's "header
+// stays minimal, .cpp pulls what its method BODIES need" convention.
+#include "SECSGEM/uHGemEquipment.h"
 #include <cstdlib>   // atoi (CheckECValue's Type/PMax_Value/PMin_Value decode)
 
 // AI(W5-SECSGEM-Translate) 20260710: MyDBIProcess's real golden signature is
@@ -287,6 +335,7 @@ HTGem::HTGem()
 {
     HGemPtr=NULL;
     HandlerPath="";
+    ActiveWire=&WireCodec;                                                      //AI(W906-SysModWire) 20260720: design D default -- standalone dispatch target
     SecsAlarmMessage=new TStringList;                                           //Steven 20150519 : 修正SECS GEM使用ShowMyMessage會出現記憶體破壞
     FMessageList=new TStringList;                                               //Ifor 20251018 add:Secs Alarm List
 };
@@ -295,6 +344,7 @@ HTGem::HTGem(THGem *HGemTmp)
 {
     HGemPtr=HGemTmp;
     HandlerPath="";
+    ActiveWire=&WireCodec;                                                      //AI(W906-SysModWire) 20260720: design D default -- standalone dispatch target
     SecsAlarmMessage=new TStringList;                                           //Steven 20150519 : 修正SECS GEM使用ShowMyMessage會出現記憶體破壞
     FMessageList=new TStringList;                                               //Ifor 20251018 add:Secs Alarm List
 }
@@ -302,6 +352,7 @@ HTGem::HTGem(THGem *HGemTmp)
 HTGem::HTGem(AnsiString Path)
 {
     HandlerPath=Path;
+    ActiveWire=&WireCodec;                                                      //AI(W906-SysModWire) 20260720: design D default -- standalone dispatch target
     SecsAlarmMessage=new TStringList;                                           //Steven 20150519 : 修正SECS GEM使用ShowMyMessage會出現記憶體破壞
     FMessageList=new TStringList;                                               //Ifor 20251018 add:Secs Alarm List
 }
@@ -345,18 +396,33 @@ void HTGem::UpdateDataPath(AnsiString Path)
 //---------------------------------------------------------------------------
 // [S1,F1] Are You There Request.
 //---------------------------------------------------------------------------
+// AI(W906-SysModWire) 20260720: UN-GATED (golden SECSGEM/uHGemClass.cpp:89-95).
+// `HGemPtr->bS1F2_OnLineData` is a real THGem DATA member (unchanged);
+// InitLocalHead/StringOut/SendLocalData -> ActiveWire-> (wire-codec ops).
+// GOLDEN QUIRK preserved verbatim: InitLocalHead(1,1,0) sets W-Bit=0 even
+// though S1,F1 is itself a request (W-Bit would normally be 1) -- not "fixed".
 void HTGem::S1F1_AreYouThereRequest()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem member bS1F2_OnLineData) -- golden SECSGEM/uHGemClass.cpp:89-95
-#endif
+    HGemPtr->bS1F2_OnLineData=false;
+    ActiveWire->InitLocalHead(1,1,0);
+    ActiveWire->StringOut("[Send]    AreYouThereRequest");
+    ActiveWire->SendLocalData();
 }
 //---------------------------------------------------------------------------
 // [S1,F2] OnLineData : Data signifying that the equipment is alive.
 //---------------------------------------------------------------------------
+// AI(W906-SysModWire) 20260720: UN-GATED (golden SECSGEM/uHGemClass.cpp:102-111).
+// CheckSFFormatOnlyHead/GemMDLN/GemSOFTREV are real THGem method/data members
+// (HGemPtr->, unchanged); InitLocalHead/DataItemOut/SendLocalData -> ActiveWire->.
 void HTGem::S1F2_OnLineData()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem::CheckSFFormatOnlyHead + THGem members GemMDLN/GemSOFTREV) -- golden SECSGEM/uHGemClass.cpp:102-111
-#endif
+    if(HGemPtr->CheckSFFormatOnlyHead("S1,F1 Format error !!!")==false)
+        return;
+    ActiveWire->InitLocalHead(1, 2, 0);
+    ActiveWire->DataItemOut(2, HType.LIST_TYPE, NULL);
+    ActiveWire->DataItemOut(HType.ASCII_TYPE, HGemPtr->GemMDLN);
+    ActiveWire->DataItemOut(HType.ASCII_TYPE, HGemPtr->GemSOFTREV);
+    ActiveWire->SendLocalData();
 }
 //---------------------------------------------------------------------------
 // [S1,F4] Selected Status Reply -- reports the value of each requested SVID.
@@ -377,40 +443,140 @@ void HTGem::S1F12_StatusVariableNamelistReply()
 //---------------------------------------------------------------------------
 // [S1,F13] Establish Communications Request.
 //---------------------------------------------------------------------------
+// AI(W906-SysModWire) 20260720: UN-GATED (golden SECSGEM/uHGemClass.cpp:326-334).
+// GemMDLN/GemSOFTREV real THGem data members (HGemPtr->, unchanged);
+// InitLocalHead/DataItemOut/SendLocalData -> ActiveWire->.
 void HTGem::S1F13_EstablishCommunicationsRequest()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem members GemMDLN/GemSOFTREV) -- golden SECSGEM/uHGemClass.cpp:326-334
-#endif
+    AnsiString S;
+    ActiveWire->InitLocalHead(1, 13, 0);
+    ActiveWire->DataItemOut(2, HType.LIST_TYPE, NULL);
+    ActiveWire->DataItemOut(HType.ASCII_TYPE, HGemPtr->GemMDLN);
+    ActiveWire->DataItemOut(HType.ASCII_TYPE, HGemPtr->GemSOFTREV);
+    ActiveWire->SendLocalData();
 }
 //---------------------------------------------------------------------------
 // [S1,F14] Connect Request Acknowledge.
 //---------------------------------------------------------------------------
+// AI(W906-SysModWire) 20260720: UN-GATED (golden SECSGEM/uHGemClass.cpp:341-368).
+// chkMoreMessageAbortProcess (THGemCheckBox*) + GemMDLN/GemSOFTREV +
+// bReceiveEstablishCommunicationsRequest are real THGem members (HGemPtr->,
+// unchanged); GetDataItemLenAndTypeAndDelete/InitLocalHead/DataItemOut/
+// SendLocalData -> ActiveWire->.
 void HTGem::S1F14_ConnectRequestAcknowledge()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs VCL TCheckBox chkMoreMessageAbortProcess + GetDataItemLenAndTypeAndDelete + THGem members GemMDLN/GemSOFTREV/bReceiveEstablishCommunicationsRequest) -- golden SECSGEM/uHGemClass.cpp:341-368
-#endif
+    unsigned char Command=0,Type;
+    AnsiString S, ret;
+    int len;
+
+    // < L[0]
+    // >.
+
+    if(HGemPtr->chkMoreMessageAbortProcess->Checked)
+    {
+        ret=ActiveWire->GetDataItemLenAndTypeAndDelete(len, Type);
+        if(ret!=1 || len!=0 || Type!=HType.LIST_TYPE)
+        {
+            S9F7_IllegalData("S1,F13 data format error");
+            return;
+        }
+    }
+    ActiveWire->InitLocalHead(1,14,0);
+
+    ActiveWire->DataItemOut(2, HType.LIST_TYPE, NULL);
+    ActiveWire->DataItemOut(1, HType.BINARY_TYPE, &Command);
+    ActiveWire->DataItemOut(2, HType.LIST_TYPE, NULL);
+    ActiveWire->DataItemOut(HType.ASCII_TYPE, HGemPtr->GemMDLN);
+    ActiveWire->DataItemOut(HType.ASCII_TYPE, HGemPtr->GemSOFTREV);
+    ActiveWire->SendLocalData();
+    HGemPtr->bReceiveEstablishCommunicationsRequest=true;
 }
 //---------------------------------------------------------------------------
+// AI(W906-SysModWire) 20260720: UN-GATED (golden SECSGEM/uHGemClass.cpp:370-403).
+// bWaitEstablishCommunicationsResponse/...Error are real THGem data members
+// (HGemPtr->, unchanged); DataItemIn -> ActiveWire->.
 void HTGem::Process_S1F14_ConnectRequestAcknowledge()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem members bWaitEstablishCommunicationsResponse/bWaitEstablishCommunicationsResponseError) -- golden SECSGEM/uHGemClass.cpp:370-403
-#endif
+    if(ActiveWire->DataItemIn(2, HType.LIST_TYPE, NULL)==1)
+    {
+        unsigned char binarydata[1];
+        if(ActiveWire->DataItemIn(1, HType.BINARY_TYPE, binarydata)==1)
+        {
+            if(ActiveWire->DataItemIn(0, HType.LIST_TYPE, NULL)!=1)
+            {
+                S9F7_IllegalData("S1,F14 data format error");
+                return;
+            }
+
+            if(binarydata[0]==0x00)
+            {
+                HGemPtr->bWaitEstablishCommunicationsResponse=true;
+                HGemPtr->bWaitEstablishCommunicationsResponseError=false;
+                return;
+            }
+        }
+        else
+        {
+            S9F7_IllegalData("S1,F14 data format error");
+            return;
+        }
+    }
+    else
+    {
+        S9F7_IllegalData("S1,F14 data format error");
+        return;
+    }
+    HGemPtr->bWaitEstablishCommunicationsResponse=true;
+    HGemPtr->bWaitEstablishCommunicationsResponseError=true;
 }
 //---------------------------------------------------------------------------
 // [S1,F16] OFFLINE Acknowledge.
 //---------------------------------------------------------------------------
+// AI(W906-SysModWire) 20260720: UN-GATED (golden SECSGEM/uHGemClass.cpp:408-417).
+// CheckSFFormatOnlyHead/OffLine are real THGem out-of-line methods (HGemPtr->,
+// unchanged); InitLocalHead/DataItemOut/SendLocalData -> ActiveWire->.
 void HTGem::S1F16_OFFLINEAcknowledge()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem::CheckSFFormatOnlyHead + THGem::OffLine) -- golden SECSGEM/uHGemClass.cpp:408-417
-#endif
+    unsigned char Command=0;
+    if(HGemPtr->CheckSFFormatOnlyHead("S1,F15 Format error !!!")==false)
+        return;
+
+    ActiveWire->InitLocalHead(1, 16, 0);
+    ActiveWire->DataItemOut(1, HType.BINARY_TYPE, &Command);
+    ActiveWire->SendLocalData();
+    HGemPtr->OffLine();
 }
 //---------------------------------------------------------------------------
 // [S1,F18] ONLINE Acknowledge.
 //---------------------------------------------------------------------------
+// AI(W906-SysModWire) 20260720: UN-GATED (golden SECSGEM/uHGemClass.cpp:423-447).
+// CheckSFFormatOnlyHead/bOnLine/GemCheckBoxAcceptHostOnlineRequest/OnLine/
+// GetOnLineMode are real THGem members (HGemPtr->, unchanged); InitLocalHead/
+// DataItemOut/SendLocalData -> ActiveWire->.
 void HTGem::S1F18_ONLINEAcknowledge()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem::CheckSFFormatOnlyHead + THGem member bOnLine + VCL TCheckBox GemCheckBoxAcceptHostOnlineRequest + THGem::OnLine/GetOnLineMode) -- golden SECSGEM/uHGemClass.cpp:423-447
-#endif
+    unsigned char Command=0;
+    if(HGemPtr->CheckSFFormatOnlyHead("S1,F17 Format error !!!")==false)
+        return;
+
+    ActiveWire->InitLocalHead(1, 18, 0);
+    if(HGemPtr->bOnLine)
+    {
+        Command=2;
+    }
+    else if(HGemPtr->GemCheckBoxAcceptHostOnlineRequest->Checked)
+    {
+        HGemPtr->bOnLine=true;
+        Command=0;
+    }
+    else
+    {
+        Command=1;
+    }
+    ActiveWire->DataItemOut(1, HType.BINARY_TYPE, &Command);
+    ActiveWire->SendLocalData();
+    if(Command==0)
+        HGemPtr->OnLine(HGemPtr->GetOnLineMode());
 }
 //---------------------------------------------------------------------------
 // [S1,F24] Collection Event Namelist.                          //2014/01/01 lee
@@ -431,18 +597,33 @@ void HTGem::S2F14_EquipmentConstanData()
 //---------------------------------------------------------------------------
 // [S2,F16] New Equipment Constant Send Acknowledge.
 //---------------------------------------------------------------------------
+// AI(W906-SysModWire) 20260720: gate comment narrowed -- THGem::MoveCheckCallBack
+// (this wave's own new member) is NO LONGER a blocker for this method (golden
+// :779-780 is now satisfiable), but golden :734/746 still need
+// `THGem::SReceiveDataBackup` (a member no wave has added yet) and the
+// csystem predicates `HasICUnderMachine()`/`HasAnyICInMachine()` (golden
+// :738/746 -- free functions that would require a NEW ht9045_secsgem ->
+// ht9045_sm link edge, deliberately out of this wave's scope). Still gated.
 void HTGem::S2F16_NewEquipmentConstantSendAcknowledge()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem member SReceiveDataBackup + THGem member MoveCheckCallBack (function pointer)) -- golden SECSGEM/uHGemClass.cpp:731-779
+#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem member SReceiveDataBackup + csystem predicates HasICUnderMachine()/HasAnyICInMachine() (new ht9045_secsgem->ht9045_sm link edge)) -- golden SECSGEM/uHGemClass.cpp:731-779
 #endif
 }
 //---------------------------------------------------------------------------
 // [S2,F18] Date and Time Data.
 //---------------------------------------------------------------------------
+// AI(W906-SysModWire) 20260720: UN-GATED (golden SECSGEM/uHGemClass.cpp:786-793).
+// CheckSFFormatOnlyHead/GetTimeInfo/GemClock are real THGem method/data
+// members (HGemPtr->, unchanged); InitLocalHead/DataItemOut/SendLocalData ->
+// ActiveWire->.
 void HTGem::S2F18_DateandTimeData()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem::CheckSFFormatOnlyHead + THGem::GetTimeInfo + THGem member GemClock) -- golden SECSGEM/uHGemClass.cpp:786-793
-#endif
+    if(HGemPtr->CheckSFFormatOnlyHead("S2,F17 Format error !!!")==false)
+        return;
+    HGemPtr->GetTimeInfo();
+    ActiveWire->InitLocalHead(2, 18, 0);
+    ActiveWire->DataItemOut(HType.ASCII_TYPE, HGemPtr->GemClock);
+    ActiveWire->SendLocalData();
 }
 //---------------------------------------------------------------------------
 // [S2,F24] Trace Initialize -- ack-code sub (called by the void wrapper below).
@@ -465,7 +646,7 @@ void HTGem::S2F24_TraceInitializeAcknowledge()
     if(ret==-1)
         S9F7_IllegalData("S2,F23 Format error !!!");
     else
-        WireCodec.LocalAcknowledge(2,24,(unsigned char)ret);                     // int->uchar narrowing, matches golden's own implicit conversion
+        ActiveWire->LocalAcknowledge(2,24,(unsigned char)ret);                     // int->uchar narrowing, matches golden's own implicit conversion
 }
 //---------------------------------------------------------------------------
 // [S2,F26] Diagnostic Loopback Data.
@@ -484,15 +665,15 @@ void HTGem::S2F26_DiagnosticLoopbackData()
     int len, ret;
     unsigned char Type;
     unsigned char *Temp;
-    ret=WireCodec.GetDataItemLenAndType(len,Type);
+    ret=ActiveWire->GetDataItemLenAndType(len,Type);
     if(Type==HType.BINARY_TYPE && ret==1)
     {
         Temp=new unsigned char [len+100];
-        if(WireCodec.DataItemIn(len, Type, Temp)==1)
+        if(ActiveWire->DataItemIn(len, Type, Temp)==1)
         {
-            WireCodec.InitLocalHead(2, 26, 0);
-            WireCodec.DataItemOut(len, HType.BINARY_TYPE, Temp);
-            WireCodec.SendLocalData();
+            ActiveWire->InitLocalHead(2, 26, 0);
+            ActiveWire->DataItemOut(len, HType.BINARY_TYPE, Temp);
+            ActiveWire->SendLocalData();
         }
         else
         {
@@ -582,12 +763,12 @@ int HTGem::S2F42_Host_Command_Acknowledge()
     unsigned char Type;
     AnsiString S, S1;
 
-    if(WireCodec.DataItemIn(2, HType.LIST_TYPE, NULL)==1)                       // 需要補充多重 Command
+    if(ActiveWire->DataItemIn(2, HType.LIST_TYPE, NULL)==1)                       // 需要補充多重 Command
     {
-        WireCodec.GetDataItemLenAndType(len, Type);
+        ActiveWire->GetDataItemLenAndType(len, Type);
         if(Type==HType.ASCII_TYPE)
         {
-            ret=WireCodec.DataItemIn(len, HType.ASCII_TYPE, CommandStr);
+            ret=ActiveWire->DataItemIn(len, HType.ASCII_TYPE, CommandStr);
             if(ret==-1)
                 S="";
         }
@@ -598,30 +779,30 @@ int HTGem::S2F42_Host_Command_Acknowledge()
         S=CommandStr;
         S=S.UpperCase();
         HCACK=1;
-        WireCodec.InitLocalHead(2, 42, 0);
+        ActiveWire->InitLocalHead(2, 42, 0);
 
         if(HCACK==0)
         {
-            WireCodec.DataItemOut(2, HType.LIST_TYPE, NULL);
-            WireCodec.DataItemOut(1, HType.BINARY_TYPE, &HCACK);
-            WireCodec.DataItemOut(0, HType.LIST_TYPE, NULL);
+            ActiveWire->DataItemOut(2, HType.LIST_TYPE, NULL);
+            ActiveWire->DataItemOut(1, HType.BINARY_TYPE, &HCACK);
+            ActiveWire->DataItemOut(0, HType.LIST_TYPE, NULL);
         }
         else
         {
-            WireCodec.DataItemOut(2, HType.LIST_TYPE, NULL);
-            WireCodec.DataItemOut(1, HType.BINARY_TYPE, &HCACK);
-            WireCodec.DataItemOut(0, HType.LIST_TYPE, NULL);
+            ActiveWire->DataItemOut(2, HType.LIST_TYPE, NULL);
+            ActiveWire->DataItemOut(1, HType.BINARY_TYPE, &HCACK);
+            ActiveWire->DataItemOut(0, HType.LIST_TYPE, NULL);
         }
 
-        WireCodec.SendLocalData();
+        ActiveWire->SendLocalData();
         return 1;
     }
     else
     {
         HCACK=3;
-        WireCodec.DataItemOut(2, HType.LIST_TYPE, NULL);
-        WireCodec.DataItemOut(1, HType.BINARY_TYPE, &HCACK);
-        WireCodec.DataItemOut(0, HType.LIST_TYPE, NULL);
+        ActiveWire->DataItemOut(2, HType.LIST_TYPE, NULL);
+        ActiveWire->DataItemOut(1, HType.BINARY_TYPE, &HCACK);
+        ActiveWire->DataItemOut(0, HType.LIST_TYPE, NULL);
     }
     return HCACK;
 }
@@ -632,11 +813,11 @@ int HTGem::S2F42_Host_Command_Acknowledge()
 void HTGem::S2F44_ResetSpoolingAcknowledge()
 {
     unsigned char C=0;
-    WireCodec.InitLocalHead(2, 44,0);
-    WireCodec.DataItemOut( 2,HType.LIST_TYPE, NULL);
-    WireCodec.DataItemOut( 1,HType.BINARY_TYPE,&C);
-    WireCodec.DataItemOut( 0,HType.LIST_TYPE, NULL);
-    WireCodec.SendLocalData();
+    ActiveWire->InitLocalHead(2, 44,0);
+    ActiveWire->DataItemOut( 2,HType.LIST_TYPE, NULL);
+    ActiveWire->DataItemOut( 1,HType.BINARY_TYPE,&C);
+    ActiveWire->DataItemOut( 0,HType.LIST_TYPE, NULL);
+    ActiveWire->SendLocalData();
 }
 //---------------------------------------------------------------------------
 void HTGem::S5F4_EnableDisableAlarmAcknowledge()
@@ -698,20 +879,20 @@ int HTGem::S7F2_ProcessProgramLoadGrant()
     int ret,len;
     unsigned char Type;
     AnsiString PPID;
-    if(WireCodec.DataItemIn(2, HType.LIST_TYPE, NULL)==1)
+    if(ActiveWire->DataItemIn(2, HType.LIST_TYPE, NULL)==1)
     {
-        ret=WireCodec.GetDataItemLenAndType(len, Type);
+        ret=ActiveWire->GetDataItemLenAndType(len, Type);
         if(ret==1 && Type==HType.ASCII_TYPE)
         {
-            WireCodec.DataItemIn(len, Type, PPID);
-            ret=WireCodec.GetDataItemLenAndTypeAndDelete(len, Type);
+            ActiveWire->DataItemIn(len, Type, PPID);
+            ret=ActiveWire->GetDataItemLenAndTypeAndDelete(len, Type);
             if(ret==1 && len==1 &&
                  (Type==HType.UINT_1_TYPE || Type==HType.UINT_2_TYPE ||
                   Type==HType.UINT_4_TYPE || Type==HType.UINT_8_TYPE ||
                   Type==HType.INT_1_TYPE  || Type==HType.INT_2_TYPE  ||
                   Type==HType.INT_4_TYPE  || Type==HType.INT_8_TYPE))
             {
-                WireCodec.LocalAcknowledge(7, 2, 0);
+                ActiveWire->LocalAcknowledge(7, 2, 0);
                 return 1;
             }
         }
@@ -746,10 +927,10 @@ void HTGem::Process_S7F20_CurrentEPPIDData()
 //---------------------------------------------------------------------------
 void HTGem::S9F1_UnrecognizedDeviceID(AnsiString S)
 {
-    WireCodec.StringOut(S);
-    WireCodec.InitLocalHead(9, 1, 0);
-    WireCodec.DataItemOut(HType.ASCII_TYPE, S);
-    WireCodec.SendLocalData();
+    ActiveWire->StringOut(S);
+    ActiveWire->InitLocalHead(9, 1, 0);
+    ActiveWire->DataItemOut(HType.ASCII_TYPE, S);
+    ActiveWire->SendLocalData();
 }
 //---------------------------------------------------------------------------
 // [S9,F3] Unrecognized Stream Function Type.                    //KenHsieh 20221006
@@ -757,10 +938,10 @@ void HTGem::S9F1_UnrecognizedDeviceID(AnsiString S)
 //---------------------------------------------------------------------------
 void HTGem::S9F3_Unrecognized_Stream_Function_Type(AnsiString S)
 {
-    WireCodec.StringOut(S);
-    WireCodec.InitLocalHead(9, 3, 0);
-    WireCodec.DataItemOut(HType.ASCII_TYPE, S);
-    WireCodec.SendLocalData();
+    ActiveWire->StringOut(S);
+    ActiveWire->InitLocalHead(9, 3, 0);
+    ActiveWire->DataItemOut(HType.ASCII_TYPE, S);
+    ActiveWire->SendLocalData();
 }
 //---------------------------------------------------------------------------
 // [S9,F5] Unrecognized Function Type.                            //Ifor 20260402
@@ -768,10 +949,10 @@ void HTGem::S9F3_Unrecognized_Stream_Function_Type(AnsiString S)
 //---------------------------------------------------------------------------
 void HTGem::S9F5_UnrecognizedFunctionType(AnsiString S)
 {
-    WireCodec.StringOut(S);
-    WireCodec.InitLocalHead(9, 5, 0);
-    WireCodec.DataItemOut(HType.ASCII_TYPE, S);
-    WireCodec.SendLocalData();
+    ActiveWire->StringOut(S);
+    ActiveWire->InitLocalHead(9, 5, 0);
+    ActiveWire->DataItemOut(HType.ASCII_TYPE, S);
+    ActiveWire->SendLocalData();
 }
 //---------------------------------------------------------------------------
 // [S9,F7] Illegal Data.
@@ -783,10 +964,10 @@ void HTGem::S9F5_UnrecognizedFunctionType(AnsiString S)
 //---------------------------------------------------------------------------
 void HTGem::S9F7_IllegalData(AnsiString S)
 {
-    WireCodec.StringOut(S);
-    WireCodec.InitLocalHead(9, 7, 0);
-    WireCodec.DataItemOut(HType.ASCII_TYPE, S);
-    WireCodec.SendLocalData();
+    ActiveWire->StringOut(S);
+    ActiveWire->InitLocalHead(9, 7, 0);
+    ActiveWire->DataItemOut(HType.ASCII_TYPE, S);
+    ActiveWire->SendLocalData();
 }
 //---------------------------------------------------------------------------
 // [S9,F9] Transaction Timer Timeout.                             //Ifor 20260402
@@ -794,10 +975,10 @@ void HTGem::S9F7_IllegalData(AnsiString S)
 //---------------------------------------------------------------------------
 void HTGem::S9F9_TransactionTimerTimeout(AnsiString S)
 {
-    WireCodec.StringOut(S);
-    WireCodec.InitLocalHead(9, 9, 0);
-    WireCodec.DataItemOut(HType.ASCII_TYPE, S);
-    WireCodec.SendLocalData();
+    ActiveWire->StringOut(S);
+    ActiveWire->InitLocalHead(9, 9, 0);
+    ActiveWire->DataItemOut(HType.ASCII_TYPE, S);
+    ActiveWire->SendLocalData();
 }
 //---------------------------------------------------------------------------
 // [S10,F4] Terminal Display Single Acknowledge.
@@ -840,9 +1021,19 @@ void HTGem::S101F4_CurrentEPPDData()
 #endif
 }
 //---------------------------------------------------------------------------
+// AI(W906-SysModWire) 20260720: gate comment narrowed -- MoveCheckCallBack
+// and bReceiveS101F5 (both this wave's new members) are no longer blockers
+// (golden :2510-2512 now satisfiable), but golden :2507/2509/2513 still need
+// THGem's own `bDisableBinaryShow` member and `LocalAcknowledge` method
+// (neither exposed directly on THGem in this port -- only SecsWireCodec has
+// analogues, SecsWireCodec.h:280/370 -- THGem itself doesn't forward them),
+// and golden :2508 calls the still-gated sibling S101F6_StoreHostUploadFile
+// (its own deep, unrelated blocker chain: UpLoadPath/GemRemoteReceipeList/
+// SV_70_UNT1_ReceipeStruct/SV_71_ASCII_FilenameExtened/bFinishDownloadFile,
+// none in this wave). Still gated.
 void HTGem::S101F6()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem members MoveCheckCallBack/bReceiveS101F5 (calls still-gated S101F6_StoreHostUploadFile)) -- golden SECSGEM/uHGemClass.cpp:2505-2513
+#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem::bDisableBinaryShow/LocalAcknowledge + calls still-gated S101F6_StoreHostUploadFile) -- golden SECSGEM/uHGemClass.cpp:2505-2513
 #endif
 }
 //---------------------------------------------------------------------------
@@ -854,9 +1045,13 @@ void HTGem::S101F6_StoreHostUploadFile()
 #endif
 }
 //---------------------------------------------------------------------------
+// AI(W906-SysModWire) 20260720: gate comment narrowed -- same shape as
+// S101F6's own note above (MoveCheckCallBack/bReceiveS101F7 resolved this
+// wave; THGem::bDisableBinaryShow/LocalAcknowledge still absent; calls the
+// still-gated sibling S101F8_StoreHostUploadFile). Still gated.
 void HTGem::S101F8()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem members MoveCheckCallBack/bReceiveS101F7 (calls still-gated S101F8_StoreHostUploadFile)) -- golden SECSGEM/uHGemClass.cpp:2583-2595
+#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem::bDisableBinaryShow/LocalAcknowledge + calls still-gated S101F8_StoreHostUploadFile) -- golden SECSGEM/uHGemClass.cpp:2583-2595
 #endif
 }
 //---------------------------------------------------------------------------
@@ -941,98 +1136,98 @@ int HTGem::S2F15_UpdateNewEquipmentConstant()
     double         doubleEC;
     AnsiString S;
 
-    if(WireCodec.GetDataItemLenAndTypeAndDelete(EClen, Type)==1)
+    if(ActiveWire->GetDataItemLenAndTypeAndDelete(EClen, Type)==1)
     {
         if(Type==HType.LIST_TYPE)
         {
             for(i=0; i<EClen; i++)
             {
-                if(WireCodec.GetDataItemLenAndTypeAndDelete(len, Type)==1)
+                if(ActiveWire->GetDataItemLenAndTypeAndDelete(len, Type)==1)
                 {
                     if(Type!=HType.LIST_TYPE || len!=2)
                         break;
                     // get ECID
 
-                    WireCodec.GetDataItemLenAndType(len, Type);
-                    WireCodec.DataItemIn(len, Type, S);
+                    ActiveWire->GetDataItemLenAndType(len, Type);
+                    ActiveWire->DataItemIn(len, Type, S);
                     ECID=(unsigned)atoi(S.c_str());
 
-                    WireCodec.GetDataItemLenAndType(len, Type);
+                    ActiveWire->GetDataItemLenAndType(len, Type);
 
                     if(Type==HType.UINT_1_TYPE)
                     {
-                        if(WireCodec.DataItemIn(1, Type, &uint1EC)==1)
+                        if(ActiveWire->DataItemIn(1, Type, &uint1EC)==1)
                             SetECValue(ECID, &uint1EC);
                     }
                     else if(Type==HType.UINT_2_TYPE)
                     {
-                        if(WireCodec.DataItemIn(1, Type, &uint2EC)==1)
+                        if(ActiveWire->DataItemIn(1, Type, &uint2EC)==1)
                             SetECValue(ECID, &uint2EC);
                     }
                     else if(Type==HType.UINT_4_TYPE)
                     {
-                        if(WireCodec.DataItemIn(1, Type, &uint4EC)==1)
+                        if(ActiveWire->DataItemIn(1, Type, &uint4EC)==1)
                             SetECValue(ECID, &uint4EC);
                     }
                     else if(Type==HType.UINT_8_TYPE)                            //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
                     {
-                        if(WireCodec.DataItemIn(1, Type, &uint8EC)==1)
+                        if(ActiveWire->DataItemIn(1, Type, &uint8EC)==1)
                             SetECValue(ECID, &uint8EC);
                     }
                     else if(Type==HType.INT_1_TYPE)
                     {
-                        if(WireCodec.DataItemIn(1, Type, &int1EC)==1)
+                        if(ActiveWire->DataItemIn(1, Type, &int1EC)==1)
                             SetECValue(ECID, &int1EC);
                     }
                     else if(Type==HType.INT_2_TYPE)
                     {
-                        if(WireCodec.DataItemIn(1, Type, &int2EC)==1)
+                        if(ActiveWire->DataItemIn(1, Type, &int2EC)==1)
                             SetECValue(ECID, &int2EC);
                     }
                     else if(Type==HType.INT_4_TYPE)
                     {
-                        if(WireCodec.DataItemIn(1, Type, &int4EC)==1)
+                        if(ActiveWire->DataItemIn(1, Type, &int4EC)==1)
                             SetECValue(ECID, &int4EC);
                     }
                     else if(Type==HType.INT_8_TYPE)                             //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
                     {
-                        if(WireCodec.DataItemIn(1, Type, &int8EC)==1)
+                        if(ActiveWire->DataItemIn(1, Type, &int8EC)==1)
                             SetECValue(ECID, &int8EC);
                     }
                     else if(Type==HType.ASCII_TYPE)
                     {
                         char *Str;
                         Str=new char [(size_t)len+100];
-                        if(WireCodec.DataItemIn(len, Type, Str)==1)
+                        if(ActiveWire->DataItemIn(len, Type, Str)==1)
                             SetECValue(ECID, Str);
                         // NOTE: golden never delete[]s Str here -- see this
                         // function's own "PRESERVED GOLDEN QUIRK" comment above.
                     }
                     else if(Type==HType.BINARY_TYPE)
                     {
-                        if(WireCodec.DataItemIn(len, Type, &int1EC)==1)
+                        if(ActiveWire->DataItemIn(len, Type, &int1EC)==1)
                             SetECValue(ECID, &int1EC);
                     }
                     else if(Type==HType.BOOLEAN_TYPE)
                     {
-                        if(WireCodec.DataItemIn(len, Type, &int1EC)==1)
+                        if(ActiveWire->DataItemIn(len, Type, &int1EC)==1)
                         {
                             SetECValue(ECID, &int1EC);
                         }
                     }
                     else if(Type==HType.FT_4_TYPE)
                     {
-                        if(WireCodec.DataItemIn(len, Type, &floatEC)==1)
+                        if(ActiveWire->DataItemIn(len, Type, &floatEC)==1)
                             SetECValue(ECID, &floatEC);
                     }
                     else if(Type==HType.FT_8_TYPE)
                     {
-                        if(WireCodec.DataItemIn(len, Type, &doubleEC)==1)
+                        if(ActiveWire->DataItemIn(len, Type, &doubleEC)==1)
                             SetECValue(ECID, &doubleEC);
                     }
                     else                                                        // error format (SECS-II ASCII code ir correct ,but ITRI is failure,need confirm with ITRI
                     {
-                        WireCodec.SendInvalidDataMessageToHost("error format");
+                        ActiveWire->SendInvalidDataMessageToHost("error format");
                         return -1;
                     }
                 }
@@ -1092,7 +1287,7 @@ int HTGem::S2F15_CheckNewEquipmentConstant()                                    
         2. <ECVn>
     */
 
-    if(WireCodec.GetDataItemLenAndTypeAndDelete(EClen, Type)!=1)
+    if(ActiveWire->GetDataItemLenAndTypeAndDelete(EClen, Type)!=1)
         return -1;
     if(Type!=HType.LIST_TYPE)
         return -1;
@@ -1100,14 +1295,14 @@ int HTGem::S2F15_CheckNewEquipmentConstant()                                    
         return -1;
     for(i=0; i<EClen; i++)
     {
-        if(WireCodec.GetDataItemLenAndTypeAndDelete(len, Type)!=1)
+        if(ActiveWire->GetDataItemLenAndTypeAndDelete(len, Type)!=1)
             return -1;
         if(Type!=HType.LIST_TYPE || len!=2)
             return -1;
         ret=1;
-        if(WireCodec.GetDataItemLenAndType(len, Type)==1)
+        if(ActiveWire->GetDataItemLenAndType(len, Type)==1)
         {
-            if(WireCodec.DataItemIn(len, Type, ECID)!=1)
+            if(ActiveWire->DataItemIn(len, Type, ECID)!=1)
                 return -1;
         }
         else
@@ -1115,60 +1310,60 @@ int HTGem::S2F15_CheckNewEquipmentConstant()                                    
             return -1;
         }
 
-        if(WireCodec.GetDataItemLenAndType(len, Type)==1)
+        if(ActiveWire->GetDataItemLenAndType(len, Type)==1)
         {
             if(Type==HType.UINT_1_TYPE)
             {
-                if(WireCodec.DataItemIn(1, Type, &uint1EC)==1)
+                if(ActiveWire->DataItemIn(1, Type, &uint1EC)==1)
                     ret=CheckECValue(ECID, &uint1EC);
                 else
                     return -1;
             }
             else if(Type==HType.UINT_2_TYPE)
             {
-                if(WireCodec.DataItemIn(1, Type, &uint2EC)==1)
+                if(ActiveWire->DataItemIn(1, Type, &uint2EC)==1)
                     ret=CheckECValue(ECID, &uint2EC);
                 else
                     return -1;
             }
             else if(Type==HType.UINT_4_TYPE)
             {
-                if(WireCodec.DataItemIn(1, Type, &uint4EC)==1)
+                if(ActiveWire->DataItemIn(1, Type, &uint4EC)==1)
                     ret=CheckECValue(ECID, &uint4EC);
                 else
                     return -1;
             }
             else if(Type==HType.UINT_8_TYPE)                                    //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
             {
-                if(WireCodec.DataItemIn(1, Type, &uint8EC)==1)
+                if(ActiveWire->DataItemIn(1, Type, &uint8EC)==1)
                     ret=CheckECValue(ECID, &uint8EC);
                 else
                     return -1;
             }
             else if(Type==HType.INT_1_TYPE)
             {
-                if(WireCodec.DataItemIn(1, Type, &int1EC)==1)
+                if(ActiveWire->DataItemIn(1, Type, &int1EC)==1)
                     ret=CheckECValue(ECID, &int1EC);
                 else
                     return -1;
             }
             else if(Type==HType.INT_2_TYPE)
             {
-                if(WireCodec.DataItemIn(1, Type, &int2EC)==1)
+                if(ActiveWire->DataItemIn(1, Type, &int2EC)==1)
                     ret=CheckECValue(ECID, &int2EC);
                 else
                     return -1;
             }
             else if(Type==HType.INT_4_TYPE)
             {
-                if(WireCodec.DataItemIn(1, Type, &int4EC)==1)
+                if(ActiveWire->DataItemIn(1, Type, &int4EC)==1)
                     ret=CheckECValue(ECID, &int4EC);
                 else
                     return -1;
             }
             else if(Type==HType.INT_8_TYPE)                                     //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
             {
-                if(WireCodec.DataItemIn(1, Type, &int8EC)==1)
+                if(ActiveWire->DataItemIn(1, Type, &int8EC)==1)
                     ret=CheckECValue(ECID, &int8EC);
                 else
                     return -1;
@@ -1177,42 +1372,42 @@ int HTGem::S2F15_CheckNewEquipmentConstant()                                    
             {
                 char *Str;
                 Str=new char [(size_t)len+100];
-                if(WireCodec.DataItemIn(len, Type, Str)==1)
+                if(ActiveWire->DataItemIn(len, Type, Str)==1)
                     ret=CheckECValue(ECID, Str);
                 else
                     return -1;
             }
             else if(Type==HType.BINARY_TYPE)
             {
-                if(WireCodec.DataItemIn(len, Type, &int1EC)==1)
+                if(ActiveWire->DataItemIn(len, Type, &int1EC)==1)
                     ret=CheckECValue(ECID, &int1EC);
                 else
                     return -1;
             }
             else if(Type==HType.BOOLEAN_TYPE)
             {
-                if(WireCodec.DataItemIn(len, Type, &int1EC)==1)
+                if(ActiveWire->DataItemIn(len, Type, &int1EC)==1)
                     ret=CheckECValue(ECID, &int1EC);
                 else
                     return -1;
             }
             else if(Type==HType.FT_4_TYPE)
             {
-                if(WireCodec.DataItemIn(len, Type, &floatEC)==1)
+                if(ActiveWire->DataItemIn(len, Type, &floatEC)==1)
                     ret=CheckECValue(ECID, &floatEC);
                 else
                     return -1;
             }
             else if(Type==HType.FT_8_TYPE)
             {
-                if(WireCodec.DataItemIn(len, Type, &doubleEC)==1)
+                if(ActiveWire->DataItemIn(len, Type, &doubleEC)==1)
                     ret=CheckECValue(ECID, &doubleEC);
                 else
                     return -1;
             }
             else                                                                // error format (SECS-II ASCII code ir correct ,but ITRI is failure,need confirm with ITRI
             {
-                WireCodec.SendInvalidDataMessageToHost("error format");
+                ActiveWire->SendInvalidDataMessageToHost("error format");
                 return -1;
             }
 
@@ -1221,7 +1416,7 @@ int HTGem::S2F15_CheckNewEquipmentConstant()                                    
         }
         else
         {
-            WireCodec.SendInvalidDataMessageToHost("GetDataItemLenAndType Error");
+            ActiveWire->SendInvalidDataMessageToHost("GetDataItemLenAndType Error");
             return -1;
         }
     }
@@ -1618,7 +1813,7 @@ int HTGem::CheckECValue(AnsiString ECID, void *PtrSour)
         }
         return 4;
     }
-    WireCodec.StringOut("ECID:"+ECID+" not exist !!");
+    ActiveWire->StringOut("ECID:"+ECID+" not exist !!");
     return 1;
 }
 //---------------------------------------------------------------------------

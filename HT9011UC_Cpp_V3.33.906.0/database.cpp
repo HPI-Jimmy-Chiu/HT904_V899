@@ -15,13 +15,19 @@
 //    TMOTNO::TMOTNO()                      (database.cpp:2047-2079)
 //    TMOTNO::SetMOTTableNo(AnsiString)     (database.cpp:2081-2298)
 //    TMOTDATA::TMOTDATA(AnsiString)        (database.cpp:2300-2874)
+//    SYSTEM_MODULAR::SystemModularInitial()  (database.cpp:1539-1546, real as
+//      of W906-SysModWire -- wires MyGem via SECSGEM/uHGemHT9045_Shim.h's
+//      thin HT9045Gem shim; NUMBER_PANEL_TYPE branch stays gated, see below)
 //
 //  WHAT IS GATED (#if 0 // TODO(wave)):
 //    TDataModule1 ctor / DataModule1 global (database.cpp:24, 33-41)
 //      -> BDE TTable / TDataModule; deferred to BDE wave.
-//    SYSTEM_MODULAR ctor/dtor + SystemModularInitial + InstallColorBinDisplay
-//      (database.cpp:43-288, 1539-1546, 1684-1729, 1731-1754)
-//      -> calls ReadGeneralIni + SECS (HT9045Gem) + BinDisp; deferred.
+//    SYSTEM_MODULAR ctor/dtor + InstallColorBinDisplay
+//      (database.cpp:43-288, 1684-1729, 1731-1754)
+//      -> ctor calls ReadGeneralIni + SystemModularInitial (the latter now
+//         real, but the ctor ITSELF that would call it stays gated -- tests
+//         invoke SystemModularInitial directly); InstallColorBinDisplay needs
+//         TMyBinDispHT9046/TMyBinDispCtrl (W7-UI); deferred.
 //    ReadGeneralIni (database.cpp:301-1537) -> cmydef/cprod full surface; deferred.
 //    LogSoftwareOnTime / SoftwareExeTimer globals (database.cpp:28-31, 2876-2917)
 //      -> #ifdef DEBUG_SOFTWARE_EXEC_TIME, effectively no-op; stub provided.
@@ -54,6 +60,11 @@
 #include "MachineType.h"            // enum eIOType (eMotionNet/eISABase/ePCI1735U/ePLCbase)
 #include "common.h"                 // extern AnsiString IoTablePath / MotTablePath (common.h:67-68)
 #include "cmydef.h"                 // extern int INDEX_MOTION_CARD (cmydef.h:2977)
+// AI(W906-SysModWire) 20260720: HT9045Gem thin shim (SystemModularInitial's
+// `new HT9045Gem(...)` needs the complete type) + extern HGem. Swap to
+// "SECSGEM/uHGemHT9045.h" when the real override layer lands -- see that
+// header's own file-head note for the full swap-back path.
+#include "SECSGEM/uHGemHT9045_Shim.h"
 
 // ---------------------------------------------------------------------------
 //  MyDBIProcess / ShowMyMessage forward declarations
@@ -117,7 +128,7 @@ _fastcall SYSTEM_MODULAR::SYSTEM_MODULAR()
     MyGem      = NULL;
     // ATKRecipeInfo = new ATK_RECIPE_INFO();
     // ReadGeneralIni();
-    // SystemModularInitial();
+    // SystemModularInitial();   // AI(W906-SysModWire) 20260720: this callee is now real -- see below; this ctor itself stays gated
     // AddSpace(asGeneralPath);
     mapATCAlarmCode.clear();
     // ... mapATCAlarmCode["ALM001"] = "WAR15200"; ... (database.cpp:58-288)
@@ -142,14 +153,27 @@ _fastcall SYSTEM_MODULAR::~SYSTEM_MODULAR()
 #endif // TODO(wave)
 
 // ---------------------------------------------------------------------------
-//  #if 0: SYSTEM_MODULAR::SystemModularInitial  (database.cpp:1539-1546)
+//  SYSTEM_MODULAR::SystemModularInitial  (golden database.cpp:1539-1546)
 //  Creates HT9045Gem (SECS) + InstallColorBinDisplay.
+//
+// AI(W906-SysModWire) 20260720: golden calls this once, from the
+// (still-gated in this port) SYSTEM_MODULAR ctor (golden database.cpp:54);
+// tests invoke it directly instead. Calling it twice leaks the first MyGem --
+// golden has the identical property (single ctor call site, no guard, no
+// re-entry protection) -- deliberately NOT guarded here either. Deletion
+// lives in untranslated main.cpp:11480-11481 (`delete HSys.MyGem;
+// HSys.MyGem=NULL;`) -- callers/tests must do the same in their own teardown.
 // ---------------------------------------------------------------------------
 void SYSTEM_MODULAR::SystemModularInitial()
 {
-#if 0 // TODO(wave-SECS): SystemModularInitial -- database.cpp:1539-1546
-    MyGem = new HT9045Gem("HT9045", HGem);
-    if(NUMBER_PANEL_TYPE==3 || NUMBER_PANEL_TYPE==4)
+    MyGem=new HT9045Gem("HT9045", HGem);                                        //20140213  wei   KYEC SECS/GEM
+    // AI(W906-SysModWire) 20260720: NUMBER_PANEL_TYPE branch stays gated --
+    // InstallColorBinDisplay needs TMyBinDispHT9046/TMyBinDispCtrl (W7-UI,
+    // golden database.cpp:1684-1729). NUMBER_PANEL_TYPE defaults 0 offline
+    // (cmydef.cpp) so the branch is dead here anyway.
+#if 0 // TODO(W7-UI): InstallColorBinDisplay -- golden database.cpp:1543-1545; needs TMyBinDispHT9046 (uHGemHT9045/BinDisp surface untranslated)
+    if(NUMBER_PANEL_TYPE==3 ||
+       NUMBER_PANEL_TYPE==4)                                                    //Sam 20240604: new BinDisplay TFT
         InstallColorBinDisplay(NUMBER_PANEL_TYPE);
 #endif
 }

@@ -245,6 +245,17 @@ THGem::THGem()
       bDataFormatOK(false),               // golden never inits this (see header note)
       bFirstEntry(true),                                 // golden ctor :450
       bFirstBlock(true),                                 // golden ctor :472
+      // AI(W906-SysModWire) 20260720: ProcessReceiceData tail members --
+      // golden ctor :503 (MoveCheckCallBack=NULL) and :462-466 (bReceiveS7F6..
+      // bReceiveS101F8=false). bReceiveS110F2 is the one flagged deviation
+      // (golden's own ctor NEVER initializes it -- see header member comment).
+      MoveCheckCallBack(NULL),                            // golden ctor :503
+      bReceiveS7F6(false),                                // golden ctor :462
+      bReceiveS101F5(false),                              // golden ctor :463
+      bReceiveS101F6(false),                              // golden ctor :464
+      bReceiveS101F7(false),                              // golden ctor :465
+      bReceiveS101F8(false),                              // golden ctor :466
+      bReceiveS110F2(false),               // golden never inits this -- flagged deviation, see header note
       iFileCount(0),                                     // golden ctor :672
       Timer1Task(1),                                      // golden ctor :494
       Timer1ct(0),                                        // golden ctor :495
@@ -2528,6 +2539,19 @@ void __fastcall THGem::SaveSystemDefault()
     WriteIniData(sPath, "GEM", "ECChangeEventReport", cbECChaneEventReport->Checked);     // JerryYang 20200520 客戶提出DoReportECDataChangeCheck函式會影響UPH,改成功能選項
 }
 
+//---------------------------------------------------------------------------
+// V 1.0 (golden uHGemEquipment.cpp:6510-6514)
+//---------------------------------------------------------------------------
+// AI(W906-SysModWire) 20260720: PORT -- verbatim golden body (2 assignments).
+// "Softwarse" is golden's own misspelling (should be "Software") -- preserved
+// verbatim in the golden-derived signature per this project's faithful-
+// translation rule; not "corrected".
+void __fastcall THGem::SetMachineTypeAndSoftwarseVer(AnsiString Mdln, AnsiString SoftVer)
+{
+    GemMDLN = Mdln;
+    GemSOFTREV = SoftVer;
+}
+
 //===========================================================================
 //  Bucket C (W906-uHGemEquipment-BucketC 20260717): socket receive pump / T3
 //  timeout / HSMS control-message handshake / Timer1Timer master state
@@ -2614,14 +2638,15 @@ int THGem::DoConnect()
                 bWaitEstablishCommunicationsResponseError = false;
                 // AI(W906-uHGemEquipment-BucketC) 20260717: D3 null-guard --
                 // golden calls this unguarded (uHGemEquipment.cpp:3555);
-                // HSys.MyGem is gated NULL until the SystemModularInitial
-                // wiring wave (database.h:238). Precedent: cprod.cpp:2199/
-                // 2398/3035 already null-guard HSys.MyGem in this port.
-                // NOTE: even fully wired, HTGem::S1F13_EstablishCommunications
-                // Request() is itself still a gated no-op (uHGemClass.cpp:369
-                // -373, needs GemMDLN/GemSOFTREV) -- so DoConnect stalls at
-                // Task=200 until a future wave un-gates THAT too (or a test
-                // sets bWaitEstablishCommunicationsResponse manually).
+                // HSys.MyGem is NULL until SystemModularInitial wires it
+                // (database.h -- tests do so directly; the production
+                // SYSTEM_MODULAR ctor call site stays gated). Precedent:
+                // cprod.cpp:2199/2398/3035 already null-guard HSys.MyGem in
+                // this port.
+                // AI(W906-SysModWire) 20260720: S1F13_EstablishCommunications
+                // Request() is REAL as of this wave (uHGemClass.cpp) -- the
+                // full DoConnect<->S1F13<->S1F14<->Process_S1F14 handshake now
+                // goes end-to-end when wired (see test [W3]).
                 if (HSys.MyGem != NULL)
                     HSys.MyGem->S1F13_EstablishCommunicationsRequest();
                 Task = 200;
@@ -2842,6 +2867,34 @@ void THGem::DoDownLoadRemoteFile()
 {
 }
 //---------------------------------------------------------------------------
+// 2013/06/29  V1.1  Lee (golden uHGemEquipment.cpp:8679-8693)
+// Format-only-head check for S,F handlers that expect a head-only (no data
+// item) message: when chkMoreMessageAbortProcess is unchecked, this is a
+// no-op pass (golden quirk -- the "more message abort" feature is opt-in);
+// when checked, consumes ONE zero-length item and requires it to be exactly
+// L[0], else reports "S,F data format error" via SendInvalidDataMessageToHost
+// and returns false.
+//---------------------------------------------------------------------------
+// AI(W906-SysModWire) 20260720: PORT -- StringOut/chkMoreMessageAbortProcess
+// are THGem's own members (implicit this->, unchanged); GetDataItemLenAndTypeAndDelete
+// and SendInvalidDataMessageToHost are SecsWireCodec methods (D1/D2 precedent)
+// so both route through `WireCodec.` here.
+bool THGem::CheckSFFormatOnlyHead(AnsiString ErrStr)
+{
+    int ret, len;
+    unsigned char Type;
+
+    if (chkMoreMessageAbortProcess->Checked == false)
+        return true;
+
+    ret = WireCodec.GetDataItemLenAndTypeAndDelete(len, Type);
+    if (ret != 1)
+        return true;
+    StringOut(ErrStr);
+    WireCodec.SendInvalidDataMessageToHost(ErrStr);
+    return false;
+}
+//---------------------------------------------------------------------------
 // 2013/05/27  V1.1 (golden uHGemEquipment.cpp:8707-8723)
 // control message SelectRequest Response
 //---------------------------------------------------------------------------
@@ -2904,13 +2957,13 @@ void THGem::LinktestRsp()
 }
 //==============================================================================
 // 2013/05/27  V1.1 (golden uHGemEquipment.cpp:8772-8989)
-// 主要對 Stream 和 function code 的處理
+// Main handling of Stream and Function code dispatch.
 //
 // AI(W906-uHGemEquipment-BucketC) 20260717: SPLIT -- the HSMS control-message
-// head below (Select/Deselect/Linktest/Separate) is REAL; the S,F
-// data-message dispatch tail stays ONE gated block (see the #if 0 comment
-// inside the final `else` for the full rationale + the two-codec-instance
-// boundary note).
+// head below (Select/Deselect/Linktest/Separate) is REAL.
+// AI(W906-SysModWire) 20260720: the S,F data-message dispatch tail (the final
+// `else` block) is NOW REAL TOO -- see the null-guard comment at its start
+// for the wiring rationale and the two-codec-instance self-heal it performs.
 //==============================================================================
 void THGem::ProcessReceiceData()
 {
@@ -2954,30 +3007,208 @@ void THGem::ProcessReceiceData()
     }
     else
     {
-#if 0 // TODO(W906-SECSGEM-dispatch, needs HSys.MyGem wiring + bReceive* flags (bReceiveS7F6/bReceiveS101F5/bReceiveS101F6/bReceiveS101F7/bReceiveS101F8/bReceiveS110F2) + MoveCheckCallBack) golden uHGemEquipment.cpp:8812-8988
-        // Golden's S,F data-message dispatch tail: bDataFormatOK check ->
-        // S9F7_IllegalData; CheckSFCodeResponse(); Remote.DeviceID check ->
-        // S9F1_UnrecognizedDeviceID; direct-dispatch quartet (S1F1/S1F2/
-        // S1F13/S1F17/S2F15); then a CUSTOMER_CODE-gated (CC_TFME_CHINA)
-        // MoveCheckCallBack guard, followed by a ~40-branch S,F if/else-if
-        // chain dispatching to HSys.MyGem->SxFy_... handlers; falls back to
-        // S9F3_Unrecognized_Stream_Function_Type / S9F5_UnrecognizedFunctionType
-        // for anything unrecognized (per-stream S,F0/even-F short-circuits
-        // preserved). Blocked on the SystemModularInitial wiring wave
-        // (HSys.MyGem stays NULL in production today, D3) plus ~15 THGem
-        // flag members and MoveCheckCallBack, none of which are part of this
-        // wave's member set.
-        //
-        // NOTE for whoever un-gates this: the dispatcher must resolve the
-        // TWO-CODEC-INSTANCE boundary this port introduced -- HTGem's own
-        // S,F handlers (uHGemClass.cpp) read HTGem::WireCodec.SReceiveData/
-        // Remote, but THIS function decodes into THGem::WireCodec (a
-        // DIFFERENT SecsWireCodec instance). SEND is already unified
-        // (SecsWireCodec::SendLocalDataHook, D2); RECEIVE is not yet.
-        // Recommended future fix (decided THEN, not now): give HTGem a
-        // `SecsWireCodec *ActiveWire` (or bind its WireCodec by reference at
-        // construction) so both classes share ONE live decode buffer.
-#endif
+        // AI(W906-SysModWire) 20260720: PORT null-guard -- golden dereferences
+        // HSys.MyGem unguarded (golden :8817 etc.); in this port MyGem is
+        // NULL until SystemModularInitial is invoked (tests) -- precedent:
+        // cprod.cpp:2199 and this file's own DoConnect/DoProcessSFNoResponse
+        // D3 sites. When NULL the ENTIRE tail (including CheckSFCodeResponse
+        // and the flag latches) is skipped -- this deviation exists ONLY in
+        // the unwired offline state, unreachable in golden production (where
+        // MyGem is never NULL once AddSV/AddEC have run).
+        if (HSys.MyGem != NULL)
+        {
+            // AI(W906-SysModWire) 20260720: PORT-ONLY re-bind -- golden has
+            // ONE codec (inside THGem); the port's HTGem carries its own
+            // by-value codec for standalone tests. Re-point the dispatch
+            // target at THIS engine's live decode buffer before every
+            // dispatch (self-heals golden's own NULL-at-static-init
+            // construction order -- see design brief §1.1 -- and mirrors
+            // golden's own HGemPtr=HGem re-point in AddSV, future
+            // uHGemHT9045_SV.cpp:61).
+            HSys.MyGem->ActiveWire = &WireCodec;
+
+            if (bDataFormatOK == false)
+            {
+                // Ifor 20260421: S9F7 - Use proper S9F7_IllegalData instead of SendInvalidDataMessageToHost
+                HSys.MyGem->S9F7_IllegalData("Data Format Error");
+                return;
+            }
+            CheckSFCodeResponse();
+
+            // Ifor 20260421: S9F1 - Re-enable Device ID check (reject transaction only, keep connection alive)
+            if (WireCodec.Remote.W_Bit == 1 && WireCodec.Remote.DeviceID != WireCodec.Local.DeviceID && WireCodec.Remote.DeviceID != 0xFFFF)
+            {
+                AnsiString sDevIDErr;
+                sDevIDErr.sprintf("Unrecognized Device ID: Remote=%d, Local=%d", WireCodec.Remote.DeviceID, WireCodec.Local.DeviceID);
+                HSys.MyGem->S9F1_UnrecognizedDeviceID(sDevIDErr);
+                return;
+            }
+
+            if (WireCodec.Remote.MessageID_S == 1 && WireCodec.Remote.MessageID_F == 1)          // [S1F1] Are you There
+            {
+                HSys.MyGem->S1F2_OnLineData();                                                   // [S1F2] On Line Data
+            }
+            else if (WireCodec.Remote.MessageID_S == 1 && WireCodec.Remote.MessageID_F == 2)      // [S1F2] On Line Data
+            {
+                StringOut("[On Line Data]");
+                bS1F2_OnLineData = true;
+            }
+            else if (WireCodec.Remote.MessageID_S == 1 && WireCodec.Remote.MessageID_F == 13)     // [S1F13] Connect Request
+            {
+                HSys.MyGem->S1F14_ConnectRequestAcknowledge();                                    // [S1F14] Connect Request Acknowledge
+            }
+            else if (WireCodec.Remote.MessageID_S == 1 && WireCodec.Remote.MessageID_F == 17)     // [S1F17] Request ON-LINE
+            {
+                HSys.MyGem->S1F18_ONLINEAcknowledge();                                            // [S1F18] ON-LINE Acknowledge
+            }
+            else if (WireCodec.Remote.MessageID_S == 2 && WireCodec.Remote.MessageID_F == 15)     // [S2F15] New Equipment Constant Send
+            {
+                HSys.MyGem->S2F16_NewEquipmentConstantSendAcknowledge();                          // [S2F16] New Equipment Constant Send Acknowledge
+            }
+            else
+            {
+                if ((CUSTOMER_CODE == CC_TFME_CHINA && GemControlState > 1) || CUSTOMER_CODE != CC_TFME_CHINA)   // JerryYang 20200527: no other S,F code accepted except Online state
+                {
+                    if (MoveCheckCallBack != NULL)
+                        if (MoveCheckCallBack() == 1)                                             // whether this S,F Code should be handled by the Application instead
+                            return;
+
+                    if (WireCodec.Remote.MessageID_S == 1 && WireCodec.Remote.MessageID_F == 3)         // [S1F3] Selected Status Request
+                        HSys.MyGem->S1F4_SelectedStatusReply();                                         // [S1F4] Selected Status Reply
+                    else if (WireCodec.Remote.MessageID_S == 1 && WireCodec.Remote.MessageID_F == 11)   // [S1F11] Status Variable Namelist Request
+                        HSys.MyGem->S1F12_StatusVariableNamelistReply();                                // [S1F12] Status Variable Namelist Reply
+                    else if (WireCodec.Remote.MessageID_S == 1 && WireCodec.Remote.MessageID_F == 14)   // [S1F14] Connect Request Acknowledge
+                        HSys.MyGem->Process_S1F14_ConnectRequestAcknowledge();
+                    else if (WireCodec.Remote.MessageID_S == 1 && WireCodec.Remote.MessageID_F == 15)   // [S1F15] Request OFF-LINE
+                        HSys.MyGem->S1F16_OFFLINEAcknowledge();                                         // [S1F16] OFF-LINE Acknowledge
+                    else if (WireCodec.Remote.MessageID_S == 1 && WireCodec.Remote.MessageID_F == 23)   // [S1F23] Collection Event Namelist Request   //2014/01/01  lee
+                        HSys.MyGem->S1F24_CollectionEventNamelist();                                    // [S1F24] Collection Event Namelist           //2014/01/01  lee
+                    else if (WireCodec.Remote.MessageID_S == 2 && WireCodec.Remote.MessageID_F == 13)   // [S2F13] Equipment Constant Request
+                        HSys.MyGem->S2F14_EquipmentConstanData();                                       // [S2F14] Equipment Constant Data
+                    else if (WireCodec.Remote.MessageID_S == 2 && WireCodec.Remote.MessageID_F == 17)   // [S2F17] Date and Time Request
+                        HSys.MyGem->S2F18_DateandTimeData();                                            // [S2F18] Date and Time Data
+                    else if (WireCodec.Remote.MessageID_S == 2 && WireCodec.Remote.MessageID_F == 23)   // [S2F23] Trace Initial Send
+                        HSys.MyGem->S2F24_TraceInitializeAcknowledge();                                 // [S2F24] Trace Initial Acknowledge
+                    else if (WireCodec.Remote.MessageID_S == 2 && WireCodec.Remote.MessageID_F == 25)   // [S2F25] Diagnostic Loopback Request
+                        HSys.MyGem->S2F26_DiagnosticLoopbackData();                                     // [S2F26] Diagnostic Loopback Data
+                    else if (WireCodec.Remote.MessageID_S == 2 && WireCodec.Remote.MessageID_F == 29)   // [S2F29] Equipment Constant Namelist Request
+                        HSys.MyGem->S2F30_EquipmentConstantNamelistReply();                             // [S2F30] Equipment Constant Namelist Reply
+                    else if (WireCodec.Remote.MessageID_S == 2 && WireCodec.Remote.MessageID_F == 31)   // [S2F31] Date and Time Send
+                        HSys.MyGem->S2F32_DateAndTimeAcknowledge();                                     // [S2F32] Date and Time Acknowledge
+                    else if (WireCodec.Remote.MessageID_S == 2 && WireCodec.Remote.MessageID_F == 33)   // [S2F33] Define Report
+                        HSys.MyGem->S2F34_DefineReportAcknowledge();                                    // [S2F34] Define Report Acknowledge
+                    else if (WireCodec.Remote.MessageID_S == 2 && WireCodec.Remote.MessageID_F == 35)   // [S2F35] Link Event Report
+                        HSys.MyGem->S2F36_LinkEventReportAcknowledge();                                 // [S2F36] Link Event Report Acknowledge
+                    else if (WireCodec.Remote.MessageID_S == 2 && WireCodec.Remote.MessageID_F == 37)   // [S2F37] Enable/Disable Event Report
+                        HSys.MyGem->S2F38_EnableDisableEventReportAcknowledge();                        // [S2F38] Enable/Disable Event Report Acknowledge
+                    else if (WireCodec.Remote.MessageID_S == 2 && WireCodec.Remote.MessageID_F == 43)   // [S2F37] Enable/Disable Event Report (golden's own mis-cited comment, preserved)
+                        HSys.MyGem->S2F44_ResetSpoolingAcknowledge();                                   // [S2F43] Enable/Disable Event Report Acknowledge (golden's own mis-cited comment, preserved)
+                    else if (WireCodec.Remote.MessageID_S == 5 && WireCodec.Remote.MessageID_F == 3)    // [S5F3] Enable/Disable Alarm Send
+                        HSys.MyGem->S5F4_EnableDisableAlarmAcknowledge();                               // [S5F4] Enable/Disable Alarm Acknowledge
+                    else if (WireCodec.Remote.MessageID_S == 5 && WireCodec.Remote.MessageID_F == 5)    // [S5F5] List Alarm Request
+                        HSys.MyGem->S5F6_ListAlarmData();                                               // [S5F6] List Alarm Data
+                    else if (WireCodec.Remote.MessageID_S == 5 && WireCodec.Remote.MessageID_F == 7)    // [S5F7] List Enable Alarm Request
+                        HSys.MyGem->S5F8_ListEnableAlarmAcknowledge();                                  // [S5F8] List Enable Alarm Acknowledge
+                    else if (WireCodec.Remote.MessageID_S == 6 && WireCodec.Remote.MessageID_F == 15)   // [S6F15] Event Report Request
+                        HSys.MyGem->S6F16_EventReportData();                                            // [S6F16] Event Report Data
+                    else if (WireCodec.Remote.MessageID_S == 6 && WireCodec.Remote.MessageID_F == 17)   // [S6F17] Annotated Event Report Request
+                        HSys.MyGem->S6F18_AnnotatedEventReportData();                                   // [S6F18] Annotated Event Report Data
+                    else if (WireCodec.Remote.MessageID_S == 6 && WireCodec.Remote.MessageID_F == 19)   // [S6F19] Individual Report Request
+                        HSys.MyGem->S6F20_IndividualReportData();                                       // [S6F20] Individual Report Data
+                    else if (WireCodec.Remote.MessageID_S == 6 && WireCodec.Remote.MessageID_F == 23)   // [S6F23] Request Spooled Data
+                        HSys.MyGem->S6F24_RequestSpooledDataAcknowledgementSend();                      // [S6F24] Request Spooled Data Acknowledgement Send
+                    else if (WireCodec.Remote.MessageID_S == 7 && WireCodec.Remote.MessageID_F == 1)    // [S7F1] Process Program Load Inquire
+                        HSys.MyGem->S7F2_ProcessProgramLoadGrant();                                     // [S7F2] Process Program Load Grant
+                    else if (WireCodec.Remote.MessageID_S == 7 && WireCodec.Remote.MessageID_F == 3)    // [S7F1] Process Program Load Inquire (golden's own mis-cited comment, preserved)
+                        HSys.MyGem->S7F4_ProcessProgramAcknowledge();                                   // [S7F2] Process Program Load Grant (golden's own mis-cited comment, preserved)
+                    else if (WireCodec.Remote.MessageID_S == 7 && WireCodec.Remote.MessageID_F == 5)    // [S7F5] Process Program Request
+                        HSys.MyGem->S7F6_ProcessProgramData();                                          // [S7F6] Process Program Data
+                    else if (WireCodec.Remote.MessageID_S == 7 && WireCodec.Remote.MessageID_F == 6)    // [S7F6] Process Program Data
+                        bReceiveS7F6 = true;
+                    else if (WireCodec.Remote.MessageID_S == 7 && WireCodec.Remote.MessageID_F == 17)   // [S7F17] Delete Process Program Send
+                        HSys.MyGem->S7F18_DeleteProcessProgramAcknowledge();                            // [S7F18] Delete Process Program Acknowledge
+                    else if (WireCodec.Remote.MessageID_S == 7 && WireCodec.Remote.MessageID_F == 19)   // [S7F19] Current EPPID Request
+                        HSys.MyGem->S7F20_CurrentEPPDData();                                            // [S7F20] Current EPPID Data
+                    else if (WireCodec.Remote.MessageID_S == 7 && WireCodec.Remote.MessageID_F == 20)   // [S7F20] Current EPPID Data
+                        HSys.MyGem->Process_S7F20_CurrentEPPIDData();
+                    else if (WireCodec.Remote.MessageID_S == 10 && WireCodec.Remote.MessageID_F == 3)   // [S10F3] Terminal Display Single
+                        HSys.MyGem->S10F4_TerminalDisplaySingleAcknowledge();                           // [S10F4] Terminal Display Single Acknowledge
+                    else if (WireCodec.Remote.MessageID_S == 10 && WireCodec.Remote.MessageID_F == 5)   // [S10F5] Terminal Display Multi-block
+                        HSys.MyGem->S10F6_TerminalDisplayMultiBlockAcknowledge();                       // [S10F6] Terminal Display Multi-block Acknowledge
+                    // AI(W906-SysModWire) 20260720: GOLDEN QUIRK preserved verbatim -- golden
+                    // :8922 dereferences the GLOBAL `HGem->` pointer here instead of the
+                    // implicit `this->` every other branch in this chain uses (the file's
+                    // only branch that does so). A caller/test must set `HGem = &instance;`
+                    // before exercising this branch (existing project convention, e.g.
+                    // ProcessShow); HGem==NULL here derefs NULL, same as golden's own
+                    // production precondition -- not guarded, by design.
+                    else if (HGem->WireCodec.Remote.MessageID_S == 14 && HGem->WireCodec.Remote.MessageID_F == 3)   // [S14F3] receive 2DID & bin code
+                        HSys.MyGem->S14F4_Get2DID_BinCode();
+                    else if (WireCodec.Remote.MessageID_S == 100 && WireCodec.Remote.MessageID_F == 3)
+                        HSys.MyGem->S100F4_ReportAllAlarm();
+                    else if (WireCodec.Remote.MessageID_S == 101 && WireCodec.Remote.MessageID_F == 1)
+                        HSys.MyGem->S101F2_CurrentEPPDData();
+                    else if (WireCodec.Remote.MessageID_S == 101 && WireCodec.Remote.MessageID_F == 3)
+                        HSys.MyGem->S101F4_CurrentEPPDData();
+                    else if (WireCodec.Remote.MessageID_S == 101 && WireCodec.Remote.MessageID_F == 5)
+                        HSys.MyGem->S101F6();                                                           // download HOST RECIPE
+                    else if (WireCodec.Remote.MessageID_S == 101 && WireCodec.Remote.MessageID_F == 6)
+                        bReceiveS101F6 = true;
+                    else if (WireCodec.Remote.MessageID_S == 101 && WireCodec.Remote.MessageID_F == 7)
+                        HSys.MyGem->S101F8();
+                    else if (WireCodec.Remote.MessageID_S == 101 && WireCodec.Remote.MessageID_F == 8)
+                        bReceiveS101F8 = true;
+                    else if (WireCodec.Remote.MessageID_S == 103 && WireCodec.Remote.MessageID_F == 11)   // [S103F11] Status Variable Namelist Request with Value  //Steven 20140911 : Add S103F1
+                        HSys.MyGem->S103F12_StatusVariableNamelistReply();                                // [S103F12] Status Variable Namelist Reply with Value
+                    //pig 2014.04.01 ASEM SECS start
+                    else if (WireCodec.Remote.MessageID_S == 110 && WireCodec.Remote.MessageID_F == 2)
+                        bReceiveS110F2 = true;
+                    //pig 2014.07.04 ASEM SECS GEM start
+                    else if (WireCodec.Remote.MessageID_S == 110 && WireCodec.Remote.MessageID_F == 6)
+                        HSys.MyGem->S110F6_ListCustomerName();
+                    else if (WireCodec.Remote.MessageID_S == 110 && WireCodec.Remote.MessageID_F == 8)
+                        HSys.MyGem->S110F8_ListReceipeInformation();
+                    else if (WireCodec.Remote.MessageID_S == 120 && WireCodec.Remote.MessageID_F == 2)
+                        HSys.MyGem->S120F2_ListReceipeSetupFile();
+                    //pig 2014.07.04 ASEM SECS GEM end
+                    //pig 2014.08.27 start
+                    else if (WireCodec.Remote.MessageID_S == 125 && WireCodec.Remote.MessageID_F == 1)   // [S125F1] Enable/Disable EC Data Send
+                        HSys.MyGem->S125F2_EnableDisableECDataAcknowledge();                             // [S125F2] Enable/Disable EC Data Acknowledge
+                    //pig 2014.08.27 end
+                    else if (WireCodec.Remote.MessageID_S == 125 && WireCodec.Remote.MessageID_F == 3)   // [S125F3] Level Setting Change Request
+                        HSys.MyGem->S125F4_LevelSettingChangeAcknowledge();                              // [S125F4] Level Setting Change Acknowledge  //Steven 20150605 : S125F3 LevelSettingChangeRequest
+                    else
+                    {
+                        // LocalAcknowledge(Remote.MessageID_S,Remote.MessageID_F+1,0);
+                        // if(MoveCheckCallBack!=NULL)
+                        //     MoveCheckCallBack();
+                        // Ifor 20260402: S9F3/S9F5 - send for all customers (was only CC_ASE_KaohSiung_K3)
+                        // S9F3: Unrecognized Stream, S9F5: Unrecognized Function (stream known but function unknown)
+                        if (WireCodec.Remote.MessageID_F % 2 == 0)
+                        {
+                            // Secondary message reply - silently accept
+                            // (S5F2, S6F12, S6F14, S10F2, S101F2/4/6/8, etc.)
+                        }
+                        else if (WireCodec.Remote.MessageID_F == 0)
+                        {
+                            // SxF0 = Abort Transaction (SEMI E5)
+                            // Do not respond with S9F5; just log and ignore
+                        }
+                        else
+                        {
+                            int iS = WireCodec.Remote.MessageID_S;
+                            bool bKnownStream = (iS == 1 || iS == 2 || iS == 5 || iS == 6 || iS == 7 ||
+                                                 iS == 10 || iS == 14 || iS == 100 || iS == 101 ||
+                                                 iS == 103 || iS == 110 || iS == 120 || iS == 125);
+                            if (bKnownStream)
+                                HSys.MyGem->S9F5_UnrecognizedFunctionType("S,F Function Not Define");
+                            else
+                                HSys.MyGem->S9F3_Unrecognized_Stream_Function_Type("S,F Stream Not Define");
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 //---------------------------------------------------------------------------

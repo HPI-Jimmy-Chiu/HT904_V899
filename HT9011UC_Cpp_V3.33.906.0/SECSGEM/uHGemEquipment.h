@@ -151,6 +151,19 @@
 //  DoTraceDataResponse/DoUploadFileToHost/DoDownLoadRemoteFile (gated no-op
 //  stubs, same idiom as EnableDisableEventReportAcknowledgeError), and the
 //  ProcessReceiceData data-message tail above.
+//
+//  AI(W906-SysModWire) 20260720: FIFTH wave -- SystemModularInitial wiring.
+//  The ProcessReceiceData tail's blocker list from the Bucket C note above
+//  (live HSys.MyGem + ~15 flag members + MoveCheckCallBack) is now satisfied:
+//  MoveCheckCallBack + the 6 bReceive* flags (bReceiveS7F6/S101F5/S101F6/
+//  S101F7/S101F8/S110F2) are added members (see the class body below);
+//  HSys.MyGem is wired by database.cpp's SystemModularInitial (new
+//  SECSGEM/uHGemHT9045_Shim.h "thin shim" HT9045Gem class). The tail is now a
+//  REAL block (single `if(HSys.MyGem != NULL)` guard around the golden body,
+//  see ProcessReceiceData's own .cpp comment) -- no longer gated. Also added
+//  this wave: GemMDLN/GemSOFTREV members + SetMachineTypeAndSoftwarseVer/
+//  CheckSFFormatOnlyHead methods (both prerequisites for 8 of uHGemClass.cpp's
+//  gated S,F handlers -- see that file's own un-gating note).
 //---------------------------------------------------------------------------
 #ifndef uHGemEquipmentH
 #define uHGemEquipmentH
@@ -492,6 +505,15 @@ public:
 
     AnsiString TimeString;   // golden :700
     AnsiString GemClock;     // golden :302
+    // AI(W906-SysModWire) 20260720: GemMDLN/GemSOFTREV -- golden uHGemEquipment.h
+    // :306-307. Set by SetMachineTypeAndSoftwarseVer(Mdln,SoftVer) (golden
+    // :6510-6514, declared below near DoConnect); golden's own ctor never
+    // touches either (both stay AnsiString-default "" until that setter runs) --
+    // deliberately NOT added to this ctor's init-list, matching that golden
+    // "ctor does not touch" semantics exactly (C++ default-constructs AnsiString
+    // to "" either way, so omitting from the init-list is behavior-neutral).
+    AnsiString GemMDLN;      // golden :306
+    AnsiString GemSOFTREV;   // golden :307
     // NOTE: golden's real 3rd field name is "SystemDate" (uHGemEquipment.h:230),
     // not "SystemDay" -- kept as golden spells it (GetTimeInfo/DecodeDate both
     // reference it by this exact name).
@@ -528,6 +550,28 @@ public:
     bool bDataFormatOK;                              // golden :528
     bool bFirstEntry;                                 // golden :454 (ctor :450 true)
     bool bFirstBlock;                                 // golden :472 (ctor :472 true)
+
+    // AI(W906-SysModWire) 20260720: ProcessReceiceData's S,F data-message
+    // dispatch tail (golden :8812-8988) needs these -- MoveCheckCallBack (a
+    // GemCallBack installer, golden :319, ctor :503 NULL; the only real
+    // installer in golden is UsecegemMainFrom.cpp:625, TFSECS -- untranslated,
+    // so this stays NULL offline) and 6 flag members set (never guarded) by
+    // the tail's own dispatch branches.
+    int (*MoveCheckCallBack)();          // golden :319 (ctor :503 NULL)
+    bool bReceiveS7F6;                   // golden :459 (ctor :462 false)
+    bool bReceiveS101F5;                 // golden :460 (ctor :463 false)
+    bool bReceiveS101F6;                 // golden :461 (ctor :464 false)
+    bool bReceiveS101F7;                 // golden :462 (ctor :465 false)
+    bool bReceiveS101F8;                 // golden :463 (ctor :466 false)
+    // AI(W906-SysModWire) 20260720: bReceiveS110F2 (golden :625) -- GOLDEN BUG
+    // preserved: golden's own ctor NEVER initializes this member (grep confirms
+    // no ctor assignment anywhere in golden uHGemEquipment.cpp), and no golden
+    // code ever READS it either (write-only at golden :8942). This port's ctor
+    // explicitly zero-inits it below (matching this file's own established
+    // "flagged deviation from golden's raw uninitialized state" precedent, see
+    // bDataFormatOK/iOldSecProcessSFNoResponse/RemoteSystemByte above) -- the
+    // ONLY behavioral non-bit-identity this wave introduces vs. golden.
+    bool bReceiveS110F2;                 // golden :625 -- see note above
 
     int  iFileCount;                                  // golden :721 (ctor :672 = 0)
     int  Timer1Task, Timer1ct;                        // golden :519 (ctor :494-495 = 1, 0)
@@ -771,6 +815,13 @@ public:
     int  DoConnect();                          // golden :3536-3599
     void __fastcall DoProcessSFNoResponse();   // golden :4604-4694
     void DoLocalAllProcessLoop();              // golden :4699-4741 (shell; 4 callees gated, see .cpp)
+
+    // AI(W906-SysModWire) 20260720: SetMachineTypeAndSoftwarseVer/
+    // CheckSFFormatOnlyHead -- both prerequisites for un-gating uHGemClass.cpp's
+    // S1F1/S1F2/S1F13/S1F14/Process_S1F14/S1F16/S1F18/S2F18 (see that file's own
+    // un-gating notes); also consumed directly by ProcessReceiceData's tail.
+    void __fastcall SetMachineTypeAndSoftwarseVer(AnsiString Mdln, AnsiString SoftVer); // golden :6510-6514 ("Softwarse" misspelling preserved verbatim)
+    bool CheckSFFormatOnlyHead(AnsiString ErrStr);   // golden :8679-8693 (no __fastcall, matches golden)
 
     // golden's private "S,F 主要處理" block (uHGemEquipment.h:292-295) --
     // SelectRsp/DeselectRsp/LinktestRsp are pure WireCodec composition (REAL);

@@ -10,9 +10,15 @@
 // writeup): 57 of HTGem's ~90 methods need `THGem` (uHGemEquipment.h, out of
 // scope) and are GATED with a conservative-default ACTIVE stub.  This harness
 // therefore verifies:
-//   (1) the translation compiles + links clean under MinGW g++, with ZERO
-//       external dependencies beyond vclcompat (no THGem, no cmydef/csystem/
-//       common -- confirmed by this test's own trivial link line), AND
+//   (1) the translation compiles + links clean under MinGW g++.  AI(W906-
+//       SysModWire) 20260720: this test's link line grew a real THGem/
+//       uHGemEquipment.cpp dependency this wave (8 more methods un-gated --
+//       see uHGemClass.cpp's "INTEGRATE WAVE 3" note -- call real out-of-line
+//       THGem methods) -- see tests/CMakeLists.txt's own updated comment on
+//       this target and the new tests/test_uHGemClass_link_stubs.cpp
+//       (supplies the two extra gated externals that dependency pulls in;
+//       kept in a SEPARATE TU so this file itself stays untouched by that
+//       plumbing), AND
 //   (2) the genuinely ACTIVE surface behaves per golden: ctors/dtor/
 //       UpdateDataPath, the free helper IsCorrectDateFormat, the header's
 //       already-fully-inline virtuals (verbatim from golden, e.g.
@@ -89,7 +95,7 @@ public:
 int main()
 {
     printf("=== SECSGEM/uHGemClass (HTGem) + SecsEventType (SECS_EVENT) translation verification ===\n");
-    printf("(no THGem/uHGemEquipment link dependency -- see uHGemClass.cpp file-head note)\n\n");
+    printf("(as of W906-SysModWire: real THGem/uHGemEquipment link dependency -- see this file's own updated file-head note)\n\n");
 
     // -----------------------------------------------------------------------
     // Construction / destruction (ACTIVE, faithful -- golden :34-79)
@@ -188,8 +194,22 @@ int main()
     {
         HTGem g;
         // void, no-arg (representative of the still-gated void/no-arg stubs)
-        g.S1F1_AreYouThereRequest();
-        g.S1F2_OnLineData();
+        // AI(W906-SysModWire) 20260720: S1F1_AreYouThereRequest/S1F2_OnLineData
+        // MOVED OUT of this sample (same "moved out" precedent as the
+        // S2F42/CheckECValue/S7F2/S2F15_Update/S2F15_Check comment above) --
+        // this wave un-gated both (see uHGemClass.cpp's "INTEGRATE WAVE 3"
+        // note). They are NO LONGER blanket-safe on a default-constructed `g`:
+        // both now dereference `HGemPtr` for real THGem state
+        // (bS1F2_OnLineData / CheckSFFormatOnlyHead+GemMDLN+GemSOFTREV), and
+        // `g`'s HGemPtr is NULL here (golden pre-AddSV UB window, deliberately
+        // un-guarded -- see design brief risk R8). This TU only
+        // forward-declares THGem (cannot construct one to wire HGemPtr for
+        // real), so their real behavior is exercised over in
+        // tests/test_uHGemEquipment.cpp instead, where a real THGem instance
+        // exists (design brief's W2/W3/W4/W5 tests). Replaced here with two
+        // more still-gated void/no-arg stubs to keep the sample's width.
+        g.S1F4_SelectedStatusReply();
+        g.S1F12_StatusVariableNamelistReply();
         g.S1F24_CollectionEventNamelist();
         g.S6F16_EventReportData();
         g.S103F12_StatusVariableNamelistReply();

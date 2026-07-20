@@ -218,9 +218,19 @@ add_executable(test_config_loaders
 #                     the SAME archive; GNU ld's single-pass archive scan can't
 #                     back-resolve that, so wrap the libs in a LINK_GROUP to make
 #                     ld re-scan the archive set until all refs settle.
+# AI(W906-SysModWire) 20260720: database.cpp now references HT9045Gem/HGem
+# (SystemModularInitial real) -> pulls ht9045_secsgem (HT9045Gem ctor,
+# uHGemHT9045_Shim.cpp.o) in cross-archive, which itself needs ht9045_db back
+# (HSys) -- genuine circular archive dependency, RESCAN required across both.
+# ht9045_secsgem also needs ht9045_public/vclcompat (already present) and
+# ws2_32 (THGem's ctor constructs TClientSocket/TServerSocket -- see
+# test_uHGemEquipment's own identical need).
 target_link_libraries(test_config_loaders PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_db,ht9045_core,ht9045_globals>"
+    "$<LINK_GROUP:RESCAN,ht9045_secsgem,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
+if(WIN32)
+    target_link_libraries(test_config_loaders PRIVATE ws2_32)
+endif()
 
 add_test(NAME config_loaders COMMAND test_config_loaders)
 
@@ -1233,15 +1243,33 @@ add_test(NAME W7_C2_OneCycleFinish COMMAND test_w7_c2_onecycle_finish)
 # ===========================================================================
 
 # --- test_uHGemClass: HTGem ctor/dtor/UpdateDataPath + IsCorrectDateFormat +
-#   the already-inline virtuals + derived-override polymorphism + the 57 gated
+#   the already-inline virtuals + derived-override polymorphism + the 36 gated
 #   stubs' conservative defaults + every SECS_EVENT enumerator's exact golden
-#   value.  Zero THGem/uHGemEquipment dependency -- links vclcompat only (via
-#   ht9045_secsgem).  Supplies its own local MyDBIProcess(3-arg) stub.
+#   value.  Supplies its own local MyDBIProcess(3-arg) stub.
 add_executable(test_uHGemClass
     test_uHGemClass.cpp
+    test_uHGemClass_link_stubs.cpp
 )
 
-target_link_libraries(test_uHGemClass PRIVATE ht9045_secsgem)
+# AI(W906-SysModWire) 20260720: was plain `ht9045_secsgem` (this test used to
+# have ZERO THGem/uHGemEquipment dependency). This wave un-gated 8 uHGemClass.cpp
+# methods (S1F1/S1F2/S1F13/S1F14/Process_S1F14/S1F16/S1F18/S2F18) that call
+# real out-of-line THGem methods (CheckSFFormatOnlyHead/OffLine/OnLine/
+# GetOnLineMode/GetTimeInfo, uHGemEquipment.cpp) -- uHGemClass.cpp.o now has
+# unconditional undefined refs into uHGemEquipment.cpp.o (same archive, fine)
+# which itself references `HSys` (ht9045_db, cross-archive) and, once the
+# SystemModularInitial shim wave lands, database.cpp.o references BACK into
+# ht9045_secsgem for HT9045Gem's ctor -- the same circular-archive shape
+# documented at test_uHGemEquipment's own entry below (identical RESCAN fix
+# applied here; not one of the six targets the design brief's own risk R3
+# anticipated by name, but the exact case R3's own wording covers: "if other
+# targets also indirectly pull database.cpp.o in, apply the same fix").
+target_link_libraries(test_uHGemClass PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_secsgem,ht9045_core,ht9045_globals,ht9045_public,ht9045_db,vclcompat>"
+)
+if(WIN32)
+    target_link_libraries(test_uHGemClass PRIVATE ws2_32)
+endif()
 
 add_test(NAME uHGemClass COMMAND test_uHGemClass)
 

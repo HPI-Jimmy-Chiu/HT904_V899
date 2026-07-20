@@ -1551,13 +1551,18 @@ static void test_frame_reassembly()
 }
 
 // ===========================================================================
-//  [T5] Data message with gated dispatcher: a real, syntactically-valid
-//  S1F14 (W=0) frame, built via a throwaway SecsWireCodec's own real
-//  encoder (InitLocalHead/DataItemOut) rather than hand-encoded bytes.
+//  [T5] Data message with null-guarded dispatcher (W906-SysModWire): a real,
+//  syntactically-valid S1F14 (W=0) frame, built via a throwaway SecsWireCodec's
+//  own real encoder (InitLocalHead/DataItemOut) rather than hand-encoded bytes.
+//  AI(W906-SysModWire) 20260720: the tail is REAL now (was a gated `#if 0`
+//  block) -- this test still runs with HSys.MyGem==NULL (never wired), so it
+//  exercises the null-guard's early-skip path, not the dispatch itself. See
+//  [W10] for this same semantics re-verified post-un-gating, and W1-W9 for
+//  the WIRED (HSys.MyGem != NULL) behavior.
 // ===========================================================================
 static void test_data_message_gated_dispatch()
 {
-    printf("\n[T5] Data message (S1F14, W=0) -- gated dispatcher: no crash, no reply, SReceiveData decoded\n");
+    printf("\n[T5] Data message (S1F14, W=0) -- null-guarded dispatcher (W906-SysModWire): no crash, no reply, SReceiveData decoded\n");
 
     THGem g;
     TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.0.9", 4200);
@@ -1575,7 +1580,7 @@ static void test_data_message_gated_dispatch()
 
     CHECK(g.WireCodec.Remote.MessageID_S == 1 && g.WireCodec.Remote.MessageID_F == 14,
           "T5: WireCodec.Remote decodes MessageID_S/F == 1/14");
-    CHECK(conn->SimTxBuffer().size() == 0, "T5: gated S,F dispatch tail sends no reply (HSys.MyGem stays NULL)");
+    CHECK(conn->SimTxBuffer().size() == 0, "T5: null-guarded S,F dispatch tail sends no reply (HSys.MyGem stays NULL)");
     CHECK(g.WireCodec.SReceiveData->Count > 0, "T5: ShowSML's real ProcessSML decode populated SReceiveData with tokens while bReceiveData was true");
     CHECK(g.WireCodec.bReceiveData == false, "T5: bReceiveData reset to false once the message is fully consumed");
 }
@@ -1703,6 +1708,11 @@ static void test_doconnect_state_walk()
     int ret2 = g.DoConnect();   // case 100: bWaitSelectRsp==true -> S1F13 (D3 null-guarded, HSys.MyGem==NULL) -> Task=200
     CHECK(ret2 == 0 && g.iStartConnectTask == 200,
           "T9: DoConnect case 100 (bWaitSelectRsp) advances to Task 200 -- S1F13 null-guard did not crash with HSys.MyGem==NULL");
+    // AI(W906-SysModWire) 20260720: this specific instance stays unwired
+    // (HSys.MyGem never set here) -- the check above still holds (true, the
+    // null-guard still exists for an unwired instance). See [W3] below for
+    // the WIRED (HSys.MyGem != NULL) version of this exact same state walk,
+    // where S1F13 is a real send and the full handshake completes end-to-end.
 
     g.bWaitEstablishCommunicationsResponse = true;
     g.bWaitEstablishCommunicationsResponseError = false;
@@ -1717,6 +1727,676 @@ static void test_doconnect_state_walk()
     ::Sleep(3100);
     int ret5 = g.DoConnect();   // case 100: bWaitSelectRsp==false, ConnectDelay elapsed -> Task=1, return 2
     CHECK(ret5 == 2 && g.iStartConnectTask == 1, "T9: ConnectDelay's 3-second timeout -> DoConnect returns 2, resets Task to 1");
+}
+
+// ===========================================================================
+//  W906-SysModWire: SystemModularInitial wiring wave (W1-W10).
+//
+//  All of these tests wire `HSys.MyGem` for real via `HSys.SystemModularInitial()`
+//  (SECSGEM/uHGemHT9045_Shim.h's thin `HT9045Gem` shim -- zero virtual
+//  overrides, so every dispatched handler runs HTGem's own base behavior;
+//  see that shim's own file-head note and the design brief's §5 behavior-
+//  difference table for exactly which branches differ from golden
+//  production, where the REAL HT9045Gem override layer would run instead).
+//
+//  None of these call Timer1Timer -- ProcessSocketReceiveData()/DoConnect()
+//  are invoked DIRECTLY, deliberately bypassing the master state machine (T10
+//  above must stay the LAST test in this binary to ever pump Timer1Timer, so
+//  its own function-static locals stay at their process-start defaults for
+//  T10's own assumptions -- see that test's own comment).
+//
+//  Each test does its own save/restore of `HGem` (global) and always tears
+//  down with `delete HSys.MyGem; HSys.MyGem=NULL;` -- the identical shape
+//  golden's own main.cpp:11480-11481 uses (untranslated in this port; tests
+//  must do it themselves since SystemModularInitial's own production call
+//  site, the SYSTEM_MODULAR ctor, is still gated).
+// ===========================================================================
+
+// ---------------------------------------------------------------------------
+//  [W1] SystemModularInitial wires HSys.MyGem for real.
+// ---------------------------------------------------------------------------
+static void test_w906_sysmodwire_w1_systemmodularinitial_wiring()
+{
+    printf("\n[W906-SysModWire.W1] SystemModularInitial wires HSys.MyGem\n");
+
+    THGem *savedHGem = HGem;
+
+    // (a) wired: HGem set to a real THGem instance BEFORE SystemModularInitial.
+    {
+        THGem g;
+        HGem = &g;
+        HSys.SystemModularInitial();
+        CHECK(HSys.MyGem != NULL, "W1(a): SystemModularInitial() sets HSys.MyGem != NULL");
+        CHECK(HSys.MyGem->HGemPtr == &g, "W1(a): MyGem->HGemPtr == &g (the wired THGem instance)");
+        CHECK(HSys.MyGem->ActiveWire == &g.WireCodec, "W1(a): MyGem->ActiveWire re-points at the wired instance's own WireCodec (design D)");
+        CHECK(HSys.MyGem->HandlerPath == "HT9045", "W1(a): MyGem->HandlerPath == \"HT9045\" (golden database.cpp:1541's literal)");
+        delete HSys.MyGem; HSys.MyGem = NULL;
+    }
+
+    // (b) golden's own static-init reality: HGem is still NULL at the call
+    // site (design brief §1.1 -- HSys is a global, its ctor/SystemModularInitial
+    // run during static init, BEFORE the global THGem *HGem is ever assigned
+    // in golden production). NULL-tolerant: ActiveWire stays at its own
+    // default (&MyGem's own by-value WireCodec) -- must not crash.
+    {
+        HGem = NULL;
+        HSys.SystemModularInitial();
+        CHECK(HSys.MyGem != NULL, "W1(b): SystemModularInitial() sets HSys.MyGem != NULL even when HGem is NULL");
+        CHECK(HSys.MyGem->HGemPtr == NULL, "W1(b): MyGem->HGemPtr == NULL (golden's static-init reality)");
+        CHECK(HSys.MyGem->ActiveWire == &HSys.MyGem->WireCodec, "W1(b): ActiveWire defaults to MyGem's OWN WireCodec when HGemTmp==NULL");
+        delete HSys.MyGem; HSys.MyGem = NULL;
+    }
+
+    HGem = savedHGem;
+}
+
+// ---------------------------------------------------------------------------
+//  [W2] HSys.MyGem->S1F13_EstablishCommunicationsRequest() composes a real
+//  S1,F13 frame carrying GemMDLN/GemSOFTREV.
+// ---------------------------------------------------------------------------
+static void test_w906_sysmodwire_w2_s1f13_frame()
+{
+    printf("\n[W906-SysModWire.W2] S1F13 frame composition (real send via ActiveWire/hook)\n");
+
+    THGem *savedHGem = HGem;
+
+    THGem g;
+    TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.2.1", 4701);
+    g.srvGem->Open();
+
+    HGem = &g;
+    HSys.SystemModularInitial();
+    g.SetMachineTypeAndSoftwarseVer("HT9045", "V906");
+
+    conn->SimClearTx();
+    HSys.MyGem->S1F13_EstablishCommunicationsRequest();
+
+    const std::vector<char> &tx = conn->SimTxBuffer();
+    CHECK(tx.size() > 0, "W2: S1F13_EstablishCommunicationsRequest produced real bytes on the wire");
+    if (!tx.empty())
+    {
+        CHECK(((unsigned char)tx[6] & 0x7f) == 1, "W2: sent frame's MessageID_S == 1");
+        CHECK((unsigned char)tx[7] == 13, "W2: sent frame's MessageID_F == 13");
+    }
+    std::string body(tx.begin(), tx.end());
+    CHECK(body.find("HT9045") != std::string::npos, "W2: S1F13 payload carries GemMDLN (\"HT9045\")");
+    CHECK(body.find("V906") != std::string::npos, "W2: S1F13 payload carries GemSOFTREV (\"V906\")");
+
+    delete HSys.MyGem; HSys.MyGem = NULL;
+    HGem = savedHGem;
+}
+
+// ---------------------------------------------------------------------------
+//  [W3] DoConnect full end-to-end handshake, wired (task range 3 acceptance).
+// ---------------------------------------------------------------------------
+static void test_w906_sysmodwire_w3_doconnect_e2e()
+{
+    printf("\n[W906-SysModWire.W3] DoConnect full e2e handshake (wired -- task range 3 acceptance)\n");
+
+    THGem *savedHGem = HGem;
+
+    THGem g;
+    TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.2.2", 4702);
+    g.srvGem->Open();
+    conn->SimClearTx();
+
+    HGem = &g;
+    HSys.SystemModularInitial();
+    g.SetMachineTypeAndSoftwarseVer("HT9045", "V906");
+
+    int r1 = g.DoConnect();   // case 1: DoSelect() sends Select.req, Task=100
+    CHECK(r1 == 0 && g.iStartConnectTask == 100, "W3: DoConnect case 1 sends Select.req, Task->100");
+
+    conn->SimClearTx();
+    // Host's Select.rsp control frame (SType=2) -- same 14-byte control-frame
+    // shape as T3's own Select.req fixture, SType swapped to Select.rsp.
+    unsigned char selectRsp[14] = { 0,0,0,0x0A, 0xFF,0xFF, 0,0,0,0x02, 0,0,0,0x01 };
+    conn->SimPushReceive(selectRsp, 14);
+    g.ProcessSocketReceiveData();
+    CHECK(g.bWaitSelectRsp == true, "W3: Select.rsp control frame sets bWaitSelectRsp");
+
+    conn->SimClearTx();
+    int r2 = g.DoConnect();   // case 100: bWaitSelectRsp==true -> REAL S1F13 send (HSys.MyGem wired) -> Task=200
+    CHECK(r2 == 0 && g.iStartConnectTask == 200, "W3: DoConnect case 100 sends real S1F13 (no longer null-guard short-circuit), Task->200");
+    CHECK(conn->SimTxBuffer().size() > 0, "W3: S1F13 produced real bytes on the wire");
+
+    conn->SimClearTx();
+    // Host's S1F14 SUCCESS reply. Process_S1F14_ConnectRequestAcknowledge's
+    // own parser (golden uHGemClass.cpp:372-388) expects EXACTLY
+    // L2{ B[1]=0, L[0] } -- NOT L2{B, L2{MDLN,SOFTREV}} (that shape would take
+    // the format-error branch instead).
+    SecsWireCodec builder;
+    unsigned char zero = 0;
+    builder.InitLocalHead(1, 14, 0);
+    builder.DataItemOut(2, HType.LIST_TYPE, NULL);
+    builder.DataItemOut(1, HType.BINARY_TYPE, &zero);
+    builder.DataItemOut(0, HType.LIST_TYPE, NULL);
+    conn->SimPushReceive(builder.LocalBuffer.data(), static_cast<int>(builder.LocalLength_4));
+    g.ProcessSocketReceiveData();
+    CHECK(g.bWaitEstablishCommunicationsResponse == true && g.bWaitEstablishCommunicationsResponseError == false,
+          "W3: S1F14 success reply -> Process_S1F14_ConnectRequestAcknowledge sets Response=true/Error=false");
+
+    int r3 = g.DoConnect();   // case 200: success -> bConnect=true, Task=1, return 1
+    CHECK(r3 == 1 && g.bConnect == true && g.iStartConnectTask == 1,
+          "W3: DoConnect case 200 completes the handshake -- bConnect=true, Task resets to 1, returns 1");
+
+    delete HSys.MyGem; HSys.MyGem = NULL;
+    HGem = savedHGem;
+}
+
+// ---------------------------------------------------------------------------
+//  [W4] Host-initiated S1F13 -> our real S1F14 reply (tail's direct-dispatch
+//  quartet, third member).
+// ---------------------------------------------------------------------------
+static void test_w906_sysmodwire_w4_host_s1f13_reply()
+{
+    printf("\n[W906-SysModWire.W4] Host-initiated S1F13 -> our S1F14 reply (direct-dispatch)\n");
+
+    THGem *savedHGem = HGem;
+
+    THGem g;
+    TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.2.3", 4703);
+    g.srvGem->Open();
+
+    HGem = &g;
+    HSys.SystemModularInitial();
+    g.SetMachineTypeAndSoftwarseVer("HT9045", "V906");
+
+    conn->SimClearTx();
+    SecsWireCodec builder;
+    builder.InitLocalHead(1, 13, 1);   // a real host-initiated S1,F13 request (W=1)
+    builder.DataItemOut(2, HType.LIST_TYPE, NULL);
+    builder.DataItemOut(HType.ASCII_TYPE, AnsiString("HOST"));
+    builder.DataItemOut(HType.ASCII_TYPE, AnsiString("1.0"));
+    conn->SimPushReceive(builder.LocalBuffer.data(), static_cast<int>(builder.LocalLength_4));
+    g.ProcessSocketReceiveData();
+
+    const std::vector<char> &tx = conn->SimTxBuffer();
+    CHECK(tx.size() > 0, "W4: incoming S1F13 -> tail's direct-dispatch branch produced a reply");
+    if (!tx.empty())
+    {
+        CHECK(((unsigned char)tx[6] & 0x7f) == 1, "W4: reply MessageID_S == 1");
+        CHECK((unsigned char)tx[7] == 14, "W4: reply MessageID_F == 14 (S1F14)");
+    }
+    CHECK(g.bReceiveEstablishCommunicationsRequest == true, "W4: bReceiveEstablishCommunicationsRequest latched true");
+    // Incidental coverage: S1F14_ConnectRequestAcknowledge's own inline
+    // chkMoreMessageAbortProcess check (golden uHGemClass.cpp:350) short-
+    // circuits to "ignore the incoming body" when unchecked (ctor default).
+    CHECK(g.chkMoreMessageAbortProcess->Checked == false,
+          "W4: fixture -- chkMoreMessageAbortProcess defaults Checked==false (S1F14's own inline short-circuit, incidentally covered)");
+
+    delete HSys.MyGem; HSys.MyGem = NULL;
+    HGem = savedHGem;
+}
+
+// ---------------------------------------------------------------------------
+//  [W5] S1F1 -> S1F2 direct-dispatch (first member of the quartet).
+// ---------------------------------------------------------------------------
+static void test_w906_sysmodwire_w5_s1f1_s1f2()
+{
+    printf("\n[W906-SysModWire.W5] S1F1 -> S1F2 direct-dispatch\n");
+
+    THGem *savedHGem = HGem;
+
+    THGem g;
+    TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.2.4", 4704);
+    g.srvGem->Open();
+
+    HGem = &g;
+    HSys.SystemModularInitial();
+    g.SetMachineTypeAndSoftwarseVer("HT9045", "V906");
+
+    conn->SimClearTx();
+    SecsWireCodec builder;
+    builder.InitLocalHead(1, 1, 1);   // S1,F1 (Are You There), head-only
+    conn->SimPushReceive(builder.LocalBuffer.data(), static_cast<int>(builder.LocalLength_4));
+    g.ProcessSocketReceiveData();
+
+    const std::vector<char> &tx = conn->SimTxBuffer();
+    CHECK(tx.size() > 0, "W5: incoming S1F1 -> tail's direct-dispatch branch produced an S1F2 reply");
+    if (!tx.empty())
+    {
+        CHECK(((unsigned char)tx[6] & 0x7f) == 1, "W5: reply MessageID_S == 1");
+        CHECK((unsigned char)tx[7] == 2, "W5: reply MessageID_F == 2 (S1F2)");
+    }
+    std::string body(tx.begin(), tx.end());
+    CHECK(body.find("HT9045") != std::string::npos, "W5: S1F2 payload carries GemMDLN (\"HT9045\")");
+    CHECK(body.find("V906") != std::string::npos, "W5: S1F2 payload carries GemSOFTREV (\"V906\")");
+
+    delete HSys.MyGem; HSys.MyGem = NULL;
+    HGem = savedHGem;
+}
+
+// ---------------------------------------------------------------------------
+//  [W6] Tail negative paths: DeviceID mismatch -> S9F1; unknown odd F on a
+//  known stream -> S9F5; unknown stream -> S9F3; even-F secondary reply ->
+//  silent; F==0 abort -> silent; malformed SML -> bDataFormatOK=false -> S9F7.
+// ---------------------------------------------------------------------------
+static void test_w906_sysmodwire_w6_tail_negative_paths()
+{
+    printf("\n[W906-SysModWire.W6] Tail negative paths (S9F1/S9F5/S9F3/silent x2/S9F7)\n");
+
+    THGem *savedHGem = HGem;
+
+    // (a) DeviceID mismatch: Remote.DeviceID(1234) != Local.DeviceID(0, ctor
+    // default) and != 0xFFFF, W_Bit==1 -> S9F1_UnrecognizedDeviceID.
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.2.5", 4705);
+        g.srvGem->Open();
+        HGem = &g;
+        HSys.SystemModularInitial();
+
+        conn->SimClearTx();
+        unsigned char frame[14] = {
+            0x00,0x00,0x00,0x0A,   // Value=10 -> Len=14 (head only)
+            0x04,0xD2,             // DeviceID=1234 (0x04D2) -- mismatches Local.DeviceID==0
+            0x81,                  // MessageID_S=1 | W_Bit(0x80)
+            0x01,                  // MessageID_F=1
+            0x00, 0x00,            // PType=0, SType=0 (Data_Message)
+            0x00,0x00,0x00,0x01    // SystemByte=1
+        };
+        conn->SimPushReceive(frame, 14);
+        g.ProcessSocketReceiveData();
+
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() > 0, "W6(a): DeviceID mismatch produced a reply");
+        if (!tx.empty())
+        {
+            CHECK(((unsigned char)tx[6] & 0x7f) == 9, "W6(a): reply MessageID_S == 9");
+            CHECK((unsigned char)tx[7] == 1, "W6(a): reply MessageID_F == 1 (S9F1)");
+        }
+        delete HSys.MyGem; HSys.MyGem = NULL;
+    }
+
+    // (b) known stream (S=1), unknown ODD function (F=99) -> S9F5.
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.2.6", 4706);
+        g.srvGem->Open();
+        HGem = &g;
+        HSys.SystemModularInitial();
+
+        conn->SimClearTx();
+        unsigned char frame[14] = {
+            0x00,0x00,0x00,0x0A, 0x00,0x00, 0x01, 99, 0x00,0x00, 0x00,0x00,0x00,0x01
+        };
+        conn->SimPushReceive(frame, 14);
+        g.ProcessSocketReceiveData();
+
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() > 0, "W6(b): unknown odd F on a known stream produced a reply");
+        if (!tx.empty())
+        {
+            CHECK(((unsigned char)tx[6] & 0x7f) == 9, "W6(b): reply MessageID_S == 9");
+            CHECK((unsigned char)tx[7] == 5, "W6(b): reply MessageID_F == 5 (S9F5)");
+        }
+        delete HSys.MyGem; HSys.MyGem = NULL;
+    }
+
+    // (c) unknown stream (S=99) -> S9F3.
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.2.7", 4707);
+        g.srvGem->Open();
+        HGem = &g;
+        HSys.SystemModularInitial();
+
+        conn->SimClearTx();
+        unsigned char frame[14] = {
+            0x00,0x00,0x00,0x0A, 0x00,0x00, 99, 0x01, 0x00,0x00, 0x00,0x00,0x00,0x01
+        };
+        conn->SimPushReceive(frame, 14);
+        g.ProcessSocketReceiveData();
+
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() > 0, "W6(c): unknown stream produced a reply");
+        if (!tx.empty())
+        {
+            CHECK(((unsigned char)tx[6] & 0x7f) == 9, "W6(c): reply MessageID_S == 9");
+            CHECK((unsigned char)tx[7] == 3, "W6(c): reply MessageID_F == 3 (S9F3)");
+        }
+        delete HSys.MyGem; HSys.MyGem = NULL;
+    }
+
+    // (d) even-F secondary reply (S6F12) -> silently accepted, no reply.
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.2.8", 4708);
+        g.srvGem->Open();
+        HGem = &g;
+        HSys.SystemModularInitial();
+
+        conn->SimClearTx();
+        unsigned char frame[14] = {
+            0x00,0x00,0x00,0x0A, 0x00,0x00, 0x06, 0x0C, 0x00,0x00, 0x00,0x00,0x00,0x01
+        };
+        conn->SimPushReceive(frame, 14);
+        g.ProcessSocketReceiveData();
+        CHECK(conn->SimTxBuffer().size() == 0, "W6(d): even-F secondary message (S6F12) -- no reply");
+        delete HSys.MyGem; HSys.MyGem = NULL;
+    }
+
+    // (e) F==0 abort transaction (S1F0) -> silently ignored, no reply.
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.2.9", 4709);
+        g.srvGem->Open();
+        HGem = &g;
+        HSys.SystemModularInitial();
+
+        conn->SimClearTx();
+        unsigned char frame[14] = {
+            0x00,0x00,0x00,0x0A, 0x00,0x00, 0x01, 0x00, 0x00,0x00, 0x00,0x00,0x00,0x01
+        };
+        conn->SimPushReceive(frame, 14);
+        g.ProcessSocketReceiveData();
+        CHECK(conn->SimTxBuffer().size() == 0, "W6(e): F==0 (abort transaction) -- no reply");
+        delete HSys.MyGem; HSys.MyGem = NULL;
+    }
+
+    // (f) malformed SML (legal 14-byte head, ONE top-level BINARY item whose
+    // declared ItemSize (5) claims more bytes than the buffer actually
+    // supplies (0 -- the buffer ends immediately after the length byte)) ->
+    // ProcessSMLBinary's data-item loop (SecsWireCodec.cpp) checks
+    // `RunLength>=Len` BEFORE reading (unlike the sibling list-recursion
+    // check a few lines above it, which reads Ptr[RunLength] first and would
+    // require an out-of-bounds heap read to reach at this buffer's exact
+    // boundary -- deliberately NOT used here for that reason: ProcessBuffer
+    // is `new`'d to EXACTLY Value+4 bytes, uHGemEquipment.cpp's own
+    // ProcessSocketReceiveData, so reading one byte past it is undefined
+    // behavior this test must not rely on) -> ShowSMLBinary returns -2 ->
+    // bDataFormatOK=false -> S9F7_IllegalData (the FIRST check in the tail,
+    // before even CheckSFCodeResponse/DeviceID).
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.2.10", 4710);
+        g.srvGem->Open();
+        HGem = &g;
+        HSys.SystemModularInitial();
+
+        conn->SimClearTx();
+        unsigned char frame[16] = {
+            0x00,0x00,0x00,0x0C,   // Value=12 -> Len=Value+4=16 (== this buffer's actual size)
+            0xFF,0xFF,             // DeviceID=0xFFFF (sentinel; unreachable anyway -- bDataFormatOK bails first)
+            0x01, 0x01,            // MessageID_S=1, MessageID_F=1 (irrelevant -- bails before dispatch)
+            0x00, 0x00,            // PType=0, SType=0 (Data_Message)
+            0x00,0x00,0x00,0x01,   // SystemByte=1
+            0x21,                  // byte14: BINARY_TYPE(0x20)|ct=1 -> 1 length byte follows
+            0x05                   // byte15: declared ItemSize=5 -- but the buffer ends HERE (16
+                                   // bytes total); the data-item loop's first iteration checks
+                                   // RunLength(16)>=Len(16) BEFORE any read -> returns -2
+        };
+        conn->SimPushReceive(frame, 16);
+        g.ProcessSocketReceiveData();
+
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() > 0, "W6(f): malformed SML produced a reply");
+        if (!tx.empty())
+        {
+            CHECK(((unsigned char)tx[6] & 0x7f) == 9, "W6(f): reply MessageID_S == 9");
+            CHECK((unsigned char)tx[7] == 7, "W6(f): reply MessageID_F == 7 (S9F7)");
+        }
+        delete HSys.MyGem; HSys.MyGem = NULL;
+    }
+
+    HGem = savedHGem;
+}
+
+// ---------------------------------------------------------------------------
+//  [W7] Flag latches (bReceiveS7F6/S101F6/S101F8/S110F2/bS1F2_OnLineData) +
+//  MoveCheckCallBack short-circuit.
+// ---------------------------------------------------------------------------
+static int W906_SysModWire_MoveCheckCallBack_Ret1() { return 1; }
+static int W906_SysModWire_MoveCheckCallBack_Ret0() { return 0; }
+
+static void test_w906_sysmodwire_w7_flag_latch_movecheckcallback()
+{
+    printf("\n[W906-SysModWire.W7] Flag latches + MoveCheckCallBack short-circuit\n");
+
+    THGem *savedHGem = HGem;
+
+    // S7F6 -> bReceiveS7F6 (S known via S,F direct branch, MoveCheckCallBack NULL by ctor default).
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.2.11", 4711);
+        g.srvGem->Open();
+        HGem = &g;
+        HSys.SystemModularInitial();
+        unsigned char frame[14] = { 0,0,0,0x0A, 0,0, 0x07,6, 0,0, 0,0,0,1 };
+        conn->SimPushReceive(frame, 14);
+        g.ProcessSocketReceiveData();
+        CHECK(g.bReceiveS7F6 == true, "W7: S7F6 -> bReceiveS7F6 latches true");
+        delete HSys.MyGem; HSys.MyGem = NULL;
+    }
+    // S101F6 -> bReceiveS101F6.
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.2.12", 4712);
+        g.srvGem->Open();
+        HGem = &g;
+        HSys.SystemModularInitial();
+        unsigned char frame[14] = { 0,0,0,0x0A, 0,0, 101,6, 0,0, 0,0,0,1 };
+        conn->SimPushReceive(frame, 14);
+        g.ProcessSocketReceiveData();
+        CHECK(g.bReceiveS101F6 == true, "W7: S101F6 -> bReceiveS101F6 latches true");
+        delete HSys.MyGem; HSys.MyGem = NULL;
+    }
+    // S101F8 -> bReceiveS101F8.
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.2.13", 4713);
+        g.srvGem->Open();
+        HGem = &g;
+        HSys.SystemModularInitial();
+        unsigned char frame[14] = { 0,0,0,0x0A, 0,0, 101,8, 0,0, 0,0,0,1 };
+        conn->SimPushReceive(frame, 14);
+        g.ProcessSocketReceiveData();
+        CHECK(g.bReceiveS101F8 == true, "W7: S101F8 -> bReceiveS101F8 latches true");
+        delete HSys.MyGem; HSys.MyGem = NULL;
+    }
+    // S110F2 -> bReceiveS110F2 (this wave's one flagged golden-ctor deviation -- see header comment).
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.2.14", 4714);
+        g.srvGem->Open();
+        HGem = &g;
+        HSys.SystemModularInitial();
+        unsigned char frame[14] = { 0,0,0,0x0A, 0,0, 110,2, 0,0, 0,0,0,1 };
+        conn->SimPushReceive(frame, 14);
+        g.ProcessSocketReceiveData();
+        CHECK(g.bReceiveS110F2 == true, "W7: S110F2 -> bReceiveS110F2 latches true");
+        delete HSys.MyGem; HSys.MyGem = NULL;
+    }
+    // S1F2 -> bS1F2_OnLineData (direct-dispatch quartet member, before the customer/MoveCheckCallBack gate).
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.2.15", 4715);
+        g.srvGem->Open();
+        HGem = &g;
+        HSys.SystemModularInitial();
+        unsigned char frame[14] = { 0,0,0,0x0A, 0,0, 1,2, 0,0, 0,0,0,1 };
+        conn->SimPushReceive(frame, 14);
+        g.ProcessSocketReceiveData();
+        CHECK(g.bS1F2_OnLineData == true, "W7: S1F2 -> bS1F2_OnLineData latches true");
+        delete HSys.MyGem; HSys.MyGem = NULL;
+    }
+
+    // MoveCheckCallBack==1 -> the ~40-branch chain short-circuits (return
+    // BEFORE even checking S,F): S1F3 produces no reply, no crash.
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.2.16", 4716);
+        g.srvGem->Open();
+        HGem = &g;
+        HSys.SystemModularInitial();
+        g.MoveCheckCallBack = W906_SysModWire_MoveCheckCallBack_Ret1;
+
+        unsigned char frame[14] = { 0,0,0,0x0A, 0,0, 1,3, 0,0, 0,0,0,7 };
+        conn->SimPushReceive(frame, 14);
+        bool threw = false;
+        try { g.ProcessSocketReceiveData(); } catch (...) { threw = true; }
+        CHECK(threw == false, "W7: MoveCheckCallBack()==1 path does not throw");
+        CHECK(conn->SimTxBuffer().size() == 0, "W7: MoveCheckCallBack()==1 short-circuits the S,F chain -- no reply");
+
+        delete HSys.MyGem; HSys.MyGem = NULL;
+    }
+
+    // MoveCheckCallBack==0 -> lets the chain through; S1F4_SelectedStatusReply
+    // is itself still a gated no-op stub (uHGemClass.cpp), so there is still
+    // no reply -- but CheckSFCodeResponse (called unconditionally earlier in
+    // the tail, BEFORE this gate) demonstrably ran against THIS message,
+    // proving the pump reached this far (same seed/consume idiom as [T8]).
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.2.17", 4717);
+        g.srvGem->Open();
+        HGem = &g;
+        HSys.SystemModularInitial();
+        g.MoveCheckCallBack = W906_SysModWire_MoveCheckCallBack_Ret0;
+
+        g.SFCodeResponseList->Items->Add("1 3 7");   // matches the incoming message's own S,F,SystemByte below
+        g.TimeLeft->Add("300");
+
+        unsigned char frame[14] = { 0,0,0,0x0A, 0,0, 1,3, 0,0, 0,0,0,7 };
+        conn->SimPushReceive(frame, 14);
+        bool threw = false;
+        try { g.ProcessSocketReceiveData(); } catch (...) { threw = true; }
+        CHECK(threw == false, "W7: MoveCheckCallBack()==0 path does not throw");
+        CHECK(conn->SimTxBuffer().size() == 0, "W7: MoveCheckCallBack()==0 lets the chain through to S1F4 (still gated no-op) -- no reply either way");
+        CHECK(g.SFCodeResponseList->Items->Count == 0, "W7: CheckSFCodeResponse (called before the gate) consumed the pre-seeded \"1 3 7\" record -- the pump reached this message");
+
+        delete HSys.MyGem; HSys.MyGem = NULL;
+    }
+
+    HGem = savedHGem;
+}
+
+// ---------------------------------------------------------------------------
+//  [W8] CC_TFME_CHINA customer gate: direct-dispatch quartet (S1F1) is
+//  unaffected; the post-gate ~40-branch chain (S2F17->S2F18) is skipped when
+//  GemControlState<=1, and dispatches normally once GemControlState>1.
+// ---------------------------------------------------------------------------
+static void test_w906_sysmodwire_w8_customer_code_gate()
+{
+    printf("\n[W906-SysModWire.W8] CC_TFME_CHINA customer gate\n");
+
+    THGem *savedHGem = HGem;
+    int savedCustomerCode = CUSTOMER_CODE;
+    CUSTOMER_CODE = CC_TFME_CHINA;
+
+    THGem g;
+    TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.2.18", 4718);
+    g.srvGem->Open();
+    HGem = &g;
+    HSys.SystemModularInitial();
+    g.SetMachineTypeAndSoftwarseVer("HT9045", "V906");
+    g.GemControlState = 1;
+
+    conn->SimClearTx();
+    SecsWireCodec s1f1;
+    s1f1.InitLocalHead(1, 1, 1);
+    conn->SimPushReceive(s1f1.LocalBuffer.data(), static_cast<int>(s1f1.LocalLength_4));
+    g.ProcessSocketReceiveData();
+    CHECK(conn->SimTxBuffer().size() > 0, "W8: CC_TFME_CHINA/GemControlState<=1 -- S1F1 direct-dispatch quartet still replies (S1F2)");
+
+    conn->SimClearTx();
+    unsigned char s2f17[14] = { 0,0,0,0x0A, 0,0, 2,17, 0,0, 0,0,0,1 };
+    conn->SimPushReceive(s2f17, 14);
+    g.ProcessSocketReceiveData();
+    CHECK(conn->SimTxBuffer().size() == 0, "W8: CC_TFME_CHINA/GemControlState<=1 -- post-gate S2F17 does NOT dispatch (no reply)");
+
+    g.GemControlState = 2;
+    conn->SimClearTx();
+    unsigned char s2f17b[14] = { 0,0,0,0x0A, 0,0, 2,17, 0,0, 0,0,0,2 };
+    conn->SimPushReceive(s2f17b, 14);
+    g.ProcessSocketReceiveData();
+    CHECK(conn->SimTxBuffer().size() > 0, "W8: CC_TFME_CHINA/GemControlState==2 (>1) -- post-gate S2F17 dispatches normally (S2F18 reply)");
+    if (conn->SimTxBuffer().size() > 0)
+    {
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(((unsigned char)tx[6] & 0x7f) == 2 && (unsigned char)tx[7] == 18, "W8: reply is S2F18 (Date and Time Data)");
+    }
+
+    delete HSys.MyGem; HSys.MyGem = NULL;
+    HGem = savedHGem;
+    CUSTOMER_CODE = savedCustomerCode;
+}
+
+// ---------------------------------------------------------------------------
+//  [W9] Two-codec merge oracle: S2F26_DiagnosticLoopbackData (an ALREADY
+//  ActiveWire-routed HTGem method) reads/writes THGem::WireCodec via
+//  ActiveWire when wired -- proving the handler consumes the SAME decode
+//  buffer ProcessSocketReceiveData just populated, not HTGem's own separate
+//  by-value WireCodec instance.
+// ---------------------------------------------------------------------------
+static void test_w906_sysmodwire_w9_two_codec_merge_oracle()
+{
+    printf("\n[W906-SysModWire.W9] Two-codec merge oracle (S2F25 -> S2F26 loopback)\n");
+
+    THGem *savedHGem = HGem;
+
+    THGem g;
+    TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.2.19", 4719);
+    g.srvGem->Open();
+    HGem = &g;
+    HSys.SystemModularInitial();
+
+    conn->SimClearTx();
+    SecsWireCodec builder;
+    unsigned char payload[4] = { 0xDE, 0xAD, 0xBE, 0xEF };
+    builder.InitLocalHead(2, 25, 1);
+    builder.DataItemOut(4, HType.BINARY_TYPE, payload);
+    conn->SimPushReceive(builder.LocalBuffer.data(), static_cast<int>(builder.LocalLength_4));
+    g.ProcessSocketReceiveData();
+
+    const std::vector<char> &tx = conn->SimTxBuffer();
+    CHECK(tx.size() > 0, "W9: S2F25 -> S2F26_DiagnosticLoopbackData (ACTIVE) produced a reply");
+    if (!tx.empty())
+    {
+        CHECK(((unsigned char)tx[6] & 0x7f) == 2, "W9: reply MessageID_S == 2");
+        CHECK((unsigned char)tx[7] == 26, "W9: reply MessageID_F == 26 (S2F26)");
+    }
+    std::string body(tx.begin(), tx.end());
+    std::string expectedPayload(reinterpret_cast<char*>(payload), 4);
+    CHECK(body.find(expectedPayload) != std::string::npos,
+          "W9: S2F26 echoes the SAME binary payload -- handler read THGem::WireCodec.SReceiveData via ActiveWire");
+    CHECK(HSys.MyGem->WireCodec.SReceiveData->Count == 0,
+          "W9: MyGem's OWN by-value WireCodec (HTGem's standalone instance) was never touched -- SReceiveData stays empty");
+
+    delete HSys.MyGem; HSys.MyGem = NULL;
+    HGem = savedHGem;
+}
+
+// ---------------------------------------------------------------------------
+//  [W10] Null-guard regression: HSys.MyGem==NULL -- the tail's whole `if`
+//  block is skipped (no reply, no crash), WireCodec.Remote still decodes.
+//  This is [T5]'s own gated-dispatcher semantics re-verified now that the
+//  tail is a real (null-guarded) block instead of a gated `#if 0`.
+// ---------------------------------------------------------------------------
+static void test_w906_sysmodwire_w10_null_guard_regression()
+{
+    printf("\n[W906-SysModWire.W10] Null-guard regression (HSys.MyGem==NULL)\n");
+
+    CHECK(HSys.MyGem == NULL, "W10: fixture -- HSys.MyGem is NULL (no prior test in this file left it wired)");
+
+    THGem g;
+    TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.2.20", 4720);
+    g.srvGem->Open();
+
+    SecsWireCodec builder;
+    builder.InitLocalHead(1, 14, 0);
+    builder.DataItemOut(HType.ASCII_TYPE, AnsiString("OK"));
+    conn->SimPushReceive(builder.LocalBuffer.data(), static_cast<int>(builder.LocalLength_4));
+
+    bool threw = false;
+    try { g.ProcessSocketReceiveData(); }
+    catch (...) { threw = true; }
+    CHECK(threw == false, "W10: null-guarded tail does not throw with HSys.MyGem==NULL");
+
+    CHECK(g.WireCodec.Remote.MessageID_S == 1 && g.WireCodec.Remote.MessageID_F == 14,
+          "W10: WireCodec.Remote still decodes MessageID_S/F == 1/14");
+    CHECK(conn->SimTxBuffer().size() == 0, "W10: null-guarded tail sends no reply (HSys.MyGem stays NULL)");
 }
 
 // ===========================================================================
@@ -1907,6 +2587,26 @@ int main()
     test_t3_timeout_s9f9_cross_class_seam();
     test_checksfcoderesponse();
     test_doconnect_state_walk();
+
+    // W906-SysModWire (W1-W10): W3-W10 pump ProcessSocketReceiveData, which
+    // reaches the now-real SaveSECSGEMTextToLog() -- same test-hygiene rule
+    // as the T3/T4/T5 bracket above (see that TextLogSnapshot comment).
+    // Deliberately placed AFTER [T9] and BEFORE [T10] -- none of W1-W10 pump
+    // Timer1Timer (see test_timer1timer_disable_branch's own comment on why
+    // it must stay the LAST test in this binary to do so).
+    TextLogSnapshot sysModWireLogSnap = CaptureTextLogSnapshot();
+    test_w906_sysmodwire_w1_systemmodularinitial_wiring();
+    test_w906_sysmodwire_w2_s1f13_frame();
+    test_w906_sysmodwire_w3_doconnect_e2e();
+    test_w906_sysmodwire_w4_host_s1f13_reply();
+    test_w906_sysmodwire_w5_s1f1_s1f2();
+    test_w906_sysmodwire_w6_tail_negative_paths();
+    test_w906_sysmodwire_w7_flag_latch_movecheckcallback();
+    test_w906_sysmodwire_w8_customer_code_gate();
+    test_w906_sysmodwire_w9_two_codec_merge_oracle();
+    test_w906_sysmodwire_w10_null_guard_regression();
+    RestoreTextLogSnapshot(sysModWireLogSnap);
+
     test_timer1timer_disable_branch();
 
     printf("\n=== RESULT: %d passed, %d failed ===\n", g_pass, g_fail);

@@ -505,6 +505,11 @@ add_library(ht9045_secsgem
     SECSGEM/SecsWireCodec.cpp
     SECSGEM/SecsSvEcRegistration.cpp
     SECSGEM/uHGemEquipment.cpp
+    # AI(W906-SysModWire) 20260720: HT9045Gem thin shim (Decision A) -- the
+    # ONLY definition of `HT9045Gem`, needed by database.cpp's now-real
+    # SystemModularInitial (`new HT9045Gem(...)`). See that header's own
+    # file-head note for the full scope/swap-back-path writeup.
+    SECSGEM/uHGemHT9045_Shim.cpp
 )
 
 target_include_directories(ht9045_secsgem PUBLIC
@@ -525,9 +530,29 @@ target_include_directories(ht9045_secsgem PUBLIC
 # -- see this target's own comment above for the full reasoning.
 # AI(W906-uHGemEquipment-BucketC) 20260717: ht9045_db added -- D3's HSys.MyGem
 # seam (`#include "database.h"`, `extern SYSTEM_MODULAR HSys;`) needs
-# database.cpp's one definition of `HSys` linked in. ht9045_db itself only
-# links vclcompat+ht9045_globals (see that library's own target above) --
-# no cycle (ht9045_db does not link back to ht9045_secsgem or ht9045_public).
+# database.cpp's one definition of `HSys` linked in. ht9045_db's OWN
+# target_link_libraries declaration only lists vclcompat+ht9045_globals (see
+# that library's own target above) -- no CMake-target-graph cycle.
+#
+# AI(W906-SysModWire) 20260720: a real (object-file-level, not CMake-target-
+# level) circular SYMBOL dependency now exists as of this wave: database.cpp's
+# SystemModularInitial calls `new HT9045Gem(...)`, a symbol this library
+# (ht9045_secsgem) defines (uHGemHT9045_Shim.cpp.o) -- so ht9045_db's
+# database.cpp.o now has an undefined reference back INTO this archive, even
+# though ht9045_db's CMake target never declares ht9045_secsgem as a
+# dependency. Any executable that ends up needing BOTH archives (this one,
+# for HSys via ht9045_db) must link them through a `$<LINK_GROUP:RESCAN,...>`
+# (or equivalent --start-group/--end-group) wrapper, not a plain sequential
+# link -- see tests/CMakeLists.txt's test_uHGemEquipment/test_uHGemClass/
+# test_config_loaders (the three targets that actually pull database.cpp.o;
+# independent review verified via nm that only these executables contain
+# _HSys -- the motor/io targets linking ht9045_db never pull database.cpp.o,
+# so they need no ht9045_secsgem edge) for the applied fix.
+# Deliberately NOT making ht9045_db declare
+# `target_link_libraries(ht9045_db PUBLIC ht9045_secsgem)` here -- that would
+# invert this library's intended layering (ht9045_db is a lower layer than
+# SECS/GEM) for a dependency that is a database.cpp implementation detail, not
+# ht9045_db's own public interface.
 target_link_libraries(ht9045_secsgem PUBLIC vclcompat ht9045_public ht9045_core ht9045_globals ht9045_db)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")

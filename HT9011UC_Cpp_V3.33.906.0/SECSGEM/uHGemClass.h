@@ -61,21 +61,30 @@
 // for the pieces of THGem those methods actually needed. HGemPtr itself is
 // untouched and still exists for the remaining gated methods.
 //
-// AI(W906-fire-integrate) 20260716: EVALUATED AND DECLINED -- switching this
-// forward declaration to `#include "SECSGEM/uHGemEquipment.h"` now that a
-// real (but deliberately partial) `class THGem` exists there (W906-uHGemEquipment
-// front). Checked every one of uHGemClass.cpp's 44 still-gated methods against
-// that partial THGem's actual member/method list: NONE has its full dependency
-// chain satisfied yet -- each needs at least one more THGem member/method still
-// absent from this wave's slice (e.g. slTempReportID/lTempReportIDContent,
-// EnableDisableAlarmAll/EnableDisableAlarm, EnableDisableECDataAll/
-// EnableDisableECData, GemMDLN/GemSOFTREV/bOnLine/GemClock, or a VCL widget
-// type not in vclcompat) -- see uHGemClass.cpp's own "INTEGRATE WAVE 2" note
-// for the full per-method accounting. Including uHGemEquipment.h here today
-// would add a real new header dependency (StringGrid.h/SecsEventType.h) for
-// ZERO additional un-gating, so the forward declaration stays as-is per this
-// project's "don't force an include just to look more integrated" discipline.
-// Re-evaluate the next time uHGemEquipment.h's THGem slice grows.
+// AI(W906-fire-integrate) 20260716: EVALUATED AND DECLINED (at that time) --
+// switching this forward declaration to `#include "SECSGEM/uHGemEquipment.h"`
+// now that a real (but deliberately partial) `class THGem` exists there
+// (W906-uHGemEquipment front). Checked every one of uHGemClass.cpp's 44
+// still-gated methods against that partial THGem's actual member/method
+// list: NONE had its full dependency chain satisfied yet -- each needed at
+// least one more THGem member/method still absent from that wave's slice
+// (e.g. slTempReportID/lTempReportIDContent, EnableDisableAlarmAll/
+// EnableDisableAlarm, EnableDisableECDataAll/EnableDisableECData,
+// GemMDLN/GemSOFTREV/bOnLine/GemClock, or a VCL widget type not in
+// vclcompat).
+//
+// AI(W906-SysModWire) 20260720: RE-EVALUATED, NOW ADOPTED (this is the "next
+// time uHGemEquipment.h's THGem slice grows" the note above anticipated).
+// GemMDLN/GemSOFTREV/bOnLine/GemClock (data members) and a new
+// CheckSFFormatOnlyHead method (all added to THGem this wave, see
+// uHGemEquipment.h/.cpp) together satisfy the full dependency chain of 8
+// methods (S1F1/S1F2/S1F13/S1F14/Process_S1F14/S1F16/S1F18/S2F18 -- see
+// uHGemClass.cpp's own "INTEGRATE WAVE 3" note for the per-method
+// accounting), taking the gated count from 44 to 36. The include is added in
+// uHGemClass.cpp ONLY (not here) -- this header stays at a bare forward
+// declaration; only method BODIES that dereference THGem's complete type
+// need uHGemEquipment.h, matching this project's established "form pointer
+// interface-cut" convention referenced above.
 class THGem;
 
 extern AnsiString SYS_ECChangeID             ;    //pig 2014.04.23 KYEC SECS
@@ -126,6 +135,20 @@ class HTGem
         // incidental improvement.
         SecsWireCodec WireCodec;
         SecsSvEcRegistration SvEcReg;
+
+        // AI(W906-SysModWire) 20260720: receive-side merge (design D). Golden has
+        // exactly ONE codec (THGem's); this port grew two (HTGem's by-value
+        // WireCodec for standalone tests + THGem's live engine). ActiveWire is
+        // the dispatch indirection: defaults to &WireCodec (standalone behavior
+        // bit-identical -- test_uHGemClass's 86 assertions poke hgem.WireCodec
+        // directly and keep passing), and is re-pointed at THGem::WireCodec by
+        // (a) HT9045Gem shim ctor when a live THGem is supplied and (b)
+        // ProcessReceiceData's dispatch entry (self-heal for golden's
+        // NULL-at-static-init construction order). SEND was already unified via
+        // SecsWireCodec::SendLocalDataHook (Bucket C D2); with ActiveWire bound
+        // to THGem's codec, sends composed by HTGem handlers go out through the
+        // hook THGem's own ctor installed -- no second hook install needed.
+        SecsWireCodec *ActiveWire;
 
         void UpdateDataPath(AnsiString Path);
         virtual ~HTGem()                        ;
