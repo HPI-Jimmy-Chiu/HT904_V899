@@ -5,8 +5,12 @@
 //  Only the four pure-logic leaf functions are exposed here (W1 scope).
 //  VCL-form-coupled functions (StringGrid_Insert_Row, StringGrid_Delete_Row,
 //  StatusBar_ItemText, ShowRecordTime) are deferred to the UI wave (W7).
-//  DeleteDirectory is deferred: it depends on BCB6 SysUtils FindFirst/FindNext
-//  which require a fuller SysUtils shim (out of W0/W1 scope).
+//  DeleteDirectory -- AI(W906-uHGemClass-Micro6) 20260721: the W1-era
+//  "deferred, needs FindFirst/FindNext SysUtils shim" note below was stale by
+//  this wave: vclcompat/SysUtils.h now carries FindFirst/FindNext/FindClose/
+//  TSearchRec/RemoveDir/DeleteFile/DirectoryExists (added by a later wave than
+//  when that note was written), so it is translated for real here (needed by
+//  SECSGEM/uHGemClass.cpp's S7F18_DeleteProcessProgramAcknowledge).
 // ===========================================================================
 #ifndef PUBLIC_EXTERN_FUNCTION_H
 #define PUBLIC_EXTERN_FUNCTION_H
@@ -71,5 +75,28 @@ void String_EraseRSpace(AnsiString& sStr);
 //  as BCB6. Callers that need milliseconds must divide by CLOCKS_PER_SEC/1000.
 // ---------------------------------------------------------------------------
 int RecordTime(bool bIsStart);
+
+// ---------------------------------------------------------------------------
+//  DeleteDirectory
+//  BCB6 source: ExternFunction.cpp:249-280 ("2014.06.12, Joye, ASE-SG")
+//
+//  Recursively deletes sDir and everything under it.
+//    - If sDir does not exist, returns true immediately (deleting a
+//      nonexistent directory is treated as success, not an error).
+//    - Otherwise walks sDir via FindFirst/FindNext (faAnyFile mask):
+//      plain files are DeleteFile()'d; subdirectories (Attr & faDirectory,
+//      excluding "." and "..") are recursed into via DeleteDirectory() itself.
+//    - Return values of the individual DeleteFile() calls are NOT checked
+//      (golden ignores them).
+//    - If a recursive call on a subdirectory returns false, the enumeration
+//      loop `break`s early (remaining siblings at that level are left
+//      untouched) but FindClose() + the final RemoveDir(sDir) still run --
+//      RemoveDir on a non-empty directory then typically fails, so that
+//      failure propagates up as this call's own return value. Preserved
+//      verbatim, not hardened into an early `return false`.
+//    - Final return is RemoveDir(sDir) -- true only if the directory (now
+//      believed empty) was actually removed.
+// ---------------------------------------------------------------------------
+bool DeleteDirectory(AnsiString sDir);
 
 #endif // PUBLIC_EXTERN_FUNCTION_H

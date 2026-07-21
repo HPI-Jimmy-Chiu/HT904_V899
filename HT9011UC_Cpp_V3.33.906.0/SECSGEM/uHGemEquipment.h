@@ -910,6 +910,34 @@ public:
     int GemSpoolCountActual;                        // golden :196 (SV54)
     char GemSpoolStartTime[256];                    // golden :198 (SV57)
 
+    // ==== S6F24/S7F18 supporting state (W906-uHGemClass-Micro6) =============
+    // golden uHGemEquipment.h:430/694-695/698. bSpoolActive/bBeginTransferSpool
+    // are S6F24_RequestSpooledDataAcknowledgementSend's own gate + latch
+    // (ctor false, golden ctor :604/607 -- see THGem's ctor below); with the
+    // safe false default, S6F24's only side effect (the `system("del ...")`
+    // spool-wipe) stays a no-op until some future "DoSpool subsystem" wave
+    // actually drives bSpoolActive true -- NOT built this wave, per plan.
+    // GemSpoolPath is the directory that wipe targets (golden ctor :814 builds
+    // it from CurrentDirectory+"SPOOL", out of scope; defaults to "" here,
+    // same "caller/test must set it explicitly" idiom as GemSystemPath above).
+    // AI(W906-uHGemClass-Micro6) 20260721: added 3 THGem members to un-gate
+    // S6F24_RequestSpooledDataAcknowledgementSend (golden uHGemClass.cpp:2053-2079).
+    bool bSpoolActive;                              // golden :694 (ctor false)
+    bool bBeginTransferSpool;                       // golden :695 (ctor false)
+    AnsiString GemSpoolPath;                        // golden :430
+
+    // UpLoadPath -- golden :698. The recipe-upload base directory S7F18
+    // (delete process program) resolves each PPID against (`UpLoadPath+"\\"+
+    // PPID`) and SetReceipeDirectoryAndGlobalName (still out of scope, see
+    // S7F20's own gate note above UploadFileString) is its only real writer
+    // in golden. Plain scalar, no ctor default in golden's own ctor either
+    // (grepped uHGemEquipment.cpp:444-674 -- absent), so it defaults to ""
+    // here too, same as UpLoadPath's own AnsiString() default ctor would give
+    // BCB6 for free.
+    // AI(W906-uHGemClass-Micro6) 20260721: added to un-gate
+    // S7F18_DeleteProcessProgramAcknowledge (golden uHGemClass.cpp:2115-2166).
+    AnsiString UpLoadPath;                          // golden :698
+
     // ==== CEID / Report StringGrid-backed "database" family =================
     void SetCEIDContent(unsigned iCeid, AnsiString CeidAlias, unsigned iReportCount, unsigned *iReportIDData, int Mode);
     void SetCEIDContent(unsigned iCeid, unsigned iReportCount, unsigned *iReportIDData, int Mode);

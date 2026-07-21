@@ -2,13 +2,15 @@
 //  Public/ExternFunction.cpp  -- W1 portable translation
 //  BCB6 golden source: HT9011UC_Code_V3.33.906.0_20260618/Public/ExternFunction.cpp
 //
-//  Translated: W1 batch, pure-logic leaf functions only.
-//  Deferred (VCL-form-coupled or requires fuller SysUtils shim):
+//  Translated: W1 batch, pure-logic leaf functions only, PLUS DeleteDirectory
+//  (AI(W906-uHGemClass-Micro6) 20260721: vclcompat/SysUtils.h now has the
+//  FindFirst/FindNext shim this needed -- see ExternFunction.h's own updated
+//  note).
+//  Deferred (VCL-form-coupled):
 //    StringGrid_Insert_Row   -> W7 (UI wave)
 //    StringGrid_Delete_Row   -> W7 (UI wave)
 //    StatusBar_ItemText      -> W7 (UI wave)
 //    ShowRecordTime          -> W7 (UI wave, depends on TEdit)
-//    DeleteDirectory         -> deferred (needs FindFirst/FindNext SysUtils shim)
 // ===========================================================================
 
 // BCB6 had:  #include "MachineDefine.h"  / #pragma hdrstop
@@ -156,4 +158,56 @@ int RecordTime(bool bIsStart)
         clock_t tEndTime = clock();
         return static_cast<int>(tEndTime - tStartTime);
     }
+}
+
+// ---------------------------------------------------------------------------
+//  DeleteDirectory
+//  BCB6 source: ExternFunction.cpp:249-280 ("2014.06.12, Joye, ASE-SG")
+//
+//  AI(W906-uHGemClass-Micro6) 20260721: translated using vclcompat/SysUtils.h's
+//  FindFirst/FindNext/FindClose/TSearchRec/RemoveDir/DeleteFile/
+//  DirectoryExists -- their semantics (FindFirst/FindNext return 0 on a
+//  match, non-0 when exhausted; faAnyFile/faDirectory bit values) already
+//  match BCB6's own SysUtils exactly (see that header's own comment), so this
+//  body is a direct, unmodified transcription of golden's logic.
+//
+//  Golden quirks preserved verbatim (see ExternFunction.h's own comment for
+//  the full list): nonexistent sDir -> true (not an error); individual
+//  DeleteFile() failures are never checked; a failed recursive call on a
+//  subdirectory `break`s the enumeration early but still falls through to
+//  FindClose()+RemoveDir(sDir) (RemoveDir on a non-empty directory then
+//  typically fails, propagating as this call's own return value) rather than
+//  returning false immediately.
+// ---------------------------------------------------------------------------
+bool DeleteDirectory(AnsiString sDir)
+{
+    if (DirectoryExists(sDir) == false)                  // BCB6 :251-254
+    {
+        return true;
+    }
+
+    AnsiString sDirFile = sDir + "\\*.*";                // BCB6 :256
+    TSearchRec sr;
+    if (FindFirst(sDirFile, faAnyFile, sr) == 0)          // BCB6 :258
+    {
+        do
+        {
+            if (!(sr.Attr & faDirectory))                // BCB6 :262-266 -- plain file
+            {
+                AnsiString sFilePath = sDir + "\\" + sr.Name;
+                DeleteFile(sFilePath);
+            }
+            else                                          // BCB6 :267-275 -- directory entry
+            {
+                if (sr.Name != "." && sr.Name != "..")
+                {
+                    AnsiString sSubDir = sDir + "\\" + sr.Name;
+                    if (DeleteDirectory(sSubDir) == false)
+                        break;                            // BCB6 :273 -- see file-head quirk note
+                }
+            }
+        } while (FindNext(sr) == 0);                      // BCB6 :276
+        FindClose(sr);                                    // BCB6 :277
+    }
+    return RemoveDir(sDir);                               // BCB6 :279
 }

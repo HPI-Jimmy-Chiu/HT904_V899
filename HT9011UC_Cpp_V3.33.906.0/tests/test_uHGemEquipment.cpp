@@ -144,6 +144,12 @@
 #include "database.h"            // HSys / SYSTEM_MODULAR
 #include "SECSGEM/uHGemClass.h"  // HTGem (T7)
 #include "Config.h"              // IniConfig.bEnable_SECS_GEM (T10)
+// AI(W906-uHGemClass-Micro6) 20260721: LastDataPath/GetLastOpenFN/
+// WriteLastDataFN for the S7F18 "currently open recipe" guard coverage below
+// -- same repoint-before-use safety posture as test_common.cpp's own "E)"
+// test (this file's own SAFETY NOTE above governs why: never touch the real
+// D:\HT9045\SetUp.inf-backed default).
+#include "common.h"
 
 #include <cstdio>
 #include <cstring>
@@ -3325,6 +3331,253 @@ static void test_w906_uhgemclass_micro5_e2e()
 }
 
 // ===========================================================================
+//  [W906-uHGemClass-Micro6] Real THGem-backed coverage for the 2
+//  uHGemClass.cpp methods un-gated this wave (see that file's own
+//  "INTEGRATE WAVE 7" note): S6F24_RequestSpooledDataAcknowledgementSend /
+//  S7F18_DeleteProcessProgramAcknowledge.
+//
+//  WIRING: same `THGem g; HTGem hgem; hgem.HGemPtr=&g; hgem.ActiveWire=
+//  &g.WireCodec;` pattern as test_w906_uhgemclass_micro5_e2e above.
+//
+//  SAFETY: S7F18's "currently open recipe" guard reads the real global
+//  `GetLastOpenFN()`, which by default reads the production
+//  D:\HT9045\SetUp.inf-backed `LastDataPath`. Following this file's own
+//  SAFETY NOTE (top of file) + test_common.cpp's own established technique,
+//  `LastDataPath` is repointed to a scratch file for the whole duration of
+//  this test and restored at the end -- the real production file is never
+//  touched.
+// ===========================================================================
+static void test_w906_uhgemclass_micro6_e2e()
+{
+    printf("\n[W906-uHGemClass-Micro6] S6F24/S7F18 real THGem-backed coverage\n");
+
+    // -- S6F24: bSpoolActive==false (ctor default -- the safe no-op path this
+    //    wave's design deliberately leaves as the only reachable behavior
+    //    until some future "DoSpool subsystem" wave). Early-returns BEFORE
+    //    touching bBeginTransferSpool or the input queue, but still sends a
+    //    real LocalAcknowledge(6,24,0) reply. --
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.6.10", 6010);
+        g.srvGem->Open();
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+
+        CHECK(g.bSpoolActive == false, "N1: bSpoolActive defaults to false (ctor)");
+        hgem.S6F24_RequestSpooledDataAcknowledgementSend();
+        CHECK(g.bBeginTransferSpool == false,
+              "N1: bSpoolActive==false path never touches bBeginTransferSpool");
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() >= 14, "N1: S6F24 no-op path produced real bytes on the wire");
+        if (tx.size() >= 14)
+        {
+            CHECK((unsigned char)tx[6] == 6 && (unsigned char)tx[7] == 24, "N1: reply S,F == 6,24");
+            CHECK((unsigned char)tx[tx.size() - 1] == 0x00, "N1: ack byte == 0x00");
+        }
+    }
+
+    // -- S6F24: bSpoolActive==true, RSDC==0 -- the spool-wipe `system("del
+    //    ...")` call is NOT reached (only RSDC==1 triggers it -- deliberately
+    //    not exercised here, a real shell command has no place in this
+    //    binary's own test run). Real bBeginTransferSpool latch + real
+    //    DataItemIn consumption of the queued token + same unconditional
+    //    ack==0 golden always sends from every branch of this method. --
+    {
+        THGem g;
+        g.bSpoolActive = true;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.6.11", 6011);
+        g.srvGem->Open();
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.UINT_1_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString(0));   // RSDC = 0 -> skip system()
+        int countBefore = g.WireCodec.SReceiveData->Count;
+
+        hgem.S6F24_RequestSpooledDataAcknowledgementSend();
+        CHECK(g.bBeginTransferSpool == true, "N2: bSpoolActive==true path latches bBeginTransferSpool=true");
+        CHECK(g.WireCodec.SReceiveData->Count == countBefore - 3,
+              "N2: DataItemIn really consumed the queued UINT_1 RSDC token (3 tokens: Type/Len/Value)");
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() >= 14, "N2: S6F24 RSDC==0 path produced real bytes on the wire");
+        if (tx.size() >= 14)
+        {
+            CHECK((unsigned char)tx[6] == 6 && (unsigned char)tx[7] == 24, "N2: reply S,F == 6,24");
+            CHECK((unsigned char)tx[tx.size() - 1] == 0x00,
+                  "N2: ack byte == 0x00 (same as N1 -- S6F24 never sends a reject code on any branch)");
+        }
+    }
+
+    // ---- S7F18 block: repoint LastDataPath for the whole block, restore at
+    // the end (see this function's own SAFETY comment above). ----
+    AnsiString savedLastDataPath = LastDataPath;
+    const AnsiString kScratchDir = "uHGemClass_micro6_test_scratch";
+    ForceDirectories(kScratchDir);
+    LastDataPath = kScratchDir + "\\lastdata.inf";
+    DeleteFile(LastDataPath);   // ensure GetLastOpenFN() starts from the "Fail Open" default
+
+    // -- S7F18: happy path -- UpLoadPath/PPID directory exists (with real
+    //    nested files under it) -> real DeleteDirectory() removes the whole
+    //    tree -> LocalAcknowledge(7,18,0). --
+    {
+        const AnsiString kUpLoad = kScratchDir + "\\upload_happy";
+        const AnsiString kRecipeDir = kUpLoad + "\\RECIPE_A";
+        ForceDirectories(kRecipeDir + "\\sub");
+        {
+            FILE *f = fopen((kRecipeDir + "\\sub\\payload.txt").c_str(), "wb");
+            if (f) { fputs("x", f); fclose(f); }
+        }
+        CHECK(DirectoryExists(kRecipeDir) == true, "N3: scratch recipe dir exists before S7F18");
+
+        THGem g;
+        g.UpLoadPath = kUpLoad;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.6.12", 6012);
+        g.srvGem->Open();
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(8));
+        g.WireCodec.SReceiveData->Add(AnsiString("RECIPE_A"));
+
+        hgem.S7F18_DeleteProcessProgramAcknowledge();
+        CHECK(DirectoryExists(kRecipeDir) == false, "N3: S7F18 really deleted the scratch recipe dir");
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() >= 14, "N3: S7F18 happy path produced real bytes on the wire");
+        if (tx.size() >= 14)
+        {
+            CHECK((unsigned char)tx[6] == 7 && (unsigned char)tx[7] == 18, "N3: reply S,F == 7,18");
+            CHECK((unsigned char)tx[tx.size() - 1] == 0x00, "N3: ack byte == 0x00 (accept, deleted)");
+        }
+    }
+
+    // -- S7F18: DirectoryExists==false branch -- PPID names a folder that
+    //    does not exist under UpLoadPath -> LocalAcknowledge(7,18,4), and
+    //    DeleteDirectory is never even called. --
+    {
+        const AnsiString kUpLoad = kScratchDir + "\\upload_missing";
+        ForceDirectories(kUpLoad);
+
+        THGem g;
+        g.UpLoadPath = kUpLoad;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.6.13", 6013);
+        g.srvGem->Open();
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(14));
+        g.WireCodec.SReceiveData->Add(AnsiString("NO_SUCH_RECIPE"));
+
+        hgem.S7F18_DeleteProcessProgramAcknowledge();
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() >= 14, "N4: S7F18 not-exist path produced real bytes on the wire");
+        if (tx.size() >= 14)
+        {
+            CHECK((unsigned char)tx[6] == 7 && (unsigned char)tx[7] == 18, "N4: reply S,F == 7,18");
+            CHECK((unsigned char)tx[tx.size() - 1] == 0x04,
+                  "N4: ack byte == 0x04 (reject, work-file directory does not exist)");
+        }
+    }
+
+    // -- S7F18: golden quirk -- "currently open recipe" guard. When
+    //    GetLastOpenFN()==PPID, LocalAcknowledge(7,18,1) fires BEFORE
+    //    DirectoryExists/DeleteDirectory are even reached -- so a directory
+    //    that genuinely exists on disk under UpLoadPath survives the call
+    //    untouched, purely because it is "currently open". --
+    {
+        WriteLastDataFN(AnsiString("LOCKED_RECIPE"));
+        CHECK(GetLastOpenFN() == AnsiString("LOCKED_RECIPE"),
+              "N5 setup: GetLastOpenFN() now returns the repointed \"LOCKED_RECIPE\"");
+
+        const AnsiString kUpLoad = kScratchDir + "\\upload_locked";
+        const AnsiString kRecipeDir = kUpLoad + "\\LOCKED_RECIPE";
+        ForceDirectories(kRecipeDir);
+        CHECK(DirectoryExists(kRecipeDir) == true, "N5: scratch \"locked\" recipe dir exists before S7F18");
+
+        THGem g;
+        g.UpLoadPath = kUpLoad;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.6.14", 6014);
+        g.srvGem->Open();
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(13));
+        g.WireCodec.SReceiveData->Add(AnsiString("LOCKED_RECIPE"));
+
+        hgem.S7F18_DeleteProcessProgramAcknowledge();
+        CHECK(DirectoryExists(kRecipeDir) == true,
+              "N5: GOLDEN QUIRK -- the \"currently open\" guard fires before DeleteDirectory ever runs, "
+              "so the real directory survives untouched");
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() >= 14, "N5: S7F18 \"currently open\" guard path produced real bytes on the wire");
+        if (tx.size() >= 14)
+        {
+            CHECK((unsigned char)tx[6] == 7 && (unsigned char)tx[7] == 18, "N5: reply S,F == 7,18");
+            CHECK((unsigned char)tx[tx.size() - 1] == 0x01,
+                  "N5: ack byte == 0x01 (reject, currently-open work file cannot be deleted)");
+        }
+    }
+
+    // -- S7F18: multi-PPID L,n list -- proves the `for(i<slen)` loop really
+    //    iterates and deletes EACH listed recipe directory, ending in a
+    //    single LocalAcknowledge(7,18,0) for the whole batch. --
+    {
+        const AnsiString kUpLoad = kScratchDir + "\\upload_multi";
+        const AnsiString kDirB = kUpLoad + "\\RECIPE_B";
+        const AnsiString kDirC = kUpLoad + "\\RECIPE_C";
+        ForceDirectories(kDirB);
+        ForceDirectories(kDirC);
+        CHECK(DirectoryExists(kDirB) == true && DirectoryExists(kDirC) == true,
+              "N6: both scratch recipe dirs exist before S7F18");
+
+        THGem g;
+        g.UpLoadPath = kUpLoad;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.6.15", 6015);
+        g.srvGem->Open();
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(2));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(8));
+        g.WireCodec.SReceiveData->Add(AnsiString("RECIPE_B"));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(8));
+        g.WireCodec.SReceiveData->Add(AnsiString("RECIPE_C"));
+
+        hgem.S7F18_DeleteProcessProgramAcknowledge();
+        CHECK(DirectoryExists(kDirB) == false, "N6: RECIPE_B deleted by the multi-item loop");
+        CHECK(DirectoryExists(kDirC) == false, "N6: RECIPE_C deleted by the multi-item loop");
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() >= 14, "N6: S7F18 multi-item path produced real bytes on the wire");
+        if (tx.size() >= 14)
+        {
+            CHECK((unsigned char)tx[6] == 7 && (unsigned char)tx[7] == 18, "N6: reply S,F == 7,18");
+            CHECK((unsigned char)tx[tx.size() - 1] == 0x00, "N6: ack byte == 0x00 (accept, both deleted)");
+        }
+    }
+
+    DeleteFile(LastDataPath);
+    LastDataPath = savedLastDataPath;
+}
+
+// ===========================================================================
 //  [T10] Timer1Timer's IniConfig.bEnable_SECS_GEM==false branch (forced
 //  disconnect) + the SECSGEM_DoSeparateWait 5-second re-arm window.
 //
@@ -3557,6 +3810,11 @@ int main()
     // above -- direct HTGem method calls only, no socket pump/Timer1Timer, so
     // no TextLogSnapshot bracket or special T10 ordering needed either.
     test_w906_uhgemclass_micro5_e2e();
+
+    // W906-uHGemClass-Micro6: same posture as Micro5 immediately above --
+    // direct HTGem method calls only, no socket pump/Timer1Timer, so no
+    // TextLogSnapshot bracket or special T10 ordering needed either.
+    test_w906_uhgemclass_micro6_e2e();
 
     test_timer1timer_disable_branch();
 

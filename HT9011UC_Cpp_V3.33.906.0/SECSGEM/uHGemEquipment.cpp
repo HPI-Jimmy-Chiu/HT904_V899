@@ -371,7 +371,20 @@ THGem::THGem()
       // shape, to avoid a -Wreorder mismatch (member-init order must track
       // declaration order, not "logical grouping").
       UploadFileString(NULL),
-      GemSpoolCountActual(0)
+      GemSpoolCountActual(0),
+      // AI(W906-uHGemClass-Micro6) 20260721: S6F24/S7F18 supporting state --
+      // see header's own comment on this cluster. bSpoolActive/
+      // bBeginTransferSpool false per golden ctor body :607/:604 (assignment
+      // statements there, not an init-list in golden -- same end state).
+      // GemSpoolPath/UpLoadPath default to "" (AnsiString's own default ctor;
+      // golden's SetCurrentDirectory-driven GemSpoolPath.sprintf() and
+      // SetReceipeDirectoryAndGlobalName-driven UpLoadPath assignment are both
+      // still out of scope -- same "caller/test must set explicitly" idiom as
+      // GemSystemPath/GemSystemIniPath above).
+      bSpoolActive(false),             // golden ctor :607
+      bBeginTransferSpool(false),      // golden ctor :604
+      GemSpoolPath(""),
+      UpLoadPath("")
 {
     // AI(W906-SvEcDataItem) 20260720: szManID/szGetCPUType/GemSpoolStartTime
     // are fixed char[256] buffers (not in the member-init list above --

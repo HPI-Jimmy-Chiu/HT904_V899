@@ -460,6 +460,63 @@
 //  dynamic_cast cluster) -- unchanged from INTEGRATE WAVE 5's own list minus
 //  the 4 resolved this wave.
 //---------------------------------------------------------------------------
+//
+//  INTEGRATE WAVE 7 (AI(W906-uHGemClass-Micro6) 20260721) -- micro-slice #6 of
+//  the "remaining 11 gated methods" cluster: S6F24 spool-ack + S7F18
+//  delete-process-program
+//  ---------------------------------------------------------------------------
+//  uHGemEquipment.h's THGem gained 4 new plain scalar members --
+//  bSpoolActive/bBeginTransferSpool/GemSpoolPath (S6F24's own gate/latch/
+//  target-dir) and UpLoadPath (S7F18's recipe-upload base dir) -- plus a new
+//  free function `DeleteDirectory` (Public/ExternFunction.h/.cpp; the "W3
+//  DEFERRED, needs FindFirst/FindNext shim" note on it was stale -- vclcompat/
+//  SysUtils.h already carries FindFirst/FindNext/FindClose/TSearchRec/
+//  RemoveDir/DeleteFile/DirectoryExists, added by a later wave than when that
+//  deferred note was written). `GetDataItemLenAndTypeAndDelete` (already a
+//  real ActiveWire/WireCodec method since INTEGRATE WAVE 2) and the free
+//  `GetLastOpenFN()` (already real, common.cpp, translated in an earlier
+//  wave) needed no further work. This resolves every remaining blocker for
+//  both methods.
+//
+//  UN-GATED (2 more, 46->48/57 total now; 11->9 remaining-gated) -- golden
+//  SECSGEM/uHGemClass.cpp line ranges cited at each definition below:
+//    S6F24_RequestSpooledDataAcknowledgementSend (:2053-2079),
+//    S7F18_DeleteProcessProgramAcknowledge (:2115-2166).
+//
+//  MECHANICAL RENAME RULE (same golden-derived split as prior waves): golden
+//  `HGemPtr->DataItemIn/GetDataItemLenAndTypeAndDelete/LocalAcknowledge` (wire-
+//  codec primitives) became `ActiveWire->...`; golden `HGemPtr->bSpoolActive/
+//  bBeginTransferSpool/GemSpoolPath/UpLoadPath` (real THGem data members)
+//  stayed `HGemPtr->`, unchanged. `GetLastOpenFN()` and `DeleteDirectory(...)`
+//  are golden GLOBAL free functions (not THGem members -- confirmed by
+//  reading golden uHGemClass.h/uHGemEquipment.h, neither declares a member of
+//  either name), so they are called bare, exactly as golden does, no `HGemPtr->`/
+//  `ActiveWire->` prefix.
+//
+//  GOLDEN QUIRKS PRESERVED VERBATIM (flagged for review, not corrected):
+//    S6F24: the spool-wipe command string is built as
+//    `AnsiString("del ")+IncludeTrailingPathDelimiter(path)+AnsiString("*.*/q/f")`
+//    -- note the missing spaces before `/q` and `/f`; as written this is a
+//    single argument to `del` (`...\*.*/ q/f` has no delimiter cmd.exe would
+//    split on), so the `/Q` (quiet) and `/F` (force) switches are almost
+//    certainly never actually applied as switches -- a pre-existing golden
+//    bug (same shape recurs verbatim at golden uHGemEquipment.cpp:4102/6144,
+//    so it is not local to S6F24). Also: this `system()` call only executes
+//    when `bSpoolActive==true` AND the host's RSDC byte==1 -- with this wave's
+//    safe `bSpoolActive=false` ctor default (no "DoSpool subsystem" wave has
+//    run yet), it is a no-op path, exactly as the design brief intended.
+//    S7F18: `ret=DeleteDirectory(S); if(ret==0)` assigns `DeleteDirectory`'s
+//    `bool` return into an `int` and compares with `==0` rather than
+//    `==false` -- functionally identical (bool->int: true=1/false=0), just
+//    golden's own literal C++ idiom, preserved rather than "cleaned up" to
+//    `if(!ret)`/`bool ret`. Also preserved: the `asLastFileName==PPID`
+//    "currently open recipe" guard short-circuits BEFORE the
+//    `DirectoryExists`/`DeleteDirectory` calls for that one PPID entry (golden
+//    :2143-2147) -- if the host lists the in-use PPID first in a multi-PPID
+//    L,n request, later PPIDs in the same list are never even reached (golden
+//    `return`s immediately) -- an existing golden behavior, not a translation
+//    defect.
+//---------------------------------------------------------------------------
 
 #include "vclcompat/vcl_compat.h"
 #include "uHGemClass.h"
@@ -483,6 +540,15 @@
 // already links ht9045_core/ht9045_globals for exactly this).
 #include "cmydef.h"
 #include <cstdlib>   // atoi (CheckECValue's Type/PMax_Value/PMin_Value decode); strtoll/strtoull (S5F6_ListAlarmData's golden _atoi64 substitution, same precedent as SecsSvEcRegistration.cpp/uHGemEquipment.cpp)
+// AI(W906-uHGemClass-Micro6) 20260721: S6F24/S7F18's own dependencies --
+// common.h declares the real (un-gated, AI(W906-CommonWaveFile) 20260721)
+// global GetLastOpenFN() S7F18 calls bare, exactly as golden does (it is a
+// free function, NOT a THGem member -- confirmed by reading golden
+// uHGemClass.h/uHGemEquipment.h, neither declares one of that name).
+// Public/ExternFunction.h declares the real (this same wave) global
+// DeleteDirectory(AnsiString), likewise called bare.
+#include "common.h"
+#include "Public/ExternFunction.h"
 
 // AI(W5-SECSGEM-Translate) 20260710: MyDBIProcess's real golden signature is
 // `void __fastcall MyDBIProcess(AnsiString asTable, AnsiString S1,
@@ -508,6 +574,20 @@
 // firing (`__fastcall` is a compiler-builtin macro on MinGW) -- systemic
 // follow-up tracked in MIGRATION_ROADMAP; this line fixes the one live edge.
 extern void __fastcall MyDBIProcess(AnsiString asTable, AnsiString S1, AnsiString S2 = "");
+
+// ---------------------------------------------------------------------------
+//  IncludeTrailingPathDelimiter -- golden calls this exact SysUtils name
+//  (uHGemClass.cpp:2067, inside S6F24_RequestSpooledDataAcknowledgementSend).
+//  vclcompat/SysUtils.h only exposes IncludeTrailingBackslash (semantically
+//  identical: appends the platform path separator iff not already present).
+//  SAME file-scope-only thin wrapper idiom as uHGemEquipment.cpp's own
+//  identically-named static helper (that one is NOT visible here -- static
+//  = TU-local linkage -- hence this file needs its own copy).
+// ---------------------------------------------------------------------------
+static AnsiString IncludeTrailingPathDelimiter(const AnsiString &path)
+{
+    return IncludeTrailingBackslash(path);
+}
 
 //---------------------------------------------------------------------------
 AnsiString SYS_ECChangeID             = "";                                     //pig 2014.04.23 KYEC SECS
@@ -2307,10 +2387,45 @@ void HTGem::S6F20_IndividualReportData()
     S9F7_IllegalData("S6,F19 Data Format error !!!");
 }
 //---------------------------------------------------------------------------
+// [S6,F24] Request Spooled Data Acknowledge (RSDA).
+// AI(W906-uHGemClass-Micro6) 20260721 UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 2053-2079): needed 3 new THGem plain-scalar members (bSpoolActive/
+// bBeginTransferSpool/GemSpoolPath, uHGemEquipment.h, this same wave).
+// `HGemPtr->DataItemIn`/`HGemPtr->LocalAcknowledge` (wire primitives) ->
+// `ActiveWire->...`; `HGemPtr->bSpoolActive`/`bBeginTransferSpool`/
+// `GemSpoolPath` (real THGem data) stay `HGemPtr->`, unchanged -- same split
+// as every prior integrate wave. GOLDEN QUIRK preserved verbatim: the
+// spool-wipe command string `"del "+path+"*.*/q/f"` is missing the spaces
+// before `/q`/`/f` that would make those real DOS `del` switches (same shape
+// recurs in golden uHGemEquipment.cpp:4102/6144, so this is a pre-existing
+// golden bug, not introduced here) -- NOT corrected. With this wave's safe
+// `bSpoolActive=false` ctor default, this `system()` call is a no-op path
+// until some future "DoSpool subsystem" wave drives it true (not built this
+// wave, per plan).
+//---------------------------------------------------------------------------
 void HTGem::S6F24_RequestSpooledDataAcknowledgementSend()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem members bSpoolActive/bBeginTransferSpool/GemSpoolPath) -- golden SECSGEM/uHGemClass.cpp:2053-2079
-#endif
+    unsigned char RSDC;
+    AnsiString S;
+    if(HGemPtr->bSpoolActive==false)
+    {
+        ActiveWire->LocalAcknowledge(6, 24, 0);
+        return;
+    }
+    HGemPtr->bBeginTransferSpool=true;
+    if(ActiveWire->DataItemIn(1, HType.UINT_1_TYPE, &RSDC)==1)
+    {
+        if(RSDC==1)
+        {
+            S=AnsiString("del ")+IncludeTrailingPathDelimiter(HGemPtr->GemSpoolPath)+AnsiString("*.*/q/f");  // golden quirk: missing spaces before /q /f, see comment above
+            system(S.c_str());
+        }
+        ActiveWire->LocalAcknowledge(6, 24, 0);
+    }
+    else
+    {
+        ActiveWire->LocalAcknowledge(6, 24, 0);
+    }
 }
 //---------------------------------------------------------------------------
 // [S7,F2] Process Program Load Grant (PPGNT).
@@ -2352,10 +2467,79 @@ int HTGem::S7F2_ProcessProgramLoadGrant()
     return 0;
 }
 //---------------------------------------------------------------------------
+// [S7,F18] Delete Process Program Acknowledge (ACKC7).
+// AI(W906-uHGemClass-Micro6) 20260721 UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 2115-2166): its 2 recorded blockers are now both real -- THGem::UpLoadPath
+// (new plain-scalar member, uHGemEquipment.h, this same wave) and the free
+// function DeleteDirectory (Public/ExternFunction.h/.cpp, this same wave,
+// translated from golden's own ExternFunction.cpp:249-280 -- the "W3
+// DEFERRED, needs FindFirst/FindNext shim" note on it was stale, see that
+// file's own updated comment). GetDataItemLenAndTypeAndDelete was already a
+// real ActiveWire/WireCodec method since INTEGRATE WAVE 2. GetLastOpenFN() is
+// the real GLOBAL free function (common.h/common.cpp, un-gated in an earlier
+// wave) -- confirmed by reading golden uHGemClass.h/uHGemEquipment.h that
+// neither declares a member of that name, so golden's own unqualified call
+// here really is the global, not some THGem method reached implicitly.
+// `HGemPtr->GetDataItemLenAndTypeAndDelete/GetDataItemLenAndType/DataItemIn/
+// LocalAcknowledge` (wire primitives) -> `ActiveWire->...`; `HGemPtr->
+// UpLoadPath` (real THGem data) stays `HGemPtr->`, unchanged -- same split as
+// every prior integrate wave. GOLDEN QUIRKS preserved verbatim (see file-head
+// note above for the full list): `ret=DeleteDirectory(S); if(ret==0)` is a
+// bool->int assignment compared with `==0` rather than `==false`; the
+// "currently open recipe" (`asLastFileName==PPID`) guard short-circuits with
+// LocalAcknowledge(7,18,1) BEFORE DirectoryExists/DeleteDirectory even run for
+// that PPID entry; a non-ASCII_TYPE list item is silently skipped (the `for`
+// loop's `i` still advances, but neither GetDataItemLenAndTypeAndDelete nor
+// DataItemIn consume that item's body) -- none of these three are corrected.
+//---------------------------------------------------------------------------
 void HTGem::S7F18_DeleteProcessProgramAcknowledge()                             // AI(W5-SECSGEM-Translate) 20260710: __fastcall dropped (see .h note)
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs GetDataItemLenAndTypeAndDelete + THGem::GetLastOpenFN/member UpLoadPath + DeleteDirectory (W3 DEFERRED, not yet translated)) -- golden SECSGEM/uHGemClass.cpp:2115-2166
-#endif
+    /*
+    L,n     (Number of process programs to be deleted)
+        1. <PPID1>
+         .
+         .
+        n. <PPIDn>
+    */
+    char PPID[1024];
+    int len, ret, slen;
+    unsigned char Type;
+    AnsiString S;
+    AnsiString asLastFileName=GetLastOpenFN();                                  //JerryYang 20170626 (Steven) 使用中的工作檔不能被刪除
+
+    ret=ActiveWire->GetDataItemLenAndTypeAndDelete(slen, Type);
+    if(ret!=1 || Type!=HType.LIST_TYPE)
+    {
+        S9F7_IllegalData("S7,F17 Data Format error !!!");
+        return;
+    }
+
+    for(int i=0; i<slen; i++)
+    {
+        ret=ActiveWire->GetDataItemLenAndType(len, Type);
+        if(ret==1 && Type==HType.ASCII_TYPE)
+        {
+            ActiveWire->DataItemIn(len, Type, PPID);                            // PPID=filename;
+            if(asLastFileName==PPID)                                            //JerryYang 20170626 (Steven) 使用中的工作檔不能被刪除
+            {
+                ActiveWire->LocalAcknowledge(7, 18, 1);
+                return;
+            }
+            S=HGemPtr->UpLoadPath+"\\"+PPID;
+            if(DirectoryExists(S)==false)                                       //JerryYang 20170626 (Steven) 不存在的工作檔要return 4
+            {
+                ActiveWire->LocalAcknowledge(7, 18, 4);
+                return;
+            }
+            ret=DeleteDirectory(S);
+            if(ret==0)
+            {
+                ActiveWire->LocalAcknowledge(7, 18, 1);
+                return;
+            }
+        }
+    }
+    ActiveWire->LocalAcknowledge(7,18,0);
 }
 //---------------------------------------------------------------------------
 void HTGem::S7F20_CurrentEPPDData()

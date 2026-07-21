@@ -155,6 +155,41 @@ int main()
     }
 
     // -----------------------------------------------------------------------
+    // 5. DeleteDirectory  (BCB6 :249-280) -- AI(W906-uHGemClass-Micro6) 20260721
+    //    Translated this wave (needed by SECSGEM/uHGemClass.cpp's S7F18).
+    //    All I/O confined to a SCRATCH subfolder under the test binary's own
+    //    working directory -- never a production path.
+    // -----------------------------------------------------------------------
+    {
+        const AnsiString kRoot = "ExternFunction_test_scratch_deldir";
+
+        // Build: kRoot/file_a.txt, kRoot/sub1/file_b.txt, kRoot/sub1/sub2/file_c.txt
+        ForceDirectories(kRoot + "\\sub1\\sub2");
+        {
+            FILE *f = fopen((kRoot + "\\file_a.txt").c_str(), "wb");
+            if (f) { fputs("a", f); fclose(f); }
+        }
+        {
+            FILE *f = fopen((kRoot + "\\sub1\\file_b.txt").c_str(), "wb");
+            if (f) { fputs("b", f); fclose(f); }
+        }
+        {
+            FILE *f = fopen((kRoot + "\\sub1\\sub2\\file_c.txt").c_str(), "wb");
+            if (f) { fputs("c", f); fclose(f); }
+        }
+        CHECK(DirectoryExists(kRoot) == true);
+        CHECK(FileExists(kRoot + "\\sub1\\sub2\\file_c.txt") == true);
+
+        bool delRet = DeleteDirectory(kRoot);
+        CHECK(delRet == true);
+        CHECK(DirectoryExists(kRoot) == false);
+
+        // Golden quirk (BCB6 :251-254): deleting a directory that never
+        // existed is treated as SUCCESS (true), not an error.
+        CHECK(DeleteDirectory("ExternFunction_test_scratch_deldir_does_not_exist") == true);
+    }
+
+    // -----------------------------------------------------------------------
     std::printf("test_ExternFunction: %d / %d passed\n", g_total - g_fail, g_total);
     return (g_fail == 0) ? 0 : 1;
 }
