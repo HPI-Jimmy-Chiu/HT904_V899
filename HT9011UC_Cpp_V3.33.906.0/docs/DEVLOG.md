@@ -777,3 +777,22 @@ C 桶(`clientGemRead`/`ProcessSocketReceiveData`/`Timer1Timer`)是本檔案最�
 - **✅ SECSGEM Wave 2「W906-AlarmReportAck」完成（2026-07-21，commit `4c2ec4c`）**。**下一波＝Wave 3 `uHGemHT9045 Bucket 0` swap-back**（刪 shim→真骨架 header 只宣告已翻 method、未翻者繼承 base，零行為變更、消除未來 churn；唯一近期可做的桶，牆②③(fMain fan-out/Handler free-func)擋其餘 5 桶——見 `DESIGN_uHGemHT9045_siteoverride.md` 摘要，原書已不可見，開工前同比照本波方式重新 recon golden）。**其後佇列**：common.cpp 完成波(最高槓桿，解 GetLastOpenFN+S7F18+≥4 gate)→SECSGEM W3 3a/3b(3b 需先建 SaveEventReportData 檔寫 seam=稽核 HIGH#2)→VCW-1/VCW-2 cast 波→S2F32 時鐘微波→DoDLRequest 測試 seam。零成本清理波：刪 5 個假 ODR-dup gate+atester_32Site.cpp:1698 補 MSG_CMD_Arm1Down。測試衛生：cBootLog 測試隔離(稽核 HIGH#1)。中長期：FormsFacade/Handler-free-func 前置波→uHGemHT9045 Bucket 1-5；W7 E0/M1/M2 HAL pump 群。
 - **驗證基準更新**：ctest 83/87（同 4 既有漂移）；`uHGemClass` gated 23→**15**。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 `fix/v899.32-pti`；工作樹另有無關 V899/config 殘留(PTI 案)勿圈入 V906 commit。
 - **執行模式變更（使用者 2026-07-21 明確指示）**：「進行機械翻譯且火力全開，除非有異常、疑問或完成才能停下」——本波起主迴圈由 Fable 5 切為 Sonnet 5 + xhigh，連續推進多波不逐波停下請示；仍在每個真異常/疑問點停下澄清（本波唯一疑似異常＝SECS_GEM_LOGS 初次 glob 誤判，已自行查證排除，非真異常，未停下請示）。
+
+---
+
+## 2026-07-21 — uHGemHT9045 Bucket 0 swap-back 完成（shim→真名永久骨架，零行為變更）
+
+**設定聲明**：主迴圈 Sonnet 5 + xhigh；翻譯 Sonnet 5；獨立審查 Sonnet 5。
+
+**Recon 修正遺失設計書**（`DESIGN_uHGemHT9045_siteoverride.md` 同樣在本 session 不可見）：派 read-only agent 直讀 golden `uHGemHT9045.h/.cpp/_SV.cpp/_EC.cpp` 重建範圍。確認核心結論成立：class `HT9045Gem:public HTGem`，golden .cpp 本體合計 **9140 行**(6215+1013+1912，非單一 6215 檔)，**22 個** virtual override(精確非約略，含 `S2F42_Host_Command_Acknowledge` 單支 ~3044 行的巨無霸)。三道牆逐一直讀驗證成立：牆①(THGem/wire/SvEcReg)已由近期 SECSGEM 波解；牆②(`fMain->` 82 處觸及 28 個成員，`FormsFacade.h` 現缺 ~19 個+1 部分)；牆③(`GetAlarmCodeList`/`ProcessLotInfo` 全樹未翻，`DoAutoRetest` 被 csystem.cpp 一個 TU-local no-op 巨集遮蔽不可鏈接真版，`SaveAllFile` 宣告無定義會在連結期炸)。**Go/no-go 裁決：GO**——現有 shim 本就零宣告 22 個 override(已經是「骨架」)，`database.h` 已用 base class `HTGem*` 持有(虛派發，換具體類別對呼叫端透明)，純結構搬遷不涉邏輯翻譯。**唯一風險點**：shim 建構子帶有 golden 沒有的 port 專屬 `ActiveWire` rebind(橋接兩個 `SecsWireCodec` 實例)，若照「golden-mirror」直覺重譯建構子會靜默丟掉這段+讓既有測試斷言(`test_uHGemEquipment.cpp` W1(a)/W1(b))壞掉——recon 明確標注「複製 shim 現有建構子逐位，不得從 golden 重譯」。
+
+**交付**（commit `ee85c32`，5 檔 +101/-94，git 自動偵測為 rename）：刪 `SECSGEM/uHGemHT9045_Shim.{h,cpp}`→新建 `SECSGEM/uHGemHT9045.{h,cpp}`(同名同 base、單一建構子、刻意零宣告 22 個 override)；建構子逐位複製自 shim(含原 `AI(W906-SysModWire) 20260720` 註解一併保留，未動)；`database.cpp` include 改向、`CMakeLists.txt` `ht9045_secsgem` library 原始檔清單改向(本波唯一需要動 CMake 的一步，因是結構搬遷非邏輯翻譯)。**未翻的兩個資料成員**(`TAsyncRCMDState m_AsyncRCMD`/`AnsiString EventDescription[...]`)裁決：兩者皆不加，留給未來實際用到的 bucket，避免骨架波 scope creep。
+
+**獨立審查 CLEAN**（1 個 LOW 揭露、不擋）：clean-room fresh build 獨立重跑；逐位比對建構子與 git 歷史中的舊 shim 內容確認 byte-for-byte 相同；grep golden 22 個 override 名稱確認新 header 一個都沒宣告；確認 `aArmHeader.h` 的 dormant include(仍 `#if 0`)透過 `ht9045_secsgem` 的 PUBLIC include 目錄若未來解閘會正確解析到新真檔、無路徑陷阱；`nm -C` 掃描 87 個測試執行檔確認恰 3 個含 `HT9045Gem::HT9045Gem` 符號(與宣稱一致)。LOW：一個既有測試(非本波)寫入的 scratch 副產物檔未在自報中提及，已確認 untracked/gitignored、不影響本波 diff。
+
+**主迴圈親自定案**（全新 `build_w906_bucket0_final`）：build exit 0、resolving/undefined reference=0、ctest **83/87**(同 4 既有環境漂移)、mojibake 0/4。
+
+### 🔖 RESUME（最新）
+- **✅ SECSGEM Wave 1(`21900fd`)+Wave 2(`4c2ec4c`)+uHGemHT9045 Bucket 0(`ee85c32`)三波連發完成（2026-07-21）**。`uHGemClass` 累計 42/57 已解(gated 57→15)；`uHGemHT9045` 容器已真名落地，但 22 個 override+AddSV+AddEC(~9140 行)本體仍 0 翻，牆②③未解、Bucket 1-5 暫不可做。**下一波候選(尚無設計書，開工前先 recon)**：`uHGemClass.cpp` 剩 15 個 gated method、SECSGEM 4 個獨立子系統(DoSpool/Trace/上下傳)+FormCreate SV 註冊、**common.cpp 完成波(最高槓桿，解 GetLastOpenFN+S7F18+≥4 個下游 gate，只需既有 vclcompat 檔案 API)**、VCW-1/VCW-2 cast 波(需先讓 TStringList 入 TObject 樹)、S2F32 時鐘微波、DoDLRequest/DoULRequest 防護 seam(裁決：ctest 不起外部行程)、`SCK_ART.cpp` 剩餘協調債。中長期：FormsFacade/Handler free-func 前置波(解牆②③)→uHGemHT9045 Bucket 1-5；W7 E0/M1/M2 HAL pump 群。
+- **驗證基準**：ctest 83/87(同 4 既有漂移)；`uHGemClass` gated 57→15。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 `fix/v899.32-pti`；工作樹另有無關 V899/config 殘留(PTI 案)勿圈入 V906 commit。
+- **執行模式**：使用者 2026-07-21 指示「機械翻譯火力全開，除非異常/疑問/完成才停下」持續有效，本波起第三個連續波次，過程無真異常/疑問，未停下請示。
