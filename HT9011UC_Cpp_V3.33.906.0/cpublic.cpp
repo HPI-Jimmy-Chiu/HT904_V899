@@ -1433,6 +1433,24 @@ AnsiString TMyStrQueue100::ShowCommaText(bool bWithDateTime)
     }
     return Str;
 }
+// AI(W906-CommonWaveFile) 20260721: ATTEMPTED un-gate -- MyForceDirectories
+// (its sole cited blocker) is real as of this wave and every other symbol
+// this function uses was already active in this TU, so the function itself
+// compiles clean. RE-GATED after a real build: cpublic.cpp compiles into
+// ht9045_globals, which several test executables link WITHOUT ht9045_core
+// (transitively via ht9045_comms/ht9045_motor/ht9045_io, e.g. test_MyCCLink,
+// test_myplc_modbus, test_MyNUEC1 -- confirmed by a full build attempt, not
+// merely inferred). Un-gating this pulls a new undefined reference to
+// MyForceDirectories (common.cpp / ht9045_core) into cpublic.cpp.o, breaking
+// every one of those targets' final link. Fixing it properly means either
+// patching every such test target's link_libraries individually (unbounded,
+// easy to miss one) or making ht9045_globals PUBLIC-link ht9045_core at the
+// library level (a bigger architectural change than this wave's brief scoped,
+// and reverses a deliberate documented independence between the two
+// libraries -- see this file's own CMakeLists.txt banner). Left gated per
+// the wave brief's own instruction: "if any turns out to have additional
+// unrelated blockers you discover while trying, leave it gated and just note
+// that finding -- don't force it."
 #if 0 // TODO(W5-safe: TMyStrQueue100::SafeData needs MyForceDirectories (gated in common.cpp TODO(wave-file)))
 //------------------------------------------------------------------------------
 void TMyStrQueue100::SafeData()
@@ -1651,6 +1669,13 @@ AnsiString TMyTimerQueue100::ShowCommaText(bool bWithDateTime)
     }
     return Str;
 }
+// AI(W906-CommonWaveFile) 20260721: ATTEMPTED un-gate, RE-GATED -- same
+// finding as TMyStrQueue100::SafeData above (see that function's banner):
+// MyForceDirectories is real, but cpublic.cpp's object file is shared with
+// several test executables that link ht9045_globals without ht9045_core
+// (transitively via ht9045_comms/ht9045_motor/ht9045_io), and a full build
+// confirmed un-gating this breaks their final link. Left gated per the wave
+// brief's "don't force it" guardrail.
 #if 0 // TODO(W5-safe: TMyTimerQueue100::SafeData needs MyForceDirectories (gated))
 //------------------------------------------------------------------------------
 void TMyTimerQueue100::SafeData()
@@ -1808,6 +1833,14 @@ void RotationCoordinates(double px, double py, double &px1, double &py1, double 
         //py1 = py;
     }
 }
+// AI(W906-CommonWaveFile) 20260721: ATTEMPTED un-gate, RE-GATED -- both cited
+// blockers (MyForceDirectories, WriteDataToFile) are real as of this wave, and
+// asUDPLogPath/GetTimeInfo() were already active in this TU. However a full
+// build confirmed the same cpublic.cpp.o / ht9045_globals-without-ht9045_core
+// linkage hazard documented on TMyStrQueue100::SafeData above applies here
+// too (zero current callers of UDPErrorLog itself does NOT help -- the whole
+// translation unit's object file is what a static-library link pulls in, not
+// per-function). Left gated per the wave brief's "don't force it" guardrail.
 #if 0 // TODO(W6: UDPErrorLog needs asUDPLogPath + MyForceDirectories (gated) + WriteDataToFile (gated))
 //------------------------------------------------------------------------------
 void UDPErrorLog(AnsiString aTitle, AnsiString Command)                         //kevin 20211020 UDP error log

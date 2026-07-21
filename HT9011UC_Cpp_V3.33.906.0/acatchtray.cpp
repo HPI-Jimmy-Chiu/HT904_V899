@@ -138,16 +138,15 @@ bool bPlaceShuttle      = false;                                               /
 int  iInRotateFinish    = 0;                                                   // golden cmydef.cpp (Sam 20190828) -- in-rotate finish state
 
 //==============================================================================
-//==  (W7) WriteDataToFile  -- golden common.h:256 (AnsiString overload).  The
-//==  common.cpp body is gated (#if 0 // TODO(wave-file)), so define an offline
-//==  stub here matching the prototype (write to file via vclcompat would pull the
-//==  file subsystem; offline the tray-ID-by-lot persistence is a no-op).  TODO(W7).
-//==============================================================================
-void WriteDataToFile(AnsiString /*cFilePath*/, AnsiString /*cData*/, bool /*bOverWrite*/=false)
-{
-    // offline: tray-ID-by-lot persistence sink (no file write).  golden common.cpp:256
-}
-
+//== AI(W906-CommonWaveFile) 20260721: REMOVED the offline no-op WriteDataToFile
+//== stub that used to live here (golden common.h:256 AnsiString overload). Its
+//== common.cpp body is un-gated and real as of this wave; keeping this stub
+//== would be a GNU ld "multiple definition" link error (both ht9045_core and
+//== ht9045_sm meet at final link). This file's own 2 call sites (below) are
+//== unchanged and now correctly bind to the real common.cpp implementation --
+//== a genuine, harmless behavior upgrade for this file: no-op -> real file
+//== write (same extern-then-call pattern BarCode_Bottom2DID8CCD.cpp:36 already
+//== used against this stub; it too now binds to the real function).
 //==============================================================================
 //==  (W7) SetAutoSkipCount  -- golden ainarm9045.h:84 (REAL home: ainarm9045.cpp,
 //==  already in lib ht9045_sm).  The engine calls it; declare extern so it binds

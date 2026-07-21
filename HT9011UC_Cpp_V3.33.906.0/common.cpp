@@ -62,6 +62,23 @@
 static void RecordProcess(AnsiString /*S*/, AnsiString /*S2*/ = AnsiString("")) {}
 
 // ---------------------------------------------------------------------------
+//  Forward stub for ShowMyMessage (golden mymessbox.h:58; called from
+//  GetLastOpenFN common.cpp:1262/1266/1275 and MyForceDirectories :1709/1715).
+//  mymessbox.h pulls untranslated BCB6 UI forms and is out of scope this wave.
+//  ht9045_core (this library) must NOT depend on ht9045_sm -- ht9045_sm already
+//  has a real sim stand-in for this in canary_support.h, but ht9045_sm
+//  transitively depends on ht9045_core, so linking the other way would create
+//  a CMake link cycle. Mirror the RecordProcess stub immediately above instead:
+//  a local no-op with the same signature golden's call sites need.
+//
+//  AI(W906-CommonWaveFile) 20260721: added, mirroring the RecordProcess
+//  forward-stub precedent above.
+//  TODO(wave-UI): remove this stub once mymessbox / a real message-box shim is
+//  translated and linked into ht9045_core (or ht9045_core no longer needs it).
+// ---------------------------------------------------------------------------
+static void ShowMyMessage(AnsiString /*S1*/, AnsiString /*S2*/ = AnsiString(""), AnsiString /*S3*/ = AnsiString(""), bool /*Ok*/ = false, bool /*bServoOff*/ = false) {}
+
+// ---------------------------------------------------------------------------
 //  Global path strings (common.cpp:18-174)
 //  Big5 source comments are preserved as-is (raw bytes; ASCII portions only
 //  shown where needed for provenance).
@@ -1056,16 +1073,41 @@ void __fastcall ReplaceIniData(AnsiString FileName, AnsiString Group, AnsiString
 }
 
 // ===========================================================================
-//  GATED: GetLastOpenFN (common.cpp:1252-1281)
-//  WAVE: path -- depends on TStringList, FileExists (translated), but also
-//  ShowMyMessage (VCL MessageBox, out of wave).
+//  GetLastOpenFN (common.cpp:1252-1281)
 // ===========================================================================
-#if 0 // TODO(wave-path): GetLastOpenFN (common.cpp:1252)
-AnsiString __fastcall GetLastOpenFN()
+// AI(W906-CommonWaveFile) 20260721: un-gated -- TStringList::LoadFromFile /
+// FileExists are already-active vclcompat primitives; ShowMyMessage resolves
+// to the local no-op forward-stub declared near RecordProcess above.
+AnsiString __fastcall GetLastOpenFN()                                        // common.cpp:1252
 {
-    // ... TStringList + FileExists + ShowMyMessage -- gated pending wave-UI
+    AnsiString Str="Fail Open";
+    TStringList *MyList= new TStringList();
+
+    if(FileExists(LastDataPath))
+    {
+        MyList->LoadFromFile(LastDataPath);
+        if(MyList->Count==0)                                                 // Jimmychiu 20250426 : content of setup is empty
+        {
+            ShowMyMessage("The content of setup.inf is empty!");
+        }
+        else if(AnsiString(MyList->Strings[0]).Trim()=="")                   // StringsProxy has no Trim() -- explicit AnsiString cast (established idiom, e.g. Automation/auto9045.cpp:84)
+        {
+            ShowMyMessage("The content of setup.inf is NULL!");
+        }
+        else
+        {
+            Str=MyList->Strings[0];
+        }
+    }
+    else
+    {
+        ShowMyMessage("LastData does not exist");
+    }
+    MyList->Clear();                                                         // Ifor 20170603 : clear TStringList before delete
+    delete MyList;
+
+    return Str;
 }
-#endif // TODO(wave-path)
 
 // ===========================================================================
 //  CheckSectionExist / CheckKeyExist (common.cpp:1283-1309)
@@ -1102,13 +1144,37 @@ bool __fastcall CheckKeyExist(AnsiString FileName, AnsiString Group, AnsiString 
 }
 
 // ===========================================================================
-//  GATED: WriteLastDataFN (common.cpp:1311-1331)
-//  WAVE: path -- TStringList + FileCreate/FileWrite/FileClose (BCB6 file API,
-//  not in vclcompat this wave).
+//  WriteLastDataFN (common.cpp:1311-1331)
 // ===========================================================================
-#if 0 // TODO(wave-path): WriteLastDataFN (common.cpp:1311)
-void __fastcall WriteLastDataFN(AnsiString SName) { /* ... */ }
-#endif // TODO(wave-path)
+// AI(W906-CommonWaveFile) 20260721: un-gated. Golden's bootstrap (else,
+// LastDataPath does not yet exist) branch used raw BCB6 int-handle
+// FileCreate/FileWrite/FileClose (common.cpp:1325-1327) -- no vclcompat shim
+// for that trio exists (confirmed via grep across this tree), and adding one
+// is deliberately out of scope this wave (avoid growing new Win32 shim
+// surface for a single bootstrap call). DELIBERATE SUBSTITUTION: reuse the
+// same TStringList Add()+SaveToFile() path as the if-branch instead --
+// functionally equivalent to golden's "create the file with SName as its
+// sole line" bootstrap behavior. `iFileHandle` (golden's local var for the
+// removed FileCreate/FileWrite/FileClose calls) is dropped as unused.
+void __fastcall WriteLastDataFN(AnsiString SName)                            // common.cpp:1311
+{
+    TStringList *MyList= new TStringList();
+
+    if(FileExists(LastDataPath))
+    {
+        MyList->LoadFromFile(LastDataPath);
+        MyList->Clear();
+        MyList->Add(SName);
+        MyList->SaveToFile(LastDataPath);
+    }
+    else
+    {
+        MyList->Add(SName);
+        MyList->SaveToFile(LastDataPath);
+    }
+    MyList->Clear();                                                         // Ifor 20170603 : clear TStringList before delete
+    delete MyList;
+}
 
 // ===========================================================================
 //  GATED: AddSpace (common.cpp:1333-1336) -- body is a no-op return; still
@@ -1429,11 +1495,205 @@ unsigned long __fastcall ReadWriteIni(AnsiString FileName, AnsiString Group, Ans
 }
 
 // ===========================================================================
-//  GATED: all remaining common.cpp regions (lines 1607-end)
+//  GATED: most remaining common.cpp regions (lines 1607-end) -- EXCEPT the
+//  wave-file cluster immediately below, un-gated this wave (AI(W906-
+//  CommonWaveFile) 20260721).
 // ===========================================================================
 
-#if 0 // TODO(wave-file): WriteDataToFile x2 / CheckFileIsEmpty / ReadDataFromFile / MyForceDirectories (common.cpp:1607-1726)
-#endif // TODO(wave-file)
+// ===========================================================================
+//  WriteDataToFile x2 / CheckFileIsEmpty / ReadDataFromFile / MyForceDirectories
+//  (common.cpp:1607-1721)
+// ===========================================================================
+// AI(W906-CommonWaveFile) 20260721: un-gated -- all five functions translated
+// below. See each function's own note for golden bugs/quirks preserved
+// verbatim.
+
+// ---------------------------------------------------------------------------
+//  WriteDataToFile(char*,char*,bool) (common.cpp:1607-1625)
+//  Pure CRT: fopen(mode "w"/"a") -> fputs(cData) -> fputs("\n") -> fclose.
+//  Silent no-op if fopen fails (pFile==NULL) -- no error signalled to caller.
+//  DEVIATION from golden's literal `char*` params: `const char*` here (see
+//  common.h's declaration-site note for why -- fixes a real infinite-
+//  recursion bug found via a build+gdb backtrace, not a stylistic choice).
+// ---------------------------------------------------------------------------
+void WriteDataToFile(const char* cFilePath, const char* cData, bool bOverWrite) // common.cpp:1607
+{
+    FILE *pFile;
+    if(bOverWrite)
+    {
+        pFile=fopen(cFilePath, "w");
+    }
+    else
+    {
+        pFile=fopen(cFilePath, "a");
+    }
+
+    if(pFile!=NULL)
+    {
+        fputs(cData, pFile);
+        fputs("\n", pFile);
+        fclose(pFile);
+    }
+}
+
+// ---------------------------------------------------------------------------
+//  CheckFileIsEmpty(AnsiString) (common.cpp:1627-1643)
+//  GOLDEN BUG, preserved verbatim: fclose(pFile) is called UNCONDITIONALLY,
+//  even when pFile==NULL (fopen failed) -- passing a NULL FILE* to fclose is
+//  UB in ISO C. Do NOT add a NULL guard; this is golden's actual behavior.
+//
+//  GOLDEN BUG (found and VERIFIED empirically this wave via tests/
+//  test_common.cpp -- NOT just a static reading; the naive expectation below
+//  was wrong the first time round too), preserved verbatim: the return value
+//  is effectively INVERTED from what the function's name suggests. `bResult`
+//  starts `true` and is only ever forced to `false` in the one case where the
+//  file opens AND the very first fgetc() immediately hits EOF. The three
+//  real outcomes are:
+//    - file does not exist            -> returns true
+//    - file exists, has content       -> returns true
+//    - file exists, genuinely empty   -> returns false
+//  In other words: true means "missing OR non-empty", false means "exists
+//  and is empty" -- the opposite of an intuitive "IsEmpty" predicate for two
+//  of the three cases. Do not "fix" this; callers elsewhere in golden
+//  presumably already accommodate (or never depend on) this inversion.
+// ---------------------------------------------------------------------------
+bool CheckFileIsEmpty(AnsiString cFilePath)                                  // common.cpp:1627
+{
+    bool bResult=true;
+    FILE *pFile;
+
+    pFile=fopen(cFilePath.c_str(), "r");
+    if(pFile!=NULL)
+    {
+        int first_char=fgetc(pFile);
+        if(first_char==EOF)
+        {
+            bResult=false;
+        }
+    }
+    fclose(pFile);                                                          // golden bug: unconditional, even if pFile==NULL
+    return bResult;
+}
+
+// ---------------------------------------------------------------------------
+//  WriteDataToFile(AnsiString,AnsiString,bool) (common.cpp:1645-1648)
+//  1-line forwarder to the char* overload via .c_str().
+// ---------------------------------------------------------------------------
+void WriteDataToFile(AnsiString cFilePath, AnsiString cData, bool bOverWrite) // common.cpp:1645
+{
+    WriteDataToFile(cFilePath.c_str(), cData.c_str(), bOverWrite);
+}
+
+// ---------------------------------------------------------------------------
+//  ReadDataFromFile(AnsiString) (common.cpp:1650-1665)
+//  OWNERSHIP CONTRACT (golden, preserved verbatim -- this is a deliberate
+//  C-style raw pointer hand-off, not a bug to "modernize" away): returns a
+//  raw malloc()'d buffer on success; the CALLER is responsible for free()'ing
+//  it. Signature kept exactly as golden has it (raw char*/malloc, no smart
+//  pointer, no signature change).
+//
+//  GOLDEN BUG (found and VERIFIED empirically this wave via a standalone gdb/
+//  diagnostic repro, not just inferred): `fopen(...,"r")` here is TEXT mode
+//  (golden's literal mode string, no "b"), so on Windows the CRLF<->LF
+//  translation applies. `file_size` is the ON-DISK byte count (from ftell()),
+//  used as (a) the malloc() size, (b) the fread() request size, AND (c) the
+//  index where the forced '\0' terminator is written. A text-mode fread()
+//  DELIVERS FEWER bytes than requested whenever the file contains any "\r\n"
+//  (each collapses to one delivered "\n"), stopping at EOF -- so for a file
+//  with N embedded newlines, exactly N bytes at the TAIL of the malloc'd
+//  buffer (immediately before the forced '\0') are LEFT UNINITIALIZED
+//  (whatever malloc() happened to hand back), not zeroed and not part of the
+//  real file content. Any file written by WriteDataToFile ALWAYS has this
+//  problem, since it unconditionally appends one "\n" per call. Preserved
+//  verbatim (golden's fopen mode strings are exactly "r"/"w"/"a", no "b" --
+//  see also WriteDataToFile above); documented here rather than silently
+//  switched to binary mode. Callers must not assume the returned buffer's
+//  tail bytes (near the end, before the final NUL) are meaningful when the
+//  source file has embedded newlines -- see tests/test_common.cpp for a
+//  reproduction and the safe (prefix-only) way to check round-tripped content.
+// ---------------------------------------------------------------------------
+char* ReadDataFromFile(AnsiString cFilePath)                                 // common.cpp:1650
+{
+    FILE* pFile=fopen(cFilePath.c_str(), "r");
+    if(pFile!=NULL)
+    {
+        fseek(pFile, 0, SEEK_END);
+        long file_size=ftell(pFile);
+        fseek(pFile, 0, SEEK_SET);
+        char* file_buf=(char*)malloc(file_size + 1);
+        fread(file_buf, file_size, 1, pFile);
+        file_buf[file_size]='\0';
+        fclose(pFile);
+        return file_buf;
+    }
+    return NULL;
+}
+
+// ---------------------------------------------------------------------------
+//  MyForceDirectories(AnsiString,AnsiString) (common.cpp:1667-1721)
+//  GOLDEN QUIRK, preserved verbatim: the directory-vs-filename auto-detect
+//  only strips a trailing filename component for exactly ".txt"/".csv"
+//  extensions (hardcoded) when the path does not exist and has no trailing
+//  '\\' -- any other extension is (mis)treated as a directory name to create.
+//  catch(Exception&)/catch(...) MERGED into a single generic catch(...) --
+//  there is no vclcompat Exception base class to catch. Follows the
+//  established project precedent in Interface/TesterTCP.cpp:79
+//  (Gated_MyForceDirectories) and its sibling copy in
+//  Interface/TesterTCP_Socket.cpp. Documented accepted behavior-diff: loses
+//  golden's distinct return-code/e.Message text split (-2 with e.Message vs
+//  -3 with a fixed string) -- both call sites currently in this project
+//  discard the return value, so this is harmless today; -3 with the fixed
+//  message is returned uniformly instead.
+// ---------------------------------------------------------------------------
+int MyForceDirectories(AnsiString Directory, AnsiString Function)            // common.cpp:1667
+{
+    AnsiString Str;
+    if(Directory=="")
+    {
+        RecordProcess("Directory value is NULL!", Function);
+        return -1;
+    }
+
+    if(Directory[Directory.Length()]!='\\')
+    {
+        DWORD attr=GetFileAttributes(Directory.c_str());
+        if(attr!=INVALID_FILE_ATTRIBUTES)
+        {
+            if(!(attr & FILE_ATTRIBUTE_DIRECTORY))
+                Directory=ExtractFilePath(Directory);                       // path exists: strip filename only if it's a file
+        }
+        else
+        {
+            AnsiString sExt=ExtractFileExt(Directory).LowerCase();          // only these 2 known file extensions get stripped (golden quirk, see banner above)
+            if(sExt==".txt" || sExt==".csv")
+                Directory=ExtractFilePath(Directory);
+        }
+    }
+
+    if(Directory=="")
+    {
+        RecordProcess("Directory value is NULL!", Function);
+        return -1;
+    }
+    else
+    {
+        try
+        {
+            if(DirectoryExists(Directory)==false)
+            {
+                ForceDirectories(Directory);
+            }
+        }
+        catch(...)
+        {
+            Str.sprintf("%s -- %s", Directory, Function);
+            ShowMyMessage("Create directory fail!", Str, Str);
+            return -3;
+        }
+    }
+
+    return 1;
+}
 
 #if 0 // TODO(wave-timing): MyTickCount / MySleepEx / MySleep (common.cpp:1726-1801)
 #endif // TODO(wave-timing)
@@ -1441,7 +1701,11 @@ unsigned long __fastcall ReadWriteIni(AnsiString FileName, AnsiString Group, Ans
 #if 0 // TODO(wave-logging): TempChangeLog (common.cpp:1802)
 #endif // TODO(wave-logging)
 
-#if 0 // TODO(wave-path): GetRecipePath / GetRecipeFileName / ChangeSaveFileName / GetLastOpenFN / WriteLastDataFN (common.cpp:1252-1331, 2039-2130)
+// AI(W906-CommonWaveFile) 20260721: GetLastOpenFN / WriteLastDataFN un-gated
+// above (common.cpp:1252-1331 real bodies now live earlier in this file) --
+// dropped from this index placeholder. GetRecipePath / GetRecipeFileName /
+// ChangeSaveFileName remain gated (still out of scope; common.cpp:2039-2130).
+#if 0 // TODO(wave-path): GetRecipePath / GetRecipeFileName / ChangeSaveFileName (common.cpp:2039-2130)
 #endif // TODO(wave-path)
 
 #if 0 // TODO(wave-grid): SGDToCSV (common.cpp:2050)

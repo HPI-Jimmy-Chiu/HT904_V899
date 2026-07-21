@@ -73,13 +73,9 @@
 //       `MNetLog()` -- neither has a translated home.  SendTrayMapToFTP() is
 //       gated wholesale, returns 0 (matches golden HS_ERR_NoError's numeric
 //       value; HS_Function.h's named constant is not translated either).
-//    4. common.h's `MyForceDirectories()` declaration is ITSELF inside that
-//       file's `#if 0 // TODO(wave-file)` gate (not merely link-incomplete
-//       like WriteIniData's real bodies are) -- the identifier is not visible
-//       at all today.  UpdateFileNameList()'s single call to it is gated;
-//       every other statement in that function is ACTIVE (WriteIniData's
-//       AnsiString-overload body IS real/linkable -- verified against
-//       common.cpp:1021).
+//    4. [RESOLVED -- AI(W906-CommonWaveFile) 20260721] common.h's
+//       `MyForceDirectories()` declaration is un-gated and its common.cpp body
+//       is now real. UpdateFileNameList()'s single call to it is un-gated too.
 //
 //  CROSS-UNIT WIRING (for the integrate agent, NOT done by this unit):
 //    * golden main.h:1696 `uHANA_ART* hanaART;` / main.cpp:1500
@@ -964,13 +960,11 @@ void uHANA_ART::UpdateFileNameList(int iUpdateStatus)                           
     AnsiString sFileName_ini;
     AnsiString sFileName_Log;
     sPathName.sprintf("D:\\HT9045_Log\\Hana_TrayMap\\%04d\\%s", SystemYear, fSCKART->palLotNumber->Caption);
-    // AI(W5-HanaART-Translate) 20260710: MyForceDirectories's OWN declaration is
-    // inside common.h's `#if 0 // TODO(wave-file)` gate (not merely link-
-    // incomplete) -- the identifier is not visible in this tree yet (file-header
-    // GATED DEPENDENCIES #4).  Every other statement in this function is ACTIVE.
-#if 0 // TODO(wave-file): MyForceDirectories (common.h identifier itself gated)
+    // AI(W906-CommonWaveFile) 20260721: MyForceDirectories's common.h
+    // declaration is un-gated and its common.cpp body is now real this wave --
+    // un-gating this call site (was blocked solely on this gate; see
+    // file-header GATED DEPENDENCIES #4, now resolved).
     MyForceDirectories(sPathName, "uHANA_ART::UpdateFileNameList");
-#endif // TODO(wave-file)
 
     sFileName_ini.sprintf("%s\\%s.ini", sPathName, fSCKART->palLotNumber->Caption);
 

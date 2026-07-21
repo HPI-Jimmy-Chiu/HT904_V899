@@ -284,20 +284,43 @@ AnsiString EncodeStr(AnsiString sourceStr);                  // common.h:14
 AnsiString DecodeStr(AnsiString sourceStr);                  // common.h:15
 #endif // TODO(wave-misc-strings)
 
-#if 0 // TODO(wave-path): GetLastOpenFN / WriteLastDataFN / ChangeSaveFileName / GetRecipePath / GetRecipeFileName
+// AI(W906-CommonWaveFile) 20260721: un-gated GetLastOpenFN / WriteLastDataFN --
+// bodies translated in common.cpp (golden common.cpp:1252-1281 / :1311-1331).
+// ChangeSaveFileName / GetRecipePath / GetRecipeFileName remain gated below
+// (wave-path, out of this wave's scope).
 AnsiString  __fastcall GetLastOpenFN();                      // common.h:68
 void __fastcall WriteLastDataFN(AnsiString SName);           // common.h:76
+
+#if 0 // TODO(wave-path): ChangeSaveFileName / GetRecipePath / GetRecipeFileName
 AnsiString  __fastcall ChangeSaveFileName(AnsiString asFileName); // common.h:69
 extern AnsiString GetRecipePath();                           // common.h:268
 extern AnsiString GetRecipeFileName(AnsiString FileName);    // common.h:269
 #endif // TODO(wave-path)
 
-#if 0 // TODO(wave-file): WriteDataToFile / ReadDataFromFile / CheckFileIsEmpty / MyForceDirectories / IsFileInUse / CopyAndCompressFile / SGDToCSV
-extern void WriteDataToFile(char* cFilePath, char* cData, bool bOverWrite=false);     // common.h:255
+// AI(W906-CommonWaveFile) 20260721: un-gated WriteDataToFile (both overloads) /
+// ReadDataFromFile / CheckFileIsEmpty / MyForceDirectories -- bodies translated
+// in common.cpp (golden common.cpp:1607-1721). IsFileInUse / CopyAndCompressFile
+// / SGDToCSV remain gated below (wave-file / wave-grid, out of this wave's
+// scope -- IsFileInUse+CopyAndCompressFile confirmed zero current callers).
+// DEVIATION from golden's literal `char*` params (verified via a real build +
+// gdb backtrace, not merely inferred): AnsiString::c_str() in vclcompat
+// returns `const char*` (golden BCB6 AnsiString::c_str() is looser about
+// const). A `char*`-parameter overload cannot bind a `const char*` argument,
+// so any caller passing `x.c_str()` -- including the AnsiString overload's
+// OWN forwarder body just below -- silently overload-resolves to the *other*
+// (AnsiString,AnsiString,bool) overload instead (via the implicit
+// AnsiString(const char*) constructor), which is itself, causing UNBOUNDED
+// RECURSION / stack-overflow crash. `const char*` is behavior-identical here
+// (fopen/fputs never mutate cFilePath/cData) and makes `x.c_str()` an exact
+// match for THIS overload again, fixing the recursion. Signature otherwise
+// unchanged (2 params + bool default, same names).
+extern void WriteDataToFile(const char* cFilePath, const char* cData, bool bOverWrite=false); // common.h:255
 extern void WriteDataToFile(AnsiString cFilePath, AnsiString cData, bool bOverWrite=false); // common.h:256
 extern char* ReadDataFromFile(AnsiString cFilePath);         // common.h:257
 extern bool CheckFileIsEmpty(AnsiString cFilePath);          // common.h:258
 extern int MyForceDirectories(AnsiString Directory, AnsiString Function=""); // common.h:262
+
+#if 0 // TODO(wave-file): IsFileInUse / CopyAndCompressFile
 bool IsFileInUse(const char* filePath);                      // common.h:280
 #endif // TODO(wave-file)
 

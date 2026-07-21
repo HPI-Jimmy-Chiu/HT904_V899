@@ -33,15 +33,14 @@
 //       in the whole core body (verified: grep of DoE84Loader/DoE84Unloader/
 //       ShowE84Log/E84StatusLog finds no other VCL control reference).
 //
-//    2. WriteDataToFile(AnsiString,AnsiString,bool) -- golden common.h:296-297.
-//       The IDENTIFIER ITSELF is inside common.h's own `#if 0 // TODO(wave-file)`
-//       gate (not merely link-incomplete) -- same gap HANA_ART.cpp already hit
-//       for MyForceDirectories (see that file's :967-973 comment).  2 call
-//       sites gated (1 in ShowE84Log, 1 in E84StatusLog), no replacement (the
-//       persisted E84DataTxt log file is simply not written offline; the
-//       DirectoryExists/ForceDirectories day-folder housekeeping above each
-//       gated call IS active, since those vclcompat SysUtils functions are
-//       real).
+//    2. [RESOLVED -- AI(W906-CommonWaveFile) 20260721] WriteDataToFile(AnsiString,
+//       char*,bool) -- golden common.h:296-297. Its common.h declaration is
+//       un-gated and the common.cpp body (char* overload used at both call
+//       sites here) is now real. Both call sites (1 in ShowE84Log, 1 in
+//       E84StatusLog) are un-gated -- the E84DataTxt log file is now actually
+//       written (append mode, default bOverWrite=false), a genuine behavior
+//       upgrade from the prior no-op. The DirectoryExists/ForceDirectories
+//       day-folder housekeeping above each call was already active.
 //
 //    3. ShowMyMessageBox_YES_NO(AnsiString,AnsiString,AnsiString=NULL) -- golden
 //       mymessbox.h:55.  A real VCL modal Yes/No dialog, W7-UI, not translated
@@ -121,6 +120,12 @@
                               // Sn*/Sw*/C_* sensor-switch-cylinder index constants; iMMAuto[]
 #include "cprod.h"            // TestIF_File (SYSTEM_TEST_IF, .iE84TimeOut_K12[2][11])
 #include "cpublic.h"          // GetTimeInfo()
+// AI(W906-CommonWaveFile) 20260721: added -- WriteDataToFile (golden common.h:
+// 255-256) is called in ShowE84Log/E84StatusLog below; its declaration was
+// previously only reachable while gated (never actually needed a header, since
+// both call sites were themselves `#if 0`'d). Now that both are un-gated and
+// common.cpp's body is real, this file needs the declaration in scope.
+#include "common.h"           // WriteDataToFile(char*,char*,bool=false)
 #include "mysensor.h"          // Sen[] (TMySensor Sim HAL)
 #include "myswitch.h"          // SW[] (TMySwitch Sim HAL)
 #include "mycylin.h"           // Cylinder[] (TMyCylinder Sim HAL)
@@ -989,13 +994,10 @@ void ShowE84Log(AnsiString str, int iFunction, int iLoader)
         // matching every other offline TMemo stand-in in this tree.
         fAGV->mmE84Log->Lines->Add(str);
 
-        // AI(W5-Final-AGV_E84) 20260711: WriteDataToFile's OWN declaration is
-        // inside common.h's `#if 0 // TODO(wave-file)` gate -- see file-head
-        // GATED DEPENDENCIES #2 (same gap HANA_ART.cpp already hit for
-        // MyForceDirectories).
-        #if 0 // TODO(wave-file): WriteDataToFile (common.h:296-297 identifier itself gated)
+        // AI(W906-CommonWaveFile) 20260721: WriteDataToFile's common.h
+        // declaration is un-gated and its common.cpp body is now real this
+        // wave -- un-gating this call site (was blocked solely on this gate).
         WriteDataToFile(sFileName.c_str() , str.c_str());
-        #endif // TODO(wave-file)
 
         if(iLoader==3 || iLoader==4)
             ShowMyMessage(str);
@@ -1033,10 +1035,8 @@ void E84StatusLog(AnsiString str, bool bflag)
 
         str=sMegTime+" "+str+" "+asStr;
 
-        // AI(W5-Final-AGV_E84) 20260711: same WriteDataToFile gate as
-        // ShowE84Log -- see file-head GATED DEPENDENCIES #2.
-        #if 0 // TODO(wave-file): WriteDataToFile (common.h:296-297 identifier itself gated)
+        // AI(W906-CommonWaveFile) 20260721: same un-gate as ShowE84Log above --
+        // WriteDataToFile is real as of this wave.
         WriteDataToFile(sFileName.c_str() , str.c_str());
-        #endif // TODO(wave-file)
     }
 }

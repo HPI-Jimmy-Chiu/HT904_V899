@@ -189,6 +189,24 @@ target_link_libraries(test_ini_helpers PRIVATE ht9045_core)
 
 add_test(NAME ini_helpers COMMAND test_ini_helpers)
 
+# --- test_common: W906-CommonWaveFile un-gated file-helper cluster ----------
+#   Smoke-tests the 6 functions un-gated this wave: WriteDataToFile (both
+#   overloads) + ReadDataFromFile round-trip; CheckFileIsEmpty on
+#   existing-empty/existing-non-empty/missing; MyForceDirectories creating a
+#   nested scratch directory (+ empty-path -1 guard); GetLastOpenFN/
+#   WriteLastDataFN round-trip against a repointed LastDataPath (bootstrap
+#   else-branch then if-branch). All I/O under TEMP/TMP scratch paths --
+#   never touches the real D:\HT9045\SetUp.inf default. Links ht9045_core
+#   for the translated common.cpp bodies (PUBLIC-links vclcompat +
+#   ht9045_public transitively).
+add_executable(test_common
+    test_common.cpp
+)
+
+target_link_libraries(test_common PRIVATE ht9045_core)
+
+add_test(NAME common COMMAND test_common)
+
 # ===========================================================================
 #  W3-cont2 config-table LOADERS (translated database.cpp)
 # ===========================================================================
