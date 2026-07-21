@@ -18,6 +18,15 @@
 //  change, pure vclcompat-proxy accommodation.
 //---------------------------------------------------------------------------
 #include "SECSGEM/SecsSvEcRegistration.h"
+// AI(W906-VCW1) 20260721: GetECDataValue's IsVCL==1 dynamic_cast cascade
+// (below) needs the 6 VCL-widget stand-ins this header supplies (TPanel/
+// TCustomEdit/TComboBox/TLabel/TCheckBox/TRadioGroup) -- see that header's
+// own file-head scope-boundary note (no real widget-backed EC is made
+// functional by this include; see also this method's own "REGISTRATION-TIME
+// REACHABILITY PROOF" comment below -- still true, this branch remains
+// unreachable from any call site in THIS unit's own scope even though it
+// now compiles and dispatches correctly).
+#include "vclcompat/Controls.h"
 #include <cstdlib>   // atoi/atof/_atoi64
 #include <cstring>   // strcpy
 
@@ -541,8 +550,9 @@ void SecsSvEcRegistration::SetECDataPointer(AnsiString ECID, unsigned char Type,
 // overloads). It only becomes reachable for an OLDER, already-registered
 // ECID queried by a FUTURE, out-of-scope, non-registration caller (S2F13/
 // S2F15 handlers, golden uHGemEquipment.cpp:3968/:4000) -- for which
-// IsVCL==1 needs live VCL widget types this unit does not have (gated
-// below) while IsVCL==2 needs nothing new (kept ACTIVE, costs nothing, and
+// IsVCL==1 needed live VCL widget types this unit didn't have; AI(W906-VCW1)
+// 20260721 supplied them (vclcompat/Controls.h) and un-gated this branch
+// below -- while IsVCL==2 needs nothing new (kept ACTIVE, costs nothing, and
 // exercises the SAME genuine golden bug documented immediately below).
 //
 // SECOND DISCOVERED BUG, PRESERVED VERBATIM (flag for review, CONFIRMED by
@@ -621,17 +631,20 @@ AnsiString SecsSvEcRegistration::GetECDataValue(AnsiString ECID)
         {
             if (IsVCL == 1)
             {
-#if 0
-                // golden uHGemEquipment.cpp:3684-3762 -- dynamic_casts VclP
-                // (a TObject*) against TPanel/TCustomEdit/TComboBox/TLabel/
-                // TCheckBox/TRadioGroup/TStringList in turn, none of which
-                // (save TStringList) exist in vclcompat today. GATED per
-                // project convention -- see this function's "REGISTRATION-
-                // TIME REACHABILITY PROOF" header comment for why no call
-                // path in this unit's own scope reaches here.
-                // TODO(W7-UI / future THGem wave): un-gate once TPanel/
-                // TCustomEdit/TComboBox/TLabel/TCheckBox/TRadioGroup have
-                // real vclcompat homes.
+                // AI(W906-VCW1) 20260721: UN-GATED -- golden
+                // uHGemEquipment.cpp:3684-3762 (dynamic_casts VclP, a
+                // TObject*, against TPanel/TCustomEdit/TComboBox/TLabel/
+                // TCheckBox/TRadioGroup/TStringList in turn). vclcompat/
+                // Controls.h (this wave) now supplies all 6 previously-
+                // missing widget stand-ins. Still UNREACHABLE from any call
+                // path in THIS unit's own scope, per the "REGISTRATION-TIME
+                // REACHABILITY PROOF" header comment above (un-gating does
+                // not change that proof -- it only concerns THIS unit's own
+                // 4 SetECDataPointer callers, not a future S2F13/S2F15
+                // caller) -- but now compiles and dispatches correctly
+                // instead of returning a conservative "" default, matching
+                // golden's real logic for whenever that future caller
+                // arrives.
                 Type    = (unsigned char)atoi(EC_TYPE->GetString(i).c_str());
                 ECName  = EC_NAME->GetString(i);
                 ECUnit  = EC_UNIT->GetString(i);
@@ -692,12 +705,6 @@ AnsiString SecsSvEcRegistration::GetECDataValue(AnsiString ECID)
                 }
                 else
                     VCLStr = "";
-#else
-                // Unreachable from this unit's scope (see proof above).
-                // Conservative default matches golden's own final `else`
-                // tail (nothing dynamic_casts successfully -> VCLStr="").
-                VCLStr = "";
-#endif
             }
             else   // IsVCL==2 -- golden uHGemEquipment.cpp:3763-3767, fully
                    // translatable (no missing types needed) -- kept ACTIVE.

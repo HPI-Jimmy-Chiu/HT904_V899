@@ -194,9 +194,14 @@ public:
     // every SetECDataPointer overload above (to seed EC_OldValue at
     // registration time) -- see the "REGISTRATION-TIME REACHABILITY PROOF"
     // note on this method's definition in the .cpp for why that internal use
-    // is always safe/reachable even though this method also has a dead
-    // (gated) VCL-widget branch that only a FUTURE, out-of-scope caller
-    // (S2F13/S2F15 handlers, golden :3968/:4000) could ever reach.
+    // is always safe/reachable even though this method also has a VCL-widget
+    // branch that only a FUTURE, out-of-scope caller (S2F13/S2F15 handlers,
+    // golden :3968/:4000) could ever reach. AI(W906-VCW1) 20260721: that
+    // branch is UN-GATED as of this wave (vclcompat/Controls.h supplies the
+    // 6 widget stand-ins its dynamic_cast cascade needs) -- it now compiles
+    // and dispatches correctly, but remains unreachable dead code from any
+    // call path in THIS unit's own scope (the reachability proof is
+    // unaffected; only a future S2F13/S2F15 wave changes that).
     //
     // CONFIRMED GOLDEN BUG (see "SECOND DISCOVERED BUG" note in the .cpp,
     // proven by a failing test before being documented): for an

@@ -209,6 +209,39 @@ int main()
             liveReRead.str(), "");
 
     // ---------------------------------------------------------------------
+    // AI(W906-VCW1) 20260721: GetECDataValue's IsVCL==1 dynamic_cast cascade
+    // is UN-GATED as of this wave (vclcompat/Controls.h supplies the 6
+    // previously-missing widget stand-ins) -- exercise its one branch with a
+    // real possible instance today, TStringList (already existed; this
+    // wave's own R1 gave it the `: public TObject` base the dynamic_cast
+    // needs). Same "needs a LATER registration first" reachability quirk as
+    // the IsVCL==2 section above (registration-time's OWN internal
+    // GetECDataValue call always takes the safe IsVCL==0 path -- see the
+    // "REGISTRATION-TIME REACHABILITY PROOF" .cpp comment) -- registered
+    // with a numeric Type (UINT_1_TYPE), not ASCII_TYPE, to avoid the same
+    // documented registration-time strlen-through-raw-pointer hazard noted
+    // above (harmless here regardless: the registration-time read is on the
+    // TStringList object's own raw bytes, unasserted either way).
+    // ---------------------------------------------------------------------
+    printf("\n-- GetECDataValue: IsVCL==1 (TStringList-backed), reachable only AFTER a later registration --\n");
+    vclcompat::TStringList *ecStrList = new vclcompat::TStringList();
+    reg.SetECDataPointer(AnsiString("106"), HType.UINT_1_TYPE, "EcStrList", "unitE7",
+                          (vclcompat::TObject*)ecStrList, "0", "255", "0", "ecRemark7");
+    check_i("EC_ID.Count after 6th EC (#100/101/102/104/105/106)", reg.EC_ID->Count, 6);
+    check_s("EC_VCL_NAME[5] (#106, TObject* tag)", reg.EC_VCL_NAME->GetString(5).str(), "1");
+    // Mutate the live TStringList AFTER registration (registration-time's
+    // own internal read already happened and is deliberately unasserted --
+    // see file-head SAFETY NOTE), then push EC_VCL_NAME->Count past #106's
+    // own index with one more registration, exactly like the IsVCL==2
+    // section above.
+    ecStrList->CommaText = "42";
+    reg.SetECDataPointer(AnsiString("107"), HType.INT_4_TYPE, "EcLater2", "unitE8",
+                          &ecRawInt, 0, 100, 0, "ecRemark8");
+    AnsiString strListReRead = reg.GetECDataValue(AnsiString("106"));
+    check_s("GetECDataValue(\"106\") (IsVCL==1, TStringList) == live CommaText, decoded as UINT_1 (\"42\")",
+            strListReRead.str(), "42");
+
+    // ---------------------------------------------------------------------
     printf("\n=== SUMMARY: %d passed, %d failed ===\n", g_pass, g_fail);
     return (g_fail == 0) ? 0 : 1;
 }

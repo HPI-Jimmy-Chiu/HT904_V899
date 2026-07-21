@@ -42,8 +42,23 @@ public:
 //
 //  Only the methods called through a TStrings* pointer in the V906 source are
 //  listed here as pure virtuals.  TStringList provides the concrete impl.
+//
+// AI(W906-VCW1) 20260721: R1 -- added `: public TObject` (was base-less).
+// Needed so `dynamic_cast<TStringList*>(someTObjectPtr)` is well-formed in
+// SECSGEM's SetECValue/DataItemOutSV/DataItemOutEC/GetECDataValue cast-
+// dispatch cascades (golden dynamic_casts a stored EC/SV "VCL pointer",
+// declared TObject*, against TStringList among 6 other candidate widget
+// types) -- per [expr.dynamic.cast], a dynamic_cast between pointer types is
+// ill-formed at COMPILE TIME unless one of the two classes is a base of the
+// other; TStrings had no relation to TObject before this change, which would
+// make that cast a hard compile error, not a runtime nullptr. Purely
+// additive: TObject is `{ virtual ~TObject(){} }` (no data members), and
+// TStrings/TStringList were already polymorphic via their own pure virtuals,
+// so this adds no new vtable pointer and changes no sizeof/layout for any of
+// the 67 existing TStringList call sites (none of which cast a TStringList*
+// to/from anything today -- confirmed by recon before this edit).
 // ---------------------------------------------------------------------------
-class TStrings {
+class TStrings : public TObject {
 public:
     virtual ~TStrings() {}
 

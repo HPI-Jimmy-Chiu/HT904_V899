@@ -32,6 +32,12 @@
 //  established by the KYECFTP/FTPClient_Transfer.cpp precedent).
 //---------------------------------------------------------------------------
 #include "SECSGEM/uHGemEquipment.h"
+// AI(W906-VCW1) 20260721: DataItemOutSV/DataItemOutEC's IsVCL==1 dynamic_cast
+// cascade (below) needs the 6 VCL-widget stand-ins this header supplies
+// (TPanel/TCustomEdit/TComboBox/TLabel/TCheckBox/TRadioGroup) -- see that
+// header's own file-head scope-boundary note (no real widget-backed EC/SV is
+// made functional by this include).
+#include "vclcompat/Controls.h"
 
 #include <cstdio>
 #include <cstdlib>   // atoi
@@ -1002,16 +1008,23 @@ void THGem::EnableDisableECDataAll(unsigned char T)
 //  has no `_atoi64`; same portability substitution SecsSvEcRegistration.cpp
 //  already made, identical rationale).
 //
-//  GATE NOTE (design doc D2): golden's VCL-widget-cast sub-branch (IsVCL==1
-//  -> dynamic_cast onto TPanel/TCustomEdit/TComboBox/TLabel/TCheckBox/
-//  TRadioGroup/TStringList, none of which exist in vclcompat) is GATED
-//  (`#if 0`) in DataItemOutSV/DataItemOutEC below, following the EXACT same
+//  GATE NOTE (design doc D2), UN-GATED AI(W906-VCW1) 20260721: golden's
+//  VCL-widget-cast sub-branch (IsVCL==1 -> dynamic_cast onto TPanel/
+//  TCustomEdit/TComboBox/TLabel/TCheckBox/TRadioGroup/TStringList) was GATED
+//  (`#if 0`) in DataItemOutSV/DataItemOutEC below, following the same
 //  gate+conservative-fallback idiom SecsSvEcRegistration.cpp's own
-//  GetECDataValue already established for the identical golden branch
-//  (SecsSvEcRegistration.cpp:620-701) -- see that method for the precedent.
-//  Every SV/EC THGem::FormCreate registers this wave is raw-ptr (VCL_NAME/
-//  EC_VCL_NAME=="0"), so this gate is never reached by any in-scope caller;
-//  the IsVCL==2 (AnsiString*-backed) sibling branch stays REAL.
+//  GetECDataValue established for the identical golden branch
+//  (SecsSvEcRegistration.cpp:620-701, which this same wave also un-gated --
+//  see that method's own comment). vclcompat/Controls.h (this wave) now
+//  supplies all 6 missing widget stand-ins, so all three are un-gated:
+//  real dynamic_cast cascades, matching golden exactly.
+//  SCOPE BOUNDARY: every SV/EC THGem::FormCreate registers today is still
+//  raw-ptr (VCL_NAME/EC_VCL_NAME=="0"), so this cascade is not reached by any
+//  in-scope caller YET -- un-gating it does not, by itself, make any real
+//  widget-backed EC/SV live (see Controls.h's own file-head note for the
+//  full writeup: zero real TPanel/TCustomEdit/TComboBox/TLabel/TCheckBox/
+//  TRadioGroup instances exist anywhere in the object graph). The IsVCL==2
+//  (AnsiString*-backed) sibling branch was already REAL before this wave.
 //===========================================================================
 //---------------------------------------------------------------------------
 // V 1.0 (golden uHGemEquipment.cpp:2472-2761)
@@ -1055,8 +1068,7 @@ bool THGem::DataItemOutSV(AnsiString SVID)
         {
             if(IsVCL==1)
             {
-#if 0
-                // AI(W906-SvEcDataItem) 20260720: GATED -- golden
+                // AI(W906-VCW1) 20260721: UN-GATED -- golden
                 // uHGemEquipment.cpp:2513-2585 (dynamic_cast cluster). See
                 // this method group's own file-head GATE NOTE.
                 TObject *VclP=(TObject *)P;
@@ -1119,12 +1131,6 @@ bool THGem::DataItemOutSV(AnsiString SVID)
                 }
                 else
                     VCLStr="";
-#else
-                // Unreachable from this unit's scope (see GATE NOTE above).
-                // Conservative default matches golden's own final `else`
-                // tail (nothing dynamic_casts successfully -> "").
-                VCLStr="";
-#endif
             }
             else
             {
@@ -1423,10 +1429,15 @@ void THGem::DataItemOutEC(AnsiString ECID)
         {
             if(IsVCL==1)
             {
-#if 0
-                // AI(W906-SvEcDataItem) 20260720: GATED -- golden
+                // AI(W906-VCW1) 20260721: UN-GATED -- golden
                 // uHGemEquipment.cpp:2885-2956 (dynamic_cast cluster). See
-                // this method group's own file-head GATE NOTE.
+                // this method group's own file-head GATE NOTE. golden itself
+                // redundantly re-reads Type/ECName/ECUnit here even though
+                // they were already set moments earlier (right before the
+                // `if(IsVCL==1 || IsVCL==2)` check above) -- a genuine
+                // golden asymmetry vs. DataItemOutSV (which does NOT re-read
+                // Type/SVName/SVUnit in its own IsVCL==1 branch), preserved
+                // verbatim rather than de-duplicated.
                 Type    =(unsigned char)atoi(SvEcReg.EC_TYPE->GetString(i).c_str());
                 ECName  =SvEcReg.EC_NAME->GetString(i);
                 ECUnit  =SvEcReg.EC_UNIT->GetString(i);
@@ -1490,10 +1501,6 @@ void THGem::DataItemOutEC(AnsiString ECID)
                 }
                 else
                     VCLStr="";
-#else
-                // Unreachable from this unit's scope (see GATE NOTE above).
-                VCLStr="";
-#endif
             }
             else
             {

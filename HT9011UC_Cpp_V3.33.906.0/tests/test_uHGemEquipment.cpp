@@ -2833,6 +2833,96 @@ static void test_w906_svecdataitem_e2e_s101f6_s101f8_smoke()
     HGem = savedHGem;
 }
 
+// ---------------------------------------------------------------------------
+//  [W906-VCW1] AI(W906-VCW1) 20260721: DataItemOutSV/DataItemOutEC UN-GATED --
+//  vclcompat/Controls.h dynamic_cast dispatch coverage (golden
+//  uHGemEquipment.cpp:2513-2585/2882-2957). Direct calls, no socket/dispatch-
+//  pump needed (DataItemOutSV/DataItemOutEC only ever touch `WireCodec.`,
+//  never `ActiveWire->` -- see this file's own un-gating note on those
+//  methods) -- pure in-memory, no file I/O, no snapshot needed, matching F1's
+//  own "no snapshot needed" precedent above.
+//  SCOPE REMINDER: this proves the CAST-DISPATCH CODE compiles and reads
+//  correctly from a real TStringList instance constructed BY THIS TEST -- it
+//  does NOT mean any real widget-backed SV/EC from uHGemHT9045_SV.cpp/_EC.cpp
+//  is functional (none exist yet; see vclcompat/Controls.h's own file-head
+//  note).
+// ---------------------------------------------------------------------------
+static void test_w906_vcw1_dataitemout_vcl_dispatch()
+{
+    printf("\n[W906-VCW1] DataItemOutSV/DataItemOutEC -- UN-GATED VCL-widget (TStringList-backed) read dispatch\n");
+
+    // DataItemOutSV: SV registered VCL_NAME=="1" (TObject* tag), backed by a
+    // real TStringList (dynamic_cast target #7, StringListPtr branch, first
+    // in golden's if/else-if chain). ASCII_TYPE so the encoded wire item's
+    // payload bytes are the CommaText string itself, unconverted -- the
+    // clearest possible proof the read actually flowed through
+    // StringListPtr->CommaText, not some other branch or a stale default.
+    {
+        THGem g;
+        TStringList *slSv = new TStringList();
+        slSv->CommaText = "42";
+        g.SvEcReg.SV_ID->Add(AnsiString(900));
+        g.SvEcReg.SV_TYPE->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.SvEcReg.SV_NAME->Add("TestSvStrList");
+        g.SvEcReg.SV_UNIT->Add("unit");
+        g.SvEcReg.SV_Ptr->Add((void*)slSv);
+        g.SvEcReg.VCL_NAME->Add("1");
+        g.SvEcReg.SV_LEN->Add(1);
+
+        bool ret = g.DataItemOutSV(AnsiString(900));
+        CHECK(ret == true, "DataItemOutSV: TStringList-backed SV -> returns true (found+encoded)");
+        const std::vector<unsigned char> &buf = g.WireCodec.LocalBuffer;
+        // LocalLength_4 starts at 4, not 0 -- SecsWireCodec's ctor primes it
+        // to reserve the 4-byte message-length header golden's (out-of-
+        // scope) CreateLocalHead() would otherwise write first (see
+        // SecsWireCodec.cpp's own ctor comment); no InitLocalHead call here,
+        // so the item bytes land right after that 4-byte reserve, at offset 4.
+        CHECK(g.WireCodec.LocalLength_4 == 8, "DataItemOutSV: wire cursor advances by 4 bytes (format+len+\"42\") past the 4-byte header reserve");
+        CHECK(buf[4] == (unsigned char)(HType.ASCII_TYPE | 1), "DataItemOutSV: item format byte == ASCII_TYPE|1");
+        CHECK(buf[5] == 2, "DataItemOutSV: item length byte == 2 (strlen(\"42\"))");
+        CHECK(buf[6] == '4' && buf[7] == '2', "DataItemOutSV: payload == \"42\" (live CommaText, flowed through StringListPtr branch)");
+    }
+
+    // DataItemOutEC: same StringListPtr branch, EC side (EC_VCL_NAME=="1").
+    // Different CommaText value than the SV case above so a copy/paste bug
+    // between the two (e.g. reading the wrong Ptr) would be caught.
+    {
+        THGem g;
+        TStringList *slEc = new TStringList();
+        slEc->CommaText = "77";
+        g.SvEcReg.EC_ID->Add(AnsiString(901));
+        g.SvEcReg.EC_TYPE->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.SvEcReg.EC_NAME->Add("TestEcStrList");
+        g.SvEcReg.EC_UNIT->Add("unit");
+        g.SvEcReg.EC_Ptr->Add((void*)slEc);
+        g.SvEcReg.EC_VCL_NAME->Add("1");
+
+        g.DataItemOutEC(AnsiString(901));
+        const std::vector<unsigned char> &buf = g.WireCodec.LocalBuffer;
+        CHECK(g.WireCodec.LocalLength_4 == 8, "DataItemOutEC: wire cursor advances by 4 bytes (format+len+\"77\") past the 4-byte header reserve");
+        CHECK(buf[4] == (unsigned char)(HType.ASCII_TYPE | 1), "DataItemOutEC: item format byte == ASCII_TYPE|1");
+        CHECK(buf[5] == 2, "DataItemOutEC: item length byte == 2 (strlen(\"77\"))");
+        CHECK(buf[6] == '7' && buf[7] == '7', "DataItemOutEC: payload == \"77\" (live CommaText, flowed through StringListPtr branch)");
+    }
+
+    // Not-found path (SVID/ECID never registered) -- unaffected by this
+    // wave's dynamic_cast additions, spot-checked once for regression safety.
+    // golden's not-found tail unconditionally touches `DB->Lines->Add(...)`
+    // (DB defaults to NULL, externally assigned via out-of-scope
+    // SetDisplayPtr(TMemo*) in a live system) -- DB must be primed first,
+    // matching this file's own established DB-lifecycle precedent elsewhere
+    // (e.g. test_w906_alarmreportack_e2e: `g.DB = new THGemMemo(); ...
+    // delete g.DB; g.DB = NULL;`), not a defect this wave introduced or
+    // needs to fix.
+    {
+        THGem g;
+        g.DB = new THGemMemo();
+        bool ret = g.DataItemOutSV(AnsiString(999));
+        CHECK(ret == false, "DataItemOutSV: unregistered SVID -> returns false (not-found path unaffected)");
+        delete g.DB; g.DB = NULL;
+    }
+}
+
 // ===========================================================================
 //  [W906-AlarmReportAck] Real THGem-backed coverage for the 8 uHGemClass.cpp
 //  methods un-gated this wave (see that file's own "INTEGRATE WAVE 5" note):
@@ -4303,6 +4393,11 @@ int main()
     test_w906_svecdataitem_e2e_s5f8_s100f4();
     test_w906_svecdataitem_e2e_s101f6_s101f8_smoke();
     RestoreTextLogSnapshot(svEcDataItemLogSnap);
+
+    // W906-VCW1: direct DataItemOutSV/DataItemOutEC calls only (no socket
+    // pump/Timer1Timer, no file I/O) -- same posture as W906-AlarmReportAck
+    // immediately below, no TextLogSnapshot bracket needed.
+    test_w906_vcw1_dataitemout_vcl_dispatch();
 
     // W906-AlarmReportAck: does not pump ProcessSocketReceiveData/
     // Timer1Timer at all (direct HTGem method calls only), so it needs

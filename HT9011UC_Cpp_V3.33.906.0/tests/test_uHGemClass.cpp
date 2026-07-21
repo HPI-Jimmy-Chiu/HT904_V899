@@ -32,7 +32,12 @@
 
 #include "SECSGEM/uHGemClass.h"
 #include "SECSGEM/SecsEventType.h"
+// AI(W906-VCW1) 20260721: SetECValue's UN-GATED IsVCL==1 dynamic_cast
+// cascade (below) needs the 6 VCL-widget stand-ins this header supplies --
+// see its own file-head scope-boundary note.
+#include "vclcompat/Controls.h"
 #include <cstdio>
+#include <cstring>   // strcpy (test-side buffer prep for SetECValue's void* sink)
 #include <string>
 
 // AI(W5-SECSGEM-Translate) 20260710: IsCorrectDateFormat has external linkage
@@ -252,16 +257,133 @@ int main()
         // above.
 
         // SetECValue -- void, two args, must not crash even with a NULL sink.
-        // STILL gated (see uHGemClass.cpp's own comment on this method: the
-        // IsVCL==1 dynamic_cast branch needs vclcompat widget types
-        // [TPanel/TCustomEdit/TComboBox/TLabel/TCheckBox/TRadioGroup] that
-        // don't exist, and -- unlike SecsSvEcRegistration.cpp's analogous
-        // GetECDataValue gate -- there is no reachability proof available
-        // to safely gate just that one sub-branch).
+        // UN-GATED as of AI(W906-VCW1) 20260721 (see the dedicated section
+        // below for real dispatch coverage); still exercised once here with
+        // an unregistered ECID (70) to confirm the not-found path (i<0) is
+        // a harmless no-op, matching golden's own falls-off-the-end-of-the-
+        // if body for that case.
         int dummy = 0;
         g.SetECValue(70, &dummy);
-        printf("PASS  SetECValue callable without crash\n");
+        printf("PASS  SetECValue(unregistered ECID) callable without crash\n");
         ++g_pass;
+    }
+
+    // -----------------------------------------------------------------------
+    // AI(W906-VCW1) 20260721: SetECValue UN-GATED -- vclcompat/Controls.h
+    // dynamic_cast dispatch coverage (golden uHGemClass.cpp:2682-2882).
+    // SCOPE REMINDER: this proves the CAST-DISPATCH CODE compiles and
+    // dispatches correctly against real instances of the 6 new stand-in
+    // types constructed BY THIS TEST -- it does NOT mean any real widget-
+    // backed EC from uHGemHT9045_EC.cpp is functional (none exist yet; see
+    // vclcompat/Controls.h's own file-head note).
+    // -----------------------------------------------------------------------
+    printf("\n-- SetECValue: UN-GATED VCL-widget dynamic_cast dispatch --\n");
+    {
+        // (c) each of the 6 new stand-in types' dynamic_cast against an
+        // UNRELATED sibling type correctly resolves to nullptr -- the "safe
+        // no-op for unbacked types" property this whole wave rests on,
+        // confirmed explicitly here rather than just relying on it
+        // compiling. Also confirms TStringList (pre-existing, gained its
+        // TObject base via this wave's own R1 step) is a correct match/
+        // non-match partner too.
+        TPanel panelInstance;
+        TObject *asPanelObj = &panelInstance;
+        check_b("dynamic_cast<TPanel*> matches a real TPanel instance",
+                dynamic_cast<TPanel*>(asPanelObj) != NULL, true);
+        check_b("dynamic_cast<TCustomEdit*> vs TPanel instance -> nullptr",
+                dynamic_cast<TCustomEdit*>(asPanelObj) == NULL, true);
+        check_b("dynamic_cast<TComboBox*> vs TPanel instance -> nullptr",
+                dynamic_cast<TComboBox*>(asPanelObj) == NULL, true);
+        check_b("dynamic_cast<TLabel*> vs TPanel instance -> nullptr",
+                dynamic_cast<TLabel*>(asPanelObj) == NULL, true);
+        check_b("dynamic_cast<TCheckBox*> vs TPanel instance -> nullptr",
+                dynamic_cast<TCheckBox*>(asPanelObj) == NULL, true);
+        check_b("dynamic_cast<TRadioGroup*> vs TPanel instance -> nullptr",
+                dynamic_cast<TRadioGroup*>(asPanelObj) == NULL, true);
+        check_b("dynamic_cast<TStringList*> vs TPanel instance -> nullptr",
+                dynamic_cast<TStringList*>(asPanelObj) == NULL, true);
+
+        TStringList realList;
+        TObject *asListObj = &realList;
+        check_b("dynamic_cast<TStringList*> matches a real TStringList instance (R1)",
+                dynamic_cast<TStringList*>(asListObj) != NULL, true);
+        check_b("dynamic_cast<TPanel*> vs TStringList instance -> nullptr",
+                dynamic_cast<TPanel*>(asListObj) == NULL, true);
+
+        // (a) SetECValue writing to a REAL TStringList*-backed EC (VCL_NAME
+        // =="1") -- the one widget type with a real instance possible today
+        // via SetECDataPointer's TObject* overload (R1 gave TStringList the
+        // `: public TObject` base this dynamic_cast needs). Registered by
+        // directly populating HTGem's own SvEcReg parallel lists (matching
+        // exactly what SetECValue itself reads) rather than through
+        // SetECDataPointer, to sidestep that overload's own documented
+        // registration-time ASCII-hazard (see SecsSvEcRegistration.cpp's
+        // file-head note) -- irrelevant to what THIS test is verifying.
+        HTGem g;
+        TStringList *slEc = new TStringList();
+        g.SvEcReg.EC_ID->Add(AnsiString(200));
+        g.SvEcReg.EC_TYPE->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.SvEcReg.EC_NAME->Add("TestStrEC");
+        g.SvEcReg.EC_UNIT->Add("unit");
+        g.SvEcReg.EC_Ptr->Add((void*)slEc);
+        g.SvEcReg.EC_VCL_NAME->Add("1");
+
+        char strBuf[64];
+        strcpy(strBuf, "hello,world");
+        g.SetECValue(200, strBuf);
+        check_s("SetECValue: TStringList-backed EC (StringListPtr branch) -> CommaText written",
+                slEc->GetCommaText().str(), "hello,world");
+
+        // Second widget type, end to end through the SAME real SetECValue
+        // dispatch -- proves the dynamic_cast cascade selects the CORRECT
+        // branch out of all 7 candidates (not just "compiles"), and that
+        // TCheckBox's ->Checked write-through (S!="0") is byte-for-byte
+        // golden's own logic.
+        TCheckBox cbEc;
+        g.SvEcReg.EC_ID->Add(AnsiString(202));
+        g.SvEcReg.EC_TYPE->Add(AnsiString((int)HType.BOOLEAN_TYPE));
+        g.SvEcReg.EC_NAME->Add("TestCheckEC");
+        g.SvEcReg.EC_UNIT->Add("unit");
+        g.SvEcReg.EC_Ptr->Add((void*)&cbEc);
+        g.SvEcReg.EC_VCL_NAME->Add("1");
+        unsigned char boolByte = 1;   // non-"0" byte -> S!="0" -> Checked=true
+        g.SetECValue(202, &boolByte);
+        check_b("SetECValue: TCheckBox-backed EC (CheckBoxPtr branch) -> Checked==true",
+                cbEc.Checked, true);
+
+        // (b) SetECValue's IsVCL==2 bare-return asymmetry (golden :2718-2721,
+        // preserved verbatim): an EC registered via the AnsiString* overload
+        // is host-READABLE (GetECDataValue) but silently NON-WRITABLE via
+        // SetECValue. Assert the stored value is genuinely UNCHANGED after a
+        // SetECValue call, proving the preserved golden bug (this
+        // translation did not silently "fix" it into an actual write-through).
+        AnsiString ecBacking = "original";
+        g.SvEcReg.EC_ID->Add(AnsiString(201));
+        g.SvEcReg.EC_TYPE->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.SvEcReg.EC_NAME->Add("TestAnsiEC");
+        g.SvEcReg.EC_UNIT->Add("unit");
+        g.SvEcReg.EC_Ptr->Add((void*)&ecBacking);
+        g.SvEcReg.EC_VCL_NAME->Add("2");
+        char strBuf2[64];
+        strcpy(strBuf2, "attempted-overwrite");
+        g.SetECValue(201, strBuf2);
+        check_s("SetECValue: IsVCL==2 (AnsiString*-backed) EC -> bare return, value UNCHANGED (golden asymmetry)",
+                ecBacking.str(), "original");
+
+        // Non-VCL (raw-pointer, VCL_NAME=="0") scalar write-through still
+        // works exactly as before this wave (unaffected by the IsVCL==1/2
+        // additions above) -- spot-check one scalar type end to end.
+        int rawEcValue = 0;
+        g.SvEcReg.EC_ID->Add(AnsiString(203));
+        g.SvEcReg.EC_TYPE->Add(AnsiString((int)HType.INT_4_TYPE));
+        g.SvEcReg.EC_NAME->Add("TestRawEC");
+        g.SvEcReg.EC_UNIT->Add("unit");
+        g.SvEcReg.EC_Ptr->Add((void*)&rawEcValue);
+        g.SvEcReg.EC_VCL_NAME->Add("0");
+        int newRawValue = 777;
+        g.SetECValue(203, &newRawValue);
+        check_i("SetECValue: raw-pointer (VCL_NAME==\"0\") EC -> *Ptr=*Ptr2 scalar write-through",
+                rawEcValue, 777);
     }
 
     // -----------------------------------------------------------------------

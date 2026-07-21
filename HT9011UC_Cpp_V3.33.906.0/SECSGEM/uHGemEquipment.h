@@ -1177,7 +1177,9 @@ public:
     // ==== SV/EC DataItem family (W906-SvEcDataItem 20260720) ================
     // golden uHGemEquipment.cpp:2472-3336 (SvEcReg-backed) + :7623-7688
     // (Report/CEID composers, pure WireCodec+SV composition). See .cpp for
-    // the golden-VCL-branch gate note (design doc D2).
+    // the golden-VCL-branch gate note (design doc D2) -- AI(W906-VCW1)
+    // 20260721: that note's dynamic_cast branch is UN-GATED as of this wave
+    // (vclcompat/Controls.h); see the .cpp note's own updated text.
     bool DataItemOutSV(AnsiString SVID);                          // golden :2472-2761
     bool DataItemOutSVNameList(AnsiString SVID);                  // golden :2765-2801
     bool DataItemOutSVNameListWithValue(AnsiString SVID);         // golden :2803-2840 (S103F11/F12)

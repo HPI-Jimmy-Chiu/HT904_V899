@@ -596,9 +596,21 @@
 //  Process_S7F20_CurrentEPPIDData, already un-gated), SetECValue (VCL widget
 //  dynamic_cast cluster) -- unchanged from INTEGRATE WAVE 7's own list minus
 //  the 4 resolved this wave.
+//
+//  AI(W906-VCW1) 20260721: refreshed from "5" above -- SetECValue is
+//  UN-GATED this wave (vclcompat/Controls.h supplies the 6 missing widget
+//  stand-ins; see SetECValue's own comment below). 4 REMAIN gated: S2F16,
+//  S2F24Sub, S2F32, S7F20_CurrentEPPDData (unchanged, none of this wave's
+//  scope). grep `^#if 0` re-verified at 4.
 //---------------------------------------------------------------------------
 
 #include "vclcompat/vcl_compat.h"
+// AI(W906-VCW1) 20260721: SetECValue's IsVCL==1 dynamic_cast cascade (below)
+// needs the 6 VCL-widget stand-ins this header supplies (TPanel/TCustomEdit/
+// TComboBox/TLabel/TCheckBox/TRadioGroup) -- see Controls.h's own file-head
+// scope-boundary note (no real widget-backed EC/SV is made functional by
+// this include).
+#include "vclcompat/Controls.h"
 #include "uHGemClass.h"
 // AI(W906-SysModWire) 20260720: FIRST include of uHGemEquipment.h in this file
 // -- see uHGemClass.h's own updated forward-declaration note for why: 8 newly
@@ -3314,36 +3326,247 @@ void HTGem::S125F2_EnableDisableECDataAcknowledge()                             
 }
 //---------------------------------------------------------------------------
 // SetECValue -- writes an EC value out to *PtrSour by ECID's registered type.
-// AI(W906-uHGemClass-Unlock) 20260713 STILL GATED -- checked in full against SvEcReg,
-// NOT un-gateable today: the raw-pointer (EC_VCL_NAME=="0") dispatch ladder
-// alone would resolve entirely through SvEcReg (EC_ID/EC_TYPE/EC_Ptr), but
-// golden's `IsVCL==1` branch (golden :2705-2717) `dynamic_cast`s the stored
-// pointer to TPanel/TCustomEdit/TComboBox/TLabel/TCheckBox/TRadioGroup/
-// TStringList -- none of the first 6 exist in vclcompat today. UNLIKE
-// SecsSvEcRegistration.cpp's GetECDataValue (which gates the analogous
-// dynamic_cast branch but has a rigorous registration-time proof that path
-// is provably unreachable from ITS OWN callers), SetECValue cannot offer the
-// same proof -- SecsSvEcRegistration.cpp's own TObject*-overload
-// SetECDataPointer DOES register ECs with EC_VCL_NAME=="1", so IsVCL==1 is a
-// real, reachable case in a live system. This remains true regardless of
-// whether SetECValue's caller is itself gated: AI(W906-uHGemClass-Unlock2)
-// 20260716 un-gated S2F15_UpdateNewEquipmentConstant below (a real caller of
-// this function now), which does NOT change SetECValue's own reachability
-// proof -- the IsVCL==1 branch is selected by whatever ECID happens to be
-// registered, not by the caller, so SetECValue stays fully gated here.
-// Gating only the IsVCL==1 sub-branch without a reachability proof would be
-// forcing a partial translation through on an unproven assumption -- left
-// fully gated per this project's "do not force it through" instruction
-// instead. (Safe either way: S2F15_UpdateNewEquipmentConstant's calls into
-// this still-gated stub simply no-op, exactly like CheckECValue's un-gating
-// in the prior wave already established as an acceptable interim state.)
+// AI(W906-VCW1) 20260721 UN-GATED (golden SECSGEM/uHGemClass.cpp:2682-2882):
+// vclcompat/Controls.h now supplies the 6 VCL-widget stand-ins
+// (TPanel/TCustomEdit/TComboBox/TLabel/TCheckBox/TRadioGroup) golden's
+// `IsVCL==1` branch dynamic_casts against; TStringList (the 7th candidate)
+// already existed and gained the `: public TObject` base this same wave's R1
+// step added (vclcompat/TStringList.h) so the dynamic_cast is well-formed.
+// `HGem->EC_ID/EC_TYPE/EC_Ptr/EC_VCL_NAME` (golden's global THGem* access)
+// -> `SvEcReg.EC_ID/EC_TYPE/EC_Ptr/EC_VCL_NAME` (HTGem's own embedded
+// registration engine, same substitution CheckECValue/S2F15_Update already
+// established in this file); `->Strings[i].c_str()` -> `->GetString(i)
+// .c_str()` (vclcompat StringsProxy has no .c_str(), same accommodation);
+// `EC_Ptr->Items[i]` -> `EC_Ptr->GetItem(i)` (vclcompat::TList function
+// form, matching CheckECValue's own idiom in this same file). Nothing else
+// changed vs. golden -- every dynamic_cast target, the first-match-wins
+// if/else-if order, and the raw-pointer (IsVCL==0) scalar switch tail are
+// byte-for-byte the same shape as golden.
+//
+// SCOPE BOUNDARY (see vclcompat/Controls.h's own file-head note for the full
+// writeup): this does NOT make any real widget-backed EC functional. Zero
+// real TPanel/TCustomEdit/TComboBox/TLabel/TCheckBox/TRadioGroup instances
+// exist anywhere in the object graph today (uHGemHT9045_EC.cpp/_SV.cpp, the
+// ~1740 real registration call sites, remain almost entirely untranslated) --
+// every dynamic_cast below against those 6 correctly and safely returns
+// nullptr for every EC registered today, exactly mirroring the precedent
+// SecsSvEcRegistration.cpp's own GetECDataValue gate already established.
+// Only the TStringList branch has any real reachable instance possible
+// right now (SetECDataPointer's TObject* overload can register one).
+//
+// PRESERVED GOLDEN QUIRK -- IsVCL==2 bare `return;` (golden :2718-2721):
+// unlike the IsVCL==1 branch above it, the IsVCL==2 (AnsiString*-backed) sub-
+// branch NEVER writes back through the stored pointer at all -- it just
+// returns immediately, dropping the incoming value on the floor. Meanwhile
+// GetECDataValue/DataItemOutSV/DataItemOutEC (this same wave, below/
+// SecsSvEcRegistration.cpp) all correctly READ IsVCL==2 ECs
+// (`SS=(AnsiString*)EC_Ptr->GetItem(i); VCLStr=*SS;`). This is a real,
+// previously-undocumented golden product-level asymmetry: an EC registered
+// via the AnsiString* overload is host-READABLE but silently NON-WRITABLE
+// via S2F15/SetECValue. Preserved verbatim -- NOT "fixed" into an actual
+// write-through, per this project's faithful-translation mandate.
 //---------------------------------------------------------------------------
 void HTGem::SetECValue(unsigned ECID, void *PtrSour)
 {
-#if 0 // TODO(future THGem/vclcompat wave, needs TPanel/TCustomEdit/TComboBox/TLabel/TCheckBox/TRadioGroup in vclcompat) -- golden SECSGEM/uHGemClass.cpp:2682-2882
-#endif
-    (void)ECID;
-    (void)PtrSour;
+    unsigned char Type;
+    AnsiString ECName;
+    AnsiString ECUnit;
+    void *P;
+    TObject *VclP;
+    AnsiString S, IsVCL;
+
+    TPanel      *PanelPtr;
+    TCustomEdit *EditPtr;
+    TComboBox   *ComboBoxPtr;
+    TLabel      *LabelPtr;
+    TCheckBox   *CheckBoxPtr;
+    TRadioGroup *RadioGroupPtr;
+    TStringList *StringListPtr;
+
+    int i=SvEcReg.EC_ID->IndexOf(ECID);
+    if(i>=0)
+    {
+        Type    =(unsigned char)atoi(SvEcReg.EC_TYPE->GetString(i).c_str());
+        P       =SvEcReg.EC_Ptr->GetItem(i);
+        IsVCL   =SvEcReg.EC_VCL_NAME->GetString(i);
+        if(IsVCL==1 || IsVCL==2)
+        {
+            if(IsVCL==1)
+            {
+                VclP=(TObject *)SvEcReg.EC_Ptr->GetItem(i);
+                PanelPtr        =dynamic_cast<TPanel        *>(VclP);
+                EditPtr         =dynamic_cast<TCustomEdit   *>(VclP);
+                ComboBoxPtr     =dynamic_cast<TComboBox     *>(VclP);
+                LabelPtr        =dynamic_cast<TLabel        *>(VclP);
+                CheckBoxPtr     =dynamic_cast<TCheckBox     *>(VclP);
+                RadioGroupPtr   =dynamic_cast<TRadioGroup   *>(VclP);
+                StringListPtr   =dynamic_cast<TStringList   *>(VclP);
+            }
+            else
+            {
+                // AI(W906-VCW1) 20260721: preserved golden quirk -- see this
+                // function's own file-head note above. Genuinely a bare
+                // return, not a missing write-through.
+                return;
+            }
+
+            char *Ptr2;
+            Ptr2=(char *)PtrSour;
+            if(Type==HType.ASCII_TYPE)
+            {
+                S=Ptr2;
+            }
+            else
+            {
+                S=*Ptr2;
+            }
+
+            if(StringListPtr!=NULL)
+            {
+                StringListPtr->CommaText=S;
+            }
+            else if(PanelPtr!=NULL)
+            {
+                PanelPtr->Caption=S;
+            }
+            else if(EditPtr!=NULL)
+            {
+                EditPtr->Text=S;
+            }
+            else if(ComboBoxPtr!=NULL)
+            {
+                if(Type==HType.ASCII_TYPE)
+                    ComboBoxPtr->Text=S;
+                else
+                    ComboBoxPtr->ItemIndex=atoi(S.c_str());
+            }
+            else if(LabelPtr!=NULL)
+            {
+                LabelPtr->Caption=S;
+            }
+            else if(CheckBoxPtr!=NULL)
+            {
+                CheckBoxPtr->Checked=(S!="0");
+            }
+            else if(RadioGroupPtr!=NULL)
+            {
+                if(Type==HType.ASCII_TYPE)
+                {
+                    if(S!="")
+                    {
+                        for(int x=0; x<RadioGroupPtr->Items->Count; x++)
+                        {
+                            if(S==RadioGroupPtr->Items->Strings[x])
+                                RadioGroupPtr->ItemIndex=x;
+                        }
+                    }
+                    else
+                    {
+                        RadioGroupPtr->ItemIndex=-1;
+                    }
+                }
+                else
+                {
+                    RadioGroupPtr->ItemIndex=atoi(S.c_str());
+                }
+            }
+        }
+        else
+        {
+            if(Type==HType.ASCII_TYPE)
+            {
+                char *Ptr, *Ptr2;
+                Ptr=(char *)P;
+                Ptr2=(char *)PtrSour;
+                strcpy(Ptr, Ptr2);
+            }
+            else if(Type==HType.BINARY_TYPE)
+            {
+                char *Ptr, *Ptr2;
+                Ptr=(char *)P;
+                Ptr2=(char *)PtrSour;
+                *Ptr=*Ptr2;
+            }
+            else if(Type==HType.BOOLEAN_TYPE)
+            {
+                unsigned char *Ptr, *Ptr2;
+                Ptr=(unsigned char *)P;
+                Ptr2=(unsigned char *)PtrSour;
+                *Ptr=*Ptr2;
+            }
+            else if(Type==HType.INT_1_TYPE)
+            {
+                char *Ptr,*Ptr2;
+                Ptr=(char *)P;
+                Ptr2=(char *)PtrSour;
+                *Ptr=*Ptr2;
+            }
+            else if(Type==HType.INT_2_TYPE)
+            {
+                short *Ptr,*Ptr2;
+                Ptr=(short *)P;
+                Ptr2=(short *)PtrSour;
+                *Ptr=*Ptr2;
+            }
+            else if(Type==HType.INT_4_TYPE)
+            {
+                int *Ptr, *Ptr2;
+                Ptr=(int *)P;
+                Ptr2=(int *)PtrSour;
+                *Ptr=*Ptr2;
+            }
+            else if(Type==HType.INT_8_TYPE)
+            {
+                long long *Ptr, *Ptr2;                 // golden __int64
+                Ptr=(long long *)P;
+                Ptr2=(long long *)PtrSour;
+                *Ptr=*Ptr2;
+            }
+            else if(Type==HType.UINT_1_TYPE)
+            {
+                unsigned char *Ptr,*Ptr2;
+                Ptr=(unsigned char *)P;
+                Ptr2=(unsigned char *)PtrSour;
+                *Ptr=*Ptr2;
+            }
+            else if(Type==HType.UINT_2_TYPE)
+            {
+                unsigned short *Ptr,*Ptr2;
+                Ptr=(unsigned short *)P;
+                Ptr2=(unsigned short *)PtrSour;
+                *Ptr=*Ptr2;
+            }
+            else if(Type==HType.UINT_4_TYPE)
+            {
+                unsigned int  *Ptr,*Ptr2;
+                Ptr=(unsigned int  *)P;
+                Ptr2=(unsigned int  *)PtrSour;
+                *Ptr=*Ptr2;
+            }
+            else if(Type==HType.UINT_8_TYPE)
+            {
+                unsigned long long  *Ptr,*Ptr2;         // golden unsigned __int64
+                Ptr=(unsigned long long  *)P;
+                Ptr2=(unsigned long long  *)PtrSour;
+                *Ptr=*Ptr2;
+            }
+            else if(Type==HType.FT_4_TYPE)
+            {
+                float  *Ptr,*Ptr2;
+                Ptr=(float  *)P;
+                Ptr2=(float  *)PtrSour;
+                *Ptr=*Ptr2;
+            }
+            else if(Type==HType.FT_8_TYPE)
+            {
+                double  *Ptr,*Ptr2;
+                Ptr=(double  *)P;
+                Ptr2=(double  *)PtrSour;
+                *Ptr=*Ptr2;
+            }
+        }
+        return;
+    }
 }
 //---------------------------------------------------------------------------
 // [S2,F15] Update New Equipment Constant.                //wei 20170417 (Steven)
@@ -3352,9 +3575,15 @@ void HTGem::SetECValue(unsigned ECID, void *PtrSour)
 // (GetDataItemLenAndTypeAndDelete / SendInvalidDataMessageToHost, SecsWireCodec
 // "WAVE 3" addendum); every other call in this body was already
 // WireCodec-only (GetDataItemLenAndType/DataItemIn) or a same-class virtual
-// call (SetECValue -- still gated above, see its own comment; ReloadParameter
-// -- already an inline no-op in the header). `HGem->` -> `WireCodec.`,
-// nothing else changed vs. golden.
+// call (SetECValue -- still gated above at the time of THIS wave, see its
+// own comment; ReloadParameter -- already an inline no-op in the header).
+// `HGem->` -> `WireCodec.`, nothing else changed vs. golden.
+// AI(W906-VCW1) 20260721: SetECValue (above) is UN-GATED as of this later
+// wave -- this note's "still gated" is left as its own historical record
+// (matching this file's established convention, see the file-head
+// "INTEGRATE WAVE 3" note on why historical before/after narrative is not
+// rewritten); S2F15_UpdateNewEquipmentConstant's calls into it now reach a
+// real implementation instead of a no-op.
 // PRESERVED GOLDEN QUIRK (confirmed by direct read, not a translation bug):
 // the ASCII branch's `Str=new char[len+100]` is never `delete[]`d anywhere in
 // golden (uHGemClass.cpp's ASCII branch, ~golden :2955-2960) -- a genuine
