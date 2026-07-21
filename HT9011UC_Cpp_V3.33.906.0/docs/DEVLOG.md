@@ -860,3 +860,27 @@ C 桶(`clientGemRead`/`ProcessSocketReceiveData`/`Timer1Timer`)是本檔案最�
 - **✅ 2026-07-21 六波連發完成**：SECSGEM Wave 1(`21900fd`，上日)+Wave 2「AlarmReportAck」(`4c2ec4c`)+uHGemHT9045 Bucket 0(`ee85c32`)+common.cpp wave-file 叢集(`38157cc`)+uHGemClass Micro5(`e6f03d3`)+uHGemClass Micro6(`33d4734`)，各附獨立審查+主迴圈五道閘+docs commit。**寫入佇列已清空**。`uHGemClass` 累計 48/57 已解(gated 57→**9**)。**下一波候選(尚無設計書，開工前先 recon)**：`uHGemClass.cpp` 剩 9 個(`S2F16`真循環依賴/`S2F24Sub`Trace子系統/`S2F32`需時鐘測試seam/`S7F20_CurrentEPPDData`/`S10F4`/`S10F6`/`S101F6`/`S101F8`各剩1個真阻塞/`SetECValue`獨立cast設計書)、SECSGEM 4 個獨立子系統(DoSpool/Trace/上下傳)+FormCreate SV 註冊、VCW-1/VCW-2 cast 波、DoDLRequest/DoULRequest 防護 seam、`SCK_ART.cpp` 剩餘協調債、或評估 `ht9045_globals`→`ht9045_core` link 擴大。中長期：FormsFacade/Handler free-func 前置波；W7 E0/M1/M2 HAL pump 群。
 - **驗證基準**：ctest 84/88(同 4 既有漂移)；`uHGemClass` gated 57→9。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 `fix/v899.32-pti`；工作樹另有無關 V899/config 殘留(PTI 案)勿圈入 V906 commit。
 - **執行模式**：使用者 2026-07-21 指示持續有效，本波為當日第六個連續波次，過程無真異常/疑問，未停下請示。
+
+---
+
+## 2026-07-21 — 平行展開三波（使用者明確指示「純翻譯可平行就盡量展開」）：uHGemClass Micro7 + DoDownLoadRemoteFile + DoARTLotStart
+
+**設定聲明**：主迴圈 Sonnet 5 + xhigh；翻譯/審查皆 Sonnet 5。使用者於連續 6 波單線推進後傳訊「如果純翻譯可以平行展開。請盡可能展開執行」——本節起改變執行模式：先平行派 4 個唯讀任務(Wave 7審查+3個候選區塊recon)，找出真正互斥的檔案後，對確認安全的目標平行開翻譯。
+
+**平行 recon 三路成果**：
+1. **SECSGEM 4 獨立子系統**（DoSpool/DoTraceDataResponse/上下傳+FormCreate SV 註冊）：**FormCreate SV 註冊確認早在 Wave 1 已完成**，ROADMAP 候選純屬過時記錄，即刻刪除。`DoTraceDataResponse` 與 `uHGemClass.cpp` 剩餘的 `S2F24_TraceInitializeAcknowledgeSub` 共享 9 個 Trace 陣列成員，兩者必須合波，此刻與 uHGemClass.cpp 同檔並行中不可碰。`DoSpool`+`DoUploadFileToHost` 家族需先定案一個 `TFileListBox` 即時目錄掃描 stand-in 設計。**唯一確認安全立即可做者：`DoDownLoadRemoteFile`**(零 VCL 依賴，4 個新純量/指標成員)。
+2. **SCK_ART.cpp 剩餘**：ROADMAP 舊稱「3 方 state 協調債」**修正為 4 方**(`SckArtState`+`SckArtRemainderState`+`csystem.cpp` 的 `W7C1_TfSCKARTSeam` 與 `W7C2_TfSCKARTSeam` 各自獨立內嵌一份，原記錄漏算 W7C1 那份)；判定此為有界機械式整併債非架構阻塞。**唯一確認安全立即可做者：`DoARTLotStart`**(66 行，依賴幾乎全部已存在)。
+3. **VCW cast 波可行性**（`SetECValue` 家族）：重建被遺失設計書的分析——確認 `TStrings:TObject` 一行改動是低風險(ABI無影響、零既有依賴受影響)、`vclcompat/Controls.h` 6個空殼型別可安全新增(零真實 widget 實例存在，`dynamic_cast` 天然回 nullptr，比照 `GetECDataValue` 既有先例)。**判定 GO，但需明確標註範圍邊界**：這只解「cast cluster 編譯正確」，不等於 28 個表單裡 1740 個真實 widget-backed EC/SV 註冊變得可用(那批仍卡 7/28 表單已翻的債)——排入下一波但因與 uHGemClass.cpp/uHGemEquipment.h 同檔衝突，須等本輪 SECSGEM 波次全部落地才能開工，不算真平行。
+
+**平行翻譯執行**：確認安全後，同時派出 uHGemClass Micro7(S10F4/S10F6/S101F6/S101F8，續前波在 uHGemClass.cpp/uHGemEquipment.h 上疊加)、DoDownLoadRemoteFile(uHGemEquipment.cpp，與 Micro7 疊加但零成員名稱衝突)、DoARTLotStart(`Automation/SCK_ART_Remainder.cpp`，與前兩者零檔案重疊)——三個翻譯 agent 真同時跑，事後證實：SECSGEM 兩波在同一批檔案上純增量疊加(無衝突，僅一次因並發寫入造成的暫態 SegFault，二次重跑即清)；SCK_ART 波全程零觸碰 SECSGEM 檔案。
+
+**交付**：
+- **`Automation/SCK_ART_Remainder.cpp`：DoARTLotStart 完成**(commit `092fce0`，golden :4191-4256，66 行)——獨立成一個 commit，因為與 SECSGEM 兩波完全零檔案重疊。逐位保留 `_sLotID!=" "`(真空白字元非空字串)不對稱 quirk；新增 2 個 TU-local no-op gate。獨立審查 CLEAN(2 個非阻擋 LOW/MEDIUM：一個揭露文字漏算既有重複次數、一個斷言數筆誤 22 vs 24)。
+- **SECSGEM `uHGemClass.cpp`/`uHGemEquipment.h/.cpp`：Micro7+DoDownLoadRemoteFile 合併成一個 commit**(commit `8a1b628`)——因兩波交織在同一批檔案的不同插入點，硬要拆兩個 commit 需 hunk 級手術，風險大於價值，兩波各自已獨立審查 CLEAN 故合併落地。**本波中心發現**：`S101F6_StoreHostUploadFile` 成功路徑真的對 host 送兩次 `LocalAcknowledge(101,6,0)`(Sub 自己送一次+既有 wrapper 又送一次)，`S101F8` 不會——golden 真雙重 ACK bug，逐位保留，新測試逐幀驗證 wire 內容(非僅比對總 bytes 數，避免「34 bytes」巧合通過)。`DoDownLoadRemoteFile` 零 VCL 依賴，糾正既有 stub 註解一個真錯誤(呼叫端是 `DoLocalAllProcessLoop` 非 `Timer1Timer case 410`)，逐位保留 golden 倒退式重試邏輯 quirk。兩波獨立審查皆 CLEAN(各 1 個 LOW，皆自報斷言數筆誤，非功能性)；審查亦確認兩波新增成員零命名衝突、ctor init-list 順序皆正確。
+
+**主迴圈親自定案**（`build_w906_doartlotstart_final` 全樹 + `build_w906_secsgem_micro78_final` SECSGEM 專項，皆全新 from-scratch）：build exit 0、resolving/undefined reference=0、ctest 皆 **84/88**(同 4 既有環境漂移)、mojibake 0。`uHGemClass` gated 9→**5**。
+
+### 🔖 RESUME（最新）
+- **✅ 平行三波完成（2026-07-21）**：DoARTLotStart(`092fce0`)+uHGemClass Micro7(`8a1b628`，含 DoDownLoadRemoteFile)。`uHGemClass` 累計 52/57 已解(gated 57→**5**：`S2F16`/`S2F24Sub`/`S2F32`/`S7F20_CurrentEPPDData`/`SetECValue`)。**下一波候選**：**VCW-1 cast 切片**(已 recon 判定 GO，範圍已明確——`TStrings:TObject`+6個空殼型別+4函式 dispatch，~550行；需等本輪 SECSGEM 落地才開工，因同檔)、`DoSpool`+`DoUploadFileToHost` 家族(需先定案 `TFileListBox` stand-in 設計)、`S2F24Sub`+`DoTraceDataResponse` 合波、`Automation/SCK_ART.cpp` 5支報表函式(建議一支一波)或4方state整併小波、`S2F32` 時鐘微波(需先建測試seam)、`S2F16`(真循環CMake依賴)、DoDLRequest/DoULRequest 防護 seam、或評估 `ht9045_globals`→`ht9045_core` link 擴大。
+- **驗證基準**：ctest 84/88(同 4 既有漂移)；`uHGemClass` gated 57→5。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 `fix/v899.32-pti`；工作樹另有無關 V899/config 殘留(PTI 案)勿圈入 V906 commit。
+- **執行模式變更**：使用者 2026-07-21 明確指示「純翻譯可平行就盡量展開」——本節起遇到多個彼此無檔案重疊的候選時，先平行 recon 判斷互斥性，再對確認安全者平行派翻譯；同檔案疊加的波次各自獨立審查後，視能否乾淨拆分決定合併或分開 commit。過程無真異常/疑問，未停下請示。
