@@ -265,6 +265,21 @@
 //  Process_S7F20_CurrentEPPIDData/S125F2_EnableDisableECDataAcknowledge
 //  (uHGemClass.cpp, this same wave) -- see that file's own "INTEGRATE WAVE 6"
 //  note for the matching 4-method un-gating on the HTGem side.
+//
+// AI(W906-DoDownLoadRemoteFile) 20260721: NINTH wave -- un-gates
+// THGem::DoDownLoadRemoteFile (golden uHGemEquipment.cpp:6746-6807), the
+// remote-recipe-download (S7F5 PP-Request) retry state machine invoked from
+// DoLocalAllProcessLoop. Added 4 members (golden uHGemEquipment.h:239/520-522):
+// TStringList *RequestRemoteDownLoad (new/delete lifecycle, same idiom as
+// UploadFileString above), int iRetryCTDownLoadRemoteFile (ctor 0),
+// GemTimer DelayDownLoadRemoteFile (no ctor default, matches every other
+// GemTimer member's own established precedent), int iDownLoadRemoteFileTask
+// (ctor 1). Also added: the AnsiString-form `DataItemOut(unsigned char,
+// AnsiString)` forwarder (golden .h:316) -- the EIGHTH wave's own note above
+// explicitly deferred this exact overload for lack of an in-scope caller;
+// DoDownLoadRemoteFile is now that caller (golden calls it bare, matching
+// this wave's translated call site). No VCL widget dependency; bReceiveS7F6/
+// bReceiveS101F5/bReceiveS101F7 already exist (SysModWire wave, FIFTH above).
 //---------------------------------------------------------------------------
 #ifndef uHGemEquipmentH
 #define uHGemEquipmentH
@@ -272,6 +287,7 @@
 #include "vclcompat/vcl_compat.h"
 #include "vclcompat/StringGrid.h"
 #include "SECSGEM/SecsEventType.h"   // SECS_EVENT.TotalEvent (array bound in SetCEIDContent)
+#include <vector>   // AI(W906-uHGemClass-Micro7) 20260721: THGemCheckedArray's backing store (see below)
 
 // AI(W906-uHGemEquipment-BucketC) 20260717: D1 -- embed `SecsWireCodec
 // WireCodec;` by value (see the class body below), following the proven
@@ -484,16 +500,65 @@ struct THGemMemo
 };
 
 //---------------------------------------------------------------------------
+//  AI(W906-uHGemClass-Micro7) 20260721: THGemCheckedArray -- stand-in for the
+//  indexed bool property golden's real VCL TCheckListBox exposes as
+//  `->Checked[i]` (golden uHGemEquipment.h:414 `TCheckListBox
+//  *GemRemoteReceipeList;`). This wave's in-scope call sites
+//  (S101F6_StoreHostUploadFile/S101F8_StoreHostUploadFile, uHGemClass.cpp,
+//  golden :2571/:2634 `GemRemoteReceipeList->Checked[i]=false;`) only ever
+//  WRITE to it -- golden elsewhere (out of this wave's scope) also READS
+//  Checked[i], so this stand-in is deliberately shaped to add read support
+//  later WITHOUT reshaping: `operator[]` returns a Proxy whose
+//  `operator=(bool)` auto-grows the backing `std::vector<bool>` to fit
+//  index `i` (default-false-filled) before storing -- a future wave just
+//  adds `operator bool() const` to Proxy, touching neither this member's
+//  declaration nor any existing call site. Deliberately NOT sized off
+//  Items->Count automatically (golden's own TCheckListBox ties Checked's
+//  size to the list's item count as a side effect of Items->Add(), which
+//  this minimal stand-in does not model) -- auto-grow-on-write is the
+//  simplest faithful substitute for this wave's write-only scope.
+//---------------------------------------------------------------------------
+struct THGemCheckedArray
+{
+    std::vector<bool> Values;
+    struct Proxy
+    {
+        std::vector<bool> &Values;
+        int Index;
+        Proxy(std::vector<bool> &v, int i) : Values(v), Index(i) {}
+        Proxy& operator=(bool val)
+        {
+            if ((int)Values.size() <= Index)
+                Values.resize((size_t)Index + 1, false);
+            Values[(size_t)Index] = val;
+            return *this;
+        }
+    };
+    Proxy operator[](int i) { return Proxy(Values, i); }
+};
+
+//---------------------------------------------------------------------------
 //  AI(W906-uHGemEquipment-BucketC) 20260717: THGemListBox -- stand-in for
 //  golden TListBox *SFCodeResponseList (uHGemEquipment.h:138, __published).
 //  Fields actually used in this wave's scope: ->Items (Add :2062 /
 //  Strings[i] :4644 / Delete :4654 / Count :4617 / IndexOf :7040 / Clear
 //  :7037) and ->Clear() (:4624, real TListBox::Clear == Items.Clear).
 //  Same minimal-stand-in idiom as the Bucket-B THGemXxx widgets above.
+//  AI(W906-uHGemClass-Micro7) 20260721: ADDED `Checked` (THGemCheckedArray,
+//  see its own comment immediately above) -- golden's own GemRemoteReceipeList
+//  is a real TCheckListBox (golden uHGemEquipment.h:414), a TListBox
+//  SUBCLASS that adds exactly this indexed Checked property; this reuses the
+//  EXISTING THGemListBox stand-in (already standing in for GemRemoteReceipeList
+//  since Micro5) rather than forking a second struct, so SFCodeResponseList
+//  (the OTHER THGemListBox instance, which golden's real TListBox base class
+//  has no Checked property on at all) simply carries an always-unused Checked
+//  member -- harmless, and avoids a THGemCheckedArray-vs-plain-TListBox split
+//  that no call site in this project actually needs yet.
 //---------------------------------------------------------------------------
 struct THGemListBox
 {
     TStringList *Items;
+    THGemCheckedArray Checked;
     THGemListBox() { Items = new TStringList(); }
     ~THGemListBox() { delete Items; }
     THGemListBox(const THGemListBox&) = delete;
@@ -793,6 +858,36 @@ public:
     THGemMemo *DB;                // golden :300 (externally assigned via out-of-scope SetDisplayPtr, default NULL)
     THGemMemo *TerminalMemoPtr;   // golden :677 (externally assigned, default NULL, always null-guarded at its call site)
 
+    // AI(W906-uHGemClass-Micro7) 20260721: TerminalListboxPtr/TerminalEditPtr/
+    // TerminalPanelPtr/TerminalDisplayIndex + the "2"-suffixed mirror set --
+    // un-gates HTGem::S10F4_TerminalDisplaySingleAcknowledge/
+    // S10F6_TerminalDisplayMultiBlockAcknowledge (uHGemClass.cpp, this wave).
+    // Golden mirrors ALL 5 base "Terminal*" concepts with a second, fully
+    // parallel "2"-suffixed set (golden uHGemEquipment.h:677-686) -- this is
+    // not a partial echo, both halves are read/written symmetrically by
+    // S10F4's own body (see that method's own .cpp comment). Same
+    // default-NULL/externally-assigned idiom as TerminalMemoPtr immediately
+    // above (a caller/test must `new` a THGemListBox/THGemEdit/THGemPanel and
+    // assign it; THIS class does NOT allocate any of them) -- golden's own
+    // TListBox*/TCustomEdit*/TPanel* map onto the ALREADY-EXISTING
+    // THGemListBox/THGemEdit/THGemPanel stand-ins (no new struct needed,
+    // confirmed by reading golden's own S10F4/S10F6 bodies: only
+    // ->Items/->Clear() (THGemListBox), ->Text (THGemEdit), ->Caption
+    // (THGemPanel) are ever touched -- all already exposed). TerminalDisplayIndex/
+    // TerminalDisplayIndex2 are the one int-typed pair in this set; UNLIKE the
+    // rest of this member, golden's own ctor DOES explicitly zero them
+    // (uHGemEquipment.cpp:599-600) -- see THGem's own ctor below for the
+    // matching explicit 0 (not a "flagged deviation", a literal golden match).
+    THGemListBox *TerminalListboxPtr;   // golden :678 (externally assigned, default NULL)
+    THGemEdit *TerminalEditPtr;         // golden :679 (externally assigned, default NULL)
+    THGemPanel *TerminalPanelPtr;       // golden :680 (externally assigned, default NULL)
+    int TerminalDisplayIndex;           // golden :681 (ctor 0, golden ctor :599)
+    THGemMemo *TerminalMemoPtr2;        // golden :682 (externally assigned, default NULL)
+    THGemListBox *TerminalListboxPtr2;  // golden :683 (externally assigned, default NULL)
+    THGemEdit *TerminalEditPtr2;        // golden :684 (externally assigned, default NULL)
+    THGemPanel *TerminalPanelPtr2;      // golden :685 (externally assigned, default NULL)
+    int TerminalDisplayIndex2;          // golden :686 (ctor 0, golden ctor :600)
+
     // AI(W906-uHGemClass-Micro5) 20260721: GemRemoteReceipeList -- golden
     // uHGemEquipment.h:414 (`TCheckListBox *GemRemoteReceipeList;`, plain
     // `public:`, NOT __published) -- externally assigned, matching golden's
@@ -907,6 +1002,41 @@ public:
     // both .cpp definitions for the exact shape this mirrors.
     TStringList *UploadFileString;
 
+    // AI(W906-DoDownLoadRemoteFile) 20260721: RequestRemoteDownLoad -- golden
+    // uHGemEquipment.h:239 (part of the SAME SV/EC-cluster private-member
+    // block as UploadFileName/RequestRemoteDownLoad/ALID_ALED there; NOT the
+    // SV/EC registration-table cluster SvEcReg models -- confirmed by reading
+    // SecsSvEcRegistration.h, no such member). Golden ctor-allocates it
+    // alongside UploadFileName/TimeLeft (.cpp:582 `RequestRemoteDownLoad=new
+    // TStringList;`) and separately Clears it right after (.cpp:586) -- see
+    // this wave's own ctor comment for that redundant-but-harmless-on-a-
+    // freshly-allocated-list Clear() call, reproduced verbatim. Golden's own
+    // ~THGem (uHGemEquipment.cpp:724/755) Clears then deletes it for real --
+    // this port mirrors UploadFileString's own established NULL-guarded
+    // Clear-then-delete dtor idiom (see that member's own header comment),
+    // NOT golden's un-guarded version, same already-accepted deviation class.
+    // Populated by DoDownLoadRemoteFile's own case 1/100/200 (this wave);
+    // golden's other writer, SetReceipeDirectoryAndGlobalName, stays out of
+    // scope (same blocker as UploadFileName/UpLoadPath above).
+    //
+    // NAMING TRAP (flagged in this wave's own brief): do not confuse with
+    // UploadFileName (a DIFFERENT TStringList*, golden .h:228, upload-family
+    // scope, NOT added here) or UploadFileString (a THIRD, already-existing
+    // member, S101F2/S101F4 scope, unrelated lifecycle purpose despite the
+    // similar new/delete shape).
+    TStringList *RequestRemoteDownLoad;
+
+    // AI(W906-DoDownLoadRemoteFile) 20260721: DoDownLoadRemoteFile's own
+    // retry-loop state (golden uHGemEquipment.h:520-522, ctor :496-497 for
+    // the 2 ints -- see the .cpp ctor init list). DelayDownLoadRemoteFile
+    // (GemTimer) gets NO explicit ctor entry, same established precedent as
+    // DelayOpenCommuncation/ConnectDelay/DelayForServoError above -- its own
+    // default ctor already zero-inits defensively (see GemTimer's own header
+    // comment).
+    int iRetryCTDownLoadRemoteFile;                 // golden ctor :496 (explicitly 0)
+    GemTimer DelayDownLoadRemoteFile;
+    int iDownLoadRemoteFileTask;                    // golden ctor :497 (explicitly 1)
+
     int GemSpoolCountActual;                        // golden :196 (SV54)
     char GemSpoolStartTime[256];                    // golden :198 (SV57)
 
@@ -937,6 +1067,23 @@ public:
     // AI(W906-uHGemClass-Micro6) 20260721: added to un-gate
     // S7F18_DeleteProcessProgramAcknowledge (golden uHGemClass.cpp:2115-2166).
     AnsiString UpLoadPath;                          // golden :698
+
+    // AI(W906-uHGemClass-Micro7) 20260721: bFinishDownloadFile/CurrentDirectory
+    // -- un-gates S101F6_StoreHostUploadFile/S101F8_StoreHostUploadFile
+    // (uHGemClass.cpp, this wave). bFinishDownloadFile (golden :626) is
+    // S101F6's own "whole multi-part upload finished" latch; golden never
+    // explicitly initializes it (grepped ctor body -- absent), so zero-init
+    // defensively here, same established precedent as this cluster's own
+    // bSpoolActive/bBeginTransferSpool above. CurrentDirectory (golden :427)
+    // is READ-ONLY in this wave's scope (S101F8 only reads it, via
+    // IncludeTrailingPathDelimiter) -- golden's own `SetCurrentDirectory(Path)`
+    // setter (golden :426/.cpp:810-814, which ALSO cascades into
+    // GemSystemPath/GemSpoolPath/GemSystemIniPath) is deliberately NOT ported
+    // here, out of this wave's scope; a caller/test must set this member
+    // directly, same "caller/test must set explicitly" idiom as
+    // GemSystemPath/GemSpoolPath above.
+    bool bFinishDownloadFile;                       // golden :626
+    AnsiString CurrentDirectory;                    // golden :427
 
     // ==== CEID / Report StringGrid-backed "database" family =================
     void SetCEIDContent(unsigned iCeid, AnsiString CeidAlias, unsigned iReportCount, unsigned *iReportIDData, int Mode);
@@ -1146,8 +1293,14 @@ public:
     // is added -- golden's sibling `DataItemOut(unsigned char, AnsiString)`
     // overload has no in-scope THGem-level caller today (verified by reading
     // every new method's body), so it is not added speculatively.
+    //
+    // AI(W906-DoDownLoadRemoteFile) 20260721: the deferral above no longer
+    // holds -- DoDownLoadRemoteFile (below) calls the AnsiString-form
+    // overload bare, matching golden (uHGemEquipment.cpp:6762). Added now,
+    // same one-line-forwarder idiom as its pointer-form sibling.
     void InitLocalHead(int SCode, int FCode, int WBit);        // golden .h:314
     void DataItemOut(int len, unsigned char Type, void *P);    // golden .h:315
+    void DataItemOut(unsigned char Type, AnsiString S);        // golden .h:316
 
     void SendLocalData();   // golden .h:318, uHGemEquipment.cpp:1985-2107 (now real -- forwards to SendLocalDataFrom(WireCodec))
     // AI(W906-uHGemEquipment-BucketC) 20260717: ADDITIVE, not a golden method
@@ -1177,7 +1330,13 @@ public:
     void DoSpool();                    // golden :4079 -- #if 0 TODO(W906-SECSGEM-spool), needs spool-file surface
     void DoTraceDataResponse(int TR);  // golden :4190 -- #if 0 TODO(W906-SECSGEM-trace), needs TraceData[]/TraceDataResponseTask[]
     void DoUploadFileToHost();         // golden :4591 -- #if 0 TODO(W906-SECSGEM-upload), needs FTP/file-transfer surface
-    void DoDownLoadRemoteFile();       // golden :6746 -- #if 0 TODO(W906-SECSGEM-download), needs FTP/file-transfer surface
+
+    // AI(W906-DoDownLoadRemoteFile) 20260721: UN-GATED (was a stub in this
+    // same cluster) -- real body added, see .cpp. golden :6746-6807. Pure
+    // RequestRemoteDownLoad/InitLocalHead/DataItemOut/SendLocalData retry
+    // state machine, no VCL widget dependency (unlike its sibling
+    // DoUploadFileToHost family immediately above, which stays gated).
+    void DoDownLoadRemoteFile();       // golden :6746-6807
 };
 
 //---------------------------------------------------------------------------

@@ -314,6 +314,22 @@ THGem::THGem()
       GemBtnOnlineLocal(NULL),
       DB(NULL),                        // golden ctor :537
       TerminalMemoPtr(NULL),
+      // AI(W906-uHGemClass-Micro7) 20260721: TerminalListboxPtr/TerminalEditPtr/
+      // TerminalPanelPtr + the "2"-suffixed mirror set -- see header's own
+      // comment on this cluster. All 4 pointers (+4 "2"-suffixed pointers)
+      // default-NULL/externally-assigned, same idiom as TerminalMemoPtr
+      // immediately above; TerminalDisplayIndex/TerminalDisplayIndex2
+      // explicitly 0, a literal match of golden's own ctor (uHGemEquipment.cpp
+      // golden :599-600), not a "flagged deviation".
+      TerminalListboxPtr(NULL),
+      TerminalEditPtr(NULL),
+      TerminalPanelPtr(NULL),
+      TerminalDisplayIndex(0),          // golden ctor :599
+      TerminalMemoPtr2(NULL),
+      TerminalListboxPtr2(NULL),
+      TerminalEditPtr2(NULL),
+      TerminalPanelPtr2(NULL),
+      TerminalDisplayIndex2(0),         // golden ctor :600
       // AI(W906-uHGemClass-Micro5) 20260721: default-NULL/externally-assigned
       // idiom, same category as TerminalMemoPtr immediately above -- NOT
       // allocated anywhere in this ctor (see its own header comment).
@@ -371,6 +387,16 @@ THGem::THGem()
       // shape, to avoid a -Wreorder mismatch (member-init order must track
       // declaration order, not "logical grouping").
       UploadFileString(NULL),
+      // AI(W906-DoDownLoadRemoteFile) 20260721: RequestRemoteDownLoad --
+      // allocated for real in the ctor body below, same NULL-then-`new`
+      // idiom as UploadFileString immediately above (see this member's own
+      // header comment). iRetryCTDownLoadRemoteFile/iDownLoadRemoteFileTask:
+      // golden ctor :496-497 (explicit 0/1); DelayDownLoadRemoteFile
+      // (GemTimer, declared between the two ints) gets no entry here, same
+      // established precedent as every other GemTimer member in this list.
+      RequestRemoteDownLoad(NULL),
+      iRetryCTDownLoadRemoteFile(0),   // golden ctor :496 (explicitly 0)
+      iDownLoadRemoteFileTask(1),      // golden ctor :497 (explicitly 1)
       GemSpoolCountActual(0),
       // AI(W906-uHGemClass-Micro6) 20260721: S6F24/S7F18 supporting state --
       // see header's own comment on this cluster. bSpoolActive/
@@ -384,7 +410,15 @@ THGem::THGem()
       bSpoolActive(false),             // golden ctor :607
       bBeginTransferSpool(false),      // golden ctor :604
       GemSpoolPath(""),
-      UpLoadPath("")
+      UpLoadPath(""),
+      // AI(W906-uHGemClass-Micro7) 20260721: see header's own comment on this
+      // pair (S101F6/S101F8 supporting state). bFinishDownloadFile: golden
+      // never inits this either -- zero-init defensively, same posture as
+      // bSpoolActive/bBeginTransferSpool immediately above. CurrentDirectory:
+      // defaults to "" (AnsiString's own default ctor) -- caller/test must set
+      // it explicitly, same idiom as GemSpoolPath/UpLoadPath immediately above.
+      bFinishDownloadFile(false),
+      CurrentDirectory("")
 {
     // AI(W906-SvEcDataItem) 20260720: szManID/szGetCPUType/GemSpoolStartTime
     // are fixed char[256] buffers (not in the member-init list above --
@@ -537,6 +571,14 @@ THGem::THGem()
         // ctor block) -- mirrors HTGem's own SecsAlarmMessage/FMessageList
         // new/delete lifecycle, see its own header comment.
         UploadFileString    = new TStringList();
+        // AI(W906-DoDownLoadRemoteFile) 20260721: RequestRemoteDownLoad --
+        // golden ctor :582 (`RequestRemoteDownLoad=new TStringList;`, part of
+        // the SAME SV/EC-cluster ctor block as UploadFileName/TimeLeft
+        // there). golden separately Clear()s it right after, at ctor :586 --
+        // a no-op on a freshly-allocated empty list, reproduced verbatim
+        // below for 1:1 fidelity (see this member's own header comment).
+        RequestRemoteDownLoad = new TStringList();
+        RequestRemoteDownLoad->Clear();   // golden ctor :586 (redundant on a fresh list, harmless)
         // GemRemoteReceipeList: default-NULL/externally-assigned (golden ctor
         // :504 `GemRemoteReceipeList=NULL;`) -- deliberately NOT allocated
         // here, same documentation idiom as EnableOrDisablePtr below.
@@ -597,6 +639,7 @@ THGem::THGem()
         delete SFCodeResponseList;
         delete TimeLeft;
         delete UploadFileString;   // AI(W906-uHGemClass-Micro5) 20260721
+        delete RequestRemoteDownLoad;   // AI(W906-DoDownLoadRemoteFile) 20260721
         delete pLockOnSocketRecvice;
         delete csSFCodeResponse;
         delete RecvMemoryBuffer;
@@ -718,6 +761,18 @@ THGem::~THGem()
         delete UploadFileString;
     }
     UploadFileString = NULL;
+    // AI(W906-DoDownLoadRemoteFile) 20260721: RequestRemoteDownLoad -- same
+    // NULL-guarded Clear-then-delete idiom as UploadFileString immediately
+    // above (mirrors that member's own header comment). NOT a deviation:
+    // golden's own ~THGem (uHGemEquipment.cpp:724/755, inside the SAME SV/EC-
+    // cluster teardown) also Clears then deletes RequestRemoteDownLoad for
+    // real.
+    if (RequestRemoteDownLoad != NULL)
+    {
+        RequestRemoteDownLoad->Clear();
+        delete RequestRemoteDownLoad;
+    }
+    RequestRemoteDownLoad = NULL;
     // GemRemoteReceipeList is NOT deleted here -- externally-assigned, see
     // this destructor's own widget-ownership note above.
     // AI(W906-AlarmReportAck) 20260721: NOT a deviation, unlike the 7 pointers
@@ -4257,14 +4312,106 @@ void THGem::DoUploadFileToHost()
 {
 }
 //---------------------------------------------------------------------------
-// AI(W906-uHGemEquipment-BucketC) 20260717: GATED STUB (golden
-// uHGemEquipment.cpp:6746, called from Timer1Timer case 410's own `else`
-// branch). Real body manages the remote-recipe-download retry state machine
-// (DelayDownLoadRemoteFile/iDownLoadRemoteFileTask/iRetryCTDownLoadRemoteFile/
-// ...), an FTP/file-transfer surface entirely out of this wave's scope.
+// AI(W906-DoDownLoadRemoteFile) 20260721: UN-GATED (was a no-op stub, see
+// removed comment history below this note). golden uHGemEquipment.cpp:
+// 6746-6807. Remote-recipe-download (S7F5 PP-Request, expects S7F6 PP-Send
+// reply) retry state machine, pumped once per DoLocalAllProcessLoop call
+// (this file's own call site, inside DoLocalAllProcessLoop above). Pure
+// RequestRemoteDownLoad/InitLocalHead/DataItemOut/SendLocalData composition,
+// no VCL widget dependency (unlike the sibling DoUploadFileToHost family,
+// which stays gated -- see that method's own stub comment).
+// `int &iRetryCT=...`/`int &Task=...` is golden's own reference-alias idiom,
+// preserved verbatim -- matches this file's own established DoOpenCommuncation
+// /DoConnect/Timer1Timer sub-task convention (`int &Task=...Task;`, see e.g.
+// uHGemEquipment.cpp:3388/3543/4077/5542).
+//
+// GOLDEN QUIRK, preserved verbatim -- case 200's two branches read backwards
+// from the "wait for timer, then retry" shape one would expect. `switch` is
+// a plain one-shot dispatch here (no internal loop), so every transition
+// below only takes effect on the CALLER's *next* invocation of this method
+// (i.e. the next DoLocalAllProcessLoop pump), not within the same call:
+//   * DelayDownLoadRemoteFile.TimerOff()==FALSE (the 1-second grace window
+//     since the last send has NOT yet elapsed) -> `else{ Task=100; }` --
+//     falls back to the re-send state WITHOUT waiting for the window to
+//     actually elapse. This call sends nothing itself; the very NEXT pump
+//     call (now dispatching case 100) immediately re-sends the S7F5 request
+//     and re-arms the timer fresh. If DoLocalAllProcessLoop is pumped faster
+//     than 1 second (its usual case -- see Timer1Timer's own polling
+//     cadence), this pair of transitions repeats every ~2 pump calls, so the
+//     state machine ends up RESENDING the request continuously rather than
+//     genuinely waiting out the 1-second window.
+//   * TimerOff()==TRUE (the window DID elapse without a reply) -> increments
+//     iRetryCT but, unless the >5 cap is exceeded, does NOT resend and does
+//     NOT re-arm the timer -- Task simply stays 200. Since nothing rearms
+//     the timer on this path, TimerOff() keeps returning true on every
+//     subsequent pump call too, so iRetryCT actually races from 0 to >5
+//     (and gives up, Task=1) within a handful of back-to-back pump calls --
+//     NOT genuinely spaced ~1 second apart per retry, despite the
+//     "TimerSetSecAndOn(1)" naming suggesting otherwise.
+// Neither behavior is "fixed" here -- both are translated exactly as golden
+// wrote them.
 //---------------------------------------------------------------------------
 void THGem::DoDownLoadRemoteFile()
 {
+    int &iRetryCT = iRetryCTDownLoadRemoteFile;
+    int &Task = iDownLoadRemoteFileTask;
+
+    switch (Task)
+    {
+        case 1:
+            if (RequestRemoteDownLoad->Count != 0)
+            {
+                iRetryCT = 0;
+                Task = 100;
+            }
+            break;
+        case 100:
+            InitLocalHead(7, 5, 1);
+            DataItemOut(HType.ASCII_TYPE, RequestRemoteDownLoad->Strings[0]);
+            bReceiveS7F6 = false;
+            DelayDownLoadRemoteFile.TimerSetSecAndOn(1);
+            SendLocalData();
+            Task = 200;
+            break;
+        case 200:
+            if (bReceiveS7F6 == true)
+            {
+                bReceiveS7F6 = false;
+                RequestRemoteDownLoad->Delete(0);
+                DelayDownLoadRemoteFile.TimerSetSecAndOn(1);
+                Task = 300;
+                break;
+            }
+
+            if (DelayDownLoadRemoteFile.TimerOff())
+            {
+                iRetryCT++;
+                if (iRetryCT > 5)
+                {
+                    bReceiveS7F6 = false;
+                    RequestRemoteDownLoad->Delete(0);
+                    Task = 1;
+                    break;
+                }
+            }
+            else
+            {
+                Task = 100;
+            }
+            break;
+        case 300:
+            if (DelayDownLoadRemoteFile.TimerOff())
+            {
+                Task = 1;
+            }
+            else if (bReceiveS101F5 == true || bReceiveS101F7 == true)
+            {
+                bReceiveS101F5 = false;
+                bReceiveS101F7 = false;
+                DelayDownLoadRemoteFile.TimerSetSecAndOn(1);
+            }
+            break;
+    }
 }
 //---------------------------------------------------------------------------
 // 2013/06/29  V1.1  Lee (golden uHGemEquipment.cpp:8679-8693)
@@ -4899,6 +5046,17 @@ void THGem::InitLocalHead(int SCode, int FCode, int WBit)
 void THGem::DataItemOut(int len, unsigned char Type, void *P)
 {
     WireCodec.DataItemOut(len, Type, P);
+}
+//------------------------------------------------------------------------------
+// AI(W906-DoDownLoadRemoteFile) 20260721: golden .h:316 -- the AnsiString-form
+// sibling forwarder, deliberately deferred by the AlarmReportAck wave above
+// (no in-scope caller at the time, per that wave's own comment). Added now:
+// DoDownLoadRemoteFile (this wave) calls it bare, matching golden
+// (uHGemEquipment.cpp:6762 `DataItemOut(HType.ASCII_TYPE, ...)`). Same
+// one-line-forwarder idiom as its pointer-form sibling immediately above.
+void THGem::DataItemOut(unsigned char Type, AnsiString S)
+{
+    WireCodec.DataItemOut(Type, S);
 }
 //------------------------------------------------------------------------------
 // golden public signature (.h:318) -- forwards to SendLocalDataFrom over

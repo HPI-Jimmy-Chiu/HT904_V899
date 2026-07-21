@@ -517,6 +517,86 @@
 //    `return`s immediately) -- an existing golden behavior, not a translation
 //    defect.
 //---------------------------------------------------------------------------
+//
+//  INTEGRATE WAVE 8 (AI(W906-uHGemClass-Micro7) 20260721) -- micro-slice #7:
+//  Terminal display Ack pair + the recipe-upload "Store Host Upload File"
+//  Sub pair (S101F6/S101F8's own real bodies, not just their wrappers)
+//  ---------------------------------------------------------------------------
+//  uHGemEquipment.h's THGem gained: 9 new Terminal* members
+//  (TerminalDisplayIndex/TerminalListboxPtr/TerminalEditPtr/TerminalPanelPtr
+//  + the full "2"-suffixed mirror set -- TerminalMemoPtr already existed),
+//  `bool bFinishDownloadFile`, and `AnsiString CurrentDirectory` (bare member
+//  only -- golden's own SetCurrentDirectory setter/cascade stays out of
+//  scope). `THGemListBox` (the existing GemRemoteReceipeList stand-in) gained
+//  a new `Checked` member (`THGemCheckedArray`, write-only this wave --
+//  auto-grows on `Checked[i]=false`, see that struct's own header comment for
+//  the read-support-later design). This resolves every remaining blocker for
+//  4 methods.
+//
+//  UN-GATED (4 more, 48->52/57 total now; 9->5 remaining-gated) -- golden
+//  SECSGEM/uHGemClass.cpp line ranges cited at each definition below:
+//    S10F4_TerminalDisplaySingleAcknowledge (:2274-2382),
+//    S10F6_TerminalDisplayMultiBlockAcknowledge (:2387-2431),
+//    S101F6_StoreHostUploadFile (:2519-2581),
+//    S101F8_StoreHostUploadFile (:2597-2639).
+//
+//  MECHANICAL RENAME RULE (same golden-derived split as prior waves): golden
+//  `HGemPtr->GetDataItemLenAndTypeAndDelete/GetDataItemLenAndType/DataItemIn/
+//  Remote.W_Bit/LocalAcknowledge` (wire-codec primitives) became
+//  `ActiveWire->...` -- INCLUDING S10F6's own cosmetic mix of `HGemPtr->` and
+//  the bare global `HGem->` for these same primitives (both spellings
+//  unified to `ActiveWire->`, same duality rule as INTEGRATE WAVE 5/6's own
+//  notes, see uHGemClass.cpp:3234); golden `HGemPtr->TerminalDisplayIndex(2)/
+//  TerminalMemoPtr(2)/TerminalListboxPtr(2)/TerminalEditPtr(2)/
+//  TerminalPanelPtr(2)/GetTimeInfo()/TimeString/bFinishDownloadFile/
+//  UpLoadPath/CurrentDirectory/GemRemoteReceipeList/SV_70_UNT1_ReceipeStruct/
+//  SV_71_ASCII_FilenameExtened` (real THGem state/methods) stayed
+//  `HGemPtr->`, unchanged. `ActiveWire->DownLoadFilePtr` is the wire codec's
+//  own raw-binary-payload pointer (SecsWireCodec.h, already real), not a
+//  THGem member. `FMessageList`/`SecsAlarmMessage` are HTGem's OWN members
+//  (bare, no prefix, same as every other access to them in this file).
+//  `MyForceDirectories`/`IncludeTrailingPathDelimiter` are golden GLOBAL/
+//  TU-local free functions (not THGem members), called bare, exactly as
+//  golden does. `Now().FormatString(fmt)` -> `FormatDateTime(fmt, Now())`,
+//  same substitution already established at ainarm9045.cpp:890. `__FUNC__`
+//  (BCB6 builtin) -> standard `__func__`, same substitution this project's
+//  own canary_support.h/aArmHeader.h shims already establish elsewhere.
+//
+//  GOLDEN BUG DISCOVERED AND PRESERVED VERBATIM (flag for review, found via
+//  direct golden read while translating -- not previously catalogued):
+//  S101F6_StoreHostUploadFile's own success path calls
+//  `ActiveWire->LocalAcknowledge(101, 6, 0);` internally (golden :2579), and
+//  its caller `HTGem::S101F6()` (golden :2778-2787) ALSO unconditionally
+//  calls `ActiveWire->LocalAcknowledge(101, 6, 0);` right after -- a genuine
+//  double-acknowledge: the host receives the SAME accept TWICE for one
+//  successful S101F6 primary message. NOT corrected here, per this project's
+//  faithful-translation mandate; see both methods' own inline comments.
+//  ASYMMETRY (also flagged, NOT a bug to "fix"): `S101F8_StoreHostUploadFile`
+//  itself never calls LocalAcknowledge anywhere in golden -- only its own
+//  wrapper `HTGem::S101F8()` does, exactly once -- so S101F8's host reply is
+//  single, never double like S101F6's. Confirmed by direct read of golden
+//  (uHGemClass.cpp:2597-2639 vs :2519-2581); a genuine difference between the
+//  two otherwise near-identical Subs, not a translation gap.
+//
+//  GOLDEN QUIRK, FLAGGED NOT FIXED (wire-supplied path, zero sanitization,
+//  same risk category as this file's own established S7F18/DeleteDirectory
+//  precedent, see INTEGRATE WAVE 7's own note above): both
+//  S101F6_StoreHostUploadFile's `str` (200-byte wire-supplied ASCII filename,
+//  concatenated onto `UpLoadPath+"HGem\\"`) and S101F8_StoreHostUploadFile's
+//  `PathName`/`str` (both 200-byte wire-supplied ASCII fields, fed into
+//  `MyForceDirectories` and the final `fopen` path) are used with NO
+//  length/charset/".."/absolute-path sanitization of any kind, in golden or
+//  here. NOT sanitized here, per this project's faithful-translation
+//  mandate -- see each method's own inline comment.
+//
+//  STILL GATED (5 remain; unaffected by this wave's delta): S2F16 (needs
+//  THGem::SReceiveDataBackup + csystem predicates HasICUnderMachine()/
+//  HasAnyICInMachine()), S2F24Sub (Trace member arrays), S2F32 (Borland
+//  dos.h clock), S7F20_CurrentEPPDData (DISTINCT from
+//  Process_S7F20_CurrentEPPIDData, already un-gated), SetECValue (VCL widget
+//  dynamic_cast cluster) -- unchanged from INTEGRATE WAVE 7's own list minus
+//  the 4 resolved this wave.
+//---------------------------------------------------------------------------
 
 #include "vclcompat/vcl_compat.h"
 #include "uHGemClass.h"
@@ -2654,18 +2734,205 @@ void HTGem::S9F9_TransactionTimerTimeout(AnsiString S)
 //---------------------------------------------------------------------------
 // [S10,F4] Terminal Display Single Acknowledge.
 //---------------------------------------------------------------------------
+// AI(W906-uHGemClass-Micro7) 20260721: UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 2274-2382) -- sole recorded blockers were the 9 THGem Terminal* members
+// (added this wave, uHGemEquipment.h: TerminalDisplayIndex/TerminalListboxPtr/
+// TerminalEditPtr/TerminalPanelPtr + the "2"-suffixed mirror set;
+// TerminalMemoPtr already existed). MECHANICAL RENAME: golden
+// `HGemPtr->GetDataItemLenAndTypeAndDelete/DataItemIn/Remote.W_Bit/
+// LocalAcknowledge` (wire-codec primitives) -> `ActiveWire->...`;
+// `HGemPtr->TerminalDisplayIndex/TerminalMemoPtr/TerminalListboxPtr/
+// TerminalEditPtr/TerminalPanelPtr(+2 each)/GetTimeInfo()/TimeString` (real
+// THGem state/methods) stay `HGemPtr->`, unchanged. `FMessageList`/
+// `SecsAlarmMessage` are HTGem's OWN members (bare, no prefix, same as every
+// other access to them in this file, e.g. this file's ctor/dtor).
+// `CUSTOMER_CODE`/`CC_MAXIM_THAILAND`/`iSECSMessageCanCloseByOperator` are
+// real bare globals (cmydef.h, already #include'd). `Now().FormatString(...)`
+// -> `FormatDateTime(...)`, same substitution pattern already established at
+// ainarm9045.cpp:890 (verified against vclcompat/TDateTime.cpp's own
+// tokenizer: "mm" between "yyyy" and "dd_hh" correctly resolves to MONTH, not
+// minute, because its nearest token neighbour is 'y', not 'h' -- see that
+// file's own token-disambiguation comment).
+// GOLDEN INVARIANT preserved verbatim, NOT a NULL-guard added by this port:
+// TerminalMemoPtr/TerminalListboxPtr/TerminalEditPtr/TerminalPanelPtr (and
+// their "2" mirrors) are dereferenced with NO NULL check whenever
+// TerminalDisplayIndex(2)==1..4 -- golden's own real invariant is "whoever
+// sets TerminalDisplayIndex to a non-zero value must have already wired the
+// matching pointer" (out of this wave's scope, some future FormCreate-style
+// wave). A caller/test that sets TerminalDisplayIndex!=0 without wiring the
+// matching pointer crashes here in BOTH golden and this port, by design.
+//---------------------------------------------------------------------------
 void HTGem::S10F4_TerminalDisplaySingleAcknowledge()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem members/widgets TerminalDisplayIndex/TerminalMemoPtr/TerminalListboxPtr/TerminalEditPtr/TerminalPanelPtr(+2) + GetDataItemLenAndTypeAndDelete) -- golden SECSGEM/uHGemClass.cpp:2274-2382
-#endif
+    int len;
+    unsigned char Type;
+    unsigned char  uint1EC=0;
+    char str[1024];
+
+    int iDisplay=1;
+    AnsiString S,S1;
+    AnsiString sStartTime;
+    sStartTime=FormatDateTime("yyyy:mm:dd_hh:nn:ss ", Now());   // golden: Now().FormatString("yyyy:mm:dd_hh:nn:ss ")
+
+    if(HGemPtr->TerminalDisplayIndex!=0)
+    {
+        if(ActiveWire->GetDataItemLenAndTypeAndDelete(len, Type)==1)
+        {
+            if(Type==HType.LIST_TYPE && len==2)
+            {
+                if(ActiveWire->DataItemIn(1, HType.BINARY_TYPE, &uint1EC)==1)
+                {
+                    iSECSMessageCanCloseByOperator=uint1EC;                     //Ifor 20171024 : add KYEC SECS GEM Can Close By Operator 0:一般流程 1:必須清除Alarm 2:啟動工站檢查流程
+                    if(ActiveWire->DataItemIn(1024, HType.ASCII_TYPE, str)==1)
+                    {
+                        HGemPtr->GetTimeInfo();
+                        if(CUSTOMER_CODE==CC_MAXIM_THAILAND)                    //Ifor 20251018 add:Secs Alarm List
+                        {
+                            S=sStartTime+str;
+                            FMessageList->Insert(0, S);
+                            S="";
+                            if(FMessageList->Count > 20)
+                            {
+                                FMessageList->Delete(20);
+                            }
+
+                            for(int i=0; i<FMessageList->Count; i++)
+                            {
+                                S1=IntToStr(i+1)+ ". ";
+                                S=S+S1+FMessageList->Strings[(FMessageList->Count-1)-i]+"\r\n";
+                            }
+                            SecsAlarmMessage->Add(S);                           //Steven 20150519 : 修正SECS GEM使用ShowMyMessage會出現記憶體破壞
+                        }
+                        else
+                        {
+                            S=str;
+                            SecsAlarmMessage->Add(S);                           //Steven 20150519 : 修正SECS GEM使用ShowMyMessage會出現記憶體破壞
+                        }
+
+                        S=HGemPtr->TimeString+AnsiString(" [R] <<==")+S;
+                        if(HGemPtr->TerminalDisplayIndex==1)
+                        {
+                            if(uint1EC==0)
+                                HGemPtr->TerminalMemoPtr->Clear();
+                            HGemPtr->TerminalMemoPtr->Lines->Add(S);
+                            iDisplay=0;
+                        }
+                        else if(HGemPtr->TerminalDisplayIndex==2)
+                        {
+                            if(uint1EC==0)
+                                HGemPtr->TerminalListboxPtr->Clear();
+                            HGemPtr->TerminalListboxPtr->Items->Add(S);
+                            iDisplay=0;
+                        }
+                        else if(HGemPtr->TerminalDisplayIndex==3)
+                        {
+                            HGemPtr->TerminalEditPtr->Text=S;
+                            iDisplay=0;
+                        }
+                        else if(HGemPtr->TerminalDisplayIndex==4)
+                        {
+                            HGemPtr->TerminalPanelPtr->Caption=S;
+                            iDisplay=0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        iDisplay=2;
+    }
+
+    if(ActiveWire->Remote.W_Bit==1)
+        ActiveWire->LocalAcknowledge(10, 4, iDisplay);
+
+    if(iDisplay==0 && HGemPtr->TerminalDisplayIndex2!=0)
+    {
+        if(HGemPtr->TerminalDisplayIndex2==1)
+        {
+            if(uint1EC==0)
+                HGemPtr->TerminalMemoPtr2->Clear();
+            HGemPtr->TerminalMemoPtr2->Lines->Add(S);
+        }
+        else if(HGemPtr->TerminalDisplayIndex2==2)
+        {
+            if(uint1EC==0)
+                HGemPtr->TerminalListboxPtr2->Clear();
+            HGemPtr->TerminalListboxPtr2->Items->Add(S);
+        }
+        else if(HGemPtr->TerminalDisplayIndex2==3)
+        {
+            HGemPtr->TerminalEditPtr2->Text=S;
+        }
+        else if(HGemPtr->TerminalDisplayIndex2==4)
+        {
+            HGemPtr->TerminalPanelPtr2->Caption=S;
+        }
+    }
 }
 //---------------------------------------------------------------------------
 // [S10,F6] Terminal Display Multi-Block Acknowledge.
 //---------------------------------------------------------------------------
+// AI(W906-uHGemClass-Micro7) 20260721: UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 2387-2431) -- only needs `TerminalDisplayIndex` (shared with S10F4 above,
+// added this wave) -- does NOT touch TerminalMemoPtr/TerminalListboxPtr/
+// TerminalEditPtr/TerminalPanelPtr or any "2"-suffixed member at all.
+// MECHANICAL RENAME: golden mixes `HGemPtr->`/bare `HGem->` for the SAME wire
+// primitives within this one function (`HGemPtr->GetDataItemLenAndTypeAndDelete/
+// DataItemIn/Remote.W_Bit/LocalAcknowledge` vs the loop body's bare
+// `HGem->GetDataItemLenAndType/DataItemIn`) -- both spellings normalized to
+// `ActiveWire->...` per this project's established duality rule (see this
+// file's own INTEGRATE WAVE 6 note / uHGemClass.cpp:3234). `HGemPtr->
+// TerminalDisplayIndex` (real THGem state) stays `HGemPtr->`, unchanged.
+// `SecsAlarmMessage`/`iSECSMessageCanCloseByOperator` same bare-access
+// reasoning as S10F4 immediately above.
+//---------------------------------------------------------------------------
 void HTGem::S10F6_TerminalDisplayMultiBlockAcknowledge()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem members/widgets TerminalDisplayIndex/TerminalMemoPtr/TerminalListboxPtr/TerminalEditPtr/TerminalPanelPtr(+2) + GetDataItemLenAndTypeAndDelete (called twice)) -- golden SECSGEM/uHGemClass.cpp:2387-2431
-#endif
+    int len;
+    unsigned char Type;
+
+    unsigned char  uint1EC=0;
+    char str[1024];
+    int iDisplay=1;
+    int iDataLen;
+    AnsiString S;
+
+    if(HGemPtr->TerminalDisplayIndex!=0)
+    {
+        if(ActiveWire->GetDataItemLenAndTypeAndDelete(len, Type)==1)
+        {
+            if(Type==HType.LIST_TYPE && len==2)
+            {
+                if(ActiveWire->DataItemIn(1, HType.BINARY_TYPE, &uint1EC)==1)
+                {
+                    iSECSMessageCanCloseByOperator=uint1EC;                     //Ifor 20171024 : add KYEC SECS GEM Can Close By Operator 0:一般流程 1:必須清除Alarm 2:啟動工站檢查流程
+                    ActiveWire->GetDataItemLenAndType(len, Type);               //取得資料長度與格式
+                    if(ActiveWire->GetDataItemLenAndTypeAndDelete(len, Type)==1)
+                    {
+                        HGemPtr->GetTimeInfo();
+                        S="";
+                        for(int i=0; i<len; i++)                                //Ifor 20150708  顯示多筆資料
+                        {
+                            ActiveWire->GetDataItemLenAndType(iDataLen, Type);   //取得資料長度與格式
+                            ActiveWire->DataItemIn(iDataLen, Type, str);         //取值
+                            S=S+str+"\r\n";
+                        }
+                        SecsAlarmMessage->Add(S);
+                        iDisplay=0;
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        iDisplay=2;
+    }
+
+    if(ActiveWire->Remote.W_Bit==1)
+        ActiveWire->LocalAcknowledge(10, 6, iDisplay);
 }
 //---------------------------------------------------------------------------
 // [S100,F4] Report All Alarm.
@@ -2768,13 +3035,24 @@ void HTGem::S101F4_CurrentEPPDData()
 // D1/D2 precedent, NOT THGem's own -- corrects this stub's own prior gate
 // comment, which assumed no engine home existed for them); MoveCheckCallBack/
 // bReceiveS101F5 are THGem's own members (HGemPtr->, unchanged, added by the
-// SysModWire wave). S101F6_StoreHostUploadFile itself STAYS GATED (needs
+// SysModWire wave).
+// AI(W906-uHGemClass-Micro7) 20260721: S101F6_StoreHostUploadFile itself is
+// NOW UN-GATED too (see its own definition immediately below) -- the
 // UpLoadPath/GemRemoteReceipeList/SV_70_UNT1_ReceipeStruct/
-// SV_71_ASCII_FilenameExtened/bFinishDownloadFile -- none in this wave's
-// scope, deferred to Wave 3b per design doc) -- calling a gated no-op stub
-// is itself unconditionally safe (matches the project's established
-// "caller un-gates independently of its gated callee" precedent, e.g.
-// S2F24_TraceInitializeAcknowledge/S2F24_TraceInitializeAcknowledgeSub).
+// SV_71_ASCII_FilenameExtened/bFinishDownloadFile blockers this comment used
+// to cite are all resolved this wave.
+// GOLDEN BUG PRESERVED VERBATIM -- DOUBLE ACKNOWLEDGE (flag for review): on
+// S101F6_StoreHostUploadFile's own success path (its outer
+// `DataItemIn(5,LIST_TYPE,NULL)==1` branch), THAT Sub itself already calls
+// `ActiveWire->LocalAcknowledge(101, 6, 0);` internally (golden
+// uHGemClass.cpp:2579 -- see that method's own matching comment). THIS
+// wrapper's `ActiveWire->LocalAcknowledge(101, 6, 0);` call below then fires
+// UNCONDITIONALLY right after, regardless -- so on that success path the host
+// receives the SAME (101,6,0) accept TWICE for one S101F6 primary message.
+// Confirmed by direct read of golden (uHGemClass.cpp:2778-2787 this wrapper +
+// :2519-2581 the Sub) -- a genuine golden defect, not a translation
+// artifact. NOT corrected here, per this project's faithful-translation
+// mandate: both calls are preserved, neither suppressed.
 void HTGem::S101F6()
 {
     ActiveWire->bDisableBinaryShow=true;
@@ -2783,20 +3061,118 @@ void HTGem::S101F6()
     if(HGemPtr->MoveCheckCallBack!=NULL)
         HGemPtr->MoveCheckCallBack();
     HGemPtr->bReceiveS101F5=true;
-    ActiveWire->LocalAcknowledge(101, 6, 0);
+    ActiveWire->LocalAcknowledge(101, 6, 0);   // GOLDEN BUG preserved verbatim: 2nd (101,6,0) ack on the success path -- see this wrapper's own comment above
 }
 //---------------------------------------------------------------------------
 // [S101,F6] Store Host Upload File.
 //---------------------------------------------------------------------------
+// AI(W906-uHGemClass-Micro7) 20260721: UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 2519-2581). Blockers resolved this wave: THGem member `UpLoadPath`
+// (already real, added Micro6) + `bFinishDownloadFile` (added this wave) +
+// `THGemListBox::Checked` write support (added this wave, uHGemEquipment.h --
+// see that struct's own comment) on the already-real `GemRemoteReceipeList`.
+// MECHANICAL RENAME: golden `HGemPtr->DataItemIn/GetDataItemLenAndType/
+// LocalAcknowledge` (wire-codec primitives) -> `ActiveWire->...`; `HGemPtr->
+// bFinishDownloadFile/UpLoadPath/GemRemoteReceipeList/SV_70_UNT1_ReceipeStruct/
+// SV_71_ASCII_FilenameExtened` (real THGem state) stay `HGemPtr->`, unchanged.
+// `ActiveWire->DownLoadFilePtr` is the wire codec's own raw-binary-payload
+// pointer (SecsWireCodec.h, already real since an earlier wave), NOT a THGem
+// member -- called `ActiveWire->`, matching its real engine home.
+// GOLDEN QUIRK, FLAGGED NOT FIXED (wire-supplied path, zero sanitization):
+// `str` below is a 200-byte ASCII field read directly off the wire
+// (`DataItemIn(200,...)`) and concatenated verbatim onto
+// `HGemPtr->UpLoadPath+"HGem\\"` to build the fopen() target path -- no
+// length/charset/".."/absolute-path check of any kind, in golden or here.
+// Same documented risk category as this file's own S7F18/DeleteDirectory
+// precedent (see this file's head-note "STILL GATED"/"GOLDEN QUIRKS" history
+// for that method) -- a malicious or malformed host could steer this fopen()
+// outside `UpLoadPath` entirely. NOT sanitized here, per this project's
+// faithful-translation mandate.
+// GOLDEN BUG PRESERVED VERBATIM -- DOUBLE ACKNOWLEDGE (see this method's own
+// LocalAcknowledge call below, and HTGem::S101F6()'s own matching comment
+// just above this method): this Sub's success-path `LocalAcknowledge(101,6,0)`
+// plus its caller's own unconditional second call means the host is ACK'd
+// twice per successful S101F6. NOT corrected here.
+//---------------------------------------------------------------------------
 void HTGem::S101F6_StoreHostUploadFile()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem member UpLoadPath + VCL TCheckListBox GemRemoteReceipeList + THGem members SV_70_UNT1_ReceipeStruct/SV_71_ASCII_FilenameExtened/bFinishDownloadFile) -- golden SECSGEM/uHGemClass.cpp:2519-2581
-#endif
+    char str[256];
+    int len, i, j;
+    unsigned char Type;
+    AnsiString S;
+    FILE *P;
+    int iStoreCT, iTotalCount, iFileCount;
+
+    if(ActiveWire->DataItemIn(5, HType.LIST_TYPE, NULL)==1)
+    {
+        ActiveWire->DataItemIn(200, HType.ASCII_TYPE, str);                     //  file name
+        ActiveWire->DataItemIn(1, HType.INT_4_TYPE, &iStoreCT);
+        ActiveWire->DataItemIn(1, HType.INT_4_TYPE, &iTotalCount);
+        ActiveWire->DataItemIn(1, HType.INT_4_TYPE, &iFileCount);
+
+        if(ActiveWire->GetDataItemLenAndType(len, Type)==1)
+        {
+            //pig 2014.04.01 ASEM SECS start
+            HGemPtr->bFinishDownloadFile=false;
+            // GOLDEN QUIRK preserved verbatim, NOT sanitized -- see this
+            // method's own file-head comment above ("wire-supplied path,
+            // zero sanitization").
+            S = HGemPtr->UpLoadPath+"HGem\\";
+            S+=str;
+            //pig 2014.04.01 ASEM SECS end
+            if(iStoreCT==1)
+                P=fopen(S.c_str(), "wb");
+            else
+                P=fopen(S.c_str(), "ab+");
+
+            if(P!=NULL)
+            {
+                fwrite(ActiveWire->DownLoadFilePtr, len, 1, P);
+                fclose(P);
+            }
+        }
+
+        if(iStoreCT==iTotalCount)
+        {
+            for(i=0; i<HGemPtr->GemRemoteReceipeList->Items->Count; i++)
+            {
+                if(HGemPtr->SV_70_UNT1_ReceipeStruct==0)
+                {
+                    S=HGemPtr->GemRemoteReceipeList->Items->Strings[i];
+                }
+                else if(HGemPtr->SV_70_UNT1_ReceipeStruct==1)
+                {
+                    S=HGemPtr->SV_71_ASCII_FilenameExtened;
+                    j=S.LastDelimiter(".");
+                    S=S.SubString(j, S.Length());
+                    S=HGemPtr->GemRemoteReceipeList->Items->Strings[i]+S;
+                }
+
+                if(S==str)
+                    HGemPtr->GemRemoteReceipeList->Checked[i]=false;
+            }
+
+            if(iFileCount<=1)
+            {
+                HGemPtr->bFinishDownloadFile=true;
+            }
+        }
+        ActiveWire->LocalAcknowledge(101, 6, 0);   // GOLDEN BUG preserved verbatim: 1st (101,6,0) ack -- HTGem::S101F6() (this Sub's caller) unconditionally sends a 2nd one right after this Sub returns, see both methods' own file-head comments
+    }
 }
 //---------------------------------------------------------------------------
 // AI(W906-SvEcDataItem) 20260720: UN-GATED (golden SECSGEM/uHGemClass.cpp:
-// 2583-2595) -- same shape/reasoning as S101F6 above. S101F8_StoreHostUploadFile
-// itself STAYS GATED (same deferred blocker list, Wave 3b).
+// 2583-2595) -- same shape/reasoning as S101F6 above.
+// AI(W906-uHGemClass-Micro7) 20260721: S101F8_StoreHostUploadFile itself is
+// NOW UN-GATED too (see its own definition immediately below).
+// NOTE ASYMMETRY vs S101F6_StoreHostUploadFile (flag for review, do NOT
+// "fix" one to match the other): UNLIKE that Sub, S101F8_StoreHostUploadFile
+// itself never calls LocalAcknowledge anywhere in golden (confirmed by direct
+// read, uHGemClass.cpp:2597-2639) -- only THIS wrapper's own
+// `ActiveWire->LocalAcknowledge(101, 8, 0);` call below fires, exactly once.
+// So S101F8's host reply is single, never double like S101F6's -- a genuine
+// golden difference between the two otherwise near-identical Subs, not a
+// translation oversight on either side.
 void HTGem::S101F8()
 {
     ActiveWire->bDisableBinaryShow=true;
@@ -2805,15 +3181,83 @@ void HTGem::S101F8()
     if(HGemPtr->MoveCheckCallBack!=NULL)
         HGemPtr->MoveCheckCallBack();
     HGemPtr->bReceiveS101F7=true;
-    ActiveWire->LocalAcknowledge(101, 8, 0);
+    ActiveWire->LocalAcknowledge(101, 8, 0);   // sole ack for S101F8 -- see this wrapper's own comment above (NOTE ASYMMETRY)
 }
 //---------------------------------------------------------------------------
 // [S101,F8] Store Host Upload File (variant).
 //---------------------------------------------------------------------------
+// AI(W906-uHGemClass-Micro7) 20260721: UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 2597-2639). Blockers resolved this wave: THGem member `CurrentDirectory`
+// (added this wave, READ-ONLY here -- golden's own `SetCurrentDirectory`
+// setter/cascade is out of scope, see that member's own header comment) +
+// `THGemListBox::Checked` write support (added this wave, shared with
+// S101F6_StoreHostUploadFile above). `IncludeTrailingPathDelimiter` reuses
+// the existing TU-local static helper already added for S6F24 (see this
+// file's own INTEGRATE WAVE 7 note above / that helper's own definition).
+// `MyForceDirectories` is the already-real `common.cpp` global (common.h
+// already #include'd) -- called bare, exactly as golden does (a free
+// function, not a THGem member). `__FUNC__` (BCB6 builtin) -> standard
+// `__func__`, same substitution this project's own canary_support.h/
+// aArmHeader.h shims already establish elsewhere (AnsiString's `const char*`
+// ctor accepts it directly, no wrapper needed).
+// MECHANICAL RENAME: golden `HGemPtr->DataItemIn/GetDataItemLenAndType`
+// (wire-codec primitives) -> `ActiveWire->...`; `HGemPtr->CurrentDirectory/
+// GemRemoteReceipeList` (real THGem state) stay `HGemPtr->`, unchanged;
+// `ActiveWire->DownLoadFilePtr` (wire codec's own raw-binary pointer) ->
+// `ActiveWire->`, same reasoning as S101F6_StoreHostUploadFile above.
+// GOLDEN QUIRK, FLAGGED NOT FIXED (wire-supplied path, zero sanitization):
+// same risk category as S101F6_StoreHostUploadFile's own comment above --
+// `PathName`/`str` are BOTH 200-byte wire-supplied ASCII fields, fed straight
+// into `MyForceDirectories` and the final `fopen` path with no sanitization
+// of any kind, in golden or here. NOT fixed here.
+// NOTE ASYMMETRY (see HTGem::S101F8()'s own comment just above this method):
+// this Sub never calls LocalAcknowledge itself -- only its caller does, once.
+//---------------------------------------------------------------------------
 void HTGem::S101F8_StoreHostUploadFile()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem member CurrentDirectory + VCL TCheckListBox GemRemoteReceipeList) -- golden SECSGEM/uHGemClass.cpp:2597-2641
-#endif
+    char str[2560], PathName[2560];
+    int len;
+    unsigned char Type;
+    char *Ptr;
+    AnsiString S;
+    FILE *P;
+    int iStoreCT, iTotalCount;
+
+    if(ActiveWire->DataItemIn(5, HType.LIST_TYPE, NULL)==1)
+    {
+        ActiveWire->DataItemIn(200, HType.ASCII_TYPE, PathName);                //  path name
+        ActiveWire->DataItemIn(200, HType.ASCII_TYPE, str);                     //  file name
+        ActiveWire->DataItemIn(1, HType.INT_4_TYPE, &iStoreCT);
+        ActiveWire->DataItemIn(1, HType.INT_4_TYPE, &iTotalCount);
+        if(ActiveWire->GetDataItemLenAndType(len, Type)==1)
+        {
+            Ptr=ActiveWire->DownLoadFilePtr;
+            // GOLDEN QUIRK preserved verbatim, NOT sanitized -- see this
+            // method's own file-head comment above ("wire-supplied path,
+            // zero sanitization").
+            MyForceDirectories(IncludeTrailingPathDelimiter(HGemPtr->CurrentDirectory)+AnsiString(PathName), __func__);
+            S=IncludeTrailingPathDelimiter(HGemPtr->CurrentDirectory)+AnsiString(PathName)+AnsiString("\\")+AnsiString(str);
+            if(iStoreCT==1)
+                P=fopen(S.c_str(), "wb");
+            else
+                P=fopen(S.c_str(), "ab+");
+            if(P!=NULL)
+            {
+                fwrite(Ptr,len,1,P);
+                fclose(P);
+            }
+        }
+
+        if(iStoreCT==iTotalCount)
+        {
+            for(int i=0; i<HGemPtr->GemRemoteReceipeList->Items->Count; i++)
+            {
+                S=HGemPtr->GemRemoteReceipeList->Items->Strings[i];
+                if(S==PathName)
+                    HGemPtr->GemRemoteReceipeList->Checked[i]=false;
+            }
+        }
+    }
 }
 //---------------------------------------------------------------------------
 // [S125,F2] Enable/Disable EC Data Acknowledge.                  //wei 20150630

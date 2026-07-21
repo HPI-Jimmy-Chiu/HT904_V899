@@ -2769,7 +2769,19 @@ static void test_w906_svecdataitem_e2e_s5f8_s100f4()
 // ---------------------------------------------------------------------------
 static void test_w906_svecdataitem_e2e_s101f6_s101f8_smoke()
 {
-    printf("\n[W906-SvEcDataItem.E5] S101,F5/S101,F7 smoke -- real S101F6/S101F8, gated *_StoreHostUploadFile callee\n");
+    // AI(W906-uHGemClass-Micro7) 20260721: UPDATED comment only (no assertion
+    // changes) -- S101F6_StoreHostUploadFile/S101F8_StoreHostUploadFile are
+    // REAL now (un-gated this wave, uHGemClass.cpp), not the gated no-op stub
+    // this test's original name/printf implied. This test still passes
+    // UNCHANGED because it sends a bare S101,F5/S101,F7 header with NO data
+    // items at all -- the real Sub's own outer
+    // `ActiveWire->DataItemIn(5,LIST_TYPE,NULL)==1` guard is false on an empty
+    // SReceiveData queue (see DataItemInSub: `SReceiveData->Count==0 ->
+    // return -1`), so the Sub's whole body is skipped, same net effect as the
+    // old no-op stub for this particular (empty-request) scenario. The Sub's
+    // REAL success/double-ack/file-write/Checked-write paths are exercised by
+    // test_w906_uhgemclass_micro7_e2e() below instead.
+    printf("\n[W906-SvEcDataItem.E5] S101,F5/S101,F7 smoke -- real S101F6/S101F8 wrappers, empty-body request never enters the (now real) *_StoreHostUploadFile Sub's guarded block\n");
 
     THGem *savedHGem = HGem;
 
@@ -2787,7 +2799,7 @@ static void test_w906_svecdataitem_e2e_s101f6_s101f8_smoke()
 
         bool threw = false;
         try { g.ProcessSocketReceiveData(); } catch (...) { threw = true; }
-        CHECK(threw == false, "E5a: S101,F5 does not throw (S101F6 real, StoreHostUploadFile gated no-op)");
+        CHECK(threw == false, "E5a: S101,F5 does not throw (empty request never enters the now-real StoreHostUploadFile Sub's guarded block)");
         CHECK(g.bReceiveS101F5 == true, "E5a: bReceiveS101F5 latches true (S101F6's own tail)");
         const std::vector<char> &tx = conn->SimTxBuffer();
         CHECK(tx.size() == 17, "E5a: LocalAcknowledge(101,6,0) produces a 17-byte ack frame (14-byte header + BINARY|1 fmt + len + 1 ack byte)");
@@ -2809,7 +2821,7 @@ static void test_w906_svecdataitem_e2e_s101f6_s101f8_smoke()
 
         bool threw = false;
         try { g.ProcessSocketReceiveData(); } catch (...) { threw = true; }
-        CHECK(threw == false, "E5b: S101,F7 does not throw (S101F8 real, StoreHostUploadFile gated no-op)");
+        CHECK(threw == false, "E5b: S101,F7 does not throw (empty request never enters the now-real StoreHostUploadFile Sub's guarded block)");
         CHECK(g.bReceiveS101F7 == true, "E5b: bReceiveS101F7 latches true (S101F8's own tail)");
         const std::vector<char> &tx = conn->SimTxBuffer();
         CHECK(tx.size() == 17, "E5b: LocalAcknowledge(101,8,0) produces a 17-byte ack frame");
@@ -3578,6 +3590,497 @@ static void test_w906_uhgemclass_micro6_e2e()
 }
 
 // ===========================================================================
+//  [W906-uHGemClass-Micro7] Real THGem-backed coverage for the 4
+//  uHGemClass.cpp methods un-gated this wave (see that file's own
+//  "INTEGRATE WAVE 8" note): S10F4_TerminalDisplaySingleAcknowledge /
+//  S10F6_TerminalDisplayMultiBlockAcknowledge /
+//  S101F6_StoreHostUploadFile / S101F8_StoreHostUploadFile (the two Subs
+//  themselves -- their wrappers S101F6()/S101F8() were already real and
+//  already covered by test_w906_svecdataitem_e2e_s101f6_s101f8_smoke's
+//  empty-request "Sub never entered" path; THIS block is what actually
+//  drives the Subs' real bodies, including the flagged double-ack bug).
+//
+//  WIRING: same `THGem g; HTGem hgem; hgem.HGemPtr=&g; hgem.ActiveWire=
+//  &g.WireCodec;` pattern as test_w906_uhgemclass_micro5/6_e2e above.
+//
+//  SAFETY: all file I/O below stays under a dedicated scratch directory
+//  (kScratchDir), mirroring test_w906_uhgemclass_micro6_e2e's own
+//  UpLoadPath-repointing convention just above -- never a production path.
+// ===========================================================================
+static void test_w906_uhgemclass_micro7_e2e()
+{
+    printf("\n[W906-uHGemClass-Micro7] S10F4/S10F6/S101F6_StoreHostUploadFile/S101F8_StoreHostUploadFile real THGem-backed coverage\n");
+
+    const AnsiString kScratchDir = "uHGemClass_micro7_test_scratch";
+    ForceDirectories(kScratchDir);
+
+    // -- S10F4: guard-off path -- TerminalDisplayIndex==0 (its ctor default,
+    //    the "NULL"/unset case) -> iDisplay=2, the whole
+    //    Terminal*Ptr-touching body is skipped entirely (so no pointer is
+    //    ever dereferenced while unset -- proves the guard, not just "it
+    //    doesn't crash"). --
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.7.1", 7001);
+        g.srvGem->Open();
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+        g.WireCodec.Remote.W_Bit = 1;
+
+        bool threw = false;
+        try { hgem.S10F4_TerminalDisplaySingleAcknowledge(); } catch (...) { threw = true; }
+        CHECK(threw == false, "P1: S10F4 with TerminalDisplayIndex==0 (ctor default) does not throw/crash");
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() >= 14, "P1: S10F4 guard-off path produced real bytes on the wire");
+        if (tx.size() >= 14)
+        {
+            CHECK((unsigned char)tx[6] == 10 && (unsigned char)tx[7] == 4, "P1: reply S,F == 10,4");
+            CHECK((unsigned char)tx[tx.size() - 1] == 0x02,
+                  "P1: ack byte == 0x02 (iDisplay==2, TerminalDisplayIndex==0 guard branch)");
+        }
+    }
+
+    // -- S10F4: real "populated" success path -- TerminalDisplayIndex==1
+    //    (memo) + TerminalDisplayIndex2==2 (listbox), BOTH really wired ->
+    //    both the primary Terminal write AND the "2"-suffixed mirror write
+    //    happen in one call (iDisplay==0 unlocks the second block); real
+    //    SecsAlarmMessage content too. Uses CUSTOMER_CODE's real default (0,
+    //    != CC_MAXIM_THAILAND==860) -- the plain (non-KYEC) branch. --
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.7.2", 7002);
+        g.srvGem->Open();
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+        g.WireCodec.Remote.W_Bit = 1;
+        g.TerminalDisplayIndex = 1;
+        g.TerminalMemoPtr = new THGemMemo();
+        g.TerminalDisplayIndex2 = 2;
+        g.TerminalListboxPtr2 = new THGemListBox();
+
+        // <L,2 <BINARY uint1EC=0> <ASCII "HELLO">>
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(2));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.BINARY_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString(0));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(5));
+        g.WireCodec.SReceiveData->Add(AnsiString("HELLO"));
+
+        hgem.S10F4_TerminalDisplaySingleAcknowledge();
+        CHECK(hgem.SecsAlarmMessage->Count == 1 && hgem.SecsAlarmMessage->Strings[0] == "HELLO",
+              "P2: real SecsAlarmMessage gets the plain (non-KYEC) \"HELLO\" content");
+        CHECK(g.TerminalMemoPtr->Lines->Count == 1,
+              "P2: primary TerminalDisplayIndex==1 path really wrote TerminalMemoPtr->Lines");
+        if (g.TerminalMemoPtr->Lines->Count == 1)
+            CHECK(AnsiString(g.TerminalMemoPtr->Lines->Strings[0]).Pos("HELLO") > 0,
+                  "P2: TerminalMemoPtr's written line carries the \"HELLO\" payload");
+        CHECK(g.TerminalListboxPtr2->Items->Count == 1,
+              "P2: iDisplay==0 unlocked the \"2\"-suffixed mirror -- TerminalListboxPtr2->Items really got the SAME line");
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() >= 14, "P2: S10F4 success path produced real bytes on the wire");
+        if (tx.size() >= 14)
+        {
+            CHECK((unsigned char)tx[6] == 10 && (unsigned char)tx[7] == 4, "P2: reply S,F == 10,4");
+            CHECK((unsigned char)tx[tx.size() - 1] == 0x00, "P2: ack byte == 0x00 (iDisplay==0, accept)");
+        }
+    }
+
+    // -- S10F4: CUSTOMER_CODE==CC_MAXIM_THAILAND branch -- proves the
+    //    FMessageList-numbered ("1. <text>\r\n") path really runs and lands
+    //    in SecsAlarmMessage, via TerminalDisplayIndex==2 (listbox). Global
+    //    CUSTOMER_CODE is saved/restored around this one block only. --
+    {
+        int savedCustomerCode = CUSTOMER_CODE;
+        CUSTOMER_CODE = CC_MAXIM_THAILAND;
+
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.7.3", 7003);
+        g.srvGem->Open();
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+        g.WireCodec.Remote.W_Bit = 1;
+        g.TerminalDisplayIndex = 2;
+        g.TerminalListboxPtr = new THGemListBox();
+
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(2));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.BINARY_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString(0));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(6));
+        g.WireCodec.SReceiveData->Add(AnsiString("MAXIM1"));
+
+        hgem.S10F4_TerminalDisplaySingleAcknowledge();
+        CHECK(hgem.SecsAlarmMessage->Count == 1, "P3: CC_MAXIM_THAILAND branch adds exactly 1 SecsAlarmMessage entry");
+        if (hgem.SecsAlarmMessage->Count == 1)
+        {
+            const AnsiString &msg = hgem.SecsAlarmMessage->Strings[0];
+            CHECK(msg.Pos("1. ") > 0 && msg.Pos("MAXIM1") > 0,
+                  "P3: FMessageList-numbered (\"1. <text>\") content really lands in SecsAlarmMessage");
+        }
+        CHECK(g.TerminalListboxPtr->Items->Count == 1, "P3: TerminalDisplayIndex==2 path really wrote TerminalListboxPtr->Items");
+
+        CUSTOMER_CODE = savedCustomerCode;
+    }
+
+    // -- S10F6: guard-off path -- TerminalDisplayIndex==0 -> iDisplay=2,
+    //    same guard shape as S10F4's own P1 above (shared member). --
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.7.4", 7004);
+        g.srvGem->Open();
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+        g.WireCodec.Remote.W_Bit = 1;
+
+        bool threw = false;
+        try { hgem.S10F6_TerminalDisplayMultiBlockAcknowledge(); } catch (...) { threw = true; }
+        CHECK(threw == false, "Q1: S10F6 with TerminalDisplayIndex==0 (ctor default) does not throw/crash");
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() >= 14, "Q1: S10F6 guard-off path produced real bytes on the wire");
+        if (tx.size() >= 14)
+        {
+            CHECK((unsigned char)tx[6] == 10 && (unsigned char)tx[7] == 6, "Q1: reply S,F == 10,6");
+            CHECK((unsigned char)tx[tx.size() - 1] == 0x02, "Q1: ack byte == 0x02 (iDisplay==2, guard branch)");
+        }
+    }
+
+    // -- S10F6: real multi-block success path -- <L,2 <BINARY uint1EC=0>
+    //    <L,2 <ASCII "LINE1"> <ASCII "LINE2">>> -> real SecsAlarmMessage
+    //    joined content "LINE1\r\nLINE2\r\n", LocalAcknowledge(10,6,0). Only
+    //    needs TerminalDisplayIndex -- does NOT touch any TerminalMemoPtr/
+    //    TerminalListboxPtr/TerminalEditPtr/TerminalPanelPtr(+2). --
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.7.5", 7005);
+        g.srvGem->Open();
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+        g.WireCodec.Remote.W_Bit = 1;
+        g.TerminalDisplayIndex = 1;   // any non-zero value opens the guard; body below never touches TerminalMemoPtr
+
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(2));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.BINARY_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString(0));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(2));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(5));
+        g.WireCodec.SReceiveData->Add(AnsiString("LINE1"));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(5));
+        g.WireCodec.SReceiveData->Add(AnsiString("LINE2"));
+
+        hgem.S10F6_TerminalDisplayMultiBlockAcknowledge();
+        CHECK(hgem.SecsAlarmMessage->Count == 1, "Q2: S10F6 success path adds exactly 1 SecsAlarmMessage entry");
+        if (hgem.SecsAlarmMessage->Count == 1)
+            CHECK(hgem.SecsAlarmMessage->Strings[0] == AnsiString("LINE1\r\nLINE2\r\n"),
+                  "Q2: real multi-block loop joins BOTH items with \\r\\n, exactly as golden");
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() >= 14, "Q2: S10F6 success path produced real bytes on the wire");
+        if (tx.size() >= 14)
+        {
+            CHECK((unsigned char)tx[6] == 10 && (unsigned char)tx[7] == 6, "Q2: reply S,F == 10,6");
+            CHECK((unsigned char)tx[tx.size() - 1] == 0x00, "Q2: ack byte == 0x00 (iDisplay==0, accept)");
+        }
+    }
+
+    // -- S101F6_StoreHostUploadFile (via its real wrapper HTGem::S101F6()):
+    //    success path -- real file write under a scratch UpLoadPath, real
+    //    GemRemoteReceipeList->Checked[i] flip true->false, real
+    //    bFinishDownloadFile latch, and the GOLDEN DOUBLE-ACK bug: TWO
+    //    (101,6,0) accept frames land on the wire for this ONE call, not
+    //    one -- the one golden-bug-preservation claim this wave most needs a
+    //    concrete test for (not just "it builds"). --
+    {
+        const AnsiString kUpLoadBase = kScratchDir + "\\upload_s101f6";
+        // golden never creates the "HGem\\" subfolder itself in this method
+        // (no ForceDirectories/MyForceDirectories call anywhere in
+        // S101F6_StoreHostUploadFile) -- it is a real golden invariant that
+        // UpLoadPath+"HGem\\" must already exist on disk before this runs.
+        // Pre-create it here, matching that invariant (NOT "fixing" golden).
+        ForceDirectories(kUpLoadBase + "\\HGem");
+
+        THGem g;
+        g.UpLoadPath = kUpLoadBase + "\\";   // golden concatenates "HGem\\" directly onto UpLoadPath with no separator -- UpLoadPath itself must already end with '\\'
+        g.GemRemoteReceipeList = new THGemListBox();
+        g.GemRemoteReceipeList->Items->Add("RECIPE_A");
+        g.GemRemoteReceipeList->Checked[0] = true;   // pre-set true so the flip to false is observable
+        static char payload[] = "DATA";
+        g.WireCodec.DownLoadFilePtr = payload;
+
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.7.6", 7006);
+        g.srvGem->Open();
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+
+        // <L,5 <ASCII "RECIPE_A"> <I4 iStoreCT=1> <I4 iTotalCount=1> <I4 iFileCount=1>>
+        // followed by the (out-of-band, raw-binary) <BINARY,4> header that
+        // GetDataItemLenAndType peeks to learn `len` for fwrite -- see
+        // S101F6_StoreHostUploadFile's own comment on DownLoadFilePtr.
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(5));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(8));
+        g.WireCodec.SReceiveData->Add(AnsiString("RECIPE_A"));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.INT_4_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.INT_4_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.INT_4_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.BINARY_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(4));
+
+        bool threw = false;
+        try { hgem.S101F6(); } catch (...) { threw = true; }
+        CHECK(threw == false, "R1: S101F6() success path does not throw/crash");
+
+        const AnsiString kOutFile = kUpLoadBase + "\\HGem\\RECIPE_A";
+        CHECK(FileExists(kOutFile), "R1: S101F6_StoreHostUploadFile really wrote UpLoadPath+\"HGem\\\"+str under the scratch dir");
+        if (FileExists(kOutFile))
+        {
+            FILE *rf = fopen(kOutFile.c_str(), "rb");
+            char buf[16] = {0};
+            size_t n = rf ? fread(buf, 1, sizeof(buf) - 1, rf) : 0;
+            if (rf) fclose(rf);
+            CHECK(n == 4 && memcmp(buf, "DATA", 4) == 0, "R1: written file content == the real DownLoadFilePtr payload (\"DATA\")");
+        }
+        CHECK(g.GemRemoteReceipeList->Checked.Values.size() >= 1 && g.GemRemoteReceipeList->Checked.Values[0] == false,
+              "R1: GemRemoteReceipeList->Checked[0] really flipped true->false (SV_70_UNT1_ReceipeStruct==0 match on \"RECIPE_A\")");
+        CHECK(g.bFinishDownloadFile == true, "R1: bFinishDownloadFile latches true (iFileCount<=1)");
+
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() == 34,
+              "R1: GOLDEN DOUBLE-ACK BUG preserved -- exactly TWO 17-byte (101,6,0) frames on the wire for ONE successful S101F6() call, not one");
+        if (tx.size() == 34)
+        {
+            CHECK((unsigned char)tx[6] == 101 && (unsigned char)tx[7] == 6 && (unsigned char)tx[16] == 0x00,
+                  "R1: 1st ack frame == accept (101,6,0) -- sent by S101F6_StoreHostUploadFile's own internal LocalAcknowledge call");
+            CHECK((unsigned char)tx[23] == 101 && (unsigned char)tx[24] == 6 && (unsigned char)tx[33] == 0x00,
+                  "R1: 2nd ack frame == accept (101,6,0) -- sent unconditionally by HTGem::S101F6()'s own wrapper tail right after");
+        }
+    }
+
+    // -- S101F8_StoreHostUploadFile (via its real wrapper HTGem::S101F8()):
+    //    success path -- real MyForceDirectories-created subdirectory under
+    //    a scratch CurrentDirectory, real file write, real
+    //    GemRemoteReceipeList->Checked[i] flip true->false, and the
+    //    documented ASYMMETRY: exactly ONE (101,8,0) accept frame on the
+    //    wire (never two, unlike S101F6 above). --
+    {
+        const AnsiString kRoot = kScratchDir + "\\s101f8_root";
+
+        THGem g;
+        g.CurrentDirectory = kRoot;
+        g.GemRemoteReceipeList = new THGemListBox();
+        g.GemRemoteReceipeList->Items->Add("SUBDIR");
+        g.GemRemoteReceipeList->Checked[0] = true;   // pre-set true so the flip to false is observable
+        static char payload2[] = "DATA";
+        g.WireCodec.DownLoadFilePtr = payload2;
+
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.7.7", 7007);
+        g.srvGem->Open();
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+
+        // <L,5 <ASCII "SUBDIR"> <ASCII "FILE.BIN"> <I4 iStoreCT=1> <I4 iTotalCount=1>>
+        // followed by the same out-of-band <BINARY,4> peek header as R1 above.
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(5));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(6));
+        g.WireCodec.SReceiveData->Add(AnsiString("SUBDIR"));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(8));
+        g.WireCodec.SReceiveData->Add(AnsiString("FILE.BIN"));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.INT_4_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.INT_4_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.BINARY_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(4));
+
+        bool threw = false;
+        try { hgem.S101F8(); } catch (...) { threw = true; }
+        CHECK(threw == false, "R2: S101F8() success path does not throw/crash");
+
+        const AnsiString kOutFile = kRoot + "\\SUBDIR\\FILE.BIN";
+        CHECK(DirectoryExists(kRoot + "\\SUBDIR"), "R2: MyForceDirectories really created CurrentDirectory+PathName under the scratch dir");
+        CHECK(FileExists(kOutFile), "R2: S101F8_StoreHostUploadFile really wrote CurrentDirectory+PathName+\"\\\\\"+str");
+        if (FileExists(kOutFile))
+        {
+            FILE *rf = fopen(kOutFile.c_str(), "rb");
+            char buf[16] = {0};
+            size_t n = rf ? fread(buf, 1, sizeof(buf) - 1, rf) : 0;
+            if (rf) fclose(rf);
+            CHECK(n == 4 && memcmp(buf, "DATA", 4) == 0, "R2: written file content == the real DownLoadFilePtr payload (\"DATA\")");
+        }
+        CHECK(g.GemRemoteReceipeList->Checked.Values.size() >= 1 && g.GemRemoteReceipeList->Checked.Values[0] == false,
+              "R2: GemRemoteReceipeList->Checked[0] really flipped true->false (PathName==\"SUBDIR\" match)");
+
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() == 17,
+              "R2: ASYMMETRY vs S101F6 preserved -- exactly ONE 17-byte (101,8,0) frame on the wire, never two");
+        if (tx.size() == 17)
+            CHECK((unsigned char)tx[6] == 101 && (unsigned char)tx[7] == 8 && (unsigned char)tx[16] == 0x00,
+                  "R2: sole ack frame == accept (101,8,0)");
+    }
+}
+
+// ===========================================================================
+//  AI(W906-DoDownLoadRemoteFile) 20260721: THGem::DoDownLoadRemoteFile --
+//  direct THGem method calls only (no ProcessSocketReceiveData/Timer1Timer
+//  pump), same posture as Micro5/Micro6/Micro7 above -- no TextLogSnapshot
+//  bracket or special T10 ordering needed either.
+// ===========================================================================
+static void test_w906_dodownloadremotefile_e2e()
+{
+    printf("\n[W906-DoDownLoadRemoteFile] S7F5 PP-Request retry state machine, real THGem-backed coverage\n");
+
+    // -- D1: Task==1 (ctor default), empty queue -> stays 1 (no-op) --
+    {
+        THGem g;
+        CHECK(g.iDownLoadRemoteFileTask == 1, "D1: ctor default Task == 1");
+        CHECK(g.iRetryCTDownLoadRemoteFile == 0, "D1: ctor default retry counter == 0");
+        CHECK(g.RequestRemoteDownLoad->Count == 0, "D1: ctor default queue is empty");
+        g.DoDownLoadRemoteFile();
+        CHECK(g.iDownLoadRemoteFileTask == 1, "D1: empty queue -> Task stays 1 (no-op)");
+    }
+
+    // -- D2: case 1 -> 100 -> a real S7F5 request goes out on the wire --
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.5.1", 5001);
+        g.srvGem->Open();
+        g.RequestRemoteDownLoad->Add("RECIPE_A.PGM");
+
+        g.DoDownLoadRemoteFile();   // case 1 -> Task=100 (iRetryCT reset)
+        CHECK(g.iDownLoadRemoteFileTask == 100, "D2: non-empty queue -> Task 1->100");
+
+        g.DoDownLoadRemoteFile();   // case 100 -> sends S7F5, Task=200
+        CHECK(g.iDownLoadRemoteFileTask == 200, "D2: case 100 -> Task->200");
+        CHECK(g.bReceiveS7F6 == false, "D2: case 100 clears bReceiveS7F6 before waiting for the reply");
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() > 10, "D2: case 100 sends a real frame onto the wire");
+        if (tx.size() > 10)
+        {
+            CHECK((unsigned char)(tx[6] & 0x7f) == 7, "D2: reply S == 7 (PP-Request family)");
+            CHECK((unsigned char)tx[7] == 5, "D2: reply F == 5 (S7F5 PP-Request)");
+            CHECK(((unsigned char)tx[6] & 0x80) != 0, "D2: W-bit set (InitLocalHead(7,5,1) -- expects an S7F6 reply)");
+        }
+        AnsiString frame(tx.data(), (int)tx.size());
+        CHECK(frame.Pos("RECIPE_A.PGM") > 0, "D2: sent frame's data item carries the queued filename");
+        CHECK(g.RequestRemoteDownLoad->Count == 1, "D2: case 100 does not dequeue yet (only case 200's success path does)");
+    }
+
+    // -- D3: case 200, bReceiveS7F6==true (host sent S7F6) -> dequeue + Task=300 --
+    {
+        THGem g;
+        g.RequestRemoteDownLoad->Add("RECIPE_B.PGM");
+        g.iDownLoadRemoteFileTask = 200;
+        g.bReceiveS7F6 = true;
+
+        g.DoDownLoadRemoteFile();
+        CHECK(g.iDownLoadRemoteFileTask == 300, "D3: bReceiveS7F6==true -> Task 200->300");
+        CHECK(g.bReceiveS7F6 == false, "D3: bReceiveS7F6 consumed (reset false)");
+        CHECK(g.RequestRemoteDownLoad->Count == 0, "D3: success path dequeues the sent filename");
+    }
+
+    // -- D4: case 200, TimerOff()==false -- GOLDEN QUIRK: falls back to 100
+    //    WITHOUT waiting for the 1-second window to elapse. The resend itself
+    //    only happens on the *next* call (once Task==100 is actually
+    //    dispatched) -- this method is a plain switch, not a loop.
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.5.2", 5002);
+        g.srvGem->Open();
+        g.RequestRemoteDownLoad->Add("RECIPE_C.PGM");
+        g.iDownLoadRemoteFileTask = 200;
+        g.bReceiveS7F6 = false;
+        g.DelayDownLoadRemoteFile.TimerSetSecAndOn(1);   // freshly armed -> TimerOff()==false
+
+        g.DoDownLoadRemoteFile();
+        CHECK(g.iDownLoadRemoteFileTask == 100,
+              "D4: GOLDEN QUIRK -- TimerOff()==false falls Task back to 100 instead of continuing to wait");
+        CHECK(conn->SimTxBuffer().size() == 0,
+              "D4: this call's own case-200 body sends nothing (the resend happens on the NEXT pump call)");
+
+        g.DoDownLoadRemoteFile();   // now dispatches case 100 -> immediate resend, Task=200 again
+        CHECK(g.iDownLoadRemoteFileTask == 200, "D4: next pump call (Task==100) resends and returns to 200");
+        CHECK(conn->SimTxBuffer().size() > 10,
+              "D4: the resend fires on this 2nd call, well before the original 1s window could have elapsed");
+    }
+
+    // -- D5: case 200, TimerOff()==true and retry cap already exceeded -> gives up (Task=1) --
+    {
+        THGem g;
+        g.RequestRemoteDownLoad->Add("RECIPE_D.PGM");
+        g.iDownLoadRemoteFileTask = 200;
+        g.bReceiveS7F6 = false;
+        g.iRetryCTDownLoadRemoteFile = 6;   // already past the >5 cap
+        g.DelayDownLoadRemoteFile.TimerSet(0);
+        g.DelayDownLoadRemoteFile.TimerOn();   // iTimeLen<=0 -> TimerOff()==true immediately (no real sleep needed)
+
+        g.DoDownLoadRemoteFile();
+        CHECK(g.iDownLoadRemoteFileTask == 1, "D5: retry cap exceeded -> gives up, Task->1");
+        CHECK(g.RequestRemoteDownLoad->Count == 0, "D5: give-up path also dequeues the stuck filename");
+    }
+
+    // -- D6: case 300, host sends S101F5 (or S101F7) -> stays 300, re-arms timer --
+    {
+        THGem g;
+        g.iDownLoadRemoteFileTask = 300;
+        g.DelayDownLoadRemoteFile.TimerSetSecAndOn(1);
+        g.bReceiveS101F5 = true;
+
+        g.DoDownLoadRemoteFile();
+        CHECK(g.iDownLoadRemoteFileTask == 300, "D6: S101F5 receipt keeps Task at 300 (re-arms the timer, does not advance)");
+        CHECK(g.bReceiveS101F5 == false, "D6: bReceiveS101F5 consumed (reset false)");
+    }
+    {
+        THGem g;
+        g.iDownLoadRemoteFileTask = 300;
+        g.DelayDownLoadRemoteFile.TimerSetSecAndOn(1);
+        g.bReceiveS101F7 = true;
+
+        g.DoDownLoadRemoteFile();
+        CHECK(g.iDownLoadRemoteFileTask == 300, "D6b: S101F7 receipt keeps Task at 300 (re-arms the timer, does not advance)");
+        CHECK(g.bReceiveS101F7 == false, "D6b: bReceiveS101F7 consumed (reset false)");
+    }
+
+    // -- D7: case 300, TimerOff()==true and no S101F5/F7 -> whole cycle complete, Task=1 --
+    {
+        THGem g;
+        g.iDownLoadRemoteFileTask = 300;
+        g.bReceiveS101F5 = false;
+        g.bReceiveS101F7 = false;
+        g.DelayDownLoadRemoteFile.TimerSet(0);
+        g.DelayDownLoadRemoteFile.TimerOn();   // iTimeLen<=0 -> TimerOff()==true immediately
+
+        g.DoDownLoadRemoteFile();
+        CHECK(g.iDownLoadRemoteFileTask == 1, "D7: case 300 window elapsed with no S101F5/F7 -> Task->1 (cycle complete)");
+    }
+}
+
+// ===========================================================================
 //  [T10] Timer1Timer's IniConfig.bEnable_SECS_GEM==false branch (forced
 //  disconnect) + the SECSGEM_DoSeparateWait 5-second re-arm window.
 //
@@ -3815,6 +4318,16 @@ int main()
     // direct HTGem method calls only, no socket pump/Timer1Timer, so no
     // TextLogSnapshot bracket or special T10 ordering needed either.
     test_w906_uhgemclass_micro6_e2e();
+
+    // W906-uHGemClass-Micro7: same posture as Micro5/Micro6 immediately
+    // above -- direct HTGem method calls only, no socket pump/Timer1Timer,
+    // so no TextLogSnapshot bracket or special T10 ordering needed either.
+    test_w906_uhgemclass_micro7_e2e();
+
+    // W906-DoDownLoadRemoteFile: same posture as Micro5/Micro6/Micro7 above --
+    // direct THGem method calls only, no socket pump/Timer1Timer, so no
+    // TextLogSnapshot bracket or special T10 ordering needed either.
+    test_w906_dodownloadremotefile_e2e();
 
     test_timer1timer_disable_branch();
 
