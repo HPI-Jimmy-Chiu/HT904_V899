@@ -4,8 +4,10 @@
 //
 // Exercises the translated public API against input->expected-output values hand-derived from the
 // ORIGINAL golden reference
-//   HT9011UC_Code_V3.33.906.0_20260618/Automation/SCK_ART.cpp:183-1645 (see SCK_ART_Remainder.h for
-//   the exact per-function golden line ranges).
+//   HT9011UC_Code_V3.33.906.0_20260618/Automation/SCK_ART.cpp:183-1645, :4191-4256 (see
+//   SCK_ART_Remainder.h for the exact per-function golden line ranges).
+//
+// AI(W906-DoARTLotStart) 20260721: added PART 9 (DoARTLotStart, golden :4191-4256).
 //
 // LIMITATION 1 (same as test_SCK_ART.cpp/test_ContactForce.cpp): we CANNOT run the original BCB6
 // binary (no Borland compiler in this environment). Verification here is therefore: (1) the
@@ -419,6 +421,124 @@ int main()
         TestIF_File.iTestType = 0;   // not TCP_IP_MODE
         SckArtRem_SaveTestSummary(1);
         CHECK(true, "fallback branch dispatches to (gated) SaveSummaryTrayFeed+SaveTestSummaryTSV without crashing (golden :1638-1644)");
+    }
+
+    // =========================================================================================
+    // PART 9 -- DoARTLotStart -- golden :4191-4256. AI(W906-DoARTLotStart) 20260721.
+    //   HasICUnderMachine()==false/true is toggled via FTestSuck.SetItemData(0,0,HAS_IC/NULL_IC,0):
+    //   FTestSuck.UseSiteHasIC() -> FrontTestHeadHasIC() -> TestHeadHasIC() -> IndexHasIC() ->
+    //   HasICUnderMachine() (csystem_predicates.cpp). Cell [0][0] is always in-bounds/live because
+    //   iShtRow/iShtCol default to a 2x1 grid per aHotPlateSubstrate.cpp's TMyKitSuck ctor -- same
+    //   default this file's own sibling test_SCK_ART.cpp's DoAutoSocketOff PART already documents for
+    //   TestSocket. FTestSuck's cell is always restored to NULL_IC before returning control so later
+    //   PARTs (and re-runs within this same process) start clean.
+    // =========================================================================================
+    printf("\n-- DoARTLotStart --\n");
+    {
+        bQAModeFlag = false;
+        bReadLotInfoFromART = false;
+        TestIF_File.bRENESAS_EnableFTCT = false;
+        TestIF_File.bAlarmAfterSendSRQKIND2 = false;
+        FTestSuck.SetItemData(0, 0, NULL_IC, 0);   // baseline: HasICUnderMachine()==false
+
+        // ---- 9A: HasICUnderMachine()==false -> bChangeLotID FORCED true regardless of sLotID
+        //   (golden :4195-4197). iTesterType=0 isolates this sub-case from the independent
+        //   iTesterType==1 tail (golden :4243-4254, covered separately by 9F below).
+        {
+            SckArtRemainderState st;
+            st.sLotID = "SAME-LOT";
+            st.iTesterType = 0;
+            SckArtRem_DoARTLotStart(st, "SAME-LOT", "PROC-A", 100);
+            CHECK(bReadLotInfoFromART == true, "DoARTLotStart -> bReadLotInfoFromART=true unconditionally (golden :4193, real cmydef.cpp global)");
+            CHECK(st.iCurrent93KARTStep == 1,  "HasICUnderMachine()==false -> bChangeLotID=true -> iCurrent93KARTStep=1 (golden :4195-4213)");
+            CHECK(st.iCurrentFlexARTStep == 4, "same branch -> iCurrentFlexARTStep=4 (golden :4214)");
+            CHECK(st.iNeedRT == 1,             "ClearLotInfo() always sets iNeedRT=1 (golden :839); iTesterType!=1 tail does not reset it back to 0 here");
+            CHECK(st.sLOTSTATUS == "LOTSTATUS_W", "SetLotStatus(iLOTSTATUS_W) inlined -> sLOTSTATUS=\"LOTSTATUS_W\" (golden :4216)");
+            CHECK(st.iCurrentStatus == 1,          "SetLotStatus(iLOTSTATUS_W) inlined -> iCurrentStatus=1 (golden :4216, iLOTSTATUS_W==1 per golden ctor SCK_ART.cpp:44)");
+            CHECK(st.sLotID == "SAME-LOT",         "sLotID=_sLotID (golden :4217, re-applied after ClearLotInfo cleared it)");
+            CHECK(st.sProcessCode == "PROC-A",     "sProcessCode=_sProcess (golden :4218)");
+            CHECK(st.sLotStartTime != "",           "bRENESAS_EnableFTCT==false -> sLotStartTime stamped via FormatDateTime(\"yyyymmdd_hhnnss\",Now()) (golden :4219-4220)");
+            CHECK(st.iLotCount == 100,               "bQAModeFlag==false -> iLotCount=_iLotCount (golden :4235)");
+            CHECK(st.iInputCount == 100,             "bQAModeFlag==false -> iInputCount=_iLotCount (golden :4236)");
+        }
+
+        // ---- 9B: HasICUnderMachine()==true + sLotID EXACT match (non-empty, non-space) ->
+        //   bChangeLotID=false -> the WHOLE if(bChangeLotID==true) block is SKIPPED; st fields set
+        //   to sentinels beforehand must come back UNCHANGED (golden :4201-4211).
+        {
+            FTestSuck.SetItemData(0, 0, HAS_IC, 0);   // force HasICUnderMachine()==true
+            SckArtRemainderState st;
+            st.sLotID = "LOT-KEEP";
+            st.iCurrent93KARTStep = 999;             // sentinel
+            st.sLOTSTATUS = "SENTINEL-UNCHANGED";    // sentinel
+            st.iTesterType = 0;
+            SckArtRem_DoARTLotStart(st, "LOT-KEEP", "PROC-B", 555);
+            CHECK(st.iCurrent93KARTStep == 999,          "sLotID match (non-space) -> bChangeLotID=false -> block SKIPPED, iCurrent93KARTStep untouched");
+            CHECK(st.sLOTSTATUS == "SENTINEL-UNCHANGED", "same -> sLOTSTATUS untouched (SetLotStatus never runs)");
+            FTestSuck.SetItemData(0, 0, NULL_IC, 0);     // restore baseline
+        }
+
+        // ---- 9C: the " " vs "" ASYMMETRY (golden :4201) -- an EXACT match on " " (one literal
+        //   space) still forces bChangeLotID=true, because the right AND-term compares _sLotID
+        //   against " " (not ""), unlike the left AND-term's sLotID!="" check. Demonstrates the
+        //   asymmetry is REAL and preserved, not "fixed".
+        {
+            FTestSuck.SetItemData(0, 0, HAS_IC, 0);
+            SckArtRemainderState st;
+            st.sLotID = " ";              // exact match target: one literal space, same as _sLotID below
+            st.iCurrent93KARTStep = 999;  // sentinel -- expect this to be OVERWRITTEN despite the exact match
+            st.iTesterType = 0;
+            SckArtRem_DoARTLotStart(st, " ", "PROC-C", 7);
+            CHECK(st.iCurrent93KARTStep == 1, "sLotID==\" \"==_sLotID (EXACT match) but _sLotID!=\" \" is FALSE -> right AND-term false -> bChangeLotID forced TRUE despite the match (golden :4201 asymmetry, preserved verbatim, NOT normalized to \"\")");
+            FTestSuck.SetItemData(0, 0, NULL_IC, 0);
+        }
+
+        // ---- 9D: HasICUnderMachine()==true + sLotID MISMATCH -> bChangeLotID=true (straightforward
+        //   else-branch, golden :4205-4207) ----
+        {
+            FTestSuck.SetItemData(0, 0, HAS_IC, 0);
+            SckArtRemainderState st;
+            st.sLotID = "OLD-LOT";
+            st.iTesterType = 0;
+            SckArtRem_DoARTLotStart(st, "NEW-LOT", "PROC-D", 42);
+            CHECK(st.iCurrent93KARTStep == 1, "HasICUnderMachine()==true + sLotID mismatch -> bChangeLotID=true (golden :4205-4207)");
+            CHECK(st.sLotID == "NEW-LOT",      "block ran -> sLotID overwritten to _sLotID (golden :4217)");
+            FTestSuck.SetItemData(0, 0, NULL_IC, 0);
+        }
+
+        // ---- 9E: bQAModeFlag==true -> iLotCount/iInputCount pulled from TestIF_File.iQAModeCount,
+        //   NOT _iLotCount; bQAModeFlag reset to false afterward (golden :4225-4231) ----
+        {
+            TestIF_File.iQAModeCount = 321;
+            bQAModeFlag = true;
+            SckArtRemainderState st;
+            st.iTesterType = 0;
+            SckArtRem_DoARTLotStart(st, "QA-LOT", "PROC-E", 9999);
+            CHECK(st.iLotCount == 321,    "bQAModeFlag==true -> iLotCount=TestIF_File.iQAModeCount, NOT _iLotCount (golden :4227)");
+            CHECK(st.iInputCount == 321,  "bQAModeFlag==true -> iInputCount=TestIF_File.iQAModeCount (golden :4228)");
+            CHECK(bQAModeFlag == false,   "bQAModeFlag reset to false after the QA-mode branch runs (golden :4231)");
+        }
+
+        // ---- 9F: iTesterType==1 tail -- iNeedRT reset + the 3 REAL LastSet GPIB fields + gates
+        //   #9/#10 (fMain->SetLotState/tESDError->Add) run without crashing (golden :4243-4254) ----
+        {
+            SckArtRemainderState st;
+            st.iTesterType = 1;
+            st.iNeedRT = 5;   // sentinel, expect reset to 0
+            LastSet.bEndLotAutoRetestGPIB = true;
+            LastSet.bWaitStartLotAutoRetestGPIB = true;
+            LastSet.bFirstTestAutoRetestGPIB = false;
+            TestIF_File.bAlarmAfterSendSRQKIND2 = true;   // also exercises gate #10
+            SckArtRem_DoARTLotStart(st, "", "", 0);
+            CHECK(st.iNeedRT == 0,                              "iTesterType==1 -> iNeedRT=0 (golden :4245)");
+            CHECK(LastSet.bEndLotAutoRetestGPIB == false,       "iTesterType==1 -> LastSet.bEndLotAutoRetestGPIB=false (golden :4246, REAL LastSet field, canary_support.h:145)");
+            CHECK(LastSet.bWaitStartLotAutoRetestGPIB == false, "iTesterType==1 -> LastSet.bWaitStartLotAutoRetestGPIB=false (golden :4247, REAL LastSet field, canary_support.h:144)");
+            CHECK(LastSet.bFirstTestAutoRetestGPIB == true,     "iTesterType==1 -> LastSet.bFirstTestAutoRetestGPIB=true (golden :4248, REAL LastSet field, canary_support.h:146)");
+            CHECK(true, "fMain->SetLotState(2) / fMain->tESDError->Add(\"MES07399\") -- gates #9/#10 -- run without crashing (golden :4249-4252)");
+            TestIF_File.bAlarmAfterSendSRQKIND2 = false;
+        }
+
+        FTestSuck.SetItemData(0, 0, NULL_IC, 0);   // final cleanup: leave the shared global grid clean
     }
 
     printf("\n=== %d PASS, %d FAIL (of %d) ===\n", g_pass, g_fail, g_pass + g_fail);

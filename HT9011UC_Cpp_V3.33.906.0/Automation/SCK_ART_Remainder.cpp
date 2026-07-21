@@ -23,13 +23,23 @@
 #include "cprod.h"             // Prod (bIsPassBin), TestIF_File (SYSTEM_TEST_IF), IniConfig, BinSelect[],
                                 // FT/OffT, CustomerFunctionSelect(), WriteLastDataFile()
 #include "cmydef.h"            // CUSTOMER_CODE, USE_AUTO_RETEST, OFF_LINE, K_SKIP, bCanRunSCKART, bWaitTSV,
-                                // TCP_IP_MODE, _2D_SORT
+                                // TCP_IP_MODE, _2D_SORT, bReadLotInfoFromART, bQAModeFlag (both real
+                                // globals -- AI(W906-DoARTLotStart) 20260721, see SckArtRem_DoARTLotStart)
 #include "common.h"            // ReadWriteIni / WriteIniData overloads, AuthPath, DataPath (all REAL,
                                 // active bodies in common.cpp -- see gate #1 for the 3 exceptions)
-#include "canary_support.h"    // LastSet (LAST_GENERAL_SET shim), RunInfo (RUN_INFO::AddAlarm)
-#include "aHotPlateSubstrate.h"// OutArmSuck (TMyKitSuck: iBinData[][])
+#include "canary_support.h"    // LastSet (LAST_GENERAL_SET shim), RunInfo (RUN_INFO::AddAlarm), __FUNC__
+#include "aHotPlateSubstrate.h"// OutArmSuck (TMyKitSuck: iBinData[][]); SetRunStartMode(int) (real,
+                                // AI(W906-DoARTLotStart) 20260721)
 #include "FormsFacade.h"       // fMain (see gate #3 -- SetStartModeData/LoadTestModePicture/
-                                // BackupSetupFile are NOT on it yet)
+                                // BackupSetupFile are NOT on it yet); fLotInfo->cbProcess/SetLotID/
+                                // SetLotStart (real -- AI(W906-DoARTLotStart) 20260721)
+// AI(W906-DoARTLotStart) 20260721: new include, needed ONLY for HasICUnderMachine() (real,
+// csystem_predicates.cpp:204). Lightweight header (vclcompat + myTimer.h + cmydef.h only, see its own
+// file-head); already #include'd by several other ht9045_sm sources (acatchtray.cpp, aoutarm9045_*.cpp,
+// ...) for this exact predicate -- no new circular-link risk (csystem_predicates.cpp and this file
+// compile into the SAME CMake target, ht9045_sm; there is no separate "Automation" target to worry
+// about).
+#include "csystem.h"
 
 // =============================================================================
 //  SckArtRemainderState ctor -- golden TfSCKART::TfSCKART(TComponent*) (SCK_ART.cpp:36-120), the
@@ -43,6 +53,10 @@ SckArtRemainderState::SckArtRemainderState()
       sProcessCode(""),                 // golden TForm AnsiString member; zero-init (no explicit ctor line)
       sLotStartTime(""),                // golden :41
       iCurrentStatus(0),                // golden ctor does not set this explicitly; 0==iLOTSTATUS_NONE
+      // AI(W906-DoARTLotStart) 20260721: golden TForm int members (SCK_ART.h:263-264); zero-init (no
+      // explicit ctor line), same convention as every other "no explicit golden ctor line" field here.
+      iCurrent93KARTStep(0),            // golden SCK_ART.h:263
+      iCurrentFlexARTStep(0),           // golden SCK_ART.h:264
       iTesterType(0),                   // golden :42 (0: Flex, 1: 93K)
       iInputCount(0),                   // golden TForm int member; zero-init (no explicit ctor line)
       iLotCount(0),                     // golden TForm int member; zero-init (no explicit ctor line)
@@ -184,6 +198,22 @@ static W5SckArtRem_LotSummaryStub W5SckArtRem_LotSummary = {{0,0,0,0,0}};
 #define W5SCKARTREM_WRITELASTDATAFILE()            do { } while(0)   // golden cprod.cpp:1944 (TODO(W6)-gated)
 #define W5SCKARTREM_CUSTOMERFUNCTIONSELECT()        do { } while(0)   // golden cprod.cpp:3686 (TODO(W6)-gated)
 #define W5SCKARTREM_RUNINFO_ADDALARM(code, message) do { (void)(code); (void)(message); } while(0)  // golden RUN_INFO::AddAlarm, cprod.cpp:984 (TODO(W6)-gated)
+
+// ---- Gate #9 [NEW -- AI(W906-DoARTLotStart) 20260721]: fMain->SetLotState(int) ---------------------
+//   golden fMain->SetLotState(int) (SCK_ART.cpp golden :4249). csystem.cpp:2320 carries an EXACT macro
+//   precedent for this identical call pattern -- W7C2_FMAIN_SETLOTSTATE(n), itself a pure no-op -- but
+//   it is #define'd LOCAL to csystem.cpp, not reachable from this TU. TU-local no-op stand-in here
+//   instead (same no-op behavior, same "TU-local macro" idiom as gates #1/#2/#6/#7/#8 above -- see
+//   SCK_ART_Remainder.h's gate #9 for the full reasoning, including why gate #3's FormsFacade-forwarding
+//   idiom was NOT used here).
+#define W5SCKARTREM_FMAIN_SETLOTSTATE(n)            do { (void)(n); } while(0)   // golden fMain->SetLotState(int)
+
+// ---- Gate #10 [NEW -- AI(W906-DoARTLotStart) 20260721]: fMain->tESDError->Add(AnsiString) ----------
+//   golden fMain->tESDError->Add("MES07399") (SCK_ART.cpp golden :4251-4252). tESDError (golden
+//   main.h:1394, TStringList* ESD-error-code queue) has ZERO hits anywhere in this translated tree
+//   (verified by grep) -- a genuinely brand-new gap, no prior gate/macro/FormsFacade member to reuse.
+//   TU-local no-op stand-in, same idiom as gate #9.
+#define W5SCKARTREM_FMAIN_TESDERROR_ADD(code)       do { (void)(code); } while(0)   // golden fMain->tESDError->Add(AnsiString)
 
 // =============================================================================
 //  1. SetSetupFilePath -- golden TfSCKART::SetSetupFilePath() (SCK_ART.cpp:183-188)
@@ -708,5 +738,110 @@ void SckArtRem_SaveTestSummary(int iSaveData)
             W5SCKARTREM_SAVESUMMARYTRAYFEED();                                  // golden :1641 SaveSummaryTrayFeed() -- TODO(next wave), see gate #7
 
         W5SCKARTREM_SAVETESTSUMMARYTSV(iSaveData);                              // golden :1643 SaveTestSummaryTSV(iSaveData) -- TODO(next wave), see gate #7
+    }
+}
+
+// =============================================================================
+//  9. DoARTLotStart -- golden TfSCKART::DoARTLotStart(AnsiString,AnsiString,int) (SCK_ART.cpp:4191-4256)
+//     AI(W906-DoARTLotStart) 20260721. See SCK_ART_Remainder.h's own doc comment on this declaration
+//     for the full dependency-verification writeup (HasICUnderMachine / bReadLotInfoFromART /
+//     bQAModeFlag / SetRunStartMode / RecordProcess / fLotInfo->*/ fMain->* gates #9-#10 / the 2 new
+//     LastSet fields that turned out to be already-real / the 2 new struct fields).
+// =============================================================================
+void SckArtRem_DoARTLotStart(SckArtRemainderState &st, AnsiString _sLotID, AnsiString _sProcess, int _iLotCount)
+{
+    bReadLotInfoFromART=true;                                                   // golden :4193 (real global, cmydef.cpp -- NOT a TfSCKART member; verified against golden SCK_ART.h)
+    bool bChangeLotID=false;
+    if(HasICUnderMachine()==false)                                              // golden :4195 (real, csystem.h/csystem_predicates.cpp)
+    {
+        bChangeLotID=true;
+    }
+    else
+    {
+        // golden :4201 `if(sLotID==_sLotID && (sLotID!="" && _sLotID!=" "))` -- ASYMMETRIC ON PURPOSE,
+        // preserved VERBATIM (not "fixed"): the left half compares st.sLotID against "" (empty string);
+        // the right half compares _sLotID against " " (one literal SPACE character), not "". This reads
+        // like a BCB6-era typo (both halves plausibly meant "!=\"\""),  but it is golden's real, shipped
+        // behavior. Net effect: when a caller passes _sLotID=="" (the common case -- e.g. HANA_ART.cpp's
+        // fSCKART->DoARTLotStart(sLotNo,...) call site), "" != " " is TRUE, so the right-hand AND-term is
+        // just "st.sLotID!=\"\"" in practice and the whole condition collapses to golden's evident intent
+        // (st.sLotID==_sLotID && st.sLotID!=""); only a caller passing the exact one-character string " "
+        // as _sLotID would hit the asymmetry and force bChangeLotID=true even when st.sLotID==_sLotID.
+        // DO NOT normalize " " to "" here -- see the test file's own case exercising this exact " " input.
+        if(st.sLotID==_sLotID && (st.sLotID!="" && _sLotID!=" "))
+        {
+            bChangeLotID=false;
+        }
+        else
+        {
+            bChangeLotID=true;
+        }
+    }
+
+    if(bChangeLotID==true)
+    {
+        st.iCurrent93KARTStep=1;                                                // golden :4213
+        st.iCurrentFlexARTStep=4;                                               // golden :4214
+
+        // golden :4215 ClearLotInfo() -- per SckArtRem_ClearLotInfo's own out-param contract, its
+        // internal `fSCKART->AccessFile(false)` (golden :921, iAccess defaults to -1, ALL groups) is
+        // exposed via bNeedAccessFileWrite rather than called recursively inside that function. Invoked
+        // here immediately, matching golden's real execution order (ClearLotInfo fully returns --
+        // INCLUDING that tail AccessFile(false) call -- before this function's next statement runs).
+        bool bNeedAccessFileWrite=false;
+        SckArtRem_ClearLotInfo(st, &bNeedAccessFileWrite);
+        if(bNeedAccessFileWrite)
+            SckArtRem_AccessFile(st, false);                                    // golden :921 (inside ClearLotInfo) fSCKART->AccessFile(false)
+
+        // golden :4216 SetLotStatus(iLOTSTATUS_W) -- inlined (iLOTSTATUS_W==1, golden ctor
+        // SCK_ART.cpp:44 -- itself a TfSCKART member golden sets once in its ctor and never reassigns,
+        // i.e. a de-facto constant; same "avoid a 2nd SetLotStatus implementation" precedent
+        // SckArtRem_ClearLotInfo's own comment already established for iLOTSTATUS_NONE==0). NOTE: because
+        // this runs AFTER the AccessFile(false) call just above (which persists the PRE-overwrite
+        // "NONE"/0 values), and the LATER AccessFile(false,1) call below only persists the iAccess==1
+        // group (sLotID/iLotCount/...), NOT the iAccess==-1||0||10 group SetLotStatus's fields belong to
+        // -- the "LOTSTATUS_W"/1 values set here are NEVER actually written to the ini file by this
+        // function. Faithfully reproduced golden quirk, not a translation bug.
+        st.sLOTSTATUS="LOTSTATUS_W";
+        st.iCurrentStatus=1;
+
+        st.sLotID=_sLotID;                                                      // golden :4217
+        st.sProcessCode=_sProcess;                                              //Steven 20190521 : ATK lot count -- golden :4218
+        if(TestIF_File.bRENESAS_EnableFTCT==false)                              //RogerYang 20250930 : RogerYang 瑞薩FT-CT 指令"20"已更新
+            st.sLotStartTime=FormatDateTime("yyyymmdd_hhnnss", Now());          // golden :4220 Now().FormatString(...) -> vclcompat FormatDateTime (ainarm9045.cpp:890 precedent)
+
+        fLotInfo->cbProcess->Text=_sProcess;                                    // golden :4221 (real FormsFacade member)
+        fLotInfo->SetLotID(_sLotID, false);                                     // golden :4222 (real FormsFacade member, offline no-op)
+        fLotInfo->SetLotStart(__FUNC__);                                        // golden :4223 (real FormsFacade member, offline no-op; __FUNC__ via canary_support.h shim)
+
+        if(bQAModeFlag==true)                                                   //Steven 20170830 (wei) : QA mode for ATK ART -- golden :4225 (real global, cmydef.cpp)
+        {
+            st.iLotCount  =TestIF_File.iQAModeCount;                           // golden :4227
+            st.iInputCount=TestIF_File.iQAModeCount;                           // golden :4228
+            SckArtRem_AccessFile(st, false, 1);                                 //必須在轉換模式前先存檔一次, 不然轉模式的裡面會讀取到舊的資料 -- golden :4229
+            SetRunStartMode(rsmInitial_ART);                                    // golden :4230 (real, aHotPlateSubstrate.h/.cpp)
+            bQAModeFlag=false;                                                  // golden :4231
+        }
+        else
+        {
+            st.iLotCount  =_iLotCount;                                         //Steven 20250410 : fixed for ART -- golden :4235
+            st.iInputCount=_iLotCount;                                         // golden :4236
+            SckArtRem_AccessFile(st, false, 1);                                 // golden :4237
+        }
+
+        RecordProcess(AnsiString().sprintf("Lot start: %s, %d", st.sLotID, st.iLotCount));    //Steven 20190722 : add TSV log -- golden :4240
+    }
+
+    if(st.iTesterType==1)
+    {
+        st.iNeedRT=0;                                                           // golden :4245
+        LastSet.bEndLotAutoRetestGPIB=false;                                    // golden :4246 -- REAL LastSet field (canary_support.h:145; added ahead of need by a prior integrate pass -- verified, NOT a new gate, see header's [UPDATE] note on gate #4)
+        LastSet.bWaitStartLotAutoRetestGPIB=false;                              // golden :4247 -- REAL LastSet field (canary_support.h:144)
+        LastSet.bFirstTestAutoRetestGPIB=true;                                  // golden :4248 -- REAL LastSet field (canary_support.h:146)
+        W5SCKARTREM_FMAIN_SETLOTSTATE(2);                                       // golden :4249 fMain->SetLotState(2) -- ART FT Start for SCK -- gate #9, TU-local no-op
+        if(TestIF_File.bAlarmAfterSendSRQKIND2)                                 //Steven 20230202 : ATK 要在SRQKIND2之後Alarm
+        {
+            W5SCKARTREM_FMAIN_TESDERROR_ADD("MES07399");                       // golden :4252 fMain->tESDError->Add("MES07399") -- gate #10, TU-local no-op
+        }
     }
 }
