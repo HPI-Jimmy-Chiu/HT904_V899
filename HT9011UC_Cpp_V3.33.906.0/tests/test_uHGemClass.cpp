@@ -233,10 +233,23 @@ int main()
         // are no longer blanket stubs.)
         check_i("S2F24_TraceInitializeAcknowledgeSub() conservative default",
                 g.S2F24_TraceInitializeAcknowledgeSub(), 1);
-        check_i("S2F34_DefineReportAcknowledgeSub() conservative default",
-                g.S2F34_DefineReportAcknowledgeSub(), 1);
-        check_i("S2F36_LinkEventReportAcknowledgeSub() conservative default",
-                g.S2F36_LinkEventReportAcknowledgeSub(), 1);
+        // AI(W906-AlarmReportAck) 20260721: S2F34_DefineReportAcknowledgeSub/
+        // S2F36_LinkEventReportAcknowledgeSub MOVED OUT of this sample -- same
+        // "moved out" precedent as S1F1/S1F2 above (this wave un-gated both,
+        // see uHGemClass.cpp's "INTEGRATE WAVE 5" note). They are NO LONGER
+        // blanket-safe on a default-constructed `g`: both now dereference
+        // `HGemPtr->slTempReportID`/`HGemPtr->slTempCeID` for real THGem
+        // state, and `g`'s HGemPtr is NULL here (golden pre-AddSV UB window,
+        // deliberately un-guarded -- see design brief risk R8). This TU only
+        // forward-declares THGem (cannot construct one to wire HGemPtr for
+        // real), so their real behavior is exercised over in
+        // tests/test_uHGemEquipment.cpp instead, where a real THGem instance
+        // exists. NOT replaced with 2 more int-returning stubs here (unlike
+        // the void/no-arg sample's own replacement above) -- every one of the
+        // 15 still-gated methods left in uHGemClass.cpp is void-returning
+        // (grepped), so no like-for-like int-ack replacement exists; the
+        // int-ack shape stays represented by S2F24_TraceInitializeAcknowledgeSub
+        // above.
 
         // SetECValue -- void, two args, must not crash even with a NULL sink.
         // STILL gated (see uHGemClass.cpp's own comment on this method: the

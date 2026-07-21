@@ -336,6 +336,75 @@
 //  S125F2/SetECValue (VCL widget dynamic_cast cluster) -- see §2 DEFERRED
 //  in the design doc for the full breakdown.
 //---------------------------------------------------------------------------
+//
+//  INTEGRATE WAVE 5 (AI(W906-AlarmReportAck) 20260721) -- SECSGEM closing-waves
+//  Wave 2: THGem's Alarm/Report-Ack family unlocks the 8 remaining S2F34/
+//  S2F36/S2F38/S5F4/S5F6 methods
+//  ---------------------------------------------------------------------------
+//  uHGemEquipment.h's THGem gained: 2 wire-codec forwarders (InitLocalHead/
+//  DataItemOut, pointer overload only), 4 new members (slTempReportID/
+//  lTempReportIDContent/slTempCeID/lTempCeIDContent), 3 new Alarm methods
+//  (EnableDisableAlarm/EnableDisableAlarmAll/GetAlarmIndex), the Report/Link
+//  Acknowledge composer family (ProcessHostSendReportLinkID/
+//  ReportAcknowledge+5 wrappers/ReportLinkAcknowledgeError+4 wrappers), and a
+//  REAL body for EnableDisableEventReportAcknowledgeError (+ its 2 wrappers)
+//  -- replacing the earlier no-op stub. This resolves every remaining
+//  blocker for the last 8 of the original 57 gated methods.
+//
+//  UN-GATED (8 more, 34->42/57 total now; 23->15 remaining-gated) -- golden
+//  SECSGEM/uHGemClass.cpp line ranges cited at each definition below:
+//    S2F34_DefineReportAcknowledgeSub (:1218-1291), S2F34_ProcessHostSendReportID
+//    (:1294-1361), S2F34_DefineReportAcknowledge (:1363-1393),
+//    S2F36_LinkEventReportAcknowledgeSub (:1395-1457),
+//    S2F36_LinkEventReportAcknowledge (:1460-1477),
+//    S2F38_EnableDisableEventReportAcknowledge (:1480-1521),
+//    S5F4_EnableDisableAlarmAcknowledge (:1593-1624), S5F6_ListAlarmData
+//    (:1626-1887).
+//
+//  MECHANICAL RENAME RULE (same golden-derived split as prior waves): every
+//  golden `HGemPtr->DataItemIn/GetDataItemLenAndType/
+//  GetDataItemLenAndTypeAndDelete/InitLocalHead/DataItemOut/SendLocalData/
+//  LocalAcknowledge` (wire-codec primitives) became `ActiveWire->...`; golden
+//  `HGemPtr->slTempReportID/lTempReportIDContent/slTempCeID/
+//  lTempCeIDContent/strGrdAlarm/CheckReportAlreadyDefine/IsValidSVID/
+//  DefineReportAcknowledge*/DeleteReportID/DeleteReportIDOfCeid/
+//  SetReportIDContent/SaveEventReportData/DeleteAllHostDefineReportID/
+//  DeleteAllHostDefineCeid/LinkReportAcknowledgeFormatError/
+//  ProcessHostSendReportLinkID/CheckCEIDExist/
+//  EnableDisableEventReportAcknowledgeCeidNotExist/...FormatError/
+//  EnableDisableEventReport/EnableDisableAlarmAll/EnableDisableAlarm/
+//  GetAlarmIndex` (real THGem-only state/methods, no wire-codec engine home)
+//  stayed `HGemPtr->`, unchanged.
+//
+//  DEPENDENCY WIDENING (flagged explicitly): S2F34_DefineReportAcknowledgeSub's
+//  golden body branches on `CUSTOMER_CODE==CC_ONSEMI_M` (golden :1241-1248,
+//  an empty-bodied `if` -- preserved verbatim, not an omission on this port's
+//  part). Neither symbol existed in this file before this wave; `cmydef.h`
+//  is now `#include`d (below) for `CUSTOMER_CODE`/`CC_ONSEMI_M`, matching the
+//  identical widening uHGemEquipment.cpp's own Bucket-B wave already made for
+//  the same header -- zero new CMake link edge needed (uHGemClass.cpp and
+//  uHGemEquipment.cpp already share the `ht9045_secsgem` target, which
+//  already links `ht9045_core`/`ht9045_globals` for exactly this).
+//
+//  GOLDEN QUIRK PRESERVED VERBATIM (S5F6_ListAlarmData, golden :1751-1788,
+//  the "alarm not found" branch): `DataItemOut(0, HType.BINARY_TYPE, &Mode)`
+//  passes length 0 -- `Mode`'s value is never actually transmitted on the
+//  wire. This is a genuine golden zero-length SECS-II item, not a
+//  translation bug -- see that method's own inline comment. Also preserved:
+//  golden `_atoi64` -> `strtoll`/`strtoull` (MinGW <cstdlib> substitution,
+//  same precedent SecsSvEcRegistration.cpp/uHGemEquipment.cpp already
+//  established) and the `(unsigned)strtoull(...)` 32-bit-truncating cast
+//  golden itself applies before storing into a 64-bit `uint8SV` (golden
+//  :1720 -- an existing golden quirk, not introduced here).
+//
+//  STILL GATED (15 remain; unaffected by this wave's delta): S2F24Sub (Trace
+//  member arrays), S2F32 (Borland dos.h clock), S6F24/S7F18/S7F20/
+//  Process_S7F20/S101F2/S101F4/S101F6_StoreHostUploadFile/
+//  S101F8_StoreHostUploadFile (spool/upload/recipe subsystem members),
+//  S10F4/S10F6 (Terminal widget stand-ins), S125F2/SetECValue (VCL widget
+//  dynamic_cast cluster) -- unchanged from INTEGRATE WAVE 4's own list minus
+//  the 8 resolved this wave.
+//---------------------------------------------------------------------------
 
 #include "vclcompat/vcl_compat.h"
 #include "uHGemClass.h"
@@ -348,7 +417,17 @@
 // this include stays confined to the .cpp, matching this project's "header
 // stays minimal, .cpp pulls what its method BODIES need" convention.
 #include "SECSGEM/uHGemEquipment.h"
-#include <cstdlib>   // atoi (CheckECValue's Type/PMax_Value/PMin_Value decode)
+// AI(W906-AlarmReportAck) 20260721: DEPENDENCY WIDENING -- S2F34_
+// DefineReportAcknowledgeSub's golden body branches on
+// `CUSTOMER_CODE==CC_ONSEMI_M` (golden uHGemClass.cpp:1241-1248). Neither
+// symbol existed in this file before this wave; cmydef.h supplies both
+// (CUSTOMER_CODE extern int + CC_ONSEMI_M macro, via its own MachineType.h
+// include) -- same widening uHGemEquipment.cpp's own Bucket-B wave already
+// made for the identical header, zero new CMake link edge needed (this file
+// and uHGemEquipment.cpp already share the ht9045_secsgem target, which
+// already links ht9045_core/ht9045_globals for exactly this).
+#include "cmydef.h"
+#include <cstdlib>   // atoi (CheckECValue's Type/PMax_Value/PMin_Value decode); strtoll/strtoull (S5F6_ListAlarmData's golden _atoi64 substitution, same precedent as SecsSvEcRegistration.cpp/uHGemEquipment.cpp)
 
 // AI(W5-SECSGEM-Translate) 20260710: MyDBIProcess's real golden signature is
 // `void __fastcall MyDBIProcess(AnsiString asTable, AnsiString S1,
@@ -1299,44 +1378,307 @@ void HTGem::S2F32_DateAndTimeAcknowledge()
 //---------------------------------------------------------------------------
 // [S2,F34] Define Report -- ack-code sub (DRACK).
 //---------------------------------------------------------------------------
+// AI(W906-AlarmReportAck) 20260721: UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 1218-1291). DataItemIn/GetDataItemLenAndType/GetDataItemLenAndTypeAndDelete
+// -> ActiveWire-> (wire-codec primitives); slTempReportID/lTempReportIDContent/
+// DeleteAllHostDefineReportID stay HGemPtr-> (real THGem state/method, no
+// wire-codec engine home). DEPENDENCY WIDENING: the CUSTOMER_CODE==
+// CC_ONSEMI_M branch below needs cmydef.h, now included (see this file's own
+// file-head note).
 int HTGem::S2F34_DefineReportAcknowledgeSub()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem members slTempReportID/lTempReportIDContent + THGem::DeleteAllHostDefineReportID) -- golden SECSGEM/uHGemClass.cpp:1218-1291
-#endif
-    return 1;                                                                  // conservative default (deny); real DRACK decode gated above
+    int len, svlen, ret, temp;
+    unsigned char Type;
+    AnsiString DATAID, ReportID, sSVID;
+    TStringList *P;
+
+    for(int i=0; i<HGemPtr->slTempReportID->Count; i++)                         // 若上一次的資料尚未清除則要清除
+    {
+        P=(TStringList *) HGemPtr->lTempReportIDContent->Items[i];
+        P->Clear();                                                             //Ifor 20170603 (wei) TStringList 刪除前先 Clean
+        delete P;
+    }
+    HGemPtr->slTempReportID->Clear();
+    HGemPtr->lTempReportIDContent->Clear();
+
+    if(ActiveWire->DataItemIn(2, HType.LIST_TYPE, NULL)!=1)
+        return -1;
+
+    ActiveWire->GetDataItemLenAndType(len, Type);
+    if(ActiveWire->DataItemIn(len, Type, DATAID)!=1)
+        return -1;
+
+    if(CUSTOMER_CODE==CC_ONSEMI_M)
+    {
+    }
+    else
+    {
+        if(DATAID=="")                                                          //JerryYang 20250120 : modify
+            return -1;
+    }
+
+    ret=ActiveWire->GetDataItemLenAndType(len, Type);                              // 取得多少 report id 要被定義
+    if(ret!=1 || Type!=HType.LIST_TYPE)
+        return -1;
+    ActiveWire->DataItemIn(len, HType.LIST_TYPE, NULL);
+    if(len==0)
+    {
+        HGemPtr->DeleteAllHostDefineReportID();
+        return 1;
+    }
+
+    for(int i=0; i<len; i++)
+    {
+        if(ActiveWire->DataItemIn(2, HType.LIST_TYPE,NULL)!=1)
+            return -1;
+        if(ActiveWire->GetDataItemLenAndType(temp, Type)!=1)
+            return -1;
+        if(ActiveWire->DataItemIn(temp, Type, ReportID)!=1)
+            return -1;
+        ret=ActiveWire->GetDataItemLenAndTypeAndDelete(svlen, Type);
+        if(ret!=1 || Type!=HType.LIST_TYPE)
+            return -1;
+
+        P=new TStringList;
+        P->Clear();
+        for(int j=0; j<svlen; j++)
+        {
+            ActiveWire->GetDataItemLenAndType(temp, Type);
+            if(ActiveWire->DataItemIn(temp, Type, sSVID)==1)
+            {
+                P->Add(sSVID);
+            }
+            else
+            {
+                P->Clear();                                                     //Ifor 20170603 (wei) TStringList 刪除前先 Clean
+                delete P;
+                return -1;
+            }
+        }
+        HGemPtr->slTempReportID->Add(ReportID);
+        HGemPtr->lTempReportIDContent->Add(P);
+    }
+    return 1;
 }
 //---------------------------------------------------------------------------
+// AI(W906-AlarmReportAck) 20260721: UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 1294-1361). No wire-codec primitives called directly in this method's own
+// body -- every HGemPtr-> call stays HGemPtr-> (real THGem state/methods,
+// all already real per this wave's own header/A4 additions).
 void HTGem::S2F34_ProcessHostSendReportID()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem::CheckReportAlreadyDefine/IsValidSVID/DefineReportAcknowledgeAlreadyDefined/DefineReportAcknowledgeInvalidSVID/DeleteReportID/DeleteReportIDOfCeid/SetReportIDContent/DefineReportAcknowledgeInsufficientSpace/DefineReportAcknowledgeAccept/SaveEventReportData) -- golden SECSGEM/uHGemClass.cpp:1294-1361
-#endif
+    AnsiString ReportID, SVID;
+    TStringList *strPtr;
+
+    // 檢查是否已經定義了
+    for(int i=0; i<HGemPtr->slTempReportID->Count; i++)
+    {
+        ReportID=HGemPtr->slTempReportID->Strings[i];
+        strPtr  =(TStringList *)HGemPtr->lTempReportIDContent->Items[i];
+        if(HGemPtr->CheckReportAlreadyDefine(ReportID) && strPtr->Count!=0)
+        {
+            HGemPtr->DefineReportAcknowledgeAlreadyDefined();
+            return;
+        }
+    }
+    // 檢查 SVID 是否有不存在的
+    for(int i=0; i<HGemPtr->slTempReportID->Count; i++)
+    {
+        strPtr=(TStringList *)HGemPtr->lTempReportIDContent->Items[i];
+        for(int j=0; j<strPtr->Count; j++)
+        {
+            SVID=strPtr->Strings[j];
+            if(HGemPtr->IsValidSVID(SVID)==false)
+            {
+                HGemPtr->DefineReportAcknowledgeInvalidSVID();
+                return;
+            }
+        }
+    }
+    unsigned SVIDBuffer[1024];
+    for(int i=0; i<HGemPtr->slTempReportID->Count; i++)
+    {
+        ReportID=HGemPtr->slTempReportID->Strings[i];
+        strPtr=(TStringList *)HGemPtr->lTempReportIDContent->Items[i];
+        if(strPtr->Count==0)
+        {
+            HGemPtr->DeleteReportID(atoi(ReportID.c_str()), 0);                 //  把 report id 表內地 report id 全部 delete  2013/11/20
+            HGemPtr->DeleteReportIDOfCeid(atoi(ReportID.c_str()));              // 把 ceid   id 表內地 report id 全部 delete
+        }
+        else
+        {
+            if(strPtr->Count>1024)
+            {
+                HGemPtr->DefineReportAcknowledgeInsufficientSpace();
+                return;
+            }
+
+            for(int j=0; j<strPtr->Count; j++)
+            {
+                SVID=strPtr->Strings[j];
+                SVIDBuffer[j]=atoi(SVID.c_str());
+            }
+
+            if(HGemPtr->SetReportIDContent(atoi(ReportID.c_str()), strPtr->Count, SVIDBuffer, 0)==false)
+            {
+                HGemPtr->DefineReportAcknowledgeInsufficientSpace();
+                return;
+            }
+        }
+        strPtr->Clear();                                                        //Ifor 20170603 (wei) TStringList 刪除前先 Clean
+        delete strPtr;
+    }
+    HGemPtr->slTempReportID->Clear();
+    HGemPtr->lTempReportIDContent->Clear();
+    HGemPtr->DefineReportAcknowledgeAccept();
+    HGemPtr->SaveEventReportData();
 }
 //---------------------------------------------------------------------------
+// AI(W906-AlarmReportAck) 20260721: UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 1363-1393). No wire-codec primitives called directly (calls its own
+// Sub() sibling + HGemPtr->DefineReportAcknowledgeFormatError, both real).
 void HTGem::S2F34_DefineReportAcknowledge()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem::DefineReportAcknowledgeFormatError) -- golden SECSGEM/uHGemClass.cpp:1363-1393
-#endif
+    int ret;
+    ret=S2F34_DefineReportAcknowledgeSub();
+    if(ret==-1)
+        HGemPtr->DefineReportAcknowledgeFormatError();
+    else
+        S2F34_ProcessHostSendReportID();
 }
 //---------------------------------------------------------------------------
 // [S2,F36] Link Event Report -- ack-code sub (LRACK).
 //---------------------------------------------------------------------------
+// AI(W906-AlarmReportAck) 20260721: UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 1395-1457). Same DataItemIn/GetDataItemLenAndType/
+// GetDataItemLenAndTypeAndDelete -> ActiveWire-> rule as
+// S2F34_DefineReportAcknowledgeSub above; slTempCeID/lTempCeIDContent/
+// DeleteAllHostDefineCeid stay HGemPtr->.
 int HTGem::S2F36_LinkEventReportAcknowledgeSub()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem members slTempCeID/lTempCeIDContent + THGem::DeleteAllHostDefineCeid) -- golden SECSGEM/uHGemClass.cpp:1395-1457
-#endif
-    return 1;                                                                  // conservative default (deny); real LRACK decode gated above
+    int len, svlen, ret, temp;
+    unsigned char Type;
+    AnsiString DATAID,Ceid,sReportID;
+    TStringList *P;
+
+    for(int i=0; i<HGemPtr->slTempCeID->Count; i++)                             // 若上一次遞資料尚未清除記憶體則要清除
+    {
+        P=(TStringList *) HGemPtr->lTempCeIDContent->Items[i];
+        P->Clear();                                                             //Ifor 20170603 (wei) TStringList 刪除前先 Clean
+        delete P;
+    }
+    HGemPtr->slTempCeID->Clear();
+    HGemPtr->lTempCeIDContent->Clear();
+
+    if(ActiveWire->DataItemIn(2, HType.LIST_TYPE, NULL)!=1)
+        return -1;
+
+    ActiveWire->GetDataItemLenAndType(len, Type);
+    if(ActiveWire->DataItemIn(len, Type, DATAID)!=1)
+        return -1;
+    ret=ActiveWire->GetDataItemLenAndType(len, Type);                              // 取得多少 report id 要被定義
+    if(ret!=1 || Type!=HType.LIST_TYPE)
+        return -1;
+
+    ActiveWire->DataItemIn(len, HType.LIST_TYPE, NULL);
+    if(len==0)
+    {
+        HGemPtr->DeleteAllHostDefineCeid();
+        return 1;
+    }
+
+    for(int i=0; i<len; i++)
+    {
+        if(ActiveWire->DataItemIn(2, HType.LIST_TYPE, NULL)!=1)
+            return -1;
+
+        ActiveWire->GetDataItemLenAndType(temp, Type);
+        if(ActiveWire->DataItemIn(temp, Type, Ceid)!=1)
+            return -1;
+
+        ret=ActiveWire->GetDataItemLenAndTypeAndDelete(svlen, Type);
+        if(ret!=1 || Type!=HType.LIST_TYPE)
+            return -1;
+
+        P=new TStringList;
+        P->Clear();
+        for(int j=0; j<svlen; j++)
+        {
+            ActiveWire->GetDataItemLenAndType(temp, Type);
+            if(ActiveWire->DataItemIn(temp, Type, sReportID)!=1)
+            {
+                P->Clear();                                                     //Ifor 20170603 (wei) TStringList 刪除前先 Clean
+                delete P;
+                return -1;
+            }
+            P->Add(sReportID);
+        }
+        HGemPtr->slTempCeID->Add(Ceid);
+        HGemPtr->lTempCeIDContent->Add(P);
+    }
+    return 1;
 }
 //---------------------------------------------------------------------------
+// AI(W906-AlarmReportAck) 20260721: UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 1460-1477). No wire-codec primitives called directly (calls its own
+// Sub() sibling + HGemPtr->LinkReportAcknowledgeFormatError/
+// ProcessHostSendReportLinkID, both real).
 void HTGem::S2F36_LinkEventReportAcknowledge()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem::LinkReportAcknowledgeFormatError/ProcessHostSendReportLinkID) -- golden SECSGEM/uHGemClass.cpp:1460-1477
-#endif
+    int ret;
+    ret=S2F36_LinkEventReportAcknowledgeSub();
+    if(ret==-1)
+        HGemPtr->LinkReportAcknowledgeFormatError();
+    else
+        HGemPtr->ProcessHostSendReportLinkID();
 }
 //---------------------------------------------------------------------------
+// AI(W906-AlarmReportAck) 20260721: UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 1480-1521). DataItemIn/GetDataItemLenAndTypeAndDelete/GetDataItemLenAndType
+// -> ActiveWire->; CheckCEIDExist/EnableDisableEventReportAcknowledge
+// CeidNotExist/...FormatError/EnableDisableEventReport stay HGemPtr-> (real
+// THGem methods, all already real per this wave's own header/A4 additions).
 void HTGem::S2F38_EnableDisableEventReportAcknowledge()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs GetDataItemLenAndTypeAndDelete + THGem::CheckCEIDExist/EnableDisableEventReportAcknowledgeCeidNotExist/EnableDisableEventReportAcknowledgeFormatError/EnableDisableEventReport) -- golden SECSGEM/uHGemClass.cpp:1480-1521
-#endif
+    int len, slen;
+    unsigned char Type;
+    bool CEED;
+    unsigned CEID[1024];
+    AnsiString sID;
+
+    if(ActiveWire->DataItemIn(2, HType.LIST_TYPE,NULL)==1)
+    {
+        if(ActiveWire->DataItemIn(1, HType.BOOLEAN_TYPE, &CEED))
+        {
+            if(ActiveWire->GetDataItemLenAndTypeAndDelete(slen, Type)==1)
+            {
+                if(Type==HType.LIST_TYPE)
+                {
+                    for(int i=0; i<slen; i++)
+                    {
+                        ActiveWire->GetDataItemLenAndType(len, Type);
+                        if(ActiveWire->DataItemIn(len, Type, sID)==1)
+                        {
+                            CEID[i]=atoi(sID.c_str());
+                            if(HGemPtr->CheckCEIDExist(sID)==false)
+                            {
+                                HGemPtr->EnableDisableEventReportAcknowledgeCeidNotExist();
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            HGemPtr->EnableDisableEventReportAcknowledgeFormatError();
+                            return;
+                        }
+                    }
+                    HGemPtr->EnableDisableEventReport(CEED, slen, CEID);
+                    return;
+                }
+            }
+        }
+    }
+    HGemPtr->EnableDisableEventReportAcknowledgeFormatError();
 }
 //---------------------------------------------------------------------------
 // [S2,F42] Host Command Acknowledge (HCACK).
@@ -1413,16 +1755,327 @@ void HTGem::S2F44_ResetSpoolingAcknowledge()
     ActiveWire->SendLocalData();
 }
 //---------------------------------------------------------------------------
+// AI(W906-AlarmReportAck) 20260721: UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 1593-1624). DataItemIn/GetDataItemLenAndType/LocalAcknowledge ->
+// ActiveWire-> (wire-codec primitives); EnableDisableAlarmAll/
+// EnableDisableAlarm stay HGemPtr-> (real THGem methods, added this wave).
 void HTGem::S5F4_EnableDisableAlarmAcknowledge()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem::EnableDisableAlarmAll/EnableDisableAlarm) -- golden SECSGEM/uHGemClass.cpp:1593-1624
-#endif
+    unsigned char ALED, Type;
+    int len;
+    AnsiString ID;
+
+    if(ActiveWire->DataItemIn(2, HType.LIST_TYPE, NULL)==1)
+    {
+        if(ActiveWire->DataItemIn(1, HType.BINARY_TYPE, &ALED))
+        {
+            ActiveWire->GetDataItemLenAndType(len, Type);
+            if(len==0)
+            {
+                HGemPtr->EnableDisableAlarmAll(ALED);
+                ActiveWire->LocalAcknowledge(5, 4, 0);
+            }
+            else
+            {
+                ActiveWire->DataItemIn(len, Type, ID);
+                if(HGemPtr->EnableDisableAlarm(ID, ALED))
+                    ActiveWire->LocalAcknowledge(5, 4, 0);
+                else
+                    ActiveWire->LocalAcknowledge(5, 4, 1);
+            }
+            return;
+        }
+    }
+    S9F7_IllegalData("S5,F3 Data Format error !!!");
 }
 //---------------------------------------------------------------------------
+// V 1.0
+// S5,F6 This message contains the alarm data known to the equipment. There are “m” alarms in the list.
+//---------------------------------------------------------------------------
+// AI(W906-AlarmReportAck) 20260721: UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 1626-1887). DataItemIn/GetDataItemLenAndType/InitLocalHead/DataItemOut/
+// SendLocalData -> ActiveWire-> (wire-codec primitives); strGrdAlarm/
+// GetAlarmIndex stay HGemPtr-> (real THGem StringGrid/method, no wire-codec
+// engine home). golden `_atoi64` -> `strtoll`/`strtoull` (MinGW <cstdlib>
+// substitution, see this file's own file-head note); the `(unsigned)
+// strtoull(...)` 32-bit-truncating cast before storing into the 64-bit
+// `uint8SV` is an EXISTING golden quirk (golden :1720), not introduced here.
 void HTGem::S5F6_ListAlarmData()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs VCL TStringGrid strGrdAlarm + THGem::GetAlarmIndex) -- golden SECSGEM/uHGemClass.cpp:1626-1890
-#endif
+    int SVlen,i, j,ret;
+    unsigned char Type;
+
+    __int64  int8SV;                                                            //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+    int   int4SV;
+    short int2SV;
+    unsigned __int64  uint8SV;                                                  //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+    unsigned int   uint4SV;
+    unsigned short uint2SV;
+    AnsiString str;
+    AnsiString S;
+
+    if(ActiveWire->GetDataItemLenAndType(SVlen,Type)==1)
+    {
+        if(SVlen!=0)
+        {
+            if(Type==HType.UINT_8_TYPE || Type==HType.UINT_4_TYPE || Type==HType.UINT_2_TYPE ||
+               Type==HType.INT_8_TYPE  || Type==HType.INT_4_TYPE  || Type==HType.INT_2_TYPE)                            //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+            {
+                unsigned __int64 *uint8Ptr;
+                unsigned *uint4Ptr;
+                unsigned short *uint2Ptr;
+                __int64     *int8Ptr;
+                int      *int4Ptr;
+                short    *int2Ptr;
+                unsigned char Mode=0x80;
+
+                ret=ActiveWire->GetDataItemLenAndType(SVlen,Type);
+                if(ret!=1)
+                {
+                    S9F7_IllegalData("S5,F5 Data Format error !!!");
+                    return;
+                }
+
+                if(Type==HType.UINT_8_TYPE)                                     //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+                {
+                    uint8Ptr=new unsigned __int64 [SVlen];
+                    ret=ActiveWire->DataItemIn(SVlen, HType.UINT_8_TYPE,uint8Ptr);
+                }
+                else if(Type==HType.UINT_4_TYPE)
+                {
+                    uint4Ptr=new unsigned [SVlen];
+                    ret=ActiveWire->DataItemIn(SVlen, HType.UINT_4_TYPE,uint4Ptr);
+                }
+                else if(Type==HType.UINT_2_TYPE)
+                {
+                    uint2Ptr=new unsigned short [SVlen];
+                    ret=ActiveWire->DataItemIn(SVlen, HType.UINT_2_TYPE,uint2Ptr);
+                }
+                else if(Type==HType.INT_8_TYPE)                                 //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+                {
+                    int8Ptr=new __int64[SVlen];
+                    ret=ActiveWire->DataItemIn(SVlen, HType.INT_8_TYPE,int8Ptr);
+                }
+                else if(Type==HType.INT_4_TYPE)
+                {
+                    int4Ptr=new int[SVlen];
+                    ret=ActiveWire->DataItemIn(SVlen, HType.INT_4_TYPE,int4Ptr);
+                }
+                else if(Type==HType.INT_2_TYPE)
+                {
+                    int2Ptr=new short[SVlen];
+                    ret=ActiveWire->DataItemIn(SVlen, HType.INT_2_TYPE,int2Ptr);
+                }
+
+                if(ret==1)
+                {
+                    ActiveWire->InitLocalHead(5,6,0);
+                    ActiveWire->DataItemOut(SVlen, HType.LIST_TYPE, NULL);
+                    for(i=0; i<SVlen; i++)
+                    {
+                        if(Type==HType.UINT_8_TYPE)                             //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+                            // AI(W906-AlarmReportAck) 20260721: cast to (long
+                            // long) -- vclcompat AnsiString has no operator=
+                            // matching `unsigned long long` exactly (ambiguous
+                            // across int/unsigned int/long long/double), same
+                            // established precedent as SecsWireCodec.cpp's own
+                            // identical accommodation.
+                            S=(long long)uint8Ptr[i];
+                        else if(Type==HType.UINT_4_TYPE)
+                            S=uint4Ptr[i];
+                        else if(Type==HType.UINT_2_TYPE)
+                            S=uint2Ptr[i];
+                        else if(Type==HType.INT_8_TYPE)                         //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+                            S=int8Ptr[i];
+                        else if(Type==HType.INT_4_TYPE)
+                            S=int4Ptr[i];
+                        else if(Type==HType.INT_2_TYPE)
+                            S=int2Ptr[i];
+
+                        j=HGemPtr->GetAlarmIndex(S);
+                        if(j>=0)
+                        {
+                            ActiveWire->DataItemOut(3, HType.LIST_TYPE, NULL);
+                            Mode=atoi(HGemPtr->strGrdAlarm->Cells[2][j].c_str())+0x80;
+                            ActiveWire->DataItemOut(1, HType.BINARY_TYPE, &Mode);  // mode
+                            if(Type==HType.UINT_8_TYPE)                         //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+                            {
+                                uint8SV=(unsigned)strtoull(HGemPtr->strGrdAlarm->Cells[1][j].c_str(), NULL, 10);   // golden: _atoi64 (MinGW substitution); (unsigned) truncation is an EXISTING golden quirk, see this method's own file-head-adjacent comment
+                                ActiveWire->DataItemOut(1, HType.UINT_8_TYPE, &uint8SV);
+                            }
+                            else if(Type==HType.UINT_4_TYPE)
+                            {
+                                uint4SV=atoi(HGemPtr->strGrdAlarm->Cells[1][j].c_str());
+                                ActiveWire->DataItemOut(1, HType.UINT_4_TYPE, &uint4SV);
+                            }
+                            else if(Type==HType.UINT_2_TYPE)
+                            {
+                                uint2SV=atoi(HGemPtr->strGrdAlarm->Cells[1][j].c_str());
+                                ActiveWire->DataItemOut(1, HType.UINT_2_TYPE, &uint2SV);
+                            }
+                            else if(Type==HType.INT_8_TYPE)                     //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+                            {
+                                int8SV=strtoll(HGemPtr->strGrdAlarm->Cells[1][j].c_str(), NULL, 10);   // golden: _atoi64 (MinGW substitution)
+                                ActiveWire->DataItemOut(1, HType.INT_8_TYPE, &int8SV);
+                            }
+                            else if(Type==HType.INT_4_TYPE)
+                            {
+                                int4SV=atoi(HGemPtr->strGrdAlarm->Cells[1][j].c_str());
+                                ActiveWire->DataItemOut(1, HType.INT_4_TYPE, &int4SV);
+                            }
+                            else if(Type==HType.INT_2_TYPE)
+                            {
+                                int2SV=atoi(HGemPtr->strGrdAlarm->Cells[1][j].c_str());
+                                ActiveWire->DataItemOut(1, HType.INT_2_TYPE, &int2SV);
+                            }
+
+                            ActiveWire->DataItemOut(HType.ASCII_TYPE, HGemPtr->strGrdAlarm->Cells[4][j]);                  // message
+                        }
+                        else
+                        {
+                            // AI(W906-AlarmReportAck) 20260721: golden quirk,
+                            // preserved verbatim -- this DataItemOut call
+                            // passes length 0, so `Mode`'s value (0x80 from
+                            // its declaration above, never reassigned in THIS
+                            // branch) is never actually transmitted. This is a
+                            // genuine zero-length SECS-II item in golden
+                            // itself (golden uHGemClass.cpp:1754), not a
+                            // translation error -- do NOT "fix" it to a
+                            // non-zero length.
+                            ActiveWire->DataItemOut(3, HType.LIST_TYPE, NULL);
+                            ActiveWire->DataItemOut(0, HType.BINARY_TYPE,&Mode);   // mode -- zero length, see comment above
+                            if(Type==HType.UINT_8_TYPE)                         //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+                            {
+                                uint8SV=uint8Ptr[i];
+                                ActiveWire->DataItemOut(1, HType.UINT_8_TYPE, &uint8SV);
+                            }
+                            else if(Type==HType.UINT_4_TYPE)
+                            {
+                                uint4SV=uint4Ptr[i];
+                                ActiveWire->DataItemOut(1, HType.UINT_4_TYPE, &uint4SV);
+                            }
+                            else if(Type==HType.UINT_2_TYPE)
+                            {
+                                uint2SV=uint2Ptr[i];
+                                ActiveWire->DataItemOut(1, HType.UINT_2_TYPE, &uint2SV);
+                            }
+                            else if(Type==HType.INT_8_TYPE)                     //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+                            {
+                                int8SV=int8Ptr[i];
+                                ActiveWire->DataItemOut(1, HType.INT_8_TYPE, &int8SV);
+                            }
+                            else if(Type==HType.INT_4_TYPE)
+                            {
+                                int4SV=int4Ptr[i];
+                                ActiveWire->DataItemOut(1, HType.INT_4_TYPE, &int4SV);
+                            }
+                            else if(Type==HType.INT_2_TYPE)
+                            {
+                                int2SV=int2Ptr[i];
+                                ActiveWire->DataItemOut(1, HType.INT_2_TYPE, &int2SV);
+                            }
+
+                            str="";
+                            ActiveWire->DataItemOut(HType.ASCII_TYPE, str);
+                        }
+                    }
+                    ActiveWire->SendLocalData();
+                    if(Type==HType.UINT_8_TYPE)                                 //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+                    {
+                        delete[] uint8Ptr;                                      //Ifor 20170603 (wei) 修改陣列刪除方式 delete ==> delete[]
+                        uint8Ptr=NULL;                                          //kevin 20180517
+                    }
+                    else if(Type==HType.UINT_4_TYPE)
+                    {
+                        delete[] uint4Ptr;                                      //Ifor 20170603 (wei) 修改陣列刪除方式 delete ==> delete[]
+                        uint4Ptr=NULL;                                          //kevin 20180517
+                    }
+                    else if(Type==HType.UINT_2_TYPE)
+                    {
+                        delete[] uint2Ptr;                                      //Ifor 20170603 (wei) 修改陣列刪除方式 delete ==> delete[]
+                        uint2Ptr=NULL;                                          //kevin 20180517
+                    }
+                    else if(Type==HType.INT_8_TYPE)                             //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+                    {
+                        delete[] int8Ptr;                                       //Ifor 20170603 (wei) 修改陣列刪除方式 delete ==> delete[]
+                        int8Ptr=NULL;                                           //kevin 20180517
+                    }
+                    else if(Type==HType.INT_4_TYPE)
+                    {
+                        delete[] int4Ptr;                                       //Ifor 20170603 (wei) 修改陣列刪除方式 delete ==> delete[]
+                        int4Ptr=NULL;                                           //kevin 20180517
+                    }
+                    else if(Type==HType.INT_2_TYPE)
+                    {
+                        delete[] int2Ptr;                                       //Ifor 20170603 (wei) 修改陣列刪除方式 delete ==> delete[]
+                        int2Ptr=NULL;                                           //kevin 20180517
+                    }
+                    return;
+                }
+                else
+                {
+                    S9F7_IllegalData("S5,F5 Data Format error !!!");
+                    if(Type==HType.UINT_8_TYPE)                                 //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+                    {
+                        delete[] uint8Ptr;                                      //Ifor 20170603 (wei) 修改陣列刪除方式 delete ==> delete[]
+                        uint8Ptr=NULL;                                          //kevin 20180517
+                    }
+                    else if(Type==HType.UINT_4_TYPE)
+                    {
+                        delete[] uint4Ptr;                                      //Ifor 20170603 (wei) 修改陣列刪除方式 delete ==> delete[]
+                        uint4Ptr=NULL;                                          //kevin 20180517
+                    }
+                    else if(Type==HType.UINT_2_TYPE)
+                    {
+                        delete[] uint2Ptr;                                      //Ifor 20170603 (wei) 修改陣列刪除方式 delete ==> delete[]
+                        uint2Ptr=NULL;                                          //kevin 20180517
+                    }
+                    else if(Type==HType.INT_8_TYPE)                             //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+                    {
+                        delete[] int8Ptr;                                       //Ifor 20170603 (wei) 修改陣列刪除方式 delete ==> delete[]
+                        int8Ptr=NULL;                                           //kevin 20180517
+                    }
+                    else if(Type==HType.INT_4_TYPE)
+                    {
+                        delete[] int4Ptr;                                       //Ifor 20170603 (wei) 修改陣列刪除方式 delete ==> delete[]
+                        int4Ptr=NULL;                                           //kevin 20180517
+                    }
+                    else if(Type==HType.INT_2_TYPE)
+                    {
+                        delete[] int2Ptr;                                       //Ifor 20170603 修改陣列刪除方式 delete ==> delete[]
+                        int2Ptr=NULL;                                           //kevin 20180517
+                    }
+                    return;
+                }
+            }
+            else
+            {
+                S9F7_IllegalData("S5,F5 Data Format error !!!");
+            }
+        }
+        else
+        {
+            ActiveWire->InitLocalHead(5, 6, 0);
+            unsigned char Mode=0x80;
+            ActiveWire->DataItemOut(HGemPtr->strGrdAlarm->RowCount-1, HType.LIST_TYPE, NULL);
+            for(i=1; i<HGemPtr->strGrdAlarm->RowCount; i++)
+            {
+                ActiveWire->DataItemOut(3, HType.LIST_TYPE, NULL);
+                Mode=atoi(HGemPtr->strGrdAlarm->Cells[2][i].c_str())+0x80;
+                ActiveWire->DataItemOut(1, HType.BINARY_TYPE,&Mode);               // mode
+                uint4SV=atoi(HGemPtr->strGrdAlarm->Cells[1][i].c_str());
+                ActiveWire->DataItemOut(1, HType.UINT_4_TYPE, &uint4SV);           // ID
+                ActiveWire->DataItemOut(HType.ASCII_TYPE, HGemPtr->strGrdAlarm->Cells[4][i]);
+            }
+
+            ActiveWire->SendLocalData();
+            return;
+        }
+    }
+    else
+    {
+        S9F7_IllegalData("S5,F5 Data Format error !!!");
+    }
 }
 //---------------------------------------------------------------------------
 // AI(W906-SvEcDataItem) 20260720: UN-GATED (golden SECSGEM/uHGemClass.cpp:

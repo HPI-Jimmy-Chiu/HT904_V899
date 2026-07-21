@@ -506,6 +506,14 @@ THGem::THGem()
         RecvMemoryBuffer     = new TMemoryStream();      // golden ctor :669
         ProcBuffer           = new TMemoryStream();      // golden ctor :670
         TempProcBuffer       = new TMemoryStream();      // golden ctor :671
+
+        // AI(W906-AlarmReportAck) 20260721: temp CEID/ReportID staging lists
+        // (golden ctor :619-622, right after LogDataString) -- see the header's
+        // own member comment for the full lifecycle/consumer citation.
+        slTempReportID       = new TStringList();
+        lTempReportIDContent = new vclcompat::TList();
+        slTempCeID           = new TStringList();
+        lTempCeIDContent     = new vclcompat::TList();
     }
     catch (...)
     {
@@ -554,6 +562,14 @@ THGem::THGem()
         delete ProcBuffer;
         delete TempProcBuffer;
         delete[] EthernetBuffer;
+        // AI(W906-AlarmReportAck) 20260721: same catch-block cleanup convention
+        // as the other Bucket-C-era members immediately above (no NULL-init
+        // safety net -- matches this ctor's own established, pre-existing
+        // posture for TimeLeft/SFCodeResponseList/etc.).
+        delete slTempReportID;
+        delete lTempReportIDContent;
+        delete slTempCeID;
+        delete lTempCeIDContent;
         throw;
     }
 }
@@ -645,6 +661,15 @@ THGem::~THGem()
     delete ProcBuffer;
     delete TempProcBuffer;
     delete[] EthernetBuffer;
+    // AI(W906-AlarmReportAck) 20260721: NOT a deviation, unlike the 7 pointers
+    // above -- golden's OWN FormDestroy (uHGemEquipment.cpp:759-760,790-791)
+    // deletes these same 4 members for real (this port's ctor/dtor pair
+    // collapses golden's separate ctor+FormDestroy into one, see this dtor's
+    // own file-head convention note).
+    delete slTempReportID;
+    delete lTempReportIDContent;
+    delete slTempCeID;
+    delete lTempCeIDContent;
 }
 
 //===========================================================================
@@ -749,6 +774,47 @@ void THGem::WriteAlamData()
     memoPtr->SaveToFile(Filename);
     memoPtr->Clear();
     delete memoPtr;
+}
+//------------------------------------------------------------------------------
+// AI(W906-AlarmReportAck) 20260721: golden uHGemEquipment.cpp:3337-3352 --
+// pure strGrdAlarm StringGrid composition, zero new dependency. Consumed by
+// HTGem::S5F4_EnableDisableAlarmAcknowledge (uHGemClass.cpp, this same wave).
+//------------------------------------------------------------------------------
+bool THGem::EnableDisableAlarm(AnsiString S, unsigned char T)
+{
+    for (int y = 1; y < strGrdAlarm->RowCount; y++)
+    {
+        if (strGrdAlarm->Cells[8][y] == S)                                    //wei 20180227 (Steven) S5F3 判斷位置錯誤 1-->8
+        {
+            if (T & 0x80)
+                strGrdAlarm->Cells[7][y] = "1";
+            else
+                strGrdAlarm->Cells[7][y] = "0";
+            WriteAlamData();
+            return true;
+        }
+    }
+    return false;
+}
+//------------------------------------------------------------------------------
+void THGem::EnableDisableAlarmAll(unsigned char T)
+{
+    for (int y = 1; y < strGrdAlarm->RowCount; y++)
+    {
+        if (T & 0x80)
+            strGrdAlarm->Cells[7][y] = "1";
+        else
+            strGrdAlarm->Cells[7][y] = "0";
+    }
+    WriteAlamData();
+}
+//------------------------------------------------------------------------------
+int THGem::GetAlarmIndex(AnsiString S)
+{
+    for (int y = 1; y < strGrdAlarm->RowCount; y++)
+        if (strGrdAlarm->Cells[8][y] == S)
+            return y;
+    return -1;
 }
 
 //===========================================================================
@@ -2222,22 +2288,177 @@ bool THGem::CheckReportAlreadyDefine(AnsiString ReportID)
     return false;
 }
 //------------------------------------------------------------------------------
-// golden uHGemEquipment.cpp:8034-8039 -- GATED STUB.
-// Real body is:
-//     InitLocalHead(2, 38, 0);
-//     DataItemOut(1, HType.BINARY_TYPE, &ErrCode);
-//     SendLocalData();
-// i.e. sends an S2F38 (Enable/Disable Event Report Acknowledge) over the
-// wire. InitLocalHead/DataItemOut/SendLocalData are THGem's SML wire-codec
-// forwarding methods, explicitly deferred to a follow-on wave (this wave's
-// scope is the StringGrid CEID/Report/Alarm family only -- see this file's
-// own header note). No-op: does NOT send anything over clientGem/srvGem.
-// Exists purely so EnableDisableEventReport's own (in-scope) control flow,
-// which unconditionally calls this at its tail, remains translatable without
-// silently dropping the call site.
+// AI(W906-AlarmReportAck) 20260721: golden uHGemEquipment.cpp:7838-7898 --
+// pure StringGrid/TStringList/TList composition (CheckCeidExist/
+// CheckCeidAlreadyDefine/CheckReportIDExist/AddCeidReportID/
+// DeleteHostReportIDOfAssignCeid/SaveEventReportData all already real, see
+// above) + the InitLocalHead/DataItemOut(pointer overload)/SendLocalData
+// wire calls this wave adds (see those forwarders' own .cpp definition
+// below). Drains slTempCeID/lTempCeIDContent (see header), populated by
+// HTGem::S2F36_LinkEventReportAcknowledgeSub (uHGemClass.cpp) while parsing
+// an incoming S2F35 Link Event Report message.
+//------------------------------------------------------------------------------
+void THGem::ProcessHostSendReportLinkID()
+{
+    AnsiString ReportID, SVID, Ceid;
+    (void)SVID;                                                               // golden declares this but never uses it -- preserved verbatim, not a translation gap
+    TStringList *strPtr;
+
+    for (int i = 0; i < slTempCeID->Count; i++)
+    {
+        Ceid = slTempCeID->Strings[i];
+        strPtr = (TStringList *)lTempCeIDContent->Items[i];
+        if (CheckCeidExist(Ceid) == false)
+        {
+            LinkReportAcknowledgeInvalidCeID();
+            return;
+        }
+
+        if (CheckCeidAlreadyDefine(Ceid) && strPtr->Count != 0)
+        {
+            //DefineReportAcknowledgeAlreadyDefined();
+            LinkReportAcknowledgeAlreadyDefined();                           // 2013.10.22 , Joye , Link Report
+            return;
+        }
+        else
+        {
+            for (int j = 0; j < strPtr->Count; j++)
+            {
+                ReportID = strPtr->Strings[j];
+                if (CheckReportIDExist(ReportID) == false)
+                {
+                    LinkReportAcknowledgeInvalidReportID();
+                    return;
+                }
+            }
+        }
+    }
+    for (int i = 0; i < slTempCeID->Count; i++)
+    {
+        Ceid = slTempCeID->Strings[i];
+        strPtr = (TStringList *)lTempCeIDContent->Items[i];
+        if (strPtr->Count == 0)
+        {
+            DeleteHostReportIDOfAssignCeid(Ceid);
+        }
+        else
+        {
+            for (int j = 0; j < strPtr->Count; j++)
+            {
+                ReportID = strPtr->Strings[j];
+                AddCeidReportID(Ceid, ReportID);
+            }
+        }
+        delete strPtr;
+    }
+    slTempCeID->Clear();
+    lTempCeIDContent->Clear();
+
+    unsigned char OK = 0x00;
+    InitLocalHead(2, 36, 0);
+    DataItemOut(1, HType.BINARY_TYPE, &OK);
+    SendLocalData();
+    SaveEventReportData();
+}
+//------------------------------------------------------------------------------
+// AI(W906-AlarmReportAck) 20260721: golden uHGemEquipment.cpp:7969-7999 --
+// S2F34 Define Report Acknowledge (DRACK) composer + its 5 named wrappers.
+// InitLocalHead/DataItemOut/SendLocalData -> THGem's own WireCodec (see
+// forwarders below); no VCL dependency. Consumed by
+// HTGem::S2F34_ProcessHostSendReportID/S2F34_DefineReportAcknowledge
+// (uHGemClass.cpp).
+//------------------------------------------------------------------------------
+void THGem::ReportAcknowledge(unsigned char Code)
+{
+    InitLocalHead(2, 34, 0);
+    DataItemOut(1, HType.BINARY_TYPE, &Code);
+    SendLocalData();
+}
+//------------------------------------------------------------------------------
+void THGem::DefineReportAcknowledgeAccept()
+{
+    ReportAcknowledge(0x00);
+}
+//------------------------------------------------------------------------------
+void THGem::DefineReportAcknowledgeInsufficientSpace()
+{
+    ReportAcknowledge(0x01);
+}
+//------------------------------------------------------------------------------
+void THGem::DefineReportAcknowledgeFormatError()
+{
+    ReportAcknowledge(0x02);
+}
+//------------------------------------------------------------------------------
+void THGem::DefineReportAcknowledgeAlreadyDefined()
+{
+    ReportAcknowledge(0x03);
+}
+//------------------------------------------------------------------------------
+void THGem::DefineReportAcknowledgeInvalidSVID()
+{
+    ReportAcknowledge(0x04);
+}
+//------------------------------------------------------------------------------
+// AI(W906-AlarmReportAck) 20260721: golden uHGemEquipment.cpp:8001-8026 --
+// S2F36 Link Event Report Acknowledge (LRACK) composer + its 4 named
+// wrappers. Same InitLocalHead/DataItemOut/SendLocalData idiom as
+// ReportAcknowledge above. Consumed by
+// HTGem::S2F36_LinkEventReportAcknowledgeSub (uHGemClass.cpp) and
+// ProcessHostSendReportLinkID (above).
+//------------------------------------------------------------------------------
+void THGem::ReportLinkAcknowledgeError(unsigned char ErrCode)
+{
+    InitLocalHead(2, 36, 0);
+    DataItemOut(1, HType.BINARY_TYPE, &ErrCode);
+    SendLocalData();
+}
+//------------------------------------------------------------------------------
+void THGem::LinkReportAcknowledgeFormatError()
+{
+    ReportLinkAcknowledgeError(0x02);
+}
+//------------------------------------------------------------------------------
+void THGem::LinkReportAcknowledgeAlreadyDefined()
+{
+    ReportLinkAcknowledgeError(0x03);
+}
+//------------------------------------------------------------------------------
+void THGem::LinkReportAcknowledgeInvalidCeID()
+{
+    ReportLinkAcknowledgeError(0x04);
+}
+//------------------------------------------------------------------------------
+void THGem::LinkReportAcknowledgeInvalidReportID()
+{
+    ReportLinkAcknowledgeError(0x05);
+}
+//------------------------------------------------------------------------------
+/*
+0 = Accepted
+1 = Denied. At least one CEID does not exist
+>1 = Other Errors
+2-63 Reserved
+*/
+// AI(W906-AlarmReportAck) 20260721: REAL BODY -- replaces the earlier no-op
+// stub (golden uHGemEquipment.cpp:8034-8039). This wave's new
+// InitLocalHead/DataItemOut(pointer overload) forwarders (see below) close
+// the exact gap the stub's own comment named as its blocker.
 void THGem::EnableDisableEventReportAcknowledgeError(unsigned char ErrCode)
 {
-    (void)ErrCode;
+    InitLocalHead(2, 38, 0);
+    DataItemOut(1, HType.BINARY_TYPE, &ErrCode);
+    SendLocalData();
+}
+//------------------------------------------------------------------------------
+void THGem::EnableDisableEventReportAcknowledgeCeidNotExist()
+{
+    EnableDisableEventReportAcknowledgeError(0x01);
+}
+//------------------------------------------------------------------------------
+void THGem::EnableDisableEventReportAcknowledgeFormatError()
+{
+    EnableDisableEventReportAcknowledgeError(0x02);
 }
 //------------------------------------------------------------------------------
 void THGem::EnableDisableEventReport(bool CEED, int slen, unsigned *CEID)
@@ -2272,7 +2493,7 @@ void THGem::EnableDisableEventReport(bool CEED, int slen, unsigned *CEID)
         }
     }
     SaveEventReportData();
-    EnableDisableEventReportAcknowledgeError(0x00);   // GATED, see stub above
+    EnableDisableEventReportAcknowledgeError(0x00);   // AI(W906-AlarmReportAck) 20260721: no longer gated, now sends S2F38 for real (see definition above)
 }
 
 //===========================================================================
@@ -2877,11 +3098,13 @@ void THGem::GetTimeInfo()
     // GetGlobalMemoryStatusKB(...). Neither function exists anywhere in this
     // codebase yet (grepped), and the LastGetDiskInfoMin/LastGetMemoryStatus/
     // Disk_C_TotalSpaceMB/.../ulMemoryLoad/... members that tail reads/writes
-    // are not part of THIS wave's scope either. Same gated-stub precedent as
-    // EnableDisableEventReportAcknowledgeError above (this file's other GATED
-    // STUB): omitted outright (no member additions, no calls) rather than
-    // half-modeled -- exists purely so this comment documents WHY the tail is
-    // missing, so a future wave doesn't mistake the omission for an oversight.
+    // are not part of THIS wave's scope either. Same gated-stub precedent this
+    // file used for EnableDisableEventReportAcknowledgeError before it got a
+    // real body (AI(W906-AlarmReportAck) 20260721 -- see that method's own
+    // definition): omitted outright (no member additions, no calls) rather
+    // than half-modeled -- exists purely so this comment documents WHY the
+    // tail is missing, so a future wave doesn't mistake the omission for an
+    // oversight.
 }
 
 //---------------------------------------------------------------------------
@@ -4555,6 +4778,20 @@ void THGem::SendLocalDataFrom(SecsWireCodec &wc)
     }
     //==========================================================================
 }
+// AI(W906-AlarmReportAck) 20260721: golden .h:314-315 -- one-line forwarders
+// to THGem's own embedded WireCodec, same idiom as SendLocalData() below.
+// Only the pointer-form DataItemOut overload is added -- see the header's
+// own declaration comment for why the AnsiString-form sibling is not.
+void THGem::InitLocalHead(int SCode, int FCode, int WBit)
+{
+    WireCodec.InitLocalHead(SCode, FCode, WBit);
+}
+//------------------------------------------------------------------------------
+void THGem::DataItemOut(int len, unsigned char Type, void *P)
+{
+    WireCodec.DataItemOut(len, Type, P);
+}
+//------------------------------------------------------------------------------
 // golden public signature (.h:318) -- forwards to SendLocalDataFrom over
 // THGem's own embedded WireCodec.
 void THGem::SendLocalData()

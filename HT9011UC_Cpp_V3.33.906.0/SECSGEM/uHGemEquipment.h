@@ -107,20 +107,32 @@
 //      declared/defined -- as a GATED STUB, see above -- so it no longer
 //      belongs on this specific "not present" list, but its REAL wire-codec
 //      body is still deferred exactly like its DoConnect/DoSelect siblings.)
-//    - InitLocalHead/DataItemOut/DataItemInSub/DataItemIn/DataItemInNew/
-//      GetDataItemLenAndType(Sub)/StringOut/SendLocalData and
-//      SetSVDataPointer/SetECDataPointer/GetECDataValue -- per the project's
-//      established design (see SecsWireCodec.h/SecsSvEcRegistration.h's own
-//      "INTEGRATE-AGENT WIRING POINT" notes), a future full-THGem wave should
-//      hold `SecsWireCodec WireCodec; SecsSvEcRegistration SvEcReg;` as
-//      by-value members and forward these methods to them (thin wrappers,
-//      matching HTGem's already-proven pattern in SECSGEM/uHGemClass.h/.cpp)
-//      rather than re-implementing the logic here. NOT done this wave --
-//      this wave's methods (see list above) have ZERO dependency on the wire
-//      codec or SV/EC registration, by design (see synthesis note).
-//    - EnableDisableEventReportAcknowledgeError: DECLARED and DEFINED below,
-//      but as a GATED NO-OP STUB (see its own comment at the definition) --
-//      it is THGem::EnableDisableEventReport's one dependency outside this
+//    - DataItemInSub/DataItemIn/DataItemInNew/GetDataItemLenAndType(Sub)/
+//      StringOut and SetSVDataPointer/SetECDataPointer/GetECDataValue -- per
+//      the project's established design (see SecsWireCodec.h/
+//      SecsSvEcRegistration.h's own "INTEGRATE-AGENT WIRING POINT" notes), a
+//      future full-THGem wave should forward these to WireCodec/SvEcReg
+//      (thin wrappers, matching HTGem's already-proven pattern in
+//      SECSGEM/uHGemClass.h/.cpp) rather than re-implementing the logic
+//      here. NOT done this wave. AI(W906-AlarmReportAck) 20260721:
+//      InitLocalHead and ONE DataItemOut overload (the `(int len, unsigned
+//      char Type, void *P)` pointer form) are the exception -- ADDED this
+//      wave as one-line forwarders to THGem's own embedded WireCodec (see
+//      the class body below), because this wave's new Report/Link
+//      Acknowledge composer family (ReportAcknowledge/
+//      ReportLinkAcknowledgeError/EnableDisableEventReportAcknowledgeError/
+//      ProcessHostSendReportLinkID, all below) calls them bare (implicit
+//      `this->`, per golden). The 2-arg `DataItemOut(unsigned char, AnsiString)`
+//      overload golden's THGem.h also declares is still NOT added -- no
+//      in-scope THGem-level caller uses it (verified by reading every new
+//      method's body before writing this note); DataItemInSub/DataItemIn/.../
+//      SetSVDataPointer/etc. remain fully out of scope as before.
+//    - EnableDisableEventReportAcknowledgeError: AI(W906-AlarmReportAck)
+//      20260721: NO LONGER a stub -- this wave gave it its real body (see the
+//      .cpp), now that InitLocalHead/DataItemOut(pointer overload) exist on
+//      THGem (immediately above). The paragraph below is preserved as
+//      historical record of why it WAS stubbed:
+//      it was THGem::EnableDisableEventReport's one dependency outside that
 //      wave's StringGrid-only slice (its golden body is
 //      InitLocalHead+DataItemOut+SendLocalData, i.e. the wire-codec family
 //      above). Kept as a stub purely so EnableDisableEventReport's own
@@ -187,6 +199,48 @@
 //  golden's SV/EC registration (uHGemHT9045_SV.cpp/_EC.cpp, ~877+~1740 calls)
 //  stays OUT OF SCOPE (see SecsSvEcRegistration.h's own "INTEGRATE-AGENT
 //  WIRING POINT" note -- unaffected by this wave).
+//
+//  AI(W906-AlarmReportAck) 20260721: SEVENTH wave -- SECSGEM closing-waves
+//  Wave 2 (Alarm/Report-Ack family). Closes the exact InitLocalHead/
+//  DataItemOut gap the SIXTH wave's own note (above) and the
+//  EnableDisableEventReportAcknowledgeError stub both named as their
+//  blocker. Added:
+//    * 2 THGem-level wire-codec forwarders -- InitLocalHead(int,int,int) and
+//      DataItemOut(int len, unsigned char Type, void *P), both one-line
+//      forwards to THGem's own embedded WireCodec (same idiom as the
+//      already-real SendLocalData() below). Only the ONE DataItemOut
+//      overload this wave's new callers actually use is added (see that
+//      declaration's own comment).
+//    * 4 new members (golden uHGemEquipment.h:530-533): slTempReportID/
+//      lTempReportIDContent/slTempCeID/lTempCeIDContent -- temp CEID/
+//      ReportID staging lists populated by HTGem::
+//      S2F34_DefineReportAcknowledgeSub/S2F36_LinkEventReportAcknowledgeSub
+//      (uHGemClass.cpp, this same wave) while parsing an incoming S2F33/
+//      S2F35 message, drained by ProcessHostSendReportID (STILL not present
+//      -- see its own note below)/ProcessHostSendReportLinkID (below).
+//    * 3 new Alarm methods (golden uHGemEquipment.cpp:3337-3372):
+//      EnableDisableAlarm/EnableDisableAlarmAll/GetAlarmIndex -- pure
+//      strGrdAlarm/WriteAlamData composition, zero new dependency.
+//    * The Report/Link Acknowledge composer family (golden
+//      uHGemEquipment.cpp:7838-8049): ProcessHostSendReportLinkID/
+//      ReportAcknowledge(+5 named wrappers)/ReportLinkAcknowledgeError(+4
+//      named wrappers) -- pure InitLocalHead/DataItemOut/SendLocalData
+//      composition (now real, see above) plus already-real
+//      CheckCeidExist/CheckCeidAlreadyDefine/CheckReportIDExist/
+//      AddCeidReportID/DeleteHostReportIDOfAssignCeid/SaveEventReportData.
+//    * EnableDisableEventReportAcknowledgeError given its REAL body
+//      (replacing the no-op stub) + its 2 named wrappers
+//      (EnableDisableEventReportAcknowledgeCeidNotExist/FormatError, golden
+//      :8041-8049).
+//  NOT added: golden's OWN `THGem::ProcessHostSendReportID()` (declared
+//  golden uHGemEquipment.h:553) -- confirmed by grep to have ZERO definition
+//  and ZERO call sites anywhere in golden's SECSGEM directory (a dead/
+//  vestigial declaration golden itself never defines or calls; NOT the same
+//  method as `HTGem::S2F34_ProcessHostSendReportID`, uHGemClass.cpp, which
+//  IS translated this wave and needs no THGem-level sibling). Not declared
+//  here either, matching golden's own effectively-abstract state for it.
+//  See uHGemClass.cpp's own "INTEGRATE WAVE 5" note for the matching
+//  8-method un-gating on the HTGem side.
 //---------------------------------------------------------------------------
 #ifndef uHGemEquipmentH
 #define uHGemEquipmentH
@@ -466,6 +520,22 @@ public:
     TStringGrid *strGrdCEID;        // uHGemEquipment.dfm:396-405 (ColCount=258,  RowCount=1025)
     TStringGrid *stdGridReportID;   // uHGemEquipment.dfm:406-415 (ColCount=1026, RowCount=257)
     TStringGrid *strGrdAlarm;       // uHGemEquipment.dfm:428-437 (ColCount=12,   RowCount=<default 5>)
+
+    // AI(W906-AlarmReportAck) 20260721: temp CEID/ReportID staging lists
+    // (golden uHGemEquipment.h:530-533) -- populated by HTGem::
+    // S2F34_DefineReportAcknowledgeSub/S2F36_LinkEventReportAcknowledgeSub
+    // (uHGemClass.cpp, HGemPtr->...) while parsing an incoming S2F33/S2F35
+    // message; drained by ProcessHostSendReportLinkID (below) /
+    // HTGem::S2F34_ProcessHostSendReportID (uHGemClass.cpp). `vclcompat::TList`
+    // spelled out fully-qualified here (NOT brought into the global
+    // namespace by this header, matching SecsSvEcRegistration.h's own
+    // established precedent -- see vcl_compat.h's own "TList deliberately
+    // NOT brought into global namespace" note for why: a different,
+    // unrelated global `class TList` shim lives in aHotPlateSubstrate.h).
+    TStringList *slTempReportID;
+    vclcompat::TList *lTempReportIDContent;
+    TStringList *slTempCeID;
+    vclcompat::TList *lTempCeIDContent;
 
     // ==== supporting state this wave's methods need ========================
     // golden AnsiString member (uHGemEquipment.h:428/429/430 area); populated
@@ -794,9 +864,39 @@ public:
     bool CheckReportAlreadyDefine(AnsiString ReportID);
     bool CheckCEIDExist(AnsiString sID);   // upper-case-CEID sibling of CheckCeidExist (golden :8051)
 
-    // golden's tail call inside EnableDisableEventReport; GATED STUB, see
-    // definition in the .cpp for why.
+    // ==== Report/Link Acknowledge composers (AI(W906-AlarmReportAck) 20260721)
+    // golden uHGemEquipment.cpp:7838-8026 -- pure InitLocalHead/DataItemOut/
+    // SendLocalData composition (see those forwarders below) + already-real
+    // CheckCeidExist/CheckCeidAlreadyDefine/CheckReportIDExist/
+    // AddCeidReportID/DeleteHostReportIDOfAssignCeid/SaveEventReportData
+    // (above); no VCL dependency. ProcessHostSendReportLinkID drains
+    // slTempCeID/lTempCeIDContent (above); consumed by
+    // HTGem::S2F36_LinkEventReportAcknowledge (uHGemClass.cpp). The
+    // ReportAcknowledge/ReportLinkAcknowledgeError families are consumed by
+    // HTGem::S2F34_ProcessHostSendReportID/S2F34_DefineReportAcknowledge/
+    // S2F36_LinkEventReportAcknowledgeSub (ditto).
+    void ProcessHostSendReportLinkID();                                    // golden :7838-7898
+    void ReportAcknowledge(unsigned char Code);                            // golden :7969-7974 (S2F34 DRACK composer)
+    void DefineReportAcknowledgeAccept();                                  // golden :7976-7979
+    void DefineReportAcknowledgeInsufficientSpace();                       // golden :7981-7984
+    void DefineReportAcknowledgeFormatError();                             // golden :7986-7989
+    void DefineReportAcknowledgeAlreadyDefined();                          // golden :7991-7994
+    void DefineReportAcknowledgeInvalidSVID();                             // golden :7996-7999
+    void ReportLinkAcknowledgeError(unsigned char ErrCode);                // golden :8001-8006 (S2F36 LRACK composer)
+    void LinkReportAcknowledgeFormatError();                               // golden :8008-8011
+    void LinkReportAcknowledgeAlreadyDefined();                            // golden :8013-8016
+    void LinkReportAcknowledgeInvalidCeID();                               // golden :8018-8021
+    void LinkReportAcknowledgeInvalidReportID();                           // golden :8023-8026
+
+    // golden's tail call inside EnableDisableEventReport (golden
+    // uHGemEquipment.cpp:8034-8039). AI(W906-AlarmReportAck) 20260721: no
+    // longer a stub -- now a REAL forwarder (InitLocalHead/DataItemOut/
+    // SendLocalData, see .cpp), now that THGem has its own InitLocalHead/
+    // DataItemOut (above). Replaces the earlier no-op stub this wave closed
+    // the gap for.
     void EnableDisableEventReportAcknowledgeError(unsigned char ErrCode);
+    void EnableDisableEventReportAcknowledgeCeidNotExist();                 // golden :8041-8044
+    void EnableDisableEventReportAcknowledgeFormatError();                  // golden :8046-8049
     void EnableDisableEventReport(bool CEED, int slen, unsigned *CEID);
 
     void ReadEventReportData();
@@ -810,6 +910,14 @@ public:
     void SetAlamData(int iRowCount, AnsiString ALID, AnsiString Class, AnsiString ALTX, AnsiString Position);
     void ReadAlamData();
     void WriteAlamData();
+
+    // AI(W906-AlarmReportAck) 20260721: golden uHGemEquipment.cpp:3337-3372 --
+    // pure strGrdAlarm StringGrid composition (+ WriteAlamData above); zero
+    // new dependency. Consumed by HTGem::S5F4_EnableDisableAlarmAcknowledge/
+    // S5F6_ListAlarmData (uHGemClass.cpp, this same wave).
+    bool EnableDisableAlarm(AnsiString S, unsigned char T);       // golden :3337-3352
+    void EnableDisableAlarmAll(unsigned char T);                  // golden :3354-3364
+    int GetAlarmIndex(AnsiString S);                              // golden :3366-3372
 
     // ==== SV/EC DataItem family (W906-SvEcDataItem 20260720) ================
     // golden uHGemEquipment.cpp:2472-3336 (SvEcReg-backed) + :7623-7688
@@ -916,6 +1024,22 @@ public:
     void SelectRsp();            // golden :8707-8723
     void DeselectRsp();          // golden :8729-8745
     void ProcessReceiceData();   // golden :8772-8989 (control head REAL; S,F tail GATED, see .cpp)
+
+    // AI(W906-AlarmReportAck) 20260721: THGem-level InitLocalHead/DataItemOut
+    // forwarders (golden .h:314-315) -- same one-line-forwarder idiom as
+    // SendLocalData() below, targeting THGem's own embedded WireCodec
+    // directly (`this->WireCodec` / bare `WireCodec`, NEVER `ActiveWire` --
+    // that pointer belongs to HTGem, a DIFFERENT class, see this file's own
+    // D1/D2 notes above). This wave's new wire composers below
+    // (ReportAcknowledge/ReportLinkAcknowledgeError/
+    // EnableDisableEventReportAcknowledgeError/ProcessHostSendReportLinkID)
+    // call these bare (implicit `this->`, matching golden). Only the ONE
+    // DataItemOut overload those composers actually call (the pointer form)
+    // is added -- golden's sibling `DataItemOut(unsigned char, AnsiString)`
+    // overload has no in-scope THGem-level caller today (verified by reading
+    // every new method's body), so it is not added speculatively.
+    void InitLocalHead(int SCode, int FCode, int WBit);        // golden .h:314
+    void DataItemOut(int len, unsigned char Type, void *P);    // golden .h:315
 
     void SendLocalData();   // golden .h:318, uHGemEquipment.cpp:1985-2107 (now real -- forwards to SendLocalDataFrom(WireCodec))
     // AI(W906-uHGemEquipment-BucketC) 20260717: ADDITIVE, not a golden method

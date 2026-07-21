@@ -2816,6 +2816,240 @@ static void test_w906_svecdataitem_e2e_s101f6_s101f8_smoke()
 }
 
 // ===========================================================================
+//  [W906-AlarmReportAck] Real THGem-backed coverage for the 8 uHGemClass.cpp
+//  methods un-gated this wave (see that file's own "INTEGRATE WAVE 5" note):
+//  S2F34/S2F36/S2F38/S5F4/S5F6 family.
+//
+//  WIRING: a plain `HTGem hgem; hgem.HGemPtr=&g; hgem.ActiveWire=&g.WireCodec;`
+//  (does NOT touch the HSys/HGem globals at all -- simpler and more
+//  self-contained than the [W1]-family tests above, sufficient here since
+//  none of these 8 methods need HSys.MyGem wired for anything else). This
+//  puts BOTH the HGemPtr-side (real THGem state: slTempReportID/slTempCeID/
+//  strGrdAlarm) and ActiveWire-side (real wire primitives: DataItemIn/
+//  InitLocalHead/DataItemOut/SendLocalData) of each method against ONE
+//  shared THGem instance -- proving the HGemPtr-vs-ActiveWire split this
+//  wave's un-gating relies on actually works end-to-end, not just "compiles".
+//
+//  DANGER AVOIDED (flagged explicitly): THGem::SaveEventReportData() writes
+//  to a HARDCODED absolute production path (see its own .cpp comment,
+//  "DANGEROUS IF EXECUTED AS-IS ON THIS DEV MACHINE") -- NEVER call any code
+//  path that reaches it. ProcessHostSendReportID/ProcessHostSendReportLinkID/
+//  EnableDisableEventReport's SUCCESS tails all call it unconditionally, so
+//  this test deliberately exercises ONLY: (a) the 2 Sub() methods' own
+//  "delete all" success return directly (Sub itself never calls
+//  SaveEventReportData -- only its caller's success continuation does), and
+//  (b) every FORMAT-ERROR / early-return path (returns before ever reaching
+//  SaveEventReportData). The full multi-method success chain
+//  (Sub->Process*->Save) is NOT exercised here by design.
+// ===========================================================================
+static void test_w906_alarmreportack_e2e()
+{
+    printf("\n[W906-AlarmReportAck] S2F34/S2F36/S2F38/S5F4/S5F6 real THGem-backed coverage\n");
+
+    // -- S2F34_DefineReportAcknowledgeSub: format-error path (empty SReceiveData) --
+    {
+        THGem g;
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+        int ret = hgem.S2F34_DefineReportAcknowledgeSub();
+        CHECK(ret == -1, "A1: S2F34_DefineReportAcknowledgeSub() with empty SReceiveData -> -1 (format error)");
+    }
+    // -- S2F34_DefineReportAcknowledgeSub: "delete all" success path (<L,2 <ASCII DATAID> <L,0>>) --
+    {
+        THGem g;
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(2));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(3));
+        g.WireCodec.SReceiveData->Add(AnsiString("ABC"));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(0));
+        int ret = hgem.S2F34_DefineReportAcknowledgeSub();
+        CHECK(ret == 1, "A2: S2F34_DefineReportAcknowledgeSub() with <DATAID><L,0> -> 1 (delete-all success, DeleteAllHostDefineReportID only)");
+        CHECK(g.slTempReportID->Count == 0, "A2: slTempReportID stays empty (nothing queued by the delete-all branch)");
+    }
+    // -- S2F34_DefineReportAcknowledge: format-error path -> real DRACK(0x02) on the wire --
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.4.1", 4901);
+        g.srvGem->Open();
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+
+        hgem.S2F34_DefineReportAcknowledge();   // empty SReceiveData -> Sub()==-1 -> DefineReportAcknowledgeFormatError()
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() == 17, "A3: S2F34_DefineReportAcknowledge format-error -> 17-byte DRACK frame");
+        if (tx.size() == 17)
+        {
+            CHECK((unsigned char)tx[6] == 2 && (unsigned char)tx[7] == 34, "A3: reply S,F == 2,34");
+            CHECK((unsigned char)tx[16] == 0x02, "A3: DRACK byte == 0x02 (format error)");
+        }
+    }
+    // -- S2F34_ProcessHostSendReportID: "invalid SVID" early-return path
+    //    (returns BEFORE ever reaching SaveEventReportData) --
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.4.2", 4902);
+        g.srvGem->Open();
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+
+        TStringList *svids = new TStringList();
+        svids->Add("999");   // never registered -> IsValidSVID("999")==false
+        g.slTempReportID->Add("500");
+        g.lTempReportIDContent->Add(svids);
+
+        hgem.S2F34_ProcessHostSendReportID();
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() == 17, "A4: ProcessHostSendReportID with an unregistered SVID -> 17-byte DRACK frame");
+        if (tx.size() == 17)
+        {
+            CHECK((unsigned char)tx[6] == 2 && (unsigned char)tx[7] == 34, "A4: reply S,F == 2,34");
+            CHECK((unsigned char)tx[16] == 0x04, "A4: DRACK byte == 0x04 (invalid SVID) -- DefineReportAcknowledgeInvalidSVID fired");
+        }
+        // Early-return path never clears slTempReportID/lTempReportIDContent
+        // (matches golden verbatim -- see ProcessHostSendReportID's own .cpp
+        // citation); `svids` is deliberately left un-freed too, same as
+        // golden's own leak on this exact path -- inconsequential for a
+        // short-lived test process.
+    }
+    // -- S2F36_LinkEventReportAcknowledgeSub: format-error + "delete all" success --
+    {
+        THGem g;
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+        int ret = hgem.S2F36_LinkEventReportAcknowledgeSub();
+        CHECK(ret == -1, "A5: S2F36_LinkEventReportAcknowledgeSub() with empty SReceiveData -> -1 (format error)");
+    }
+    {
+        THGem g;
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(2));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(3));
+        g.WireCodec.SReceiveData->Add(AnsiString("ABC"));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(0));
+        int ret = hgem.S2F36_LinkEventReportAcknowledgeSub();
+        CHECK(ret == 1, "A6: S2F36_LinkEventReportAcknowledgeSub() with <DATAID><L,0> -> 1 (delete-all success, DeleteAllHostDefineCeid only)");
+        CHECK(g.slTempCeID->Count == 0, "A6: slTempCeID stays empty");
+    }
+    // -- S2F36_LinkEventReportAcknowledge: format-error path -> real LRACK(0x02) --
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.4.3", 4903);
+        g.srvGem->Open();
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+
+        hgem.S2F36_LinkEventReportAcknowledge();
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() == 17, "A7: S2F36_LinkEventReportAcknowledge format-error -> 17-byte LRACK frame");
+        if (tx.size() == 17)
+        {
+            CHECK((unsigned char)tx[6] == 2 && (unsigned char)tx[7] == 36, "A7: reply S,F == 2,36");
+            CHECK((unsigned char)tx[16] == 0x02, "A7: LRACK byte == 0x02 (format error)");
+        }
+    }
+    // -- S2F38_EnableDisableEventReportAcknowledge: format-error path (empty
+    //    SReceiveData) -> real EDA(0x02) -- success path deliberately NOT
+    //    exercised (reaches EnableDisableEventReport -> SaveEventReportData). --
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.4.4", 4904);
+        g.srvGem->Open();
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+
+        hgem.S2F38_EnableDisableEventReportAcknowledge();
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() == 17, "A8: S2F38 format-error (empty body) -> 17-byte EDA frame");
+        if (tx.size() == 17)
+        {
+            CHECK((unsigned char)tx[6] == 2 && (unsigned char)tx[7] == 38, "A8: reply S,F == 2,38");
+            CHECK((unsigned char)tx[16] == 0x02, "A8: EDA byte == 0x02 (format error)");
+        }
+    }
+    // -- S5F4_EnableDisableAlarmAcknowledge: real success path (len==0 ->
+    //    EnableDisableAlarmAll -> WriteAlamData under a scratch GemSystemPath,
+    //    never a production path -- SAFE, unlike SaveEventReportData). --
+    {
+        const AnsiString kScratchDir = "uHGemEquipment_test_scratch";
+        ForceDirectories(kScratchDir);
+
+        THGem g;
+        g.GemSystemPath = kScratchDir;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.4.5", 4905);
+        g.srvGem->Open();
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+
+        g.strGrdAlarm->Cells[7][1] = "0";   // pre-seed one disabled alarm row
+
+        // <L,2 <BINARY ALED=0x80 (enable)> <L,0>> -- len==0 -> "all" branch.
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(2));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.BINARY_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString(0x80));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(0));
+
+        hgem.S5F4_EnableDisableAlarmAcknowledge();
+        CHECK(g.strGrdAlarm->Cells[7][1] == "1", "A9: EnableDisableAlarmAll flips strGrdAlarm col7 to \"1\" (real HGemPtr-side effect)");
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() == 17, "A9: S5F4 success -> 17-byte LocalAcknowledge(5,4,0) frame");
+        if (tx.size() == 17)
+        {
+            CHECK((unsigned char)tx[6] == 5 && (unsigned char)tx[7] == 4, "A9: reply S,F == 5,4");
+            CHECK((unsigned char)tx[16] == 0x00, "A9: ack byte == 0x00 (accept)");
+        }
+        CHECK(FileExists(kScratchDir + "\\AlarmData.def"), "A9: EnableDisableAlarmAll's WriteAlamData wrote under the scratch folder (not production)");
+    }
+    // -- S5F6_ListAlarmData: "alarm not found" branch -- proves the golden
+    //    zero-length-item quirk is reachable/safe (documented verbatim at
+    //    the method's own definition; not re-verified byte-for-byte here). --
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.4.6", 4906);
+        g.srvGem->Open();
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+
+        // <U4,1 999> -- one SVID (999), never registered in strGrdAlarm ->
+        // GetAlarmIndex returns -1 -> the "not found" branch. (Both of
+        // S5F6's own GetDataItemLenAndType peeks read the SAME [type,len]
+        // token pair without consuming it -- only the final DataItemIn call
+        // is destructive -- so exactly ONE [type,len,value] token group is
+        // seeded, not two.)
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.UINT_4_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString(999));
+
+        bool threw = false;
+        try { hgem.S5F6_ListAlarmData(); } catch (...) { threw = true; }
+        CHECK(threw == false, "A10: S5F6_ListAlarmData with an unregistered SVID does not throw/crash");
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() >= 14 && (unsigned char)tx[6] == 5 && (unsigned char)tx[7] == 6,
+              "A10: real S5F6 reply sent (S,F == 5,6)");
+    }
+}
+
+// ===========================================================================
 //  [T10] Timer1Timer's IniConfig.bEnable_SECS_GEM==false branch (forced
 //  disconnect) + the SECSGEM_DoSeparateWait 5-second re-arm window.
 //
@@ -3038,6 +3272,11 @@ int main()
     test_w906_svecdataitem_e2e_s5f8_s100f4();
     test_w906_svecdataitem_e2e_s101f6_s101f8_smoke();
     RestoreTextLogSnapshot(svEcDataItemLogSnap);
+
+    // W906-AlarmReportAck: does not pump ProcessSocketReceiveData/
+    // Timer1Timer at all (direct HTGem method calls only), so it needs
+    // neither a TextLogSnapshot bracket nor special ordering vs [T10] below.
+    test_w906_alarmreportack_e2e();
 
     test_timer1timer_disable_branch();
 
