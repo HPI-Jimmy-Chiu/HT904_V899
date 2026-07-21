@@ -4171,6 +4171,212 @@ static void test_w906_dodownloadremotefile_e2e()
 }
 
 // ===========================================================================
+//  [W906-SpoolCluster] WriteToSpoolFile (golden :1887-1977) / DoSpool
+//  (golden :4079-4189) / SetSpoolActive (golden :6133-6154) / GetSpoolActive
+//  (golden :6158-6161) / DoSpoolSendLocalData (golden :4025-4074).
+//
+//  All file I/O below happens under dedicated scratch directories
+//  (spoolcluster_test_scratch_p1..p4, relative to the test binary's own CWD)
+//  -- never a production path, same discipline as this file's own SAFETY
+//  NOTE at the top.
+//
+//  P4's synthetic spool "frame" is a minimal, VALID 14-byte header-only SECS
+//  message (S0F0, no data items): Ptr[0..3] big-endian encode
+//  (RunLength-4)==10, so DoSpoolSendLocalData computes RunLength==14 (header
+//  size only) -- WireCodec::ShowSML/ProcessSML's own `if(RunLength>=Len)
+//  return -1;` guard then stops immediately without reading past offset 14,
+//  so this frame is safe to feed through the REAL send/show pipeline (no
+//  out-of-bounds read, no crash) without needing a full SECS-II item body.
+// ===========================================================================
+static void test_w906_spoolcluster_e2e()
+{
+    printf("\n[W906-SpoolCluster] WriteToSpoolFile/DoSpool/SetSpoolActive/GetSpoolActive/DoSpoolSendLocalData, real THGem-backed coverage\n");
+
+    // -- P1: GetSpoolActive/SetSpoolActive round-trip, empty spool dir --
+    {
+        THGem g;
+        const AnsiString kDir = "spoolcluster_test_scratch_p1";
+        ForceDirectories(kDir);
+        g.GemSpoolPath = kDir;
+        g.FileListBox1->Mask = kDir + AnsiString("\\*.dat");
+
+        CHECK(g.GetSpoolActive() == false, "P1: ctor default bSpoolActive is false");
+        g.SetSpoolActive(true);
+        CHECK(g.GetSpoolActive() == true, "P1: SetSpoolActive(true) always takes effect (golden's confirm-dialog guard only gates Active==false)");
+
+        // Active==false, empty spool dir -> Items->Count==0 -> confirm guard
+        // skipped entirely -> falls straight through to bSpoolActive=false.
+        g.SetSpoolActive(false);
+        CHECK(g.GetSpoolActive() == false, "P1: SetSpoolActive(false) with an EMPTY spool dir succeeds (no confirm needed)");
+
+        RemoveDir(kDir);
+    }
+
+    // -- P2: SetSpoolActive(false) with a NONEMPTY spool dir -- golden
+    //    control-flow preserved verbatim: Gated_MessageDlgConfirmYes always
+    //    returns false ("not confirmed"), so this returns WITHOUT ever
+    //    assigning bSpoolActive -- it stays at whatever it was BEFORE the call.
+    {
+        THGem g;
+        const AnsiString kDir = "spoolcluster_test_scratch_p2";
+        ForceDirectories(kDir);
+        g.GemSpoolPath = kDir;
+        g.FileListBox1->Mask = kDir + AnsiString("\\*.dat");
+
+        FILE *f = fopen((kDir + AnsiString("\\leftover.dat")).c_str(), "wb");
+        CHECK(f != NULL, "P2: setup -- leftover spool file created");
+        if (f) { fwrite("x", 1, 1, f); fclose(f); }
+
+        g.SetSpoolActive(true);
+        CHECK(g.GetSpoolActive() == true, "P2: primed bSpoolActive=true before the real assertion");
+
+        g.SetSpoolActive(false);
+        CHECK(g.GetSpoolActive() == true,
+              "P2: GOLDEN QUIRK -- SetSpoolActive(false) with a nonempty spool dir and no real confirm dialog "
+              "leaves bSpoolActive UNCHANGED (still true), because the (never-shown) confirm was answered No");
+
+        DeleteFile(kDir + AnsiString("\\leftover.dat"));
+        RemoveDir(kDir);
+    }
+
+    // -- P3: WriteToSpoolFile's conditional Refresh()/Update() -- only fires
+    //    when FileListBox1->Items->Count==0 at entry, and seeds
+    //    GemSpoolStartTime then (and only then). --
+    {
+        THGem g;
+        const AnsiString kDir = "spoolcluster_test_scratch_p3";
+        ForceDirectories(kDir);
+        g.GemSpoolPath = kDir;
+        g.FileListBox1->Mask = kDir + AnsiString("\\*.dat");
+        g.GetTimeInfo();
+
+        // Seed WireCodec.LocalBuffer/LocalLength_4 with a tiny real payload --
+        // WriteToSpoolFile writes exactly LocalLength_4 bytes verbatim.
+        g.WireCodec.LocalBuffer.assign(4, 0xAB);
+        g.WireCodec.LocalLength_4 = 4;
+
+        memset(g.GemSpoolStartTime, 0, sizeof(g.GemSpoolStartTime));
+        CHECK(g.FileListBox1->Items->Count == 0, "P3: fresh scratch dir starts with Items->Count==0");
+
+        g.WriteToSpoolFile();   // Count==0 at entry -> seeds GemSpoolStartTime + Refresh()/Update()
+        CHECK(strlen(g.GemSpoolStartTime) == 14, "P3: first write (queue was empty) seeds GemSpoolStartTime (yyyyMMddHHmmss, 14 chars)");
+        CHECK(g.FileListBox1->Items->Count == 1, "P3: WriteToSpoolFile's own Refresh()/Update() sees the just-written file");
+
+        memset(g.GemSpoolStartTime, 0, sizeof(g.GemSpoolStartTime));   // clear, to prove the 2nd write does NOT reseed it
+        g.WriteToSpoolFile();    // Count==1 (nonzero) at entry -> does NOT reseed GemSpoolStartTime
+        CHECK(strlen(g.GemSpoolStartTime) == 0,
+              "P3: second write (queue was already nonempty) does NOT touch GemSpoolStartTime -- conditional trigger confirmed");
+
+        // cleanup: whatever *.dat files landed under kDir.
+        g.FileListBox1->Refresh();
+        for (int i = 0; i < g.FileListBox1->Items->Count; i++)
+            DeleteFile(kDir + AnsiString("\\") + AnsiString(g.FileListBox1->Items->Strings[i]));
+        RemoveDir(kDir);
+    }
+
+    // -- P4: DoSpool's FIFO consumption of Items->Strings[0] --
+    {
+        THGem g;
+        const AnsiString kDir = "spoolcluster_test_scratch_p4";
+        ForceDirectories(kDir);
+        g.GemSpoolPath = kDir;
+        g.FileListBox1->Mask = kDir + AnsiString("\\*.dat");
+
+        unsigned char frame[14] = {0, 0, 0, 10,  0, 0,  0, 0,  0, 0,  0, 0, 0, 1};
+
+        // 3 spool files, written in REVERSE chronological order on disk, to
+        // prove DoSpool consumes the alphabetically/chronologically FIRST
+        // one first -- not creation order.
+        const char *names[3] = {
+            "2026_07_21 11_00_00 000.dat",
+            "2026_07_21 09_00_00 000.dat",
+            "2026_07_21 10_00_00 000.dat",
+        };
+        for (int i = 0; i < 3; i++)
+        {
+            FILE *f = fopen((kDir + AnsiString("\\") + AnsiString(names[i])).c_str(), "wb");
+            CHECK(f != NULL, "P4: setup -- spool test file created");
+            if (f) { fwrite(frame, sizeof(frame), 1, f); fclose(f); }
+        }
+
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.9.1", 5009);
+        g.srvGem->Open();
+
+        g.bSpoolActive = true;
+        g.bBeginTransferSpool = true;
+        g.bConnect = true;
+        g.iSpoolTask = 1;
+        g.GemSpoolCountActual = 3;   // matches the 3 files just seeded (real usage sets this via the bootstrap branches this test skips)
+
+        g.DoSpool();   // case 1: picks Items->Strings[0], sends it, Task->100
+        CHECK(g.iSpoolTask == 100, "P4: case 1 with a nonempty queue and bConnect==true -> Task 1->100");
+        CHECK(conn->SimTxBuffer().size() == 14, "P4: case 1 sent exactly the 14-byte frame onto the wire");
+        CHECK(FileExists(kDir + AnsiString("\\2026_07_21 09_00_00 000.dat")) == false,
+              "P4: DoSpool consumed the CHRONOLOGICALLY-EARLIEST file first (09_00_00), not creation order");
+        CHECK(FileExists(kDir + AnsiString("\\2026_07_21 10_00_00 000.dat")) == true,
+              "P4: the 10_00_00 file is untouched -- still queued");
+        CHECK(FileExists(kDir + AnsiString("\\2026_07_21 11_00_00 000.dat")) == true,
+              "P4: the 11_00_00 file is untouched -- still queued");
+        CHECK(g.GemSpoolCountActual == 2, "P4: GemSpoolCountActual decremented after consuming one file");
+        conn->SimClearTx();
+
+        g.DoSpool();   // case 100: frees SpoolPtr, Task->1 (no send, no file I/O)
+        CHECK(g.iSpoolTask == 1, "P4: case 100 -> Task 100->1 (ready for the next file)");
+        CHECK(conn->SimTxBuffer().size() == 0, "P4: case 100 sends nothing");
+
+        g.DoSpool();   // case 1 again: picks the NEW Items->Strings[0] (10_00_00)
+        CHECK(g.iSpoolTask == 100, "P4: case 1 (2nd file) -> Task 1->100 again");
+        CHECK(conn->SimTxBuffer().size() == 14, "P4: case 1 (2nd file) sent exactly the 14-byte frame");
+        CHECK(FileExists(kDir + AnsiString("\\2026_07_21 10_00_00 000.dat")) == false,
+              "P4: DoSpool consumed the 2nd-earliest file (10_00_00) next -- FIFO order confirmed across 2 cycles");
+        CHECK(FileExists(kDir + AnsiString("\\2026_07_21 11_00_00 000.dat")) == true,
+              "P4: the 11_00_00 file is STILL untouched after 2 consume cycles");
+        CHECK(g.GemSpoolCountActual == 1, "P4: GemSpoolCountActual decremented again");
+
+        // cleanup: whatever *.dat file(s) remain under kDir.
+        g.FileListBox1->Refresh();
+        for (int i = 0; i < g.FileListBox1->Items->Count; i++)
+            DeleteFile(kDir + AnsiString("\\") + AnsiString(g.FileListBox1->Items->Strings[i]));
+        RemoveDir(kDir);
+    }
+
+    // -- P5: DoSpool's bSpoolActive==false branch -- bSpooling/
+    //    bBeginTransferSpool reset, GemSpoolCountTotal/Actual re-synced from
+    //    a fresh scan once SystemMin changes. Does NOT exercise the
+    //    `del ...*.*/q/f` system() call's actual on-disk effect (that
+    //    command string's own well-known missing-/q//f-spaces quirk, see
+    //    DoSpool's own .cpp comment, makes its real deletion behavior
+    //    OS-parsing-dependent) -- only the surrounding state transitions,
+    //    which do not depend on whether the wipe itself actually ran.
+    {
+        THGem g;
+        const AnsiString kDir = "spoolcluster_test_scratch_p5";
+        ForceDirectories(kDir);
+        g.GemSpoolPath = kDir;
+        g.FileListBox1->Mask = kDir + AnsiString("\\*.dat");
+
+        g.bSpoolActive = false;
+        g.bSpooling = true;             // primed non-default, to prove DoSpool resets it
+        g.bBeginTransferSpool = true;   // primed non-default, to prove DoSpool resets it
+        g.OldSpoolSystemMin = static_cast<WORD>(g.SystemMin + 1);   // force != SystemMin, so the re-sync branch runs
+
+        g.DoSpool();
+        CHECK(g.bSpooling == false, "P5: bSpoolActive==false path resets bSpooling");
+        CHECK(g.bBeginTransferSpool == false, "P5: bSpoolActive==false path resets bBeginTransferSpool");
+        CHECK(g.OldSpoolSystemMin == g.SystemMin, "P5: OldSpoolSystemMin re-synced to the current SystemMin");
+        CHECK(g.GemSpoolCountTotal == g.GemSpoolCountActual, "P5: GemSpoolCountTotal/Actual re-synced to the same (freshly re-scanned) value");
+
+        // cleanup: whatever *.dat file(s) landed under kDir (none expected,
+        // but the wipe's own on-disk effect is deliberately not asserted --
+        // see this test's own file-head note).
+        g.FileListBox1->Refresh();
+        for (int i = 0; i < g.FileListBox1->Items->Count; i++)
+            DeleteFile(kDir + AnsiString("\\") + AnsiString(g.FileListBox1->Items->Strings[i]));
+        RemoveDir(kDir);
+    }
+}
+
+// ===========================================================================
 //  [T10] Timer1Timer's IniConfig.bEnable_SECS_GEM==false branch (forced
 //  disconnect) + the SECSGEM_DoSeparateWait 5-second re-arm window.
 //
@@ -4423,6 +4629,16 @@ int main()
     // direct THGem method calls only, no socket pump/Timer1Timer, so no
     // TextLogSnapshot bracket or special T10 ordering needed either.
     test_w906_dodownloadremotefile_e2e();
+
+    // W906-SpoolCluster: same posture as Micro5/Micro6/Micro7/
+    // DoDownLoadRemoteFile above -- direct THGem method calls only, no
+    // socket pump/Timer1Timer, so no TextLogSnapshot bracket or special T10
+    // ordering needed either. DoSpoolSendLocalData's own StringOut/ShowSML
+    // calls DO write through THGem's normal StringOut path, same as every
+    // other test in this file that calls a THGem method touching the wire --
+    // not routed through SaveSECSGEMTextToLog (T3/SysModWire's own concern),
+    // so no snapshot bracket is needed here either.
+    test_w906_spoolcluster_e2e();
 
     test_timer1timer_disable_branch();
 

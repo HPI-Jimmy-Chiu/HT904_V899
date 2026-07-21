@@ -73,6 +73,18 @@ add_library(vclcompat
     #   vclcompat/SyncObjs.h (TCriticalSection) is header-only (inline) --
     #   no matching .cpp, no separate CMake source entry needed for it.
     vclcompat/MemoryStream.cpp
+    # AI(W906-SpoolCluster) 20260721: headless TFileListBox shim (FileCtrl.hpp) -
+    #   Faithful stand-in for the real VCL TFileListBox used by SECSGEM/
+    #   uHGemEquipment.h's THGem::FileListBox1 (Spool cluster: WriteToSpoolFile/
+    #   DoSpool/SetSpoolActive/GetSpoolActive) -- see vclcompat/FileListBox.h's
+    #   own file-head note for the exact scan-logic/sort-order/Refresh()==
+    #   Update() rationale. Zero dependency beyond vclcompat/AnsiString.h +
+    #   vclcompat/TStringList.h + vclcompat/SysUtils.h's FindFirst/FindNext/
+    #   FindClose/TSearchRec family (already real). NOT brought into the
+    #   global namespace by vcl_compat.h (consumers add their own `using
+    #   vclcompat::TFileListBox;` -- same established precedent as
+    #   vclcompat::TStringGrid above).
+    vclcompat/FileListBox.cpp
 )
 
 target_include_directories(vclcompat PUBLIC

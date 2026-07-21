@@ -1407,6 +1407,20 @@ endif()
 
 add_test(NAME ServerSocket COMMAND test_serversocket)
 
+# AI(W906-SpoolCluster) 20260721: test_FileListBox -- vclcompat/FileListBox real-rescan acceptance test ----
+#   TFileListBox (W906-SpoolCluster: THGem's FileListBox1, Spool cluster).
+#   Real file-system I/O under a scratch directory (no Sim/Real split, unlike
+#   ClientSocket/ServerSocket -- FindFirst/FindNext/FindClose are already
+#   real, unconditionally). Links vclcompat only (FileListBox.cpp lives in
+#   the vclcompat library, see root CMakeLists.txt).
+add_executable(test_FileListBox
+    test_FileListBox.cpp
+)
+
+target_link_libraries(test_FileListBox PRIVATE vclcompat)
+
+add_test(NAME FileListBox COMMAND test_FileListBox)
+
 # --- test_MyNUEC1: EtherCAT/MyNUEC1 FS-N12 amplifier slave (W5 comms leaf) --
 #   Offline stub path (HAVE_PCI1203 not defined); links the combined
 #   ht9045_comms library.

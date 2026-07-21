@@ -43,6 +43,13 @@
 #include <cstdlib>   // atoi
 #include <cstring>   // strcpy/strncpy
 #include <cstddef>   // NULL
+// AI(W906-SpoolCluster) 20260721: golden's Spool cluster (DoSpool, golden
+// uHGemEquipment.cpp:4025-4189) needs open()/close()/filelength()/O_RDONLY --
+// both headers exist under MinGW with these exact bare (non-underscore-
+// prefixed) names (verified against MinGW's own <io.h>/<fcntl.h>), so this is
+// a direct, unmodified translation, no wrapper needed.
+#include <io.h>      // open/close/filelength
+#include <fcntl.h>   // O_RDONLY
 
 // AI(W906-uHGemEquipment-ConnLifecycle) 20260717: GetSocketErrorMsg (below)
 // is a thin forward to the already-real GetErrorMsg (golden
@@ -424,7 +431,27 @@ THGem::THGem()
       // defaults to "" (AnsiString's own default ctor) -- caller/test must set
       // it explicitly, same idiom as GemSpoolPath/UpLoadPath immediately above.
       bFinishDownloadFile(false),
-      CurrentDirectory("")
+      CurrentDirectory(""),
+      // AI(W906-SpoolCluster) 20260721: Spool cluster's own 9 new members --
+      // see header's own comment on this group for the full golden-citation/
+      // ctor-value rationale. FileListBox1: NULL here, allocated for real in
+      // the ctor body below (same "no VCL form-ownership mechanism here"
+      // idiom as strGrdCEID/strGrdAlarm/sgSECSECData above). bSpooling(false)
+      // golden ctor :605; ctSpoolFile(0) golden ctor :471; iSpoolTask(1)
+      // golden ctor :481. SpoolPtr/SpoolRunPtr/OldSpoolSystemMin/
+      // GemSpoolCountTotal: golden never explicitly initializes any of
+      // these -- zero/NULL defensively, same flagged-deviation posture as
+      // iEstablishCommunicationsTryCount above. SpoolDelay (GemTimer) gets
+      // no explicit entry, same established precedent as
+      // DelayDownLoadRemoteFile/DelayOpenCommuncation/ConnectDelay above.
+      FileListBox1(NULL),
+      bSpooling(false),           // golden ctor :605
+      ctSpoolFile(0),             // golden ctor :471
+      iSpoolTask(1),              // golden ctor :481
+      SpoolPtr(NULL),             // golden never inits -- defensive
+      SpoolRunPtr(NULL),          // golden never inits -- defensive
+      OldSpoolSystemMin(0),       // golden never inits -- defensive
+      GemSpoolCountTotal(0)       // golden never inits -- defensive
 {
     // AI(W906-SvEcDataItem) 20260720: szManID/szGetCPUType/GemSpoolStartTime
     // are fixed char[256] buffers (not in the member-init list above --
@@ -601,6 +628,17 @@ THGem::THGem()
         lTempReportIDContent = new vclcompat::TList();
         slTempCeID           = new TStringList();
         lTempCeIDContent     = new vclcompat::TList();
+
+        // AI(W906-SpoolCluster) 20260721: FileListBox1 -- golden .dfm:20-28
+        // (TFileListBox, form-owned). Allocated here, same "no VCL
+        // form-ownership mechanism here" idiom as strGrdCEID/strGrdAlarm/
+        // sgSECSECData above. Mask is left "" here (NOT golden's own
+        // CWD-dependent .dfm default 'spool\\*.dat') -- a caller/test (or a
+        // future FormCreate-equivalent wiring wave) sets FileListBox1->Mask
+        // from GemSpoolPath once SetCurrentDirectory has run, per this
+        // wave's own disclosed deviation (see vclcompat/FileListBox.h's
+        // file-head note).
+        FileListBox1 = new TFileListBox();
     }
     catch (...)
     {
@@ -634,6 +672,7 @@ THGem::THGem()
         delete stdGridReportID;
         delete strGrdAlarm;
         delete sgSECSECData;   // AI(W906-uHGemClass-Micro5) 20260721
+        delete FileListBox1;    // AI(W906-SpoolCluster) 20260721
         // AI(W906-uHGemEquipment-BucketC) 20260717: WaitShowString/
         // LogDataString are NO LONGER deleted here (D4 -- they are ALIASED
         // to WireCodec's own instances, not separately owned; see the
@@ -727,6 +766,17 @@ THGem::~THGem()
     delete stdGridReportID;
     delete strGrdAlarm;
     delete sgSECSECData;   // AI(W906-uHGemClass-Micro5) 20260721
+    // AI(W906-SpoolCluster) 20260721: FileListBox1 -- same "no VCL
+    // form-ownership mechanism here" convention as strGrdCEID/strGrdAlarm/
+    // sgSECSECData immediately above (golden itself never deletes
+    // FileListBox1 -- it is form-owned; see this member's own header
+    // comment). SpoolPtr/SpoolRunPtr are deliberately NOT deleted here --
+    // golden's own ~THGem/FormDestroy never touches them either (they are
+    // DoSpool's own transient case-1/case-100 buffer, freed there -- see
+    // that method's own comment), so a THGem destroyed mid-spool-send would
+    // leak exactly like golden does. NOT fixed here (faithful preservation
+    // of golden's own behavior, not introducing a new deviation).
+    delete FileListBox1;
     // AI(W906-uHGemEquipment-BucketC) 20260717: WaitShowString/LogDataString
     // are NO LONGER deleted here (D4 -- ALIASED to WireCodec's own instances,
     // see the ctor's own aliasing comment). WireCodec's own destructor (runs
@@ -790,6 +840,35 @@ THGem::~THGem()
     delete lTempReportIDContent;
     delete slTempCeID;
     delete lTempCeIDContent;
+}
+
+//===========================================================================
+//  THGem::SetCurrentDirectory (golden uHGemEquipment.cpp:810-819)
+//===========================================================================
+// AI(W906-SpoolCluster) 20260721: UN-GATED for real this wave -- see header's
+// own member comment for why this was previously deferred and is no longer.
+// Faithful, direct translation: computes GemSystemPath/GemSpoolPath/
+// GemSystemIniPath from CurrentDirectory (all 3 already real THGem members,
+// see .h), then force-creates the two directories. `IncludeTrailingPathDelimiter`
+// is this TU's own local static helper (defined at the top of this file,
+// wrapping IncludeTrailingBackslash) -- same reuse already established by
+// ReadAlamData/ReadECEnableData above. `MyForceDirectories` is the already-
+// real `common.cpp` global (common.h already #include'd) -- called bare,
+// exactly as golden does (a free function, not a THGem member). `__FUNC__`
+// (BCB6 builtin) -> standard `__func__`, same substitution this project's own
+// canary_support.h/aArmHeader.h shims already establish elsewhere (AnsiString's
+// `const char*` ctor accepts it directly, no wrapper needed) -- see
+// uHGemClass.cpp:3211's own identical citation of this exact substitution.
+//---------------------------------------------------------------------------
+void THGem::SetCurrentDirectory(AnsiString Path)
+{
+    CurrentDirectory = Path;
+    GemSystemPath.sprintf("%sSYSTEM", IncludeTrailingPathDelimiter(CurrentDirectory));
+    GemSpoolPath.sprintf("%sSPOOL", IncludeTrailingPathDelimiter(CurrentDirectory) + AnsiString());
+    GemSystemIniPath.sprintf("%ssecs_gem.ini", IncludeTrailingPathDelimiter(GemSystemPath));
+
+    MyForceDirectories(GemSystemPath, __func__);
+    MyForceDirectories(GemSpoolPath, __func__);
 }
 
 //===========================================================================
@@ -3021,6 +3100,32 @@ void Gated_ShowMessage(const AnsiString & /*S*/)
 }
 
 // ---------------------------------------------------------------------------
+// AI(W906-SpoolCluster) 20260721: Gated_MessageDlgConfirmYes -- golden
+// Dialogs.hpp `int MessageDlg(AnsiString, TMsgDlgType, TMsgDlgButtons, int)`
+// (the real VCL modal Yes/No confirmation dialog). Golden's one call site in
+// THIS file's Spool cluster scope is THGem::SetSpoolActive(false)
+// (uHGemEquipment.cpp:6142: `MessageDlg("All spool data will be clear,Sure
+// to clear ?", mtConfirmation, TMsgDlgButtons()<<mbYes<<mbNo, 0)==mrYes`).
+// No stand-in for the real MessageDlg/TMsgDlgType/mrYes/mbYes/mbNo family
+// exists anywhere in this tree (grepped) -- GATED per the EXACT same
+// established convention as this file's own Gated_ShowMessage immediately
+// above. Returns the SAFE no-op answer (i.e. "operator did NOT confirm")
+// rather than auto-confirming a destructive spool-file wipe with no operator
+// actually present to see the (not-yet-wired) prompt -- same "err toward not
+// doing the destructive/UI-dependent action automatically" posture already
+// established by bSpoolActive/bBeginTransferSpool's own safe-false ctor
+// defaults. This preserves golden's own control-flow shape verbatim:
+// SetSpoolActive(false) with a nonempty spool queue returns WITHOUT ever
+// updating bSpoolActive (see that method's own comment below) -- exactly
+// what golden does when the (never-shown) dialog is answered No.
+// ---------------------------------------------------------------------------
+bool Gated_MessageDlgConfirmYes(const AnsiString & /*S*/)
+{
+    // TODO(W7-UI): wire to a real modal MessageDlg(mtConfirmation, mbYes|mbNo).
+    return false;
+}
+
+// ---------------------------------------------------------------------------
 // HTimer -- AI(W906-uHGemEquipment-BucketC) 20260717: UPGRADED to a REAL
 // elapsed-time timer, replacing the always-fires stub that used to live here
 // (see the Bucket-B FLAGGED LIMITATION this note replaces, and the identical
@@ -4284,17 +4389,15 @@ void THGem::DoLocalAllProcessLoop()
     DoDownLoadRemoteFile();
 }
 //---------------------------------------------------------------------------
-// AI(W906-uHGemEquipment-BucketC) 20260717: GATED STUB (golden
-// uHGemEquipment.cpp:4079-4189). Real body manages the spool-file retry
-// queue (WriteToSpoolFile/DoSpoolSendLocalData/GemSpoolPath/bSpoolActive/
-// bBeginTransferSpool/GemSpoolCountActual/...), none of which is part of
-// this wave's scope. No-op: DoLocalAllProcessLoop's own control flow
-// (which unconditionally calls this) stays translatable without silently
-// dropping the call.
+// AI(W906-SpoolCluster) 20260721: the GATED STUB that used to live here
+// (golden uHGemEquipment.cpp:4079-4189, a no-op `{}` body) is UN-GATED for
+// real this wave -- moved to a new "Spool cluster" section at the end of
+// this file (alongside WriteToSpoolFile/DoSpoolSendLocalData/
+// SetSpoolActive/GetSpoolActive, its own siblings) so both of its
+// dependencies (Gated_ShowMessage/Gated_MessageDlgConfirmYes) are already
+// declared by the time it references them. DoLocalAllProcessLoop's own
+// unconditional call to DoSpool() immediately above is UNCHANGED.
 //---------------------------------------------------------------------------
-void THGem::DoSpool()
-{
-}
 //---------------------------------------------------------------------------
 // AI(W906-uHGemEquipment-BucketC) 20260717: GATED STUB (golden
 // uHGemEquipment.cpp:4190-4589, called once per index 0..9 from
@@ -6011,4 +6114,364 @@ void __fastcall THGem::FormShow(TObject *Sender)
         RemoteOrLocal->Enabled = false;
     }
     //<== Eastsun 20260526 #026-1.78
+}
+
+//===========================================================================
+//  AI(W906-SpoolCluster) 20260721: Spool cluster -- WriteToSpoolFile (golden
+//  uHGemEquipment.cpp:1887-1977) / DoSpoolSendLocalData (golden :4025-4074) /
+//  DoSpool (golden :4079-4189) / SetSpoolActive (golden :6133-6154) /
+//  GetSpoolActive (golden :6158-6161). Placed here (end of file, after
+//  Gated_ShowMessage/Gated_MessageDlgConfirmYes above) purely so both
+//  no-op stubs are already declared by the time WriteToSpoolFile/
+//  SetSpoolActive reference them -- no other ordering significance.
+//
+//  MECHANICAL RENAME TABLE (same "THGem owns real domain state (bare
+//  this->); SecsWireCodec's own codec primitives route through
+//  WireCodec." split already established by SendLocalDataFrom's own
+//  translation-table comment above):
+//    golden bare `LocalBuffer`/`LocalLength_4`   -> `WireCodec.LocalBuffer`/
+//                                                    `WireCodec.LocalLength_4`
+//    golden bare `bReceiveData`                  -> `WireCodec.bReceiveData`
+//    golden bare `ShowSFDescription`/`ShowSML`/
+//                `ShowSMLBinary`                  -> `WireCodec.ShowXxx(...)`
+//    everything else golden touches here (FileListBox1/ctSpoolFile/
+//    GemSpoolStartTime/bUseClientSocket/clientGem/srvGem/StringOut/
+//    GemCheckBoxShowBinary/bSpoolActive/bSpooling/bBeginTransferSpool/
+//    OldSpoolSystemMin/SystemMin/GemSpoolPath/GemSpoolCountTotal/
+//    GemSpoolCountActual/bConnect/SpoolPtr/SpoolRunPtr/SpoolDelay/
+//    iSpoolTask) is REAL THGem state -- stays bare `this->` (implicit),
+//    unchanged.
+//===========================================================================
+
+//---------------------------------------------------------------------------
+//  THGem::WriteToSpoolFile (golden uHGemEquipment.cpp:1887-1977)
+//
+//  GOLDEN QUIRKS PRESERVED VERBATIM (flagged, not corrected):
+//   [1] The ctSpoolFile-increment block (golden :1898-1924) is DEAD CODE --
+//       commented out in golden itself (`/* ... ctSpoolFile++; ... */`,
+//       flagged "暫時沒用到Mark" i.e. "temporarily unused, marked"). This
+//       means ctSpoolFile stays at its ctor value (0) FOREVER in this port
+//       too (nothing else in this wave's scope ever assigns it) -- every
+//       spool filename generated for a given exact-same-second timestamp is
+//       therefore IDENTICAL (suffix always "000"), a genuine golden
+//       behavior this port reproduces exactly by simply never re-adding the
+//       increment golden itself deleted the meaning of.  NOT reproduced
+//       here as literal dead C++ (no observable effect either way) -- only
+//       cited, matching this file's own established "cite, don't
+//       transcribe inert commented-out golden code" posture.
+//   [2] `Ptr[1024]` is a FIXED-size stack readback buffer, but
+//       `WireCodec.LocalLength_4` (the fread() size) is bounded only by
+//       WireCodec.LocalBuffer's own much larger capacity (golden's own
+//       LocalBuffer is `unsigned char[64*1024*1024]` -- see SecsWireCodec.h's
+//       own file-head note). A LocalLength_4 > sizeof(Ptr) would overflow
+//       this stack buffer in GOLDEN TOO (same fixed-1024 array there) -- a
+//       pre-existing golden risk, flagged here, NOT fixed (no evidence any
+//       in-scope caller ever drives LocalLength_4 above 1024 in practice,
+//       but this is not proven either way).
+//   [3] The trailing `StringOut("Host not connect ,write to spool
+//       buffer !!! ")` fires UNCONDITIONALLY at the end of golden's own
+//       body -- even along the successful-write path. The message text is
+//       misleading (a write can succeed while still printing "Host not
+//       connect") -- a genuine golden wording quirk, preserved verbatim.
+//---------------------------------------------------------------------------
+void THGem::WriteToSpoolFile()
+{
+    FILE *P;
+    AnsiString str;
+    unsigned char Ptr[1024];
+    unsigned int i;
+    GetTimeInfo();
+    bool ErrorFlag;
+    int iTryCT = 0;
+    bool bUpdateSpoolStartTime = false;
+
+    str.sprintf("%s%04d_%02d_%02d %02d_%02d_%02d %03d.dat", IncludeTrailingPathDelimiter(GemSpoolPath), SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec, ctSpoolFile);
+    do
+    {
+        if (FileListBox1->Items->Count == 0)
+        {
+            bUpdateSpoolStartTime = true;
+            sprintf(GemSpoolStartTime, "%04d%02d%02d%02d%02d%02d", SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec);
+        }
+        ErrorFlag = false;
+        P = fopen(str.c_str(), "wb");
+        if (P != NULL)
+        {
+            fwrite(WireCodec.LocalBuffer.data(), WireCodec.LocalLength_4, 1, P);
+            fclose(P);
+            P = fopen(str.c_str(), "rb");
+            fread(Ptr, WireCodec.LocalLength_4, 1, P);
+            fclose(P);
+            if (bUpdateSpoolStartTime == true)
+            {
+                FileListBox1->Refresh();
+                FileListBox1->Update();
+            }
+            for (i = 0; i < WireCodec.LocalLength_4; i++)
+            {
+                if (WireCodec.LocalBuffer[i] != Ptr[i])
+                {
+                    ErrorFlag = true;
+                    break;
+                }
+            }
+
+            if (ErrorFlag == true)
+            {
+                DeleteFile(str.c_str());
+                iTryCT++;
+                if (iTryCT > 20)
+                {
+                    Gated_ShowMessage("Err");
+                    break;
+                }
+            }
+            else
+            {
+                break;
+            }
+        }
+        else
+        {
+            break;
+        }
+    } while (1);
+    StringOut("Host not connect ,write to spool buffer !!! ");
+}
+
+//---------------------------------------------------------------------------
+//  THGem::DoSpoolSendLocalData (golden uHGemEquipment.cpp:4025-4074)
+//  Socket-send only -- does NOT touch FileListBox1 at all.
+//---------------------------------------------------------------------------
+int THGem::DoSpoolSendLocalData(unsigned char *Ptr)
+{
+    AnsiString S;
+    char str[8];
+    unsigned int i, RunLength = 0;
+    WireCodec.bReceiveData = false;
+
+    RunLength = 0;
+    for (i = 0; i < 4; i++)
+    {
+        RunLength <<= 8;
+        RunLength |= Ptr[i];
+    }
+
+    RunLength += 4;
+    if (bUseClientSocket)
+        clientGem->Socket->SendBuf(Ptr, RunLength);
+    else
+        srvGem->Socket->Connections[0]->SendBuf(Ptr, RunLength);
+
+    StringOut("---------------------------------------------------");
+    S = AnsiString("[Send]    ") + DateTimeToStr(Now());
+
+    StringOut(S);
+    // AI(W906-SpoolCluster) 20260721: explicit unsigned-char cast on the
+    // 1st arg, same established precedent as SendLocalDataFrom's own
+    // identical `wc.ShowSFDescription(static_cast<unsigned char>(...), ...)`
+    // call shape above (avoids a -Wconversion warning on the int-promoted
+    // `Ptr[6] & 0x7f` bitwise result; not a behavior change).
+    WireCodec.ShowSFDescription(static_cast<unsigned char>(Ptr[6] & 0x7f), Ptr[7]);
+
+    if (GemCheckBoxShowBinary->Checked == true)                                    //Steven 20211109 : SECS指令Show出時，順便顯示binary code
+    {
+        StringOut("");
+        S = "";
+        for (i = 0; i < 4; i++)
+        {
+            sprintf(str, "%02X,", Ptr[i]);
+            S += AnsiString(str);
+        }
+        StringOut(S);
+        S = "";
+        for (i = 4; i < 14; i++)
+        {
+            sprintf(str, "%02X,", Ptr[i]);
+            S += AnsiString(str);
+        }
+
+        StringOut(S);
+
+        WireCodec.ShowSMLBinary(Ptr, RunLength);
+    }
+    WireCodec.ShowSML(Ptr, RunLength);
+    return RunLength;
+}
+
+//---------------------------------------------------------------------------
+//  THGem::DoSpool (golden uHGemEquipment.cpp:4079-4189)
+//
+//  GOLDEN QUIRK PRESERVED VERBATIM (flagged, not corrected): the
+//  `del ...*.*/q/f` command string below is missing the spaces before `/q`
+//  and `/f`, same shape (and same fix-status) already documented at
+//  uHGemClass.cpp's own S6F24_RequestSpooledDataAcknowledgementSend comment
+//  (golden uHGemClass.cpp:2489-2496, citing this exact pair of golden line
+//  numbers, :4102/:6144) -- NOT corrected here either, for the same reason.
+//---------------------------------------------------------------------------
+void THGem::DoSpool()
+{
+    int &Task = iSpoolTask;
+    FILE *P;
+    unsigned TotalFileSize;
+    int handle;
+
+    AnsiString S;
+
+    FileListBox1->Refresh();
+    FileListBox1->Update();
+
+    if (bSpoolActive == false)
+    {
+        bSpooling = false;
+        bBeginTransferSpool = false;
+        if (OldSpoolSystemMin != SystemMin)
+        {
+            OldSpoolSystemMin = SystemMin;
+            FileListBox1->Refresh();
+            FileListBox1->Update();
+            if (FileListBox1->Items->Count != 0)
+            {
+                S = AnsiString("del ") + IncludeTrailingPathDelimiter(GemSpoolPath) + AnsiString("*.*/q/f");  // golden quirk: missing spaces before /q /f, see comment above
+                system(S.c_str());
+            }
+            GemSpoolCountTotal = FileListBox1->Items->Count;
+            GemSpoolCountActual = GemSpoolCountTotal;
+        }
+        return;
+    }
+
+    if (bBeginTransferSpool == false)
+    {
+        if (OldSpoolSystemMin != SystemMin)
+        {
+            OldSpoolSystemMin = SystemMin;
+            FileListBox1->Refresh();
+            FileListBox1->Update();
+            GemSpoolCountTotal = FileListBox1->Items->Count;
+            GemSpoolCountActual = GemSpoolCountTotal;
+        }
+        return;
+    }
+    switch (Task)
+    {
+        case 1:
+            if (bConnect == false)
+            {
+                bSpooling = false;
+                return;
+            }
+
+            if (FileListBox1->Items->Count == 0)
+            {
+                FileListBox1->Refresh();
+                FileListBox1->Update();
+                if (FileListBox1->Items->Count == 0)
+                {
+                    bSpooling = false;
+                    bBeginTransferSpool = false;
+                    break;
+                }
+            }
+            else
+            {
+                bSpooling = true;
+            }
+            // AI(W906-SpoolCluster) 20260721: FIFO-oldest-first assumption --
+            // always consumes Items->Strings[0] -- holds ONLY because
+            // vclcompat::TFileListBox's Refresh()/Update() sort Items
+            // (alphabetically) AND every filename WriteToSpoolFile ever
+            // writes is a zero-padded date/time string, so alphabetical
+            // order == chronological order. See vclcompat/FileListBox.h's
+            // own "SORT ORDER" file-head note; proven by this wave's own
+            // test (tests/test_FileListBox.cpp), not merely asserted here.
+            S = IncludeTrailingPathDelimiter(GemSpoolPath) + FileListBox1->Items->Strings[0];
+            handle = open(S.c_str(), O_RDONLY);
+            if (handle != -1)
+            {
+                TotalFileSize = filelength(handle);
+                close(handle);
+                P = fopen(S.c_str(), "rb");
+                if (P != NULL)
+                {
+                    // AI(W906-SpoolCluster) 20260721: golden allocates this
+                    // buffer as `new char[...]` even though SpoolPtr/
+                    // SpoolRunPtr are declared `unsigned char*` (golden
+                    // uHGemEquipment.h:482) -- an implicit char*->unsigned
+                    // char* pointer conversion BCB6 tolerates but standard
+                    // C++ (this port's g++ target) does not. Allocating as
+                    // `unsigned char[]` directly (matching the declared
+                    // type) is a language-conformance adjustment only --
+                    // same byte width, no constructors/destructors run
+                    // either way, `delete[]` below stays valid -- NOT a
+                    // behavior change, so NOT flagged as a golden-bug
+                    // deviation (see file-head "GOLDEN QUIRK" note above for
+                    // the one deviation this method actually preserves).
+                    SpoolPtr = new unsigned char[TotalFileSize + 100];
+                    fread(SpoolPtr, TotalFileSize, 1, P);
+                    SpoolRunPtr = SpoolPtr;
+                    fclose(P);
+                }
+                DeleteFile(S);
+                GemSpoolCountActual--;
+                DoSpoolSendLocalData(SpoolRunPtr);
+                Task = 100;
+            }
+            else
+            {
+                DeleteFile(S);
+            }
+            break;
+        case 100:
+            delete[] SpoolPtr;                                                  //Ifor 20170603 修改開陣列刪除方式 delete ==> delete[]
+            SpoolPtr = NULL;                                                    //kevin 20180517
+            Task = 1;
+            break;
+        case 200:
+            SpoolDelay.TimerSetSecAndOn(0.1);
+            Task = 300;
+            break;
+        case 300:
+            if (SpoolDelay.TimerOff())
+                Task = 1;
+            break;
+    }
+}
+
+//---------------------------------------------------------------------------
+//  THGem::SetSpoolActive (golden uHGemEquipment.cpp:6133-6154)
+//  GOLDEN CONTROL-FLOW PRESERVED VERBATIM: if the (gated, no-op)
+//  confirmation is not answered Yes, this returns WITHOUT ever assigning
+//  bSpoolActive=Active -- see Gated_MessageDlgConfirmYes's own comment above
+//  for why that is the deliberately safe behavior here, not an oversight.
+//---------------------------------------------------------------------------
+void THGem::SetSpoolActive(bool Active)
+{
+    AnsiString S;
+    if (Active == false)
+    {
+        FileListBox1->Refresh();
+        FileListBox1->Update();
+        if (FileListBox1->Items->Count != 0)
+        {
+            if (Gated_MessageDlgConfirmYes("All spool data will be clear,Sure to clear ?") == true)
+            {
+                S = AnsiString("del ") + IncludeTrailingPathDelimiter(GemSpoolPath) + AnsiString("*.*/q/f");  // golden quirk: missing spaces before /q /f, see DoSpool's own comment above
+                system(S.c_str());
+            }
+            else
+            {
+                return;
+            }
+        }
+    }
+    bSpoolActive = Active;
+}
+
+//---------------------------------------------------------------------------
+//  THGem::GetSpoolActive (golden uHGemEquipment.cpp:6158-6161)
+//---------------------------------------------------------------------------
+bool THGem::GetSpoolActive()
+{
+    return bSpoolActive;
 }

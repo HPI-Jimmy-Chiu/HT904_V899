@@ -286,6 +286,10 @@
 
 #include "vclcompat/vcl_compat.h"
 #include "vclcompat/StringGrid.h"
+// AI(W906-SpoolCluster) 20260721: headless TFileListBox shim (THGem's own
+// FileListBox1 member, Spool cluster) -- see vclcompat/FileListBox.h's own
+// file-head note for the full design.
+#include "vclcompat/FileListBox.h"
 #include "SECSGEM/SecsEventType.h"   // SECS_EVENT.TotalEvent (array bound in SetCEIDContent)
 #include <vector>   // AI(W906-uHGemClass-Micro7) 20260721: THGemCheckedArray's backing store (see below)
 
@@ -316,6 +320,12 @@
 // TStringGrid into the global namespace here is collision-free (grepped: no
 // other `class TStringGrid` exists anywhere in this tree).
 using vclcompat::TStringGrid;
+// AI(W906-SpoolCluster) 20260721: same collision-check discipline as
+// TStringGrid immediately above -- grepped the whole Cpp tree for
+// `class TFileListBox`/`TFileListBox` before adding this: no other
+// definition exists anywhere outside vclcompat/FileListBox.h itself, so
+// bringing it into the global namespace here is collision-free.
+using vclcompat::TFileListBox;
 // TCriticalSection is NOT auto-brought into the global namespace by
 // vclcompat/SyncObjs.h (matches TStringGrid.h's own posture) -- brought in
 // explicitly here, same idiom as the TStringGrid line above (golden spells
@@ -1075,15 +1085,80 @@ public:
     // explicitly initializes it (grepped ctor body -- absent), so zero-init
     // defensively here, same established precedent as this cluster's own
     // bSpoolActive/bBeginTransferSpool above. CurrentDirectory (golden :427)
-    // is READ-ONLY in this wave's scope (S101F8 only reads it, via
+    // was READ-ONLY as of that wave (S101F8 only reads it, via
     // IncludeTrailingPathDelimiter) -- golden's own `SetCurrentDirectory(Path)`
-    // setter (golden :426/.cpp:810-814, which ALSO cascades into
-    // GemSystemPath/GemSpoolPath/GemSystemIniPath) is deliberately NOT ported
-    // here, out of this wave's scope; a caller/test must set this member
-    // directly, same "caller/test must set explicitly" idiom as
-    // GemSystemPath/GemSpoolPath above.
+    // setter (golden :426/.cpp:810-819, which ALSO cascades into
+    // GemSystemPath/GemSpoolPath/GemSystemIniPath) was deliberately NOT
+    // ported at that time, out of that wave's scope.
+    // AI(W906-SpoolCluster) 20260721: UN-GATED for real this wave (see .cpp)
+    // -- the above "deliberately NOT ported" note is now STALE, kept only for
+    // the historical record. SetCurrentDirectory has zero remaining blockers:
+    // IncludeTrailingPathDelimiter already exists as this TU's own local
+    // static helper (see top of .cpp), and MyForceDirectories is already real
+    // (common.cpp, already #include'd via common.h above). A caller/test may
+    // still set CurrentDirectory/GemSystemPath/GemSpoolPath/GemSystemIniPath
+    // directly if it wants to bypass the cascade (same "caller/test must set
+    // explicitly" idiom used everywhere else in this cluster) -- but now has
+    // the real setter available too.
     bool bFinishDownloadFile;                       // golden :626
     AnsiString CurrentDirectory;                    // golden :427
+    void SetCurrentDirectory(AnsiString Path);      // golden :426/.cpp:810-819
+
+    // ==== Spool cluster (W906-SpoolCluster) =================================
+    // golden uHGemEquipment.h:98 (FileListBox1), :185 (bSpooling), :470
+    // (ctSpoolFile), :481-484 (iSpoolTask/SpoolPtr,SpoolRunPtr/
+    // OldSpoolSystemMin/SpoolDelay), :197 (GemSpoolCountTotal). Un-gates
+    // THGem::DoSpool/WriteToSpoolFile/SetSpoolActive/GetSpoolActive/
+    // DoSpoolSendLocalData (golden .cpp :1887-1977/:4025-4189/:6133-6161,
+    // this wave). bSpoolActive/bBeginTransferSpool/GemSpoolPath (golden :430/
+    // 694-695) and GemSpoolCountActual/GemSpoolStartTime (golden :196/198,
+    // SV53/SV57) already exist above (S6F24/SvEcDataItem waves) -- NOT
+    // re-declared here.
+    //
+    // FileListBox1 is THGem's own private FileListBox1-equivalent widget
+    // (golden .dfm:20-28, TFileListBox, design-time Mask='spool\\*.dat', no
+    // Directory set). See vclcompat/FileListBox.h's own file-head note for
+    // why this port's stand-in resolves its Mask deterministically from
+    // GemSpoolPath instead of replicating golden's CWD-dependent default --
+    // a disclosed deviation, NOT a silent fix. Allocated in the ctor body /
+    // deleted in ~THGem(), same established "no VCL form-ownership mechanism
+    // here" convention already used for strGrdCEID/strGrdAlarm/... above
+    // (golden itself never `new`s/`delete`s FileListBox1 -- it is form-owned
+    // by the .dfm streaming system, which this port does not have).
+    //
+    // bSpooling (golden :185): WRITE-ONLY in every golden call site inside
+    // this wave's own scope (DoSpool sets it, nothing golden-side ever reads
+    // it back) -- confirmed dead state, preserved faithfully (not removed
+    // just because it looks unused).
+    //
+    // ctSpoolFile/iSpoolTask: golden explicitly initializes both in its ctor
+    // BODY (ctSpoolFile=0 :471, iSpoolTask=1 :481 -- assignment statements
+    // there, not an init-list in golden; this port uses its own established
+    // init-list idiom for the same end state, see .cpp). NOTE golden quirk
+    // preserved verbatim: WriteToSpoolFile's own ctSpoolFile-increment logic
+    // is DEAD CODE (commented out in golden itself, .cpp :1898-1924) -- so
+    // ctSpoolFile stays 0 forever in practice, and every spool filename
+    // WriteToSpoolFile generates for a given exact-same-second timestamp is
+    // identical (suffix always "000"); see that method's own .cpp comment.
+    //
+    // OldSpoolSystemMin/SpoolPtr/SpoolRunPtr/GemSpoolCountTotal: golden NEVER
+    // explicitly initializes any of these in its own ctor (grepped ctor body
+    // -- absent) -- zero/NULL-initialized here defensively, same "flagged
+    // deviation from golden's raw uninitialized state" precedent already
+    // established by GemTimer's own header comment / this file's
+    // iEstablishCommunicationsTryCount note. SpoolDelay (GemTimer) gets NO
+    // explicit ctor entry, same established precedent as
+    // DelayDownLoadRemoteFile/DelayOpenCommuncation/ConnectDelay above -- its
+    // own default ctor already zero-inits defensively.
+    TFileListBox *FileListBox1;                     // golden :98
+    bool bSpooling;                                 // golden :185 (ctor false, write-only -- dead state, preserved)
+    int ctSpoolFile;                                // golden :470 (ctor 0; increment logic is dead in golden, see above)
+    int iSpoolTask;                                 // golden :481 (ctor 1)
+    unsigned char *SpoolPtr;                        // golden :482 (golden never inits -- NULL here defensively)
+    unsigned char *SpoolRunPtr;                     // golden :482 (golden never inits -- NULL here defensively)
+    WORD OldSpoolSystemMin;                         // golden :483 (golden never inits -- 0 here defensively)
+    GemTimer SpoolDelay;                            // golden :484
+    int GemSpoolCountTotal;                         // golden :197 (golden never inits -- 0 here defensively)
 
     // ==== CEID / Report StringGrid-backed "database" family =================
     void SetCEIDContent(unsigned iCeid, AnsiString CeidAlias, unsigned iReportCount, unsigned *iReportIDData, int Mode);
@@ -1326,10 +1401,20 @@ public:
     void ShowLocalBufferBinaryData();            // golden :1350-1373 (forwards to ShowLocalBufferBinaryData(WireCodec))
     void ShowLocalBufferBinaryData(SecsWireCodec &wc); // ADDITIVE (real body)
 
+    // AI(W906-SpoolCluster) 20260721: DoSpool UN-GATED for real this wave --
+    // moved OUT of the "Bucket C: gated no-op stubs" group below (it now has
+    // a real spool-file surface: vclcompat::TFileListBox, see this file's own
+    // Spool-cluster member-comment above). Real bodies for all 5 live in the
+    // .cpp -- see each one's own comment there for the exact golden citation.
+    void DoSpool();                                // golden :4079-4189
+    void WriteToSpoolFile();                       // golden :1887-1977
+    int DoSpoolSendLocalData(unsigned char *Ptr);  // golden :4025-4074
+    void SetSpoolActive(bool Active);              // golden :6133-6154
+    bool GetSpoolActive();                         // golden :6158-6161
+
     // ==== Bucket C: gated no-op stubs (golden citation each; no in-scope
     // ==== consumer needs a real body -- same idiom as
     // ==== EnableDisableEventReportAcknowledgeError above) ====================
-    void DoSpool();                    // golden :4079 -- #if 0 TODO(W906-SECSGEM-spool), needs spool-file surface
     void DoTraceDataResponse(int TR);  // golden :4190 -- #if 0 TODO(W906-SECSGEM-trace), needs TraceData[]/TraceDataResponseTask[]
     void DoUploadFileToHost();         // golden :4591 -- #if 0 TODO(W906-SECSGEM-upload), needs FTP/file-transfer surface
 
