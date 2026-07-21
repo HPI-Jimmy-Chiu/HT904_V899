@@ -509,11 +509,12 @@ add_library(ht9045_secsgem
     # (CPU/disk/memory) source functions. New, standalone (vclcompat only),
     # zero new link edge (same archive as uHGemEquipment.cpp, which calls it).
     SECSGEM/TasmInfo.cpp
-    # AI(W906-SysModWire) 20260720: HT9045Gem thin shim (Decision A) -- the
+    # AI(W906-uHGemHT9045-Bucket0) 20260721: HT9045Gem's permanent home
+    # (supersedes the deleted uHGemHT9045_Shim.cpp, W906-SysModWire) -- the
     # ONLY definition of `HT9045Gem`, needed by database.cpp's now-real
     # SystemModularInitial (`new HT9045Gem(...)`). See that header's own
-    # file-head note for the full scope/swap-back-path writeup.
-    SECSGEM/uHGemHT9045_Shim.cpp
+    # file-head note for scope (still zero of golden's 22 overrides).
+    SECSGEM/uHGemHT9045.cpp
 )
 
 target_include_directories(ht9045_secsgem PUBLIC
@@ -541,7 +542,8 @@ target_include_directories(ht9045_secsgem PUBLIC
 # AI(W906-SysModWire) 20260720: a real (object-file-level, not CMake-target-
 # level) circular SYMBOL dependency now exists as of this wave: database.cpp's
 # SystemModularInitial calls `new HT9045Gem(...)`, a symbol this library
-# (ht9045_secsgem) defines (uHGemHT9045_Shim.cpp.o) -- so ht9045_db's
+# (ht9045_secsgem) defines (uHGemHT9045.cpp.o as of W906-uHGemHT9045-Bucket0,
+# 20260721; was uHGemHT9045_Shim.cpp.o before the swap-back) -- so ht9045_db's
 # database.cpp.o now has an undefined reference back INTO this archive, even
 # though ht9045_db's CMake target never declares ht9045_secsgem as a
 # dependency. Any executable that ends up needing BOTH archives (this one,

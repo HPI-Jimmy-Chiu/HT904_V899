@@ -1,25 +1,32 @@
 //---------------------------------------------------------------------------
-//  SECSGEM/uHGemHT9045_Shim.cpp -- THIN SHIM for golden uHGemHT9045.cpp:66-69
+//  SECSGEM/uHGemHT9045.cpp -- permanent home for HT9045Gem::HT9045Gem ctor
 //
-//  Translation wave: W906-SysModWire (SystemModularInitial wiring)
-//  Translator: AI(W906-SysModWire) 20260720
+//  Translation wave: W906-uHGemHT9045-Bucket0 (skeleton swap-back)
+//  Translator: AI(W906-uHGemHT9045-Bucket0) 20260721
 //  Golden source: HT9011UC_Code_V3.33.906.0_20260618/SECSGEM/uHGemHT9045.cpp
-//                 (ctor's first two lines only -- see uHGemHT9045_Shim.h's
-//                 own file-head note for why the rest of this ~9200-line
-//                 file is explicitly out of scope for this wave).
+//                 (ctor's first two lines only -- see uHGemHT9045.h's own
+//                 file-head note for why the rest of this ~9200-line file
+//                 remains out of scope for this wave).
 //
-//  golden ctor body (uHGemHT9045.cpp:66-69):
+//  This ctor body is copied VERBATIM from the now-deleted
+//  uHGemHT9045_Shim.cpp (W906-SysModWire 20260720), NOT reconstructed from
+//  golden -- golden's own ctor (uHGemHT9045.cpp:66-69) lacks the ActiveWire
+//  rebind below (a deliberate port-specific addition, see uHGemClass.h:
+//  139-151) and instead seeds a ~300-line EventDescription[] string table
+//  (golden :71-368) this class does not carry members for (see uHGemHT9045.h's
+//  own "DATA MEMBERS" note -- that population remains future-bucket work,
+//  not this wave's, regardless of that data-member decision).
+//
+//  golden ctor body (uHGemHT9045.cpp:66-69), for reference only -- NOT what
+//  is implemented below:
 //    HT9045Gem::HT9045Gem(AnsiString Path, THGem *HGemTmp)   // Tmp
 //    {
 //        HGemPtr=HGemTmp;
 //        HandlerPath=Path;
 //        ... ~300 lines of EventDescription[...] string-table seeding ...
 //    }
-//  The EventDescription[] table (golden :71-368) is NOT ported -- it belongs
-//  to the real HT9045Gem override layer and has zero consumer anywhere in
-//  this already-translated tree (grep-confirmed at design time).
 //---------------------------------------------------------------------------
-#include "SECSGEM/uHGemHT9045_Shim.h"
+#include "SECSGEM/uHGemHT9045.h"
 #include "SECSGEM/uHGemEquipment.h"   // THGem complete type (needed for HGemTmp->WireCodec)
 
 HT9045Gem::HT9045Gem(AnsiString Path, THGem *HGemTmp)

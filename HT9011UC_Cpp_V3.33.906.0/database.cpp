@@ -16,8 +16,10 @@
 //    TMOTNO::SetMOTTableNo(AnsiString)     (database.cpp:2081-2298)
 //    TMOTDATA::TMOTDATA(AnsiString)        (database.cpp:2300-2874)
 //    SYSTEM_MODULAR::SystemModularInitial()  (database.cpp:1539-1546, real as
-//      of W906-SysModWire -- wires MyGem via SECSGEM/uHGemHT9045_Shim.h's
-//      thin HT9045Gem shim; NUMBER_PANEL_TYPE branch stays gated, see below)
+//      of W906-SysModWire -- wires MyGem via SECSGEM/uHGemHT9045.h's
+//      HT9045Gem class (permanent home as of W906-uHGemHT9045-Bucket0,
+//      20260721; zero of golden's 22 overrides declared yet); NUMBER_PANEL_TYPE
+//      branch stays gated, see below)
 //
 //  WHAT IS GATED (#if 0 // TODO(wave)):
 //    TDataModule1 ctor / DataModule1 global (database.cpp:24, 33-41)
@@ -60,11 +62,12 @@
 #include "MachineType.h"            // enum eIOType (eMotionNet/eISABase/ePCI1735U/ePLCbase)
 #include "common.h"                 // extern AnsiString IoTablePath / MotTablePath (common.h:67-68)
 #include "cmydef.h"                 // extern int INDEX_MOTION_CARD (cmydef.h:2977)
-// AI(W906-SysModWire) 20260720: HT9045Gem thin shim (SystemModularInitial's
-// `new HT9045Gem(...)` needs the complete type) + extern HGem. Swap to
-// "SECSGEM/uHGemHT9045.h" when the real override layer lands -- see that
-// header's own file-head note for the full swap-back path.
-#include "SECSGEM/uHGemHT9045_Shim.h"
+// AI(W906-uHGemHT9045-Bucket0) 20260721: SystemModularInitial's
+// `new HT9045Gem(...)` needs the complete HT9045Gem type + extern HGem;
+// swapped from the temporary uHGemHT9045_Shim.h (W906-SysModWire, deleted
+// this wave) to the permanent SECSGEM/uHGemHT9045.h -- see that header's own
+// file-head note for scope (still zero of golden's 22 overrides).
+#include "SECSGEM/uHGemHT9045.h"
 
 // ---------------------------------------------------------------------------
 //  MyDBIProcess / ShowMyMessage forward declarations
