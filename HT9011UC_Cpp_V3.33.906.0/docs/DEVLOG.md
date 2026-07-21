@@ -820,3 +820,24 @@ C 桶(`clientGemRead`/`ProcessSocketReceiveData`/`Timer1Timer`)是本檔案最�
 - **✅ 2026-07-21 四波連發完成**：SECSGEM Wave 1(`21900fd`，上日)+Wave 2「AlarmReportAck」(`4c2ec4c`)+uHGemHT9045 Bucket 0(`ee85c32`)+common.cpp wave-file 叢集(`38157cc`)，各附獨立審查+主迴圈五道閘+docs commit。**寫入佇列已清空**。**下一波候選(尚無設計書，開工前先 recon)**：`uHGemClass.cpp` 剩 15 個 gated method、SECSGEM 4 個獨立子系統(DoSpool/Trace/上下傳)+FormCreate SV 註冊、VCW-1/VCW-2 cast 波、S2F32 時鐘微波、DoDLRequest/DoULRequest 防護 seam、`SCK_ART.cpp` 剩餘協調債、或評估 `ht9045_globals`→`ht9045_core` link 擴大(解 cpublic.cpp 3 處僅存阻塞)。中長期：FormsFacade/Handler free-func 前置波(解 uHGemHT9045 牆②③)；W7 E0/M1/M2 HAL pump 群。
 - **驗證基準**：ctest 84/88(同 4 既有漂移，成因已查明＝本機 system/ 快照列數漂移)；`uHGemClass` gated 57→15。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 `fix/v899.32-pti`；工作樹另有無關 V899/config 殘留(PTI 案)勿圈入 V906 commit。
 - **執行模式**：使用者 2026-07-21 指示持續有效，本波為當日第四個連續波次，過程無真異常/疑問，未停下請示。
+
+---
+
+## 2026-07-21 — uHGemClass Micro5 完成（剩 15 個 gated method 重新分類 + 解 4 個，15→11）
+
+**設定聲明**：主迴圈 Sonnet 5 + xhigh；翻譯 Sonnet 5；獨立審查 Sonnet 5。
+
+**Recon 修正另一處過時分類**：ROADMAP 對 `uHGemClass.cpp` 剩餘 gated method 的分類文字(「VCL StringGrid 資料庫(5個)/widget(5-6個)/THGem 資料成員(~12)/方法(~18)/dos.h(1)」)寫於 21/57 解鎖時期，**在最近兩波再解 21 個之後已徹底過時**。派 read-only agent 逐一直讀現存 15 個 `#if 0` 區塊重建分類，發現部分方法比舊分類暗示的更便宜——例如 `S101F2`/`S101F4`/`S125F2` 過去被歸為「THGem-only 方法/StringGrid 資料庫」大類，實際只需一個純量/指標成員或一組結構相仿(但非盲抄)的既有模式即可解。同時誠實標出真正大的仍卡著：`S2F16`(`ht9045_sm`↔`ht9045_secsgem` 真循環 CMake 依賴)、`S2F24Sub`(Trace 陣列子系統全未翻)、`S2F32`(邏輯簡單但真動 OS 時鐘，需先有測試 seam 才安全解)、`SetECValue`(已有專屬更大設計書)。
+
+**交付**（commit `e6f03d3`，4 檔 +658/-9）：`THGem::UploadFileString`(新 `TStringList*`，new/delete 生命週期，比照既有 `SecsAlarmMessage`/`FMessageList`)解鎖 `S101F2_CurrentEPPDData`+`S101F4_CurrentEPPDData`(golden :2456-2502)；`THGem::GemRemoteReceipeList`(新 `THGemListBox*`，**刻意用不同的** default-NULL/外部指派生命週期，比照既有 `TerminalMemoPtr`，非複製 UploadFileString 的 new/delete 模式)解鎖 `Process_S7F20_CurrentEPPIDData`(golden :2191-2220)；`THGem::sgSECSECData`+`WriteECEnableData`/`EnableDisableECData`/`EnableDisableECDataAll`(結構仿上波 Alarm 家族**但非盲抄**——golden EC StringGrid 欄位配置與 Alarm 不同[ID 比對 Cells[1]非[8]、enable 旗標 Cells[2]非[7]]，已個別核對 golden 用對欄位)解鎖 `S125F2_EnableDisableECDataAcknowledge`(golden :2643-2680)。
+
+**Golden bug 保留(verbatim)**：`S101F4_CurrentEPPDData` 兩條路徑(early-return+success)都送出 `InitLocalHead(101, 2, 0)`，從未送 `(101, 4, 0)`——是從正上方 `S101F2` 複製貼上留下的痕跡，與前波已記錄的 S6F16/S6F18 header bug 同類。`Process_S7F20_CurrentEPPIDData` 的 `GemRemoteReceipeList==NULL` 提前返回(不碰 wire)guard 逐位保留。`EnableDisableECData`/`EnableDisableECDataAll` 上的歷史修正註解「Steven 20150603 : T&0x10 --> T&0x80」逐字保留。
+
+**獨立審查 CLEAN**（4 項最高風險宣稱全部獨立重新推導確認）：(1) 兩種生命週期(new/delete vs default-NULL)各自對應正確的 golden 前例，未混淆；(2) S101F4 header bug 逐位保留，測試斷言的是錯的那個值(101,2)非直覺上該送的(101,4)；(3) NULL-guard 保留且測試證明該路徑真的不消耗 wire token(非只是「不當機」)；(4) EC 家族逐一比對 golden 確認欄位配置與 Alarm 家族不同且翻譯用對了 EC 自己的配置，非表面重命名。額外查證 `-Wreorder` 修正、mojibake 自抓(翻譯 agent 自己抓到一處差點把 Big5 原始位元組誤植進 UTF-8 檔案，已改寫成一般英文註解)。
+
+**主迴圈親自定案**（全新 `build_w906_uhgemmicro5_final`）：build exit 0、resolving/undefined reference=0、ctest **84/88**(同 4 既有環境漂移)、mojibake 0/4。
+
+### 🔖 RESUME（最新）
+- **✅ 2026-07-21 五波連發完成**：SECSGEM Wave 1(`21900fd`，上日)+Wave 2「AlarmReportAck」(`4c2ec4c`)+uHGemHT9045 Bucket 0(`ee85c32`)+common.cpp wave-file 叢集(`38157cc`)+uHGemClass Micro5(`e6f03d3`)，各附獨立審查+主迴圈五道閘+docs commit。**寫入佇列已清空**。`uHGemClass` 累計 46/57 已解(gated 57→**11**)。**下一波候選(尚無設計書，開工前先 recon；uHGemClass 剩 11 個已逐個重新分類，見 ROADMAP DEFERRED 表)**：SECSGEM 4 個獨立子系統(DoSpool/Trace/上下傳)+FormCreate SV 註冊、VCW-1/VCW-2 cast 波(`SetECValue`)、S2F32 時鐘微波(需先建測試 seam)、DoDLRequest/DoULRequest 防護 seam、`SCK_ART.cpp` 剩餘協調債、或評估 `ht9045_globals`→`ht9045_core` link 擴大(解 cpublic.cpp 3 處僅存阻塞)。中長期：FormsFacade/Handler free-func 前置波(解 uHGemHT9045 牆②③)；W7 E0/M1/M2 HAL pump 群。
+- **驗證基準**：ctest 84/88(同 4 既有漂移，成因已查明＝本機 system/ 快照列數漂移)；`uHGemClass` gated 57→11。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 `fix/v899.32-pti`；工作樹另有無關 V899/config 殘留(PTI 案)勿圈入 V906 commit。
+- **執行模式**：使用者 2026-07-21 指示持續有效，本波為當日第五個連續波次，過程無真異常/疑問，未停下請示。
