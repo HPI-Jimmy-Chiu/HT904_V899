@@ -921,3 +921,41 @@ C 桶(`clientGemRead`/`ProcessSocketReceiveData`/`Timer1Timer`)是本檔案最�
 ### 🔖 RESUME（最新）
 - **✅ SaveTestSummarySECS 完成(`8c34ddc`)**；Spool 叢集翻譯+審查皆完成，commit 待下一步定案。`Automation/SCK_ART.cpp` 18/55 method 已翻，剩 4 支報表函式(`Save2DSortingSummary` 次便宜、`SaveTestSummaryTSV` 最貴、`SaveMultiLotTestSummary` 因無真呼叫點暫緩)。**孤兒 stash 事件已妥善排除，`git stash list` 恢復乾淨**(僅剩與本專案無關的既有 `stash@{1}`)。
 - **執行模式**：使用者指示持續有效；本次事件驗證了平行執行下的風險控管——多個 agent 共用同一 working tree 時，git 層級操作(stash/reset)須格外小心，主迴圈發現異常立即暫停查證而非照常推進，過程有真異常但妥善排除，未錯誤地「假裝沒事」繼續。
+
+---
+
+## 2026-07-21 深夜 — 使用者指示「純翻譯全開、最大化 agent」後的大規模平行推進 + 關機交接檢查點
+
+**背景**：VCW-1 落地後使用者問「V906 下一波是什麼？純翻譯都完成？如果沒完成就火力全開，最大化 agent 翻譯每一個檔案」。回答：遠遠沒完成（main.cpp 34972行/cContact 22761行/uLotInfo 16613行/AutoClean 9137行/ckernel 皆 0%）。隨即對 6 個最大未翻區域平行派 recon（main.cpp、cContact.cpp、uLotInfo+ckernel、AutoClean.cpp、csystem.cpp 剩餘 gated 清單、common.cpp+Public/ 剩餘葉節點），找出「現在就安全可翻」與「需前置設計才能動」的邊界，而非盲目對巨型檔案開翻。
+
+**六路 recon 重大發現**（詳見各自 DEVLOG 段落引註，此處總結）：
+1. **AutoClean.cpp(9137行) 確認 HAL-ready**，跟已成功的 W6.2/6.4/6.5 引擎波同等級可行——本輪最高價值發現。
+2. **main.cpp 有 ~55 個函式/~5200行(15%) 可獨立抽出**，完全不需等 UI 框架決定——同 cContact calc-core 模式。
+3. **cContact.cpp `IsRun2DCheck`**：40+ 真呼叫點目前硬編碼 false，零依賴風險真本體。
+4. **uLotInfo.cpp `InitialUnLoaderTask`**：golden 僅一行，5個真呼叫點在 acatchtray.cpp，目前 no-op。
+5. **csystem.cpp 剩餘僅 5 個 `#if 0`**（非舊表列的一堆），2個零阻塞(`DoHotplateEdgeCylinderLoop`+`DoLoaderVibrateLoop`)+1個差一個新方法(`SetMainRunStartMode`)。
+6. **common.cpp 剩 9 個項目可翻**(含1個零工作量:已寫好的body只是被`#if 0`包住)+**`Public/MyProductionRecord` 有 ~28 個 pure setter/getter 現在substrate齊了可翻**。
+
+**平行翻譯執行（6 個波次同時展開，本節起真正「最大化」）**：
+- **Wave 13 cContact leaves**（`IsRun2DCheck`+5個bank-ahead）：完成，103/103測試過，額外抓到`bRun2DCheck`定義被前波誤掃進不相關`#if 0`區塊的真bug並精準抽出修正。
+- **Wave 14 AutoClean 地基**（新`AutoClean/AutoClean.{h,cpp}`共3484行+`vclcompat::StringGrid`重用+FormsFacade/aHotPlateSubstrate/acatchtray_shims擴充+`InitialUnLoaderTask`真本體）：完成，58個新測試全過。發現多處比brief描述更深的缺口(`PlaceToCleanList`不存在、`TMyKitSuck`需13個新欄位、`fNote`/`fShowMessage`全樹無家)，皆妥善填補非強行翻譯。
+- **Wave 17 common.cpp 完成波**：9/10項完成，第10項(`TempChangeLog`)翻完驗證後因真link邊界(`ht9045_core`不link`ht9045_globals`)而**主動撤回重新gate**——recon的「零風險」宣稱經實測證偽，正確處理非強推。額外修好一個既有測試的僥倖通過(`test_w7_grid_occupancy.cpp`依賴幸運的stack零值)。
+- **Wave 18 MyProductionRecord 純邏輯切片**：28個方法完成，90/90測試過。**過程中兩次卡在等自己背景build沒回報完整結果，皆用SendMessage接續才拿到終版報告**（同今日稍早Wave11審查同款模式，已知agent行為，非任務本身異常）。
+- **平行design：FileListBox stand-in**（解DoSpool+Upload家族前置）：完成，判定GO，Wave14已消化其中Spool部分。
+- **SCK_ART報表函式排序 recon**：找到`SaveTestSummarySECS`最便宜，已在更早的Wave 12完成(見上方區段)。
+
+**真異常：跨波次檔案協調**（發現→查證→處理，未盲目推進）：
+1. `Public/MyProductionRecord.h`+`tests/CMakeLists.txt` 被 Wave 14 與 Wave 18 同時觸碰。Wave 14 為讓 AutoClean.cpp 連結，在 `aHotPlateSubstrate.cpp` 加了 `TMyProductionRecord` 8個方法(含ctor)的 no-op stand-in；Wave 18 同時在 `Public/MyProductionRecord.cpp` 給同一批方法寫真本體。兩者若都落地會 multiple-definition。**主迴圈親自協調**：移除 `aHotPlateSubstrate.cpp` 的 8 行 stand-in(保留 Wave18 刻意不翻的 3 個)、把 `Public/MyProductionRecord.cpp` 接進 `ht9045_sm`(AutoClean.cpp所在target)、全新 build 驗證零 multiple-definition。
+2. 協調後首次 ctest 出現 `common` 新失敗（`MySecondsBetween`）。**主迴圈直接查證**：讀 golden 原始碼逐行核對，發現 `MySecondsBetween` 對小於1天的時間差呼叫 `DecodeDate` 時，會把差值當絕對日期解出 OLE epoch 的 1899年12月30日(day=30)，導致 `day*86400` 主導結果——這是 **golden 真bug(real BCB6語意下也一樣)**，Wave17翻譯完全忠實，只是 Wave17 自己寫的測試斷言錯誤地期待「直覺值」330。修正測試斷言為真實計算值 `2592330`，加註解說明。修正後全套回到基準 87/91(4個既有環境漂移)。
+
+**主迴圈親自驗證**（`build_w906_reconcile_check`，全新 from-scratch）：build exit 0、零 multiple-definition、ctest **87/91**(同4個既有環境漂移)。**尚未 commit**——已派出 3 個平行獨立審查(Group A=Wave13 cContact、Group B=Wave17 common.cpp、Group C=Wave14+18+協調，範圍最大最複雜)，使用者於審查進行中要求關機暫停。
+
+### 🔖 RESUME（關機交接，2026-07-21 深夜）
+- **工作樹狀態**：**尚未 commit**，但已驗證乾淨(build+ctest 87/91同基準)。這些是真實檔案在本機硬碟(`D:\HT9045`)，非暫時容器，關機不會遺失，下次開機原樣還在。
+- **未 commit 的檔案清單**（4個波次+1次協調，尚待審查）：
+  - `CMakeLists.txt`/`FormsFacade.{cpp,h}`/`Public/MyProductionRecord.{h,cpp}`/`aHotPlateSubstrate.{cpp,h}`/`acatchtray_shims.{cpp,h}`/`AutoClean/`(新)/`tests/CMakeLists.txt`/`tests/test_AutoClean.cpp`(新)/`tests/test_MyProductionRecord.cpp`(新) — **Group C**：Wave14 AutoClean地基+Wave18 MyProductionRecord+主迴圈協調
+  - `cContact.{h,cpp}`/`cmydef.cpp`/`atester_shims.cpp`/`tests/test_cContact.cpp` — **Group A**：Wave13
+  - `common.{cpp,h}`/`acarry_shims.cpp`/`ainarm9045_2x4_16_shims.cpp`/`tests/test_common.cpp`/`tests/test_w7_grid_occupancy.cpp` — **Group B**：Wave17
+- **下次接續步驟**：(1) 檢查 3 個審查agent(Group A/B/C)是否留有結果——關機可能中斷它們，需重派也無妨(讀本節即有完整brief可重建)。(2) 三組獨立通過後，各自主迴圈五道閘(全新 from-scratch build+ctest+mojibake)+分開commit(A/B天然獨立；C因跨wave協調建議合併一個commit，訊息需完整記錄協調過程)。(3) 更新DEVLOG/ROADMAP。(4) 排隊中的下一輪：Wave15(AutoClean核心引擎，golden :4417-9107主要4個engine)、Wave16(csystem.cpp 3個微小gate，`DoHotplateEdgeCylinderLoop`+`DoLoaderVibrateLoop`+`InitCleanOutFunction`AutoSiteMap分支)、Wave19(main.cpp calc-core~55函式)——這三個都會動`FormsFacade.h`，須排隊不可真平行，建議合併成一輪。
+- **驗證基準**：ctest 87/91（同4個既有環境漂移：config_db/IniFiles/ini_helpers/config_loaders）。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支`fix/v899.32-pti`；HEAD=`14539a9`。工作樹另有無關V899/config殘留(PTI案)勿圈入V906 commit。
+- **執行模式**：使用者明確要求「純翻譯可平行就盡量展開、最大化agent」，本節起從單線波次轉為大規模recon+平行翻譯模式，過程中妥善處理2次真跨agent檔案衝突(git stash孤兒+MyProductionRecord重複定義)，皆查證後才動作，未盲目推進。使用者於本節收工時要求關機暫停記錄，故此處為主動交接檢查點，非任務完成。
