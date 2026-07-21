@@ -903,3 +903,21 @@ C 桶(`clientGemRead`/`ProcessSocketReceiveData`/`Timer1Timer`)是本檔案最�
 - **✅ VCW-1 完成（2026-07-21，`fcb1b6f`）**。`uHGemClass` 累計 53/57 已解(gated 57→**4**：`S2F16`/`S2F24Sub`/`S2F32`/`S7F20_CurrentEPPDData`)。**平行派出的 `DoSpool`+`Upload` 家族 `TFileListBox` stand-in 設計已完成**：確認可用既有 `FindFirst`/`FindNext` 原語(零 glob engine 需求)，設計出 `vclcompat::TFileListBox`(新 `.h`/`.cpp`，非 header-only，零 CMake 風險)。**recon 額外發現範圍比原估大**：Spool 側其實還牽連 `WriteToSpoolFile`(91行)+`SetSpoolActive`/`GetSpoolActive`(29行)，原估 157 行修正為 **~285 行**；Upload 側發現 `SetReceipeDirectoryAndGlobalName` 的唯一真實分支(Type==2)其實驅動另一個完全不同的 widget `TDirectoryListBox`，非 `FileListBox2`，建議排除獨立處理。**下一波＝Spool叢集**(設計已就緒可直接翻譯)；其後 Upload 家族(排除 `SetReceipeDirectoryAndGlobalName`)。
 - **驗證基準**：ctest 84/88(同 4 既有漂移)；`uHGemClass` gated 57→4。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 `fix/v899.32-pti`；工作樹另有無關 V899/config 殘留(PTI 案)勿圈入 V906 commit。
 - **執行模式**：使用者指示持續有效。過程無真異常/疑問，未停下請示。
+
+---
+
+## 2026-07-21 — 平行雙波：Spool 叢集(SECSGEM) + SaveTestSummarySECS(SCK_ART)，含一次孤兒 git stash 事件
+
+**設定聲明**：主迴圈 Sonnet 5 + xhigh；翻譯/審查皆 Sonnet 5。VCW-1 落地後，`vclcompat::TFileListBox` 前置設計(平行做好)可直接開工；同時對 SCK_ART.cpp 剩餘 5 支報表函式做 recon 排序，找到零依賴衝突的 `SaveTestSummarySECS`——兩者分屬 SECSGEM 與 Automation 完全不同檔案，真平行派出翻譯。
+
+**真異常事件(已妥善處理)**：Spool 叢集翻譯 agent 為隔離自己的 build baseline，對正被 SaveTestSummarySECS agent 積極編輯的 `Automation/SCK_ART_Remainder.{cpp,h}` 做了 `git stash push`，之後 `git stash pop` 因與 SaveTestSummarySECS 同期的新編輯衝突被 git 中止(未套用)，留下一個孤兒 `stash@{0}`。**主迴圈察覺後暫停正常節奏**，逐步查證：(1) 確認 stash 內容只涵蓋這 2 個檔案；(2) 確認 SaveTestSummarySECS agent 自己也偵測到檔案被外部還原(透過 grep/git diff 跟自身編輯紀錄不符)，已自行完整重做並用 grep/diff(非只信任編輯器工具回報)複驗；(3) 主迴圈親自跑全新 from-scratch 合併建置(`build_w906_spoolsck_final`)確認兩波合併後 85/89 通過(同 4 個既有環境漂移)；(4) 比對 stash 內容 vs 現有磁碟版本，確認現有版本是重做後更完整的版本，stash 已無獨特價值；(5) 安全 `git stash drop`。全程未動用 `git reset --hard` 等破壞性指令，遵循「有疑慮先用可逆手段」原則。
+
+**交付**：
+- **Spool 叢集**（SECSGEM，commit 待 Wave 11 審查完成後定案）：新 `vclcompat::TFileListBox`(真 `FindFirst`/`FindNext` rescan，`Refresh`/`Update` 皆做真掃描規避 golden 呼叫順序不一致的模糊性)+`THGem::SetCurrentDirectory`+`DoSpool`/`DoSpoolSendLocalData`/`WriteToSpoolFile`/`SetSpoolActive`/`GetSpoolActive`。**recon 修正真實新成員數為 9 非原估 7**(`SpoolPtr`/`SpoolRunPtr` 是獨立傳輸緩衝區非 widget 本身，另漏算 `ctSpoolFile`)。`Mask` 由 `GemSpoolPath` 組出，刻意規避 golden 原生 CWD 依賴的模糊性(揭露性偏離，非靜默修正)。
+- **SaveTestSummarySECS**（Automation，commit `8c34ddc`）：recon 排序 5 支報表函式後判定此支最便宜——僅 1 個新 `fObserver` 成員(`memoLotSummary`，golden 值拷貝語意，非別名/移轉)+`LotSummary` stub 小擴充(欄位維度對 golden `cSocket.h`/`MachineType.h` 常數核實)，零 `ServerSocket`/`FTP_Upload`/`fConfiguration`/`FormHS` 依賴。逐位保留真 golden bug：`bN17UploadLotSummary` 關閉時 `strFileName` 仍是空字串，但 `ShellExecute` 由另一條件無條件觸發。
+
+**主迴圈親自定案**（`build_w906_spoolsck_final` 全新合併建置）：build exit 0、resolving/undefined reference=0、ctest **85/89**(同 4 既有環境漂移，總數因新增 `test_FileListBox` 從 88→89)、mojibake 0。**兩波獨立審查皆 CLEAN**——SaveTestSummarySECS 審查特別針對還原事件逐行核對，確認整支函式讀起來是「一次連貫、內部一致的通過」，無新舊版本殘留拼接痕跡。
+
+### 🔖 RESUME（最新）
+- **✅ SaveTestSummarySECS 完成(`8c34ddc`)**；Spool 叢集翻譯+審查皆完成，commit 待下一步定案。`Automation/SCK_ART.cpp` 18/55 method 已翻，剩 4 支報表函式(`Save2DSortingSummary` 次便宜、`SaveTestSummaryTSV` 最貴、`SaveMultiLotTestSummary` 因無真呼叫點暫緩)。**孤兒 stash 事件已妥善排除，`git stash list` 恢復乾淨**(僅剩與本專案無關的既有 `stash@{1}`)。
+- **執行模式**：使用者指示持續有效；本次事件驗證了平行執行下的風險控管——多個 agent 共用同一 working tree 時，git 層級操作(stash/reset)須格外小心，主迴圈發現異常立即暫停查證而非照常推進，過程有真異常但妥善排除，未錯誤地「假裝沒事」繼續。
