@@ -884,3 +884,22 @@ C 桶(`clientGemRead`/`ProcessSocketReceiveData`/`Timer1Timer`)是本檔案最�
 - **✅ 平行三波完成（2026-07-21）**：DoARTLotStart(`092fce0`)+uHGemClass Micro7(`8a1b628`，含 DoDownLoadRemoteFile)。`uHGemClass` 累計 52/57 已解(gated 57→**5**：`S2F16`/`S2F24Sub`/`S2F32`/`S7F20_CurrentEPPDData`/`SetECValue`)。**下一波候選**：**VCW-1 cast 切片**(已 recon 判定 GO，範圍已明確——`TStrings:TObject`+6個空殼型別+4函式 dispatch，~550行；需等本輪 SECSGEM 落地才開工，因同檔)、`DoSpool`+`DoUploadFileToHost` 家族(需先定案 `TFileListBox` stand-in 設計)、`S2F24Sub`+`DoTraceDataResponse` 合波、`Automation/SCK_ART.cpp` 5支報表函式(建議一支一波)或4方state整併小波、`S2F32` 時鐘微波(需先建測試seam)、`S2F16`(真循環CMake依賴)、DoDLRequest/DoULRequest 防護 seam、或評估 `ht9045_globals`→`ht9045_core` link 擴大。
 - **驗證基準**：ctest 84/88(同 4 既有漂移)；`uHGemClass` gated 57→5。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 `fix/v899.32-pti`；工作樹另有無關 V899/config 殘留(PTI 案)勿圈入 V906 commit。
 - **執行模式變更**：使用者 2026-07-21 明確指示「純翻譯可平行就盡量展開」——本節起遇到多個彼此無檔案重疊的候選時，先平行 recon 判斷互斥性，再對確認安全者平行派翻譯；同檔案疊加的波次各自獨立審查後，視能否乾淨拆分決定合併或分開 commit。過程無真異常/疑問，未停下請示。
+
+---
+
+## 2026-07-21 — VCW-1 完成（SetECValue cast dispatch 家族，本日風險最高的一波）
+
+**設定聲明**：主迴圈 Sonnet 5 + xhigh；翻譯/審查皆 Sonnet 5。SECSGEM 檔案剛落地穩定，本波接續進行；同時平行派出 `DoSpool`+`Upload` 家族的 `TFileListBox` stand-in 前置設計(唯讀，零檔案衝突)。
+
+**交付**（commit `fcb1b6f`，10 檔 +731/-85，新增 `vclcompat/Controls.h`）：**R1**——`vclcompat/TStringList.h` 的 `TStrings` 改繼承 `TObject`(一行，附加性；兩者早已 pure-virtual 多型，無 vtable/sizeof 變化)，經 recon 確認為真必要非可省——golden 4 個 cast cascade(`SetECValue`/`DataItemOutSV`/`DataItemOutEC`/`GetECDataValue`)皆從同一 `TObject*` `dynamic_cast` 出 `TStringList`，並非可跳過的獨立路徑。新 `vclcompat/Controls.h`：6 個極簡 `TObject` 派生空殼型別(`TPanel`/`TCustomEdit`/`TComboBox`/`TLabel`/`TCheckBox`/`TRadioGroup`)，只給 golden cast dispatch 實際用到的成員。**範圍邊界(務必在程式碼本身講清楚，不能只在報告裡講)**：這 6 個型別全樹零真實 instance(28 個表單僅 7 個已翻，`uHGemHT9045_EC.cpp`/`_SV.cpp` 裡 ~1740 個真實 widget-backed 註冊全部未動)，`dynamic_cast` 對它們永遠安全回 nullptr——此波只讓 cast dispatch 程式碼編譯且邏輯正確，不代表任何真實 widget-backed EC/SV 變得可用。
+
+解鎖 `HTGem::SetECValue`(golden :2682-2882)+`THGem::DataItemOutSV`/`DataItemOutEC`(uHGemEquipment.cpp)+`GetECDataValue` cast 分支(`SecsSvEcRegistration.cpp`，此檔已有前波留下的「design doc D2」缺口註記，本波填補)。**發現一個先前未記錄的真 golden 不對稱 bug**：`SetECValue` 的 `IsVCL==2` 分支是裸 `return;`，從不透過存的 `AnsiString*` 寫回；但 `GetECDataValue`/`DataItemOutSV`/`DataItemOutEC` 都正確讀取 `IsVCL==2` 的值——經 `AnsiString*` 多載註冊的 EC，對 host 可讀但透過 S2F15 靜默不可寫，真實產品層 bug，繼承自 golden 非本波引入，逐位保留。另確認 `DataItemOutEC` 與 `DataItemOutSV` 的 cast block 結構相似但非完全相同：EC 版本在 `IsVCL==1` 子分支內多餘重讀一次 `Type`/`ECName`/`ECUnit`(明明剛讀過)，且 wire 長度硬編碼 `1` 而非 SV 版本的 `Len` 變數——兩處差異皆逐位保留，未強行統一。
+
+**獨立審查**（本日風險最高，特別針對 `TStrings:TObject` 基礎型別變更做窮舉式反向驗證）：**1 個 MEDIUM 發現**——`Controls.h` 檔頭+`uHGemEquipment.cpp` 一處 gate 註記+`SecsSvEcRegistration.cpp` 一處歷史分析註解，這 3 處在本波自己解鎖 `GetECDataValue` 之後，仍寫著「remains gated」——純文件性但風險是誤導未來讀者，commit 前已修正 3 處。其餘全部 CLEAN：獨立驗證 `sizeof(TString*)` 全樹零呼叫、`memcpy`/`reinterpret_cast` 涉及這兩型別全樹零命中、`vclcompat` 內繼承關係全樹無多重/虛擬繼承、`TStringList*` 同時匹配既有 `void*`/`TObject*` 多載時 derived-to-base 轉換必勝過轉 `void*`(無新歧義)；逐行核對 golden 確認 R1 真必要(非分析誤判)；`TComboBox`/`TRadioGroup` 兩個最複雜型別的讀寫邏輯逐行對 golden 核實正確；新測試證明 6 個型別的 `dynamic_cast` 確實回 nullptr(非僅「能編譯」)。
+
+**主迴圈親自定案**（全新 `build_w906_vcw1_final`）：build exit 0、resolving/undefined reference=0、ctest **84/88**(同 4 既有環境漂移)、mojibake 0/10。`uHGemClass` gated 5→**4**。
+
+### 🔖 RESUME（最新）
+- **✅ VCW-1 完成（2026-07-21，`fcb1b6f`）**。`uHGemClass` 累計 53/57 已解(gated 57→**4**：`S2F16`/`S2F24Sub`/`S2F32`/`S7F20_CurrentEPPDData`)。**平行派出的 `DoSpool`+`Upload` 家族 `TFileListBox` stand-in 設計已完成**：確認可用既有 `FindFirst`/`FindNext` 原語(零 glob engine 需求)，設計出 `vclcompat::TFileListBox`(新 `.h`/`.cpp`，非 header-only，零 CMake 風險)。**recon 額外發現範圍比原估大**：Spool 側其實還牽連 `WriteToSpoolFile`(91行)+`SetSpoolActive`/`GetSpoolActive`(29行)，原估 157 行修正為 **~285 行**；Upload 側發現 `SetReceipeDirectoryAndGlobalName` 的唯一真實分支(Type==2)其實驅動另一個完全不同的 widget `TDirectoryListBox`，非 `FileListBox2`，建議排除獨立處理。**下一波＝Spool叢集**(設計已就緒可直接翻譯)；其後 Upload 家族(排除 `SetReceipeDirectoryAndGlobalName`)。
+- **驗證基準**：ctest 84/88(同 4 既有漂移)；`uHGemClass` gated 57→4。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 `fix/v899.32-pti`；工作樹另有無關 V899/config 殘留(PTI 案)勿圈入 V906 commit。
+- **執行模式**：使用者指示持續有效。過程無真異常/疑問，未停下請示。
