@@ -841,3 +841,22 @@ C 桶(`clientGemRead`/`ProcessSocketReceiveData`/`Timer1Timer`)是本檔案最�
 - **✅ 2026-07-21 五波連發完成**：SECSGEM Wave 1(`21900fd`，上日)+Wave 2「AlarmReportAck」(`4c2ec4c`)+uHGemHT9045 Bucket 0(`ee85c32`)+common.cpp wave-file 叢集(`38157cc`)+uHGemClass Micro5(`e6f03d3`)，各附獨立審查+主迴圈五道閘+docs commit。**寫入佇列已清空**。`uHGemClass` 累計 46/57 已解(gated 57→**11**)。**下一波候選(尚無設計書，開工前先 recon；uHGemClass 剩 11 個已逐個重新分類，見 ROADMAP DEFERRED 表)**：SECSGEM 4 個獨立子系統(DoSpool/Trace/上下傳)+FormCreate SV 註冊、VCW-1/VCW-2 cast 波(`SetECValue`)、S2F32 時鐘微波(需先建測試 seam)、DoDLRequest/DoULRequest 防護 seam、`SCK_ART.cpp` 剩餘協調債、或評估 `ht9045_globals`→`ht9045_core` link 擴大(解 cpublic.cpp 3 處僅存阻塞)。中長期：FormsFacade/Handler free-func 前置波(解 uHGemHT9045 牆②③)；W7 E0/M1/M2 HAL pump 群。
 - **驗證基準**：ctest 84/88(同 4 既有漂移，成因已查明＝本機 system/ 快照列數漂移)；`uHGemClass` gated 57→11。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 `fix/v899.32-pti`；工作樹另有無關 V899/config 殘留(PTI 案)勿圈入 V906 commit。
 - **執行模式**：使用者 2026-07-21 指示持續有效，本波為當日第五個連續波次，過程無真異常/疑問，未停下請示。
+
+---
+
+## 2026-07-21 — uHGemClass Micro6 完成（S6F24+S7F18 解鎖 + 真正移植 DeleteDirectory，11→9）
+
+**設定聲明**：主迴圈 Sonnet 5 + xhigh；翻譯 Sonnet 5；獨立審查 Sonnet 5。承接 Wave 5 recon 已判定的「SMALL」分類，不再重派 recon agent，直接進翻譯。
+
+**交付**（commit `33d4734`，7 檔 +609/-10）：`S6F24_RequestSpooledDataAcknowledgementSend`(golden :2053-2079)新增 `THGem::bSpoolActive`/`bBeginTransferSpool`/`GemSpoolPath` 3 個純量成員，安全預設 `false`/`false`/`""`，讓本體唯一副作用(`system("del...")` spool 清空)維持 no-op 直到未來真正的 DoSpool 子系統波驅動 `bSpoolActive=true`。**Golden bug 逐位保留**：清空指令字串 `"*.*/q/f"` 缺 `/q`/`/f` 前空格，同形態已存在於 golden 其他處(uHGemEquipment.cpp:4102/6144)，非本波引入。`S7F18_DeleteProcessProgramAcknowledge`(golden :2115-2166)新增 `THGem::UpLoadPath`(無 ctor 預設，golden 亦然)+**真正移植 `DeleteDirectory`** 到 `Public/ExternFunction.{h,cpp}`——該檔原有「deferred：需 FindFirst/FindNext shim」註解已過時(vclcompat/SysUtils.h 早在更晚的一波就補上了)，一併修正。
+
+**`DeleteDirectory` 逐行核對(因為是真會刪檔案的函式，值得比一般翻譯波更仔細)**：獨立審查逐行比對 golden 與譯本，確認 3 個自報 quirk 皆屬實且逐位保留：(1) 目錄不存在→回 `true`(非錯誤)；(2) 個別 `DeleteFile()` 失敗從不檢查回傳值；(3) 遞迴刪子目錄失敗會 `break` 提前結束列舉，但仍會落到 `FindClose()`+`RemoveDir()`，非立即回 `false`。
+
+**審查額外標記(LOW，繼承 golden 非翻譯引入，記錄不擋)**：`S7F18` 用未消毒的 SECS wire 字串接 `DeleteDirectory` 目標路徑，無 `..`/根目錄防護——這是 `DeleteDirectory` 首次真的被 wire 端可觸發呼叫。`DataItemIn` 固定 1024 bytes buffer 亦無 wire 長度上界檢查——同形態風險已透過更早一波解鎖的 `S2F42` 上線過，非新類別曝露。裁決：忠實翻譯原則下不擋 commit，寫入記錄供未來安全性盤點參考。
+
+**主迴圈親自定案**（全新 `build_w906_uhgemmicro6_final`）：build exit 0、resolving/undefined reference=0、ctest **84/88**(同 4 既有環境漂移)、mojibake 0/7、確認無殘留 scratch 目錄留在 repo 根目錄。
+
+### 🔖 RESUME（最新）
+- **✅ 2026-07-21 六波連發完成**：SECSGEM Wave 1(`21900fd`，上日)+Wave 2「AlarmReportAck」(`4c2ec4c`)+uHGemHT9045 Bucket 0(`ee85c32`)+common.cpp wave-file 叢集(`38157cc`)+uHGemClass Micro5(`e6f03d3`)+uHGemClass Micro6(`33d4734`)，各附獨立審查+主迴圈五道閘+docs commit。**寫入佇列已清空**。`uHGemClass` 累計 48/57 已解(gated 57→**9**)。**下一波候選(尚無設計書，開工前先 recon)**：`uHGemClass.cpp` 剩 9 個(`S2F16`真循環依賴/`S2F24Sub`Trace子系統/`S2F32`需時鐘測試seam/`S7F20_CurrentEPPDData`/`S10F4`/`S10F6`/`S101F6`/`S101F8`各剩1個真阻塞/`SetECValue`獨立cast設計書)、SECSGEM 4 個獨立子系統(DoSpool/Trace/上下傳)+FormCreate SV 註冊、VCW-1/VCW-2 cast 波、DoDLRequest/DoULRequest 防護 seam、`SCK_ART.cpp` 剩餘協調債、或評估 `ht9045_globals`→`ht9045_core` link 擴大。中長期：FormsFacade/Handler free-func 前置波；W7 E0/M1/M2 HAL pump 群。
+- **驗證基準**：ctest 84/88(同 4 既有漂移)；`uHGemClass` gated 57→9。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 `fix/v899.32-pti`；工作樹另有無關 V899/config 殘留(PTI 案)勿圈入 V906 commit。
+- **執行模式**：使用者 2026-07-21 指示持續有效，本波為當日第六個連續波次，過程無真異常/疑問，未停下請示。
