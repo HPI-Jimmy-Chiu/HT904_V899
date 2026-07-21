@@ -405,6 +405,61 @@
 //  dynamic_cast cluster) -- unchanged from INTEGRATE WAVE 4's own list minus
 //  the 8 resolved this wave.
 //---------------------------------------------------------------------------
+//
+//  INTEGRATE WAVE 6 (AI(W906-uHGemClass-Micro5) 20260721) -- micro-slice #5 of
+//  the "remaining 15 gated methods" cluster: recipe-upload-listing +
+//  remote-recipe-checklist + EC-enable "StringGrid database"
+//  ---------------------------------------------------------------------------
+//  uHGemEquipment.h's THGem gained: TStringList *UploadFileString (new/delete
+//  lifecycle mirroring HTGem's own SecsAlarmMessage/FMessageList pair),
+//  THGemListBox *GemRemoteReceipeList (default-NULL/externally-assigned
+//  lifecycle mirroring TerminalMemoPtr -- reuses the EXISTING THGemListBox
+//  stand-in, already in use for SFCodeResponseList), and
+//  TStringGrid *sgSECSECData + WriteECEnableData/EnableDisableECData/
+//  EnableDisableECDataAll (a mechanical structural clone of the prior wave's
+//  own strGrdAlarm/WriteAlamData/EnableDisableAlarm/EnableDisableAlarmAll
+//  family, just for EC instead of Alarm). This resolves every remaining
+//  blocker for 4 of the 15 gated methods.
+//
+//  UN-GATED (4 more, 42->46/57 total now; 15->11 remaining-gated) -- golden
+//  SECSGEM/uHGemClass.cpp line ranges cited at each definition below:
+//    Process_S7F20_CurrentEPPIDData (:2191-2220), S101F2_CurrentEPPDData
+//    (:2456-2476), S101F4_CurrentEPPDData (:2482-2502),
+//    S125F2_EnableDisableECDataAcknowledge (:2643-2680).
+//
+//  MECHANICAL RENAME RULE (same golden-derived split as prior waves): every
+//  golden `HGemPtr->InitLocalHead/DataItemOut/SendLocalData/DataItemIn/
+//  GetDataItemLenAndType/GetDataItemLenAndTypeAndDelete` (wire-codec
+//  primitives) became `ActiveWire->...` -- including golden S125F2's OWN
+//  cosmetic mix of `HGemPtr->` and the bare global `HGem->` for these same
+//  primitives (both spellings unified to `ActiveWire->`, see that method's
+//  own comment); golden `HGemPtr->UploadFileString/GemRemoteReceipeList/
+//  SV_70_UNT1_ReceipeStruct/SV_71_ASCII_FilenameExtened/
+//  EnableDisableECDataAll/EnableDisableECData` (real THGem state/methods)
+//  stayed `HGemPtr->`, unchanged.
+//
+//  GOLDEN BUG DISCOVERED AND PRESERVED VERBATIM (same species as the
+//  already-documented S6F16/S6F18 InitLocalHead(6,16,0) copy-paste bug, see
+//  INTEGRATE WAVE 4's own note above): S101F4_CurrentEPPDData's BOTH the
+//  early-return path (golden :2487) and the success path (golden :2493) call
+//  InitLocalHead(101, 2, 0) -- the S101F2 header, never (101, 4, 0) -- an
+//  evident copy-paste artifact from S101F2_CurrentEPPDData immediately above
+//  it in golden. NOT corrected here; see that method's own inline comment.
+//
+//  STILL GATED (11 remain; unaffected by this wave's delta): S2F16 (needs
+//  THGem::SReceiveDataBackup + csystem predicates HasICUnderMachine()/
+//  HasAnyICInMachine() -- a new ht9045_secsgem->ht9045_sm link edge,
+//  deliberately out of scope; grep-confirmed among the "15" count above but
+//  not previously named in this file-head note's own prose), S2F24Sub (Trace
+//  member arrays), S2F32 (Borland dos.h clock), S6F24/S7F18/S7F20 (spool/
+//  upload/recipe subsystem members -- HTGem::S7F20_CurrentEPPDData, DISTINCT
+//  from Process_S7F20_CurrentEPPIDData resolved this wave), S10F4/S10F6
+//  (Terminal widget stand-ins), S101F6_StoreHostUploadFile/
+//  S101F8_StoreHostUploadFile (still need UpLoadPath/CurrentDirectory +
+//  bFinishDownloadFile, none in this wave's scope), SetECValue (VCL widget
+//  dynamic_cast cluster) -- unchanged from INTEGRATE WAVE 5's own list minus
+//  the 4 resolved this wave.
+//---------------------------------------------------------------------------
 
 #include "vclcompat/vcl_compat.h"
 #include "uHGemClass.h"
@@ -2309,10 +2364,46 @@ void HTGem::S7F20_CurrentEPPDData()
 #endif
 }
 //---------------------------------------------------------------------------
+// [S7,F20 -> Process] Current EPPID Data (incoming remote-recipe checklist).
+// AI(W906-uHGemClass-Micro5) 20260721 UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 2191-2220): sole recorded blockers were THGem's own TCheckListBox
+// GemRemoteReceipeList (now the THGemListBox stand-in, uHGemEquipment.h, this
+// same wave) + GetDataItemLenAndTypeAndDelete (already real, ActiveWire->).
+// `HGemPtr->GemRemoteReceipeList` (real THGem state) stays HGemPtr->;
+// `HGemPtr->GetDataItemLenAndTypeAndDelete`/`HGemPtr->DataItemIn` (wire
+// primitives) -> ActiveWire->, same mechanical-rename rule as every prior
+// integrate wave. GOLDEN NULL-GUARD preserved verbatim (golden :2196-2197):
+// if GemRemoteReceipeList==NULL, return immediately WITHOUT ever touching the
+// wire -- do NOT pre-allocate this pointer "helpfully"; that would silently
+// change behavior for any path relying on this short-circuit.
+//---------------------------------------------------------------------------
 void HTGem::Process_S7F20_CurrentEPPIDData()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs VCL TCheckListBox GemRemoteReceipeList + GetDataItemLenAndTypeAndDelete) -- golden SECSGEM/uHGemClass.cpp:2191-2220
-#endif
+    int count;
+    unsigned char Type;
+    char str[256];
+    if(HGemPtr->GemRemoteReceipeList==NULL)
+        return;
+
+    HGemPtr->GemRemoteReceipeList->Clear();
+
+    if(ActiveWire->GetDataItemLenAndTypeAndDelete(count, Type)==1)
+    {
+        if(Type==HType.LIST_TYPE)
+        {
+            for(int i=0; i<count; i++)
+            {
+                if(ActiveWire->DataItemIn(256, HType.ASCII_TYPE, str))
+                {
+                    HGemPtr->GemRemoteReceipeList->Items->Add(str);
+                }
+                else
+                {
+                    return;
+                }
+            }
+        }
+    }
 }
 //---------------------------------------------------------------------------
 // [S9,F1] Unrecognized Device ID.                                //Ifor 20260402
@@ -2416,18 +2507,75 @@ void HTGem::S100F4_ReportAllAlarm()
 //---------------------------------------------------------------------------
 // [S101,F2] Current EPPD Data (variant 1).
 //---------------------------------------------------------------------------
+// AI(W906-uHGemClass-Micro5) 20260721 UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 2456-2476): sole recorded blockers were THGem members SV_70_UNT1_ReceipeStruct
+// (already real)/UploadFileString/SV_71_ASCII_FilenameExtened (the latter two
+// added this wave, uHGemEquipment.h). `HGemPtr->SV_70_UNT1_ReceipeStruct/
+// UploadFileString/SV_71_ASCII_FilenameExtened` (real THGem state) stay
+// HGemPtr->; `HGemPtr->InitLocalHead/DataItemOut/SendLocalData` (wire
+// primitives) -> ActiveWire->, same mechanical-rename rule as every prior
+// integrate wave.
+//---------------------------------------------------------------------------
 void HTGem::S101F2_CurrentEPPDData()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem members SV_70_UNT1_ReceipeStruct/UploadFileString/SV_71_ASCII_FilenameExtened) -- golden SECSGEM/uHGemClass.cpp:2456-2476
-#endif
+    int count;
+    if(HGemPtr->SV_70_UNT1_ReceipeStruct!=1)
+    {
+        ActiveWire->InitLocalHead(101, 2, 0);
+        ActiveWire->DataItemOut(0, HType.LIST_TYPE, NULL);
+        ActiveWire->SendLocalData();
+        return;
+    }
+    count=HGemPtr->UploadFileString->Count;
+    ActiveWire->InitLocalHead(101, 2, 0);
+
+    ActiveWire->DataItemOut(2, HType.LIST_TYPE, NULL);
+    ActiveWire->DataItemOut(HType.ASCII_TYPE, HGemPtr->SV_71_ASCII_FilenameExtened);
+    ActiveWire->DataItemOut(count, HType.LIST_TYPE, NULL);
+    for(int i=0; i<count; i++)
+    {
+        ActiveWire->DataItemOut(HType.ASCII_TYPE, HGemPtr->UploadFileString->Strings[i]);
+    }
+    ActiveWire->SendLocalData();
 }
 //---------------------------------------------------------------------------
 // [S101,F4] Current EPPD Data (variant 2).
 //---------------------------------------------------------------------------
+// AI(W906-uHGemClass-Micro5) 20260721 UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 2482-2502): same blockers/resolution as S101F2_CurrentEPPDData immediately
+// above (SV_70_UNT1_ReceipeStruct/UploadFileString/SV_71_ASCII_FilenameExtened
+// stay HGemPtr->; wire -> ActiveWire->), just gated on
+// SV_70_UNT1_ReceipeStruct!=2 (variant 2) instead of !=1.
+// GOLDEN BUG DISCOVERED AND PRESERVED VERBATIM (same species as the
+// already-documented S6F16/S6F18 InitLocalHead(6,16,0) copy-paste bug, see
+// this file's own file-head note): BOTH the early-return path (golden :2487)
+// and the success path (golden :2493) call InitLocalHead(101, 2, 0) -- the
+// *S101F2* header, never (101, 4, 0). This function never emits its own
+// correct S,F header anywhere in golden; it is an evident copy-paste artifact
+// from S101F2_CurrentEPPDData immediately above it in golden. NOT corrected
+// here, per this project's faithful-translation mandate.
+//---------------------------------------------------------------------------
 void HTGem::S101F4_CurrentEPPDData()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem members SV_70_UNT1_ReceipeStruct/UploadFileString/SV_71_ASCII_FilenameExtened) -- golden SECSGEM/uHGemClass.cpp:2482-2502
-#endif
+    int count;
+    if(HGemPtr->SV_70_UNT1_ReceipeStruct!=2)
+    {
+        ActiveWire->InitLocalHead(101, 2, 0);   // GOLDEN BUG preserved verbatim: S101F2's header, never (101,4,0) -- see comment above
+        ActiveWire->DataItemOut(0, HType.LIST_TYPE, NULL);
+        ActiveWire->SendLocalData();
+        return;
+    }
+    count=HGemPtr->UploadFileString->Count;
+    ActiveWire->InitLocalHead(101, 2, 0);   // GOLDEN BUG preserved verbatim: same as above, not (101,4,0)
+
+    ActiveWire->DataItemOut(2, HType.LIST_TYPE, NULL);
+    ActiveWire->DataItemOut(HType.ASCII_TYPE, HGemPtr->SV_71_ASCII_FilenameExtened);
+    ActiveWire->DataItemOut(count, HType.LIST_TYPE,NULL);
+    for(int i=0; i<count; i++)
+    {
+        ActiveWire->DataItemOut(HType.ASCII_TYPE, HGemPtr->UploadFileString->Strings[i]);
+    }
+    ActiveWire->SendLocalData();
 }
 //---------------------------------------------------------------------------
 // AI(W906-SvEcDataItem) 20260720: UN-GATED (golden SECSGEM/uHGemClass.cpp:
@@ -2486,10 +2634,55 @@ void HTGem::S101F8_StoreHostUploadFile()
 //---------------------------------------------------------------------------
 // [S125,F2] Enable/Disable EC Data Acknowledge.                  //wei 20150630
 //---------------------------------------------------------------------------
-void HTGem::S125F2_EnableDisableECDataAcknowledge()
+// AI(W906-uHGemClass-Micro5) 20260721 UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 2643-2680): sole recorded blockers were GetDataItemLenAndTypeAndDelete
+// (already real, ActiveWire->) + THGem::EnableDisableECDataAll/
+// EnableDisableECData (added this wave, uHGemEquipment.h/.cpp). GOLDEN QUIRK
+// preserved verbatim: golden itself mixes `HGemPtr->` and the bare global
+// `HGem->` for wire-primitive calls within this ONE function (:2653/:2664 use
+// `HGem->`, everything else uses `HGemPtr->`) -- in real golden deployment
+// both point at the same live THGem instance, so this is cosmetic, not a
+// behavioral fork. Per this project's established mechanical-rename rule,
+// EVERY wire-primitive call (DataItemIn/GetDataItemLenAndType/
+// GetDataItemLenAndTypeAndDelete/LocalAcknowledge) -> ActiveWire->,
+// regardless of which of the two golden spellings it used;
+// `HGemPtr->EnableDisableECDataAll/EnableDisableECData` (real THGem methods)
+// stay HGemPtr->.
+//---------------------------------------------------------------------------
+void HTGem::S125F2_EnableDisableECDataAcknowledge()                             //wei 20150630
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs GetDataItemLenAndTypeAndDelete + THGem::EnableDisableECDataAll/EnableDisableECData) -- golden SECSGEM/uHGemClass.cpp:2643-2680
-#endif
+    unsigned char ALED, Type;
+    int len, SVLen;
+    AnsiString ID;
+
+    if(ActiveWire->DataItemIn(2, HType.LIST_TYPE ,NULL)==1)
+    {
+        if(ActiveWire->DataItemIn(1, HType.BINARY_TYPE, &ALED))
+        {
+            if(ActiveWire->GetDataItemLenAndTypeAndDelete(SVLen,Type)==1)
+            {
+                if(SVLen==0)
+                {
+                    HGemPtr->EnableDisableECDataAll(ALED);
+                    ActiveWire->LocalAcknowledge(125, 2, 0);
+                }
+                else
+                {
+                    for(int i=0; i<SVLen; i++)
+                    {
+                        ActiveWire->GetDataItemLenAndType(len, Type);           // gloss: "peek this item's length and format"
+                        ActiveWire->DataItemIn(len, Type, ID);
+                        if(HGemPtr->EnableDisableECData(ID, ALED))
+                            ActiveWire->LocalAcknowledge(125, 2, 0);
+                        else
+                            ActiveWire->LocalAcknowledge(125, 2, 1);
+                    }
+                }
+                return;
+            }
+        }
+    }
+    S9F7_IllegalData("S125,F1 Data Format error !!!");
 }
 //---------------------------------------------------------------------------
 // SetECValue -- writes an EC value out to *PtrSour by ECID's registered type.

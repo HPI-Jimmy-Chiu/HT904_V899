@@ -204,6 +204,7 @@ THGem::THGem()
       strGrdCEID(NULL),
       stdGridReportID(NULL),
       strGrdAlarm(NULL),
+      sgSECSECData(NULL),          // AI(W906-uHGemClass-Micro5) 20260721: allocated in ctor body below
       GemSystemPath(""),
       clientGem(NULL),
       srvGem(NULL),
@@ -313,6 +314,10 @@ THGem::THGem()
       GemBtnOnlineLocal(NULL),
       DB(NULL),                        // golden ctor :537
       TerminalMemoPtr(NULL),
+      // AI(W906-uHGemClass-Micro5) 20260721: default-NULL/externally-assigned
+      // idiom, same category as TerminalMemoPtr immediately above -- NOT
+      // allocated anywhere in this ctor (see its own header comment).
+      GemRemoteReceipeList(NULL),
       DefaultAddress(""),              // golden ctor :451
       DefaultPort(""),                 // golden ctor :452
       DefaultDeviceID(""),             // golden ctor :453
@@ -357,6 +362,15 @@ THGem::THGem()
       iTimeFormatDefault(0),           // golden never inits this either -- flagged deviation, see header note
       SV_70_UNT1_ReceipeStruct(0),
       SV_71_ASCII_FilenameExtened(""),
+      // AI(W906-uHGemClass-Micro5) 20260721: allocated for real in the ctor
+      // body below (mirrors HTGem's own SecsAlarmMessage/FMessageList
+      // new/delete lifecycle -- see UploadFileString's own header comment).
+      // Placed here, matching its DECLARATION position (right after
+      // SV_71_ASCII_FilenameExtened in the header) -- NOT next to
+      // TimeLeft/SFCodeResponseList above, despite the similar new/delete
+      // shape, to avoid a -Wreorder mismatch (member-init order must track
+      // declaration order, not "logical grouping").
+      UploadFileString(NULL),
       GemSpoolCountActual(0)
 {
     // AI(W906-SvEcDataItem) 20260720: szManID/szGetCPUType/GemSpoolStartTime
@@ -374,6 +388,10 @@ THGem::THGem()
         strGrdCEID      = new TStringGrid(258, 1025);
         stdGridReportID = new TStringGrid(1026, 257);
         strGrdAlarm     = new TStringGrid(12, 5);
+        // AI(W906-uHGemClass-Micro5) 20260721: sgSECSECData -- golden .dfm:
+        // 452-462 (ColCount=4, RowCount=1, FixedRows=0), see its own header
+        // comment.
+        sgSECSECData    = new TStringGrid(4, 1);
 
         // AI(W906-uHGemEquipment-BucketC) 20260717: D4 -- ALIASED into
         // WireCodec's own WaitShowString/LogDataString (WireCodec, a
@@ -501,6 +519,14 @@ THGem::THGem()
 
         SFCodeResponseList  = new THGemListBox();       // golden .h:138 (__published)
         TimeLeft            = new TStringList();        // golden ctor :584
+        // AI(W906-uHGemClass-Micro5) 20260721: UploadFileString -- golden ctor
+        // :567 (`UploadFileString=new TStringList;`, part of the SV/EC-cluster
+        // ctor block) -- mirrors HTGem's own SecsAlarmMessage/FMessageList
+        // new/delete lifecycle, see its own header comment.
+        UploadFileString    = new TStringList();
+        // GemRemoteReceipeList: default-NULL/externally-assigned (golden ctor
+        // :504 `GemRemoteReceipeList=NULL;`) -- deliberately NOT allocated
+        // here, same documentation idiom as EnableOrDisablePtr below.
         pLockOnSocketRecvice = new TFixedCriticalSection();   // golden ctor :668 (16.10.05.00 Roy Add)
         csSFCodeResponse     = new TCriticalSection();        // golden ctor :673 (20221111 Joseph (Jason))
         RecvMemoryBuffer     = new TMemoryStream();      // golden ctor :669
@@ -546,6 +572,7 @@ THGem::THGem()
         delete strGrdCEID;
         delete stdGridReportID;
         delete strGrdAlarm;
+        delete sgSECSECData;   // AI(W906-uHGemClass-Micro5) 20260721
         // AI(W906-uHGemEquipment-BucketC) 20260717: WaitShowString/
         // LogDataString are NO LONGER deleted here (D4 -- they are ALIASED
         // to WireCodec's own instances, not separately owned; see the
@@ -556,6 +583,7 @@ THGem::THGem()
         // deleting them here too would be a double-free.
         delete SFCodeResponseList;
         delete TimeLeft;
+        delete UploadFileString;   // AI(W906-uHGemClass-Micro5) 20260721
         delete pLockOnSocketRecvice;
         delete csSFCodeResponse;
         delete RecvMemoryBuffer;
@@ -609,6 +637,9 @@ THGem::~THGem()
     // EXTERNALLY assigned (never allocated by THGem, see each member's own
     // header comment) -- deliberately NOT deleted here, matching golden
     // semantics (THGem never owned them in the first place).
+    // AI(W906-uHGemClass-Micro5) 20260721: GemRemoteReceipeList joins this
+    // same EXTERNALLY-assigned category (see its own header comment) --
+    // deliberately NOT deleted here either.
     delete OnLineOrOffLine;
     delete RemoteOrLocal;
     delete rgRole;
@@ -633,6 +664,7 @@ THGem::~THGem()
     delete strGrdCEID;
     delete stdGridReportID;
     delete strGrdAlarm;
+    delete sgSECSECData;   // AI(W906-uHGemClass-Micro5) 20260721
     // AI(W906-uHGemEquipment-BucketC) 20260717: WaitShowString/LogDataString
     // are NO LONGER deleted here (D4 -- ALIASED to WireCodec's own instances,
     // see the ctor's own aliasing comment). WireCodec's own destructor (runs
@@ -661,6 +693,20 @@ THGem::~THGem()
     delete ProcBuffer;
     delete TempProcBuffer;
     delete[] EthernetBuffer;
+    // AI(W906-uHGemClass-Micro5) 20260721: UploadFileString -- lifecycle
+    // mirrors HTGem's own SecsAlarmMessage/FMessageList dtor pattern verbatim
+    // (uHGemClass.cpp ~HTGem(): NULL-guard, ->Clear() before delete, then
+    // reassign NULL), per this member's own header comment. NOT a deviation:
+    // golden's own ~THGem (uHGemEquipment.cpp:713/744, inside the SV/EC-
+    // cluster teardown) also Clears then deletes UploadFileString for real.
+    if (UploadFileString != NULL)
+    {
+        UploadFileString->Clear();
+        delete UploadFileString;
+    }
+    UploadFileString = NULL;
+    // GemRemoteReceipeList is NOT deleted here -- externally-assigned, see
+    // this destructor's own widget-ownership note above.
     // AI(W906-AlarmReportAck) 20260721: NOT a deviation, unlike the 7 pointers
     // above -- golden's OWN FormDestroy (uHGemEquipment.cpp:759-760,790-791)
     // deletes these same 4 members for real (this port's ctor/dtor pair
@@ -815,6 +861,56 @@ int THGem::GetAlarmIndex(AnsiString S)
         if (strGrdAlarm->Cells[8][y] == S)
             return y;
     return -1;
+}
+//------------------------------------------------------------------------------
+// AI(W906-uHGemClass-Micro5) 20260721: golden uHGemEquipment.cpp:9257-9302 --
+// EC-side siblings of the Alarm-grid family above (WriteAlamData/
+// EnableDisableAlarm/EnableDisableAlarmAll), a mechanical structural clone
+// against sgSECSECData instead of strGrdAlarm. Consumed by
+// HTGem::S125F2_EnableDisableECDataAcknowledge (uHGemClass.cpp, this same
+// wave).
+//------------------------------------------------------------------------------
+void THGem::WriteECEnableData()
+{
+    TStringList *memoPtr;
+    AnsiString Filename;
+
+    memoPtr = new TStringList;
+    CopyStringGridAsTabFormat(sgSECSECData, memoPtr);
+
+    Filename = IncludeTrailingPathDelimiter(GemSystemPath) + AnsiString("ECEnableData.def");
+    memoPtr->SaveToFile(Filename);
+
+    delete memoPtr;
+}
+//------------------------------------------------------------------------------
+bool THGem::EnableDisableECData(AnsiString ID, unsigned char T)
+{
+    for (int y = 1; y < sgSECSECData->RowCount; y++)
+    {
+        if (sgSECSECData->Cells[1][y] == ID)
+        {
+            if (T & 0x80)                                                    //Steven 20150603 : T&0x10 --> T&0x80
+                sgSECSECData->Cells[2][y] = "1";
+            else
+                sgSECSECData->Cells[2][y] = "0";
+            WriteECEnableData();
+            return true;
+        }
+    }
+    return false;
+}
+//------------------------------------------------------------------------------
+void THGem::EnableDisableECDataAll(unsigned char T)
+{
+    for (int y = 1; y < sgSECSECData->RowCount; y++)
+    {
+        if (T & 0x80)                                                        //Steven 20150603 : T&0x10 --> T&0x80
+            sgSECSECData->Cells[2][y] = "1";
+        else
+            sgSECSECData->Cells[2][y] = "0";
+    }
+    WriteECEnableData();
 }
 
 //===========================================================================

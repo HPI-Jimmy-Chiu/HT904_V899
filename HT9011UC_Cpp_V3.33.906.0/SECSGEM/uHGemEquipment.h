@@ -241,6 +241,30 @@
 //  here either, matching golden's own effectively-abstract state for it.
 //  See uHGemClass.cpp's own "INTEGRATE WAVE 5" note for the matching
 //  8-method un-gating on the HTGem side.
+//
+//  AI(W906-uHGemClass-Micro5) 20260721: EIGHTH wave -- uHGemClass.cpp
+//  "remaining 15 gated methods" cluster, micro-slice #5 (the last 4 of that
+//  cluster resolvable without a whole new subsystem: recipe-upload-listing +
+//  remote-recipe-checklist + EC-enable "StringGrid database"). Added:
+//    * TStringList *UploadFileString -- see that member's own comment above
+//      (mirrors HTGem's SecsAlarmMessage/FMessageList new/delete lifecycle,
+//      NOT the default-NULL idiom below).
+//    * THGemListBox *GemRemoteReceipeList -- see that member's own comment
+//      above (mirrors TerminalMemoPtr's default-NULL/externally-assigned
+//      idiom, NOT the new/delete idiom above -- the two members added this
+//      wave deliberately use OPPOSITE lifecycles, each matching its own
+//      golden precedent).
+//    * TStringGrid *sgSECSECData + WriteECEnableData/EnableDisableECData/
+//      EnableDisableECDataAll (golden uHGemEquipment.cpp:9257-9302) -- a
+//      mechanical structural clone of the SEVENTH wave's own strGrdAlarm/
+//      WriteAlamData/EnableDisableAlarm/EnableDisableAlarmAll family, just
+//      for EC instead of Alarm. GOLDEN COMMENT preserved verbatim in the
+//      .cpp (see EnableDisableECData/EnableDisableECDataAll's own citation):
+//      "Steven 20150603 : T&0x10 --> T&0x80".
+//  Consumed by HTGem::S101F2_CurrentEPPDData/S101F4_CurrentEPPDData/
+//  Process_S7F20_CurrentEPPIDData/S125F2_EnableDisableECDataAcknowledge
+//  (uHGemClass.cpp, this same wave) -- see that file's own "INTEGRATE WAVE 6"
+//  note for the matching 4-method un-gating on the HTGem side.
 //---------------------------------------------------------------------------
 #ifndef uHGemEquipmentH
 #define uHGemEquipmentH
@@ -521,6 +545,15 @@ public:
     TStringGrid *stdGridReportID;   // uHGemEquipment.dfm:406-415 (ColCount=1026, RowCount=257)
     TStringGrid *strGrdAlarm;       // uHGemEquipment.dfm:428-437 (ColCount=12,   RowCount=<default 5>)
 
+    // AI(W906-uHGemClass-Micro5) 20260721: sgSECSECData -- golden
+    // uHGemEquipment.h:155 (__published), .dfm:452-462 (ColCount=4, RowCount=1,
+    // FixedRows=0) -- the EC-side sibling of strGrdAlarm immediately above
+    // (same "StringGrid database" shape: col0=No./col1=ECID/col2=Enable(0/1)/
+    // col3=Function -- see golden uHGemEquipment.cpp:640-648, ReadECEnableData).
+    // Allocated (ctor) at its exact .dfm dimensions, same idiom as
+    // strGrdAlarm/strGrdCEID/stdGridReportID above.
+    TStringGrid *sgSECSECData;      // uHGemEquipment.dfm:452-462 (ColCount=4, RowCount=1)
+
     // AI(W906-AlarmReportAck) 20260721: temp CEID/ReportID staging lists
     // (golden uHGemEquipment.h:530-533) -- populated by HTGem::
     // S2F34_DefineReportAcknowledgeSub/S2F36_LinkEventReportAcknowledgeSub
@@ -760,6 +793,22 @@ public:
     THGemMemo *DB;                // golden :300 (externally assigned via out-of-scope SetDisplayPtr, default NULL)
     THGemMemo *TerminalMemoPtr;   // golden :677 (externally assigned, default NULL, always null-guarded at its call site)
 
+    // AI(W906-uHGemClass-Micro5) 20260721: GemRemoteReceipeList -- golden
+    // uHGemEquipment.h:414 (`TCheckListBox *GemRemoteReceipeList;`, plain
+    // `public:`, NOT __published) -- externally assigned, matching golden's
+    // own ctor :504 `GemRemoteReceipeList=NULL;` (right alongside
+    // `MoveCheckCallBack=NULL;` immediately above it there). Reuses the
+    // EXISTING THGemListBox stand-in (above, already used for
+    // SFCodeResponseList) -- its ->Items/->Clear() cover every field
+    // HTGem::Process_S7F20_CurrentEPPIDData (uHGemClass.cpp, this wave)
+    // touches. UNLIKE SFCodeResponseList (__published, ctor-allocated --
+    // golden .dfm-streamed before any real VCL form's ctor body runs), this
+    // one is NOT allocated here -- same default-NULL/externally-assigned
+    // idiom as TerminalMemoPtr immediately above (a caller/test must `new`
+    // one and assign it; Process_S7F20's own golden NULL-guard, preserved
+    // verbatim in uHGemClass.cpp, is what makes that safe).
+    THGemListBox *GemRemoteReceipeList;
+
     // golden AnsiString members (:524-526); read by InitialHGem as the
     // ReadIniData "DefaultValue" fallback for Address/Port/DeviceID when no
     // ini entry exists yet. Ctor-inited to "" (golden ctor :451-453).
@@ -840,6 +889,24 @@ public:
     int iTimeFormatDefault;                         // golden NEVER inits this either (see note above) -- flagged deviation
     int SV_70_UNT1_ReceipeStruct;                   // golden :707 (SV70)
     AnsiString SV_71_ASCII_FilenameExtened;         // golden :701 (SV71)
+
+    // AI(W906-uHGemClass-Micro5) 20260721: UploadFileString -- golden
+    // uHGemEquipment.h:675 (part of golden's SV/EC-cluster private members,
+    // ctor-allocated alongside SV_ID/EC_ID -- golden uHGemEquipment.cpp:567
+    // `UploadFileString=new TStringList;`, ~THGem :713/744 Clear()+delete).
+    // Added standalone here rather than folded into SvEcReg -- that embed
+    // (above) models the DISTINCT SV_ID/SV_TYPE/EC_ID/... registration-table
+    // cluster only (confirmed by reading SecsSvEcRegistration.h: no
+    // UploadFileString member there); this is a simple recipe/upload-filename
+    // staging list, populated by SetReceipeDirectoryAndGlobalName (still out
+    // of scope) and read by S101F2/S101F4/Process_S7F20's sibling S7F20 (all
+    // uHGemClass.cpp -- S101F2/S101F4 un-gated this wave). Lifecycle idiom
+    // deliberately mirrors HTGem's OWN SecsAlarmMessage/FMessageList pair
+    // (uHGemClass.h:104/242; uHGemClass.cpp ctor/dtor) -- `new`'d in THGem's
+    // ctor, `delete`d (NULL-guarded, ->Clear()'d first) in THGem's dtor -- see
+    // both .cpp definitions for the exact shape this mirrors.
+    TStringList *UploadFileString;
+
     int GemSpoolCountActual;                        // golden :196 (SV54)
     char GemSpoolStartTime[256];                    // golden :198 (SV57)
 
@@ -918,6 +985,19 @@ public:
     bool EnableDisableAlarm(AnsiString S, unsigned char T);       // golden :3337-3352
     void EnableDisableAlarmAll(unsigned char T);                  // golden :3354-3364
     int GetAlarmIndex(AnsiString S);                              // golden :3366-3372
+
+    // AI(W906-uHGemClass-Micro5) 20260721: EC-side siblings of the Alarm
+    // family above -- golden uHGemEquipment.cpp:9257-9302, a mechanical
+    // structural clone of WriteAlamData/EnableDisableAlarm/
+    // EnableDisableAlarmAll, just against sgSECSECData instead of
+    // strGrdAlarm (see that member's own comment above). golden's remaining
+    // 3 EC-file siblings -- ReadECEnableData/GetECEnableData/SetECEnableData,
+    // uHGemEquipment.cpp:9226-9253/9306-9334 -- are NOT added: no in-scope
+    // caller needs them (only HTGem::S125F2_EnableDisableECDataAcknowledge,
+    // this same wave, calls EnableDisableECData/EnableDisableECDataAll).
+    void WriteECEnableData();                                      // golden :9257-9269
+    bool EnableDisableECData(AnsiString ID, unsigned char T);      // golden :9273-9288
+    void EnableDisableECDataAll(unsigned char T);                  // golden :9292-9302
 
     // ==== SV/EC DataItem family (W906-SvEcDataItem 20260720) ================
     // golden uHGemEquipment.cpp:2472-3336 (SvEcReg-backed) + :7623-7688

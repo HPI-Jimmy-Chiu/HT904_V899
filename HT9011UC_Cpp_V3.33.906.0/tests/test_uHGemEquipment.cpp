@@ -3050,6 +3050,281 @@ static void test_w906_alarmreportack_e2e()
 }
 
 // ===========================================================================
+//  [W906-uHGemClass-Micro5] Real THGem-backed coverage for the 4
+//  uHGemClass.cpp methods un-gated this wave (see that file's own
+//  "INTEGRATE WAVE 6" note): Process_S7F20_CurrentEPPIDData/S101F2/S101F4/
+//  S125F2.
+//
+//  WIRING: same `THGem g; HTGem hgem; hgem.HGemPtr=&g; hgem.ActiveWire=
+//  &g.WireCodec;` pattern as test_w906_alarmreportack_e2e above.
+// ===========================================================================
+static void test_w906_uhgemclass_micro5_e2e()
+{
+    printf("\n[W906-uHGemClass-Micro5] Process_S7F20/S101F2/S101F4/S125F2 real THGem-backed coverage\n");
+
+    // -- S101F2_CurrentEPPDData: early-return path (SV_70_UNT1_ReceipeStruct
+    //    defaults to 0, so !=1) -> real empty-list reply on S,F==101,2 --
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.6.1", 6001);
+        g.srvGem->Open();
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+
+        hgem.S101F2_CurrentEPPDData();
+        const std::vector<char> &tx1 = conn->SimTxBuffer();
+        CHECK(tx1.size() >= 14, "M1: S101F2 early-return produced real bytes on the wire");
+        if (tx1.size() >= 14)
+            CHECK((unsigned char)tx1[6] == 101 && (unsigned char)tx1[7] == 2,
+                  "M1: early-return reply S,F == 101,2");
+
+        // -- success path: SV_70_UNT1_ReceipeStruct==1, real UploadFileString/
+        //    SV_71_ASCII_FilenameExtened content echoed back --
+        conn->SimClearTx();
+        g.SV_70_UNT1_ReceipeStruct = 1;
+        g.SV_71_ASCII_FilenameExtened = "RECIPE01.INI";
+        g.UploadFileString->Add("FILE_A.INI");
+        g.UploadFileString->Add("FILE_B.INI");
+
+        hgem.S101F2_CurrentEPPDData();
+        const std::vector<char> &tx2 = conn->SimTxBuffer();
+        CHECK(tx2.size() >= 14, "M2: S101F2 success path produced real bytes on the wire");
+        if (tx2.size() >= 14)
+            CHECK((unsigned char)tx2[6] == 101 && (unsigned char)tx2[7] == 2,
+                  "M2: success-path reply S,F == 101,2");
+        std::string body2(tx2.begin() + 14, tx2.end());
+        CHECK(body2.find("RECIPE01.INI") != std::string::npos,
+              "M2: reply payload carries SV_71_ASCII_FilenameExtened (\"RECIPE01.INI\")");
+        CHECK(body2.find("FILE_A.INI") != std::string::npos && body2.find("FILE_B.INI") != std::string::npos,
+              "M2: reply payload carries both UploadFileString entries");
+    }
+
+    // -- S101F4_CurrentEPPDData: early-return path (SV_70_UNT1_ReceipeStruct
+    //    defaults to 0, so !=2) -- GOLDEN BUG check: reply header is STILL
+    //    101,2 (S101F2's header), never its own 101,4. --
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.6.2", 6002);
+        g.srvGem->Open();
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+
+        hgem.S101F4_CurrentEPPDData();
+        const std::vector<char> &tx1 = conn->SimTxBuffer();
+        CHECK(tx1.size() >= 14, "M3: S101F4 early-return produced real bytes on the wire");
+        if (tx1.size() >= 14)
+            CHECK((unsigned char)tx1[6] == 101 && (unsigned char)tx1[7] == 2,
+                  "M3: GOLDEN BUG preserved -- early-return reply is S,F==101,2 (S101F2's header), never 101,4");
+
+        // -- success path: SV_70_UNT1_ReceipeStruct==2 -- header is STILL
+        //    101,2 (the same golden bug), but the BODY carries this call's
+        //    own real content. --
+        conn->SimClearTx();
+        g.SV_70_UNT1_ReceipeStruct = 2;
+        g.SV_71_ASCII_FilenameExtened = "RECIPE02.INI";
+        g.UploadFileString->Add("FILE_C.INI");
+
+        hgem.S101F4_CurrentEPPDData();
+        const std::vector<char> &tx2 = conn->SimTxBuffer();
+        CHECK(tx2.size() >= 14, "M4: S101F4 success path produced real bytes on the wire");
+        if (tx2.size() >= 14)
+            CHECK((unsigned char)tx2[6] == 101 && (unsigned char)tx2[7] == 2,
+                  "M4: GOLDEN BUG preserved -- success-path reply is ALSO S,F==101,2, never its own 101,4");
+        std::string body2(tx2.begin() + 14, tx2.end());
+        CHECK(body2.find("RECIPE02.INI") != std::string::npos,
+              "M4: reply payload carries SV_71_ASCII_FilenameExtened (\"RECIPE02.INI\")");
+        CHECK(body2.find("FILE_C.INI") != std::string::npos,
+              "M4: reply payload carries the UploadFileString entry");
+    }
+
+    // -- Process_S7F20_CurrentEPPIDData: golden NULL-guard -- when
+    //    GemRemoteReceipeList==NULL (its ctor default), the function must
+    //    return BEFORE ever touching the wire (no token consumed). --
+    {
+        THGem g;
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+        // g.GemRemoteReceipeList stays NULL here -- deliberately not allocated.
+
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        int countBefore = g.WireCodec.SReceiveData->Count;
+
+        bool threw = false;
+        try { hgem.Process_S7F20_CurrentEPPIDData(); } catch (...) { threw = true; }
+        CHECK(threw == false, "M5: Process_S7F20 with GemRemoteReceipeList==NULL does not throw/crash");
+        CHECK(g.WireCodec.SReceiveData->Count == countBefore,
+              "M5: NULL-guard returns before touching the wire (no token consumed)");
+    }
+    // -- Process_S7F20_CurrentEPPIDData: non-NULL path -- <L,2 <ASCII "AAA">
+    //    <ASCII "BBB">> populates GemRemoteReceipeList->Items in order. --
+    {
+        THGem g;
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+        g.GemRemoteReceipeList = new THGemListBox();
+
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(2));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(3));
+        g.WireCodec.SReceiveData->Add(AnsiString("AAA"));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(3));
+        g.WireCodec.SReceiveData->Add(AnsiString("BBB"));
+
+        hgem.Process_S7F20_CurrentEPPIDData();
+        CHECK(g.GemRemoteReceipeList->Items->Count == 2,
+              "M6: Process_S7F20 non-NULL path populates GemRemoteReceipeList with 2 items");
+        if (g.GemRemoteReceipeList->Items->Count == 2)
+        {
+            CHECK(g.GemRemoteReceipeList->Items->Strings[0] == "AAA", "M6: item[0] == \"AAA\"");
+            CHECK(g.GemRemoteReceipeList->Items->Strings[1] == "BBB", "M6: item[1] == \"BBB\"");
+        }
+
+        delete g.GemRemoteReceipeList;
+        g.GemRemoteReceipeList = NULL;
+    }
+
+    // -- S125F2_EnableDisableECDataAcknowledge: format-error path (empty
+    //    SReceiveData) -> real S9F7_IllegalData reply (S,F==9,7). --
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.6.3", 6003);
+        g.srvGem->Open();
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+
+        hgem.S125F2_EnableDisableECDataAcknowledge();
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() >= 14, "M7: S125F2 format-error path produced real bytes on the wire");
+        if (tx.size() >= 14)
+            CHECK((unsigned char)tx[6] == 9 && (unsigned char)tx[7] == 7,
+                  "M7: format-error path falls to S9F7_IllegalData (S,F==9,7)");
+    }
+    // -- S125F2: "all" branch (<L,2 <BINARY ALED=0x80(enable)> <L,0>>) --
+    //    real EnableDisableECDataAll side effect on sgSECSECData + scratch
+    //    WriteECEnableData file write + LocalAcknowledge(125,2,0). --
+    {
+        const AnsiString kScratchDir = "uHGemClass_micro5_test_scratch";
+        ForceDirectories(kScratchDir);
+
+        THGem g;
+        g.GemSystemPath = kScratchDir;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.6.4", 6004);
+        g.srvGem->Open();
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+
+        g.sgSECSECData->RowCount = 2;
+        g.sgSECSECData->Cells[1][1] = "100";
+        g.sgSECSECData->Cells[2][1] = "0";   // pre-seed disabled
+
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(2));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.BINARY_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString(0x80));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(0));
+
+        hgem.S125F2_EnableDisableECDataAcknowledge();
+        CHECK(g.sgSECSECData->Cells[2][1] == "1",
+              "M8: EnableDisableECDataAll flips sgSECSECData col2 to \"1\" (real HGemPtr-side effect)");
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() >= 14, "M8: S125F2 \"all\" branch produced real bytes on the wire");
+        if (tx.size() >= 14)
+        {
+            CHECK((unsigned char)tx[6] == 125 && (unsigned char)tx[7] == 2, "M8: reply S,F == 125,2");
+            CHECK((unsigned char)tx[tx.size() - 1] == 0x00, "M8: ack byte == 0x00 (accept)");
+        }
+        CHECK(FileExists(kScratchDir + "\\ECEnableData.def"),
+              "M8: EnableDisableECDataAll's WriteECEnableData wrote under the scratch folder (not production)");
+    }
+    // -- S125F2: single-ID branch, ID found -> EnableDisableECData flips the
+    //    matching row + LocalAcknowledge(125,2,0). --
+    {
+        const AnsiString kScratchDir = "uHGemClass_micro5_test_scratch";
+        ForceDirectories(kScratchDir);
+
+        THGem g;
+        g.GemSystemPath = kScratchDir;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.6.5", 6005);
+        g.srvGem->Open();
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+
+        g.sgSECSECData->RowCount = 2;
+        g.sgSECSECData->Cells[1][1] = "200";
+        g.sgSECSECData->Cells[2][1] = "0";
+
+        // <L,2 <BINARY ALED=0x80(enable)> <L,1 <ASCII "200">>>
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(2));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.BINARY_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString(0x80));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(3));
+        g.WireCodec.SReceiveData->Add(AnsiString("200"));
+
+        hgem.S125F2_EnableDisableECDataAcknowledge();
+        CHECK(g.sgSECSECData->Cells[2][1] == "1",
+              "M9: EnableDisableECData flips the matching row (ID \"200\" found)");
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() >= 14 && (unsigned char)tx[6] == 125 && (unsigned char)tx[7] == 2,
+              "M9: single-ID found -> real S125F2 reply (S,F == 125,2)");
+        if (tx.size() >= 14)
+            CHECK((unsigned char)tx[tx.size() - 1] == 0x00, "M9: ack byte == 0x00 (accept, ID found)");
+    }
+    // -- S125F2: single-ID branch, ID NOT found -> EnableDisableECData
+    //    returns false -> LocalAcknowledge(125,2,1) (reject). --
+    {
+        THGem g;
+        TCustomWinSocket *conn = g.srvGem->SimAcceptConnection("10.0.6.6", 6006);
+        g.srvGem->Open();
+        HTGem hgem;
+        hgem.HGemPtr = &g;
+        hgem.ActiveWire = &g.WireCodec;
+
+        g.sgSECSECData->RowCount = 2;
+        g.sgSECSECData->Cells[1][1] = "300";
+        g.sgSECSECData->Cells[2][1] = "0";
+
+        // <L,2 <BINARY ALED=0x80(enable)> <L,1 <ASCII "999">>> -- "999" is
+        // never registered -> not-found branch (no file write reached).
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(2));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.BINARY_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString(0x80));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(3));
+        g.WireCodec.SReceiveData->Add(AnsiString("999"));
+
+        hgem.S125F2_EnableDisableECDataAcknowledge();
+        CHECK(g.sgSECSECData->Cells[2][1] == "0",
+              "M10: unmatched ID leaves sgSECSECData untouched");
+        const std::vector<char> &tx = conn->SimTxBuffer();
+        CHECK(tx.size() >= 14 && (unsigned char)tx[6] == 125 && (unsigned char)tx[7] == 2,
+              "M10: single-ID not-found -> real S125F2 reply (S,F == 125,2)");
+        if (tx.size() >= 14)
+            CHECK((unsigned char)tx[tx.size() - 1] == 0x01, "M10: ack byte == 0x01 (reject, ID not found)");
+    }
+}
+
+// ===========================================================================
 //  [T10] Timer1Timer's IniConfig.bEnable_SECS_GEM==false branch (forced
 //  disconnect) + the SECSGEM_DoSeparateWait 5-second re-arm window.
 //
@@ -3277,6 +3552,11 @@ int main()
     // Timer1Timer at all (direct HTGem method calls only), so it needs
     // neither a TextLogSnapshot bracket nor special ordering vs [T10] below.
     test_w906_alarmreportack_e2e();
+
+    // W906-uHGemClass-Micro5: same posture as W906-AlarmReportAck immediately
+    // above -- direct HTGem method calls only, no socket pump/Timer1Timer, so
+    // no TextLogSnapshot bracket or special T10 ordering needed either.
+    test_w906_uhgemclass_micro5_e2e();
 
     test_timer1timer_disable_branch();
 
