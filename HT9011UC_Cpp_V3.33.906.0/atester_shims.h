@@ -30,6 +30,7 @@
 
 #include "vclcompat/vcl_compat.h"   // AnsiString
 #include "MachineType.h"            // MAX_SOCKET_ROW / MAX_SOCKET_COL
+#include <vector>                   // AI(W906-SaveTestSummarySECS) 20260721: TfObserverMemoLotSummaryLines::Strings
 
 // ===========================================================================
 //  atester_32Site.cpp -- AI(W5-Automation-Integrate) 20260710: ALL 10 symbols
@@ -245,6 +246,38 @@ extern TfAutomationShim *fAutomation;            // golden automation.h:151 (PAC
 struct TfObserverLabel { AnsiString Caption; };            // golden TLabel* (Caption only)
 struct TfObserverMemoLines0 { AnsiString Strings0; };      // golden TMemo*->Lines->Strings[0] (only index used)
 
+// -- AI(W906-SaveTestSummarySECS) 20260721: new sibling stand-in for a DIFFERENT golden TMemo* member
+//    than Memo1 above -- golden cObserver.h:339 `TMyMemo *memoLotSummary;`, dereferenced by
+//    Automation/SCK_ART_Remainder.cpp's SckArtRem_SaveTestSummarySECS as
+//    `fObserver->memoLotSummary->Lines=sList;` (golden SCK_ART.cpp:1965, a WHOLE-LIST assignment).
+//    Memo1Lines's {AnsiString Strings0;} shape above only supports a single-string PEEK
+//    (->Lines->Strings[0]) with no operator=(TStringList*) -- it cannot be reused verbatim for this
+//    DIFFERENT operation. Golden's real `TStrings::operator=(TPersistent*)` COPIES the source list's
+//    content into Lines; it does NOT take ownership of/alias the source pointer -- proven by golden
+//    itself, which calls `sList->Clear(); delete sList;` immediately after the assignment
+//    (SCK_ART.cpp:1967-1968), so the Memo must already hold its own independent copy. Modeled here as
+//    a small vector-backed COPY target with an `operator=(TStringList*)` that walks and copies
+//    `src->Strings[i]` for `i<src->Count` -- same spirit as the existing Count-only-memo idiom above,
+//    just shaped for a copy-assign instead of a read-only peek.
+struct TfObserverMemoLotSummaryLines
+{
+    std::vector<AnsiString> Strings;             // last-assigned COPY of golden Lines's content
+    TfObserverMemoLotSummaryLines &operator=(TStringList *src)
+    {
+        Strings.clear();
+        if(src!=0)
+        {
+            for(int i=0; i<src->Count; i++)
+                Strings.push_back(src->Strings[i]);
+        }
+        return *this;
+    }
+};
+struct TfObserverMemoLotSummary
+{
+    TfObserverMemoLotSummaryLines Lines;         // golden TMyMemo->Lines (TStrings*) -- whole-list-assign shape only
+};
+
 class TfObserverShim
 {
 public:
@@ -260,6 +293,8 @@ public:
     TfObserverMemoLines0 *Memo1Lines;                                   // golden cObserver.h (TMemo* Memo1)
     TfObserverLabel *labModel, *labPowerOnTime, *labRunningTime, *labProductTime,
                     *labLoadingCount, *labMUBA, *labMTBA;                // golden cObserver.h (TLabel*)
+    // -- AI(W906-SaveTestSummarySECS) 20260721: new member, see TfObserverMemoLotSummary above.
+    TfObserverMemoLotSummary *memoLotSummary;                           // golden cObserver.h:339 (TMyMemo* memoLotSummary)
     TfObserverShim();
 };
 extern TfObserverShim *fObserver;                // golden cObserver.h

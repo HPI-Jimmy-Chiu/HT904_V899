@@ -53,6 +53,7 @@
 #include "aHotPlateSubstrate.h"
 #include "FormsFacade.h"
 #include "common.h"     // ReadWriteIni/WriteIniData (direct, safe scratch-path seeding) + DataPath
+#include "atester_shims.h"   // AI(W906-SaveTestSummarySECS) 20260721: fObserver->memoLotSummary (PART 10)
 
 #include <cstdio>
 #include <cstdlib>
@@ -396,31 +397,45 @@ int main()
     }
 
     // =========================================================================================
-    // PART 8 -- SaveTestSummary -- golden :1619-1645 (dispatch logic only; all 4 callees gated, see
-    //   gate #7 -- deferred to next wave). Exercises all 4 branches; nothing externally observable
-    //   beyond "does not crash", since the callees are no-op stand-ins.
+    // PART 8 -- SaveTestSummary -- golden :1619-1645 (dispatch logic; 3 of 4 callees gated, see
+    //   gate #7 -- deferred to next wave). AI(W906-SaveTestSummarySECS) 20260721: the SECS branch now
+    //   calls the REAL SckArtRem_SaveTestSummarySECS -- asSummaryPath is redirected to a scratch dir
+    //   for the DURATION of this PART (never the real D:\HT9045_Log\Summary production path) so that
+    //   branch's real file-write does not touch anything outside the scratch sandbox. Deep coverage of
+    //   SaveTestSummarySECS's own behavior is PART 10 below; here we only confirm dispatch doesn't crash.
     // =========================================================================================
-    printf("\n-- SaveTestSummary (dispatch logic only -- callees deferred, gate #7) --\n");
+    printf("\n-- SaveTestSummary (dispatch logic; SECS branch now real, see PART 10) --\n");
     {
+        AnsiString savedSummaryPath8 = asSummaryPath;
+        asSummaryPath = ScratchDir() + "W906SaveTestSummaryDispatchScratch";
+
+        SckArtRemainderState st;
+        IniConfig.bSPILFunction = false;
+        IniConfig.bN17UploadLotSummary = false;
+        IniConfig.bA38_SLT_Summary = false;   // keep the ShellExecute-quirk branch OFF here -- PART 10 owns that
+        CosFunction.bUseTSVFunction = false;
+
         CosFunction.bSortingBy2DList = true;
         LastSet.iTester = _2D_SORT;
         TestIF_File.bSortingBy2DIDList = true;
-        SckArtRem_SaveTestSummary(1);
+        SckArtRem_SaveTestSummary(st, 1);
         CHECK(true, "2D-sort branch dispatches to (gated) Save2DSortingSummary without crashing (golden :1621-1626)");
 
         CosFunction.bSortingBy2DList = false;
         CosFunction.bART_SECSGEM_93K = true;
-        SckArtRem_SaveTestSummary(1);
-        CHECK(true, "SECS/93K branch dispatches to (gated) SaveTestSummarySECS without crashing (golden :1627-1630)");
+        SckArtRem_SaveTestSummary(st, 1);
+        CHECK(true, "SECS/93K branch dispatches to the now-REAL SckArtRem_SaveTestSummarySECS without crashing (golden :1627-1630; see PART 10 for deep coverage)");
 
         CosFunction.bART_SECSGEM_93K = false;
         TestIF_File.iTestType = TCP_IP_MODE;
-        SckArtRem_SaveTestSummary(1);
+        SckArtRem_SaveTestSummary(st, 1);
         CHECK(true, "TCP/IP branch dispatches to (gated) ProcessOSPrint+SaveTestSummaryTSV without crashing (golden :1631-1637)");
 
         TestIF_File.iTestType = 0;   // not TCP_IP_MODE
-        SckArtRem_SaveTestSummary(1);
+        SckArtRem_SaveTestSummary(st, 1);
         CHECK(true, "fallback branch dispatches to (gated) SaveSummaryTrayFeed+SaveTestSummaryTSV without crashing (golden :1638-1644)");
+
+        asSummaryPath = savedSummaryPath8;
     }
 
     // =========================================================================================
@@ -539,6 +554,136 @@ int main()
         }
 
         FTestSuck.SetItemData(0, 0, NULL_IC, 0);   // final cleanup: leave the shared global grid clean
+    }
+
+    // =========================================================================================
+    // PART 10 -- SaveTestSummarySECS -- golden :1647-2044. AI(W906-SaveTestSummarySECS) 20260721.
+    //   asSummaryPath is redirected to a scratch dir for the WHOLE part (never the real
+    //   D:\HT9045_Log\Summary production path -- restored at the end, same discipline as PART 1/3/3b's
+    //   DataPath save/restore). GetTimeInfo() is called once here BEFORE each real call so the test can
+    //   reconstruct the exact SystemYear/Month/Date/Hour/Min-stamped filename the function will use
+    //   (golden embeds these directly in FileName when bSPILFunction==false); any stale file from a
+    //   previous run inside the SAME wall-clock minute is proactively deleted first, so this test is
+    //   deterministic across repeated ctest invocations (not just "usually passes").
+    // =========================================================================================
+    printf("\n-- SaveTestSummarySECS --\n");
+    {
+        AnsiString savedSummaryPath = asSummaryPath;
+        asSummaryPath = ScratchDir() + "W906SaveTestSummarySECSScratch";
+
+        IniConfig.bSPILFunction = false;        // simplest FileName/header-block shape, unconditional SaveToFile (golden :1954-1964)
+        IniConfig.bN17UploadLotSummary = false; // THE quirk precondition: strFileName is NEVER assigned (golden :1970-2023 skipped)
+        IniConfig.bA38_SLT_Summary = true;      // needed for the ShellExecute-quirk branch (golden :2025)
+        CosFunction.bUseTSVFunction = false;    // isolate 10A-10C from the TSV tail (covered separately in 10D)
+
+        // Seed LotSummary so iUnloadCount>0 (TestSocket.iShtRow=2/iShtCol=1 by default -- see PART 9's
+        // own comment above -- so valid site indices are 0 and 1; bin 3 is an arbitrary in-range choice,
+        // 0<=3<iTestBinCount==16 default).
+        W5SckArtRem_LotSummary.iCountCategory[0][3] = 5;
+        W5SckArtRem_LotSummary.iTotalCategory[3] = 5;
+
+        // ---- 10A/10B/10C shared setup: one real call, several independent assertions on its effects ----
+        SckArtRemainderState st;
+        st.sLotID = "LOT-SECS-1";
+        st.sProcessCode = "";              // exercises the ""->"FT1" default (golden :1677-1678)
+        st.sInfo_Customer = "ACME";
+        st.sInfo_Stage = "FT1";
+        st.sInfo_Step = "1";
+        st.sInfo_ReportCnt = "1";
+        st.sInfo_CustLotID = "CUST-LOT-1";
+        st.sInfo_TesterID = "TESTER1";
+        st.sInfo_HandlerID = "HANDLER1";
+        st.sInfo_TestBinNo = "1:2";         // exercises StringReplace(":", "-", rfReplaceAll) -> "1-2"
+        st.sLotStartTime = "";              // exercises the RunInfo.LotStartTime fallback branch (golden :1788-1789)
+        RunInfo.LotStartTime = "2026-07-21 10:00:00";
+
+        GetTimeInfo();   // snapshot NOW into SystemYear/Month/Date/Hour/Min, to reconstruct the expected filename
+        AnsiString expectedFileName, expectedPathName2;
+        expectedFileName.sprintf("%s_%s_%s_%s_%s_%s_%s_%s_%04d%02d%02d%02d%02d.txt",
+                                  AnsiString("FT1"), AnsiString("1"), AnsiString("1"), AnsiString("CUST-LOT-1"),
+                                  AnsiString("LOT-SECS-1"), AnsiString("TESTER1"), AnsiString("HANDLER1"), AnsiString("1-2"),
+                                  SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin);
+        expectedPathName2.sprintf("%s\\%04d\\%02d\\", asSummaryPath, SystemYear, SystemMonth);
+        AnsiString expectedFullPath = expectedPathName2 + expectedFileName;
+        if (FileExists(expectedFullPath))
+            DeleteFile(expectedFullPath);   // idempotent cleanup -- see this PART's own header note
+
+        W5SckArtRem_LastShellExecuteOpenPath = "<unset>";   // reset gate #11's capture before the call
+
+        SckArtRem_SaveTestSummarySECS(st, /*iSaveData=*/1);
+
+        // ---- 10A: real file-write path, scratch dir only ----
+        CHECK(FileExists(expectedFullPath), "SaveTestSummarySECS(iSaveData=1) writes the summary .txt under the SCRATCH asSummaryPath (golden :1954-1964)");
+        CHECK(st.sProcessCode == "FT1", "sProcessCode==\"\" defaulted to \"FT1\" (golden :1677-1678)");
+
+        // ---- 10B: fObserver->memoLotSummary->Lines whole-list-assign (golden :1965) ----
+        bool foundCustomerLine = false;
+        for (size_t i = 0; i < fObserver->memoLotSummary->Lines.Strings.size(); ++i)
+            if (fObserver->memoLotSummary->Lines.Strings[i] == "CUSTOMER:ACME")
+                foundCustomerLine = true;
+        CHECK(fObserver->memoLotSummary->Lines.Strings.size() > 0, "fObserver->memoLotSummary->Lines captured a COPY of sList's content (golden :1965)");
+        CHECK(foundCustomerLine, "captured content includes the \"CUSTOMER:ACME\" header line built from st.sInfo_Customer");
+
+        // ---- 10C: the bN17UploadLotSummary-off "strFileName stays empty but ShellExecute still fires"
+        //   golden quirk (golden :1970/:2025-2027, this function's own header doc comment "Golden bug
+        //   preserved VERBATIM"). bA38_SLT_Summary==true + FileName!="" + iUnloadCount>0 (seeded above)
+        //   all hold, so gate #11's stand-in MUST have been invoked -- with an EMPTY path, because
+        //   strFileName was never assigned (bN17UploadLotSummary==false skipped that whole block).
+        CHECK(W5SckArtRem_LastShellExecuteOpenPath == "", "ShellExecute-open stand-in (gate #11) fired UNCONDITIONALLY with an EMPTY path -- the golden strFileName-can-be-empty quirk, preserved verbatim, not \"fixed\" to skip");
+
+        // ---- 10D: iSaveData==1 -> LotSummary.ClearAllData() actually zeroes the 2 extended fields
+        //   (golden :2041-2042; gate #5's [UPDATE] -- this macro is now real, not a no-op) ----
+        CHECK(W5SckArtRem_LotSummary.iCountCategory[0][3] == 0, "iSaveData==1 -> LotSummary.ClearAllData() zeroed iCountCategory[0][3] (golden :2042, gate #5 now real)");
+        CHECK(W5SckArtRem_LotSummary.iTotalCategory[3] == 0, "iSaveData==1 -> LotSummary.ClearAllData() zeroed iTotalCategory[3] (golden :2042, gate #5 now real)");
+
+        // ---- 10E: TSV-wait tail (golden :2030-2039) -- separate call, re-seed LotSummary (10D just
+        //   cleared it) so the file-write/ShellExecute path still runs the same way; only the NEW
+        //   CosFunction.bUseTSVFunction/IniConfig.bN09_LotCountAutoFunc gate differs from 10A-10C ----
+        {
+            W5SckArtRem_LotSummary.iCountCategory[0][3] = 5;
+            W5SckArtRem_LotSummary.iTotalCategory[3] = 5;
+            CosFunction.bUseTSVFunction = true;
+            IniConfig.bN09_LotCountAutoFunc = true;
+            IniConfig.dN09_SearchTime = 5.0;
+            bWaitTSV = false;
+
+            SckArtRemainderState st2 = st;
+            st2.sInfo_ReportCnt = "2";   // distinct filename from 10A-10D's, avoids the golden :1954 dedup-skip
+            SckArtRem_SaveTestSummarySECS(st2, /*iSaveData=*/1);
+
+            CHECK(bWaitTSV == true, "CosFunction.bUseTSVFunction && IniConfig.bN09_LotCountAutoFunc -> bWaitTSV=true (golden :2033, real global)");
+            CHECK(st2.bShowTSVMsg == false, "same branch -> st.bShowTSVMsg=false (golden :2034, new struct field)");
+            CHECK(st2.sTSVMsg == "", "same branch -> st.sTSVMsg=\"\" (golden :2035, new struct field)");
+            CosFunction.bUseTSVFunction = false;
+            IniConfig.bN09_LotCountAutoFunc = false;
+        }
+
+        // ---- 10F: iSaveData==0 -> early return BEFORE any file/list/ShellExecute work (golden
+        //   :1699-1700), even though GetTimeInfo()/PathName2/MyForceDirectories/FileName-building
+        //   (golden :1670-1697) already ran -- a DIFFERENT sInfo_ReportCnt keeps its (non-)existence
+        //   independently checkable from 10A-10E's file ----
+        {
+            W5SckArtRem_LastShellExecuteOpenPath = "<unset>";
+            SckArtRemainderState st3 = st;
+            st3.sInfo_ReportCnt = "3";
+            GetTimeInfo();
+            AnsiString fn3, path3;
+            fn3.sprintf("%s_%s_%s_%s_%s_%s_%s_%s_%04d%02d%02d%02d%02d.txt",
+                        AnsiString("FT1"), AnsiString("1"), AnsiString("3"), AnsiString("CUST-LOT-1"),
+                        AnsiString("LOT-SECS-1"), AnsiString("TESTER1"), AnsiString("HANDLER1"), AnsiString("1-2"),
+                        SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin);
+            path3.sprintf("%s\\%04d\\%02d\\", asSummaryPath, SystemYear, SystemMonth);
+            AnsiString fullPath3 = path3 + fn3;
+            if (FileExists(fullPath3))
+                DeleteFile(fullPath3);
+
+            SckArtRem_SaveTestSummarySECS(st3, /*iSaveData=*/0);
+
+            CHECK(FileExists(fullPath3) == false, "iSaveData==0 -> early return -> no file written (golden :1699-1700)");
+            CHECK(W5SckArtRem_LastShellExecuteOpenPath == "<unset>", "iSaveData==0 -> early return -> ShellExecute stand-in never reached either");
+        }
+
+        asSummaryPath = savedSummaryPath;
     }
 
     printf("\n=== %d PASS, %d FAIL (of %d) ===\n", g_pass, g_fail, g_pass + g_fail);
