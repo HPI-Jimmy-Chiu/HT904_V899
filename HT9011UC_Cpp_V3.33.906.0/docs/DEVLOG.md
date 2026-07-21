@@ -796,3 +796,27 @@ C 桶(`clientGemRead`/`ProcessSocketReceiveData`/`Timer1Timer`)是本檔案最�
 - **✅ SECSGEM Wave 1(`21900fd`)+Wave 2(`4c2ec4c`)+uHGemHT9045 Bucket 0(`ee85c32`)三波連發完成（2026-07-21）**。`uHGemClass` 累計 42/57 已解(gated 57→15)；`uHGemHT9045` 容器已真名落地，但 22 個 override+AddSV+AddEC(~9140 行)本體仍 0 翻，牆②③未解、Bucket 1-5 暫不可做。**下一波候選(尚無設計書，開工前先 recon)**：`uHGemClass.cpp` 剩 15 個 gated method、SECSGEM 4 個獨立子系統(DoSpool/Trace/上下傳)+FormCreate SV 註冊、**common.cpp 完成波(最高槓桿，解 GetLastOpenFN+S7F18+≥4 個下游 gate，只需既有 vclcompat 檔案 API)**、VCW-1/VCW-2 cast 波(需先讓 TStringList 入 TObject 樹)、S2F32 時鐘微波、DoDLRequest/DoULRequest 防護 seam(裁決：ctest 不起外部行程)、`SCK_ART.cpp` 剩餘協調債。中長期：FormsFacade/Handler free-func 前置波(解牆②③)→uHGemHT9045 Bucket 1-5；W7 E0/M1/M2 HAL pump 群。
 - **驗證基準**：ctest 83/87(同 4 既有漂移)；`uHGemClass` gated 57→15。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 `fix/v899.32-pti`；工作樹另有無關 V899/config 殘留(PTI 案)勿圈入 V906 commit。
 - **執行模式**：使用者 2026-07-21 指示「機械翻譯火力全開，除非異常/疑問/完成才停下」持續有效，本波起第三個連續波次，過程無真異常/疑問，未停下請示。
+
+---
+
+## 2026-07-21 — common.cpp「wave-file」叢集完成（6 函式解鎖 + 修正上一版 recon 誤判 + 2 個真 golden bug 發現）
+
+**設定聲明**：主迴圈 Sonnet 5 + xhigh；翻譯 Sonnet 5；獨立審查 Sonnet 5。
+
+**Recon 修正先前唯讀稽核的誇大宣稱**：`AUDIT_gated_inventory.md`(遠端稽核，本 session 不可見原文，僅信其結論作為線索)聲稱此叢集「解鎖 ≥5 個下游檔案，含 SECSGEM S7F18」。派 read-only agent 逐一直讀驗證，**結果修正**：S7F18 **不解鎖**(卡 `THGem::UpLoadPath` 缺成員 + `DeleteDirectory` 全樹未翻，兩者皆與 common.cpp 無關)；`BarCode_Bottom2DID8CCD.cpp` **本就能跑**(靠 `acatchtray.cpp` 既有 no-op stub，此波只是把它從 no-op 升級成真寫檔，非解鎖新功能)。真正、驗證過的解鎖＝`Automation/AGV_E84.cpp`(2 處)+`Automation/HANA_ART.cpp`(1 處)+`cpublic.cpp`(3 處可淨解，但另有架構阻塞，見下)。
+
+**交付**（commit `38157cc`，8 檔 +626/-62，新增 `tests/test_common.cpp`）：`common.cpp`/`.h` 解鎖 `WriteDataToFile`(2 多載)/`CheckFileIsEmpty`/`ReadDataFromFile`/`MyForceDirectories`/`GetLastOpenFN`/`WriteLastDataFN`(golden :1252-1721)。新增 `common.cpp` 本地 `static ShowMyMessage` no-op stub(比照既有 `RecordProcess` 前例，避免 `ht9045_core`→`ht9045_sm` 形成 CMake link cycle)。`WriteLastDataFN` 首跑分支用既有 `TStringList` idiom 替代 golden 的 `FileCreate`/`FileWrite`/`FileClose`(vclcompat 無此三支 shim，且 `LastDataPath` 全 golden 只有 `GetLastOpenFN` 一個讀者，功能等價)。**必要配套**：刪 `acatchtray.cpp` 既有全域 `WriteDataToFile` no-op stub(否則真本體解鎖後與之在最終連結期產生 multiple-definition 錯誤)；`cpublic.cpp` 3 處嘗試後**主動擱置**——實測發現 `ht9045_globals` library 未 link `ht9045_core`，多個測試 target 會斷鏈，留 gated 加註解說明(遵循「無法安全解就不要硬解」的既定紀律)。
+
+**兩個真 golden bug 發現(1 修 1 記錄)**：
+1. **翻譯期間自己引入又自己抓到並修正**：golden `WriteDataToFile` 的 `char*`(非 const)多載，在標準 C++ 下 `AnsiString::c_str()`(回傳 `const char*`)無法綁定該多載，靜默改綁 `AnsiString` 多載，而該多載的一行 forwarder 又呼叫自己→**無窮遞迴**(獨立審查以 gdb backtrace 21600+ 層佐證)。修正：該多載參數改 `const char*`(fopen/fputs 皆不改動字串內容，行為等價，非邏輯變更)。
+2. **`CheckFileIsEmpty` 語意與函式名相反**(記錄不改)：`bResult` 預設 `true`；只有「開檔成功且第一個 `fgetc` 立刻 `EOF`」才設 `false`。即：檔案不存在或非空皆回 `true`，只有「存在且真的是空檔」才回 `false`——與函式名字面意義相反。獨立審查逐行重新推導 golden 確認無誤，新測試斷言的是這個真實(反直覺)行為。
+3. **`ReadDataFromFile` text-mode CRLF bug**(記錄不改)：golden `fopen(...,"r")` 是文字模式，Windows CRLF→LF 轉換會讓實際讀到位元組數少於用 `ftell` 算出的檔案大小，任何含換行的檔案結尾會有未初始化垃圾位元組(在強制補的 NUL 之前)。新測試只斷言確定性前綴、不做全字串相等比對，以避開這段 UB。
+
+**獨立審查 CLEAN**（3 項高風險自報宣稱全部獨立重新推導確認屬實，非照單全收）：(1) 無窮遞迴成因與修法都獨立驗證正確；(2)/(3) 兩個 golden bug 都獨立逐行重讀 golden 確認邏輯正確；`ShowMyMessage` stub 簽章比對 golden 呼叫點皆吻合；`acatchtray.cpp` stub 刪除確認乾淨無殘留；`cpublic.cpp` 擱置理由查證屬實(且發現受影響 test target 比自報的還多，強化「不硬解」的判斷)；新測試全部限定 scratch 路徑；範圍紀律確認其餘所有 `wave-*` gated 區塊皆未被動到。
+
+**主迴圈親自定案**（全新 `build_w906_commonwavefile_final`）：build exit 0、resolving/undefined reference=0、ctest **84/88**(同 4 既有環境漂移——本波進一步查明成因＝本機真實 `system/{Mot_Table,IO_Table,Gerneral.ini}` 快照列數與測試硬編碼 oracle 不符[如 44 vs 期望 45 列 SMC]，屬環境漂移非回歸)、mojibake 0/7。
+
+### 🔖 RESUME（最新）
+- **✅ 2026-07-21 四波連發完成**：SECSGEM Wave 1(`21900fd`，上日)+Wave 2「AlarmReportAck」(`4c2ec4c`)+uHGemHT9045 Bucket 0(`ee85c32`)+common.cpp wave-file 叢集(`38157cc`)，各附獨立審查+主迴圈五道閘+docs commit。**寫入佇列已清空**。**下一波候選(尚無設計書，開工前先 recon)**：`uHGemClass.cpp` 剩 15 個 gated method、SECSGEM 4 個獨立子系統(DoSpool/Trace/上下傳)+FormCreate SV 註冊、VCW-1/VCW-2 cast 波、S2F32 時鐘微波、DoDLRequest/DoULRequest 防護 seam、`SCK_ART.cpp` 剩餘協調債、或評估 `ht9045_globals`→`ht9045_core` link 擴大(解 cpublic.cpp 3 處僅存阻塞)。中長期：FormsFacade/Handler free-func 前置波(解 uHGemHT9045 牆②③)；W7 E0/M1/M2 HAL pump 群。
+- **驗證基準**：ctest 84/88(同 4 既有漂移，成因已查明＝本機 system/ 快照列數漂移)；`uHGemClass` gated 57→15。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 `fix/v899.32-pti`；工作樹另有無關 V899/config 殘留(PTI 案)勿圈入 V906 commit。
+- **執行模式**：使用者 2026-07-21 指示持續有效，本波為當日第四個連續波次，過程無真異常/疑問，未停下請示。
