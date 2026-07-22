@@ -5800,6 +5800,16 @@ int iAOILotCount=0;
 bool bInArmLaserActionflag[2]={false, false};
 bool bOutArmLaserActionflag[2]={false, false};
 
+// AI(W906-cContactLeaf) 20260721: un-gated from the InitialMemory tail block below (was
+// collateral-gated there by the W0-TAIL "gate to EOF" sweep even though it is a plain global
+// definition with no state-machine/app-global dependency, same as bOutArmLaserActionflag above).
+// Needed live now: TfContactShim::IsRun2DCheck() (atester_shims.cpp) calls the real
+// ComputeIsRun2DCheck() (cContact.h/.cpp), which reads this global -- the declaration
+// (cmydef.h:5830 extern bool bRun2DCheck;) already existed, but its definition was unreachable
+// (link error) while gated. i2DMAPCHKSTEP (the next line in the gated block) is left gated;
+// nothing in this wave needs it.
+bool bRun2DCheck;                                                               //JerryYang 20250220 : 2DID硬體順序檢查功能
+
 //------------------------------------------------------------------------------
 //AI(W0-TAIL) 20260626: TODO(W6) -- InitialMemory/GetTotalYield_* reach state
 //  machines + app globals + TMyStringList bodies. Gated to EOF.
@@ -5921,7 +5931,6 @@ AnsiString GetTotalYield_Str()
     return AnsiString().sprintf("%02.2f%",GetTotalYield_double());
 }
 //------------------------------------------------------------------------------
-bool bRun2DCheck;                                                               //JerryYang 20250220 : 2DID硬體順序檢查功能
 int i2DMAPCHKSTEP;                                                              //JerryYang 20250220 : 2DID硬體順序檢查功能
 
 int iBundleDieQty=0;                                                            //JerryYang 20250224 : add

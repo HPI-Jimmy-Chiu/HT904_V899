@@ -23,6 +23,9 @@
 #include "cprod.h"
 // AI(W5-Automation-Integrate) 20260710: TMyKitSuck (CheckTestSuckICOn stand-in below).
 #include "aHotPlateSubstrate.h"
+// AI(W906-cContactLeaf) 20260721: ComputeIsRun2DCheck (real TfContact::IsRun2DCheck body,
+// translated as a free function) for the TfContactShim::IsRun2DCheck() wire-up below.
+#include "cContact.h"
 
 // ===========================================================================
 //  csystem.h cross-module predicates referenced ONLY by the tester/index engine
@@ -235,7 +238,23 @@ bool DoBRTCAutoModelVerify(bool /*bInitial*/){ return true; }
 // ---- fContact (offline contact-mode form) ----------------------------------
 TfContactShim::TfContactShim() : fShow(false) {}
 bool TfContactShim::Do_ROILearning() { return true; }   // offline: ROI learning "done"
-bool TfContactShim::IsRun2DCheck()   { return false; }  // W6.2b1x1: offline -> not running 2DID re-check
+// AI(W906-cContactLeaf) 20260721: was a hardcoded `return false;` stub (W6.2b1x1 note, now
+// superseded).  Swapped in the real golden predicate (TfContact::IsRun2DCheck, cContact.cpp:
+// 21203-21219, translated as ComputeIsRun2DCheck in cContact.h/.cpp) over the real globals it
+// reads.  Checked this wave: bRun2DCheck (cmydef.h:5830) has no ASSIGNMENT anywhere in the
+// translated tree yet -- only its own zero-init definition (cmydef.cpp:5811, un-gated this same
+// wave; see the AI(W906-cContactLeaf) comment there) -- so this still evaluates to `false` under
+// every reachable state today, identical to the old stub; see cContact.h's ComputeIsRun2DCheck
+// banner for the full call-site risk check.
+bool TfContactShim::IsRun2DCheck()
+{
+    return ComputeIsRun2DCheck(IniConfig.bF33_Check2DHardware,
+                                BAR_CODE_INSTALL,
+                                TestIF_File.bEnableBarCode,
+                                InArmSuck.iShtRow,
+                                iContactMode,
+                                bRun2DCheck);
+}
 TfContactShim *fContact = new TfContactShim();
 
 // ---- ADAM_* EP DAQ (offline: no DAQ card) ----------------------------------
