@@ -149,8 +149,13 @@ void Do_Auto_SHT1AsOutArmIsRotater() {}                    // golden acarry.h de
 //   - iCloseSiteStep_2x8: 0 offline (2x8 close-site geometry baseline).
 // ---------------------------------------------------------------------------
 bool  MoveOutArmToAutoSafe()                       { return true; }   // golden aoutarm.h:52
-DWORD MySleepEx(DWORD /*dwMilliseconds*/, bool /*bAlertable*/) { return 0; } // golden common.h:260
-void  MySleep(DWORD /*dwMilliseconds*/)            {}                 // golden common.h:261
+// AI(W906-CommonCompletion) 20260721: MySleepEx/MySleep stand-in DEFINITIONS
+// REMOVED -- common.cpp now provides the real bodies (golden common.h:260-261
+// un-gated this wave), and this file's own header (acarry_shims.h:230-232)
+// already declares these with the exact same signature, citing "golden
+// common.h:260/261" -- so removing just the definitions here needs zero
+// caller changes; the real common.cpp definitions now satisfy every caller
+// that previously linked against these offline stand-ins.
 bool  SystemNG = false;                            // golden main-side global
 //AI(W6.2c-INARM-batch4) 20260626: the placeholder DEFINITION of iCloseSiteStep_2x8
 // (was =0) was REMOVED -- ainarm9045_2x8_8.cpp now owns the REAL def (=0, golden

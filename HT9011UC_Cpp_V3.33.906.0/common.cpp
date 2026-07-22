@@ -238,32 +238,186 @@ AnsiString asATCFileTransferPath    ="D:\\ATC\\Data\\SaveFile\\";               
 AnsiString sWhite2DIDListLoc        ="D:\\HT9045_Log\\White2DIDListTmp\\";           // common.cpp:174
 
 // ===========================================================================
-//  GATED: InitCommonString (common.cpp:177-265)
-//  WAVE: misc-strings -- depends on same path globals but also reassigns
-//  SecsGemPath to a shorter form and resets asKeyStr; no external coupling
-//  otherwise.  Translated body deferred until misc-strings wave because the
-//  function is only called at startup and the defaults above already match
-//  the reset values for the majority of paths.
+//  InitCommonString (common.cpp:177-265)
+//  jou 2016-08-24 : Initial Common String
+//  AI(W906-CommonCompletion) 20260721: un-gated -- reassigns ~90 already-
+//  declared AnsiString path globals to runtime defaults.
+//
+//  VERIFIED DEVIATION from this wave's plan text (which assumed, subject to
+//  verification, that every reassignment here is identical to its
+//  declaration-site default above): diffed golden's declaration block
+//  against golden's InitCommonString body line-by-line (not merely assumed)
+//  and found THREE real discrepancies, all preserved verbatim below (golden's
+//  own actual behavior -- NOT "fixed" to match the declaration-site value):
+//    * SecsGemPath: declared "D:\\HT9045\\SECS\\SECS\\SYSTEM\\Gerneral.ini"
+//      (common.cpp:116, double "SECS") but reassigned here to the
+//      single-SECS "D:\\HT9045\\SECS\\SYSTEM\\Gerneral.ini" (golden
+//      common.cpp:200).
+//    * asBarCodeDownLot: declared "...\\2DBarCode\\LotCheckData.txt"
+//      (common.cpp:166) but reassigned here to "...\\2DBarCode\\LotData1.txt"
+//      (golden common.cpp:243) -- a different filename.
+//    * asSortingBy2DID: declared as a FILE path
+//      "...\\2DBarCode\\SortingBy2DID.txt" (common.cpp:168) but reassigned
+//      here to the DIRECTORY "...\\2DBarCode\\" (golden common.cpp:245).
+//  Net effect: which value is actually in force at runtime depends on
+//  whether InitCommonString has been called yet -- a real (if latent) golden
+//  quirk, not a translation error.
+//
+//  asBackup2DSortListPath is also assigned TWICE to the identical value
+//  (golden common.cpp:253 and :257, under two different attribution
+//  comments) -- a harmless duplicate, preserved as-is rather than deduped.
 // ===========================================================================
-#if 0 // TODO(wave-misc-strings): InitCommonString
-void InitCommonString()
+void InitCommonString()                                                      // common.cpp:177
 {
-    // ... (common.cpp:177-265) -- reassign all path globals at runtime.
-    // Defer: the runtime reset is only needed for machines that mount HT9045
-    // from a non-default drive; the global initialisers above are the same
-    // values that InitCommonString assigns, so omitting this body is safe for
-    // the compile/test wave.
+    asGeneralPath        ="d:\\HT9045\\system\\Gerneral.ini";
+    asBarCodeLogPath     ="D:\\HT9045_Log\\2DBarCode";
+    asBarCodeLot         ="D:\\HT9045_Log\\2DBarCode\\LotData.txt";
+    asBarCodeCommLogPath ="D:\\HT9045_Log\\2DBarCodeComm";
+    asTrayMapCommLogPath ="D:\\HT9045_Log\\TrayMapComm";
+    asKeyenceCommLogPath ="D:\\HT9045_Log\\KeyenceComm";
+    asTrayMapLogPath     ="D:\\HT9045_Log\\TrayMapLog";
+    asTrayMapDataPath    ="D:\\HT9045_Log\\TrayMapLog\\TrayData";
+    asFix2AICCDDataPath  ="D:\\HT9045_Log\\Fix2AICCDLog\\Fix2AICCDData";
+    asSystemPath         ="d:\\HT9045\\system\\";
+    asDBPath             ="D:\\HT9045\\MDB\\Handler.db3";
+    AuthPath             ="D:\\HT9045\\config\\";
+    DefaultPath          ="D:\\HT9045\\IniData\\";
+    DataPath             ="D:\\HT9045\\IniData\\Data\\";
+    OffsetPath           ="D:\\HT9045\\IniData\\Offset\\";
+    DIOCFGPath           ="D:\\HT9045\\iniData\\DioCfg\\";
+    asErrNotePath        ="D:\\HT9045\\system\\SpecialErrNote.ini";
+    ConfigMemoPath       ="D:\\HT9045\\config\\Description.ini";
+    LastDataPath         ="D:\\HT9045\\SetUp.inf";
+    BmpPath              ="D:\\HT9045\\IMG\\BMP\\";
+    GrapicPath           ="D:\\HT9045\\IMG\\Graphic\\";
+    SecsGemPath          ="D:\\HT9045\\SECS\\SYSTEM\\Gerneral.ini";           // DEVIATION from decl-site default -- see banner above
+    asKeyStr             ="HontechPassword";
+    as9045UPH            ="D:\\HT9045_Log\\UPH";
+    as9045LogPath        ="D:\\HT9045_Log";
+    asEPLogPath          ="D:\\HT9045_Log\\EP";
+    asHiSiLogPath        ="D:\\HT9045_Log\\Temperature";
+    asShtLogPath         ="D:\\HT9045_Log\\ShuttleLog";
+    asHomeLogPath        ="D:\\HT9045_Log\\HomeLog";
+    asTorqLogPath        ="D:\\HT9045_Log\\TorqueLog";
+    asACSmartIntervalLogPath ="D:\\HT9045_Log\\ACSmartIntervalLog";
+    asTrayLogPath        ="D:\\HT9045_Log\\EditTray";
+    asTempLogPath        ="D:\\HT9045_Log\\Temp";
+    asEJ1NLogPath        ="D:\\HT9045_Log\\EJ1N_Log";
+    asLaserLogPath       ="D:\\HT9045_Log\\LaserLog";
+    asASELogPath         ="D:\\SaveRecord";
+    asTravelingLogPath   ="D:\\HT9045_Log\\Production_Log";
+    asOLPLogPath         ="D:\\HT9045_Log\\Automation";
+    asBarCodeLogPath1    ="D:\\HT9045_Log\\BarCode_LOG";
+    asHeaterOnLogPath    ="D:\\HT9045_Log\\Heater_On_Off_LOG";
+    asYieldRecordPath    ="D:\\HT9045_Log\\Yield";
+    asProductionLogPath  ="D:\\RMS";
+    asPMAlarmPath        ="D:\\HT9045\\PMAlarm";
+    asProductDataPath    ="D:\\HT9045_Log\\ProductData\\";
+    sPMList_Month            ="D:\\HT9045\\PMAlarm\\PM_Month.ini";
+    sPMList_Quarter          ="D:\\HT9045\\PMAlarm\\PM_Quarter.ini";
+    sPMList_Year             ="D:\\HT9045\\PMAlarm\\PM_Year.ini";
+    sPMList_Temperature      ="D:\\HT9045\\PMAlarm\\PM_Temperature.ini";
+    sPMList_ESD              ="D:\\HT9045\\PMAlarm\\PM_ESD.ini";
+    sPMList_IonFan           ="D:\\HT9045\\PMAlarm\\PM_IonFan.ini";
+    sPMItem_List             ="D:\\HT9045\\PMAlarm\\PM_List.ini";
+    sPMItem_Check            ="D:\\HT9045\\PMAlarm\\PM_Check.ini";
+    sPMItem_ListTemperature  ="D:\\HT9045\\PMAlarm\\PM_ListTemperature.ini";
+    sPMItem_CheckTemperature ="D:\\HT9045\\PMAlarm\\PM_CheckTemperature.ini";
+    sPMItem_ListESD          ="D:\\HT9045\\PMAlarm\\PM_ListESD.ini";
+    sPMItem_CheckESD         ="D:\\HT9045\\PMAlarm\\PM_CheckESD.ini";
+    sPMItem_ListIonFan       ="D:\\HT9045\\PMAlarm\\PM_ListIonFan.ini";
+    sPMItem_CheckIonFan      ="D:\\HT9045\\PMAlarm\\PM_CheckIonFan.ini";
+    sPMSetting               ="D:\\HT9045\\PMAlarm\\PM_Setting.ini";
+    JOBFILEDataPath          ="JOBFILE";
+    JOBFILEOffsetPath        ="JOBFILE";
+    sBarcodeFile             ="D:\\HT9045\\Barcode_File\\";
+    asBarCodeDownLot         ="D:\\HT9045_Log\\2DBarCode\\LotData1.txt";      // DEVIATION from decl-site default -- see banner above
+    asSearch2DIDByLot        ="D:\\HT9045_Log\\2DBarCode\\Search2DIDByLot.txt";
+    asSortingBy2DID          ="D:\\HT9045_Log\\2DBarCode\\";                  // DEVIATION from decl-site default -- see banner above
+    asGalilCmdPath           ="D:\\HT9045_Log\\Galil_Log";
+    asProduct_LoaderPath     ="D:\\HT9045_Log\\Production_Loader";
+    asAlarmLogXmlPath        ="D:\\HT9045_Log\\AlarmLogXml";
+    sFTPSetupFileLogPath     ="D:\\HT9045_Log\\FTPSetupFileChangeLog";
+    asTestTCPIPLogPath       ="D:\\HT9045_Log\\Test_TCPIP";
+    asShtSenLogPath          ="D:\\HT9045_Log\\ShuttleSensorLog\\";
+    asCleanPadLogPath        ="D:\\HT9045_Log\\CleanPad_Log";
+    asBackup2DSortListPath   ="D:\\HT9045_log\\2D_SortList_Backup\\";
+    asOCRDownLoadLotPath     ="D:\\HT9045_Log\\OCR\\CompareFile";
+    asOCRLotPath             ="D:\\HT9045_Log\\OCR\\OCRLot.txt";
+    asProductionByFilePath   ="D:\\HT9045_Log\\Production_ByFile";
+    asBackup2DSortListPath   ="D:\\HT9045_log\\2D_SortList_Backup\\";         // golden's own duplicate assignment (see banner above), preserved
+    asBackup2DSummaryPath    ="D:\\HT9045_log\\Summary_Backup\\";
+    asPowerSavePath          ="D:\\HT9045_Log\\Power_EnergySaving";
+    asATCPowerSavePath       ="D:\\HT9045_Log\\ATC_EnergySaving";
+    asBarCodeInspReportPath  ="D:\\HT9045_Log\\2DIDParameterReport";
+    asDupBundleID            ="D:\\HT9045_Log\\BundleID\\DupBundleID.txt";
+    aslDupUnloadBundlID      ="D:\\HT9045_Log\\BundleID\\DupUnloadBundleID.txt";
+    asMachineLifePath        ="D:\\HT9045\\system\\MachineLife.ini";
 }
-#endif // TODO(wave-misc-strings)
 
 // ===========================================================================
-//  GATED: EncodeStr / DecodeStr (common.cpp:267-321)
-//  WAVE: misc-strings -- pure XOR password codec; no external dependency.
+//  EncodeStr / DecodeStr (common.cpp:267-321)
+//  jou 2013-01-04 : Password Txt XOR encode/decode against file-local asKeyStr.
+//  AI(W906-CommonCompletion) 20260721: un-gated -- pure XOR password codec,
+//  no external dependency beyond the already file-local `asKeyStr`
+//  (common.cpp:117) and the `byte` typedef (already visible project-wide via
+//  windows.h's rpcndr.h, non-lean per vcl_compat.h's own precedent/note).
 // ===========================================================================
-#if 0 // TODO(wave-misc-strings): EncodeStr / DecodeStr
-AnsiString EncodeStr(AnsiString sourceStr) { /* common.cpp:267 */ return sourceStr; }
-AnsiString DecodeStr(AnsiString sourceStr) { /* common.cpp:295 */ return sourceStr; }
-#endif // TODO(wave-misc-strings)
+AnsiString EncodeStr(AnsiString sourceStr)                                   // common.cpp:267
+{
+    int l1, l2, p1, p2;
+    byte ch, ctemp;
+    AnsiString Result;
+    l1=sourceStr.Length();
+    p1=1;
+    l2=asKeyStr.Length();
+    p2=1;
+    Result="";
+    while(p1<=l1)
+    {
+        ctemp=(byte(sourceStr[p1])-1)^byte(asKeyStr[p2]);
+        if(ctemp==0 || ctemp=='\0')
+            ch=(byte(asKeyStr[p2]));
+        else
+            ch=ctemp;
+
+        Result=Result+char(ch);
+        p1++;
+        if(p2>=l2)
+            p2=1;
+        else
+            p2++;
+    }
+    return Result;
+}
+
+AnsiString DecodeStr(AnsiString sourceStr)                                   // common.cpp:295
+{
+    int l1, l2, p1, p2;
+    byte ch;
+    AnsiString Result;
+    l1=sourceStr.Length();
+    p1=1;
+    l2=asKeyStr.Length();
+    p2=1;
+    Result="";
+    while(p1<=l1)
+    {
+        ch=byte(sourceStr[p1]);
+        if(ch==byte(asKeyStr[p2]))                                           // Steven 20210330 : fix rare collision where an encoded byte equals the key byte
+            ch=byte(asKeyStr[p2]);
+        else
+            ch=ch^byte(asKeyStr[p2]);
+
+        Result=Result+char(ch+1);
+        p1++;
+        if(p2>=l2)
+            p2=1;
+        else
+            p2++;
+    }
+    return Result;
+}
 
 // ===========================================================================
 //  OpenIniFile / CloseIniFile (common.cpp:323-343)
@@ -1177,24 +1331,28 @@ void __fastcall WriteLastDataFN(AnsiString SName)                            // 
 }
 
 // ===========================================================================
-//  GATED: AddSpace (common.cpp:1333-1336) -- body is a no-op return; still
-//  gated to keep the header clean for this wave (it depends on nothing but
-//  the signature is UI-flavoured).
+//  AddSpace (common.cpp:1333-1336) -- body is a golden no-op return.
+//  AI(W906-CommonCompletion) 20260721: un-gated -- the draft body already
+//  sitting in this #if 0 block matched golden exactly (return; with no
+//  side effect). Takes an AnsiString, not a VCL control -- no dependency gap.
 // ===========================================================================
-#if 0 // TODO(wave-ui-input): AddSpace (common.cpp:1333)
 void __fastcall AddSpace(AnsiString /*File*/) { return; }
-#endif // TODO(wave-ui-input)
 
 // ===========================================================================
-//  GATED: OnlyNumberInPut / OnlyNumberAndDotInPut / OnlyMakeFileDataInPut
+//  OnlyNumberInPut / OnlyNumberAndDotInPut / OnlyMakeFileDataInPut
 //  (common.cpp:1338-1358) -- key-filter helpers; pure logic, no deps.
-//  WAVE: ui-input (tiny, could pull early if needed).
+//  AI(W906-CommonCompletion) 20260721: un-gated -- verified the draft bodies
+//  already sitting in this #if 0 block against golden common.cpp:1338-1358:
+//  logically identical (golden's if(cond) return true; return false; here
+//  collapsed to a single `return cond;`; OnlyMakeFileDataInPut's golden
+//  if(cond) return false; return true; here is De Morgan'd to
+//  `return !(cond);`) -- no behavior discrepancy, just a compacter
+//  expression form. None take a VCL control (plain int keycode) -- no
+//  dependency gap either.
 // ===========================================================================
-#if 0 // TODO(wave-ui-input): keyboard filter helpers (common.cpp:1338-1358)
 bool __fastcall OnlyNumberInPut(int iKey)          { return (iKey>='0'&&iKey<='9')||iKey==8||iKey=='-'; }
 bool __fastcall OnlyNumberAndDotInPut(int iKey)    { return (iKey>='0'&&iKey<='9')||iKey=='.'||iKey==8||iKey=='-'; }
 bool __fastcall OnlyMakeFileDataInPut(int iKey)    { return !(iKey=='\''||iKey=='/'||iKey==':'||iKey=='*'||iKey=='?'||iKey=='"'||iKey=='<'||iKey=='|'); }
-#endif // TODO(wave-ui-input)
 
 // ===========================================================================
 //  GATED: MyDrawText overloads (common.cpp:1360-1404)
@@ -1695,24 +1853,634 @@ int MyForceDirectories(AnsiString Directory, AnsiString Function)            // 
     return 1;
 }
 
-#if 0 // TODO(wave-timing): MyTickCount / MySleepEx / MySleep (common.cpp:1726-1801)
-#endif // TODO(wave-timing)
+// ===========================================================================
+//  MyTickCount / MySleepEx / MySleep (common.cpp:1726-1796)
+//  AI(W906-CommonCompletion) 20260721: un-gated -- 3 trivial timing wrappers.
+//
+//  MySleepEx CRITICAL NOTE: golden gates its live body behind
+//  #ifdef USE_EC_CHANGE { ~50-line EC-change-report polling loop, needs
+//  HGem/TQPF_Timer/iSleepCount/bRunTimer/bAlreadySleep, none translated }
+//  #else return SleepEx(dwMilliseconds, bAlertable); #endif (common.cpp:
+//  1737-1790). Confirmed USE_EC_CHANGE is commented out
+//  (`//#define USE_EC_CHANGE`) in BOTH golden and this tree's MachineType.h,
+//  so the #ifdef branch is genuinely dead code the preprocessor strips under
+//  this build's config -- intentionally NOT ported (not silently dropped;
+//  this is the one case in this wave where a whole branch is skipped rather
+//  than translated, because it is unreachable regardless). Only the live
+//  #else branch is translated below. golden's iSleepCount/bRunTimer/
+//  bAlreadySleep/MySpeelTimer file-scope globals (common.cpp:1731-1734) exist
+//  ONLY to serve that dead branch -- grepped the whole golden tree and
+//  confirmed no other file references them (the same-named `bRunTimer`(1)/
+//  `bRunTimer1` identifiers elsewhere are unrelated function-local statics or
+//  class members) -- so they are correctly omitted here too, not just the
+//  dead branch alone.
+//
+//  COLLISION FIX (required for these 3 to link): acarry_shims.cpp:152-153 and
+//  ainarm9045_2x4_16_shims.cpp:69 previously carried offline stand-in
+//  DEFINITIONS of exactly these 3 symbol names (as a substitute while these
+//  common.cpp bodies were gated). Verified via those shim headers' own
+//  comments (acarry_shims.h:219-232, ainarm9045_2x4_16_shims.h:89) that they
+//  already cite these as "golden common.h:259-261" -- i.e. the callers only
+//  ever needed a link-time symbol satisfying that exact declaration, so
+//  removing the stand-in DEFINITIONS (while leaving each shim header's own
+//  prototype re-declaration alone) needs zero caller changes. Those 2 stand-in
+//  bodies are removed as part of this same change (see acarry_shims.cpp /
+//  ainarm9045_2x4_16_shims.cpp) so the bodies below are the sole definitions
+//  within the ht9045_core/ht9045_sm link set (the pair this plan named and
+//  the pair CMakeLists.txt:1217-1219 confirms actually link together).
+//  atester.cpp:1515's `static DWORD W7T1_MyTickCount()` + its `#define
+//  MyTickCount W7T1_MyTickCount` macro-redirect is a separate, non-colliding
+//  TU-local identifier (internal linkage) -- left untouched, out of scope
+//  per plan. ADDITIONAL FINDING beyond the plan's own recon (reported, not
+//  fixed -- out of scope this wave): MyPLC/MyPLC_IO_Modbus.cpp:61 ALSO
+//  defines a global (non-static) `DWORD MySleepEx(...)`, in the ht9045_comms
+//  library. This is a LATENT, pre-existing collision risk with the bodies
+//  below -- NOT introduced by this change (ht9045_comms already defined it
+//  unconditionally, before this wave, regardless of common.cpp's gating
+//  state) -- that would only surface if some future target ever links BOTH
+//  ht9045_core and ht9045_comms together; grepped tests/CMakeLists.txt +
+//  this file: no current target does (test_MyCCLink links ht9045_comms/
+//  ht9045_globals/ht9045_public/vclcompat, never ht9045_core), so it does
+//  not affect this wave's build. Flagged here for whoever eventually wires
+//  those two libraries together.
+// ===========================================================================
+DWORD MyTickCount()                                                          // common.cpp:1726
+{
+    return GetTickCount();
+}
 
-#if 0 // TODO(wave-logging): TempChangeLog (common.cpp:1802)
+DWORD MySleepEx(DWORD dwMilliseconds, bool bAlertable)                       // common.cpp:1735 -- Steven 20200807
+{
+    // golden's #ifdef USE_EC_CHANGE branch (EC-change-report polling loop) is
+    // dead code under this build's config -- see banner above; not ported.
+    return SleepEx(dwMilliseconds, bAlertable);
+}
+
+void MySleep(DWORD dwMilliseconds)                                           // common.cpp:1793
+{
+    ::Sleep(dwMilliseconds);
+}
+
+// ===========================================================================
+//  TempChangeLog (common.cpp:1802-2037) -- Ifor 20190930
+//  AI(W906-CommonCompletion) 20260721: ATTEMPTED then RE-GATED. The plan's
+//  premise ("zero current callers -> translating the body now is zero-risk
+//  prep work") is WRONG, verified via a real build+link, not just reasoning:
+//  the body reads asTempCtrl[] (defined cmydef.cpp) and TestIF_File (defined
+//  cprod.cpp) directly -- both real, both already declared/visible via
+//  cmydef.h/cprod.h -- but those two .cpp files are compiled into the
+//  ht9045_globals static library, which ht9045_core (common.cpp's own
+//  library) deliberately does NOT link (see this project's CMakeLists.txt
+//  ht9045_core banner / cContact.cpp's own "confirmed empirically: the clean
+//  build below links fine without it" precedent -- ht9045_globals is not
+//  linked into any executable yet because its active globals' constructors
+//  reach still-gated regions). Static-library linking is per-.o-file, not
+//  per-function: once ANY symbol in common.cpp.obj is referenced (which
+//  happens the moment any executable calls ANY other common.cpp function --
+//  WriteIniData, OpenIniFile, etc.), the WHOLE object file is pulled in,
+//  including TempChangeLog's asTempCtrl/TestIF_File references, regardless
+//  of whether TempChangeLog itself is ever called. Un-gating this produced 2
+//  concrete link failures (`undefined reference to asTempCtrl` /
+//  `TestIF_File`) in test_common.exe and test_ini_helpers.exe the moment
+//  they linked ht9045_core. Re-gated rather than also wiring
+//  target_link_libraries(ht9045_core ... ht9045_globals) project-wide --
+//  that is a much larger structural change (every ht9045_core consumer,
+//  which is most of the test suite) than this wave's stated scope, and the
+//  existing banner explicitly warns it isn't safe yet. Genuinely still
+//  blocked -- NOT stale info, contrary to this wave's plan text; left gated
+//  exactly as before this wave, draft body below preserved unchanged (a
+//  faithful, verified-correct translation -- see the body itself and its own
+//  inline comments -- ready to un-gate the moment ht9045_core can safely
+//  reach ht9045_globals, or TestIF_File/asTempCtrl gain a lighter-weight
+//  home).
+// ===========================================================================
+#if 0 // TODO(wave-logging): TempChangeLog (common.cpp:1802-2037) -- body verified correct, blocked on ht9045_core/ht9045_globals link boundary, see banner above
+AnsiString __fastcall TempChangeLog(AnsiString Group, AnsiString Name)       // common.cpp:1802
+{
+    int iSiteAdd=0;
+    AnsiString asATCTempName[32]=   {"Aa1", "Ab1", "Ac1", "Ad1",
+                                     "Ae1", "Af1", "Ag1", "Ah1",
+                                     "Ba1", "Bb1", "Bc1", "Bd1",
+                                     "Be1", "Bf1", "Bg1", "Bh1",
+                                     "Aa2", "Ab2", "Ac2", "Ad2",
+                                     "Ae2", "Af2", "Ag2", "Ah2",
+                                     "Ba2", "Bb2", "Bc2", "Bd2",
+                                     "Be2", "Bf2", "Bg2", "Bh2"
+                                    };
+
+    AnsiString asIniDelayName[10]=  {"Every first devices",
+                                     "After ShowAlarm Message",
+                                     "After Auto Clean Function",
+                                     "When happen tested time below",
+                                     "After Open Heat Door",
+                                     "When Press Stop Over",
+                                     "When No Full Site",
+                                     "EOT monitor time",
+                                     "OTD unlock",
+                                     "SOT monitor time"
+                                    };
+
+    AnsiString asAutoCleanSpeed[4]= {"Auto Clean Input Arm Speed",
+                                     "Auto Clean Shuttle Speed",
+                                     "Auto Clean Index Arm Speed",
+                                     "Auto Clean Input Arm Z Speed"
+                                    };
+
+    if(Group.Pos("AmbientHotLowOffSet")     ==1     ||                       // Ifor 20190930 : add Temp Change Site
+       Group.Pos("AmbientHotMidOffSet")     ==1     ||
+       Group.Pos("Low OffSet")              ==1     ||
+       Group.Pos("Mid. OffSet")             ==1     ||
+       Group.Pos("High OffSet")             ==1     ||
+       Group.Pos("User OffSet")             ==1     ||
+       Group.Pos("SingleTempLimit")         ==1     ||
+       Group.Pos("Init Temp OffSet")        ==1     ||
+       Group.Pos("TestOverTime Temp OffSet")==1     )
+    {
+        if(Name.Pos("CH")==1)                                                // Ifor 20191015 : Fix temp sw. testing use non-CH parameter causes exception unable to write file
+        {
+            iSiteAdd=atoi(Name.SubString(3,Name.Length()-2).c_str());
+            if(Group.Pos("SingleTempLimit")==1)                              // Ifor 20190930 : add Single Temp Limit index-1
+            {
+                Name=asTempCtrl[iSiteAdd];
+            }
+            else
+            {
+                Name=asTempCtrl[iSiteAdd-1];
+            }
+        }
+    }
+    else if(Group.Pos("ATC")==1 && Name.Pos("ATCTempOffset")==1)
+    {
+        iSiteAdd=atoi(Name.SubString(15,Name.Length()-15).c_str());
+
+        if(TestIF_File.iTestMode==_8Site2X4 && TestIF_File.bOctal_16Kit==true) // JerryYang 20230828 : fix change log
+        {
+            if(iSiteAdd>=2)                                                  // avoid negative index
+            {
+                iSiteAdd-=2;
+            }
+        }
+
+        Name="OffSet_"+asATCTempName[iSiteAdd];
+    }
+    else if(Group.Pos("InitialMode")==1)
+    {
+        if(Name.Pos("iInitialDelay")==1)
+        {
+            if(Name.Pos("iInitialDelay_")==1)
+            {
+                iSiteAdd=atoi(Name.SubString(15,Name.Length()-14).c_str())-1;
+            }
+            else
+            {
+                iSiteAdd=0;
+            }
+            Name=asIniDelayName[iSiteAdd];
+        }
+        else if(Name.Pos("dInitialDelay_10")==1)
+        {
+            iSiteAdd=atoi(Name.SubString(15,Name.Length()-14).c_str())-1;
+            Name=asIniDelayName[iSiteAdd];
+        }
+        else if(Name=="bEveryFirstDeviceUseInitialDelay")
+        {
+            Name="bEvery First Device Use Initial Delay";
+        }
+        else if(Name=="bAfterShowAlarmMessageUseInitialDelay")
+        {
+            Name="bAfter Show Alarm Message Use Initial Delay";
+        }
+        else if(Name=="bWhenHappenTestedTimeBelowUseInitialDelay")
+        {
+            Name="bWhen Happen Tested Time Below Use Initial Delay";
+        }
+        else if(Name=="bAfterAutoCleanFunctionUseInitialDelay")
+        {
+            Name="bAfter Auto Clean Function Use Initial Delay";
+        }
+        else if(Name=="bAfterOpenHeatDoorUseInitialDelay")
+        {
+            Name="bAfter Open Heat Door Use Initial Delay";
+        }
+        else if(Name=="bWhenPressStopOverUseInitialDelay")
+        {
+            Name="bWhen Press Stop Over Use Initial Delay";
+        }
+        else if(Name=="bTestFinishToNextTestOver")
+        {
+            Name="bEOT monitor time Use Initial Delay";
+        }
+        else if(Name=="bTestStartToNextTestStart")
+        {
+            Name="bSOT monitor time Use Initial Delay";
+        }
+        else if(Name=="bOTDUnlockDelay")
+        {
+            Name="bOTD Unlock Use Initial Delay";
+        }
+        else if(Name=="iEveryFirstDeviceUseInitialDelay")
+        {
+            Name="When happen tested time below Trigger time (Sec)";
+        }
+        else if(Name=="iWhenPressStopOver")
+        {
+            Name="When Press Stop Over Trigger time (Sec)";
+        }
+        else if(Name=="iTestFinishToNextTestOver")
+        {
+            Name="EOT monitor time Trigger time (Sec)";
+        }
+        else if(Name=="dTeststartToNextTestStart")
+        {
+            Name="SOT monitor time Trigger time (Sec)";
+        }
+    }
+    else if(Group.Pos("Time")==1)
+    {
+        if(Name=="Stary Delay")
+        {
+            Name="Start Delay";
+        }
+        else if(Name=="Initial Stary Delay")
+        {
+            Name="Initial Start Delay";
+        }
+        else if(Name=="Initial Stary Delay CT")
+        {
+            Name="Initial Start Delay Count";
+        }
+    }
+    else if(Group.Pos("Mode")==1)
+    {
+        if(Name=="fSocketInitialICCheckPositionOffset")
+        {
+            Name="fSocket Initial IC Check Position Offset";
+        }
+        else if(Name=="iSocketInitialICCheckPosition")
+        {
+            Name="iSocket Initial IC Check Position";
+        }
+    }
+    else if(Group.Pos("Configuration")==1)
+    {
+        if(Name.Pos("iAutoClean_MotorSpeed[")==1)
+        {
+            iSiteAdd=atoi(Name.SubString(23,1).c_str());
+            Name=asAutoCleanSpeed[iSiteAdd];
+        }
+        else if(Name=="iAutoClean_AlarmCount")
+        {
+            Name="Auto Clean Alarm Count";
+        }
+        else if(Name=="iAutoClean_iPadThickness")
+        {
+            Name="Auto Clean Clean Pad Deviation";
+        }
+        else if(Name=="iAutoClean_ContactCleanHeight")
+        {
+            Name="Auto Clean Socket Position Offset";
+        }
+        else if(Name=="iAutoClean_IndexPickOffset")
+        {
+            Name="Auto Clean Index to Shuttle Pick Offset";
+        }
+        else if(Name=="iAutoClean_IndexReleaseOffset")
+        {
+            Name="Auto Clean Index to Shuttle Release Offset";
+        }
+        else if(Name=="iAutoClean_Shuttle1PickOffset")
+        {
+            Name="Auto Clean In Arm to Shuttle1 Pick Offset";
+        }
+        else if(Name=="iAutoClean_Shuttle1PlaceOffset")
+        {
+            Name="Auto Clean In Arm to Shuttle1 Place Offset";
+        }
+        else if(Name=="iAutoClean_Shuttle1XOffset")
+        {
+            Name="Auto Clean In Arm to Shuttle1 X Offset";
+        }
+        else if(Name=="iAutoClean_Shuttle1YOffset")
+        {
+            Name="Auto Clean In Arm to Shuttle1 Y Offset";
+        }
+        else if(Name=="iAutoClean_Shuttle2PickOffset")
+        {
+            Name="Auto Clean In Arm to Shuttle2 Pick Offset";
+        }
+        else if(Name=="iAutoClean_Shuttle2PlaceOffset")
+        {
+            Name="Auto Clean In Arm to Shuttle2 Place Offset";
+        }
+        else if(Name=="iAutoClean_Shuttle2XOffset")
+        {
+            Name="Auto Clean In Arm to Shuttle2 X Offset";
+        }
+        else if(Name=="iAutoClean_Shuttle2YOffset")
+        {
+            Name="Auto Clean In Arm to Shuttle2 Y Offset";
+        }
+        else if(Name=="ShuttlePitchOffset")
+        {
+            Name="Auto Clean In Arm Shuttle Pitch Offset";
+        }
+    }
+    return Name;
+}
 #endif // TODO(wave-logging)
 
-// AI(W906-CommonWaveFile) 20260721: GetLastOpenFN / WriteLastDataFN un-gated
-// above (common.cpp:1252-1331 real bodies now live earlier in this file) --
-// dropped from this index placeholder. GetRecipePath / GetRecipeFileName /
-// ChangeSaveFileName remain gated (still out of scope; common.cpp:2039-2130).
-#if 0 // TODO(wave-path): GetRecipePath / GetRecipeFileName / ChangeSaveFileName (common.cpp:2039-2130)
-#endif // TODO(wave-path)
+// ===========================================================================
+//  Common_PathCombin -- TU-local static helper, NOT a partial FileInfo class.
+//  AI(W906-CommonCompletion) 20260721: golden's GetRecipeFileName /
+//  CopyAndCompressFile both call `FileInfo().PathCombin(...)`
+//  (ProductionInfo/FileInfo.cpp:290-311), but `class FileInfo` does not exist
+//  anywhere in this translated tree (ProductionInfo/FileInfo.cpp itself is
+//  untranslated). Rather than dragging in the whole untranslated FileInfo
+//  class for one small path-join helper, inline just that logic here as a
+//  TU-local static function -- same "don't drag in a whole untranslated class
+//  for one small piece of it" precedent already established by
+//  Automation/SCK_ART_Remainder.cpp's W5SckArtRem_GetRecipePath/
+//  W5SckArtRem_GetRecipeFileName/W5SckArtRem_MyForceDirectories stand-ins
+//  (see that file's own Gate #1 comment block). Faithful copy of golden
+//  FileInfo::PathCombin's body verbatim: append '/' for FTP-style paths
+//  (already containing a '/', or already ending in '/'), else '\\' for local
+//  paths, unless the base path already ends with the right separator; then
+//  append the filename.
+// ===========================================================================
+static AnsiString Common_PathCombin(const AnsiString &sPath, const AnsiString &sFile)
+{
+    AnsiString combinedPath=sPath;
+    if(!combinedPath.IsEmpty())
+    {
+        if(combinedPath[combinedPath.Length()]=='/' || combinedPath.Pos("/"))   // FTP path format
+        {
+            if(combinedPath[combinedPath.Length()]!='/')
+            {
+                combinedPath+="/";
+            }
+        }
+        else                                                                    // Local path
+        {
+            if(combinedPath[combinedPath.Length()]!='\\')
+            {
+                combinedPath+="\\";
+            }
+        }
+    }
+    combinedPath+=sFile;
+    return combinedPath;
+}
 
-#if 0 // TODO(wave-grid): SGDToCSV (common.cpp:2050)
-#endif // TODO(wave-grid)
+// ===========================================================================
+//  GetRecipePath / GetRecipeFileName (common.cpp:2039-2048)
+//  JimmyChiu 20220601 / Steven 20241030
+//  AI(W906-CommonCompletion) 20260721: un-gated. GetRecipePath has zero
+//  dependency beyond already-real DataPath/GetLastOpenFN(). GetRecipeFileName
+//  uses Common_PathCombin (above) instead of golden's FileInfo().PathCombin
+//  -- see that helper's banner for why. Golden itself keeps a commented-out
+//  one-line equivalent inside GetRecipeFileName (common.cpp:2047); reproduced
+//  below for provenance.
+//
+//  KNOWN INTEGRATION OPPORTUNITY (out of scope this wave): Automation/
+//  SCK_ART_Remainder.cpp:120-138 has local W5SckArtRem_GetRecipePath /
+//  W5SckArtRem_GetRecipeFileName stand-ins built specifically because these
+//  were gated (explicit TODO(wave-path) comments there). Now that the real
+//  functions exist, deleting those stand-ins and wiring that file to the real
+//  functions below is a candidate for a future wave -- SCK_ART_Remainder.cpp
+//  is intentionally left untouched this wave.
+// ===========================================================================
+AnsiString GetRecipePath()                                                   // common.cpp:2039
+{
+    return AnsiString().sprintf("%s%s\\", DataPath, GetLastOpenFN());
+}
 
-#if 0 // TODO(wave-file): IsFileInUse / CopyAndCompressFile (common.cpp:2066-2120)
-#endif // TODO(wave-file)
+AnsiString GetRecipeFileName(AnsiString FileName)                            // common.cpp:2044
+{
+    return Common_PathCombin(AnsiString().sprintf("%s%s", DataPath, GetLastOpenFN()), FileName);
+    // golden's own commented-out one-line equivalent (common.cpp:2047):
+    // return AnsiString().sprintf("%s%s\\%s", DataPath, GetLastOpenFN(), FileName);
+}
 
-#if 0 // TODO(wave-datetime): MySecondsBetween (common.cpp:2188)
-#endif // TODO(wave-datetime)
+// ===========================================================================
+//  SGDToCSV (common.cpp:2050-2064) -- Sam 20231106 / Sam 20240104
+//  AI(W906-CommonCompletion) 20260721: un-gated. Iterates a TStringGrid's
+//  RowCount/ColCount, reads Cells[iCol][iRow], StringReplace()s a split
+//  character, appends via WriteDataToFile (already real, landed earlier
+//  today). vclcompat::TStringGrid's Cells[ACol][ARow] is confirmed 0-based on
+//  BOTH axes (vclcompat/StringGrid.h's own file-head note) -- matches golden's
+//  loop exactly (both loops start at 0, no header-row skip here; golden's own
+//  "skip row 0" idiom used elsewhere, e.g. uHGemEquipment.cpp, is a caller
+//  choice, not something SGDToCSV itself does), so the loop bounds/indexing
+//  below are a direct, unmodified translation.
+// ===========================================================================
+void SGDToCSV(vclcompat::TStringGrid *strGrid, AnsiString sSplit, AnsiString sReplaceSplit, AnsiString Path)  // common.cpp:2050
+{
+    AnsiString sTemp="", sStr="";
+
+    for(int iRow=0; iRow<strGrid->RowCount; iRow++)
+    {
+        sTemp="";
+        for(int iCol=0; iCol<strGrid->ColCount; iCol++)
+        {
+            sStr=StringReplace(strGrid->Cells[iCol][iRow], sSplit, sReplaceSplit, TReplaceFlags());  // common.cpp:2059 -- NOTE: no rfReplaceAll here (golden's own choice -- only the FIRST occurrence is replaced)
+            sTemp+=sStr+sSplit;
+        }
+        WriteDataToFile(Path, sTemp);
+    }
+}
+
+// ===========================================================================
+//  IsFileInUse (common.cpp:2066-2090) -- Jimmychiu 20241121
+//  AI(W906-CommonCompletion) 20260721: un-gated -- pure Win32
+//  CreateFile/GetLastError/CloseHandle, zero dependency gap. Zero current
+//  callers.
+// ===========================================================================
+bool IsFileInUse(const char* filePath)                                       // common.cpp:2066
+{
+    HANDLE hFile=CreateFile(
+        filePath,
+        GENERIC_READ,
+        FILE_SHARE_READ,
+        NULL,
+        OPEN_EXISTING,
+        FILE_ATTRIBUTE_NORMAL,
+        NULL
+    );
+
+    if(hFile==INVALID_HANDLE_VALUE)
+    {
+        DWORD error=GetLastError();
+        if(error==ERROR_SHARING_VIOLATION || error==ERROR_LOCK_VIOLATION)
+        {
+            return true;
+        }
+    } else
+    {
+        CloseHandle(hFile);
+    }
+    return false;
+}
+
+// ===========================================================================
+//  CopyAndCompressFile (common.cpp:2092-2120)
+//  AI(W906-CommonCompletion) 20260721: un-gated. Calls Common_PathCombin
+//  TWICE (same helper as GetRecipeFileName above -- reused, not duplicated a
+//  third time) + MySleep(iDelayMS) (real as of this same wave, Item 9 above)
+//  + plain Win32 FileExists/CopyFile against hardcoded d:\HT9045\7z.exe /
+//  C:\Program Files\7-Zip\7z.exe paths (preserved exactly, not parameterized).
+//
+//  DEVIATION from this wave's plan text (which asserted ShellExecute is a
+//  "plain Win32 ... no gap" call): VERIFIED this is NOT true in this tree --
+//  Interface/TesterTCP.cpp's CopyRecipeToTester/CopyRecipeFromTester (golden
+//  TesterTCP.cpp:1070/1089) already hit this EXACT same golden idiom
+//  (ShellExecute against this EXACT same d:\HT9045\7z.exe) and explicitly
+//  documented (TesterTCP.cpp:144-146) that "VCL ShellExecute has no
+//  vclcompat/portable-C++ equivalent anywhere in this tree (would pull in a
+//  new <shellapi.h>+shell32 link dependency not shared by anything else
+//  translated so far)". Reused that exact same established project idiom here
+//  instead of re-deriving a third variant: a detached `cmd /c start "" /B`
+//  launch via system() (async fire-and-forget, matching golden's own
+//  ShellExecute+MySleep(iDelayMS) best-effort throttle semantics -- NOT a
+//  blocking call). Zero current callers of this function either way.
+// ===========================================================================
+bool CopyAndCompressFile(const AnsiString &sourcePath, const AnsiString &targetPath, const AnsiString &sSourFileName, const AnsiString &sTarFileName, const int &iDelayMS, AnsiString &sMsg)  // common.cpp:2092
+{
+    AnsiString sSourceFilePath=Common_PathCombin(sourcePath, sSourFileName);
+    AnsiString sTargetFilePath=Common_PathCombin(targetPath, sTarFileName);
+    if(FileExists(sSourceFilePath))
+    {
+        if(FileExists("d:\\HT9045\\7z.exe")==false)                          // common.cpp:2098 -- prepare 7-Zip
+        {
+            CopyFile("C:\\Program Files\\7-Zip\\7z.exe", "d:\\HT9045\\7z.exe", false); // common.cpp:2100
+        }
+        AnsiString Str=AnsiString().sprintf("a -tzip \"%s\" \"%s\"", sTargetFilePath, sSourceFilePath);
+
+        // golden: ShellExecute(NULL,"open","d:\\HT9045\\7z.exe",Str.c_str(),NULL,SW_HIDE);
+        // -- see banner above for why this is routed through system() instead.
+        AnsiString cmd;
+        cmd.sprintf("d:\\HT9045\\7z.exe %s", Str);
+        AnsiString shellCmd;
+        shellCmd.sprintf("start \"\" /B %s", cmd);
+        system(shellCmd.c_str());
+
+        MySleep(iDelayMS);                                                   // common.cpp:2104
+        if(FileExists(sTargetFilePath))
+        {
+            sMsg=AnsiString().sprintf("Copy file from %s to %s .", sSourceFilePath, sTargetFilePath);
+            return true;
+        }
+        else
+        {
+            sMsg=AnsiString().sprintf("Failed to copy file from %s to %s .", sSourceFilePath, sTargetFilePath);
+        }
+    }
+    else
+    {
+        sMsg=AnsiString().sprintf("File %s does not exists!", sSourceFilePath);
+    }
+    return false;
+}
+
+// ===========================================================================
+//  ChangeSaveFileName (common.cpp:2124-2183) -- ben 20240927
+//  AI(W906-CommonCompletion) 20260721: un-gated. Pure AnsiString::Pos +
+//  StringReplace(...,TReplaceFlags()<<rfReplaceAll) chain sanitizing
+//  \ / : * ? " < > | characters. All primitives already exist in
+//  vclcompat/SysUtils.h. Zero current callers.
+//
+//  GOLDEN BUG, preserved verbatim (found and verified via a careful reading of
+//  the raw source bytes, not assumed): the `"` (double-quote) branch below
+//  uses the literal token `""""` (four raw double-quote characters, no
+//  backslash escape) as both the Pos() search string and the StringReplace()
+//  OldPattern. Under standard C++ string-literal grammar (this file has
+//  always been compiled as C++, not Pascal, so BCB6 doubled-quote escaping
+//  does not apply) two adjacent `""` empty-string literals concatenate to a
+//  single empty string "" -- so this branch actually checks/replaces an EMPTY
+//  pattern, not a literal `"` character. Per this tree's own StringReplace
+//  contract ("An empty OldPattern is a no-op") and BCB6's own Pos("")==0
+//  convention, `asFileName.Pos("""")` is always 0, so `!=0` is always false --
+//  this whole branch is DEAD CODE in golden itself. The apparent intent (strip
+//  embedded `"` characters from a save filename, matching the other 8
+//  separator branches) never actually fires. Reproduced verbatim below,
+//  4-quote token included, rather than "fixed" to `"\""` -- that would be a
+//  silent behavior change from what golden's compiled binary actually does.
+// ===========================================================================
+AnsiString __fastcall ChangeSaveFileName(AnsiString asFileName)              // common.cpp:2124
+{
+    AnsiString Str1;
+
+    if(asFileName.Pos("\\")!=0)
+    {
+        Str1=StringReplace(asFileName, "\\", "_", TReplaceFlags()<<rfReplaceAll);
+        asFileName=Str1;
+    }
+
+    if(asFileName.Pos("/")!=0)
+    {
+        Str1=StringReplace(asFileName, "/", "_", TReplaceFlags()<<rfReplaceAll);
+        asFileName=Str1;
+    }
+
+    if(asFileName.Pos(":")!=0)
+    {
+        Str1=StringReplace(asFileName, ":", "_", TReplaceFlags()<<rfReplaceAll);
+        asFileName=Str1;
+    }
+
+    if(asFileName.Pos("*")!=0)
+    {
+        Str1=StringReplace(asFileName, "*", "_", TReplaceFlags()<<rfReplaceAll);
+        asFileName=Str1;
+    }
+
+    if(asFileName.Pos("?")!=0)
+    {
+        Str1=StringReplace(asFileName, "?", "_", TReplaceFlags()<<rfReplaceAll);
+        asFileName=Str1;
+    }
+
+    if(asFileName.Pos("""")!=0)                                              // golden bug: always-false dead branch -- see banner above
+    {
+        Str1=StringReplace(asFileName, """", "_", TReplaceFlags()<<rfReplaceAll);
+        asFileName=Str1;
+    }
+
+    if(asFileName.Pos("<")!=0)
+    {
+        Str1=StringReplace(asFileName, "<", "_", TReplaceFlags()<<rfReplaceAll);
+        asFileName=Str1;
+    }
+
+    if(asFileName.Pos(">")!=0)
+    {
+        Str1=StringReplace(asFileName, ">", "_", TReplaceFlags()<<rfReplaceAll);
+        asFileName=Str1;
+    }
+
+    if(asFileName.Pos("|")!=0)
+    {
+        Str1=StringReplace(asFileName, "|", "_", TReplaceFlags()<<rfReplaceAll);
+        asFileName=Str1;
+    }
+
+    return asFileName;
+}
+
+// ===========================================================================
+//  MySecondsBetween (common.cpp:2188-2199) -- Sam 20251031
+//  AI(W906-CommonCompletion) 20260721: un-gated. TDateTime subtraction +
+//  DecodeDate/DecodeTime, both already in vclcompat/TDateTime.h and brought
+//  into the global namespace via vcl_compat.h. Zero current callers.
+// ===========================================================================
+int __fastcall MySecondsBetween(TDateTime DT1, TDateTime DT2)                // common.cpp:2188
+{
+    int iTempSec=0;
+    Word year, month, day;
+    Word hour, min, sec, msec;
+    TDateTime TempDT;
+    TempDT=DT2-DT1;
+    DecodeDate(TempDT, year, month, day);
+    DecodeTime(TempDT, hour, min, sec, msec);
+    iTempSec=day*24*60*60+hour*60*60+min*60+sec;
+    return iTempSec;
+}

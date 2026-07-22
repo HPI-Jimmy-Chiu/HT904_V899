@@ -1509,10 +1509,14 @@ bool IsIndexRunCycle()
 #ifndef W7T1_SEAM
 #define W7T1_SEAM
 
-// --- wave-timing (golden common.h MyTickCount is #if 0 TODO(wave-timing)) ------
+// --- wave-timing (common.cpp now provides a real MyTickCount, un-gated by
+//  AI(W906-CommonCompletion) 20260721 -- this TU-local macro redirect below
+//  still intentionally shadows it with the offline stand-in, unchanged by that
+//  wave; revisiting whether this seam should switch to the real tick source is
+//  a separate translation decision, out of scope here) ------------------------
 //  case 20200/20210 idle-drain timer.  Offline: monotonic 0 (no real tick source
 //  yet); startTick/endTick/nowTick are function locals below.
-static DWORD W7T1_MyTickCount(){ return (DWORD)0; }            // golden common.h:259 (gated)
+static DWORD W7T1_MyTickCount(){ return (DWORD)0; }            // golden common.h:259
 #define MyTickCount            W7T1_MyTickCount
 
 // --- RTC-CCD entry case ids: moved to golden file-scope home (atester.cpp:5551-5555,

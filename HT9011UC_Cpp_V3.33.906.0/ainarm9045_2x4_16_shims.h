@@ -86,7 +86,7 @@ extern TQPF_Timer DoArmPickFromLoadStage_Delay;                                 
 extern int  iInArmZTeachTask;                                                   // golden (call-only) -- loader Z teach task cursor
 extern int  iAutoSiteMapHotplateiWhichShuttle;                                  // golden (call-only) -- JCET ASM hotplate which-shuttle
 extern bool ProcessSCKARTLoadingCount(bool bReset=false);                       // golden (call-only) -- SCK ART loading-count alarm flow
-extern DWORD MyTickCount();                                                     // golden common.h:259 (gated #if 0 in common.h) -- ms tick
+extern DWORD MyTickCount();                                                     // golden common.h:259 -- real body in common.cpp (un-gated AI(W906-CommonCompletion) 20260721)
 extern int  iArmXShuttle1OffsetPos;                                             // golden cmydef.h:3727 (commented-out) -- AutoClean InArm X offset to Sht1
 extern int  iArmYShuttle1OffsetPos;                                             // golden cmydef.h:3728 (commented-out) -- AutoClean InArm Y offset to Sht1
 

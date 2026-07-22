@@ -35,6 +35,14 @@
 
 #include "vclcompat/vcl_compat.h"   // was: #include <vcl.h> + BCB6 RTL headers
 #include "MachineType.h"
+// AI(W906-CommonCompletion) 20260721: SGDToCSV (un-gated below) takes a
+// TStringGrid* -- headless shim not wired into the vcl_compat.h umbrella
+// (see vclcompat/StringGrid.h's own file-head note); pulled in directly here,
+// same posture as SECSGEM/uHGemEquipment.h's "first consumer" precedent. Only
+// the header is included (no blanket `using vclcompat::TStringGrid;`, since
+// common.h is included far more widely than uHGemEquipment.h) -- the
+// SGDToCSV declaration below spells the type fully-qualified instead.
+#include "vclcompat/StringGrid.h"
 
 // ---------------------------------------------------------------------------
 //  IniFile singletons (defined in common.cpp, common.h:38-41 / common.cpp:148-151)
@@ -278,11 +286,13 @@ unsigned long __fastcall ReadWriteIni(AnsiString FileName, AnsiString Group, Ans
 //  includes this header will NOT see these names at compile-time until they
 //  are translated in a later wave.
 // ===========================================================================
-#if 0 // TODO(wave-misc-strings): InitCommonString / EncodeStr / DecodeStr
+// AI(W906-CommonCompletion) 20260721: un-gated -- bodies translated in
+// common.cpp (golden common.cpp:177-321). See common.cpp's InitCommonString
+// banner for 3 verified decl-vs-reassignment value discrepancies (real golden
+// behavior, preserved verbatim, not a translation error).
 void InitCommonString();                                     // common.h:12
 AnsiString EncodeStr(AnsiString sourceStr);                  // common.h:14
 AnsiString DecodeStr(AnsiString sourceStr);                  // common.h:15
-#endif // TODO(wave-misc-strings)
 
 // AI(W906-CommonWaveFile) 20260721: un-gated GetLastOpenFN / WriteLastDataFN --
 // bodies translated in common.cpp (golden common.cpp:1252-1281 / :1311-1331).
@@ -291,11 +301,21 @@ AnsiString DecodeStr(AnsiString sourceStr);                  // common.h:15
 AnsiString  __fastcall GetLastOpenFN();                      // common.h:68
 void __fastcall WriteLastDataFN(AnsiString SName);           // common.h:76
 
-#if 0 // TODO(wave-path): ChangeSaveFileName / GetRecipePath / GetRecipeFileName
+// AI(W906-CommonCompletion) 20260721: un-gated -- bodies translated in
+// common.cpp (golden common.cpp:2039-2048 / :2124-2183). GetRecipeFileName's
+// golden FileInfo().PathCombin(...) dependency is satisfied by a small
+// TU-local static helper in common.cpp (Common_PathCombin) instead of
+// dragging in the whole untranslated FileInfo class -- see that helper's
+// banner for the precedent (Automation/SCK_ART_Remainder.cpp's W5SckArtRem_*
+// stand-ins). KNOWN INTEGRATION OPPORTUNITY (out of scope this wave):
+// Automation/SCK_ART_Remainder.cpp:125-136 still has its own local
+// W5SckArtRem_GetRecipePath/W5SckArtRem_GetRecipeFileName stand-ins built
+// specifically because these were gated; now that the real functions exist,
+// wiring that file to them is a candidate for a future wave -- not done here
+// (SCK_ART_Remainder.cpp is untouched this wave, per plan).
 AnsiString  __fastcall ChangeSaveFileName(AnsiString asFileName); // common.h:69
 extern AnsiString GetRecipePath();                           // common.h:268
 extern AnsiString GetRecipeFileName(AnsiString FileName);    // common.h:269
-#endif // TODO(wave-path)
 
 // AI(W906-CommonWaveFile) 20260721: un-gated WriteDataToFile (both overloads) /
 // ReadDataFromFile / CheckFileIsEmpty / MyForceDirectories -- bodies translated
@@ -320,20 +340,49 @@ extern char* ReadDataFromFile(AnsiString cFilePath);         // common.h:257
 extern bool CheckFileIsEmpty(AnsiString cFilePath);          // common.h:258
 extern int MyForceDirectories(AnsiString Directory, AnsiString Function=""); // common.h:262
 
-#if 0 // TODO(wave-file): IsFileInUse / CopyAndCompressFile
+// AI(W906-CommonCompletion) 20260721: un-gated -- bodies translated in
+// common.cpp (golden common.cpp:2066-2120). Zero current callers of either
+// function (verified this wave).
 bool IsFileInUse(const char* filePath);                      // common.h:280
-#endif // TODO(wave-file)
+// NOTE: golden's OWN common.h never declares CopyAndCompressFile at all (only
+// its common.cpp:2092 definition exists there) -- BCB6 tolerated the missing
+// prototype since golden has no cross-TU caller either. Added here (unlike
+// golden) so this translated header remains the single declaration point for
+// any future TU that includes common.h and wants to call it.
+bool CopyAndCompressFile(const AnsiString &sourcePath, const AnsiString &targetPath, const AnsiString &sSourFileName, const AnsiString &sTarFileName, const int &iDelayMS, AnsiString &sMsg); // common.cpp:2092
 
-#if 0 // TODO(wave-timing): MyTickCount / MySleepEx / MySleep / MySecondsBetween
+// AI(W906-CommonCompletion) 20260721: un-gated -- bodies translated in
+// common.cpp (golden common.cpp:1726-1796 / :2188-2199). MySleepEx's golden
+// #ifdef USE_EC_CHANGE branch is genuinely dead code (macro commented out in
+// both golden and this tree's MachineType.h) and was intentionally NOT
+// ported -- see the common.cpp definition's own note. acarry_shims.cpp /
+// ainarm9045_2x4_16_shims.cpp previously carried colliding offline stand-in
+// DEFINITIONS of MyTickCount/MySleep/MySleepEx (their own header declarations
+// already pointed at these exact golden common.h line numbers) -- those 3
+// stand-in bodies are removed as part of this same change so the real bodies
+// here are the sole definitions.
 extern DWORD MyTickCount();                                  // common.h:259
 extern DWORD MySleepEx(DWORD dwMilliseconds, bool bAlertable); // common.h:260
 extern void MySleep(DWORD dwMilliseconds);                   // common.h:261
 int __fastcall MySecondsBetween(TDateTime DT1, TDateTime DT2); // common.h:288
-#endif // TODO(wave-timing)
 
+// AI(W906-CommonCompletion) 20260721: ATTEMPTED, then RE-GATED -- see
+// common.cpp's own note at this item's placeholder for the verified,
+// build-proven reason (the plan's "zero current callers -> zero risk" claim
+// for this item was empirically WRONG: the translated BODY references
+// asTempCtrl/TestIF_File regardless of whether anything calls the function,
+// and those globals live in ht9045_globals, which ht9045_core deliberately
+// does NOT link -- confirmed via a real build: un-gating broke the link step
+// for test_common and test_ini_helpers with 4 undefined-reference errors).
 #if 0 // TODO(wave-logging): TempChangeLog
 extern AnsiString __fastcall TempChangeLog(AnsiString Group, AnsiString Name); // common.h:263
 #endif // TODO(wave-logging)
+
+// AI(W906-CommonCompletion) 20260721: new declaration this wave -- golden
+// common.h:274. Body translated in common.cpp (golden common.cpp:2050-2064).
+// vclcompat::TStringGrid fully-qualified (see the StringGrid.h #include note
+// near the top of this header for why no blanket `using` is added here).
+void SGDToCSV(vclcompat::TStringGrid *strGrid, AnsiString sSplit, AnsiString sReplaceSplit, AnsiString Path); // common.h:274
 
 #if 0 // TODO(wave-canvas): MyDrawText (6 overloads, TCanvas/TRect/TColor VCL GDI)
 void __fastcall MyDrawText(TCanvas *pCanvas, TRect &Rect, char *str);              // common.h:89
@@ -344,12 +393,16 @@ void __fastcall MyDrawText(TCanvas *pCanvas, TRect &Rect, char *str, int left, i
 void __fastcall MyDrawText(TCanvas *pCanvas, TRect &Rect, int left, int right, int top, int bottom); // common.h:94
 #endif // TODO(wave-canvas)
 
-#if 0 // TODO(wave-ui-input): OnlyNumberInPut / OnlyNumberAndDotInPut / OnlyMakeFileDataInPut / AddSpace
+// AI(W906-CommonCompletion) 20260721: un-gated -- the real translated bodies
+// were already sitting in common.cpp under a matching #if 0 wrapper (verified
+// against golden common.cpp:1333-1358: logically identical, just written as
+// single-expression `return`s instead of golden's if/return/return -- no
+// behavior discrepancy). None of these take a VCL control (int keycode /
+// AnsiString only), so no dependency gap either.
 bool __fastcall OnlyMakeFileDataInPut(int iKey);             // common.h:102
 extern bool __fastcall OnlyNumberInPut(int iKey);            // common.h:104
 extern bool __fastcall OnlyNumberAndDotInPut(int iKey);      // common.h:105
 void __fastcall AddSpace(AnsiString File);                   // common.h (stub)
-#endif // TODO(wave-ui-input)
 
 // ---------------------------------------------------------------------------
 //  Misc non-function declarations from common.h that may be needed by callers

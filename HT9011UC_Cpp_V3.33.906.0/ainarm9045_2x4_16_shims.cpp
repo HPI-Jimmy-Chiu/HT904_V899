@@ -66,7 +66,11 @@ int  iAutoSiteMapHotplateiWhichShuttle = 0;
 //AI(W6.2b-2x4_16) 20260626: ProcessSCKARTLoadingCount(bool) is now DEFINED in the
 // registered ainarm9045.cpp (the in-arm engine) -- removed the local stub to avoid
 // an ODR multiple-definition at link.  The extern decl stays in the shims .h.
-DWORD MyTickCount()                                      { return 0; }     // offline: monotonic ms tick stub (common.cpp def gated #if 0)
+// AI(W906-CommonCompletion) 20260721: MyTickCount stand-in DEFINITION REMOVED
+// -- common.cpp now provides the real body (golden common.h:259 un-gated this
+// wave), and this file's own header (ainarm9045_2x4_16_shims.h:89) already
+// declares it with the exact same signature, citing "golden common.h:259" --
+// so removing just the definition here needs zero caller changes.
 int  iArmXShuttle1OffsetPos = 0; // AutoClean InArm X offset to Sht1 (0)
 int  iArmYShuttle1OffsetPos = 0; // AutoClean InArm Y offset to Sht1 (0)
 

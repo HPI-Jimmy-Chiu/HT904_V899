@@ -88,7 +88,26 @@ int main()
     // =======================================================================
     printf("[A] LOCAL TMyKitSuck leaf-body oracles\n");
 
-    TMyKitSuck kit;   // ctor: iShtRow=2, iShtCol=1, Item zero-init (== NULL_IC)
+    TMyKitSuck kit;   // ctor: iShtRow=2, iShtCol=1 -- see note below on Item.
+
+    // AI(W906-CommonCompletion) 20260721: FOUND + FIXED a latent test bug,
+    // unmasked by this wave's unrelated common.cpp/acarry_shims.cpp/
+    // ainarm9045_2x4_16_shims.cpp edits (which merely changed code size/
+    // layout enough to perturb pre-main() stack contents -- root cause is
+    // here, not in that wave's translated code). VERIFIED via aHotPlateSubstrate.cpp:90-95's
+    // own comment ("Item/iWhichSite are int grids left to the loader"):
+    // TMyKitSuck::TMyKitSuck() deliberately does NOT zero the Item[][] array
+    // (unlike iBinData/cDeviceInf/cSBin/etc., which the ctor loop above DOES
+    // clear). The comment removed just above this block ("Item zero-init")
+    // was simply wrong about what the real ctor does -- a fresh LOCAL
+    // TMyKitSuck's Item[][] is genuinely indeterminate stack memory, not
+    // guaranteed zero; this test previously passed only by luck (a freshly
+    // started process's first main()-local variable typically -- but not
+    // reliably -- sees zero-filled stack pages). Explicitly zero it here so
+    // "fresh kit" is deterministic, matching this test's own stated intent.
+    for (int i = 0; i < _MAX_SUCK_ROW_ITEM; ++i)
+        for (int j = 0; j < _MAX_SUCK_COL_ITEM; ++j)
+            kit.Item[i][j] = 0;   // == NULL_IC
 
     // -- (a) fresh kit: empty grid == all NULL_IC --------------------------
     CHECK(kit.iShtRow == 2 && kit.iShtCol == 1,

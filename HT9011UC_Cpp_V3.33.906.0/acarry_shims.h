@@ -216,10 +216,12 @@ void SetMotorScaleSpeed(int Index, int ScaleSpeed); // golden cinitial.h:50 (bod
 //      MoveOutArmToAutoSafe in aoutarm9045.cpp is NOT link-visible; the carry
 //      engine needs the cross-module variant).  Offline: out-arm reaches the
 //      safe position immediately -> true.
-//    * MySleep / MySleepEx  -- golden common.h:260-261 (the common.cpp bodies are
-//      #if 0 // TODO(wave-timing); supply offline no-op timing so the kept-verbatim
-//      shuttle thread / step loops compile + link).  MySleepEx returns 0 (==
-//      WAIT_OBJECT_0, the "completed, not alerted" result the callers ignore).
+//    * MySleep / MySleepEx  -- golden common.h:260-261.  AI(W906-CommonCompletion)
+//      20260721: common.cpp now provides the REAL bodies (this wave un-gated
+//      them); the offline no-op stand-in DEFINITIONS this file used to own were
+//      removed (see acarry_shims.cpp).  These two lines are now just forward
+//      declarations for this header's own callers -- same signatures as
+//      common.h:365-366, one real definition in common.cpp.
 //    * SystemNG             -- golden global bool (main-side VCL form unit, no
 //      translated home).  Offline false -> the `if(SystemNG) return;` SM guards
 //      proceed (system not in NG).
@@ -228,8 +230,8 @@ void SetMotorScaleSpeed(int Index, int ScaleSpeed); // golden cinitial.h:50 (bod
 //      to the no-offset baseline.
 // ===========================================================================
 bool  MoveOutArmToAutoSafe();                     // golden aoutarm.h:52 -- offline: safe reached (true)
-DWORD MySleepEx(DWORD dwMilliseconds, bool bAlertable); // golden common.h:260 -- offline: 0
-void  MySleep(DWORD dwMilliseconds);              // golden common.h:261 -- offline: no-op
+DWORD MySleepEx(DWORD dwMilliseconds, bool bAlertable); // golden common.h:260 -- real body in common.cpp
+void  MySleep(DWORD dwMilliseconds);              // golden common.h:261 -- real body in common.cpp
 extern bool SystemNG;                             // golden main-side global -- offline: false
 extern int  iCloseSiteStep_2x8;                   // golden ainarm9045_2x8_8.h:27 -- offline: 0
 
