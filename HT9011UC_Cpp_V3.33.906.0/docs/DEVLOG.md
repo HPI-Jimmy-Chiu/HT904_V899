@@ -959,3 +959,34 @@ C 桶(`clientGemRead`/`ProcessSocketReceiveData`/`Timer1Timer`)是本檔案最�
 - **下次接續步驟**：(1) 檢查 3 個審查agent(Group A/B/C)是否留有結果——關機可能中斷它們，需重派也無妨(讀本節即有完整brief可重建)。(2) 三組獨立通過後，各自主迴圈五道閘(全新 from-scratch build+ctest+mojibake)+分開commit(A/B天然獨立；C因跨wave協調建議合併一個commit，訊息需完整記錄協調過程)。(3) 更新DEVLOG/ROADMAP。(4) 排隊中的下一輪：Wave15(AutoClean核心引擎，golden :4417-9107主要4個engine)、Wave16(csystem.cpp 3個微小gate，`DoHotplateEdgeCylinderLoop`+`DoLoaderVibrateLoop`+`InitCleanOutFunction`AutoSiteMap分支)、Wave19(main.cpp calc-core~55函式)——這三個都會動`FormsFacade.h`，須排隊不可真平行，建議合併成一輪。
 - **驗證基準**：ctest 87/91（同4個既有環境漂移：config_db/IniFiles/ini_helpers/config_loaders）。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支`fix/v899.32-pti`；HEAD=`14539a9`。工作樹另有無關V899/config殘留(PTI案)勿圈入V906 commit。
 - **執行模式**：使用者明確要求「純翻譯可平行就盡量展開、最大化agent」，本節起從單線波次轉為大規模recon+平行翻譯模式，過程中妥善處理2次真跨agent檔案衝突(git stash孤兒+MyProductionRecord重複定義)，皆查證後才動作，未盲目推進。使用者於本節收工時要求關機暫停記錄，故此處為主動交接檢查點，非任務完成。
+
+
+---
+
+## 2026-07-22 — 接續關機交接：Group A/B/C 三組獨立審查完成 + 1 個 HIGH severity 真bug發現並修正
+
+**設定聲明**：主迴圈 Sonnet 5 + xhigh；三組獨立審查皆 Sonnet 5（Group C 因涉及 ODR/multiple-definition 風險判斷與 AutoClean 硬體狀態機審查，用 xhigh；Group A/B 用預設 effort）。
+
+**背景**：接續 2026-07-21 深夜關機交接 RESUME（見上一節）。開工前先讀該節確認工作樹狀態（`git status`/`git diff --stat` 逐項核對，與交接記錄完全吻合），確認分支 `fix/v899.32-pti`、HEAD 仍是 `14539a9`，4 波尚未 commit。三個審查 agent 在關機時被中斷、無殘留背景任務，故重新派出（非重做翻譯，是重新獨立審查昨晚已完成但未 commit 的翻譯），彼此檔案零重疊真平行執行。
+
+**三組獨立審查結果**：
+- **Group A（Wave13 cContact，`IsRun2DCheck`+5個bank-ahead葉節點）：CLEAN**。獨立重新推導 `bRun2DCheck` 誤掃進不相關 `#if 0` 區塊的問題（確認為真且修正必要，否則連結失敗）；額外自行修正一處文件性引用錯誤（`cContact.h` banner 聲稱「40+ 呼叫點」，獨立審查直接 grep golden 得出真實數字 78 個呼叫點/34 個檔案）。
+- **Group B（Wave17 common.cpp，9/10項）：CLEAN**。獨立重新從 `vclcompat/TDateTime.cpp` 的 `splitSerial`/`civilFromDays` 推導 `MySecondsBetween` 的 OLE-epoch 數學，確認 2,592,330 是正確的 golden 真值（非上一版測試誤植的直覺值330）；確認 `TempChangeLog` 撤回乾淨無孤兒片段。額外標出 3 處無關檔案（`acarry_shims.h`/`ainarm9045_2x4_16_shims.h`/`atester.cpp`）裡描述 `MyTickCount`/`MySleepEx`/`MySleep` 仍是 offline stub 的過時註解（不在該審查範圍故未動，留給主迴圈收尾）。
+- **Group C（Wave14 AutoClean 地基 + Wave18 MyProductionRecord + 跨wave協調，範圍最大最複雜）：FINDINGS**。逐一核對 8-vs-3 stand-in 拆分（確認 `aHotPlateSubstrate.cpp` 現存恰好 3 個 no-op：`AddErrorRecord`/`AddTestRecord`/`SaveRecordCleanPad`，`Public/MyProductionRecord.cpp` 44 個真本體零重疊，ODR 安全）；CMake 連結、`PlaceToCleanList`/`TMyKitSuck` 新欄位、`fNote`/`fShowMessage` 安家皆核對通過。**抓到 1 個 HIGH severity 真fidelity bug**：`TMyKitSuck::MoveSuckDataDiff` 翻譯只做了「複製到目標」，漏了 golden 整段「清空來源槽位」邏輯（`MyKitSuck.cpp:1529-1560`：`Source.SetItemData(...,NULL_IC)`+~15個欄位歸零+`PordRec.bUse`複製），本身函式註解還誤稱「FAITHFUL line-for-line translation」。`AutoClean.cpp` 的 `CleanPad_PlaceToShuttle`/`CleanPad_PickFromShuttle` 呼叫點完全依賴這個內部清空作為清空來源格的唯一機制，呼叫端本身無補償清空——若不修，會在 AutoClean 的清潔墊搬運路徑上持續累積來源槽位的殘留資料。審查本身**未修**（判斷為實質邏輯變更，留給主迴圈），另修 5 個 LOW（1個診斷字串「錯誤0」應為「錯誤3」+4處 `cinitial.h` 行號引用錯誤 `:49`→`:51`）。
+
+**主迴圈親自核對並修正 HIGH severity 發現**：直接讀 golden `MyKitSuck.cpp:1490-1561` 逐行核對，確認審查所述屬實（含驗證 `bLed`/`pLed` 在本樹 `TMyKitSuck` 確實不存在，該部分可正確省略）。修正 `aHotPlateSubstrate.cpp` 補齊 `PordRec.bUse` 複製+完整來源清空區塊（來源 `Item`/`iWhichSite`/`iWhichAuto`/`iWhichIndex`/`bPass`/`iCleanCount`/`bFliped`/`iBinData`/`iAutoCleanRecX`/`iAutoCleanRecY`/`cDeviceInf`/`cReDeviceInf`/`cSBin`/`b2DIDNG`/`iCurrRotAng`/`iNeedRotAng`/`bQATray`/`iAOIResult` 全部歸零/清空），更新 `aHotPlateSubstrate.h` 兩處過時的行號/語意（copy→move）註解。新增 `tests/test_AutoClean.cpp` 直接針對 `MoveSuckDataDiff` 的回歸測試（雙向搬移：目標寫入+來源清空各10個斷言），修正前會失敗、修正後全過，證明測試真的能抓到這個回歸。順手修正 Group B 標出的 3 處無關檔案過時註解、Group C 標出的 2 處 `tests/CMakeLists.txt`/`test_MyProductionRecord.cpp` 過時「ht9045_sm 無法編譯」文字（協調完成後已非事實）。
+
+**主迴圈親自定案**（全新 `build_v906_moveuckdiff_fix`）：build exit 0、ctest **87/91**(同4個既有環境漂移：config_db/IniFiles/ini_helpers/config_loaders)、新增的10個 `MoveSuckDataDiff` 斷言全過、mojibake 0/28（全部4波觸及檔案）。
+
+**分開 3 個 commit**（依既定慣例：天然獨立的分開、跨wave協調的合併且完整記錄協調過程）：
+- `48be4d6` cContact Wave13（IsRun2DCheck + 5 bank-ahead，review CLEAN）
+- `88d4c0a` common.cpp Wave17（9/10項完成，review CLEAN）
+- `f6bf156` AutoClean 地基 + MyProductionRecord + 協調（1 個 review 抓到的 HIGH severity bug 由主迴圈修正）
+
+**ROADMAP 同步**：`MIGRATION_ROADMAP.md` 的 common.cpp/Public-MyProductionRecord DEFERRED 表行、csystem.cpp 行（新增「AutoClean 引擎已翻出但尚未接進 DoAllProcess spine」澄清，避免未來誤讀成已接線）、進度條列（新增本輪 3 個 commit + 下一輪候選）皆已同步更新，避免記錄漂移。
+
+### 🔖 RESUME（最新）
+- **✅ 三組審查+修正+commit 全部完成（2026-07-22）**：`48be4d6`+`88d4c0a`+`f6bf156`。**寫入佇列已清空**。`uHGemClass` 累計仍 53/57 已解（本輪未觸及）。
+- **下一輪候選（3個都會動 `FormsFacade.h`，需序列處理或合併成一輪，見上節既有規劃）**：Wave15（AutoClean 核心引擎主體，golden :4417-9107 四個 engine）、Wave16（csystem.cpp 3個微小gate：`DoHotplateEdgeCylinderLoop`+`DoLoaderVibrateLoop`+`InitCleanOutFunction` AutoSiteMap 分支）、Wave19（main.cpp calc-core ~55函式）；或回頭處理 `uHGemClass.cpp` 剩4個/SECSGEM DoUploadFileToHost 家族/`Automation/SCK_ART.cpp` 剩4支報表函式等未觸及候選（見更早RESUME）。
+- **驗證基準**：ctest 87/91（同4個既有環境漂移）。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支`fix/v899.32-pti`；工作樹另有無關V899/config殘留(PTI案)勿圈入V906 commit。
+- **執行模式**：使用者指示持續有效（純翻譯/審查可平行就盡量展開；過程無真異常/疑問，未停下請示）。
