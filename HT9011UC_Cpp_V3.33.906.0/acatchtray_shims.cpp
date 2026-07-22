@@ -122,6 +122,7 @@ bool AutoCylinderUp(int, int, int, bool)             { return true;  }   // offl
 bool AutoCylinderMiddle(int, int, int, bool)         { return true;  }   // offline: reached
 bool AutoCylinderLower(int, int, int, bool)          { return true;  }   // offline: reached
 void SetMotorScaleSpeed(int, int)                    {}                  // offline: no-op
+void SetMotorAccelSpeed(int, int)                    {}                  // AI(W906-AutoCleanFoundation) 20260721: golden cinitial.h:51 sibling -- offline no-op
 void ClearAutoChangingWarn(int)                      {}                  // offline: BinDisp warn-clear no-op
 
 // =============================================================================

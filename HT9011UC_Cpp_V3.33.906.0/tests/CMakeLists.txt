@@ -513,6 +513,38 @@ if(WIN32)
     target_link_libraries(test_w6_2_inarm_canary PRIVATE ws2_32)
 endif()
 
+# ===========================================================================
+#  W906-AutoCleanFoundation VERIFY -- AutoClean engine foundation wave
+# ===========================================================================
+# --- test_AutoClean: pure-calc + HAL-only helper verify ---------------------
+#   Exercises every Part A pure-calc function (GetAutoCleanPickCount/
+#   GetAutoCleanPickStep/CalculateAutoCleanXPitch/GetXPitchOfCleanKit_HP+_Kit+
+#   dispatcher/GetYPitchOfCleanKit/RunAutoCleanByArmPickArm2Test/
+#   Special_2X6_Tray_XItem7/GetInarmSuckRow) with a representative case each,
+#   and pumps the HAL-only state-machine helpers (init task family/
+#   CleanSetSpeed/TrayHasCleanIC(+Count)/SetAutoCleanStringGrid+
+#   ReadWriteAutoCleanCount round-trip/RestoreCleanKitData/
+#   SearchCleanKitRowCol(+UpDown)/PickFromCleanKit family/the Move* Z+XY
+#   geometry leaves/GetShuttleState+CheckShuttleSensor_Clean dispatchers) over
+#   the Sim HAL with no hardware. Also exercises Part D
+#   (SetDeviceInTray/CleanPadCountCanSupport2Arm) and the FormsFacade
+#   InitialUnLoaderTask behaviour-change fix (Part B). Same RESCAN link group
+#   as the other ht9045_sm-linking verify TUs (AutoClean/AutoClean.cpp is
+#   compiled into ht9045_sm, see the root CMakeLists.txt entry).
+add_executable(test_AutoClean
+    test_AutoClean.cpp
+)
+
+target_link_libraries(test_AutoClean PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_AutoClean PRIVATE ws2_32)
+endif()
+
+add_test(NAME AutoClean COMMAND test_AutoClean)
+
 add_test(NAME W6_2_InArmCanary COMMAND test_w6_2_inarm_canary)
 
 # --- test_w6_2_inarm_search: drive the Search/Do functions with golden oracle -
@@ -2032,3 +2064,33 @@ if(WIN32)
     target_link_libraries(test_FTPClient_Transfer PRIVATE ws2_32)
 endif()
 add_test(NAME FTPClient_Transfer COMMAND test_FTPClient_Transfer)
+
+# ===========================================================================
+#  W906-MyProductionRecord -- Public/MyProductionRecord.cpp pure-logic slice
+#    (ctor/InitialRecord/DeleteProductionRecord + ~28 Add*Record/Get* leaves
+#    that only read/write asBuffer; golden .cpp:218-654).
+#
+#  Compiles ../Public/MyProductionRecord.cpp directly a second time as its own
+#  isolated build (it also lives in the main ht9045_sm target via the top-level
+#  CMakeLists.txt, post AI(W906-Reconcile) 20260721 -- aHotPlateSubstrate.cpp's
+#  own former no-op stand-ins for the same 8 methods were removed there, so
+#  there is no multiple-definition risk linking the two together; this test
+#  target simply chooses not to, to avoid pulling in the ht9045_sm god-stack
+#  for a focused unit test). ht9045_sm itself now compiles cleanly (the
+#  FormsFacade.h gap an earlier draft of this comment referenced is resolved).
+#  Links ht9045_globals (CUSTOMER_CODE/IndexSuckName[][]/
+#  iOneTrayPickCount[]/iTestBinCount/LoadForm/HotPlateForm/CosFunction/
+#  TestIF_File/GetDateInfoByString/GetOnlyTimeInfoByString/GetTimeInfo/
+#  System*) + vclcompat. Supplies its OWN local stand-ins (TMyKitSuck's ctor
+#  + the InArmSuck/OutArmSuck/TestSocket globals it declares extern) instead
+#  of linking aHotPlateSubstrate.cpp -- same "avoid the god-stack for a
+#  focused unit test" posture already established by test_config_loaders.cpp/
+#  test_MyCCLink.cpp/test_FTPClient_EventHandlers.cpp/test_FTPClient_Transfer.cpp
+#  above. See the test file's own banner for the full reconciliation note.
+# ===========================================================================
+add_executable(test_MyProductionRecord
+    test_MyProductionRecord.cpp
+    ../Public/MyProductionRecord.cpp
+)
+target_link_libraries(test_MyProductionRecord PRIVATE ht9045_globals ht9045_public vclcompat)
+add_test(NAME MyProductionRecord COMMAND test_MyProductionRecord)

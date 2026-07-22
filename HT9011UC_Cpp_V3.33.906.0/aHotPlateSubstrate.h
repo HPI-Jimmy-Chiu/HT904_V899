@@ -345,6 +345,35 @@ public:
 #define HT9045_KITSUCK_SETNULLIC2HASNULLIC_ADDED
     void SetNullIcToHasNullIc();                 // golden MyKitSuck.h:280 (Steven 20150203)
 #endif
+
+    // AI(W906-AutoCleanFoundation) 20260721: golden MyKitSuck.h data members the
+    // AutoClean foundation wave's HAL-only helpers (RestoreCleanKitData /
+    // CleanPad_PlaceToShuttle / CleanPad_PickFromShuttle / DoPlaceToKitSwapData /
+    // PickFromCleanKit / PlaceToCleanKit / MoveInArmZ_Shuttle_Pick) deref, plus
+    // the MoveSuckDataDiff move method golden MyKitSuck.cpp:1503-1561 they call.
+    // Every field below is genuine golden MyKitSuck.h API (cited per line); pure
+    // data, zero HAL. Guarded so a parallel sibling wave does not double-declare.
+#ifndef HT9045_KITSUCK_AUTOCLEAN_ADDED
+#define HT9045_KITSUCK_AUTOCLEAN_ADDED
+    int  iNeedSuck      [_MAX_SUCK_ROW_ITEM][_MAX_SUCK_COL_ITEM]; // golden :185 (0=不需要吸, 其他=IC type)
+    int  iAutoCleanRecX [_MAX_SUCK_ROW_ITEM][_MAX_SUCK_COL_ITEM]; // golden :244 (jou 2013-03-13)
+    int  iAutoCleanRecY [_MAX_SUCK_ROW_ITEM][_MAX_SUCK_COL_ITEM]; // golden :245
+    int  iWhichIndex    [_MAX_SUCK_ROW_ITEM][_MAX_SUCK_COL_ITEM]; // golden :184 (ChungHung 20150205, ATK)
+    int  iNeedRotAng    [_MAX_SUCK_ROW_ITEM][_MAX_SUCK_COL_ITEM]; // golden :179
+    int  iCurrRotAng    [_MAX_SUCK_ROW_ITEM][_MAX_SUCK_COL_ITEM]; // golden :180
+    bool bQATray        [_MAX_SUCK_ROW_ITEM][_MAX_SUCK_COL_ITEM]; // golden :181
+    int  iCleanCount    [_MAX_SUCK_ROW_ITEM][_MAX_SUCK_COL_ITEM]; // golden :182 (TMyKitSuck's OWN copy -- distinct from TMyTray::iCleanCount, different class)
+    bool bFliped        [_MAX_SUCK_ROW_ITEM][_MAX_SUCK_COL_ITEM]; // golden :183
+    int  iBinDataBackUp [_MAX_SUCK_ROW_ITEM][_MAX_SUCK_COL_ITEM]; // golden :190 (Sam 20180612)
+    AnsiString cReDeviceInf[_MAX_SUCK_ROW_ITEM][_MAX_SUCK_COL_ITEM]; // golden :229
+    bool b2DIDNG        [_MAX_SUCK_ROW_ITEM][_MAX_SUCK_COL_ITEM]; // golden :234 (Steven 20200611)
+    int  iAOIResult     [_MAX_SUCK_ROW_ITEM][_MAX_SUCK_COL_ITEM]; // golden :235 (Sam 20240325)
+    // golden MyKitSuck.h:269 -- MOVES one nozzle's full record (Item + every grid
+    // above + PordRec[][].asBuffer->CommaText/bUse) from Source[SourceR][SourceC]
+    // into this[TargetR][TargetC], then clears the Source slot back to empty.
+    // FAITHFUL body in aHotPlateSubstrate.cpp.
+    void MoveSuckDataDiff(class TMyKitSuck &Source, int SourceR, int SourceC, int TargetR, int TargetC);
+#endif
 };
 
 extern TMyKitSuck InArmSuck;     // golden MyKitSuck.h:357
@@ -368,6 +397,15 @@ extern TMyKitSuck BTestSuck;     // golden MyKitSuck.h:364 (rear  test-head suck
 //      :323, same {int X; int Y;} layout); its ctor/Clear bodies were deferred --
 //      aHotPlateSubstrate.cpp supplies them for W6.2.  Do NOT redeclare it here.
 // ============================================================================
+// AI(W906-AutoCleanFoundation) 20260721: golden HTEditList.h:128 -- opaque
+// forward decl only.  uPlateInfo::ExtractFirstTeam() (below) returns
+// uHPSuckTeam*; MoveInOutArmZToKitPickPlace (AutoClean.cpp) only null-checks
+// the returned pointer and never dereferences it, so the full uHPSuckGroup/
+// uHPSuckTeam list-bookkeeping class body stays out of scope for this wave
+// (real translation is a separate, larger future front) -- an incomplete
+// type is sufficient and honest about what is/isn't implemented.
+class uHPSuckTeam;
+
 // uPlateInfo: MINIMAL mirror -- only the called methods (golden HTEditList.h:244)
 class uPlateInfo
 {
@@ -398,9 +436,26 @@ public:
     //    consumed offline; the SM only needs the calls to be linkable/no-throw).
     void AddHPSuckGroup();                                              // golden HTEditList.h:202
     void UpdateHPSuckGroup(int iP, int iR, int iC, int iSht, int iKit); // golden HTEditList.h:204
+    // AI(W906-AutoCleanFoundation) 20260721: golden HTEditList.h:233 -- "pull the
+    // first team out of the group list, if any" (uHPSuckGroup ownership move).
+    // Offline: matches the sibling GetHPFirstTeam* determinism (team list is
+    // always empty offline) -> always NULL, i.e. "no team to extract".
+    uHPSuckTeam* ExtractFirstTeam();
 };
 
 extern uPlateInfo *PickFromHPList;   // golden HTEditList.h:294
+
+// AI(W906-AutoCleanFoundation) 20260721: golden HTEditList.h:247 -- a SEPARATE
+// uPlateInfo* instance from PickFromHPList (golden main.cpp:2150 `new`s each
+// independently). AutoClean's shuttle-place/pick geometry (MoveInOutArmZToKitPickPlace/
+// MoveInArmXYPickCleanKit/PlaceToCleanKit) needs its own team list, distinct
+// from the in-arm HotPlate engine's PickFromHPList. NOTE: csystem.cpp's W7C1
+// wave already defines an UNRELATED same-named macro `PlaceToCleanList` scoped
+// to its own translation unit only (a throwaway ->ResetFile()-only seam,
+// csystem.cpp:936-942) -- that macro does not leak into other TUs, so it does
+// not collide with this real extern (any TU that includes THIS header, like
+// AutoClean.cpp, sees the genuine uPlateInfo* below, not csystem.cpp's local stub).
+extern uPlateInfo *PlaceToCleanList; // golden HTEditList.h:247
 
 extern AnsiString sHPPickRec;            // golden HTEditList.h:16 (used in SOFT_SIMULTE-gated SaveFile)
 extern AnsiString sHPPickRecException;   // golden HTEditList.h:17
@@ -428,6 +483,18 @@ extern int iHotCount;                                                   // golde
 extern int iHotPlateCount  [2][50][50];                                 // golden ainarm2.h:78
 extern int iHotWhichKit    [2][50][50];                                 // golden ainarm2.h:83
 extern int iHotWhichShuttle [2][50][50];                                // golden ainarm2.h:84
+
+// AI(W906-AutoCleanFoundation) 20260721: golden ainarm2.h:87/175-177 (REAL def:
+// ainarm2.cpp) -- the AutoClean pick-plan cursors SearchCleanKitRowCol /
+// SearchCleanKitUpDown / MoveInArmXYPickCleanKit / PickFromCleanKit read+write,
+// and the per-nozzle "am I committed to this AutoClean pick?" grid the same
+// functions (+ MoveInArmZToShuttlePlace) gate on. Verified absent from the
+// target tree before adding (grepped) -- genuinely missing, not a duplicate.
+extern int  iAutoCleanStart;                       // golden ainarm2.h:87  (REAL def ainarm2.cpp:91, =0)
+extern int  iAutoCleanPickPlateX, iAutoCleanPickPlateY; // golden ainarm2.h:176 (REAL def ainarm2.cpp:105-106)
+extern int  iAutoCleanUseXPitch;                   // golden ainarm2.h:177 (REAL def ainarm2.cpp:107, =0)
+extern bool bInArmSuckActive[MAX_ARM_Row][MAX_ARM_Col]; // golden ainarm2.h:175 (REAL def ainarm2.cpp:101, all false)
+extern bool bPlaceToCleanKit;                      // golden ainarm2.h:57 (REAL def ainarm2.cpp:49, =false) -- Steven 20171204 (Wei)
 
 extern bool bPitchOver12000;                                            // golden ainarm2.h:162 (jou 20100120)
 

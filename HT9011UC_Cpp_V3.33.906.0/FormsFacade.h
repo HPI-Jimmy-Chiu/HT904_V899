@@ -34,6 +34,19 @@
 
 #include "vclcompat/vcl_compat.h"   // AnsiString
 
+// AI(W906-AutoCleanFoundation) 20260721: golden fMain->AutoCleanStringGrid
+// (main.h, TStringGrid*) is NOT cosmetic -- AutoClean/AutoClean.cpp's
+// RestoreCleanKitData/CheckCleaningCount (in scope this wave) read it back via
+// atoi(...->Cells[X][Y].c_str()). Reuses vclcompat::TStringGrid (built
+// W906-uHGemEquipment 20260716 for the analogous SECS SV/EC-grid problem) --
+// a materially better fit than inventing a bespoke AutoCleanSubstrate type,
+// since it already has real Cells[][]/RowCount/ColCount semantics. Second
+// consumer after SECSGEM/uHGemEquipment.h, which sets the `using` idiom this
+// mirrors verbatim (duplicate identical `using` declarations across headers
+// are legal C++, not an ODR conflict).
+#include "vclcompat/StringGrid.h"
+using vclcompat::TStringGrid;
+
 // Forward declaration: TfMainMemo (golden TMemo* shape) is fully defined further
 // down this same header (W6.5 shuttle-log section) -- TfAGV only needs a
 // pointer to it (W5-Final-AGV_E84 INTEGRATE, see below), so a forward
@@ -68,6 +81,50 @@ public:
 };
 
 extern TfAGV *fAGV;     // golden: extern PACKAGE TfAGV *fAGV; (AGV.h:210)
+
+// ===========================================================================
+//  W906-AutoCleanFoundation ADD (20260721): TfNote -- FIRST home for fNote
+//  (golden note.h `class TfNote : public TForm`) anywhere in this migrated
+//  tree. Multiple earlier waves (Automation/AGV_PortScan.h's TfAGV::Timer2Timer
+//  note, BarCode/BarCode_Bottom2DID.h's fNote->t2DCode/bMyServoOffInArm note)
+//  found fNote had no home and deliberately left their own fNote-dependent
+//  code gated/untranslated rather than stand up "a whole new TfNote facade
+//  CLASS" for what was, in each of those cases, a single narrow call with no
+//  other payoff. This wave's need is different in kind, not just degree: TWO
+//  genuinely in-scope Part A functions (DoInArmPineRelease's servo-off-during-
+//  alarm recovery cycle; InitialAutoCleanTask's SPIL FTP jam-code upload trace)
+//  read/write exactly 4 plain-data fields -- no VCL lifecycle, no widgets, no
+//  settings-editor surface like the deferred cases above. Standing up THIS
+//  minimal a home costs nothing extra and unblocks a faithful (not gated)
+//  translation of both functions; it does not retroactively un-gate any of
+//  the earlier waves' own deferred fNote call sites (still all self-gated,
+//  unaffected by this addition).
+// ===========================================================================
+class TfNote
+{
+public:
+    bool       bMyServoOffInArm;     // [DATA] golden note.h:417ish (bool) -- "an alarm-triggered ServoOff on the in-arm is pending recovery"
+    int        iMyServoOffInArmPosX; // [DATA] golden note.h:418 (int) -- encoder pos to jog back to (X)
+    int        iMyServoOffInArmPosY; // [DATA] golden note.h:419 (int) -- encoder pos to jog back to (Y)
+    AnsiString aJamCodeFilePath;     // [DATA] golden note.h:434 (AnsiString) -- SPIL FTP jam-code trace file path
+    TfNote();
+};
+extern TfNote *fNote;   // golden: extern PACKAGE TfNote *fNote; (note.h:462)
+
+// ===========================================================================
+//  W906-AutoCleanFoundation ADD (20260721): TfShowMessage -- FIRST home for
+//  fShowMessage (golden cUnitConvert.h note: "W7 VCL form pointer" -- another
+//  confirmed no-home global, same class of gap as TfNote just above). Needed
+//  by CleanSetSpeed's (in-scope) tail call `fShowMessage->ShowSpeed(bool)`.
+//  Even smaller than TfNote: one method, zero data, offline no-op (a debug
+//  "speed values changed" popup that never shows without a UI).
+// ===========================================================================
+class TfShowMessage
+{
+public:
+    void ShowSpeed(bool bShow);   // [METHOD] golden cUnitConvert.h -- offline: no-op (no UI to show a debug popup on)
+};
+extern TfShowMessage *fShowMessage;
 
 // ===========================================================================
 //  W6.2 -- TMyStringList facade-local stub for slAutoSiteMapLog
@@ -126,6 +183,22 @@ public:
 // ---------------------------------------------------------------------------
 struct TfMainCheckBox { bool Checked; TfMainCheckBox():Checked(false){} };       // [DATA] golden TCheckBox*
 struct TfMainGrid     { void SetCellColorIndex(int /*col*/,int /*row*/,int /*idx*/){} }; // [METHOD] golden THeatTable*
+// -- W906-AutoCleanFoundation ADD: golden TFont* (TPanel->Font) -- only ->Color
+//    is ever assigned (SearchCleanNum, next-wave); same tiny data-holder idiom
+//    as every other Caption/Color stand-in in this file.
+struct TfMainFont { int Color; TfMainFont():Color(0){} };                       // [DATA] golden TFont*
+// -- W906-AutoCleanFoundation ADD: golden THeatTable* (fMain->tmyAutoClean, the
+//    AutoClean clean-kit grid widget). XItem/YItem/Top/Width/Height are
+//    write-only offline (verified by grep -- SetAutoCleanICCount/
+//    SetAutoCleanTrayPosition, both next-wave, only ever WRITE them);
+//    SetCellColorIndex reuses the same no-op idiom as TfMainGrid above and IS
+//    called this wave (AutoClean/AutoClean.cpp's SetCleanCellValue helper).
+struct TfMainAutoCleanGrid
+{
+    int XItem, YItem, Top, Width, Height;
+    TfMainAutoCleanGrid():XItem(0),YItem(0),Top(0),Width(0),Height(0){}
+    void SetCellColorIndex(int /*col*/,int /*row*/,int /*idx*/){}
+};
 struct TfMainMemoLines{ int Count; void Add(AnsiString /*s*/){} TfMainMemoLines():Count(0){} }; // [DATA] golden TStrings*
 struct TfMainMemo     { TfMainMemoLines *Lines; void Clear(){} TfMainMemo(){ Lines=new TfMainMemoLines(); } }; // [DATA] golden TMemo*
 struct TfMainPageControl { int ActivePageIndex; TfMainPageControl():ActivePageIndex(0){} };      // [DATA] golden TPageControl* (pgMain)
@@ -280,6 +353,34 @@ public:
     AnsiString W906_PERSITETemperatureStrings_Sim;  // [PORT-ONLY SEAM] test-settable stand-in feed for the
                                     //   gated leaf above (same data-driven-facade idiom as GetSamSungMap
                                     //   ""-default / GetSamSungSoakTime "0"-default); default ""
+    // -- W906-AutoCleanFoundation ADD (20260721): members the AutoClean foundation
+    //    wave's translated functions (AutoClean/AutoClean.cpp) deref. Per-member
+    //    touch-scope note (verified by grepping golden -- see the wave's own
+    //    report for detail): ONLY chkCleanPadPickErr is actually dereferenced by
+    //    a function THIS wave translates (CheckInSuckICFallDown, inside
+    //    #ifdef SOFT_SIMULTE). AddAutoCleanMessage / bAutoCleanTest / cbIndexDrop /
+    //    pnlCleanCount / AutoCleanContactCountLabel / edHPX / edHPY are all
+    //    touched only by the 4 named core engines (DoAutoCleanKit /
+    //    DoAutoCleanPickfromCleanKit / DoIndexAutoClean(+variant) / EnableAutoclean /
+    //    SearchCleanNum) that are explicitly OUT OF SCOPE this wave (next wave) --
+    //    pre-staged here anyway per this wave's task brief, at zero behavioural
+    //    risk (plain data / no-op sinks, same idiom as every other fMain member).
+    void AddAutoCleanMessage(AnsiString S);       // [METHOD] golden AutoClean.cpp -- offline log sink no-op (next-wave real consumer)
+    bool bAutoCleanTest;                          // [DATA]   golden main.h -- offline default false (next-wave real consumer)
+    TfMainCheckBox *cbIndexDrop;                  // [DATA]   golden main.h (TCheckBox*) -- offline Checked=false (next-wave)
+    TfMainCheckBox *chkCleanPadPickErr;           // [DATA]   golden main.h (TCheckBox*) -- offline Checked=false; ACTIVE this wave (CheckInSuckICFallDown, SOFT_SIMULTE-gated)
+    TfMainPanel    *pnlCleanCount;                 // [DATA]   golden main.h (TPanel*) -- Caption only touched here; ->Font->Color is next-wave (SearchCleanNum), see AutoCleanFont below
+    TfMainFont     *pnlCleanCountFont;              // [DATA]   golden main.h (TPanel->Font, TFont*) -- next-wave (SearchCleanNum sets clRed/clNavy)
+    TfMainPanel    *AutoCleanContactCountLabel;    // [DATA]   golden main.h (TLabel*) -- Caption only (reuse TfMainPanel {AnsiString Caption;}); next-wave (EnableAutoclean)
+    TfLotInfoEdit  *edHPX;                        // [DATA]   golden main.h (TEdit*) -- reuse TfLotInfoEdit {AnsiString Text;}; next-wave (DoIndexAutoClean)
+    TfLotInfoEdit  *edHPY;                        // [DATA]   golden main.h (TEdit*) -- next-wave (DoIndexAutoClean)
+    TfMainAutoCleanGrid *tmyAutoClean;             // [DATA]   golden main.h (THeatTable* clean-kit grid) -- write-only (confirmed by grep: SetAutoCleanICCount/
+                                                    //   SetAutoCleanTrayPosition only WRITE XItem/YItem/Top/Width/Height, never read back inside AutoClean.cpp;
+                                                    //   a pure no-op/plain-data sink is faithful). ->SetCellColorIndex IS called this wave (Part D's
+                                                    //   SetCleanCellValue helper, iMode==eUcleanUsed branch) -- reuses the SAME no-op idiom as htShullte0/1.
+    TStringGrid *AutoCleanStringGrid;               // [DATA]   golden main.h (TStringGrid*) -- REAL backing store (see header banner); RestoreCleanKitData/
+                                                    //   CheckCleaningCount (this wave) read Cells[][] back via atoi(). Default-constructed 5x5 (vclcompat
+                                                    //   default); a future wave's SetAutoCleanICCount translation resizes it via ->ColCount=/->RowCount=.
     TfMain();
 };
 extern TfMain *fMain;
@@ -334,7 +435,20 @@ public:
     // -- W6.3 ADD: members the TRAY-ARM ENGINE (acatchtray.cpp) derefs -----------
     TfLotInfoLabel   *labNowLoaderTrayID;         // [DATA] golden uLotInfo.h (loader tray-ID label)
     TfLotInfoEdit    *edtSysLotID;                // [DATA] golden uLotInfo.h (system lot-ID edit)
-    void InitialUnLoaderTask(int iUnloader);      // [METHOD] golden uLotInfo.h -- offline: no-op (SOFT_SIMULTE AMR path)
+    // AI(W906-AutoCleanFoundation) 20260721: golden uLotInfo.h:1264 `int
+    // iUnloaderTask[3];` (Eastsun 20260515 F011) -- the backing store
+    // InitialUnLoaderTask (below) writes. Was missing entirely (the previous
+    // stand-in's InitialUnLoaderTask didn't even declare it) -- see
+    // InitialUnLoaderTask's own comment for the behaviour-change note.
+    int iUnloaderTask[3];                         // [DATA] golden uLotInfo.h:1264
+    // golden uLotInfo.cpp:16250-16253 -- REAL one-line body (was a total no-op
+    // before this wave). 5 existing call sites in acatchtray.cpp (all inside
+    // `#ifdef SOFT_SIMULTE`, which is #undef'd/commented-out in MachineType.h
+    // -- verified via grep -- so this is currently dormant on every compiled
+    // path; a genuine no-op -> real-write behaviour change ONLY if/when
+    // SOFT_SIMULTE is ever defined). No existing test references
+    // InitialUnLoaderTask or iUnloaderTask (grepped tests/ -- zero hits).
+    void InitialUnLoaderTask(int iPos);           // [METHOD] golden uLotInfo.h -- REAL body: iUnloaderTask[iPos]=1;
     // -- W5-Automation INTEGRATE ADD: members Automation/AMR.cpp + HANA_ART.cpp derefs --
     TfLotInfoRunMode *cbProcess;                  // [DATA] golden uLotInfo.h (TComboBox*; only ->Text used) -- reuse TfLotInfoRunMode shape
     void RefreshAMR();                            // [METHOD] golden uLotInfo.h:1416 -- offline: no UI to refresh (no-op)
@@ -394,5 +508,26 @@ public:
     TfSCKART();
 };
 extern TfSCKART *fSCKART;
+
+// ===========================================================================
+//  W906-AutoCleanFoundation ADD (20260721): TfCleaning -- non-VCL stand-in
+//  (golden AutoClean/uCleaning.h `class TfCleaning : public TForm`). Golden's
+//  real class backs the 2,916-line AutoClean settings-panel VCL form
+//  (uCleaning.cpp) -- entirely OUT OF SCOPE this wave, per the task brief;
+//  this is ONLY a minimal facade stand-in for the handful of members the
+//  translated AutoClean/AutoClean.cpp (+ this wave's Part D free functions)
+//  actually deref, same "form as junk drawer" idiom as TfMain/TfLotInfo/
+//  TfSortCT above.
+// ===========================================================================
+class TfCleaning
+{
+public:
+    TfLotInfoEdit *edCleaningCount;   // [DATA] golden uCleaning.h (TEdit*) -- reuse TfLotInfoEdit {AnsiString Text;}; SearchCleanNum (next-wave)
+    int  iDeviceCount;                 // [DATA] golden uCleaning.h -- offline default 0
+    bool bResetCleanCount;             // [DATA] golden uCleaning.h -- offline default false
+    bool b1x2SiteAbClosePutDummy;      // [DATA] golden uCleaning.h -- ACTIVE this wave: SetShuttleIcForSpecialMode (AutoClean.cpp) + CleanPadCountCanSupport2Arm (Part D)
+    TfCleaning();
+};
+extern TfCleaning *fCleaning;
 
 #endif // FormsFacadeH

@@ -219,6 +219,12 @@ bool AutoCylinderMiddle(int iAuto, int iUp, int iSel, bool bReset=false);  // go
 bool AutoCylinderLower(int iAuto, int iUp, int iSel, bool bReset=false);   // golden -- offline: reached
 //  motor scale-speed setter + BinDisp warn-clear (golden main / MyBinDisp) -- no-op
 void SetMotorScaleSpeed(int iMot, int iSp);      // golden -- no-op
+// AI(W906-AutoCleanFoundation) 20260721: golden cinitial.h:51 sibling of
+// SetMotorScaleSpeed just above (same golden module, cinitial.cpp -- not yet
+// translated anywhere in this tree). AutoClean/AutoClean.cpp's CleanSetSpeed
+// (in-scope this wave) calls both; mirrors the exact no-op idiom already
+// established for its sibling one line up.
+void SetMotorAccelSpeed(int iMot, int iSp);      // golden cinitial.h:51 -- no-op
 void ClearAutoChangingWarn(int iAuto);           // golden MyBinDisp -- no-op
 
 // ===========================================================================

@@ -37,6 +37,14 @@ bool TfAGV::IsATK_AMR()  { return AGV_IsATK_AMR();  }
 // --- W6.3 ADD --------------------------------------------------------------
 bool TfAGV::Use_AMR()    { return AGV_Use_AMR();    }
 
+// --- W906-AutoCleanFoundation ADD: TfNote (first home, see FormsFacade.h) --
+TfNote::TfNote() : bMyServoOffInArm(false), iMyServoOffInArmPosX(0), iMyServoOffInArmPosY(0), aJamCodeFilePath("") {}
+TfNote *fNote = new TfNote();
+
+// --- W906-AutoCleanFoundation ADD: TfShowMessage (first home, see FormsFacade.h) --
+void TfShowMessage::ShowSpeed(bool /*bShow*/) {}
+TfShowMessage *fShowMessage = new TfShowMessage();
+
 // --- W6.2: TfMain ----------------------------------------------------------
 // --- W6.3 ADD: TfMainHanaART --------------------------------------------------
 bool TfMainHanaART::IsHanaArtAvailable() { return false; }     // offline: no HANA link
@@ -101,6 +109,17 @@ TfMain::TfMain()
                                                                      // TesterTCP_Socket.cpp quirk #13).
     SVID1190_OSSetup = "";
     W906_PERSITETemperatureStrings_Sim = "";
+    // -- W906-AutoCleanFoundation ADD (20260721) ------------------------------
+    bAutoCleanTest         = false;
+    cbIndexDrop            = new TfMainCheckBox();
+    chkCleanPadPickErr     = new TfMainCheckBox();
+    pnlCleanCount          = new TfMainPanel();
+    pnlCleanCountFont      = new TfMainFont();
+    AutoCleanContactCountLabel = new TfMainPanel();
+    edHPX                  = new TfLotInfoEdit();
+    edHPY                  = new TfLotInfoEdit();
+    tmyAutoClean           = new TfMainAutoCleanGrid();
+    AutoCleanStringGrid    = new TStringGrid();
 }
 void TfMain::LightOn() {}                                       // W6.4: CCD light sink (offline no-op)
 void TfMain::DebugOneCycleHotPlate(AnsiString /*sfunc*/) {}     // debug log sink (offline no-op)
@@ -144,6 +163,10 @@ void TfMain::BackupSetupFile() {}                                           // o
 //    that front's task brief as a small additive cross-file gap ahead of
 //    ProcessBuffer's own future translation.
 bool TfMain::Home(AnsiString /*Func*/) { return false; }
+// -- W906-AutoCleanFoundation ADD: golden AutoClean.cpp AddAutoCleanMessage
+//    sink. Next-wave real consumer (the 4 core engines); offline no-op log
+//    sink, same idiom as AddShuttleMessage/CleanOut above.
+void TfMain::AddAutoCleanMessage(AnsiString /*S*/) {}
 // -- W906-TesterTCPTimer ADD: golden TfMain::WritePERSITETemperature,
 //    Command.cpp:935-943 (void __fastcall) -- WRAPPER, translated faithfully.
 void TfMain::WritePERSITETemperature()
@@ -198,8 +221,14 @@ TfLotInfo::TfLotInfo()
     ALedLoader    = new TfLedValue();
     for(int i=0;i<3;i++) aLedAuto[i] = new TfLedValue();
     palRemoveTray = new TfLotInfoPanel();
+    // -- W906-AutoCleanFoundation ADD (20260721) ------------------------------
+    for(int iW906AC=0; iW906AC<3; iW906AC++) iUnloaderTask[iW906AC] = 0;
 }
-void TfLotInfo::InitialUnLoaderTask(int /*iUnloader*/) {}      // W6.3: offline AMR-task no-op
+// AI(W906-AutoCleanFoundation) 20260721: golden uLotInfo.cpp:16250-16253 --
+// REAL one-line body (was a total no-op stub before this wave). See
+// FormsFacade.h's iUnloaderTask/InitialUnLoaderTask member comments for the
+// behaviour-change + dormant-call-site (SOFT_SIMULTE undefined) analysis.
+void TfLotInfo::InitialUnLoaderTask(int iPos) { iUnloaderTask[iPos]=1; }
 // -- W5-Automation ADD: AMR.cpp + HANA_ART.cpp method sinks (all offline no-op) --
 void TfLotInfo::RefreshAMR() {}                                            // offline: no UI to refresh
 void TfLotInfo::SetLotID(AnsiString /*ID*/, bool /*bReadFromFile*/) {}     // offline no-op
@@ -227,3 +256,10 @@ void TfSCKART::AddOutputJamCnt(int /*row*/, int /*col*/, int /*ret*/, int /*iBin
 void TfSCKART::DoARTLotStart(AnsiString /*_sLotID*/, AnsiString /*_sProcessCode*/, int /*_iLotCount*/) {}
 void TfSCKART::AccessFile(bool /*bRead*/, int /*iAccess*/) {}
 TfSCKART *fSCKART = new TfSCKART();
+
+// --- W906-AutoCleanFoundation ADD: TfCleaning -------------------------------
+TfCleaning::TfCleaning() : iDeviceCount(0), bResetCleanCount(false), b1x2SiteAbClosePutDummy(false)
+{
+    edCleaningCount = new TfLotInfoEdit();
+}
+TfCleaning *fCleaning = new TfCleaning();

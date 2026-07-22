@@ -111,6 +111,12 @@ TMyKitSuck::TMyKitSuck()
             iWhichAuto[i][j]  = 0;
             bPass[i][j]       = false;
             bNeedReTest[i][j] = false;
+            // AI(W906-AutoCleanFoundation) 20260721: golden -1 = "no pending
+            // AutoClean pick/place record at this nozzle" sentinel -- every
+            // in-scope call site guards on `if(iXpos>=0 && iYpos>=0)` before
+            // trusting these, so 0 (a VALID tray coordinate) would be wrong.
+            iAutoCleanRecX[i][j] = -1;
+            iAutoCleanRecY[i][j] = -1;
         }
 }
 
@@ -466,22 +472,20 @@ bool TMyKitSuck::HasDefineIC(int IC_TYPE)                                       
 }
 
 //==============================================================================
-//  (e) TMyProductionRecord bodies the leaves call (Public/MyProductionRecord.h
-//      is declaration-only; supply the five touched bodies as offline no-ops).
+//  (e) TMyProductionRecord bodies the leaves call. A same-day sibling wave
+//      (AI(W906-MyProductionRecord) 20260721) gave Public/MyProductionRecord.cpp
+//      real bodies for the pure-logic half of this class (ctor included) --
+//      reconciled here: the 8 stand-ins that wave now defines for real were
+//      removed from this file (ctor, AddHPRecord, AddInArmHotplatePickRecord,
+//      GetInRotationAngRecord, AddPickCleanPad, AddPickCleanPadFormShuttle,
+//      AddPlaceCleanPad, Add2DIDRecord) to avoid a multiple-definition link
+//      error; only the 3 the real .cpp deliberately still leaves undefined
+//      (the heavy Save*/upload half + one golden-dead method) keep their
+//      offline no-op here.
 //==============================================================================
-TMyProductionRecord::TMyProductionRecord() {}                       // golden ctor (Public/MyProductionRecord.h declares it; body deferred)
 void TMyProductionRecord::AddErrorRecord(AnsiString, bool, int, int, int, int, int) {}
-void TMyProductionRecord::AddHPRecord(int, int, int) {}
-void TMyProductionRecord::AddInArmHotplatePickRecord(int, int) {}   //Sam 20200716
 void TMyProductionRecord::AddTestRecord(int, int) {}               // W6.2b(2x4_16): golden dead method; offline no-op
-AnsiString TMyProductionRecord::GetInRotationAngRecord() { return ""; } //Sam 20221103
-//AI(W5-BarCode-Integrate) 20260711: Add2DIDRecord(AnsiString) is declared
-// (Public/MyProductionRecord.h:42) but had NO compiled body anywhere in the
-// tree -- BarCode_Bottom2DID.cpp calls InArmSuck.PordRec[i][j].Add2DIDRecord()
-// unguarded (golden BarCode.cpp:1414-1465 region), so linking it into
-// ht9045_sm surfaced a real undefined-reference.  Offline no-op, same
-// convention as the four siblings above.
-void TMyProductionRecord::Add2DIDRecord(AnsiString) {}
+void TMyProductionRecord::SaveRecordCleanPad(AnsiString) {}
 
 //==============================================================================
 //  IsFLCarrKitAllHasIC / IsBLCarrKitAllHasIC -- EXPORTED by
@@ -528,9 +532,21 @@ void uPlateInfo::SetArrPlateXY(int, int, int, int, int, int) {}
 void uPlateInfo::AddHPSuckGroup() {}                                        // W6.2b1x1: golden HTEditList.h:202 -- offline list no-op
 void uPlateInfo::UpdateHPSuckGroup(int, int, int, int, int) {}             // W6.2b1x1: golden HTEditList.h:204 -- offline list no-op
 void uPlateInfo::SaveFile(AnsiString) {}
+// AI(W906-AutoCleanFoundation) 20260721: golden HTEditList.h:233 -- matches the
+// "team list is empty" determinism every sibling GetHPFirstTeam* method above
+// already documents/implements offline.
+uHPSuckTeam* uPlateInfo::ExtractFirstTeam() { return NULL; }
 
 uPlateInfo  g_PickFromHPList;
 uPlateInfo *PickFromHPList = &g_PickFromHPList;
+
+// AI(W906-AutoCleanFoundation) 20260721: golden HTEditList.h:247 -- PlaceToCleanList
+// is a SEPARATE uPlateInfo instance from PickFromHPList (golden main.cpp:2150
+// `new`s each independently); AutoClean's shuttle-place/pick geometry needs its
+// own (offline-empty) team list. See aHotPlateSubstrate.h's extern comment for
+// why this does not collide with csystem.cpp's unrelated same-named TU-local macro.
+uPlateInfo  g_PlaceToCleanList;
+uPlateInfo *PlaceToCleanList = &g_PlaceToCleanList;
 
 AnsiString sHPPickRec          = "";
 AnsiString sHPPickRecException = "";
@@ -542,6 +558,15 @@ const bool ZAxisDown = true;                               // golden ainarm2.h:4
 
 int iPickPlate [2] = {0,0},  iPickPlateX [2] = {0,0},  iPickPlateY [2] = {0,0};
 int iPlacePlate[2] = {0,0},  iPlacePlateX[2] = {0,0},  iPlacePlateY[2] = {0,0};
+
+// AI(W906-AutoCleanFoundation) 20260721: golden ainarm2.cpp:91/101/105-107 --
+// verified genuinely absent from the target tree (grepped) before adding.
+int  iAutoCleanStart = 0;                                   // golden ainarm2.cpp:91
+int  iAutoCleanPickPlateX;                                  // golden ainarm2.cpp:105 (int-static default-0)
+int  iAutoCleanPickPlateY;                                  // golden ainarm2.cpp:106
+int  iAutoCleanUseXPitch = 0;                               // golden ainarm2.cpp:107
+bool bInArmSuckActive[MAX_ARM_Row][MAX_ARM_Col] = {{false,false,false,false},{false,false,false,false}}; // golden ainarm2.cpp:101
+bool bPlaceToCleanKit = false;                              // golden ainarm2.cpp:49
 
 bool InArmSuckUse[MAX_ARM_Row][MAX_ARM_Col]          = {{false}};
 bool bPickFromHotplate                               = false;
@@ -942,6 +967,75 @@ void CopyInitSuck(TMyKitSuck *Source, TMyKitSuck *Target, int SourceR, int Sourc
     Target->bNeedReTest[TargetR][TargetC]=Source->bNeedReTest[SourceR][SourceC];
     Target->cDeviceInf[TargetR][TargetC]= Source->cDeviceInf[SourceR][SourceC];
     Target->cSBin    [TargetR][TargetC] = Source->cSBin    [SourceR][SourceC];
+}
+
+// AI(W906-AutoCleanFoundation-Review) 20260722: golden MyKitSuck.cpp:1503-1561 --
+// FAITHFUL line-for-line translation (every field golden copies/clears, in
+// golden's order; see aHotPlateSubstrate.h's TMyKitSuck member comments for
+// each field's golden home).  Used by the AutoClean shuttle-place/pick leaves
+// (CleanPad_PlaceToShuttle / CleanPad_PickFromShuttle / DoAutoCleanKit-family)
+// to move one nozzle's full record between two TMyKitSuck grids (e.g.
+// InArmSuck -> FLCarryKit).  Calls the real SetItemData (not a raw Item[]=)
+// exactly as golden does, so any future SetItemData side-effect stays wired.
+// This is a MOVE not a copy: golden clears the Source slot after copying (via
+// Source.SetItemData(..., NULL_IC) plus a matching per-field reset) so callers
+// rely on the source grid going empty as a side-effect -- see review finding
+// that a prior revision of this function stopped after the target-side copy
+// and silently dropped golden's entire source-clear tail, leaving stale data
+// in the source slot.  Golden's bLed/pLed UI sync (MyKitSuck.cpp:1532-1538) is
+// omitted: this tree's TMyKitSuck has no bLed/pLed members (UI LED gate
+// already dropped offline elsewhere, see All_HasIC).
+void TMyKitSuck::MoveSuckDataDiff(TMyKitSuck &Source, int SourceR, int SourceC, int TargetR, int TargetC)
+{
+    SetItemData(TargetR, TargetC, Source.Item[SourceR][SourceC]);
+
+    iWhichSite[TargetR][TargetC]     = Source.iWhichSite[SourceR][SourceC];
+    iWhichAuto[TargetR][TargetC]     = Source.iWhichAuto[SourceR][SourceC];
+    iWhichIndex[TargetR][TargetC]    = Source.iWhichIndex[SourceR][SourceC];
+    iCurrRotAng[TargetR][TargetC]    = Source.iCurrRotAng[SourceR][SourceC];
+    iNeedRotAng[TargetR][TargetC]    = Source.iNeedRotAng[SourceR][SourceC];
+
+    bPass[TargetR][TargetC]          = Source.bPass[SourceR][SourceC];
+    iCleanCount[TargetR][TargetC]    = Source.iCleanCount[SourceR][SourceC];
+    bFliped[TargetR][TargetC]        = Source.bFliped[SourceR][SourceC];
+    iBinData[TargetR][TargetC]       = Source.iBinData[SourceR][SourceC];
+    iBinDataBackUp[TargetR][TargetC] = Source.iBinDataBackUp[SourceR][SourceC];
+
+    iAutoCleanRecX[TargetR][TargetC] = Source.iAutoCleanRecX[SourceR][SourceC];
+    iAutoCleanRecY[TargetR][TargetC] = Source.iAutoCleanRecY[SourceR][SourceC];
+    cDeviceInf[TargetR][TargetC]     = Source.cDeviceInf[SourceR][SourceC];
+    b2DIDNG[TargetR][TargetC]        = Source.b2DIDNG[SourceR][SourceC];
+    cReDeviceInf[TargetR][TargetC]   = Source.cReDeviceInf[SourceR][SourceC];
+    cSBin[TargetR][TargetC]          = Source.cSBin[SourceR][SourceC];
+    bQATray[TargetR][TargetC]        = Source.bQATray[SourceR][SourceC];
+    iAOIResult[TargetR][TargetC]     = Source.iAOIResult[SourceR][SourceC];
+
+    PordRec[TargetR][TargetC].asBuffer->CommaText = Source.PordRec[SourceR][SourceC].asBuffer->CommaText;
+    PordRec[TargetR][TargetC].bUse = Source.PordRec[SourceR][SourceC].bUse;
+
+    Source.SetItemData(SourceR, SourceC, NULL_IC);
+
+    Source.iWhichSite[SourceR][SourceC]      = -1;
+    Source.iWhichAuto[SourceR][SourceC]      = -1;
+    Source.iWhichIndex[SourceR][SourceC]     = -1;
+
+    Source.bPass[SourceR][SourceC]           = false;
+    Source.iCleanCount[SourceR][SourceC]     = 0;
+    Source.bFliped[SourceR][SourceC]         = false;
+
+    Source.iBinData[SourceR][SourceC]        = -1;
+    Source.iAutoCleanRecX[SourceR][SourceC]  = -1;
+    Source.iAutoCleanRecY[SourceR][SourceC]  = -1;
+
+    Source.cDeviceInf[SourceR][SourceC]      = "";
+    Source.cReDeviceInf[SourceR][SourceC]    = "";
+    Source.cSBin[SourceR][SourceC]           = "";
+    Source.b2DIDNG[SourceR][SourceC]         = false;
+
+    Source.iCurrRotAng[SourceR][SourceC]     = 0;
+    Source.iNeedRotAng[SourceR][SourceC]     = 0;
+    Source.bQATray[SourceR][SourceC]         = false;
+    Source.iAOIResult[SourceR][SourceC]      = 0;
 }
 
 // ResetInToShtFlag (golden ainarm2.cpp:124): zero the in->shuttle pitch/Z flags.

@@ -727,6 +727,12 @@ add_library(ht9045_sm STATIC
     ainarm_SearchPickPlate.cpp
     ainarm_SearchPlacePlate.cpp
     aHotPlateSubstrate.cpp
+    # AI(W906-Reconcile) 20260721: Public/MyProductionRecord.cpp's real pure-logic
+    # bodies (ctor + ~28 leaves) supersede the offline no-op stand-ins
+    # aHotPlateSubstrate.cpp used to carry for the same 8 methods (removed there,
+    # see that file's own comment) -- lives in ht9045_sm because that's what
+    # aHotPlateSubstrate.cpp/AutoClean.cpp (both in this target) call into.
+    Public/MyProductionRecord.cpp
     # --- W5-comms INTEGRATE: Interface/InterfaceSYS.cpp (WM_COPYDATA IPC bridge
     #     to the GPIB/Tester bridge / ESD / Auto-Update / Event-Log-Analyzer
     #     helper programs).  Lives HERE, not in ht9045_comms, per that unit's own
@@ -1091,6 +1097,14 @@ add_library(ht9045_sm STATIC
     #     Empty/MustHas/Prominent checks / Check32site* / MoveOutArmXY_To* /
     #     SendHTTPRequest / MoveSortArmToAutoSafe / Win32 thread tokens).
     acarry_shims.cpp
+    # --- W906-AutoCleanFoundation: AutoClean engine FOUNDATION wave -- ~30
+    #     pure-calc/HAL-only helper functions out of golden AutoClean/AutoClean.cpp
+    #     (9,137 lines); the 4 named core state machines (DoAutoCleanKit,
+    #     DoAutoCleanPickfromCleanKit, DoPlaceToShuttle, DoPickFromShuttle,
+    #     DoAutoCleanPlaceToCleanKit, DoShuttle1/2AutoClean(+variants),
+    #     DoIndexAutoClean(+variant)) are explicitly OUT OF SCOPE (next wave).
+    #     Mirrors golden's own AutoClean/ subfolder (new in the target tree).
+    AutoClean/AutoClean.cpp
     # --- W6.6 (csystem ORCHESTRATION HUB): the integration SPINE that ties the
     #     five already-translated engines together.  csystem.cpp realizes the
     #     frozen csystem.h spine free-functions: MainProc (slim) + DoAllProcess
