@@ -108,6 +108,15 @@ add_library(ht9045_core
     #   dContactOffset*) is passed in as an explicit scalar parameter, so this TU needs NO link to
     #   ht9045_globals (confirmed empirically: the clean build below links fine without it).
     cContact.cpp
+    # --- W906-MainCalcCore (TfMain calc-core extract): 6 pure calc-core TfMain member
+    #   functions turned into free functions (ComputeShtModeFlag / ComputeCanChangeRealDummy /
+    #   ComputeSiteMapIsStander / ComputeSiteMapPriority / ComputeCanChangeSite /
+    #   ComputeCanChangeToSocket). Only #includes MachineType.h (header-only); every other
+    #   external read (TestIF.*, MOT[].HasIC(), InArmSuck/OutArmSuck.HasIC(), ShuttleHasIC()/
+    #   IndexHasIC()/InputShuttleHasIC(), IniConfig.*, bCanAutoCloseSite, bPickFromLoader,
+    #   iPickFromLoadStageTask, SystemStart, iSiteTotal) is passed in as an explicit scalar
+    #   parameter -- same "no ht9045_globals link needed" shape as cContact.cpp above.
+    MainCalcCore.cpp
 )
 
 target_include_directories(ht9045_core PUBLIC
@@ -132,6 +141,11 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     # ht9045_public's HTMD5.cpp / ht9045_globals' idiom carve-outs); every other warning
     # class (-Wall -Wextra -Wshadow -Wconversion) still applies in full to cContact.cpp.
     set_source_files_properties(cContact.cpp PROPERTIES COMPILE_FLAGS "-Wno-pedantic")
+
+    # AI(ht9045-v899) 20260722: MainCalcCore.cpp also #includes MachineType.h (via
+    # MainCalcCore.h) and hits the SAME stray-';' -Wpedantic idiom noted above for
+    # cContact.cpp. Same narrow suppression, same reasoning.
+    set_source_files_properties(MainCalcCore.cpp PROPERTIES COMPILE_FLAGS "-Wno-pedantic")
 endif()
 
 # ---------------------------------------------------------------------------
@@ -1097,12 +1111,15 @@ add_library(ht9045_sm STATIC
     #     Empty/MustHas/Prominent checks / Check32site* / MoveOutArmXY_To* /
     #     SendHTTPRequest / MoveSortArmToAutoSafe / Win32 thread tokens).
     acarry_shims.cpp
-    # --- W906-AutoCleanFoundation: AutoClean engine FOUNDATION wave -- ~30
-    #     pure-calc/HAL-only helper functions out of golden AutoClean/AutoClean.cpp
-    #     (9,137 lines); the 4 named core state machines (DoAutoCleanKit,
-    #     DoAutoCleanPickfromCleanKit, DoPlaceToShuttle, DoPickFromShuttle,
-    #     DoAutoCleanPlaceToCleanKit, DoShuttle1/2AutoClean(+variants),
-    #     DoIndexAutoClean(+variant)) are explicitly OUT OF SCOPE (next wave).
+    # --- W906-AutoCleanFoundation (~30 pure-calc/HAL-only helpers) + W906-
+    #     AutoCleanCluster (9 small helpers + the 4 named core pick/place
+    #     engines -- DoAutoCleanPickfromCleanKit/DoPlaceToShuttle/
+    #     DoPickFromShuttle/DoAutoCleanPlaceToCleanKit -- + the 3 shuttle-clean
+    #     state machines + the DoAutoCleanKit master orchestrator), out of
+    #     golden AutoClean/AutoClean.cpp (9,137 lines). Still explicitly OUT OF
+    #     SCOPE (a separate follow-on wave, the SECOND dependency cluster):
+    #     DoIndexAutoClean(+_Arm1PickArm2Test variant) -- see the TEMPORARY
+    #     placeholder stub for DoIndexAutoClean near the top of the .cpp.
     #     Mirrors golden's own AutoClean/ subfolder (new in the target tree).
     AutoClean/AutoClean.cpp
     # --- W6.6 (csystem ORCHESTRATION HUB): the integration SPINE that ties the

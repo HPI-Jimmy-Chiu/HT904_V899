@@ -18,6 +18,20 @@ target_link_libraries(test_cContact PRIVATE ht9045_core)
 
 add_test(NAME cContact COMMAND test_cContact)
 
+# --- MainCalcCore: ComputeShtModeFlag / ComputeCanChangeRealDummy /
+#   ComputeSiteMapIsStander / ComputeSiteMapPriority / ComputeCanChangeSite /
+#   ComputeCanChangeToSocket (W906 TfMain calc-core extract) ------------------
+#   Same simple link shape as test_cContact above: MainCalcCore.cpp only #includes
+#   MachineType.h (header-only) and takes every other external read as an explicit
+#   parameter, so it needs no ht9045_globals / RESCAN link group.
+add_executable(test_MainCalcCore
+    test_MainCalcCore.cpp
+)
+
+target_link_libraries(test_MainCalcCore PRIVATE ht9045_core)
+
+add_test(NAME MainCalcCore COMMAND test_MainCalcCore)
+
 # --- cUnitConvert: iUnitMultiply100 / iUnitMultiply1000 (W2 pure extract) ---
 add_executable(test_cUnitConvert
     test_cUnitConvert.cpp
@@ -1210,6 +1224,37 @@ if(WIN32)
 endif()
 
 add_test(NAME W7_GridOccupancy COMMAND test_w7_grid_occupancy)
+
+# ===========================================================================
+#  W7 VERIFY -- HotPlate edge-cylinder knock loop + Loader vibration loop
+# ===========================================================================
+# --- test_w7_hotplate_loader_vibrate: prove both un-gated tail loops pump ---
+#   Proves the W7 un-gate of DoHotplateEdgeCylinderLoop (golden csystem.cpp
+#   :20323-20388) and DoLoaderVibrateLoop (golden :20391-20432), both
+#   ZERO-BLOCKED (every symbol -- Cylinder[]/SW[]/MOT[]/IniConfig/LastSet/
+#   Ld_UldDelayTime -- already had a real translated home).  Drives each loop
+#   through its 10-tick cadence over the Sim HAL and asserts the Cylinder[]/
+#   SW[] end state + TQPF_Timer on/off transitions against golden-derived
+#   oracles: the four/three top guards (zero side effect, no iCT advance), the
+#   bFirst LoopDelay<2 clamp, the off-delay/on-delay elapse -> On()/Off()
+#   transitions (including the iVibratorHP1 int(OnDelay/10.0) truncation
+#   quirk, preserved verbatim), and the bPickFromHotplate+VibrationMotor guard
+#   forcing Cylinder Off().  Same RESCAN link group as the other W6/W7
+#   state-machine tests (csystem.cpp is compiled into ht9045_sm) so the
+#   cprod<->cpublic<->cmydef ctor cross-references settle.
+add_executable(test_w7_hotplate_loader_vibrate
+    test_w7_hotplate_loader_vibrate.cpp
+)
+
+target_link_libraries(test_w7_hotplate_loader_vibrate PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w7_hotplate_loader_vibrate PRIVATE ws2_32)
+endif()
+
+add_test(NAME W7_HotplateLoaderVibrate COMMAND test_w7_hotplate_loader_vibrate)
 
 # ===========================================================================
 #  W7-C1 VERIFY -- the end-of-lot CLEAN OUT drain finish-check (REAL body)
