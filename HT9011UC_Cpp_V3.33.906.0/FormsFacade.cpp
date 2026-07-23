@@ -120,6 +120,8 @@ TfMain::TfMain()
     edHPY                  = new TfLotInfoEdit();
     tmyAutoClean           = new TfMainAutoCleanGrid();
     AutoCleanStringGrid    = new TStringGrid();
+    // -- W906-AutoCleanCluster ADD (20260722) ----------------------------------
+    mtPlate2               = new TfMainAutoCleanGrid();
 }
 void TfMain::LightOn() {}                                       // W6.4: CCD light sink (offline no-op)
 void TfMain::DebugOneCycleHotPlate(AnsiString /*sfunc*/) {}     // debug log sink (offline no-op)

@@ -374,6 +374,28 @@ public:
     // FAITHFUL body in aHotPlateSubstrate.cpp.
     void MoveSuckDataDiff(class TMyKitSuck &Source, int SourceR, int SourceC, int TargetR, int TargetC);
 #endif
+
+    // AI(W906-AutoCleanCluster) 20260722: golden TMyKitSuck members the AutoClean
+    // pick/place-engine cluster (DoAutoCleanPickfromCleanKit / DoAutoCleanKit /
+    // DoShuttle1/2AutoClean) derefs, additive to the Wave-14 AutoClean-foundation
+    // set above. Every one is genuine golden MyKitSuck.h/.cpp API (cited per
+    // line), pure Item-grid scans -- zero HAL, same idiom as ArmUpSideAllTypeIC/
+    // RowHasDefineIC above.  Guarded so a parallel sibling wave does not
+    // double-declare.
+#ifndef HT9045_KITSUCK_AUTOCLEAN_CLUSTER_ADDED
+#define HT9045_KITSUCK_AUTOCLEAN_CLUSTER_ADDED
+    // golden MyKitSuck.cpp:306 (Steven 20250420) -- "every used nozzle over the
+    // FULL pick grid (iMaxRow/iMaxCol) is one of the two given IC types".
+    bool ArmAll_HasICType(int IC_TYPE1, int IC_TYPE2);   // golden MyKitSuck.h (mykitsuck.cpp:306)
+    // golden MyKitSuck.cpp:323 -- same predicate scoped to the SHUTTLE-side grid
+    // (iShtRow/iShtCol) -- "this one is used on In/Out arm" per its own comment.
+    bool ShtAll_HasICType(int IC_TYPE1, int IC_TYPE2);   // golden MyKitSuck.h (mykitsuck.cpp:323)
+    // golden MyKitSuck.cpp:238 (kevin 20120531) -- "is there an empty (NULL_IC)
+    // slot anywhere over the FULL pick grid". Genuinely missing (grepped) before
+    // this addition; needed by DoAutoCleanKit's FLCarryKit/BLCarryKit.FindNoIC()
+    // call sites (golden AutoClean.cpp:2688/3339).
+    bool FindNoIC();                                     // golden MyKitSuck.h:291 (mykitsuck.cpp:238)
+#endif
 };
 
 extern TMyKitSuck InArmSuck;     // golden MyKitSuck.h:357
@@ -406,6 +428,24 @@ extern TMyKitSuck BTestSuck;     // golden MyKitSuck.h:364 (rear  test-head suck
 // type is sufficient and honest about what is/isn't implemented.
 class uHPSuckTeam;
 
+// AI(W906-AutoCleanCluster-review) 20260723: GAP, not a settled invariant --
+// every method below (AddHPSuckGroup/UpdateHPSuckGroup/SetArrPlateXY/
+// GetHPFirstTeam*/ExtractFirstTeam/ClearGroupList) is an unconditional no-op;
+// this class holds no TList at all, so "the team list is always empty" is
+// true ONLY because nothing can ever write to it -- not because of any real
+// offline invariant. Golden's HotPlate-place branch in DoAutoCleanKit
+// (AutoClean.cpp:3960/3993/4893, gated by IniConfig.bE43AutoCleanUseHotplate,
+// a real runtime feature flag, not offline-only) depends on
+// GetHPFirstTeamMotUse() returning TRUE to find where to place/pick; since it
+// permanently returns false here, that branch would unconditionally fail
+// (`ShowMyMessage(...); return false;`) the moment bE43AutoCleanUseHotplate=
+// true is exercised. Zero live effect today (DoAutoCleanKit's only call site
+// is still `#if 0`-gated in csystem.cpp per the W7 wiring TODO), and
+// test_AutoClean.cpp only exercises bE43AutoCleanUseHotplate=false -- but a
+// real HPSuckGroupList/HPSuckTeamList implementation (golden
+// Public/HTEditList.cpp:2454/2617-2628 ClearTeamList/ClearGroupList,
+// :2459-2467 AddHPSuckGroup) must land here before any bE43AutoCleanUseHotplate
+// =true configuration can work, once the W7 gate above is ever removed.
 // uPlateInfo: MINIMAL mirror -- only the called methods (golden HTEditList.h:244)
 class uPlateInfo
 {
@@ -441,6 +481,15 @@ public:
     // Offline: matches the sibling GetHPFirstTeam* determinism (team list is
     // always empty offline) -> always NULL, i.e. "no team to extract".
     uHPSuckTeam* ExtractFirstTeam();
+    // AI(W906-AutoCleanCluster) 20260722: golden HTEditList.h -- "throw away the
+    // whole group list" (sibling of AddHPSuckGroup/UpdateHPSuckGroup above).
+    // DoAutoCleanKit calls PlaceToCleanList->ClearGroupList() once, right at its
+    // Task==1 entry (golden AutoClean.cpp:4509), to guarantee no stale group
+    // survives a restart. Offline: same "list bookkeeping no-op" idiom as its
+    // AddHPSuckGroup/UpdateHPSuckGroup siblings -- see the GAP note on the
+    // class banner above: this is a no-op because nothing populates the list,
+    // not a settled offline invariant.
+    void ClearGroupList();                                              // golden HTEditList.h
 };
 
 extern uPlateInfo *PickFromHPList;   // golden HTEditList.h:294
@@ -495,6 +544,15 @@ extern int  iAutoCleanPickPlateX, iAutoCleanPickPlateY; // golden ainarm2.h:176 
 extern int  iAutoCleanUseXPitch;                   // golden ainarm2.h:177 (REAL def ainarm2.cpp:107, =0)
 extern bool bInArmSuckActive[MAX_ARM_Row][MAX_ARM_Col]; // golden ainarm2.h:175 (REAL def ainarm2.cpp:101, all false)
 extern bool bPlaceToCleanKit;                      // golden ainarm2.h:57 (REAL def ainarm2.cpp:49, =false) -- Steven 20171204 (Wei)
+// AI(W906-AutoCleanCluster) 20260722: golden ainarm2.h:88 (REAL def ainarm2.cpp:92,
+// `int iAutoCleanNum=0;`) -- "which AutoClean pad position is currently the
+// least-used" cursor SearchiAutoCleanNum computes and
+// DoAutoCleanPickfromCleanKit resets on Restart. ainarm2.cpp/.h are NOT this
+// wave's scope (out-of-bounds file), so -- matching the identical pattern
+// already used for iAutoCleanStart/iAutoCleanPickPlateX/Y/iAutoCleanUseXPitch/
+// bInArmSuckActive/bPlaceToCleanKit above -- homed here instead. Verified
+// absent from the target tree before adding (grepped): genuinely missing.
+extern int  iAutoCleanNum;                         // golden ainarm2.h:88 (REAL def ainarm2.cpp:92, =0)
 
 extern bool bPitchOver12000;                                            // golden ainarm2.h:162 (jou 20100120)
 

@@ -159,6 +159,26 @@ public:
     //    reads fContact->IsRun2DCheck() (golden cContact.h:627).  Offline: not
     //    running a 2DID re-check -> false.
     bool IsRun2DCheck();                        // golden cContact.h:627 -- offline false
+    // -- W906-AutoCleanCluster ADD: DoAutoCleanKit's optional pre-clean "Full
+    //    View Check" RTC hand-shake (golden cContact.h:577/578, body cContact.cpp
+    //    :15064-15162 [not just :15064-15130 -- cases 400/500/600 run past that,
+    //    see below] -- a multi-step COM2/vision-comm state machine). TWO call
+    //    sites in golden, not one: (1) AutoClean.cpp:4514-4521/4537, gated behind
+    //    `CosFunction.bFullTestBeforeAutoClean && REAL_TIME_CCD==true &&
+    //    !COM2->bCCDDummyRum`; (2) cContact.cpp:11906-11963 (TfContact::
+    //    DoTestContactFunction, case 70/75), gated behind the structurally
+    //    identical `REAL_TIME_CCD==true && !COM2->bCCDDummyRum &&
+    //    CosFunction.bFullTestBeforeContactHeight`. COM2->bCCDDummyRum is
+    //    offline `true` (TCOM2Shim ctor above), so `!COM2->bCCDDummyRum` is
+    //    unconditionally false offline at BOTH sites: dead-by-construction
+    //    under every reachable state today (site 2's enclosing
+    //    DoTestContactFunction is also itself still untranslated, cContact.h,
+    //    ~11347 lines -- a second, independent reason it can't fire yet).
+    //    Matches this file's established "Do* reports complete (true) so the
+    //    gated SM advances, Init* is a no-op" idiom (banner comment above)
+    //    rather than translating the real vision-comm SM.
+    void InitDoFullViewCheck();                 // golden cContact.h:577 -- offline no-op
+    bool DoFullViewCheck();                     // golden cContact.h:578 -- offline true (complete)
     TfContactShim();
 };
 extern TfContactShim *fContact;                 // golden cContact.h:667 (PACKAGE TfContact* fContact)

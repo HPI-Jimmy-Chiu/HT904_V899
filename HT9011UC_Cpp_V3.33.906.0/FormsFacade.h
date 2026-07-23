@@ -378,6 +378,13 @@ public:
                                                     //   SetAutoCleanTrayPosition only WRITE XItem/YItem/Top/Width/Height, never read back inside AutoClean.cpp;
                                                     //   a pure no-op/plain-data sink is faithful). ->SetCellColorIndex IS called this wave (Part D's
                                                     //   SetCleanCellValue helper, iMode==eUcleanUsed branch) -- reuses the SAME no-op idiom as htShullte0/1.
+    // AI(W906-AutoCleanCluster) 20260722: golden main.h:164 `TTMyTray *mtPlate2;`
+    // -- the HotPlate-2 clean-kit grid widget SetAutoCleanTrayPosition's
+    // bE43AutoCleanUseHotplate branch reads (->Top/->Width/->Height only,
+    // confirmed by grep). Sibling widget of tmyAutoClean above (both are golden
+    // TTMyTray*), so reuses the SAME TfMainAutoCleanGrid stand-in -- this is the
+    // ONLY FormsFacade.h member this wave adds.
+    TfMainAutoCleanGrid *mtPlate2;                  // [DATA]   golden main.h:164 (TTMyTray*) -- read-only here (Top/Width/Height)
     TStringGrid *AutoCleanStringGrid;               // [DATA]   golden main.h (TStringGrid*) -- REAL backing store (see header banner); RestoreCleanKitData/
                                                     //   CheckCleaningCount (this wave) read Cells[][] back via atoi(). Default-constructed 5x5 (vclcompat
                                                     //   default); a future wave's SetAutoCleanICCount translation resizes it via ->ColCount=/->RowCount=.

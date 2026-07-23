@@ -14,8 +14,11 @@
 //  link + run with no hardware and behave sanely. Also exercises the
 //  FormsFacade InitialUnLoaderTask behaviour-change fix (Part B).
 //
-//  This wave's 4 named core engines (DoAutoCleanKit and friends) are
-//  explicitly out of scope -- not exercised here.
+//  W906-AutoCleanCluster (20260722) ADD: extends this same TU with the 9
+//  small helpers + 4 core pick/place engines + 3 shuttle-clean state machines
+//  + the DoAutoCleanKit master orchestrator (the first of two remaining
+//  dependency clusters; DoIndexAutoClean(+variant) stay out of scope -- a
+//  TEMPORARY placeholder stub only, see AutoClean.cpp).
 // =============================================================================
 #include "AutoClean/AutoClean.h"
 #include "aHotPlateSubstrate.h"
@@ -24,6 +27,11 @@
 #include "cpublic.h"
 #include "cmydef.h"
 #include "FormsFacade.h"
+// AI(W906-AutoCleanCluster) 20260722: ADD -- fContact (TfContactShim) / bShuttleShake,
+// acarry.h family symbols this extended test exercises directly.
+#include "atester_shims.h"          // fContact
+#include "csystem_shims.h"          // bShuttleShake
+#include "acarry.h"                 // b1ShuttleMoveToLeft family (not directly asserted, but keeps parity with AutoClean.cpp's own include set)
 #include "canary_support.h"
 #include <cstdio>
 #include <cstring>
@@ -437,6 +445,356 @@ int main()
     CHECK(fLotInfo->iUnloaderTask[1]==1, "InitialUnLoaderTask now REALLY sets iUnloaderTask[pos]=1 (was a no-op)");
     CHECK(fLotInfo->iUnloaderTask[0]==0 && fLotInfo->iUnloaderTask[2]==0,
           "InitialUnLoaderTask only touches the targeted index");
+
+    // =========================================================================
+    //  W906-AutoCleanCluster (20260722)
+    // =========================================================================
+
+    // -----------------------------------------------------------------------
+    //  New substrate: TMyKitSuck.ArmAll_HasICType/ShtAll_HasICType/FindNoIC,
+    //  uPlateInfo::ClearGroupList, TfContactShim::DoFullViewCheck/InitDoFullViewCheck
+    // -----------------------------------------------------------------------
+    printf("[substrate] AutoCleanCluster new TMyKitSuck/uPlateInfo/fContact members\n");
+
+    // ArmAll_HasICType/FindNoIC scan the FULL pick grid (iMaxRow/iMaxCol) --
+    // this test file never calls SetPickerCount, so those default to 0
+    // (zero-initialized, ctor does not set them) unless set explicitly here;
+    // pin them so the loop is non-vacuous.
+    ResetAutoCleanTestState();
+    InArmSuck.iMaxRow = 2; InArmSuck.iMaxCol = 4;
+    InArmSuck.ClearAll();
+    CHECK(InArmSuck.ArmAll_HasICType(NULL_IC, HAS_NULL_CLEAN_IC)==true,
+          "ArmAll_HasICType: an all-NULL_IC pick grid matches (NULL_IC, x)");
+    CHECK(InArmSuck.FindNoIC()==true, "FindNoIC: true when at least one NULL_IC cell remains");
+    InArmSuck.SetItemData(0, 0, HAS_CLEAN_IC);
+    CHECK(InArmSuck.ArmAll_HasICType(NULL_IC, HAS_NULL_CLEAN_IC)==false,
+          "ArmAll_HasICType: one HAS_CLEAN_IC cell breaks the match");
+    InArmSuck.ClearAll();
+
+    // ShtAll_HasICType scans the SHUTTLE-side grid (iShtRow/iShtCol) -- ctor
+    // homes these to 2/1 and nothing in this test file changes them.
+    FLCarryKit.ClearAll();
+    CHECK(FLCarryKit.ShtAll_HasICType(NULL_IC, HAS_NULL_CLEAN_IC)==true,
+          "ShtAll_HasICType: an all-NULL_IC shuttle grid matches (NULL_IC, x)");
+    FLCarryKit.SetItemData(0, 0, HAS_CLEAN_IC);
+    CHECK(FLCarryKit.ShtAll_HasICType(NULL_IC, HAS_NULL_CLEAN_IC)==false,
+          "ShtAll_HasICType: one HAS_CLEAN_IC cell breaks the match");
+    FLCarryKit.ClearAll();
+
+    PlaceToCleanList->ClearGroupList();
+    CHECK(true, "uPlateInfo::ClearGroupList runs without crash (offline list no-op)");
+
+    fContact->InitDoFullViewCheck();
+    CHECK(fContact->DoFullViewCheck()==true, "TfContactShim::DoFullViewCheck offline-completes (true) -- see .h banner for why");
+
+    // -----------------------------------------------------------------------
+    //  Part E -- 9 small helpers
+    // -----------------------------------------------------------------------
+    printf("[E] AutoCleanCluster small helpers\n");
+
+    // GetMotFunc: pure "%s %d" formatter.
+    CHECK(GetMotFunc("Test", 5) == AnsiString("Test 5"), "GetMotFunc formats \"%s %d\"");
+
+    // CleanOnlyHasNullInShuttle: loop bound is InArmSuck.iShtRow/iShtCol (2x1
+    // from the ctor); writes land on BLCarryKit.
+    ResetAutoCleanTestState();
+    BLCarryKit.ClearAll();
+    BLCarryKit.SetItemData(0, 0, HAS_CLEAN_IC);   // a real IC breaks the "only null" condition
+    CleanOnlyHasNullInShuttle();
+    CHECK(BLCarryKit.Item[0][0]==HAS_CLEAN_IC, "CleanOnlyHasNullInShuttle leaves a real-IC shuttle untouched");
+    BLCarryKit.ClearAll();
+    BLCarryKit.SetItemData(0, 0, HAS_NULL_CLEAN_IC);  // still "only null-ish" (HAS_NULL_CLEAN_IC counts)
+    CleanOnlyHasNullInShuttle();
+    CHECK(BLCarryKit.Item[0][0]==NULL_IC, "CleanOnlyHasNullInShuttle clears an all-null-ish shuttle to NULL_IC");
+    BLCarryKit.ClearAll();
+
+    // ResetAutoClean: no clean pad stranded anywhere -> only bRunAutoClean clears.
+    ResetAutoCleanTestState();
+    bRunAutoClean = true;
+    fAllMotorHome = true;
+    ResetAutoClean();
+    CHECK(bRunAutoClean==false, "ResetAutoClean always clears bRunAutoClean");
+    CHECK(fAllMotorHome==true, "ResetAutoClean leaves fAllMotorHome alone when no clean pad is stranded anywhere");
+    // a stranded clean pad on InArmSuck -> triggers the full-clear branch.
+    ResetAutoCleanTestState();
+    InArmSuck.SetItemData(0, 0, HAS_CLEAN_IC);
+    fAllMotorHome = true;
+    ResetAutoClean();
+    CHECK(InArmSuck.Item[0][0]==NULL_IC, "ResetAutoClean clears InArmSuck when a stranded clean pad is found");
+    CHECK(fAllMotorHome==false, "ResetAutoClean clears fAllMotorHome when a stranded clean pad is found (forces a real re-home)");
+    CHECK(bRunAutoClean==false, "ResetAutoClean always clears bRunAutoClean (stranded-pad branch too)");
+
+    // SetAutoCleanTrayPosition: HP-position disabled -> the static Top/Width/Height defaults.
+    ResetAutoCleanTestState();
+    fMain->tmyAutoClean->Top=-1; fMain->tmyAutoClean->Width=-1; fMain->tmyAutoClean->Height=-1;
+    SetAutoCleanTrayPosition();
+    CHECK(fMain->tmyAutoClean->Top==351 && fMain->tmyAutoClean->Width==89 && fMain->tmyAutoClean->Height==25,
+          "SetAutoCleanTrayPosition uses the static Top/Width/Height defaults when HP-position disabled");
+    // HP-position enabled -> mirrors mtPlate2 (the ONLY FormsFacade.h addition this wave).
+    IniConfig.bE43AutoCleanUseHotplate = true;
+    fMain->mtPlate2->Top=100; fMain->mtPlate2->Width=200; fMain->mtPlate2->Height=300;
+    SetAutoCleanTrayPosition();
+    CHECK(fMain->tmyAutoClean->Top==100 && fMain->tmyAutoClean->Width==200 && fMain->tmyAutoClean->Height==300,
+          "SetAutoCleanTrayPosition mirrors fMain->mtPlate2 when HP-position enabled");
+
+    // SearchiAutoCleanNum: two HAS_CLEAN_IC cells with distinct counts -> the
+    // smaller-count cell's position label wins.
+    ResetAutoCleanTestState();
+    MOT[MMAutoCleanKit].SetTraySingleData(0, 0, HAS_CLEAN_IC);
+    MOT[MMAutoCleanKit].SetTraySingleData(1, 0, HAS_CLEAN_IC);
+    fMain->AutoCleanStringGrid->Cells[0][1] = AnsiString("5");   // count at (X=0,Y=0)
+    fMain->AutoCleanStringGrid->Cells[1][1] = AnsiString("2");   // count at (X=1,Y=0) -- smaller
+    fMain->AutoCleanStringGrid->Cells[0][3] = AnsiString("10");  // position label, Y+iAutoClean_YDivision(1)+2=3
+    fMain->AutoCleanStringGrid->Cells[1][3] = AnsiString("20");
+    iAutoCleanNum = -1;
+    SearchiAutoCleanNum();
+    CHECK(iAutoCleanNum==20, "SearchiAutoCleanNum picks the position label of the smaller-count cell (col 1, count=2 < count=5)");
+
+    // EnableAutoclean(Manual=true): function enabled, not mid one-cycle -> triggers InitialAutoCleanAllTask.
+    ResetAutoCleanTestState();
+    TestIF.iAutoClean_Function = 1;
+    bIsAutoOneCycle = false;
+    iOneCycle = 0;
+    bIsAutoOneCycleAutoclean = false;
+    iDoAutoCleanTask = 0; iDoShuttle1AutoCleanTask=0; iDoShuttle2AutoCleanTask=0;
+    iDoShuttleAutoCleanTask=0; iDoIndexAutoCleanTask=0;
+    EnableAutoclean(true);
+    CHECK(iDoAutoCleanTask==1, "EnableAutoclean(Manual) triggers InitialAutoCleanAllTask (resets iDoAutoCleanTask)");
+    CHECK(bIsAutoOneCycleAutoclean==true, "EnableAutoclean(Manual) sets the bIsAutoOneCycleAutoclean latch");
+
+    // EnableAutoclean(Manual=false): interval reached -> same trigger, plus the
+    // contact-count label mirror (unconditional in the Manual==false branch).
+    ResetAutoCleanTestState();
+    TestIF.iAutoClean_Function = 1;
+    TestIF.iAutoClean_IntervalContact = 5;
+    iOneCycle = 0;
+    iAutoClean_IndexContactCount = 10;   // >= IntervalContact
+    iDoAutoCleanTask = 0;
+    bIsAutoOneCycleAutoclean = false;
+    EnableAutoclean(false);
+    CHECK(iDoAutoCleanTask==1, "EnableAutoclean(auto, interval reached) triggers InitialAutoCleanAllTask");
+    CHECK(fMain->AutoCleanContactCountLabel->Caption == AnsiString(10),
+          "EnableAutoclean(auto) always mirrors iAutoClean_IndexContactCount onto the label");
+
+    // AutoCleanWriteData: real WriteIniData file I/O (GetLastOpenFN/DataPath are
+    // un-gated, see common.h) -- smoke-run only, matching this suite's existing
+    // treatment of other real-file-writing calls.
+    ResetAutoCleanTestState();
+    AutoCleanWriteData("iAutoClean_IndexTime", 42);
+    CHECK(true, "AutoCleanWriteData runs without crash (real WriteIniData file I/O)");
+
+    // SetAutoCleanICCount: InitialOK==false -> guarded no-op.
+    ResetAutoCleanTestState();
+    InitialOK = false;
+    fMain->AutoCleanStringGrid->ColCount = 99;
+    SetAutoCleanICCount(false);
+    CHECK(fMain->AutoCleanStringGrid->ColCount==99, "SetAutoCleanICCount(InitialOK=false) is a guarded no-op");
+
+    // SetAutoCleanICCount: iAutoClean_Function disabled -> clears the whole tray, returns.
+    ResetAutoCleanTestState();
+    InitialOK = true;
+    TestIF_File.iAutoClean_Function = 0;
+    MOT[MMAutoCleanKit].SetTraySingleData(0, 0, HAS_CLEAN_IC);
+    SetAutoCleanICCount(false);
+    CHECK(MOT[MMAutoCleanKit].Tray.Data[0][0]==NULL_IC,
+          "SetAutoCleanICCount clears the whole tray when iAutoClean_Function is disabled");
+
+    // SetAutoCleanICCount: normal path (Work=false) -- resizes the grid + repopulates via SetDeviceInTray.
+    ResetAutoCleanTestState();
+    InitialOK = true;
+    TestIF_File.iAutoClean_Function = 1;
+    bRunAutoClean = false;
+    iAutoCleanAlarm = 0;
+    SetAutoCleanICCount(false);
+    CHECK(fMain->AutoCleanStringGrid->ColCount==TestIF.iAutoClean_XDivision,
+          "SetAutoCleanICCount(Work=false) resizes AutoCleanStringGrid->ColCount to iAutoClean_XDivision");
+    CHECK(fMain->tmyAutoClean->XItem==TestIF.iAutoClean_XDivision && fMain->tmyAutoClean->YItem==TestIF.iAutoClean_YDivision,
+          "SetAutoCleanICCount(Work=false) sets tmyAutoClean XItem/YItem");
+    CHECK(TrayHasCleanICCount()>=1, "SetAutoCleanICCount repopulates the clean-kit tray via SetDeviceInTray");
+
+    // -----------------------------------------------------------------------
+    //  Part F -- 4 core pick/place engines
+    // -----------------------------------------------------------------------
+    printf("[F] AutoCleanCluster core pick/place engines\n");
+
+    // DoAutoCleanPickfromCleanKit(Restart=true): resets both cursors, returns 0.
+    ResetAutoCleanTestState();
+    iAutoCleanPickFromCleanKitStageTask = 999;
+    iAutoCleanNum = 0;
+    int rPick = DoAutoCleanPickfromCleanKit(euShuttle1, true);
+    CHECK(rPick==0, "DoAutoCleanPickfromCleanKit(Restart=true) returns 0");
+    CHECK(iAutoCleanPickFromCleanKitStageTask==1, "DoAutoCleanPickfromCleanKit(Restart=true) resets the stage-task cursor to 1");
+    CHECK(iAutoCleanNum==1, "DoAutoCleanPickfromCleanKit(Restart=true) resets iAutoCleanNum to 1");
+
+    // Tick through case 1 -> case 10 -> case 30 -> case 10 (oscillates): an
+    // empty clean-kit tray means CheckCleaningCount() returns FALSE (its scan
+    // only sets bFlag=true for a NON-NULL_IC cell below the alarm threshold;
+    // with every cell NULL_IC that never fires) -- so case 10 routes to case
+    // 30 ("out of clean pads"), and case 30's MoveInArm2XYToShuttle2Wait() is
+    // an offline-true stub (acatchtray_shims.h) so it fires the WAR1922 alarm
+    // and (bUse_NewAutoCleanForm default false) bounces straight back to case
+    // 10 every other tick. Deliberately never reaches case 20/21 -- MoveInArmXYPickCleanKit
+    // is a KNOWN pre-existing gap this suite's own banner documents (InArmOffSet[]
+    // has no linkable ctor, so that call would segfault) -- an empty tray's
+    // case-10 path never goes there regardless.
+    rPick = DoAutoCleanPickfromCleanKit(euShuttle1, false);   // case 1 -> case 10
+    CHECK(iAutoCleanPickFromCleanKitStageTask==10, "DoAutoCleanPickfromCleanKit ticks case 1 -> case 10 (Z reaches safe immediately)");
+    rPick = DoAutoCleanPickfromCleanKit(euShuttle1, false);   // case 10 -> case 30 (empty tray, CheckCleaningCount()==false)
+    CHECK(iAutoCleanPickFromCleanKitStageTask==30, "DoAutoCleanPickfromCleanKit routes an empty clean-kit tray from case 10 to case 30 (out of clean pads)");
+    CHECK(rPick==0, "... and keeps returning 0 (not finished, not erroring)");
+    iAutoCleanAlarm = 0;
+    rPick = DoAutoCleanPickfromCleanKit(euShuttle1, false);   // case 30 -> case 10 (WAR1922 alarm, bUse_NewAutoCleanForm==false)
+    CHECK(iAutoCleanPickFromCleanKitStageTask==10, "DoAutoCleanPickfromCleanKit case 30 bounces back to case 10 (bUse_NewAutoCleanForm disabled)");
+    CHECK(iAutoCleanAlarm==1, "... and raises iAutoCleanAlarm (WAR1922, Clean Count > Alarm Count path)");
+    CHECK(rPick==2, "... returning iResult=2 (\"retry the clean-count cycle\" signal)");
+
+    // case 3300 "finish" path directly (seeded -- avoids the segfault-prone
+    // case 20/21 path): LastSet.iRealDummy==DUMMY -> CheckInArmSuckFromCleanKitICFallDown
+    // returns false -> Task resets to 1, AddHPSuckGroup() called, iResult=1.
+    iAutoCleanPickFromCleanKitStageTask = 3300;
+    rPick = DoAutoCleanPickfromCleanKit(euShuttle1, false);
+    CHECK(rPick==1, "DoAutoCleanPickfromCleanKit case 3300 finish path (DUMMY LastSet) returns 1");
+    CHECK(iAutoCleanPickFromCleanKitStageTask==1, "... and resets the stage-task cursor back to 1");
+
+    // DoPlaceToShuttle: case 1 -> case 100 (fallthrough) -> ArmAll_HasICType
+    // true (InArm fully clear) -> case 2000; InSHT1InLF() false by default (no
+    // shuttle-in-place sensor asserted offline) -> parks at case 2000.
+    ResetAutoCleanTestState();
+    iAutoCleanPlaceToShuttleTask = 1;
+    InArmSuck.ClearAll();
+    bool rPlace = DoPlaceToShuttle(euShuttle1);
+    CHECK(rPlace==false, "DoPlaceToShuttle first tick does not finish");
+    CHECK(iAutoCleanPlaceToShuttleTask==2000, "DoPlaceToShuttle reaches case 2000 (case1->100->2000) when InArm is fully clear");
+
+    // DoPickFromShuttle: case 1 -> case 10; MoveInArmXYToShuttle_9045 is an
+    // offline Sim stub that always returns false (ainarm9045.cpp), so case 10
+    // parks -- a deterministic, documented Sim-HAL limitation, not a bug here.
+    ResetAutoCleanTestState();
+    iAutoCleanPickFromShuttleTask = 1;
+    bool rPickSht = DoPickFromShuttle(euShuttle1, 1);
+    CHECK(rPickSht==false, "DoPickFromShuttle first tick does not finish");
+    CHECK(iAutoCleanPickFromShuttleTask==10, "DoPickFromShuttle reaches case 10 (SetShuttleIcForSpecialMode done)");
+    rPickSht = DoPickFromShuttle(euShuttle1, 1);
+    CHECK(iAutoCleanPickFromShuttleTask==10, "DoPickFromShuttle parks at case 10 (MoveInArmXYToShuttle_9045 offline stub always false)");
+
+    // DoAutoCleanPlaceToCleanKit(Reset=true): resets the task cursor, returns false.
+    ResetAutoCleanTestState();
+    iAutoCleanPlaceToCleanKitTask = 555;
+    bool rPlaceCK = DoAutoCleanPlaceToCleanKit(true);
+    CHECK(rPlaceCK==false && iAutoCleanPlaceToCleanKitTask==1,
+          "DoAutoCleanPlaceToCleanKit(Reset=true) resets the task cursor to 1 and returns false");
+    // case 1 -> case 10 (Z reaches safe immediately); case 10 with InArm empty -> returns true (nothing to place).
+    rPlaceCK = DoAutoCleanPlaceToCleanKit(false);
+    CHECK(iAutoCleanPlaceToCleanKitTask==10, "DoAutoCleanPlaceToCleanKit ticks case 1 -> case 10");
+    CHECK(rPlaceCK==false, "... does not finish on the tick that only just reached case 10");
+    rPlaceCK = DoAutoCleanPlaceToCleanKit(false);
+    CHECK(rPlaceCK==true, "DoAutoCleanPlaceToCleanKit returns true when InArm holds no IC (nothing to place)");
+
+    // -----------------------------------------------------------------------
+    //  Part G -- 3 shuttle-clean state machines
+    // -----------------------------------------------------------------------
+    printf("[G] AutoCleanCluster shuttle-clean state machines\n");
+
+    ResetAutoCleanTestState();
+    MOT[MInShuttle1].fCanMove=MOT[MInShuttle1].fCanMoveR=MOT[MInShuttle1].fCanMoveM=MOT[MInShuttle1].fCanMoveL=true;
+    TestIF_File.iAutoClean_Tray = eCKPos_CleanKit;
+    iDoShuttle1AutoCleanTask = 1;
+    IniConfig.bD43IndexDropErrorCanRetryandSkip = false;
+    DoShuttle1AutoClean_Arm1PickArm2Test();
+    CHECK(iDoShuttle1AutoCleanTask==200,
+          "DoShuttle1AutoClean_Arm1PickArm2Test: case 1 -> case 200 (shuttle1 IsCanMove + Clean-Kit tray mode)");
+    // case 200: FTestSuck/FLCarryKit both clear (ResetAutoCleanTestState) ->
+    // bIndexHasCleanIC=false, FLCarryKit.UseSiteNoIC()=true -> case 1000 (SHT_LEFT).
+    DoShuttle1AutoClean_Arm1PickArm2Test();
+    CHECK(iDoShuttle1AutoCleanTask==1000,
+          "... case 200 with an empty shuttle+index routes to case 1000 (SHT_LEFT)");
+
+    // DoShuttle1AutoClean: same case1->200 entry, but through the "real" (non-
+    // Arm1PickArm2Test) wrapper -- exercises its own extra early-return guards.
+    ResetAutoCleanTestState();
+    MOT[MInShuttle1].fCanMove=MOT[MInShuttle1].fCanMoveR=MOT[MInShuttle1].fCanMoveM=MOT[MInShuttle1].fCanMoveL=true;
+    TestIF_File.iAutoClean_Tray = eCKPos_CleanKit;
+    iDoShuttle1AutoCleanTask = 1;
+    bShuttleShake = false;
+    IniConfig.bF16CheckShuttleSensorBroken = false;
+    IniConfig.bD58UseArm1PickPlaceArm2Test = false;    // RunAutoCleanByArmPickArm2Test() -> false -> does NOT delegate
+    bInSh1DoLtc = false;
+    DoShuttle1AutoClean();
+    CHECK(iDoShuttle1AutoCleanTask==200, "DoShuttle1AutoClean: case 1 -> case 200 (its own early guards all pass through)");
+
+    // DoShuttle2AutoClean: mirrors DoShuttle1AutoClean's entry-guard shape plus
+    // its OWN extra iAutoClean_SelectArm gate.
+    ResetAutoCleanTestState();
+    TestIF.iAutoClean_SelectArm = 2;             // != 0 -> does not early-return on the SelectArm gate
+    CosFunction.bAutoCleanAutoSelIndexArm = false;
+    MOT[MInShuttle2].fCanMove=MOT[MInShuttle2].fCanMoveR=MOT[MInShuttle2].fCanMoveM=MOT[MInShuttle2].fCanMoveL=true;
+    TestIF_File.iAutoClean_Tray = eCKPos_CleanKit;
+    iDoShuttle2AutoCleanTask = 1;
+    bShuttleShake = false;
+    IniConfig.bF16CheckShuttleSensorBroken = false;
+    IniConfig.bD58UseArm1PickPlaceArm2Test = false;
+    bInSh2DoLtc = false;
+    DoShuttle2AutoClean();
+    CHECK(iDoShuttle2AutoCleanTask==200, "DoShuttle2AutoClean: case 1 -> case 200 (its own early guards + SelectArm gate all pass through)");
+
+    // -----------------------------------------------------------------------
+    //  Part H -- master orchestrator (DoAutoCleanKit)
+    // -----------------------------------------------------------------------
+    printf("[H] AutoCleanCluster DoAutoCleanKit master orchestrator\n");
+
+    // Early-exit guards: none of these should touch iDoAutoCleanTask at all.
+    ResetAutoCleanTestState();
+    iDoAutoCleanTask = 777;
+    bLockPlaceToShuttleByAutoClean = true;
+    bLockPickFromShuttleByAutoClean = false;
+    bPlaceToCleanKit = false; bPickFromKitByAutoClean = false;
+    DoAutoCleanKit();
+    CHECK(iDoAutoCleanTask==777,
+          "DoAutoCleanKit early-returns when locked-for-safe-move and neither place/pick-from-kit flag is set");
+
+    ResetAutoCleanTestState();
+    iDoAutoCleanTask = 777;
+    fContact->fShow = true;
+    iContactMode = 9;   // mirrors AutoClean.cpp's file-local CONTACT_DEVICE_MAP_CHECK constant (=9)
+    DoAutoCleanKit();
+    CHECK(iDoAutoCleanTask==777, "DoAutoCleanKit early-returns on fContact->fShow + Device-Map-Check contact mode");
+    fContact->fShow = false;   // restore -- fContact is a shared global shim instance
+
+    ResetAutoCleanTestState();
+    iDoAutoCleanTask = 777;
+    IniConfig.bF16CheckShuttleSensorBroken = true;
+    bDoingF16 = true;
+    DoAutoCleanKit();
+    CHECK(iDoAutoCleanTask==777, "DoAutoCleanKit early-returns while an F16 shuttle-sensor-broken check is in progress");
+
+    // Main flow: an empty clean-kit tray (0 clean pads < iAutoClean_DeveicePices)
+    // routes case 1 -> case 5 -> case 2000 (the error-finish path), then case
+    // 2000's own body runs (falls through into case 2001, a no-op here since
+    // IniConfig.bA81WaitSECS defaults false) and parks at 2000 -- golden itself
+    // re-runs case 2000's whole body every tick in this state (no case 2000
+    // Task= reassignment on the bA81WaitSECS==false path); preserved verbatim.
+    ResetAutoCleanTestState();
+    iDoAutoCleanTask = 1;
+    bLockPlaceToShuttleByAutoClean = false; bLockPickFromShuttleByAutoClean = false;
+    fContact->fShow = false;
+    IniConfig.bF16CheckShuttleSensorBroken = false;
+    IniConfig.bA81WaitSECS = false;
+    IniConfig.bEnable_SECS_GEM = false;
+    USE_IN_Y_IS_AUTO_PITCH = false;              // skip the ASE-KaohSiung AOA branch entirely
+    CosFunction.bFullTestBeforeAutoClean = false; // skip the RTC full-view-check branch (case 1 -> case 5 directly)
+    bAutoCleaning = true;
+    bIndexCheckState = false;
+    bErrorAutoClean = false;
+    DoAutoCleanKit();   // tick 1: case 1 -> case 5
+    CHECK(iDoAutoCleanTask==5, "DoAutoCleanKit tick1: case 1 -> case 5 (Fix3 cylinder + full-view-check both disabled)");
+    DoAutoCleanKit();   // tick 2: case 5 -> case 2000 (0 clean pads < DeveicePices)
+    CHECK(iDoAutoCleanTask==2000, "DoAutoCleanKit tick2: case 5 routes an empty clean-kit tray to case 2000 (error-finish)");
+    CHECK(bAutoCleaning==true, "... bAutoCleaning is still true (case 2000 hasn't run its body yet)");
+    DoAutoCleanKit();   // tick 3: case 2000 body runs, falls through to case 2001 (no-op), parks
+    CHECK(iDoAutoCleanTask==2000, "DoAutoCleanKit tick3: case 2000 parks after running its finish bookkeeping (bA81WaitSECS disabled)");
+    CHECK(bAutoCleaning==false, "... case 2000 clears bAutoCleaning");
+    CHECK(bIndexCheckState==true, "... case 2000 sets bIndexCheckState");
+    CHECK(bErrorAutoClean==false, "... case 2000 clears bErrorAutoClean (set true by case 5's error path)");
 
     // -----------------------------------------------------------------------
     printf("==== %d passed, %d failed ====\n", g_pass, g_fail);

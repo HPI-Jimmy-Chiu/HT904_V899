@@ -1,24 +1,28 @@
 // =============================================================================
-//  AutoClean/AutoClean.h  --  W906-AutoCleanFoundation wave
+//  AutoClean/AutoClean.h  --  W906-AutoCleanFoundation + W906-AutoCleanCluster waves
 //
-//  Translation wave: W906-AutoCleanFoundation (foundation for the AutoClean
-//  engine translation; the 4 named core state machines land in a follow-on
-//  wave -- see the .cpp file banner for the full explicitly-out-of-scope list)
-//  Translator: AI(W906-AutoCleanFoundation) 20260721
+//  Translation wave: W906-AutoCleanFoundation (foundation, 20260721) followed by
+//  W906-AutoCleanCluster (this wave, 20260722) -- the FIRST of two natural
+//  dependency clusters covering golden's remaining 19 absent functions. See the
+//  .cpp file banner for the full explicitly-out-of-scope list (the SECOND
+//  cluster: DoIndexAutoClean + DoIndexAutoClean_Arm1PickArm2Test, golden
+//  AutoClean.cpp:6465-9106, land in a follow-on wave).
+//  Translator: AI(W906-AutoCleanFoundation) 20260721 / AI(W906-AutoCleanCluster) 20260722
 //
 //  Golden: D:\HT9045\HT9011UC_Code_V3.33.906.0_20260618\AutoClean\AutoClean.h/.cpp
 //  Mirrors golden's own file layout (golden keeps ALL of AutoClean.cpp/.h in one
 //  AutoClean/ subfolder rather than per-function files) -- this wave creates
 //  that same AutoClean/ subfolder in the target tree for the first time.
 //
-//  SCOPE (this wave): ~30 pure-calc/HAL-only helper functions out of golden's
-//  9,137-line AutoClean.cpp. Explicitly NOT this wave: DoAutoCleanKit,
-//  DoAutoCleanPickfromCleanKit, DoPlaceToShuttle, DoPickFromShuttle,
-//  DoAutoCleanPlaceToCleanKit, DoShuttle1AutoClean(+variant),
-//  DoShuttle2AutoClean, DoIndexAutoClean(+variant) -- the 4 named core engines
-//  and their variants, forward-declared below only where an in-scope function
-//  needs to reference them by name (none currently do; kept for parity with
-//  golden's own extern list if a future wave needs it).
+//  SCOPE (W906-AutoCleanCluster, this wave): 9 small helpers + the 4 named core
+//  pick/place engines (DoAutoCleanPickfromCleanKit / DoPlaceToShuttle /
+//  DoPickFromShuttle / DoAutoCleanPlaceToCleanKit) + the 3 shuttle-clean state
+//  machines (DoShuttle1AutoClean(+_Arm1PickArm2Test variant) / DoShuttle2AutoClean)
+//  + the master orchestrator DoAutoCleanKit. Explicitly NOT this wave (the SECOND
+//  cluster, a separate follow-on wave): DoIndexAutoClean, DoIndexAutoClean_Arm1PickArm2Test
+//  (golden AutoClean.cpp:6465-9106, 2642 lines) -- see the TEMPORARY placeholder
+//  stub for DoIndexAutoClean near the top of AutoClean.cpp for how DoAutoCleanKit
+//  links against it in the meantime.
 // =============================================================================
 #ifndef AutoCleanFoundationH
 #define AutoCleanFoundationH
@@ -33,13 +37,22 @@ enum eWhichShuttle { euShuttle1=0, euShuttle2=1 };
 
 // golden AutoClean.cpp:44-47 -- file-scope globals declared right at the top
 // of golden's own file (mirrored here at the header so both this file and
-// the .cpp agree on one definition). iAutoCleanPickFromCleanKitStageTask
-// (golden :44) is NOT declared here -- it is only read/written by
-// DoAutoCleanPickfromCleanKit, an explicitly out-of-scope core engine; no
-// in-scope function this wave touches it.
+// the .cpp agree on one definition).
 extern int iAutoCleanPlaceToShuttleTask;
 extern int iInXPos;
 extern int iInYPos;
+// AI(W906-AutoCleanCluster) 20260722: golden AutoClean.cpp:44/48/49/51 -- the
+// remaining file-scope globals DoAutoCleanPickfromCleanKit/DoAutoCleanKit (now
+// in-scope) read/write. `SHT_Kit` (golden :49, `int SHT_Kit=0;`) is DELIBERATELY
+// NOT declared here -- verified by grep: it is written once at its own
+// declaration and never read or written anywhere else in the whole of golden
+// AutoClean.cpp/uCleaning.cpp (dead global) -- and `DoTestYRearDelayAC` (golden
+// :51, a TQPF_Timer) is likewise NOT declared here -- its only readers/writers
+// are all inside DoIndexAutoClean (golden :7902 onward), the out-of-scope
+// SECOND cluster.
+extern int iAutoCleanPickFromCleanKitStageTask;    // golden :44 (jou 2012-05-22)
+extern bool bFullViewCheckFinish;                  // golden :48 (JerryYang 20160331)
+extern bool bInedxCleanFinish[2];                  // golden :50 (kevin 20170520)
 
 // ---------------------------------------------------------------------------
 //  Part A -- pure calc / config (zero VCL, zero HAL beyond already-real globals)
@@ -135,5 +148,51 @@ void SetAutoCleanStringGrid(int X, int Y, AnsiString Str);
 enum eSetCleanPadMode { eUcleanUsed=0, eAutoCleanUsed=1 };
 void SetDeviceInTray(int iXItem, int iYItem, int iDeviceNum, int iMode);   // golden uCleaning.cpp:1934
 bool CleanPadCountCanSupport2Arm();                                        // golden uCleaning.cpp:1325
+
+// =============================================================================
+//  W906-AutoCleanCluster (20260722) -- 9 small helpers + 4 core pick/place
+//  engines + 3 shuttle-clean state machines + the master orchestrator.
+// =============================================================================
+
+// ---------------------------------------------------------------------------
+//  Part E -- 9 small helpers
+// ---------------------------------------------------------------------------
+void CleanOnlyHasNullInShuttle();                                          // golden :55-78 (jimmychiu 20220624)
+void InitialSet();                                                         // golden :80-129
+void EnableAutoclean(bool Manual);                                         // golden :131-152
+void __fastcall AutoCleanWriteData(AnsiString Str, int Data);              // golden :154-161 (kevin 20120710)
+void SetAutoCleanICCount(bool Work);                                       // golden :583-668 (ChungHung 20141027)
+void SetAutoCleanTrayPosition();                                           // golden :670-687 (Steven 20210825)
+void SearchiAutoCleanNum();                                                // golden :1150-1169 (Steven 20171212)
+AnsiString GetMotFunc(AnsiString asFunc, int iTask);                       // golden :6457-6460
+void ResetAutoClean();                                                     // golden :5877-5930
+
+// ---------------------------------------------------------------------------
+//  Part F -- 4 core pick/place engines
+// ---------------------------------------------------------------------------
+int  DoAutoCleanPickfromCleanKit(eWhichShuttle iSht, bool Restart);        // golden :2591-3157 (567 lines)
+bool DoPlaceToShuttle(eWhichShuttle iSht);                                 // golden :3554-3770 (217 lines)
+bool DoPickFromShuttle(eWhichShuttle iSht, int iSelRow);                   // golden :3863-4142 (280 lines)
+bool DoAutoCleanPlaceToCleanKit(bool Reset);                               // golden :4225-4360 (136 lines)
+
+// ---------------------------------------------------------------------------
+//  Part G -- 3 shuttle-clean state machines
+// ---------------------------------------------------------------------------
+void DoShuttle1AutoClean_Arm1PickArm2Test();                               // golden :5932-6043 (Jimmychiu 20230710)
+void DoShuttle1AutoClean();                                                // golden :6044-6199
+void DoShuttle2AutoClean();                                                // golden :6200-6385
+
+// ---------------------------------------------------------------------------
+//  Part H -- master orchestrator
+// ---------------------------------------------------------------------------
+void DoAutoCleanKit();                                                     // golden :4417-5799 (ChungHung 20130701)
+
+// ---------------------------------------------------------------------------
+//  TEMPORARY placeholder -- see AutoClean.cpp for the marked stub. Declared
+//  here so any TU that includes this header (e.g. tests) can see the symbol.
+//  DO NOT treat this declaration as a real translation of DoIndexAutoClean --
+//  it is a stand-in for the SECOND (not-yet-translated) dependency cluster.
+// ---------------------------------------------------------------------------
+void DoIndexAutoClean();                                                   // golden :7360-9106 -- TEMPORARY placeholder, see .cpp
 
 #endif // AutoCleanFoundationH

@@ -344,6 +344,43 @@ void TMyKitSuck::ClearAll()
 }
 void TMyKitSuck::SetAllToNullIC()      { ClearAll(); }       // golden :286
 
+// -- W906-AutoCleanCluster ADD: golden MyKitSuck.cpp:238/306/323 verbatim. -----
+#ifndef HT9045_KITSUCK_AUTOCLEAN_CLUSTER_BODIES
+#define HT9045_KITSUCK_AUTOCLEAN_CLUSTER_BODIES
+bool TMyKitSuck::FindNoIC()                                                     //kevin 20120531
+{
+    for(int i=0; i<iMaxRow; i++)
+        for(int j=0; j<iMaxCol; j++)
+            if(Item[i][j]==NULL_IC)
+                return true;
+    return false;
+}
+bool TMyKitSuck::ArmAll_HasICType(int IC_TYPE1, int IC_TYPE2)                   //Steven 20250420 : fixed for auto clean
+{
+    for(int i=0; i<iMaxRow; i++)
+    {
+        for(int j=0; j<iMaxCol; j++)
+        {
+            if(Item[i][j]!=IC_TYPE1 && Item[i][j]!=IC_TYPE2)
+                return false;
+        }
+    }
+    return true;
+}
+bool TMyKitSuck::ShtAll_HasICType(int IC_TYPE1, int IC_TYPE2)                   //這個能用在In / out arm上
+{
+    for(int i=0; i<iShtRow; i++)
+    {
+        for(int j=0; j<iShtCol; j++)
+        {
+            if(Item[i][j]!=IC_TYPE1 && Item[i][j]!=IC_TYPE2)
+                return false;
+        }
+    }
+    return true;
+}
+#endif
+
 // -- W6.2c(OUT-ARM) ADD: golden MyKitSuck.cpp:369 (Steven 20241017) verbatim.
 //    Clears unused nozzles (beyond iShtRow/iShtCol) + maps HAS_NULL_IC->NULL_IC.
 #ifndef HT9045_KITSUCK_SETUNUSE_BODY
@@ -536,6 +573,10 @@ void uPlateInfo::SaveFile(AnsiString) {}
 // "team list is empty" determinism every sibling GetHPFirstTeam* method above
 // already documents/implements offline.
 uHPSuckTeam* uPlateInfo::ExtractFirstTeam() { return NULL; }
+// AI(W906-AutoCleanCluster) 20260722: golden HTEditList.h -- same offline list
+// no-op idiom as AddHPSuckGroup/UpdateHPSuckGroup above (the team list is
+// always empty offline, so there is nothing to actually clear).
+void uPlateInfo::ClearGroupList() {}
 
 uPlateInfo  g_PickFromHPList;
 uPlateInfo *PickFromHPList = &g_PickFromHPList;
@@ -567,6 +608,9 @@ int  iAutoCleanPickPlateY;                                  // golden ainarm2.cp
 int  iAutoCleanUseXPitch = 0;                               // golden ainarm2.cpp:107
 bool bInArmSuckActive[MAX_ARM_Row][MAX_ARM_Col] = {{false,false,false,false},{false,false,false,false}}; // golden ainarm2.cpp:101
 bool bPlaceToCleanKit = false;                              // golden ainarm2.cpp:49
+// AI(W906-AutoCleanCluster) 20260722: golden ainarm2.cpp:92 -- verified genuinely
+// absent from the target tree (grepped) before adding.
+int  iAutoCleanNum = 0;                                     // golden ainarm2.cpp:92
 
 bool InArmSuckUse[MAX_ARM_Row][MAX_ARM_Col]          = {{false}};
 bool bPickFromHotplate                               = false;

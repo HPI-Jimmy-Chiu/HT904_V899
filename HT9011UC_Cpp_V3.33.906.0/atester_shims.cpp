@@ -255,6 +255,8 @@ bool TfContactShim::IsRun2DCheck()
                                 iContactMode,
                                 bRun2DCheck);
 }
+void TfContactShim::InitDoFullViewCheck() {}                   // offline no-op
+bool TfContactShim::DoFullViewCheck() { return true; }         // offline: reached (true) -- see .h banner
 TfContactShim *fContact = new TfContactShim();
 
 // ---- ADAM_* EP DAQ (offline: no DAQ card) ----------------------------------
