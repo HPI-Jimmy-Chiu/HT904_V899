@@ -985,8 +985,50 @@ C 桶(`clientGemRead`/`ProcessSocketReceiveData`/`Timer1Timer`)是本檔案最�
 
 **ROADMAP 同步**：`MIGRATION_ROADMAP.md` 的 common.cpp/Public-MyProductionRecord DEFERRED 表行、csystem.cpp 行（新增「AutoClean 引擎已翻出但尚未接進 DoAllProcess spine」澄清，避免未來誤讀成已接線）、進度條列（新增本輪 3 個 commit + 下一輪候選）皆已同步更新，避免記錄漂移。
 
-### 🔖 RESUME（最新）
+### 2026-07-22 深夜～2026-07-23 RESUME（歷史存檔）
 - **✅ 三組審查+修正+commit 全部完成（2026-07-22）**：`48be4d6`+`88d4c0a`+`f6bf156`。**寫入佇列已清空**。`uHGemClass` 累計仍 53/57 已解（本輪未觸及）。
 - **下一輪候選（3個都會動 `FormsFacade.h`，需序列處理或合併成一輪，見上節既有規劃）**：Wave15（AutoClean 核心引擎主體，golden :4417-9107 四個 engine）、Wave16（csystem.cpp 3個微小gate：`DoHotplateEdgeCylinderLoop`+`DoLoaderVibrateLoop`+`InitCleanOutFunction` AutoSiteMap 分支）、Wave19（main.cpp calc-core ~55函式）；或回頭處理 `uHGemClass.cpp` 剩4個/SECSGEM DoUploadFileToHost 家族/`Automation/SCK_ART.cpp` 剩4支報表函式等未觸及候選（見更早RESUME）。
 - **驗證基準**：ctest 87/91（同4個既有環境漂移）。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支`fix/v899.32-pti`；工作樹另有無關V899/config殘留(PTI案)勿圈入V906 commit。
 - **執行模式**：使用者指示持續有效（純翻譯/審查可平行就盡量展開；過程無真異常/疑問，未停下請示）。
+
+## 2026-07-23：發現未commit在製工作 + 獨立審查+修正+3commit落地 + 4路recon下一輪
+
+**背景**：使用者要求「繼續純翻譯，火力全開」，本輪並開啟 ultracode（workflow 多代理協調）。開工前照既有 SOP 先 `git status`/`git log` 核對工作樹狀態，**發現與上一節 RESUME 記錄不符**：工作樹裡有 MainCalcCore.cpp/.h（全新檔）、csystem.cpp（DoHotplateEdgeCylinderLoop/DoLoaderVibrateLoop 兩函式解閘）、AutoClean.cpp/.h+aHotPlateSubstrate+FormsFacade+atester_shims（AutoCleanCluster 主體）等一批未 commit 的修改，DEVLOG/ROADMAP 完全沒有記載——比照既有「V906 workflow crash 復原」慣例（別假設是半成品，先驗證再決定），沒有直接重譯或蓋掉。
+
+**驗證非半成品**：fresh build（`build_resume_verify_20260723`）exit 0；ctest 89/93（同 4 個既有環境漂移：config_db/IniFiles/ini_helpers/config_loaders，另新增 `MainCalcCore`/`AutoClean`/`W7_HotplateLoaderVibrate` 3 個目標各自獨立跑也全過）；mojibake 0/14（全部觸及檔案）。確認是紮實的既有進度，非中斷在做一半。
+
+**Workflow 4路獨立審查（非重譯）+4路平行 recon 下一輪**：
+- **Review MainCalcCore**：CLEAN，零發現（逐一核對 golden main.cpp 6 個函式引用行號、分支、`ComputeCanChangeToSocket` 呼叫 `ComputeCanChangeSite` 的 golden 預設參數）。
+- **Review HotplateLoaderVibrate**：CLEAN，零發現（含獨立重新驗證golden `return` 在 `iCT=0` 重置之前的真quirk、`int(OnDelay/10.0)` 截斷）。
+- **Review AutoCleanCluster pass1（引擎本體）**：CLEAN，零發現（4個pick/place engine+3個shuttle-clean SM+`DoAutoCleanKit`主調度逐段核對golden，`DoIndexAutoClean` 確認乾淨延後未被破壞式翻譯）。
+- **Review AutoCleanCluster pass2（支援性新增）**：**FINDINGS，2個MEDIUM**：
+  1. `uPlateInfo`（HP-suck-group/team 記帳）全數空殼no-op，「team list is always empty offline」的說法只因為沒人能寫入而恆真、並非真正離線不變量；`DoAutoCleanKit` 的 HotPlate-place 分支（`IniConfig.bE43AutoCleanUseHotplate`=true，真實runtime旗標非離線模擬專用）依賴 `GetHPFirstTeamMotUse()` 回真資料，今日零影響（呼叫端仍在 csystem.cpp `#if 0`），但這個更深層的gap沒被記錄在 DEFERRED 表任何地方。
+  2. `atester_shims.h` 宣稱 `InitDoFullViewCheck`/`DoFullViewCheck` 「唯一呼叫點」，但golden其實有第二個呼叫點在 `TfContact::DoTestContactFunction`(cContact.cpp:11906-11963)；結論（離線不可達）仍成立，但「唯一」的宣稱本身是錯的——與本專案先前吃過的 `MoveSuckDataDiff`「FAITHFUL」誤稱同一類問題。
+- **Recon `uHGemClass.cpp` 剩4個**：確認 `S2F16` 為最小可行下一塊（純機械組裝：`SReceiveDataBackup` 成員+`#include "csystem.h"`+test RESCAN link group 擴充，需刪除 `test_uHGemClass_link_stubs.cpp` 內會撞名的本地 `MyDBIProcess` stub），`S2F24Sub` 確認不可脫離 `DoTraceDataResponse` 單獨解（否則host會收到「已armed」承諾但永遠收不到S6F1，比現狀「誠實拒絕」更糟），`S2F32` 確認需要全新的 OS 時鐘寫入抽象+可測試 seam（真正設計工作，非機械解鎖）。
+- **Recon `Automation/SCK_ART.cpp` 剩報表函式**：確認 `Save2DSortingSummary` 最便宜（僅需1個`FTP_Upload` TU-local no-op gate+`FormsFacade.h`加6個`TfLotInfo`成員+`atester_shims.h`加1個`fObserver`成員`labFactory`），`SaveMultiLotTestSummary`確認golden裡無真呼叫點應暫緩。
+- **Recon `SECSGEM/uHGemEquipment.cpp` `DoUploadFileToHost`家族**：確認**零剩餘阻塞**，純機械組裝波（`TFileListBox`夠用但`GemLocalFileLixtBox`需另外用`THGemListBox`，非同一shim）；**發現golden既有bug**：`iMaxSend`是純值拷貝非參照，導致chunk size算完就遺失、下個tick永遠讀到0——這解釋了golden呼叫點自己的「// need debug」註解，逐位保留不修。
+- **Recon `MainCalcCore` 下一批**：排出8個具體候選並排序（`ATCAmbientTemperCheck`最乾淨推薦第一個），且**修正了原banner「deferred」的錯誤標記**——`ATCAmbientTemperCheck`/`CheckARTSetupFile`經重新查證其實都已可翻譯（阻塞只是3個trivial常數+2個陣列欄位，非整個型別），另外發現 `CanChangeToHotTemp`/`CanChangeToAmbientTemp` 是golden裡的死宣告（有宣告無實作）。
+
+**主迴圈修正2個MEDIUM發現**：`aHotPlateSubstrate.h` 在 `uPlateInfo` class banner補上明確GAP註記（說明是空殼而非真正不變量，未來解 csystem.cpp 那個 `#if 0` 前必須先補真實記帳）；`atester_shims.h` 改正「唯一呼叫點」為「兩個呼叫點」並修正golden函式本體行號範圍（:15064-15130 → 完整的:15064-15162）。兩處純屬註解修正，零功能行為改變。修正後重跑 build+ctest 確認仍 89/93。
+
+**分3個天然獨立commit落地**（依既定慣例）：
+- `db4d1fd` W906 MainCalcCore：6個純calc-core函式（Wave19第一批）
+- `6f60737` W906 csystem.cpp：`DoHotplateEdgeCylinderLoop`+`DoLoaderVibrateLoop`解閘（Wave16局部，`InitCleanOutFunction` AutoSiteMap分支仍延後）
+- `95cfabf` W906 AutoCleanCluster：4個pick/place engine+3個shuttle-clean SM+`DoAutoCleanKit`主調度+2個review發現的MEDIUM修正（Wave15局部，`DoIndexAutoClean`仍延後）
+
+**⚠️ 一個git操作教訓（記入避免重蹈）**：commit 1 用了 `git commit -m "..." -- <pathspec>` 的寫法，pathspec 收尾會讓 git 對列出的路徑採用「目前工作目錄內容」而非「已 staged 的內容」去 commit——結果 `CMakeLists.txt`/`tests/CMakeLists.txt` 這兩個被我用 `git apply --cached` 手動切開 hunk 的共用檔案，被整檔（含尚未落地的 AutoCleanCluster/HotplateLoaderVibrate hunk）一起收進了第一個 commit，導致 `db4d1fd` 單獨checkout時因為缺 `test_w7_hotplate_loader_vibrate.cpp` 而編不過。因為緊接著commit 2就補上了缺的來源檔，HEAD最終狀態正確，只是`db4d1fd`這個中間點單獨不可獨立build（本地未推送，影響有限）。**日後手動切hunk分批commit時，一律用純 `git add <files>` 之後 `git commit -m "..."`（不带尾隨pathspec），避免此陷阱。**
+
+**驗證基準**：fresh build exit 0，ctest 89/93（同4個既有環境漂移），mojibake 0/14（全部本輪觸及檔案，含2個修正檔）。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支`fix/v899.32-pti`。
+
+**ROADMAP 同步**：進度條列新增本輪一則、csystem.cpp/AutoClean DEFERRED 列補上 AutoCleanCluster 進度與新GAP說明，避免記錄漂移。
+
+### 🔖 RESUME（最新）
+- **✅ 未commit在製工作驗證+4路獨立審查+2個MEDIUM修正+3個commit全部完成（2026-07-23）**：`db4d1fd`+`6f60737`+`95cfabf`。**寫入佇列已清空**。
+- **下一輪候選（4個recon已就緒、互不衝突、可平行翻譯）**：
+  1. `SECSGEM/uHGemClass.cpp` `S2F16_NewEquipmentConstantSendAcknowledge`（純機械組裝，見上方recon）
+  2. `Automation/SCK_ART.cpp` `Save2DSortingSummary`（landing at `SCK_ART_Remainder.cpp` 第11個函式，見上方recon）
+  3. `HT9011UC_Cpp_V3.33.906.0/MainCalcCore.cpp` 下一批（`ATCAmbientTemperCheck`起，共8個候選已排序，見上方recon）
+  4. `SECSGEM/uHGemEquipment.cpp` `DoUploadFileToHost`家族（零剩餘阻塞，純機械組裝，見上方recon）
+  仍延後、需回頭處理：`DoIndexAutoClean`（AutoClean.cpp剩餘叢集）、`InitCleanOutFunction` AutoSiteMap分支（Wave16剩餘微小gate，會動FormsFacade.h，建議與其他會動FormsFacade.h的候選序列處理）、`uHGemClass.cpp` `S2F24Sub`+`S2F32`+`S7F20_CurrentEPPDData`。
+- **驗證基準**：ctest 89/93（同4個既有環境漂移）。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支`fix/v899.32-pti`；工作樹另有無關V899/config殘留(PTI案)勿圈入V906 commit。
+- **執行模式**：使用者指示持續有效（純翻譯/審查可平行就盡量展開；過程無真異常/疑問，未停下請示）。ultracode本輪開啟，後續波次可用 Workflow 工具做「翻譯→獨立審查」平行編排。
