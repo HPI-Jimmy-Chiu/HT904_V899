@@ -669,19 +669,130 @@ void DoAllProcess()
 
 // ===========================================================================
 //  DoHotplateEdgeCylinderLoop / DoLoaderVibrateLoop -- golden csystem.cpp:
-//  (tail cylinder loops; declared in the frozen csystem.h).  The full bodies
-//  walk the Cylinder[] edge-push arrays + loader vibration motor; offline they
-//  are no-ops so the spine tail links + pumps.  GATED #if 0 with active stubs.
+//  20323-20388 / 20391-20432 (declared in the frozen csystem.h).  FAITHFUL
+//  line-for-line translation -- names, formulas, branches and Chinese
+//  comments preserved verbatim, including the two file-scope TQPF_Timer
+//  globals at golden :20321-20322 / :20390.
+// AI(ht9045-v906) 20260722: un-gated both tail cylinder/vibration loops --
+//  ZERO-BLOCKED per recon (Cylinder[]/SW[]/MOT[]/IniConfig/LastSet/
+//  Ld_UldDelayTime all already have real translated homes); no FormsFacade
+//  changes required.
 // ===========================================================================
-void DoHotplateEdgeCylinderLoop()
+TQPF_Timer HotplateEdgeOffDelay;
+TQPF_Timer HotplateEdgeOnDelay;
+void DoHotplateEdgeCylinderLoop()                                               //jou 2011-08-09 start : Hotplate也要敲敲敲
 {
-#if 0 // TODO(W7): Hotplate edge-cylinder knock loop (golden csystem.cpp) -- Cylinder[] edge-push arrays + timing
-#endif
+    static bool EdgePushLoop=false;
+    static bool bFirst=true;
+    static int iCT=0;
+
+    if(SystemStart==false)
+        return;
+
+    if(Cylinder[C_HotplateVibration].Enable==false)                             //Steven 20120510 : 全部改用汽缸的Enable判斷
+        return;
+
+    if(IniConfig.bP16EnableHotplateEdgePushCylinderLoop==false)
+        return;
+
+    if((LastSet.iTemperature==Tempture_Ambient ||
+        LastSet.iTemperature==Tempture_AmbientHot) &&
+        bAmbientHotPlate==false)                                                //Kevincheng 20260525 : 渠梁常溫模式使用hotplate
+        return;                                                                 //kevin 20140918 恆溫控制
+
+    iCT++;
+    if(iCT<10)
+    {
+        return;
+    }
+
+    // AI(ht9045-v906) 20260722: golden quirk, preserved verbatim (not "fixed")
+    //  -- this `return` is BEFORE the `iCT=0;` reset below, so iCT is left
+    //  >=10 when this branch fires; the very next tick re-enters this same
+    //  check immediately with no further 10-tick wait.
+    if(bPickFromHotplate==true && TRAY_VIBRATION==VibrationMotor)               //JerryYang 20171211 (Steven) In arm在hot plate吸取時,關閉震動馬達,邊吸邊震會造成drop error
+    {
+        if(Cylinder[C_HotplateVibration].GetOutBit())
+        {
+            Cylinder[C_HotplateVibration].Off();
+            return;
+        }
+    }
+
+    iCT=0;
+    if(bFirst==true)                                                            //JerryYang 20170531 (wei) 敲擊方式改成可以分別設定on off時間
+    {
+        if(IniConfig.iP16HotplateEdgePushCylinderLoopDelay<2)
+            IniConfig.iP16HotplateEdgePushCylinderLoopDelay=2;
+        HotplateEdgeOffDelay.Set0_1SecAndOn(IniConfig.iP16HotplateEdgePushCylinderLoopDelay);
+        EdgePushLoop=false;
+        bFirst=false;
+    }
+
+    if(HotplateEdgeOffDelay.Off() && EdgePushLoop==false)
+    {
+        if(MOT[MMPlate1].HasRealIC() || MOT[MMPlate2].HasRealIC())
+        {
+            HotplateEdgeOnDelay.Set0_1SecAndOn(IniConfig.iP16HotplateEdgePushCylinderOnDelay);
+            Cylinder[C_HotplateVibration].On();
+            IniConfig.iVibratorHP1=IniConfig.iVibratorHP1+int(IniConfig.iP16HotplateEdgePushCylinderOnDelay/10.0);      //JerryYang 20200612 振動馬達作動時間累計
+            EdgePushLoop=true;
+        }
+    }
+
+    if(HotplateEdgeOnDelay.Off() && EdgePushLoop==true)
+    {
+        if(MOT[MMPlate1].HasRealIC() || MOT[MMPlate2].HasRealIC())
+        {
+            HotplateEdgeOffDelay.Set0_1SecAndOn(IniConfig.iP16HotplateEdgePushCylinderLoopDelay);
+            Cylinder[C_HotplateVibration].Off();
+            EdgePushLoop=false;
+        }
+    }
 }
-void DoLoaderVibrateLoop()
+//------------------------------------------------------------------------------
+TQPF_Timer LoaderVibrateOnDelay;
+void DoLoaderVibrateLoop()                                                      //JerryYang 20191001 loader震動馬達
 {
-#if 0 // TODO(W7): loader vibration-motor loop (golden csystem.cpp) -- MOT[MLoader*] vibrate + timing
-#endif
+    static int iCT=0;
+    static bool bFinishVibrate=true;
+
+    if(SystemStart==false)
+        return;
+
+    if(SW[SwLoaderVibration].Enable==false)
+        return;
+
+    if(Ld_UldDelayTime.LD_EnableVibrate==false)
+        return;
+
+    iCT++;
+    if(iCT<10)
+    {
+        return;
+    }
+
+    iCT=0;
+
+    if(bLoaderNeedVibrate)
+    {
+        bLoaderNeedVibrate=false;
+        bFinishVibrate=false;
+        if(SW[SwLoaderVibration].Status()==false)
+        {
+            SW[SwLoaderVibration].On();
+            LoaderVibrateOnDelay.Set0_1SecAndOn(Ld_UldDelayTime.LD_VibrateOnDelay);
+        }
+    }
+
+    if(bFinishVibrate==false)
+    {
+        if(LoaderVibrateOnDelay.Off())
+        {
+            bFinishVibrate=true;
+            SW[SwLoaderVibration].Off();
+        }
+    }
 }
 
 // ===========================================================================
