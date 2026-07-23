@@ -1032,3 +1032,32 @@ C 桶(`clientGemRead`/`ProcessSocketReceiveData`/`Timer1Timer`)是本檔案最�
   仍延後、需回頭處理：`DoIndexAutoClean`（AutoClean.cpp剩餘叢集）、`InitCleanOutFunction` AutoSiteMap分支（Wave16剩餘微小gate，會動FormsFacade.h，建議與其他會動FormsFacade.h的候選序列處理）、`uHGemClass.cpp` `S2F24Sub`+`S2F32`+`S7F20_CurrentEPPDData`。
 - **驗證基準**：ctest 89/93（同4個既有環境漂移）。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支`fix/v899.32-pti`；工作樹另有無關V899/config殘留(PTI案)勿圈入V906 commit。
 - **執行模式**：使用者指示持續有效（純翻譯/審查可平行就盡量展開；過程無真異常/疑問，未停下請示）。ultracode本輪開啟，後續波次可用 Workflow 工具做「翻譯→獨立審查」平行編排。
+
+## 2026-07-23（同日）：4候選 Workflow 中途被使用者關機請求中斷 -- 交接記錄
+
+**背景**：上方 RESUME 落地後，隨即依4個recon結果派出「翻譯→獨立審查」Workflow（4候選：`S2F16`/`Save2DSortingSummary`/`MainCalcCore`第二批5函式/`DoUploadFileToHost`家族；`S2F16`與`DoUploadFileToHost`因共用`THGem`故意序列化，另兩者平行）。Workflow執行中使用者表示「一個段落後暫停，要關機」，主迴圈判斷：背景workflow在使用者關機後存續與否不確定，與其讓它在無人監看下於中途被強制砍斷、留下不可預期的半寫檔案狀態，不如**主動`TaskStop`乾淨中止**，再誠實記錄現況，好過留給下一場次去猜。
+
+**中止後現況（已核實，未commit）**：`git status`顯示以下檔案有未commit修改，**審查階段全部未跑到**（4個候選都還在「翻譯」階段就被中止，没有一個經過獨立審查）：
+- `Automation/SCK_ART_Remainder.cpp/.h`、`FormsFacade.cpp/.h`、`atester_shims.cpp/.h`、`tests/test_SCK_ART_Remainder.cpp`（Save2DSortingSummary）
+- `MainCalcCore.cpp/.h`、`tests/test_MainCalcCore.cpp`（MainCalcCore第二批）
+- `SECSGEM/uHGemClass.cpp`、`SECSGEM/uHGemEquipment.cpp/.h`、`SECSGEM/SecsWireCodec.cpp/.h`（**非預期觸及**，未在原始任務範圍內，需查明原因）、`tests/CMakeLists.txt`、`tests/test_uHGemClass.cpp`、`tests/test_uHGemClass_link_stubs.cpp`、`tests/test_uHGemEquipment.cpp`（S2F16 + DoUploadFileToHost 序列對）
+- `tests/test_config_loaders.cpp`（**非預期觸及**——這是既有4個「環境漂移」已知失敗之一，不在任何候選的範圍內，需查明是哪個agent動的、為何動、改了什麼，才能判斷能不能留）
+
+**主迴圈中止後親自核實（沿用既有build_resume_verify_20260723，未fresh reconfigure）**：
+- Build 整體 **exit 0**（全樹含新增4候選的4個test target皆成功編譯連結，`tests/CMakeLists.txt`的`test_uHGemClass` RESCAN link group擴充經確認確實生效——若擴充失敗會是連結期錯誤，而非跑起來才炸）。
+- `ctest -R "MainCalcCore|uHGemEquipment|uHGemClass|SCK_ART_Remainder"`：**MainCalcCore Passed**、**SCK_ART_Remainder Passed**、**uHGemClass SegFault**、**uHGemEquipment SegFault**。
+
+**結論與交接指示（下一場次開工前必讀，不可跳過）**：
+1. **不得直接commit目前工作樹的任何一塊**——沒有一個經過獨立審查，且`uHGemClass`/`uHGemEquipment`兩個測試會SegFault，明確不完整或有真bug（S2F16+DoUploadFileToHost這對序列任務極可能是被中止在DoUploadFileToHost進行到一半，例如recon已預警的「`GemLocalFileLixtBox`呼叫`->Items->IndexOf`前無NULL guard，測試若沒先指派實例就會null deref」——但**這只是推測，下一場次必須先讀code再下判斷，不可假設**）。
+2. `MainCalcCore`第二批與`Save2DSortingSummary`兩塊測試通過，但**尚未經過本專案標配的獨立fidelity審查**，不可因為「測試綠燈」就當作已完成——比照本檔案一貫教訓（`MoveSuckDataDiff`「FAITHFUL」自稱／atester_shims「唯一呼叫點」自稱皆測試綠燈但審查後才抓到問題），必須先跑獨立審查再考慮commit。
+3. `SECSGEM/SecsWireCodec.cpp/.h` 與 `tests/test_config_loaders.cpp` 是**非預期觸及**（不在任何一個候選的原始任務範圍內）——下一場次開工前第一件事：`git diff`這兩個檔案，讀懂改了什麼、為什麼改、是否必要，再決定保留/回退。
+4. 開工SOP：先`git status`+`git diff --stat`核對這份交接是否吻合，再對`uHGemClass`/`uHGemEquipment`兩個SegFault個案用`gdb`或加log的方式定位崩潰點（大機率在`DoUploadFileToHost`家族新增的16MB `PtrUploadFileToHost_ForSingleFile`陣列或`GemLocalFileLixtBox`初始化附近，但需實測確認），修好或必要時討論是否整塊重譯這一對。
+5. 4個候選的recon內容仍然有效（見上方RESUME），若判斷部分工作不可用，重新執行對應的翻譯任務即可，不必重新recon。
+
+### 🔖 RESUME（最新，取代上一則）
+- **⚠️ 4候選翻譯workflow中途被使用者關機請求中止，工作樹有未commit、未審查、部分SegFault的翻譯——開工前必讀上方交接段落，禁止直接commit**。
+- `MainCalcCore`第二批+`Save2DSortingSummary`：build綠+自身test綠，但**未經獨立審查**。
+- `S2F16`+`DoUploadFileToHost`（序列對）：build綠，但**ctest SegFault**，需先debug定位崩潰點才能繼續。
+- **非預期觸及待查**：`SECSGEM/SecsWireCodec.cpp/.h`、`tests/test_config_loaders.cpp`。
+- **已安全落地、無需重做**：`db4d1fd`/`6f60737`/`95cfabf`/`b3e9c54`（本日稍早4個commit，皆已審查+驗證+commit，與本次中止的4候選無關，安全）。
+- 驗證基準：`build_resume_verify_20260723`（沿用，未fresh reconfigure）build exit 0，ctest（4候選子集）2 Passed/2 SegFault。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支`fix/v899.32-pti`。
