@@ -1,7 +1,9 @@
 // tests/test_MainCalcCore.cpp
 // Verification harness for the MainCalcCore translation (ComputeShtModeFlag /
 // ComputeCanChangeRealDummy / ComputeSiteMapIsStander / ComputeSiteMapPriority /
-// ComputeCanChangeSite / ComputeCanChangeToSocket).
+// ComputeCanChangeSite / ComputeCanChangeToSocket / ComputeATCAmbientTemperCheck /
+// ComputeCheckAllMOTHome / ComputeCheckSiteMapState / ComputeCheckOLPErrorHasErr /
+// ComputeCheckARTSetupFile).
 //
 // Exercises the translated public API with input->expected-output values hand-derived from
 // the BCB6 formula in the ORIGINAL golden reference
@@ -11,6 +13,11 @@
 //   HT9011UC_Code_V3.33.906.0_20260618/main.cpp:31187-31208 (CheckSiteMapPriority)
 //   HT9011UC_Code_V3.33.906.0_20260618/main.cpp:14350-14393 (CanChangeSite)
 //   HT9011UC_Code_V3.33.906.0_20260618/main.cpp:30156-30163 (CanChangeToSocket)
+//   HT9011UC_Code_V3.33.906.0_20260618/main.cpp:31942-31962 (ATCAmbientTemperCheck)
+//   HT9011UC_Code_V3.33.906.0_20260618/main.cpp:15112-15125 (Check_AllMOT_Home)
+//   HT9011UC_Code_V3.33.906.0_20260618/main.cpp:31148-31172 (CheckSiteMapState, no-arg)
+//   HT9011UC_Code_V3.33.906.0_20260618/main.cpp:33986-34012 (CheckOLPError, partial)
+//   HT9011UC_Code_V3.33.906.0_20260618/main.cpp:32211-32238 (CheckARTSetupFile)
 //
 // LIMITATION (stated explicitly, same as test_cContact.cpp): we CANNOT run the original BCB6
 // binary (no Borland compiler in this environment).  Verification here is therefore:
@@ -52,6 +59,20 @@ static void check_i(const char* name, int got, int expected)
     else
     {
         printf("FAIL  %-56s got=%-6d exp=%-6d\n", name, got, expected);
+        ++g_fail;
+    }
+}
+
+static void check_s(const char* name, const AnsiString& got, const char* expected)
+{
+    if (std::strcmp(got.c_str(), expected) == 0)
+    {
+        printf("PASS  %-56s got=%-10s exp=%-10s\n", name, got.c_str(), expected);
+        ++g_pass;
+    }
+    else
+    {
+        printf("FAIL  %-56s got=%-10s exp=%-10s\n", name, got.c_str(), expected);
         ++g_fail;
     }
 }
@@ -223,6 +244,212 @@ int main()
         // SystemStart=false, but Plate1HasIC=true drives the inner B1b 5-way guard to false.
         check_b("SystemStart=false, Plate1HasIC drives inner CanChangeSite -> false -> false",
                 ComputeCanChangeToSocket(false, false, false, false, false, false, true, false, false, 1), false);
+    }
+
+    // =========================================================================================
+    // ComputeATCAmbientTemperCheck -- BCB6 main.cpp:31942-31962
+    //   eNewATCSystem==6 (MachineType.h eATCType); ATC_TYPE_33/35/61 (ATC_Handler_Side.h)
+    // =========================================================================================
+    printf("\n-- ComputeATCAmbientTemperCheck --\n");
+    {
+        // Ambient temp inside [25,30] and !=0 -> outer guard never fires -> true, regardless
+        // of ATC system/mode.
+        check_b("temp=27 (in [25,30]) -> true regardless of ATC system",
+                ComputeATCAmbientTemperCheck(27.0, 0, 0), true);
+
+        // temp==0 (unconfigured sentinel) -> outer guard fires; new system + matching mode,
+        // but 0 is NOT < -5 -> inner check doesn't fail -> true.
+        check_b("temp=0 (sentinel), new ATC system, mode=33, 0 is not < -5 -> true",
+                ComputeATCAmbientTemperCheck(0.0, 6, 33), true);
+
+        // temp<-5, new system (6), mode==33 -> inner check fires -> false.
+        check_b("temp=-10, new ATC system, mode=33, -10<-5 -> false",
+                ComputeATCAmbientTemperCheck(-10.0, 6, 33), false);
+        check_b("temp=-10, new ATC system, mode=35 -> false",
+                ComputeATCAmbientTemperCheck(-10.0, 6, 35), false);
+        check_b("temp=-10, new ATC system, mode=61 -> false",
+                ComputeATCAmbientTemperCheck(-10.0, 6, 61), false);
+
+        // temp=-3 (>= -5) with new system + matching mode -> inner check does NOT fire -> true.
+        check_b("temp=-3 (>=-5), new ATC system, mode=61 -> true",
+                ComputeATCAmbientTemperCheck(-3.0, 6, 61), true);
+
+        // temp=20 (<25) but mode=99 doesn't match 33/35/61 -> falls to the else branch -> false.
+        check_b("temp=20 (<25), new ATC system, mode=99 (no match) -> false",
+                ComputeATCAmbientTemperCheck(20.0, 6, 99), false);
+
+        // temp=35 (>30), ATC system NOT new (0) -> else branch -> false.
+        check_b("temp=35 (>30), old ATC system (0) -> false",
+                ComputeATCAmbientTemperCheck(35.0, 0, 33), false);
+    }
+
+    // =========================================================================================
+    // ComputeCheckAllMOTHome -- BCB6 main.cpp:15112-15125
+    //   TOTAL_MOTOR=164 (cmydef.h:33); MTrayX=30, MInArmY=1, MOutArmY=20 (cmydef.cpp)
+    // =========================================================================================
+    printf("\n-- ComputeCheckAllMOTHome --\n");
+    {
+        const int kTotalMotor = 164;
+        bool allHome[kTotalMotor];
+
+        // All motors at home -> true.
+        for (int i = 0; i < kTotalMotor; ++i) allHome[i] = true;
+        check_b("all 164 motors at home -> true", ComputeCheckAllMOTHome(allHome), true);
+
+        // A single non-skip-list motor (index 5) off-home -> false.
+        bool oneOff[kTotalMotor];
+        for (int i = 0; i < kTotalMotor; ++i) oneOff[i] = true;
+        oneOff[5] = false;
+        check_b("motor 5 (not in skip-list) off-home -> false", ComputeCheckAllMOTHome(oneOff), false);
+
+        // Only the 3 skip-list motors (MTrayX=30, MInArmY=1, MOutArmY=20) off-home -> still true.
+        bool skipOnly[kTotalMotor];
+        for (int i = 0; i < kTotalMotor; ++i) skipOnly[i] = true;
+        skipOnly[30] = false; skipOnly[1] = false; skipOnly[20] = false;
+        check_b("only MTrayX/MInArmY/MOutArmY off-home -> true (skip-list)",
+                ComputeCheckAllMOTHome(skipOnly), true);
+
+        // A skip-list motor (MInArmY=1) AND a non-skip motor (index 50) both off-home -> false
+        // (confirms the skip only exempts the 3 named indices, not everything after them).
+        bool mixedOff[kTotalMotor];
+        for (int i = 0; i < kTotalMotor; ++i) mixedOff[i] = true;
+        mixedOff[1] = false; mixedOff[50] = false;
+        check_b("MInArmY off-home (skipped) + motor 50 off-home (not skipped) -> false",
+                ComputeCheckAllMOTHome(mixedOff), false);
+    }
+
+    // =========================================================================================
+    // ComputeCheckSiteMapState -- BCB6 main.cpp:31148-31172 (no-arg overload only)
+    //   Returns raw bHasErr (see header polarity note); ErrPart is an append-only out-param.
+    // =========================================================================================
+    printf("\n-- ComputeCheckSiteMapState --\n");
+    {
+        // No sites mapped -> no error, ErrPart stays empty.
+        int zeroMap[MAX_SOCKET_ROW][MAX_SOCKET_COL] = {{0}};
+        int zeroDut[MAX_SOCKET_ROW][MAX_SOCKET_COL] = {{0}};
+        AnsiString names1[MAX_SOCKET_ROW][MAX_SOCKET_COL];
+        AnsiString errPart1 = "";
+        bool r1 = ComputeCheckSiteMapState(zeroMap, zeroDut, names1, errPart1);
+        check_b("all iSiteMap==0 -> bHasErr=false", r1, false);
+        check_s("all iSiteMap==0 -> ErrPart empty", errPart1, "");
+
+        // Site [0][0] mapped (>=1) but Index shows it OFF (iDutOnOff0==0) -> one error.
+        int map2[MAX_SOCKET_ROW][MAX_SOCKET_COL] = {{0}};
+        int dut2[MAX_SOCKET_ROW][MAX_SOCKET_COL] = {{0}};
+        map2[0][0] = 1;
+        dut2[0][0] = 0;
+        AnsiString names2[MAX_SOCKET_ROW][MAX_SOCKET_COL];
+        names2[0][0] = "S00";
+        AnsiString errPart2 = "";
+        bool r2 = ComputeCheckSiteMapState(map2, dut2, names2, errPart2);
+        check_b("[0][0] mapped + Index off -> bHasErr=true", r2, true);
+        check_s("[0][0] mapped + Index off -> ErrPart==S00", errPart2, "S00");
+
+        // Site mapped AND Index shows it ON (iDutOnOff0!=0) -> NOT an error.
+        int map3[MAX_SOCKET_ROW][MAX_SOCKET_COL] = {{0}};
+        int dut3[MAX_SOCKET_ROW][MAX_SOCKET_COL] = {{0}};
+        map3[1][2] = 1;
+        dut3[1][2] = 1;   // Index still ON -> no mismatch
+        AnsiString names3[MAX_SOCKET_ROW][MAX_SOCKET_COL];
+        names3[1][2] = "S12";
+        AnsiString errPart3 = "";
+        bool r3 = ComputeCheckSiteMapState(map3, dut3, names3, errPart3);
+        check_b("[1][2] mapped + Index ON -> bHasErr=false (no mismatch)", r3, false);
+        check_s("[1][2] mapped + Index ON -> ErrPart stays empty", errPart3, "");
+
+        // Two error cells in row-major order -> ErrPart concatenates in scan order (i then j).
+        int map4[MAX_SOCKET_ROW][MAX_SOCKET_COL] = {{0}};
+        int dut4[MAX_SOCKET_ROW][MAX_SOCKET_COL] = {{0}};
+        map4[0][0] = 1; dut4[0][0] = 0;
+        map4[2][3] = 1; dut4[2][3] = 0;
+        AnsiString names4[MAX_SOCKET_ROW][MAX_SOCKET_COL];
+        names4[0][0] = "A";
+        names4[2][3] = "B";
+        AnsiString errPart4 = "";
+        bool r4 = ComputeCheckSiteMapState(map4, dut4, names4, errPart4);
+        check_b("two mismatched cells -> bHasErr=true", r4, true);
+        check_s("two mismatched cells -> ErrPart==AB (row-major scan order)", errPart4, "AB");
+    }
+
+    // =========================================================================================
+    // ComputeCheckOLPErrorHasErr -- BCB6 main.cpp:33986-34012 (partial: pure reduction only)
+    // =========================================================================================
+    printf("\n-- ComputeCheckOLPErrorHasErr --\n");
+    {
+        int allZero[10] = {0,0,0,0,0,0,0,0,0,0};
+        check_b("all OLPSetBinErr==0 -> false", ComputeCheckOLPErrorHasErr(allZero), false);
+
+        int oneAtThreshold[10] = {0,0,3,0,0,0,0,0,0,0};
+        check_b("OLPSetBinErr[2]==3 (threshold) -> true", ComputeCheckOLPErrorHasErr(oneAtThreshold), true);
+
+        int belowThreshold[10] = {0,2,0,0,0,0,0,0,0,0};
+        check_b("OLPSetBinErr[1]==2 (below threshold) -> false", ComputeCheckOLPErrorHasErr(belowThreshold), false);
+
+        int lastIndex[10] = {0,0,0,0,0,0,0,0,0,5};
+        check_b("OLPSetBinErr[9]==5 (last index) -> true", ComputeCheckOLPErrorHasErr(lastIndex), true);
+    }
+
+    // =========================================================================================
+    // ComputeCheckARTSetupFile -- BCB6 main.cpp:32211-32238
+    //   eAuto3==2, eartInstall==1 (MachineType.h); bAutoRetest[1]=true, iCatDataT3Pos matches
+    //   i==1 at j==1 and j==3, so the "BinSelect match" gate is satisfied for i=1 in all cases
+    //   below unless bAutoRetest is explicitly all-false.
+    // =========================================================================================
+    printf("\n-- ComputeCheckARTSetupFile --\n");
+    {
+        bool bAutoRetest[3]     = {false, true, false};   // only index 1 qualifies
+        int  iCatDataT3Pos[4]   = {0, 1, 2, 1};            // j=1 and j=3 both map to i=1
+        // 1 == MachineType.h eAutoRetest::eartInstall; 0 == eartUninstall (raw int literals,
+        // same idiom as this file's other tests, e.g. ComputeShtModeFlag's iShuttleMode==1).
+
+        check_b("gate off (USE_AUTO_RETEST != eartInstall) -> false regardless of filename",
+                ComputeCheckARTSetupFile(0, true, bAutoRetest, iCatDataT3Pos, 4,
+                                          AnsiString("XYZ_ART001")), false);
+
+        check_b("gate on but bA10_AutoReTest=false -> false",
+                ComputeCheckARTSetupFile(1, false, bAutoRetest, iCatDataT3Pos, 4,
+                                          AnsiString("XYZ_ART001")), false);
+
+        bool noMatch[3] = {false, false, false};
+        check_b("gate on, bA10=true, but no BinSelect cell qualifies -> false",
+                ComputeCheckARTSetupFile(1, true, noMatch, iCatDataT3Pos, 4,
+                                          AnsiString("XYZ_ART001")), false);
+
+        check_b("qualifying cell + filename contains \"_ART\" (Pos!=0, any position) -> true",
+                ComputeCheckARTSetupFile(1, true, bAutoRetest, iCatDataT3Pos, 4,
+                                          AnsiString("XYZ_ART001")), true);
+
+        check_b("qualifying cell + filename STARTS WITH \"9203\" (Pos==1) -> true",
+                ComputeCheckARTSetupFile(1, true, bAutoRetest, iCatDataT3Pos, 4,
+                                          AnsiString("9203_setup.cfg")), true);
+
+        check_b("qualifying cell + \"9203\" present but NOT at position 1 -> false",
+                ComputeCheckARTSetupFile(1, true, bAutoRetest, iCatDataT3Pos, 4,
+                                          AnsiString("ABC9203.cfg")), false);
+
+        check_b("qualifying cell + filename matches none of the 7 keywords -> false",
+                ComputeCheckARTSetupFile(1, true, bAutoRetest, iCatDataT3Pos, 4,
+                                          AnsiString("NormalSetup.cfg")), false);
+
+        // Sweep the remaining 5 position-anchored keywords individually.
+        check_b("keyword \"5611\" at position 1 -> true",
+                ComputeCheckARTSetupFile(1, true, bAutoRetest, iCatDataT3Pos, 4,
+                                          AnsiString("5611_setup.cfg")), true);
+        check_b("keyword \"9287\" at position 1 -> true",
+                ComputeCheckARTSetupFile(1, true, bAutoRetest, iCatDataT3Pos, 4,
+                                          AnsiString("9287xxx.cfg")), true);
+        check_b("keyword \"3971\" at position 1 -> true",
+                ComputeCheckARTSetupFile(1, true, bAutoRetest, iCatDataT3Pos, 4,
+                                          AnsiString("3971abc.cfg")), true);
+        check_b("keyword \"9606\" at position 1 -> true",
+                ComputeCheckARTSetupFile(1, true, bAutoRetest, iCatDataT3Pos, 4,
+                                          AnsiString("9606abc.cfg")), true);
+        check_b("keyword \"KL\" at position 1 -> true",
+                ComputeCheckARTSetupFile(1, true, bAutoRetest, iCatDataT3Pos, 4,
+                                          AnsiString("KLxxx.cfg")), true);
+        check_b("keyword \"9378\" at position 1 -> true",
+                ComputeCheckARTSetupFile(1, true, bAutoRetest, iCatDataT3Pos, 4,
+                                          AnsiString("9378xxx.cfg")), true);
     }
 
     printf("\n=== Summary: %d passed, %d failed ===\n", g_pass, g_fail);
