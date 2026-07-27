@@ -8,6 +8,8 @@
 //   SCK_ART_Remainder.h for the exact per-function golden line ranges).
 //
 // AI(W906-DoARTLotStart) 20260721: added PART 9 (DoARTLotStart, golden :4191-4256).
+// AI(W906-Save2DSortingSummary) 20260723: added PART 11 (Save2DSortingSummary, golden :3402-4061);
+// also retrofitted PART 8's 2D-sort dispatch sub-case (now real, see PART 8's own updated comment).
 //
 // LIMITATION 1 (same as test_SCK_ART.cpp/test_ContactForce.cpp): we CANNOT run the original BCB6
 // binary (no Borland compiler in this environment). Verification here is therefore: (1) the
@@ -397,14 +399,24 @@ int main()
     }
 
     // =========================================================================================
-    // PART 8 -- SaveTestSummary -- golden :1619-1645 (dispatch logic; 3 of 4 callees gated, see
+    // PART 8 -- SaveTestSummary -- golden :1619-1645 (dispatch logic; 2 of 4 callees still gated, see
     //   gate #7 -- deferred to next wave). AI(W906-SaveTestSummarySECS) 20260721: the SECS branch now
     //   calls the REAL SckArtRem_SaveTestSummarySECS -- asSummaryPath is redirected to a scratch dir
     //   for the DURATION of this PART (never the real D:\HT9045_Log\Summary production path) so that
     //   branch's real file-write does not touch anything outside the scratch sandbox. Deep coverage of
     //   SaveTestSummarySECS's own behavior is PART 10 below; here we only confirm dispatch doesn't crash.
+    //   AI(W906-Save2DSortingSummary) 20260723: the 2D-sort branch now ALSO calls the REAL
+    //   SckArtRem_Save2DSortingSummary -- same scratch-dir discipline applies. IniConfig.bN23UseLotInfoFile
+    //   is forced true here specifically to steer that call through the (safe) `sList->Text=
+    //   fLotInfo->mmo2DLotInfo->Text;` content branch, NOT the final "else" branch (golden :3634-3644,
+    //   `Str.sprintf("LOT_ID:%s", fLotInfo->edtSysLotID)` -- a real golden bug that passes a raw pointer
+    //   to %s, see that function's own header doc comment "Golden bugs preserved VERBATIM #2"). That bug
+    //   is preserved VERBATIM in the SOURCE and is expected to be harmless in practice (see the same doc
+    //   comment's UB analysis), but this shallow dispatch-only PART deliberately avoids exercising it --
+    //   deep coverage of Save2DSortingSummary's own behavior (including the bReadLotInfoFromART content
+    //   branch, gate #13's FTP_Upload, and the ShellExecute quirk) is PART 11 below.
     // =========================================================================================
-    printf("\n-- SaveTestSummary (dispatch logic; SECS branch now real, see PART 10) --\n");
+    printf("\n-- SaveTestSummary (dispatch logic; SECS + 2D-sort branches now real, see PART 10/11) --\n");
     {
         AnsiString savedSummaryPath8 = asSummaryPath;
         asSummaryPath = ScratchDir() + "W906SaveTestSummaryDispatchScratch";
@@ -412,14 +424,16 @@ int main()
         SckArtRemainderState st;
         IniConfig.bSPILFunction = false;
         IniConfig.bN17UploadLotSummary = false;
-        IniConfig.bA38_SLT_Summary = false;   // keep the ShellExecute-quirk branch OFF here -- PART 10 owns that
+        IniConfig.bA38_SLT_Summary = false;   // keep the ShellExecute-quirk branch OFF here -- PART 11 owns that
+        IniConfig.bN23UseLotInfoFile = true;  // steer Save2DSortingSummary's content-building away from the LOT_ID-bug branch (see PART header note above)
         CosFunction.bUseTSVFunction = false;
 
         CosFunction.bSortingBy2DList = true;
         LastSet.iTester = _2D_SORT;
         TestIF_File.bSortingBy2DIDList = true;
         SckArtRem_SaveTestSummary(st, 1);
-        CHECK(true, "2D-sort branch dispatches to (gated) Save2DSortingSummary without crashing (golden :1621-1626)");
+        CHECK(true, "2D-sort branch dispatches to the now-REAL SckArtRem_Save2DSortingSummary without crashing (golden :1621-1626; see PART 11 for deep coverage)");
+        IniConfig.bN23UseLotInfoFile = false;   // restore default for the remaining PART 8 sub-cases below
 
         CosFunction.bSortingBy2DList = false;
         CosFunction.bART_SECSGEM_93K = true;
@@ -684,6 +698,122 @@ int main()
         }
 
         asSummaryPath = savedSummaryPath;
+    }
+
+    // =========================================================================================
+    // PART 11 -- Save2DSortingSummary -- golden :3402-4061. AI(W906-Save2DSortingSummary) 20260723.
+    //   Steers through the bReadLotInfoFromART==true content-building branch (safe -- all ->Text/
+    //   ->Caption reads, no raw pointers -- and exercises the NEW fObserver->labFactory member) and the
+    //   bUseTSVFunction && bN09_LotCountAutoFunc && iNeedRT==0 && iN09_4_UploadMethod==0 FTP_Upload path
+    //   (new gate #13), plus the bA38_SLT_Summary ShellExecute-with-empty-path quirk (reusing gate #11,
+    //   same golden idiom PART 10 already exercises for SaveTestSummarySECS). Deliberately does NOT
+    //   exercise the bN23UseLotInfoFile==false && bReadLotInfoFromART==false && bSPILFunction==false
+    //   "else" content branch (golden :3634-3644, `Str.sprintf("LOT_ID:%s", fLotInfo->edtSysLotID)` --
+    //   a real golden bug passing a raw pointer to %s, see that function's own header doc comment
+    //   "Golden bugs preserved VERBATIM #2"): the bug is preserved VERBATIM in the SOURCE (not "fixed"),
+    //   but this harness avoids making an automated test's pass/fail depend on unspecified/undefined
+    //   behavior, even though ordinary (non-ASan) execution of that exact line is expected to be
+    //   harmless in practice (see that same doc comment's analysis). A distinctive, obviously-fake Lot
+    //   ID / edtSysLotID->Text is used throughout, specifically to make the unavoidable (golden :4044,
+    //   runs whenever iSaveData!=0) hardcoded "D:\HT9045_Log\2D_SortList" FileExists check's already-
+    //   vanishingly-small collision risk with any real production file effectively zero (same posture
+    //   this file's own LIMITATION 2 documents for SckArtRem_SetGPIBVersion's hardcoded GPIB path).
+    // =========================================================================================
+    printf("\n-- Save2DSortingSummary --\n");
+    {
+        AnsiString savedSummaryPath11 = asSummaryPath;
+        asSummaryPath = ScratchDir() + "W906Save2DSortingSummaryScratch";
+        AnsiString savedN09Folder = IniConfig.sN09_HandlerFolder;
+        IniConfig.sN09_HandlerFolder = ScratchDir() + "W906Save2DSortingSummaryN09Scratch";
+        AnsiString savedEdtSysLotID = fLotInfo->edtSysLotID->Text;
+        fLotInfo->edtSysLotID->Text = "W906TESTPART11EDT";
+
+        IniConfig.bSPILFunction = false;
+        IniConfig.bN23UseLotInfoFile = false;
+        bReadLotInfoFromART = true;              // steer content+FileName-building through the SAFE branch (also exercises labFactory)
+        IniConfig.bA37LotStartLotEnd = false;
+        TestIF_File.bSCKART_EnableART = true;    // keep iUnloadCount purely from the seeded LotSummary accumulation below (golden :3529-3535 skipped)
+        CosFunction.bART_SECSGEM_93K = true;     // skip the iE1Count/iE2Count/iE3Count/bIsRTBin reset block (golden :3505-3521) -- not under test here
+        IniConfig.bN17UploadLotSummary = false;  // THE ShellExecute-quirk precondition -- strFileName never assigned (same as PART 10)
+        IniConfig.bA38_SLT_Summary = true;       // needed for the ShellExecute-quirk branch
+        CosFunction.bUseTSVFunction = true;      // needed for the FTP_Upload gate
+        IniConfig.bN09_LotCountAutoFunc = true;  // needed for the FTP_Upload gate
+        IniConfig.iN09_4_UploadMethod = 0;       // selects the FTP_Upload sub-branch (golden :3939-3942)
+        IniConfig.sN09_5_Path = "/remote/scratch/path";
+        IniConfig.dN09_SearchTime = 5.0;
+        bWaitTSV = false;
+
+        SckArtRemainderState st;
+        st.sLotID = "W906TESTLOT2DSORT";
+        st.iNeedRT = 0;                          // required for the FTP_Upload gate (golden :3937 fSCKART->iNeedRT==0)
+        st.sInfo_CustLotID = "CUST-2DSORT-1";
+        st.sInfo_CustDevGup = "DEVGRP-1";
+        st.sInfo_Customer = "ACME2D";
+        st.sInfo_DeviceName = "DEVICE2D";
+        st.sInfo_HandlerID = "HANDLER2D";
+        st.sInfo_OperatorID = "OP2D";
+        st.sLotStartTime = "";                   // exercises the RunInfo.LotStartTime/LotEndTime fallback branches (golden :3646-3665)
+        RunInfo.LotStartTime = "2026-07-23 09:00:00";
+        RunInfo.LotEndTime   = "2026-07-23 09:30:00";
+        fObserver->labFactory->Caption = "FACTORY-2D-TEST";
+
+        // Seed LotSummary so iUnloadCount>0 (unconditional accumulation loop, golden :3667-3678) --
+        // same site/bin choice as PART 10 (TestSocket default 2x1 grid; bin 3 arbitrary in-range).
+        W5SckArtRem_LotSummary.iCountCategory[0][3] = 7;
+        W5SckArtRem_LotSummary.iTotalCategory[3] = 7;
+
+        GetTimeInfo();   // snapshot NOW into SystemYear/Month/Date/Hour/Min, to reconstruct the expected filename
+        AnsiString expectedFileName, expectedPathName2;
+        expectedFileName.sprintf("%s_%s_%s_%04d%02d%02d%02d%02d.txt",
+                                  st.sLotID, st.sInfo_CustLotID, st.sInfo_CustDevGup,
+                                  SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin);
+        expectedPathName2.sprintf("%s\\%04d\\%02d\\", asSummaryPath, SystemYear, SystemMonth);
+        AnsiString expectedFullPath = expectedPathName2 + expectedFileName;
+        if (FileExists(expectedFullPath))
+            DeleteFile(expectedFullPath);   // idempotent cleanup -- same discipline as PART 10
+
+        W5SckArtRem_LastShellExecuteOpenPath = "<unset>";
+        W5SckArtRem_LastFTPUpload_Sources    = "<unset>";
+        W5SckArtRem_LastFTPUpload_Target     = "<unset>";
+        W5SckArtRem_LastFTPUpload_FileName   = "<unset>";
+
+        SckArtRem_Save2DSortingSummary(st, /*iSaveData=*/1);
+
+        // ---- 11A: FileName-building via the bReadLotInfoFromART branch + real scratch file-write ----
+        CHECK(FileExists(expectedFullPath), "Save2DSortingSummary(iSaveData=1) writes the summary .txt under the SCRATCH asSummaryPath, bReadLotInfoFromART FileName shape (golden :3485-3488)");
+
+        // ---- 11B: gate #13 FTP_Upload REACHED (not skipped), with the real FileName argument (golden :3937-3942) ----
+        CHECK(W5SckArtRem_LastFTPUpload_Sources != "<unset>", "FTP_Upload gate #13 was REACHED, not skipped (golden :3942)");
+        CHECK(W5SckArtRem_LastFTPUpload_FileName == expectedFileName, "FTP_Upload gate #13 received the real FileName argument (golden :3942)");
+
+        // ---- 11C: the ShellExecute-can-fire-with-an-empty-path quirk (golden :4025-4028, this
+        //   function's own header doc "Golden bugs preserved VERBATIM #4") -- same shape as PART 10's
+        //   own citation for SaveTestSummarySECS's structurally identical call. ----
+        CHECK(W5SckArtRem_LastShellExecuteOpenPath == "", "ShellExecute-open stand-in (gate #11) fired UNCONDITIONALLY with an EMPTY path -- bN17UploadLotSummary==false means strFileName was never assigned, same golden quirk as SaveTestSummarySECS's own PART 10 citation");
+
+        // ---- 11D: the bReadLotInfoFromART content branch actually read the NEW fObserver->labFactory member ----
+        bool foundFactoryLine = false;
+        for (size_t i = 0; i < fObserver->memoLotSummary->Lines.Strings.size(); ++i)
+            if (fObserver->memoLotSummary->Lines.Strings[i] == "ASSEMBLY SITE:FACTORY-2D-TEST")
+                foundFactoryLine = true;
+        CHECK(foundFactoryLine, "bReadLotInfoFromART branch built \"ASSEMBLY SITE:%s\" from the NEW fObserver->labFactory->Caption member (golden :3605/:3638)");
+
+        // ---- 11E: iSaveData==0 -> early return BEFORE the FTP_Upload/ShellExecute work (golden :3523-3524) ----
+        {
+            W5SckArtRem_LastFTPUpload_Sources = "<unset>";
+            W5SckArtRem_LastShellExecuteOpenPath = "<unset>";
+            SckArtRemainderState st0 = st;
+            SckArtRem_Save2DSortingSummary(st0, /*iSaveData=*/0);
+            CHECK(W5SckArtRem_LastFTPUpload_Sources == "<unset>", "iSaveData==0 -> early return -> FTP_Upload gate never reached (golden :3523-3524)");
+            CHECK(W5SckArtRem_LastShellExecuteOpenPath == "<unset>", "iSaveData==0 -> early return -> ShellExecute stand-in never reached either");
+        }
+
+        fLotInfo->edtSysLotID->Text = savedEdtSysLotID;
+        IniConfig.sN09_HandlerFolder = savedN09Folder;
+        asSummaryPath = savedSummaryPath11;
+        bReadLotInfoFromART = false;
+        CosFunction.bUseTSVFunction = false;
+        IniConfig.bN09_LotCountAutoFunc = false;
     }
 
     printf("\n=== %d PASS, %d FAIL (of %d) ===\n", g_pass, g_fail, g_pass + g_fail);

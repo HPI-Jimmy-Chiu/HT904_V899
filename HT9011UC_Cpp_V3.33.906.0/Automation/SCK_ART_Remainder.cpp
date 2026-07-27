@@ -203,15 +203,17 @@ void W5SckArtRem_LotSummaryStub::ClearAllData()
 #define W5SCKARTREM_LOTSUMMARY_COUNTCATEGORY(site,bin) W5SckArtRem_LotSummary.iCountCategory[site][bin]   // golden LotSummary.iCountCategory[site][bin]
 #define W5SCKARTREM_LOTSUMMARY_TOTALCATEGORY(bin)      W5SckArtRem_LotSummary.iTotalCategory[bin]         // golden LotSummary.iTotalCategory[bin]
 #define W5SCKARTREM_LOTSUMMARY_CLEARALLDATA()          W5SckArtRem_LotSummary.ClearAllData()              // golden cSocket.cpp:754-763 -- NOW REAL (partial), see gate #5 [UPDATE] above
+#define W5SCKARTREM_LOTSUMMARY_BISRTBIN(bin)           W5SckArtRem_LotSummary.bIsRTBin[bin]                // golden LotSummary.bIsRTBin[bin] -- gate #5 [UPDATE 2], AI(W906-Save2DSortingSummary) 20260723
 
 // ---- Gate #6: fTesterTCP->ProcessOSPrint() (golden Automation/TesterTCP.h/.cpp, untranslated) -----
 #define W5SCKARTREM_FTESTERTCP_PROCESSOSPRINT()   do { } while(0)   // golden fTesterTCP->ProcessOSPrint()
 
-// ---- Gate #7: 3 of the 4 giant report-writer bodies (golden :2045-4062) -- deferred to next wave ----
-//   SaveTestSummarySECS (golden :1647-2044), the 4th, is now REAL -- see SckArtRem_SaveTestSummarySECS
-//   below (AI(W906-SaveTestSummarySECS) 20260721). Its macro stand-in is retired (removed, not just
-//   left unused) since SckArtRem_SaveTestSummary's SECS branch now calls the real function directly.
-#define W5SCKARTREM_SAVE2DSORTINGSUMMARY(iSaveData)     do { (void)(iSaveData); } while(0)  // golden :3402-4062
+// ---- Gate #7: 2 of the 4 giant report-writer bodies (golden :2045-3401) -- deferred to next wave ----
+//   SaveTestSummarySECS (golden :1647-2044) and Save2DSortingSummary (golden :3402-4061) are now REAL --
+//   see SckArtRem_SaveTestSummarySECS / SckArtRem_Save2DSortingSummary below (AI(W906-SaveTestSummarySECS)
+//   20260721 / AI(W906-Save2DSortingSummary) 20260723). Both macro stand-ins are retired (removed, not
+//   just left unused) since SckArtRem_SaveTestSummary's SECS and 2D-sort branches now call the real
+//   functions directly.
 #define W5SCKARTREM_SAVETESTSUMMARYTSV(iSaveData)       do { (void)(iSaveData); } while(0)  // golden :2805-3128
 #define W5SCKARTREM_SAVESUMMARYTRAYFEED()               do { } while(0)                      // golden :3129-3401
 
@@ -230,6 +232,21 @@ static void W5SckArtRem_ShellExecuteOpen(AnsiString path)
 // ---- Gate #12 [NEW -- AI(W906-SaveTestSummarySECS) 20260721]: TimerTSV->Enabled=true (golden VCL
 //   TTimer arm, SCK_ART.cpp:2038). See SCK_ART_Remainder.h's gate #12 doc comment.
 #define W5SCKARTREM_TIMERTSV_ENABLE()   do { } while(0)   // golden TimerTSV->Enabled=true
+
+// ---- Gate #13 [NEW -- AI(W906-Save2DSortingSummary) 20260723]: FTP_Upload(sSourcesFilePath,
+//   sTargetFilePath, sULFileName) -- golden TfSCKART::FTP_Upload (SCK_ART.cpp:4103-4179), called once
+//   from Save2DSortingSummary (golden :3942). See SCK_ART_Remainder.h's gate #13 doc comment for the
+//   full "why a no-op, why observable, only 1 of 4 golden call sites is in-scope" rationale.
+AnsiString W5SckArtRem_LastFTPUpload_Sources ="<unset>";
+AnsiString W5SckArtRem_LastFTPUpload_Target  ="<unset>";
+AnsiString W5SckArtRem_LastFTPUpload_FileName="<unset>";
+static void W5SckArtRem_FTPUploadStub(AnsiString sSourcesFilePath, AnsiString sTargetFilePath, AnsiString sULFileName)
+{
+    W5SckArtRem_LastFTPUpload_Sources =sSourcesFilePath;   // golden FTP_Upload's own 3 parameters,
+    W5SckArtRem_LastFTPUpload_Target  =sTargetFilePath;    // captured verbatim -- no real FTP client
+    W5SckArtRem_LastFTPUpload_FileName=sULFileName;        // (TfFTP is not translated, see gate #13).
+}
+#define W5SCKARTREM_FTP_UPLOAD(src,dst,name)   W5SckArtRem_FTPUploadStub(src,dst,name)   // golden FTP_Upload(src,dst,name)
 
 // ---- Gate #8: WriteLastDataFile()/CustomerFunctionSelect()/RunInfo.AddAlarm() -- DISCOVERED LATE,
 //   during this wave's own real link-test (not just -fsyntax-only), see translate report --------------
@@ -761,10 +778,12 @@ void SckArtRem_AddOutputJamCnt(SckArtRemainderState &st, int row, int col, int r
 
 // =============================================================================
 //  8. SaveTestSummary -- golden TfSCKART::SaveTestSummary(int) (SCK_ART.cpp:1619-1645)
-//     Dispatch logic verbatim; 3 of the 4 callees remain gated (see gate #7 -- deferred to next wave).
+//     Dispatch logic verbatim; 2 of the 4 callees remain gated (see gate #7 -- deferred to next wave).
 //     AI(W906-SaveTestSummarySECS) 20260721: added the `st` parameter, and the SECS branch now calls
 //     the real SckArtRem_SaveTestSummarySECS below instead of the retired W5SCKARTREM_SAVETESTSUMMARYSECS
 //     macro -- see this function's own header doc comment for why widening the signature is safe.
+//     AI(W906-Save2DSortingSummary) 20260723: the 2D-sort branch now ALSO calls the real
+//     SckArtRem_Save2DSortingSummary below instead of the retired W5SCKARTREM_SAVE2DSORTINGSUMMARY macro.
 // =============================================================================
 void SckArtRem_SaveTestSummary(SckArtRemainderState &st, int iSaveData)
 {
@@ -772,7 +791,7 @@ void SckArtRem_SaveTestSummary(SckArtRemainderState &st, int iSaveData)
        LastSet.iTester==_2D_SORT &&                                             //JerryYang 20230322 : SPIL 2D SORT summary修改
        TestIF_File.bSortingBy2DIDList==true)
     {
-        W5SCKARTREM_SAVE2DSORTINGSUMMARY(iSaveData);                            // golden :1625 Save2DSortingSummary(iSaveData) -- TODO(next wave), see gate #7
+        SckArtRem_Save2DSortingSummary(st, iSaveData);                         // golden :1625 Save2DSortingSummary(iSaveData) -- AI(W906-Save2DSortingSummary) 20260723: now real, see below
     }
     else if(CosFunction.bART_SECSGEM_93K==true)
     {
@@ -1313,6 +1332,700 @@ void SckArtRem_DoARTLotStart(SckArtRemainderState &st, AnsiString _sLotID, AnsiS
         if(TestIF_File.bAlarmAfterSendSRQKIND2)                                 //Steven 20230202 : ATK 要在SRQKIND2之後Alarm
         {
             W5SCKARTREM_FMAIN_TESDERROR_ADD("MES07399");                       // golden :4252 fMain->tESDError->Add("MES07399") -- gate #10, TU-local no-op
+        }
+    }
+}
+
+// =============================================================================
+//  11. Save2DSortingSummary -- golden TfSCKART::Save2DSortingSummary(int) (SCK_ART.cpp:3402-4061)
+//     AI(W906-Save2DSortingSummary) 20260723. See SCK_ART_Remainder.h's own doc comment on this
+//     declaration for the full dependency-verification writeup, the dropped dead locals, and the
+//     golden bugs preserved verbatim (2x dead-MachineTypeChoice-chain-then-overwrite, the LOT_ID
+//     raw-pointer bug, the SUMMARY_END_TIME re-check+mislabel, and the ShellExecute-can-fire-with-an-
+//     empty-path quirk shared with SaveTestSummarySECS's own gate #11).
+// =============================================================================
+void SckArtRem_Save2DSortingSummary(SckArtRemainderState &st, int iSaveData)                              //Steven 20240830 : 2D sort補立出來
+{
+    AnsiString FileName, PathName, PathName2, Str, Str1, Str2, strPath, strFileName="", str3="";
+    int iCount=0, iUnloadCount=0;
+    bool bResult=false;
+    AnsiString sLotID1=st.sLotID;
+
+    if(sLotID1=="" && fLotInfo->edtSysLotID->Text!="")                          //Steven 20230317 : 避免lot ID是空值
+        sLotID1=fLotInfo->edtSysLotID->Text;
+    if(sLotID1=="")                                                             //Steven 20230814 : 沒有Lot ID, 就帶入日期時間
+        sLotID1.sprintf("%04d%02d%02d%02d%02d%02d", SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec);
+
+    bool bHaveBinData=false;
+    int temp;
+    AnsiString aUnloader[eTrayCount]={"Auto1-", "Auto2-", "Auto3-", "Auto4-", "Auto5-", "Auto6-",
+                                      "Fix1-", "Fix2-", "Fix3-", "Fix4-", "Fix5-", "Fix6-", "Fix7-", "Fix8-", "Fix9-", "Fix10-", "Fix11-", "Fix12-",
+                                      "BulkBox-",
+                                      "Mag1-", "Mag2" , "Mag3", "Mag4", "Mag5", "Mag6", "Mag7", "Mag8", "Mag9", "Mag10", "Mag11", "Mag12", "Mag13", "Mag14"};
+    int iUnloadCnt[eTrayCount]={0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                0, 0};
+    GetTimeInfo();
+
+    st.sLotEndTime.sprintf("%04d%02d%02d%02d%02d%02d", SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec);
+    if(CosFunction.bUseTSVFunction)                                             //Steven 20240904 : for ATK的TSV功能
+    {
+        if(IniConfig.bN09_LotCountAutoFunc)
+        {
+            PathName.sprintf("%s\\%04d\\%02d\\", IniConfig.sN09_HandlerFolder, SystemYear, SystemMonth);        //Steven 20230215 : 存檔路徑加上年月
+            MyForceDirectories(PathName, "TfSCKART::Save2DSortingSummary_1");
+        }
+        else
+        {
+            PathName.sprintf("%s\\%04d\\%02d\\", asSummaryPath, SystemYear, SystemMonth);
+            MyForceDirectories(PathName, "TfSCKART::Save2DSortingSummary_2");
+        }
+    }
+    else
+    {
+        PathName.sprintf("%s\\%04d\\%02d\\", asSummaryPath, SystemYear, SystemMonth);
+        MyForceDirectories(PathName, "TfSCKART::Save2DSortingSummary_3");
+    }
+
+    if(IniConfig.bN25FolderWithoutYYMM==true)                                   //JerryYang 20230822 : 依照要求路徑不要加年月
+    {
+        PathName2.sprintf("%s\\", asSummaryPath);                               //Steven 20230215 : 存檔路徑加上年月
+        MyForceDirectories(PathName2, "TfSCKART::Save2DSortingSummary_4");
+    }
+    else
+    {
+        PathName2.sprintf("%s\\%04d\\%02d\\", asSummaryPath, SystemYear, SystemMonth);    //Steven 20230215 : 存檔路徑加上年月
+        MyForceDirectories(PathName2, "TfSCKART::Save2DSortingSummary_5");
+    }
+
+    if(st.sProcessCode=="")
+        st.sProcessCode="FT1";
+
+    if(IniConfig.bN23UseLotInfoFile)
+    {
+        FileName.sprintf("%s_%s_%s_%04d%02d%02d%02d%02d.txt", fLotInfo->edtSysLotID->Text, fLotInfo->edtCusLotID->Text, fLotInfo->edtCusDevGrp->Text,
+                                                              SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin);  //JerryYang 20230822 : 修改檔名
+    }
+    else if(IniConfig.bSPILFunction==true &&    //JerryYang 20260201 : modify log
+            IniConfig.bA66_2D_Sort==true)
+    {
+        // AI(W906-Save2DSortingSummary) 20260723: GOLDEN BUG #1 preserved VERBATIM (golden :3472-3480) --
+        // this if/else-if chain computes sInfo_ProgramName from MachineTypeChoice, then is immediately
+        // overwritten, unconditionally, by the "HT9046LS" assignment right below it -- the whole chain
+        // is dead code. See this function's own header doc comment "Golden bugs preserved VERBATIM #1".
+        if(MachineTypeChoice==Type_HT9045 ||
+           MachineTypeChoice==Type_HT9045_12Site)
+            st.sInfo_ProgramName="HT9045";
+        else if(MachineTypeChoice==Type_HT9046)
+            st.sInfo_ProgramName="HT9046";
+        else if(MachineTypeChoice==Type_HT9046_LS)
+            st.sInfo_ProgramName="HT9046LS";
+
+        st.sInfo_ProgramName="HT9046LS";
+        FileName.sprintf("%s_%s_%s_%s_%s_%s_ALL_%04d%02d%02d%02d%02d%02d.txt", st.sInfo_Stage, st.sInfo_Step, st.sInfo_InnerLotID,
+                                                              fLotInfo->edtCusLotID->Text, fLotInfo->edtCusDevGrp->Text, fLotInfo->edtCusStep->Text,
+                                                              SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec);  //JerryYang 20230822 : 修改檔名
+    }
+    else if(bReadLotInfoFromART==true)
+    {
+        FileName.sprintf("%s_%s_%s_%04d%02d%02d%02d%02d.txt", st.sLotID, st.sInfo_CustLotID, st.sInfo_CustDevGup,
+                                                              SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin);  //JerryYang 20230822 : 修改檔名
+    }
+    else
+    {
+        // AI(W906-Save2DSortingSummary) 20260723: GOLDEN BUG #1, SECOND occurrence (golden :3492-3500),
+        // same dead-chain-then-overwrite shape as above -- preserved verbatim, NOT collapsed/deduped.
+        if(MachineTypeChoice==Type_HT9045 ||
+           MachineTypeChoice==Type_HT9045_12Site)                               //JerryYang 20230322 : SPIL 2D SORT summary修改
+            st.sInfo_ProgramName="HT9045";
+        else if(MachineTypeChoice==Type_HT9046)
+            st.sInfo_ProgramName="HT9046";
+        else if(MachineTypeChoice==Type_HT9046_LS)
+            st.sInfo_ProgramName="HT9046LS";
+
+        st.sInfo_ProgramName="HT9046LS";
+        FileName.sprintf("%s_%s_%s_%04d%02d%02d%02d%02d.txt", fLotInfo->edtSysLotID->Text, fLotInfo->edtCusLotID->Text, fLotInfo->edtCusDevGrp->Text,
+                                                              SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin);  //JerryYang 20230822 : 修改檔名
+    }
+
+    if(CosFunction.bART_SECSGEM_93K==false)                                     //JerryYang 20220927 : SPIL不套用
+    {
+        for(int iBin=0; iBin<iTestBinCount; iBin++)
+        {
+            for(int i=0; i<MAX_SOCKET_ROW*MAX_SOCKET_COL; i++)
+            {
+                if(st.iNeedRT!=0 && W5SCKARTREM_LOTSUMMARY_BISRTBIN(iBin)==true)
+                {
+                    W5SCKARTREM_LOTSUMMARY_COUNTCATEGORY(i,iBin)=0;
+                    W5SCKARTREM_LOTSUMMARY_TOTALCATEGORY(iBin)=0;
+                }
+            }
+        }
+        iE1Count=0;                                                             //JerryYang 20230322 : SPIL 2D SORT summary修改
+        iE2Count=0;
+        iE3Count=0;
+    }
+
+    if(iSaveData==0)
+        return;
+
+    TStringList *sList  =new TStringList();
+
+    if(TestIF_File.bSCKART_EnableART==false &&                                  //Steven 20230322 : Fixed for summary count
+       IniConfig.bA37LotStartLotEnd==false &&
+       IniConfig.bSPILFunction==false)                                          //JerryYang 20230822 : fix unloader count
+    {
+        st.iLotCount=LastSet.SendCT[0];
+        iUnloadCount=RunInfo.iUnloadCount;
+    }
+
+    if(IniConfig.bSPILFunction==true)
+    {
+        if(IniConfig.bA66_2D_Sort==false)   //JerryYang 20260201 : modify log
+        {
+            Str.sprintf("CUSTOMER:NVIDIA");                                         //JerryYang 20230322 : SPIL 2D SORT summary修改
+            sList->Add(Str);
+            Str.sprintf("ASSEMBLY SITE:SPIL");
+            sList->Add(Str);
+            Str.sprintf("INNER_LOT_ID:%s", fLotInfo->edtSysLotID->Text);
+            sList->Add(Str);
+            Str.sprintf("CUST_LOT_ID:%s", fLotInfo->edtCusLotID->Text);             //JerryYang 20230322 : SPIL 2D SORT summary修改
+            sList->Add(Str);
+            Str.sprintf("CUSTOMER_DEVICE_GROUP:%s", fLotInfo->edtCusDevGrp->Text);
+            sList->Add(Str);
+            Str.sprintf("DEVICE_NAME:%s", fLotInfo->edtDevice->Text);
+            sList->Add(Str);
+            #ifdef HiSilicon
+            Str.sprintf("PROGRAM_NAME:%s.%s", st.sInfo_ProgramName, HISI_VERSION);  //JerryYang 20230822 : 修改檔名
+            #else
+            Str.sprintf("PROGRAM_NAME:%s.%s", st.sInfo_ProgramName, MainVersion);  //JerryYang 20230822 : 修改檔名
+            #endif
+            sList->Add(Str);
+            Str.sprintf("HANDLER_ID:%s", IniConfig.SocketHandlerID);
+            sList->Add(Str);
+            Str.sprintf("OPERATOR_ID:%s", fLotInfo->edtSysOperatorID->Text);
+            sList->Add(Str);
+            Str.sprintf("OPERATION:VS");
+            sList->Add(Str);
+            Str.sprintf("STAGE:%s", fLotInfo->cbRunMode->Text);
+            sList->Add(Str);
+        }
+        else        //JerryYang 20260201 : modify log
+        {
+            Str.sprintf("CUSTOMER:%s", st.sInfo_Customer);                                         //JerryYang 20230322 : SPIL 2D SORT summary修改
+            sList->Add(Str);
+            Str.sprintf("ASSEMBLY SITE:SPIL");
+            sList->Add(Str);
+            Str.sprintf("INNER_LOT_ID:%s", fLotInfo->edtSysLotID->Text);
+            sList->Add(Str);
+            Str.sprintf("CUST_LOT_ID:%s", fLotInfo->edtCusLotID->Text);             //JerryYang 20230322 : SPIL 2D SORT summary修改
+            sList->Add(Str);
+            Str.sprintf("CUSTOMER_DEVICE_GROUP:%s", fLotInfo->edtCusDevGrp->Text);
+            sList->Add(Str);
+            Str.sprintf("DEVICE_NAME:%s", st.sInfo_DeviceName);
+            sList->Add(Str);
+            Str.sprintf("PROGRAM_NAME:%s.%s", st.sInfo_ProgramName, MainVersion);  //JerryYang 20230822 : 修改檔名
+            sList->Add(Str);
+            Str.sprintf("HANDLER_ID:%s", IniConfig.SocketHandlerID);
+            sList->Add(Str);
+            Str.sprintf("OPERATOR_ID:%s", fLotInfo->edtSysOperatorID->Text);
+            sList->Add(Str);
+            Str.sprintf("OPERATION:VS");
+            sList->Add(Str);
+            Str.sprintf("STAGE:%s", st.sInfo_Stage);
+            sList->Add(Str);
+            Str.sprintf("STEP:%s", st.sInfo_Step);
+            sList->Add(Str);
+            Str.sprintf("CUST STEP NO:%s", fLotInfo->edtCusStep->Text);
+            sList->Add(Str);
+        }
+    }
+    else if(bReadLotInfoFromART==true)
+    {
+        Str.sprintf("CUSTOMER:%s", st.sInfo_Customer);
+        sList->Add(Str);
+        if(IniConfig.bSPILFunction==true)
+            Str.sprintf("ASSEMBLY SITE:SPIL");
+        else
+            Str.sprintf("ASSEMBLY SITE:%s", fObserver->labFactory->Caption);
+        sList->Add(Str);
+        Str.sprintf("INNER_LOT_ID:%s", st.sLotID);
+        sList->Add(Str);
+        Str.sprintf("CUST_LOT_ID:%s", st.sInfo_CustLotID);
+        sList->Add(Str);
+        Str.sprintf("CUSTOMER_DEVICE_GROUP:%s", st.sInfo_CustDevGup);
+        sList->Add(Str);
+        Str.sprintf("DEVICE_NAME:%s", st.sInfo_DeviceName);
+        sList->Add(Str);
+        #ifdef HiSilicon
+        Str.sprintf("PROGRAM_NAME:%s.%s", st.sInfo_ProgramName, HISI_VERSION);
+        #else
+        Str.sprintf("PROGRAM_NAME:%s.%s", st.sInfo_ProgramName, MainVersion);
+        #endif
+        sList->Add(Str);
+        Str.sprintf("HANDLER_ID:%s", st.sInfo_HandlerID);
+        sList->Add(Str);
+        Str.sprintf("OPERATOR_ID:%s", st.sInfo_OperatorID);
+        sList->Add(Str);
+    }
+    else if(IniConfig.bN23UseLotInfoFile)
+    {
+        sList->Text=fLotInfo->mmo2DLotInfo->Text;
+        Str.sprintf("PROGRAM_NAME:%s", asHandlerVersion);
+        sList->Add(Str);
+        Str.sprintf("HANDLER_ID:%s", IniConfig.SocketHandlerID);
+        sList->Add(Str);
+    }
+    else
+    {
+        // AI(W906-Save2DSortingSummary) 20260723: GOLDEN BUG #2 preserved VERBATIM (golden :3636) --
+        // passes fLotInfo->edtSysLotID (the TEdit*/TfLotInfoEdit* POINTER itself) to a %s conversion,
+        // missing ->Text. See this function's own header doc comment "Golden bugs preserved VERBATIM
+        // #2" for the full compile/runtime-UB analysis. NOT "fixed" to ->Text here.
+        Str.sprintf("LOT_ID:%s", fLotInfo->edtSysLotID);
+        sList->Add(Str);
+        Str.sprintf("ASSEMBLY SITE:%s", fObserver->labFactory->Caption);
+        sList->Add(Str);
+        Str.sprintf("PROGRAM_NAME:%s", asHandlerVersion);
+        sList->Add(Str);
+        Str.sprintf("HANDLER_ID:%s", IniConfig.SocketHandlerID);
+        sList->Add(Str);
+    }
+
+    if(st.sLotStartTime!="")                                              //Richard 20230111 : Fix fSCKART->sLotStartTime 為NULL。
+    {
+        Str.sprintf("SUMMARY_START_TIME:%s", st.sLotStartTime);
+    }
+    else
+    {
+        Str.sprintf("SUMMARY_START_TIME:%s%s%s%s%s%s", RunInfo.LotStartTime.SubString(1, 4), RunInfo.LotStartTime.SubString(6, 2), RunInfo.LotStartTime.SubString(9, 2),
+                                                       RunInfo.LotStartTime.SubString(12, 2), RunInfo.LotStartTime.SubString(15, 2), RunInfo.LotStartTime.SubString(18, 2));
+    }
+    sList->Add(Str);
+    // AI(W906-Save2DSortingSummary) 20260723: GOLDEN BUG #3 preserved VERBATIM (golden :3656/:3662) --
+    // this re-checks st.sLotStartTime (NOT a separate end-time flag) a SECOND time, and its else-branch
+    // format string is literally "SUMMARY_START_TIME:..." again (built from RunInfo.LotEndTime, but
+    // mislabeled "START"). See this function's own header doc comment "Golden bugs preserved VERBATIM
+    // #3" -- contrast with the sibling SaveTestSummarySECS above, which has neither quirk.
+    if(st.sLotStartTime!="")                                              //Richard 20230111 : Fix fSCKART->sLotStartTime 為NULL。
+    {
+        Str.sprintf("SUMMARY_END_TIME:%s", st.sLotEndTime);
+    }
+    else
+    {
+        Str.sprintf("SUMMARY_START_TIME:%s%s%s%s%s%s", RunInfo.LotEndTime.SubString(1, 4), RunInfo.LotEndTime.SubString(6, 2), RunInfo.LotEndTime.SubString(9, 2),
+                                                       RunInfo.LotEndTime.SubString(12, 2), RunInfo.LotEndTime.SubString(15, 2), RunInfo.LotEndTime.SubString(18, 2));
+    }
+    sList->Add(Str);
+
+    for(int iBin=0; iBin<=iTestBinCount; iBin++)
+    {
+        iCount=0;
+        for(int i=0; i<TestSocket.iShtRow; i++)
+        {
+            for(int j=0; j<TestSocket.iShtCol; j++)
+            {
+                iUnloadCount+=W5SCKARTREM_LOTSUMMARY_COUNTCATEGORY(iCount,iBin);   // golden :3674 LotSummary.iCountCategory[iCount][iBin]
+                iCount++;
+            }
+        }
+    }
+
+    for(int i=0; i<eTrayCount; i++)
+    {
+        aUnloader[i]=s6ShortTrayName[i]+AnsiString("(");
+        bHaveBinData=false;
+        if(Prod.iTrayType[i]!=tNotUse)
+        {
+            for(int j=0; j<=iTestBinCount; j++)
+            {
+                temp=Prod.iT6PosCate[j];
+                if(temp<=0 && j!=iTestBinCount)
+                    continue;
+                if(i==temp-1)
+                {
+                    if(bHaveBinData==false)
+                        aUnloader[i]+=AnsiString(j);
+                    else
+                        aUnloader[i]+=AnsiString(",")+AnsiString(j);
+
+                    bHaveBinData=true;
+//                    aUnloader[i]+=AnsiString(j);                              //JerryYang 20260124 : mark掉
+                    iUnloadCnt[i]+=W5SCKARTREM_LOTSUMMARY_TOTALCATEGORY(j);        // golden :3700 LotSummary.iTotalCategory[j]
+                }
+
+                if(Prod.iIfErrorT6==i && j==iTestBinCount)
+                {
+                    iUnloadCnt[i]+=W5SCKARTREM_LOTSUMMARY_TOTALCATEGORY(j);        // golden :3705 LotSummary.iTotalCategory[j]
+                }
+            }
+
+            if(Prod.iIfErrorT6==i)
+            {
+                aUnloader[i]+="error";
+                bHaveBinData=true;
+            }
+            else
+            {
+                if(bHaveBinData==false)
+                    aUnloader[i]+="Null";
+            }
+            aUnloader[i]+=")";
+        }
+    }
+
+    Str.sprintf("Handler Load Qty:%d", LastSet.iSCKARTInputCT);                 //JerryYang 20200319 fix summary
+    sList->Add(Str);
+    Str.sprintf("Handler Unload Qty:%d", iUnloadCount);
+    sList->Add(Str);
+    sList->Add("");
+    sList->Add(" ========================================================================");
+    sList->Add(" =========================  Group Bin Summary  ===========================");
+    sList->Add(" ========================================================================");
+
+    for(int i=0; i<eTrayCount; i++)
+    {
+        if(Prod.iTrayType[i]!=tNotUse)
+        {
+            Str.sprintf("%s:%d", aUnloader[i], iUnloadCnt[i]);
+            sList->Add(Str);
+        }
+    }
+
+    sList->Add("");
+    sList->Add(" ========================================================================");
+    sList->Add(" =========================  Hard Bin Summary  ===========================");
+    sList->Add(" ========================================================================");
+
+    iCount=0;
+    Str=" Hard P/F ";
+    Str2=" ---- ----";
+    for(int i=0; i<TestSocket.iShtRow; i++)
+    {
+        for(int j=0; j<TestSocket.iShtCol; j++)
+        {
+            iCount++;
+            Str1.sprintf(" Site%d", iCount);
+            Str=Str+Str1;
+            Str2=Str2+" -----";
+        }
+    }
+    Str=Str+" Total  Yield";
+    sList->Add(Str);
+    Str2=Str2+" ----- --------";
+    sList->Add(Str2);
+
+    for(int iBin=0; iBin<iTestBinCount+1; iBin++)
+    {
+        if(iBin==iTestBinCount)
+        {
+        }
+        else
+        {
+            temp=Prod.iT6CatData[iBin];
+            if(temp<0 || temp>=eTrayCount)
+                continue;
+        }
+
+        if(iBin==iTestBinCount)
+        {
+            Str="Err";
+        }
+        else
+        {
+            Str.sprintf("%d", iBin);
+        }
+
+        while(Str.Length()<5)
+        {
+            Str=" "+Str;
+        }
+
+        if(iBin==iTestBinCount)
+        {
+            Str=Str+" FAIL";
+        }
+        else
+        {
+            if(Prod.bIsPassBin[iBin])
+                Str=Str+" PASS";
+            else
+                Str=Str+" FAIL";
+        }
+
+        iCount=0;
+        for(int i=0; i<TestSocket.iShtRow; i++)
+        {
+            for(int j=0; j<TestSocket.iShtCol; j++)
+            {
+                Str2.sprintf("%d", W5SCKARTREM_LOTSUMMARY_COUNTCATEGORY(iCount,iBin));   // golden :3807 LotSummary.iCountCategory[iCount][iBin]
+                while(Str2.Length()<6)
+                {
+                    Str2=" "+Str2;
+                }
+                Str=Str+Str2;
+                iCount++;
+            }
+        }
+
+        if(IniConfig.bSPILFunction==true && W5SCKARTREM_LOTSUMMARY_TOTALCATEGORY(iBin)<=0)   // golden :3817 LotSummary.iTotalCategory[iBin]
+            continue;
+
+        Str2.sprintf("%d", W5SCKARTREM_LOTSUMMARY_TOTALCATEGORY(iBin));                      // golden :3820 LotSummary.iTotalCategory[iBin]
+        while(Str2.Length()<6)
+        {
+            Str2=" "+Str2;
+        }
+        Str=Str+Str2;
+        Str2=ChangeToPercentage(W5SCKARTREM_LOTSUMMARY_TOTALCATEGORY(iBin), iUnloadCount);   // golden :3826 LotSummary.iTotalCategory[iBin]
+
+        while(Str2.Length()<9)
+        {
+            Str2=" "+Str2;
+        }
+        Str=Str+Str2;
+
+        sList->Add(Str);
+    }
+
+    sList->Add("");
+    sList->Add(" ========================================================================");
+    sList->Add(" ==========================  Yield Summary  =============================");
+    sList->Add(" ========================================================================");
+
+    Str ="  P/F    Qty    Yield";
+    sList->Add(Str);
+    Str2=" ----- ------ --------";
+    sList->Add(Str2);
+
+    int iPassCount=0;
+    int iFailCount=0;
+    for(int iBin=0; iBin<iTestBinCount+1; iBin++)
+    {
+        if(iBin==iTestBinCount)
+        {
+        }
+        else
+        {
+            temp=Prod.iT6CatData[iBin];
+            if(temp<0 || temp>=eTrayCount)
+                continue;
+        }
+
+        iCount++;
+
+        if(IniConfig.bSPILFunction==true && W5SCKARTREM_LOTSUMMARY_TOTALCATEGORY(iBin)<=0)   // golden :3863 LotSummary.iTotalCategory[iBin]
+            continue;
+
+        if(Prod.bIsPassBin[iBin]==false || iBin==iTestBinCount)
+        {
+            iFailCount+=W5SCKARTREM_LOTSUMMARY_TOTALCATEGORY(iBin);                          // golden :3868 LotSummary.iTotalCategory[iBin]
+        }
+        else
+        {
+            iPassCount+=W5SCKARTREM_LOTSUMMARY_TOTALCATEGORY(iBin);                          // golden :3872 LotSummary.iTotalCategory[iBin]
+        }
+    }
+
+    Str=" PASS";
+
+    Str2.sprintf("%d", iPassCount);
+    while(Str2.Length()<6)
+    {
+        Str2=" "+Str2;
+    }
+    Str=Str+Str2;
+
+    Str2=ChangeToPercentage(iPassCount, iUnloadCount);
+    while(Str2.Length()<9)
+    {
+        Str2=" "+Str2;
+    }
+    Str=Str+Str2;
+
+    sList->Add(Str);
+
+    Str=" FAIL";
+
+    Str2.sprintf("%d", iFailCount);
+    while(Str2.Length()<6)
+    {
+        Str2=" "+Str2;
+    }
+    Str=Str+Str2;
+
+    Str2=ChangeToPercentage(iFailCount, iUnloadCount);
+    while(Str2.Length()<9)
+    {
+        Str2=" "+Str2;
+    }
+    Str=Str+Str2;
+    sList->Add(Str);
+
+    sList->Add("");
+    sList->Add(" ========================================================================");
+    sList->Add(" ==========================  Error Bin Summary  =========================");
+    sList->Add(" 991(Barcode Read Error)");
+    sList->Add(" 992(Duplicate 2DID error)");
+    sList->Add(" 993(2DID not existed in list)");
+    sList->Add(" 994(Not defined)");
+    sList->Add(" ========================================================================");
+
+    // golden :3920 `LotSummary.iTotalCategory[iTestBinCount];` -- a bare expression-statement (a
+    // discarded read, no assignment, no side effect at all) -- preserved verbatim as a genuine no-op,
+    // matching this file's "don't silently drop golden statements" posture (see this function's own
+    // header doc comment). Wrapped in (void) to silence -Wunused-value (-Wall) on the discarded read
+    // without changing its (lack of) behavior.
+    (void)W5SCKARTREM_LOTSUMMARY_TOTALCATEGORY(iTestBinCount);
+
+    Str2.sprintf(" 991: %d", iE1Count);
+    sList->Add(Str2);
+    Str2.sprintf(" 992: %d", iE2Count);
+    sList->Add(Str2);
+    Str2.sprintf(" 993: %d", iE3Count);
+    sList->Add(Str2);
+    Str2.sprintf(" 994: %d", W5SCKARTREM_LOTSUMMARY_TOTALCATEGORY(iTestBinCount)-iE1Count-iE2Count-iE3Count);   // golden :3928
+    sList->Add(Str2);
+    sList->Add(" ========================================================================");
+
+    if(FileExists(PathName2+FileName)==false)                                   //Steven 20230317 : 避免連續存兩次把資料蓋掉了
+    {
+        if(CosFunction.bUseTSVFunction &&                                       //Steven 20240904 : for ATK的TSV功能
+           IniConfig.bN09_LotCountAutoFunc)
+        {
+            if(st.iNeedRT==0)
+            {
+                if(IniConfig.iN09_4_UploadMethod==0)
+                {
+                    sList->SaveToFile(PathName2+FileName);                      //Steven 20230215 : 存檔路徑加上年月
+                    W5SCKARTREM_FTP_UPLOAD(PathName2, IniConfig.sN09_5_Path, FileName);   // golden :3942 FTP_Upload(PathName2,IniConfig.sN09_5_Path,FileName) -- gate #13
+                }
+                else
+                {
+                    sList->SaveToFile(PathName+FileName);
+                }
+            }
+        }
+        else
+        {
+            if(IniConfig.bSPILFunction==true)                                   //JerryYang 20220923 : unload數量為0不要存log
+            {
+                if(iUnloadCount>0)
+                    sList->SaveToFile(PathName2+FileName);
+            }
+            else
+            {
+                sList->SaveToFile(PathName2+FileName);
+            }
+        }
+        fObserver->memoLotSummary->Lines=sList;                                 // golden :3962 fObserver->memoLotSummary->Lines=sList -- whole-list COPY, see atester_shims.h TfObserverMemoLotSummaryLines
+    }
+    sList->Clear();
+    delete sList;
+
+    if(IniConfig.bN17UploadLotSummary)                                          //JerryYang 20220923 : Upload lot summary
+    {
+        if(DirectoryExists(IniConfig.asN17LotSummaryPath))
+        {
+            if(IniConfig.bA38_SLT_Summary &&
+               st.sLotID!="NA" &&
+               st.sLotID!="" &&
+               iUnloadCount>0)
+            {
+                strFileName=PathName2+FileName;                                 //Steven 20230215 : 存檔路徑加上年月
+                if(FileExists(strFileName))
+                {
+                    strPath.sprintf("%s\\%s", IniConfig.asN17LotSummaryPath, FileName);
+                    bResult=CopyFile(strFileName.c_str(), strPath.c_str(), true);
+                    if(bResult==false)
+                    {
+                        ShowMyMessage("Uploaded lot summary error\r\nPlease check the path of N-17.","上傳lot summary失敗\r\n請檢查N-17路徑是否存在");
+                    }
+                    else
+                    {
+                        RecordProcess("Uploaded lot summary successfully.");    //Steven 20190722 : add TSV log
+                    }
+                }
+            }
+            else
+            {
+                if(st.sInfo_CustLotID=="NA" || st.sInfo_CurrQty=="NA" ||
+                   st.sInfo_CustLotID=="" || st.sInfo_CurrQty=="")
+                {
+                }
+                else
+                {
+                    strFileName=PathName2+FileName;                             //Steven 20230215 : 存檔路徑加上年月
+                    if(FileExists(strFileName))
+                    {
+                        strPath.sprintf("%s\\%s", IniConfig.asN17LotSummaryPath, FileName);
+                        bResult=CopyFile(strFileName.c_str(), strPath.c_str(), true);
+                        if(bResult==false)
+                        {
+                            ShowMyMessage("Uploaded lot summary error\r\nPlease check the path of N-17.","上傳lot summary失敗\r\n請檢查N-17路徑是否存在");
+                        }
+                        else
+                        {
+                            RecordProcess("Uploaded lot summary successfully.");//Steven 20190722 : add TSV log
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            ShowMyMessage("Uploaded lot summary error\r\nPlease check the path of N-17.", "上傳lot summary失敗\r\n請檢查N-17路徑是否存在");
+        }
+    }
+
+    if(IniConfig.bA38_SLT_Summary && FileName!="" && iUnloadCount>0)
+    {
+        // AI(W906-Save2DSortingSummary) 20260723: GOLDEN BUG #4 preserved VERBATIM (golden :4025-4028,
+        // see this function's own header doc comment "Golden bugs preserved VERBATIM #4"): fires on a
+        // condition independent of whichever branch (if any) of the bN17UploadLotSummary block above
+        // actually assigned strFileName -- when that whole block is skipped/off, strFileName is still
+        // "" here. Reuses the EXISTING gate #11 stand-in (same golden idiom as SaveTestSummarySECS's
+        // own citation above), not a new gate.
+        W5SCKARTREM_SHELLEXECUTE_OPEN(strFileName);                             // golden :4027 ShellExecute(NULL,NULL,strFileName.c_str(),NULL,NULL,SW_SHOW)
+    }
+
+    if(CosFunction.bUseTSVFunction &&                                           //Steven 20240904 : for ATK的TSV功能
+       IniConfig.bN09_LotCountAutoFunc)
+    {
+        bWaitTSV=true;
+        st.bShowTSVMsg=false;
+        st.sTSVMsg="";
+        RecordProcess("Lot end and send summary and waiting TSV reply.");       //Steven 20190722 : add TSV log
+        st.TSVdelay.SetSecAndOn(IniConfig.dN09_SearchTime);
+        W5SCKARTREM_TIMERTSV_ENABLE();                                          // golden :4038 TimerTSV->Enabled=true
+    }
+
+    if(iSaveData==1)
+        W5SCKARTREM_LOTSUMMARY_CLEARALLDATA();                                  // golden :4042 LotSummary.ClearAllData()
+
+    // AI(W906-Save2DSortingSummary) 20260723: golden :4044 hardcodes a REAL, non-redirectable
+    // production path ("D:\HT9045_Log\2D_SortList") -- same "no equivalent gate protecting it" posture
+    // this tree's own test-file LIMITATION 2 already documents for SckArtRem_SetGPIBVersion's hardcoded
+    // GPIB path. Read-only (FileExists) unless a file with this exact name already happens to exist
+    // there; this wave's own test (PART 11) uses a distinctive, obviously-fake Lot ID specifically to
+    // make that collision practically impossible, rather than skip this unavoidable (unconditional
+    // whenever iSaveData!=0) statement.
+    Str2.sprintf("%s\\SortBy2DID_%s.csv", "D:\\HT9045_Log\\2D_SortList", fLotInfo->edtSysLotID->Text);
+    str3.sprintf("%s\\SortBy2DID_%s.csv", asBackup2DSortListPath, fLotInfo->edtSysLotID->Text);  //JerryYang 20230822 : 依照要求備份2D sort list
+    if(FileExists(Str2))                                                        //Steven 20160505 : 加上保護, 避免程式找不到Error
+    {
+        CopyFile(Str2.c_str(), str3.c_str(), true);                             //複製至Backup資料夾  //JerryYang 20230822 : 依照要求備份2D sort list
+        DeleteFile(Str2);
+    }
+
+    if(IniConfig.bSPILFunction)                                                 //JerryYang 20231205 : 備份2DID summary
+    {
+        Str2=PathName2+FileName;
+        str3=asBackup2DSummaryPath+FileName;
+        if(FileExists(Str2))
+        {
+            CopyFile(Str2.c_str(), str3.c_str(), true);                         //複製至Backup資料夾
         }
     }
 }

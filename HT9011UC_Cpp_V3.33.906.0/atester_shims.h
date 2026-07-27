@@ -315,6 +315,12 @@ public:
                     *labLoadingCount, *labMUBA, *labMTBA;                // golden cObserver.h (TLabel*)
     // -- AI(W906-SaveTestSummarySECS) 20260721: new member, see TfObserverMemoLotSummary above.
     TfObserverMemoLotSummary *memoLotSummary;                           // golden cObserver.h:339 (TMyMemo* memoLotSummary)
+    // -- AI(W906-Save2DSortingSummary) 20260723: new member, Automation/SCK_ART_Remainder.cpp's
+    //    SckArtRem_Save2DSortingSummary derefs `fObserver->labFactory->Caption` (golden SCK_ART.cpp
+    //    :3605/:3638, `Str.sprintf("ASSEMBLY SITE:%s", fObserver->labFactory->Caption)`) -- reuses the
+    //    same TfObserverLabel {AnsiString Caption;} shape as labModel/labPowerOnTime/... above (golden
+    //    cObserver.h TLabel*, only ->Caption read here).
+    TfObserverLabel *labFactory;                                        // golden cObserver.h (TLabel*)
     TfObserverShim();
 };
 extern TfObserverShim *fObserver;                // golden cObserver.h

@@ -471,6 +471,18 @@ public:
     TfLedValue     *ALedLoader;                   // [DATA] golden uLotInfo.h:971 (TALed*)
     TfLedValue     *aLedAuto[3];                  // [DATA] golden uLotInfo.h:965,969,970 (TALed* aLedAuto1/2/3, consolidated into an array -- same convention as fSortCT->pnlTrayCnt[6])
     TfLotInfoPanel *palRemoveTray;                 // [DATA] golden uLotInfo.h:828 (TPanel*, Enabled+Visible)
+    // AI(W906-Save2DSortingSummary) 20260723: 6 new members Automation/SCK_ART_Remainder.cpp's
+    // SckArtRem_Save2DSortingSummary derefs (golden SCK_ART.cpp:3402-4061, only ->Text read/each --
+    // reuse the existing TfLotInfoEdit {AnsiString Text;} shape, same idiom as edtSysLotID above).
+    // mmo2DLotInfo is a TMemo* in golden (uLotInfo.h, `sList->Text=fLotInfo->mmo2DLotInfo->Text;`,
+    // golden :3628) but only ->Text is ever read here too, so the same minimal shape applies (no
+    // TStrings/Lines surface needed, unlike fObserver->memoLotSummary's whole-list-assign shape).
+    TfLotInfoEdit *edtCusLotID;                    // [DATA] golden uLotInfo.h (TEdit* customer lot-ID edit)
+    TfLotInfoEdit *edtCusDevGrp;                   // [DATA] golden uLotInfo.h (TEdit* customer device-group edit)
+    TfLotInfoEdit *edtCusStep;                     // [DATA] golden uLotInfo.h (TEdit* customer step-no edit)
+    TfLotInfoEdit *edtDevice;                      // [DATA] golden uLotInfo.h (TEdit* device-name edit)
+    TfLotInfoEdit *edtSysOperatorID;                // [DATA] golden uLotInfo.h (TEdit* system operator-ID edit)
+    TfLotInfoEdit *mmo2DLotInfo;                    // [DATA] golden uLotInfo.h (TMemo* 2D lot-info source -- only ->Text read)
     TfLotInfo();
 };
 extern TfLotInfo *fLotInfo;

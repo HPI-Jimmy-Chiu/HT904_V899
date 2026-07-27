@@ -314,6 +314,8 @@ TfObserverShim::TfObserverShim() : bTestIndexZ(false)
     labMTBA         = new TfObserverLabel();
     // -- AI(W906-SaveTestSummarySECS) 20260721: new memoLotSummary member, see atester_shims.h.
     memoLotSummary  = new TfObserverMemoLotSummary();
+    // -- AI(W906-Save2DSortingSummary) 20260723: new labFactory member, see atester_shims.h.
+    labFactory      = new TfObserverLabel();
 }
 void TfObserverShim::RecordInArmTime()                {}  // W6.2b1x1: OEE time bookkeeping no-op
 void TfObserverShim::AddTimeData(int /*iRow*/, double /*Time*/) {} // W6.2b1x1: OEE time bookkeeping no-op

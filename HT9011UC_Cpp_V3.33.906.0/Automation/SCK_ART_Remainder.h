@@ -35,6 +35,12 @@
 //                                                    [AI(W906-SaveTestSummarySECS) 20260721 -- see that
 //                                                    function's own doc comment below for gates #11/#12,
 //                                                    the 3 new struct fields, and gate #5's stub extension]
+//     TfSCKART::Save2DSortingSummary(int)       -> SckArtRem_Save2DSortingSummary (golden :3402-4061)
+//                                                    [AI(W906-Save2DSortingSummary) 20260723 -- see that
+//                                                    function's own doc comment below for gate #13, the
+//                                                    gate #5 bIsRTBin extension, and the 6 new
+//                                                    FormsFacade TfLotInfo / 1 new atester_shims
+//                                                    TfObserverShim members it needed]
 //
 //   SKIPPED -- PURE VCL (no calc-core; widget lifecycle/event glue only, verified by direct golden
 //   read, not silently dropped):
@@ -53,12 +59,13 @@
 //     edtVersionMouseUp/edSPBinYieldClick (:1608-1617).
 //
 //   REMAINING (next wave, golden :1647-4358 minus DoARTLotStart :4191-4256 [DONE, see
-//   AI(W906-DoARTLotStart) above] and SaveTestSummarySECS :1647-2044 [DONE, see
-//   AI(W906-SaveTestSummarySECS) above]; DoChkInputCntAlarm :4359-4391 already done by the
+//   AI(W906-DoARTLotStart) above], SaveTestSummarySECS :1647-2044 [DONE, see
+//   AI(W906-SaveTestSummarySECS) above], and Save2DSortingSummary :3402-4061 [DONE, see
+//   AI(W906-Save2DSortingSummary) above]; DoChkInputCntAlarm :4359-4391 already done by the
 //   sibling SCK_ART.h/.cpp): SaveMultiLotTestSummary(:2045-2804)/SaveTestSummaryTSV(:2805-3128)/
-//   SaveSummaryTrayFeed(:3129-3401)/Save2DSortingSummary(:3402-4062)
-//   (four large report-file-writer bodies, ~2200 golden lines combined -- gated no-op stand-ins in
-//   THIS file at their SaveTestSummary dispatch call sites, see gate #7), srvrscktTSVClientRead/
+//   SaveSummaryTrayFeed(:3129-3401)
+//   (three remaining large report-file-writer bodies -- gated no-op stand-ins in THIS file at their
+//   SaveTestSummary dispatch call sites, see gate #7), srvrscktTSVClientRead/
 //   TimerTSVTimer(:4063-4102, VCL socket/timer events -- TimerTSV's own ->Enabled arm/disarm is now
 //   gate #12, see below), FTP_Upload(:4103-4180, TNMFTP VCL component),
 //   edtMRejectCntClick/edtAlmAutoCloseSiteClick(:4181-4190, VCL), ledShowFTCTDataClick/
@@ -156,15 +163,28 @@
 //       content and the iUnloadCount-gated branches (an unseedable static would make that coverage
 //       vacuous). `iByLotLoadCount[5]` (ClearLotInfo's own field) is unaffected in behavior, just now
 //       reachable by name from outside this TU too.
+//       [UPDATE 2 -- AI(W906-Save2DSortingSummary) 20260723]: extended AGAIN with `bool
+//       bIsRTBin[TEST_MAX_BIN]` (golden cSocket.h:123) -- Save2DSortingSummary is its first reader
+//       (golden SCK_ART.cpp:3511, `if(iNeedRT!=0 && LotSummary.bIsRTBin[iBin]==true)`). Golden's own
+//       ClearAllData() never zeroes bIsRTBin either (verified, cSocket.cpp:754-763) so this stub's
+//       ClearAllData() is NOT extended for it, matching golden. Nothing writes it yet -> defaults
+//       all-false (harmless, see the struct's own comment in the header body below).
 //   #6  fTesterTCP->ProcessOSPrint() -- golden Automation/TesterTCP.h/.cpp (Interface/TesterTCP is
 //       still DEFERRED per MIGRATION_ROADMAP.md's W5 "Automation 剩餘" list). No-op stand-in; only
 //       reached when TestIF_File.iTestType==TCP_IP_MODE && iSaveData!=0.
-//   #7  Save2DSortingSummary/SaveTestSummarySECS/SaveTestSummaryTSV/SaveSummaryTrayFeed -- the four
-//       giant report-writer bodies this wave intentionally defers (golden :1647-4062, see GOLDEN
-//       LINE BOUNDARY above). SaveTestSummary's dispatcher (translated for-real in this file) calls
-//       TU-local no-op stand-ins for all four; the dispatch LOGIC (which of the four golden would
+//   #7  SaveTestSummarySECS/SaveTestSummaryTSV/SaveSummaryTrayFeed/Save2DSortingSummary -- originally
+//       the four giant report-writer bodies this wave intentionally deferred (golden :1647-4062, see
+//       GOLDEN LINE BOUNDARY above). SaveTestSummary's dispatcher (translated for-real in this file)
+//       calls TU-local no-op stand-ins for all four; the dispatch LOGIC (which of the four golden would
 //       have picked, per CosFunction/TestIF_File/LastSet flags) is preserved verbatim and is directly
-//       testable even though the callees are stubs.
+//       testable even though (originally) all 4 callees were stubs.
+//       [UPDATE -- AI(W906-SaveTestSummarySECS) 20260721]: SaveTestSummarySECS graduated to real; its
+//       macro stand-in retired.
+//       [UPDATE 2 -- AI(W906-Save2DSortingSummary) 20260723]: Save2DSortingSummary ALSO graduated to
+//       real (see that function's own doc comment below); its macro stand-in
+//       (W5SCKARTREM_SAVE2DSORTINGSUMMARY) is likewise retired, and the dispatcher's 2D-sort branch now
+//       calls SckArtRem_Save2DSortingSummary directly. Only SaveTestSummaryTSV/SaveSummaryTrayFeed
+//       remain gated no-op stand-ins under this gate.
 //   #8  WriteLastDataFile() / CustomerFunctionSelect() / RunInfo.AddAlarm() -- DISCOVERED LATE, only
 //       by an actual real-link smoke test (not just -fsyntax-only) run for this hand-off: cprod.h
 //       DECLARES all three (WriteLastDataFile:3237, CustomerFunctionSelect:3280, RUN_INFO::AddAlarm:
@@ -214,6 +234,24 @@
 //       socket/timer events, deferred) -- arming a timer whose handler does not exist yet in this tree
 //       has no observable effect, so this is a TU-local no-op stand-in (same idiom as gate #9's
 //       fMain->SetLotState).
+//   #13 [NEW -- AI(W906-Save2DSortingSummary) 20260723] FTP_Upload(PathName2, IniConfig.sN09_5_Path,
+//       FileName) -- golden SCK_ART.cpp:3942, the ONE call site inside Save2DSortingSummary's own body
+//       (golden :3402-4061) that reaches `TfSCKART::FTP_Upload(AnsiString,AnsiString,AnsiString)`
+//       (golden SCK_ART.cpp:4103-4179 / SCK_ART.h:304). Verified by grep: FTP_Upload has 4 call sites
+//       total in golden SCK_ART.cpp (:2684, :3054, :3069, :3942) -- the other 3 are all inside
+//       SaveTestSummaryTSV/SaveSummaryTrayFeed (golden :2045-3401), functions this wave does NOT
+//       translate (still gated no-op stand-ins, gate #7) -- so gate #13 only needs to cover Save2D-
+//       SortingSummary's single call site, not FTP_Upload generally. FTP_Upload's own body wraps
+//       `TfFTP` (golden ProductionInfo/TfFTP.h) -- confirmed NOT translated anywhere in this tree
+//       (grepped HT9011UC_Cpp_V3.33.906.0: the only 2 other TfFTP mentions are Automation/HANA_ART.cpp's
+//       own already-gated SendTrayMapToFTP, "not translated (W5 KYECFTP-adjacent scope)", and this same
+//       file's own file-head citation of that gate -- no TfFTP class exists anywhere as a linkable
+//       symbol). TU-local no-op stand-in, matching gate #6/#7's "whole untranslated dependency" idiom --
+//       but, same as gate #11's ShellExecute stand-in, captures its 3 AnsiString arguments into
+//       observable globals (W5SckArtRem_LastFTPUpload_Sources/_Target/_FileName, declared below) so
+//       this wave's own test can assert the gate was actually REACHED (not just that dispatch didn't
+//       crash), distinguishing "FTP_Upload was called with the right args" from "the whole branch was
+//       skipped because some precondition was false".
 // ---------------------------------------------------------------------------------------------
 
 #ifndef AUTOMATION_SCK_ART_REMAINDER_CORE_H
@@ -245,6 +283,18 @@ struct W5SckArtRem_LotSummaryStub
     int iByLotLoadCount[5];                                            // golden TLotSummary::iByLotLoadCount[5] (ClearLotInfo's own field, unchanged)
     int iCountCategory[MAX_SOCKET_ROW*MAX_SOCKET_COL][TEST_MAX_BIN];    // golden TLotSummary::iCountCategory[Row*Col][Category]
     int iTotalCategory[TEST_MAX_BIN];                                  // golden TLotSummary::iTotalCategory[Category]
+    // AI(W906-Save2DSortingSummary) 20260723: gate #5 extended AGAIN, same "first real reader" pattern
+    // as the [UPDATE] note above -- Save2DSortingSummary is the first (and so far only) reader of
+    // `LotSummary.bIsRTBin[iBin]` (golden cSocket.h:123 `bool bIsRTBin[TEST_MAX_BIN];`, read at golden
+    // SCK_ART.cpp :3511/:2847/:3847 -- only the first of those 3 sites is inside THIS wave's function).
+    // Verified via golden grep: golden's OWN ClearAllData() (cSocket.cpp:754-763) never touches
+    // bIsRTBin either (only iCountCategory/iTotalCategory/iLastTotalCategory/iLoadTotal are zeroed
+    // there) -- so, matching golden exactly, this stub's ClearAllData() body below is NOT extended to
+    // zero this new field. Nothing in this tree WRITES bIsRTBin yet (it would normally be set via
+    // AccessFile/config plumbing not yet translated), so it defaults to all-false (POD zero-init) --
+    // harmless: the `iNeedRT!=0 && bIsRTBin[iBin]==true` guard this new field gates is simply never
+    // true until a future wave adds a real writer.
+    bool bIsRTBin[TEST_MAX_BIN];                                       // golden TLotSummary::bIsRTBin[Category] (cSocket.h:123)
     void ClearAllData();                                               // golden cSocket.cpp:754-763 (PARTIAL -- see gate #5's [UPDATE] note above)
 };
 extern W5SckArtRem_LotSummaryStub W5SckArtRem_LotSummary;
@@ -255,6 +305,16 @@ extern W5SckArtRem_LotSummaryStub W5SckArtRem_LotSummary;
 // the golden "strFileName can be empty" quirk this exists to make assertable.
 // ---------------------------------------------------------------------------
 extern AnsiString W5SckArtRem_LastShellExecuteOpenPath;
+
+// ---------------------------------------------------------------------------
+// W5SckArtRem_LastFTPUpload_Sources/_Target/_FileName -- gate #13's test-observable capture (see gate
+// #13's doc comment above). NOT a real FTP upload -- the 3 arguments golden's own FTP_Upload
+// (sSourcesFilePath, sTargetFilePath, sULFileName) was called with, verbatim, so the test can prove the
+// call site was reached (not merely that dispatch didn't crash).
+// ---------------------------------------------------------------------------
+extern AnsiString W5SckArtRem_LastFTPUpload_Sources;
+extern AnsiString W5SckArtRem_LastFTPUpload_Target;
+extern AnsiString W5SckArtRem_LastFTPUpload_FileName;
 
 // ---------------------------------------------------------------------------
 // SckArtRemainderState -- this file's own-field subset of golden TfSCKART (Automation/SCK_ART.h)
@@ -399,12 +459,14 @@ void SckArtRem_AddOutputJamCnt(SckArtRemainderState &st, int row, int col, int r
 
 // ---------------------------------------------------------------------------
 // SckArtRem_SaveTestSummary -- golden TfSCKART::SaveTestSummary(int=0) (SCK_ART.cpp:1619-1645).
-//   Dispatcher logic translated verbatim; 3 of the 4 callees remain gated no-op stand-ins (gate #7,
+//   Dispatcher logic translated verbatim; 2 of the 4 callees remain gated no-op stand-ins (gate #7,
 //   deferred to next wave). AI(W906-SaveTestSummarySECS) 20260721: added the `st` parameter (golden
 //   dispatcher body itself touches no TfSCKART member, but its SECS branch now calls the real
 //   SckArtRem_SaveTestSummarySECS below, which needs one) -- this function had NO other caller in this
 //   tree yet (verified by grep; only this header's own declaration + its PART-8 test), so widening the
 //   signature is not a breaking change. iSaveData default 0 matches golden SCK_ART.h:296.
+//   AI(W906-Save2DSortingSummary) 20260723: the 2D-sort branch now ALSO calls the real
+//   SckArtRem_Save2DSortingSummary (below) instead of the retired W5SCKARTREM_SAVE2DSORTINGSUMMARY macro.
 // ---------------------------------------------------------------------------
 void SckArtRem_SaveTestSummary(SckArtRemainderState &st, int iSaveData = 0);
 
@@ -531,5 +593,123 @@ void SckArtRem_SaveTestSummarySECS(SckArtRemainderState &st, int iSaveData);
 //   to the ini file by this function -- a real, faithfully-reproduced golden quirk, not a translation bug.
 // ---------------------------------------------------------------------------
 void SckArtRem_DoARTLotStart(SckArtRemainderState &st, AnsiString _sLotID, AnsiString _sProcess, int _iLotCount);
+
+// ---------------------------------------------------------------------------
+// SckArtRem_Save2DSortingSummary -- golden TfSCKART::Save2DSortingSummary(int) (SCK_ART.cpp:3402-4061).
+//   AI(W906-Save2DSortingSummary) 20260723.
+//
+//   Dependency verification (each checked directly against the CURRENT target tree, not assumed):
+//     * fLotInfo->edtSysLotID/edtCusLotID/edtCusDevGrp/edtCusStep/edtDevice/edtSysOperatorID/
+//       mmo2DLotInfo (all ->Text only) -- edtSysLotID was already REAL; the other 6 are NEW this wave
+//       (FormsFacade.h's TfLotInfo, reusing the existing TfLotInfoEdit {AnsiString Text;} shape).
+//       mmo2DLotInfo is a TMemo* in golden but only ->Text is ever read here (golden :3628
+//       `sList->Text=fLotInfo->mmo2DLotInfo->Text;`) -- same minimal-shape reasoning as every other
+//       TfLotInfoEdit reuse in this tree (edlRTTryCnt, edCleaningCount, ...).
+//     * fLotInfo->cbRunMode->Text -- REAL, already on TfLotInfo (golden uLotInfo.h:307).
+//     * fObserver->labFactory->Caption -- NEW this wave (atester_shims.h's TfObserverShim), reusing the
+//       existing TfObserverLabel {AnsiString Caption;} shape (same as labModel/labPowerOnTime/...).
+//     * MachineTypeChoice / Type_HT9045 / Type_HT9045_12Site / Type_HT9046 / Type_HT9046_LS -- REAL,
+//       cmydef.h/cmydef.cpp (MachineTypeChoice) + MachineType.h (the 4 eMachineType enumerators),
+//       already #include'd transitively via this file's existing MachineDefine.h/MachineType.h/
+//       cmydef.h includes.
+//     * iE1Count/iE2Count/iE3Count -- REAL globals, cmydef.h:5427-5429/cmydef.cpp:5432-5434 (a 4th
+//       sibling, iENotDefinedCount, also exists but is NOT read here -- golden :3928 computes the
+//       "994: Not defined" line inline as `LotSummary.iTotalCategory[iTestBinCount]-iE1Count-iE2Count-
+//       iE3Count`, never touching iENotDefinedCount itself).
+//     * LastSet.SendCT[4] / LastSet.iSCKARTInputCT -- REAL, canary_support.h:73 / already used by
+//       SaveTestSummarySECS above.
+//     * RunInfo.iUnloadCount / RunInfo.LotStartTime / RunInfo.LotEndTime -- REAL, cprod.h:2721/2732/2818
+//       (iUnloadCount confirmed via direct grep this wave; LotStartTime/LotEndTime already used by
+//       SaveTestSummarySECS above).
+//     * TestIF_File.bSCKART_EnableART -- REAL, cprod.h:2237 (confirmed via direct grep this wave).
+//     * IniConfig.bA37LotStartLotEnd/.bA66_2D_Sort/.bN09_LotCountAutoFunc/.sN09_HandlerFolder/
+//       .iN09_4_UploadMethod/.sN09_5_Path/.bN23UseLotInfoFile/.bN25FolderWithoutYYMM -- all REAL,
+//       Config.h (confirmed via direct grep this wave); .bSPILFunction/.bA38_SLT_Summary/
+//       .bN17UploadLotSummary/.asN17LotSummaryPath/.dN09_SearchTime/.SocketHandlerID already used by
+//       SaveTestSummarySECS above.
+//     * CosFunction.bSortingBy2DList/.bART_SECSGEM_93K/.bUseTSVFunction -- all REAL, CosFunction.h
+//       (confirmed via direct grep this wave; the latter two already used elsewhere in this file).
+//     * bReadLotInfoFromART -- REAL GLOBAL (cmydef.cpp:5744), NOT a TfSCKART member -- same "verified
+//       against golden SCK_ART.h, which declares no such member" reasoning SckArtRem_DoARTLotStart's own
+//       comment already established for this identical global.
+//     * MainVersion -- REAL, cmydef.h:4193/cmydef.cpp:4367 (`AnsiString MainVersion="";`). The
+//       `#ifdef HiSilicon` / `#else` split around it (golden :3554-3557,:3615-3619) is preserved
+//       verbatim; HiSilicon itself is `//#define`-commented-out tree-wide (MachineType.h:52), so only
+//       the `#else` (MainVersion) arm actually compiles on this tree, matching golden's own default
+//       posture on a non-HiSilicon build.
+//     * asHandlerVersion/asBackup2DSortListPath/asBackup2DSummaryPath/asSummaryPath/eTrayCount/
+//       iTestBinCount/s6ShortTrayName[]/tNotUse/MAX_SOCKET_ROW/MAX_SOCKET_COL/TEST_MAX_BIN/
+//       SystemYear.../GetTimeInfo()/RecordProcess()/ShowMyMessage()/bWaitTSV/ChangeToPercentage<T>/
+//       MyForceDirectories(AnsiString,AnsiString)/FileExists/DirectoryExists/CopyFile/DeleteFile/
+//       StringReplace/TReplaceFlags -- all REAL, already used by SaveTestSummarySECS above (same file,
+//       same includes) or common.h/vclcompat.
+//     * Prod (.iTrayType[]/.iT6PosCate[]/.iIfErrorT6/.bIsPassBin[]/.iT6CatData[]) / TestSocket
+//       (.iShtRow/.iShtCol) -- REAL, already used by SaveTestSummarySECS above.
+//     * LotSummary.iCountCategory[][]/.iTotalCategory[] -- gate #5's existing (extended) stub.
+//       LotSummary.bIsRTBin[] -- gate #5 extended AGAIN this wave (see gate #5's [UPDATE 2] note and the
+//       struct's own comment above) -- this function is bIsRTBin's first (and, per golden grep, only
+//       in-scope) reader.
+//     * FTP_Upload(PathName2,IniConfig.sN09_5_Path,FileName) -- new gate #13 (TU-local no-op,
+//       observable capture -- see that gate's own doc comment for the "only 1 of 4 golden call sites is
+//       in-scope" verification).
+//     * ShellExecute(NULL,NULL,strFileName.c_str(),NULL,NULL,SW_SHOW) -- REUSES the existing gate #11
+//       stand-in (W5SCKARTREM_SHELLEXECUTE_OPEN) verbatim -- this is the SAME golden idiom
+//       (SaveTestSummarySECS already established gate #11 for its own, structurally identical,
+//       ShellExecute call), not a new gate.
+//     * TimerTSV->Enabled=true -- REUSES the existing gate #12 stand-in (W5SCKARTREM_TIMERTSV_ENABLE).
+//     * ZERO EXPOSURE to ServerSocket/srvrscktTSV/fConfiguration/FormHS -- confirmed by direct golden
+//       read of :3402-4061: none of these appear anywhere in this function's body.
+//
+//   Golden dead local declarations DROPPED (extract-calc-core, same convention as every other function
+//   in this file, INCLUDING the specific `sTestBinNo` local this wave's hand-off named): `AnsiString
+//   sTestBinNo=StringReplace(fSCKART->sInfo_TestBinNo,":","-",...)` (golden :3405 -- declared once,
+//   never read again anywhere in :3402-4061, unlike SaveTestSummarySECS's OWN `sTestBinNo`, which IS
+//   used in that function's FileName.sprintf(); THIS function's FileName-building never references
+//   sInfo_TestBinNo at all), `map<AnsiString,AnsiString> mapIPList`/`mapIPIter`, `IP`, `tmps1`, `Data`,
+//   lowercase `str2` (NOT the heavily-used `Str2`) -- verified by direct golden grep across the WHOLE
+//   golden SCK_ART.cpp file (not just this function): every one of these 6 identifiers appears ONLY at
+//   its own declaration line (:3404/:3408-3410) within :3402-4061, with the sole other mention being a
+//   dead, already-commented-out `//    mapIPList.clear();` at :3965. UNLIKE SaveTestSummarySECS's own
+//   analogous local-declaration list, `PathName` (plain, no "2" suffix) and lowercase `str3` are BOTH
+//   genuinely used in THIS function (PathName: golden :3435/:3446/:3457/:3946 -- the
+//   `IniConfig.iN09_4_UploadMethod!=0` fallback branch saves to `PathName+FileName` instead of
+//   `PathName2+FileName`; str3: golden :4045/:4048/:4055/:4058, the final 2D-sort/SPIL-summary backup
+//   copy block) -- so, unlike that sibling function, both are KEPT here, not dropped.
+//
+//   Golden bugs preserved VERBATIM (none "fixed" -- each cited at its own translation site too):
+//     1. (golden :3472-3480 and, separately, :3492-3500) TWO occurrences of the same dead-code shape:
+//        an if/else-if chain sets `sInfo_ProgramName` based on `MachineTypeChoice`
+//        (HT9045/HT9046/HT9046LS), immediately followed by an UNCONDITIONAL
+//        `sInfo_ProgramName="HT9046LS";` that overwrites whatever the chain just computed -- the entire
+//        chain is dead code. Preserved verbatim, twice, not collapsed into a single assignment.
+//     2. (golden :3636) `Str.sprintf("LOT_ID:%s", fLotInfo->edtSysLotID);` passes the TEdit* POINTER
+//        itself to a `%s` conversion (missing `->Text`) -- a real golden typo/bug. In THIS translated
+//        tree's vclcompat, `AnsiString::sprintf` forwards to real `vsnprintf` (vclcompat/AnsiString.cpp:
+//        165-178), so this compiles (any POD pointer is a legal varargs argument) and at runtime reads
+//        raw bytes STARTING AT the `TfLotInfoEdit` object's own address as if they were a NUL-terminated
+//        C string -- undefined behavior, matching the SAME undefined behavior golden's real BCB6 build
+//        would hit passing a `TEdit*` to `%s`. Preserved verbatim (not "fixed" to `->Text`) -- but this
+//        wave's own test (PART 11) deliberately does NOT exercise this exact branch (it steers via
+//        bReadLotInfoFromART==true instead, see PART 11's own comment), so as to not make an automated
+//        test's outcome depend on unspecified/undefined behavior, even though ordinary (non-ASan)
+//        execution of this exact line is expected to be harmless in practice (the pointer's own 8 raw
+//        bytes almost always contain a NUL well before running off any mapped page, on a 64-bit build).
+//     3. (golden :3656, reusing :3646's `if(fSCKART->sLotStartTime!="")` a SECOND time for the
+//        SUMMARY_END_TIME block) and (golden :3662, whose ELSE-branch format string is literally
+//        `"SUMMARY_START_TIME:%s%s%s%s%s%s"` again -- built from `RunInfo.LotEndTime`, not
+//        `RunInfo.LotStartTime`, but mislabeled "START" not "END") -- BOTH preserved verbatim. Contrast
+//        with the sibling SaveTestSummarySECS (golden :1788-1792/:1965's near-neighbor, see that
+//        function's own translation above), which unconditionally writes `SUMMARY_END_TIME:%s` with NO
+//        re-check and NO mislabel -- proof this is a genuine, function-specific golden quirk, not a
+//        transcription error introduced by this translation.
+//     4. (golden :4025-4028, this wave's hand-off-flagged quirk) `ShellExecute(...,strFileName...)`
+//        fires on `IniConfig.bA38_SLT_Summary && FileName!="" && iUnloadCount>0` -- a condition
+//        completely independent of whichever branch (if any) of the `bN17UploadLotSummary` block just
+//        above actually ASSIGNED `strFileName`. When that block is skipped (or takes a path that never
+//        reaches an assignment), `strFileName` is still its `AnsiString` default `""` here -- same
+//        latent "opens with an empty path" quirk SaveTestSummarySECS's own gate #11 citation already
+//        documents for its structurally identical call.
+// ---------------------------------------------------------------------------
+void SckArtRem_Save2DSortingSummary(SckArtRemainderState &st, int iSaveData);
 
 #endif // AUTOMATION_SCK_ART_REMAINDER_CORE_H

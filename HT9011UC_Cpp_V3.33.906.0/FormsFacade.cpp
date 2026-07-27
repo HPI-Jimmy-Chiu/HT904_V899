@@ -225,6 +225,13 @@ TfLotInfo::TfLotInfo()
     palRemoveTray = new TfLotInfoPanel();
     // -- W906-AutoCleanFoundation ADD (20260721) ------------------------------
     for(int iW906AC=0; iW906AC<3; iW906AC++) iUnloaderTask[iW906AC] = 0;
+    // -- AI(W906-Save2DSortingSummary) 20260723 ADD: 6 new TfLotInfoEdit members --
+    edtCusLotID       = new TfLotInfoEdit();
+    edtCusDevGrp      = new TfLotInfoEdit();
+    edtCusStep        = new TfLotInfoEdit();
+    edtDevice         = new TfLotInfoEdit();
+    edtSysOperatorID  = new TfLotInfoEdit();
+    mmo2DLotInfo      = new TfLotInfoEdit();
 }
 // AI(W906-AutoCleanFoundation) 20260721: golden uLotInfo.cpp:16250-16253 --
 // REAL one-line body (was a total no-op stub before this wave). See
