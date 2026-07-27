@@ -36,6 +36,15 @@
 // cascade (below) needs the 6 VCL-widget stand-ins this header supplies --
 // see its own file-head scope-boundary note.
 #include "vclcompat/Controls.h"
+// AI(W906-uHGemClass-Unlock3) 20260723: S2F16_NewEquipmentConstantSendAcknowledge's
+// own test section (below) needs a real `THGem` instance (so its
+// unconditional `HGemPtr->MoveCheckCallBack` tail dereferences a valid
+// pointer, matching golden's own assumption -- see that method's file-head
+// comment in uHGemClass.cpp) and the real `HasICUnderMachine()`/
+// `HasAnyICInMachine()` predicate declarations to document/assert their
+// current conservative-false default.
+#include "SECSGEM/uHGemEquipment.h"
+#include "csystem.h"
 #include <cstdio>
 #include <cstring>   // strcpy (test-side buffer prep for SetECValue's void* sink)
 #include <string>
@@ -692,6 +701,135 @@ int main()
             g16.WireCodec.SReceiveData->Add(AnsiString(999));  // > max 100
             int ret = g16.S2F15_CheckNewEquipmentConstant();
             check_i("S2F15_Check with out-of-range EC value -> 3 (via real CheckECValue)", ret, 3);
+        }
+
+        // ---------------------------------------------------------------
+        // S2F16_NewEquipmentConstantSendAcknowledge (golden uHGemClass.cpp:
+        // 731-781, UN-GATED 20260723).
+        // ---------------------------------------------------------------
+        printf("\n-- S2F16_NewEquipmentConstantSendAcknowledge (golden :731-781) --\n");
+        {
+            // Precondition documented, not assumed: this test target links
+            // ht9045_sm (the RESCAN group expansion, see tests/CMakeLists.txt),
+            // so HasICUnderMachine()/HasAnyICInMachine() here are the REAL
+            // csystem_predicates.cpp bodies (HT9045_KITSUCK_GRID_AVAILABLE=1
+            // since the W7 substrate wave, 20260629) evaluating the real,
+            // wired TMyKitSuck grid objects -- NOT a stub. They return false
+            // here simply because this test never seeds an IC into any of
+            // those grid objects (empty-grid default), not because the grid
+            // is architecturally unwired. S2F16's "IC still under machine"
+            // early-return (ack code 2) is NOT reachable from this test as a
+            // result. Asserted here so a future test that DOES seed the grid
+            // gets an immediate, loud signal if this default ever flips.
+            check_b("HasICUnderMachine() == false (empty KitSuck grid, real csystem.h predicate)",
+                    HasICUnderMachine(), false);
+            check_b("HasAnyICInMachine() == false (empty KitSuck grid, real csystem.h predicate)",
+                    HasAnyICInMachine(), false);
+        }
+        {
+            // Format-error path: empty SReceiveData -> S2F15_CheckNewEquipmentConstant
+            // returns -1 (GetDataItemLenAndTypeAndDelete's own Count<2 guard)
+            // -> `S9F7_IllegalData("S2,F15 data format error")` -- reachable
+            // with HGemPtr==NULL (returns before the HGemPtr->MoveCheckCallBack
+            // tail). Also proves the CUSTOMER_CODE!=CC_SJ_Semiconductor_OS
+            // `else` branch's `HasICUnderMachine() || HasAnyICInMachine()`
+            // check (both false per the precondition above) correctly falls
+            // through into S2F15_Check instead of short-circuiting.
+            HTGem g17;
+            g17.S2F16_NewEquipmentConstantSendAcknowledge();
+            check_i("S2F16 with empty SReceiveData -> falls to S9F7 (MessageID_F==7)",
+                    g17.WireCodec.Local.MessageID_F, 7);
+            check_i("S2F16 with empty SReceiveData -> falls to S9F7 (MessageID_S==9)",
+                    g17.WireCodec.Local.MessageID_S, 9);
+        }
+        {
+            // Same format-error path, but with CUSTOMER_CODE temporarily set
+            // to CC_SJ_Semiconductor_OS -- proves the OTHER half of the
+            // if/else branch selection (golden :736) also falls through to
+            // S2F15_Check when HasICUnderMachine() is false (this build's
+            // only reachable case -- see the precondition test above; the
+            // SJSemi branch's own distinct behavior, ack code 2 when IC IS
+            // present, is not exercisable until the KitSuck grid wave).
+            int savedCustomerCode = CUSTOMER_CODE;
+            CUSTOMER_CODE = CC_SJ_Semiconductor_OS;
+            HTGem g18;
+            g18.S2F16_NewEquipmentConstantSendAcknowledge();
+            check_i("S2F16 (CC_SJ_Semiconductor_OS branch) with empty SReceiveData -> S9F7 (MessageID_F==7)",
+                    g18.WireCodec.Local.MessageID_F, 7);
+            CUSTOMER_CODE = savedCustomerCode;
+        }
+        {
+            // S2F15_Check returns a nonzero, NON-(-1) code (1 == "ECID not
+            // registered", CheckECValue's own not-exist default, golden
+            // :3558-3559 / this file's own CheckECValue comment) -> S2F16's
+            // `else` branch fires: `ActiveWire->LocalAcknowledge(2, 16, ret)`
+            // and an early return -- BEFORE SReceiveData is ever restored
+            // from the backup. Also proves SReceiveDataBackup really did
+            // snapshot the burst BEFORE S2F15_Check destructively consumed
+            // the original SReceiveData (Backup->Count still holds every
+            // token pushed, even though SReceiveData itself is now empty).
+            HTGem g19;
+            g19.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+            g19.WireCodec.SReceiveData->Add(AnsiString(1));
+            g19.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+            g19.WireCodec.SReceiveData->Add(AnsiString(2));
+            g19.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+            g19.WireCodec.SReceiveData->Add(AnsiString(3));
+            g19.WireCodec.SReceiveData->Add(AnsiString("999"));   // unregistered ECID
+            g19.WireCodec.SReceiveData->Add(AnsiString((int)HType.UINT_1_TYPE));
+            g19.WireCodec.SReceiveData->Add(AnsiString(1));
+            g19.WireCodec.SReceiveData->Add(AnsiString(5));
+            int backupCountBefore = 10;   // exactly the 10 tokens just pushed above
+            g19.S2F16_NewEquipmentConstantSendAcknowledge();
+            check_i("S2F16 with unregistered ECID -> S2F15_Check returns 1 -> LocalAcknowledge(2,16,ret): MessageID_S==2",
+                    g19.WireCodec.Local.MessageID_S, 2);
+            check_i("S2F16 with unregistered ECID -> LocalAcknowledge(2,16,ret): MessageID_F==16",
+                    g19.WireCodec.Local.MessageID_F, 16);
+            check_i("S2F16 with unregistered ECID: SReceiveDataBackup snapshotted the full burst before Check consumed it",
+                    g19.WireCodec.SReceiveDataBackup->Count, backupCountBefore);
+            check_i("S2F16 with unregistered ECID: SReceiveData itself was fully consumed by Check, NOT restored (ret!=0 short-circuits before the restore Assign)",
+                    g19.WireCodec.SReceiveData->Count, 0);
+        }
+        {
+            // Full success round trip, proving the un-gated backup/restore
+            // dance actually works end to end: S2F15_Check destructively
+            // consumes SReceiveData and succeeds (ret==0) -> S2F16 restores
+            // SReceiveData from SReceiveDataBackup -> S2F15_Update re-parses
+            // the SAME burst and really calls SetECValue on the registered
+            // EC pointer -> both LocalAcknowledge(2,16,0) AND the
+            // HGemPtr->MoveCheckCallBack tail run without crashing. A real
+            // THGem is used (not the default-NULL HGemPtr the other cases
+            // above use) so that unconditional golden tail
+            // (`HGemPtr->MoveCheckCallBack!=NULL`) dereferences a valid
+            // pointer, matching golden's own assumption here (preserved
+            // verbatim, NOT NULL-guarded -- see this file's own
+            // S101F6()/S101F8() precedent) -- THGem's own ctor
+            // (uHGemEquipment.cpp) sets MoveCheckCallBack=NULL, so the call
+            // itself is safely skipped either way.
+            THGem realThgem;
+            HTGem g20(&realThgem);
+            int ecRaw = 50;
+            g20.SvEcReg.SetECDataPointer(AnsiString("200"), HType.INT_4_TYPE, "TestEC2", "unit",
+                                          (void*)&ecRaw, 0, 100, 50, "remark2");
+            g20.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+            g20.WireCodec.SReceiveData->Add(AnsiString(1));
+            g20.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+            g20.WireCodec.SReceiveData->Add(AnsiString(2));
+            g20.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+            g20.WireCodec.SReceiveData->Add(AnsiString(3));
+            g20.WireCodec.SReceiveData->Add(AnsiString("200"));
+            g20.WireCodec.SReceiveData->Add(AnsiString((int)HType.INT_4_TYPE));
+            g20.WireCodec.SReceiveData->Add(AnsiString(1));
+            g20.WireCodec.SReceiveData->Add(AnsiString(30));   // in [0,100]
+            g20.S2F16_NewEquipmentConstantSendAcknowledge();
+            check_i("S2F16 full success round trip -> LocalAcknowledge(2,16,0): MessageID_S==2",
+                    g20.WireCodec.Local.MessageID_S, 2);
+            check_i("S2F16 full success round trip -> LocalAcknowledge(2,16,0): MessageID_F==16",
+                    g20.WireCodec.Local.MessageID_F, 16);
+            check_i("S2F16 full success round trip: S2F15_Update really ran SetECValue on the restored burst (ecRaw==30)",
+                    ecRaw, 30);
+            check_i("S2F16 full success round trip: SReceiveData fully consumed after the restore+re-parse",
+                    g20.WireCodec.SReceiveData->Count, 0);
         }
     }
 

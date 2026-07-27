@@ -445,13 +445,67 @@ THGem::THGem()
       // no explicit entry, same established precedent as
       // DelayDownLoadRemoteFile/DelayOpenCommuncation/ConnectDelay above.
       FileListBox1(NULL),
+      // AI(W906-UploadFamily) 20260723: FileListBox2 -- same "NULL here,
+      // allocated for real in the ctor body below" idiom as FileListBox1
+      // immediately above (see header's own FileListBox2 comment).
+      FileListBox2(NULL),
       bSpooling(false),           // golden ctor :605
       ctSpoolFile(0),             // golden ctor :471
       iSpoolTask(1),              // golden ctor :481
       SpoolPtr(NULL),             // golden never inits -- defensive
       SpoolRunPtr(NULL),          // golden never inits -- defensive
       OldSpoolSystemMin(0),       // golden never inits -- defensive
-      GemSpoolCountTotal(0)       // golden never inits -- defensive
+      GemSpoolCountTotal(0),      // golden never inits -- defensive
+      // AI(W906-UploadFamily) 20260723: DoUploadFileToHost family's own
+      // member-init entries -- see header's own comment on this group for
+      // the full golden-citation/ctor-value rationale. UploadFileName: NULL
+      // here, allocated for real in the ctor body below (same NULL-then-
+      // `new` idiom as UploadFileString/RequestRemoteDownLoad above).
+      // EC69_UNT1_MaxTranslateLen: golden never inits this either -- 0 here,
+      // flagged deviation (see header note). GemLocalFileLixtBox: golden
+      // ctor :510 `GemLocalFileLixtBox=NULL;`, externally-assigned, same
+      // idiom as GemRemoteReceipeList above. The remaining Task-state
+      // scalars/FILE*/AnsiString members: golden ctor :482/483/484
+      // explicitly set the 3 "Task" fields to 1 (cited individually below);
+      // every OTHER field in this group is never explicitly initialized by
+      // golden's own ctor (grepped uHGemEquipment.cpp:444-674 -- absent for
+      // all of them) -- zero/NULL/"" here defensively, same flagged-
+      // deviation posture as this list's own SpoolPtr/OldSpoolSystemMin
+      // entries immediately above. UploadFileToHost_ForMultiFileDelay
+      // (GemTimer) gets no explicit entry, same established precedent as
+      // SpoolDelay/DelayDownLoadRemoteFile above.
+      UploadFileName(NULL),
+      EC69_UNT1_MaxTranslateLen(0),        // golden never inits this either -- flagged deviation, see header note
+      GemLocalFileLixtBox(NULL),           // golden ctor :510
+      iUploadFileToHost_ForSingleFile(1),  // golden ctor :482 (explicitly 1)
+      UploadFileToHost_ForSingleFileTotalFileSize(0),
+      UploadFileToHost_ForSingleFileFilePtr(NULL),
+      iUploadFileToHost_ForSingleFileStoreCT(0),
+      iUploadFileToHost_ForSingleFileTotalCount(0),
+      iUploadFileToHost_ForSingleFileMaxSend(0),   // golden never assigns this anywhere else -- see PRESERVED GOLDEN BUG note (.cpp, DoUploadFileToHost_ForSingleFile)
+      iUploadFileToHost_ForMultiFileTask(1),       // golden ctor :483 (explicitly 1)
+      iUploadFileToHost_ForMultiFileCT(0),
+      UploadFileToHost_ForMultiFileTotalFileSize(0),
+      PFileUploadFileToHost_ForMultiFile(NULL),
+      UploadFileToHost_ForMultiFileMultiFile(""),
+      iStoreCTUploadFileToHost_ForMultiFile(0),
+      iTotalCountUploadFileToHost_ForMultiFile(0),
+      iUploadFileToHost_ForDirectoryFileTask(1),   // golden ctor :484 (explicitly 1)
+      iCTUploadFileToHost_ForDirectoryFile(0),
+      TotalFileSizeUploadFileToHost_ForDirectoryFile(0),
+      FilePUploadFileToHost_ForDirectoryFile(NULL),
+      PathNameUploadFileToHost_ForDirectoryFile(""),
+      MultiFileUploadFileToHost_ForDirectoryFile(""),
+      FileNameUploadFileToHost_ForDirectoryFile(""),
+      iStoreCTUploadFileToHost_ForDirectoryFile(0),
+      iTotalCountUploadFileToHost_ForDirectoryFile(0),
+      // AI(W906-UploadFamily-StackFix) 20260727: PtrUploadFileToHost_ForSingleFile
+      // -- allocated here (heap buffer, NOT the embedded-array-plus-uninitialized
+      // idiom used elsewhere in this ctor) because this member itself is a
+      // deliberate storage-duration deviation from golden; see the member's
+      // own header comment for the full stack-overflow root cause this fixes.
+      PtrUploadFileToHost_ForSingleFile(new char[256*256*256]),
+      ForMultiFileFileName("")
 {
     // AI(W906-SvEcDataItem) 20260720: szManID/szGetCPUType/GemSpoolStartTime
     // are fixed char[256] buffers (not in the member-init list above --
@@ -612,9 +666,21 @@ THGem::THGem()
         // below for 1:1 fidelity (see this member's own header comment).
         RequestRemoteDownLoad = new TStringList();
         RequestRemoteDownLoad->Clear();   // golden ctor :586 (redundant on a fresh list, harmless)
+        // AI(W906-UploadFamily) 20260723: UploadFileName -- golden ctor :583
+        // (`UploadFileName=new TStringList;`, SAME ctor block as
+        // RequestRemoteDownLoad/TimeLeft immediately above/below). golden
+        // separately Clear()s it a few lines later, at ctor :594 (after the
+        // TraceData[] loop, before TimeLeft->Clear()) -- a no-op on a
+        // freshly-allocated empty list, reproduced verbatim here too for
+        // 1:1 fidelity (see this member's own header comment).
+        UploadFileName = new TStringList();
+        UploadFileName->Clear();   // golden ctor :594 (redundant on a fresh list, harmless)
         // GemRemoteReceipeList: default-NULL/externally-assigned (golden ctor
         // :504 `GemRemoteReceipeList=NULL;`) -- deliberately NOT allocated
         // here, same documentation idiom as EnableOrDisablePtr below.
+        // GemLocalFileLixtBox: same default-NULL/externally-assigned idiom
+        // (golden ctor :510 `GemLocalFileLixtBox=NULL;`) -- also NOT
+        // allocated here.
         pLockOnSocketRecvice = new TFixedCriticalSection();   // golden ctor :668 (16.10.05.00 Roy Add)
         csSFCodeResponse     = new TCriticalSection();        // golden ctor :673 (20221111 Joseph (Jason))
         RecvMemoryBuffer     = new TMemoryStream();      // golden ctor :669
@@ -639,6 +705,12 @@ THGem::THGem()
         // wave's own disclosed deviation (see vclcompat/FileListBox.h's
         // file-head note).
         FileListBox1 = new TFileListBox();
+        // AI(W906-UploadFamily) 20260723: FileListBox2 -- golden .h:99
+        // (TFileListBox, __published, form-owned). Allocated here, same
+        // "no VCL form-ownership mechanism here" idiom as FileListBox1
+        // immediately above (see header's own FileListBox2 comment for the
+        // full citation).
+        FileListBox2 = new TFileListBox();
     }
     catch (...)
     {
@@ -685,6 +757,8 @@ THGem::THGem()
         delete TimeLeft;
         delete UploadFileString;   // AI(W906-uHGemClass-Micro5) 20260721
         delete RequestRemoteDownLoad;   // AI(W906-DoDownLoadRemoteFile) 20260721
+        delete UploadFileName;   // AI(W906-UploadFamily) 20260723
+        delete FileListBox2;     // AI(W906-UploadFamily) 20260723
         delete pLockOnSocketRecvice;
         delete csSFCodeResponse;
         delete RecvMemoryBuffer;
@@ -777,6 +851,11 @@ THGem::~THGem()
     // leak exactly like golden does. NOT fixed here (faithful preservation
     // of golden's own behavior, not introducing a new deviation).
     delete FileListBox1;
+    // AI(W906-UploadFamily) 20260723: FileListBox2 -- same "no VCL
+    // form-ownership mechanism here" convention as FileListBox1 immediately
+    // above (golden itself never deletes FileListBox2 either -- also
+    // form-owned; see this member's own header comment).
+    delete FileListBox2;
     // AI(W906-uHGemEquipment-BucketC) 20260717: WaitShowString/LogDataString
     // are NO LONGER deleted here (D4 -- ALIASED to WireCodec's own instances,
     // see the ctor's own aliasing comment). WireCodec's own destructor (runs
@@ -829,8 +908,29 @@ THGem::~THGem()
         delete RequestRemoteDownLoad;
     }
     RequestRemoteDownLoad = NULL;
+    // AI(W906-UploadFamily) 20260723: UploadFileName -- same NULL-guarded
+    // Clear-then-delete idiom as UploadFileString/RequestRemoteDownLoad
+    // immediately above (mirrors those members' own header comments). NOT a
+    // deviation: golden's own ~THGem (uHGemEquipment.cpp:725/756, inside the
+    // SAME SV/EC-cluster teardown) also Clears then deletes UploadFileName
+    // for real.
+    if (UploadFileName != NULL)
+    {
+        UploadFileName->Clear();
+        delete UploadFileName;
+    }
+    UploadFileName = NULL;
+    // AI(W906-UploadFamily-StackFix) 20260727: PtrUploadFileToHost_ForSingleFile
+    // -- this port's OWN heap buffer (golden's real member has no delete site
+    // to mirror, being embedded; see the member's own header comment for why
+    // this port allocates it on the heap at all). `delete[]` matches the
+    // `new char[...]` array-form allocation in the ctor's init-list.
+    delete[] PtrUploadFileToHost_ForSingleFile;
     // GemRemoteReceipeList is NOT deleted here -- externally-assigned, see
     // this destructor's own widget-ownership note above.
+    // GemLocalFileLixtBox is likewise NOT deleted here -- same
+    // externally-assigned idiom (see this destructor's own widget-ownership
+    // note above, and GemLocalFileLixtBox's own header comment).
     // AI(W906-AlarmReportAck) 20260721: NOT a deviation, unlike the 7 pointers
     // above -- golden's OWN FormDestroy (uHGemEquipment.cpp:759-760,790-791)
     // deletes these same 4 members for real (this port's ctor/dtor pair
@@ -4411,15 +4511,441 @@ void THGem::DoTraceDataResponse(int TR)
     (void)TR;
 }
 //---------------------------------------------------------------------------
-// AI(W906-uHGemEquipment-BucketC) 20260717: GATED STUB (golden
-// uHGemEquipment.cpp:4591-4589... actually :4591 is the call site inside
-// DoLocalAllProcessLoop; the real DoUploadFileToHost body is further down,
-// dispatching to DoUploadFileToHost_ForSingleFile/_ForMultiFile/
-// _ForDirectoryFile -- an FTP/file-transfer surface entirely out of this
-// wave's scope).
+// AI(W906-UploadFamily) 20260723: THGem::DoUploadFileToHost_ForSingleFile --
+// UN-GATED for real this wave (was the "#if 0 TODO(W906-SECSGEM-upload)"
+// gated no-op stub that used to live here). golden uHGemEquipment.cpp:
+// 4249-4344. Single-recipe-file upload state machine (S101F5, expects
+// S101F6 ack per chunk) -- one of DoUploadFileToHost()'s 3 sibling bodies,
+// see that dispatcher's own comment further below for how SV_70_UNT1_
+// ReceipeStruct selects among the 3.
+//
+// `int &Task=...`/`long &TotalFileSize=...`/`int &iStoreCT=...,
+// &iTotalCount=...` are golden's own reference-alias idiom, preserved
+// verbatim -- same established convention as DoDownLoadRemoteFile's own
+// `int &Task=...`/`int &iRetryCT=...` immediately below in this file.
+//
+// `bDisableBinaryShow=true/false` (golden .cpp:4327/4337, bare THGem member
+// writes, golden .h:412) route through `WireCodec.bDisableBinaryShow`
+// instead of a bare THGem-level field in this port -- SAME established
+// consolidation this tree already applies everywhere else golden's own
+// THGem duplicated a WireCodec-owned primitive (see SecsWireCodec.h's own
+// bDisableBinaryShow comment, golden uHGemEquipment.h:412 citation there,
+// and this file's own existing ProcessSocketReceiveData -- .cpp:5862/5866 --
+// which already writes `WireCodec.bDisableBinaryShow` for the SAME single
+// flag on the receive side). No new member added; this is NOT a behavior
+// change, since golden's own THGem::bDisableBinaryShow and any
+// WireCodec-side copy are the same conceptual single flag in this port.
+//
+// AI(W906-UploadFamily) 20260723: PRESERVED GOLDEN BUG #1 (per this task's
+// own brief) -- golden .cpp:4259 `int iMaxSend=
+// iUploadFileToHost_ForSingleFileMaxSend;` is a PLAIN VALUE COPY, NOT a
+// reference, unlike the sibling `int &Task=`/`long &TotalFileSize=` aliases
+// on the very same lines above it. Grepped the ENTIRE golden tree for
+// `iUploadFileToHost_ForSingleFileMaxSend` -- its ONLY 2 appearances
+// anywhere are the .h:490 declaration and THIS function's own .cpp:4259
+// value-copy read above. Golden .cpp:4269's `iMaxSend=
+// EC69_UNT1_MaxTranslateLen;` (case 100's chunk-size assignment) writes only
+// the LOCAL `iMaxSend`, never the member itself -- which is precisely why
+// the bug exists: no golden code path ever assigns the member at all, never
+// assigned from any other function, never read back through the member
+// itself. So the chunk size case 100 computes into the LOCAL `iMaxSend` is
+// lost the instant this function returns; the very next
+// call (case 200/300) re-enters with a freshly value-copied `iMaxSend` from
+// the member `iUploadFileToHost_ForSingleFileMaxSend`, which is NEVER
+// assigned anywhere -- so it reads back 0 forever.
+//
+// PRESERVED GOLDEN BUG #2 (found while verifying #1, same class of defect,
+// NOT called out in this task's own brief but flagged here per this
+// project's "cite every golden bug you notice" convention) -- the SAME
+// plain-copy-instead-of-reference mistake also hits `FILE *P;
+// P=UploadFileToHost_ForSingleFileFilePtr;` two lines above `iMaxSend`.
+// Grepped the ENTIRE golden tree for `UploadFileToHost_ForSingleFileFilePtr`
+// -- its ONLY 2 appearances anywhere are the .h:488 declaration and THIS
+// line (.cpp:4255); case 100's `P=fopen(...)` (.cpp:4301) reassigns only the
+// LOCAL `P`, never writing back to the member either. In isolation this
+// would mean case 200's `fread(...,P)`/`fclose(P)` (on the NEXT call, a
+// fresh, still all-zero `P` reloaded from the never-written member) touch a
+// NULL/stale FILE*, not the handle case 100 actually opened. In PRACTICE,
+// bug #1 above masks this: with `iMaxSend` stuck at 0, `TotalFileSize>
+// iMaxSend` is true for any nonempty file, so case 200 always takes the
+// `iReadSize=iMaxSend` branch -> `iReadSize` is always 0 -> BOTH
+// `if(iReadSize!=0) fread(...)` and `if(TotalFileSize==0) fclose(P);` stay
+// permanently false -- `P` is therefore never actually dereferenced through
+// this path in practice, so bug #2 stays latent/inert unless bug #1 is ever
+// fixed in isolation. Both translated exactly as golden wrote them --
+// NEITHER fixed here.
+//---------------------------------------------------------------------------
+void THGem::DoUploadFileToHost_ForSingleFile()
+{
+    int &Task=iUploadFileToHost_ForSingleFile;
+    int i, j;
+    long &TotalFileSize=UploadFileToHost_ForSingleFileTotalFileSize;
+    FILE *P;
+    P=UploadFileToHost_ForSingleFileFilePtr;
+    AnsiString S, FileName;
+    int &iStoreCT=iUploadFileToHost_ForSingleFileStoreCT, &iTotalCount=iUploadFileToHost_ForSingleFileTotalCount;
+    int handle,iReadSize;
+    int iMaxSend=iUploadFileToHost_ForSingleFileMaxSend;
+
+    switch(Task)
+    {
+        case 1:
+            if(UploadFileName->Count==0)
+                break;
+            Task=100;
+            break;
+        case 100:
+            iMaxSend=EC69_UNT1_MaxTranslateLen;
+            if(iMaxSend==1)
+                iMaxSend=8192;
+            else if(iMaxSend==2)
+                iMaxSend=64*1024;
+            else if(iMaxSend==3)
+                iMaxSend=128*1024;
+            else if(iMaxSend==4)
+                iMaxSend=256*256*256;
+            else
+                iMaxSend=4096;
+
+            S=FileListBox2->Mask;
+            i=S.LastDelimiter("\\");
+            S=S.SubString(1, i);
+            FileName=UploadFileName->Strings[0];
+            j=GemLocalFileLixtBox->Items->IndexOf(FileName);
+            if(j!=-1)
+                GemLocalFileLixtBox->Checked[j]=false;
+
+            S+=FileName;
+            UploadFileName->Delete(0);
+            handle = open(S.c_str(),O_RDONLY);
+            if(handle==-1)
+                return;
+            TotalFileSize=filelength(handle);
+            close(handle);
+
+            iStoreCT=0;
+            iTotalCount=ChangeToFloatNonPcnt((double)(TotalFileSize), (double)(iMaxSend));
+            if((TotalFileSize%iMaxSend)!=0)
+                iTotalCount++;
+            P=fopen(S.c_str(),"rb");
+            if(P==NULL)
+            {
+                Task=1;
+                break;
+            }
+            Task=200;
+            break;
+        case 200:
+            iStoreCT++;
+            if(TotalFileSize>iMaxSend)
+            {
+                iReadSize=iMaxSend;
+                Task=300;
+            }
+            else
+            {
+                iReadSize=TotalFileSize;
+                Task=1;
+            }
+
+            if(iReadSize!=0)
+                fread(PtrUploadFileToHost_ForSingleFile, iReadSize, 1, P);
+            TotalFileSize-=iReadSize;
+            if(TotalFileSize==0)
+                fclose(P);
+            WireCodec.bDisableBinaryShow=true;
+            InitLocalHead(101,5,1);
+            DataItemOut(4, HType.LIST_TYPE, NULL);
+
+            DataItemOut(HType.ASCII_TYPE, FileName);                                                                    // 1.filename
+            DataItemOut(1, HType.INT_4_TYPE, &iStoreCT);                                                                // 2.iStoreCT
+            DataItemOut(1, HType.INT_4_TYPE, &iTotalCount);                                                             // 3.iTotalCount
+            DataItemOut(iReadSize, HType.BINARY_TYPE, PtrUploadFileToHost_ForSingleFile);                               // 4.data body
+            bReceiveS101F6=false;
+            SendLocalData();
+            WireCodec.bDisableBinaryShow=false;
+            break;
+        case 300:
+            if(bReceiveS101F6==true)
+                Task=200;
+            break;
+    }
+}
+//---------------------------------------------------------------------------
+// AI(W906-UploadFamily) 20260723: THGem::DoUploadFileToHost_ForMultiFile --
+// UN-GATED alongside its _ForSingleFile sibling immediately above (same
+// wave). golden uHGemEquipment.cpp:4350-4471. Multi-file-set (.BLD/.OFF/...)
+// upload state machine (S101F5, expects S101F6 ack per chunk) -- unlike
+// _ForSingleFile, `PFileUploadFileToHost_ForMultiFile`/iStoreCT/iTotalCount
+// are all either a genuine reference alias or a DIRECT member assignment
+// (`PFileUploadFileToHost_ForMultiFile=fopen(...)` writes the MEMBER
+// itself, not a local copy) -- grepped this function's own body to confirm
+// neither of PRESERVED GOLDEN BUG #1/#2 above recurs here (no plain-copy-of-
+// a-persisted-FILE*-or-chunk-size pattern exists in this sibling). `Ptr` is
+// a genuine golden STACK-local `char Ptr[8000]` scratch buffer (fread'd
+// into, then DataItemOut'd, all within the SAME case-200 call) -- not
+// persisted across calls, faithfully kept as a plain local array here too.
+//---------------------------------------------------------------------------
+void THGem::DoUploadFileToHost_ForMultiFile()
+{
+    int &Task=iUploadFileToHost_ForMultiFileTask;
+    int &iCT=iUploadFileToHost_ForMultiFileCT;
+
+    int j;
+    long &TotalFileSize=UploadFileToHost_ForMultiFileTotalFileSize;
+    char Ptr[8000];
+    AnsiString S, FileName;
+
+    int &iStoreCT=iStoreCTUploadFileToHost_ForMultiFile;
+    int &iTotalCount=iTotalCountUploadFileToHost_ForMultiFile;
+    int handle, iReadSize;
+
+    switch(Task)
+    {
+        case 1:
+            if(UploadFileName->Count==0)
+                break;
+            Task=100;
+            break;
+        case 100:
+            S=UpLoadPath;
+            UploadFileToHost_ForMultiFileMultiFile=S;
+            Task=120;
+            break;
+        case 120:
+            ForMultiFileFileName=UploadFileName->Strings[0];
+            j=GemLocalFileLixtBox->Items->IndexOf(ForMultiFileFileName);
+            if(j!=-1)
+                GemLocalFileLixtBox->Checked[j]=false;
+
+            UploadFileName->Delete(0);
+            S=UploadFileToHost_ForMultiFileMultiFile+ForMultiFileFileName;
+            S+=".*";
+            FileListBox2->Mask=S;
+            FileListBox2->Update();
+            FileListBox2->Refresh();
+            iCT=0;
+            Task=140;
+            break;
+        case 140:
+            if(iCT>=FileListBox2->Items->Count)
+            {
+                Task=1;
+                break;
+            }
+            S=UploadFileToHost_ForMultiFileMultiFile+FileListBox2->Items->Strings[iCT];
+            ForMultiFileFileName=FileListBox2->Items->Strings[iCT];
+            handle=open(S.c_str(), O_RDONLY);
+            if(handle==-1)
+                return;
+            TotalFileSize=filelength(handle);
+            close(handle);
+
+            iStoreCT=0;
+            iTotalCount=TotalFileSize/8000;
+            if((TotalFileSize%8000)!=0)
+                iTotalCount++;
+
+            PFileUploadFileToHost_ForMultiFile=fopen(S.c_str(), "rb");          //2014/02/01 lee   // ASEM
+            if(PFileUploadFileToHost_ForMultiFile==NULL)                        //2014/02/01 lee   // ASEM
+            {
+                Task=1;
+                break;
+            }
+            Task=200;
+            break;
+        case 200:
+            iStoreCT++;
+            if(TotalFileSize>8000)
+            {
+                iReadSize=8000;
+                Task=300;
+            }
+            else
+            {
+                iReadSize=TotalFileSize;
+                iCT++;
+                Task=400;
+            }
+
+            if(iReadSize!=0)
+                fread(Ptr, iReadSize, 1, PFileUploadFileToHost_ForMultiFile);   //2014/02/01 lee   // ASEM
+            TotalFileSize-=iReadSize;
+            if(TotalFileSize==0)
+                fclose(PFileUploadFileToHost_ForMultiFile);                     //2014/02/01 lee   // ASEM
+            WireCodec.bDisableBinaryShow=true;
+            InitLocalHead(101, 5, 1);
+            DataItemOut(5, HType.LIST_TYPE, NULL);
+
+            DataItemOut(HType.ASCII_TYPE, ForMultiFileFileName);                // 1.filename
+            DataItemOut(1, HType.INT_4_TYPE, &iStoreCT);                        // 2.iStoreCT
+            DataItemOut(1, HType.INT_4_TYPE, &iTotalCount);                     // 3.iTotalCount
+            DataItemOut(iReadSize, HType.BINARY_TYPE, Ptr);                     // 4.data body
+            bReceiveS101F6=false;
+            SendLocalData();
+            WireCodec.bDisableBinaryShow=false;
+            UploadFileToHost_ForMultiFileDelay.TimerSetSecAndOn(1);
+            break;
+        case 300:
+            if(bReceiveS101F6==true)
+            {
+                Task=200;
+            }
+            else if(UploadFileToHost_ForMultiFileDelay.TimerOff())
+            {
+                Task=1;
+            }
+            break;
+        case 400:
+            if(bReceiveS101F6==true)
+            {
+                Task=140;
+            }
+            else if(UploadFileToHost_ForMultiFileDelay.TimerOff())
+            {
+                Task=1;
+            }
+            break;
+    }
+}
+//---------------------------------------------------------------------------
+// AI(W906-UploadFamily) 20260723: THGem::DoUploadFileToHost_ForDirectoryFile
+// -- UN-GATED alongside its 2 siblings immediately above (same wave). golden
+// uHGemEquipment.cpp:4477-4586. Whole-directory upload state machine
+// (S101F7, expects S101F8 ack per chunk -- the ONE sibling of this family
+// that uses S101F7/F8 rather than S101F5/F6, see InitLocalHead(101,7,1)
+// below). Same "direct member FILE* assignment, no local-copy bug" shape as
+// _ForMultiFile immediately above -- confirmed by re-reading this function's
+// own body (`FilePUploadFileToHost_ForDirectoryFile=fopen(...)` writes the
+// member itself).
+//---------------------------------------------------------------------------
+void THGem::DoUploadFileToHost_ForDirectoryFile()
+{
+    int &Task=iUploadFileToHost_ForDirectoryFileTask;
+    int j;
+    int &iCT=iCTUploadFileToHost_ForDirectoryFile;
+    long &TotalFileSize=TotalFileSizeUploadFileToHost_ForDirectoryFile;
+    char Ptr[8000];
+    AnsiString S;
+    int handle, iReadSize;
+
+    switch(Task)
+    {
+        case 1:
+            if(UploadFileName->Count==0)
+                break;
+            Task=100;
+            break;
+        case 100:
+            S=UpLoadPath;
+            MultiFileUploadFileToHost_ForDirectoryFile=S;
+            Task=120;
+            break;
+        case 120:
+            PathNameUploadFileToHost_ForDirectoryFile=UploadFileName->Strings[0];
+            j=GemLocalFileLixtBox->Items->IndexOf(PathNameUploadFileToHost_ForDirectoryFile);
+            if(j!=-1)
+                GemLocalFileLixtBox->Checked[j]=false;
+
+            UploadFileName->Delete(0);
+            S=MultiFileUploadFileToHost_ForDirectoryFile+"\\"+PathNameUploadFileToHost_ForDirectoryFile+"\\*.*";
+            FileListBox2->Mask=S;
+            FileListBox2->Update();
+            FileListBox2->Refresh();
+            iCT=0;
+            Task=140;
+            break;
+        case 140:
+            if(iCT>=FileListBox2->Items->Count)
+            {
+                Task=1;
+                break;
+            }
+            S=MultiFileUploadFileToHost_ForDirectoryFile+"\\"+PathNameUploadFileToHost_ForDirectoryFile+"\\"+FileListBox2->Items->Strings[iCT];
+            FileNameUploadFileToHost_ForDirectoryFile=FileListBox2->Items->Strings[iCT];
+            handle = open(S.c_str(), O_RDONLY);
+            if(handle==-1)
+                return;
+            TotalFileSize=filelength(handle);
+            close(handle);
+
+            iStoreCTUploadFileToHost_ForDirectoryFile=0;
+            iTotalCountUploadFileToHost_ForDirectoryFile=TotalFileSize/8000;
+            if((TotalFileSize%8000)!=0)
+                iTotalCountUploadFileToHost_ForDirectoryFile++;
+
+            FilePUploadFileToHost_ForDirectoryFile=fopen(S.c_str(), "rb");      //2014/02/01 lee   // ASEM
+            if(FilePUploadFileToHost_ForDirectoryFile==NULL)                    //2014/02/01 lee   // ASEM
+            {
+                Task=1;
+                break;
+            }
+            Task=200;
+            break;
+        case 200:
+            iStoreCTUploadFileToHost_ForDirectoryFile++;
+            if(TotalFileSize>8000)
+            {
+                iReadSize=8000;
+                Task=300;
+            }
+            else
+            {
+                iReadSize=TotalFileSize;
+                iCT++;
+                Task=400;
+            }
+
+            if(iReadSize!=0)
+                fread(Ptr, iReadSize, 1, FilePUploadFileToHost_ForDirectoryFile);                                       //2014/02/01 lee   // ASEM
+            TotalFileSize-=iReadSize;
+            if(TotalFileSize==0)
+                  fclose(FilePUploadFileToHost_ForDirectoryFile);                                                       //2014/02/01 lee   // ASEM
+            WireCodec.bDisableBinaryShow=true;
+
+            InitLocalHead(101,7,1);
+            DataItemOut(5, HType.LIST_TYPE, NULL);
+
+            DataItemOut(HType.ASCII_TYPE, PathNameUploadFileToHost_ForDirectoryFile);                                   // 1.Directory
+            DataItemOut(HType.ASCII_TYPE, FileNameUploadFileToHost_ForDirectoryFile);                                   // 1.filename
+            DataItemOut(1, HType.INT_4_TYPE, &iStoreCTUploadFileToHost_ForDirectoryFile);                               // 2.iStoreCT
+            DataItemOut(1, HType.INT_4_TYPE, &iTotalCountUploadFileToHost_ForDirectoryFile);                            // 3.iTotalCount
+            DataItemOut(iReadSize, HType.BINARY_TYPE, Ptr);                                                             // 4.data body
+            bReceiveS101F8=false;
+            SendLocalData();
+            WireCodec.bDisableBinaryShow=false;
+            break;
+        case 300:
+            if(bReceiveS101F8==true)
+            {
+                Task=200;
+            }
+            break;
+        case 400:
+            if(bReceiveS101F8==true)
+            {
+                Task=140;
+            }
+            break;
+    }
+}
+//---------------------------------------------------------------------------
+// AI(W906-UploadFamily) 20260723: THGem::DoUploadFileToHost -- the 3-way
+// dispatcher, UN-GATED alongside its 3 sibling sub-functions immediately
+// above (same wave). golden uHGemEquipment.cpp:4591-4599. Called once per
+// DoLocalAllProcessLoop pump (this file's own call site, marked "// need
+// debug" in golden -- see PRESERVED GOLDEN BUG #1/#2 on
+// DoUploadFileToHost_ForSingleFile above for the likely reason: golden's own
+// author flagged this family as suspect, and grepping confirms why).
 //---------------------------------------------------------------------------
 void THGem::DoUploadFileToHost()
 {
+    if(SV_70_UNT1_ReceipeStruct==0)
+        DoUploadFileToHost_ForSingleFile();
+    else if(SV_70_UNT1_ReceipeStruct==1)
+        DoUploadFileToHost_ForMultiFile();
+    else if(SV_70_UNT1_ReceipeStruct==2)
+        DoUploadFileToHost_ForDirectoryFile();
 }
 //---------------------------------------------------------------------------
 // AI(W906-DoDownLoadRemoteFile) 20260721: UN-GATED (was a no-op stub, see
@@ -4429,7 +4955,8 @@ void THGem::DoUploadFileToHost()
 // (this file's own call site, inside DoLocalAllProcessLoop above). Pure
 // RequestRemoteDownLoad/InitLocalHead/DataItemOut/SendLocalData composition,
 // no VCL widget dependency (unlike the sibling DoUploadFileToHost family,
-// which stays gated -- see that method's own stub comment).
+// UN-GATED separately this same wave -- see that family's own comments
+// above).
 // `int &iRetryCT=...`/`int &Task=...` is golden's own reference-alias idiom,
 // preserved verbatim -- matches this file's own established DoOpenCommuncation
 // /DoConnect/Timer1Timer sub-task convention (`int &Task=...Task;`, see e.g.

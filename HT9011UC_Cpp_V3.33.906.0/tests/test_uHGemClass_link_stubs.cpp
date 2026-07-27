@@ -17,7 +17,27 @@
 // __fastcall) both need a definition somewhere in the final link. Same exact
 // stub shape as tests/test_uHGemEquipment.cpp's own (:173/:190) -- copied
 // verbatim into this standalone TU rather than into test_uHGemClass.cpp.
+//
+// AI(W906-uHGemClass-Unlock3) 20260723: BOTH stubs that used to live here
+// (2-arg `MyDBIProcess` and the 5-arg `ShowMyMessage` above) are REMOVED,
+// this TU now compiles to empty. This wave un-gated S2F16 (uHGemClass.cpp),
+// which needs the real `HasICUnderMachine()`/`HasAnyICInMachine()`
+// predicates (csystem_predicates.cpp) -- linking those pulls in ht9045_sm
+// (see tests/CMakeLists.txt's test_uHGemClass entry). Confirmed by the
+// actual link error (not assumed): ht9045_sm drags in, transitively, TWO
+// other object files that each supply a REAL, non-static definition of the
+// exact same signature this TU used to stub:
+//   * aHotPlateSubstrate.cpp:772 `void MyDBIProcess(AnsiString, AnsiString) {}`
+//   * canary_support.cpp:82-89   `void ShowMyMessage(AnsiString, AnsiString,
+//                                  AnsiString, bool, bool) { ... }`
+// FLAG FOR REVIEW (self-correction): an earlier version of this same
+// comment (and the matching tests/CMakeLists.txt note) claimed "every OTHER
+// ShowMyMessage definition in the tree is `static`" and kept this file's own
+// ShowMyMessage stub on that basis -- that claim was WRONG (a partial-grep
+// mistake, not verified against the actual link), caught only by actually
+// building this target and reading the real duplicate-definition error
+// (`canary_support.cpp.obj: multiple definition of ShowMyMessage(...)`).
+// Corrected here per this project's own "never claim more than verified"
+// mandate. `HSys` (database.cpp) already resolves via the existing ht9045_db
+// link member, unaffected by either removal.
 #include "vclcompat/vcl_compat.h"
-
-void MyDBIProcess(AnsiString /*S1*/, AnsiString /*S2*/) {}
-void ShowMyMessage(AnsiString /*S1*/, AnsiString /*S2*/, AnsiString /*S3*/, bool /*Ok*/, bool /*bServoOff*/) {}

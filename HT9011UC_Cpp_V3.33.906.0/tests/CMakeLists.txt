@@ -1359,8 +1359,21 @@ add_executable(test_uHGemClass
 # applied here; not one of the six targets the design brief's own risk R3
 # anticipated by name, but the exact case R3's own wording covers: "if other
 # targets also indirectly pull database.cpp.o in, apply the same fix").
+# AI(W906-uHGemClass-Unlock3) 20260723: `ht9045_sm` added to the RESCAN group
+# -- S2F16_NewEquipmentConstantSendAcknowledge (this wave's own un-gate) calls
+# the real `HasICUnderMachine()`/`HasAnyICInMachine()` free-function
+# predicates, which live in csystem_predicates.cpp, compiled into ht9045_sm
+# (see that library's own root-CMakeLists.txt comment). Pulling that object
+# file in transitively drags in TWO more ht9045_sm object files that each
+# supply a REAL, non-static definition colliding with a local stub this test
+# used to carry (both REMOVED from tests/test_uHGemClass_link_stubs.cpp this
+# same wave -- see that file's own updated comment for the full list and the
+# self-correction note on the ShowMyMessage one):
+#   * aHotPlateSubstrate.cpp:772 `void MyDBIProcess(AnsiString, AnsiString) {}`
+#   * canary_support.cpp:82-89   `void ShowMyMessage(AnsiString, AnsiString,
+#                                  AnsiString, bool, bool) { ... }`
 target_link_libraries(test_uHGemClass PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_secsgem,ht9045_core,ht9045_globals,ht9045_public,ht9045_db,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 if(WIN32)
     target_link_libraries(test_uHGemClass PRIVATE ws2_32)

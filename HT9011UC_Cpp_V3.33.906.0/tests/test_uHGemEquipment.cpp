@@ -205,6 +205,27 @@ void MyDBIProcess(AnsiString /*S1*/, AnsiString /*S2*/) {}
 void ShowMyMessage(AnsiString /*S1*/, AnsiString /*S2*/, AnsiString /*S3*/, bool /*Ok*/, bool /*bServoOff*/) {}
 
 // ---------------------------------------------------------------------------
+//  AI(W906-uHGemClass-Unlock3) 20260723: HasICUnderMachine / HasAnyICInMachine
+//  stubs -- this wave un-gated SECSGEM/uHGemClass.cpp's S2F16, which calls
+//  these two real csystem.h predicates (implemented in csystem_predicates.cpp,
+//  part of ht9045_sm, which this test does NOT link). uHGemClass.cpp.o is
+//  unconditionally part of ht9045_secsgem (this test already links it), so
+//  its now-undefined refs to these two predicates must resolve at THIS
+//  test's link too, even though this test never exercises HTGem/S2F16 at
+//  all. Same "avoid the god-stack ht9045_sm for a focused unit test" posture
+//  already established by this file's own MyDBIProcess/ShowMyMessage stubs
+//  immediately above. Conservative `false` here is NOT because the real
+//  bodies still have a gated/TODO false-by-default path -- csystem_predicates.
+//  cpp:56 has HT9045_KITSUCK_GRID_AVAILABLE=1 (flipped on by the W7
+//  substrate wave, 20260629), so the real HasICUnderMachine() actively
+//  evaluates ShuttleHasIC()||IndexHasIC()||HasICUnderHotPlate() on the real
+//  (wired) TMyKitSuck grid objects. `false` is simply the correct answer for
+//  THIS unlinked stub, which has no grid state to query at all -- not a
+//  behavioral fork from the real body, just a link-time stand-in.
+bool HasICUnderMachine() { return false; }
+bool HasAnyICInMachine() { return false; }
+
+// ---------------------------------------------------------------------------
 //  Tiny PASS / FAIL harness (same style as tests/test_serversocket.cpp).
 // ---------------------------------------------------------------------------
 static int g_pass = 0, g_fail = 0;
@@ -4521,6 +4542,118 @@ static void RestoreTextLogSnapshot(const TextLogSnapshot &snap)
     }
 }
 
+//---------------------------------------------------------------------------
+//  AI(W906-UploadFamily-StackFix) 20260727: DoUploadFileToHost /
+//  DoUploadFileToHost_ForSingleFile -- golden dispatcher .cpp:4941-4949,
+//  ForSingleFile body .cpp:4249-4599 range (this wave, 20260723). MINIMAL
+//  coverage added per independent review finding (the UploadFamily wave
+//  shipped with ZERO test coverage for this whole ~330-line 3-way family).
+//
+//  IMPORTANT, discovered while writing this test (not assumed going in): a
+//  naive "single small file -> Task 1->100->200->1 happy path" test is NOT
+//  what actually happens, because PRESERVED GOLDEN BUG #1 (see this
+//  function's own .cpp file-head comment) bites on the VERY FIRST real
+//  Task==200 call, not just on some later multi-chunk call. Case 100's own
+//  `iMaxSend=EC69_UNT1_MaxTranslateLen; ... else iMaxSend=4096;` chain only
+//  ever computes the LOCAL `iMaxSend` -- it is never written back to the
+//  backing member `iUploadFileToHost_ForSingleFileMaxSend`. So the NEXT
+//  call's `int iMaxSend=iUploadFileToHost_ForSingleFileMaxSend;` re-reads
+//  that member fresh, still its ctor-default 0 (never written by ANY golden
+//  code path) -- meaning `TotalFileSize>iMaxSend` (12>0) is ALWAYS true, so
+//  `case 200` is permanently forced onto the "iReadSize=iMaxSend" (==0)
+//  chunked branch, never the "iReadSize=TotalFileSize" whole-file-done
+//  branch, no matter how small the real file is. This test exercises and
+//  asserts that REAL (bug-preserving) behavior rather than the wrong
+//  happy-path assumption. NOT covered here, a real gap left for a future
+//  wave, not silently claimed as full coverage: ever actually completing an
+//  upload (blocked by this same bug), the _ForMultiFile/_ForDirectoryFile
+//  sibling bodies, or PRESERVED GOLDEN BUG #2's own leaked-FILE* angle.
+//---------------------------------------------------------------------------
+static void test_w906_uploadfamily_e2e()
+{
+    printf("\n[W906-UploadFamily] DoUploadFileToHost / DoUploadFileToHost_ForSingleFile, real THGem-backed coverage\n");
+
+    const AnsiString kDir = "uploadfamily_test_scratch";
+    ForceDirectories(kDir);
+    const AnsiString kFileName = "upload_me.dat";
+    const AnsiString kFullPath = kDir + AnsiString("\\") + kFileName;
+
+    {
+        FILE *f = fopen(kFullPath.c_str(), "wb");
+        CHECK(f != NULL, "setup: scratch upload file created");
+        if (f) { fwrite("HELLO_UPLOAD", 1, 12, f); fclose(f); }
+    }
+
+    THGem g;
+    g.FileListBox2->Mask = kDir + AnsiString("\\*.dat");
+    g.GemLocalFileLixtBox = new THGemListBox();
+    g.GemLocalFileLixtBox->Items->Add(kFileName);
+    g.GemLocalFileLixtBox->Checked[0] = true;   // pre-set true so case 100's flip to false is observable
+    g.UploadFileName->Add(kFileName);
+
+    CHECK(g.iUploadFileToHost_ForSingleFile == 1, "precondition: Task starts at 1 (golden ctor :482)");
+
+    // Task 1 -> 100 (UploadFileName->Count==1, nonzero).
+    g.DoUploadFileToHost_ForSingleFile();
+    CHECK(g.iUploadFileToHost_ForSingleFile == 100, "Task 1->100: file was queued in UploadFileName");
+
+    // Task 100 -> 200: opens the real file, computes TotalFileSize/iStoreCT/
+    // iTotalCount, flips GemLocalFileLixtBox->Checked[0] false, fopen()s P
+    // (LOCALLY only -- see PRESERVED GOLDEN BUG #2 in the .cpp comment; the
+    // real handle this fopen() returns is never saved to any member, so it
+    // is already effectively leaked/unreachable the instant this call returns).
+    g.DoUploadFileToHost_ForSingleFile();
+    CHECK(g.iUploadFileToHost_ForSingleFile == 200, "Task 100->200: fopen succeeded on the real scratch file");
+    CHECK(g.UploadFileToHost_ForSingleFileTotalFileSize == 12, "Task 100: TotalFileSize == real file size (12 bytes)");
+    CHECK(g.GemLocalFileLixtBox->Checked.Values[0] == false, "Task 100: GemLocalFileLixtBox->Checked[0] flipped true->false (golden :4615-4616)");
+    CHECK(g.UploadFileName->Count == 0, "Task 100: UploadFileName->Delete(0) consumed the queued entry");
+
+    // Task 200's FIRST real invocation -- PRESERVED GOLDEN BUG #1 in action
+    // (see this test function's own file-head comment above for the full
+    // derivation): iMaxSend reverts to 0, forcing the chunked branch with a
+    // 0-byte read instead of a 1-shot whole-file finish.
+    g.DoUploadFileToHost_ForSingleFile();
+    CHECK(g.iUploadFileToHost_ForSingleFile == 300, "Task 200->300: PRESERVED GOLDEN BUG #1 -- iMaxSend reverted to 0 (member never written back by case 100), so TotalFileSize(12)>iMaxSend(0) forces the chunked branch, not a 1-shot whole-file finish");
+    CHECK(g.iUploadFileToHost_ForSingleFileStoreCT == 1, "Task 200: iStoreCT incremented to 1");
+    CHECK(g.UploadFileToHost_ForSingleFileTotalFileSize == 12, "Task 200: PRESERVED GOLDEN BUG #1 consequence -- TotalFileSize is UNCHANGED (iReadSize was forced to 0, so nothing was actually read/subtracted)");
+    CHECK(g.bReceiveS101F6 == false, "Task 200: bReceiveS101F6 reset false at the tail of this case, gating case 300's own retry check");
+
+    // Task 300 stays parked until a real S101F6 ack sets bReceiveS101F6 --
+    // proving the state machine does NOT silently self-advance without one.
+    g.DoUploadFileToHost_ForSingleFile();
+    CHECK(g.iUploadFileToHost_ForSingleFile == 300, "Task 300: stays parked without a real bReceiveS101F6==true ack (golden :4668-4671)");
+
+    if (FileExists(kFullPath)) DeleteFile(kFullPath);
+    RemoveDir(kDir);
+
+    // -- Dispatcher routing: DoUploadFileToHost() picks the right sibling via
+    //    SV_70_UNT1_ReceipeStruct (golden .cpp:4941-4949). Exercised here on
+    //    a FRESH THGem/scratch-dir setup (independent of the Task==300 state
+    //    left over above) for just the ==0 (ForSingleFile) branch; the
+    //    ==1/==2 branches (MultiFile/DirectoryFile) are NOT covered by this
+    //    test.
+    {
+        const AnsiString kDir2 = "uploadfamily_test_scratch_dispatch";
+        ForceDirectories(kDir2);
+        const AnsiString kFullPath2 = kDir2 + AnsiString("\\") + kFileName;
+        FILE *f = fopen(kFullPath2.c_str(), "wb");
+        if (f) { fwrite("X", 1, 1, f); fclose(f); }
+
+        THGem g2;
+        g2.FileListBox2->Mask = kDir2 + AnsiString("\\*.dat");
+        g2.GemLocalFileLixtBox = new THGemListBox();
+        g2.GemLocalFileLixtBox->Items->Add(kFileName);
+        g2.UploadFileName->Add(kFileName);
+        g2.SV_70_UNT1_ReceipeStruct = 0;
+
+        g2.DoUploadFileToHost();
+        CHECK(g2.iUploadFileToHost_ForSingleFile == 100, "DoUploadFileToHost() dispatcher: SV_70_UNT1_ReceipeStruct==0 really reached DoUploadFileToHost_ForSingleFile (Task advanced 1->100)");
+
+        if (FileExists(kFullPath2)) DeleteFile(kFullPath2);
+        RemoveDir(kDir2);
+    }
+}
+
 // ===========================================================================
 int main()
 {
@@ -4639,6 +4772,12 @@ int main()
     // not routed through SaveSECSGEMTextToLog (T3/SysModWire's own concern),
     // so no snapshot bracket is needed here either.
     test_w906_spoolcluster_e2e();
+
+    // W906-UploadFamily-StackFix: same posture as SpoolCluster/Micro5-7/
+    // DoDownLoadRemoteFile above -- direct THGem method calls only, no
+    // socket pump/Timer1Timer, so no TextLogSnapshot bracket or special T10
+    // ordering needed either.
+    test_w906_uploadfamily_e2e();
 
     test_timer1timer_disable_branch();
 

@@ -602,6 +602,13 @@
 //  stand-ins; see SetECValue's own comment below). 4 REMAIN gated: S2F16,
 //  S2F24Sub, S2F32, S7F20_CurrentEPPDData (unchanged, none of this wave's
 //  scope). grep `^#if 0` re-verified at 4.
+//
+//  AI(W906-uHGemClass-Unlock3) 20260723: refreshed from "4" above -- S2F16
+//  is UN-GATED this wave (SecsWireCodec gained SReceiveDataBackup, csystem.h
+//  supplies the real HasICUnderMachine()/HasAnyICInMachine() predicates --
+//  see S2F16's own comment below). 3 REMAIN gated: S2F24Sub, S2F32,
+//  S7F20_CurrentEPPDData (unchanged, none of this wave's scope). grep
+//  `^#if 0` re-verified at 3.
 //---------------------------------------------------------------------------
 
 #include "vclcompat/vcl_compat.h"
@@ -631,6 +638,18 @@
 // and uHGemEquipment.cpp already share the ht9045_secsgem target, which
 // already links ht9045_core/ht9045_globals for exactly this).
 #include "cmydef.h"
+// AI(W906-uHGemClass-Unlock3) 20260723: S2F16_NewEquipmentConstantSendAcknowledge's
+// golden body (uHGemClass.cpp:736/746) branches on the cross-arm IC-presence
+// predicates `HasICUnderMachine()`/`HasAnyICInMachine()` -- declared in
+// csystem.h (the frozen W6 predicate-API contract), real-implemented in
+// csystem_predicates.cpp (part of the ht9045_sm library). This is the FIRST
+// call from ht9045_secsgem into ht9045_sm's predicate surface -- a new
+// link edge (ht9045_secsgem the CMake TARGET does not link ht9045_sm; only
+// the final test/executable that links BOTH resolves it, same posture as
+// every other still-unresolved extern already declared-but-not-linked
+// elsewhere in this tree). See tests/CMakeLists.txt's test_uHGemClass entry
+// for the RESCAN group update this requires.
+#include "csystem.h"
 #include <cstdlib>   // atoi (CheckECValue's Type/PMax_Value/PMin_Value decode); strtoll/strtoull (S5F6_ListAlarmData's golden _atoi64 substitution, same precedent as SecsSvEcRegistration.cpp/uHGemEquipment.cpp)
 // AI(W906-uHGemClass-Micro6) 20260721: S6F24/S7F18's own dependencies --
 // common.h declares the real (un-gated, AI(W906-CommonWaveFile) 20260721)
@@ -1444,17 +1463,93 @@ void HTGem::S2F14_EquipmentConstanData()
 //---------------------------------------------------------------------------
 // [S2,F16] New Equipment Constant Send Acknowledge.
 //---------------------------------------------------------------------------
-// AI(W906-SysModWire) 20260720: gate comment narrowed -- THGem::MoveCheckCallBack
-// (this wave's own new member) is NO LONGER a blocker for this method (golden
-// :779-780 is now satisfiable), but golden :734/746 still need
-// `THGem::SReceiveDataBackup` (a member no wave has added yet) and the
-// csystem predicates `HasICUnderMachine()`/`HasAnyICInMachine()` (golden
-// :738/746 -- free functions that would require a NEW ht9045_secsgem ->
-// ht9045_sm link edge, deliberately out of this wave's scope). Still gated.
+// AI(W906-uHGemClass-Unlock3) 20260723: UN-GATED (golden SECSGEM/uHGemClass.cpp:
+// 731-781). Both blockers this stub's prior gate comment cited are now real:
+// `THGem::SReceiveDataBackup` -- added THIS wave, but NOT on THGem/
+// uHGemEquipment.h as that comment (and the task brief handed down for this
+// wave) assumed. Direct read of THIS tree (not just the golden header)
+// showed golden's `SReceiveData` itself already migrated off THGem onto
+// SecsWireCodec in an EARLIER wave (see SecsWireCodec.h's own file-head
+// note) -- THGem/uHGemEquipment.h/.cpp have carried ZERO `SReceiveData`
+// members since then (grepped uHGemEquipment.cpp in full to confirm: zero
+// hits). Adding SReceiveDataBackup back onto THGem as the brief's plan
+// literally described would have reintroduced a member the codec no longer
+// needs there and left THIS method unable to reach it via `ActiveWire->`
+// (this file's own established Design D dispatch idiom, see uHGemClass.h) --
+// so it is added to SecsWireCodec instead, right next to SReceiveData,
+// matching that member's own ctor/dtor lifecycle exactly (see
+// SecsWireCodec.h/.cpp's own comments on the new member). The csystem
+// predicates `HasICUnderMachine()`/`HasAnyICInMachine()` (golden :738/746)
+// are real, already-implemented free functions (csystem_predicates.cpp,
+// part of ht9045_sm) -- called bare, exactly as golden does (not THGem
+// members, no ActiveWire/HGemPtr indirection needed). Linking them in is a
+// new ht9045_secsgem(-consuming executable) -> ht9045_sm link edge -- see
+// tests/CMakeLists.txt's test_uHGemClass entry for the RESCAN group update
+// this requires (and the resulting MyDBIProcess stub collision that fix
+// surfaces).
+// MECHANICAL RENAME: golden `HGemPtr->SReceiveDataBackup`/`HGemPtr->
+// SReceiveData` (wire-codec primitives, now SecsWireCodec members) ->
+// `ActiveWire->...`; golden `HGemPtr->LocalAcknowledge` -> `ActiveWire->
+// LocalAcknowledge` (same D1/D2/Design-D precedent used throughout this
+// file); `S2F15_CheckNewEquipmentConstant`/`S2F15_UpdateNewEquipmentConstant`
+// (already-real HTGem sibling methods) called bare, unchanged; `HGemPtr->
+// MoveCheckCallBack` (a real THGem member, added the SysModWire wave) stays
+// `HGemPtr->`, unchanged, GOLDEN QUIRK preserved verbatim: golden derefs
+// HGemPtr here with NO NULL-guard of its own (only the function-pointer
+// VALUE is NULL-checked) -- same as this file's own already-un-gated
+// S101F6()/S101F8() (see each one's own `HGemPtr->MoveCheckCallBack` call),
+// so a standalone HTGem with HGemPtr==NULL must not reach this tail; this
+// method's own test seeds a real THGem instance for exactly that reason.
 void HTGem::S2F16_NewEquipmentConstantSendAcknowledge()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem member SReceiveDataBackup + csystem predicates HasICUnderMachine()/HasAnyICInMachine() (new ht9045_secsgem->ht9045_sm link edge)) -- golden SECSGEM/uHGemClass.cpp:731-779
-#endif
+    int ret;
+    ActiveWire->SReceiveDataBackup->Assign(ActiveWire->SReceiveData);
+
+    if(CUSTOMER_CODE==CC_SJ_Semiconductor_OS)                                   //Steven 20230213 : For SJSemi OS Tester
+    {
+        if(HasICUnderMachine())                                                //kevin 20181127 add
+        {
+            ActiveWire->LocalAcknowledge(2, 16, 2);
+            return ;
+        }
+    }
+    else
+    {
+        if(HasICUnderMachine() || HasAnyICInMachine())                         //kevin 20181127 add
+        {
+            ActiveWire->LocalAcknowledge(2, 16, 2);
+            return ;
+        }
+    }
+
+    ret=S2F15_CheckNewEquipmentConstant();                                     //wei 20170417 (Steven) add S2F15
+    if(ret!=0)
+    {
+        if(ret==-1)
+        {
+            S9F7_IllegalData("S2,F15 data format error");
+            return ;
+        }
+        else
+        {
+            ActiveWire->LocalAcknowledge(2, 16, ret);
+            return ;
+        }
+    }
+    ActiveWire->SReceiveData->Assign(ActiveWire->SReceiveDataBackup);
+
+    ret=S2F15_UpdateNewEquipmentConstant();                                    //JerryYang 20250120 : modify
+    if(ret==0)
+    {
+        ActiveWire->LocalAcknowledge(2, 16, 0);
+    }
+    else
+    {
+        ActiveWire->LocalAcknowledge(2, 16, ret);
+    }
+
+    if(HGemPtr->MoveCheckCallBack!=NULL)
+        HGemPtr->MoveCheckCallBack();
 }
 //---------------------------------------------------------------------------
 // [S2,F18] Date and Time Data.

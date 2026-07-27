@@ -87,6 +87,31 @@ void ShowMyMessage(AnsiString S1, AnsiString /*S2*/, AnsiString /*S3*/,
 void MyDBIProcess(AnsiString /*S1*/, AnsiString /*S2*/) {}
 
 // ---------------------------------------------------------------------------
+//  AI(W906-uHGemClass-Unlock3) 20260723: HasICUnderMachine / HasAnyICInMachine
+//  stubs -- this wave un-gated SECSGEM/uHGemClass.cpp's S2F16, which calls
+//  these two real csystem.h predicates (implemented in csystem_predicates.cpp,
+//  part of ht9045_sm). uHGemClass.cpp.o is unconditionally part of
+//  ht9045_secsgem (this test already links it -- see the RESCAN group above,
+//  needed for HT9045Gem/HGem), so its now-undefined refs to these two
+//  predicates must resolve at THIS test's link too, even though this test
+//  never calls S2F16/LoadMotData/LoadIoData through a path that reaches
+//  them. Same "avoid the god-stack ht9045_sm for a focused unit test"
+//  posture already established by this file's own MyDBIProcess/ShowMyMessage
+//  stubs above (rather than adding ht9045_sm to the RESCAN group, which would
+//  reintroduce the exact MyDBIProcess/ShowMyMessage duplicate-definition
+//  collision those stubs were written to avoid). Conservative `false` here is
+//  NOT because the real bodies still have a gated/TODO false-by-default path
+//  -- csystem_predicates.cpp:56 has HT9045_KITSUCK_GRID_AVAILABLE=1 (flipped
+//  on by the W7 substrate wave, 20260629), so the real HasICUnderMachine()
+//  actively evaluates ShuttleHasIC()||IndexHasIC()||HasICUnderHotPlate() on
+//  the real (wired) TMyKitSuck grid objects. `false` is simply the correct
+//  answer for THIS unlinked stub, which has no grid state to query at all --
+//  not a behavioral fork from the real body, just a link-time stand-in for a
+//  value this test would get anyway (no IC seeded => false either way).
+bool HasICUnderMachine() { return false; }
+bool HasAnyICInMachine() { return false; }
+
+// ---------------------------------------------------------------------------
 //  Link-satisfying stub ctors for the W6/W7-DEFERRED queue classes.
 //
 //  WHY THESE ARE NEEDED -- not a translation gap in the loaders:

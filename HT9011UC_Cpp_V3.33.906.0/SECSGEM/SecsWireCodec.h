@@ -217,6 +217,27 @@ public:
     // golden uHGemEquipment.h:256/257); tests push tokens directly.
     TStringList *SReceiveData;
 
+    // AI(W906-uHGemClass-Unlock3) 20260723: SReceiveDataBackup -- golden
+    // `TStringList *SReceiveDataBackup;` (uHGemEquipment.h:673, declared
+    // immediately after SReceiveData there too -- same grouping preserved
+    // here). Golden's ctor :543 `SReceiveDataBackup=new TStringList;` /
+    // dtor :705,:736 Clear()-then-delete pair is a THGem-member lifecycle
+    // that never got its own translated home when SReceiveData itself moved
+    // into this class (an earlier wave, see SReceiveData's own comment
+    // above) -- added NOW, alongside SReceiveData, for the SAME reason and
+    // at the SAME member scope, since its only real consumer is
+    // HTGem::S2F16_NewEquipmentConstantSendAcknowledge (uHGemClass.cpp,
+    // golden :734/767 `HGemPtr->SReceiveDataBackup->Assign(HGemPtr-
+    // >SReceiveData)` / the restore-back `HGemPtr->SReceiveData->Assign
+    // (HGemPtr->SReceiveDataBackup)`), which (per this file's own Design D
+    // convention, see uHGemClass.h) reaches this member via
+    // `ActiveWire->SReceiveDataBackup`. Grepped golden uHGemEquipment.cpp in
+    // FULL for every "SReceiveDataBackup" hit before adding this (not just
+    // the S2F16 call site) -- confirmed its ONLY other golden uses are the
+    // ctor alloc and the two dtor/reset Clear() calls cited above, both
+    // pure lifecycle, no other golden code ever Adds/reads its content.
+    TStringList *SReceiveDataBackup;
+
     // ---- display/log sinks (golden THGem members) --------------------------
     // Golden `TStringList *WaitShowString;` (uHGemEquipment.h:597) /
     // `TStringList *LogDataString;` (uHGemEquipment.h:686) -- StringOut's

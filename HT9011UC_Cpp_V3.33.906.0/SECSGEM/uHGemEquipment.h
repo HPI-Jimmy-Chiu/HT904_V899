@@ -1151,6 +1151,25 @@ public:
     // DelayDownLoadRemoteFile/DelayOpenCommuncation/ConnectDelay above -- its
     // own default ctor already zero-inits defensively.
     TFileListBox *FileListBox1;                     // golden :98
+    // AI(W906-UploadFamily) 20260723: FileListBox2 -- golden uHGemEquipment.h:99
+    // (`TFileListBox *FileListBox2;`, __published, the SECOND TFileListBox
+    // instance immediately after FileListBox1 there). Reuses the SAME
+    // vclcompat::TFileListBox shim as FileListBox1 -- that class's own
+    // file-head note (vclcompat/FileListBox.h) already anticipated this
+    // exact reuse ("golden's OTHER two FileListBox instances (FileListBox2
+    // -- DoUploadFileToHost family; ...) are explicitly OUT OF SCOPE for
+    // this wave; nothing below is specialized to FileListBox1 in a way that
+    // would block reusing this same class for them later"). FileListBox2's
+    // only readers/writers are THGem::DoUploadFileToHost_ForSingleFile/
+    // _ForMultiFile/_ForDirectoryFile (this wave, see .cpp) -- every call
+    // site there bakes a directory into ->Mask before ->Update()/->Refresh(),
+    // the same "directory folded into Mask" shape FileListBox1's own shim
+    // comment documents. Allocated in the ctor body / deleted in ~THGem(),
+    // same "no VCL form-ownership mechanism here" convention as FileListBox1
+    // immediately above (golden itself never `new`s/`delete`s FileListBox2
+    // either -- also form-owned by the .dfm streaming system this port does
+    // not have).
+    TFileListBox *FileListBox2;                     // golden :99
     bool bSpooling;                                 // golden :185 (ctor false, write-only -- dead state, preserved)
     int ctSpoolFile;                                // golden :470 (ctor 0; increment logic is dead in golden, see above)
     int iSpoolTask;                                 // golden :481 (ctor 1)
@@ -1159,6 +1178,153 @@ public:
     WORD OldSpoolSystemMin;                         // golden :483 (golden never inits -- 0 here defensively)
     GemTimer SpoolDelay;                            // golden :484
     int GemSpoolCountTotal;                         // golden :197 (golden never inits -- 0 here defensively)
+
+    // ==== DoUploadFileToHost family (W906-UploadFamily 20260723) ===================
+    // golden uHGemEquipment.h:228 (UploadFileName), :234
+    // (EC69_UNT1_MaxTranslateLen), :419 (GemLocalFileLixtBox), :486-507
+    // (Task-state scalars/FILE*/AnsiString members), :523
+    // (PtrUploadFileToHost_ForSingleFile), :622 (ForMultiFileFileName).
+    // Un-gates THGem::DoUploadFileToHost_ForSingleFile/_ForMultiFile/
+    // _ForDirectoryFile + the DoUploadFileToHost() 3-way dispatcher itself
+    // (golden .cpp :4249-4599, this wave) -- see .cpp for each function's
+    // own body/citation. FileListBox2 (declared immediately above) and
+    // UpLoadPath/SV_70_UNT1_ReceipeStruct (already declared further above,
+    // golden :698/:707) are this family's other dependencies -- NOT
+    // re-declared here.
+    //
+    // UploadFileName (golden .h:228) -- queue of local filenames staged for
+    // upload. golden ctor-allocates it alongside RequestRemoteDownLoad/
+    // TimeLeft (.cpp:583 `UploadFileName=new TStringList;`) and separately
+    // Clear()s it a few lines later (.cpp:594) -- a redundant-but-harmless
+    // Clear() on a freshly-allocated empty list, reproduced verbatim in this
+    // port's ctor (see .cpp). golden's own ~THGem (.cpp:725/756) Clear()s
+    // then deletes it for real -- this port mirrors UploadFileString/
+    // RequestRemoteDownLoad's own established NULL-guarded Clear-then-delete
+    // dtor idiom (see those members' own comments above), NOT golden's
+    // un-guarded version, same already-accepted deviation class.
+    //
+    // NAMING TRAP (same one flagged at RequestRemoteDownLoad's own comment
+    // above): UploadFileName is a DIFFERENT TStringList* from
+    // RequestRemoteDownLoad (golden .h:239, DoDownLoadRemoteFile's own
+    // queue) and from UploadFileString (golden .h:675, S101F2/S101F4 scope)
+    // despite the similar new/delete shape -- all 3 coexist.
+    TStringList *UploadFileName;                    // golden :228 (ctor :583, new TStringList)
+
+    // EC69_UNT1_MaxTranslateLen (golden .h:234) -- plain int, read by
+    // DoUploadFileToHost_ForSingleFile's own case 100 (see .cpp) to pick the
+    // per-chunk send size. Grepped golden's own ctor body
+    // (uHGemEquipment.cpp:444-674) -- ABSENT, golden itself never
+    // initializes this either (only its "...Default" sibling at .h:236,
+    // EC69_UNT1_MaxTranslateLenDefault, is a future SV/EC-registration
+    // concern, out of THIS family's scope, deliberately NOT added here) --
+    // same "flagged deviation: zero-init defensively" posture already
+    // established by iTimeFormatDefault's own header comment above. Do NOT
+    // invent a nonzero default.
+    int EC69_UNT1_MaxTranslateLen;                  // golden never inits this either -- flagged deviation, see note above
+
+    // GemLocalFileLixtBox (golden .h:419) -- IMPORTANT: golden's real type
+    // is `TCheckListBox *GemLocalFileLixtBox;` (plain `public:`, NOT
+    // __published -- re-confirmed by re-reading the golden header for this
+    // wave), the SAME real VCL base class GemRemoteReceipeList (above)
+    // stands in for -- so this reuses the EXISTING THGemListBox stand-in
+    // (->Items->IndexOf(), ->Checked[j]=... via THGemCheckedArray), NOT
+    // TFileListBox despite the "FileLixtBox" name (a golden typo for
+    // "FileListBox", carried through faithfully, not corrected). Golden's
+    // own ctor sets it to NULL (.cpp:510 `GemLocalFileLixtBox=NULL;`, right
+    // alongside GemRemoteReceipeList's own :504) -- externally assigned,
+    // same default-NULL idiom as GemRemoteReceipeList; NOT allocated here (a
+    // caller/test must `new` a THGemListBox and assign it). None of this
+    // family's 3 sub-functions NULL-guards it before calling
+    // ->Items->IndexOf() in golden (unlike GemSelectAllRemoteFileClick's own
+    // NULL-guard elsewhere in this file) -- a golden gap preserved verbatim,
+    // NOT fixed here; a caller/test must supply a non-null instance.
+    THGemListBox *GemLocalFileLixtBox;              // golden :419 (TCheckListBox in golden; ctor NULL)
+
+    // ---- DoUploadFileToHost_ForSingleFile's own Task-state (golden .h:486-490) ----
+    int iUploadFileToHost_ForSingleFile;                   // golden :486 (Task; ctor :482, explicitly 1)
+    long UploadFileToHost_ForSingleFileTotalFileSize;      // golden :487 (golden never inits -- 0 here defensively)
+    FILE *UploadFileToHost_ForSingleFileFilePtr;           // golden :488 (golden never inits -- NULL here defensively)
+    int iUploadFileToHost_ForSingleFileStoreCT;            // golden :489 (golden never inits -- 0 here defensively)
+    int iUploadFileToHost_ForSingleFileTotalCount;         // golden :489 (golden never inits -- 0 here defensively)
+    // AI(W906-UploadFamily) 20260723: PRESERVED GOLDEN BUG (cited again, verbatim,
+    // at its own use site in .cpp case 100) -- golden .cpp:4259
+    // `int iMaxSend=iUploadFileToHost_ForSingleFileMaxSend;` is a PLAIN
+    // VALUE COPY (not a reference, unlike the sibling `int &Task=...`/
+    // `long &TotalFileSize=...` aliases on the same lines), and this member
+    // is NEVER assigned anywhere else in golden -- grepped the ENTIRE golden
+    // tree for this identifier (`grep -rn iUploadFileToHost_ForSingleFileMaxSend`
+    // across HT9011UC_Code_V3.33.906.0_20260618): its ONLY 3 appearances
+    // anywhere are the .h:490 declaration and .cpp:259/269 (both inside
+    // DoUploadFileToHost_ForSingleFile itself). So the chunk size golden
+    // computes into it at case 100 (from EC69_UNT1_MaxTranslateLen) is lost
+    // the moment the function returns -- see
+    // DoUploadFileToHost_ForSingleFile's own .cpp comment for the resulting
+    // apparent 0-byte-send stall this produces once Task reaches 200/300.
+    // Translated as a plain copy here too, NOT fixed.
+    int iUploadFileToHost_ForSingleFileMaxSend;            // golden :490 (golden never assigns this anywhere else -- see PRESERVED GOLDEN BUG note above)
+
+    // ---- DoUploadFileToHost_ForMultiFile's own Task-state (golden .h:491-498) ----
+    // UploadFileToHost_ForMultiFileDelay (GemTimer) gets NO explicit ctor
+    // entry, same established precedent as DelayDownLoadRemoteFile/
+    // SpoolDelay/ConnectDelay above -- its own default ctor already
+    // zero-inits defensively.
+    GemTimer UploadFileToHost_ForMultiFileDelay;           // golden :491
+    int iUploadFileToHost_ForMultiFileTask;                // golden :492 (Task; ctor :483, explicitly 1)
+    int iUploadFileToHost_ForMultiFileCT;                  // golden :493 (golden never inits -- 0 here defensively)
+    long UploadFileToHost_ForMultiFileTotalFileSize;       // golden :494 (golden never inits -- 0 here defensively)
+    FILE *PFileUploadFileToHost_ForMultiFile;              // golden :495 (golden never inits -- NULL here defensively)
+    AnsiString UploadFileToHost_ForMultiFileMultiFile;     // golden :496 (golden never inits -- "" here defensively)
+    int iStoreCTUploadFileToHost_ForMultiFile;             // golden :497 (golden never inits -- 0 here defensively)
+    int iTotalCountUploadFileToHost_ForMultiFile;          // golden :498 (golden never inits -- 0 here defensively)
+
+    // ---- DoUploadFileToHost_ForDirectoryFile's own Task-state (golden .h:499-507) ----
+    int iUploadFileToHost_ForDirectoryFileTask;            // golden :499 (Task; ctor :484, explicitly 1)
+    int iCTUploadFileToHost_ForDirectoryFile;              // golden :500 (golden never inits -- 0 here defensively)
+    long TotalFileSizeUploadFileToHost_ForDirectoryFile;   // golden :501 (golden never inits -- 0 here defensively)
+    FILE *FilePUploadFileToHost_ForDirectoryFile;          // golden :502 (golden never inits -- NULL here defensively)
+    AnsiString PathNameUploadFileToHost_ForDirectoryFile;  // golden :503 (golden never inits -- "" here defensively)
+    AnsiString MultiFileUploadFileToHost_ForDirectoryFile; // golden :504 (golden never inits -- "" here defensively)
+    AnsiString FileNameUploadFileToHost_ForDirectoryFile;  // golden :505 (golden never inits -- "" here defensively)
+    int iStoreCTUploadFileToHost_ForDirectoryFile;         // golden :506 (golden never inits -- 0 here defensively)
+    int iTotalCountUploadFileToHost_ForDirectoryFile;      // golden :507 (golden never inits -- 0 here defensively)
+
+    // PtrUploadFileToHost_ForSingleFile (golden .h:523) -- IMPORTANT: despite
+    // the "Ptr" name this is a genuinely EMBEDDED fixed-size char array in
+    // golden (`char PtrUploadFileToHost_ForSingleFile[256*256*256];`, a real
+    // 16MB member of THGem, not a heap pointer). FLAGGED DEVIATION (found +
+    // fixed 20260727, post-hoc): this wave originally kept it as a literal
+    // embedded array, reasoning "a THGem is long-lived/singleton in both
+    // golden and this port" -- that assumption is FALSE for this port's own
+    // test suite: tests/test_uHGemEquipment.cpp alone stack-allocates
+    // `THGem g;` (or gem/gemWriter/gemReader) as a plain automatic-storage
+    // local in 110+ places (an established convention predating this wave),
+    // and tests/test_uHGemClass.cpp does the same once (`THGem realThgem;`).
+    // An embedded 16MB member makes EVERY one of those stack frames need
+    // 16MB+, which blows the default thread stack (MinGW default ~1-8MB)
+    // instantly -- this is what caused ctest's "uHGemClass"/"uHGemEquipment"
+    // SegFault (really STATUS_STACK_OVERFLOW, confirmed via direct exe
+    // invocation) after this wave landed. Converting the WHOLE test suite's
+    // 110+ stack-locals to heap allocation instead would be a far larger,
+    // riskier diff against already-reviewed, already-passing test code for
+    // no behavioral gain. So this member itself is ported as an
+    // equivalent-capacity HEAP buffer (allocated in the ctor init-list,
+    // `delete[]`d in the dtor) instead of an embedded array -- same capacity,
+    // same raw-byte-buffer usage, same read/write call sites (both existing
+    // call sites already just pass the bare pointer, see .cpp), only the
+    // storage duration changes. This buffer is only ever used as a raw byte
+    // buffer: every read of it (DataItemOut's BINARY_TYPE copy of exactly
+    // iReadSize bytes) is preceded, in the very same case, by an fread() of
+    // that SAME iReadSize byte count (case 200 in every one of the 3
+    // sub-functions) -- so leaving its contents uninitialized introduces no
+    // out-of-bounds/UB read in normal use, matching golden's own real member
+    // layout (BCB6 does not zero-init raw member arrays for heap-allocated
+    // objects either).
+    char *PtrUploadFileToHost_ForSingleFile;   // golden :523 (golden: embedded char[256*256*256]; ported as heap buffer, see comment above)
+
+    // ForMultiFileFileName (golden .h:622) -- the "current file being sent"
+    // scratch AnsiString shared by DoUploadFileToHost_ForMultiFile's own
+    // case 120/140 (golden .cpp:4377/4398, this wave).
+    AnsiString ForMultiFileFileName;                       // golden :622 (golden never inits -- "" here defensively)
 
     // ==== CEID / Report StringGrid-backed "database" family =================
     void SetCEIDContent(unsigned iCeid, AnsiString CeidAlias, unsigned iReportCount, unsigned *iReportIDData, int Mode);
@@ -1416,14 +1582,28 @@ public:
     // ==== consumer needs a real body -- same idiom as
     // ==== EnableDisableEventReportAcknowledgeError above) ====================
     void DoTraceDataResponse(int TR);  // golden :4190 -- #if 0 TODO(W906-SECSGEM-trace), needs TraceData[]/TraceDataResponseTask[]
-    void DoUploadFileToHost();         // golden :4591 -- #if 0 TODO(W906-SECSGEM-upload), needs FTP/file-transfer surface
 
     // AI(W906-DoDownLoadRemoteFile) 20260721: UN-GATED (was a stub in this
     // same cluster) -- real body added, see .cpp. golden :6746-6807. Pure
     // RequestRemoteDownLoad/InitLocalHead/DataItemOut/SendLocalData retry
     // state machine, no VCL widget dependency (unlike its sibling
-    // DoUploadFileToHost family immediately above, which stays gated).
+    // DoUploadFileToHost family immediately below, UN-GATED separately this
+    // wave -- see its own comment).
     void DoDownLoadRemoteFile();       // golden :6746-6807
+
+    // AI(W906-UploadFamily) 20260723: DoUploadFileToHost family -- UN-GATED for
+    // real this wave (was the "#if 0 TODO(W906-SECSGEM-upload)" gated no-op
+    // stub immediately above DoDownLoadRemoteFile, until now). golden
+    // .cpp:4249-4344 (_ForSingleFile), :4350-4471 (_ForMultiFile), :4477-4586
+    // (_ForDirectoryFile), :4591-4599 (DoUploadFileToHost() itself, the
+    // 3-way dispatcher on SV_70_UNT1_ReceipeStruct). Real bodies for all 4
+    // live in the .cpp, each with its own golden citation and, for
+    // _ForSingleFile, a PRESERVED GOLDEN BUG note (see that member's own
+    // header comment above, iUploadFileToHost_ForSingleFileMaxSend).
+    void DoUploadFileToHost_ForSingleFile();     // golden :4249-4344
+    void DoUploadFileToHost_ForMultiFile();      // golden :4350-4471
+    void DoUploadFileToHost_ForDirectoryFile();  // golden :4477-4586
+    void DoUploadFileToHost();                   // golden :4591-4599 (dispatcher)
 };
 
 //---------------------------------------------------------------------------

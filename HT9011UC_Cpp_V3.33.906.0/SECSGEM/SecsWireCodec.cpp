@@ -356,6 +356,10 @@ SecsWireCodec::SecsWireCodec()
                            // so a freshly-constructed codec is immediately
                            // usable for an encode burst.
       SReceiveData(new TStringList()),
+      // AI(W906-uHGemClass-Unlock3) 20260723: SReceiveDataBackup -- golden
+      // ctor :543 `SReceiveDataBackup=new TStringList;` (see this member's
+      // own .h comment for the full lifecycle citation).
+      SReceiveDataBackup(new TStringList()),
       WaitShowString(new TStringList()),
       LogDataString(new TStringList()),
       iReturnCode(1),     // golden convention: "初始值=1" (see every
@@ -384,6 +388,12 @@ SecsWireCodec::SecsWireCodec()
 SecsWireCodec::~SecsWireCodec()
 {
     delete SReceiveData;
+    // AI(W906-uHGemClass-Unlock3) 20260723: SReceiveDataBackup -- golden
+    // dtor :736 `delete SReceiveDataBackup;` (see this member's own .h
+    // comment). Same unconditional-delete idiom as SReceiveData immediately
+    // above (both fresh-`new`'d in the ctor, never reassigned NULL anywhere
+    // in this class).
+    delete SReceiveDataBackup;
     delete WaitShowString;
     delete LogDataString;
 }
