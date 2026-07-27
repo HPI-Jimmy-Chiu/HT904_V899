@@ -1054,10 +1054,44 @@ C 桶(`clientGemRead`/`ProcessSocketReceiveData`/`Timer1Timer`)是本檔案最�
 4. 開工SOP：先`git status`+`git diff --stat`核對這份交接是否吻合，再對`uHGemClass`/`uHGemEquipment`兩個SegFault個案用`gdb`或加log的方式定位崩潰點（大機率在`DoUploadFileToHost`家族新增的16MB `PtrUploadFileToHost_ForSingleFile`陣列或`GemLocalFileLixtBox`初始化附近，但需實測確認），修好或必要時討論是否整塊重譯這一對。
 5. 4個候選的recon內容仍然有效（見上方RESUME），若判斷部分工作不可用，重新執行對應的翻譯任務即可，不必重新recon。
 
-### 🔖 RESUME（最新，取代上一則）
+### 🔖 RESUME（2026-07-23，交接記錄，已被下一則取代）
 - **⚠️ 4候選翻譯workflow中途被使用者關機請求中止，工作樹有未commit、未審查、部分SegFault的翻譯——開工前必讀上方交接段落，禁止直接commit**。
 - `MainCalcCore`第二批+`Save2DSortingSummary`：build綠+自身test綠，但**未經獨立審查**。
 - `S2F16`+`DoUploadFileToHost`（序列對）：build綠，但**ctest SegFault**，需先debug定位崩潰點才能繼續。
 - **非預期觸及待查**：`SECSGEM/SecsWireCodec.cpp/.h`、`tests/test_config_loaders.cpp`。
 - **已安全落地、無需重做**：`db4d1fd`/`6f60737`/`95cfabf`/`b3e9c54`（本日稍早4個commit，皆已審查+驗證+commit，與本次中止的4候選無關，安全）。
 - 驗證基準：`build_resume_verify_20260723`（沿用，未fresh reconfigure）build exit 0，ctest（4候選子集）2 Passed/2 SegFault。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支`fix/v899.32-pti`。
+
+---
+
+## 2026-07-27 — 接續關機交接：SegFault 根因debug+修正 + Workflow獨立審查 + 4個HIGH/MEDIUM/LOW發現修正 + 3個commit落地 + 大規模平行recon
+
+**背景**：使用者要求「純翻譯繼續做，workflow，火力全開」，ultracode本輪開啟。開工前先讀上方2026-07-23交接記錄，`git status`/`git diff --stat`逐項核對確認完全吻合(4候選：MainCalcCore第二批/`Save2DSortingSummary`/`S2F16`+`DoUploadFileToHost`序列對，皆未commit)。先處理2個「非預期觸及待查」項——`SECSGEM/SecsWireCodec.cpp/.h`(新增`SReceiveDataBackup`成員，`S2F16`真正需要，golden ctor/dtor lifecycle皆有citation，非誤觸)+`tests/test_config_loaders.cpp`(`HasICUnderMachine`/`HasAnyICInMachine`兩個link-satisfying stub，`S2F16`拉入`ht9045_sm`的必然連結需求)——兩者皆查證屬實為`S2F16`波次的合理延伸，非真正「非預期」，僅recon摘要未涵蓋到，不算異常。
+
+**SegFault根因debug**：fresh build(`build_resume_verify_20260727`，MinGW g++ 6.3.0)+直接執行`test_uHGemClass.exe`/`test_uHGemEquipment.exe`(繞過ctest的exit-code包裝)，確認真實例外碼是`STATUS_STACK_OVERFLOW`(0xC00000FD)非泛用SegFault。根因：`DoUploadFileToHost`家族翻譯時，`THGem::PtrUploadFileToHost_ForSingleFile`忠實翻成golden原生的**內嵌** `char[256*256*256]`(16MB)成員(golden .h:523原文如此)——但`tests/test_uHGemEquipment.cpp`全檔110+處以`THGem g;`stack-local方式建構實例(既有慣例，早於本次改動)，`test_uHGemClass.cpp`亦有1處(`THGem realThgem;`)，16MB內嵌成員讓這些stack frame瞬間爆掉預設thread stack。**修正**：改為heap-allocated buffer(`char *`，ctor用`new char[256*256*256]`、dtor用`delete[]`)——兩個真實呼叫點(`fread`/`DataItemOut`)皆只需bare pointer，行為零改變，僅storage duration從embedded改heap，於`.h`揭露性註記為蓄意偏離(非靜默修正)。
+
+**Workflow獨立審查（3路平行）+ 6路平行recon（同一workflow，9 agent）**：
+- **審查`S2F16`+`DoUploadFileToHost`+今日stack-overflow修正**：FINDINGS。**1個HIGH**——`uHGemEquipment.h`本次修正前既有一段中文註解(`"S,F 主要處理"`)被先前波次(2026-07-23)整檔重寫路徑意外亂碼化成無意義CJK亂碼+檔案開頭混入UTF-8 BOM(全樹529個`.h`/`.cpp`檔中唯一一個帶BOM的)——非本次修正引入(git blame HEAD版本乾淨無BOM)，但責無旁貸須在commit前修好。主迴圈直接byte-level比對HEAD版本，還原正確文字+移除BOM，逐行掃描確認無其他CJK行被連帶污染(僅CRLF vs LF差異)。**2個MEDIUM**——(1)`HasICUnderMachine`/`HasAnyICInMachine` link stub的說明註解宣稱「KitSuck grid未接上」，但`csystem_predicates.cpp:56`其實`HT9045_KITSUCK_GRID_AVAILABLE=1`早已接上(W7 substrate波，20260629)，回傳false只是這些獨立test沒seed IC非grid未接，3處註解(`test_config_loaders.cpp`/`test_uHGemEquipment.cpp`/`test_uHGemClass.cpp`)皆已修正；(2)整個`DoUploadFileToHost`家族(~330行狀態機)零test coverage——已補`test_w906_uploadfamily_e2e()`，過程中發現自己原本設計的「單一小檔一次搬完」測試假設是錯的：**PRESERVED GOLDEN BUG #1在第一次真實Task==200呼叫就會咬人**(非只在多chunk情境才顯現)——`case 100`算出的`iMaxSend`只寫區域變數從未寫回backing member，下一次呼叫重新從member讀回的`iMaxSend`永遠是ctor預設值0，導致`TotalFileSize>iMaxSend`恆真，狀態機永遠卡在Task=300、`iReadSize`恆0、檔案實際上永遠讀不到真資料也永遠不會`fclose`——測試已改寫成正確驗證這個「忠實保留的真golden bug」的regression test，而非原先錯誤的「single-chunk happy path」假設。**1個LOW**——`PRESERVED GOLDEN BUG #1`註解自稱`iUploadFileToHost_ForSingleFileMaxSend`全樹「僅3處出現」，獨立複grep golden後糾正為實際2處(該member的.h宣告+本函式的value-copy讀取；golden另一行只寫區域變數`iMaxSend`非member本身)，已修正措辭。
+- **審查`MainCalcCore`第二批**：FINDINGS，僅**1個LOW**——`ComputeCheckOLPErrorHasErr`的`OLPSetBinErr`參數註解誤引用來源為`cprod.h`，正確應為`LastSet.h:472`，已修正。其餘逐行核對golden(`main.cpp:31942-31962`/`:15112-15125`/`:31148-31172`/`:33986-34012`/`:32211-32238`)+76項斷言(含32項新增)全過，CLEAN。
+- **審查`Save2DSortingSummary`**：**CLEAN，零發現**。逐行核對golden`Automation/SCK_ART.cpp:3402-4061`，4個golden bug皆逐位保留驗證屬實，6+1個新FormsFacade/atester_shims成員皆核實只被淺讀一次，116項斷言全過。
+- **Recon `DoIndexAutoClean`**(AutoClean.cpp剩餘叢集，golden:6465-9106共2642行)：確認仍未翻，stub banner誠實無虛報；找到3個具體小缺口(`fHome`的`InitDoTestZHome`需一個新FormsFacade-style stand-in、`SetTechDataToProd_AutoClean`golden cinitial.cpp:11269-11315零依賴需搬入、`fiosetview->ProcessIndexSuckDestroy1/2`需比照atester.cpp既有`W7T1_FIOSET_PISD1/2`模式再做一對)，皆機械式無需真設計；建議獨立列一波，因規模大(2642行、6階段、雙臂共享static狀態)建議先做`_Arm1PickArm2Test`(callee)再做主體，各自獨立審查後合併一個commit。
+- **Recon `InitCleanOutFunction` AutoSiteMap分支**：確認範圍小(~26行golden已忠實，+1個`SetMainRunStartMode`no-op stub即可)，但**明確BLOCKED**——當時`FormsFacade.h/.cpp`仍有本次交接的未commit異動(`Save2DSortingSummary`的6個新`TfLotInfo`成員)，recon建議先落地那批再碰此檔，避免疊加未審查/未commit的異動。今日3個commit已落地，此blocker已解除。
+- **Recon `uHGemClass.cpp`剩餘`S2F24Sub`/`S2F32`/`S7F20_CurrentEPPDData`**：schema設計失誤（單一物件schema卻要求回報3項）導致StructuredOutput連續5次驗證失敗、workflow此路agent最終失敗（`parallel[5] failed`），**此recon未完成，需重派**。
+- **Recon `MainCalcCore`下一批**：糾正先前「~55函式/~5200行(15%)」估計為過度樂觀——實測後段落yield很低，找到6個候選(3個零阻塞：`ComputeSMCDLLVersionMismatchCode`/`ComputeATPDLLVersionMismatch`/`ComputeJamRateRecordStrings`部分抽取；3個卡在`TriTemp_Ch[]`/`ESD_Temperature*`宣告位置未找到，需先做header考古)，另外確認~11個表面promising候選(bool/int return、Check*/Get*命名)實際讀body後發現皆不可安全抽取(硬體輪詢/VCL級聯/多分支副作用交織)。真實剩餘可安全抽取估計修正為6-15個，非「55-11=44」。
+- **Recon `Automation/SCK_ART.cpp`剩餘報表函式**：重新核對`18/55`(now `19/55`含今日`Save2DSortingSummary`)進度數字正確；發現一個記帳漏洞——`ClearAlarmCode`(golden真呼叫、真存在)從未被DONE/SKIPPED/REMAINING三分類記錄過；**發現並修正DEVLOG本身既有的錯誤宣稱**：本檔案(`docs/DEVLOG.md`)`922`/`1008`行「`SaveMultiLotTestSummary`確認golden裡無真呼叫點應暫緩」為誤——golden **有**真呼叫點(`csystem.cpp:10862`的`DoTrayFeedProcess()`)，只是該呼叫端本身在port裡還沒翻(`csystem.cpp:392`整塊`#if 0 TODO(W7)`)，`docs/MIGRATION_ROADMAP.md:143`原本就有正確的細緻版本描述("golden 唯一呼叫在 csystem.cpp 尚未翻到的區塊")，是本檔的精簡轉寫弄丟了關鍵細節——**此處記錄以資後續recon不再繼承此誤**(依本專案「append-only歷史log不回改舊條目」慣例，原922/1008行文字保留不動，正確版本以此則為準)。建議下一輪`SaveTestSummaryTSV`+`SaveSummaryTrayFeed`優先於`SaveMultiLotTestSummary`(前兩者接在已翻且已測的dispatcher上，後者翻完也只能孤立單元測試)。
+- **Recon 大局重新測量**：`AutoClean.cpp`翻譯進度舊估(2026-07-21)已嚴重過時——實測目前約**71%已翻**(golden 9137行，僅剩`DoIndexAutoClean`+`_Arm1PickArm2Test`共2643行未翻)，非舊估的「0%」。`main.cpp`(34972行，僅`MainCalcCore`11函式/234行，~0.67%)、`cContact.cpp`(22761行，僅9個純算葉/399行，~1.75%)、`uLotInfo.cpp`(16613行，僅1行真本體，~0%)、`ckernel`(`ckernel.cpp`+`.h`共2615行，0%，卡在未決的HAL pump E0/M1/M2設計決策)均大致維持舊估。**建議下一輪首選**：繼續`main.cpp` calc-core抽取(仍是風險最低、已驗證3次的既定模式)；**次選**：`AutoClean.cpp`剩餘`DoIndexAutoClean`叢集(收尾這個檔案)。
+
+**主迴圈修正全部HIGH/MEDIUM/LOW發現**（見上方審查段落逐項），親自跑fresh build(`build_resume_verify_20260727`)+全套ctest確認**89/93**(同4個既有環境漂移：config_db/IniFiles/ini_helpers/config_loaders)，全部觸及檔案mojibake/BOM掃描0異常。
+
+**分3個天然獨立commit落地**：
+- `1bd1759` W906 SECSGEM: S2F16 (uHGemClass) + DoUploadFileToHost family (uHGemEquipment)，含stack-overflow修正+全部審查發現修正+新增測試
+- `14a8bb5` W906 MainCalcCore batch 2: 5個函式(`ComputeATCAmbientTemperCheck`/`ComputeCheckAllMOTHome`/`ComputeCheckSiteMapState`/`ComputeCheckOLPErrorHasErr`/`ComputeCheckARTSetupFile`)
+- `5c541d3` W906 Automation/SCK_ART: `SckArtRem_Save2DSortingSummary`
+
+**驗證基準**：ctest 89/93(同4個既有環境漂移)。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支`fix/v899.32-pti`；工作樹另有無關V899/config殘留(PTI案)勿圈入V906 commit。
+
+### 🔖 RESUME（最新）
+- **✅ 4候選翻譯workflow交接全部處理完成(2026-07-27)**：`1bd1759`+`14a8bb5`+`5c541d3`。**寫入佇列已清空**。`uHGemClass`累計 **54/57 已解**(gated 4→**3**：`S2F24Sub`/`S2F32`/`S7F20_CurrentEPPDData`)。`SECSGEM/uHGemEquipment.cpp` `DoUploadFileToHost`家族已完成(僅剩`DoTraceDataResponse`需與`S2F24Sub`合波)。`Automation/SCK_ART.cpp` **19/55** method已翻，剩3支報表函式(`SaveTestSummaryTSV`/`SaveSummaryTrayFeed`/`SaveMultiLotTestSummary`)。`MainCalcCore` 累計11個函式。
+- **下一輪候選(recon已就緒，見上方段落)**：(1) `DoIndexAutoClean`叢集(AutoClean.cpp收尾，2642行，建議獨立大波，3個小依賴先備)；(2) `InitCleanOutFunction` AutoSiteMap分支(blocker已解除，現可安全動`FormsFacade.h`)；(3) `MainCalcCore`下一批(`ComputeSMCDLLVersionMismatchCode`+`ComputeATPDLLVersionMismatch`零阻塞優先，`ComputeJamRateRecordStrings`次之，Tri_Temp/ESD三個候選卡header考古待補)；(4) `Automation/SCK_ART.cpp` `SaveTestSummaryTSV`/`SaveSummaryTrayFeed`(優先於`SaveMultiLotTestSummary`，理由見上方recon)；(5) `uHGemClass.cpp`剩3個中`S2F24Sub`/`S2F32`/`S7F20_CurrentEPPDData`**尚未recon**(workflow此路因主迴圈自己的schema設計失誤失敗，需重派，非候選本身有問題)。**次選大方向**：main.cpp calc-core持續 > AutoClean.cpp收尾 > uLotInfo.cpp(需先recon找純算葉)。`ckernel.cpp`卡HAL pump設計決策，暫緩。
+- **驗證基準**：ctest 89/93(同4個既有環境漂移)。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支`fix/v899.32-pti`；工作樹另有無關V899/config殘留(PTI案)勿圈入V906 commit。
+- **執行模式**：使用者指示持續有效(純翻譯/審查可平行就盡量展開；過程無真異常/疑問，未停下請示)。ultracode本輪開啟，全程用Workflow工具做「審查+recon」大規模平行編排(9 agent，1個因主迴圈自己的schema設計失誤失敗，其餘8個皆成功)。
