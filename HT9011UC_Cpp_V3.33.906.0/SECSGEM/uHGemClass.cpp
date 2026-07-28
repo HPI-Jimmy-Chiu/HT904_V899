@@ -609,6 +609,26 @@
 //  see S2F16's own comment below). 3 REMAIN gated: S2F24Sub, S2F32,
 //  S7F20_CurrentEPPDData (unchanged, none of this wave's scope). grep
 //  `^#if 0` re-verified at 3.
+//
+//  AI(W906-uHGemClass-TraceUnlock) 20260728: refreshed from "3" above -- 2 of
+//  the 3 remaining are UN-GATED this wave:
+//    * S2F24Sub -- uHGemEquipment.h gained the "Trace cluster" member set
+//      (bTraceData[10]/iTRID[10]/DSPER[10]/iTOTSMP[10]/iREPGSZ[10]/
+//      iTOTSMP_Count[10]/TraceData[10]/TraceDataResponseTask[10]); real body
+//      translated, golden :810-990.
+//    * S2F32 -- split into a pure ParseSECSDateTimeString(...) helper (this
+//      file, zero OS side effects, fully unit-tested) + SetSystemDateTimeHook
+//      (uHGemClass.h, an std::function seam defaulting EMPTY/no-op) standing
+//      in for golden's only non-portable calls (Borland dos.h settime()/
+//      setdate()); real body translated, golden :1095-1216.
+//  1 REMAINS gated: S7F20_CurrentEPPDData -- INVESTIGATED this wave, NOT a
+//  mechanical member-addition case: its real blocker is
+//  THGem::SetReceipeDirectoryAndGlobalName's Type==2 branch, which needs a
+//  live TDirectoryListBox-equivalent directory-tree-walking widget (no
+//  vclcompat stand-in exists) -- see that method's own updated #if 0 comment
+//  for the full re-investigation writeup (2 of its originally-cited 3
+//  blockers, SV_70_UNT1_ReceipeStruct/UploadFileString, turned out to
+//  already be real). grep `^#if 0` re-verified at 1.
 //---------------------------------------------------------------------------
 
 #include "vclcompat/vcl_compat.h"
@@ -720,6 +740,115 @@ bool IsCorrectDateFormat(int y,int m,int d)
         return true;
     else
         return false;
+}
+//---------------------------------------------------------------------------
+// AI(W906-uHGemClass-TraceUnlock) 20260728: injectable OS-clock-write seam --
+// definition of the extern declared in uHGemClass.h (see that header's own
+// comment for the full design rationale). Default-constructed = an EMPTY
+// std::function -- calling it is guarded at S2F32's own call site below, so
+// this is a safe no-op until some future wave/test explicitly assigns it.
+std::function<void(int year, int month, int day, int hour, int min, int sec, int hundredths)> SetSystemDateTimeHook;
+//---------------------------------------------------------------------------
+// AI(W906-uHGemClass-TraceUnlock) 20260728: pure parse+validate extraction
+// for S2,F32 (golden SECSGEM/uHGemClass.cpp:1095-1216) -- see uHGemClass.h's
+// own comment on this function/struct for the full design rationale
+// (mirrors this project's established "extract pure calc-core, gate the side
+// effect" philosophy, e.g. MainCalcCore.h/.cpp, kept local to this SECSGEM
+// file instead since golden's origin here is uHGemClass.cpp, not main.cpp).
+// Every `atoi(S.SubString(a,b).c_str())` call below is a DIRECT, unmodified
+// transcription of golden's own `atoi(S.SubString(a,b).c_str())` calls
+// (uHGemClass.cpp:1114-1175) -- only the assignment TARGETS were renamed
+// (golden's `reset.da_year`/`t.ti_hour`/etc, Borland dos.h `struct date`/
+// `struct time` fields -- not portable -- became `out.year`/`out.hour`/etc,
+// this function's own portable POD struct).
+bool ParseSECSDateTimeString(const AnsiString &S, int len, SECSDateTimeFields &out,
+                              bool &bRangeError, bool &bApplyClock)
+{
+    bRangeError=false;
+    bApplyClock=false;
+
+    if(len==12)                                                                // "030601134700"
+    {
+        out.year        =atoi(S.SubString(1, 2).c_str())+2000;
+        out.month       =atoi(S.SubString(3, 2).c_str());
+        out.day         =atoi(S.SubString(5, 2).c_str());
+        out.hour        =atoi(S.SubString(7, 2).c_str());
+        out.min         =atoi(S.SubString(9, 2).c_str());
+        out.sec         =atoi(S.SubString(11, 2).c_str());
+        out.hundredths  =0;
+    }
+    else if(len==14)                                                           // "20030602134700"
+    {
+        out.year        =atoi(S.SubString(1, 4).c_str());
+        out.month       =atoi(S.SubString(5, 2).c_str());
+        out.day         =atoi(S.SubString(7, 2).c_str());
+        out.hour        =atoi(S.SubString(9, 2).c_str());
+        out.min         =atoi(S.SubString(11, 2).c_str());
+        out.sec         =atoi(S.SubString(13, 2).c_str());
+        out.hundredths  =0;
+    }
+    else if(len==16)                                                           // "2003060313401000"
+    {
+        out.year        =atoi(S.SubString(1, 4).c_str());
+        out.month       =atoi(S.SubString(5, 2).c_str());
+        out.day         =atoi(S.SubString(7, 2).c_str());
+        out.hour        =atoi(S.SubString(9, 2).c_str());
+        out.min         =atoi(S.SubString(11, 2).c_str());
+        out.sec         =atoi(S.SubString(13, 2).c_str());
+        out.hundredths  =atoi(S.SubString(15, 2).c_str());
+    }
+    else if(len==19)                                                           //  "2003-06-04T13:01:01"
+    {
+        out.year        =atoi(S.SubString(1, 4).c_str());
+        out.month       =atoi(S.SubString(6, 2).c_str());
+        out.day         =atoi(S.SubString(9, 2).c_str());
+        out.hour        =atoi(S.SubString(12, 2).c_str());
+        out.min         =atoi(S.SubString(15, 2).c_str());
+        out.sec         =atoi(S.SubString(18, 2).c_str());
+        out.hundredths  =0;
+    }
+    else if(len==21)                                                           //  "2003-06-05T13:01:01.2"
+    {
+        out.year        =atoi(S.SubString(1, 4).c_str());
+        out.month       =atoi(S.SubString(6, 2).c_str());
+        out.day         =atoi(S.SubString(9, 2).c_str());
+        out.hour        =atoi(S.SubString(12, 2).c_str());
+        out.min         =atoi(S.SubString(15, 2).c_str());
+        out.sec         =atoi(S.SubString(18, 2).c_str());
+        out.hundredths  =atoi(S.SubString(21, 1).c_str())*10;
+    }
+    else if(len==22)                                                           //  "2003-06-06T13:01:01.25"
+    {
+        out.year        =atoi(S.SubString(1, 4).c_str());
+        out.month       =atoi(S.SubString(6, 2).c_str());
+        out.day         =atoi(S.SubString(9, 2).c_str());
+        out.hour        =atoi(S.SubString(12, 2).c_str());
+        out.min         =atoi(S.SubString(15, 2).c_str());
+        out.sec         =atoi(S.SubString(18, 2).c_str());
+        out.hundredths  =atoi(S.SubString(21, 2).c_str());
+    }
+    else
+    {
+        return false;                                                          // golden's own Error=true, uHGemClass.cpp:1177-1180
+    }
+
+    // golden uHGemClass.cpp:1182-1200 -- GOLDEN QUIRK: see this function's
+    // own header comment (uHGemClass.h) for why an IsCorrectDateFormat()
+    // failure here does NOT set bRangeError (preserved verbatim).
+    if(IsCorrectDateFormat(out.year, out.month, out.day))
+    {
+        if(out.hour>23)                                                        //Steven 20140404 (golden): 避免Warning
+            bRangeError=true;
+        if(out.min>59)
+            bRangeError=true;
+        if(out.sec>59)
+            bRangeError=true;
+        if(out.hundredths>99)
+            bRangeError=true;
+        if(bRangeError==false)
+            bApplyClock=true;
+    }
+    return true;
 }
 //---------------------------------------------------------------------------
 HTGem::HTGem()
@@ -1569,12 +1698,225 @@ void HTGem::S2F18_DateandTimeData()
 }
 //---------------------------------------------------------------------------
 // [S2,F24] Trace Initialize -- ack-code sub (called by the void wrapper below).
-//---------------------------------------------------------------------------
+// AI(W906-uHGemClass-TraceUnlock) 20260728 UN-GATED (golden SECSGEM/
+// uHGemClass.cpp:810-990). uHGemEquipment.h gained the "Trace cluster" member
+// set this method (and its DoTraceDataResponse sibling in uHGemEquipment.cpp,
+// still its own separate gated stub, out of THIS wave's scope -- see that
+// method's own updated comment) share: bTraceData[10]/iTRID[10]/DSPER[10]/
+// iTOTSMP[10]/iREPGSZ[10]/iTOTSMP_Count[10]/TraceData[10]/
+// TraceDataResponseTask[10] (golden uHGemEquipment.h:674/696/699/702-706).
+// THGem::IsValidSVID was already real (added by an earlier wave for the
+// SV/EC DataItem family). NOTE: golden's own blocker citation for this
+// method (as inherited from an earlier wave's #if 0 comment) omitted
+// iTOTSMP_Count[10] -- confirmed by direct re-read of golden :982 (`HGemPtr->
+// iTOTSMP_Count[iIndex]=1;`), which is not reachable from any OTHER already-
+// ported method; added here as part of the same coherent cluster.
+//
+// MECHANICAL RENAME (same rule as every prior integrate wave in this file):
+// golden `HGemPtr->DataItemIn/GetDataItemLenAndType` (wire-codec primitives)
+// -> `ActiveWire->...`; `HGemPtr->bTraceData/iTRID/DSPER/iTOTSMP/iREPGSZ/
+// iTOTSMP_Count/TraceData/TraceDataResponseTask/IsValidSVID/StringOut` (real
+// THGem state/methods) stay `HGemPtr->`, unchanged.
+//
+// GOLDEN BUG DISCOVERED AND PRESERVED VERBATIM (found via direct golden read
+// while translating -- not previously catalogued): in the `Type==
+// HType.UINT_4_TYPE` SVID-array branch (golden :937-964), `P=new unsigned
+// [len];` is `delete[]`d ONLY on the `DataItemIn(...)!=1` failure path
+// (golden :961) -- the SUCCESS path (the entire `if(...==1){...}` body,
+// golden :941-958) never frees `P` at all, a genuine memory leak on every
+// successful UINT_4_TYPE trace-SVID-list request. NOT corrected here, per
+// this project's faithful-translation mandate; preserved exactly (no `delete[]`
+// added after the if/else below).
+//
+// GOLDEN QUIRK PRESERVED VERBATIM (asymmetric length-mismatch handling,
+// confirmed by direct read, golden :886-900): the TOTSMP peek's `len!=1`
+// check returns `1` (golden :889 -- NOT an error code; the wrapper's
+// `ret==-1` test is false, so this ends up ACKing 1 via LocalAcknowledge,
+// distinct from a true format error), while the REPGSZ peek's OWN `len!=1`
+// check (golden :896, structurally identical shape) returns `-1` (a true
+// format error, routes to S9F7_IllegalData in the wrapper instead). Golden's
+// own inconsistency between two adjacent, near-identical blocks -- not
+// "fixed" into a uniform return code here.
 int HTGem::S2F24_TraceInitializeAcknowledgeSub()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem members bTraceData[10]/iTRID[10]/DSPER[10]/iTOTSMP[10]/iREPGSZ[10]/TraceData[10]/TraceDataResponseTask[10] + THGem::IsValidSVID) -- golden SECSGEM/uHGemClass.cpp:810-985
-#endif
-    return 1;                                                                  // conservative default (deny); real TIACK decode gated above
+    int len,ret;
+    unsigned int i;
+    unsigned char Type;
+    char str[256],dsper[64];
+    unsigned hh, mm, ss, cc=0;
+    int iIndex;
+    bool bSVIDError=false;
+    AnsiString ID,S,SVID;
+
+    if(ActiveWire->DataItemIn(5,HType.LIST_TYPE,NULL)==1)
+    {
+        ActiveWire->GetDataItemLenAndType(len,Type);
+        if(ActiveWire->DataItemIn(len,Type,ID)!=1)                             // ID=TRID
+            return -1;
+        iIndex=-1;
+        for(i=0; i<10; i++)
+        {
+            if(HGemPtr->bTraceData[i]==true && HGemPtr->iTRID[i]==ID)
+            {
+                iIndex=i;
+                break;
+            }
+        }
+
+        if(iIndex==-1)                                                          // new TRACE
+        {
+            for(i=0; i<10; i++)
+            {
+                if(HGemPtr->bTraceData[i]==false)
+                {
+                    iIndex=i;
+                    break;
+                }
+            }
+        }
+
+        if(iIndex==-1)                                                          // No more trace can use
+            return 2;
+        HGemPtr->iTRID[iIndex]=ID;
+
+        ret=ActiveWire->GetDataItemLenAndType(len,Type);
+        if(ret!=1 || Type!=HType.ASCII_TYPE || (len!=6 && len!=8))
+            return -1;
+
+        if(ActiveWire->DataItemIn(len,HType.ASCII_TYPE,dsper)!=1)
+            return -1;
+        // Format 1: hhmmss, 6 bytes
+        // Format 2: hhmmsscc, 8 bytes
+
+        str[0]=dsper[0];
+        str[1]=dsper[1];
+        str[2]=0;
+        hh=atoi(str);
+
+        str[0]=dsper[2];
+        str[1]=dsper[3];
+        str[2]=0;
+        mm=atoi(str);
+
+        str[0]=dsper[4];
+        str[1]=dsper[5];
+        str[2]=0;
+        ss=atoi(str);
+        if(len==8)
+        {
+            str[0]=dsper[6];
+            str[1]=dsper[7];
+            str[2]=0;
+            cc=atoi(str);
+        }
+
+        HGemPtr->DSPER[iIndex]=hh*60*60*1000+mm*60*1000+ss*1000+cc;             // 以 0.1 sec 為單位 (golden gloss)
+        HGemPtr->TraceDataResponseTask[iIndex]=1;                               //2013/07/18 lee
+
+        if(ActiveWire->GetDataItemLenAndType(len, Type)!=1)
+            return -1;
+        if(len!=1)
+            return 1;
+        if(ActiveWire->DataItemIn(1, Type, S)!=1)
+            return -1;
+        HGemPtr->iTOTSMP[iIndex]=atoi(S.c_str());
+
+        if(ActiveWire->GetDataItemLenAndType(len, Type)!=1)
+            return -1;
+        if(len!=1)
+            return -1;
+        if(ActiveWire->DataItemIn(1,Type,S)!=1)
+            return -1;
+        HGemPtr->iREPGSZ[iIndex]=atoi(S.c_str());
+
+        HGemPtr->TraceData[iIndex]->Clear();
+
+        if(ActiveWire->GetDataItemLenAndType(len, Type)!=1)
+            return -1;
+        if(Type==HType.LIST_TYPE)
+        {
+            if(ActiveWire->DataItemIn(len, HType.LIST_TYPE, NULL)==1)
+            {
+                HGemPtr->iREPGSZ[iIndex]=len;
+                for(i=0; i<HGemPtr->iREPGSZ[iIndex];i++)
+                {
+                    if(ActiveWire->GetDataItemLenAndType(len, Type)==1)
+                    {
+                        if(len!=1)
+                            return -1;
+                        if(ActiveWire->DataItemIn(1, Type, SVID)!=1)
+                            return -1;
+                        if(HGemPtr->IsValidSVID(SVID)==false)                   // invalid SVID
+                        {
+                            S="SVID:"+AnsiString(SVID)+" not exist!!!";
+                            HGemPtr->StringOut(S);
+                            bSVIDError=true;
+                        }
+                        else
+                        {
+                            HGemPtr->TraceData[iIndex]->Add(SVID);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                HGemPtr->iREPGSZ[iIndex]=0;
+            }
+        }
+        else if(Type==HType.UINT_4_TYPE)
+        {
+            unsigned *P;
+            P=new unsigned [len];
+            if(ActiveWire->DataItemIn(len, Type, P)==1)
+            {
+                HGemPtr->iREPGSZ[iIndex]=len;
+                for(i=0; i<HGemPtr->iREPGSZ[iIndex]; i++)
+                {
+                    SVID=P[i];
+                    if(HGemPtr->IsValidSVID(SVID)==false)                       // invalid SVID
+                    {
+                        S="SVID:"+AnsiString(SVID)+" not exist!!!";
+                        HGemPtr->StringOut(S);
+                        bSVIDError=true;
+                    }
+                    else
+                    {
+                        HGemPtr->TraceData[iIndex]->Add(SVID);
+                    }
+                }
+            }
+            else
+            {
+                delete[] P;
+                return -1;
+            }
+        }
+        else
+        {
+            return -1;
+        }
+
+        if(bSVIDError==true)
+            return 4;
+        if(HGemPtr->iREPGSZ[iIndex]!=0)
+        {
+            HGemPtr->iTOTSMP[iIndex]/=HGemPtr->iREPGSZ[iIndex];
+            HGemPtr->bTraceData[iIndex]=true;
+        }
+        else
+        {
+            HGemPtr->bTraceData[iIndex]=false;
+        }
+
+        HGemPtr->iTOTSMP_Count[iIndex]=1;
+        HGemPtr->TraceDataResponseTask[iIndex]=1;
+    }
+    else
+    {
+        return -1;
+    }
+    return 0;
 }
 //---------------------------------------------------------------------------
 // AI(W906-uHGemClass-Unlock) 20260713 UN-GATED (golden SECSGEM/uHGemClass.cpp:992-1000):
@@ -1691,11 +2033,74 @@ void HTGem::S2F30_EquipmentConstantNamelistReply()
 }
 //---------------------------------------------------------------------------
 // [S2,F32] Date And Time Acknowledge (uses IsCorrectDateFormat, kept ACTIVE above).
-//---------------------------------------------------------------------------
+// AI(W906-uHGemClass-TraceUnlock) 20260728 UN-GATED (golden SECSGEM/
+// uHGemClass.cpp:1095-1216). Split per this wave's brief: the pure decode+
+// validate logic lives in ParseSECSDateTimeString (this file, see its own
+// header-banner comment right above IsCorrectDateFormat) -- zero OS side
+// effects, fully unit-tested (tests/test_uHGemClass.cpp). The ONLY
+// non-portable operations golden had here (Borland dos.h settime()/setdate())
+// are represented by SetSystemDateTimeHook (uHGemClass.h), an std::function
+// seam that defaults EMPTY -- guarded below, so this method NEVER touches the
+// real OS clock unless a caller has explicitly wired the hook (no such
+// wiring exists anywhere in this ported tree yet, by design -- see the
+// hook's own header comment).
+//
+// MECHANICAL RENAME: golden `HGemPtr->GetDataItemLenAndType/DataItemIn`
+// (wire-codec primitives) -> `ActiveWire->...`; golden `HGemPtr->
+// LocalAcknowledge` -> `ActiveWire->LocalAcknowledge` (same rule as every
+// other un-gated method in this file).
+//
+// GOLDEN QUIRK PRESERVED VERBATIM (see ParseSECSDateTimeString's own header
+// comment in uHGemClass.h for the full writeup): a structurally well-formed
+// date/time string whose CALENDAR date is invalid (e.g. month=13, or a
+// day that does not exist in that month) still yields Error==false here
+// (DTACK=0, "accepted") even though NO clock write happens
+// (`bApplyClock==false` in that case) -- golden's own asymmetry against the
+// range-check-failure case (hour>23 etc, which DOES set Error=true ->
+// DTACK=1), not "fixed" into a uniform decision here.
 void HTGem::S2F32_DateAndTimeAcknowledge()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs Borland dos.h settime()/setdate()/struct time/struct date (not in vclcompat)) -- golden SECSGEM/uHGemClass.cpp:1095-1216
-#endif
+    char str[256];
+    int len,ret;
+    unsigned char Type;
+    bool Error=false;
+    AnsiString S;
+    SECSDateTimeFields parsed;
+    bool bRangeError=false, bApplyClock=false;
+
+    ret=ActiveWire->GetDataItemLenAndType(len, Type);
+    if(Type==HType.ASCII_TYPE && ret==1)
+    {
+        if(ActiveWire->DataItemIn(len, Type, str)==1)
+        {
+            S=str;
+            if(ParseSECSDateTimeString(S, len, parsed, bRangeError, bApplyClock))
+            {
+                if(bRangeError==true)
+                    Error=true;
+                if(bApplyClock==true && SetSystemDateTimeHook)
+                    SetSystemDateTimeHook(parsed.year, parsed.month, parsed.day,
+                                          parsed.hour, parsed.min, parsed.sec, parsed.hundredths);
+            }
+            else
+            {
+                Error=true;
+            }
+        }
+        else
+        {
+            Error=true;
+        }
+    }
+    else
+    {
+        Error=true;
+    }
+
+    if(Error==true)
+        ActiveWire->LocalAcknowledge(2, 32, 1);
+    else
+        ActiveWire->LocalAcknowledge(2, 32, 0);
 }
 //---------------------------------------------------------------------------
 // [S2,F34] Define Report -- ack-code sub (DRACK).
@@ -2729,9 +3134,52 @@ void HTGem::S7F18_DeleteProcessProgramAcknowledge()                             
     ActiveWire->LocalAcknowledge(7,18,0);
 }
 //---------------------------------------------------------------------------
+// AI(W906-uHGemClass-TraceUnlock) 20260728: INVESTIGATED, STILL GATED --
+// refreshed blocker citation (2 of the original 3 named blockers are STALE,
+// confirmed by direct re-grep of uHGemEquipment.h/.cpp this wave):
+//   * SV_70_UNT1_ReceipeStruct already EXISTS as a real THGem member
+//     (uHGemEquipment.h:995, golden :707/SV70) -- NOT a blocker.
+//   * UploadFileString already EXISTS as a real THGem member, `new`'d in the
+//     ctor / NULL-guarded Clear-then-delete in the dtor (uHGemEquipment.h:
+//     ~1013, added by the W906-uHGemClass-Micro5 wave for S101F2/S101F4's
+//     sake) -- NOT a blocker, exactly as this task's own brief anticipated
+//     checking for.
+// The GENUINE remaining blocker is `THGem::SetReceipeDirectoryAndGlobalName`
+// itself (golden uHGemEquipment.cpp:6427-6489) -- confirmed absent (grepped
+// uHGemEquipment.h/.cpp, zero hits besides comments). Golden S7F20 only
+// reaches this call when SV_70_UNT1_ReceipeStruct==2 (golden uHGemClass.cpp:
+// 2171-2177 early-returns with an empty-list reply otherwise) -- but every
+// call it DOES make passes `Type==2` (golden uHGemClass.cpp:2179, the ONLY
+// call site anywhere in golden that passes 2 -- SECSGEM.cpp:867/
+// UsecegemMainFrom.cpp:695 both pass Type==2 as well), and golden's OWN
+// Type==2 branch (uHGemEquipment.cpp:
+// 6436-6460) is fundamentally different in kind from its Type==0/1 siblings:
+// it does NOT just build a file-mask string -- it assigns
+// `DirectoryListBox1->Directory=Path;` and then walks
+// `DirectoryListBox1->Items` (a live VCL `TDirectoryListBox`'s already-
+// populated, OS-driven directory-tree listing for that path) to compute
+// `ct` (an index into that listing) and populate `UploadFileString` from the
+// entries AFTER it. This is NOT a data member gap this wave can mechanically
+// add (unlike UploadFileString/SV_70_UNT1_ReceipeStruct above) -- it needs a
+// vclcompat stand-in that actually WALKS A REAL FILESYSTEM DIRECTORY TREE
+// and reproduces TDirectoryListBox's own Items-population semantics
+// (subdirectory listing at each path-nesting level, matching BCB6's own
+// `TDirectoryListBox` behavior) -- confirmed NO such stand-in exists
+// anywhere in vclcompat/ (grepped "DirectoryListBox"/"TDirectoryListBox" --
+// zero hits outside docs/*.md). This is a genuine, non-trivial design task
+// (a real directory-walking widget, not a thin seam or a plain data member),
+// exactly the class of blocker this task's own brief anticipated when it
+// said "if it's genuinely not available, this method likely cannot land
+// this wave; confirm and document rather than force it" -- confirmed here;
+// NOT attempted this wave. A future wave un-gating this method would need to
+// either (a) build a real TDirectoryListBox-equivalent vclcompat stand-in
+// (using <filesystem>/FindFirst-FindNext, matching this project's existing
+// SysUtils.h precedent for other directory-walking needs), or (b) special-
+// case SetReceipeDirectoryAndGlobalName's Type==2 branch specifically for
+// S7F20's actual call pattern rather than modeling the full widget.
 void HTGem::S7F20_CurrentEPPDData()
 {
-#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem members SV_70_UNT1_ReceipeStruct/UploadFileString + THGem::SetReceipeDirectoryAndGlobalName) -- golden SECSGEM/uHGemClass.cpp:2168-2189
+#if 0 // TODO(W906-uHGemClass-Unlock, needs THGem::SetReceipeDirectoryAndGlobalName's Type==2 branch -- a live TDirectoryListBox directory-tree-walking widget, NOT yet in vclcompat; SV_70_UNT1_ReceipeStruct/UploadFileString are ALREADY real, see this method's own comment above for the full re-investigation) -- golden SECSGEM/uHGemClass.cpp:2168-2189
 #endif
 }
 //---------------------------------------------------------------------------

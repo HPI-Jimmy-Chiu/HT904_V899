@@ -424,6 +424,27 @@ THGem::THGem()
       bBeginTransferSpool(false),      // golden ctor :604
       GemSpoolPath(""),
       UpLoadPath(""),
+      // AI(W906-uHGemClass-TraceUnlock) 20260728: Trace cluster -- value-
+      // initialize every array member here (BEFORE the ctor body's try block
+      // runs), purely for constructor exception-safety: TraceData[10] is a
+      // TStringList* array `new`'d for real in the ctor BODY (matching
+      // golden's own ctor :588-591 loop -- see body), and this ctor's own
+      // established catch-block convention (see every other `new`'d pointer
+      // member below) deletes every owned pointer if a LATER `new` in the
+      // same try block throws -- TraceData[i] must therefore be a safe,
+      // deletable NULL from the moment the ctor BEGINS, not just from the
+      // point its own body-loop runs. `Member()` (empty parens) value-
+      // initializes an array member element-by-element (nullptr for
+      // TStringList*, 0/false for the scalar arrays, AnsiString's own
+      // default ctor for iTRID) -- standard C++11 behavior, not a new idiom.
+      TraceData(),                     // golden :674 (each slot NULL until the body loop `new`s it)
+      bTraceData(),                    // golden :696 (each slot false)
+      iTRID(),                         // golden :699 (each slot "")
+      DSPER(),                         // golden :702 (each slot 0)
+      iTOTSMP(),                       // golden :703 (each slot 0)
+      iREPGSZ(),                       // golden :704 (each slot 0)
+      iTOTSMP_Count(),                 // golden :705 (each slot 0)
+      TraceDataResponseTask(),         // golden :706 (each slot 0)
       // AI(W906-uHGemClass-Micro7) 20260721: see header's own comment on this
       // pair (S101F6/S101F8 supporting state). bFinishDownloadFile: golden
       // never inits this either -- zero-init defensively, same posture as
@@ -675,6 +696,36 @@ THGem::THGem()
         // 1:1 fidelity (see this member's own header comment).
         UploadFileName = new TStringList();
         UploadFileName->Clear();   // golden ctor :594 (redundant on a fresh list, harmless)
+        // AI(W906-uHGemClass-TraceUnlock) 20260728: Trace cluster ctor init --
+        // golden ctor :588-591 (`TraceData[i]=new TStringList; TraceData[i]->
+        // Clear();`) and :596-597 (`bTraceData[i]=false;`), both reproduced
+        // verbatim as `for` loops over golden's own `iTraceDataCT==10`
+        // (uHGemEquipment.cpp:40, a TU-local `const` in golden -- not carried
+        // over as a named constant here, the literal `10` matches every
+        // array's own fixed extent declared in the header). golden's own
+        // ctor NEVER explicitly initializes iTRID[]/DSPER[]/iTOTSMP[]/
+        // iREPGSZ[]/iTOTSMP_Count[]/TraceDataResponseTask[] (grepped
+        // uHGemEquipment.cpp:380-680 -- absent for all 6) -- zero/empty-
+        // initialized here defensively, same "flagged deviation" posture as
+        // iTimeFormatDefault/SpoolPtr/OldSpoolSystemMin elsewhere in this
+        // ctor (real BCB6 zero-inits every instance field for free; this
+        // port must do so explicitly). Folded into ONE loop below (golden
+        // itself uses two separate loops, at different points in its ctor
+        // body -- merging them is safe: each iteration is independent, no
+        // cross-index dependency, and this is initialization code, not
+        // decision logic).
+        for (int i = 0; i < 10; i++)
+        {
+            TraceData[i] = new TStringList();
+            TraceData[i]->Clear();
+            bTraceData[i] = false;
+            iTRID[i] = "";
+            DSPER[i] = 0;
+            iTOTSMP[i] = 0;
+            iREPGSZ[i] = 0;
+            iTOTSMP_Count[i] = 0;
+            TraceDataResponseTask[i] = 0;
+        }
         // GemRemoteReceipeList: default-NULL/externally-assigned (golden ctor
         // :504 `GemRemoteReceipeList=NULL;`) -- deliberately NOT allocated
         // here, same documentation idiom as EnableOrDisablePtr below.
@@ -758,6 +809,13 @@ THGem::THGem()
         delete UploadFileString;   // AI(W906-uHGemClass-Micro5) 20260721
         delete RequestRemoteDownLoad;   // AI(W906-DoDownLoadRemoteFile) 20260721
         delete UploadFileName;   // AI(W906-UploadFamily) 20260723
+        // AI(W906-uHGemClass-TraceUnlock) 20260728: TraceData[] -- safe even
+        // if the try block's own allocation loop (above) never ran: the
+        // ctor init-list's `TraceData()` value-init (see above) guarantees
+        // every slot is NULL until that loop `new`s it, and `delete NULL` is
+        // a defined no-op.
+        for (int i = 0; i < 10; i++)
+            delete TraceData[i];
         delete FileListBox2;     // AI(W906-UploadFamily) 20260723
         delete pLockOnSocketRecvice;
         delete csSFCodeResponse;
@@ -920,6 +978,22 @@ THGem::~THGem()
         delete UploadFileName;
     }
     UploadFileName = NULL;
+    // AI(W906-uHGemClass-TraceUnlock) 20260728: TraceData[] -- same NULL-
+    // guarded Clear-then-delete idiom as UploadFileString/RequestRemoteDownLoad/
+    // UploadFileName immediately above, applied per-slot. NOT a deviation:
+    // golden's own ~THGem (uHGemEquipment.cpp:766-773) already NULL-guards
+    // and Clear()s-then-deletes every TraceData[i] for real (see this
+    // member's own header comment) -- unlike the "golden LEAKS this outright"
+    // class of members flagged elsewhere in this destructor.
+    for (int i = 0; i < 10; i++)
+    {
+        if (TraceData[i] != NULL)
+        {
+            TraceData[i]->Clear();
+            delete TraceData[i];
+        }
+        TraceData[i] = NULL;
+    }
     // AI(W906-UploadFamily-StackFix) 20260727: PtrUploadFileToHost_ForSingleFile
     // -- this port's OWN heap buffer (golden's real member has no delete site
     // to mirror, being embedded; see the member's own header comment for why

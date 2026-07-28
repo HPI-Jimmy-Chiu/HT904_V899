@@ -46,6 +46,12 @@
 #include "vclcompat/vcl_compat.h"
 #include "SECSGEM/SecsWireCodec.h"
 #include "SECSGEM/SecsSvEcRegistration.h"
+// AI(W906-uHGemClass-TraceUnlock) 20260728: std::function, for
+// SetSystemDateTimeHook below (already transitively available via
+// SecsWireCodec.h's own <functional> include -- added directly here too,
+// this header uses the type by name and should not rely on a transitive
+// include from a sibling header to keep compiling).
+#include <functional>
 //---------------------------------------------------------------------------
 
 // AI(W5-SECSGEM-Translate) 20260710: THGem (uHGemEquipment.h) is the SECS
@@ -90,6 +96,72 @@ class THGem;
 extern AnsiString SYS_ECChangeID             ;    //pig 2014.04.23 KYEC SECS
 extern AnsiString SYS_ECChangeIDOriginaValue ;    //pig 2014.04.23 KYEC SECS
 extern AnsiString SYS_ECChangeIDNewValue     ;    //pig 2014.04.23 KYEC SECS
+
+// AI(W906-uHGemClass-TraceUnlock) 20260728: pure parse-fields struct + free
+// function un-gating S2,F32 (Date And Time Acknowledge) -- golden SECSGEM/
+// uHGemClass.cpp:1095-1216. Extracted as a standalone, zero-side-effect
+// helper (same "extract pure calc-core, gate the side effect" philosophy
+// already established by this project's MainCalcCore.h/.cpp) but kept LOCAL
+// to this file rather than folded into MainCalcCore -- golden's origin here
+// is SECSGEM/uHGemClass.cpp, not main.cpp, and MainCalcCore.h's own file-head
+// note scopes it explicitly to main.cpp extracts only; IsCorrectDateFormat
+// (this same file, ACTIVE since the very first translation wave) is the
+// direct precedent for keeping a pure SECSGEM-only helper right here instead.
+// Decodes one of golden's 6 fixed SECS ASCII date/time lengths (12/14/16/19/
+// 21/22 bytes) into year/month/day/hour/min/sec/hundredths -- pure string
+// parsing, zero OS calls, fully unit-testable (see tests/test_uHGemClass.cpp).
+struct SECSDateTimeFields
+{
+    int year, month, day, hour, min, sec, hundredths;
+};
+
+// Returns false ONLY when `len` matches none of golden's 6 supported lengths
+// (golden's own `Error=true` in that trailing `else`, uHGemClass.cpp:
+// 1177-1180) -- `out` is left untouched in that case. When it returns true,
+// `out` holds the decoded (but not yet validated) fields; `bRangeError` is
+// golden's own `Error` flag as set INSIDE the `IsCorrectDateFormat()==true`
+// branch (hour>23 || min>59 || sec>59 || hundredths>99, uHGemClass.cpp:
+// 1186-1193); `bApplyClock` is true ONLY when golden would actually reach
+// `settime()`/`setdate()` (uHGemClass.cpp:1196-1197) -- i.e.
+// IsCorrectDateFormat() true AND every range check passes.
+//
+// GOLDEN QUIRK, PRESERVED VERBATIM (flagged, not "fixed"): if the length
+// branch succeeds but IsCorrectDateFormat() returns false (e.g. month=13, or
+// a calendar-invalid day), golden's own `if(IsCorrectDateFormat(...)) {...}`
+// has NO `else Error=true` -- Error is simply left at its prior value
+// (false), so the host still receives DTACK=0 ("accepted") even though NO
+// clock write ever happens. This is DISTINCT from the range-check failure
+// case (hour>23 etc, which DOES set Error=true -> DTACK=1) -- an asymmetry
+// in golden itself, not a translation defect. Callers must check
+// `bApplyClock` (NOT just the return value / `bRangeError`) to know whether
+// a write would really occur; the return value and `bRangeError` alone
+// reproduce golden's own (inconsistent) DTACK decision, nothing more.
+bool ParseSECSDateTimeString(const AnsiString &S, int len, SECSDateTimeFields &out,
+                              bool &bRangeError, bool &bApplyClock);
+
+// AI(W906-uHGemClass-TraceUnlock) 20260728: injectable OS-clock-write seam --
+// golden's ONLY non-portable operations in S2F32 are Borland dos.h's
+// settime()/setdate() (struct time/struct date, BCB6-only types/API, not in
+// vclcompat and not portable to standard/MinGW C++). Modeled as an
+// std::function hook, the SAME established "injectable side-effect" idiom
+// this project already uses for SecsWireCodec::SendLocalDataHook
+// (SecsWireCodec.h:424, std::function<void(SecsWireCodec&)>) -- defaults to
+// an EMPTY/unassigned std::function (calling an empty std::function is
+// explicitly guarded at the one call site, S2F32's own body -- see .cpp), so
+// this is a safe no-op until a caller explicitly wires it. NO production
+// wiring site exists yet anywhere in this ported tree (grepped) -- a future
+// "real OS clock" wave would assign this to a Win32 SetLocalTime-equivalent
+// (the natural portable substitute for settime()+setdate() together, since
+// Win32 SetLocalTime takes one combined SYSTEMTIME); NOT implemented this
+// wave (deliberately out of scope -- this wave's mandate is the pure-parse
+// extraction + a SAFE seam, not standing up a real system-clock-mutating
+// call with no caller and no way to verify it safely under ctest). A test
+// may assign its own recording lambda to observe what WOULD have been
+// written, then must reset this back to an empty std::function afterward
+// (same save/restore-global discipline this project's own test files already
+// use for CUSTOMER_CODE).
+extern std::function<void(int year, int month, int day, int hour, int min, int sec, int hundredths)> SetSystemDateTimeHook;
+
 class HTGem
 {
     private:

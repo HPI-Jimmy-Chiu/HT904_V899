@@ -1078,6 +1078,55 @@ public:
     // S7F18_DeleteProcessProgramAcknowledge (golden uHGemClass.cpp:2115-2166).
     AnsiString UpLoadPath;                          // golden :698
 
+    // ==== Trace cluster (W906-uHGemClass-TraceUnlock 20260728) ==============
+    // golden uHGemEquipment.h:674 (TraceData[10]), :696 (bTraceData[10]),
+    // :699 (iTRID[10]), :702-706 (DSPER/iTOTSMP/iREPGSZ/iTOTSMP_Count/
+    // TraceDataResponseTask[10]), :485 (TraceDataResponseDelay[10]). Un-gates
+    // HTGem::S2F24_TraceInitializeAcknowledgeSub (uHGemClass.cpp, this wave --
+    // golden :810-990). DESIGNED to also satisfy THGem's own
+    // DoTraceDataResponse (uHGemEquipment.cpp:4190-4242, the S6F1 Trace Data
+    // Send retry state machine that shares this SAME member cluster) -- that
+    // method stays its own separate gated stub (see "Bucket C" section below,
+    // DoTraceDataResponse's own comment) because un-gating IT is explicitly
+    // NOT part of THIS wave's assigned scope (S2F24Sub, uHGemClass.cpp); this
+    // member set is simply shaped so a future wave can un-gate it
+    // mechanically, citing this same golden line range, rather than inventing
+    // a second, incompatible set of Trace members later.
+    //
+    // TraceData[10] (TStringList*): per-trace-slot SVID list, `new`'d in the
+    // ctor / NULL-guarded Clear-then-delete in the dtor, same lifecycle idiom
+    // already established by UploadFileString/RequestRemoteDownLoad/
+    // UploadFileName above (golden ctor :588-591 loop + ~THGem :766-773 loop,
+    // both reproduced verbatim as ctor-body/dtor-body `for` loops over index
+    // 0..9 -- see .cpp).
+    TStringList *TraceData[10];                     // golden :674
+
+    // bTraceData[10]: per-slot "is this trace slot active" latch. golden ctor
+    // :596-597 explicitly sets every slot false -- reproduced verbatim.
+    bool bTraceData[10];                            // golden :696 (ctor false)
+
+    // iTRID[10]/DSPER[10]/iTOTSMP[10]/iREPGSZ[10]/iTOTSMP_Count[10]/
+    // TraceDataResponseTask[10]: golden's own ctor (uHGemEquipment.cpp:
+    // 380-680, grepped) NEVER explicitly initializes any of these 6 -- same
+    // "flagged deviation: zero-init defensively" posture already established
+    // by iTimeFormatDefault/SpoolPtr/OldSpoolSystemMin elsewhere in this file
+    // (real BCB6 zero-inits every instance field for free; this port must do
+    // so explicitly -- see .cpp ctor).
+    AnsiString iTRID[10];                           // golden :699
+    unsigned DSPER[10];                             // golden :702
+    unsigned iTOTSMP[10];                           // golden :703
+    unsigned iREPGSZ[10];                           // golden :704
+    unsigned iTOTSMP_Count[10];                     // golden :705
+    int TraceDataResponseTask[10];                  // golden :706
+
+    // TraceDataResponseDelay[10] (GemTimer): DoTraceDataResponse's OWN retry-
+    // delay timer array (golden :485) -- NOT read by S2F24Sub itself (added
+    // here only for the "coherent set both consumers can use" reason stated
+    // above). Gets NO explicit ctor entry, same established precedent as
+    // every other GemTimer member in this file (its own default ctor already
+    // zero-inits defensively -- see GemTimer's own header comment).
+    GemTimer TraceDataResponseDelay[10];            // golden :485
+
     // AI(W906-uHGemClass-Micro7) 20260721: bFinishDownloadFile/CurrentDirectory
     // -- un-gates S101F6_StoreHostUploadFile/S101F8_StoreHostUploadFile
     // (uHGemClass.cpp, this wave). bFinishDownloadFile (golden :626) is
@@ -1581,7 +1630,25 @@ public:
     // ==== Bucket C: gated no-op stubs (golden citation each; no in-scope
     // ==== consumer needs a real body -- same idiom as
     // ==== EnableDisableEventReportAcknowledgeError above) ====================
-    void DoTraceDataResponse(int TR);  // golden :4190 -- #if 0 TODO(W906-SECSGEM-trace), needs TraceData[]/TraceDataResponseTask[]
+    // AI(W906-uHGemClass-TraceUnlock) 20260728: refreshed status -- the
+    // TraceData[]/TraceDataResponseTask[]/bTraceData[]/TraceDataResponseDelay[]/
+    // iTRID[]/DSPER[]/iTOTSMP[]/iREPGSZ[]/iTOTSMP_Count[] member cluster this
+    // TODO used to cite as missing now EXISTS (added this wave, see the
+    // "Trace cluster" member comment above, for HTGem::
+    // S2F24_TraceInitializeAcknowledgeSub's sake -- NOT for this method,
+    // deliberately out of THIS wave's scope). GetTimeInfo()/iTimeFormat/
+    // SystemYear.../DataItemOutSV (golden's other reads, uHGemEquipment.cpp:
+    // 4217-4230) are ALSO already real (earlier waves). A future wave un-
+    // gating this method specifically should therefore need NO new member
+    // additions -- just the real body (golden :4190-4242, a Task==1/100
+    // one-shot-per-poll retry state machine) translated in .cpp, following
+    // the same InitLocalHead/DataItemOut/SendLocalData -> ActiveWire-
+    // equivalent mechanical-rename rule this file's siblings already use
+    // (NOTE: THGem's own methods call these directly as bare members, not
+    // through an ActiveWire-style indirection -- confirm the exact call
+    // shape against THIS file's OWN established convention, not uHGemClass.cpp's,
+    // before assuming a 1:1 copy).
+    void DoTraceDataResponse(int TR);  // golden :4190-4242
 
     // AI(W906-DoDownLoadRemoteFile) 20260721: UN-GATED (was a stub in this
     // same cluster) -- real body added, see .cpp. golden :6746-6807. Pure

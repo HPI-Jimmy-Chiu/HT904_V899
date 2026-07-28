@@ -50,10 +50,15 @@
 #include <string>
 
 // AI(W5-SECSGEM-Translate) 20260710: IsCorrectDateFormat has external linkage
-// in golden (uHGemClass.cpp) but no header declares it there either (it is a
-// uHGemClass.cpp-private helper only ever called from the gated
+// in golden (uHGemClass.cpp) but no header declares it there either (it was,
+// at the time of this original comment, only ever called from the then-GATED
 // S2F32_DateAndTimeAcknowledge body) -- forward-declared here, test-local,
 // exactly as golden leaves it undeclared-in-any-header.
+// AI(W906-uHGemClass-TraceUnlock) 20260728: S2F32 is UN-GATED as of this
+// wave (see the dedicated test section below) -- IsCorrectDateFormat is now
+// ALSO called by the real ParseSECSDateTimeString (uHGemClass.h/.cpp, a
+// SEPARATE free function with a real header declaration, unlike this one) --
+// this forward declaration itself is unaffected and stays exactly as-is.
 extern bool IsCorrectDateFormat(int y, int m, int d);
 
 // AI(W906-FastcallFix) 20260720: this test's own local MyDBIProcess (3-arg,
@@ -245,8 +250,23 @@ int main()
         // S2F15_UpdateNewEquipmentConstant, S2F15_CheckNewEquipmentConstant
         // moved out of this sample -- see the UN-GATED section below, they
         // are no longer blanket stubs.)
-        check_i("S2F24_TraceInitializeAcknowledgeSub() conservative default",
-                g.S2F24_TraceInitializeAcknowledgeSub(), 1);
+        // AI(W906-uHGemClass-TraceUnlock) 20260728: S2F24_TraceInitializeAcknowledgeSub
+        // MOVED OUT of this sample -- same "moved out" precedent as S1F1/S1F2/
+        // S2F34/S2F36 above (this wave un-gated it, see uHGemClass.cpp's own
+        // "INTEGRATE WAVE" note). It is NO LONGER a blanket conservative-
+        // default-1 stub: on THIS default-constructed `g` (empty
+        // WireCodec.SReceiveData), its own very first read
+        // (`ActiveWire->DataItemIn(5,LIST_TYPE,NULL)`) now fails for real and
+        // returns -1 (not 1) -- still safe to call (the format-error early
+        // exit happens BEFORE any `HGemPtr` dereference, so `g`'s NULL
+        // HGemPtr is never touched here), but asserting a hardcoded "1" would
+        // now be WRONG, not just stale. Real behavior (all 2/-1/1/4/0 return
+        // paths) is exercised in its own dedicated section below, with a real
+        // THGem instance wired (this TU only forward-declares THGem, cannot
+        // construct one here). Every one of the now-1 still-gated methods
+        // left in uHGemClass.cpp (S7F20_CurrentEPPDData) is void-returning
+        // (grepped) -- no like-for-like int-ack replacement exists to keep
+        // this sample's width; not replaced.
         // AI(W906-AlarmReportAck) 20260721: S2F34_DefineReportAcknowledgeSub/
         // S2F36_LinkEventReportAcknowledgeSub MOVED OUT of this sample -- same
         // "moved out" precedent as S1F1/S1F2 above (this wave un-gated both,
@@ -258,12 +278,7 @@ int main()
         // forward-declares THGem (cannot construct one to wire HGemPtr for
         // real), so their real behavior is exercised over in
         // tests/test_uHGemEquipment.cpp instead, where a real THGem instance
-        // exists. NOT replaced with 2 more int-returning stubs here (unlike
-        // the void/no-arg sample's own replacement above) -- every one of the
-        // 15 still-gated methods left in uHGemClass.cpp is void-returning
-        // (grepped), so no like-for-like int-ack replacement exists; the
-        // int-ack shape stays represented by S2F24_TraceInitializeAcknowledgeSub
-        // above.
+        // exists.
 
         // SetECValue -- void, two args, must not crash even with a NULL sink.
         // UN-GATED as of AI(W906-VCW1) 20260721 (see the dedicated section
@@ -510,15 +525,27 @@ int main()
                     g5.S2F42_Host_Command_Acknowledge(), 1);
         }
 
-        // S2F24_TraceInitializeAcknowledge -- thin wrapper: its own Sub()
-        // sibling stays gated (returns its conservative default, 1), so this
-        // always takes the `else` branch -> a real LocalAcknowledge(2,24,1)
-        // burst (InitLocalHead+DataItemOut+SendLocalData, all via WireCodec).
+        // S2F24_TraceInitializeAcknowledge -- thin wrapper.
+        // AI(W906-uHGemClass-TraceUnlock) 20260728: UPDATED -- its own Sub()
+        // sibling is UN-GATED as of this wave (was previously a blanket
+        // conservative-default-1 stub, which made this wrapper always take
+        // the `else` branch -> LocalAcknowledge(2,24,1)). On THIS
+        // default-constructed `g6` (empty WireCodec.SReceiveData), Sub()'s
+        // own very first read (`ActiveWire->DataItemIn(5,LIST_TYPE,NULL)`)
+        // now fails for real and returns -1 (format error, BEFORE touching
+        // HGemPtr -- see the "gated stubs" sample's own updated comment
+        // above) -> the wrapper's `if(ret==-1)` branch fires instead:
+        // `S9F7_IllegalData("S2,F23 Format error !!!")`, NOT
+        // LocalAcknowledge(2,24,...). Sub()'s own full success/2/4/1/-1
+        // behavior (needing a real THGem for HGemPtr) is covered in its own
+        // dedicated section below.
         {
             HTGem g6;
             g6.S2F24_TraceInitializeAcknowledge();
-            check_i("S2F24_TraceInitializeAcknowledge: Local.MessageID_S == 2", g6.WireCodec.Local.MessageID_S, 2);
-            check_i("S2F24_TraceInitializeAcknowledge: Local.MessageID_F == 24", g6.WireCodec.Local.MessageID_F, 24);
+            check_i("S2F24_TraceInitializeAcknowledge with empty SReceiveData: Sub()=-1 -> falls to S9F7 (MessageID_S==9)",
+                    g6.WireCodec.Local.MessageID_S, 9);
+            check_i("S2F24_TraceInitializeAcknowledge with empty SReceiveData: Sub()=-1 -> falls to S9F7 (MessageID_F==7)",
+                    g6.WireCodec.Local.MessageID_F, 7);
         }
 
         // CheckECValue -- not-found path matches golden's own default (1),
@@ -831,6 +858,401 @@ int main()
             check_i("S2F16 full success round trip: SReceiveData fully consumed after the restore+re-parse",
                     g20.WireCodec.SReceiveData->Count, 0);
         }
+    }
+
+    // -----------------------------------------------------------------------
+    // S2F24_TraceInitializeAcknowledgeSub (golden uHGemClass.cpp:810-990,
+    // UN-GATED W906-uHGemClass-TraceUnlock 20260728) -- needs a real THGem
+    // (dereferences HGemPtr->bTraceData/iTRID/DSPER/iTOTSMP/iREPGSZ/
+    // iTOTSMP_Count/TraceData/TraceDataResponseTask directly), same
+    // "construct a real THGem" pattern as the S2F16 section above.
+    // -----------------------------------------------------------------------
+    printf("\n-- S2F24_TraceInitializeAcknowledgeSub (golden :810-990) --\n");
+    {
+        // Format-error path: empty SReceiveData -> the outer
+        // DataItemIn(5,LIST_TYPE,NULL) fails immediately (BEFORE touching
+        // HGemPtr) -> -1.
+        THGem realThgem;
+        HTGem g(&realThgem);
+        check_i("S2F24Sub with empty SReceiveData -> -1 (format error, HGemPtr untouched)",
+                g.S2F24_TraceInitializeAcknowledgeSub(), -1);
+    }
+    {
+        // No free trace slot: every one of the 10 slots is already active
+        // (bTraceData[i]=true) with a TRID that will NOT match the incoming
+        // one -> golden's own new-vs-reuse search both fail -> iIndex stays
+        // -1 -> return 2. Minimal seed: just the outer <L,5> header + a TRID
+        // that matches none of the pre-filled slots (Sub() returns 2 before
+        // ever reading DSPER/TOTSMP/REPGSZ/SVID-list).
+        THGem realThgem;
+        HTGem g(&realThgem);
+        for (int i = 0; i < 10; i++)
+        {
+            realThgem.bTraceData[i] = true;
+            realThgem.iTRID[i] = AnsiString(900 + i);
+        }
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(5));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString("1"));   // TRID="1", matches none of "900".."909"
+        check_i("S2F24Sub with all 10 trace slots active (no match) -> 2 (no free slot)",
+                g.S2F24_TraceInitializeAcknowledgeSub(), 2);
+    }
+    {
+        // TOTSMP peek len!=1 -> return 1 (GOLDEN QUIRK -- NOT a format
+        // error code; distinct from REPGSZ's own len!=1 case below).
+        // Seed: <L,5> + TRID + DSPER(6 bytes, valid) + a TOTSMP header whose
+        // OWN peeked len is 2 (not 1) -- Sub() returns 1 right after the
+        // peek, WITHOUT ever consuming that item (peek-only).
+        THGem realThgem;
+        HTGem g(&realThgem);
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(5));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString("1"));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(6));
+        g.WireCodec.SReceiveData->Add(AnsiString("010203"));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.UINT_2_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(2));   // TOTSMP header: len=2, not 1
+        check_i("S2F24Sub with TOTSMP peek len!=1 -> 1 (golden quirk, NOT a format error)",
+                g.S2F24_TraceInitializeAcknowledgeSub(), 1);
+    }
+    {
+        // REPGSZ peek len!=1 -> return -1 (structurally identical check to
+        // TOTSMP's own above, but golden's OWN asymmetric return code --
+        // preserved verbatim, see this method's own uHGemClass.cpp comment).
+        THGem realThgem;
+        HTGem g(&realThgem);
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(5));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString("1"));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(6));
+        g.WireCodec.SReceiveData->Add(AnsiString("010203"));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.UINT_2_TYPE));   // TOTSMP: len=1, value=20 (consumed for real)
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString(20));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.UINT_2_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(2));   // REPGSZ header: len=2, not 1
+        check_i("S2F24Sub with REPGSZ peek len!=1 -> -1 (golden's OWN asymmetry vs TOTSMP's ==1 above)",
+                g.S2F24_TraceInitializeAcknowledgeSub(), -1);
+    }
+    {
+        // Full success round trip via the LIST_TYPE SVID-list branch: 2
+        // registered SVIDs ("10","11") -> return 0. Verifies DSPER/iTOTSMP
+        // (post-division)/iREPGSZ/bTraceData/iTOTSMP_Count/
+        // TraceDataResponseTask/TraceData contents -- exact wire-frame-
+        // derived state, not just the return code.
+        THGem realThgem;
+        HTGem g(&realThgem);
+        realThgem.SvEcReg.SV_ID->Add(AnsiString(10));
+        realThgem.SvEcReg.SV_ID->Add(AnsiString(11));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));     // outer <L,5>
+        g.WireCodec.SReceiveData->Add(AnsiString(5));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));    // TRID="1"
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString("1"));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));    // DSPER="010203" (hh=1,mm=2,ss=3)
+        g.WireCodec.SReceiveData->Add(AnsiString(6));
+        g.WireCodec.SReceiveData->Add(AnsiString("010203"));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.UINT_2_TYPE));   // TOTSMP=20
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString(20));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.UINT_2_TYPE));   // REPGSZ=99 (overwritten below by the SVID-list len)
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString(99));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));     // SVID sub-list <L,2>
+        g.WireCodec.SReceiveData->Add(AnsiString(2));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.UINT_2_TYPE));   // SVID#1=10
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString(10));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.UINT_2_TYPE));   // SVID#2=11
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString(11));
+        int ret = g.S2F24_TraceInitializeAcknowledgeSub();
+        check_i("S2F24Sub full success (LIST_TYPE SVID branch) -> 0", ret, 0);
+        check_i("S2F24Sub success: fully consumes its seeded burst",
+                g.WireCodec.SReceiveData->Count, 0);
+        check_i("S2F24Sub success: DSPER[0] == hh*3600000+mm*60000+ss*1000 (1*3600000+2*60000+3*1000)",
+                (int)realThgem.DSPER[0], 3723000);
+        check_i("S2F24Sub success: iREPGSZ[0] == 2 (overwritten by the SVID sub-list's own <L,2>)",
+                (int)realThgem.iREPGSZ[0], 2);
+        check_i("S2F24Sub success: iTOTSMP[0] == 20/2 == 10 (post-division)",
+                (int)realThgem.iTOTSMP[0], 10);
+        check_b("S2F24Sub success: bTraceData[0] == true", realThgem.bTraceData[0], true);
+        check_i("S2F24Sub success: iTOTSMP_Count[0] == 1", (int)realThgem.iTOTSMP_Count[0], 1);
+        check_i("S2F24Sub success: TraceDataResponseTask[0] == 1", realThgem.TraceDataResponseTask[0], 1);
+        check_i("S2F24Sub success: TraceData[0]->Count == 2 (both SVIDs valid)",
+                realThgem.TraceData[0]->Count, 2);
+        check_s("S2F24Sub success: TraceData[0]->Strings[0] == \"10\"",
+                realThgem.TraceData[0]->GetString(0).str(), "10");
+        check_s("S2F24Sub success: TraceData[0]->Strings[1] == \"11\"",
+                realThgem.TraceData[0]->GetString(1).str(), "11");
+    }
+    {
+        // Invalid SVID path: SAME shape as the success case above, but SV_ID
+        // is left EMPTY (neither "10" nor "11" registered) -> IsValidSVID
+        // false for both -> bSVIDError -> return 4 BEFORE the trailing
+        // bTraceData/iTOTSMP_Count/TraceDataResponseTask block ever runs
+        // (golden's own early `if(bSVIDError==true) return 4;`, ahead of
+        // that block) -- so bTraceData[idx] stays FALSE (ctor default,
+        // never flipped true) and iTOTSMP[idx] stays UN-divided (still 20).
+        THGem realThgem;
+        HTGem g(&realThgem);
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(5));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString("1"));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(6));
+        g.WireCodec.SReceiveData->Add(AnsiString("010203"));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.UINT_2_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString(20));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.UINT_2_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString(99));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(2));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.UINT_2_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString(10));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.UINT_2_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString(11));
+        int ret = g.S2F24_TraceInitializeAcknowledgeSub();
+        check_i("S2F24Sub with 2 unregistered SVIDs -> 4 (bSVIDError)", ret, 4);
+        check_i("S2F24Sub invalid-SVID: TraceData[0]->Count == 0 (neither SVID added)",
+                realThgem.TraceData[0]->Count, 0);
+        check_b("S2F24Sub invalid-SVID: bTraceData[0] stays false (return 4 short-circuits BEFORE this assignment)",
+                realThgem.bTraceData[0], false);
+        check_i("S2F24Sub invalid-SVID: iTOTSMP[0] stays 20, UN-divided (same short-circuit)",
+                (int)realThgem.iTOTSMP[0], 20);
+    }
+    {
+        // UINT_4_TYPE SVID-array branch (golden's OTHER SVID-list encoding,
+        // :937-964) -- same success shape as the LIST_TYPE case above, just
+        // a different wire Type for the SVID sub-list itself. Also the
+        // GOLDEN BUG's own exercise path (P is `new`'d and, on this SUCCESS
+        // path, never `delete[]`d -- see this method's own uHGemClass.cpp
+        // comment; not independently observable under this harness, no ASan
+        // available, but the path is exercised end to end without crashing).
+        THGem realThgem;
+        HTGem g(&realThgem);
+        realThgem.SvEcReg.SV_ID->Add(AnsiString(20));
+        realThgem.SvEcReg.SV_ID->Add(AnsiString(21));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.LIST_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(5));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString("2"));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(6));
+        g.WireCodec.SReceiveData->Add(AnsiString("040506"));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.UINT_2_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString(30));
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.UINT_2_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString(99));
+        // SVID sub-list encoded as ONE UINT_4_TYPE item of len=2 (2 values),
+        // NOT a LIST_TYPE header -- golden's `else if(Type==HType.UINT_4_TYPE)`
+        // branch reads BOTH SVIDs directly out of this single item's own
+        // `len` (item count), no nested per-SVID Type/len tokens.
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.UINT_4_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(2));
+        g.WireCodec.SReceiveData->Add(AnsiString(20));
+        g.WireCodec.SReceiveData->Add(AnsiString(21));
+        int ret = g.S2F24_TraceInitializeAcknowledgeSub();
+        check_i("S2F24Sub full success (UINT_4_TYPE SVID branch) -> 0", ret, 0);
+        // Fresh THGem (all bTraceData[] false) -> the "find first free slot"
+        // loop picks index 0 (same as every other fresh-instance case above).
+        check_i("S2F24Sub UINT_4_TYPE branch: iREPGSZ[0] == 2", (int)realThgem.iREPGSZ[0], 2);
+        check_i("S2F24Sub UINT_4_TYPE branch: TraceData[0]->Count == 2 (both SVIDs valid)",
+                realThgem.TraceData[0]->Count, 2);
+    }
+
+    // -----------------------------------------------------------------------
+    // ParseSECSDateTimeString (uHGemClass.h/.cpp, W906-uHGemClass-TraceUnlock
+    // 20260728) -- pure golden SECSGEM/uHGemClass.cpp:1095-1216 decode logic,
+    // zero OS side effects. Every length branch uses golden's OWN inline
+    // comment example string verbatim.
+    // -----------------------------------------------------------------------
+    printf("\n-- ParseSECSDateTimeString (golden :1095-1216, pure extraction) --\n");
+    {
+        SECSDateTimeFields f;
+        bool bRangeError, bApplyClock;
+
+        // len==12: "030601134700" (golden :1111)
+        check_b("len=12 \"030601134700\" -> structurally valid", ParseSECSDateTimeString("030601134700", 12, f, bRangeError, bApplyClock), true);
+        check_i("len=12: year==2003 (2-digit + 2000)", f.year, 2003);
+        check_i("len=12: month==6", f.month, 6);
+        check_i("len=12: day==1", f.day, 1);
+        check_i("len=12: hour==13", f.hour, 13);
+        check_i("len=12: min==47", f.min, 47);
+        check_i("len=12: sec==0", f.sec, 0);
+        check_i("len=12: hundredths==0 (format has none)", f.hundredths, 0);
+        check_b("len=12: bRangeError==false", bRangeError, false);
+        check_b("len=12: bApplyClock==true (valid calendar date + in-range fields)", bApplyClock, true);
+
+        // len==14: "20030602134700" (golden :1122)
+        check_b("len=14 \"20030602134700\" -> structurally valid", ParseSECSDateTimeString("20030602134700", 14, f, bRangeError, bApplyClock), true);
+        check_i("len=14: year==2003 (4-digit)", f.year, 2003);
+        check_i("len=14: day==2", f.day, 2);
+        check_b("len=14: bApplyClock==true", bApplyClock, true);
+
+        // len==16: "2003060313401000" (golden :1133)
+        check_b("len=16 \"2003060313401000\" -> structurally valid", ParseSECSDateTimeString("2003060313401000", 16, f, bRangeError, bApplyClock), true);
+        check_i("len=16: min==40", f.min, 40);
+        check_i("len=16: sec==10", f.sec, 10);
+        check_i("len=16: hundredths==0", f.hundredths, 0);
+        check_b("len=16: bApplyClock==true", bApplyClock, true);
+
+        // len==19: "2003-06-04T13:01:01" (golden :1144)
+        check_b("len=19 \"2003-06-04T13:01:01\" -> structurally valid", ParseSECSDateTimeString("2003-06-04T13:01:01", 19, f, bRangeError, bApplyClock), true);
+        check_i("len=19: day==4", f.day, 4);
+        check_i("len=19: min==1", f.min, 1);
+        check_i("len=19: sec==1", f.sec, 1);
+        check_i("len=19: hundredths==0 (explicit t.ti_hund=0 in golden)", f.hundredths, 0);
+        check_b("len=19: bApplyClock==true", bApplyClock, true);
+
+        // len==21: "2003-06-05T13:01:01.2" (golden :1155) -- 1-digit tenths*10
+        check_b("len=21 \"2003-06-05T13:01:01.2\" -> structurally valid", ParseSECSDateTimeString("2003-06-05T13:01:01.2", 21, f, bRangeError, bApplyClock), true);
+        check_i("len=21: day==5", f.day, 5);
+        check_i("len=21: hundredths==20 (1-digit tenths '2'*10)", f.hundredths, 20);
+        check_b("len=21: bApplyClock==true", bApplyClock, true);
+
+        // len==22: "2003-06-06T13:01:01.25" (golden :1166) -- 2-digit hundredths
+        check_b("len=22 \"2003-06-06T13:01:01.25\" -> structurally valid", ParseSECSDateTimeString("2003-06-06T13:01:01.25", 22, f, bRangeError, bApplyClock), true);
+        check_i("len=22: day==6", f.day, 6);
+        check_i("len=22: hundredths==25 (2-digit '25')", f.hundredths, 25);
+        check_b("len=22: bApplyClock==true", bApplyClock, true);
+
+        // Structural failure: len matches none of the 6 -> false, out untouched.
+        check_b("len=10 (unsupported length) -> false (golden's own Error=true else-branch)",
+                ParseSECSDateTimeString("0306011347", 10, f, bRangeError, bApplyClock), false);
+
+        // Range-check failure: hour=24 (>23) -- calendar date itself IS valid
+        // (2003-06-01), so IsCorrectDateFormat passes, but the hour range
+        // check flips bRangeError true -> bApplyClock stays false.
+        check_b("len=12 hour=24 (out of range) -> still structurally valid",
+                ParseSECSDateTimeString("030601244700", 12, f, bRangeError, bApplyClock), true);
+        check_b("len=12 hour=24: bRangeError==true", bRangeError, true);
+        check_b("len=12 hour=24: bApplyClock==false (no clock write)", bApplyClock, false);
+
+        // GOLDEN QUIRK: calendar-invalid date (month=13) -- IsCorrectDateFormat
+        // fails, so golden's own Error stays at its PRIOR value (false) --
+        // bRangeError==false (NOT true) even though the date is nonsense, and
+        // bApplyClock==false (no clock write happens either). See
+        // ParseSECSDateTimeString's own header comment (uHGemClass.h) for the
+        // full writeup of why this is NOT "fixed" into bRangeError==true here.
+        check_b("len=12 month=13 (calendar-invalid) -> still structurally valid",
+                ParseSECSDateTimeString("031301010000", 12, f, bRangeError, bApplyClock), true);
+        check_b("len=12 month=13: bRangeError==false (GOLDEN QUIRK -- IsCorrectDateFormat failure is NOT surfaced as Error)",
+                bRangeError, false);
+        check_b("len=12 month=13: bApplyClock==false (no clock write, despite bRangeError==false)",
+                bApplyClock, false);
+    }
+
+    // -----------------------------------------------------------------------
+    // S2F32_DateAndTimeAcknowledge (golden uHGemClass.cpp:1095-1216, UN-GATED
+    // W906-uHGemClass-TraceUnlock 20260728) -- wire-level integration on top
+    // of ParseSECSDateTimeString + SetSystemDateTimeHook. Every case resets
+    // SetSystemDateTimeHook back to an empty std::function afterward (same
+    // save/restore-global discipline this file already uses for
+    // CUSTOMER_CODE) -- CRITICAL here: this hook must NEVER leak a wired
+    // lambda into a LATER, unrelated test in this same process.
+    // -----------------------------------------------------------------------
+    printf("\n-- S2F32_DateAndTimeAcknowledge (golden :1095-1216) --\n");
+    {
+        // Format-error path: peeked Type is NOT ASCII_TYPE -> Error=true ->
+        // LocalAcknowledge(2,32,1). Hook must NOT fire.
+        HTGem g;
+        bool hookFired = false;
+        SetSystemDateTimeHook = [&hookFired](int,int,int,int,int,int,int){ hookFired = true; };
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.UINT_2_TYPE));   // NOT ASCII_TYPE
+        g.WireCodec.SReceiveData->Add(AnsiString(1));
+        g.WireCodec.SReceiveData->Add(AnsiString(5));
+        g.S2F32_DateAndTimeAcknowledge();
+        check_i("S2F32 with non-ASCII peeked item -> LocalAcknowledge(2,32,1): MessageID_S==2",
+                g.WireCodec.Local.MessageID_S, 2);
+        check_i("S2F32 with non-ASCII peeked item -> LocalAcknowledge(2,32,1): MessageID_F==32",
+                g.WireCodec.Local.MessageID_F, 32);
+        check_b("S2F32 format-error path: hook NOT fired", hookFired, false);
+        SetSystemDateTimeHook = std::function<void(int,int,int,int,int,int,int)>();   // reset -- MUST NOT leak into later tests
+    }
+    {
+        // Success path: well-formed ASCII date/time string (len=12,
+        // "030601134700") -> Error=false -> LocalAcknowledge(2,32,0), AND the
+        // hook fires with the EXACT decoded fields (proves the wire-to-parse-
+        // to-hook plumbing end to end, not just the ack code).
+        HTGem g;
+        int gotYear=0, gotMonth=0, gotDay=0, gotHour=0, gotMin=0, gotSec=0, gotHundredths=-1;
+        bool hookFired = false;
+        SetSystemDateTimeHook = [&](int y,int mo,int d,int h,int mi,int s,int hu){
+            hookFired=true; gotYear=y; gotMonth=mo; gotDay=d; gotHour=h; gotMin=mi; gotSec=s; gotHundredths=hu;
+        };
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(12));
+        g.WireCodec.SReceiveData->Add(AnsiString("030601134700"));
+        g.S2F32_DateAndTimeAcknowledge();
+        check_i("S2F32 success path -> LocalAcknowledge(2,32,0): MessageID_S==2",
+                g.WireCodec.Local.MessageID_S, 2);
+        check_i("S2F32 success path -> LocalAcknowledge(2,32,0): MessageID_F==32",
+                g.WireCodec.Local.MessageID_F, 32);
+        check_b("S2F32 success path: hook DID fire", hookFired, true);
+        check_i("S2F32 success path: hook received year==2003", gotYear, 2003);
+        check_i("S2F32 success path: hook received month==6", gotMonth, 6);
+        check_i("S2F32 success path: hook received day==1", gotDay, 1);
+        check_i("S2F32 success path: hook received hour==13", gotHour, 13);
+        check_i("S2F32 success path: hook received min==47", gotMin, 47);
+        check_i("S2F32 success path: hook received sec==0", gotSec, 0);
+        check_i("S2F32 success path: hook received hundredths==0", gotHundredths, 0);
+        SetSystemDateTimeHook = std::function<void(int,int,int,int,int,int,int)>();   // reset -- MUST NOT leak into later tests
+    }
+    {
+        // GOLDEN QUIRK end to end: calendar-invalid date (month=13) still
+        // ACKs 0 (accepted) -- but the hook must NOT fire (no real clock
+        // write happens for this input, per ParseSECSDateTimeString's own
+        // documented quirk).
+        HTGem g;
+        bool hookFired = false;
+        SetSystemDateTimeHook = [&hookFired](int,int,int,int,int,int,int){ hookFired = true; };
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(12));
+        g.WireCodec.SReceiveData->Add(AnsiString("031301010000"));   // month=13
+        g.S2F32_DateAndTimeAcknowledge();
+        check_i("S2F32 GOLDEN QUIRK (month=13): still LocalAcknowledge(2,32,0) (MessageID_F==32)",
+                g.WireCodec.Local.MessageID_F, 32);
+        // The ack byte itself is the LAST byte DataItemOut(1,BINARY_TYPE,&C)
+        // wrote verbatim into LocalBuffer (see SecsWireCodec.cpp's own
+        // BINARY_TYPE branch -- raw bytes, no further encoding for len=1).
+        check_i("S2F32 GOLDEN QUIRK (month=13): still ACK code 0 (last LocalBuffer byte)",
+                (int)g.WireCodec.LocalBuffer[g.WireCodec.LocalLength_4 - 1], 0);
+        check_b("S2F32 GOLDEN QUIRK (month=13): hook NOT fired despite ACK==0 (no real clock write)",
+                hookFired, false);
+        SetSystemDateTimeHook = std::function<void(int,int,int,int,int,int,int)>();   // reset -- MUST NOT leak into later tests
+    }
+    {
+        // Range-check failure end to end: hour=24 -> Error=true ->
+        // LocalAcknowledge(2,32,1), hook NOT fired.
+        HTGem g;
+        bool hookFired = false;
+        SetSystemDateTimeHook = [&hookFired](int,int,int,int,int,int,int){ hookFired = true; };
+        g.WireCodec.SReceiveData->Add(AnsiString((int)HType.ASCII_TYPE));
+        g.WireCodec.SReceiveData->Add(AnsiString(12));
+        g.WireCodec.SReceiveData->Add(AnsiString("030601244700"));   // hour=24
+        g.S2F32_DateAndTimeAcknowledge();
+        check_i("S2F32 range-check failure (hour=24): LocalAcknowledge(2,32,1) -> last LocalBuffer byte==1",
+                (int)g.WireCodec.LocalBuffer[g.WireCodec.LocalLength_4 - 1], 1);
+        check_b("S2F32 range-check failure (hour=24): hook NOT fired", hookFired, false);
+        SetSystemDateTimeHook = std::function<void(int,int,int,int,int,int,int)>();   // reset -- MUST NOT leak into later tests
     }
 
     // -----------------------------------------------------------------------
