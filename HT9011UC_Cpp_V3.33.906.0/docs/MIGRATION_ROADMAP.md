@@ -5,7 +5,7 @@
 ## 關鍵策略（keystone decisions）
 1. **VCL-compat 層（最關鍵）**：在 `vclcompat/`（附加目錄）自製「只實作專案實際用到的 API 子集」的相容層——`AnsiString`（**1-based** `Pos`/`SubString`/`Length`/`UpperCase`/`Trim`/`sprintf`/operator+ 等，語意完全照 BCB6）、`TStringList`、`TDateTime`、SysUtils 風格自由函式（`IntToStr`/`StrToInt`/`Format`/`FileExists`/`Now`/`FormatDateTime`…），以及巨集中和（`__fastcall`/`__closure`→空、`__property`→getter/setter 指引、`PACKAGE`/`DELPHICLASS`→空）。**好處**：大量檔案可忠實、保名、低風險地機械翻譯（避開 ~1,910 個 1-based off-by-one 改寫），日後可選擇性重構成 idiomatic std。翻譯檔以 `#include "vclcompat/vcl_compat.h"` 取代 `<vcl.h>`。
 2. **檔案鏡射**：翻譯出的 `.cpp/.h` 鏡射 BCB6 相對路徑+檔名（見 KNOWLEDGE）；附加檔（`vclcompat/`、`CMakeLists.txt`、`tests/`、`docs/`）才用新結構；`.bpr`→CMake。
-3. **建置/驗證**：CMake 鏡射樹 + MinGW g++（本機無 MSVC；最終 MSVC build 在開發機）。每模組有 golden oracle 就對拍（MD5 向量、真實 config/log 檔、手算公式值）；無 Borland 故不對原 binary live diff（已知限制）。
+3. **建置/驗證**：CMake 鏡射樹 + MinGW g++。每模組有 golden oracle 就對拍（MD5 向量、真實 config/log 檔、手算公式值）；無 Borland 故不對原 binary live diff（已知限制）。**⚠️ 2026-07-28 實測更正**：本條原記載「本機無 MSVC；最終 MSVC build 在開發機」**已過時**——本機其實**有** MSVC：VS 2022 BuildTools 17.14.3（`cl.exe` at MSVC `14.44.35207` 與 `14.42.34433`）+ VS 2019 BuildTools 16.11.47（MSVC `14.29.30133`），Windows SDK `10.0.18362.0`/`19041`/`20348`/`22000`/`22621`/`26100` 皆在。**但 MFC 元件未安裝**（`atlmfc\` 僅剩 `lib\spectre\arm64` 空殼，無 `include\`、無 `afxwin.h`、無 `mfc*.lib`），需由使用者跑 VS Installer 加裝「C++ MFC for latest v143 build tools」。此更正對 W7 影響重大：MSVC-targeting 的碼在本機即可編譯驗證，不必盲寫等開發機，唯 MFC-dependent 的部分仍卡元件安裝。
 4. **硬體/UI 接縫**：即時硬體核心保留 native、同程序直呼；硬體與 UI 走抽象基底 + Sim/Real、Stub/真UI（§9 HAL）。**UI 框架（MFC/Qt/Win32）延到 W7 再定**（不擋 W0–W6）。
 5. **節奏**：一波一波、一個模組一個 workflow；每批完成自動 commit + 更新 DEVLOG/KNOWLEDGE/RESUME。這是長期多輪工程。
 

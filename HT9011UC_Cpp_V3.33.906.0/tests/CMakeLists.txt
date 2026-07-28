@@ -1,3 +1,33 @@
+# ===========================================================================
+#  BATCH-SAFETY BOOTSTRAP -- must stay at the TOP of this file
+# ===========================================================================
+# AI(W906-TestBootstrap) 20260728: every test executable in this directory
+# gets tests/test_bootstrap.cpp compiled into it, which disables Windows'
+# modal error dialogs (MSVC Debug-CRT "Debug Assertion Failed!", CRT
+# invalid-parameter, abort(), and the WER "program stopped working" box).
+#
+# WHY: those dialogs BLOCK. A single failing assert under `ctest -jN` stops
+# the whole 95-test run dead, writes nothing to the log while it hangs, and
+# buries the developer's screen in modal boxes. Observed 20260728 on an MSVC
+# Debug build of this suite (hung at 94/95). The WER box also fires on plain
+# crashes under MinGW -- this project has hit both a SegFault and a real
+# STATUS_STACK_OVERFLOW in tests before (DEVLOG 2026-07-27).
+#
+# This does NOT hide failures: a failing test still fails, but now it fails
+# fast and loud on stderr where ctest captures it, instead of hanging.
+#
+# An INTERFACE library (not a static one) so the TU is COMPILED INTO each
+# executable -- an object containing only a static initializer can otherwise
+# be dropped by the linker when nothing references it.
+#
+# `link_libraries()` is directory-scoped and applies to every target created
+# BELOW it, which is why this block must remain first.
+add_library(ht9045_test_bootstrap INTERFACE)
+target_sources(ht9045_test_bootstrap
+    INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/test_bootstrap.cpp
+)
+link_libraries(ht9045_test_bootstrap)
+
 add_executable(test_ContactForce
     test_ContactForce.cpp
 )
@@ -2226,3 +2256,24 @@ add_executable(test_MyProductionRecord
 )
 target_link_libraries(test_MyProductionRecord PRIVATE ht9045_globals ht9045_public vclcompat)
 add_test(NAME MyProductionRecord COMMAND test_MyProductionRecord)
+
+# ===========================================================================
+#  GLOBAL TEST TIMEOUT -- must stay at the BOTTOM of this file
+# ===========================================================================
+# AI(W906-TestBootstrap) 20260728: second line of defence behind
+# tests/test_bootstrap.cpp (see the block at the top of this file). The
+# bootstrap stops the KNOWN blocking paths (modal CRT/WER dialogs); this
+# catches everything else that can wedge a batch run -- an infinite loop, a
+# state machine that never converges, a socket test waiting on a peer that
+# never connects, or any future dialog path the bootstrap does not cover.
+#
+# Without it, `ctest` has NO default timeout for these tests and one hung
+# executable blocks the suite indefinitely (exactly what happened 20260728).
+#
+# 600s is deliberately generous: the slowest tests here legitimately take
+# ~40s under MSVC and ~22s under MinGW, and the whole suite runs ~200-220s,
+# so this only ever trips on something genuinely stuck, never on a slow-but-
+# healthy test. Raise it for a specific test with set_tests_properties()
+# AFTER this block if one ever legitimately needs longer.
+get_property(_ht9045_all_tests DIRECTORY PROPERTY TESTS)
+set_tests_properties(${_ht9045_all_tests} PROPERTIES TIMEOUT 600)

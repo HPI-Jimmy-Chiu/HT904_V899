@@ -55,7 +55,8 @@
 - 全域：`PROD_INFO_ST Prod`(cprod.h)；`iArmTask` 系列。
 
 ## 建置 / 工具（本機）
-- **g++ 6.3.0 (MinGW) + CMake 4.0.2；無 MSVC/clang**。翻譯成**可攜標準 C++**（建議 C++14/17），用 CMake + g++ 編譯驗證可攜性；最終 Visual C++/MSVC build 在開發機驗。
+- **g++ 6.3.0 (MinGW) + CMake 4.0.2**。翻譯成**可攜標準 C++**（建議 C++14/17），用 CMake + g++ 編譯驗證可攜性。
+- **⚠️ 2026-07-28 實測更正**：本節原記載「無 MSVC/clang……最終 MSVC build 在開發機驗」**已過時**。本機**有** MSVC：VS 2022 BuildTools 17.14.3（`cl.exe` at MSVC `14.44.35207`/`14.42.34433`）+ VS 2019 BuildTools 16.11.47（`14.29.30133`），Windows SDK `10.0.18362`～`10.0.26100`。實測可用 MSVC configure+build 全樹並跑完 95 個 ctest。**但 MFC 元件未安裝**（`atlmfc\` 只剩 `lib\spectre\arm64` 空殼，無 `include\`／`afxwin.h`／`mfc*.lib`），需跑 VS Installer 加「C++ MFC for latest v143 build tools」。→ MSVC-targeting 的碼在本機即可驗證，但**跑 MSVC 測試前務必先讀 Gotcha 9**。
 - 純邏輯/計算 class 可獨立 CMake target + g++ 編譯 + 簡單測試框架（或自寫 assert main）驗證，無需 VCL/硬體。
 
 ## Gotcha（踩過/要注意）
@@ -67,6 +68,8 @@
 6. **workflow/session 中斷復原（2026-07-13 實例）**：一整批已完成、已 CMake 接上、各自 build 目錄驗證過的翻譯工作（W5-Final：KYECFTP+Automation 剩餘+TesterTCP_Socket+BarCode 收尾+SECSGEM 前置切片，2026-07-11 執行），因當時 session/workflow 中斷，跨戰線合併複驗+DEVLOG/ROADMAP 記錄+commit 三步從未執行，工作樹帶著 2 天未提交狀態。接續時**不可信任何殘留的 agent 文字或 cached 摘要**，必須：(1) `git status`/`git diff --stat` 看實際未提交變更，(2) 對照檔案時間戳判斷是同一批還是不同批工作，(3) 若有舊 build_* 目錄，讀 `Testing/Temporary/LastTest.log` 當線索但不當定論，(4) 一定要重跑一次全新 from-scratch build+ctest 拿到當下的 ground truth，才能決定是否可以安心 commit。
 7. **AI 修改註解標籤別混用 V899/V906（2026-07-13 踩過）**：CLAUDE.md 的「AI 修改註解格式」(`//AI(AgentName) YYYYMMDD:`，AgentName 預設 `ht9045-v899`) 是**專屬 V899 BCB6 直改檔案**的慣例；V906 這邊翻譯波次一律用「波次代號」當標籤(如 `AI(W5-Final-Integrate)`、`AI(W906-ServerSocket)`)，不是 agent 名稱。曾有翻譯 agent 把整批 V906 新註解誤標成 `AI(ht9045-v899)`(59+2 處)，事後才發現改回正確波次標籤——**指派翻譯 agent 時若沒特別強調，容易把兩套慣例搞混，之後每次交派新翻譯任務前應在 prompt 裡明講這是 V906、用波次代號、不是 V899 的 AgentName 格式**。
 8. **背景 thread 物件的跨執行緒刪除，deferred-delete 不等於安全（2026-07-13 踩過）**：`TServerSocket`（vclcompat 新 shim）第一版把每條連線的「不在自己執行緒上自我刪除」這個 hazard 處理對了（deferred-delete 到`~TServerSocket()`才真的`delete`），但漏了另一個獨立問題：`delete`之前並沒有等待該連線自己的背景 reader thread 真正結束(`recv()`卡住的執行緒)，導致刪除當下該執行緒仍可能在跑、之後 dereference 已釋放記憶體。**這是兩個不同的 hazard，各自要分開處理**：(a) 同執行緒自我刪除→deferred-delete 解；(b) 跨執行緒刪除時背景 thread 是否已經真正收工→一定要顯式`join`(`WaitForSingleObject`)，deferred-delete 完全沒處理到這塊。任何新 shim 只要有背景 thread 寫入某個物件、而該物件可能被別的執行緒(含解構子)刪除，都要同時檢查這兩點。
+
+9. **測試崩潰會彈 modal 對話框、卡死整批 ctest 並洗版使用者螢幕（2026-07-28 踩過，已加防護）**：一個 agent 用 **MSVC Debug CRT** configure+build 全樹後跑 `ctest -j4`，跑到 **94/95 就無限停住**——因為 Debug CRT 的 `assert()`／`_CrtDbg` 失敗會彈出 modal「Debug Assertion Failed!」對話框等人按確定。**致命之處在於它不寫 log**：ctest log 看起來只是「卡在最後一支」，完全看不出是在等互動，而使用者螢幕同時被彈窗洗版。這不是 MSVC 專屬——MinGW 下的硬崩潰（access violation、`STATUS_STACK_OVERFLOW`，本專案兩種都真的發生過，見 DEVLOG 2026-07-27）會彈 Windows 錯誤回報視窗，同樣會 block。**已加兩道防護（勿移除）**：(a) `tests/test_bootstrap.cpp`——透過 `tests/CMakeLists.txt` 最上方的 `ht9045_test_bootstrap` INTERFACE library 編進**每一個** test 執行檔，static init 階段呼叫 `SetErrorMode(SEM_FAILCRITICALERRORS|SEM_NOGPFAULTERRORBOX|SEM_NOOPENFILEERRORBOX)`，MSVC 另加 `_CrtSetReportMode/_CrtSetReportFile`(→stderr)、`_set_abort_behavior(0,...)`、`_set_invalid_parameter_handler`；(b) 同檔最下方對全部 95 個 test 設 `TIMEOUT 600`。**刻意用 INTERFACE library 而非 static library**——只含 static initializer 的 object 檔會被 linker 當成沒人引用而丟掉。防護**不會遮蔽失敗**：測試照樣失敗，只是改成立刻在 stderr 大聲失敗（實測 null-deref 立即 exit 139、零彈窗、沒吃到 timeout），而不是無聲阻塞。**衍生紀律**：任何在背景／平行 agent 裡執行的程式，都不可以有能彈 modal 視窗的路徑——那會綁架使用者的機器，而且從 log 上完全看不出原因。
 
 ## 接縫（HAL）與 64-bit 跨位元
 - 即時硬體（運動/IO/互鎖/ATC）保留 native C++（既有已驗證 wrapper），翻譯後的 C++ **同程序直接呼叫**（無 P/Invoke、無 managed 邊界）。「interface 切割」＝抽象基底 + Sim/Real 子類。
