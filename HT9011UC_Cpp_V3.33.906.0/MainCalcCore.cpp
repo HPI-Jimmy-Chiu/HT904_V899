@@ -1,5 +1,5 @@
 // MainCalcCore.cpp
-// Standard C++ translation of 11 pure calc-core functions from BCB6 main.cpp
+// Standard C++ translation of 15 pure calc-core functions from BCB6 main.cpp
 // (V3.33.906.0_20260618) -- CALC CORE ONLY.
 // Source of truth: HT9011UC_Code_V3.33.906.0_20260618/main.cpp
 //
@@ -9,6 +9,15 @@
 //
 // AI(ht9045-v899) 20260723: batch 2 appended below (5 more functions) -- see MainCalcCore.h's
 // updated banner for the full rationale.
+//
+// AI(W906-maincalccore) 20260727: batch 3 appended below (3 more functions:
+// ComputeSMCDLLVersionMismatchCode / ComputeATPDLLVersionMismatch / ComputeJamRateRecordStrings)
+// -- see MainCalcCore.h's updated banner for the full rationale and OUT-OF-SCOPE list.
+//
+// AI(W906-maincalccore) 20260728: batch 4 appended below (1 more function:
+// ComputeSetESDTriTempCommand) -- see MainCalcCore.h's updated banner for the TriTemp_Ch/
+// ESD_Temperature header archaeology and the 2 rejected candidates (Tri_Temp_Set_Site,
+// Tri_Temp_ChangeATCSiteUse -- both write shared extern globals and/or VCL, not pure).
 //
 // Toolchain: MinGW g++ 6.3+, C++14 or later.
 
@@ -382,4 +391,146 @@ bool ComputeCheckARTSetupFile(int iUSE_AUTO_RETEST,
         }
     }
     return false;
+}
+
+// ---------------------------------------------------------------------------
+// ComputeSMCDLLVersionMismatchCode
+//   BCB6 source: main.cpp:303-318 (decision tail of free function DoCheckSMCDLLVersion())
+// ---------------------------------------------------------------------------
+int ComputeSMCDLLVersionMismatchCode(const AnsiString &strSMCVersion0,
+                                      const AnsiString &strSMCVersion1)
+{
+    // BCB6 :303-318  CSMCDLLRevision -- MachineType.h:111 #define string literal, already
+    // visible via this file's own MachineType.h include (see header comment).
+    if (strSMCVersion0 != CSMCDLLRevision && strSMCVersion1 != CSMCDLLRevision)
+    {
+        return 3;
+    }
+    else if (strSMCVersion0 != CSMCDLLRevision)
+    {
+        return 1;
+    }
+    else if (strSMCVersion1 != CSMCDLLRevision)
+    {
+        return 2;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// ComputeATPDLLVersionMismatch
+//   BCB6 source: main.cpp:348-355 (decision tail of free function DoCheckATPDLLVersion())
+// ---------------------------------------------------------------------------
+int ComputeATPDLLVersionMismatch(const AnsiString &sATPDLLVersion)
+{
+    // BCB6 :348-355  ATPDLLVersion -- MachineType.h:113 #define string literal, already
+    // visible via this file's own MachineType.h include (see header comment).
+    if (sATPDLLVersion != ATPDLLVersion)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;                                                             //OK
+    }
+}
+
+// ---------------------------------------------------------------------------
+// ComputeJamRateRecordStrings
+//   PARTIAL extract of TfMain::RecordJamRateByTime() -- BCB6 source: main.cpp:32047-32067.
+//   See header comment for the full OUT-OF-SCOPE list (clock-gate/counter-resets/RecordProcess)
+//   and the two preserved golden quirks (fixed "MTBF 1/" literal; MTBF-labelled-but-actually-a-
+//   rate formula).
+// ---------------------------------------------------------------------------
+void ComputeJamRateRecordStrings(int iRecordJamRateByTime_JamCount,
+                                  int iRecordJamRateByTime_LoaderCount,
+                                  int iRecordJamRateIntervalTime,
+                                  AnsiString &sMTBFRecord,
+                                  AnsiString &sJamRateRecord)
+{
+    // BCB6 :32047-32049
+    sMTBFRecord = "";
+    double fH;
+    int iH;
+
+    // BCB6 :32051-32064  GOLDEN QUIRK (see header): the else branch's "MTBF 1/" is a fixed
+    // literal digit, NOT iRecordJamRateByTime_JamCount -- preserved verbatim, not "fixed".
+    if (iRecordJamRateByTime_JamCount == 0)
+    {
+        // BCB6 :32053-32056
+        fH = iRecordJamRateIntervalTime / 60.;
+        iH = (int)(fH * 1000);
+        fH = double(iH) / 1000.;
+        sMTBFRecord = AnsiString("  MTBF 0/") + AnsiString(fH) + AnsiString("hr");
+    }
+    else
+    {
+        // BCB6 :32060-32063  GOLDEN QUIRK (see header): jams-per-hour RATE, not an actual
+        // mean-time-between-failures (hours-per-jam) -- preserved verbatim, not "corrected".
+        fH = iRecordJamRateByTime_JamCount / (iRecordJamRateIntervalTime / 60.);
+        iH = (int)(fH * 1000);
+        fH = double(iH) / 1000.;
+        sMTBFRecord = AnsiString("  MTBF 1/") + AnsiString(fH) + AnsiString("hr");
+    }
+
+    // BCB6 :32066-32067
+    sJamRateRecord = "";
+    sJamRateRecord = AnsiString("[Jam Rate Record] ") +
+                      AnsiString(iRecordJamRateByTime_JamCount) + "/" +
+                      AnsiString(iRecordJamRateByTime_LoaderCount) + sMTBFRecord;
+}
+
+// ---------------------------------------------------------------------------
+// ComputeSetESDTriTempCommand
+//   BCB6 source: main.cpp:34528-34550 (TfMain::SET_ESD_Tri_Temp, Ztex 2023.04.19)
+// ---------------------------------------------------------------------------
+int ComputeSetESDTriTempCommand(int iUSE_NOVX3360,
+                                 int iTriTempMachine,
+                                 double fWorkTemperBase,
+                                 int iTemperature)
+{
+    // BCB6 :34530  Tempture_Hot==1 / Tempture_AmbientHot==3 -- `const int` globals,
+    // cmydef.cpp:2972-2973 (NOT header-only -- see MainCalcCore.h banner). Inlined locally.
+    const int Tempture_Hot = 1;
+    const int Tempture_AmbientHot = 3;
+
+    // BCB6 :34534/34537/34539/34543/34547  ESD_COMMAND enum members, Interface/InterfaceSYS.h
+    // (Ambient=82, Hot=83, Cold=84, SuperHot=88). Inlined locally (see MainCalcCore.h banner).
+    const int ESD_TemperatureAmbient  = 82;
+    const int ESD_TemperatureHot      = 83;
+    const int ESD_TemperatureCold     = 84;
+    const int ESD_TemperatureSuperHot = 88;
+
+    // BCB6 :34530  outer guard -- USE_NOVX3360 compared as `==true` (raw-int idiom, see header)
+    if (iUSE_NOVX3360 == true && iTriTempMachine == 1)
+    {
+        // BCB6 :34532-34540
+        if (iTemperature == Tempture_Hot)
+        {
+            if (fWorkTemperBase >= 40 && fWorkTemperBase <= 130)
+                return ESD_TemperatureHot;
+            else if (fWorkTemperBase > 130)
+                return ESD_TemperatureSuperHot;
+            else if (fWorkTemperBase < 10)
+                return ESD_TemperatureCold;
+            // BCB6 GOLDEN QUIRK: fWorkTemperBase in [10,40) matches none of the 3 branches
+            // above -- golden calls SendCommand_ESD() zero times for this sample. Preserved
+            // verbatim: return the "no command" sentinel, not a guessed nearest command.
+        }
+        // BCB6 :34541-34548  AmbientHot branch AND the catch-all else both send the SAME
+        // ESD_TemperatureAmbient command -- preserved verbatim (not collapsed away as
+        // "redundant", golden itself keeps them as two separate branches).
+        else if (iTemperature == Tempture_AmbientHot)
+        {
+            return ESD_TemperatureAmbient;
+        }
+        else
+        {
+            return ESD_TemperatureAmbient;
+        }
+    }
+    return kNoESDTriTempCommand;
 }

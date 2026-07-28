@@ -3,7 +3,8 @@
 // ComputeCanChangeRealDummy / ComputeSiteMapIsStander / ComputeSiteMapPriority /
 // ComputeCanChangeSite / ComputeCanChangeToSocket / ComputeATCAmbientTemperCheck /
 // ComputeCheckAllMOTHome / ComputeCheckSiteMapState / ComputeCheckOLPErrorHasErr /
-// ComputeCheckARTSetupFile).
+// ComputeCheckARTSetupFile / ComputeSMCDLLVersionMismatchCode / ComputeATPDLLVersionMismatch /
+// ComputeJamRateRecordStrings / ComputeSetESDTriTempCommand).
 //
 // Exercises the translated public API with input->expected-output values hand-derived from
 // the BCB6 formula in the ORIGINAL golden reference
@@ -18,6 +19,16 @@
 //   HT9011UC_Code_V3.33.906.0_20260618/main.cpp:31148-31172 (CheckSiteMapState, no-arg)
 //   HT9011UC_Code_V3.33.906.0_20260618/main.cpp:33986-34012 (CheckOLPError, partial)
 //   HT9011UC_Code_V3.33.906.0_20260618/main.cpp:32211-32238 (CheckARTSetupFile)
+//   HT9011UC_Code_V3.33.906.0_20260618/main.cpp:303-318   (DoCheckSMCDLLVersion, decision tail)
+//   HT9011UC_Code_V3.33.906.0_20260618/main.cpp:348-355   (DoCheckATPDLLVersion, decision tail)
+//   HT9011UC_Code_V3.33.906.0_20260618/main.cpp:32047-32067 (RecordJamRateByTime, partial)
+//   HT9011UC_Code_V3.33.906.0_20260618/main.cpp:34528-34550 (SET_ESD_Tri_Temp)
+//
+// The ComputeJamRateRecordStrings expected strings below were cross-checked against a
+// standalone (non-translation) C snprintf("%.15g", ...) probe of the exact
+// iH=(int)(fH*1000); fH=iH/1000.0 pipeline, using only "nice" (power-of-2-fraction) fH values
+// so the double->text formatting is unambiguous (1, 1.5, 0.125, 999 -- no repeating-decimal
+// rounding uncertainty in the expected literals).
 //
 // LIMITATION (stated explicitly, same as test_cContact.cpp): we CANNOT run the original BCB6
 // binary (no Borland compiler in this environment).  Verification here is therefore:
@@ -450,6 +461,148 @@ int main()
         check_b("keyword \"9378\" at position 1 -> true",
                 ComputeCheckARTSetupFile(1, true, bAutoRetest, iCatDataT3Pos, 4,
                                           AnsiString("9378xxx.cfg")), true);
+    }
+
+    // =========================================================================================
+    // ComputeSMCDLLVersionMismatchCode -- BCB6 main.cpp:303-318 (decision tail of
+    // DoCheckSMCDLLVersion, a free function). CSMCDLLRevision == "3.15.0.0" (MachineType.h:111).
+    // =========================================================================================
+    printf("\n-- ComputeSMCDLLVersionMismatchCode --\n");
+    {
+        check_i("both match CSMCDLLRevision -> 0 (OK)",
+                ComputeSMCDLLVersionMismatchCode(AnsiString("3.15.0.0"), AnsiString("3.15.0.0")), 0);
+        check_i("only [0] mismatches -> 1",
+                ComputeSMCDLLVersionMismatchCode(AnsiString("1.0.0.0"), AnsiString("3.15.0.0")), 1);
+        check_i("only [1] mismatches -> 2",
+                ComputeSMCDLLVersionMismatchCode(AnsiString("3.15.0.0"), AnsiString("1.0.0.0")), 2);
+        check_i("both mismatch -> 3",
+                ComputeSMCDLLVersionMismatchCode(AnsiString("1.0.0.0"), AnsiString("2.0.0.0")), 3);
+        check_i("both empty (never populated) -> 3",
+                ComputeSMCDLLVersionMismatchCode(AnsiString(""), AnsiString("")), 3);
+    }
+
+    // =========================================================================================
+    // ComputeATPDLLVersionMismatch -- BCB6 main.cpp:348-355 (decision tail of
+    // DoCheckATPDLLVersion, a free function). ATPDLLVersion == "1.0.0.1" (MachineType.h:113).
+    // =========================================================================================
+    printf("\n-- ComputeATPDLLVersionMismatch --\n");
+    {
+        check_i("matches ATPDLLVersion -> 0 (OK)",
+                ComputeATPDLLVersionMismatch(AnsiString("1.0.0.1")), 0);
+        check_i("mismatches ATPDLLVersion -> 1",
+                ComputeATPDLLVersionMismatch(AnsiString("1.0.0.0")), 1);
+        check_i("empty (never populated) -> 1",
+                ComputeATPDLLVersionMismatch(AnsiString("")), 1);
+    }
+
+    // =========================================================================================
+    // ComputeJamRateRecordStrings -- BCB6 main.cpp:32047-32067 (partial extract of
+    // RecordJamRateByTime). Both out-params are unconditionally overwritten each call.
+    // =========================================================================================
+    printf("\n-- ComputeJamRateRecordStrings --\n");
+    {
+        // Case A: JamCount==0 branch. IntervalTime=60min(1hr) -> fH=60/60=1.0 -> iH=1000 ->
+        // fH=1.0 -> "1".
+        AnsiString mtbfA = "", jamA = "";
+        ComputeJamRateRecordStrings(0, 10, 60, mtbfA, jamA);
+        check_s("A: JamCount=0,Loader=10,Interval=60 -> sMTBFRecord", mtbfA, "  MTBF 0/1hr");
+        check_s("A: JamCount=0,Loader=10,Interval=60 -> sJamRateRecord", jamA,
+                "[Jam Rate Record] 0/10  MTBF 0/1hr");
+
+        // Case B: JamCount==0 branch, non-integer hours. IntervalTime=90min(1.5hr) ->
+        // fH=90/60=1.5 (exact in binary) -> iH=1500 -> fH=1.5 -> "1.5".
+        AnsiString mtbfB = "", jamB = "";
+        ComputeJamRateRecordStrings(0, 0, 90, mtbfB, jamB);
+        check_s("B: JamCount=0,Loader=0,Interval=90 -> sMTBFRecord", mtbfB, "  MTBF 0/1.5hr");
+        check_s("B: JamCount=0,Loader=0,Interval=90 -> sJamRateRecord", jamB,
+                "[Jam Rate Record] 0/0  MTBF 0/1.5hr");
+
+        // Case C: JamCount!=0 branch. IntervalTime=120min(2hr), JamCount=3 ->
+        // fH=3/(120/60)=3/2=1.5 -> iH=1500 -> fH=1.5 -> "1.5". Note the "MTBF 1/" fixed-digit
+        // quirk: JamCount is 3, but the record still literally says "1", not "3".
+        AnsiString mtbfC = "", jamC = "";
+        ComputeJamRateRecordStrings(3, 50, 120, mtbfC, jamC);
+        check_s("C: JamCount=3,Loader=50,Interval=120 -> sMTBFRecord (fixed '1', GOLDEN QUIRK)",
+                mtbfC, "  MTBF 1/1.5hr");
+        check_s("C: JamCount=3,Loader=50,Interval=120 -> sJamRateRecord", jamC,
+                "[Jam Rate Record] 3/50  MTBF 1/1.5hr");
+
+        // Case D: JamCount!=0 branch, eighths fraction. IntervalTime=480min(8hr), JamCount=1 ->
+        // fH=1/(480/60)=1/8=0.125 (exact in binary) -> iH=125 -> fH=0.125 -> "0.125".
+        AnsiString mtbfD = "", jamD = "";
+        ComputeJamRateRecordStrings(1, 7, 480, mtbfD, jamD);
+        check_s("D: JamCount=1,Loader=7,Interval=480 -> sMTBFRecord", mtbfD, "  MTBF 1/0.125hr");
+        check_s("D: JamCount=1,Loader=7,Interval=480 -> sJamRateRecord", jamD,
+                "[Jam Rate Record] 1/7  MTBF 1/0.125hr");
+
+        // Case E: GOLDEN QUIRK spotlight -- large JamCount=999, Interval=60(1hr) ->
+        // fH=999/(60/60)=999/1=999.0 -> iH=999000 -> fH=999.0 -> "999". sMTBFRecord still
+        // literally reads "MTBF 1/999hr" (the fixed '1', NOT the real JamCount=999) --
+        // main.cpp:32063's literal "MTBF 1/" preserved verbatim, not "fixed".
+        AnsiString mtbfE = "", jamE = "";
+        ComputeJamRateRecordStrings(999, 20, 60, mtbfE, jamE);
+        check_s("E: JamCount=999 (large) -> sMTBFRecord still says fixed '1' (GOLDEN QUIRK)",
+                mtbfE, "  MTBF 1/999hr");
+        check_s("E: JamCount=999,Loader=20,Interval=60 -> sJamRateRecord", jamE,
+                "[Jam Rate Record] 999/20  MTBF 1/999hr");
+
+        // Case F: out-params are unconditionally OVERWRITTEN, not appended -- pre-seed both
+        // with garbage and confirm it is fully replaced (not left as a stale prefix).
+        AnsiString mtbfF = "STALE", jamF = "STALE";
+        ComputeJamRateRecordStrings(0, 10, 60, mtbfF, jamF);
+        check_s("F: pre-seeded out-params are fully overwritten, not appended-to", mtbfF,
+                "  MTBF 0/1hr");
+    }
+
+    // =========================================================================================
+    // ComputeSetESDTriTempCommand -- BCB6 main.cpp:34528-34550
+    //   Tempture_Hot=1, Tempture_AmbientHot=3 (cmydef.cpp); ESD_TemperatureAmbient=82,
+    //   ESD_TemperatureHot=83, ESD_TemperatureCold=84, ESD_TemperatureSuperHot=88
+    //   (Interface/InterfaceSYS.h ESD_COMMAND enum); kNoESDTriTempCommand==-1 (MainCalcCore.h).
+    // =========================================================================================
+    printf("\n-- ComputeSetESDTriTempCommand --\n");
+    {
+        // Outer guard fails (USE_NOVX3360!=true) -> no command regardless of anything else.
+        check_i("USE_NOVX3360=0 -> kNoESDTriTempCommand",
+                ComputeSetESDTriTempCommand(0, 1, 25.0, 1), kNoESDTriTempCommand);
+
+        // Outer guard fails (Tri_Temp_Machine!=1) -> no command.
+        check_i("USE_NOVX3360=1,TriTempMachine=2 -> kNoESDTriTempCommand",
+                ComputeSetESDTriTempCommand(1, 2, 100.0, 1), kNoESDTriTempCommand);
+
+        // Guard passes, iTemperature==Tempture_Hot(1), fWorkTemperBase=25 falls in the golden
+        // GAP [10,40) -- none of the 3 inner branches match -> no command (GOLDEN QUIRK).
+        check_i("Hot branch, temp=25 (in [10,40) gap) -> kNoESDTriTempCommand (GOLDEN QUIRK)",
+                ComputeSetESDTriTempCommand(1, 1, 25.0, 1), kNoESDTriTempCommand);
+
+        // Same gap, exactly at the lower boundary 10 (not <10, since the test is strict <10).
+        check_i("Hot branch, temp=10 (boundary, not <10) -> kNoESDTriTempCommand (GOLDEN QUIRK)",
+                ComputeSetESDTriTempCommand(1, 1, 10.0, 1), kNoESDTriTempCommand);
+
+        // fWorkTemperBase>=40 && <=130 -> ESD_TemperatureHot(83). Boundary 40 included.
+        check_i("Hot branch, temp=40 (lower boundary of Hot range) -> ESD_TemperatureHot(83)",
+                ComputeSetESDTriTempCommand(1, 1, 40.0, 1), 83);
+        check_i("Hot branch, temp=130 (upper boundary of Hot range) -> ESD_TemperatureHot(83)",
+                ComputeSetESDTriTempCommand(1, 1, 130.0, 1), 83);
+
+        // fWorkTemperBase>130 -> ESD_TemperatureSuperHot(88).
+        check_i("Hot branch, temp=131 (>130) -> ESD_TemperatureSuperHot(88)",
+                ComputeSetESDTriTempCommand(1, 1, 131.0, 1), 88);
+
+        // fWorkTemperBase<10 -> ESD_TemperatureCold(84).
+        check_i("Hot branch, temp=9.9 (<10) -> ESD_TemperatureCold(84)",
+                ComputeSetESDTriTempCommand(1, 1, 9.9, 1), 84);
+
+        // iTemperature==Tempture_AmbientHot(3) -> ESD_TemperatureAmbient(82), fWorkTemperBase
+        // irrelevant to this branch.
+        check_i("AmbientHot branch (temp param irrelevant) -> ESD_TemperatureAmbient(82)",
+                ComputeSetESDTriTempCommand(1, 1, 999.0, 3), 82);
+
+        // iTemperature is neither Tempture_Hot nor Tempture_AmbientHot -> the catch-all else
+        // sends the SAME ESD_TemperatureAmbient(82) as the AmbientHot branch (golden keeps
+        // these as two separate branches with an identical result -- preserved verbatim).
+        check_i("neither Hot nor AmbientHot (else branch) -> ESD_TemperatureAmbient(82) too",
+                ComputeSetESDTriTempCommand(1, 1, 999.0, 0), 82);
     }
 
     printf("\n=== Summary: %d passed, %d failed ===\n", g_pass, g_fail);

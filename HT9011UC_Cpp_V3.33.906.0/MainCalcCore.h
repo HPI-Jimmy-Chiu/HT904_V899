@@ -1,5 +1,5 @@
 // MainCalcCore.h
-// Standard C++ translation of 11 pure calc-core functions from BCB6 main.cpp
+// Standard C++ translation of 15 pure calc-core functions from BCB6 main.cpp
 // (V3.33.906.0_20260618) -- CALC CORE ONLY.
 // Source of truth: HT9011UC_Code_V3.33.906.0_20260618/main.cpp (bodies) and
 //                   HT9011UC_Code_V3.33.906.0_20260618/main.h (TfMain declarations).
@@ -37,6 +37,57 @@
 // Also explicitly OUT OF SCOPE: TfMain::CheckSiteMapState(bool bDelete) -- the file-I/O overload
 // at main.cpp:31176-31183 (reads AuToSitMap.txt via ReadIniData) -- only the NO-ARG overload
 // (main.cpp:31148-31172) is translated below as ComputeCheckSiteMapState.
+//
+// AI(W906-maincalccore) 20260727: batch 3 appended below (3 more extracts) --
+// ComputeSMCDLLVersionMismatchCode / ComputeATPDLLVersionMismatch (the pure decision tails of
+// the plain FREE functions DoCheckSMCDLLVersion()/DoCheckATPDLLVersion() -- NOT TfMain members;
+// declared `extern int DoCheckSMCDLLVersion();` / `extern int DoCheckATPDLLVersion();` inline in
+// main.cpp:236,238) and ComputeJamRateRecordStrings (a PARTIAL extract of the pure
+// MTBF/JamRate-string-building sub-computation inside TfMain::RecordJamRateByTime()). All three
+// keep this file's established idioms: every external read becomes an explicit parameter, and
+// header-only constants already visible via this file's own MachineType.h include
+// (CSMCDLLRevision, ATPDLLVersion -- both #define string literals, MachineType.h:111,113) are
+// read directly in the .cpp body rather than threaded through as parameters, same treatment as
+// ComputeCheckARTSetupFile's eAuto3 already got in batch 2.
+//   OUT OF SCOPE this batch (left for a future wrapper wave):
+//     - CheckSMCDLLVersion()'s own MOTION_CARD_TYPE guard + MessageDlg (main.cpp:254-287) and
+//       DoCheckSMCDLLVersion()'s own VerInfo().GetAppVersion() file reads (main.cpp:291-301).
+//     - CheckATPDLLVersion()'s own CosFunction.bDLLCommands guard + MessageDlg (main.cpp:321-338)
+//       and DoCheckATPDLLVersion()'s own VerInfo().GetAppVersion() file read (main.cpp:342-347).
+//     - RecordJamRateByTime()'s own static clock_t ctStart interval-gate (main.cpp:32030,32039,
+//       32043-32046), its two global-counter resets (main.cpp:32069-32070), and its
+//       RecordProcess(sJamRateRecord) call (main.cpp:32068) -- all side effects.
+//
+// AI(W906-maincalccore) 20260728: batch 4 -- TriTemp_Ch/ESD_Temperature header archaeology
+// (see docs/DEVLOG.md 2026-07-27 recon). TriTemp_Ch is `extern int TriTemp_Ch[ATC_MAX_SITE]`
+// (ATC/ATC_Handler_Side.h:497, defined ATC_Handler_Side.cpp:192-198); ESD_Temperature is NOT a
+// variable -- it is 4 members (ESD_TemperatureAmbient=82/Hot=83/Cold=84/SuperHot=88) of the
+// ESD_COMMAND enum (Interface/InterfaceSYS.h:60-...). Neither exists in this ported tree yet.
+// Of the 3 main.cpp functions that read them, only ONE is a clean pure extraction:
+//   * TfMain::SET_ESD_Tri_Temp(int) (main.cpp:34528-34550) -> ComputeSetESDTriTempCommand
+//     below -- reads 4 plain scalars, decides which ESD_COMMAND code (if any) to send; the
+//     actual SendCommand_ESD() dispatch (Interface/InterfaceSYS.cpp:459, IPC to the external
+//     ESD program) is OUT OF SCOPE, same "decision tail" treatment already given
+//     DoCheckSMCDLLVersion()/DoCheckATPDLLVersion() above.
+// The other 2 candidates considered and REJECTED (NOT pure -- writes to shared extern globals
+// and/or VCL, matching the task's own "side-effecting" exclusion, not this file's "OUT param"
+// convention, which so far has only ever applied to plain LOCAL AnsiStrings the golden body
+// itself declares -- see ComputeCheckSiteMapState's ErrPart / ComputeJamRateRecordStrings'
+// sMTBFRecord+sJamRateRecord, both fresh locals in golden, never extern):
+//   * TfMain::Tri_Temp_Set_Site() (main.cpp:34453-34510) -- its ENTIRE body writes directly
+//     into bUT150Install[tcTotalCount] and bUT150HasUse[tcTotalCount] (cmydef.h:3292,5529;
+//     `extern bool ...[tcTotalCount]`), global heater-channel-enable flags read continuously
+//     elsewhere (ATC_Handler_Side.cpp, uTemp_Set.cpp, TempCtrl/TriTemp.cpp) -- the same
+//     "writing back to a shared global array" pattern the task explicitly calls out as NOT
+//     extractable (MOT[]/Sen[]-style side effect), not a pure by-product local.
+//   * TfMain::Tri_Temp_ChangeATCSiteUse() (main.cpp:34512-34526) -- writes global
+//     bATC_EnablesChannel[] AND calls ATC_InterfaceForm->EnablesChannel(...), a VCL form
+//     method -- doubly out of scope (global write + VCL call).
+// Also NOT extractable: the 5 other TriTemp_Ch reads at main.cpp:19165/19781/19833/19928/20223
+// all live INSIDE TfMain::Index16Heater(bool) (main.cpp:18613-20226+, ~1600 lines), a giant
+// heater-configuration state function that reads ATC_InterfaceForm (VCL), CUSTOMER_CODE,
+// TestIF_File, DeviceForm_File, LastSet, etc. and writes bUT150Install/HasUse throughout --
+// far outside "pure calc-core" by any reading.
 //
 // Toolchain: MinGW g++ 6.3+, C++14 or later.
 
@@ -370,5 +421,164 @@ bool ComputeCheckARTSetupFile(int iUSE_AUTO_RETEST,
                                const int iCatDataT3Pos[],
                                int iTestBinCount,
                                const AnsiString &aFileName_ART);
+
+// ---------------------------------------------------------------------------
+// ComputeSMCDLLVersionMismatchCode
+//   Portable replacement for the decision tail of free function
+//   DoCheckSMCDLLVersion() (main.cpp:289-319; a plain extern free function, NOT a TfMain
+//   member -- declared `extern int DoCheckSMCDLLVersion();` inline at main.cpp:236).
+//   BCB6 source: main.cpp:303-318 (the 3-way AnsiString compare only).
+//
+//   Parameters:
+//     strSMCVersion0 -- global strSMCVersion[0] (main.cpp:220, `AnsiString
+//                       strSMCVersion[2]={"",""}`), already populated by the caller's own
+//                       VerInfo().GetAppVersion(...) + .sprintf(...) call (main.cpp:299-300)
+//                       -- that file-read + formatting is OUT OF SCOPE (side-effecting I/O),
+//                       per the task.
+//     strSMCVersion1 -- global strSMCVersion[1], same provenance as above.
+//
+//   CSMCDLLRevision (MachineType.h:111, `#define CSMCDLLRevision "3.15.0.0"`) is compared
+//   directly -- already visible via this file's own MachineType.h include, same treatment as
+//   ComputeCheckARTSetupFile's eAuto3 (header-only, no separate inlining needed, unlike
+//   ATC_TYPE_33/35/61 / TOTAL_MOTOR above, which live in headers this file does NOT include).
+//
+//   OUT OF SCOPE (left for a future wrapper, per the task):
+//     - main.cpp:254-287 CheckSMCDLLVersion()'s own MOTION_CARD_TYPE guard, the
+//       str/strtemp.sprintf(...) message construction, MessageDlg(...), and its own final
+//       bool return (== ret==0).
+//     - main.cpp:291-301 DoCheckSMCDLLVersion()'s own strFilePath[]/VerInfo().GetAppVersion()
+//       file reads that populate strSMCVersion[0]/[1] in the first place.
+//
+//   Faithfully preserves the exact if/else-if/else chain and its (deliberately asymmetric,
+//   NOT a bitmask) return codes: 3 (BOTH strSMCVersion[0] and [1] mismatch CSMCDLLRevision),
+//   1 (ONLY strSMCVersion[0] mismatches), 2 (ONLY strSMCVersion[1] mismatches), 0 (neither
+//   mismatches -- OK).
+// ---------------------------------------------------------------------------
+int ComputeSMCDLLVersionMismatchCode(const AnsiString &strSMCVersion0,
+                                      const AnsiString &strSMCVersion1);
+
+// ---------------------------------------------------------------------------
+// ComputeATPDLLVersionMismatch
+//   Portable replacement for the decision tail of free function
+//   DoCheckATPDLLVersion() (main.cpp:340-356; a plain extern free function, NOT a TfMain
+//   member -- declared `extern int DoCheckATPDLLVersion();` inline at main.cpp:238).
+//   BCB6 source: main.cpp:348-355 (the single AnsiString compare only).
+//
+//   Parameters:
+//     sATPDLLVersion -- global sATPDLLVersion (main.cpp:221, `AnsiString sATPDLLVersion=""`),
+//                        already populated by the caller's own VerInfo().GetAppVersion(...) +
+//                        .sprintf(...) call (main.cpp:346-347) -- OUT OF SCOPE (side-effecting
+//                        I/O), same treatment as ComputeSMCDLLVersionMismatchCode above.
+//
+//   ATPDLLVersion (MachineType.h:113, `#define ATPDLLVersion "1.0.0.1"`) is compared directly
+//   -- already visible via this file's own MachineType.h include.
+//
+//   OUT OF SCOPE (per the task):
+//     - main.cpp:321-338 CheckATPDLLVersion()'s own CosFunction.bDLLCommands guard, message
+//       construction, MessageDlg(...), and its own final bool return.
+//     - main.cpp:342-347 DoCheckATPDLLVersion()'s own strFilePath/VerInfo().GetAppVersion()
+//       file read that populates sATPDLLVersion in the first place.
+//
+//   Faithfully preserves the single compare's two return codes: 1 (mismatch), 0 (OK, per
+//   golden's own "//OK" comment at main.cpp:354).
+// ---------------------------------------------------------------------------
+int ComputeATPDLLVersionMismatch(const AnsiString &sATPDLLVersion);
+
+// ---------------------------------------------------------------------------
+// ComputeJamRateRecordStrings
+//   PARTIAL portable replacement for TfMain::RecordJamRateByTime() (main.cpp:32028-32072,
+//   2015.11.11 Joye "Add Jam Rate Record"). Extracts ONLY the pure MTBF/JamRate
+//   string-building sub-computation at main.cpp:32047-32067; see header banner above for the
+//   OUT-OF-SCOPE list (the static clock_t interval-gate, the counter resets, and the
+//   RecordProcess() call -- all side effects, deferred to a future wrapper wave).
+//
+//   Parameters:
+//     iRecordJamRateByTime_JamCount    -- global iRecordJamRateByTime_JamCount (cmydef.h:3878,
+//                                          extern int)
+//     iRecordJamRateByTime_LoaderCount -- global iRecordJamRateByTime_LoaderCount
+//                                          (cmydef.h:3877, extern int)
+//     iRecordJamRateIntervalTime       -- global IniConfig.iRecordJamRateIntervalTime
+//                                          (Config.h:237, int)
+//     sMTBFRecord    -- OUT param. Unconditionally OVERWRITTEN (assigned via operator=, not
+//                       appended) -- unlike ComputeCheckSiteMapState's append-only ErrPart
+//                       above, golden's own sMTBFRecord is a fresh local reassigned by
+//                       whichever if/else branch runs, so the caller does not need to
+//                       pre-clear it.
+//     sJamRateRecord -- OUT param, same "unconditionally overwritten" contract as
+//                       sMTBFRecord.
+//
+//   PRECONDITION carried over from the OUT-OF-SCOPE outer guard (main.cpp:32031-32032, `if
+//   (IniConfig.bRecordJamRateByTime==false || IniConfig.iRecordJamRateIntervalTime<=0) return;`):
+//   golden only ever reaches this code with iRecordJamRateIntervalTime>0. This extract does
+//   NOT re-check that guard (it is out of scope), so calling it directly with
+//   iRecordJamRateIntervalTime<=0 is undefined by the caller's contract, not by this function
+//   (matches golden, which likewise never runs this tail under that condition).
+//
+//   GOLDEN QUIRKS preserved verbatim (found while reading the full body -- neither is
+//   "fixed" here):
+//     1) The iRecordJamRateByTime_JamCount!=0 branch's sMTBFRecord literal is "  MTBF 1/..."
+//        -- a fixed digit '1', NOT iRecordJamRateByTime_JamCount itself (main.cpp:32063).
+//        The displayed MTBF numerator is therefore always "0" (JamCount==0) or "1"
+//        (JamCount!=0, no matter how large the real count is) -- never the true jam count.
+//     2) Despite the "MTBF" (Mean Time Between Failures, i.e. hours/jam) label, the non-zero
+//        branch's fH formula (main.cpp:32060) computes
+//        `iRecordJamRateByTime_JamCount / (iRecordJamRateIntervalTime/60.)`, i.e.
+//        jams-per-hour (a RATE), the reciprocal of an actual mean-time-between-failures
+//        (hours-per-jam). Kept as-is, not "corrected" to invert the ratio.
+//   Also faithfully preserves the truncating iH=(int)(fH*1000); fH=iH/1000.0 round-trip
+//   (BCB6's implicit double->int assignment truncates toward zero, same as a C-style cast).
+// ---------------------------------------------------------------------------
+void ComputeJamRateRecordStrings(int iRecordJamRateByTime_JamCount,
+                                  int iRecordJamRateByTime_LoaderCount,
+                                  int iRecordJamRateIntervalTime,
+                                  AnsiString &sMTBFRecord,
+                                  AnsiString &sJamRateRecord);
+
+// ---------------------------------------------------------------------------
+// ComputeSetESDTriTempCommand
+//   Portable replacement for the decision logic of TfMain::SET_ESD_Tri_Temp(int iTemperature).
+//   BCB6 source: main.cpp:34528-34550 (Ztex 2023.04.19 Add HT-1032 TriTemp Function)
+//
+//   Parameters:
+//     iUSE_NOVX3360   -- global USE_NOVX3360 (cmydef.h:2955, extern int; golden compares it
+//                        as `USE_NOVX3360==true`, i.e. ==1 -- raw-int idiom, same treatment
+//                        already used for iATC_SYSTEM/iUSE_AUTO_RETEST above)
+//     iTriTempMachine -- global Tri_Temp_Machine (cmydef.h:5523, extern int)
+//     fWorkTemperBase -- global Temperature.fWorkTemperBase (cprod.h:1391, double)
+//     iTemperature    -- unchanged golden param (int); both call sites (main.cpp:6257,27303)
+//                        pass LastSet.iTemperature
+//
+//   Tempture_Hot(==1)/Tempture_AmbientHot(==3) are `const int` globals defined in
+//   cmydef.cpp:2972-2973 (NOT header-only -- would need ht9045_globals linkage) -- inlined as
+//   local named constants in the .cpp body, same treatment this file already gives
+//   ATC_TYPE_33/35/61 / TOTAL_MOTOR (see banner above and ComputeATCAmbientTemperCheck).
+//
+//   ESD_TemperatureHot(83)/ESD_TemperatureSuperHot(88)/ESD_TemperatureCold(84)/
+//   ESD_TemperatureAmbient(82) are members of Interface/InterfaceSYS.h's ESD_COMMAND enum (a
+//   plain compile-time enum, no extern storage) -- inlined the same way rather than
+//   #including that header, keeping this file's minimal-dependency character.
+//
+//   RETURN VALUE: the ESD_COMMAND code that golden's SendCommand_ESD() would be called with,
+//   or the sentinel kNoESDTriTempCommand (-1, distinct from every non-negative ESD_COMMAND
+//   value, see ESD_NORMAL==0) when golden would not call SendCommand_ESD() at all for this
+//   invocation. SendCommand_ESD() itself (Interface/InterfaceSYS.cpp:459, IPC dispatch to the
+//   external ESD program) is OUT OF SCOPE -- belongs in a not-yet-translated wrapper around
+//   this decision, same "decision tail" split as ComputeSMCDLLVersionMismatchCode above.
+//
+//   GOLDEN QUIRK preserved verbatim: when iTemperature==Tempture_Hot and fWorkTemperBase
+//   falls in the gap [10,40) -- neither >=40 (Hot/SuperHot) nor <10 (Cold) -- NONE of golden's
+//   three inner if/else-if branches fire (there is no final catch-all else), so
+//   SendCommand_ESD() is not called at all for that sample; this extract returns
+//   kNoESDTriTempCommand for that gap rather than guessing a nearest command.
+//   Also preserved: the iTemperature!=Tempture_Hot && iTemperature!=Tempture_AmbientHot
+//   "else" branch (main.cpp:34545-34548) sends the SAME ESD_TemperatureAmbient command as the
+//   AmbientHot branch just above it -- both collapse to the identical return value here.
+// ---------------------------------------------------------------------------
+const int kNoESDTriTempCommand = -1;
+
+int ComputeSetESDTriTempCommand(int iUSE_NOVX3360,
+                                 int iTriTempMachine,
+                                 double fWorkTemperBase,
+                                 int iTemperature);
 
 #endif // MAINCALCCORE_H
