@@ -93,6 +93,131 @@
 #endif
 
 // ---------------------------------------------------------------------------
+//  Win32 A/W macro guard
+//
+//  windows.h #defines several file/string function names to their *A variants
+//  (e.g. DeleteFile -> DeleteFileA, CopyFile -> CopyFileA, MoveFile ->
+//  MoveFileA).  If any of those macros are already active when SysUtils.h
+//  (below) DECLARES vclcompat::DeleteFile/CopyFile, the declaration itself
+//  gets macro-substituted (e.g. into `vclcompat::DeleteFileA`), so the name
+//  the `using` block further down expects (`vclcompat::DeleteFile`) was never
+//  declared at all -- not a shadow, an outright missing declaration.
+//
+// AI(W906-W7-A0) 20260728: hoist winsock2+windows.h+A/W undefs above
+// SysUtils.h so the umbrella is include-order-robust (was: broke whenever
+// any TU saw windows.h first -- blocks Public/WinSocketErrorCode.cpp under
+// MSVC and every future MFC TU). See docs/W7_UI_ARCHITECTURE_PLAN.md section
+// 4, verification result V6.
+//
+//  Strategy: include <windows.h> HERE, BEFORE any vclcompat header that
+//  declares one of the colliding names, and immediately undefine the
+//  colliding macros. AI(W906-W7-A0-followup) 20260728: the declaring headers
+//  are exactly SysUtils.h (DeleteFile, CopyFile) and TStringList.h
+//  (GetObject) -- this list previously also named AnsiString.h, which
+//  declares none of them, and implied a vclcompat MoveFile declaration,
+//  which does not exist (its undef below is purely preventive, as that
+//  undef's own comment says). On
+//  MSVC only, <winsock2.h> is included first -- see the MSVC-vs-MinGW split
+//  below; under MinGW no extra header is added ahead of <windows.h> here.
+//  Doing this before those declarations -- rather than after, as this block
+//  used to sit -- means the undefs are in effect no matter whether some
+//  earlier-included file (this TU's own #include <windows.h>, or an upstream
+//  MFC header such as <afxwin.h>) already pulled windows.h in first: our own
+//  <windows.h> include is then just a no-op re-inclusion (header guards), but
+//  our #undef lines still run unconditionally and land before SysUtils.h's
+//  declarations are parsed either way. The previous position (after all the
+//  vclcompat headers) only ever protected call sites made AFTER this header
+//  from macro shadowing -- it did nothing for the declarations inside
+//  SysUtils.h itself, which is exactly the case that broke (plan section 4,
+//  V6 reproduced this verbatim: with windows.h included before vcl_compat.h,
+//  the old ordering failed with "vclcompat::DeleteFile has not been
+//  declared"). The real Win32 entry points remain reachable through their
+//  explicit *A spellings (CopyFileA / DeleteFileA / MoveFileA / GetObjectA).
+//
+//  On MSVC only, <winsock2.h> is included first (defining _WINSOCKAPI_) so
+//  that the windows.h include below never defaults to dragging in the legacy
+//  winsock.h (v1) -- avoiding the classic MSVC "WinSock.h already included"
+//  hard error for any TU (e.g. Public/WinSocketErrorCode.cpp) that also does
+//  its own explicit #include <winsock2.h> afterward.
+//
+//  This pre-include is deliberately MSVC-only (`#if defined(_MSC_VER)`), NOT
+//  applied under MinGW: MinGW's own <windows.h> already prefers WinSock v2
+//  internally by default for WinNT4+ targets (via its private _winsock.h
+//  chooser) without any help from us, and reproduction proved that adding an
+//  unconditional standalone <winsock2.h> include HERE, ahead of <windows.h>,
+//  actively BREAKS MinGW. The mechanism, verified by reading the installed
+//  MinGW headers directly (NOT winerror.h's own repeat-inclusion guard --
+//  that guard is exactly what gets defeated):
+//    1. <winsock2.h> (winsock2.h:62) includes "winsock.h".
+//    2. winsock.h:50 sets `__WINSOCK_H_SOURCED__ 1`, THEN winsock.h:52-53
+//       does its own `#include <windows.h>` followed by `#include
+//       <winerror.h>` -- both while that macro is still defined. windows.h
+//       transitively reaches winerror.h a second way too, via winnt.h:46.
+//    3. winerror.h:33 guards the whole file with `#ifndef _WINERROR_H`, but
+//       the statement that actually DEFINES `_WINERROR_H` (winerror.h:41) --
+//       along with every general Win32 error code between it and :1604,
+//       including ERROR_SHARING_VIOLATION and ERROR_LOCK_VIOLATION -- lives
+//       inside a NESTED `#ifndef __WINSOCK_H_SOURCED__` (winerror.h:36).
+//       Because that macro is defined for both of winerror.h's entries in
+//       this pass (the nested one via windows.h/winnt.h, and winsock.h's own
+//       direct one right after), the nested block -- and therefore the
+//       `_WINERROR_H` define itself -- is skipped BOTH times.
+//    4. `__WINSOCK_H_SOURCED__` is only undefined at winsock.h:682, by which
+//       point windows.h's own top-level include guard already marks the
+//       whole header "done" for this TU. Any later, legitimate
+//       `#include <windows.h>` (e.g. this file's own include just below) is
+//       then a silent no-op that never revisits winnt.h/winerror.h to retry
+//       -- so `_WINERROR_H` stays permanently unset and the general error
+//       codes are never defined for the rest of the translation unit.
+//  This was NOT hypothetical: it broke common.cpp's
+//  `error==ERROR_SHARING_VIOLATION` (common.cpp:2313, a TU whose line 45
+//  includes this umbrella first) in a full tree rebuild the first time this
+//  fix was written with the pre-include unconditional, and was found and
+//  fixed in the same wave (W7-A0) by gating it to MSVC only, as coded below
+//  (docs/W7_UI_ARCHITECTURE_PLAN.md section 10 records the correction to
+//  section 6's original unconditional instruction).
+//
+//  NOT undefined: FindClose (real Win32 function, not a macro; vclcompat
+//  FindClose(TSearchRec&) has a different signature and overload resolution
+//  disambiguates); Sleep (Win32 real function, different signature).
+// ---------------------------------------------------------------------------
+#if defined(_WIN32)
+// Do NOT define WIN32_LEAN_AND_MEAN here: some consumers (cmydef.h) rely on
+// rpcndr.h's `byte` typedef that the lean build omits.  Include the full
+// windows.h and let each consumer opt into LEAN themselves if desired.
+#  if defined(_MSC_VER)
+#    include <winsock2.h>
+#  endif
+#  include <windows.h>
+// DeleteFile  -> DeleteFileA  -- shadows vclcompat::DeleteFile(AnsiString)
+#  ifdef DeleteFile
+#    undef DeleteFile
+#  endif
+// CopyFile    -> CopyFileA    -- shadows vclcompat::CopyFile(AnsiString,AnsiString,bool)
+#  ifdef CopyFile
+#    undef CopyFile
+#  endif
+// MoveFile    -> MoveFileA    -- preventive: vclcompat has no MoveFile yet but
+//                                 a future Rename/MoveFile shim would collide.
+#  ifdef MoveFile
+#    undef MoveFile
+#  endif
+// GetObject   -> GetObjectA   -- shadows vclcompat::TStringList::GetObject(int) const
+// AI(W906-W7-A0-Followup) 20260728: added after an exhaustive `g++ -dM -E
+// windows.h` macro sweep cross-checked against every identifier in
+// vclcompat/*.h found this was the one A/W collision the original A0 pass
+// missed. Without this undef, TStringList.h:176's `GetObject(int) const`
+// declaration is macro-substituted to `GetObjectA` in every TU that includes
+// this umbrella, while TStringList.cpp (which only includes TStringList.h,
+// never windows.h) still DEFINES the unsubstituted `GetObject` -- a silent
+// cross-TU ODR mismatch that passes -fsyntax-only but fails at link time with
+// "undefined reference to vclcompat::TStringList::GetObjectA(int) const".
+#  ifdef GetObject
+#    undef GetObject
+#  endif
+#endif // _WIN32
+
+// ---------------------------------------------------------------------------
 //  Compat types & functions
 // ---------------------------------------------------------------------------
 #include "vclcompat/AnsiString.h"
@@ -113,47 +238,6 @@
 // vclcompat/ (only comments referencing the eventual golden translation),
 // so no TList-style exclusion is needed for this include.
 #include "vclcompat/ServerSocket.h"
-
-// ---------------------------------------------------------------------------
-//  Win32 A/W macro guard
-//
-//  windows.h #defines several file/string function names to their *A variants
-//  (e.g. DeleteFile -> DeleteFileA, CopyFile -> CopyFileA, MoveFile ->
-//  MoveFileA).  These macros would silently shadow the vclcompat AnsiString
-//  overloads that the `using` declarations below bring into the global
-//  namespace, causing "undefined reference to vclcompat::DeleteFile" or
-//  silent name corruption at the call site.
-//
-//  Strategy: include <windows.h> centrally here (it was already being pulled
-//  in by individual TUs such as SysUtils.cpp anyway) and immediately undefine
-//  the colliding macros using guarded #ifdef / #undef so the header is safe
-//  whether or not windows.h happened to be included earlier.  The real Win32
-//  entry points remain reachable through their explicit *A spellings
-//  (CopyFileA / DeleteFileA / MoveFileA).
-//
-//  NOT undefined: FindClose (real Win32 function, not a macro; vclcompat
-//  FindClose(TSearchRec&) has a different signature and overload resolution
-//  disambiguates); Sleep (Win32 real function, different signature).
-// ---------------------------------------------------------------------------
-#if defined(_WIN32)
-// Do NOT define WIN32_LEAN_AND_MEAN here: some consumers (cmydef.h) rely on
-// rpcndr.h's `byte` typedef that the lean build omits.  Include the full
-// windows.h and let each consumer opt into LEAN themselves if desired.
-#  include <windows.h>
-// DeleteFile  -> DeleteFileA  -- shadows vclcompat::DeleteFile(AnsiString)
-#  ifdef DeleteFile
-#    undef DeleteFile
-#  endif
-// CopyFile    -> CopyFileA    -- shadows vclcompat::CopyFile(AnsiString,AnsiString,bool)
-#  ifdef CopyFile
-#    undef CopyFile
-#  endif
-// MoveFile    -> MoveFileA    -- preventive: vclcompat has no MoveFile yet but
-//                                 a future Rename/MoveFile shim would collide.
-#  ifdef MoveFile
-#    undef MoveFile
-#  endif
-#endif // _WIN32
 
 // BCB6 spelling alias: a lot of code uses `String` as a synonym for AnsiString.
 #ifndef VCLCOMPAT_NO_GLOBAL_USING
