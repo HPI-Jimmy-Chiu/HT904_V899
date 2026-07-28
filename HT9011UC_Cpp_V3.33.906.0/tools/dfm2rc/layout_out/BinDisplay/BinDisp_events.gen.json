@@ -1,0 +1,23 @@
+{
+ "event_count": 2,
+ "events": [
+  {
+   "control_path": "Form1",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "Form1",
+   "vcl_class": "TForm1"
+  },
+  {
+   "control_path": "Form1.Panel3.Button1",
+   "event_name": "OnClick",
+   "handler_name": "Button1Click",
+   "leaf_name": "Button1",
+   "vcl_class": "TButton"
+  }
+ ],
+ "form_name": "Form1",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "BinDisplay/BinDisp.dfm"
+}

@@ -1,0 +1,100 @@
+{
+ "event_count": 13,
+ "events": [
+  {
+   "control_path": "fBuilder",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fBuilder",
+   "vcl_class": "TfBuilder"
+  },
+  {
+   "control_path": "fBuilder",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fBuilder",
+   "vcl_class": "TfBuilder"
+  },
+  {
+   "control_path": "fBuilder.GroupBox5.cbSourceFile",
+   "event_name": "OnChange",
+   "handler_name": "cbSourceFileChange",
+   "leaf_name": "cbSourceFile",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBuilder.GroupBox5.edNewFileName",
+   "event_name": "OnChange",
+   "handler_name": "edNewFileNameChange",
+   "leaf_name": "edNewFileName",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBuilder.GroupBox5.edNewFileName",
+   "event_name": "OnKeyPress",
+   "handler_name": "edNewFileNameKeyPress",
+   "leaf_name": "edNewFileName",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBuilder.GroupBox5.edNewFileName",
+   "event_name": "OnMouseDown",
+   "handler_name": "edNewFileNameMouseDown",
+   "leaf_name": "edNewFileName",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBuilder.GroupBox5.btCreateSetupFile",
+   "event_name": "OnClick",
+   "handler_name": "btCreateSetupFileClick",
+   "leaf_name": "btCreateSetupFile",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBuilder.GroupBox6.btDeleteSetupFile",
+   "event_name": "OnClick",
+   "handler_name": "btDeleteSetupFileClick",
+   "leaf_name": "btDeleteSetupFile",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBuilder.GroupBox6.cbDeleteFile",
+   "event_name": "OnChange",
+   "handler_name": "cbDeleteFileChange",
+   "leaf_name": "cbDeleteFile",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBuilder.GroupBox7.spbImport",
+   "event_name": "OnClick",
+   "handler_name": "spbImportClick",
+   "leaf_name": "spbImport",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fBuilder.GroupBox7.spbExport",
+   "event_name": "OnClick",
+   "handler_name": "spbExportClick",
+   "leaf_name": "spbExport",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fBuilder.GroupBox7.DirectoryListBox1",
+   "event_name": "OnChange",
+   "handler_name": "DirectoryListBox1Change",
+   "leaf_name": "DirectoryListBox1",
+   "vcl_class": "TDirectoryListBox"
+  },
+  {
+   "control_path": "fBuilder.spbExit",
+   "event_name": "OnClick",
+   "handler_name": "spbExitClick",
+   "leaf_name": "spbExit",
+   "vcl_class": "TPanel"
+  }
+ ],
+ "form_name": "fBuilder",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "cBuilder.dfm"
+}

@@ -1,0 +1,65 @@
+{
+ "event_count": 8,
+ "events": [
+  {
+   "control_path": "FormBarcodeReader",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "FormBarcodeReader",
+   "vcl_class": "TFormBarcodeReader"
+  },
+  {
+   "control_path": "FormBarcodeReader",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "FormBarcodeReader",
+   "vcl_class": "TFormBarcodeReader"
+  },
+  {
+   "control_path": "FormBarcodeReader.pnlBarcodeReader.edtBarcodeNumber",
+   "event_name": "OnKeyDown",
+   "handler_name": "edtBarcodeNumberKeyDown",
+   "leaf_name": "edtBarcodeNumber",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FormBarcodeReader.pnlBarcodeReader.edtBarcodeNumber",
+   "event_name": "OnKeyUp",
+   "handler_name": "edtBarcodeNumberKeyUp",
+   "leaf_name": "edtBarcodeNumber",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FormBarcodeReader.pnlBarcodeReader.btnEnter",
+   "event_name": "OnClick",
+   "handler_name": "btnEnterClick",
+   "leaf_name": "btnEnter",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "FormBarcodeReader.TimerKeyIn",
+   "event_name": "OnTimer",
+   "handler_name": "TimerKeyInTimer",
+   "leaf_name": "TimerKeyIn",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "FormBarcodeReader.pmBarcode.miClear",
+   "event_name": "OnClick",
+   "handler_name": "miClearClick",
+   "leaf_name": "miClear",
+   "vcl_class": "TMenuItem"
+  },
+  {
+   "control_path": "FormBarcodeReader.pmBarcode.miClose",
+   "event_name": "OnClick",
+   "handler_name": "miCloseClick",
+   "leaf_name": "miClose",
+   "vcl_class": "TMenuItem"
+  }
+ ],
+ "form_name": "FormBarcodeReader",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "BarcodeReader.dfm"
+}

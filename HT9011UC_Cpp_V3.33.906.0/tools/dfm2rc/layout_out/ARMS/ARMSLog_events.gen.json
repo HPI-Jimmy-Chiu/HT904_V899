@@ -1,0 +1,44 @@
+{
+ "event_count": 5,
+ "events": [
+  {
+   "control_path": "fARMSLog",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fARMSLog",
+   "vcl_class": "TfARMSLog"
+  },
+  {
+   "control_path": "fARMSLog",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fARMSLog",
+   "vcl_class": "TfARMSLog"
+  },
+  {
+   "control_path": "fARMSLog",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fARMSLog",
+   "vcl_class": "TfARMSLog"
+  },
+  {
+   "control_path": "fARMSLog.pnARMSLog.pnButtonTitle.sbExit",
+   "event_name": "OnClick",
+   "handler_name": "sbExitClick",
+   "leaf_name": "sbExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fARMSLog.pnARMSLog.pnButtonTitle.sbSave",
+   "event_name": "OnClick",
+   "handler_name": "sbSaveClick",
+   "leaf_name": "sbSave",
+   "vcl_class": "TSpeedButton"
+  }
+ ],
+ "form_name": "fARMSLog",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "ARMS/ARMSLog.dfm"
+}

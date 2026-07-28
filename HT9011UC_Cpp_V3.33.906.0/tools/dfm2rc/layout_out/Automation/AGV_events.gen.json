@@ -1,0 +1,233 @@
+{
+ "event_count": 32,
+ "events": [
+  {
+   "control_path": "fAGV",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fAGV",
+   "vcl_class": "TfAGV"
+  },
+  {
+   "control_path": "fAGV",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fAGV",
+   "vcl_class": "TfAGV"
+  },
+  {
+   "control_path": "fAGV.AGV.tsAGV_Setting.Panel2.spbSave",
+   "event_name": "OnClick",
+   "handler_name": "spbSaveClick",
+   "leaf_name": "spbSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fAGV.AGV.tsAGV_Setting.Panel2.sbtExit",
+   "event_name": "OnClick",
+   "handler_name": "sbtExitClick",
+   "leaf_name": "sbtExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TP1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edE84_1_TP1MouseDown",
+   "leaf_name": "edE84_2_TP1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TP2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edE84_1_TP1MouseDown",
+   "leaf_name": "edE84_2_TP2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TP3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edE84_1_TP1MouseDown",
+   "leaf_name": "edE84_2_TP3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TP4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edE84_1_TP1MouseDown",
+   "leaf_name": "edE84_2_TP4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TP5",
+   "event_name": "OnMouseDown",
+   "handler_name": "edE84_1_TP1MouseDown",
+   "leaf_name": "edE84_2_TP5",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TP6",
+   "event_name": "OnMouseDown",
+   "handler_name": "edE84_1_TP1MouseDown",
+   "leaf_name": "edE84_2_TP6",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TA1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edE84_1_TP1MouseDown",
+   "leaf_name": "edE84_2_TA1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TA2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edE84_1_TP1MouseDown",
+   "leaf_name": "edE84_2_TA2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TA3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edE84_1_TP1MouseDown",
+   "leaf_name": "edE84_2_TA3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TD0",
+   "event_name": "OnMouseDown",
+   "handler_name": "edE84_1_TP1MouseDown",
+   "leaf_name": "edE84_2_TD0",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TD1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edE84_1_TP1MouseDown",
+   "leaf_name": "edE84_2_TD1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TP1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edE84_1_TP1MouseDown",
+   "leaf_name": "edE84_1_TP1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TP2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edE84_1_TP1MouseDown",
+   "leaf_name": "edE84_1_TP2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TP3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edE84_1_TP1MouseDown",
+   "leaf_name": "edE84_1_TP3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TP4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edE84_1_TP1MouseDown",
+   "leaf_name": "edE84_1_TP4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TP5",
+   "event_name": "OnMouseDown",
+   "handler_name": "edE84_1_TP1MouseDown",
+   "leaf_name": "edE84_1_TP5",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TP6",
+   "event_name": "OnMouseDown",
+   "handler_name": "edE84_1_TP1MouseDown",
+   "leaf_name": "edE84_1_TP6",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TA1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edE84_1_TP1MouseDown",
+   "leaf_name": "edE84_1_TA1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TA2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edE84_1_TP1MouseDown",
+   "leaf_name": "edE84_1_TA2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TA3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edE84_1_TP1MouseDown",
+   "leaf_name": "edE84_1_TA3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TD0",
+   "event_name": "OnMouseDown",
+   "handler_name": "edE84_1_TP1MouseDown",
+   "leaf_name": "edE84_1_TD0",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TD1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edE84_1_TP1MouseDown",
+   "leaf_name": "edE84_1_TD1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAGV.AGV.tsAGV_Setting.Panel3.btInitalLoad",
+   "event_name": "OnClick",
+   "handler_name": "btInitalLoadClick",
+   "leaf_name": "btInitalLoad",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fAGV.AGV.tsAGV_Setting.Panel3.btInitalUnLoad",
+   "event_name": "OnClick",
+   "handler_name": "btInitalUnLoadClick",
+   "leaf_name": "btInitalUnLoad",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4.edAuto1Count",
+   "event_name": "OnMouseDown",
+   "handler_name": "edAuto1CountMouseDown",
+   "leaf_name": "edAuto1Count",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4.edAuto2Count",
+   "event_name": "OnMouseDown",
+   "handler_name": "edAuto1CountMouseDown",
+   "leaf_name": "edAuto2Count",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4.edAuto3Count",
+   "event_name": "OnMouseDown",
+   "handler_name": "edAuto1CountMouseDown",
+   "leaf_name": "edAuto3Count",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAGV.Timer2",
+   "event_name": "OnTimer",
+   "handler_name": "Timer2Timer",
+   "leaf_name": "Timer2",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fAGV",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "Automation/AGV.dfm"
+}

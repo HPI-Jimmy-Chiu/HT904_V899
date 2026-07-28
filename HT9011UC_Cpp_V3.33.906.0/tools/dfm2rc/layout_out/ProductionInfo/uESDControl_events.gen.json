@@ -1,0 +1,86 @@
+{
+ "event_count": 11,
+ "events": [
+  {
+   "control_path": "ESDForm",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "ESDForm",
+   "vcl_class": "TESDForm"
+  },
+  {
+   "control_path": "ESDForm",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "ESDForm",
+   "vcl_class": "TESDForm"
+  },
+  {
+   "control_path": "ESDForm.sbExit",
+   "event_name": "OnClick",
+   "handler_name": "sbExitClick",
+   "leaf_name": "sbExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "ESDForm.pcESDMain.tsESDMain.sbESDDataImport",
+   "event_name": "OnClick",
+   "handler_name": "sbESDDataImportClick",
+   "leaf_name": "sbESDDataImport",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "ESDForm.pcESDMain.tsESDSetup.SpeedButton1",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton1Click",
+   "leaf_name": "SpeedButton1",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "ESDForm.pcESDMain.tsESDSetup.Panel1.sbAddESDTimeSet",
+   "event_name": "OnClick",
+   "handler_name": "sbAddESDTimeSetClick",
+   "leaf_name": "sbAddESDTimeSet",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "ESDForm.pcESDMain.tsESDSetup.Panel1.sbDeleteESDTime",
+   "event_name": "OnClick",
+   "handler_name": "sbDeleteESDTimeClick",
+   "leaf_name": "sbDeleteESDTime",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "ESDForm.pcESDMain.tsESDSetup.Panel1.sbUpdate",
+   "event_name": "OnClick",
+   "handler_name": "sbUpdateClick",
+   "leaf_name": "sbUpdate",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "ESDForm.pcESDMain.tsESDSetup.Panel1.sbSetTime",
+   "event_name": "OnClick",
+   "handler_name": "sbSetTimeClick",
+   "leaf_name": "sbSetTime",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "ESDForm.pcESDMain.tsESDSetup.Panel1.sgESDSetTime",
+   "event_name": "OnSelectCell",
+   "handler_name": "sgESDSetTimeSelectCell",
+   "leaf_name": "sgESDSetTime",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "ESDForm.pcESDMain.tsESDSetup.Panel1.edESDCheckForwardTime",
+   "event_name": "OnClick",
+   "handler_name": "edESDCheckForwardTimeClick",
+   "leaf_name": "edESDCheckForwardTime",
+   "vcl_class": "TEdit"
+  }
+ ],
+ "form_name": "ESDForm",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "ProductionInfo/uESDControl.dfm"
+}

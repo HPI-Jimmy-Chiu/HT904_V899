@@ -1,0 +1,1104 @@
+{
+ "control_node_count": 16,
+ "encoding_used": "cp950",
+ "form_class": "TCCDInterfaceForm",
+ "form_name": "CCDInterfaceForm",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "CCDInterfaceForm.Memo",
+    "CCDInterfaceForm.Button1",
+    "CCDInterfaceForm.Button2",
+    "CCDInterfaceForm.Button3",
+    "CCDInterfaceForm.Button4",
+    "CCDInterfaceForm.Edit1",
+    "CCDInterfaceForm.Button5",
+    "CCDInterfaceForm.GroupBox1",
+    "CCDInterfaceForm.Timer1",
+    "CCDInterfaceForm.Timer2"
+   ],
+   "class": "TCCDInterfaceForm",
+   "depth": 0,
+   "events": {
+    "OnClose": "FormClose",
+    "OnShow": "FormShow"
+   },
+   "geometry": {
+    "height": 333,
+    "left": 400,
+    "top": 289,
+    "width": 391
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "CCDInterfaceForm",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "CCDInterfaceForm",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "MUTInterface"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 333
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 400
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnClose": {
+     "type": "SCALAR",
+     "value": "FormClose"
+    },
+    "OnShow": {
+     "type": "SCALAR",
+     "value": "FormShow"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Position": {
+     "type": "SCALAR",
+     "value": "poScreenCenter"
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 289
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 391
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 1,
+   "events": {
+    "OnDblClick": "MemoDblClick"
+   },
+   "geometry": {
+    "height": 193,
+    "left": 131,
+    "top": 0,
+    "width": 236
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 19,
+   "name": "Memo",
+   "objkind": "object",
+   "parent_path": "CCDInterfaceForm",
+   "path": "CCDInterfaceForm.Memo",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 193
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 131
+    },
+    "OnDblClick": {
+     "type": "SCALAR",
+     "value": "MemoDblClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 236
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "Button1Click"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 8,
+    "top": 40,
+    "width": 113
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 28,
+   "name": "Button1",
+   "objkind": "object",
+   "parent_path": "CCDInterfaceForm",
+   "path": "CCDInterfaceForm.Button1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "EXISTENCE"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "Button1Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 113
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "Button2Click"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 8,
+    "top": 104,
+    "width": 113
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 37,
+   "name": "Button2",
+   "objkind": "object",
+   "parent_path": "CCDInterfaceForm",
+   "path": "CCDInterfaceForm.Button2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "FILE READY"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "Button2Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 104
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 113
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "Button3Click"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 8,
+    "top": 136,
+    "width": 113
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 46,
+   "name": "Button3",
+   "objkind": "object",
+   "parent_path": "CCDInterfaceForm",
+   "path": "CCDInterfaceForm.Button3",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "IDENTIFICATION"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "Button3Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 113
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "Button4Click"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 8,
+    "top": 168,
+    "width": 113
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 55,
+   "name": "Button4",
+   "objkind": "object",
+   "parent_path": "CCDInterfaceForm",
+   "path": "CCDInterfaceForm.Button4",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "END"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "Button4Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 168
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 113
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 8,
+    "top": 72,
+    "width": 113
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 64,
+   "name": "Edit1",
+   "objkind": "object",
+   "parent_path": "CCDInterfaceForm",
+   "path": "CCDInterfaceForm.Edit1",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Text": {
+     "type": "STR",
+     "value": "Test"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 113
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "Button5Click"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 8,
+    "top": 8,
+    "width": 113
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 78,
+   "name": "Button5",
+   "objkind": "object",
+   "parent_path": "CCDInterfaceForm",
+   "path": "CCDInterfaceForm.Button5",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Call CCD Progran"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "Button5Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 113
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "CCDInterfaceForm.GroupBox1.Label1",
+    "CCDInterfaceForm.GroupBox1.Label2",
+    "CCDInterfaceForm.GroupBox1.CountCBox",
+    "CCDInterfaceForm.GroupBox1.Button6",
+    "CCDInterfaceForm.GroupBox1.edSavePath",
+    "CCDInterfaceForm.GroupBox1.VideoCBox"
+   ],
+   "class": "TGroupBox",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 81,
+    "left": 8,
+    "top": 200,
+    "width": 361
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 87,
+   "name": "GroupBox1",
+   "objkind": "object",
+   "parent_path": "CCDInterfaceForm",
+   "path": "CCDInterfaceForm.GroupBox1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Grab Image"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 81
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 200
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 361
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 7,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 96,
+    "top": 24,
+    "width": 40
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 100,
+   "name": "Label1",
+   "objkind": "object",
+   "parent_path": "CCDInterfaceForm.GroupBox1",
+   "path": "CCDInterfaceForm.GroupBox1.Label1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Count :"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 40
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 8,
+    "top": 52,
+    "width": 62
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 107,
+   "name": "Label2",
+   "objkind": "object",
+   "parent_path": "CCDInterfaceForm.GroupBox1",
+   "path": "CCDInterfaceForm.GroupBox1.Label2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Save Path"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 52
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 62
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 144,
+    "top": 20,
+    "width": 41
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 114,
+   "name": "CountCBox",
+   "objkind": "object",
+   "parent_path": "CCDInterfaceForm.GroupBox1",
+   "path": "CCDInterfaceForm.GroupBox1.CountCBox",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 144
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Text": {
+     "type": "STR",
+     "value": "1"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 41
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "Button6Click"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 200,
+    "top": 20,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 140,
+   "name": "Button6",
+   "objkind": "object",
+   "parent_path": "CCDInterfaceForm.GroupBox1",
+   "path": "CCDInterfaceForm.GroupBox1.Button6",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "GRAB"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 200
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "Button6Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 80,
+    "top": 48,
+    "width": 185
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 149,
+   "name": "edSavePath",
+   "objkind": "object",
+   "parent_path": "CCDInterfaceForm.GroupBox1",
+   "path": "CCDInterfaceForm.GroupBox1.edSavePath",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Text": {
+     "type": "STR",
+     "value": "D:\\"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 48
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 185
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 8,
+    "top": 20,
+    "width": 73
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 163,
+   "name": "VideoCBox",
+   "objkind": "object",
+   "parent_path": "CCDInterfaceForm.GroupBox1",
+   "path": "CCDInterfaceForm.GroupBox1.VideoCBox",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "Video 1",
+      "Video 2",
+      "Video 3",
+      "Video 4"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Text": {
+     "type": "STR",
+     "value": "Video 1"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 73
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTimer",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": null,
+    "left": 184,
+    "top": 16,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 178,
+   "name": "Timer1",
+   "objkind": "object",
+   "parent_path": "CCDInterfaceForm",
+   "path": "CCDInterfaceForm.Timer1",
+   "properties": {
+    "Enabled": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 200
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 184
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTimer",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": null,
+    "left": 220,
+    "top": 16,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 184,
+   "name": "Timer2",
+   "objkind": "object",
+   "parent_path": "CCDInterfaceForm",
+   "path": "CCDInterfaceForm.Timer2",
+   "properties": {
+    "Interval": {
+     "type": "SCALAR",
+     "value": 200
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 220
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "CCDInterface.dfm",
+ "total_nodes_incl_root": 17
+}

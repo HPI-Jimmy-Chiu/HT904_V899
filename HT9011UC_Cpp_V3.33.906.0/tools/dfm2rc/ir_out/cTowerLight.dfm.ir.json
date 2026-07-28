@@ -1,0 +1,3926 @@
+{
+ "control_node_count": 55,
+ "encoding_used": "cp950",
+ "form_class": "TfTowerLight",
+ "form_name": "fTowerLight",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fTowerLight.Panel3",
+    "fTowerLight.Panel2",
+    "fTowerLight.spbExit",
+    "fTowerLight.Timer1"
+   ],
+   "class": "TfTowerLight",
+   "depth": 0,
+   "events": {
+    "OnClose": "FormClose",
+    "OnShow": "FormShow"
+   },
+   "geometry": {
+    "height": null,
+    "left": 762,
+    "top": 160,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "fTowerLight",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "fTowerLight",
+   "properties": {
+    "BorderIcons": {
+     "type": "SET",
+     "value": []
+    },
+    "BorderStyle": {
+     "type": "SCALAR",
+     "value": "bsToolWindow"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "TowerLight"
+    },
+    "ClientHeight": {
+     "type": "SCALAR",
+     "value": 530
+    },
+    "ClientWidth": {
+     "type": "SCALAR",
+     "value": 760
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "DragKind": {
+     "type": "SCALAR",
+     "value": "dkDock"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 762
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnClose": {
+     "type": "SCALAR",
+     "value": "FormClose"
+    },
+    "OnShow": {
+     "type": "SCALAR",
+     "value": "FormShow"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 160
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [
+    "fTowerLight.Panel3.RGB50",
+    "fTowerLight.Panel3.RGB40",
+    "fTowerLight.Panel3.RGB30",
+    "fTowerLight.Panel3.RGB20",
+    "fTowerLight.Panel3.RGB10",
+    "fTowerLight.Panel3.RGB00",
+    "fTowerLight.Panel3.RGB01",
+    "fTowerLight.Panel3.RGB11",
+    "fTowerLight.Panel3.RGB21",
+    "fTowerLight.Panel3.RGB31",
+    "fTowerLight.Panel3.RGB41",
+    "fTowerLight.Panel3.RGB51",
+    "fTowerLight.Panel3.RGB52",
+    "fTowerLight.Panel3.RGB42",
+    "fTowerLight.Panel3.RGB32",
+    "fTowerLight.Panel3.RGB22",
+    "fTowerLight.Panel3.RGB12",
+    "fTowerLight.Panel3.RGB02",
+    "fTowerLight.Panel3.Label2",
+    "fTowerLight.Panel3.Label3",
+    "fTowerLight.Panel3.Label4",
+    "fTowerLight.Panel3.Label6",
+    "fTowerLight.Panel3.Bevel1",
+    "fTowerLight.Panel3.Bevel2",
+    "fTowerLight.Panel3.Bevel3",
+    "fTowerLight.Panel3.Bevel4",
+    "fTowerLight.Panel3.Label43",
+    "fTowerLight.Panel3.RGB60",
+    "fTowerLight.Panel3.RGB61",
+    "fTowerLight.Panel3.RGB62",
+    "fTowerLight.Panel3.Panel4",
+    "fTowerLight.Panel3.Panel5",
+    "fTowerLight.Panel3.Panel6",
+    "fTowerLight.Panel3.Panel7",
+    "fTowerLight.Panel3.Panel8",
+    "fTowerLight.Panel3.Panel9",
+    "fTowerLight.Panel3.cbRunning",
+    "fTowerLight.Panel3.cbJam",
+    "fTowerLight.Panel3.cbPause",
+    "fTowerLight.Panel3.cbMessage",
+    "fTowerLight.Panel3.cbHeating",
+    "fTowerLight.Panel3.cbHome",
+    "fTowerLight.Panel3.rgMusicTest",
+    "fTowerLight.Panel3.Panel1",
+    "fTowerLight.Panel3.cbOffLine",
+    "fTowerLight.Panel3.Panel11"
+   ],
+   "class": "TPanel",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 456,
+    "left": 0,
+    "top": 33,
+    "width": 760
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 21,
+   "name": "Panel3",
+   "objkind": "object",
+   "parent_path": "fTowerLight",
+   "path": "fTowerLight.Panel3",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 456
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 760
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 2,
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "geometry": {
+    "height": 22,
+    "left": 168,
+    "top": 260,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 30,
+   "name": "RGB50",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB50",
+   "properties": {
+    "FalseColor": {
+     "type": "SCALAR",
+     "value": 22272
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 168
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "RGB00Click"
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 260
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 2,
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "geometry": {
+    "height": 22,
+    "left": 168,
+    "top": 219,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 41,
+   "name": "RGB40",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB40",
+   "properties": {
+    "FalseColor": {
+     "type": "SCALAR",
+     "value": 22272
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 168
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "RGB00Click"
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 219
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 2,
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "geometry": {
+    "height": 22,
+    "left": 168,
+    "top": 177,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 52,
+   "name": "RGB30",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB30",
+   "properties": {
+    "FalseColor": {
+     "type": "SCALAR",
+     "value": 22272
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 168
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "RGB00Click"
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 177
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 2,
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "geometry": {
+    "height": 22,
+    "left": 168,
+    "top": 136,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 63,
+   "name": "RGB20",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB20",
+   "properties": {
+    "FalseColor": {
+     "type": "SCALAR",
+     "value": 22272
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 168
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "RGB00Click"
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 2,
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "geometry": {
+    "height": 22,
+    "left": 168,
+    "top": 95,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 74,
+   "name": "RGB10",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB10",
+   "properties": {
+    "FalseColor": {
+     "type": "SCALAR",
+     "value": 22272
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 168
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "RGB00Click"
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 95
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 2,
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "geometry": {
+    "height": 22,
+    "left": 168,
+    "top": 54,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 85,
+   "name": "RGB00",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB00",
+   "properties": {
+    "FalseColor": {
+     "type": "SCALAR",
+     "value": 22272
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 168
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "RGB00Click"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 54
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 2,
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "geometry": {
+    "height": 22,
+    "left": 224,
+    "top": 55,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 95,
+   "name": "RGB01",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB01",
+   "properties": {
+    "FalseColor": {
+     "type": "SCALAR",
+     "value": 881034
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 224
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "RGB00Click"
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 55
+    },
+    "TrueColor": {
+     "type": "SCALAR",
+     "value": "clYellow"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 2,
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "geometry": {
+    "height": 22,
+    "left": 224,
+    "top": 95,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 107,
+   "name": "RGB11",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB11",
+   "properties": {
+    "FalseColor": {
+     "type": "SCALAR",
+     "value": 881034
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 224
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "RGB00Click"
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 95
+    },
+    "TrueColor": {
+     "type": "SCALAR",
+     "value": "clYellow"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 2,
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "geometry": {
+    "height": 22,
+    "left": 224,
+    "top": 136,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 119,
+   "name": "RGB21",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB21",
+   "properties": {
+    "FalseColor": {
+     "type": "SCALAR",
+     "value": 881034
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 224
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "RGB00Click"
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "TrueColor": {
+     "type": "SCALAR",
+     "value": "clYellow"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 2,
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "geometry": {
+    "height": 22,
+    "left": 224,
+    "top": 177,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 131,
+   "name": "RGB31",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB31",
+   "properties": {
+    "FalseColor": {
+     "type": "SCALAR",
+     "value": 881034
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 224
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "RGB00Click"
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 177
+    },
+    "TrueColor": {
+     "type": "SCALAR",
+     "value": "clYellow"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 2,
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "geometry": {
+    "height": 22,
+    "left": 224,
+    "top": 219,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 143,
+   "name": "RGB41",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB41",
+   "properties": {
+    "FalseColor": {
+     "type": "SCALAR",
+     "value": 881034
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 224
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "RGB00Click"
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 219
+    },
+    "TrueColor": {
+     "type": "SCALAR",
+     "value": "clYellow"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 2,
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "geometry": {
+    "height": 22,
+    "left": 224,
+    "top": 260,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 155,
+   "name": "RGB51",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB51",
+   "properties": {
+    "FalseColor": {
+     "type": "SCALAR",
+     "value": 881034
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 224
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "RGB00Click"
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 260
+    },
+    "TrueColor": {
+     "type": "SCALAR",
+     "value": "clYellow"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 2,
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "geometry": {
+    "height": 22,
+    "left": 280,
+    "top": 260,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 167,
+   "name": "RGB52",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB52",
+   "properties": {
+    "FalseColor": {
+     "type": "SCALAR",
+     "value": "clMaroon"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 280
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "RGB00Click"
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 260
+    },
+    "TrueColor": {
+     "type": "SCALAR",
+     "value": "clRed"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 12,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 2,
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "geometry": {
+    "height": 22,
+    "left": 279,
+    "top": 218,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 179,
+   "name": "RGB42",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB42",
+   "properties": {
+    "FalseColor": {
+     "type": "SCALAR",
+     "value": "clMaroon"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 279
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "RGB00Click"
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 218
+    },
+    "TrueColor": {
+     "type": "SCALAR",
+     "value": "clRed"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 13,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 2,
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "geometry": {
+    "height": 22,
+    "left": 280,
+    "top": 177,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 191,
+   "name": "RGB32",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB32",
+   "properties": {
+    "FalseColor": {
+     "type": "SCALAR",
+     "value": "clMaroon"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 280
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "RGB00Click"
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 177
+    },
+    "TrueColor": {
+     "type": "SCALAR",
+     "value": "clRed"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 14,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 2,
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "geometry": {
+    "height": 22,
+    "left": 280,
+    "top": 136,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 203,
+   "name": "RGB22",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB22",
+   "properties": {
+    "FalseColor": {
+     "type": "SCALAR",
+     "value": "clMaroon"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 280
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "RGB00Click"
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "TrueColor": {
+     "type": "SCALAR",
+     "value": "clRed"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 15,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 2,
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "geometry": {
+    "height": 22,
+    "left": 280,
+    "top": 95,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 215,
+   "name": "RGB12",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB12",
+   "properties": {
+    "FalseColor": {
+     "type": "SCALAR",
+     "value": "clMaroon"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 280
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "RGB00Click"
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 95
+    },
+    "TrueColor": {
+     "type": "SCALAR",
+     "value": "clRed"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 16,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 2,
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "geometry": {
+    "height": 22,
+    "left": 280,
+    "top": 54,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 227,
+   "name": "RGB02",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB02",
+   "properties": {
+    "FalseColor": {
+     "type": "SCALAR",
+     "value": "clMaroon"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 280
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "RGB00Click"
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 54
+    },
+    "TrueColor": {
+     "type": "SCALAR",
+     "value": "clRed"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 17,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 164,
+    "top": 24,
+    "width": 29
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 239,
+   "name": "Label2",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Label2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Green"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 164
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 29
+    }
+   },
+   "sibling_index": 18,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 219,
+    "top": 24,
+    "width": 31
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 246,
+   "name": "Label3",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Label3",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Yellow"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 219
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 31
+    }
+   },
+   "sibling_index": 19,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 281,
+    "top": 24,
+    "width": 20
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 253,
+   "name": "Label4",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Label4",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Red"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 281
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 20
+    }
+   },
+   "sibling_index": 20,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 344,
+    "top": 24,
+    "width": 61
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 260,
+   "name": "Label6",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Label6",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Music Select"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 344
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 61
+    }
+   },
+   "sibling_index": 21,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TBevel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 50,
+    "left": 177,
+    "top": 362,
+    "width": 7
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 267,
+   "name": "Bevel1",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Bevel1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 50
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 177
+    },
+    "Shape": {
+     "type": "SCALAR",
+     "value": "bsLeftLine"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 362
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 7
+    }
+   },
+   "sibling_index": 22,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TBevel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 50,
+    "left": 233,
+    "top": 362,
+    "width": 7
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 274,
+   "name": "Bevel2",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Bevel2",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 50
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 233
+    },
+    "Shape": {
+     "type": "SCALAR",
+     "value": "bsLeftLine"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 362
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 7
+    }
+   },
+   "sibling_index": 23,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TBevel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 50,
+    "left": 289,
+    "top": 362,
+    "width": 7
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 281,
+   "name": "Bevel3",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Bevel3",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 50
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 289
+    },
+    "Shape": {
+     "type": "SCALAR",
+     "value": "bsLeftLine"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 362
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 7
+    }
+   },
+   "sibling_index": 24,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TBevel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 51,
+    "left": 177,
+    "top": 362,
+    "width": 134
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 288,
+   "name": "Bevel4",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Bevel4",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 51
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 177
+    },
+    "Shape": {
+     "type": "SCALAR",
+     "value": "bsBottomLine"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 362
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 134
+    }
+   },
+   "sibling_index": 25,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 316,
+    "top": 406,
+    "width": 74
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 295,
+   "name": "Label43",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Label43",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Click to change"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 316
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 406
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 74
+    }
+   },
+   "sibling_index": 26,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 2,
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "geometry": {
+    "height": 22,
+    "left": 168,
+    "top": 300,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 302,
+   "name": "RGB60",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB60",
+   "properties": {
+    "FalseColor": {
+     "type": "SCALAR",
+     "value": 22272
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 168
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "RGB00Click"
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 18
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 27,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 2,
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "geometry": {
+    "height": 22,
+    "left": 224,
+    "top": 300,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 313,
+   "name": "RGB61",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB61",
+   "properties": {
+    "FalseColor": {
+     "type": "SCALAR",
+     "value": 881034
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 224
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "RGB00Click"
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "TrueColor": {
+     "type": "SCALAR",
+     "value": "clYellow"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 28,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 2,
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "geometry": {
+    "height": 22,
+    "left": 280,
+    "top": 300,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 325,
+   "name": "RGB62",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB62",
+   "properties": {
+    "FalseColor": {
+     "type": "SCALAR",
+     "value": "clMaroon"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 280
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "RGB00Click"
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "TrueColor": {
+     "type": "SCALAR",
+     "value": "clRed"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 29,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 33,
+    "left": 40,
+    "top": 48,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 337,
+   "name": "Panel4",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Panel4",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvRaised"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Running"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 9534289
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -15
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 48
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 30,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 33,
+    "left": 40,
+    "top": 89,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 354,
+   "name": "Panel5",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Panel5",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvRaised"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Error/Jam"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 9534289
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -15
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 89
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 31,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 33,
+    "left": 40,
+    "top": 130,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 371,
+   "name": "Panel6",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Panel6",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvRaised"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Pause"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 9534289
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -15
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 130
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 32,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 33,
+    "left": 40,
+    "top": 171,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 388,
+   "name": "Panel7",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Panel7",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvRaised"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Message"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 9534289
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -15
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 171
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 33,
+   "synthesized": false,
+   "tab_order": 7,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 33,
+    "left": 40,
+    "top": 213,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 405,
+   "name": "Panel8",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Panel8",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvRaised"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Heating"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 9534289
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -15
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 213
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 34,
+   "synthesized": false,
+   "tab_order": 9,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 33,
+    "left": 40,
+    "top": 254,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 422,
+   "name": "Panel9",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Panel9",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvRaised"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Homing"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 9534289
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -15
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 254
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 35,
+   "synthesized": false,
+   "tab_order": 11,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 344,
+    "top": 50,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 439,
+   "name": "cbRunning",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.cbRunning",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "ImeName": {
+     "type": "STR",
+     "value": ""
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "Silent",
+      "Music 1",
+      "Music 2",
+      "Music 3",
+      "Music 4"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 344
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Text": {
+     "type": "STR",
+     "value": "Silent"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 50
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 36,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 344,
+    "top": 92,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 455,
+   "name": "cbJam",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.cbJam",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "ImeName": {
+     "type": "STR",
+     "value": ""
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "Silent",
+      "Music 1",
+      "Music 2",
+      "Music 3",
+      "Music 4"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 344
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Text": {
+     "type": "STR",
+     "value": "Silent"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 92
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 37,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 344,
+    "top": 133,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 471,
+   "name": "cbPause",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.cbPause",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "ImeName": {
+     "type": "STR",
+     "value": ""
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "Silent",
+      "Music 1",
+      "Music 2",
+      "Music 3",
+      "Music 4"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 344
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Text": {
+     "type": "STR",
+     "value": "Silent"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 133
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 38,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 344,
+    "top": 174,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 487,
+   "name": "cbMessage",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.cbMessage",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "ImeName": {
+     "type": "STR",
+     "value": ""
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "Silent",
+      "Music 1",
+      "Music 2",
+      "Music 3",
+      "Music 4"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 344
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Text": {
+     "type": "STR",
+     "value": "Silent"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 174
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 39,
+   "synthesized": false,
+   "tab_order": 8,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 344,
+    "top": 216,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 503,
+   "name": "cbHeating",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.cbHeating",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "ImeName": {
+     "type": "STR",
+     "value": ""
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "Silent",
+      "Music 1",
+      "Music 2",
+      "Music 3",
+      "Music 4"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 344
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Text": {
+     "type": "STR",
+     "value": "Silent"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 216
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 40,
+   "synthesized": false,
+   "tab_order": 10,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 344,
+    "top": 257,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 519,
+   "name": "cbHome",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.cbHome",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "ImeName": {
+     "type": "STR",
+     "value": ""
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "Silent",
+      "Music 1",
+      "Music 2",
+      "Music 3",
+      "Music 4"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 344
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Text": {
+     "type": "STR",
+     "value": "Silent"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 257
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 41,
+   "synthesized": false,
+   "tab_order": 12,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TRadioGroup",
+   "depth": 2,
+   "events": {
+    "OnClick": "rgMusicTestClick"
+   },
+   "geometry": {
+    "height": 225,
+    "left": 520,
+    "top": 56,
+    "width": 185
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 535,
+   "name": "rgMusicTest",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.rgMusicTest",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Music Test"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 225
+    },
+    "ItemIndex": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "[ 0 ] Silent",
+      "[ 1 ] Music 1",
+      "[ 2 ] Music 2",
+      "[ 3 ] Music 3",
+      "[ 4 ] Music 4"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 520
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "rgMusicTestClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 56
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 185
+    }
+   },
+   "sibling_index": 42,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 33,
+    "left": 40,
+    "top": 294,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 551,
+   "name": "Panel1",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Panel1",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvRaised"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "OffLine Running"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 9534289
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -15
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 294
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 43,
+   "synthesized": false,
+   "tab_order": 13,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 344,
+    "top": 297,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 568,
+   "name": "cbOffLine",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.cbOffLine",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "ImeName": {
+     "type": "STR",
+     "value": ""
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "Silent",
+      "Music 1",
+      "Music 2",
+      "Music 3",
+      "Music 4"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 344
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "Text": {
+     "type": "STR",
+     "value": "Silent"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 297
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 44,
+   "synthesized": false,
+   "tab_order": 14,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fTowerLight.Panel3.Panel11.RGB72",
+    "fTowerLight.Panel3.Panel11.RGB71",
+    "fTowerLight.Panel3.Panel11.RGB70",
+    "fTowerLight.Panel3.Panel11.cbART",
+    "fTowerLight.Panel3.Panel11.palART"
+   ],
+   "class": "TPanel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 33,
+    "left": 40,
+    "top": 332,
+    "width": 405
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 584,
+   "name": "Panel11",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Panel11",
+   "properties": {
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 332
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 405
+    }
+   },
+   "sibling_index": 45,
+   "synthesized": false,
+   "tab_order": 15,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 3,
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "geometry": {
+    "height": 22,
+    "left": 240,
+    "top": 8,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 592,
+   "name": "RGB72",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3.Panel11",
+   "path": "fTowerLight.Panel3.Panel11.RGB72",
+   "properties": {
+    "FalseColor": {
+     "type": "SCALAR",
+     "value": "clMaroon"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 240
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "RGB00Click"
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 23
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "TrueColor": {
+     "type": "SCALAR",
+     "value": "clRed"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 3,
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "geometry": {
+    "height": 22,
+    "left": 184,
+    "top": 8,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 604,
+   "name": "RGB71",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3.Panel11",
+   "path": "fTowerLight.Panel3.Panel11.RGB71",
+   "properties": {
+    "FalseColor": {
+     "type": "SCALAR",
+     "value": 881034
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 184
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "RGB00Click"
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "TrueColor": {
+     "type": "SCALAR",
+     "value": "clYellow"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 3,
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "geometry": {
+    "height": 22,
+    "left": 128,
+    "top": 8,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 616,
+   "name": "RGB70",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3.Panel11",
+   "path": "fTowerLight.Panel3.Panel11.RGB70",
+   "properties": {
+    "FalseColor": {
+     "type": "SCALAR",
+     "value": 22272
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 128
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "RGB00Click"
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 304,
+    "top": 5,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 627,
+   "name": "cbART",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3.Panel11",
+   "path": "fTowerLight.Panel3.Panel11.cbART",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "ImeName": {
+     "type": "STR",
+     "value": ""
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "Silent",
+      "Music 1",
+      "Music 2",
+      "Music 3",
+      "Music 4"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 304
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Text": {
+     "type": "STR",
+     "value": "Silent"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 33,
+    "left": 0,
+    "top": 2,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 643,
+   "name": "palART",
+   "objkind": "object",
+   "parent_path": "fTowerLight.Panel3.Panel11",
+   "path": "fTowerLight.Panel3.Panel11.palART",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvRaised"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Auto Retest"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 9534289
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -15
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 33,
+    "left": 0,
+    "top": 0,
+    "width": 760
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 662,
+   "name": "Panel2",
+   "objkind": "object",
+   "parent_path": "fTowerLight",
+   "path": "fTowerLight.Panel2",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Tower light and  music setup"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 9534289
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 760
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": "alBottom",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 1,
+   "events": {
+    "OnClick": "spbExitClick"
+   },
+   "geometry": {
+    "height": 41,
+    "left": 0,
+    "top": 489,
+    "width": 760
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 679,
+   "name": "spbExit",
+   "objkind": "object",
+   "parent_path": "fTowerLight",
+   "path": "fTowerLight.spbExit",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alBottom"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Exit"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "spbExitClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 489
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 760
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTimer",
+   "depth": 1,
+   "events": {
+    "OnTimer": "Timer1Timer"
+   },
+   "geometry": {
+    "height": null,
+    "left": 516,
+    "top": 32,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 695,
+   "name": "Timer1",
+   "objkind": "object",
+   "parent_path": "fTowerLight",
+   "path": "fTowerLight.Timer1",
+   "properties": {
+    "Interval": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 516
+    },
+    "OnTimer": {
+     "type": "SCALAR",
+     "value": "Timer1Timer"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 32
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "cTowerLight.dfm",
+ "total_nodes_incl_root": 56
+}

@@ -1,0 +1,289 @@
+{
+ "event_count": 40,
+ "events": [
+  {
+   "control_path": "fShuttleMove",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fShuttleMove",
+   "vcl_class": "TfShuttleMove"
+  },
+  {
+   "control_path": "fShuttleMove",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fShuttleMove",
+   "vcl_class": "TfShuttleMove"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel2.sbShuttleSensor",
+   "event_name": "OnClick",
+   "handler_name": "sbShuttleSensorClick",
+   "leaf_name": "sbShuttleSensor",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel2.sbSensorLatch",
+   "event_name": "OnClick",
+   "handler_name": "sbSensorLatchClick",
+   "leaf_name": "sbSensorLatch",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel2.gbShuttleMove.btShu2Right",
+   "event_name": "OnClick",
+   "handler_name": "ShuttleMoveClick",
+   "leaf_name": "btShu2Right",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel2.gbShuttleMove.btShu1Right",
+   "event_name": "OnClick",
+   "handler_name": "ShuttleMoveClick",
+   "leaf_name": "btShu1Right",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel2.gbShuttleMove.btShu2Left",
+   "event_name": "OnClick",
+   "handler_name": "ShuttleMoveClick",
+   "leaf_name": "btShu2Left",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel2.gbShuttleMove.btShu1Left",
+   "event_name": "OnClick",
+   "handler_name": "ShuttleMoveClick",
+   "leaf_name": "btShu1Left",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel2.gbScanOutShuttle.btScanOutShu2",
+   "event_name": "OnClick",
+   "handler_name": "ShuttleMoveClick",
+   "leaf_name": "btScanOutShu2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel2.gbScanOutShuttle.btScanOutShu1",
+   "event_name": "OnClick",
+   "handler_name": "ShuttleMoveClick",
+   "leaf_name": "btScanOutShu1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel3.gbInFiberCheck.btnInSH1Sen7DetectPos",
+   "event_name": "OnClick",
+   "handler_name": "ShuttleMoveClick",
+   "leaf_name": "btnInSH1Sen7DetectPos",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel3.gbInFiberCheck.btnInSH2Sen7DetectPos",
+   "event_name": "OnClick",
+   "handler_name": "ShuttleMoveClick",
+   "leaf_name": "btnInSH2Sen7DetectPos",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel3.gbInFiberCheck.edInSH2Sen7DetectPos",
+   "event_name": "OnClick",
+   "handler_name": "edInSH2Sen7DetectPosClick",
+   "leaf_name": "edInSH2Sen7DetectPos",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel3.gbInFiberCheck.edInSH1Sen7DetectPos",
+   "event_name": "OnClick",
+   "handler_name": "edInSH1Sen7DetectPosClick",
+   "leaf_name": "edInSH1Sen7DetectPos",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel3.gbBarCode.btInSH1BarCodePos",
+   "event_name": "OnClick",
+   "handler_name": "ShuttleMoveClick",
+   "leaf_name": "btInSH1BarCodePos",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel3.gbBarCode.btInSH2BarCodePos",
+   "event_name": "OnClick",
+   "handler_name": "ShuttleMoveClick",
+   "leaf_name": "btInSH2BarCodePos",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel3.gbBarCode.edInSH1BarCodePos",
+   "event_name": "OnClick",
+   "handler_name": "edInSH1Sen7DetectPosClick",
+   "leaf_name": "edInSH1BarCodePos",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel3.gbBarCode.edInSH2BarCodePos",
+   "event_name": "OnClick",
+   "handler_name": "edInSH2Sen7DetectPosClick",
+   "leaf_name": "edInSH2BarCodePos",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel3.gbBarCode.btnTStep",
+   "event_name": "OnClick",
+   "handler_name": "btnTStepClick",
+   "leaf_name": "btnTStep",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel3.gbOutFiberCheck.btOutSH1ZDetectPos",
+   "event_name": "OnClick",
+   "handler_name": "ShuttleMoveClick",
+   "leaf_name": "btOutSH1ZDetectPos",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel3.gbOutFiberCheck.btOutSH2ZDetectPos",
+   "event_name": "OnClick",
+   "handler_name": "ShuttleMoveClick",
+   "leaf_name": "btOutSH2ZDetectPos",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel3.gbOutFiberCheck.btOutSH1OneRowDetectPos",
+   "event_name": "OnClick",
+   "handler_name": "ShuttleMoveClick",
+   "leaf_name": "btOutSH1OneRowDetectPos",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel3.gbOutFiberCheck.btOutSH2OneRowDetectPos",
+   "event_name": "OnClick",
+   "handler_name": "ShuttleMoveClick",
+   "leaf_name": "btOutSH2OneRowDetectPos",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel3.gbOutFiberCheck.btRetry",
+   "event_name": "OnClick",
+   "handler_name": "btRetryClick",
+   "leaf_name": "btRetry",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel3.gbOutFiberCheck.edOutSH1OneRowDetectPos",
+   "event_name": "OnClick",
+   "handler_name": "edInSH1Sen7DetectPosClick",
+   "leaf_name": "edOutSH1OneRowDetectPos",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel3.gbOutFiberCheck.edOutSH2OneRowDetectPos",
+   "event_name": "OnClick",
+   "handler_name": "edInSH2Sen7DetectPosClick",
+   "leaf_name": "edOutSH2OneRowDetectPos",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel3.gbOutFiberCheck.edOutSH1ZDetectPos",
+   "event_name": "OnClick",
+   "handler_name": "edInSH1Sen7DetectPosClick",
+   "leaf_name": "edOutSH1ZDetectPos",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel3.gbOutFiberCheck.edOutSH2ZDetectPos",
+   "event_name": "OnClick",
+   "handler_name": "edInSH2Sen7DetectPosClick",
+   "leaf_name": "edOutSH2ZDetectPos",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel3.gbOutFiberCheck.mtOutSHDetectPos",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtOutSHDetectPosMouseDown",
+   "leaf_name": "mtOutSHDetectPos",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel3.gbInFiberCheckShtSnLct.btnInSH1SenICDetectPos",
+   "event_name": "OnClick",
+   "handler_name": "ShuttleMoveClick",
+   "leaf_name": "btnInSH1SenICDetectPos",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel3.gbInFiberCheckShtSnLct.btnInSH2SenICDetectPos",
+   "event_name": "OnClick",
+   "handler_name": "ShuttleMoveClick",
+   "leaf_name": "btnInSH2SenICDetectPos",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel3.gbInFiberCheckShtSnLct.btnInSH1SenICDetectAction",
+   "event_name": "OnClick",
+   "handler_name": "ShuttleMoveClick",
+   "leaf_name": "btnInSH1SenICDetectAction",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel3.gbInFiberCheckShtSnLct.btnInSH2SenICDetectAction",
+   "event_name": "OnClick",
+   "handler_name": "ShuttleMoveClick",
+   "leaf_name": "btnInSH2SenICDetectAction",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel3.gbInFiberCheckShtSnLct.edInSH2SenICDetectPos",
+   "event_name": "OnClick",
+   "handler_name": "edInSH2Sen7DetectPosClick",
+   "leaf_name": "edInSH2SenICDetectPos",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel3.gbInFiberCheckShtSnLct.edInSH1SenICDetectPos",
+   "event_name": "OnClick",
+   "handler_name": "edInSH1Sen7DetectPosClick",
+   "leaf_name": "edInSH1SenICDetectPos",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel3.gbInFiberCheckShtSnLct.edInSH1SenICDetectZPos",
+   "event_name": "OnClick",
+   "handler_name": "edInSH1SenICDetectZPosClick",
+   "leaf_name": "edInSH1SenICDetectZPos",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel3.gbInFiberCheckShtSnLct.edInSH2SenICDetectZPos",
+   "event_name": "OnClick",
+   "handler_name": "edInSH2SenICDetectZPosClick",
+   "leaf_name": "edInSH2SenICDetectZPos",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel3.gbInFiberCheckShtSnLct.btStart",
+   "event_name": "OnClick",
+   "handler_name": "btStartClick",
+   "leaf_name": "btStart",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel4.sbUpdate",
+   "event_name": "OnClick",
+   "handler_name": "sbUpdateClick",
+   "leaf_name": "sbUpdate",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fShuttleMove.Panel1.Panel4.sbtExit",
+   "event_name": "OnClick",
+   "handler_name": "sbtExitClick",
+   "leaf_name": "sbtExit",
+   "vcl_class": "TSpeedButton"
+  }
+ ],
+ "form_name": "fShuttleMove",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "ShuttleMove.dfm"
+}

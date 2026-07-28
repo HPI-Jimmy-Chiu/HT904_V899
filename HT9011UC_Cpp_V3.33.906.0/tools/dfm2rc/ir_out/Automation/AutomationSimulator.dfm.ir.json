@@ -1,0 +1,870 @@
+{
+ "control_node_count": 13,
+ "encoding_used": "cp950",
+ "form_class": "TMain",
+ "form_name": "Main",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "Main.GroupBox1",
+    "Main.rgACK"
+   ],
+   "class": "TMain",
+   "depth": 0,
+   "events": {},
+   "geometry": {
+    "height": 640,
+    "left": 173,
+    "top": 93,
+    "width": 870
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "Main",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "Main",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Hon Prec Automation Simulator"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnFace"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 640
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 173
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 93
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 870
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "Main.GroupBox1.Label1",
+    "Main.GroupBox1.Label2",
+    "Main.GroupBox1.Label3",
+    "Main.GroupBox1.Label4",
+    "Main.GroupBox1.Label5",
+    "Main.GroupBox1.lbSystemStatus",
+    "Main.GroupBox1.cbMachineModel",
+    "Main.GroupBox1.edMachineID",
+    "Main.GroupBox1.enVersion",
+    "Main.GroupBox1.cbConnectStatus",
+    "Main.GroupBox1.cbHandlerStatus"
+   ],
+   "class": "TGroupBox",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 205,
+    "left": 12,
+    "top": 12,
+    "width": 313
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 16,
+   "name": "GroupBox1",
+   "objkind": "object",
+   "parent_path": "Main",
+   "path": "Main.GroupBox1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "System Status"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 205
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 313
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 80,
+    "width": 79
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 23,
+   "name": "Label1",
+   "objkind": "object",
+   "parent_path": "Main.GroupBox1",
+   "path": "Main.GroupBox1.Label1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Machine Model :"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 79
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 104,
+    "width": 61
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 30,
+   "name": "Label2",
+   "objkind": "object",
+   "parent_path": "Main.GroupBox1",
+   "path": "Main.GroupBox1.Label2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Machine ID :"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 104
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 61
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 128,
+    "width": 41
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 37,
+   "name": "Label3",
+   "objkind": "object",
+   "parent_path": "Main.GroupBox1",
+   "path": "Main.GroupBox1.Label3",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Version :"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 128
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 41
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 152,
+    "width": 93
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 44,
+   "name": "Label4",
+   "objkind": "object",
+   "parent_path": "Main.GroupBox1",
+   "path": "Main.GroupBox1.Label4",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Connection Status :"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 152
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 93
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 180,
+    "width": 76
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 51,
+   "name": "Label5",
+   "objkind": "object",
+   "parent_path": "Main.GroupBox1",
+   "path": "Main.GroupBox1.Label5",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Handler Status :"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 180
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 76
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 29,
+    "left": 20,
+    "top": 28,
+    "width": 265
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 58,
+   "name": "lbSystemStatus",
+   "objkind": "object",
+   "parent_path": "Main.GroupBox1",
+   "path": "Main.GroupBox1.lbSystemStatus",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "lbSystemStatus"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlue"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 265
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 120,
+    "top": 76,
+    "width": 169
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 72,
+   "name": "cbMachineModel",
+   "objkind": "object",
+   "parent_path": "Main.GroupBox1",
+   "path": "Main.GroupBox1.cbMachineModel",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "HT-9046",
+      "HT-9045W",
+      "HT-7048",
+      "HT-7045 / HT-7040",
+      "HT-9040 / HT-9080 / HT-8080"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 120
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Text": {
+     "type": "STR",
+     "value": "HT-9045W"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 76
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 169
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 120,
+    "top": 100,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 87,
+   "name": "edMachineID",
+   "objkind": "object",
+   "parent_path": "Main.GroupBox1",
+   "path": "Main.GroupBox1.edMachineID",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 120
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Text": {
+     "type": "STR",
+     "value": "HT-100"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 120,
+    "top": 124,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 95,
+   "name": "enVersion",
+   "objkind": "object",
+   "parent_path": "Main.GroupBox1",
+   "path": "Main.GroupBox1.enVersion",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 120
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Text": {
+     "type": "STR",
+     "value": "V2.06"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 124
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 120,
+    "top": 148,
+    "width": 169
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 103,
+   "name": "cbConnectStatus",
+   "objkind": "object",
+   "parent_path": "Main.GroupBox1",
+   "path": "Main.GroupBox1.cbConnectStatus",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "Ready",
+      "Not Ready"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 120
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Text": {
+     "type": "STR",
+     "value": "Ready"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 148
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 169
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 120,
+    "top": 176,
+    "width": 169
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 115,
+   "name": "cbHandlerStatus",
+   "objkind": "object",
+   "parent_path": "Main.GroupBox1",
+   "path": "Main.GroupBox1.cbHandlerStatus",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "HALT",
+      "PAUSE",
+      "RUNNING",
+      ""
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 120
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Text": {
+     "type": "STR",
+     "value": "HALT"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 176
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 169
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TRadioGroup",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 45,
+    "left": 12,
+    "top": 224,
+    "width": 313
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 130,
+   "name": "rgACK",
+   "objkind": "object",
+   "parent_path": "Main",
+   "path": "Main.rgACK",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "ACK#"
+    },
+    "Columns": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clRed"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 45
+    },
+    "ItemIndex": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "Succeed",
+      "No Data",
+      "Otherwise"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 224
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 313
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "Automation/AutomationSimulator.dfm",
+ "total_nodes_incl_root": 14
+}

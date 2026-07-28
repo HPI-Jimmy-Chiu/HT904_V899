@@ -1,0 +1,58 @@
+{
+ "event_count": 7,
+ "events": [
+  {
+   "control_path": "fQAMode",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fQAMode",
+   "vcl_class": "TfQAMode"
+  },
+  {
+   "control_path": "fQAMode",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fQAMode",
+   "vcl_class": "TfQAMode"
+  },
+  {
+   "control_path": "fQAMode.btnApply",
+   "event_name": "OnClick",
+   "handler_name": "btnApplyClick",
+   "leaf_name": "btnApply",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fQAMode.btnOk",
+   "event_name": "OnClick",
+   "handler_name": "btnOkClick",
+   "leaf_name": "btnOk",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fQAMode.pgcQAMode.tsQAMode.gbQAMode.edQAMode",
+   "event_name": "OnMouseDown",
+   "handler_name": "edQAModeMouseDown",
+   "leaf_name": "edQAMode",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fQAMode.pgcQAMode.tsQAMode.gbQAMode.gbLoaderDirection.Image1",
+   "event_name": "OnClick",
+   "handler_name": "Image1Click",
+   "leaf_name": "Image1",
+   "vcl_class": "TImage"
+  },
+  {
+   "control_path": "fQAMode.pgcQAMode.tsQASampling.pnlQASample.edtQASampleCnt",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtQASampleCntMouseDown",
+   "leaf_name": "edtQASampleCnt",
+   "vcl_class": "TEdit"
+  }
+ ],
+ "form_name": "fQAMode",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "QAMode.dfm"
+}

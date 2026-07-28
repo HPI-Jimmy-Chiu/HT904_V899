@@ -1,0 +1,4807 @@
+{
+ "control_node_count": 73,
+ "encoding_used": "cp950",
+ "form_class": "TfMainAT",
+ "form_name": "fMainAT",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fMainAT.GroupBox1",
+    "fMainAT.GroupBox2",
+    "fMainAT.GroupBox3",
+    "fMainAT.GroupBox4",
+    "fMainAT.gbCategory",
+    "fMainAT.gbMapping",
+    "fMainAT.gbDutOn",
+    "fMainAT.gbTrayForm",
+    "fMainAT.gbPlateForm"
+   ],
+   "class": "TfMainAT",
+   "depth": 0,
+   "events": {},
+   "geometry": {
+    "height": 631,
+    "left": 202,
+    "top": 120,
+    "width": 864
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "fMainAT",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "fMainAT",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Hon Prec Automation Simulator"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnFace"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 631
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 202
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 120
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 864
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fMainAT.GroupBox1.Label1",
+    "fMainAT.GroupBox1.Label2",
+    "fMainAT.GroupBox1.Label3",
+    "fMainAT.GroupBox1.Label4",
+    "fMainAT.GroupBox1.Label5",
+    "fMainAT.GroupBox1.lbSystemStatus",
+    "fMainAT.GroupBox1.Label30",
+    "fMainAT.GroupBox1.cbMachineModel",
+    "fMainAT.GroupBox1.edMachineID",
+    "fMainAT.GroupBox1.enVersion",
+    "fMainAT.GroupBox1.cbConnectStatus",
+    "fMainAT.GroupBox1.cbHandlerStatus",
+    "fMainAT.GroupBox1.cbSetUpFileName"
+   ],
+   "class": "TGroupBox",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 237,
+    "left": 12,
+    "top": 12,
+    "width": 209
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 16,
+   "name": "GroupBox1",
+   "objkind": "object",
+   "parent_path": "fMainAT",
+   "path": "fMainAT.GroupBox1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "System Status"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 237
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 209
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 5,
+    "top": 80,
+    "width": 79
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 23,
+   "name": "Label1",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox1",
+   "path": "fMainAT.GroupBox1.Label1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Machine Model :"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 79
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 5,
+    "top": 105,
+    "width": 61
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 30,
+   "name": "Label2",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox1",
+   "path": "fMainAT.GroupBox1.Label2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Machine ID :"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 105
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 61
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 5,
+    "top": 130,
+    "width": 41
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 37,
+   "name": "Label3",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox1",
+   "path": "fMainAT.GroupBox1.Label3",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Version :"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 130
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 41
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 5,
+    "top": 155,
+    "width": 93
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 44,
+   "name": "Label4",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox1",
+   "path": "fMainAT.GroupBox1.Label4",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Connection Status :"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 155
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 93
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 5,
+    "top": 180,
+    "width": 76
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 51,
+   "name": "Label5",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox1",
+   "path": "fMainAT.GroupBox1.Label5",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Handler Status :"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 180
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 76
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 29,
+    "left": 20,
+    "top": 28,
+    "width": 173
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 58,
+   "name": "lbSystemStatus",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox1",
+   "path": "fMainAT.GroupBox1.lbSystemStatus",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "HALT"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlue"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 173
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 5,
+    "top": 204,
+    "width": 83
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 72,
+   "name": "Label30",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox1",
+   "path": "fMainAT.GroupBox1.Label30",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Set Up File Name"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 204
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 83
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 104,
+    "top": 76,
+    "width": 90
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 79,
+   "name": "cbMachineModel",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox1",
+   "path": "fMainAT.GroupBox1.cbMachineModel",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "HT-9046",
+      "HT-9045W",
+      "HT-7048",
+      "HT-7045",
+      "HT-7040",
+      "HT-9040",
+      "HT-9080",
+      "HT-8080"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 104
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Text": {
+     "type": "STR",
+     "value": "HT-9045W"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 76
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 90
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 104,
+    "top": 101,
+    "width": 90
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 97,
+   "name": "edMachineID",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox1",
+   "path": "fMainAT.GroupBox1.edMachineID",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 104
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Text": {
+     "type": "STR",
+     "value": "HT-100"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 101
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 90
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 104,
+    "top": 126,
+    "width": 90
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 105,
+   "name": "enVersion",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox1",
+   "path": "fMainAT.GroupBox1.enVersion",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 104
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Text": {
+     "type": "STR",
+     "value": "V2.06"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 126
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 90
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 104,
+    "top": 151,
+    "width": 90
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 113,
+   "name": "cbConnectStatus",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox1",
+   "path": "fMainAT.GroupBox1.cbConnectStatus",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "Ready",
+      "Not Ready"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 104
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Text": {
+     "type": "STR",
+     "value": "Ready"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 151
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 90
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 104,
+    "top": 176,
+    "width": 90
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 125,
+   "name": "cbHandlerStatus",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox1",
+   "path": "fMainAT.GroupBox1.cbHandlerStatus",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "HALT",
+      "PAUSE",
+      "RUNNING"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 104
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Text": {
+     "type": "STR",
+     "value": "HALT"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 176
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 90
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 104,
+    "top": 200,
+    "width": 90
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 138,
+   "name": "cbSetUpFileName",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox1",
+   "path": "fMainAT.GroupBox1.cbSetUpFileName",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 104
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Text": {
+     "type": "STR",
+     "value": "3x3 14x35"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 200
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 90
+    }
+   },
+   "sibling_index": 12,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fMainAT.GroupBox2.APHeadLabel1",
+    "fMainAT.GroupBox2.APHeadLabel2",
+    "fMainAT.GroupBox2.APHeadLabel3",
+    "fMainAT.GroupBox2.APHeadLabel4",
+    "fMainAT.GroupBox2.APHeadLabel5",
+    "fMainAT.GroupBox2.APHeadLabel6",
+    "fMainAT.GroupBox2.APHeadLabel7",
+    "fMainAT.GroupBox2.APHeadLabel8",
+    "fMainAT.GroupBox2.APHeadLabel9",
+    "fMainAT.GroupBox2.APHeadLabel10",
+    "fMainAT.GroupBox2.edTemp1",
+    "fMainAT.GroupBox2.edTemp2",
+    "fMainAT.GroupBox2.edTemp3",
+    "fMainAT.GroupBox2.edTemp4",
+    "fMainAT.GroupBox2.edTemp5",
+    "fMainAT.GroupBox2.edTemp6",
+    "fMainAT.GroupBox2.edTemp7",
+    "fMainAT.GroupBox2.edTemp8",
+    "fMainAT.GroupBox2.edTemp9",
+    "fMainAT.GroupBox2.edTemp10"
+   ],
+   "class": "TGroupBox",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 93,
+    "left": 36,
+    "top": 496,
+    "width": 777
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 148,
+   "name": "GroupBox2",
+   "objkind": "object",
+   "parent_path": "fMainAT",
+   "path": "fMainAT.GroupBox2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Actual Temperature"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 93
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 496
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 777
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TAPHeadLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 27,
+    "left": 28,
+    "top": 28,
+    "width": 76
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 155,
+   "name": "APHeadLabel1",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox2",
+   "path": "fMainAT.GroupBox2.APHeadLabel1",
+   "properties": {
+    "Alignment": {
+     "type": "SCALAR",
+     "value": "taCenter"
+    },
+    "AutoBounds": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "BoundColor": {
+     "type": "SCALAR",
+     "value": 5645915
+    },
+    "BoundLines": {
+     "type": "SET",
+     "value": [
+      "blLeft",
+      "blTop",
+      "blRight",
+      "blBottom"
+     ]
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Plate 1"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Gradient.StartColor": {
+     "type": "SCALAR",
+     "value": 16512185
+    },
+    "Gradient.Style": {
+     "type": "SCALAR",
+     "value": "gsNone"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 27
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "SubCaption.Ellipsis": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "SubCaption.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 76
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TAPHeadLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 27,
+    "left": 101,
+    "top": 28,
+    "width": 76
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 176,
+   "name": "APHeadLabel2",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox2",
+   "path": "fMainAT.GroupBox2.APHeadLabel2",
+   "properties": {
+    "Alignment": {
+     "type": "SCALAR",
+     "value": "taCenter"
+    },
+    "AutoBounds": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "BoundColor": {
+     "type": "SCALAR",
+     "value": 5645915
+    },
+    "BoundLines": {
+     "type": "SET",
+     "value": [
+      "blLeft",
+      "blTop",
+      "blRight",
+      "blBottom"
+     ]
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Plate 2"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Gradient.StartColor": {
+     "type": "SCALAR",
+     "value": 16512185
+    },
+    "Gradient.Style": {
+     "type": "SCALAR",
+     "value": "gsNone"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 27
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 101
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "SubCaption.Ellipsis": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "SubCaption.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 76
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TAPHeadLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 27,
+    "left": 176,
+    "top": 28,
+    "width": 76
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 197,
+   "name": "APHeadLabel3",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox2",
+   "path": "fMainAT.GroupBox2.APHeadLabel3",
+   "properties": {
+    "Alignment": {
+     "type": "SCALAR",
+     "value": "taCenter"
+    },
+    "AutoBounds": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "BoundColor": {
+     "type": "SCALAR",
+     "value": 5645915
+    },
+    "BoundLines": {
+     "type": "SET",
+     "value": [
+      "blLeft",
+      "blTop",
+      "blRight",
+      "blBottom"
+     ]
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Shuttle 1"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Gradient.StartColor": {
+     "type": "SCALAR",
+     "value": 16512185
+    },
+    "Gradient.Style": {
+     "type": "SCALAR",
+     "value": "gsNone"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 27
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 176
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "SubCaption.Ellipsis": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "SubCaption.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 76
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TAPHeadLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 27,
+    "left": 251,
+    "top": 28,
+    "width": 76
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 218,
+   "name": "APHeadLabel4",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox2",
+   "path": "fMainAT.GroupBox2.APHeadLabel4",
+   "properties": {
+    "Alignment": {
+     "type": "SCALAR",
+     "value": "taCenter"
+    },
+    "AutoBounds": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "BoundColor": {
+     "type": "SCALAR",
+     "value": 5645915
+    },
+    "BoundLines": {
+     "type": "SET",
+     "value": [
+      "blLeft",
+      "blTop",
+      "blRight",
+      "blBottom"
+     ]
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Shuttle 2"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Gradient.StartColor": {
+     "type": "SCALAR",
+     "value": 16512185
+    },
+    "Gradient.Style": {
+     "type": "SCALAR",
+     "value": "gsNone"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 27
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 251
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "SubCaption.Ellipsis": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "SubCaption.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 76
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TAPHeadLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 27,
+    "left": 324,
+    "top": 28,
+    "width": 76
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 239,
+   "name": "APHeadLabel5",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox2",
+   "path": "fMainAT.GroupBox2.APHeadLabel5",
+   "properties": {
+    "Alignment": {
+     "type": "SCALAR",
+     "value": "taCenter"
+    },
+    "AutoBounds": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "BoundColor": {
+     "type": "SCALAR",
+     "value": 5645915
+    },
+    "BoundLines": {
+     "type": "SET",
+     "value": [
+      "blLeft",
+      "blTop",
+      "blRight",
+      "blBottom"
+     ]
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Head 1/2"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Gradient.StartColor": {
+     "type": "SCALAR",
+     "value": 16512185
+    },
+    "Gradient.Style": {
+     "type": "SCALAR",
+     "value": "gsNone"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 27
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 324
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "SubCaption.Ellipsis": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "SubCaption.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 76
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TAPHeadLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 27,
+    "left": 397,
+    "top": 28,
+    "width": 76
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 260,
+   "name": "APHeadLabel6",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox2",
+   "path": "fMainAT.GroupBox2.APHeadLabel6",
+   "properties": {
+    "Alignment": {
+     "type": "SCALAR",
+     "value": "taCenter"
+    },
+    "AutoBounds": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "BoundColor": {
+     "type": "SCALAR",
+     "value": 5645915
+    },
+    "BoundLines": {
+     "type": "SET",
+     "value": [
+      "blLeft",
+      "blTop",
+      "blRight",
+      "blBottom"
+     ]
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Head 3/4"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Gradient.StartColor": {
+     "type": "SCALAR",
+     "value": 16512185
+    },
+    "Gradient.Style": {
+     "type": "SCALAR",
+     "value": "gsNone"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 27
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 397
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "SubCaption.Ellipsis": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "SubCaption.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 76
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TAPHeadLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 27,
+    "left": 470,
+    "top": 28,
+    "width": 76
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 281,
+   "name": "APHeadLabel7",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox2",
+   "path": "fMainAT.GroupBox2.APHeadLabel7",
+   "properties": {
+    "Alignment": {
+     "type": "SCALAR",
+     "value": "taCenter"
+    },
+    "AutoBounds": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "BoundColor": {
+     "type": "SCALAR",
+     "value": 5645915
+    },
+    "BoundLines": {
+     "type": "SET",
+     "value": [
+      "blLeft",
+      "blTop",
+      "blRight",
+      "blBottom"
+     ]
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Head 5/6"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Gradient.StartColor": {
+     "type": "SCALAR",
+     "value": 16512185
+    },
+    "Gradient.Style": {
+     "type": "SCALAR",
+     "value": "gsNone"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 27
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 470
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "SubCaption.Ellipsis": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "SubCaption.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 76
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TAPHeadLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 27,
+    "left": 543,
+    "top": 28,
+    "width": 76
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 302,
+   "name": "APHeadLabel8",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox2",
+   "path": "fMainAT.GroupBox2.APHeadLabel8",
+   "properties": {
+    "Alignment": {
+     "type": "SCALAR",
+     "value": "taCenter"
+    },
+    "AutoBounds": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "BoundColor": {
+     "type": "SCALAR",
+     "value": 5645915
+    },
+    "BoundLines": {
+     "type": "SET",
+     "value": [
+      "blLeft",
+      "blTop",
+      "blRight",
+      "blBottom"
+     ]
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Head 7/8"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Gradient.StartColor": {
+     "type": "SCALAR",
+     "value": 16512185
+    },
+    "Gradient.Style": {
+     "type": "SCALAR",
+     "value": "gsNone"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 27
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 543
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "SubCaption.Ellipsis": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "SubCaption.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 76
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TAPHeadLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 27,
+    "left": 616,
+    "top": 28,
+    "width": 76
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 323,
+   "name": "APHeadLabel9",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox2",
+   "path": "fMainAT.GroupBox2.APHeadLabel9",
+   "properties": {
+    "Alignment": {
+     "type": "SCALAR",
+     "value": "taCenter"
+    },
+    "AutoBounds": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "BoundColor": {
+     "type": "SCALAR",
+     "value": 5645915
+    },
+    "BoundLines": {
+     "type": "SET",
+     "value": [
+      "blLeft",
+      "blTop",
+      "blRight",
+      "blBottom"
+     ]
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Dut"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Gradient.StartColor": {
+     "type": "SCALAR",
+     "value": 16512185
+    },
+    "Gradient.Style": {
+     "type": "SCALAR",
+     "value": "gsNone"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 27
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 616
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "SubCaption.Ellipsis": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "SubCaption.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 76
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TAPHeadLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 27,
+    "left": 689,
+    "top": 28,
+    "width": 76
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 344,
+   "name": "APHeadLabel10",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox2",
+   "path": "fMainAT.GroupBox2.APHeadLabel10",
+   "properties": {
+    "Alignment": {
+     "type": "SCALAR",
+     "value": "taCenter"
+    },
+    "AutoBounds": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "BoundColor": {
+     "type": "SCALAR",
+     "value": 5645915
+    },
+    "BoundLines": {
+     "type": "SET",
+     "value": [
+      "blLeft",
+      "blTop",
+      "blRight",
+      "blBottom"
+     ]
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Chamber"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Gradient.StartColor": {
+     "type": "SCALAR",
+     "value": 16512185
+    },
+    "Gradient.Style": {
+     "type": "SCALAR",
+     "value": "gsNone"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 27
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 689
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "SubCaption.Ellipsis": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "SubCaption.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 76
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 28,
+    "top": 54,
+    "width": 76
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 365,
+   "name": "edTemp1",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox2",
+   "path": "fMainAT.GroupBox2.edTemp1",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Text": {
+     "type": "STR",
+     "value": "25.0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 54
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 76
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 101,
+    "top": 54,
+    "width": 76
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 379,
+   "name": "edTemp2",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox2",
+   "path": "fMainAT.GroupBox2.edTemp2",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 101
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Text": {
+     "type": "STR",
+     "value": "25.0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 54
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 76
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 176,
+    "top": 54,
+    "width": 76
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 393,
+   "name": "edTemp3",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox2",
+   "path": "fMainAT.GroupBox2.edTemp3",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 176
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Text": {
+     "type": "STR",
+     "value": "25.0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 54
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 76
+    }
+   },
+   "sibling_index": 12,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 251,
+    "top": 54,
+    "width": 76
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 407,
+   "name": "edTemp4",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox2",
+   "path": "fMainAT.GroupBox2.edTemp4",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 251
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Text": {
+     "type": "STR",
+     "value": "25.0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 54
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 76
+    }
+   },
+   "sibling_index": 13,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 324,
+    "top": 54,
+    "width": 76
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 421,
+   "name": "edTemp5",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox2",
+   "path": "fMainAT.GroupBox2.edTemp5",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 324
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Text": {
+     "type": "STR",
+     "value": "---"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 54
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 76
+    }
+   },
+   "sibling_index": 14,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 397,
+    "top": 54,
+    "width": 76
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 435,
+   "name": "edTemp6",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox2",
+   "path": "fMainAT.GroupBox2.edTemp6",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 397
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Text": {
+     "type": "STR",
+     "value": "---"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 54
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 76
+    }
+   },
+   "sibling_index": 15,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 470,
+    "top": 54,
+    "width": 76
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 449,
+   "name": "edTemp7",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox2",
+   "path": "fMainAT.GroupBox2.edTemp7",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 470
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Text": {
+     "type": "STR",
+     "value": "---"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 54
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 76
+    }
+   },
+   "sibling_index": 16,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 543,
+    "top": 54,
+    "width": 76
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 463,
+   "name": "edTemp8",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox2",
+   "path": "fMainAT.GroupBox2.edTemp8",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 543
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Text": {
+     "type": "STR",
+     "value": "---"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 54
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 76
+    }
+   },
+   "sibling_index": 17,
+   "synthesized": false,
+   "tab_order": 7,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 616,
+    "top": 54,
+    "width": 76
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 477,
+   "name": "edTemp9",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox2",
+   "path": "fMainAT.GroupBox2.edTemp9",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 616
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Text": {
+     "type": "STR",
+     "value": "25.0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 54
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 76
+    }
+   },
+   "sibling_index": 18,
+   "synthesized": false,
+   "tab_order": 8,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 689,
+    "top": 54,
+    "width": 76
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 491,
+   "name": "edTemp10",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox2",
+   "path": "fMainAT.GroupBox2.edTemp10",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 689
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "Text": {
+     "type": "STR",
+     "value": "25.0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 54
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 76
+    }
+   },
+   "sibling_index": 19,
+   "synthesized": false,
+   "tab_order": 9,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fMainAT.GroupBox3.Label29",
+    "fMainAT.GroupBox3.Label28",
+    "fMainAT.GroupBox3.edtSoakTime",
+    "fMainAT.GroupBox3.edtTemperature",
+    "fMainAT.GroupBox3.cTempmode"
+   ],
+   "class": "TGroupBox",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 117,
+    "left": 12,
+    "top": 252,
+    "width": 209
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 506,
+   "name": "GroupBox3",
+   "objkind": "object",
+   "parent_path": "fMainAT",
+   "path": "fMainAT.GroupBox3",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Temperature"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 117
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 252
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 209
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 60,
+    "width": 48
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 513,
+   "name": "Label29",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox3",
+   "path": "fMainAT.GroupBox3.Label29",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "SoakTime"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 48
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 32,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 520,
+   "name": "Label28",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox3",
+   "path": "fMainAT.GroupBox3.Label28",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Temperature"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 80,
+    "top": 58,
+    "width": 37
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 527,
+   "name": "edtSoakTime",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox3",
+   "path": "fMainAT.GroupBox3.edtSoakTime",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Text": {
+     "type": "STR",
+     "value": "25"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 58
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 37
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 80,
+    "top": 28,
+    "width": 37
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 535,
+   "name": "edtTemperature",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox3",
+   "path": "fMainAT.GroupBox3.edtTemperature",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Text": {
+     "type": "STR",
+     "value": "25"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 37
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 16,
+    "top": 88,
+    "width": 153
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 543,
+   "name": "cTempmode",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox3",
+   "path": "fMainAT.GroupBox3.cTempmode",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Temp On / Off"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 88
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 153
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fMainAT.GroupBox4.cConnectionTester",
+    "fMainAT.GroupBox4.rgTesterMode"
+   ],
+   "class": "TGroupBox",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 85,
+    "left": 12,
+    "top": 372,
+    "width": 209
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 552,
+   "name": "GroupBox4",
+   "objkind": "object",
+   "parent_path": "fMainAT",
+   "path": "fMainAT.GroupBox4",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Tester"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 85
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 372
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 209
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 12,
+    "top": 20,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 559,
+   "name": "cConnectionTester",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox4",
+   "path": "fMainAT.GroupBox4.cConnectionTester",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Connect with Tester"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TRadioGroup",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 33,
+    "left": 8,
+    "top": 44,
+    "width": 169
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 567,
+   "name": "rgTesterMode",
+   "objkind": "object",
+   "parent_path": "fMainAT.GroupBox4",
+   "path": "fMainAT.GroupBox4.rgTesterMode",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Test Mode"
+    },
+    "Columns": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "ItemIndex": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "0",
+      "1",
+      "2"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 44
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 169
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TGroupBox",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 425,
+    "left": 380,
+    "top": 12,
+    "width": 150
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 582,
+   "name": "gbCategory",
+   "objkind": "object",
+   "parent_path": "fMainAT",
+   "path": "fMainAT.gbCategory",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Category"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 425
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 380
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 150
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TGroupBox",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 425,
+    "left": 532,
+    "top": 12,
+    "width": 150
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 590,
+   "name": "gbMapping",
+   "objkind": "object",
+   "parent_path": "fMainAT",
+   "path": "fMainAT.gbMapping",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Site Mapping"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 425
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 532
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 150
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TGroupBox",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 425,
+    "left": 684,
+    "top": 12,
+    "width": 150
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 598,
+   "name": "gbDutOn",
+   "objkind": "object",
+   "parent_path": "fMainAT",
+   "path": "fMainAT.gbDutOn",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Dut On / Off"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 425
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 684
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 150
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fMainAT.gbTrayForm.Label6",
+    "fMainAT.gbTrayForm.Label7",
+    "fMainAT.gbTrayForm.Label8",
+    "fMainAT.gbTrayForm.Label9",
+    "fMainAT.gbTrayForm.Label10",
+    "fMainAT.gbTrayForm.Label11",
+    "fMainAT.gbTrayForm.Edit1",
+    "fMainAT.gbTrayForm.Edit2",
+    "fMainAT.gbTrayForm.Edit3",
+    "fMainAT.gbTrayForm.Edit4",
+    "fMainAT.gbTrayForm.Edit5",
+    "fMainAT.gbTrayForm.Edit6"
+   ],
+   "class": "TGroupBox",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 220,
+    "left": 224,
+    "top": 12,
+    "width": 150
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 606,
+   "name": "gbTrayForm",
+   "objkind": "object",
+   "parent_path": "fMainAT",
+   "path": "fMainAT.gbTrayForm",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Tray Form"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 220
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 224
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 150
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 7,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 12,
+    "top": 28,
+    "width": 30
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 613,
+   "name": "Label6",
+   "objkind": "object",
+   "parent_path": "fMainAT.gbTrayForm",
+   "path": "fMainAT.gbTrayForm.Label6",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "X-Item"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 30
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 12,
+    "top": 61,
+    "width": 30
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 620,
+   "name": "Label7",
+   "objkind": "object",
+   "parent_path": "fMainAT.gbTrayForm",
+   "path": "fMainAT.gbTrayForm.Label7",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Y-Item"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 61
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 30
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 12,
+    "top": 93,
+    "width": 32
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 627,
+   "name": "Label8",
+   "objkind": "object",
+   "parent_path": "fMainAT.gbTrayForm",
+   "path": "fMainAT.gbTrayForm.Label8",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "X-Start"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 93
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 32
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 12,
+    "top": 126,
+    "width": 32
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 634,
+   "name": "Label9",
+   "objkind": "object",
+   "parent_path": "fMainAT.gbTrayForm",
+   "path": "fMainAT.gbTrayForm.Label9",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Y-Start"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 126
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 32
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 12,
+    "top": 158,
+    "width": 34
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 641,
+   "name": "Label10",
+   "objkind": "object",
+   "parent_path": "fMainAT.gbTrayForm",
+   "path": "fMainAT.gbTrayForm.Label10",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "X-Pitch"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 158
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 34
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 12,
+    "top": 191,
+    "width": 34
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 648,
+   "name": "Label11",
+   "objkind": "object",
+   "parent_path": "fMainAT.gbTrayForm",
+   "path": "fMainAT.gbTrayForm.Label11",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Y-Pitch"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 191
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 34
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 70,
+    "top": 24,
+    "width": 70
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 655,
+   "name": "Edit1",
+   "objkind": "object",
+   "parent_path": "fMainAT.gbTrayForm",
+   "path": "fMainAT.gbTrayForm.Edit1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 70
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Text": {
+     "type": "STR",
+     "value": "14"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 70
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 70,
+    "top": 56,
+    "width": 70
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 663,
+   "name": "Edit2",
+   "objkind": "object",
+   "parent_path": "fMainAT.gbTrayForm",
+   "path": "fMainAT.gbTrayForm.Edit2",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 70
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Text": {
+     "type": "STR",
+     "value": "35"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 56
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 70
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 70,
+    "top": 89,
+    "width": 70
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 671,
+   "name": "Edit3",
+   "objkind": "object",
+   "parent_path": "fMainAT.gbTrayForm",
+   "path": "fMainAT.gbTrayForm.Edit3",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 70
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Text": {
+     "type": "STR",
+     "value": "8.15"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 89
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 70
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 70,
+    "top": 121,
+    "width": 70
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 679,
+   "name": "Edit4",
+   "objkind": "object",
+   "parent_path": "fMainAT.gbTrayForm",
+   "path": "fMainAT.gbTrayForm.Edit4",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 70
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Text": {
+     "type": "STR",
+     "value": "7.9"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 121
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 70
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 70,
+    "top": 154,
+    "width": 70
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 687,
+   "name": "Edit5",
+   "objkind": "object",
+   "parent_path": "fMainAT.gbTrayForm",
+   "path": "fMainAT.gbTrayForm.Edit5",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 70
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Text": {
+     "type": "STR",
+     "value": "9.2"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 154
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 70
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 70,
+    "top": 186,
+    "width": 70
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 695,
+   "name": "Edit6",
+   "objkind": "object",
+   "parent_path": "fMainAT.gbTrayForm",
+   "path": "fMainAT.gbTrayForm.Edit6",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 70
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Text": {
+     "type": "STR",
+     "value": "8.8"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 186
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 70
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fMainAT.gbPlateForm.Label12",
+    "fMainAT.gbPlateForm.Label13",
+    "fMainAT.gbPlateForm.Label14",
+    "fMainAT.gbPlateForm.Label15",
+    "fMainAT.gbPlateForm.Label16",
+    "fMainAT.gbPlateForm.Label17",
+    "fMainAT.gbPlateForm.Edit7",
+    "fMainAT.gbPlateForm.Edit8",
+    "fMainAT.gbPlateForm.Edit9",
+    "fMainAT.gbPlateForm.Edit10",
+    "fMainAT.gbPlateForm.Edit11",
+    "fMainAT.gbPlateForm.Edit12"
+   ],
+   "class": "TGroupBox",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 220,
+    "left": 224,
+    "top": 237,
+    "width": 150
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 704,
+   "name": "gbPlateForm",
+   "objkind": "object",
+   "parent_path": "fMainAT",
+   "path": "fMainAT.gbPlateForm",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Plate Form"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 220
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 224
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 237
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 150
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": 8,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 12,
+    "top": 28,
+    "width": 30
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 711,
+   "name": "Label12",
+   "objkind": "object",
+   "parent_path": "fMainAT.gbPlateForm",
+   "path": "fMainAT.gbPlateForm.Label12",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "X-Item"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 30
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 12,
+    "top": 61,
+    "width": 30
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 718,
+   "name": "Label13",
+   "objkind": "object",
+   "parent_path": "fMainAT.gbPlateForm",
+   "path": "fMainAT.gbPlateForm.Label13",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Y-Item"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 61
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 30
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 12,
+    "top": 93,
+    "width": 32
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 725,
+   "name": "Label14",
+   "objkind": "object",
+   "parent_path": "fMainAT.gbPlateForm",
+   "path": "fMainAT.gbPlateForm.Label14",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "X-Start"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 93
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 32
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 12,
+    "top": 126,
+    "width": 32
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 732,
+   "name": "Label15",
+   "objkind": "object",
+   "parent_path": "fMainAT.gbPlateForm",
+   "path": "fMainAT.gbPlateForm.Label15",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Y-Start"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 126
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 32
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 12,
+    "top": 158,
+    "width": 34
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 739,
+   "name": "Label16",
+   "objkind": "object",
+   "parent_path": "fMainAT.gbPlateForm",
+   "path": "fMainAT.gbPlateForm.Label16",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "X-Pitch"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 158
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 34
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 12,
+    "top": 191,
+    "width": 34
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 746,
+   "name": "Label17",
+   "objkind": "object",
+   "parent_path": "fMainAT.gbPlateForm",
+   "path": "fMainAT.gbPlateForm.Label17",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Y-Pitch"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 191
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 34
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 70,
+    "top": 24,
+    "width": 70
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 753,
+   "name": "Edit7",
+   "objkind": "object",
+   "parent_path": "fMainAT.gbPlateForm",
+   "path": "fMainAT.gbPlateForm.Edit7",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 70
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Text": {
+     "type": "STR",
+     "value": "6"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 70
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 70,
+    "top": 56,
+    "width": 70
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 761,
+   "name": "Edit8",
+   "objkind": "object",
+   "parent_path": "fMainAT.gbPlateForm",
+   "path": "fMainAT.gbPlateForm.Edit8",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 70
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Text": {
+     "type": "STR",
+     "value": "11"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 56
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 70
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 70,
+    "top": 89,
+    "width": 70
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 769,
+   "name": "Edit9",
+   "objkind": "object",
+   "parent_path": "fMainAT.gbPlateForm",
+   "path": "fMainAT.gbPlateForm.Edit9",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 70
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Text": {
+     "type": "STR",
+     "value": "13.35"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 89
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 70
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 70,
+    "top": 121,
+    "width": 70
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 777,
+   "name": "Edit10",
+   "objkind": "object",
+   "parent_path": "fMainAT.gbPlateForm",
+   "path": "fMainAT.gbPlateForm.Edit10",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 70
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Text": {
+     "type": "STR",
+     "value": "20.05"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 121
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 70
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 70,
+    "top": 154,
+    "width": 70
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 785,
+   "name": "Edit11",
+   "objkind": "object",
+   "parent_path": "fMainAT.gbPlateForm",
+   "path": "fMainAT.gbPlateForm.Edit11",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 70
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Text": {
+     "type": "STR",
+     "value": "26.6"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 154
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 70
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 70,
+    "top": 186,
+    "width": 70
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 793,
+   "name": "Edit12",
+   "objkind": "object",
+   "parent_path": "fMainAT.gbPlateForm",
+   "path": "fMainAT.gbPlateForm.Edit12",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 70
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Text": {
+     "type": "STR",
+     "value": "30"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 186
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 70
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "Automation/mainAT.dfm",
+ "total_nodes_incl_root": 74
+}

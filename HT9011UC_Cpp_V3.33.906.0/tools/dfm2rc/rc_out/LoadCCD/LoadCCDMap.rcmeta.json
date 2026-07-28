@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "generator": "emit_rc.py W7-B1b v1.0",
+  "source_dfm": "LoadCCD/LoadCCDMap.dfm",
+  "formstem": "LOADCCDMAP",
+  "dialog_count": 2,
+  "control_count": 8,
+  "fallback_classes_used": [],
+  "warnings": [],
+  "dialogs": [
+    {
+      "idd_symbol": "IDD_LOADCCDMAP",
+      "idd_value": 8192,
+      "is_root": true,
+      "owner_path": "LoadCCD",
+      "owner_class": "TLoadCCD",
+      "controls": []
+    },
+    {
+      "idd_symbol": "IDD_LOADCCDMAP_PANEL1",
+      "idd_value": 8193,
+      "is_root": false,
+      "owner_path": "LoadCCD.Panel1",
+      "owner_class": "TPanel",
+      "controls": [
+        {
+          "symbol": "IDC_LOADCCDMAP_LABEL1",
+          "value": 1024,
+          "win32_class": "Static",
+          "caption": "Port",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "LoadCCD.Panel1.Label1",
+          "fallback_class": false,
+          "x": 3,
+          "y": 24,
+          "cx": 19,
+          "cy": 13
+        },
+        {
+          "symbol": "IDC_LOADCCDMAP_LEDACONNECT",
+          "value": 1025,
+          "win32_class": "HT9045.MyLed",
+          "caption": null,
+          "synthesized": false,
+          "rule": null,
+          "source_path": "LoadCCD.Panel1.LedAConnect",
+          "fallback_class": false,
+          "x": 331,
+          "y": 13,
+          "cx": 23,
+          "cy": 23
+        },
+        {
+          "symbol": "IDC_LOADCCDMAP_EDTPORT",
+          "value": 1026,
+          "win32_class": "Edit",
+          "caption": "5000",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "LoadCCD.Panel1.edtPort",
+          "fallback_class": false,
+          "x": 51,
+          "y": 16,
+          "cx": 121,
+          "cy": 21
+        },
+        {
+          "symbol": "IDC_LOADCCDMAP_BTNCONNECT",
+          "value": 1027,
+          "win32_class": "Button",
+          "caption": "Connect",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "LoadCCD.Panel1.btnConnect",
+          "fallback_class": false,
+          "x": 191,
+          "y": 12,
+          "cx": 75,
+          "cy": 29
+        },
+        {
+          "symbol": "IDC_LOADCCDMAP_MEMO1",
+          "value": 1028,
+          "win32_class": "Edit",
+          "caption": null,
+          "synthesized": false,
+          "rule": null,
+          "source_path": "LoadCCD.Panel1.Memo1",
+          "fallback_class": false,
+          "x": 8,
+          "y": 56,
+          "cx": 601,
+          "cy": 497
+        },
+        {
+          "symbol": "IDC_LOADCCDMAP_CCD1",
+          "value": 1029,
+          "win32_class": "Button",
+          "caption": "CCD1",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "LoadCCD.Panel1.CCD1",
+          "fallback_class": false,
+          "x": 624,
+          "y": 24,
+          "cx": 75,
+          "cy": 25
+        },
+        {
+          "symbol": "IDC_LOADCCDMAP_CCD2",
+          "value": 1030,
+          "win32_class": "Button",
+          "caption": "CCD2",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "LoadCCD.Panel1.CCD2",
+          "fallback_class": false,
+          "x": 624,
+          "y": 64,
+          "cx": 75,
+          "cy": 25
+        },
+        {
+          "symbol": "IDC_LOADCCDMAP_BTNCCDTEST",
+          "value": 1031,
+          "win32_class": "Button",
+          "caption": "btnCCDTest",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "LoadCCD.Panel1.btnCCDTest",
+          "fallback_class": false,
+          "x": 624,
+          "y": 100,
+          "cx": 75,
+          "cy": 25
+        }
+      ]
+    }
+  ]
+}

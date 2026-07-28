@@ -1,0 +1,235 @@
+{
+ "control_node_count": 2,
+ "encoding_used": "cp950",
+ "form_class": "TCleanPadFrom",
+ "form_name": "CleanPadFrom",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "CleanPadFrom.Image1",
+    "CleanPadFrom.SpeedButton1"
+   ],
+   "class": "TCleanPadFrom",
+   "depth": 0,
+   "events": {
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow"
+   },
+   "geometry": {
+    "height": 443,
+    "left": 281,
+    "top": 164,
+    "width": 572
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "CleanPadFrom",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "CleanPadFrom",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "CleanPadFrom"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnFace"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 443
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 281
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnDestroy": {
+     "type": "SCALAR",
+     "value": "FormDestroy"
+    },
+    "OnShow": {
+     "type": "SCALAR",
+     "value": "FormShow"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 164
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 572
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TImage",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 361,
+    "left": 0,
+    "top": 0,
+    "width": 556
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 18,
+   "name": "Image1",
+   "objkind": "object",
+   "parent_path": "CleanPadFrom",
+   "path": "CleanPadFrom.Image1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 361
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 556
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "SpeedButton1Click"
+   },
+   "geometry": {
+    "height": 38,
+    "left": 200,
+    "top": 364,
+    "width": 161
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 24,
+   "name": "SpeedButton1",
+   "objkind": "object",
+   "parent_path": "CleanPadFrom",
+   "path": "CleanPadFrom.SpeedButton1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Exit"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clRed"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -24
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 38
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 200
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "SpeedButton1Click"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 364
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 161
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "AutoClean/uShowcleanPad_ASEKH.dfm",
+ "total_nodes_incl_root": 3
+}

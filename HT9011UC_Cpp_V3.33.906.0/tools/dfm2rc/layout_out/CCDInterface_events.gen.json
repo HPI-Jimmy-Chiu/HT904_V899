@@ -1,0 +1,72 @@
+{
+ "event_count": 9,
+ "events": [
+  {
+   "control_path": "CCDInterfaceForm",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "CCDInterfaceForm",
+   "vcl_class": "TCCDInterfaceForm"
+  },
+  {
+   "control_path": "CCDInterfaceForm",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "CCDInterfaceForm",
+   "vcl_class": "TCCDInterfaceForm"
+  },
+  {
+   "control_path": "CCDInterfaceForm.Memo",
+   "event_name": "OnDblClick",
+   "handler_name": "MemoDblClick",
+   "leaf_name": "Memo",
+   "vcl_class": "TMemo"
+  },
+  {
+   "control_path": "CCDInterfaceForm.Button1",
+   "event_name": "OnClick",
+   "handler_name": "Button1Click",
+   "leaf_name": "Button1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "CCDInterfaceForm.Button2",
+   "event_name": "OnClick",
+   "handler_name": "Button2Click",
+   "leaf_name": "Button2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "CCDInterfaceForm.Button3",
+   "event_name": "OnClick",
+   "handler_name": "Button3Click",
+   "leaf_name": "Button3",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "CCDInterfaceForm.Button4",
+   "event_name": "OnClick",
+   "handler_name": "Button4Click",
+   "leaf_name": "Button4",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "CCDInterfaceForm.Button5",
+   "event_name": "OnClick",
+   "handler_name": "Button5Click",
+   "leaf_name": "Button5",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "CCDInterfaceForm.GroupBox1.Button6",
+   "event_name": "OnClick",
+   "handler_name": "Button6Click",
+   "leaf_name": "Button6",
+   "vcl_class": "TButton"
+  }
+ ],
+ "form_name": "CCDInterfaceForm",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "CCDInterface.dfm"
+}

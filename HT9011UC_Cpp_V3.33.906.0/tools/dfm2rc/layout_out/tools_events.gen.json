@@ -1,0 +1,219 @@
+{
+ "event_count": 30,
+ "events": [
+  {
+   "control_path": "FTool",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "FTool",
+   "vcl_class": "TFTool"
+  },
+  {
+   "control_path": "FTool",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "FTool",
+   "vcl_class": "TFTool"
+  },
+  {
+   "control_path": "FTool.PageControl1.TabSheet1.SpeedButton2",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton2Click",
+   "leaf_name": "SpeedButton2",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "FTool.PageControl1.TabSheet1.edtPort0",
+   "event_name": "OnClick",
+   "handler_name": "edtPort0Click",
+   "leaf_name": "edtPort0",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTool.PageControl1.TabSheet1.edtPort0",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtPort0KeyPress",
+   "leaf_name": "edtPort0",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTool.PageControl1.TabSheet1.edtPort2",
+   "event_name": "OnClick",
+   "handler_name": "edtPort0Click",
+   "leaf_name": "edtPort2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTool.PageControl1.TabSheet1.edtPort2",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtPort0KeyPress",
+   "leaf_name": "edtPort2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTool.PageControl1.TabSheet1.ComboBox1",
+   "event_name": "OnChange",
+   "handler_name": "ComboBox1Change",
+   "leaf_name": "ComboBox1",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "FTool.PageControl1.TabSheet1.edtPort1",
+   "event_name": "OnClick",
+   "handler_name": "edtPort0Click",
+   "leaf_name": "edtPort1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTool.PageControl1.TabSheet1.edtPort1",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtPort0KeyPress",
+   "leaf_name": "edtPort1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTool.PageControl1.TabSheet1.edtPort3",
+   "event_name": "OnClick",
+   "handler_name": "edtPort0Click",
+   "leaf_name": "edtPort3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTool.PageControl1.TabSheet1.edtPort3",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtPort0KeyPress",
+   "leaf_name": "edtPort3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTool.PageControl1.TabSheet1.edtLane0",
+   "event_name": "OnClick",
+   "handler_name": "edtLane0Click",
+   "leaf_name": "edtLane0",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTool.PageControl1.TabSheet1.edtLane0",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtPort0KeyPress",
+   "leaf_name": "edtLane0",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTool.PageControl1.TabSheet1.edtLane2",
+   "event_name": "OnClick",
+   "handler_name": "edtLane0Click",
+   "leaf_name": "edtLane2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTool.PageControl1.TabSheet1.edtLane2",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtPort0KeyPress",
+   "leaf_name": "edtLane2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTool.PageControl1.TabSheet1.edtLane1",
+   "event_name": "OnClick",
+   "handler_name": "edtLane0Click",
+   "leaf_name": "edtLane1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTool.PageControl1.TabSheet1.edtLane1",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtPort0KeyPress",
+   "leaf_name": "edtLane1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTool.PageControl1.TabSheet1.edtLane3",
+   "event_name": "OnClick",
+   "handler_name": "edtLane0Click",
+   "leaf_name": "edtLane3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTool.PageControl1.TabSheet1.edtLane3",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtPort0KeyPress",
+   "leaf_name": "edtLane3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTool.PageControl1.TabSheet1.edtIP0",
+   "event_name": "OnClick",
+   "handler_name": "edtIP0Click",
+   "leaf_name": "edtIP0",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTool.PageControl1.TabSheet1.edtIP0",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtPort0KeyPress",
+   "leaf_name": "edtIP0",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTool.PageControl1.TabSheet1.edtIP2",
+   "event_name": "OnClick",
+   "handler_name": "edtIP0Click",
+   "leaf_name": "edtIP2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTool.PageControl1.TabSheet1.edtIP2",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtPort0KeyPress",
+   "leaf_name": "edtIP2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTool.PageControl1.TabSheet1.edtIP1",
+   "event_name": "OnClick",
+   "handler_name": "edtIP0Click",
+   "leaf_name": "edtIP1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTool.PageControl1.TabSheet1.edtIP1",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtPort0KeyPress",
+   "leaf_name": "edtIP1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTool.PageControl1.TabSheet1.edtIP3",
+   "event_name": "OnClick",
+   "handler_name": "edtIP0Click",
+   "leaf_name": "edtIP3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTool.PageControl1.TabSheet1.edtIP3",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtPort0KeyPress",
+   "leaf_name": "edtIP3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTool.sbExit",
+   "event_name": "OnClick",
+   "handler_name": "sbExitClick",
+   "leaf_name": "sbExit",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "FTool.Timer1",
+   "event_name": "OnTimer",
+   "handler_name": "Timer1Timer",
+   "leaf_name": "Timer1",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "FTool",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "tools.dfm"
+}

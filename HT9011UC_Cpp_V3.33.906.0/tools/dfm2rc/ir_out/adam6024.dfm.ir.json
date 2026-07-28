@@ -1,0 +1,172 @@
+{
+ "control_node_count": 1,
+ "encoding_used": "cp950",
+ "form_class": "TfAdam6024",
+ "form_name": "fAdam6024",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fAdam6024.ClientSocket1"
+   ],
+   "class": "TfAdam6024",
+   "depth": 0,
+   "events": {
+    "OnDestroy": "FormDestroy"
+   },
+   "geometry": {
+    "height": 106,
+    "left": 1611,
+    "top": 840,
+    "width": 346
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "fAdam6024",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "fAdam6024",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "ADAM"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnFace"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 106
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 1611
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnDestroy": {
+     "type": "SCALAR",
+     "value": "FormDestroy"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Position": {
+     "type": "SCALAR",
+     "value": "poScreenCenter"
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 840
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 346
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TClientSocket",
+   "depth": 1,
+   "events": {
+    "OnConnect": "ClientSocket1Connect",
+    "OnError": "ClientSocket1Error"
+   },
+   "geometry": {
+    "height": null,
+    "left": 36,
+    "top": 16,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 18,
+   "name": "ClientSocket1",
+   "objkind": "object",
+   "parent_path": "fAdam6024",
+   "path": "fAdam6024.ClientSocket1",
+   "properties": {
+    "Active": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Address": {
+     "type": "STR",
+     "value": "172.16.8.110"
+    },
+    "ClientType": {
+     "type": "SCALAR",
+     "value": "ctNonBlocking"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "OnConnect": {
+     "type": "SCALAR",
+     "value": "ClientSocket1Connect"
+    },
+    "OnError": {
+     "type": "SCALAR",
+     "value": "ClientSocket1Error"
+    },
+    "Port": {
+     "type": "SCALAR",
+     "value": 10001
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "adam6024.dfm",
+ "total_nodes_incl_root": 2
+}

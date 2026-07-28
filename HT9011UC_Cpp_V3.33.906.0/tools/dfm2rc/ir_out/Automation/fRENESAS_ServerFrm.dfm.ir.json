@@ -1,0 +1,2728 @@
+{
+ "control_node_count": 39,
+ "encoding_used": "cp950",
+ "form_class": "TfServerFrm",
+ "form_name": "fServerFrm",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fServerFrm.frameProdInfo1",
+    "fServerFrm.grpFTCTStatus",
+    "fServerFrm.grpTestMode",
+    "fServerFrm.GroupBox1",
+    "fServerFrm.grpHandlerSeq",
+    "fServerFrm.GroupBox2",
+    "fServerFrm.grpAfter71RecvTimeOut",
+    "fServerFrm.ProcTimer"
+   ],
+   "class": "TfServerFrm",
+   "depth": 0,
+   "events": {
+    "OnCreate": "FormCreate"
+   },
+   "geometry": {
+    "height": 336,
+    "left": 311,
+    "top": 247,
+    "width": 508
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "fServerFrm",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "fServerFrm",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "ServerFrm"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnFace"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 336
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 311
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnCreate": {
+     "type": "SCALAR",
+     "value": "FormCreate"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 247
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 508
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fServerFrm.frameProdInfo1.lbledtLotNo",
+    "fServerFrm.frameProdInfo1.lbledtLotID",
+    "fServerFrm.frameProdInfo1.lbledtHdParameter",
+    "fServerFrm.frameProdInfo1.lbledtProduct",
+    "fServerFrm.frameProdInfo1.lbledtStepCode",
+    "fServerFrm.frameProdInfo1.lbledtQty",
+    "fServerFrm.frameProdInfo1.lbledtDate",
+    "fServerFrm.frameProdInfo1.ShowTimer"
+   ],
+   "class": "TframeProdInfo",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 299,
+    "left": 4,
+    "top": 4,
+    "width": 173
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 17,
+   "name": "frameProdInfo1",
+   "objkind": "inline",
+   "parent_path": "fServerFrm",
+   "path": "fServerFrm.frameProdInfo1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 299
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 173
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabeledEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": null,
+    "left": null,
+    "top": null,
+    "width": 150
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 23,
+   "name": "lbledtLotNo",
+   "objkind": "inherited",
+   "parent_path": "fServerFrm.frameProdInfo1",
+   "path": "fServerFrm.frameProdInfo1.lbledtLotNo",
+   "properties": {
+    "Width": {
+     "type": "SCALAR",
+     "value": 150
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabeledEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": null,
+    "left": null,
+    "top": null,
+    "width": 150
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 26,
+   "name": "lbledtLotID",
+   "objkind": "inherited",
+   "parent_path": "fServerFrm.frameProdInfo1",
+   "path": "fServerFrm.frameProdInfo1.lbledtLotID",
+   "properties": {
+    "Width": {
+     "type": "SCALAR",
+     "value": 150
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabeledEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": null,
+    "left": null,
+    "top": null,
+    "width": 150
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 29,
+   "name": "lbledtHdParameter",
+   "objkind": "inherited",
+   "parent_path": "fServerFrm.frameProdInfo1",
+   "path": "fServerFrm.frameProdInfo1.lbledtHdParameter",
+   "properties": {
+    "Width": {
+     "type": "SCALAR",
+     "value": 150
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabeledEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": null,
+    "left": null,
+    "top": null,
+    "width": 150
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 32,
+   "name": "lbledtProduct",
+   "objkind": "inherited",
+   "parent_path": "fServerFrm.frameProdInfo1",
+   "path": "fServerFrm.frameProdInfo1.lbledtProduct",
+   "properties": {
+    "Width": {
+     "type": "SCALAR",
+     "value": 150
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabeledEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": null,
+    "left": null,
+    "top": null,
+    "width": 150
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 35,
+   "name": "lbledtStepCode",
+   "objkind": "inherited",
+   "parent_path": "fServerFrm.frameProdInfo1",
+   "path": "fServerFrm.frameProdInfo1.lbledtStepCode",
+   "properties": {
+    "Width": {
+     "type": "SCALAR",
+     "value": 150
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabeledEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": null,
+    "left": null,
+    "top": null,
+    "width": 150
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 38,
+   "name": "lbledtQty",
+   "objkind": "inherited",
+   "parent_path": "fServerFrm.frameProdInfo1",
+   "path": "fServerFrm.frameProdInfo1.lbledtQty",
+   "properties": {
+    "Width": {
+     "type": "SCALAR",
+     "value": 150
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabeledEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": null,
+    "left": null,
+    "top": null,
+    "width": 150
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 41,
+   "name": "lbledtDate",
+   "objkind": "inherited",
+   "parent_path": "fServerFrm.frameProdInfo1",
+   "path": "fServerFrm.frameProdInfo1.lbledtDate",
+   "properties": {
+    "Width": {
+     "type": "SCALAR",
+     "value": 150
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTimer",
+   "depth": 2,
+   "events": {
+    "OnTimer": "frameProdInfo1ShowTimerTimer"
+   },
+   "geometry": {
+    "height": null,
+    "left": null,
+    "top": 268,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 44,
+   "name": "ShowTimer",
+   "objkind": "inherited",
+   "parent_path": "fServerFrm.frameProdInfo1",
+   "path": "fServerFrm.frameProdInfo1.ShowTimer",
+   "properties": {
+    "OnTimer": {
+     "type": "SCALAR",
+     "value": "frameProdInfo1ShowTimerTimer"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 268
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fServerFrm.grpFTCTStatus.pnlOnLine"
+   ],
+   "class": "TGroupBox",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 57,
+    "left": 188,
+    "top": 8,
+    "width": 177
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 49,
+   "name": "grpFTCTStatus",
+   "objkind": "object",
+   "parent_path": "fServerFrm",
+   "path": "fServerFrm.grpFTCTStatus",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "FTCT Status"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 57
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 188
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 177
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 30,
+    "left": 9,
+    "top": 15,
+    "width": 160
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 56,
+   "name": "pnlOnLine",
+   "objkind": "object",
+   "parent_path": "fServerFrm.grpFTCTStatus",
+   "path": "fServerFrm.grpFTCTStatus.pnlOnLine",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "pnlOnLine"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 30
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 160
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fServerFrm.grpTestMode.pnlTestMode"
+   ],
+   "class": "TGroupBox",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 57,
+    "left": 188,
+    "top": 72,
+    "width": 177
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 71,
+   "name": "grpTestMode",
+   "objkind": "object",
+   "parent_path": "fServerFrm",
+   "path": "fServerFrm.grpTestMode",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Test Mode"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 57
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 188
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 177
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 30,
+    "left": 9,
+    "top": 16,
+    "width": 160
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 78,
+   "name": "pnlTestMode",
+   "objkind": "object",
+   "parent_path": "fServerFrm.grpTestMode",
+   "path": "fServerFrm.grpTestMode.pnlTestMode",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "pnlTestMode"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 30
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 160
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fServerFrm.GroupBox1.lbledtHdPass",
+    "fServerFrm.GroupBox1.lbledtHdFail",
+    "fServerFrm.GroupBox1.lbledtHdRejectATPass",
+    "fServerFrm.GroupBox1.lbledtHdRejectATFail",
+    "fServerFrm.GroupBox1.lbledtHdRejectBT",
+    "fServerFrm.GroupBox1.lbledtTesterMatch",
+    "fServerFrm.GroupBox1.lbledtTesterUnmatch",
+    "fServerFrm.GroupBox1.lbledtTesterIgnore",
+    "fServerFrm.GroupBox1.lbledtHdPickUp",
+    "fServerFrm.GroupBox1.lbledtHdPass1",
+    "fServerFrm.GroupBox1.lbledtHdPass2",
+    "fServerFrm.GroupBox1.lbledtHdRejectATPass1",
+    "fServerFrm.GroupBox1.lbledtHdRejectATPass2"
+   ],
+   "class": "TGroupBox",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 188,
+    "top": 132,
+    "width": 309
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 93,
+   "name": "GroupBox1",
+   "objkind": "object",
+   "parent_path": "fServerFrm",
+   "path": "fServerFrm.GroupBox1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "GroupBox1"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 188
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 132
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 309
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabeledEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 8,
+    "top": 32,
+    "width": 73
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 101,
+   "name": "lbledtHdPass",
+   "objkind": "object",
+   "parent_path": "fServerFrm.GroupBox1",
+   "path": "fServerFrm.GroupBox1.lbledtHdPass",
+   "properties": {
+    "EditLabel.Caption": {
+     "type": "STR",
+     "value": "lbledtHdPass"
+    },
+    "EditLabel.Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "EditLabel.Width": {
+     "type": "SCALAR",
+     "value": 62
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "LabelPosition": {
+     "type": "SCALAR",
+     "value": "lpAbove"
+    },
+    "LabelSpacing": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 73
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabeledEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 8,
+    "top": 72,
+    "width": 73
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 119,
+   "name": "lbledtHdFail",
+   "objkind": "object",
+   "parent_path": "fServerFrm.GroupBox1",
+   "path": "fServerFrm.GroupBox1.lbledtHdFail",
+   "properties": {
+    "EditLabel.Caption": {
+     "type": "STR",
+     "value": "lbledtHdFail"
+    },
+    "EditLabel.Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "EditLabel.Width": {
+     "type": "SCALAR",
+     "value": 55
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "LabelPosition": {
+     "type": "SCALAR",
+     "value": "lpAbove"
+    },
+    "LabelSpacing": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 73
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabeledEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 8,
+    "top": 112,
+    "width": 73
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 137,
+   "name": "lbledtHdRejectATPass",
+   "objkind": "object",
+   "parent_path": "fServerFrm.GroupBox1",
+   "path": "fServerFrm.GroupBox1.lbledtHdRejectATPass",
+   "properties": {
+    "EditLabel.Caption": {
+     "type": "STR",
+     "value": "lbledtHdRejectATPass"
+    },
+    "EditLabel.Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "EditLabel.Width": {
+     "type": "SCALAR",
+     "value": 107
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "LabelPosition": {
+     "type": "SCALAR",
+     "value": "lpAbove"
+    },
+    "LabelSpacing": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 112
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 73
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabeledEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 8,
+    "top": 152,
+    "width": 73
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 155,
+   "name": "lbledtHdRejectATFail",
+   "objkind": "object",
+   "parent_path": "fServerFrm.GroupBox1",
+   "path": "fServerFrm.GroupBox1.lbledtHdRejectATFail",
+   "properties": {
+    "EditLabel.Caption": {
+     "type": "STR",
+     "value": "lbledtHdRejectATFail"
+    },
+    "EditLabel.Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "EditLabel.Width": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "LabelPosition": {
+     "type": "SCALAR",
+     "value": "lpAbove"
+    },
+    "LabelSpacing": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 152
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 73
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 9,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabeledEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 8,
+    "top": 192,
+    "width": 73
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 173,
+   "name": "lbledtHdRejectBT",
+   "objkind": "object",
+   "parent_path": "fServerFrm.GroupBox1",
+   "path": "fServerFrm.GroupBox1.lbledtHdRejectBT",
+   "properties": {
+    "EditLabel.Caption": {
+     "type": "STR",
+     "value": "lbledtHdRejectBT"
+    },
+    "EditLabel.Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "EditLabel.Width": {
+     "type": "SCALAR",
+     "value": 84
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "LabelPosition": {
+     "type": "SCALAR",
+     "value": "lpAbove"
+    },
+    "LabelSpacing": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 192
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 73
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 12,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabeledEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 120,
+    "top": 32,
+    "width": 73
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 191,
+   "name": "lbledtTesterMatch",
+   "objkind": "object",
+   "parent_path": "fServerFrm.GroupBox1",
+   "path": "fServerFrm.GroupBox1.lbledtTesterMatch",
+   "properties": {
+    "EditLabel.Caption": {
+     "type": "STR",
+     "value": "lbledtTesterMatch"
+    },
+    "EditLabel.Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "EditLabel.Width": {
+     "type": "SCALAR",
+     "value": 85
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "LabelPosition": {
+     "type": "SCALAR",
+     "value": "lpAbove"
+    },
+    "LabelSpacing": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 120
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 73
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabeledEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 120,
+    "top": 72,
+    "width": 73
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 209,
+   "name": "lbledtTesterUnmatch",
+   "objkind": "object",
+   "parent_path": "fServerFrm.GroupBox1",
+   "path": "fServerFrm.GroupBox1.lbledtTesterUnmatch",
+   "properties": {
+    "EditLabel.Caption": {
+     "type": "STR",
+     "value": "lbledtTesterUnmatch"
+    },
+    "EditLabel.Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "EditLabel.Width": {
+     "type": "SCALAR",
+     "value": 98
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "LabelPosition": {
+     "type": "SCALAR",
+     "value": "lpAbove"
+    },
+    "LabelSpacing": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 120
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 73
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabeledEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 120,
+    "top": 112,
+    "width": 73
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 227,
+   "name": "lbledtTesterIgnore",
+   "objkind": "object",
+   "parent_path": "fServerFrm.GroupBox1",
+   "path": "fServerFrm.GroupBox1.lbledtTesterIgnore",
+   "properties": {
+    "EditLabel.Caption": {
+     "type": "STR",
+     "value": "lbledtTesterIgnore"
+    },
+    "EditLabel.Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "EditLabel.Width": {
+     "type": "SCALAR",
+     "value": 85
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "LabelPosition": {
+     "type": "SCALAR",
+     "value": "lpAbove"
+    },
+    "LabelSpacing": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 120
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 112
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 73
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 7,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabeledEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 120,
+    "top": 152,
+    "width": 73
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 245,
+   "name": "lbledtHdPickUp",
+   "objkind": "object",
+   "parent_path": "fServerFrm.GroupBox1",
+   "path": "fServerFrm.GroupBox1.lbledtHdPickUp",
+   "properties": {
+    "EditLabel.Caption": {
+     "type": "STR",
+     "value": "lbledtHdPickUp"
+    },
+    "EditLabel.Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "EditLabel.Width": {
+     "type": "SCALAR",
+     "value": 74
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "LabelPosition": {
+     "type": "SCALAR",
+     "value": "lpAbove"
+    },
+    "LabelSpacing": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 120
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 152
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 73
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": 10,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabeledEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 232,
+    "top": 32,
+    "width": 73
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 263,
+   "name": "lbledtHdPass1",
+   "objkind": "object",
+   "parent_path": "fServerFrm.GroupBox1",
+   "path": "fServerFrm.GroupBox1.lbledtHdPass1",
+   "properties": {
+    "EditLabel.Caption": {
+     "type": "STR",
+     "value": "lbledtHdPass1"
+    },
+    "EditLabel.Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "EditLabel.Width": {
+     "type": "SCALAR",
+     "value": 68
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "LabelPosition": {
+     "type": "SCALAR",
+     "value": "lpAbove"
+    },
+    "LabelSpacing": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 232
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 73
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabeledEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 232,
+    "top": 76,
+    "width": 73
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 281,
+   "name": "lbledtHdPass2",
+   "objkind": "object",
+   "parent_path": "fServerFrm.GroupBox1",
+   "path": "fServerFrm.GroupBox1.lbledtHdPass2",
+   "properties": {
+    "EditLabel.Caption": {
+     "type": "STR",
+     "value": "lbledtHdPass2"
+    },
+    "EditLabel.Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "EditLabel.Width": {
+     "type": "SCALAR",
+     "value": 68
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "LabelPosition": {
+     "type": "SCALAR",
+     "value": "lpAbove"
+    },
+    "LabelSpacing": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 232
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 76
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 73
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabeledEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 232,
+    "top": 117,
+    "width": 73
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 299,
+   "name": "lbledtHdRejectATPass1",
+   "objkind": "object",
+   "parent_path": "fServerFrm.GroupBox1",
+   "path": "fServerFrm.GroupBox1.lbledtHdRejectATPass1",
+   "properties": {
+    "EditLabel.Caption": {
+     "type": "STR",
+     "value": "lbledtHdRejectATPass1"
+    },
+    "EditLabel.Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "EditLabel.Width": {
+     "type": "SCALAR",
+     "value": 113
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "LabelPosition": {
+     "type": "SCALAR",
+     "value": "lpAbove"
+    },
+    "LabelSpacing": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 232
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 117
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 73
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": 8,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabeledEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 232,
+    "top": 157,
+    "width": 73
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 317,
+   "name": "lbledtHdRejectATPass2",
+   "objkind": "object",
+   "parent_path": "fServerFrm.GroupBox1",
+   "path": "fServerFrm.GroupBox1.lbledtHdRejectATPass2",
+   "properties": {
+    "EditLabel.Caption": {
+     "type": "STR",
+     "value": "lbledtHdRejectATPass2"
+    },
+    "EditLabel.Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "EditLabel.Width": {
+     "type": "SCALAR",
+     "value": 113
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "LabelPosition": {
+     "type": "SCALAR",
+     "value": "lpAbove"
+    },
+    "LabelSpacing": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 232
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 157
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 73
+    }
+   },
+   "sibling_index": 12,
+   "synthesized": false,
+   "tab_order": 11,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fServerFrm.grpHandlerSeq.pnlHandlerSeq"
+   ],
+   "class": "TGroupBox",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 57,
+    "left": 372,
+    "top": 72,
+    "width": 125
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 336,
+   "name": "grpHandlerSeq",
+   "objkind": "object",
+   "parent_path": "fServerFrm",
+   "path": "fServerFrm.grpHandlerSeq",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Handler Last seq status"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 57
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 372
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 125
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 30,
+    "left": 9,
+    "top": 16,
+    "width": 84
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 343,
+   "name": "pnlHandlerSeq",
+   "objkind": "object",
+   "parent_path": "fServerFrm.grpHandlerSeq",
+   "path": "fServerFrm.grpHandlerSeq.pnlHandlerSeq",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "pnlHandlerSeq"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 30
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 84
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fServerFrm.GroupBox2.pnlFTCTLastSeqStatus"
+   ],
+   "class": "TGroupBox",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 57,
+    "left": 368,
+    "top": 8,
+    "width": 129
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 358,
+   "name": "GroupBox2",
+   "objkind": "object",
+   "parent_path": "fServerFrm",
+   "path": "fServerFrm.GroupBox2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "FTCT Last seq status"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 57
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 368
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 129
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 30,
+    "left": 9,
+    "top": 16,
+    "width": 84
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 365,
+   "name": "pnlFTCTLastSeqStatus",
+   "objkind": "object",
+   "parent_path": "fServerFrm.GroupBox2",
+   "path": "fServerFrm.GroupBox2.pnlFTCTLastSeqStatus",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "pnlFTCTLastSeqStatus"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 30
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 84
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fServerFrm.grpAfter71RecvTimeOut.grpNowCounter",
+    "fServerFrm.grpAfter71RecvTimeOut.grpSetCounter"
+   ],
+   "class": "TGroupBox",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 73,
+    "left": 188,
+    "top": 160,
+    "width": 249
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 380,
+   "name": "grpAfter71RecvTimeOut",
+   "objkind": "object",
+   "parent_path": "fServerFrm",
+   "path": "fServerFrm.grpAfter71RecvTimeOut",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "grpAfter71RecvTimeOut"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 73
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 188
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 160
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 249
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fServerFrm.grpAfter71RecvTimeOut.grpNowCounter.lblNowCounterUnit",
+    "fServerFrm.grpAfter71RecvTimeOut.grpNowCounter.pnlNowCounter"
+   ],
+   "class": "TGroupBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 52,
+    "left": 8,
+    "top": 16,
+    "width": 113
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 388,
+   "name": "grpNowCounter",
+   "objkind": "object",
+   "parent_path": "fServerFrm.grpAfter71RecvTimeOut",
+   "path": "fServerFrm.grpAfter71RecvTimeOut.grpNowCounter",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "grpNowCounter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 52
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 113
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 76,
+    "top": 18,
+    "width": 33
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 395,
+   "name": "lblNowCounterUnit",
+   "objkind": "object",
+   "parent_path": "fServerFrm.grpAfter71RecvTimeOut.grpNowCounter",
+   "path": "fServerFrm.grpAfter71RecvTimeOut.grpNowCounter.lblNowCounterUnit",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Sec"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 76
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 18
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 33
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 30,
+    "left": 9,
+    "top": 16,
+    "width": 64
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 408,
+   "name": "pnlNowCounter",
+   "objkind": "object",
+   "parent_path": "fServerFrm.grpAfter71RecvTimeOut.grpNowCounter",
+   "path": "fServerFrm.grpAfter71RecvTimeOut.grpNowCounter.pnlNowCounter",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "pnlNowCounter"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 30
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 64
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fServerFrm.grpAfter71RecvTimeOut.grpSetCounter.lblSetCounterUnit",
+    "fServerFrm.grpAfter71RecvTimeOut.grpSetCounter.pnlSetCounter"
+   ],
+   "class": "TGroupBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 52,
+    "left": 128,
+    "top": 16,
+    "width": 113
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 423,
+   "name": "grpSetCounter",
+   "objkind": "object",
+   "parent_path": "fServerFrm.grpAfter71RecvTimeOut",
+   "path": "fServerFrm.grpAfter71RecvTimeOut.grpSetCounter",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "grpSetCounter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 52
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 128
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 113
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 76,
+    "top": 17,
+    "width": 33
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 430,
+   "name": "lblSetCounterUnit",
+   "objkind": "object",
+   "parent_path": "fServerFrm.grpAfter71RecvTimeOut.grpSetCounter",
+   "path": "fServerFrm.grpAfter71RecvTimeOut.grpSetCounter.lblSetCounterUnit",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Sec"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 76
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 33
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 30,
+    "left": 9,
+    "top": 16,
+    "width": 64
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 443,
+   "name": "pnlSetCounter",
+   "objkind": "object",
+   "parent_path": "fServerFrm.grpAfter71RecvTimeOut.grpSetCounter",
+   "path": "fServerFrm.grpAfter71RecvTimeOut.grpSetCounter.pnlSetCounter",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "pnlFTCTLastSeqStatus"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 30
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 64
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTimer",
+   "depth": 1,
+   "events": {
+    "OnTimer": "ProcTimerTimer"
+   },
+   "geometry": {
+    "height": null,
+    "left": 180,
+    "top": 272,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 459,
+   "name": "ProcTimer",
+   "objkind": "object",
+   "parent_path": "fServerFrm",
+   "path": "fServerFrm.ProcTimer",
+   "properties": {
+    "Interval": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 180
+    },
+    "OnTimer": {
+     "type": "SCALAR",
+     "value": "ProcTimerTimer"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 272
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "Automation/fRENESAS_ServerFrm.dfm",
+ "total_nodes_incl_root": 40
+}

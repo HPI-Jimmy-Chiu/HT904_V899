@@ -1,0 +1,72 @@
+{
+ "event_count": 9,
+ "events": [
+  {
+   "control_path": "fContactCT",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fContactCT",
+   "vcl_class": "TfContactCT"
+  },
+  {
+   "control_path": "fContactCT",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fContactCT",
+   "vcl_class": "TfContactCT"
+  },
+  {
+   "control_path": "fContactCT",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fContactCT",
+   "vcl_class": "TfContactCT"
+  },
+  {
+   "control_path": "fContactCT.rgYieldType",
+   "event_name": "OnClick",
+   "handler_name": "rgYieldTypeClick",
+   "leaf_name": "rgYieldType",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fContactCT.sgYield",
+   "event_name": "OnDblClick",
+   "handler_name": "sgYieldDblClick",
+   "leaf_name": "sgYield",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fContactCT.sgYield",
+   "event_name": "OnDrawCell",
+   "handler_name": "sgYieldDrawCell",
+   "leaf_name": "sgYield",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fContactCT.sgYield",
+   "event_name": "OnMouseDown",
+   "handler_name": "sgYieldMouseDown",
+   "leaf_name": "sgYield",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fContactCT.palClearCnt.btClearCount",
+   "event_name": "OnClick",
+   "handler_name": "btClearCountClick",
+   "leaf_name": "btClearCount",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fContactCT.palClearCnt.btYieldChart",
+   "event_name": "OnClick",
+   "handler_name": "btYieldChartClick",
+   "leaf_name": "btYieldChart",
+   "vcl_class": "TButton"
+  }
+ ],
+ "form_name": "fContactCT",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "cContactCT.dfm"
+}

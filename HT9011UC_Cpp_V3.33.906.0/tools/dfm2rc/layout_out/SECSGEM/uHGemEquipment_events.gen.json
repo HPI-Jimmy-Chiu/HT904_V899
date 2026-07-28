@@ -1,0 +1,135 @@
+{
+ "event_count": 18,
+ "events": [
+  {
+   "control_path": "HGem",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "HGem",
+   "vcl_class": "THGem"
+  },
+  {
+   "control_path": "HGem",
+   "event_name": "OnCreate",
+   "handler_name": "FormCreate",
+   "leaf_name": "HGem",
+   "vcl_class": "THGem"
+  },
+  {
+   "control_path": "HGem",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "HGem",
+   "vcl_class": "THGem"
+  },
+  {
+   "control_path": "HGem",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "HGem",
+   "vcl_class": "THGem"
+  },
+  {
+   "control_path": "HGem.PageControl1.TabSheet2.palSheet1.edtPort",
+   "event_name": "OnClick",
+   "handler_name": "edtPortClick",
+   "leaf_name": "edtPort",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HGem.PageControl1.TabSheet2.palSheet1.edtT3TimeOut",
+   "event_name": "OnClick",
+   "handler_name": "edtT3TimeOutClick",
+   "leaf_name": "edtT3TimeOut",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HGem.PageControl1.TabSheet2.palSheet1.edDeviceID",
+   "event_name": "OnClick",
+   "handler_name": "edtPortClick",
+   "leaf_name": "edDeviceID",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HGem.PageControl1.TabSheet6.palSheet5.btnExport",
+   "event_name": "OnClick",
+   "handler_name": "btnExportClick",
+   "leaf_name": "btnExport",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "HGem.clientGem",
+   "event_name": "OnConnect",
+   "handler_name": "clientGemConnect",
+   "leaf_name": "clientGem",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "HGem.clientGem",
+   "event_name": "OnConnecting",
+   "handler_name": "clientGemConnecting",
+   "leaf_name": "clientGem",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "HGem.clientGem",
+   "event_name": "OnDisconnect",
+   "handler_name": "clientGemDisconnect",
+   "leaf_name": "clientGem",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "HGem.clientGem",
+   "event_name": "OnError",
+   "handler_name": "clientGemError",
+   "leaf_name": "clientGem",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "HGem.clientGem",
+   "event_name": "OnRead",
+   "handler_name": "clientGemRead",
+   "leaf_name": "clientGem",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "HGem.Timer1",
+   "event_name": "OnTimer",
+   "handler_name": "Timer1Timer",
+   "leaf_name": "Timer1",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "HGem.srvGem",
+   "event_name": "OnClientConnect",
+   "handler_name": "srvGemClientConnect",
+   "leaf_name": "srvGem",
+   "vcl_class": "TServerSocket"
+  },
+  {
+   "control_path": "HGem.srvGem",
+   "event_name": "OnClientDisconnect",
+   "handler_name": "srvGemClientDisconnect",
+   "leaf_name": "srvGem",
+   "vcl_class": "TServerSocket"
+  },
+  {
+   "control_path": "HGem.srvGem",
+   "event_name": "OnClientError",
+   "handler_name": "srvGemClientError",
+   "leaf_name": "srvGem",
+   "vcl_class": "TServerSocket"
+  },
+  {
+   "control_path": "HGem.srvGem",
+   "event_name": "OnClientRead",
+   "handler_name": "clientGemRead",
+   "leaf_name": "srvGem",
+   "vcl_class": "TServerSocket"
+  }
+ ],
+ "form_name": "HGem",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "SECSGEM/uHGemEquipment.dfm"
+}

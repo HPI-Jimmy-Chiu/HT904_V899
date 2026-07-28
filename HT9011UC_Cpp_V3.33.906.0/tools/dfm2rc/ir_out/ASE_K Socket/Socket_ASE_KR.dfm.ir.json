@@ -1,0 +1,1706 @@
+{
+ "control_node_count": 28,
+ "encoding_used": "cp950",
+ "form_class": "TfSocketCommunication",
+ "form_name": "fSocketCommunication",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fSocketCommunication.Splitter1",
+    "fSocketCommunication.GroupBox1",
+    "fSocketCommunication.GroupBox3",
+    "fSocketCommunication.Memo",
+    "fSocketCommunication.ClientSocket1",
+    "fSocketCommunication.Timer1"
+   ],
+   "class": "TfSocketCommunication",
+   "depth": 0,
+   "events": {
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow"
+   },
+   "geometry": {
+    "height": 608,
+    "left": 556,
+    "top": 121,
+    "width": 378
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "fSocketCommunication",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "fSocketCommunication",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Socket Communication"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 608
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 556
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnDestroy": {
+     "type": "SCALAR",
+     "value": "FormDestroy"
+    },
+    "OnShow": {
+     "type": "SCALAR",
+     "value": "FormShow"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 121
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 378
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alNone",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSplitter",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 8,
+    "left": 0,
+    "top": 217,
+    "width": 369
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 19,
+   "name": "Splitter1",
+   "objkind": "object",
+   "parent_path": "fSocketCommunication",
+   "path": "fSocketCommunication.Splitter1",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alNone"
+    },
+    "Cursor": {
+     "type": "SCALAR",
+     "value": "crHSplit"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ResizeStyle": {
+     "type": "SCALAR",
+     "value": "rsLine"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 217
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 369
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fSocketCommunication.GroupBox1.OnLine",
+    "fSocketCommunication.GroupBox1.cbEnableSocket",
+    "fSocketCommunication.GroupBox1.gbSetting",
+    "fSocketCommunication.GroupBox1.btnOK",
+    "fSocketCommunication.GroupBox1.btnCancel"
+   ],
+   "class": "TGroupBox",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 217,
+    "left": 0,
+    "top": 0,
+    "width": 369
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 28,
+   "name": "GroupBox1",
+   "objkind": "object",
+   "parent_path": "fSocketCommunication",
+   "path": "fSocketCommunication.GroupBox1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Tester communiction"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 217
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 369
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 45,
+    "left": 308,
+    "top": 12,
+    "width": 45
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 35,
+   "name": "OnLine",
+   "objkind": "object",
+   "parent_path": "fSocketCommunication.GroupBox1",
+   "path": "fSocketCommunication.GroupBox1.OnLine",
+   "properties": {
+    "Enabled": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Glyph.Data": {
+     "type": "BLOB",
+     "value": {
+      "byte_len": 3130,
+      "hex": "360C0000424D360C000000000000360000002800000020000000200000000100180000000000000C0000130B0000130B00000000000000000000FFFFFF000000000000000000000000000000000000000000000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000000000000000000000000000000000000000000000000000000000000000FFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080808080808080808080000000FFFFFFFFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080808080808080808080000000FFFFFF808080FFFFFFC0C0C000FF0000FF00C0C0C0C0C0C0000000000000000000000000C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C000FF0000FF00C0C0C0C0C0C0000000000000000000000000C0C0C0808080000000FFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080808080808080808080C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080808080808080808080C0C0C0808080000000FFFFFF808080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080000000FFFFFFFFFFFFFFFFFF808080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080000000FFFFFFFFFFFF808080000000000000000000000000000000000000000000000000000000000000C0C0C0000000FFFFFFFFFFFFFFFFFFFFFFFF808080000000000000000000000000000000000000000000000000000000000000C0C0C0000000FFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080808080000000FFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFF808080000000BF0000BF0000BF0000BF0000BF0000C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000BF0000BF0000BF0000BF0000BF0000C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFF808080000000FF0000FF0000FF0000FF0000BF0000C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000FF0000FF0000FF0000FF0000BF0000C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFF808080000000FF0000FF0000FF0000FF0000BF0000C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000FF0000FF0000FF0000FF0000BF0000C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFF808080000000FFFF00FF0000FF0000FF0000BF0000C0C0C0808080000000000000FFFFFFFFFFFFFFFFFF000000808080FFFFFF808080000000FFFF00FF0000FF0000FF0000BF0000C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFF808080000000000000000000000000000000000000C0C0C0808080000000FFFFFF000000000000000000FFFFFF808080FFFFFF808080000000000000000000000000000000000000C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080000000FFFFFFFFFFFF000000FFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080FFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000000000000000000000000000000000000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080808080808080808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C000FF0000FF00C0C0C0C0C0C0000000000000000000000000C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080808080808080808080C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080000000000000000000000000000000000000000000000000000000000000C0C0C0000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000BFBF00BFBF00BFBF00BFBF00808080C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000BFBF00BFBF00BFBF00BFBF00808080C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000BFBF00BFBF00BFBF00BFBF00808080C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000FFFF00BFBF00BFBF00BFBF00808080C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000000000000000000000000000808080C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+      "sha1": "6bc36ed42298a2900b4526eb6281c21b5d8207cd"
+     }
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 45
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 308
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 45
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 16,
+    "top": 16,
+    "width": 177
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 141,
+   "name": "cbEnableSocket",
+   "objkind": "object",
+   "parent_path": "fSocketCommunication.GroupBox1",
+   "path": "fSocketCommunication.GroupBox1.cbEnableSocket",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Enable Socket Communication"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 177
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fSocketCommunication.GroupBox1.gbSetting.Label1",
+    "fSocketCommunication.GroupBox1.gbSetting.Label2",
+    "fSocketCommunication.GroupBox1.gbSetting.Label3",
+    "fSocketCommunication.GroupBox1.gbSetting.edtServerIP_1",
+    "fSocketCommunication.GroupBox1.gbSetting.edtServerPort",
+    "fSocketCommunication.GroupBox1.gbSetting.edtSocketTimeout",
+    "fSocketCommunication.GroupBox1.gbSetting.edtServerIP_2",
+    "fSocketCommunication.GroupBox1.gbSetting.edtServerIP_3",
+    "fSocketCommunication.GroupBox1.gbSetting.edtServerIP_4"
+   ],
+   "class": "TGroupBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 121,
+    "left": 8,
+    "top": 40,
+    "width": 289
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 149,
+   "name": "gbSetting",
+   "objkind": "object",
+   "parent_path": "fSocketCommunication.GroupBox1",
+   "path": "fSocketCommunication.GroupBox1.gbSetting",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Setting"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 121
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 289
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 58,
+    "width": 72
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 156,
+   "name": "Label1",
+   "objkind": "object",
+   "parent_path": "fSocketCommunication.GroupBox1.gbSetting",
+   "path": "fSocketCommunication.GroupBox1.gbSetting.Label1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Server IP Addr."
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 58
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 72
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 92,
+    "width": 53
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 163,
+   "name": "Label2",
+   "objkind": "object",
+   "parent_path": "fSocketCommunication.GroupBox1.gbSetting",
+   "path": "fSocketCommunication.GroupBox1.gbSetting.Label2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Server Port"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 92
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 53
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 24,
+    "width": 106
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 170,
+   "name": "Label3",
+   "objkind": "object",
+   "parent_path": "fSocketCommunication.GroupBox1.gbSetting",
+   "path": "fSocketCommunication.GroupBox1.gbSetting.Label3",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Socket Timeout (secs)"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 106
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {
+    "OnClick": "edtServerIP_1Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 96,
+    "top": 50,
+    "width": 41
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 177,
+   "name": "edtServerIP_1",
+   "objkind": "object",
+   "parent_path": "fSocketCommunication.GroupBox1.gbSetting",
+   "path": "fSocketCommunication.GroupBox1.gbSetting.edtServerIP_1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "MaxLength": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edtServerIP_1Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 50
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 41
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {
+    "OnClick": "edtServerPortClick"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 96,
+    "top": 84,
+    "width": 57
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 186,
+   "name": "edtServerPort",
+   "objkind": "object",
+   "parent_path": "fSocketCommunication.GroupBox1.gbSetting",
+   "path": "fSocketCommunication.GroupBox1.gbSetting.edtServerPort",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edtServerPortClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 84
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 57
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {
+    "OnClick": "edtSocketTimeoutClick"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 133,
+    "top": 16,
+    "width": 105
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 194,
+   "name": "edtSocketTimeout",
+   "objkind": "object",
+   "parent_path": "fSocketCommunication.GroupBox1.gbSetting",
+   "path": "fSocketCommunication.GroupBox1.gbSetting.edtSocketTimeout",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 133
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edtSocketTimeoutClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Text": {
+     "type": "STR",
+     "value": "30"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 105
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {
+    "OnClick": "edtServerIP_1Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 144,
+    "top": 50,
+    "width": 41
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 203,
+   "name": "edtServerIP_2",
+   "objkind": "object",
+   "parent_path": "fSocketCommunication.GroupBox1.gbSetting",
+   "path": "fSocketCommunication.GroupBox1.gbSetting.edtServerIP_2",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 144
+    },
+    "MaxLength": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edtServerIP_1Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 50
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 41
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {
+    "OnClick": "edtServerIP_1Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 192,
+    "top": 50,
+    "width": 41
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 212,
+   "name": "edtServerIP_3",
+   "objkind": "object",
+   "parent_path": "fSocketCommunication.GroupBox1.gbSetting",
+   "path": "fSocketCommunication.GroupBox1.gbSetting.edtServerIP_3",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 192
+    },
+    "MaxLength": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edtServerIP_1Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 50
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 41
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {
+    "OnClick": "edtServerIP_1Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 240,
+    "top": 50,
+    "width": 41
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 221,
+   "name": "edtServerIP_4",
+   "objkind": "object",
+   "parent_path": "fSocketCommunication.GroupBox1.gbSetting",
+   "path": "fSocketCommunication.GroupBox1.gbSetting.edtServerIP_4",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 240
+    },
+    "MaxLength": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edtServerIP_1Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 50
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 41
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "btnOKClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 40,
+    "top": 176,
+    "width": 75
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 231,
+   "name": "btnOK",
+   "objkind": "object",
+   "parent_path": "fSocketCommunication.GroupBox1",
+   "path": "fSocketCommunication.GroupBox1.btnOK",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "OK"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btnOKClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 176
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 75
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "btnCancelClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 192,
+    "top": 176,
+    "width": 75
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 240,
+   "name": "btnCancel",
+   "objkind": "object",
+   "parent_path": "fSocketCommunication.GroupBox1",
+   "path": "fSocketCommunication.GroupBox1.btnCancel",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Cancel"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 192
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btnCancelClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 176
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 75
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fSocketCommunication.GroupBox3.btnC1N1",
+    "fSocketCommunication.GroupBox3.btnC1N3",
+    "fSocketCommunication.GroupBox3.btnC6N1",
+    "fSocketCommunication.GroupBox3.btnC9N1",
+    "fSocketCommunication.GroupBox3.btnC9N3",
+    "fSocketCommunication.GroupBox3.btnC9N5",
+    "fSocketCommunication.GroupBox3.Button1",
+    "fSocketCommunication.GroupBox3.Button2"
+   ],
+   "class": "TGroupBox",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 137,
+    "left": 1,
+    "top": 224,
+    "width": 369
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 250,
+   "name": "GroupBox3",
+   "objkind": "object",
+   "parent_path": "fSocketCommunication",
+   "path": "fSocketCommunication.GroupBox3",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Command List"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 137
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 224
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 369
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "btnC1N1Click"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 24,
+    "top": 24,
+    "width": 75
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 258,
+   "name": "btnC1N1",
+   "objkind": "object",
+   "parent_path": "fSocketCommunication.GroupBox3",
+   "path": "fSocketCommunication.GroupBox3.btnC1N1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "C1N1"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btnC1N1Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 75
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "btnC1N3Click"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 148,
+    "top": 24,
+    "width": 75
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 267,
+   "name": "btnC1N3",
+   "objkind": "object",
+   "parent_path": "fSocketCommunication.GroupBox3",
+   "path": "fSocketCommunication.GroupBox3.btnC1N3",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "C1N3"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 148
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btnC1N3Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 75
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "btnC6N1Click"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 272,
+    "top": 24,
+    "width": 75
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 276,
+   "name": "btnC6N1",
+   "objkind": "object",
+   "parent_path": "fSocketCommunication.GroupBox3",
+   "path": "fSocketCommunication.GroupBox3.btnC6N1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "C6N1"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 272
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btnC6N1Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 75
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "btnC9N1Click"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 24,
+    "top": 64,
+    "width": 75
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 285,
+   "name": "btnC9N1",
+   "objkind": "object",
+   "parent_path": "fSocketCommunication.GroupBox3",
+   "path": "fSocketCommunication.GroupBox3.btnC9N1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "C9N1"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btnC9N1Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 64
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 75
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "btnC9N3Click"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 148,
+    "top": 64,
+    "width": 75
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 294,
+   "name": "btnC9N3",
+   "objkind": "object",
+   "parent_path": "fSocketCommunication.GroupBox3",
+   "path": "fSocketCommunication.GroupBox3.btnC9N3",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "C9N3"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 148
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btnC9N3Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 64
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 75
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "btnC9N5Click"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 272,
+    "top": 64,
+    "width": 75
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 303,
+   "name": "btnC9N5",
+   "objkind": "object",
+   "parent_path": "fSocketCommunication.GroupBox3",
+   "path": "fSocketCommunication.GroupBox3.btnC9N5",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "C9N5"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 272
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btnC9N5Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 64
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 75
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "Button1Click"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 64,
+    "top": 104,
+    "width": 75
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 312,
+   "name": "Button1",
+   "objkind": "object",
+   "parent_path": "fSocketCommunication.GroupBox3",
+   "path": "fSocketCommunication.GroupBox3.Button1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Connent"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 64
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "Button1Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 104
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 75
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "Button2Click"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 224,
+    "top": 104,
+    "width": 75
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 321,
+   "name": "Button2",
+   "objkind": "object",
+   "parent_path": "fSocketCommunication.GroupBox3",
+   "path": "fSocketCommunication.GroupBox3.Button2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Disconnect"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 224
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "Button2Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 104
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 75
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 7,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 209,
+    "left": 0,
+    "top": 368,
+    "width": 369
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 331,
+   "name": "Memo",
+   "objkind": "object",
+   "parent_path": "fSocketCommunication",
+   "path": "fSocketCommunication.Memo",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 209
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 368
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 369
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TClientSocket",
+   "depth": 1,
+   "events": {
+    "OnConnect": "ClientSocket1Connect",
+    "OnConnecting": "ClientSocket1Connecting",
+    "OnDisconnect": "ClientSocket1Disconnect",
+    "OnError": "ClientSocket1Error",
+    "OnRead": "ClientSocket1Read"
+   },
+   "geometry": {
+    "height": null,
+    "left": 272,
+    "top": 8,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 340,
+   "name": "ClientSocket1",
+   "objkind": "object",
+   "parent_path": "fSocketCommunication",
+   "path": "fSocketCommunication.ClientSocket1",
+   "properties": {
+    "Active": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ClientType": {
+     "type": "SCALAR",
+     "value": "ctNonBlocking"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 272
+    },
+    "OnConnect": {
+     "type": "SCALAR",
+     "value": "ClientSocket1Connect"
+    },
+    "OnConnecting": {
+     "type": "SCALAR",
+     "value": "ClientSocket1Connecting"
+    },
+    "OnDisconnect": {
+     "type": "SCALAR",
+     "value": "ClientSocket1Disconnect"
+    },
+    "OnError": {
+     "type": "SCALAR",
+     "value": "ClientSocket1Error"
+    },
+    "OnRead": {
+     "type": "SCALAR",
+     "value": "ClientSocket1Read"
+    },
+    "Port": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTimer",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": null,
+    "left": 304,
+    "top": 64,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 352,
+   "name": "Timer1",
+   "objkind": "object",
+   "parent_path": "fSocketCommunication",
+   "path": "fSocketCommunication.Timer1",
+   "properties": {
+    "Enabled": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 304
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 64
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "ASE_K Socket/Socket_ASE_KR.dfm",
+ "total_nodes_incl_root": 29
+}

@@ -1,0 +1,1198 @@
+{
+ "control_node_count": 13,
+ "encoding_used": "cp950",
+ "form_class": "TMyMessageBox",
+ "form_name": "MyMessageBox",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "MyMessageBox.labStopTime",
+    "MyMessageBox.lblSecsMsg",
+    "MyMessageBox.pnlPause",
+    "MyMessageBox.pnlMain",
+    "MyMessageBox.pnlNo",
+    "MyMessageBox.pnlYes",
+    "MyMessageBox.pnlAlarmReset",
+    "MyMessageBox.palWaitEAP",
+    "MyMessageBox.Timer1"
+   ],
+   "class": "TMyMessageBox",
+   "depth": 0,
+   "events": {
+    "OnClose": "FormClose",
+    "OnShortCut": "FormShortCut",
+    "OnShow": "FormShow"
+   },
+   "geometry": {
+    "height": null,
+    "left": 432,
+    "top": 411,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "MyMessageBox",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "MyMessageBox",
+   "properties": {
+    "BorderIcons": {
+     "type": "SET",
+     "value": []
+    },
+    "BorderStyle": {
+     "type": "SCALAR",
+     "value": "bsSingle"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Message"
+    },
+    "ClientHeight": {
+     "type": "SCALAR",
+     "value": 241
+    },
+    "ClientWidth": {
+     "type": "SCALAR",
+     "value": 500
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "DragKind": {
+     "type": "SCALAR",
+     "value": "dkDock"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 432
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "OnClose": {
+     "type": "SCALAR",
+     "value": "FormClose"
+    },
+    "OnShortCut": {
+     "type": "SCALAR",
+     "value": "FormShortCut"
+    },
+    "OnShow": {
+     "type": "SCALAR",
+     "value": "FormShow"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Position": {
+     "type": "SCALAR",
+     "value": "poScreenCenter"
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 411
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 102,
+    "top": 208,
+    "width": 244
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 23,
+   "name": "labStopTime",
+   "objkind": "object",
+   "parent_path": "MyMessageBox",
+   "path": "MyMessageBox.labStopTime",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Timer : 0000 days 00:00:00"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -21
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Times New Roman"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 102
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 208
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 244
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 49,
+    "left": 8,
+    "top": 0,
+    "width": 441
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 36,
+   "name": "lblSecsMsg",
+   "objkind": "object",
+   "parent_path": "MyMessageBox",
+   "path": "MyMessageBox.lblSecsMsg",
+   "properties": {
+    "Alignment": {
+     "type": "SCALAR",
+     "value": "taCenter"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "SECS GEM Message"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clNavy"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -32
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 49
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 441
+    },
+    "WordWrap": {
+     "type": "SCALAR",
+     "value": "True"
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 1,
+   "events": {
+    "OnClick": "pnlPauseClick"
+   },
+   "geometry": {
+    "height": 33,
+    "left": 155,
+    "top": 172,
+    "width": 130
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 53,
+   "name": "pnlPause",
+   "objkind": "object",
+   "parent_path": "MyMessageBox",
+   "path": "MyMessageBox.pnlPause",
+   "properties": {
+    "BevelWidth": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Pause"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 9534289
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 155
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "pnlPauseClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 172
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 130
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "MyMessageBox.pnlMain.lblSubMsg",
+    "MyMessageBox.pnlMain.lblMainMsg",
+    "MyMessageBox.pnlMain.lblChineseMsg",
+    "MyMessageBox.pnlMain.moSecsGem"
+   ],
+   "class": "TPanel",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 153,
+    "left": 24,
+    "top": 16,
+    "width": 457
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 70,
+   "name": "pnlMain",
+   "objkind": "object",
+   "parent_path": "MyMessageBox",
+   "path": "MyMessageBox.pnlMain",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clNavy"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 153
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 457
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 27,
+    "left": 7,
+    "top": 99,
+    "width": 441
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 84,
+   "name": "lblSubMsg",
+   "objkind": "object",
+   "parent_path": "MyMessageBox.pnlMain",
+   "path": "MyMessageBox.pnlMain.lblSubMsg",
+   "properties": {
+    "Alignment": {
+     "type": "SCALAR",
+     "value": "taCenter"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clNavy"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 27
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 99
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 441
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 49,
+    "left": 8,
+    "top": 8,
+    "width": 441
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 98,
+   "name": "lblMainMsg",
+   "objkind": "object",
+   "parent_path": "MyMessageBox.pnlMain",
+   "path": "MyMessageBox.pnlMain.lblMainMsg",
+   "properties": {
+    "Alignment": {
+     "type": "SCALAR",
+     "value": "taCenter"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "English"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clNavy"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 49
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 441
+    },
+    "WordWrap": {
+     "type": "SCALAR",
+     "value": "True"
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 62,
+    "left": 8,
+    "top": 64,
+    "width": 441
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 114,
+   "name": "lblChineseMsg",
+   "objkind": "object",
+   "parent_path": "MyMessageBox.pnlMain",
+   "path": "MyMessageBox.pnlMain.lblChineseMsg",
+   "properties": {
+    "Alignment": {
+     "type": "SCALAR",
+     "value": "taCenter"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "中文"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clNavy"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 62
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 64
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 441
+    },
+    "WordWrap": {
+     "type": "SCALAR",
+     "value": "True"
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 141,
+    "left": 8,
+    "top": 8,
+    "width": 437
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 130,
+   "name": "moSecsGem",
+   "objkind": "object",
+   "parent_path": "MyMessageBox.pnlMain",
+   "path": "MyMessageBox.pnlMain.moSecsGem",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 141
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "ScrollBars": {
+     "type": "SCALAR",
+     "value": "ssBoth"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 437
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 1,
+   "events": {
+    "OnClick": "pnlYesClick"
+   },
+   "geometry": {
+    "height": 33,
+    "left": 247,
+    "top": 172,
+    "width": 130
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 140,
+   "name": "pnlNo",
+   "objkind": "object",
+   "parent_path": "MyMessageBox",
+   "path": "MyMessageBox.pnlNo",
+   "properties": {
+    "BevelWidth": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "No"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 9534289
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 247
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "pnlYesClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 172
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 130
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 1,
+   "events": {
+    "OnClick": "pnlYesClick"
+   },
+   "geometry": {
+    "height": 33,
+    "left": 47,
+    "top": 172,
+    "width": 130
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 159,
+   "name": "pnlYes",
+   "objkind": "object",
+   "parent_path": "MyMessageBox",
+   "path": "MyMessageBox.pnlYes",
+   "properties": {
+    "BevelWidth": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Yes"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 9534289
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 47
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "pnlYesClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 172
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 130
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 1,
+   "events": {
+    "OnClick": "pnlAlarmResetClick"
+   },
+   "geometry": {
+    "height": 33,
+    "left": 347,
+    "top": 172,
+    "width": 110
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 178,
+   "name": "pnlAlarmReset",
+   "objkind": "object",
+   "parent_path": "MyMessageBox",
+   "path": "MyMessageBox.pnlAlarmReset",
+   "properties": {
+    "BevelWidth": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "AlarmReset"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 9534289
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 347
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "pnlAlarmResetClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 172
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 110
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 49,
+    "left": 552,
+    "top": 776,
+    "width": 625
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 195,
+   "name": "palWaitEAP",
+   "objkind": "object",
+   "parent_path": "MyMessageBox",
+   "path": "MyMessageBox.palWaitEAP",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Waiting for EAP system judgment"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clRed"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -27
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 49
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 552
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 776
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 625
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTimer",
+   "depth": 1,
+   "events": {
+    "OnTimer": "Timer1Timer"
+   },
+   "geometry": {
+    "height": null,
+    "left": 416,
+    "top": 176,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 210,
+   "name": "Timer1",
+   "objkind": "object",
+   "parent_path": "MyMessageBox",
+   "path": "MyMessageBox.Timer1",
+   "properties": {
+    "Interval": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 416
+    },
+    "OnTimer": {
+     "type": "SCALAR",
+     "value": "Timer1Timer"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 176
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "mymessbox.dfm",
+ "total_nodes_incl_root": 14
+}

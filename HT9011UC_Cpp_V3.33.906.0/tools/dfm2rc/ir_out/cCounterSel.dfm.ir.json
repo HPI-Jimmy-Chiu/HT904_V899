@@ -1,0 +1,2232 @@
+{
+ "control_node_count": 34,
+ "encoding_used": "cp950",
+ "form_class": "TfCounterSel",
+ "form_name": "fCounterSel",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fCounterSel.spbExit",
+    "fCounterSel.GroupBox17",
+    "fCounterSel.cbDefaultValue"
+   ],
+   "class": "TfCounterSel",
+   "depth": 0,
+   "events": {
+    "OnClose": "FormClose",
+    "OnShow": "FormShow"
+   },
+   "geometry": {
+    "height": null,
+    "left": 279,
+    "top": 116,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "fCounterSel",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "fCounterSel",
+   "properties": {
+    "BorderIcons": {
+     "type": "SET",
+     "value": []
+    },
+    "BorderStyle": {
+     "type": "SCALAR",
+     "value": "bsToolWindow"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Counter Selection"
+    },
+    "ClientHeight": {
+     "type": "SCALAR",
+     "value": 559
+    },
+    "ClientWidth": {
+     "type": "SCALAR",
+     "value": 397
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "DragKind": {
+     "type": "SCALAR",
+     "value": "dkDock"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 279
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnClose": {
+     "type": "SCALAR",
+     "value": "FormClose"
+    },
+    "OnShow": {
+     "type": "SCALAR",
+     "value": "FormShow"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 116
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "spbExitClick"
+   },
+   "geometry": {
+    "height": 48,
+    "left": 43,
+    "top": 504,
+    "width": 314
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 21,
+   "name": "spbExit",
+   "objkind": "object",
+   "parent_path": "fCounterSel",
+   "path": "fCounterSel.spbExit",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Exit"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Glyph.Data": {
+     "type": "BLOB",
+     "value": {
+      "byte_len": 1554,
+      "hex": "0E060000424D0E06000000000000360000002800000016000000160000000100180000000000D805000001000000010000000000000000000000EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF7474A44C4C946C6CA4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF6C6CA44C4C947474A4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF2C2C8C5454C45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC4C4C94EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C4645C9CEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C4645C9C645C9C3C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C43C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D46C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC6464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C2424946464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C8C8CAC8C8CAC2424946464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF6C6CA43C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEF8C8CAC2424946464D45454C46C6CA4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF2C2C8C4C4CBC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424945454C44C4C94EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC3434948C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC3434948C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF",
+      "sha1": "f9091dff96fbb403d8fe7eec0dcccd5c7539ad97"
+     }
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 48
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 43
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "spbExitClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 504
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 314
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fCounterSel.GroupBox17.gbLoadingCount",
+    "fCounterSel.GroupBox17.gbContactCount",
+    "fCounterSel.GroupBox17.gbTestCategory",
+    "fCounterSel.GroupBox17.gbScanner",
+    "fCounterSel.GroupBox17.gbTemperature",
+    "fCounterSel.GroupBox17.gbBinAssign",
+    "fCounterSel.GroupBox17.gbStatus"
+   ],
+   "class": "TGroupBox",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 462,
+    "left": 20,
+    "top": 15,
+    "width": 353
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 85,
+   "name": "GroupBox17",
+   "objkind": "object",
+   "parent_path": "fCounterSel",
+   "path": "fCounterSel.GroupBox17",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Counter Select"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clNavy"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -12
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 462
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 353
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fCounterSel.GroupBox17.gbLoadingCount.labLoadingCount",
+    "fCounterSel.GroupBox17.gbLoadingCount.rbLoadingCount_On",
+    "fCounterSel.GroupBox17.gbLoadingCount.rbLoadingCount_Off"
+   ],
+   "class": "TGroupBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 59,
+    "left": 11,
+    "top": 12,
+    "width": 332
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 98,
+   "name": "gbLoadingCount",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17",
+   "path": "fCounterSel.GroupBox17.gbLoadingCount",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clNavy"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -12
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 59
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 332
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 15,
+    "top": 25,
+    "width": 78
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 110,
+   "name": "labLoadingCount",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17.gbLoadingCount",
+   "path": "fCounterSel.GroupBox17.gbLoadingCount.labLoadingCount",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Loading Counter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 78
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TRadioButton",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 119,
+    "top": 25,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 117,
+   "name": "rbLoadingCount_On",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17.gbLoadingCount",
+   "path": "fCounterSel.GroupBox17.gbLoadingCount.rbLoadingCount_On",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "ON"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 119
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TRadioButton",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 186,
+    "top": 25,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 125,
+   "name": "rbLoadingCount_Off",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17.gbLoadingCount",
+   "path": "fCounterSel.GroupBox17.gbLoadingCount.rbLoadingCount_Off",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "OFF"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 186
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fCounterSel.GroupBox17.gbContactCount.labContactCount",
+    "fCounterSel.GroupBox17.gbContactCount.rbContactCount_On",
+    "fCounterSel.GroupBox17.gbContactCount.rbContactCount_Off"
+   ],
+   "class": "TGroupBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 59,
+    "left": 11,
+    "top": 72,
+    "width": 332
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 134,
+   "name": "gbContactCount",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17",
+   "path": "fCounterSel.GroupBox17.gbContactCount",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clNavy"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -12
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 59
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 332
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 25,
+    "width": 68
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 146,
+   "name": "labContactCount",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17.gbContactCount",
+   "path": "fCounterSel.GroupBox17.gbContactCount.labContactCount",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Contact Count"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 68
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TRadioButton",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 18,
+    "left": 119,
+    "top": 25,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 153,
+   "name": "rbContactCount_On",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17.gbContactCount",
+   "path": "fCounterSel.GroupBox17.gbContactCount.rbContactCount_On",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "ON"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 18
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 119
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TRadioButton",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 18,
+    "left": 186,
+    "top": 25,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 161,
+   "name": "rbContactCount_Off",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17.gbContactCount",
+   "path": "fCounterSel.GroupBox17.gbContactCount.rbContactCount_Off",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "OFF"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 18
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 186
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fCounterSel.GroupBox17.gbTestCategory.labTestCategory",
+    "fCounterSel.GroupBox17.gbTestCategory.rbTestCategory_On",
+    "fCounterSel.GroupBox17.gbTestCategory.rbTestCategory_Off",
+    "fCounterSel.GroupBox17.gbTestCategory.rgTestCategory"
+   ],
+   "class": "TGroupBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 58,
+    "left": 11,
+    "top": 134,
+    "width": 332
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 170,
+   "name": "gbTestCategory",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17",
+   "path": "fCounterSel.GroupBox17.gbTestCategory",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clNavy"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -12
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 58
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 134
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 332
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 25,
+    "width": 75
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 182,
+   "name": "labTestCategory",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17.gbTestCategory",
+   "path": "fCounterSel.GroupBox17.gbTestCategory.labTestCategory",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Tester Category"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 75
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TRadioButton",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 18,
+    "left": 119,
+    "top": 25,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 189,
+   "name": "rbTestCategory_On",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17.gbTestCategory",
+   "path": "fCounterSel.GroupBox17.gbTestCategory.rbTestCategory_On",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "ON"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 18
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 119
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TRadioButton",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 18,
+    "left": 186,
+    "top": 25,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 197,
+   "name": "rbTestCategory_Off",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17.gbTestCategory",
+   "path": "fCounterSel.GroupBox17.gbTestCategory.rbTestCategory_Off",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "OFF"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 18
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 186
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TRadioGroup",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 45,
+    "left": 242,
+    "top": 8,
+    "width": 82
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 205,
+   "name": "rgTestCategory",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17.gbTestCategory",
+   "path": "fCounterSel.GroupBox17.gbTestCategory.rgTestCategory",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clNavy"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -9
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 45
+    },
+    "ItemIndex": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "Normal",
+      "By Arm"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 242
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 82
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fCounterSel.GroupBox17.gbScanner.labScanner",
+    "fCounterSel.GroupBox17.gbScanner.rbScanner_On",
+    "fCounterSel.GroupBox17.gbScanner.rbScanner_Off"
+   ],
+   "class": "TGroupBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 59,
+    "left": 11,
+    "top": 194,
+    "width": 332
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 223,
+   "name": "gbScanner",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17",
+   "path": "fCounterSel.GroupBox17.gbScanner",
+   "properties": {
+    "Enabled": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clNavy"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -12
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 59
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 194
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 332
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 14,
+    "top": 25,
+    "width": 85
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 236,
+   "name": "labScanner",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17.gbScanner",
+   "path": "fCounterSel.GroupBox17.gbScanner.labScanner",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Scanner Category"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 85
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TRadioButton",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 18,
+    "left": 119,
+    "top": 25,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 243,
+   "name": "rbScanner_On",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17.gbScanner",
+   "path": "fCounterSel.GroupBox17.gbScanner.rbScanner_On",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "ON"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 18
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 119
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TRadioButton",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 18,
+    "left": 186,
+    "top": 25,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 251,
+   "name": "rbScanner_Off",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17.gbScanner",
+   "path": "fCounterSel.GroupBox17.gbScanner.rbScanner_Off",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "OFF"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 18
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 186
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fCounterSel.GroupBox17.gbTemperature.labTemperature",
+    "fCounterSel.GroupBox17.gbTemperature.rbTemperature_On",
+    "fCounterSel.GroupBox17.gbTemperature.rbTemperature_Off"
+   ],
+   "class": "TGroupBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 59,
+    "left": 11,
+    "top": 255,
+    "width": 332
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 260,
+   "name": "gbTemperature",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17",
+   "path": "fCounterSel.GroupBox17.gbTemperature",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clNavy"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -12
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 59
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 255
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 332
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 25,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 272,
+   "name": "labTemperature",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17.gbTemperature",
+   "path": "fCounterSel.GroupBox17.gbTemperature.labTemperature",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Temperature"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TRadioButton",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 18,
+    "left": 119,
+    "top": 25,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 279,
+   "name": "rbTemperature_On",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17.gbTemperature",
+   "path": "fCounterSel.GroupBox17.gbTemperature.rbTemperature_On",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "ON"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 18
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 119
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TRadioButton",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 18,
+    "left": 186,
+    "top": 25,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 287,
+   "name": "rbTemperature_Off",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17.gbTemperature",
+   "path": "fCounterSel.GroupBox17.gbTemperature.rbTemperature_Off",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "OFF"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 18
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 186
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fCounterSel.GroupBox17.gbBinAssign.labBinAssign",
+    "fCounterSel.GroupBox17.gbBinAssign.rbBinAssign_On",
+    "fCounterSel.GroupBox17.gbBinAssign.rbBinAssign_Off"
+   ],
+   "class": "TGroupBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 58,
+    "left": 11,
+    "top": 316,
+    "width": 332
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 296,
+   "name": "gbBinAssign",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17",
+   "path": "fCounterSel.GroupBox17.gbBinAssign",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clNavy"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -12
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 58
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 316
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 332
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 25,
+    "width": 49
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 308,
+   "name": "labBinAssign",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17.gbBinAssign",
+   "path": "fCounterSel.GroupBox17.gbBinAssign.labBinAssign",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Bin Assign"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 49
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TRadioButton",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 18,
+    "left": 119,
+    "top": 25,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 315,
+   "name": "rbBinAssign_On",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17.gbBinAssign",
+   "path": "fCounterSel.GroupBox17.gbBinAssign.rbBinAssign_On",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "ON"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 18
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 119
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TRadioButton",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 18,
+    "left": 186,
+    "top": 25,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 323,
+   "name": "rbBinAssign_Off",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17.gbBinAssign",
+   "path": "fCounterSel.GroupBox17.gbBinAssign.rbBinAssign_Off",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "OFF"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 18
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 186
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fCounterSel.GroupBox17.gbStatus.labStatus",
+    "fCounterSel.GroupBox17.gbStatus.cbIndexTime",
+    "fCounterSel.GroupBox17.gbStatus.cbUPH",
+    "fCounterSel.GroupBox17.gbStatus.cbCycleTime",
+    "fCounterSel.GroupBox17.gbStatus.cbContactHeight"
+   ],
+   "class": "TGroupBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 74,
+    "left": 11,
+    "top": 376,
+    "width": 332
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 332,
+   "name": "gbStatus",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17",
+   "path": "fCounterSel.GroupBox17.gbStatus",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clNavy"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -12
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 74
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 376
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 332
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 32,
+    "width": 30
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 344,
+   "name": "labStatus",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17.gbStatus",
+   "path": "fCounterSel.GroupBox17.gbStatus.labStatus",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Status"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 30
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 126,
+    "top": 15,
+    "width": 90
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 351,
+   "name": "cbIndexTime",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17.gbStatus",
+   "path": "fCounterSel.GroupBox17.gbStatus.cbIndexTime",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Index Time"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clNavy"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -12
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 126
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 90
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 15,
+    "left": 126,
+    "top": 46,
+    "width": 98
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 365,
+   "name": "cbUPH",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17.gbStatus",
+   "path": "fCounterSel.GroupBox17.gbStatus.cbUPH",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "UPH"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clNavy"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -12
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 126
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 46
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 98
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 230,
+    "top": 15,
+    "width": 90
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 379,
+   "name": "cbCycleTime",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17.gbStatus",
+   "path": "fCounterSel.GroupBox17.gbStatus.cbCycleTime",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Cycle Time"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clNavy"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -12
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 230
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 90
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 15,
+    "left": 230,
+    "top": 46,
+    "width": 98
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 393,
+   "name": "cbContactHeight",
+   "objkind": "object",
+   "parent_path": "fCounterSel.GroupBox17.gbStatus",
+   "path": "fCounterSel.GroupBox17.gbStatus.cbContactHeight",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Contact Height"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clNavy"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -12
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 230
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 46
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 98
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 226,
+    "top": 483,
+    "width": 151
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 409,
+   "name": "cbDefaultValue",
+   "objkind": "object",
+   "parent_path": "fCounterSel",
+   "path": "fCounterSel.cbDefaultValue",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Default Position Value"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 226
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 483
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 151
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "cCounterSel.dfm",
+ "total_nodes_incl_root": 35
+}

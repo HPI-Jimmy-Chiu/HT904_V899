@@ -1,0 +1,9379 @@
+{
+ "control_node_count": 125,
+ "encoding_used": "cp950",
+ "form_class": "TfShowBinSet",
+ "form_name": "fShowBinSet",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fShowBinSet.PageControl1",
+    "fShowBinSet.Timer1"
+   ],
+   "class": "TfShowBinSet",
+   "depth": 0,
+   "events": {
+    "OnClose": "FormClose",
+    "OnShow": "FormShow"
+   },
+   "geometry": {
+    "height": null,
+    "left": 1212,
+    "top": 169,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "fShowBinSet",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "fShowBinSet",
+   "properties": {
+    "BorderStyle": {
+     "type": "SCALAR",
+     "value": "bsToolWindow"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "BIN Setting Check"
+    },
+    "ClientHeight": {
+     "type": "SCALAR",
+     "value": 819
+    },
+    "ClientWidth": {
+     "type": "SCALAR",
+     "value": 959
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnFace"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 1212
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnClose": {
+     "type": "SCALAR",
+     "value": "FormClose"
+    },
+    "OnShow": {
+     "type": "SCALAR",
+     "value": "FormShow"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 169
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [
+    "fShowBinSet.PageControl1.tsBinSettingCheck",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck"
+   ],
+   "class": "TPageControl",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 819,
+    "left": 0,
+    "top": 0,
+    "width": 959
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "TABHOST",
+   "line": 19,
+   "name": "PageControl1",
+   "objkind": "object",
+   "parent_path": "fShowBinSet",
+   "path": "fShowBinSet.PageControl1",
+   "properties": {
+    "ActivePage": {
+     "type": "SCALAR",
+     "value": "tsSiteMappingCheck"
+    },
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 819
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabIndex": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 959
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 28,
+   "name": "tsBinSettingCheck",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Bin"
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alLeft",
+   "anchors": null,
+   "child_paths": [
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.lab4",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labAuto1",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labAuto2",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labAuto3",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix1",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix2",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix3",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix4",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix5",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix6",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.Label2",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag1",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag2",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag3",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag4",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag5",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag6",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag7",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag8",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag9",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag10",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag11",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag12",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag13",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag14",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labAuto4",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labAuto5",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labAuto6",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix7",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix8",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix9",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix10",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix11",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix12"
+   ],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 791,
+    "left": 0,
+    "top": 0,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 30,
+   "name": "pal1",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alLeft"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 791
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 29,
+    "left": -2,
+    "top": 630,
+    "width": 91
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 38,
+   "name": "lab4",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.lab4",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Bin Box"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -24
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": -2
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 630
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 91
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 0,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 51,
+   "name": "labAuto1",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labAuto1",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Auto 1"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 20,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 67,
+   "name": "labAuto2",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labAuto2",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Auto 2"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 40,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 83,
+   "name": "labAuto3",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labAuto3",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Auto 3"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 120,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 99,
+   "name": "labFix1",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix1",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Fix1"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 120
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 140,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 115,
+   "name": "labFix2",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix2",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Fix2"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 140
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 160,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 131,
+   "name": "labFix3",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix3",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Fix3"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 160
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 180,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 147,
+   "name": "labFix4",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix4",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Fix4"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 180
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 200,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 163,
+   "name": "labFix5",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix5",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Fix5"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 200
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 220,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 179,
+   "name": "labFix6",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix6",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Fix6"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 220
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 360,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 195,
+   "name": "Label2",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.Label2",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "BulkBox"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 380,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 211,
+   "name": "labMag1",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag1",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Mag 1"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 380
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 400,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 227,
+   "name": "labMag2",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag2",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Mag 2"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 400
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 12,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 420,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 243,
+   "name": "labMag3",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag3",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Mag 3"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 420
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 13,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 440,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 259,
+   "name": "labMag4",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag4",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Mag 4"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 440
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 14,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 460,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 275,
+   "name": "labMag5",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag5",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Mag 5"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 460
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 15,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 480,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 291,
+   "name": "labMag6",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag6",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Mag 6"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 480
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 16,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 500,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 307,
+   "name": "labMag7",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag7",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Mag 7"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 500
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 17,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 520,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 323,
+   "name": "labMag8",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag8",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Mag 8"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 520
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 18,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 540,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 339,
+   "name": "labMag9",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag9",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Mag 9"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 540
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 19,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 560,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 355,
+   "name": "labMag10",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag10",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Mag 10"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 560
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 20,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 580,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 371,
+   "name": "labMag11",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag11",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Mag 11"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 580
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 21,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 600,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 387,
+   "name": "labMag12",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag12",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Mag 12"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 600
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 22,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 620,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 403,
+   "name": "labMag13",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag13",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Mag 13"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 620
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 23,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 640,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 419,
+   "name": "labMag14",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag14",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Mag 14"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 640
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 24,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 60,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 435,
+   "name": "labAuto4",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labAuto4",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Auto 4"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 25,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 80,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 451,
+   "name": "labAuto5",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labAuto5",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Auto 5"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 26,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 100,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 467,
+   "name": "labAuto6",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labAuto6",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Auto 6"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 27,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 240,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 483,
+   "name": "labFix7",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix7",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Fix 7"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 240
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 28,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 260,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 499,
+   "name": "labFix8",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix8",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Fix 8"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 260
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 29,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 280,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 515,
+   "name": "labFix9",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix9",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Fix 9"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 280
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 30,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 300,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 531,
+   "name": "labFix10",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix10",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Fix 10"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 31,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 320,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 547,
+   "name": "labFix11",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix11",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Fix 11"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 320
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 32,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 340,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 563,
+   "name": "labFix12",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix12",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Fix 12"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 340
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 33,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.labBinBox",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin"
+   ],
+   "class": "TScrollBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 791,
+    "left": 89,
+    "top": 0,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 580,
+   "name": "ScrollBox1",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "AutoScroll": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "BorderStyle": {
+     "type": "SCALAR",
+     "value": "bsNone"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 791
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 89
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 29,
+    "left": 0,
+    "top": 628,
+    "width": 48
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 591,
+   "name": "labBinBox",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.labBinBox",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Fix6"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -24
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 628
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 48
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laAuto1",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laAuto2",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laAuto3",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laBinBox",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag1",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag2",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag3",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag4",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag5",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag6",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag7",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag8",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag9",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag10",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag11",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag12",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag13",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag14",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laAuto5",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laAuto6",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix4",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix5",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix6",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laAuto4",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix1",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix2",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix3",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix7",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix8",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix9",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix10",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix11",
+    "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix12"
+   ],
+   "class": "TPanel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 791,
+    "left": 0,
+    "top": 0,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 606,
+   "name": "pnlShowBin",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "pnlShowBin"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 791
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 0,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 616,
+   "name": "laAuto1",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laAuto1",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Auto 1"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 20,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 634,
+   "name": "laAuto2",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laAuto2",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Auto 2"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 40,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 652,
+   "name": "laAuto3",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laAuto3",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Auto 3"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 360,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 670,
+   "name": "laBinBox",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laBinBox",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Bulk Box"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 380,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 688,
+   "name": "laMag1",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag1",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine 1"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 380
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 400,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 706,
+   "name": "laMag2",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag2",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine 2"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 400
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 420,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 724,
+   "name": "laMag3",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag3",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine 3"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 420
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 440,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 742,
+   "name": "laMag4",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag4",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine 4"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 440
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 460,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 760,
+   "name": "laMag5",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag5",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine 5"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 460
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 480,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 778,
+   "name": "laMag6",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag6",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine 6"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 480
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 500,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 796,
+   "name": "laMag7",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag7",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine 7"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 500
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 520,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 814,
+   "name": "laMag8",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag8",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine 8"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 520
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 540,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 832,
+   "name": "laMag9",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag9",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine 9"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 540
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 12,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 560,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 850,
+   "name": "laMag10",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag10",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine 10"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 560
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 13,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 580,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 868,
+   "name": "laMag11",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag11",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine 11"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 580
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 14,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 600,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 886,
+   "name": "laMag12",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag12",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine 12"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 600
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 15,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 620,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 904,
+   "name": "laMag13",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag13",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine 13"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 620
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 16,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 640,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 922,
+   "name": "laMag14",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag14",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine 14"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 640
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 17,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 80,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 940,
+   "name": "laAuto5",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laAuto5",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Auto 5"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 18,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 100,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 958,
+   "name": "laAuto6",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laAuto6",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Auto 6"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 19,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 180,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 976,
+   "name": "laFix4",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix4",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Fix 4"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 180
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 20,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 200,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 994,
+   "name": "laFix5",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix5",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Fix 5"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 200
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 21,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 220,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1012,
+   "name": "laFix6",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix6",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Fix 6"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 220
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 22,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 60,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1030,
+   "name": "laAuto4",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laAuto4",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Auto 4"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 23,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 120,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1048,
+   "name": "laFix1",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix1",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Fix 1"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 120
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 24,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 140,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1066,
+   "name": "laFix2",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix2",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Fix 2"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 140
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 25,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 160,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1084,
+   "name": "laFix3",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix3",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Fix 3"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 160
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 26,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 240,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1102,
+   "name": "laFix7",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix7",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Fix 7"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 240
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 27,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 260,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1120,
+   "name": "laFix8",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix8",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Fix 8"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 260
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 28,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 280,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1138,
+   "name": "laFix9",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix9",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Fix 9"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 280
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 29,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 300,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1156,
+   "name": "laFix10",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix10",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Fix 10"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 30,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 320,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1174,
+   "name": "laFix11",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix11",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Fix 11"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 320
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 31,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 340,
+    "width": 862
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1192,
+   "name": "laFix12",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix12",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Fix 12"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clHighlightText"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 340
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 862
+    }
+   },
+   "sibling_index": 32,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 1213,
+   "name": "tsSiteMappingCheck",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Site mapping"
+    },
+    "ImageIndex": {
+     "type": "SCALAR",
+     "value": 1
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2"
+   ],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 629,
+    "left": 0,
+    "top": 0,
+    "width": 949
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 1216,
+   "name": "palSiteMap",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clRed"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 629
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 949
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.Label1",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.Panel4",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.Panel3",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4"
+   ],
+   "class": "TPanel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 601,
+    "left": 24,
+    "top": 16,
+    "width": 905
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 1223,
+   "name": "Panel2",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 601
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 905
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 96,
+    "left": 8,
+    "top": 12,
+    "width": 673
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1229,
+   "name": "Label1",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.Label1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Please check handler Site Mapping.\r\n-- Press OK if Site Mapping is Correct to continue running.\r\n-- Press Cancel if Not Correct, Please call Maintenance or Supervisor to correct it.\r\n"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 673
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 5,
+   "events": {
+    "OnClick": "Panel4Click"
+   },
+   "geometry": {
+    "height": 33,
+    "left": 243,
+    "top": 280,
+    "width": 130
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1245,
+   "name": "Panel4",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.Panel4",
+   "properties": {
+    "BevelWidth": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Cancel"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 9534289
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 243
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "Panel4Click"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 280
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 130
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 5,
+   "events": {
+    "OnClick": "Panel3Click"
+   },
+   "geometry": {
+    "height": 33,
+    "left": 23,
+    "top": 280,
+    "width": 130
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1263,
+   "name": "Panel3",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.Panel3",
+   "properties": {
+    "BevelWidth": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "OK"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 9534289
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 23
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "Panel3Click"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 280
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 130
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": "alCustom",
+   "anchors": null,
+   "child_paths": [
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labRowA",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labRowB",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labColA",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labColB",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labColC",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labColD",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labColE",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labColF",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labColG",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labColH",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labRowC",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labRowD",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palAa",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palAb",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palAc",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palAd",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palAg",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palAh",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palAf",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palAe",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palBa",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palBb",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palBc",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palBd",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palBg",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palBh",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palBf",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palBe",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palCa",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palCb",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palCc",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palCd",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palCg",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palCh",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palCf",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palCe",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palDa",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palDb",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palDc",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palDd",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palDg",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palDh",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palDf",
+    "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palDe"
+   ],
+   "class": "TGroupBox",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 177,
+    "left": 4,
+    "top": 96,
+    "width": 745
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 1281,
+   "name": "GroupBox4",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alCustom"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Test Site Assign"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -15
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 177
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 745
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 9,
+    "top": 41,
+    "width": 39
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1295,
+   "name": "labRowA",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labRowA",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "RowA"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 39
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 9,
+    "top": 71,
+    "width": 40
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1302,
+   "name": "labRowB",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labRowB",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "RowB"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 71
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 40
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 90,
+    "top": 16,
+    "width": 8
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1309,
+   "name": "labColA",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labColA",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "a"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 90
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 8
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 176,
+    "top": 16,
+    "width": 8
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1316,
+   "name": "labColB",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labColB",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "b"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 176
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 8
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 262,
+    "top": 16,
+    "width": 8
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1323,
+   "name": "labColC",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labColC",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "c"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 262
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 8
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 347,
+    "top": 16,
+    "width": 8
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1330,
+   "name": "labColD",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labColD",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "d"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 347
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 8
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 432,
+    "top": 16,
+    "width": 8
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1337,
+   "name": "labColE",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labColE",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "e"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 432
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 8
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 517,
+    "top": 16,
+    "width": 4
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1344,
+   "name": "labColF",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labColF",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "f"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 517
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 4
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 603,
+    "top": 16,
+    "width": 8
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1351,
+   "name": "labColG",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labColG",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "g"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 603
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 8
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 688,
+    "top": 16,
+    "width": 8
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1358,
+   "name": "labColH",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labColH",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "h"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 688
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 8
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 9,
+    "top": 102,
+    "width": 41
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1365,
+   "name": "labRowC",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labRowC",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "RowC"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 102
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 41
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 9,
+    "top": 132,
+    "width": 41
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1372,
+   "name": "labRowD",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labRowD",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "RowD"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 132
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 41
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 68,
+    "top": 36,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1379,
+   "name": "palAa",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palAa",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 68
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 12,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 152,
+    "top": 36,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1387,
+   "name": "palAb",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palAb",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 152
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 13,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 236,
+    "top": 36,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1395,
+   "name": "palAc",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palAc",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 236
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 14,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 320,
+    "top": 36,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1403,
+   "name": "palAd",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palAd",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 320
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 15,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 572,
+    "top": 36,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1411,
+   "name": "palAg",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palAg",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 572
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 16,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 656,
+    "top": 36,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1419,
+   "name": "palAh",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palAh",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 656
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 17,
+   "synthesized": false,
+   "tab_order": 7,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 488,
+    "top": 36,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1427,
+   "name": "palAf",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palAf",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 488
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 18,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 404,
+    "top": 36,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1435,
+   "name": "palAe",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palAe",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 404
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 19,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 68,
+    "top": 68,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1443,
+   "name": "palBa",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palBa",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 68
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 68
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 20,
+   "synthesized": false,
+   "tab_order": 8,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 152,
+    "top": 68,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1451,
+   "name": "palBb",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palBb",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 152
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 68
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 21,
+   "synthesized": false,
+   "tab_order": 9,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 236,
+    "top": 68,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1459,
+   "name": "palBc",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palBc",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 236
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 68
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 22,
+   "synthesized": false,
+   "tab_order": 10,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 320,
+    "top": 68,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1467,
+   "name": "palBd",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palBd",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 320
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 68
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 23,
+   "synthesized": false,
+   "tab_order": 11,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 572,
+    "top": 68,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1475,
+   "name": "palBg",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palBg",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 572
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 68
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 24,
+   "synthesized": false,
+   "tab_order": 14,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 656,
+    "top": 68,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1483,
+   "name": "palBh",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palBh",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 656
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 68
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 25,
+   "synthesized": false,
+   "tab_order": 15,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 488,
+    "top": 68,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1491,
+   "name": "palBf",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palBf",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 488
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 68
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 26,
+   "synthesized": false,
+   "tab_order": 13,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 404,
+    "top": 68,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1499,
+   "name": "palBe",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palBe",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 404
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 68
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 27,
+   "synthesized": false,
+   "tab_order": 12,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 68,
+    "top": 100,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1507,
+   "name": "palCa",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palCa",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 68
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 28,
+   "synthesized": false,
+   "tab_order": 16,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 152,
+    "top": 100,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1515,
+   "name": "palCb",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palCb",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 152
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 29,
+   "synthesized": false,
+   "tab_order": 17,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 236,
+    "top": 100,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1523,
+   "name": "palCc",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palCc",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 236
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 18
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 30,
+   "synthesized": false,
+   "tab_order": 18,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 320,
+    "top": 100,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1531,
+   "name": "palCd",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palCd",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 320
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 31,
+   "synthesized": false,
+   "tab_order": 19,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 572,
+    "top": 100,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1539,
+   "name": "palCg",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palCg",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 572
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 32,
+   "synthesized": false,
+   "tab_order": 22,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 656,
+    "top": 100,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1547,
+   "name": "palCh",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palCh",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 656
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 23
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 33,
+   "synthesized": false,
+   "tab_order": 23,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 488,
+    "top": 100,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1555,
+   "name": "palCf",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palCf",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 488
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 34,
+   "synthesized": false,
+   "tab_order": 21,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 404,
+    "top": 100,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1563,
+   "name": "palCe",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palCe",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 404
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 35,
+   "synthesized": false,
+   "tab_order": 20,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 68,
+    "top": 132,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1571,
+   "name": "palDa",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palDa",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 68
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 132
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 36,
+   "synthesized": false,
+   "tab_order": 24,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 152,
+    "top": 132,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1579,
+   "name": "palDb",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palDb",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 152
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 132
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 37,
+   "synthesized": false,
+   "tab_order": 25,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 236,
+    "top": 132,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1587,
+   "name": "palDc",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palDc",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 236
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 26
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 132
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 38,
+   "synthesized": false,
+   "tab_order": 26,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 320,
+    "top": 132,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1595,
+   "name": "palDd",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palDd",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 320
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 27
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 132
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 39,
+   "synthesized": false,
+   "tab_order": 27,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 572,
+    "top": 132,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1603,
+   "name": "palDg",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palDg",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 572
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 30
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 132
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 40,
+   "synthesized": false,
+   "tab_order": 30,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 656,
+    "top": 132,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1611,
+   "name": "palDh",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palDh",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 656
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 31
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 132
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 41,
+   "synthesized": false,
+   "tab_order": 31,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 488,
+    "top": 132,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1619,
+   "name": "palDf",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palDf",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 488
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 132
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 42,
+   "synthesized": false,
+   "tab_order": 29,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 404,
+    "top": 132,
+    "width": 71
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1627,
+   "name": "palDe",
+   "objkind": "object",
+   "parent_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palDe",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 404
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 132
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 71
+    }
+   },
+   "sibling_index": 43,
+   "synthesized": false,
+   "tab_order": 28,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTimer",
+   "depth": 1,
+   "events": {
+    "OnTimer": "Timer1Timer"
+   },
+   "geometry": {
+    "height": null,
+    "left": 720,
+    "top": 8,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 1640,
+   "name": "Timer1",
+   "objkind": "object",
+   "parent_path": "fShowBinSet",
+   "path": "fShowBinSet.Timer1",
+   "properties": {
+    "Interval": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 720
+    },
+    "OnTimer": {
+     "type": "SCALAR",
+     "value": "Timer1Timer"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "cShowBinSet.dfm",
+ "total_nodes_incl_root": 126
+}

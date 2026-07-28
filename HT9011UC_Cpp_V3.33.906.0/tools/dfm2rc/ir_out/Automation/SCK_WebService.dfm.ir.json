@@ -1,0 +1,240 @@
+{
+ "control_node_count": 2,
+ "encoding_used": "cp950",
+ "form_class": "TfWebService",
+ "form_name": "fWebService",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fWebService.HTTPRIO1",
+    "fWebService.HTTPRIO_VTEST"
+   ],
+   "class": "TfWebService",
+   "depth": 0,
+   "events": {},
+   "geometry": {
+    "height": 155,
+    "left": 543,
+    "top": 403,
+    "width": 220
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "fWebService",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "fWebService",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "fWebService"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnFace"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 155
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 543
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 403
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 220
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "THTTPRIO",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": null,
+    "left": 20,
+    "top": 12,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 16,
+   "name": "HTTPRIO1",
+   "objkind": "object",
+   "parent_path": "fWebService",
+   "path": "fWebService.HTTPRIO1",
+   "properties": {
+    "Converter.Options": {
+     "type": "SET",
+     "value": [
+      "soSendMultiRefObj",
+      "soTryAllSchema",
+      "soRootRefNodesToBody"
+     ]
+    },
+    "HTTPWebNode.Agent": {
+     "type": "STR",
+     "value": "Borland SOAP 1.1"
+    },
+    "HTTPWebNode.InvokeOptions": {
+     "type": "SET",
+     "value": [
+      "soIgnoreInvalidCerts"
+     ]
+    },
+    "HTTPWebNode.UseUTF8InHeader": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Port": {
+     "type": "STR",
+     "value": "SIP1Soap"
+    },
+    "Service": {
+     "type": "STR",
+     "value": "SIP1"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "WSDLLocation": {
+     "type": "STR",
+     "value": "http://10.20.20.32/cimreport/ws/sip1.asmx?WSDL"
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "THTTPRIO",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": null,
+    "left": 84,
+    "top": 12,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 27,
+   "name": "HTTPRIO_VTEST",
+   "objkind": "object",
+   "parent_path": "fWebService",
+   "path": "fWebService.HTTPRIO_VTEST",
+   "properties": {
+    "Converter.Options": {
+     "type": "SET",
+     "value": [
+      "soSendMultiRefObj",
+      "soTryAllSchema",
+      "soRootRefNodesToBody"
+     ]
+    },
+    "HTTPWebNode.Agent": {
+     "type": "STR",
+     "value": "Borland SOAP 1.1"
+    },
+    "HTTPWebNode.InvokeOptions": {
+     "type": "SET",
+     "value": [
+      "soIgnoreInvalidCerts"
+     ]
+    },
+    "HTTPWebNode.UseUTF8InHeader": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 84
+    },
+    "Port": {
+     "type": "STR",
+     "value": "MesWebServiceSoap"
+    },
+    "Service": {
+     "type": "STR",
+     "value": "MesWebService"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "WSDLLocation": {
+     "type": "STR",
+     "value": "http://192.168.10.216/vt_mes/MesWebService.asmx?WSDL"
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "Automation/SCK_WebService.dfm",
+ "total_nodes_incl_root": 3
+}

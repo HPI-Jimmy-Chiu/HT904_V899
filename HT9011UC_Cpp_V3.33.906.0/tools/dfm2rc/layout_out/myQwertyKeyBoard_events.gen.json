@@ -1,0 +1,219 @@
+{
+ "event_count": 30,
+ "events": [
+  {
+   "control_path": "fQwertyKey",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fQwertyKey",
+   "vcl_class": "TfQwertyKey"
+  },
+  {
+   "control_path": "fQwertyKey",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fQwertyKey",
+   "vcl_class": "TfQwertyKey"
+  },
+  {
+   "control_path": "fQwertyKey",
+   "event_name": "OnResize",
+   "handler_name": "FormResize",
+   "leaf_name": "fQwertyKey",
+   "vcl_class": "TfQwertyKey"
+  },
+  {
+   "control_path": "fQwertyKey",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fQwertyKey",
+   "vcl_class": "TfQwertyKey"
+  },
+  {
+   "control_path": "fQwertyKey.palContent.edQwertyContent",
+   "event_name": "OnKeyDown",
+   "handler_name": "edQwertyContentKeyDown",
+   "leaf_name": "edQwertyContent",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fQwertyKey.palContent.edQwertyContent",
+   "event_name": "OnKeyPress",
+   "handler_name": "edQwertyContentKeyPress",
+   "leaf_name": "edQwertyContent",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fQwertyKey.palNumKey.spbDP",
+   "event_name": "OnClick",
+   "handler_name": "spbDPClick",
+   "leaf_name": "spbDP",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fQwertyKey.palNumKey.spbMinus",
+   "event_name": "OnClick",
+   "handler_name": "spbMinusClick",
+   "leaf_name": "spbMinus",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fQwertyKey.palNumKey.spbCancel2",
+   "event_name": "OnClick",
+   "handler_name": "spbCancelClick",
+   "leaf_name": "spbCancel2",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fQwertyKey.palNumKey.spbSummit2",
+   "event_name": "OnClick",
+   "handler_name": "spbSummitClick",
+   "leaf_name": "spbSummit2",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fQwertyKey.palNumKey.spbClear2",
+   "event_name": "OnClick",
+   "handler_name": "spbClearClick",
+   "leaf_name": "spbClear2",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fQwertyKey.palNumKey.spbBackSpace2",
+   "event_name": "OnClick",
+   "handler_name": "spbBackSpaceClick",
+   "leaf_name": "spbBackSpace2",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fQwertyKey.palNumKey.spbPercent",
+   "event_name": "OnClick",
+   "handler_name": "spbPercentClick",
+   "leaf_name": "spbPercent",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fQwertyKey.palNumKey.spbAdd1",
+   "event_name": "OnClick",
+   "handler_name": "spbAdd1Click",
+   "leaf_name": "spbAdd1",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fQwertyKey.palNumKey.spbMinus1",
+   "event_name": "OnClick",
+   "handler_name": "spbAdd1Click",
+   "leaf_name": "spbMinus1",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fQwertyKey.palNumKey.spbAdd10",
+   "event_name": "OnClick",
+   "handler_name": "spbAdd1Click",
+   "leaf_name": "spbAdd10",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fQwertyKey.palNumKey.spbMinus10",
+   "event_name": "OnClick",
+   "handler_name": "spbAdd1Click",
+   "leaf_name": "spbMinus10",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fQwertyKey.palNumKey.spbAdd100",
+   "event_name": "OnClick",
+   "handler_name": "spbAdd1Click",
+   "leaf_name": "spbAdd100",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fQwertyKey.palNumKey.spbMinus100",
+   "event_name": "OnClick",
+   "handler_name": "spbAdd1Click",
+   "leaf_name": "spbMinus100",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fQwertyKey.palQwertyKey.spbChangeCase",
+   "event_name": "OnClick",
+   "handler_name": "spbChangeCaseClick",
+   "leaf_name": "spbChangeCase",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fQwertyKey.palQwertyKey.spbBackSpace",
+   "event_name": "OnClick",
+   "handler_name": "spbBackSpaceClick",
+   "leaf_name": "spbBackSpace",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fQwertyKey.palQwertyKey.spbSummit",
+   "event_name": "OnClick",
+   "handler_name": "spbSummitClick",
+   "leaf_name": "spbSummit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fQwertyKey.palQwertyKey.spbClear",
+   "event_name": "OnClick",
+   "handler_name": "spbClearClick",
+   "leaf_name": "spbClear",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fQwertyKey.palQwertyKey.spbCancel",
+   "event_name": "OnClick",
+   "handler_name": "spbCancelClick",
+   "leaf_name": "spbCancel",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fQwertyKey.palValueLimit.edCurrValue",
+   "event_name": "OnKeyDown",
+   "handler_name": "edQwertyContentKeyDown",
+   "leaf_name": "edCurrValue",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fQwertyKey.palValueLimit.edCurrValue",
+   "event_name": "OnKeyPress",
+   "handler_name": "edQwertyContentKeyPress",
+   "leaf_name": "edCurrValue",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fQwertyKey.palValueLimit.edMaxValue",
+   "event_name": "OnKeyDown",
+   "handler_name": "edQwertyContentKeyDown",
+   "leaf_name": "edMaxValue",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fQwertyKey.palValueLimit.edMaxValue",
+   "event_name": "OnKeyPress",
+   "handler_name": "edQwertyContentKeyPress",
+   "leaf_name": "edMaxValue",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fQwertyKey.palValueLimit.edMinValue",
+   "event_name": "OnKeyDown",
+   "handler_name": "edQwertyContentKeyDown",
+   "leaf_name": "edMinValue",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fQwertyKey.palValueLimit.edMinValue",
+   "event_name": "OnKeyPress",
+   "handler_name": "edQwertyContentKeyPress",
+   "leaf_name": "edMinValue",
+   "vcl_class": "TEdit"
+  }
+ ],
+ "form_name": "fQwertyKey",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "myQwertyKeyBoard.dfm"
+}

@@ -1,0 +1,1112 @@
+{
+ "control_node_count": 15,
+ "encoding_used": "cp950",
+ "form_class": "TFormHS",
+ "form_name": "FormHS",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "FormHS.pnlSlfeTestRun",
+    "FormHS.TimerAutoBackup",
+    "FormHS.ESDServerSocket",
+    "FormHS.RTMServerSocket",
+    "FormHS.TimerRTMMsg",
+    "FormHS.HandlerClientSocket"
+   ],
+   "class": "TFormHS",
+   "depth": 0,
+   "events": {
+    "OnCreate": "FormCreate",
+    "OnDestroy": "FormDestroy"
+   },
+   "geometry": {
+    "height": null,
+    "left": 461,
+    "top": 265,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "FormHS",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "FormHS",
+   "properties": {
+    "BorderIcons": {
+     "type": "SET",
+     "value": []
+    },
+    "BorderStyle": {
+     "type": "SCALAR",
+     "value": "bsSingle"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "ATC Self Test"
+    },
+    "ClientHeight": {
+     "type": "SCALAR",
+     "value": 214
+    },
+    "ClientWidth": {
+     "type": "SCALAR",
+     "value": 190
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnFace"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 461
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnCreate": {
+     "type": "SCALAR",
+     "value": "FormCreate"
+    },
+    "OnDestroy": {
+     "type": "SCALAR",
+     "value": "FormDestroy"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 265
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "FormHS.pnlSlfeTestRun.Label1",
+    "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_01",
+    "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_02",
+    "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_03",
+    "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_99"
+   ],
+   "class": "TPanel",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 217,
+    "left": 0,
+    "top": 0,
+    "width": 190
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 20,
+   "name": "pnlSlfeTestRun",
+   "objkind": "object",
+   "parent_path": "FormHS",
+   "path": "FormHS.pnlSlfeTestRun",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 217
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 190
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 22,
+    "left": 5,
+    "top": 6,
+    "width": 180
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 26,
+   "name": "Label1",
+   "objkind": "object",
+   "parent_path": "FormHS.pnlSlfeTestRun",
+   "path": "FormHS.pnlSlfeTestRun.Label1",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "SELF TEST RUN STATE"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnFace"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clRed"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Times New Roman"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 180
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_01.Label2"
+   ],
+   "class": "TPanel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 41,
+    "left": 15,
+    "top": 30,
+    "width": 160
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 42,
+   "name": "pl_ATCSelfTestSatus_01",
+   "objkind": "object",
+   "parent_path": "FormHS.pnlSlfeTestRun",
+   "path": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_01",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvRaised"
+    },
+    "BorderWidth": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 30
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 160
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 25,
+    "top": 11,
+    "width": 113
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 51,
+   "name": "Label2",
+   "objkind": "object",
+   "parent_path": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_01",
+   "path": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_01.Label2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Temperature(+5)"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Times New Roman"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 113
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_02.Label3"
+   ],
+   "class": "TPanel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 41,
+    "left": 15,
+    "top": 75,
+    "width": 160
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 66,
+   "name": "pl_ATCSelfTestSatus_02",
+   "objkind": "object",
+   "parent_path": "FormHS.pnlSlfeTestRun",
+   "path": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_02",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvRaised"
+    },
+    "BorderWidth": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 75
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 160
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 25,
+    "top": 11,
+    "width": 109
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 75,
+   "name": "Label3",
+   "objkind": "object",
+   "parent_path": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_02",
+   "path": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_02.Label3",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Temperature(-5)"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Times New Roman"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 109
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_03.Label4"
+   ],
+   "class": "TPanel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 41,
+    "left": 15,
+    "top": 120,
+    "width": 160
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 90,
+   "name": "pl_ATCSelfTestSatus_03",
+   "objkind": "object",
+   "parent_path": "FormHS.pnlSlfeTestRun",
+   "path": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_03",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvRaised"
+    },
+    "BorderWidth": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 120
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 160
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 25,
+    "top": 11,
+    "width": 113
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 99,
+   "name": "Label4",
+   "objkind": "object",
+   "parent_path": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_03",
+   "path": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_03.Label4",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Temperature(+0)"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Times New Roman"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 113
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_99.Label5"
+   ],
+   "class": "TPanel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 41,
+    "left": 15,
+    "top": 165,
+    "width": 160
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 114,
+   "name": "pl_ATCSelfTestSatus_99",
+   "objkind": "object",
+   "parent_path": "FormHS.pnlSlfeTestRun",
+   "path": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_99",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvRaised"
+    },
+    "BorderWidth": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 165
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 160
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 45,
+    "top": 11,
+    "width": 75
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 123,
+   "name": "Label5",
+   "objkind": "object",
+   "parent_path": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_99",
+   "path": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_99.Label5",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "ATC STOP"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Times New Roman"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 45
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 75
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTimer",
+   "depth": 1,
+   "events": {
+    "OnTimer": "TimerAutoBackupTimer"
+   },
+   "geometry": {
+    "height": null,
+    "left": null,
+    "top": 160,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 139,
+   "name": "TimerAutoBackup",
+   "objkind": "object",
+   "parent_path": "FormHS",
+   "path": "FormHS.TimerAutoBackup",
+   "properties": {
+    "Enabled": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnTimer": {
+     "type": "SCALAR",
+     "value": "TimerAutoBackupTimer"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 160
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TServerSocket",
+   "depth": 1,
+   "events": {
+    "OnClientConnect": "ESDServerSocketClientConnect",
+    "OnClientError": "ESDServerSocketClientError",
+    "OnClientRead": "ESDServerSocketClientRead"
+   },
+   "geometry": {
+    "height": null,
+    "left": null,
+    "top": 128,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 144,
+   "name": "ESDServerSocket",
+   "objkind": "object",
+   "parent_path": "FormHS",
+   "path": "FormHS.ESDServerSocket",
+   "properties": {
+    "Active": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnClientConnect": {
+     "type": "SCALAR",
+     "value": "ESDServerSocketClientConnect"
+    },
+    "OnClientError": {
+     "type": "SCALAR",
+     "value": "ESDServerSocketClientError"
+    },
+    "OnClientRead": {
+     "type": "SCALAR",
+     "value": "ESDServerSocketClientRead"
+    },
+    "Port": {
+     "type": "SCALAR",
+     "value": 6666
+    },
+    "ServerType": {
+     "type": "SCALAR",
+     "value": "stNonBlocking"
+    },
+    "ThreadCacheSize": {
+     "type": "SCALAR",
+     "value": 1000
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 128
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TServerSocket",
+   "depth": 1,
+   "events": {
+    "OnClientConnect": "RTMServerSocketClientConnect",
+    "OnClientDisconnect": "RTMServerSocketClientDisconnect",
+    "OnClientError": "RTMServerSocketClientError",
+    "OnClientRead": "RTMServerSocketClientRead"
+   },
+   "geometry": {
+    "height": null,
+    "left": null,
+    "top": 96,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 154,
+   "name": "RTMServerSocket",
+   "objkind": "object",
+   "parent_path": "FormHS",
+   "path": "FormHS.RTMServerSocket",
+   "properties": {
+    "Active": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnClientConnect": {
+     "type": "SCALAR",
+     "value": "RTMServerSocketClientConnect"
+    },
+    "OnClientDisconnect": {
+     "type": "SCALAR",
+     "value": "RTMServerSocketClientDisconnect"
+    },
+    "OnClientError": {
+     "type": "SCALAR",
+     "value": "RTMServerSocketClientError"
+    },
+    "OnClientRead": {
+     "type": "SCALAR",
+     "value": "RTMServerSocketClientRead"
+    },
+    "Port": {
+     "type": "SCALAR",
+     "value": 6000
+    },
+    "ServerType": {
+     "type": "SCALAR",
+     "value": "stNonBlocking"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 96
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTimer",
+   "depth": 1,
+   "events": {
+    "OnTimer": "TimerRTMMsgTimer"
+   },
+   "geometry": {
+    "height": null,
+    "left": 28,
+    "top": 160,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 164,
+   "name": "TimerRTMMsg",
+   "objkind": "object",
+   "parent_path": "FormHS",
+   "path": "FormHS.TimerRTMMsg",
+   "properties": {
+    "Enabled": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "OnTimer": {
+     "type": "SCALAR",
+     "value": "TimerRTMMsgTimer"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 160
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TClientSocket",
+   "depth": 1,
+   "events": {
+    "OnConnect": "HandlerClientSocketConnect",
+    "OnError": "HandlerClientSocketError",
+    "OnRead": "HandlerClientSocketRead"
+   },
+   "geometry": {
+    "height": null,
+    "left": 168,
+    "top": 120,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 171,
+   "name": "HandlerClientSocket",
+   "objkind": "object",
+   "parent_path": "FormHS",
+   "path": "FormHS.HandlerClientSocket",
+   "properties": {
+    "Active": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Address": {
+     "type": "STR",
+     "value": "127.0.0.1"
+    },
+    "ClientType": {
+     "type": "SCALAR",
+     "value": "ctNonBlocking"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 168
+    },
+    "OnConnect": {
+     "type": "SCALAR",
+     "value": "HandlerClientSocketConnect"
+    },
+    "OnError": {
+     "type": "SCALAR",
+     "value": "HandlerClientSocketError"
+    },
+    "OnRead": {
+     "type": "SCALAR",
+     "value": "HandlerClientSocketRead"
+    },
+    "Port": {
+     "type": "SCALAR",
+     "value": 1023
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 120
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "HS_Function.dfm",
+ "total_nodes_incl_root": 16
+}

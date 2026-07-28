@@ -119,7 +119,7 @@ void SetFixTrayFullIC();                                                        
 // magazine surface (golden Magazine.h)
 bool CheckPlaceToMagazineTray(int iWhichMag);                                  // golden Magazine.h -- offline: true
 bool DoPickFromMagazineBuffer();                                               // golden Magazine.h -- offline: true
-void SearchTrayToPlace_Magazine();                                             // golden Magazine.h / Eastsun 20260515 -- offline: no-op
+int  SearchTrayToPlace_Magazine();                                             // golden aoutarm9045.h:63 -- AI(W906-W7-A2) 20260728: was void (ODR split vs. golden's int; see aoutarm_shims.cpp)
 bool CheckPlaceToMagazineTrayFinish();                                         // golden Magazine.h -- offline: true
 // out-arm Y-pitch home timer + flag (golden file-globals)
 extern TQPF_Timer hOutArmYpitchHomeTimer;                                      // golden aoutarm.h -- offline: software timer

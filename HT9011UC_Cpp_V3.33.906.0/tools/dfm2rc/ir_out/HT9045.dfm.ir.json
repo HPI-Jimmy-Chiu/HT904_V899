@@ -1,0 +1,97 @@
+{
+ "control_node_count": 0,
+ "encoding_used": "cp950",
+ "form_class": "TForm1",
+ "form_name": "Form1",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TForm1",
+   "depth": 0,
+   "events": {},
+   "geometry": {
+    "height": 500,
+    "left": 192,
+    "top": 114,
+    "width": 870
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "Form1",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "Form1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Form1"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnFace"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 500
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 192
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 114
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 870
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "HT9045.dfm",
+ "total_nodes_incl_root": 1
+}

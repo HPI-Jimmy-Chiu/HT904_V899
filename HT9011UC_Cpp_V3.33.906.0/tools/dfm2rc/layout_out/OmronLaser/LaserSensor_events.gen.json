@@ -1,0 +1,275 @@
+{
+ "event_count": 38,
+ "events": [
+  {
+   "control_path": "fLaserSensor",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fLaserSensor",
+   "vcl_class": "TfLaserSensor"
+  },
+  {
+   "control_path": "fLaserSensor",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fLaserSensor",
+   "vcl_class": "TfLaserSensor"
+  },
+  {
+   "control_path": "fLaserSensor",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fLaserSensor",
+   "vcl_class": "TfLaserSensor"
+  },
+  {
+   "control_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.sbUpdate",
+   "event_name": "OnClick",
+   "handler_name": "sbUpdateClick",
+   "leaf_name": "sbUpdate",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.sbtExit",
+   "event_name": "OnClick",
+   "handler_name": "sbtExitClick",
+   "leaf_name": "sbtExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.edICThickness",
+   "event_name": "OnMouseDown",
+   "handler_name": "edICThicknessMouseDown",
+   "leaf_name": "edICThickness",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.edLaserShtThreshold",
+   "event_name": "OnMouseDown",
+   "handler_name": "edICThicknessMouseDown",
+   "leaf_name": "edLaserShtThreshold",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.btSaveLog",
+   "event_name": "OnClick",
+   "handler_name": "btSaveLogClick",
+   "leaf_name": "btSaveLog",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsplate1.gpPlate1_Golden.mtPlate1_Golden",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtPlate1_GoldenMouseDown",
+   "leaf_name": "mtPlate1_Golden",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsplate1.btSetPlate1GoldenToZero",
+   "event_name": "OnClick",
+   "handler_name": "btSetPlate1GoldenToZeroClick",
+   "leaf_name": "btSetPlate1GoldenToZero",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsPlate2.gpPlate2_Golden.mtPlate2_Golden",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtPlate2_GoldenMouseDown",
+   "leaf_name": "mtPlate2_Golden",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsPlate2.btSetPlate2GoldenToZero",
+   "event_name": "OnClick",
+   "handler_name": "btSetPlate2GoldenToZeroClick",
+   "leaf_name": "btSetPlate2GoldenToZero",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.edLaserHPThreshold",
+   "event_name": "OnMouseDown",
+   "handler_name": "edICThicknessMouseDown",
+   "leaf_name": "edLaserHPThreshold",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.edDeviceXOffset",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDeviceXOffsetMouseDown",
+   "leaf_name": "edDeviceXOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.edDeviceYOffset",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDeviceYOffsetMouseDown",
+   "leaf_name": "edDeviceYOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.edOutDeviceXOffset",
+   "event_name": "OnMouseDown",
+   "handler_name": "edOutDeviceXOffsetMouseDown",
+   "leaf_name": "edOutDeviceXOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.edOutDeviceYOffset",
+   "event_name": "OnMouseDown",
+   "handler_name": "edOutDeviceYOffsetMouseDown",
+   "leaf_name": "edOutDeviceYOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.btGetInShuttleGolden",
+   "event_name": "OnClick",
+   "handler_name": "btGetInShuttleGoldenClick",
+   "leaf_name": "btGetInShuttleGolden",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.btGetOutShuttleGolden",
+   "event_name": "OnClick",
+   "handler_name": "btGetOutShuttleGoldenClick",
+   "leaf_name": "btGetOutShuttleGolden",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLaserSensor.pcLaserSensor.tsLaserSet.btConnect",
+   "event_name": "OnClick",
+   "handler_name": "btConnectClick",
+   "leaf_name": "btConnect",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLaserSensor.pcLaserSensor.tsLaserSet.btSetToZero",
+   "event_name": "OnClick",
+   "handler_name": "btSetToZeroClick",
+   "leaf_name": "btSetToZero",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLaserSensor.pcLaserSensor.tsLaserSet.btSetToZeroSh1",
+   "event_name": "OnClick",
+   "handler_name": "btSetToZeroSh1Click",
+   "leaf_name": "btSetToZeroSh1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLaserSensor.pcLaserSensor.tsLaserSet.btSetToZeroSh2",
+   "event_name": "OnClick",
+   "handler_name": "btSetToZeroSh2Click",
+   "leaf_name": "btSetToZeroSh2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLaserSensor.pcLaserSensor.tsLaserSet.btGetValueSht2_1Row",
+   "event_name": "OnClick",
+   "handler_name": "btGetValueSht2_1RowClick",
+   "leaf_name": "btGetValueSht2_1Row",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLaserSensor.pcLaserSensor.tsLaserSet.btGetValueSht2_2Row",
+   "event_name": "OnClick",
+   "handler_name": "btGetValueSht2_2RowClick",
+   "leaf_name": "btGetValueSht2_2Row",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLaserSensor.pcLaserSensor.tsLaserSet.btGetValueSht1_1Row",
+   "event_name": "OnClick",
+   "handler_name": "btGetValueSht1_1RowClick",
+   "leaf_name": "btGetValueSht1_1Row",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLaserSensor.pcLaserSensor.tsLaserSet.btGetValueSht1_2Row",
+   "event_name": "OnClick",
+   "handler_name": "btGetValueSht1_2RowClick",
+   "leaf_name": "btGetValueSht1_2Row",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLaserSensor.pcLaserSensor.tsLaserSet.btGetValueInArm",
+   "event_name": "OnClick",
+   "handler_name": "btGetValueInArmClick",
+   "leaf_name": "btGetValueInArm",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLaserSensor.pcLaserSensor.tsLaserSet.btSetToZeroInArm",
+   "event_name": "OnClick",
+   "handler_name": "btSetToZeroInArmClick",
+   "leaf_name": "btSetToZeroInArm",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLaserSensor.pcLaserSensor.tsLaserSet.cbStartPooling",
+   "event_name": "OnClick",
+   "handler_name": "cbStartPoolingClick",
+   "leaf_name": "cbStartPooling",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fLaserSensor.pcLaserSensor.tsLaserSet.btGetShValue",
+   "event_name": "OnClick",
+   "handler_name": "btGetShValueClick",
+   "leaf_name": "btGetShValue",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLaserSensor.pcLaserSensor.tsLaserSet.btGetOutShValue",
+   "event_name": "OnClick",
+   "handler_name": "btGetOutShValueClick",
+   "leaf_name": "btGetOutShValue",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLaserSensor.CommLaser1",
+   "event_name": "OnReceiveData",
+   "handler_name": "CommLaser1ReceiveData",
+   "leaf_name": "CommLaser1",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "fLaserSensor.Timer1",
+   "event_name": "OnTimer",
+   "handler_name": "Timer1Timer",
+   "leaf_name": "Timer1",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fLaserSensor.CommLaser2",
+   "event_name": "OnReceiveData",
+   "handler_name": "CommLaser2ReceiveData",
+   "leaf_name": "CommLaser2",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "fLaserSensor.CommLaserInArm",
+   "event_name": "OnReceiveData",
+   "handler_name": "CommLaserInArmReceiveData",
+   "leaf_name": "CommLaserInArm",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "fLaserSensor.TimerInArm",
+   "event_name": "OnTimer",
+   "handler_name": "TimerInArmTimer",
+   "leaf_name": "TimerInArm",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fLaserSensor.CommLaserOutArm",
+   "event_name": "OnReceiveData",
+   "handler_name": "CommLaserOutArmReceiveData",
+   "leaf_name": "CommLaserOutArm",
+   "vcl_class": "TComm"
+  }
+ ],
+ "form_name": "fLaserSensor",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "OmronLaser/LaserSensor.dfm"
+}

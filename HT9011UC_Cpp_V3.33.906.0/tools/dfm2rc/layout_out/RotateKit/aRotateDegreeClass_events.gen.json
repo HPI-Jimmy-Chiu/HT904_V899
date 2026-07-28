@@ -1,0 +1,30 @@
+{
+ "event_count": 3,
+ "events": [
+  {
+   "control_path": "frmRot",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "frmRot",
+   "vcl_class": "TfrmRot"
+  },
+  {
+   "control_path": "frmRot.pnlRotDegree.grpRotDegree.imgRotDegree",
+   "event_name": "OnClick",
+   "handler_name": "imgRotDegreeClick",
+   "leaf_name": "imgRotDegree",
+   "vcl_class": "TImage"
+  },
+  {
+   "control_path": "frmRot.pnlRotDegree.grpRotDegree.lblSiteMap",
+   "event_name": "OnClick",
+   "handler_name": "imgRotDegreeClick",
+   "leaf_name": "lblSiteMap",
+   "vcl_class": "TLabel"
+  }
+ ],
+ "form_name": "frmRot",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "RotateKit/aRotateDegreeClass.dfm"
+}

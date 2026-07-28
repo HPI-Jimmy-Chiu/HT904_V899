@@ -1,0 +1,1992 @@
+{
+ "control_node_count": 22,
+ "encoding_used": "cp950",
+ "form_class": "TCCInput",
+ "form_name": "CCInput",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "CCInput.SpeedButton1",
+    "CCInput.SpeedButton2",
+    "CCInput.SpeedButton3",
+    "CCInput.SpeedButton4",
+    "CCInput.SpeedButton5",
+    "CCInput.SpeedButton6",
+    "CCInput.SpeedButton7",
+    "CCInput.Label1",
+    "CCInput.Button1",
+    "CCInput.Button2",
+    "CCInput.Button3",
+    "CCInput.Button5",
+    "CCInput.Button6",
+    "CCInput.Button8",
+    "CCInput.Button9",
+    "CCInput.Button11",
+    "CCInput.Button12",
+    "CCInput.Button15",
+    "CCInput.Button17",
+    "CCInput.Button18",
+    "CCInput.Button13",
+    "CCInput.Button4"
+   ],
+   "class": "TCCInput",
+   "depth": 0,
+   "events": {
+    "OnShow": "FormShow"
+   },
+   "geometry": {
+    "height": 389,
+    "left": 252,
+    "top": 254,
+    "width": 584
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "CCInput",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "CCInput",
+   "properties": {
+    "BorderIcons": {
+     "type": "SET",
+     "value": []
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Input"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 9534289
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 389
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 252
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnShow": {
+     "type": "SCALAR",
+     "value": "FormShow"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Position": {
+     "type": "SCALAR",
+     "value": "poScreenCenter"
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 254
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 584
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "SpeedButton1Click"
+   },
+   "geometry": {
+    "height": 65,
+    "left": 380,
+    "top": 65,
+    "width": 86
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 19,
+   "name": "SpeedButton1",
+   "objkind": "object",
+   "parent_path": "CCInput",
+   "path": "CCInput.SpeedButton1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "+100"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlue"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -32
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Trebuchet MS"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 65
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 380
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "SpeedButton1Click"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 65
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 86
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "SpeedButton1Click"
+   },
+   "geometry": {
+    "height": 65,
+    "left": 380,
+    "top": 136,
+    "width": 86
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 33,
+   "name": "SpeedButton2",
+   "objkind": "object",
+   "parent_path": "CCInput",
+   "path": "CCInput.SpeedButton2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "+10"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlue"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -32
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Trebuchet MS"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 65
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 380
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "SpeedButton1Click"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 86
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "SpeedButton1Click"
+   },
+   "geometry": {
+    "height": 65,
+    "left": 380,
+    "top": 207,
+    "width": 86
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 47,
+   "name": "SpeedButton3",
+   "objkind": "object",
+   "parent_path": "CCInput",
+   "path": "CCInput.SpeedButton3",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "+1"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlue"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -32
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Trebuchet MS"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 65
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 380
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "SpeedButton1Click"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 207
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 86
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "SpeedButton4Click"
+   },
+   "geometry": {
+    "height": 135,
+    "left": 286,
+    "top": 207,
+    "width": 86
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 61,
+   "name": "SpeedButton4",
+   "objkind": "object",
+   "parent_path": "CCInput",
+   "path": "CCInput.SpeedButton4",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Abort"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlue"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -29
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Trebuchet MS"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 135
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 286
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "SpeedButton4Click"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 207
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 86
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "SpeedButton1Click"
+   },
+   "geometry": {
+    "height": 65,
+    "left": 473,
+    "top": 65,
+    "width": 86
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 75,
+   "name": "SpeedButton5",
+   "objkind": "object",
+   "parent_path": "CCInput",
+   "path": "CCInput.SpeedButton5",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "-100"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlue"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -32
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Trebuchet MS"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 65
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 473
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "SpeedButton1Click"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 65
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 86
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "SpeedButton1Click"
+   },
+   "geometry": {
+    "height": 65,
+    "left": 473,
+    "top": 136,
+    "width": 86
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 89,
+   "name": "SpeedButton6",
+   "objkind": "object",
+   "parent_path": "CCInput",
+   "path": "CCInput.SpeedButton6",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "-10"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlue"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -32
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Trebuchet MS"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 65
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 473
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "SpeedButton1Click"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 86
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "SpeedButton1Click"
+   },
+   "geometry": {
+    "height": 65,
+    "left": 473,
+    "top": 207,
+    "width": 86
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 103,
+   "name": "SpeedButton7",
+   "objkind": "object",
+   "parent_path": "CCInput",
+   "path": "CCInput.SpeedButton7",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "-1"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlue"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -32
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Trebuchet MS"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 65
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 473
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "SpeedButton1Click"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 207
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 86
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 53,
+    "left": 8,
+    "top": 8,
+    "width": 553
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 117,
+   "name": "Label1",
+   "objkind": "object",
+   "parent_path": "CCInput",
+   "path": "CCInput.Label1",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -48
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Trebuchet MS"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 53
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 553
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "NumberClick"
+   },
+   "geometry": {
+    "height": 65,
+    "left": 6,
+    "top": 65,
+    "width": 86
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 133,
+   "name": "Button1",
+   "objkind": "object",
+   "parent_path": "CCInput",
+   "path": "CCInput.Button1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "7"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -48
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Trebuchet MS"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 65
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "NumberClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 65
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 86
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "NumberClick"
+   },
+   "geometry": {
+    "height": 65,
+    "left": 6,
+    "top": 136,
+    "width": 86
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 149,
+   "name": "Button2",
+   "objkind": "object",
+   "parent_path": "CCInput",
+   "path": "CCInput.Button2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "4"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -48
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Trebuchet MS"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 65
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "NumberClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 86
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "NumberClick"
+   },
+   "geometry": {
+    "height": 65,
+    "left": 6,
+    "top": 207,
+    "width": 86
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 165,
+   "name": "Button3",
+   "objkind": "object",
+   "parent_path": "CCInput",
+   "path": "CCInput.Button3",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "1"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -48
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Trebuchet MS"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 65
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "NumberClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 207
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 86
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "NumberClick"
+   },
+   "geometry": {
+    "height": 65,
+    "left": 99,
+    "top": 65,
+    "width": 86
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 181,
+   "name": "Button5",
+   "objkind": "object",
+   "parent_path": "CCInput",
+   "path": "CCInput.Button5",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "8"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -48
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Trebuchet MS"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 65
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 99
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "NumberClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 65
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 86
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "NumberClick"
+   },
+   "geometry": {
+    "height": 65,
+    "left": 99,
+    "top": 136,
+    "width": 86
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 197,
+   "name": "Button6",
+   "objkind": "object",
+   "parent_path": "CCInput",
+   "path": "CCInput.Button6",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "5"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -48
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Trebuchet MS"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 65
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 99
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "NumberClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 86
+    }
+   },
+   "sibling_index": 12,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "NumberClick"
+   },
+   "geometry": {
+    "height": 65,
+    "left": 193,
+    "top": 65,
+    "width": 86
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 213,
+   "name": "Button8",
+   "objkind": "object",
+   "parent_path": "CCInput",
+   "path": "CCInput.Button8",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "9"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -48
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Trebuchet MS"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 65
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 193
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "NumberClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 65
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 86
+    }
+   },
+   "sibling_index": 13,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "NumberClick"
+   },
+   "geometry": {
+    "height": 65,
+    "left": 193,
+    "top": 136,
+    "width": 86
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 229,
+   "name": "Button9",
+   "objkind": "object",
+   "parent_path": "CCInput",
+   "path": "CCInput.Button9",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "6"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -48
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Trebuchet MS"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 65
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 193
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "NumberClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 86
+    }
+   },
+   "sibling_index": 14,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "NumberClick"
+   },
+   "geometry": {
+    "height": 65,
+    "left": 193,
+    "top": 207,
+    "width": 86
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 245,
+   "name": "Button11",
+   "objkind": "object",
+   "parent_path": "CCInput",
+   "path": "CCInput.Button11",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "3"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -48
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Trebuchet MS"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 65
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 193
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "NumberClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 207
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 86
+    }
+   },
+   "sibling_index": 15,
+   "synthesized": false,
+   "tab_order": 7,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "NumberClick"
+   },
+   "geometry": {
+    "height": 65,
+    "left": 99,
+    "top": 207,
+    "width": 86
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 261,
+   "name": "Button12",
+   "objkind": "object",
+   "parent_path": "CCInput",
+   "path": "CCInput.Button12",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "2"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -48
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Trebuchet MS"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 65
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 99
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "NumberClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 207
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 86
+    }
+   },
+   "sibling_index": 16,
+   "synthesized": false,
+   "tab_order": 8,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "Button15Click"
+   },
+   "geometry": {
+    "height": 64,
+    "left": 380,
+    "top": 278,
+    "width": 180
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 277,
+   "name": "Button15",
+   "objkind": "object",
+   "parent_path": "CCInput",
+   "path": "CCInput.Button15",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Enter"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -48
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Trebuchet MS"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 64
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 380
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "Button15Click"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 278
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 180
+    }
+   },
+   "sibling_index": 17,
+   "synthesized": false,
+   "tab_order": 9,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "Button17Click"
+   },
+   "geometry": {
+    "height": 65,
+    "left": 193,
+    "top": 278,
+    "width": 86
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 292,
+   "name": "Button17",
+   "objkind": "object",
+   "parent_path": "CCInput",
+   "path": "CCInput.Button17",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "."
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -48
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Trebuchet MS"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 65
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 193
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "Button17Click"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 278
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 86
+    }
+   },
+   "sibling_index": 18,
+   "synthesized": false,
+   "tab_order": 10,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "NumberClick"
+   },
+   "geometry": {
+    "height": 65,
+    "left": 6,
+    "top": 278,
+    "width": 179
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 307,
+   "name": "Button18",
+   "objkind": "object",
+   "parent_path": "CCInput",
+   "path": "CCInput.Button18",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -48
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Trebuchet MS"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 65
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "NumberClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 278
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 179
+    }
+   },
+   "sibling_index": 19,
+   "synthesized": false,
+   "tab_order": 11,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "Button13Click"
+   },
+   "geometry": {
+    "height": 65,
+    "left": 286,
+    "top": 136,
+    "width": 86
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 322,
+   "name": "Button13",
+   "objkind": "object",
+   "parent_path": "CCInput",
+   "path": "CCInput.Button13",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "BS"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -37
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Trebuchet MS"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 65
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 286
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "Button13Click"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 86
+    }
+   },
+   "sibling_index": 20,
+   "synthesized": false,
+   "tab_order": 12,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "Button4Click"
+   },
+   "geometry": {
+    "height": 65,
+    "left": 286,
+    "top": 65,
+    "width": 86
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 337,
+   "name": "Button4",
+   "objkind": "object",
+   "parent_path": "CCInput",
+   "path": "CCInput.Button4",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "-"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -48
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Trebuchet MS"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 65
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 286
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "Button4Click"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 65
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 86
+    }
+   },
+   "sibling_index": 21,
+   "synthesized": false,
+   "tab_order": 13,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "CCLink/CCINPUT.dfm",
+ "total_nodes_incl_root": 23
+}

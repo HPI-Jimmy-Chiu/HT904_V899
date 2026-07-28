@@ -1,0 +1,121 @@
+{
+ "event_count": 16,
+ "events": [
+  {
+   "control_path": "fRFID",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fRFID",
+   "vcl_class": "TfRFID"
+  },
+  {
+   "control_path": "fRFID",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fRFID",
+   "vcl_class": "TfRFID"
+  },
+  {
+   "control_path": "fRFID.PageControl1.tsRFID.gbRFIDTest.spbResetCom",
+   "event_name": "OnClick",
+   "handler_name": "spbResetComClick",
+   "leaf_name": "spbResetCom",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fRFID.PageControl1.tsRFID.gbRFIDTest.spbStartCom",
+   "event_name": "OnClick",
+   "handler_name": "spbStartComClick",
+   "leaf_name": "spbStartCom",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fRFID.PageControl1.tsRFID.gbRFIDTest.gb1.btRFID1On",
+   "event_name": "OnClick",
+   "handler_name": "btRFID1OnClick",
+   "leaf_name": "btRFID1On",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fRFID.PageControl1.tsRFID.gbRFIDTest.GroupBox1.btRFID2On",
+   "event_name": "OnClick",
+   "handler_name": "btRFID1OnClick",
+   "leaf_name": "btRFID2On",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fRFID.PageControl1.tsDelta.GroupBox2.Button1",
+   "event_name": "OnClick",
+   "handler_name": "Button1Click",
+   "leaf_name": "Button1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fRFID.PageControl1.tsDelta.GroupBox2.Button3",
+   "event_name": "OnClick",
+   "handler_name": "Button3Click",
+   "leaf_name": "Button3",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fRFID.PageControl1.tsDelta.GroupBox2.Button4",
+   "event_name": "OnClick",
+   "handler_name": "Button4Click",
+   "leaf_name": "Button4",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fRFID.PageControl1.tsDelta.GroupBox2.Button2",
+   "event_name": "OnClick",
+   "handler_name": "Button2Click",
+   "leaf_name": "Button2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fRFID.PageControl1.tsDelta.GroupBox2.Button9",
+   "event_name": "OnClick",
+   "handler_name": "Button9Click",
+   "leaf_name": "Button9",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fRFID.Panel1.spbSave",
+   "event_name": "OnClick",
+   "handler_name": "spbSaveClick",
+   "leaf_name": "spbSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fRFID.Panel1.sbtExit",
+   "event_name": "OnClick",
+   "handler_name": "sbtExitClick",
+   "leaf_name": "sbtExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fRFID.RFID_1",
+   "event_name": "OnReceiveData",
+   "handler_name": "RFID_1ReceiveData",
+   "leaf_name": "RFID_1",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "fRFID.RFID_2",
+   "event_name": "OnReceiveData",
+   "handler_name": "RFID_2ReceiveData",
+   "leaf_name": "RFID_2",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "fRFID.Timer1",
+   "event_name": "OnTimer",
+   "handler_name": "Timer1Timer",
+   "leaf_name": "Timer1",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fRFID",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "MR/RFID.dfm"
+}

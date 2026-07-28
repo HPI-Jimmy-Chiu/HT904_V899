@@ -1,0 +1,268 @@
+{
+ "event_count": 37,
+ "events": [
+  {
+   "control_path": "fAutoAlignment",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fAutoAlignment",
+   "vcl_class": "TfAutoAlignment"
+  },
+  {
+   "control_path": "fAutoAlignment",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fAutoAlignment",
+   "vcl_class": "TfAutoAlignment"
+  },
+  {
+   "control_path": "fAutoAlignment.Panel1.GroupBox47.GroupBox46.cbAutoAlignmentTray_AfterHome",
+   "event_name": "OnClick",
+   "handler_name": "cbAutoAlignmentTray_AfterHomeClick",
+   "leaf_name": "cbAutoAlignmentTray_AfterHome",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fAutoAlignment.Panel1.GroupBox47.edAutoAlignment_DeviceThick",
+   "event_name": "OnMouseDown",
+   "handler_name": "edAutoAlignment_DeviceThickMouseDown",
+   "leaf_name": "edAutoAlignment_DeviceThick",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAutoAlignment.Panel1.GroupBox47.PageControl19.TabSheet33.GroupBox53.edAutoAlignmentTray_InArmZRealaseOffset",
+   "event_name": "OnClick",
+   "handler_name": "edAutoAlignmentTray_InArmZRealaseOffsetClick",
+   "leaf_name": "edAutoAlignmentTray_InArmZRealaseOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAutoAlignment.Panel1.GroupBox47.PageControl19.TabSheet33.GroupBox53.edAutoAlignmentTray_InArmZPickUpOffset",
+   "event_name": "OnClick",
+   "handler_name": "edAutoAlignmentTray_InArmZRealaseOffsetClick",
+   "leaf_name": "edAutoAlignmentTray_InArmZPickUpOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAutoAlignment.Panel1.GroupBox47.PageControl19.TabSheet33.GroupBox54.edAutoAlignmentTray_OutArmZRealaseOffset",
+   "event_name": "OnClick",
+   "handler_name": "edAutoAlignmentTray_InArmZRealaseOffsetClick",
+   "leaf_name": "edAutoAlignmentTray_OutArmZRealaseOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAutoAlignment.Panel1.GroupBox47.PageControl19.TabSheet33.GroupBox54.edAutoAlignmentTray_OutArmZPickUpOffset",
+   "event_name": "OnClick",
+   "handler_name": "edAutoAlignmentTray_InArmZRealaseOffsetClick",
+   "leaf_name": "edAutoAlignmentTray_OutArmZPickUpOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAutoAlignment.Panel1.GroupBox47.PageControl19.TabSheet36.GroupBox57.edAutoAlignmentCK_InArmZRealaseOffset",
+   "event_name": "OnClick",
+   "handler_name": "edAutoAlignmentTray_InArmZRealaseOffsetClick",
+   "leaf_name": "edAutoAlignmentCK_InArmZRealaseOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAutoAlignment.Panel1.GroupBox47.PageControl19.TabSheet36.GroupBox57.edAutoAlignmentCK_InArmZPickUpOffset",
+   "event_name": "OnClick",
+   "handler_name": "edAutoAlignmentTray_InArmZRealaseOffsetClick",
+   "leaf_name": "edAutoAlignmentCK_InArmZPickUpOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAutoAlignment.Panel1.GroupBox47.PageControl19.TabSheet36.GroupBox58.edAutoAlignmentCK_OutArmZRealaseOffset",
+   "event_name": "OnClick",
+   "handler_name": "edAutoAlignmentTray_InArmZRealaseOffsetClick",
+   "leaf_name": "edAutoAlignmentCK_OutArmZRealaseOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAutoAlignment.Panel1.GroupBox47.PageControl19.TabSheet36.GroupBox58.edAutoAlignmentCK_OutArmZPickUpOffset",
+   "event_name": "OnClick",
+   "handler_name": "edAutoAlignmentTray_InArmZRealaseOffsetClick",
+   "leaf_name": "edAutoAlignmentCK_OutArmZPickUpOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAutoAlignment.Panel1.PageControl18.TabSheet34.GroupBox49.edtAlignmentPointX",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtAlignmentPointXMouseDown",
+   "leaf_name": "edtAlignmentPointX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAutoAlignment.Panel1.PageControl18.TabSheet34.GroupBox49.edtAlignmentPointY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtAlignmentPointXMouseDown",
+   "leaf_name": "edtAlignmentPointY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAutoAlignment.Panel1.PageControl18.TabSheet34.GroupBox49.btnAutoAlignmentTrayPointCal",
+   "event_name": "OnClick",
+   "handler_name": "btnAutoAlignmentTrayPointCalClick",
+   "leaf_name": "btnAutoAlignmentTrayPointCal",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fAutoAlignment.Panel1.PageControl18.TabSheet35.GroupBox50.edtAlignmentPlatePointX",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtAlignmentPointXMouseDown",
+   "leaf_name": "edtAlignmentPlatePointX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAutoAlignment.Panel1.PageControl18.TabSheet35.GroupBox50.edtAlignmentPlatePointY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtAlignmentPointXMouseDown",
+   "leaf_name": "edtAlignmentPlatePointY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAutoAlignment.Panel1.PageControl18.TabSheet35.GroupBox50.btnAutoAlignmentPlatePointCal",
+   "event_name": "OnClick",
+   "handler_name": "btnAutoAlignmentPlatePointCalClick",
+   "leaf_name": "btnAutoAlignmentPlatePointCal",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fAutoAlignment.Panel1.GroupBox3.GroupBox1.edtInArmPort",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtInArmPortMouseDown",
+   "leaf_name": "edtInArmPort",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAutoAlignment.Panel1.GroupBox3.GroupBox2.edtOutArmPort",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtInArmPortMouseDown",
+   "leaf_name": "edtOutArmPort",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAutoAlignment.Panel1.GroupBox3.btnConnect",
+   "event_name": "OnClick",
+   "handler_name": "btnConnectClick",
+   "leaf_name": "btnConnect",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fAutoAlignment.Panel1.GroupBox3.btnDisconnect",
+   "event_name": "OnClick",
+   "handler_name": "btnDisconnectClick",
+   "leaf_name": "btnDisconnect",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fAutoAlignment.Panel1.GroupBox3.GroupBox4.Button1",
+   "event_name": "OnClick",
+   "handler_name": "Button1Click",
+   "leaf_name": "Button1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fAutoAlignment.Panel1.GroupBox3.GroupBox4.Button2",
+   "event_name": "OnClick",
+   "handler_name": "Button2Click",
+   "leaf_name": "Button2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fAutoAlignment.Panel1.GroupBox3.GroupBox4.edtFileName",
+   "event_name": "OnChange",
+   "handler_name": "edtFileNameChange",
+   "leaf_name": "edtFileName",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAutoAlignment.Panel1.GroupBox3.edAOADecodetimeout",
+   "event_name": "OnMouseDown",
+   "handler_name": "edAutoAlignment_DeviceThickMouseDown",
+   "leaf_name": "edAOADecodetimeout",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAutoAlignment.Panel1.Panel2.spbSave",
+   "event_name": "OnClick",
+   "handler_name": "spbSaveClick",
+   "leaf_name": "spbSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fAutoAlignment.Panel1.Panel2.sbtExit",
+   "event_name": "OnClick",
+   "handler_name": "sbtExitClick",
+   "leaf_name": "sbtExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fAutoAlignment.Timer1",
+   "event_name": "OnTimer",
+   "handler_name": "Timer1Timer",
+   "leaf_name": "Timer1",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fAutoAlignment.ClientSocket2",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket2Connect",
+   "leaf_name": "ClientSocket2",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fAutoAlignment.ClientSocket2",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket2Disconnect",
+   "leaf_name": "ClientSocket2",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fAutoAlignment.ClientSocket2",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket2Error",
+   "leaf_name": "ClientSocket2",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fAutoAlignment.ClientSocket2",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket2Read",
+   "leaf_name": "ClientSocket2",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fAutoAlignment.ClientSocket1",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket1Connect",
+   "leaf_name": "ClientSocket1",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fAutoAlignment.ClientSocket1",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket1Disconnect",
+   "leaf_name": "ClientSocket1",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fAutoAlignment.ClientSocket1",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket1Error",
+   "leaf_name": "ClientSocket1",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fAutoAlignment.ClientSocket1",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket1Read",
+   "leaf_name": "ClientSocket1",
+   "vcl_class": "TClientSocket"
+  }
+ ],
+ "form_name": "fAutoAlignment",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "AutoAlignment/AutoAlignment.dfm"
+}

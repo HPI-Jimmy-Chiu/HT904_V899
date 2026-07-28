@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "generator": "emit_rc.py W7-B1b v1.0",
+  "source_dfm": "BarcodeReader.dfm",
+  "formstem": "BARCODEREADER",
+  "dialog_count": 2,
+  "control_count": 3,
+  "fallback_classes_used": [],
+  "warnings": [],
+  "dialogs": [
+    {
+      "idd_symbol": "IDD_BARCODEREADER",
+      "idd_value": 8192,
+      "is_root": true,
+      "owner_path": "FormBarcodeReader",
+      "owner_class": "TFormBarcodeReader",
+      "controls": []
+    },
+    {
+      "idd_symbol": "IDD_BARCODEREADER_PNLBARCODEREADER",
+      "idd_value": 8193,
+      "is_root": false,
+      "owner_path": "FormBarcodeReader.pnlBarcodeReader",
+      "owner_class": "TPanel",
+      "controls": [
+        {
+          "symbol": "IDC_BARCODEREADER_LBLINPUTTYPE",
+          "value": 1024,
+          "win32_class": "Static",
+          "caption": "Input Operator ID:",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "FormBarcodeReader.pnlBarcodeReader.lblInputType",
+          "fallback_class": false,
+          "x": 24,
+          "y": 17,
+          "cx": 147,
+          "cy": 24
+        },
+        {
+          "symbol": "IDC_BARCODEREADER_EDTBARCODENUMBER",
+          "value": 1025,
+          "win32_class": "Edit",
+          "caption": null,
+          "synthesized": false,
+          "rule": null,
+          "source_path": "FormBarcodeReader.pnlBarcodeReader.edtBarcodeNumber",
+          "fallback_class": false,
+          "x": 24,
+          "y": 46,
+          "cx": 321,
+          "cy": 32
+        },
+        {
+          "symbol": "IDC_BARCODEREADER_BTNENTER",
+          "value": 1026,
+          "win32_class": "Button",
+          "caption": "Enter",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "FormBarcodeReader.pnlBarcodeReader.btnEnter",
+          "fallback_class": false,
+          "x": 88,
+          "y": 92,
+          "cx": 193,
+          "cy": 36
+        }
+      ]
+    }
+  ]
+}

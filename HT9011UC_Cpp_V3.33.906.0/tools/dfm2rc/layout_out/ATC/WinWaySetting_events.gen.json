@@ -1,0 +1,79 @@
+{
+ "event_count": 10,
+ "events": [
+  {
+   "control_path": "fWinway",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fWinway",
+   "vcl_class": "TfWinway"
+  },
+  {
+   "control_path": "fWinway.btnUpdate",
+   "event_name": "OnClick",
+   "handler_name": "btnUpdateClick",
+   "leaf_name": "btnUpdate",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fWinway.cbbWinwayATCIndex",
+   "event_name": "OnChange",
+   "handler_name": "cbbWinwayATCIndexChange",
+   "leaf_name": "cbbWinwayATCIndex",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fWinway.grpcommu.edtSetTemp",
+   "event_name": "OnClick",
+   "handler_name": "edtSetTempClick",
+   "leaf_name": "edtSetTemp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fWinway.grpcommu.btnSendTemp",
+   "event_name": "OnClick",
+   "handler_name": "btnSendTempClick",
+   "leaf_name": "btnSendTemp",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fWinway.grpcommu.btnGetPV",
+   "event_name": "OnClick",
+   "handler_name": "btnGetPVClick",
+   "leaf_name": "btnGetPV",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fWinway.WinWayATCComm1",
+   "event_name": "OnReceiveData",
+   "handler_name": "WinWayATCComm1ReceiveData",
+   "leaf_name": "WinWayATCComm1",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "fWinway.WinWayATCComm2",
+   "event_name": "OnReceiveData",
+   "handler_name": "WinWayATCComm1ReceiveData",
+   "leaf_name": "WinWayATCComm2",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "fWinway.WinWayATCComm3",
+   "event_name": "OnReceiveData",
+   "handler_name": "WinWayATCComm1ReceiveData",
+   "leaf_name": "WinWayATCComm3",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "fWinway.WinWayATCComm4",
+   "event_name": "OnReceiveData",
+   "handler_name": "WinWayATCComm1ReceiveData",
+   "leaf_name": "WinWayATCComm4",
+   "vcl_class": "TComm"
+  }
+ ],
+ "form_name": "fWinway",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "ATC/WinWaySetting.dfm"
+}

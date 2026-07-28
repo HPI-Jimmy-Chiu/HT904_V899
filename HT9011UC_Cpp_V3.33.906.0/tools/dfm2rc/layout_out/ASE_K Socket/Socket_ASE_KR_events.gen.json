@@ -1,0 +1,170 @@
+{
+ "event_count": 23,
+ "events": [
+  {
+   "control_path": "fSocketCommunication",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fSocketCommunication",
+   "vcl_class": "TfSocketCommunication"
+  },
+  {
+   "control_path": "fSocketCommunication",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fSocketCommunication",
+   "vcl_class": "TfSocketCommunication"
+  },
+  {
+   "control_path": "fSocketCommunication.GroupBox1.gbSetting.edtServerIP_1",
+   "event_name": "OnClick",
+   "handler_name": "edtServerIP_1Click",
+   "leaf_name": "edtServerIP_1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSocketCommunication.GroupBox1.gbSetting.edtServerPort",
+   "event_name": "OnClick",
+   "handler_name": "edtServerPortClick",
+   "leaf_name": "edtServerPort",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSocketCommunication.GroupBox1.gbSetting.edtSocketTimeout",
+   "event_name": "OnClick",
+   "handler_name": "edtSocketTimeoutClick",
+   "leaf_name": "edtSocketTimeout",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSocketCommunication.GroupBox1.gbSetting.edtServerIP_2",
+   "event_name": "OnClick",
+   "handler_name": "edtServerIP_1Click",
+   "leaf_name": "edtServerIP_2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSocketCommunication.GroupBox1.gbSetting.edtServerIP_3",
+   "event_name": "OnClick",
+   "handler_name": "edtServerIP_1Click",
+   "leaf_name": "edtServerIP_3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSocketCommunication.GroupBox1.gbSetting.edtServerIP_4",
+   "event_name": "OnClick",
+   "handler_name": "edtServerIP_1Click",
+   "leaf_name": "edtServerIP_4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSocketCommunication.GroupBox1.btnOK",
+   "event_name": "OnClick",
+   "handler_name": "btnOKClick",
+   "leaf_name": "btnOK",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fSocketCommunication.GroupBox1.btnCancel",
+   "event_name": "OnClick",
+   "handler_name": "btnCancelClick",
+   "leaf_name": "btnCancel",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fSocketCommunication.GroupBox3.btnC1N1",
+   "event_name": "OnClick",
+   "handler_name": "btnC1N1Click",
+   "leaf_name": "btnC1N1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fSocketCommunication.GroupBox3.btnC1N3",
+   "event_name": "OnClick",
+   "handler_name": "btnC1N3Click",
+   "leaf_name": "btnC1N3",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fSocketCommunication.GroupBox3.btnC6N1",
+   "event_name": "OnClick",
+   "handler_name": "btnC6N1Click",
+   "leaf_name": "btnC6N1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fSocketCommunication.GroupBox3.btnC9N1",
+   "event_name": "OnClick",
+   "handler_name": "btnC9N1Click",
+   "leaf_name": "btnC9N1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fSocketCommunication.GroupBox3.btnC9N3",
+   "event_name": "OnClick",
+   "handler_name": "btnC9N3Click",
+   "leaf_name": "btnC9N3",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fSocketCommunication.GroupBox3.btnC9N5",
+   "event_name": "OnClick",
+   "handler_name": "btnC9N5Click",
+   "leaf_name": "btnC9N5",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fSocketCommunication.GroupBox3.Button1",
+   "event_name": "OnClick",
+   "handler_name": "Button1Click",
+   "leaf_name": "Button1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fSocketCommunication.GroupBox3.Button2",
+   "event_name": "OnClick",
+   "handler_name": "Button2Click",
+   "leaf_name": "Button2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fSocketCommunication.ClientSocket1",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket1Connect",
+   "leaf_name": "ClientSocket1",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fSocketCommunication.ClientSocket1",
+   "event_name": "OnConnecting",
+   "handler_name": "ClientSocket1Connecting",
+   "leaf_name": "ClientSocket1",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fSocketCommunication.ClientSocket1",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket1Disconnect",
+   "leaf_name": "ClientSocket1",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fSocketCommunication.ClientSocket1",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket1Error",
+   "leaf_name": "ClientSocket1",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fSocketCommunication.ClientSocket1",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket1Read",
+   "leaf_name": "ClientSocket1",
+   "vcl_class": "TClientSocket"
+  }
+ ],
+ "form_name": "fSocketCommunication",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "ASE_K Socket/Socket_ASE_KR.dfm"
+}

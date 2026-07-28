@@ -1,0 +1,254 @@
+{
+ "event_count": 35,
+ "events": [
+  {
+   "control_path": "fAutoAlignment",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fAutoAlignment",
+   "vcl_class": "TfAutoAlignment"
+  },
+  {
+   "control_path": "fAutoAlignment",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fAutoAlignment",
+   "vcl_class": "TfAutoAlignment"
+  },
+  {
+   "control_path": "fAutoAlignment",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fAutoAlignment",
+   "vcl_class": "TfAutoAlignment"
+  },
+  {
+   "control_path": "fAutoAlignment.Panel1.spbSave",
+   "event_name": "OnClick",
+   "handler_name": "spbSaveClick",
+   "leaf_name": "spbSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fAutoAlignment.Panel1.sbtExit",
+   "event_name": "OnClick",
+   "handler_name": "sbtExitClick",
+   "leaf_name": "sbtExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fAutoAlignment.palBase.palCCDControl.sbPasue",
+   "event_name": "OnClick",
+   "handler_name": "sbPasueClick",
+   "leaf_name": "sbPasue",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fAutoAlignment.palBase.palCCDControl.sbStart",
+   "event_name": "OnClick",
+   "handler_name": "sbStartClick",
+   "leaf_name": "sbStart",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fAutoAlignment.palBase.PageControl1.tsCCDSetting.grpCCDSetting1.btnCCDConnect1",
+   "event_name": "OnClick",
+   "handler_name": "btnCCDConnectClick",
+   "leaf_name": "btnCCDConnect1",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fAutoAlignment.palBase.PageControl1.tsCCDSetting.grpCCDSetting1.btnCCDDisconnect1",
+   "event_name": "OnClick",
+   "handler_name": "btnCCDDisconnectClick",
+   "leaf_name": "btnCCDDisconnect1",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fAutoAlignment.palBase.PageControl1.tsCCDSetting.grpCCDSetting1.btnCCDSend1",
+   "event_name": "OnClick",
+   "handler_name": "btnCCDSendClick",
+   "leaf_name": "btnCCDSend1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fAutoAlignment.palBase.PageControl1.tsCCDSetting.grpCCDSetting2.btnCCDConnect2",
+   "event_name": "OnClick",
+   "handler_name": "btnCCDConnectClick",
+   "leaf_name": "btnCCDConnect2",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fAutoAlignment.palBase.PageControl1.tsCCDSetting.grpCCDSetting2.btnCCDDisconnect2",
+   "event_name": "OnClick",
+   "handler_name": "btnCCDDisconnectClick",
+   "leaf_name": "btnCCDDisconnect2",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fAutoAlignment.palBase.PageControl1.tsCCDSetting.grpCCDSetting3.btnCCDConnect3",
+   "event_name": "OnClick",
+   "handler_name": "btnCCDConnectClick",
+   "leaf_name": "btnCCDConnect3",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fAutoAlignment.palBase.PageControl1.tsCCDSetting.grpCCDSetting3.btnCCDDisconnect3",
+   "event_name": "OnClick",
+   "handler_name": "btnCCDDisconnectClick",
+   "leaf_name": "btnCCDDisconnect3",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fAutoAlignment.palBase.PageControl1.tsCCDSetting.grpCCDSetting4.btnCCDConnect4",
+   "event_name": "OnClick",
+   "handler_name": "btnCCDConnectClick",
+   "leaf_name": "btnCCDConnect4",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fAutoAlignment.palBase.PageControl1.tsCCDSetting.grpCCDSetting4.btnCCDDisconnect4",
+   "event_name": "OnClick",
+   "handler_name": "btnCCDDisconnectClick",
+   "leaf_name": "btnCCDDisconnect4",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fAutoAlignment.clntscktOutBottom",
+   "event_name": "OnConnect",
+   "handler_name": "clntscktConnect",
+   "leaf_name": "clntscktOutBottom",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fAutoAlignment.clntscktOutBottom",
+   "event_name": "OnDisconnect",
+   "handler_name": "clntscktAlignDisconnect",
+   "leaf_name": "clntscktOutBottom",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fAutoAlignment.clntscktOutBottom",
+   "event_name": "OnError",
+   "handler_name": "clntscktAlignError",
+   "leaf_name": "clntscktOutBottom",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fAutoAlignment.clntscktOutBottom",
+   "event_name": "OnRead",
+   "handler_name": "clntscktAlignRead",
+   "leaf_name": "clntscktOutBottom",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fAutoAlignment.clntscktOutTop",
+   "event_name": "OnConnect",
+   "handler_name": "clntscktConnect",
+   "leaf_name": "clntscktOutTop",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fAutoAlignment.clntscktOutTop",
+   "event_name": "OnDisconnect",
+   "handler_name": "clntscktAlignDisconnect",
+   "leaf_name": "clntscktOutTop",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fAutoAlignment.clntscktOutTop",
+   "event_name": "OnError",
+   "handler_name": "clntscktAlignError",
+   "leaf_name": "clntscktOutTop",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fAutoAlignment.clntscktOutTop",
+   "event_name": "OnRead",
+   "handler_name": "clntscktAlignRead",
+   "leaf_name": "clntscktOutTop",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fAutoAlignment.clntscktInTop",
+   "event_name": "OnConnect",
+   "handler_name": "clntscktConnect",
+   "leaf_name": "clntscktInTop",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fAutoAlignment.clntscktInTop",
+   "event_name": "OnDisconnect",
+   "handler_name": "clntscktAlignDisconnect",
+   "leaf_name": "clntscktInTop",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fAutoAlignment.clntscktInTop",
+   "event_name": "OnError",
+   "handler_name": "clntscktAlignError",
+   "leaf_name": "clntscktInTop",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fAutoAlignment.clntscktInTop",
+   "event_name": "OnRead",
+   "handler_name": "clntscktAlignRead",
+   "leaf_name": "clntscktInTop",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fAutoAlignment.clntscktInBottom",
+   "event_name": "OnConnect",
+   "handler_name": "clntscktConnect",
+   "leaf_name": "clntscktInBottom",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fAutoAlignment.clntscktInBottom",
+   "event_name": "OnDisconnect",
+   "handler_name": "clntscktAlignDisconnect",
+   "leaf_name": "clntscktInBottom",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fAutoAlignment.clntscktInBottom",
+   "event_name": "OnError",
+   "handler_name": "clntscktAlignError",
+   "leaf_name": "clntscktInBottom",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fAutoAlignment.clntscktInBottom",
+   "event_name": "OnRead",
+   "handler_name": "clntscktAlignRead",
+   "leaf_name": "clntscktInBottom",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fAutoAlignment.tmrProcessGetData",
+   "event_name": "OnTimer",
+   "handler_name": "tmrProcessGetDataTimer",
+   "leaf_name": "tmrProcessGetData",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fAutoAlignment.tmrCCDInitial",
+   "event_name": "OnTimer",
+   "handler_name": "tmrCCDInitialTimer",
+   "leaf_name": "tmrCCDInitial",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fAutoAlignment.tmrCCDConnect",
+   "event_name": "OnTimer",
+   "handler_name": "tmrCCDConnectTimer",
+   "leaf_name": "tmrCCDConnect",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fAutoAlignment",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "AutoAlignment/cAutoAlignment.dfm"
+}

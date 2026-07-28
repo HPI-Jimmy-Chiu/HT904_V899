@@ -1,0 +1,732 @@
+{
+ "control_node_count": 11,
+ "encoding_used": "cp950",
+ "form_class": "TLoadCCD",
+ "form_name": "LoadCCD",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "LoadCCD.Panel1",
+    "LoadCCD.ServerSocket1",
+    "LoadCCD.Timer1"
+   ],
+   "class": "TLoadCCD",
+   "depth": 0,
+   "events": {},
+   "geometry": {
+    "height": 603,
+    "left": 354,
+    "top": 257,
+    "width": 759
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "LoadCCD",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "LoadCCD",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "LoadCCD"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 603
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 354
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 257
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 759
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [
+    "LoadCCD.Panel1.Label1",
+    "LoadCCD.Panel1.LedAConnect",
+    "LoadCCD.Panel1.edtPort",
+    "LoadCCD.Panel1.btnConnect",
+    "LoadCCD.Panel1.Memo1",
+    "LoadCCD.Panel1.CCD1",
+    "LoadCCD.Panel1.CCD2",
+    "LoadCCD.Panel1.btnCCDTest"
+   ],
+   "class": "TPanel",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 572,
+    "left": 0,
+    "top": 0,
+    "width": 751
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 16,
+   "name": "Panel1",
+   "objkind": "object",
+   "parent_path": "LoadCCD",
+   "path": "LoadCCD.Panel1",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Panel1"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 572
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 751
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 3,
+    "top": 24,
+    "width": 19
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 25,
+   "name": "Label1",
+   "objkind": "object",
+   "parent_path": "LoadCCD.Panel1",
+   "path": "LoadCCD.Panel1.Label1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Port"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 19
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMyLed",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 23,
+    "left": 331,
+    "top": 13,
+    "width": 23
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 32,
+   "name": "LedAConnect",
+   "objkind": "object",
+   "parent_path": "LoadCCD.Panel1",
+   "path": "LoadCCD.Panel1.LedAConnect",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 23
+    },
+    "Hint": {
+     "type": "STR",
+     "value": "Connection"
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 500
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 331
+    },
+    "ShowHint": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 23
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edtPortClick"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 51,
+    "top": 16,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 42,
+   "name": "edtPort",
+   "objkind": "object",
+   "parent_path": "LoadCCD.Panel1",
+   "path": "LoadCCD.Panel1.edtPort",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 51
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edtPortClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Text": {
+     "type": "STR",
+     "value": "5000"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "btnConnectClick"
+   },
+   "geometry": {
+    "height": 29,
+    "left": 191,
+    "top": 12,
+    "width": 75
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 51,
+   "name": "btnConnect",
+   "objkind": "object",
+   "parent_path": "LoadCCD.Panel1",
+   "path": "LoadCCD.Panel1.btnConnect",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Connect"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 191
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btnConnectClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 75
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 497,
+    "left": 8,
+    "top": 56,
+    "width": 601
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 60,
+   "name": "Memo1",
+   "objkind": "object",
+   "parent_path": "LoadCCD.Panel1",
+   "path": "LoadCCD.Panel1.Memo1",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 497
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Lines.Strings": {
+     "type": "LIST",
+     "value": [
+      "Memo1"
+     ]
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 56
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 601
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "CCD1Click"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 624,
+    "top": 24,
+    "width": 75
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 70,
+   "name": "CCD1",
+   "objkind": "object",
+   "parent_path": "LoadCCD.Panel1",
+   "path": "LoadCCD.Panel1.CCD1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "CCD1"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 624
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "CCD1Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 75
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "CCD2Click"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 624,
+    "top": 64,
+    "width": 75
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 79,
+   "name": "CCD2",
+   "objkind": "object",
+   "parent_path": "LoadCCD.Panel1",
+   "path": "LoadCCD.Panel1.CCD2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "CCD2"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 624
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "CCD2Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 64
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 75
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "btnCCDTestClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 624,
+    "top": 100,
+    "width": 75
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 88,
+   "name": "btnCCDTest",
+   "objkind": "object",
+   "parent_path": "LoadCCD.Panel1",
+   "path": "LoadCCD.Panel1.btnCCDTest",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "btnCCDTest"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 624
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btnCCDTestClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 75
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TServerSocket",
+   "depth": 1,
+   "events": {
+    "OnClientConnect": "ServerSocket1ClientConnect",
+    "OnClientDisconnect": "ServerSocket1ClientDisconnect",
+    "OnClientRead": "ServerSocket1ClientRead"
+   },
+   "geometry": {
+    "height": null,
+    "left": 440,
+    "top": 8,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 98,
+   "name": "ServerSocket1",
+   "objkind": "object",
+   "parent_path": "LoadCCD",
+   "path": "LoadCCD.ServerSocket1",
+   "properties": {
+    "Active": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 440
+    },
+    "OnClientConnect": {
+     "type": "SCALAR",
+     "value": "ServerSocket1ClientConnect"
+    },
+    "OnClientDisconnect": {
+     "type": "SCALAR",
+     "value": "ServerSocket1ClientDisconnect"
+    },
+    "OnClientRead": {
+     "type": "SCALAR",
+     "value": "ServerSocket1ClientRead"
+    },
+    "Port": {
+     "type": "SCALAR",
+     "value": 5000
+    },
+    "ServerType": {
+     "type": "SCALAR",
+     "value": "stNonBlocking"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTimer",
+   "depth": 1,
+   "events": {
+    "OnTimer": "Timer1Timer"
+   },
+   "geometry": {
+    "height": null,
+    "left": 632,
+    "top": 136,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 108,
+   "name": "Timer1",
+   "objkind": "object",
+   "parent_path": "LoadCCD",
+   "path": "LoadCCD.Timer1",
+   "properties": {
+    "Left": {
+     "type": "SCALAR",
+     "value": 632
+    },
+    "OnTimer": {
+     "type": "SCALAR",
+     "value": "Timer1Timer"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "LoadCCD/LoadCCDMap.dfm",
+ "total_nodes_incl_root": 12
+}

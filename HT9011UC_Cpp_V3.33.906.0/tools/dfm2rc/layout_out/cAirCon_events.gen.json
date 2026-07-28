@@ -1,0 +1,44 @@
+{
+ "event_count": 5,
+ "events": [
+  {
+   "control_path": "fAirCon",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fAirCon",
+   "vcl_class": "TfAirCon"
+  },
+  {
+   "control_path": "fAirCon.Panel1.sbUpdate",
+   "event_name": "OnClick",
+   "handler_name": "sbUpdateClick",
+   "leaf_name": "sbUpdate",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fAirCon.Panel1.sbtExit",
+   "event_name": "OnClick",
+   "handler_name": "sbtExitClick",
+   "leaf_name": "sbtExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fAirCon.Panel1.edOutputCurrent",
+   "event_name": "OnMouseDown",
+   "handler_name": "edOutputCurrentMouseDown",
+   "leaf_name": "edOutputCurrent",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAirCon.CommAirCon",
+   "event_name": "OnReceiveData",
+   "handler_name": "CommAirConReceiveData",
+   "leaf_name": "CommAirCon",
+   "vcl_class": "TComm"
+  }
+ ],
+ "form_name": "fAirCon",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "cAirCon.dfm"
+}

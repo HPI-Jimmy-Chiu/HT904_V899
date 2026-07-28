@@ -1,0 +1,100 @@
+{
+ "event_count": 13,
+ "events": [
+  {
+   "control_path": "fTesterTCP",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fTesterTCP",
+   "vcl_class": "TfTesterTCP"
+  },
+  {
+   "control_path": "fTesterTCP",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fTesterTCP",
+   "vcl_class": "TfTesterTCP"
+  },
+  {
+   "control_path": "fTesterTCP.pgcTcpIp.tsSetting.grpTrayFunc_OS.btnSave",
+   "event_name": "OnClick",
+   "handler_name": "btnSaveClick",
+   "leaf_name": "btnSave",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTesterTCP.pgcTcpIp.tsSetting.gbTCPIP.btTCPIP_Connect",
+   "event_name": "OnClick",
+   "handler_name": "btTCPIP_ConnectClick",
+   "leaf_name": "btTCPIP_Connect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTesterTCP.pgcTcpIp.tsSetting.gbTCPIP.btTCPIP_Disconnect",
+   "event_name": "OnClick",
+   "handler_name": "btTCPIP_DisconnectClick",
+   "leaf_name": "btTCPIP_Disconnect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTesterTCP.pgcTcpIp.tsSetting.gbTCPIP.btTCPIP_Trigger",
+   "event_name": "OnClick",
+   "handler_name": "btTCPIP_TriggerClick",
+   "leaf_name": "btTCPIP_Trigger",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTesterTCP.pgcTcpIp.tsTestResult2.rgUnloader",
+   "event_name": "OnClick",
+   "handler_name": "rgUnloaderClick",
+   "leaf_name": "rgUnloader",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fTesterTCP.TimerTCPIPConnect",
+   "event_name": "OnTimer",
+   "handler_name": "TimerTCPIPConnectTimer",
+   "leaf_name": "TimerTCPIPConnect",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fTesterTCP.ClientSocket_TCPIP",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_TCPIPConnect",
+   "leaf_name": "ClientSocket_TCPIP",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTesterTCP.ClientSocket_TCPIP",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_TCPIPDisconnect",
+   "leaf_name": "ClientSocket_TCPIP",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTesterTCP.ClientSocket_TCPIP",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_TCPIPError",
+   "leaf_name": "ClientSocket_TCPIP",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTesterTCP.ClientSocket_TCPIP",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_TCPIPRead",
+   "leaf_name": "ClientSocket_TCPIP",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTesterTCP.TimerProcessTCPData",
+   "event_name": "OnTimer",
+   "handler_name": "TimerProcessTCPDataTimer",
+   "leaf_name": "TimerProcessTCPData",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fTesterTCP",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "Interface/TesterTCP.dfm"
+}

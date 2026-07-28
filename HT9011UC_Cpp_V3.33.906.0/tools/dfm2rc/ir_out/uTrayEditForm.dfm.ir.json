@@ -1,0 +1,890 @@
+{
+ "control_node_count": 13,
+ "encoding_used": "cp950",
+ "form_class": "TTrayEditForm",
+ "form_name": "TrayEditForm",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "TrayEditForm.spbUpdate",
+    "TrayEditForm.SpeedButton2",
+    "TrayEditForm.Label1",
+    "TrayEditForm.Label2",
+    "TrayEditForm.mtLoaderBuffer",
+    "TrayEditForm.edtYPos",
+    "TrayEditForm.edtXPos",
+    "TrayEditForm.Button1",
+    "TrayEditForm.BitBtn1",
+    "TrayEditForm.Button2",
+    "TrayEditForm.CheckBox1",
+    "TrayEditForm.cbBinCount",
+    "TrayEditForm.Timer1"
+   ],
+   "class": "TTrayEditForm",
+   "depth": 0,
+   "events": {
+    "OnClose": "FormClose",
+    "OnShow": "FormShow"
+   },
+   "geometry": {
+    "height": 699,
+    "left": 640,
+    "top": 45,
+    "width": 520
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "TrayEditForm",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "TrayEditForm",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TrayEditForm"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 699
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 640
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnClose": {
+     "type": "SCALAR",
+     "value": "FormClose"
+    },
+    "OnShow": {
+     "type": "SCALAR",
+     "value": "FormShow"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 45
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 520
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "spbUpdateClick"
+   },
+   "geometry": {
+    "height": 33,
+    "left": 224,
+    "top": 576,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 18,
+   "name": "spbUpdate",
+   "objkind": "object",
+   "parent_path": "TrayEditForm",
+   "path": "TrayEditForm.spbUpdate",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Update"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 224
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "spbUpdateClick"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 576
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "SpeedButton2Click"
+   },
+   "geometry": {
+    "height": 33,
+    "left": 368,
+    "top": 576,
+    "width": 129
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 26,
+   "name": "SpeedButton2",
+   "objkind": "object",
+   "parent_path": "TrayEditForm",
+   "path": "TrayEditForm.SpeedButton2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Abort"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 368
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "SpeedButton2Click"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 576
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 129
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 176,
+    "top": 636,
+    "width": 7
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 34,
+   "name": "Label1",
+   "objkind": "object",
+   "parent_path": "TrayEditForm",
+   "path": "TrayEditForm.Label1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Y"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 176
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 636
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 7
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 24,
+    "top": 636,
+    "width": 7
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 41,
+   "name": "Label2",
+   "objkind": "object",
+   "parent_path": "TrayEditForm",
+   "path": "TrayEditForm.Label2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "X"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 636
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 7
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTMyTray",
+   "depth": 1,
+   "events": {
+    "OnMouseDown": "mtLoaderBufferMouseDown",
+    "OnMouseMove": "mtLoaderBufferMouseMove",
+    "OnMouseUp": "mtLoaderBufferMouseUp"
+   },
+   "geometry": {
+    "height": 567,
+    "left": 6,
+    "top": 2,
+    "width": 491
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 48,
+   "name": "mtLoaderBuffer",
+   "objkind": "object",
+   "parent_path": "TrayEditForm",
+   "path": "TrayEditForm.mtLoaderBuffer",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 567
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "mtLoaderBufferMouseDown"
+    },
+    "OnMouseMove": {
+     "type": "SCALAR",
+     "value": "mtLoaderBufferMouseMove"
+    },
+    "OnMouseUp": {
+     "type": "SCALAR",
+     "value": "mtLoaderBufferMouseUp"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 491
+    },
+    "XItem": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "YItem": {
+     "type": "SCALAR",
+     "value": 8
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 1,
+   "events": {
+    "OnClick": "edtXPosClick"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 200,
+    "top": 632,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 60,
+   "name": "edtYPos",
+   "objkind": "object",
+   "parent_path": "TrayEditForm",
+   "path": "TrayEditForm.edtYPos",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 200
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edtXPosClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 632
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 1,
+   "events": {
+    "OnClick": "edtXPosClick"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 48,
+    "top": 632,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 74,
+   "name": "edtXPos",
+   "objkind": "object",
+   "parent_path": "TrayEditForm",
+   "path": "TrayEditForm.edtXPos",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 48
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edtXPosClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 632
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "Button1Click"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 336,
+    "top": 632,
+    "width": 113
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 88,
+   "name": "Button1",
+   "objkind": "object",
+   "parent_path": "TrayEditForm",
+   "path": "TrayEditForm.Button1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Manual Input"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 336
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "Button1Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 632
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 113
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 7,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TBitBtn",
+   "depth": 1,
+   "events": {
+    "OnClick": "BitBtn1Click"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 8,
+    "top": 568,
+    "width": 97
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 97,
+   "name": "BitBtn1",
+   "objkind": "object",
+   "parent_path": "TrayEditForm",
+   "path": "TrayEditForm.BitBtn1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "START"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "BitBtn1Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 568
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 97
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "Button2Click"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 108,
+    "top": 568,
+    "width": 75
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 107,
+   "name": "Button2",
+   "objkind": "object",
+   "parent_path": "TrayEditForm",
+   "path": "TrayEditForm.Button2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Button2"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 108
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "Button2Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 568
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 75
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 384,
+    "top": 612,
+    "width": 97
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 117,
+   "name": "CheckBox1",
+   "objkind": "object",
+   "parent_path": "TrayEditForm",
+   "path": "TrayEditForm.CheckBox1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "No Save Image"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 384
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 612
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 97
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 8,
+    "top": 600,
+    "width": 145
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 125,
+   "name": "cbBinCount",
+   "objkind": "object",
+   "parent_path": "TrayEditForm",
+   "path": "TrayEditForm.cbBinCount",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Text": {
+     "type": "STR",
+     "value": "1"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 600
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 145
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTimer",
+   "depth": 1,
+   "events": {
+    "OnTimer": "Timer1Timer"
+   },
+   "geometry": {
+    "height": null,
+    "left": 96,
+    "top": 8,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 134,
+   "name": "Timer1",
+   "objkind": "object",
+   "parent_path": "TrayEditForm",
+   "path": "TrayEditForm.Timer1",
+   "properties": {
+    "Interval": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "OnTimer": {
+     "type": "SCALAR",
+     "value": "Timer1Timer"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    }
+   },
+   "sibling_index": 12,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "uTrayEditForm.dfm",
+ "total_nodes_incl_root": 14
+}

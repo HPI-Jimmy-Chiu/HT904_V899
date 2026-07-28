@@ -1,0 +1,72 @@
+{
+ "event_count": 9,
+ "events": [
+  {
+   "control_path": "LoadCCD.Panel1.edtPort",
+   "event_name": "OnClick",
+   "handler_name": "edtPortClick",
+   "leaf_name": "edtPort",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "LoadCCD.Panel1.btnConnect",
+   "event_name": "OnClick",
+   "handler_name": "btnConnectClick",
+   "leaf_name": "btnConnect",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "LoadCCD.Panel1.CCD1",
+   "event_name": "OnClick",
+   "handler_name": "CCD1Click",
+   "leaf_name": "CCD1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "LoadCCD.Panel1.CCD2",
+   "event_name": "OnClick",
+   "handler_name": "CCD2Click",
+   "leaf_name": "CCD2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "LoadCCD.Panel1.btnCCDTest",
+   "event_name": "OnClick",
+   "handler_name": "btnCCDTestClick",
+   "leaf_name": "btnCCDTest",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "LoadCCD.ServerSocket1",
+   "event_name": "OnClientConnect",
+   "handler_name": "ServerSocket1ClientConnect",
+   "leaf_name": "ServerSocket1",
+   "vcl_class": "TServerSocket"
+  },
+  {
+   "control_path": "LoadCCD.ServerSocket1",
+   "event_name": "OnClientDisconnect",
+   "handler_name": "ServerSocket1ClientDisconnect",
+   "leaf_name": "ServerSocket1",
+   "vcl_class": "TServerSocket"
+  },
+  {
+   "control_path": "LoadCCD.ServerSocket1",
+   "event_name": "OnClientRead",
+   "handler_name": "ServerSocket1ClientRead",
+   "leaf_name": "ServerSocket1",
+   "vcl_class": "TServerSocket"
+  },
+  {
+   "control_path": "LoadCCD.Timer1",
+   "event_name": "OnTimer",
+   "handler_name": "Timer1Timer",
+   "leaf_name": "Timer1",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "LoadCCD",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "LoadCCD/LoadCCDMap.dfm"
+}

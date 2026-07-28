@@ -1,0 +1,233 @@
+{
+ "event_count": 32,
+ "events": [
+  {
+   "control_path": "fFixAICCD",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fFixAICCD",
+   "vcl_class": "TfFixAICCD"
+  },
+  {
+   "control_path": "fFixAICCD",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fFixAICCD",
+   "vcl_class": "TfFixAICCD"
+  },
+  {
+   "control_path": "fFixAICCD",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fFixAICCD",
+   "vcl_class": "TfFixAICCD"
+  },
+  {
+   "control_path": "fFixAICCD.PageControl1.tsTraySetting.edtlFix2AICCDGetResultTimeOut",
+   "event_name": "OnClick",
+   "handler_name": "edtlFix2AICCDStartDelayClick",
+   "leaf_name": "edtlFix2AICCDGetResultTimeOut",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fFixAICCD.PageControl1.tsTraySetting.edtlFix2AICCDStartDelay",
+   "event_name": "OnClick",
+   "handler_name": "edtlFix2AICCDStartDelayClick",
+   "leaf_name": "edtlFix2AICCDStartDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fFixAICCD.PageControl1.tsTraySetting.edtlFix2AICCDAutoRetry",
+   "event_name": "OnClick",
+   "handler_name": "edtlFix2AICCDAutoRetryClick",
+   "leaf_name": "edtlFix2AICCDAutoRetry",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fFixAICCD.PageControl1.tsTraySetting.edtlFix2AICCDExposureTimeOut",
+   "event_name": "OnClick",
+   "handler_name": "edtlFix2AICCDStartDelayClick",
+   "leaf_name": "edtlFix2AICCDExposureTimeOut",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fFixAICCD.PageControl1.tsTraySetting.edtOutArmCycleInsp",
+   "event_name": "OnClick",
+   "handler_name": "edtOutArmCycleInspClick",
+   "leaf_name": "edtOutArmCycleInsp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fFixAICCD.PageControl1.tsTraySetting.edtInspectResultThres",
+   "event_name": "OnClick",
+   "handler_name": "edtInspectResultThresClick",
+   "leaf_name": "edtInspectResultThres",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2.edtFix2AICCD_Port",
+   "event_name": "OnClick",
+   "handler_name": "edtFix2AICCD_PortClick",
+   "leaf_name": "edtFix2AICCD_Port",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2.btnFix2AICCD_Connect",
+   "event_name": "OnClick",
+   "handler_name": "btnFix2AICCD_ConnectClick",
+   "leaf_name": "btnFix2AICCD_Connect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2.btnFix2AICCD_Disconnect",
+   "event_name": "OnClick",
+   "handler_name": "btnFix2AICCD_DisconnectClick",
+   "leaf_name": "btnFix2AICCD_Disconnect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2.btFix2AICCD_Trigger",
+   "event_name": "OnClick",
+   "handler_name": "btFix2AICCD_TriggerClick",
+   "leaf_name": "btFix2AICCD_Trigger",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2.pnlBGALightValue",
+   "event_name": "OnDblClick",
+   "handler_name": "pnlBGALightValueDblClick",
+   "leaf_name": "pnlBGALightValue",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2.scrBGALightValue",
+   "event_name": "OnChange",
+   "handler_name": "scrBGALightValueChange",
+   "leaf_name": "scrBGALightValue",
+   "vcl_class": "TScrollBar"
+  },
+  {
+   "control_path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2.edtFix2AICCD_Port2",
+   "event_name": "OnClick",
+   "handler_name": "edtFix2AICCD_PortClick",
+   "leaf_name": "edtFix2AICCD_Port2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2.btnFix2AICCD_Connect2",
+   "event_name": "OnClick",
+   "handler_name": "btnFix2AICCD_ConnectClick",
+   "leaf_name": "btnFix2AICCD_Connect2",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2.btnFix2AICCD_Disconnect2",
+   "event_name": "OnClick",
+   "handler_name": "btnFix2AICCD_DisconnectClick",
+   "leaf_name": "btnFix2AICCD_Disconnect2",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2.btFix2AICCD_Trigger2",
+   "event_name": "OnClick",
+   "handler_name": "btFix2AICCD_TriggerClick",
+   "leaf_name": "btFix2AICCD_Trigger2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fFixAICCD.Panel1.spbSave",
+   "event_name": "OnClick",
+   "handler_name": "spbSaveClick",
+   "leaf_name": "spbSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fFixAICCD.Panel1.sbtExit",
+   "event_name": "OnClick",
+   "handler_name": "sbtExitClick",
+   "leaf_name": "sbtExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fFixAICCD.tmrProcessFixAICCDData",
+   "event_name": "OnTimer",
+   "handler_name": "tmrProcessFixAICCDDataTimer",
+   "leaf_name": "tmrProcessFixAICCDData",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fFixAICCD.ClientSocket_FixAICCD",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_FixAICCDConnect",
+   "leaf_name": "ClientSocket_FixAICCD",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fFixAICCD.ClientSocket_FixAICCD",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_FixAICCDDisconnect",
+   "leaf_name": "ClientSocket_FixAICCD",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fFixAICCD.ClientSocket_FixAICCD",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_FixAICCDError",
+   "leaf_name": "ClientSocket_FixAICCD",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fFixAICCD.ClientSocket_FixAICCD",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_FixAICCDRead",
+   "leaf_name": "ClientSocket_FixAICCD",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fFixAICCD.TimerDownFixAICCDConnect",
+   "event_name": "OnTimer",
+   "handler_name": "TimerDownFixAICCDConnectTimer",
+   "leaf_name": "TimerDownFixAICCDConnect",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fFixAICCD.tmrLightControl",
+   "event_name": "OnTimer",
+   "handler_name": "tmrLightControlTimer",
+   "leaf_name": "tmrLightControl",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fFixAICCD.ClientSocket_FixAICCD2",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_FixAICCDConnect",
+   "leaf_name": "ClientSocket_FixAICCD2",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fFixAICCD.ClientSocket_FixAICCD2",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_FixAICCDDisconnect",
+   "leaf_name": "ClientSocket_FixAICCD2",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fFixAICCD.ClientSocket_FixAICCD2",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_FixAICCDError",
+   "leaf_name": "ClientSocket_FixAICCD2",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fFixAICCD.ClientSocket_FixAICCD2",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_FixAICCDRead",
+   "leaf_name": "ClientSocket_FixAICCD2",
+   "vcl_class": "TClientSocket"
+  }
+ ],
+ "form_name": "fFixAICCD",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "FixAICCD.dfm"
+}

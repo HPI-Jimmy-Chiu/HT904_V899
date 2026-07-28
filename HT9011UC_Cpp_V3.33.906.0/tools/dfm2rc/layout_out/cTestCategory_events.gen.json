@@ -1,0 +1,44 @@
+{
+ "event_count": 5,
+ "events": [
+  {
+   "control_path": "fTestCategory",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fTestCategory",
+   "vcl_class": "TfTestCategory"
+  },
+  {
+   "control_path": "fTestCategory",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fTestCategory",
+   "vcl_class": "TfTestCategory"
+  },
+  {
+   "control_path": "fTestCategory",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fTestCategory",
+   "vcl_class": "TfTestCategory"
+  },
+  {
+   "control_path": "fTestCategory.sgArm2",
+   "event_name": "OnDrawCell",
+   "handler_name": "sgArm1DrawCell",
+   "leaf_name": "sgArm2",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fTestCategory.sgArm1",
+   "event_name": "OnDrawCell",
+   "handler_name": "sgArm1DrawCell",
+   "leaf_name": "sgArm1",
+   "vcl_class": "TStringGrid"
+  }
+ ],
+ "form_name": "fTestCategory",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "cTestCategory.dfm"
+}

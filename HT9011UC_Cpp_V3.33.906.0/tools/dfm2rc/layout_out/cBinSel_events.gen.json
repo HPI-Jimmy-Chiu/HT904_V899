@@ -1,0 +1,156 @@
+{
+ "event_count": 21,
+ "events": [
+  {
+   "control_path": "fBinSel",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fBinSel",
+   "vcl_class": "TfBinSel"
+  },
+  {
+   "control_path": "fBinSel",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fBinSel",
+   "vcl_class": "TfBinSel"
+  },
+  {
+   "control_path": "fBinSel",
+   "event_name": "OnShortCut",
+   "handler_name": "FormShortCut",
+   "leaf_name": "fBinSel",
+   "vcl_class": "TfBinSel"
+  },
+  {
+   "control_path": "fBinSel",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fBinSel",
+   "vcl_class": "TfBinSel"
+  },
+  {
+   "control_path": "fBinSel.PageControl1.tsNormal.Panel.mtTrayItem",
+   "event_name": "OnMouseUp",
+   "handler_name": "mtTrayItemMouseUp",
+   "leaf_name": "mtTrayItem",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fBinSel.PageControl1.tsNormal.Panel.sbBinSetting.mtBinSelect",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtBinSelectMouseDown",
+   "leaf_name": "mtBinSelect",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fBinSel.PageControl1.tsNormal.Panel.sbBinSetting.mtBinSelect",
+   "event_name": "OnMouseMove",
+   "handler_name": "mtBinSelectMouseMove",
+   "leaf_name": "mtBinSelect",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fBinSel.PageControl1.tsNormal.Panel.sbBinSetting.mtBinSelect",
+   "event_name": "OnMouseUp",
+   "handler_name": "mtBinSelectMouseUp",
+   "leaf_name": "mtBinSelect",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fBinSel.PageControl1.tsNormal.Panel.mtTrayName",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtTrayNameMouseDown",
+   "leaf_name": "mtTrayName",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fBinSel.PageControl1.tsNormal.palSpecificBin",
+   "event_name": "OnClick",
+   "handler_name": "palSpecificBinClick",
+   "leaf_name": "palSpecificBin",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fBinSel.PageControl1.tsNormal.palSpecificBin.sgSpecificBin",
+   "event_name": "OnMouseDown",
+   "handler_name": "sgSpecificBinMouseDown",
+   "leaf_name": "sgSpecificBin",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fBinSel.Panel1.spbSave",
+   "event_name": "OnClick",
+   "handler_name": "spbSaveClick",
+   "leaf_name": "spbSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fBinSel.Panel1.sbtExit",
+   "event_name": "OnClick",
+   "handler_name": "sbtExitClick",
+   "leaf_name": "sbtExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fBinSel.Panel1.spbNormal",
+   "event_name": "OnClick",
+   "handler_name": "spbNormalClick",
+   "leaf_name": "spbNormal",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fBinSel.Panel1.spbPrime",
+   "event_name": "OnClick",
+   "handler_name": "spbPrimeClick",
+   "leaf_name": "spbPrime",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fBinSel.Panel1.btnSettingSpecificBin",
+   "event_name": "OnClick",
+   "handler_name": "btnSettingSpecificBinClick",
+   "leaf_name": "btnSettingSpecificBin",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fBinSel.Panel1.cbTestMode",
+   "event_name": "OnChange",
+   "handler_name": "cbTestModeChange",
+   "leaf_name": "cbTestMode",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBinSel.Panel1.CancelErrorBin",
+   "event_name": "OnClick",
+   "handler_name": "CancelErrorBinClick",
+   "leaf_name": "CancelErrorBin",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fBinSel.Panel1.BulkBox.rg_FixBinBox",
+   "event_name": "OnClick",
+   "handler_name": "rg_FixBinBoxClick",
+   "leaf_name": "rg_FixBinBox",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fBinSel.Panel1.BulkBox.ed_FixBinBoxAlarmCount",
+   "event_name": "OnMouseDown",
+   "handler_name": "ed_FixBinBoxAlarmCountMouseDown",
+   "leaf_name": "ed_FixBinBoxAlarmCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBinSel.Panel1.btnSetAll2NotUse",
+   "event_name": "OnClick",
+   "handler_name": "btnSetAll2NotUseClick",
+   "leaf_name": "btnSetAll2NotUse",
+   "vcl_class": "TButton"
+  }
+ ],
+ "form_name": "fBinSel",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "cBinSel.dfm"
+}

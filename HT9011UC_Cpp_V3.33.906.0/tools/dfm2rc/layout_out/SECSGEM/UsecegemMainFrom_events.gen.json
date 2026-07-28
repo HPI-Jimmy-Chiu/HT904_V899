@@ -1,0 +1,114 @@
+{
+ "event_count": 15,
+ "events": [
+  {
+   "control_path": "FSECS",
+   "event_name": "OnCreate",
+   "handler_name": "FormCreate",
+   "leaf_name": "FSECS",
+   "vcl_class": "TFSECS"
+  },
+  {
+   "control_path": "FSECS",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "FSECS",
+   "vcl_class": "TFSECS"
+  },
+  {
+   "control_path": "FSECS",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "FSECS",
+   "vcl_class": "TFSECS"
+  },
+  {
+   "control_path": "FSECS.PageControl1.TabSheet1.Pal00.GroupBox1.spEnter",
+   "event_name": "OnClick",
+   "handler_name": "spEnterClick",
+   "leaf_name": "spEnter",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "FSECS.PageControl1.TabSheet1.Pal00.btnS7F6",
+   "event_name": "OnClick",
+   "handler_name": "btnS7F6Click",
+   "leaf_name": "btnS7F6",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "FSECS.PageControl1.TabSheet4.Pal03.ToolingSystem.TabSheet7.SpeedButton2",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton2Click",
+   "leaf_name": "SpeedButton2",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "FSECS.PageControl1.TabSheet10.Pal06.Button2",
+   "event_name": "OnClick",
+   "handler_name": "Button2Click",
+   "leaf_name": "Button2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "FSECS.PageControl1.TabSheet10.Pal06.Button3",
+   "event_name": "OnClick",
+   "handler_name": "Button2Click",
+   "leaf_name": "Button3",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "FSECS.PageControl1.TabSheet11.Pal07.Button4",
+   "event_name": "OnClick",
+   "handler_name": "Button4Click",
+   "leaf_name": "Button4",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "FSECS.PageControl1.tsCCode.Panel2.palCCodeList.spbNewCCode",
+   "event_name": "OnClick",
+   "handler_name": "spbNewCCodeClick",
+   "leaf_name": "spbNewCCode",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "FSECS.PageControl1.tsCCode.Panel2.sgCCodeList",
+   "event_name": "OnMouseDown",
+   "handler_name": "sgCCodeListMouseDown",
+   "leaf_name": "sgCCodeList",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "FSECS.PageControl1.tsCCode.Panel2.Panel3.apbUpdateCCode",
+   "event_name": "OnClick",
+   "handler_name": "apbUpdateCCodeClick",
+   "leaf_name": "apbUpdateCCode",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "FSECS.PageControl1.tsCCode.Panel1.sgECIDList",
+   "event_name": "OnMouseDown",
+   "handler_name": "sgECIDListMouseDown",
+   "leaf_name": "sgECIDList",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "FSECS.TimerTooling",
+   "event_name": "OnTimer",
+   "handler_name": "TimerToolingTimer",
+   "leaf_name": "TimerTooling",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "FSECS.TimerSecsAlarm",
+   "event_name": "OnTimer",
+   "handler_name": "TimerSecsAlarmTimer",
+   "leaf_name": "TimerSecsAlarm",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "FSECS",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "SECSGEM/UsecegemMainFrom.dfm"
+}

@@ -1,0 +1,44 @@
+{
+ "event_count": 5,
+ "events": [
+  {
+   "control_path": "fShowBinSet",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fShowBinSet",
+   "vcl_class": "TfShowBinSet"
+  },
+  {
+   "control_path": "fShowBinSet",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fShowBinSet",
+   "vcl_class": "TfShowBinSet"
+  },
+  {
+   "control_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.Panel4",
+   "event_name": "OnClick",
+   "handler_name": "Panel4Click",
+   "leaf_name": "Panel4",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.Panel3",
+   "event_name": "OnClick",
+   "handler_name": "Panel3Click",
+   "leaf_name": "Panel3",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fShowBinSet.Timer1",
+   "event_name": "OnTimer",
+   "handler_name": "Timer1Timer",
+   "leaf_name": "Timer1",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fShowBinSet",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "cShowBinSet.dfm"
+}

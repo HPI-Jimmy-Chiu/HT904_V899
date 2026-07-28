@@ -1,0 +1,161 @@
+{
+ "control_node_count": 1,
+ "encoding_used": "cp950",
+ "form_class": "TfShowPmSOPForm",
+ "form_name": "fShowPmSOPForm",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fShowPmSOPForm.cpwbrwsrPmSOP"
+   ],
+   "class": "TfShowPmSOPForm",
+   "depth": 0,
+   "events": {
+    "OnShow": "FormShow"
+   },
+   "geometry": {
+    "height": 847,
+    "left": 372,
+    "top": 13,
+    "width": 1228
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "fShowPmSOPForm",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "fShowPmSOPForm",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "PM SOP Form"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnFace"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 847
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 372
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnShow": {
+     "type": "SCALAR",
+     "value": "FormShow"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 1228
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCppWebBrowser",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 793,
+    "left": 0,
+    "top": 0,
+    "width": 1193
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 17,
+   "name": "cpwbrwsrPmSOP",
+   "objkind": "object",
+   "parent_path": "fShowPmSOPForm",
+   "path": "fShowPmSOPForm.cpwbrwsrPmSOP",
+   "properties": {
+    "ControlData": {
+     "type": "BLOB",
+     "value": {
+      "byte_len": 156,
+      "hex": "4C0000004D7B0000F55100000000000000000000000000000000000000000000000000004C000000000000000000000001000000E0D057007335CF11AE6908002B2E126208000000000000004C0000000114020000000000C000000000000046800000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000",
+      "sha1": "06e64b64e038fc0d4c7fb3a56bad64919ed125cc"
+     }
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 793
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 1193
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "fShowPmSOP.dfm",
+ "total_nodes_incl_root": 2
+}

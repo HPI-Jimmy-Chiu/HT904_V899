@@ -1,0 +1,289 @@
+{
+ "event_count": 40,
+ "events": [
+  {
+   "control_path": "fMagazine",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fMagazine",
+   "vcl_class": "TfMagazine"
+  },
+  {
+   "control_path": "fMagazine",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fMagazine",
+   "vcl_class": "TfMagazine"
+  },
+  {
+   "control_path": "fMagazine.sbtExit",
+   "event_name": "OnClick",
+   "handler_name": "sbtExitClick",
+   "leaf_name": "sbtExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMagazine.spbSave",
+   "event_name": "OnClick",
+   "handler_name": "spbSaveClick",
+   "leaf_name": "spbSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMagazine.pnlMagazineTrayOut.btnMagazineTrayOut",
+   "event_name": "OnClick",
+   "handler_name": "btnMagazineTrayOutClick",
+   "leaf_name": "btnMagazineTrayOut",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMagazine.rgMagTraySource",
+   "event_name": "OnClick",
+   "handler_name": "rgMagTraySourceClick",
+   "leaf_name": "rgMagTraySource",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edInMagOfs16",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edInMagOfs16",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edInMagOfs15",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edInMagOfs15",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edInMagOfs14",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edInMagOfs14",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edInMagOfs13",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edInMagOfs13",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edInMagOfs12",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edInMagOfs12",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edInMagOfs11",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edInMagOfs11",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edInMagOfs10",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edInMagOfs10",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edInMagOfs09",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edInMagOfs09",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edInMagOfs08",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edInMagOfs08",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edInMagOfs07",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edInMagOfs07",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edInMagOfs06",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edInMagOfs06",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edInMagOfs05",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edInMagOfs05",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edInMagOfs04",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edInMagOfs04",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edInMagOfs03",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edInMagOfs03",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edInMagOfs02",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edInMagOfs02",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edInMagOfs01",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edInMagOfs01",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edOutAuto3Ofs01",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edOutAuto3Ofs01",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edOutAuto3Ofs02",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edOutAuto3Ofs02",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edOutAuto3Ofs03",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edOutAuto3Ofs03",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edOutAuto3Ofs04",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edOutAuto3Ofs04",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edOutAuto3Ofs05",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edOutAuto3Ofs05",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edOutAuto3Ofs06",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edOutAuto3Ofs06",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edOutAuto3Ofs07",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edOutAuto3Ofs07",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edOutAuto3Ofs08",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edOutAuto3Ofs08",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edOutAuto3Ofs09",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edOutAuto3Ofs09",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edOutAuto3Ofs10",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edOutAuto3Ofs10",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edOutAuto3Ofs11",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edOutAuto3Ofs11",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edOutAuto3Ofs12",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edOutAuto3Ofs12",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edOutAuto3Ofs13",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edOutAuto3Ofs13",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edOutAuto3Ofs14",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edOutAuto3Ofs14",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edOutAuto3Ofs15",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edOutAuto3Ofs15",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.GroupBox1.edOutAuto3Ofs16",
+   "event_name": "OnClick",
+   "handler_name": "edInMagOfs01Click",
+   "leaf_name": "edOutAuto3Ofs16",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMagazine.rgMagFixType",
+   "event_name": "OnClick",
+   "handler_name": "rgMagFixTypeClick",
+   "leaf_name": "rgMagFixType",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fMagazine.rgMagDisplayOrder",
+   "event_name": "OnClick",
+   "handler_name": "rgMagFixTypeClick",
+   "leaf_name": "rgMagDisplayOrder",
+   "vcl_class": "TRadioGroup"
+  }
+ ],
+ "form_name": "fMagazine",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "Magazine.dfm"
+}

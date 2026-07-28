@@ -1,0 +1,254 @@
+{
+ "event_count": 35,
+ "events": [
+  {
+   "control_path": "fFTPClient",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fFTPClient",
+   "vcl_class": "TfFTPClient"
+  },
+  {
+   "control_path": "fFTPClient",
+   "event_name": "OnCreate",
+   "handler_name": "FormCreate",
+   "leaf_name": "fFTPClient",
+   "vcl_class": "TfFTPClient"
+  },
+  {
+   "control_path": "fFTPClient",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fFTPClient",
+   "vcl_class": "TfFTPClient"
+  },
+  {
+   "control_path": "fFTPClient.PageControl1.TabSheet2.GroupBox3.edtServerWaferName",
+   "event_name": "OnChange",
+   "handler_name": "edtServerWaferNameChange",
+   "leaf_name": "edtServerWaferName",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fFTPClient.PageControl1.TabSheet2.GroupBox3.edtServerWaferName",
+   "event_name": "OnKeyDown",
+   "handler_name": "edtServerWaferNameKeyDown",
+   "leaf_name": "edtServerWaferName",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fFTPClient.PageControl1.TabSheet2.GroupBox3.edtServerWaferName",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtServerWaferNameKeyPress",
+   "leaf_name": "edtServerWaferName",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fFTPClient.PageControl1.TabSheet2.GroupBox3.edtServerWaferName",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtServerWaferNameMouseDown",
+   "leaf_name": "edtServerWaferName",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fFTPClient.PageControl1.TabSheet2.GroupBox3.lstServerFile",
+   "event_name": "OnDblClick",
+   "handler_name": "lstServerFileDblClick",
+   "leaf_name": "lstServerFile",
+   "vcl_class": "TListBox"
+  },
+  {
+   "control_path": "fFTPClient.PageControl1.TabSheet2.GroupBox4.plSLoad",
+   "event_name": "OnClick",
+   "handler_name": "plSLoadClick",
+   "leaf_name": "plSLoad",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fFTPClient.PageControl1.TabSheet2.GroupBox4.Panel15",
+   "event_name": "OnClick",
+   "handler_name": "Panel15Click",
+   "leaf_name": "Panel15",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fFTPClient.PageControl1.TabSheet2.GroupBox4.Panel16",
+   "event_name": "OnClick",
+   "handler_name": "Panel16Click",
+   "leaf_name": "Panel16",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fFTPClient.PageControl1.TabSheet3.GroupBox5.edtHDWaferName",
+   "event_name": "OnChange",
+   "handler_name": "edtHDWaferNameChange",
+   "leaf_name": "edtHDWaferName",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fFTPClient.PageControl1.TabSheet3.GroupBox5.edtHDWaferName",
+   "event_name": "OnKeyDown",
+   "handler_name": "edtHDWaferNameKeyDown",
+   "leaf_name": "edtHDWaferName",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fFTPClient.PageControl1.TabSheet3.GroupBox5.edtHDWaferName",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtHDWaferNameKeyPress",
+   "leaf_name": "edtHDWaferName",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fFTPClient.PageControl1.TabSheet3.GroupBox5.edtHDWaferName",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtHDWaferNameMouseDown",
+   "leaf_name": "edtHDWaferName",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fFTPClient.PageControl1.TabSheet3.GroupBox5.lstHDFile",
+   "event_name": "OnDblClick",
+   "handler_name": "lstHDFileDblClick",
+   "leaf_name": "lstHDFile",
+   "vcl_class": "TListBox"
+  },
+  {
+   "control_path": "fFTPClient.PageControl1.TabSheet3.GroupBox6.plLoad",
+   "event_name": "OnClick",
+   "handler_name": "plLoadClick",
+   "leaf_name": "plLoad",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fFTPClient.PageControl1.TabSheet3.GroupBox6.plUnload",
+   "event_name": "OnClick",
+   "handler_name": "plUnloadClick",
+   "leaf_name": "plUnload",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fFTPClient.PageControl1.TabSheet3.GroupBox6.plUnloadALL",
+   "event_name": "OnClick",
+   "handler_name": "plUnloadALLClick",
+   "leaf_name": "plUnloadALL",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fFTPClient.PageControl1.TabSheet4.GroupBox8.rgInputMethod",
+   "event_name": "OnClick",
+   "handler_name": "rgInputMethodClick",
+   "leaf_name": "rgInputMethod",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fFTPClient.PageControl1.TabSheet4.GroupBox8.grpTesterMap.cbTesterType",
+   "event_name": "OnChange",
+   "handler_name": "cbTesterTypeChange",
+   "leaf_name": "cbTesterType",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fFTPClient.PageControl1.TabSheet4.GroupBox8.grpTesterMap.cbTesterID",
+   "event_name": "OnChange",
+   "handler_name": "cbTesterIDChange",
+   "leaf_name": "cbTesterID",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fFTPClient.PageControl1.TabSheet4.btSafeTasterName",
+   "event_name": "OnClick",
+   "handler_name": "btSafeTasterNameClick",
+   "leaf_name": "btSafeTasterName",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fFTPClient.PageControl1.TabSheet4.Button3",
+   "event_name": "OnClick",
+   "handler_name": "Button3Click",
+   "leaf_name": "Button3",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fFTPClient.memoFTP",
+   "event_name": "OnDblClick",
+   "handler_name": "memoFTPDblClick",
+   "leaf_name": "memoFTP",
+   "vcl_class": "TMemo"
+  },
+  {
+   "control_path": "fFTPClient.NMFTP1",
+   "event_name": "OnAuthenticationFailed",
+   "handler_name": "NMFTP1AuthenticationFailed",
+   "leaf_name": "NMFTP1",
+   "vcl_class": "TNMFTP"
+  },
+  {
+   "control_path": "fFTPClient.NMFTP1",
+   "event_name": "OnConnectionFailed",
+   "handler_name": "NMFTP1ConnectionFailed",
+   "leaf_name": "NMFTP1",
+   "vcl_class": "TNMFTP"
+  },
+  {
+   "control_path": "fFTPClient.NMFTP1",
+   "event_name": "OnError",
+   "handler_name": "NMFTP1Error",
+   "leaf_name": "NMFTP1",
+   "vcl_class": "TNMFTP"
+  },
+  {
+   "control_path": "fFTPClient.NMFTP1",
+   "event_name": "OnFailure",
+   "handler_name": "NMFTP1Failure",
+   "leaf_name": "NMFTP1",
+   "vcl_class": "TNMFTP"
+  },
+  {
+   "control_path": "fFTPClient.NMFTP1",
+   "event_name": "OnListItem",
+   "handler_name": "NMFTP1ListItem",
+   "leaf_name": "NMFTP1",
+   "vcl_class": "TNMFTP"
+  },
+  {
+   "control_path": "fFTPClient.NMFTP1",
+   "event_name": "OnStatus",
+   "handler_name": "NMFTP1Status",
+   "leaf_name": "NMFTP1",
+   "vcl_class": "TNMFTP"
+  },
+  {
+   "control_path": "fFTPClient.NMFTP1",
+   "event_name": "OnSuccess",
+   "handler_name": "NMFTP1Success",
+   "leaf_name": "NMFTP1",
+   "vcl_class": "TNMFTP"
+  },
+  {
+   "control_path": "fFTPClient.NMFTP1",
+   "event_name": "OnTransactionStart",
+   "handler_name": "NMFTP1TransactionStart",
+   "leaf_name": "NMFTP1",
+   "vcl_class": "TNMFTP"
+  },
+  {
+   "control_path": "fFTPClient.NMFTP1",
+   "event_name": "OnTransactionStop",
+   "handler_name": "NMFTP1TransactionStop",
+   "leaf_name": "NMFTP1",
+   "vcl_class": "TNMFTP"
+  },
+  {
+   "control_path": "fFTPClient.NMFTP1",
+   "event_name": "OnUnSupportedFunction",
+   "handler_name": "NMFTP1UnSupportedFunction",
+   "leaf_name": "NMFTP1",
+   "vcl_class": "TNMFTP"
+  }
+ ],
+ "form_name": "fFTPClient",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "KYECFTP/FTPClient.dfm"
+}

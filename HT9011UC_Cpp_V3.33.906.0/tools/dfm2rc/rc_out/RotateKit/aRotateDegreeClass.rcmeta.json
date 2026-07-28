@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "generator": "emit_rc.py W7-B1b v1.0",
+  "source_dfm": "RotateKit/aRotateDegreeClass.dfm",
+  "formstem": "AROTATEDEGREECLASS",
+  "dialog_count": 4,
+  "control_count": 8,
+  "fallback_classes_used": [],
+  "warnings": [],
+  "dialogs": [
+    {
+      "idd_symbol": "IDD_AROTATEDEGREECLASS",
+      "idd_value": 8192,
+      "is_root": true,
+      "owner_path": "frmRot",
+      "owner_class": "TfrmRot",
+      "controls": []
+    },
+    {
+      "idd_symbol": "IDD_AROTATEDEGREECLASS_PNLROTDEGREE",
+      "idd_value": 8193,
+      "is_root": false,
+      "owner_path": "frmRot.pnlRotDegree",
+      "owner_class": "TPanel",
+      "controls": []
+    },
+    {
+      "idd_symbol": "IDD_AROTATEDEGREECLASS_PNLROTDEGREE_RGROTATEDEGREE",
+      "idd_value": 8194,
+      "is_root": false,
+      "owner_path": "frmRot.pnlRotDegree.rgRotateDegree",
+      "owner_class": "TRadioGroup",
+      "controls": [
+        {
+          "symbol": "IDC_AROTATEDEGREECLASS_RGROTATEDEGREE_FRAME",
+          "value": 1024,
+          "win32_class": "Button",
+          "caption": "RotateDegree",
+          "synthesized": true,
+          "rule": "SYNTH_CONTAINER_FRAME",
+          "source_path": "frmRot.pnlRotDegree.rgRotateDegree",
+          "fallback_class": false,
+          "x": 0,
+          "y": 0,
+          "cx": 105,
+          "cy": 97
+        },
+        {
+          "symbol": "IDC_AROTATEDEGREECLASS_RGROTATEDEGREE_ITEM0",
+          "value": 1025,
+          "win32_class": "Button",
+          "caption": "0",
+          "synthesized": true,
+          "rule": "SYNTH_RADIOGROUP_ITEM",
+          "source_path": "frmRot.pnlRotDegree.rgRotateDegree",
+          "fallback_class": false,
+          "x": 8,
+          "y": 14,
+          "cx": 89,
+          "cy": 14
+        },
+        {
+          "symbol": "IDC_AROTATEDEGREECLASS_RGROTATEDEGREE_ITEM1",
+          "value": 1026,
+          "win32_class": "Button",
+          "caption": "90",
+          "synthesized": true,
+          "rule": "SYNTH_RADIOGROUP_ITEM",
+          "source_path": "frmRot.pnlRotDegree.rgRotateDegree",
+          "fallback_class": false,
+          "x": 8,
+          "y": 33,
+          "cx": 89,
+          "cy": 14
+        },
+        {
+          "symbol": "IDC_AROTATEDEGREECLASS_RGROTATEDEGREE_ITEM2",
+          "value": 1027,
+          "win32_class": "Button",
+          "caption": "180",
+          "synthesized": true,
+          "rule": "SYNTH_RADIOGROUP_ITEM",
+          "source_path": "frmRot.pnlRotDegree.rgRotateDegree",
+          "fallback_class": false,
+          "x": 8,
+          "y": 52,
+          "cx": 89,
+          "cy": 14
+        },
+        {
+          "symbol": "IDC_AROTATEDEGREECLASS_RGROTATEDEGREE_ITEM3",
+          "value": 1028,
+          "win32_class": "Button",
+          "caption": "270",
+          "synthesized": true,
+          "rule": "SYNTH_RADIOGROUP_ITEM",
+          "source_path": "frmRot.pnlRotDegree.rgRotateDegree",
+          "fallback_class": false,
+          "x": 8,
+          "y": 71,
+          "cx": 89,
+          "cy": 14
+        }
+      ]
+    },
+    {
+      "idd_symbol": "IDD_AROTATEDEGREECLASS_PNLROTDEGREE_GRPROTDEGREE",
+      "idd_value": 8195,
+      "is_root": false,
+      "owner_path": "frmRot.pnlRotDegree.grpRotDegree",
+      "owner_class": "TGroupBox",
+      "controls": [
+        {
+          "symbol": "IDC_AROTATEDEGREECLASS_GRPROTDEGREE_FRAME",
+          "value": 1029,
+          "win32_class": "Button",
+          "caption": "Aa",
+          "synthesized": true,
+          "rule": "SYNTH_CONTAINER_FRAME",
+          "source_path": "frmRot.pnlRotDegree.grpRotDegree",
+          "fallback_class": false,
+          "x": 0,
+          "y": 0,
+          "cx": 64,
+          "cy": 82
+        },
+        {
+          "symbol": "IDC_AROTATEDEGREECLASS_IMGROTDEGREE",
+          "value": 1030,
+          "win32_class": "Static",
+          "caption": null,
+          "synthesized": false,
+          "rule": null,
+          "source_path": "frmRot.pnlRotDegree.grpRotDegree.imgRotDegree",
+          "fallback_class": false,
+          "x": 2,
+          "y": 20,
+          "cx": 60,
+          "cy": 60
+        },
+        {
+          "symbol": "IDC_AROTATEDEGREECLASS_LBLSITEMAP",
+          "value": 1031,
+          "win32_class": "Static",
+          "caption": "1",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "frmRot.pnlRotDegree.grpRotDegree.lblSiteMap",
+          "fallback_class": false,
+          "x": 2,
+          "y": 44,
+          "cx": 9,
+          "cy": 18
+        }
+      ]
+    }
+  ]
+}

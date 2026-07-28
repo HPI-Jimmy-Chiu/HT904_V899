@@ -1,0 +1,394 @@
+{
+ "event_count": 55,
+ "events": [
+  {
+   "control_path": "Zteach",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "Zteach",
+   "vcl_class": "TZteach"
+  },
+  {
+   "control_path": "Zteach",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "Zteach",
+   "vcl_class": "TZteach"
+  },
+  {
+   "control_path": "Zteach",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "Zteach",
+   "vcl_class": "TZteach"
+  },
+  {
+   "control_path": "Zteach.Panel1.SpeedButton14",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton14Click",
+   "leaf_name": "SpeedButton14",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "Zteach.Panel1.SpeedButton11",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton11Click",
+   "leaf_name": "SpeedButton11",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "Zteach.Panel1.GroupBox8.AEdit1",
+   "event_name": "OnClick",
+   "handler_name": "AEdit1Click",
+   "leaf_name": "AEdit1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "Zteach.Panel1.GroupBox8.AEdit2",
+   "event_name": "OnClick",
+   "handler_name": "AEdit1Click",
+   "leaf_name": "AEdit2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "Zteach.Panel1.GroupBox8.AEdit3",
+   "event_name": "OnClick",
+   "handler_name": "AEdit1Click",
+   "leaf_name": "AEdit3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "Zteach.Panel1.GroupBox8.AEdit4",
+   "event_name": "OnClick",
+   "handler_name": "AEdit1Click",
+   "leaf_name": "AEdit4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "Zteach.Panel1.GroupBox8.AEdit5",
+   "event_name": "OnClick",
+   "handler_name": "AEdit1Click",
+   "leaf_name": "AEdit5",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "Zteach.Panel1.GroupBox8.AEdit6",
+   "event_name": "OnClick",
+   "handler_name": "AEdit1Click",
+   "leaf_name": "AEdit6",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "Zteach.Panel1.GroupBox8.AEdit7",
+   "event_name": "OnClick",
+   "handler_name": "AEdit1Click",
+   "leaf_name": "AEdit7",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "Zteach.Panel1.GroupBox8.AEdit8",
+   "event_name": "OnClick",
+   "handler_name": "AEdit1Click",
+   "leaf_name": "AEdit8",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "Zteach.Panel1.GroupBox8.SendInarm",
+   "event_name": "OnClick",
+   "handler_name": "SendInarmClick",
+   "leaf_name": "SendInarm",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "Zteach.Panel1.GroupBox9.AOutEdit7",
+   "event_name": "OnClick",
+   "handler_name": "AEdit1Click",
+   "leaf_name": "AOutEdit7",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "Zteach.Panel1.GroupBox9.AOutEdit5",
+   "event_name": "OnClick",
+   "handler_name": "AEdit1Click",
+   "leaf_name": "AOutEdit5",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "Zteach.Panel1.GroupBox9.AOutEdit3",
+   "event_name": "OnClick",
+   "handler_name": "AEdit1Click",
+   "leaf_name": "AOutEdit3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "Zteach.Panel1.GroupBox9.AOutEdit1",
+   "event_name": "OnClick",
+   "handler_name": "AEdit1Click",
+   "leaf_name": "AOutEdit1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "Zteach.Panel1.GroupBox9.AOutEdit8",
+   "event_name": "OnClick",
+   "handler_name": "AEdit1Click",
+   "leaf_name": "AOutEdit8",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "Zteach.Panel1.GroupBox9.AOutEdit6",
+   "event_name": "OnClick",
+   "handler_name": "AEdit1Click",
+   "leaf_name": "AOutEdit6",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "Zteach.Panel1.GroupBox9.AOutEdit4",
+   "event_name": "OnClick",
+   "handler_name": "AEdit1Click",
+   "leaf_name": "AOutEdit4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "Zteach.Panel1.GroupBox9.AOutEdit2",
+   "event_name": "OnClick",
+   "handler_name": "AEdit1Click",
+   "leaf_name": "AOutEdit2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "Zteach.Panel1.GroupBox9.SendOutarm",
+   "event_name": "OnClick",
+   "handler_name": "SendOutarmClick",
+   "leaf_name": "SendOutarm",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "Zteach.Panel1.BitBtn1",
+   "event_name": "OnClick",
+   "handler_name": "BitBtn1Click",
+   "leaf_name": "BitBtn1",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "Zteach.Panel1.AutoTeachSingle",
+   "event_name": "OnClick",
+   "handler_name": "AutoTeachSingleClick",
+   "leaf_name": "AutoTeachSingle",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "Zteach.Panel1.StringGrid1",
+   "event_name": "OnMouseDown",
+   "handler_name": "StringGrid1MouseDown",
+   "leaf_name": "StringGrid1",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "Zteach.Panel1.SendData",
+   "event_name": "OnClick",
+   "handler_name": "SendDataClick",
+   "leaf_name": "SendData",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "Zteach.Panel1.rgTeachMode",
+   "event_name": "OnClick",
+   "handler_name": "rgTeachModeClick",
+   "leaf_name": "rgTeachMode",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "Zteach.Panel1.gbInarm.sbHotPlate2",
+   "event_name": "OnClick",
+   "handler_name": "sbLoaderClick",
+   "leaf_name": "sbHotPlate2",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "Zteach.Panel1.gbInarm.sbHotPlate1",
+   "event_name": "OnClick",
+   "handler_name": "sbLoaderClick",
+   "leaf_name": "sbHotPlate1",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "Zteach.Panel1.gbInarm.sbInSht2",
+   "event_name": "OnClick",
+   "handler_name": "sbLoaderClick",
+   "leaf_name": "sbInSht2",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "Zteach.Panel1.gbInarm.sbInSht1",
+   "event_name": "OnClick",
+   "handler_name": "sbLoaderClick",
+   "leaf_name": "sbInSht1",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "Zteach.Panel1.gbInarm.sbInZ_Calibration",
+   "event_name": "OnClick",
+   "handler_name": "sbLoaderClick",
+   "leaf_name": "sbInZ_Calibration",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "Zteach.Panel1.gbInarm.sbInRotate",
+   "event_name": "OnClick",
+   "handler_name": "sbLoaderClick",
+   "leaf_name": "sbInRotate",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "Zteach.Panel1.gbInarm.sbLoader",
+   "event_name": "OnClick",
+   "handler_name": "sbLoaderClick",
+   "leaf_name": "sbLoader",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "Zteach.Panel1.gbOutArm.sbFix1",
+   "event_name": "OnClick",
+   "handler_name": "sbLoaderClick",
+   "leaf_name": "sbFix1",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "Zteach.Panel1.gbOutArm.sbFix2",
+   "event_name": "OnClick",
+   "handler_name": "sbLoaderClick",
+   "leaf_name": "sbFix2",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "Zteach.Panel1.gbOutArm.sbFix3",
+   "event_name": "OnClick",
+   "handler_name": "sbLoaderClick",
+   "leaf_name": "sbFix3",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "Zteach.Panel1.gbOutArm.sbAuto3",
+   "event_name": "OnClick",
+   "handler_name": "sbLoaderClick",
+   "leaf_name": "sbAuto3",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "Zteach.Panel1.gbOutArm.sbAuto2",
+   "event_name": "OnClick",
+   "handler_name": "sbLoaderClick",
+   "leaf_name": "sbAuto2",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "Zteach.Panel1.gbOutArm.sbAuto1",
+   "event_name": "OnClick",
+   "handler_name": "sbLoaderClick",
+   "leaf_name": "sbAuto1",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "Zteach.Panel1.gbOutArm.sbOutSht2",
+   "event_name": "OnClick",
+   "handler_name": "sbLoaderClick",
+   "leaf_name": "sbOutSht2",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "Zteach.Panel1.gbOutArm.sbOutSht1",
+   "event_name": "OnClick",
+   "handler_name": "sbLoaderClick",
+   "leaf_name": "sbOutSht1",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "Zteach.Panel1.gbOutArm.sbOutZ_Calibration",
+   "event_name": "OnClick",
+   "handler_name": "sbLoaderClick",
+   "leaf_name": "sbOutZ_Calibration",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "Zteach.Panel1.gbOutArm.sbOutRotate",
+   "event_name": "OnClick",
+   "handler_name": "sbLoaderClick",
+   "leaf_name": "sbOutRotate",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "Zteach.Panel1.sgThreePointTeach",
+   "event_name": "OnDrawCell",
+   "handler_name": "sgThreePointTeachDrawCell",
+   "leaf_name": "sgThreePointTeach",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "Zteach.Panel1.cbEnableUseAreaZCalbration",
+   "event_name": "OnClick",
+   "handler_name": "cbEnableUseAreaZCalbrationClick",
+   "leaf_name": "cbEnableUseAreaZCalbration",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "Zteach.Panel1.Panel2.MotorInArmX",
+   "event_name": "OnClick",
+   "handler_name": "MotorInArmXClick",
+   "leaf_name": "MotorInArmX",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "Zteach.Panel1.Panel2.MotorInArmY",
+   "event_name": "OnClick",
+   "handler_name": "MotorInArmXClick",
+   "leaf_name": "MotorInArmY",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "Zteach.Panel1.Panel2.SpeedButton13",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton13Click",
+   "leaf_name": "SpeedButton13",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "Zteach.Panel1.Panel2.SpeedButton12",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton12Click",
+   "leaf_name": "SpeedButton12",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "Zteach.Panel1.Panel2.SpeedButton1",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton1Click",
+   "leaf_name": "SpeedButton1",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "Zteach.Panel1.Panel2.edtPosition",
+   "event_name": "OnClick",
+   "handler_name": "edtPositionClick",
+   "leaf_name": "edtPosition",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "Zteach.Panel1.Button1",
+   "event_name": "OnClick",
+   "handler_name": "Button1Click",
+   "leaf_name": "Button1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "Zteach.AutoTimer",
+   "event_name": "OnTimer",
+   "handler_name": "AutoTimerTimer",
+   "leaf_name": "AutoTimer",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "Zteach",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "AutoTeach/InOutArmZteach.dfm"
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "generator": "emit_rc.py W7-B1b v1.0",
+  "source_dfm": "HT9045.dfm",
+  "formstem": "HT9045",
+  "dialog_count": 1,
+  "control_count": 0,
+  "fallback_classes_used": [],
+  "warnings": [],
+  "dialogs": [
+    {
+      "idd_symbol": "IDD_HT9045",
+      "idd_value": 8192,
+      "is_root": true,
+      "owner_path": "Form1",
+      "owner_class": "TForm1",
+      "controls": []
+    }
+  ]
+}

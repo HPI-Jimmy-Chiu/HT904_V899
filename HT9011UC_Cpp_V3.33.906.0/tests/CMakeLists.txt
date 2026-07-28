@@ -2258,6 +2258,250 @@ target_link_libraries(test_MyProductionRecord PRIVATE ht9045_globals ht9045_publ
 add_test(NAME MyProductionRecord COMMAND test_MyProductionRecord)
 
 # ===========================================================================
+#  W906 W7-A2 VERIFY -- SearchTrayToPlace_Magazine() return-type smoke test
+#
+#  Smoke test for the fix landed this wave: golden declares/defines
+#  SearchTrayToPlace_Magazine() as `int` (aoutarm9045.h:63, def
+#  aoutarm9045.cpp:1420) with the return value genuinely consumed at golden
+#  aoutarm9045.cpp:1369 (`return SearchTrayToPlace_Magazine();`). The ported
+#  tree previously had 14/27 site-variant TUs declaring it `void` against the
+#  other 13's `int` and the shim's `void` definition -- a live ODR violation
+#  that MinGW linked silently. This wave reconciled all 27 declaring TUs plus
+#  the shim definition to `int` (verified by direct inspection, not by this
+#  test). This test forward-declares the function `int` (the shape a newly
+#  translated call site will use), assigns/consumes the return value, and
+#  reproduces the golden :1369 `return SearchTrayToPlace_Magazine();` shape
+#  via a local helper, linking ht9045_sm so the call resolves to the real
+#  definition in aoutarm_shims.cpp.
+#
+#  IMPORTANT LIMITATION (do not restate the old claim that this "fails to
+#  compile" on regression): a function's return type is not part of its C++
+#  mangled name, so a `void` regression in aoutarm_shims.cpp's definition, or
+#  a declaration drift in any of the OTHER 26 site-variant TUs this test does
+#  not include, would build and link silently under MinGW -- verified with a
+#  minimal two-TU repro (int-declaring caller + void-defining callee) that
+#  built clean at -Wall -Wextra and ran. This test only proves the symbol
+#  still exists, still links, and using it as `int` from a fresh call site
+#  builds and runs; it is not a compile-time ODR guard. Same RESCAN link
+#  group as the other W6.2c out-arm verify TUs.
+# ===========================================================================
+add_executable(test_w7_a2_searchtray_magazine_return
+    test_w7_a2_searchtray_magazine_return.cpp
+)
+
+target_link_libraries(test_w7_a2_searchtray_magazine_return PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w7_a2_searchtray_magazine_return PRIVATE ws2_32)
+endif()
+
+add_test(NAME W7_A2_SearchTrayMagazineReturn COMMAND test_w7_a2_searchtray_magazine_return)
+
+# ===========================================================================
+#  W906 W7-C1 -- 3 framework-free custom-control cores + unit tests
+#
+#  vclcompat/TrayCore.* / LedCore.* / BtnPanelCore.* -- new, framework-free
+#  (no VCL, no MFC, no GDI) state/geometry cores for the 3 custom-control
+#  families identified in W7_UI_ARCHITECTURE_PLAN.md §6 W7-C1. Together
+#  they model 7 real golden classes (TTMyTray/TTMyTray256, TMyLed/
+#  TMyLedLane/TALed, TBtnPanel/TBtnPanelLane) -- AI(W906-W7-C) 20260728:
+#  corrected count, verified directly against the golden source tree
+#  (D:\HT9045\elec\myvcl\{HTray,HTray256,MyLed,MyLedLane,butPa1,
+#  BtnPanelLane}.h/.cpp + D:\HT9045\elec\Component\aled.pas): 6 of these 7
+#  classes live under elec\myvcl\, NOT elec\Component\ -- only TALed does
+#  (a prior version of this comment said "5 of the 7", which under-counted
+#  by one). Each links ONLY against vclcompat (no ht9045_* libraries, no
+#  LINK_GROUP needed -- these headers have zero dependency on anything else
+#  in the tree, by design/D5).
+# ===========================================================================
+add_executable(test_traycore
+    test_traycore.cpp
+    ${CMAKE_SOURCE_DIR}/vclcompat/TrayCore.cpp
+)
+target_link_libraries(test_traycore PRIVATE vclcompat)
+add_test(NAME TrayCore COMMAND test_traycore)
+
+add_executable(test_ledcore
+    test_ledcore.cpp
+    ${CMAKE_SOURCE_DIR}/vclcompat/LedCore.cpp
+)
+target_link_libraries(test_ledcore PRIVATE vclcompat)
+add_test(NAME LedCore COMMAND test_ledcore)
+
+add_executable(test_btnpanelcore
+    test_btnpanelcore.cpp
+    ${CMAKE_SOURCE_DIR}/vclcompat/BtnPanelCore.cpp
+)
+target_link_libraries(test_btnpanelcore PRIVATE vclcompat)
+add_test(NAME BtnPanelCore COMMAND test_btnpanelcore)
+
+# ===========================================================================
+#  W7-B1c -- .dfm layout/colour/font/custom-control data table gate G9
+#
+#  Compiles a curated 4-form sample of the generated
+#  tools/dfm2rc/layout_out/**/*_layout.gen.cpp tables (ARMS/cBinSel/
+#  cContact/iosetview -- chosen to cover plain nesting, TTMyTray, TMyLed,
+#  and the mass TMyLedLane/TBtnPanelLane Alias+True*/False*Color usage) and
+#  round-trips a curated set of rows against golden .dfm text read directly
+#  (see test_DfmLayoutGen.cpp's own banner for exactly which golden lines
+#  each assertion reproduces). No vclcompat/ht9045_* link needed -- these
+#  tables are plain data (D7/D12), no framework dependency.
+#
+#  This is NOT the full-133-form CMake wiring (that is W7-B1d's job per the
+#  plan, S6 W7-B1d "全語料跑 + 閘門分流 + CMake 接線"); the full-corpus
+#  compile-under-MinGW proof for all 133 forms lives in
+#  tools/dfm2rc/reports/b1c_gate_report.json's g9_compile_smoke section
+#  (run via `python tools/dfm2rc/run_b1c.py`, a direct g++ -fsyntax-only
+#  batch outside ctest -- 133/133 clean at the time this test was added).
+# ===========================================================================
+add_executable(test_DfmLayoutGen
+    test_DfmLayoutGen.cpp
+    ${CMAKE_SOURCE_DIR}/tools/dfm2rc/layout_out/ARMS/ARMS_layout.gen.cpp
+    ${CMAKE_SOURCE_DIR}/tools/dfm2rc/layout_out/cBinSel_layout.gen.cpp
+    ${CMAKE_SOURCE_DIR}/tools/dfm2rc/layout_out/cContact_layout.gen.cpp
+    ${CMAKE_SOURCE_DIR}/tools/dfm2rc/layout_out/iosetview_layout.gen.cpp
+)
+add_test(NAME DfmLayoutGen COMMAND test_DfmLayoutGen)
+
+# ===========================================================================
+#  W906 W7-C2 -- HDC renderer + headless pixel tests for the 3 W7-C1 cores
+#
+#  vclcompat/render/{RenderCommon,TrayRender,LedRender,BtnPanelRender}.* --
+#  new, targets a raw HDC (link `gdi32`, which MinGW ships in full -- no MFC
+#  needed for this wave, see W7_UI_ARCHITECTURE_PLAN.md §6 W7-C2 and §7's
+#  "renderer 不卡" note). Each test renders into a memory DC backed by a
+#  CreateDIBSection (never a visible window) and asserts a full-buffer FNV-1a
+#  hash plus targeted per-pixel spot checks. Every add_executable below links
+#  ONLY vclcompat + gdi32 (+ its own W7-C1 core .cpp, same direct-source-file
+#  pattern the W7-C1 block above uses) -- no ht9045_* libraries, no LINK_GROUP.
+# ===========================================================================
+add_executable(test_trayrender
+    test_trayrender.cpp
+    ${CMAKE_SOURCE_DIR}/vclcompat/TrayCore.cpp
+    ${CMAKE_SOURCE_DIR}/vclcompat/render/TrayRender.cpp
+    ${CMAKE_SOURCE_DIR}/vclcompat/render/RenderCommon.cpp
+)
+target_link_libraries(test_trayrender PRIVATE vclcompat gdi32)
+add_test(NAME TrayRender COMMAND test_trayrender)
+
+add_executable(test_ledrender
+    test_ledrender.cpp
+    ${CMAKE_SOURCE_DIR}/vclcompat/LedCore.cpp
+    ${CMAKE_SOURCE_DIR}/vclcompat/render/LedRender.cpp
+    ${CMAKE_SOURCE_DIR}/vclcompat/render/RenderCommon.cpp
+)
+target_link_libraries(test_ledrender PRIVATE vclcompat gdi32)
+add_test(NAME LedRender COMMAND test_ledrender)
+
+add_executable(test_btnpanelrender
+    test_btnpanelrender.cpp
+    ${CMAKE_SOURCE_DIR}/vclcompat/BtnPanelCore.cpp
+    ${CMAKE_SOURCE_DIR}/vclcompat/render/BtnPanelRender.cpp
+    ${CMAKE_SOURCE_DIR}/vclcompat/render/RenderCommon.cpp
+)
+target_link_libraries(test_btnpanelrender PRIVATE vclcompat gdi32)
+add_test(NAME BtnPanelRender COMMAND test_btnpanelrender)
+
+# ===========================================================================
+#  W7-B1d -- full-corpus run + gate triage + CMake wiring
+#
+#  Wires tools/dfm2rc/run_b1d.py's 4 modes into ctest as ONE compiled
+#  wrapper executable (test_dfm2rc_pipeline.cpp, so it inherits
+#  ht9045_test_bootstrap like every other test in this file via the
+#  directory-scoped link_libraries() at the top) invoked 4 times with
+#  different argv -- ctest natively supports reusing one binary across
+#  several add_test entries, so no need for 4 near-identical .cpp files.
+#  See run_b1d.py's own module docstring for exactly what each mode
+#  proves; short version:
+#
+#    dfm2rc_rc_compiles / dfm2rc_layout_full  -- FAST day-to-day path.
+#        Compile the EXISTING checked-in tools/dfm2rc/rc_out (rc.exe +
+#        windres, full 133/133 -- gate G5) and tools/dfm2rc/layout_out
+#        (g++ -fsyntax-only, full 133/133 -- gate G9's compile half)
+#        corpora as they sit on disk. Zero dependency on GOLDEN at test
+#        time, same as every other test in this file. This is what the
+#        sibling W7-B1c wave's own CMakeLists comment (above,
+#        test_DfmLayoutGen's banner) explicitly deferred to "W7-B1d's
+#        job" -- bringing the full-133-form compile proof (until now only
+#        run ad hoc via `python run_b1c.py`, outside ctest) INTO ctest.
+#
+#    dfm2rc_fidelity / dfm2rc_idempotent -- the two tests that DO read
+#        GOLDEN, deliberately: they re-derive the whole pipeline (parse
+#        .dfm -> IR -> .rc/_ids.h/.rcmeta.json -> compile -> G6 readback
+#        -> layout tables -> G9 geometry/taborder crosscheck) from
+#        scratch into ${CMAKE_BINARY_DIR}/dfm2rc_regen (gitignored,
+#        build_*/ -- see .gitignore), never touching the source tree.
+#        `fidelity` asserts that full G0-G9 sweep is 0 problems (not just
+#        "some possibly-stale committed JSON report says so") plus the
+#        S12 ratchet #4 mojibake/BOM scan; `idempotent` byte-diffs that
+#        fresh regeneration against the checked-in tools/dfm2rc/{ir_out,
+#        rc_out,layout_out} (gate G7) -- proving the generators are a
+#        pure, deterministic function of GOLDEN and that nothing
+#        checked-in has silently drifted from what they currently emit.
+#
+#  Independently re-run fresh (2026-07-28, this wave) before wiring:
+#  fidelity 133/133 forms, 0 problems (22,627 IR control nodes / 22,296
+#  visual / 3,637 DIALOGEX templates / 22,586 emitted CONTROL entries /
+#  22,760 layout rows / 7,280 events), 0 mojibake/BOM hits; idempotent 0
+#  byte diffs; rc_compiles 133/133 clean on both rc.exe and windres;
+#  layout_full 133/133 clean g++ -std=c++14 -Wall -Wextra -fsyntax-only.
+#  Full per-form detail: tools/dfm2rc/reports/b1d_fidelity_report.json and
+#  b1d_idempotent_report.json (written by run_b1d.py itself, refreshed
+#  every time these ctest targets run).
+# ===========================================================================
+find_package(Python3 COMPONENTS Interpreter)
+
+if(Python3_Interpreter_FOUND)
+    add_executable(test_dfm2rc_pipeline
+        test_dfm2rc_pipeline.cpp
+    )
+    target_compile_definitions(test_dfm2rc_pipeline PRIVATE
+        HT9045_PYTHON_EXE="${Python3_EXECUTABLE}"
+        HT9045_DFM2RC_DIR="${CMAKE_SOURCE_DIR}/tools/dfm2rc"
+    )
+
+    # AI(W906-W7-B1-review) 20260728: MEDIUM-4 fix -- fidelity and
+    # idempotent used to share one "${CMAKE_BINARY_DIR}/dfm2rc_regen" root
+    # (run_b1d.py then joined 'fidelity'/'idempotent' subdirs onto it, so
+    # they never actually wrote into each other's files, but a plain ctest
+    # run still hit both FAILING on a leftover rc.exe scratch file, see
+    # run_b1d.py's _clean_dir() docstring for the full story). Each mode
+    # now gets its own top-level root, independent of the other, on top of
+    # _clean_dir()'s own tolerant-rmtree fallback.
+    set(_dfm2rc_regen_dir_fidelity "${CMAKE_BINARY_DIR}/dfm2rc_regen_fidelity")
+    set(_dfm2rc_regen_dir_idempotent "${CMAKE_BINARY_DIR}/dfm2rc_regen_idempotent")
+
+    add_test(NAME dfm2rc_rc_compiles
+        COMMAND test_dfm2rc_pipeline rc_compiles)
+    add_test(NAME dfm2rc_layout_full
+        COMMAND test_dfm2rc_pipeline layout_full)
+    add_test(NAME dfm2rc_fidelity
+        COMMAND test_dfm2rc_pipeline fidelity "${_dfm2rc_regen_dir_fidelity}")
+    add_test(NAME dfm2rc_idempotent
+        COMMAND test_dfm2rc_pipeline idempotent "${_dfm2rc_regen_dir_idempotent}")
+
+    # Explicit per-test TIMEOUT (plan S6-B1d: "每一個都要明確 TIMEOUT"),
+    # IN ADDITION to (not instead of) the blanket 600s ratchet at the
+    # bottom of this file -- these 4 legitimately run longer than the
+    # ~200-220s the rest of the suite is scoped for. Fresh measured runs
+    # (this machine, 2026-07-28): rc_compiles ~85s, layout_full ~45s,
+    # idempotent ~10s, fidelity ~130s -- 300s keeps generous headroom for
+    # a slower CI machine without approaching the 600s hang-detector.
+    set_tests_properties(
+        dfm2rc_rc_compiles dfm2rc_layout_full dfm2rc_fidelity dfm2rc_idempotent
+        PROPERTIES TIMEOUT 300
+    )
+else()
+    message(WARNING "W7-B1d: Python3 interpreter not found on this machine -- "
+                     "dfm2rc_rc_compiles/dfm2rc_layout_full/dfm2rc_fidelity/"
+                     "dfm2rc_idempotent ctest targets are NOT registered. "
+                     "This environment cannot verify the tools/dfm2rc/ "
+                     "pipeline gates; see docs/W7-UI-SKIPPED.md.")
+endif()
+
+# ===========================================================================
 #  GLOBAL TEST TIMEOUT -- must stay at the BOTTOM of this file
 # ===========================================================================
 # AI(W906-TestBootstrap) 20260728: second line of defence behind

@@ -1,0 +1,1255 @@
+{
+ "event_count": 178,
+ "events": [
+  {
+   "control_path": "fTrayMapping",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fTrayMapping",
+   "vcl_class": "TfTrayMapping"
+  },
+  {
+   "control_path": "fTrayMapping",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fTrayMapping",
+   "vcl_class": "TfTrayMapping"
+  },
+  {
+   "control_path": "fTrayMapping",
+   "event_name": "OnShortCut",
+   "handler_name": "FormShortCut",
+   "leaf_name": "fTrayMapping",
+   "vcl_class": "TfTrayMapping"
+  },
+  {
+   "control_path": "fTrayMapping",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fTrayMapping",
+   "vcl_class": "TfTrayMapping"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1",
+   "event_name": "OnChange",
+   "handler_name": "PageControl1Change",
+   "leaf_name": "PageControl1",
+   "vcl_class": "TPageControl"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsView.GroupBox1.Button1",
+   "event_name": "OnClick",
+   "handler_name": "Button1Click",
+   "leaf_name": "Button1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsView.GroupBox1.Button2",
+   "event_name": "OnClick",
+   "handler_name": "Button2Click",
+   "leaf_name": "Button2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsView.GroupBox1.Button4",
+   "event_name": "OnClick",
+   "handler_name": "Button4Click",
+   "leaf_name": "Button4",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTraySetting.edTrayGetResultTimeOut",
+   "event_name": "OnClick",
+   "handler_name": "edTrayStartDelayClick",
+   "leaf_name": "edTrayGetResultTimeOut",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTraySetting.edTrayStartDelay",
+   "event_name": "OnClick",
+   "handler_name": "edTrayStartDelayClick",
+   "leaf_name": "edTrayStartDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTraySetting.edTrayAutoRetry",
+   "event_name": "OnClick",
+   "handler_name": "edTrayAutoRetryClick",
+   "leaf_name": "edTrayAutoRetry",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTraySetting.edTrayExposureTimeOut",
+   "event_name": "OnClick",
+   "handler_name": "edTrayStartDelayClick",
+   "leaf_name": "edTrayExposureTimeOut",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTraySetting.palTrayIDGroup.edtTraycodeMinLength",
+   "event_name": "OnClick",
+   "handler_name": "edTrayAutoRetryClick",
+   "leaf_name": "edtTraycodeMinLength",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTraySetting.palTrayIDGroup.edtTraycodeMaxLength",
+   "event_name": "OnClick",
+   "handler_name": "edTrayAutoRetryClick",
+   "leaf_name": "edtTraycodeMaxLength",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTraySetting.palTrayIDGroup.edtTrayIDShift",
+   "event_name": "OnClick",
+   "handler_name": "edtTrayMapShiftClick",
+   "leaf_name": "edtTrayIDShift",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTraySetting.palTrayIDGroup.edtTrayID2Shift",
+   "event_name": "OnClick",
+   "handler_name": "edtTrayMapShiftClick",
+   "leaf_name": "edtTrayID2Shift",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTraySetting.palTrayMapGroup.edtTrayMapCatch",
+   "event_name": "OnClick",
+   "handler_name": "edtTrayMapCatchClick",
+   "leaf_name": "edtTrayMapCatch",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTraySetting.palTrayMapGroup.edtTrayMapStart",
+   "event_name": "OnClick",
+   "handler_name": "edtTrayMapShiftClick",
+   "leaf_name": "edtTrayMapStart",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTraySetting.palDeviceCountGroup.edtTrayDeciveCntStart",
+   "event_name": "OnClick",
+   "handler_name": "edtTrayDeciveCntStartClick",
+   "leaf_name": "edtTrayDeciveCntStart",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTrayCCD.Panel2.GroupBox2.edTray_ID_Port",
+   "event_name": "OnMouseDown",
+   "handler_name": "edTray_ID_PortMouseDown",
+   "leaf_name": "edTray_ID_Port",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTrayCCD.Panel2.GroupBox2.BtTray_ID_Connect",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_ConnectClick",
+   "leaf_name": "BtTray_ID_Connect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTrayCCD.Panel2.GroupBox2.BtTray_ID_Disconnect",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_DisconnectClick",
+   "leaf_name": "BtTray_ID_Disconnect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTrayCCD.Panel2.GroupBox2.btTray_ID_Trigger",
+   "event_name": "OnClick",
+   "handler_name": "btTray_ID_TriggerClick",
+   "leaf_name": "btTray_ID_Trigger",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTrayCCD.Panel2.GroupBox3.edTray_Map_Port",
+   "event_name": "OnMouseDown",
+   "handler_name": "edTray_ID_PortMouseDown",
+   "leaf_name": "edTray_Map_Port",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTrayCCD.Panel2.GroupBox3.BtTray_Map_Connect",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_ConnectClick",
+   "leaf_name": "BtTray_Map_Connect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTrayCCD.Panel2.GroupBox3.BtTray_Map_Disconnect",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_DisconnectClick",
+   "leaf_name": "BtTray_Map_Disconnect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTrayCCD.Panel2.GroupBox3.btTray_Map_Trigger",
+   "event_name": "OnClick",
+   "handler_name": "btTray_ID_TriggerClick",
+   "leaf_name": "btTray_Map_Trigger",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTrayCCD.Panel2.GroupBox4.edTray_ID2_Port",
+   "event_name": "OnMouseDown",
+   "handler_name": "edTray_ID_PortMouseDown",
+   "leaf_name": "edTray_ID2_Port",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTrayCCD.Panel2.GroupBox4.BtTray_ID2_Connect",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_ConnectClick",
+   "leaf_name": "BtTray_ID2_Connect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTrayCCD.Panel2.GroupBox4.BtTray_ID2_Disconnect",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_DisconnectClick",
+   "leaf_name": "BtTray_ID2_Disconnect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTrayCCD.Panel2.GroupBox4.btTray_ID2_Trigger",
+   "event_name": "OnClick",
+   "handler_name": "btTray_ID_TriggerClick",
+   "leaf_name": "btTray_ID2_Trigger",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTrayCCD.Panel2.GroupBox6.edTrayDeviceCnt1_Port",
+   "event_name": "OnMouseDown",
+   "handler_name": "edTray_ID_PortMouseDown",
+   "leaf_name": "edTrayDeviceCnt1_Port",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTrayCCD.Panel2.GroupBox6.btnTrayDeviceCnt1_Connect",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_ConnectClick",
+   "leaf_name": "btnTrayDeviceCnt1_Connect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTrayCCD.Panel2.GroupBox6.btnTrayDeviceCnt1_Disconnect",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_DisconnectClick",
+   "leaf_name": "btnTrayDeviceCnt1_Disconnect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTrayCCD.Panel2.GroupBox6.btnTrayDeviceCnt1_Trigger",
+   "event_name": "OnClick",
+   "handler_name": "btTray_ID_TriggerClick",
+   "leaf_name": "btnTrayDeviceCnt1_Trigger",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTrayCCD.Panel2.GroupBox7.edTrayDeviceCnt2_Port",
+   "event_name": "OnMouseDown",
+   "handler_name": "edTray_ID_PortMouseDown",
+   "leaf_name": "edTrayDeviceCnt2_Port",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTrayCCD.Panel2.GroupBox7.btnTrayDeviceCnt2_Connect",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_ConnectClick",
+   "leaf_name": "btnTrayDeviceCnt2_Connect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTrayCCD.Panel2.GroupBox7.btnTrayDeviceCnt2_Disconnect",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_DisconnectClick",
+   "leaf_name": "btnTrayDeviceCnt2_Disconnect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTrayCCD.Panel2.GroupBox7.btnTrayDeviceCnt2_Trigger",
+   "event_name": "OnClick",
+   "handler_name": "btTray_ID_TriggerClick",
+   "leaf_name": "btnTrayDeviceCnt2_Trigger",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTrayCCD.Panel2.GroupBox5.edTrayDeviceCnt3_Port",
+   "event_name": "OnMouseDown",
+   "handler_name": "edTray_ID_PortMouseDown",
+   "leaf_name": "edTrayDeviceCnt3_Port",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTrayCCD.Panel2.GroupBox5.btnTrayDeviceCnt3_Connect",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_ConnectClick",
+   "leaf_name": "btnTrayDeviceCnt3_Connect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTrayCCD.Panel2.GroupBox5.btnTrayDeviceCnt3_Disconnect",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_DisconnectClick",
+   "leaf_name": "btnTrayDeviceCnt3_Disconnect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsTrayCCD.Panel2.GroupBox5.btnTrayDeviceCnt3_Trigger",
+   "event_name": "OnClick",
+   "handler_name": "btTray_ID_TriggerClick",
+   "leaf_name": "btnTrayDeviceCnt3_Trigger",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet1.Panel3.GroupBox8.edTray_ID2_PortKY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edTray_ID_PortMouseDown",
+   "leaf_name": "edTray_ID2_PortKY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet1.Panel3.GroupBox8.BtTray_ID2_ConnectKY",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_ConnectKYClick",
+   "leaf_name": "BtTray_ID2_ConnectKY",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet1.Panel3.GroupBox8.BtTray_ID2_DisconnectKY",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_DisconnectKYClick",
+   "leaf_name": "BtTray_ID2_DisconnectKY",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet1.Panel3.GroupBox8.btTray_ID2_TriggerKY",
+   "event_name": "OnClick",
+   "handler_name": "btTray_ID_TriggerKYClick",
+   "leaf_name": "btTray_ID2_TriggerKY",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet1.Panel3.GroupBox9.edTray_ID_PortKY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edTray_ID_PortMouseDown",
+   "leaf_name": "edTray_ID_PortKY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet1.Panel3.GroupBox9.BtTray_ID_ConnectKY",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_ConnectKYClick",
+   "leaf_name": "BtTray_ID_ConnectKY",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet1.Panel3.GroupBox9.BtTray_ID_DisconnectKY",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_DisconnectKYClick",
+   "leaf_name": "BtTray_ID_DisconnectKY",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet1.Panel3.GroupBox9.btTray_ID_TriggerKY",
+   "event_name": "OnClick",
+   "handler_name": "btTray_ID_TriggerKYClick",
+   "leaf_name": "btTray_ID_TriggerKY",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet1.Panel3.GroupBox10.edTray_ID4_PortKY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edTray_ID_PortMouseDown",
+   "leaf_name": "edTray_ID4_PortKY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet1.Panel3.GroupBox10.BtTray_ID3_ConnectKY",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_ConnectKYClick",
+   "leaf_name": "BtTray_ID3_ConnectKY",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet1.Panel3.GroupBox10.BtTray_ID3_DisconnectKY",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_DisconnectKYClick",
+   "leaf_name": "BtTray_ID3_DisconnectKY",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet1.Panel3.GroupBox10.btTray_ID4_TriggerKY",
+   "event_name": "OnClick",
+   "handler_name": "btTray_ID_TriggerKYClick",
+   "leaf_name": "btTray_ID4_TriggerKY",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet1.Panel3.GroupBox11.edTray_ID3_PortKY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edTray_ID_PortMouseDown",
+   "leaf_name": "edTray_ID3_PortKY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet1.Panel3.GroupBox11.BitBtn1",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_ConnectKYClick",
+   "leaf_name": "BitBtn1",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet1.Panel3.GroupBox11.BitBtn2",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_DisconnectKYClick",
+   "leaf_name": "BitBtn2",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet1.Panel3.GroupBox11.btTray_ID3_TriggerKY",
+   "event_name": "OnClick",
+   "handler_name": "btTray_ID_TriggerKYClick",
+   "leaf_name": "btTray_ID3_TriggerKY",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderDeviceCheck.GroupBox12.Label17",
+   "event_name": "OnMouseDown",
+   "handler_name": "Label18MouseDown",
+   "leaf_name": "Label17",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderDeviceCheck.GroupBox12.BtLoaderDC_Connect",
+   "event_name": "OnClick",
+   "handler_name": "BtLoaderDC_ConnectClick",
+   "leaf_name": "BtLoaderDC_Connect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderDeviceCheck.GroupBox12.edLoopTimes",
+   "event_name": "OnKeyPress",
+   "handler_name": "edLoopTimesKeyPress",
+   "leaf_name": "edLoopTimes",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderDeviceCheck.GroupBox12.cbLaserScanMode",
+   "event_name": "OnChange",
+   "handler_name": "cbLaserScanModeChange",
+   "leaf_name": "cbLaserScanMode",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderDeviceCheck.GroupBox12.edWaitAOITimes",
+   "event_name": "OnKeyPress",
+   "handler_name": "edLoopTimesKeyPress",
+   "leaf_name": "edWaitAOITimes",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderDeviceCheck.GroupBox12.edLoaderCWSpeed",
+   "event_name": "OnKeyPress",
+   "handler_name": "edLoopTimesKeyPress",
+   "leaf_name": "edLoaderCWSpeed",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderDeviceCheck.GroupBox12.Panel4.Panel6.btnSimulateRemainIC",
+   "event_name": "OnClick",
+   "handler_name": "btnSimulateRemainICClick",
+   "leaf_name": "btnSimulateRemainIC",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderDeviceCheck.plTrayMap.PageControl3.tsCommand.Panel11.btLoaderDC_Trigger",
+   "event_name": "OnClick",
+   "handler_name": "btLoaderDC_TriggerClick",
+   "leaf_name": "btLoaderDC_Trigger",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderDeviceCheck.plTrayMap.PageControl3.tsCommand.Panel11.btnLoadFile",
+   "event_name": "OnClick",
+   "handler_name": "btnLoadFileClick",
+   "leaf_name": "btnLoadFile",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderDeviceCheck.plTrayMap.PageControl3.tsCommand.Panel11.btnClearBuffer",
+   "event_name": "OnClick",
+   "handler_name": "btnClearBufferClick",
+   "leaf_name": "btnClearBuffer",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderDeviceCheck.plTrayMap.PageControl3.tsCommand.Panel11.btnGrab",
+   "event_name": "OnClick",
+   "handler_name": "btnGrabClick",
+   "leaf_name": "btnGrab",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderDeviceCheck.plTrayMap.PageControl3.tsCommand.Panel11.btnGetValue",
+   "event_name": "OnClick",
+   "handler_name": "btnGetValueClick",
+   "leaf_name": "btnGetValue",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderDeviceCheck.plTrayMap.PageControl3.tsCommand.Panel11.btnSetLot",
+   "event_name": "OnClick",
+   "handler_name": "btnSetLotClick",
+   "leaf_name": "btnSetLot",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderDeviceCheck.plTrayMap.PageControl3.tsCommand.Panel11.btnCreateFile",
+   "event_name": "OnClick",
+   "handler_name": "btnCreateFileClick",
+   "leaf_name": "btnCreateFile",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderDeviceCheck.plTrayMap.PageControl3.tsCommand.Panel11.btnGoldenImage",
+   "event_name": "OnClick",
+   "handler_name": "btnGoldenImageClick",
+   "leaf_name": "btnGoldenImage",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderDeviceCheck.plTrayMap.PageControl3.tsCommand.Panel11.cbSimulationAOICommand",
+   "event_name": "OnClick",
+   "handler_name": "cbSimulationAOICommandClick",
+   "leaf_name": "cbSimulationAOICommand",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderDeviceCheck.plTrayMap.PageControl3.tsCommand.GroupBox13.btnMoveIn",
+   "event_name": "OnClick",
+   "handler_name": "btnMoveInClick",
+   "leaf_name": "btnMoveIn",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderDeviceCheck.plTrayMap.PageControl3.tsCommand.GroupBox13.btnMoveOut",
+   "event_name": "OnClick",
+   "handler_name": "btnMoveOutClick",
+   "leaf_name": "btnMoveOut",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderDeviceCheck.plTrayMap.PageControl3.TabSheet5.btnAddRandom",
+   "event_name": "OnClick",
+   "handler_name": "btnAddRandomClick",
+   "leaf_name": "btnAddRandom",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderDeviceCheck.plTrayMap.PageControl3.TabSheet5.btnRefreshYield",
+   "event_name": "OnClick",
+   "handler_name": "btnRefreshYieldClick",
+   "leaf_name": "btnRefreshYield",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet6.Panel12.GroupBox17.edCoverTray_ID5_PortKY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edTray_ID_PortMouseDown",
+   "leaf_name": "edCoverTray_ID5_PortKY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet6.Panel12.GroupBox17.BitBtn9",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_ConnectKYClick",
+   "leaf_name": "BitBtn9",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet6.Panel12.GroupBox17.BitBtn10",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_DisconnectKYClick",
+   "leaf_name": "BitBtn10",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet6.Panel12.GroupBox17.Button7",
+   "event_name": "OnClick",
+   "handler_name": "btTray_ID_TriggerKYClick",
+   "leaf_name": "Button7",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet6.Panel12.GroupBox16.edCoverTray_ID3_PortKY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edTray_ID_PortMouseDown",
+   "leaf_name": "edCoverTray_ID3_PortKY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet6.Panel12.GroupBox16.BitBtn7",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_ConnectKYClick",
+   "leaf_name": "BitBtn7",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet6.Panel12.GroupBox16.BitBtn8",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_DisconnectKYClick",
+   "leaf_name": "BitBtn8",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet6.Panel12.GroupBox16.Button6",
+   "event_name": "OnClick",
+   "handler_name": "btTray_ID_TriggerKYClick",
+   "leaf_name": "Button6",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet6.Panel12.GroupBox14.edCoverTray_ID_PortKY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edTray_ID_PortMouseDown",
+   "leaf_name": "edCoverTray_ID_PortKY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet6.Panel12.GroupBox14.BitBtn3",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_ConnectKYClick",
+   "leaf_name": "BitBtn3",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet6.Panel12.GroupBox14.BitBtn4",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_DisconnectKYClick",
+   "leaf_name": "BitBtn4",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet6.Panel12.GroupBox14.Button3",
+   "event_name": "OnClick",
+   "handler_name": "btTray_ID_TriggerKYClick",
+   "leaf_name": "Button3",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet6.Panel12.GroupBox15.edCoverTray_ID2_PortKY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edTray_ID_PortMouseDown",
+   "leaf_name": "edCoverTray_ID2_PortKY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet6.Panel12.GroupBox15.BitBtn5",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_ConnectKYClick",
+   "leaf_name": "BitBtn5",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet6.Panel12.GroupBox15.BitBtn6",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_DisconnectKYClick",
+   "leaf_name": "BitBtn6",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet6.Panel12.GroupBox15.Button5",
+   "event_name": "OnClick",
+   "handler_name": "btTray_ID_TriggerKYClick",
+   "leaf_name": "Button5",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet6.Panel12.GroupBox18.edCoverTray_ID4_PortKY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edTray_ID_PortMouseDown",
+   "leaf_name": "edCoverTray_ID4_PortKY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet6.Panel12.GroupBox18.BitBtn11",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_ConnectKYClick",
+   "leaf_name": "BitBtn11",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet6.Panel12.GroupBox18.BitBtn12",
+   "event_name": "OnClick",
+   "handler_name": "BtTray_ID_DisconnectKYClick",
+   "leaf_name": "BitBtn12",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.TabSheet6.Panel12.GroupBox18.Button8",
+   "event_name": "OnClick",
+   "handler_name": "btTray_ID_TriggerKYClick",
+   "leaf_name": "Button8",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderRFID.grpRFIDCommSetting.btnLdRFIDConn",
+   "event_name": "OnClick",
+   "handler_name": "btnLdRFIDConnClick",
+   "leaf_name": "btnLdRFIDConn",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderRFID.grpRFIDCommSetting.btnLdRFIDDisConn",
+   "event_name": "OnClick",
+   "handler_name": "btnLdRFIDDisConnClick",
+   "leaf_name": "btnLdRFIDDisConn",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderRFID.grpRFIDCommSetting.grpNFC_CH1.btnLdRFIDClear1",
+   "event_name": "OnClick",
+   "handler_name": "btnLdRFIDClear1Click",
+   "leaf_name": "btnLdRFIDClear1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderRFID.grpRFIDCommSetting.grpNFC_CH1.btnReadMemData1",
+   "event_name": "OnClick",
+   "handler_name": "btnReadMemData1Click",
+   "leaf_name": "btnReadMemData1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderRFID.grpRFIDCommSetting.grpNFC_CH1.btnReadUID1",
+   "event_name": "OnClick",
+   "handler_name": "btnReadUID1Click",
+   "leaf_name": "btnReadUID1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderRFID.grpRFIDCommSetting.grpNFC_CH1.btnReadID1",
+   "event_name": "OnClick",
+   "handler_name": "btnReadID1Click",
+   "leaf_name": "btnReadID1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderRFID.grpRFIDCommSetting.grpNFC_CH1.btnLdRFIDReadBlock1",
+   "event_name": "OnClick",
+   "handler_name": "btnLdRFIDReadBlock1Click",
+   "leaf_name": "btnLdRFIDReadBlock1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderRFID.grpRFIDCommSetting.grpNFC_CH2.btnLdRFIDClear2",
+   "event_name": "OnClick",
+   "handler_name": "btnLdRFIDClear2Click",
+   "leaf_name": "btnLdRFIDClear2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderRFID.grpRFIDCommSetting.grpNFC_CH2.btnReadMemData2",
+   "event_name": "OnClick",
+   "handler_name": "btnReadMemData2Click",
+   "leaf_name": "btnReadMemData2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderRFID.grpRFIDCommSetting.grpNFC_CH2.btnReadUID2",
+   "event_name": "OnClick",
+   "handler_name": "btnReadUID2Click",
+   "leaf_name": "btnReadUID2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderRFID.grpRFIDCommSetting.grpNFC_CH2.btnReadID2",
+   "event_name": "OnClick",
+   "handler_name": "btnReadID2Click",
+   "leaf_name": "btnReadID2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.PageControl1.tsLoaderRFID.grpRFIDCommSetting.grpNFC_CH2.btnLdRFIDReadBlock2",
+   "event_name": "OnClick",
+   "handler_name": "btnLdRFIDReadBlock2Click",
+   "leaf_name": "btnLdRFIDReadBlock2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayMapping.Panel1.spbSave",
+   "event_name": "OnClick",
+   "handler_name": "spbSaveClick",
+   "leaf_name": "spbSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fTrayMapping.Panel1.sbtExit",
+   "event_name": "OnClick",
+   "handler_name": "sbtExitClick",
+   "leaf_name": "sbtExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Tray_ID",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_Tray_IDConnect",
+   "leaf_name": "ClientSocket_Tray_ID",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Tray_ID",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_Tray_IDDisconnect",
+   "leaf_name": "ClientSocket_Tray_ID",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Tray_ID",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_Tray_IDError",
+   "leaf_name": "ClientSocket_Tray_ID",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Tray_ID",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_Tray_IDRead",
+   "leaf_name": "ClientSocket_Tray_ID",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Tray_Map",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_Tray_IDConnect",
+   "leaf_name": "ClientSocket_Tray_Map",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Tray_Map",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_Tray_IDDisconnect",
+   "leaf_name": "ClientSocket_Tray_Map",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Tray_Map",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_Tray_IDError",
+   "leaf_name": "ClientSocket_Tray_Map",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Tray_Map",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_Tray_IDRead",
+   "leaf_name": "ClientSocket_Tray_Map",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.TimerDownCCDTrayConnect",
+   "event_name": "OnTimer",
+   "handler_name": "TimerDownCCDTrayConnectTimer",
+   "leaf_name": "TimerDownCCDTrayConnect",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fTrayMapping.TimerCCDTrayInitial",
+   "event_name": "OnTimer",
+   "handler_name": "TimerCCDTrayInitialTimer",
+   "leaf_name": "TimerCCDTrayInitial",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fTrayMapping.TimerProcessTrayData",
+   "event_name": "OnTimer",
+   "handler_name": "TimerProcessTrayDataTimer",
+   "leaf_name": "TimerProcessTrayData",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Tray_ID2",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_Tray_IDConnect",
+   "leaf_name": "ClientSocket_Tray_ID2",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Tray_ID2",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_Tray_IDDisconnect",
+   "leaf_name": "ClientSocket_Tray_ID2",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Tray_ID2",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_Tray_IDError",
+   "leaf_name": "ClientSocket_Tray_ID2",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Tray_ID2",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_Tray_IDRead",
+   "leaf_name": "ClientSocket_Tray_ID2",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Tray_DeviceCnt3",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_Tray_IDConnect",
+   "leaf_name": "ClientSocket_Tray_DeviceCnt3",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Tray_DeviceCnt3",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_Tray_IDDisconnect",
+   "leaf_name": "ClientSocket_Tray_DeviceCnt3",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Tray_DeviceCnt3",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_Tray_IDError",
+   "leaf_name": "ClientSocket_Tray_DeviceCnt3",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Tray_DeviceCnt3",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_Tray_IDRead",
+   "leaf_name": "ClientSocket_Tray_DeviceCnt3",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Tray_DeviceCnt2",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_Tray_IDConnect",
+   "leaf_name": "ClientSocket_Tray_DeviceCnt2",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Tray_DeviceCnt2",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_Tray_IDDisconnect",
+   "leaf_name": "ClientSocket_Tray_DeviceCnt2",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Tray_DeviceCnt2",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_Tray_IDError",
+   "leaf_name": "ClientSocket_Tray_DeviceCnt2",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Tray_DeviceCnt2",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_Tray_IDRead",
+   "leaf_name": "ClientSocket_Tray_DeviceCnt2",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Tray_DeviceCnt1",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_Tray_IDConnect",
+   "leaf_name": "ClientSocket_Tray_DeviceCnt1",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Tray_DeviceCnt1",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_Tray_IDDisconnect",
+   "leaf_name": "ClientSocket_Tray_DeviceCnt1",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Tray_DeviceCnt1",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_Tray_IDError",
+   "leaf_name": "ClientSocket_Tray_DeviceCnt1",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Tray_DeviceCnt1",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_Tray_IDRead",
+   "leaf_name": "ClientSocket_Tray_DeviceCnt1",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Keyence1",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_Keyence1Connect",
+   "leaf_name": "ClientSocket_Keyence1",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Keyence1",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_Keyence1Disconnect",
+   "leaf_name": "ClientSocket_Keyence1",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Keyence1",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_Keyence1Error",
+   "leaf_name": "ClientSocket_Keyence1",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Keyence1",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_Keyence1Read",
+   "leaf_name": "ClientSocket_Keyence1",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Keyence2",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_Keyence1Connect",
+   "leaf_name": "ClientSocket_Keyence2",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Keyence2",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_Keyence1Disconnect",
+   "leaf_name": "ClientSocket_Keyence2",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Keyence2",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_Keyence1Error",
+   "leaf_name": "ClientSocket_Keyence2",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Keyence2",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_Keyence1Read",
+   "leaf_name": "ClientSocket_Keyence2",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Keyence3",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_Keyence1Connect",
+   "leaf_name": "ClientSocket_Keyence3",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Keyence3",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_Keyence1Disconnect",
+   "leaf_name": "ClientSocket_Keyence3",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Keyence3",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_Keyence1Error",
+   "leaf_name": "ClientSocket_Keyence3",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Keyence3",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_Keyence1Read",
+   "leaf_name": "ClientSocket_Keyence3",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Keyence4",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_Keyence1Connect",
+   "leaf_name": "ClientSocket_Keyence4",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Keyence4",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_Keyence1Disconnect",
+   "leaf_name": "ClientSocket_Keyence4",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Keyence4",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_Keyence1Error",
+   "leaf_name": "ClientSocket_Keyence4",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_Keyence4",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_Keyence1Read",
+   "leaf_name": "ClientSocket_Keyence4",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_CoverTray_ID_LoaderCar",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_Keyence1Connect",
+   "leaf_name": "ClientSocket_CoverTray_ID_LoaderCar",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_CoverTray_ID_LoaderCar",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_Keyence1Disconnect",
+   "leaf_name": "ClientSocket_CoverTray_ID_LoaderCar",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_CoverTray_ID_LoaderCar",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_Keyence1Error",
+   "leaf_name": "ClientSocket_CoverTray_ID_LoaderCar",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_CoverTray_ID_LoaderCar",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_Keyence1Read",
+   "leaf_name": "ClientSocket_CoverTray_ID_LoaderCar",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_CoverTray_ID_Loader",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_Keyence1Connect",
+   "leaf_name": "ClientSocket_CoverTray_ID_Loader",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_CoverTray_ID_Loader",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_Keyence1Disconnect",
+   "leaf_name": "ClientSocket_CoverTray_ID_Loader",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_CoverTray_ID_Loader",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_Keyence1Error",
+   "leaf_name": "ClientSocket_CoverTray_ID_Loader",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_CoverTray_ID_Loader",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_Keyence1Read",
+   "leaf_name": "ClientSocket_CoverTray_ID_Loader",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_CoverTray_ID_AUTO1Car",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_Keyence1Connect",
+   "leaf_name": "ClientSocket_CoverTray_ID_AUTO1Car",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_CoverTray_ID_AUTO1Car",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_Keyence1Disconnect",
+   "leaf_name": "ClientSocket_CoverTray_ID_AUTO1Car",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_CoverTray_ID_AUTO1Car",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_Keyence1Error",
+   "leaf_name": "ClientSocket_CoverTray_ID_AUTO1Car",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_CoverTray_ID_AUTO1Car",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_Keyence1Read",
+   "leaf_name": "ClientSocket_CoverTray_ID_AUTO1Car",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_CoverTray_ID_AUTO2Car",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_Keyence1Connect",
+   "leaf_name": "ClientSocket_CoverTray_ID_AUTO2Car",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_CoverTray_ID_AUTO2Car",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_Keyence1Disconnect",
+   "leaf_name": "ClientSocket_CoverTray_ID_AUTO2Car",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_CoverTray_ID_AUTO2Car",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_Keyence1Error",
+   "leaf_name": "ClientSocket_CoverTray_ID_AUTO2Car",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_CoverTray_ID_AUTO2Car",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_Keyence1Read",
+   "leaf_name": "ClientSocket_CoverTray_ID_AUTO2Car",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_CoverTray_ID_AUTO3Car",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_Keyence1Connect",
+   "leaf_name": "ClientSocket_CoverTray_ID_AUTO3Car",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_CoverTray_ID_AUTO3Car",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_Keyence1Disconnect",
+   "leaf_name": "ClientSocket_CoverTray_ID_AUTO3Car",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_CoverTray_ID_AUTO3Car",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_Keyence1Error",
+   "leaf_name": "ClientSocket_CoverTray_ID_AUTO3Car",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.ClientSocket_CoverTray_ID_AUTO3Car",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_Keyence1Read",
+   "leaf_name": "ClientSocket_CoverTray_ID_AUTO3Car",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fTrayMapping.commRFID",
+   "event_name": "OnReceiveData",
+   "handler_name": "commRFIDReceiveData",
+   "leaf_name": "commRFID",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "fTrayMapping.tmrNFC",
+   "event_name": "OnTimer",
+   "handler_name": "tmrNFCTimer",
+   "leaf_name": "tmrNFC",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fTrayMapping",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "cTrayMapping.dfm"
+}

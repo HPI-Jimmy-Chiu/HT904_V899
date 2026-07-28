@@ -1,0 +1,156 @@
+{
+ "event_count": 21,
+ "events": [
+  {
+   "control_path": "frmDTME08",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "frmDTME08",
+   "vcl_class": "TfrmDTME08"
+  },
+  {
+   "control_path": "frmDTME08",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "frmDTME08",
+   "vcl_class": "TfrmDTME08"
+  },
+  {
+   "control_path": "frmDTME08.Panel7.PageControl1.tsAuto.btSetThermoType",
+   "event_name": "OnClick",
+   "handler_name": "btSetThermoTypeClick",
+   "leaf_name": "btSetThermoType",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "frmDTME08.Panel7.PageControl1.tsManual.GroupBox3.edPort",
+   "event_name": "OnClick",
+   "handler_name": "edPortClick",
+   "leaf_name": "edPort",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "frmDTME08.Panel7.PageControl1.tsManual.GroupBox3.btnSetSave",
+   "event_name": "OnClick",
+   "handler_name": "btnSetSaveClick",
+   "leaf_name": "btnSetSave",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "frmDTME08.Panel7.PageControl1.tsManual.GroupBox3.btnReload",
+   "event_name": "OnClick",
+   "handler_name": "btnReloadClick",
+   "leaf_name": "btnReload",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "frmDTME08.Panel7.PageControl1.tsManual.GroupBox1.btnGetPV",
+   "event_name": "OnClick",
+   "handler_name": "btnGetPVClick",
+   "leaf_name": "btnGetPV",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "frmDTME08.Panel7.PageControl1.tsManual.GroupBox1.btnSetAT",
+   "event_name": "OnClick",
+   "handler_name": "btnSetATClick",
+   "leaf_name": "btnSetAT",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "frmDTME08.Panel7.PageControl1.tsManual.GroupBox1.btnGetSV",
+   "event_name": "OnClick",
+   "handler_name": "btnGetSVClick",
+   "leaf_name": "btnGetSV",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "frmDTME08.Panel7.PageControl1.tsManual.GroupBox1.btnSetSV",
+   "event_name": "OnClick",
+   "handler_name": "btnSetSVClick",
+   "leaf_name": "btnSetSV",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "frmDTME08.Panel7.PageControl1.tsManual.GroupBox1.btnGetStatus",
+   "event_name": "OnClick",
+   "handler_name": "btnGetStatusClick",
+   "leaf_name": "btnGetStatus",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "frmDTME08.Panel7.PageControl1.tsManual.GroupBox1.btnSetSensor",
+   "event_name": "OnClick",
+   "handler_name": "btnSetSensorClick",
+   "leaf_name": "btnSetSensor",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "frmDTME08.Panel7.PageControl1.tsSimple.btSetSV",
+   "event_name": "OnClick",
+   "handler_name": "btSetSVClick",
+   "leaf_name": "btSetSV",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "frmDTME08.Panel7.PageControl1.tsSimple.gbAT.btAT",
+   "event_name": "OnClick",
+   "handler_name": "btATClick",
+   "leaf_name": "btAT",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "frmDTME08.Panel7.PageControl1.tsSimple.gbAT.btATOff",
+   "event_name": "OnClick",
+   "handler_name": "btATOffClick",
+   "leaf_name": "btATOff",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "frmDTME08.Panel7.PageControl1.tsSimple.gbAT.btAT1by1",
+   "event_name": "OnClick",
+   "handler_name": "btAT1by1Click",
+   "leaf_name": "btAT1by1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "frmDTME08.Panel7.PageControl1.tsSimple.grpStatus.chkHeater",
+   "event_name": "OnClick",
+   "handler_name": "chkHeaterClick",
+   "leaf_name": "chkHeater",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "frmDTME08.Panel7.PageControl1.tsSimple.btnSetSVFollowCh1",
+   "event_name": "OnClick",
+   "handler_name": "btnSetSVFollowCh1Click",
+   "leaf_name": "btnSetSVFollowCh1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "frmDTME08.Panel7.PageControl1.tsSimple.btnCtrl",
+   "event_name": "OnClick",
+   "handler_name": "btnCtrlClick",
+   "leaf_name": "btnCtrl",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "frmDTME08.Panel1.GroupBox2.ScrollBox1.GroupBox.edSV",
+   "event_name": "OnClick",
+   "handler_name": "edSVClick",
+   "leaf_name": "edSV",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "frmDTME08.TimerUpdate",
+   "event_name": "OnTimer",
+   "handler_name": "TimerUpdateTimer",
+   "leaf_name": "TimerUpdate",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "frmDTME08",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "EJ1N/fDTME08.dfm"
+}

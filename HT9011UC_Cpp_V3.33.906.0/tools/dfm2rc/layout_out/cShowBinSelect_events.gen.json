@@ -1,0 +1,331 @@
+{
+ "event_count": 46,
+ "events": [
+  {
+   "control_path": "fShowBinSelect",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fShowBinSelect",
+   "vcl_class": "TfShowBinSelect"
+  },
+  {
+   "control_path": "fShowBinSelect",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fShowBinSelect",
+   "vcl_class": "TfShowBinSelect"
+  },
+  {
+   "control_path": "fShowBinSelect",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fShowBinSelect",
+   "vcl_class": "TfShowBinSelect"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1",
+   "event_name": "OnChange",
+   "handler_name": "PageControl1Change",
+   "leaf_name": "PageControl1",
+   "vcl_class": "TPageControl"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsTestBin.palUnloader.labAuto1",
+   "event_name": "OnClick",
+   "handler_name": "labAuto1Click",
+   "leaf_name": "labAuto1",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsTestBin.palUnloader.labAuto2",
+   "event_name": "OnClick",
+   "handler_name": "labAuto1Click",
+   "leaf_name": "labAuto2",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsTestBin.palUnloader.labAuto3",
+   "event_name": "OnClick",
+   "handler_name": "labAuto1Click",
+   "leaf_name": "labAuto3",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsTestBin.palUnloader.labFix1",
+   "event_name": "OnClick",
+   "handler_name": "labAuto1Click",
+   "leaf_name": "labFix1",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsTestBin.palUnloader.labFix2",
+   "event_name": "OnClick",
+   "handler_name": "labAuto1Click",
+   "leaf_name": "labFix2",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsTestBin.palUnloader.labFix3",
+   "event_name": "OnClick",
+   "handler_name": "labAuto1Click",
+   "leaf_name": "labFix3",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsTestBin.palUnloader.labFix4",
+   "event_name": "OnClick",
+   "handler_name": "labAuto1Click",
+   "leaf_name": "labFix4",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsTestBin.palUnloader.labFix5",
+   "event_name": "OnClick",
+   "handler_name": "labAuto1Click",
+   "leaf_name": "labFix5",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsTestBin.palUnloader.labFix6",
+   "event_name": "OnClick",
+   "handler_name": "labAuto1Click",
+   "leaf_name": "labFix6",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsTestBin.palUnloader.labBinBox",
+   "event_name": "OnClick",
+   "handler_name": "labAuto1Click",
+   "leaf_name": "labBinBox",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsTestBin.palUnloader.labMag1",
+   "event_name": "OnClick",
+   "handler_name": "labAuto1Click",
+   "leaf_name": "labMag1",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsTestBin.palUnloader.labMag2",
+   "event_name": "OnClick",
+   "handler_name": "labAuto1Click",
+   "leaf_name": "labMag2",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsTestBin.palUnloader.labMag3",
+   "event_name": "OnClick",
+   "handler_name": "labAuto1Click",
+   "leaf_name": "labMag3",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsTestBin.palUnloader.labMag4",
+   "event_name": "OnClick",
+   "handler_name": "labAuto1Click",
+   "leaf_name": "labMag4",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsTestBin.palUnloader.labMag5",
+   "event_name": "OnClick",
+   "handler_name": "labAuto1Click",
+   "leaf_name": "labMag5",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsTestBin.palUnloader.labMag6",
+   "event_name": "OnClick",
+   "handler_name": "labAuto1Click",
+   "leaf_name": "labMag6",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsTestBin.palUnloader.labMag7",
+   "event_name": "OnClick",
+   "handler_name": "labAuto1Click",
+   "leaf_name": "labMag7",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsTestBin.palUnloader.labMag8",
+   "event_name": "OnClick",
+   "handler_name": "labAuto1Click",
+   "leaf_name": "labMag8",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsTestBin.palUnloader.labMag9",
+   "event_name": "OnClick",
+   "handler_name": "labAuto1Click",
+   "leaf_name": "labMag9",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsTestBin.palUnloader.labMag10",
+   "event_name": "OnClick",
+   "handler_name": "labAuto1Click",
+   "leaf_name": "labMag10",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsTestBin.palUnloader.labMag11",
+   "event_name": "OnClick",
+   "handler_name": "labAuto1Click",
+   "leaf_name": "labMag11",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsTestBin.palUnloader.labMag12",
+   "event_name": "OnClick",
+   "handler_name": "labAuto1Click",
+   "leaf_name": "labMag12",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsTestBin.palUnloader.labMag13",
+   "event_name": "OnClick",
+   "handler_name": "labAuto1Click",
+   "leaf_name": "labMag13",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsTestBin.palUnloader.labMag14",
+   "event_name": "OnClick",
+   "handler_name": "labAuto1Click",
+   "leaf_name": "labMag14",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsTestBin.palUnloader.labAuto4",
+   "event_name": "OnClick",
+   "handler_name": "labAuto1Click",
+   "leaf_name": "labAuto4",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsTestBin.palUnloader.labAuto5",
+   "event_name": "OnClick",
+   "handler_name": "labAuto1Click",
+   "leaf_name": "labAuto5",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsTestBin.palUnloader.labAuto6",
+   "event_name": "OnClick",
+   "handler_name": "labAuto1Click",
+   "leaf_name": "labAuto6",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsTestBin.palUnloader.btReturn",
+   "event_name": "OnClick",
+   "handler_name": "btReturnClick",
+   "leaf_name": "btReturn",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.Tab_UPH.UPH_StringGrid",
+   "event_name": "OnDblClick",
+   "handler_name": "UPH_StringGridDblClick",
+   "leaf_name": "UPH_StringGrid",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsIndex.gbAutoCleanCount.btnAutoClean",
+   "event_name": "OnClick",
+   "handler_name": "btnAutoCleanClick",
+   "leaf_name": "btnAutoClean",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsIndex.gbAutoCleanCount.btnCleanReset",
+   "event_name": "OnClick",
+   "handler_name": "btnCleanResetClick",
+   "leaf_name": "btnCleanReset",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsIndex.gbAutoCleanCount.ed_AutoCleanCount",
+   "event_name": "OnClick",
+   "handler_name": "ed_AutoCleanCountClick",
+   "leaf_name": "ed_AutoCleanCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsIndex.btnClearCount",
+   "event_name": "OnClick",
+   "handler_name": "btnClearCountClick",
+   "leaf_name": "btnClearCount",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsIndex.gbTriggerAlm.btnICMisPlacementAuto1",
+   "event_name": "OnClick",
+   "handler_name": "btnICMisPlacementClick",
+   "leaf_name": "btnICMisPlacementAuto1",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsIndex.gbTriggerAlm.btnICMisPlacementAuto2",
+   "event_name": "OnClick",
+   "handler_name": "btnICMisPlacementClick",
+   "leaf_name": "btnICMisPlacementAuto2",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsIndex.gbTriggerAlm.btnICMisPlacementAuto3",
+   "event_name": "OnClick",
+   "handler_name": "btnICMisPlacementClick",
+   "leaf_name": "btnICMisPlacementAuto3",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsIndex.gbCopyRecipe.sbCopyRecipe",
+   "event_name": "OnClick",
+   "handler_name": "sbCopyRecipeClick",
+   "leaf_name": "sbCopyRecipe",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsASE.PLoadInput.EdLoadCount",
+   "event_name": "OnClick",
+   "handler_name": "EdLoadCountClick",
+   "leaf_name": "EdLoadCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsASE.PLoadInput.btnSetInpputCnt",
+   "event_name": "OnClick",
+   "handler_name": "btnSetInpputCntClick",
+   "leaf_name": "btnSetInpputCnt",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsARTNormalBin.palARTNor.labArtFtAuto1",
+   "event_name": "OnClick",
+   "handler_name": "labAuto1Click",
+   "leaf_name": "labArtFtAuto1",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowBinSelect.PageControl1.tsARTRTBin.palARTRT.labArtRtAuto1",
+   "event_name": "OnClick",
+   "handler_name": "labAuto1Click",
+   "leaf_name": "labArtRtAuto1",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowBinSelect.TimerAutoCleanCount",
+   "event_name": "OnTimer",
+   "handler_name": "TimerAutoCleanCountTimer",
+   "leaf_name": "TimerAutoCleanCount",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fShowBinSelect",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "cShowBinSelect.dfm"
+}

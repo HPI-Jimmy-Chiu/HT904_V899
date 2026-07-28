@@ -1,0 +1,198 @@
+{
+ "event_count": 27,
+ "events": [
+  {
+   "control_path": "ACTForm",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "ACTForm",
+   "vcl_class": "TACTForm"
+  },
+  {
+   "control_path": "ACTForm",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "ACTForm",
+   "vcl_class": "TACTForm"
+  },
+  {
+   "control_path": "ACTForm",
+   "event_name": "OnResize",
+   "handler_name": "FormResize",
+   "leaf_name": "ACTForm",
+   "vcl_class": "TACTForm"
+  },
+  {
+   "control_path": "ACTForm",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "ACTForm",
+   "vcl_class": "TACTForm"
+  },
+  {
+   "control_path": "ACTForm.pcACT.tsTemperature.pnlData.btnAutoStart",
+   "event_name": "OnClick",
+   "handler_name": "btnAutoStartClick",
+   "leaf_name": "btnAutoStart",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "ACTForm.pcACT.tsTemperature.pnlData.btnDutOnOff",
+   "event_name": "OnClick",
+   "handler_name": "btnDutOnOffClick",
+   "leaf_name": "btnDutOnOff",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "ACTForm.pcACT.tsTemperature.pnlData.btShowPos",
+   "event_name": "OnClick",
+   "handler_name": "btShowPosClick",
+   "leaf_name": "btShowPos",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "ACTForm.pcACT.tsTemperature.pnlData.edtAutoStartHr",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtAutoStartHrMouseDown",
+   "leaf_name": "edtAutoStartHr",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "ACTForm.pcACT.tsTemperature.pnlData.edtAutoStartMin",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtAutoStartMinMouseDown",
+   "leaf_name": "edtAutoStartMin",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "ACTForm.pcACT.tsTemperature.pnlData.edtRange1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtRange1MouseDown",
+   "leaf_name": "edtRange1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "ACTForm.pcACT.tsTemperature.pnlData.edtRange2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtRange1MouseDown",
+   "leaf_name": "edtRange2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "ACTForm.pcACT.tsTemperature.pnlData.edtRange3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtRange1MouseDown",
+   "leaf_name": "edtRange3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "ACTForm.pcACT.tsTemperature.Panel3.palSaveLog",
+   "event_name": "OnClick",
+   "handler_name": "palSaveLogClick",
+   "leaf_name": "palSaveLog",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "ACTForm.pcACT.tsSetup.btnUpdate",
+   "event_name": "OnClick",
+   "handler_name": "btnUpdateClick",
+   "leaf_name": "btnUpdate",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ACTForm.pcACT.tsSetup.gbACTSetting.edtCheckIntervalTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtCheckIntervalTimeMouseDown",
+   "leaf_name": "edtCheckIntervalTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "ACTForm.pcACT.tsSetup.gbACTSetting.edtCalibrationRange",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtCheckIntervalTimeMouseDown",
+   "leaf_name": "edtCalibrationRange",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "ACTForm.pcACT.tsSetup.gbACTSetting.edtReadScanTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtCheckIntervalTimeMouseDown",
+   "leaf_name": "edtReadScanTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "ACTForm.pcACT.tsSetup.gbACTSetting.edtOffsetLimit",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtCheckIntervalTimeMouseDown",
+   "leaf_name": "edtOffsetLimit",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "ACTForm.pcACT.tsSetup.gbACTSetting.edSingleOffset",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtCheckIntervalTimeMouseDown",
+   "leaf_name": "edSingleOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "ACTForm.pcACT.tsSetup.gbDisplay.edColumns",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtCheckIntervalTimeMouseDown",
+   "leaf_name": "edColumns",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "ACTForm.pcACT.tsSetup.gbACTTCPIP.btConnect",
+   "event_name": "OnClick",
+   "handler_name": "btConnectClick",
+   "leaf_name": "btConnect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "ACTForm.pcACT.tsSetup.gbACTTCPIP.btDisConnect",
+   "event_name": "OnClick",
+   "handler_name": "btDisConnectClick",
+   "leaf_name": "btDisConnect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "ACTForm.pcACT.tsSetup.gbACTTCPIP.btACTTrigger",
+   "event_name": "OnClick",
+   "handler_name": "btACTTriggerClick",
+   "leaf_name": "btACTTrigger",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ACTForm.ACTCom",
+   "event_name": "OnReceiveData",
+   "handler_name": "ACTComReceiveData",
+   "leaf_name": "ACTCom",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "ACTForm.TimerACT",
+   "event_name": "OnTimer",
+   "handler_name": "TimerACTTimer",
+   "leaf_name": "TimerACT",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "ACTForm.ClientSocketACT",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocketACTRead",
+   "leaf_name": "ClientSocketACT",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "ACTForm.ACTConnectTimer",
+   "event_name": "OnTimer",
+   "handler_name": "ACTConnectTimerTimer",
+   "leaf_name": "ACTConnectTimer",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "ACTForm",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "AutoTemperature.dfm"
+}

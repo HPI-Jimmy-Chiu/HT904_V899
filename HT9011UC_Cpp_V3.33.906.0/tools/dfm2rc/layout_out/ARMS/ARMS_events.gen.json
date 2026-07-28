@@ -1,0 +1,149 @@
+{
+ "event_count": 20,
+ "events": [
+  {
+   "control_path": "fARMS",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fARMS",
+   "vcl_class": "TfARMS"
+  },
+  {
+   "control_path": "fARMS",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fARMS",
+   "vcl_class": "TfARMS"
+  },
+  {
+   "control_path": "fARMS",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fARMS",
+   "vcl_class": "TfARMS"
+  },
+  {
+   "control_path": "fARMS.pcARMSFoem",
+   "event_name": "OnChange",
+   "handler_name": "pcARMSFoemChange",
+   "leaf_name": "pcARMSFoem",
+   "vcl_class": "TPageControl"
+  },
+  {
+   "control_path": "fARMS.pcARMSFoem.tsARMSMain.pnMain.sbMoveToDownload",
+   "event_name": "OnClick",
+   "handler_name": "sbMoveToDownloadClick",
+   "leaf_name": "sbMoveToDownload",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fARMS.pcARMSFoem.tsARMSMain.pnMain.sbARMSRecipeDownload",
+   "event_name": "OnClick",
+   "handler_name": "sbARMSRecipeDownloadClick",
+   "leaf_name": "sbARMSRecipeDownload",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fARMS.pcARMSFoem.tsARMSMain.pnMain.sbARMSRecipeUpload",
+   "event_name": "OnClick",
+   "handler_name": "sbARMSRecipeUploadClick",
+   "leaf_name": "sbARMSRecipeUpload",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fARMS.pcARMSFoem.tsARMSMain.pnMain.gbDownloadRecipe.sbRefreshDownloadRecipe",
+   "event_name": "OnClick",
+   "handler_name": "sbRefreshDownloadRecipeClick",
+   "leaf_name": "sbRefreshDownloadRecipe",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fARMS.pcARMSFoem.tsARMSMain.pnMain.gbDownloadRecipe.sbDeletDownloadRecipe",
+   "event_name": "OnClick",
+   "handler_name": "sbDeletDownloadRecipeClick",
+   "leaf_name": "sbDeletDownloadRecipe",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fARMS.pcARMSFoem.tsARMSMain.pnMain.gbUploadRecipe.sbRefreshUploadloadRecipe",
+   "event_name": "OnClick",
+   "handler_name": "sbRefreshDownloadRecipeClick",
+   "leaf_name": "sbRefreshUploadloadRecipe",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fARMS.pcARMSFoem.tsARMSMain.pnMain.gbUploadRecipe.sbDeletUploadRecipe",
+   "event_name": "OnClick",
+   "handler_name": "sbDeletDownloadRecipeClick",
+   "leaf_name": "sbDeletUploadRecipe",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fARMS.pcARMSFoem.tsARMSSetup.gbServerPathSetup.sbUploadRecipePath",
+   "event_name": "OnClick",
+   "handler_name": "sbUploadRecipePathClick",
+   "leaf_name": "sbUploadRecipePath",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fARMS.pcARMSFoem.tsARMSSetup.gbServerPathSetup.sbDownloadRecipePath",
+   "event_name": "OnClick",
+   "handler_name": "sbUploadRecipePathClick",
+   "leaf_name": "sbDownloadRecipePath",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fARMS.pcARMSFoem.tsARMSSetup.gbServerPathSetup.sbBackupUploadRecipe",
+   "event_name": "OnClick",
+   "handler_name": "sbUploadRecipePathClick",
+   "leaf_name": "sbBackupUploadRecipe",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fARMS.pcARMSFoem.tsBackup.pnBackup.GroupBox1.sbRefreshBackupUploadloadRecipe",
+   "event_name": "OnClick",
+   "handler_name": "sbRefreshDownloadRecipeClick",
+   "leaf_name": "sbRefreshBackupUploadloadRecipe",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fARMS.pcARMSFoem.tsBackup.pnBackup.GroupBox1.sbDeletBackupUploadRecipe",
+   "event_name": "OnClick",
+   "handler_name": "sbDeletDownloadRecipeClick",
+   "leaf_name": "sbDeletBackupUploadRecipe",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fARMS.pcARMSFoem.tsBackup.pnBackup.GroupBox1.sbMoveToUploadRecipeFolder",
+   "event_name": "OnClick",
+   "handler_name": "sbMoveToUploadRecipeFolderClick",
+   "leaf_name": "sbMoveToUploadRecipeFolder",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fARMS.pcARMSFoem.tsBackup.pnBackup.Panel1.FileListBoxARMS",
+   "event_name": "OnDblClick",
+   "handler_name": "FileListBoxARMSDblClick",
+   "leaf_name": "FileListBoxARMS",
+   "vcl_class": "TFileListBox"
+  },
+  {
+   "control_path": "fARMS.pnButtonTitle.sbExit",
+   "event_name": "OnClick",
+   "handler_name": "sbExitClick",
+   "leaf_name": "sbExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fARMS.pnButtonTitle.sbEquipmentUpdate",
+   "event_name": "OnClick",
+   "handler_name": "sbEquipmentUpdateClick",
+   "leaf_name": "sbEquipmentUpdate",
+   "vcl_class": "TSpeedButton"
+  }
+ ],
+ "form_name": "fARMS",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "ARMS/ARMS.dfm"
+}

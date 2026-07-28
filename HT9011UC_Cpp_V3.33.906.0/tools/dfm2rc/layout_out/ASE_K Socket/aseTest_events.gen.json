@@ -1,0 +1,72 @@
+{
+ "event_count": 9,
+ "events": [
+  {
+   "control_path": "ASESendMessage.PageControl1.Commucation.btnTest",
+   "event_name": "OnClick",
+   "handler_name": "btnTestClick",
+   "leaf_name": "btnTest",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ASESendMessage.PageControl1.Commucation.btnTestRecv",
+   "event_name": "OnClick",
+   "handler_name": "btnTestRecvClick",
+   "leaf_name": "btnTestRecv",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ASESendMessage.PageControl1.Setup.IPPort1",
+   "event_name": "OnClick",
+   "handler_name": "IPPort2Click",
+   "leaf_name": "IPPort1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "ASESendMessage.PageControl1.Setup.Connect",
+   "event_name": "OnClick",
+   "handler_name": "ConnectClick",
+   "leaf_name": "Connect",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ASESendMessage.PageControl1.Setup.SaveData",
+   "event_name": "OnClick",
+   "handler_name": "SaveDataClick",
+   "leaf_name": "SaveData",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ASESendMessage.PageControl1.Setup.Button2",
+   "event_name": "OnClick",
+   "handler_name": "Button2Click",
+   "leaf_name": "Button2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ASESendMessage.PageControl1.Setup.IPPort2",
+   "event_name": "OnClick",
+   "handler_name": "IPPort2Click",
+   "leaf_name": "IPPort2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "ASESendMessage.NMUDP1",
+   "event_name": "OnDataReceived",
+   "handler_name": "NMUDP1DataReceived",
+   "leaf_name": "NMUDP1",
+   "vcl_class": "TNMUDP"
+  },
+  {
+   "control_path": "ASESendMessage.NMUDP2",
+   "event_name": "OnDataReceived",
+   "handler_name": "NMUDP1DataReceived",
+   "leaf_name": "NMUDP2",
+   "vcl_class": "TNMUDP"
+  }
+ ],
+ "form_name": "ASESendMessage",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "ASE_K Socket/aseTest.dfm"
+}

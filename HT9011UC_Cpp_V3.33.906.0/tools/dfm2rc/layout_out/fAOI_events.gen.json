@@ -1,0 +1,457 @@
+{
+ "event_count": 64,
+ "events": [
+  {
+   "control_path": "FrmAOI",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "FrmAOI",
+   "vcl_class": "TFrmAOI"
+  },
+  {
+   "control_path": "FrmAOI",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "FrmAOI",
+   "vcl_class": "TFrmAOI"
+  },
+  {
+   "control_path": "FrmAOI.Panel1.spbSave",
+   "event_name": "OnClick",
+   "handler_name": "spbSaveClick",
+   "leaf_name": "spbSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "FrmAOI.Panel1.sbtExit",
+   "event_name": "OnClick",
+   "handler_name": "sbtExitClick",
+   "leaf_name": "sbtExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet1.GroupBox2.edt_FailPADView",
+   "event_name": "OnClick",
+   "handler_name": "edt_FailTopViewClick",
+   "leaf_name": "edt_FailPADView",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet1.GroupBox2.edt_TimeoutPADView",
+   "event_name": "OnClick",
+   "handler_name": "edt_SDelayTopViewClick",
+   "leaf_name": "edt_TimeoutPADView",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet1.GroupBox2.edt_SDelayPADView",
+   "event_name": "OnClick",
+   "handler_name": "edt_SDelayTopViewClick",
+   "leaf_name": "edt_SDelayPADView",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet1.GroupBox2.edt_FailFailPADView",
+   "event_name": "OnClick",
+   "handler_name": "edt_FailTopViewClick",
+   "leaf_name": "edt_FailFailPADView",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet1.GroupBox2.GroupBox10.Panel2.mtDutOnOff_Vitrox1",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtDutOnOff_Vitrox1MouseDown",
+   "leaf_name": "mtDutOnOff_Vitrox1",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet1.GroupBox3.edt_FailBGAView",
+   "event_name": "OnClick",
+   "handler_name": "edt_FailTopViewClick",
+   "leaf_name": "edt_FailBGAView",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet1.GroupBox3.edt_TimeoutBGAView",
+   "event_name": "OnClick",
+   "handler_name": "edt_SDelayTopViewClick",
+   "leaf_name": "edt_TimeoutBGAView",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet1.GroupBox3.edt_SDelayBGAView",
+   "event_name": "OnClick",
+   "handler_name": "edt_SDelayTopViewClick",
+   "leaf_name": "edt_SDelayBGAView",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet1.GroupBox3.edt_FailFailBGAView",
+   "event_name": "OnClick",
+   "handler_name": "edt_FailTopViewClick",
+   "leaf_name": "edt_FailFailBGAView",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet1.GroupBox3.GroupBox6.SitePanel_Vit.mtDutOnOff_Vitrox",
+   "event_name": "OnMouseUp",
+   "handler_name": "mtDutOnOff_VitroxMouseUp",
+   "leaf_name": "mtDutOnOff_Vitrox",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet1.GroupBox1.edt_FailTopView",
+   "event_name": "OnClick",
+   "handler_name": "edt_FailTopViewClick",
+   "leaf_name": "edt_FailTopView",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet1.GroupBox1.edt_TimeoutTopView",
+   "event_name": "OnClick",
+   "handler_name": "edt_SDelayTopViewClick",
+   "leaf_name": "edt_TimeoutTopView",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet1.GroupBox1.edt_SDelayTopView",
+   "event_name": "OnClick",
+   "handler_name": "edt_SDelayTopViewClick",
+   "leaf_name": "edt_SDelayTopView",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet1.GroupBox4.edt_AlarmCount",
+   "event_name": "OnClick",
+   "handler_name": "edt_AlarmCountClick",
+   "leaf_name": "edt_AlarmCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet1.GroupBox4.cbTesterFailBin",
+   "event_name": "OnMouseUp",
+   "handler_name": "cbTesterFailBinMouseUp",
+   "leaf_name": "cbTesterFailBin",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet1.GroupBox4.Panel3.edt_PassFailBGAPADView",
+   "event_name": "OnClick",
+   "handler_name": "edt_FailTopViewClick",
+   "leaf_name": "edt_PassFailBGAPADView",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet1.GroupBox4.Panel3.edt_FailFailBGAPADView",
+   "event_name": "OnClick",
+   "handler_name": "edt_FailTopViewClick",
+   "leaf_name": "edt_FailFailBGAPADView",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet2.GroupBox11.edt_ConAlarmConut",
+   "event_name": "OnClick",
+   "handler_name": "edt_AlarmCountClick",
+   "leaf_name": "edt_ConAlarmConut",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet2.GroupBox11.edt_ConAlarmConut1",
+   "event_name": "OnClick",
+   "handler_name": "edt_AlarmCountClick",
+   "leaf_name": "edt_ConAlarmConut1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet3.pnlAOISet.edtAOIIntervalCounter",
+   "event_name": "OnClick",
+   "handler_name": "edt_SDelayTopViewClick",
+   "leaf_name": "edtAOIIntervalCounter",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet3.pnlAOISet.edtAOIRetryCounter",
+   "event_name": "OnClick",
+   "handler_name": "edtAOIRetryCounterClick",
+   "leaf_name": "edtAOIRetryCounter",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet3.pnlAOISet.rgAOIFailBinType",
+   "event_name": "OnClick",
+   "handler_name": "rgAOIFailBinTypeClick",
+   "leaf_name": "rgAOIFailBinType",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet3.edtScannerReadTimeout",
+   "event_name": "OnClick",
+   "handler_name": "edtScannerReadTimeoutClick",
+   "leaf_name": "edtScannerReadTimeout",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet3.pnlAOIBDAlarm.sbBDTotalReset",
+   "event_name": "OnClick",
+   "handler_name": "sbBDTotalResetClick",
+   "leaf_name": "sbBDTotalReset",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet3.pnlAOIBDAlarm.SpeedButton58",
+   "event_name": "OnClick",
+   "handler_name": "sbBDTotalResetClick",
+   "leaf_name": "SpeedButton58",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet3.pnlAOIBDAlarm.SpeedButton59",
+   "event_name": "OnClick",
+   "handler_name": "sbBDTotalResetClick",
+   "leaf_name": "SpeedButton59",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet3.pnlAOIBDAlarm.SpeedButton60",
+   "event_name": "OnClick",
+   "handler_name": "sbBDTotalResetClick",
+   "leaf_name": "SpeedButton60",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet3.pnlAOIBDAlarm.edtAOIBDCounterTotal",
+   "event_name": "OnClick",
+   "handler_name": "edt_AlarmCountClick",
+   "leaf_name": "edtAOIBDCounterTotal",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet3.pnlAOIBDAlarm.edtAOIBDCounterTotalConti",
+   "event_name": "OnClick",
+   "handler_name": "edt_AlarmCountClick",
+   "leaf_name": "edtAOIBDCounterTotalConti",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet3.pnlAOIBDAlarm.edtAOIBDCounterSite",
+   "event_name": "OnClick",
+   "handler_name": "edt_AlarmCountClick",
+   "leaf_name": "edtAOIBDCounterSite",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet3.pnlAOIBDAlarm.edtAOIBDCounterSiteConti",
+   "event_name": "OnClick",
+   "handler_name": "edt_AlarmCountClick",
+   "leaf_name": "edtAOIBDCounterSiteConti",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet3.edt_SDelayScanAOI",
+   "event_name": "OnClick",
+   "handler_name": "edt_SDelayTopViewClick",
+   "leaf_name": "edt_SDelayScanAOI",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet3.edt_TimeoutScanAOI",
+   "event_name": "OnClick",
+   "handler_name": "edt_SDelayTopViewClick",
+   "leaf_name": "edt_TimeoutScanAOI",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet3.GroupBox13.edt_ScanAOIAlarmCountBySite",
+   "event_name": "OnClick",
+   "handler_name": "edt_AlarmCountClick",
+   "leaf_name": "edt_ScanAOIAlarmCountBySite",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet3.GroupBox13.edt_ScanAOIAlarmCountByArm",
+   "event_name": "OnClick",
+   "handler_name": "edt_AlarmCountClick",
+   "leaf_name": "edt_ScanAOIAlarmCountByArm",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet3.edtScannerICGain",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtScannerICGainMouseDown",
+   "leaf_name": "edtScannerICGain",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet3.edtScannerLGAWaitTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtScannerLGAWaitTimeMouseDown",
+   "leaf_name": "edtScannerLGAWaitTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet3.mtAOIBuffer",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtAOIBufferMouseDown",
+   "leaf_name": "mtAOIBuffer",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet4.GroupBox12.spbStartCom",
+   "event_name": "OnClick",
+   "handler_name": "spbStartComClick",
+   "leaf_name": "spbStartCom",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet4.GroupBox12.spbStopCom",
+   "event_name": "OnClick",
+   "handler_name": "spbStopComClick",
+   "leaf_name": "spbStopCom",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet4.GroupBox12.Panel76.sbAOISend",
+   "event_name": "OnClick",
+   "handler_name": "sbAOISendClick",
+   "leaf_name": "sbAOISend",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet4.Panel4.pnlManual.sbSend",
+   "event_name": "OnClick",
+   "handler_name": "sbSendClick",
+   "leaf_name": "sbSend",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet4.Panel4.pnlManual.sbClear",
+   "event_name": "OnClick",
+   "handler_name": "sbClearClick",
+   "leaf_name": "sbClear",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet5.GroupBox14.edt_TopScanAOIAlarmCountBySite",
+   "event_name": "OnClick",
+   "handler_name": "edt_AlarmCountClick",
+   "leaf_name": "edt_TopScanAOIAlarmCountBySite",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet5.GroupBox14.edt_TopScanAOIAlarmCountByArm",
+   "event_name": "OnClick",
+   "handler_name": "edt_AlarmCountClick",
+   "leaf_name": "edt_TopScanAOIAlarmCountByArm",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet5.Panel5.edtTopAOIIntervalCounter",
+   "event_name": "OnClick",
+   "handler_name": "edt_SDelayTopViewClick",
+   "leaf_name": "edtTopAOIIntervalCounter",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet5.Panel5.edtTopAOIRetryCounter",
+   "event_name": "OnClick",
+   "handler_name": "edtAOIRetryCounterClick",
+   "leaf_name": "edtTopAOIRetryCounter",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet5.edtTopScannerReadTimeout",
+   "event_name": "OnClick",
+   "handler_name": "edtScannerReadTimeoutClick",
+   "leaf_name": "edtTopScannerReadTimeout",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet5.edt_TimeoutTopScanAOI",
+   "event_name": "OnClick",
+   "handler_name": "edt_SDelayTopViewClick",
+   "leaf_name": "edt_TimeoutTopScanAOI",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet5.edt_SDelayTopScanAOI",
+   "event_name": "OnClick",
+   "handler_name": "edt_SDelayTopViewClick",
+   "leaf_name": "edt_SDelayTopScanAOI",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet6.GroupBox15.spbTopStartCom",
+   "event_name": "OnClick",
+   "handler_name": "spbStartComClick",
+   "leaf_name": "spbTopStartCom",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet6.GroupBox15.SpeedButton2",
+   "event_name": "OnClick",
+   "handler_name": "spbStopComClick",
+   "leaf_name": "SpeedButton2",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet6.GroupBox15.Panel6.sbTopAOISend",
+   "event_name": "OnClick",
+   "handler_name": "sbAOISendClick",
+   "leaf_name": "sbTopAOISend",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet6.Panel7.Panel8.sbTopSend",
+   "event_name": "OnClick",
+   "handler_name": "sbSendClick",
+   "leaf_name": "sbTopSend",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.TabSheet6.Panel7.Panel8.sbTopClear",
+   "event_name": "OnClick",
+   "handler_name": "sbClearClick",
+   "leaf_name": "sbTopClear",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.tsTopBtnModSet.Panel17.Panel15.btSaveReport",
+   "event_name": "OnClick",
+   "handler_name": "btSaveReportClick",
+   "leaf_name": "btSaveReport",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.tsTopBtnCommSet.GroupBox16.Panel9.pConnect.btnTopBtm_Connect",
+   "event_name": "OnClick",
+   "handler_name": "btnTopBtm_ConnectClick",
+   "leaf_name": "btnTopBtm_Connect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "FrmAOI.PageControl1.tsTopBtnCommSet.GroupBox16.Panel9.Panel11.btnSimulateTopBtm",
+   "event_name": "OnClick",
+   "handler_name": "btnSimulateTopBtmClick",
+   "leaf_name": "btnSimulateTopBtm",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "FrmAOI.AOIComm",
+   "event_name": "OnReceiveData",
+   "handler_name": "AOICommReceiveData",
+   "leaf_name": "AOIComm",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "FrmAOI.TopAOIComm",
+   "event_name": "OnReceiveData",
+   "handler_name": "AOICommReceiveData",
+   "leaf_name": "TopAOIComm",
+   "vcl_class": "TComm"
+  }
+ ],
+ "form_name": "FrmAOI",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "fAOI.dfm"
+}

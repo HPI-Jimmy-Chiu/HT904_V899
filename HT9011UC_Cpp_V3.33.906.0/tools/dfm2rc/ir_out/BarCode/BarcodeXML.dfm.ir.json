@@ -1,0 +1,200 @@
+{
+ "control_node_count": 2,
+ "encoding_used": "cp950",
+ "form_class": "TfrmXml",
+ "form_name": "frmXml",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "frmXml.IdHTTPMESSystem",
+    "frmXml.XMLDocument1"
+   ],
+   "class": "TfrmXml",
+   "depth": 0,
+   "events": {},
+   "geometry": {
+    "height": 83,
+    "left": 313,
+    "top": 120,
+    "width": 180
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "frmXml",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "frmXml",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Xml"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnFace"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 83
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 313
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 120
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 180
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TIdHTTP",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": null,
+    "left": 36,
+    "top": 8,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 16,
+   "name": "IdHTTPMESSystem",
+   "objkind": "object",
+   "parent_path": "frmXml",
+   "path": "frmXml.IdHTTPMESSystem",
+   "properties": {
+    "Left": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "Request.Accept": {
+     "type": "STR",
+     "value": "text/html, */*"
+    },
+    "Request.ContentLength": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Request.ContentRangeEnd": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Request.ContentRangeStart": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Request.ProxyPort": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Request.UserAgent": {
+     "type": "STR",
+     "value": "Mozilla/3.0 (compatible; Indy Library)"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TXMLDocument",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": null,
+    "left": 72,
+    "top": 8,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 26,
+   "name": "XMLDocument1",
+   "objkind": "object",
+   "parent_path": "frmXml",
+   "path": "frmXml.XMLDocument1",
+   "properties": {
+    "DOMVendorDesc": {
+     "type": "STR",
+     "value": "Open XML"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "BarCode/BarcodeXML.dfm",
+ "total_nodes_incl_root": 3
+}

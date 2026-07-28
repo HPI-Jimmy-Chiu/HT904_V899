@@ -1,0 +1,1863 @@
+{
+ "control_node_count": 29,
+ "encoding_used": "cp950",
+ "form_class": "TfAutomation",
+ "form_name": "fAutomation",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fAutomation.pgcOLP",
+    "fAutomation.gbAutomation",
+    "fAutomation.btUDPSend",
+    "fAutomation.btUDPMap",
+    "fAutomation.btUDPTemp",
+    "fAutomation.OLPServer",
+    "fAutomation.tmrOLP",
+    "fAutomation.OLPClient",
+    "fAutomation.NMUDP1"
+   ],
+   "class": "TfAutomation",
+   "depth": 0,
+   "events": {
+    "OnDestroy": "FormDestroy"
+   },
+   "geometry": {
+    "height": 610,
+    "left": 391,
+    "top": 195,
+    "width": 884
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "fAutomation",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "fAutomation",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Automation"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 610
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 391
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnDestroy": {
+     "type": "SCALAR",
+     "value": "FormDestroy"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 195
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 884
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [
+    "fAutomation.pgcOLP.TabSheet20",
+    "fAutomation.pgcOLP.TabSheet6",
+    "fAutomation.pgcOLP.TabSheet22"
+   ],
+   "class": "TPageControl",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 458,
+    "left": 0,
+    "top": 113,
+    "width": 868
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "TABHOST",
+   "line": 17,
+   "name": "pgcOLP",
+   "objkind": "object",
+   "parent_path": "fAutomation",
+   "path": "fAutomation.pgcOLP",
+   "properties": {
+    "ActivePage": {
+     "type": "SCALAR",
+     "value": "TabSheet20"
+    },
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 458
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabIndex": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 113
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 868
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fAutomation.pgcOLP.TabSheet20.Memo"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 26,
+   "name": "TabSheet20",
+   "objkind": "object",
+   "parent_path": "fAutomation.pgcOLP",
+   "path": "fAutomation.pgcOLP.TabSheet20",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "1"
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 3,
+   "events": {
+    "OnDblClick": "MemoDblClick"
+   },
+   "geometry": {
+    "height": 430,
+    "left": 0,
+    "top": 0,
+    "width": 860
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 28,
+   "name": "Memo",
+   "objkind": "object",
+   "parent_path": "fAutomation.pgcOLP.TabSheet20",
+   "path": "fAutomation.pgcOLP.TabSheet20.Memo",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 430
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "OnDblClick": {
+     "type": "SCALAR",
+     "value": "MemoDblClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 860
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fAutomation.pgcOLP.TabSheet6.MemoChar"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 39,
+   "name": "TabSheet6",
+   "objkind": "object",
+   "parent_path": "fAutomation.pgcOLP",
+   "path": "fAutomation.pgcOLP.TabSheet6",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "2"
+    },
+    "ImageIndex": {
+     "type": "SCALAR",
+     "value": 1
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 3,
+   "events": {
+    "OnDblClick": "MemoDblClick"
+   },
+   "geometry": {
+    "height": 431,
+    "left": 0,
+    "top": 0,
+    "width": 860
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 42,
+   "name": "MemoChar",
+   "objkind": "object",
+   "parent_path": "fAutomation.pgcOLP.TabSheet6",
+   "path": "fAutomation.pgcOLP.TabSheet6.MemoChar",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "CHINESEBIG5_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 431
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "OnDblClick": {
+     "type": "SCALAR",
+     "value": "MemoDblClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 860
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fAutomation.pgcOLP.TabSheet22.MemoCode"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 59,
+   "name": "TabSheet22",
+   "objkind": "object",
+   "parent_path": "fAutomation.pgcOLP",
+   "path": "fAutomation.pgcOLP.TabSheet22",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "3"
+    },
+    "ImageIndex": {
+     "type": "SCALAR",
+     "value": 2
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 3,
+   "events": {
+    "OnDblClick": "MemoDblClick"
+   },
+   "geometry": {
+    "height": 431,
+    "left": 0,
+    "top": 0,
+    "width": 860
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 62,
+   "name": "MemoCode",
+   "objkind": "object",
+   "parent_path": "fAutomation.pgcOLP.TabSheet22",
+   "path": "fAutomation.pgcOLP.TabSheet22.MemoCode",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "CHINESEBIG5_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 431
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "OnDblClick": {
+     "type": "SCALAR",
+     "value": "MemoDblClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 860
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [
+    "fAutomation.gbAutomation.OnLine",
+    "fAutomation.gbAutomation.OnLine2",
+    "fAutomation.gbAutomation.cbbOLPCommand",
+    "fAutomation.gbAutomation.btEventReport",
+    "fAutomation.gbAutomation.btAlarmReport",
+    "fAutomation.gbAutomation.chkViewComm",
+    "fAutomation.gbAutomation.btnConnect",
+    "fAutomation.gbAutomation.btnDisconnect",
+    "fAutomation.gbAutomation.btTestResult",
+    "fAutomation.gbAutomation.Panel1"
+   ],
+   "class": "TGroupBox",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 113,
+    "left": 0,
+    "top": 0,
+    "width": 868
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 80,
+   "name": "gbAutomation",
+   "objkind": "object",
+   "parent_path": "fAutomation",
+   "path": "fAutomation.gbAutomation",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Automation"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 113
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 868
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 45,
+    "left": 172,
+    "top": 12,
+    "width": 45
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 88,
+   "name": "OnLine",
+   "objkind": "object",
+   "parent_path": "fAutomation.gbAutomation",
+   "path": "fAutomation.gbAutomation.OnLine",
+   "properties": {
+    "Enabled": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Glyph.Data": {
+     "type": "BLOB",
+     "value": {
+      "byte_len": 3130,
+      "hex": "360C0000424D360C000000000000360000002800000020000000200000000100180000000000000C0000130B0000130B00000000000000000000FFFFFF000000000000000000000000000000000000000000000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000000000000000000000000000000000000000000000000000000000000000FFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080808080808080808080000000FFFFFFFFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080808080808080808080000000FFFFFF808080FFFFFFC0C0C000FF0000FF00C0C0C0C0C0C0000000000000000000000000C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C000FF0000FF00C0C0C0C0C0C0000000000000000000000000C0C0C0808080000000FFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080808080808080808080C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080808080808080808080C0C0C0808080000000FFFFFF808080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080000000FFFFFFFFFFFFFFFFFF808080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080000000FFFFFFFFFFFF808080000000000000000000000000000000000000000000000000000000000000C0C0C0000000FFFFFFFFFFFFFFFFFFFFFFFF808080000000000000000000000000000000000000000000000000000000000000C0C0C0000000FFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080808080000000FFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFF808080000000BF0000BF0000BF0000BF0000BF0000C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000BF0000BF0000BF0000BF0000BF0000C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFF808080000000FF0000FF0000FF0000FF0000BF0000C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000FF0000FF0000FF0000FF0000BF0000C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFF808080000000FF0000FF0000FF0000FF0000BF0000C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000FF0000FF0000FF0000FF0000BF0000C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFF808080000000FFFF00FF0000FF0000FF0000BF0000C0C0C0808080000000000000FFFFFFFFFFFFFFFFFF000000808080FFFFFF808080000000FFFF00FF0000FF0000FF0000BF0000C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFF808080000000000000000000000000000000000000C0C0C0808080000000FFFFFF000000000000000000FFFFFF808080FFFFFF808080000000000000000000000000000000000000C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080000000FFFFFFFFFFFF000000FFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080FFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000000000000000000000000000000000000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080808080808080808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C000FF0000FF00C0C0C0C0C0C0000000000000000000000000C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080808080808080808080C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080000000000000000000000000000000000000000000000000000000000000C0C0C0000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000BFBF00BFBF00BFBF00BFBF00808080C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000BFBF00BFBF00BFBF00BFBF00808080C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000BFBF00BFBF00BFBF00BFBF00808080C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000FFFF00BFBF00BFBF00BFBF00808080C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000000000000000000000000000808080C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+      "sha1": "6bc36ed42298a2900b4526eb6281c21b5d8207cd"
+     }
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 45
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 172
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 45
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 45,
+    "left": 227,
+    "top": 12,
+    "width": 44
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 194,
+   "name": "OnLine2",
+   "objkind": "object",
+   "parent_path": "fAutomation.gbAutomation",
+   "path": "fAutomation.gbAutomation.OnLine2",
+   "properties": {
+    "Enabled": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Glyph.Data": {
+     "type": "BLOB",
+     "value": {
+      "byte_len": 3130,
+      "hex": "360C0000424D360C000000000000360000002800000020000000200000000100180000000000000C0000130B0000130B00000000000000000000FFFFFF000000000000000000000000000000000000000000000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000000000000000000000000000000000000000000000000000000000000000FFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080808080808080808080000000FFFFFFFFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080808080808080808080000000FFFFFF808080FFFFFFC0C0C000FF0000FF00C0C0C0C0C0C0000000000000000000000000C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C000FF0000FF00C0C0C0C0C0C0000000000000000000000000C0C0C0808080000000FFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080808080808080808080C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080808080808080808080C0C0C0808080000000FFFFFF808080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080000000FFFFFFFFFFFFFFFFFF808080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080000000FFFFFFFFFFFF808080000000000000000000000000000000000000000000000000000000000000C0C0C0000000FFFFFFFFFFFFFFFFFFFFFFFF808080000000000000000000000000000000000000000000000000000000000000C0C0C0000000FFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080808080000000FFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFF808080000000BF0000BF0000BF0000BF0000BF0000C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000BF0000BF0000BF0000BF0000BF0000C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFF808080000000FF0000FF0000FF0000FF0000BF0000C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000FF0000FF0000FF0000FF0000BF0000C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFF808080000000FF0000FF0000FF0000FF0000BF0000C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000FF0000FF0000FF0000FF0000BF0000C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFF808080000000FFFF00FF0000FF0000FF0000BF0000C0C0C0808080000000000000FFFFFFFFFFFFFFFFFF000000808080FFFFFF808080000000FFFF00FF0000FF0000FF0000BF0000C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFF808080000000000000000000000000000000000000C0C0C0808080000000FFFFFF000000000000000000FFFFFF808080FFFFFF808080000000000000000000000000000000000000C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080000000FFFFFFFFFFFF000000FFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080FFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000000000000000000000000000000000000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080808080808080808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C000FF0000FF00C0C0C0C0C0C0000000000000000000000000C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080808080808080808080C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080000000000000000000000000000000000000000000000000000000000000C0C0C0000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000BFBF00BFBF00BFBF00BFBF00808080C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000BFBF00BFBF00BFBF00BFBF00808080C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000BFBF00BFBF00BFBF00BFBF00808080C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000FFFF00BFBF00BFBF00BFBF00808080C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000000000000000000000000000808080C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+      "sha1": "6bc36ed42298a2900b4526eb6281c21b5d8207cd"
+     }
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 45
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 227
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 44
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 284,
+    "top": 13,
+    "width": 145
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 300,
+   "name": "cbbOLPCommand",
+   "objkind": "object",
+   "parent_path": "fAutomation.gbAutomation",
+   "path": "fAutomation.gbAutomation.cbbOLPCommand",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "ItemIndex": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "0001",
+      "0002",
+      "0003",
+      "0004",
+      "0005",
+      "0006",
+      "0007"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 284
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0001"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 145
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "btEventReportClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 285,
+    "top": 41,
+    "width": 146
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 318,
+   "name": "btEventReport",
+   "objkind": "object",
+   "parent_path": "fAutomation.gbAutomation",
+   "path": "fAutomation.gbAutomation.btEventReport",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Even Report"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 285
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btEventReportClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 146
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "btAlarmReportClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 436,
+    "top": 9,
+    "width": 144
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 327,
+   "name": "btAlarmReport",
+   "objkind": "object",
+   "parent_path": "fAutomation.gbAutomation",
+   "path": "fAutomation.gbAutomation.btAlarmReport",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Alarm Report"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 436
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btAlarmReportClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 144
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 605,
+    "top": 48,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 336,
+   "name": "chkViewComm",
+   "objkind": "object",
+   "parent_path": "fAutomation.gbAutomation",
+   "path": "fAutomation.gbAutomation.chkViewComm",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "View Communction"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 605
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 48
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "btnConnectClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 8,
+    "top": 13,
+    "width": 128
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 344,
+   "name": "btnConnect",
+   "objkind": "object",
+   "parent_path": "fAutomation.gbAutomation",
+   "path": "fAutomation.gbAutomation.btnConnect",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Connect"
+    },
+    "Enabled": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btnConnectClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 128
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "btnDisconnectClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 8,
+    "top": 44,
+    "width": 128
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 354,
+   "name": "btnDisconnect",
+   "objkind": "object",
+   "parent_path": "fAutomation.gbAutomation",
+   "path": "fAutomation.gbAutomation.btnDisconnect",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "DisConnect"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btnDisconnectClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 44
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 128
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "btTestResultClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 436,
+    "top": 41,
+    "width": 144
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 363,
+   "name": "btTestResult",
+   "objkind": "object",
+   "parent_path": "fAutomation.gbAutomation",
+   "path": "fAutomation.gbAutomation.btTestResult",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Test Result"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 436
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btTestResultClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 144
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fAutomation.gbAutomation.Panel1.lbIP",
+    "fAutomation.gbAutomation.Panel1.lbPORT",
+    "fAutomation.gbAutomation.Panel1.edinputIP",
+    "fAutomation.gbAutomation.Panel1.edinputport"
+   ],
+   "class": "TPanel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 30,
+    "left": 348,
+    "top": 72,
+    "width": 313
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 372,
+   "name": "Panel1",
+   "objkind": "object",
+   "parent_path": "fAutomation.gbAutomation",
+   "path": "fAutomation.gbAutomation.Panel1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 30
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 348
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 313
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": 7,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 4,
+    "top": 7,
+    "width": 74
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 378,
+   "name": "lbIP",
+   "objkind": "object",
+   "parent_path": "fAutomation.gbAutomation.Panel1",
+   "path": "fAutomation.gbAutomation.Panel1.lbIP",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "IP(Address):"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 74
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 200,
+    "top": 7,
+    "width": 41
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 391,
+   "name": "lbPORT",
+   "objkind": "object",
+   "parent_path": "fAutomation.gbAutomation.Panel1",
+   "path": "fAutomation.gbAutomation.Panel1.lbPORT",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "PORT:"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 200
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 41
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 80,
+    "top": 2,
+    "width": 109
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 404,
+   "name": "edinputIP",
+   "objkind": "object",
+   "parent_path": "fAutomation.gbAutomation.Panel1",
+   "path": "fAutomation.gbAutomation.Panel1.edinputIP",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Text": {
+     "type": "STR",
+     "value": "192.168.120.143"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 109
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {
+    "OnMouseDown": "edinputportMouseDown"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 244,
+    "top": 2,
+    "width": 57
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 418,
+   "name": "edinputport",
+   "objkind": "object",
+   "parent_path": "fAutomation.gbAutomation.Panel1",
+   "path": "fAutomation.gbAutomation.Panel1.edinputport",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 244
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edinputportMouseDown"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Text": {
+     "type": "STR",
+     "value": "6670"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 57
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "btUDPSendClick"
+   },
+   "geometry": {
+    "height": 36,
+    "left": 519,
+    "top": 8,
+    "width": 111
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 429,
+   "name": "btUDPSend",
+   "objkind": "object",
+   "parent_path": "fAutomation",
+   "path": "fAutomation.btUDPSend",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Map + Temp"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 519
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btUDPSendClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 111
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "btUDPMapClick"
+   },
+   "geometry": {
+    "height": 36,
+    "left": 636,
+    "top": 8,
+    "width": 111
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 438,
+   "name": "btUDPMap",
+   "objkind": "object",
+   "parent_path": "fAutomation",
+   "path": "fAutomation.btUDPMap",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Map"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 636
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btUDPMapClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 111
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "btUDPTempClick"
+   },
+   "geometry": {
+    "height": 36,
+    "left": 753,
+    "top": 8,
+    "width": 111
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 447,
+   "name": "btUDPTemp",
+   "objkind": "object",
+   "parent_path": "fAutomation",
+   "path": "fAutomation.btUDPTemp",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Temp"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 753
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btUDPTempClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 111
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TServerSocket",
+   "depth": 1,
+   "events": {
+    "OnClientConnect": "OLPServerClientConnect",
+    "OnClientDisconnect": "OLPServerClientDisconnect",
+    "OnClientError": "OLPServerClientError",
+    "OnClientRead": "OLPServerClientRead"
+   },
+   "geometry": {
+    "height": null,
+    "left": 788,
+    "top": 3,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 456,
+   "name": "OLPServer",
+   "objkind": "object",
+   "parent_path": "fAutomation",
+   "path": "fAutomation.OLPServer",
+   "properties": {
+    "Active": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 788
+    },
+    "OnClientConnect": {
+     "type": "SCALAR",
+     "value": "OLPServerClientConnect"
+    },
+    "OnClientDisconnect": {
+     "type": "SCALAR",
+     "value": "OLPServerClientDisconnect"
+    },
+    "OnClientError": {
+     "type": "SCALAR",
+     "value": "OLPServerClientError"
+    },
+    "OnClientRead": {
+     "type": "SCALAR",
+     "value": "OLPServerClientRead"
+    },
+    "Port": {
+     "type": "SCALAR",
+     "value": 5001
+    },
+    "ServerType": {
+     "type": "SCALAR",
+     "value": "stNonBlocking"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 3
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTimer",
+   "depth": 1,
+   "events": {
+    "OnTimer": "tmrOLPTimer"
+   },
+   "geometry": {
+    "height": null,
+    "left": 756,
+    "top": 4,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 467,
+   "name": "tmrOLP",
+   "objkind": "object",
+   "parent_path": "fAutomation",
+   "path": "fAutomation.tmrOLP",
+   "properties": {
+    "Enabled": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 756
+    },
+    "OnTimer": {
+     "type": "SCALAR",
+     "value": "tmrOLPTimer"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 4
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TClientSocket",
+   "depth": 1,
+   "events": {
+    "OnConnect": "OLPClientConnect",
+    "OnConnecting": "OLPClientConnecting",
+    "OnDisconnect": "OLPClientDisconnect",
+    "OnError": "OLPClientError",
+    "OnRead": "OLPClientRead"
+   },
+   "geometry": {
+    "height": null,
+    "left": 724,
+    "top": 4,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 474,
+   "name": "OLPClient",
+   "objkind": "object",
+   "parent_path": "fAutomation",
+   "path": "fAutomation.OLPClient",
+   "properties": {
+    "Active": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Address": {
+     "type": "STR",
+     "value": "10.33.10.70"
+    },
+    "ClientType": {
+     "type": "SCALAR",
+     "value": "ctNonBlocking"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 724
+    },
+    "OnConnect": {
+     "type": "SCALAR",
+     "value": "OLPClientConnect"
+    },
+    "OnConnecting": {
+     "type": "SCALAR",
+     "value": "OLPClientConnecting"
+    },
+    "OnDisconnect": {
+     "type": "SCALAR",
+     "value": "OLPClientDisconnect"
+    },
+    "OnError": {
+     "type": "SCALAR",
+     "value": "OLPClientError"
+    },
+    "OnRead": {
+     "type": "SCALAR",
+     "value": "OLPClientRead"
+    },
+    "Port": {
+     "type": "SCALAR",
+     "value": 5002
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 4
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TNMUDP",
+   "depth": 1,
+   "events": {
+    "OnDataReceived": "NMUDP1DataReceived"
+   },
+   "geometry": {
+    "height": null,
+    "left": 820,
+    "top": 4,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 487,
+   "name": "NMUDP1",
+   "objkind": "object",
+   "parent_path": "fAutomation",
+   "path": "fAutomation.NMUDP1",
+   "properties": {
+    "Left": {
+     "type": "SCALAR",
+     "value": 820
+    },
+    "LocalPort": {
+     "type": "SCALAR",
+     "value": 9001
+    },
+    "OnDataReceived": {
+     "type": "SCALAR",
+     "value": "NMUDP1DataReceived"
+    },
+    "RemoteHost": {
+     "type": "STR",
+     "value": "127.0.0.1"
+    },
+    "RemotePort": {
+     "type": "SCALAR",
+     "value": 9000
+    },
+    "ReportLevel": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 4
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "Automation/automation.dfm",
+ "total_nodes_incl_root": 30
+}

@@ -1,0 +1,79 @@
+{
+ "event_count": 10,
+ "events": [
+  {
+   "control_path": "fGroundMan",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fGroundMan",
+   "vcl_class": "TfGroundMan"
+  },
+  {
+   "control_path": "fGroundMan",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fGroundMan",
+   "vcl_class": "TfGroundMan"
+  },
+  {
+   "control_path": "fGroundMan.PageControl1.tsMain.spbStartCom",
+   "event_name": "OnClick",
+   "handler_name": "spbStartComClick",
+   "leaf_name": "spbStartCom",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fGroundMan.PageControl1.tsMain.spbStopCom",
+   "event_name": "OnClick",
+   "handler_name": "spbStopComClick",
+   "leaf_name": "spbStopCom",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fGroundMan.PageControl1.tsMain.edContinuous_Time",
+   "event_name": "OnMouseDown",
+   "handler_name": "edContinuous_TimeMouseDown",
+   "leaf_name": "edContinuous_Time",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fGroundMan.PageControl1.tsMain.edOccurrences",
+   "event_name": "OnMouseDown",
+   "handler_name": "edOccurrencesMouseDown",
+   "leaf_name": "edOccurrences",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fGroundMan.Panel1.spbSave",
+   "event_name": "OnClick",
+   "handler_name": "spbSaveClick",
+   "leaf_name": "spbSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fGroundMan.Panel1.sbtExit",
+   "event_name": "OnClick",
+   "handler_name": "sbtExitClick",
+   "leaf_name": "sbtExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fGroundMan.comGM",
+   "event_name": "OnReceiveData",
+   "handler_name": "comGMReceiveData",
+   "leaf_name": "comGM",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "fGroundMan.Timer1",
+   "event_name": "OnTimer",
+   "handler_name": "Timer1Timer",
+   "leaf_name": "Timer1",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fGroundMan",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "GroundMan/GroundMan.dfm"
+}

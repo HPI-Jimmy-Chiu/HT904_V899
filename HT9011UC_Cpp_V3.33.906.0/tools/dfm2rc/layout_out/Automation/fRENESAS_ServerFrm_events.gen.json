@@ -1,0 +1,30 @@
+{
+ "event_count": 3,
+ "events": [
+  {
+   "control_path": "fServerFrm",
+   "event_name": "OnCreate",
+   "handler_name": "FormCreate",
+   "leaf_name": "fServerFrm",
+   "vcl_class": "TfServerFrm"
+  },
+  {
+   "control_path": "fServerFrm.frameProdInfo1.ShowTimer",
+   "event_name": "OnTimer",
+   "handler_name": "frameProdInfo1ShowTimerTimer",
+   "leaf_name": "ShowTimer",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fServerFrm.ProcTimer",
+   "event_name": "OnTimer",
+   "handler_name": "ProcTimerTimer",
+   "leaf_name": "ProcTimer",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fServerFrm",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "Automation/fRENESAS_ServerFrm.dfm"
+}

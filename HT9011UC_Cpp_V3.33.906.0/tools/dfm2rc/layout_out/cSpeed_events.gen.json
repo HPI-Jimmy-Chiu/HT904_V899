@@ -1,0 +1,1605 @@
+{
+ "event_count": 228,
+ "events": [
+  {
+   "control_path": "fSpeed",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fSpeed",
+   "vcl_class": "TfSpeed"
+  },
+  {
+   "control_path": "fSpeed",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fSpeed",
+   "vcl_class": "TfSpeed"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsAllSpeed.gpSpeed.tbAllSpeed",
+   "event_name": "OnChange",
+   "handler_name": "tbAllSpeedChange",
+   "leaf_name": "tbAllSpeed",
+   "vcl_class": "TTrackBar"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsAllSpeed.gbAcc.tbAccSpeed",
+   "event_name": "OnChange",
+   "handler_name": "tbAccSpeedChange",
+   "leaf_name": "tbAccSpeed",
+   "vcl_class": "TTrackBar"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsAllSpeed.gbUnitForChange.spbSpeedAdd",
+   "event_name": "OnClick",
+   "handler_name": "spbSpeedAddClick",
+   "leaf_name": "spbSpeedAdd",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsAllSpeed.gbUnitForChange.spbSpeedDec",
+   "event_name": "OnClick",
+   "handler_name": "spbSpeedDecClick",
+   "leaf_name": "spbSpeedDec",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsAllSpeed.gbUnitForChange.spbSelectAll",
+   "event_name": "OnClick",
+   "handler_name": "spbSelectAllClick",
+   "leaf_name": "spbSelectAll",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsAllSpeed.gbUnitForChange.spbSetToDef",
+   "event_name": "OnClick",
+   "handler_name": "spbSetToDefClick",
+   "leaf_name": "spbSetToDef",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsAllSpeed.gbUnitForChange.cbIndexArm",
+   "event_name": "OnClick",
+   "handler_name": "cbIndexArmClick",
+   "leaf_name": "cbIndexArm",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsAllSpeed.gbUnitForChange.cbInArm",
+   "event_name": "OnClick",
+   "handler_name": "cbIndexArmClick",
+   "leaf_name": "cbInArm",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsAllSpeed.gbUnitForChange.cbOutArm",
+   "event_name": "OnClick",
+   "handler_name": "cbIndexArmClick",
+   "leaf_name": "cbOutArm",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsAllSpeed.gbUnitForChange.cbShuttle",
+   "event_name": "OnClick",
+   "handler_name": "cbIndexArmClick",
+   "leaf_name": "cbShuttle",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsAllSpeed.gbUnitForChange.cbTrayArm",
+   "event_name": "OnClick",
+   "handler_name": "cbIndexArmClick",
+   "leaf_name": "cbTrayArm",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsAllSpeed.gbUnitForChange.cbInArmZ",
+   "event_name": "OnClick",
+   "handler_name": "cbIndexArmClick",
+   "leaf_name": "cbInArmZ",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsAllSpeed.gbUnitForChange.cbOutArmZ",
+   "event_name": "OnClick",
+   "handler_name": "cbIndexArmClick",
+   "leaf_name": "cbOutArmZ",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsAllSpeed.gbUnitForChange.cbInRotate",
+   "event_name": "OnClick",
+   "handler_name": "cbIndexArmClick",
+   "leaf_name": "cbInRotate",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsAllSpeed.gbUnitForChange.cbOutRotate",
+   "event_name": "OnClick",
+   "handler_name": "cbIndexArmClick",
+   "leaf_name": "cbOutRotate",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsAllSpeed.gbEPControl.tbEPControl",
+   "event_name": "OnChange",
+   "handler_name": "tbEPControlChange",
+   "leaf_name": "tbEPControl",
+   "vcl_class": "TTrackBar"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsAllSpeed.Panel4.edAutoSpeedLow",
+   "event_name": "OnMouseDown",
+   "handler_name": "edAutoSpeedLowMouseDown",
+   "leaf_name": "edAutoSpeedLow",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.gbInArmSpeed.edInXYSpd",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edInXYSpd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.gbInArmSpeed.edInXYSpd",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexSpeedMouseDown",
+   "leaf_name": "edInXYSpd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.gbInArmSpeed.edInXYAcc",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edInXYAcc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.gbInArmSpeed.edInXYAcc",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexAccDecMouseDown",
+   "leaf_name": "edInXYAcc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.gbInArmSpeed.edInZSpd",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edInZSpd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.gbInArmSpeed.edInZSpd",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexSpeedMouseDown",
+   "leaf_name": "edInZSpd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.gbInArmSpeed.edInZAcc",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edInZAcc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.gbInArmSpeed.edInZAcc",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexAccDecMouseDown",
+   "leaf_name": "edInZAcc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.gbInArmSpeed.edInPitchSpd",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edInPitchSpd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.gbInArmSpeed.edInPitchSpd",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexSpeedMouseDown",
+   "leaf_name": "edInPitchSpd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.gbInArmSpeed.edInPitchAcc",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edInPitchAcc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.gbInArmSpeed.edInPitchAcc",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexAccDecMouseDown",
+   "leaf_name": "edInPitchAcc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.gbInArmSpeed.palInRotate.edInRotSpd",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edInRotSpd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.gbInArmSpeed.palInRotate.edInRotSpd",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexSpeedMouseDown",
+   "leaf_name": "edInRotSpd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.gbInArmSpeed.palInRotate.edInRotAcc",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edInRotAcc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.gbInArmSpeed.palInRotate.edInRotAcc",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexSpeedMouseDown",
+   "leaf_name": "edInRotAcc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.gbAutoSkip.edtAutoSkipCT",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edtAutoSkipCT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.gbAutoSkip.edtAutoSkipCT",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtAutoSkipCTMouseDown",
+   "leaf_name": "edtAutoSkipCT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.gbInArmReleaseDelay.edRelaseDelay",
+   "event_name": "OnKeyPress",
+   "handler_name": "edRelaseDelayKeyPress",
+   "leaf_name": "edRelaseDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.gbInArmReleaseDelay.edRelaseDelay",
+   "event_name": "OnMouseDown",
+   "handler_name": "edRelaseDelayMouseDown",
+   "leaf_name": "edRelaseDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.gbInArmDieClean.edInArmDieCleanDelay",
+   "event_name": "OnKeyPress",
+   "handler_name": "edRelaseDelayKeyPress",
+   "leaf_name": "edInArmDieCleanDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.gbInArmDieClean.edInArmDieCleanDelay",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInArmDieCleanDelayMouseDown",
+   "leaf_name": "edInArmDieCleanDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.gbInArmDieClean.edInArmDieCleanHeight",
+   "event_name": "OnKeyPress",
+   "handler_name": "edRelaseDelayKeyPress",
+   "leaf_name": "edInArmDieCleanHeight",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.gbInArmDieClean.edInArmDieCleanHeight",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInArmDieCleanHeightMouseDown",
+   "leaf_name": "edInArmDieCleanHeight",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.gbInArmCylinderDelay.edInArmCylinderDelay",
+   "event_name": "OnKeyPress",
+   "handler_name": "edRelaseDelayKeyPress",
+   "leaf_name": "edInArmCylinderDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.gbInArmCylinderDelay.edInArmCylinderDelay",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInArmDieCleanDelayMouseDown",
+   "leaf_name": "edInArmCylinderDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.GroupBox4.Panel6.edPrecisorOpenSp",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edPrecisorOpenSp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.GroupBox4.Panel6.edPrecisorOpenSp",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexSpeedMouseDown",
+   "leaf_name": "edPrecisorOpenSp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.GroupBox4.Panel6.edPrecisorCloseSp",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edPrecisorCloseSp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmLeft.GroupBox4.Panel6.edPrecisorCloseSp",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexSpeedMouseDown",
+   "leaf_name": "edPrecisorCloseSp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmRight.gbInArmRetry.edInArmRetryCount",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edInArmRetryCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmRight.gbInArmRetry.edInArmRetryCount",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInArmRetryCountMouseDown",
+   "leaf_name": "edInArmRetryCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmRight.gbInArmRetry.edInArmRetryMM",
+   "event_name": "OnKeyPress",
+   "handler_name": "edIndexArmRetryMMKeyPress",
+   "leaf_name": "edInArmRetryMM",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmRight.gbInArmRetry.edInArmRetryMM",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexArmRetryMMMouseDown",
+   "leaf_name": "edInArmRetryMM",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmRight.gbInArmWaitTime.gbInArmVacuumCheck.edInVacumCheckTime",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInVacumCheckTimeKeyPress",
+   "leaf_name": "edInVacumCheckTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmRight.gbInArmWaitTime.gbInArmVacuumCheck.edInVacumCheckTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInVacumCheckTimeMouseDown",
+   "leaf_name": "edInVacumCheckTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmRight.gbInArmWaitTime.Panel2.gbInArmAirOnTime.edInArmAirOnTime",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInVacumCheckTimeKeyPress",
+   "leaf_name": "edInArmAirOnTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmRight.gbInArmWaitTime.Panel2.gbInArmAirOnTime.edInArmAirOnTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInVacumCheckTimeMouseDown",
+   "leaf_name": "edInArmAirOnTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmRight.gbInArmWaitTime.Panel2.gbInArmWaitOnSht.edInArmShtWaitTime",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInVacumCheckTimeKeyPress",
+   "leaf_name": "edInArmShtWaitTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmRight.gbInArmWaitTime.Panel2.gbInArmWaitOnSht.edInArmShtWaitTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInVacumCheckTimeMouseDown",
+   "leaf_name": "edInArmShtWaitTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmRight.gbInArmWaitTime.grpHPVacuumDelay.edtHPVacuumDelay",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInVacumCheckTimeKeyPress",
+   "leaf_name": "edtHPVacuumDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmRight.gbInArmWaitTime.grpHPVacuumDelay.edtHPVacuumDelay",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInVacumCheckTimeMouseDown",
+   "leaf_name": "edtHPVacuumDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmRight.gbInArmDestoryTime.edInArmDestroyAgainTime",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInVacumCheckTimeKeyPress",
+   "leaf_name": "edInArmDestroyAgainTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmRight.gbInArmDestoryTime.edInArmDestroyAgainTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInVacumCheckTimeMouseDown",
+   "leaf_name": "edInArmDestroyAgainTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmRight.gbInArmDestoryTime.edInArmDestroyAgainCount",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edInArmDestroyAgainCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmRight.gbInArmDestoryTime.edInArmDestroyAgainCount",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInArmRetryCountMouseDown",
+   "leaf_name": "edInArmDestroyAgainCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmRight.gbInDestoryCheck.Edt_CheckTime_In",
+   "event_name": "OnKeyPress",
+   "handler_name": "Edt_CheckTime_InKeyPress",
+   "leaf_name": "Edt_CheckTime_In",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmRight.gbInDestoryCheck.Edt_CheckTime_In",
+   "event_name": "OnMouseDown",
+   "handler_name": "Edt_CheckTime_InMouseDown",
+   "leaf_name": "Edt_CheckTime_In",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmRight.gbInDestoryCheck.Edt_HeightCheck_In",
+   "event_name": "OnKeyPress",
+   "handler_name": "Edt_CheckTime_InKeyPress",
+   "leaf_name": "Edt_HeightCheck_In",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmRight.gbInDestoryCheck.Edt_HeightCheck_In",
+   "event_name": "OnMouseDown",
+   "handler_name": "Edt_HeightCheck_InMouseDown",
+   "leaf_name": "Edt_HeightCheck_In",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmRight.gbTwoSpeed_In.edTwoSpeedDistance_In",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInVacumCheckTimeKeyPress",
+   "leaf_name": "edTwoSpeedDistance_In",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmRight.gbTwoSpeed_In.edTwoSpeedDistance_In",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInVacumCheckTimeMouseDown",
+   "leaf_name": "edTwoSpeedDistance_In",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmRight.gbTwoSpeed_In.edSecondSpeedIn",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edSecondSpeedIn",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmRight.gbTwoSpeed_In.edSecondSpeedIn",
+   "event_name": "OnMouseDown",
+   "handler_name": "edSecondSpeedInMouseDown",
+   "leaf_name": "edSecondSpeedIn",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmRight.gbTwoSpeed_In.edSecondADCIn",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edSecondADCIn",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsInArm.palInArmRight.gbTwoSpeed_In.edSecondADCIn",
+   "event_name": "OnMouseDown",
+   "handler_name": "edSecondADCInMouseDown",
+   "leaf_name": "edSecondADCIn",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsShuttle.palShuttleLeft.gbShuttleSpeed.edSht1Spd",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edSht1Spd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsShuttle.palShuttleLeft.gbShuttleSpeed.edSht1Spd",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexSpeedMouseDown",
+   "leaf_name": "edSht1Spd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsShuttle.palShuttleLeft.gbShuttleSpeed.edSht1Acc",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edSht1Acc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsShuttle.palShuttleLeft.gbShuttleSpeed.edSht1Acc",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexAccDecMouseDown",
+   "leaf_name": "edSht1Acc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsShuttle.palShuttleLeft.gbShuttleSpeed.edSht2Spd",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edSht2Spd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsShuttle.palShuttleLeft.gbShuttleSpeed.edSht2Spd",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexSpeedMouseDown",
+   "leaf_name": "edSht2Spd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsShuttle.palShuttleLeft.gbShuttleSpeed.edSht2Acc",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edSht2Acc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsShuttle.palShuttleLeft.gbShuttleSpeed.edSht2Acc",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexAccDecMouseDown",
+   "leaf_name": "edSht2Acc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsShuttle.palShuttleLeft.grpShake.edShakeAccDec",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edShakeAccDec",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsShuttle.palShuttleLeft.grpShake.edShakeAccDec",
+   "event_name": "OnMouseDown",
+   "handler_name": "edShakeAccDecMouseDown",
+   "leaf_name": "edShakeAccDec",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsShuttle.palShuttleLeft.grpShake.edShakeDistance",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edShakeDistance",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsShuttle.palShuttleLeft.grpShake.edShakeDistance",
+   "event_name": "OnMouseDown",
+   "handler_name": "edShakeDistanceMouseDown",
+   "leaf_name": "edShakeDistance",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsShuttle.palShuttleLeft.grpShake.edShakeDelay",
+   "event_name": "OnKeyPress",
+   "handler_name": "edShakeDelayKeyPress",
+   "leaf_name": "edShakeDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsShuttle.palShuttleLeft.grpShake.edShakeDelay",
+   "event_name": "OnMouseDown",
+   "handler_name": "edShakeDelayMouseDown",
+   "leaf_name": "edShakeDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsShuttle.palShuttleLeft.grpShake.edShakeCycles",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edShakeCycles",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsShuttle.palShuttleLeft.grpShake.edShakeCycles",
+   "event_name": "OnMouseDown",
+   "handler_name": "edShakeCyclesMouseDown",
+   "leaf_name": "edShakeCycles",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsShuttle.palShuttleRight.gbShtDeviceCheckTime.edShtDeviceCheckTime",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInVacumCheckTimeKeyPress",
+   "leaf_name": "edShtDeviceCheckTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsShuttle.palShuttleRight.gbShtDeviceCheckTime.edShtDeviceCheckTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInVacumCheckTimeMouseDown",
+   "leaf_name": "edShtDeviceCheckTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsIndex.palIndexLeft.gbIndexArmSpeed.edIndexSpeed",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edIndexSpeed",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsIndex.palIndexLeft.gbIndexArmSpeed.edIndexSpeed",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexSpeedMouseDown",
+   "leaf_name": "edIndexSpeed",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsIndex.palIndexLeft.gbIndexArmSpeed.edIndexAccDec",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edIndexAccDec",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsIndex.palIndexLeft.gbIndexArmSpeed.edIndexAccDec",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexAccDecMouseDown",
+   "leaf_name": "edIndexAccDec",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsIndex.palIndexLeft.grpIndexUPHTryRun.edtTryAcc",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edtTryAcc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsIndex.palIndexLeft.grpIndexUPHTryRun.edtTryAcc",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexAccDecMouseDown",
+   "leaf_name": "edtTryAcc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsIndex.palIndexLeft.grpIndexUPHTryRun.edtTrySpeed",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edtTrySpeed",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsIndex.palIndexLeft.grpIndexUPHTryRun.edtTrySpeed",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexSpeedMouseDown",
+   "leaf_name": "edtTrySpeed",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsIndex.palIndexLeft.grpIndexCycleTimeMonitoring.edtMonitoringIndexCycletime",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtMonitoringIndexCycletimeKeyPress",
+   "leaf_name": "edtMonitoringIndexCycletime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsIndex.palIndexLeft.grpIndexCycleTimeMonitoring.edtMonitoringIndexCycletime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtMonitoringIndexCycletimeMouseDown",
+   "leaf_name": "edtMonitoringIndexCycletime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsIndex.palIndexLeft.grpIndexCycleTimeMonitoring.edtMonitoringOutlier",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtMonitoringOutlierKeyPress",
+   "leaf_name": "edtMonitoringOutlier",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsIndex.palIndexLeft.grpIndexCycleTimeMonitoring.edtMonitoringOutlier",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtMonitoringOutlierMouseDown",
+   "leaf_name": "edtMonitoringOutlier",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsIndex.palIndexLeft.grpIndexCycleTimeMonitoring.edtMonitoringWindow",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtMonitoringWindowKeyPress",
+   "leaf_name": "edtMonitoringWindow",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsIndex.palIndexLeft.grpIndexCycleTimeMonitoring.edtMonitoringWindow",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtMonitoringWindowMouseDown",
+   "leaf_name": "edtMonitoringWindow",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsIndex.palIndexLeft.grpIndexCycleTimeMonitoring.edtIndexCycleTimetolerance",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtIndexCycleTimetoleranceKeyPress",
+   "leaf_name": "edtIndexCycleTimetolerance",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsIndex.palIndexLeft.grpIndexCycleTimeMonitoring.edtIndexCycleTimetolerance",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtIndexCycleTimetoleranceMouseDown",
+   "leaf_name": "edtIndexCycleTimetolerance",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsIndex.palIndexRight.gbIndexWaitTime.gbIndexVacuumCheck.edIndexVacumCheckTime",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInVacumCheckTimeKeyPress",
+   "leaf_name": "edIndexVacumCheckTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsIndex.palIndexRight.gbIndexWaitTime.gbIndexVacuumCheck.edIndexVacumCheckTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInVacumCheckTimeMouseDown",
+   "leaf_name": "edIndexVacumCheckTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsIndex.palIndexRight.gbIndexWaitTime.gbIndexAirOnTime.edIndexAirOnTime",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInVacumCheckTimeKeyPress",
+   "leaf_name": "edIndexAirOnTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsIndex.palIndexRight.gbIndexWaitTime.gbIndexAirOnTime.edIndexAirOnTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInVacumCheckTimeMouseDown",
+   "leaf_name": "edIndexAirOnTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsIndex.palIndexRight.gbIndexRetry.edIndexRetryCount",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edIndexRetryCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsIndex.palIndexRight.gbIndexRetry.edIndexRetryCount",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInArmRetryCountMouseDown",
+   "leaf_name": "edIndexRetryCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsIndex.palIndexRight.gbIndexRetry.edIndexArmRetryMM",
+   "event_name": "OnKeyPress",
+   "handler_name": "edIndexArmRetryMMKeyPress",
+   "leaf_name": "edIndexArmRetryMM",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsIndex.palIndexRight.gbIndexRetry.edIndexArmRetryMM",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexArmRetryMMMouseDown",
+   "leaf_name": "edIndexArmRetryMM",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsIndex.palIndexRight.gbIndexDestoryTime.edIndexDestroyAgainTime",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInVacumCheckTimeKeyPress",
+   "leaf_name": "edIndexDestroyAgainTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsIndex.palIndexRight.gbIndexDestoryTime.edIndexDestroyAgainTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInVacumCheckTimeMouseDown",
+   "leaf_name": "edIndexDestroyAgainTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsIndex.palIndexRight.gbIndexDestoryTime.edIndexDestroyAgainCount",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edIndexDestroyAgainCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsIndex.palIndexRight.gbIndexDestoryTime.edIndexDestroyAgainCount",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInArmRetryCountMouseDown",
+   "leaf_name": "edIndexDestroyAgainCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutLeft.gbOutArmSpeed.edOutXSpd",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edOutXSpd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutLeft.gbOutArmSpeed.edOutXSpd",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexSpeedMouseDown",
+   "leaf_name": "edOutXSpd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutLeft.gbOutArmSpeed.edOutXAcc",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edOutXAcc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutLeft.gbOutArmSpeed.edOutXAcc",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexAccDecMouseDown",
+   "leaf_name": "edOutXAcc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutLeft.gbOutArmSpeed.edOutZSpd",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edOutZSpd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutLeft.gbOutArmSpeed.edOutZSpd",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexSpeedMouseDown",
+   "leaf_name": "edOutZSpd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutLeft.gbOutArmSpeed.edOutZAcc",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edOutZAcc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutLeft.gbOutArmSpeed.edOutZAcc",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexAccDecMouseDown",
+   "leaf_name": "edOutZAcc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutLeft.gbOutArmSpeed.edOutPitchSpd",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edOutPitchSpd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutLeft.gbOutArmSpeed.edOutPitchSpd",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexSpeedMouseDown",
+   "leaf_name": "edOutPitchSpd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutLeft.gbOutArmSpeed.edOutPitchAcc",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edOutPitchAcc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutLeft.gbOutArmSpeed.edOutPitchAcc",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexAccDecMouseDown",
+   "leaf_name": "edOutPitchAcc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutLeft.gbOutArmSpeed.palOutRotate.edOutRotSpd",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edOutRotSpd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutLeft.gbOutArmSpeed.palOutRotate.edOutRotSpd",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexSpeedMouseDown",
+   "leaf_name": "edOutRotSpd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutLeft.gbOutArmSpeed.palOutRotate.edOutRotAcc",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edOutRotAcc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutLeft.gbOutArmSpeed.palOutRotate.edOutRotAcc",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexAccDecMouseDown",
+   "leaf_name": "edOutRotAcc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutLeft.gbOutVacuumOnFunc.edtOutArmPreSuck",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInVacumCheckTimeKeyPress",
+   "leaf_name": "edtOutArmPreSuck",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutLeft.gbOutVacuumOnFunc.edtOutArmPreSuck",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInVacumCheckTimeMouseDown",
+   "leaf_name": "edtOutArmPreSuck",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutLeft.gbOutArmDieClean.edOutArmDieCleanDelay",
+   "event_name": "OnKeyPress",
+   "handler_name": "edRelaseDelayKeyPress",
+   "leaf_name": "edOutArmDieCleanDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutLeft.gbOutArmDieClean.edOutArmDieCleanDelay",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInArmDieCleanDelayMouseDown",
+   "leaf_name": "edOutArmDieCleanDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutLeft.gbOutArmCylinderDelay.edOutArmCylinderDelay",
+   "event_name": "OnKeyPress",
+   "handler_name": "edRelaseDelayKeyPress",
+   "leaf_name": "edOutArmCylinderDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutLeft.gbOutArmCylinderDelay.edOutArmCylinderDelay",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInArmDieCleanDelayMouseDown",
+   "leaf_name": "edOutArmCylinderDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutRight.gbOutArmRetry.edOutArmRetryCount",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edOutArmRetryCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutRight.gbOutArmRetry.edOutArmRetryCount",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInArmRetryCountMouseDown",
+   "leaf_name": "edOutArmRetryCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutRight.gbOutArmRetry.edOutArmRetryMM",
+   "event_name": "OnKeyPress",
+   "handler_name": "edIndexArmRetryMMKeyPress",
+   "leaf_name": "edOutArmRetryMM",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutRight.gbOutArmRetry.edOutArmRetryMM",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexArmRetryMMMouseDown",
+   "leaf_name": "edOutArmRetryMM",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutRight.gbOutArmWaitTime.gbOutArmVacuumCheck.edOutVacumCheckTime",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInVacumCheckTimeKeyPress",
+   "leaf_name": "edOutVacumCheckTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutRight.gbOutArmWaitTime.gbOutArmVacuumCheck.edOutVacumCheckTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInVacumCheckTimeMouseDown",
+   "leaf_name": "edOutVacumCheckTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutRight.gbOutArmWaitTime.gbOutArmAirOnTime.edOutArmAirOnTime",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInVacumCheckTimeKeyPress",
+   "leaf_name": "edOutArmAirOnTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutRight.gbOutArmWaitTime.gbOutArmAirOnTime.edOutArmAirOnTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInVacumCheckTimeMouseDown",
+   "leaf_name": "edOutArmAirOnTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutRight.gbOutArmWaitTime.GroupBox1.edOutArmShtWaitTime",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInVacumCheckTimeKeyPress",
+   "leaf_name": "edOutArmShtWaitTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutRight.gbOutArmWaitTime.GroupBox1.edOutArmShtWaitTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edOutArmShtWaitTimeMouseDown",
+   "leaf_name": "edOutArmShtWaitTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutRight.gbOutArmDestoryTime.edOutArmDestroyAgainTime",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInVacumCheckTimeKeyPress",
+   "leaf_name": "edOutArmDestroyAgainTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutRight.gbOutArmDestoryTime.edOutArmDestroyAgainTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInVacumCheckTimeMouseDown",
+   "leaf_name": "edOutArmDestroyAgainTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutRight.gbOutArmDestoryTime.edOutArmDestroyAgainCount",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edOutArmDestroyAgainCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutRight.gbOutArmDestoryTime.edOutArmDestroyAgainCount",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInArmRetryCountMouseDown",
+   "leaf_name": "edOutArmDestroyAgainCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutRight.gbOutDestoryCheck.Edt_CheckTime_Out",
+   "event_name": "OnKeyPress",
+   "handler_name": "Edt_CheckTime_InKeyPress",
+   "leaf_name": "Edt_CheckTime_Out",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutRight.gbOutDestoryCheck.Edt_CheckTime_Out",
+   "event_name": "OnMouseDown",
+   "handler_name": "Edt_CheckTime_InMouseDown",
+   "leaf_name": "Edt_CheckTime_Out",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutRight.gbTwoSpeed_Out.edTwoSpeedDistance_Out",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInVacumCheckTimeKeyPress",
+   "leaf_name": "edTwoSpeedDistance_Out",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutRight.gbTwoSpeed_Out.edTwoSpeedDistance_Out",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInVacumCheckTimeMouseDown",
+   "leaf_name": "edTwoSpeedDistance_Out",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutRight.gbTwoSpeed_Out.edSecondSpeedOut",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edSecondSpeedOut",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutRight.gbTwoSpeed_Out.edSecondSpeedOut",
+   "event_name": "OnMouseDown",
+   "handler_name": "edSecondSpeedOutMouseDown",
+   "leaf_name": "edSecondSpeedOut",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutRight.gbTwoSpeed_Out.edSecondADCOut",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edSecondADCOut",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsOutArm.palOutRight.gbTwoSpeed_Out.edSecondADCOut",
+   "event_name": "OnMouseDown",
+   "handler_name": "edSecondADCOutMouseDown",
+   "leaf_name": "edSecondADCOut",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsTrayArm.palTrayArmLeft.gbTrayArmSpeed.edTrayXSpd",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edTrayXSpd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsTrayArm.palTrayArmLeft.gbTrayArmSpeed.edTrayXSpd",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexSpeedMouseDown",
+   "leaf_name": "edTrayXSpd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsTrayArm.palTrayArmLeft.gbTrayArmSpeed.edTrayXAcc",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edTrayXAcc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsTrayArm.palTrayArmLeft.gbTrayArmSpeed.edTrayXAcc",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexAccDecMouseDown",
+   "leaf_name": "edTrayXAcc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsTrayArm.palTrayArmRight.gbTrayArmWaitTime.gbTrayArmVacuumCheck.edTrayVacumCheckTime",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInVacumCheckTimeKeyPress",
+   "leaf_name": "edTrayVacumCheckTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsTrayArm.palTrayArmRight.gbTrayArmWaitTime.gbTrayArmVacuumCheck.edTrayVacumCheckTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInVacumCheckTimeMouseDown",
+   "leaf_name": "edTrayVacumCheckTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsTrayArm.palTrayArmRight.gbTrayArmWaitTime.gbTrayArmAirOnTime.edTrayArmAirOnTime",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInVacumCheckTimeKeyPress",
+   "leaf_name": "edTrayArmAirOnTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsTrayArm.palTrayArmRight.gbTrayArmWaitTime.gbTrayArmAirOnTime.edTrayArmAirOnTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInVacumCheckTimeMouseDown",
+   "leaf_name": "edTrayArmAirOnTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsTrayArm.palTrayArmRight.gbTrayArmWaitTime.gbTrayArmHandDown.edTrayArmHandDown",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInVacumCheckTimeKeyPress",
+   "leaf_name": "edTrayArmHandDown",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsTrayArm.palTrayArmRight.gbTrayArmWaitTime.gbTrayArmHandDown.edTrayArmHandDown",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInVacumCheckTimeMouseDown",
+   "leaf_name": "edTrayArmHandDown",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsTrayArm.palTrayArmRight.gbTrayArmRetryCount.edTrayArmRetryCount",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edTrayArmRetryCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsTrayArm.palTrayArmRight.gbTrayArmRetryCount.edTrayArmRetryCount",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInArmRetryCountMouseDown",
+   "leaf_name": "edTrayArmRetryCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel3.grpLoader.pnlpnlLoaderZ.edtLoaderSpeedZ",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edtLoaderSpeedZ",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel3.grpLoader.pnlpnlLoaderZ.edtLoaderSpeedZ",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtLoaderSpeed1MouseDown",
+   "leaf_name": "edtLoaderSpeedZ",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel3.grpLoader.pnlLoaderY.edtLoaderSpeed1",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edtLoaderSpeed1",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel3.grpLoader.pnlLoaderY.edtLoaderSpeed1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtLoaderSpeed1MouseDown",
+   "leaf_name": "edtLoaderSpeed1",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel3.grpAuto2.pnlAuto2Y.edtAuto2Speed1",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edtAuto2Speed1",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel3.grpAuto2.pnlAuto2Y.edtAuto2Speed1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtLoaderSpeed1MouseDown",
+   "leaf_name": "edtAuto2Speed1",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel3.grpAuto2.pnlAuto2Z.edtAuto2SpeedZ",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edtAuto2SpeedZ",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel3.grpAuto2.pnlAuto2Z.edtAuto2SpeedZ",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtLoaderSpeed1MouseDown",
+   "leaf_name": "edtAuto2SpeedZ",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel3.grpAuto3.pnlAuto3Y.edtAuto3Speed1",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edtAuto3Speed1",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel3.grpAuto3.pnlAuto3Y.edtAuto3Speed1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtLoaderSpeed1MouseDown",
+   "leaf_name": "edtAuto3Speed1",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel3.grpAuto3.pnlAuto3Z.edtAuto3SpeedZ",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edtAuto3SpeedZ",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel3.grpAuto3.pnlAuto3Z.edtAuto3SpeedZ",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtLoaderSpeed1MouseDown",
+   "leaf_name": "edtAuto3SpeedZ",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel3.grpAuto1.pnlAuto1Y.edtAuto1Speed1",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edtAuto1Speed1",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel3.grpAuto1.pnlAuto1Y.edtAuto1Speed1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtLoaderSpeed1MouseDown",
+   "leaf_name": "edtAuto1Speed1",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel3.grpAuto1.pnlAuto1Z.edtAuto1SpeedZ",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edtAuto1SpeedZ",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel3.grpAuto1.pnlAuto1Z.edtAuto1SpeedZ",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtLoaderSpeed1MouseDown",
+   "leaf_name": "edtAuto1SpeedZ",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel3.grpColor.pnlColorY.edtColorSpeed1",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edtColorSpeed1",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel3.grpColor.pnlColorY.edtColorSpeed1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtLoaderSpeed1MouseDown",
+   "leaf_name": "edtColorSpeed1",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel3.grpColor.pnlColorZ.edtColorSpeedZ",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edtColorSpeedZ",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel3.grpColor.pnlColorZ.edtColorSpeedZ",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtLoaderSpeed1MouseDown",
+   "leaf_name": "edtColorSpeedZ",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel3.grpEmpty.pnEmptyY.edtEmptySpeed1",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edtEmptySpeed1",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel3.grpEmpty.pnEmptyY.edtEmptySpeed1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtLoaderSpeed1MouseDown",
+   "leaf_name": "edtEmptySpeed1",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel3.grpEmpty.pnEmptyZ.edtEmptySpeedZ",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edtEmptySpeedZ",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel3.grpEmpty.pnEmptyZ.edtEmptySpeedZ",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtLoaderSpeed1MouseDown",
+   "leaf_name": "edtEmptySpeedZ",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel5.edtLoaderSpeed2",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edtLoaderSpeed2",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel5.grpAuto6.pnlAuto6Y.edtAuto6Speed1",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edtAuto6Speed1",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel5.grpAuto6.pnlAuto6Y.edtAuto6Speed1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtLoaderSpeed1MouseDown",
+   "leaf_name": "edtAuto6Speed1",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel5.grpAuto6.pnlAuto6Z.edtAuto6SpeedZ",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edtAuto6SpeedZ",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel5.grpAuto6.pnlAuto6Z.edtAuto6SpeedZ",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtLoaderSpeed1MouseDown",
+   "leaf_name": "edtAuto6SpeedZ",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel5.grpAuto5.pnlAuto5Y.edtAuto5Speed1",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edtAuto5Speed1",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel5.grpAuto5.pnlAuto5Y.edtAuto5Speed1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtLoaderSpeed1MouseDown",
+   "leaf_name": "edtAuto5Speed1",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel5.grpAuto5.pnlAuto5Z.edtAuto5SpeedZ",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edtAuto5SpeedZ",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel5.grpAuto5.pnlAuto5Z.edtAuto5SpeedZ",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtLoaderSpeed1MouseDown",
+   "leaf_name": "edtAuto5SpeedZ",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel5.grpAuto4.pnlAuto4Y.edtAuto4Speed1",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edtAuto4Speed1",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel5.grpAuto4.pnlAuto4Y.edtAuto4Speed1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtLoaderSpeed1MouseDown",
+   "leaf_name": "edtAuto4Speed1",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel5.grpAuto4.pnlAuto4Z.edtAuto4SpeedZ",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edtAuto4SpeedZ",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsLoader.Panel5.grpAuto4.pnlAuto4Z.edtAuto4SpeedZ",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtLoaderSpeed1MouseDown",
+   "leaf_name": "edtAuto4SpeedZ",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsMagazine.GroupBox2.edMagCatchYSpd",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edMagCatchYSpd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsMagazine.GroupBox2.edMagCatchYSpd",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexSpeedMouseDown",
+   "leaf_name": "edMagCatchYSpd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsMagazine.GroupBox2.edMagCatchYAcc",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edMagCatchYAcc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsMagazine.GroupBox2.edMagCatchYAcc",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexAccDecMouseDown",
+   "leaf_name": "edMagCatchYAcc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsMagazine.GroupBox2.edMagZSpd",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edMagZSpd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsMagazine.GroupBox2.edMagZSpd",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexSpeedMouseDown",
+   "leaf_name": "edMagZSpd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsMagazine.GroupBox2.edMagZAcc",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edMagZAcc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsMagazine.GroupBox2.edMagZAcc",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIndexAccDecMouseDown",
+   "leaf_name": "edMagZAcc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsMagazine.GroupBox3.edSecondSpeedCatchY",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edSecondSpeedCatchY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsMagazine.GroupBox3.edSecondSpeedCatchY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edSecondSpeedInMouseDown",
+   "leaf_name": "edSecondSpeedCatchY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsMagazine.GroupBox3.edSecondADCCatchY",
+   "event_name": "OnKeyPress",
+   "handler_name": "edInArmRetryCountKeyPress",
+   "leaf_name": "edSecondADCCatchY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.PageControl1.tsMagazine.GroupBox3.edSecondADCCatchY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edSecondADCInMouseDown",
+   "leaf_name": "edSecondADCCatchY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSpeed.Panel1.spbSave",
+   "event_name": "OnClick",
+   "handler_name": "spbSaveClick",
+   "leaf_name": "spbSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSpeed.Panel1.sbtExit",
+   "event_name": "OnClick",
+   "handler_name": "sbtExitClick",
+   "leaf_name": "sbtExit",
+   "vcl_class": "TSpeedButton"
+  }
+ ],
+ "form_name": "fSpeed",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "cSpeed.dfm"
+}

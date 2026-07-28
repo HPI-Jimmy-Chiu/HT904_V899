@@ -1,0 +1,2727 @@
+{
+ "control_node_count": 43,
+ "encoding_used": "cp950",
+ "form_class": "TfArmOffsetData",
+ "form_name": "fArmOffsetData",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fArmOffsetData.pgcArmOffset",
+    "fArmOffsetData.Panel2"
+   ],
+   "class": "TfArmOffsetData",
+   "depth": 0,
+   "events": {
+    "OnClose": "FormClose",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow"
+   },
+   "geometry": {
+    "height": null,
+    "left": 1071,
+    "top": 236,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "fArmOffsetData",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "fArmOffsetData",
+   "properties": {
+    "BorderIcons": {
+     "type": "SET",
+     "value": []
+    },
+    "BorderStyle": {
+     "type": "SCALAR",
+     "value": "bsToolWindow"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "fArmOffsetData"
+    },
+    "ClientHeight": {
+     "type": "SCALAR",
+     "value": 504
+    },
+    "ClientWidth": {
+     "type": "SCALAR",
+     "value": 736
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 1071
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnClose": {
+     "type": "SCALAR",
+     "value": "FormClose"
+    },
+    "OnDestroy": {
+     "type": "SCALAR",
+     "value": "FormDestroy"
+    },
+    "OnShow": {
+     "type": "SCALAR",
+     "value": "FormShow"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 236
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [
+    "fArmOffsetData.pgcArmOffset.tsInArm",
+    "fArmOffsetData.pgcArmOffset.tsOutArm"
+   ],
+   "class": "TPageControl",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 464,
+    "left": 0,
+    "top": 0,
+    "width": 736
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "TABHOST",
+   "line": 21,
+   "name": "pgcArmOffset",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData",
+   "path": "fArmOffsetData.pgcArmOffset",
+   "properties": {
+    "ActivePage": {
+     "type": "SCALAR",
+     "value": "tsOutArm"
+    },
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 464
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabIndex": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 736
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+    "fArmOffsetData.pgcArmOffset.tsInArm.palOffsetParts"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 30,
+   "name": "tsInArm",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "In Arm"
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [
+    "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label1",
+    "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label2",
+    "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label3",
+    "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label4",
+    "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label5",
+    "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label6",
+    "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label9",
+    "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label10",
+    "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label11",
+    "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label12",
+    "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label28",
+    "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label29",
+    "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label30",
+    "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label31"
+   ],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 257,
+    "left": 0,
+    "top": 40,
+    "width": 728
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 32,
+   "name": "pnlInArm",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 257
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 728
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 84,
+    "top": 10,
+    "width": 33
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 41,
+   "name": "Label1",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Loader"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 84
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 33
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 30,
+    "width": 36
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 54,
+   "name": "Label2",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Hand X"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 30
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 36
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 55,
+    "width": 36
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 61,
+   "name": "Label3",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label3",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Hand Y"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 55
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 36
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 105,
+    "width": 36
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 68,
+   "name": "Label4",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label4",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Pick up"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 105
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 36
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 80,
+    "width": 39
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 75,
+   "name": "Label5",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label5",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Release"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 39
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 130,
+    "width": 43
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 82,
+   "name": "Label6",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label6",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "X Pitch 1"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 130
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 43
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 201,
+    "top": 10,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 89,
+   "name": "Label9",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label9",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Hot Plate1"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 201
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 323,
+    "top": 10,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 102,
+   "name": "Label10",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label10",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Hot Plate2"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 323
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 450,
+    "top": 10,
+    "width": 42
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 115,
+   "name": "Label11",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label11",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Shuttle 1"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 450
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 42
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 572,
+    "top": 10,
+    "width": 42
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 128,
+   "name": "Label12",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label12",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Shuttle 2"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 572
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 42
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 155,
+    "width": 43
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 141,
+   "name": "Label28",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label28",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "X Pitch 2"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 155
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 43
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 180,
+    "width": 43
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 148,
+   "name": "Label29",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label29",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "X Pitch 3"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 180
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 43
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 205,
+    "width": 43
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 155,
+   "name": "Label30",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label30",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "X Pitch 4"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 205
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 43
+    }
+   },
+   "sibling_index": 12,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 230,
+    "width": 34
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 162,
+   "name": "Label31",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label31",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Y Pitch"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 230
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 34
+    }
+   },
+   "sibling_index": 13,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [
+    "fArmOffsetData.pgcArmOffset.tsInArm.palOffsetParts.Label27"
+   ],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 40,
+    "left": 0,
+    "top": 0,
+    "width": 728
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 170,
+   "name": "palOffsetParts",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.palOffsetParts",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Input Arm"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 9534289
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -24
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial Black"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 728
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": "alRight",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 40,
+    "left": 674,
+    "top": 0,
+    "width": 54
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 186,
+   "name": "Label27",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsInArm.palOffsetParts",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.palOffsetParts.Label27",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alRight"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Unit : mm"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clFuchsia"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlBottom"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 674
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 54
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+    "fArmOffsetData.pgcArmOffset.tsOutArm.Panel1"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 203,
+   "name": "tsOutArm",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "OutArm"
+    },
+    "ImageIndex": {
+     "type": "SCALAR",
+     "value": 1
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [
+    "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label13",
+    "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label19",
+    "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label20",
+    "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label21",
+    "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label22",
+    "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label23",
+    "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label24",
+    "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label25",
+    "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label14",
+    "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label15",
+    "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label16",
+    "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label17",
+    "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label18",
+    "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label32",
+    "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label33",
+    "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label34",
+    "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label35"
+   ],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 396,
+    "left": 0,
+    "top": 40,
+    "width": 728
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 206,
+   "name": "pnlOutArm",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 396
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 728
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 80,
+    "top": 10,
+    "width": 42
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 215,
+   "name": "Label13",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label13",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Shuttle 1"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 42
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 159,
+    "top": 10,
+    "width": 42
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 228,
+   "name": "Label19",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label19",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Shuttle 2"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 159
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 42
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 238,
+    "top": 10,
+    "width": 31
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 241,
+   "name": "Label20",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label20",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Auto 1"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 238
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 31
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 317,
+    "top": 10,
+    "width": 31
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 254,
+   "name": "Label21",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label21",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Auto 2"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 317
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 31
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 395,
+    "top": 10,
+    "width": 31
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 267,
+   "name": "Label22",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label22",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Auto 3"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 395
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 31
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 474,
+    "top": 10,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 280,
+   "name": "Label23",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label23",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Fix 1"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 474
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 553,
+    "top": 10,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 293,
+   "name": "Label24",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label24",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Fix 2"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 553
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 632,
+    "top": 10,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 306,
+   "name": "Label25",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label25",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Fix 3"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 632
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 30,
+    "width": 36
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 319,
+   "name": "Label14",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label14",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Hand X"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 30
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 36
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 55,
+    "width": 36
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 326,
+   "name": "Label15",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label15",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Hand Y"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 55
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 36
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 105,
+    "width": 36
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 333,
+   "name": "Label16",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label16",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Pick up"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 105
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 36
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 80,
+    "width": 39
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 340,
+   "name": "Label17",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label17",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Release"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 39
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 130,
+    "width": 43
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 347,
+   "name": "Label18",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label18",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "X Pitch 1"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 130
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 43
+    }
+   },
+   "sibling_index": 12,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 155,
+    "width": 43
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 354,
+   "name": "Label32",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label32",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "X Pitch 2"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 155
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 43
+    }
+   },
+   "sibling_index": 13,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 180,
+    "width": 43
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 361,
+   "name": "Label33",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label33",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "X Pitch 3"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 180
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 43
+    }
+   },
+   "sibling_index": 14,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 205,
+    "width": 43
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 368,
+   "name": "Label34",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label34",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "X Pitch 4"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 205
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 43
+    }
+   },
+   "sibling_index": 15,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 16,
+    "top": 230,
+    "width": 34
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 375,
+   "name": "Label35",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label35",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Y Pitch"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 230
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 34
+    }
+   },
+   "sibling_index": 16,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [
+    "fArmOffsetData.pgcArmOffset.tsOutArm.Panel1.Label8"
+   ],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 40,
+    "left": 0,
+    "top": 0,
+    "width": 728
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 383,
+   "name": "Panel1",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.Panel1",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Output Arm"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 9534289
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -24
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial Black"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 728
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": "alRight",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 40,
+    "left": 674,
+    "top": 0,
+    "width": 54
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 399,
+   "name": "Label8",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.pgcArmOffset.tsOutArm.Panel1",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.Panel1.Label8",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alRight"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Unit : mm"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clFuchsia"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlBottom"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 674
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 54
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alBottom",
+   "anchors": null,
+   "child_paths": [
+    "fArmOffsetData.Panel2.btnSave",
+    "fArmOffsetData.Panel2.btnExit"
+   ],
+   "class": "TPanel",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 40,
+    "left": 0,
+    "top": 464,
+    "width": 736
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 417,
+   "name": "Panel2",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData",
+   "path": "fArmOffsetData.Panel2",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alBottom"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 464
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 736
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "btnSaveClick"
+   },
+   "geometry": {
+    "height": 30,
+    "left": 116,
+    "top": 5,
+    "width": 150
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 426,
+   "name": "btnSave",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.Panel2",
+   "path": "fArmOffsetData.Panel2.btnSave",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Save"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 30
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 116
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btnSaveClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 150
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "btnOutArmExitClick"
+   },
+   "geometry": {
+    "height": 30,
+    "left": 509,
+    "top": 5,
+    "width": 150
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 435,
+   "name": "btnExit",
+   "objkind": "object",
+   "parent_path": "fArmOffsetData.Panel2",
+   "path": "fArmOffsetData.Panel2.btnExit",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Exit"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 30
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 509
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btnOutArmExitClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 150
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "ArmOffsetData.dfm",
+ "total_nodes_incl_root": 44
+}

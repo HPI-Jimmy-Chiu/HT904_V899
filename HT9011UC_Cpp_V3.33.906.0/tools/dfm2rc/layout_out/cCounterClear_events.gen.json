@@ -1,0 +1,100 @@
+{
+ "event_count": 13,
+ "events": [
+  {
+   "control_path": "fCounterClear",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fCounterClear",
+   "vcl_class": "TfCounterClear"
+  },
+  {
+   "control_path": "fCounterClear",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fCounterClear",
+   "vcl_class": "TfCounterClear"
+  },
+  {
+   "control_path": "fCounterClear.spbExit",
+   "event_name": "OnClick",
+   "handler_name": "spbExitClick",
+   "leaf_name": "spbExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fCounterClear.gbItems.spbExe",
+   "event_name": "OnClick",
+   "handler_name": "spbExeClick",
+   "leaf_name": "spbExe",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fCounterClear.gbItems.cbAlarmData",
+   "event_name": "OnMouseUp",
+   "handler_name": "cbAlarmDataMouseUp",
+   "leaf_name": "cbAlarmData",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fCounterClear.gbItems.cbTestCategory",
+   "event_name": "OnMouseUp",
+   "handler_name": "cbAlarmDataMouseUp",
+   "leaf_name": "cbTestCategory",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fCounterClear.gbItems.cbScanner",
+   "event_name": "OnMouseUp",
+   "handler_name": "cbAlarmDataMouseUp",
+   "leaf_name": "cbScanner",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fCounterClear.gbItems.cbLoadingCount",
+   "event_name": "OnMouseUp",
+   "handler_name": "cbAlarmDataMouseUp",
+   "leaf_name": "cbLoadingCount",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fCounterClear.gbItems.cbContactCountCurr",
+   "event_name": "OnMouseUp",
+   "handler_name": "cbAlarmDataMouseUp",
+   "leaf_name": "cbContactCountCurr",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fCounterClear.gbItems.cbContactCountHis",
+   "event_name": "OnMouseUp",
+   "handler_name": "cbAlarmDataMouseUp",
+   "leaf_name": "cbContactCountHis",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fCounterClear.gbItems.cbSortingCount",
+   "event_name": "OnMouseUp",
+   "handler_name": "cbAlarmDataMouseUp",
+   "leaf_name": "cbSortingCount",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fCounterClear.gbItems.cbTimeData",
+   "event_name": "OnMouseUp",
+   "handler_name": "cbAlarmDataMouseUp",
+   "leaf_name": "cbTimeData",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fCounterClear.gbItems.cbSelectAll",
+   "event_name": "OnMouseUp",
+   "handler_name": "cbSelectAllMouseUp",
+   "leaf_name": "cbSelectAll",
+   "vcl_class": "TCheckBox"
+  }
+ ],
+ "form_name": "fCounterClear",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "cCounterClear.dfm"
+}

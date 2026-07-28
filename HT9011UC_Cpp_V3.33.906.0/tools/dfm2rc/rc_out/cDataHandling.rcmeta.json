@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "generator": "emit_rc.py W7-B1b v1.0",
+  "source_dfm": "cDataHandling.dfm",
+  "formstem": "CDATAHANDLING",
+  "dialog_count": 4,
+  "control_count": 10,
+  "fallback_classes_used": [],
+  "warnings": [],
+  "dialogs": [
+    {
+      "idd_symbol": "IDD_CDATAHANDLING",
+      "idd_value": 8192,
+      "is_root": true,
+      "owner_path": "fDataHandling",
+      "owner_class": "TfDataHandling",
+      "controls": [
+        {
+          "symbol": "IDC_CDATAHANDLING_SBTEXIT",
+          "value": 1024,
+          "win32_class": "Button",
+          "caption": "Exit",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fDataHandling.sbtExit",
+          "fallback_class": false,
+          "x": 422,
+          "y": 232,
+          "cx": 240,
+          "cy": 40
+        },
+        {
+          "symbol": "IDC_CDATAHANDLING_SPBEXE",
+          "value": 1025,
+          "win32_class": "Button",
+          "caption": "Execute",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fDataHandling.spbExe",
+          "fallback_class": false,
+          "x": 174,
+          "y": 232,
+          "cx": 240,
+          "cy": 40
+        }
+      ]
+    },
+    {
+      "idd_symbol": "IDD_CDATAHANDLING_GROUPBOX1",
+      "idd_value": 8193,
+      "is_root": false,
+      "owner_path": "fDataHandling.GroupBox1",
+      "owner_class": "TGroupBox",
+      "controls": [
+        {
+          "symbol": "IDC_CDATAHANDLING_GROUPBOX1_FRAME",
+          "value": 1026,
+          "win32_class": "Button",
+          "caption": "Source Setup",
+          "synthesized": true,
+          "rule": "SYNTH_CONTAINER_FRAME",
+          "source_path": "fDataHandling.GroupBox1",
+          "fallback_class": false,
+          "x": 0,
+          "y": 0,
+          "cx": 239,
+          "cy": 76
+        },
+        {
+          "symbol": "IDC_CDATAHANDLING_COMBOBOX1",
+          "value": 1027,
+          "win32_class": "ComboBox",
+          "caption": null,
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fDataHandling.GroupBox1.ComboBox1",
+          "fallback_class": false,
+          "x": 15,
+          "y": 30,
+          "cx": 216,
+          "cy": 21
+        }
+      ]
+    },
+    {
+      "idd_symbol": "IDD_CDATAHANDLING_GROUPBOX2",
+      "idd_value": 8194,
+      "is_root": false,
+      "owner_path": "fDataHandling.GroupBox2",
+      "owner_class": "TGroupBox",
+      "controls": [
+        {
+          "symbol": "IDC_CDATAHANDLING_GROUPBOX2_FRAME",
+          "value": 1028,
+          "win32_class": "Button",
+          "caption": "Items",
+          "synthesized": true,
+          "rule": "SYNTH_CONTAINER_FRAME",
+          "source_path": "fDataHandling.GroupBox2",
+          "fallback_class": false,
+          "x": 0,
+          "y": 0,
+          "cx": 239,
+          "cy": 127
+        },
+        {
+          "symbol": "IDC_CDATAHANDLING_CHECKBOX1",
+          "value": 1029,
+          "win32_class": "Button",
+          "caption": "Tray Form Data",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fDataHandling.GroupBox2.CheckBox1",
+          "fallback_class": false,
+          "x": 22,
+          "y": 30,
+          "cx": 180,
+          "cy": 16
+        },
+        {
+          "symbol": "IDC_CDATAHANDLING_CHECKBOX2",
+          "value": 1030,
+          "win32_class": "Button",
+          "caption": "Hot Plate Form Data",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fDataHandling.GroupBox2.CheckBox2",
+          "fallback_class": false,
+          "x": 22,
+          "y": 63,
+          "cx": 180,
+          "cy": 16
+        },
+        {
+          "symbol": "IDC_CDATAHANDLING_CHECKBOX3",
+          "value": 1031,
+          "win32_class": "Button",
+          "caption": "Temperature Calibration",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fDataHandling.GroupBox2.CheckBox3",
+          "fallback_class": false,
+          "x": 22,
+          "y": 97,
+          "cx": 180,
+          "cy": 15
+        }
+      ]
+    },
+    {
+      "idd_symbol": "IDD_CDATAHANDLING_GROUPBOX3",
+      "idd_value": 8195,
+      "is_root": false,
+      "owner_path": "fDataHandling.GroupBox3",
+      "owner_class": "TGroupBox",
+      "controls": [
+        {
+          "symbol": "IDC_CDATAHANDLING_GROUPBOX3_FRAME",
+          "value": 1032,
+          "win32_class": "Button",
+          "caption": "Destination Setup",
+          "synthesized": true,
+          "rule": "SYNTH_CONTAINER_FRAME",
+          "source_path": "fDataHandling.GroupBox3",
+          "fallback_class": false,
+          "x": 0,
+          "y": 0,
+          "cx": 409,
+          "cy": 207
+        },
+        {
+          "symbol": "IDC_CDATAHANDLING_CHECKLISTBOX1",
+          "value": 1033,
+          "win32_class": "ListBox",
+          "caption": null,
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fDataHandling.GroupBox3.CheckListBox1",
+          "fallback_class": false,
+          "x": 7,
+          "y": 20,
+          "cx": 388,
+          "cy": 173
+        }
+      ]
+    }
+  ]
+}

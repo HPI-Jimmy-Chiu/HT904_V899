@@ -1,0 +1,163 @@
+{
+ "event_count": 22,
+ "events": [
+  {
+   "control_path": "CCInput",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "CCInput",
+   "vcl_class": "TCCInput"
+  },
+  {
+   "control_path": "CCInput.SpeedButton1",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton1Click",
+   "leaf_name": "SpeedButton1",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "CCInput.SpeedButton2",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton1Click",
+   "leaf_name": "SpeedButton2",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "CCInput.SpeedButton3",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton1Click",
+   "leaf_name": "SpeedButton3",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "CCInput.SpeedButton4",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton4Click",
+   "leaf_name": "SpeedButton4",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "CCInput.SpeedButton5",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton1Click",
+   "leaf_name": "SpeedButton5",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "CCInput.SpeedButton6",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton1Click",
+   "leaf_name": "SpeedButton6",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "CCInput.SpeedButton7",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton1Click",
+   "leaf_name": "SpeedButton7",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "CCInput.Button1",
+   "event_name": "OnClick",
+   "handler_name": "NumberClick",
+   "leaf_name": "Button1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "CCInput.Button2",
+   "event_name": "OnClick",
+   "handler_name": "NumberClick",
+   "leaf_name": "Button2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "CCInput.Button3",
+   "event_name": "OnClick",
+   "handler_name": "NumberClick",
+   "leaf_name": "Button3",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "CCInput.Button5",
+   "event_name": "OnClick",
+   "handler_name": "NumberClick",
+   "leaf_name": "Button5",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "CCInput.Button6",
+   "event_name": "OnClick",
+   "handler_name": "NumberClick",
+   "leaf_name": "Button6",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "CCInput.Button8",
+   "event_name": "OnClick",
+   "handler_name": "NumberClick",
+   "leaf_name": "Button8",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "CCInput.Button9",
+   "event_name": "OnClick",
+   "handler_name": "NumberClick",
+   "leaf_name": "Button9",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "CCInput.Button11",
+   "event_name": "OnClick",
+   "handler_name": "NumberClick",
+   "leaf_name": "Button11",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "CCInput.Button12",
+   "event_name": "OnClick",
+   "handler_name": "NumberClick",
+   "leaf_name": "Button12",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "CCInput.Button15",
+   "event_name": "OnClick",
+   "handler_name": "Button15Click",
+   "leaf_name": "Button15",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "CCInput.Button17",
+   "event_name": "OnClick",
+   "handler_name": "Button17Click",
+   "leaf_name": "Button17",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "CCInput.Button18",
+   "event_name": "OnClick",
+   "handler_name": "NumberClick",
+   "leaf_name": "Button18",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "CCInput.Button13",
+   "event_name": "OnClick",
+   "handler_name": "Button13Click",
+   "leaf_name": "Button13",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "CCInput.Button4",
+   "event_name": "OnClick",
+   "handler_name": "Button4Click",
+   "leaf_name": "Button4",
+   "vcl_class": "TButton"
+  }
+ ],
+ "form_name": "CCInput",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "CCLink/CCINPUT.dfm"
+}

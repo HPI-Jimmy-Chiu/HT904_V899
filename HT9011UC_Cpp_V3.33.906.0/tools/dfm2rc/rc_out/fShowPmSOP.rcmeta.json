@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "generator": "emit_rc.py W7-B1b v1.0",
+  "source_dfm": "fShowPmSOP.dfm",
+  "formstem": "FSHOWPMSOP",
+  "dialog_count": 1,
+  "control_count": 1,
+  "fallback_classes_used": [],
+  "warnings": [],
+  "dialogs": [
+    {
+      "idd_symbol": "IDD_FSHOWPMSOP",
+      "idd_value": 8192,
+      "is_root": true,
+      "owner_path": "fShowPmSOPForm",
+      "owner_class": "TfShowPmSOPForm",
+      "controls": [
+        {
+          "symbol": "IDC_FSHOWPMSOP_CPWBRWSRPMSOP",
+          "value": 1024,
+          "win32_class": "HT9045.CppWebBrowser",
+          "caption": null,
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fShowPmSOPForm.cpwbrwsrPmSOP",
+          "fallback_class": false,
+          "x": 0,
+          "y": 0,
+          "cx": 1193,
+          "cy": 793
+        }
+      ]
+    }
+  ]
+}

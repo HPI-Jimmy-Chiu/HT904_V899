@@ -1,0 +1,177 @@
+{
+ "event_count": 24,
+ "events": [
+  {
+   "control_path": "fAutomation",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fAutomation",
+   "vcl_class": "TfAutomation"
+  },
+  {
+   "control_path": "fAutomation.pgcOLP.TabSheet20.Memo",
+   "event_name": "OnDblClick",
+   "handler_name": "MemoDblClick",
+   "leaf_name": "Memo",
+   "vcl_class": "TMemo"
+  },
+  {
+   "control_path": "fAutomation.pgcOLP.TabSheet6.MemoChar",
+   "event_name": "OnDblClick",
+   "handler_name": "MemoDblClick",
+   "leaf_name": "MemoChar",
+   "vcl_class": "TMemo"
+  },
+  {
+   "control_path": "fAutomation.pgcOLP.TabSheet22.MemoCode",
+   "event_name": "OnDblClick",
+   "handler_name": "MemoDblClick",
+   "leaf_name": "MemoCode",
+   "vcl_class": "TMemo"
+  },
+  {
+   "control_path": "fAutomation.gbAutomation.btEventReport",
+   "event_name": "OnClick",
+   "handler_name": "btEventReportClick",
+   "leaf_name": "btEventReport",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fAutomation.gbAutomation.btAlarmReport",
+   "event_name": "OnClick",
+   "handler_name": "btAlarmReportClick",
+   "leaf_name": "btAlarmReport",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fAutomation.gbAutomation.btnConnect",
+   "event_name": "OnClick",
+   "handler_name": "btnConnectClick",
+   "leaf_name": "btnConnect",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fAutomation.gbAutomation.btnDisconnect",
+   "event_name": "OnClick",
+   "handler_name": "btnDisconnectClick",
+   "leaf_name": "btnDisconnect",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fAutomation.gbAutomation.btTestResult",
+   "event_name": "OnClick",
+   "handler_name": "btTestResultClick",
+   "leaf_name": "btTestResult",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fAutomation.gbAutomation.Panel1.edinputport",
+   "event_name": "OnMouseDown",
+   "handler_name": "edinputportMouseDown",
+   "leaf_name": "edinputport",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAutomation.btUDPSend",
+   "event_name": "OnClick",
+   "handler_name": "btUDPSendClick",
+   "leaf_name": "btUDPSend",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fAutomation.btUDPMap",
+   "event_name": "OnClick",
+   "handler_name": "btUDPMapClick",
+   "leaf_name": "btUDPMap",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fAutomation.btUDPTemp",
+   "event_name": "OnClick",
+   "handler_name": "btUDPTempClick",
+   "leaf_name": "btUDPTemp",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fAutomation.OLPServer",
+   "event_name": "OnClientConnect",
+   "handler_name": "OLPServerClientConnect",
+   "leaf_name": "OLPServer",
+   "vcl_class": "TServerSocket"
+  },
+  {
+   "control_path": "fAutomation.OLPServer",
+   "event_name": "OnClientDisconnect",
+   "handler_name": "OLPServerClientDisconnect",
+   "leaf_name": "OLPServer",
+   "vcl_class": "TServerSocket"
+  },
+  {
+   "control_path": "fAutomation.OLPServer",
+   "event_name": "OnClientError",
+   "handler_name": "OLPServerClientError",
+   "leaf_name": "OLPServer",
+   "vcl_class": "TServerSocket"
+  },
+  {
+   "control_path": "fAutomation.OLPServer",
+   "event_name": "OnClientRead",
+   "handler_name": "OLPServerClientRead",
+   "leaf_name": "OLPServer",
+   "vcl_class": "TServerSocket"
+  },
+  {
+   "control_path": "fAutomation.tmrOLP",
+   "event_name": "OnTimer",
+   "handler_name": "tmrOLPTimer",
+   "leaf_name": "tmrOLP",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fAutomation.OLPClient",
+   "event_name": "OnConnect",
+   "handler_name": "OLPClientConnect",
+   "leaf_name": "OLPClient",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fAutomation.OLPClient",
+   "event_name": "OnConnecting",
+   "handler_name": "OLPClientConnecting",
+   "leaf_name": "OLPClient",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fAutomation.OLPClient",
+   "event_name": "OnDisconnect",
+   "handler_name": "OLPClientDisconnect",
+   "leaf_name": "OLPClient",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fAutomation.OLPClient",
+   "event_name": "OnError",
+   "handler_name": "OLPClientError",
+   "leaf_name": "OLPClient",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fAutomation.OLPClient",
+   "event_name": "OnRead",
+   "handler_name": "OLPClientRead",
+   "leaf_name": "OLPClient",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fAutomation.NMUDP1",
+   "event_name": "OnDataReceived",
+   "handler_name": "NMUDP1DataReceived",
+   "leaf_name": "NMUDP1",
+   "vcl_class": "TNMUDP"
+  }
+ ],
+ "form_name": "fAutomation",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "Automation/automation.dfm"
+}

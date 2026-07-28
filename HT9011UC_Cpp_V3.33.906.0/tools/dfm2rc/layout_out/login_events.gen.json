@@ -1,0 +1,30 @@
+{
+ "event_count": 3,
+ "events": [
+  {
+   "control_path": "fLogin",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fLogin",
+   "vcl_class": "TfLogin"
+  },
+  {
+   "control_path": "fLogin.sbOk",
+   "event_name": "OnClick",
+   "handler_name": "sbOkClick",
+   "leaf_name": "sbOk",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fLogin.rgLoginOption",
+   "event_name": "OnClick",
+   "handler_name": "rgLoginOptionClick",
+   "leaf_name": "rgLoginOption",
+   "vcl_class": "TRadioGroup"
+  }
+ ],
+ "form_name": "fLogin",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "login.dfm"
+}

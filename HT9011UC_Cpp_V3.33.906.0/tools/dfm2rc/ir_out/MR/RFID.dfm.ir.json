@@ -1,0 +1,6262 @@
+{
+ "control_node_count": 105,
+ "encoding_used": "cp950",
+ "form_class": "TfRFID",
+ "form_name": "fRFID",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fRFID.PageControl1",
+    "fRFID.Panel1",
+    "fRFID.RFID_1",
+    "fRFID.RFID_2",
+    "fRFID.Timer1"
+   ],
+   "class": "TfRFID",
+   "depth": 0,
+   "events": {
+    "OnClose": "FormClose",
+    "OnShow": "FormShow"
+   },
+   "geometry": {
+    "height": 675,
+    "left": 464,
+    "top": 237,
+    "width": 675
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "fRFID",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "fRFID",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "fRFID"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 675
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 464
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnClose": {
+     "type": "SCALAR",
+     "value": "FormClose"
+    },
+    "OnShow": {
+     "type": "SCALAR",
+     "value": "FormShow"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 237
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 675
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [
+    "fRFID.PageControl1.tsRFID",
+    "fRFID.PageControl1.tsDelta",
+    "fRFID.PageControl1.tsE84"
+   ],
+   "class": "TPageControl",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 593,
+    "left": 0,
+    "top": 0,
+    "width": 659
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "TABHOST",
+   "line": 18,
+   "name": "PageControl1",
+   "objkind": "object",
+   "parent_path": "fRFID",
+   "path": "fRFID.PageControl1",
+   "properties": {
+    "ActivePage": {
+     "type": "SCALAR",
+     "value": "tsRFID"
+    },
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 593
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabIndex": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 659
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fRFID.PageControl1.tsRFID.Label395",
+    "fRFID.PageControl1.tsRFID.labRetryCount",
+    "fRFID.PageControl1.tsRFID.cbEnableRFID",
+    "fRFID.PageControl1.tsRFID.edRFIDScanDelayTime",
+    "fRFID.PageControl1.tsRFID.gbRFIDTest",
+    "fRFID.PageControl1.tsRFID.edRFIDRetryCount",
+    "fRFID.PageControl1.tsRFID.cbRFIDSimulate"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 33,
+   "name": "tsRFID",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1",
+   "path": "fRFID.PageControl1.tsRFID",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "RFID"
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 13,
+    "top": 53,
+    "width": 160
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 35,
+   "name": "Label395",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsRFID",
+   "path": "fRFID.PageControl1.tsRFID.Label395",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Decode time out (ms): "
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 53
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 160
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 13,
+    "top": 91,
+    "width": 113
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 48,
+   "name": "labRetryCount",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsRFID",
+   "path": "fRFID.PageControl1.tsRFID.labRetryCount",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Auto retry count"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 91
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 113
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 12,
+    "top": 14,
+    "width": 273
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 61,
+   "name": "cbEnableRFID",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsRFID",
+   "path": "fRFID.PageControl1.tsRFID.cbEnableRFID",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Enable RFID function"
+    },
+    "Checked": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clRed"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "State": {
+     "type": "SCALAR",
+     "value": "cbChecked"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 273
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 241,
+    "top": 49,
+    "width": 81
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 77,
+   "name": "edRFIDScanDelayTime",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsRFID",
+   "path": "fRFID.PageControl1.tsRFID.edRFIDScanDelayTime",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 241
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Text": {
+     "type": "STR",
+     "value": "1"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 49
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 81
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": "alBottom",
+   "anchors": null,
+   "child_paths": [
+    "fRFID.PageControl1.tsRFID.gbRFIDTest.spbResetCom",
+    "fRFID.PageControl1.tsRFID.gbRFIDTest.spbStartCom",
+    "fRFID.PageControl1.tsRFID.gbRFIDTest.gb1",
+    "fRFID.PageControl1.tsRFID.gbRFIDTest.GroupBox1",
+    "fRFID.PageControl1.tsRFID.gbRFIDTest.Memo1"
+   ],
+   "class": "TGroupBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 299,
+    "left": 0,
+    "top": 259,
+    "width": 651
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 91,
+   "name": "gbRFIDTest",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsRFID",
+   "path": "fRFID.PageControl1.tsRFID.gbRFIDTest",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alBottom"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "RFID Test"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 299
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 259
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 651
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 4,
+   "events": {
+    "OnClick": "spbResetComClick"
+   },
+   "geometry": {
+    "height": 55,
+    "left": 439,
+    "top": 19,
+    "width": 180
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 99,
+   "name": "spbResetCom",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsRFID.gbRFIDTest",
+   "path": "fRFID.PageControl1.tsRFID.gbRFIDTest.spbResetCom",
+   "properties": {
+    "AllowAllUp": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Stop COM"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -15
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Glyph.Data": {
+     "type": "BLOB",
+     "value": {
+      "byte_len": 3946,
+      "hex": "660F0000424D660F000000000000360000002800000024000000240000000100180000000000300F000001000000010000000000000000000000D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2B9A596AD9D8E9885758B796685726083705D816D5A806D59806D59806D59806D59806D59806D59806D59806D59806D59806D59806D59806D59806D59806D59806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2BAA596FCF8F6FBF8F5FCF6F4FCF6F4FBF5F2FBF4F1FAF3F0FAF3EFF9F2EEF9F1EDF9F1ECF9F0EBF8EFEAF9EFEAF8EEE9F7EDE8F7EEE7F7EDE7F7ECE7F7ECE6806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2BBA697FCF8F7FCF7F5FBF7F4FBF6F3FBF5F2FBF5F1FAF4F0FAF3EFFAF2EEFAF2EDF9F1ECF9F0EBF8EFEAF8EEE9F8EFE9F8EEE8F7EDE7F8EDE7F7EDE7F7ECE7806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2BBA798FCF9F6FCF8F52D92C72B8FC7298DC7278AC62485C72181C71E7DC71A78C61673C6126EC60F69C60C65C60961C6075DC60459C70256C6F7EDE7F7EDE7806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2BCA899FDF9F7FCF7F52D92C7CBE8F6C7E7F5C1E4F5BBE1F5B4DEF5ACDBF4A4D7F49BD4F393D0F28ACDF283CAF17CC7F175C4F170C2F10054C6F8EDE8F8EDE7806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2BDA89AFDF8F6FCF7F52D92C7CBE8F62A9BF92899F92697F82394F82191F81D8EF71A89F61686F51483F5107FF50E7CF40C7AF370C2F10054C6F7EEE8F8EEE8806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2BEA99BFDF9F7FDF8F62D92C7CBE8F6C7E6F6C2E5F5BBE1F5B4DEF4ACDBF4A4D8F49BD4F393D0F28BCDF283CAF27CC7F176C4F070C2F00054C6F8EFE9F8EEE9806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2BFAA9CFCF8F7FDF8F62D92C72B8FC7298DC7278AC62485C72181C71E7DC71A78C61673C6126EC60F69C60C65C60961C6075DC60459C70256C6F8EFE9F8EFE9806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2C0AC9DFCF9F7FCF9F6FCF7F5FCF7F4FBF7F3FBF6F2FBF5F2FAF4F1FAF4F0FAF4EFFAF3EEFAF1EEF9F1EDF9F1ECF9F0ECF8F0ECF8F0EBF8F0EAF9EFEAF8EFEA806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2C1AD9EFCF9F7FCF9F7D0B3A5CFAFA2CCAC9DCAA999C9A595C6A190C49E8DC29B89C19986BF9684BE9481BC927FBB907DBB8F7BBA8F7BBA8E7AF8F0EBF8F0EB806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2C2AE9FFDF9F8FCF9F8FCF9F7FCF8F6FCF7F5FBF6F4FBF6F3FBF6F2FBF5F1FBF4F1FAF4F0FAF3EFF9F2EFFAF2EDFAF2EEF9F2EDF9F1EDF9F0EDF9F1ECF9F1EC806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2C3AFA0FDFBF9FDF9F7D3B7AAD2B5A7CFB2A4CEAF9FCCAA9CC9A697C7A493C5A090C39C8CC19A88BF9785BE9582BD937FBC917DBB907CBA8F7BF9F1EDF9F2ED806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2C4B0A2FDFAF8FCFAF8FDFAF7FCF8F6FCF8F6FCF7F5FBF6F4FBF6F3FBF5F3FBF5F2FBF4F2FAF4F0FAF3F0FAF4F0FAF3EFF9F2EEFAF2EFFAF2EEF9F2EEF9F2EE806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2C5B1A3FDFAF9FDFAF8D5BAAED4B9ACD2B6A9D1B3A6CFB1A2CCAD9ECAAA9AC8A595C7A192C49F8DC29B8AC19986BF9684BD9481BD927EBB907DFAF3EFF9F3F0806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2C6B3A4FDFBFAFDFBF9FDFAF8FCF9F7FCF9F7FCF8F6FCF8F6FCF7F5FBF7F4FBF6F4FBF6F3FBF5F2FBF5F1FBF5F1FBF4F1FBF4F1FBF4F1FBF4F0FAF4F0FAF4F0806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2C7B4A5FDFCFAFDFBFAD7BDB1D6BCB0D4BAADD3B7ABD2B5A8CFB2A5CEAFA1CCAB9DCAA898C7A494C5A090C39E8CC19A88C09885BF9582BD937FFBF5F1FBF4F1806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2C8B5A7FEFCFBFDFBFAFDFBF9FDFBF8FDF9F8FDFAF7FCF9F7FDF8F7FCF8F6FCF7F5FBF7F4FCF7F4FCF6F4FCF6F3FBF6F3FBF6F3FBF5F3FBF5F2FBF5F2FBF5F2806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2C9B6A8FEFCFCFEFBFBD8C0B3D7BEB2D6BCB1D5BBAED4B9ACD2B7AAD2B4A6CFB1A3CDAD9ECAAA9BC9A595C7A292C49F8EC39C8AC19987BF9784FBF6F3FCF6F3806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2CAB7A9FEFDFCFEFCFBFEFBFBFEFBFAFDFBF9FDFAF9FDFAF8FDF9F8FCF9F8FCF9F7FCF9F6FDF9F6FCF7F6FCF7F5FCF7F5FCF7F4FBF7F5FCF7F4FCF6F4FBF6F4806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2CBB8AAFEFDFCFEFDFCD9C1B6D8C0B5D8BFB4D7BEB2D6BCB0D5BBADD3B8ACD2B6A9D0B3A6FCF9F7FCF8F6FDF9F6FCF8F6FCF8F6FCF8F6FCF7F5FCF7F5FCF8F5806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2CCBAABFFFDFDFEFDFCFEFDFCFEFCFCFEFCFAFDFBFAFDFBF9FDFBF9FDFAF9FDFAF8FCFAF8FDFAF8FCF9F7FDF9F7FCF8F7FCF8F7FDF9F6FDF8F6FCF8F7FCF9F6806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2CDBBACFEFEFDFEFEFD2B8FC7278BC62385C71E7DC61875C7126DC60D66C70860C60256C6FDFAF8FDFAF8BEAA9A9C8674836E59806D59806D59806D59806D59806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2CEBCADFEFEFEFEFEFD2B8FC7C3E5F6B9E1F5ACDBF49ED5F38FD0F282C9F277C6F10054C6FEFBF9FDFBF9BEAA9AFFFFFFEEDBCEECD2BFE4C5B0D9BAA4806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2CFBCAEFEFEFEFEFEFE2B8FC7C3E5F62798F92393F81C8DF61786F61280F578C5F10054C6FEFBFAFEFBFABEAA9AFFFFFFFFEEE4F5E1D3E1C6B2806D59D2C2B4D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D0BDAFFFFFFFFFFEFF2B8FC7C3E5F6B9E0F5ACDBF49ED5F38FCFF383C9F278C5F10054C6FDFCFBFEFCFABEAA9AFFFFFFFFEEE4E9D4C5806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D0BEB0FFFFFFFFFFFF2B8FC7278BC62385C71E7DC61875C7126DC60D66C70860C60256C6FEFCFBFEFDFBBEAA9AFFFFFFF3E0D5836E59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D1BFB1FFFFFFFFFFFFFFFFFFFFFEFEFEFFFEFFFFFEFEFEFEFEFEFDFFFEFDFFFDFDFEFDFDFEFDFCFEFDFCBEAA9AF3E0D59C8674D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D2BFB1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFEFFFEFEFFFEFEFFFFFEFFFEFEFFFDFDFEFEFDFEFEFDBEAA9ABDA89AD7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D2C0B2D2C0B2D1BFB1D0BEB0CFBCAECDBBADCCB9ABCAB7A9C8B5A7C7B3A5C5B1A3C3AFA1C2AD9FC0AC9EBFAA9CD7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2",
+      "sha1": "cabb9987befd542deb0594f163b0b10c0e6746ab"
+     }
+    },
+    "GroupIndex": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 55
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 439
+    },
+    "Margin": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "spbResetComClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 180
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 4,
+   "events": {
+    "OnClick": "spbStartComClick"
+   },
+   "geometry": {
+    "height": 55,
+    "left": 439,
+    "top": 81,
+    "width": 180
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 241,
+   "name": "spbStartCom",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsRFID.gbRFIDTest",
+   "path": "fRFID.PageControl1.tsRFID.gbRFIDTest.spbStartCom",
+   "properties": {
+    "AllowAllUp": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Start COM"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -15
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Glyph.Data": {
+     "type": "BLOB",
+     "value": {
+      "byte_len": 3946,
+      "hex": "660F0000424D660F000000000000360000002800000024000000240000000100180000000000300F000001000000010000000000000000000000D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2B9A596AD9D8E9885758B796685726083705D816D5A806D59806D59806D59806D59806D59806D59806D59806D59806D59806D59806D59806D59806D59806D59806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2BAA596FCF8F6FBF8F5FCF6F4FCF6F4FBF5F2FBF4F1FAF3F0FAF3EFF9F2EEF9F1EDF9F1ECF9F0EBF8EFEAF9EFEAF8EEE9F7EDE8F7EEE7F7EDE7F7ECE7F7ECE6806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2BBA697FCF8F7FCF7F5FBF7F4FBF6F3FBF5F2FBF5F1FAF4F0FAF3EFFAF2EEFAF2EDF9F1ECF9F0EBF8EFEAF8EEE9F8EFE9F8EEE8F7EDE7F8EDE7F7EDE7F7ECE7806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2BBA798FCF9F6FCF8F52D92C72B8FC7298DC7278AC62485C72181C71E7DC71A78C61673C6126EC60F69C60C65C60961C6075DC60459C70256C6F7EDE7F7EDE7806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2BCA899FDF9F7FCF7F52D92C7CBE8F6C7E7F5C1E4F5BBE1F5B4DEF5ACDBF4A4D7F49BD4F393D0F28ACDF283CAF17CC7F175C4F170C2F10054C6F8EDE8F8EDE7806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2BDA89AFDF8F6FCF7F52D92C7CBE8F62A9BF92899F92697F82394F82191F81D8EF71A89F61686F51483F5107FF50E7CF40C7AF370C2F10054C6F7EEE8F8EEE8806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2BEA99BFDF9F7FDF8F62D92C7CBE8F6C7E6F6C2E5F5BBE1F5B4DEF4ACDBF4A4D8F49BD4F393D0F28BCDF283CAF27CC7F176C4F070C2F00054C6F8EFE9F8EEE9806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2BFAA9CFCF8F7FDF8F62D92C72B8FC7298DC7278AC62485C72181C71E7DC71A78C61673C6126EC60F69C60C65C60961C6075DC60459C70256C6F8EFE9F8EFE9806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2C0AC9DFCF9F7FCF9F6FCF7F5FCF7F4FBF7F3FBF6F2FBF5F2FAF4F1FAF4F0FAF4EFFAF3EEFAF1EEF9F1EDF9F1ECF9F0ECF8F0ECF8F0EBF8F0EAF9EFEAF8EFEA806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2C1AD9EFCF9F7FCF9F7D0B3A5CFAFA2CCAC9DCAA999C9A595C6A190C49E8DC29B89C19986BF9684BE9481BC927FBB907DBB8F7BBA8F7BBA8E7AF8F0EBF8F0EB806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2C2AE9FFDF9F8FCF9F8FCF9F7FCF8F6FCF7F5FBF6F4FBF6F3FBF6F2FBF5F1FBF4F1FAF4F0FAF3EFF9F2EFFAF2EDFAF2EEF9F2EDF9F1EDF9F0EDF9F1ECF9F1EC806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2C3AFA0FDFBF9FDF9F7D3B7AAD2B5A7CFB2A4CEAF9FCCAA9CC9A697C7A493C5A090C39C8CC19A88BF9785BE9582BD937FBC917DBB907CBA8F7BF9F1EDF9F2ED806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2C4B0A2FDFAF8FCFAF8FDFAF7FCF8F6FCF8F6FCF7F5FBF6F4FBF6F3FBF5F3FBF5F2FBF4F2FAF4F0FAF3F0FAF4F0FAF3EFF9F2EEFAF2EFFAF2EEF9F2EEF9F2EE806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2C5B1A3FDFAF9FDFAF8D5BAAED4B9ACD2B6A9D1B3A6CFB1A2CCAD9ECAAA9AC8A595C7A192C49F8DC29B8AC19986BF9684BD9481BD927EBB907DFAF3EFF9F3F0806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2C6B3A4FDFBFAFDFBF9FDFAF8FCF9F7FCF9F7FCF8F6FCF8F6FCF7F5FBF7F4FBF6F4FBF6F3FBF5F2FBF5F1FBF5F1FBF4F1FBF4F1FBF4F1FBF4F0FAF4F0FAF4F0806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2C7B4A5FDFCFAFDFBFAD7BDB1D6BCB0D4BAADD3B7ABD2B5A8CFB2A5CEAFA1CCAB9DCAA898C7A494C5A090C39E8CC19A88C09885BF9582BD937FFBF5F1FBF4F1806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2C8B5A7FEFCFBFDFBFAFDFBF9FDFBF8FDF9F8FDFAF7FCF9F7FDF8F7FCF8F6FCF7F5FBF7F4FCF7F4FCF6F4FCF6F3FBF6F3FBF6F3FBF5F3FBF5F2FBF5F2FBF5F2806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2C9B6A8FEFCFCFEFBFBD8C0B3D7BEB2D6BCB1D5BBAED4B9ACD2B7AAD2B4A6CFB1A3CDAD9ECAAA9BC9A595C7A292C49F8EC39C8AC19987BF9784FBF6F3FCF6F3806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2CAB7A9FEFDFCFEFCFBFEFBFBFEFBFAFDFBF9FDFAF9FDFAF8FDF9F8FCF9F8FCF9F7FCF9F6FDF9F6FCF7F6FCF7F5FCF7F5FCF7F4FBF7F5FCF7F4FCF6F4FBF6F4806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2CBB8AAFEFDFCFEFDFCD9C1B6D8C0B5D8BFB4D7BEB2D6BCB0D5BBADD3B8ACD2B6A9D0B3A6FCF9F7FCF8F6FDF9F6FCF8F6FCF8F6FCF8F6FCF7F5FCF7F5FCF8F5806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2CCBAABFFFDFDFEFDFCFEFDFCFEFCFCFEFCFAFDFBFAFDFBF9FDFBF9FDFAF9FDFAF8FCFAF8FDFAF8FCF9F7FDF9F7FCF8F7FCF8F7FDF9F6FDF8F6FCF8F7FCF9F6806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2CDBBACFEFEFDFEFEFD2B8FC7278BC62385C71E7DC61875C7126DC60D66C70860C60256C6FDFAF8FDFAF8BEAA9A9C8674836E59806D59806D59806D59806D59806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2CEBCADFEFEFEFEFEFD2B8FC7C3E5F6B9E1F5ACDBF49ED5F38FD0F282C9F277C6F10054C6FEFBF9FDFBF9BEAA9AFFFFFFEEDBCEECD2BFE4C5B0D9BAA4806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2CFBCAEFEFEFEFEFEFE2B8FC7C3E5F62798F92393F81C8DF61786F61280F578C5F10054C6FEFBFAFEFBFABEAA9AFFFFFFFFEEE4F5E1D3E1C6B2806D59D2C2B4D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D0BDAFFFFFFFFFFEFF2B8FC7C3E5F6B9E0F5ACDBF49ED5F38FCFF383C9F278C5F10054C6FDFCFBFEFCFABEAA9AFFFFFFFFEEE4E9D4C5806D59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D0BEB0FFFFFFFFFFFF2B8FC7278BC62385C71E7DC61875C7126DC60D66C70860C60256C6FEFCFBFEFDFBBEAA9AFFFFFFF3E0D5836E59D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D1BFB1FFFFFFFFFFFFFFFFFFFFFEFEFEFFFEFFFFFEFEFEFEFEFEFDFFFEFDFFFDFDFEFDFDFEFDFCFEFDFCBEAA9AF3E0D59C8674D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D2BFB1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFEFFFEFEFFFEFEFFFFFEFFFEFEFFFDFDFEFEFDFEFEFDBEAA9ABDA89AD7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D2C0B2D2C0B2D1BFB1D0BEB0CFBCAECDBBADCCB9ABCAB7A9C8B5A7C7B3A5C5B1A3C3AFA1C2AD9FC0AC9EBFAA9CD7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2D7E3F2",
+      "sha1": "cabb9987befd542deb0594f163b0b10c0e6746ab"
+     }
+    },
+    "GroupIndex": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 55
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 439
+    },
+    "Margin": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "spbStartComClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 81
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 180
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fRFID.PageControl1.tsRFID.gbRFIDTest.gb1.cbCommReader1",
+    "fRFID.PageControl1.tsRFID.gbRFIDTest.gb1.coCommRFID1",
+    "fRFID.PageControl1.tsRFID.gbRFIDTest.gb1.btRFID1On"
+   ],
+   "class": "TGroupBox",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 50,
+    "left": 12,
+    "top": 26,
+    "width": 397
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 383,
+   "name": "gb1",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsRFID.gbRFIDTest",
+   "path": "fRFID.PageControl1.tsRFID.gbRFIDTest.gb1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Load Port"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 50
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 26
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 397
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 12,
+    "top": 18,
+    "width": 173
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 396,
+   "name": "cbCommReader1",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsRFID.gbRFIDTest.gb1",
+   "path": "fRFID.PageControl1.tsRFID.gbRFIDTest.gb1.cbCommReader1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Load Port COM Port: "
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 18
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 173
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 160,
+    "top": 15,
+    "width": 117
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 410,
+   "name": "coCommRFID1",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsRFID.gbRFIDTest.gb1",
+   "path": "fRFID.PageControl1.tsRFID.gbRFIDTest.gb1.coCommRFID1",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "COM1",
+      "COM2",
+      "COM3",
+      "COM4",
+      "COM5",
+      "COM6",
+      "COM7",
+      "COM8",
+      "COM9",
+      "COM10",
+      "COM11",
+      "COM12",
+      "COM13",
+      "COM14",
+      "COM15",
+      "COM16",
+      "COM17",
+      "COM18",
+      "COM19"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 160
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Text": {
+     "type": "STR",
+     "value": "COM15"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 117
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 5,
+   "events": {
+    "OnClick": "btRFID1OnClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 288,
+    "top": 14,
+    "width": 97
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 445,
+   "name": "btRFID1On",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsRFID.gbRFIDTest.gb1",
+   "path": "fRFID.PageControl1.tsRFID.gbRFIDTest.gb1.btRFID1On",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "RFID 1 On"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 288
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btRFID1OnClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 97
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fRFID.PageControl1.tsRFID.gbRFIDTest.GroupBox1.CheckBox1",
+    "fRFID.PageControl1.tsRFID.gbRFIDTest.GroupBox1.coCommRFID2",
+    "fRFID.PageControl1.tsRFID.gbRFIDTest.GroupBox1.btRFID2On"
+   ],
+   "class": "TGroupBox",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 50,
+    "left": 12,
+    "top": 82,
+    "width": 397
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 461,
+   "name": "GroupBox1",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsRFID.gbRFIDTest",
+   "path": "fRFID.PageControl1.tsRFID.gbRFIDTest.GroupBox1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Conversion"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 50
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 82
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 397
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 12,
+    "top": 18,
+    "width": 165
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 474,
+   "name": "CheckBox1",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsRFID.gbRFIDTest.GroupBox1",
+   "path": "fRFID.PageControl1.tsRFID.gbRFIDTest.GroupBox1.CheckBox1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Conversion COM Port: "
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 18
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 165
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 160,
+    "top": 15,
+    "width": 117
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 488,
+   "name": "coCommRFID2",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsRFID.gbRFIDTest.GroupBox1",
+   "path": "fRFID.PageControl1.tsRFID.gbRFIDTest.GroupBox1.coCommRFID2",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "COM1",
+      "COM2",
+      "COM3",
+      "COM4",
+      "COM5",
+      "COM6",
+      "COM7",
+      "COM8",
+      "COM9",
+      "COM10",
+      "COM11",
+      "COM12",
+      "COM13",
+      "COM14",
+      "COM15",
+      "COM16",
+      "COM17",
+      "COM18",
+      "COM19"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 160
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Text": {
+     "type": "STR",
+     "value": "COM16"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 117
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 5,
+   "events": {
+    "OnClick": "btRFID1OnClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 288,
+    "top": 14,
+    "width": 97
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 523,
+   "name": "btRFID2On",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsRFID.gbRFIDTest.GroupBox1",
+   "path": "fRFID.PageControl1.tsRFID.gbRFIDTest.GroupBox1.btRFID2On",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "RFID 2 On"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 288
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btRFID1OnClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 97
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": "alBottom",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 145,
+    "left": 2,
+    "top": 152,
+    "width": 647
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 540,
+   "name": "Memo1",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsRFID.gbRFIDTest",
+   "path": "fRFID.PageControl1.tsRFID.gbRFIDTest.Memo1",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alBottom"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 145
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "ScrollBars": {
+     "type": "SCALAR",
+     "value": "ssVertical"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 152
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 647
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 241,
+    "top": 87,
+    "width": 81
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 551,
+   "name": "edRFIDRetryCount",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsRFID",
+   "path": "fRFID.PageControl1.tsRFID.edRFIDRetryCount",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 241
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Text": {
+     "type": "STR",
+     "value": "1"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 87
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 81
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 408,
+    "top": 232,
+    "width": 177
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 565,
+   "name": "cbRFIDSimulate",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsRFID",
+   "path": "fRFID.PageControl1.tsRFID.cbRFIDSimulate",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Simulate"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 408
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 232
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 177
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fRFID.PageControl1.tsDelta.Label1",
+    "fRFID.PageControl1.tsDelta.Label11",
+    "fRFID.PageControl1.tsDelta.Label10",
+    "fRFID.PageControl1.tsDelta.Label9",
+    "fRFID.PageControl1.tsDelta.Label2",
+    "fRFID.PageControl1.tsDelta.Label3",
+    "fRFID.PageControl1.tsDelta.Label4",
+    "fRFID.PageControl1.tsDelta.Label5",
+    "fRFID.PageControl1.tsDelta.Label6",
+    "fRFID.PageControl1.tsDelta.Label7",
+    "fRFID.PageControl1.tsDelta.Label8",
+    "fRFID.PageControl1.tsDelta.Label12",
+    "fRFID.PageControl1.tsDelta.Label13",
+    "fRFID.PageControl1.tsDelta.Label14",
+    "fRFID.PageControl1.tsDelta.Label15",
+    "fRFID.PageControl1.tsDelta.Label16",
+    "fRFID.PageControl1.tsDelta.Label17",
+    "fRFID.PageControl1.tsDelta.Edit1",
+    "fRFID.PageControl1.tsDelta.ReqData",
+    "fRFID.PageControl1.tsDelta.ResData",
+    "fRFID.PageControl1.tsDelta.ActStatus",
+    "fRFID.PageControl1.tsDelta.Edit4",
+    "fRFID.PageControl1.tsDelta.Edit5",
+    "fRFID.PageControl1.tsDelta.Edit7",
+    "fRFID.PageControl1.tsDelta.Edit8",
+    "fRFID.PageControl1.tsDelta.Edit10",
+    "fRFID.PageControl1.tsDelta.Edit11",
+    "fRFID.PageControl1.tsDelta.Edit13",
+    "fRFID.PageControl1.tsDelta.Edit14",
+    "fRFID.PageControl1.tsDelta.Edit16",
+    "fRFID.PageControl1.tsDelta.Edit17",
+    "fRFID.PageControl1.tsDelta.Edit19",
+    "fRFID.PageControl1.tsDelta.Edit20",
+    "fRFID.PageControl1.tsDelta.Edit22",
+    "fRFID.PageControl1.tsDelta.Edit23",
+    "fRFID.PageControl1.tsDelta.Edit25",
+    "fRFID.PageControl1.tsDelta.Edit26",
+    "fRFID.PageControl1.tsDelta.Edit28",
+    "fRFID.PageControl1.tsDelta.Edit29",
+    "fRFID.PageControl1.tsDelta.Edit31",
+    "fRFID.PageControl1.tsDelta.Edit32",
+    "fRFID.PageControl1.tsDelta.Edit3",
+    "fRFID.PageControl1.tsDelta.Edit6",
+    "fRFID.PageControl1.tsDelta.Edit9",
+    "fRFID.PageControl1.tsDelta.Edit12",
+    "fRFID.PageControl1.tsDelta.Edit15",
+    "fRFID.PageControl1.tsDelta.Edit18",
+    "fRFID.PageControl1.tsDelta.Edit21",
+    "fRFID.PageControl1.tsDelta.Edit24",
+    "fRFID.PageControl1.tsDelta.Edit27",
+    "fRFID.PageControl1.tsDelta.Edit30",
+    "fRFID.PageControl1.tsDelta.cbEnableView",
+    "fRFID.PageControl1.tsDelta.Memo2",
+    "fRFID.PageControl1.tsDelta.Edit34",
+    "fRFID.PageControl1.tsDelta.Edit35",
+    "fRFID.PageControl1.tsDelta.Edit36",
+    "fRFID.PageControl1.tsDelta.GroupBox2"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 574,
+   "name": "tsDelta",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1",
+   "path": "fRFID.PageControl1.tsDelta",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Delta"
+    },
+    "ImageIndex": {
+     "type": "SCALAR",
+     "value": 1
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 272,
+    "top": 12,
+    "width": 15
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 577,
+   "name": "Label1",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Label1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "IP"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 272
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 15
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 104,
+    "width": 96
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 584,
+   "name": "Label11",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Label11",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Action Status"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 104
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 96
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 72,
+    "width": 112
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 591,
+   "name": "Label10",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Label10",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Response Data"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 112
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 40,
+    "width": 100
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 598,
+   "name": "Label9",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Label9",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Request Data"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 100
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 40,
+    "top": 136,
+    "width": 89
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 605,
+   "name": "Label2",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Label2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Cassette ID:"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 89
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 200,
+    "top": 136,
+    "width": 43
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 612,
+   "name": "Label3",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Label3",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Data :"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 200
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 43
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 360,
+    "top": 136,
+    "width": 48
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 619,
+   "name": "Label4",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Label4",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Lot ID:"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 48
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 21,
+    "top": 163,
+    "width": 9
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 626,
+   "name": "Label5",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Label5",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "1"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 163
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 9
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 21,
+    "top": 197,
+    "width": 9
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 633,
+   "name": "Label6",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Label6",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "2"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 197
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 9
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 21,
+    "top": 231,
+    "width": 9
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 640,
+   "name": "Label7",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Label7",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "3"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 231
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 9
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 21,
+    "top": 264,
+    "width": 9
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 647,
+   "name": "Label8",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Label8",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "4"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 264
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 9
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 21,
+    "top": 298,
+    "width": 9
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 654,
+   "name": "Label12",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Label12",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "5"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 298
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 9
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 21,
+    "top": 332,
+    "width": 9
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 661,
+   "name": "Label13",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Label13",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "6"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 332
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 9
+    }
+   },
+   "sibling_index": 12,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 21,
+    "top": 366,
+    "width": 9
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 668,
+   "name": "Label14",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Label14",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "7"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 366
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 9
+    }
+   },
+   "sibling_index": 13,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 21,
+    "top": 399,
+    "width": 9
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 675,
+   "name": "Label15",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Label15",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "8"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 399
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 9
+    }
+   },
+   "sibling_index": 14,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 21,
+    "top": 433,
+    "width": 9
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 682,
+   "name": "Label16",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Label16",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "9"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 433
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 9
+    }
+   },
+   "sibling_index": 15,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 19,
+    "top": 467,
+    "width": 18
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 689,
+   "name": "Label17",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Label17",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "10"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 467
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 18
+    }
+   },
+   "sibling_index": 16,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 304,
+    "top": 8,
+    "width": 145
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 696,
+   "name": "Edit1",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 304
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Text": {
+     "type": "STR",
+     "value": "172.16.8.109"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 145
+    }
+   },
+   "sibling_index": 17,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 136,
+    "top": 39,
+    "width": 241
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 704,
+   "name": "ReqData",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.ReqData",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Text": {
+     "type": "STR",
+     "value": "010307D0000A"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 39
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 241
+    }
+   },
+   "sibling_index": 18,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 136,
+    "top": 72,
+    "width": 241
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 712,
+   "name": "ResData",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.ResData",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnFace"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "ReadOnly": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 241
+    }
+   },
+   "sibling_index": 19,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 136,
+    "top": 104,
+    "width": 241
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 721,
+   "name": "ActStatus",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.ActStatus",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnFace"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "ReadOnly": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 104
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 241
+    }
+   },
+   "sibling_index": 20,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 200,
+    "top": 159,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 730,
+   "name": "Edit4",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit4",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 200
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 159
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 21,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 360,
+    "top": 159,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 737,
+   "name": "Edit5",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit5",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 159
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 22,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 200,
+    "top": 193,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 744,
+   "name": "Edit7",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit7",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 200
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 193
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 23,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 360,
+    "top": 193,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 751,
+   "name": "Edit8",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit8",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 193
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 24,
+   "synthesized": false,
+   "tab_order": 7,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 200,
+    "top": 227,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 758,
+   "name": "Edit10",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit10",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 200
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 227
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 25,
+   "synthesized": false,
+   "tab_order": 8,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 360,
+    "top": 227,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 765,
+   "name": "Edit11",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit11",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 227
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 26,
+   "synthesized": false,
+   "tab_order": 9,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 200,
+    "top": 260,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 772,
+   "name": "Edit13",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit13",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 200
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 260
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 27,
+   "synthesized": false,
+   "tab_order": 10,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 360,
+    "top": 260,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 779,
+   "name": "Edit14",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit14",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 260
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 28,
+   "synthesized": false,
+   "tab_order": 11,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 200,
+    "top": 294,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 786,
+   "name": "Edit16",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit16",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 200
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 294
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 29,
+   "synthesized": false,
+   "tab_order": 12,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 360,
+    "top": 294,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 793,
+   "name": "Edit17",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit17",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 294
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 30,
+   "synthesized": false,
+   "tab_order": 13,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 200,
+    "top": 328,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 800,
+   "name": "Edit19",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit19",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 200
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 328
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 31,
+   "synthesized": false,
+   "tab_order": 14,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 360,
+    "top": 328,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 807,
+   "name": "Edit20",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit20",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 328
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 32,
+   "synthesized": false,
+   "tab_order": 15,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 200,
+    "top": 362,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 814,
+   "name": "Edit22",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit22",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 200
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 362
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 33,
+   "synthesized": false,
+   "tab_order": 16,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 360,
+    "top": 362,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 821,
+   "name": "Edit23",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit23",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 362
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 34,
+   "synthesized": false,
+   "tab_order": 17,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 200,
+    "top": 395,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 828,
+   "name": "Edit25",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit25",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 200
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 18
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 395
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 35,
+   "synthesized": false,
+   "tab_order": 18,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 360,
+    "top": 395,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 835,
+   "name": "Edit26",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit26",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 395
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 36,
+   "synthesized": false,
+   "tab_order": 19,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 200,
+    "top": 429,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 842,
+   "name": "Edit28",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit28",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 200
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 429
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 37,
+   "synthesized": false,
+   "tab_order": 20,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 360,
+    "top": 429,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 849,
+   "name": "Edit29",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit29",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 429
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 38,
+   "synthesized": false,
+   "tab_order": 21,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 200,
+    "top": 463,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 856,
+   "name": "Edit31",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit31",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 200
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 463
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 39,
+   "synthesized": false,
+   "tab_order": 22,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 360,
+    "top": 463,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 863,
+   "name": "Edit32",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit32",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 23
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 463
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 40,
+   "synthesized": false,
+   "tab_order": 23,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 40,
+    "top": 159,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 870,
+   "name": "Edit3",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit3",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 159
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 41,
+   "synthesized": false,
+   "tab_order": 24,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 40,
+    "top": 193,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 877,
+   "name": "Edit6",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit6",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 193
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 42,
+   "synthesized": false,
+   "tab_order": 25,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 40,
+    "top": 227,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 884,
+   "name": "Edit9",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit9",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 26
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 227
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 43,
+   "synthesized": false,
+   "tab_order": 26,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 40,
+    "top": 260,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 891,
+   "name": "Edit12",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit12",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 27
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 260
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 44,
+   "synthesized": false,
+   "tab_order": 27,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 40,
+    "top": 294,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 898,
+   "name": "Edit15",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit15",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 294
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 45,
+   "synthesized": false,
+   "tab_order": 28,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 40,
+    "top": 328,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 905,
+   "name": "Edit18",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit18",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 328
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 46,
+   "synthesized": false,
+   "tab_order": 29,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 40,
+    "top": 362,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 912,
+   "name": "Edit21",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit21",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 30
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 362
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 47,
+   "synthesized": false,
+   "tab_order": 30,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 40,
+    "top": 395,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 919,
+   "name": "Edit24",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit24",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 31
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 395
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 48,
+   "synthesized": false,
+   "tab_order": 31,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 40,
+    "top": 429,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 926,
+   "name": "Edit27",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit27",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 429
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 49,
+   "synthesized": false,
+   "tab_order": 32,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 40,
+    "top": 463,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 933,
+   "name": "Edit30",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit30",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 463
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 50,
+   "synthesized": false,
+   "tab_order": 33,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 3,
+    "top": 10,
+    "width": 238
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 940,
+   "name": "cbEnableView",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.cbEnableView",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Enable View function"
+    },
+    "Checked": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clRed"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "State": {
+     "type": "SCALAR",
+     "value": "cbChecked"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 34
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 238
+    }
+   },
+   "sibling_index": 51,
+   "synthesized": false,
+   "tab_order": 34,
+   "visible": null
+  },
+  {
+   "align": "alBottom",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 30,
+    "left": 0,
+    "top": 528,
+    "width": 651
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 956,
+   "name": "Memo2",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Memo2",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alBottom"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 30
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 35
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 528
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 651
+    }
+   },
+   "sibling_index": 52,
+   "synthesized": false,
+   "tab_order": 35,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 40,
+    "top": 495,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 964,
+   "name": "Edit34",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit34",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 495
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 53,
+   "synthesized": false,
+   "tab_order": 36,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 200,
+    "top": 495,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 971,
+   "name": "Edit35",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit35",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 200
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 37
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 495
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 54,
+   "synthesized": false,
+   "tab_order": 37,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 360,
+    "top": 495,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 978,
+   "name": "Edit36",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.Edit36",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 38
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 495
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 55,
+   "synthesized": false,
+   "tab_order": 38,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fRFID.PageControl1.tsDelta.GroupBox2.Button1",
+    "fRFID.PageControl1.tsDelta.GroupBox2.Button3",
+    "fRFID.PageControl1.tsDelta.GroupBox2.Button4",
+    "fRFID.PageControl1.tsDelta.GroupBox2.Button2",
+    "fRFID.PageControl1.tsDelta.GroupBox2.Button9"
+   ],
+   "class": "TGroupBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 217,
+    "left": 512,
+    "top": 152,
+    "width": 137
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 985,
+   "name": "GroupBox2",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta",
+   "path": "fRFID.PageControl1.tsDelta.GroupBox2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Test Mode"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 217
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 512
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 39
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 152
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 137
+    }
+   },
+   "sibling_index": 56,
+   "synthesized": false,
+   "tab_order": 39,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 4,
+   "events": {
+    "OnClick": "Button1Click"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 8,
+    "top": 24,
+    "width": 120
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 992,
+   "name": "Button1",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta.GroupBox2",
+   "path": "fRFID.PageControl1.tsDelta.GroupBox2.Button1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Write data"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "Button1Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 120
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 4,
+   "events": {
+    "OnClick": "Button3Click"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 8,
+    "top": 56,
+    "width": 120
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1001,
+   "name": "Button3",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta.GroupBox2",
+   "path": "fRFID.PageControl1.tsDelta.GroupBox2.Button3",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Read data"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "Button3Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 56
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 120
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 4,
+   "events": {
+    "OnClick": "Button4Click"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 8,
+    "top": 88,
+    "width": 120
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1010,
+   "name": "Button4",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta.GroupBox2",
+   "path": "fRFID.PageControl1.tsDelta.GroupBox2.Button4",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Clean data"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "Button4Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 88
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 120
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 4,
+   "events": {
+    "OnClick": "Button2Click"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 8,
+    "top": 144,
+    "width": 120
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1019,
+   "name": "Button2",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta.GroupBox2",
+   "path": "fRFID.PageControl1.tsDelta.GroupBox2.Button2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Close Connect"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "Button2Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 144
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 120
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 4,
+   "events": {
+    "OnClick": "Button9Click"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 8,
+    "top": 176,
+    "width": 120
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1028,
+   "name": "Button9",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsDelta.GroupBox2",
+   "path": "fRFID.PageControl1.tsDelta.GroupBox2.Button9",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "start"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "Button9Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 176
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 120
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fRFID.PageControl1.tsE84.gbE84TimeOut",
+    "fRFID.PageControl1.tsE84.gbE84Log"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 1040,
+   "name": "tsE84",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1",
+   "path": "fRFID.PageControl1.tsE84",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "E84 Sensor"
+    },
+    "ImageIndex": {
+     "type": "SCALAR",
+     "value": 2
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fRFID.PageControl1.tsE84.gbE84TimeOut.labTP1",
+    "fRFID.PageControl1.tsE84.gbE84TimeOut.labTP2",
+    "fRFID.PageControl1.tsE84.gbE84TimeOut.labTP3",
+    "fRFID.PageControl1.tsE84.gbE84TimeOut.labTP4",
+    "fRFID.PageControl1.tsE84.gbE84TimeOut.labTP5",
+    "fRFID.PageControl1.tsE84.gbE84TimeOut.labTP6",
+    "fRFID.PageControl1.tsE84.gbE84TimeOut.edTP1",
+    "fRFID.PageControl1.tsE84.gbE84TimeOut.edTP2",
+    "fRFID.PageControl1.tsE84.gbE84TimeOut.edTP3",
+    "fRFID.PageControl1.tsE84.gbE84TimeOut.edTP4",
+    "fRFID.PageControl1.tsE84.gbE84TimeOut.edTP5",
+    "fRFID.PageControl1.tsE84.gbE84TimeOut.edTP6"
+   ],
+   "class": "TGroupBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 265,
+    "left": 8,
+    "top": 16,
+    "width": 185
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 1043,
+   "name": "gbE84TimeOut",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsE84",
+   "path": "fRFID.PageControl1.tsE84.gbE84TimeOut",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "E84 Time Out Setting"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 265
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 185
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 8,
+    "top": 24,
+    "width": 28
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1050,
+   "name": "labTP1",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsE84.gbE84TimeOut",
+   "path": "fRFID.PageControl1.tsE84.gbE84TimeOut.labTP1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TP1"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 28
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 8,
+    "top": 64,
+    "width": 28
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1057,
+   "name": "labTP2",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsE84.gbE84TimeOut",
+   "path": "fRFID.PageControl1.tsE84.gbE84TimeOut.labTP2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TP2"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 64
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 28
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 8,
+    "top": 104,
+    "width": 28
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1064,
+   "name": "labTP3",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsE84.gbE84TimeOut",
+   "path": "fRFID.PageControl1.tsE84.gbE84TimeOut.labTP3",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TP3"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 104
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 28
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 8,
+    "top": 144,
+    "width": 28
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1071,
+   "name": "labTP4",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsE84.gbE84TimeOut",
+   "path": "fRFID.PageControl1.tsE84.gbE84TimeOut.labTP4",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TP4"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 144
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 28
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 8,
+    "top": 184,
+    "width": 28
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1078,
+   "name": "labTP5",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsE84.gbE84TimeOut",
+   "path": "fRFID.PageControl1.tsE84.gbE84TimeOut.labTP5",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TP5"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 184
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 28
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 8,
+    "top": 224,
+    "width": 28
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1085,
+   "name": "labTP6",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsE84.gbE84TimeOut",
+   "path": "fRFID.PageControl1.tsE84.gbE84TimeOut.labTP6",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TP6"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 224
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 28
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 72,
+    "top": 20,
+    "width": 49
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1092,
+   "name": "edTP1",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsE84.gbE84TimeOut",
+   "path": "fRFID.PageControl1.tsE84.gbE84TimeOut.edTP1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Text": {
+     "type": "STR",
+     "value": "2"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 49
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 72,
+    "top": 60,
+    "width": 49
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1100,
+   "name": "edTP2",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsE84.gbE84TimeOut",
+   "path": "fRFID.PageControl1.tsE84.gbE84TimeOut.edTP2",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Text": {
+     "type": "STR",
+     "value": "2"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 49
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 72,
+    "top": 100,
+    "width": 49
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1108,
+   "name": "edTP3",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsE84.gbE84TimeOut",
+   "path": "fRFID.PageControl1.tsE84.gbE84TimeOut.edTP3",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Text": {
+     "type": "STR",
+     "value": "60"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 49
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 72,
+    "top": 140,
+    "width": 49
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1116,
+   "name": "edTP4",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsE84.gbE84TimeOut",
+   "path": "fRFID.PageControl1.tsE84.gbE84TimeOut.edTP4",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Text": {
+     "type": "STR",
+     "value": "60"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 140
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 49
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 72,
+    "top": 180,
+    "width": 49
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1124,
+   "name": "edTP5",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsE84.gbE84TimeOut",
+   "path": "fRFID.PageControl1.tsE84.gbE84TimeOut.edTP5",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Text": {
+     "type": "STR",
+     "value": "2"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 180
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 49
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 72,
+    "top": 220,
+    "width": 49
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1132,
+   "name": "edTP6",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsE84.gbE84TimeOut",
+   "path": "fRFID.PageControl1.tsE84.gbE84TimeOut.edTP6",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Text": {
+     "type": "STR",
+     "value": "2"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 220
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 49
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": "alRight",
+   "anchors": null,
+   "child_paths": [
+    "fRFID.PageControl1.tsE84.gbE84Log.Memo3"
+   ],
+   "class": "TGroupBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 558,
+    "left": 408,
+    "top": 0,
+    "width": 243
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 1141,
+   "name": "gbE84Log",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsE84",
+   "path": "fRFID.PageControl1.tsE84.gbE84Log",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alRight"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "E84 Log"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 558
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 408
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 243
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 534,
+    "left": 2,
+    "top": 22,
+    "width": 239
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1149,
+   "name": "Memo3",
+   "objkind": "object",
+   "parent_path": "fRFID.PageControl1.tsE84.gbE84Log",
+   "path": "fRFID.PageControl1.tsE84.gbE84Log.Memo3",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 534
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 239
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": "alBottom",
+   "anchors": null,
+   "child_paths": [
+    "fRFID.Panel1.spbSave",
+    "fRFID.Panel1.sbtExit"
+   ],
+   "class": "TPanel",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 44,
+    "left": 0,
+    "top": 593,
+    "width": 659
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 1160,
+   "name": "Panel1",
+   "objkind": "object",
+   "parent_path": "fRFID",
+   "path": "fRFID.Panel1",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alBottom"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 44
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 593
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 659
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "spbSaveClick"
+   },
+   "geometry": {
+    "height": 40,
+    "left": 46,
+    "top": 4,
+    "width": 227
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1169,
+   "name": "spbSave",
+   "objkind": "object",
+   "parent_path": "fRFID.Panel1",
+   "path": "fRFID.Panel1.spbSave",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Save"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Glyph.Data": {
+     "type": "BLOB",
+     "value": {
+      "byte_len": 3946,
+      "hex": "660F0000424D660F000000000000360000002800000024000000240000000100180000000000300F000001000000010000000000000000000000FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF9F9F9F9F9F9F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F9F9F9F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF7F7F7EFEFEFE8E8E8E6E6E6E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E9E9E9F3F3F3F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF8F8F8ECECECD6D6D6C8C8C8C5C5C5C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4D0D0D0E9E9E9F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF0EFEFC0A6A7A55B6CA96270A45E6C934556A6A3A3A4A1A1A19C9C9C9797979393948D8D8E88888A8383867F7D837A7A807978807978994759994759994759994759994759994759994759994756C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAD2C1C1B28181AF6D79B8717FB7707DAA6472EFEFF1EEEEF1995D68B8717EB06B78E1E0E0DDDADBD8D5D6D4D1D2CFCCCCCAC6C6DBD8D88F4B59A05565A05565BE848EB9727FB8727EB8717E994557C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AAF6D79BA7481B97380B7737FAA6472E9E9EBECEBEF995D68B8717EB06B78E1DFE1DCDADDD7D5D6D2D0D1CDC9CAC8C3C3D9D6D68D49589F5464A05565BF848EB97380B9737FB9727F9B4457C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC38D95BA7682BA7481B97480AA6472E5E4E7E9E9EB9A5D69B8737FB06B78E5E5E7E2E0E3DDDBDDD8D5D7D3D0D1CDCACBDDDADB8B48579D53639F5464BF858FBA7480BA7481BA74819B4558C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC48E96BA7783BA7682B97481AA6472E0DFE1E5E3E69B5F6BB97580B06B78E9EAECE6E5E8E2E1E4DDDCDED9D6D8D4D0D2E0DFDF8945549B50619D5363BF8590BA7481BA7481BA74819A4759C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC58F96BB7784BA7784BA7582AA6472DAD9DBE0DEE09B5F6BBA7582B06B78EDECEFEAE9EDE6E6E9E2E2E4DEDDDFDAD8DAE5E2E4874353994E5F9B5061C18690B97480BA7481BA74819C495CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC58F98BC7886BB7785BB7783AA6472D5D2D4DBD8DA9C606C925864925864EAEAEDEDEDF0EAEAEDE8E7E9E4E2E5DFDDDFE8E7E8864252974C5D994E5FC08691B9727FB97380B973809C4B5CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC49098BC7986BD7985BC7784AA6472CFCCCCD4D1D3D9D7D9DFDCDFE2E1E4E7E5E8EAEAEDEDECF0EAEBEEE8E7EAE4E2E6ECEAEC864252864252874353C28791B7727FB8727EB9727F9C4E5DC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC79198BD7A87BD7987BC7985BB7785AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472B77A84B76F7DB7707DB7707EB8717E9E4E5FC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6929ABE7B88BE7B87BC7986BC7886BB7785BB7784BA7682B97481B97480B87380B8717EB7717EB76F7DB76D7CB76D7BB76D7BB66D7BB56C7AB56C7AB66D7BB76F7CB76F7CB7707D9F4E60C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6929ABE7B88BE7B87BC7986BC7886BB7785BB7784BA7682B97481B97480B87380B8717EB76F7DB76D7CB76D7CB76C7AB66C7AB66D7BB56C7AB56C7AB56C7AB66C7AB66C7AB76D7C9F4F60C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6939BBE7E89BC7884A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70B66B7AB66C7B9F5162C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC7949CBF7F8AAF6F7BEBE1E1FEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFEFDFDFEFDFDFDFCFCFCFCFBFCFBFBFBFBFAFAFAF9F9F9F9F9F9F8F8F8E8D1D1A75E70B76D7BB66C7A9F5262C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC8959DC0808BAF6F7BFEFFFEFCFCFBFBFBFAFAFBFAFAFAFAF9FAF9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F7F7F7F7F7F7F7F7F7F7F7F7F7F7F6F6F6F6F6F9F9F9A75E70B96F7DB66B7AA05363C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9959DC1818CAF6F7BFEFFFEE1E1E1DFDFDFDDDDDDDBDCDBDADAD9D9D9D9D7D7D6D5D6D5D4D4D3D2D3D2D1D1D1D0D0D0CFCFCFCFCFCFCFCFCFCFCFCFF9FAF9A75E70BA707EB66B79A15466C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9969EC1818DAF6F7BFEFFFEFCFCFCFCFCFBFBFBFBFBFBFAFBFAFAFAFAFAF9F9F9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F8F7F7F7F7F7F7F7F7F7F7F7F6FBFBFBA75E70B97480B56B79A25666C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9989FC2828EAF6F7BFEFFFEE4E4E4E3E3E3E2E2E1E0E0E0DEDDDEDCDCDCDADADAD9D9D9D7D8D8D6D5D5D4D4D4D2D3D3D1D2D1D0D0D0CFCFCFCFCFCFFCFCFBA75E70BA7581B56B79A45968C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9989FC2838EAF6F7BFEFFFEFCFCFCFCFCFCFCFCFCFCFCFBFBFBFBFBFBFAFAFAFAFAFAF9F9F9F9F9F9F9F9F9F8F8F9F8F8F8F8F8F7F7F7F7F7F7F7F7FCFCFCA75E70BA7783B66C7AA55969C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACA98A0C2838EAF6F7BFEFFFEE6E6E6E6E5E6E4E4E4E3E3E3E1E2E2E0E0E0DEDEDEDCDCDCDBDBDBD9D9D9D8D8D8D6D6D6D4D5D5D3D3D3D1D1D1D0D0D0FDFDFCA75E70BC7783B76D7BA55D6CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB98A0C2838EAF6F7BFEFFFEFDFDFDFDFDFCFCFDFCFCFCFCFCFCFBFBFCFBFBFBFBFBFBFAFAFAFAFAFAF9F9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F7F7F7FDFEFDA75E70BD7985B76F7DA65F6EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEE6E6E6E6E6E6E6E6E6E5E5E6E4E5E5E4E3E3E2E2E2E1E0E0DFDFDFDDDDDDDBDBDCDADAD9D9D8D9D7D6D7D5D5D5D3D4D3FEFEFEA75E70BE7A86B7707DA6606EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEFEFEFDFEFEFDFDFDFCFDFDFCFCFDFCFCFCFCFCFCFBFCFCFBFBFBFAFBFBFAFAFAF9F9F9F9F9F9F9F9F9F9F9F9F8F8F8F8FEFFFEA75E70B38088B8717FA7606EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEE6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E5E5E5E4E4E3E2E3E3E1E1E1E0DFDFDDDDDEDCDBDCDADADAD9D9D9D7D8D7FEFFFEA75E70996E759E5967A9606EC5C5C5E5E5E5F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEFEFFFEFEFEFEFEFEFDFEFEFDFDFDFCFDFDFCFCFDFCFCFCFCFCFCFBFBFBFBFBFBFAFAFAFAFAFAF9FAFAF9F9F9F9F9F9F9FEFFFEA75E70B0757F9E5A68AA6471C5C5C5E6E6E6F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACA969EC2838EAF6F7BFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEA75E70C77F8BC77F8BAA6572D1D1D1EBEBEBFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AAE6A7AAE6A7AAE6A7AD9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6A75E70A75E70A75E70A75E70ECECECF6F6F6FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFA",
+      "sha1": "b6420a2c6417ab1d75d6f7441ace55c339665e38"
+     }
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 46
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "spbSaveClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 227
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "sbtExitClick"
+   },
+   "geometry": {
+    "height": 41,
+    "left": 396,
+    "top": 3,
+    "width": 241
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1308,
+   "name": "sbtExit",
+   "objkind": "object",
+   "parent_path": "fRFID.Panel1",
+   "path": "fRFID.Panel1.sbtExit",
+   "properties": {
+    "AllowAllUp": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Exit"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Glyph.Data": {
+     "type": "BLOB",
+     "value": {
+      "byte_len": 1554,
+      "hex": "0E060000424D0E06000000000000360000002800000016000000160000000100180000000000D805000001000000010000000000000000000000EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF7474A44C4C946C6CA4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF6C6CA44C4C947474A4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF2C2C8C5454C45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC4C4C94EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C4645C9CEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C4645C9C645C9C3C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C43C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D46C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC6464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C2424946464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C8C8CAC8C8CAC2424946464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF6C6CA43C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEF8C8CAC2424946464D45454C46C6CA4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF2C2C8C4C4CBC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424945454C44C4C94EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC3434948C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC3434948C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF",
+      "sha1": "f9091dff96fbb403d8fe7eec0dcccd5c7539ad97"
+     }
+    },
+    "GroupIndex": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 396
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "sbtExitClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 241
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComm",
+   "depth": 1,
+   "events": {
+    "OnReceiveData": "RFID_1ReceiveData"
+   },
+   "geometry": {
+    "height": null,
+    "left": 536,
+    "top": 36,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 1375,
+   "name": "RFID_1",
+   "objkind": "object",
+   "parent_path": "fRFID",
+   "path": "fRFID.RFID_1",
+   "properties": {
+    "BaudRate": {
+     "type": "SCALAR",
+     "value": 9600
+    },
+    "ByteSize": {
+     "type": "SCALAR",
+     "value": "_8"
+    },
+    "CommName": {
+     "type": "STR",
+     "value": "COM2"
+    },
+    "DsrSensitivity": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "DtrControl": {
+     "type": "SCALAR",
+     "value": "DtrEnable"
+    },
+    "IgnoreNullChar": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Inx_XonXoffFlow": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 536
+    },
+    "OnReceiveData": {
+     "type": "SCALAR",
+     "value": "RFID_1ReceiveData"
+    },
+    "Outx_CtsFlow": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Outx_DsrFlow": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Outx_XonXoffFlow": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "Parity": {
+     "type": "SCALAR",
+     "value": "None"
+    },
+    "ParityCheck": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ReadIntervalTimeout": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "ReadTotalTimeoutConstant": {
+     "type": "SCALAR",
+     "value": 1000
+    },
+    "ReadTotalTimeoutMultiplier": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "ReplaceWhenParityError": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ReplacedChar": {
+     "type": "STR",
+     "value": "\u0000"
+    },
+    "RtsControl": {
+     "type": "SCALAR",
+     "value": "RtsEnable"
+    },
+    "StopBits": {
+     "type": "SCALAR",
+     "value": "_1"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "TxContinueOnXoff": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "WriteTotalTimeoutConstant": {
+     "type": "SCALAR",
+     "value": 1000
+    },
+    "WriteTotalTimeoutMultiplier": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "XoffChar": {
+     "type": "STR",
+     "value": "\u0013"
+    },
+    "XoffLimit": {
+     "type": "SCALAR",
+     "value": 500
+    },
+    "XonChar": {
+     "type": "STR",
+     "value": "\u0011"
+    },
+    "XonLimit": {
+     "type": "SCALAR",
+     "value": 500
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComm",
+   "depth": 1,
+   "events": {
+    "OnReceiveData": "RFID_2ReceiveData"
+   },
+   "geometry": {
+    "height": null,
+    "left": 565,
+    "top": 36,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 1406,
+   "name": "RFID_2",
+   "objkind": "object",
+   "parent_path": "fRFID",
+   "path": "fRFID.RFID_2",
+   "properties": {
+    "BaudRate": {
+     "type": "SCALAR",
+     "value": 9600
+    },
+    "ByteSize": {
+     "type": "SCALAR",
+     "value": "_8"
+    },
+    "CommName": {
+     "type": "STR",
+     "value": "COM2"
+    },
+    "DsrSensitivity": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "DtrControl": {
+     "type": "SCALAR",
+     "value": "DtrEnable"
+    },
+    "IgnoreNullChar": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Inx_XonXoffFlow": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 565
+    },
+    "OnReceiveData": {
+     "type": "SCALAR",
+     "value": "RFID_2ReceiveData"
+    },
+    "Outx_CtsFlow": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Outx_DsrFlow": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Outx_XonXoffFlow": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "Parity": {
+     "type": "SCALAR",
+     "value": "None"
+    },
+    "ParityCheck": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ReadIntervalTimeout": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "ReadTotalTimeoutConstant": {
+     "type": "SCALAR",
+     "value": 1000
+    },
+    "ReadTotalTimeoutMultiplier": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "ReplaceWhenParityError": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ReplacedChar": {
+     "type": "STR",
+     "value": "\u0000"
+    },
+    "RtsControl": {
+     "type": "SCALAR",
+     "value": "RtsEnable"
+    },
+    "StopBits": {
+     "type": "SCALAR",
+     "value": "_1"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "TxContinueOnXoff": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "WriteTotalTimeoutConstant": {
+     "type": "SCALAR",
+     "value": 1000
+    },
+    "WriteTotalTimeoutMultiplier": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "XoffChar": {
+     "type": "STR",
+     "value": "\u0013"
+    },
+    "XoffLimit": {
+     "type": "SCALAR",
+     "value": 500
+    },
+    "XonChar": {
+     "type": "STR",
+     "value": "\u0011"
+    },
+    "XonLimit": {
+     "type": "SCALAR",
+     "value": 500
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTimer",
+   "depth": 1,
+   "events": {
+    "OnTimer": "Timer1Timer"
+   },
+   "geometry": {
+    "height": null,
+    "left": 616,
+    "top": 32,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 1437,
+   "name": "Timer1",
+   "objkind": "object",
+   "parent_path": "fRFID",
+   "path": "fRFID.Timer1",
+   "properties": {
+    "Left": {
+     "type": "SCALAR",
+     "value": 616
+    },
+    "OnTimer": {
+     "type": "SCALAR",
+     "value": "Timer1Timer"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 32
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "MR/RFID.dfm",
+ "total_nodes_incl_root": 106
+}

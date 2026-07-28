@@ -1,0 +1,7186 @@
+{
+ "control_node_count": 108,
+ "encoding_used": "cp950",
+ "form_class": "TfMagazine",
+ "form_name": "fMagazine",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fMagazine.sbtExit",
+    "fMagazine.spbSave",
+    "fMagazine.pnlMagazineTrayOut",
+    "fMagazine.rgMagTraySource",
+    "fMagazine.GroupBox1",
+    "fMagazine.rgMagFixType",
+    "fMagazine.GroupBox2",
+    "fMagazine.gbBinBuffer",
+    "fMagazine.rgMagDisplayOrder"
+   ],
+   "class": "TfMagazine",
+   "depth": 0,
+   "events": {
+    "OnClose": "FormClose",
+    "OnShow": "FormShow"
+   },
+   "geometry": {
+    "height": 753,
+    "left": 76,
+    "top": 144,
+    "width": 1235
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "fMagazine",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "fMagazine",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "fMagazine"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 753
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 76
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnClose": {
+     "type": "SCALAR",
+     "value": "FormClose"
+    },
+    "OnShow": {
+     "type": "SCALAR",
+     "value": "FormShow"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 144
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 1235
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "sbtExitClick"
+   },
+   "geometry": {
+    "height": 41,
+    "left": 557,
+    "top": 622,
+    "width": 241
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 18,
+   "name": "sbtExit",
+   "objkind": "object",
+   "parent_path": "fMagazine",
+   "path": "fMagazine.sbtExit",
+   "properties": {
+    "AllowAllUp": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Exit"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Glyph.Data": {
+     "type": "BLOB",
+     "value": {
+      "byte_len": 1554,
+      "hex": "0E060000424D0E06000000000000360000002800000016000000160000000100180000000000D805000001000000010000000000000000000000EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF7474A44C4C946C6CA4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF6C6CA44C4C947474A4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF2C2C8C5454C45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC4C4C94EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C4645C9CEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C4645C9C645C9C3C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C43C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D46C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC6464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C2424946464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C8C8CAC8C8CAC2424946464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF6C6CA43C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEF8C8CAC2424946464D45454C46C6CA4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF2C2C8C4C4CBC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424945454C44C4C94EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC3434948C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC3434948C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF",
+      "sha1": "f9091dff96fbb403d8fe7eec0dcccd5c7539ad97"
+     }
+    },
+    "GroupIndex": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 557
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "sbtExitClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 622
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 241
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "spbSaveClick"
+   },
+   "geometry": {
+    "height": 40,
+    "left": 207,
+    "top": 623,
+    "width": 227
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 84,
+   "name": "spbSave",
+   "objkind": "object",
+   "parent_path": "fMagazine",
+   "path": "fMagazine.spbSave",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Save"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Glyph.Data": {
+     "type": "BLOB",
+     "value": {
+      "byte_len": 3946,
+      "hex": "660F0000424D660F000000000000360000002800000024000000240000000100180000000000300F000001000000010000000000000000000000FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF9F9F9F9F9F9F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F9F9F9F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF7F7F7EFEFEFE8E8E8E6E6E6E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E9E9E9F3F3F3F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF8F8F8ECECECD6D6D6C8C8C8C5C5C5C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4D0D0D0E9E9E9F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF0EFEFC0A6A7A55B6CA96270A45E6C934556A6A3A3A4A1A1A19C9C9C9797979393948D8D8E88888A8383867F7D837A7A807978807978994759994759994759994759994759994759994759994756C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAD2C1C1B28181AF6D79B8717FB7707DAA6472EFEFF1EEEEF1995D68B8717EB06B78E1E0E0DDDADBD8D5D6D4D1D2CFCCCCCAC6C6DBD8D88F4B59A05565A05565BE848EB9727FB8727EB8717E994557C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AAF6D79BA7481B97380B7737FAA6472E9E9EBECEBEF995D68B8717EB06B78E1DFE1DCDADDD7D5D6D2D0D1CDC9CAC8C3C3D9D6D68D49589F5464A05565BF848EB97380B9737FB9727F9B4457C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC38D95BA7682BA7481B97480AA6472E5E4E7E9E9EB9A5D69B8737FB06B78E5E5E7E2E0E3DDDBDDD8D5D7D3D0D1CDCACBDDDADB8B48579D53639F5464BF858FBA7480BA7481BA74819B4558C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC48E96BA7783BA7682B97481AA6472E0DFE1E5E3E69B5F6BB97580B06B78E9EAECE6E5E8E2E1E4DDDCDED9D6D8D4D0D2E0DFDF8945549B50619D5363BF8590BA7481BA7481BA74819A4759C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC58F96BB7784BA7784BA7582AA6472DAD9DBE0DEE09B5F6BBA7582B06B78EDECEFEAE9EDE6E6E9E2E2E4DEDDDFDAD8DAE5E2E4874353994E5F9B5061C18690B97480BA7481BA74819C495CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC58F98BC7886BB7785BB7783AA6472D5D2D4DBD8DA9C606C925864925864EAEAEDEDEDF0EAEAEDE8E7E9E4E2E5DFDDDFE8E7E8864252974C5D994E5FC08691B9727FB97380B973809C4B5CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC49098BC7986BD7985BC7784AA6472CFCCCCD4D1D3D9D7D9DFDCDFE2E1E4E7E5E8EAEAEDEDECF0EAEBEEE8E7EAE4E2E6ECEAEC864252864252874353C28791B7727FB8727EB9727F9C4E5DC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC79198BD7A87BD7987BC7985BB7785AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472B77A84B76F7DB7707DB7707EB8717E9E4E5FC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6929ABE7B88BE7B87BC7986BC7886BB7785BB7784BA7682B97481B97480B87380B8717EB7717EB76F7DB76D7CB76D7BB76D7BB66D7BB56C7AB56C7AB66D7BB76F7CB76F7CB7707D9F4E60C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6929ABE7B88BE7B87BC7986BC7886BB7785BB7784BA7682B97481B97480B87380B8717EB76F7DB76D7CB76D7CB76C7AB66C7AB66D7BB56C7AB56C7AB56C7AB66C7AB66C7AB76D7C9F4F60C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6939BBE7E89BC7884A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70B66B7AB66C7B9F5162C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC7949CBF7F8AAF6F7BEBE1E1FEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFEFDFDFEFDFDFDFCFCFCFCFBFCFBFBFBFBFAFAFAF9F9F9F9F9F9F8F8F8E8D1D1A75E70B76D7BB66C7A9F5262C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC8959DC0808BAF6F7BFEFFFEFCFCFBFBFBFAFAFBFAFAFAFAF9FAF9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F7F7F7F7F7F7F7F7F7F7F7F7F7F7F6F6F6F6F6F9F9F9A75E70B96F7DB66B7AA05363C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9959DC1818CAF6F7BFEFFFEE1E1E1DFDFDFDDDDDDDBDCDBDADAD9D9D9D9D7D7D6D5D6D5D4D4D3D2D3D2D1D1D1D0D0D0CFCFCFCFCFCFCFCFCFCFCFCFF9FAF9A75E70BA707EB66B79A15466C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9969EC1818DAF6F7BFEFFFEFCFCFCFCFCFBFBFBFBFBFBFAFBFAFAFAFAFAF9F9F9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F8F7F7F7F7F7F7F7F7F7F7F7F6FBFBFBA75E70B97480B56B79A25666C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9989FC2828EAF6F7BFEFFFEE4E4E4E3E3E3E2E2E1E0E0E0DEDDDEDCDCDCDADADAD9D9D9D7D8D8D6D5D5D4D4D4D2D3D3D1D2D1D0D0D0CFCFCFCFCFCFFCFCFBA75E70BA7581B56B79A45968C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9989FC2838EAF6F7BFEFFFEFCFCFCFCFCFCFCFCFCFCFCFBFBFBFBFBFBFAFAFAFAFAFAF9F9F9F9F9F9F9F9F9F8F8F9F8F8F8F8F8F7F7F7F7F7F7F7F7FCFCFCA75E70BA7783B66C7AA55969C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACA98A0C2838EAF6F7BFEFFFEE6E6E6E6E5E6E4E4E4E3E3E3E1E2E2E0E0E0DEDEDEDCDCDCDBDBDBD9D9D9D8D8D8D6D6D6D4D5D5D3D3D3D1D1D1D0D0D0FDFDFCA75E70BC7783B76D7BA55D6CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB98A0C2838EAF6F7BFEFFFEFDFDFDFDFDFCFCFDFCFCFCFCFCFCFBFBFCFBFBFBFBFBFBFAFAFAFAFAFAF9F9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F7F7F7FDFEFDA75E70BD7985B76F7DA65F6EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEE6E6E6E6E6E6E6E6E6E5E5E6E4E5E5E4E3E3E2E2E2E1E0E0DFDFDFDDDDDDDBDBDCDADAD9D9D8D9D7D6D7D5D5D5D3D4D3FEFEFEA75E70BE7A86B7707DA6606EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEFEFEFDFEFEFDFDFDFCFDFDFCFCFDFCFCFCFCFCFCFBFCFCFBFBFBFAFBFBFAFAFAF9F9F9F9F9F9F9F9F9F9F9F9F8F8F8F8FEFFFEA75E70B38088B8717FA7606EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEE6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E5E5E5E4E4E3E2E3E3E1E1E1E0DFDFDDDDDEDCDBDCDADADAD9D9D9D7D8D7FEFFFEA75E70996E759E5967A9606EC5C5C5E5E5E5F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEFEFFFEFEFEFEFEFEFDFEFEFDFDFDFCFDFDFCFCFDFCFCFCFCFCFCFBFBFBFBFBFBFAFAFAFAFAFAF9FAFAF9F9F9F9F9F9F9FEFFFEA75E70B0757F9E5A68AA6471C5C5C5E6E6E6F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACA969EC2838EAF6F7BFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEA75E70C77F8BC77F8BAA6572D1D1D1EBEBEBFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AAE6A7AAE6A7AAE6A7AD9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6A75E70A75E70A75E70A75E70ECECECF6F6F6FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFA",
+      "sha1": "b6420a2c6417ab1d75d6f7441ace55c339665e38"
+     }
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 207
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "spbSaveClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 623
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 227
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fMagazine.pnlMagazineTrayOut.Label15",
+    "fMagazine.pnlMagazineTrayOut.btnMagazineTrayOut",
+    "fMagazine.pnlMagazineTrayOut.chkMag1",
+    "fMagazine.pnlMagazineTrayOut.chkMag2",
+    "fMagazine.pnlMagazineTrayOut.chkMag3",
+    "fMagazine.pnlMagazineTrayOut.chkMag4",
+    "fMagazine.pnlMagazineTrayOut.chkMag5",
+    "fMagazine.pnlMagazineTrayOut.chkMag6",
+    "fMagazine.pnlMagazineTrayOut.chkMag7",
+    "fMagazine.pnlMagazineTrayOut.chkMag8",
+    "fMagazine.pnlMagazineTrayOut.chkMag9",
+    "fMagazine.pnlMagazineTrayOut.chkMag10",
+    "fMagazine.pnlMagazineTrayOut.chkMag11",
+    "fMagazine.pnlMagazineTrayOut.chkMag12",
+    "fMagazine.pnlMagazineTrayOut.chkMag13",
+    "fMagazine.pnlMagazineTrayOut.chkMag14"
+   ],
+   "class": "TPanel",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 515,
+    "left": 1544,
+    "top": 70,
+    "width": 372
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 223,
+   "name": "pnlMagazineTrayOut",
+   "objkind": "object",
+   "parent_path": "fMagazine",
+   "path": "fMagazine.pnlMagazineTrayOut",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 515
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 1544
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 70
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 372
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 24,
+    "top": 8,
+    "width": 197
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 231,
+   "name": "Label15",
+   "objkind": "object",
+   "parent_path": "fMagazine.pnlMagazineTrayOut",
+   "path": "fMagazine.pnlMagazineTrayOut.Label15",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "請選擇要退出的Magazine"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 197
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "btnMagazineTrayOutClick"
+   },
+   "geometry": {
+    "height": 41,
+    "left": 27,
+    "top": 434,
+    "width": 241
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 244,
+   "name": "btnMagazineTrayOut",
+   "objkind": "object",
+   "parent_path": "fMagazine.pnlMagazineTrayOut",
+   "path": "fMagazine.pnlMagazineTrayOut.btnMagazineTrayOut",
+   "properties": {
+    "AllowAllUp": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Exit"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Glyph.Data": {
+     "type": "BLOB",
+     "value": {
+      "byte_len": 1554,
+      "hex": "0E060000424D0E06000000000000360000002800000016000000160000000100180000000000D805000001000000010000000000000000000000EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF7474A44C4C946C6CA4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF6C6CA44C4C947474A4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF2C2C8C5454C45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC4C4C94EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C4645C9CEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C4645C9C645C9C3C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C43C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D46C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC6464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C2424946464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C8C8CAC8C8CAC2424946464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF6C6CA43C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEF8C8CAC2424946464D45454C46C6CA4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF2C2C8C4C4CBC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424945454C44C4C94EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC3434948C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC3434948C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF",
+      "sha1": "f9091dff96fbb403d8fe7eec0dcccd5c7539ad97"
+     }
+    },
+    "GroupIndex": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 27
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btnMagazineTrayOutClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 434
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 241
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 32,
+    "top": 48,
+    "width": 281
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 310,
+   "name": "chkMag1",
+   "objkind": "object",
+   "parent_path": "fMagazine.pnlMagazineTrayOut",
+   "path": "fMagazine.pnlMagazineTrayOut.chkMag1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine1"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 48
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 281
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 32,
+    "top": 74,
+    "width": 294
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 324,
+   "name": "chkMag2",
+   "objkind": "object",
+   "parent_path": "fMagazine.pnlMagazineTrayOut",
+   "path": "fMagazine.pnlMagazineTrayOut.chkMag2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine2"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 74
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 294
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 32,
+    "top": 100,
+    "width": 294
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 338,
+   "name": "chkMag3",
+   "objkind": "object",
+   "parent_path": "fMagazine.pnlMagazineTrayOut",
+   "path": "fMagazine.pnlMagazineTrayOut.chkMag3",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine3"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 294
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 32,
+    "top": 126,
+    "width": 294
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 352,
+   "name": "chkMag4",
+   "objkind": "object",
+   "parent_path": "fMagazine.pnlMagazineTrayOut",
+   "path": "fMagazine.pnlMagazineTrayOut.chkMag4",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine4"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 126
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 294
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 32,
+    "top": 151,
+    "width": 294
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 366,
+   "name": "chkMag5",
+   "objkind": "object",
+   "parent_path": "fMagazine.pnlMagazineTrayOut",
+   "path": "fMagazine.pnlMagazineTrayOut.chkMag5",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine5"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 151
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 294
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 32,
+    "top": 177,
+    "width": 294
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 380,
+   "name": "chkMag6",
+   "objkind": "object",
+   "parent_path": "fMagazine.pnlMagazineTrayOut",
+   "path": "fMagazine.pnlMagazineTrayOut.chkMag6",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine6"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 177
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 294
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 32,
+    "top": 203,
+    "width": 294
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 394,
+   "name": "chkMag7",
+   "objkind": "object",
+   "parent_path": "fMagazine.pnlMagazineTrayOut",
+   "path": "fMagazine.pnlMagazineTrayOut.chkMag7",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine7"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 203
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 294
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 32,
+    "top": 229,
+    "width": 294
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 408,
+   "name": "chkMag8",
+   "objkind": "object",
+   "parent_path": "fMagazine.pnlMagazineTrayOut",
+   "path": "fMagazine.pnlMagazineTrayOut.chkMag8",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine8"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 229
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 294
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": 7,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 32,
+    "top": 255,
+    "width": 294
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 422,
+   "name": "chkMag9",
+   "objkind": "object",
+   "parent_path": "fMagazine.pnlMagazineTrayOut",
+   "path": "fMagazine.pnlMagazineTrayOut.chkMag9",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine9"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 255
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 294
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": 8,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 32,
+    "top": 281,
+    "width": 294
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 436,
+   "name": "chkMag10",
+   "objkind": "object",
+   "parent_path": "fMagazine.pnlMagazineTrayOut",
+   "path": "fMagazine.pnlMagazineTrayOut.chkMag10",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine10"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 281
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 294
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": 9,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 32,
+    "top": 306,
+    "width": 294
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 450,
+   "name": "chkMag11",
+   "objkind": "object",
+   "parent_path": "fMagazine.pnlMagazineTrayOut",
+   "path": "fMagazine.pnlMagazineTrayOut.chkMag11",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine11"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 306
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 294
+    }
+   },
+   "sibling_index": 12,
+   "synthesized": false,
+   "tab_order": 10,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 32,
+    "top": 332,
+    "width": 294
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 464,
+   "name": "chkMag12",
+   "objkind": "object",
+   "parent_path": "fMagazine.pnlMagazineTrayOut",
+   "path": "fMagazine.pnlMagazineTrayOut.chkMag12",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine12"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 332
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 294
+    }
+   },
+   "sibling_index": 13,
+   "synthesized": false,
+   "tab_order": 11,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 32,
+    "top": 358,
+    "width": 294
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 478,
+   "name": "chkMag13",
+   "objkind": "object",
+   "parent_path": "fMagazine.pnlMagazineTrayOut",
+   "path": "fMagazine.pnlMagazineTrayOut.chkMag13",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine13"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 358
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 294
+    }
+   },
+   "sibling_index": 14,
+   "synthesized": false,
+   "tab_order": 12,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 32,
+    "top": 384,
+    "width": 294
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 492,
+   "name": "chkMag14",
+   "objkind": "object",
+   "parent_path": "fMagazine.pnlMagazineTrayOut",
+   "path": "fMagazine.pnlMagazineTrayOut.chkMag14",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine14"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 384
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 294
+    }
+   },
+   "sibling_index": 15,
+   "synthesized": false,
+   "tab_order": 13,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TRadioGroup",
+   "depth": 1,
+   "events": {
+    "OnClick": "rgMagTraySourceClick"
+   },
+   "geometry": {
+    "height": 63,
+    "left": 3,
+    "top": 2,
+    "width": 181
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 507,
+   "name": "rgMagTraySource",
+   "objkind": "object",
+   "parent_path": "fMagazine",
+   "path": "fMagazine.rgMagTraySource",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Mag. Tray source"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 63
+    },
+    "ItemIndex": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "[1] From handler Empty lane",
+      "[2] Manual Mag. slot"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "rgMagTraySourceClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 181
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fMagazine.GroupBox1.Label1",
+    "fMagazine.GroupBox1.Label2",
+    "fMagazine.GroupBox1.Label3",
+    "fMagazine.GroupBox1.Label4",
+    "fMagazine.GroupBox1.Label5",
+    "fMagazine.GroupBox1.Label6",
+    "fMagazine.GroupBox1.Label7",
+    "fMagazine.GroupBox1.Label8",
+    "fMagazine.GroupBox1.Label9",
+    "fMagazine.GroupBox1.Label10",
+    "fMagazine.GroupBox1.Label11",
+    "fMagazine.GroupBox1.Label12",
+    "fMagazine.GroupBox1.Label13",
+    "fMagazine.GroupBox1.Label14",
+    "fMagazine.GroupBox1.Label16",
+    "fMagazine.GroupBox1.Label17",
+    "fMagazine.GroupBox1.Label18",
+    "fMagazine.GroupBox1.edInMagOfs16",
+    "fMagazine.GroupBox1.edInMagOfs15",
+    "fMagazine.GroupBox1.edInMagOfs14",
+    "fMagazine.GroupBox1.edInMagOfs13",
+    "fMagazine.GroupBox1.edInMagOfs12",
+    "fMagazine.GroupBox1.edInMagOfs11",
+    "fMagazine.GroupBox1.edInMagOfs10",
+    "fMagazine.GroupBox1.edInMagOfs09",
+    "fMagazine.GroupBox1.edInMagOfs08",
+    "fMagazine.GroupBox1.edInMagOfs07",
+    "fMagazine.GroupBox1.edInMagOfs06",
+    "fMagazine.GroupBox1.edInMagOfs05",
+    "fMagazine.GroupBox1.edInMagOfs04",
+    "fMagazine.GroupBox1.edInMagOfs03",
+    "fMagazine.GroupBox1.edInMagOfs02",
+    "fMagazine.GroupBox1.edInMagOfs01",
+    "fMagazine.GroupBox1.edOutAuto3Ofs01",
+    "fMagazine.GroupBox1.edOutAuto3Ofs02",
+    "fMagazine.GroupBox1.edOutAuto3Ofs03",
+    "fMagazine.GroupBox1.edOutAuto3Ofs04",
+    "fMagazine.GroupBox1.edOutAuto3Ofs05",
+    "fMagazine.GroupBox1.edOutAuto3Ofs06",
+    "fMagazine.GroupBox1.edOutAuto3Ofs07",
+    "fMagazine.GroupBox1.edOutAuto3Ofs08",
+    "fMagazine.GroupBox1.edOutAuto3Ofs09",
+    "fMagazine.GroupBox1.edOutAuto3Ofs10",
+    "fMagazine.GroupBox1.edOutAuto3Ofs11",
+    "fMagazine.GroupBox1.edOutAuto3Ofs12",
+    "fMagazine.GroupBox1.edOutAuto3Ofs13",
+    "fMagazine.GroupBox1.edOutAuto3Ofs14",
+    "fMagazine.GroupBox1.edOutAuto3Ofs15",
+    "fMagazine.GroupBox1.edOutAuto3Ofs16"
+   ],
+   "class": "TGroupBox",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 449,
+    "left": 7,
+    "top": 72,
+    "width": 198
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 520,
+   "name": "GroupBox1",
+   "objkind": "object",
+   "parent_path": "fMagazine",
+   "path": "fMagazine.GroupBox1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine In/Out OffsetZ"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 449
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 198
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 60,
+    "top": 32,
+    "width": 125
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 527,
+   "name": "Label1",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.Label1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "In Mag           Out auto3    "
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 125
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 6,
+    "top": 413,
+    "width": 33
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 534,
+   "name": "Label2",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.Label2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Mag01"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 413
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 33
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 6,
+    "top": 389,
+    "width": 33
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 541,
+   "name": "Label3",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.Label3",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Mag02"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 389
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 33
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 6,
+    "top": 365,
+    "width": 33
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 548,
+   "name": "Label4",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.Label4",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Mag03"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 365
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 33
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 6,
+    "top": 341,
+    "width": 33
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 555,
+   "name": "Label5",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.Label5",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Mag04"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 341
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 33
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 6,
+    "top": 317,
+    "width": 33
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 562,
+   "name": "Label6",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.Label6",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Mag05"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 317
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 33
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 6,
+    "top": 293,
+    "width": 33
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 569,
+   "name": "Label7",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.Label7",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Mag06"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 293
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 33
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 6,
+    "top": 269,
+    "width": 33
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 576,
+   "name": "Label8",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.Label8",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Mag07"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 269
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 33
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 6,
+    "top": 245,
+    "width": 33
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 583,
+   "name": "Label9",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.Label9",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Mag08"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 245
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 33
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 6,
+    "top": 221,
+    "width": 33
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 590,
+   "name": "Label10",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.Label10",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Mag09"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 221
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 33
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 6,
+    "top": 197,
+    "width": 33
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 597,
+   "name": "Label11",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.Label11",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Mag10"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 197
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 33
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 6,
+    "top": 173,
+    "width": 33
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 604,
+   "name": "Label12",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.Label12",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Mag11"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 173
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 33
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 6,
+    "top": 149,
+    "width": 33
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 611,
+   "name": "Label13",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.Label13",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Mag12"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 149
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 33
+    }
+   },
+   "sibling_index": 12,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 6,
+    "top": 125,
+    "width": 33
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 618,
+   "name": "Label14",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.Label14",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Mag13"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 125
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 33
+    }
+   },
+   "sibling_index": 13,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 6,
+    "top": 101,
+    "width": 33
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 625,
+   "name": "Label16",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.Label16",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Mag14"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 101
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 33
+    }
+   },
+   "sibling_index": 14,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 6,
+    "top": 77,
+    "width": 33
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 632,
+   "name": "Label17",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.Label17",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Mag15"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 77
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 33
+    }
+   },
+   "sibling_index": 15,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 6,
+    "top": 53,
+    "width": 33
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 639,
+   "name": "Label18",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.Label18",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Mag16"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 53
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 33
+    }
+   },
+   "sibling_index": 16,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 44,
+    "top": 48,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 646,
+   "name": "edInMagOfs16",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edInMagOfs16",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 44
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 48
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 17,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 44,
+    "top": 72,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 655,
+   "name": "edInMagOfs15",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edInMagOfs15",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 44
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 18,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 44,
+    "top": 96,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 664,
+   "name": "edInMagOfs14",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edInMagOfs14",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 44
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 19,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 44,
+    "top": 120,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 673,
+   "name": "edInMagOfs13",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edInMagOfs13",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 44
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 120
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 20,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 44,
+    "top": 144,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 682,
+   "name": "edInMagOfs12",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edInMagOfs12",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 44
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 144
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 21,
+   "synthesized": false,
+   "tab_order": 8,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 44,
+    "top": 168,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 691,
+   "name": "edInMagOfs11",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edInMagOfs11",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 44
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 168
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 22,
+   "synthesized": false,
+   "tab_order": 10,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 44,
+    "top": 192,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 700,
+   "name": "edInMagOfs10",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edInMagOfs10",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 44
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 192
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 23,
+   "synthesized": false,
+   "tab_order": 12,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 44,
+    "top": 216,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 709,
+   "name": "edInMagOfs09",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edInMagOfs09",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 44
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 216
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 24,
+   "synthesized": false,
+   "tab_order": 14,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 44,
+    "top": 240,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 718,
+   "name": "edInMagOfs08",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edInMagOfs08",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 44
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 240
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 25,
+   "synthesized": false,
+   "tab_order": 16,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 44,
+    "top": 264,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 727,
+   "name": "edInMagOfs07",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edInMagOfs07",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 44
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 18
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 264
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 26,
+   "synthesized": false,
+   "tab_order": 18,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 44,
+    "top": 288,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 736,
+   "name": "edInMagOfs06",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edInMagOfs06",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 44
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 288
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 27,
+   "synthesized": false,
+   "tab_order": 20,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 44,
+    "top": 312,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 745,
+   "name": "edInMagOfs05",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edInMagOfs05",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 44
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 312
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 28,
+   "synthesized": false,
+   "tab_order": 22,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 44,
+    "top": 336,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 754,
+   "name": "edInMagOfs04",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edInMagOfs04",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 44
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 336
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 29,
+   "synthesized": false,
+   "tab_order": 24,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 44,
+    "top": 360,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 763,
+   "name": "edInMagOfs03",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edInMagOfs03",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 44
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 26
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 30,
+   "synthesized": false,
+   "tab_order": 26,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 44,
+    "top": 384,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 772,
+   "name": "edInMagOfs02",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edInMagOfs02",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 44
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 384
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 31,
+   "synthesized": false,
+   "tab_order": 28,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 44,
+    "top": 408,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 781,
+   "name": "edInMagOfs01",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edInMagOfs01",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 44
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 30
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 408
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 32,
+   "synthesized": false,
+   "tab_order": 30,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 116,
+    "top": 408,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 790,
+   "name": "edOutAuto3Ofs01",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edOutAuto3Ofs01",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 116
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 31
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 408
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 33,
+   "synthesized": false,
+   "tab_order": 31,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 116,
+    "top": 384,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 799,
+   "name": "edOutAuto3Ofs02",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edOutAuto3Ofs02",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 116
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 384
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 34,
+   "synthesized": false,
+   "tab_order": 29,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 116,
+    "top": 360,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 808,
+   "name": "edOutAuto3Ofs03",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edOutAuto3Ofs03",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 116
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 27
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 35,
+   "synthesized": false,
+   "tab_order": 27,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 116,
+    "top": 336,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 817,
+   "name": "edOutAuto3Ofs04",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edOutAuto3Ofs04",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 116
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 336
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 36,
+   "synthesized": false,
+   "tab_order": 25,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 116,
+    "top": 312,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 826,
+   "name": "edOutAuto3Ofs05",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edOutAuto3Ofs05",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 116
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 23
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 312
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 37,
+   "synthesized": false,
+   "tab_order": 23,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 116,
+    "top": 288,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 835,
+   "name": "edOutAuto3Ofs06",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edOutAuto3Ofs06",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 116
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 288
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 38,
+   "synthesized": false,
+   "tab_order": 21,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 116,
+    "top": 264,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 844,
+   "name": "edOutAuto3Ofs07",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edOutAuto3Ofs07",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 116
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 264
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 39,
+   "synthesized": false,
+   "tab_order": 19,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 116,
+    "top": 240,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 853,
+   "name": "edOutAuto3Ofs08",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edOutAuto3Ofs08",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 116
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 240
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 40,
+   "synthesized": false,
+   "tab_order": 17,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 116,
+    "top": 216,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 862,
+   "name": "edOutAuto3Ofs09",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edOutAuto3Ofs09",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 116
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 216
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 41,
+   "synthesized": false,
+   "tab_order": 15,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 116,
+    "top": 192,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 871,
+   "name": "edOutAuto3Ofs10",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edOutAuto3Ofs10",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 116
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 192
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 42,
+   "synthesized": false,
+   "tab_order": 13,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 116,
+    "top": 168,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 880,
+   "name": "edOutAuto3Ofs11",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edOutAuto3Ofs11",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 116
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 168
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 43,
+   "synthesized": false,
+   "tab_order": 11,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 116,
+    "top": 144,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 889,
+   "name": "edOutAuto3Ofs12",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edOutAuto3Ofs12",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 116
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 144
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 44,
+   "synthesized": false,
+   "tab_order": 9,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 116,
+    "top": 120,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 898,
+   "name": "edOutAuto3Ofs13",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edOutAuto3Ofs13",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 116
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 120
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 45,
+   "synthesized": false,
+   "tab_order": 7,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 116,
+    "top": 96,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 907,
+   "name": "edOutAuto3Ofs14",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edOutAuto3Ofs14",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 116
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 46,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 116,
+    "top": 72,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 916,
+   "name": "edOutAuto3Ofs15",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edOutAuto3Ofs15",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 116
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 47,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edInMagOfs01Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 116,
+    "top": 48,
+    "width": 65
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 925,
+   "name": "edOutAuto3Ofs16",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox1",
+   "path": "fMagazine.GroupBox1.edOutAuto3Ofs16",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 116
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edInMagOfs01Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 48
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 65
+    }
+   },
+   "sibling_index": 48,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TRadioGroup",
+   "depth": 1,
+   "events": {
+    "OnClick": "rgMagFixTypeClick"
+   },
+   "geometry": {
+    "height": 63,
+    "left": 195,
+    "top": 3,
+    "width": 265
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 935,
+   "name": "rgMagFixType",
+   "objkind": "object",
+   "parent_path": "fMagazine",
+   "path": "fMagazine.rgMagFixType",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Manual tray type"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 63
+    },
+    "ItemIndex": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "[1] Fix 1,2,3 used to be unloader tray.",
+      "[2] Fix 1,2,3 used to be buffer area."
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 195
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "rgMagFixTypeClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 265
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fMagazine.GroupBox2.labSlot1Bin",
+    "fMagazine.GroupBox2.labSlot2Bin",
+    "fMagazine.GroupBox2.labSlot3Bin",
+    "fMagazine.GroupBox2.labSlot4Bin",
+    "fMagazine.GroupBox2.labSlot5Bin",
+    "fMagazine.GroupBox2.labSlot6Bin",
+    "fMagazine.GroupBox2.labSlot7Bin",
+    "fMagazine.GroupBox2.labSlot8Bin",
+    "fMagazine.GroupBox2.labSlot9Bin",
+    "fMagazine.GroupBox2.labSlot10Bin",
+    "fMagazine.GroupBox2.labSlot11Bin",
+    "fMagazine.GroupBox2.labSlot12Bin",
+    "fMagazine.GroupBox2.labSlot13Bin",
+    "fMagazine.GroupBox2.labSlot14Bin"
+   ],
+   "class": "TGroupBox",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 522,
+    "left": 208,
+    "top": 71,
+    "width": 172
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 948,
+   "name": "GroupBox2",
+   "objkind": "object",
+   "parent_path": "fMagazine",
+   "path": "fMagazine.GroupBox2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Bin setting"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 522
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 208
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 71
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 172
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 13,
+    "top": 39,
+    "width": 48
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 955,
+   "name": "labSlot1Bin",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox2",
+   "path": "fMagazine.GroupBox2.labSlot1Bin",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Slot 1"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 39
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 48
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 13,
+    "top": 63,
+    "width": 48
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 968,
+   "name": "labSlot2Bin",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox2",
+   "path": "fMagazine.GroupBox2.labSlot2Bin",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Slot 2"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 63
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 48
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 13,
+    "top": 88,
+    "width": 48
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 981,
+   "name": "labSlot3Bin",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox2",
+   "path": "fMagazine.GroupBox2.labSlot3Bin",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Slot 3"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 88
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 48
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 13,
+    "top": 112,
+    "width": 48
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 994,
+   "name": "labSlot4Bin",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox2",
+   "path": "fMagazine.GroupBox2.labSlot4Bin",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Slot 4"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 112
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 48
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 13,
+    "top": 137,
+    "width": 48
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1007,
+   "name": "labSlot5Bin",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox2",
+   "path": "fMagazine.GroupBox2.labSlot5Bin",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Slot 5"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 137
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 48
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 13,
+    "top": 161,
+    "width": 48
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1020,
+   "name": "labSlot6Bin",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox2",
+   "path": "fMagazine.GroupBox2.labSlot6Bin",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Slot 6"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 161
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 48
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 13,
+    "top": 185,
+    "width": 48
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1033,
+   "name": "labSlot7Bin",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox2",
+   "path": "fMagazine.GroupBox2.labSlot7Bin",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Slot 7"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 185
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 48
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 13,
+    "top": 210,
+    "width": 48
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1046,
+   "name": "labSlot8Bin",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox2",
+   "path": "fMagazine.GroupBox2.labSlot8Bin",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Slot 8"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 210
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 48
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 13,
+    "top": 234,
+    "width": 48
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1059,
+   "name": "labSlot9Bin",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox2",
+   "path": "fMagazine.GroupBox2.labSlot9Bin",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Slot 9"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 234
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 48
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 13,
+    "top": 258,
+    "width": 58
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1072,
+   "name": "labSlot10Bin",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox2",
+   "path": "fMagazine.GroupBox2.labSlot10Bin",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Slot 10"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 258
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 58
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 13,
+    "top": 283,
+    "width": 58
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1085,
+   "name": "labSlot11Bin",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox2",
+   "path": "fMagazine.GroupBox2.labSlot11Bin",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Slot 11"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 283
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 58
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 13,
+    "top": 307,
+    "width": 58
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1098,
+   "name": "labSlot12Bin",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox2",
+   "path": "fMagazine.GroupBox2.labSlot12Bin",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Slot 12"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 307
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 58
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 13,
+    "top": 332,
+    "width": 58
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1111,
+   "name": "labSlot13Bin",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox2",
+   "path": "fMagazine.GroupBox2.labSlot13Bin",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Slot 13"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 332
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 58
+    }
+   },
+   "sibling_index": 12,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 13,
+    "top": 356,
+    "width": 58
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1124,
+   "name": "labSlot14Bin",
+   "objkind": "object",
+   "parent_path": "fMagazine.GroupBox2",
+   "path": "fMagazine.GroupBox2.labSlot14Bin",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Slot 14"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 356
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 58
+    }
+   },
+   "sibling_index": 13,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fMagazine.gbBinBuffer.labSlot1",
+    "fMagazine.gbBinBuffer.labSlot2",
+    "fMagazine.gbBinBuffer.labSlot3",
+    "fMagazine.gbBinBuffer.labSlot4",
+    "fMagazine.gbBinBuffer.labSlot5",
+    "fMagazine.gbBinBuffer.labSlot6",
+    "fMagazine.gbBinBuffer.labSlot7",
+    "fMagazine.gbBinBuffer.labSlot8",
+    "fMagazine.gbBinBuffer.labSlot9",
+    "fMagazine.gbBinBuffer.labSlot10",
+    "fMagazine.gbBinBuffer.labSlot11",
+    "fMagazine.gbBinBuffer.labSlot12",
+    "fMagazine.gbBinBuffer.labSlot13",
+    "fMagazine.gbBinBuffer.labSlot14",
+    "fMagazine.gbBinBuffer.Label19",
+    "fMagazine.gbBinBuffer.Label20",
+    "fMagazine.gbBinBuffer.Label21",
+    "fMagazine.gbBinBuffer.mtTrayBuffer1",
+    "fMagazine.gbBinBuffer.mtTrayBuffer2",
+    "fMagazine.gbBinBuffer.mtTrayBuffer3"
+   ],
+   "class": "TGroupBox",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 522,
+    "left": 381,
+    "top": 74,
+    "width": 812
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 1138,
+   "name": "gbBinBuffer",
+   "objkind": "object",
+   "parent_path": "fMagazine",
+   "path": "fMagazine.gbBinBuffer",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Bin buffer Area"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 522
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 381
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 74
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 812
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 5,
+    "top": 62,
+    "width": 48
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1145,
+   "name": "labSlot1",
+   "objkind": "object",
+   "parent_path": "fMagazine.gbBinBuffer",
+   "path": "fMagazine.gbBinBuffer.labSlot1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Slot 1"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 62
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 48
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 282,
+    "top": 62,
+    "width": 48
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1158,
+   "name": "labSlot2",
+   "objkind": "object",
+   "parent_path": "fMagazine.gbBinBuffer",
+   "path": "fMagazine.gbBinBuffer.labSlot2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Slot 2"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 282
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 62
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 48
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 545,
+    "top": 62,
+    "width": 48
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1171,
+   "name": "labSlot3",
+   "objkind": "object",
+   "parent_path": "fMagazine.gbBinBuffer",
+   "path": "fMagazine.gbBinBuffer.labSlot3",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Slot 3"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 545
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 62
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 48
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 5,
+    "top": 120,
+    "width": 48
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1184,
+   "name": "labSlot4",
+   "objkind": "object",
+   "parent_path": "fMagazine.gbBinBuffer",
+   "path": "fMagazine.gbBinBuffer.labSlot4",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Slot 4"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 120
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 48
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 282,
+    "top": 120,
+    "width": 48
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1197,
+   "name": "labSlot5",
+   "objkind": "object",
+   "parent_path": "fMagazine.gbBinBuffer",
+   "path": "fMagazine.gbBinBuffer.labSlot5",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Slot 5"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 282
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 120
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 48
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 545,
+    "top": 120,
+    "width": 48
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1210,
+   "name": "labSlot6",
+   "objkind": "object",
+   "parent_path": "fMagazine.gbBinBuffer",
+   "path": "fMagazine.gbBinBuffer.labSlot6",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Slot 6"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 545
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 120
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 48
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 5,
+    "top": 174,
+    "width": 48
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1223,
+   "name": "labSlot7",
+   "objkind": "object",
+   "parent_path": "fMagazine.gbBinBuffer",
+   "path": "fMagazine.gbBinBuffer.labSlot7",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Slot 7"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 174
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 48
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 282,
+    "top": 174,
+    "width": 48
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1236,
+   "name": "labSlot8",
+   "objkind": "object",
+   "parent_path": "fMagazine.gbBinBuffer",
+   "path": "fMagazine.gbBinBuffer.labSlot8",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Slot 8"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 282
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 174
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 48
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 545,
+    "top": 174,
+    "width": 48
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1249,
+   "name": "labSlot9",
+   "objkind": "object",
+   "parent_path": "fMagazine.gbBinBuffer",
+   "path": "fMagazine.gbBinBuffer.labSlot9",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Slot 9"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 545
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 174
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 48
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 5,
+    "top": 230,
+    "width": 58
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1262,
+   "name": "labSlot10",
+   "objkind": "object",
+   "parent_path": "fMagazine.gbBinBuffer",
+   "path": "fMagazine.gbBinBuffer.labSlot10",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Slot 10"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 230
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 58
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 282,
+    "top": 230,
+    "width": 58
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1275,
+   "name": "labSlot11",
+   "objkind": "object",
+   "parent_path": "fMagazine.gbBinBuffer",
+   "path": "fMagazine.gbBinBuffer.labSlot11",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Slot 11"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 282
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 230
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 58
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 545,
+    "top": 230,
+    "width": 58
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1288,
+   "name": "labSlot12",
+   "objkind": "object",
+   "parent_path": "fMagazine.gbBinBuffer",
+   "path": "fMagazine.gbBinBuffer.labSlot12",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Slot 12"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 545
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 230
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 58
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 5,
+    "top": 288,
+    "width": 58
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1301,
+   "name": "labSlot13",
+   "objkind": "object",
+   "parent_path": "fMagazine.gbBinBuffer",
+   "path": "fMagazine.gbBinBuffer.labSlot13",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Slot 13"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 288
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 58
+    }
+   },
+   "sibling_index": 12,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 282,
+    "top": 288,
+    "width": 58
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1314,
+   "name": "labSlot14",
+   "objkind": "object",
+   "parent_path": "fMagazine.gbBinBuffer",
+   "path": "fMagazine.gbBinBuffer.labSlot14",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Slot 14"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 282
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 288
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 58
+    }
+   },
+   "sibling_index": 13,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 189,
+    "top": 19,
+    "width": 39
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1327,
+   "name": "Label19",
+   "objkind": "object",
+   "parent_path": "fMagazine.gbBinBuffer",
+   "path": "fMagazine.gbBinBuffer.Label19",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Fix 1"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 189
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 39
+    }
+   },
+   "sibling_index": 14,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 474,
+    "top": 19,
+    "width": 39
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1340,
+   "name": "Label20",
+   "objkind": "object",
+   "parent_path": "fMagazine.gbBinBuffer",
+   "path": "fMagazine.gbBinBuffer.Label20",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Fix 2"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 474
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 39
+    }
+   },
+   "sibling_index": 15,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 734,
+    "top": 19,
+    "width": 39
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1353,
+   "name": "Label21",
+   "objkind": "object",
+   "parent_path": "fMagazine.gbBinBuffer",
+   "path": "fMagazine.gbBinBuffer.Label21",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Fix 3"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 734
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 39
+    }
+   },
+   "sibling_index": 16,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTMyTray",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 350,
+    "left": 72,
+    "top": 51,
+    "width": 200
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1366,
+   "name": "mtTrayBuffer1",
+   "objkind": "object",
+   "parent_path": "fMagazine.gbBinBuffer",
+   "path": "fMagazine.gbBinBuffer.mtTrayBuffer1",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 350
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 51
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 200
+    },
+    "XItem": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "YItem": {
+     "type": "SCALAR",
+     "value": 8
+    }
+   },
+   "sibling_index": 17,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTMyTray",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 350,
+    "left": 343,
+    "top": 51,
+    "width": 200
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1375,
+   "name": "mtTrayBuffer2",
+   "objkind": "object",
+   "parent_path": "fMagazine.gbBinBuffer",
+   "path": "fMagazine.gbBinBuffer.mtTrayBuffer2",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 350
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 343
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 51
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 200
+    },
+    "XItem": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "YItem": {
+     "type": "SCALAR",
+     "value": 8
+    }
+   },
+   "sibling_index": 18,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTMyTray",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 350,
+    "left": 607,
+    "top": 51,
+    "width": 200
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1384,
+   "name": "mtTrayBuffer3",
+   "objkind": "object",
+   "parent_path": "fMagazine.gbBinBuffer",
+   "path": "fMagazine.gbBinBuffer.mtTrayBuffer3",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 350
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 607
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 51
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 200
+    },
+    "XItem": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "YItem": {
+     "type": "SCALAR",
+     "value": 8
+    }
+   },
+   "sibling_index": 19,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TRadioGroup",
+   "depth": 1,
+   "events": {
+    "OnClick": "rgMagFixTypeClick"
+   },
+   "geometry": {
+    "height": 63,
+    "left": 467,
+    "top": 2,
+    "width": 265
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 1394,
+   "name": "rgMagDisplayOrder",
+   "objkind": "object",
+   "parent_path": "fMagazine",
+   "path": "fMagazine.rgMagDisplayOrder",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Magazine display order"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 63
+    },
+    "ItemIndex": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "[1] From top to bottom in sequence14 to 1.",
+      "[2] From top to bottom in sequence1 to 14."
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 467
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "rgMagFixTypeClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 265
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "Magazine.dfm",
+ "total_nodes_incl_root": 109
+}

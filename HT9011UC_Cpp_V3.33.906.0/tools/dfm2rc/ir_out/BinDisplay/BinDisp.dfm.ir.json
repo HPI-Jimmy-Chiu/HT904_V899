@@ -1,0 +1,1320 @@
+{
+ "control_node_count": 20,
+ "encoding_used": "cp950",
+ "form_class": "TForm1",
+ "form_name": "Form1",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "Form1.Panel3",
+    "Form1.StatusBar1"
+   ],
+   "class": "TForm1",
+   "depth": 0,
+   "events": {
+    "OnShow": "FormShow"
+   },
+   "geometry": {
+    "height": 487,
+    "left": 413,
+    "top": 265,
+    "width": 476
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "Form1",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "Form1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "三色七段顯示器測試機"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnFace"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 487
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 413
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnShow": {
+     "type": "SCALAR",
+     "value": "FormShow"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 265
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 476
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "Form1.Panel3.Label7",
+    "Form1.Panel3.GroupBox1",
+    "Form1.Panel3.GroupBox2",
+    "Form1.Panel3.Button1"
+   ],
+   "class": "TPanel",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 422,
+    "left": 3,
+    "top": 3,
+    "width": 450
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 17,
+   "name": "Panel3",
+   "objkind": "object",
+   "parent_path": "Form1",
+   "path": "Form1.Panel3",
+   "properties": {
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 422
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 450
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 40,
+    "left": 19,
+    "top": 4,
+    "width": 394
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 25,
+   "name": "Label7",
+   "objkind": "object",
+   "parent_path": "Form1.Panel3",
+   "path": "Form1.Panel3.Label7",
+   "properties": {
+    "Alignment": {
+     "type": "SCALAR",
+     "value": "taCenter"
+    },
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "三色七段顯示器專用測試機"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clGreen"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -32
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "微軟正黑體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 394
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "Form1.Panel3.GroupBox1.CheckBox1",
+    "Form1.Panel3.GroupBox1.CheckBox2",
+    "Form1.Panel3.GroupBox1.CheckBox3",
+    "Form1.Panel3.GroupBox1.CheckBox4",
+    "Form1.Panel3.GroupBox1.CheckBox5",
+    "Form1.Panel3.GroupBox1.CheckBox6",
+    "Form1.Panel3.GroupBox1.CheckBox7",
+    "Form1.Panel3.GroupBox1.CheckBox8",
+    "Form1.Panel3.GroupBox1.CheckBox9",
+    "Form1.Panel3.GroupBox1.CheckBox10",
+    "Form1.Panel3.GroupBox1.CheckBox11",
+    "Form1.Panel3.GroupBox1.CheckBox12"
+   ],
+   "class": "TGroupBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 329,
+    "left": 36,
+    "top": 76,
+    "width": 185
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 40,
+   "name": "GroupBox1",
+   "objkind": "object",
+   "parent_path": "Form1.Panel3",
+   "path": "Form1.Panel3.GroupBox1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Display Select"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 329
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 76
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 185
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 12,
+    "top": 20,
+    "width": 97
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 53,
+   "name": "CheckBox1",
+   "objkind": "object",
+   "parent_path": "Form1.Panel3.GroupBox1",
+   "path": "Form1.Panel3.GroupBox1.CheckBox1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Loader"
+    },
+    "Checked": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "State": {
+     "type": "SCALAR",
+     "value": "cbChecked"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 97
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 12,
+    "top": 46,
+    "width": 97
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 63,
+   "name": "CheckBox2",
+   "objkind": "object",
+   "parent_path": "Form1.Panel3.GroupBox1",
+   "path": "Form1.Panel3.GroupBox1.CheckBox2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Empty"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 46
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 97
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 12,
+    "top": 72,
+    "width": 97
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 71,
+   "name": "CheckBox3",
+   "objkind": "object",
+   "parent_path": "Form1.Panel3.GroupBox1",
+   "path": "Form1.Panel3.GroupBox1.CheckBox3",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Color"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 97
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 12,
+    "top": 97,
+    "width": 97
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 79,
+   "name": "CheckBox4",
+   "objkind": "object",
+   "parent_path": "Form1.Panel3.GroupBox1",
+   "path": "Form1.Panel3.GroupBox1.CheckBox4",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Auto1"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 97
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 97
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 12,
+    "top": 123,
+    "width": 97
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 87,
+   "name": "CheckBox5",
+   "objkind": "object",
+   "parent_path": "Form1.Panel3.GroupBox1",
+   "path": "Form1.Panel3.GroupBox1.CheckBox5",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Auto2"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 123
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 97
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 12,
+    "top": 149,
+    "width": 97
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 95,
+   "name": "CheckBox6",
+   "objkind": "object",
+   "parent_path": "Form1.Panel3.GroupBox1",
+   "path": "Form1.Panel3.GroupBox1.CheckBox6",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Auto3"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 149
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 97
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 12,
+    "top": 175,
+    "width": 97
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 103,
+   "name": "CheckBox7",
+   "objkind": "object",
+   "parent_path": "Form1.Panel3.GroupBox1",
+   "path": "Form1.Panel3.GroupBox1.CheckBox7",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Fix1"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 175
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 97
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 12,
+    "top": 201,
+    "width": 97
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 111,
+   "name": "CheckBox8",
+   "objkind": "object",
+   "parent_path": "Form1.Panel3.GroupBox1",
+   "path": "Form1.Panel3.GroupBox1.CheckBox8",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Fix2"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 201
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 97
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 7,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 12,
+    "top": 227,
+    "width": 97
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 119,
+   "name": "CheckBox9",
+   "objkind": "object",
+   "parent_path": "Form1.Panel3.GroupBox1",
+   "path": "Form1.Panel3.GroupBox1.CheckBox9",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Fix3"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 227
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 97
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": 8,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 12,
+    "top": 252,
+    "width": 97
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 127,
+   "name": "CheckBox10",
+   "objkind": "object",
+   "parent_path": "Form1.Panel3.GroupBox1",
+   "path": "Form1.Panel3.GroupBox1.CheckBox10",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Fix4"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 252
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 97
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": 9,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 12,
+    "top": 278,
+    "width": 97
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 135,
+   "name": "CheckBox11",
+   "objkind": "object",
+   "parent_path": "Form1.Panel3.GroupBox1",
+   "path": "Form1.Panel3.GroupBox1.CheckBox11",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Fix5"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 278
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 97
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": 10,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 12,
+    "top": 304,
+    "width": 97
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 143,
+   "name": "CheckBox12",
+   "objkind": "object",
+   "parent_path": "Form1.Panel3.GroupBox1",
+   "path": "Form1.Panel3.GroupBox1.CheckBox12",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Fix6"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 304
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 97
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": 11,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "Form1.Panel3.GroupBox2.ComboBox1",
+    "Form1.Panel3.GroupBox2.ComboBox2"
+   ],
+   "class": "TGroupBox",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 121,
+    "left": 232,
+    "top": 84,
+    "width": 181
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 152,
+   "name": "GroupBox2",
+   "objkind": "object",
+   "parent_path": "Form1.Panel3",
+   "path": "Form1.Panel3.GroupBox2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Send Data"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 121
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 232
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 84
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 181
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 16,
+    "top": 24,
+    "width": 145
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 165,
+   "name": "ComboBox1",
+   "objkind": "object",
+   "parent_path": "Form1.Panel3.GroupBox2",
+   "path": "Form1.Panel3.GroupBox2.ComboBox1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "紅色",
+      "綠色",
+      "橘色"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Text": {
+     "type": "STR",
+     "value": "綠色"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 145
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 16,
+    "top": 72,
+    "width": 145
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 178,
+   "name": "ComboBox2",
+   "objkind": "object",
+   "parent_path": "Form1.Panel3.GroupBox2",
+   "path": "Form1.Panel3.GroupBox2.ComboBox2",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "I",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "O",
+      "P",
+      "Q",
+      "R",
+      "S",
+      "T",
+      "U",
+      "V",
+      "W",
+      "X",
+      "Y",
+      "Z"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 145
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "Button1Click"
+   },
+   "geometry": {
+    "height": 61,
+    "left": 232,
+    "top": 340,
+    "width": 181
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 225,
+   "name": "Button1",
+   "objkind": "object",
+   "parent_path": "Form1.Panel3",
+   "path": "Form1.Panel3.Button1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "傳送"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 61
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 232
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "Button1Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 340
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 181
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TStatusBar",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 0,
+    "top": 430,
+    "width": 460
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 235,
+   "name": "StatusBar1",
+   "objkind": "object",
+   "parent_path": "Form1",
+   "path": "Form1.StatusBar1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Panels": {
+     "type": "COLLECTION",
+     "value": []
+    },
+    "SimplePanel": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 430
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 460
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "BinDisplay/BinDisp.dfm",
+ "total_nodes_incl_root": 21
+}

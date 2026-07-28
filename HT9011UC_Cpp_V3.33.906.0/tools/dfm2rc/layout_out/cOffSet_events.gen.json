@@ -1,0 +1,1409 @@
+{
+ "event_count": 200,
+ "events": [
+  {
+   "control_path": "fOffSet",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fOffSet",
+   "vcl_class": "TfOffSet"
+  },
+  {
+   "control_path": "fOffSet",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fOffSet",
+   "vcl_class": "TfOffSet"
+  },
+  {
+   "control_path": "fOffSet",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fOffSet",
+   "vcl_class": "TfOffSet"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlMain.btnToIndexOffset",
+   "event_name": "OnClick",
+   "handler_name": "btnToIndexOffsetClick",
+   "leaf_name": "btnToIndexOffset",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlMain.btnOffsetList",
+   "event_name": "OnClick",
+   "handler_name": "btnOffsetListClick",
+   "leaf_name": "btnOffsetList",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlMain.Pnl_ScanAOI.ck_ScanAOI",
+   "event_name": "OnClick",
+   "handler_name": "ck_ScanAOIClick",
+   "leaf_name": "ck_ScanAOI",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.Panel6.edArmX",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "edArmX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.Panel6.edArmX",
+   "event_name": "OnMouseDown",
+   "handler_name": "edArmXMouseDown",
+   "leaf_name": "edArmX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.Panel6.edArmY",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "edArmY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.Panel6.edArmY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edArmXMouseDown",
+   "leaf_name": "edArmY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.Panel6.CheckBox1",
+   "event_name": "OnClick",
+   "handler_name": "CheckBox1Click",
+   "leaf_name": "CheckBox1",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.Panel6.pan_AutoOffsetMove.sb_AutoOffsetDown",
+   "event_name": "OnClick",
+   "handler_name": "sb_AutoOffsetDownClick",
+   "leaf_name": "sb_AutoOffsetDown",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.Panel6.pan_AutoOffsetMove.sb_AutoOffsetLeft",
+   "event_name": "OnClick",
+   "handler_name": "sb_AutoOffsetLeftClick",
+   "leaf_name": "sb_AutoOffsetLeft",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.Panel6.pan_AutoOffsetMove.sb_AutoOffsetRight",
+   "event_name": "OnClick",
+   "handler_name": "sb_AutoOffsetRightClick",
+   "leaf_name": "sb_AutoOffsetRight",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.Panel6.pan_AutoOffsetMove.sb_AutoOffsetUp",
+   "event_name": "OnClick",
+   "handler_name": "sb_AutoOffsetUpClick",
+   "leaf_name": "sb_AutoOffsetUp",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.Panel6.edPitchY",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "edPitchY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.Panel6.edPitchY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edArmXMouseDown",
+   "leaf_name": "edPitchY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.Panel6.edPitchX2",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "edPitchX2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.Panel6.edPitchX2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edArmXMouseDown",
+   "leaf_name": "edPitchX2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.Panel6.edPitchX1",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "edPitchX1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.Panel6.edPitchX1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edArmXMouseDown",
+   "leaf_name": "edPitchX1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.Panel6.edPickUp",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "edPickUp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.Panel6.edPickUp",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "edPickUp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.Panel6.edRelease",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "edRelease",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.Panel6.edRelease",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "edRelease",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.Panel6.palPreciser.edPreciserOpen",
+   "event_name": "OnMouseDown",
+   "handler_name": "edPreciserOpenMouseDown",
+   "leaf_name": "edPreciserOpen",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.Panel6.palPreciser.edPreciserClose",
+   "event_name": "OnMouseDown",
+   "handler_name": "edPreciserOpenMouseDown",
+   "leaf_name": "edPreciserClose",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.Panel6.edPitchX4",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "edPitchX4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.Panel6.edPitchX4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edArmXMouseDown",
+   "leaf_name": "edPitchX4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.Panel6.edPitchX3",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "edPitchX3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.Panel6.edPitchX3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edArmXMouseDown",
+   "leaf_name": "edPitchX3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsA",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtRelsA",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsA",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtRelsA",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickA",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EditPickA",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickA",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EditPickA",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsB",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtRelsB",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsB",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtRelsB",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickB",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EditPickB",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickB",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EditPickB",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsD",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtRelsD",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsD",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtRelsD",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickD",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EditPickD",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickD",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EditPickD",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsF",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtRelsF",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsF",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtRelsF",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickF",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EditPickF",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickF",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EditPickF",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsH",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtRelsH",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsH",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtRelsH",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickH",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EditPickH",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickH",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EditPickH",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsC",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtRelsC",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsC",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtRelsC",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickC",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EditPickC",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickC",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EditPickC",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsE",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtRelsE",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsE",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtRelsE",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickE",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EditPickE",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickE",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EditPickE",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsG",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtRelsG",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsG",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtRelsG",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickG",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EditPickG",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickG",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EditPickG",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickO",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EditPickO",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickO",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EditPickO",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsO",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtRelsO",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsO",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtRelsO",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickM",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EditPickM",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickM",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EditPickM",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsM",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtRelsM",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsM",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtRelsM",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickK",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EditPickK",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickK",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EditPickK",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsK",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtRelsK",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsK",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtRelsK",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickP",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EditPickP",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickP",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EditPickP",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsP",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtRelsP",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsP",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtRelsP",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickN",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EditPickN",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickN",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EditPickN",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsN",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtRelsN",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsN",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtRelsN",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickL",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EditPickL",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickL",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EditPickL",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsL",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtRelsL",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsL",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtRelsL",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickJ",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EditPickJ",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickJ",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EditPickJ",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsJ",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtRelsJ",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsJ",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtRelsJ",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickI",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EditPickI",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EditPickI",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EditPickI",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsI",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtRelsI",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtRelsI",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtRelsI",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetBX",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetBX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetBX",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetBX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetBY",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetBY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetBY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetBY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetAX",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetAX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetAX",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetAX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetAY",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetAY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetAY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetAY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetCY",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetCY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetCY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetCY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetCX",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetCX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetCX",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetCX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetDY",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetDY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetDY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetDY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetDX",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetDX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetDX",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetDX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetEX",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetEX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetEX",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetEX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetEY",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetEY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetEY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetEY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetFX",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetFX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetFX",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetFX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetFY",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetFY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetFY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetFY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetGX",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetGX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetGX",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetGX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetGY",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetGY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetGY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetGY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetHX",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetHX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetHX",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetHX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetHY",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetHY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetHY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetHY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetIX",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetIX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetIX",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetIX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetIY",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetIY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetIY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetIY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetJX",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetJX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetJX",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetJX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetJY",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetJY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetJY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetJY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetLX",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetLX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetLX",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetLX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetLY",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetLY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetLY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetLY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetKX",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetKX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetKX",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetKX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetKY",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetKY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetKY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetKY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetNX",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetNX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetNX",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetNX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetNY",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetNY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetNY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetNY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetMX",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetMX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetMX",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetMX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetMY",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetMY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetMY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetMY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetPX",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetPX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetPX",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetPX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetPY",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetPY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetPY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetPY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetOX",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetOX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetOX",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetOX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetOY",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "EdtOffsetOY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.pnlPicker.EdtOffsetOY",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "EdtOffsetOY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsInOutArmOffset.Pnl_AOI.ck_AOI",
+   "event_name": "OnClick",
+   "handler_name": "ck_AOIClick",
+   "leaf_name": "ck_AOI",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsIndexOffset.pnlIndex.btnToArmOffset",
+   "event_name": "OnClick",
+   "handler_name": "btnToArmOffsetClick",
+   "leaf_name": "btnToArmOffset",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsIndexOffset.pnlIndexOfs.Panel2.edtTrayArmX",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "edtTrayArmX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsIndexOffset.pnlIndexOfs.Panel2.edtTrayArmX",
+   "event_name": "OnMouseDown",
+   "handler_name": "edArmXMouseDown",
+   "leaf_name": "edtTrayArmX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsIndexOffset.pnlIndexOfs.Panel2.edlLoadZ",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "edlLoadZ",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsIndexOffset.pnlIndexOfs.Panel2.edlLoadZ",
+   "event_name": "OnMouseDown",
+   "handler_name": "edArmXMouseDown",
+   "leaf_name": "edlLoadZ",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsIndexOffset.pnlIndexOfs.Panel3.IndexArmOffSet2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "IndexArmOffSet2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsIndexOffset.pnlIndexOfs.Panel3.IndexArmOffSet3",
+   "event_name": "OnChange",
+   "handler_name": "IndexArmOffSet3Change",
+   "leaf_name": "IndexArmOffSet3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsIndexOffset.pnlIndexOfs.Panel3.IndexArmOffSet3",
+   "event_name": "OnKeyDown",
+   "handler_name": "IndexArmOffSet3KeyDown",
+   "leaf_name": "IndexArmOffSet3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsIndexOffset.pnlIndexOfs.Panel3.IndexArmOffSet3",
+   "event_name": "OnKeyUp",
+   "handler_name": "IndexArmOffSet3KeyUp",
+   "leaf_name": "IndexArmOffSet3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsIndexOffset.pnlIndexOfs.Panel3.IndexArmOffSet3",
+   "event_name": "OnMouseDown",
+   "handler_name": "IndexArmOffSet3MouseDown",
+   "leaf_name": "IndexArmOffSet3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsIndexOffset.pnlIndexOfs.Panel3.IndexArmOffSet1",
+   "event_name": "OnKeyDown",
+   "handler_name": "IndexArmOffSet1KeyDown",
+   "leaf_name": "IndexArmOffSet1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsIndexOffset.pnlIndexOfs.Panel3.IndexArmOffSet1",
+   "event_name": "OnKeyUp",
+   "handler_name": "IndexArmOffSet1KeyUp",
+   "leaf_name": "IndexArmOffSet1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsIndexOffset.pnlIndexOfs.Panel3.IndexArmOffSet1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edReleaseMouseDown",
+   "leaf_name": "IndexArmOffSet1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsIndexOffset.pnlIndexOfs.Panel3.IndexArmOffSet4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edArmXMouseDown",
+   "leaf_name": "IndexArmOffSet4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsIndexOffset.pnlIndexOfs.Panel3.IndexArmOffSet5",
+   "event_name": "OnMouseDown",
+   "handler_name": "IndexArmOffSet5MouseDown",
+   "leaf_name": "IndexArmOffSet5",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsIndexOffset.pnlIndexOfs.Panel3.IndexArmOffSet6",
+   "event_name": "OnMouseDown",
+   "handler_name": "IndexArmOffSet5MouseDown",
+   "leaf_name": "IndexArmOffSet6",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsIndexOffset.pnlIndexOfs.Panel3.edShtFor2D",
+   "event_name": "OnMouseDown",
+   "handler_name": "edShtFor2DMouseDown",
+   "leaf_name": "edShtFor2D",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsIndexOffset.pnlIndexOfs.pnlTrayXART.edtARTPlace",
+   "event_name": "OnKeyPress",
+   "handler_name": "edArmXKeyPress",
+   "leaf_name": "edtARTPlace",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsIndexOffset.pnlIndexOfs.pnlTrayXART.edtARTPlace",
+   "event_name": "OnMouseDown",
+   "handler_name": "edArmXMouseDown",
+   "leaf_name": "edtARTPlace",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsIndexOffset.pnlIndexOfs.pnlOEE_Contact.edOffsetContactForce",
+   "event_name": "OnChange",
+   "handler_name": "edOffsetContactForceChange",
+   "leaf_name": "edOffsetContactForce",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsIndexOffset.pnlIndexOfs.pnlOEE_Contact.edOffsetContactForce",
+   "event_name": "OnMouseDown",
+   "handler_name": "edOffsetContactForceMouseDown",
+   "leaf_name": "edOffsetContactForce",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsArmOffset.btnBack",
+   "event_name": "OnClick",
+   "handler_name": "btnBackClick",
+   "leaf_name": "btnBack",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsSetupTeach.grpSetupTeach.grpOutArm.btnSortAuto1",
+   "event_name": "OnClick",
+   "handler_name": "btnSortAuto1Click",
+   "leaf_name": "btnSortAuto1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsSetupTeach.grpSetupTeach.grpOutArm.btnSortAuto2",
+   "event_name": "OnClick",
+   "handler_name": "btnSortAuto1Click",
+   "leaf_name": "btnSortAuto2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsSetupTeach.grpSetupTeach.grpOutArm.btnSortAuto3",
+   "event_name": "OnClick",
+   "handler_name": "btnSortAuto1Click",
+   "leaf_name": "btnSortAuto3",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsSetupTeach.grpSetupTeach.grpOutArm.btnSortFix1",
+   "event_name": "OnClick",
+   "handler_name": "btnSortAuto1Click",
+   "leaf_name": "btnSortFix1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsSetupTeach.grpSetupTeach.grpOutArm.btnSortFix2",
+   "event_name": "OnClick",
+   "handler_name": "btnSortAuto1Click",
+   "leaf_name": "btnSortFix2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsSetupTeach.grpSetupTeach.grpOutArm.btnSortFix3",
+   "event_name": "OnClick",
+   "handler_name": "btnSortAuto1Click",
+   "leaf_name": "btnSortFix3",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsSetupTeach.grpSetupTeach.grpOutArm.grpOutArm456.btnSortAuto4",
+   "event_name": "OnClick",
+   "handler_name": "btnSortAuto1Click",
+   "leaf_name": "btnSortAuto4",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsSetupTeach.grpSetupTeach.grpOutArm.grpOutArm456.btnSortAuto5",
+   "event_name": "OnClick",
+   "handler_name": "btnSortAuto1Click",
+   "leaf_name": "btnSortAuto5",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsSetupTeach.grpSetupTeach.grpOutArm.grpOutArm456.btnSortAuto6",
+   "event_name": "OnClick",
+   "handler_name": "btnSortAuto1Click",
+   "leaf_name": "btnSortAuto6",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsSetupTeach.grpSetupTeach.grpOutArm.grpOutArm456.btnSortFix4",
+   "event_name": "OnClick",
+   "handler_name": "btnSortAuto1Click",
+   "leaf_name": "btnSortFix4",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsSetupTeach.grpSetupTeach.grpOutArm.grpOutArm456.btnSortFix5",
+   "event_name": "OnClick",
+   "handler_name": "btnSortAuto1Click",
+   "leaf_name": "btnSortFix5",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsSetupTeach.grpSetupTeach.grpOutArm.grpOutArm456.btnSortFix6",
+   "event_name": "OnClick",
+   "handler_name": "btnSortAuto1Click",
+   "leaf_name": "btnSortFix6",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsZCalibration.sbInArmZCalibration",
+   "event_name": "OnMouseDown",
+   "handler_name": "sbInArmZCalibrationMouseDown",
+   "leaf_name": "sbInArmZCalibration",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fOffSet.PageControl1.tsZCalibration.sbOutArmZCalibration",
+   "event_name": "OnMouseDown",
+   "handler_name": "sbOutArmZCalibrationMouseDown",
+   "leaf_name": "sbOutArmZCalibration",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fOffSet.Panel5.spbSave",
+   "event_name": "OnClick",
+   "handler_name": "spbSaveClick",
+   "leaf_name": "spbSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fOffSet.Panel5.sbtExit",
+   "event_name": "OnClick",
+   "handler_name": "sbtExitClick",
+   "leaf_name": "sbtExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fOffSet.TimerSetupTeach",
+   "event_name": "OnTimer",
+   "handler_name": "TimerSetupTeachTimer",
+   "leaf_name": "TimerSetupTeach",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fOffSet.Timer1",
+   "event_name": "OnTimer",
+   "handler_name": "Timer1Timer",
+   "leaf_name": "Timer1",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fOffSet",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "cOffSet.dfm"
+}

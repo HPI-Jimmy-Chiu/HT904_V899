@@ -1,0 +1,7384 @@
+{
+ "control_node_count": 104,
+ "encoding_used": "cp950",
+ "form_class": "TfLaserSensor",
+ "form_name": "fLaserSensor",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fLaserSensor.pcLaserSensor",
+    "fLaserSensor.CommLaser1",
+    "fLaserSensor.Timer1",
+    "fLaserSensor.CommLaser2",
+    "fLaserSensor.CommLaserInArm",
+    "fLaserSensor.TimerInArm",
+    "fLaserSensor.CommLaserOutArm"
+   ],
+   "class": "TfLaserSensor",
+   "depth": 0,
+   "events": {
+    "OnClose": "FormClose",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow"
+   },
+   "geometry": {
+    "height": 703,
+    "left": 192,
+    "top": 163,
+    "width": 1066
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "fLaserSensor",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "fLaserSensor",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Laser Sensor"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 703
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 192
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnClose": {
+     "type": "SCALAR",
+     "value": "FormClose"
+    },
+    "OnDestroy": {
+     "type": "SCALAR",
+     "value": "FormDestroy"
+    },
+    "OnShow": {
+     "type": "SCALAR",
+     "value": "FormShow"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 163
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 1066
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [
+    "fLaserSensor.pcLaserSensor.tsLaserSensor",
+    "fLaserSensor.pcLaserSensor.tsLaserSet",
+    "fLaserSensor.pcLaserSensor.TabSheet1"
+   ],
+   "class": "TPageControl",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 664,
+    "left": 0,
+    "top": 0,
+    "width": 1050
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "TABHOST",
+   "line": 19,
+   "name": "pcLaserSensor",
+   "objkind": "object",
+   "parent_path": "fLaserSensor",
+   "path": "fLaserSensor.pcLaserSensor",
+   "properties": {
+    "ActivePage": {
+     "type": "SCALAR",
+     "value": "tsLaserSensor"
+    },
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 664
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabIndex": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabWidth": {
+     "type": "SCALAR",
+     "value": 150
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 1050
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 29,
+   "name": "tsLaserSensor",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Sensor"
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.sbUpdate",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.sbtExit",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.labICThickness",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.labLaserThreshold",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.Label1",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.gbLaserPanel_InArm",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.cbEnableShuttleLaser",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.edICThickness",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.edLaserShtThreshold",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.btSaveLog",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.cbEnableInArmLaser",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.edLaserHPThreshold",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.cbEnableInShuttleFloatingCheck",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.cbEnableOutShuttleFloatingCheck"
+   ],
+   "class": "TScrollBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 636,
+    "left": 0,
+    "top": 0,
+    "width": 1042
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 31,
+   "name": "ScrollBox1",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 636
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 1042
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 4,
+   "events": {
+    "OnClick": "sbUpdateClick"
+   },
+   "geometry": {
+    "height": 43,
+    "left": 141,
+    "top": 584,
+    "width": 323
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 38,
+   "name": "sbUpdate",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.sbUpdate",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Save"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -29
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Glyph.Data": {
+     "type": "BLOB",
+     "value": {
+      "byte_len": 3946,
+      "hex": "660F0000424D660F000000000000360000002800000024000000240000000100180000000000300F000001000000010000000000000000000000FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF9F9F9F9F9F9F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F9F9F9F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF7F7F7EFEFEFE8E8E8E6E6E6E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E9E9E9F3F3F3F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF8F8F8ECECECD6D6D6C8C8C8C5C5C5C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4D0D0D0E9E9E9F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF0EFEFC0A6A7A55B6CA96270A45E6C934556A6A3A3A4A1A1A19C9C9C9797979393948D8D8E88888A8383867F7D837A7A807978807978994759994759994759994759994759994759994759994756C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAD2C1C1B28181AF6D79B8717FB7707DAA6472EFEFF1EEEEF1995D68B8717EB06B78E1E0E0DDDADBD8D5D6D4D1D2CFCCCCCAC6C6DBD8D88F4B59A05565A05565BE848EB9727FB8727EB8717E994557C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AAF6D79BA7481B97380B7737FAA6472E9E9EBECEBEF995D68B8717EB06B78E1DFE1DCDADDD7D5D6D2D0D1CDC9CAC8C3C3D9D6D68D49589F5464A05565BF848EB97380B9737FB9727F9B4457C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC38D95BA7682BA7481B97480AA6472E5E4E7E9E9EB9A5D69B8737FB06B78E5E5E7E2E0E3DDDBDDD8D5D7D3D0D1CDCACBDDDADB8B48579D53639F5464BF858FBA7480BA7481BA74819B4558C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC48E96BA7783BA7682B97481AA6472E0DFE1E5E3E69B5F6BB97580B06B78E9EAECE6E5E8E2E1E4DDDCDED9D6D8D4D0D2E0DFDF8945549B50619D5363BF8590BA7481BA7481BA74819A4759C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC58F96BB7784BA7784BA7582AA6472DAD9DBE0DEE09B5F6BBA7582B06B78EDECEFEAE9EDE6E6E9E2E2E4DEDDDFDAD8DAE5E2E4874353994E5F9B5061C18690B97480BA7481BA74819C495CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC58F98BC7886BB7785BB7783AA6472D5D2D4DBD8DA9C606C925864925864EAEAEDEDEDF0EAEAEDE8E7E9E4E2E5DFDDDFE8E7E8864252974C5D994E5FC08691B9727FB97380B973809C4B5CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC49098BC7986BD7985BC7784AA6472CFCCCCD4D1D3D9D7D9DFDCDFE2E1E4E7E5E8EAEAEDEDECF0EAEBEEE8E7EAE4E2E6ECEAEC864252864252874353C28791B7727FB8727EB9727F9C4E5DC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC79198BD7A87BD7987BC7985BB7785AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472B77A84B76F7DB7707DB7707EB8717E9E4E5FC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6929ABE7B88BE7B87BC7986BC7886BB7785BB7784BA7682B97481B97480B87380B8717EB7717EB76F7DB76D7CB76D7BB76D7BB66D7BB56C7AB56C7AB66D7BB76F7CB76F7CB7707D9F4E60C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6929ABE7B88BE7B87BC7986BC7886BB7785BB7784BA7682B97481B97480B87380B8717EB76F7DB76D7CB76D7CB76C7AB66C7AB66D7BB56C7AB56C7AB56C7AB66C7AB66C7AB76D7C9F4F60C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6939BBE7E89BC7884A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70B66B7AB66C7B9F5162C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC7949CBF7F8AAF6F7BEBE1E1FEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFEFDFDFEFDFDFDFCFCFCFCFBFCFBFBFBFBFAFAFAF9F9F9F9F9F9F8F8F8E8D1D1A75E70B76D7BB66C7A9F5262C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC8959DC0808BAF6F7BFEFFFEFCFCFBFBFBFAFAFBFAFAFAFAF9FAF9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F7F7F7F7F7F7F7F7F7F7F7F7F7F7F6F6F6F6F6F9F9F9A75E70B96F7DB66B7AA05363C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9959DC1818CAF6F7BFEFFFEE1E1E1DFDFDFDDDDDDDBDCDBDADAD9D9D9D9D7D7D6D5D6D5D4D4D3D2D3D2D1D1D1D0D0D0CFCFCFCFCFCFCFCFCFCFCFCFF9FAF9A75E70BA707EB66B79A15466C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9969EC1818DAF6F7BFEFFFEFCFCFCFCFCFBFBFBFBFBFBFAFBFAFAFAFAFAF9F9F9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F8F7F7F7F7F7F7F7F7F7F7F7F6FBFBFBA75E70B97480B56B79A25666C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9989FC2828EAF6F7BFEFFFEE4E4E4E3E3E3E2E2E1E0E0E0DEDDDEDCDCDCDADADAD9D9D9D7D8D8D6D5D5D4D4D4D2D3D3D1D2D1D0D0D0CFCFCFCFCFCFFCFCFBA75E70BA7581B56B79A45968C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9989FC2838EAF6F7BFEFFFEFCFCFCFCFCFCFCFCFCFCFCFBFBFBFBFBFBFAFAFAFAFAFAF9F9F9F9F9F9F9F9F9F8F8F9F8F8F8F8F8F7F7F7F7F7F7F7F7FCFCFCA75E70BA7783B66C7AA55969C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACA98A0C2838EAF6F7BFEFFFEE6E6E6E6E5E6E4E4E4E3E3E3E1E2E2E0E0E0DEDEDEDCDCDCDBDBDBD9D9D9D8D8D8D6D6D6D4D5D5D3D3D3D1D1D1D0D0D0FDFDFCA75E70BC7783B76D7BA55D6CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB98A0C2838EAF6F7BFEFFFEFDFDFDFDFDFCFCFDFCFCFCFCFCFCFBFBFCFBFBFBFBFBFBFAFAFAFAFAFAF9F9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F7F7F7FDFEFDA75E70BD7985B76F7DA65F6EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEE6E6E6E6E6E6E6E6E6E5E5E6E4E5E5E4E3E3E2E2E2E1E0E0DFDFDFDDDDDDDBDBDCDADAD9D9D8D9D7D6D7D5D5D5D3D4D3FEFEFEA75E70BE7A86B7707DA6606EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEFEFEFDFEFEFDFDFDFCFDFDFCFCFDFCFCFCFCFCFCFBFCFCFBFBFBFAFBFBFAFAFAF9F9F9F9F9F9F9F9F9F9F9F9F8F8F8F8FEFFFEA75E70B38088B8717FA7606EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEE6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E5E5E5E4E4E3E2E3E3E1E1E1E0DFDFDDDDDEDCDBDCDADADAD9D9D9D7D8D7FEFFFEA75E70996E759E5967A9606EC5C5C5E5E5E5F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEFEFFFEFEFEFEFEFEFDFEFEFDFDFDFCFDFDFCFCFDFCFCFCFCFCFCFBFBFBFBFBFBFAFAFAFAFAFAF9FAFAF9F9F9F9F9F9F9FEFFFEA75E70B0757F9E5A68AA6471C5C5C5E6E6E6F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACA969EC2838EAF6F7BFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEA75E70C77F8BC77F8BAA6572D1D1D1EBEBEBFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AAE6A7AAE6A7AAE6A7AD9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6A75E70A75E70A75E70A75E70ECECECF6F6F6FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFA",
+      "sha1": "b6420a2c6417ab1d75d6f7441ace55c339665e38"
+     }
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 43
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 141
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "sbUpdateClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 584
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 323
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 4,
+   "events": {
+    "OnClick": "sbtExitClick"
+   },
+   "geometry": {
+    "height": 44,
+    "left": 543,
+    "top": 583,
+    "width": 323
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 177,
+   "name": "sbtExit",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.sbtExit",
+   "properties": {
+    "AllowAllUp": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Exit"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -29
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Glyph.Data": {
+     "type": "BLOB",
+     "value": {
+      "byte_len": 1554,
+      "hex": "0E060000424D0E06000000000000360000002800000016000000160000000100180000000000D805000001000000010000000000000000000000EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF7474A44C4C946C6CA4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF6C6CA44C4C947474A4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF2C2C8C5454C45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC4C4C94EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C4645C9CEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C4645C9C645C9C3C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C43C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D46C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC6464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C2424946464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C8C8CAC8C8CAC2424946464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF6C6CA43C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEF8C8CAC2424946464D45454C46C6CA4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF2C2C8C4C4CBC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424945454C44C4C94EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC3434948C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC3434948C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF",
+      "sha1": "f9091dff96fbb403d8fe7eec0dcccd5c7539ad97"
+     }
+    },
+    "GroupIndex": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 44
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 543
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "sbtExitClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 583
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 323
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 428,
+    "top": 16,
+    "width": 150
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 243,
+   "name": "labICThickness",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.labICThickness",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Device Thickness (mm) : "
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 428
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 150
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 428,
+    "top": 64,
+    "width": 214
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 256,
+   "name": "labLaserThreshold",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.labLaserThreshold",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Detect Threshold of Hot Plate(mm) : "
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 428
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 64
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 214
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 428,
+    "top": 40,
+    "width": 202
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 269,
+   "name": "Label1",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.Label1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Detect Threshold of Shuttle (mm) : "
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 428
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 202
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.gbLaserPanel_InArm.palLaserValue_InArm"
+   ],
+   "class": "TGroupBox",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 89,
+    "left": 8,
+    "top": 4,
+    "width": 141
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 282,
+   "name": "gbLaserPanel_InArm",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.gbLaserPanel_InArm",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "In Arm"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 89
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 141
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 60,
+    "left": 5,
+    "top": 20,
+    "width": 128
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 295,
+   "name": "palLaserValue_InArm",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.gbLaserPanel_InArm",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.gbLaserPanel_InArm.palLaserValue_InArm",
+   "properties": {
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "##.##"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnShadow"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": 48
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 128
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 160,
+    "top": 16,
+    "width": 201
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 312,
+   "name": "cbEnableShuttleLaser",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.cbEnableShuttleLaser",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Enable Shuttle Floating Check"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 160
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 201
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 4,
+   "events": {
+    "OnMouseDown": "edICThicknessMouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 644,
+    "top": 12,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 326,
+   "name": "edICThickness",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.edICThickness",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 644
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edICThicknessMouseDown"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0.25"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 4,
+   "events": {
+    "OnMouseDown": "edICThicknessMouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 644,
+    "top": 36,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 341,
+   "name": "edLaserShtThreshold",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.edLaserShtThreshold",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 644
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edICThicknessMouseDown"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0.1"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 4,
+   "events": {
+    "OnClick": "btSaveLogClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 160,
+    "top": 64,
+    "width": 75
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 356,
+   "name": "btSaveLog",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.btSaveLog",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "SaveLog"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 160
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btSaveLogClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 64
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 75
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 160,
+    "top": 36,
+    "width": 241
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 365,
+   "name": "cbEnableInArmLaser",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.cbEnableInArmLaser",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Enable Hot Plate Floating Check"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 160
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 241
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsplate1",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsPlate2"
+   ],
+   "class": "TPageControl",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 469,
+    "left": 4,
+    "top": 96,
+    "width": 413
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "TABHOST",
+   "line": 379,
+   "name": "PageControl1",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1",
+   "properties": {
+    "ActivePage": {
+     "type": "SCALAR",
+     "value": "tsplate1"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 469
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "TabIndex": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 413
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": 7,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsplate1.gpPlate1_Golden",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsplate1.mtPlate1",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsplate1.btSetPlate1GoldenToZero"
+   ],
+   "class": "TTabSheet",
+   "depth": 5,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 387,
+   "name": "tsplate1",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsplate1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Plate 1"
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsplate1.gpPlate1_Golden.mtPlate1_Golden"
+   ],
+   "class": "TGroupBox",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 200,
+    "left": 0,
+    "top": 188,
+    "width": 400
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 389,
+   "name": "gpPlate1_Golden",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsplate1",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsplate1.gpPlate1_Golden",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Golden"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 200
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 188
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 400
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTMyTray",
+   "depth": 7,
+   "events": {
+    "OnMouseDown": "mtPlate1_GoldenMouseDown"
+   },
+   "geometry": {
+    "height": 180,
+    "left": 2,
+    "top": 12,
+    "width": 396
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 396,
+   "name": "mtPlate1_Golden",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsplate1.gpPlate1_Golden",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsplate1.gpPlate1_Golden.mtPlate1_Golden",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 180
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "mtPlate1_GoldenMouseDown"
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 396
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTMyTray",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 180,
+    "left": 4,
+    "top": 4,
+    "width": 396
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 405,
+   "name": "mtPlate1",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsplate1",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsplate1.mtPlate1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 180
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 396
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 6,
+   "events": {
+    "OnClick": "btSetPlate1GoldenToZeroClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 264,
+    "top": 396,
+    "width": 139
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 411,
+   "name": "btSetPlate1GoldenToZero",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsplate1",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsplate1.btSetPlate1GoldenToZero",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Set Plate 1 Golden To Zero"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 264
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btSetPlate1GoldenToZeroClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 396
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 139
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsPlate2.gpPlate2_Golden",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsPlate2.mtPlate2",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsPlate2.btSetPlate2GoldenToZero"
+   ],
+   "class": "TTabSheet",
+   "depth": 5,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 421,
+   "name": "tsPlate2",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsPlate2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Plate 2"
+    },
+    "ImageIndex": {
+     "type": "SCALAR",
+     "value": 1
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsPlate2.gpPlate2_Golden.mtPlate2_Golden"
+   ],
+   "class": "TGroupBox",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 200,
+    "left": 0,
+    "top": 188,
+    "width": 400
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 424,
+   "name": "gpPlate2_Golden",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsPlate2",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsPlate2.gpPlate2_Golden",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Golden"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 200
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 188
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 400
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTMyTray",
+   "depth": 7,
+   "events": {
+    "OnMouseDown": "mtPlate2_GoldenMouseDown"
+   },
+   "geometry": {
+    "height": 180,
+    "left": 2,
+    "top": 12,
+    "width": 396
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 431,
+   "name": "mtPlate2_Golden",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsPlate2.gpPlate2_Golden",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsPlate2.gpPlate2_Golden.mtPlate2_Golden",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 180
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "mtPlate2_GoldenMouseDown"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 396
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTMyTray",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 180,
+    "left": 4,
+    "top": 4,
+    "width": 396
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 439,
+   "name": "mtPlate2",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsPlate2",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsPlate2.mtPlate2",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 180
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 396
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 6,
+   "events": {
+    "OnClick": "btSetPlate2GoldenToZeroClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 260,
+    "top": 396,
+    "width": 139
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 445,
+   "name": "btSetPlate2GoldenToZero",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsPlate2",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsPlate2.btSetPlate2GoldenToZero",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Set Plate 2 Golden To Zero"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 260
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btSetPlate2GoldenToZeroClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 396
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 139
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 4,
+   "events": {
+    "OnMouseDown": "edICThicknessMouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 644,
+    "top": 60,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 456,
+   "name": "edLaserHPThreshold",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.edLaserHPThreshold",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 644
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edICThicknessMouseDown"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0.1"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 12,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4"
+   ],
+   "class": "TPageControl",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 433,
+    "left": 430,
+    "top": 136,
+    "width": 589
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "TABHOST",
+   "line": 471,
+   "name": "PageControl2",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2",
+   "properties": {
+    "ActivePage": {
+     "type": "SCALAR",
+     "value": "TabSheet3"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 433
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 430
+    },
+    "TabIndex": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 589
+    }
+   },
+   "sibling_index": 13,
+   "synthesized": false,
+   "tab_order": 8,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbLaserPanel_Shuttle1_2",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbLaserPanel_Shuttle1_1",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbLaserPanel_Shuttle2_2",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbLaserPanel_Shuttle2_1",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.mtShuttle2",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbShuttle2_Golden",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbShuttle1_Golden",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.mtShuttle1"
+   ],
+   "class": "TTabSheet",
+   "depth": 5,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 479,
+   "name": "TabSheet3",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "In Shuttle"
+    },
+    "ImageIndex": {
+     "type": "SCALAR",
+     "value": 1
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbLaserPanel_Shuttle1_2.palLaserValue_InShuttle1_2"
+   ],
+   "class": "TGroupBox",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 89,
+    "left": 13,
+    "top": 213,
+    "width": 141
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 482,
+   "name": "gbLaserPanel_Shuttle1_2",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbLaserPanel_Shuttle1_2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "In Shuttle 1 - 2"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 89
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 213
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 141
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 7,
+   "events": {},
+   "geometry": {
+    "height": 60,
+    "left": 5,
+    "top": 20,
+    "width": 128
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 495,
+   "name": "palLaserValue_InShuttle1_2",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbLaserPanel_Shuttle1_2",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbLaserPanel_Shuttle1_2.palLaserValue_InShuttle1_2",
+   "properties": {
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "##.##"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnShadow"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": 48
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 128
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbLaserPanel_Shuttle1_1.palLaserValue_InShuttle1_1"
+   ],
+   "class": "TGroupBox",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 89,
+    "left": 13,
+    "top": 309,
+    "width": 141
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 512,
+   "name": "gbLaserPanel_Shuttle1_1",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbLaserPanel_Shuttle1_1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "In Shuttle 1 - 1"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 89
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 309
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 141
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 7,
+   "events": {},
+   "geometry": {
+    "height": 60,
+    "left": 5,
+    "top": 20,
+    "width": 128
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 525,
+   "name": "palLaserValue_InShuttle1_1",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbLaserPanel_Shuttle1_1",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbLaserPanel_Shuttle1_1.palLaserValue_InShuttle1_1",
+   "properties": {
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "##.##"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnShadow"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": 48
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 128
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbLaserPanel_Shuttle2_2.palLaserValue_InShuttle2_2"
+   ],
+   "class": "TGroupBox",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 89,
+    "left": 12,
+    "top": 12,
+    "width": 141
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 542,
+   "name": "gbLaserPanel_Shuttle2_2",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbLaserPanel_Shuttle2_2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "In Shuttle 2 - 2"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 89
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 141
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 7,
+   "events": {},
+   "geometry": {
+    "height": 60,
+    "left": 5,
+    "top": 20,
+    "width": 128
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 555,
+   "name": "palLaserValue_InShuttle2_2",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbLaserPanel_Shuttle2_2",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbLaserPanel_Shuttle2_2.palLaserValue_InShuttle2_2",
+   "properties": {
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "##.##"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnShadow"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": 48
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 128
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbLaserPanel_Shuttle2_1.palLaserValue_InShuttle2_1"
+   ],
+   "class": "TGroupBox",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 89,
+    "left": 12,
+    "top": 108,
+    "width": 141
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 572,
+   "name": "gbLaserPanel_Shuttle2_1",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbLaserPanel_Shuttle2_1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "In Shuttle 2 - 1"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 89
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 108
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 141
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 7,
+   "events": {},
+   "geometry": {
+    "height": 60,
+    "left": 5,
+    "top": 20,
+    "width": 128
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 585,
+   "name": "palLaserValue_InShuttle2_1",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbLaserPanel_Shuttle2_1",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbLaserPanel_Shuttle2_1.palLaserValue_InShuttle2_1",
+   "properties": {
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "##.##"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnShadow"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": 48
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 128
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTMyTray",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 80,
+    "left": 168,
+    "top": 20,
+    "width": 400
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 602,
+   "name": "mtShuttle2",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.mtShuttle2",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 168
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 400
+    },
+    "XItem": {
+     "type": "SCALAR",
+     "value": 4
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbShuttle2_Golden.mtShuttle2_Golden"
+   ],
+   "class": "TGroupBox",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 90,
+    "left": 168,
+    "top": 104,
+    "width": 400
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 609,
+   "name": "gbShuttle2_Golden",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbShuttle2_Golden",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Golden"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 90
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 168
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 104
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 400
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTMyTray",
+   "depth": 7,
+   "events": {},
+   "geometry": {
+    "height": 80,
+    "left": 2,
+    "top": 12,
+    "width": 396
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 616,
+   "name": "mtShuttle2_Golden",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbShuttle2_Golden",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbShuttle2_Golden.mtShuttle2_Golden",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 396
+    },
+    "XItem": {
+     "type": "SCALAR",
+     "value": 4
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbShuttle1_Golden.mtShuttle1_Golden"
+   ],
+   "class": "TGroupBox",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 90,
+    "left": 169,
+    "top": 309,
+    "width": 400
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 624,
+   "name": "gbShuttle1_Golden",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbShuttle1_Golden",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Golden"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 90
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 169
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 309
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 400
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTMyTray",
+   "depth": 7,
+   "events": {},
+   "geometry": {
+    "height": 80,
+    "left": 2,
+    "top": 12,
+    "width": 396
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 631,
+   "name": "mtShuttle1_Golden",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbShuttle1_Golden",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.gbShuttle1_Golden.mtShuttle1_Golden",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 396
+    },
+    "XItem": {
+     "type": "SCALAR",
+     "value": 4
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTMyTray",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 80,
+    "left": 169,
+    "top": 217,
+    "width": 400
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 639,
+   "name": "mtShuttle1",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3.mtShuttle1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 169
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 217
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 400
+    },
+    "XItem": {
+     "type": "SCALAR",
+     "value": 4
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.gbLaserPanel_OutShuttle1_2",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.gbLaserPanel_OutShuttle1_1",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.gbLaserPanel_OutShuttle2_2",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.gbLaserPanel_OutShuttle2_1",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.mtOutShuttle2",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.GroupBox5",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.GroupBox6",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.mtOutShuttle1"
+   ],
+   "class": "TTabSheet",
+   "depth": 5,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 647,
+   "name": "TabSheet2",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Out Shuttle"
+    },
+    "ImageIndex": {
+     "type": "SCALAR",
+     "value": 1
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.gbLaserPanel_OutShuttle1_2.palLaserValue_OutShuttle1_2"
+   ],
+   "class": "TGroupBox",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 89,
+    "left": 13,
+    "top": 213,
+    "width": 141
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 650,
+   "name": "gbLaserPanel_OutShuttle1_2",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.gbLaserPanel_OutShuttle1_2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Out Shuttle 1 - 2"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 89
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 213
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 141
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 7,
+   "events": {},
+   "geometry": {
+    "height": 60,
+    "left": 5,
+    "top": 20,
+    "width": 128
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 663,
+   "name": "palLaserValue_OutShuttle1_2",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.gbLaserPanel_OutShuttle1_2",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.gbLaserPanel_OutShuttle1_2.palLaserValue_OutShuttle1_2",
+   "properties": {
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "##.##"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnShadow"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": 48
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 128
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.gbLaserPanel_OutShuttle1_1.palLaserValue_OutShuttle1_1"
+   ],
+   "class": "TGroupBox",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 89,
+    "left": 13,
+    "top": 309,
+    "width": 141
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 680,
+   "name": "gbLaserPanel_OutShuttle1_1",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.gbLaserPanel_OutShuttle1_1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Out Shuttle 1 - 1"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 89
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 309
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 141
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 7,
+   "events": {},
+   "geometry": {
+    "height": 60,
+    "left": 5,
+    "top": 20,
+    "width": 128
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 693,
+   "name": "palLaserValue_OutShuttle1_1",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.gbLaserPanel_OutShuttle1_1",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.gbLaserPanel_OutShuttle1_1.palLaserValue_OutShuttle1_1",
+   "properties": {
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "##.##"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnShadow"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": 48
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 128
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.gbLaserPanel_OutShuttle2_2.palLaserValue_OutShuttle2_2"
+   ],
+   "class": "TGroupBox",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 89,
+    "left": 12,
+    "top": 12,
+    "width": 141
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 710,
+   "name": "gbLaserPanel_OutShuttle2_2",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.gbLaserPanel_OutShuttle2_2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Out Shuttle 2 - 2"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 89
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 141
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 7,
+   "events": {},
+   "geometry": {
+    "height": 60,
+    "left": 5,
+    "top": 20,
+    "width": 128
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 723,
+   "name": "palLaserValue_OutShuttle2_2",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.gbLaserPanel_OutShuttle2_2",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.gbLaserPanel_OutShuttle2_2.palLaserValue_OutShuttle2_2",
+   "properties": {
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "##.##"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnShadow"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": 48
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 128
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.gbLaserPanel_OutShuttle2_1.palLaserValue_OutShuttle2_1"
+   ],
+   "class": "TGroupBox",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 89,
+    "left": 12,
+    "top": 108,
+    "width": 141
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 740,
+   "name": "gbLaserPanel_OutShuttle2_1",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.gbLaserPanel_OutShuttle2_1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Out Shuttle 2 - 1"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 89
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 108
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 141
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 7,
+   "events": {},
+   "geometry": {
+    "height": 60,
+    "left": 5,
+    "top": 20,
+    "width": 128
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 753,
+   "name": "palLaserValue_OutShuttle2_1",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.gbLaserPanel_OutShuttle2_1",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.gbLaserPanel_OutShuttle2_1.palLaserValue_OutShuttle2_1",
+   "properties": {
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "##.##"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnShadow"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": 48
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 128
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTMyTray",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 80,
+    "left": 168,
+    "top": 20,
+    "width": 400
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 770,
+   "name": "mtOutShuttle2",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.mtOutShuttle2",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 168
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 400
+    },
+    "XItem": {
+     "type": "SCALAR",
+     "value": 4
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.GroupBox5.mtOutShuttle2_Golden"
+   ],
+   "class": "TGroupBox",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 90,
+    "left": 168,
+    "top": 104,
+    "width": 400
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 777,
+   "name": "GroupBox5",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.GroupBox5",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Golden"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 90
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 168
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 104
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 400
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTMyTray",
+   "depth": 7,
+   "events": {},
+   "geometry": {
+    "height": 80,
+    "left": 2,
+    "top": 12,
+    "width": 396
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 784,
+   "name": "mtOutShuttle2_Golden",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.GroupBox5",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.GroupBox5.mtOutShuttle2_Golden",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 396
+    },
+    "XItem": {
+     "type": "SCALAR",
+     "value": 4
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.GroupBox6.mtOutShuttle1_Golden"
+   ],
+   "class": "TGroupBox",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 90,
+    "left": 169,
+    "top": 309,
+    "width": 400
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 792,
+   "name": "GroupBox6",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.GroupBox6",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Golden"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 90
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 169
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 309
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 400
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTMyTray",
+   "depth": 7,
+   "events": {},
+   "geometry": {
+    "height": 80,
+    "left": 2,
+    "top": 12,
+    "width": 396
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 799,
+   "name": "mtOutShuttle1_Golden",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.GroupBox6",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.GroupBox6.mtOutShuttle1_Golden",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 396
+    },
+    "XItem": {
+     "type": "SCALAR",
+     "value": 4
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTMyTray",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 80,
+    "left": 169,
+    "top": 217,
+    "width": 400
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 807,
+   "name": "mtOutShuttle1",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2.mtOutShuttle1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 169
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 217
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 400
+    },
+    "XItem": {
+     "type": "SCALAR",
+     "value": 4
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.Label2",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.Label3",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.Label5",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.Label6",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.Label4",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.Label7",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.edDeviceXOffset",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.edDeviceYOffset",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.edOutDeviceXOffset",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.edOutDeviceYOffset",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.edInArmDeviceFloatingCheckRange",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.edOutArmDeviceFloatingCheckRange",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.btGetInShuttleGolden",
+    "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.btGetOutShuttleGolden"
+   ],
+   "class": "TTabSheet",
+   "depth": 5,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 815,
+   "name": "TabSheet4",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Fuction Setting"
+    },
+    "ImageIndex": {
+     "type": "SCALAR",
+     "value": 2
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 11,
+    "top": 16,
+    "width": 197
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 818,
+   "name": "Label2",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.Label2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "In Arm Device Offset X (0.01mm) : "
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 197
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 11,
+    "top": 45,
+    "width": 198
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 831,
+   "name": "Label3",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.Label3",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "In Arm Device Offset Y (0.01mm) : "
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 45
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 198
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 11,
+    "top": 74,
+    "width": 207
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 844,
+   "name": "Label5",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.Label5",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Out Arm Device Offset X (0.01mm) : "
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 74
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 207
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 11,
+    "top": 102,
+    "width": 208
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 857,
+   "name": "Label6",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.Label6",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Out Arm Device Offset Y (0.01mm) : "
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 102
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 208
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 11,
+    "top": 131,
+    "width": 330
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 870,
+   "name": "Label4",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.Label4",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "In Arm Device Floating Check Range:                        (mm)  "
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 131
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 330
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 11,
+    "top": 160,
+    "width": 340
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 885,
+   "name": "Label7",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.Label7",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Out Arm Device Floating Check Range:                        (mm)  "
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 160
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 340
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 6,
+   "events": {
+    "OnMouseDown": "edDeviceXOffsetMouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 214,
+    "top": 12,
+    "width": 61
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 900,
+   "name": "edDeviceXOffset",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.edDeviceXOffset",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 214
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edDeviceXOffsetMouseDown"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0.25"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 61
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 6,
+   "events": {
+    "OnMouseDown": "edDeviceYOffsetMouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 214,
+    "top": 41,
+    "width": 61
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 915,
+   "name": "edDeviceYOffset",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.edDeviceYOffset",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 214
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edDeviceYOffsetMouseDown"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0.25"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 61
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 6,
+   "events": {
+    "OnMouseDown": "edOutDeviceXOffsetMouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 222,
+    "top": 70,
+    "width": 61
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 930,
+   "name": "edOutDeviceXOffset",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.edOutDeviceXOffset",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 222
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edOutDeviceXOffsetMouseDown"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0.25"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 70
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 61
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 6,
+   "events": {
+    "OnMouseDown": "edOutDeviceYOffsetMouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 222,
+    "top": 98,
+    "width": 61
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 945,
+   "name": "edOutDeviceYOffset",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.edOutDeviceYOffset",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 222
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edOutDeviceYOffsetMouseDown"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0.25"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 98
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 61
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 241,
+    "top": 127,
+    "width": 61
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 960,
+   "name": "edInArmDeviceFloatingCheckRange",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.edInArmDeviceFloatingCheckRange",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 241
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0.25"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 127
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 61
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 247,
+    "top": 156,
+    "width": 61
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 974,
+   "name": "edOutArmDeviceFloatingCheckRange",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.edOutArmDeviceFloatingCheckRange",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 247
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0.25"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 156
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 61
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 6,
+   "events": {
+    "OnClick": "btGetInShuttleGoldenClick"
+   },
+   "geometry": {
+    "height": 29,
+    "left": 436,
+    "top": 13,
+    "width": 140
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 988,
+   "name": "btGetInShuttleGolden",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.btGetInShuttleGolden",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Get In Shuttle Golden"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 436
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btGetInShuttleGoldenClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 140
+    }
+   },
+   "sibling_index": 12,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 6,
+   "events": {
+    "OnClick": "btGetOutShuttleGoldenClick"
+   },
+   "geometry": {
+    "height": 29,
+    "left": 436,
+    "top": 45,
+    "width": 140
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1003,
+   "name": "btGetOutShuttleGolden",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet4.btGetOutShuttleGolden",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Get Out Shuttle Golden"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 436
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btGetOutShuttleGoldenClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 45
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 140
+    }
+   },
+   "sibling_index": 13,
+   "synthesized": false,
+   "tab_order": 7,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 428,
+    "top": 88,
+    "width": 285
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1020,
+   "name": "cbEnableInShuttleFloatingCheck",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.cbEnableInShuttleFloatingCheck",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Enable In Shuttle Floating Check"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 428
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 88
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 285
+    }
+   },
+   "sibling_index": 14,
+   "synthesized": false,
+   "tab_order": 9,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 428,
+    "top": 112,
+    "width": 285
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1034,
+   "name": "cbEnableOutShuttleFloatingCheck",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.cbEnableOutShuttleFloatingCheck",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Enable Out Shuttle Floating Check"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 428
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 112
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 285
+    }
+   },
+   "sibling_index": 15,
+   "synthesized": false,
+   "tab_order": 10,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fLaserSensor.pcLaserSensor.tsLaserSet.btConnect",
+    "fLaserSensor.pcLaserSensor.tsLaserSet.btSetToZero",
+    "fLaserSensor.pcLaserSensor.tsLaserSet.btSetToZeroSh1",
+    "fLaserSensor.pcLaserSensor.tsLaserSet.btSetToZeroSh2",
+    "fLaserSensor.pcLaserSensor.tsLaserSet.btGetValueSht2_1Row",
+    "fLaserSensor.pcLaserSensor.tsLaserSet.btGetValueSht2_2Row",
+    "fLaserSensor.pcLaserSensor.tsLaserSet.btGetValueSht1_1Row",
+    "fLaserSensor.pcLaserSensor.tsLaserSet.btGetValueSht1_2Row",
+    "fLaserSensor.pcLaserSensor.tsLaserSet.CheckBox1",
+    "fLaserSensor.pcLaserSensor.tsLaserSet.btGetValueInArm",
+    "fLaserSensor.pcLaserSensor.tsLaserSet.btSetToZeroInArm",
+    "fLaserSensor.pcLaserSensor.tsLaserSet.cbStartPooling",
+    "fLaserSensor.pcLaserSensor.tsLaserSet.Panel1",
+    "fLaserSensor.pcLaserSensor.tsLaserSet.cbLD40L",
+    "fLaserSensor.pcLaserSensor.tsLaserSet.btGetShValue",
+    "fLaserSensor.pcLaserSensor.tsLaserSet.btGetOutShValue"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 1050,
+   "name": "tsLaserSet",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSet",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Setting"
+    },
+    "ImageIndex": {
+     "type": "SCALAR",
+     "value": 1
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 3,
+   "events": {
+    "OnClick": "btConnectClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 32,
+    "top": 244,
+    "width": 75
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1053,
+   "name": "btConnect",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSet",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSet.btConnect",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Connect"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btConnectClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 244
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 75
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 3,
+   "events": {
+    "OnClick": "btSetToZeroClick"
+   },
+   "geometry": {
+    "height": 29,
+    "left": 304,
+    "top": 196,
+    "width": 280
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1062,
+   "name": "btSetToZero",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSet",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSet.btSetToZero",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Set Shuttle To Zero for All"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 304
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btSetToZeroClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 196
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 280
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 3,
+   "events": {
+    "OnClick": "btSetToZeroSh1Click"
+   },
+   "geometry": {
+    "height": 29,
+    "left": 304,
+    "top": 164,
+    "width": 280
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1077,
+   "name": "btSetToZeroSh1",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSet",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSet.btSetToZeroSh1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Set  Shuttle 1 To Zero"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 304
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btSetToZeroSh1Click"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 164
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 280
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 3,
+   "events": {
+    "OnClick": "btSetToZeroSh2Click"
+   },
+   "geometry": {
+    "height": 29,
+    "left": 304,
+    "top": 132,
+    "width": 280
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1092,
+   "name": "btSetToZeroSh2",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSet",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSet.btSetToZeroSh2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Set Shuttle 2 To Zero"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 304
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btSetToZeroSh2Click"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 132
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 280
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 3,
+   "events": {
+    "OnClick": "btGetValueSht2_1RowClick"
+   },
+   "geometry": {
+    "height": 29,
+    "left": 304,
+    "top": 100,
+    "width": 280
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1107,
+   "name": "btGetValueSht2_1Row",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSet",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSet.btGetValueSht2_1Row",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Get Shuttle 2 Value 1 Row"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 304
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btGetValueSht2_1RowClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 280
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 3,
+   "events": {
+    "OnClick": "btGetValueSht2_2RowClick"
+   },
+   "geometry": {
+    "height": 29,
+    "left": 304,
+    "top": 68,
+    "width": 280
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1122,
+   "name": "btGetValueSht2_2Row",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSet",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSet.btGetValueSht2_2Row",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Get Shuttle 2 Value 2 Row"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 304
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btGetValueSht2_2RowClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 68
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 280
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 3,
+   "events": {
+    "OnClick": "btGetValueSht1_1RowClick"
+   },
+   "geometry": {
+    "height": 29,
+    "left": 304,
+    "top": 36,
+    "width": 280
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1137,
+   "name": "btGetValueSht1_1Row",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSet",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSet.btGetValueSht1_1Row",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Get Shuttle 1 Value 1 Row"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 304
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btGetValueSht1_1RowClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 280
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 3,
+   "events": {
+    "OnClick": "btGetValueSht1_2RowClick"
+   },
+   "geometry": {
+    "height": 29,
+    "left": 304,
+    "top": 4,
+    "width": 280
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1152,
+   "name": "btGetValueSht1_2Row",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSet",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSet.btGetValueSht1_2Row",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Get Shuttle 1 Value 2 Row"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 304
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btGetValueSht1_2RowClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 280
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 7,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 32,
+    "top": 292,
+    "width": 97
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1167,
+   "name": "CheckBox1",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSet",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSet.CheckBox1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Show Log"
+    },
+    "Checked": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "State": {
+     "type": "SCALAR",
+     "value": "cbChecked"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 292
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 97
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": 8,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 3,
+   "events": {
+    "OnClick": "btGetValueInArmClick"
+   },
+   "geometry": {
+    "height": 29,
+    "left": 8,
+    "top": 4,
+    "width": 280
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1177,
+   "name": "btGetValueInArm",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSet",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSet.btGetValueInArm",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Get In Arm Value"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btGetValueInArmClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 280
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": 9,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 3,
+   "events": {
+    "OnClick": "btSetToZeroInArmClick"
+   },
+   "geometry": {
+    "height": 29,
+    "left": 8,
+    "top": 36,
+    "width": 280
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1192,
+   "name": "btSetToZeroInArm",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSet",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSet.btSetToZeroInArm",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Set To Zero"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btSetToZeroInArmClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 280
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": 10,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {
+    "OnClick": "cbStartPoolingClick"
+   },
+   "geometry": {
+    "height": 17,
+    "left": 32,
+    "top": 272,
+    "width": 97
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1207,
+   "name": "cbStartPooling",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSet",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSet.cbStartPooling",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Start Pooling"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "cbStartPoolingClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 272
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 97
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": 11,
+   "visible": null
+  },
+  {
+   "align": "alBottom",
+   "anchors": null,
+   "child_paths": [
+    "fLaserSensor.pcLaserSensor.tsLaserSet.Panel1.memoLaserSensor",
+    "fLaserSensor.pcLaserSensor.tsLaserSet.Panel1.MemoStatus"
+   ],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 255,
+    "left": 0,
+    "top": 381,
+    "width": 1042
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 1216,
+   "name": "Panel1",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSet",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSet.Panel1",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alBottom"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 255
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 381
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 1042
+    }
+   },
+   "sibling_index": 12,
+   "synthesized": false,
+   "tab_order": 12,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 253,
+    "left": 1,
+    "top": 1,
+    "width": 677
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1224,
+   "name": "memoLaserSensor",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSet.Panel1",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSet.Panel1.memoLaserSensor",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 253
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "ScrollBars": {
+     "type": "SCALAR",
+     "value": "ssBoth"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 677
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": "alRight",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 253,
+    "left": 678,
+    "top": 1,
+    "width": 363
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1234,
+   "name": "MemoStatus",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSet.Panel1",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSet.Panel1.MemoStatus",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alRight"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 253
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 678
+    },
+    "ScrollBars": {
+     "type": "SCALAR",
+     "value": "ssBoth"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 363
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 32,
+    "top": 312,
+    "width": 97
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1245,
+   "name": "cbLD40L",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSet",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSet.cbLD40L",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "USE LD-40L"
+    },
+    "Checked": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "State": {
+     "type": "SCALAR",
+     "value": "cbChecked"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 312
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 97
+    }
+   },
+   "sibling_index": 13,
+   "synthesized": false,
+   "tab_order": 13,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 3,
+   "events": {
+    "OnClick": "btGetShValueClick"
+   },
+   "geometry": {
+    "height": 29,
+    "left": 308,
+    "top": 260,
+    "width": 280
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1255,
+   "name": "btGetShValue",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSet",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSet.btGetShValue",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Get In Shuttle Value"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 308
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btGetShValueClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 260
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 280
+    }
+   },
+   "sibling_index": 14,
+   "synthesized": false,
+   "tab_order": 14,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 3,
+   "events": {
+    "OnClick": "btGetOutShValueClick"
+   },
+   "geometry": {
+    "height": 29,
+    "left": 308,
+    "top": 292,
+    "width": 280
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1270,
+   "name": "btGetOutShValue",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSet",
+   "path": "fLaserSensor.pcLaserSensor.tsLaserSet.btGetOutShValue",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Get Out Shuttle Value"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 308
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btGetOutShValueClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 292
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 280
+    }
+   },
+   "sibling_index": 15,
+   "synthesized": false,
+   "tab_order": 15,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fLaserSensor.pcLaserSensor.TabSheet1.MemoSh2",
+    "fLaserSensor.pcLaserSensor.TabSheet1.MemoSh1",
+    "fLaserSensor.pcLaserSensor.TabSheet1.edTemp"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 1286,
+   "name": "TabSheet1",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor",
+   "path": "fLaserSensor.pcLaserSensor.TabSheet1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TabSheet1"
+    },
+    "ImageIndex": {
+     "type": "SCALAR",
+     "value": 2
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 181,
+    "left": 564,
+    "top": 132,
+    "width": 537
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1289,
+   "name": "MemoSh2",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.TabSheet1",
+   "path": "fLaserSensor.pcLaserSensor.TabSheet1.MemoSh2",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 181
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 564
+    },
+    "ScrollBars": {
+     "type": "SCALAR",
+     "value": "ssBoth"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 132
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 537
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 181,
+    "left": 564,
+    "top": 320,
+    "width": 537
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1297,
+   "name": "MemoSh1",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.TabSheet1",
+   "path": "fLaserSensor.pcLaserSensor.TabSheet1.MemoSh1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 181
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 564
+    },
+    "ScrollBars": {
+     "type": "SCALAR",
+     "value": "ssBoth"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 320
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 537
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 564,
+    "top": 104,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1305,
+   "name": "edTemp",
+   "objkind": "object",
+   "parent_path": "fLaserSensor.pcLaserSensor.TabSheet1",
+   "path": "fLaserSensor.pcLaserSensor.TabSheet1.edTemp",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 564
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Text": {
+     "type": "STR",
+     "value": "edTemp"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 104
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComm",
+   "depth": 1,
+   "events": {
+    "OnReceiveData": "CommLaser1ReceiveData"
+   },
+   "geometry": {
+    "height": null,
+    "left": 92,
+    "top": 552,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 1315,
+   "name": "CommLaser1",
+   "objkind": "object",
+   "parent_path": "fLaserSensor",
+   "path": "fLaserSensor.CommLaser1",
+   "properties": {
+    "BaudRate": {
+     "type": "SCALAR",
+     "value": 38400
+    },
+    "ByteSize": {
+     "type": "SCALAR",
+     "value": "_8"
+    },
+    "CommName": {
+     "type": "STR",
+     "value": "COM2"
+    },
+    "DsrSensitivity": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "DtrControl": {
+     "type": "SCALAR",
+     "value": "DtrEnable"
+    },
+    "IgnoreNullChar": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Inx_XonXoffFlow": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 92
+    },
+    "OnReceiveData": {
+     "type": "SCALAR",
+     "value": "CommLaser1ReceiveData"
+    },
+    "Outx_CtsFlow": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Outx_DsrFlow": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Outx_XonXoffFlow": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Parity": {
+     "type": "SCALAR",
+     "value": "None"
+    },
+    "ParityCheck": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ReadIntervalTimeout": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "ReadTotalTimeoutConstant": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ReadTotalTimeoutMultiplier": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ReplaceWhenParityError": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ReplacedChar": {
+     "type": "STR",
+     "value": "\u0000"
+    },
+    "RtsControl": {
+     "type": "SCALAR",
+     "value": "RtsEnable"
+    },
+    "StopBits": {
+     "type": "SCALAR",
+     "value": "_1"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 552
+    },
+    "TxContinueOnXoff": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "WriteTotalTimeoutConstant": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "WriteTotalTimeoutMultiplier": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "XoffChar": {
+     "type": "STR",
+     "value": "\u0013"
+    },
+    "XoffLimit": {
+     "type": "SCALAR",
+     "value": 500
+    },
+    "XonChar": {
+     "type": "STR",
+     "value": "\u0011"
+    },
+    "XonLimit": {
+     "type": "SCALAR",
+     "value": 500
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTimer",
+   "depth": 1,
+   "events": {
+    "OnTimer": "Timer1Timer"
+   },
+   "geometry": {
+    "height": null,
+    "left": 120,
+    "top": 552,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 1346,
+   "name": "Timer1",
+   "objkind": "object",
+   "parent_path": "fLaserSensor",
+   "path": "fLaserSensor.Timer1",
+   "properties": {
+    "Interval": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 120
+    },
+    "OnTimer": {
+     "type": "SCALAR",
+     "value": "Timer1Timer"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 552
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComm",
+   "depth": 1,
+   "events": {
+    "OnReceiveData": "CommLaser2ReceiveData"
+   },
+   "geometry": {
+    "height": null,
+    "left": 64,
+    "top": 552,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 1352,
+   "name": "CommLaser2",
+   "objkind": "object",
+   "parent_path": "fLaserSensor",
+   "path": "fLaserSensor.CommLaser2",
+   "properties": {
+    "BaudRate": {
+     "type": "SCALAR",
+     "value": 38400
+    },
+    "ByteSize": {
+     "type": "SCALAR",
+     "value": "_8"
+    },
+    "CommName": {
+     "type": "STR",
+     "value": "COM2"
+    },
+    "DsrSensitivity": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "DtrControl": {
+     "type": "SCALAR",
+     "value": "DtrEnable"
+    },
+    "IgnoreNullChar": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Inx_XonXoffFlow": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 64
+    },
+    "OnReceiveData": {
+     "type": "SCALAR",
+     "value": "CommLaser2ReceiveData"
+    },
+    "Outx_CtsFlow": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Outx_DsrFlow": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Outx_XonXoffFlow": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Parity": {
+     "type": "SCALAR",
+     "value": "None"
+    },
+    "ParityCheck": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ReadIntervalTimeout": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "ReadTotalTimeoutConstant": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ReadTotalTimeoutMultiplier": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ReplaceWhenParityError": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ReplacedChar": {
+     "type": "STR",
+     "value": "\u0000"
+    },
+    "RtsControl": {
+     "type": "SCALAR",
+     "value": "RtsEnable"
+    },
+    "StopBits": {
+     "type": "SCALAR",
+     "value": "_1"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 552
+    },
+    "TxContinueOnXoff": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "WriteTotalTimeoutConstant": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "WriteTotalTimeoutMultiplier": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "XoffChar": {
+     "type": "STR",
+     "value": "\u0013"
+    },
+    "XoffLimit": {
+     "type": "SCALAR",
+     "value": 500
+    },
+    "XonChar": {
+     "type": "STR",
+     "value": "\u0011"
+    },
+    "XonLimit": {
+     "type": "SCALAR",
+     "value": 500
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComm",
+   "depth": 1,
+   "events": {
+    "OnReceiveData": "CommLaserInArmReceiveData"
+   },
+   "geometry": {
+    "height": null,
+    "left": 36,
+    "top": 552,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 1383,
+   "name": "CommLaserInArm",
+   "objkind": "object",
+   "parent_path": "fLaserSensor",
+   "path": "fLaserSensor.CommLaserInArm",
+   "properties": {
+    "BaudRate": {
+     "type": "SCALAR",
+     "value": 38400
+    },
+    "ByteSize": {
+     "type": "SCALAR",
+     "value": "_8"
+    },
+    "CommName": {
+     "type": "STR",
+     "value": "COM2"
+    },
+    "DsrSensitivity": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "DtrControl": {
+     "type": "SCALAR",
+     "value": "DtrEnable"
+    },
+    "IgnoreNullChar": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Inx_XonXoffFlow": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "OnReceiveData": {
+     "type": "SCALAR",
+     "value": "CommLaserInArmReceiveData"
+    },
+    "Outx_CtsFlow": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Outx_DsrFlow": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Outx_XonXoffFlow": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Parity": {
+     "type": "SCALAR",
+     "value": "None"
+    },
+    "ParityCheck": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ReadIntervalTimeout": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "ReadTotalTimeoutConstant": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ReadTotalTimeoutMultiplier": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ReplaceWhenParityError": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ReplacedChar": {
+     "type": "STR",
+     "value": "\u0000"
+    },
+    "RtsControl": {
+     "type": "SCALAR",
+     "value": "RtsEnable"
+    },
+    "StopBits": {
+     "type": "SCALAR",
+     "value": "_1"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 552
+    },
+    "TxContinueOnXoff": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "WriteTotalTimeoutConstant": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "WriteTotalTimeoutMultiplier": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "XoffChar": {
+     "type": "STR",
+     "value": "\u0013"
+    },
+    "XoffLimit": {
+     "type": "SCALAR",
+     "value": 500
+    },
+    "XonChar": {
+     "type": "STR",
+     "value": "\u0011"
+    },
+    "XonLimit": {
+     "type": "SCALAR",
+     "value": 500
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTimer",
+   "depth": 1,
+   "events": {
+    "OnTimer": "TimerInArmTimer"
+   },
+   "geometry": {
+    "height": null,
+    "left": 148,
+    "top": 552,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 1414,
+   "name": "TimerInArm",
+   "objkind": "object",
+   "parent_path": "fLaserSensor",
+   "path": "fLaserSensor.TimerInArm",
+   "properties": {
+    "Interval": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 148
+    },
+    "OnTimer": {
+     "type": "SCALAR",
+     "value": "TimerInArmTimer"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 552
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComm",
+   "depth": 1,
+   "events": {
+    "OnReceiveData": "CommLaserOutArmReceiveData"
+   },
+   "geometry": {
+    "height": null,
+    "left": 37,
+    "top": 584,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 1420,
+   "name": "CommLaserOutArm",
+   "objkind": "object",
+   "parent_path": "fLaserSensor",
+   "path": "fLaserSensor.CommLaserOutArm",
+   "properties": {
+    "BaudRate": {
+     "type": "SCALAR",
+     "value": 38400
+    },
+    "ByteSize": {
+     "type": "SCALAR",
+     "value": "_8"
+    },
+    "CommName": {
+     "type": "STR",
+     "value": "COM2"
+    },
+    "DsrSensitivity": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "DtrControl": {
+     "type": "SCALAR",
+     "value": "DtrEnable"
+    },
+    "IgnoreNullChar": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Inx_XonXoffFlow": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 37
+    },
+    "OnReceiveData": {
+     "type": "SCALAR",
+     "value": "CommLaserOutArmReceiveData"
+    },
+    "Outx_CtsFlow": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Outx_DsrFlow": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Outx_XonXoffFlow": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Parity": {
+     "type": "SCALAR",
+     "value": "None"
+    },
+    "ParityCheck": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ReadIntervalTimeout": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "ReadTotalTimeoutConstant": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ReadTotalTimeoutMultiplier": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ReplaceWhenParityError": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ReplacedChar": {
+     "type": "STR",
+     "value": "\u0000"
+    },
+    "RtsControl": {
+     "type": "SCALAR",
+     "value": "RtsEnable"
+    },
+    "StopBits": {
+     "type": "SCALAR",
+     "value": "_1"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 584
+    },
+    "TxContinueOnXoff": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "WriteTotalTimeoutConstant": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "WriteTotalTimeoutMultiplier": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "XoffChar": {
+     "type": "STR",
+     "value": "\u0013"
+    },
+    "XoffLimit": {
+     "type": "SCALAR",
+     "value": 500
+    },
+    "XonChar": {
+     "type": "STR",
+     "value": "\u0011"
+    },
+    "XonLimit": {
+     "type": "SCALAR",
+     "value": 500
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "OmronLaser/LaserSensor.dfm",
+ "total_nodes_incl_root": 105
+}

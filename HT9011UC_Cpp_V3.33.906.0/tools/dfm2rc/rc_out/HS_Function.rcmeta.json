@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "generator": "emit_rc.py W7-B1b v1.0",
+  "source_dfm": "HS_Function.dfm",
+  "formstem": "HS_FUNCTION",
+  "dialog_count": 6,
+  "control_count": 5,
+  "fallback_classes_used": [],
+  "warnings": [],
+  "dialogs": [
+    {
+      "idd_symbol": "IDD_HS_FUNCTION",
+      "idd_value": 8192,
+      "is_root": true,
+      "owner_path": "FormHS",
+      "owner_class": "TFormHS",
+      "controls": []
+    },
+    {
+      "idd_symbol": "IDD_HS_FUNCTION_PNLSLFETESTRUN",
+      "idd_value": 8193,
+      "is_root": false,
+      "owner_path": "FormHS.pnlSlfeTestRun",
+      "owner_class": "TPanel",
+      "controls": [
+        {
+          "symbol": "IDC_HS_FUNCTION_LABEL1",
+          "value": 1024,
+          "win32_class": "Static",
+          "caption": "SELF TEST RUN STATE",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "FormHS.pnlSlfeTestRun.Label1",
+          "fallback_class": false,
+          "x": 5,
+          "y": 6,
+          "cx": 180,
+          "cy": 22
+        }
+      ]
+    },
+    {
+      "idd_symbol": "IDD_HS_FUNCTION_PNLSLFETESTRUN_PL_ATCSELFTESTSATUS_01",
+      "idd_value": 8194,
+      "is_root": false,
+      "owner_path": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_01",
+      "owner_class": "TPanel",
+      "controls": [
+        {
+          "symbol": "IDC_HS_FUNCTION_LABEL2",
+          "value": 1025,
+          "win32_class": "Static",
+          "caption": "Temperature(+5)",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_01.Label2",
+          "fallback_class": false,
+          "x": 25,
+          "y": 11,
+          "cx": 113,
+          "cy": 19
+        }
+      ]
+    },
+    {
+      "idd_symbol": "IDD_HS_FUNCTION_PNLSLFETESTRUN_PL_ATCSELFTESTSATUS_02",
+      "idd_value": 8195,
+      "is_root": false,
+      "owner_path": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_02",
+      "owner_class": "TPanel",
+      "controls": [
+        {
+          "symbol": "IDC_HS_FUNCTION_LABEL3",
+          "value": 1026,
+          "win32_class": "Static",
+          "caption": "Temperature(-5)",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_02.Label3",
+          "fallback_class": false,
+          "x": 25,
+          "y": 11,
+          "cx": 109,
+          "cy": 19
+        }
+      ]
+    },
+    {
+      "idd_symbol": "IDD_HS_FUNCTION_PNLSLFETESTRUN_PL_ATCSELFTESTSATUS_03",
+      "idd_value": 8196,
+      "is_root": false,
+      "owner_path": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_03",
+      "owner_class": "TPanel",
+      "controls": [
+        {
+          "symbol": "IDC_HS_FUNCTION_LABEL4",
+          "value": 1027,
+          "win32_class": "Static",
+          "caption": "Temperature(+0)",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_03.Label4",
+          "fallback_class": false,
+          "x": 25,
+          "y": 11,
+          "cx": 113,
+          "cy": 19
+        }
+      ]
+    },
+    {
+      "idd_symbol": "IDD_HS_FUNCTION_PNLSLFETESTRUN_PL_ATCSELFTESTSATUS_99",
+      "idd_value": 8197,
+      "is_root": false,
+      "owner_path": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_99",
+      "owner_class": "TPanel",
+      "controls": [
+        {
+          "symbol": "IDC_HS_FUNCTION_LABEL5",
+          "value": 1028,
+          "win32_class": "Static",
+          "caption": "ATC STOP",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_99.Label5",
+          "fallback_class": false,
+          "x": 45,
+          "y": 11,
+          "cx": 75,
+          "cy": 19
+        }
+      ]
+    }
+  ]
+}

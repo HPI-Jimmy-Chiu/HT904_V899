@@ -1,0 +1,2314 @@
+{
+ "control_node_count": 28,
+ "encoding_used": "cp950",
+ "form_class": "TfSmartDiagnostic",
+ "form_name": "fSmartDiagnostic",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fSmartDiagnostic.pc_SmartDiagnostic",
+    "fSmartDiagnostic.pn_SmartDiagnosticTitle",
+    "fSmartDiagnostic.SmartDiagnosticTimer"
+   ],
+   "class": "TfSmartDiagnostic",
+   "depth": 0,
+   "events": {
+    "OnCreate": "FormCreate",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow"
+   },
+   "geometry": {
+    "height": null,
+    "left": 378,
+    "top": 202,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "fSmartDiagnostic",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "fSmartDiagnostic",
+   "properties": {
+    "BorderStyle": {
+     "type": "SCALAR",
+     "value": "bsSingle"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Smart Diagnostic"
+    },
+    "ClientHeight": {
+     "type": "SCALAR",
+     "value": 658
+    },
+    "ClientWidth": {
+     "type": "SCALAR",
+     "value": 804
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnFace"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 378
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnCreate": {
+     "type": "SCALAR",
+     "value": "FormCreate"
+    },
+    "OnDestroy": {
+     "type": "SCALAR",
+     "value": "FormDestroy"
+    },
+    "OnShow": {
+     "type": "SCALAR",
+     "value": "FormShow"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 202
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Summary",
+    "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup"
+   ],
+   "class": "TPageControl",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 616,
+    "left": 0,
+    "top": 39,
+    "width": 800
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "TABHOST",
+   "line": 20,
+   "name": "pc_SmartDiagnostic",
+   "objkind": "object",
+   "parent_path": "fSmartDiagnostic",
+   "path": "fSmartDiagnostic.pc_SmartDiagnostic",
+   "properties": {
+    "ActivePage": {
+     "type": "SCALAR",
+     "value": "ts_SmartDiagnostic_Setup"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 616
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Style": {
+     "type": "SCALAR",
+     "value": "tsButtons"
+    },
+    "TabIndex": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 39
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 800
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Summary.pn_SmartDiagnostic_Summary"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 29,
+   "name": "ts_SmartDiagnostic_Summary",
+   "objkind": "object",
+   "parent_path": "fSmartDiagnostic.pc_SmartDiagnostic",
+   "path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Summary",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Summary"
+    },
+    "ImageIndex": {
+     "type": "SCALAR",
+     "value": 1
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [
+    "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Summary.pn_SmartDiagnostic_Summary.sb_SmarDiagnostic_CreateCyliderName",
+    "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Summary.pn_SmartDiagnostic_Summary.lb_SmartDiagnostic_SystemTime",
+    "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Summary.pn_SmartDiagnostic_Summary.sg_SmartDiagnostic_Summary",
+    "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Summary.pn_SmartDiagnostic_Summary.pn_SmartDiagnostic_Time"
+   ],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 585,
+    "left": 0,
+    "top": 0,
+    "width": 792
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 32,
+   "name": "pn_SmartDiagnostic_Summary",
+   "objkind": "object",
+   "parent_path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Summary",
+   "path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Summary.pn_SmartDiagnostic_Summary",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvSpace"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 585
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 792
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 4,
+   "events": {
+    "OnClick": "sb_SmarDiagnostic_CreateCyliderNameClick"
+   },
+   "geometry": {
+    "height": 40,
+    "left": 536,
+    "top": 5,
+    "width": 244
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 42,
+   "name": "sb_SmarDiagnostic_CreateCyliderName",
+   "objkind": "object",
+   "parent_path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Summary.pn_SmartDiagnostic_Summary",
+   "path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Summary.pn_SmartDiagnostic_Summary.sb_SmarDiagnostic_CreateCyliderName",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Create Initial Cylider Name"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clNavy"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Glyph.Data": {
+     "type": "BLOB",
+     "value": {
+      "byte_len": 1786,
+      "hex": "F6060000424DF606000000000000360000002800000018000000180000000100180000000000C0060000252E0000252E00000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF6F6F7CFCFD0C9CACBB9BDBFB9BEC1B9BEC1B9BEC1B9BEC1B9BEC1BDC0C2CBCCCDD3D3D4FAFAFAFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDDDEE04A4D505D5F62CBCED0CBCED0CBCED0CBCED0CBCED0CBCFD0ACAEB0484B4F515357E9EAECFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBEBEBB4D4F51707175EBECECE5E5E5E5E5E5E5E5E5E5E5E5E7E7E7D4D5D656585C51545798948CADA79DABA59BA9A398A7A296A6A094A49E92A49E92A29C90A8A399EAE9E6FFFFFFBBA98562605D787B7EDEDEDED8D8D8D8D8D8D8D8D8D8D8D8DADADACDCDCE696B6E6465677D735F8F826A8A7D658B7F6690846B988C739C8F76A3977EAB9E85A47D2DE6D7B9FFFFFF979590757677818284DDDBDBD7D6D6D7D6D6D7D6D6D7D6D6D9D7D7CECDCE787A7C75777996979AAEAFB1ADADAFB1B2B4B8BABBC0C1C3C9CACBD2D3D4DBDBDD6F6B61C5C3BFFFFFFF919396949596878B8DDFEAEBDCE7E7DCE6E7DCE6E7DCE6E7DFE9E9CBD6D7888A8B88888AA1A2A3BDBDBEBABABBBBBCBCC2C3C3CBCBCCCECECFD3D3D4DBDBDB5C5F64BDBEC0FFFFFF909193A4A4A593999B83979A84969983969883969885989A86999B829496939596949595B0B1B2CDCECEC8C8C9CACACBCECECED5D5D5DADADBDADBDBDEDEDF5E6164BEBFC0FFFFFF8F90929E9E9FB3B3B44C4C4F58575A8685878483857F7F81717173686769939394949596BEBFC0DDDFDEE2E3E3E3E3E4E6E6E6D4D4D5929396D3D3D5E4E4E55F6164BEBFC0FFFFFF8E8F91959596B1B1B3727375818385A9AAABA9AAAB67696B5254576F71738E8F90959596CECECFEEEEEFF0F0F0EEEEEEB5B7B845484C313338DADBDCEDEEEE616366BDBFC0FFFFFF8D8F918C8E8FA1A2A37B7C7EB4B5B7CCCCCCBEBFBF5F60634A4C4F7E80828F9091959697D0D1D1F6F7F7D5D6D6777A7C2B2E321C1F233F4245DCDEDEEFEFEF626467BDBFC0FFFFFF8E8F907A7C7D8A8B8C737577C1C1C2EFEFEFEDEDED97989A707173898A8C7E80818F9192CACBCCB0B2B2616365383B4034373B2A2D31474A4DDFE0E0F1F1F2636568BDBEC0FFFFFF87888A46494D7E8083ABACADD1D1D1E8E8E9EAEAEAE7E8E8E5E6E6B5B6B7696B6EB4B5B7C6C8C891939574777854575A45484B373A3D4D4F53E3E3E3F4F4F4636669BDBEBFFFFFFF8A8C8E989A9CFCFCFCEEEEEFECECECEAEAEAEBEBEBEDEDEEEEEEEEF2F2F3F5F6F6FAFBFBFBFBFCF8F8F9B1B2B362646653565840434657595CE6E6E6F5F5F5646669BDBEBFFFFFFF8B8D8F9EA0A1FFFFFFFCFCFCFDFDFDFEFEFDFEFEFFFFFFFFFFFFFFFFFFFFFFFFFFFDFDFDFEFDFEDFDFE09092936A6D6F6A6C6F989A9C78797CE4E6E6F7F8F8646769BDBEBFFFFFFF8B8D8F9D9EA1FFFFFFF9F9F9FBFBFBFCFCFCFAFBFBFBFBFBFBFBFBFBFBFBF8F8F9F0F0F0D5D5D6AAABAD969799999A9CD3D3D4FFFFFEDBDBDCEEEEEEF8F8F866676BBDBEBFFFFFFF8B8D8F9EA0A2FFFFFFFBFBFBFCFCFDFCFCFDFEFEFEFBFBFBF4F4F4EBECECDEDFDFCDCECEC2C3C3C5C5C5D8D8D9F6F6F6FFFFFFF9F9FAFDFDFCFAFAFAF9F9F966686BBDBEBFFFFFFF898C8EA4A6A8FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF6B6D70BDBEBFFFFFFF95989A818789B9BEBEB6BBBCB5B9BAB4B8B9B2B6B8B1B6B7B0B4B6AFB3B4ADB2B3ACB1B2ABB0B1A9AEAFA6A9ABA4A6A7A2A4A6A4A4A5A3A3A29B9DA69799A844494EC0C2C2FFFFFFA38F943B111C3E15203D15203D15203D141F3C141F3C141F3C131E3B131E3B121E3A121D3A121D340A175B3B3CCEC6ABB5A892C9BA9BD1C6A75E60B0818ADB482A3CCDC2C4FFFFFFC59DA5924957954E5C954D5C944B5A924A589248579147569045548F44538F43528E41508D404F893A4A9C5863C59D9EBD9091C09393C2999AA37794B38A9F975160DFC9CDFFFFFFFCF9FAFCFAFAFCFAFAFCFAFAFBF9FAFBF9F9FBF8F9FBF8F9FBF7F8FAF7F8FAF7F7FAF6F7FAF6F7FAF6F7F7F1F3F1E8EBF2E9ECF1E8EBF0E7EAF4EAE8F1E6E6F6F0F0FDFCFCFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+      "sha1": "dddf112458bca7bd1a755606703e22ea1c02d31f"
+     }
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 536
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "sb_SmarDiagnostic_CreateCyliderNameClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 244
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 10,
+    "top": 15,
+    "width": 90
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 113,
+   "name": "lb_SmartDiagnostic_SystemTime",
+   "objkind": "object",
+   "parent_path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Summary.pn_SmartDiagnostic_Summary",
+   "path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Summary.pn_SmartDiagnostic_Summary.lb_SmartDiagnostic_SystemTime",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Now Time"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -21
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 90
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alBottom",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TStringGrid",
+   "depth": 4,
+   "events": {
+    "OnDrawCell": "sg_SmartDiagnostic_SummaryDrawCell"
+   },
+   "geometry": {
+    "height": 531,
+    "left": 2,
+    "top": 52,
+    "width": 788
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 130,
+   "name": "sg_SmartDiagnostic_Summary",
+   "objkind": "object",
+   "parent_path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Summary.pn_SmartDiagnostic_Summary",
+   "path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Summary.pn_SmartDiagnostic_Summary.sg_SmartDiagnostic_Summary",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alBottom"
+    },
+    "ColCount": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "FixedColor": {
+     "type": "SCALAR",
+     "value": 9534289
+    },
+    "FixedCols": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clNavy"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 531
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "OnDrawCell": {
+     "type": "SCALAR",
+     "value": "sg_SmartDiagnostic_SummaryDrawCell"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "RowCount": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "ScrollBars": {
+     "type": "SCALAR",
+     "value": "ssVertical"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 52
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 788
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 110,
+    "top": 15,
+    "width": 180
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 151,
+   "name": "pn_SmartDiagnostic_Time",
+   "objkind": "object",
+   "parent_path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Summary.pn_SmartDiagnostic_Summary",
+   "path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Summary.pn_SmartDiagnostic_Summary.pn_SmartDiagnostic_Time",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clTeal"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 110
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 180
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 168,
+   "name": "ts_SmartDiagnostic_Setup",
+   "objkind": "object",
+   "parent_path": "fSmartDiagnostic.pc_SmartDiagnostic",
+   "path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Setup"
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [
+    "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_CyliderManagement",
+    "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_Parameter",
+    "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.sgCylinder",
+    "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.edTemp"
+   ],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 585,
+    "left": 0,
+    "top": 0,
+    "width": 792
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 170,
+   "name": "pn_SmartDiagnostic_Setup",
+   "objkind": "object",
+   "parent_path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup",
+   "path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvSpace"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 585
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 792
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_CyliderManagement.sb_SmartDiagnostic_ResetRecordCount",
+    "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_CyliderManagement.pn_SmartDiagnostic_CyliderManagementTop",
+    "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_CyliderManagement.cob_SmartDiagnostic_CyliderName",
+    "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_CyliderManagement.sg_SmartDiagnostic_CyliderManagement"
+   ],
+   "class": "TPanel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 543,
+    "left": 10,
+    "top": 10,
+    "width": 250
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 180,
+   "name": "pn_SmartDiagnostic_CyliderManagement",
+   "objkind": "object",
+   "parent_path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup",
+   "path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_CyliderManagement",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvSpace"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 543
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 250
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 5,
+   "events": {
+    "OnClick": "sb_SmartDiagnostic_ResetRecordCountClick"
+   },
+   "geometry": {
+    "height": 40,
+    "left": 16,
+    "top": 61,
+    "width": 210
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 189,
+   "name": "sb_SmartDiagnostic_ResetRecordCount",
+   "objkind": "object",
+   "parent_path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_CyliderManagement",
+   "path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_CyliderManagement.sb_SmartDiagnostic_ResetRecordCount",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Reset Cylider Record"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clNavy"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Glyph.Data": {
+     "type": "BLOB",
+     "value": {
+      "byte_len": 2410,
+      "hex": "66090000424D660900000000000036000000280000001C0000001C000000010018000000000030090000232E0000232E00000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFCF4E4F1E3C7FEFDFBFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFAFAFAC7C8C994959796989ADCDCDDFDF9EFF5DDAFECC26EE3A52ADD9300C7973DBD8318D7B067EFDDBAFEFDFBFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD3D3D4787A7C66676AB2B3B5DCDCDCFAFAFAFBF0DCDE9403DD9300DD9300DD9300DD9300C7973DB77906BD7D05C48204CE8F15EBD2A0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFECEDED7E80839A9B9DE4E4E4E4E4E5F9F9F9FFFFFFFFFFFFFAEDD3DD9300DD9300DD9300DF970AE2A325C79840B77906BD7D05C48204CA8603E2BD75FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFCBCBCC8F9193DFE0E0D4D5D6F5F5F5FFFFFFFFFFFFFFFFFFFFFFFFFAEDD2E9B858EABB5FEBBF68EDC575EDC576C79841B77906BD7D05C48204CA8603E2BD75FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC3C3C5BABBBCDADBDBC6C7C8FDFDFDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFAEBCFEBBD63EBBD61E6B75BDEAF53D09F44C79539C89A44C6902AC58305CA8603E2BD75FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE1E2E2BBBBBDD3D3D4B9B9BBFEFEFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEF8ECEAC987D69F34C38204B97A05B97A06AF7406A66E089D6709AB7921CBA154E8CFA0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFABACAECCCCCDB8B8B9EEEEEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF8F2E6E6CEA3CDA863A38D65D7C099E8DCC6FAF7F2FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC3C4C5C4C5C6C4C5C69C9EA0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDBDCDC8A8B8D9B9C9C808284F1F1F1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB1B2B3BDBEBEADAEAFCBCBCCFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFCFCFC9697989E9FA0ADAEB0FEFEFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBEBEBB6B7B7B6B7B7818384F8F8F8FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBEBFC09D9C9ADFDFE0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFCACACBAFAFB0AFAFB0737477FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDF9EFF5DDAFECC26EE3A52AD59F39B98424D8B575F0E2C6FFFEFEFFFFFFFFFFFFFFFFFFFFFFFFB3B4B5A7A8A9A7A8A96E7073FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE9B858DE9403DD9300DD9300DD9300D59F39AF7407B77906BD7D05C48B1FE0BD7AFFFFFFFFFFFFFFFFFFADADAEA0A1A2A0A1A25D5F62FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE4A72EDD9300DD9300DD9300DE9607D7A546AF7407B77906BD7D05BD7D05CA8E1CFFFFFFFFFFFFFFFFFFAFB0B1999A9B999A9B47494CFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE9B958E7B248E8B651EBBD63EDC575DAB060AF7407B77906BD7D05BD7D05CA8E1CFFFFFFFFFFFFFFFFFFB9BABB9293949293944B4E51EAEAEAFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFECC26DEBBD63EBBD61E6B75CDBAD55CFA14BC29542BE861FBD7D05BD7D05CA8E1CFFFFFFFFFFFFFFFFFFCBCCCC8D8E8F8D8E8F6264667E7F82FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEECE8EDBA948C5860CB97A05B97A06AF7406A66E089D6709B1802CC29545D1A34DFFFFFFFFFFFFFFFFFFE6E7E787888A87888A8586882D3034D9DADAFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF4EBD8E1C694C79E50B68937C19F64D3BA90E2D4BCF4EFE9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF93949582838482838466686A35373CD5D5D6FFFFFFFFFFFFFFFFFFF0F0F1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDFDFD9E9FA18A8B8D9E9FA1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC9C9CA7C7D7F7C7D7F7C7D7F606164272A2DA6A7A9FAFAFAEEEEEE5B5D61DBDBDCFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDDDDDE8F91929D9E9F8C8E90ECECEDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDFDFD92939477787A77787A77787A696A6D36393D2D2F348081836465682F3136DADBDBFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFA5A6A790908FC3C4C5FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE8E8E97A7B7E717275717275717275717275696A6D595A5E71727557595D2E3035D8D9DAFFFFFFFEFCF6F6E2B9EDC576E4A832CD9F47C59A4BE3CA9CFAF4EBFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE3E3E477787A6C6D6F6C6D6F6C6D6F6C6D6F6C6D6F6C6D6F6C6D6F5456593D4044E6AF41DE9608DD9300DD9300DD9300CC9D44AF7407B77906B87B08CE9F45ECD7ADFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF1F1F195969866676A66676A66676A66676A66676A66676A66676AACACACDD9300DD9300DD9300DD9300DE9402CD9F48AF7407B77906B77906BD7D05D5A64DFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE1E1E2A0A0A2767679616265616265616265838486FFFEFAE5AD3CE7B045E8B54FEBBE65EEC87CCEA353AF7407B77906B77906BD7D05D5A64DFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC1C2C35C5D60696A6DFEFEFEFFFCF6ECC16BECC16BECC16BE7BB64DEB15ACA9F50BE8E35B97C0AB77906BD7D05D5A64DFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC3C4C5636467F8F8F8FFFFFFFFFDF8E7BE6DD9A43DC88C18B97A05AF7406AF7407A66E08A47016BC8F3FC79841D7AD5EFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD1D2D2EDEDEDFFFFFFFFFFFFFFFFFFFFFFFFFCF8F0E9D5AFD1AE6DBB882AB17F25BA9350CBAF7DDAC8A9EAE2D6FEFDFCFFFFFF",
+      "sha1": "fbb2a818658e451c537412330562cd2c79c8ed70"
+     }
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "sb_SmartDiagnostic_ResetRecordCountClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 61
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 210
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 2,
+    "top": 2,
+    "width": 246
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 280,
+   "name": "pn_SmartDiagnostic_CyliderManagementTop",
+   "objkind": "object",
+   "parent_path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_CyliderManagement",
+   "path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_CyliderManagement.pn_SmartDiagnostic_CyliderManagementTop",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Cylider Management"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 9534289
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 246
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 20,
+    "top": 30,
+    "width": 200
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 297,
+   "name": "cob_SmartDiagnostic_CyliderName",
+   "objkind": "object",
+   "parent_path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_CyliderManagement",
+   "path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_CyliderManagement.cob_SmartDiagnostic_CyliderName",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clNavy"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 30
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 200
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": "alBottom",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TStringGrid",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 433,
+    "left": 2,
+    "top": 108,
+    "width": 246
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 311,
+   "name": "sg_SmartDiagnostic_CyliderManagement",
+   "objkind": "object",
+   "parent_path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_CyliderManagement",
+   "path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_CyliderManagement.sg_SmartDiagnostic_CyliderManagement",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alBottom"
+    },
+    "ColCount": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "FixedColor": {
+     "type": "SCALAR",
+     "value": 9534289
+    },
+    "FixedCols": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clNavy"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 433
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "RowCount": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "ScrollBars": {
+     "type": "SCALAR",
+     "value": "ssNone"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 108
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 246
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_Parameter.lb_SmartDiagnostic_LimitCountValue",
+    "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_Parameter.lb_SmartDiagnostic_LimitCheckTime",
+    "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_Parameter.pn_SmartDiagnostic_ParameterTop",
+    "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_Parameter.ed_SmartDiagnostic_LimitCountValue",
+    "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_Parameter.ed_SmartDiagnostic_LimitCheckTime"
+   ],
+   "class": "TPanel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 120,
+    "left": 265,
+    "top": 10,
+    "width": 515
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 332,
+   "name": "pn_SmartDiagnostic_Parameter",
+   "objkind": "object",
+   "parent_path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup",
+   "path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_Parameter",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvSpace"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 120
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 265
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 515
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 10,
+    "top": 30,
+    "width": 200
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 341,
+   "name": "lb_SmartDiagnostic_LimitCountValue",
+   "objkind": "object",
+   "parent_path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_Parameter",
+   "path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_Parameter.lb_SmartDiagnostic_LimitCountValue",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Limit Count Value"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 30
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 200
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 10,
+    "top": 70,
+    "width": 200
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 358,
+   "name": "lb_SmartDiagnostic_LimitCheckTime",
+   "objkind": "object",
+   "parent_path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_Parameter",
+   "path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_Parameter.lb_SmartDiagnostic_LimitCheckTime",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Limit Check Time(sec)"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Layout": {
+     "type": "SCALAR",
+     "value": "tlCenter"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 70
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 200
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 2,
+    "top": 2,
+    "width": 511
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 375,
+   "name": "pn_SmartDiagnostic_ParameterTop",
+   "objkind": "object",
+   "parent_path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_Parameter",
+   "path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_Parameter.pn_SmartDiagnostic_ParameterTop",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Parameter"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 9534289
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 511
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 5,
+   "events": {
+    "OnMouseDown": "ed_SmartDiagnostic_LimitCountValueMouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 220,
+    "top": 30,
+    "width": 120
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 392,
+   "name": "ed_SmartDiagnostic_LimitCountValue",
+   "objkind": "object",
+   "parent_path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_Parameter",
+   "path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_Parameter.ed_SmartDiagnostic_LimitCountValue",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 220
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "ed_SmartDiagnostic_LimitCountValueMouseDown"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 30
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 120
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 5,
+   "events": {
+    "OnMouseDown": "ed_SmartDiagnostic_LimitCheckTimeMouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 220,
+    "top": 70,
+    "width": 120
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 406,
+   "name": "ed_SmartDiagnostic_LimitCheckTime",
+   "objkind": "object",
+   "parent_path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_Parameter",
+   "path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_Parameter.ed_SmartDiagnostic_LimitCheckTime",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 220
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "ed_SmartDiagnostic_LimitCheckTimeMouseDown"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 70
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 120
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TStringGrid",
+   "depth": 4,
+   "events": {
+    "OnDrawCell": "sgCylinderDrawCell",
+    "OnSelectCell": "sgCylinderSelectCell"
+   },
+   "geometry": {
+    "height": 417,
+    "left": 264,
+    "top": 136,
+    "width": 985
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 421,
+   "name": "sgCylinder",
+   "objkind": "object",
+   "parent_path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup",
+   "path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.sgCylinder",
+   "properties": {
+    "ColCount": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "ColWidths": {
+     "type": "LIST",
+     "value": [
+      64,
+      64,
+      64,
+      64,
+      64,
+      64
+     ]
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "FixedColor": {
+     "type": "SCALAR",
+     "value": 9534289
+    },
+    "FixedCols": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clNavy"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 417
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 264
+    },
+    "OnDrawCell": {
+     "type": "SCALAR",
+     "value": "sgCylinderDrawCell"
+    },
+    "OnSelectCell": {
+     "type": "SCALAR",
+     "value": "sgCylinderSelectCell"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "RowCount": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "ScrollBars": {
+     "type": "SCALAR",
+     "value": "ssVertical"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 985
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 267,
+    "top": 556,
+    "width": 113
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 449,
+   "name": "edTemp",
+   "objkind": "object",
+   "parent_path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup",
+   "path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.edTemp",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "ImeName": {
+     "type": "STR",
+     "value": ""
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 267
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 556
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 113
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": "False"
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [
+    "fSmartDiagnostic.pn_SmartDiagnosticTitle.sb_SmartDiagnostic_Setup",
+    "fSmartDiagnostic.pn_SmartDiagnosticTitle.sb_SmartDiagnostic_Summary",
+    "fSmartDiagnostic.pn_SmartDiagnosticTitle.sb_SmartDiagnostic_Exit",
+    "fSmartDiagnostic.pn_SmartDiagnosticTitle.sb_SmartDiagnostic_Save"
+   ],
+   "class": "TPanel",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 50,
+    "left": 0,
+    "top": 0,
+    "width": 804
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 461,
+   "name": "pn_SmartDiagnosticTitle",
+   "objkind": "object",
+   "parent_path": "fSmartDiagnostic",
+   "path": "fSmartDiagnostic.pn_SmartDiagnosticTitle",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 50
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 804
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 40,
+    "left": 130,
+    "top": 5,
+    "width": 120
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 470,
+   "name": "sb_SmartDiagnostic_Setup",
+   "objkind": "object",
+   "parent_path": "fSmartDiagnostic.pn_SmartDiagnosticTitle",
+   "path": "fSmartDiagnostic.pn_SmartDiagnosticTitle.sb_SmartDiagnostic_Setup",
+   "properties": {
+    "AllowAllUp": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Setup"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clNavy"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Glyph.Data": {
+     "type": "BLOB",
+     "value": {
+      "byte_len": 4202,
+      "hex": "66100000424D661000000000000036000000280000002500000025000000010018000000000030100000232E0000232E00000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FEFEFEFEFEFEF9F9F9F3F3F3EDEDEEE8E8E9E1E2E2D5D6D7C8C9CAB9BABCABADAEA3A4A6A1A1A3A5A6A8A9AAACABACADABACADABACADABACADABACADABACADABACADA9AAACA5A6A89FA0A2999B9D97999B9B9C9EA6A7A9B7B8BAC8C9CAD5D6D7E4E4E5EAEAEAEEEEEFF5F5F5FFFFFF00FCFCFCF3F3F3DEDEDFC7C8C9B0B1B39C9D9F9092948D8F91909294999B9D997B7D9A5231913C1C813136C6A5ACFEFEFEFFFFFFFFFFFFFFFFFFFEFEFEF6F6F7EDEDEEDEDEDFCBCCCDB6B7B9A7A8AA989A9C9293968D8F919293969B9C9EA4A5A7B5B6B7C7C8C9D6D7D8E9E9EAFFFFFF00FFFFFFFBFBFBF5F6F6F0F0F1E4E4E5D5D5D6C5C6C7B7B8BAABACADAEA491D48E05DD9300DD9300D38703812B214E4147484A4E484A4E484A4E484A4D47494C45474A44464944464A484A4D4C4E52515357B5B6B8E3E4E4E5E5E6EAEAEAEEEEEFF3F3F3F9F9F9FCFCFCFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB2B3B47E6C49D59005DD9300DD9300BD6E0B673C4760626561636662646762646763656863656864666965676A65676A2A2D31171A1F4C4E52FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDBDBDBA0A1A1A1A2A2B59D6FDD9300DD9300D68B02854F5BA8A9AAA9AAABAAABACABACADACADAEAEAFAFAFB0B1B0B1B2B0B1B2818284171A1F171A1FAFB0B2FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBFBFB9173798A6169998A8E9F8377DD9300DD9300DD93007C2728916E76AAABACABACADACADAEAEAFAFAFB0B1B0B1B2B0B1B2B3B4B4B4B5B63F4246171A1F33363AF7F7F8FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFCCC0AAD38B09AF5F10A14F15C97C07DD9300DD9300DD9300D58903933E1B7F3F4CA59D9FAEAFAFAFB0B1B0B1B2B0B1B2B3B4B4B4B5B6B5B6B7999B9C181B20171A1F8F9193FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF3F3F3A89F8CDD9301DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300B6660E7A272E987880B0B1B2B0B1B2B3B4B4B4B5B6B5B6B7B6B7B7B8B9B9595B5E171A1F222429E8E8E9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB5B6B6A1A2A3BE9C59DD9301DD9300DD9300DA9002C89132DD9301DD9300DD9300DD9300D185048D381D844955AEA8A9B4B5B6B5B6B7B6B7B7B8B9B9B9BABAACADAE212429171A1F6E7073FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE7E8E8A1A2A3A3A4A5A4A5A6B1A285C39D50C49E52B2A68EAAABACB4A27FD69516DD9300DD9300DD9300DD9300B05F127D2F38A0868CB6B7B7B8B9B9B9BABAB9BABBBBBCBC747678171A1F181B20D2D2D3FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFEFEFEA8A9AAA3A4A5A4A5A6A5A6A7A6A7A8A8A9AAA9AAABA1A3A47E8082EEEEEFFEFAF3EBBF68DD9300DD9300DD9300DD9300E1B2669950418B535EB5B1B2B9BABBBBBCBCBDBEBEBBBCBC313438171A1F4F5155FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFD8D8D9A3A4A5A4A5A6A5A6A7A6A7A8A8A9AAA9AAAB95979866686CFDFDFDFFFFFFFFFFFFFFFFFFF6E2B9E19E1BDD9300DD9300E3A52AF5DFB3C893667C2E3AA79196BDBEBEBEBFBFBEBFC0909193171A1F171A1FB3B4B5FFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFAFAFAA3A4A5A4A5A6A5A6A7A6A7A8A8A9AAA9AAABA0A1A33F4246F2F2F2FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDF9EFEABB5EDD9300DD9300EFCA82F6E0B5E7C48E924439915F69BBB9BAC0C1C1C1C2C2484B4E171A1F35373CF8F8F8FFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFC6C7C7A4A5A6A5A6A7A6A7A8A8A9AAA9AAABAAABAC55575AA0A1A3FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5DDAFE09C15E19D18F5DEB0F4DBAAF1D49DBC81557D323FB09DA1C2C3C3A8A9AB1A1D22171A1F929396FFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFF1F1F1A3A4A6A5A6A7A6A7A8A8A9AAA9AAABAAABACA1A2A31D2025F2F2F2FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDF7EBE9B754EBBD63F6E0B5F4DBAAF3D7A0DFB578893934986B74B9AFB27344458F4C327D2C2B985C68E7D7DAFFFFFF00FFFFFFFFFFFFB5B6B7A5A6A7A7A8A9B0B1B2AEAFB0AAABACABACAD787A7C494B4FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF4DAA6F2D59CF4DBAAF3D7A0F1D295EDC986B97A4CD09957EBBF69EABC60E9B754CC8D3D812F33DAC3C800FFFFFFE5E6E6BEBEBFD6D6D7DFDFE0E4E4E5E4E5E5E6E6E6D4D5D5727477616467FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF1EADBE9CE97F3D7A0F1D295F0CE8BEFCA80EDC575ECC16BEABC60E9B755E7B34BD79B3A9C5C6200FFFFFFDDDEDED8D9D9DDDDDDDDDDDEE1E1E2E1E2E2E5E5E6E6E6E6949698606265FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5F5F5C2C3C3DBC59BF1D49BF1D295F0CE8BEFCA80EDC575D9AA62A18040D1A44AE7B34CE6D0C900FFFFFFFBFBFBD5D6D6DADADADADADBDEDEDFDEDFDFE2E3E3E3E3E4A6A8AA45484CFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEEEFEFC3C4C5C4C5C6CCC5B4F0D092F0CE8BEFCA80CC9456777478171A1F7F8083FFFCF6FFFFFF00FFFFFFFFFFFFE4E5E5D7D7D8D7D8D8DBDBDCDCDCDCDFE0E0E0E0E1CDCDCE191C21ECEDEDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE0E0E1C4C5C6C5C6C6CCC7BBF3D7A0F1D295F0CE8BB270472319202A2D31F1F1F1FFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFD5D6D6D4D5D5D9D9D9D9DADADDDDDEDDDDDEE1E1E14F5155949597FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD5D6D7D7D8D8DDDEDEECE1CBF3D7A0F1D295F0CE8BD19B5E5617259E9C9FFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFEEEEEED2D2D2D6D6D7D6D7D7DADADBDBDBDBDEDFDFBFC0C12A2D31EAEAEAFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEEEEEFF4F4F4F4F4F4F5F5F5F8F7F4F1D499F1D295F0CE8BEEC97FBA7B49853743D2B6BCFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFD8D9DAD3D4D4D3D4D4D8D9D9D9D9DADCDCDDDCDDDD9E9FA14B4D51F6F6F7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF1F2F2F1F2F2F2F2F2F5F5F5F5F5F5F5F5F5F3E5CBF1D499F1D295F0CE8BEFCA80E3B873FBF5F3FFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFF7F7F7CFD0D1D2D2D2D6D6D7D6D7D7DADADADBDBDBDBDCDCAEB0B157595CE4E4E5FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEDEEEEEDEDEDF0F0F0F0F1F1F3F3F3F3F3F3F5F5F5F5F6F694928D705F3DA89265F9EBCEFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE0E0E0CFD0D1D3D4D4D4D4D4D8D8D8D8D9D9D8D9D9DCDDDDD7D8D8A3A4A6A1A2A5D4D4D5F9F9F9F4F4F4EBECECE8E9E9EBEBEBEBECECEEEFEFEFEFEFF1F1F1F1F2F2F3F4F4DEDEDE191C211C1F24DDDDDEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFEFED1D2D2D1D1D1D2D3D3D5D6D6D5D6D7D7D7D7DBDBDBDBDCDCDEDEDFDFDFDFE2E2E2E2E3E3E5E5E6E5E6E6E8E9E9E9E9E9EAEAEAEDEDEDEDEDEDEFF0F0F0F0F0F2F2F2606265171A1F7E7F82FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE9E9E9D2D3D3D3D3D3D3D3D4D4D5D5D5D6D6D8D9D9D8D9DADCDDDDDDDDDDE0E0E0E0E1E1E3E4E4E4E4E4E7E7E7E8E8E8E8E9E9EAEBEBEBEBEBEEEEEEEEEEEEC0C1C3171A1F292C30F0F0F1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD6D6D7D0D1D1D4D5D5D5D6D6D6D6D6D6D6D7D7D8D8DADBDBDBDBDBDEDFDFDFDFE0E1E2E2E2E3E3E6E6E6E6E7E7E6E7E7E9E9E9E9EAEAECECECE7E8E83B3D41171A1F9FA0A2FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF2F2F3CECFCFD3D3D3D3D4D4D3D4D5D7D8D8D8D8D8D8D9D9D9DADADCDDDDDDDDDDE0E1E1E1E2E2E4E4E4E4E4E4E5E6E6E7E8E8E8E8E8EAEBEB999A9C171A1F3E4045FCFCFCFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDDDDDDD1D1D1D1D1D2D2D3D3D5D6D6D6D7D7D9DADADADADBDADBDBDCDCDCDFE0E0E0E0E0E2E2E2E3E4E4E4E4E4E6E7E7E7E7E7DBDBDB202328171A1FC0C0C2FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFAFAFACECFD0C9C9CAC9CACBCDCDCECDCECFD1D2D2D2D2D2D5D6D6D7D7D7D7D8D8D7D8D8DBDBDBDBDCDCDCDDDDDFE0E0E0E1E1707375171A1F5C5E62FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF9A9B9E797B7E797B7E797B7E797B7E797B7E797B7E797B7E797B7E797B7E797B7E797B7E797B7E797B7E797B7E797B7E797B7EDEDEDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00",
+      "sha1": "13872f9146457ca786d3f8e64b799dd385d82bab"
+     }
+    },
+    "GroupIndex": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 130
+    },
+    "Margin": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Spacing": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 120
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 40,
+    "left": 5,
+    "top": 5,
+    "width": 120
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 621,
+   "name": "sb_SmartDiagnostic_Summary",
+   "objkind": "object",
+   "parent_path": "fSmartDiagnostic.pn_SmartDiagnosticTitle",
+   "path": "fSmartDiagnostic.pn_SmartDiagnosticTitle.sb_SmartDiagnostic_Summary",
+   "properties": {
+    "AllowAllUp": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Summary"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clNavy"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Glyph.Data": {
+     "type": "BLOB",
+     "value": {
+      "byte_len": 4202,
+      "hex": "66100000424D661000000000000036000000280000002500000025000000010018000000000030100000232E0000232E00000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF2EAECEBDEE1EBDEE1EBDEE1EBDEE1EBDEE1EBDEE1EBDEE1EBDEE1EBDEE1EBDEE1EBDEE1EBDEE1EBDEE1EBDEE1EBDEE1EBDEE1EBDEE1EBDEE1EBDEE1EBDEE1EBDEE1F9F4F500FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDF9EFC7873DB56922B56922B56922B56922B56922B56922B56922B56922B56922B56922B56922B56922B56922B56922B56922B56922B56922B56922B56922B56922933F1ECEAFB500FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDF9F0DEA239F7E5C1F7E5C1F7E5C1E3A52AF7E5C1F7E5C1F7E5C1EABB5CF3D8A3F7E5C1F7E5C1EBBE65F0CD87F7E5C1F7E5C1EFCB81ECC16BF7E5C1F7E5C1F0CD89B06320CEAFB500FFFFFFDDEBFCE0EDFCE0EDFCE0EDFCE0EDFCE0EDFCE0EDFCE0EDFCE0EDFCE0EDFCE0EDFCE0EDFCE0E8EFDCA23AFFFFFFFFFFFFFFFFFFE5AB38FFFFFFFFFFFFFFFFFFEBBF67F9ECD1FFFFFFFFFFFFEFCC86F5DFB2FFFFFFFFFFFFF4DCABF0CF8DFFFFFFFFFFFFF6E2BAB06320CEAFB500FFFFFF5BA0EE69A8F069A8F069A8F069A8F069A8F069A8F069A8F069A8F069A8F069A8F069A8F06FA7E3D7A744FFFFFFFFFFFFFFFFFFE5AB38FFFFFFFFFFFFFFFFFFEBBF67F9ECD1FFFFFFFFFFFFEFCC86F5DFB2FFFFFFFFFFFFF4DCABF0CF8DFFFFFFFFFFFFF6E2BAB06320CEAFB500FFFFFF5CA0EFEEF5FEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFAF1E4A62DECC16BECC16BECC16BE19D17ECC16BECC16BECC16BE3A62BEAB958ECC16BECC16BE5AB38E8B34AECC16BECC16BE7B248E6AD3BECC16BECC16BECC16BB06320CEAFB500FFFFFF5CA0EFEEF5FEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFAF1E6AE3EF9EACDF9EACDF9EACDE4A62DF9EACDF9EACDF9EACDE9B653F4DBA8F9EACDF9EACDECC16CF1D08FF9EACDF9EACDF0CE8AEDC371F9EACDF9EACDF3D8A1B06320CEAFB500FFFFFF5CA0EFEEF5FEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFAF1E7B147FFFFFFFFFFFFFFFFFFE5AB38FFFFFFFFFFFFFFFFFFEBBF67F9ECD1FFFFFFFFFFFFEFCC86F5DFB2FFFFFFFFFFFFF4DCABF0CF8DFFFFFFFFFFFFF6E2BAB06320CEAFB500FFFFFF5CA0EFEEF5FEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFAF1E7B147FFFFFFFFFFFFFFFFFFE5AB38FFFFFFFFFFFFFFFFFFEBBF67F9ECD1FFFFFFFFFFFFEFCC86F5DFB2FFFFFFFFFFFFF4DCABF0CF8DFFFFFFFFFFFFF6E2BAB06320CEAFB500FFFFFF5CA0EFEEF5FEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFAF1E3A52AEABB5DEABB5DEABB5DE09C14EABB5DEABB5DEABB5DE3A325E8B44CEABB5DEABB5DE4A831E6AF41EABB5DEABB5DE6AE3EE5A933EABB5DEABB5DEBBE64B06320CEAFB500FFFFFF5CA0EFEEF5FEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFAF1E6AF41FBF0DBFBF0DBFBF0DBE4A830FBF0DBFBF0DBFBF0DBEAB958F6E0B4FBF0DBFBF0DBEDC473F2D499FBF0DBFBF0DBF2D293EEC779FBF0DBFBF0DBF4DAA7B06320CEAFB500FFFFFF5CA0EFEEF5FEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFAF1E7B147FFFFFFFFFFFFFFFFFFE5AB38FFFFFFFFFFFFFFFFFFEBBF67F9ECD1FFFFFFFFFFFFEFCC86F5DFB2FFFFFFFFFFFFF4DCABF0CF8DFFFFFFFFFFFFF6E2BAB06320CEAFB500FFFFFF4F99EE69A8F172ADF177B0F27DB4F273AEF15AA0EF616AA36454826071AC589CEB589EEE5F9EE1D6A745FFFFFFFFFFFFFFFFFFE5AB38FFFFFFFFFFFFFFFFFFEBBF67F9ECD1FFFFFFFFFFFFEFCC86F5DFB2FFFFFFFFFFFFF4DCABF0CF8DFFFFFFFFFFFFF6E2BAB06320CEAFB500FFFFFF4A96EE368AEB4090EC4A96ED549CEE5EA1EF977756C97C07B96D0F4A60931778E71778E72279DBD39F31E19D18E19D18E19D18DF990DE19D18E19D18E19D18DF990DE09C14E19D18E19D18E09B12E09C14E19D18E19D18E09C14E09B12E19D18E19D18E09A11B1641FCEAFB500FFFFFF4A96EE368AEB4090EC4A96ED549CEE779EC0DD9300DD93008263551778E71778E71778E72279DBD49E2EDD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300B1641FCEAFB500FFFFFF4C97EE3B8DEC4191EC4894ED4F98EE8C988EDD9300CA7D076862944A96ED2E85EA2E85EA3786DED59F2EDD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300B1641FCEAFB500FFFFFFDFECFCE2EEFCE2EEFCE2EEFCE2EEFCE1D3B1DD9300D185047F3342DDE3F2E2EEFCE2EEFCE2E9EFDC9D27DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300B1641FCEAFB500FFFFFF84B8F361A3EF61A4EF61A4EF61A4EF6DA2D8DD9300DD9300A553146C324F6296DB61A4EF68A3E1D79F2DDD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300B1641FCEAFB500FFFFFF5DA1EFC7DFFAE9F2FDE9F2FDE9F2FDE9F2FDE2B457DD9300DD9300AD5C117D2F3EC3ADBAE7E8E5E2AA3BD8A437D79C2DA5602EA25A2FC58534E0A737E2AA38E2AA38E2AA38E2AA38E2AA38E2AA38E2AA38E2AA38E2AA38E2AA38DAA538D49E32DD9E2DDD9E2DCE9759E9DBDE00FFFFFF5EA1EFECF4FEFFFFFFFFFFFFFFFFFFFFFFFFFBF2E0DE9608DD9300DD9300C476098E391C863B49C5A1A897A8D1B1C3D3C9982DBB752394401A7E2A309C5F6BC5A0A7EDE1E4FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBCD8F98EBEF4FFFFFFFFFFFFFFFFFFFFFFFF00FFFFFF5EA1EFECF4FEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF6E0B6DF970ADD9300DD9300DD9300C87A07A65414923E1B822D24A05622DD9300DD9300DC9200C57808A6551387311F9D5F6AFDFBFBFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBCD8F98EBEF4FFFFFFFFFFFFFFFFFFFFFFFF00FFFFFF5EA1EFECF4FEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF8E8C8E09C15DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300D48C0EF4E4CDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBCD8F98EBEF4FFFFFFFFFFFFFFFFFFFFFFFF00FFFFFF5EA1EFECF4FEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDF9F0EFCA82E2A426DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300DD9300D29028FCF7EDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBCD8F98EBEF4FFFFFFFFFFFFFFFFFFFFFFFF00FFFFFF5EA1EFECF4FEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBF1DCF3D9A4BCB086C4B27FA5A383D8C18CDD9300DD9300D8A355FFFEFCFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBCD8F98EBEF4FFFFFFFFFFFFFFFFFFFFFFFF00FFFFFF5EA1EFECF4FEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFA0C8F6ABCEF776B0F1D5E2F0DD9507E5C18FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBCD8F98EBEF4FFFFFFFFFFFFFFFFFFFFFFFF00FFFFFF569DEFA9CDF7B6D5F8B6D5F8B6D5F8B7D6F9B8D6F9B9D7F9BAD8F9BBD8F9BCD9F9BDD9F9BDD9F9BEDAF986BAF4ABCEF774AFF2ABCDF2C8CFC9C4DDFAC5DEFAC6DFFAC6DFFAC7DFFAC5DEFABDD9F9B6D5F8B6D5F8B6D5F8B6D5F888BAF48ABCF4FFFFFFFFFFFFFFFFFFFFFFFF00FFFFFF4693ED1778E71778E71778E71778E7227EE92C84EA368AEB4090EC4A96ED549CEE5EA1EF5EA1EF68A7F072ADF1ABCEF771AEF191BFF49BC5F5A5CBF6AFD1F7B9D7F8B9D7F8C3DCF9CDE2FAD7E8FBC5DDF967A7F0197AE81778E71778E782B7F3FFFFFFFFFFFFFFFFFFFFFFFF00FFFFFF4693ED1778E71778E71778E71778E71778E7227EE92C84EA368AEB4090EC4A96ED549CEE5EA1EF5EA1EF68A8F0ABCEF770ADF186B9F391BFF49BC5F5A5CBF6AFD1F7B9D7F8B9D7F8C3DCF9CDE2FAD7E8FBE1EEFCCFE3FA70ACF1207DE882B7F3FFFFFFFFFFFFFFFFFFFFFFFF00FFFFFF4593ED1778E71778E71778E71778E71778E7227EE92C84EA368AEB4090EC4A96ED549CEE5EA1EF5EA1EF67A7F0ABCEF770ADF186B9F391BFF49BC5F5A5CBF6AFD1F7B9D7F8B9D7F8C3DCF9CDE2FAD7E8FBE1EEFCEBF4FDF5FAFEF0F6FE89BBF4FFFFFFFFFFFFFFFFFFFFFFFF00FFFFFF9BC5F676B0F276B0F276B0F276B0F276B0F276B0F277B1F378B1F378B1F379B2F37AB2F37BB3F37CB4F37DB3F3CBE1FAADD0F87EB5F37FB5F380B6F381B6F382B7F482B7F483B8F483B8F484B8F485B9F486B9F487BAF488BAF488BBF4BBD8FAFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00",
+      "sha1": "8ba26f2eb36b96afc7892536c8472f46328188a5"
+     }
+    },
+    "GroupIndex": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Margin": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Spacing": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 120
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 40,
+    "left": 675,
+    "top": 5,
+    "width": 120
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 771,
+   "name": "sb_SmartDiagnostic_Exit",
+   "objkind": "object",
+   "parent_path": "fSmartDiagnostic.pn_SmartDiagnosticTitle",
+   "path": "fSmartDiagnostic.pn_SmartDiagnosticTitle.sb_SmartDiagnostic_Exit",
+   "properties": {
+    "AllowAllUp": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Exit"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clNavy"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Glyph.Data": {
+     "type": "BLOB",
+     "value": {
+      "byte_len": 4202,
+      "hex": "66100000424D661000000000000036000000280000002500000025000000010018000000000030100000232E0000232E00000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEDEDEEB6B6B89D9EA088898C7274777B7D80929396A8A9ABCBCCCDFEFEFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFECEDED8285A4383C901D22981D22A91E24BA1E24C71E24BA1E23A91D22971B1F76191C432C2E34727477BFBFC1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEDEDF6585DB01E25B91E25CD1F25CB1F25CA1F25CA1F25C91F25C72025C72025C62025C42025C32026C31F24B21C2077171B2B4C4F53CACACBFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFCFCFF7E81C81F26BF1E25CE1E25CD1F25CB1F25CA1F25CA1F25C91F25C72025C72025C62025C42025C32026C32026C22026C02126C02025B61B1F6B171A25686A6DF5F5F5FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEEEEFC3E43C41E25CE1E25CE1E25CD1F25CB1F25CA1F25CA1F25C91F25C72025C72025C62025C42025C32026C32026C22026C02126C02126BF2126BD1D217C1C2076181B33414347E3E4E4FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD7D8F72A30C61E25CE1E25CE1E25CD1F25CB1F25CA1F25CA1F25C91F25C72025C72025C62025C42025C32026C32026C22026C02126C02126BF2126BEABADE5EDEDEE9596981E228F191D462B2D32D6D7D8FFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD9DBF8252BCD1E25CE1E25CE1E25CD1F25CB1F25CA1F25CA1F25C91F25C72025C72025C62025C42025C32026C31D217C1D23982126C02126BF2126BE2126BCB7B8E9FFFFFF9FA0A21F23932125B5191D4734363BEBECECFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFEFEFFC343ACE1E25CE1E25CE1E25CD1F25CB1F25CA1F25CA1F25C91F25C72025C72025C62025C42025C32026C32228B4D4D4D67F80831D21592024AF2126BC2126BCB7B8E8FFFFFF9FA0A21F23932226B72125AA181B334E5154FAFAFAFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFEFEFF545AD61B21901D23B41E25CD1F25CB1F25CA1F25CA1F25C91F25C72025C72025C62025C42025C32026C32026C271749CFFFFFFFFFFFFD7D8D950525E2025B42126BBB7B8E8FFFFFF9FA0A21F23932226B52226B520249C171A258F9193FFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFAFB1EE464CC9A6A7A977797C4346531A1E611D229F1F25C91F25C72025C72025C62025C42025C32026C32026C22C319DE9E9E9FFFFFFFFFFFFFFFFFFD5D6E02126BB2226B9B7B8E7FFFFFF9FA0A21F23912226B52226B42326B21C1F6623262BECEDEDFFFFFF00FFFFFFFFFFFFF9F9FE383ED25D61CCFFFFFFFFFFFFFFFFFFDDDDDE8A8B8E31344E1D21922025C62025C42025C32026C32026C21F24AFAAABB3FFFFFFFFFFFFFFFFFFFFFFFF6B6EC02226B92226B8B7B8E7FFFFFF9FA0A21F23912226B42326B22326B12225A9181B2B7B7D80FFFFFF00FFFFFFFFFFFFA0A3EB1E25CE6469C9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF7F7F88E90922326501F23B02026C32026C21F25B77D7F91FFFFFFFFFFFFFFFFFFFFFFFFD6D7E42428BA2226B82226B8B7B8E7FFFFFF9FA0A21F23902326B22326B12326B12326B01D206E202327F7F7F800FFFFFFFFFFFF4F55D91E25CD6E71C9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE6E6E74A4D5B1D239B1F24AD696C80FDFDFDFFFFFFFFFFFFFFFFFFFBFBFC4B4FC32226B82226B82226B7B7B8E6FFFFFF9FA0A220238F2326B12326B12326B02326AE2225A1171A20B8B9BB00FFFFFFE9EAFB1F26CE1F25CB585CD8E0E1F6FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF9F9F9707277868891FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF8E90CF2226B82226B82226B72226B5B7B8E6FFFFFF9FA0A220238E2326B12326B02326AE2426AE2426AD1A1C3E70727500FFFFFFA5A8EB1F25CB1F25CA1F25CA1F25C94449D1878AE1CCCDF1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB7B8DB2327B92226B82226B72226B52226B5B7B8E6FFFFFF9FA0A220238E2326B02326AE2426AE2426AD2426AC1E216934363B00FFFFFF7A7EE11F25CA1F25CA1F25C91F25C72025C72025C62025C45559D2C8C9EFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFCFCFE32A2EBB2226B82226B72226B52226B52226B4B7B8E5FFFFFF9FA0A220238D2326AE2426AE2426AD2426AC2427AA2023831B1E2300FFFFFF6468DB1F25CA1F25C91F25C72025C72025C62025C42025C32026C32127C37B7EDAF6F6F9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE2E2EC3639BF2226B82226B72226B52226B52226B42326B2B7B8E5FFFFFF9FA0A220238C2426AE2426AD2426AC2427AA2427AA212491171A1F00FFFFFF4D52D51F25C91F25C72025C72025C62025C42025C32026C32026C22026C02126C0BBBCD7FFFFFFFFFFFFFFFFFFFFFFFFF0F0F141448B1D21781D21791D21791D217A1D217B1E217C2124A0B7B8E5FFFFFF9FA0A221238C2426AD2426AC2427AA2427AA2427A923269C171A1F00FFFFFF4248D32F35CB393ECE3B3FCD2F34C82429C42026C32026C22026C02126C02126BFA0A2D2FFFFFFFFFFFFFFFFFFFFFFFFE3E4E4C0C0C2BCBDBEBABBBCB8B9BBB5B6B7B3B4B5B1B2B435378DB7B8E5FFFFFF9FA0A221238B2426AC2427AA2427AA2427A92427A72426A6171A1F00FFFFFF9C9EE79B9EE69B9EE69B9EE59B9EE59B9EE59598E28A8DDE7F82DB7073D6595CCF8386D8FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF414494B7B8E4FFFFFF9FA0A221238A2427AA2427AA2427A92427A72527A723259A171A1F00FFFFFF9FA1E7989AE5989AE4989AE4989BE4989BE3989BE2989BE2989BE2989BE1989BE0A0A3E3FCFCFDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF414493B8B8E4FFFFFF9FA0A22124892427AA2427A92427A72527A73234AC5456A622252A00FFFFFFA5A7E99497E39497E39497E39497E29497E19597E19597E19597E09597DF9597DF9597DFD2D2E9FFFFFFFFFFFFFFFFFFFDFDFEFBFBFDFBFBFDFAFAFCFAFAFCF9F9FCF9F9FCF9F9FC4446B1B8B8E4FFFFFF9FA0A22124892629AA3C3EB15455BA7677C79697D47172AC45484C00FFFFFFBDBFEE9294E29295E29295E19295E09295E09295E09295E09295DF9295DF9295DE9395DDA3A5E2FAFAFBD6D7E59798CC4E50723E41584E51738385C19395D99395D99395D89495D89495D7D9DAF0FFFFFF9FA0A26F71A79294D49495D49495D49495D39495D25556878C8D9000FFFFFFF1F1FC8E91E18E91E18E91E08F91E08F91DF8F91DE8F91DD8F91DD8F91DD8F91DC8F91DB8F91DBB5B6E87D7EB2939498EAEAEAFCFCFCD4D4D55B5D637576AE9091D69091D69091D69091D5DADBF0FFFFFF9FA0A27375A89192D39192D29192D29192D19192D12D2F48D4D4D500FFFFFFFFFFFF9598E38C8FDF8C8FDF8C8FDE8C8FDE8C8FDD8C8FDD8C8FDC8D8FDB8D8FDB8D8FDB8D8FDA8D8FD9B0B1B7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF60626E8E8FD58E8FD58E8FD48E8FD3DADAF0FFFFFF9FA0A27173A78E8FD18E8FD18E8FD08E8FD07F80BF383B3FFFFFFF00FFFFFFFFFFFFBCBEEC898BDE898BDD898BDD898BDC898BDC898BDB898BDA898BD9898BD9898BD9898BD88F91CAFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFCBCBCC7F80C38A8BD38A8CD28A8CD2D8D9EFFFFFFF9FA0A26F71A68B8CCF8B8CCE8B8CCE8B8CCE525384ACADAFFFFFFF00FFFFFFFFFFFFFEFEFF8C8FDF8588DC8588DB8588DB8588DA8688D98688D88688D88688D88688D78688D7A8A9D8FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5F6F67F80C58788D18788D18788D0D7D8EFFFFFFF9FA0A26C6EA48788CD8788CD8788CC7E7FC1444751FEFEFEFFFFFF00FFFFFFFFFFFFFFFFFFC9CAF08385DA8385DA8385D98385D88385D88385D88385D78385D68385D68385D59FA0DEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDDDEE18486D08486D08486CF8486CED7D7EEFFFFFF9FA0A26B6CA38586CC8586CB8586CB464874C4C5C6FFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFF9799E07F82D88082D78082D68082D68082D68082D58082D58082D48082D38284D3E2E2F0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFADAED38182CE8182CE8182CD8182CDD6D6EEFFFFFF9FA0A26869A18182CA8282C9696AAA939498FFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFF9F9FE8A8CDB8082D68082D68082D68082D58082D58082D48082D38082D28082D29192D8E2E2F2FFFFFFFFFFFFFDFDFEC2C2E48283CF8182CE8182CD8182CD8182CCD6D6EDFFFFFF9FA0A26869A18282C97575BA6B6C79FFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE9E9F98284D77D7FD57D7FD47D7FD47D7FD37E7FD27E7FD17E7FD17E7FD17E7FD08081D19596D8A3A4DC8A8CD27E80CD7E80CD7E80CC7F80CC7F80CB7F80CAD5D5EDFFFFFF9FA0A26668A07A7AC1696B82F9F9F9FFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE9E9F98688D77A7CD37A7CD27A7CD17A7CD07A7CD07A7CD07A7CCE7B7CCE7B7CCE7B7CCD7B7DCC7B7DCC7B7DCB7B7DCA7B7DCA7B7DCA7B7DC97B7DC8D4D5EDFFFFFFB2B3C26566A687899DFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF9F9FE9495DB7779D07779CF7779CF7779CE7779CD7779CD7779CC7779CC7779CB7779CB7779CA7779C97879C97879C87879C87879C67879C67B7CC77D7DC7696AABB7B8C3FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC8C9EC8183D37476CD7476CC7576CC7576CC7576CB7577CA7577CA7577C97577C87577C87577C77577C67577C57577C57577C56C6DB78A8BB2FDFDFDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFEFFBABBE68788D37273CB7173CA7173C87173C87173C87173C67273C67273C67273C57273C47172C37071B79899C5FAFAFDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF2F2FBBABBE59A9BD88D8ED38082CC7778C77879C48182C69192CEB3B4DFEBEBF7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00",
+      "sha1": "15961b786ba5385ac4b2f7007ded53474bc9482b"
+     }
+    },
+    "GroupIndex": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 675
+    },
+    "Margin": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Spacing": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 120
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 40,
+    "left": 550,
+    "top": 4,
+    "width": 120
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 922,
+   "name": "sb_SmartDiagnostic_Save",
+   "objkind": "object",
+   "parent_path": "fSmartDiagnostic.pn_SmartDiagnosticTitle",
+   "path": "fSmartDiagnostic.pn_SmartDiagnosticTitle.sb_SmartDiagnostic_Save",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Save"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Glyph.Data": {
+     "type": "BLOB",
+     "value": {
+      "byte_len": 3946,
+      "hex": "660F0000424D660F000000000000360000002800000024000000240000000100180000000000300F000001000000010000000000000000000000FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF9F9F9F9F9F9F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F9F9F9F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF7F7F7EFEFEFE8E8E8E6E6E6E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E9E9E9F3F3F3F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF8F8F8ECECECD6D6D6C8C8C8C5C5C5C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4D0D0D0E9E9E9F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF0EFEFC0A6A7A55B6CA96270A45E6C934556A6A3A3A4A1A1A19C9C9C9797979393948D8D8E88888A8383867F7D837A7A807978807978994759994759994759994759994759994759994759994756C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAD2C1C1B28181AF6D79B8717FB7707DAA6472EFEFF1EEEEF1995D68B8717EB06B78E1E0E0DDDADBD8D5D6D4D1D2CFCCCCCAC6C6DBD8D88F4B59A05565A05565BE848EB9727FB8727EB8717E994557C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AAF6D79BA7481B97380B7737FAA6472E9E9EBECEBEF995D68B8717EB06B78E1DFE1DCDADDD7D5D6D2D0D1CDC9CAC8C3C3D9D6D68D49589F5464A05565BF848EB97380B9737FB9727F9B4457C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC38D95BA7682BA7481B97480AA6472E5E4E7E9E9EB9A5D69B8737FB06B78E5E5E7E2E0E3DDDBDDD8D5D7D3D0D1CDCACBDDDADB8B48579D53639F5464BF858FBA7480BA7481BA74819B4558C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC48E96BA7783BA7682B97481AA6472E0DFE1E5E3E69B5F6BB97580B06B78E9EAECE6E5E8E2E1E4DDDCDED9D6D8D4D0D2E0DFDF8945549B50619D5363BF8590BA7481BA7481BA74819A4759C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC58F96BB7784BA7784BA7582AA6472DAD9DBE0DEE09B5F6BBA7582B06B78EDECEFEAE9EDE6E6E9E2E2E4DEDDDFDAD8DAE5E2E4874353994E5F9B5061C18690B97480BA7481BA74819C495CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC58F98BC7886BB7785BB7783AA6472D5D2D4DBD8DA9C606C925864925864EAEAEDEDEDF0EAEAEDE8E7E9E4E2E5DFDDDFE8E7E8864252974C5D994E5FC08691B9727FB97380B973809C4B5CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC49098BC7986BD7985BC7784AA6472CFCCCCD4D1D3D9D7D9DFDCDFE2E1E4E7E5E8EAEAEDEDECF0EAEBEEE8E7EAE4E2E6ECEAEC864252864252874353C28791B7727FB8727EB9727F9C4E5DC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC79198BD7A87BD7987BC7985BB7785AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472B77A84B76F7DB7707DB7707EB8717E9E4E5FC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6929ABE7B88BE7B87BC7986BC7886BB7785BB7784BA7682B97481B97480B87380B8717EB7717EB76F7DB76D7CB76D7BB76D7BB66D7BB56C7AB56C7AB66D7BB76F7CB76F7CB7707D9F4E60C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6929ABE7B88BE7B87BC7986BC7886BB7785BB7784BA7682B97481B97480B87380B8717EB76F7DB76D7CB76D7CB76C7AB66C7AB66D7BB56C7AB56C7AB56C7AB66C7AB66C7AB76D7C9F4F60C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6939BBE7E89BC7884A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70B66B7AB66C7B9F5162C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC7949CBF7F8AAF6F7BEBE1E1FEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFEFDFDFEFDFDFDFCFCFCFCFBFCFBFBFBFBFAFAFAF9F9F9F9F9F9F8F8F8E8D1D1A75E70B76D7BB66C7A9F5262C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC8959DC0808BAF6F7BFEFFFEFCFCFBFBFBFAFAFBFAFAFAFAF9FAF9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F7F7F7F7F7F7F7F7F7F7F7F7F7F7F6F6F6F6F6F9F9F9A75E70B96F7DB66B7AA05363C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9959DC1818CAF6F7BFEFFFEE1E1E1DFDFDFDDDDDDDBDCDBDADAD9D9D9D9D7D7D6D5D6D5D4D4D3D2D3D2D1D1D1D0D0D0CFCFCFCFCFCFCFCFCFCFCFCFF9FAF9A75E70BA707EB66B79A15466C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9969EC1818DAF6F7BFEFFFEFCFCFCFCFCFBFBFBFBFBFBFAFBFAFAFAFAFAF9F9F9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F8F7F7F7F7F7F7F7F7F7F7F7F6FBFBFBA75E70B97480B56B79A25666C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9989FC2828EAF6F7BFEFFFEE4E4E4E3E3E3E2E2E1E0E0E0DEDDDEDCDCDCDADADAD9D9D9D7D8D8D6D5D5D4D4D4D2D3D3D1D2D1D0D0D0CFCFCFCFCFCFFCFCFBA75E70BA7581B56B79A45968C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9989FC2838EAF6F7BFEFFFEFCFCFCFCFCFCFCFCFCFCFCFBFBFBFBFBFBFAFAFAFAFAFAF9F9F9F9F9F9F9F9F9F8F8F9F8F8F8F8F8F7F7F7F7F7F7F7F7FCFCFCA75E70BA7783B66C7AA55969C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACA98A0C2838EAF6F7BFEFFFEE6E6E6E6E5E6E4E4E4E3E3E3E1E2E2E0E0E0DEDEDEDCDCDCDBDBDBD9D9D9D8D8D8D6D6D6D4D5D5D3D3D3D1D1D1D0D0D0FDFDFCA75E70BC7783B76D7BA55D6CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB98A0C2838EAF6F7BFEFFFEFDFDFDFDFDFCFCFDFCFCFCFCFCFCFBFBFCFBFBFBFBFBFBFAFAFAFAFAFAF9F9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F7F7F7FDFEFDA75E70BD7985B76F7DA65F6EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEE6E6E6E6E6E6E6E6E6E5E5E6E4E5E5E4E3E3E2E2E2E1E0E0DFDFDFDDDDDDDBDBDCDADAD9D9D8D9D7D6D7D5D5D5D3D4D3FEFEFEA75E70BE7A86B7707DA6606EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEFEFEFDFEFEFDFDFDFCFDFDFCFCFDFCFCFCFCFCFCFBFCFCFBFBFBFAFBFBFAFAFAF9F9F9F9F9F9F9F9F9F9F9F9F8F8F8F8FEFFFEA75E70B38088B8717FA7606EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEE6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E5E5E5E4E4E3E2E3E3E1E1E1E0DFDFDDDDDEDCDBDCDADADAD9D9D9D7D8D7FEFFFEA75E70996E759E5967A9606EC5C5C5E5E5E5F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEFEFFFEFEFEFEFEFEFDFEFEFDFDFDFCFDFDFCFCFDFCFCFCFCFCFCFBFBFBFBFBFBFAFAFAFAFAFAF9FAFAF9F9F9F9F9F9F9FEFFFEA75E70B0757F9E5A68AA6471C5C5C5E6E6E6F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACA969EC2838EAF6F7BFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEA75E70C77F8BC77F8BAA6572D1D1D1EBEBEBFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AAE6A7AAE6A7AAE6A7AD9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6A75E70A75E70A75E70A75E70ECECECF6F6F6FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFA",
+      "sha1": "b6420a2c6417ab1d75d6f7441ace55c339665e38"
+     }
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 550
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Tag": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 120
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTimer",
+   "depth": 1,
+   "events": {
+    "OnTimer": "SmartDiagnosticTimerTimer"
+   },
+   "geometry": {
+    "height": null,
+    "left": 508,
+    "top": 20,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 1062,
+   "name": "SmartDiagnosticTimer",
+   "objkind": "object",
+   "parent_path": "fSmartDiagnostic",
+   "path": "fSmartDiagnostic.SmartDiagnosticTimer",
+   "properties": {
+    "Enabled": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 508
+    },
+    "OnTimer": {
+     "type": "SCALAR",
+     "value": "SmartDiagnosticTimerTimer"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 20
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "SmartDiagnostic.dfm",
+ "total_nodes_incl_root": 29
+}

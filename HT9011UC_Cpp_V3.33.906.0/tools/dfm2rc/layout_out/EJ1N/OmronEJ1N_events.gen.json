@@ -1,0 +1,261 @@
+{
+ "event_count": 36,
+ "events": [
+  {
+   "control_path": "fOmron",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fOmron",
+   "vcl_class": "TfOmron"
+  },
+  {
+   "control_path": "fOmron",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fOmron",
+   "vcl_class": "TfOmron"
+  },
+  {
+   "control_path": "fOmron",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fOmron",
+   "vcl_class": "TfOmron"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsAuto.btGetModuler",
+   "event_name": "OnClick",
+   "handler_name": "btGetModulerClick",
+   "leaf_name": "btGetModuler",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsAuto.btRunStop",
+   "event_name": "OnClick",
+   "handler_name": "btRunStopClick",
+   "leaf_name": "btRunStop",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsAuto.btSetThermoType",
+   "event_name": "OnClick",
+   "handler_name": "btSetThermoTypeClick",
+   "leaf_name": "btSetThermoType",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsAuto.Button1",
+   "event_name": "OnClick",
+   "handler_name": "Button1Click",
+   "leaf_name": "Button1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsManual.gbBccArea.gbFinsMiniCommand.cbMrcSrc",
+   "event_name": "OnChange",
+   "handler_name": "cbMrcSrcChange",
+   "leaf_name": "cbMrcSrc",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsManual.gbBccArea.gbFinsMiniCommand.pcMrcSrc.tsReadVariable.ComboBox5",
+   "event_name": "OnChange",
+   "handler_name": "cbMrcSrcChange",
+   "leaf_name": "ComboBox5",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsManual.gbBccArea.gbFinsMiniCommand.pcMrcSrc.tbWriteVariable.ComboBox3",
+   "event_name": "OnChange",
+   "handler_name": "cbMrcSrcChange",
+   "leaf_name": "ComboBox3",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsManual.gbBccArea.gbFinsMiniCommand.pcMrcSrc.tsCompositeRead.ComboBox6",
+   "event_name": "OnChange",
+   "handler_name": "cbMrcSrcChange",
+   "leaf_name": "ComboBox6",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsManual.gbBccArea.gbFinsMiniCommand.pcMrcSrc.tsCompositeRead.ComboBox7",
+   "event_name": "OnChange",
+   "handler_name": "cbMrcSrcChange",
+   "leaf_name": "ComboBox7",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsManual.gbBccArea.gbFinsMiniCommand.pcMrcSrc.tsCompositeRead.ComboBox8",
+   "event_name": "OnChange",
+   "handler_name": "cbMrcSrcChange",
+   "leaf_name": "ComboBox8",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsManual.gbBccArea.gbFinsMiniCommand.pcMrcSrc.tsCompositeRead.ComboBox9",
+   "event_name": "OnChange",
+   "handler_name": "cbMrcSrcChange",
+   "leaf_name": "ComboBox9",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsManual.gbBccArea.gbFinsMiniCommand.pcMrcSrc.tsCompositeWrite.ComboBox1",
+   "event_name": "OnChange",
+   "handler_name": "cbMrcSrcChange",
+   "leaf_name": "ComboBox1",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsManual.gbBccArea.gbFinsMiniCommand.pcMrcSrc.tsCompositeWrite.ComboBox2",
+   "event_name": "OnChange",
+   "handler_name": "cbMrcSrcChange",
+   "leaf_name": "ComboBox2",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsManual.gbBccArea.gbFinsMiniCommand.pcMrcSrc.tsCompositeWrite.ComboBox10",
+   "event_name": "OnChange",
+   "handler_name": "cbMrcSrcChange",
+   "leaf_name": "ComboBox10",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsManual.gbBccArea.gbFinsMiniCommand.pcMrcSrc.tsCompositeWrite.ComboBox11",
+   "event_name": "OnChange",
+   "handler_name": "cbMrcSrcChange",
+   "leaf_name": "ComboBox11",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsManual.gbBccArea.gbFinsMiniCommand.pcMrcSrc.tsCompositeReadReg.ComboBox12",
+   "event_name": "OnChange",
+   "handler_name": "cbMrcSrcChange",
+   "leaf_name": "ComboBox12",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsManual.gbBccArea.gbFinsMiniCommand.pcMrcSrc.tsCompositeReadReg.ComboBox13",
+   "event_name": "OnChange",
+   "handler_name": "cbMrcSrcChange",
+   "leaf_name": "ComboBox13",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsManual.gbBccArea.gbFinsMiniCommand.pcMrcSrc.tsCompositeReadReg.ComboBox14",
+   "event_name": "OnChange",
+   "handler_name": "cbMrcSrcChange",
+   "leaf_name": "ComboBox14",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsManual.gbBccArea.gbFinsMiniCommand.pcMrcSrc.tsCompositeReadReg.ComboBox15",
+   "event_name": "OnChange",
+   "handler_name": "cbMrcSrcChange",
+   "leaf_name": "ComboBox15",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsManual.gbBccArea.gbFinsMiniCommand.pcMrcSrc.tsEchoTest.Edit1",
+   "event_name": "OnClick",
+   "handler_name": "Edit1Click",
+   "leaf_name": "Edit1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsManual.gbBccArea.btSend",
+   "event_name": "OnClick",
+   "handler_name": "btSendClick",
+   "leaf_name": "btSend",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsSimple.btSetSV",
+   "event_name": "OnClick",
+   "handler_name": "btSetSVClick",
+   "leaf_name": "btSetSV",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsSimple.btResetCOM",
+   "event_name": "OnClick",
+   "handler_name": "btResetCOMClick",
+   "leaf_name": "btResetCOM",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsSimple.Button3",
+   "event_name": "OnClick",
+   "handler_name": "Button1Click",
+   "leaf_name": "Button3",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsSimple.gbAT.btAT",
+   "event_name": "OnClick",
+   "handler_name": "btATClick",
+   "leaf_name": "btAT",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsSimple.gbAT.btATOff",
+   "event_name": "OnClick",
+   "handler_name": "btATOffClick",
+   "leaf_name": "btATOff",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsSimple.gbAT.btAT1by1",
+   "event_name": "OnClick",
+   "handler_name": "btAT1by1Click",
+   "leaf_name": "btAT1by1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsSimple.gbAT.btRT",
+   "event_name": "OnClick",
+   "handler_name": "btRTClick",
+   "leaf_name": "btRT",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsSimple.gbAT.btRT1by1",
+   "event_name": "OnClick",
+   "handler_name": "btRT1by1Click",
+   "leaf_name": "btRT1by1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsSimple.gbAT.btRTOff",
+   "event_name": "OnClick",
+   "handler_name": "btRTOffClick",
+   "leaf_name": "btRTOff",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOmron.Panel7.PageControl1.tsRecord.Panel11.btSaveData",
+   "event_name": "OnClick",
+   "handler_name": "btSaveDataClick",
+   "leaf_name": "btSaveData",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOmron.Timer2",
+   "event_name": "OnTimer",
+   "handler_name": "Timer2Timer",
+   "leaf_name": "Timer2",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fOmron.CommOmron",
+   "event_name": "OnReceiveData",
+   "handler_name": "CommOmronReceiveData",
+   "leaf_name": "CommOmron",
+   "vcl_class": "TComm"
+  }
+ ],
+ "form_name": "fOmron",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "EJ1N/OmronEJ1N.dfm"
+}

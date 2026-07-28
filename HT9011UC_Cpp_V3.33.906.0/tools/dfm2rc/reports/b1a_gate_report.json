@@ -1,0 +1,2312 @@
+{
+ "per_file": [
+  {
+   "control_node_count": 46,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 12,
+   "problems": [],
+   "source_dfm": "ARMS/ARMS.dfm"
+  },
+  {
+   "control_node_count": 60,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 2,
+   "problems": [],
+   "source_dfm": "ARMS/ARMSLog.dfm"
+  },
+  {
+   "control_node_count": 17,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 2,
+   "problems": [],
+   "source_dfm": "ASE_K Socket/DataCompileForm.dfm"
+  },
+  {
+   "control_node_count": 28,
+   "g1_stats": {
+    "nonvisual_count": 2,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 4,
+   "problems": [],
+   "source_dfm": "ASE_K Socket/Socket_ASE_KR.dfm"
+  },
+  {
+   "control_node_count": 20,
+   "g1_stats": {
+    "nonvisual_count": 2,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 3,
+   "problems": [],
+   "source_dfm": "ASE_K Socket/aseTest.dfm"
+  },
+  {
+   "control_node_count": 87,
+   "g1_stats": {
+    "nonvisual_count": 4,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 15,
+   "problems": [],
+   "source_dfm": "ATC/ATCInterface.dfm"
+  },
+  {
+   "control_node_count": 112,
+   "g1_stats": {
+    "nonvisual_count": 4,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 11,
+   "problems": [],
+   "source_dfm": "ATC/ATC_Handler_Side.dfm"
+  },
+  {
+   "control_node_count": 0,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 0,
+   "problems": [],
+   "source_dfm": "ATC/FileTransfer.dfm"
+  },
+  {
+   "control_node_count": 25,
+   "g1_stats": {
+    "nonvisual_count": 4,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 3,
+   "problems": [],
+   "source_dfm": "ATC/WinWaySetting.dfm"
+  },
+  {
+   "control_node_count": 43,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 4,
+   "problems": [],
+   "source_dfm": "ArmOffsetData.dfm"
+  },
+  {
+   "control_node_count": 115,
+   "g1_stats": {
+    "nonvisual_count": 3,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [
+    {
+     "count": 1,
+     "parent_path": "fAutoAlignment.Panel1.PageControl18.TabSheet34",
+     "tab_orders": [
+      1
+     ]
+    },
+    {
+     "count": 1,
+     "parent_path": "fAutoAlignment.Panel1.PageControl18.TabSheet35",
+     "tab_orders": [
+      1
+     ]
+    }
+   ],
+   "g4_ok_groups": 18,
+   "problems": [],
+   "source_dfm": "AutoAlignment/AutoAlignment.dfm"
+  },
+  {
+   "control_node_count": 282,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 16,
+   "problems": [],
+   "source_dfm": "AutoAlignment/SmartSetup.dfm"
+  },
+  {
+   "control_node_count": 281,
+   "g1_stats": {
+    "nonvisual_count": 7,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 17,
+   "problems": [],
+   "source_dfm": "AutoAlignment/cAutoAlignment.dfm"
+  },
+  {
+   "control_node_count": 246,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 33,
+   "problems": [],
+   "source_dfm": "AutoClean/uCleaning.dfm"
+  },
+  {
+   "control_node_count": 2,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 0,
+   "problems": [],
+   "source_dfm": "AutoClean/uShowcleanPad_ASEKH.dfm"
+  },
+  {
+   "control_node_count": 85,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 5,
+   "problems": [],
+   "source_dfm": "AutoTeach/AutoTeach.dfm"
+  },
+  {
+   "control_node_count": 81,
+   "g1_stats": {
+    "nonvisual_count": 1,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 5,
+   "problems": [],
+   "source_dfm": "AutoTeach/InOutArmZteach.dfm"
+  },
+  {
+   "control_node_count": 79,
+   "g1_stats": {
+    "nonvisual_count": 4,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 11,
+   "problems": [],
+   "source_dfm": "AutoTemperature.dfm"
+  },
+  {
+   "control_node_count": 142,
+   "g1_stats": {
+    "nonvisual_count": 2,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 7,
+   "problems": [],
+   "source_dfm": "Automation/AGV.dfm"
+  },
+  {
+   "control_node_count": 13,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 2,
+   "problems": [],
+   "source_dfm": "Automation/AutomationSimulator.dfm"
+  },
+  {
+   "control_node_count": 179,
+   "g1_stats": {
+    "nonvisual_count": 3,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 18,
+   "problems": [],
+   "source_dfm": "Automation/SCK_ART.dfm"
+  },
+  {
+   "control_node_count": 2,
+   "g1_stats": {
+    "nonvisual_count": 2,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 0,
+   "problems": [],
+   "source_dfm": "Automation/SCK_WebService.dfm"
+  },
+  {
+   "control_node_count": 29,
+   "g1_stats": {
+    "nonvisual_count": 4,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 6,
+   "problems": [],
+   "source_dfm": "Automation/automation.dfm"
+  },
+  {
+   "control_node_count": 39,
+   "g1_stats": {
+    "nonvisual_count": 2,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 9,
+   "problems": [],
+   "source_dfm": "Automation/fRENESAS_ServerFrm.dfm"
+  },
+  {
+   "control_node_count": 73,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 7,
+   "problems": [],
+   "source_dfm": "Automation/mainAT.dfm"
+  },
+  {
+   "control_node_count": 8,
+   "g1_stats": {
+    "nonvisual_count": 1,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 2,
+   "problems": [],
+   "source_dfm": "Automation/ufrmProdInfo.dfm"
+  },
+  {
+   "control_node_count": 512,
+   "g1_stats": {
+    "nonvisual_count": 24,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [
+    {
+     "count": 8,
+     "parent_path": "fBarCode.Panel55.pgc2DID.tsBarcodeMapping.pgc2DMap.tsMagazine1",
+     "tab_orders": [
+      0,
+      1,
+      2,
+      3,
+      8,
+      9,
+      10,
+      11
+     ]
+    },
+    {
+     "count": 6,
+     "parent_path": "fBarCode.Panel55.pgc2DID.tsBarcodeMapping.pgc2DMap.tsMagazine2",
+     "tab_orders": [
+      0,
+      1,
+      2,
+      3,
+      8,
+      9
+     ]
+    }
+   ],
+   "g4_ok_groups": 61,
+   "problems": [],
+   "source_dfm": "BarCode/BarCode.dfm"
+  },
+  {
+   "control_node_count": 2,
+   "g1_stats": {
+    "nonvisual_count": 2,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 0,
+   "problems": [],
+   "source_dfm": "BarCode/BarcodeXML.dfm"
+  },
+  {
+   "control_node_count": 8,
+   "g1_stats": {
+    "nonvisual_count": 4,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 2,
+   "problems": [],
+   "source_dfm": "BarcodeReader.dfm"
+  },
+  {
+   "control_node_count": 20,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 4,
+   "problems": [],
+   "source_dfm": "BinDisplay/BinDisp.dfm"
+  },
+  {
+   "control_node_count": 2,
+   "g1_stats": {
+    "nonvisual_count": 2,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 0,
+   "problems": [],
+   "source_dfm": "BinDisplay/MyBinDisp.dfm"
+  },
+  {
+   "control_node_count": 16,
+   "g1_stats": {
+    "nonvisual_count": 2,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 2,
+   "problems": [],
+   "source_dfm": "CCDInterface.dfm"
+  },
+  {
+   "control_node_count": 22,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 1,
+   "problems": [],
+   "source_dfm": "CCLink/CCINPUT.dfm"
+  },
+  {
+   "control_node_count": 332,
+   "g1_stats": {
+    "nonvisual_count": 2,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [
+    {
+     "count": 6,
+     "parent_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht1",
+     "tab_orders": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      6
+     ]
+    },
+    {
+     "count": 16,
+     "parent_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht1.palInSht1_1",
+     "tab_orders": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      16
+     ]
+    },
+    {
+     "count": 5,
+     "parent_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht2",
+     "tab_orders": [
+      0,
+      1,
+      2,
+      3,
+      5
+     ]
+    },
+    {
+     "count": 16,
+     "parent_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht2.palInSht2_1",
+     "tab_orders": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      16
+     ]
+    },
+    {
+     "count": 2,
+     "parent_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgR.palOutSht2",
+     "tab_orders": [
+      1,
+      2
+     ]
+    },
+    {
+     "count": 2,
+     "parent_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgR.palOutSht1",
+     "tab_orders": [
+      1,
+      2
+     ]
+    },
+    {
+     "count": 16,
+     "parent_path": "fCCLink.PageControl1.tsSocketAndRotate.palSocketSensor.palSocketSensor1",
+     "tab_orders": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      16
+     ]
+    },
+    {
+     "count": 8,
+     "parent_path": "fCCLink.PageControl1.tsSocketAndRotate.palRotate.palRotate1",
+     "tab_orders": [
+      0,
+      1,
+      2,
+      3,
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    {
+     "count": 16,
+     "parent_path": "fCCLink.PageControl1.tsSocketAndRotate.palColorSensor.palColorSensor1",
+     "tab_orders": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      12,
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    {
+     "count": 16,
+     "parent_path": "fCCLink.PageControl1.tsSocketBase2.Panel3.Panel4",
+     "tab_orders": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      16
+     ]
+    },
+    {
+     "count": 16,
+     "parent_path": "fCCLink.PageControl1.tsSocketBase2.Panel5.Panel6",
+     "tab_orders": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      12,
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    {
+     "count": 16,
+     "parent_path": "fCCLink.PageControl1.tsSocketBase3.Panel7.Panel8",
+     "tab_orders": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      16
+     ]
+    }
+   ],
+   "g4_ok_groups": 21,
+   "problems": [],
+   "source_dfm": "CCLink/MyCCLinkSensor.dfm"
+  },
+  {
+   "control_node_count": 181,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 37,
+   "problems": [],
+   "source_dfm": "ContactForce.dfm"
+  },
+  {
+   "control_node_count": 30,
+   "g1_stats": {
+    "nonvisual_count": 2,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 6,
+   "problems": [],
+   "source_dfm": "DIOInterFaceCFG.dfm"
+  },
+  {
+   "control_node_count": 93,
+   "g1_stats": {
+    "nonvisual_count": 21,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 23,
+   "problems": [],
+   "source_dfm": "DynamicTemp.dfm"
+  },
+  {
+   "control_node_count": 174,
+   "g1_stats": {
+    "nonvisual_count": 2,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 23,
+   "problems": [],
+   "source_dfm": "EJ1N/OmronEJ1N.dfm"
+  },
+  {
+   "control_node_count": 63,
+   "g1_stats": {
+    "nonvisual_count": 1,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 16,
+   "problems": [],
+   "source_dfm": "EJ1N/fDTME08.dfm"
+  },
+  {
+   "control_node_count": 52,
+   "g1_stats": {
+    "nonvisual_count": 5,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 6,
+   "problems": [],
+   "source_dfm": "FixAICCD.dfm"
+  },
+  {
+   "control_node_count": 164,
+   "g1_stats": {
+    "nonvisual_count": 2,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 3,
+   "problems": [],
+   "source_dfm": "GroundMan/GroundMan.dfm"
+  },
+  {
+   "control_node_count": 15,
+   "g1_stats": {
+    "nonvisual_count": 5,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 2,
+   "problems": [],
+   "source_dfm": "HS_Function.dfm"
+  },
+  {
+   "control_node_count": 0,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 0,
+   "problems": [],
+   "source_dfm": "HT9045.dfm"
+  },
+  {
+   "control_node_count": 422,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 64,
+   "problems": [],
+   "source_dfm": "HandlerSys.dfm"
+  },
+  {
+   "control_node_count": 23,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 1,
+   "problems": [],
+   "source_dfm": "INPUT.dfm"
+  },
+  {
+   "control_node_count": 6,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 1,
+   "problems": [],
+   "source_dfm": "InputForm.dfm"
+  },
+  {
+   "control_node_count": 191,
+   "g1_stats": {
+    "nonvisual_count": 3,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 42,
+   "problems": [],
+   "source_dfm": "Interface/TesterTCP.dfm"
+  },
+  {
+   "control_node_count": 79,
+   "g1_stats": {
+    "nonvisual_count": 1,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 15,
+   "problems": [],
+   "source_dfm": "KYECFTP/FTPClient.dfm"
+  },
+  {
+   "control_node_count": 11,
+   "g1_stats": {
+    "nonvisual_count": 2,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 2,
+   "problems": [],
+   "source_dfm": "LoadCCD/LoadCCDMap.dfm"
+  },
+  {
+   "control_node_count": 102,
+   "g1_stats": {
+    "nonvisual_count": 2,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 15,
+   "problems": [],
+   "source_dfm": "LtcSensor.dfm"
+  },
+  {
+   "control_node_count": 109,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [
+    {
+     "count": 28,
+     "parent_path": "fCassette.PageControl1.TabSheet2",
+     "tab_orders": [
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52
+     ]
+    }
+   ],
+   "g4_ok_groups": 6,
+   "problems": [],
+   "source_dfm": "MR/Cassette.dfm"
+  },
+  {
+   "control_node_count": 105,
+   "g1_stats": {
+    "nonvisual_count": 3,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 10,
+   "problems": [],
+   "source_dfm": "MR/RFID.dfm"
+  },
+  {
+   "control_node_count": 108,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 3,
+   "problems": [],
+   "source_dfm": "Magazine.dfm"
+  },
+  {
+   "control_node_count": 94,
+   "g1_stats": {
+    "nonvisual_count": 2,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 8,
+   "problems": [],
+   "source_dfm": "Mes/fVATMesFileSys.dfm"
+  },
+  {
+   "control_node_count": 39,
+   "g1_stats": {
+    "nonvisual_count": 2,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 7,
+   "problems": [],
+   "source_dfm": "Monitor/MonitorInterface.dfm"
+  },
+  {
+   "control_node_count": 2,
+   "g1_stats": {
+    "nonvisual_count": 2,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 0,
+   "problems": [],
+   "source_dfm": "Motor/TrayStepMotor.dfm"
+  },
+  {
+   "control_node_count": 88,
+   "g1_stats": {
+    "nonvisual_count": 8,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 13,
+   "problems": [],
+   "source_dfm": "OCR.dfm"
+  },
+  {
+   "control_node_count": 29,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 0,
+   "problems": [],
+   "source_dfm": "ObserveMagazine.dfm"
+  },
+  {
+   "control_node_count": 104,
+   "g1_stats": {
+    "nonvisual_count": 6,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [
+    {
+     "count": 2,
+     "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsplate1",
+     "tab_orders": [
+      1,
+      2
+     ]
+    },
+    {
+     "count": 2,
+     "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl1.tsPlate2",
+     "tab_orders": [
+      0,
+      2
+     ]
+    },
+    {
+     "count": 6,
+     "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet3",
+     "tab_orders": [
+      0,
+      1,
+      2,
+      3,
+      5,
+      6
+     ]
+    },
+    {
+     "count": 6,
+     "parent_path": "fLaserSensor.pcLaserSensor.tsLaserSensor.ScrollBox1.PageControl2.TabSheet2",
+     "tab_orders": [
+      0,
+      1,
+      2,
+      3,
+      5,
+      6
+     ]
+    }
+   ],
+   "g4_ok_groups": 16,
+   "problems": [],
+   "source_dfm": "OmronLaser/LaserSensor.dfm"
+  },
+  {
+   "control_node_count": 157,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 30,
+   "problems": [],
+   "source_dfm": "PMAlarm/PMAlarmInterFace.dfm"
+  },
+  {
+   "control_node_count": 4,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 1,
+   "problems": [],
+   "source_dfm": "PMAlarm/PMAlarmShowData.dfm"
+  },
+  {
+   "control_node_count": 2,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 1,
+   "problems": [],
+   "source_dfm": "PMAlarm/fMain.dfm"
+  },
+  {
+   "control_node_count": 32,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 4,
+   "problems": [],
+   "source_dfm": "Password.dfm"
+  },
+  {
+   "control_node_count": 23,
+   "g1_stats": {
+    "nonvisual_count": 1,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 3,
+   "problems": [],
+   "source_dfm": "Precaution.dfm"
+  },
+  {
+   "control_node_count": 150,
+   "g1_stats": {
+    "nonvisual_count": 2,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 32,
+   "problems": [],
+   "source_dfm": "ProductionInfo/ProductionInfo.dfm"
+  },
+  {
+   "control_node_count": 27,
+   "g1_stats": {
+    "nonvisual_count": 3,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 5,
+   "problems": [],
+   "source_dfm": "ProductionInfo/uESDControl.dfm"
+  },
+  {
+   "control_node_count": 2,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 1,
+   "problems": [],
+   "source_dfm": "Public/MemoryAlarm.dfm"
+  },
+  {
+   "control_node_count": 26,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 5,
+   "problems": [],
+   "source_dfm": "QAMode.dfm"
+  },
+  {
+   "control_node_count": 13,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 3,
+   "problems": [],
+   "source_dfm": "RPDefault.dfm"
+  },
+  {
+   "control_node_count": 5,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 2,
+   "problems": [],
+   "source_dfm": "RotateKit/aRotateDegreeClass.dfm"
+  },
+  {
+   "control_node_count": 35,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [
+    {
+     "count": 13,
+     "parent_path": "FrmRotate.Panel1",
+     "tab_orders": [
+      0,
+      1,
+      2,
+      3,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+     ]
+    }
+   ],
+   "g4_ok_groups": 7,
+   "problems": [],
+   "source_dfm": "RotateKit/fRotate.dfm"
+  },
+  {
+   "control_node_count": 244,
+   "g1_stats": {
+    "nonvisual_count": 2,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 26,
+   "problems": [],
+   "source_dfm": "SECSGEM/UsecegemMainFrom.dfm"
+  },
+  {
+   "control_node_count": 69,
+   "g1_stats": {
+    "nonvisual_count": 4,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 17,
+   "problems": [],
+   "source_dfm": "SECSGEM/uHGemEquipment.dfm"
+  },
+  {
+   "control_node_count": 56,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [
+    {
+     "count": 2,
+     "parent_path": "fShuttleMove.Panel1.Panel3.gbInFiberCheck",
+     "tab_orders": [
+      0,
+      2
+     ]
+    },
+    {
+     "count": 3,
+     "parent_path": "fShuttleMove.Panel1.Panel3.gbBarCode",
+     "tab_orders": [
+      0,
+      2,
+      3
+     ]
+    },
+    {
+     "count": 5,
+     "parent_path": "fShuttleMove.Panel1.Panel3.gbOutFiberCheck",
+     "tab_orders": [
+      0,
+      1,
+      2,
+      3,
+      5
+     ]
+    },
+    {
+     "count": 5,
+     "parent_path": "fShuttleMove.Panel1.Panel3.gbInFiberCheckShtSnLct",
+     "tab_orders": [
+      0,
+      2,
+      3,
+      4,
+      5
+     ]
+    }
+   ],
+   "g4_ok_groups": 7,
+   "problems": [],
+   "source_dfm": "ShuttleMove.dfm"
+  },
+  {
+   "control_node_count": 28,
+   "g1_stats": {
+    "nonvisual_count": 1,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 7,
+   "problems": [],
+   "source_dfm": "SmartDiagnostic.dfm"
+  },
+  {
+   "control_node_count": 1,
+   "g1_stats": {
+    "nonvisual_count": 1,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 0,
+   "problems": [],
+   "source_dfm": "TempCtrl/MyTempture.dfm"
+  },
+  {
+   "control_node_count": 190,
+   "g1_stats": {
+    "nonvisual_count": 3,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 40,
+   "problems": [],
+   "source_dfm": "TempCtrl/TriMachineDeforst.dfm"
+  },
+  {
+   "control_node_count": 39,
+   "g1_stats": {
+    "nonvisual_count": 1,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 11,
+   "problems": [],
+   "source_dfm": "VacuumUnit/VacuumUnit.dfm"
+  },
+  {
+   "control_node_count": 1,
+   "g1_stats": {
+    "nonvisual_count": 1,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 0,
+   "problems": [],
+   "source_dfm": "adam6024.dfm"
+  },
+  {
+   "control_node_count": 8,
+   "g1_stats": {
+    "nonvisual_count": 1,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 2,
+   "problems": [],
+   "source_dfm": "cAirCon.dfm"
+  },
+  {
+   "control_node_count": 4,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 1,
+   "problems": [],
+   "source_dfm": "cBinAoiSel.dfm"
+  },
+  {
+   "control_node_count": 77,
+   "g1_stats": {
+    "nonvisual_count": 5,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [
+    {
+     "count": 27,
+     "parent_path": "fBinSel.PageControl1.tsNormal.Panel",
+     "tab_orders": [
+      0,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      29
+     ]
+    }
+   ],
+   "g4_ok_groups": 6,
+   "problems": [],
+   "source_dfm": "cBinSel.dfm"
+  },
+  {
+   "control_node_count": 18,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 4,
+   "problems": [],
+   "source_dfm": "cBuilder.dfm"
+  },
+  {
+   "control_node_count": 2221,
+   "g1_stats": {
+    "nonvisual_count": 4,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 384,
+   "problems": [],
+   "source_dfm": "cConfiguration.dfm"
+  },
+  {
+   "control_node_count": 270,
+   "g1_stats": {
+    "nonvisual_count": 3,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 22,
+   "problems": [],
+   "source_dfm": "cContact.dfm"
+  },
+  {
+   "control_node_count": 5,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 2,
+   "problems": [],
+   "source_dfm": "cContactCT.dfm"
+  },
+  {
+   "control_node_count": 12,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 2,
+   "problems": [],
+   "source_dfm": "cCounterClear.dfm"
+  },
+  {
+   "control_node_count": 34,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 9,
+   "problems": [],
+   "source_dfm": "cCounterSel.dfm"
+  },
+  {
+   "control_node_count": 10,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 4,
+   "problems": [],
+   "source_dfm": "cDataHandling.dfm"
+  },
+  {
+   "control_node_count": 5,
+   "g1_stats": {
+    "nonvisual_count": 1,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 2,
+   "problems": [],
+   "source_dfm": "cDefrostNote.dfm"
+  },
+  {
+   "control_node_count": 29,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 4,
+   "problems": [],
+   "source_dfm": "cHotPlate.dfm"
+  },
+  {
+   "control_node_count": 60,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 8,
+   "problems": [],
+   "source_dfm": "cLd_ULd.dfm"
+  },
+  {
+   "control_node_count": 383,
+   "g1_stats": {
+    "nonvisual_count": 37,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 43,
+   "problems": [],
+   "source_dfm": "cObserver.dfm"
+  },
+  {
+   "control_node_count": 379,
+   "g1_stats": {
+    "nonvisual_count": 2,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 33,
+   "problems": [],
+   "source_dfm": "cOffSet.dfm"
+  },
+  {
+   "control_node_count": 60,
+   "g1_stats": {
+    "nonvisual_count": 2,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 13,
+   "problems": [],
+   "source_dfm": "cSecurity.dfm"
+  },
+  {
+   "control_node_count": 193,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 29,
+   "problems": [],
+   "source_dfm": "cSetUp.dfm"
+  },
+  {
+   "control_node_count": 445,
+   "g1_stats": {
+    "nonvisual_count": 1,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 64,
+   "problems": [],
+   "source_dfm": "cShowBinSelect.dfm"
+  },
+  {
+   "control_node_count": 125,
+   "g1_stats": {
+    "nonvisual_count": 1,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 7,
+   "problems": [],
+   "source_dfm": "cShowBinSet.dfm"
+  },
+  {
+   "control_node_count": 248,
+   "g1_stats": {
+    "nonvisual_count": 2,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 12,
+   "problems": [],
+   "source_dfm": "cSortCT.dfm"
+  },
+  {
+   "control_node_count": 442,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 108,
+   "problems": [],
+   "source_dfm": "cSpeed.dfm"
+  },
+  {
+   "control_node_count": 369,
+   "g1_stats": {
+    "nonvisual_count": 8,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 30,
+   "problems": [],
+   "source_dfm": "cStartCondition.dfm"
+  },
+  {
+   "control_node_count": 220,
+   "g1_stats": {
+    "nonvisual_count": 1,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 42,
+   "problems": [],
+   "source_dfm": "cTemperFrom.dfm"
+  },
+  {
+   "control_node_count": 2,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 1,
+   "problems": [],
+   "source_dfm": "cTestCategory.dfm"
+  },
+  {
+   "control_node_count": 240,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 44,
+   "problems": [],
+   "source_dfm": "cTesterIF.dfm"
+  },
+  {
+   "control_node_count": 55,
+   "g1_stats": {
+    "nonvisual_count": 1,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 3,
+   "problems": [],
+   "source_dfm": "cTowerLight.dfm"
+  },
+  {
+   "control_node_count": 247,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [
+    {
+     "count": 4,
+     "parent_path": "fTrayAssignment",
+     "tab_orders": [
+      0,
+      1,
+      2,
+      99
+     ]
+    }
+   ],
+   "g4_ok_groups": 43,
+   "problems": [],
+   "source_dfm": "cTrayAssignment.dfm"
+  },
+  {
+   "control_node_count": 176,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [
+    {
+     "count": 13,
+     "parent_path": "fTrayForm.PageControl1.TabSheet1.Panel2",
+     "tab_orders": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      13
+     ]
+    },
+    {
+     "count": 11,
+     "parent_path": "fTrayForm.PageControl1.TabSheet2.Panel4",
+     "tab_orders": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      11
+     ]
+    },
+    {
+     "count": 11,
+     "parent_path": "fTrayForm.PageControl1.TabSheet3.Panel6",
+     "tab_orders": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      11
+     ]
+    }
+   ],
+   "g4_ok_groups": 17,
+   "problems": [],
+   "source_dfm": "cTrayForm.dfm"
+  },
+  {
+   "control_node_count": 325,
+   "g1_stats": {
+    "nonvisual_count": 20,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 51,
+   "problems": [],
+   "source_dfm": "cTrayMapping.dfm"
+  },
+  {
+   "control_node_count": 24,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [
+    {
+     "count": 6,
+     "parent_path": "fCCDPin1",
+     "tab_orders": [
+      0,
+      3,
+      4,
+      6,
+      8,
+      9
+     ]
+    }
+   ],
+   "g4_ok_groups": 4,
+   "problems": [],
+   "source_dfm": "cheksocket.dfm"
+  },
+  {
+   "control_node_count": 5,
+   "g1_stats": {
+    "nonvisual_count": 5,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 0,
+   "problems": [],
+   "source_dfm": "database.dfm"
+  },
+  {
+   "control_node_count": 335,
+   "g1_stats": {
+    "nonvisual_count": 2,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [
+    {
+     "count": 13,
+     "parent_path": "FrmAOI.PageControl1.TabSheet3",
+     "tab_orders": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      13
+     ]
+    }
+   ],
+   "g4_ok_groups": 72,
+   "problems": [],
+   "source_dfm": "fAOI.dfm"
+  },
+  {
+   "control_node_count": 1,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 1,
+   "problems": [],
+   "source_dfm": "fShowPmSOP.dfm"
+  },
+  {
+   "control_node_count": 2929,
+   "g1_stats": {
+    "nonvisual_count": 2,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [
+    {
+     "count": 10,
+     "parent_path": "fiosetview.PC_IOSET.tsFix.pnlFixTray.pnlFixTray_Line",
+     "tab_orders": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      8,
+      9,
+      10,
+      11,
+      12
+     ]
+    }
+   ],
+   "g4_ok_groups": 259,
+   "problems": [],
+   "source_dfm": "iosetview.dfm"
+  },
+  {
+   "control_node_count": 0,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 0,
+   "problems": [],
+   "source_dfm": "language.dfm"
+  },
+  {
+   "control_node_count": 9,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 1,
+   "problems": [],
+   "source_dfm": "login.dfm"
+  },
+  {
+   "control_node_count": 849,
+   "g1_stats": {
+    "nonvisual_count": 27,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [
+    {
+     "count": 33,
+     "parent_path": "fMain.pgMain.tsMain",
+     "tab_orders": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      30,
+      31,
+      32,
+      33
+     ]
+    },
+    {
+     "count": 1,
+     "parent_path": "fMain.pgMain.tsMain.Panel2.SitePanel",
+     "tab_orders": [
+      3
+     ]
+    },
+    {
+     "count": 22,
+     "parent_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsActionView.PanelMain6",
+     "tab_orders": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      39,
+      40,
+      43
+     ]
+    },
+    {
+     "count": 8,
+     "parent_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsActionView.PanelMain6.pnlTrayCar",
+     "tab_orders": [
+      0,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18
+     ]
+    },
+    {
+     "count": 1,
+     "parent_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsActionView.PanelMain6.PageControl6.TabSheet17",
+     "tab_orders": [
+      6
+     ]
+    },
+    {
+     "count": 1,
+     "parent_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsActionView.PanelMain6.pnlSimMagazineTray",
+     "tab_orders": [
+      14
+     ]
+    }
+   ],
+   "g4_ok_groups": 57,
+   "problems": [],
+   "source_dfm": "main.dfm"
+  },
+  {
+   "control_node_count": 91,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 3,
+   "problems": [],
+   "source_dfm": "myQwertyKeyBoard.dfm"
+  },
+  {
+   "control_node_count": 13,
+   "g1_stats": {
+    "nonvisual_count": 1,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 2,
+   "problems": [],
+   "source_dfm": "mymessbox.dfm"
+  },
+  {
+   "control_node_count": 306,
+   "g1_stats": {
+    "nonvisual_count": 4,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [
+    {
+     "count": 3,
+     "parent_path": "fNote.pnlBottom.pnlPicker",
+     "tab_orders": [
+      0,
+      2,
+      3
+     ]
+    },
+    {
+     "count": 45,
+     "parent_path": "fNote.pnlNote.pgcNote.tsHandler.PanelMain6.Panel5",
+     "tab_orders": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      45
+     ]
+    }
+   ],
+   "g4_ok_groups": 33,
+   "problems": [],
+   "source_dfm": "note.dfm"
+  },
+  {
+   "control_node_count": 12,
+   "g1_stats": {
+    "nonvisual_count": 12,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 0,
+   "problems": [],
+   "source_dfm": "rs232.dfm"
+  },
+  {
+   "control_node_count": 0,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 0,
+   "problems": [],
+   "source_dfm": "systools.dfm"
+  },
+  {
+   "control_node_count": 75,
+   "g1_stats": {
+    "nonvisual_count": 1,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 2,
+   "problems": [],
+   "source_dfm": "tools.dfm"
+  },
+  {
+   "control_node_count": 1095,
+   "g1_stats": {
+    "nonvisual_count": 11,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 120,
+   "problems": [],
+   "source_dfm": "uLotInfo.dfm"
+  },
+  {
+   "control_node_count": 200,
+   "g1_stats": {
+    "nonvisual_count": 2,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 14,
+   "problems": [],
+   "source_dfm": "uMotorTest.dfm"
+  },
+  {
+   "control_node_count": 75,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 4,
+   "problems": [],
+   "source_dfm": "uPadInterface.dfm"
+  },
+  {
+   "control_node_count": 139,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 17,
+   "problems": [],
+   "source_dfm": "uRecipeDefault.dfm"
+  },
+  {
+   "control_node_count": 10,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 1,
+   "problems": [],
+   "source_dfm": "uShowMessage.dfm"
+  },
+  {
+   "control_node_count": 4,
+   "g1_stats": {
+    "nonvisual_count": 0,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 1,
+   "problems": [],
+   "source_dfm": "uTechShow.dfm"
+  },
+  {
+   "control_node_count": 858,
+   "g1_stats": {
+    "nonvisual_count": 1,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 136,
+   "problems": [],
+   "source_dfm": "uTemp_Set.dfm"
+  },
+  {
+   "control_node_count": 13,
+   "g1_stats": {
+    "nonvisual_count": 1,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [
+    {
+     "count": 7,
+     "parent_path": "TrayEditForm",
+     "tab_orders": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    }
+   ],
+   "g4_ok_groups": 0,
+   "problems": [],
+   "source_dfm": "uTrayEditForm.dfm"
+  },
+  {
+   "control_node_count": 429,
+   "g1_stats": {
+    "nonvisual_count": 1,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 86,
+   "problems": [],
+   "source_dfm": "uYieldMonitoring.dfm"
+  },
+  {
+   "control_node_count": 17,
+   "g1_stats": {
+    "nonvisual_count": 1,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 3,
+   "problems": [],
+   "source_dfm": "uhome.dfm"
+  },
+  {
+   "control_node_count": 2080,
+   "g1_stats": {
+    "nonvisual_count": 2,
+    "synthesized_count": 0
+   },
+   "g4_exceptions": [],
+   "g4_ok_groups": 246,
+   "problems": [],
+   "source_dfm": "uteach.dfm"
+  }
+ ],
+ "summary": {
+  "blob_bytes": 3880955,
+  "blob_count": 554,
+  "blob_mb": 3.701,
+  "encoding_used_histogram": {
+   "cp950": 133
+  },
+  "files": 133,
+  "g4_exception_group_count": 43,
+  "g4_ok_group_count": 2876,
+  "generator": "dfm_parse.py W7-B1a v1.0",
+  "graphic_control_count_full_set": 8603,
+  "graphic_control_count_plan_cited_6760_set": 6763,
+  "kind_histogram": {
+   "LEAF": 18649,
+   "NONVISUAL": 331,
+   "SUBDLG": 3504,
+   "TABHOST": 143
+  },
+  "known_plan_cross_checks": {
+   "blob_554_expected": true,
+   "control_nodes_22627_expected": true,
+   "g4_exceptions_38_cited_actual": 43,
+   "nonvisual_331_expected": true
+  },
+  "schema_version": 1,
+  "top_classes": [
+   [
+    "TLabel",
+    4979
+   ],
+   [
+    "TEdit",
+    3717
+   ],
+   [
+    "TPanel",
+    2991
+   ],
+   [
+    "TSpeedButton",
+    1611
+   ],
+   [
+    "TCheckBox",
+    1553
+   ],
+   [
+    "TGroupBox",
+    1248
+   ],
+   [
+    "TMyLedLane",
+    1214
+   ],
+   [
+    "TButton",
+    725
+   ],
+   [
+    "TBtnPanelLane",
+    701
+   ],
+   [
+    "TTabSheet",
+    691
+   ],
+   [
+    "TALed",
+    530
+   ],
+   [
+    "TComboBox",
+    372
+   ],
+   [
+    "TRadioGroup",
+    336
+   ],
+   [
+    "TTMyTray",
+    246
+   ],
+   [
+    "TLabeledEdit",
+    198
+   ],
+   [
+    "TMemo",
+    157
+   ],
+   [
+    "TPageControl",
+    143
+   ],
+   [
+    "TTimer",
+    124
+   ],
+   [
+    "TStringGrid",
+    119
+   ],
+   [
+    "TBitBtn",
+    110
+   ],
+   [
+    "TImage",
+    103
+   ],
+   [
+    "TMyLed",
+    96
+   ],
+   [
+    "TRadioButton",
+    78
+   ],
+   [
+    "TShape",
+    62
+   ],
+   [
+    "TBtnPanel",
+    56
+   ]
+  ],
+  "total_control_nodes": 22627,
+  "total_nonvisual_nodes": 331,
+  "total_problems": 0
+ }
+}

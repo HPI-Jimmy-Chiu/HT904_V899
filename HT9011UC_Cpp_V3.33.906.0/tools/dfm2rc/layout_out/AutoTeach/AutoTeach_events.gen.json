@@ -1,0 +1,149 @@
+{
+ "event_count": 20,
+ "events": [
+  {
+   "control_path": "fAutoTeach",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fAutoTeach",
+   "vcl_class": "TfAutoTeach"
+  },
+  {
+   "control_path": "fAutoTeach",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fAutoTeach",
+   "vcl_class": "TfAutoTeach"
+  },
+  {
+   "control_path": "fAutoTeach.pc_AutoTeach.ts_DoHomeing.pan_AutoOffsetMove.Panel2.sb_AutoOffsetYRear",
+   "event_name": "OnClick",
+   "handler_name": "sb_AutoOffsetYRearClick",
+   "leaf_name": "sb_AutoOffsetYRear",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fAutoTeach.pc_AutoTeach.ts_DoHomeing.pan_AutoOffsetMove.Panel2.sb_AutoOffsetXLeft",
+   "event_name": "OnClick",
+   "handler_name": "sb_AutoOffsetXLeftClick",
+   "leaf_name": "sb_AutoOffsetXLeft",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fAutoTeach.pc_AutoTeach.ts_DoHomeing.pan_AutoOffsetMove.Panel2.sb_AutoOffsetXRight",
+   "event_name": "OnClick",
+   "handler_name": "sb_AutoOffsetXRightClick",
+   "leaf_name": "sb_AutoOffsetXRight",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fAutoTeach.pc_AutoTeach.ts_DoHomeing.pan_AutoOffsetMove.Panel2.sb_AutoOffsetYFront",
+   "event_name": "OnClick",
+   "handler_name": "sb_AutoOffsetYFrontClick",
+   "leaf_name": "sb_AutoOffsetYFront",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fAutoTeach.pc_AutoTeach.ts_DoHomeing.pan_AutoOffsetMove.Panel3.sb_AutoOffsetZDown",
+   "event_name": "OnClick",
+   "handler_name": "sb_AutoOffsetZDownClick",
+   "leaf_name": "sb_AutoOffsetZDown",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fAutoTeach.pc_AutoTeach.ts_DoHomeing.pan_AutoOffsetMove.Panel3.sb_AutoOffsetZUp",
+   "event_name": "OnClick",
+   "handler_name": "sb_AutoOffsetZUpClick",
+   "leaf_name": "sb_AutoOffsetZUp",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fAutoTeach.pc_AutoTeach.ts_DoHomeing.pan_AutoOffsetMove.Panel4.sb_AutoOffsetPitchYClose",
+   "event_name": "OnClick",
+   "handler_name": "sb_AutoOffsetPitchYCloseClick",
+   "leaf_name": "sb_AutoOffsetPitchYClose",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fAutoTeach.pc_AutoTeach.ts_DoHomeing.pan_AutoOffsetMove.Panel4.sb_AutoOffsetPitchXClose",
+   "event_name": "OnClick",
+   "handler_name": "sb_AutoOffsetPitchXCloseClick",
+   "leaf_name": "sb_AutoOffsetPitchXClose",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fAutoTeach.pc_AutoTeach.ts_DoHomeing.pan_AutoOffsetMove.Panel4.sb_AutoOffsetPitchXOpen",
+   "event_name": "OnClick",
+   "handler_name": "sb_AutoOffsetPitchXOpenClick",
+   "leaf_name": "sb_AutoOffsetPitchXOpen",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fAutoTeach.pc_AutoTeach.ts_DoHomeing.pan_AutoOffsetMove.Panel4.sb_AutoOffsetPitchYOpen",
+   "event_name": "OnClick",
+   "handler_name": "sb_AutoOffsetPitchYOpenClick",
+   "leaf_name": "sb_AutoOffsetPitchYOpen",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fAutoTeach.pc_AutoTeach.ts_DoHomeing.pn_Information.ed_XOffsetValue",
+   "event_name": "OnMouseDown",
+   "handler_name": "ed_XOffsetValueMouseDown",
+   "leaf_name": "ed_XOffsetValue",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAutoTeach.pc_AutoTeach.ts_DoHomeing.pn_Information.ed_YOffsetValue",
+   "event_name": "OnMouseDown",
+   "handler_name": "ed_XOffsetValueMouseDown",
+   "leaf_name": "ed_YOffsetValue",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAutoTeach.pc_AutoTeach.ts_DoHomeing.pn_Information.ed_XPitchOffsetValue",
+   "event_name": "OnMouseDown",
+   "handler_name": "ed_XOffsetValueMouseDown",
+   "leaf_name": "ed_XPitchOffsetValue",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAutoTeach.pc_AutoTeach.ts_DoHomeing.pn_Information.ed_YPitchOffsetValue",
+   "event_name": "OnMouseDown",
+   "handler_name": "ed_XOffsetValueMouseDown",
+   "leaf_name": "ed_YPitchOffsetValue",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAutoTeach.pc_AutoTeach.ts_DoHomeing.pn_Information.ed_ZOffsetValue",
+   "event_name": "OnMouseDown",
+   "handler_name": "ed_ZOffsetValueMouseDown",
+   "leaf_name": "ed_ZOffsetValue",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fAutoTeach.Panel1.sb_DoClose",
+   "event_name": "OnClick",
+   "handler_name": "sb_DoCloseClick",
+   "leaf_name": "sb_DoClose",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fAutoTeach.Panel1.sb_DoNext",
+   "event_name": "OnClick",
+   "handler_name": "sb_DoNextClick",
+   "leaf_name": "sb_DoNext",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fAutoTeach.Panel1.sb_DoRetry",
+   "event_name": "OnClick",
+   "handler_name": "sb_DoRetryClick",
+   "leaf_name": "sb_DoRetry",
+   "vcl_class": "TSpeedButton"
+  }
+ ],
+ "form_name": "fAutoTeach",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "AutoTeach/AutoTeach.dfm"
+}

@@ -1,0 +1,230 @@
+{
+  "schema_version": 1,
+  "generator": "emit_rc.py W7-B1b v1.0",
+  "source_dfm": "uhome.dfm",
+  "formstem": "UHOME",
+  "dialog_count": 4,
+  "control_count": 13,
+  "fallback_classes_used": [],
+  "warnings": [],
+  "dialogs": [
+    {
+      "idd_symbol": "IDD_UHOME",
+      "idd_value": 8192,
+      "is_root": true,
+      "owner_path": "fHome",
+      "owner_class": "TfHome",
+      "controls": [
+        {
+          "symbol": "IDC_UHOME_PALUNUSE",
+          "value": 1024,
+          "win32_class": "Static",
+          "caption": null,
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fHome.palUnUse",
+          "fallback_class": false,
+          "x": 532,
+          "y": 0,
+          "cx": 185,
+          "cy": 41
+        },
+        {
+          "symbol": "IDC_UHOME_PANEL104",
+          "value": 1025,
+          "win32_class": "Static",
+          "caption": "Motor Home Monitor",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fHome.Panel104",
+          "fallback_class": false,
+          "x": 0,
+          "y": 0,
+          "cx": 1084,
+          "cy": 44
+        }
+      ]
+    },
+    {
+      "idd_symbol": "IDD_UHOME_PANEL2",
+      "idd_value": 8193,
+      "is_root": false,
+      "owner_path": "fHome.Panel2",
+      "owner_class": "TPanel",
+      "controls": [
+        {
+          "symbol": "IDC_UHOME_BEVEL1",
+          "value": 1026,
+          "win32_class": "Static",
+          "caption": null,
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fHome.Panel2.Bevel1",
+          "fallback_class": false,
+          "x": 24,
+          "y": 24,
+          "cx": 345,
+          "cy": 97
+        },
+        {
+          "symbol": "IDC_UHOME_LABEL26",
+          "value": 1027,
+          "win32_class": "Static",
+          "caption": "Reset OK",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fHome.Panel2.Label26",
+          "fallback_class": false,
+          "x": 128,
+          "y": 56,
+          "cx": 136,
+          "cy": 37
+        },
+        {
+          "symbol": "IDC_UHOME_SPEEDBUTTON1",
+          "value": 1028,
+          "win32_class": "Button",
+          "caption": "Exit",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fHome.Panel2.SpeedButton1",
+          "fallback_class": false,
+          "x": 104,
+          "y": 160,
+          "cx": 201,
+          "cy": 57
+        }
+      ]
+    },
+    {
+      "idd_symbol": "IDD_UHOME_PANEL1",
+      "idd_value": 8194,
+      "is_root": false,
+      "owner_path": "fHome.Panel1",
+      "owner_class": "TPanel",
+      "controls": [
+        {
+          "symbol": "IDC_UHOME_NAME",
+          "value": 1029,
+          "win32_class": "Static",
+          "caption": "Name",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fHome.Panel1.Name",
+          "fallback_class": false,
+          "x": 24,
+          "y": 48,
+          "cx": 28,
+          "cy": 13
+        },
+        {
+          "symbol": "IDC_UHOME_LEDHOME",
+          "value": 1030,
+          "win32_class": "HT9045.ALed",
+          "caption": null,
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fHome.Panel1.ledHome",
+          "fallback_class": false,
+          "x": 68,
+          "y": 44,
+          "cx": 22,
+          "cy": 22
+        },
+        {
+          "symbol": "IDC_UHOME_EDPOS",
+          "value": 1031,
+          "win32_class": "Edit",
+          "caption": "edPos",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fHome.Panel1.edPos",
+          "fallback_class": false,
+          "x": 100,
+          "y": 44,
+          "cx": 121,
+          "cy": 21
+        },
+        {
+          "symbol": "IDC_UHOME_PNLLINE1",
+          "value": 1032,
+          "win32_class": "Static",
+          "caption": null,
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fHome.Panel1.pnlLine1",
+          "fallback_class": false,
+          "x": 255,
+          "y": 0,
+          "cx": 5,
+          "cy": 500
+        },
+        {
+          "symbol": "IDC_UHOME_PNLLINE2",
+          "value": 1033,
+          "win32_class": "Static",
+          "caption": null,
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fHome.Panel1.pnlLine2",
+          "fallback_class": false,
+          "x": 525,
+          "y": 0,
+          "cx": 5,
+          "cy": 500
+        },
+        {
+          "symbol": "IDC_UHOME_PNLLINE3",
+          "value": 1034,
+          "win32_class": "Static",
+          "caption": null,
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fHome.Panel1.pnlLine3",
+          "fallback_class": false,
+          "x": 795,
+          "y": 0,
+          "cx": 5,
+          "cy": 500
+        }
+      ]
+    },
+    {
+      "idd_symbol": "IDD_UHOME_PANEL3",
+      "idd_value": 8195,
+      "is_root": false,
+      "owner_path": "fHome.Panel3",
+      "owner_class": "TPanel",
+      "controls": [
+        {
+          "symbol": "IDC_UHOME_SBABORTHOME",
+          "value": 1035,
+          "win32_class": "Button",
+          "caption": "Abort Home",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fHome.Panel3.sbAbortHome",
+          "fallback_class": false,
+          "x": 856,
+          "y": 4,
+          "cx": 217,
+          "cy": 117
+        },
+        {
+          "symbol": "IDC_UHOME_LISTBOX1",
+          "value": 1036,
+          "win32_class": "ListBox",
+          "caption": null,
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fHome.Panel3.ListBox1",
+          "fallback_class": false,
+          "x": 0,
+          "y": 0,
+          "cx": 845,
+          "cy": 122
+        }
+      ]
+    }
+  ]
+}

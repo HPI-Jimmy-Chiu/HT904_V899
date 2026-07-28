@@ -1,0 +1,177 @@
+{
+ "event_count": 24,
+ "events": [
+  {
+   "control_path": "FrmRotate",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "FrmRotate",
+   "vcl_class": "TFrmRotate"
+  },
+  {
+   "control_path": "FrmRotate",
+   "event_name": "OnCreate",
+   "handler_name": "FormCreate",
+   "leaf_name": "FrmRotate",
+   "vcl_class": "TFrmRotate"
+  },
+  {
+   "control_path": "FrmRotate",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "FrmRotate",
+   "vcl_class": "TFrmRotate"
+  },
+  {
+   "control_path": "FrmRotate",
+   "event_name": "OnShortCut",
+   "handler_name": "FormShortCut",
+   "leaf_name": "FrmRotate",
+   "vcl_class": "TFrmRotate"
+  },
+  {
+   "control_path": "FrmRotate",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "FrmRotate",
+   "vcl_class": "TFrmRotate"
+  },
+  {
+   "control_path": "FrmRotate.Panel1.spbSave",
+   "event_name": "OnClick",
+   "handler_name": "spbSaveClick",
+   "leaf_name": "spbSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "FrmRotate.Panel1.sbtExit",
+   "event_name": "OnClick",
+   "handler_name": "sbtExitClick",
+   "leaf_name": "sbtExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "FrmRotate.Panel1.rgDutNum",
+   "event_name": "OnClick",
+   "handler_name": "rgDutNumClick",
+   "leaf_name": "rgDutNum",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "FrmRotate.Panel1.rgSelect",
+   "event_name": "OnClick",
+   "handler_name": "rgSelectClick",
+   "leaf_name": "rgSelect",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "FrmRotate.Panel1.GroupBox1.sgFTA",
+   "event_name": "OnDrawCell",
+   "handler_name": "sgFTADrawCell",
+   "leaf_name": "sgFTA",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "FrmRotate.Panel1.GroupBox1.sgFTA",
+   "event_name": "OnSelectCell",
+   "handler_name": "sgFTASelectCell",
+   "leaf_name": "sgFTA",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "FrmRotate.Panel1.pgcRotate.tsM1RotateIn.sgRotateIn",
+   "event_name": "OnDrawCell",
+   "handler_name": "sgRotateInDrawCell",
+   "leaf_name": "sgRotateIn",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "FrmRotate.Panel1.pgcRotate.tsM1RotateIn.sgRotateIn",
+   "event_name": "OnSelectCell",
+   "handler_name": "sgRotateInSelectCell",
+   "leaf_name": "sgRotateIn",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "FrmRotate.Panel1.pgcRotate.tsM1RotateOut.sgRotateOut",
+   "event_name": "OnDrawCell",
+   "handler_name": "sgRotateInDrawCell",
+   "leaf_name": "sgRotateOut",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "FrmRotate.Panel1.pgcRotate.tsM1RotateOut.sgRotateOut",
+   "event_name": "OnSelectCell",
+   "handler_name": "sgRotateInSelectCell",
+   "leaf_name": "sgRotateOut",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "FrmRotate.Panel1.pgcRotate.tsM1RotateInRT.sgRotateInRT",
+   "event_name": "OnDrawCell",
+   "handler_name": "sgRotateInDrawCell",
+   "leaf_name": "sgRotateInRT",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "FrmRotate.Panel1.pgcRotate.tsM1RotateInRT.sgRotateInRT",
+   "event_name": "OnSelectCell",
+   "handler_name": "sgRotateInSelectCell",
+   "leaf_name": "sgRotateInRT",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "FrmRotate.Panel1.pgcRotate.tsM1RotateOutRT.sgRotateOutRT",
+   "event_name": "OnDrawCell",
+   "handler_name": "sgRotateInDrawCell",
+   "leaf_name": "sgRotateOutRT",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "FrmRotate.Panel1.pgcRotate.tsM1RotateOutRT.sgRotateOutRT",
+   "event_name": "OnSelectCell",
+   "handler_name": "sgRotateInSelectCell",
+   "leaf_name": "sgRotateOutRT",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "FrmRotate.Panel1.cbOutRotateDifferentAngle",
+   "event_name": "OnClick",
+   "handler_name": "cbOutRotateDifferentAngleClick",
+   "leaf_name": "cbOutRotateDifferentAngle",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "FrmRotate.Panel1.chkRotateUseRTmode",
+   "event_name": "OnClick",
+   "handler_name": "chkRotateUseRTmodeClick",
+   "leaf_name": "chkRotateUseRTmode",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "FrmRotate.Panel1.chkART_RTNoRotate",
+   "event_name": "OnClick",
+   "handler_name": "chkRotateUseRTmodeClick",
+   "leaf_name": "chkART_RTNoRotate",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "FrmRotate.Panel1.grpRotateOffset.edInRotate_0",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInRotate_0MouseDown",
+   "leaf_name": "edInRotate_0",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FrmRotate.Panel1.grpRotateOffset.edOutRotate_0",
+   "event_name": "OnMouseDown",
+   "handler_name": "edInRotate_0MouseDown",
+   "leaf_name": "edOutRotate_0",
+   "vcl_class": "TEdit"
+  }
+ ],
+ "form_name": "FrmRotate",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "RotateKit/fRotate.dfm"
+}

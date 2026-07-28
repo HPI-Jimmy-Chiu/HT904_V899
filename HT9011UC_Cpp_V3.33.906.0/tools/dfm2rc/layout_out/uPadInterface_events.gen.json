@@ -1,0 +1,261 @@
+{
+ "event_count": 36,
+ "events": [
+  {
+   "control_path": "fPadInterface",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fPadInterface",
+   "vcl_class": "TfPadInterface"
+  },
+  {
+   "control_path": "fPadInterface",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fPadInterface",
+   "vcl_class": "TfPadInterface"
+  },
+  {
+   "control_path": "fPadInterface",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fPadInterface",
+   "vcl_class": "TfPadInterface"
+  },
+  {
+   "control_path": "fPadInterface.pn_PadInterfaceTitle.sb_PadInterface_Exit",
+   "event_name": "OnClick",
+   "handler_name": "sb_PadInterface_ExitClick",
+   "leaf_name": "sb_PadInterface_Exit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.sb_PadInterface_FrontPowerOff",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_FrontPowerOff",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.sb_PadInterface_FrontPowerOn",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_FrontPowerOn",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.sb_PadInterface_Front",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_Front",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.sb_PadInterface_FrontStart",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_FrontStart",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.sb_PadInterface_FrontHome",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_FrontHome",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.sb_PadInterface_FrontPause",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_FrontPause",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.sb_PadInterface_FrontReset",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_FrontReset",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.sb_PadInterface_FrontOneCycle",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_FrontOneCycle",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.sb_PadInterface_FrontRetry",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_FrontRetry",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.sb_PadInterface_FrontSkip",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_FrontSkip",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.sb_PadInterface_FrontCleanOut",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_FrontCleanOut",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.sb_PadInterface_FrontAlarmReset",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_FrontAlarmReset",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.sb_PadInterface_FrontTrayEnd",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_FrontTrayEnd",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.sb_PadInterface_FrontTrayFeed",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_FrontTrayFeed",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearPowerOff",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_RearPowerOff",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearPowerOn",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_RearPowerOn",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearPause",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_RearPause",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearReset",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_RearReset",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearOneCycle",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_RearOneCycle",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearRetry",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_RearRetry",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearSkip",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_RearSkip",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearHome",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_RearHome",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearStart",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_RearStart",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearCleanOut",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_RearCleanOut",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearAlarmReset",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_RearAlarmReset",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearTrayEnd",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_RearTrayEnd",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearTrayFeed",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_RearTrayFeed",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearStep",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_RearStep",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearTStart",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_RearTStart",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearSafeLock",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_RearSafeLock",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_Rear",
+   "event_name": "OnMouseDown",
+   "handler_name": "sb_PadInterface_FrontPowerOffMouseDown",
+   "leaf_name": "sb_PadInterface_Rear",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fPadInterface.sb_PadInterface_MainPage.sb_PadInterface_ManualSend",
+   "event_name": "OnClick",
+   "handler_name": "sb_PadInterface_ManualSendClick",
+   "leaf_name": "sb_PadInterface_ManualSend",
+   "vcl_class": "TButton"
+  }
+ ],
+ "form_name": "fPadInterface",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "uPadInterface.dfm"
+}

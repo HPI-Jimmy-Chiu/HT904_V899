@@ -1,0 +1,1394 @@
+{
+ "control_node_count": 17,
+ "encoding_used": "cp950",
+ "form_class": "TDataCompile",
+ "form_name": "DataCompile",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "DataCompile.Panel1"
+   ],
+   "class": "TDataCompile",
+   "depth": 0,
+   "events": {},
+   "geometry": {
+    "height": 561,
+    "left": 326,
+    "top": 165,
+    "width": 1309
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "DataCompile",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "DataCompile",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "DataCompile"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 561
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 326
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 165
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 1309
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [
+    "DataCompile.Panel1.Label1",
+    "DataCompile.Panel1.Label2",
+    "DataCompile.Panel1.Label3",
+    "DataCompile.Panel1.Label4",
+    "DataCompile.Panel1.Label5",
+    "DataCompile.Panel1.Label6",
+    "DataCompile.Panel1.Label7",
+    "DataCompile.Panel1.Label8",
+    "DataCompile.Panel1.Label9",
+    "DataCompile.Panel1.edtWorkTemp",
+    "DataCompile.Panel1.edtSoakTime",
+    "DataCompile.Panel1.edtForcePerPin",
+    "DataCompile.Panel1.edtPinCount",
+    "DataCompile.Panel1.edtSiteMap",
+    "DataCompile.Panel1.edtBinMap",
+    "DataCompile.Panel1.btnCompare"
+   ],
+   "class": "TPanel",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 530,
+    "left": 0,
+    "top": 0,
+    "width": 1301
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 16,
+   "name": "Panel1",
+   "objkind": "object",
+   "parent_path": "DataCompile",
+   "path": "DataCompile.Panel1",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 530
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 1301
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 29,
+    "left": 8,
+    "top": 24,
+    "width": 106
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 24,
+   "name": "Label1",
+   "objkind": "object",
+   "parent_path": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.Label1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Set Temp"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -24
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 106
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 29,
+    "left": 8,
+    "top": 80,
+    "width": 113
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 37,
+   "name": "Label2",
+   "objkind": "object",
+   "parent_path": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.Label2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Soak time "
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -24
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 113
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 29,
+    "left": 10,
+    "top": 405,
+    "width": 79
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 50,
+   "name": "Label3",
+   "objkind": "object",
+   "parent_path": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.Label3",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "binning"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -24
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 405
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 79
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 29,
+    "left": 10,
+    "top": 282,
+    "width": 97
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 63,
+   "name": "Label4",
+   "objkind": "object",
+   "parent_path": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.Label4",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "site map "
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -24
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 282
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 97
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 29,
+    "left": 7,
+    "top": 140,
+    "width": 99
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 76,
+   "name": "Label5",
+   "objkind": "object",
+   "parent_path": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.Label5",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "pin force "
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -24
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 140
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 99
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 29,
+    "left": 8,
+    "top": 192,
+    "width": 97
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 89,
+   "name": "Label6",
+   "objkind": "object",
+   "parent_path": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.Label6",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "pin count"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -24
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 192
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 97
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 29,
+    "left": 161,
+    "top": 239,
+    "width": 157
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 102,
+   "name": "Label7",
+   "objkind": "object",
+   "parent_path": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.Label7",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "A    ====>     G"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -24
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 161
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 239
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 157
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 29,
+    "left": 161,
+    "top": 366,
+    "width": 821
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 115,
+   "name": "Label8",
+   "objkind": "object",
+   "parent_path": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.Label8",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Bin 1  ====>     Bin15     Key in    Auto1-3 Fix 1-3 =   1 -6  0 no use   Ex  2,1,1,0,"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -24
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 161
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 366
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 821
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 29,
+    "left": 264,
+    "top": 461,
+    "width": 6
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 130,
+   "name": "Label9",
+   "objkind": "object",
+   "parent_path": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.Label9",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clRed"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -24
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 29
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 264
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 461
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 6
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edtWorkTempClick"
+   },
+   "geometry": {
+    "height": 37,
+    "left": 161,
+    "top": 24,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 142,
+   "name": "edtWorkTemp",
+   "objkind": "object",
+   "parent_path": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.edtWorkTemp",
+   "properties": {
+    "BiDiMode": {
+     "type": "SCALAR",
+     "value": "bdLeftToRight"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clYellow"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -24
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 37
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 161
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edtWorkTempClick"
+    },
+    "ParentBiDiMode": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Text": {
+     "type": "STR",
+     "value": "30"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edtSoakTimeClick"
+   },
+   "geometry": {
+    "height": 37,
+    "left": 161,
+    "top": 78,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 160,
+   "name": "edtSoakTime",
+   "objkind": "object",
+   "parent_path": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.edtSoakTime",
+   "properties": {
+    "BiDiMode": {
+     "type": "SCALAR",
+     "value": "bdLeftToRight"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clYellow"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -24
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 37
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 161
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edtSoakTimeClick"
+    },
+    "ParentBiDiMode": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Text": {
+     "type": "STR",
+     "value": "10"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 78
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edtForcePerPinClick"
+   },
+   "geometry": {
+    "height": 37,
+    "left": 161,
+    "top": 135,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 178,
+   "name": "edtForcePerPin",
+   "objkind": "object",
+   "parent_path": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.edtForcePerPin",
+   "properties": {
+    "BiDiMode": {
+     "type": "SCALAR",
+     "value": "bdLeftToRight"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clYellow"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -24
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 37
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 161
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edtForcePerPinClick"
+    },
+    "ParentBiDiMode": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Text": {
+     "type": "STR",
+     "value": "10"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 135
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {
+    "OnClick": "edtPinCountClick"
+   },
+   "geometry": {
+    "height": 37,
+    "left": 161,
+    "top": 189,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 196,
+   "name": "edtPinCount",
+   "objkind": "object",
+   "parent_path": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.edtPinCount",
+   "properties": {
+    "BiDiMode": {
+     "type": "SCALAR",
+     "value": "bdLeftToRight"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clYellow"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -24
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 37
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 161
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "edtPinCountClick"
+    },
+    "ParentBiDiMode": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Text": {
+     "type": "STR",
+     "value": "10"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 189
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 12,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 37,
+    "left": 161,
+    "top": 288,
+    "width": 1065
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 214,
+   "name": "edtSiteMap",
+   "objkind": "object",
+   "parent_path": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.edtSiteMap",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -24
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 37
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 161
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 288
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 1065
+    }
+   },
+   "sibling_index": 13,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 37,
+    "left": 161,
+    "top": 415,
+    "width": 1065
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 227,
+   "name": "edtBinMap",
+   "objkind": "object",
+   "parent_path": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.edtBinMap",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -24
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 37
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 161
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 415
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 1065
+    }
+   },
+   "sibling_index": 14,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "btnCompareClick"
+   },
+   "geometry": {
+    "height": 37,
+    "left": 1056,
+    "top": 464,
+    "width": 145
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 240,
+   "name": "btnCompare",
+   "objkind": "object",
+   "parent_path": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.btnCompare",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Compare"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 37
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 1056
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btnCompareClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 464
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 145
+    }
+   },
+   "sibling_index": 15,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "ASE_K Socket/DataCompileForm.dfm",
+ "total_nodes_incl_root": 18
+}

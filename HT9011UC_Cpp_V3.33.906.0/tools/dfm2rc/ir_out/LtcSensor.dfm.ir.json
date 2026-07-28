@@ -1,0 +1,5747 @@
+{
+ "control_node_count": 102,
+ "encoding_used": "cp950",
+ "form_class": "TfLtcSensor",
+ "form_name": "fLtcSensor",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fLtcSensor.btnClose",
+    "fLtcSensor.Panel1",
+    "fLtcSensor.TimerLtcSensor",
+    "fLtcSensor.DellTest"
+   ],
+   "class": "TfLtcSensor",
+   "depth": 0,
+   "events": {
+    "OnClose": "FormClose",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow"
+   },
+   "geometry": {
+    "height": null,
+    "left": 309,
+    "top": 159,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "fLtcSensor",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "fLtcSensor",
+   "properties": {
+    "BorderIcons": {
+     "type": "SET",
+     "value": [
+      "biSystemMenu"
+     ]
+    },
+    "BorderStyle": {
+     "type": "SCALAR",
+     "value": "bsSingle"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "LtcSensor"
+    },
+    "ClientHeight": {
+     "type": "SCALAR",
+     "value": 480
+    },
+    "ClientWidth": {
+     "type": "SCALAR",
+     "value": 1198
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "DragKind": {
+     "type": "SCALAR",
+     "value": "dkDock"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 309
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnClose": {
+     "type": "SCALAR",
+     "value": "FormClose"
+    },
+    "OnDestroy": {
+     "type": "SCALAR",
+     "value": "FormDestroy"
+    },
+    "OnShow": {
+     "type": "SCALAR",
+     "value": "FormShow"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 159
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alBottom",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 1,
+   "events": {
+    "OnClick": "btnCloseClick"
+   },
+   "geometry": {
+    "height": 39,
+    "left": 0,
+    "top": 441,
+    "width": 1198
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 22,
+   "name": "btnClose",
+   "objkind": "object",
+   "parent_path": "fLtcSensor",
+   "path": "fLtcSensor.btnClose",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alBottom"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Exit"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 39
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btnCloseClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 441
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 1198
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [
+    "fLtcSensor.Panel1.pnlTop",
+    "fLtcSensor.Panel1.pnlCenter"
+   ],
+   "class": "TPanel",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 441,
+    "left": 0,
+    "top": 0,
+    "width": 1198
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 38,
+   "name": "Panel1",
+   "objkind": "object",
+   "parent_path": "fLtcSensor",
+   "path": "fLtcSensor.Panel1",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 441
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 1198
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [
+    "fLtcSensor.Panel1.pnlTop.ledSht2Servo",
+    "fLtcSensor.Panel1.pnlTop.lblSht1Servo",
+    "fLtcSensor.Panel1.pnlTop.ledSht1Servo",
+    "fLtcSensor.Panel1.pnlTop.lblSht2Servo",
+    "fLtcSensor.Panel1.pnlTop.lblLtcCount",
+    "fLtcSensor.Panel1.pnlTop.Label22",
+    "fLtcSensor.Panel1.pnlTop.Label23",
+    "fLtcSensor.Panel1.pnlTop.ledSht3Servo",
+    "fLtcSensor.Panel1.pnlTop.lblSht3Servo",
+    "fLtcSensor.Panel1.pnlTop.btSetLtc",
+    "fLtcSensor.Panel1.pnlTop.btSh1Servo",
+    "fLtcSensor.Panel1.pnlTop.btSh2Servo",
+    "fLtcSensor.Panel1.pnlTop.BtnDellTest",
+    "fLtcSensor.Panel1.pnlTop.ScrollBar1",
+    "fLtcSensor.Panel1.pnlTop.btSh3Servo"
+   ],
+   "class": "TPanel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 73,
+    "left": 0,
+    "top": 0,
+    "width": 1198
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 47,
+   "name": "pnlTop",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1",
+   "path": "fLtcSensor.Panel1.pnlTop",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 73
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 1198
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 22,
+    "left": 364,
+    "top": 13,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 56,
+   "name": "ledSht2Servo",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.ledSht2Servo",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 364
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 188,
+    "top": 14,
+    "width": 66
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 63,
+   "name": "lblSht1Servo",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.lblSht1Servo",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Servo On"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 188
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 66
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 22,
+    "left": 164,
+    "top": 13,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 76,
+   "name": "ledSht1Servo",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.ledSht1Servo",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 164
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 388,
+    "top": 14,
+    "width": 66
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 83,
+   "name": "lblSht2Servo",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.lblSht2Servo",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Servo On"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 388
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 66
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 164,
+    "top": 56,
+    "width": 297
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 96,
+   "name": "lblLtcCount",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.lblLtcCount",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "lblLtcCount"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 164
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 56
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 297
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 808,
+    "top": 40,
+    "width": 38
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 104,
+   "name": "Label22",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.Label22",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Label22"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 808
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 38
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 732,
+    "top": 12,
+    "width": 38
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 112,
+   "name": "Label23",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.Label23",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Label23"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 732
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 38
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 22,
+    "left": 556,
+    "top": 13,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 120,
+   "name": "ledSht3Servo",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.ledSht3Servo",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 556
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 580,
+    "top": 14,
+    "width": 66
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 127,
+   "name": "lblSht3Servo",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.lblSht3Servo",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Servo On"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 580
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 66
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 3,
+   "events": {
+    "OnClick": "btSetLtcClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 84,
+    "top": 44,
+    "width": 75
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 140,
+   "name": "btSetLtc",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.btSetLtc",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Set"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 84
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btSetLtcClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 44
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 75
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 3,
+   "events": {
+    "OnClick": "btSh1ServoClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 84,
+    "top": 12,
+    "width": 75
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 149,
+   "name": "btSh1Servo",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.btSh1Servo",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Shuttle1 Servo"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 84
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btSh1ServoClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 75
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 3,
+   "events": {
+    "OnClick": "btSh2ServoClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 280,
+    "top": 12,
+    "width": 75
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 158,
+   "name": "btSh2Servo",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.btSh2Servo",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Shuttle2 Servo"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 280
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btSh2ServoClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 75
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 3,
+   "events": {
+    "OnClick": "BtnDellTestClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 772,
+    "top": 8,
+    "width": 75
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 167,
+   "name": "BtnDellTest",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.BtnDellTest",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "BtnDellTest"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 772
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "BtnDellTestClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 75
+    }
+   },
+   "sibling_index": 12,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TScrollBar",
+   "depth": 3,
+   "events": {
+    "OnChange": "ScrollBar1Change"
+   },
+   "geometry": {
+    "height": 17,
+    "left": 684,
+    "top": 40,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 177,
+   "name": "ScrollBar1",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.ScrollBar1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 684
+    },
+    "Min": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "OnChange": {
+     "type": "SCALAR",
+     "value": "ScrollBar1Change"
+    },
+    "PageSize": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Position": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 13,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 3,
+   "events": {
+    "OnClick": "btSh3ServoClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 472,
+    "top": 12,
+    "width": 75
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 189,
+   "name": "btSh3Servo",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.btSh3Servo",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Shuttle3 Servo"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 472
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btSh3ServoClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 75
+    }
+   },
+   "sibling_index": 14,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh1Y",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh2Y",
+    "fLtcSensor.Panel1.pnlCenter.gbInSh1Y",
+    "fLtcSensor.Panel1.pnlCenter.gbInSh2Y",
+    "fLtcSensor.Panel1.pnlCenter.pnlCaption",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y",
+    "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc"
+   ],
+   "class": "TPanel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 368,
+    "left": 0,
+    "top": 73,
+    "width": 1198
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 199,
+   "name": "pnlCenter",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1",
+   "path": "fLtcSensor.Panel1.pnlCenter",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "BorderWidth": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 368
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 73
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 1198
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": "alLeft",
+   "anchors": null,
+   "child_paths": [
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z.labOut1_Z1_Axis",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z.labOut1_Z2_Axis",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z.labOut1_Z1_Count",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z.labOut1_Z2_Count",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z.ledOut1_1",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z.ledOut1_2",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z.btGetSh1Ltc",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z.Memo_Out1Z1",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z.Memo_Out1Z2"
+   ],
+   "class": "TGroupBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 360,
+    "left": 80,
+    "top": 4,
+    "width": 142
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 209,
+   "name": "gbOutSh1Z",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alLeft"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Out Shuttle 1 Z"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 142
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 12,
+    "top": 60,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 217,
+   "name": "labOut1_Z1_Axis",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z.labOut1_Z1_Axis",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Counter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 80,
+    "top": 60,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 225,
+   "name": "labOut1_Z2_Axis",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z.labOut1_Z2_Axis",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Counter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 12,
+    "top": 96,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 233,
+   "name": "labOut1_Z1_Count",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z.labOut1_Z1_Count",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Counter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 80,
+    "top": 96,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 241,
+   "name": "labOut1_Z2_Count",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z.labOut1_Z2_Count",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Counter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 22,
+    "left": 26,
+    "top": 19,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 249,
+   "name": "ledOut1_1",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z.ledOut1_1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 26
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 22,
+    "left": 94,
+    "top": 19,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 256,
+   "name": "ledOut1_2",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z.ledOut1_2",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 94
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 4,
+   "events": {
+    "OnClick": "btGetSh1LtcClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 8,
+    "top": 328,
+    "width": 129
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 263,
+   "name": "btGetSh1Ltc",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z.btGetSh1Ltc",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Get"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btGetSh1LtcClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 328
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 129
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 189,
+    "left": 7,
+    "top": 136,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 272,
+   "name": "Memo_Out1Z1",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z.Memo_Out1Z1",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 189
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 189,
+    "left": 75,
+    "top": 136,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 280,
+   "name": "Memo_Out1Z2",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z.Memo_Out1Z2",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 189
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 75
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": "alLeft",
+   "anchors": null,
+   "child_paths": [
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z.labOut2_Z1_Axis",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z.labOut2_Z2_Axis",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z.labOut2_Z1_Count",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z.labOut2_Z2_Count",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z.ledOut2_1",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z.ledOut2_2",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z.Memo_Out2Z1",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z.Memo_Out2Z2",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z.btGetSh2Ltc"
+   ],
+   "class": "TGroupBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 360,
+    "left": 222,
+    "top": 4,
+    "width": 142
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 289,
+   "name": "gbOutSh2Z",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alLeft"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Out Shuttle 2 Z"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 222
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 142
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 12,
+    "top": 60,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 297,
+   "name": "labOut2_Z1_Axis",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z.labOut2_Z1_Axis",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Counter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 80,
+    "top": 60,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 305,
+   "name": "labOut2_Z2_Axis",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z.labOut2_Z2_Axis",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Counter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 12,
+    "top": 96,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 313,
+   "name": "labOut2_Z1_Count",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z.labOut2_Z1_Count",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Counter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 80,
+    "top": 96,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 321,
+   "name": "labOut2_Z2_Count",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z.labOut2_Z2_Count",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Counter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 22,
+    "left": 26,
+    "top": 19,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 329,
+   "name": "ledOut2_1",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z.ledOut2_1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 26
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 22,
+    "left": 94,
+    "top": 19,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 336,
+   "name": "ledOut2_2",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z.ledOut2_2",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 94
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 189,
+    "left": 7,
+    "top": 136,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 343,
+   "name": "Memo_Out2Z1",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z.Memo_Out2Z1",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 189
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 189,
+    "left": 75,
+    "top": 136,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 351,
+   "name": "Memo_Out2Z2",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z.Memo_Out2Z2",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 189
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 75
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 4,
+   "events": {
+    "OnClick": "btGetSh2LtcClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 8,
+    "top": 328,
+    "width": 129
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 359,
+   "name": "btGetSh2Ltc",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z.btGetSh2Ltc",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Get"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btGetSh2LtcClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 328
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 129
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": "alLeft",
+   "anchors": null,
+   "child_paths": [
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh1Y.labOut1_Y_Axis",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh1Y.labOut1_Y_Count",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh1Y.ledOut1_Y",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh1Y.btGetSh1YLtc",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh1Y.Memo_Out1Y"
+   ],
+   "class": "TGroupBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 360,
+    "left": 506,
+    "top": 4,
+    "width": 90
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 369,
+   "name": "gbOutSh1Y",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Y",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alLeft"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Out Shuttle 1 Y"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 506
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 90
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 20,
+    "top": 60,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 377,
+   "name": "labOut1_Y_Axis",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Y.labOut1_Y_Axis",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Counter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 20,
+    "top": 96,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 385,
+   "name": "labOut1_Y_Count",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Y.labOut1_Y_Count",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Counter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 22,
+    "left": 34,
+    "top": 19,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 393,
+   "name": "ledOut1_Y",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Y.ledOut1_Y",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 34
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 4,
+   "events": {
+    "OnClick": "btGetSh1LtcClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 16,
+    "top": 328,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 400,
+   "name": "btGetSh1YLtc",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Y.btGetSh1YLtc",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Get"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btGetSh1LtcClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 328
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 189,
+    "left": 15,
+    "top": 136,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 409,
+   "name": "Memo_Out1Y",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Y.Memo_Out1Y",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 189
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": "alLeft",
+   "anchors": null,
+   "child_paths": [
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh2Y.labOut2_Y_Axis",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh2Y.labOut2_Y_Count",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh2Y.ledOut2_Y",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh2Y.Memo_Out2Y",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh2Y.btGetSh2YLtc"
+   ],
+   "class": "TGroupBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 360,
+    "left": 596,
+    "top": 4,
+    "width": 90
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 418,
+   "name": "gbOutSh2Y",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Y",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alLeft"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Out Shuttle 2 Y"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 596
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 90
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 20,
+    "top": 60,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 426,
+   "name": "labOut2_Y_Axis",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Y.labOut2_Y_Axis",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Counter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 20,
+    "top": 96,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 434,
+   "name": "labOut2_Y_Count",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Y.labOut2_Y_Count",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Counter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 22,
+    "left": 34,
+    "top": 19,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 442,
+   "name": "ledOut2_Y",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Y.ledOut2_Y",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 34
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 189,
+    "left": 15,
+    "top": 136,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 449,
+   "name": "Memo_Out2Y",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Y.Memo_Out2Y",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 189
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 4,
+   "events": {
+    "OnClick": "btGetSh2LtcClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 15,
+    "top": 328,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 457,
+   "name": "btGetSh2YLtc",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Y.btGetSh2YLtc",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Get"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btGetSh2LtcClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 328
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": "alLeft",
+   "anchors": null,
+   "child_paths": [
+    "fLtcSensor.Panel1.pnlCenter.gbInSh1Y.labIn1_Y_Axis",
+    "fLtcSensor.Panel1.pnlCenter.gbInSh1Y.labIn1_Y_Count",
+    "fLtcSensor.Panel1.pnlCenter.gbInSh1Y.ledIn1_Y",
+    "fLtcSensor.Panel1.pnlCenter.gbInSh1Y.btGetInSh1YLtc",
+    "fLtcSensor.Panel1.pnlCenter.gbInSh1Y.Memo_In1Y"
+   ],
+   "class": "TGroupBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 360,
+    "left": 828,
+    "top": 4,
+    "width": 90
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 467,
+   "name": "gbInSh1Y",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbInSh1Y",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alLeft"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "In Shuttle 1 Y"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 828
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 90
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 7,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 20,
+    "top": 60,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 475,
+   "name": "labIn1_Y_Axis",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbInSh1Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbInSh1Y.labIn1_Y_Axis",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Counter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 20,
+    "top": 96,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 483,
+   "name": "labIn1_Y_Count",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbInSh1Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbInSh1Y.labIn1_Y_Count",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Counter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 22,
+    "left": 34,
+    "top": 19,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 491,
+   "name": "ledIn1_Y",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbInSh1Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbInSh1Y.ledIn1_Y",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 34
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 4,
+   "events": {
+    "OnClick": "btGetSh1LtcClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 16,
+    "top": 328,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 498,
+   "name": "btGetInSh1YLtc",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbInSh1Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbInSh1Y.btGetInSh1YLtc",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Get"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btGetSh1LtcClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 328
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 189,
+    "left": 15,
+    "top": 136,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 507,
+   "name": "Memo_In1Y",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbInSh1Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbInSh1Y.Memo_In1Y",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 189
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": "alLeft",
+   "anchors": null,
+   "child_paths": [
+    "fLtcSensor.Panel1.pnlCenter.gbInSh2Y.labIn2_Y_Axis",
+    "fLtcSensor.Panel1.pnlCenter.gbInSh2Y.labIn2_Y_Count",
+    "fLtcSensor.Panel1.pnlCenter.gbInSh2Y.ledIn2_Y",
+    "fLtcSensor.Panel1.pnlCenter.gbInSh2Y.Memo_In2Y",
+    "fLtcSensor.Panel1.pnlCenter.gbInSh2Y.btGetInSh2YLtc"
+   ],
+   "class": "TGroupBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 360,
+    "left": 918,
+    "top": 4,
+    "width": 90
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 516,
+   "name": "gbInSh2Y",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbInSh2Y",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alLeft"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "In Shuttle 2 Y"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 918
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 90
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 8,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 20,
+    "top": 60,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 524,
+   "name": "labIn2_Y_Axis",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbInSh2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbInSh2Y.labIn2_Y_Axis",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Counter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 20,
+    "top": 96,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 532,
+   "name": "labIn2_Y_Count",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbInSh2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbInSh2Y.labIn2_Y_Count",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Counter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 22,
+    "left": 34,
+    "top": 19,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 540,
+   "name": "ledIn2_Y",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbInSh2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbInSh2Y.ledIn2_Y",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 34
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 189,
+    "left": 15,
+    "top": 136,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 547,
+   "name": "Memo_In2Y",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbInSh2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbInSh2Y.Memo_In2Y",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 189
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 4,
+   "events": {
+    "OnClick": "btGetSh2LtcClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 15,
+    "top": 328,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 555,
+   "name": "btGetInSh2YLtc",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbInSh2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbInSh2Y.btGetInSh2YLtc",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Get"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btGetSh2LtcClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 328
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": "alLeft",
+   "anchors": null,
+   "child_paths": [
+    "fLtcSensor.Panel1.pnlCenter.pnlCaption.Label9",
+    "fLtcSensor.Panel1.pnlCenter.pnlCaption.Label10",
+    "fLtcSensor.Panel1.pnlCenter.pnlCaption.Label13"
+   ],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 360,
+    "left": 4,
+    "top": 4,
+    "width": 76
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 565,
+   "name": "pnlCaption",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter",
+   "path": "fLtcSensor.Panel1.pnlCenter.pnlCaption",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alLeft"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 76
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 8,
+    "top": 64,
+    "width": 39
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 574,
+   "name": "Label9",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.pnlCaption",
+   "path": "fLtcSensor.Panel1.pnlCenter.pnlCaption.Label9",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Axis No."
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 64
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 39
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 8,
+    "top": 100,
+    "width": 57
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 581,
+   "name": "Label10",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.pnlCaption",
+   "path": "fLtcSensor.Panel1.pnlCenter.pnlCaption.Label10",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Latch count"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 57
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 8,
+    "top": 28,
+    "width": 59
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 588,
+   "name": "Label13",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.pnlCaption",
+   "path": "fLtcSensor.Panel1.pnlCenter.pnlCaption.Label13",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Latch Signal"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 59
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alLeft",
+   "anchors": null,
+   "child_paths": [
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z.labOut3_Z1_Axis",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z.labOut3_Z2_Axis",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z.labOut3_Z1_Count",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z.labOut3_Z2_Count",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z.ledOut3_1",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z.ledOut3_2",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z.Memo_Out3Z1",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z.Memo_Out3Z2",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z.btGetSh3Ltc"
+   ],
+   "class": "TGroupBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 360,
+    "left": 364,
+    "top": 4,
+    "width": 142
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 596,
+   "name": "gbOutSh3Z",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alLeft"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Out Shuttle 3 Z"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 364
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 142
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 12,
+    "top": 60,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 604,
+   "name": "labOut3_Z1_Axis",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z.labOut3_Z1_Axis",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Counter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 80,
+    "top": 60,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 612,
+   "name": "labOut3_Z2_Axis",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z.labOut3_Z2_Axis",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Counter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 12,
+    "top": 96,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 620,
+   "name": "labOut3_Z1_Count",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z.labOut3_Z1_Count",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Counter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 80,
+    "top": 96,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 628,
+   "name": "labOut3_Z2_Count",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z.labOut3_Z2_Count",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Counter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 22,
+    "left": 26,
+    "top": 19,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 636,
+   "name": "ledOut3_1",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z.ledOut3_1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 26
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 22,
+    "left": 94,
+    "top": 19,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 643,
+   "name": "ledOut3_2",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z.ledOut3_2",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 94
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 189,
+    "left": 7,
+    "top": 136,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 650,
+   "name": "Memo_Out3Z1",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z.Memo_Out3Z1",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 189
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 189,
+    "left": 75,
+    "top": 136,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 658,
+   "name": "Memo_Out3Z2",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z.Memo_Out3Z2",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 189
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 75
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 4,
+   "events": {
+    "OnClick": "btGetSh3LtcClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 8,
+    "top": 328,
+    "width": 129
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 666,
+   "name": "btGetSh3Ltc",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z.btGetSh3Ltc",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Get"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btGetSh3LtcClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 328
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 129
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": "alLeft",
+   "anchors": null,
+   "child_paths": [
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y.labOut3_Y_Axis",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y.labOut3_Y_Count",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y.ledOut3_Y",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y.ledOut3_Y2",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y.labOut3_Y2_Axis",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y.labOut3_Y2_Count",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y.btGetSh3YLtc",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y.Memo_Out3Y",
+    "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y.Memo_Out3Y2"
+   ],
+   "class": "TGroupBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 360,
+    "left": 686,
+    "top": 4,
+    "width": 142
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 676,
+   "name": "gbOutSh3Y",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alLeft"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Out Shuttle 3 Y"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 686
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 142
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 12,
+    "top": 60,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 684,
+   "name": "labOut3_Y_Axis",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y.labOut3_Y_Axis",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Counter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 12,
+    "top": 96,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 692,
+   "name": "labOut3_Y_Count",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y.labOut3_Y_Count",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Counter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 22,
+    "left": 26,
+    "top": 19,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 700,
+   "name": "ledOut3_Y",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y.ledOut3_Y",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 26
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 22,
+    "left": 94,
+    "top": 19,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 707,
+   "name": "ledOut3_Y2",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y.ledOut3_Y2",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 94
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 80,
+    "top": 60,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 714,
+   "name": "labOut3_Y2_Axis",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y.labOut3_Y2_Axis",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Counter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 80,
+    "top": 96,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 722,
+   "name": "labOut3_Y2_Count",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y.labOut3_Y2_Count",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Counter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 4,
+   "events": {
+    "OnClick": "btGetSh3LtcClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 8,
+    "top": 328,
+    "width": 129
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 730,
+   "name": "btGetSh3YLtc",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y.btGetSh3YLtc",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Get"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btGetSh3LtcClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 328
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 129
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 189,
+    "left": 7,
+    "top": 136,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 739,
+   "name": "Memo_Out3Y",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y.Memo_Out3Y",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 189
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 189,
+    "left": 75,
+    "top": 136,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 747,
+   "name": "Memo_Out3Y2",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y.Memo_Out3Y2",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 189
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 75
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": "alLeft",
+   "anchors": null,
+   "child_paths": [
+    "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh1_2Y",
+    "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh2_2Y"
+   ],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 360,
+    "left": 1008,
+    "top": 4,
+    "width": 185
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 756,
+   "name": "palInSHAutoLtc",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter",
+   "path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alLeft"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 1008
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 185
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": 9,
+   "visible": null
+  },
+  {
+   "align": "alLeft",
+   "anchors": null,
+   "child_paths": [
+    "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh1_2Y.labIn1_2_Y_Axis",
+    "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh1_2Y.labIn1_2_Y_Count",
+    "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh1_2Y.ledIn1_2_Y",
+    "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh1_2Y.Button5",
+    "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh1_2Y.Memo_In1_2Y"
+   ],
+   "class": "TGroupBox",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 360,
+    "left": 0,
+    "top": 0,
+    "width": 90
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 765,
+   "name": "gbInSh1_2Y",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc",
+   "path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh1_2Y",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alLeft"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "In Shuttle 1_2 Y"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 90
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 20,
+    "top": 60,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 773,
+   "name": "labIn1_2_Y_Axis",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh1_2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh1_2Y.labIn1_2_Y_Axis",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Counter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 20,
+    "top": 96,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 781,
+   "name": "labIn1_2_Y_Count",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh1_2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh1_2Y.labIn1_2_Y_Count",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Counter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 22,
+    "left": 34,
+    "top": 19,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 789,
+   "name": "ledIn1_2_Y",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh1_2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh1_2Y.ledIn1_2_Y",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 34
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 5,
+   "events": {
+    "OnClick": "btGetSh1LtcClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 16,
+    "top": 328,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 796,
+   "name": "Button5",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh1_2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh1_2Y.Button5",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Get"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btGetSh1LtcClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 328
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 189,
+    "left": 15,
+    "top": 136,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 805,
+   "name": "Memo_In1_2Y",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh1_2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh1_2Y.Memo_In1_2Y",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 189
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": "alLeft",
+   "anchors": null,
+   "child_paths": [
+    "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh2_2Y.labIn2_2_Y_Axis",
+    "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh2_2Y.labIn2_2_Y_Count",
+    "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh2_2Y.ledIn2_2_Y",
+    "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh2_2Y.Memo_In2_2Y",
+    "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh2_2Y.Button6"
+   ],
+   "class": "TGroupBox",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 360,
+    "left": 90,
+    "top": 0,
+    "width": 90
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 814,
+   "name": "gbInSh2_2Y",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc",
+   "path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh2_2Y",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alLeft"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "In Shuttle 2_2 Y"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 90
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 90
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 20,
+    "top": 60,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 822,
+   "name": "labIn2_2_Y_Axis",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh2_2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh2_2Y.labIn2_2_Y_Axis",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Counter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 20,
+    "top": 96,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 830,
+   "name": "labIn2_2_Y_Count",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh2_2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh2_2Y.labIn2_2_Y_Count",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Counter"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 22,
+    "left": 34,
+    "top": 19,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 838,
+   "name": "ledIn2_2_Y",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh2_2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh2_2Y.ledIn2_2_Y",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDSqLarge"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 34
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 189,
+    "left": 15,
+    "top": 136,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 845,
+   "name": "Memo_In2_2Y",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh2_2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh2_2Y.Memo_In2_2Y",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 189
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 5,
+   "events": {
+    "OnClick": "btGetSh2LtcClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 15,
+    "top": 328,
+    "width": 60
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 853,
+   "name": "Button6",
+   "objkind": "object",
+   "parent_path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh2_2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh2_2Y.Button6",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Get"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btGetSh2LtcClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 328
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 60
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTimer",
+   "depth": 1,
+   "events": {
+    "OnTimer": "TimerLtcSensorTimer"
+   },
+   "geometry": {
+    "height": null,
+    "left": 932,
+    "top": null,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 866,
+   "name": "TimerLtcSensor",
+   "objkind": "object",
+   "parent_path": "fLtcSensor",
+   "path": "fLtcSensor.TimerLtcSensor",
+   "properties": {
+    "Enabled": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 932
+    },
+    "OnTimer": {
+     "type": "SCALAR",
+     "value": "TimerLtcSensorTimer"
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTimer",
+   "depth": 1,
+   "events": {
+    "OnTimer": "DellTestTimer"
+   },
+   "geometry": {
+    "height": null,
+    "left": 904,
+    "top": null,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 872,
+   "name": "DellTest",
+   "objkind": "object",
+   "parent_path": "fLtcSensor",
+   "path": "fLtcSensor.DellTest",
+   "properties": {
+    "Enabled": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 904
+    },
+    "OnTimer": {
+     "type": "SCALAR",
+     "value": "DellTestTimer"
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "LtcSensor.dfm",
+ "total_nodes_incl_root": 103
+}

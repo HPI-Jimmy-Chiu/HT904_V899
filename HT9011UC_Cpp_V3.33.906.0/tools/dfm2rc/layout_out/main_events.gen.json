@@ -1,0 +1,1759 @@
+{
+ "event_count": 250,
+ "events": [
+  {
+   "control_path": "fMain",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fMain",
+   "vcl_class": "TfMain"
+  },
+  {
+   "control_path": "fMain",
+   "event_name": "OnCreate",
+   "handler_name": "FormCreate",
+   "leaf_name": "fMain",
+   "vcl_class": "TfMain"
+  },
+  {
+   "control_path": "fMain",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fMain",
+   "vcl_class": "TfMain"
+  },
+  {
+   "control_path": "fMain",
+   "event_name": "OnShortCut",
+   "handler_name": "FormShortCut",
+   "leaf_name": "fMain",
+   "vcl_class": "TfMain"
+  },
+  {
+   "control_path": "fMain",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fMain",
+   "vcl_class": "TfMain"
+  },
+  {
+   "control_path": "fMain.pgMain",
+   "event_name": "OnChange",
+   "handler_name": "pgMainChange",
+   "leaf_name": "pgMain",
+   "vcl_class": "TPageControl"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.sbLaguage",
+   "event_name": "OnClick",
+   "handler_name": "sbLaguageClick",
+   "leaf_name": "sbLaguage",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.sbCloseProgram",
+   "event_name": "OnClick",
+   "handler_name": "sbCloseProgramClick",
+   "leaf_name": "sbCloseProgram",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.sbSetting",
+   "event_name": "OnClick",
+   "handler_name": "sbSettingClick",
+   "leaf_name": "sbSetting",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.sbConfig",
+   "event_name": "OnClick",
+   "handler_name": "sbConfigClick",
+   "leaf_name": "sbConfig",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.sbOffset",
+   "event_name": "OnClick",
+   "handler_name": "sbOffsetClick",
+   "leaf_name": "sbOffset",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.sbSpeed",
+   "event_name": "OnClick",
+   "handler_name": "sbSpeedClick",
+   "leaf_name": "sbSpeed",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.sbIO",
+   "event_name": "OnClick",
+   "handler_name": "sbIOClick",
+   "leaf_name": "sbIO",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.sbMessage",
+   "event_name": "OnClick",
+   "handler_name": "sbMessageClick",
+   "leaf_name": "sbMessage",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.sbCalculator",
+   "event_name": "OnClick",
+   "handler_name": "sbCalculatorClick",
+   "leaf_name": "sbCalculator",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.sbCalculator",
+   "event_name": "OnDblClick",
+   "handler_name": "sbCalculatorDblClick",
+   "leaf_name": "sbCalculator",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.btnView",
+   "event_name": "OnClick",
+   "handler_name": "btnViewClick",
+   "leaf_name": "btnView",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.Panel2.labUser",
+   "event_name": "OnClick",
+   "handler_name": "labUserClick",
+   "leaf_name": "labUser",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.Panel2.labTestSite",
+   "event_name": "OnClick",
+   "handler_name": "labTestSiteClick",
+   "leaf_name": "labTestSite",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.Panel2.sbEngSite",
+   "event_name": "OnClick",
+   "handler_name": "sbEngSiteClick",
+   "leaf_name": "sbEngSite",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.Panel2.edtLogin",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtLoginKeyPress",
+   "leaf_name": "edtLogin",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.Panel2.edtLogin",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtLoginMouseDown",
+   "leaf_name": "edtLogin",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.Panel2.cbUserSelect",
+   "event_name": "OnChange",
+   "handler_name": "cbUserSelectChange",
+   "leaf_name": "cbUserSelect",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.Panel2.palFT",
+   "event_name": "OnClick",
+   "handler_name": "palFTClick",
+   "leaf_name": "palFT",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.Panel2.palFT",
+   "event_name": "OnMouseDown",
+   "handler_name": "palFTMouseDown",
+   "leaf_name": "palFT",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.Panel2.palFT",
+   "event_name": "OnMouseUp",
+   "handler_name": "palFTMouseUp",
+   "leaf_name": "palFT",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.Panel2.palRT",
+   "event_name": "OnClick",
+   "handler_name": "palRTClick",
+   "leaf_name": "palRT",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.Panel2.palRT",
+   "event_name": "OnMouseDown",
+   "handler_name": "palRTMouseDown",
+   "leaf_name": "palRT",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.Panel2.palRT",
+   "event_name": "OnMouseUp",
+   "handler_name": "palRTMouseUp",
+   "leaf_name": "palRT",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.Panel2.edSetupFileName",
+   "event_name": "OnKeyUp",
+   "handler_name": "edSetupFileNameKeyUp",
+   "leaf_name": "edSetupFileName",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.Panel2.SitePanel.mtDutOnOff",
+   "event_name": "OnMouseUp",
+   "handler_name": "mtDutOnOffMouseUp",
+   "leaf_name": "mtDutOnOff",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.Panel2.palEQC",
+   "event_name": "OnClick",
+   "handler_name": "palEQCClick",
+   "leaf_name": "palEQC",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.Panel2.palEQC",
+   "event_name": "OnMouseDown",
+   "handler_name": "palEQCMouseDown",
+   "leaf_name": "palEQC",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.Panel2.palEQC",
+   "event_name": "OnMouseUp",
+   "handler_name": "palEQCMouseUp",
+   "leaf_name": "palEQC",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.Panel2.Off_lineDisplay.AutoCleanPad",
+   "event_name": "OnDblClick",
+   "handler_name": "labAutomationDblClick",
+   "leaf_name": "AutoCleanPad",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.Panel2.Off_lineDisplay.palMainStatus.PiggyBackLab",
+   "event_name": "OnClick",
+   "handler_name": "PiggyBackLabClick",
+   "leaf_name": "PiggyBackLab",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.Panel2.Off_lineDisplay.palMainStatus.cbDisableSiteMappingCheck",
+   "event_name": "OnClick",
+   "handler_name": "cbDisableSiteMappingCheckClick",
+   "leaf_name": "cbDisableSiteMappingCheck",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.Panel2.btLogin",
+   "event_name": "OnClick",
+   "handler_name": "btLoginClick",
+   "leaf_name": "btLogin",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetting.labTester",
+   "event_name": "OnClick",
+   "handler_name": "labTesterClick",
+   "leaf_name": "labTester",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetting.labRunMode",
+   "event_name": "OnClick",
+   "handler_name": "labRunModeClick",
+   "leaf_name": "labRunMode",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetting.spbFan",
+   "event_name": "OnClick",
+   "handler_name": "spbFanClick",
+   "leaf_name": "spbFan",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetting.spbLight",
+   "event_name": "OnClick",
+   "handler_name": "spbLightClick",
+   "leaf_name": "spbLight",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetting.spbChamberFan",
+   "event_name": "OnClick",
+   "handler_name": "spbChamberFanClick",
+   "leaf_name": "spbChamberFan",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetting.PutCleanPad",
+   "event_name": "OnClick",
+   "handler_name": "PutCleanPadClick",
+   "leaf_name": "PutCleanPad",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetting.AutoCleanButton",
+   "event_name": "OnClick",
+   "handler_name": "AutoCleanButtonClick",
+   "leaf_name": "AutoCleanButton",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetting.sbStateRecord2",
+   "event_name": "OnClick",
+   "handler_name": "sbStateRecord2Click",
+   "leaf_name": "sbStateRecord2",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetting.sbPEModel",
+   "event_name": "OnClick",
+   "handler_name": "sbPEModelClick",
+   "leaf_name": "sbPEModel",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetting.cbRunStartMode",
+   "event_name": "OnChange",
+   "handler_name": "cbRunStartModeChange",
+   "leaf_name": "cbRunStartMode",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetting.cbRunStartMode",
+   "event_name": "OnClick",
+   "handler_name": "cbRunStartModeClick",
+   "leaf_name": "cbRunStartMode",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetting.palTester.imgTester",
+   "event_name": "OnClick",
+   "handler_name": "imgTesterClick",
+   "leaf_name": "imgTester",
+   "vcl_class": "TImage"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetting.palRunMode.imgRunMode",
+   "event_name": "OnClick",
+   "handler_name": "imgRunModeClick",
+   "leaf_name": "imgRunMode",
+   "vcl_class": "TImage"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetting.cbbRunModeSel",
+   "event_name": "OnChange",
+   "handler_name": "cbbRunModeSelChange",
+   "leaf_name": "cbbRunModeSel",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetting.cb_MainAutoSkipSwitch",
+   "event_name": "OnClick",
+   "handler_name": "cb_MainAutoSkipSwitchClick",
+   "leaf_name": "cb_MainAutoSkipSwitch",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetting.pnlTempSetting.labTemperature",
+   "event_name": "OnClick",
+   "handler_name": "labTemperatureClick",
+   "leaf_name": "labTemperature",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetting.pnlTempSetting.spbSet",
+   "event_name": "OnClick",
+   "handler_name": "spbSetClick",
+   "leaf_name": "spbSet",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetting.pnlTempSetting.edWorkTemperBase",
+   "event_name": "OnKeyPress",
+   "handler_name": "edWorkTemperBaseKeyPress",
+   "leaf_name": "edWorkTemperBase",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetting.pnlTempSetting.edWorkTemperBase",
+   "event_name": "OnMouseDown",
+   "handler_name": "edWorkTemperBaseMouseDown",
+   "leaf_name": "edWorkTemperBase",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetting.pnlTempSetting.edSoakTime",
+   "event_name": "OnKeyPress",
+   "handler_name": "edSoakTimeKeyPress",
+   "leaf_name": "edSoakTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetting.pnlTempSetting.edSoakTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edSoakTimeMouseDown",
+   "leaf_name": "edSoakTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetting.pnlTempSetting.palTemperatureOnOff.imgTempOnOff",
+   "event_name": "OnClick",
+   "handler_name": "Panel42Click",
+   "leaf_name": "imgTempOnOff",
+   "vcl_class": "TImage"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetting.pnlTempSetting.edATCAmbientTemper",
+   "event_name": "OnKeyPress",
+   "handler_name": "edWorkTemperBaseKeyPress",
+   "leaf_name": "edATCAmbientTemper",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetting.pnlTempSetting.edATCAmbientTemper",
+   "event_name": "OnMouseDown",
+   "handler_name": "edWorkTemperBaseMouseDown",
+   "leaf_name": "edATCAmbientTemper",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.labAutomation",
+   "event_name": "OnDblClick",
+   "handler_name": "labAutomationDblClick",
+   "leaf_name": "labAutomation",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.pnlSaveSummary",
+   "event_name": "OnMouseDown",
+   "handler_name": "pnlSaveSummaryMouseDown",
+   "leaf_name": "pnlSaveSummary",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.pnlSaveSummary",
+   "event_name": "OnMouseUp",
+   "handler_name": "pnlSaveSummaryMouseUp",
+   "leaf_name": "pnlSaveSummary",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palConfig.sbExit",
+   "event_name": "OnClick",
+   "handler_name": "sbExitClick",
+   "leaf_name": "sbExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palConfig.sbSelete",
+   "event_name": "OnClick",
+   "handler_name": "sbSeleteClick",
+   "leaf_name": "sbSelete",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palConfig.sbClear",
+   "event_name": "OnClick",
+   "handler_name": "sbClearClick",
+   "leaf_name": "sbClear",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palConfig.sbBuilder",
+   "event_name": "OnClick",
+   "handler_name": "sbBuilderClick",
+   "leaf_name": "sbBuilder",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palConfig.sbStartMode",
+   "event_name": "OnClick",
+   "handler_name": "sbStartModeClick",
+   "leaf_name": "sbStartMode",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palConfig.sbPassword",
+   "event_name": "OnClick",
+   "handler_name": "sbPasswordClick",
+   "leaf_name": "sbPassword",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palConfig.sbConfiguration",
+   "event_name": "OnClick",
+   "handler_name": "sbConfigurationClick",
+   "leaf_name": "sbConfiguration",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palConfig.sbTowerLight",
+   "event_name": "OnClick",
+   "handler_name": "sbTowerLightClick",
+   "leaf_name": "sbTowerLight",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palConfig.sbDioSet",
+   "event_name": "OnClick",
+   "handler_name": "sbDioSetClick",
+   "leaf_name": "sbDioSet",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palConfig.sbSensorLatch",
+   "event_name": "OnClick",
+   "handler_name": "sbSensorLatchClick",
+   "leaf_name": "sbSensorLatch",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palConfig.sbOmron",
+   "event_name": "OnClick",
+   "handler_name": "sbOmronClick",
+   "leaf_name": "sbOmron",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palConfig.sbSecsGem",
+   "event_name": "OnClick",
+   "handler_name": "sbSecsGemClick",
+   "leaf_name": "sbSecsGem",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palConfig.sbAutoTemp",
+   "event_name": "OnClick",
+   "handler_name": "sbAutoTempClick",
+   "leaf_name": "sbAutoTemp",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palConfig.sbMotionView",
+   "event_name": "OnClick",
+   "handler_name": "sbMotionViewClick",
+   "leaf_name": "sbMotionView",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palConfig.spbAirConditioner",
+   "event_name": "OnClick",
+   "handler_name": "spbAirConditionerClick",
+   "leaf_name": "spbAirConditioner",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palConfig.sbPMAlarm",
+   "event_name": "OnClick",
+   "handler_name": "sbPMAlarmClick",
+   "leaf_name": "sbPMAlarm",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palConfig.sbMonitorView",
+   "event_name": "OnClick",
+   "handler_name": "sbMonitorViewClick",
+   "leaf_name": "sbMonitorView",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palConfig.btnHelp",
+   "event_name": "OnClick",
+   "handler_name": "btnHelpClick",
+   "leaf_name": "btnHelp",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.sbContact",
+   "event_name": "OnClick",
+   "handler_name": "sbContactClick",
+   "leaf_name": "sbContact",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.sbBin",
+   "event_name": "OnClick",
+   "handler_name": "sbBinClick",
+   "leaf_name": "sbBin",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.sbTester",
+   "event_name": "OnClick",
+   "handler_name": "sbTesterClick",
+   "leaf_name": "sbTester",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.sbTempOffset",
+   "event_name": "OnClick",
+   "handler_name": "sbTempOffsetClick",
+   "leaf_name": "sbTempOffset",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.sbTrayForm",
+   "event_name": "OnClick",
+   "handler_name": "sbTrayFormClick",
+   "leaf_name": "sbTrayForm",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.sbPlateForm",
+   "event_name": "OnClick",
+   "handler_name": "sbPlateFormClick",
+   "leaf_name": "sbPlateForm",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.sbTrayAssign",
+   "event_name": "OnClick",
+   "handler_name": "sbTrayAssignClick",
+   "leaf_name": "sbTrayAssign",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.sbExitSetup",
+   "event_name": "OnClick",
+   "handler_name": "sbExitSetupClick",
+   "leaf_name": "sbExitSetup",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.sbLdUld",
+   "event_name": "OnClick",
+   "handler_name": "sbLdUldClick",
+   "leaf_name": "sbLdUld",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.sbSetup",
+   "event_name": "OnClick",
+   "handler_name": "sbSetupClick",
+   "leaf_name": "sbSetup",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.sbYield",
+   "event_name": "OnClick",
+   "handler_name": "sbYieldClick",
+   "leaf_name": "sbYield",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.sbATC",
+   "event_name": "OnClick",
+   "handler_name": "sbATCClick",
+   "leaf_name": "sbATC",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.sbCCD",
+   "event_name": "OnClick",
+   "handler_name": "sbCCDClick",
+   "leaf_name": "sbCCD",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.sbShuttleSensor",
+   "event_name": "OnClick",
+   "handler_name": "sbShuttleSensorClick",
+   "leaf_name": "sbShuttleSensor",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.sbAutoClean",
+   "event_name": "OnClick",
+   "handler_name": "sbAutoCleanClick",
+   "leaf_name": "sbAutoClean",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.sbOCR",
+   "event_name": "OnClick",
+   "handler_name": "sbOCRClick",
+   "leaf_name": "sbOCR",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.sbDynamicTemp",
+   "event_name": "OnClick",
+   "handler_name": "sbDynamicTempClick",
+   "leaf_name": "sbDynamicTemp",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.sbSocket_ASE_KR",
+   "event_name": "OnClick",
+   "handler_name": "sbSocket_ASE_KRClick",
+   "leaf_name": "sbSocket_ASE_KR",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.sbQAMode",
+   "event_name": "OnClick",
+   "handler_name": "sbQAModeClick",
+   "leaf_name": "sbQAMode",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.sbBarCode",
+   "event_name": "OnClick",
+   "handler_name": "sbBarCodeClick",
+   "leaf_name": "sbBarCode",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.sbRotate",
+   "event_name": "OnClick",
+   "handler_name": "sbRotateClick",
+   "leaf_name": "sbRotate",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.spbLaser",
+   "event_name": "OnClick",
+   "handler_name": "spbLaserClick",
+   "leaf_name": "spbLaser",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.spbAutoRetest",
+   "event_name": "OnClick",
+   "handler_name": "spbAutoRetestClick",
+   "leaf_name": "spbAutoRetest",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.spbTrayMapping",
+   "event_name": "OnClick",
+   "handler_name": "spbTrayMappingClick",
+   "leaf_name": "spbTrayMapping",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.spbRPDefalut",
+   "event_name": "OnClick",
+   "handler_name": "spbRPDefalutClick",
+   "leaf_name": "spbRPDefalut",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.spbGroundMan",
+   "event_name": "OnClick",
+   "handler_name": "spbGroundManClick",
+   "leaf_name": "spbGroundMan",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.sbFixButtomCCD",
+   "event_name": "OnClick",
+   "handler_name": "sbFixButtomCCDClick",
+   "leaf_name": "sbFixButtomCCD",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.sbAutoAlignment",
+   "event_name": "OnClick",
+   "handler_name": "sbAutoAlignmentClick",
+   "leaf_name": "sbAutoAlignment",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.sbMagazine",
+   "event_name": "OnClick",
+   "handler_name": "sbMagazineClick",
+   "leaf_name": "sbMagazine",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.sbSmartSetup",
+   "event_name": "OnClick",
+   "handler_name": "sbSmartSetupClick",
+   "leaf_name": "sbSmartSetup",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.sbVacuumUnit",
+   "event_name": "OnClick",
+   "handler_name": "sbVacuumUnitClick",
+   "leaf_name": "sbVacuumUnit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.palSetup.spbAGV",
+   "event_name": "OnClick",
+   "handler_name": "spbAGVClick",
+   "leaf_name": "spbAGV",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.chk_Honprec_Use",
+   "event_name": "OnClick",
+   "handler_name": "cbDisableSiteMappingCheckClick",
+   "leaf_name": "chk_Honprec_Use",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.cbSetupFileName",
+   "event_name": "OnChange",
+   "handler_name": "cbSetupFileNameChange",
+   "leaf_name": "cbSetupFileName",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.cbSetupFileName",
+   "event_name": "OnCloseUp",
+   "handler_name": "cbSetupFileNameCloseUp",
+   "leaf_name": "cbSetupFileName",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.cbSetupFileName",
+   "event_name": "OnDropDown",
+   "handler_name": "cbSetupFileNameDropDown",
+   "leaf_name": "cbSetupFileName",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.cbSetupFileName",
+   "event_name": "OnKeyDown",
+   "handler_name": "cbSetupFileNameKeyDown",
+   "leaf_name": "cbSetupFileName",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMain.cbSetupFileName",
+   "event_name": "OnKeyPress",
+   "handler_name": "cbSetupFileNameKeyPress",
+   "leaf_name": "cbSetupFileName",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.gbControlBtn.BtnReset",
+   "event_name": "OnClick",
+   "handler_name": "BtnResetClick",
+   "leaf_name": "BtnReset",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.gbControlBtn.BtnPause",
+   "event_name": "OnClick",
+   "handler_name": "BtnPauseClick",
+   "leaf_name": "BtnPause",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.gbControlBtn.BtnHome",
+   "event_name": "OnClick",
+   "handler_name": "BtnHomeClick",
+   "leaf_name": "BtnHome",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.gbControlBtn.BtnStart",
+   "event_name": "OnClick",
+   "handler_name": "BtnStartClick",
+   "leaf_name": "BtnStart",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.gbControlBtn.BtnOneCycle",
+   "event_name": "OnClick",
+   "handler_name": "BtnOneCycleClick",
+   "leaf_name": "BtnOneCycle",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.gbControlBtn.BtnCleanOut",
+   "event_name": "OnClick",
+   "handler_name": "BtnCleanOutClick",
+   "leaf_name": "BtnCleanOut",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.gbControlBtn.BtnAlarmReset",
+   "event_name": "OnClick",
+   "handler_name": "BtnAlarmResetClick",
+   "leaf_name": "BtnAlarmReset",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.gbControlBtn.BtnTrayEnd",
+   "event_name": "OnClick",
+   "handler_name": "BtnTrayEndClick",
+   "leaf_name": "BtnTrayEnd",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.gbControlBtn.Button1",
+   "event_name": "OnClick",
+   "handler_name": "Button1Click",
+   "leaf_name": "Button1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.gbControlBtn.Button3",
+   "event_name": "OnClick",
+   "handler_name": "Button3Click",
+   "leaf_name": "Button3",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.gbControlBtn.Button4",
+   "event_name": "OnClick",
+   "handler_name": "Button4Click",
+   "leaf_name": "Button4",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.gbControlBtn.Button5",
+   "event_name": "OnClick",
+   "handler_name": "Button5Click",
+   "leaf_name": "Button5",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.gbControlBtn.gbRemoteControl.BtnSTEP",
+   "event_name": "OnClick",
+   "handler_name": "BtnSTEPClick",
+   "leaf_name": "BtnSTEP",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.gbControlBtn.gbRemoteControl.BtnT_Start",
+   "event_name": "OnClick",
+   "handler_name": "BtnT_StartClick",
+   "leaf_name": "BtnT_Start",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.gbControlBtn.gbRemoteControl.BtnZUpDown",
+   "event_name": "OnClick",
+   "handler_name": "BtnZUpDownClick",
+   "leaf_name": "BtnZUpDown",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.ScrollBox1.sbTeaching",
+   "event_name": "OnClick",
+   "handler_name": "sbTeachingClick",
+   "leaf_name": "sbTeaching",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.ScrollBox1.sbStateRecord",
+   "event_name": "OnClick",
+   "handler_name": "sbStateRecordClick",
+   "leaf_name": "sbStateRecord",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.ScrollBox1.sbReturnToMain",
+   "event_name": "OnClick",
+   "handler_name": "sbReturnToMainClick",
+   "leaf_name": "sbReturnToMain",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.ScrollBox1.sbShuttleMaintain",
+   "event_name": "OnClick",
+   "handler_name": "sbShuttleMaintainClick",
+   "leaf_name": "sbShuttleMaintain",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.ScrollBox1.sbpContact2",
+   "event_name": "OnClick",
+   "handler_name": "sbContactClick",
+   "leaf_name": "sbpContact2",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.ScrollBox1.LabATCPowerSaveSec",
+   "event_name": "OnMouseDown",
+   "handler_name": "LabATCPowerSaveSecMouseDown",
+   "leaf_name": "LabATCPowerSaveSec",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.ScrollBox1.sbSaveMMI",
+   "event_name": "OnClick",
+   "handler_name": "sbSaveMMIClick",
+   "leaf_name": "sbSaveMMI",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.ScrollBox1.gbSimulate.edHPX",
+   "event_name": "OnClick",
+   "handler_name": "edHPXClick",
+   "leaf_name": "edHPX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.ScrollBox1.gbSimulate.edHPY",
+   "event_name": "OnClick",
+   "handler_name": "edHPXClick",
+   "leaf_name": "edHPY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.ScrollBox1.gbSimulate.Button2",
+   "event_name": "OnClick",
+   "handler_name": "Button2Click",
+   "leaf_name": "Button2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.ScrollBox1.btnGroundMan",
+   "event_name": "OnClick",
+   "handler_name": "btnGroundManClick",
+   "leaf_name": "btnGroundMan",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsMotorView.Panel17.cbCheckEncoderEveryTime",
+   "event_name": "OnClick",
+   "handler_name": "cbCheckEncoderEveryTimeClick",
+   "leaf_name": "cbCheckEncoderEveryTime",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsMotorView.PanelMain3.StringGrid1",
+   "event_name": "OnDblClick",
+   "handler_name": "StringGrid1DblClick",
+   "leaf_name": "StringGrid1",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsActionView.PanelMain6.pnlMotionBtm.CheckBox2",
+   "event_name": "OnClick",
+   "handler_name": "CheckBox2Click",
+   "leaf_name": "CheckBox2",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsActionView.PanelMain6.pnlTrayCar.btnLoadRfidTray",
+   "event_name": "OnClick",
+   "handler_name": "btnLoadRfidTrayClick",
+   "leaf_name": "btnLoadRfidTray",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsActionView.PanelMain6.pnlTrayCar.btnLoadLoaderTray",
+   "event_name": "OnClick",
+   "handler_name": "btnLoadLoaderTrayClick",
+   "leaf_name": "btnLoadLoaderTray",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsActionView.PanelMain6.pnlTrayCar.btnE84Auto1",
+   "event_name": "OnClick",
+   "handler_name": "btnE84Auto1Click",
+   "leaf_name": "btnE84Auto1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsActionView.PanelMain6.mtAuto6",
+   "event_name": "OnMouseMove",
+   "handler_name": "mtAuto1MouseMove",
+   "leaf_name": "mtAuto6",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsActionView.PanelMain6.mtAuto5",
+   "event_name": "OnMouseMove",
+   "handler_name": "mtAuto1MouseMove",
+   "leaf_name": "mtAuto5",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsActionView.PanelMain6.mtAuto4",
+   "event_name": "OnMouseMove",
+   "handler_name": "mtAuto1MouseMove",
+   "leaf_name": "mtAuto4",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsActionView.PanelMain6.PageControl6.TabSheet17.mtFix2",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtFix2MouseDown",
+   "leaf_name": "mtFix2",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsActionView.PanelMain6.PageControl6.TabSheet17.mtFix2",
+   "event_name": "OnMouseMove",
+   "handler_name": "mtAuto1MouseMove",
+   "leaf_name": "mtFix2",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsActionView.PanelMain6.PageControl6.TabSheet17.mtFix3",
+   "event_name": "OnMouseMove",
+   "handler_name": "mtAuto1MouseMove",
+   "leaf_name": "mtFix3",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsActionView.PanelMain6.PageControl6.TabSheet17.mtFix1",
+   "event_name": "OnMouseMove",
+   "handler_name": "mtAuto1MouseMove",
+   "leaf_name": "mtFix1",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsActionView.PanelMain6.PageControl6.TabSheet17.mtFix4",
+   "event_name": "OnMouseMove",
+   "handler_name": "mtAuto1MouseMove",
+   "leaf_name": "mtFix4",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsActionView.PanelMain6.PageControl6.TabSheet17.mtFix5",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtFix2MouseDown",
+   "leaf_name": "mtFix5",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsActionView.PanelMain6.PageControl6.TabSheet17.mtFix5",
+   "event_name": "OnMouseMove",
+   "handler_name": "mtAuto1MouseMove",
+   "leaf_name": "mtFix5",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsActionView.PanelMain6.PageControl6.TabSheet17.mtFix6",
+   "event_name": "OnMouseMove",
+   "handler_name": "mtAuto1MouseMove",
+   "leaf_name": "mtFix6",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsActionView.PanelMain6.PageControl6.TabSheet17.btnE84Fix2",
+   "event_name": "OnClick",
+   "handler_name": "btnE84Fix2Click",
+   "leaf_name": "btnE84Fix2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsActionView.PanelMain6.mtAuto1",
+   "event_name": "OnMouseMove",
+   "handler_name": "mtAuto1MouseMove",
+   "leaf_name": "mtAuto1",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsActionView.PanelMain6.mtAuto2",
+   "event_name": "OnMouseMove",
+   "handler_name": "mtAuto1MouseMove",
+   "leaf_name": "mtAuto2",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsActionView.PanelMain6.mtAuto3",
+   "event_name": "OnMouseMove",
+   "handler_name": "mtAuto1MouseMove",
+   "leaf_name": "mtAuto3",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsActionView.PanelMain6.pnlSimMagazineTray",
+   "event_name": "OnClick",
+   "handler_name": "pnlSimMagazineTrayClick",
+   "leaf_name": "pnlSimMagazineTray",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsActionView.PanelMain6.AutoCleanStringGrid",
+   "event_name": "OnDblClick",
+   "handler_name": "AutoCleanStringGridDblClick",
+   "leaf_name": "AutoCleanStringGrid",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsActionView.PanelMain6.AutoCleanStringGrid",
+   "event_name": "OnDrawCell",
+   "handler_name": "AutoCleanStringGridDrawCell",
+   "leaf_name": "AutoCleanStringGrid",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsCommView.PanelMain7.pcCommView.TabSheet4.pal_RS232.btnReadZ1",
+   "event_name": "OnClick",
+   "handler_name": "btnReadZ1Click",
+   "leaf_name": "btnReadZ1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsCommView.PanelMain7.pcCommView.TabSheet4.pal_RS232.btnReadZ2",
+   "event_name": "OnClick",
+   "handler_name": "btnReadZ2Click",
+   "leaf_name": "btnReadZ2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsCommView.PanelMain7.pcCommView.TabSheet4.pal_RS232.edtSetZ1",
+   "event_name": "OnClick",
+   "handler_name": "edtSetZ1Click",
+   "leaf_name": "edtSetZ1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsCommView.PanelMain7.pcCommView.TabSheet4.pal_RS232.edtSetZ2",
+   "event_name": "OnClick",
+   "handler_name": "edtSetZ1Click",
+   "leaf_name": "edtSetZ2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsCommView.PanelMain7.pcCommView.TabSheet4.pal_RS232.btnSetZ1",
+   "event_name": "OnClick",
+   "handler_name": "btnSetZ1Click",
+   "leaf_name": "btnSetZ1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsCommView.PanelMain7.pcCommView.TabSheet4.pal_RS232.btnSetZ2",
+   "event_name": "OnClick",
+   "handler_name": "btnSetZ2Click",
+   "leaf_name": "btnSetZ2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsCommView.PanelMain7.pcCommView.TabSheet4.pal_RS232.grpTorqueFunction.btnStartTorque",
+   "event_name": "OnClick",
+   "handler_name": "btnStartTorqueClick",
+   "leaf_name": "btnStartTorque",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsCommView.PanelMain7.pcCommView.TabSheet4.pal_RS232.grpTorqueFunction.btnStopTorque",
+   "event_name": "OnClick",
+   "handler_name": "btnStopTorqueClick",
+   "leaf_name": "btnStopTorque",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsCommView.PanelMain7.pcCommView.TabSheet4.pal_RS232.grpTorqueFunction.Button12",
+   "event_name": "OnClick",
+   "handler_name": "Button12Click",
+   "leaf_name": "Button12",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsCommView.PanelMain7.pcCommView.TabSheet4.pal_RS232.grpTorqueFunction.Button6",
+   "event_name": "OnClick",
+   "handler_name": "Button6Click",
+   "leaf_name": "Button6",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsCommView.PanelMain7.pcCommView.TabSheet4.pal_RS232.pgcTorque",
+   "event_name": "OnChange",
+   "handler_name": "pgcTorqueChange",
+   "leaf_name": "pgcTorque",
+   "vcl_class": "TPageControl"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsCommView.PanelMain7.pcCommView.tsInArm.StringGrid2",
+   "event_name": "OnDblClick",
+   "handler_name": "StringGrid2DblClick",
+   "leaf_name": "StringGrid2",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsCommView.PanelMain7.pcCommView.tsInArm.StringGrid2",
+   "event_name": "OnSelectCell",
+   "handler_name": "StringGrid2SelectCell",
+   "leaf_name": "StringGrid2",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsCommView.PanelMain7.pcCommView.IndexArmYPos.palIndexShiftFunction.btnRecordSHT",
+   "event_name": "OnClick",
+   "handler_name": "btnRecordSHTClick",
+   "leaf_name": "btnRecordSHT",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsCommView.PanelMain7.pcCommView.IndexArmYPos.palIndexShiftFunction.btnRecordSocket",
+   "event_name": "OnClick",
+   "handler_name": "btnRecordSocketClick",
+   "leaf_name": "btnRecordSocket",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsCommView.PanelMain7.pcCommView.IndexArmYPos.palIndexShiftFunction.btnSaveIndexPosLog",
+   "event_name": "OnClick",
+   "handler_name": "btnSaveIndexPosLogClick",
+   "leaf_name": "btnSaveIndexPosLog",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsCommView.PanelMain7.pcCommView.IndexArmYPos.palIndexShiftFunction.btnClearIndexPosLog",
+   "event_name": "OnClick",
+   "handler_name": "btnClearIndexPosLogClick",
+   "leaf_name": "btnClearIndexPosLog",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsCommView.PanelMain7.pcCommView.IndexArmYPos.palIndexShiftFunction.btnSaveMaxMin",
+   "event_name": "OnClick",
+   "handler_name": "btnSaveMaxMinClick",
+   "leaf_name": "btnSaveMaxMin",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsHeaterView.PanelMain8.palHP2View",
+   "event_name": "OnClick",
+   "handler_name": "palHP2ViewClick",
+   "leaf_name": "palHP2View",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsHeaterView.PanelMain8.rgHotplateShowMessage",
+   "event_name": "OnClick",
+   "handler_name": "rgHotplateShowMessageClick",
+   "leaf_name": "rgHotplateShowMessage",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsHeaterView.PanelMain8.SaveHPPick",
+   "event_name": "OnClick",
+   "handler_name": "SaveHPPickClick",
+   "leaf_name": "SaveHPPick",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsHeaterView.PanelMain8.btnSaveHPTable",
+   "event_name": "OnClick",
+   "handler_name": "btnSaveHPTableClick",
+   "leaf_name": "btnSaveHPTable",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsShuttleSensor.palShtSensor.meShuttle2",
+   "event_name": "OnDblClick",
+   "handler_name": "meShuttle2DblClick",
+   "leaf_name": "meShuttle2",
+   "vcl_class": "TMemo"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsShuttleSensor.palShtSensor.meShuttle1",
+   "event_name": "OnDblClick",
+   "handler_name": "meShuttle2DblClick",
+   "leaf_name": "meShuttle1",
+   "vcl_class": "TMemo"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsRecord.PanelMain2.spbClearRecord",
+   "event_name": "OnClick",
+   "handler_name": "spbClearRecordClick",
+   "leaf_name": "spbClearRecord",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsRecord.PanelMain2.btSavelog",
+   "event_name": "OnClick",
+   "handler_name": "btSavelogClick",
+   "leaf_name": "btSavelog",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsRecord.PanelMain2.AseRecordMemo",
+   "event_name": "OnDblClick",
+   "handler_name": "meShuttle2DblClick",
+   "leaf_name": "AseRecordMemo",
+   "vcl_class": "TMemo"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsTaskList.sgTaskList",
+   "event_name": "OnDblClick",
+   "handler_name": "StringGrid2DblClick",
+   "leaf_name": "sgTaskList",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.tsTaskList.sgTaskList",
+   "event_name": "OnSelectCell",
+   "handler_name": "StringGrid2SelectCell",
+   "leaf_name": "sgTaskList",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.ts1.Panel14.OffsetSave",
+   "event_name": "OnClick",
+   "handler_name": "OffsetSaveClick",
+   "leaf_name": "OffsetSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.ts1.Panel14.Ed_InSH2Offset_X",
+   "event_name": "OnClick",
+   "handler_name": "Ed_LoaderOffset_XClick",
+   "leaf_name": "Ed_InSH2Offset_X",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.ts1.Panel14.Ed_InSH1Offset_X",
+   "event_name": "OnClick",
+   "handler_name": "Ed_LoaderOffset_XClick",
+   "leaf_name": "Ed_InSH1Offset_X",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.ts1.Panel14.Ed_HP2Offset_X",
+   "event_name": "OnClick",
+   "handler_name": "Ed_LoaderOffset_XClick",
+   "leaf_name": "Ed_HP2Offset_X",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.ts1.Panel14.Ed_HP1Offset_X",
+   "event_name": "OnClick",
+   "handler_name": "Ed_LoaderOffset_XClick",
+   "leaf_name": "Ed_HP1Offset_X",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.ts1.Panel14.Ed_LoaderOffset_X",
+   "event_name": "OnClick",
+   "handler_name": "Ed_LoaderOffset_XClick",
+   "leaf_name": "Ed_LoaderOffset_X",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.ts1.Panel14.Ed_InSH1Offset_Y",
+   "event_name": "OnClick",
+   "handler_name": "Ed_LoaderOffset_XClick",
+   "leaf_name": "Ed_InSH1Offset_Y",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.ts1.Panel14.Ed_LoaderOffset_Y",
+   "event_name": "OnClick",
+   "handler_name": "Ed_LoaderOffset_XClick",
+   "leaf_name": "Ed_LoaderOffset_Y",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.ts1.Panel14.Ed_HP1Offset_Y",
+   "event_name": "OnClick",
+   "handler_name": "Ed_LoaderOffset_XClick",
+   "leaf_name": "Ed_HP1Offset_Y",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.ts1.Panel14.Ed_HP2Offset_Y",
+   "event_name": "OnClick",
+   "handler_name": "Ed_LoaderOffset_XClick",
+   "leaf_name": "Ed_HP2Offset_Y",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.ts1.Panel14.Ed_InSH2Offset_Y",
+   "event_name": "OnClick",
+   "handler_name": "Ed_LoaderOffset_XClick",
+   "leaf_name": "Ed_InSH2Offset_Y",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.ts1.Panel14.Ed_OutSH1Offset_X",
+   "event_name": "OnClick",
+   "handler_name": "Ed_LoaderOffset_XClick",
+   "leaf_name": "Ed_OutSH1Offset_X",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.ts1.Panel14.Ed_OutSH1Offset_Y",
+   "event_name": "OnClick",
+   "handler_name": "Ed_LoaderOffset_XClick",
+   "leaf_name": "Ed_OutSH1Offset_Y",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.ts1.Panel14.Ed_OutSH2Offset_X",
+   "event_name": "OnClick",
+   "handler_name": "Ed_LoaderOffset_XClick",
+   "leaf_name": "Ed_OutSH2Offset_X",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.ts1.Panel14.Ed_OutSH2Offset_Y",
+   "event_name": "OnClick",
+   "handler_name": "Ed_LoaderOffset_XClick",
+   "leaf_name": "Ed_OutSH2Offset_Y",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.ts1.Panel14.Ed_Auto1Offset_X",
+   "event_name": "OnClick",
+   "handler_name": "Ed_LoaderOffset_XClick",
+   "leaf_name": "Ed_Auto1Offset_X",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.ts1.Panel14.Ed_Auto1Offset_Y",
+   "event_name": "OnClick",
+   "handler_name": "Ed_LoaderOffset_XClick",
+   "leaf_name": "Ed_Auto1Offset_Y",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.ts1.Panel14.Ed_Auto2Offset_X",
+   "event_name": "OnClick",
+   "handler_name": "Ed_LoaderOffset_XClick",
+   "leaf_name": "Ed_Auto2Offset_X",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.ts1.Panel14.Ed_Auto2Offset_Y",
+   "event_name": "OnClick",
+   "handler_name": "Ed_LoaderOffset_XClick",
+   "leaf_name": "Ed_Auto2Offset_Y",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.ts1.Panel14.Ed_Auto3Offset_X",
+   "event_name": "OnClick",
+   "handler_name": "Ed_LoaderOffset_XClick",
+   "leaf_name": "Ed_Auto3Offset_X",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.ts1.Panel14.Ed_Auto3Offset_Y",
+   "event_name": "OnClick",
+   "handler_name": "Ed_LoaderOffset_XClick",
+   "leaf_name": "Ed_Auto3Offset_Y",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.ts1.Panel14.Ed_Fix1Offset_X",
+   "event_name": "OnClick",
+   "handler_name": "Ed_LoaderOffset_XClick",
+   "leaf_name": "Ed_Fix1Offset_X",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.ts1.Panel14.Ed_Fix1Offset_Y",
+   "event_name": "OnClick",
+   "handler_name": "Ed_LoaderOffset_XClick",
+   "leaf_name": "Ed_Fix1Offset_Y",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.ts1.Panel14.Ed_Fix2Offset_X",
+   "event_name": "OnClick",
+   "handler_name": "Ed_LoaderOffset_XClick",
+   "leaf_name": "Ed_Fix2Offset_X",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.ts1.Panel14.Ed_Fix2Offset_Y",
+   "event_name": "OnClick",
+   "handler_name": "Ed_LoaderOffset_XClick",
+   "leaf_name": "Ed_Fix2Offset_Y",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.ts1.Panel14.Ed_Fix3Offset_X",
+   "event_name": "OnClick",
+   "handler_name": "Ed_LoaderOffset_XClick",
+   "leaf_name": "Ed_Fix3Offset_X",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.pgMain.tsMotionView.pnlBackGround.pgMotionView.ts1.Panel14.Ed_Fix3Offset_Y",
+   "event_name": "OnClick",
+   "handler_name": "Ed_LoaderOffset_XClick",
+   "leaf_name": "Ed_Fix3Offset_Y",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMain.Timer1",
+   "event_name": "OnTimer",
+   "handler_name": "Timer1Timer",
+   "leaf_name": "Timer1",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fMain.Timer2",
+   "event_name": "OnTimer",
+   "handler_name": "Timer2Timer",
+   "leaf_name": "Timer2",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fMain.PopupMenu4.RecordSuckRealTimeVacuumOnOffTime",
+   "event_name": "OnClick",
+   "handler_name": "RecordSuckRealTimeVacuumOnOffTimeClick",
+   "leaf_name": "RecordSuckRealTimeVacuumOnOffTime",
+   "vcl_class": "TMenuItem"
+  },
+  {
+   "control_path": "fMain.PopupMenu4.ModifySuckVacuumOnOffTime",
+   "event_name": "OnClick",
+   "handler_name": "ModifySuckVacuumOnOffTimeClick",
+   "leaf_name": "ModifySuckVacuumOnOffTime",
+   "vcl_class": "TMenuItem"
+  },
+  {
+   "control_path": "fMain.PopupMenu4.SetToDefineValue1",
+   "event_name": "OnClick",
+   "handler_name": "SetToDefineValue1Click",
+   "leaf_name": "SetToDefineValue1",
+   "vcl_class": "TMenuItem"
+  },
+  {
+   "control_path": "fMain.Timer3",
+   "event_name": "OnTimer",
+   "handler_name": "Timer3Timer",
+   "leaf_name": "Timer3",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fMain.Timer4",
+   "event_name": "OnTimer",
+   "handler_name": "Timer4Timer",
+   "leaf_name": "Timer4",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fMain.TimerESD",
+   "event_name": "OnTimer",
+   "handler_name": "TimerESDTimer",
+   "leaf_name": "TimerESD",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fMain.TimerTemperatureStorageMinute",
+   "event_name": "OnTimer",
+   "handler_name": "TimerTemperatureStorageMinuteTimer",
+   "leaf_name": "TimerTemperatureStorageMinute",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fMain.Timer5",
+   "event_name": "OnTimer",
+   "handler_name": "Timer5Timer",
+   "leaf_name": "Timer5",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fMain.Timer6",
+   "event_name": "OnTimer",
+   "handler_name": "Timer6Timer",
+   "leaf_name": "Timer6",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fMain.Timer7",
+   "event_name": "OnTimer",
+   "handler_name": "Timer7Timer",
+   "leaf_name": "Timer7",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fMain.TimerScanKey",
+   "event_name": "OnTimer",
+   "handler_name": "TimerScanKeyTimer",
+   "leaf_name": "TimerScanKey",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fMain.Timer8",
+   "event_name": "OnTimer",
+   "handler_name": "Timer8Timer",
+   "leaf_name": "Timer8",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fMain.Timer9",
+   "event_name": "OnTimer",
+   "handler_name": "Timer9Timer",
+   "leaf_name": "Timer9",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fMain.TeraTCPResultServer",
+   "event_name": "OnClientConnect",
+   "handler_name": "TeraTCPResultServerClientConnect",
+   "leaf_name": "TeraTCPResultServer",
+   "vcl_class": "TServerSocket"
+  },
+  {
+   "control_path": "fMain.TeraTCPResultServer",
+   "event_name": "OnClientDisconnect",
+   "handler_name": "TeraTCPResultServerClientDisconnect",
+   "leaf_name": "TeraTCPResultServer",
+   "vcl_class": "TServerSocket"
+  },
+  {
+   "control_path": "fMain.TeraTCPResultServer",
+   "event_name": "OnClientError",
+   "handler_name": "TeraTCPResultServerClientError",
+   "leaf_name": "TeraTCPResultServer",
+   "vcl_class": "TServerSocket"
+  },
+  {
+   "control_path": "fMain.TCPCommandServer",
+   "event_name": "OnClientConnect",
+   "handler_name": "TCPCommandServerClientConnect",
+   "leaf_name": "TCPCommandServer",
+   "vcl_class": "TServerSocket"
+  },
+  {
+   "control_path": "fMain.TCPCommandServer",
+   "event_name": "OnClientDisconnect",
+   "handler_name": "TCPCommandServerClientDisconnect",
+   "leaf_name": "TCPCommandServer",
+   "vcl_class": "TServerSocket"
+  },
+  {
+   "control_path": "fMain.TCPCommandServer",
+   "event_name": "OnClientRead",
+   "handler_name": "TCPCommandServerClientRead",
+   "leaf_name": "TCPCommandServer",
+   "vcl_class": "TServerSocket"
+  },
+  {
+   "control_path": "fMain.TimerDLL",
+   "event_name": "OnTimer",
+   "handler_name": "TimerDLLTimer",
+   "leaf_name": "TimerDLL",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fMain.Timer10",
+   "event_name": "OnTimer",
+   "handler_name": "Timer10Timer",
+   "leaf_name": "Timer10",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fMain",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "main.dfm"
+}

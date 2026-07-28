@@ -1,0 +1,37 @@
+{
+ "event_count": 4,
+ "events": [
+  {
+   "control_path": "fDataHandling",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fDataHandling",
+   "vcl_class": "TfDataHandling"
+  },
+  {
+   "control_path": "fDataHandling.sbtExit",
+   "event_name": "OnClick",
+   "handler_name": "sbtExitClick",
+   "leaf_name": "sbtExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fDataHandling.spbExe",
+   "event_name": "OnClick",
+   "handler_name": "spbExeClick",
+   "leaf_name": "spbExe",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fDataHandling.GroupBox1.ComboBox1",
+   "event_name": "OnChange",
+   "handler_name": "ComboBox1Change",
+   "leaf_name": "ComboBox1",
+   "vcl_class": "TComboBox"
+  }
+ ],
+ "form_name": "fDataHandling",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "cDataHandling.dfm"
+}

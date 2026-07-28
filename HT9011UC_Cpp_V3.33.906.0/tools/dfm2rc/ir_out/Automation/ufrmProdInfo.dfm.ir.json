@@ -1,0 +1,760 @@
+{
+ "control_node_count": 8,
+ "encoding_used": "cp950",
+ "form_class": "TframeProdInfo",
+ "form_name": "frameProdInfo",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "frameProdInfo.lbledtLotNo",
+    "frameProdInfo.lbledtLotID",
+    "frameProdInfo.lbledtHdParameter",
+    "frameProdInfo.lbledtProduct",
+    "frameProdInfo.lbledtStepCode",
+    "frameProdInfo.lbledtQty",
+    "frameProdInfo.lbledtDate",
+    "frameProdInfo.ShowTimer"
+   ],
+   "class": "TframeProdInfo",
+   "depth": 0,
+   "events": {},
+   "geometry": {
+    "height": 299,
+    "left": 0,
+    "top": 0,
+    "width": 303
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "frameProdInfo",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "frameProdInfo",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 299
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 303
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabeledEdit",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 8,
+    "top": 24,
+    "width": 289
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 7,
+   "name": "lbledtLotNo",
+   "objkind": "object",
+   "parent_path": "frameProdInfo",
+   "path": "frameProdInfo.lbledtLotNo",
+   "properties": {
+    "EditLabel.Caption": {
+     "type": "STR",
+     "value": "lbledtLotNo"
+    },
+    "EditLabel.Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "EditLabel.Width": {
+     "type": "SCALAR",
+     "value": 54
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "LabelPosition": {
+     "type": "SCALAR",
+     "value": "lpAbove"
+    },
+    "LabelSpacing": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 289
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabeledEdit",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 8,
+    "top": 64,
+    "width": 289
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 25,
+   "name": "lbledtLotID",
+   "objkind": "object",
+   "parent_path": "frameProdInfo",
+   "path": "frameProdInfo.lbledtLotID",
+   "properties": {
+    "EditLabel.Caption": {
+     "type": "STR",
+     "value": "lbledtLotID"
+    },
+    "EditLabel.Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "EditLabel.Width": {
+     "type": "SCALAR",
+     "value": 51
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "LabelPosition": {
+     "type": "SCALAR",
+     "value": "lpAbove"
+    },
+    "LabelSpacing": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 64
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 289
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabeledEdit",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 8,
+    "top": 104,
+    "width": 289
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 43,
+   "name": "lbledtHdParameter",
+   "objkind": "object",
+   "parent_path": "frameProdInfo",
+   "path": "frameProdInfo.lbledtHdParameter",
+   "properties": {
+    "EditLabel.Caption": {
+     "type": "STR",
+     "value": "lbledtHdParameter"
+    },
+    "EditLabel.Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "EditLabel.Width": {
+     "type": "SCALAR",
+     "value": 87
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "LabelPosition": {
+     "type": "SCALAR",
+     "value": "lpAbove"
+    },
+    "LabelSpacing": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 104
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 289
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabeledEdit",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 8,
+    "top": 144,
+    "width": 289
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 61,
+   "name": "lbledtProduct",
+   "objkind": "object",
+   "parent_path": "frameProdInfo",
+   "path": "frameProdInfo.lbledtProduct",
+   "properties": {
+    "EditLabel.Caption": {
+     "type": "STR",
+     "value": "lbledtProduct"
+    },
+    "EditLabel.Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "EditLabel.Width": {
+     "type": "SCALAR",
+     "value": 62
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "LabelPosition": {
+     "type": "SCALAR",
+     "value": "lpAbove"
+    },
+    "LabelSpacing": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 144
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 289
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabeledEdit",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 8,
+    "top": 184,
+    "width": 289
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 79,
+   "name": "lbledtStepCode",
+   "objkind": "object",
+   "parent_path": "frameProdInfo",
+   "path": "frameProdInfo.lbledtStepCode",
+   "properties": {
+    "EditLabel.Caption": {
+     "type": "STR",
+     "value": "lbledtStepCode"
+    },
+    "EditLabel.Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "EditLabel.Width": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "LabelPosition": {
+     "type": "SCALAR",
+     "value": "lpAbove"
+    },
+    "LabelSpacing": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 184
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 289
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabeledEdit",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 8,
+    "top": 224,
+    "width": 289
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 97,
+   "name": "lbledtQty",
+   "objkind": "object",
+   "parent_path": "frameProdInfo",
+   "path": "frameProdInfo.lbledtQty",
+   "properties": {
+    "EditLabel.Caption": {
+     "type": "STR",
+     "value": "lbledtQty"
+    },
+    "EditLabel.Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "EditLabel.Width": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "LabelPosition": {
+     "type": "SCALAR",
+     "value": "lpAbove"
+    },
+    "LabelSpacing": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 224
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 289
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabeledEdit",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 8,
+    "top": 264,
+    "width": 289
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 115,
+   "name": "lbledtDate",
+   "objkind": "object",
+   "parent_path": "frameProdInfo",
+   "path": "frameProdInfo.lbledtDate",
+   "properties": {
+    "EditLabel.Caption": {
+     "type": "STR",
+     "value": "lbledtDate"
+    },
+    "EditLabel.Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "EditLabel.Width": {
+     "type": "SCALAR",
+     "value": 48
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "LabelPosition": {
+     "type": "SCALAR",
+     "value": "lpAbove"
+    },
+    "LabelSpacing": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 264
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 289
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTimer",
+   "depth": 1,
+   "events": {
+    "OnTimer": "ShowTimerTimer"
+   },
+   "geometry": {
+    "height": null,
+    "left": 8,
+    "top": 264,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 133,
+   "name": "ShowTimer",
+   "objkind": "object",
+   "parent_path": "frameProdInfo",
+   "path": "frameProdInfo.ShowTimer",
+   "properties": {
+    "Interval": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "OnTimer": {
+     "type": "SCALAR",
+     "value": "ShowTimerTimer"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 264
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "Automation/ufrmProdInfo.dfm",
+ "total_nodes_incl_root": 9
+}

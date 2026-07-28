@@ -1,0 +1,23 @@
+{
+ "event_count": 2,
+ "events": [
+  {
+   "control_path": "fTeachShow.Button1",
+   "event_name": "OnClick",
+   "handler_name": "Button1Click",
+   "leaf_name": "Button1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTeachShow.Button2",
+   "event_name": "OnClick",
+   "handler_name": "Button2Click",
+   "leaf_name": "Button2",
+   "vcl_class": "TButton"
+  }
+ ],
+ "form_name": "fTeachShow",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "uTechShow.dfm"
+}

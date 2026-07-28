@@ -1,0 +1,93 @@
+{
+ "event_count": 12,
+ "events": [
+  {
+   "control_path": "fShowMessage",
+   "event_name": "OnClick",
+   "handler_name": "FormClick",
+   "leaf_name": "fShowMessage",
+   "vcl_class": "TfShowMessage"
+  },
+  {
+   "control_path": "fShowMessage",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fShowMessage",
+   "vcl_class": "TfShowMessage"
+  },
+  {
+   "control_path": "fShowMessage",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fShowMessage",
+   "vcl_class": "TfShowMessage"
+  },
+  {
+   "control_path": "fShowMessage",
+   "event_name": "OnMouseUp",
+   "handler_name": "FormMouseUp",
+   "leaf_name": "fShowMessage",
+   "vcl_class": "TfShowMessage"
+  },
+  {
+   "control_path": "fShowMessage",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fShowMessage",
+   "vcl_class": "TfShowMessage"
+  },
+  {
+   "control_path": "fShowMessage.lblIndexCycleTime",
+   "event_name": "OnMouseUp",
+   "handler_name": "FormMouseUp",
+   "leaf_name": "lblIndexCycleTime",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowMessage.lblTestTime",
+   "event_name": "OnMouseUp",
+   "handler_name": "FormMouseUp",
+   "leaf_name": "lblTestTime",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowMessage.lblInitialMessage",
+   "event_name": "OnMouseUp",
+   "handler_name": "FormMouseUp",
+   "leaf_name": "lblInitialMessage",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fShowMessage.sgdSpeedView",
+   "event_name": "OnDrawCell",
+   "handler_name": "sgdSpeedViewDrawCell",
+   "leaf_name": "sgdSpeedView",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fShowMessage.sgdSpeedView",
+   "event_name": "OnMouseUp",
+   "handler_name": "FormMouseUp",
+   "leaf_name": "sgdSpeedView",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fShowMessage.ProgressBar1",
+   "event_name": "OnMouseUp",
+   "handler_name": "FormMouseUp",
+   "leaf_name": "ProgressBar1",
+   "vcl_class": "TProgressBar"
+  },
+  {
+   "control_path": "fShowMessage.btnBackToMain",
+   "event_name": "OnMouseUp",
+   "handler_name": "FormMouseUp",
+   "leaf_name": "btnBackToMain",
+   "vcl_class": "TButton"
+  }
+ ],
+ "form_name": "fShowMessage",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "uShowMessage.dfm"
+}

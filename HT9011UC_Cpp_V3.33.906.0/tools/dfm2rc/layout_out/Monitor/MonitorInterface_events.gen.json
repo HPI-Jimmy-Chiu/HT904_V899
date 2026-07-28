@@ -1,0 +1,156 @@
+{
+ "event_count": 21,
+ "events": [
+  {
+   "control_path": "fMonitor",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fMonitor",
+   "vcl_class": "TfMonitor"
+  },
+  {
+   "control_path": "fMonitor",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fMonitor",
+   "vcl_class": "TfMonitor"
+  },
+  {
+   "control_path": "fMonitor",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fMonitor",
+   "vcl_class": "TfMonitor"
+  },
+  {
+   "control_path": "fMonitor.pnMVConnectTitle.sbMVConnect",
+   "event_name": "OnClick",
+   "handler_name": "sbMVConnectClick",
+   "leaf_name": "sbMVConnect",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMonitor.pnMVConnectTitle.sbMVDisconnect",
+   "event_name": "OnClick",
+   "handler_name": "sbMVDisconnectClick",
+   "leaf_name": "sbMVDisconnect",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMonitor.MVPageControl.tsMVMain.sbMVLogClear",
+   "event_name": "OnClick",
+   "handler_name": "sbMVLogClearClick",
+   "leaf_name": "sbMVLogClear",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMonitor.MVPageControl.tsMVMain.pnMVMain.sbSendCommand",
+   "event_name": "OnClick",
+   "handler_name": "sbSendCommandClick",
+   "leaf_name": "sbSendCommand",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMonitor.MVPageControl.tsMVMain.pnMVMain.sbMonitor1Open",
+   "event_name": "OnClick",
+   "handler_name": "sbMonitor1OpenClick",
+   "leaf_name": "sbMonitor1Open",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMonitor.MVPageControl.tsMVMain.pnMVMain.sbMonitor2Open",
+   "event_name": "OnClick",
+   "handler_name": "sbMonitor1OpenClick",
+   "leaf_name": "sbMonitor2Open",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMonitor.MVPageControl.tsMVMain.pnMVMain.sbMonitor3Open",
+   "event_name": "OnClick",
+   "handler_name": "sbMonitor1OpenClick",
+   "leaf_name": "sbMonitor3Open",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMonitor.MVPageControl.tsMVMain.pnMVMain.sbMonitor1Stop",
+   "event_name": "OnClick",
+   "handler_name": "sbMonitor1OpenClick",
+   "leaf_name": "sbMonitor1Stop",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMonitor.MVPageControl.tsMVMain.pnMVMain.sbMonitor2Stop",
+   "event_name": "OnClick",
+   "handler_name": "sbMonitor1OpenClick",
+   "leaf_name": "sbMonitor2Stop",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMonitor.MVPageControl.tsMVMain.pnMVMain.sbMonitor3Stop",
+   "event_name": "OnClick",
+   "handler_name": "sbMonitor1OpenClick",
+   "leaf_name": "sbMonitor3Stop",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMonitor.MVPageControl.tsMVMain.pnMVMain.sbMonitorGetHDSpace",
+   "event_name": "OnClick",
+   "handler_name": "sbMonitorGetHDSpaceClick",
+   "leaf_name": "sbMonitorGetHDSpace",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMonitor.MVPageControl.tsMVSettingPage.pnMVSetupPage.edMVPort",
+   "event_name": "OnMouseDown",
+   "handler_name": "edMVPortMouseDown",
+   "leaf_name": "edMVPort",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMonitor.MVPageControl.tsMonitorSpecific.edLowHDSpace",
+   "event_name": "OnMouseDown",
+   "handler_name": "edLowHDSpaceMouseDown",
+   "leaf_name": "edLowHDSpace",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMonitor.MVPageControl.tsMonitorSpecific.edWhenHDFullPrompt",
+   "event_name": "OnMouseDown",
+   "handler_name": "edWhenHDFullPromptMouseDown",
+   "leaf_name": "edWhenHDFullPrompt",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMonitor.MVPageControl.tsMonitorSpecific.edAfterHandlerTrayFeedMonitor1ClosedVideoWaitTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edAfterHandlerTrayFeedMonitor1ClosedVideoWaitTimeMouseDown",
+   "leaf_name": "edAfterHandlerTrayFeedMonitor1ClosedVideoWaitTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMonitor.pnMVButtonTitle.sbMVUpdate",
+   "event_name": "OnClick",
+   "handler_name": "sbMVUpdateClick",
+   "leaf_name": "sbMVUpdate",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMonitor.pnMVButtonTitle.sbMVExit",
+   "event_name": "OnClick",
+   "handler_name": "sbMVExitClick",
+   "leaf_name": "sbMVExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMonitor.MonitorTimer",
+   "event_name": "OnTimer",
+   "handler_name": "MonitorTimerTimer",
+   "leaf_name": "MonitorTimer",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fMonitor",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "Monitor/MonitorInterface.dfm"
+}

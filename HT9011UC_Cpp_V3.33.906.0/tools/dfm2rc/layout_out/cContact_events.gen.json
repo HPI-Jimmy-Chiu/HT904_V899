@@ -1,0 +1,1031 @@
+{
+ "event_count": 146,
+ "events": [
+  {
+   "control_path": "fContact",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fContact",
+   "vcl_class": "TfContact"
+  },
+  {
+   "control_path": "fContact",
+   "event_name": "OnShortCut",
+   "handler_name": "FormShortCut",
+   "leaf_name": "fContact",
+   "vcl_class": "TfContact"
+  },
+  {
+   "control_path": "fContact",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fContact",
+   "vcl_class": "TfContact"
+  },
+  {
+   "control_path": "fContact.pnlBottom.sbtExit",
+   "event_name": "OnClick",
+   "handler_name": "sbtExitClick",
+   "leaf_name": "sbtExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fContact.pnlBottom.spbSave",
+   "event_name": "OnClick",
+   "handler_name": "spbSaveClick",
+   "leaf_name": "spbSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fContact.pnlBottom.btnStart",
+   "event_name": "OnClick",
+   "handler_name": "btnStartClick",
+   "leaf_name": "btnStart",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fContact.pnlBottom.btnPause",
+   "event_name": "OnClick",
+   "handler_name": "btnPauseClick",
+   "leaf_name": "btnPause",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fContact.pnlBottom.gbDynaTemp.btAt",
+   "event_name": "OnClick",
+   "handler_name": "btAtClick",
+   "leaf_name": "btAt",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fContact.pnlBottom.gbDynaTemp.btShowDynaTemp",
+   "event_name": "OnClick",
+   "handler_name": "btShowDynaTempClick",
+   "leaf_name": "btShowDynaTemp",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fContact.pnlBottom.gbDynaTemp.btTempOffset",
+   "event_name": "OnClick",
+   "handler_name": "btTempOffsetClick",
+   "leaf_name": "btTempOffset",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fContact.pnlBottom.gbDynaTemp.edSpeed",
+   "event_name": "OnMouseDown",
+   "handler_name": "edSpeedZMouseDown",
+   "leaf_name": "edSpeed",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlBottom.gbDynaTemp.edSpeedZ",
+   "event_name": "OnMouseDown",
+   "handler_name": "edSpeedZMouseDown",
+   "leaf_name": "edSpeedZ",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlBottom.btOffset",
+   "event_name": "OnClick",
+   "handler_name": "btOffsetClick",
+   "leaf_name": "btOffset",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fContact.pnlBottom.btBarcode",
+   "event_name": "OnClick",
+   "handler_name": "btBarcodeClick",
+   "leaf_name": "btBarcode",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbContactForce.spbOneCycle",
+   "event_name": "OnClick",
+   "handler_name": "spbOneCycleClick",
+   "leaf_name": "spbOneCycle",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbContactForce.labMPa",
+   "event_name": "OnDblClick",
+   "handler_name": "labMPaDblClick",
+   "leaf_name": "labMPa",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbContactForce.edForcePerPinG",
+   "event_name": "OnChange",
+   "handler_name": "edDieForcePerPinGChange",
+   "leaf_name": "edForcePerPinG",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbContactForce.edForcePerPinG",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edForcePerPinG",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbContactForce.edForcePerPinG",
+   "event_name": "OnMouseDown",
+   "handler_name": "edForcePerPinGMouseDown",
+   "leaf_name": "edForcePerPinG",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbContactForce.edAirForce",
+   "event_name": "OnChange",
+   "handler_name": "edAirForceChange",
+   "leaf_name": "edAirForce",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbContactForce.edAirForce",
+   "event_name": "OnMouseDown",
+   "handler_name": "Edit16MouseDown",
+   "leaf_name": "edAirForce",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbContactForce.edForcePerDeviceKG",
+   "event_name": "OnClick",
+   "handler_name": "edForcePerDeviceKGClick",
+   "leaf_name": "edForcePerDeviceKG",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbContactForce.edForcePerDeviceKG",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtPinOfDieKeyPress",
+   "leaf_name": "edForcePerDeviceKG",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbContactForce.edYDimension",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDropWaitTimeMouseDown",
+   "leaf_name": "edYDimension",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbContactForce.edXDimension",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDropWaitTimeMouseDown",
+   "leaf_name": "edXDimension",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbContactForce.scrbSLK",
+   "event_name": "OnChange",
+   "handler_name": "scrbSLKChange",
+   "leaf_name": "scrbSLK",
+   "vcl_class": "TScrollBar"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbContactForce.btnTStart",
+   "event_name": "OnClick",
+   "handler_name": "btnTStartClick",
+   "leaf_name": "btnTStart",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbContactForce.btnTStep",
+   "event_name": "OnClick",
+   "handler_name": "btnTStepClick",
+   "leaf_name": "btnTStep",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbContactForce.rgKitDiameter",
+   "event_name": "OnClick",
+   "handler_name": "rgKitDiameterClick",
+   "leaf_name": "rgKitDiameter",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbContactForce.edPinCount",
+   "event_name": "OnChange",
+   "handler_name": "edPinCountChange",
+   "leaf_name": "edPinCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbContactForce.edPinCount",
+   "event_name": "OnKeyPress",
+   "handler_name": "edPinCountKeyPress",
+   "leaf_name": "edPinCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbContactForce.edPinCount",
+   "event_name": "OnMouseDown",
+   "handler_name": "Edit16MouseDown",
+   "leaf_name": "edPinCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbContactForce.edForcePerPinN",
+   "event_name": "OnChange",
+   "handler_name": "edForcePerPinNChange",
+   "leaf_name": "edForcePerPinN",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbContactForce.edForcePerPinN",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edForcePerPinN",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbContactForce.edForcePerPinN",
+   "event_name": "OnMouseDown",
+   "handler_name": "edForcePerPinNMouseDown",
+   "leaf_name": "edForcePerPinN",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbContactForce.edAirKPA",
+   "event_name": "OnMouseDown",
+   "handler_name": "Edit16MouseDown",
+   "leaf_name": "edAirKPA",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbContactForce.rgOutKitDiameter",
+   "event_name": "OnClick",
+   "handler_name": "rgOutKitDiameterClick",
+   "leaf_name": "rgOutKitDiameter",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbContactForce.chkUseAddWeight",
+   "event_name": "OnClick",
+   "handler_name": "chkUseAddWeightClick",
+   "leaf_name": "chkUseAddWeight",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbContactForce.btnTempSet",
+   "event_name": "OnClick",
+   "handler_name": "btnTempSetClick",
+   "leaf_name": "btnTempSet",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbContactForce.btTCPIP",
+   "event_name": "OnClick",
+   "handler_name": "btTCPIPClick",
+   "leaf_name": "btTCPIP",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.btContactForce",
+   "event_name": "OnClick",
+   "handler_name": "btContactForceClick",
+   "leaf_name": "btContactForce",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.palOTD_4",
+   "event_name": "OnClick",
+   "handler_name": "palOTD_4Click",
+   "leaf_name": "palOTD_4",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.palOTD_6",
+   "event_name": "OnClick",
+   "handler_name": "palOTD_6Click",
+   "leaf_name": "palOTD_6",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.pnlSensorAdj",
+   "event_name": "OnClick",
+   "handler_name": "pnlSensorAdjClick",
+   "leaf_name": "pnlSensorAdj",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbDoubleEPSet.rgDieForceKitDiameter",
+   "event_name": "OnClick",
+   "handler_name": "rgDieForceKitDiameterClick",
+   "leaf_name": "rgDieForceKitDiameter",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbDoubleEPSet.edDoubleForce",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDoubleForceMouseDown",
+   "leaf_name": "edDoubleForce",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbDoubleEPSet.edtPinOfDie",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtPinOfDieKeyPress",
+   "leaf_name": "edtPinOfDie",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbDoubleEPSet.edtPinOfDie",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtPinOfDieMouseDown",
+   "leaf_name": "edtPinOfDie",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbDoubleEPSet.edDieForcePerPinN",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edDieForcePerPinN",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbDoubleEPSet.edDieForcePerPinN",
+   "event_name": "OnMouseDown",
+   "handler_name": "edForcePerPinNMouseDown",
+   "leaf_name": "edDieForcePerPinN",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbDoubleEPSet.edDieForcePerPinG",
+   "event_name": "OnChange",
+   "handler_name": "edDieForcePerPinGChange",
+   "leaf_name": "edDieForcePerPinG",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbDoubleEPSet.edDieForcePerPinG",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edDieForcePerPinG",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlSLKSetting.gbDoubleEPSet.edDieForcePerPinG",
+   "event_name": "OnMouseDown",
+   "handler_name": "edForcePerPinGMouseDown",
+   "leaf_name": "edDieForcePerPinG",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edReleaseHeight1",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edReleaseHeight1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edReleaseHeight1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDropWaitTimeMouseDown",
+   "leaf_name": "edReleaseHeight1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edPickUp1",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edPickUp1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edPickUp1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDropWaitTimeMouseDown",
+   "leaf_name": "edPickUp1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edDropOffset1",
+   "event_name": "OnChange",
+   "handler_name": "edContactHeight1Change",
+   "leaf_name": "edDropOffset1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edDropOffset1",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edDropOffset1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edDropOffset1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDropWaitTimeMouseDown",
+   "leaf_name": "edDropOffset1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edContactHeight1",
+   "event_name": "OnChange",
+   "handler_name": "edContactHeight1Change",
+   "leaf_name": "edContactHeight1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edContactHeight1",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edContactHeight1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edContactHeight1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDropWaitTimeMouseDown",
+   "leaf_name": "edContactHeight1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.pnlTorqueControl.edtTorqueMax",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edtTorqueMax",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.pnlTorqueControl.edtTorqueMax",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDropWaitTimeMouseDown",
+   "leaf_name": "edtTorqueMax",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.pnlTorqueControl.edtTorqueCmp",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edtTorqueCmp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.pnlTorqueControl.edtTorqueCmp",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDropWaitTimeMouseDown",
+   "leaf_name": "edtTorqueCmp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edContactOffsetArm1",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edContactOffsetArm1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edContactOffsetArm1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edContactOffsetArm1MouseDown",
+   "leaf_name": "edContactOffsetArm1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edReleaseHeight2",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edReleaseHeight2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edReleaseHeight2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDropWaitTimeMouseDown",
+   "leaf_name": "edReleaseHeight2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edPickUp2",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edPickUp2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edPickUp2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDropWaitTimeMouseDown",
+   "leaf_name": "edPickUp2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edDropOffset2",
+   "event_name": "OnChange",
+   "handler_name": "edContactHeight1Change",
+   "leaf_name": "edDropOffset2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edDropOffset2",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edDropOffset2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edDropOffset2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDropWaitTimeMouseDown",
+   "leaf_name": "edDropOffset2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edContactHeight2",
+   "event_name": "OnChange",
+   "handler_name": "edContactHeight1Change",
+   "leaf_name": "edContactHeight2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edContactHeight2",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edContactHeight2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edContactHeight2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDropWaitTimeMouseDown",
+   "leaf_name": "edContactHeight2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edContactOffsetArm2",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edContactOffsetArm2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edContactOffsetArm2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edContactOffsetArm1MouseDown",
+   "leaf_name": "edContactOffsetArm2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edOrgPick1",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edOrgPick1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edOrgPick1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDropWaitTimeMouseDown",
+   "leaf_name": "edOrgPick1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edOrgPick2",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edOrgPick2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edOrgPick2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDropWaitTimeMouseDown",
+   "leaf_name": "edOrgPick2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edShtPickOffset1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edShtPickOffset1MouseDown",
+   "leaf_name": "edShtPickOffset1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edShtPickOffset2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edShtPickOffset1MouseDown",
+   "leaf_name": "edShtPickOffset2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.plIndexArmJogMove.btnIndexArmJogMove_Up",
+   "event_name": "OnClick",
+   "handler_name": "btnIndexArmJogMove_UpClick",
+   "leaf_name": "btnIndexArmJogMove_Up",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.plIndexArmJogMove.btnIndexArmJogMove_Down",
+   "event_name": "OnClick",
+   "handler_name": "btnIndexArmJogMove_DownClick",
+   "leaf_name": "btnIndexArmJogMove_Down",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edLoadCellHeight1",
+   "event_name": "OnChange",
+   "handler_name": "edContactHeight1Change",
+   "leaf_name": "edLoadCellHeight1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edLoadCellHeight1",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edLoadCellHeight1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edLoadCellHeight1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDropWaitTimeMouseDown",
+   "leaf_name": "edLoadCellHeight1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edLoadCellHeight2",
+   "event_name": "OnChange",
+   "handler_name": "edContactHeight1Change",
+   "leaf_name": "edLoadCellHeight2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edLoadCellHeight2",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edLoadCellHeight2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edLoadCellHeight2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDropWaitTimeMouseDown",
+   "leaf_name": "edLoadCellHeight2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edAutoKSHTReleaseOfs",
+   "event_name": "OnMouseDown",
+   "handler_name": "edAutoKSHTReleaseOfsMouseDown",
+   "leaf_name": "edAutoKSHTReleaseOfs",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edUpOffset2",
+   "event_name": "OnChange",
+   "handler_name": "edContactHeight1Change",
+   "leaf_name": "edUpOffset2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edUpOffset2",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edUpOffset2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edUpOffset2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDropWaitTimeMouseDown",
+   "leaf_name": "edUpOffset2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edUpOffset1",
+   "event_name": "OnChange",
+   "handler_name": "edContactHeight1Change",
+   "leaf_name": "edUpOffset1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edUpOffset1",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edUpOffset1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edUpOffset1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDropWaitTimeMouseDown",
+   "leaf_name": "edUpOffset1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edContactRelativeZ1",
+   "event_name": "OnChange",
+   "handler_name": "edContactHeight1Change",
+   "leaf_name": "edContactRelativeZ1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edContactRelativeZ1",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edContactRelativeZ1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edContactRelativeZ1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDropWaitTimeMouseDown",
+   "leaf_name": "edContactRelativeZ1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edContactRelativeZ2",
+   "event_name": "OnChange",
+   "handler_name": "edContactHeight1Change",
+   "leaf_name": "edContactRelativeZ2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edContactRelativeZ2",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edContactRelativeZ2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactHeight.edContactRelativeZ2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDropWaitTimeMouseDown",
+   "leaf_name": "edContactRelativeZ2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactParameter.cbContactMode",
+   "event_name": "OnChange",
+   "handler_name": "cbContactModeChange",
+   "leaf_name": "cbContactMode",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactParameter.edDropWaitTime",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edDropWaitTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactParameter.edDropWaitTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDropWaitTimeMouseDown",
+   "leaf_name": "edDropWaitTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactParameter.edDropSpeed",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edDropSpeed",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactParameter.edDropSpeed",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDropWaitTimeMouseDown",
+   "leaf_name": "edDropSpeed",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactParameter.pnlPurge.edtPurgeBeforePickShuttleTime",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edtPurgeBeforePickShuttleTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactParameter.pnlPurge.edtPurgeBeforePickShuttleTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDropWaitTimeMouseDown",
+   "leaf_name": "edtPurgeBeforePickShuttleTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactParameter.pnlPurge.edtPurgeBeforePickShuttleInterval",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edtPurgeBeforePickShuttleInterval",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactParameter.pnlPurge.edtPurgeBeforePickShuttleInterval",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDropWaitTimeMouseDown",
+   "leaf_name": "edtPurgeBeforePickShuttleInterval",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactParameter.pnlPurge.edtPurgeBdforePickShuttleOffSet",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edtPurgeBdforePickShuttleOffSet",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactParameter.pnlPurge.edtPurgeBdforePickShuttleOffSet",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDropWaitTimeMouseDown",
+   "leaf_name": "edtPurgeBdforePickShuttleOffSet",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactParameter.edUpWaitTime",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edUpWaitTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactParameter.edUpWaitTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDropWaitTimeMouseDown",
+   "leaf_name": "edUpWaitTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactParameter.edUpSpeed",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edUpSpeed",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactParameter.edUpSpeed",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDropWaitTimeMouseDown",
+   "leaf_name": "edUpSpeed",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactParameter.edDropByPassDetect",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDropByPassDetectMouseDown",
+   "leaf_name": "edDropByPassDetect",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactParameter.pnlSidePush.edSidePushWaitTime",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDropWaitTimeKeyPressInt",
+   "leaf_name": "edSidePushWaitTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.gbContactParameter.pnlSidePush.edSidePushWaitTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDropWaitTimeMouseDown",
+   "leaf_name": "edSidePushWaitTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.pnlTop.palHeightCalibration.pnlFuncSelect.cbEnableUK",
+   "event_name": "OnClick",
+   "handler_name": "cbEnableUKClick",
+   "leaf_name": "cbEnableUK",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fContact.pnlTop.palHeightCalibration.pnlFuncSelect.btnTrayMap",
+   "event_name": "OnClick",
+   "handler_name": "btnTrayMapClick",
+   "leaf_name": "btnTrayMap",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fContact.pnlTop.palHeightCalibration.pnlFuncSelect.cbRTCAutoTuning",
+   "event_name": "OnClick",
+   "handler_name": "cbRTCAutoTuningClick",
+   "leaf_name": "cbRTCAutoTuning",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fContact.pnlTop.palHeightCalibration.panHeightMode.rgHandlerMode.rbModeNormal",
+   "event_name": "OnClick",
+   "handler_name": "rbModeNormalClick",
+   "leaf_name": "rbModeNormal",
+   "vcl_class": "TRadioButton"
+  },
+  {
+   "control_path": "fContact.pnlTop.palHeightCalibration.panHeightMode.rgHandlerMode.rbAutoHeight",
+   "event_name": "OnClick",
+   "handler_name": "rbModeNormalClick",
+   "leaf_name": "rbAutoHeight",
+   "vcl_class": "TRadioButton"
+  },
+  {
+   "control_path": "fContact.pnlTop.palHeightCalibration.panHeightMode.rgHandlerMode.rbManualHeight",
+   "event_name": "OnClick",
+   "handler_name": "rbModeNormalClick",
+   "leaf_name": "rbManualHeight",
+   "vcl_class": "TRadioButton"
+  },
+  {
+   "control_path": "fContact.pnlTop.palHeightCalibration.panHeightMode.rgHandlerMode.rbContactTest",
+   "event_name": "OnClick",
+   "handler_name": "rbModeNormalClick",
+   "leaf_name": "rbContactTest",
+   "vcl_class": "TRadioButton"
+  },
+  {
+   "control_path": "fContact.pnlTop.palHeightCalibration.panHeightMode.rgHandlerMode.rbAutoContactTest",
+   "event_name": "OnClick",
+   "handler_name": "rbModeNormalClick",
+   "leaf_name": "rbAutoContactTest",
+   "vcl_class": "TRadioButton"
+  },
+  {
+   "control_path": "fContact.pnlTop.palHeightCalibration.panHeightMode.rgHandlerMode.rbStepContactTest",
+   "event_name": "OnClick",
+   "handler_name": "rbModeNormalClick",
+   "leaf_name": "rbStepContactTest",
+   "vcl_class": "TRadioButton"
+  },
+  {
+   "control_path": "fContact.pnlTop.palHeightCalibration.panHeightMode.rgHandlerMode.btEditTray",
+   "event_name": "OnClick",
+   "handler_name": "btEditTrayClick",
+   "leaf_name": "btEditTray",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fContact.pnlTop.palHeightCalibration.panHeightMode.rgHandlerMode.rbDeviceMapping",
+   "event_name": "OnClick",
+   "handler_name": "rbModeNormalClick",
+   "leaf_name": "rbDeviceMapping",
+   "vcl_class": "TRadioButton"
+  },
+  {
+   "control_path": "fContact.pnlTop.palHeightCalibration.panHeightMode.rgHandlerMode.rbLoadCellAutoHigh",
+   "event_name": "OnClick",
+   "handler_name": "rbModeNormalClick",
+   "leaf_name": "rbLoadCellAutoHigh",
+   "vcl_class": "TRadioButton"
+  },
+  {
+   "control_path": "fContact.pnlTop.palHeightCalibration.panHeightMode.rgHandlerMode.rbKTempIndexMove",
+   "event_name": "OnClick",
+   "handler_name": "rbModeNormalClick",
+   "leaf_name": "rbKTempIndexMove",
+   "vcl_class": "TRadioButton"
+  },
+  {
+   "control_path": "fContact.pnlTop.palHeightCalibration.panHeightMode.rgHandlerMode.rbDeviceLoopTest",
+   "event_name": "OnClick",
+   "handler_name": "rbModeNormalClick",
+   "leaf_name": "rbDeviceLoopTest",
+   "vcl_class": "TRadioButton"
+  },
+  {
+   "control_path": "fContact.pnlTop.palHeightCalibration.panHeightMode.gbContactStatus.gbHeightStatus.AutoZTeachButton",
+   "event_name": "OnClick",
+   "handler_name": "AutoZTeachButtonClick",
+   "leaf_name": "AutoZTeachButton",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fContact.palTestSocket.coD41",
+   "event_name": "OnChange",
+   "handler_name": "coD41Change",
+   "leaf_name": "coD41",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fContact.palTestSocket.edD41",
+   "event_name": "OnMouseDown",
+   "handler_name": "edD41MouseDown",
+   "leaf_name": "edD41",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContact.OTDTimer",
+   "event_name": "OnTimer",
+   "handler_name": "OTDTimerTimer",
+   "leaf_name": "OTDTimer",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fContact.TimerEP",
+   "event_name": "OnTimer",
+   "handler_name": "TimerEPTimer",
+   "leaf_name": "TimerEP",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fContact.timerContact",
+   "event_name": "OnTimer",
+   "handler_name": "timerContactTimer",
+   "leaf_name": "timerContact",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fContact",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "cContact.dfm"
+}

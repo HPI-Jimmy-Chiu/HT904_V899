@@ -1,0 +1,203 @@
+{
+ "control_node_count": 1,
+ "encoding_used": "cp950",
+ "form_class": "TDataModule2",
+ "form_name": "DataModule2",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "DataModule2.Tempture"
+   ],
+   "class": "TDataModule2",
+   "depth": 0,
+   "events": {},
+   "geometry": {
+    "height": 245,
+    "left": 656,
+    "top": 422,
+    "width": 457
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "DataModule2",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "DataModule2",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 245
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 656
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 422
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 457
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComm",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": null,
+    "left": 40,
+    "top": 24,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 7,
+   "name": "Tempture",
+   "objkind": "object",
+   "parent_path": "DataModule2",
+   "path": "DataModule2.Tempture",
+   "properties": {
+    "BaudRate": {
+     "type": "SCALAR",
+     "value": 9600
+    },
+    "ByteSize": {
+     "type": "SCALAR",
+     "value": "_8"
+    },
+    "CommName": {
+     "type": "STR",
+     "value": "COM2"
+    },
+    "DsrSensitivity": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "DtrControl": {
+     "type": "SCALAR",
+     "value": "DtrEnable"
+    },
+    "IgnoreNullChar": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Inx_XonXoffFlow": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Outx_CtsFlow": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Outx_DsrFlow": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Outx_XonXoffFlow": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "Parity": {
+     "type": "SCALAR",
+     "value": "None"
+    },
+    "ParityCheck": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ReadIntervalTimeout": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "ReadTotalTimeoutConstant": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ReadTotalTimeoutMultiplier": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ReplaceWhenParityError": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ReplacedChar": {
+     "type": "STR",
+     "value": "\u0000"
+    },
+    "RtsControl": {
+     "type": "SCALAR",
+     "value": "RtsEnable"
+    },
+    "StopBits": {
+     "type": "SCALAR",
+     "value": "_1"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "TxContinueOnXoff": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "WriteTotalTimeoutConstant": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "WriteTotalTimeoutMultiplier": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "XoffChar": {
+     "type": "STR",
+     "value": "\u0013"
+    },
+    "XoffLimit": {
+     "type": "SCALAR",
+     "value": 500
+    },
+    "XonChar": {
+     "type": "STR",
+     "value": "\u0011"
+    },
+    "XonLimit": {
+     "type": "SCALAR",
+     "value": 500
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "TempCtrl/MyTempture.dfm",
+ "total_nodes_incl_root": 2
+}

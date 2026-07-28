@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "generator": "emit_rc.py W7-B1b v1.0",
+  "source_dfm": "Public/MemoryAlarm.dfm",
+  "formstem": "MEMORYALARM",
+  "dialog_count": 2,
+  "control_count": 1,
+  "fallback_classes_used": [],
+  "warnings": [],
+  "dialogs": [
+    {
+      "idd_symbol": "IDD_MEMORYALARM",
+      "idd_value": 8192,
+      "is_root": true,
+      "owner_path": "MemoryAlarmForm",
+      "owner_class": "TMemoryAlarmForm",
+      "controls": []
+    },
+    {
+      "idd_symbol": "IDD_MEMORYALARM_PNLMEMORYALARM",
+      "idd_value": 8193,
+      "is_root": false,
+      "owner_path": "MemoryAlarmForm.pnlMemoryAlarm",
+      "owner_class": "TPanel",
+      "controls": [
+        {
+          "symbol": "IDC_MEMORYALARM_LBMEMORYALARM",
+          "value": 1024,
+          "win32_class": "Static",
+          "caption": "Memory Alarm",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "MemoryAlarmForm.pnlMemoryAlarm.lbMemoryAlarm",
+          "fallback_class": false,
+          "x": 1,
+          "y": 1,
+          "cx": 752,
+          "cy": 158
+        }
+      ]
+    }
+  ]
+}

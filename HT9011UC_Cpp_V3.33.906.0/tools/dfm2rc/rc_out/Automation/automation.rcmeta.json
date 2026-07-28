@@ -1,0 +1,360 @@
+{
+  "schema_version": 1,
+  "generator": "emit_rc.py W7-B1b v1.0",
+  "source_dfm": "Automation/automation.dfm",
+  "formstem": "AUTOMATION",
+  "dialog_count": 6,
+  "control_count": 21,
+  "fallback_classes_used": [],
+  "warnings": [],
+  "dialogs": [
+    {
+      "idd_symbol": "IDD_AUTOMATION",
+      "idd_value": 8192,
+      "is_root": true,
+      "owner_path": "fAutomation",
+      "owner_class": "TfAutomation",
+      "controls": [
+        {
+          "symbol": "IDC_AUTOMATION_PGCOLP",
+          "value": 1024,
+          "win32_class": "SysTabControl32",
+          "caption": null,
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fAutomation.pgcOLP",
+          "fallback_class": false,
+          "x": 0,
+          "y": 113,
+          "cx": 868,
+          "cy": 458
+        },
+        {
+          "symbol": "IDC_AUTOMATION_BTUDPSEND",
+          "value": 1025,
+          "win32_class": "Button",
+          "caption": "Map + Temp",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fAutomation.btUDPSend",
+          "fallback_class": false,
+          "x": 519,
+          "y": 8,
+          "cx": 111,
+          "cy": 36
+        },
+        {
+          "symbol": "IDC_AUTOMATION_BTUDPMAP",
+          "value": 1026,
+          "win32_class": "Button",
+          "caption": "Map",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fAutomation.btUDPMap",
+          "fallback_class": false,
+          "x": 636,
+          "y": 8,
+          "cx": 111,
+          "cy": 36
+        },
+        {
+          "symbol": "IDC_AUTOMATION_BTUDPTEMP",
+          "value": 1027,
+          "win32_class": "Button",
+          "caption": "Temp",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fAutomation.btUDPTemp",
+          "fallback_class": false,
+          "x": 753,
+          "y": 8,
+          "cx": 111,
+          "cy": 36
+        }
+      ]
+    },
+    {
+      "idd_symbol": "IDD_AUTOMATION_PGCOLP_TABSHEET20",
+      "idd_value": 8193,
+      "is_root": false,
+      "owner_path": "fAutomation.pgcOLP.TabSheet20",
+      "owner_class": "TTabSheet",
+      "controls": [
+        {
+          "symbol": "IDC_AUTOMATION_MEMO",
+          "value": 1028,
+          "win32_class": "Edit",
+          "caption": null,
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fAutomation.pgcOLP.TabSheet20.Memo",
+          "fallback_class": false,
+          "x": 0,
+          "y": 0,
+          "cx": 860,
+          "cy": 430
+        }
+      ]
+    },
+    {
+      "idd_symbol": "IDD_AUTOMATION_PGCOLP_TABSHEET6",
+      "idd_value": 8194,
+      "is_root": false,
+      "owner_path": "fAutomation.pgcOLP.TabSheet6",
+      "owner_class": "TTabSheet",
+      "controls": [
+        {
+          "symbol": "IDC_AUTOMATION_MEMOCHAR",
+          "value": 1029,
+          "win32_class": "Edit",
+          "caption": null,
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fAutomation.pgcOLP.TabSheet6.MemoChar",
+          "fallback_class": false,
+          "x": 0,
+          "y": 0,
+          "cx": 860,
+          "cy": 431
+        }
+      ]
+    },
+    {
+      "idd_symbol": "IDD_AUTOMATION_PGCOLP_TABSHEET22",
+      "idd_value": 8195,
+      "is_root": false,
+      "owner_path": "fAutomation.pgcOLP.TabSheet22",
+      "owner_class": "TTabSheet",
+      "controls": [
+        {
+          "symbol": "IDC_AUTOMATION_MEMOCODE",
+          "value": 1030,
+          "win32_class": "Edit",
+          "caption": null,
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fAutomation.pgcOLP.TabSheet22.MemoCode",
+          "fallback_class": false,
+          "x": 0,
+          "y": 0,
+          "cx": 860,
+          "cy": 431
+        }
+      ]
+    },
+    {
+      "idd_symbol": "IDD_AUTOMATION_GBAUTOMATION",
+      "idd_value": 8196,
+      "is_root": false,
+      "owner_path": "fAutomation.gbAutomation",
+      "owner_class": "TGroupBox",
+      "controls": [
+        {
+          "symbol": "IDC_AUTOMATION_GBAUTOMATION_FRAME",
+          "value": 1031,
+          "win32_class": "Button",
+          "caption": "Automation",
+          "synthesized": true,
+          "rule": "SYNTH_CONTAINER_FRAME",
+          "source_path": "fAutomation.gbAutomation",
+          "fallback_class": false,
+          "x": 0,
+          "y": 0,
+          "cx": 868,
+          "cy": 113
+        },
+        {
+          "symbol": "IDC_AUTOMATION_ONLINE",
+          "value": 1032,
+          "win32_class": "Button",
+          "caption": null,
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fAutomation.gbAutomation.OnLine",
+          "fallback_class": false,
+          "x": 172,
+          "y": 12,
+          "cx": 45,
+          "cy": 45
+        },
+        {
+          "symbol": "IDC_AUTOMATION_ONLINE2",
+          "value": 1033,
+          "win32_class": "Button",
+          "caption": null,
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fAutomation.gbAutomation.OnLine2",
+          "fallback_class": false,
+          "x": 227,
+          "y": 12,
+          "cx": 44,
+          "cy": 45
+        },
+        {
+          "symbol": "IDC_AUTOMATION_CBBOLPCOMMAND",
+          "value": 1034,
+          "win32_class": "ComboBox",
+          "caption": "0001",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fAutomation.gbAutomation.cbbOLPCommand",
+          "fallback_class": false,
+          "x": 284,
+          "y": 13,
+          "cx": 145,
+          "cy": 21
+        },
+        {
+          "symbol": "IDC_AUTOMATION_BTEVENTREPORT",
+          "value": 1035,
+          "win32_class": "Button",
+          "caption": "Even Report",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fAutomation.gbAutomation.btEventReport",
+          "fallback_class": false,
+          "x": 285,
+          "y": 41,
+          "cx": 146,
+          "cy": 25
+        },
+        {
+          "symbol": "IDC_AUTOMATION_BTALARMREPORT",
+          "value": 1036,
+          "win32_class": "Button",
+          "caption": "Alarm Report",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fAutomation.gbAutomation.btAlarmReport",
+          "fallback_class": false,
+          "x": 436,
+          "y": 9,
+          "cx": 144,
+          "cy": 25
+        },
+        {
+          "symbol": "IDC_AUTOMATION_CHKVIEWCOMM",
+          "value": 1037,
+          "win32_class": "Button",
+          "caption": "View Communction",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fAutomation.gbAutomation.chkViewComm",
+          "fallback_class": false,
+          "x": 605,
+          "y": 48,
+          "cx": 121,
+          "cy": 17
+        },
+        {
+          "symbol": "IDC_AUTOMATION_BTNCONNECT",
+          "value": 1038,
+          "win32_class": "Button",
+          "caption": "Connect",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fAutomation.gbAutomation.btnConnect",
+          "fallback_class": false,
+          "x": 8,
+          "y": 13,
+          "cx": 128,
+          "cy": 25
+        },
+        {
+          "symbol": "IDC_AUTOMATION_BTNDISCONNECT",
+          "value": 1039,
+          "win32_class": "Button",
+          "caption": "DisConnect",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fAutomation.gbAutomation.btnDisconnect",
+          "fallback_class": false,
+          "x": 8,
+          "y": 44,
+          "cx": 128,
+          "cy": 25
+        },
+        {
+          "symbol": "IDC_AUTOMATION_BTTESTRESULT",
+          "value": 1040,
+          "win32_class": "Button",
+          "caption": "Test Result",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fAutomation.gbAutomation.btTestResult",
+          "fallback_class": false,
+          "x": 436,
+          "y": 41,
+          "cx": 144,
+          "cy": 25
+        }
+      ]
+    },
+    {
+      "idd_symbol": "IDD_AUTOMATION_GBAUTOMATION_PANEL1",
+      "idd_value": 8197,
+      "is_root": false,
+      "owner_path": "fAutomation.gbAutomation.Panel1",
+      "owner_class": "TPanel",
+      "controls": [
+        {
+          "symbol": "IDC_AUTOMATION_LBIP",
+          "value": 1041,
+          "win32_class": "Static",
+          "caption": "IP(Address):",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fAutomation.gbAutomation.Panel1.lbIP",
+          "fallback_class": false,
+          "x": 4,
+          "y": 7,
+          "cx": 74,
+          "cy": 16
+        },
+        {
+          "symbol": "IDC_AUTOMATION_LBPORT",
+          "value": 1042,
+          "win32_class": "Static",
+          "caption": "PORT:",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fAutomation.gbAutomation.Panel1.lbPORT",
+          "fallback_class": false,
+          "x": 200,
+          "y": 7,
+          "cx": 41,
+          "cy": 16
+        },
+        {
+          "symbol": "IDC_AUTOMATION_EDINPUTIP",
+          "value": 1043,
+          "win32_class": "Edit",
+          "caption": "192.168.120.143",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fAutomation.gbAutomation.Panel1.edinputIP",
+          "fallback_class": false,
+          "x": 80,
+          "y": 2,
+          "cx": 109,
+          "cy": 24
+        },
+        {
+          "symbol": "IDC_AUTOMATION_EDINPUTPORT",
+          "value": 1044,
+          "win32_class": "Edit",
+          "caption": "6670",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fAutomation.gbAutomation.Panel1.edinputport",
+          "fallback_class": false,
+          "x": 244,
+          "y": 2,
+          "cx": 57,
+          "cy": 21
+        }
+      ]
+    }
+  ]
+}

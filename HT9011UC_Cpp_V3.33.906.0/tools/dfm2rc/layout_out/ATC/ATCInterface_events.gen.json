@@ -1,0 +1,233 @@
+{
+ "event_count": 32,
+ "events": [
+  {
+   "control_path": "ATCInterfaceForm",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "ATCInterfaceForm",
+   "vcl_class": "TATCInterfaceForm"
+  },
+  {
+   "control_path": "ATCInterfaceForm",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "ATCInterfaceForm",
+   "vcl_class": "TATCInterfaceForm"
+  },
+  {
+   "control_path": "ATCInterfaceForm",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "ATCInterfaceForm",
+   "vcl_class": "TATCInterfaceForm"
+  },
+  {
+   "control_path": "ATCInterfaceForm.Panel2.btnClearAll",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAllClick",
+   "leaf_name": "btnClearAll",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "ATCInterfaceForm.Panel2.btnExit",
+   "event_name": "OnClick",
+   "handler_name": "btnExitClick",
+   "leaf_name": "btnExit",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "ATCInterfaceForm.PageControl1.TabSheet1.ScrollBoxATC.gbATC.edtPort",
+   "event_name": "OnClick",
+   "handler_name": "edtPortClick",
+   "leaf_name": "edtPort",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "ATCInterfaceForm.PageControl1.TabSheet1.ScrollBoxATC.gbATC.gbOffset.edtOffset",
+   "event_name": "OnClick",
+   "handler_name": "edtOffsetClick",
+   "leaf_name": "edtOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "ATCInterfaceForm.PageControl1.TabSheet1.ScrollBoxATC.gbATC.gbOffset.btSetOffset",
+   "event_name": "OnClick",
+   "handler_name": "btSetOffsetClick",
+   "leaf_name": "btSetOffset",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATCInterfaceForm.PageControl1.TabSheet1.ScrollBoxATC.gbChiller.pl_ATCSetTempChiller",
+   "event_name": "OnClick",
+   "handler_name": "pl_ATCSetTempChillerClick",
+   "leaf_name": "pl_ATCSetTempChiller",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "ATCInterfaceForm.PageControl1.TabSheet1.ScrollBoxATC.btnATCChillerSwitchRun",
+   "event_name": "OnClick",
+   "handler_name": "btnATCChillerSwitchRunClick",
+   "leaf_name": "btnATCChillerSwitchRun",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATCInterfaceForm.PageControl1.TabSheet1.ScrollBoxATC.btnATCChillerSwitchStop",
+   "event_name": "OnClick",
+   "handler_name": "btnATCChillerSwitchStopClick",
+   "leaf_name": "btnATCChillerSwitchStop",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATCInterfaceForm.PageControl1.TabSheet1.ScrollBoxATC.btnATCPower",
+   "event_name": "OnClick",
+   "handler_name": "btnATCPowerClick",
+   "leaf_name": "btnATCPower",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATCInterfaceForm.PageControl1.TabSheet1.ScrollBoxATC.btOnLine",
+   "event_name": "OnClick",
+   "handler_name": "btOnLineClick",
+   "leaf_name": "btOnLine",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATCInterfaceForm.PageControl1.TabSheet1.ScrollBoxATC.btOffLine",
+   "event_name": "OnClick",
+   "handler_name": "btOffLineClick",
+   "leaf_name": "btOffLine",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATCInterfaceForm.PageControl1.TabSheet1.ScrollBoxATC.btSetChillerTemp",
+   "event_name": "OnClick",
+   "handler_name": "btSetChillerTempClick",
+   "leaf_name": "btSetChillerTemp",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATCInterfaceForm.PageControl1.TabSheet1.ScrollBoxATC.btSave",
+   "event_name": "OnClick",
+   "handler_name": "btSaveClick",
+   "leaf_name": "btSave",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATCInterfaceForm.PageControl1.TabSheet1.ScrollBoxATC.Button1",
+   "event_name": "OnClick",
+   "handler_name": "Button1Click",
+   "leaf_name": "Button1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATCInterfaceForm.PageControl1.TabSheet1.ScrollBoxATC.btSetWorkTemp",
+   "event_name": "OnClick",
+   "handler_name": "btSetWorkTempClick",
+   "leaf_name": "btSetWorkTemp",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATCInterfaceForm.PageControl1.TabSheet1.ScrollBoxATC.gbL11.edATCChillerCheckTime",
+   "event_name": "OnClick",
+   "handler_name": "edATCChillerCheckTimeClick",
+   "leaf_name": "edATCChillerCheckTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "ATCInterfaceForm.PageControl1.TabSheet1.ScrollBoxATC.Button2",
+   "event_name": "OnClick",
+   "handler_name": "Button2Click",
+   "leaf_name": "Button2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATCInterfaceForm.PageControl1.TabSheet2.ScrollBox1.GroupBox4.edATC7_Temp",
+   "event_name": "OnClick",
+   "handler_name": "edATC7_TempClick",
+   "leaf_name": "edATC7_Temp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "ATCInterfaceForm.PageControl1.TabSheet2.ScrollBox1.GroupBox4.BitBtn1",
+   "event_name": "OnClick",
+   "handler_name": "BitBtn1Click",
+   "leaf_name": "BitBtn1",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "ATCInterfaceForm.PageControl1.TabSheet2.ScrollBox1.GroupBox4.BitBtn2",
+   "event_name": "OnClick",
+   "handler_name": "BitBtn2Click",
+   "leaf_name": "BitBtn2",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "ATCInterfaceForm.PageControl1.TabSheet2.ScrollBox1.GroupBox4.BitBtn3",
+   "event_name": "OnClick",
+   "handler_name": "BitBtn3Click",
+   "leaf_name": "BitBtn3",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "ATCInterfaceForm.PageControl1.TabSheet2.ScrollBox1.GroupBox4.BitBtn4",
+   "event_name": "OnClick",
+   "handler_name": "BitBtn4Click",
+   "leaf_name": "BitBtn4",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "ATCInterfaceForm.PageControl1.TabSheet2.ScrollBox1.GroupBox4.BitBtn5",
+   "event_name": "OnClick",
+   "handler_name": "BitBtn5Click",
+   "leaf_name": "BitBtn5",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "ATCInterfaceForm.ATCWatchTimer",
+   "event_name": "OnTimer",
+   "handler_name": "ATCWatchTimerTimer",
+   "leaf_name": "ATCWatchTimer",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "ATCInterfaceForm.TimerChillerStop",
+   "event_name": "OnTimer",
+   "handler_name": "TimerChillerStopTimer",
+   "leaf_name": "TimerChillerStop",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "ATCInterfaceForm.ATC7_ServerSocket",
+   "event_name": "OnClientConnect",
+   "handler_name": "ATC7_ServerSocketClientConnect",
+   "leaf_name": "ATC7_ServerSocket",
+   "vcl_class": "TServerSocket"
+  },
+  {
+   "control_path": "ATCInterfaceForm.ATC7_ServerSocket",
+   "event_name": "OnClientDisconnect",
+   "handler_name": "ATC7_ServerSocketClientDisconnect",
+   "leaf_name": "ATC7_ServerSocket",
+   "vcl_class": "TServerSocket"
+  },
+  {
+   "control_path": "ATCInterfaceForm.ATC7_ServerSocket",
+   "event_name": "OnClientRead",
+   "handler_name": "ATC7_ServerSocketClientRead",
+   "leaf_name": "ATC7_ServerSocket",
+   "vcl_class": "TServerSocket"
+  },
+  {
+   "control_path": "ATCInterfaceForm.TimerATC",
+   "event_name": "OnTimer",
+   "handler_name": "TimerATCTimer",
+   "leaf_name": "TimerATC",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "ATCInterfaceForm",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "ATC/ATCInterface.dfm"
+}

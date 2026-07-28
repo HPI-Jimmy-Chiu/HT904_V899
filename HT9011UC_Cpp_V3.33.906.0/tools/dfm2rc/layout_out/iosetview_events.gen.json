@@ -1,0 +1,5049 @@
+{
+ "event_count": 720,
+ "events": [
+  {
+   "control_path": "fiosetview",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fiosetview",
+   "vcl_class": "Tfiosetview"
+  },
+  {
+   "control_path": "fiosetview",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fiosetview",
+   "vcl_class": "Tfiosetview"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpEmpty.btnC_EmptyLoaderZ_Select",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_EmptyLoaderZ_Select",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpEmpty.btnC_Empty_Middle",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Empty_UpClick",
+   "leaf_name": "btnC_Empty_Middle",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpEmpty.btnC_Empty_Up",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Empty_UpClick",
+   "leaf_name": "btnC_Empty_Up",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpEmpty.btnSwACEmptyCCW",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACEmptyCCW",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpEmpty.btnSwACEmptyCW",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACEmptyCW",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpEmpty.btnC_Empty_Fix",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Empty_Fix",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpEmpty.btnSwEmpty1Bin",
+   "event_name": "OnClick",
+   "handler_name": "BtnNumPanelTestClick",
+   "leaf_name": "btnSwEmpty1Bin",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpEmpty.btnC_EmptyCasstteLock",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_EmptyCasstteLock",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpColor.btnC_ColorLoaderZ_Select",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_ColorLoaderZ_Select",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpColor.btnC_Color_Middle",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Color_UpClick",
+   "leaf_name": "btnC_Color_Middle",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpColor.btnC_Color_Up",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Color_UpClick",
+   "leaf_name": "btnC_Color_Up",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpColor.btnSwACColorCCW",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACColorCCW",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpColor.btnSwACColorCW",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACColorCW",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpColor.btnC_Color_Fix",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Color_Fix",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpColor.btnSwEmpty2Bin",
+   "event_name": "OnClick",
+   "handler_name": "BtnNumPanelTestClick",
+   "leaf_name": "btnSwEmpty2Bin",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpColor.btnC_ColorCasstteLock",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_ColorCasstteLock",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpLoader.btnC_TrayZ_Selector",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_TrayZ_Selector",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpLoader.btnC_Load_Middle",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Load_UpClick",
+   "leaf_name": "btnC_Load_Middle",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpLoader.btnC_Load_Up",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Load_UpClick",
+   "leaf_name": "btnC_Load_Up",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpLoader.btnC_TrayY_Fixer",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_TrayY_Fixer",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpLoader.btnC_LoaderEdgePush",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_LoaderEdgePush",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpLoader.btnSwACTrayY",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACTrayY",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpLoader.btnSwLoaderBin",
+   "event_name": "OnClick",
+   "handler_name": "BtnNumPanelTestClick",
+   "leaf_name": "btnSwLoaderBin",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpLoader.btnSwACLoaderCCW",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACLoaderCCW",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpLoader.btnC_LoaderUpPress",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_LoaderUpPress",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpLoader.btnSwLoaderVibration",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwLoaderVibration",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpLoader.btnSwLoaderAirClean",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwLoaderAirClean",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpLoader.btnC_LoaderCasstteLock",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_LoaderCasstteLock",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpLoader.grpLoaderFunc.btnC_LoadCarRFIDRotArmD",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_LoadCarRFIDRotArmD",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpLoader.grpLoaderFunc.btnC_LoadCarRFIDRotArmU",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_LoadCarRFIDRotArmU",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpLoader2.btnC_Tray2Z_Selector",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Tray2Z_Selector",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpLoader2.btnC_Load2_Middle",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Load_UpClick",
+   "leaf_name": "btnC_Load2_Middle",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpLoader2.btnC_Load2_Up",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Load_UpClick",
+   "leaf_name": "btnC_Load2_Up",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpLoader2.btnC_Tray2Y_Fixer",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Tray2Y_Fixer",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpLoader2.btnC_Load2EdgePush",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Load2EdgePush",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpLoader2.btnSwACTray2Y",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACTray2Y",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpLoader2.btnSwLoad2Bin",
+   "event_name": "OnClick",
+   "handler_name": "BtnNumPanelTestClick",
+   "leaf_name": "btnSwLoad2Bin",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpLoader2.btnSwACLoad2CCW",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACLoad2CCW",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpLoader2.btnC_Load2UpPress",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Load2UpPress",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpLoader2.btnSwLoad2Vibration",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwLoad2Vibration",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpLoader2.btnSwLoad2AirClean",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwLoad2AirClean",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Above.grpLoader2.btnC_Load2CasstteLock",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Load2CasstteLock",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpLoader_Under.btnC_TrayZ_Selector_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_TrayZ_Selector_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpLoader_Under.btnC_Load_Middle_U",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Load_UpClick",
+   "leaf_name": "btnC_Load_Middle_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpLoader_Under.btnC_Load_Up_U",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Load_UpClick",
+   "leaf_name": "btnC_Load_Up_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpLoader_Under.btnC_TrayY_Fixer_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_TrayY_Fixer_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpLoader_Under.btnC_LoaderEdgePush_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_LoaderEdgePush_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpLoader_Under.btnSwACTrayY_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACTrayY_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpLoader_Under.btnSwACLoaderCCW_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACLoaderCCW_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpLoader_Under.btnSwLoaderVibration_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwLoaderVibration_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpLoader_Under.btnC_LoadTrackFloodgate_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_LoadTrackFloodgate_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpLoader_Under.btnC_LoaderPushBack_Push_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_LoaderPushBack_Push_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpLoader_Under.btnC_LoaderPushBack_Back_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_LoaderPushBack_Back_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpLoader_Under.btnSwLoaderAirClean_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwLoaderAirClean_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpLoader_Under.btnC_LoaderSeparate_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_LoaderSeparate_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpColor_Under.btnC_ColorLoaderZ_Select_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_ColorLoaderZ_Select_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpColor_Under.btnC_Color_Middle_U",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Color_UpClick",
+   "leaf_name": "btnC_Color_Middle_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpColor_Under.btnC_Color_Up_U",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Color_UpClick",
+   "leaf_name": "btnC_Color_Up_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpColor_Under.btnSwACColorCCW_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACColorCCW_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpColor_Under.btnSwACColorCW_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACColorCW_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpColor_Under.btnC_Color_Fix_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Color_Fix_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpColor_Under.btnC_ColorTrackFloodgate_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_ColorTrackFloodgate_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpColor_Under.btnC_ColorPushBack_Push_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_ColorPushBack_Push_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpColor_Under.btnC_ColorPushBack_Back_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_ColorPushBack_Back_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpColor_Under.btnC_ColorEdgePush_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_ColorEdgePush_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpColor_Under.btnC_ColorSeparate_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_ColorSeparate_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpEmpty_Under.btnC_EmptyLoaderZ_Select_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_EmptyLoaderZ_Select_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpEmpty_Under.btnC_Empty_Middle_U",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Empty_UpClick",
+   "leaf_name": "btnC_Empty_Middle_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpEmpty_Under.btnC_Empty_Up_U",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Empty_UpClick",
+   "leaf_name": "btnC_Empty_Up_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpEmpty_Under.btnSwACEmptyCCW_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACEmptyCCW_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpEmpty_Under.btnSwACEmptyCW_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACEmptyCW_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpEmpty_Under.btnC_Empty_Fix_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Empty_Fix_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpEmpty_Under.btnC_EmptyTrackFloodgate_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_EmptyTrackFloodgate_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpEmpty_Under.btnC_EmptyPushBack_Push_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_EmptyPushBack_Push_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpEmpty_Under.btnC_EmptyPushBack_Back_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_EmptyPushBack_Back_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpEmpty_Under.btnC_EmptyEdgePush_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_EmptyEdgePush_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpEmpty_Under.btnC_EmptySeparate_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_EmptySeparate_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpLoader2_Under.btnC_Tray2Z_Selector_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Tray2Z_Selector_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpLoader2_Under.btnC_Load2_Middle_U",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Load_UpClick",
+   "leaf_name": "btnC_Load2_Middle_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpLoader2_Under.btnC_Load2_Up_U",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Load_UpClick",
+   "leaf_name": "btnC_Load2_Up_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpLoader2_Under.btnC_Tray2Y_Fixer_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Tray2Y_Fixer_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpLoader2_Under.btnC_Load2EdgePush_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Load2EdgePush_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpLoader2_Under.btnSwACTray2Y_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACTray2Y_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpLoader2_Under.btnSwACLoad2CCW_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACLoad2CCW_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpLoader2_Under.btnSwLoad2Vibration_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwLoad2Vibration_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpLoader2_Under.btnC_Load2TrackFloodgate_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Load2TrackFloodgate_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpLoader2_Under.btnC_Load2PushBack_Push_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Load2PushBack_Push_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpLoader2_Under.btnC_Load2PushBack_Back_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Load2PushBack_Back_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpLoader2_Under.btnSwLoad2AirClean_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwLoad2AirClean_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Under.grpLoader2_Under.btnC_Load2Separate_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Load2Separate_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Cassette.GroupBox1.BtnPanelLane4",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "BtnPanelLane4",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Cassette.GroupBox1.BtnPanelLane5",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "BtnPanelLane5",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Cassette.GroupBox1.BtnPanelLane6",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "BtnPanelLane6",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Cassette.GroupBox1.BtnPanelLane8",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "BtnPanelLane8",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Cassette.GroupBox1.BtnPanelLane9",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "BtnPanelLane9",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Cassette.GroupBox1.BtnPanelLane10",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "BtnPanelLane10",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Cassette.GroupBox1.BtnPanelLane11",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "BtnPanelLane11",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Cassette.GroupBox1.Panel10.BtnPanelLane39",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "BtnPanelLane39",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsLoader.pnlStack1.pgcStack1.tsStack1_Cassette.GroupBox1.btnSwCassetteLDMotBreaker",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwCassetteLDMotBreaker",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto1.btnSwACAuto1",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACAuto1",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto1.btnSwACAuto1CW",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACAuto1CW",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto1.btnC_Auto1Side_Fixer",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto1Side_Fixer",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto1.btnC_Auto1EdgePush",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto1EdgePush",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto1.btnSwAuto1Bin",
+   "event_name": "OnClick",
+   "handler_name": "BtnNumPanelTestClick",
+   "leaf_name": "btnSwAuto1Bin",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto1.btnC_Auto1LoaderZ_Select",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto1LoaderZ_Select",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto1.btnC_Auto1_Selector",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Auto1_UpClick",
+   "leaf_name": "btnC_Auto1_Selector",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto1.btnC_Auto1_Up",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Auto1_UpClick",
+   "leaf_name": "btnC_Auto1_Up",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto1.btnC_Auto1UpPress",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto1UpPress",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto1.btnC_Auto1CasstteLock",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto1CasstteLock",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto2.btnSwACAuto2",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACAuto2",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto2.btnC_Auto2Side_Fixer",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto2Side_Fixer",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto2.btnC_Auto2EdgePush",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto2EdgePush",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto2.btnSwAuto2Bin",
+   "event_name": "OnClick",
+   "handler_name": "BtnNumPanelTestClick",
+   "leaf_name": "btnSwAuto2Bin",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto2.btnC_TrayVibration",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_TrayVibration",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto2.btnC_Auto2_Selector",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Auto2_UpClick",
+   "leaf_name": "btnC_Auto2_Selector",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto2.btnC_Auto2_Up",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Auto2_UpClick",
+   "leaf_name": "btnC_Auto2_Up",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto2.btnC_Auto2LoaderZ_Select",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto2LoaderZ_Select",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto2.btnSwACAuto2CW",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACAuto2CW",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto2.btnC_Auto2UpPress",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto2UpPress",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto2.btnC_Auto2CasstteLock",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto2CasstteLock",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto3.btnSwACAuto3",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACAuto3",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto3.btnC_Auto3Side_Fixer",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto3Side_Fixer",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto3.btnC_Auto3EdgePush",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto3EdgePush",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto3.btnSwAuto3Bin",
+   "event_name": "OnClick",
+   "handler_name": "BtnNumPanelTestClick",
+   "leaf_name": "btnSwAuto3Bin",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto3.btnC_Auto3LoaderZ_Select",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto3LoaderZ_Select",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto3.btnSwACAuto3CW",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACAuto3CW",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto3.btnC_Auto3_Up",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Auto3_UpClick",
+   "leaf_name": "btnC_Auto3_Up",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto3.btnC_Auto3_Selector",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Auto3_UpClick",
+   "leaf_name": "btnC_Auto3_Selector",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto3.btnC_Auto3UpPress",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto3UpPress",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Above.grpAuto3.btnC_Auto3CasstteLock",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto3CasstteLock",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto1_Under.btnSwACAuto1_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACAuto1_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto1_Under.btnSwACAutoCW_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACAutoCW_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto1_Under.btnC_Auto1Side_Fixer_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto1Side_Fixer_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto1_Under.btnC_Auto1EdgePush_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto1EdgePush_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto1_Under.btnC_Auto1LoaderZ_Select_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto1LoaderZ_Select_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto1_Under.btnC_Auto1_Selector_U",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Auto1_UpClick",
+   "leaf_name": "btnC_Auto1_Selector_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto1_Under.btnC_Auto1_Up_U",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Auto1_UpClick",
+   "leaf_name": "btnC_Auto1_Up_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto1_Under.btnC_Auto1TrackFloodgate_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto1TrackFloodgate_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto1_Under.btnC_Auto1PushBack_Push_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto1PushBack_Push_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto1_Under.btnC_Auto1PushBack_Back_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto1PushBack_Back_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto1_Under.btnC_Auto1Separate_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto1Separate_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto2_Under.btnSwACAuto2_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACAuto2_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto2_Under.btnC_Auto2_Selector_U",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Auto2_UpClick",
+   "leaf_name": "btnC_Auto2_Selector_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto2_Under.btnC_Auto2_Up_U",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Auto2_UpClick",
+   "leaf_name": "btnC_Auto2_Up_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto2_Under.btnC_Auto2LoaderZ_Select_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto2LoaderZ_Select_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto2_Under.btnSwACAuto2CW_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACAuto2CW_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto2_Under.btnC_Auto2TrackFloodgate_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto2TrackFloodgate_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto2_Under.btnC_Auto2Side_Fixer_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto2Side_Fixer_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto2_Under.btnC_Auto2EdgePush_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto2EdgePush_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto2_Under.btnC_Auto2PushBack_Push_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto2PushBack_Push_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto2_Under.btnC_Auto2PushBack_Back_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto2PushBack_Back_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto2_Under.btnC_Auto2Separate_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto2Separate_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto2_Under.btnC_TrayVibration_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_TrayVibration_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto3_Under.btnSwACAuto3_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACAuto3_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto3_Under.btnC_Auto3Side_Fixer_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto3Side_Fixer_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto3_Under.btnC_Auto3EdgePush_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto3EdgePush_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto3_Under.btnC_Auto3LoaderZ_Select_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto3LoaderZ_Select_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto3_Under.btnSwACAuto3CW_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACAuto3CW_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto3_Under.btnC_Auto3_Up_U",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Auto3_UpClick",
+   "leaf_name": "btnC_Auto3_Up_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto3_Under.btnC_Auto3_Selector_U",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Auto3_UpClick",
+   "leaf_name": "btnC_Auto3_Selector_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto3_Under.btnC_Auto3TrackFloodgate_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto3TrackFloodgate_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto3_Under.btnC_Auto3PushBack_Push_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto3PushBack_Push_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto3_Under.btnC_Auto3PushBack_Back_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto3PushBack_Back_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Under.grpAuto3_Under.btnC_Auto3Separate_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto3Separate_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Cassette.GroupBox4.BtnPanelLane15",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "BtnPanelLane15",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Cassette.GroupBox4.BtnPanelLane16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "BtnPanelLane16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Cassette.GroupBox4.BtnPanelLane17",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "BtnPanelLane17",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Cassette.GroupBox4.BtnPanelLane18",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "BtnPanelLane18",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Cassette.GroupBox4.BtnPanelLane19",
+   "event_name": "OnClick",
+   "handler_name": "BtnNumPanelTestClick",
+   "leaf_name": "BtnPanelLane19",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Cassette.GroupBox4.BtnPanelLane23",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "BtnPanelLane23",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Cassette.GroupBox4.Panel21.BtnPanelLane36",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "BtnPanelLane36",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Cassette.GroupBox4.btnSwCassetteAuto1MotBreaker",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwCassetteAuto1MotBreaker",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Cassette.GroupBox5.BtnPanelLane25",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "BtnPanelLane25",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Cassette.GroupBox5.BtnPanelLane26",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "BtnPanelLane26",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Cassette.GroupBox5.BtnPanelLane27",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "BtnPanelLane27",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Cassette.GroupBox5.BtnPanelLane28",
+   "event_name": "OnClick",
+   "handler_name": "BtnNumPanelTestClick",
+   "leaf_name": "BtnPanelLane28",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Cassette.GroupBox5.BtnPanelLane29",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "BtnPanelLane29",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Cassette.GroupBox5.BtnPanelLane33",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "BtnPanelLane33",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Cassette.GroupBox5.BtnPanelLane34",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "BtnPanelLane34",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Cassette.GroupBox5.Panel34.BtnPanelLane37",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "BtnPanelLane37",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader.pnlStack2.pgcStack2.tsStack2_Cassette.GroupBox5.btnSwCassetteAuto2MotBreaker",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwCassetteAuto2MotBreaker",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Above.grpAuto4.btnSwACAuto4",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACAuto4",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Above.grpAuto4.btnSwACAuto4CW",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACAuto4CW",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Above.grpAuto4.btnC_Auto4Side_Fixer",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto4Side_Fixer",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Above.grpAuto4.btnC_Auto4EdgePush",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto4EdgePush",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Above.grpAuto4.btnC_Auto4LoaderZ_Select",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto4LoaderZ_Select",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Above.grpAuto4.btnC_Auto4_Selector",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Auto4_SelectorClick",
+   "leaf_name": "btnC_Auto4_Selector",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Above.grpAuto4.btnC_Auto4_Up",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Auto4_SelectorClick",
+   "leaf_name": "btnC_Auto4_Up",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Above.grpAuto4.btnC_Auto4UpPress",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto4UpPress",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Above.grpAuto4.btnC_Auto4CasstteLock",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto4CasstteLock",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Above.grpAuto5.btnSwACAuto5",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACAuto5",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Above.grpAuto5.btnC_Auto5Side_Fixer",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto5Side_Fixer",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Above.grpAuto5.btnC_Auto5EdgePush",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto5EdgePush",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Above.grpAuto5.btnC_Auto5_Selector",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Auto5_SelectorClick",
+   "leaf_name": "btnC_Auto5_Selector",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Above.grpAuto5.btnC_Auto5_Up",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Auto5_SelectorClick",
+   "leaf_name": "btnC_Auto5_Up",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Above.grpAuto5.btnC_Auto5LoaderZ_Select",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto5LoaderZ_Select",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Above.grpAuto5.btnSwACAuto5CW",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACAuto5CW",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Above.grpAuto5.btnC_Auto5UpPress",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto5UpPress",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Above.grpAuto5.btnC_Auto5CasstteLock",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto5CasstteLock",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Above.grpAuto6.btnSwACAuto6",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACAuto6",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Above.grpAuto6.btnC_Auto6Side_Fixer",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto6Side_Fixer",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Above.grpAuto6.btnC_Auto6EdgePush",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto6EdgePush",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Above.grpAuto6.btnC_Auto6LoaderZ_Select",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto6LoaderZ_Select",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Above.grpAuto6.btnSwACAuto6CW",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACAuto6CW",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Above.grpAuto6.btnC_Auto6_Up",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Auto6_SelectorClick",
+   "leaf_name": "btnC_Auto6_Up",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Above.grpAuto6.btnC_Auto6_Selector",
+   "event_name": "OnClick",
+   "handler_name": "btnC_Auto6_SelectorClick",
+   "leaf_name": "btnC_Auto6_Selector",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Above.grpAuto6.btnC_Auto6UpPress",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto6UpPress",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Above.grpAuto6.btnC_Auto6CasstteLock",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto6CasstteLock",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto4_Under.btnSwACAuto4_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACAuto4_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto4_Under.btnSwACAuto4CW_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACAuto4CW_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto4_Under.btnC_Auto4Side_Fixer_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto4Side_Fixer_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto4_Under.btnC_Auto4EdgePush_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto4EdgePush_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto4_Under.btnC_Auto4LoaderZ_Select_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto4LoaderZ_Select_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto4_Under.btnC_Auto4_Selector_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto4_Selector_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto4_Under.btnC_Auto4_Up_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto4_Up_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto4_Under.btnC_Auto4TrackFloodgate_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto4TrackFloodgate_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto4_Under.btnC_Auto4PushBack_Push_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto4PushBack_Push_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto4_Under.btnC_Auto4Separate_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto4Separate_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto4_Under.btnC_Auto4PushBack_Back_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto4PushBack_Back_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto5_Under.btnSwACAuto5_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACAuto5_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto5_Under.btnC_Auto5_Selector_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto5_Selector_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto5_Under.btnC_Auto5_Up_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto5_Up_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto5_Under.btnC_Auto5LoaderZ_Select_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto5LoaderZ_Select_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto5_Under.btnSwACAuto5CW_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACAuto5CW_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto5_Under.btnC_Auto5TrackFloodgate_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto5TrackFloodgate_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto5_Under.btnC_Auto5Separate_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto5Separate_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto5_Under.btnC_Auto5Side_Fixer_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto5Side_Fixer_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto5_Under.btnC_Auto5EdgePush_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto5EdgePush_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto5_Under.btnC_Auto5PushBack_Push_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto5PushBack_Push_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto5_Under.btnC_Auto5PushBack_Back_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto5PushBack_Back_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto6_Under.btnSwACAuto6_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACAuto6_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto6_Under.btnC_Auto6Side_Fixer_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto6Side_Fixer_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto6_Under.btnC_Auto6EdgePush_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto6EdgePush_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto6_Under.btnC_Auto6LoaderZ_Select_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto6LoaderZ_Select_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto6_Under.btnSwACAuto6CW_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwACAuto6CW_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto6_Under.btnC_Auto6_Up_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto6_Up_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto6_Under.btnC_Auto6_Selector_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto6_Selector_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto6_Under.btnC_Auto6TrackFloodgate_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto6TrackFloodgate_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto6_Under.btnC_Auto6Separate_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto6Separate_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto6_Under.btnC_Auto6PushBack_Push_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto6PushBack_Push_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsUnLoader2.pnlStack3.pgcStack3.tsStack3_Under.grpAuto6_Under.btnC_Auto6PushBack_Back_U",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto6PushBack_Back_U",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsFix.pnlFixTray.pnlFixTray_Line.btnSwFix1Bin",
+   "event_name": "OnClick",
+   "handler_name": "BtnNumPanelTestClick",
+   "leaf_name": "btnSwFix1Bin",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsFix.pnlFixTray.pnlFixTray_Line.btnSwFix2Bin",
+   "event_name": "OnClick",
+   "handler_name": "BtnNumPanelTestClick",
+   "leaf_name": "btnSwFix2Bin",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsFix.pnlFixTray.pnlFixTray_Line.btnSwFix3Bin",
+   "event_name": "OnClick",
+   "handler_name": "BtnNumPanelTestClick",
+   "leaf_name": "btnSwFix3Bin",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsFix.pnlFixTray.pnlFixTray_Line.btnSwFix6Bin",
+   "event_name": "OnClick",
+   "handler_name": "BtnNumPanelTestClick",
+   "leaf_name": "btnSwFix6Bin",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsFix.pnlFixTray.pnlFixTray_Line.btnSwFix5Bin",
+   "event_name": "OnClick",
+   "handler_name": "BtnNumPanelTestClick",
+   "leaf_name": "btnSwFix5Bin",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsFix.pnlFixTray.pnlFixTray_Line.btnSwFix4Bin",
+   "event_name": "OnClick",
+   "handler_name": "BtnNumPanelTestClick",
+   "leaf_name": "btnSwFix4Bin",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsFix.pnlFixTray.pnlFixTray_Line.btnC_FixTray_FullPlace",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_FixTray_FullPlace",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsFix.pnlFixTray.pnlFixTray_Line.btnSwFixMove",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwFixMove",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsFix.pnlFixTray.pnlFixTray_Line.btnC_FixTray_UpDown",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_FixTray_UpDown",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmAa.btnInArmSuckAA_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckAA_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmAa.btnInArmSuckAA_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckAA_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmAb.btnInArmSuckAB_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckAB_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmAb.btnInArmSuckAB_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckAB_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmAc.btnInArmSuckAC_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckAC_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmAc.btnInArmSuckAC_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckAC_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmAd.btnInArmSuckAD_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckAD_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmAd.btnInArmSuckAD_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckAD_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmAe.btnInArmSuckAE_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckAE_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmAe.btnInArmSuckAE_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckAE_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmAf.btnInArmSuckAF_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckAF_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmAf.btnInArmSuckAF_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckAF_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmAG.btnInArmSuckAG_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckAG_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmAG.btnInArmSuckAG_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckAG_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmAh.btnInArmSuckAH_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckAH_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmAh.btnInArmSuckAH_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckAH_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmBa.btnInArmSuckBA_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckBA_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmBa.btnInArmSuckBA_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckBA_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmBb.btnInArmSuckBB_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckBB_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmBb.btnInArmSuckBB_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckBB_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmBc.btnInArmSuckBC_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckBC_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmBc.btnInArmSuckBC_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckBC_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmBd.btnInArmSuckBD_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckBD_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmBd.btnInArmSuckBD_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckBD_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmBe.btnInArmSuckBE_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckBE_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmBe.btnInArmSuckBE_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckBE_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmBf.btnInArmSuckBF_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckBF_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmBf.btnInArmSuckBF_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckBF_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmBg.btnInArmSuckBG_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckBG_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmBg.btnInArmSuckBG_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckBG_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmBh.btnInArmSuckBH_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckBH_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnl16PickerInArm.pnlInArmBh.btnInArmSuckBH_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmSuckBH_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnlIn8Pick.pnl8PickerInArm.bplInArmSuckG_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplInArmSuckG_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnlIn8Pick.pnl8PickerInArm.bplInArmSuckG_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplInArmSuckG_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnlIn8Pick.pnl8PickerInArm.bplInArmSuckE_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplInArmSuckE_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnlIn8Pick.pnl8PickerInArm.bplInArmSuckE_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplInArmSuckE_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnlIn8Pick.pnl8PickerInArm.bplInArmSuckC_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplInArmSuckC_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnlIn8Pick.pnl8PickerInArm.bplInArmSuckC_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplInArmSuckC_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnlIn8Pick.pnl8PickerInArm.bplInArmSuckA_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplInArmSuckA_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnlIn8Pick.pnl8PickerInArm.bplInArmSuckA_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplInArmSuckA_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnlIn8Pick.pnl8PickerInArm.bplInArmSuckB_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplInArmSuckB_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnlIn8Pick.pnl8PickerInArm.bplInArmSuckB_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplInArmSuckB_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnlIn8Pick.pnl8PickerInArm.bplInArmSuckD_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplInArmSuckD_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnlIn8Pick.pnl8PickerInArm.bplInArmSuckD_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplInArmSuckD_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnlIn8Pick.pnl8PickerInArm.bplInArmSuckF_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplInArmSuckF_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnlIn8Pick.pnl8PickerInArm.bplInArmSuckF_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplInArmSuckF_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnlIn8Pick.pnl8PickerInArm.bplInArmSuckH_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplInArmSuckH_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnlIn8Pick.pnl8PickerInArm.bplInArmSuckH_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplInArmSuckH_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnlIn8Pick.bplC_HotplateVibration",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplC_HotplateVibration",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlInVacuum.pnlIn8Pick.btnSwInArmZBreaker",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwInArmZBreaker",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlVacuumBottom.grpIONBar.btnSwESDAntennaRelay1",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwESDAntennaRelay1",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlVacuumBottom.grpIONBar.btnSwESDAntennaRelay2",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwESDAntennaRelay2",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlVacuumBottom.grpIONBar.btnSwESDAntennaRelay3",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwESDAntennaRelay3",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlVacuumBottom.grpIONBar.btnSwESDAntennaRelay4",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwESDAntennaRelay4",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlVacuumBottom.grpIONBar.btnSwESDAntennaRelay5",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwESDAntennaRelay5",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlVacuumBottom.grpIONBar.btnSwESDAntennaRelay6",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwESDAntennaRelay6",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlVacuumBottom.grpIONBar.btnSwESDAntennaRelay7",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwESDAntennaRelay7",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlVacuumBottom.grpIONBar.btnSwESDAntennaRelay8",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwESDAntennaRelay8",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlVacuumBottom.grpPickUpErrorPlacement.btnC_PlacementArm",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_PlacementArm",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlVacuumBottom.grpPickUpErrorPlacement.pnlPlacementArm.btnInArmPlacementSuck_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmPlacementSuck_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsInArmVacuum.pnlVacuumBottom.grpPickUpErrorPlacement.pnlPlacementArm.btnInArmPlacementSuck_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnInArmPlacementSuck_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_B.palArm1_Ba.bplFTestSuckBA_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckBA_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_B.palArm1_Ba.bplFTestSuckBA_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckBA_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_B.palArm1_Bb.bplFTestSuckBB_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckBB_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_B.palArm1_Bb.bplFTestSuckBB_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckBB_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_B.palArm1_Bc.bplFTestSuckBC_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckBC_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_B.palArm1_Bc.bplFTestSuckBC_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckBC_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_B.palArm1_Bd.bplFTestSuckBD_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckBD_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_B.palArm1_Bd.bplFTestSuckBD_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckBD_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_A.palArm1_Aa.bplFTestSuckAA_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckAA_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_A.palArm1_Aa.bplFTestSuckAA_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckAA_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_A.palArm1_Ab.bplFTestSuckAB_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckAB_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_A.palArm1_Ab.bplFTestSuckAB_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckAB_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_A.palArm1_Ac.bplFTestSuckAC_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckAC_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_A.palArm1_Ac.bplFTestSuckAC_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckAC_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_A.palArm1_Ad.bplFTestSuckAD_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckAD_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_A.palArm1_Ad.bplFTestSuckAD_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckAD_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_B.palArm2_Ba.bplBTestSuckBA_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckBA_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_B.palArm2_Ba.bplBTestSuckBA_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckBA_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_B.palArm2_Bb.bplBTestSuckBB_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckBB_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_B.palArm2_Bb.bplBTestSuckBB_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckBB_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_B.palArm2_Bc.bplBTestSuckBC_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckBC_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_B.palArm2_Bc.bplBTestSuckBC_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckBC_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_B.palArm2_Bd.bplBTestSuckBD_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckBD_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_B.palArm2_Bd.bplBTestSuckBD_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckBD_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_A.palArm2_Aa.bplBTestSuckAA_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckAA_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_A.palArm2_Aa.bplBTestSuckAA_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckAA_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_A.palArm2_Ab.bplBTestSuckAB_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckAB_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_A.palArm2_Ab.bplBTestSuckAB_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckAB_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_A.palArm2_Ac.bplBTestSuckAC_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckAC_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_A.palArm2_Ac.bplBTestSuckAC_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckAC_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_A.palArm2_Ad.bplBTestSuckAD_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckAD_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_A.palArm2_Ad.bplBTestSuckAD_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckAD_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_B_16.palArm1_Ba_16.bplFTestSuckBA_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckBA_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_B_16.palArm1_Ba_16.bplFTestSuckBA_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckBA_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_B_16.palArm1_Bb_16.bplFTestSuckBB_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckBB_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_B_16.palArm1_Bb_16.bplFTestSuckBB_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckBB_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_B_16.palArm1_Bc_16.bplFTestSuckBC_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckBC_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_B_16.palArm1_Bc_16.bplFTestSuckBC_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckBC_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_B_16.palArm1_Bd_16.bplFTestSuckBD_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckBD_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_B_16.palArm1_Bd_16.bplFTestSuckBD_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckBD_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_B_16.palArm1_Be_16.bplFTestSuckBE_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckBE_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_B_16.palArm1_Be_16.bplFTestSuckBE_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckBE_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_B_16.palArm1_Bf_16.bplFTestSuckBF_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckBF_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_B_16.palArm1_Bf_16.bplFTestSuckBF_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckBF_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_B_16.palArm1_Bg_16.bplFTestSuckBG_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckBG_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_B_16.palArm1_Bg_16.bplFTestSuckBG_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckBG_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_B_16.palArm1_Bh_16.bplFTestSuckBH_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckBH_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_B_16.palArm1_Bh_16.bplFTestSuckBH_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckBH_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_A_16.palArm1_Aa_16.bplFTestSuckAA_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckAA_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_A_16.palArm1_Aa_16.bplFTestSuckAA_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckAA_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_A_16.palArm1_Ab_16.bplFTestSuckAB_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckAB_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_A_16.palArm1_Ab_16.bplFTestSuckAB_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckAB_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_A_16.palArm1_Ac_16.bplFTestSuckAC_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckAC_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_A_16.palArm1_Ac_16.bplFTestSuckAC_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckAC_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_A_16.palArm1_Ad_16.bplFTestSuckAD_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckAD_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_A_16.palArm1_Ad_16.bplFTestSuckAD_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckAD_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_A_16.palArm1_Ae_16.bplFTestSuckAE_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckAE_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_A_16.palArm1_Ae_16.bplFTestSuckAE_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckAE_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_A_16.palArm1_Af_16.bplFTestSuckAF_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckAF_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_A_16.palArm1_Af_16.bplFTestSuckAF_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckAF_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_A_16.palArm1_Ag_16.bplFTestSuckAG_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckAG_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_A_16.palArm1_Ag_16.bplFTestSuckAG_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckAG_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_A_16.palArm1_Ah_16.bplFTestSuckAH_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckAH_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm1_A_16.palArm1_Ah_16.bplFTestSuckAH_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFTestSuckAH_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_B_16.palArm2_Ba_16.bplBTestSuckBA_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckBA_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_B_16.palArm2_Ba_16.bplBTestSuckBA_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckBA_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_B_16.palArm2_Bb_16.bplBTestSuckBB_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckBB_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_B_16.palArm2_Bb_16.bplBTestSuckBB_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckBB_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_B_16.palArm2_Bc_16.bplBTestSuckBC_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckBC_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_B_16.palArm2_Bc_16.bplBTestSuckBC_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckBC_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_B_16.palArm2_Bd_16.bplBTestSuckBD_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckBD_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_B_16.palArm2_Bd_16.bplBTestSuckBD_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckBD_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_B_16.palArm2_Be_16.bplBTestSuckBE_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckBE_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_B_16.palArm2_Be_16.bplBTestSuckBE_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckBE_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_B_16.palArm2_Bf_16.bplBTestSuckBF_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckBF_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_B_16.palArm2_Bf_16.bplBTestSuckBF_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckBF_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_B_16.palArm2_Bg_16.bplBTestSuckBG_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckBG_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_B_16.palArm2_Bg_16.bplBTestSuckBG_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckBG_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_B_16.palArm2_Bh_16.bplBTestSuckBH_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckBH_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_B_16.palArm2_Bh_16.bplBTestSuckBH_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckBH_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_A_16.palArm2_Aa_16.bplBTestSuckAA_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckAA_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_A_16.palArm2_Aa_16.bplBTestSuckAA_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckAA_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_A_16.palArm2_Ab_16.bplBTestSuckAB_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckAB_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_A_16.palArm2_Ab_16.bplBTestSuckAB_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckAB_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_A_16.palArm2_Ac_16.bplBTestSuckAC_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckAC_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_A_16.palArm2_Ac_16.bplBTestSuckAC_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckAC_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_A_16.palArm2_Ad_16.bplBTestSuckAD_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckAD_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_A_16.palArm2_Ad_16.bplBTestSuckAD_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckAD_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_A_16.palArm2_Ae_16.bplBTestSuckAE_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckAE_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_A_16.palArm2_Ae_16.bplBTestSuckAE_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckAE_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_A_16.palArm2_Af_16.bplBTestSuckAF_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckAF_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_A_16.palArm2_Af_16.bplBTestSuckAF_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckAF_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_A_16.palArm2_Ag_16.bplBTestSuckAG_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckAG_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_A_16.palArm2_Ag_16.bplBTestSuckAG_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckAG_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_A_16.palArm2_Ah_16.bplBTestSuckAH_On_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckAH_On_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.palArm2_A_16.palArm2_Ah_16.bplBTestSuckAH_Off_16",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplBTestSuckAH_Off_16",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.chkShowIndexAll",
+   "event_name": "OnClick",
+   "handler_name": "chkShowIndexAllClick",
+   "leaf_name": "chkShowIndexAll",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.btnAllVacuum",
+   "event_name": "OnClick",
+   "handler_name": "btnAllVacuumClick",
+   "leaf_name": "btnAllVacuum",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsIndexVacuum.btnAllDestory",
+   "event_name": "OnClick",
+   "handler_name": "btnAllVacuumClick",
+   "leaf_name": "btnAllDestory",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnlOut8Pick.pnl8PickerOutArm.bplOutArmSuckG_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplOutArmSuckG_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnlOut8Pick.pnl8PickerOutArm.bplOutArmSuckG_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplOutArmSuckG_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnlOut8Pick.pnl8PickerOutArm.bplOutArmSuckE_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplOutArmSuckE_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnlOut8Pick.pnl8PickerOutArm.bplOutArmSuckE_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplOutArmSuckE_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnlOut8Pick.pnl8PickerOutArm.bplOutArmSuckC_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplOutArmSuckC_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnlOut8Pick.pnl8PickerOutArm.bplOutArmSuckC_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplOutArmSuckC_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnlOut8Pick.pnl8PickerOutArm.bplOutArmSuckA_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplOutArmSuckA_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnlOut8Pick.pnl8PickerOutArm.bplOutArmSuckA_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplOutArmSuckA_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnlOut8Pick.pnl8PickerOutArm.bplOutArmSuckB_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplOutArmSuckB_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnlOut8Pick.pnl8PickerOutArm.bplOutArmSuckB_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplOutArmSuckB_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnlOut8Pick.pnl8PickerOutArm.bplOutArmSuckD_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplOutArmSuckD_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnlOut8Pick.pnl8PickerOutArm.bplOutArmSuckD_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplOutArmSuckD_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnlOut8Pick.pnl8PickerOutArm.bplOutArmSuckF_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplOutArmSuckF_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnlOut8Pick.pnl8PickerOutArm.bplOutArmSuckF_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplOutArmSuckF_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnlOut8Pick.pnl8PickerOutArm.bplOutArmSuckH_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplOutArmSuckH_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnlOut8Pick.pnl8PickerOutArm.bplOutArmSuckH_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplOutArmSuckH_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnlOut8Pick.btnSwOutArmZBreaker",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwOutArmZBreaker",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmAa.btnOutArmSuckAA_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckAA_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmAa.btnOutArmSuckAA_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckAA_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmAb.btnOutArmSuckAB_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckAB_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmAb.btnOutArmSuckAB_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckAB_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmAc.btnOutArmSuckAC_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckAC_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmAc.btnOutArmSuckAC_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckAC_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmAd.btnOutArmSuckAD_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckAD_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmAd.btnOutArmSuckAD_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckAD_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmAe.btnOutArmSuckAE_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckAE_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmAe.btnOutArmSuckAE_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckAE_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmAf.btnOutArmSuckAF_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckAF_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmAf.btnOutArmSuckAF_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckAF_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmAG.btnOutArmSuckAG_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckAG_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmAG.btnOutArmSuckAG_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckAG_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmAh.btnOutArmSuckAH_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckAH_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmAh.btnOutArmSuckAH_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckAH_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmBa.btnOutArmSuckBA_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckBA_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmBa.btnOutArmSuckBA_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckBA_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmBb.btnOutArmSuckBB_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckBB_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmBb.btnOutArmSuckBB_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckBB_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmBc.btnOutArmSuckBC_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckBC_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmBc.btnOutArmSuckBC_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckBC_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmBd.btnOutArmSuckBD_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckBD_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmBd.btnOutArmSuckBD_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckBD_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmBe.btnOutArmSuckBE_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckBE_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmBe.btnOutArmSuckBE_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckBE_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmBf.btnOutArmSuckBF_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckBF_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmBf.btnOutArmSuckBF_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckBF_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmBg.btnOutArmSuckBG_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckBG_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmBg.btnOutArmSuckBG_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckBG_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmBh.btnOutArmSuckBH_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckBH_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutVacuum.pnl16PickerOutArm.pnlOutArmBh.btnOutArmSuckBH_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArmSuckBH_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutArm2Suck.btnOutArm2SuckAB_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArm2SuckAB_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutArm2Suck.btnOutArm2SuckAB_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArm2SuckAB_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutArm2Suck.btnOutArm2SuckAA_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArm2SuckAA_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOutArmVacuum.pnlOutArm2Suck.btnOutArm2SuckAA_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnOutArm2SuckAA_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOtherVacuum.pnlVacuumOtherLeft.gbTrayArm.pgcTrayArm.tsTrayArm.bplCatchSuck_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplCatchSuck_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOtherVacuum.pnlVacuumOtherLeft.gbTrayArm.pgcTrayArm.tsTrayArm.bplCatchSuck_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplCatchSuck_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOtherVacuum.pnlVacuumOtherLeft.gbTrayArm.pgcTrayArm.tsTrayArm.bplC_CatchTray_Fix",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplC_CatchTray_Fix",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOtherVacuum.pnlVacuumOtherLeft.gbTrayArm.pgcTrayArm.tsRTArm.bplC_TrayCover",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplC_TrayCover",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOtherVacuum.pnlVacuumOtherLeft.gbTrayArm.pgcTrayArm.tsRTArm.btnC_CatchTray_FixOn",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_CatchTray_FixOn",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOtherVacuum.pnlVacuumOtherLeft.gbTrayArm.pgcTrayArm.tsRTArm.btnC_CatchTray_FixOff",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_CatchTray_FixOff",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOtherVacuum.pnlVacuumOtherLeft.gbTrayArm.pgcTrayArm.tsRTArm.bplC_TurnTrayArm",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplC_TurnTrayArm",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOtherVacuum.pnlVacuumOtherLeft.gbTrayArm.pgcTrayArm.tsRTArm.btnC_TurnTrayArmLock",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_TurnTrayArmLock",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOtherVacuum.pnlVacuumOtherLeft.gbTrayArm.pgcTrayArm.tsUnderArm.btnC_UnderTrayArmYCatch_1032",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_UnderTrayArmYCatch_1032",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOtherVacuum.pnlVacuumOtherLeft.gbTrayArm.bplC_TrayX_UpDown",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplC_TrayX_UpDown",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOtherVacuum.pnlVacuumOtherCenter.gbAOA.btnC_InAreaAlignment",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_InAreaAlignment",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOtherVacuum.pnlVacuumOtherCenter.gbAOA.btnC_OutAreaAlignment",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_OutAreaAlignment",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOtherVacuum.pnlVacuumOtherCenter.gbCheckKitSuck.palCheckKitSuckAb.bplCheckKitSuck_2_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplCheckKitSuck_2_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOtherVacuum.pnlVacuumOtherCenter.gbCheckKitSuck.palCheckKitSuckAb.bplCheckKitSuck_2_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplCheckKitSuck_2_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOtherVacuum.pnlVacuumOtherCenter.gbCheckKitSuck.CheckKitSuckAa.bplCheckKitSuck_1_On",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplCheckKitSuck_1_On",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSucker.pnlVacuum.pgcVacuum.tsOtherVacuum.pnlVacuumOtherCenter.gbCheckKitSuck.CheckKitSuckAa.bplCheckKitSuck_1_Off",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplCheckKitSuck_1_Off",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsShuttle.pnlSht.grpShtSensor.btnSwShuttleFan",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwShuttleFan",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsShuttle.pnlSht.grpShtSensor.grpShtRotate.btnSwRotateCheckClear",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwRotateCheckClear",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsShuttle.pnlSht.grpShtSensor.btnC_Shuttle_Knocker_2",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Shuttle_Knocker_2",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsShuttle.pnlSht.grpShtSensor.btnC_Shuttle_Knocker_1",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Shuttle_Knocker_1",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsShuttle.pnlSht.grpShtSensor.btnSwShuttleVibration1",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwShuttleVibration1",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsShuttle.pnlSht.grpShtSensor.btnSwShuttleVibration2",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwShuttleVibration2",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsShuttle.pnlSht.grpShtSensor.btnC_Shuttle2Floodgate",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Shuttle2Floodgate",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsShuttle.pnlSht.grpShtSensor.btnC_Shuttle1Floodgate",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Shuttle1Floodgate",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsShuttle.pnlSht.grpShtSensor.btnC_OutShuttle2Floodgate",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_OutShuttle2Floodgate",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsShuttle.pnlSht.grpShtSensor.btnC_OutShuttle1Floodgate",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_OutShuttle1Floodgate",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsShuttle.pnlSht.btnLatchCheck",
+   "event_name": "OnClick",
+   "handler_name": "btnLatchCheckClick",
+   "leaf_name": "btnLatchCheck",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsShuttle.pnlSht.gbRotateKIT.btnC_InputRotateKIT",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_InputRotateKIT",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsShuttle.pnlSht.gbRotateKIT.btnC_OutputRotateKIT",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_OutputRotateKIT",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpFrontKeyPad.sb_IO_CommunicationPad",
+   "event_name": "OnClick",
+   "handler_name": "sb_IO_CommunicationPadClick",
+   "leaf_name": "sb_IO_CommunicationPad",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpFrontKeyPad.btnSwFKPowerOff",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwFKPowerOff",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpFrontKeyPad.btnSwFKPowerOn",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwFKPowerOn",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpFrontKeyPad.btnSwFrontActiveLed",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwFrontActiveLed",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpFrontKeyPad.btnSwFKReset",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwFKReset",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpFrontKeyPad.btnSwFKPause",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwFKPause",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpFrontKeyPad.btnSwFKHome",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwFKHome",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpFrontKeyPad.btnSwFKStart",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwFKStart",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpFrontKeyPad.btnSwFKOneCycle",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwFKOneCycle",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpFrontKeyPad.btnSwFKRetry",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwFKRetry",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpFrontKeyPad.btnSwFKSkip",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwFKSkip",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpFrontKeyPad.btnSwFKCleanOut",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwFKCleanOut",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpFrontKeyPad.btnSwFKAlarmReset",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwFKAlarmReset",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpFrontKeyPad.btnSwFKTrayEnd",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwFKTrayEnd",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpFrontKeyPad.btnSwFKTrayFeed",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwFKTrayFeed",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpRearKeyPad.btnSwRKPowerOff",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwRKPowerOff",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpRearKeyPad.btnSwRKPowerOn",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwRKPowerOn",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpRearKeyPad.btnSwRKReset",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwRKReset",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpRearKeyPad.btnSwRKPause",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwRKPause",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpRearKeyPad.btnSwRKHome",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwRKHome",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpRearKeyPad.btnSwRKStart",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwRKStart",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpRearKeyPad.btnSwRKOneCycle",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwRKOneCycle",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpRearKeyPad.btnSwRKRetry",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwRKRetry",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpRearKeyPad.btnSwRKSkip",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwRKSkip",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpRearKeyPad.btnSwRKCleanOut",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwRKCleanOut",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpRearKeyPad.btnSwRKAlarmReset",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwRKAlarmReset",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpRearKeyPad.btnSwRKTrayEnd",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwRKTrayEnd",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpRearKeyPad.btnSwRKTrayFeed",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwRKTrayFeed",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpRearKeyPad.btnSwRKManualTStart",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwRKManualTStart",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsKeyPad.grpRearKeyPad.btnSwRKManualStep",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwRKManualStep",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlRearEMG.pnlSnSafeDoor3.btnC_SafeDoor3Lock_1032",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_SafeDoor3Lock_1032",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlRearEMG.pnlSnSafeDoor4.btnC_SafeDoor4Lock_1032",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_SafeDoor4Lock_1032",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlRearEMG.pnlSnSafeDoor6.btnC_SafeDoor6Lock_1032",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_SafeDoor6Lock_1032",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlLeftSafeDoor.pnlSnSafeDoor2",
+   "event_name": "OnClick",
+   "handler_name": "BtnNumPanelTestClick",
+   "leaf_name": "pnlSnSafeDoor2",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlLeftSafeDoor.pnlSnSafeDoor2.btnC_SafeDoor2Lock_1032",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_SafeDoor2Lock_1032",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlLeftSafeDoor.pnlSnSafeDoor1",
+   "event_name": "OnClick",
+   "handler_name": "BtnNumPanelTestClick",
+   "leaf_name": "pnlSnSafeDoor1",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlLeftSafeDoor.pnlSnSafeDoor1.btnC_SafeDoor1Lock_1032",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_SafeDoor1Lock_1032",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlSystemClientCenter.pnlSystemLeft.grpIonFanStatus.btnpnlnIndexIONFan",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnpnlnIndexIONFan",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlSystemClientCenter.pnlSystemLeft.grpIonFanStatus.btnSwIonFanClean",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwIonFanClean",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlSystemClientCenter.pnlSystemLeft.grpTesterDryAir.btnpnlTesterDryAirSwitch",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnpnlTesterDryAirSwitch",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlSystemClientCenter.pnlSystemCenter.gbOCR.btnSwOCRTigger",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwOCRTigger",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlSystemClientCenter.pnlSystemCenter.gbOCR.btnC_OCRLight_Up",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_OCRLight_Up",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlSystemClientCenter.pnlSystemCenter.gbOCR.btnC_OCRLight_Down",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_OCRLight_Down",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlSystemClientCenter.pnlSystemCenter.grpDieClean.btnSwDieCleanSuck",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwDieCleanSuck",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlSystemClientCenter.pnlSystemCenter.grpDieClean.btnSwDieClean",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwDieClean",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlSystemClientCenter.pnlSystemCenter.pnlSwVacuum.btnSwSafeDoorLock",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwSafeDoorLock",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlSystemClientCenter.pnlSystemCenter.pnlSwVacuum.btnSwHotplateCooling",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwHotplateCooling",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlSystemClientCenter.pnlSystemCenter.pnlSwVacuum.btnSwHeaterRelay",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwHeaterRelay",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlSystemClientCenter.pnlSystemCenter.pnlSwVacuum.btnSwHeaterFan",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwHeaterFan",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlSystemClientCenter.pnlSystemCenter.pnlSwVacuum.btnSwServerON",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwServerON",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlSystemClientCenter.pnlSystemCenter.pnlSwVacuum.btnSwHeaterFanSpeed",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwHeaterFanSpeed",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlSystemClientCenter.pnlSystemCenter.pnlSwVacuum.bplFanDirection",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplFanDirection",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlSystemClientCenter.pnlSystemCenter.pnlSwVacuum.btnSwAirOff",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwAirOff",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlSystemClientCenter.pnlSystemRight.grpTowerLight.btnSwTowerRed",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwTowerRed",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlSystemClientCenter.pnlSystemRight.grpTowerLight.btnSwTowerYellow",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwTowerYellow",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlSystemClientCenter.pnlSystemRight.grpTowerLight.btnSwTowerGreen",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwTowerGreen",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlSystemClientCenter.pnlSystemRight.grpMusic.btnSwMusic1",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwMusic1",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlSystemClientCenter.pnlSystemRight.grpMusic.btnSwMusic2",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwMusic2",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlSystemClientCenter.pnlSystemRight.grpMusic.btnSwMusic3",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwMusic3",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlSystemClientCenter.pnlSystemRight.grpMusic.btnSwMusic4",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwMusic4",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlSystemClientCenter.pnlSystemRight.grpMotorPower.btnSwMotorRelay",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwMotorRelay",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlRightSafeDoor.pnlSnSafeDoor7",
+   "event_name": "OnClick",
+   "handler_name": "BtnNumPanelTestClick",
+   "leaf_name": "pnlSnSafeDoor7",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlRightSafeDoor.pnlSnSafeDoor7.btnC_SafeDoor7Lock_1032",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_SafeDoor7Lock_1032",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlRightSafeDoor.pnlSnSafeDoor8",
+   "event_name": "OnClick",
+   "handler_name": "BtnNumPanelTestClick",
+   "leaf_name": "pnlSnSafeDoor8",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsSystem.pnlSystem.pnlSystemClient.pnlRightSafeDoor.pnlSnSafeDoor8.btnC_SafeDoor8Lock_1032",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_SafeDoor8Lock_1032",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlLeft.grpIndexBreaker.btnSwManualZ1",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwManualZ1",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlLeft.grpIndexBreaker.btnSwManualZ2",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwManualZ2",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlLeft.grpIndexBreaker.btnSwBMotorBreaker",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwBMotorBreaker",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlLeft.grpIndexBreaker.btnSwFMotorBreaker",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwFMotorBreaker",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlLeft.grpSuckMode.btnIndexArm1SuckMode1",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnIndexArm1SuckMode1",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlLeft.grpSuckMode.btnIndexArm1SuckMode2",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnIndexArm1SuckMode2",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlLeft.grpSuckMode.btnIndexArm2SuckMode1",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnIndexArm2SuckMode1",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlLeft.grpSuckMode.btnIndexArm2SuckMode2",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnIndexArm2SuckMode2",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlLeft.grpIndexChangeToque.btnSwIndexChangeToque2",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwIndexChangeToque2",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlLeft.grpIndexChangeToque.btnSwIndexChangeToque1",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwIndexChangeToque1",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlLeft.grpEPTest.tbarIndexEP",
+   "event_name": "OnChange",
+   "handler_name": "tbarIndexEPChange",
+   "leaf_name": "tbarIndexEP",
+   "vcl_class": "TTrackBar"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlLeft.grpEPTest.bplEpSwitch2",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplEpSwitch2",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlLeft.grpEPTest.bplEpSwitch1",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "bplEpSwitch1",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlLeft.grpEPTest.btn500KPA",
+   "event_name": "OnClick",
+   "handler_name": "btn500KPAClick",
+   "leaf_name": "btn500KPA",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlLeft.grpArm2EP.tbarIndexEP2",
+   "event_name": "OnChange",
+   "handler_name": "tbarIndexEP2Change",
+   "leaf_name": "tbarIndexEP2",
+   "vcl_class": "TTrackBar"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlLeft.gbDoubleEP.tbarDieForce",
+   "event_name": "OnChange",
+   "handler_name": "tbarDieForceChange",
+   "leaf_name": "tbarDieForce",
+   "vcl_class": "TTrackBar"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlLeft.gbDoubleEP.btnSwIndEpArm1",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwIndEpArm1",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlLeft.gbDoubleEP.btnSwIndEpArm2",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwIndEpArm2",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlLeft.grpLoaderEP.tbarLoaderEP",
+   "event_name": "OnChange",
+   "handler_name": "tbarLoaderEPChange",
+   "leaf_name": "tbarLoaderEP",
+   "vcl_class": "TTrackBar"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlLeft.gbMultiEP.BtnPanelLane1",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "BtnPanelLane1",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlCenter.gbOneTouchDocking.btnC_DockYAxisOn",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_DockYAxisOn",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlCenter.gbOneTouchDocking.btnC_DockYAxisOff",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_DockYAxisOff",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlCenter.gbOneTouchDocking.btnC_DockXAxisOn",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_DockXAxisOn",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlCenter.gbOneTouchDocking.btnC_DockXAxisOff",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_DockXAxisOff",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlCenter.gbOneTouchDocking.btnSwUnDock",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwUnDock",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlCenter.gbOneTouchDocking.btnSwDockError",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwDockError",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlCenter.grpSidePush.btnC_Tester_SidePush",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Tester_SidePush",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlIndexRight.gbHotGun.btnSwHeatGun",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwHeatGun",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlIndexRight.gbSLKClamp.btnSLK1Clamp",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSLK1Clamp",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlIndexRight.gbSLKClamp.btnSLK2Clamp",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSLK2Clamp",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlIndexRight.gbSLKClamp.btnSLK1Unlamp",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSLK1Unlamp",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlIndexRight.gbSLKClamp.btnSLK2Unclamp",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSLK2Unclamp",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlIndexRight.gbSocketClamp.btnC_Socket_Clamp",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Socket_Clamp",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlIndexRight.gbSocketClamp.btnC_Socket_Unclamp",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Socket_Unclamp",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlIndexRight.pnlIndexSwitch.btnC_CoolingValve",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_CoolingValve",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlIndexRight.pnlIndexSwitch.btnSwCoolingFan_Blower",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwCoolingFan_Blower",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlIndexRight.pnlIndexSwitch.btnSwDutHeaterCoolFan",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwDutHeaterCoolFan",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlIndexRight.pnlIndexSwitch.btnSwSocketClean",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwSocketClean",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlIndexRight.pnlIndexSwitch.btnSwCCDCooling",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwCCDCooling",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlIndexRight.pnlIndexSwitch.btnSwCDAGun",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwCDAGun",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlIndexRight.pnlIndexSwitch.btnSwCCDLight",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwCCDLight",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlIndexRight.pnlIndexSwitch.btnSwCCDAir",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwCCDAir",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlIndexRight.pnlIndexSwitch.btnSwAirConditioner",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwAirConditioner",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlIndexRight.pnlIndexSwitch.btnSwShuttleCooling",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwShuttleCooling",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlIndexRight.pnlIndexSwitch.btnSwTesterAirCooling",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwTesterAirCooling",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlIndexRight.pnlIndexSwitch.BtnChamboCoolDown",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "BtnChamboCoolDown",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlIndexRight.pnlIndexSwitch.btnSwReadTorue",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwReadTorue",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlIndexRight.pnlIndexSwitch.btnSwTesterPower",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwTesterPower",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIndex.pnlIndexRight.pnlIndexSwitch.btnSwATCHeatGun",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwATCHeatGun",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsATC.pnlAtcCenter.grpDryAirSource.btnATCDryAirUseHandler",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnATCDryAirUseHandler",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsATC.pnlAtcCenter.grpDryAirSource.btnDryAirUseATCCAR",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnDryAirUseATCCAR",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsATC.pnlTriTemp.grpTriTempAir.btnSwDryAirSwitch_1032",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwDryAirSwitch_1032",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsATC.pnlTriTemp.grpTriTempAir.btnSwColdAirSwitch_1032",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwColdAirSwitch_1032",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsATC.pnlTriTemp.grpTrayArmGate.btnC_TrayXFloodgate1",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_TrayXFloodgate1",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsATC.pnlTriTemp.grpTrayArmGate.btnC_TrayXFloodgate2",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_TrayXFloodgate2",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsATC.pnlTriTemp.grpTrayArmGate.btnC_TrayXFloodgate3",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_TrayXFloodgate3",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsATC.pnlTriTemp.grpTrayArmGate.btnC_TrayXFloodgate4",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_TrayXFloodgate4",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsATC.pnlTriTemp.gbExhaustAir.btnSwEnhaustAirFanPowerOn",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwEnhaustAirFanPowerOn",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsATC.pnlTriTemp.gbExhaustAir.btnEnhaustAirVentDoorOpen",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnEnhaustAirVentDoorOpen",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsATC.pnlTriTemp.gbExhaustAir.btnEnhaustAirVentDoorClose",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnEnhaustAirVentDoorClose",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsATC.pnlTriTemp.gbExhaustAir.btnC_LeftUpEnhaustAirOpen",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_LeftUpEnhaustAirOpen",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsATC.pnlTriTemp.gbExhaustAir.btnC_RightUpEnhaustAirOpen",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_RightUpEnhaustAirOpen",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsATC.pnlTriTemp.gbExhaustAir.btnC_LeftUpEnhaustAirClose",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_LeftUpEnhaustAirClose",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsATC.pnlTriTemp.gbExhaustAir.btnC_RightUpEnhaustAirClose",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_RightUpEnhaustAirClose",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsMagazine.grpMagazine.btnC_Auto3EdgePush_Mag",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_Auto3EdgePush_Mag",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsMagazine.grpMagazine.btnSwMagazineMotorBreaker",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwMagazineMotorBreaker",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsMagazine.grpMagazine.btnC_CatchMagazineTray",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_CatchMagazineTray",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsMagazine.grpMagazine.btnC_CatchMagazineTray1",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnC_CatchMagazineTray1",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsMagazine.grpMagazine.btnSwMagazineSafeDoorLock",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwMagazineSafeDoorLock",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAOI.gbTopBottomAOI.gbCylinderLock.gbTopLeft.btnSwFixedSeatTLOn",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwFixedSeatTLOn",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAOI.gbTopBottomAOI.gbCylinderLock.gbTopLeft.btnSwFixedSeatTLOff",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwFixedSeatTLOff",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAOI.gbTopBottomAOI.gbCylinderLock.gbTopRight.btnSwFixedSeatTROn",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwFixedSeatTROn",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAOI.gbTopBottomAOI.gbCylinderLock.gbTopRight.btnSwFixedSeatTROff",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwFixedSeatTROff",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAOI.gbTopBottomAOI.gbCylinderLock.gbBottomLeft.btnSwFixedSeatBLOn",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwFixedSeatBLOn",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAOI.gbTopBottomAOI.gbCylinderLock.gbBottomLeft.btnSwFixedSeatBLOff",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwFixedSeatBLOff",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAOI.gbTopBottomAOI.gbCylinderLock.gbBottomRight.btnSwFixedSeatBROn",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwFixedSeatBROn",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAOI.gbTopBottomAOI.gbCylinderLock.gbBottomRight.btnSwFixedSeatBROff",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwFixedSeatBROff",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAOI.gbTopBottomAOI.gbCylinderLock.btnAllLock",
+   "event_name": "OnClick",
+   "handler_name": "btnAllLockClick",
+   "leaf_name": "btnAllLock",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAOI.gbTopBottomAOI.gbCylinderLock.btnAllUnLock",
+   "event_name": "OnClick",
+   "handler_name": "btnAllUnLockClick",
+   "leaf_name": "btnAllUnLock",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAOI.gbTopBottomAOI.gbCylinderLock.gbRotateLock.BtnPanelLane7",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "BtnPanelLane7",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAOI.gbTopBottomAOI.gbCylinderLock.gbRotateLock.BtnPanelLane55",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "BtnPanelLane55",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAOI.gbTopBottomAOI.btnCCDZBreaker",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnCCDZBreaker",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAOI.gbTopBottomAOI.GroupBox8.TrackBarLight",
+   "event_name": "OnChange",
+   "handler_name": "TrackBarLightChange",
+   "leaf_name": "TrackBarLight",
+   "vcl_class": "TTrackBar"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAOI.gbTopBottomAOI.GroupBox8.btnLightZStart",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnLightZStart",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAOI.gbTopBottomAOI.GroupBox8.btnLightZPRG0",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnLightZPRG0",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAOI.gbTopBottomAOI.GroupBox8.btnLightZPRG1",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnLightZPRG1",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAOI.gbTopBottomAOI.GroupBox8.btnLightZPRG2",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnLightZPRG2",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAOI.gbTopBottomAOI.GroupBox8.btnLightZPRG3",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnLightZPRG3",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAOI.gbTopBottomAOI.GroupBox8.btnLightZPRG6",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnLightZPRG6",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAOI.gbTopBottomAOI.GroupBox8.btnLightZPRG5",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnLightZPRG5",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAOI.gbTopBottomAOI.GroupBox8.btnLightZPRG4",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnLightZPRG4",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAOI.gbTopBottomAOI.GroupBox8.btnLightZOrg",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnLightZOrg",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAOI.grpAOI.grpTopView.btnSwStartTest1",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwStartTest1",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAOI.grpAOI.grpPadView.btnSwStartTest2",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwStartTest2",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAOI.grpAOI.grpBGAView.btnSwStartTest3",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwStartTest3",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAGV.grpAGV.grpE84Loader.btnSwE84_1_LREQ",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwE84_1_LREQ",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAGV.grpAGV.grpE84Loader.btnSwE84_1_UREQ",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwE84_1_UREQ",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAGV.grpAGV.grpE84Loader.btnSwE84_1_VA",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwE84_1_VA",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAGV.grpAGV.grpE84Loader.btnSwE84_1_ES",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwE84_1_ES",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAGV.grpAGV.grpE84Loader.btnSwE84_1_VS0",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwE84_1_VS0",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAGV.grpAGV.grpE84Loader.btnSwE84_1_VS1",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwE84_1_VS1",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAGV.grpAGV.grpE84Loader.btnSwE84_1_READY",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwE84_1_READY",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAGV.grpAGV.grpE84Loader.btnSwE84_1_HOAVBL",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwE84_1_HOAVBL",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAGV.grpAGV.grpE84Loader.btnSwE84_1_POWER",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwE84_1_POWER",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAGV.grpAGV.grpE84Unloader.btnSwE84_2_LREQ",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwE84_2_LREQ",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAGV.grpAGV.grpE84Unloader.btnSwE84_2_UREQ",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwE84_2_UREQ",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAGV.grpAGV.grpE84Unloader.btnSwE84_2_VA",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwE84_2_VA",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAGV.grpAGV.grpE84Unloader.btnSwE84_2_ES",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwE84_2_ES",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAGV.grpAGV.grpE84Unloader.btnSwE84_2_VS0",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwE84_2_VS0",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAGV.grpAGV.grpE84Unloader.btnSwE84_2_VS1",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwE84_2_VS1",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAGV.grpAGV.grpE84Unloader.btnSwE84_2_READY",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwE84_2_READY",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAGV.grpAGV.grpE84Unloader.btnSwE84_2_HOAVBL",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwE84_2_HOAVBL",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsOption1.PageControl1.tsAGV.grpAGV.grpE84Unloader.btnSwE84_2_POWER",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwE84_2_POWER",
+   "vcl_class": "TBtnPanelLane"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTTL.palTTL8Site.btnSwClear4",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwClear4",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTTL.palTTL8Site.btnSwClear5",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwClear5",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTTL.palTTL8Site.btnSwClear6",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwClear6",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTTL.palTTL8Site.btnSwClear7",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwClear7",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTTL.palTTL8Site.btnSwStart4",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwStart4",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTTL.palTTL8Site.btnSwStart5",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwStart5",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTTL.palTTL8Site.btnSwStart6",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwStart6",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTTL.palTTL8Site.btnSwStart7",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwStart7",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTTL.palTTL8Site.btnSwDut4",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwDut4",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTTL.palTTL8Site.btnSwDut5",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwDut5",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTTL.palTTL8Site.btnSwDut6",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwDut6",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTTL.palTTL8Site.btnSwDut7",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwDut7",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTTL.palTTL8Site.btnSw10Bit2",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSw10Bit2",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTTL.btnSwClear0",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwClear0",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTTL.btnSwClear1",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwClear1",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTTL.btnSwClear2",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwClear2",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTTL.btnSwClear3",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwClear3",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTTL.btnSwStart0",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwStart0",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTTL.btnSwStart1",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwStart1",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTTL.btnSwStart2",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwStart2",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTTL.btnSwStart3",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwStart3",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTTL.btnSwDut0",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwDut0",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTTL.btnSwDut1",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwDut1",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTTL.btnSwDut2",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwDut2",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTTL.btnSwDut3",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSwDut3",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTTL.btnSw10Bit",
+   "event_name": "OnClick",
+   "handler_name": "BtnPanelClick",
+   "leaf_name": "btnSw10Bit",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTTL.gbTTLTest.edtPulseDelay",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtPulseDelayMouseDown",
+   "leaf_name": "edtPulseDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTTL.gbTTLTest.edtSendCount",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtPulseDelayMouseDown",
+   "leaf_name": "edtSendCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTTL.gbTTLTest.btnTTLTest",
+   "event_name": "OnClick",
+   "handler_name": "btnTTLTestClick",
+   "leaf_name": "btnTTLTest",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsConnection.pnlButtonOther.btIPSetting",
+   "event_name": "OnClick",
+   "handler_name": "btIPSettingClick",
+   "leaf_name": "btIPSetting",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsConnection.pnlButtonOther.btComPoet",
+   "event_name": "OnClick",
+   "handler_name": "btComPoetClick",
+   "leaf_name": "btComPoet",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsConnection.pnlButtonOther.btKVM",
+   "event_name": "OnClick",
+   "handler_name": "btKVMClick",
+   "leaf_name": "btKVM",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTool.btnTool",
+   "event_name": "OnClick",
+   "handler_name": "btnToolClick",
+   "leaf_name": "btnTool",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTool.btnReload",
+   "event_name": "OnClick",
+   "handler_name": "btnReloadClick",
+   "leaf_name": "btnReload",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsTool.btnClose",
+   "event_name": "OnClick",
+   "handler_name": "btnCloseClick",
+   "leaf_name": "btnClose",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIOTable.pnlIOTable.sbtReload",
+   "event_name": "OnClick",
+   "handler_name": "btnReloadClick",
+   "leaf_name": "sbtReload",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIOTable.pnlIOTable.btnAddIO",
+   "event_name": "OnClick",
+   "handler_name": "btnAddIOClick",
+   "leaf_name": "btnAddIO",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIOTable.pnlIOTable.btnDeleteIO",
+   "event_name": "OnClick",
+   "handler_name": "btnDeleteIOClick",
+   "leaf_name": "btnDeleteIO",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIOTable.pnlIOTable.btnModify",
+   "event_name": "OnClick",
+   "handler_name": "btnModifyClick",
+   "leaf_name": "btnModify",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIOTable.pnlIOTable.sbUpdate",
+   "event_name": "OnClick",
+   "handler_name": "sbUpdateClick",
+   "leaf_name": "sbUpdate",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIOTable.pnlIOTable.cbbType",
+   "event_name": "OnChange",
+   "handler_name": "cbbTypeChange",
+   "leaf_name": "cbbType",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIOTable.pnlIOTable.cbbLane",
+   "event_name": "OnChange",
+   "handler_name": "cbbTypeChange",
+   "leaf_name": "cbbLane",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIOTable.pnlIOTable.edtTemp",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtPulseDelayMouseDown",
+   "leaf_name": "edtTemp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIOTable.pnlIOTable.edtSearchIO",
+   "event_name": "OnChange",
+   "handler_name": "edtSearchIOChange",
+   "leaf_name": "edtSearchIO",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIOTable.strngrdIoTable",
+   "event_name": "OnDblClick",
+   "handler_name": "strngrdIoTableDblClick",
+   "leaf_name": "strngrdIoTable",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fiosetview.PC_IOSET.tsIOTable.strngrdIoTable",
+   "event_name": "OnSelectCell",
+   "handler_name": "strngrdIoTableSelectCell",
+   "leaf_name": "strngrdIoTable",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fiosetview.Timer1",
+   "event_name": "OnTimer",
+   "handler_name": "Timer1Timer",
+   "leaf_name": "Timer1",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fiosetview.Timer2",
+   "event_name": "OnTimer",
+   "handler_name": "Timer2Timer",
+   "leaf_name": "Timer2",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fiosetview",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "iosetview.dfm"
+}

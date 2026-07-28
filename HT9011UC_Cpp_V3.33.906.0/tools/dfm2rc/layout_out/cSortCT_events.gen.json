@@ -1,0 +1,275 @@
+{
+ "event_count": 38,
+ "events": [
+  {
+   "control_path": "fSortCT",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fSortCT",
+   "vcl_class": "TfSortCT"
+  },
+  {
+   "control_path": "fSortCT",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fSortCT",
+   "vcl_class": "TfSortCT"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.pnlLoadingBG.pnlLoader",
+   "event_name": "OnMouseDown",
+   "handler_name": "pnlLoaderMouseDown",
+   "leaf_name": "pnlLoader",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.pnlLoadingBG.pnlLoadTrayCt",
+   "event_name": "OnMouseDown",
+   "handler_name": "pnlAuto1YieldMouseDown",
+   "leaf_name": "pnlLoadTrayCt",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.pnlLoadingBG.pnlLoadCID",
+   "event_name": "OnDblClick",
+   "handler_name": "pnlAuto1DblClick",
+   "leaf_name": "pnlLoadCID",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.pnlLoadingBG.pnlLoadCID",
+   "event_name": "OnMouseDown",
+   "handler_name": "pnlAuto1YieldMouseDown",
+   "leaf_name": "pnlLoadCID",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.pnlTotalBG.lblTotal",
+   "event_name": "OnClick",
+   "handler_name": "lblTotalClick",
+   "leaf_name": "lblTotal",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.pnlTotalBG.pnlCoverTrayD",
+   "event_name": "OnDblClick",
+   "handler_name": "pnlAuto1DblClick",
+   "leaf_name": "pnlCoverTrayD",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.pnlTotalBG.pnlCoverTrayD",
+   "event_name": "OnMouseDown",
+   "handler_name": "pnlAuto1YieldMouseDown",
+   "leaf_name": "pnlCoverTrayD",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.btnClearCount",
+   "event_name": "OnClick",
+   "handler_name": "btnClearCountClick",
+   "leaf_name": "btnClearCount",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto1Yield",
+   "event_name": "OnMouseDown",
+   "handler_name": "pnlAuto1YieldMouseDown",
+   "leaf_name": "pnlAuto1Yield",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto1",
+   "event_name": "OnDblClick",
+   "handler_name": "pnlAuto1DblClick",
+   "leaf_name": "pnlAuto1",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto1",
+   "event_name": "OnMouseDown",
+   "handler_name": "pnlAuto1YieldMouseDown",
+   "leaf_name": "pnlAuto1",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix1Yield",
+   "event_name": "OnMouseDown",
+   "handler_name": "pnlFix1YieldMouseDown",
+   "leaf_name": "pnlFix1Yield",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix2Yield",
+   "event_name": "OnMouseDown",
+   "handler_name": "pnlFix2MouseDown",
+   "leaf_name": "pnlFix2Yield",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix4Yield",
+   "event_name": "OnMouseDown",
+   "handler_name": "pnlFix4YieldMouseDown",
+   "leaf_name": "pnlFix4Yield",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix3Yield",
+   "event_name": "OnMouseDown",
+   "handler_name": "pnlFix3MouseDown",
+   "leaf_name": "pnlFix3Yield",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix5Yield",
+   "event_name": "OnMouseDown",
+   "handler_name": "pnlFix5YieldMouseDown",
+   "leaf_name": "pnlFix5Yield",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix6Yield",
+   "event_name": "OnMouseDown",
+   "handler_name": "pnlFix6YieldMouseDown",
+   "leaf_name": "pnlFix6Yield",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto1TrayCt",
+   "event_name": "OnMouseDown",
+   "handler_name": "pnlAuto1YieldMouseDown",
+   "leaf_name": "pnlAuto1TrayCt",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto1CID",
+   "event_name": "OnDblClick",
+   "handler_name": "pnlAuto1CIDDblClick",
+   "leaf_name": "pnlAuto1CID",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto2TrayCt",
+   "event_name": "OnMouseDown",
+   "handler_name": "pnlAuto1YieldMouseDown",
+   "leaf_name": "pnlAuto2TrayCt",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto2CID",
+   "event_name": "OnDblClick",
+   "handler_name": "pnlAuto1CIDDblClick",
+   "leaf_name": "pnlAuto2CID",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto3TrayCt",
+   "event_name": "OnMouseDown",
+   "handler_name": "pnlAuto1YieldMouseDown",
+   "leaf_name": "pnlAuto3TrayCt",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto3CID",
+   "event_name": "OnDblClick",
+   "handler_name": "pnlAuto1CIDDblClick",
+   "leaf_name": "pnlAuto3CID",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto4TrayCt",
+   "event_name": "OnMouseDown",
+   "handler_name": "pnlAuto1YieldMouseDown",
+   "leaf_name": "pnlAuto4TrayCt",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto4CID",
+   "event_name": "OnDblClick",
+   "handler_name": "pnlAuto1CIDDblClick",
+   "leaf_name": "pnlAuto4CID",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto5TrayCt",
+   "event_name": "OnMouseDown",
+   "handler_name": "pnlAuto1YieldMouseDown",
+   "leaf_name": "pnlAuto5TrayCt",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto5CID",
+   "event_name": "OnDblClick",
+   "handler_name": "pnlAuto1CIDDblClick",
+   "leaf_name": "pnlAuto5CID",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto6TrayCt",
+   "event_name": "OnMouseDown",
+   "handler_name": "pnlAuto1YieldMouseDown",
+   "leaf_name": "pnlAuto6TrayCt",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto6CID",
+   "event_name": "OnDblClick",
+   "handler_name": "pnlAuto1CIDDblClick",
+   "leaf_name": "pnlAuto6CID",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.SortCount.gbLotID.spbClearAllCount",
+   "event_name": "OnClick",
+   "handler_name": "spbClearAllCountClick",
+   "leaf_name": "spbClearAllCount",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.ARTSortCount.pnlLoadingARTBG.pnlLoadingART",
+   "event_name": "OnMouseDown",
+   "handler_name": "pnlLoaderMouseDown",
+   "leaf_name": "pnlLoadingART",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.tsICCount.grpInputArea.pnlLoad",
+   "event_name": "OnMouseDown",
+   "handler_name": "pnlLoaderMouseDown",
+   "leaf_name": "pnlLoad",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.tsICCount.grpInputArea.pnlHP1",
+   "event_name": "OnMouseDown",
+   "handler_name": "pnlHP1MouseDown",
+   "leaf_name": "pnlHP1",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.PageControl1.tsICCount.grpInputArea.pnlHP2",
+   "event_name": "OnMouseDown",
+   "handler_name": "pnlHP2MouseDown",
+   "leaf_name": "pnlHP2",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSortCT.Timer1",
+   "event_name": "OnTimer",
+   "handler_name": "Timer1Timer",
+   "leaf_name": "Timer1",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fSortCT.Timer2",
+   "event_name": "OnTimer",
+   "handler_name": "Timer2Timer",
+   "leaf_name": "Timer2",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fSortCT",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "cSortCT.dfm"
+}

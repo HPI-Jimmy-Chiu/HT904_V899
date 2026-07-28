@@ -1,0 +1,548 @@
+{
+ "event_count": 77,
+ "events": [
+  {
+   "control_path": "fTrayAssignment",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fTrayAssignment",
+   "vcl_class": "TfTrayAssignment"
+  },
+  {
+   "control_path": "fTrayAssignment",
+   "event_name": "OnShortCut",
+   "handler_name": "FormShortCut",
+   "leaf_name": "fTrayAssignment",
+   "vcl_class": "TfTrayAssignment"
+  },
+  {
+   "control_path": "fTrayAssignment",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fTrayAssignment",
+   "vcl_class": "TfTrayAssignment"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.gbAuto3.imgAuto3",
+   "event_name": "OnClick",
+   "handler_name": "imgLoaderClick",
+   "leaf_name": "imgAuto3",
+   "vcl_class": "TImage"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.gbAuto2.imgAuto2",
+   "event_name": "OnClick",
+   "handler_name": "imgLoaderClick",
+   "leaf_name": "imgAuto2",
+   "vcl_class": "TImage"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.gbAuto1.imgAuto1",
+   "event_name": "OnClick",
+   "handler_name": "imgLoaderClick",
+   "leaf_name": "imgAuto1",
+   "vcl_class": "TImage"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.gbColorTray.cbColor",
+   "event_name": "OnChange",
+   "handler_name": "cbEmptyChange",
+   "leaf_name": "cbColor",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.gbEmptyTray.cbEmpty",
+   "event_name": "OnChange",
+   "handler_name": "cbEmptyChange",
+   "leaf_name": "cbEmpty",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.GroupBox1.imgLoader",
+   "event_name": "OnClick",
+   "handler_name": "imgLoaderClick",
+   "leaf_name": "imgLoader",
+   "vcl_class": "TImage"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.GroupBox1.cbLoader",
+   "event_name": "OnChange",
+   "handler_name": "cbLoaderChange",
+   "leaf_name": "cbLoader",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.GroupBox1.cbLoader",
+   "event_name": "OnDropDown",
+   "handler_name": "cbLoaderDropDown",
+   "leaf_name": "cbLoader",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlFTTrayFrom.RGAuto1",
+   "event_name": "OnClick",
+   "handler_name": "cbEmptyChange",
+   "leaf_name": "RGAuto1",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlFTTrayFrom.RGAuto2",
+   "event_name": "OnClick",
+   "handler_name": "RGAuto2Click",
+   "leaf_name": "RGAuto2",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlFTTrayFrom.RGAuto3",
+   "event_name": "OnClick",
+   "handler_name": "cbEmptyChange",
+   "leaf_name": "RGAuto3",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlFTTrayFrom.RGAuto4",
+   "event_name": "OnClick",
+   "handler_name": "cbEmptyChange",
+   "leaf_name": "RGAuto4",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlFTTrayFrom.RGAuto5",
+   "event_name": "OnClick",
+   "handler_name": "RGAuto2Click",
+   "leaf_name": "RGAuto5",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlFTTrayFrom.RGAuto6",
+   "event_name": "OnClick",
+   "handler_name": "cbEmptyChange",
+   "leaf_name": "RGAuto6",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlLoad_FT.RGLoader",
+   "event_name": "OnClick",
+   "handler_name": "RGLoaderClick",
+   "leaf_name": "RGLoader",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlRTTrayFrom.rgAuto1_RT",
+   "event_name": "OnClick",
+   "handler_name": "cbEmptyChange",
+   "leaf_name": "rgAuto1_RT",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlRTTrayFrom.rgAuto2_RT",
+   "event_name": "OnClick",
+   "handler_name": "cbEmptyChange",
+   "leaf_name": "rgAuto2_RT",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlRTTrayFrom.rgAuto3_RT",
+   "event_name": "OnClick",
+   "handler_name": "cbEmptyChange",
+   "leaf_name": "rgAuto3_RT",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlRTTrayFrom.rgAuto4_RT",
+   "event_name": "OnClick",
+   "handler_name": "cbEmptyChange",
+   "leaf_name": "rgAuto4_RT",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlRTTrayFrom.rgAuto5_RT",
+   "event_name": "OnClick",
+   "handler_name": "cbEmptyChange",
+   "leaf_name": "rgAuto5_RT",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlRTTrayFrom.rgAuto6_RT",
+   "event_name": "OnClick",
+   "handler_name": "cbEmptyChange",
+   "leaf_name": "rgAuto6_RT",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlLoad_RT.rgLoad_RT",
+   "event_name": "OnClick",
+   "handler_name": "rgLoad_RTClick",
+   "leaf_name": "rgLoad_RT",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGraph.sbNormalTest",
+   "event_name": "OnChange",
+   "handler_name": "sbNormalTestChange",
+   "leaf_name": "sbNormalTest",
+   "vcl_class": "TScrollBar"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGraph.sbNormalTest_RT",
+   "event_name": "OnChange",
+   "handler_name": "sbNormalTest_RTChange",
+   "leaf_name": "sbNormalTest_RT",
+   "vcl_class": "TScrollBar"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.pnlTop.rgLoaderType",
+   "event_name": "OnClick",
+   "handler_name": "rgLoaderTypeClick",
+   "leaf_name": "rgLoaderType",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix1.imgFix1",
+   "event_name": "OnClick",
+   "handler_name": "imgLoaderClick",
+   "leaf_name": "imgFix1",
+   "vcl_class": "TImage"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix2.imgFix2",
+   "event_name": "OnClick",
+   "handler_name": "imgLoaderClick",
+   "leaf_name": "imgFix2",
+   "vcl_class": "TImage"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix3.imgFix3",
+   "event_name": "OnClick",
+   "handler_name": "imgLoaderClick",
+   "leaf_name": "imgFix3",
+   "vcl_class": "TImage"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.pnlTop.rgFixTrayMode",
+   "event_name": "OnClick",
+   "handler_name": "rgFixTrayModeClick",
+   "leaf_name": "rgFixTrayMode",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix4.imgFix4",
+   "event_name": "OnClick",
+   "handler_name": "imgLoaderClick",
+   "leaf_name": "imgFix4",
+   "vcl_class": "TImage"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix5.imgFix5",
+   "event_name": "OnClick",
+   "handler_name": "imgLoaderClick",
+   "leaf_name": "imgFix5",
+   "vcl_class": "TImage"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix6.imgFix6",
+   "event_name": "OnClick",
+   "handler_name": "imgLoaderClick",
+   "leaf_name": "imgFix6",
+   "vcl_class": "TImage"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.gbAuto6.imgAuto6",
+   "event_name": "OnClick",
+   "handler_name": "imgLoaderClick",
+   "leaf_name": "imgAuto6",
+   "vcl_class": "TImage"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.gbAuto5.imgAuto5",
+   "event_name": "OnClick",
+   "handler_name": "imgLoaderClick",
+   "leaf_name": "imgAuto5",
+   "vcl_class": "TImage"
+  },
+  {
+   "control_path": "fTrayAssignment.palTrayAssign.gbAuto4.imgAuto4",
+   "event_name": "OnClick",
+   "handler_name": "imgLoaderClick",
+   "leaf_name": "imgAuto4",
+   "vcl_class": "TImage"
+  },
+  {
+   "control_path": "fTrayAssignment.GroupBox2_KYEC.cbEnableAMR_KYEC",
+   "event_name": "OnClick",
+   "handler_name": "cbEnableAMR_KYECClick",
+   "leaf_name": "cbEnableAMR_KYEC",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel2.sbtExit",
+   "event_name": "OnClick",
+   "handler_name": "sbtExitClick",
+   "leaf_name": "sbtExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel2.spbSave",
+   "event_name": "OnClick",
+   "handler_name": "spbSaveClick",
+   "leaf_name": "spbSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3.edtICSort3_1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort3_1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3.edtICSort3_2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort3_2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3.edtICSort3_3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort3_3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3.edtICSort3_4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort3_4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3.edtICSort3_5",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort3_5",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3.edtICSort3_6",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort3_6",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2.edtICSort2_1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort2_1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2.edtICSort2_2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort2_2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2.edtICSort2_3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort2_3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2.edtICSort2_4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort2_4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2.edtICSort2_5",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort2_5",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2.edtICSort2_6",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort2_6",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1.edtICSort1_1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort1_1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1.edtICSort1_2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort1_2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1.edtICSort1_3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort1_3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1.edtICSort1_4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort1_4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1.edtICSort1_5",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort1_5",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1.edtICSort1_6",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort1_6",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4.edtICSort4_1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort4_1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4.edtICSort4_2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort4_2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4.edtICSort4_3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort4_3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4.edtICSort4_4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort4_4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4.edtICSort4_5",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort4_5",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4.edtICSort4_6",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort4_6",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6.edtICSort6_1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort6_1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6.edtICSort6_2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort6_2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6.edtICSort6_3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort6_3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6.edtICSort6_4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort6_4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6.edtICSort6_5",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort6_5",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6.edtICSort6_6",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort6_6",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5.edtICSort5_1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort5_1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5.edtICSort5_2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort5_2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5.edtICSort5_3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort5_3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5.edtICSort5_4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort5_4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5.edtICSort5_5",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort5_5",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5.edtICSort5_6",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtICSort1_1MouseDown",
+   "leaf_name": "edtICSort5_6",
+   "vcl_class": "TEdit"
+  }
+ ],
+ "form_name": "fTrayAssignment",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "cTrayAssignment.dfm"
+}

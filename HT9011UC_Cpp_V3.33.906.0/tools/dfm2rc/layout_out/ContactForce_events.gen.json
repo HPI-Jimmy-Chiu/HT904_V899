@@ -1,0 +1,485 @@
+{
+ "event_count": 68,
+ "events": [
+  {
+   "control_path": "fContactForce",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fContactForce",
+   "vcl_class": "TfContactForce"
+  },
+  {
+   "control_path": "fContactForce",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fContactForce",
+   "vcl_class": "TfContactForce"
+  },
+  {
+   "control_path": "fContactForce",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fContactForce",
+   "vcl_class": "TfContactForce"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.gbLoadRate.edtHotOffset",
+   "event_name": "OnClick",
+   "handler_name": "edtHotOffsetClick",
+   "leaf_name": "edtHotOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.gbLoadRate.edtContactOffset",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtContactOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.gbLoadRate.edtContactOffset_NS",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffset_NSClick",
+   "leaf_name": "edtContactOffset_NS",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsD25.edD25_60mm",
+   "event_name": "OnMouseDown",
+   "handler_name": "edD25_60mmMouseDown",
+   "leaf_name": "edD25_60mm",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsD25.edD25_40mm",
+   "event_name": "OnMouseDown",
+   "handler_name": "edD25_60mmMouseDown",
+   "leaf_name": "edD25_40mm",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsD25.edD25_30mm",
+   "event_name": "OnMouseDown",
+   "handler_name": "edD25_60mmMouseDown",
+   "leaf_name": "edD25_30mm",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsD25.edD60_56mm",
+   "event_name": "OnMouseDown",
+   "handler_name": "edD25_60mmMouseDown",
+   "leaf_name": "edD60_56mm",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsNewMethod.GroupBox1.tb30mm_10kg",
+   "event_name": "OnChange",
+   "handler_name": "tb30mm_10kgChange",
+   "leaf_name": "tb30mm_10kg",
+   "vcl_class": "TTrackBar"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsNewMethod.GroupBox1.tb30mm_60kg",
+   "event_name": "OnChange",
+   "handler_name": "tb30mm_10kgChange",
+   "leaf_name": "tb30mm_60kg",
+   "vcl_class": "TTrackBar"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsNewMethod.GroupBox2.tb40mm_10kg",
+   "event_name": "OnChange",
+   "handler_name": "tb30mm_10kgChange",
+   "leaf_name": "tb40mm_10kg",
+   "vcl_class": "TTrackBar"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsNewMethod.GroupBox2.tb40mm_60kg",
+   "event_name": "OnChange",
+   "handler_name": "tb30mm_10kgChange",
+   "leaf_name": "tb40mm_60kg",
+   "vcl_class": "TTrackBar"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsNewMethod.GroupBox3.tb60mm_10kg",
+   "event_name": "OnChange",
+   "handler_name": "tb30mm_10kgChange",
+   "leaf_name": "tb60mm_10kg",
+   "vcl_class": "TTrackBar"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsNewMethod.GroupBox3.tb60mm_60kg",
+   "event_name": "OnChange",
+   "handler_name": "tb30mm_10kgChange",
+   "leaf_name": "tb60mm_60kg",
+   "vcl_class": "TTrackBar"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsNewMethod.GroupBox4.tb56mm_10kg",
+   "event_name": "OnChange",
+   "handler_name": "tb30mm_10kgChange",
+   "leaf_name": "tb56mm_10kg",
+   "vcl_class": "TTrackBar"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsNewMethod.GroupBox4.tb56mm_60kg",
+   "event_name": "OnChange",
+   "handler_name": "tb30mm_10kgChange",
+   "leaf_name": "tb56mm_60kg",
+   "vcl_class": "TTrackBar"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsEPCalibration.GroupBox5.gbEPSetting.edMaxKpa",
+   "event_name": "OnClick",
+   "handler_name": "edMaxKpaClick",
+   "leaf_name": "edMaxKpa",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsEPCalibration.GroupBox5.gbEPSetting.edMinMpa",
+   "event_name": "OnClick",
+   "handler_name": "edMinMpaClick",
+   "leaf_name": "edMinMpa",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsEPCalibration.GroupBox5.gbEPReadSetting.edMaxMpaFB",
+   "event_name": "OnClick",
+   "handler_name": "edMaxMpaFBClick",
+   "leaf_name": "edMaxMpaFB",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsEPCalibration.GroupBox5.gbEPReadSetting.edtMinMpaFB",
+   "event_name": "OnClick",
+   "handler_name": "edMaxMpaFBClick",
+   "leaf_name": "edtMinMpaFB",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsEPCalibration.grpEPForDieForce.GroupBox6.edMaxKpaDual",
+   "event_name": "OnClick",
+   "handler_name": "edMaxKpaClick",
+   "leaf_name": "edMaxKpaDual",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsEPCalibration.grpEPForDieForce.GroupBox6.edMinMpaDual",
+   "event_name": "OnClick",
+   "handler_name": "edMinMpaClick",
+   "leaf_name": "edMinMpaDual",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsEPCalibration.grpEPForDieForce.GroupBox7.edMaxMpaFBDual",
+   "event_name": "OnClick",
+   "handler_name": "edMaxMpaFBClick",
+   "leaf_name": "edMaxMpaFBDual",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsEPCalibration.grpEPForDieForce.GroupBox7.edtMinMpaFBDual",
+   "event_name": "OnClick",
+   "handler_name": "edMaxMpaFBClick",
+   "leaf_name": "edtMinMpaFBDual",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsEPCalibration.grpEPForArm2.gbEPSetting_1032.edMaxKpa_1032",
+   "event_name": "OnClick",
+   "handler_name": "edMaxKpaClick",
+   "leaf_name": "edMaxKpa_1032",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsEPCalibration.grpEPForArm2.gbEPSetting_1032.edMinMpa_1032",
+   "event_name": "OnClick",
+   "handler_name": "edMinMpaClick",
+   "leaf_name": "edMinMpa_1032",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsEPCalibration.grpEPForArm2.gbEPReadSetting_1032.edMaxMpaFB_1032",
+   "event_name": "OnClick",
+   "handler_name": "edMaxMpaFBClick",
+   "leaf_name": "edMaxMpaFB_1032",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsEPCalibration.grpEPForArm2.gbEPReadSetting_1032.edtMinMpaFB_1032",
+   "event_name": "OnClick",
+   "handler_name": "edMaxMpaFBClick",
+   "leaf_name": "edtMinMpaFB_1032",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsEPCalibration.GroupBox8.Button1",
+   "event_name": "OnClick",
+   "handler_name": "Button1Click",
+   "leaf_name": "Button1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.TabSheet1.scrlbxDynamicKitInd.gbLoadRateInd.edtLoadRateInd",
+   "event_name": "OnClick",
+   "handler_name": "edtLoadRateIndClick",
+   "leaf_name": "edtLoadRateInd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.TabSheet1.scrlbxDynamicKitInd.gbLoadRateInd.edtContactOffsetInd",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtContactOffsetInd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsDieForceDynamicKit.scrlbxDieForceDynamicKit.gbDieForceLoadRate.edtDieForceContactOffset",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtDieForceContactOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_01",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm1Offset_01",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_02",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm1Offset_02",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_03",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm1Offset_03",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_04",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm1Offset_04",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_05",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm1Offset_05",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_06",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm1Offset_06",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_07",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm1Offset_07",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_01",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm2Offset_01",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_02",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm2Offset_02",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_03",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm2Offset_03",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_04",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm2Offset_04",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_05",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm2Offset_05",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_06",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm2Offset_06",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_07",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm2Offset_07",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_08",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm1Offset_08",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_09",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm1Offset_09",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_10",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm1Offset_10",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_11",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm1Offset_11",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_08",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm2Offset_08",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_09",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm2Offset_09",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_10",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm2Offset_10",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_11",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm2Offset_11",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_12",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm1Offset_12",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_13",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm1Offset_13",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_14",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm1Offset_14",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_12",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm2Offset_12",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_13",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm2Offset_13",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_14",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm2Offset_14",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_15",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm1Offset_15",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_15",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtArm2Offset_15",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsDieForceOneByOneKit.scrlbxDieForceOneByOneDynamicKit.gbDieForceOneByOneLoadRate.edtDieForceOneByOneLoadRate",
+   "event_name": "OnClick",
+   "handler_name": "edtLoadRateIndClick",
+   "leaf_name": "edtDieForceOneByOneLoadRate",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.PageControl1.tsDieForceOneByOneKit.scrlbxDieForceOneByOneDynamicKit.gbDieForceOneByOneLoadRate.edtDieForceOneByOneContactOffset",
+   "event_name": "OnClick",
+   "handler_name": "edtContactOffsetClick",
+   "leaf_name": "edtDieForceOneByOneContactOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fContactForce.Panel1.btSave",
+   "event_name": "OnClick",
+   "handler_name": "btSaveClick",
+   "leaf_name": "btSave",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fContactForce.Panel1.btExit",
+   "event_name": "OnClick",
+   "handler_name": "btExitClick",
+   "leaf_name": "btExit",
+   "vcl_class": "TButton"
+  }
+ ],
+ "form_name": "fContactForce",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "ContactForce.dfm"
+}

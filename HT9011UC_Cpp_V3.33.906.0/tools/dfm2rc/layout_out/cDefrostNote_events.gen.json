@@ -1,0 +1,44 @@
+{
+ "event_count": 5,
+ "events": [
+  {
+   "control_path": "fDefrostNote",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fDefrostNote",
+   "vcl_class": "TfDefrostNote"
+  },
+  {
+   "control_path": "fDefrostNote",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fDefrostNote",
+   "vcl_class": "TfDefrostNote"
+  },
+  {
+   "control_path": "fDefrostNote.Panel11.btn_Start",
+   "event_name": "OnClick",
+   "handler_name": "btn_StartClick",
+   "leaf_name": "btn_Start",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fDefrostNote.Panel11.btn_Interrupt",
+   "event_name": "OnClick",
+   "handler_name": "btn_InterruptClick",
+   "leaf_name": "btn_Interrupt",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fDefrostNote.Timer1",
+   "event_name": "OnTimer",
+   "handler_name": "Timer1Timer",
+   "leaf_name": "Timer1",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fDefrostNote",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "cDefrostNote.dfm"
+}

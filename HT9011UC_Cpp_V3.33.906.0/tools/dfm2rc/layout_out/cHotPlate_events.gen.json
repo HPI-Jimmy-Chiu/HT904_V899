@@ -1,0 +1,142 @@
+{
+ "event_count": 19,
+ "events": [
+  {
+   "control_path": "fHotPlate",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fHotPlate",
+   "vcl_class": "TfHotPlate"
+  },
+  {
+   "control_path": "fHotPlate",
+   "event_name": "OnShortCut",
+   "handler_name": "FormShortCut",
+   "leaf_name": "fHotPlate",
+   "vcl_class": "TfHotPlate"
+  },
+  {
+   "control_path": "fHotPlate",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fHotPlate",
+   "vcl_class": "TfHotPlate"
+  },
+  {
+   "control_path": "fHotPlate.Panel1.HotPlateName",
+   "event_name": "OnMouseDown",
+   "handler_name": "HotPlateNameMouseDown",
+   "leaf_name": "HotPlateName",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fHotPlate.GroupBox2.XST1",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "XST1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fHotPlate.GroupBox2.XST1",
+   "event_name": "OnMouseDown",
+   "handler_name": "XST1MouseDown",
+   "leaf_name": "XST1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fHotPlate.GroupBox2.XPitch1",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "XPitch1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fHotPlate.GroupBox2.XPitch1",
+   "event_name": "OnMouseDown",
+   "handler_name": "XST1MouseDown",
+   "leaf_name": "XPitch1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fHotPlate.GroupBox2.XCT1",
+   "event_name": "OnKeyPress",
+   "handler_name": "YCT1KeyPress",
+   "leaf_name": "XCT1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fHotPlate.GroupBox2.XCT1",
+   "event_name": "OnMouseDown",
+   "handler_name": "XCT1MouseDown",
+   "leaf_name": "XCT1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fHotPlate.GroupBox2.YST1",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "YST1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fHotPlate.GroupBox2.YST1",
+   "event_name": "OnMouseDown",
+   "handler_name": "XST1MouseDown",
+   "leaf_name": "YST1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fHotPlate.GroupBox2.YPitch1",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "YPitch1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fHotPlate.GroupBox2.YPitch1",
+   "event_name": "OnMouseDown",
+   "handler_name": "XST1MouseDown",
+   "leaf_name": "YPitch1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fHotPlate.GroupBox2.YCT1",
+   "event_name": "OnKeyPress",
+   "handler_name": "YCT1KeyPress",
+   "leaf_name": "YCT1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fHotPlate.GroupBox2.YCT1",
+   "event_name": "OnMouseDown",
+   "handler_name": "XCT1MouseDown",
+   "leaf_name": "YCT1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fHotPlate.GroupBox2.cbSelectHPFromDB",
+   "event_name": "OnChange",
+   "handler_name": "cbSelectHPFromDBChange",
+   "leaf_name": "cbSelectHPFromDB",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fHotPlate.Panel2.spbSave",
+   "event_name": "OnClick",
+   "handler_name": "spbSaveClick",
+   "leaf_name": "spbSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fHotPlate.Panel2.sbtExit",
+   "event_name": "OnClick",
+   "handler_name": "sbtExitClick",
+   "leaf_name": "sbtExit",
+   "vcl_class": "TSpeedButton"
+  }
+ ],
+ "form_name": "fHotPlate",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "cHotPlate.dfm"
+}

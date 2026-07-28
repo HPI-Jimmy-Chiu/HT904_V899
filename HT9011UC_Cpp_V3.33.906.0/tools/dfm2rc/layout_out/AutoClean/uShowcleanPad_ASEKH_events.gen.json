@@ -1,0 +1,30 @@
+{
+ "event_count": 3,
+ "events": [
+  {
+   "control_path": "CleanPadFrom",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "CleanPadFrom",
+   "vcl_class": "TCleanPadFrom"
+  },
+  {
+   "control_path": "CleanPadFrom",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "CleanPadFrom",
+   "vcl_class": "TCleanPadFrom"
+  },
+  {
+   "control_path": "CleanPadFrom.SpeedButton1",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton1Click",
+   "leaf_name": "SpeedButton1",
+   "vcl_class": "TSpeedButton"
+  }
+ ],
+ "form_name": "CleanPadFrom",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "AutoClean/uShowcleanPad_ASEKH.dfm"
+}

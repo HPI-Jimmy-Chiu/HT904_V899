@@ -1,0 +1,8496 @@
+{
+ "control_node_count": 142,
+ "encoding_used": "cp950",
+ "form_class": "TfAGV",
+ "form_name": "fAGV",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fAGV.AGV",
+    "fAGV.Timer1",
+    "fAGV.Timer2"
+   ],
+   "class": "TfAGV",
+   "depth": 0,
+   "events": {
+    "OnClose": "FormClose",
+    "OnShow": "FormShow"
+   },
+   "geometry": {
+    "height": 714,
+    "left": 738,
+    "top": 20,
+    "width": 903
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "fAGV",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "fAGV",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "fAGV"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnFace"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 714
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 738
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnClose": {
+     "type": "SCALAR",
+     "value": "FormClose"
+    },
+    "OnShow": {
+     "type": "SCALAR",
+     "value": "FormShow"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 903
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [
+    "fAGV.AGV.tsAGV_Setting"
+   ],
+   "class": "TPageControl",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 676,
+    "left": 0,
+    "top": 0,
+    "width": 887
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "TABHOST",
+   "line": 18,
+   "name": "AGV",
+   "objkind": "object",
+   "parent_path": "fAGV",
+   "path": "fAGV.AGV",
+   "properties": {
+    "ActivePage": {
+     "type": "SCALAR",
+     "value": "tsAGV_Setting"
+    },
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 676
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabIndex": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 887
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fAGV.AGV.tsAGV_Setting.Panel2",
+    "fAGV.AGV.tsAGV_Setting.Panel3"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 33,
+   "name": "tsAGV_Setting",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV",
+   "path": "fAGV.AGV.tsAGV_Setting",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "AMR Setting"
+    },
+    "ImageIndex": {
+     "type": "SCALAR",
+     "value": 1
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alBottom",
+   "anchors": null,
+   "child_paths": [
+    "fAGV.AGV.tsAGV_Setting.Panel2.spbSave",
+    "fAGV.AGV.tsAGV_Setting.Panel2.sbtExit"
+   ],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 54,
+    "left": 0,
+    "top": 591,
+    "width": 879
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 36,
+   "name": "Panel2",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel2",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alBottom"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clInactiveCaption"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 54
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 591
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 879
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 4,
+   "events": {
+    "OnClick": "spbSaveClick"
+   },
+   "geometry": {
+    "height": 40,
+    "left": 123,
+    "top": 7,
+    "width": 227
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 45,
+   "name": "spbSave",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel2",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel2.spbSave",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Save"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Glyph.Data": {
+     "type": "BLOB",
+     "value": {
+      "byte_len": 3946,
+      "hex": "660F0000424D660F000000000000360000002800000024000000240000000100180000000000300F000001000000010000000000000000000000FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF9F9F9F9F9F9F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F9F9F9F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF7F7F7EFEFEFE8E8E8E6E6E6E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E9E9E9F3F3F3F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF8F8F8ECECECD6D6D6C8C8C8C5C5C5C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4D0D0D0E9E9E9F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF0EFEFC0A6A7A55B6CA96270A45E6C934556A6A3A3A4A1A1A19C9C9C9797979393948D8D8E88888A8383867F7D837A7A807978807978994759994759994759994759994759994759994759994756C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAD2C1C1B28181AF6D79B8717FB7707DAA6472EFEFF1EEEEF1995D68B8717EB06B78E1E0E0DDDADBD8D5D6D4D1D2CFCCCCCAC6C6DBD8D88F4B59A05565A05565BE848EB9727FB8727EB8717E994557C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AAF6D79BA7481B97380B7737FAA6472E9E9EBECEBEF995D68B8717EB06B78E1DFE1DCDADDD7D5D6D2D0D1CDC9CAC8C3C3D9D6D68D49589F5464A05565BF848EB97380B9737FB9727F9B4457C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC38D95BA7682BA7481B97480AA6472E5E4E7E9E9EB9A5D69B8737FB06B78E5E5E7E2E0E3DDDBDDD8D5D7D3D0D1CDCACBDDDADB8B48579D53639F5464BF858FBA7480BA7481BA74819B4558C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC48E96BA7783BA7682B97481AA6472E0DFE1E5E3E69B5F6BB97580B06B78E9EAECE6E5E8E2E1E4DDDCDED9D6D8D4D0D2E0DFDF8945549B50619D5363BF8590BA7481BA7481BA74819A4759C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC58F96BB7784BA7784BA7582AA6472DAD9DBE0DEE09B5F6BBA7582B06B78EDECEFEAE9EDE6E6E9E2E2E4DEDDDFDAD8DAE5E2E4874353994E5F9B5061C18690B97480BA7481BA74819C495CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC58F98BC7886BB7785BB7783AA6472D5D2D4DBD8DA9C606C925864925864EAEAEDEDEDF0EAEAEDE8E7E9E4E2E5DFDDDFE8E7E8864252974C5D994E5FC08691B9727FB97380B973809C4B5CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC49098BC7986BD7985BC7784AA6472CFCCCCD4D1D3D9D7D9DFDCDFE2E1E4E7E5E8EAEAEDEDECF0EAEBEEE8E7EAE4E2E6ECEAEC864252864252874353C28791B7727FB8727EB9727F9C4E5DC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC79198BD7A87BD7987BC7985BB7785AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472B77A84B76F7DB7707DB7707EB8717E9E4E5FC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6929ABE7B88BE7B87BC7986BC7886BB7785BB7784BA7682B97481B97480B87380B8717EB7717EB76F7DB76D7CB76D7BB76D7BB66D7BB56C7AB56C7AB66D7BB76F7CB76F7CB7707D9F4E60C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6929ABE7B88BE7B87BC7986BC7886BB7785BB7784BA7682B97481B97480B87380B8717EB76F7DB76D7CB76D7CB76C7AB66C7AB66D7BB56C7AB56C7AB56C7AB66C7AB66C7AB76D7C9F4F60C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6939BBE7E89BC7884A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70B66B7AB66C7B9F5162C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC7949CBF7F8AAF6F7BEBE1E1FEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFEFDFDFEFDFDFDFCFCFCFCFBFCFBFBFBFBFAFAFAF9F9F9F9F9F9F8F8F8E8D1D1A75E70B76D7BB66C7A9F5262C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC8959DC0808BAF6F7BFEFFFEFCFCFBFBFBFAFAFBFAFAFAFAF9FAF9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F7F7F7F7F7F7F7F7F7F7F7F7F7F7F6F6F6F6F6F9F9F9A75E70B96F7DB66B7AA05363C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9959DC1818CAF6F7BFEFFFEE1E1E1DFDFDFDDDDDDDBDCDBDADAD9D9D9D9D7D7D6D5D6D5D4D4D3D2D3D2D1D1D1D0D0D0CFCFCFCFCFCFCFCFCFCFCFCFF9FAF9A75E70BA707EB66B79A15466C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9969EC1818DAF6F7BFEFFFEFCFCFCFCFCFBFBFBFBFBFBFAFBFAFAFAFAFAF9F9F9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F8F7F7F7F7F7F7F7F7F7F7F7F6FBFBFBA75E70B97480B56B79A25666C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9989FC2828EAF6F7BFEFFFEE4E4E4E3E3E3E2E2E1E0E0E0DEDDDEDCDCDCDADADAD9D9D9D7D8D8D6D5D5D4D4D4D2D3D3D1D2D1D0D0D0CFCFCFCFCFCFFCFCFBA75E70BA7581B56B79A45968C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9989FC2838EAF6F7BFEFFFEFCFCFCFCFCFCFCFCFCFCFCFBFBFBFBFBFBFAFAFAFAFAFAF9F9F9F9F9F9F9F9F9F8F8F9F8F8F8F8F8F7F7F7F7F7F7F7F7FCFCFCA75E70BA7783B66C7AA55969C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACA98A0C2838EAF6F7BFEFFFEE6E6E6E6E5E6E4E4E4E3E3E3E1E2E2E0E0E0DEDEDEDCDCDCDBDBDBD9D9D9D8D8D8D6D6D6D4D5D5D3D3D3D1D1D1D0D0D0FDFDFCA75E70BC7783B76D7BA55D6CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB98A0C2838EAF6F7BFEFFFEFDFDFDFDFDFCFCFDFCFCFCFCFCFCFBFBFCFBFBFBFBFBFBFAFAFAFAFAFAF9F9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F7F7F7FDFEFDA75E70BD7985B76F7DA65F6EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEE6E6E6E6E6E6E6E6E6E5E5E6E4E5E5E4E3E3E2E2E2E1E0E0DFDFDFDDDDDDDBDBDCDADAD9D9D8D9D7D6D7D5D5D5D3D4D3FEFEFEA75E70BE7A86B7707DA6606EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEFEFEFDFEFEFDFDFDFCFDFDFCFCFDFCFCFCFCFCFCFBFCFCFBFBFBFAFBFBFAFAFAF9F9F9F9F9F9F9F9F9F9F9F9F8F8F8F8FEFFFEA75E70B38088B8717FA7606EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEE6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E5E5E5E4E4E3E2E3E3E1E1E1E0DFDFDDDDDEDCDBDCDADADAD9D9D9D7D8D7FEFFFEA75E70996E759E5967A9606EC5C5C5E5E5E5F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEFEFFFEFEFEFEFEFEFDFEFEFDFDFDFCFDFDFCFCFDFCFCFCFCFCFCFBFBFBFBFBFBFAFAFAFAFAFAF9FAFAF9F9F9F9F9F9F9FEFFFEA75E70B0757F9E5A68AA6471C5C5C5E6E6E6F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACA969EC2838EAF6F7BFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEA75E70C77F8BC77F8BAA6572D1D1D1EBEBEBFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AAE6A7AAE6A7AAE6A7AD9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6A75E70A75E70A75E70A75E70ECECECF6F6F6FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFA",
+      "sha1": "b6420a2c6417ab1d75d6f7441ace55c339665e38"
+     }
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 123
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "spbSaveClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 227
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 4,
+   "events": {
+    "OnClick": "sbtExitClick"
+   },
+   "geometry": {
+    "height": 41,
+    "left": 492,
+    "top": 7,
+    "width": 241
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 184,
+   "name": "sbtExit",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel2",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel2.sbtExit",
+   "properties": {
+    "AllowAllUp": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Exit"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Glyph.Data": {
+     "type": "BLOB",
+     "value": {
+      "byte_len": 1554,
+      "hex": "0E060000424D0E06000000000000360000002800000016000000160000000100180000000000D805000001000000010000000000000000000000EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF7474A44C4C946C6CA4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF6C6CA44C4C947474A4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF2C2C8C5454C45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC4C4C94EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C4645C9CEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C4645C9C645C9C3C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C43C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D46C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC6464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C2424946464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C8C8CAC8C8CAC2424946464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF6C6CA43C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEF8C8CAC2424946464D45454C46C6CA4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF2C2C8C4C4CBC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424945454C44C4C94EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC3434948C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC3434948C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF",
+      "sha1": "f9091dff96fbb403d8fe7eec0dcccd5c7539ad97"
+     }
+    },
+    "GroupIndex": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 492
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "sbtExitClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 241
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+    "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+    "fAGV.AGV.tsAGV_Setting.Panel3.cbEnableAGVFunction",
+    "fAGV.AGV.tsAGV_Setting.Panel3.btInitalLoad",
+    "fAGV.AGV.tsAGV_Setting.Panel3.btInitalUnLoad",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10"
+   ],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 591,
+    "left": 0,
+    "top": 0,
+    "width": 879
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 251,
+   "name": "Panel3",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 591
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 879
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label21",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label22",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label23",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label24",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label25",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label26",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label27",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label28",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label29",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label30",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label31",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TP1",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TP2",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TP3",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TP4",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TP5",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TP6",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TA1",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TA2",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TA3",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TD0",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TD1"
+   ],
+   "class": "TGroupBox",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 260,
+    "left": 208,
+    "top": 320,
+    "width": 193
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 260,
+   "name": "GroupBox1",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "E84 Time Out Setting"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 260
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 208
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 320
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 193
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 8,
+    "top": 24,
+    "width": 25
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 267,
+   "name": "Label21",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label21",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TP1"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 25
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 8,
+    "top": 64,
+    "width": 25
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 274,
+   "name": "Label22",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label22",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TP2"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 64
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 25
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 8,
+    "top": 104,
+    "width": 25
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 281,
+   "name": "Label23",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label23",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TP3"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 104
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 25
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 8,
+    "top": 144,
+    "width": 25
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 288,
+   "name": "Label24",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label24",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TP4"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 144
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 25
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 8,
+    "top": 184,
+    "width": 25
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 295,
+   "name": "Label25",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label25",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TP5"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 184
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 25
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 8,
+    "top": 224,
+    "width": 25
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 302,
+   "name": "Label26",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label26",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TP6"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 224
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 25
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 96,
+    "top": 24,
+    "width": 25
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 309,
+   "name": "Label27",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label27",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TA1"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 25
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 96,
+    "top": 64,
+    "width": 25
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 316,
+   "name": "Label28",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label28",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TA2"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 64
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 25
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 96,
+    "top": 104,
+    "width": 25
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 323,
+   "name": "Label29",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label29",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TA3"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 104
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 25
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 96,
+    "top": 144,
+    "width": 26
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 330,
+   "name": "Label30",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label30",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TD0"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 144
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 26
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 96,
+    "top": 184,
+    "width": 26
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 337,
+   "name": "Label31",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label31",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TD1"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 184
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 26
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 5,
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 39,
+    "top": 20,
+    "width": 49
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 344,
+   "name": "edE84_2_TP1",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TP1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 39
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edE84_1_TP1MouseDown"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Text": {
+     "type": "STR",
+     "value": "2"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 49
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 5,
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 39,
+    "top": 60,
+    "width": 49
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 353,
+   "name": "edE84_2_TP2",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TP2",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 39
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edE84_1_TP1MouseDown"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Text": {
+     "type": "STR",
+     "value": "2"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 49
+    }
+   },
+   "sibling_index": 12,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 5,
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 39,
+    "top": 100,
+    "width": 49
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 362,
+   "name": "edE84_2_TP3",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TP3",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 39
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edE84_1_TP1MouseDown"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Text": {
+     "type": "STR",
+     "value": "60"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 49
+    }
+   },
+   "sibling_index": 13,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 5,
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 39,
+    "top": 140,
+    "width": 49
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 371,
+   "name": "edE84_2_TP4",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TP4",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 39
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edE84_1_TP1MouseDown"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Text": {
+     "type": "STR",
+     "value": "60"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 140
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 49
+    }
+   },
+   "sibling_index": 14,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 5,
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 39,
+    "top": 180,
+    "width": 49
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 380,
+   "name": "edE84_2_TP5",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TP5",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 39
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edE84_1_TP1MouseDown"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Text": {
+     "type": "STR",
+     "value": "2"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 180
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 49
+    }
+   },
+   "sibling_index": 15,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 5,
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 39,
+    "top": 220,
+    "width": 49
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 389,
+   "name": "edE84_2_TP6",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TP6",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 39
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edE84_1_TP1MouseDown"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Text": {
+     "type": "STR",
+     "value": "2"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 220
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 49
+    }
+   },
+   "sibling_index": 16,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 5,
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 127,
+    "top": 20,
+    "width": 49
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 398,
+   "name": "edE84_2_TA1",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TA1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 127
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edE84_1_TP1MouseDown"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Text": {
+     "type": "STR",
+     "value": "2"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 49
+    }
+   },
+   "sibling_index": 17,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 5,
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 127,
+    "top": 60,
+    "width": 49
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 407,
+   "name": "edE84_2_TA2",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TA2",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 127
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edE84_1_TP1MouseDown"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Text": {
+     "type": "STR",
+     "value": "2"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 49
+    }
+   },
+   "sibling_index": 18,
+   "synthesized": false,
+   "tab_order": 7,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 5,
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 127,
+    "top": 100,
+    "width": 49
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 416,
+   "name": "edE84_2_TA3",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TA3",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 127
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edE84_1_TP1MouseDown"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Text": {
+     "type": "STR",
+     "value": "2"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 49
+    }
+   },
+   "sibling_index": 19,
+   "synthesized": false,
+   "tab_order": 8,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 5,
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 127,
+    "top": 140,
+    "width": 49
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 425,
+   "name": "edE84_2_TD0",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TD0",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 127
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edE84_1_TP1MouseDown"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "Text": {
+     "type": "STR",
+     "value": "2"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 140
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 49
+    }
+   },
+   "sibling_index": 20,
+   "synthesized": false,
+   "tab_order": 9,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 5,
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 127,
+    "top": 180,
+    "width": 49
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 434,
+   "name": "edE84_2_TD1",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TD1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 127
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edE84_1_TP1MouseDown"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Text": {
+     "type": "STR",
+     "value": "2"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 180
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 49
+    }
+   },
+   "sibling_index": 21,
+   "synthesized": false,
+   "tab_order": 10,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.labTP1",
+    "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.labTP2",
+    "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.labTP3",
+    "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.labTP4",
+    "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.labTP5",
+    "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.labTP6",
+    "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.labTA1",
+    "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.labTA2",
+    "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.labTA3",
+    "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.LabTD0",
+    "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.LabTD1",
+    "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TP1",
+    "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TP2",
+    "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TP3",
+    "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TP4",
+    "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TP5",
+    "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TP6",
+    "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TA1",
+    "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TA2",
+    "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TA3",
+    "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TD0",
+    "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TD1"
+   ],
+   "class": "TGroupBox",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 260,
+    "left": 8,
+    "top": 320,
+    "width": 193
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 444,
+   "name": "gbE84TimeOut",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "E84 Time Out Setting"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 260
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 320
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 193
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 8,
+    "top": 24,
+    "width": 25
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 451,
+   "name": "labTP1",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.labTP1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TP1"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 25
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 8,
+    "top": 64,
+    "width": 25
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 458,
+   "name": "labTP2",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.labTP2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TP2"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 64
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 25
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 8,
+    "top": 104,
+    "width": 25
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 465,
+   "name": "labTP3",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.labTP3",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TP3"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 104
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 25
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 8,
+    "top": 144,
+    "width": 25
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 472,
+   "name": "labTP4",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.labTP4",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TP4"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 144
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 25
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 8,
+    "top": 184,
+    "width": 25
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 479,
+   "name": "labTP5",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.labTP5",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TP5"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 184
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 25
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 8,
+    "top": 224,
+    "width": 25
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 486,
+   "name": "labTP6",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.labTP6",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TP6"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 224
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 25
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 96,
+    "top": 24,
+    "width": 25
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 493,
+   "name": "labTA1",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.labTA1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TA1"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 25
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 96,
+    "top": 64,
+    "width": 25
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 500,
+   "name": "labTA2",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.labTA2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TA2"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 64
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 25
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 96,
+    "top": 104,
+    "width": 25
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 507,
+   "name": "labTA3",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.labTA3",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TA3"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 104
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 25
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 96,
+    "top": 144,
+    "width": 26
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 514,
+   "name": "LabTD0",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.LabTD0",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TD0"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 144
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 26
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 96,
+    "top": 184,
+    "width": 26
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 521,
+   "name": "LabTD1",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.LabTD1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TD1"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 184
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 26
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 5,
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 40,
+    "top": 20,
+    "width": 49
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 528,
+   "name": "edE84_1_TP1",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TP1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edE84_1_TP1MouseDown"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Text": {
+     "type": "STR",
+     "value": "2"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 49
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 5,
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 40,
+    "top": 60,
+    "width": 49
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 537,
+   "name": "edE84_1_TP2",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TP2",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edE84_1_TP1MouseDown"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Text": {
+     "type": "STR",
+     "value": "2"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 49
+    }
+   },
+   "sibling_index": 12,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 5,
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 40,
+    "top": 100,
+    "width": 49
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 546,
+   "name": "edE84_1_TP3",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TP3",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edE84_1_TP1MouseDown"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Text": {
+     "type": "STR",
+     "value": "60"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 49
+    }
+   },
+   "sibling_index": 13,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 5,
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 40,
+    "top": 140,
+    "width": 49
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 555,
+   "name": "edE84_1_TP4",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TP4",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edE84_1_TP1MouseDown"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Text": {
+     "type": "STR",
+     "value": "60"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 140
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 49
+    }
+   },
+   "sibling_index": 14,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 5,
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 40,
+    "top": 180,
+    "width": 49
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 564,
+   "name": "edE84_1_TP5",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TP5",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edE84_1_TP1MouseDown"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Text": {
+     "type": "STR",
+     "value": "2"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 180
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 49
+    }
+   },
+   "sibling_index": 15,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 5,
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 40,
+    "top": 220,
+    "width": 49
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 573,
+   "name": "edE84_1_TP6",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TP6",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edE84_1_TP1MouseDown"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Text": {
+     "type": "STR",
+     "value": "2"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 220
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 49
+    }
+   },
+   "sibling_index": 16,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 5,
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 128,
+    "top": 20,
+    "width": 49
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 582,
+   "name": "edE84_1_TA1",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TA1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 128
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edE84_1_TP1MouseDown"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Text": {
+     "type": "STR",
+     "value": "2"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 49
+    }
+   },
+   "sibling_index": 17,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 5,
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 128,
+    "top": 60,
+    "width": 49
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 591,
+   "name": "edE84_1_TA2",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TA2",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 128
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edE84_1_TP1MouseDown"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Text": {
+     "type": "STR",
+     "value": "2"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 49
+    }
+   },
+   "sibling_index": 18,
+   "synthesized": false,
+   "tab_order": 7,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 5,
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 128,
+    "top": 100,
+    "width": 49
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 600,
+   "name": "edE84_1_TA3",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TA3",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 128
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edE84_1_TP1MouseDown"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Text": {
+     "type": "STR",
+     "value": "2"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 49
+    }
+   },
+   "sibling_index": 19,
+   "synthesized": false,
+   "tab_order": 8,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 5,
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 128,
+    "top": 140,
+    "width": 49
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 609,
+   "name": "edE84_1_TD0",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TD0",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 128
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edE84_1_TP1MouseDown"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "Text": {
+     "type": "STR",
+     "value": "2"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 140
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 49
+    }
+   },
+   "sibling_index": 20,
+   "synthesized": false,
+   "tab_order": 9,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 5,
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 128,
+    "top": 180,
+    "width": 49
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 618,
+   "name": "edE84_1_TD1",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TD1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 128
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edE84_1_TP1MouseDown"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Text": {
+     "type": "STR",
+     "value": "2"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 180
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 49
+    }
+   },
+   "sibling_index": 21,
+   "synthesized": false,
+   "tab_order": 10,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 20,
+    "top": 27,
+    "width": 273
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 628,
+   "name": "cbEnableAGVFunction",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.cbEnableAGVFunction",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Enable AMR function"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clRed"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 27
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 273
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 4,
+   "events": {
+    "OnClick": "btInitalLoadClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 32,
+    "top": 232,
+    "width": 100
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 642,
+   "name": "btInitalLoad",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.btInitalLoad",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Inital Load"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btInitalLoadClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 232
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 100
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 4,
+   "events": {
+    "OnClick": "btInitalUnLoadClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 32,
+    "top": 264,
+    "width": 100
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 651,
+   "name": "btInitalUnLoad",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.btInitalUnLoad",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Inital Unload"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btInitalUnLoadClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 264
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 100
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4.Label32",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4.Label42",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4.Label43",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4.edAuto1Count",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4.edAuto2Count",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4.edAuto3Count"
+   ],
+   "class": "TGroupBox",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 94,
+    "left": 144,
+    "top": 216,
+    "width": 257
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 660,
+   "name": "GroupBox4",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Unloader Tray Count"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 94
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 144
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 216
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 257
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 16,
+    "top": 25,
+    "width": 108
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 667,
+   "name": "Label32",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4.Label32",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Auto1 Tray Count :"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 108
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 16,
+    "top": 45,
+    "width": 108
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 674,
+   "name": "Label42",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4.Label42",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Auto2 Tray Count :"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 45
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 108
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 16,
+    "top": 65,
+    "width": 108
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 681,
+   "name": "Label43",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4.Label43",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Auto3 Tray Count :"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 65
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 108
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 5,
+   "events": {
+    "OnMouseDown": "edAuto1CountMouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 136,
+    "top": 21,
+    "width": 93
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 688,
+   "name": "edAuto1Count",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4.edAuto1Count",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edAuto1CountMouseDown"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 93
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 5,
+   "events": {
+    "OnMouseDown": "edAuto1CountMouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 136,
+    "top": 41,
+    "width": 93
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 696,
+   "name": "edAuto2Count",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4.edAuto2Count",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edAuto1CountMouseDown"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 93
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 5,
+   "events": {
+    "OnMouseDown": "edAuto1CountMouseDown"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 136,
+    "top": 61,
+    "width": 93
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 704,
+   "name": "edAuto3Count",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4.edAuto3Count",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edAuto1CountMouseDown"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 61
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 93
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": "alRight",
+   "anchors": null,
+   "child_paths": [
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Label19",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Label20",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.mmE84Log",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1"
+   ],
+   "class": "TGroupBox",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 591,
+    "left": 409,
+    "top": 0,
+    "width": 470
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 713,
+   "name": "GroupBox10",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alRight"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "E84 Handshaking Log"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 591
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 409
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 470
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 57,
+    "top": 314,
+    "width": 143
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 727,
+   "name": "Label19",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Label19",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Load/Empty/Color"
+    },
+    "FocusControl": {
+     "type": "SCALAR",
+     "value": "GroupBox10"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 57
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 314
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 143
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 324,
+    "top": 314,
+    "width": 64
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 741,
+   "name": "Label20",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Label20",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "UnLoad"
+    },
+    "FocusControl": {
+     "type": "SCALAR",
+     "value": "GroupBox10"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 324
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 314
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 64
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 283,
+    "left": 2,
+    "top": 22,
+    "width": 466
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 755,
+   "name": "mmE84Log",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.mmE84Log",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 283
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Lines.Strings": {
+     "type": "LIST",
+     "value": [
+      ""
+     ]
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ReadOnly": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "ScrollBars": {
+     "type": "SCALAR",
+     "value": "ssVertical"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 22
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 466
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label128",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label129",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label130",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label132",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label133",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label134",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label135",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label136",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label140",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label33",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label34",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label35",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label36",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label37",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label38",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label39",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label40",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label41",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed1",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed2",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed3",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed4",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed5",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed6",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed7",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed8",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed10",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed11",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed12",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed13",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed14",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed15",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed16",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed17",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed18",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed9"
+   ],
+   "class": "TPanel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 225,
+    "left": 9,
+    "top": 345,
+    "width": 223
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 773,
+   "name": "Panel18",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 225
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 345
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 223
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 27,
+    "top": 11,
+    "width": 47
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 780,
+   "name": "Label128",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label128",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "VALID"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 27
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 47
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 12,
+    "top": 105,
+    "width": 63
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 793,
+   "name": "Label129",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label129",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TR_REQ"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 105
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 63
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 34,
+    "top": 34,
+    "width": 41
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 806,
+   "name": "Label130",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label130",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "CS_0"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 34
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 34
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 41
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 1,
+    "top": 81,
+    "width": 74
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 819,
+   "name": "Label132",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label132",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "AM_AVBL"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 81
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 74
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 31,
+    "top": 128,
+    "width": 44
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 832,
+   "name": "Label133",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label133",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "BUSY"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 31
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 128
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 44
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 31,
+    "top": 175,
+    "width": 44
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 845,
+   "name": "Label134",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label134",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "CONT"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 31
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 175
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 44
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 18,
+    "top": 151,
+    "width": 57
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 858,
+   "name": "Label135",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label135",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "COMPT"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 18
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 151
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 57
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 51,
+    "top": 198,
+    "width": 24
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 871,
+   "name": "Label136",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label136",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "GO"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 51
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 198
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 24
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 34,
+    "top": 58,
+    "width": 41
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 884,
+   "name": "Label140",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label140",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "CS_1"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 34
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 58
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 41
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 149,
+    "top": 11,
+    "width": 52
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 897,
+   "name": "Label33",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label33",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "L_REQ"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 149
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 52
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 149,
+    "top": 105,
+    "width": 40
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 910,
+   "name": "Label34",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label34",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "VS_0"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 149
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 105
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 40
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 149,
+    "top": 34,
+    "width": 54
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 923,
+   "name": "Label35",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label35",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "U_REQ"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 149
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 34
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 54
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 149,
+    "top": 81,
+    "width": 56
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 936,
+   "name": "Label36",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label36",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "READY"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 149
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 81
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 56
+    }
+   },
+   "sibling_index": 12,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 149,
+    "top": 128,
+    "width": 40
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 949,
+   "name": "Label37",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label37",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "VS_1"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 149
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 128
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 40
+    }
+   },
+   "sibling_index": 13,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 149,
+    "top": 151,
+    "width": 73
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 962,
+   "name": "Label38",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label38",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "HO_AVBL"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 149
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 151
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 73
+    }
+   },
+   "sibling_index": 14,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 149,
+    "top": 175,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 975,
+   "name": "Label39",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label39",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "ES"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 149
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 175
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 15,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 149,
+    "top": 198,
+    "width": 62
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 988,
+   "name": "Label40",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label40",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "POWER"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 149
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 198
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 62
+    }
+   },
+   "sibling_index": 16,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 149,
+    "top": 58,
+    "width": 21
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1001,
+   "name": "Label41",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label41",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "VA"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 149
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 58
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 21
+    }
+   },
+   "sibling_index": 17,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 118,
+    "top": 13,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1014,
+   "name": "ALed1",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 118
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 18,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 118,
+    "top": 37,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1021,
+   "name": "ALed2",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed2",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 118
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 37
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 19,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 118,
+    "top": 60,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1028,
+   "name": "ALed3",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed3",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 118
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 20,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 118,
+    "top": 83,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1035,
+   "name": "ALed4",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed4",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 118
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 83
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 21,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 118,
+    "top": 107,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1042,
+   "name": "ALed5",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed5",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 118
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 107
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 22,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 118,
+    "top": 131,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1049,
+   "name": "ALed6",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed6",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 118
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 131
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 23,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 118,
+    "top": 154,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1056,
+   "name": "ALed7",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed7",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 118
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 154
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 24,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 118,
+    "top": 177,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1063,
+   "name": "ALed8",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed8",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 118
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 177
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 25,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 86,
+    "top": 13,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1070,
+   "name": "ALed10",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed10",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 86
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 26,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 86,
+    "top": 37,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1077,
+   "name": "ALed11",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed11",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 86
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 37
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 27,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 86,
+    "top": 60,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1084,
+   "name": "ALed12",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed12",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 86
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 28,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 86,
+    "top": 83,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1091,
+   "name": "ALed13",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed13",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 86
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 83
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 29,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 86,
+    "top": 107,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1098,
+   "name": "ALed14",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed14",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 86
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 107
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 30,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 86,
+    "top": 131,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1105,
+   "name": "ALed15",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed15",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 86
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 131
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 31,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 86,
+    "top": 178,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1112,
+   "name": "ALed16",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed16",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 86
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 178
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 32,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 86,
+    "top": 153,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1119,
+   "name": "ALed17",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed17",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 86
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 153
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 33,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 86,
+    "top": 201,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1126,
+   "name": "ALed18",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed18",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 86
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 201
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 34,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 118,
+    "top": 201,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1133,
+   "name": "ALed9",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed9",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 118
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 201
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 35,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label1",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label2",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label3",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label4",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label5",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label6",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label7",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label8",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label9",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label10",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label11",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label12",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label13",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label14",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label15",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label16",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label17",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label18",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed19",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed20",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed21",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed22",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed23",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed24",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed25",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed26",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed27",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed28",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed29",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed30",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed31",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed32",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed33",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed34",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed35",
+    "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed36"
+   ],
+   "class": "TPanel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 225,
+    "left": 241,
+    "top": 345,
+    "width": 223
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 1141,
+   "name": "Panel1",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 225
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 241
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 345
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 223
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 27,
+    "top": 11,
+    "width": 47
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1148,
+   "name": "Label1",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "VALID"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 27
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 47
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 12,
+    "top": 105,
+    "width": 63
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1161,
+   "name": "Label2",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TR_REQ"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 105
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 63
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 34,
+    "top": 34,
+    "width": 41
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1174,
+   "name": "Label3",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label3",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "CS_0"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 34
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 34
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 41
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 1,
+    "top": 81,
+    "width": 74
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1187,
+   "name": "Label4",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label4",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "AM_AVBL"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 81
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 74
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 31,
+    "top": 128,
+    "width": 44
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1200,
+   "name": "Label5",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label5",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "BUSY"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 31
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 128
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 44
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 31,
+    "top": 175,
+    "width": 44
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1213,
+   "name": "Label6",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label6",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "CONT"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 31
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 175
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 44
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 18,
+    "top": 151,
+    "width": 57
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1226,
+   "name": "Label7",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label7",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "COMPT"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 18
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 151
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 57
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 51,
+    "top": 198,
+    "width": 24
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1239,
+   "name": "Label8",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label8",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "GO"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 51
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 198
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 24
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 34,
+    "top": 58,
+    "width": 41
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1252,
+   "name": "Label9",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label9",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "CS_1"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 34
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 58
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 41
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 149,
+    "top": 11,
+    "width": 52
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1265,
+   "name": "Label10",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label10",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "L_REQ"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 149
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 52
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 149,
+    "top": 105,
+    "width": 40
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1278,
+   "name": "Label11",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label11",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "VS_0"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 149
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 105
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 40
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 149,
+    "top": 34,
+    "width": 54
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1291,
+   "name": "Label12",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label12",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "U_REQ"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 149
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 34
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 54
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 149,
+    "top": 81,
+    "width": 56
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1304,
+   "name": "Label13",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label13",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "READY"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 149
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 81
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 56
+    }
+   },
+   "sibling_index": 12,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 149,
+    "top": 128,
+    "width": 40
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1317,
+   "name": "Label14",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label14",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "VS_1"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 149
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 128
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 40
+    }
+   },
+   "sibling_index": 13,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 149,
+    "top": 151,
+    "width": 73
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1330,
+   "name": "Label15",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label15",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "HO_AVBL"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 149
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 151
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 73
+    }
+   },
+   "sibling_index": 14,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 149,
+    "top": 175,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1343,
+   "name": "Label16",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label16",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "ES"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 149
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 175
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 15,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 149,
+    "top": 198,
+    "width": 62
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1356,
+   "name": "Label17",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label17",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "POWER"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 149
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 198
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 62
+    }
+   },
+   "sibling_index": 16,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 149,
+    "top": 58,
+    "width": 21
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1369,
+   "name": "Label18",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label18",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "VA"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -17
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 149
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 58
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 21
+    }
+   },
+   "sibling_index": 17,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 118,
+    "top": 13,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1382,
+   "name": "ALed19",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed19",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 118
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 18,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 118,
+    "top": 37,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1389,
+   "name": "ALed20",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed20",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 118
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 37
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 19,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 118,
+    "top": 60,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1396,
+   "name": "ALed21",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed21",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 118
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 20,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 118,
+    "top": 83,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1403,
+   "name": "ALed22",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed22",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 118
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 83
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 21,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 118,
+    "top": 107,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1410,
+   "name": "ALed23",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed23",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 118
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 107
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 22,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 118,
+    "top": 131,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1417,
+   "name": "ALed24",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed24",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 118
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 131
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 23,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 118,
+    "top": 154,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1424,
+   "name": "ALed25",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed25",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 118
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 154
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 24,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 118,
+    "top": 177,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1431,
+   "name": "ALed26",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed26",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 118
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 177
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 25,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 118,
+    "top": 200,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1438,
+   "name": "ALed27",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed27",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 118
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 200
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 26,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 86,
+    "top": 13,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1445,
+   "name": "ALed28",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed28",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 86
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 27,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 86,
+    "top": 36,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1452,
+   "name": "ALed29",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed29",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 86
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 28,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 86,
+    "top": 59,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1459,
+   "name": "ALed30",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed30",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 86
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 59
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 29,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 86,
+    "top": 83,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1466,
+   "name": "ALed31",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed31",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 86
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 83
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 30,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 86,
+    "top": 107,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1473,
+   "name": "ALed32",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed32",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 86
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 107
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 31,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 86,
+    "top": 131,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1480,
+   "name": "ALed33",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed33",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 86
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 131
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 32,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 86,
+    "top": 177,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1487,
+   "name": "ALed34",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed34",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 86
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 177
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 33,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 86,
+    "top": 154,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1494,
+   "name": "ALed35",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed35",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 86
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 154
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 34,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TALed",
+   "depth": 6,
+   "events": {},
+   "geometry": {
+    "height": 14,
+    "left": 86,
+    "top": 201,
+    "width": 22
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 1501,
+   "name": "ALed36",
+   "objkind": "object",
+   "parent_path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed36",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "LEDStyle": {
+     "type": "SCALAR",
+     "value": "LEDHorizontal"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 86
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 201
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 22
+    }
+   },
+   "sibling_index": 35,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTimer",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": null,
+    "left": 376,
+    "top": 40,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 1513,
+   "name": "Timer1",
+   "objkind": "object",
+   "parent_path": "fAGV",
+   "path": "fAGV.Timer1",
+   "properties": {
+    "Left": {
+     "type": "SCALAR",
+     "value": 376
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 40
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTimer",
+   "depth": 1,
+   "events": {
+    "OnTimer": "Timer2Timer"
+   },
+   "geometry": {
+    "height": null,
+    "left": 344,
+    "top": 40,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 1517,
+   "name": "Timer2",
+   "objkind": "object",
+   "parent_path": "fAGV",
+   "path": "fAGV.Timer2",
+   "properties": {
+    "Interval": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 344
+    },
+    "OnTimer": {
+     "type": "SCALAR",
+     "value": "Timer2Timer"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 40
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "Automation/AGV.dfm",
+ "total_nodes_incl_root": 143
+}

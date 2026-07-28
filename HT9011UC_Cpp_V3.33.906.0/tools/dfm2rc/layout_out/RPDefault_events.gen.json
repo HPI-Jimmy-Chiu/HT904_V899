@@ -1,0 +1,58 @@
+{
+ "event_count": 7,
+ "events": [
+  {
+   "control_path": "fRPDefault",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fRPDefault",
+   "vcl_class": "TfRPDefault"
+  },
+  {
+   "control_path": "fRPDefault",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fRPDefault",
+   "vcl_class": "TfRPDefault"
+  },
+  {
+   "control_path": "fRPDefault.gbTestingStopTime.spbDefaulteViewShow",
+   "event_name": "OnClick",
+   "handler_name": "spbDefaulteViewShowClick",
+   "leaf_name": "spbDefaulteViewShow",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fRPDefault.gbTestingStopTime.spbSave",
+   "event_name": "OnClick",
+   "handler_name": "spbSaveClick",
+   "leaf_name": "spbSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fRPDefault.gbTestingStopTime.spbExit",
+   "event_name": "OnClick",
+   "handler_name": "spbExitClick",
+   "leaf_name": "spbExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fRPDefault.gbTestingStopTime.pnl1.spbReplyRPDefault",
+   "event_name": "OnClick",
+   "handler_name": "spbReplyRPDefaultClick",
+   "leaf_name": "spbReplyRPDefault",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fRPDefault.gbTestingStopTime.pnl1.spbSetRPDefault",
+   "event_name": "OnClick",
+   "handler_name": "spbSetRPDefaultClick",
+   "leaf_name": "spbSetRPDefault",
+   "vcl_class": "TSpeedButton"
+  }
+ ],
+ "form_name": "fRPDefault",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "RPDefault.dfm"
+}

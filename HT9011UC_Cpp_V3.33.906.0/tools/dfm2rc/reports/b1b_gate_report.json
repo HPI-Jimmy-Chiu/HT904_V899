@@ -1,0 +1,1229 @@
+{
+  "summary": {
+    "generator": "emit_rc.py W7-B1b v1.0",
+    "files": 133,
+    "total_dialogs": 3637,
+    "total_controls": 22586,
+    "total_problems": 0,
+    "rc_exe_fail_count": 0,
+    "rc_exe_fail_forms": [],
+    "windres_fail_count": 0,
+    "windres_fail_forms": [],
+    "fallback_classes_used_histogram": {},
+    "skip_vendor_hits": [
+      [
+        "cheksocket",
+        "TECameraPicolo"
+      ],
+      [
+        "cheksocket",
+        "TEasyMain"
+      ]
+    ],
+    "skip_no_source_hits": [
+      [
+        "Automation/mainAT",
+        "TAPHeadLabel"
+      ]
+    ]
+  },
+  "per_file": [
+    {
+      "source_dfm": "ARMS/ARMS.dfm",
+      "problems": [],
+      "dialog_count": 13,
+      "control_count": 39,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "ARMS/ARMSLog.dfm",
+      "problems": [],
+      "dialog_count": 3,
+      "control_count": 58,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "ASE_K Socket/DataCompileForm.dfm",
+      "problems": [],
+      "dialog_count": 2,
+      "control_count": 16,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "ASE_K Socket/Socket_ASE_KR.dfm",
+      "problems": [],
+      "dialog_count": 4,
+      "control_count": 26,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "ASE_K Socket/aseTest.dfm",
+      "problems": [],
+      "dialog_count": 3,
+      "control_count": 16,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "ATC/ATCInterface.dfm",
+      "problems": [],
+      "dialog_count": 15,
+      "control_count": 78,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "ATC/ATC_Handler_Side.dfm",
+      "problems": [],
+      "dialog_count": 17,
+      "control_count": 96,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "ATC/FileTransfer.dfm",
+      "problems": [],
+      "dialog_count": 1,
+      "control_count": 0,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "ATC/WinWaySetting.dfm",
+      "problems": [],
+      "dialog_count": 3,
+      "control_count": 21,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "ArmOffsetData.dfm",
+      "problems": [],
+      "dialog_count": 8,
+      "control_count": 36,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "AutoAlignment/AutoAlignment.dfm",
+      "problems": [],
+      "dialog_count": 21,
+      "control_count": 105,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "AutoAlignment/SmartSetup.dfm",
+      "problems": [],
+      "dialog_count": 17,
+      "control_count": 274,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "AutoAlignment/cAutoAlignment.dfm",
+      "problems": [],
+      "dialog_count": 19,
+      "control_count": 269,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "AutoClean/uCleaning.dfm",
+      "problems": [],
+      "dialog_count": 39,
+      "control_count": 244,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "AutoClean/uShowcleanPad_ASEKH.dfm",
+      "problems": [],
+      "dialog_count": 1,
+      "control_count": 2,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "AutoTeach/AutoTeach.dfm",
+      "problems": [],
+      "dialog_count": 19,
+      "control_count": 71,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "AutoTeach/InOutArmZteach.dfm",
+      "problems": [],
+      "dialog_count": 9,
+      "control_count": 83,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "AutoTemperature.dfm",
+      "problems": [],
+      "dialog_count": 12,
+      "control_count": 72,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "Automation/AGV.dfm",
+      "problems": [],
+      "dialog_count": 10,
+      "control_count": 135,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "Automation/AutomationSimulator.dfm",
+      "problems": [],
+      "dialog_count": 3,
+      "control_count": 16,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "Automation/SCK_ART.dfm",
+      "problems": [],
+      "dialog_count": 18,
+      "control_count": 171,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "Automation/SCK_WebService.dfm",
+      "problems": [],
+      "dialog_count": 1,
+      "control_count": 0,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "Automation/automation.dfm",
+      "problems": [],
+      "dialog_count": 6,
+      "control_count": 21,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "Automation/fRENESAS_ServerFrm.dfm",
+      "problems": [],
+      "dialog_count": 10,
+      "control_count": 56,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "Automation/mainAT.dfm",
+      "problems": [],
+      "dialog_count": 11,
+      "control_count": 76,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "Automation/ufrmProdInfo.dfm",
+      "problems": [],
+      "dialog_count": 1,
+      "control_count": 14,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "BarCode/BarCode.dfm",
+      "problems": [],
+      "dialog_count": 76,
+      "control_count": 483,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "BarCode/BarcodeXML.dfm",
+      "problems": [],
+      "dialog_count": 1,
+      "control_count": 0,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "BarcodeReader.dfm",
+      "problems": [],
+      "dialog_count": 2,
+      "control_count": 3,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "BinDisplay/BinDisp.dfm",
+      "problems": [],
+      "dialog_count": 4,
+      "control_count": 19,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "BinDisplay/MyBinDisp.dfm",
+      "problems": [],
+      "dialog_count": 1,
+      "control_count": 0,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "CCDInterface.dfm",
+      "problems": [],
+      "dialog_count": 2,
+      "control_count": 14,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "CCLink/CCINPUT.dfm",
+      "problems": [],
+      "dialog_count": 1,
+      "control_count": 22,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "CCLink/MyCCLinkSensor.dfm",
+      "problems": [],
+      "dialog_count": 35,
+      "control_count": 304,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "ContactForce.dfm",
+      "problems": [],
+      "dialog_count": 37,
+      "control_count": 168,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "DIOInterFaceCFG.dfm",
+      "problems": [],
+      "dialog_count": 11,
+      "control_count": 43,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "DynamicTemp.dfm",
+      "problems": [],
+      "dialog_count": 22,
+      "control_count": 69,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "EJ1N/OmronEJ1N.dfm",
+      "problems": [],
+      "dialog_count": 26,
+      "control_count": 160,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "EJ1N/fDTME08.dfm",
+      "problems": [],
+      "dialog_count": 18,
+      "control_count": 57,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "FixAICCD.dfm",
+      "problems": [],
+      "dialog_count": 9,
+      "control_count": 47,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "GroundMan/GroundMan.dfm",
+      "problems": [],
+      "dialog_count": 8,
+      "control_count": 159,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "HS_Function.dfm",
+      "problems": [],
+      "dialog_count": 6,
+      "control_count": 5,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "HT9045.dfm",
+      "problems": [],
+      "dialog_count": 1,
+      "control_count": 0,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "HandlerSys.dfm",
+      "problems": [],
+      "dialog_count": 213,
+      "control_count": 1791,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "INPUT.dfm",
+      "problems": [],
+      "dialog_count": 1,
+      "control_count": 23,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "InputForm.dfm",
+      "problems": [],
+      "dialog_count": 1,
+      "control_count": 6,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "Interface/TesterTCP.dfm",
+      "problems": [],
+      "dialog_count": 44,
+      "control_count": 186,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "KYECFTP/FTPClient.dfm",
+      "problems": [],
+      "dialog_count": 16,
+      "control_count": 76,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "LoadCCD/LoadCCDMap.dfm",
+      "problems": [],
+      "dialog_count": 2,
+      "control_count": 8,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "LtcSensor.dfm",
+      "problems": [],
+      "dialog_count": 16,
+      "control_count": 95,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "MR/Cassette.dfm",
+      "problems": [],
+      "dialog_count": 13,
+      "control_count": 98,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "MR/RFID.dfm",
+      "problems": [],
+      "dialog_count": 11,
+      "control_count": 98,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "Magazine.dfm",
+      "problems": [],
+      "dialog_count": 8,
+      "control_count": 113,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "Mes/fVATMesFileSys.dfm",
+      "problems": [],
+      "dialog_count": 8,
+      "control_count": 159,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "Monitor/MonitorInterface.dfm",
+      "problems": [],
+      "dialog_count": 8,
+      "control_count": 30,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "Motor/TrayStepMotor.dfm",
+      "problems": [],
+      "dialog_count": 1,
+      "control_count": 0,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "OCR.dfm",
+      "problems": [],
+      "dialog_count": 18,
+      "control_count": 128,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "ObserveMagazine.dfm",
+      "problems": [],
+      "dialog_count": 1,
+      "control_count": 29,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "OmronLaser/LaserSensor.dfm",
+      "problems": [],
+      "dialog_count": 26,
+      "control_count": 88,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "PMAlarm/PMAlarmInterFace.dfm",
+      "problems": [],
+      "dialog_count": 30,
+      "control_count": 130,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "PMAlarm/PMAlarmShowData.dfm",
+      "problems": [],
+      "dialog_count": 1,
+      "control_count": 4,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "PMAlarm/fMain.dfm",
+      "problems": [],
+      "dialog_count": 1,
+      "control_count": 2,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "Password.dfm",
+      "problems": [],
+      "dialog_count": 4,
+      "control_count": 29,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "Precaution.dfm",
+      "problems": [],
+      "dialog_count": 3,
+      "control_count": 20,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "ProductionInfo/ProductionInfo.dfm",
+      "problems": [],
+      "dialog_count": 34,
+      "control_count": 121,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "ProductionInfo/uESDControl.dfm",
+      "problems": [],
+      "dialog_count": 5,
+      "control_count": 20,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "Public/MemoryAlarm.dfm",
+      "problems": [],
+      "dialog_count": 2,
+      "control_count": 1,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "QAMode.dfm",
+      "problems": [],
+      "dialog_count": 7,
+      "control_count": 27,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "RPDefault.dfm",
+      "problems": [],
+      "dialog_count": 3,
+      "control_count": 12,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "RotateKit/aRotateDegreeClass.dfm",
+      "problems": [],
+      "dialog_count": 4,
+      "control_count": 8,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "RotateKit/fRotate.dfm",
+      "problems": [],
+      "dialog_count": 12,
+      "control_count": 36,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "SECSGEM/UsecegemMainFrom.dfm",
+      "problems": [],
+      "dialog_count": 28,
+      "control_count": 222,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "SECSGEM/uHGemEquipment.dfm",
+      "problems": [],
+      "dialog_count": 20,
+      "control_count": 55,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "ShuttleMove.dfm",
+      "problems": [],
+      "dialog_count": 11,
+      "control_count": 52,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "SmartDiagnostic.dfm",
+      "problems": [],
+      "dialog_count": 8,
+      "control_count": 20,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "TempCtrl/MyTempture.dfm",
+      "problems": [],
+      "dialog_count": 1,
+      "control_count": 0,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "TempCtrl/TriMachineDeforst.dfm",
+      "problems": [],
+      "dialog_count": 40,
+      "control_count": 153,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "VacuumUnit/VacuumUnit.dfm",
+      "problems": [],
+      "dialog_count": 16,
+      "control_count": 29,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "adam6024.dfm",
+      "problems": [],
+      "dialog_count": 1,
+      "control_count": 0,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cAirCon.dfm",
+      "problems": [],
+      "dialog_count": 3,
+      "control_count": 41,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cBinAoiSel.dfm",
+      "problems": [],
+      "dialog_count": 3,
+      "control_count": 2,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cBinSel.dfm",
+      "problems": [],
+      "dialog_count": 15,
+      "control_count": 61,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cBuilder.dfm",
+      "problems": [],
+      "dialog_count": 4,
+      "control_count": 18,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cConfiguration.dfm",
+      "problems": [],
+      "dialog_count": 411,
+      "control_count": 2097,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cContact.dfm",
+      "problems": [],
+      "dialog_count": 36,
+      "control_count": 279,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cContactCT.dfm",
+      "problems": [],
+      "dialog_count": 3,
+      "control_count": 15,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cCounterClear.dfm",
+      "problems": [],
+      "dialog_count": 2,
+      "control_count": 12,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cCounterSel.dfm",
+      "problems": [],
+      "dialog_count": 10,
+      "control_count": 36,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cDataHandling.dfm",
+      "problems": [],
+      "dialog_count": 4,
+      "control_count": 10,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cDefrostNote.dfm",
+      "problems": [],
+      "dialog_count": 2,
+      "control_count": 3,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cHotPlate.dfm",
+      "problems": [],
+      "dialog_count": 5,
+      "control_count": 27,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cLd_ULd.dfm",
+      "problems": [],
+      "dialog_count": 9,
+      "control_count": 54,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cObserver.dfm",
+      "problems": [],
+      "dialog_count": 50,
+      "control_count": 328,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cOffSet.dfm",
+      "problems": [],
+      "dialog_count": 38,
+      "control_count": 354,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cSecurity.dfm",
+      "problems": [],
+      "dialog_count": 26,
+      "control_count": 41,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cSetUp.dfm",
+      "problems": [],
+      "dialog_count": 36,
+      "control_count": 194,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cShowBinSelect.dfm",
+      "problems": [],
+      "dialog_count": 75,
+      "control_count": 448,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cShowBinSet.dfm",
+      "problems": [],
+      "dialog_count": 9,
+      "control_count": 117,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cSortCT.dfm",
+      "problems": [],
+      "dialog_count": 12,
+      "control_count": 237,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cSpeed.dfm",
+      "problems": [],
+      "dialog_count": 129,
+      "control_count": 462,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cStartCondition.dfm",
+      "problems": [],
+      "dialog_count": 30,
+      "control_count": 343,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cTemperFrom.dfm",
+      "problems": [],
+      "dialog_count": 42,
+      "control_count": 200,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cTestCategory.dfm",
+      "problems": [],
+      "dialog_count": 1,
+      "control_count": 2,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cTesterIF.dfm",
+      "problems": [],
+      "dialog_count": 51,
+      "control_count": 227,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cTowerLight.dfm",
+      "problems": [],
+      "dialog_count": 4,
+      "control_count": 57,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cTrayAssignment.dfm",
+      "problems": [],
+      "dialog_count": 62,
+      "control_count": 270,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cTrayForm.dfm",
+      "problems": [],
+      "dialog_count": 23,
+      "control_count": 169,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cTrayMapping.dfm",
+      "problems": [],
+      "dialog_count": 55,
+      "control_count": 272,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "cheksocket.dfm",
+      "problems": [],
+      "dialog_count": 5,
+      "control_count": 20,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "database.dfm",
+      "problems": [],
+      "dialog_count": 1,
+      "control_count": 0,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "fAOI.dfm",
+      "problems": [],
+      "dialog_count": 86,
+      "control_count": 299,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "fShowPmSOP.dfm",
+      "problems": [],
+      "dialog_count": 1,
+      "control_count": 1,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "iosetview.dfm",
+      "problems": [],
+      "dialog_count": 313,
+      "control_count": 2720,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "language.dfm",
+      "problems": [],
+      "dialog_count": 1,
+      "control_count": 0,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "login.dfm",
+      "problems": [],
+      "dialog_count": 2,
+      "control_count": 12,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "main.dfm",
+      "problems": [],
+      "dialog_count": 91,
+      "control_count": 758,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "myQwertyKeyBoard.dfm",
+      "problems": [],
+      "dialog_count": 5,
+      "control_count": 87,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "mymessbox.dfm",
+      "problems": [],
+      "dialog_count": 2,
+      "control_count": 11,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "note.dfm",
+      "problems": [],
+      "dialog_count": 78,
+      "control_count": 225,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "rs232.dfm",
+      "problems": [],
+      "dialog_count": 1,
+      "control_count": 0,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "systools.dfm",
+      "problems": [],
+      "dialog_count": 1,
+      "control_count": 0,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "tools.dfm",
+      "problems": [],
+      "dialog_count": 2,
+      "control_count": 73,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "uLotInfo.dfm",
+      "problems": [],
+      "dialog_count": 146,
+      "control_count": 1039,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "uMotorTest.dfm",
+      "problems": [],
+      "dialog_count": 19,
+      "control_count": 200,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "uPadInterface.dfm",
+      "problems": [],
+      "dialog_count": 5,
+      "control_count": 71,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "uRecipeDefault.dfm",
+      "problems": [],
+      "dialog_count": 17,
+      "control_count": 123,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "uShowMessage.dfm",
+      "problems": [],
+      "dialog_count": 1,
+      "control_count": 10,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "uTechShow.dfm",
+      "problems": [],
+      "dialog_count": 1,
+      "control_count": 4,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "uTemp_Set.dfm",
+      "problems": [],
+      "dialog_count": 148,
+      "control_count": 806,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "uTrayEditForm.dfm",
+      "problems": [],
+      "dialog_count": 1,
+      "control_count": 12,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "uYieldMonitoring.dfm",
+      "problems": [],
+      "dialog_count": 100,
+      "control_count": 408,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "uhome.dfm",
+      "problems": [],
+      "dialog_count": 4,
+      "control_count": 13,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    },
+    {
+      "source_dfm": "uteach.dfm",
+      "problems": [],
+      "dialog_count": 312,
+      "control_count": 1901,
+      "fallback_classes_used": [],
+      "rc_exe_returncode": 0,
+      "windres_returncode": 0
+    }
+  ]
+}

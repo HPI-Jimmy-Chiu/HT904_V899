@@ -1,0 +1,562 @@
+{
+ "event_count": 79,
+ "events": [
+  {
+   "control_path": "fMotorTest",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fMotorTest",
+   "vcl_class": "TfMotorTest"
+  },
+  {
+   "control_path": "fMotorTest",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fMotorTest",
+   "vcl_class": "TfMotorTest"
+  },
+  {
+   "control_path": "fMotorTest",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fMotorTest",
+   "vcl_class": "TfMotorTest"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel23.btnHighSpeed",
+   "event_name": "OnClick",
+   "handler_name": "btnHighSpeedClick",
+   "leaf_name": "btnHighSpeed",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel23.btnHomeHigh",
+   "event_name": "OnClick",
+   "handler_name": "btnHomeHighClick",
+   "leaf_name": "btnHomeHigh",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel23.btnHomeLow",
+   "event_name": "OnClick",
+   "handler_name": "btnHomeLowClick",
+   "leaf_name": "btnHomeLow",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel23.btnLowSpeed",
+   "event_name": "OnClick",
+   "handler_name": "btnLowSpeedClick",
+   "leaf_name": "btnLowSpeed",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel23.btnSoftPPos",
+   "event_name": "OnClick",
+   "handler_name": "btnSoftPPosClick",
+   "leaf_name": "btnSoftPPos",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel23.btnSoftNPos",
+   "event_name": "OnClick",
+   "handler_name": "btnSoftNPosClick",
+   "leaf_name": "btnSoftNPos",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel23.btnRange",
+   "event_name": "OnClick",
+   "handler_name": "btnRangeClick",
+   "leaf_name": "btnRange",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel23.btnRate",
+   "event_name": "OnClick",
+   "handler_name": "btnRateClick",
+   "leaf_name": "btnRate",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel23.btnReloadMotorData",
+   "event_name": "OnClick",
+   "handler_name": "btnReloadMotorDataClick",
+   "leaf_name": "btnReloadMotorData",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel23.btnSetRate",
+   "event_name": "OnClick",
+   "handler_name": "btnSetRateClick",
+   "leaf_name": "btnSetRate",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel23.btnSetRange",
+   "event_name": "OnClick",
+   "handler_name": "btnSetRangeClick",
+   "leaf_name": "btnSetRange",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel23.edtMotorRate",
+   "event_name": "OnClick",
+   "handler_name": "edtMotorRateClick",
+   "leaf_name": "edtMotorRate",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel23.edtMotorRange",
+   "event_name": "OnClick",
+   "handler_name": "edtMotorRangeClick",
+   "leaf_name": "edtMotorRange",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel23.btResetMNet",
+   "event_name": "OnClick",
+   "handler_name": "btResetMNetClick",
+   "leaf_name": "btResetMNet",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel20.sbMotorTest_JogN",
+   "event_name": "OnMouseDown",
+   "handler_name": "sbMotorTest_JogNMouseDown",
+   "leaf_name": "sbMotorTest_JogN",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel20.sbMotorTest_JogN",
+   "event_name": "OnMouseUp",
+   "handler_name": "sbMotorTest_JogPMouseUp",
+   "leaf_name": "sbMotorTest_JogN",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel20.sbMotorTest_JogP",
+   "event_name": "OnMouseDown",
+   "handler_name": "sbMotorTest_JogPMouseDown",
+   "leaf_name": "sbMotorTest_JogP",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel20.sbMotorTest_JogP",
+   "event_name": "OnMouseUp",
+   "handler_name": "sbMotorTest_JogPMouseUp",
+   "leaf_name": "sbMotorTest_JogP",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel20.sbMotorTest_MoveN",
+   "event_name": "OnClick",
+   "handler_name": "sbMotorTest_MoveNClick",
+   "leaf_name": "sbMotorTest_MoveN",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel20.sbMotorTest_MoveP",
+   "event_name": "OnClick",
+   "handler_name": "sbMotorTest_MovePClick",
+   "leaf_name": "sbMotorTest_MoveP",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel20.btnLoopMove",
+   "event_name": "OnClick",
+   "handler_name": "btnLoopMoveClick",
+   "leaf_name": "btnLoopMove",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel20.btnSetPosP",
+   "event_name": "OnClick",
+   "handler_name": "btnSetPosPClick",
+   "leaf_name": "btnSetPosP",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel20.btnSetPosN",
+   "event_name": "OnClick",
+   "handler_name": "btnSetPosNClick",
+   "leaf_name": "btnSetPosN",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel20.btnHome",
+   "event_name": "OnClick",
+   "handler_name": "btnHomeClick",
+   "leaf_name": "btnHome",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel20.btnGoSoftP",
+   "event_name": "OnClick",
+   "handler_name": "btnGoSoftPClick",
+   "leaf_name": "btnGoSoftP",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel20.btnGoSoftN",
+   "event_name": "OnClick",
+   "handler_name": "btnGoSoftNClick",
+   "leaf_name": "btnGoSoftN",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel20.btnGo",
+   "event_name": "OnClick",
+   "handler_name": "btnGoClick",
+   "leaf_name": "btnGo",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel20.btnServoOff",
+   "event_name": "OnClick",
+   "handler_name": "btnServoOffClick",
+   "leaf_name": "btnServoOff",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel20.btnMotorPower",
+   "event_name": "OnClick",
+   "handler_name": "btnMotorPowerClick",
+   "leaf_name": "btnMotorPower",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel20.scrlbrMotorSpeed",
+   "event_name": "OnScroll",
+   "handler_name": "scrlbrMotorSpeedScroll",
+   "leaf_name": "scrlbrMotorSpeed",
+   "vcl_class": "TScrollBar"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel20.edtSpeed",
+   "event_name": "OnChange",
+   "handler_name": "edtSpeedChange",
+   "leaf_name": "edtSpeed",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel20.edtSpeed",
+   "event_name": "OnClick",
+   "handler_name": "edtSpeedClick",
+   "leaf_name": "edtSpeed",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel20.pnlStop.btnStop",
+   "event_name": "OnClick",
+   "handler_name": "btnStopClick",
+   "leaf_name": "btnStop",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel4.BitBtn1",
+   "event_name": "OnClick",
+   "handler_name": "BitBtn1Click",
+   "leaf_name": "BitBtn1",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet6.Panel2.Panel4.strngrdMotor",
+   "event_name": "OnSelectCell",
+   "handler_name": "strngrdMotorSelectCell",
+   "leaf_name": "strngrdMotor",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet7.Panel24.SpeedButton44",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton44Click",
+   "leaf_name": "SpeedButton44",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet7.Panel24.SpeedButton45",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton45Click",
+   "leaf_name": "SpeedButton45",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet7.Panel24.SpeedButton46",
+   "event_name": "OnMouseDown",
+   "handler_name": "SpeedButton46MouseDown",
+   "leaf_name": "SpeedButton46",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet7.Panel24.SpeedButton46",
+   "event_name": "OnMouseUp",
+   "handler_name": "SpeedButton46MouseUp",
+   "leaf_name": "SpeedButton46",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet7.Panel24.SpeedButton47",
+   "event_name": "OnMouseDown",
+   "handler_name": "SpeedButton47MouseDown",
+   "leaf_name": "SpeedButton47",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet7.Panel24.SpeedButton47",
+   "event_name": "OnMouseUp",
+   "handler_name": "SpeedButton47MouseUp",
+   "leaf_name": "SpeedButton47",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet7.Panel24.SpeedButton4",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton4Click",
+   "leaf_name": "SpeedButton4",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet7.Panel24.SpeedButton5",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton5Click",
+   "leaf_name": "SpeedButton5",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet7.Panel24.SpeedButton8",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton8Click",
+   "leaf_name": "SpeedButton8",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet7.Panel24.ScrollBar2",
+   "event_name": "OnScroll",
+   "handler_name": "ScrollBar2Scroll",
+   "leaf_name": "ScrollBar2",
+   "vcl_class": "TScrollBar"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet7.Panel24.edtSpeedIndex1",
+   "event_name": "OnClick",
+   "handler_name": "edtSpeedClick",
+   "leaf_name": "edtSpeedIndex1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet7.Panel26.SpeedButton50",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton50Click",
+   "leaf_name": "SpeedButton50",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet7.Panel26.SpeedButton51",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton51Click",
+   "leaf_name": "SpeedButton51",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet7.Panel26.SpeedButton52",
+   "event_name": "OnMouseDown",
+   "handler_name": "SpeedButton52MouseDown",
+   "leaf_name": "SpeedButton52",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet7.Panel26.SpeedButton52",
+   "event_name": "OnMouseUp",
+   "handler_name": "SpeedButton52MouseUp",
+   "leaf_name": "SpeedButton52",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet7.Panel26.SpeedButton53",
+   "event_name": "OnMouseDown",
+   "handler_name": "SpeedButton53MouseDown",
+   "leaf_name": "SpeedButton53",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet7.Panel26.SpeedButton53",
+   "event_name": "OnMouseUp",
+   "handler_name": "SpeedButton53MouseUp",
+   "leaf_name": "SpeedButton53",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet7.Panel26.SpeedButton6",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton6Click",
+   "leaf_name": "SpeedButton6",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet7.Panel26.SpeedButton7",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton7Click",
+   "leaf_name": "SpeedButton7",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet7.Panel26.SpeedButton9",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton9Click",
+   "leaf_name": "SpeedButton9",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet7.Panel26.ScrollBar3",
+   "event_name": "OnScroll",
+   "handler_name": "ScrollBar3Scroll",
+   "leaf_name": "ScrollBar3",
+   "vcl_class": "TScrollBar"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet7.Panel26.edtSpeedIndex2",
+   "event_name": "OnClick",
+   "handler_name": "edtSpeedClick",
+   "leaf_name": "edtSpeedIndex2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet1.edDelayTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDelayTimeMouseDown",
+   "leaf_name": "edDelayTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet1.edPitech",
+   "event_name": "OnMouseDown",
+   "handler_name": "edPitechMouseDown",
+   "leaf_name": "edPitech",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet1.BitBtn2",
+   "event_name": "OnClick",
+   "handler_name": "BitBtn2Click",
+   "leaf_name": "BitBtn2",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet1.BitBtn3",
+   "event_name": "OnClick",
+   "handler_name": "BitBtn3Click",
+   "leaf_name": "BitBtn3",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.TabSheet1.rgAxis",
+   "event_name": "OnClick",
+   "handler_name": "rgAxisClick",
+   "leaf_name": "rgAxis",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.ts1.btnSaveLogLightScaleData",
+   "event_name": "OnClick",
+   "handler_name": "btnSaveLogLightScaleDataClick",
+   "leaf_name": "btnSaveLogLightScaleData",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.tsMotorDatabase.Panel1.sbtReload",
+   "event_name": "OnClick",
+   "handler_name": "sbtReloadClick",
+   "leaf_name": "sbtReload",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.tsMotorDatabase.Panel1.sbUpdate",
+   "event_name": "OnClick",
+   "handler_name": "sbUpdateClick",
+   "leaf_name": "sbUpdate",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.tsMotorDatabase.Panel1.btnAddMotor",
+   "event_name": "OnClick",
+   "handler_name": "btnAddMotorClick",
+   "leaf_name": "btnAddMotor",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.tsMotorDatabase.Panel1.btnDeleteMotor",
+   "event_name": "OnClick",
+   "handler_name": "btnDeleteMotorClick",
+   "leaf_name": "btnDeleteMotor",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.tsMotorDatabase.Panel1.btnModify",
+   "event_name": "OnClick",
+   "handler_name": "btnModifyClick",
+   "leaf_name": "btnModify",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.tsMotorDatabase.strngrdMotorData",
+   "event_name": "OnDblClick",
+   "handler_name": "strngrdMotorDataDblClick",
+   "leaf_name": "strngrdMotorData",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.tsMotorDatabase.strngrdMotorData",
+   "event_name": "OnDragDrop",
+   "handler_name": "strngrdMotorDataDragDrop",
+   "leaf_name": "strngrdMotorData",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.tsMotorDatabase.strngrdMotorData",
+   "event_name": "OnDragOver",
+   "handler_name": "strngrdMotorDataDragOver",
+   "leaf_name": "strngrdMotorData",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.tsMotorDatabase.strngrdMotorData",
+   "event_name": "OnMouseDown",
+   "handler_name": "strngrdMotorDataMouseDown",
+   "leaf_name": "strngrdMotorData",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fMotorTest.PageControl1.tsMotorDatabase.strngrdMotorData",
+   "event_name": "OnSelectCell",
+   "handler_name": "strngrdMotorDataSelectCell",
+   "leaf_name": "strngrdMotorData",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fMotorTest.palExit",
+   "event_name": "OnClick",
+   "handler_name": "palExitClick",
+   "leaf_name": "palExit",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fMotorTest.Timer1",
+   "event_name": "OnTimer",
+   "handler_name": "Timer1Timer",
+   "leaf_name": "Timer1",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fMotorTest.Timer2",
+   "event_name": "OnTimer",
+   "handler_name": "Timer2Timer",
+   "leaf_name": "Timer2",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fMotorTest",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "uMotorTest.dfm"
+}

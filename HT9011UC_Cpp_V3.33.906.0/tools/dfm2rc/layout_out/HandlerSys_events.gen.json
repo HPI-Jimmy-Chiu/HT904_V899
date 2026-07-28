@@ -1,0 +1,331 @@
+{
+ "event_count": 46,
+ "events": [
+  {
+   "control_path": "HandlerSystem",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "HandlerSystem",
+   "vcl_class": "THandlerSystem"
+  },
+  {
+   "control_path": "HandlerSystem",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "HandlerSystem",
+   "vcl_class": "THandlerSystem"
+  },
+  {
+   "control_path": "HandlerSystem",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "HandlerSystem",
+   "vcl_class": "THandlerSystem"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting",
+   "event_name": "OnChange",
+   "handler_name": "pcSettingChange",
+   "leaf_name": "pcSetting",
+   "vcl_class": "TPageControl"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.TabSheet1.pnlHandler3.GroupBox1.BtnEnableAll",
+   "event_name": "OnClick",
+   "handler_name": "BtnEnableAllClick",
+   "leaf_name": "BtnEnableAll",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.TabSheet1.pnlHandler1.GroupBox3.edtCustomerCode",
+   "event_name": "OnClick",
+   "handler_name": "edtCustomerCodeClick",
+   "leaf_name": "edtCustomerCode",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.TabSheet1.pnlHandler1.rgTTLCard",
+   "event_name": "OnClick",
+   "handler_name": "rgTTLCardClick",
+   "leaf_name": "rgTTLCard",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.tsInOutArm.gbRotateKit.rgRotateKit_Type",
+   "event_name": "OnClick",
+   "handler_name": "rgRotateKit_TypeClick",
+   "leaf_name": "rgRotateKit_Type",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.tsInOutArm.pnlInArm1.grpInOutArmYPitch.edtMinYPitch",
+   "event_name": "OnClick",
+   "handler_name": "edtMinYPitchClick",
+   "leaf_name": "edtMinYPitch",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.tsInOutArm.pnlInArm1.grpInOutArmYPitch.edtMaxYPitch",
+   "event_name": "OnClick",
+   "handler_name": "edtMaxYPitchClick",
+   "leaf_name": "edtMaxYPitch",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.tsInOutArm.pnlInArm1.grpInOutArmYPitch.edtMinXPitch",
+   "event_name": "OnClick",
+   "handler_name": "edtMinXPitchClick",
+   "leaf_name": "edtMinXPitch",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.tsInOutArm.pnlInArm1.grpInOutArmYPitch.edtMaxXPitch",
+   "event_name": "OnClick",
+   "handler_name": "edtMaxXPitchClick",
+   "leaf_name": "edtMaxXPitch",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.tsInOutArm.pnlInArm1.grpInOutArmYPitch.edtHPLimit",
+   "event_name": "OnClick",
+   "handler_name": "edtMaxYPitchClick",
+   "leaf_name": "edtHPLimit",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.tsInOutArm.pnlInArm4.grpOutSortArm.edtOutSortXPitchMin",
+   "event_name": "OnClick",
+   "handler_name": "edtMinXPitchClick",
+   "leaf_name": "edtOutSortXPitchMin",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.tsInOutArm.pnlInArm4.grpOutSortArm.edtOutSortXPitchMax",
+   "event_name": "OnClick",
+   "handler_name": "edtMaxXPitchClick",
+   "leaf_name": "edtOutSortXPitchMax",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.TabSheet4.pnlIndex1.gbEPReadSetting.edMaxMpaFB",
+   "event_name": "OnClick",
+   "handler_name": "edMaxMpaFBClick",
+   "leaf_name": "edMaxMpaFB",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.TabSheet4.pnlIndex1.gbEPReadSetting.edtMinMpaFB",
+   "event_name": "OnClick",
+   "handler_name": "edMaxMpaFBClick",
+   "leaf_name": "edtMinMpaFB",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.TabSheet4.pnlIndex1.gbEPSetting.edMaxKpa",
+   "event_name": "OnClick",
+   "handler_name": "edMaxKpaClick",
+   "leaf_name": "edMaxKpa",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.TabSheet4.pnlIndex1.gbEPSetting.edMinMpa",
+   "event_name": "OnClick",
+   "handler_name": "edMinMpaClick",
+   "leaf_name": "edMinMpa",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.TabSheet4.pnlIndex2.GroupBox4.edATCSystemPort",
+   "event_name": "OnClick",
+   "handler_name": "edATCSystemPortClick",
+   "leaf_name": "edATCSystemPort",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.TabSheet4.pnlIndex2.GroupBox4.edATCSystemUseHeat",
+   "event_name": "OnClick",
+   "handler_name": "edATCSystemUseHeatClick",
+   "leaf_name": "edATCSystemUseHeat",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.TabSheet4.pnlIndex5.grpContactHeight.edtUserDefMaxContactHeight",
+   "event_name": "OnClick",
+   "handler_name": "edtUserDefMaxContactHeightClick",
+   "leaf_name": "edtUserDefMaxContactHeight",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.TabSheet4.pnlIndex5.GroupBox8.edHotGunFlow_LineNo",
+   "event_name": "OnClick",
+   "handler_name": "edHotGunFlow_Gun1_ChannelNoClick",
+   "leaf_name": "edHotGunFlow_LineNo",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.TabSheet4.pnlIndex5.GroupBox8.edHotGunFlow_DevNo",
+   "event_name": "OnClick",
+   "handler_name": "edHotGunFlow_DevNoClick",
+   "leaf_name": "edHotGunFlow_DevNo",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.TabSheet4.pnlIndex5.GroupBox8.edHotGunFlow_Gun1_ChannelNo",
+   "event_name": "OnClick",
+   "handler_name": "edHotGunFlow_Gun1_ChannelNoClick",
+   "leaf_name": "edHotGunFlow_Gun1_ChannelNo",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.TabSheet4.pnlIndex5.GroupBox8.edHotGunFlow_Gun2_ChannelNo",
+   "event_name": "OnClick",
+   "handler_name": "edHotGunFlow_Gun1_ChannelNoClick",
+   "leaf_name": "edHotGunFlow_Gun2_ChannelNo",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.TabSheet4.pnlIndex5.grpIndexZSafePos.edtUserDefineIndexZSafePos",
+   "event_name": "OnClick",
+   "handler_name": "edtUserDefineIndexZSafePosClick",
+   "leaf_name": "edtUserDefineIndexZSafePos",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.tsShuttle.pnlSht2.grpCognexCCD.edCognexSystemCCD",
+   "event_name": "OnClick",
+   "handler_name": "edCognexSystemCCDClick",
+   "leaf_name": "edCognexSystemCCD",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.TabSheet3.pnlOther1.GroupBox7.ed24VMonitorPulseCount",
+   "event_name": "OnClick",
+   "handler_name": "ed24VMonitorPulseCountClick",
+   "leaf_name": "ed24VMonitorPulseCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.TabSheet3.Panel1.grpTriTemperature.edtTriTemperature_MaxDegree",
+   "event_name": "OnClick",
+   "handler_name": "edtTriTemperature_MaxDegreeClick",
+   "leaf_name": "edtTriTemperature_MaxDegree",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.TabSheet3.Panel1.grpTriTemperature.edtTriTemperature_MinDegree",
+   "event_name": "OnClick",
+   "handler_name": "edtTriTemperature_MinDegreeClick",
+   "leaf_name": "edtTriTemperature_MinDegree",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.TabSheet3.Panel1.grpTriTemperature.edtTriTempTotalCh",
+   "event_name": "OnClick",
+   "handler_name": "edtTriTempTotalChClick",
+   "leaf_name": "edtTriTempTotalCh",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.TabSheet3.Panel1.grpTriTemperature.grp_SetHeaterTemp.edtOutShtMaxTemp",
+   "event_name": "OnClick",
+   "handler_name": "edtOutShtMaxTempClick",
+   "leaf_name": "edtOutShtMaxTemp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.TabSheet3.Panel1.grpTriTemperature.grp_SetHeaterTemp.edtIndexMaxTemp",
+   "event_name": "OnClick",
+   "handler_name": "edtIndexMaxTempClick",
+   "leaf_name": "edtIndexMaxTemp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.TabSheet3.Panel1.grpTriTemperature.grp_SetHeaterTemp.edtBaseMaxTemp",
+   "event_name": "OnClick",
+   "handler_name": "edtOutShtMaxTempClick",
+   "leaf_name": "edtBaseMaxTemp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.TabSheet3.Panel1.grpTriTemperature.edt_Total_Compressor",
+   "event_name": "OnChange",
+   "handler_name": "edt_Total_CompressorChange",
+   "leaf_name": "edt_Total_Compressor",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.TabSheet5.btnSetATCCom",
+   "event_name": "OnClick",
+   "handler_name": "btnSetATCComClick",
+   "leaf_name": "btnSetATCCom",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.tsCustomerCode.rgCustomerList",
+   "event_name": "OnClick",
+   "handler_name": "rgCustomerListClick",
+   "leaf_name": "rgCustomerList",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.tsIONFan.pnlESD1.grpIONPulseCount.edIONPulseCount",
+   "event_name": "OnClick",
+   "handler_name": "edIONPulseCountClick",
+   "leaf_name": "edIONPulseCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.tsIONFan.pnlESD2.grpGroundMan.edGroundMan_AlarmOhm",
+   "event_name": "OnClick",
+   "handler_name": "edGroundMan_AlarmOhmClick",
+   "leaf_name": "edGroundMan_AlarmOhm",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.pcSetting.tsSearchFunction.edtSearchFunction",
+   "event_name": "OnChange",
+   "handler_name": "edtSearchFunctionChange",
+   "leaf_name": "edtSearchFunction",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.Panel3.SaveBtn",
+   "event_name": "OnClick",
+   "handler_name": "SaveBtnClick",
+   "leaf_name": "SaveBtn",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.Panel3.ExitBtn",
+   "event_name": "OnClick",
+   "handler_name": "ExitBtnClick",
+   "leaf_name": "ExitBtn",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.Panel3.ExitBtn",
+   "event_name": "OnMouseDown",
+   "handler_name": "ExitBtnMouseDown",
+   "leaf_name": "ExitBtn",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.Panel3.LoadBtn",
+   "event_name": "OnClick",
+   "handler_name": "LoadBtnClick",
+   "leaf_name": "LoadBtn",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "HandlerSystem.Panel2.Panel3.edtSearchCode",
+   "event_name": "OnChange",
+   "handler_name": "edtSearchCodeChange",
+   "leaf_name": "edtSearchCode",
+   "vcl_class": "TLabeledEdit"
+  }
+ ],
+ "form_name": "HandlerSystem",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "HandlerSys.dfm"
+}

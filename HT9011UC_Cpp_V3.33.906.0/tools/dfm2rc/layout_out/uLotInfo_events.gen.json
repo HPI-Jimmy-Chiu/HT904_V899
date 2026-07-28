@@ -1,0 +1,1213 @@
+{
+ "event_count": 172,
+ "events": [
+  {
+   "control_path": "fLotInfo",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fLotInfo",
+   "vcl_class": "TfLotInfo"
+  },
+  {
+   "control_path": "fLotInfo",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fLotInfo",
+   "vcl_class": "TfLotInfo"
+  },
+  {
+   "control_path": "fLotInfo",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fLotInfo",
+   "vcl_class": "TfLotInfo"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo",
+   "event_name": "OnChange",
+   "handler_name": "pgLotinfoChange",
+   "leaf_name": "pgLotinfo",
+   "vcl_class": "TPageControl"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsDeviceInfo.Panel30.edDeviceName",
+   "event_name": "OnKeyDown",
+   "handler_name": "edDeviceNameKeyDown",
+   "leaf_name": "edDeviceName",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsDeviceInfo.Panel30.edDeviceName",
+   "event_name": "OnKeyPress",
+   "handler_name": "edDeviceNameKeyPress",
+   "leaf_name": "edDeviceName",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsDeviceInfo.Panel30.edDeviceName",
+   "event_name": "OnKeyUp",
+   "handler_name": "edDeviceNameKeyUp",
+   "leaf_name": "edDeviceName",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsDeviceInfo.Panel30.edDeviceName",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDeviceNameMouseDown",
+   "leaf_name": "edDeviceName",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsDeviceInfo.Panel30.btDownload",
+   "event_name": "OnClick",
+   "handler_name": "btDownloadClick",
+   "leaf_name": "btDownload",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsDeviceInfo.Panel30.btUpload",
+   "event_name": "OnClick",
+   "handler_name": "btUploadClick",
+   "leaf_name": "btUpload",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsDeviceInfo.Panel30.edTemp",
+   "event_name": "OnKeyDown",
+   "handler_name": "edTempKeyDown",
+   "leaf_name": "edTemp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsDeviceInfo.Panel30.edTemp",
+   "event_name": "OnKeyPress",
+   "handler_name": "edTempKeyPress",
+   "leaf_name": "edTemp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsDeviceInfo.Panel30.edTemp",
+   "event_name": "OnKeyUp",
+   "handler_name": "edTempKeyUp",
+   "leaf_name": "edTemp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsDeviceInfo.Panel30.cbbDeviceName",
+   "event_name": "OnChange",
+   "handler_name": "cbbDeviceNameChange",
+   "leaf_name": "cbbDeviceName",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsDeviceInfo.Panel30.coLevelMode",
+   "event_name": "OnChange",
+   "handler_name": "coLevelModeChange",
+   "leaf_name": "coLevelMode",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem",
+   "event_name": "OnMouseDown",
+   "handler_name": "palSecsGemMouseDown",
+   "leaf_name": "palSecsGem",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.labLotID",
+   "event_name": "OnMouseDown",
+   "handler_name": "labLotIDMouseDown",
+   "leaf_name": "labLotID",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.sbSECSLotStart",
+   "event_name": "OnClick",
+   "handler_name": "sbSECSLotStartClick",
+   "leaf_name": "sbSECSLotStart",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.sbSECSLotEnd",
+   "event_name": "OnClick",
+   "handler_name": "sbSECSLotEndClick",
+   "leaf_name": "sbSECSLotEnd",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.spSECSLotCheck",
+   "event_name": "OnClick",
+   "handler_name": "spSECSLotCheckClick",
+   "leaf_name": "spSECSLotCheck",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.btnSaveData",
+   "event_name": "OnClick",
+   "handler_name": "btnSaveDataClick",
+   "leaf_name": "btnSaveData",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.sbUploadPAT",
+   "event_name": "OnClick",
+   "handler_name": "sbUploadPATClick",
+   "leaf_name": "sbUploadPAT",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.btnFTPDownLoadbyDeviceID",
+   "event_name": "OnClick",
+   "handler_name": "btnFTPDownLoadbyDeviceIDClick",
+   "leaf_name": "btnFTPDownLoadbyDeviceID",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.edtSysLotID",
+   "event_name": "OnKeyDown",
+   "handler_name": "edtSysLotIDKeyDown",
+   "leaf_name": "edtSysLotID",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.edtSysLotID",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtSysLotIDKeyPress",
+   "leaf_name": "edtSysLotID",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.edtSysLotID",
+   "event_name": "OnKeyUp",
+   "handler_name": "edtSysLotIDKeyUp",
+   "leaf_name": "edtSysLotID",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.edtSysLotID",
+   "event_name": "OnMouseUp",
+   "handler_name": "edtSysLotIDMouseUp",
+   "leaf_name": "edtSysLotID",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.Panel28.edtSysOperatorID",
+   "event_name": "OnKeyDown",
+   "handler_name": "edtSysOperatorIDKeyDown",
+   "leaf_name": "edtSysOperatorID",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.Panel28.edtSysOperatorID",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtSysOperatorIDKeyPress",
+   "leaf_name": "edtSysOperatorID",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.Panel28.edtSysOperatorID",
+   "event_name": "OnKeyUp",
+   "handler_name": "edtSysOperatorIDKeyUp",
+   "leaf_name": "edtSysOperatorID",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.Panel28.edtSysOperatorID",
+   "event_name": "OnMouseUp",
+   "handler_name": "edtSysOperatorIDMouseUp",
+   "leaf_name": "edtSysOperatorID",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.Panel28.cbRunMode",
+   "event_name": "OnDropDown",
+   "handler_name": "cbRunModeDropDown",
+   "leaf_name": "cbRunMode",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.Panel28.cbRunMode",
+   "event_name": "OnKeyDown",
+   "handler_name": "cbRunModeKeyDown",
+   "leaf_name": "cbRunMode",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.Panel28.cbRunMode",
+   "event_name": "OnKeyPress",
+   "handler_name": "cbRunModeKeyPress",
+   "leaf_name": "cbRunMode",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.Panel28.cbRunMode",
+   "event_name": "OnKeyUp",
+   "handler_name": "cbRunModeKeyUp",
+   "leaf_name": "cbRunMode",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.Panel28.cbTestTimes",
+   "event_name": "OnKeyPress",
+   "handler_name": "cbRunModeKeyPress",
+   "leaf_name": "cbTestTimes",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.edPage",
+   "event_name": "OnKeyPress",
+   "handler_name": "edPageKeyPress",
+   "leaf_name": "edPage",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.edPage",
+   "event_name": "OnMouseDown",
+   "handler_name": "edPageMouseDown",
+   "leaf_name": "edPage",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.pgcLotInfo.tsMurata.pnlXMLOnLine",
+   "event_name": "OnClick",
+   "handler_name": "pnlXMLOnLineClick",
+   "leaf_name": "pnlXMLOnLine",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.pgcLotInfo.tsSigurd_CX.coStation",
+   "event_name": "OnKeyPress",
+   "handler_name": "cbRunModeKeyPress",
+   "leaf_name": "coStation",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.pgcLotInfo.tsSigurd_CX.edStationNum",
+   "event_name": "OnMouseDown",
+   "handler_name": "edStationNumMouseDown",
+   "leaf_name": "edStationNum",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.pgcLotInfo.tsOEE.sb_RunExecutFile",
+   "event_name": "OnClick",
+   "handler_name": "sb_RunExecutFileClick",
+   "leaf_name": "sb_RunExecutFile",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.pgcLotInfo.ts2DSort.grpManualSet2D.Label53",
+   "event_name": "OnMouseDown",
+   "handler_name": "labLotIDMouseDown",
+   "leaf_name": "Label53",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.pgcLotInfo.ts2DSort.grpManualSet2D.Label54",
+   "event_name": "OnMouseDown",
+   "handler_name": "labLotIDMouseDown",
+   "leaf_name": "Label54",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.pgcLotInfo.ts2DSort.grpManualSet2D.btnLoadFile",
+   "event_name": "OnClick",
+   "handler_name": "btnLoadFileClick",
+   "leaf_name": "btnLoadFile",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.pgcLotInfo.tsVTest.grpOEEState.rgOEEState",
+   "event_name": "OnClick",
+   "handler_name": "rgOEEStateClick",
+   "leaf_name": "rgOEEState",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.pgcLotInfo.tsPATSetUp.sbLotReset",
+   "event_name": "OnClick",
+   "handler_name": "sbLotResetClick",
+   "leaf_name": "sbLotReset",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.pgcLotInfo.tsPATSetUp.leRunCardNumber",
+   "event_name": "OnMouseDown",
+   "handler_name": "leRunCardNumberMouseDown",
+   "leaf_name": "leRunCardNumber",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.pgcLotInfo.tsPATSetUp.cbPATMode",
+   "event_name": "OnChange",
+   "handler_name": "cbPATModeChange",
+   "leaf_name": "cbPATMode",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.pgcLotInfo.tsPATSetUp.btnPATInstall",
+   "event_name": "OnClick",
+   "handler_name": "btnPATInstallClick",
+   "leaf_name": "btnPATInstall",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.pgcLotInfo.tsPATSetUp.btnRealTime",
+   "event_name": "OnClick",
+   "handler_name": "btnRealTimeClick",
+   "leaf_name": "btnRealTime",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.pgcLotInfo.tsPATSetUp.btnpatHourly",
+   "event_name": "OnClick",
+   "handler_name": "btnpatHourlyClick",
+   "leaf_name": "btnpatHourly",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.pgcLotInfo.tsPATSetUp.btnpatEndLot",
+   "event_name": "OnClick",
+   "handler_name": "btnpatEndLotClick",
+   "leaf_name": "btnpatEndLot",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.edtCusLotID",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtSysOperatorIDKeyPress",
+   "leaf_name": "edtCusLotID",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.edtCusLotID",
+   "event_name": "OnKeyUp",
+   "handler_name": "edtSysOperatorIDKeyUp",
+   "leaf_name": "edtCusLotID",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.edtCusLotID",
+   "event_name": "OnMouseUp",
+   "handler_name": "edtSysOperatorIDMouseUp",
+   "leaf_name": "edtCusLotID",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.edtCusDevGrp",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtSysOperatorIDKeyPress",
+   "leaf_name": "edtCusDevGrp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.edtCusDevGrp",
+   "event_name": "OnKeyUp",
+   "handler_name": "edtSysOperatorIDKeyUp",
+   "leaf_name": "edtCusDevGrp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.edtCusDevGrp",
+   "event_name": "OnMouseUp",
+   "handler_name": "edtSysOperatorIDMouseUp",
+   "leaf_name": "edtCusDevGrp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.edtDevice",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtSysOperatorIDKeyPress",
+   "leaf_name": "edtDevice",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.edtDevice",
+   "event_name": "OnKeyUp",
+   "handler_name": "edtSysOperatorIDKeyUp",
+   "leaf_name": "edtDevice",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.edtDevice",
+   "event_name": "OnMouseUp",
+   "handler_name": "edtSysOperatorIDMouseUp",
+   "leaf_name": "edtDevice",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.edtCusStep",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtSysOperatorIDKeyPress",
+   "leaf_name": "edtCusStep",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.edtCusStep",
+   "event_name": "OnKeyUp",
+   "handler_name": "edtSysOperatorIDKeyUp",
+   "leaf_name": "edtCusStep",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.edtCusStep",
+   "event_name": "OnMouseUp",
+   "handler_name": "edtSysOperatorIDMouseUp",
+   "leaf_name": "edtCusStep",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.edtBarcodeRecipe",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtSysOperatorIDKeyPress",
+   "leaf_name": "edtBarcodeRecipe",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.edtBarcodeRecipe",
+   "event_name": "OnKeyUp",
+   "handler_name": "edtSysOperatorIDKeyUp",
+   "leaf_name": "edtBarcodeRecipe",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palSecsGem.edtBarcodeRecipe",
+   "event_name": "OnMouseUp",
+   "handler_name": "edtSysOperatorIDMouseUp",
+   "leaf_name": "edtBarcodeRecipe",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palQAMode.btnQAmodeSave",
+   "event_name": "OnClick",
+   "handler_name": "btnQAmodeSaveClick",
+   "leaf_name": "btnQAmodeSave",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.palQAMode.edQAMode",
+   "event_name": "OnMouseDown",
+   "handler_name": "edQAModeMouseDown",
+   "leaf_name": "edQAMode",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsLotID.Panel8.grpRFID.btnGetLoader",
+   "event_name": "OnClick",
+   "handler_name": "btnGetLoaderClick",
+   "leaf_name": "btnGetLoader",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsFTP.Panel25.btnFtpServer",
+   "event_name": "OnClick",
+   "handler_name": "btnFtpServerClick",
+   "leaf_name": "btnFtpServer",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsFTP.Panel25.btnFtpHD",
+   "event_name": "OnClick",
+   "handler_name": "btnFtpServerClick",
+   "leaf_name": "btnFtpHD",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsFTP.Panel25.btnFtpTester",
+   "event_name": "OnClick",
+   "handler_name": "btnFtpServerClick",
+   "leaf_name": "btnFtpTester",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsFTP.Panel25.btSaveSetupFile",
+   "event_name": "OnClick",
+   "handler_name": "btSaveSetupFileClick",
+   "leaf_name": "btSaveSetupFile",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsFTP.Panel25.btnDataFTPSaveToData",
+   "event_name": "OnClick",
+   "handler_name": "btnFtpServerClick",
+   "leaf_name": "btnDataFTPSaveToData",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsFTP.Panel25.BtnPause",
+   "event_name": "OnClick",
+   "handler_name": "BtnPauseClick",
+   "leaf_name": "BtnPause",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsFTP.Panel25.BtnPause",
+   "event_name": "OnMouseDown",
+   "handler_name": "BtnPauseMouseDown",
+   "leaf_name": "BtnPause",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsFTP.Panel25.BtnPause",
+   "event_name": "OnMouseUp",
+   "handler_name": "BtnPauseMouseUp",
+   "leaf_name": "BtnPause",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsRTCFullViewImg.Panel32.btStartCount",
+   "event_name": "OnClick",
+   "handler_name": "btStartCountClick",
+   "leaf_name": "btStartCount",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsRTCFullViewImg.Panel32.cbRTCASTD",
+   "event_name": "OnClick",
+   "handler_name": "cbRTCASTDClick",
+   "leaf_name": "cbRTCASTD",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsATC.pan_ATCInterface.pnlATC_Flag.pl_ATC_Online",
+   "event_name": "OnClick",
+   "handler_name": "pl_ATC_OnlineClick",
+   "leaf_name": "pl_ATC_Online",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsATC.pan_ATCInterface.pnlATC_Flag.btnClearTemperature",
+   "event_name": "OnClick",
+   "handler_name": "btnClearTemperatureClick",
+   "leaf_name": "btnClearTemperature",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsSelection.Panel14.groupbDownloadItem.btnSave",
+   "event_name": "OnClick",
+   "handler_name": "btnSaveClick",
+   "leaf_name": "btnSave",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsBarCode.Panel17.btClearBarcodeCount",
+   "event_name": "OnClick",
+   "handler_name": "btClearBarcodeCountClick",
+   "leaf_name": "btClearBarcodeCount",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsBarCode.Panel17.btClearBarcodeList",
+   "event_name": "OnClick",
+   "handler_name": "btClearBarcodeListClick",
+   "leaf_name": "btClearBarcodeList",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsBarCode.Panel17.btChangeFile",
+   "event_name": "OnClick",
+   "handler_name": "btChangeFileClick",
+   "leaf_name": "btChangeFile",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsBarCode.Panel17.edtLotVerify",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtLotVerifyKeyPress",
+   "leaf_name": "edtLotVerify",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsBarCode.Panel17.edtLotVerify",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtLotVerifyMouseDown",
+   "leaf_name": "edtLotVerify",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsOCRBarCode.Panel9.spOCRSaveLog",
+   "event_name": "OnClick",
+   "handler_name": "spOCRSaveLogClick",
+   "leaf_name": "spOCRSaveLog",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsOCRBarCode.Panel9.spOCRChangeFile",
+   "event_name": "OnClick",
+   "handler_name": "spOCRChangeFileClick",
+   "leaf_name": "spOCRChangeFile",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsOCRBarCode.Panel9.spOCRLogIn",
+   "event_name": "OnClick",
+   "handler_name": "spOCRLogInClick",
+   "leaf_name": "spOCRLogIn",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsOCRBarCode.Panel9.spOCRCleanList",
+   "event_name": "OnClick",
+   "handler_name": "spOCRCleanListClick",
+   "leaf_name": "spOCRCleanList",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASEMARMS.Panel20.sbARMSShow",
+   "event_name": "OnClick",
+   "handler_name": "sbARMSShowClick",
+   "leaf_name": "sbARMSShow",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketAa",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketAa",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketAb",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketAb",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketAc",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketAc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketAd",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketAd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketAe",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketAe",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketAf",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketAf",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketAg",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketAg",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketAh",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketAh",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketBa",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketBa",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketBb",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketBb",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketBc",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketBc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketBd",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketBd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketBe",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketBe",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketBf",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketBf",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketBg",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketBg",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketBh",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketBh",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketCa",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketCa",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketCb",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketCb",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketCc",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketCc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketCd",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketCd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketCe",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketCe",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketCf",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketCf",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketCg",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketCg",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketCh",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketCh",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketDa",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketDa",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketDb",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketDb",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketDc",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketDc",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketDd",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketDd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketDe",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketDe",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketDf",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketDf",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketDg",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketDg",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.ScrollBox1.edtSocketDh",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtSocketDh",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.pnlLotStart_ASECL.btnASECL_LotStart",
+   "event_name": "OnClick",
+   "handler_name": "btnASECL_LotStartClick",
+   "leaf_name": "btnASECL_LotStart",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.pnlLotStart_ASECL.btnASECL_LotEnd",
+   "event_name": "OnClick",
+   "handler_name": "btnASECL_LotEndClick",
+   "leaf_name": "btnASECL_LotEnd",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.pnlLotInfo_ASECL.sb_Main_EvenLevelLogin",
+   "event_name": "OnClick",
+   "handler_name": "sb_Main_EvenLevelLoginClick",
+   "leaf_name": "sb_Main_EvenLevelLogin",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.pnlLotInfo_ASECL.edtASECL_LotID",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtASECL_LotID",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.pnlLotInfo_ASECL.edtASECL_OPID",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtASECL_OPID",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.pnlLotInfo_ASECL.edtASECL_TesterID",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtASECL_TesterID",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.pnlLotInfo_ASECL.edtASECL_LoadBoard",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edtASECL_LoadBoard",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.pnlLotInfo_ASECL.edInsertion",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edInsertion",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.pnlLotInfo_ASECL.edCustomerDevice",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edCustomerDevice",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsASECLEventLog.Panel10.pnlLotInfo_ASECL.edFlowID",
+   "event_name": "OnClick",
+   "handler_name": "edtASECL_LotIDClick",
+   "leaf_name": "edFlowID",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsChamberBoost.btnStopChamberBoost",
+   "event_name": "OnClick",
+   "handler_name": "btnStopChamberBoostClick",
+   "leaf_name": "btnStopChamberBoost",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsChamberBoost.btnStartChamberBoost",
+   "event_name": "OnClick",
+   "handler_name": "btnStartChamberBoostClick",
+   "leaf_name": "btnStartChamberBoost",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsRFMD.btnESCFunction",
+   "event_name": "OnClick",
+   "handler_name": "btnESCFunctionClick",
+   "leaf_name": "btnESCFunction",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsRFMD.btnCancelTestPause",
+   "event_name": "OnClick",
+   "handler_name": "btnCancelTestPauseClick",
+   "leaf_name": "btnCancelTestPause",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.ts_FTPAutomation.sbTest",
+   "event_name": "OnClick",
+   "handler_name": "sbTestClick",
+   "leaf_name": "sbTest",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.ts_FTPAutomation.sbRecipeUpload",
+   "event_name": "OnClick",
+   "handler_name": "sbRecipeUploadClick",
+   "leaf_name": "sbRecipeUpload",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.ts_FTPAutomation.sbRecipeDownload",
+   "event_name": "OnClick",
+   "handler_name": "sbRecipeDownloadClick",
+   "leaf_name": "sbRecipeDownload",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.ts_FTPAutomation.sbFTPAutomationSave",
+   "event_name": "OnClick",
+   "handler_name": "sbFTPAutomationSaveClick",
+   "leaf_name": "sbFTPAutomationSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsYieldMonitior.pgcYieldMonitor.tsSigurd.gbManualCheckList.btnManualCheckList",
+   "event_name": "OnClick",
+   "handler_name": "btnManualCheckListClick",
+   "leaf_name": "btnManualCheckList",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsYieldMonitior.pgcYieldMonitor.tsSigurd.gbManualCheckList.btnManualStandard",
+   "event_name": "OnClick",
+   "handler_name": "btnManualStandardClick",
+   "leaf_name": "btnManualStandard",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsYieldMonitior.pgcYieldMonitor.tsTPW.btnManualI49",
+   "event_name": "OnClick",
+   "handler_name": "btnManualI49Click",
+   "leaf_name": "btnManualI49",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsTesterLog.Panel35.btTesterTCPShow",
+   "event_name": "OnClick",
+   "handler_name": "btTesterTCPShowClick",
+   "leaf_name": "btTesterTCPShow",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsTesterLog.rgUnloader",
+   "event_name": "OnClick",
+   "handler_name": "rgUnloaderClick",
+   "leaf_name": "rgUnloader",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.ts_ATC6_1.pnl_ATC61.palATC61Status",
+   "event_name": "OnClick",
+   "handler_name": "pl_ATC_OnlineClick",
+   "leaf_name": "palATC61Status",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.ts_ATC6_1.pnl_ATC61.pgcATC61.ts1.btnAirStreamOnOff",
+   "event_name": "OnClick",
+   "handler_name": "btnAirStreamOnOffClick",
+   "leaf_name": "btnAirStreamOnOff",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsSetupFileCheck.edDeviceID",
+   "event_name": "OnKeyDown",
+   "handler_name": "edtSysLotIDKeyDown",
+   "leaf_name": "edDeviceID",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsSetupFileCheck.edDeviceID",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtSysLotIDKeyPress",
+   "leaf_name": "edDeviceID",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsSetupFileCheck.edDeviceID",
+   "event_name": "OnKeyUp",
+   "handler_name": "edtSysLotIDKeyUp",
+   "leaf_name": "edDeviceID",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsKYEC_AMR.Panel36_KYEC.labNowTrayCount",
+   "event_name": "OnClick",
+   "handler_name": "labNowTrayCountClick",
+   "leaf_name": "labNowTrayCount",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsKYEC_AMR.btnAMRSupplement",
+   "event_name": "OnClick",
+   "handler_name": "btnAMRSupplementClick",
+   "leaf_name": "btnAMRSupplement",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsKYEC_AMR.btnAMRLDUnLDCheck",
+   "event_name": "OnClick",
+   "handler_name": "btnAMRLDUnLDCheckClick",
+   "leaf_name": "btnAMRLDUnLDCheck",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsKYEC_AMR.btnAMRLDUnLDFinish",
+   "event_name": "OnClick",
+   "handler_name": "btnAMRLDUnLDFinishClick",
+   "leaf_name": "btnAMRLDUnLDFinish",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsKYEC_AMR.btnAMRClearCount",
+   "event_name": "OnClick",
+   "handler_name": "btnAMRClearCountClick",
+   "leaf_name": "btnAMRClearCount",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.pgLotinfo.tsKYEC_AMR.btnAMRSetSECS",
+   "event_name": "OnClick",
+   "handler_name": "btnAMRSetSECSClick",
+   "leaf_name": "btnAMRSetSECS",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLotInfo.tsOtherTool.GroupBox6.cbFirstTrayCheckOnUnloader",
+   "event_name": "OnClick",
+   "handler_name": "cbFirstTrayCheckOnUnloaderClick",
+   "leaf_name": "cbFirstTrayCheckOnUnloader",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fLotInfo.tsOtherTool.GroupBox6.cbFirstTrayCheckOnUnloader",
+   "event_name": "OnMouseDown",
+   "handler_name": "cbFirstTrayCheckOnUnloaderMouseDown",
+   "leaf_name": "cbFirstTrayCheckOnUnloader",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fLotInfo.Timer1",
+   "event_name": "OnTimer",
+   "handler_name": "Timer1Timer",
+   "leaf_name": "Timer1",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fLotInfo.Timer2",
+   "event_name": "OnTimer",
+   "handler_name": "Timer2Timer",
+   "leaf_name": "Timer2",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fLotInfo.Timer3",
+   "event_name": "OnTimer",
+   "handler_name": "Timer3Timer",
+   "leaf_name": "Timer3",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fLotInfo.Timer4",
+   "event_name": "OnTimer",
+   "handler_name": "Timer4Timer",
+   "leaf_name": "Timer4",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fLotInfo.NetATCTime",
+   "event_name": "OnTimer",
+   "handler_name": "NetATCTimeTimer",
+   "leaf_name": "NetATCTime",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fLotInfo.TimerERMS",
+   "event_name": "OnTimer",
+   "handler_name": "TimerERMSTimer",
+   "leaf_name": "TimerERMS",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fLotInfo.LotKeyInTime",
+   "event_name": "OnTimer",
+   "handler_name": "LotKeyInTimeTimer",
+   "leaf_name": "LotKeyInTime",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fLotInfo.tmrChamberBoost",
+   "event_name": "OnTimer",
+   "handler_name": "tmrChamberBoostTimer",
+   "leaf_name": "tmrChamberBoost",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fLotInfo.RFID_Reader",
+   "event_name": "OnReceiveData",
+   "handler_name": "RFID_ReaderReceiveData",
+   "leaf_name": "RFID_Reader",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "fLotInfo.ATCTransferFileTime",
+   "event_name": "OnTimer",
+   "handler_name": "ATCTransferFileTimeTimer",
+   "leaf_name": "ATCTransferFileTime",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fLotInfo",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "uLotInfo.dfm"
+}

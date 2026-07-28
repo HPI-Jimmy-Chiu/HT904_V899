@@ -1,0 +1,58 @@
+{
+ "event_count": 7,
+ "events": [
+  {
+   "control_path": "fMesSystem",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fMesSystem",
+   "vcl_class": "TfMesSystem"
+  },
+  {
+   "control_path": "fMesSystem",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fMesSystem",
+   "vcl_class": "TfMesSystem"
+  },
+  {
+   "control_path": "fMesSystem.PageControl1.tabsInformation.buttonDownloadLotInfor",
+   "event_name": "OnClick",
+   "handler_name": "buttonDownloadLotInforClick",
+   "leaf_name": "buttonDownloadLotInfor",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMesSystem.PageControl1.tabsSet.grpCreateManualEOCAP.btnSendJamCode",
+   "event_name": "OnClick",
+   "handler_name": "btnSendJamCodeClick",
+   "leaf_name": "btnSendJamCode",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMesSystem.PageControl1.tabsSet.grpCreateManualEOCAP.btnQueryEocapStatus",
+   "event_name": "OnClick",
+   "handler_name": "btnQueryEocapStatusClick",
+   "leaf_name": "btnQueryEocapStatus",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMesSystem.PageControl1.tabsSet.buttonSave",
+   "event_name": "OnClick",
+   "handler_name": "buttonSaveClick",
+   "leaf_name": "buttonSave",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fMesSystem.PageControl1.tabsSet.grpGetRcsCheckingResult.btnGetRcsCheckingResult",
+   "event_name": "OnClick",
+   "handler_name": "btnGetRcsCheckingResultClick",
+   "leaf_name": "btnGetRcsCheckingResult",
+   "vcl_class": "TButton"
+  }
+ ],
+ "form_name": "fMesSystem",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "Mes/fVATMesFileSys.dfm"
+}

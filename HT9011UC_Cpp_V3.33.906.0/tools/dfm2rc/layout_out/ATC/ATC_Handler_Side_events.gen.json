@@ -1,0 +1,352 @@
+{
+ "event_count": 49,
+ "events": [
+  {
+   "control_path": "ATC_InterfaceForm",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "ATC_InterfaceForm",
+   "vcl_class": "TATC_InterfaceForm"
+  },
+  {
+   "control_path": "ATC_InterfaceForm",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "ATC_InterfaceForm",
+   "vcl_class": "TATC_InterfaceForm"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.Panel1.A31_RunStopsBtn",
+   "event_name": "OnClick",
+   "handler_name": "A31_RunStopsBtnClick",
+   "leaf_name": "A31_RunStopsBtn",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.Panel1.ATC_ConnectBtn",
+   "event_name": "OnClick",
+   "handler_name": "ATC_ConnectBtnClick",
+   "leaf_name": "ATC_ConnectBtn",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.Panel1.A31_Temp_OFS",
+   "event_name": "OnClick",
+   "handler_name": "A31_Temp_OFSClick",
+   "leaf_name": "A31_Temp_OFS",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.Panel1.A31_Set_Temp_OFS",
+   "event_name": "OnClick",
+   "handler_name": "A31_Set_Temp_OFSClick",
+   "leaf_name": "A31_Set_Temp_OFS",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.Panel1.A31_Temperature",
+   "event_name": "OnClick",
+   "handler_name": "A31_TemperatureClick",
+   "leaf_name": "A31_Temperature",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.Panel1.A31_Set_Temp",
+   "event_name": "OnClick",
+   "handler_name": "A31_Set_TempClick",
+   "leaf_name": "A31_Set_Temp",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.Panel1.ATC_Recipe_File",
+   "event_name": "OnClick",
+   "handler_name": "ATC_Recipe_FileClick",
+   "leaf_name": "ATC_Recipe_File",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.Panel1.ChannelGroupBox.ATC_SetChannelEnabled",
+   "event_name": "OnClick",
+   "handler_name": "ATC_SetChannelEnabledClick",
+   "leaf_name": "ATC_SetChannelEnabled",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.Panel1.A31_Read_Temp",
+   "event_name": "OnClick",
+   "handler_name": "A31_Read_TempClick",
+   "leaf_name": "A31_Read_Temp",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.Panel1.ATC_Set_Single_Temp_OFS",
+   "event_name": "OnClick",
+   "handler_name": "ATC_Set_Single_Temp_OFSClick",
+   "leaf_name": "ATC_Set_Single_Temp_OFS",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.Panel1.ATC_Set_Single_Temp",
+   "event_name": "OnClick",
+   "handler_name": "ATC_Set_Single_TempClick",
+   "leaf_name": "ATC_Set_Single_Temp",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.Panel1.Button2",
+   "event_name": "OnClick",
+   "handler_name": "Button2Click",
+   "leaf_name": "Button2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.Panel1.A31_Single_Temp",
+   "event_name": "OnClick",
+   "handler_name": "A31_TemperatureClick",
+   "leaf_name": "A31_Single_Temp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.Panel1.A31_Single_Temp_OFS",
+   "event_name": "OnClick",
+   "handler_name": "A31_Temp_OFSClick",
+   "leaf_name": "A31_Single_Temp_OFS",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.Panel1.cBox_RecordComm",
+   "event_name": "OnClick",
+   "handler_name": "cBox_RecordCommClick",
+   "leaf_name": "cBox_RecordComm",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.Panel1.btnGetNowRecipeFile",
+   "event_name": "OnClick",
+   "handler_name": "btnGetNowRecipeFileClick",
+   "leaf_name": "btnGetNowRecipeFile",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.Panel1.btnGetRecipeFileList",
+   "event_name": "OnClick",
+   "handler_name": "btnGetRecipeFileListClick",
+   "leaf_name": "btnGetRecipeFileList",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.Panel1.btnGetSelfTestResult",
+   "event_name": "OnClick",
+   "handler_name": "btnGetSelfTestResultClick",
+   "leaf_name": "btnGetSelfTestResult",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.Panel1.btnFFCEnable",
+   "event_name": "OnClick",
+   "handler_name": "btnFFCEnableClick",
+   "leaf_name": "btnFFCEnable",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.Panel1.btnFFCTrigger",
+   "event_name": "OnClick",
+   "handler_name": "btnFFCTriggerClick",
+   "leaf_name": "btnFFCTrigger",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.PageControl.TabSheet31.SecondSensorFunction",
+   "event_name": "OnClick",
+   "handler_name": "SecondSensorFunctionClick",
+   "leaf_name": "SecondSensorFunction",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.PageControl.TabSheet31.SpeedButton1",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton1Click",
+   "leaf_name": "SpeedButton1",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.PageControl.TabSheet31.SpeedButton2",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton2Click",
+   "leaf_name": "SpeedButton2",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.PageControl.TabSheet31.SpeedButton3",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton3Click",
+   "leaf_name": "SpeedButton3",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.PageControl.TabSheet31.SpeedButton4",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton4Click",
+   "leaf_name": "SpeedButton4",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.PageControl.TabSheet31.A31_Set_Temp_Reading_Mode",
+   "event_name": "OnClick",
+   "handler_name": "A31_Set_Temp_Reading_ModeClick",
+   "leaf_name": "A31_Set_Temp_Reading_Mode",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.PageControl.TabSheet31.A31_Handler_Arm",
+   "event_name": "OnClick",
+   "handler_name": "A31_Handler_ArmClick",
+   "leaf_name": "A31_Handler_Arm",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.PageControl.TabSheet31.A31_Test_Start",
+   "event_name": "OnClick",
+   "handler_name": "A31_Test_StartClick",
+   "leaf_name": "A31_Test_Start",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.PageControl.TabSheet31.A31_Initial_Set",
+   "event_name": "OnClick",
+   "handler_name": "A31_Initial_SetClick",
+   "leaf_name": "A31_Initial_Set",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.PageControl.TabSheet31.A31_Chiller_Status",
+   "event_name": "OnClick",
+   "handler_name": "A31_Chiller_StatusClick",
+   "leaf_name": "A31_Chiller_Status",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.PageControl.TabSheet31.A31_GetAlarmMsg",
+   "event_name": "OnClick",
+   "handler_name": "A31_GetAlarmMsgClick",
+   "leaf_name": "A31_GetAlarmMsg",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.PageControl.TabSheet31.Panel11.ed_P",
+   "event_name": "OnClick",
+   "handler_name": "ed_PClick",
+   "leaf_name": "ed_P",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.PageControl.TabSheet31.Panel11.ed_I",
+   "event_name": "OnClick",
+   "handler_name": "ed_PClick",
+   "leaf_name": "ed_I",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.PageControl.TabSheet31.Panel11.ed_D",
+   "event_name": "OnClick",
+   "handler_name": "ed_PClick",
+   "leaf_name": "ed_D",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.PageControl.TabSheet31.Panel11.PID_Set",
+   "event_name": "OnClick",
+   "handler_name": "PID_SetClick",
+   "leaf_name": "PID_Set",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.PageControl.TabSheet70.EMG_UP_DOWN",
+   "event_name": "OnClick",
+   "handler_name": "EMG_UP_DOWNClick",
+   "leaf_name": "EMG_UP_DOWN",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.PageControl.TabSheet70.GroupBox3.BtnSetTSD",
+   "event_name": "OnClick",
+   "handler_name": "BtnSetTSDClick",
+   "leaf_name": "BtnSetTSD",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.ClientSocket",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocketConnect",
+   "leaf_name": "ClientSocket",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.ClientSocket",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocketDisconnect",
+   "leaf_name": "ClientSocket",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.ClientSocket",
+   "event_name": "OnError",
+   "handler_name": "ClientSocketError",
+   "leaf_name": "ClientSocket",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.ClientSocket",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocketRead",
+   "leaf_name": "ClientSocket",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.Timer",
+   "event_name": "OnTimer",
+   "handler_name": "TimerTimer",
+   "leaf_name": "Timer",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.CommFlagTimer",
+   "event_name": "OnTimer",
+   "handler_name": "CommFlagTimerTimer",
+   "leaf_name": "CommFlagTimer",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.FileSocket",
+   "event_name": "OnConnect",
+   "handler_name": "FileSocketConnect",
+   "leaf_name": "FileSocket",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.FileSocket",
+   "event_name": "OnDisconnect",
+   "handler_name": "FileSocketDisconnect",
+   "leaf_name": "FileSocket",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.FileSocket",
+   "event_name": "OnError",
+   "handler_name": "FileSocketError",
+   "leaf_name": "FileSocket",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "ATC_InterfaceForm.FileSocket",
+   "event_name": "OnRead",
+   "handler_name": "FileSocketRead",
+   "leaf_name": "FileSocket",
+   "vcl_class": "TClientSocket"
+  }
+ ],
+ "form_name": "ATC_InterfaceForm",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "ATC/ATC_Handler_Side.dfm"
+}

@@ -1,0 +1,356 @@
+{
+ "control_node_count": 2,
+ "encoding_used": "cp950",
+ "form_class": "TfTestCategory",
+ "form_name": "fTestCategory",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fTestCategory.sgArm2",
+    "fTestCategory.sgArm1"
+   ],
+   "class": "TfTestCategory",
+   "depth": 0,
+   "events": {
+    "OnClose": "FormClose",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow"
+   },
+   "geometry": {
+    "height": null,
+    "left": 657,
+    "top": 299,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "fTestCategory",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "fTestCategory",
+   "properties": {
+    "BorderIcons": {
+     "type": "SET",
+     "value": []
+    },
+    "BorderStyle": {
+     "type": "SCALAR",
+     "value": "bsToolWindow"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Tester Category"
+    },
+    "ClientHeight": {
+     "type": "SCALAR",
+     "value": 160
+    },
+    "ClientWidth": {
+     "type": "SCALAR",
+     "value": 258
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnFace"
+    },
+    "DragKind": {
+     "type": "SCALAR",
+     "value": "dkDock"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 657
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnClose": {
+     "type": "SCALAR",
+     "value": "FormClose"
+    },
+    "OnDestroy": {
+     "type": "SCALAR",
+     "value": "FormDestroy"
+    },
+    "OnShow": {
+     "type": "SCALAR",
+     "value": "FormShow"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 299
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TStringGrid",
+   "depth": 1,
+   "events": {
+    "OnDrawCell": "sgArm1DrawCell"
+   },
+   "geometry": {
+    "height": 80,
+    "left": 0,
+    "top": 0,
+    "width": 258
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 22,
+   "name": "sgArm2",
+   "objkind": "object",
+   "parent_path": "fTestCategory",
+   "path": "fTestCategory.sgArm2",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "ColCount": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "DefaultColWidth": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Enabled": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "OnDrawCell": {
+     "type": "SCALAR",
+     "value": "sgArm1DrawCell"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "RowCount": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "RowHeights": {
+     "type": "LIST",
+     "value": [
+      24,
+      24,
+      24
+     ]
+    },
+    "ScrollBars": {
+     "type": "SCALAR",
+     "value": "ssNone"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabStop": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 258
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": "alBottom",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TStringGrid",
+   "depth": 1,
+   "events": {
+    "OnDrawCell": "sgArm1DrawCell"
+   },
+   "geometry": {
+    "height": 80,
+    "left": 0,
+    "top": 80,
+    "width": 258
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 47,
+   "name": "sgArm1",
+   "objkind": "object",
+   "parent_path": "fTestCategory",
+   "path": "fTestCategory.sgArm1",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alBottom"
+    },
+    "ColCount": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "ColWidths": {
+     "type": "LIST",
+     "value": [
+      80,
+      80,
+      80
+     ]
+    },
+    "DefaultColWidth": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Enabled": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Batang"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "OnDrawCell": {
+     "type": "SCALAR",
+     "value": "sgArm1DrawCell"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "RowCount": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "ScrollBars": {
+     "type": "SCALAR",
+     "value": "ssNone"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "TabStop": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 258
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "cTestCategory.dfm",
+ "total_nodes_incl_root": 3
+}

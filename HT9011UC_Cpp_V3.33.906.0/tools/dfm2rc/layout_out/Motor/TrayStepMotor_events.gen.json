@@ -1,0 +1,30 @@
+{
+ "event_count": 3,
+ "events": [
+  {
+   "control_path": "dmTrayMotor",
+   "event_name": "OnDestroy",
+   "handler_name": "DataModuleDestroy",
+   "leaf_name": "dmTrayMotor",
+   "vcl_class": "TdmTrayMotor"
+  },
+  {
+   "control_path": "dmTrayMotor.tmrTrayStepMotor",
+   "event_name": "OnTimer",
+   "handler_name": "tmrTrayStepMotorTimer",
+   "leaf_name": "tmrTrayStepMotor",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "dmTrayMotor.comTrayStepMotor",
+   "event_name": "OnReceiveData",
+   "handler_name": "comTrayStepMotorReceiveData",
+   "leaf_name": "comTrayStepMotor",
+   "vcl_class": "TComm"
+  }
+ ],
+ "form_name": "dmTrayMotor",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "Motor/TrayStepMotor.dfm"
+}

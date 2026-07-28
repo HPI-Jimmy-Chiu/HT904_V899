@@ -1,0 +1,191 @@
+{
+ "event_count": 26,
+ "events": [
+  {
+   "control_path": "fInput",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fInput",
+   "vcl_class": "TfInput"
+  },
+  {
+   "control_path": "fInput",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fInput",
+   "vcl_class": "TfInput"
+  },
+  {
+   "control_path": "fInput.SpeedButton1",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton1Click",
+   "leaf_name": "SpeedButton1",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fInput.SpeedButton2",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton1Click",
+   "leaf_name": "SpeedButton2",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fInput.SpeedButton3",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton1Click",
+   "leaf_name": "SpeedButton3",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fInput.SpeedButton4",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton4Click",
+   "leaf_name": "SpeedButton4",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fInput.SpeedButton5",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton1Click",
+   "leaf_name": "SpeedButton5",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fInput.SpeedButton6",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton1Click",
+   "leaf_name": "SpeedButton6",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fInput.SpeedButton7",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton1Click",
+   "leaf_name": "SpeedButton7",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fInput.Button1",
+   "event_name": "OnClick",
+   "handler_name": "NumberClick",
+   "leaf_name": "Button1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fInput.Edit1",
+   "event_name": "OnKeyDown",
+   "handler_name": "Edit1KeyDown",
+   "leaf_name": "Edit1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fInput.Edit1",
+   "event_name": "OnKeyPress",
+   "handler_name": "Edit1KeyPress",
+   "leaf_name": "Edit1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fInput.Button2",
+   "event_name": "OnClick",
+   "handler_name": "NumberClick",
+   "leaf_name": "Button2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fInput.Button3",
+   "event_name": "OnClick",
+   "handler_name": "NumberClick",
+   "leaf_name": "Button3",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fInput.Button5",
+   "event_name": "OnClick",
+   "handler_name": "NumberClick",
+   "leaf_name": "Button5",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fInput.Button6",
+   "event_name": "OnClick",
+   "handler_name": "NumberClick",
+   "leaf_name": "Button6",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fInput.Button8",
+   "event_name": "OnClick",
+   "handler_name": "NumberClick",
+   "leaf_name": "Button8",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fInput.Button9",
+   "event_name": "OnClick",
+   "handler_name": "NumberClick",
+   "leaf_name": "Button9",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fInput.Button11",
+   "event_name": "OnClick",
+   "handler_name": "NumberClick",
+   "leaf_name": "Button11",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fInput.Button12",
+   "event_name": "OnClick",
+   "handler_name": "NumberClick",
+   "leaf_name": "Button12",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fInput.Button15",
+   "event_name": "OnClick",
+   "handler_name": "Button15Click",
+   "leaf_name": "Button15",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fInput.Button17",
+   "event_name": "OnClick",
+   "handler_name": "Button17Click",
+   "leaf_name": "Button17",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fInput.Button17",
+   "event_name": "OnKeyPress",
+   "handler_name": "Button17KeyPress",
+   "leaf_name": "Button17",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fInput.Button18",
+   "event_name": "OnClick",
+   "handler_name": "NumberClick",
+   "leaf_name": "Button18",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fInput.Button13",
+   "event_name": "OnClick",
+   "handler_name": "Button13Click",
+   "leaf_name": "Button13",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fInput.Button4",
+   "event_name": "OnClick",
+   "handler_name": "Button4Click",
+   "leaf_name": "Button4",
+   "vcl_class": "TButton"
+  }
+ ],
+ "form_name": "fInput",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "INPUT.dfm"
+}

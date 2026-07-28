@@ -1,0 +1,310 @@
+{
+ "event_count": 43,
+ "events": [
+  {
+   "control_path": "fOCR",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fOCR",
+   "vcl_class": "TfOCR"
+  },
+  {
+   "control_path": "fOCR",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fOCR",
+   "vcl_class": "TfOCR"
+  },
+  {
+   "control_path": "fOCR",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fOCR",
+   "vcl_class": "TfOCR"
+  },
+  {
+   "control_path": "fOCR.PageControl1.TabSheet1.palLeft.btSend",
+   "event_name": "OnClick",
+   "handler_name": "btSendClick",
+   "leaf_name": "btSend",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fOCR.PageControl1.TabSheet1.palLeft.btSend",
+   "event_name": "OnMouseDown",
+   "handler_name": "btSendMouseDown",
+   "leaf_name": "btSend",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fOCR.PageControl1.TabSheet1.palLeft.btSend",
+   "event_name": "OnMouseUp",
+   "handler_name": "btSendMouseUp",
+   "leaf_name": "btSend",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fOCR.PageControl1.TabSheet1.palLeft.Button1",
+   "event_name": "OnClick",
+   "handler_name": "Button1Click",
+   "leaf_name": "Button1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOCR.PageControl1.tsOCR_Cognex.Panel1.spInternetConnect",
+   "event_name": "OnClick",
+   "handler_name": "spInternetConnectClick",
+   "leaf_name": "spInternetConnect",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fOCR.PageControl1.tsOCR_Cognex.Panel1.spInternetDisConnec",
+   "event_name": "OnClick",
+   "handler_name": "spInternetDisConnecClick",
+   "leaf_name": "spInternetDisConnec",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fOCR.PageControl1.tsOCR_Cognex.Panel1.IPPort1",
+   "event_name": "OnMouseDown",
+   "handler_name": "IPPort1MouseDown",
+   "leaf_name": "IPPort1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOCR.PageControl1.tsOCR_Cognex.Panel1.Button2",
+   "event_name": "OnClick",
+   "handler_name": "Button2Click",
+   "leaf_name": "Button2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOCR.PageControl1.tsOCR_Cognex.Panel1.Button3",
+   "event_name": "OnClick",
+   "handler_name": "Button3Click",
+   "leaf_name": "Button3",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOCR.PageControl1.tsOCR_Cognex.Panel1.Button4",
+   "event_name": "OnClick",
+   "handler_name": "Button4Click",
+   "leaf_name": "Button4",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOCR.PageControl1.tsOCR_Cognex.Panel2.SpeedButton2",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton2Click",
+   "leaf_name": "SpeedButton2",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fOCR.PageControl1.tsOCR_Cognex.Panel2.SpeedButton4",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton4Click",
+   "leaf_name": "SpeedButton4",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fOCR.PageControl1.tsOCR_Cognex.Panel2.RadioGroup1",
+   "event_name": "OnClick",
+   "handler_name": "RadioGroup1Click",
+   "leaf_name": "RadioGroup1",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fOCR.PageControl1.tsOCR_Cognex.Panel2.IPPort2",
+   "event_name": "OnMouseDown",
+   "handler_name": "IPPort1MouseDown",
+   "leaf_name": "IPPort2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1.edOCRRetry",
+   "event_name": "OnClick",
+   "handler_name": "edOCRRetryClick",
+   "leaf_name": "edOCRRetry",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1.edOCRSkip",
+   "event_name": "OnClick",
+   "handler_name": "edOCRRetryClick",
+   "leaf_name": "edOCRSkip",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1.edOCRWordCount",
+   "event_name": "OnClick",
+   "handler_name": "edOCRRetryClick",
+   "leaf_name": "edOCRWordCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1.edStartposshift",
+   "event_name": "OnClick",
+   "handler_name": "edStartposshiftClick",
+   "leaf_name": "edStartposshift",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOCR.PageControl1.tsOCR_Cognex_Setting.Panel4.spbSave",
+   "event_name": "OnClick",
+   "handler_name": "spbSaveClick",
+   "leaf_name": "spbSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fOCR.PageControl1.tsOCR_Cognex_Setting.Panel4.sbtExit",
+   "event_name": "OnClick",
+   "handler_name": "sbtExitClick",
+   "leaf_name": "sbtExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2.spbResetCom",
+   "event_name": "OnClick",
+   "handler_name": "spbResetComClick",
+   "leaf_name": "spbResetCom",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2.edSetBlueLight",
+   "event_name": "OnChange",
+   "handler_name": "edSetBlueLightChange",
+   "leaf_name": "edSetBlueLight",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2.edSetBlueLight",
+   "event_name": "OnClick",
+   "handler_name": "edSetBlueLightClick",
+   "leaf_name": "edSetBlueLight",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2.sbSetBlueLight",
+   "event_name": "OnChange",
+   "handler_name": "sbSetBlueLightChange",
+   "leaf_name": "sbSetBlueLight",
+   "vcl_class": "TScrollBar"
+  },
+  {
+   "control_path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2.btSetBlueLight",
+   "event_name": "OnClick",
+   "handler_name": "btSetBlueLightClick",
+   "leaf_name": "btSetBlueLight",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2.edSetRedLight",
+   "event_name": "OnChange",
+   "handler_name": "edSetRedLightChange",
+   "leaf_name": "edSetRedLight",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2.edSetRedLight",
+   "event_name": "OnClick",
+   "handler_name": "edSetBlueLightChange",
+   "leaf_name": "edSetRedLight",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2.sbSetRedLight",
+   "event_name": "OnChange",
+   "handler_name": "sbSetRedLightChange",
+   "leaf_name": "sbSetRedLight",
+   "vcl_class": "TScrollBar"
+  },
+  {
+   "control_path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2.btSetRedLight",
+   "event_name": "OnClick",
+   "handler_name": "btSetRedLightClick",
+   "leaf_name": "btSetRedLight",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fOCR.CommOcr",
+   "event_name": "OnReceiveData",
+   "handler_name": "CommOcrReceiveData",
+   "leaf_name": "CommOcr",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "fOCR.TimerOcrOn",
+   "event_name": "OnTimer",
+   "handler_name": "TimerOcrOnTimer",
+   "leaf_name": "TimerOcrOn",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fOCR.TimerOcrChangeFile",
+   "event_name": "OnTimer",
+   "handler_name": "TimerOcrChangeFileTimer",
+   "leaf_name": "TimerOcrChangeFile",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fOCR.CommOcr_Tester",
+   "event_name": "OnReceiveData",
+   "handler_name": "CommOcr_TesterReceiveData",
+   "leaf_name": "CommOcr_Tester",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "fOCR.Timer1",
+   "event_name": "OnTimer",
+   "handler_name": "Timer1Timer",
+   "leaf_name": "Timer1",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fOCR.ClientSocket1",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket1Connect",
+   "leaf_name": "ClientSocket1",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fOCR.ClientSocket1",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket1Disconnect",
+   "leaf_name": "ClientSocket1",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fOCR.ClientSocket1",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket1Read",
+   "leaf_name": "ClientSocket1",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fOCR.ClientSocket2",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket2Connect",
+   "leaf_name": "ClientSocket2",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fOCR.ClientSocket2",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket2Disconnect",
+   "leaf_name": "ClientSocket2",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fOCR.ClientSocket2",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket2Read",
+   "leaf_name": "ClientSocket2",
+   "vcl_class": "TClientSocket"
+  }
+ ],
+ "form_name": "fOCR",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "OCR.dfm"
+}

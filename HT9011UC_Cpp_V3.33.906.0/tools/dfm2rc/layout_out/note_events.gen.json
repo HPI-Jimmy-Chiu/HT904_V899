@@ -1,0 +1,534 @@
+{
+ "event_count": 75,
+ "events": [
+  {
+   "control_path": "fNote",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fNote",
+   "vcl_class": "TfNote"
+  },
+  {
+   "control_path": "fNote",
+   "event_name": "OnCreate",
+   "handler_name": "FormCreate",
+   "leaf_name": "fNote",
+   "vcl_class": "TfNote"
+  },
+  {
+   "control_path": "fNote",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fNote",
+   "vcl_class": "TfNote"
+  },
+  {
+   "control_path": "fNote",
+   "event_name": "OnShortCut",
+   "handler_name": "FormShortCut",
+   "leaf_name": "fNote",
+   "vcl_class": "TfNote"
+  },
+  {
+   "control_path": "fNote",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fNote",
+   "vcl_class": "TfNote"
+  },
+  {
+   "control_path": "fNote.pnlBottom.pnlPicker.pnlMovie",
+   "event_name": "OnMouseDown",
+   "handler_name": "pnlMovieMouseDown",
+   "leaf_name": "pnlMovie",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fNote.pnlBottom.pnlPicker.TMyTray1",
+   "event_name": "OnMouseDown",
+   "handler_name": "TMyTray1MouseDown",
+   "leaf_name": "TMyTray1",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fNote.pnlBottom.pnlPicker.btPrintSummary",
+   "event_name": "OnClick",
+   "handler_name": "btPrintSummaryClick",
+   "leaf_name": "btPrintSummary",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fNote.pnlBottom.pnlPicker.MediaPlayer1",
+   "event_name": "OnNotify",
+   "handler_name": "MediaPlayer1Notify",
+   "leaf_name": "MediaPlayer1",
+   "vcl_class": "TMediaPlayer"
+  },
+  {
+   "control_path": "fNote.pnlBottom.pnlMsg.reDescription",
+   "event_name": "OnMouseDown",
+   "handler_name": "reDescriptionMouseDown",
+   "leaf_name": "reDescription",
+   "vcl_class": "TRichEdit"
+  },
+  {
+   "control_path": "fNote.pnlNote.pnlButton.BtnOneCycle",
+   "event_name": "OnClick",
+   "handler_name": "BtnSkipClick",
+   "leaf_name": "BtnOneCycle",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fNote.pnlNote.pnlButton.BtnSkip",
+   "event_name": "OnClick",
+   "handler_name": "BtnSkipClick",
+   "leaf_name": "BtnSkip",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fNote.pnlNote.pnlButton.BtnTrayEnd",
+   "event_name": "OnClick",
+   "handler_name": "BtnSkipClick",
+   "leaf_name": "BtnTrayEnd",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fNote.pnlNote.pnlButton.BtnCleanOut",
+   "event_name": "OnClick",
+   "handler_name": "BtnSkipClick",
+   "leaf_name": "BtnCleanOut",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fNote.pnlNote.pnlButton.BtnStart",
+   "event_name": "OnClick",
+   "handler_name": "BtnStartClick",
+   "leaf_name": "BtnStart",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fNote.pnlNote.pnlButton.BtnPause",
+   "event_name": "OnClick",
+   "handler_name": "BtnPauseClick",
+   "leaf_name": "BtnPause",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fNote.pnlNote.pnlButton.BtnReset",
+   "event_name": "OnClick",
+   "handler_name": "BtnResetClick",
+   "leaf_name": "BtnReset",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fNote.pnlNote.pnlButton.BtnHome",
+   "event_name": "OnClick",
+   "handler_name": "BtnSkipClick",
+   "leaf_name": "BtnHome",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fNote.pnlNote.pnlButton.BtnTrain",
+   "event_name": "OnClick",
+   "handler_name": "BtnSkipClick",
+   "leaf_name": "BtnTrain",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fNote.pnlNote.pnlButton.BtnRetry",
+   "event_name": "OnClick",
+   "handler_name": "BtnSkipClick",
+   "leaf_name": "BtnRetry",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fNote.pnlNote.pnlButton.BtnTrayFeed",
+   "event_name": "OnClick",
+   "handler_name": "BtnSkipClick",
+   "leaf_name": "BtnTrayFeed",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fNote.pnlNote.pnlButton.BtnFix",
+   "event_name": "OnClick",
+   "handler_name": "BtnSkipClick",
+   "leaf_name": "BtnFix",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fNote.pnlNote.pnlButton.BtnAlarmReset",
+   "event_name": "OnClick",
+   "handler_name": "BtnAlarmResetClick",
+   "leaf_name": "BtnAlarmReset",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsHandler.PanelMain6",
+   "event_name": "OnMouseDown",
+   "handler_name": "PanelMain6MouseDown",
+   "leaf_name": "PanelMain6",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsHandler.PanelMain6.Panel5.btnMoveToFront",
+   "event_name": "OnClick",
+   "handler_name": "btnMoveToFrontClick",
+   "leaf_name": "btnMoveToFront",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsHandler.PanelMain6.Panel5.btnMoveToRear",
+   "event_name": "OnClick",
+   "handler_name": "btnMoveToRearClick",
+   "leaf_name": "btnMoveToRear",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsHandler.PanelMain6.Panel5.pnlTrayCar.TrayEdit",
+   "event_name": "OnClick",
+   "handler_name": "TrayEditClick",
+   "leaf_name": "TrayEdit",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsHandler.palShtSensorSOP",
+   "event_name": "OnClick",
+   "handler_name": "palShtSensorSOPClick",
+   "leaf_name": "palShtSensorSOP",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsHandler.palShtSensorSOP.labShtSensorSOP",
+   "event_name": "OnClick",
+   "handler_name": "palShtSensorSOPClick",
+   "leaf_name": "labShtSensorSOP",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsHandler.palShtSensorSOP.labShtSensorSOP2",
+   "event_name": "OnClick",
+   "handler_name": "palShtSensorSOPClick",
+   "leaf_name": "labShtSensorSOP2",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsRedAlarm.PanSpecialNote",
+   "event_name": "OnClick",
+   "handler_name": "PanSpecialNoteClick",
+   "leaf_name": "PanSpecialNote",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsRedAlarm.palCheckLoader",
+   "event_name": "OnClick",
+   "handler_name": "PanSpecialNoteClick",
+   "leaf_name": "palCheckLoader",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsRedAlarm.palCheckLoader.lblCheckLoadEN",
+   "event_name": "OnClick",
+   "handler_name": "PanSpecialNoteClick",
+   "leaf_name": "lblCheckLoadEN",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsRedAlarm.palCheckLoader.lblCheckLoadCH",
+   "event_name": "OnClick",
+   "handler_name": "PanSpecialNoteClick",
+   "leaf_name": "lblCheckLoadCH",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsRedAlarm.palCheckSht",
+   "event_name": "OnClick",
+   "handler_name": "PanSpecialNoteClick",
+   "leaf_name": "palCheckSht",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsRedAlarm.palCheckSht.lblCheckShtEn",
+   "event_name": "OnClick",
+   "handler_name": "PanSpecialNoteClick",
+   "leaf_name": "lblCheckShtEn",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsRedAlarm.palCheckSht.lblCheckShtCh",
+   "event_name": "OnClick",
+   "handler_name": "PanSpecialNoteClick",
+   "leaf_name": "lblCheckShtCh",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsRedAlarm.pnlOutArmDrop",
+   "event_name": "OnClick",
+   "handler_name": "PanSpecialNoteClick",
+   "leaf_name": "pnlOutArmDrop",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsRedAlarm.pnlOutArmDrop.lblOutArmDropEN",
+   "event_name": "OnClick",
+   "handler_name": "PanSpecialNoteClick",
+   "leaf_name": "lblOutArmDropEN",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsRedAlarm.pnlOutArmDrop.lblOutArmDropCN",
+   "event_name": "OnClick",
+   "handler_name": "PanSpecialNoteClick",
+   "leaf_name": "lblOutArmDropCN",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsRedAlarm.palWrongPW",
+   "event_name": "OnClick",
+   "handler_name": "PanSpecialNoteClick",
+   "leaf_name": "palWrongPW",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsTrayQty.pnlTrayQty.edQtyLoader",
+   "event_name": "OnClick",
+   "handler_name": "edtLotIDClick",
+   "leaf_name": "edQtyLoader",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsTrayQty.pnlTrayQty.edQtyAuto1",
+   "event_name": "OnClick",
+   "handler_name": "edtLotIDClick",
+   "leaf_name": "edQtyAuto1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsTrayQty.pnlTrayQty.edQtyAuto2",
+   "event_name": "OnClick",
+   "handler_name": "edtLotIDClick",
+   "leaf_name": "edQtyAuto2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsTrayQty.pnlTrayQty.edQtyAuto3",
+   "event_name": "OnClick",
+   "handler_name": "edtLotIDClick",
+   "leaf_name": "edQtyAuto3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsTrayQty.pnlTrayQty.edQtyFix3",
+   "event_name": "OnClick",
+   "handler_name": "edtLotIDClick",
+   "leaf_name": "edQtyFix3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsTrayQty.pnlTrayQty.edQtyFix2",
+   "event_name": "OnClick",
+   "handler_name": "edtLotIDClick",
+   "leaf_name": "edQtyFix2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsTrayQty.pnlTrayQty.edQtyFix1",
+   "event_name": "OnClick",
+   "handler_name": "edtLotIDClick",
+   "leaf_name": "edQtyFix1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsTrayQty.pnlTrayQty.pnlFix4.edQtyFix4",
+   "event_name": "OnClick",
+   "handler_name": "edtLotIDClick",
+   "leaf_name": "edQtyFix4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsTrayQty.pnlTrayQty.pnlFix4.edQtyFix5",
+   "event_name": "OnClick",
+   "handler_name": "edtLotIDClick",
+   "leaf_name": "edQtyFix5",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsTrayQty.pnlTrayQty.pnlFix4.edQtyFix6",
+   "event_name": "OnClick",
+   "handler_name": "edtLotIDClick",
+   "leaf_name": "edQtyFix6",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsTrayQty.pnlTrayQty.pnlFix789.edQtyFix9",
+   "event_name": "OnClick",
+   "handler_name": "edtLotIDClick",
+   "leaf_name": "edQtyFix9",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsTrayQty.pnlTrayQty.pnlFix789.edQtyFix8",
+   "event_name": "OnClick",
+   "handler_name": "edtLotIDClick",
+   "leaf_name": "edQtyFix8",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsTrayQty.pnlTrayQty.pnlFix789.edQtyFix7",
+   "event_name": "OnClick",
+   "handler_name": "edtLotIDClick",
+   "leaf_name": "edQtyFix7",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsTrayQty.pnlTrayQty.pnlFix10.edQtyFix10",
+   "event_name": "OnClick",
+   "handler_name": "edtLotIDClick",
+   "leaf_name": "edQtyFix10",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsTrayQty.pnlTrayQty.pnlFix10.edQtyFix11",
+   "event_name": "OnClick",
+   "handler_name": "edtLotIDClick",
+   "leaf_name": "edQtyFix11",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsTrayQty.pnlTrayQty.pnlFix10.edQtyFix12",
+   "event_name": "OnClick",
+   "handler_name": "edtLotIDClick",
+   "leaf_name": "edQtyFix12",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsRingErr.tvMNet",
+   "event_name": "OnCustomDrawItem",
+   "handler_name": "tvMNetCustomDrawItem",
+   "leaf_name": "tvMNet",
+   "vcl_class": "TTreeView"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsMDBQuery.strngrdMDBQuery",
+   "event_name": "OnDrawCell",
+   "handler_name": "strngrdMDBQueryDrawCell",
+   "leaf_name": "strngrdMDBQuery",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsMDBQuery.btCloseMDBQuery",
+   "event_name": "OnClick",
+   "handler_name": "btCloseMDBQueryClick",
+   "leaf_name": "btCloseMDBQuery",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsCorrectionCount.pnlCorrectionCount.btContinuousTest",
+   "event_name": "OnClick",
+   "handler_name": "btContinuousTestClick",
+   "leaf_name": "btContinuousTest",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsCorrectionCount.pnlCorrectionCount.btCorrectCounting",
+   "event_name": "OnClick",
+   "handler_name": "btCorrectCountingClick",
+   "leaf_name": "btCorrectCounting",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsCorrectionCount.pnlCorrectionCount.btCorrectCounting_Auto",
+   "event_name": "OnClick",
+   "handler_name": "btCorrectCounting_AutoClick",
+   "leaf_name": "btCorrectCounting_Auto",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsCorrectionCount.pnlCorrectionCount.btCorrectCounting_StopART",
+   "event_name": "OnClick",
+   "handler_name": "btCorrectCounting_StopARTClick",
+   "leaf_name": "btCorrectCounting_StopART",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsLotInfo.pnlLotInfo.edtLotCount",
+   "event_name": "OnClick",
+   "handler_name": "edtLotCountClick",
+   "leaf_name": "edtLotCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsLotInfo.pnlLotInfo.edtLotID",
+   "event_name": "OnClick",
+   "handler_name": "edtLotIDClick",
+   "leaf_name": "edtLotID",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsLotInfo.pnlLotInfo.edEQCQty",
+   "event_name": "OnClick",
+   "handler_name": "edtLotIDClick",
+   "leaf_name": "edEQCQty",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.ts2DID.t2DCode",
+   "event_name": "OnMouseDown",
+   "handler_name": "TMyTray1MouseDown",
+   "leaf_name": "t2DCode",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsBigDescription.reBigDescription",
+   "event_name": "OnMouseDown",
+   "handler_name": "reDescriptionMouseDown",
+   "leaf_name": "reBigDescription",
+   "vcl_class": "TRichEdit"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsFixBundleID.Panel1.edBundleID",
+   "event_name": "OnChange",
+   "handler_name": "edBundleIDChange",
+   "leaf_name": "edBundleID",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fNote.pnlNote.pgcNote.tsFixBundleID.Panel1.edBundleID",
+   "event_name": "OnKeyPress",
+   "handler_name": "edBundleIDKeyPress",
+   "leaf_name": "edBundleID",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fNote.Timer1",
+   "event_name": "OnTimer",
+   "handler_name": "Timer1Timer",
+   "leaf_name": "Timer1",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fNote.TimerFTP",
+   "event_name": "OnTimer",
+   "handler_name": "TimerFTPTimer",
+   "leaf_name": "TimerFTP",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fNote.tmrKeyIn",
+   "event_name": "OnTimer",
+   "handler_name": "tmrKeyInTimer",
+   "leaf_name": "tmrKeyIn",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fNote.timerKeyence",
+   "event_name": "OnTimer",
+   "handler_name": "timerKeyenceTimer",
+   "leaf_name": "timerKeyence",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fNote",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "note.dfm"
+}

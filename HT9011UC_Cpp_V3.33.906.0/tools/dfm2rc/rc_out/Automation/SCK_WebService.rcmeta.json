@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "generator": "emit_rc.py W7-B1b v1.0",
+  "source_dfm": "Automation/SCK_WebService.dfm",
+  "formstem": "SCK_WEBSERVICE",
+  "dialog_count": 1,
+  "control_count": 0,
+  "fallback_classes_used": [],
+  "warnings": [],
+  "dialogs": [
+    {
+      "idd_symbol": "IDD_SCK_WEBSERVICE",
+      "idd_value": 8192,
+      "is_root": true,
+      "owner_path": "fWebService",
+      "owner_class": "TfWebService",
+      "controls": []
+    }
+  ]
+}

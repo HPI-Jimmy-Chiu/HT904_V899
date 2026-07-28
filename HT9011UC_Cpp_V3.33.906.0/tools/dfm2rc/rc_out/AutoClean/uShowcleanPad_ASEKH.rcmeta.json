@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "generator": "emit_rc.py W7-B1b v1.0",
+  "source_dfm": "AutoClean/uShowcleanPad_ASEKH.dfm",
+  "formstem": "USHOWCLEANPAD_ASEKH",
+  "dialog_count": 1,
+  "control_count": 2,
+  "fallback_classes_used": [],
+  "warnings": [],
+  "dialogs": [
+    {
+      "idd_symbol": "IDD_USHOWCLEANPAD_ASEKH",
+      "idd_value": 8192,
+      "is_root": true,
+      "owner_path": "CleanPadFrom",
+      "owner_class": "TCleanPadFrom",
+      "controls": [
+        {
+          "symbol": "IDC_USHOWCLEANPAD_ASEKH_IMAGE1",
+          "value": 1024,
+          "win32_class": "Static",
+          "caption": null,
+          "synthesized": false,
+          "rule": null,
+          "source_path": "CleanPadFrom.Image1",
+          "fallback_class": false,
+          "x": 0,
+          "y": 0,
+          "cx": 556,
+          "cy": 361
+        },
+        {
+          "symbol": "IDC_USHOWCLEANPAD_ASEKH_SPEEDBUTTON1",
+          "value": 1025,
+          "win32_class": "Button",
+          "caption": "Exit",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "CleanPadFrom.SpeedButton1",
+          "fallback_class": false,
+          "x": 200,
+          "y": 364,
+          "cx": 161,
+          "cy": 38
+        }
+      ]
+    }
+  ]
+}

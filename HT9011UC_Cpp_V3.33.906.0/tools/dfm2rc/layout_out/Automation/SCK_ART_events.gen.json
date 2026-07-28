@@ -1,0 +1,254 @@
+{
+ "event_count": 35,
+ "events": [
+  {
+   "control_path": "fSCKART",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fSCKART",
+   "vcl_class": "TfSCKART"
+  },
+  {
+   "control_path": "fSCKART",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fSCKART",
+   "vcl_class": "TfSCKART"
+  },
+  {
+   "control_path": "fSCKART",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fSCKART",
+   "vcl_class": "TfSCKART"
+  },
+  {
+   "control_path": "fSCKART.palARTLeft.palARTCount.gbCountInfo.btnApplyQty",
+   "event_name": "OnClick",
+   "handler_name": "btnApplyQtyClick",
+   "leaf_name": "btnApplyQty",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSCKART.palARTLeft.palARTCount.gbCountInfo.palInputCount",
+   "event_name": "OnMouseDown",
+   "handler_name": "palInputCountMouseDown",
+   "leaf_name": "palInputCount",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSCKART.palARTLeft.palARTCount.gbCountInfo.edtInputCount",
+   "event_name": "OnClick",
+   "handler_name": "edLotCountClick",
+   "leaf_name": "edtInputCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSCKART.palARTLeft.palARTCount.gbCountInfo.edtMRejectCnt",
+   "event_name": "OnClick",
+   "handler_name": "edtMRejectCntClick",
+   "leaf_name": "edtMRejectCnt",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSCKART.palARTLeft.palARTCount.gbCountInfo.palManualRejectCnt",
+   "event_name": "OnMouseDown",
+   "handler_name": "palInputCountMouseDown",
+   "leaf_name": "palManualRejectCnt",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSCKART.palARTLeft.palARTCount.gbLotStatus.btnApplyLotInfo",
+   "event_name": "OnClick",
+   "handler_name": "btnApplyLotInfoClick",
+   "leaf_name": "btnApplyLotInfo",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSCKART.palARTLeft.palARTCount.gbLotStatus.edlRTTryCnt",
+   "event_name": "OnClick",
+   "handler_name": "edlRTTryCntClick",
+   "leaf_name": "edlRTTryCnt",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSCKART.palARTLeft.palARTCount.gbLotStatus.edARTPassRate",
+   "event_name": "OnClick",
+   "handler_name": "edARTPassRateClick",
+   "leaf_name": "edARTPassRate",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSCKART.palARTLeft.palARTCount.gbLotStatus.edLotCount",
+   "event_name": "OnClick",
+   "handler_name": "edLotCountClick",
+   "leaf_name": "edLotCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSCKART.palARTLeft.palARTCount.gbUserFix.btnApplyCount",
+   "event_name": "OnClick",
+   "handler_name": "btnApplyCountClick",
+   "leaf_name": "btnApplyCount",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSCKART.palARTLeft.palARTCount.gbUserFix.btnExit1",
+   "event_name": "OnClick",
+   "handler_name": "btnExitClick",
+   "leaf_name": "btnExit1",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSCKART.palARTLeft.palARTCount.gbUserFix.palInRemoveCnt",
+   "event_name": "OnClick",
+   "handler_name": "palInputJamCntClick",
+   "leaf_name": "palInRemoveCnt",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSCKART.palARTLeft.palARTCount.gbUserFix.palInputJamCnt",
+   "event_name": "OnClick",
+   "handler_name": "palInputJamCntClick",
+   "leaf_name": "palInputJamCnt",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSCKART.palARTLeft.palARTCount.gbUserFix.palOutRemoveCnt",
+   "event_name": "OnClick",
+   "handler_name": "palInputJamCntClick",
+   "leaf_name": "palOutRemoveCnt",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSCKART.palARTLeft.palARTCount.gbUserFix.palOutputJamCnt",
+   "event_name": "OnClick",
+   "handler_name": "palInputJamCntClick",
+   "leaf_name": "palOutputJamCnt",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSCKART.palARTLeft.palARTCount.gbUserFix.edTemp",
+   "event_name": "OnClick",
+   "handler_name": "edtMRejectCntClick",
+   "leaf_name": "edTemp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSCKART.palARTLeft.pgARTFlow.ts93KFlow.grp93KARTFlow.ledShowFTCTData",
+   "event_name": "OnClick",
+   "handler_name": "ledShowFTCTDataClick",
+   "leaf_name": "ledShowFTCTData",
+   "vcl_class": "TALed"
+  },
+  {
+   "control_path": "fSCKART.palARTSetting.btnApplySetting",
+   "event_name": "OnClick",
+   "handler_name": "btnApplySettingClick",
+   "leaf_name": "btnApplySetting",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSCKART.palARTSetting.btnExit",
+   "event_name": "OnClick",
+   "handler_name": "btnExitClick",
+   "leaf_name": "btnExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSCKART.palARTSetting.gbARTMode.edSPBinYield",
+   "event_name": "OnClick",
+   "handler_name": "edSPBinYieldClick",
+   "leaf_name": "edSPBinYield",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSCKART.palARTSetting.gbARTMode.edtLowYieldForFT",
+   "event_name": "OnClick",
+   "handler_name": "edSPBinYieldClick",
+   "leaf_name": "edtLowYieldForFT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSCKART.palARTSetting.gbSocketOff.edBestYield",
+   "event_name": "OnClick",
+   "handler_name": "edSPBinYieldClick",
+   "leaf_name": "edBestYield",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSCKART.palARTSetting.gbSocketOff.edtAlmAutoCloseSite",
+   "event_name": "OnClick",
+   "handler_name": "edtAlmAutoCloseSiteClick",
+   "leaf_name": "edtAlmAutoCloseSite",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSCKART.palARTSetting.btnDeleteLotInfo",
+   "event_name": "OnClick",
+   "handler_name": "btnDeleteLotInfoClick",
+   "leaf_name": "btnDeleteLotInfo",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fSCKART.palARTSetting.grpARTSetting.edtVersion",
+   "event_name": "OnMouseUp",
+   "handler_name": "edtVersionMouseUp",
+   "leaf_name": "edtVersion",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSCKART.palARTSetting.grpARTSetting.btnFTCTReset",
+   "event_name": "OnClick",
+   "handler_name": "btnFTCTResetClick",
+   "leaf_name": "btnFTCTReset",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fSCKART.palARTSetting.gbAutoSkip.edARTAutoSkip",
+   "event_name": "OnClick",
+   "handler_name": "edARTAutoSkipClick",
+   "leaf_name": "edARTAutoSkip",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSCKART.palARTSetting.gbDevice.edtLdCntLimP",
+   "event_name": "OnClick",
+   "handler_name": "edtLdCntLimNClick",
+   "leaf_name": "edtLdCntLimP",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSCKART.palARTSetting.gbDevice.edtLdCntLimN",
+   "event_name": "OnClick",
+   "handler_name": "edtLdCntLimNClick",
+   "leaf_name": "edtLdCntLimN",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSCKART.TimerSCKARTFlow",
+   "event_name": "OnTimer",
+   "handler_name": "TimerSCKARTFlowTimer",
+   "leaf_name": "TimerSCKARTFlow",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fSCKART.srvrscktTSV",
+   "event_name": "OnClientRead",
+   "handler_name": "srvrscktTSVClientRead",
+   "leaf_name": "srvrscktTSV",
+   "vcl_class": "TServerSocket"
+  },
+  {
+   "control_path": "fSCKART.TimerTSV",
+   "event_name": "OnTimer",
+   "handler_name": "TimerTSVTimer",
+   "leaf_name": "TimerTSV",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fSCKART",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "Automation/SCK_ART.dfm"
+}

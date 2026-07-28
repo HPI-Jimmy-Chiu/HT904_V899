@@ -1,0 +1,100 @@
+{
+ "event_count": 13,
+ "events": [
+  {
+   "control_path": "fSecurity",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fSecurity",
+   "vcl_class": "TfSecurity"
+  },
+  {
+   "control_path": "fSecurity",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fSecurity",
+   "vcl_class": "TfSecurity"
+  },
+  {
+   "control_path": "fSecurity",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fSecurity",
+   "vcl_class": "TfSecurity"
+  },
+  {
+   "control_path": "fSecurity.Panel1.sbSupervisor",
+   "event_name": "OnClick",
+   "handler_name": "sbSupervisorClick",
+   "leaf_name": "sbSupervisor",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSecurity.Panel1.sbEngineer",
+   "event_name": "OnClick",
+   "handler_name": "sbEngineerClick",
+   "leaf_name": "sbEngineer",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSecurity.Panel1.btnHonPrec",
+   "event_name": "OnClick",
+   "handler_name": "btnHonPrecClick",
+   "leaf_name": "btnHonPrec",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSecurity.Panel1.btnOperator",
+   "event_name": "OnClick",
+   "handler_name": "btnOperatorClick",
+   "leaf_name": "btnOperator",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSecurity.SecurityExit",
+   "event_name": "OnClick",
+   "handler_name": "SecurityExitClick",
+   "leaf_name": "SecurityExit",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fSecurity.PageControl1.tsJamCode.spbExport",
+   "event_name": "OnClick",
+   "handler_name": "spbExportClick",
+   "leaf_name": "spbExport",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSecurity.PageControl1.tsJamCode.spbImport",
+   "event_name": "OnClick",
+   "handler_name": "spbImportClick",
+   "leaf_name": "spbImport",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSecurity.PageControl1.tsJamCode.cbJamArea",
+   "event_name": "OnChange",
+   "handler_name": "cbJamAreaChange",
+   "leaf_name": "cbJamArea",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSecurity.PageControl1.tsJamCode.cbJamCode",
+   "event_name": "OnChange",
+   "handler_name": "cbJamCodeChange",
+   "leaf_name": "cbJamCode",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSecurity.PageControl1.tsJamCode.cbJamLang",
+   "event_name": "OnChange",
+   "handler_name": "cbJamLangChange",
+   "leaf_name": "cbJamLang",
+   "vcl_class": "TComboBox"
+  }
+ ],
+ "form_name": "fSecurity",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "cSecurity.dfm"
+}

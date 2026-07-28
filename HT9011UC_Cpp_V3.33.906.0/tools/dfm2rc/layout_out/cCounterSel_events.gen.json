@@ -1,0 +1,30 @@
+{
+ "event_count": 3,
+ "events": [
+  {
+   "control_path": "fCounterSel",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fCounterSel",
+   "vcl_class": "TfCounterSel"
+  },
+  {
+   "control_path": "fCounterSel",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fCounterSel",
+   "vcl_class": "TfCounterSel"
+  },
+  {
+   "control_path": "fCounterSel.spbExit",
+   "event_name": "OnClick",
+   "handler_name": "spbExitClick",
+   "leaf_name": "spbExit",
+   "vcl_class": "TSpeedButton"
+  }
+ ],
+ "form_name": "fCounterSel",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "cCounterSel.dfm"
+}

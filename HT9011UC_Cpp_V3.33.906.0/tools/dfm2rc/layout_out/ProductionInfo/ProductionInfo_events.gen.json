@@ -1,0 +1,359 @@
+{
+ "event_count": 50,
+ "events": [
+  {
+   "control_path": "fProductionInfo",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fProductionInfo",
+   "vcl_class": "TfProductionInfo"
+  },
+  {
+   "control_path": "fProductionInfo",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fProductionInfo",
+   "vcl_class": "TfProductionInfo"
+  },
+  {
+   "control_path": "fProductionInfo",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fProductionInfo",
+   "vcl_class": "TfProductionInfo"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1",
+   "event_name": "OnChange",
+   "handler_name": "PageControl1Change",
+   "leaf_name": "PageControl1",
+   "vcl_class": "TPageControl"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsInformation.Panel1.cb_PIChoiseMO",
+   "event_name": "OnKeyUp",
+   "handler_name": "cb_PIChoiseMOKeyUp",
+   "leaf_name": "cb_PIChoiseMO",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsInformation.Panel1.bt_PIRefreshMOList",
+   "event_name": "OnClick",
+   "handler_name": "bt_PIRefreshMOListClick",
+   "leaf_name": "bt_PIRefreshMOList",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsInformation.Panel2.bt_PICloseForm",
+   "event_name": "OnClick",
+   "handler_name": "bt_PICloseFormClick",
+   "leaf_name": "bt_PICloseForm",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsHaltStatusForm.sbScreenkeyboard_HALT",
+   "event_name": "OnClick",
+   "handler_name": "sbScreenkeyboard_HALTClick",
+   "leaf_name": "sbScreenkeyboard_HALT",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsHaltStatusForm.SpeedButton_Halt00",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Halt00Click",
+   "leaf_name": "SpeedButton_Halt00",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsHaltStatusForm.SpeedButton_Halt01",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Halt00Click",
+   "leaf_name": "SpeedButton_Halt01",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsHaltStatusForm.SpeedButton_Halt02",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Halt00Click",
+   "leaf_name": "SpeedButton_Halt02",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsHaltStatusForm.SpeedButton_Halt03",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Halt00Click",
+   "leaf_name": "SpeedButton_Halt03",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsHaltStatusForm.SpeedButton_Halt04",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Halt00Click",
+   "leaf_name": "SpeedButton_Halt04",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsHaltStatusForm.SpeedButton_Halt05",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Halt00Click",
+   "leaf_name": "SpeedButton_Halt05",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsHaltStatusForm.SpeedButton_Halt06",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Halt00Click",
+   "leaf_name": "SpeedButton_Halt06",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsHaltStatusForm.SpeedButton_Halt07",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Halt00Click",
+   "leaf_name": "SpeedButton_Halt07",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsHaltStatusForm.SpeedButton_Halt08",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Halt00Click",
+   "leaf_name": "SpeedButton_Halt08",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsHaltStatusForm.SpeedButton_Halt09",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Halt00Click",
+   "leaf_name": "SpeedButton_Halt09",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsHaltStatusForm.SpeedButton_Halt10",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Halt00Click",
+   "leaf_name": "SpeedButton_Halt10",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsHaltStatusForm.SpeedButton_Halt11",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Halt00Click",
+   "leaf_name": "SpeedButton_Halt11",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsHaltStatusForm.SpeedButton_Halt12",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Halt00Click",
+   "leaf_name": "SpeedButton_Halt12",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsHaltStatusForm.SpeedButton_Halt13",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Halt00Click",
+   "leaf_name": "SpeedButton_Halt13",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsHaltStatusForm.SpeedButton_Halt14",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Halt00Click",
+   "leaf_name": "SpeedButton_Halt14",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsHaltStatusForm.SpeedButton_Halt15",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Halt00Click",
+   "leaf_name": "SpeedButton_Halt15",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsHaltStatusForm.edInsertOPID_HALT",
+   "event_name": "OnClick",
+   "handler_name": "edInsertOPID_HALTClick",
+   "leaf_name": "edInsertOPID_HALT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsHaltStatusForm.Button2",
+   "event_name": "OnClick",
+   "handler_name": "Button2Click",
+   "leaf_name": "Button2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsPauseStatusForm.sbScreenkeyboard_Pause",
+   "event_name": "OnClick",
+   "handler_name": "sbScreenkeyboard_HALTClick",
+   "leaf_name": "sbScreenkeyboard_Pause",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsPauseStatusForm.SpeedButton_Pause00",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Pause00Click",
+   "leaf_name": "SpeedButton_Pause00",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsPauseStatusForm.SpeedButton_Pause01",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Pause00Click",
+   "leaf_name": "SpeedButton_Pause01",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsPauseStatusForm.SpeedButton_Pause02",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Pause00Click",
+   "leaf_name": "SpeedButton_Pause02",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsPauseStatusForm.SpeedButton_Pause03",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Pause00Click",
+   "leaf_name": "SpeedButton_Pause03",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsPauseStatusForm.SpeedButton_Pause04",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Pause00Click",
+   "leaf_name": "SpeedButton_Pause04",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsPauseStatusForm.SpeedButton_Pause05",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Pause00Click",
+   "leaf_name": "SpeedButton_Pause05",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsPauseStatusForm.SpeedButton_Pause06",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Pause00Click",
+   "leaf_name": "SpeedButton_Pause06",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsPauseStatusForm.SpeedButton_Pause07",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Pause00Click",
+   "leaf_name": "SpeedButton_Pause07",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsPauseStatusForm.SpeedButton_Pause08",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Pause00Click",
+   "leaf_name": "SpeedButton_Pause08",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsPauseStatusForm.SpeedButton_Pause09",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Pause00Click",
+   "leaf_name": "SpeedButton_Pause09",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsPauseStatusForm.SpeedButton_Pause10",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Pause00Click",
+   "leaf_name": "SpeedButton_Pause10",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsPauseStatusForm.SpeedButton_Pause11",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Pause00Click",
+   "leaf_name": "SpeedButton_Pause11",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsPauseStatusForm.SpeedButton_Pause12",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Pause00Click",
+   "leaf_name": "SpeedButton_Pause12",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsPauseStatusForm.SpeedButton_Pause13",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Pause00Click",
+   "leaf_name": "SpeedButton_Pause13",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsPauseStatusForm.SpeedButton_Pause14",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Pause00Click",
+   "leaf_name": "SpeedButton_Pause14",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsPauseStatusForm.SpeedButton_Pause15",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton_Pause00Click",
+   "leaf_name": "SpeedButton_Pause15",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsPauseStatusForm.Button1",
+   "event_name": "OnClick",
+   "handler_name": "Button2Click",
+   "leaf_name": "Button1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsCompareData.Panel8.pnl2.btnCancel",
+   "event_name": "OnClick",
+   "handler_name": "btnCancelClick",
+   "leaf_name": "btnCancel",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsCompareData.Panel8.pnl2.btnSummit",
+   "event_name": "OnClick",
+   "handler_name": "btnSummitClick",
+   "leaf_name": "btnSummit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsCalibrateSuckZHeight.plBottomArmAutoSuckZ.SpeedButton1",
+   "event_name": "OnClick",
+   "handler_name": "btnCancelClick",
+   "leaf_name": "SpeedButton1",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.PageControl1.tsCalibrateSuckZHeight.plBottomArmAutoSuckZ.btnAutoCalSuckZSave",
+   "event_name": "OnClick",
+   "handler_name": "btnAutoCalSuckZSaveClick",
+   "leaf_name": "btnAutoCalSuckZSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fProductionInfo.tm_PI",
+   "event_name": "OnTimer",
+   "handler_name": "tm_PITimer",
+   "leaf_name": "tm_PI",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fProductionInfo.tm_IPSCControl",
+   "event_name": "OnTimer",
+   "handler_name": "tm_IPSCControlTimer",
+   "leaf_name": "tm_IPSCControl",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fProductionInfo",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "ProductionInfo/ProductionInfo.dfm"
+}

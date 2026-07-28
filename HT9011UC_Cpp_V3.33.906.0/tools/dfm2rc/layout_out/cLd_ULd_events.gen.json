@@ -1,0 +1,121 @@
+{
+ "event_count": 16,
+ "events": [
+  {
+   "control_path": "fLd_ULd",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fLd_ULd",
+   "vcl_class": "TfLd_ULd"
+  },
+  {
+   "control_path": "fLd_ULd",
+   "event_name": "OnShortCut",
+   "handler_name": "FormShortCut",
+   "leaf_name": "fLd_ULd",
+   "vcl_class": "TfLd_ULd"
+  },
+  {
+   "control_path": "fLd_ULd",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fLd_ULd",
+   "vcl_class": "TfLd_ULd"
+  },
+  {
+   "control_path": "fLd_ULd.Panel1.spbSave",
+   "event_name": "OnClick",
+   "handler_name": "spbSaveClick",
+   "leaf_name": "spbSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fLd_ULd.Panel1.sbtExit",
+   "event_name": "OnClick",
+   "handler_name": "sbtExitClick",
+   "leaf_name": "sbtExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fLd_ULd.Panel1.btnDefaultValue",
+   "event_name": "OnClick",
+   "handler_name": "btnDefaultValueClick",
+   "leaf_name": "btnDefaultValue",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fLd_ULd.PageControl1.TabSheet1.Panel2.grpLoader.edtLD_TrayArrivalDely",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtLD_TrayArrivalDelyKeyPress",
+   "leaf_name": "edtLD_TrayArrivalDely",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLd_ULd.PageControl1.TabSheet1.Panel2.grpLoader.edtLD_FixTrayDely",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtLD_TrayArrivalDelyKeyPress",
+   "leaf_name": "edtLD_FixTrayDely",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLd_ULd.PageControl1.TabSheet1.Panel2.grpLoader.edtLD_MiddLockDelay",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtLD_TrayArrivalDelyKeyPress",
+   "leaf_name": "edtLD_MiddLockDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLd_ULd.PageControl1.TabSheet1.Panel2.grpLoader.edtLD_LiftDownDelay",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtLD_TrayArrivalDelyKeyPress",
+   "leaf_name": "edtLD_LiftDownDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLd_ULd.PageControl1.TabSheet1.Panel2.grpLoader.edtLD_BeforeDownDelay",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtLD_TrayArrivalDelyKeyPress",
+   "leaf_name": "edtLD_BeforeDownDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLd_ULd.PageControl1.TabSheet1.Panel2.grpUnloader.edtULD_TrayArrivalDelay",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtLD_TrayArrivalDelyKeyPress",
+   "leaf_name": "edtULD_TrayArrivalDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLd_ULd.PageControl1.TabSheet1.Panel2.grpUnloader.edtULD_FixTrayDely",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtLD_TrayArrivalDelyKeyPress",
+   "leaf_name": "edtULD_FixTrayDely",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLd_ULd.PageControl1.TabSheet1.Panel2.grpUnloader.edtULD_TrayBackDelay",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtLD_TrayArrivalDelyKeyPress",
+   "leaf_name": "edtULD_TrayBackDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLd_ULd.PageControl1.TabSheet1.Panel2.grpUnloader.edtULD_LiftDownDelay",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtLD_TrayArrivalDelyKeyPress",
+   "leaf_name": "edtULD_LiftDownDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fLd_ULd.PageControl1.TabSheet1.Panel2.grpUnloader.edtULD_TrayArrivalWait",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtLD_TrayArrivalDelyKeyPress",
+   "leaf_name": "edtULD_TrayArrivalWait",
+   "vcl_class": "TEdit"
+  }
+ ],
+ "form_name": "fLd_ULd",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "cLd_ULd.dfm"
+}

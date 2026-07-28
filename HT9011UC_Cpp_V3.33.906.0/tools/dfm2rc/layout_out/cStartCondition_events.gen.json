@@ -1,0 +1,1003 @@
+{
+ "event_count": 142,
+ "events": [
+  {
+   "control_path": "fStartCondition",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fStartCondition",
+   "vcl_class": "TfStartCondition"
+  },
+  {
+   "control_path": "fStartCondition",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fStartCondition",
+   "vcl_class": "TfStartCondition"
+  },
+  {
+   "control_path": "fStartCondition.spbExit",
+   "event_name": "OnClick",
+   "handler_name": "spbExitClick",
+   "leaf_name": "spbExit",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsStartMode.gbContactCount.sbSameAsHead1",
+   "event_name": "OnClick",
+   "handler_name": "sbSameAsHead1Click",
+   "leaf_name": "sbSameAsHead1",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsStartMode.gbContactCount.sbClearCount",
+   "event_name": "OnClick",
+   "handler_name": "sbClearCountClick",
+   "leaf_name": "sbClearCount",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsStartMode.gbContactCount.sbSave",
+   "event_name": "OnClick",
+   "handler_name": "sbSaveClick",
+   "leaf_name": "sbSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsStartMode.gbContactCount.sgContactCount",
+   "event_name": "OnSelectCell",
+   "handler_name": "sgContactCountSelectCell",
+   "leaf_name": "sgContactCount",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime",
+   "event_name": "OnChange",
+   "handler_name": "pgLifeTimeChange",
+   "leaf_name": "pgLifeTime",
+   "vcl_class": "TPageControl"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsCondition01.sgHeadCondition1",
+   "event_name": "OnSelectCell",
+   "handler_name": "sgHeadCondition1SelectCell",
+   "leaf_name": "sgHeadCondition1",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsCondition02.sgHeadCondition2",
+   "event_name": "OnSelectCell",
+   "handler_name": "sgHeadCondition1SelectCell",
+   "leaf_name": "sgHeadCondition2",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsCondition03.sgHeadCondition3",
+   "event_name": "OnSelectCell",
+   "handler_name": "sgHeadCondition1SelectCell",
+   "leaf_name": "sgHeadCondition3",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelAa",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelAa",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelAb",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelAb",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelAc",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelAc",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelAd",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelAd",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelAe",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelAe",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelAf",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelAf",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelAg",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelAg",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelAh",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelAh",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelBa",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelBa",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelBb",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelBb",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelBc",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelBc",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelBd",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelBd",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelBe",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelBe",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelBf",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelBf",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelBg",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelBg",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelBh",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelBh",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelCa",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelCa",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelCb",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelCb",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelCc",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelCc",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelCd",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelCd",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelCe",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelCe",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelCf",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelCf",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelCg",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelCg",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelCh",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelCh",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelDa",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelDa",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelDb",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelDb",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelDc",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelDc",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelDd",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelDd",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelDe",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelDe",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelDf",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelDf",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelDg",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelDg",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.PanelDh",
+   "event_name": "OnDblClick",
+   "handler_name": "PanelAaDblClick",
+   "leaf_name": "PanelDh",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearAa",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearAa",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearAb",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearAb",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearAc",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearAc",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearAd",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearAd",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearAe",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearAe",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearAf",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearAf",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearAg",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearAg",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearAh",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearAh",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearBh",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearBh",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearBg",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearBg",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearBf",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearBf",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearBe",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearBe",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearBd",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearBd",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearBc",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearBc",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearBb",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearBb",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearBa",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearBa",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearCa",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearCa",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearCb",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearCb",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearCc",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearCc",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearCd",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearCd",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearCe",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearCe",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearCf",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearCf",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearCg",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearCg",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearCh",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearCh",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearDg",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearDg",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearDf",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearDf",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearDe",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearDe",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearDd",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearDd",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearDc",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearDc",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearDb",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearDb",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.TabsSocketID.groupbSocketID.btnClearDa",
+   "event_name": "OnClick",
+   "handler_name": "btnClearAaClick",
+   "leaf_name": "btnClearDa",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsSmartDiagnostic.pn_Maintenance_SmartDiagnosticFunction.sb_Maintenance_SmartDiagnosticFunction",
+   "event_name": "OnClick",
+   "handler_name": "sb_Maintenance_SmartDiagnosticFunctionClick",
+   "leaf_name": "sb_Maintenance_SmartDiagnosticFunction",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsSocketCount.sgSocketCount",
+   "event_name": "OnSelectCell",
+   "handler_name": "sgHeadCondition1SelectCell",
+   "leaf_name": "sgSocketCount",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox2.btnOutArmE",
+   "event_name": "OnClick",
+   "handler_name": "btnOutArmAClick",
+   "leaf_name": "btnOutArmE",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox2.btnOutArmA",
+   "event_name": "OnClick",
+   "handler_name": "btnOutArmAClick",
+   "leaf_name": "btnOutArmA",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox2.btnOutArmC",
+   "event_name": "OnClick",
+   "handler_name": "btnOutArmAClick",
+   "leaf_name": "btnOutArmC",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox2.btnOutArmG",
+   "event_name": "OnClick",
+   "handler_name": "btnOutArmAClick",
+   "leaf_name": "btnOutArmG",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox2.btnOutArmH",
+   "event_name": "OnClick",
+   "handler_name": "btnOutArmAClick",
+   "leaf_name": "btnOutArmH",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox2.btnOutArmF",
+   "event_name": "OnClick",
+   "handler_name": "btnOutArmAClick",
+   "leaf_name": "btnOutArmF",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox2.btnOutArmD",
+   "event_name": "OnClick",
+   "handler_name": "btnOutArmAClick",
+   "leaf_name": "btnOutArmD",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox2.btnOutArmB",
+   "event_name": "OnClick",
+   "handler_name": "btnOutArmAClick",
+   "leaf_name": "btnOutArmB",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox1.edtInArmA",
+   "event_name": "OnClick",
+   "handler_name": "edtInArmAClick",
+   "leaf_name": "edtInArmA",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox1.btnInArmA",
+   "event_name": "OnClick",
+   "handler_name": "btnInArmAClick",
+   "leaf_name": "btnInArmA",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox1.btnInArmC",
+   "event_name": "OnClick",
+   "handler_name": "btnInArmAClick",
+   "leaf_name": "btnInArmC",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox1.btnInArmE",
+   "event_name": "OnClick",
+   "handler_name": "btnInArmAClick",
+   "leaf_name": "btnInArmE",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox1.btnInArmG",
+   "event_name": "OnClick",
+   "handler_name": "btnInArmAClick",
+   "leaf_name": "btnInArmG",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox1.btnInArmB",
+   "event_name": "OnClick",
+   "handler_name": "btnInArmAClick",
+   "leaf_name": "btnInArmB",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox1.btnInArmD",
+   "event_name": "OnClick",
+   "handler_name": "btnInArmAClick",
+   "leaf_name": "btnInArmD",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox1.btnInArmF",
+   "event_name": "OnClick",
+   "handler_name": "btnInArmAClick",
+   "leaf_name": "btnInArmF",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox1.btnInArmH",
+   "event_name": "OnClick",
+   "handler_name": "btnInArmAClick",
+   "leaf_name": "btnInArmH",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox3.btnArm2Aa",
+   "event_name": "OnClick",
+   "handler_name": "btnArm2AaClick",
+   "leaf_name": "btnArm2Aa",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox3.btnArm2Ab",
+   "event_name": "OnClick",
+   "handler_name": "btnArm2AaClick",
+   "leaf_name": "btnArm2Ab",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox3.btnArm2Ac",
+   "event_name": "OnClick",
+   "handler_name": "btnArm2AaClick",
+   "leaf_name": "btnArm2Ac",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox3.btnArm2Ad",
+   "event_name": "OnClick",
+   "handler_name": "btnArm2AaClick",
+   "leaf_name": "btnArm2Ad",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox3.btnArm2Ba",
+   "event_name": "OnClick",
+   "handler_name": "btnArm2AaClick",
+   "leaf_name": "btnArm2Ba",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox3.btnArm2Bb",
+   "event_name": "OnClick",
+   "handler_name": "btnArm2AaClick",
+   "leaf_name": "btnArm2Bb",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox3.btnArm2Bc",
+   "event_name": "OnClick",
+   "handler_name": "btnArm2AaClick",
+   "leaf_name": "btnArm2Bc",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox3.btnArm2Bd",
+   "event_name": "OnClick",
+   "handler_name": "btnArm2AaClick",
+   "leaf_name": "btnArm2Bd",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox3.btnArm2Ae",
+   "event_name": "OnClick",
+   "handler_name": "btnArm2AaClick",
+   "leaf_name": "btnArm2Ae",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox3.btnArm2Af",
+   "event_name": "OnClick",
+   "handler_name": "btnArm2AaClick",
+   "leaf_name": "btnArm2Af",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox3.btnArm2Ag",
+   "event_name": "OnClick",
+   "handler_name": "btnArm2AaClick",
+   "leaf_name": "btnArm2Ag",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox3.btnArm2Ah",
+   "event_name": "OnClick",
+   "handler_name": "btnArm2AaClick",
+   "leaf_name": "btnArm2Ah",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox3.btnArm2Be",
+   "event_name": "OnClick",
+   "handler_name": "btnArm2AaClick",
+   "leaf_name": "btnArm2Be",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox3.btnArm2Bf",
+   "event_name": "OnClick",
+   "handler_name": "btnArm2AaClick",
+   "leaf_name": "btnArm2Bf",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox3.btnArm2Bg",
+   "event_name": "OnClick",
+   "handler_name": "btnArm2AaClick",
+   "leaf_name": "btnArm2Bg",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox3.btnArm2Bh",
+   "event_name": "OnClick",
+   "handler_name": "btnArm2AaClick",
+   "leaf_name": "btnArm2Bh",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.edtInOutArmPickerAlmCnt",
+   "event_name": "OnClick",
+   "handler_name": "edtInOutArmPickerAlmCntClick",
+   "leaf_name": "edtInOutArmPickerAlmCnt",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox4.btnArm1Aa",
+   "event_name": "OnClick",
+   "handler_name": "btnArm1AaClick",
+   "leaf_name": "btnArm1Aa",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox4.btnArm1Ab",
+   "event_name": "OnClick",
+   "handler_name": "btnArm1AaClick",
+   "leaf_name": "btnArm1Ab",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox4.btnArm1Ac",
+   "event_name": "OnClick",
+   "handler_name": "btnArm1AaClick",
+   "leaf_name": "btnArm1Ac",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox4.btnArm1Ad",
+   "event_name": "OnClick",
+   "handler_name": "btnArm1AaClick",
+   "leaf_name": "btnArm1Ad",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox4.btnArm1Ba",
+   "event_name": "OnClick",
+   "handler_name": "btnArm1AaClick",
+   "leaf_name": "btnArm1Ba",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox4.btnArm1Bb",
+   "event_name": "OnClick",
+   "handler_name": "btnArm1AaClick",
+   "leaf_name": "btnArm1Bb",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox4.btnArm1Bc",
+   "event_name": "OnClick",
+   "handler_name": "btnArm1AaClick",
+   "leaf_name": "btnArm1Bc",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox4.btnArm1Bd",
+   "event_name": "OnClick",
+   "handler_name": "btnArm1AaClick",
+   "leaf_name": "btnArm1Bd",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox4.btnArm1Ae",
+   "event_name": "OnClick",
+   "handler_name": "btnArm1AaClick",
+   "leaf_name": "btnArm1Ae",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox4.btnArm1Af",
+   "event_name": "OnClick",
+   "handler_name": "btnArm1AaClick",
+   "leaf_name": "btnArm1Af",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox4.btnArm1Ag",
+   "event_name": "OnClick",
+   "handler_name": "btnArm1AaClick",
+   "leaf_name": "btnArm1Ag",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox4.btnArm1Ah",
+   "event_name": "OnClick",
+   "handler_name": "btnArm1AaClick",
+   "leaf_name": "btnArm1Ah",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox4.btnArm1Be",
+   "event_name": "OnClick",
+   "handler_name": "btnArm1AaClick",
+   "leaf_name": "btnArm1Be",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox4.btnArm1Bf",
+   "event_name": "OnClick",
+   "handler_name": "btnArm1AaClick",
+   "leaf_name": "btnArm1Bf",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox4.btnArm1Bg",
+   "event_name": "OnClick",
+   "handler_name": "btnArm1AaClick",
+   "leaf_name": "btnArm1Bg",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsPickerLifeTime.ScrollBox1.GroupBox4.btnArm1Bh",
+   "event_name": "OnClick",
+   "handler_name": "btnArm1AaClick",
+   "leaf_name": "btnArm1Bh",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsCylinderView.strngrdCylinderView",
+   "event_name": "OnDrawCell",
+   "handler_name": "strngrdCylinderViewDrawCell",
+   "leaf_name": "strngrdCylinderView",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.pgLifeTime.tsCylinderView.strngrdCylinderView",
+   "event_name": "OnSelectCell",
+   "handler_name": "strngrdCylinderViewSelectCell",
+   "leaf_name": "strngrdCylinderView",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.Panel1.sbHeadCondition1Clear",
+   "event_name": "OnClick",
+   "handler_name": "sbHeadCondition1ClearClick",
+   "leaf_name": "sbHeadCondition1Clear",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.Panel1.sbHeadCondition1Save",
+   "event_name": "OnClick",
+   "handler_name": "sbHeadCondition1SaveClick",
+   "leaf_name": "sbHeadCondition1Save",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsLifeTime.Panel1.editContactCountAlarm",
+   "event_name": "OnMouseDown",
+   "handler_name": "editContactCountAlarmMouseDown",
+   "leaf_name": "editContactCountAlarm",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsFunction.cbStartModeOnlyFT",
+   "event_name": "OnClick",
+   "handler_name": "cbStartModeOnlyFTClick",
+   "leaf_name": "cbStartModeOnlyFT",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsFunction.gbSetOffsetLimit.edtSetXYOffsetLimit",
+   "event_name": "OnClick",
+   "handler_name": "edtSetXYOffsetLimitClick",
+   "leaf_name": "edtSetXYOffsetLimit",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsFunction.gbSetOffsetLimit.edtSetZOffsetLimit",
+   "event_name": "OnClick",
+   "handler_name": "edtSetZOffsetLimitClick",
+   "leaf_name": "edtSetZOffsetLimit",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fStartCondition.PageControl1.tsFunction.gbSetOffsetLimit.btnSetOffsetLimit",
+   "event_name": "OnClick",
+   "handler_name": "btnSetOffsetLimitClick",
+   "leaf_name": "btnSetOffsetLimit",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fStartCondition.pmCylinder.mniResetOnOffCount",
+   "event_name": "OnClick",
+   "handler_name": "mniResetOnOffCountClick",
+   "leaf_name": "mniResetOnOffCount",
+   "vcl_class": "TMenuItem"
+  },
+  {
+   "control_path": "fStartCondition.pmCylinder.mniSetOnOffCountAlarm",
+   "event_name": "OnClick",
+   "handler_name": "mniResetOnOffCountClick",
+   "leaf_name": "mniSetOnOffCountAlarm",
+   "vcl_class": "TMenuItem"
+  },
+  {
+   "control_path": "fStartCondition.pmCylinder.mniSetOnTimeAlarm",
+   "event_name": "OnClick",
+   "handler_name": "mniResetOnOffCountClick",
+   "leaf_name": "mniSetOnTimeAlarm",
+   "vcl_class": "TMenuItem"
+  },
+  {
+   "control_path": "fStartCondition.pmCylinder.mniSetOffTimeAlarm",
+   "event_name": "OnClick",
+   "handler_name": "mniResetOnOffCountClick",
+   "leaf_name": "mniSetOffTimeAlarm",
+   "vcl_class": "TMenuItem"
+  },
+  {
+   "control_path": "fStartCondition.pmCylinder.mniSettimeoutcountalarm",
+   "event_name": "OnClick",
+   "handler_name": "mniResetOnOffCountClick",
+   "leaf_name": "mniSettimeoutcountalarm",
+   "vcl_class": "TMenuItem"
+  },
+  {
+   "control_path": "fStartCondition.pmCylinder.mniSetOnTimeStandard",
+   "event_name": "OnClick",
+   "handler_name": "mniResetOnOffCountClick",
+   "leaf_name": "mniSetOnTimeStandard",
+   "vcl_class": "TMenuItem"
+  },
+  {
+   "control_path": "fStartCondition.pmCylinder.mniSetOffTimeStandard",
+   "event_name": "OnClick",
+   "handler_name": "mniResetOnOffCountClick",
+   "leaf_name": "mniSetOffTimeStandard",
+   "vcl_class": "TMenuItem"
+  }
+ ],
+ "form_name": "fStartCondition",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "cStartCondition.dfm"
+}

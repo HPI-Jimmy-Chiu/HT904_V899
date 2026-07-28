@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "generator": "emit_rc.py W7-B1b v1.0",
+  "source_dfm": "cTestCategory.dfm",
+  "formstem": "CTESTCATEGORY",
+  "dialog_count": 1,
+  "control_count": 2,
+  "fallback_classes_used": [],
+  "warnings": [],
+  "dialogs": [
+    {
+      "idd_symbol": "IDD_CTESTCATEGORY",
+      "idd_value": 8192,
+      "is_root": true,
+      "owner_path": "fTestCategory",
+      "owner_class": "TfTestCategory",
+      "controls": [
+        {
+          "symbol": "IDC_CTESTCATEGORY_SGARM2",
+          "value": 1024,
+          "win32_class": "HT9045.StringGrid",
+          "caption": null,
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fTestCategory.sgArm2",
+          "fallback_class": false,
+          "x": 0,
+          "y": 0,
+          "cx": 258,
+          "cy": 80
+        },
+        {
+          "symbol": "IDC_CTESTCATEGORY_SGARM1",
+          "value": 1025,
+          "win32_class": "HT9045.StringGrid",
+          "caption": null,
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fTestCategory.sgArm1",
+          "fallback_class": false,
+          "x": 0,
+          "y": 80,
+          "cx": 258,
+          "cy": 80
+        }
+      ]
+    }
+  ]
+}

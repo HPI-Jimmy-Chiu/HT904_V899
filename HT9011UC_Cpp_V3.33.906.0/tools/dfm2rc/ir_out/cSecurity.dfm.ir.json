@@ -1,0 +1,4456 @@
+{
+ "control_node_count": 60,
+ "encoding_used": "cp950",
+ "form_class": "TfSecurity",
+ "form_name": "fSecurity",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fSecurity.Panel13",
+    "fSecurity.Panel1",
+    "fSecurity.Panel17",
+    "fSecurity.SecurityExit",
+    "fSecurity.PageControl1",
+    "fSecurity.OpenDialog1",
+    "fSecurity.SaveDialog1"
+   ],
+   "class": "TfSecurity",
+   "depth": 0,
+   "events": {
+    "OnClose": "FormClose",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow"
+   },
+   "geometry": {
+    "height": null,
+    "left": 66,
+    "top": 40,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "fSecurity",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "fSecurity",
+   "properties": {
+    "BorderIcons": {
+     "type": "SET",
+     "value": []
+    },
+    "BorderStyle": {
+     "type": "SCALAR",
+     "value": "bsToolWindow"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Password and Security"
+    },
+    "ClientHeight": {
+     "type": "SCALAR",
+     "value": 871
+    },
+    "ClientWidth": {
+     "type": "SCALAR",
+     "value": 874
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "DragKind": {
+     "type": "SCALAR",
+     "value": "dkDock"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 66
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnClose": {
+     "type": "SCALAR",
+     "value": "FormClose"
+    },
+    "OnDestroy": {
+     "type": "SCALAR",
+     "value": "FormDestroy"
+    },
+    "OnShow": {
+     "type": "SCALAR",
+     "value": "FormShow"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 40
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 31,
+    "left": 0,
+    "top": 0,
+    "width": 874
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 22,
+   "name": "Panel13",
+   "objkind": "object",
+   "parent_path": "fSecurity",
+   "path": "fSecurity.Panel13",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Add And Delete User"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 9534289
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 31
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 874
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [
+    "fSecurity.Panel1.sbSupervisor",
+    "fSecurity.Panel1.sbEngineer",
+    "fSecurity.Panel1.btnHonPrec",
+    "fSecurity.Panel1.btnOperator"
+   ],
+   "class": "TPanel",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 53,
+    "left": 0,
+    "top": 31,
+    "width": 874
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 39,
+   "name": "Panel1",
+   "objkind": "object",
+   "parent_path": "fSecurity",
+   "path": "fSecurity.Panel1",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 53
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 31
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 874
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "sbSupervisorClick"
+   },
+   "geometry": {
+    "height": 33,
+    "left": 67,
+    "top": 11,
+    "width": 186
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 48,
+   "name": "sbSupervisor",
+   "objkind": "object",
+   "parent_path": "fSecurity.Panel1",
+   "path": "fSecurity.Panel1.sbSupervisor",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Supervisor"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 67
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "sbSupervisorClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 186
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "sbEngineerClick"
+   },
+   "geometry": {
+    "height": 33,
+    "left": 497,
+    "top": 11,
+    "width": 186
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 62,
+   "name": "sbEngineer",
+   "objkind": "object",
+   "parent_path": "fSecurity.Panel1",
+   "path": "fSecurity.Panel1.sbEngineer",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Engineer"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -15
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 497
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "sbEngineerClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 186
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "btnHonPrecClick"
+   },
+   "geometry": {
+    "height": 33,
+    "left": 282,
+    "top": 11,
+    "width": 186
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 76,
+   "name": "btnHonPrec",
+   "objkind": "object",
+   "parent_path": "fSecurity.Panel1",
+   "path": "fSecurity.Panel1.btnHonPrec",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "HonPrec"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 282
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btnHonPrecClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 186
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "btnOperatorClick"
+   },
+   "geometry": {
+    "height": 33,
+    "left": 645,
+    "top": 11,
+    "width": 186
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 90,
+   "name": "btnOperator",
+   "objkind": "object",
+   "parent_path": "fSecurity.Panel1",
+   "path": "fSecurity.Panel1.btnOperator",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Operator"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -15
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 645
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btnOperatorClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 186
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 31,
+    "left": 0,
+    "top": 84,
+    "width": 874
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 105,
+   "name": "Panel17",
+   "objkind": "object",
+   "parent_path": "fSecurity",
+   "path": "fSecurity.Panel17",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Operate level setup"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 9534289
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 31
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 84
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 874
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": "alBottom",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 1,
+   "events": {
+    "OnClick": "SecurityExitClick"
+   },
+   "geometry": {
+    "height": 41,
+    "left": 0,
+    "top": 830,
+    "width": 874
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 122,
+   "name": "SecurityExit",
+   "objkind": "object",
+   "parent_path": "fSecurity",
+   "path": "fSecurity.SecurityExit",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alBottom"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Exit"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -27
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "SecurityExitClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 830
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 874
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [
+    "fSecurity.PageControl1.tsMain",
+    "fSecurity.PageControl1.tsTools",
+    "fSecurity.PageControl1.tsConfig",
+    "fSecurity.PageControl1.tsContact",
+    "fSecurity.PageControl1.tsSetup",
+    "fSecurity.PageControl1.tsTemp",
+    "fSecurity.PageControl1.tsIo",
+    "fSecurity.PageControl1.tsConfiguration",
+    "fSecurity.PageControl1.tsYield",
+    "fSecurity.PageControl1.tsOther",
+    "fSecurity.PageControl1.tsJamCode",
+    "fSecurity.PageControl1.tsStatisticsJam"
+   ],
+   "class": "TPageControl",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 715,
+    "left": 0,
+    "top": 115,
+    "width": 874
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "TABHOST",
+   "line": 138,
+   "name": "PageControl1",
+   "objkind": "object",
+   "parent_path": "fSecurity",
+   "path": "fSecurity.PageControl1",
+   "properties": {
+    "ActivePage": {
+     "type": "SCALAR",
+     "value": "tsJamCode"
+    },
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 715
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabIndex": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "TabWidth": {
+     "type": "SCALAR",
+     "value": 75
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 115
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 874
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fSecurity.PageControl1.tsMain.sbMain"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 148,
+   "name": "tsMain",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1",
+   "path": "fSecurity.PageControl1.tsMain",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Main"
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TScrollBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 601,
+    "left": 0,
+    "top": 0,
+    "width": 841
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 150,
+   "name": "sbMain",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsMain",
+   "path": "fSecurity.PageControl1.tsMain.sbMain",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 601
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 841
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fSecurity.PageControl1.tsTools.sbTools"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 167,
+   "name": "tsTools",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1",
+   "path": "fSecurity.PageControl1.tsTools",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Tools"
+    },
+    "ImageIndex": {
+     "type": "SCALAR",
+     "value": 1
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TScrollBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 601,
+    "left": 0,
+    "top": 0,
+    "width": 841
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 170,
+   "name": "sbTools",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsTools",
+   "path": "fSecurity.PageControl1.tsTools.sbTools",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 601
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 841
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fSecurity.PageControl1.tsConfig.sbConfig"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 187,
+   "name": "tsConfig",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1",
+   "path": "fSecurity.PageControl1.tsConfig",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Config"
+    },
+    "ImageIndex": {
+     "type": "SCALAR",
+     "value": 2
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TScrollBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 601,
+    "left": 0,
+    "top": 0,
+    "width": 841
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 190,
+   "name": "sbConfig",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsConfig",
+   "path": "fSecurity.PageControl1.tsConfig.sbConfig",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 601
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 841
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fSecurity.PageControl1.tsContact.sbContact"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 207,
+   "name": "tsContact",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1",
+   "path": "fSecurity.PageControl1.tsContact",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Contact"
+    },
+    "ImageIndex": {
+     "type": "SCALAR",
+     "value": 3
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TScrollBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 601,
+    "left": 0,
+    "top": 0,
+    "width": 841
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 210,
+   "name": "sbContact",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsContact",
+   "path": "fSecurity.PageControl1.tsContact.sbContact",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 601
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 841
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fSecurity.PageControl1.tsSetup.sbSetup"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 227,
+   "name": "tsSetup",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1",
+   "path": "fSecurity.PageControl1.tsSetup",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Setup"
+    },
+    "ImageIndex": {
+     "type": "SCALAR",
+     "value": 4
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TScrollBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 490,
+    "left": 0,
+    "top": 0,
+    "width": 841
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 230,
+   "name": "sbSetup",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsSetup",
+   "path": "fSecurity.PageControl1.tsSetup.sbSetup",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 490
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 841
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fSecurity.PageControl1.tsTemp.sbTemp"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 247,
+   "name": "tsTemp",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1",
+   "path": "fSecurity.PageControl1.tsTemp",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Temp. Offset"
+    },
+    "ImageIndex": {
+     "type": "SCALAR",
+     "value": 5
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TScrollBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 490,
+    "left": 0,
+    "top": 0,
+    "width": 841
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 250,
+   "name": "sbTemp",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsTemp",
+   "path": "fSecurity.PageControl1.tsTemp.sbTemp",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 490
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 841
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fSecurity.PageControl1.tsIo.sbIO"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 267,
+   "name": "tsIo",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1",
+   "path": "fSecurity.PageControl1.tsIo",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "IO"
+    },
+    "ImageIndex": {
+     "type": "SCALAR",
+     "value": 6
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TScrollBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 490,
+    "left": 0,
+    "top": 0,
+    "width": 841
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 270,
+   "name": "sbIO",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsIo",
+   "path": "fSecurity.PageControl1.tsIo.sbIO",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 490
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 841
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fSecurity.PageControl1.tsConfiguration.sbConfiguration"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 287,
+   "name": "tsConfiguration",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1",
+   "path": "fSecurity.PageControl1.tsConfiguration",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Configuration"
+    },
+    "ImageIndex": {
+     "type": "SCALAR",
+     "value": 7
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TScrollBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 490,
+    "left": 0,
+    "top": 0,
+    "width": 841
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 290,
+   "name": "sbConfiguration",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsConfiguration",
+   "path": "fSecurity.PageControl1.tsConfiguration.sbConfiguration",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 490
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 841
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fSecurity.PageControl1.tsYield.sbYield"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 307,
+   "name": "tsYield",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1",
+   "path": "fSecurity.PageControl1.tsYield",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Yield"
+    },
+    "ImageIndex": {
+     "type": "SCALAR",
+     "value": 8
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TScrollBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 490,
+    "left": 0,
+    "top": 0,
+    "width": 841
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 310,
+   "name": "sbYield",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsYield",
+   "path": "fSecurity.PageControl1.tsYield.sbYield",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 490
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 841
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fSecurity.PageControl1.tsOther.sbOther"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 327,
+   "name": "tsOther",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1",
+   "path": "fSecurity.PageControl1.tsOther",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Other"
+    },
+    "ImageIndex": {
+     "type": "SCALAR",
+     "value": 9
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TScrollBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 554,
+    "left": 0,
+    "top": 0,
+    "width": 841
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 330,
+   "name": "sbOther",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsOther",
+   "path": "fSecurity.PageControl1.tsOther.sbOther",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 554
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 841
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fSecurity.PageControl1.tsJamCode.labJamArea",
+    "fSecurity.PageControl1.tsJamCode.labJamCode",
+    "fSecurity.PageControl1.tsJamCode.Label1",
+    "fSecurity.PageControl1.tsJamCode.labLang",
+    "fSecurity.PageControl1.tsJamCode.spbExport",
+    "fSecurity.PageControl1.tsJamCode.spbImport",
+    "fSecurity.PageControl1.tsJamCode.labMustCheck_35",
+    "fSecurity.PageControl1.tsJamCode.rgJamLevel",
+    "fSecurity.PageControl1.tsJamCode.cbJamArea",
+    "fSecurity.PageControl1.tsJamCode.cbJamCode",
+    "fSecurity.PageControl1.tsJamCode.cbJamLang",
+    "fSecurity.PageControl1.tsJamCode.RichEditJamCode",
+    "fSecurity.PageControl1.tsJamCode.cbJamNeedRed",
+    "fSecurity.PageControl1.tsJamCode.cbSilentMode",
+    "fSecurity.PageControl1.tsJamCode.cbUnlockPassWord",
+    "fSecurity.PageControl1.tsJamCode.rgMachineStatusBit8",
+    "fSecurity.PageControl1.tsJamCode.cbIncludeMTBA",
+    "fSecurity.PageControl1.tsJamCode.chkCheckContAlarm",
+    "fSecurity.PageControl1.tsJamCode.chkO17",
+    "fSecurity.PageControl1.tsJamCode.cbAddAlarmLog",
+    "fSecurity.PageControl1.tsJamCode.cbN27AddBoard",
+    "fSecurity.PageControl1.tsJamCode.cbN27AlarmSel",
+    "fSecurity.PageControl1.tsJamCode.cbN27AlarmSelByArea",
+    "fSecurity.PageControl1.tsJamCode.chkTCPAlarm",
+    "fSecurity.PageControl1.tsJamCode.cbContAlarmNotUpload",
+    "fSecurity.PageControl1.tsJamCode.chkAlarmAfterFullTray"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 347,
+   "name": "tsJamCode",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1",
+   "path": "fSecurity.PageControl1.tsJamCode",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Jam Code"
+    },
+    "ImageIndex": {
+     "type": "SCALAR",
+     "value": 10
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 4,
+    "top": 0,
+    "width": 47
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 350,
+   "name": "labJamArea",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsJamCode",
+   "path": "fSecurity.PageControl1.tsJamCode.labJamArea",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Area : "
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "微軟正黑體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 47
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 4,
+    "top": 36,
+    "width": 52
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 363,
+   "name": "labJamCode",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsJamCode",
+   "path": "fSecurity.PageControl1.tsJamCode.labJamCode",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Code : "
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "微軟正黑體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 52
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 4,
+    "top": 72,
+    "width": 50
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 376,
+   "name": "Label1",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsJamCode",
+   "path": "fSecurity.PageControl1.tsJamCode.Label1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Level : "
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "微軟正黑體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 50
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 0,
+    "top": 189,
+    "width": 87
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 389,
+   "name": "labLang",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsJamCode",
+   "path": "fSecurity.PageControl1.tsJamCode.labLang",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Language : "
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "微軟正黑體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 189
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 87
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 3,
+   "events": {
+    "OnClick": "spbExportClick"
+   },
+   "geometry": {
+    "height": 55,
+    "left": 687,
+    "top": 317,
+    "width": 143
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 402,
+   "name": "spbExport",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsJamCode",
+   "path": "fSecurity.PageControl1.tsJamCode.spbExport",
+   "properties": {
+    "AllowAllUp": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Export"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Glyph.Data": {
+     "type": "BLOB",
+     "value": {
+      "byte_len": 3838,
+      "hex": "FA0E0000424DFA0E000000000000360000002800000024000000230000000100180000000000C40E000001000000010000000000000000000000EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEEEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEEEFEFEEEFEFEEEFEFEEEFEFEEEFEFEEEFEFEEEFEFEEEFEFEEEBEBEAEBEBEAEBEBEAE6E6E6E6E6E6EBEBEAEFEFEEEFEFEEDDDDDDE6E6E6EBEBEAEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFE6E6E6DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD6D6D6D6D6D6CCCCCCCCCCCCCCCCCCD6D6D6E6E6E600833CE6E6E6D6D6D6DDDDDDEBEBEAEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEBEBEADDDDDDD6D6D6CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC5C5C5BDBDBDB6B6B6B6B6B6B6B6B6B6B6B6D6D6D600833C00833CDDDDDDD6D6D6DDDDDDEBEBEAEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEBEBEA952E7C93297A93297A93297A8E29758E29758E297585216D85216D85216D85216DA66396A663969D5F8D965D89965D89965D89965D89CCCCCC00833C00BE5800833CDDDDDDD6D6D6DDDDDDEBEBEAEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFE6E6E6DDDDDD9D3083EBEBEAEBEBEAEBEBEAEBEBEAEBEBEAEBEBEAEBEBEAEBEBEAEBEBEAEBEBEAEBEBEA00833C00833C00833C00833C00833C00833C00833C00833C00BE5800BE5800833CDDDDDDD6D6D6DDDDDDEFEFEEEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFDDDDDDD6D6D6A33888EBEBEAEBEBEAEBEBEAEBEBEAEBEBEAEBEBEAEBEBEAEBEBEAEBEBEAEBEBEAEBEBEA00833C79E6AA00C45A00C45A00C45A00C45A00C45A00C45A00C45A00C45A00C45A00833CDDDDDDD6D6D6E6E6E6EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF952E7C952E7C8E2975A33888EBEBEAEBEBEAEBEBEAEBEBEAEBEBEAEBEBEAEBEBEAEBEBEAEBEBEAEBEBEAEBEBEA00833C79E6AA00C45A00C45A00C45A00C45A00C45A00C45A00C45A00C45A00C45A00C45A00833CE6E6E6EBEBEAEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF9D3083EBEBEAE6E6E6A33888EBEBEAEBEBEAEBEBEAEBEBEAEBEBEAEBEBEAEBEBEAEBEBEAEBEBEAEBEBEAEFEFEE00833C79E6AA00C45A00C45A00C45A00C45A00C45A00C45A00C45A00C45A00C45A00C45A00C45A00833CF7F7F7EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFA33888EBEBEAE6E6E6A6398CEFEFEEEFEFEEEFEFEEC5C5C5BDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDCCCCCC00833C79E6AA00C45A00C45A00C45A00C45A00C45A00C45A00C45A00C45A00C45A00C45A008B40FBFBFAEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFA33888EBEBEAE6E6E6AE4193F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F200833C79E6AA79E6AA79E6AA79E6AA79E6AA79E6AA79E6AA00C45A00C45A00C45A008B40F7F7F7EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFA33888EBEBEAE6E6E6A6398CEFEFEEEFEFEEEFEFEEC5C5C5BDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDCCCCCC00833C00833C00833C00833C00833C00833C00833C00833C00C45A00C45A008B40FBFBFAEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFA6398CEFEFEEEBEBEAAE4193F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7AF689DE6E6E600833C00C45A008B40FBFBFAEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFAE4193F3F2F2EBEBEAB8489CF3F2F2F3F2F2F3F2F2C5C5C5C5C5C5C5C5C5C5C5C5BDBDBDBDBDBDBDBDBDBDBDBDBDBDBDB6B6B6F3F2F2F3F2F2F3F2F293297AE6E6E600833C00833CFBFBFAEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFA6398CEFEFEEEBEBEABC4C9FF3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2952E7CE6E6E600833CFBFBFAEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFAE4193F3F2F2EBEBEAC452A7F7F7F7F7F7F7F7F7F7C5C5C5C5C5C5C5C5C5C5C5C5C5C5C5C5C5C5BDBDBDBDBDBDBDBDBDBDBDBDF7F7F7F7F7F7F7F7F79D3083E6E6E6F3F2F2EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFB8489CF3F2F2EBEBEAC956ABF7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7A33888DDDDDDEFEFEEEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFBC4C9FF3F2F2EFEFEECD58B0FBFBFAFBFBFAFBFBFAD461B6CD58B0C452A7B8489CAE4193AE4193A338889D308393297A8C2373FBFBFAFBFBFAFBFBFAA6398CDDDDDDEFEFEEEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFC452A7F7F7F7F3F2F2D461B6FBFBFAFBFBFAFBFBFADD6CBEEB89D0EB89D0E982CEE87DCDE87DCDE87DCDE87DCDE87DCD9D3083FBFBFAFBFBFAFBFBFAAE4193DDDDDDEFEFEEEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFC956ABF7F7F7F3F2F2DC65BDFBFBFAFBFBFAFBFBFAE56CC6ED8AD3ED8AD3E982CEE982CEE982CEE87DCDE87DCDE87DCD9D3083FBFBFAFBFBFAFBFBFAB8489CDDDDDDEFEFEEEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFCD58B0FBFBFAF3F2F2DC65BDFFFFFFFFFFFFFFFFFFE56CC6E56CC6D461B6CD58B0C452A7C452A7B8489CAE4193A6398C9D3083FFFFFFFFFFFFFFFFFFBD4DA1DDDDDDEFEFEEEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFD461B6FBFBFAF3F2F2E56CC6FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC452A7DDDDDDEFEFEEEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFDC65BDFBFBFAF7F7F7E56CC6FFFFFFFFFFFFFFFFFFC5C5C5C5C5C5C5C5C5C5C5C5BDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDFFFFFFFFFFFFFFFFFFC956ABDDDDDDEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFDC65BDFFFFFFFBFBFAE56CC6FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD15BB2E6E6E6EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFE56CC6FFFFFFFFFFFFE56CC6FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD15BB2EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFE56CC6FFFFFFFFFFFFE56CC6E56CC6E56CC6E56CC6E56CC6E56CC6E56CC6E56CC6E56CC6E56CC6E56CC6E56CC6DC65BDDC65BDDC65BDDC65BDDC65BDD461B6EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFE56CC6FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD15BB2E6E6E6EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFE56CC6FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD15BB2EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFE56CC6E56CC6E56CC6E56CC6E56CC6E56CC6E56CC6E56CC6E56CC6E56CC6E56CC6E56CC6DC65BDDC65BDDC65BDDC65BDDC65BDD461B6EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF",
+      "sha1": "c28a50ca95d28c6bfbe18689a79ecf4f69ef2d8c"
+     }
+    },
+    "GroupIndex": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 55
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 687
+    },
+    "Margin": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "spbExportClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 317
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 143
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 3,
+   "events": {
+    "OnClick": "spbImportClick"
+   },
+   "geometry": {
+    "height": 55,
+    "left": 535,
+    "top": 317,
+    "width": 141
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 540,
+   "name": "spbImport",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsJamCode",
+   "path": "fSecurity.PageControl1.tsJamCode.spbImport",
+   "properties": {
+    "AllowAllUp": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Import"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Glyph.Data": {
+     "type": "BLOB",
+     "value": {
+      "byte_len": 3838,
+      "hex": "FA0E0000424DFA0E000000000000360000002800000024000000230000000100180000000000C40E000001000000010000000000000000000000EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFECECEAECECEAEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFECECEAECECEAE5E5E5DDDDDDE5E5E5ECECEAECECEAEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFE5E5E5E3E3E1DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD7D7D7CCCCCCD7D7D700833CDDDDDDDDDDDDECECEAEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFECECEADDDDDDD7D7D7CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC5C5C5BDBDBDCCCCCC00833C00833CD7D7D7D7D7D7DDDDDDDDDDDDDDDDDDDDDDDDE3E3E1E5E5E5EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFECECEA952E7C93297A93297A93297A8E29758E29758E297585216D85216D85216D85216D85216D85216D7C1C64741B5F9A5E8D00833C00BF5900833CD7D7D7DDDDDDDDDDDDE3E3E1E3E3E1E3E3E1E3E3E1ECECEAEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFE5E5E5DDDDDD9D3083ECECEAECECEAECECEAECECEAECECEAECECEAECECEAECECEAECECEAECECEAECECEAE3E3E1D7D7D7DDDDDD00833C00BF5900BF5900833C00833C00833C00833C00833C00833C00833C00833CE5E5E5EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFE3E3E1D7D7D7A33888ECECEAECECEAECECEAECECEAECECEAECECEAECECEAECECEAECECEAECECEAECECEAE3E3E1E3E3E100833C00BF5900C45A00C45A00C45A00C45A00C45A00C45A00C45A00C45A00C45A00833CE5E5E5EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF952E7C952E7C8E2975A33888ECECEAECECEAECECEAECECEAECECEAECECEAECECEAECECEAECECEAECECEAECECEAECECEA00833C00C45A00C45A00C45A00C45A00C45A00C45A00C45A00C45A00C45A00C45A00C45A00833CE5E5E5EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF9D3083ECECEAE3E3E1A33888ECECEAECECEAECECEAECECEAECECEAECECEAECECEAECECEAECECEAECECEAF3F2F200833C79E6AA00C45A00C45A00C45A00C45A00C45A00C45A00C45A00C45A00C45A00C45A00C45A00833CECECEAEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFA33888ECECEAE5E5E5A93D8EEFEFEFEFEFEFEFEFEFC5C5C5BDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDCCCCCC008B4079E6AA00C45A00C45A00C45A00C45A00C45A00C45A00C45A00C45A00C45A00C45A00833CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFA33888ECECEAE5E5E5AE4193F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2008B4079E6AA00C45A00C45A79E6AA79E6AA79E6AA79E6AA79E6AA79E6AA79E6AA00833CF7F7F7EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFA33888ECECEAE5E5E5A93D8EEFEFEFEFEFEFEFEFEFC5C5C5BDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDB5B5B5B5B5B5B5B5B5F3F2F2008B4079E6AA00C45A00833C00833C00833C00833C00833C00833C00833C00833CFBFBFAEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFA93D8EEFEFEFECECEAAE4193F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2008B4079E6AA00833CECECEAF7F7F7FBFBFAFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFAE4193F3F2F2ECECEAB8489CF3F2F2F3F2F2F3F2F2C5C5C5C5C5C5C5C5C5C5C5C5BDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDF3F2F2F3F2F2F3F2F200833C00833CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFA93D8EEFEFEFECECEABC4C9FF3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2F3F2F2B66EA400833CF3F2F2EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFAE4193F3F2F2ECECEAC452A7F7F7F7F7F7F7F7F7F7C5C5C5C5C5C5C5C5C5C5C5C5C5C5C5C5C5C5BDBDBDBDBDBDBDBDBDBDBDBDF7F7F7F7F7F7F7F7F79D3083E5E5E5F3F2F2EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFB8489CF3F2F2ECECEAC956ABF7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7A33888DDDDDDEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFBC4C9FF3F2F2EFEFEFCD58B0FBFBFAFBFBFAFBFBFAD461B6CD58B0C452A7B8489CAE4193AE4193A338889D308393297A8C2373FBFBFAFBFBFAFBFBFAA93D8EDDDDDDEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFC452A7F7F7F7F3F2F2D461B6FBFBFAFBFBFAFBFBFADD6CBEEB89D0EB89D0E982CEE87DCDE87DCDE87DCDE87DCDE87DCD9D3083FBFBFAFBFBFAFBFBFAAE4193DDDDDDEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFC956ABF7F7F7F3F2F2DC65BDFBFBFAFBFBFAFBFBFAE56CC6ED8AD3ED8AD3E982CEE982CEE982CEE87DCDE87DCDE87DCD9D3083FBFBFAFBFBFAFBFBFAB8489CDDDDDDEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFCD58B0FBFBFAF3F2F2E068C1FFFFFFFFFFFFFFFFFFE56CC6E068C1D461B6CD58B0C452A7C452A7B8489CAE4193A6398C9D3083FFFFFFFFFFFFFFFFFFBD4DA1DDDDDDEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFD461B6FBFBFAF3F2F2E068C1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC452A7DDDDDDEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFDC65BDFBFBFAF7F7F7E56CC6FFFFFFFFFFFFFFFFFFC5C5C5C5C5C5C5C5C5C5C5C5BDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDFFFFFFFFFFFFFFFFFFC956ABE3E3E1EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFE068C1FFFFFFFBFBFAE56CC6FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD15BB2E5E5E5EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFE068C1FFFFFFFFFFFFE56CC6FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD15BB2EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFE56CC6FFFFFFFFFFFFE56CC6E56CC6E56CC6E56CC6E56CC6E56CC6E56CC6E56CC6E56CC6E56CC6E068C1E068C1E068C1DC65BDDC65BDDC65BDDC65BDD461B6EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFE56CC6FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD15BB2E5E5E5EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFE56CC6FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD15BB2EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFE56CC6E56CC6E56CC6E56CC6E56CC6E56CC6E56CC6E56CC6E56CC6E56CC6E068C1E068C1E068C1DC65BDDC65BDDC65BDDC65BDD461B6EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF",
+      "sha1": "bc1faed947151bb6441594edda1de8c503b663ea"
+     }
+    },
+    "GroupIndex": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 55
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 535
+    },
+    "Margin": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "spbImportClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 317
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 141
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 16,
+    "left": 92,
+    "top": 112,
+    "width": 354
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 678,
+   "name": "labMustCheck_35",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsJamCode",
+   "path": "fSecurity.PageControl1.tsJamCode.labMustCheck_35",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Level must large than [35] Alarm - Trouble Shooting"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clRed"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 92
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 112
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 354
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TRadioGroup",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 45,
+    "left": 92,
+    "top": 64,
+    "width": 433
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 692,
+   "name": "rgJamLevel",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsJamCode",
+   "path": "fSecurity.PageControl1.tsJamCode.rgJamLevel",
+   "properties": {
+    "Columns": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "微軟正黑體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 45
+    },
+    "ItemIndex": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "Operator",
+      "Engineer",
+      "Supervisor",
+      "HonPrec"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 92
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 64
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 433
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 3,
+   "events": {
+    "OnChange": "cbJamAreaChange"
+   },
+   "geometry": {
+    "height": 28,
+    "left": 92,
+    "top": 0,
+    "width": 145
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 712,
+   "name": "cbJamArea",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsJamCode",
+   "path": "fSecurity.PageControl1.tsJamCode.cbJamArea",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "微軟正黑體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "ItemIndex": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "01 Input Arm",
+      "02 Output Arm",
+      "03 Index Unit",
+      "04 Input Shuttle",
+      "05 Output Shuttle",
+      "06 Empty Tray Arm",
+      "07 Tester I/F",
+      "08 Scanner",
+      "09 Tray Loader",
+      "10 Empty Tray",
+      "11 Tray Unloader 1",
+      "12 Tray Unloader 2",
+      "13 Tray Unloader 3",
+      "14 Color Tray",
+      "15 Temp. Controller",
+      "16 System",
+      "17 Fix Tray 1",
+      "18 Fix Tray 2",
+      "19 Fix Tray 3",
+      "20 ESD System",
+      "21 Process Log",
+      "22 Motion Log",
+      "23 Message",
+      "24 Motor",
+      "25 Tray Unloader 4",
+      "26 Tray Unloader 5",
+      "27 Tray Unloader 6",
+      "28 Fix Tray 4",
+      "29 Fix Tray 5",
+      "30 Fix Tray 6",
+      "31 Cylinder"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 92
+    },
+    "OnChange": {
+     "type": "SCALAR",
+     "value": "cbJamAreaChange"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Text": {
+     "type": "STR",
+     "value": "01 Input Arm"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 145
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 3,
+   "events": {
+    "OnChange": "cbJamCodeChange"
+   },
+   "geometry": {
+    "height": 28,
+    "left": 92,
+    "top": 32,
+    "width": 725
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 761,
+   "name": "cbJamCode",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsJamCode",
+   "path": "fSecurity.PageControl1.tsJamCode.cbJamCode",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "微軟正黑體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 92
+    },
+    "OnChange": {
+     "type": "SCALAR",
+     "value": "cbJamCodeChange"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 725
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 3,
+   "events": {
+    "OnChange": "cbJamLangChange"
+   },
+   "geometry": {
+    "height": 28,
+    "left": 88,
+    "top": 185,
+    "width": 145
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 776,
+   "name": "cbJamLang",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsJamCode",
+   "path": "fSecurity.PageControl1.tsJamCode.cbJamLang",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "微軟正黑體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "English",
+      "Chinese",
+      "Korean",
+      "Singapore"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 88
+    },
+    "OnChange": {
+     "type": "SCALAR",
+     "value": "cbJamLangChange"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Text": {
+     "type": "STR",
+     "value": "English"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 185
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 145
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": 10,
+   "visible": null
+  },
+  {
+   "align": "alBottom",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TRichEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 298,
+    "left": 0,
+    "top": 389,
+    "width": 866
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 797,
+   "name": "RichEditJamCode",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsJamCode",
+   "path": "fSecurity.PageControl1.tsJamCode.RichEditJamCode",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alBottom"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "CHINESEBIG5_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 298
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ScrollBars": {
+     "type": "SCALAR",
+     "value": "ssBoth"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 18
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 389
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 866
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": 18,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 560,
+    "top": 64,
+    "width": 217
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 812,
+   "name": "cbJamNeedRed",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsJamCode",
+   "path": "fSecurity.PageControl1.tsJamCode.cbJamNeedRed",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Need Red Background"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "微軟正黑體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 560
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 64
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 217
+    }
+   },
+   "sibling_index": 12,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 560,
+    "top": 88,
+    "width": 217
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 826,
+   "name": "cbSilentMode",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsJamCode",
+   "path": "fSecurity.PageControl1.tsJamCode.cbSilentMode",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Silent Mode"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "微軟正黑體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 560
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 88
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 217
+    }
+   },
+   "sibling_index": 13,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 560,
+    "top": 112,
+    "width": 217
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 840,
+   "name": "cbUnlockPassWord",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsJamCode",
+   "path": "fSecurity.PageControl1.tsJamCode.cbUnlockPassWord",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Need unlock password"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "微軟正黑體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 560
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 112
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 217
+    }
+   },
+   "sibling_index": 14,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TRadioGroup",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 45,
+    "left": 264,
+    "top": 185,
+    "width": 207
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 854,
+   "name": "rgMachineStatusBit8",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsJamCode",
+   "path": "fSecurity.PageControl1.tsJamCode.rgMachineStatusBit8",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Machine Status:Bit8"
+    },
+    "Columns": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "微軟正黑體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 45
+    },
+    "ItemIndex": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "0",
+      "1"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 264
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 185
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 207
+    }
+   },
+   "sibling_index": 15,
+   "synthesized": false,
+   "tab_order": 11,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 560,
+    "top": 136,
+    "width": 217
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 873,
+   "name": "cbIncludeMTBA",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsJamCode",
+   "path": "fSecurity.PageControl1.tsJamCode.cbIncludeMTBA",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Include MTBA"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "微軟正黑體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 560
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 217
+    }
+   },
+   "sibling_index": 16,
+   "synthesized": false,
+   "tab_order": 7,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 560,
+    "top": 160,
+    "width": 277
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 887,
+   "name": "chkCheckContAlarm",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsJamCode",
+   "path": "fSecurity.PageControl1.tsJamCode.chkCheckContAlarm",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Check continuously alarm [O16]"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "微軟正黑體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 560
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 160
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 277
+    }
+   },
+   "sibling_index": 17,
+   "synthesized": false,
+   "tab_order": 8,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 560,
+    "top": 184,
+    "width": 277
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 901,
+   "name": "chkO17",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsJamCode",
+   "path": "fSecurity.PageControl1.tsJamCode.chkO17",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Check continuously alarm [O17]"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "微軟正黑體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 560
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 184
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 277
+    }
+   },
+   "sibling_index": 18,
+   "synthesized": false,
+   "tab_order": 9,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 560,
+    "top": 208,
+    "width": 277
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 915,
+   "name": "cbAddAlarmLog",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsJamCode",
+   "path": "fSecurity.PageControl1.tsJamCode.cbAddAlarmLog",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Add Alarm Log"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "微軟正黑體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 560
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 208
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 277
+    }
+   },
+   "sibling_index": 19,
+   "synthesized": false,
+   "tab_order": 12,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 720,
+    "top": 232,
+    "width": 145
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 929,
+   "name": "cbN27AddBoard",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsJamCode",
+   "path": "fSecurity.PageControl1.tsJamCode.cbN27AddBoard",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "N27 Add Board"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "微軟正黑體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 720
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 232
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 145
+    }
+   },
+   "sibling_index": 20,
+   "synthesized": false,
+   "tab_order": 14,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 560,
+    "top": 232,
+    "width": 153
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 943,
+   "name": "cbN27AlarmSel",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsJamCode",
+   "path": "fSecurity.PageControl1.tsJamCode.cbN27AlarmSel",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "N27 Alarm to FTP"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "微軟正黑體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 560
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 232
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 153
+    }
+   },
+   "sibling_index": 21,
+   "synthesized": false,
+   "tab_order": 13,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 248,
+    "top": 6,
+    "width": 217
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 957,
+   "name": "cbN27AlarmSelByArea",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsJamCode",
+   "path": "fSecurity.PageControl1.tsJamCode.cbN27AlarmSelByArea",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "N27 Alarm to FTP By Area"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "微軟正黑體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 248
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 217
+    }
+   },
+   "sibling_index": 22,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 560,
+    "top": 256,
+    "width": 113
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 971,
+   "name": "chkTCPAlarm",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsJamCode",
+   "path": "fSecurity.PageControl1.tsJamCode.chkTCPAlarm",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TCP Alarm"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "微軟正黑體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 560
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 256
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 113
+    }
+   },
+   "sibling_index": 23,
+   "synthesized": false,
+   "tab_order": 15,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 244,
+    "top": 304,
+    "width": 277
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 985,
+   "name": "cbContAlarmNotUpload",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsJamCode",
+   "path": "fSecurity.PageControl1.tsJamCode.cbContAlarmNotUpload",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Continuously alarm not upload"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "微軟正黑體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 244
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 304
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 277
+    }
+   },
+   "sibling_index": 24,
+   "synthesized": false,
+   "tab_order": 17,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TCheckBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 560,
+    "top": 280,
+    "width": 281
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 999,
+   "name": "chkAlarmAfterFullTray",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsJamCode",
+   "path": "fSecurity.PageControl1.tsJamCode.chkAlarmAfterFullTray",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Alarm After Full Tray"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "微軟正黑體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 560
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 280
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 281
+    }
+   },
+   "sibling_index": 25,
+   "synthesized": false,
+   "tab_order": 16,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fSecurity.PageControl1.tsStatisticsJam.sgStatisticsJam"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 1014,
+   "name": "tsStatisticsJam",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1",
+   "path": "fSecurity.PageControl1.tsStatisticsJam",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Statistics Jam"
+    },
+    "ImageIndex": {
+     "type": "SCALAR",
+     "value": 11
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TStringGrid",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 554,
+    "left": 0,
+    "top": 0,
+    "width": 841
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 1017,
+   "name": "sgStatisticsJam",
+   "objkind": "object",
+   "parent_path": "fSecurity.PageControl1.tsStatisticsJam",
+   "path": "fSecurity.PageControl1.tsStatisticsJam.sgStatisticsJam",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "ColCount": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "DefaultColWidth": {
+     "type": "SCALAR",
+     "value": 50
+    },
+    "DefaultRowHeight": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "FixedColor": {
+     "type": "SCALAR",
+     "value": 9534289
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 554
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "RowCount": {
+     "type": "SCALAR",
+     "value": 60
+    },
+    "RowHeights": {
+     "type": "LIST",
+     "value": [
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15
+     ]
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 841
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TOpenDialog",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": null,
+    "left": 776,
+    "top": 139,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 1094,
+   "name": "OpenDialog1",
+   "objkind": "object",
+   "parent_path": "fSecurity",
+   "path": "fSecurity.OpenDialog1",
+   "properties": {
+    "DefaultExt": {
+     "type": "STR",
+     "value": "csv\r\n"
+    },
+    "Filter": {
+     "type": "STR",
+     "value": "CSV (*.csv)|*.csv"
+    },
+    "InitialDir": {
+     "type": "STR",
+     "value": "D:\\"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 776
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 139
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSaveDialog",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": null,
+    "left": 804,
+    "top": 139,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 1101,
+   "name": "SaveDialog1",
+   "objkind": "object",
+   "parent_path": "fSecurity",
+   "path": "fSecurity.SaveDialog1",
+   "properties": {
+    "DefaultExt": {
+     "type": "STR",
+     "value": "csv"
+    },
+    "Filter": {
+     "type": "STR",
+     "value": "CSV (*.csv)|*.csv"
+    },
+    "InitialDir": {
+     "type": "STR",
+     "value": "D:\\"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 804
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 139
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "cSecurity.dfm",
+ "total_nodes_incl_root": 61
+}

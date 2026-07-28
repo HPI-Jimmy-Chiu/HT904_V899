@@ -1,0 +1,506 @@
+{
+ "event_count": 71,
+ "events": [
+  {
+   "control_path": "fObserver",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fObserver",
+   "vcl_class": "TfObserver"
+  },
+  {
+   "control_path": "fObserver",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fObserver",
+   "vcl_class": "TfObserver"
+  },
+  {
+   "control_path": "fObserver",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fObserver",
+   "vcl_class": "TfObserver"
+  },
+  {
+   "control_path": "fObserver.pgcObserv",
+   "event_name": "OnChange",
+   "handler_name": "pgcObservChange",
+   "leaf_name": "pgcObserv",
+   "vcl_class": "TPageControl"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsCounter.GroupBox4.StringGrid2",
+   "event_name": "OnDrawCell",
+   "handler_name": "StringGrid2DrawCell",
+   "leaf_name": "StringGrid2",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsCounter.GroupBox4.StringGrid2",
+   "event_name": "OnMouseDown",
+   "handler_name": "StringGrid2MouseDown",
+   "leaf_name": "StringGrid2",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsCounter.GroupBox4.rgContactCountKinds",
+   "event_name": "OnClick",
+   "handler_name": "rgContactCountKindsClick",
+   "leaf_name": "rgContactCountKinds",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsCounter.GroupBox4.rgContactCountKindsForm",
+   "event_name": "OnClick",
+   "handler_name": "rgContactCountKindsFormClick",
+   "leaf_name": "rgContactCountKindsForm",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsCounter.GroupBox5.Image1",
+   "event_name": "OnDblClick",
+   "handler_name": "Image1DblClick",
+   "leaf_name": "Image1",
+   "vcl_class": "TImage"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsCounter.GroupBox5.StringGrid3",
+   "event_name": "OnDrawCell",
+   "handler_name": "StringGrid3DrawCell",
+   "leaf_name": "StringGrid3",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsCounter.GroupBox5.StringGrid3",
+   "event_name": "OnMouseDown",
+   "handler_name": "StringGrid3MouseDown",
+   "leaf_name": "StringGrid3",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsCounter.GroupBox5.rgContactCountHistory",
+   "event_name": "OnClick",
+   "handler_name": "rgContactCountHistoryClick",
+   "leaf_name": "rgContactCountHistory",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsCounter.GroupBox5.rgContactCountHistoryForm",
+   "event_name": "OnClick",
+   "handler_name": "rgContactCountHistoryFormClick",
+   "leaf_name": "rgContactCountHistoryForm",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsCounter.pnlCounterTop.GroupBox1.btnClearTime",
+   "event_name": "OnClick",
+   "handler_name": "btnClearTimeClick",
+   "leaf_name": "btnClearTime",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsTestCate.ScrollBox1.GroupBox8.rbHeadNumber",
+   "event_name": "OnClick",
+   "handler_name": "rgRowNoClick",
+   "leaf_name": "rbHeadNumber",
+   "vcl_class": "TRadioButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsTestCate.ScrollBox1.GroupBox8.rbSocketNumber",
+   "event_name": "OnClick",
+   "handler_name": "rgRowNoClick",
+   "leaf_name": "rbSocketNumber",
+   "vcl_class": "TRadioButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsTestCate.ScrollBox1.GroupBox8.rbHeadPercent",
+   "event_name": "OnClick",
+   "handler_name": "rgRowNoClick",
+   "leaf_name": "rbHeadPercent",
+   "vcl_class": "TRadioButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsTestCate.ScrollBox1.GroupBox8.rbSocketPercent",
+   "event_name": "OnClick",
+   "handler_name": "rgRowNoClick",
+   "leaf_name": "rbSocketPercent",
+   "vcl_class": "TRadioButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsTestCate.ScrollBox1.rgRowNo",
+   "event_name": "OnClick",
+   "handler_name": "rgRowNoClick",
+   "leaf_name": "rgRowNo",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsScanner.StringGrid5",
+   "event_name": "OnDrawCell",
+   "handler_name": "StringGrid5DrawCell",
+   "leaf_name": "StringGrid5",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsMDBQuery.pgcMessage",
+   "event_name": "OnChange",
+   "handler_name": "pgcMessageChange",
+   "leaf_name": "pgcMessage",
+   "vcl_class": "TPageControl"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsMDBQuery.pgcMessage.tsMDB.lbltTotalLoader",
+   "event_name": "OnMouseDown",
+   "handler_name": "lbltTotalLoaderMouseDown",
+   "leaf_name": "lbltTotalLoader",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsMDBQuery.pgcMessage.tsMDB.cbDisplayData",
+   "event_name": "OnChange",
+   "handler_name": "DateTimePicker1CloseUp",
+   "leaf_name": "cbDisplayData",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsMDBQuery.pgcMessage.tsMDB.DateTimePicker1",
+   "event_name": "OnCloseUp",
+   "handler_name": "DateTimePicker1CloseUp",
+   "leaf_name": "DateTimePicker1",
+   "vcl_class": "TDateTimePicker"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsMDBQuery.pgcMessage.tsMDB.DateTimePicker3",
+   "event_name": "OnCloseUp",
+   "handler_name": "DateTimePicker1CloseUp",
+   "leaf_name": "DateTimePicker3",
+   "vcl_class": "TDateTimePicker"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsMDBQuery.pgcMessage.tsMDB.btnQueryEventLog",
+   "event_name": "OnClick",
+   "handler_name": "BtnQueryClick",
+   "leaf_name": "btnQueryEventLog",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsMDBQuery.pgcMessage.tsMDB.Button7",
+   "event_name": "OnClick",
+   "handler_name": "BtnSaveClick",
+   "leaf_name": "Button7",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsMDBQuery.pgcMessage.tsMDB.btAutoSave",
+   "event_name": "OnClick",
+   "handler_name": "btAutoSaveClick",
+   "leaf_name": "btAutoSave",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsMDBQuery.pgcMessage.tsEventLogTxt.pnlEventLogTxt.cbbMonth",
+   "event_name": "OnChange",
+   "handler_name": "cbbMonthChange",
+   "leaf_name": "cbbMonth",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsMDBQuery.pgcMessage.tsEventLogTxt.pnlEventLogTxt.lstEventLog",
+   "event_name": "OnClick",
+   "handler_name": "lstEventLogClick",
+   "leaf_name": "lstEventLog",
+   "vcl_class": "TListBox"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsMDBQuery.pgcMessage.tsEventLogTxt.pnlEventLogTxt.btnQueryEventLogTxt",
+   "event_name": "OnClick",
+   "handler_name": "btnQueryEventLogTxtClick",
+   "leaf_name": "btnQueryEventLogTxt",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsMDBQuery.pgcMessage.tsEventLogTxt.pnlEventLogTxt.btnBackupLogYear",
+   "event_name": "OnClick",
+   "handler_name": "btnBackupLogYearClick",
+   "leaf_name": "btnBackupLogYear",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsMDBQuery.pgcMessage.tsMsgTimeData.pnlTimeDataTop.lstTimeData",
+   "event_name": "OnClick",
+   "handler_name": "lstTimeDataClick",
+   "leaf_name": "lstTimeData",
+   "vcl_class": "TListBox"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsMDBQuery.pgcMessage.tsMsgTimeData.pnlTimeDataTop.btnTimeData",
+   "event_name": "OnClick",
+   "handler_name": "btnQueryEventLogTxtClick",
+   "leaf_name": "btnTimeData",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsMDBQuery.pgcMessage.tsSGJamCount.Panel2.btnSG_QueryNow",
+   "event_name": "OnClick",
+   "handler_name": "btnSG_QueryNowClick",
+   "leaf_name": "btnSG_QueryNow",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsMDBQuery.pgcMessage.tsSGJamCount.Panel2.btnSG_QueryYesterday",
+   "event_name": "OnClick",
+   "handler_name": "btnSG_QueryYesterdayClick",
+   "leaf_name": "btnSG_QueryYesterday",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsYield.ChartYield.SpeedButton1",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton1Click",
+   "leaf_name": "SpeedButton1",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsYield.ChartYield.edYieldMax",
+   "event_name": "OnClick",
+   "handler_name": "edYieldMaxClick",
+   "leaf_name": "edYieldMax",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsYield.ChartYield.edYieldMin",
+   "event_name": "OnClick",
+   "handler_name": "edYieldMinClick",
+   "leaf_name": "edYieldMin",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsYield.pnlYield.mtRowA",
+   "event_name": "OnMouseUp",
+   "handler_name": "mtRowAMouseUp",
+   "leaf_name": "mtRowA",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsYield.pnlYield.mtRowC",
+   "event_name": "OnMouseUp",
+   "handler_name": "mtRowAMouseUp",
+   "leaf_name": "mtRowC",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsYield.pnlYield.mtRowB",
+   "event_name": "OnMouseUp",
+   "handler_name": "mtRowAMouseUp",
+   "leaf_name": "mtRowB",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsYield.pnlYield.mtRowD",
+   "event_name": "OnMouseUp",
+   "handler_name": "mtRowAMouseUp",
+   "leaf_name": "mtRowD",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsTemperature.cbbTempChart",
+   "event_name": "OnChange",
+   "handler_name": "cbbTempChartChange",
+   "leaf_name": "cbbTempChart",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsTestInfo.pgcTestInfo.tsLoadInfo.btOpenLoadLog",
+   "event_name": "OnClick",
+   "handler_name": "btOpenLoadLogClick",
+   "leaf_name": "btOpenLoadLog",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsDataRecord.pgcPrecautions.tsPrecautionsRecord.pnPrecautionsRecord.pnMaintenanceRecord.sbHandlerPrecautionRecordSet",
+   "event_name": "OnClick",
+   "handler_name": "sbHandlerPrecautionRecordSetClick",
+   "leaf_name": "sbHandlerPrecautionRecordSet",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsDataRecord.pgcPrecautions.tsPrecautionsRecord.pnPrecautionsRecord.pnMaintenanceRecord.sbHandlerPrecautionRecordClear",
+   "event_name": "OnClick",
+   "handler_name": "sbHandlerPrecautionRecordClearClick",
+   "leaf_name": "sbHandlerPrecautionRecordClear",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsDataRecord.pgcPrecautions.tsPrecautionsRecord.pnPrecautionsRecord.pnMaintenanceRecord.sbHandlerPrecautionFormShow",
+   "event_name": "OnClick",
+   "handler_name": "sbHandlerPrecautionFormShowClick",
+   "leaf_name": "sbHandlerPrecautionFormShow",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsDataRecord.pgcPrecautions.tsPrecautionsRecord.pnPrecautionsRecord.pnMaintenanceRecord.sbPRFinishDate",
+   "event_name": "OnClick",
+   "handler_name": "sbPRFinishDateClick",
+   "leaf_name": "sbPRFinishDate",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsDataRecord.pgcPrecautions.tsPrecautionsRecord.pnPrecautionsRecord.pnMaintenanceRecord.sbPRStartDate",
+   "event_name": "OnClick",
+   "handler_name": "sbPRStartDateClick",
+   "leaf_name": "sbPRStartDate",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsDataRecord.pgcPrecautions.tsPrecautionsRecord.pnPrecautionsRecord.pnMaintenanceRecord.sbPrecautionSave",
+   "event_name": "OnClick",
+   "handler_name": "sbPrecautionSaveClick",
+   "leaf_name": "sbPrecautionSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsDataRecord.pgcPrecautions.tsPrecautionsRecord.pnPrecautionsRecord.pnMaintenanceRecord.cobNoteContentsSet",
+   "event_name": "OnClick",
+   "handler_name": "cobNoteContentsSetClick",
+   "leaf_name": "cobNoteContentsSet",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsDataRecord.pgcPrecautions.tsPrecautionsRecord.pnPrecautionsRecord.pnMaintenanceRecord.sbScreenkeyboard",
+   "event_name": "OnClick",
+   "handler_name": "sbScreenkeyboardClick",
+   "leaf_name": "sbScreenkeyboard",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsDataRecord.pgcPrecautions.tsHanderMajorMaintenance.pnHanderMajrMaintenance.sbMajorMaintenanceDate",
+   "event_name": "OnClick",
+   "handler_name": "sbMajorMaintenanceDateClick",
+   "leaf_name": "sbMajorMaintenanceDate",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsDataRecord.pgcPrecautions.tsHanderMajorMaintenance.pnHanderMajrMaintenance.sbMajorMaintenanceStartTime",
+   "event_name": "OnClick",
+   "handler_name": "sbMajorMaintenanceStartTimeClick",
+   "leaf_name": "sbMajorMaintenanceStartTime",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsDataRecord.pgcPrecautions.tsHanderMajorMaintenance.pnHanderMajrMaintenance.sbMajorMaintenanceEndTime",
+   "event_name": "OnClick",
+   "handler_name": "sbMajorMaintenanceEndTimeClick",
+   "leaf_name": "sbMajorMaintenanceEndTime",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsDataRecord.pgcPrecautions.tsHanderMajorMaintenance.pnHanderMajrMaintenance.sbUndesirablePhenomenonClear",
+   "event_name": "OnClick",
+   "handler_name": "sbUndesirablePhenomenonClearClick",
+   "leaf_name": "sbUndesirablePhenomenonClear",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsDataRecord.pgcPrecautions.tsHanderMajorMaintenance.pnHanderMajrMaintenance.sbCountermeasureClear",
+   "event_name": "OnClick",
+   "handler_name": "sbCountermeasureClearClick",
+   "leaf_name": "sbCountermeasureClear",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsDataRecord.pgcPrecautions.tsHanderMajorMaintenance.pnHanderMajrMaintenance.sbMajorMaintenanceSave",
+   "event_name": "OnClick",
+   "handler_name": "sbMajorMaintenanceSaveClick",
+   "leaf_name": "sbMajorMaintenanceSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsDataRecord.pgcPrecautions.tsHanderMajorMaintenance.pnHanderMajrMaintenance.sbUndesirablePhenomenon",
+   "event_name": "OnClick",
+   "handler_name": "sbUndesirablePhenomenonClick",
+   "leaf_name": "sbUndesirablePhenomenon",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsDataRecord.pgcPrecautions.tsHanderMajorMaintenance.pnHanderMajrMaintenance.sbCountermeasure",
+   "event_name": "OnClick",
+   "handler_name": "sbCountermeasureClick",
+   "leaf_name": "sbCountermeasure",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsDataRecord.pgcPrecautions.tsHanderMajorMaintenance.pnHanderMajrMaintenance.sbMajorMaintenanceSearch",
+   "event_name": "OnClick",
+   "handler_name": "sbMajorMaintenanceSearchClick",
+   "leaf_name": "sbMajorMaintenanceSearch",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsDataRecord.pgcPrecautions.tsHanderMajorMaintenance.pnHanderMajrMaintenance.sbScreenkeyboard2",
+   "event_name": "OnClick",
+   "handler_name": "sbScreenkeyboardClick",
+   "leaf_name": "sbScreenkeyboard2",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsDataRecord.pgcPrecautions.tsPrecautionLog.pnPrecautionLog.sbSearchPrecautionLog",
+   "event_name": "OnClick",
+   "handler_name": "sbSearchPrecautionLogClick",
+   "leaf_name": "sbSearchPrecautionLog",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsLotInfo.btnLot2",
+   "event_name": "OnClick",
+   "handler_name": "btnLot1Click",
+   "leaf_name": "btnLot2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsLotInfo.btnLot3",
+   "event_name": "OnClick",
+   "handler_name": "btnLot1Click",
+   "leaf_name": "btnLot3",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsLotInfo.btnLot4",
+   "event_name": "OnClick",
+   "handler_name": "btnLot1Click",
+   "leaf_name": "btnLot4",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsLotInfo.btnLot5",
+   "event_name": "OnClick",
+   "handler_name": "btnLot1Click",
+   "leaf_name": "btnLot5",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fObserver.pgcObserv.tsLotInfo.btnLot1",
+   "event_name": "OnClick",
+   "handler_name": "btnLot1Click",
+   "leaf_name": "btnLot1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fObserver.btExit",
+   "event_name": "OnClick",
+   "handler_name": "BtnExitClick",
+   "leaf_name": "btExit",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fObserver.Timer1",
+   "event_name": "OnTimer",
+   "handler_name": "Timer1Timer",
+   "leaf_name": "Timer1",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fObserver",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "cObserver.dfm"
+}

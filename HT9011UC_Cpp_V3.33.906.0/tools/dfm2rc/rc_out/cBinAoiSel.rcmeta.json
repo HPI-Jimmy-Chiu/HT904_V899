@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "generator": "emit_rc.py W7-B1b v1.0",
+  "source_dfm": "cBinAoiSel.dfm",
+  "formstem": "CBINAOISEL",
+  "dialog_count": 3,
+  "control_count": 2,
+  "fallback_classes_used": [],
+  "warnings": [],
+  "dialogs": [
+    {
+      "idd_symbol": "IDD_CBINAOISEL",
+      "idd_value": 8192,
+      "is_root": true,
+      "owner_path": "fBinAOISel",
+      "owner_class": "TfBinAOISel",
+      "controls": [
+        {
+          "symbol": "IDC_CBINAOISEL_LABEL1",
+          "value": 1024,
+          "win32_class": "Static",
+          "caption": "AOI Fail Bin",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fBinAOISel.Label1",
+          "fallback_class": false,
+          "x": 0,
+          "y": 0,
+          "cx": 434,
+          "cy": 25
+        }
+      ]
+    },
+    {
+      "idd_symbol": "IDD_CBINAOISEL_PANEL2",
+      "idd_value": 8193,
+      "is_root": false,
+      "owner_path": "fBinAOISel.Panel2",
+      "owner_class": "TPanel",
+      "controls": [
+        {
+          "symbol": "IDC_CBINAOISEL_SPBEXIT",
+          "value": 1025,
+          "win32_class": "Button",
+          "caption": "Exit",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fBinAOISel.Panel2.spbExit",
+          "fallback_class": false,
+          "x": 256,
+          "y": 8,
+          "cx": 137,
+          "cy": 40
+        }
+      ]
+    },
+    {
+      "idd_symbol": "IDD_CBINAOISEL_SCROLLBOX1",
+      "idd_value": 8194,
+      "is_root": false,
+      "owner_path": "fBinAOISel.ScrollBox1",
+      "owner_class": "TScrollBox",
+      "controls": []
+    }
+  ]
+}

@@ -1,0 +1,1165 @@
+{
+ "control_node_count": 20,
+ "encoding_used": "cp950",
+ "form_class": "TASESendMessage",
+ "form_name": "ASESendMessage",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "ASESendMessage.PageControl1",
+    "ASESendMessage.Memo1",
+    "ASESendMessage.NMUDP1",
+    "ASESendMessage.NMUDP2"
+   ],
+   "class": "TASESendMessage",
+   "depth": 0,
+   "events": {},
+   "geometry": {
+    "height": 490,
+    "left": 472,
+    "top": 216,
+    "width": 923
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "ASESendMessage",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "ASESendMessage",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "ASESendMessage"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 490
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 472
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 216
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 923
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alLeft",
+   "anchors": null,
+   "child_paths": [
+    "ASESendMessage.PageControl1.Commucation",
+    "ASESendMessage.PageControl1.Setup"
+   ],
+   "class": "TPageControl",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 451,
+    "left": 0,
+    "top": 0,
+    "width": 432
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "TABHOST",
+   "line": 16,
+   "name": "PageControl1",
+   "objkind": "object",
+   "parent_path": "ASESendMessage",
+   "path": "ASESendMessage.PageControl1",
+   "properties": {
+    "ActivePage": {
+     "type": "SCALAR",
+     "value": "Setup"
+    },
+    "Align": {
+     "type": "SCALAR",
+     "value": "alLeft"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 451
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabIndex": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 432
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "ASESendMessage.PageControl1.Commucation.btnTest",
+    "ASESendMessage.PageControl1.Commucation.edtTestMsg",
+    "ASESendMessage.PageControl1.Commucation.edtRecvMsg",
+    "ASESendMessage.PageControl1.Commucation.btnTestRecv"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 25,
+   "name": "Commucation",
+   "objkind": "object",
+   "parent_path": "ASESendMessage.PageControl1",
+   "path": "ASESendMessage.PageControl1.Commucation",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Commucation"
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 3,
+   "events": {
+    "OnClick": "btnTestClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 280,
+    "top": 0,
+    "width": 75
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 27,
+   "name": "btnTest",
+   "objkind": "object",
+   "parent_path": "ASESendMessage.PageControl1.Commucation",
+   "path": "ASESendMessage.PageControl1.Commucation.btnTest",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Test"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 280
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btnTestClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 75
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 4,
+    "top": 4,
+    "width": 265
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 36,
+   "name": "edtTestMsg",
+   "objkind": "object",
+   "parent_path": "ASESendMessage.PageControl1.Commucation",
+   "path": "ASESendMessage.PageControl1.Commucation.edtTestMsg",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Text": {
+     "type": "STR",
+     "value": "edtTestMsg"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 265
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 4,
+    "top": 40,
+    "width": 265
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 44,
+   "name": "edtRecvMsg",
+   "objkind": "object",
+   "parent_path": "ASESendMessage.PageControl1.Commucation",
+   "path": "ASESendMessage.PageControl1.Commucation.edtRecvMsg",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Text": {
+     "type": "STR",
+     "value": "@e01001Schedule=ABCDEFG,InQty=654"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 265
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 3,
+   "events": {
+    "OnClick": "btnTestRecvClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 280,
+    "top": 36,
+    "width": 75
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 52,
+   "name": "btnTestRecv",
+   "objkind": "object",
+   "parent_path": "ASESendMessage.PageControl1.Commucation",
+   "path": "ASESendMessage.PageControl1.Commucation.btnTestRecv",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "btnTestRecv"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 280
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btnTestRecvClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 75
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "ASESendMessage.PageControl1.Setup.Label1",
+    "ASESendMessage.PageControl1.Setup.Label24",
+    "ASESendMessage.PageControl1.Setup.Label2",
+    "ASESendMessage.PageControl1.Setup.Label3",
+    "ASESendMessage.PageControl1.Setup.IPAddress1",
+    "ASESendMessage.PageControl1.Setup.IPPort1",
+    "ASESendMessage.PageControl1.Setup.Connect",
+    "ASESendMessage.PageControl1.Setup.SaveData",
+    "ASESendMessage.PageControl1.Setup.Button2",
+    "ASESendMessage.PageControl1.Setup.IPPort2"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 62,
+   "name": "Setup",
+   "objkind": "object",
+   "parent_path": "ASESendMessage.PageControl1",
+   "path": "ASESendMessage.PageControl1.Setup",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Setup"
+    },
+    "ImageIndex": {
+     "type": "SCALAR",
+     "value": 1
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 35,
+    "top": 3,
+    "width": 54
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 65,
+   "name": "Label1",
+   "objkind": "object",
+   "parent_path": "ASESendMessage.PageControl1.Setup",
+   "path": "ASESendMessage.PageControl1.Setup.Label1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "IP Address "
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 35
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 54
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 3,
+    "top": 23,
+    "width": 27
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 72,
+   "name": "Label24",
+   "objkind": "object",
+   "parent_path": "ASESendMessage.PageControl1.Setup",
+   "path": "ASESendMessage.PageControl1.Setup.Label24",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "1       "
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 23
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 27
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 187,
+    "top": 3,
+    "width": 58
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 79,
+   "name": "Label2",
+   "objkind": "object",
+   "parent_path": "ASESendMessage.PageControl1.Setup",
+   "path": "ASESendMessage.PageControl1.Setup.Label2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TCP/IP Port"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 187
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 58
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 191,
+    "top": 243,
+    "width": 58
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 86,
+   "name": "Label3",
+   "objkind": "object",
+   "parent_path": "ASESendMessage.PageControl1.Setup",
+   "path": "ASESendMessage.PageControl1.Setup.Label3",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "TCP/IP Port"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 191
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 243
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 58
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 35,
+    "top": 19,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 93,
+   "name": "IPAddress1",
+   "objkind": "object",
+   "parent_path": "ASESendMessage.PageControl1.Setup",
+   "path": "ASESendMessage.PageControl1.Setup.IPAddress1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "ImeMode": {
+     "type": "SCALAR",
+     "value": "imClose"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 35
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Text": {
+     "type": "STR",
+     "value": "127.0.0.1"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {
+    "OnClick": "IPPort2Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 187,
+    "top": 19,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 102,
+   "name": "IPPort1",
+   "objkind": "object",
+   "parent_path": "ASESendMessage.PageControl1.Setup",
+   "path": "ASESendMessage.PageControl1.Setup.IPPort1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 187
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "IPPort2Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Text": {
+     "type": "STR",
+     "value": "9200"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 3,
+   "events": {
+    "OnClick": "ConnectClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 320,
+    "top": 16,
+    "width": 100
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 111,
+   "name": "Connect",
+   "objkind": "object",
+   "parent_path": "ASESendMessage.PageControl1.Setup",
+   "path": "ASESendMessage.PageControl1.Setup.Connect",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Client Connect"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 320
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "ConnectClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 100
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 3,
+   "events": {
+    "OnClick": "SaveDataClick"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 320,
+    "top": 48,
+    "width": 100
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 120,
+   "name": "SaveData",
+   "objkind": "object",
+   "parent_path": "ASESendMessage.PageControl1.Setup",
+   "path": "ASESendMessage.PageControl1.Setup.SaveData",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "SaveData"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 320
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "SaveDataClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 48
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 100
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 3,
+   "events": {
+    "OnClick": "Button2Click"
+   },
+   "geometry": {
+    "height": 25,
+    "left": 316,
+    "top": 256,
+    "width": 100
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 129,
+   "name": "Button2",
+   "objkind": "object",
+   "parent_path": "ASESendMessage.PageControl1.Setup",
+   "path": "ASESendMessage.PageControl1.Setup.Button2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Server Connect"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 316
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "Button2Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 256
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 100
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 3,
+   "events": {
+    "OnClick": "IPPort2Click"
+   },
+   "geometry": {
+    "height": 21,
+    "left": 191,
+    "top": 259,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 138,
+   "name": "IPPort2",
+   "objkind": "object",
+   "parent_path": "ASESendMessage.PageControl1.Setup",
+   "path": "ASESendMessage.PageControl1.Setup.IPPort2",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "ImeMode": {
+     "type": "SCALAR",
+     "value": "imClose"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 191
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "IPPort2Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Text": {
+     "type": "STR",
+     "value": "9150"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 259
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 451,
+    "left": 432,
+    "top": 0,
+    "width": 475
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 150,
+   "name": "Memo1",
+   "objkind": "object",
+   "parent_path": "ASESendMessage",
+   "path": "ASESendMessage.Memo1",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 451
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 432
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 475
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TNMUDP",
+   "depth": 1,
+   "events": {
+    "OnDataReceived": "NMUDP1DataReceived"
+   },
+   "geometry": {
+    "height": null,
+    "left": 376,
+    "top": null,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 159,
+   "name": "NMUDP1",
+   "objkind": "object",
+   "parent_path": "ASESendMessage",
+   "path": "ASESendMessage.NMUDP1",
+   "properties": {
+    "Left": {
+     "type": "SCALAR",
+     "value": 376
+    },
+    "LocalPort": {
+     "type": "SCALAR",
+     "value": 9000
+    },
+    "OnDataReceived": {
+     "type": "SCALAR",
+     "value": "NMUDP1DataReceived"
+    },
+    "RemoteHost": {
+     "type": "STR",
+     "value": "127.0.0.1"
+    },
+    "RemotePort": {
+     "type": "SCALAR",
+     "value": 9001
+    },
+    "ReportLevel": {
+     "type": "SCALAR",
+     "value": 1
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TNMUDP",
+   "depth": 1,
+   "events": {
+    "OnDataReceived": "NMUDP1DataReceived"
+   },
+   "geometry": {
+    "height": null,
+    "left": 404,
+    "top": null,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 167,
+   "name": "NMUDP2",
+   "objkind": "object",
+   "parent_path": "ASESendMessage",
+   "path": "ASESendMessage.NMUDP2",
+   "properties": {
+    "Left": {
+     "type": "SCALAR",
+     "value": 404
+    },
+    "LocalPort": {
+     "type": "SCALAR",
+     "value": 9000
+    },
+    "OnDataReceived": {
+     "type": "SCALAR",
+     "value": "NMUDP1DataReceived"
+    },
+    "RemoteHost": {
+     "type": "STR",
+     "value": "127.0.0.1"
+    },
+    "RemotePort": {
+     "type": "SCALAR",
+     "value": 9001
+    },
+    "ReportLevel": {
+     "type": "SCALAR",
+     "value": 1
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "ASE_K Socket/aseTest.dfm",
+ "total_nodes_incl_root": 21
+}

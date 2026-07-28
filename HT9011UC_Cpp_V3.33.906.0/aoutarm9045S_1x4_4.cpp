@@ -140,7 +140,7 @@ bool MoveOutArmXY_ToShuttleAlarmArea();                                        /
 // magazine surface (golden Magazine.h, not in include subset)
 bool CheckPlaceToMagazineTray(int iWhichMag);                                  // golden Magazine.h -- offline: true
 bool DoPickFromMagazineBuffer();                                               // golden Magazine.h -- offline: true
-void SearchTrayToPlace_Magazine();                                             // golden Magazine.h / Eastsun 20260515 -- offline: no-op
+int  SearchTrayToPlace_Magazine();                                             // golden aoutarm9045.h:63 -- AI(W906-W7-A2) 20260728: was void (ODR split vs. golden's int; see aoutarm_shims.cpp)
 // out-arm fall-down / clean-out / fix-tray-full surface (engine helpers)
 void InitOutArmTask();                                                          // golden aHotPlateSubstrate.h (also engine) -- offline: no-op
 // y-pitch home predicates (golden ainarm9045.h:114/115; that header clashes -> declared here)

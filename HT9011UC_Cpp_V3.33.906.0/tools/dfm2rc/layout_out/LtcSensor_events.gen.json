@@ -1,0 +1,163 @@
+{
+ "event_count": 22,
+ "events": [
+  {
+   "control_path": "fLtcSensor",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fLtcSensor",
+   "vcl_class": "TfLtcSensor"
+  },
+  {
+   "control_path": "fLtcSensor",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fLtcSensor",
+   "vcl_class": "TfLtcSensor"
+  },
+  {
+   "control_path": "fLtcSensor",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fLtcSensor",
+   "vcl_class": "TfLtcSensor"
+  },
+  {
+   "control_path": "fLtcSensor.btnClose",
+   "event_name": "OnClick",
+   "handler_name": "btnCloseClick",
+   "leaf_name": "btnClose",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fLtcSensor.Panel1.pnlTop.btSetLtc",
+   "event_name": "OnClick",
+   "handler_name": "btSetLtcClick",
+   "leaf_name": "btSetLtc",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLtcSensor.Panel1.pnlTop.btSh1Servo",
+   "event_name": "OnClick",
+   "handler_name": "btSh1ServoClick",
+   "leaf_name": "btSh1Servo",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLtcSensor.Panel1.pnlTop.btSh2Servo",
+   "event_name": "OnClick",
+   "handler_name": "btSh2ServoClick",
+   "leaf_name": "btSh2Servo",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLtcSensor.Panel1.pnlTop.BtnDellTest",
+   "event_name": "OnClick",
+   "handler_name": "BtnDellTestClick",
+   "leaf_name": "BtnDellTest",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLtcSensor.Panel1.pnlTop.ScrollBar1",
+   "event_name": "OnChange",
+   "handler_name": "ScrollBar1Change",
+   "leaf_name": "ScrollBar1",
+   "vcl_class": "TScrollBar"
+  },
+  {
+   "control_path": "fLtcSensor.Panel1.pnlTop.btSh3Servo",
+   "event_name": "OnClick",
+   "handler_name": "btSh3ServoClick",
+   "leaf_name": "btSh3Servo",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z.btGetSh1Ltc",
+   "event_name": "OnClick",
+   "handler_name": "btGetSh1LtcClick",
+   "leaf_name": "btGetSh1Ltc",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z.btGetSh2Ltc",
+   "event_name": "OnClick",
+   "handler_name": "btGetSh2LtcClick",
+   "leaf_name": "btGetSh2Ltc",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Y.btGetSh1YLtc",
+   "event_name": "OnClick",
+   "handler_name": "btGetSh1LtcClick",
+   "leaf_name": "btGetSh1YLtc",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Y.btGetSh2YLtc",
+   "event_name": "OnClick",
+   "handler_name": "btGetSh2LtcClick",
+   "leaf_name": "btGetSh2YLtc",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLtcSensor.Panel1.pnlCenter.gbInSh1Y.btGetInSh1YLtc",
+   "event_name": "OnClick",
+   "handler_name": "btGetSh1LtcClick",
+   "leaf_name": "btGetInSh1YLtc",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLtcSensor.Panel1.pnlCenter.gbInSh2Y.btGetInSh2YLtc",
+   "event_name": "OnClick",
+   "handler_name": "btGetSh2LtcClick",
+   "leaf_name": "btGetInSh2YLtc",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z.btGetSh3Ltc",
+   "event_name": "OnClick",
+   "handler_name": "btGetSh3LtcClick",
+   "leaf_name": "btGetSh3Ltc",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y.btGetSh3YLtc",
+   "event_name": "OnClick",
+   "handler_name": "btGetSh3LtcClick",
+   "leaf_name": "btGetSh3YLtc",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh1_2Y.Button5",
+   "event_name": "OnClick",
+   "handler_name": "btGetSh1LtcClick",
+   "leaf_name": "Button5",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh2_2Y.Button6",
+   "event_name": "OnClick",
+   "handler_name": "btGetSh2LtcClick",
+   "leaf_name": "Button6",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fLtcSensor.TimerLtcSensor",
+   "event_name": "OnTimer",
+   "handler_name": "TimerLtcSensorTimer",
+   "leaf_name": "TimerLtcSensor",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fLtcSensor.DellTest",
+   "event_name": "OnTimer",
+   "handler_name": "DellTestTimer",
+   "leaf_name": "DellTest",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fLtcSensor",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "LtcSensor.dfm"
+}

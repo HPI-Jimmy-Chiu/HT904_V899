@@ -1,0 +1,51 @@
+{
+ "event_count": 6,
+ "events": [
+  {
+   "control_path": "fHome",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fHome",
+   "vcl_class": "TfHome"
+  },
+  {
+   "control_path": "fHome",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fHome",
+   "vcl_class": "TfHome"
+  },
+  {
+   "control_path": "fHome",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fHome",
+   "vcl_class": "TfHome"
+  },
+  {
+   "control_path": "fHome.Panel2.SpeedButton1",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton1Click",
+   "leaf_name": "SpeedButton1",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fHome.Panel3.sbAbortHome",
+   "event_name": "OnClick",
+   "handler_name": "sbAbortHomeClick",
+   "leaf_name": "sbAbortHome",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fHome.Timer1",
+   "event_name": "OnTimer",
+   "handler_name": "Timer1Timer",
+   "leaf_name": "Timer1",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fHome",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "uhome.dfm"
+}

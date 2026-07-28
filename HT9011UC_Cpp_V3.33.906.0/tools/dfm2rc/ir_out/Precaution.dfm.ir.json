@@ -1,0 +1,1987 @@
+{
+ "control_node_count": 23,
+ "encoding_used": "cp950",
+ "form_class": "TfPrecaution",
+ "form_name": "fPrecaution",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fPrecaution.pnPrecautionsRecord",
+    "fPrecaution.tm_CheckEditEmpty"
+   ],
+   "class": "TfPrecaution",
+   "depth": 0,
+   "events": {
+    "OnClose": "FormClose",
+    "OnCreate": "FormCreate",
+    "OnShow": "FormShow"
+   },
+   "geometry": {
+    "height": null,
+    "left": 756,
+    "top": 155,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "fPrecaution",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "fPrecaution",
+   "properties": {
+    "BorderStyle": {
+     "type": "SCALAR",
+     "value": "bsSingle"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Precaution Record"
+    },
+    "ClientHeight": {
+     "type": "SCALAR",
+     "value": 473
+    },
+    "ClientWidth": {
+     "type": "SCALAR",
+     "value": 574
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnFace"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "FormStyle": {
+     "type": "SCALAR",
+     "value": "fsStayOnTop"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 756
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnClose": {
+     "type": "SCALAR",
+     "value": "FormClose"
+    },
+    "OnCreate": {
+     "type": "SCALAR",
+     "value": "FormCreate"
+    },
+    "OnShow": {
+     "type": "SCALAR",
+     "value": "FormShow"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 155
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [
+    "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord"
+   ],
+   "class": "TPanel",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 473,
+    "left": 0,
+    "top": 0,
+    "width": 574
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 21,
+   "name": "pnPrecautionsRecord",
+   "objkind": "object",
+   "parent_path": "fPrecaution",
+   "path": "fPrecaution.pnPrecautionsRecord",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 9534289
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clBlack"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Courier New"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 473
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 574
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnMaintenanceRecordTitle",
+    "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.MemoHandlerPrecautionRecord",
+    "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnPrecautionRecordDocumentNoTitle",
+    "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.Panel91",
+    "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.Panel92",
+    "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.Panel93",
+    "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.Panel94",
+    "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.Panel95",
+    "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnPrecautionStartTime",
+    "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.Panel96",
+    "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnPrecautionEndTime",
+    "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnPrecautionRecordDocumentNo",
+    "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnNoteContents",
+    "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnApprovedManager",
+    "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnWatchmakers",
+    "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.Panel1",
+    "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnCloseType",
+    "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.Panel3",
+    "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnCloseName",
+    "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnPRSpecification"
+   ],
+   "class": "TPanel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 457,
+    "left": 12,
+    "top": 8,
+    "width": 549
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 36,
+   "name": "pnMaintenanceRecord",
+   "objkind": "object",
+   "parent_path": "fPrecaution.pnPrecautionsRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 457
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 549
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 30,
+    "left": 2,
+    "top": 2,
+    "width": 545
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 44,
+   "name": "pnMaintenanceRecordTitle",
+   "objkind": "object",
+   "parent_path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnMaintenanceRecordTitle",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Station Precautions Record"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 9534289
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Courier New"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 30
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 545
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 225,
+    "left": 5,
+    "top": 104,
+    "width": 536
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 61,
+   "name": "MemoHandlerPrecautionRecord",
+   "objkind": "object",
+   "parent_path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.MemoHandlerPrecautionRecord",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": 14670284
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clNavy"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Courier New"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 225
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ReadOnly": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 104
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 536
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 26,
+    "left": 5,
+    "top": 40,
+    "width": 150
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 76,
+   "name": "pnPrecautionRecordDocumentNoTitle",
+   "objkind": "object",
+   "parent_path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnPrecautionRecordDocumentNoTitle",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "DOCUMENT NO.："
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 6055843
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "標楷體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 26
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 150
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 26,
+    "left": 310,
+    "top": 40,
+    "width": 231
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 92,
+   "name": "Panel91",
+   "objkind": "object",
+   "parent_path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.Panel91",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "(若無規範依循，則以\"N/A\"表示)"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 6055843
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "標楷體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 26
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 310
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 231
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 26,
+    "left": 5,
+    "top": 72,
+    "width": 150
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 108,
+   "name": "Panel92",
+   "objkind": "object",
+   "parent_path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.Panel92",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "注意事項內容："
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 6055843
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "標楷體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 26
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 150
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 26,
+    "left": 5,
+    "top": 338,
+    "width": 115
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 124,
+   "name": "Panel93",
+   "objkind": "object",
+   "parent_path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.Panel93",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "部門經理核准："
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 6055843
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "CHINESEBIG5_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "標楷體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 26
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 338
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 115
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 8,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 26,
+    "left": 290,
+    "top": 337,
+    "width": 115
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 140,
+   "name": "Panel94",
+   "objkind": "object",
+   "parent_path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.Panel94",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "製表者："
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 6055843
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "CHINESEBIG5_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "標楷體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 26
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 290
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 337
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 115
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 7,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 26,
+    "left": 5,
+    "top": 370,
+    "width": 115
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 156,
+   "name": "Panel95",
+   "objkind": "object",
+   "parent_path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.Panel95",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "開始日期："
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 6055843
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "CHINESEBIG5_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "標楷體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 26
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 370
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 115
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 11,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 26,
+    "left": 140,
+    "top": 370,
+    "width": 120
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 172,
+   "name": "pnPrecautionStartTime",
+   "objkind": "object",
+   "parent_path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnPrecautionStartTime",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clTeal"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clPurple"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 26
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 140
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 370
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 120
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": 12,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 26,
+    "left": 290,
+    "top": 370,
+    "width": 115
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 187,
+   "name": "Panel96",
+   "objkind": "object",
+   "parent_path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.Panel96",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "結案日期："
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 6055843
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "CHINESEBIG5_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "標楷體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 26
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 290
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 370
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 115
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": 13,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 26,
+    "left": 416,
+    "top": 370,
+    "width": 120
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 203,
+   "name": "pnPrecautionEndTime",
+   "objkind": "object",
+   "parent_path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnPrecautionEndTime",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clTeal"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clPurple"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 26
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 416
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 14
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 370
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 120
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": 14,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 26,
+    "left": 159,
+    "top": 39,
+    "width": 146
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 218,
+   "name": "pnPrecautionRecordDocumentNo",
+   "objkind": "object",
+   "parent_path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnPrecautionRecordDocumentNo",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clTeal"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clPurple"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 26
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 159
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 39
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 146
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 26,
+    "left": 159,
+    "top": 71,
+    "width": 382
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 233,
+   "name": "pnNoteContents",
+   "objkind": "object",
+   "parent_path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnNoteContents",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clTeal"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clPurple"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 26
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 159
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 71
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 382
+    }
+   },
+   "sibling_index": 12,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 26,
+    "left": 140,
+    "top": 338,
+    "width": 120
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 248,
+   "name": "pnApprovedManager",
+   "objkind": "object",
+   "parent_path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnApprovedManager",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clTeal"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clPurple"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 26
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 140
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 338
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 120
+    }
+   },
+   "sibling_index": 13,
+   "synthesized": false,
+   "tab_order": 9,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 26,
+    "left": 416,
+    "top": 338,
+    "width": 120
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 263,
+   "name": "pnWatchmakers",
+   "objkind": "object",
+   "parent_path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnWatchmakers",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clTeal"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clPurple"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 26
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 416
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 338
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 120
+    }
+   },
+   "sibling_index": 14,
+   "synthesized": false,
+   "tab_order": 10,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 26,
+    "left": 5,
+    "top": 402,
+    "width": 115
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 278,
+   "name": "Panel1",
+   "objkind": "object",
+   "parent_path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.Panel1",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "結案方式："
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 6055843
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "CHINESEBIG5_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "標楷體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 26
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 15
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 402
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 115
+    }
+   },
+   "sibling_index": 15,
+   "synthesized": false,
+   "tab_order": 15,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 26,
+    "left": 140,
+    "top": 402,
+    "width": 120
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 294,
+   "name": "pnCloseType",
+   "objkind": "object",
+   "parent_path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnCloseType",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clTeal"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clPurple"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 26
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 140
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 402
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 120
+    }
+   },
+   "sibling_index": 16,
+   "synthesized": false,
+   "tab_order": 16,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 26,
+    "left": 290,
+    "top": 402,
+    "width": 115
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 309,
+   "name": "Panel3",
+   "objkind": "object",
+   "parent_path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.Panel3",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "結案者："
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 6055843
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "CHINESEBIG5_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "標楷體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 26
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 290
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 402
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 115
+    }
+   },
+   "sibling_index": 17,
+   "synthesized": false,
+   "tab_order": 17,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 26,
+    "left": 416,
+    "top": 402,
+    "width": 120
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 325,
+   "name": "pnCloseName",
+   "objkind": "object",
+   "parent_path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnCloseName",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clTeal"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clPurple"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 26
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 416
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 18
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 402
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 120
+    }
+   },
+   "sibling_index": 18,
+   "synthesized": false,
+   "tab_order": 18,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 416,
+    "top": 432,
+    "width": 120
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 340,
+   "name": "pnPRSpecification",
+   "objkind": "object",
+   "parent_path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnPRSpecification",
+   "properties": {
+    "BevelInner": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clPurple"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 416
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 432
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 120
+    }
+   },
+   "sibling_index": 19,
+   "synthesized": false,
+   "tab_order": 19,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTimer",
+   "depth": 1,
+   "events": {
+    "OnTimer": "tm_CheckEditEmptyTimer"
+   },
+   "geometry": {
+    "height": null,
+    "left": 500,
+    "top": 144,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 357,
+   "name": "tm_CheckEditEmpty",
+   "objkind": "object",
+   "parent_path": "fPrecaution",
+   "path": "fPrecaution.tm_CheckEditEmpty",
+   "properties": {
+    "Enabled": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 500
+    },
+    "OnTimer": {
+     "type": "SCALAR",
+     "value": "tm_CheckEditEmptyTimer"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 144
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "Precaution.dfm",
+ "total_nodes_incl_root": 24
+}

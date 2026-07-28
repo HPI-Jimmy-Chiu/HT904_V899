@@ -1,0 +1,93 @@
+{
+ "event_count": 12,
+ "events": [
+  {
+   "control_path": "fDIOFrom",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fDIOFrom",
+   "vcl_class": "TfDIOFrom"
+  },
+  {
+   "control_path": "fDIOFrom",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fDIOFrom",
+   "vcl_class": "TfDIOFrom"
+  },
+  {
+   "control_path": "fDIOFrom.GroupBox4.spbSave",
+   "event_name": "OnClick",
+   "handler_name": "spbSaveClick",
+   "leaf_name": "spbSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fDIOFrom.GroupBox4.spbLoad",
+   "event_name": "OnClick",
+   "handler_name": "spbLoadClick",
+   "leaf_name": "spbLoad",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fDIOFrom.GroupBox4.spbDelete",
+   "event_name": "OnClick",
+   "handler_name": "spbDeleteClick",
+   "leaf_name": "spbDelete",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fDIOFrom.spbExit",
+   "event_name": "OnClick",
+   "handler_name": "spbExitClick",
+   "leaf_name": "spbExit",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fDIOFrom.Panel1.GroupBox2.edSignalAfterOff",
+   "event_name": "OnKeyPress",
+   "handler_name": "edSignalBeforeOnKeyPress",
+   "leaf_name": "edSignalAfterOff",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fDIOFrom.Panel1.GroupBox2.edSignalAfterOff",
+   "event_name": "OnMouseDown",
+   "handler_name": "edPulseWidthMouseDown",
+   "leaf_name": "edSignalAfterOff",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fDIOFrom.Panel1.GroupBox2.edSignalBeforeOn",
+   "event_name": "OnKeyPress",
+   "handler_name": "edSignalBeforeOnKeyPress",
+   "leaf_name": "edSignalBeforeOn",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fDIOFrom.Panel1.GroupBox2.edSignalBeforeOn",
+   "event_name": "OnMouseDown",
+   "handler_name": "edPulseWidthMouseDown",
+   "leaf_name": "edSignalBeforeOn",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fDIOFrom.Panel1.GroupBox1.edPulseWidth",
+   "event_name": "OnKeyPress",
+   "handler_name": "edSignalBeforeOnKeyPress",
+   "leaf_name": "edPulseWidth",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fDIOFrom.Panel1.GroupBox1.edPulseWidth",
+   "event_name": "OnMouseDown",
+   "handler_name": "edPulseWidthMouseDown",
+   "leaf_name": "edPulseWidth",
+   "vcl_class": "TEdit"
+  }
+ ],
+ "form_name": "fDIOFrom",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "DIOInterFaceCFG.dfm"
+}

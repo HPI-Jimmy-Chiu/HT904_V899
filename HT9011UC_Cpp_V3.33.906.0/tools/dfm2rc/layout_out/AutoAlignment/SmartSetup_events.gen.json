@@ -1,0 +1,58 @@
+{
+ "event_count": 7,
+ "events": [
+  {
+   "control_path": "fSmartSetup",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fSmartSetup",
+   "vcl_class": "TfSmartSetup"
+  },
+  {
+   "control_path": "fSmartSetup",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fSmartSetup",
+   "vcl_class": "TfSmartSetup"
+  },
+  {
+   "control_path": "fSmartSetup.Panel1.Panel2.sbtExit",
+   "event_name": "OnClick",
+   "handler_name": "sbtExitClick",
+   "leaf_name": "sbtExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSmartSetup.Panel1.Panel17.btnSmartSetup",
+   "event_name": "OnClick",
+   "handler_name": "btnSmartSetupClick",
+   "leaf_name": "btnSmartSetup",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fSmartSetup.Panel1.Panel17.btShowData",
+   "event_name": "OnClick",
+   "handler_name": "btShowDataClick",
+   "leaf_name": "btShowData",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fSmartSetup.Panel1.Panel17.cbEnableAutoAlignment",
+   "event_name": "OnClick",
+   "handler_name": "cbEnableAutoAlignmentClick",
+   "leaf_name": "cbEnableAutoAlignment",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fSmartSetup.Panel1.Panel17.Button1",
+   "event_name": "OnClick",
+   "handler_name": "Button1Click",
+   "leaf_name": "Button1",
+   "vcl_class": "TButton"
+  }
+ ],
+ "form_name": "fSmartSetup",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "AutoAlignment/SmartSetup.dfm"
+}

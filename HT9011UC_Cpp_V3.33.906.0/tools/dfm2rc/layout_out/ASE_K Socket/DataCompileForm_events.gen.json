@@ -1,0 +1,44 @@
+{
+ "event_count": 5,
+ "events": [
+  {
+   "control_path": "DataCompile.Panel1.edtWorkTemp",
+   "event_name": "OnClick",
+   "handler_name": "edtWorkTempClick",
+   "leaf_name": "edtWorkTemp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "DataCompile.Panel1.edtSoakTime",
+   "event_name": "OnClick",
+   "handler_name": "edtSoakTimeClick",
+   "leaf_name": "edtSoakTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "DataCompile.Panel1.edtForcePerPin",
+   "event_name": "OnClick",
+   "handler_name": "edtForcePerPinClick",
+   "leaf_name": "edtForcePerPin",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "DataCompile.Panel1.edtPinCount",
+   "event_name": "OnClick",
+   "handler_name": "edtPinCountClick",
+   "leaf_name": "edtPinCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "DataCompile.Panel1.btnCompare",
+   "event_name": "OnClick",
+   "handler_name": "btnCompareClick",
+   "leaf_name": "btnCompare",
+   "vcl_class": "TButton"
+  }
+ ],
+ "form_name": "DataCompile",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "ASE_K Socket/DataCompileForm.dfm"
+}

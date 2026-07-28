@@ -1,0 +1,471 @@
+{
+ "control_node_count": 5,
+ "encoding_used": "cp950",
+ "form_class": "TfDefrostNote",
+ "form_name": "fDefrostNote",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fDefrostNote.Panel11",
+    "fDefrostNote.Timer1"
+   ],
+   "class": "TfDefrostNote",
+   "depth": 0,
+   "events": {
+    "OnClose": "FormClose",
+    "OnShow": "FormShow"
+   },
+   "geometry": {
+    "height": null,
+    "left": 688,
+    "top": 196,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "fDefrostNote",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "fDefrostNote",
+   "properties": {
+    "BorderIcons": {
+     "type": "SET",
+     "value": [
+      "biHelp"
+     ]
+    },
+    "BorderStyle": {
+     "type": "SCALAR",
+     "value": "bsToolWindow"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Defrost Note"
+    },
+    "ClientHeight": {
+     "type": "SCALAR",
+     "value": 198
+    },
+    "ClientWidth": {
+     "type": "SCALAR",
+     "value": 365
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnFace"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 688
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnClose": {
+     "type": "SCALAR",
+     "value": "FormClose"
+    },
+    "OnShow": {
+     "type": "SCALAR",
+     "value": "FormShow"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 196
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fDefrostNote.Panel11.pnl_ShowMessage",
+    "fDefrostNote.Panel11.btn_Start",
+    "fDefrostNote.Panel11.btn_Interrupt"
+   ],
+   "class": "TPanel",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 197,
+    "left": 0,
+    "top": 0,
+    "width": 357
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 20,
+   "name": "Panel11",
+   "objkind": "object",
+   "parent_path": "fDefrostNote",
+   "path": "fDefrostNote.Panel11",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 197
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 357
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 2,
+   "events": {},
+   "geometry": {
+    "height": 132,
+    "left": 1,
+    "top": 1,
+    "width": 355
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 27,
+   "name": "pnl_ShowMessage",
+   "objkind": "object",
+   "parent_path": "fDefrostNote.Panel11",
+   "path": "fDefrostNote.Panel11.pnl_ShowMessage",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Defrost Time Has Arrived"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clRed"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -27
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Arial"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 132
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 355
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "btn_StartClick"
+   },
+   "geometry": {
+    "height": 37,
+    "left": 100,
+    "top": 144,
+    "width": 85
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 43,
+   "name": "btn_Start",
+   "objkind": "object",
+   "parent_path": "fDefrostNote.Panel11",
+   "path": "fDefrostNote.Panel11.btn_Start",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Start"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 37
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btn_StartClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 144
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 85
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 2,
+   "events": {
+    "OnClick": "btn_InterruptClick"
+   },
+   "geometry": {
+    "height": 37,
+    "left": 192,
+    "top": 144,
+    "width": 85
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 58,
+   "name": "btn_Interrupt",
+   "objkind": "object",
+   "parent_path": "fDefrostNote.Panel11",
+   "path": "fDefrostNote.Panel11.btn_Interrupt",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Interrupt "
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 37
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 192
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btn_InterruptClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 144
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 85
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTimer",
+   "depth": 1,
+   "events": {
+    "OnTimer": "Timer1Timer"
+   },
+   "geometry": {
+    "height": null,
+    "left": 320,
+    "top": 156,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 74,
+   "name": "Timer1",
+   "objkind": "object",
+   "parent_path": "fDefrostNote",
+   "path": "fDefrostNote.Timer1",
+   "properties": {
+    "Interval": {
+     "type": "SCALAR",
+     "value": 500
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 320
+    },
+    "OnTimer": {
+     "type": "SCALAR",
+     "value": "Timer1Timer"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 156
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "cDefrostNote.dfm",
+ "total_nodes_incl_root": 6
+}

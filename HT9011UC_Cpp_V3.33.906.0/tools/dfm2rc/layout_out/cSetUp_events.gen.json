@@ -1,0 +1,884 @@
+{
+ "event_count": 125,
+ "events": [
+  {
+   "control_path": "fSetup",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fSetup",
+   "vcl_class": "TfSetup"
+  },
+  {
+   "control_path": "fSetup",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fSetup",
+   "vcl_class": "TfSetup"
+  },
+  {
+   "control_path": "fSetup",
+   "event_name": "OnShortCut",
+   "handler_name": "FormShortCut",
+   "leaf_name": "fSetup",
+   "vcl_class": "TfSetup"
+  },
+  {
+   "control_path": "fSetup",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fSetup",
+   "vcl_class": "TfSetup"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel3.gbShuttleMode.rgShtModeNormal",
+   "event_name": "OnClick",
+   "handler_name": "rgShtModeNormalClick",
+   "leaf_name": "rgShtModeNormal",
+   "vcl_class": "TRadioButton"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel3.gbShuttleMode.rgShtModeNormal",
+   "event_name": "OnMouseDown",
+   "handler_name": "rgShtModeNormalMouseDown",
+   "leaf_name": "rgShtModeNormal",
+   "vcl_class": "TRadioButton"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel3.gbShuttleMode.rgShtModeOneSide",
+   "event_name": "OnClick",
+   "handler_name": "rgShtModeNormalClick",
+   "leaf_name": "rgShtModeOneSide",
+   "vcl_class": "TRadioButton"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel3.gbShuttleMode.rgShtModeOneSide",
+   "event_name": "OnMouseDown",
+   "handler_name": "rgShtModeNormalMouseDown",
+   "leaf_name": "rgShtModeOneSide",
+   "vcl_class": "TRadioButton"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel3.grpIndexOption.chkOffCenterkit",
+   "event_name": "OnClick",
+   "handler_name": "chkOffCenterkitClick",
+   "leaf_name": "chkOffCenterkit",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel3.grpIndexOption.cbOctal12Site",
+   "event_name": "OnClick",
+   "handler_name": "cbOctal12SiteClick",
+   "leaf_name": "cbOctal12Site",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel3.grpIndexOption.cbQualSite2X2Shift",
+   "event_name": "OnClick",
+   "handler_name": "cbQualSite2X2ShiftClick",
+   "leaf_name": "cbQualSite2X2Shift",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel3.grpIndexOption.chk12SiteUse2x8SLK",
+   "event_name": "OnClick",
+   "handler_name": "cbOctal12SiteClick",
+   "leaf_name": "chk12SiteUse2x8SLK",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel3.rgUseSuckMode",
+   "event_name": "OnClick",
+   "handler_name": "rgUseSuckModeClick",
+   "leaf_name": "rgUseSuckMode",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpHandlingMode.ScrollBar1",
+   "event_name": "OnChange",
+   "handler_name": "ScrollBar1Change",
+   "leaf_name": "ScrollBar1",
+   "vcl_class": "TScrollBar"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpHandlingMode.XPitch",
+   "event_name": "OnKeyPress",
+   "handler_name": "XPitchKeyPress",
+   "leaf_name": "XPitch",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpHandlingMode.XPitch",
+   "event_name": "OnMouseDown",
+   "handler_name": "XPitchMouseDown",
+   "leaf_name": "XPitch",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpHandlingMode.YPitch",
+   "event_name": "OnKeyPress",
+   "handler_name": "XPitchKeyPress",
+   "leaf_name": "YPitch",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpHandlingMode.YPitch",
+   "event_name": "OnMouseDown",
+   "handler_name": "XPitchMouseDown",
+   "leaf_name": "YPitch",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpHandlingMode.edYOffset",
+   "event_name": "OnKeyPress",
+   "handler_name": "XPitchKeyPress",
+   "leaf_name": "edYOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpHandlingMode.edYOffset",
+   "event_name": "OnMouseDown",
+   "handler_name": "XShiftPitchMouseDown",
+   "leaf_name": "edYOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpHandlingMode.paQualSite2X2Shift.XShiftPitch",
+   "event_name": "OnKeyPress",
+   "handler_name": "XPitchKeyPress",
+   "leaf_name": "XShiftPitch",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpHandlingMode.paQualSite2X2Shift.XShiftPitch",
+   "event_name": "OnMouseDown",
+   "handler_name": "XShiftPitchMouseDown",
+   "leaf_name": "XShiftPitch",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpHandlingMode.btAutoShuttlePitch",
+   "event_name": "OnClick",
+   "handler_name": "btAutoShuttlePitchClick",
+   "leaf_name": "btAutoShuttlePitch",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpHandlingMode.rgYPitchOffsetMode",
+   "event_name": "OnClick",
+   "handler_name": "rgYPitchOffsetModeClick",
+   "leaf_name": "rgYPitchOffsetMode",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpHandlingMode.Panel6.Panel7.grpUseXCenterPitch.chkUseXCenterPitch",
+   "event_name": "OnClick",
+   "handler_name": "chkOffCenterkitClick",
+   "leaf_name": "chkUseXCenterPitch",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpHandlingMode.Panel6.Panel7.grpUseXCenterPitch.edtXCenterPitch",
+   "event_name": "OnKeyPress",
+   "handler_name": "XPitchKeyPress",
+   "leaf_name": "edtXCenterPitch",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpHandlingMode.Panel6.Panel7.grpUseXCenterPitch.edtXCenterPitch",
+   "event_name": "OnMouseDown",
+   "handler_name": "XPitchMouseDown",
+   "leaf_name": "edtXCenterPitch",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpHandlingMode.Panel6.Panel7.gbPreciser.cbEnablePreciser",
+   "event_name": "OnClick",
+   "handler_name": "chkOffCenterkitClick",
+   "leaf_name": "cbEnablePreciser",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpHandlingMode.Panel6.Panel7.gbPreciser.edPreciserXPitch",
+   "event_name": "OnKeyPress",
+   "handler_name": "XPitchKeyPress",
+   "leaf_name": "edPreciserXPitch",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpHandlingMode.Panel6.Panel7.gbPreciser.edPreciserXPitch",
+   "event_name": "OnMouseDown",
+   "handler_name": "XPitchMouseDown",
+   "leaf_name": "edPreciserXPitch",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpHandlingMode.Panel6.Panel7.gbPreciser.edPreciserYPitch",
+   "event_name": "OnKeyPress",
+   "handler_name": "XPitchKeyPress",
+   "leaf_name": "edPreciserYPitch",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpHandlingMode.Panel6.Panel7.gbPreciser.edPreciserYPitch",
+   "event_name": "OnMouseDown",
+   "handler_name": "XPitchMouseDown",
+   "leaf_name": "edPreciserYPitch",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpHandlingMode.Panel6.Panel7.gbPreciser.cbEnabledPreciserRT",
+   "event_name": "OnClick",
+   "handler_name": "chkOffCenterkitClick",
+   "leaf_name": "cbEnabledPreciserRT",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpHandlingMode.Panel6.Panel7.cbUseTesterDry",
+   "event_name": "OnClick",
+   "handler_name": "cbUseSLKClampClick",
+   "leaf_name": "cbUseTesterDry",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpHandlingMode.Panel6.Panel8.gbOutUseBackRow.cbOutUseBackRow",
+   "event_name": "OnClick",
+   "handler_name": "cbEnableRealTimeCCDClick",
+   "leaf_name": "cbOutUseBackRow",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpHandlingMode.Panel6.Panel8.gbInUseBackRow.cbInUseBackRow",
+   "event_name": "OnClick",
+   "handler_name": "cbEnableRealTimeCCDClick",
+   "leaf_name": "cbInUseBackRow",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpHandlingMode.Panel6.Panel8.gbRTC.cbEnableRealTimeCCD",
+   "event_name": "OnClick",
+   "handler_name": "cbEnableRealTimeCCDClick",
+   "leaf_name": "cbEnableRealTimeCCD",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel2.sbUpdate",
+   "event_name": "OnClick",
+   "handler_name": "sbUpdateClick",
+   "leaf_name": "sbUpdate",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel2.sbtExit",
+   "event_name": "OnClick",
+   "handler_name": "sbtExitClick",
+   "leaf_name": "sbtExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel2.cbI21",
+   "event_name": "OnClick",
+   "handler_name": "cbI21Click",
+   "leaf_name": "cbI21",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpFunction.gbArm1PickArm2Test.Arm1PickArm2Test",
+   "event_name": "OnClick",
+   "handler_name": "Arm1PickArm2TestClick",
+   "leaf_name": "Arm1PickArm2Test",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpFunction.gbArm1PickArm2Test.cbArm1UseHeat",
+   "event_name": "OnClick",
+   "handler_name": "Arm1PickArm2TestClick",
+   "leaf_name": "cbArm1UseHeat",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpFunction.gbArm1PickArm2Test.cbArm1OnlyPlaceArm2TestAndSuck",
+   "event_name": "OnClick",
+   "handler_name": "Arm1PickArm2TestClick",
+   "leaf_name": "cbArm1OnlyPlaceArm2TestAndSuck",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpFunction.gbOcr.cbOcrFunction",
+   "event_name": "OnClick",
+   "handler_name": "cbEnableRealTimeCCDClick",
+   "leaf_name": "cbOcrFunction",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpFunction.gbOcr.edOcrText",
+   "event_name": "OnMouseDown",
+   "handler_name": "edOcrTextMouseDown",
+   "leaf_name": "edOcrText",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpFunction.gbSocketClamp.cbUseSLKClamp",
+   "event_name": "OnClick",
+   "handler_name": "cbUseSLKClampClick",
+   "leaf_name": "cbUseSLKClamp",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpFunction.grpSocketSensor.Panel4.cbdisibleinitialcheck",
+   "event_name": "OnClick",
+   "handler_name": "cbEnableRealTimeCCDClick",
+   "leaf_name": "cbdisibleinitialcheck",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpFunction.grpSocketSensor.Panel4.cbSocketSensor",
+   "event_name": "OnClick",
+   "handler_name": "cbEnableRealTimeCCDClick",
+   "leaf_name": "cbSocketSensor",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.grpFunction.grpSocketSensor.Panel4.CoSocketCombo",
+   "event_name": "OnChange",
+   "handler_name": "CoSocketComboChange",
+   "leaf_name": "CoSocketCombo",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.btnLUpToRDownN",
+   "event_name": "OnClick",
+   "handler_name": "btnLUpToRDownNClick",
+   "leaf_name": "btnLUpToRDownN",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.btnLUpToRDownZ",
+   "event_name": "OnClick",
+   "handler_name": "btnLUpToRDownNClick",
+   "leaf_name": "btnLUpToRDownZ",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.btnLDownToRUpZ",
+   "event_name": "OnClick",
+   "handler_name": "btnLUpToRDownNClick",
+   "leaf_name": "btnLDownToRUpZ",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.btnRUpToLDownZ",
+   "event_name": "OnClick",
+   "handler_name": "btnLUpToRDownNClick",
+   "leaf_name": "btnRUpToLDownZ",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.btnRDownToLUpZ",
+   "event_name": "OnClick",
+   "handler_name": "btnLUpToRDownNClick",
+   "leaf_name": "btnRDownToLUpZ",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.btnRUpToLDownN",
+   "event_name": "OnClick",
+   "handler_name": "btnLUpToRDownNClick",
+   "leaf_name": "btnRUpToLDownN",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbAa",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbAa",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbAa",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbAa",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbAb",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbAb",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbAb",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbAb",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbAc",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbAc",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbAc",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbAc",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbAd",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbAd",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbAd",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbAd",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbAe",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbAe",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbAe",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbAe",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbAf",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbAf",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbAf",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbAf",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbAg",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbAg",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbAg",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbAg",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbAh",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbAh",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbAh",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbAh",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbBa",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbBa",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbBa",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbBa",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbBb",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbBb",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbBb",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbBb",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbBc",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbBc",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbBc",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbBc",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbBd",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbBd",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbBd",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbBd",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbBe",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbBe",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbBe",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbBe",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbBf",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbBf",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbBf",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbBf",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbBg",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbBg",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbBg",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbBg",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbBh",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbBh",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbBh",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbBh",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbCa",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbCa",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbCa",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbCa",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbCb",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbCb",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbCb",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbCb",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbCc",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbCc",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbCc",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbCc",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbCd",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbCd",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbCd",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbCd",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbCe",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbCe",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbCe",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbCe",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbCf",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbCf",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbCf",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbCf",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbCg",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbCg",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbCg",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbCg",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbCh",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbCh",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbCh",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbCh",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbDa",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbDa",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbDa",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbDa",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbDb",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbDb",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbDb",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbDb",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbDc",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbDc",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbDc",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbDc",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbDd",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbDd",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbDd",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbDd",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbDe",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbDe",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbDe",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbDe",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbDf",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbDf",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbDf",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbDf",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbDg",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbDg",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbDg",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbDg",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbDh",
+   "event_name": "OnChange",
+   "handler_name": "cbAaChange",
+   "leaf_name": "cbDh",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.grpSiteMap.cbDh",
+   "event_name": "OnDropDown",
+   "handler_name": "cbAaDropDown",
+   "leaf_name": "cbDh",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.pgcASE.tsCheckTorque.edDelayTime",
+   "event_name": "OnClick",
+   "handler_name": "edDelayTimeClick",
+   "leaf_name": "edDelayTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.pgcASE.tsCheckTorque.edOverRange",
+   "event_name": "OnClick",
+   "handler_name": "edOverRangeClick",
+   "leaf_name": "edOverRange",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.pgcASE.tsTrayMap.edAuto1Count",
+   "event_name": "OnClick",
+   "handler_name": "edAuto1CountClick",
+   "leaf_name": "edAuto1Count",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.pgcASE.tsTrayMap.edAuto2Count",
+   "event_name": "OnClick",
+   "handler_name": "edAuto1CountClick",
+   "leaf_name": "edAuto2Count",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.pgcASE.tsTrayMap.edAuto3Count",
+   "event_name": "OnClick",
+   "handler_name": "edAuto1CountClick",
+   "leaf_name": "edAuto3Count",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSetup.palLeft.Panel5.pgcASE.tsTrayMap.edtGetValueDelayTime",
+   "event_name": "OnClick",
+   "handler_name": "edtGetValueDelayTimeClick",
+   "leaf_name": "edtGetValueDelayTime",
+   "vcl_class": "TEdit"
+  }
+ ],
+ "form_name": "fSetup",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "cSetUp.dfm"
+}

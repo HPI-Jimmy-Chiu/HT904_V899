@@ -1,0 +1,863 @@
+{
+ "event_count": 122,
+ "events": [
+  {
+   "control_path": "fCleaning",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fCleaning",
+   "vcl_class": "TfCleaning"
+  },
+  {
+   "control_path": "fCleaning",
+   "event_name": "OnShortCut",
+   "handler_name": "FormShortCut",
+   "leaf_name": "fCleaning",
+   "vcl_class": "TfCleaning"
+  },
+  {
+   "control_path": "fCleaning",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fCleaning",
+   "vcl_class": "TfCleaning"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsOffset.grpBufferKitLT.edtBufferKitLTX",
+   "event_name": "OnClick",
+   "handler_name": "edtBufferKitLTXClick",
+   "leaf_name": "edtBufferKitLTX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsOffset.grpBufferKitLT.edtBufferKitLTY",
+   "event_name": "OnClick",
+   "handler_name": "edtBufferKitLTXClick",
+   "leaf_name": "edtBufferKitLTY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsOffset.grpBufferKitRT.edtBufferKitRTX",
+   "event_name": "OnClick",
+   "handler_name": "edtBufferKitLTXClick",
+   "leaf_name": "edtBufferKitRTX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsOffset.grpBufferKitRT.edtBufferKitRTY",
+   "event_name": "OnClick",
+   "handler_name": "edtBufferKitLTXClick",
+   "leaf_name": "edtBufferKitRTY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsOffset.grpBufferKitLD.edtBufferKitLDX",
+   "event_name": "OnClick",
+   "handler_name": "edtBufferKitLTXClick",
+   "leaf_name": "edtBufferKitLDX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsOffset.grpBufferKitLD.edtBufferKitLDY",
+   "event_name": "OnClick",
+   "handler_name": "edtBufferKitLTXClick",
+   "leaf_name": "edtBufferKitLDY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsOffset.grpBufferKitRD.edtBufferKitRDX",
+   "event_name": "OnClick",
+   "handler_name": "edtBufferKitLTXClick",
+   "leaf_name": "edtBufferKitRDX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsOffset.grpBufferKitRD.edtBufferKitRDY",
+   "event_name": "OnClick",
+   "handler_name": "edtBufferKitLTXClick",
+   "leaf_name": "edtBufferKitRDY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsYield.gbYieldAlarm.edtFailAlarmSiteYieldDifferent",
+   "event_name": "OnClick",
+   "handler_name": "edtLowYieldCountClick",
+   "leaf_name": "edtFailAlarmSiteYieldDifferent",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsYield.gbYieldAlarm.edtFailAlarmSiteYieldDifferent",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtLowYieldLimitKeyPress",
+   "leaf_name": "edtFailAlarmSiteYieldDifferent",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsYield.gbYieldAlarm.edtFailAlarmSiteYield",
+   "event_name": "OnClick",
+   "handler_name": "edtLowYieldLimitClick",
+   "leaf_name": "edtFailAlarmSiteYield",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsYield.gbYieldAlarm.edtFailAlarmSiteYield",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtLowYieldLimitKeyPress",
+   "leaf_name": "edtFailAlarmSiteYield",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsYield.gbYieldAlarm.edtLowYieldLimit",
+   "event_name": "OnClick",
+   "handler_name": "edtLowYieldLimitClick",
+   "leaf_name": "edtLowYieldLimit",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsYield.gbYieldAlarm.edtLowYieldLimit",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtLowYieldLimitKeyPress",
+   "leaf_name": "edtLowYieldLimit",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsYield.gbYieldAlarm.edtLowYieldCount",
+   "event_name": "OnClick",
+   "handler_name": "edtLowYieldCountClick",
+   "leaf_name": "edtLowYieldCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsYield.gbYieldAlarm.edtLowYieldCount",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtLowYieldLimitKeyPress",
+   "leaf_name": "edtLowYieldCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsFailure.gbConsFailureSocket.edtConseFailureCountBySocket_Retest",
+   "event_name": "OnClick",
+   "handler_name": "edtLowYieldCountClick",
+   "leaf_name": "edtConseFailureCountBySocket_Retest",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsFailure.gbConsFailureSocket.edtConseFailureCountBySocket_Retest",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtLowYieldLimitKeyPress",
+   "leaf_name": "edtConseFailureCountBySocket_Retest",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsFailure.gbConsFailureSocket.edtConseFailureCountBySocket_Normal",
+   "event_name": "OnClick",
+   "handler_name": "edtLowYieldCountClick",
+   "leaf_name": "edtConseFailureCountBySocket_Normal",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsFailure.gbConsFailureSocket.edtConseFailureCountBySocket_Normal",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtLowYieldLimitKeyPress",
+   "leaf_name": "edtConseFailureCountBySocket_Normal",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsFailure.gbConsFailureHead.edtConseFailureCountByHead_Retest",
+   "event_name": "OnClick",
+   "handler_name": "edtLowYieldCountClick",
+   "leaf_name": "edtConseFailureCountByHead_Retest",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsFailure.gbConsFailureHead.edtConseFailureCountByHead_Retest",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtLowYieldLimitKeyPress",
+   "leaf_name": "edtConseFailureCountByHead_Retest",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsFailure.gbConsFailureHead.edtConseFailureCountByHead_Normal",
+   "event_name": "OnClick",
+   "handler_name": "edtLowYieldCountClick",
+   "leaf_name": "edtConseFailureCountByHead_Normal",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsFailure.gbConsFailureHead.edtConseFailureCountByHead_Normal",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtLowYieldLimitKeyPress",
+   "leaf_name": "edtConseFailureCountByHead_Normal",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsSmart.edtACSmart_ContactTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtACSmart_ContactTimeMouseDown",
+   "leaf_name": "edtACSmart_ContactTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsSmart.edtACSmart_ACContactCount",
+   "event_name": "OnClick",
+   "handler_name": "edtLowYieldLimitClick",
+   "leaf_name": "edtACSmart_ACContactCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsSmart.btnResetInterval",
+   "event_name": "OnClick",
+   "handler_name": "btnResetIntervalClick",
+   "leaf_name": "btnResetInterval",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsSmart.edAdaptiveIntervalAdj",
+   "event_name": "OnMouseDown",
+   "handler_name": "edAdaptiveIntervalAdjMouseDown",
+   "leaf_name": "edAdaptiveIntervalAdj",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsSmart.edAdaptiveIntervalMin",
+   "event_name": "OnMouseDown",
+   "handler_name": "edAdaptiveIntervalMinMouseDown",
+   "leaf_name": "edAdaptiveIntervalMin",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsSmart.edAdaptiveIntervalMax",
+   "event_name": "OnMouseDown",
+   "handler_name": "edAdaptiveIntervalMaxMouseDown",
+   "leaf_name": "edAdaptiveIntervalMax",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsSmart.edACSmartCTF",
+   "event_name": "OnMouseDown",
+   "handler_name": "edACSmartCTFMouseDown",
+   "leaf_name": "edACSmartCTF",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsSmart.edtACSmart",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtACSmartMouseDown",
+   "leaf_name": "edtACSmart",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pcCleanYield.tsTimeCT.edTimeCT",
+   "event_name": "OnClick",
+   "handler_name": "edTimeCTClick",
+   "leaf_name": "edTimeCT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlCleanPadAlign.cbbSelectTray",
+   "event_name": "OnChange",
+   "handler_name": "cbbSelectTrayChange",
+   "leaf_name": "cbbSelectTray",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.Panel7.PageTypeName",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "PageTypeName",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.rgCleanKitType",
+   "event_name": "OnClick",
+   "handler_name": "rgCleanKitTypeClick",
+   "leaf_name": "rgCleanKitType",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tsKit.XST1",
+   "event_name": "OnClick",
+   "handler_name": "XST1Click",
+   "leaf_name": "XST1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tsKit.XST1",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "XST1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tsKit.XPitch1",
+   "event_name": "OnClick",
+   "handler_name": "XST1Click",
+   "leaf_name": "XPitch1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tsKit.XPitch1",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "XPitch1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tsKit.XCT1",
+   "event_name": "OnChange",
+   "handler_name": "XCT1Change",
+   "leaf_name": "XCT1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tsKit.XCT1",
+   "event_name": "OnClick",
+   "handler_name": "XCT1Click",
+   "leaf_name": "XCT1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tsKit.XCT1",
+   "event_name": "OnKeyPress",
+   "handler_name": "XCT1KeyPress",
+   "leaf_name": "XCT1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tsKit.YST1",
+   "event_name": "OnClick",
+   "handler_name": "XST1Click",
+   "leaf_name": "YST1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tsKit.YST1",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "YST1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tsKit.YPitch1",
+   "event_name": "OnClick",
+   "handler_name": "XST1Click",
+   "leaf_name": "YPitch1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tsKit.YPitch1",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "YPitch1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tsKit.YCT1",
+   "event_name": "OnChange",
+   "handler_name": "YCT1Change",
+   "leaf_name": "YCT1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tsKit.YCT1",
+   "event_name": "OnClick",
+   "handler_name": "XCT1Click",
+   "leaf_name": "YCT1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tsKit.YCT1",
+   "event_name": "OnKeyPress",
+   "handler_name": "XCT1KeyPress",
+   "leaf_name": "YCT1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tabTray.XPitch2",
+   "event_name": "OnChange",
+   "handler_name": "XPitch2Change",
+   "leaf_name": "XPitch2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tabTray.XPitch2",
+   "event_name": "OnClick",
+   "handler_name": "XST1Click",
+   "leaf_name": "XPitch2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tabTray.XPitch2",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "XPitch2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tabTray.XST2",
+   "event_name": "OnClick",
+   "handler_name": "XST1Click",
+   "leaf_name": "XST2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tabTray.XST2",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "XST2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tabTray.XCT2",
+   "event_name": "OnChange",
+   "handler_name": "XCT1Change",
+   "leaf_name": "XCT2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tabTray.XCT2",
+   "event_name": "OnClick",
+   "handler_name": "XCT1Click",
+   "leaf_name": "XCT2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tabTray.XCT2",
+   "event_name": "OnKeyPress",
+   "handler_name": "XCT1KeyPress",
+   "leaf_name": "XCT2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tabTray.YST2",
+   "event_name": "OnClick",
+   "handler_name": "XST1Click",
+   "leaf_name": "YST2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tabTray.YST2",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "YST2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tabTray.YPitch2",
+   "event_name": "OnClick",
+   "handler_name": "XST1Click",
+   "leaf_name": "YPitch2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tabTray.YPitch2",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "YPitch2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tabTray.YCT2",
+   "event_name": "OnChange",
+   "handler_name": "YCT1Change",
+   "leaf_name": "YCT2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tabTray.YCT2",
+   "event_name": "OnClick",
+   "handler_name": "XCT1Click",
+   "leaf_name": "YCT2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tabTray.YCT2",
+   "event_name": "OnKeyPress",
+   "handler_name": "XCT1KeyPress",
+   "leaf_name": "YCT2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.grpTrayData.pnlKitSetting.pgCleanType.tabTray.btInclude",
+   "event_name": "OnClick",
+   "handler_name": "btIncludeClick",
+   "leaf_name": "btInclude",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCleaning.pnlLeft.grpCleanPara.rgAutoCleanOnOff",
+   "event_name": "OnClick",
+   "handler_name": "rgAutoCleanOnOffClick",
+   "leaf_name": "rgAutoCleanOnOff",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fCleaning.pnlLeft.grpCleanPara.grpCleanMode.edIntervalContact",
+   "event_name": "OnClick",
+   "handler_name": "edtLowYieldCountClick",
+   "leaf_name": "edIntervalContact",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlLeft.grpCleanPara.grpCleanMode.chkAutoCleanMode6",
+   "event_name": "OnMouseUp",
+   "handler_name": "chkAutoCleanMode6MouseUp",
+   "leaf_name": "chkAutoCleanMode6",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fCleaning.pnlLeft.grpCleanPara.grpCleanMode.btnStartAutoClean",
+   "event_name": "OnClick",
+   "handler_name": "btnStartAutoCleanClick",
+   "leaf_name": "btnStartAutoClean",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCleaning.pnlLeft.grpCleanDevice.sbTrayAssign",
+   "event_name": "OnClick",
+   "handler_name": "sbTrayAssignClick",
+   "leaf_name": "sbTrayAssign",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fCleaning.pnlLeft.grpCleanDevice.btnResetCleanCount",
+   "event_name": "OnClick",
+   "handler_name": "btnResetCleanCountClick",
+   "leaf_name": "btnResetCleanCount",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCleaning.pnlLeft.grpCleanDevice.rgKitPosition",
+   "event_name": "OnClick",
+   "handler_name": "rgKitPositionClick",
+   "leaf_name": "rgKitPosition",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fCleaning.pnlLeft.grpCleanDevice.edDevicePices",
+   "event_name": "OnClick",
+   "handler_name": "edDevicePicesClick",
+   "leaf_name": "edDevicePices",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlLeft.grpCleanDevice.udDeviceCT",
+   "event_name": "OnChangingEx",
+   "handler_name": "udDeviceCTChangingEx",
+   "leaf_name": "udDeviceCT",
+   "vcl_class": "TUpDown"
+  },
+  {
+   "control_path": "fCleaning.pnlLeft.grpCleanDevice.udDeviceCT",
+   "event_name": "OnClick",
+   "handler_name": "udDeviceCTClick",
+   "leaf_name": "udDeviceCT",
+   "vcl_class": "TUpDown"
+  },
+  {
+   "control_path": "fCleaning.pnlLeft.grpCleanDevice.edAlarmCount",
+   "event_name": "OnClick",
+   "handler_name": "edtLowYieldCountClick",
+   "leaf_name": "edAlarmCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlLeft.grpCleanDevice.edCleaningCount",
+   "event_name": "OnClick",
+   "handler_name": "edCleanCountClick",
+   "leaf_name": "edCleaningCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlLeft.grpCleanDevice.edCleanPadDeviation",
+   "event_name": "OnClick",
+   "handler_name": "edDropOffset1Click",
+   "leaf_name": "edCleanPadDeviation",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlLeft.grpCleanDevice.cbbCleanPadCount",
+   "event_name": "OnChange",
+   "handler_name": "cbbCleanPadCountChange",
+   "leaf_name": "cbbCleanPadCount",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fCleaning.pnlLeft.grpCleanDevice.edIndexArmAutoCleanCnt",
+   "event_name": "OnClick",
+   "handler_name": "edCleanCountClick",
+   "leaf_name": "edIndexArmAutoCleanCnt",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlLeft.grpSpeed.OutArmSpeed",
+   "event_name": "OnClick",
+   "handler_name": "edtLowYieldLimitClick",
+   "leaf_name": "OutArmSpeed",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlLeft.grpSpeed.ShuttleSpeed",
+   "event_name": "OnClick",
+   "handler_name": "edtLowYieldLimitClick",
+   "leaf_name": "ShuttleSpeed",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlLeft.grpSpeed.IndexArmSpeed",
+   "event_name": "OnClick",
+   "handler_name": "edtLowYieldLimitClick",
+   "leaf_name": "IndexArmSpeed",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlLeft.grpSpeed.edtInArmZSpeed",
+   "event_name": "OnClick",
+   "handler_name": "edtLowYieldLimitClick",
+   "leaf_name": "edtInArmZSpeed",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlLeft.grpSpeed.edtIndexVacuum",
+   "event_name": "OnClick",
+   "handler_name": "edtIndexVacuumClick",
+   "leaf_name": "edtIndexVacuum",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlLeft.grpSpeed.edtInArmVacuum",
+   "event_name": "OnClick",
+   "handler_name": "edtIndexVacuumClick",
+   "leaf_name": "edtInArmVacuum",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlLeft.grpSpeed.edtIndexAirOn",
+   "event_name": "OnClick",
+   "handler_name": "edtIndexVacuumClick",
+   "leaf_name": "edtIndexAirOn",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlLeft.grpSpeed.edtInArmAirOn",
+   "event_name": "OnClick",
+   "handler_name": "edtIndexVacuumClick",
+   "leaf_name": "edtInArmAirOn",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlLeft.gbCleanKitOffset.edtHotplateXOffset",
+   "event_name": "OnClick",
+   "handler_name": "edtBufferKitLTXClick",
+   "leaf_name": "edtHotplateXOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlLeft.gbCleanKitOffset.edtHotplateYOffset",
+   "event_name": "OnClick",
+   "handler_name": "edtBufferKitLTXClick",
+   "leaf_name": "edtHotplateYOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlLeft.gbCleanKitOffset.edtHotplatePlaceOffset",
+   "event_name": "OnClick",
+   "handler_name": "edtHotplatePickOffsetClick",
+   "leaf_name": "edtHotplatePlaceOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlLeft.gbCleanKitOffset.edtHotplatePickOffset",
+   "event_name": "OnClick",
+   "handler_name": "edtHotplatePickOffsetClick",
+   "leaf_name": "edtHotplatePickOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlLeft.gbCleanKitOffset.edtHotplatePitchOffset",
+   "event_name": "OnClick",
+   "handler_name": "edtBufferKitLTXClick",
+   "leaf_name": "edtHotplatePitchOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlCenter.grpContactPara.grpContactForce.edPinSingleN",
+   "event_name": "OnClick",
+   "handler_name": "edPinSingleNClick",
+   "leaf_name": "edPinSingleN",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlCenter.grpContactPara.grpContactForce.edPinSingleGf",
+   "event_name": "OnClick",
+   "handler_name": "edPinSingleGfClick",
+   "leaf_name": "edPinSingleGf",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlCenter.grpContactPara.grpContactForce.edPinsCount",
+   "event_name": "OnClick",
+   "handler_name": "edPinsCountClick",
+   "leaf_name": "edPinsCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlCenter.grpContactPara.grpContactForce.edAutoCleanAirForce_Kg",
+   "event_name": "OnClick",
+   "handler_name": "edAutoCleanAirForce_KgClick",
+   "leaf_name": "edAutoCleanAirForce_Kg",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlCenter.grpContactPara.grpContactForce.edAutoCleanAirForce_N",
+   "event_name": "OnClick",
+   "handler_name": "edAutoCleanAirForce_NClick",
+   "leaf_name": "edAutoCleanAirForce_N",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlCenter.grpContactPara.grpContactForce.grpDieForce.edtAutoCleanDieForce",
+   "event_name": "OnClick",
+   "handler_name": "edAutoCleanAirForce_KgClick",
+   "leaf_name": "edtAutoCleanDieForce",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlCenter.grpContactPara.grpHeight.edACContactShiftHeight",
+   "event_name": "OnClick",
+   "handler_name": "edACContactShiftHeightClick",
+   "leaf_name": "edACContactShiftHeight",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlCenter.grpContactPara.grpHeight.edACContactCleanHeight",
+   "event_name": "OnClick",
+   "handler_name": "edACContactCleanHeightClick",
+   "leaf_name": "edACContactCleanHeight",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlCenter.grpContactPara.grpHeight.edIndexPickOffset",
+   "event_name": "OnClick",
+   "handler_name": "edtHotplatePickOffsetClick",
+   "leaf_name": "edIndexPickOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlCenter.grpContactPara.grpHeight.pnlInArmOffset.edShuttle1PickOffset",
+   "event_name": "OnClick",
+   "handler_name": "edtHotplatePickOffsetClick",
+   "leaf_name": "edShuttle1PickOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlCenter.grpContactPara.grpHeight.pnlInArmOffset.edtShuttle1PlaceOffset",
+   "event_name": "OnClick",
+   "handler_name": "edtHotplatePickOffsetClick",
+   "leaf_name": "edtShuttle1PlaceOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlCenter.grpContactPara.grpHeight.pnlInArmOffset.edtShuttle1XOffset",
+   "event_name": "OnClick",
+   "handler_name": "edtBufferKitLTXClick",
+   "leaf_name": "edtShuttle1XOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlCenter.grpContactPara.grpHeight.pnlInArmOffset.edtShuttle1YOffset",
+   "event_name": "OnClick",
+   "handler_name": "edtBufferKitLTXClick",
+   "leaf_name": "edtShuttle1YOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlCenter.grpContactPara.grpHeight.pnlInArmOffset.edShuttle2PickOffset",
+   "event_name": "OnClick",
+   "handler_name": "edtHotplatePickOffsetClick",
+   "leaf_name": "edShuttle2PickOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlCenter.grpContactPara.grpHeight.pnlInArmOffset.edtShuttle2PlaceOffset",
+   "event_name": "OnClick",
+   "handler_name": "edtHotplatePickOffsetClick",
+   "leaf_name": "edtShuttle2PlaceOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlCenter.grpContactPara.grpHeight.pnlInArmOffset.edtShuttle2XOffset",
+   "event_name": "OnClick",
+   "handler_name": "edtBufferKitLTXClick",
+   "leaf_name": "edtShuttle2XOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlCenter.grpContactPara.grpHeight.pnlInArmOffset.edtShuttle2YOffset",
+   "event_name": "OnClick",
+   "handler_name": "edtBufferKitLTXClick",
+   "leaf_name": "edtShuttle2YOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlCenter.grpContactPara.grpHeight.pnlInArmOffset.edtShuttlePitch",
+   "event_name": "OnClick",
+   "handler_name": "edtBufferKitLTXClick",
+   "leaf_name": "edtShuttlePitch",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlCenter.grpContactPara.grpHeight.edIndexReleaseOffset",
+   "event_name": "OnClick",
+   "handler_name": "edtHotplatePickOffsetClick",
+   "leaf_name": "edIndexReleaseOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlCenter.grpContactPara.pnlContactMode.edContactTime",
+   "event_name": "OnClick",
+   "handler_name": "edDropOffset1Click",
+   "leaf_name": "edContactTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlCenter.grpContactPara.pnlContactMode.edACContactCount",
+   "event_name": "OnClick",
+   "handler_name": "edtLowYieldLimitClick",
+   "leaf_name": "edACContactCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlCenter.grpContactPara.pnlContactMode.edDropOffset1",
+   "event_name": "OnClick",
+   "handler_name": "edDropOffset1Click",
+   "leaf_name": "edDropOffset1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlCenter.grpContactPara.pnlContactMode.edACInitalContactCount",
+   "event_name": "OnClick",
+   "handler_name": "edACInitalContactCountClick",
+   "leaf_name": "edACInitalContactCount",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fCleaning.pnlCenter.palBtn.sbCleanSave",
+   "event_name": "OnClick",
+   "handler_name": "sbCleanSaveClick",
+   "leaf_name": "sbCleanSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fCleaning.pnlCenter.palBtn.sbCleanExit",
+   "event_name": "OnClick",
+   "handler_name": "sbCleanExitClick",
+   "leaf_name": "sbCleanExit",
+   "vcl_class": "TSpeedButton"
+  }
+ ],
+ "form_name": "fCleaning",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "AutoClean/uCleaning.dfm"
+}

@@ -1,0 +1,30 @@
+// ===========================================================================
+//  RPDefault_layout.gen.cpp
+//  DO NOT EDIT -- GENERATED FILE. See the matching _layout.gen.h banner.
+// ===========================================================================
+#include "RPDefault_layout.gen.h"
+
+namespace ht9045_layout {
+
+// (no custom-control properties in this form)
+
+const DfmControlLayout kRPDefaultLayout[] = {
+    { "fRPDefault", "fRPDefault", "", "TfRPDefault", "", "", 0, 0, "ROOT", false, true, 966, true, 173, true, 517, true, 626, false, 0, -1, "", "", true, "MS Sans Serif", -11, "", true, -2147483640, "clWindowText", true, 16777215, "clWhite", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fRPDefault.gbTestingStopTime", "gbTestingStopTime", "IDD_RPDEFAULT_GBTESTINGSTOPTIME", "TGroupBox", "fRPDefault", "fRPDefault", 0, 1, "SUBDLG", false, true, 0, true, 0, true, 509, true, 595, true, 0, -1, "alClient", "", true, "新細明體", -15, "", true, 255, "clRed", true, 12761254, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fRPDefault.gbTestingStopTime.spbDefaulteViewShow", "spbDefaulteViewShow", "IDC_RPDEFAULT_SPBDEFAULTEVIEWSHOW", "TSpeedButton", "fRPDefault.gbTestingStopTime", "fRPDefault.gbTestingStopTime", 0, 2, "LEAF", true, true, 300, true, 145, true, 140, true, 30, false, 0, -1, "", "", true, "標楷體", -16, "", true, 8388736, "clPurple", false, 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fRPDefault.gbTestingStopTime.spbSave", "spbSave", "IDC_RPDEFAULT_SPBSAVE", "TSpeedButton", "fRPDefault.gbTestingStopTime", "fRPDefault.gbTestingStopTime", 1, 2, "LEAF", true, true, 14, true, 537, true, 227, true, 40, false, 0, -1, "", "", true, "Arial", -16, "", true, -2147483640, "clWindowText", false, 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fRPDefault.gbTestingStopTime.spbExit", "spbExit", "IDC_RPDEFAULT_SPBEXIT", "TSpeedButton", "fRPDefault.gbTestingStopTime", "fRPDefault.gbTestingStopTime", 2, 2, "LEAF", true, true, 248, true, 537, true, 241, true, 41, false, 0, -1, "", "", true, "Arial", -16, "", true, -2147483640, "clWindowText", false, 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fRPDefault.gbTestingStopTime.pnl1", "pnl1", "IDD_RPDEFAULT_GBTESTINGSTOPTIME_PNL1", "TPanel", "fRPDefault.gbTestingStopTime", "fRPDefault.gbTestingStopTime", 3, 2, "SUBDLG", false, true, 12, true, 18, true, 281, true, 169, true, 0, -1, "", "", false, "", 0, "", false, 0, "", true, -2147483622, "clGradientActiveCaption", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fRPDefault.gbTestingStopTime.pnl1.label1", "label1", "IDC_RPDEFAULT_LABEL1", "TLabel", "fRPDefault.gbTestingStopTime.pnl1", "fRPDefault.gbTestingStopTime.pnl1", 0, 3, "LEAF", true, true, 274, true, -12, true, 172, true, 15, false, 0, -1, "", "", true, "新細明體", -15, "", true, 8388608, "clNavy", false, 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fRPDefault.gbTestingStopTime.pnl1.label2", "label2", "IDC_RPDEFAULT_LABEL2", "TLabel", "fRPDefault.gbTestingStopTime.pnl1", "fRPDefault.gbTestingStopTime.pnl1", 1, 3, "LEAF", true, true, 9, true, 78, true, 163, true, 15, false, 0, -1, "", "", true, "新細明體", -15, "", true, 8388608, "clNavy", false, 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fRPDefault.gbTestingStopTime.pnl1.spbReplyRPDefault", "spbReplyRPDefault", "IDC_RPDEFAULT_SPBREPLYRPDEFAULT", "TSpeedButton", "fRPDefault.gbTestingStopTime.pnl1", "fRPDefault.gbTestingStopTime.pnl1", 2, 3, "LEAF", true, true, 137, true, 128, true, 140, true, 30, false, 0, -1, "", "", true, "標楷體", -16, "", true, 255, "clRed", false, 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fRPDefault.gbTestingStopTime.pnl1.spbSetRPDefault", "spbSetRPDefault", "IDC_RPDEFAULT_SPBSETRPDEFAULT", "TSpeedButton", "fRPDefault.gbTestingStopTime.pnl1", "fRPDefault.gbTestingStopTime.pnl1", 3, 3, "LEAF", true, true, 3, true, 128, true, 129, true, 30, false, 0, -1, "", "", true, "標楷體", -16, "", true, 16711680, "clBlue", false, 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fRPDefault.gbTestingStopTime.pnl1.pnl2", "pnl2", "IDC_RPDEFAULT_PNL2", "TPanel", "fRPDefault.gbTestingStopTime.pnl1", "fRPDefault.gbTestingStopTime.pnl1", 4, 3, "LEAF", false, true, 2, true, 2, true, 277, true, 24, true, 0, -1, "alTop", "", true, "微軟正黑體", -16, "fsBold", true, 16777215, "clWhite", true, -2147483623, "clHotLight", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fRPDefault.gbTestingStopTime.pnl1.pnlRPDefaultFalseColor", "pnlRPDefaultFalseColor", "IDC_RPDEFAULT_PNLRPDEFAULTFALSECOLOR", "TPanel", "fRPDefault.gbTestingStopTime.pnl1", "fRPDefault.gbTestingStopTime.pnl1", 5, 3, "LEAF", false, true, 200, true, 40, true, 65, true, 25, true, 1, -1, "", "", true, "新細明體", -16, "", true, 16777215, "clWhite", true, 255, "clRed", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fRPDefault.gbTestingStopTime.pnl1.pnlRPDefaultTrueColor", "pnlRPDefaultTrueColor", "IDC_RPDEFAULT_PNLRPDEFAULTTRUECOLOR", "TPanel", "fRPDefault.gbTestingStopTime.pnl1", "fRPDefault.gbTestingStopTime.pnl1", 6, 3, "LEAF", false, true, 200, true, 72, true, 65, true, 25, true, 2, -1, "", "", true, "新細明體", -16, "", true, 16777215, "clWhite", true, 32768, "clGreen", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fRPDefault.gbTestingStopTime.strngrdReciepeParameterDefault", "strngrdReciepeParameterDefault", "IDC_RPDEFAULT_STRNGRDRECIEPEPARAMETERDEFAULT", "TStringGrid", "fRPDefault.gbTestingStopTime", "fRPDefault.gbTestingStopTime", 4, 2, "LEAF", false, true, 3, true, 192, true, 488, true, 331, true, 1, -1, "alCustom", "", true, "新細明體", -15, "", true, 16711680, "clBlue", false, 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+};
+
+const int kRPDefaultLayoutCount = 14;
+
+} // namespace ht9045_layout

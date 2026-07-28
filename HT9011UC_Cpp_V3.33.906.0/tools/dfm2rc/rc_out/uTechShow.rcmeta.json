@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "generator": "emit_rc.py W7-B1b v1.0",
+  "source_dfm": "uTechShow.dfm",
+  "formstem": "UTECHSHOW",
+  "dialog_count": 1,
+  "control_count": 4,
+  "fallback_classes_used": [],
+  "warnings": [],
+  "dialogs": [
+    {
+      "idd_symbol": "IDD_UTECHSHOW",
+      "idd_value": 8192,
+      "is_root": true,
+      "owner_path": "fTeachShow",
+      "owner_class": "TfTeachShow",
+      "controls": [
+        {
+          "symbol": "IDC_UTECHSHOW_LABEL1",
+          "value": 1024,
+          "win32_class": "Static",
+          "caption": "The manual motion motor to treats measures in the position.",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fTeachShow.Label1",
+          "fallback_class": false,
+          "x": 24,
+          "y": 40,
+          "cx": 423,
+          "cy": 20
+        },
+        {
+          "symbol": "IDC_UTECHSHOW_LABEL3",
+          "value": 1025,
+          "win32_class": "Static",
+          "caption": "Save ?",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fTeachShow.Label3",
+          "fallback_class": false,
+          "x": 24,
+          "y": 80,
+          "cx": 49,
+          "cy": 20
+        },
+        {
+          "symbol": "IDC_UTECHSHOW_BUTTON1",
+          "value": 1026,
+          "win32_class": "Button",
+          "caption": "Yes",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fTeachShow.Button1",
+          "fallback_class": false,
+          "x": 104,
+          "y": 120,
+          "cx": 75,
+          "cy": 25
+        },
+        {
+          "symbol": "IDC_UTECHSHOW_BUTTON2",
+          "value": 1027,
+          "win32_class": "Button",
+          "caption": "No",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fTeachShow.Button2",
+          "fallback_class": false,
+          "x": 328,
+          "y": 120,
+          "cx": 75,
+          "cy": 25
+        }
+      ]
+    }
+  ]
+}

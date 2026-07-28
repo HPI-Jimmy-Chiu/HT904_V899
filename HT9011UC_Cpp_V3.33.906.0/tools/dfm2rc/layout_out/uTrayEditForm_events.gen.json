@@ -1,0 +1,100 @@
+{
+ "event_count": 13,
+ "events": [
+  {
+   "control_path": "TrayEditForm",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "TrayEditForm",
+   "vcl_class": "TTrayEditForm"
+  },
+  {
+   "control_path": "TrayEditForm",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "TrayEditForm",
+   "vcl_class": "TTrayEditForm"
+  },
+  {
+   "control_path": "TrayEditForm.spbUpdate",
+   "event_name": "OnClick",
+   "handler_name": "spbUpdateClick",
+   "leaf_name": "spbUpdate",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "TrayEditForm.SpeedButton2",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton2Click",
+   "leaf_name": "SpeedButton2",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "TrayEditForm.mtLoaderBuffer",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtLoaderBufferMouseDown",
+   "leaf_name": "mtLoaderBuffer",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "TrayEditForm.mtLoaderBuffer",
+   "event_name": "OnMouseMove",
+   "handler_name": "mtLoaderBufferMouseMove",
+   "leaf_name": "mtLoaderBuffer",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "TrayEditForm.mtLoaderBuffer",
+   "event_name": "OnMouseUp",
+   "handler_name": "mtLoaderBufferMouseUp",
+   "leaf_name": "mtLoaderBuffer",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "TrayEditForm.edtYPos",
+   "event_name": "OnClick",
+   "handler_name": "edtXPosClick",
+   "leaf_name": "edtYPos",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "TrayEditForm.edtXPos",
+   "event_name": "OnClick",
+   "handler_name": "edtXPosClick",
+   "leaf_name": "edtXPos",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "TrayEditForm.Button1",
+   "event_name": "OnClick",
+   "handler_name": "Button1Click",
+   "leaf_name": "Button1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "TrayEditForm.BitBtn1",
+   "event_name": "OnClick",
+   "handler_name": "BitBtn1Click",
+   "leaf_name": "BitBtn1",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "TrayEditForm.Button2",
+   "event_name": "OnClick",
+   "handler_name": "Button2Click",
+   "leaf_name": "Button2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "TrayEditForm.Timer1",
+   "event_name": "OnTimer",
+   "handler_name": "Timer1Timer",
+   "leaf_name": "Timer1",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "TrayEditForm",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "uTrayEditForm.dfm"
+}

@@ -1,0 +1,16 @@
+{
+ "event_count": 1,
+ "events": [
+  {
+   "control_path": "fLan",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fLan",
+   "vcl_class": "TfLan"
+  }
+ ],
+ "form_name": "fLan",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "language.dfm"
+}

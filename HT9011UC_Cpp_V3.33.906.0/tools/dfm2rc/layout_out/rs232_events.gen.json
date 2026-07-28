@@ -1,0 +1,114 @@
+{
+ "event_count": 15,
+ "events": [
+  {
+   "control_path": "COM2",
+   "event_name": "OnDestroy",
+   "handler_name": "DataModuleDestroy",
+   "leaf_name": "COM2",
+   "vcl_class": "TCOM2"
+  },
+  {
+   "control_path": "COM2.Comm2",
+   "event_name": "OnReceiveData",
+   "handler_name": "Comm2ReceiveData",
+   "leaf_name": "Comm2",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "COM2.Comm1",
+   "event_name": "OnReceiveData",
+   "handler_name": "Comm1ReceiveData",
+   "leaf_name": "Comm1",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "COM2.Comm1",
+   "event_name": "OnReceiveError",
+   "handler_name": "Comm1ReceiveError",
+   "leaf_name": "Comm1",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "COM2.Comm1",
+   "event_name": "OnRequestHangup",
+   "handler_name": "Comm1RequestHangup",
+   "leaf_name": "Comm1",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "COM2.Comm3",
+   "event_name": "OnReceiveData",
+   "handler_name": "Comm3ReceiveData",
+   "leaf_name": "Comm3",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "COM2.TempComm6",
+   "event_name": "OnReceiveData",
+   "handler_name": "TempComm6ReceiveData",
+   "leaf_name": "TempComm6",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "COM2.Comm4",
+   "event_name": "OnReceiveData",
+   "handler_name": "Comm4ReceiveData",
+   "leaf_name": "Comm4",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "COM2.cmATC1",
+   "event_name": "OnReceiveData",
+   "handler_name": "cmATC1ReceiveData",
+   "leaf_name": "cmATC1",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "COM2.cmATC2",
+   "event_name": "OnReceiveData",
+   "handler_name": "cmATC2ReceiveData",
+   "leaf_name": "cmATC2",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "COM2.cmATC3",
+   "event_name": "OnReceiveData",
+   "handler_name": "cmATC3ReceiveData",
+   "leaf_name": "cmATC3",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "COM2.cmATC4",
+   "event_name": "OnReceiveData",
+   "handler_name": "cmATC4ReceiveData",
+   "leaf_name": "cmATC4",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "COM2.TimerHPCard",
+   "event_name": "OnTimer",
+   "handler_name": "TimerHPCardTimer",
+   "leaf_name": "TimerHPCard",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "COM2.PadComm",
+   "event_name": "OnReceiveData",
+   "handler_name": "PadCommReceiveData",
+   "leaf_name": "PadComm",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "COM2.cmVisionLight",
+   "event_name": "OnReceiveData",
+   "handler_name": "cmVisionLightReceiveData",
+   "leaf_name": "cmVisionLight",
+   "vcl_class": "TComm"
+  }
+ ],
+ "form_name": "COM2",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "rs232.dfm"
+}

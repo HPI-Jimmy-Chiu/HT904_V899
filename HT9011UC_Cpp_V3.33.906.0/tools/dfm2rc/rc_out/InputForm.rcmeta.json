@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "generator": "emit_rc.py W7-B1b v1.0",
+  "source_dfm": "InputForm.dfm",
+  "formstem": "INPUTFORM",
+  "dialog_count": 1,
+  "control_count": 6,
+  "fallback_classes_used": [],
+  "warnings": [],
+  "dialogs": [
+    {
+      "idd_symbol": "IDD_INPUTFORM",
+      "idd_value": 8192,
+      "is_root": true,
+      "owner_path": "fInputForm",
+      "owner_class": "TfInputForm",
+      "controls": [
+        {
+          "symbol": "IDC_INPUTFORM_LABEL1",
+          "value": 1024,
+          "win32_class": "Static",
+          "caption": "Please Keyin Number : ",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fInputForm.Label1",
+          "fallback_class": false,
+          "x": 8,
+          "y": 8,
+          "cx": 185,
+          "cy": 20
+        },
+        {
+          "symbol": "IDC_INPUTFORM_IMAGE1",
+          "value": 1025,
+          "win32_class": "Static",
+          "caption": null,
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fInputForm.Image1",
+          "fallback_class": false,
+          "x": 8,
+          "y": 132,
+          "cx": 841,
+          "cy": 741
+        },
+        {
+          "symbol": "IDC_INPUTFORM_EDIT1",
+          "value": 1026,
+          "win32_class": "Edit",
+          "caption": null,
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fInputForm.Edit1",
+          "fallback_class": false,
+          "x": 40,
+          "y": 40,
+          "cx": 305,
+          "cy": 21
+        },
+        {
+          "symbol": "IDC_INPUTFORM_BUTTON1",
+          "value": 1027,
+          "win32_class": "Button",
+          "caption": "OK",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fInputForm.Button1",
+          "fallback_class": false,
+          "x": 144,
+          "y": 80,
+          "cx": 75,
+          "cy": 25
+        },
+        {
+          "symbol": "IDC_INPUTFORM_EDIT2",
+          "value": 1028,
+          "win32_class": "Edit",
+          "caption": null,
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fInputForm.Edit2",
+          "fallback_class": false,
+          "x": 40,
+          "y": 44,
+          "cx": 305,
+          "cy": 32
+        },
+        {
+          "symbol": "IDC_INPUTFORM_EDIT3",
+          "value": 1029,
+          "win32_class": "Edit",
+          "caption": null,
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fInputForm.Edit3",
+          "fallback_class": false,
+          "x": 40,
+          "y": 44,
+          "cx": 305,
+          "cy": 32
+        }
+      ]
+    }
+  ]
+}

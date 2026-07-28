@@ -1,0 +1,848 @@
+{
+ "control_node_count": 9,
+ "encoding_used": "cp950",
+ "form_class": "TfLogin",
+ "form_name": "fLogin",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fLogin.labUserName",
+    "fLogin.labOldPassword",
+    "fLogin.sbOk",
+    "fLogin.labNewPassword",
+    "fLogin.edUserName",
+    "fLogin.edLoginOldPassword",
+    "fLogin.rgLoginOption",
+    "fLogin.edLoginNewPassword",
+    "fLogin.cbLoginUserName"
+   ],
+   "class": "TfLogin",
+   "depth": 0,
+   "events": {
+    "OnShow": "FormShow"
+   },
+   "geometry": {
+    "height": null,
+    "left": 355,
+    "top": 356,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "fLogin",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "fLogin",
+   "properties": {
+    "BorderIcons": {
+     "type": "SET",
+     "value": [
+      "biSystemMenu"
+     ]
+    },
+    "BorderStyle": {
+     "type": "SCALAR",
+     "value": "bsSingle"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Login"
+    },
+    "ClientHeight": {
+     "type": "SCALAR",
+     "value": 337
+    },
+    "ClientWidth": {
+     "type": "SCALAR",
+     "value": 405
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 12761254
+    },
+    "DesignSize": {
+     "type": "LIST",
+     "value": [
+      405,
+      337
+     ]
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 355
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnShow": {
+     "type": "SCALAR",
+     "value": "FormShow"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 356
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 36,
+    "left": 24,
+    "top": 24,
+    "width": 124
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 22,
+   "name": "labUserName",
+   "objkind": "object",
+   "parent_path": "fLogin",
+   "path": "fLogin.labUserName",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Username"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -32
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Times New Roman"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 124
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 36,
+    "left": 24,
+    "top": 80,
+    "width": 120
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 36,
+   "name": "labOldPassword",
+   "objkind": "object",
+   "parent_path": "fLogin",
+   "path": "fLogin.labOldPassword",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Password"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -32
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Times New Roman"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 120
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TSpeedButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "sbOkClick"
+   },
+   "geometry": {
+    "height": 49,
+    "left": 120,
+    "top": 268,
+    "width": 145
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 49,
+   "name": "sbOk",
+   "objkind": "object",
+   "parent_path": "fLogin",
+   "path": "fLogin.sbOk",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "OK"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -24
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Times New Roman"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Glyph.Data": {
+     "type": "BLOB",
+     "value": {
+      "byte_len": 5434,
+      "hex": "36150000424D361500000000000036000000280000002A0000002A00000001001800000000000015000000000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707FFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707FF0707FF0707FF0707FFFF07FF0707FFFF07FF0707FFFF07FF0707FFFF07FF0707FFFF07FF0707FFFF07FF0707FFFF07FF0707070707070707070707FF0707FF0707FF0707FF0707FF0707FF0707FF0707FF0707FF0707FF0707070707FFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707FF0707FF0707FF0707FF0707FFFF07FF0707FFFF07FF0707FFFF07FF0707FFFF07FF0707FFFF07FF0707FFFF07FF0707FFFF07070707FFFF07FFFF07070707FF0707FF0707FF0707FF0707FF0707FF0707FF0707FF0707FF0707070707FFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707FF0707FF0707FF0707FF0707FF0707FFFF07FF0707FFFF07FF0707FFFF07FF0707FFFF07FF0707FFFF07FF0707FFFF07FF0707070707FFFF07FFFF07877F07070707FF0707FF0707FF0707FF0707FF0707FF0707FF0707FF0707070707FFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707FF0707FF0707FF0707FF0707FF0707FF0707FFFF07FF0707FFFF07FF0707FFFF07FF0707FFFF07FF0707FFFF07FF0707FFFF07070707FFFF07FFFF07877F07877F07070707FF0707FF0707FF0707FF0707FF0707FF0707FF0707070707FFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707FF0707FF0707FF0707FF0707FF0707FF0707FF0707FFFF07FF0707FFFF07FF0707FFFF07FF0707FFFF07FF0707FFFF07FF0707070707FFFF07FFFF07877F07877F07877F07070707FF0707FF0707FF0707FF0707FF0707FF0707070707FFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707FF0707FF0707FF0707FF0707FF0707FF0707FF0707FF0707FFFF07FF0707FFFF07FF0707FFFF07FF0707FFFF07FF0707FFFF07070707FFFF07FFFF07877F07877F07877F07877F07070707FF0707FF0707FF0707FF0707FF0707070707FFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707070707070707070707070707070707070707070707070707070707070707070707FFFF07FFFF07FFFF07FFFF07FFFF07FFFF07070707FFFF07FFFF07877F07877F07877F07877F07877F07070707070707070707070707070707070707FFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707FFFF07FFFF07FFFF07FFFF07FFFF07FFFF07070707FFFF07FFFF07877F07877F07877F07877F07877F07070707877F87FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707FFFF07FFFF07FFFF07FFFF07FFFF07FFFF07070707FFFF07FFFF07877F07877F07877F07877F07877F07070707877F87FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707070707070707070707070707070707070707070707FFFF07FFFF07877F07877F07877F07877F07877F07070707877F87FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707FFFFFFFFFFFF070707877F87877F87877F87877F87877F87877F87070707FFFF07FFFF07877F07877F07877F07877F07877F07070707877F87FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707070707FFFFFF070707877F87877F87877F87877F87877F87877F87070707FFFF07FFFF07877F07877F07877F07877F07877F07070707877F87FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707877F07070707070707877F87877F87877F87877F87877F87877F87070707FFFF07FFFF07877F07877F07877F07877F07877F07070707877F87FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707877F07877F07070707877F87877F87877F87877F87877F87877F87070707FFFF07FFFF07877F07070707070707877F07877F07070707877F87FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707FFFF07877F07877F07070707877F87877F87877F87877F87877F87070707FFFF07FFFF07070707877F87070707877F07877F07070707877F87FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707FFFF07FFFF07877F07877F07070707877F87877F87877F87877F87070707FFFF07FFFF07070707FFFFFF070707877F07877F07070707877F87FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707070707070707070707070707070707070707070707070707FFFF07FFFF07FFFF07877F07877F07070707877F87877F87877F87070707FFFF07FFFF07877F07070707070707877F07877F07070707877F87FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707877F07877F07877F07877F07877F07877F07877F07877F07FFFF07FFFF07FFFF07FFFF07877F07877F07070707877F87877F87070707FFFF07FFFF07877F07877F07877F07877F07877F07070707877F87FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707FFFF07FFFF07FFFF07FFFF07FFFF07FFFF07FFFF07FFFF07FFFF07FFFF07FFFF07FFFF07FFFF07877F07877F07070707877F87070707FFFF07FFFF07877F07877F07877F07877F07877F07070707877F87FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707FFFF07FFFF07FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF07FFFF07877F07070707877F87070707FFFF07FFFF07877F07877F07877F07877F07877F07070707877F87FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707FFFF07FFFF07FFFF07FFFF07FFFF07FFFF07FFFF07FFFF07FFFF07FFFF07FFFFFFFFFF07FFFF07877F07070707877F87877F87070707FFFF07FFFF07877F07877F07877F07877F07877F07070707877F87FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707070707070707070707070707070707070707070707070707FFFF07FFFFFFFFFF07FFFF07877F07070707877F87877F87877F87070707FFFF07FFFF07877F07877F07877F07877F07877F07070707877F87FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707FFFF07FFFF07FFFF07877F07070707877F87877F87877F87877F87070707FFFF07FFFF07877F07877F07877F07877F07877F07070707877F87FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707FFFF07FFFF07877F07070707877F87877F87877F87877F87877F87070707FFFF07FFFF07877F07877F07877F07877F07877F07070707877F87FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707FFFF07877F07070707877F87877F87877F87877F87877F87877F87070707FFFFFFFFFF07877F07877F07877F07877F07877F07070707877F87FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707877F07070707070707877F87877F87877F87877F87877F87877F87877F87070707FFFFFFFFFF07877F07877F07877F07877F07070707877F87FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707070707FFFFFF070707877F87877F87877F87877F87877F87877F87877F87877F87070707FFFFFFFFFF07877F07877F07877F07070707877F87FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707877F87877F87877F87877F87877F87877F87877F87877F87877F87070707FFFFFFFFFF07877F07877F07070707877F87FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707877F87877F87877F87877F87877F87877F87877F87877F87877F87877F87070707FFFFFFFFFF07877F07070707877F87FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707877F87877F87877F87877F87877F87877F87877F87877F87877F87877F87877F87070707FFFFFFFFFF07070707877F87FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707070707FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000",
+      "sha1": "1f7264a260dbb7e6b17d23aff1c5853517c3e280"
+     }
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 49
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 120
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "sbOkClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 268
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 145
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 36,
+    "left": 24,
+    "top": 136,
+    "width": 180
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 234,
+   "name": "labNewPassword",
+   "objkind": "object",
+   "parent_path": "fLogin",
+   "path": "fLogin.labNewPassword",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "NewPassword"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -32
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "Times New Roman"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 180
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 45,
+    "left": 224,
+    "top": 16,
+    "width": 169
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 247,
+   "name": "edUserName",
+   "objkind": "object",
+   "parent_path": "fLogin",
+   "path": "fLogin.edUserName",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -32
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 45
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 224
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 169
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 45,
+    "left": 224,
+    "top": 72,
+    "width": 169
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 261,
+   "name": "edLoginOldPassword",
+   "objkind": "object",
+   "parent_path": "fLogin",
+   "path": "fLogin.edLoginOldPassword",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -32
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 45
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 224
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "PasswordChar": {
+     "type": "STR",
+     "value": "*"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 169
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TRadioGroup",
+   "depth": 1,
+   "events": {
+    "OnClick": "rgLoginOptionClick"
+   },
+   "geometry": {
+    "height": 65,
+    "left": 32,
+    "top": 192,
+    "width": 337
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 275,
+   "name": "rgLoginOption",
+   "objkind": "object",
+   "parent_path": "fLogin",
+   "path": "fLogin.rgLoginOption",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Option Mode"
+    },
+    "Columns": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -19
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 65
+    },
+    "ItemIndex": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "New",
+      "Delete",
+      "Edit"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "rgLoginOptionClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 192
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 337
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 45,
+    "left": 224,
+    "top": 128,
+    "width": 169
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 296,
+   "name": "edLoginNewPassword",
+   "objkind": "object",
+   "parent_path": "fLogin",
+   "path": "fLogin.edLoginNewPassword",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -32
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 45
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 224
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "PasswordChar": {
+     "type": "STR",
+     "value": "*"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 128
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 169
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": [],
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 45,
+    "left": 224,
+    "top": 16,
+    "width": 169
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 310,
+   "name": "cbLoginUserName",
+   "objkind": "object",
+   "parent_path": "fLogin",
+   "path": "fLogin.cbLoginUserName",
+   "properties": {
+    "Anchors": {
+     "type": "SET",
+     "value": []
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -32
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 45
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 37
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 224
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 169
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": "False"
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "login.dfm",
+ "total_nodes_incl_root": 10
+}

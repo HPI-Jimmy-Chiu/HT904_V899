@@ -1,0 +1,37 @@
+{
+ "event_count": 4,
+ "events": [
+  {
+   "control_path": "fPrecaution",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fPrecaution",
+   "vcl_class": "TfPrecaution"
+  },
+  {
+   "control_path": "fPrecaution",
+   "event_name": "OnCreate",
+   "handler_name": "FormCreate",
+   "leaf_name": "fPrecaution",
+   "vcl_class": "TfPrecaution"
+  },
+  {
+   "control_path": "fPrecaution",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fPrecaution",
+   "vcl_class": "TfPrecaution"
+  },
+  {
+   "control_path": "fPrecaution.tm_CheckEditEmpty",
+   "event_name": "OnTimer",
+   "handler_name": "tm_CheckEditEmptyTimer",
+   "leaf_name": "tm_CheckEditEmpty",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fPrecaution",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "Precaution.dfm"
+}

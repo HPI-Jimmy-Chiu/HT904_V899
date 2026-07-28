@@ -1,0 +1,86 @@
+{
+ "event_count": 11,
+ "events": [
+  {
+   "control_path": "fSmartDiagnostic",
+   "event_name": "OnCreate",
+   "handler_name": "FormCreate",
+   "leaf_name": "fSmartDiagnostic",
+   "vcl_class": "TfSmartDiagnostic"
+  },
+  {
+   "control_path": "fSmartDiagnostic",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fSmartDiagnostic",
+   "vcl_class": "TfSmartDiagnostic"
+  },
+  {
+   "control_path": "fSmartDiagnostic",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fSmartDiagnostic",
+   "vcl_class": "TfSmartDiagnostic"
+  },
+  {
+   "control_path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Summary.pn_SmartDiagnostic_Summary.sb_SmarDiagnostic_CreateCyliderName",
+   "event_name": "OnClick",
+   "handler_name": "sb_SmarDiagnostic_CreateCyliderNameClick",
+   "leaf_name": "sb_SmarDiagnostic_CreateCyliderName",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Summary.pn_SmartDiagnostic_Summary.sg_SmartDiagnostic_Summary",
+   "event_name": "OnDrawCell",
+   "handler_name": "sg_SmartDiagnostic_SummaryDrawCell",
+   "leaf_name": "sg_SmartDiagnostic_Summary",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_CyliderManagement.sb_SmartDiagnostic_ResetRecordCount",
+   "event_name": "OnClick",
+   "handler_name": "sb_SmartDiagnostic_ResetRecordCountClick",
+   "leaf_name": "sb_SmartDiagnostic_ResetRecordCount",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_Parameter.ed_SmartDiagnostic_LimitCountValue",
+   "event_name": "OnMouseDown",
+   "handler_name": "ed_SmartDiagnostic_LimitCountValueMouseDown",
+   "leaf_name": "ed_SmartDiagnostic_LimitCountValue",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.pn_SmartDiagnostic_Parameter.ed_SmartDiagnostic_LimitCheckTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "ed_SmartDiagnostic_LimitCheckTimeMouseDown",
+   "leaf_name": "ed_SmartDiagnostic_LimitCheckTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.sgCylinder",
+   "event_name": "OnDrawCell",
+   "handler_name": "sgCylinderDrawCell",
+   "leaf_name": "sgCylinder",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fSmartDiagnostic.pc_SmartDiagnostic.ts_SmartDiagnostic_Setup.pn_SmartDiagnostic_Setup.sgCylinder",
+   "event_name": "OnSelectCell",
+   "handler_name": "sgCylinderSelectCell",
+   "leaf_name": "sgCylinder",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fSmartDiagnostic.SmartDiagnosticTimer",
+   "event_name": "OnTimer",
+   "handler_name": "SmartDiagnosticTimerTimer",
+   "leaf_name": "SmartDiagnosticTimer",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fSmartDiagnostic",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "SmartDiagnostic.dfm"
+}

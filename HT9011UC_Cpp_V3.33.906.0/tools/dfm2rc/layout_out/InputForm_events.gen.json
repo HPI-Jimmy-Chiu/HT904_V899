@@ -1,0 +1,30 @@
+{
+ "event_count": 3,
+ "events": [
+  {
+   "control_path": "fInputForm.Edit1",
+   "event_name": "OnClick",
+   "handler_name": "Edit1Click",
+   "leaf_name": "Edit1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fInputForm.Edit1",
+   "event_name": "OnKeyPress",
+   "handler_name": "Edit1KeyPress",
+   "leaf_name": "Edit1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fInputForm.Button1",
+   "event_name": "OnClick",
+   "handler_name": "Button1Click",
+   "leaf_name": "Button1",
+   "vcl_class": "TButton"
+  }
+ ],
+ "form_name": "fInputForm",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "InputForm.dfm"
+}

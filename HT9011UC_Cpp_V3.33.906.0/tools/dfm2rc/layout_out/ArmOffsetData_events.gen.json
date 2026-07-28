@@ -1,0 +1,44 @@
+{
+ "event_count": 5,
+ "events": [
+  {
+   "control_path": "fArmOffsetData",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fArmOffsetData",
+   "vcl_class": "TfArmOffsetData"
+  },
+  {
+   "control_path": "fArmOffsetData",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fArmOffsetData",
+   "vcl_class": "TfArmOffsetData"
+  },
+  {
+   "control_path": "fArmOffsetData",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fArmOffsetData",
+   "vcl_class": "TfArmOffsetData"
+  },
+  {
+   "control_path": "fArmOffsetData.Panel2.btnSave",
+   "event_name": "OnClick",
+   "handler_name": "btnSaveClick",
+   "leaf_name": "btnSave",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fArmOffsetData.Panel2.btnExit",
+   "event_name": "OnClick",
+   "handler_name": "btnOutArmExitClick",
+   "leaf_name": "btnExit",
+   "vcl_class": "TButton"
+  }
+ ],
+ "form_name": "fArmOffsetData",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "ArmOffsetData.dfm"
+}

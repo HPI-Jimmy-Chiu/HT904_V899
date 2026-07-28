@@ -1,0 +1,793 @@
+{
+ "event_count": 112,
+ "events": [
+  {
+   "control_path": "fTrayForm",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fTrayForm",
+   "vcl_class": "TfTrayForm"
+  },
+  {
+   "control_path": "fTrayForm",
+   "event_name": "OnShortCut",
+   "handler_name": "FormShortCut",
+   "leaf_name": "fTrayForm",
+   "vcl_class": "TfTrayForm"
+  },
+  {
+   "control_path": "fTrayForm",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fTrayForm",
+   "vcl_class": "TfTrayForm"
+  },
+  {
+   "control_path": "fTrayForm.spbSave",
+   "event_name": "OnClick",
+   "handler_name": "spbSaveClick",
+   "leaf_name": "spbSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fTrayForm.sbtExit",
+   "event_name": "OnClick",
+   "handler_name": "sbtExitClick",
+   "leaf_name": "sbtExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1",
+   "event_name": "OnChange",
+   "handler_name": "PageControl1Change",
+   "leaf_name": "PageControl1",
+   "vcl_class": "TPageControl"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel1.TrayName1",
+   "event_name": "OnMouseDown",
+   "handler_name": "TrayName1MouseDown",
+   "leaf_name": "TrayName1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.XST1",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "XST1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.XST1",
+   "event_name": "OnMouseDown",
+   "handler_name": "YST1MouseDown",
+   "leaf_name": "XST1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.XPitch1",
+   "event_name": "OnClick",
+   "handler_name": "XPitch1Click",
+   "leaf_name": "XPitch1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.XPitch1",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "XPitch1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.YST1",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "YST1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.YST1",
+   "event_name": "OnMouseDown",
+   "handler_name": "YST1MouseDown",
+   "leaf_name": "YST1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.YPitch1",
+   "event_name": "OnClick",
+   "handler_name": "YPitch1Click",
+   "leaf_name": "YPitch1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.YPitch1",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "YPitch1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.Tp1Thick",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "Tp1Thick",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.Tp1Thick",
+   "event_name": "OnMouseDown",
+   "handler_name": "YST1MouseDown",
+   "leaf_name": "Tp1Thick",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.edMemo1",
+   "event_name": "OnMouseDown",
+   "handler_name": "TrayName1MouseDown",
+   "leaf_name": "edMemo1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.cbTrayType1",
+   "event_name": "OnChange",
+   "handler_name": "cbTrayType1Change",
+   "leaf_name": "cbTrayType1",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.XCT1",
+   "event_name": "OnKeyPress",
+   "handler_name": "XCT1KeyPress",
+   "leaf_name": "XCT1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.XCT1",
+   "event_name": "OnMouseDown",
+   "handler_name": "XCT1MouseDown",
+   "leaf_name": "XCT1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.YCT1",
+   "event_name": "OnKeyPress",
+   "handler_name": "XCT1KeyPress",
+   "leaf_name": "YCT1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.YCT1",
+   "event_name": "OnMouseDown",
+   "handler_name": "YCT1MouseDown",
+   "leaf_name": "YCT1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.Tp1TickUp",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "Tp1TickUp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.Tp1TickUp",
+   "event_name": "OnMouseDown",
+   "handler_name": "Tp1TickUpMouseDown",
+   "leaf_name": "Tp1TickUp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.gb_TrayBlock1.XBStart1",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "XBStart1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.gb_TrayBlock1.XBStart1",
+   "event_name": "OnMouseDown",
+   "handler_name": "XCT1MouseDown",
+   "leaf_name": "XBStart1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.gb_TrayBlock1.XBP1",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "XBP1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.gb_TrayBlock1.XBP1",
+   "event_name": "OnMouseDown",
+   "handler_name": "YST1MouseDown",
+   "leaf_name": "XBP1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.gb_TrayBlock1.YBStart1",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "YBStart1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.gb_TrayBlock1.YBStart1",
+   "event_name": "OnMouseDown",
+   "handler_name": "XCT1MouseDown",
+   "leaf_name": "YBStart1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.gb_TrayBlock1.YBP1",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "YBP1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.gb_TrayBlock1.YBP1",
+   "event_name": "OnMouseDown",
+   "handler_name": "YST1MouseDown",
+   "leaf_name": "YBP1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.gb_TrayBlock1.XBItem1",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "XBItem1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.gb_TrayBlock1.XBItem1",
+   "event_name": "OnMouseDown",
+   "handler_name": "XCT1MouseDown",
+   "leaf_name": "XBItem1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.gb_TrayBlock1.YBItem1",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "YBItem1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.gb_TrayBlock1.YBItem1",
+   "event_name": "OnMouseDown",
+   "handler_name": "YST1MouseDown",
+   "leaf_name": "YBItem1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.gb_TrayBlock1.YBTypeSize1",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "YBTypeSize1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.gb_TrayBlock1.YBTypeSize1",
+   "event_name": "OnMouseDown",
+   "handler_name": "YST1MouseDown",
+   "leaf_name": "YBTypeSize1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.pnlUnloadTrayCount.edUnloadTrayCount",
+   "event_name": "OnKeyPress",
+   "handler_name": "XCT1KeyPress",
+   "leaf_name": "edUnloadTrayCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet1.Panel2.pnlUnloadTrayCount.edUnloadTrayCount",
+   "event_name": "OnMouseDown",
+   "handler_name": "edUnloadTrayCountMouseDown",
+   "leaf_name": "edUnloadTrayCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel3.TrayName2",
+   "event_name": "OnMouseDown",
+   "handler_name": "TrayName1MouseDown",
+   "leaf_name": "TrayName2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.XST2",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "XST2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.XST2",
+   "event_name": "OnMouseDown",
+   "handler_name": "YST1MouseDown",
+   "leaf_name": "XST2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.XPitch2",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "XPitch2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.YST2",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "YST2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.YST2",
+   "event_name": "OnMouseDown",
+   "handler_name": "YST1MouseDown",
+   "leaf_name": "YST2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.YPitch2",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "YPitch2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.YPitch2",
+   "event_name": "OnMouseDown",
+   "handler_name": "YST1MouseDown",
+   "leaf_name": "YPitch2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.Tp2Thick",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "Tp2Thick",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.Tp2Thick",
+   "event_name": "OnMouseDown",
+   "handler_name": "YST1MouseDown",
+   "leaf_name": "Tp2Thick",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.edMemo2",
+   "event_name": "OnMouseDown",
+   "handler_name": "TrayName1MouseDown",
+   "leaf_name": "edMemo2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.cbTrayType2",
+   "event_name": "OnChange",
+   "handler_name": "cbTrayType1Change",
+   "leaf_name": "cbTrayType2",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.XCT2",
+   "event_name": "OnKeyPress",
+   "handler_name": "XCT1KeyPress",
+   "leaf_name": "XCT2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.XCT2",
+   "event_name": "OnMouseDown",
+   "handler_name": "XCT1MouseDown",
+   "leaf_name": "XCT2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.YCT2",
+   "event_name": "OnKeyPress",
+   "handler_name": "XCT1KeyPress",
+   "leaf_name": "YCT2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.YCT2",
+   "event_name": "OnMouseDown",
+   "handler_name": "YCT1MouseDown",
+   "leaf_name": "YCT2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.Tp2TickUp",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "Tp2TickUp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.Tp2TickUp",
+   "event_name": "OnMouseDown",
+   "handler_name": "Tp1TickUpMouseDown",
+   "leaf_name": "Tp2TickUp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.gb_TrayBlock2.XBStart2",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "XBStart2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.gb_TrayBlock2.XBStart2",
+   "event_name": "OnMouseDown",
+   "handler_name": "XCT1MouseDown",
+   "leaf_name": "XBStart2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.gb_TrayBlock2.XBP2",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "XBP2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.gb_TrayBlock2.XBP2",
+   "event_name": "OnMouseDown",
+   "handler_name": "YST1MouseDown",
+   "leaf_name": "XBP2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.gb_TrayBlock2.YBStart2",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "YBStart2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.gb_TrayBlock2.YBStart2",
+   "event_name": "OnMouseDown",
+   "handler_name": "XCT1MouseDown",
+   "leaf_name": "YBStart2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.gb_TrayBlock2.YBP2",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "YBP2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.gb_TrayBlock2.YBP2",
+   "event_name": "OnMouseDown",
+   "handler_name": "YST1MouseDown",
+   "leaf_name": "YBP2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.gb_TrayBlock2.XBItem2",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "XBItem2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.gb_TrayBlock2.XBItem2",
+   "event_name": "OnMouseDown",
+   "handler_name": "XCT1MouseDown",
+   "leaf_name": "XBItem2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.gb_TrayBlock2.YBItem2",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "YBItem2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.gb_TrayBlock2.YBItem2",
+   "event_name": "OnMouseDown",
+   "handler_name": "YST1MouseDown",
+   "leaf_name": "YBItem2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.gb_TrayBlock2.YBTypeSize2",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "YBTypeSize2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet2.Panel4.gb_TrayBlock2.YBTypeSize2",
+   "event_name": "OnMouseDown",
+   "handler_name": "YST1MouseDown",
+   "leaf_name": "YBTypeSize2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel5.TrayName3",
+   "event_name": "OnMouseDown",
+   "handler_name": "TrayName1MouseDown",
+   "leaf_name": "TrayName3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.XST3",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "XST3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.XST3",
+   "event_name": "OnMouseDown",
+   "handler_name": "YST1MouseDown",
+   "leaf_name": "XST3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.XPitch3",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "XPitch3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.YST3",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "YST3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.YST3",
+   "event_name": "OnMouseDown",
+   "handler_name": "YST1MouseDown",
+   "leaf_name": "YST3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.YPitch3",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "YPitch3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.YPitch3",
+   "event_name": "OnMouseDown",
+   "handler_name": "YST1MouseDown",
+   "leaf_name": "YPitch3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.Tp3Thick",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "Tp3Thick",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.Tp3Thick",
+   "event_name": "OnMouseDown",
+   "handler_name": "YST1MouseDown",
+   "leaf_name": "Tp3Thick",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.edMemo3",
+   "event_name": "OnMouseDown",
+   "handler_name": "TrayName1MouseDown",
+   "leaf_name": "edMemo3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.cbTrayType3",
+   "event_name": "OnChange",
+   "handler_name": "cbTrayType1Change",
+   "leaf_name": "cbTrayType3",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.XCT3",
+   "event_name": "OnKeyPress",
+   "handler_name": "XCT1KeyPress",
+   "leaf_name": "XCT3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.XCT3",
+   "event_name": "OnMouseDown",
+   "handler_name": "XCT1MouseDown",
+   "leaf_name": "XCT3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.YCT3",
+   "event_name": "OnKeyPress",
+   "handler_name": "XCT1KeyPress",
+   "leaf_name": "YCT3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.YCT3",
+   "event_name": "OnMouseDown",
+   "handler_name": "YCT1MouseDown",
+   "leaf_name": "YCT3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.Tp3TickUp",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "Tp3TickUp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.Tp3TickUp",
+   "event_name": "OnMouseDown",
+   "handler_name": "Tp1TickUpMouseDown",
+   "leaf_name": "Tp3TickUp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.gb_TrayBlock3.XBStart3",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "XBStart3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.gb_TrayBlock3.XBStart3",
+   "event_name": "OnMouseDown",
+   "handler_name": "XCT1MouseDown",
+   "leaf_name": "XBStart3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.gb_TrayBlock3.XBP3",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "XBP3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.gb_TrayBlock3.XBP3",
+   "event_name": "OnMouseDown",
+   "handler_name": "YST1MouseDown",
+   "leaf_name": "XBP3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.gb_TrayBlock3.YBStart3",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "YBStart3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.gb_TrayBlock3.YBStart3",
+   "event_name": "OnMouseDown",
+   "handler_name": "XCT1MouseDown",
+   "leaf_name": "YBStart3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.gb_TrayBlock3.YBP3",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "YBP3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.gb_TrayBlock3.YBP3",
+   "event_name": "OnMouseDown",
+   "handler_name": "YST1MouseDown",
+   "leaf_name": "YBP3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.gb_TrayBlock3.XBItem3",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "XBItem3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.gb_TrayBlock3.XBItem3",
+   "event_name": "OnMouseDown",
+   "handler_name": "XCT1MouseDown",
+   "leaf_name": "XBItem3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.gb_TrayBlock3.YBItem3",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "YBItem3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.gb_TrayBlock3.YBItem3",
+   "event_name": "OnMouseDown",
+   "handler_name": "YST1MouseDown",
+   "leaf_name": "YBItem3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.gb_TrayBlock3.YBTypeSize3",
+   "event_name": "OnKeyPress",
+   "handler_name": "XST1KeyPress",
+   "leaf_name": "YBTypeSize3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.TabSheet3.Panel6.gb_TrayBlock3.YBTypeSize3",
+   "event_name": "OnMouseDown",
+   "handler_name": "YST1MouseDown",
+   "leaf_name": "YBTypeSize3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.tsBinBox.pnlBixBox.edtBinBoxName",
+   "event_name": "OnMouseDown",
+   "handler_name": "TrayName1MouseDown",
+   "leaf_name": "edtBinBoxName",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.tsBinBox.pnlBixBox.edtBinBoxAlarm",
+   "event_name": "OnKeyPress",
+   "handler_name": "edtBinBoxAlarmKeyPress",
+   "leaf_name": "edtBinBoxAlarm",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.tsBinBox.pnlBixBox.edtBinBoxAlarm",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtBinBoxAlarmMouseDown",
+   "leaf_name": "edtBinBoxAlarm",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.tsBinBox.pnlBixBox.btnBinBoxReset",
+   "event_name": "OnClick",
+   "handler_name": "btnBinBoxResetClick",
+   "leaf_name": "btnBinBoxReset",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.tsBinBox.rgTrayDir",
+   "event_name": "OnClick",
+   "handler_name": "rgTrayDirClick",
+   "leaf_name": "rgTrayDir",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fTrayForm.PageControl1.tsBinBox.rgDeviceDir",
+   "event_name": "OnClick",
+   "handler_name": "rgDeviceDirClick",
+   "leaf_name": "rgDeviceDir",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fTrayForm.GroupBox1.spbCopy",
+   "event_name": "OnClick",
+   "handler_name": "spbCopyClick",
+   "leaf_name": "spbCopy",
+   "vcl_class": "TSpeedButton"
+  }
+ ],
+ "form_name": "fTrayForm",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "cTrayForm.dfm"
+}

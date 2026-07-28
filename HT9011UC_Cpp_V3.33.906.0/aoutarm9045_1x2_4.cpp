@@ -171,7 +171,7 @@ bool DoFixTrayFullAlarm();                                                      
 int  VerifyTrayStatus();
 bool CheckPlaceToMagazineTray(int iWhichMag);                                   //JerryYang 20220909 : add magazine
 bool DoPickFromMagazineBuffer();
-void SearchTrayToPlace_Magazine();                                              //Eastsun 20260515 F021: Magazine search hang-up fix
+int  SearchTrayToPlace_Magazine();                                              //Eastsun 20260515 F021: Magazine search hang-up fix -- AI(W906-W7-A2) 20260728: was void (ODR split vs. golden aoutarm9045.h:63 int; see aoutarm_shims.cpp)
 bool HasICUnderMachine();
 bool HasICUnderHotPlate();
 #endif

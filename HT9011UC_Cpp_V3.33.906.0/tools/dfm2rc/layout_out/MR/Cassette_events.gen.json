@@ -1,0 +1,303 @@
+{
+ "event_count": 42,
+ "events": [
+  {
+   "control_path": "fCassette",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fCassette",
+   "vcl_class": "TfCassette"
+  },
+  {
+   "control_path": "fCassette",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fCassette",
+   "vcl_class": "TfCassette"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet2.mtCassette01",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtCassette02MouseDown",
+   "leaf_name": "mtCassette01",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet2.mtCassette02",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtCassette02MouseDown",
+   "leaf_name": "mtCassette02",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet2.mtCassette03",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtCassette02MouseDown",
+   "leaf_name": "mtCassette03",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet2.mtCassette05",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtCassette02MouseDown",
+   "leaf_name": "mtCassette05",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet2.mtCassette07",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtCassette02MouseDown",
+   "leaf_name": "mtCassette07",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet2.mtCassette08",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtCassette02MouseDown",
+   "leaf_name": "mtCassette08",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet2.mtCassette09",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtCassette02MouseDown",
+   "leaf_name": "mtCassette09",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet2.mtCassette10",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtCassette02MouseDown",
+   "leaf_name": "mtCassette10",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet2.mtLoadPort",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtCassette02MouseDown",
+   "leaf_name": "mtLoadPort",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet2.mtCassette04",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtCassette02MouseDown",
+   "leaf_name": "mtCassette04",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet2.mtTrayEmpty",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtTrayEmptyMouseDown",
+   "leaf_name": "mtTrayEmpty",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet2.mtTrayLoader",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtTrayEmptyMouseDown",
+   "leaf_name": "mtTrayLoader",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet2.CheckBox10",
+   "event_name": "OnClick",
+   "handler_name": "CheckBox10Click",
+   "leaf_name": "CheckBox10",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet2.mtLoadPort1",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtCassette02MouseDown",
+   "leaf_name": "mtLoadPort1",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet2.mtLoadPort2",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtCassette02MouseDown",
+   "leaf_name": "mtLoadPort2",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet2.mtLoadPort3",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtCassette02MouseDown",
+   "leaf_name": "mtLoadPort3",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet2.mtUnloadPort4",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtCassette02MouseDown",
+   "leaf_name": "mtUnloadPort4",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet2.mtUnloadPort1",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtCassette02MouseDown",
+   "leaf_name": "mtUnloadPort1",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet2.mtUnloadPort2",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtCassette02MouseDown",
+   "leaf_name": "mtUnloadPort2",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet2.mtUnloadPort3",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtCassette02MouseDown",
+   "leaf_name": "mtUnloadPort3",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet2.mtLoadPort4",
+   "event_name": "OnMouseDown",
+   "handler_name": "mtCassette02MouseDown",
+   "leaf_name": "mtLoadPort4",
+   "vcl_class": "TTMyTray"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet2.cbPort1",
+   "event_name": "OnClick",
+   "handler_name": "cbPort1Click",
+   "leaf_name": "cbPort1",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet2.cbPort2",
+   "event_name": "OnClick",
+   "handler_name": "cbPort1Click",
+   "leaf_name": "cbPort2",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet2.cbPort3",
+   "event_name": "OnClick",
+   "handler_name": "cbPort1Click",
+   "leaf_name": "cbPort3",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet2.cbPort4",
+   "event_name": "OnClick",
+   "handler_name": "cbPort1Click",
+   "leaf_name": "cbPort4",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet2.cbTrayMode",
+   "event_name": "OnClick",
+   "handler_name": "cbTrayModeClick",
+   "leaf_name": "cbTrayMode",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet2.cbCassetteMode",
+   "event_name": "OnClick",
+   "handler_name": "cbCassetteModeClick",
+   "leaf_name": "cbCassetteMode",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet2.cbCleanMode",
+   "event_name": "OnClick",
+   "handler_name": "cbCleanModeClick",
+   "leaf_name": "cbCleanMode",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet3.Panel16.Button6",
+   "event_name": "OnClick",
+   "handler_name": "Button6Click",
+   "leaf_name": "Button6",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet3.Panel16.cbLoaderConsecutiveLot",
+   "event_name": "OnClick",
+   "handler_name": "cbQAModeClick",
+   "leaf_name": "cbLoaderConsecutiveLot",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet3.Panel16.cbChooseCassetteMode",
+   "event_name": "OnClick",
+   "handler_name": "cbQAModeClick",
+   "leaf_name": "cbChooseCassetteMode",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet3.Panel16.cbQAMode",
+   "event_name": "OnClick",
+   "handler_name": "cbQAModeClick",
+   "leaf_name": "cbQAMode",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet3.Panel16.cbS10F5NoShow",
+   "event_name": "OnClick",
+   "handler_name": "cbS10F5NoShowClick",
+   "leaf_name": "cbS10F5NoShow",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet3.Panel16.cbAutoMode",
+   "event_name": "OnClick",
+   "handler_name": "cbAutoModeClick",
+   "leaf_name": "cbAutoMode",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet3.Panel16.CheckBox7",
+   "event_name": "OnClick",
+   "handler_name": "cbAutoModeClick",
+   "leaf_name": "CheckBox7",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet3.Panel16.GroupBox1",
+   "event_name": "OnMouseDown",
+   "handler_name": "GroupBox1MouseDown",
+   "leaf_name": "GroupBox1",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet3.Panel16.GroupBox1.Button1",
+   "event_name": "OnClick",
+   "handler_name": "Button1Click",
+   "leaf_name": "Button1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet3.Panel16.GroupBox1.Button3",
+   "event_name": "OnClick",
+   "handler_name": "Button3Click",
+   "leaf_name": "Button3",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet3.Panel16.GroupBox1.Button4",
+   "event_name": "OnClick",
+   "handler_name": "Button4Click",
+   "leaf_name": "Button4",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCassette.PageControl1.TabSheet3.Panel16.GroupBox1.Button2",
+   "event_name": "OnClick",
+   "handler_name": "Button2Click",
+   "leaf_name": "Button2",
+   "vcl_class": "TButton"
+  }
+ ],
+ "form_name": "fCassette",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "MR/Cassette.dfm"
+}

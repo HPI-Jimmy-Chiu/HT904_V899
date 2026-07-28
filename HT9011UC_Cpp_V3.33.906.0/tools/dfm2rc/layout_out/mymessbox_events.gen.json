@@ -1,0 +1,65 @@
+{
+ "event_count": 8,
+ "events": [
+  {
+   "control_path": "MyMessageBox",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "MyMessageBox",
+   "vcl_class": "TMyMessageBox"
+  },
+  {
+   "control_path": "MyMessageBox",
+   "event_name": "OnShortCut",
+   "handler_name": "FormShortCut",
+   "leaf_name": "MyMessageBox",
+   "vcl_class": "TMyMessageBox"
+  },
+  {
+   "control_path": "MyMessageBox",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "MyMessageBox",
+   "vcl_class": "TMyMessageBox"
+  },
+  {
+   "control_path": "MyMessageBox.pnlPause",
+   "event_name": "OnClick",
+   "handler_name": "pnlPauseClick",
+   "leaf_name": "pnlPause",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "MyMessageBox.pnlNo",
+   "event_name": "OnClick",
+   "handler_name": "pnlYesClick",
+   "leaf_name": "pnlNo",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "MyMessageBox.pnlYes",
+   "event_name": "OnClick",
+   "handler_name": "pnlYesClick",
+   "leaf_name": "pnlYes",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "MyMessageBox.pnlAlarmReset",
+   "event_name": "OnClick",
+   "handler_name": "pnlAlarmResetClick",
+   "leaf_name": "pnlAlarmReset",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "MyMessageBox.Timer1",
+   "event_name": "OnTimer",
+   "handler_name": "Timer1Timer",
+   "leaf_name": "Timer1",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "MyMessageBox",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "mymessbox.dfm"
+}

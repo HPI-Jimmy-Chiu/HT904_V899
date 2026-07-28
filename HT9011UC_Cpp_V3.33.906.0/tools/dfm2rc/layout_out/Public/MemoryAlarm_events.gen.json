@@ -1,0 +1,23 @@
+{
+ "event_count": 2,
+ "events": [
+  {
+   "control_path": "MemoryAlarmForm",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "MemoryAlarmForm",
+   "vcl_class": "TMemoryAlarmForm"
+  },
+  {
+   "control_path": "MemoryAlarmForm",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "MemoryAlarmForm",
+   "vcl_class": "TMemoryAlarmForm"
+  }
+ ],
+ "form_name": "MemoryAlarmForm",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "Public/MemoryAlarm.dfm"
+}

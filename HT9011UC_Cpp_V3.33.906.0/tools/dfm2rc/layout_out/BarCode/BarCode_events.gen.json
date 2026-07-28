@@ -1,0 +1,1535 @@
+{
+ "event_count": 218,
+ "events": [
+  {
+   "control_path": "fBarCode",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fBarCode",
+   "vcl_class": "TfBarCode"
+  },
+  {
+   "control_path": "fBarCode",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fBarCode",
+   "vcl_class": "TfBarCode"
+  },
+  {
+   "control_path": "fBarCode",
+   "event_name": "OnShortCut",
+   "handler_name": "FormShortCut",
+   "leaf_name": "fBarCode",
+   "vcl_class": "TfBarCode"
+  },
+  {
+   "control_path": "fBarCode",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fBarCode",
+   "vcl_class": "TfBarCode"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID",
+   "event_name": "OnChange",
+   "handler_name": "pgc2DIDChange",
+   "leaf_name": "pgc2DID",
+   "vcl_class": "TPageControl"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID",
+   "event_name": "OnChange",
+   "handler_name": "pgc2DIDChange",
+   "leaf_name": "pc2DID",
+   "vcl_class": "TPageControl"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsResult.palCheck2DID.btStart2DIDCheckSh1",
+   "event_name": "OnClick",
+   "handler_name": "btStart2DIDCheckSh1Click",
+   "leaf_name": "btStart2DIDCheckSh1",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsResult.palCheck2DID.bt2DIDOffset",
+   "event_name": "OnClick",
+   "handler_name": "bt2DIDOffsetClick",
+   "leaf_name": "bt2DIDOffset",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsResult.palCheck2DID.btStart2DIDCheckSh2",
+   "event_name": "OnClick",
+   "handler_name": "btStart2DIDCheckSh2Click",
+   "leaf_name": "btStart2DIDCheckSh2",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsLog.btnClear",
+   "event_name": "OnClick",
+   "handler_name": "btnClearClick",
+   "leaf_name": "btnClear",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsLog.btnClear",
+   "event_name": "OnMouseDown",
+   "handler_name": "btnClearMouseDown",
+   "leaf_name": "btnClear",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsLog.btnClear",
+   "event_name": "OnMouseUp",
+   "handler_name": "btnClearMouseUp",
+   "leaf_name": "btnClear",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.chkMulti2DID",
+   "event_name": "OnClick",
+   "handler_name": "chkMulti2DIDClick",
+   "leaf_name": "chkMulti2DID",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.pgcFunction.TabSheet2.edBarcodeScanDelayTime",
+   "event_name": "OnClick",
+   "handler_name": "edBarcodeScanDelayTimeClick",
+   "leaf_name": "edBarcodeScanDelayTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.pgcFunction.TabSheet2.edBarcodePosDelayTime",
+   "event_name": "OnClick",
+   "handler_name": "edBarcodePosDelayTimeClick",
+   "leaf_name": "edBarcodePosDelayTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.pgcFunction.TabSheet2.edtBarcodeMinLength",
+   "event_name": "OnClick",
+   "handler_name": "edtBarcodeMinLengthClick",
+   "leaf_name": "edtBarcodeMinLength",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.pgcFunction.TabSheet2.edBarcodeRetryCount",
+   "event_name": "OnClick",
+   "handler_name": "edBarcodeRetryCountClick",
+   "leaf_name": "edBarcodeRetryCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.pgcFunction.TabSheet2.edTriggerTime",
+   "event_name": "OnClick",
+   "handler_name": "edBarcodeScanDelayTimeClick",
+   "leaf_name": "edTriggerTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.pgcFunction.TabSheet2.edFirstDelay",
+   "event_name": "OnClick",
+   "handler_name": "edBarcodePosDelayTimeClick",
+   "leaf_name": "edFirstDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.pgcFunction.TabSheet2.edtBarcodeMaxLength",
+   "event_name": "OnClick",
+   "handler_name": "edtBarcodeMaxLengthClick",
+   "leaf_name": "edtBarcodeMaxLength",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.pgcFunction.TabSheet2.edtCheckSumLength",
+   "event_name": "OnClick",
+   "handler_name": "edBarcodeRetryCountClick",
+   "leaf_name": "edtCheckSumLength",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.pgcFunction.TabSheet2.edShtDuplicateRetryCnt",
+   "event_name": "OnClick",
+   "handler_name": "edBarcodeRetryCountClick",
+   "leaf_name": "edShtDuplicateRetryCnt",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.pgcFunction.TabSheet2.edConsecutiveFailure",
+   "event_name": "OnClick",
+   "handler_name": "edBarcodeRetryCountClick",
+   "leaf_name": "edConsecutiveFailure",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.pgcFunction.TabSheet2.edRetryOffsetMove",
+   "event_name": "OnClick",
+   "handler_name": "edRetryOffsetMoveClick",
+   "leaf_name": "edRetryOffsetMove",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.pgcFunction.TabSheet2.edRetryShiftOffsetMove",
+   "event_name": "OnClick",
+   "handler_name": "edRetryOffsetMoveClick",
+   "leaf_name": "edRetryShiftOffsetMove",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.pgcFunction.TabSheet2.edt2DIDYield",
+   "event_name": "OnClick",
+   "handler_name": "edt2DIDYieldClick",
+   "leaf_name": "edt2DIDYield",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.pgcFunction.TabSheet2.ed_2D_YieldIgnoreCnt",
+   "event_name": "OnClick",
+   "handler_name": "ed_2D_YieldIgnoreCntClick",
+   "leaf_name": "ed_2D_YieldIgnoreCnt",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.pgcFunction.TabSheet2.grpLotVerify.Panel7.grpSubString.edtLotIDStart",
+   "event_name": "OnClick",
+   "handler_name": "edBarcodeRetryCountClick",
+   "leaf_name": "edtLotIDStart",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.pgcFunction.TabSheet2.grpLotVerify.Panel7.grpSubString.edtLotIDEnd",
+   "event_name": "OnClick",
+   "handler_name": "edBarcodeRetryCountClick",
+   "leaf_name": "edtLotIDEnd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.pgcFunction.TabSheet2.grpLotVerify.Panel7.grpSubString.edt2DStart",
+   "event_name": "OnClick",
+   "handler_name": "edBarcodeRetryCountClick",
+   "leaf_name": "edt2DStart",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.pgcFunction.TabSheet2.grpLotVerify.Panel7.grpSubString.edt2DEnd",
+   "event_name": "OnClick",
+   "handler_name": "edBarcodeRetryCountClick",
+   "leaf_name": "edt2DEnd",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.pgcFunction.TabSheet2.grpLotVerify.Panel7.grpSubString.btnGetLotID",
+   "event_name": "OnClick",
+   "handler_name": "btnGetLotIDClick",
+   "leaf_name": "btnGetLotID",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.pgcFunction.TabSheet2.grpLotVerify.Panel7.grpSubString.btnTestLotID",
+   "event_name": "OnClick",
+   "handler_name": "btnTestLotIDClick",
+   "leaf_name": "btnTestLotID",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.pgcFunction.TabSheet2.cbUsePinInspection",
+   "event_name": "OnClick",
+   "handler_name": "cbUsePinInspectionClick",
+   "leaf_name": "cbUsePinInspection",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.pgcFunction.TabSheet2.edAutoAdjustLightTimeOut",
+   "event_name": "OnClick",
+   "handler_name": "edBarcodeScanDelayTimeClick",
+   "leaf_name": "edAutoAdjustLightTimeOut",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.pgcFunction.TabSheet1.edHandShakeTimeOut",
+   "event_name": "OnClick",
+   "handler_name": "edBarcodeScanDelayTimeClick",
+   "leaf_name": "edHandShakeTimeOut",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.pgcFunction.TabSheet1.pnlFunc2Left.grpBottom2D.edtOffsetX",
+   "event_name": "OnClick",
+   "handler_name": "edtOffsetXClick",
+   "leaf_name": "edtOffsetX",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.pgcFunction.TabSheet1.pnlFunc2Left.grpBottom2D.edtOffsetY",
+   "event_name": "OnClick",
+   "handler_name": "edtOffsetXClick",
+   "leaf_name": "edtOffsetY",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.pgcFunction.TabSheet1.gbManualTest.btn_2DBarcodeDataSend",
+   "event_name": "OnClick",
+   "handler_name": "btn_2DBarcodeDataSendClick",
+   "leaf_name": "btn_2DBarcodeDataSend",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.pgcFunction.TabSheet1.gbManualTest.gbSimu.btResetBarCodeCount",
+   "event_name": "OnClick",
+   "handler_name": "btResetBarCodeCountClick",
+   "leaf_name": "btResetBarCodeCount",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.pgcFunction.TabSheet1.gbManualTest.btSaveImage",
+   "event_name": "OnClick",
+   "handler_name": "btSaveImageClick",
+   "leaf_name": "btSaveImage",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsBarCodeSetting.pgcFunction.TabSheet1.gbManualTest.BitBtn1",
+   "event_name": "OnClick",
+   "handler_name": "BitBtn1Click",
+   "leaf_name": "BitBtn1",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsMulti2DID.edtXPitch",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtXPitchMouseDown",
+   "leaf_name": "edtXPitch",
+   "vcl_class": "TLabeledEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsMulti2DID.rgMulti2DType",
+   "event_name": "OnClick",
+   "handler_name": "rgMulti2DTypeClick",
+   "leaf_name": "rgMulti2DType",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsOCR.edt1stLineLength_2DBarCode",
+   "event_name": "OnMouseDown",
+   "handler_name": "edt1stLineLength_2DBarCodeMouseDown",
+   "leaf_name": "edt1stLineLength_2DBarCode",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.ts2DID.pc2DID.tsOCR.edt2ndLineLength_2DBarCode",
+   "event_name": "OnMouseDown",
+   "handler_name": "edt1stLineLength_2DBarCodeMouseDown",
+   "leaf_name": "edt2ndLineLength_2DBarCode",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsFloating.pcShtFloat.tsFloatSetting.edSFCGetResultTimeOut",
+   "event_name": "OnClick",
+   "handler_name": "edBarcodeScanDelayTimeClick",
+   "leaf_name": "edSFCGetResultTimeOut",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsFloating.pcShtFloat.tsFloatSetting.edSFCStartDelay",
+   "event_name": "OnClick",
+   "handler_name": "edBarcodePosDelayTimeClick",
+   "leaf_name": "edSFCStartDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsFloating.pcShtFloat.tsFloatSetting.edSFCAutoRetry",
+   "event_name": "OnClick",
+   "handler_name": "edBarcodeRetryCountClick",
+   "leaf_name": "edSFCAutoRetry",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsFloating.pcShtFloat.tsFloatSetting.edSFCExposureTimeOut",
+   "event_name": "OnClick",
+   "handler_name": "edBarcodeScanDelayTimeClick",
+   "leaf_name": "edSFCExposureTimeOut",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsFloating.pcShtFloat.tsFloatSetting.edSFCUse2PhotoOffset",
+   "event_name": "OnClick",
+   "handler_name": "edBarcodeRetryCountClick",
+   "leaf_name": "edSFCUse2PhotoOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts4CCD.gbATC.edShuttle_1A_Port",
+   "event_name": "OnMouseDown",
+   "handler_name": "IPPort1MouseDown",
+   "leaf_name": "edShuttle_1A_Port",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts4CCD.gbATC.BtShuttle_1A_Connect",
+   "event_name": "OnClick",
+   "handler_name": "BtShuttle_1A_ConnectClick",
+   "leaf_name": "BtShuttle_1A_Connect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts4CCD.gbATC.BtShuttle_1A_Disconnect",
+   "event_name": "OnClick",
+   "handler_name": "BtShuttle_1A_DisconnectClick",
+   "leaf_name": "BtShuttle_1A_Disconnect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts4CCD.gbATC.btShuttle_1A_Trigger",
+   "event_name": "OnClick",
+   "handler_name": "btShuttle_1A_TriggerClick",
+   "leaf_name": "btShuttle_1A_Trigger",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts4CCD.GroupBox1.edShuttle_1B_Port",
+   "event_name": "OnMouseDown",
+   "handler_name": "IPPort1MouseDown",
+   "leaf_name": "edShuttle_1B_Port",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts4CCD.GroupBox1.BtShuttle_1B_Connect",
+   "event_name": "OnClick",
+   "handler_name": "BtShuttle_1A_ConnectClick",
+   "leaf_name": "BtShuttle_1B_Connect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts4CCD.GroupBox1.BtShuttle_1B_Disconnect",
+   "event_name": "OnClick",
+   "handler_name": "BtShuttle_1A_DisconnectClick",
+   "leaf_name": "BtShuttle_1B_Disconnect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts4CCD.GroupBox1.btShuttle_1B_Trigger",
+   "event_name": "OnClick",
+   "handler_name": "btShuttle_1A_TriggerClick",
+   "leaf_name": "btShuttle_1B_Trigger",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts4CCD.GroupBox2.edShuttle_2A_Port",
+   "event_name": "OnMouseDown",
+   "handler_name": "IPPort1MouseDown",
+   "leaf_name": "edShuttle_2A_Port",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts4CCD.GroupBox2.BtShuttle_2A_Connect",
+   "event_name": "OnClick",
+   "handler_name": "BtShuttle_1A_ConnectClick",
+   "leaf_name": "BtShuttle_2A_Connect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts4CCD.GroupBox2.BtShuttle_2A_Disconnect",
+   "event_name": "OnClick",
+   "handler_name": "BtShuttle_1A_DisconnectClick",
+   "leaf_name": "BtShuttle_2A_Disconnect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts4CCD.GroupBox2.btShuttle_2A_Trigger",
+   "event_name": "OnClick",
+   "handler_name": "btShuttle_1A_TriggerClick",
+   "leaf_name": "btShuttle_2A_Trigger",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts4CCD.GroupBox3.edShuttle_2B_Port",
+   "event_name": "OnMouseDown",
+   "handler_name": "IPPort1MouseDown",
+   "leaf_name": "edShuttle_2B_Port",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts4CCD.GroupBox3.BtShuttle_2B_Connect",
+   "event_name": "OnClick",
+   "handler_name": "BtShuttle_1A_ConnectClick",
+   "leaf_name": "BtShuttle_2B_Connect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts4CCD.GroupBox3.BtShuttle_2B_Disconnect",
+   "event_name": "OnClick",
+   "handler_name": "BtShuttle_1A_DisconnectClick",
+   "leaf_name": "BtShuttle_2B_Disconnect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts4CCD.GroupBox3.btShuttle_2B_Trigger",
+   "event_name": "OnClick",
+   "handler_name": "btShuttle_1A_TriggerClick",
+   "leaf_name": "btShuttle_2B_Trigger",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts8CCD.Panel8.GroupBox8.BtBottom_8_Connect",
+   "event_name": "OnClick",
+   "handler_name": "BtShuttle_1A_ConnectClick",
+   "leaf_name": "BtBottom_8_Connect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts8CCD.Panel8.GroupBox8.BtBottom_8_Disconnect",
+   "event_name": "OnClick",
+   "handler_name": "BtShuttle_1A_DisconnectClick",
+   "leaf_name": "BtBottom_8_Disconnect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts8CCD.Panel8.GroupBox8.btBottom8_Trigger",
+   "event_name": "OnClick",
+   "handler_name": "btShuttle_1A_TriggerClick",
+   "leaf_name": "btBottom8_Trigger",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts8CCD.Panel8.GroupBox9.BtBottom_7_Connect",
+   "event_name": "OnClick",
+   "handler_name": "BtShuttle_1A_ConnectClick",
+   "leaf_name": "BtBottom_7_Connect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts8CCD.Panel8.GroupBox9.BtBottom_7_Disconnect",
+   "event_name": "OnClick",
+   "handler_name": "BtShuttle_1A_DisconnectClick",
+   "leaf_name": "BtBottom_7_Disconnect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts8CCD.Panel8.GroupBox9.btBottom7_Trigger",
+   "event_name": "OnClick",
+   "handler_name": "btShuttle_1A_TriggerClick",
+   "leaf_name": "btBottom7_Trigger",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts8CCD.Panel8.GroupBox10.BtBottom_6_Connect",
+   "event_name": "OnClick",
+   "handler_name": "BtShuttle_1A_ConnectClick",
+   "leaf_name": "BtBottom_6_Connect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts8CCD.Panel8.GroupBox10.BtBottom_6_Disconnect",
+   "event_name": "OnClick",
+   "handler_name": "BtShuttle_1A_DisconnectClick",
+   "leaf_name": "BtBottom_6_Disconnect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts8CCD.Panel8.GroupBox10.btBottom6_Trigger",
+   "event_name": "OnClick",
+   "handler_name": "btShuttle_1A_TriggerClick",
+   "leaf_name": "btBottom6_Trigger",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts8CCD.Panel8.GroupBox11.BtBottom_5_Connect",
+   "event_name": "OnClick",
+   "handler_name": "BtShuttle_1A_ConnectClick",
+   "leaf_name": "BtBottom_5_Connect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts8CCD.Panel8.GroupBox11.BtBottom_5_Disconnect",
+   "event_name": "OnClick",
+   "handler_name": "BtShuttle_1A_DisconnectClick",
+   "leaf_name": "BtBottom_5_Disconnect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts8CCD.Panel8.GroupBox11.btBottom5_Trigger",
+   "event_name": "OnClick",
+   "handler_name": "btShuttle_1A_TriggerClick",
+   "leaf_name": "btBottom5_Trigger",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts8CCD.Panel8.GroupBox12.BtBottom_4_Connect",
+   "event_name": "OnClick",
+   "handler_name": "BtShuttle_1A_ConnectClick",
+   "leaf_name": "BtBottom_4_Connect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts8CCD.Panel8.GroupBox12.BtBottom_4_Disconnect",
+   "event_name": "OnClick",
+   "handler_name": "BtShuttle_1A_DisconnectClick",
+   "leaf_name": "BtBottom_4_Disconnect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts8CCD.Panel8.GroupBox12.btBottom4_Trigger",
+   "event_name": "OnClick",
+   "handler_name": "btShuttle_1A_TriggerClick",
+   "leaf_name": "btBottom4_Trigger",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts8CCD.Panel8.GroupBox13.BtBottom_3_Connect",
+   "event_name": "OnClick",
+   "handler_name": "BtShuttle_1A_ConnectClick",
+   "leaf_name": "BtBottom_3_Connect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts8CCD.Panel8.GroupBox13.BtBottom_3_Disconnect",
+   "event_name": "OnClick",
+   "handler_name": "BtShuttle_1A_DisconnectClick",
+   "leaf_name": "BtBottom_3_Disconnect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts8CCD.Panel8.GroupBox13.btBottom3_Trigger",
+   "event_name": "OnClick",
+   "handler_name": "btShuttle_1A_TriggerClick",
+   "leaf_name": "btBottom3_Trigger",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts8CCD.Panel8.GroupBox14.BtBottom_2_Connect",
+   "event_name": "OnClick",
+   "handler_name": "BtShuttle_1A_ConnectClick",
+   "leaf_name": "BtBottom_2_Connect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts8CCD.Panel8.GroupBox14.BtBottom_2_Disconnect",
+   "event_name": "OnClick",
+   "handler_name": "BtShuttle_1A_DisconnectClick",
+   "leaf_name": "BtBottom_2_Disconnect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts8CCD.Panel8.GroupBox14.btBottom2_Trigger",
+   "event_name": "OnClick",
+   "handler_name": "btShuttle_1A_TriggerClick",
+   "leaf_name": "btBottom2_Trigger",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts8CCD.Panel8.GroupBox15.BtBottom_1_Connect",
+   "event_name": "OnClick",
+   "handler_name": "BtShuttle_1A_ConnectClick",
+   "leaf_name": "BtBottom_1_Connect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts8CCD.Panel8.GroupBox15.BtBottom_1_Disconnect",
+   "event_name": "OnClick",
+   "handler_name": "BtShuttle_1A_DisconnectClick",
+   "leaf_name": "BtBottom_1_Disconnect",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.ts8CCD.Panel8.GroupBox15.btBottom1_Trigger",
+   "event_name": "OnClick",
+   "handler_name": "btShuttle_1A_TriggerClick",
+   "leaf_name": "btBottom1_Trigger",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.tsCCD_Unloader.GroupBox17.btnClip_Connect_Fix3",
+   "event_name": "OnClick",
+   "handler_name": "btnClip_Connect_Auto1Click",
+   "leaf_name": "btnClip_Connect_Fix3",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.tsCCD_Unloader.GroupBox17.btnClip_Disconnect_Fix3",
+   "event_name": "OnClick",
+   "handler_name": "btnClip_Disconnect_Auto1Click",
+   "leaf_name": "btnClip_Disconnect_Fix3",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.tsCCD_Unloader.GroupBox17.Button9",
+   "event_name": "OnClick",
+   "handler_name": "btnGetBarcodeClick",
+   "leaf_name": "Button9",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.tsCCD_Unloader.GroupBox17.Button10",
+   "event_name": "OnClick",
+   "handler_name": "btnInitialGetBarcodeClick",
+   "leaf_name": "Button10",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.tsCCD_Unloader.GroupBox16.btnClip_Connect_Fix2",
+   "event_name": "OnClick",
+   "handler_name": "btnClip_Connect_Auto1Click",
+   "leaf_name": "btnClip_Connect_Fix2",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.tsCCD_Unloader.GroupBox16.btnClip_Disconnect_Fix2",
+   "event_name": "OnClick",
+   "handler_name": "btnClip_Disconnect_Auto1Click",
+   "leaf_name": "btnClip_Disconnect_Fix2",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.tsCCD_Unloader.GroupBox16.Button7",
+   "event_name": "OnClick",
+   "handler_name": "btnGetBarcodeClick",
+   "leaf_name": "Button7",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.tsCCD_Unloader.GroupBox16.Button8",
+   "event_name": "OnClick",
+   "handler_name": "btnInitialGetBarcodeClick",
+   "leaf_name": "Button8",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.tsCCD_Unloader.GroupBox7.btnClip_Connect_Fix1",
+   "event_name": "OnClick",
+   "handler_name": "btnClip_Connect_Auto1Click",
+   "leaf_name": "btnClip_Connect_Fix1",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.tsCCD_Unloader.GroupBox7.btnClip_Disconnect_Fix1",
+   "event_name": "OnClick",
+   "handler_name": "btnClip_Disconnect_Auto1Click",
+   "leaf_name": "btnClip_Disconnect_Fix1",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.tsCCD_Unloader.GroupBox7.Button5",
+   "event_name": "OnClick",
+   "handler_name": "btnGetBarcodeClick",
+   "leaf_name": "Button5",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.tsCCD_Unloader.GroupBox7.Button6",
+   "event_name": "OnClick",
+   "handler_name": "btnInitialGetBarcodeClick",
+   "leaf_name": "Button6",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.tsCCD_Unloader.GroupBox6.btnClip_Connect_Auto3",
+   "event_name": "OnClick",
+   "handler_name": "btnClip_Connect_Auto1Click",
+   "leaf_name": "btnClip_Connect_Auto3",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.tsCCD_Unloader.GroupBox6.btnClip_Disconnect_Auto3",
+   "event_name": "OnClick",
+   "handler_name": "btnClip_Disconnect_Auto1Click",
+   "leaf_name": "btnClip_Disconnect_Auto3",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.tsCCD_Unloader.GroupBox6.Button3",
+   "event_name": "OnClick",
+   "handler_name": "btnGetBarcodeClick",
+   "leaf_name": "Button3",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.tsCCD_Unloader.GroupBox6.Button4",
+   "event_name": "OnClick",
+   "handler_name": "btnInitialGetBarcodeClick",
+   "leaf_name": "Button4",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.tsCCD_Unloader.GroupBox5.btnClip_Connect_Auto2",
+   "event_name": "OnClick",
+   "handler_name": "btnClip_Connect_Auto1Click",
+   "leaf_name": "btnClip_Connect_Auto2",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.tsCCD_Unloader.GroupBox5.btnClip_Disconnect_Auto2",
+   "event_name": "OnClick",
+   "handler_name": "btnClip_Disconnect_Auto1Click",
+   "leaf_name": "btnClip_Disconnect_Auto2",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.tsCCD_Unloader.GroupBox5.Button1",
+   "event_name": "OnClick",
+   "handler_name": "btnGetBarcodeClick",
+   "leaf_name": "Button1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.tsCCD_Unloader.GroupBox5.Button2",
+   "event_name": "OnClick",
+   "handler_name": "btnInitialGetBarcodeClick",
+   "leaf_name": "Button2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.tsCCD_Unloader.GroupBox4.btnClip_Connect_Auto1",
+   "event_name": "OnClick",
+   "handler_name": "btnClip_Connect_Auto1Click",
+   "leaf_name": "btnClip_Connect_Auto1",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.tsCCD_Unloader.GroupBox4.btnClip_Disconnect_Auto1",
+   "event_name": "OnClick",
+   "handler_name": "btnClip_Disconnect_Auto1Click",
+   "leaf_name": "btnClip_Disconnect_Auto1",
+   "vcl_class": "TBitBtn"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.tsCCD_Unloader.GroupBox4.btnClip_SendCmd_Auto1",
+   "event_name": "OnClick",
+   "handler_name": "btnClip_SendCmd_Auto1Click",
+   "leaf_name": "btnClip_SendCmd_Auto1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.tsCCD_Unloader.GroupBox4.btnInitialGetBarcode",
+   "event_name": "OnClick",
+   "handler_name": "btnInitialGetBarcodeClick",
+   "leaf_name": "btnInitialGetBarcode",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCCD.pgcCCDSetting.tsCCD_Unloader.GroupBox4.btnGetBarcode",
+   "event_name": "OnClick",
+   "handler_name": "btnGetBarcodeClick",
+   "leaf_name": "btnGetBarcode",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCognexSetting.spbResetCom",
+   "event_name": "OnClick",
+   "handler_name": "spbResetComClick",
+   "leaf_name": "spbResetCom",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCognexSetting.spbStartCom",
+   "event_name": "OnClick",
+   "handler_name": "spbStartComClick",
+   "leaf_name": "spbStartCom",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCognexSetting.gb1.btReader2On",
+   "event_name": "OnClick",
+   "handler_name": "btReader1OnClick",
+   "leaf_name": "btReader2On",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCognexSetting.gb1.btReader1On",
+   "event_name": "OnClick",
+   "handler_name": "btReader1OnClick",
+   "leaf_name": "btReader1On",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCognexSetting.gb2.btReader3On",
+   "event_name": "OnClick",
+   "handler_name": "btReader1OnClick",
+   "leaf_name": "btReader3On",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCognexSetting.gb2.btReader4On",
+   "event_name": "OnClick",
+   "handler_name": "btReader1OnClick",
+   "leaf_name": "btReader4On",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCognexSetting.gb2.btnGPIBReader4",
+   "event_name": "OnClick",
+   "handler_name": "btnGPIBReader4Click",
+   "leaf_name": "btnGPIBReader4",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCognexSetting.gbChangFile.btBarcodeChangeFileDisConnect",
+   "event_name": "OnClick",
+   "handler_name": "btBarcodeChangeFileDisConnectClick",
+   "leaf_name": "btBarcodeChangeFileDisConnect",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCognexSetting.gbChangFile.btBarcodeChangeFileSend",
+   "event_name": "OnClick",
+   "handler_name": "btBarcodeChangeFileSendClick",
+   "leaf_name": "btBarcodeChangeFileSend",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCognexSetting.gbChangFile.btBarcodeChangeFileConnect",
+   "event_name": "OnClick",
+   "handler_name": "btBarcodeChangeFileConnectClick",
+   "leaf_name": "btBarcodeChangeFileConnect",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsCognexSetting.gbChangFile.IPPort1",
+   "event_name": "OnMouseDown",
+   "handler_name": "IPPort1MouseDown",
+   "leaf_name": "IPPort1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsBarcodeMapping.pgc2DMap.tsBarcodeAuto.cobMain_BinMapping_Auto1",
+   "event_name": "OnChange",
+   "handler_name": "cobMain_BinMapping_Auto1Change",
+   "leaf_name": "cobMain_BinMapping_Auto1",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsBarcodeMapping.pgc2DMap.tsBarcodeAuto.cobMain_BinMapping_Auto2",
+   "event_name": "OnChange",
+   "handler_name": "cobMain_BinMapping_Auto1Change",
+   "leaf_name": "cobMain_BinMapping_Auto2",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsBarcodeMapping.pgc2DMap.tsBarcodeAuto.cobMain_BinMapping_Auto3",
+   "event_name": "OnChange",
+   "handler_name": "cobMain_BinMapping_Auto1Change",
+   "leaf_name": "cobMain_BinMapping_Auto3",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsBarcodeMapping.pgc2DMap.tsBarcodeAuto4.cobMain_BinMapping_Auto4",
+   "event_name": "OnChange",
+   "handler_name": "cobMain_BinMapping_Auto1Change",
+   "leaf_name": "cobMain_BinMapping_Auto4",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsBarcodeMapping.pgc2DMap.tsBarcodeAuto4.cobMain_BinMapping_Auto5",
+   "event_name": "OnChange",
+   "handler_name": "cobMain_BinMapping_Auto1Change",
+   "leaf_name": "cobMain_BinMapping_Auto5",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsBarcodeMapping.pgc2DMap.tsBarcodeAuto4.cobMain_BinMapping_Auto6",
+   "event_name": "OnChange",
+   "handler_name": "cobMain_BinMapping_Auto1Change",
+   "leaf_name": "cobMain_BinMapping_Auto6",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsBarcodeMapping.pgc2DMap.tsBarcodeFix.cobMain_BinMapping_Fix1",
+   "event_name": "OnChange",
+   "handler_name": "cobMain_BinMapping_Auto1Change",
+   "leaf_name": "cobMain_BinMapping_Fix1",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsBarcodeMapping.pgc2DMap.tsBarcodeFix.cobMain_BinMapping_Fix2",
+   "event_name": "OnChange",
+   "handler_name": "cobMain_BinMapping_Auto1Change",
+   "leaf_name": "cobMain_BinMapping_Fix2",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsBarcodeMapping.pgc2DMap.tsBarcodeFix.cobMain_BinMapping_Fix3",
+   "event_name": "OnChange",
+   "handler_name": "cobMain_BinMapping_Auto1Change",
+   "leaf_name": "cobMain_BinMapping_Fix3",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsBarcodeMapping.pgc2DMap.tsBarcodeFix4.cobMain_BinMapping_Fix4",
+   "event_name": "OnChange",
+   "handler_name": "cobMain_BinMapping_Auto1Change",
+   "leaf_name": "cobMain_BinMapping_Fix4",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsBarcodeMapping.pgc2DMap.tsBarcodeFix4.cobMain_BinMapping_Fix5",
+   "event_name": "OnChange",
+   "handler_name": "cobMain_BinMapping_Auto1Change",
+   "leaf_name": "cobMain_BinMapping_Fix5",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsBarcodeMapping.pgc2DMap.tsBarcodeFix4.cobMain_BinMapping_Fix6",
+   "event_name": "OnChange",
+   "handler_name": "cobMain_BinMapping_Auto1Change",
+   "leaf_name": "cobMain_BinMapping_Fix6",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsBarcodeMapping.pgc2DMap.tsBarcodeBinBox.cobMain_BinMapping_BinBox",
+   "event_name": "OnChange",
+   "handler_name": "cobMain_BinMapping_Auto1Change",
+   "leaf_name": "cobMain_BinMapping_BinBox",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsBarcodeMapping.pgc2DMap.tsMagazine1.cobMain_BinMapping_Mag01",
+   "event_name": "OnChange",
+   "handler_name": "cobMain_BinMapping_Auto1Change",
+   "leaf_name": "cobMain_BinMapping_Mag01",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsBarcodeMapping.pgc2DMap.tsMagazine1.cobMain_BinMapping_Mag02",
+   "event_name": "OnChange",
+   "handler_name": "cobMain_BinMapping_Auto1Change",
+   "leaf_name": "cobMain_BinMapping_Mag02",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsBarcodeMapping.pgc2DMap.tsMagazine1.cobMain_BinMapping_Mag03",
+   "event_name": "OnChange",
+   "handler_name": "cobMain_BinMapping_Auto1Change",
+   "leaf_name": "cobMain_BinMapping_Mag03",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsBarcodeMapping.pgc2DMap.tsMagazine1.cobMain_BinMapping_Mag04",
+   "event_name": "OnChange",
+   "handler_name": "cobMain_BinMapping_Auto1Change",
+   "leaf_name": "cobMain_BinMapping_Mag04",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsBarcodeMapping.pgc2DMap.tsMagazine1.cobMain_BinMapping_Mag05",
+   "event_name": "OnChange",
+   "handler_name": "cobMain_BinMapping_Auto1Change",
+   "leaf_name": "cobMain_BinMapping_Mag05",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsBarcodeMapping.pgc2DMap.tsMagazine1.cobMain_BinMapping_Mag06",
+   "event_name": "OnChange",
+   "handler_name": "cobMain_BinMapping_Auto1Change",
+   "leaf_name": "cobMain_BinMapping_Mag06",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsBarcodeMapping.pgc2DMap.tsMagazine1.cobMain_BinMapping_Mag07",
+   "event_name": "OnChange",
+   "handler_name": "cobMain_BinMapping_Auto1Change",
+   "leaf_name": "cobMain_BinMapping_Mag07",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsBarcodeMapping.pgc2DMap.tsMagazine1.cobMain_BinMapping_Mag08",
+   "event_name": "OnChange",
+   "handler_name": "cobMain_BinMapping_Auto1Change",
+   "leaf_name": "cobMain_BinMapping_Mag08",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsBarcodeMapping.pgc2DMap.tsMagazine2.cobMain_BinMapping_Mag09",
+   "event_name": "OnChange",
+   "handler_name": "cobMain_BinMapping_Auto1Change",
+   "leaf_name": "cobMain_BinMapping_Mag09",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsBarcodeMapping.pgc2DMap.tsMagazine2.cobMain_BinMapping_Mag10",
+   "event_name": "OnChange",
+   "handler_name": "cobMain_BinMapping_Auto1Change",
+   "leaf_name": "cobMain_BinMapping_Mag10",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsBarcodeMapping.pgc2DMap.tsMagazine2.cobMain_BinMapping_Mag11",
+   "event_name": "OnChange",
+   "handler_name": "cobMain_BinMapping_Auto1Change",
+   "leaf_name": "cobMain_BinMapping_Mag11",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsBarcodeMapping.pgc2DMap.tsMagazine2.cobMain_BinMapping_Mag12",
+   "event_name": "OnChange",
+   "handler_name": "cobMain_BinMapping_Auto1Change",
+   "leaf_name": "cobMain_BinMapping_Mag12",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsBarcodeMapping.pgc2DMap.tsMagazine2.cobMain_BinMapping_Mag13",
+   "event_name": "OnChange",
+   "handler_name": "cobMain_BinMapping_Auto1Change",
+   "leaf_name": "cobMain_BinMapping_Mag13",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBarCode.Panel55.pgc2DID.tsBarcodeMapping.pgc2DMap.tsMagazine2.cobMain_BinMapping_Mag14",
+   "event_name": "OnChange",
+   "handler_name": "cobMain_BinMapping_Auto1Change",
+   "leaf_name": "cobMain_BinMapping_Mag14",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "fBarCode.Panel1.spbSave",
+   "event_name": "OnClick",
+   "handler_name": "spbSaveClick",
+   "leaf_name": "spbSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fBarCode.Panel1.sbtExit",
+   "event_name": "OnClick",
+   "handler_name": "sbtExitClick",
+   "leaf_name": "sbtExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fBarCode.Barcode_1",
+   "event_name": "OnReceiveData",
+   "handler_name": "Barcode_1ReceiveData",
+   "leaf_name": "Barcode_1",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "fBarCode.Barcode_2",
+   "event_name": "OnReceiveData",
+   "handler_name": "Barcode_2ReceiveData",
+   "leaf_name": "Barcode_2",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "fBarCode.Barcode_3",
+   "event_name": "OnReceiveData",
+   "handler_name": "Barcode_3ReceiveData",
+   "leaf_name": "Barcode_3",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "fBarCode.Barcode_4",
+   "event_name": "OnReceiveData",
+   "handler_name": "Barcode_4ReceiveData",
+   "leaf_name": "Barcode_4",
+   "vcl_class": "TComm"
+  },
+  {
+   "control_path": "fBarCode.tmr1",
+   "event_name": "OnTimer",
+   "handler_name": "tmr1Timer",
+   "leaf_name": "tmr1",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Shuttle1_A",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_Shuttle1_AConnect",
+   "leaf_name": "ClientSocket_Shuttle1_A",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Shuttle1_A",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_Shuttle1_ADisconnect",
+   "leaf_name": "ClientSocket_Shuttle1_A",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Shuttle1_A",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_Shuttle1_AError",
+   "leaf_name": "ClientSocket_Shuttle1_A",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Shuttle1_A",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_Shuttle1_ARead",
+   "leaf_name": "ClientSocket_Shuttle1_A",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Shuttle1_B",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_Shuttle1_AConnect",
+   "leaf_name": "ClientSocket_Shuttle1_B",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Shuttle1_B",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_Shuttle1_ADisconnect",
+   "leaf_name": "ClientSocket_Shuttle1_B",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Shuttle1_B",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_Shuttle1_AError",
+   "leaf_name": "ClientSocket_Shuttle1_B",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Shuttle1_B",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_Shuttle1_ARead",
+   "leaf_name": "ClientSocket_Shuttle1_B",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Shuttle2_A",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_Shuttle1_AConnect",
+   "leaf_name": "ClientSocket_Shuttle2_A",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Shuttle2_A",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_Shuttle1_ADisconnect",
+   "leaf_name": "ClientSocket_Shuttle2_A",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Shuttle2_A",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_Shuttle1_AError",
+   "leaf_name": "ClientSocket_Shuttle2_A",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Shuttle2_A",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_Shuttle1_ARead",
+   "leaf_name": "ClientSocket_Shuttle2_A",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Shuttle2_B",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_Shuttle1_AConnect",
+   "leaf_name": "ClientSocket_Shuttle2_B",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Shuttle2_B",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_Shuttle1_ADisconnect",
+   "leaf_name": "ClientSocket_Shuttle2_B",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Shuttle2_B",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_Shuttle1_AError",
+   "leaf_name": "ClientSocket_Shuttle2_B",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Shuttle2_B",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_Shuttle1_ARead",
+   "leaf_name": "ClientSocket_Shuttle2_B",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.TimerDownCCDConnect",
+   "event_name": "OnTimer",
+   "handler_name": "TimerDownCCDConnectTimer",
+   "leaf_name": "TimerDownCCDConnect",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fBarCode.TimerCCDInitial",
+   "event_name": "OnTimer",
+   "handler_name": "TimerCCDInitialTimer",
+   "leaf_name": "TimerCCDInitial",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fBarCode.TimerProcess2DData",
+   "event_name": "OnTimer",
+   "handler_name": "TimerProcess2DDataTimer",
+   "leaf_name": "TimerProcess2DData",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_BarcodeChangeFile",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_BarcodeChangeFileConnect",
+   "leaf_name": "ClientSocket_BarcodeChangeFile",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_BarcodeChangeFile",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_BarcodeChangeFileDisconnect",
+   "leaf_name": "ClientSocket_BarcodeChangeFile",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_BarcodeChangeFile",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_BarcodeChangeFileRead",
+   "leaf_name": "ClientSocket_BarcodeChangeFile",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.TimerBarcodeChangeFile",
+   "event_name": "OnTimer",
+   "handler_name": "TimerBarcodeChangeFileTimer",
+   "leaf_name": "TimerBarcodeChangeFile",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_1",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_Shuttle1_AConnect",
+   "leaf_name": "ClientSocket_Bottom_1",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_1",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_Shuttle1_ADisconnect",
+   "leaf_name": "ClientSocket_Bottom_1",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_1",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_Shuttle1_AError",
+   "leaf_name": "ClientSocket_Bottom_1",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_1",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_Shuttle1_ARead",
+   "leaf_name": "ClientSocket_Bottom_1",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_2",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_Shuttle1_AConnect",
+   "leaf_name": "ClientSocket_Bottom_2",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_2",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_Shuttle1_ADisconnect",
+   "leaf_name": "ClientSocket_Bottom_2",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_2",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_Shuttle1_AError",
+   "leaf_name": "ClientSocket_Bottom_2",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_2",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_Shuttle1_ARead",
+   "leaf_name": "ClientSocket_Bottom_2",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_3",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_Shuttle1_AConnect",
+   "leaf_name": "ClientSocket_Bottom_3",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_3",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_Shuttle1_ADisconnect",
+   "leaf_name": "ClientSocket_Bottom_3",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_3",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_Shuttle1_AError",
+   "leaf_name": "ClientSocket_Bottom_3",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_3",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_Shuttle1_ARead",
+   "leaf_name": "ClientSocket_Bottom_3",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_4",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_Shuttle1_AConnect",
+   "leaf_name": "ClientSocket_Bottom_4",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_4",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_Shuttle1_ADisconnect",
+   "leaf_name": "ClientSocket_Bottom_4",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_4",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_Shuttle1_AError",
+   "leaf_name": "ClientSocket_Bottom_4",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_4",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_Shuttle1_ARead",
+   "leaf_name": "ClientSocket_Bottom_4",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_8",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_Shuttle1_AConnect",
+   "leaf_name": "ClientSocket_Bottom_8",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_8",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_Shuttle1_ADisconnect",
+   "leaf_name": "ClientSocket_Bottom_8",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_8",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_Shuttle1_AError",
+   "leaf_name": "ClientSocket_Bottom_8",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_8",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_Shuttle1_ARead",
+   "leaf_name": "ClientSocket_Bottom_8",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_7",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_Shuttle1_AConnect",
+   "leaf_name": "ClientSocket_Bottom_7",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_7",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_Shuttle1_ADisconnect",
+   "leaf_name": "ClientSocket_Bottom_7",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_7",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_Shuttle1_AError",
+   "leaf_name": "ClientSocket_Bottom_7",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_7",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_Shuttle1_ARead",
+   "leaf_name": "ClientSocket_Bottom_7",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_6",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_Shuttle1_AConnect",
+   "leaf_name": "ClientSocket_Bottom_6",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_6",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_Shuttle1_ADisconnect",
+   "leaf_name": "ClientSocket_Bottom_6",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_6",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_Shuttle1_AError",
+   "leaf_name": "ClientSocket_Bottom_6",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_6",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_Shuttle1_ARead",
+   "leaf_name": "ClientSocket_Bottom_6",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_5",
+   "event_name": "OnConnect",
+   "handler_name": "ClientSocket_Shuttle1_AConnect",
+   "leaf_name": "ClientSocket_Bottom_5",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_5",
+   "event_name": "OnDisconnect",
+   "handler_name": "ClientSocket_Shuttle1_ADisconnect",
+   "leaf_name": "ClientSocket_Bottom_5",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_5",
+   "event_name": "OnError",
+   "handler_name": "ClientSocket_Shuttle1_AError",
+   "leaf_name": "ClientSocket_Bottom_5",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.ClientSocket_Bottom_5",
+   "event_name": "OnRead",
+   "handler_name": "ClientSocket_Shuttle1_ARead",
+   "leaf_name": "ClientSocket_Bottom_5",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "fBarCode.TimerBotton8CCDConnect",
+   "event_name": "OnTimer",
+   "handler_name": "TimerBotton8CCDConnectTimer",
+   "leaf_name": "TimerBotton8CCDConnect",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fBarCode.TimerBottom8CCDInitial",
+   "event_name": "OnTimer",
+   "handler_name": "TimerBottom8CCDInitialTimer",
+   "leaf_name": "TimerBottom8CCDInitial",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fBarCode",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "BarCode/BarCode.dfm"
+}

@@ -1,0 +1,212 @@
+{
+ "event_count": 29,
+ "events": [
+  {
+   "control_path": "fTowerLight",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fTowerLight",
+   "vcl_class": "TfTowerLight"
+  },
+  {
+   "control_path": "fTowerLight",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fTowerLight",
+   "vcl_class": "TfTowerLight"
+  },
+  {
+   "control_path": "fTowerLight.Panel3.RGB50",
+   "event_name": "OnClick",
+   "handler_name": "RGB00Click",
+   "leaf_name": "RGB50",
+   "vcl_class": "TALed"
+  },
+  {
+   "control_path": "fTowerLight.Panel3.RGB40",
+   "event_name": "OnClick",
+   "handler_name": "RGB00Click",
+   "leaf_name": "RGB40",
+   "vcl_class": "TALed"
+  },
+  {
+   "control_path": "fTowerLight.Panel3.RGB30",
+   "event_name": "OnClick",
+   "handler_name": "RGB00Click",
+   "leaf_name": "RGB30",
+   "vcl_class": "TALed"
+  },
+  {
+   "control_path": "fTowerLight.Panel3.RGB20",
+   "event_name": "OnClick",
+   "handler_name": "RGB00Click",
+   "leaf_name": "RGB20",
+   "vcl_class": "TALed"
+  },
+  {
+   "control_path": "fTowerLight.Panel3.RGB10",
+   "event_name": "OnClick",
+   "handler_name": "RGB00Click",
+   "leaf_name": "RGB10",
+   "vcl_class": "TALed"
+  },
+  {
+   "control_path": "fTowerLight.Panel3.RGB00",
+   "event_name": "OnClick",
+   "handler_name": "RGB00Click",
+   "leaf_name": "RGB00",
+   "vcl_class": "TALed"
+  },
+  {
+   "control_path": "fTowerLight.Panel3.RGB01",
+   "event_name": "OnClick",
+   "handler_name": "RGB00Click",
+   "leaf_name": "RGB01",
+   "vcl_class": "TALed"
+  },
+  {
+   "control_path": "fTowerLight.Panel3.RGB11",
+   "event_name": "OnClick",
+   "handler_name": "RGB00Click",
+   "leaf_name": "RGB11",
+   "vcl_class": "TALed"
+  },
+  {
+   "control_path": "fTowerLight.Panel3.RGB21",
+   "event_name": "OnClick",
+   "handler_name": "RGB00Click",
+   "leaf_name": "RGB21",
+   "vcl_class": "TALed"
+  },
+  {
+   "control_path": "fTowerLight.Panel3.RGB31",
+   "event_name": "OnClick",
+   "handler_name": "RGB00Click",
+   "leaf_name": "RGB31",
+   "vcl_class": "TALed"
+  },
+  {
+   "control_path": "fTowerLight.Panel3.RGB41",
+   "event_name": "OnClick",
+   "handler_name": "RGB00Click",
+   "leaf_name": "RGB41",
+   "vcl_class": "TALed"
+  },
+  {
+   "control_path": "fTowerLight.Panel3.RGB51",
+   "event_name": "OnClick",
+   "handler_name": "RGB00Click",
+   "leaf_name": "RGB51",
+   "vcl_class": "TALed"
+  },
+  {
+   "control_path": "fTowerLight.Panel3.RGB52",
+   "event_name": "OnClick",
+   "handler_name": "RGB00Click",
+   "leaf_name": "RGB52",
+   "vcl_class": "TALed"
+  },
+  {
+   "control_path": "fTowerLight.Panel3.RGB42",
+   "event_name": "OnClick",
+   "handler_name": "RGB00Click",
+   "leaf_name": "RGB42",
+   "vcl_class": "TALed"
+  },
+  {
+   "control_path": "fTowerLight.Panel3.RGB32",
+   "event_name": "OnClick",
+   "handler_name": "RGB00Click",
+   "leaf_name": "RGB32",
+   "vcl_class": "TALed"
+  },
+  {
+   "control_path": "fTowerLight.Panel3.RGB22",
+   "event_name": "OnClick",
+   "handler_name": "RGB00Click",
+   "leaf_name": "RGB22",
+   "vcl_class": "TALed"
+  },
+  {
+   "control_path": "fTowerLight.Panel3.RGB12",
+   "event_name": "OnClick",
+   "handler_name": "RGB00Click",
+   "leaf_name": "RGB12",
+   "vcl_class": "TALed"
+  },
+  {
+   "control_path": "fTowerLight.Panel3.RGB02",
+   "event_name": "OnClick",
+   "handler_name": "RGB00Click",
+   "leaf_name": "RGB02",
+   "vcl_class": "TALed"
+  },
+  {
+   "control_path": "fTowerLight.Panel3.RGB60",
+   "event_name": "OnClick",
+   "handler_name": "RGB00Click",
+   "leaf_name": "RGB60",
+   "vcl_class": "TALed"
+  },
+  {
+   "control_path": "fTowerLight.Panel3.RGB61",
+   "event_name": "OnClick",
+   "handler_name": "RGB00Click",
+   "leaf_name": "RGB61",
+   "vcl_class": "TALed"
+  },
+  {
+   "control_path": "fTowerLight.Panel3.RGB62",
+   "event_name": "OnClick",
+   "handler_name": "RGB00Click",
+   "leaf_name": "RGB62",
+   "vcl_class": "TALed"
+  },
+  {
+   "control_path": "fTowerLight.Panel3.rgMusicTest",
+   "event_name": "OnClick",
+   "handler_name": "rgMusicTestClick",
+   "leaf_name": "rgMusicTest",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fTowerLight.Panel3.Panel11.RGB72",
+   "event_name": "OnClick",
+   "handler_name": "RGB00Click",
+   "leaf_name": "RGB72",
+   "vcl_class": "TALed"
+  },
+  {
+   "control_path": "fTowerLight.Panel3.Panel11.RGB71",
+   "event_name": "OnClick",
+   "handler_name": "RGB00Click",
+   "leaf_name": "RGB71",
+   "vcl_class": "TALed"
+  },
+  {
+   "control_path": "fTowerLight.Panel3.Panel11.RGB70",
+   "event_name": "OnClick",
+   "handler_name": "RGB00Click",
+   "leaf_name": "RGB70",
+   "vcl_class": "TALed"
+  },
+  {
+   "control_path": "fTowerLight.spbExit",
+   "event_name": "OnClick",
+   "handler_name": "spbExitClick",
+   "leaf_name": "spbExit",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fTowerLight.Timer1",
+   "event_name": "OnTimer",
+   "handler_name": "Timer1Timer",
+   "leaf_name": "Timer1",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fTowerLight",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "cTowerLight.dfm"
+}

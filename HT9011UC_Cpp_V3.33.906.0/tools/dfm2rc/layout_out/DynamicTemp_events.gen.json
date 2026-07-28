@@ -1,0 +1,625 @@
+{
+ "event_count": 88,
+ "events": [
+  {
+   "control_path": "fDynamicTemp",
+   "event_name": "OnResize",
+   "handler_name": "FormResize",
+   "leaf_name": "fDynamicTemp",
+   "vcl_class": "TfDynamicTemp"
+  },
+  {
+   "control_path": "fDynamicTemp",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fDynamicTemp",
+   "vcl_class": "TfDynamicTemp"
+  },
+  {
+   "control_path": "fDynamicTemp.btExit",
+   "event_name": "OnClick",
+   "handler_name": "btExitClick",
+   "leaf_name": "btExit",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Chart1.edMax",
+   "event_name": "OnMouseDown",
+   "handler_name": "edMaxMouseDown",
+   "leaf_name": "edMax",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Chart1.edMin",
+   "event_name": "OnMouseDown",
+   "handler_name": "edMinMouseDown",
+   "leaf_name": "edMin",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.Label4",
+   "event_name": "OnMouseDown",
+   "handler_name": "gbA1MouseDown",
+   "leaf_name": "Label4",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.Label4",
+   "event_name": "OnMouseMove",
+   "handler_name": "gbA1MouseMove",
+   "leaf_name": "Label4",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.Label4",
+   "event_name": "OnMouseUp",
+   "handler_name": "gbA1MouseUp",
+   "leaf_name": "Label4",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbUpperDbl",
+   "event_name": "OnClick",
+   "handler_name": "gbUpperDblClick",
+   "leaf_name": "gbUpperDbl",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbLowerDbl",
+   "event_name": "OnClick",
+   "handler_name": "gbLowerDblClick",
+   "leaf_name": "gbLowerDbl",
+   "vcl_class": "TLabel"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbA1",
+   "event_name": "OnMouseDown",
+   "handler_name": "gbA1MouseDown",
+   "leaf_name": "gbA1",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbA1",
+   "event_name": "OnMouseMove",
+   "handler_name": "gbA1MouseMove",
+   "leaf_name": "gbA1",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbA1",
+   "event_name": "OnMouseUp",
+   "handler_name": "gbA1MouseUp",
+   "leaf_name": "gbA1",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbB2",
+   "event_name": "OnMouseDown",
+   "handler_name": "gbA1MouseDown",
+   "leaf_name": "gbB2",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbB2",
+   "event_name": "OnMouseMove",
+   "handler_name": "gbA1MouseMove",
+   "leaf_name": "gbB2",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbB2",
+   "event_name": "OnMouseUp",
+   "handler_name": "gbA1MouseUp",
+   "leaf_name": "gbB2",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbG15",
+   "event_name": "OnMouseDown",
+   "handler_name": "gbA1MouseDown",
+   "leaf_name": "gbG15",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbG15",
+   "event_name": "OnMouseMove",
+   "handler_name": "gbA1MouseMove",
+   "leaf_name": "gbG15",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbG15",
+   "event_name": "OnMouseUp",
+   "handler_name": "gbA1MouseUp",
+   "leaf_name": "gbG15",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbG13",
+   "event_name": "OnMouseDown",
+   "handler_name": "gbA1MouseDown",
+   "leaf_name": "gbG13",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbG13",
+   "event_name": "OnMouseMove",
+   "handler_name": "gbA1MouseMove",
+   "leaf_name": "gbG13",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbG13",
+   "event_name": "OnMouseUp",
+   "handler_name": "gbA1MouseUp",
+   "leaf_name": "gbG13",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbE11",
+   "event_name": "OnMouseDown",
+   "handler_name": "gbA1MouseDown",
+   "leaf_name": "gbE11",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbE11",
+   "event_name": "OnMouseMove",
+   "handler_name": "gbA1MouseMove",
+   "leaf_name": "gbE11",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbE11",
+   "event_name": "OnMouseUp",
+   "handler_name": "gbA1MouseUp",
+   "leaf_name": "gbE11",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbE9",
+   "event_name": "OnMouseDown",
+   "handler_name": "gbA1MouseDown",
+   "leaf_name": "gbE9",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbE9",
+   "event_name": "OnMouseMove",
+   "handler_name": "gbA1MouseMove",
+   "leaf_name": "gbE9",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbE9",
+   "event_name": "OnMouseUp",
+   "handler_name": "gbA1MouseUp",
+   "leaf_name": "gbE9",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbC7",
+   "event_name": "OnMouseDown",
+   "handler_name": "gbA1MouseDown",
+   "leaf_name": "gbC7",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbC7",
+   "event_name": "OnMouseMove",
+   "handler_name": "gbA1MouseMove",
+   "leaf_name": "gbC7",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbC7",
+   "event_name": "OnMouseUp",
+   "handler_name": "gbA1MouseUp",
+   "leaf_name": "gbC7",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbC5",
+   "event_name": "OnMouseDown",
+   "handler_name": "gbA1MouseDown",
+   "leaf_name": "gbC5",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbC5",
+   "event_name": "OnMouseMove",
+   "handler_name": "gbA1MouseMove",
+   "leaf_name": "gbC5",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbC5",
+   "event_name": "OnMouseUp",
+   "handler_name": "gbA1MouseUp",
+   "leaf_name": "gbC5",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbA3",
+   "event_name": "OnMouseDown",
+   "handler_name": "gbA1MouseDown",
+   "leaf_name": "gbA3",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbA3",
+   "event_name": "OnMouseMove",
+   "handler_name": "gbA1MouseMove",
+   "leaf_name": "gbA3",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbA3",
+   "event_name": "OnMouseUp",
+   "handler_name": "gbA1MouseUp",
+   "leaf_name": "gbA3",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbF10",
+   "event_name": "OnMouseDown",
+   "handler_name": "gbA1MouseDown",
+   "leaf_name": "gbF10",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbF10",
+   "event_name": "OnMouseMove",
+   "handler_name": "gbA1MouseMove",
+   "leaf_name": "gbF10",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbF10",
+   "event_name": "OnMouseUp",
+   "handler_name": "gbA1MouseUp",
+   "leaf_name": "gbF10",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbH16",
+   "event_name": "OnMouseDown",
+   "handler_name": "gbA1MouseDown",
+   "leaf_name": "gbH16",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbH16",
+   "event_name": "OnMouseMove",
+   "handler_name": "gbA1MouseMove",
+   "leaf_name": "gbH16",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbH16",
+   "event_name": "OnMouseUp",
+   "handler_name": "gbA1MouseUp",
+   "leaf_name": "gbH16",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbH14",
+   "event_name": "OnMouseDown",
+   "handler_name": "gbA1MouseDown",
+   "leaf_name": "gbH14",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbH14",
+   "event_name": "OnMouseMove",
+   "handler_name": "gbA1MouseMove",
+   "leaf_name": "gbH14",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbH14",
+   "event_name": "OnMouseUp",
+   "handler_name": "gbA1MouseUp",
+   "leaf_name": "gbH14",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbF12",
+   "event_name": "OnMouseDown",
+   "handler_name": "gbA1MouseDown",
+   "leaf_name": "gbF12",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbF12",
+   "event_name": "OnMouseMove",
+   "handler_name": "gbA1MouseMove",
+   "leaf_name": "gbF12",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbF12",
+   "event_name": "OnMouseUp",
+   "handler_name": "gbA1MouseUp",
+   "leaf_name": "gbF12",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbD8",
+   "event_name": "OnMouseDown",
+   "handler_name": "gbA1MouseDown",
+   "leaf_name": "gbD8",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbD8",
+   "event_name": "OnMouseMove",
+   "handler_name": "gbA1MouseMove",
+   "leaf_name": "gbD8",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbD8",
+   "event_name": "OnMouseUp",
+   "handler_name": "gbA1MouseUp",
+   "leaf_name": "gbD8",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbD6",
+   "event_name": "OnMouseDown",
+   "handler_name": "gbA1MouseDown",
+   "leaf_name": "gbD6",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbD6",
+   "event_name": "OnMouseMove",
+   "handler_name": "gbA1MouseMove",
+   "leaf_name": "gbD6",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbD6",
+   "event_name": "OnMouseUp",
+   "handler_name": "gbA1MouseUp",
+   "leaf_name": "gbD6",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbB4",
+   "event_name": "OnMouseDown",
+   "handler_name": "gbA1MouseDown",
+   "leaf_name": "gbB4",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbB4",
+   "event_name": "OnMouseMove",
+   "handler_name": "gbA1MouseMove",
+   "leaf_name": "gbB4",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbB4",
+   "event_name": "OnMouseUp",
+   "handler_name": "gbA1MouseUp",
+   "leaf_name": "gbB4",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.sbTempICClear",
+   "event_name": "OnClick",
+   "handler_name": "sbTempICClearClick",
+   "leaf_name": "sbTempICClear",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.sbTempICClear",
+   "event_name": "OnMouseDown",
+   "handler_name": "btSelectAllMouseDown",
+   "leaf_name": "sbTempICClear",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.sbTempICClear",
+   "event_name": "OnMouseUp",
+   "handler_name": "btSelectAllMouseUp",
+   "leaf_name": "sbTempICClear",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.btShow",
+   "event_name": "OnClick",
+   "handler_name": "btShowClick",
+   "leaf_name": "btShow",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.btShow",
+   "event_name": "OnMouseDown",
+   "handler_name": "btSelectAllMouseDown",
+   "leaf_name": "btShow",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.btShow",
+   "event_name": "OnMouseUp",
+   "handler_name": "btSelectAllMouseUp",
+   "leaf_name": "btShow",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.btSelectAll",
+   "event_name": "OnClick",
+   "handler_name": "btSelectAllClick",
+   "leaf_name": "btSelectAll",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.btSelectAll",
+   "event_name": "OnMouseDown",
+   "handler_name": "btSelectAllMouseDown",
+   "leaf_name": "btSelectAll",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.btSelectAll",
+   "event_name": "OnMouseUp",
+   "handler_name": "btSelectAllMouseUp",
+   "leaf_name": "btSelectAll",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.btDefaultPos",
+   "event_name": "OnClick",
+   "handler_name": "btDefaultPosClick",
+   "leaf_name": "btDefaultPos",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.btDefaultPos",
+   "event_name": "OnMouseDown",
+   "handler_name": "btSelectAllMouseDown",
+   "leaf_name": "btDefaultPos",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.btDefaultPos",
+   "event_name": "OnMouseUp",
+   "handler_name": "btSelectAllMouseUp",
+   "leaf_name": "btDefaultPos",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbUpper",
+   "event_name": "OnDblClick",
+   "handler_name": "gbUpperDblClick",
+   "leaf_name": "gbUpper",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbUpper",
+   "event_name": "OnMouseDown",
+   "handler_name": "gbA1MouseDown",
+   "leaf_name": "gbUpper",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbUpper",
+   "event_name": "OnMouseMove",
+   "handler_name": "gbA1MouseMove",
+   "leaf_name": "gbUpper",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbUpper",
+   "event_name": "OnMouseUp",
+   "handler_name": "gbA1MouseUp",
+   "leaf_name": "gbUpper",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbUpper.edUpper",
+   "event_name": "OnMouseDown",
+   "handler_name": "edUpperMouseDown",
+   "leaf_name": "edUpper",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbLower",
+   "event_name": "OnDblClick",
+   "handler_name": "gbLowerDblClick",
+   "leaf_name": "gbLower",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbLower",
+   "event_name": "OnMouseDown",
+   "handler_name": "gbA1MouseDown",
+   "leaf_name": "gbLower",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbLower",
+   "event_name": "OnMouseMove",
+   "handler_name": "gbA1MouseMove",
+   "leaf_name": "gbLower",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbLower",
+   "event_name": "OnMouseUp",
+   "handler_name": "gbA1MouseUp",
+   "leaf_name": "gbLower",
+   "vcl_class": "TGroupBox"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.gbLower.edLower",
+   "event_name": "OnMouseDown",
+   "handler_name": "edLowerMouseDown",
+   "leaf_name": "edLower",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel1.Button1",
+   "event_name": "OnClick",
+   "handler_name": "Button1Click",
+   "leaf_name": "Button1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel2.btTempICSave",
+   "event_name": "OnClick",
+   "handler_name": "btTempICSaveClick",
+   "leaf_name": "btTempICSave",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel2.btTempICSave",
+   "event_name": "OnMouseDown",
+   "handler_name": "btSelectAllMouseDown",
+   "leaf_name": "btTempICSave",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel2.btTempICSave",
+   "event_name": "OnMouseUp",
+   "handler_name": "btSelectAllMouseUp",
+   "leaf_name": "btTempICSave",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel2.btTempICLoad",
+   "event_name": "OnClick",
+   "handler_name": "btTempICLoadClick",
+   "leaf_name": "btTempICLoad",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel2.btTempICLoad",
+   "event_name": "OnMouseDown",
+   "handler_name": "btSelectAllMouseDown",
+   "leaf_name": "btTempICLoad",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fDynamicTemp.PanelMain7.Panel2.btTempICLoad",
+   "event_name": "OnMouseUp",
+   "handler_name": "btSelectAllMouseUp",
+   "leaf_name": "btTempICLoad",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fDynamicTemp.Timer1",
+   "event_name": "OnTimer",
+   "handler_name": "Timer1Timer",
+   "leaf_name": "Timer1",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fDynamicTemp",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "DynamicTemp.dfm"
+}

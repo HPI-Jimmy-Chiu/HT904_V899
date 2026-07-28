@@ -1,0 +1,5825 @@
+{
+ "control_node_count": 79,
+ "encoding_used": "cp950",
+ "form_class": "TfFTPClient",
+ "form_name": "fFTPClient",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fFTPClient.PageControl1",
+    "fFTPClient.sbFTPStatus",
+    "fFTPClient.memoFTP",
+    "fFTPClient.NMFTP1"
+   ],
+   "class": "TfFTPClient",
+   "depth": 0,
+   "events": {
+    "OnClose": "FormClose",
+    "OnCreate": "FormCreate",
+    "OnShow": "FormShow"
+   },
+   "geometry": {
+    "height": null,
+    "left": 260,
+    "top": 272,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "fFTPClient",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "fFTPClient",
+   "properties": {
+    "BorderStyle": {
+     "type": "SCALAR",
+     "value": "bsSingle"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "FTP"
+    },
+    "ClientHeight": {
+     "type": "SCALAR",
+     "value": 512
+    },
+    "ClientWidth": {
+     "type": "SCALAR",
+     "value": 971
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 260
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnClose": {
+     "type": "SCALAR",
+     "value": "FormClose"
+    },
+    "OnCreate": {
+     "type": "SCALAR",
+     "value": "FormCreate"
+    },
+    "OnShow": {
+     "type": "SCALAR",
+     "value": "FormShow"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "PrintScale": {
+     "type": "SCALAR",
+     "value": "poPrintToFit"
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 272
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alLeft",
+   "anchors": null,
+   "child_paths": [
+    "fFTPClient.PageControl1.TabSheet1",
+    "fFTPClient.PageControl1.TabSheet2",
+    "fFTPClient.PageControl1.TabSheet3",
+    "fFTPClient.PageControl1.TabSheet4"
+   ],
+   "class": "TPageControl",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 493,
+    "left": 0,
+    "top": 0,
+    "width": 673
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "TABHOST",
+   "line": 21,
+   "name": "PageControl1",
+   "objkind": "object",
+   "parent_path": "fFTPClient",
+   "path": "fFTPClient.PageControl1",
+   "properties": {
+    "ActivePage": {
+     "type": "SCALAR",
+     "value": "TabSheet2"
+    },
+    "Align": {
+     "type": "SCALAR",
+     "value": "alLeft"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 493
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabIndex": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 673
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fFTPClient.PageControl1.TabSheet1.Label1",
+    "fFTPClient.PageControl1.TabSheet1.GroupBox1",
+    "fFTPClient.PageControl1.TabSheet1.GroupBox2",
+    "fFTPClient.PageControl1.TabSheet1.ListBox1"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 30,
+   "name": "TabSheet1",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1",
+   "path": "fFTPClient.PageControl1.TabSheet1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Network Setting"
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 25,
+    "left": 544,
+    "top": 188,
+    "width": 5
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 32,
+   "name": "Label1",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet1",
+   "path": "fFTPClient.PageControl1.TabSheet1.Label1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "."
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clCaptionText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 25
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 544
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 188
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 5
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fFTPClient.PageControl1.TabSheet1.GroupBox1.Panel1",
+    "fFTPClient.PageControl1.TabSheet1.GroupBox1.Panel2",
+    "fFTPClient.PageControl1.TabSheet1.GroupBox1.Panel3",
+    "fFTPClient.PageControl1.TabSheet1.GroupBox1.Panel4",
+    "fFTPClient.PageControl1.TabSheet1.GroupBox1.Panel5",
+    "fFTPClient.PageControl1.TabSheet1.GroupBox1.Panel6",
+    "fFTPClient.PageControl1.TabSheet1.GroupBox1.Panel7",
+    "fFTPClient.PageControl1.TabSheet1.GroupBox1.edtMachineName",
+    "fFTPClient.PageControl1.TabSheet1.GroupBox1.edtHostName",
+    "fFTPClient.PageControl1.TabSheet1.GroupBox1.edtMachineIPAddress0",
+    "fFTPClient.PageControl1.TabSheet1.GroupBox1.edtSubNetMask0",
+    "fFTPClient.PageControl1.TabSheet1.GroupBox1.edtHostIPAddress0",
+    "fFTPClient.PageControl1.TabSheet1.GroupBox1.edtGatewayAddress0",
+    "fFTPClient.PageControl1.TabSheet1.GroupBox1.edtEthernetAddress"
+   ],
+   "class": "TGroupBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 321,
+    "left": 0,
+    "top": 8,
+    "width": 353
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 45,
+   "name": "GroupBox1",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet1",
+   "path": "fFTPClient.PageControl1.TabSheet1.GroupBox1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 321
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 353
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 41,
+    "left": 4,
+    "top": 8,
+    "width": 173
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 51,
+   "name": "Panel1",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet1.GroupBox1",
+   "path": "fFTPClient.PageControl1.TabSheet1.GroupBox1.Panel1",
+   "properties": {
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "BorderStyle": {
+     "type": "SCALAR",
+     "value": "bsSingle"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Machine Name"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clCaptionText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 173
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 41,
+    "left": 4,
+    "top": 52,
+    "width": 173
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 69,
+   "name": "Panel2",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet1.GroupBox1",
+   "path": "fFTPClient.PageControl1.TabSheet1.GroupBox1.Panel2",
+   "properties": {
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "BorderStyle": {
+     "type": "SCALAR",
+     "value": "bsSingle"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Machine IP Address"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clCaptionText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 52
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 173
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 41,
+    "left": 4,
+    "top": 96,
+    "width": 173
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 87,
+   "name": "Panel3",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet1.GroupBox1",
+   "path": "fFTPClient.PageControl1.TabSheet1.GroupBox1.Panel3",
+   "properties": {
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "BorderStyle": {
+     "type": "SCALAR",
+     "value": "bsSingle"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Sub Net Mask"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clCaptionText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 173
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 41,
+    "left": 4,
+    "top": 140,
+    "width": 173
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 105,
+   "name": "Panel4",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet1.GroupBox1",
+   "path": "fFTPClient.PageControl1.TabSheet1.GroupBox1.Panel4",
+   "properties": {
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "BorderStyle": {
+     "type": "SCALAR",
+     "value": "bsSingle"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Host Name"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clCaptionText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 140
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 173
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 41,
+    "left": 4,
+    "top": 184,
+    "width": 173
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 122,
+   "name": "Panel5",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet1.GroupBox1",
+   "path": "fFTPClient.PageControl1.TabSheet1.GroupBox1.Panel5",
+   "properties": {
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "BorderStyle": {
+     "type": "SCALAR",
+     "value": "bsSingle"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Host IP Address"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clCaptionText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 184
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 173
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 8,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 41,
+    "left": 4,
+    "top": 228,
+    "width": 173
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 140,
+   "name": "Panel6",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet1.GroupBox1",
+   "path": "fFTPClient.PageControl1.TabSheet1.GroupBox1.Panel6",
+   "properties": {
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "BorderStyle": {
+     "type": "SCALAR",
+     "value": "bsSingle"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Gateway Address"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clCaptionText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 10
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 228
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 173
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 10,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 41,
+    "left": 4,
+    "top": 272,
+    "width": 173
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 158,
+   "name": "Panel7",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet1.GroupBox1",
+   "path": "fFTPClient.PageControl1.TabSheet1.GroupBox1.Panel7",
+   "properties": {
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "BorderStyle": {
+     "type": "SCALAR",
+     "value": "bsSingle"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Ethernet Address"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clCaptionText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 272
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 173
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 12,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 33,
+    "left": 184,
+    "top": 12,
+    "width": 160
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 176,
+   "name": "edtMachineName",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet1.GroupBox1",
+   "path": "fFTPClient.PageControl1.TabSheet1.GroupBox1.edtMachineName",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 184
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 160
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 33,
+    "left": 184,
+    "top": 144,
+    "width": 160
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 192,
+   "name": "edtHostName",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet1.GroupBox1",
+   "path": "fFTPClient.PageControl1.TabSheet1.GroupBox1.edtHostName",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 184
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Text": {
+     "type": "STR",
+     "value": "127.0.0.1"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 144
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 160
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": 7,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 33,
+    "left": 184,
+    "top": 56,
+    "width": 160
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 208,
+   "name": "edtMachineIPAddress0",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet1.GroupBox1",
+   "path": "fFTPClient.PageControl1.TabSheet1.GroupBox1.edtMachineIPAddress0",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 184
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 56
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 160
+    }
+   },
+   "sibling_index": 9,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 33,
+    "left": 184,
+    "top": 100,
+    "width": 160
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 224,
+   "name": "edtSubNetMask0",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet1.GroupBox1",
+   "path": "fFTPClient.PageControl1.TabSheet1.GroupBox1.edtSubNetMask0",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 184
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 160
+    }
+   },
+   "sibling_index": 10,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 33,
+    "left": 184,
+    "top": 188,
+    "width": 160
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 240,
+   "name": "edtHostIPAddress0",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet1.GroupBox1",
+   "path": "fFTPClient.PageControl1.TabSheet1.GroupBox1.edtHostIPAddress0",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 184
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 9
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 188
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 160
+    }
+   },
+   "sibling_index": 11,
+   "synthesized": false,
+   "tab_order": 9,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 33,
+    "left": 184,
+    "top": 232,
+    "width": 160
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 256,
+   "name": "edtGatewayAddress0",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet1.GroupBox1",
+   "path": "fFTPClient.PageControl1.TabSheet1.GroupBox1.edtGatewayAddress0",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 184
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 11
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 232
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 160
+    }
+   },
+   "sibling_index": 12,
+   "synthesized": false,
+   "tab_order": 11,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 33,
+    "left": 184,
+    "top": 276,
+    "width": 160
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 272,
+   "name": "edtEthernetAddress",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet1.GroupBox1",
+   "path": "fFTPClient.PageControl1.TabSheet1.GroupBox1.edtEthernetAddress",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 184
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 276
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 160
+    }
+   },
+   "sibling_index": 13,
+   "synthesized": false,
+   "tab_order": 13,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fFTPClient.PageControl1.TabSheet1.GroupBox2.Panel8",
+    "fFTPClient.PageControl1.TabSheet1.GroupBox2.Panel9",
+    "fFTPClient.PageControl1.TabSheet1.GroupBox2.Panel10",
+    "fFTPClient.PageControl1.TabSheet1.GroupBox2.Panel11",
+    "fFTPClient.PageControl1.TabSheet1.GroupBox2.Panel12",
+    "fFTPClient.PageControl1.TabSheet1.GroupBox2.edtUserName",
+    "fFTPClient.PageControl1.TabSheet1.GroupBox2.edtPassword",
+    "fFTPClient.PageControl1.TabSheet1.GroupBox2.edtDownload",
+    "fFTPClient.PageControl1.TabSheet1.GroupBox2.edtUpload"
+   ],
+   "class": "TGroupBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 321,
+    "left": 360,
+    "top": 8,
+    "width": 293
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 289,
+   "name": "GroupBox2",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet1",
+   "path": "fFTPClient.PageControl1.TabSheet1.GroupBox2",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 321
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 293
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 41,
+    "left": 4,
+    "top": 8,
+    "width": 281
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 295,
+   "name": "Panel8",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet1.GroupBox2",
+   "path": "fFTPClient.PageControl1.TabSheet1.GroupBox2.Panel8",
+   "properties": {
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "BorderStyle": {
+     "type": "SCALAR",
+     "value": "bsSingle"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "F T P"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clCaptionText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 281
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 41,
+    "left": 4,
+    "top": 52,
+    "width": 117
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 312,
+   "name": "Panel9",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet1.GroupBox2",
+   "path": "fFTPClient.PageControl1.TabSheet1.GroupBox2.Panel9",
+   "properties": {
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "BorderStyle": {
+     "type": "SCALAR",
+     "value": "bsSingle"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "User Name"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clCaptionText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 52
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 117
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 41,
+    "left": 4,
+    "top": 96,
+    "width": 117
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 329,
+   "name": "Panel10",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet1.GroupBox2",
+   "path": "fFTPClient.PageControl1.TabSheet1.GroupBox2.Panel10",
+   "properties": {
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "BorderStyle": {
+     "type": "SCALAR",
+     "value": "bsSingle"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Password"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clCaptionText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 117
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 53,
+    "left": 4,
+    "top": 136,
+    "width": 117
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 346,
+   "name": "Panel11",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet1.GroupBox2",
+   "path": "fFTPClient.PageControl1.TabSheet1.GroupBox2.Panel11",
+   "properties": {
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "BorderStyle": {
+     "type": "SCALAR",
+     "value": "bsSingle"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Download"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clCaptionText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 53
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 117
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 53,
+    "left": 4,
+    "top": 188,
+    "width": 117
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 363,
+   "name": "Panel12",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet1.GroupBox2",
+   "path": "fFTPClient.PageControl1.TabSheet1.GroupBox2.Panel12",
+   "properties": {
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "BorderStyle": {
+     "type": "SCALAR",
+     "value": "bsSingle"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Upload"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clCaptionText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 53
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 7
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 188
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 117
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 7,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 33,
+    "left": 124,
+    "top": 56,
+    "width": 160
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 380,
+   "name": "edtUserName",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet1.GroupBox2",
+   "path": "fFTPClient.PageControl1.TabSheet1.GroupBox2.edtUserName",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 124
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Text": {
+     "type": "STR",
+     "value": "jay"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 56
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 160
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 33,
+    "left": 124,
+    "top": 100,
+    "width": 160
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 396,
+   "name": "edtPassword",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet1.GroupBox2",
+   "path": "fFTPClient.PageControl1.TabSheet1.GroupBox2.edtPassword",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 124
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "PasswordChar": {
+     "type": "STR",
+     "value": "*"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Text": {
+     "type": "STR",
+     "value": "0201"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 160
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 41,
+    "left": 124,
+    "top": 144,
+    "width": 160
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 413,
+   "name": "edtDownload",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet1.GroupBox2",
+   "path": "fFTPClient.PageControl1.TabSheet1.GroupBox2.edtDownload",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 124
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "Text": {
+     "type": "STR",
+     "value": "/"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 144
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 160
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 6,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 41,
+    "left": 124,
+    "top": 196,
+    "width": 160
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 429,
+   "name": "edtUpload",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet1.GroupBox2",
+   "path": "fFTPClient.PageControl1.TabSheet1.GroupBox2.edtUpload",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 124
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Text": {
+     "type": "STR",
+     "value": "/"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 196
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 160
+    }
+   },
+   "sibling_index": 8,
+   "synthesized": false,
+   "tab_order": 8,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TListBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 37,
+    "left": 164,
+    "top": 344,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 446,
+   "name": "ListBox1",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet1",
+   "path": "fFTPClient.PageControl1.TabSheet1.ListBox1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 37
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 164
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 344
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fFTPClient.PageControl1.TabSheet2.GroupBox3",
+    "fFTPClient.PageControl1.TabSheet2.GroupBox4",
+    "fFTPClient.PageControl1.TabSheet2.ProgressBar1"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 456,
+   "name": "TabSheet2",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1",
+   "path": "fFTPClient.PageControl1.TabSheet2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Server"
+    },
+    "ImageIndex": {
+     "type": "SCALAR",
+     "value": 1
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fFTPClient.PageControl1.TabSheet2.GroupBox3.Panel13",
+    "fFTPClient.PageControl1.TabSheet2.GroupBox3.edtServerWaferName",
+    "fFTPClient.PageControl1.TabSheet2.GroupBox3.lstServerFile"
+   ],
+   "class": "TGroupBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 381,
+    "left": 0,
+    "top": 4,
+    "width": 409
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 459,
+   "name": "GroupBox3",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet2",
+   "path": "fFTPClient.PageControl1.TabSheet2.GroupBox3",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 381
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 409
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 33,
+    "left": 4,
+    "top": 8,
+    "width": 133
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 465,
+   "name": "Panel13",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet2.GroupBox3",
+   "path": "fFTPClient.PageControl1.TabSheet2.GroupBox3.Panel13",
+   "properties": {
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "BorderStyle": {
+     "type": "SCALAR",
+     "value": "bsSingle"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Setup File"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clCaptionText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 133
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 4,
+   "events": {
+    "OnChange": "edtServerWaferNameChange",
+    "OnKeyDown": "edtServerWaferNameKeyDown",
+    "OnKeyPress": "edtServerWaferNameKeyPress",
+    "OnMouseDown": "edtServerWaferNameMouseDown"
+   },
+   "geometry": {
+    "height": 33,
+    "left": 144,
+    "top": 8,
+    "width": 257
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 482,
+   "name": "edtServerWaferName",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet2.GroupBox3",
+   "path": "fFTPClient.PageControl1.TabSheet2.GroupBox3.edtServerWaferName",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 144
+    },
+    "OnChange": {
+     "type": "SCALAR",
+     "value": "edtServerWaferNameChange"
+    },
+    "OnKeyDown": {
+     "type": "SCALAR",
+     "value": "edtServerWaferNameKeyDown"
+    },
+    "OnKeyPress": {
+     "type": "SCALAR",
+     "value": "edtServerWaferNameKeyPress"
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edtServerWaferNameMouseDown"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 257
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TListBox",
+   "depth": 4,
+   "events": {
+    "OnDblClick": "lstServerFileDblClick"
+   },
+   "geometry": {
+    "height": 325,
+    "left": 4,
+    "top": 48,
+    "width": 397
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 501,
+   "name": "lstServerFile",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet2.GroupBox3",
+   "path": "fFTPClient.PageControl1.TabSheet2.GroupBox3.lstServerFile",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 325
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "OnDblClick": {
+     "type": "SCALAR",
+     "value": "lstServerFileDblClick"
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 48
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 397
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fFTPClient.PageControl1.TabSheet2.GroupBox4.labN06_DownloadPath",
+    "fFTPClient.PageControl1.TabSheet2.GroupBox4.labN06_UploadPath",
+    "fFTPClient.PageControl1.TabSheet2.GroupBox4.plSLoad",
+    "fFTPClient.PageControl1.TabSheet2.GroupBox4.FTP_DownPath",
+    "fFTPClient.PageControl1.TabSheet2.GroupBox4.FTP_UpLdPath",
+    "fFTPClient.PageControl1.TabSheet2.GroupBox4.Panel15",
+    "fFTPClient.PageControl1.TabSheet2.GroupBox4.Panel16"
+   ],
+   "class": "TGroupBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 381,
+    "left": 412,
+    "top": 4,
+    "width": 250
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 512,
+   "name": "GroupBox4",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet2",
+   "path": "fFTPClient.PageControl1.TabSheet2.GroupBox4",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 381
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 412
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 250
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 8,
+    "top": 115,
+    "width": 76
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 518,
+   "name": "labN06_DownloadPath",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet2.GroupBox4",
+   "path": "fFTPClient.PageControl1.TabSheet2.GroupBox4.labN06_DownloadPath",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Download Path:"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 115
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 76
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 8,
+    "top": 176,
+    "width": 62
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 525,
+   "name": "labN06_UploadPath",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet2.GroupBox4",
+   "path": "fFTPClient.PageControl1.TabSheet2.GroupBox4.labN06_UploadPath",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Upload Path:"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 176
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 62
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 4,
+   "events": {
+    "OnClick": "plSLoadClick"
+   },
+   "geometry": {
+    "height": 41,
+    "left": 28,
+    "top": 40,
+    "width": 185
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 532,
+   "name": "plSLoad",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet2.GroupBox4",
+   "path": "fFTPClient.PageControl1.TabSheet2.GroupBox4.plSLoad",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Download to Handler"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clCaptionText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "plSLoadClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 40
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 185
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 8,
+    "top": 136,
+    "width": 235
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 548,
+   "name": "FTP_DownPath",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet2.GroupBox4",
+   "path": "fFTPClient.PageControl1.TabSheet2.GroupBox4.FTP_DownPath",
+   "properties": {
+    "Enabled": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 136
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 235
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 8,
+    "top": 196,
+    "width": 235
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 556,
+   "name": "FTP_UpLdPath",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet2.GroupBox4",
+   "path": "fFTPClient.PageControl1.TabSheet2.GroupBox4.FTP_UpLdPath",
+   "properties": {
+    "Enabled": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 196
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 235
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 4,
+   "events": {
+    "OnClick": "Panel15Click"
+   },
+   "geometry": {
+    "height": 41,
+    "left": 24,
+    "top": 248,
+    "width": 185
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 564,
+   "name": "Panel15",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet2.GroupBox4",
+   "path": "fFTPClient.PageControl1.TabSheet2.GroupBox4.Panel15",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Copy File Name"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clCaptionText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "Panel15Click"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 248
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 185
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 4,
+   "events": {
+    "OnClick": "Panel16Click"
+   },
+   "geometry": {
+    "height": 41,
+    "left": 24,
+    "top": 296,
+    "width": 185
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 580,
+   "name": "Panel16",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet2.GroupBox4",
+   "path": "fFTPClient.PageControl1.TabSheet2.GroupBox4.Panel16",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Clean File Name"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clCaptionText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "Panel16Click"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 296
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 185
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TProgressBar",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 17,
+    "left": 424,
+    "top": 360,
+    "width": 199
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 597,
+   "name": "ProgressBar1",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet2",
+   "path": "fFTPClient.PageControl1.TabSheet2.ProgressBar1",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 17
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 424
+    },
+    "Max": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "Min": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Smooth": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 360
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 199
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fFTPClient.PageControl1.TabSheet3.GroupBox5",
+    "fFTPClient.PageControl1.TabSheet3.GroupBox6"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 608,
+   "name": "TabSheet3",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1",
+   "path": "fFTPClient.PageControl1.TabSheet3",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "HD"
+    },
+    "ImageIndex": {
+     "type": "SCALAR",
+     "value": 2
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fFTPClient.PageControl1.TabSheet3.GroupBox5.Panel14",
+    "fFTPClient.PageControl1.TabSheet3.GroupBox5.edtHDWaferName",
+    "fFTPClient.PageControl1.TabSheet3.GroupBox5.lstHDFile"
+   ],
+   "class": "TGroupBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 381,
+    "left": 0,
+    "top": 4,
+    "width": 409
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 611,
+   "name": "GroupBox5",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet3",
+   "path": "fFTPClient.PageControl1.TabSheet3.GroupBox5",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 381
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 409
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 33,
+    "left": 4,
+    "top": 8,
+    "width": 133
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 617,
+   "name": "Panel14",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet3.GroupBox5",
+   "path": "fFTPClient.PageControl1.TabSheet3.GroupBox5.Panel14",
+   "properties": {
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvLowered"
+    },
+    "BorderStyle": {
+     "type": "SCALAR",
+     "value": "bsSingle"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Setup File"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clCaptionText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 133
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 4,
+   "events": {
+    "OnChange": "edtHDWaferNameChange",
+    "OnKeyDown": "edtHDWaferNameKeyDown",
+    "OnKeyPress": "edtHDWaferNameKeyPress",
+    "OnMouseDown": "edtHDWaferNameMouseDown"
+   },
+   "geometry": {
+    "height": 33,
+    "left": 144,
+    "top": 8,
+    "width": 257
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 634,
+   "name": "edtHDWaferName",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet3.GroupBox5",
+   "path": "fFTPClient.PageControl1.TabSheet3.GroupBox5.edtHDWaferName",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 33
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 144
+    },
+    "OnChange": {
+     "type": "SCALAR",
+     "value": "edtHDWaferNameChange"
+    },
+    "OnKeyDown": {
+     "type": "SCALAR",
+     "value": "edtHDWaferNameKeyDown"
+    },
+    "OnKeyPress": {
+     "type": "SCALAR",
+     "value": "edtHDWaferNameKeyPress"
+    },
+    "OnMouseDown": {
+     "type": "SCALAR",
+     "value": "edtHDWaferNameMouseDown"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 257
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TListBox",
+   "depth": 4,
+   "events": {
+    "OnDblClick": "lstHDFileDblClick"
+   },
+   "geometry": {
+    "height": 325,
+    "left": 4,
+    "top": 48,
+    "width": 397
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 653,
+   "name": "lstHDFile",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet3.GroupBox5",
+   "path": "fFTPClient.PageControl1.TabSheet3.GroupBox5.lstHDFile",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 325
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "OnDblClick": {
+     "type": "SCALAR",
+     "value": "lstHDFileDblClick"
+    },
+    "ParentColor": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 48
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 397
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fFTPClient.PageControl1.TabSheet3.GroupBox6.labN06_DownloadPath1",
+    "fFTPClient.PageControl1.TabSheet3.GroupBox6.labN06_UploadPath1",
+    "fFTPClient.PageControl1.TabSheet3.GroupBox6.plLoad",
+    "fFTPClient.PageControl1.TabSheet3.GroupBox6.plUnload",
+    "fFTPClient.PageControl1.TabSheet3.GroupBox6.FileListBox1",
+    "fFTPClient.PageControl1.TabSheet3.GroupBox6.FTP_DownPath1",
+    "fFTPClient.PageControl1.TabSheet3.GroupBox6.FTP_UpLdPath1",
+    "fFTPClient.PageControl1.TabSheet3.GroupBox6.plUnloadALL"
+   ],
+   "class": "TGroupBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 381,
+    "left": 412,
+    "top": 4,
+    "width": 250
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 664,
+   "name": "GroupBox6",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet3",
+   "path": "fFTPClient.PageControl1.TabSheet3.GroupBox6",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 381
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 412
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 250
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 4,
+    "top": 175,
+    "width": 76
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 670,
+   "name": "labN06_DownloadPath1",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet3.GroupBox6",
+   "path": "fFTPClient.PageControl1.TabSheet3.GroupBox6.labN06_DownloadPath1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Download Path:"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 175
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 76
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 13,
+    "left": 4,
+    "top": 236,
+    "width": 62
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 677,
+   "name": "labN06_UploadPath1",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet3.GroupBox6",
+   "path": "fFTPClient.PageControl1.TabSheet3.GroupBox6.labN06_UploadPath1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Upload Path:"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 236
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 62
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 4,
+   "events": {
+    "OnClick": "plLoadClick"
+   },
+   "geometry": {
+    "height": 41,
+    "left": 28,
+    "top": 20,
+    "width": 200
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 684,
+   "name": "plLoad",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet3.GroupBox6",
+   "path": "fFTPClient.PageControl1.TabSheet3.GroupBox6.plLoad",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Load from HD"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clCaptionText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "plLoadClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 200
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 4,
+   "events": {
+    "OnClick": "plUnloadClick"
+   },
+   "geometry": {
+    "height": 41,
+    "left": 28,
+    "top": 72,
+    "width": 200
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 700,
+   "name": "plUnload",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet3.GroupBox6",
+   "path": "fFTPClient.PageControl1.TabSheet3.GroupBox6.plUnload",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Upload to Server"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clCaptionText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "plUnloadClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 200
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": "alBottom",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TFileListBox",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 79,
+    "left": 2,
+    "top": 300,
+    "width": 246
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 716,
+   "name": "FileListBox1",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet3.GroupBox6",
+   "path": "fFTPClient.PageControl1.TabSheet3.GroupBox6.FileListBox1",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alBottom"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 79
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 5
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 300
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 246
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 5,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 4,
+    "top": 196,
+    "width": 235
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 726,
+   "name": "FTP_DownPath1",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet3.GroupBox6",
+   "path": "fFTPClient.PageControl1.TabSheet3.GroupBox6.FTP_DownPath1",
+   "properties": {
+    "Enabled": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 196
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 235
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 21,
+    "left": 4,
+    "top": 256,
+    "width": 235
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 734,
+   "name": "FTP_UpLdPath1",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet3.GroupBox6",
+   "path": "fFTPClient.PageControl1.TabSheet3.GroupBox6.FTP_UpLdPath1",
+   "properties": {
+    "Enabled": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 4
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 256
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 235
+    }
+   },
+   "sibling_index": 6,
+   "synthesized": false,
+   "tab_order": 4,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 4,
+   "events": {
+    "OnClick": "plUnloadALLClick"
+   },
+   "geometry": {
+    "height": 41,
+    "left": 28,
+    "top": 124,
+    "width": 200
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 742,
+   "name": "plUnloadALL",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet3.GroupBox6",
+   "path": "fFTPClient.PageControl1.TabSheet3.GroupBox6.plUnloadALL",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Upload All to Server"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clCaptionText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -20
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "新細明體"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 41
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "plUnloadALLClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 124
+    },
+    "Visible": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 200
+    }
+   },
+   "sibling_index": 7,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": "False"
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fFTPClient.PageControl1.TabSheet4.GroupBox7",
+    "fFTPClient.PageControl1.TabSheet4.GroupBox8",
+    "fFTPClient.PageControl1.TabSheet4.btSafeTasterName",
+    "fFTPClient.PageControl1.TabSheet4.Button3"
+   ],
+   "class": "TTabSheet",
+   "depth": 2,
+   "events": {},
+   "geometry": null,
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 761,
+   "name": "TabSheet4",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1",
+   "path": "fFTPClient.PageControl1.TabSheet4",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Taster"
+    },
+    "ImageIndex": {
+     "type": "SCALAR",
+     "value": 3
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fFTPClient.PageControl1.TabSheet4.GroupBox7.Label2",
+    "fFTPClient.PageControl1.TabSheet4.GroupBox7.Label3",
+    "fFTPClient.PageControl1.TabSheet4.GroupBox7.edHandlerType",
+    "fFTPClient.PageControl1.TabSheet4.GroupBox7.edHandlerID"
+   ],
+   "class": "TGroupBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 97,
+    "left": 12,
+    "top": 12,
+    "width": 621
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 764,
+   "name": "GroupBox7",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet4",
+   "path": "fFTPClient.PageControl1.TabSheet4.GroupBox7",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Handler"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 97
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 621
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 72,
+    "top": 24,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 777,
+   "name": "Label2",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet4.GroupBox7",
+   "path": "fFTPClient.PageControl1.TabSheet4.GroupBox7.Label2",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Type"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 236,
+    "top": 24,
+    "width": 125
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 791,
+   "name": "Label3",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet4.GroupBox7",
+   "path": "fFTPClient.PageControl1.TabSheet4.GroupBox7.Label3",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "ID"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 236
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 125
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 72,
+    "top": 48,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 805,
+   "name": "edHandlerType",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet4.GroupBox7",
+   "path": "fFTPClient.PageControl1.TabSheet4.GroupBox7.edHandlerType",
+   "properties": {
+    "Enabled": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Text": {
+     "type": "STR",
+     "value": "HT9045W"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 48
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 236,
+    "top": 48,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 814,
+   "name": "edHandlerID",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet4.GroupBox7",
+   "path": "fFTPClient.PageControl1.TabSheet4.GroupBox7.edHandlerID",
+   "properties": {
+    "Enabled": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 236
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Text": {
+     "type": "STR",
+     "value": "HT9045-001"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 48
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fFTPClient.PageControl1.TabSheet4.GroupBox8.rgInputMethod",
+    "fFTPClient.PageControl1.TabSheet4.GroupBox8.grpTesterMap",
+    "fFTPClient.PageControl1.TabSheet4.GroupBox8.grpTesterName"
+   ],
+   "class": "TGroupBox",
+   "depth": 3,
+   "events": {},
+   "geometry": {
+    "height": 225,
+    "left": 12,
+    "top": 116,
+    "width": 621
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 824,
+   "name": "GroupBox8",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet4",
+   "path": "fFTPClient.PageControl1.TabSheet4.GroupBox8",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Tester"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 225
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 116
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 621
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TRadioGroup",
+   "depth": 4,
+   "events": {
+    "OnClick": "rgInputMethodClick"
+   },
+   "geometry": {
+    "height": 69,
+    "left": 20,
+    "top": 20,
+    "width": 253
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 837,
+   "name": "rgInputMethod",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet4.GroupBox8",
+   "path": "fFTPClient.PageControl1.TabSheet4.GroupBox8.rgInputMethod",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Input method"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 69
+    },
+    "ItemIndex": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Items.Strings": {
+     "type": "LIST",
+     "value": [
+      "By List",
+      "Manually"
+     ]
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "rgInputMethodClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 253
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fFTPClient.PageControl1.TabSheet4.GroupBox8.grpTesterMap.Label4",
+    "fFTPClient.PageControl1.TabSheet4.GroupBox8.grpTesterMap.Label5",
+    "fFTPClient.PageControl1.TabSheet4.GroupBox8.grpTesterMap.Label7",
+    "fFTPClient.PageControl1.TabSheet4.GroupBox8.grpTesterMap.cbTesterType",
+    "fFTPClient.PageControl1.TabSheet4.GroupBox8.grpTesterMap.cbTesterID",
+    "fFTPClient.PageControl1.TabSheet4.GroupBox8.grpTesterMap.cbTasterIp"
+   ],
+   "class": "TGroupBox",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 129,
+    "left": 280,
+    "top": 16,
+    "width": 333
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 850,
+   "name": "grpTesterMap",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet4.GroupBox8",
+   "path": "fFTPClient.PageControl1.TabSheet4.GroupBox8.grpTesterMap",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Taster Map"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 129
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 280
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 16
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 333
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 36,
+    "top": 24,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 857,
+   "name": "Label4",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet4.GroupBox8.grpTesterMap",
+   "path": "fFTPClient.PageControl1.TabSheet4.GroupBox8.grpTesterMap.Label4",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Type"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 36,
+    "top": 57,
+    "width": 125
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 871,
+   "name": "Label5",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet4.GroupBox8.grpTesterMap",
+   "path": "fFTPClient.PageControl1.TabSheet4.GroupBox8.grpTesterMap.Label5",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "ID"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 57
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 125
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TLabel",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 20,
+    "left": 36,
+    "top": 91,
+    "width": 121
+   },
+   "index": null,
+   "is_graphic_control": true,
+   "kind": "LEAF",
+   "line": 885,
+   "name": "Label7",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet4.GroupBox8.grpTesterMap",
+   "path": "fFTPClient.PageControl1.TabSheet4.GroupBox8.grpTesterMap.Label7",
+   "properties": {
+    "AutoSize": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "IP"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -13
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 36
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 91
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 121
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 5,
+   "events": {
+    "OnChange": "cbTesterTypeChange"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 164,
+    "top": 20,
+    "width": 145
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 899,
+   "name": "cbTesterType",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet4.GroupBox8.grpTesterMap",
+   "path": "fFTPClient.PageControl1.TabSheet4.GroupBox8.grpTesterMap.cbTesterType",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 164
+    },
+    "OnChange": {
+     "type": "SCALAR",
+     "value": "cbTesterTypeChange"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 145
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 5,
+   "events": {
+    "OnChange": "cbTesterIDChange"
+   },
+   "geometry": {
+    "height": 24,
+    "left": 164,
+    "top": 54,
+    "width": 145
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 908,
+   "name": "cbTesterID",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet4.GroupBox8.grpTesterMap",
+   "path": "fFTPClient.PageControl1.TabSheet4.GroupBox8.grpTesterMap.cbTesterID",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 164
+    },
+    "OnChange": {
+     "type": "SCALAR",
+     "value": "cbTesterIDChange"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 54
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 145
+    }
+   },
+   "sibling_index": 4,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 164,
+    "top": 87,
+    "width": 145
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 917,
+   "name": "cbTasterIp",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet4.GroupBox8.grpTesterMap",
+   "path": "fFTPClient.PageControl1.TabSheet4.GroupBox8.grpTesterMap.cbTasterIp",
+   "properties": {
+    "Enabled": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 164
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 87
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 145
+    }
+   },
+   "sibling_index": 5,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fFTPClient.PageControl1.TabSheet4.GroupBox8.grpTesterName.edTesterName"
+   ],
+   "class": "TGroupBox",
+   "depth": 4,
+   "events": {},
+   "geometry": {
+    "height": 61,
+    "left": 280,
+    "top": 152,
+    "width": 333
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "SUBDLG",
+   "line": 927,
+   "name": "grpTesterName",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet4.GroupBox8",
+   "path": "fFTPClient.PageControl1.TabSheet4.GroupBox8.grpTesterName",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Taster Name"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 61
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 280
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 152
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 333
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TEdit",
+   "depth": 5,
+   "events": {},
+   "geometry": {
+    "height": 24,
+    "left": 12,
+    "top": 21,
+    "width": 309
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 934,
+   "name": "edTesterName",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet4.GroupBox8.grpTesterName",
+   "path": "fFTPClient.PageControl1.TabSheet4.GroupBox8.grpTesterName.edTesterName",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 12
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 309
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 3,
+   "events": {
+    "OnClick": "btSafeTasterNameClick"
+   },
+   "geometry": {
+    "height": 57,
+    "left": 84,
+    "top": 348,
+    "width": 177
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 943,
+   "name": "btSafeTasterName",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet4",
+   "path": "fFTPClient.PageControl1.TabSheet4.btSafeTasterName",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Save"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 57
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 84
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "btSafeTasterNameClick"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 348
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 177
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 3,
+   "events": {
+    "OnClick": "Button3Click"
+   },
+   "geometry": {
+    "height": 57,
+    "left": 376,
+    "top": 348,
+    "width": 177
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 958,
+   "name": "Button3",
+   "objkind": "object",
+   "parent_path": "fFTPClient.PageControl1.TabSheet4",
+   "path": "fFTPClient.PageControl1.TabSheet4.Button3",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Exit"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 57
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 376
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "Button3Click"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 348
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 177
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TStatusBar",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 19,
+    "left": 0,
+    "top": 493,
+    "width": 971
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 975,
+   "name": "sbFTPStatus",
+   "objkind": "object",
+   "parent_path": "fFTPClient",
+   "path": "fFTPClient.sbFTPStatus",
+   "properties": {
+    "Color": {
+     "type": "SCALAR",
+     "value": "clSilver"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 19
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Panels": {
+     "type": "COLLECTION",
+     "value": [
+      {
+       "order": [
+        "Width"
+       ],
+       "properties": {
+        "Width": {
+         "type": "SCALAR",
+         "value": 200
+        }
+       }
+      },
+      {
+       "order": [
+        "Width"
+       ],
+       "properties": {
+        "Width": {
+         "type": "SCALAR",
+         "value": 50
+        }
+       }
+      }
+     ]
+    },
+    "SimplePanel": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 493
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 971
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": "alClient",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TMemo",
+   "depth": 1,
+   "events": {
+    "OnDblClick": "memoFTPDblClick"
+   },
+   "geometry": {
+    "height": 493,
+    "left": 673,
+    "top": 0,
+    "width": 298
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 990,
+   "name": "memoFTP",
+   "objkind": "object",
+   "parent_path": "fFTPClient",
+   "path": "fFTPClient.memoFTP",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alClient"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 493
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 673
+    },
+    "Lines.Strings": {
+     "type": "LIST",
+     "value": [
+      ""
+     ]
+    },
+    "OnDblClick": {
+     "type": "SCALAR",
+     "value": "memoFTPDblClick"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 298
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TNMFTP",
+   "depth": 1,
+   "events": {
+    "OnAuthenticationFailed": "NMFTP1AuthenticationFailed",
+    "OnConnectionFailed": "NMFTP1ConnectionFailed",
+    "OnError": "NMFTP1Error",
+    "OnFailure": "NMFTP1Failure",
+    "OnListItem": "NMFTP1ListItem",
+    "OnStatus": "NMFTP1Status",
+    "OnSuccess": "NMFTP1Success",
+    "OnTransactionStart": "NMFTP1TransactionStart",
+    "OnTransactionStop": "NMFTP1TransactionStop",
+    "OnUnSupportedFunction": "NMFTP1UnSupportedFunction"
+   },
+   "geometry": {
+    "height": null,
+    "left": 632,
+    "top": 328,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 1001,
+   "name": "NMFTP1",
+   "objkind": "object",
+   "parent_path": "fFTPClient",
+   "path": "fFTPClient.NMFTP1",
+   "properties": {
+    "FWAuthenticate": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "FirewallType": {
+     "type": "SCALAR",
+     "value": "FTUser"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 632
+    },
+    "OnAuthenticationFailed": {
+     "type": "SCALAR",
+     "value": "NMFTP1AuthenticationFailed"
+    },
+    "OnConnectionFailed": {
+     "type": "SCALAR",
+     "value": "NMFTP1ConnectionFailed"
+    },
+    "OnError": {
+     "type": "SCALAR",
+     "value": "NMFTP1Error"
+    },
+    "OnFailure": {
+     "type": "SCALAR",
+     "value": "NMFTP1Failure"
+    },
+    "OnListItem": {
+     "type": "SCALAR",
+     "value": "NMFTP1ListItem"
+    },
+    "OnStatus": {
+     "type": "SCALAR",
+     "value": "NMFTP1Status"
+    },
+    "OnSuccess": {
+     "type": "SCALAR",
+     "value": "NMFTP1Success"
+    },
+    "OnTransactionStart": {
+     "type": "SCALAR",
+     "value": "NMFTP1TransactionStart"
+    },
+    "OnTransactionStop": {
+     "type": "SCALAR",
+     "value": "NMFTP1TransactionStop"
+    },
+    "OnUnSupportedFunction": {
+     "type": "SCALAR",
+     "value": "NMFTP1UnSupportedFunction"
+    },
+    "ParseList": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Passive": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Port": {
+     "type": "SCALAR",
+     "value": 21
+    },
+    "ProxyPort": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ReportLevel": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 328
+    },
+    "Vendor": {
+     "type": "SCALAR",
+     "value": 2411
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "KYECFTP/FTPClient.dfm",
+ "total_nodes_incl_root": 80
+}

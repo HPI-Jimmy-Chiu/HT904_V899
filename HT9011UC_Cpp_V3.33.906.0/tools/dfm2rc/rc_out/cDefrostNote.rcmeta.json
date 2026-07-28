@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "generator": "emit_rc.py W7-B1b v1.0",
+  "source_dfm": "cDefrostNote.dfm",
+  "formstem": "CDEFROSTNOTE",
+  "dialog_count": 2,
+  "control_count": 3,
+  "fallback_classes_used": [],
+  "warnings": [],
+  "dialogs": [
+    {
+      "idd_symbol": "IDD_CDEFROSTNOTE",
+      "idd_value": 8192,
+      "is_root": true,
+      "owner_path": "fDefrostNote",
+      "owner_class": "TfDefrostNote",
+      "controls": []
+    },
+    {
+      "idd_symbol": "IDD_CDEFROSTNOTE_PANEL11",
+      "idd_value": 8193,
+      "is_root": false,
+      "owner_path": "fDefrostNote.Panel11",
+      "owner_class": "TPanel",
+      "controls": [
+        {
+          "symbol": "IDC_CDEFROSTNOTE_PNL_SHOWMESSAGE",
+          "value": 1024,
+          "win32_class": "Static",
+          "caption": "Defrost Time Has Arrived",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fDefrostNote.Panel11.pnl_ShowMessage",
+          "fallback_class": false,
+          "x": 1,
+          "y": 1,
+          "cx": 355,
+          "cy": 132
+        },
+        {
+          "symbol": "IDC_CDEFROSTNOTE_BTN_START",
+          "value": 1025,
+          "win32_class": "Button",
+          "caption": "Start",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fDefrostNote.Panel11.btn_Start",
+          "fallback_class": false,
+          "x": 100,
+          "y": 144,
+          "cx": 85,
+          "cy": 37
+        },
+        {
+          "symbol": "IDC_CDEFROSTNOTE_BTN_INTERRUPT",
+          "value": 1026,
+          "win32_class": "Button",
+          "caption": "Interrupt ",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fDefrostNote.Panel11.btn_Interrupt",
+          "fallback_class": false,
+          "x": 192,
+          "y": 144,
+          "cx": 85,
+          "cy": 37
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,2242 @@
+{
+ "event_count": 319,
+ "events": [
+  {
+   "control_path": "fTemp_Set",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fTemp_Set",
+   "vcl_class": "TfTemp_Set"
+  },
+  {
+   "control_path": "fTemp_Set",
+   "event_name": "OnCreate",
+   "handler_name": "FormCreate",
+   "leaf_name": "fTemp_Set",
+   "vcl_class": "TfTemp_Set"
+  },
+  {
+   "control_path": "fTemp_Set",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fTemp_Set",
+   "vcl_class": "TfTemp_Set"
+  },
+  {
+   "control_path": "fTemp_Set",
+   "event_name": "OnShortCut",
+   "handler_name": "FormShortCut",
+   "leaf_name": "fTemp_Set",
+   "vcl_class": "TfTemp_Set"
+  },
+  {
+   "control_path": "fTemp_Set",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fTemp_Set",
+   "vcl_class": "TfTemp_Set"
+  },
+  {
+   "control_path": "fTemp_Set.Panel7.spbSave",
+   "event_name": "OnClick",
+   "handler_name": "spbSaveClick",
+   "leaf_name": "spbSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fTemp_Set.Panel7.sbtExit",
+   "event_name": "OnClick",
+   "handler_name": "sbtExitClick",
+   "leaf_name": "sbtExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsHot.gbHotModeSetting.edSoakTime",
+   "event_name": "OnClick",
+   "handler_name": "edSoakTimeClick",
+   "leaf_name": "edSoakTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsHot.gbHotModeSetting.edJamSoakTime",
+   "event_name": "OnClick",
+   "handler_name": "edJamSoakTimeClick",
+   "leaf_name": "edJamSoakTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsHot.gbHotModeSetting.edInitialWaitTime",
+   "event_name": "OnClick",
+   "handler_name": "edJamSoakTimeClick",
+   "leaf_name": "edInitialWaitTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsHot.gbHotModeSetting.edInitialStart1Time",
+   "event_name": "OnClick",
+   "handler_name": "edJamSoakTimeClick",
+   "leaf_name": "edInitialStart1Time",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsHot.gbHotModeSetting.edInitialStart2Time",
+   "event_name": "OnClick",
+   "handler_name": "edJamSoakTimeClick",
+   "leaf_name": "edInitialStart2Time",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsHot.gbHotModeSetting.edChamberCoolTemp",
+   "event_name": "OnMouseDown",
+   "handler_name": "edLowBaseMouseDown",
+   "leaf_name": "edChamberCoolTemp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsHot.gbHotModeSetting.PnlIndexSoakTime.edIndexSoakTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edATCTestTimeOffsetMouseDown",
+   "leaf_name": "edIndexSoakTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsHot.gbHotModeSetting.PnlIndexSoakTime.edOSTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edATCTestTimeOffsetMouseDown",
+   "leaf_name": "edOSTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsHot.gbHotModeSetting.edtTestDock",
+   "event_name": "OnClick",
+   "handler_name": "edTempOffsetCountClick",
+   "leaf_name": "edtTestDock",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsHot.gbHotModeSetting.gbNoFullsiteOffset.edArm1NoFullsiteOffset_1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edArm1NoFullsiteOffset_1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsHot.gbHotModeSetting.gbNoFullsiteOffset.edArm1NoFullsiteOffset_2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edArm1NoFullsiteOffset_2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsHot.gbHotModeSetting.gbNoFullsiteOffset.edArm1NoFullsiteOffset_3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edArm1NoFullsiteOffset_3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsHot.gbHotModeSetting.gbNoFullsiteOffset.edArm2NoFullsiteOffset_1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edArm2NoFullsiteOffset_1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsHot.gbHotModeSetting.gbNoFullsiteOffset.edArm2NoFullsiteOffset_2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edArm2NoFullsiteOffset_2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsHot.gbHotModeSetting.gbNoFullsiteOffset.edArm2NoFullsiteOffset_3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edArm2NoFullsiteOffset_3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsHot.gbHotModeSetting.gbNoFullsiteOffset.edArm1NoFullsiteOffset_4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edArm1NoFullsiteOffset_4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsHot.gbHotModeSetting.gbNoFullsiteOffset.edArm2NoFullsiteOffset_4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edArm2NoFullsiteOffset_4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsHot.gbHotModeSetting.gbNoFullsiteOffset.edArm1NoFullsiteOffset_5",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edArm1NoFullsiteOffset_5",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsHot.gbHotModeSetting.gbNoFullsiteOffset.edArm2NoFullsiteOffset_5",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edArm2NoFullsiteOffset_5",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsHot.gbHotModeSetting.PnlDewPointAlarm.edDewPointAlarmInterval",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDewPointAlarmIntervalMouseDown",
+   "leaf_name": "edDewPointAlarmInterval",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsHot.gbHotModeSetting.PnlDewPointAlarm.edDewPointRange",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDewPointRangeMouseDown",
+   "leaf_name": "edDewPointRange",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsHot.gbHotModeSetting.palLBAir.edLBTempAlarmTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edLBTempAlarmTimeMouseDown",
+   "leaf_name": "edLBTempAlarmTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsHot.gbHotModeSetting.palLBAir.edtLBAirOnTemp",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtLBAirOnTempMouseDown",
+   "leaf_name": "edtLBAirOnTemp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsAmbient.gbAmbientModeSetting.edAmbTemp",
+   "event_name": "OnClick",
+   "handler_name": "edAmbTempClick",
+   "leaf_name": "edAmbTemp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsAmbient.gbAmbientModeSetting.edAbitInitWaitTime",
+   "event_name": "OnClick",
+   "handler_name": "edJamSoakTimeClick",
+   "leaf_name": "edAbitInitWaitTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsAmbient.gbAmbientModeSetting.edAbitColdTime",
+   "event_name": "OnClick",
+   "handler_name": "edJamSoakTimeClick",
+   "leaf_name": "edAbitColdTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsAmbient.gbAmbientModeSetting.gbSocketAirCooling.edSocketAirCoolingOn",
+   "event_name": "OnClick",
+   "handler_name": "edJamSoakTimeClick",
+   "leaf_name": "edSocketAirCoolingOn",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsAmbient.gbAmbientModeSetting.gbSocketAirCooling.edSocketAirCoolingOff",
+   "event_name": "OnClick",
+   "handler_name": "edJamSoakTimeClick",
+   "leaf_name": "edSocketAirCoolingOff",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsAmbient.gbAmbientModeSetting.rgAmbientBrand.edAmbGuardband",
+   "event_name": "OnClick",
+   "handler_name": "edAmbGuardbandClick",
+   "leaf_name": "edAmbGuardband",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsAmbCtr.grpTempCtrl.edAmbHotGuartbent",
+   "event_name": "OnClick",
+   "handler_name": "edAmbHotGuartbentClick",
+   "leaf_name": "edAmbHotGuartbent",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsInitOffset.bgTempOffset.edTempOffsetCount",
+   "event_name": "OnClick",
+   "handler_name": "edTempOffsetCountClick",
+   "leaf_name": "edTempOffsetCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsInitOffset.bgTempOffset.edTempDownContactDelay",
+   "event_name": "OnClick",
+   "handler_name": "edTempDownContactDelayClick",
+   "leaf_name": "edTempDownContactDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsInitOffset.bgTempOffset.edTempReadyRange",
+   "event_name": "OnMouseDown",
+   "handler_name": "edTempReadyRangeMouseDown",
+   "leaf_name": "edTempReadyRange",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsInitOffset.GroupBox1.pnl1stDevice.edtInitialDelay_1",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsInitOffset.GroupBox1.pnl1stDevice.edtInitialDelay_1_RT",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_1_RT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsInitOffset.GroupBox1.pnlPause.edtInitialDelay_6",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_6",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsInitOffset.GroupBox1.pnlPause.edOverSec",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edOverSec",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsInitOffset.GroupBox1.pnlPause.edtInitialDelay_6_RT",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_6_RT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsInitOffset.GroupBox1.pnlLowTestTime.edtInitialDelay_4",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsInitOffset.GroupBox1.pnlLowTestTime.edBelowSec",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edBelowSec",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsInitOffset.GroupBox1.pnlLowTestTime.edtInitialDelay_4_RT",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_4_RT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsInitOffset.GroupBox1.pnlHeatDoor.edtInitialDelay_5",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_5",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsInitOffset.GroupBox1.pnlHeatDoor.edtInitialDelay_5_RT",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_5_RT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsInitOffset.GroupBox1.pnlAutoClean.edtInitialDelay_3",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsInitOffset.GroupBox1.pnlAutoClean.edtInitialDelay_3_RT",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_3_RT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsInitOffset.GroupBox1.pnlAlarmMsg.edtInitialDelay_2",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsInitOffset.GroupBox1.pnlAlarmMsg.edtInitialDelay_2_RT",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_2_RT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsInitOffset.GroupBox1.pnlOTD.edtInitialDelay_9",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_9",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsInitOffset.GroupBox1.pnlOTD.edtInitialDelay_9_RT",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_9_RT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsInitOffset.GroupBox1.pnlEOTTime.iTestFinishToNextTestOver",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "iTestFinishToNextTestOver",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsInitOffset.GroupBox1.pnlEOTTime.edtInitialDelay_8",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_8",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsInitOffset.GroupBox1.pnlEOTTime.edtInitialDelay_8_RT",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_8_RT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsInitOffset.GroupBox1.pnlNoFullsite.edtInitialDelay_7",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_7",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsInitOffset.GroupBox1.pnlNoFullsite.edtInitialDelay_7_RT",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_7_RT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsInitOffset.GroupBox1.Panel38.iTeststartToNextTestStart",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "iTeststartToNextTestStart",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsInitOffset.GroupBox1.Panel38.edtInitialDelay_10",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_10",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsInitOffset.GroupBox1.Panel38.edtInitialDelay_10_RT",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_10_RT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsInitOffset.grpChamberBoost.edtChamberBoostTime",
+   "event_name": "OnClick",
+   "handler_name": "edtChamberBoostTimeClick",
+   "leaf_name": "edtChamberBoostTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsInitOffset.grpChamberBoost.edtChamberBoostOffset",
+   "event_name": "OnClick",
+   "handler_name": "edtChamberBoostOffsetClick",
+   "leaf_name": "edtChamberBoostOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsBoostFunc.grpMidPrecondition.pnlIdleTime_Mid.edtIdleTime_Mid",
+   "event_name": "OnClick",
+   "handler_name": "edtIdleTime_LongClick",
+   "leaf_name": "edtIdleTime_Mid",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsBoostFunc.grpMidPrecondition.pnlBoostOffset_Mid.edtBoostOffset_Mid",
+   "event_name": "OnClick",
+   "handler_name": "edtBoostOffset_LongClick",
+   "leaf_name": "edtBoostOffset_Mid",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsBoostFunc.grpMidPrecondition.pnlBoostDuration_Mid.edtBoostDuration_Mid",
+   "event_name": "OnClick",
+   "handler_name": "edtIdleTime_LongClick",
+   "leaf_name": "edtBoostDuration_Mid",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsBoostFunc.grpMidPrecondition.pnlPostBoost_Mid.edtPostBoost_Mid",
+   "event_name": "OnClick",
+   "handler_name": "edtIdleTime_LongClick",
+   "leaf_name": "edtPostBoost_Mid",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsBoostFunc.grpShortPrecondition.pnlIdleTime_Short.edtIdleTime_Short",
+   "event_name": "OnClick",
+   "handler_name": "edtIdleTime_LongClick",
+   "leaf_name": "edtIdleTime_Short",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsBoostFunc.grpShortPrecondition.pnlBoostOffset_Short.edtBoostOffset_Short",
+   "event_name": "OnClick",
+   "handler_name": "edtBoostOffset_LongClick",
+   "leaf_name": "edtBoostOffset_Short",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsBoostFunc.grpShortPrecondition.pnlBoostDuration_Short.edtBoostDuration_Short",
+   "event_name": "OnClick",
+   "handler_name": "edtIdleTime_LongClick",
+   "leaf_name": "edtBoostDuration_Short",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsBoostFunc.grpShortPrecondition.pnlPostBoost_Short.edtPostBoost_Short",
+   "event_name": "OnClick",
+   "handler_name": "edtIdleTime_LongClick",
+   "leaf_name": "edtPostBoost_Short",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsBoostFunc.grpLongPrecondition.pnlIdleTime_Long.edtIdleTime_Long",
+   "event_name": "OnClick",
+   "handler_name": "edtIdleTime_LongClick",
+   "leaf_name": "edtIdleTime_Long",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsBoostFunc.grpLongPrecondition.pnlBoostOffset_Long.edtBoostOffset_Long",
+   "event_name": "OnClick",
+   "handler_name": "edtBoostOffset_LongClick",
+   "leaf_name": "edtBoostOffset_Long",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsBoostFunc.grpLongPrecondition.pnlBoostDuration_Long.edtBoostDuration_Long",
+   "event_name": "OnClick",
+   "handler_name": "edtIdleTime_LongClick",
+   "leaf_name": "edtBoostDuration_Long",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsBoostFunc.grpLongPrecondition.pnlPostBoost_Long.edtPostBoost_Long",
+   "event_name": "OnClick",
+   "handler_name": "edtIdleTime_LongClick",
+   "leaf_name": "edtPostBoost_Long",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsLBCtr.grpLBPre.Panel24.edtLBTempMin",
+   "event_name": "OnClick",
+   "handler_name": "edtLBTempMinClick",
+   "leaf_name": "edtLBTempMin",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsLBCtr.grpLBPre.Panel26.edtLBTempOffset",
+   "event_name": "OnClick",
+   "handler_name": "edtBoostOffset_LongClick",
+   "leaf_name": "edtLBTempOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsLBCtr.grpLBPre.Panel33.edtLBTimeOut",
+   "event_name": "OnClick",
+   "handler_name": "edtLBTimeOutClick",
+   "leaf_name": "edtLBTimeOut",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsLBCtr.grpLBPre.pnlthreshold.edtThreshold",
+   "event_name": "OnClick",
+   "handler_name": "edtThresholdClick",
+   "leaf_name": "edtThreshold",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsLBCtr.grpLBInitialOffset.pnlLBInitialOffset1.edtIdleTime_LB",
+   "event_name": "OnClick",
+   "handler_name": "edtIdleTime_LongClick",
+   "leaf_name": "edtIdleTime_LB",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsLBCtr.grpLBInitialOffset.pnlLBInitialOffset2.edtBoostOffset_LB",
+   "event_name": "OnClick",
+   "handler_name": "edtBoostOffset_LongClick",
+   "leaf_name": "edtBoostOffset_LB",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsLBCtr.grpLBInitialOffset.pnlLBInitialOffset3.edtBoostDuration_LB",
+   "event_name": "OnClick",
+   "handler_name": "edtIdleTime_LongClick",
+   "leaf_name": "edtBoostDuration_LB",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsLBCtr.grpLBInitialOffset.pnlLBInitialOffset4.edtPostBoost_LB",
+   "event_name": "OnClick",
+   "handler_name": "edtIdleTime_LongClick",
+   "leaf_name": "edtPostBoost_LB",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsLBCtr.grpBoostOffset.pnlBoostOffset1.edtBoostTempMin",
+   "event_name": "OnClick",
+   "handler_name": "edtLBTempMinClick",
+   "leaf_name": "edtBoostTempMin",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsLBCtr.grpBoostOffset.pnlBoostOffset2.edtBoostOffset",
+   "event_name": "OnClick",
+   "handler_name": "edtBoostOffsetClick",
+   "leaf_name": "edtBoostOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsSigmaForTemp.gbcb3SigmaTempMonitior.edt3SigmaTempMonitior_SetCount",
+   "event_name": "OnClick",
+   "handler_name": "edtATCPIDOffset_MinPClick",
+   "leaf_name": "edt3SigmaTempMonitior_SetCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsSigmaForTemp.gbcb3SigmaTempMonitior.edt3SigmaTempMonitior_Set3xSigmaValue",
+   "event_name": "OnMouseDown",
+   "handler_name": "edTSDTimeOutMouseDown",
+   "leaf_name": "edt3SigmaTempMonitior_Set3xSigmaValue",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsOthers.edLBTempHighSettingValue",
+   "event_name": "OnClick",
+   "handler_name": "edtLBTempMinClick",
+   "leaf_name": "edLBTempHighSettingValue",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsOther.pgcOtherFunc.tsOthers.edLBTempLowSettingValue",
+   "event_name": "OnClick",
+   "handler_name": "edtLBTempMinClick",
+   "leaf_name": "edLBTempLowSettingValue",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsTriTempSet.gbDefrostFunction.GroupBox4.btnDefrostStart",
+   "event_name": "OnClick",
+   "handler_name": "btnDefrostStartClick",
+   "leaf_name": "btnDefrostStart",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsTriTempSet.gbDefrostFunction.GroupBox4.btnDefrostEnd",
+   "event_name": "OnClick",
+   "handler_name": "btnDefrostEndClick",
+   "leaf_name": "btnDefrostEnd",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsTriTempSet.gbDefrostFunction.GroupBox5.btn_DefrostAllUseStart",
+   "event_name": "OnClick",
+   "handler_name": "btn_DefrostAllUseStartClick",
+   "leaf_name": "btn_DefrostAllUseStart",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsTriTempSet.gbDefrostFunction.GroupBox5.btn_DefrostAllUseEnd",
+   "event_name": "OnClick",
+   "handler_name": "btn_DefrostAllUseEndClick",
+   "leaf_name": "btn_DefrostAllUseEnd",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.pgcTempSetting.tsTriTempSet.gbDefrostFunction.GroupBox6.edt_Defrost_Time_Too_Lower",
+   "event_name": "OnClick",
+   "handler_name": "edt_Defrost_Time_Too_LowerClick",
+   "leaf_name": "edt_Defrost_Time_Too_Lower",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel8.rgTemperatureMode1.rgTemperatureMode",
+   "event_name": "OnClick",
+   "handler_name": "rgTemperatureModeClick",
+   "leaf_name": "rgTemperatureMode",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset",
+   "event_name": "OnChange",
+   "handler_name": "pgcTempOffsetChange",
+   "leaf_name": "pgcTempOffset",
+   "vcl_class": "TPageControl"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsHeatGun.gb_HotGunFlow.edtHotGunFLowLimit_H",
+   "event_name": "OnMouseDown",
+   "handler_name": "edATCTestTimeOffsetMouseDown",
+   "leaf_name": "edtHotGunFLowLimit_H",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsHeatGun.gb_HotGunFlow.edtHotGunFLowLimit_L",
+   "event_name": "OnMouseDown",
+   "handler_name": "edATCTestTimeOffsetMouseDown",
+   "leaf_name": "edtHotGunFLowLimit_L",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsHeatGun.grpATC_HotAir.edtATC_HotGunTemp",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtHeatGunTempATCMouseDown",
+   "leaf_name": "edtATC_HotGunTemp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsHeatGun.grpATC_HotAir.edtATC_HotGunTime",
+   "event_name": "OnClick",
+   "handler_name": "edtATC_HotGunTimeClick",
+   "leaf_name": "edtATC_HotGunTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsHeatGun.grpIndexAirStream.edt_SetIndexAirstreamTemp",
+   "event_name": "OnClick",
+   "handler_name": "edtSetTempature2AirMachineClick",
+   "leaf_name": "edt_SetIndexAirstreamTemp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsHeatGun.grpIndexAirStream.edt_SetAirstreamTemperatureRang_Index",
+   "event_name": "OnClick",
+   "handler_name": "edtSetTempature2AirMachineClick",
+   "leaf_name": "edt_SetAirstreamTemperatureRang_Index",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsHeatGun.grpIndexAirStream.edt_AirVolumeLmt_Index",
+   "event_name": "OnClick",
+   "handler_name": "edt_AirVolumeLmt_IndexClick",
+   "leaf_name": "edt_AirVolumeLmt_Index",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsHeatGun.grpSocketAirStream.edtSetTempature2AirMachine",
+   "event_name": "OnClick",
+   "handler_name": "edtSetTempature2AirMachineClick",
+   "leaf_name": "edtSetTempature2AirMachine",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsHeatGun.grpSocketAirStream.edt_SetAirstreamTemperatureRang_Socket",
+   "event_name": "OnClick",
+   "handler_name": "edtSetTempature2AirMachineClick",
+   "leaf_name": "edt_SetAirstreamTemperatureRang_Socket",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsHeatGun.grpSocketAirStream.edt_AirVolumeLmt_Socket",
+   "event_name": "OnClick",
+   "handler_name": "edt_AirVolumeLmt_IndexClick",
+   "leaf_name": "edt_AirVolumeLmt_Socket",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel18.grbATCTempAlarm.edtATCSP2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edLowBaseMouseDown",
+   "leaf_name": "edtATCSP2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel18.gb_TjFunction.edt_TjAvgTimes",
+   "event_name": "OnClick",
+   "handler_name": "edTempOffsetCountClick",
+   "leaf_name": "edt_TjAvgTimes",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel18.grpTJTempRange.edTJTempRange_High",
+   "event_name": "OnClick",
+   "handler_name": "edTJTempRange_HighClick",
+   "leaf_name": "edTJTempRange_High",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel18.grpTJTempRange.edTJTempRange_Low",
+   "event_name": "OnClick",
+   "handler_name": "edTJTempRange_LowClick",
+   "leaf_name": "edTJTempRange_Low",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel19.gbChillerTemp.edChillerTemp",
+   "event_name": "OnKeyPress",
+   "handler_name": "edSoakTimeKeyPress",
+   "leaf_name": "edChillerTemp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel19.gbChillerTemp.edChillerTemp",
+   "event_name": "OnMouseDown",
+   "handler_name": "edATCChillerTempMouseDown",
+   "leaf_name": "edChillerTemp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel19.gbATCAmbientTemp.edATCAmbTemp",
+   "event_name": "OnKeyPress",
+   "handler_name": "edSoakTimeKeyPress",
+   "leaf_name": "edATCAmbTemp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel19.gbATCAmbientTemp.edATCAmbTemp",
+   "event_name": "OnMouseDown",
+   "handler_name": "edATCAmbTempMouseDown",
+   "leaf_name": "edATCAmbTemp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel19.grpTempAlwaysSameTime.edTempAlwaysSameAlarm",
+   "event_name": "OnMouseDown",
+   "handler_name": "edATCTempAlwaysSameAlarmMouseDown",
+   "leaf_name": "edTempAlwaysSameAlarm",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel19.gbATCPackageOffset.edtATC_PackageOffset_01",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATC_PackageOffset_01",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel19.gbATCPackageOffset.edtATC_PackageOffset_02",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATC_PackageOffset_02",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel19.gbATCPackageOffset.edtATC_PackageOffset_03",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATC_PackageOffset_03",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel19.gbATCPackageOffset.edtATC_PackageTemp_03",
+   "event_name": "OnMouseDown",
+   "handler_name": "edLowBaseMouseDown",
+   "leaf_name": "edtATC_PackageTemp_03",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel19.gbATCPackageOffset.edtATC_PackageTemp_02",
+   "event_name": "OnMouseDown",
+   "handler_name": "edLowBaseMouseDown",
+   "leaf_name": "edtATC_PackageTemp_02",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel19.gbATCPackageOffset.edtATC_PackageTemp_01",
+   "event_name": "OnMouseDown",
+   "handler_name": "edLowBaseMouseDown",
+   "leaf_name": "edtATC_PackageTemp_01",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel19.gbHeatGunTempATC.edtHeatGunTempATC",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtHeatGunTempATCMouseDown",
+   "leaf_name": "edtHeatGunTempATC",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_01",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_01",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_02",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_02",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_03",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_03",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_04",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_04",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_05",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_05",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_06",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_06",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_07",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_07",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_08",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_08",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_09",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_09",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_10",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_10",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_11",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_11",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_12",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_12",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_13",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_13",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_14",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_14",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_15",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_15",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_16",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_16",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_17",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_17",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_25",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_25",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_26",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_26",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_18",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_18",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_19",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_19",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_27",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_27",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_28",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_28",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_20",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_20",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_21",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_21",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_29",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_29",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_30",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_30",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_22",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_22",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_23",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_23",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_31",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_31",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_32",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_32",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edtATCOffset_24",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCOffset_24",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpATCTempOffset.edATCOfsTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edATCOfsTimeMouseDown",
+   "leaf_name": "edATCOfsTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpInPC.edtATCInPC1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCInPC1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpInPC.edtATCInPC2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCInPC2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpInPC.edtATCInPC3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCInPC3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpInPC.edtATCInPC4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edtATCInPC4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpTJFunction.edtSetTJ_Offset",
+   "event_name": "OnClick",
+   "handler_name": "edtSetTJ_OffsetClick",
+   "leaf_name": "edtSetTJ_Offset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpTJFunction.edtSetTJ_Slope",
+   "event_name": "OnClick",
+   "handler_name": "edtSetTJ_SlopeChange",
+   "leaf_name": "edtSetTJ_Slope",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpTJFunction.edtDelayAfterSOT",
+   "event_name": "OnClick",
+   "handler_name": "edtSetTJ_OffsetClick",
+   "leaf_name": "edtDelayAfterSOT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpTJFunction.edtInputVLow",
+   "event_name": "OnClick",
+   "handler_name": "edtSetTJ_OffsetClick",
+   "leaf_name": "edtInputVLow",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpTJFunction.edtInputVHigh",
+   "event_name": "OnClick",
+   "handler_name": "edtSetTJ_OffsetClick",
+   "leaf_name": "edtInputVHigh",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpTJFunction.sgTjMap",
+   "event_name": "OnMouseDown",
+   "handler_name": "sgTjMapMouseDown",
+   "leaf_name": "sgTjMap",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpTJFunction.rgTjMapType",
+   "event_name": "OnClick",
+   "handler_name": "rgTjMapTypeClick",
+   "leaf_name": "rgTjMapType",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.palATC.Panel20.grpTJFunction.edContinuousSec",
+   "event_name": "OnClick",
+   "handler_name": "edtSetTJ_OffsetClick",
+   "leaf_name": "edContinuousSec",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.Panel30.sbSafeTestATC",
+   "event_name": "OnClick",
+   "handler_name": "sbSafeTestATCClick",
+   "leaf_name": "sbSafeTestATC",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.Panel30.rbATCActiveOn",
+   "event_name": "OnClick",
+   "handler_name": "rbATCActiveOnClick",
+   "leaf_name": "rbATCActiveOn",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.Panel30.cbATCReferTempSensor",
+   "event_name": "OnClick",
+   "handler_name": "cbATCReferTempSensorClick",
+   "leaf_name": "cbATCReferTempSensor",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC.Panel30.gbFileName.edAtcFileName",
+   "event_name": "OnMouseDown",
+   "handler_name": "edAtcFileNameMouseDown",
+   "leaf_name": "edAtcFileName",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC70.gbATCInitialOffset.edATCInitialOffset1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edATCInitialOffset1MouseDown",
+   "leaf_name": "edATCInitialOffset1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC70.gbATCInitialOffset.edATCInitialOffset2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edATCInitialOffset1MouseDown",
+   "leaf_name": "edATCInitialOffset2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC70.gbATCInitialOffset.edATCInitialOffset3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edATCInitialOffset1MouseDown",
+   "leaf_name": "edATCInitialOffset3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC70.gbATCInitialOffset.edATCInitialOffset4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edATCInitialOffset1MouseDown",
+   "leaf_name": "edATCInitialOffset4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC70.gbATC70.rbATC70ActiveOn",
+   "event_name": "OnClick",
+   "handler_name": "rbATC70ActiveOnClick",
+   "leaf_name": "rbATC70ActiveOn",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC70.gbATCConsFail.edATCContFailOffset1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edATCInitialOffset1MouseDown",
+   "leaf_name": "edATCContFailOffset1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC70.gbATCConsFail.edATCContFailOffset2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edATCInitialOffset1MouseDown",
+   "leaf_name": "edATCContFailOffset2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC70.gbATCConsFail.edATCContFailOffset3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edATCInitialOffset1MouseDown",
+   "leaf_name": "edATCContFailOffset3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC70.gbATCConsFail.edATCContFailOffset4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edATCInitialOffset1MouseDown",
+   "leaf_name": "edATCContFailOffset4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC70.gbATCConsFail.cbEnableATCConsFailOffset",
+   "event_name": "OnClick",
+   "handler_name": "rbATC70ActiveOnClick",
+   "leaf_name": "cbEnableATCConsFailOffset",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC70.gbATCConsFail.edATCContFailOffsetCnt",
+   "event_name": "OnClick",
+   "handler_name": "edAmbHotGuartbentClick",
+   "leaf_name": "edATCContFailOffsetCnt",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC70.gbATCConsFail.edATCContFailOffsetCnt",
+   "event_name": "OnKeyPress",
+   "handler_name": "edSoakTimeKeyPress",
+   "leaf_name": "edATCContFailOffsetCnt",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC70.gbATCQAModeOffset.edATCQAModeOffset1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edATCInitialOffset1MouseDown",
+   "leaf_name": "edATCQAModeOffset1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC70.gbATCQAModeOffset.edATCQAModeOffset2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edATCInitialOffset1MouseDown",
+   "leaf_name": "edATCQAModeOffset2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC70.gbATCQAModeOffset.edATCQAModeOffset3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edATCInitialOffset1MouseDown",
+   "leaf_name": "edATCQAModeOffset3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC70.gbATCQAModeOffset.edATCQAModeOffset4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edATCInitialOffset1MouseDown",
+   "leaf_name": "edATCQAModeOffset4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC70.gbATCQAModeOffset.cbEnableATCQAModeOffset",
+   "event_name": "OnClick",
+   "handler_name": "rbATC70ActiveOnClick",
+   "leaf_name": "cbEnableATCQAModeOffset",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC70.gbATCTestTimeOffset.edATCTestTimeOffset1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edATCInitialOffset1MouseDown",
+   "leaf_name": "edATCTestTimeOffset1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC70.gbATCTestTimeOffset.edATCTestTimeOffset2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edATCInitialOffset1MouseDown",
+   "leaf_name": "edATCTestTimeOffset2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC70.gbATCTestTimeOffset.edATCTestTimeOffset3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edATCInitialOffset1MouseDown",
+   "leaf_name": "edATCTestTimeOffset3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC70.gbATCTestTimeOffset.edATCTestTimeOffset4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edATCInitialOffset1MouseDown",
+   "leaf_name": "edATCTestTimeOffset4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC70.gbATCTestTimeOffset.cbATCTestTimeOffset",
+   "event_name": "OnClick",
+   "handler_name": "rbATC70ActiveOnClick",
+   "leaf_name": "cbATCTestTimeOffset",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC70.gbATCTestTimeOffset.edATCTestTimeOffset",
+   "event_name": "OnKeyPress",
+   "handler_name": "edSoakTimeKeyPress",
+   "leaf_name": "edATCTestTimeOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC70.gbATCTestTimeOffset.edATCTestTimeOffset",
+   "event_name": "OnMouseDown",
+   "handler_name": "edATCTestTimeOffsetMouseDown",
+   "leaf_name": "edATCTestTimeOffset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC70.gbTSD.edTSDTimeOut",
+   "event_name": "OnMouseDown",
+   "handler_name": "edTSDTimeOutMouseDown",
+   "leaf_name": "edTSDTimeOut",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_PID.pnlATC_PIDOffset.edtATCPIDOffset_MinP",
+   "event_name": "OnClick",
+   "handler_name": "edtATCPIDOffset_MinPClick",
+   "leaf_name": "edtATCPIDOffset_MinP",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_PID.pnlATC_PIDOffset.edtATCPIDOffset_MinI",
+   "event_name": "OnClick",
+   "handler_name": "edtATCPIDOffset_MinPClick",
+   "leaf_name": "edtATCPIDOffset_MinI",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_PID.pnlATC_PIDOffset.edtATCPIDOffset_MinD",
+   "event_name": "OnClick",
+   "handler_name": "edtATCPIDOffset_MinPClick",
+   "leaf_name": "edtATCPIDOffset_MinD",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_PID.pnlATC_PIDOffset.edtATCPIDOffset_MaxP",
+   "event_name": "OnClick",
+   "handler_name": "edtATCPIDOffset_MinPClick",
+   "leaf_name": "edtATCPIDOffset_MaxP",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_PID.pnlATC_PIDOffset.edtATCPIDOffset_MaxI",
+   "event_name": "OnClick",
+   "handler_name": "edtATCPIDOffset_MinPClick",
+   "leaf_name": "edtATCPIDOffset_MaxI",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_PID.pnlATC_PIDOffset.edtATCPIDOffset_MaxD",
+   "event_name": "OnClick",
+   "handler_name": "edtATCPIDOffset_MinPClick",
+   "leaf_name": "edtATCPIDOffset_MaxD",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsDUT.edFixedTemp",
+   "event_name": "OnMouseDown",
+   "handler_name": "edLowBaseMouseDown",
+   "leaf_name": "edFixedTemp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2TimeOn_01",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm2TimeOn_01",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2TimeOn_02",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm2TimeOn_02",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2TimeOff_01",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm2TimeOff_01",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2TimeOff_02",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm2TimeOff_02",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2Offset_01",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edFFC_Arm2Offset_01",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2Offset_02",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edFFC_Arm2Offset_02",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2TimeOn_03",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm2TimeOn_03",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2TimeOff_03",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm2TimeOff_03",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2Offset_03",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edFFC_Arm2Offset_03",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2Offset_04",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edFFC_Arm2Offset_04",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2TimeOff_04",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm2TimeOff_04",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2TimeOn_04",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm2TimeOn_04",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2TimeOn_05",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm2TimeOn_05",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2TimeOff_05",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm2TimeOff_05",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2Offset_05",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edFFC_Arm2Offset_05",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2Offset_06",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edFFC_Arm2Offset_06",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2TimeOff_06",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm2TimeOff_06",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2TimeOn_06",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm2TimeOn_06",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2TimeOn_07",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm2TimeOn_07",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2TimeOn_08",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm2TimeOn_08",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2TimeOn_09",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm2TimeOn_09",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2TimeOn_10",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm2TimeOn_10",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2TimeOff_10",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm2TimeOff_10",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2TimeOff_09",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm2TimeOff_09",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2TimeOff_08",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm2TimeOff_08",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2TimeOff_07",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm2TimeOff_07",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2Offset_10",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edFFC_Arm2Offset_10",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2Offset_09",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edFFC_Arm2Offset_09",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2Offset_08",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edFFC_Arm2Offset_08",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.edFFC_Arm2Offset_07",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edFFC_Arm2Offset_07",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel131.btnSameAsArm1",
+   "event_name": "OnClick",
+   "handler_name": "btnSameAsArm1Click",
+   "leaf_name": "btnSameAsArm1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1TimeOn_07",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm1TimeOn_07",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1TimeOff_01",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm1TimeOff_01",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1Offset_01",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edFFC_Arm1Offset_01",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1TimeOn_06",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm1TimeOn_06",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1TimeOff_02",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm1TimeOff_02",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1Offset_02",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edFFC_Arm1Offset_02",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1TimeOn_08",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm1TimeOn_08",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1TimeOff_03",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm1TimeOff_03",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1Offset_03",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edFFC_Arm1Offset_03",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1TimeOn_10",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm1TimeOn_10",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1TimeOff_04",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm1TimeOff_04",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1Offset_04",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edFFC_Arm1Offset_04",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1TimeOn_09",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm1TimeOn_09",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1TimeOff_05",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm1TimeOff_05",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1Offset_05",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edFFC_Arm1Offset_05",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1TimeOn_02",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm1TimeOn_02",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1TimeOff_06",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm1TimeOff_06",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1Offset_06",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edFFC_Arm1Offset_06",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1TimeOn_01",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm1TimeOn_01",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1TimeOff_07",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm1TimeOff_07",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1Offset_07",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edFFC_Arm1Offset_07",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1TimeOn_03",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm1TimeOn_03",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1TimeOff_08",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm1TimeOff_08",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1Offset_08",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edFFC_Arm1Offset_08",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1TimeOn_05",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm1TimeOn_05",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1TimeOff_09",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm1TimeOff_09",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1Offset_09",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edFFC_Arm1Offset_09",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1TimeOn_04",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm1TimeOn_04",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1TimeOff_10",
+   "event_name": "OnClick",
+   "handler_name": "edFFC_Arm1TimeOn_01Click",
+   "leaf_name": "edFFC_Arm1TimeOff_10",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATC_FFC.Panel129.edFFC_Arm1Offset_10",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edFFC_Arm1Offset_10",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel35.edATC_Arm1_S1_TC2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm1_S1_TC2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel35.edATC_Arm1_S1_TC3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm1_S1_TC3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel35.edATC_Arm1_S1_TC4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm1_S1_TC4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel35.edATC_Arm1_S1_TC1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm1_S1_TC1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel35.edATC_Arm1_S2_TC1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm1_S2_TC1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel35.edATC_Arm1_S2_TC2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm1_S2_TC2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel35.edATC_Arm1_S2_TC3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm1_S2_TC3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel35.edATC_Arm1_S2_TC4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm1_S2_TC4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel35.edATC_Arm1_S3_TC1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm1_S3_TC1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel35.edATC_Arm1_S3_TC2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm1_S3_TC2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel35.edATC_Arm1_S3_TC3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm1_S3_TC3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel35.edATC_Arm1_S3_TC4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm1_S3_TC4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel35.edATC_Arm1_S4_TC1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm1_S4_TC1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel35.edATC_Arm1_S4_TC2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm1_S4_TC2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel35.edATC_Arm1_S4_TC3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm1_S4_TC3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel35.edATC_Arm1_S4_TC4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm1_S4_TC4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel40.edATC_Arm2_S1_TC2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm2_S1_TC2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel40.edATC_Arm2_S1_TC3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm2_S1_TC3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel40.edATC_Arm2_S1_TC4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm2_S1_TC4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel40.edATC_Arm2_S1_TC1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm2_S1_TC1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel40.edATC_Arm2_S2_TC1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm2_S2_TC1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel40.edATC_Arm2_S2_TC2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm2_S2_TC2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel40.edATC_Arm2_S2_TC3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm2_S2_TC3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel40.edATC_Arm2_S2_TC4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm2_S2_TC4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel40.edATC_Arm2_S3_TC1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm2_S3_TC1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel40.edATC_Arm2_S3_TC2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm2_S3_TC2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel40.edATC_Arm2_S3_TC3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm2_S3_TC3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel40.edATC_Arm2_S3_TC4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm2_S3_TC4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel40.edATC_Arm2_S4_TC1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm2_S4_TC1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel40.edATC_Arm2_S4_TC2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm2_S4_TC2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel40.edATC_Arm2_S4_TC3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm2_S4_TC3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pgcTempOffset.tsATCMultiSensor.Panel40.edATC_Arm2_S4_TC4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtATCInPC1MouseDown",
+   "leaf_name": "edATC_Arm2_S4_TC4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pnlOffsetBase.edWorkTemp",
+   "event_name": "OnMouseDown",
+   "handler_name": "edLowBaseMouseDown",
+   "leaf_name": "edWorkTemp",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pnlOffsetBase.btClearAll",
+   "event_name": "OnClick",
+   "handler_name": "btClearAllClick",
+   "leaf_name": "btClearAll",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pnlOffsetBase.pnlArm2Offset.edArm2Offset",
+   "event_name": "OnMouseDown",
+   "handler_name": "edArm1OffsetMouseDown",
+   "leaf_name": "edArm2Offset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pnlOffsetBase.pnlArm1Offset.edArm1Offset",
+   "event_name": "OnMouseDown",
+   "handler_name": "edArm1OffsetMouseDown",
+   "leaf_name": "edArm1Offset",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pnlOffsetBase.edAbLow",
+   "event_name": "OnMouseDown",
+   "handler_name": "edLowBaseMouseDown",
+   "leaf_name": "edAbLow",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pnlOffsetBase.edAbMid",
+   "event_name": "OnMouseDown",
+   "handler_name": "edLowBaseMouseDown",
+   "leaf_name": "edAbMid",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pnlOffsetBase.edLowBase",
+   "event_name": "OnMouseDown",
+   "handler_name": "edLowBaseMouseDown",
+   "leaf_name": "edLowBase",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pnlOffsetBase.edMidBase",
+   "event_name": "OnMouseDown",
+   "handler_name": "edLowBaseMouseDown",
+   "leaf_name": "edMidBase",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pnlOffsetBase.edHighBase",
+   "event_name": "OnMouseDown",
+   "handler_name": "edLowBaseMouseDown",
+   "leaf_name": "edHighBase",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.pnlOffsetBase.edSHighBase",
+   "event_name": "OnMouseDown",
+   "handler_name": "edLowBaseMouseDown",
+   "leaf_name": "edSHighBase",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.Panel17.btnSort",
+   "event_name": "OnClick",
+   "handler_name": "btnSortClick",
+   "leaf_name": "btnSort",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.Panel17.chkTempCalByRecipe",
+   "event_name": "OnClick",
+   "handler_name": "chkTempCalByRecipeClick",
+   "leaf_name": "chkTempCalByRecipe",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.gbTempOffset.Panel17.rgBasePoint",
+   "event_name": "OnClick",
+   "handler_name": "rgBasePointClick",
+   "leaf_name": "rgBasePoint",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.pnlHeatMode.gbBasePoint.rb1Point",
+   "event_name": "OnClick",
+   "handler_name": "rb1PointClick",
+   "leaf_name": "rb1Point",
+   "vcl_class": "TRadioButton"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.pnlHeatMode.gbBasePoint.rb2Point",
+   "event_name": "OnClick",
+   "handler_name": "rb1PointClick",
+   "leaf_name": "rb2Point",
+   "vcl_class": "TRadioButton"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.pnlHeatMode.gbBasePoint.rb3Point",
+   "event_name": "OnClick",
+   "handler_name": "rb1PointClick",
+   "leaf_name": "rb3Point",
+   "vcl_class": "TRadioButton"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.pnlHeatMode.gbBasePoint.rb5Point",
+   "event_name": "OnClick",
+   "handler_name": "rb1PointClick",
+   "leaf_name": "rb5Point",
+   "vcl_class": "TRadioButton"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.pnlHeatMode.gbBasePoint.rb6Point",
+   "event_name": "OnClick",
+   "handler_name": "rb1PointClick",
+   "leaf_name": "rb6Point",
+   "vcl_class": "TRadioButton"
+  },
+  {
+   "control_path": "fTemp_Set.Panel1.pnlHeatMode.rgIndexHeatMode1.PageControl1.tsStandard.rgIndexHeatMode",
+   "event_name": "OnClick",
+   "handler_name": "rgIndexHeatModeClick",
+   "leaf_name": "rgIndexHeatMode",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "fTemp_Set.tmr_ATC_Deforst",
+   "event_name": "OnTimer",
+   "handler_name": "tmr_ATC_DeforstTimer",
+   "leaf_name": "tmr_ATC_Deforst",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fTemp_Set",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "uTemp_Set.dfm"
+}

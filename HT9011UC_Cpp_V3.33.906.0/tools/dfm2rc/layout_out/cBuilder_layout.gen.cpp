@@ -1,0 +1,35 @@
+// ===========================================================================
+//  cBuilder_layout.gen.cpp
+//  DO NOT EDIT -- GENERATED FILE. See the matching _layout.gen.h banner.
+// ===========================================================================
+#include "cBuilder_layout.gen.h"
+
+namespace ht9045_layout {
+
+// (no custom-control properties in this form)
+
+const DfmControlLayout kcBuilderLayout[] = {
+    { "fBuilder", "fBuilder", "", "TfBuilder", "", "", 0, 0, "ROOT", false, true, 608, true, 223, false, 0, false, 0, false, 0, -1, "", "", true, "MS Sans Serif", -11, "", true, -2147483640, "clWindowText", true, 12761254, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fBuilder.GroupBox5", "GroupBox5", "IDD_CBUILDER_GROUPBOX5", "TGroupBox", "fBuilder", "fBuilder", 0, 1, "SUBDLG", false, true, 0, true, 0, true, 817, true, 153, true, 0, -1, "alTop", "", true, "MS Sans Serif", -13, "", true, 8388608, "clNavy", true, 12761254, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fBuilder.GroupBox5.Label78", "Label78", "IDC_CBUILDER_LABEL78", "TLabel", "fBuilder.GroupBox5", "fBuilder.GroupBox5", 0, 2, "LEAF", true, true, 185, true, 28, true, 127, true, 16, false, 0, -1, "", "", false, "", 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fBuilder.GroupBox5.Label79", "Label79", "IDC_CBUILDER_LABEL79", "TLabel", "fBuilder.GroupBox5", "fBuilder.GroupBox5", 1, 2, "LEAF", true, true, 185, true, 63, true, 137, true, 16, false, 0, -1, "", "", false, "", 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fBuilder.GroupBox5.cbSourceFile", "cbSourceFile", "IDC_CBUILDER_CBSOURCEFILE", "TComboBox", "fBuilder.GroupBox5", "fBuilder.GroupBox5", 2, 2, "LEAF", false, true, 328, true, 26, true, 441, true, 24, true, 0, -1, "", "", false, "", 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fBuilder.GroupBox5.edNewFileName", "edNewFileName", "IDC_CBUILDER_EDNEWFILENAME", "TEdit", "fBuilder.GroupBox5", "fBuilder.GroupBox5", 3, 2, "LEAF", false, true, 328, true, 59, true, 441, true, 24, true, 1, -1, "", "", false, "", 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fBuilder.GroupBox5.btCreateSetupFile", "btCreateSetupFile", "IDC_CBUILDER_BTCREATESETUPFILE", "TButton", "fBuilder.GroupBox5", "fBuilder.GroupBox5", 4, 2, "LEAF", false, true, 560, true, 120, true, 209, true, 25, true, 2, -1, "", "", false, "", 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fBuilder.GroupBox6", "GroupBox6", "IDD_CBUILDER_GROUPBOX6", "TGroupBox", "fBuilder", "fBuilder", 1, 1, "SUBDLG", false, true, 0, true, 153, true, 817, true, 89, true, 1, -1, "alTop", "", true, "MS Sans Serif", -13, "", true, 8388608, "clNavy", true, 12761254, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fBuilder.GroupBox6.Label81", "Label81", "IDC_CBUILDER_LABEL81", "TLabel", "fBuilder.GroupBox6", "fBuilder.GroupBox6", 0, 2, "LEAF", true, true, 208, true, 25, true, 110, true, 16, false, 0, -1, "", "", false, "", 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fBuilder.GroupBox6.btDeleteSetupFile", "btDeleteSetupFile", "IDC_CBUILDER_BTDELETESETUPFILE", "TButton", "fBuilder.GroupBox6", "fBuilder.GroupBox6", 1, 2, "LEAF", false, true, 560, true, 53, true, 209, true, 25, true, 1, -1, "", "", false, "", 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fBuilder.GroupBox6.cbDeleteFile", "cbDeleteFile", "IDC_CBUILDER_CBDELETEFILE", "TComboBox", "fBuilder.GroupBox6", "fBuilder.GroupBox6", 2, 2, "LEAF", false, true, 328, true, 21, true, 441, true, 24, true, 0, -1, "", "", false, "", 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fBuilder.GroupBox7", "GroupBox7", "IDD_CBUILDER_GROUPBOX7", "TGroupBox", "fBuilder", "fBuilder", 2, 1, "SUBDLG", false, true, 0, true, 242, true, 817, true, 349, true, 2, -1, "alClient", "", true, "MS Sans Serif", -13, "", true, 8388608, "clNavy", true, 12761254, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fBuilder.GroupBox7.labDir", "labDir", "IDC_CBUILDER_LABDIR", "TLabel", "fBuilder.GroupBox7", "fBuilder.GroupBox7", 0, 2, "LEAF", true, true, 388, true, 256, true, 36, true, 16, false, 0, -1, "", "", false, "", 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fBuilder.GroupBox7.spbImport", "spbImport", "IDC_CBUILDER_SPBIMPORT", "TSpeedButton", "fBuilder.GroupBox7", "fBuilder.GroupBox7", 1, 2, "LEAF", true, true, 388, true, 278, true, 200, true, 55, false, 0, -1, "", "", true, "Arial", -13, "", true, -2147483640, "clWindowText", false, 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fBuilder.GroupBox7.spbExport", "spbExport", "IDC_CBUILDER_SPBEXPORT", "TSpeedButton", "fBuilder.GroupBox7", "fBuilder.GroupBox7", 2, 2, "LEAF", true, true, 605, true, 278, true, 200, true, 55, false, 0, -1, "", "", true, "Arial", -13, "", true, -2147483640, "clWindowText", false, 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fBuilder.GroupBox7.CheckListBox1", "CheckListBox1", "IDC_CBUILDER_CHECKLISTBOX1", "TCheckListBox", "fBuilder.GroupBox7", "fBuilder.GroupBox7", 3, 2, "LEAF", false, true, 8, true, 16, true, 373, true, 321, true, 0, -1, "", "", true, "MS Sans Serif", -19, "", true, -2147483640, "clWindowText", true, 14670284, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fBuilder.GroupBox7.DirectoryListBox1", "DirectoryListBox1", "IDC_CBUILDER_DIRECTORYLISTBOX1", "TDirectoryListBox", "fBuilder.GroupBox7", "fBuilder.GroupBox7", 4, 2, "LEAF", false, true, 388, true, 48, true, 417, true, 205, true, 2, -1, "", "", false, "", 0, "", false, 0, "", true, 14670284, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fBuilder.GroupBox7.DriveComboBox1", "DriveComboBox1", "IDC_CBUILDER_DRIVECOMBOBOX1", "TDriveComboBox", "fBuilder.GroupBox7", "fBuilder.GroupBox7", 5, 2, "LEAF", false, true, 388, true, 17, true, 417, true, 22, true, 1, -1, "", "", false, "", 0, "", false, 0, "", true, 14670284, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+    { "fBuilder.spbExit", "spbExit", "IDC_CBUILDER_SPBEXIT", "TPanel", "fBuilder", "fBuilder", 3, 1, "LEAF", false, true, 0, true, 591, true, 817, true, 41, true, 3, -1, "alBottom", "", true, "Arial", -19, "", true, -2147483640, "clWindowText", false, 0, "", false, 0, "", false, 0, "", false, 0, "", false, 0, "", 0, nullptr },
+};
+
+const int kcBuilderLayoutCount = 19;
+
+} // namespace ht9045_layout

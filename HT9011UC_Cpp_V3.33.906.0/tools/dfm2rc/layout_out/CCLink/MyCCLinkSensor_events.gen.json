@@ -1,0 +1,1059 @@
+{
+ "event_count": 150,
+ "events": [
+  {
+   "control_path": "fCCLink",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fCCLink",
+   "vcl_class": "TfCCLink"
+  },
+  {
+   "control_path": "fCCLink",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fCCLink",
+   "vcl_class": "TfCCLink"
+  },
+  {
+   "control_path": "fCCLink",
+   "event_name": "OnShortCut",
+   "handler_name": "FormShortCut",
+   "leaf_name": "fCCLink",
+   "vcl_class": "TfCCLink"
+  },
+  {
+   "control_path": "fCCLink",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fCCLink",
+   "vcl_class": "TfCCLink"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht1.edIn1_9",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn1_9",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht1.btIn1_9",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn2_8MouseDown",
+   "leaf_name": "btIn1_9",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht1.palInSht1_1.btIn1_1",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn2_8MouseDown",
+   "leaf_name": "btIn1_1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht1.palInSht1_1.btIn1_2",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn2_8MouseDown",
+   "leaf_name": "btIn1_2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht1.palInSht1_1.btIn1_3",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn2_8MouseDown",
+   "leaf_name": "btIn1_3",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht1.palInSht1_1.btIn1_4",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn2_8MouseDown",
+   "leaf_name": "btIn1_4",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht1.palInSht1_1.btIn1_5",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn2_8MouseDown",
+   "leaf_name": "btIn1_5",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht1.palInSht1_1.btIn1_8",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn2_8MouseDown",
+   "leaf_name": "btIn1_8",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht1.palInSht1_1.btIn1_7",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn2_8MouseDown",
+   "leaf_name": "btIn1_7",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht1.palInSht1_1.btIn1_6",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn2_8MouseDown",
+   "leaf_name": "btIn1_6",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht1.palInSht1_1.edIn1_8",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn1_8",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht1.palInSht1_1.edIn1_7",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn1_7",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht1.palInSht1_1.edIn1_6",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn1_6",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht1.palInSht1_1.edIn1_5",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn1_5",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht1.palInSht1_1.edIn1_4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn1_4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht1.palInSht1_1.edIn1_3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn1_3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht1.palInSht1_1.edIn1_2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn1_2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht1.palInSht1_1.edIn1_1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn1_1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht1.btSetIn1",
+   "event_name": "OnClick",
+   "handler_name": "btSetIn1Click",
+   "leaf_name": "btSetIn1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht1.btSave",
+   "event_name": "OnClick",
+   "handler_name": "btSaveClick",
+   "leaf_name": "btSave",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht1.btRead",
+   "event_name": "OnClick",
+   "handler_name": "btReadClick",
+   "leaf_name": "btRead",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht2.btIn2_9",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn2_8MouseDown",
+   "leaf_name": "btIn2_9",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht2.edIn2_9",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn2_9",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht2.palInSht2_1.btIn2_1",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn2_8MouseDown",
+   "leaf_name": "btIn2_1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht2.palInSht2_1.btIn2_2",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn2_8MouseDown",
+   "leaf_name": "btIn2_2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht2.palInSht2_1.btIn2_3",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn2_8MouseDown",
+   "leaf_name": "btIn2_3",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht2.palInSht2_1.btIn2_4",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn2_8MouseDown",
+   "leaf_name": "btIn2_4",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht2.palInSht2_1.btIn2_5",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn2_8MouseDown",
+   "leaf_name": "btIn2_5",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht2.palInSht2_1.btIn2_8",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn2_8MouseDown",
+   "leaf_name": "btIn2_8",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht2.palInSht2_1.btIn2_7",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn2_8MouseDown",
+   "leaf_name": "btIn2_7",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht2.palInSht2_1.btIn2_6",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn2_8MouseDown",
+   "leaf_name": "btIn2_6",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht2.palInSht2_1.edIn2_8",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn2_8",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht2.palInSht2_1.edIn2_7",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn2_7",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht2.palInSht2_1.edIn2_6",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn2_6",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht2.palInSht2_1.edIn2_5",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn2_5",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht2.palInSht2_1.edIn2_4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn2_4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht2.palInSht2_1.edIn2_3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn2_3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht2.palInSht2_1.edIn2_2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn2_2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht2.palInSht2_1.edIn2_1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn2_1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht2.btSetIn2",
+   "event_name": "OnClick",
+   "handler_name": "btSetIn2Click",
+   "leaf_name": "btSetIn2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgL.palInSht2.btShuttlePositionMove",
+   "event_name": "OnClick",
+   "handler_name": "btShuttlePositionMoveClick",
+   "leaf_name": "btShuttlePositionMove",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgR.palOutSht2.edOut2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edOut2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgR.palOutSht2.btOut2",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn2_8MouseDown",
+   "leaf_name": "btOut2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgR.palOutSht1.edOut1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edOut1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.TabSheet1.palSensorBg1.palSensorBgR.palOutSht1.btOut1",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn2_8MouseDown",
+   "leaf_name": "btOut1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palSocketSensor.palSocketSensor1.btIn3_1",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn3_1MouseDown",
+   "leaf_name": "btIn3_1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palSocketSensor.palSocketSensor1.btIn3_2",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn3_1MouseDown",
+   "leaf_name": "btIn3_2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palSocketSensor.palSocketSensor1.btIn3_3",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn3_1MouseDown",
+   "leaf_name": "btIn3_3",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palSocketSensor.palSocketSensor1.btIn3_4",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn3_1MouseDown",
+   "leaf_name": "btIn3_4",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palSocketSensor.palSocketSensor1.btIn3_5",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn3_1MouseDown",
+   "leaf_name": "btIn3_5",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palSocketSensor.palSocketSensor1.btIn3_8",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn3_1MouseDown",
+   "leaf_name": "btIn3_8",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palSocketSensor.palSocketSensor1.btIn3_7",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn3_1MouseDown",
+   "leaf_name": "btIn3_7",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palSocketSensor.palSocketSensor1.btIn3_6",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn3_1MouseDown",
+   "leaf_name": "btIn3_6",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palSocketSensor.palSocketSensor1.edIn3_8",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn3_8",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palSocketSensor.palSocketSensor1.edIn3_7",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn3_7",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palSocketSensor.palSocketSensor1.edIn3_6",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn3_6",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palSocketSensor.palSocketSensor1.edIn3_5",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn3_5",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palSocketSensor.palSocketSensor1.edIn3_4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn3_4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palSocketSensor.palSocketSensor1.edIn3_3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn3_3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palSocketSensor.palSocketSensor1.edIn3_2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn3_2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palSocketSensor.palSocketSensor1.edIn3_1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn3_1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palSocketSensor.SetSocket",
+   "event_name": "OnClick",
+   "handler_name": "SetSocketClick",
+   "leaf_name": "SetSocket",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palRotate.SetRotate",
+   "event_name": "OnClick",
+   "handler_name": "SetRotateClick",
+   "leaf_name": "SetRotate",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palRotate.palRotate1.edIn3_9",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn3_9",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palRotate.palRotate1.btIn3_9",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn3_9MouseDown",
+   "leaf_name": "btIn3_9",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palRotate.palRotate1.edIn3_10",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn3_10",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palRotate.palRotate1.btIn3_10",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn3_9MouseDown",
+   "leaf_name": "btIn3_10",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palRotate.palRotate1.edIn3_11",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn3_11",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palRotate.palRotate1.btIn3_11",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn3_9MouseDown",
+   "leaf_name": "btIn3_11",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palRotate.palRotate1.edIn3_12",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn3_12",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palRotate.palRotate1.btIn3_12",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn3_9MouseDown",
+   "leaf_name": "btIn3_12",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palColorSensor.palColorSensor1.edIn3_13",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn3_13",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palColorSensor.palColorSensor1.btIn3_13",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn3_13MouseDown",
+   "leaf_name": "btIn3_13",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palColorSensor.palColorSensor1.edIn3_14",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn3_14",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palColorSensor.palColorSensor1.btIn3_14",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn3_13MouseDown",
+   "leaf_name": "btIn3_14",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palColorSensor.palColorSensor1.edIn3_15",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn3_15",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palColorSensor.palColorSensor1.btIn3_15",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn3_13MouseDown",
+   "leaf_name": "btIn3_15",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palColorSensor.palColorSensor1.edIn3_16",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn3_16",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palColorSensor.palColorSensor1.btIn3_16",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn3_13MouseDown",
+   "leaf_name": "btIn3_16",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palColorSensor.palColorSensor1.edIn3_17",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn3_17",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palColorSensor.palColorSensor1.btIn3_17",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn3_13MouseDown",
+   "leaf_name": "btIn3_17",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palColorSensor.palColorSensor1.edIn3_18",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn3_18",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palColorSensor.palColorSensor1.btIn3_18",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn3_13MouseDown",
+   "leaf_name": "btIn3_18",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palColorSensor.palColorSensor1.edIn3_20",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn3_20",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palColorSensor.palColorSensor1.btIn3_20",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn3_13MouseDown",
+   "leaf_name": "btIn3_20",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palColorSensor.palColorSensor1.edtIn3_19",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edtIn3_19",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palColorSensor.palColorSensor1.btIn3_19",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn3_13MouseDown",
+   "leaf_name": "btIn3_19",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketAndRotate.palColorSensor.SetColor",
+   "event_name": "OnClick",
+   "handler_name": "SetColorClick",
+   "leaf_name": "SetColor",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel3.Panel4.btIn4_1",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn4_1MouseDown",
+   "leaf_name": "btIn4_1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel3.Panel4.btIn4_2",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn4_1MouseDown",
+   "leaf_name": "btIn4_2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel3.Panel4.btIn4_3",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn4_1MouseDown",
+   "leaf_name": "btIn4_3",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel3.Panel4.btIn4_4",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn4_1MouseDown",
+   "leaf_name": "btIn4_4",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel3.Panel4.btIn4_5",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn4_1MouseDown",
+   "leaf_name": "btIn4_5",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel3.Panel4.btIn4_8",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn4_1MouseDown",
+   "leaf_name": "btIn4_8",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel3.Panel4.btIn4_7",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn4_1MouseDown",
+   "leaf_name": "btIn4_7",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel3.Panel4.btIn4_6",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn4_1MouseDown",
+   "leaf_name": "btIn4_6",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel3.Panel4.edIn4_8",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn4_8",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel3.Panel4.edIn4_7",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn4_7",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel3.Panel4.edIn4_6",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn4_6",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel3.Panel4.edIn4_5",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn4_5",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel3.Panel4.edIn4_4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn4_4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel3.Panel4.edIn4_3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn4_3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel3.Panel4.edIn4_2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn4_2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel3.Panel4.edIn4_1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn4_1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel5.Panel6.edIn4_9",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn4_9",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel5.Panel6.btIn4_9",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn4_1MouseDown",
+   "leaf_name": "btIn4_9",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel5.Panel6.edIn4_10",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn4_10",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel5.Panel6.btIn4_10",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn4_1MouseDown",
+   "leaf_name": "btIn4_10",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel5.Panel6.edIn4_11",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn4_11",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel5.Panel6.btIn4_11",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn4_1MouseDown",
+   "leaf_name": "btIn4_11",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel5.Panel6.edIn4_12",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn4_12",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel5.Panel6.btIn4_12",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn4_1MouseDown",
+   "leaf_name": "btIn4_12",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel5.Panel6.edIn4_13",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn4_13",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel5.Panel6.btIn4_13",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn4_1MouseDown",
+   "leaf_name": "btIn4_13",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel5.Panel6.edIn4_14",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn4_14",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel5.Panel6.btIn4_14",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn4_1MouseDown",
+   "leaf_name": "btIn4_14",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel5.Panel6.edIn4_16",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn4_16",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel5.Panel6.btIn4_16",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn4_1MouseDown",
+   "leaf_name": "btIn4_16",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel5.Panel6.edIn4_15",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn4_15",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase2.Panel5.Panel6.btIn4_15",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn4_1MouseDown",
+   "leaf_name": "btIn4_15",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase3.Panel7.Panel8.btIn5_1",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn5_1MouseDown",
+   "leaf_name": "btIn5_1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase3.Panel7.Panel8.btIn5_2",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn4_1MouseDown",
+   "leaf_name": "btIn5_2",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase3.Panel7.Panel8.btIn5_3",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn4_1MouseDown",
+   "leaf_name": "btIn5_3",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase3.Panel7.Panel8.btIn5_4",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn4_1MouseDown",
+   "leaf_name": "btIn5_4",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase3.Panel7.Panel8.btIn5_5",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn4_1MouseDown",
+   "leaf_name": "btIn5_5",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase3.Panel7.Panel8.btIn5_8",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn4_1MouseDown",
+   "leaf_name": "btIn5_8",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase3.Panel7.Panel8.btIn5_7",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn4_1MouseDown",
+   "leaf_name": "btIn5_7",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase3.Panel7.Panel8.btIn5_6",
+   "event_name": "OnMouseDown",
+   "handler_name": "btIn4_1MouseDown",
+   "leaf_name": "btIn5_6",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase3.Panel7.Panel8.edIn5_8",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn5_8",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase3.Panel7.Panel8.edIn5_7",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn5_7",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase3.Panel7.Panel8.edIn5_6",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn5_6",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase3.Panel7.Panel8.edIn5_5",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn5_5",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase3.Panel7.Panel8.edIn5_4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn5_4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase3.Panel7.Panel8.edIn5_3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn5_3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase3.Panel7.Panel8.edIn5_2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn5_2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsSocketBase3.Panel7.Panel8.edIn5_1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edIn2_1MouseDown",
+   "leaf_name": "edIn5_1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsCCLinkSetting.spbSave",
+   "event_name": "OnClick",
+   "handler_name": "spbSaveClick",
+   "leaf_name": "spbSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsCCLinkSetting.gbPercentage.edPercentage",
+   "event_name": "OnMouseDown",
+   "handler_name": "edPercentageMouseDown",
+   "leaf_name": "edPercentage",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsCCLinkSetting.gbDefaultValue.edDefaultValue",
+   "event_name": "OnMouseDown",
+   "handler_name": "edDefaultValueMouseDown",
+   "leaf_name": "edDefaultValue",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsCCLinkSetting.grpCanBusSeach.btnCanBusSeach",
+   "event_name": "OnClick",
+   "handler_name": "btnCanBusSeachClick",
+   "leaf_name": "btnCanBusSeach",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsCCLinkSetting.grpCanBusSeach.btnReadCanBusSetting",
+   "event_name": "OnClick",
+   "handler_name": "btnReadCanBusSettingClick",
+   "leaf_name": "btnReadCanBusSetting",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fCCLink.PageControl1.tsCCLinkSetting.gbInSHLtcPercent.edtInShtLtcPercent",
+   "event_name": "OnMouseDown",
+   "handler_name": "edPercentageMouseDown",
+   "leaf_name": "edtInShtLtcPercent",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fCCLink.palButton.sbExit",
+   "event_name": "OnClick",
+   "handler_name": "sbExitClick",
+   "leaf_name": "sbExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fCCLink.palButton.sbReset",
+   "event_name": "OnClick",
+   "handler_name": "sbResetClick",
+   "leaf_name": "sbReset",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fCCLink.Timer1",
+   "event_name": "OnTimer",
+   "handler_name": "Timer1Timer",
+   "leaf_name": "Timer1",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "fCCLink.tmrCanBusSearch",
+   "event_name": "OnTimer",
+   "handler_name": "tmrCanBusSearchTimer",
+   "leaf_name": "tmrCanBusSearch",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fCCLink",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "CCLink/MyCCLinkSensor.dfm"
+}

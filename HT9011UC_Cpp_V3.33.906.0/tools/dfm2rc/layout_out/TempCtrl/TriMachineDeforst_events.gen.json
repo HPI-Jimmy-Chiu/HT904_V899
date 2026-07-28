@@ -1,0 +1,65 @@
+{
+ "event_count": 8,
+ "events": [
+  {
+   "control_path": "frmDefrost",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "frmDefrost",
+   "vcl_class": "TfrmDefrost"
+  },
+  {
+   "control_path": "frmDefrost.gbAutoDefrostProduction.btnForceDefrost",
+   "event_name": "OnClick",
+   "handler_name": "btnForceDefrostClick",
+   "leaf_name": "btnForceDefrost",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "frmDefrost.gbAutoDefrostProduction.btnCloseFormWaitDefrost",
+   "event_name": "OnClick",
+   "handler_name": "btnCloseFormWaitDefrostClick",
+   "leaf_name": "btnCloseFormWaitDefrost",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "frmDefrost.btnClose",
+   "event_name": "OnClick",
+   "handler_name": "btnCloseClick",
+   "leaf_name": "btnClose",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "frmDefrost.btnDefrostTermination",
+   "event_name": "OnClick",
+   "handler_name": "btnDefrostTerminationClick",
+   "leaf_name": "btnDefrostTermination",
+   "vcl_class": "TBtnPanel"
+  },
+  {
+   "control_path": "frmDefrost.tmrGetTemperatureStatus",
+   "event_name": "OnTimer",
+   "handler_name": "tmrGetTemperatureStatusTimer",
+   "leaf_name": "tmrGetTemperatureStatus",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "frmDefrost.tmrClose",
+   "event_name": "OnTimer",
+   "handler_name": "tmrCloseTimer",
+   "leaf_name": "tmrClose",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "frmDefrost.tmrMessageFlash",
+   "event_name": "OnTimer",
+   "handler_name": "tmrMessageFlashTimer",
+   "leaf_name": "tmrMessageFlash",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "frmDefrost",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "TempCtrl/TriMachineDeforst.dfm"
+}

@@ -1,0 +1,266 @@
+{
+ "control_node_count": 2,
+ "encoding_used": "cp950",
+ "form_class": "TdmTrayMotor",
+ "form_name": "dmTrayMotor",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "dmTrayMotor.tmrTrayStepMotor",
+    "dmTrayMotor.comTrayStepMotor"
+   ],
+   "class": "TdmTrayMotor",
+   "depth": 0,
+   "events": {
+    "OnDestroy": "DataModuleDestroy"
+   },
+   "geometry": {
+    "height": 165,
+    "left": 752,
+    "top": 341,
+    "width": 215
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "dmTrayMotor",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "dmTrayMotor",
+   "properties": {
+    "Height": {
+     "type": "SCALAR",
+     "value": 165
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 752
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnDestroy": {
+     "type": "SCALAR",
+     "value": "DataModuleDestroy"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 341
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 215
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TTimer",
+   "depth": 1,
+   "events": {
+    "OnTimer": "tmrTrayStepMotorTimer"
+   },
+   "geometry": {
+    "height": null,
+    "left": 116,
+    "top": 8,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 8,
+   "name": "tmrTrayStepMotor",
+   "objkind": "object",
+   "parent_path": "dmTrayMotor",
+   "path": "dmTrayMotor.tmrTrayStepMotor",
+   "properties": {
+    "Enabled": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Interval": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 116
+    },
+    "OnTimer": {
+     "type": "SCALAR",
+     "value": "tmrTrayStepMotorTimer"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 8
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComm",
+   "depth": 1,
+   "events": {
+    "OnReceiveData": "comTrayStepMotorReceiveData"
+   },
+   "geometry": {
+    "height": null,
+    "left": 26,
+    "top": 6,
+    "width": null
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "NONVISUAL",
+   "line": 15,
+   "name": "comTrayStepMotor",
+   "objkind": "object",
+   "parent_path": "dmTrayMotor",
+   "path": "dmTrayMotor.comTrayStepMotor",
+   "properties": {
+    "BaudRate": {
+     "type": "SCALAR",
+     "value": 115200
+    },
+    "ByteSize": {
+     "type": "SCALAR",
+     "value": "_8"
+    },
+    "CommName": {
+     "type": "STR",
+     "value": "COM2"
+    },
+    "DsrSensitivity": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "DtrControl": {
+     "type": "SCALAR",
+     "value": "DtrEnable"
+    },
+    "IgnoreNullChar": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Inx_XonXoffFlow": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 26
+    },
+    "OnReceiveData": {
+     "type": "SCALAR",
+     "value": "comTrayStepMotorReceiveData"
+    },
+    "Outx_CtsFlow": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Outx_DsrFlow": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Outx_XonXoffFlow": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "Parity": {
+     "type": "SCALAR",
+     "value": "None"
+    },
+    "ParityCheck": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ReadIntervalTimeout": {
+     "type": "SCALAR",
+     "value": 100
+    },
+    "ReadTotalTimeoutConstant": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ReadTotalTimeoutMultiplier": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ReplaceWhenParityError": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "ReplacedChar": {
+     "type": "STR",
+     "value": "\u0000"
+    },
+    "RtsControl": {
+     "type": "SCALAR",
+     "value": "RtsEnable"
+    },
+    "StopBits": {
+     "type": "SCALAR",
+     "value": "_1"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 6
+    },
+    "TxContinueOnXoff": {
+     "type": "SCALAR",
+     "value": "True"
+    },
+    "WriteTotalTimeoutConstant": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "WriteTotalTimeoutMultiplier": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "XoffChar": {
+     "type": "STR",
+     "value": "\u0013"
+    },
+    "XoffLimit": {
+     "type": "SCALAR",
+     "value": 500
+    },
+    "XonChar": {
+     "type": "STR",
+     "value": "\u0011"
+    },
+    "XonLimit": {
+     "type": "SCALAR",
+     "value": 500
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "Motor/TrayStepMotor.dfm",
+ "total_nodes_incl_root": 3
+}

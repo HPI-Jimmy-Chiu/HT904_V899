@@ -1,0 +1,100 @@
+{
+ "event_count": 13,
+ "events": [
+  {
+   "control_path": "fVacuumUnit",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fVacuumUnit",
+   "vcl_class": "TfVacuumUnit"
+  },
+  {
+   "control_path": "fVacuumUnit",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "fVacuumUnit",
+   "vcl_class": "TfVacuumUnit"
+  },
+  {
+   "control_path": "fVacuumUnit",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fVacuumUnit",
+   "vcl_class": "TfVacuumUnit"
+  },
+  {
+   "control_path": "fVacuumUnit.pgcVacuumUnit.tsManual.grpSetAllValue.btnSetInArm",
+   "event_name": "OnClick",
+   "handler_name": "btnSetInArmClick",
+   "leaf_name": "btnSetInArm",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fVacuumUnit.pgcVacuumUnit.tsManual.grpSetAllValue.edSetInArm",
+   "event_name": "OnClick",
+   "handler_name": "edSetInArmClick",
+   "leaf_name": "edSetInArm",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fVacuumUnit.pgcVacuumUnit.tsManual.grpSetAllValue.edSetIndexArm",
+   "event_name": "OnClick",
+   "handler_name": "edSetInArmClick",
+   "leaf_name": "edSetIndexArm",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fVacuumUnit.pgcVacuumUnit.tsManual.grpSetAllValue.btnSetIndexArm",
+   "event_name": "OnClick",
+   "handler_name": "btnSetInArmClick",
+   "leaf_name": "btnSetIndexArm",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fVacuumUnit.pgcVacuumUnit.tsManual.grpSetAllValue.btnSetOutArm",
+   "event_name": "OnClick",
+   "handler_name": "btnSetInArmClick",
+   "leaf_name": "btnSetOutArm",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fVacuumUnit.pgcVacuumUnit.tsManual.grpSetAllValue.edSetOutArm",
+   "event_name": "OnClick",
+   "handler_name": "edSetInArmClick",
+   "leaf_name": "edSetOutArm",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fVacuumUnit.Panel1.spbSave",
+   "event_name": "OnClick",
+   "handler_name": "spbSaveClick",
+   "leaf_name": "spbSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fVacuumUnit.Panel1.sbtExit",
+   "event_name": "OnClick",
+   "handler_name": "sbtExitClick",
+   "leaf_name": "sbtExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fVacuumUnit.Panel1.sbReset",
+   "event_name": "OnClick",
+   "handler_name": "sbResetClick",
+   "leaf_name": "sbReset",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fVacuumUnit.tmr1",
+   "event_name": "OnTimer",
+   "handler_name": "tmr1Timer",
+   "leaf_name": "tmr1",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fVacuumUnit",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "VacuumUnit/VacuumUnit.dfm"
+}

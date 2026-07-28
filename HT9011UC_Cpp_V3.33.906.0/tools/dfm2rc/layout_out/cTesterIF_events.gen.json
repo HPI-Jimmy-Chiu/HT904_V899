@@ -1,0 +1,660 @@
+{
+ "event_count": 93,
+ "events": [
+  {
+   "control_path": "FTestIF",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "FTestIF",
+   "vcl_class": "TFTestIF"
+  },
+  {
+   "control_path": "FTestIF",
+   "event_name": "OnShortCut",
+   "handler_name": "FormShortCut",
+   "leaf_name": "FTestIF",
+   "vcl_class": "TFTestIF"
+  },
+  {
+   "control_path": "FTestIF",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "FTestIF",
+   "vcl_class": "TFTestIF"
+  },
+  {
+   "control_path": "FTestIF.grpIFType.rgInterfaceType",
+   "event_name": "OnClick",
+   "handler_name": "rgInterfaceTypeClick",
+   "leaf_name": "rgInterfaceType",
+   "vcl_class": "TRadioGroup"
+  },
+  {
+   "control_path": "FTestIF.grpIFType.PageControl2.tsDio.grpTTL.grpTTLSetting.cbDIOType",
+   "event_name": "OnChange",
+   "handler_name": "cbDIOTypeChange",
+   "leaf_name": "cbDIOType",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "FTestIF.grpIFType.PageControl2.tsDio.grpTTL.AntiSignalCBox",
+   "event_name": "OnClick",
+   "handler_name": "AntiSignalCBoxClick",
+   "leaf_name": "AntiSignalCBox",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "FTestIF.grpIFType.PageControl2.tsDio.grpTTL.cbASEJPMode",
+   "event_name": "OnClick",
+   "handler_name": "AntiSignalCBoxClick",
+   "leaf_name": "cbASEJPMode",
+   "vcl_class": "TCheckBox"
+  },
+  {
+   "control_path": "FTestIF.grpIFType.PageControl2.tsGpib.grpGPIB.grpGPIBType.edGPIBAddress",
+   "event_name": "OnClick",
+   "handler_name": "edGPIBAddressClick",
+   "leaf_name": "edGPIBAddress",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.grpIFType.PageControl2.tsGpib.edtAutoOnecycleHomStartTime",
+   "event_name": "OnClick",
+   "handler_name": "edtAutoOnecycleHomStartTimeClick",
+   "leaf_name": "edtAutoOnecycleHomStartTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsRS232Setting.grpRS232.grpRS232Type.cbRs232Type",
+   "event_name": "OnChange",
+   "handler_name": "cbRs232TypeChange",
+   "leaf_name": "cbRs232Type",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsRS232Setting.grpRS232.pnlRS232.gbBaudRate.cbbBaudRate",
+   "event_name": "OnChange",
+   "handler_name": "cbRs232TypeChange",
+   "leaf_name": "cbbBaudRate",
+   "vcl_class": "TComboBox"
+  },
+  {
+   "control_path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6.edTestOKWaitTime",
+   "event_name": "OnClick",
+   "handler_name": "edPowerSwitchDelayClick",
+   "leaf_name": "edTestOKWaitTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6.edSendNEXTDelay",
+   "event_name": "OnClick",
+   "handler_name": "edPowerSwitchDelayClick",
+   "leaf_name": "edSendNEXTDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6.edMaxBIOSWaitTime",
+   "event_name": "OnClick",
+   "handler_name": "edMaxBIOSWaitTimeClick",
+   "leaf_name": "edMaxBIOSWaitTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6.edMinTestTime",
+   "event_name": "OnClick",
+   "handler_name": "edMinTestTimeClick",
+   "leaf_name": "edMinTestTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6.edPowerSwitchDelay",
+   "event_name": "OnClick",
+   "handler_name": "edPowerSwitchDelayClick",
+   "leaf_name": "edPowerSwitchDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6.edSLTMaxTestTime",
+   "event_name": "OnClick",
+   "handler_name": "edMaxBIOSWaitTimeClick",
+   "leaf_name": "edSLTMaxTestTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.grpIFType.PageControl2.tsTCPIP.btTesterTCPShow",
+   "event_name": "OnClick",
+   "handler_name": "btTesterTCPShowClick",
+   "leaf_name": "btTesterTCPShow",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "FTestIF.grpIFType.PageControl2.tsTCPIP.edTCPIP_Port",
+   "event_name": "OnClick",
+   "handler_name": "edTCPIP_PortClick",
+   "leaf_name": "edTCPIP_Port",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlBtm.spbSave",
+   "event_name": "OnClick",
+   "handler_name": "spbSaveClick",
+   "leaf_name": "spbSave",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "FTestIF.pnlBtm.sbtExit",
+   "event_name": "OnClick",
+   "handler_name": "sbtExitClick",
+   "leaf_name": "sbtExit",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.grpTestingStopTime.edtTestingWaitTime",
+   "event_name": "OnKeyPress",
+   "handler_name": "edMaxTestTimeKeyPress",
+   "leaf_name": "edtTestingWaitTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.grpTestingStopTime.edtTestingWaitTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edMaxTestTimeMouseDown",
+   "leaf_name": "edtTestingWaitTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.grpTestingStopTime.edtInitWaitTime",
+   "event_name": "OnKeyPress",
+   "handler_name": "edMaxTestTimeKeyPress",
+   "leaf_name": "edtInitWaitTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.grpTestingStopTime.edtInitWaitTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edMaxTestTimeMouseDown",
+   "leaf_name": "edtInitWaitTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.gbRs232BinCount.edMaxBinCount",
+   "event_name": "OnMouseDown",
+   "handler_name": "edMaxBinCountMouseDown",
+   "leaf_name": "edMaxBinCount",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnl1stDevice.edtInitialDelay_1",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnl1stDevice.edtInitialDelay_1_RT",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_1_RT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlPause.edtInitialDelay_6",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_6",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlPause.edOverSec",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edOverSec",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlPause.edtInitialDelay_6_RT",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_6_RT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlLowTestTime.edtInitialDelay_4",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlLowTestTime.edBelowSec",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edBelowSec",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlLowTestTime.edtInitialDelay_4_RT",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_4_RT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlHeatDoor.edtInitialDelay_5",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_5",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlHeatDoor.edtInitialDelay_5_RT",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_5_RT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlAutoClean.edtInitialDelay_3",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlAutoClean.edtInitialDelay_3_RT",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_3_RT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlAlarmMsg.edtInitialDelay_2",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlAlarmMsg.edtInitialDelay_2_RT",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_2_RT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlOTD.edtInitialDelay_9",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_9",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlOTD.edtInitialDelay_9_RT",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_9_RT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlEOTTime.iTestFinishToNextTestOver",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "iTestFinishToNextTestOver",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlEOTTime.edtInitialDelay_8",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_8",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlEOTTime.edtInitialDelay_8_RT",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_8_RT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlNoFullsite.edtInitialDelay_7",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_7",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlNoFullsite.edtInitialDelay_7_RT",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_7_RT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlSOTTime.iTeststartToNextTestStart",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "iTeststartToNextTestStart",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlSOTTime.edtInitialDelay_10",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_10",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlSOTTime.edtInitialDelay_10_RT",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edtInitialDelay_10_RT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.gbInitialDelay.edt_UseSocketHeating",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDelay_1Click",
+   "leaf_name": "edt_UseSocketHeating",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.edMaxTestTime",
+   "event_name": "OnClick",
+   "handler_name": "edInitialMaxTestClick",
+   "leaf_name": "edMaxTestTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.edInitialMaxTest",
+   "event_name": "OnClick",
+   "handler_name": "edInitialMaxTestClick",
+   "leaf_name": "edInitialMaxTest",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.edDummyTestTime",
+   "event_name": "OnKeyPress",
+   "handler_name": "edMaxTestTimeKeyPress",
+   "leaf_name": "edDummyTestTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.edDummyTestTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edMaxTestTimeMouseDown",
+   "leaf_name": "edDummyTestTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.edtInitStartDelay",
+   "event_name": "OnClick",
+   "handler_name": "edtInitStartDelayClick",
+   "leaf_name": "edtInitStartDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.edtInitStartDelay",
+   "event_name": "OnKeyPress",
+   "handler_name": "edMaxTestTimeKeyPress",
+   "leaf_name": "edtInitStartDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.edtInitStartDelayCT",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDecCount1Click",
+   "leaf_name": "edtInitStartDelayCT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.edtAfterTestedDelay",
+   "event_name": "OnKeyPress",
+   "handler_name": "edMaxTestTimeKeyPress",
+   "leaf_name": "edtAfterTestedDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.edtAfterTestedDelay",
+   "event_name": "OnMouseDown",
+   "handler_name": "edMaxTestTimeMouseDown",
+   "leaf_name": "edtAfterTestedDelay",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.palStartDelay.edStartDelayTime",
+   "event_name": "OnKeyPress",
+   "handler_name": "edMaxTestTimeKeyPress",
+   "leaf_name": "edStartDelayTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.palStartDelay.edStartDelayTime",
+   "event_name": "OnMouseDown",
+   "handler_name": "edMaxTestTimeMouseDown",
+   "leaf_name": "edStartDelayTime",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.edtInitialDec1",
+   "event_name": "OnKeyPress",
+   "handler_name": "edMaxTestTimeKeyPress",
+   "leaf_name": "edtInitialDec1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.edtInitialDec1",
+   "event_name": "OnMouseDown",
+   "handler_name": "edMaxTestTimeMouseDown",
+   "leaf_name": "edtInitialDec1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.edtInitialDecCount1",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDecCount1Click",
+   "leaf_name": "edtInitialDecCount1",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.edtInitialDec2",
+   "event_name": "OnKeyPress",
+   "handler_name": "edMaxTestTimeKeyPress",
+   "leaf_name": "edtInitialDec2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.edtInitialDec2",
+   "event_name": "OnMouseDown",
+   "handler_name": "edMaxTestTimeMouseDown",
+   "leaf_name": "edtInitialDec2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.edtInitialDecCount2",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDecCount1Click",
+   "leaf_name": "edtInitialDecCount2",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.edtInitialDec3",
+   "event_name": "OnKeyPress",
+   "handler_name": "edMaxTestTimeKeyPress",
+   "leaf_name": "edtInitialDec3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.edtInitialDec3",
+   "event_name": "OnMouseDown",
+   "handler_name": "edMaxTestTimeMouseDown",
+   "leaf_name": "edtInitialDec3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.edtInitialDecCount3",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDecCount1Click",
+   "leaf_name": "edtInitialDecCount3",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.edtInitialDec4",
+   "event_name": "OnKeyPress",
+   "handler_name": "edMaxTestTimeKeyPress",
+   "leaf_name": "edtInitialDec4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.edtInitialDec4",
+   "event_name": "OnMouseDown",
+   "handler_name": "edMaxTestTimeMouseDown",
+   "leaf_name": "edtInitialDec4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.edtInitialDecCount4",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDecCount1Click",
+   "leaf_name": "edtInitialDecCount4",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.rgPurgeAir.edPurgeAir",
+   "event_name": "OnClick",
+   "handler_name": "edPurgeAirClick",
+   "leaf_name": "edPurgeAir",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.tsRT.edMaxTestTime_RT",
+   "event_name": "OnClick",
+   "handler_name": "edInitialMaxTestClick",
+   "leaf_name": "edMaxTestTime_RT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.tsRT.edInitialMaxTest_RT",
+   "event_name": "OnClick",
+   "handler_name": "edInitialMaxTestClick",
+   "leaf_name": "edInitialMaxTest_RT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.tsRT.edDummyTestTime_RT",
+   "event_name": "OnKeyPress",
+   "handler_name": "edMaxTestTimeKeyPress",
+   "leaf_name": "edDummyTestTime_RT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.tsRT.edDummyTestTime_RT",
+   "event_name": "OnMouseDown",
+   "handler_name": "edMaxTestTimeMouseDown",
+   "leaf_name": "edDummyTestTime_RT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.tsRT.edtInitStartDelay_RT",
+   "event_name": "OnClick",
+   "handler_name": "edtInitStartDelayClick",
+   "leaf_name": "edtInitStartDelay_RT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.tsRT.edtInitStartDelay_RT",
+   "event_name": "OnKeyPress",
+   "handler_name": "edMaxTestTimeKeyPress",
+   "leaf_name": "edtInitStartDelay_RT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.tsRT.edtInitStartDelayCT_RT",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDecCount1Click",
+   "leaf_name": "edtInitStartDelayCT_RT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.tsRT.Panel1.edStartDelayTime_RT",
+   "event_name": "OnKeyPress",
+   "handler_name": "edMaxTestTimeKeyPress",
+   "leaf_name": "edStartDelayTime_RT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.tsRT.Panel1.edStartDelayTime_RT",
+   "event_name": "OnMouseDown",
+   "handler_name": "edMaxTestTimeMouseDown",
+   "leaf_name": "edStartDelayTime_RT",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.edMaxTestTime_EQC",
+   "event_name": "OnClick",
+   "handler_name": "edInitialMaxTestClick",
+   "leaf_name": "edMaxTestTime_EQC",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.edInitialMaxTest_EQC",
+   "event_name": "OnClick",
+   "handler_name": "edInitialMaxTestClick",
+   "leaf_name": "edInitialMaxTest_EQC",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.edDummyTestTime_EQC",
+   "event_name": "OnKeyPress",
+   "handler_name": "edMaxTestTimeKeyPress",
+   "leaf_name": "edDummyTestTime_EQC",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.edDummyTestTime_EQC",
+   "event_name": "OnMouseDown",
+   "handler_name": "edMaxTestTimeMouseDown",
+   "leaf_name": "edDummyTestTime_EQC",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.edtInitStartDelay_EQC",
+   "event_name": "OnClick",
+   "handler_name": "edtInitStartDelayClick",
+   "leaf_name": "edtInitStartDelay_EQC",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.edtInitStartDelay_EQC",
+   "event_name": "OnKeyPress",
+   "handler_name": "edMaxTestTimeKeyPress",
+   "leaf_name": "edtInitStartDelay_EQC",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.edtInitStartDelayCT_EQC",
+   "event_name": "OnClick",
+   "handler_name": "edtInitialDecCount1Click",
+   "leaf_name": "edtInitStartDelayCT_EQC",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.Panel2.edStartDelayTime_EQC",
+   "event_name": "OnKeyPress",
+   "handler_name": "edMaxTestTimeKeyPress",
+   "leaf_name": "edStartDelayTime_EQC",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.Panel2.edStartDelayTime_EQC",
+   "event_name": "OnMouseDown",
+   "handler_name": "edMaxTestTimeMouseDown",
+   "leaf_name": "edStartDelayTime_EQC",
+   "vcl_class": "TEdit"
+  }
+ ],
+ "form_name": "FTestIF",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "cTesterIF.dfm"
+}

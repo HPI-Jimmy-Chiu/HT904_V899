@@ -1,0 +1,65 @@
+{
+ "event_count": 8,
+ "events": [
+  {
+   "control_path": "fTemperFrom",
+   "event_name": "OnClose",
+   "handler_name": "FormClose",
+   "leaf_name": "fTemperFrom",
+   "vcl_class": "TfTemperFrom"
+  },
+  {
+   "control_path": "fTemperFrom",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fTemperFrom",
+   "vcl_class": "TfTemperFrom"
+  },
+  {
+   "control_path": "fTemperFrom.palLed.Panel73",
+   "event_name": "OnMouseDown",
+   "handler_name": "Panel73MouseDown",
+   "leaf_name": "Panel73",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fTemperFrom.palLed.Panel72",
+   "event_name": "OnMouseDown",
+   "handler_name": "Panel72MouseDown",
+   "leaf_name": "Panel72",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fTemperFrom.palLed.Panel71",
+   "event_name": "OnMouseDown",
+   "handler_name": "Panel71MouseDown",
+   "leaf_name": "Panel71",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fTemperFrom.pnlLeft.Button1",
+   "event_name": "OnClick",
+   "handler_name": "Button1Click",
+   "leaf_name": "Button1",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTemperFrom.pnlLeft.Button6",
+   "event_name": "OnClick",
+   "handler_name": "Button6Click",
+   "leaf_name": "Button6",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fTemperFrom.Timer1",
+   "event_name": "OnTimer",
+   "handler_name": "Timer1Timer",
+   "leaf_name": "Timer1",
+   "vcl_class": "TTimer"
+  }
+ ],
+ "form_name": "fTemperFrom",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "cTemperFrom.dfm"
+}

@@ -1,0 +1,107 @@
+{
+ "event_count": 14,
+ "events": [
+  {
+   "control_path": "FormHS",
+   "event_name": "OnCreate",
+   "handler_name": "FormCreate",
+   "leaf_name": "FormHS",
+   "vcl_class": "TFormHS"
+  },
+  {
+   "control_path": "FormHS",
+   "event_name": "OnDestroy",
+   "handler_name": "FormDestroy",
+   "leaf_name": "FormHS",
+   "vcl_class": "TFormHS"
+  },
+  {
+   "control_path": "FormHS.TimerAutoBackup",
+   "event_name": "OnTimer",
+   "handler_name": "TimerAutoBackupTimer",
+   "leaf_name": "TimerAutoBackup",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "FormHS.ESDServerSocket",
+   "event_name": "OnClientConnect",
+   "handler_name": "ESDServerSocketClientConnect",
+   "leaf_name": "ESDServerSocket",
+   "vcl_class": "TServerSocket"
+  },
+  {
+   "control_path": "FormHS.ESDServerSocket",
+   "event_name": "OnClientError",
+   "handler_name": "ESDServerSocketClientError",
+   "leaf_name": "ESDServerSocket",
+   "vcl_class": "TServerSocket"
+  },
+  {
+   "control_path": "FormHS.ESDServerSocket",
+   "event_name": "OnClientRead",
+   "handler_name": "ESDServerSocketClientRead",
+   "leaf_name": "ESDServerSocket",
+   "vcl_class": "TServerSocket"
+  },
+  {
+   "control_path": "FormHS.RTMServerSocket",
+   "event_name": "OnClientConnect",
+   "handler_name": "RTMServerSocketClientConnect",
+   "leaf_name": "RTMServerSocket",
+   "vcl_class": "TServerSocket"
+  },
+  {
+   "control_path": "FormHS.RTMServerSocket",
+   "event_name": "OnClientDisconnect",
+   "handler_name": "RTMServerSocketClientDisconnect",
+   "leaf_name": "RTMServerSocket",
+   "vcl_class": "TServerSocket"
+  },
+  {
+   "control_path": "FormHS.RTMServerSocket",
+   "event_name": "OnClientError",
+   "handler_name": "RTMServerSocketClientError",
+   "leaf_name": "RTMServerSocket",
+   "vcl_class": "TServerSocket"
+  },
+  {
+   "control_path": "FormHS.RTMServerSocket",
+   "event_name": "OnClientRead",
+   "handler_name": "RTMServerSocketClientRead",
+   "leaf_name": "RTMServerSocket",
+   "vcl_class": "TServerSocket"
+  },
+  {
+   "control_path": "FormHS.TimerRTMMsg",
+   "event_name": "OnTimer",
+   "handler_name": "TimerRTMMsgTimer",
+   "leaf_name": "TimerRTMMsg",
+   "vcl_class": "TTimer"
+  },
+  {
+   "control_path": "FormHS.HandlerClientSocket",
+   "event_name": "OnConnect",
+   "handler_name": "HandlerClientSocketConnect",
+   "leaf_name": "HandlerClientSocket",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "FormHS.HandlerClientSocket",
+   "event_name": "OnError",
+   "handler_name": "HandlerClientSocketError",
+   "leaf_name": "HandlerClientSocket",
+   "vcl_class": "TClientSocket"
+  },
+  {
+   "control_path": "FormHS.HandlerClientSocket",
+   "event_name": "OnRead",
+   "handler_name": "HandlerClientSocketRead",
+   "leaf_name": "HandlerClientSocket",
+   "vcl_class": "TClientSocket"
+  }
+ ],
+ "form_name": "FormHS",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "HS_Function.dfm"
+}
