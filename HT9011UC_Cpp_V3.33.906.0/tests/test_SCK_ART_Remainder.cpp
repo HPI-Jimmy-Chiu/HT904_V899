@@ -415,11 +415,35 @@ int main()
     //   comment's UB analysis), but this shallow dispatch-only PART deliberately avoids exercising it --
     //   deep coverage of Save2DSortingSummary's own behavior (including the bReadLotInfoFromART content
     //   branch, gate #13's FTP_Upload, and the ShellExecute quirk) is PART 11 below.
+    //   AI(W906-SaveTestSummaryTSV/SaveSummaryTrayFeed) 20260728: the TCP/IP and fallback branches'
+    //   OWN callees ALSO graduated to real this wave -- retrofitted AGAIN, same precedent:
+    //     * TCP/IP sub-case: CosFunction.bUseTSVFunction is now flipped to TRUE (with
+    //       IniConfig.sN09_HandlerFolder ALSO redirected to scratch) immediately before it, so
+    //       SckArtRem_SaveTestSummaryTSV's own top-of-function MyForceDirectories routes through the
+    //       REDIRECTABLE sN09_HandlerFolder instead of golden's OTHER hardcoded path ("D:\HT9045_Log\
+    //       TestSummary", only reachable when bUseTSVFunction==false) -- an EARLIER version of this
+    //       retrofit missed this and left a real, empty "D:\HT9045_Log\TestSummary\2026\07\" folder
+    //       behind on this dev machine (harmless -- no file written there, only MyForceDirectories'
+    //       mkdir side effect -- but avoidable, so now avoided).
+    //     * fallback sub-case: now calls with iSaveData=0 instead of 1. SckArtRem_SaveSummaryTrayFeed
+    //       has NO redirectable knob at all for its own hardcoded "D:\HT9045_Log\Summary_Lot" write
+    //       (see PART 13's own LIMITATION 4) -- but the DISPATCHER itself only calls it when
+    //       `iSaveData==1` (golden :1641), so iSaveData=0 still verifies dispatch reaches this branch
+    //       and doesn't crash WITHOUT ever invoking SaveSummaryTrayFeed's real write. An EARLIER
+    //       version of this retrofit missed this too and left 2 real, uncontrolled-content files
+    //       behind under D:\HT9045_Log\Summary_Lot\202607\ on this dev machine (deleted by hand once
+    //       discovered -- see the git history / translate report for this wave). Deep, fully-
+    //       controlled positive-path coverage of SaveSummaryTrayFeed's iSaveData=1 behavior (with
+    //       distinctive test identifiers and its own cleanup) is PART 13 below; deep coverage of
+    //       SaveTestSummaryTSV's iSaveData=1 behavior is PART 12 below -- this PART stays a SHALLOW
+    //       dispatch-only check, per its own header note above.
     // =========================================================================================
-    printf("\n-- SaveTestSummary (dispatch logic; SECS + 2D-sort branches now real, see PART 10/11) --\n");
+    printf("\n-- SaveTestSummary (dispatch logic; all 4 callees now real, see PART 10/11/12/13) --\n");
     {
         AnsiString savedSummaryPath8 = asSummaryPath;
         asSummaryPath = ScratchDir() + "W906SaveTestSummaryDispatchScratch";
+        AnsiString savedN09Folder8 = IniConfig.sN09_HandlerFolder;
+        IniConfig.sN09_HandlerFolder = ScratchDir() + "W906SaveTestSummaryDispatchN09Scratch";
 
         SckArtRemainderState st;
         IniConfig.bSPILFunction = false;
@@ -441,15 +465,18 @@ int main()
         CHECK(true, "SECS/93K branch dispatches to the now-REAL SckArtRem_SaveTestSummarySECS without crashing (golden :1627-1630; see PART 10 for deep coverage)");
 
         CosFunction.bART_SECSGEM_93K = false;
+        CosFunction.bUseTSVFunction = true;   // see this PART's own retrofit note above -- avoids the OTHER hardcoded TestSummary path
         TestIF_File.iTestType = TCP_IP_MODE;
         SckArtRem_SaveTestSummary(st, 1);
-        CHECK(true, "TCP/IP branch dispatches to (gated) ProcessOSPrint+SaveTestSummaryTSV without crashing (golden :1631-1637)");
+        CHECK(true, "TCP/IP branch dispatches to the now-REAL SaveTestSummaryTSV without crashing (golden :1631-1637; see PART 12 for deep coverage)");
 
         TestIF_File.iTestType = 0;   // not TCP_IP_MODE
-        SckArtRem_SaveTestSummary(st, 1);
-        CHECK(true, "fallback branch dispatches to (gated) SaveSummaryTrayFeed+SaveTestSummaryTSV without crashing (golden :1638-1644)");
+        SckArtRem_SaveTestSummary(st, 0);   // iSaveData=0 -- see this PART's own retrofit note above (avoids SaveSummaryTrayFeed's unavoidable real write)
+        CHECK(true, "fallback branch (iSaveData=0) dispatches to the now-REAL SaveTestSummaryTSV, and SKIPS SaveSummaryTrayFeed via the dispatcher's own `iSaveData==1` gate, without crashing (golden :1638-1644; see PART 12/13 for deep coverage)");
 
         asSummaryPath = savedSummaryPath8;
+        IniConfig.sN09_HandlerFolder = savedN09Folder8;
+        CosFunction.bUseTSVFunction = false;
     }
 
     // =========================================================================================
@@ -814,6 +841,263 @@ int main()
         bReadLotInfoFromART = false;
         CosFunction.bUseTSVFunction = false;
         IniConfig.bN09_LotCountAutoFunc = false;
+    }
+
+    // =========================================================================================
+    // PART 12 -- SaveTestSummaryTSV -- golden :2805-3128. AI(W906-SaveTestSummaryTSV) 20260728.
+    //   CosFunction.bUseTSVFunction=true throughout, redirecting BOTH the top-of-function
+    //   MyForceDirectories AND the save destination through the REDIRECTABLE sN09_HandlerFolder/
+    //   asSummaryPath scratch dirs -- avoids golden's OTHER hardcoded path ("D:\HT9045_Log\
+    //   TestSummary", only reachable when bUseTSVFunction==false), same technique PART 11 already
+    //   established for its own analogous toggle. Golden Quirk #1 (the duplicate "Handler ID:"
+    //   line when bUseTSVFunction==false) is therefore NOT exercised by an automated sub-case here
+    //   -- doing so would require the OTHER, non-redirectable branch of this SAME toggle -- but is
+    //   cited verbatim at its own translation site and in this function's header doc comment,
+    //   same "preserved+cited, not necessarily exercised" precedent PART 11 already set for its
+    //   OWN Golden Bug #2 (raw-pointer-to-%s UB).
+    // =========================================================================================
+    printf("\n-- SaveTestSummaryTSV --\n");
+    {
+        AnsiString savedSummaryPath12 = asSummaryPath;
+        asSummaryPath = ScratchDir() + "W906SaveTestSummaryTSVScratch";
+        AnsiString savedN09Folder12 = IniConfig.sN09_HandlerFolder;
+        IniConfig.sN09_HandlerFolder = ScratchDir() + "W906SaveTestSummaryTSVN09Scratch";
+
+        CosFunction.bUseTSVFunction = true;
+        IniConfig.iN09_TSV_Port = 17000;
+        IniConfig.iN09_4_UploadMethod = 0;   // both save-blocks target PathName2+FileName (asSummaryPath)
+        IniConfig.sN09_5_Path = "/remote/tsv/scratch";
+        IniConfig.dN09_SearchTime = 5.0;
+        IniConfig.bSPILFunction = false;
+        IniConfig.sN09_7_SkipIP = "192.168.1";   // a DIFFERENT prefix from the seeded IP below (12C)
+        bWaitTSV = false;
+
+        SckArtRemainderState st;
+        st.sLotID = "W906TESTLOTTSV";
+        st.sProcessCode = "";        // exercises the ""->"FT1" default (golden :2834-2835)
+        st.iFTRTCount = 1;           // FT branch (golden :2838-2839)
+        st.iNeedRT = 1;              // nonzero -- needed for 12A's bIsRTBin reset-loop sub-case below
+        st.iLotCount = 42;
+
+        // ---- 12A: the unconditional RT-bin reset loop (golden :2843-2853) runs even when
+        //   iSaveData==0 (the early return is AFTER this loop, golden :2855-2856) ----
+        W5SckArtRem_LotSummary.bIsRTBin[3] = true;
+        W5SckArtRem_LotSummary.iCountCategory[0][3] = 99;
+        W5SckArtRem_LotSummary.iTotalCategory[3] = 99;
+        GetTimeInfo();
+        AnsiString fn0, path0;
+        fn0.sprintf("%s_%s_FT_%04d%02d%02d%02d%02d.txt", st.sLotID, AnsiString("FT1"), SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin);
+        path0.sprintf("%s\\%04d\\%02d\\", asSummaryPath, SystemYear, SystemMonth);
+        AnsiString fullPath0 = path0 + fn0;
+        if (FileExists(fullPath0)) DeleteFile(fullPath0);
+
+        SckArtRem_SaveTestSummaryTSV(st, /*iSaveData=*/0);
+
+        CHECK(W5SckArtRem_LotSummary.iCountCategory[0][3] == 0, "iSaveData==0 still runs the unconditional RT-bin reset loop (golden :2843-2853) -- bIsRTBin[3]==true zeroed iCountCategory[0][3]");
+        CHECK(W5SckArtRem_LotSummary.iTotalCategory[3] == 0, "same reset loop zeroed iTotalCategory[3]");
+        CHECK(st.sProcessCode == "FT1", "sProcessCode==\"\" defaulted to \"FT1\" BEFORE the iSaveData==0 early return (golden :2834-2835, runs unconditionally)");
+        CHECK(FileExists(fullPath0) == false, "iSaveData==0 -> early return -> no file written (golden :2855-2856)");
+
+        // ---- 12B: full path, iSaveData=1 -- file write + FTP_Upload gate reuse + srvrscktTSV real substrate ----
+        st.iNeedRT = 0;   // required for the save/FTP_Upload blocks to actually run (golden :3049/:3064 fSCKART->iNeedRT==0)
+        W5SckArtRem_LotSummary.iCountCategory[0][5] = 3;   // a DIFFERENT bin, survives 12A's reset (bin 3 only)
+        W5SckArtRem_LotSummary.iTotalCategory[5] = 3;
+        W5SckArtRem_LastFTPUpload_Sources  = "<unset>";
+        W5SckArtRem_LastFTPUpload_FileName = "<unset>";
+
+        GetTimeInfo();
+        AnsiString fn1, path1;
+        fn1.sprintf("%s_%s_FT_%04d%02d%02d%02d%02d.txt", st.sLotID, st.sProcessCode, SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin);
+        path1.sprintf("%s\\%04d\\%02d\\", asSummaryPath, SystemYear, SystemMonth);
+        AnsiString fullPath1 = path1 + fn1;
+        if (FileExists(fullPath1)) DeleteFile(fullPath1);
+
+        SckArtRem_SaveTestSummaryTSV(st, /*iSaveData=*/1);
+
+        CHECK(FileExists(fullPath1), "SaveTestSummaryTSV(iSaveData=1) writes the summary .txt under the SCRATCH asSummaryPath (golden :3053, bUseTSVFunction+iN09_4_UploadMethod==0 branch)");
+        CHECK(W5SckArtRem_LastFTPUpload_Sources != "<unset>", "FTP_Upload (REUSES gate #13's existing stand-in verbatim) was REACHED (golden :3054)");
+        CHECK(W5SckArtRem_LastFTPUpload_FileName == fn1, "FTP_Upload received the real FileName argument");
+        CHECK(srvrscktTSV->Active == true, "gate #15's REAL vclcompat TServerSocket is Active after ->Open() (golden :3047) -- genuine substrate reuse, not a no-op stand-in");
+        CHECK(srvrscktTSV->Port == 17000, "gate #15's REAL TServerSocket.Port was set from IniConfig.iN09_TSV_Port (golden :3046)");
+
+        // ---- 12C: gate #14 (fConfiguration->mmoN04_IP->Lines) positive-path IP auto-pick, reusing the
+        //   RT branch (golden :2841 sLotID_sProcessCode_RT%d_...) for a distinct filename ----
+        fConfiguration->mmoN04_IP->Lines->Clear();
+        fConfiguration->mmoN04_IP->Lines->Add("10.1.2.3");   // prefix "10" not in the "192.168.1" skip-list above
+        st.iFTRTCount = 2;   // RT1 branch (golden :2841, iFTRTCount-1==1)
+
+        GetTimeInfo();
+        AnsiString fn2, path2;
+        fn2.sprintf("%s_%s_RT%d_%04d%02d%02d%02d%02d.txt", st.sLotID, st.sProcessCode, st.iFTRTCount-1, SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin);
+        path2.sprintf("%s\\%04d\\%02d\\", asSummaryPath, SystemYear, SystemMonth);
+        AnsiString fullPath2 = path2 + fn2;
+        if (FileExists(fullPath2)) DeleteFile(fullPath2);
+
+        SckArtRem_SaveTestSummaryTSV(st, /*iSaveData=*/1);
+
+        CHECK(FileExists(fullPath2), "RT branch filename (golden :2841, iFTRTCount-1==1) written correctly");
+        TStringList *check12C = new TStringList();
+        check12C->LoadFromFile(fullPath2);
+        bool foundHandlerIP = false, foundRTCode = false;
+        for (int i = 0; i < check12C->Count; i++)
+        {
+            if (check12C->Strings[i] == "Handler IP: 10.1.2.3") foundHandlerIP = true;
+            if (check12C->Strings[i] == "RT_CODE:\tRT1") foundRTCode = true;
+        }
+        check12C->Clear();
+        delete check12C;
+        CHECK(foundHandlerIP, "gate #14's REAL TStringList Lines surface: seeded \"10.1.2.3\" (prefix not in the skip-list) was auto-picked into \"Handler IP: 10.1.2.3\" (golden :2894-2925)");
+        CHECK(foundRTCode, "RT_CODE line reflects iFTRTCount-1==1 (golden :2936, \"RT_CODE:\\tRT%d\")");
+        if (FileExists(fullPath2)) DeleteFile(fullPath2);
+
+        // ---- 12D: the final UNCONDITIONAL LotSummary.ClearAllData() (golden :3126, differs from the
+        //   sibling functions' `if(iSaveData==1)`-gated call) ----
+        CHECK(W5SckArtRem_LotSummary.iCountCategory[0][5] == 0, "golden :3126 ClearAllData() runs UNCONDITIONALLY (NOT iSaveData==1-gated like the sibling functions) -- bin 5's seeded value (12B) is zeroed too");
+
+        if (FileExists(fullPath1)) DeleteFile(fullPath1);
+        fConfiguration->mmoN04_IP->Lines->Clear();
+        asSummaryPath = savedSummaryPath12;
+        IniConfig.sN09_HandlerFolder = savedN09Folder12;
+        CosFunction.bUseTSVFunction = false;
+        bWaitTSV = false;
+    }
+
+    // =========================================================================================
+    // PART 13 -- SaveSummaryTrayFeed -- golden :3129-3401. AI(W906-SaveSummaryTrayFeed) 20260728.
+    //
+    // LIMITATION 4 (NEW): unlike every other function in this file, golden hardcodes an
+    // UNCONDITIONAL, non-redirectable real production path -- "D:\HT9045_Log\Summary_Lot\
+    // <YYYYMM>\..." (golden :3321/:3324) -- with NO IniConfig knob and NO gate protecting it
+    // (contrast SaveTestSummarySECS/SaveTestSummaryTSV/Save2DSortingSummary, all of which route
+    // their equivalent writes through the REDIRECTABLE asSummaryPath/sN09_HandlerFolder). Verified
+    // on THIS dev machine: D:\HT9045_Log\Summary_Lot IS a real, actively-populated production log
+    // tree (dated subfolders already present for 202506 through 202606) -- NOT a placeholder. This
+    // test still calls the real function once (unlike LIMITATION 2's SetGPIBVersion, which is
+    // NEVER called at all) because MyForceDirectories creating an idempotent, otherwise-empty
+    // dated folder and writing ONE maximally-distinctive, obviously-fake-named file into it (which
+    // this test deletes again immediately after verifying its content) carries the same low,
+    // already-accepted residual risk this file's own PART 11 tolerates for its analogous
+    // "D:\HT9045_Log\2D_SortList" hardcoded touch -- not a new category of risk. iN10UploadMethod=0
+    // is deliberately chosen (routes uploads through the no-op FormHS stand-in) specifically to
+    // AVOID the OTHER upload branch, which would `ExecZipCommand` a real XCOPY batch file --
+    // actually spawning an OS process -- a materially larger, unnecessary risk this test does not
+    // need to accept to get real coverage of this function's translated logic.
+    // =========================================================================================
+    printf("\n-- SaveSummaryTrayFeed --\n");
+    {
+        AnsiString savedHandlerID13  = IniConfig.SocketHandlerID;
+        AnsiString savedLotNo13      = RunInfo.LotNo;
+        AnsiString savedLotStart13   = RunInfo.LotStartTime;
+        AnsiString savedLotEnd13     = RunInfo.LotEndTime;
+        AnsiString savedCustomer13   = fLotInfo->lbledtCustomer->Text;
+        AnsiString savedOperator13   = fLotInfo->edtSysOperatorID->Text;
+        AnsiString savedSetupName13  = fMain->cbSetupFileName->Text;
+        int  savedVTEST13            = IniConfig.bVTESTFunction;
+        bool savedUploadToFTP13      = IniConfig.bN10_UploadSummaryToFTP;
+        int  savedUploadMethod13     = IniConfig.iN10UploadMethod;
+
+        IniConfig.SocketHandlerID = "W906TESTPART13HANDLER-DO-NOT-USE";
+        RunInfo.LotNo = "W906TESTPART13LOT-DO-NOT-USE";
+        RunInfo.LotStartTime = "2026-07-28 08:00:00";
+        RunInfo.LotEndTime   = "2026-07-28 09:00:00";
+        fLotInfo->lbledtCustomer->Text  = "ACME-13";
+        fLotInfo->edtSysOperatorID->Text = "OP13";
+        fMain->cbSetupFileName->Text = "SETUP13.ini";
+        IniConfig.bVTESTFunction = 0;
+        IniConfig.bN10_UploadSummaryToFTP = true;
+        IniConfig.iN10UploadMethod = 0;   // routes through FormHS (gate #17), NOT the XCOPY/ExecZipCommand branch
+
+        TastCategory.iTotalSocket  = 100;
+        TastCategory.iPassSocket   = 80;
+        TastCategory.iFailSocket   = 20;
+        TastCategory.iRejectCount  = 5;
+
+        W5SckArtRem_slEventLog.sLotFileName = "";   // default -- FileExists("") is false (gate #17)
+        W5SckArtRem_LastFormHSUpload_Dir      = "<unset>";
+        W5SckArtRem_LastFormHSUpload_FileName  = "<unset>";
+        W5SckArtRem_LastFormHSUpload_Type      = "<unset>";
+
+        GetTimeInfo();   // golden itself never calls this inside SaveSummaryTrayFeed (verified by grep) --
+                          // the test snapshots NOW so it can reconstruct the exact expected file path.
+        AnsiString expectedFolder, expectedFile;
+        expectedFolder.sprintf("D:\\HT9045_Log\\Summary_Lot\\%04d%02d", SystemYear, SystemMonth);
+        expectedFile.sprintf("%s\\%s %04d%02d%02d-%02d%02d%02d %s Summary.txt", expectedFolder,
+                              IniConfig.SocketHandlerID, SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec,
+                              RunInfo.LotNo);
+        if (FileExists(expectedFile)) DeleteFile(expectedFile);   // idempotent -- see this PART's own LIMITATION 4 note
+
+        SckArtRemainderState st;   // unused by this function (see its own header doc comment); passed for signature only
+
+        SckArtRem_SaveSummaryTrayFeed(st);
+
+        // ---- 13A: the file gets written under golden's REAL (unavoidable) path with the expected name ----
+        CHECK(FileExists(expectedFile), "SaveSummaryTrayFeed() writes the summary .txt under golden's hardcoded D:\\HT9045_Log\\Summary_Lot path (golden :3321-3329) -- see LIMITATION 4 above");
+
+        // ---- 13B: file content reflects the seeded TastCategory/RunInfo/fLotInfo/fMain fields ----
+        TStringList *check13 = new TStringList();
+        check13->LoadFromFile(expectedFile);
+        bool foundLot=false, foundCustomer=false, foundProgram=false, foundInput=false, foundPass=false, foundFail=false, foundReject=false;
+        for (int i = 0; i < check13->Count; i++)
+        {
+            AnsiString line = check13->Strings[i];
+            if (line.Pos("Lot#:") == 1 && line.Pos("W906TESTPART13LOT-DO-NOT-USE") > 0) foundLot = true;
+            if (line.Pos("Customer:") == 1 && line.Pos("ACME-13") > 0) foundCustomer = true;
+            if (line.Pos("Program:") == 1 && line.Pos("SETUP13.ini") > 0) foundProgram = true;
+            if (line.Pos("Input:") == 1 && line.Pos("100") > 0) foundInput = true;
+            if (line.Pos("Pass:") == 1 && line.Pos("80") > 0) foundPass = true;
+            if (line.Pos("Fail:") == 1 && line.Pos("20") > 0) foundFail = true;
+            if (line.Pos("Reject:") == 1 && line.Pos("5") > 0) foundReject = true;
+        }
+        check13->Clear();
+        delete check13;
+        CHECK(foundLot, "\"Lot#:\" line reflects RunInfo.LotNo (golden :3166)");
+        CHECK(foundCustomer, "\"Customer:\" line reflects fLotInfo->lbledtCustomer->Text (golden :3169/:3154-3157)");
+        CHECK(foundProgram, "\"Program:\" line reflects fMain->cbSetupFileName->Text (golden :3170)");
+        CHECK(foundInput, "\"Input:\" line reflects TastCategory.iTotalSocket==100 (golden :3174, gate #16)");
+        CHECK(foundPass, "\"Pass:\" line reflects TastCategory.iPassSocket==80 (golden :3175, gate #16)");
+        CHECK(foundFail, "\"Fail:\" line reflects TastCategory.iFailSocket==20 (golden :3176, gate #16)");
+        CHECK(foundReject, "\"Reject:\" line reflects TastCategory.iRejectCount==5 (golden :3177, gate #16)");
+
+        // ---- 13C: gate #17's FormHS SLT_Report upload -- REACHED (file just written -> FileExists==true) ----
+        CHECK(W5SckArtRem_LastFormHSUpload_FileName != "<unset>", "FormHS->UpDataToServerByFTP(\"SLT_Report\") gate #17 was REACHED once the summary file existed (golden :3341-3342)");
+        CHECK(W5SckArtRem_LastFormHSUpload_Type == "SLT_Report", "gate #17 received the \"SLT_Report\" file-type argument verbatim");
+
+        // ---- 13D: gate #17's slEventLog stand-in -- default "" means the EventLog upload branch is
+        //   SKIPPED (FileExists("")==false, golden :3344) ----
+        W5SckArtRem_LastFormHSUpload_Type = "<unset>";   // reset before a 2nd call so we can distinguish
+        AnsiString fullPath13b = expectedFile;   // same call would re-write the SAME path/name (same minute)
+        SckArtRem_SaveSummaryTrayFeed(st);
+        CHECK(W5SckArtRem_LastFormHSUpload_Type == "SLT_Report", "W5SckArtRem_slEventLog.sLotFileName==\"\" (default) -> the EventLog upload branch never fires -> the LAST FormHS call observed is still \"SLT_Report\", not \"EventLog\" (golden :3344 FileExists(\"\")==false)");
+
+        // ---- 13E: seed a real scratch file for slEventLog -> the EventLog upload branch DOES fire ----
+        AnsiString scratchEventLog = ScratchDir() + "W906TestPart13EventLog.txt";
+        TStringList *seedEvt = new TStringList();
+        seedEvt->Add("dummy event log line");
+        seedEvt->SaveToFile(scratchEventLog);
+        delete seedEvt;
+        W5SckArtRem_slEventLog.sLotFileName = scratchEventLog;
+        W5SckArtRem_LastFormHSUpload_Type = "<unset>";
+        SckArtRem_SaveSummaryTrayFeed(st);
+        CHECK(W5SckArtRem_LastFormHSUpload_Type == "EventLog", "W5SckArtRem_slEventLog.sLotFileName pointing at a REAL (scratch) file -> the EventLog upload branch fires (golden :3344-3347)");
+        CHECK(W5SckArtRem_LastFormHSUpload_FileName == ExtractFileName(scratchEventLog), "gate #17's EventLog upload received the real ExtractFileName(...) argument (golden :3346)");
+        DeleteFile(scratchEventLog);
+        W5SckArtRem_slEventLog.sLotFileName = "";
+
+        // cleanup -- delete the test-created production-adjacent file (LIMITATION 4); best-effort
+        // remove the just-created month folder too (silently ignored if non-empty / still in use)
+        if (FileExists(expectedFile)) DeleteFile(expectedFile);
+        RemoveDir(expectedFolder);
+
+        IniConfig.SocketHandlerID = savedHandlerID13;
+        RunInfo.LotNo = savedLotNo13;
+        RunInfo.LotStartTime = savedLotStart13;
+        RunInfo.LotEndTime = savedLotEnd13;
+        fLotInfo->lbledtCustomer->Text = savedCustomer13;
+        fLotInfo->edtSysOperatorID->Text = savedOperator13;
+        fMain->cbSetupFileName->Text = savedSetupName13;
+        IniConfig.bVTESTFunction = savedVTEST13;
+        IniConfig.bN10_UploadSummaryToFTP = savedUploadToFTP13;
+        IniConfig.iN10UploadMethod = savedUploadMethod13;
     }
 
     printf("\n=== %d PASS, %d FAIL (of %d) ===\n", g_pass, g_fail, g_pass + g_fail);

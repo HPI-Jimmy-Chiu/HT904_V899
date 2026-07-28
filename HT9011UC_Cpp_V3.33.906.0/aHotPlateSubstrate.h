@@ -373,6 +373,32 @@ public:
     // into this[TargetR][TargetC], then clears the Source slot back to empty.
     // FAITHFUL body in aHotPlateSubstrate.cpp.
     void MoveSuckDataDiff(class TMyKitSuck &Source, int SourceR, int SourceC, int TargetR, int TargetC);
+    // AI(W906-AutoCleanCluster) 20260728: golden MyKitSuck.h:268 -- the SAME-
+    // POSITION sibling overload (TargetR/TargetC default to -1, meaning "use
+    // SourceR/SourceC"). DISCOVERED GAP (4th, beyond the 3 named in this
+    // wave's task brief): DoIndexAutoClean/DoIndexAutoClean_Arm1PickArm2Test
+    // call `FTestSuck.MoveSuckData(FLCarryKit, i, j)` (2-target-arg form)
+    // pervasively and LOAD-BEARINGLY (it is how a clean IC actually moves
+    // between FLCarryKit/FTestSuck/TestSocket/BLCarryKit/BTestSuck as the
+    // clean cycle progresses -- unlike the other TUs that already worked
+    // around this same gap with a local no-op stub (aTester_Rear.cpp's
+    // W64bT2_MoveSuckData / aTester_Front.cpp's W64B_MoveSuckData /
+    // atester_32Site.cpp's W5_32S_MOVESUCKDATA), a no-op here would silently
+    // break AutoClean's own item-tracking state, contradicting this project's
+    // "never silently drop functionality" rule). ZERO new dependencies: every
+    // field below is already real (identical set MoveSuckDataDiff already
+    // moves, faithfully, right above). Ported for REAL, matching golden
+    // MyKitSuck.cpp:1443-1501 body exactly (FAITHFUL body in
+    // aHotPlateSubstrate.cpp) -- same treatment this wave's task brief
+    // explicitly authorizes for SetTechDataToProd_AutoClean (land it for real
+    // when it has zero further dependencies, rather than stub it).
+    // GOLDEN QUIRK preserved: MoveSuckData ALSO calls
+    // `Source.PordRec[SourceR][SourceC].InitialRecord()` right after clearing
+    // the source slot -- MoveSuckDataDiff does NOT do this (verified by
+    // reading both golden bodies side by side, MyKitSuck.cpp:1443-1501 vs
+    // :1503-1561). A real, golden-verified asymmetry between the two
+    // "identical-looking" methods, not a translation slip.
+    void MoveSuckData(class TMyKitSuck &Source, int SourceR, int SourceC, int TargetR=-1, int TargetC=-1);
 #endif
 
     // AI(W906-AutoCleanCluster) 20260722: golden TMyKitSuck members the AutoClean

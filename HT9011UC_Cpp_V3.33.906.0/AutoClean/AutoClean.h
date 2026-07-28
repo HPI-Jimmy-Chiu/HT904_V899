@@ -2,32 +2,43 @@
 //  AutoClean/AutoClean.h  --  W906-AutoCleanFoundation + W906-AutoCleanCluster waves
 //
 //  Translation wave: W906-AutoCleanFoundation (foundation, 20260721) followed by
-//  W906-AutoCleanCluster (this wave, 20260722) -- the FIRST of two natural
-//  dependency clusters covering golden's remaining 19 absent functions. See the
-//  .cpp file banner for the full explicitly-out-of-scope list (the SECOND
-//  cluster: DoIndexAutoClean + DoIndexAutoClean_Arm1PickArm2Test, golden
-//  AutoClean.cpp:6465-9106, land in a follow-on wave).
+//  W906-AutoCleanCluster (20260722, the FIRST of two natural dependency
+//  clusters covering golden's remaining 19 absent functions) followed by the
+//  SECOND (and final) cluster (this wave, 20260728): DoIndexAutoClean +
+//  DoIndexAutoClean_Arm1PickArm2Test (golden AutoClean.cpp:6465-9106). Every
+//  function in golden AutoClean.cpp/.h is now translated -- no further
+//  AutoClean-cluster waves remain.
 //  Translator: AI(W906-AutoCleanFoundation) 20260721 / AI(W906-AutoCleanCluster) 20260722
+//              / AI(W906-AutoCleanCluster) 20260728 (DoIndexAutoClean cluster)
 //
 //  Golden: D:\HT9045\HT9011UC_Code_V3.33.906.0_20260618\AutoClean\AutoClean.h/.cpp
 //  Mirrors golden's own file layout (golden keeps ALL of AutoClean.cpp/.h in one
 //  AutoClean/ subfolder rather than per-function files) -- this wave creates
 //  that same AutoClean/ subfolder in the target tree for the first time.
 //
-//  SCOPE (W906-AutoCleanCluster, this wave): 9 small helpers + the 4 named core
+//  SCOPE (W906-AutoCleanCluster, 20260722): 9 small helpers + the 4 named core
 //  pick/place engines (DoAutoCleanPickfromCleanKit / DoPlaceToShuttle /
 //  DoPickFromShuttle / DoAutoCleanPlaceToCleanKit) + the 3 shuttle-clean state
 //  machines (DoShuttle1AutoClean(+_Arm1PickArm2Test variant) / DoShuttle2AutoClean)
-//  + the master orchestrator DoAutoCleanKit. Explicitly NOT this wave (the SECOND
-//  cluster, a separate follow-on wave): DoIndexAutoClean, DoIndexAutoClean_Arm1PickArm2Test
-//  (golden AutoClean.cpp:6465-9106, 2642 lines) -- see the TEMPORARY placeholder
-//  stub for DoIndexAutoClean near the top of AutoClean.cpp for how DoAutoCleanKit
-//  links against it in the meantime.
+//  + the master orchestrator DoAutoCleanKit.
+//
+//  SCOPE (this wave, 20260728): DoIndexAutoClean_Arm1PickArm2Test + DoIndexAutoClean
+//  (golden AutoClean.cpp:6465-9106, 2642 lines) -- REPLACES the TEMPORARY
+//  placeholder stub that used to sit near the top of AutoClean.cpp (an empty
+//  `void DoIndexAutoClean(){}`; see git history). Both are now real, faithful
+//  translations.
 // =============================================================================
 #ifndef AutoCleanFoundationH
 #define AutoCleanFoundationH
 
 #include "vclcompat/vcl_compat.h"   // AnsiString
+// AI(W906-AutoCleanCluster) 20260728: MAX_SOCKET_ROW/MAX_SOCKET_COL (#define,
+// MachineType.h:391-392) are needed by DoIndexAutoClean_Arm1PickArm2Test's own
+// declaration below. Included here (not left to the includer) because this
+// header must be self-sufficient regardless of caller include order --
+// verified test_AutoClean.cpp includes THIS header first, before cprod.h/
+// cmydef.h/MachineType.h would otherwise have defined these macros.
+#include "MachineType.h"            // MAX_SOCKET_ROW / MAX_SOCKET_COL
 
 // golden AutoClean.h:4-5 -- shuttle selector enum.  Verified (grepped) this
 // exact enum/these exact enumerators do not exist anywhere else in the target
@@ -46,10 +57,14 @@ extern int iInYPos;
 // in-scope) read/write. `SHT_Kit` (golden :49, `int SHT_Kit=0;`) is DELIBERATELY
 // NOT declared here -- verified by grep: it is written once at its own
 // declaration and never read or written anywhere else in the whole of golden
-// AutoClean.cpp/uCleaning.cpp (dead global) -- and `DoTestYRearDelayAC` (golden
-// :51, a TQPF_Timer) is likewise NOT declared here -- its only readers/writers
-// are all inside DoIndexAutoClean (golden :7902 onward), the out-of-scope
-// SECOND cluster.
+// AutoClean.cpp/uCleaning.cpp (dead global).
+// AI(W906-AutoCleanCluster) 20260728 UPDATE: `DoTestYRearDelayAC` (golden :51,
+// a TQPF_Timer) is NOW in scope (its sole readers/writers, DoIndexAutoClean/
+// DoIndexAutoClean_Arm1PickArm2Test, landed this wave) -- it is defined as a
+// plain (non-extern) file-scope TQPF_Timer directly in AutoClean.cpp, right
+// beside the pre-existing DoIndexAutoCleanDelay, since nothing outside this
+// one TU reads or writes it (same posture as DoIndexAutoCleanDelay itself,
+// which was never header-declared either). No header declaration needed.
 extern int iAutoCleanPickFromCleanKitStageTask;    // golden :44 (jou 2012-05-22)
 extern bool bFullViewCheckFinish;                  // golden :48 (JerryYang 20160331)
 extern bool bInedxCleanFinish[2];                  // golden :50 (kevin 20170520)
@@ -188,11 +203,21 @@ void DoShuttle2AutoClean();                                                // go
 void DoAutoCleanKit();                                                     // golden :4417-5799 (ChungHung 20130701)
 
 // ---------------------------------------------------------------------------
-//  TEMPORARY placeholder -- see AutoClean.cpp for the marked stub. Declared
-//  here so any TU that includes this header (e.g. tests) can see the symbol.
-//  DO NOT treat this declaration as a real translation of DoIndexAutoClean --
-//  it is a stand-in for the SECOND (not-yet-translated) dependency cluster.
+//  Part I -- DoIndexAutoClean cluster (this wave, 20260728). Golden's own
+//  header (AutoClean.h) does NOT declare the _Arm1PickArm2Test variant either
+//  (verified by grep) -- it is called only from DoIndexAutoClean, defined
+//  lexically before it in the SAME .cpp, so no forward declaration is
+//  strictly required for that call site. Declared here anyway (same
+//  precedent as DoShuttle1AutoClean_Arm1PickArm2Test above, which golden's
+//  own header also omits) purely for test-visibility, so a unit test can
+//  drive it in isolation with its own local arrays.
 // ---------------------------------------------------------------------------
-void DoIndexAutoClean();                                                   // golden :7360-9106 -- TEMPORARY placeholder, see .cpp
+void DoIndexAutoClean_Arm1PickArm2Test(int iSpeed, int iSpeedSY, int iSpeedSZ, int &iContactCount,
+                                       bool bDuplicateErr[MAX_SOCKET_ROW][MAX_SOCKET_COL],
+                                       bool bSuckFinish[MAX_SOCKET_ROW][MAX_SOCKET_COL],
+                                       bool bIsSuckICFallDown[MAX_SOCKET_ROW][MAX_SOCKET_COL],
+                                       bool bTestSuckUse[MAX_SOCKET_ROW][MAX_SOCKET_COL],
+                                       AnsiString ErrPart);                // golden :6465-7358 (Jimmychiu 20230710)
+void DoIndexAutoClean();                                                   // golden :7360-9105
 
 #endif // AutoCleanFoundationH

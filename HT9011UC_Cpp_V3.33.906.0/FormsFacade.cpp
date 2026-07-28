@@ -128,6 +128,42 @@ void TfMain::DebugOneCycleHotPlate(AnsiString /*sfunc*/) {}     // debug log sin
 bool TfMain::Pause(AnsiString /*Func*/) { return false; }      // offline never pauses
 void TfMain::ShowTestHeadComp(bool /*bRefresh*/) {}
 void TfMain::ReStartAutoSiteMapping(bool /*bStart*/) {}
+// ---------------------------------------------------------------------------
+// AI(W906-AutoSiteMapCleanOut) 20260727: TfMain::SetMainRunStartMode -- GAP-
+// DOCUMENTED no-op stub, added solely so csystem.cpp's InitCleanOutFunction
+// AutoSiteMap branch (golden csystem.cpp:15751-15785) could be un-gated.
+//
+// Golden's REAL SetMainRunStartMode (main.cpp:28236-28308, ~72 lines) is NOT
+// translated here -- it is out of scope for this small wave:
+//   * it dereferences fLotInfo->cbRunMode (Visible/Text.Pos), fBinSel (an
+//     entirely new VCL form, ->cbUseMRTMode -- no facade member exists for it),
+//     and this TfMain's own edSetOpenBin/lbSetOpenBin/cbRunStartMode/
+//     cbbRunModeSel (none of which have a facade home yet);
+//   * every branch ends by calling SetRunStartMode() (golden's *different*,
+//     already-real function -- NOT called from this stub) and then
+//     unconditionally calls UpdateMainOperateMode() (main.cpp:12803-13127,
+//     ~325 lines), which walks a real hardware relay/IO ladder (ATC site-use
+//     relays, edWorkTemperBase/edSoakTime enable-locks, WriteLastDataFile /
+//     ReadLastDataFile, ChangeATCSiteUse) -- none of that surface exists in
+//     this ported tree.
+// Per this project's established "extend only what's read, stub what's out
+// of scope" convention (see ShowTestHeadComp/ReStartAutoSiteMapping just
+// above, same class), this is intentionally a documented no-op: the
+// InitCleanOutFunction call site only needs the CALL to resolve. Nothing
+// currently functioning is lost by this stub for THIS call site specifically,
+// because golden's real SetMainRunStartMode always ends by calling
+// SetRunStartMode() -- which is ALREADY a separate no-op stub elsewhere in
+// this tree (aHotPlateSubstrate.cpp:764) -- so the mode-transition cascade it
+// would drive is already inert here regardless. (bSiteMappingCHKOK/
+// SiteMapData-zero/bAutoSiteMapHotplateSave are set directly by
+// InitCleanOutFunction's own body, independent of this call -- but
+// iAutoSiteMapCount is NOT: it is only touched by ReStartAutoSiteMapping,
+// golden main.cpp:28166-28180, called from SetMainRunStartMode's
+// iSetMode==rsmAutoSiteMap branch only, main.cpp:28283-28306 -- a branch this
+// call site never reaches, since iSetMode here is always rsmContinuStart or
+// rsmContinuRetest, csystem.cpp:274/276.)
+// ---------------------------------------------------------------------------
+void TfMain::SetMainRunStartMode(int /*iSetMode*/) {}
 void TfMain::CleanOut(AnsiString /*Func*/) {}                  // W6.3: offline clean-out no-op
 void TfMain::DoStateRecord(int /*i*/, bool /*b*/) {}           // W6.3: offline state-record sink
 // -- W6.5 ADD: shuttle-engine method sinks (all offline no-op) --
@@ -232,6 +268,12 @@ TfLotInfo::TfLotInfo()
     edtDevice         = new TfLotInfoEdit();
     edtSysOperatorID  = new TfLotInfoEdit();
     mmo2DLotInfo      = new TfLotInfoEdit();
+    // -- AI(W906-SaveTestSummaryTSV) 20260728 ADD: 3 new TfLotInfoEdit members + 1 more
+    //    (lbledtCustomer, AI(W906-SaveSummaryTrayFeed) 20260728) --
+    edtASECL_LotID    = new TfLotInfoEdit();
+    edInsertion       = new TfLotInfoEdit();
+    edFlowID          = new TfLotInfoEdit();
+    lbledtCustomer    = new TfLotInfoEdit();
 }
 // AI(W906-AutoCleanFoundation) 20260721: golden uLotInfo.cpp:16250-16253 --
 // REAL one-line body (was a total no-op stub before this wave). See

@@ -45,8 +45,10 @@
 //    * SetInitialICCheck()   golden :1049 -- small state setter, ACTIVE.
 //    * InitCleanOutFunction / InitOneCycle / InitTrayEndFunction  golden :15749
 //                            / :15797 / :15824 -- small cursor/flag resets,
-//                            ACTIVE (the AutoSiteMap branch of InitCleanOut is
-//                            GATED -- it derefs HotPlateForm / fMain mode setters).
+//                            FULLY ACTIVE (the AutoSiteMap branch of InitCleanOut,
+//                            golden :15751-15785, was un-gated W906-AutoSiteMapCleanOut
+//                            20260727 -- fMain->SetMainRunStartMode is a documented
+//                            GAP no-op stub, see FormsFacade.h/.cpp).
 //
 //  ODR -- SKIPPED here (already defined elsewhere; do NOT redefine):
 //    * The HasIC predicate family + InSHT*/OutSHT*/CheckSafeDoorIsClosed /
@@ -241,15 +243,22 @@ bool CheckMotorHome()
 }
 
 // ===========================================================================
-//  InitCleanOutFunction  -- golden csystem.cpp:15749.  ACTIVE tail (the simple
-//  iHome/iReset/iCleanOut/iTrayFeed/bCleanoutStart resets).  The AutoSiteMap
-//  branch (golden :15751-15785) derefs HotPlateForm / fMain mode setters /
-//  MMPlate site grids -- GATED #if 0 // TODO(W7); the cursor resets below are
-//  the load-bearing part the HUB needs.
+//  InitCleanOutFunction  -- golden csystem.cpp:15749.  FULLY ACTIVE (both the
+//  AutoSiteMap branch, golden :15751-15785, and the tail iHome/iReset/
+//  iCleanOut/iTrayFeed/bCleanoutStart resets).
+//  AI(W906-AutoSiteMapCleanOut) 20260727: un-gated the AutoSiteMap branch --
+//  it was the last remaining piece of Wave16 (siblings DoHotplateEdgeCylinderLoop
+//  + DoLoaderVibrateLoop landed 20260722, commit 6f60737). Every symbol it
+//  touches already had a real translated home in this tree EXCEPT
+//  fMain->SetMainRunStartMode(int), which did not exist -- added as a
+//  documented GAP no-op stub (FormsFacade.h/.cpp; golden's real body cascades
+//  into UpdateMainOperateMode() + a new fBinSel VCL form, both out of scope
+//  this wave -- see the stub's banner comment for the full citation). The
+//  branch body itself is translated VERBATIM from golden (braces around the
+//  single-statement if/else at :15762-15769 dropped; no logic changed).
 // ===========================================================================
 void InitCleanOutFunction()
 {
-#if 0 // TODO(W7): AutoSiteMap-mode clean-out branch derefs HotPlateForm/fMain mode setters/MMPlate site grids (golden csystem.cpp:15751-15785)
     if(LastSet.iRunStartMode==rsmAutoSiteMap                &&
        LastSet.iTemperature==Tempture_Hot                   &&
        CosFunction.bUSEJCETSiteMapMode)
@@ -275,7 +284,6 @@ void InitCleanOutFunction()
             fMain->ShowTestHeadComp(false);
         }
     }
-#endif
 
     iHome=0;
     iReset=0;

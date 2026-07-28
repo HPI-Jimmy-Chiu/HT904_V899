@@ -1082,6 +1082,74 @@ void TMyKitSuck::MoveSuckDataDiff(TMyKitSuck &Source, int SourceR, int SourceC, 
     Source.iAOIResult[SourceR][SourceC]      = 0;
 }
 
+// AI(W906-AutoCleanCluster) 20260728: golden MyKitSuck.cpp:1443-1501 -- FAITHFUL
+// line-for-line translation (same field set/order as MoveSuckDataDiff above,
+// PLUS the default-arg same-position resolution PLUS the extra
+// Source.PordRec[][].InitialRecord() call golden's MoveSuckData has that
+// MoveSuckDataDiff does NOT -- see this method's declaration comment in
+// aHotPlateSubstrate.h for the full "4th discovered gap" rationale and the
+// GOLDEN QUIRK citation). Used by DoIndexAutoClean/DoIndexAutoClean_Arm1PickArm2Test
+// (AutoClean/AutoClean.cpp) to move one nozzle's full record between two
+// TMyKitSuck grids at the SAME row/col (e.g. FTestSuck<->FLCarryKit).
+void TMyKitSuck::MoveSuckData(TMyKitSuck &Source, int SourceR, int SourceC, int TargetR, int TargetC)
+{
+    if(TargetR==-1 || TargetC==-1)
+    {
+        TargetR=SourceR;
+        TargetC=SourceC;
+    }
+
+    SetItemData(TargetR, TargetC, Source.Item[SourceR][SourceC]);
+    iWhichSite[TargetR][TargetC]     = Source.iWhichSite[SourceR][SourceC];
+    iWhichAuto[TargetR][TargetC]     = Source.iWhichAuto[SourceR][SourceC];
+    iCurrRotAng[TargetR][TargetC]    = Source.iCurrRotAng[SourceR][SourceC];
+    iNeedRotAng[TargetR][TargetC]    = Source.iNeedRotAng[SourceR][SourceC];
+    iWhichIndex[TargetR][TargetC]    = Source.iWhichIndex[SourceR][SourceC];
+
+    bPass[TargetR][TargetC]          = Source.bPass[SourceR][SourceC];
+    iCleanCount[TargetR][TargetC]    = Source.iCleanCount[SourceR][SourceC];
+    bFliped[TargetR][TargetC]        = Source.bFliped[SourceR][SourceC];
+    iBinData[TargetR][TargetC]       = Source.iBinData[SourceR][SourceC];
+    iBinDataBackUp[TargetR][TargetC] = Source.iBinDataBackUp[SourceR][SourceC];
+
+    iAutoCleanRecX[TargetR][TargetC] = Source.iAutoCleanRecX[SourceR][SourceC];
+    iAutoCleanRecY[TargetR][TargetC] = Source.iAutoCleanRecY[SourceR][SourceC];
+    cDeviceInf[TargetR][TargetC]     = Source.cDeviceInf[SourceR][SourceC];
+    cReDeviceInf[TargetR][TargetC]   = Source.cReDeviceInf[SourceR][SourceC];
+    cSBin[TargetR][TargetC]          = Source.cSBin[SourceR][SourceC];
+    b2DIDNG[TargetR][TargetC]        = Source.b2DIDNG[SourceR][SourceC];
+    bQATray[TargetR][TargetC]        = Source.bQATray[SourceR][SourceC];
+    iAOIResult[TargetR][TargetC]     = Source.iAOIResult[SourceR][SourceC];
+
+    PordRec[TargetR][TargetC].asBuffer->CommaText = Source.PordRec[SourceR][SourceC].asBuffer->CommaText;
+    PordRec[TargetR][TargetC].bUse   = Source.PordRec[SourceR][SourceC].bUse;
+
+    Source.SetItemData(SourceR, SourceC, NULL_IC);
+    Source.PordRec[SourceR][SourceC].InitialRecord();   // golden MyKitSuck.cpp:1474 -- MoveSuckDataDiff has NO equivalent call (golden quirk)
+
+    Source.iWhichSite[SourceR][SourceC]      = -1;
+    Source.iWhichAuto[SourceR][SourceC]      = -1;
+    Source.iWhichIndex[SourceR][SourceC]     = -1;
+
+    Source.bPass[SourceR][SourceC]           = false;
+    Source.iCleanCount[SourceR][SourceC]     = 0;
+    Source.bFliped[SourceR][SourceC]         = false;
+
+    Source.iBinData[SourceR][SourceC]        = -1;
+    Source.iAutoCleanRecX[SourceR][SourceC]  = -1;
+    Source.iAutoCleanRecY[SourceR][SourceC]  = -1;
+
+    Source.cDeviceInf[SourceR][SourceC]      = "";
+    Source.cReDeviceInf[SourceR][SourceC]    = "";
+    Source.cSBin[SourceR][SourceC]           = "";
+    Source.b2DIDNG[SourceR][SourceC]         = false;
+
+    Source.iCurrRotAng[SourceR][SourceC]     = 0;
+    Source.iNeedRotAng[SourceR][SourceC]     = 0;
+    Source.bQATray[SourceR][SourceC]         = false;
+    Source.iAOIResult[SourceR][SourceC]      = 0;
+}
+
 // ResetInToShtFlag (golden ainarm2.cpp:124): zero the in->shuttle pitch/Z flags.
 void ResetInToShtFlag()
 {

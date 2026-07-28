@@ -48,6 +48,11 @@
 #include "ainarm9045_All_1Pick.h"   // GetNowInShuttleRowCol_All_1Picker
 #include "aHotPlateSubstrate.h"     // InArmSuck/FLCarryKit/BLCarryKit/FTestSuck/BTestSuck, uPlateInfo (PlaceToCleanList), ainarm2 cursors
 #include "atester_shims.h"          // fContact (TfContactShim)
+// AI(W906-AutoCleanCluster) 20260728: CheckSocketSensor(int,AnsiString,bool,bool)
+// (atester.h:135) + bFTestSuckDrop (atester.h:46) -- DoIndexAutoClean /
+// DoIndexAutoClean_Arm1PickArm2Test's own socket-sensor checks need both;
+// neither was pulled in by this TU's pre-existing include set.
+#include "atester.h"                // CheckSocketSensor / bFTestSuckDrop
 #include "FormsFacade.h"            // fMain / fCleaning / fNote stand-ins
 #include "canary_support.h"         // LastSet / ShowMyMessage / ShowErrorMessage / RecordProcess
 // AI(W906-AutoCleanCluster) 20260722: additional cross-module surface the core
@@ -233,6 +238,111 @@ static void CheckInArmXYScaleByAutoTeach(int &/*iXPos*/, int &/*iYPos*/, int /*i
 // (both false by default/offline) -- offline-false keeps that branch linkable
 // without inventing AOA logic that belongs to its own future wave.
 static bool CheckInArmAutoAlignmentCKModeBeUse(int /*iMode*/, bool /*bSet*/=false) { return false; }
+
+// ---------------------------------------------------------------------------
+//  AI(W906-AutoCleanCluster) 20260728: DoIndexAutoClean / DoIndexAutoClean_
+//  Arm1PickArm2Test dependency stand-ins (the SECOND, final dependency
+//  cluster this file's foundation/cluster waves deferred -- see the removed
+//  placeholder banner that used to sit where DoIndexAutoClean's real body now
+//  is, further down this file). Same "TU-local static function + #define
+//  macro so the golden call-site syntax is preserved verbatim" idiom as
+//  atester.cpp's W7T1_* cluster (atester.cpp:1540-1620) -- duplicated here
+//  (not shared) because a `static` function in one TU has no linkage into
+//  another TU.
+// ---------------------------------------------------------------------------
+// -- fHome->InitDoTestZHome() (golden uhome.cpp:4891) -- TfHome (uhome.h) is
+//    not yet ported anywhere in this tree (verified by grep: the only other
+//    "fHome" hit is csystem.cpp's own unrelated W7C2_FHOME_SERVOOFF macro for
+//    a DIFFERENT TfHome method, GaliMotorServoOff). Golden's real body resets
+//    TestZTask (TfHome's own PRIVATE Home-form state cursor -- invisible
+//    outside TfHome, and never read back by DoIndexAutoClean or
+//    DoIndexAutoClean_Arm1PickArm2Test) plus MOT[MTestY1/Y2/Z1/Z2].MovFlag/
+//    bScanFlag/GaliSofDelayCount. Offline no-op: safe, since nothing in-scope
+//    reads those MOT[] fields back either -- kept a pure no-op (not a partial
+//    MOT[]-only translation) per this wave's task brief, which explicitly
+//    asks for the W7T1_* no-op idiom here.
+static void W906DIAC_InitDoTestZHome() {}                              // golden uhome.cpp:4891 -- offline no-op
+#define W906DIAC_FHOME_INITDOTESTZHOME()   W906DIAC_InitDoTestZHome()  // golden fHome->InitDoTestZHome()
+
+// -- fiosetview->ProcessIndexSuckDestroy1()/2() (golden iosetview.h) -- the
+//    TfiosetviewShim (atester_shims.h) exposes bIndexSuck[][][] but not these
+//    two pump methods (the SAME gap atester.cpp's W7T1_FIOSET_PISD1/2 already
+//    documents for its OWN call sites -- that pair is `static` to atester.cpp
+//    and therefore not reusable here). Offline (no DAQ): report the suck
+//    self-check "complete" (true) so the index-check SM advances, mirroring
+//    W7T1's identical rationale.
+static bool W906DIAC_ProcessIndexSuckDestroy1() { return true; }  // golden iosetview.h -- offline: suck self-check done
+static bool W906DIAC_ProcessIndexSuckDestroy2() { return true; }  // golden iosetview.h -- offline: suck self-check done
+#define W906DIAC_FIOSET_PISD1()   W906DIAC_ProcessIndexSuckDestroy1()  // golden fiosetview->ProcessIndexSuckDestroy1()
+#define W906DIAC_FIOSET_PISD2()   W906DIAC_ProcessIndexSuckDestroy2()  // golden fiosetview->ProcessIndexSuckDestroy2()
+
+// -- file-scope timers DoIndexAutoClean / DoIndexAutoClean_Arm1PickArm2Test
+//    use (golden AutoClean.cpp:51 / :6464). AutoClean.h's own banner already
+//    explained why these were deliberately NOT declared earlier: their sole
+//    readers/writers were entirely inside this (until-now out-of-scope)
+//    cluster.
+TQPF_Timer DoIndexAutoCleanDelay;   // golden AutoClean.cpp:6464
+TQPF_Timer DoTestYRearDelayAC;      // golden AutoClean.cpp:51
+
+// -- SetTechDataToProd_AutoClean() (golden cinitial.cpp:11269-11315) -- a REAL
+//    (not stubbed) translation: DoIndexAutoClean's case 3000 calls it, and
+//    (verified by reading the golden body in full) it has ZERO dependencies
+//    beyond already-real globals (Prod/TestIF/TestIF_File/IniConfig/Offset --
+//    cprod.h/Config.h/cmydef.h, all already included by this TU). cinitial.cpp
+//    itself does not exist anywhere in this ported tree yet (verified by
+//    grep/find -- zero hits); landing that whole file is well beyond this
+//    wave's scope, so this ONE function is ported directly here instead, per
+//    this wave's own task brief. Golden's own forward declaration
+//    (`extern void SetTechDataToProd_AutoClean();`, AutoClean.cpp:6462) is
+//    unnecessary here since the real body below is defined lexically before
+//    its only call site further down this file.
+void SetTechDataToProd_AutoClean()   // golden cinitial.cpp:11269-11315
+{
+    int iACParamSel=1;                                                          //Sam 20230620 : 優先 Smart Auto Clean
+    if(IniConfig.bEnableAutoCleanFunction && iRunACSmart>0)                     //Sam 20230111 : Smart Auto Clean
+    {
+        if(TestIF_File.bACSmart &&
+           TestIF_File.iACSmart_Count!=0 &&
+           iACUseParam==2)
+        {
+            iACParamSel=2;
+        }
+    }
+
+    if(iACParamSel==2)                                                          //Sam 20230620 : 優先 Smart Auto Clean
+    {
+        Prod.iAutoClean_ContactMode =TestIF_File.iACSmart_ContactMode;
+        Prod.iAutoCleanDropHigh     =TestIF_File.iACSmart_DropHigh;
+        Prod.iAutoClean_ContactTime =TestIF_File.iACSmart_ContactTime;
+        Prod.iAutoClean_ContactCount=TestIF_File.iACSmart_ContactCount;
+    }
+    else
+    {
+        Prod.iAutoClean_ContactMode =TestIF_File.iAutoClean_ContactMode;
+        Prod.iAutoCleanDropHigh     =TestIF_File.iAutoCleanDropHigh;
+        Prod.iAutoClean_ContactTime =TestIF_File.iAutoClean_ContactTime;
+        Prod.iAutoClean_ContactCount=TestIF_File.iAutoClean_ContactCount;
+    }
+
+    if(IniConfig.bSPILFunction==true)                                           //JerryYang 20220330 SPIL客戶需求，把contact offset與auto clean offset分開
+    {
+        Prod.iAutoCleanZ_Contact[0] =Prod.TestZ1_Test-Offset.iIndexArmContact[0]-Prod.TestZ1_Drop_Offset+TestIF_File.iAutoClean_ContactCleanHeight+TestIF_File.iPadThickness;
+        Prod.iAutoCleanZ_Drop[0]    =Prod.TestZ1_Test-Offset.iIndexArmContact[0]-Prod.TestZ1_Drop_Offset+TestIF_File.iAutoClean_ContactCleanHeight+TestIF_File.iPadThickness+TestIF_File.iAutoCleanDropHigh;
+        Prod.iAutoCleanZ_Shift[0]   =Prod.TestZ1_Test-Offset.iIndexArmContact[0]-Prod.TestZ1_Drop_Offset+TestIF_File.iAutoClean_ContactCleanHeight+TestIF_File.iPadThickness+TestIF_File.iAutoClean_ContactShiftHeight;
+        Prod.iAutoCleanZ_Contact[1] =Prod.TestZ2_Test-Offset.iIndexArmContact[1]-Prod.TestZ2_Drop_Offset+TestIF_File.iAutoClean_ContactCleanHeight+TestIF_File.iPadThickness;
+        Prod.iAutoCleanZ_Drop[1]    =Prod.TestZ2_Test-Offset.iIndexArmContact[1]-Prod.TestZ2_Drop_Offset+TestIF_File.iAutoClean_ContactCleanHeight+TestIF_File.iPadThickness+TestIF_File.iAutoCleanDropHigh;
+        Prod.iAutoCleanZ_Shift[1]   =Prod.TestZ2_Test-Offset.iIndexArmContact[1]-Prod.TestZ2_Drop_Offset+TestIF_File.iAutoClean_ContactCleanHeight+TestIF_File.iPadThickness+TestIF_File.iAutoClean_ContactShiftHeight;
+    }
+    else
+    {
+        Prod.iAutoCleanZ_Contact[0] =Prod.TestZ1_Test-Prod.TestZ1_Drop_Offset+TestIF.iAutoClean_ContactCleanHeight+TestIF.iPadThickness;
+        Prod.iAutoCleanZ_Drop[0]    =Prod.TestZ1_Test-Prod.TestZ1_Drop_Offset+TestIF.iAutoClean_ContactCleanHeight+TestIF.iPadThickness+Prod.iAutoCleanDropHigh;
+        Prod.iAutoCleanZ_Shift[0]   =Prod.TestZ1_Test-Prod.TestZ1_Drop_Offset+TestIF.iAutoClean_ContactCleanHeight+TestIF.iPadThickness+TestIF.iAutoClean_ContactShiftHeight;
+        Prod.iAutoCleanZ_Contact[1] =Prod.TestZ2_Test-Prod.TestZ2_Drop_Offset+TestIF.iAutoClean_ContactCleanHeight+TestIF.iPadThickness;
+        Prod.iAutoCleanZ_Drop[1]    =Prod.TestZ2_Test-Prod.TestZ2_Drop_Offset+TestIF.iAutoClean_ContactCleanHeight+TestIF.iPadThickness+Prod.iAutoCleanDropHigh;
+        Prod.iAutoCleanZ_Shift[1]   =Prod.TestZ2_Test-Prod.TestZ2_Drop_Offset+TestIF.iAutoClean_ContactCleanHeight+TestIF.iPadThickness+TestIF.iAutoClean_ContactShiftHeight;
+    }
+}
 
 //==============================================================================
 //  Part A -- pure calc / config
@@ -5424,33 +5534,2653 @@ void DoShuttle2AutoClean()
 }
 
 // =============================================================================
-//  AI(W906-AutoCleanCluster) 20260722: TEMPORARY placeholder -- DoIndexAutoClean
-//  itself is a separate not-yet-translated wave (golden AutoClean.cpp:7360-9106,
-//  the SECOND dependency cluster this session's recon split off). This stub
-//  exists ONLY so this wave's translated code links/tests run; it is NOT a
-//  real translation of DoIndexAutoClean's actual 1747-line RTC/vision-comm +
-//  Index-arm clean state machine. A later wave will REPLACE this stub with the
-//  real body -- do not extend or "improve" this placeholder in the meantime.
+//  AI(W906-AutoCleanCluster) 20260728: DoIndexAutoClean_Arm1PickArm2Test +
+//  DoIndexAutoClean -- the SECOND (and final) dependency cluster this file's
+//  earlier waves deferred (their own banners said as much; see AutoClean.h's
+//  header banner history). REAL, faithful translations replacing the
+//  TEMPORARY placeholder that used to sit here (an empty `void
+//  DoIndexAutoClean(){}` -- see git history for that stub's own banner/
+//  rationale, no longer applicable now that both functions are landed for
+//  real).
 //
-//  Verification note (this wave): read golden DoAutoCleanKit (AutoClean.cpp
-//  :4417-5799) IN FULL -- it does NOT call DoIndexAutoClean or
-//  DoIndexAutoClean_Arm1PickArm2Test directly (verified; the task brief's
-//  phrasing "DoAutoCleanKit ... calls DoIndexAutoClean" describes the BROADER
-//  AutoClean subsystem flow, not a literal call site inside DoAutoCleanKit's
-//  own body). The only real golden call site is csystem.cpp:9691, itself
-//  sitting inside an entire `#if 0 // TODO(W7)` dead-code region in THIS
-//  tree's csystem.cpp (verified: csystem.cpp:440-451) -- so nothing in the
-//  currently-linked tree actually reaches this stub today either. Added anyway,
-//  per this wave's task brief, as a defensive placeholder for whichever wave
-//  ungates that csystem.cpp region or lands the real DoIndexAutoClean.
-//  DoIndexAutoClean_Arm1PickArm2Test is DELIBERATELY NOT stubbed here: verified
-//  (by reading its only golden call site, AutoClean.cpp:7423) that it is called
-//  ONLY from inside DoIndexAutoClean itself, never from DoAutoCleanKit or any
-//  other in-scope function this wave translates -- so no in-scope code needs
-//  its symbol to link.
+//  Golden: AutoClean.cpp:6465-7358 (DoIndexAutoClean_Arm1PickArm2Test) then
+//  :7360-9105 (DoIndexAutoClean, which calls the former at golden :7423).
+//  Translated in that same order (callee first) below, mirroring golden's own
+//  file layout exactly.
+//
+//  GOLDEN QUIRK preserved: `ErrPart` is passed BY VALUE (no `&`) into
+//  DoIndexAutoClean_Arm1PickArm2Test (golden :6470, verified against the
+//  exact signature) -- any `ErrPart+=...`/`ErrPart=...` mutation made inside
+//  it is invisible to DoIndexAutoClean's own `static AnsiString ErrPart`
+//  after the call returns. Harmless in practice: every case that CONSUMES
+//  ErrPart (e.g. the `ShowErrorMessage(...,ErrPart)` calls) always rebuilds
+//  it fresh, in the SAME call, from the live FTestSuck/BTestSuck.Suck[][].Error
+//  grid before reading it back -- nothing relies on it surviving across
+//  ticks/calls. Kept exactly as golden declares it (not silently upgraded to
+//  a reference).
 // =============================================================================
-void DoIndexAutoClean()                                                         // golden :7360-9106 -- TEMPORARY placeholder, see banner above
+void DoIndexAutoClean_Arm1PickArm2Test(int iSpeed, int iSpeedSY, int iSpeedSZ, int &iContactCount,
+                                       bool bDuplicateErr[MAX_SOCKET_ROW][MAX_SOCKET_COL],
+                                       bool bSuckFinish[MAX_SOCKET_ROW][MAX_SOCKET_COL],
+                                       bool bIsSuckICFallDown[MAX_SOCKET_ROW][MAX_SOCKET_COL],
+                                       bool bTestSuckUse[MAX_SOCKET_ROW][MAX_SOCKET_COL],
+                                       AnsiString ErrPart)                      //Jimmychiu 20230710 : Auto Clean 用 Arm1 下料 arm2 測試
 {
+    static int iCT=0;
+
+    int ret=0, iPos;
+    int &Task=iDoIndexAutoCleanTask;
+    bool bFlagY1=false, bFlagS2=false, flag1=false;
+    bool bHasErr=false, bHasDuplicateErr=false;                                 //kevin 20180716
+    AnsiString Str;
+
+    switch(Task)
+    {
+        case 1:
+            W906DIAC_FHOME_INITDOTESTZHOME();
+            bInedxCleanFinish[0]=false;                                         //kevin 20170520 (wei) Autoclean index Arm 1完成
+            bInedxCleanFinish[1]=false;                                         //kevin 20170520 (wei) Autoclean index Arm 2完成
+            Task=100;
+            break;
+        case 100:
+            if(MOT[MTestZ1].Gali_Two_ZAxis_Move(Prod.TestZ1_Safe, iSpeed, GetMotFunc(__FUNC__,Task)))
+            {
+                if(TestSocket.HasDefineIC(HAS_CLEAN_IC))                        //Steven 20130620 : Auto Clean做完在左右鎖要有分開
+                {
+                    Task=3090;
+                }
+                else if(TestSocket.HasDefineIC(CLEAN_FINISH_IC))                //Steven 20130620 : Auto Clean做完在左右鎖要有分開
+                {
+                    Task=3150;
+                }
+                else if(FTestSuck.HasDefineIC(HAS_CLEAN_IC))                    //Steven 20130620 : Auto Clean做完在左右鎖要有分開
+                {
+                    Task=200;
+                }
+                else if(FTestSuck.HasDefineIC(CLEAN_FINISH_IC))                 //Steven 20130620 : Auto Clean做完在左右鎖要有分開
+                {
+                    Task=3750;
+                }
+                else
+                {
+                    Task=200;
+                }
+            }
+            break;
+        case 200:
+            //重置index狀態
+            W906DIAC_FHOME_INITDOTESTZHOME();
+            iContactCount=0;
+            Task=300;
+            break;
+        case 300:
+            if(EP_Install)
+            {
+                ADAM_WriteVoltage(TestIF.fAutoClean_AireForce);
+            }
+            bFlagY1=MOT[MTestY1].GalilTwoY_Move(Prod.TestY1_Front, Prod.TestY2_Rear, iSpeedSY, GetMotFunc(__FUNC__,Task));//kevin 20120517 iSpeed);    //Isaac 20200203 : iSpeedSY,認為要AutoCleanIndex速度要一致
+            bFlagS2=false;
+
+            if(TestIF_File.iAutoClean_Tray==eCKPos_CleanKit)                    //Clean Kit
+            {
+                if(FLCarryKit.UseSiteHasIC() && InSHT1InRT())                   //Sam 20210923 : 修正 AutoClean Index Arm 為送空盤導致 Hang up    //Steven 20220211 : HasRealIC --> HasIC
+                {
+                    MOT[MInShuttle1].fCanMoveM=false;                           //kevin 20170119 index cleanpad會限制到 shuttle的移動
+                    bFlagS2=true;
+                }
+            }
+            else if(TestIF_File.iAutoClean_Tray==eCKPos_CleanAir)
+            {
+                bFlagS2=true;
+            }
+
+            if(bFlagY1 && bFlagS2)
+            {
+                MOT[MInShuttle1].fCanMoveM=false;                               //index與shuttle到達等待位置上，shuttle 1移clean pad
+                Task=400;
+            }
+            break;
+        case 400:
+            if(MOT[MTestZ1].Gali_MotMove(Prod.TestZ1_Pick+TestIF_File.iAutoClean_IndexPickOffset, iSpeed, "DoIndexAutoClean_Arm1PickArm2Test_400"))        //wei 20150318 Auto clean Index Pick Offset
+            {
+                DoIndexAutoCleanDelay.SetMSAndOn(500);
+                Task=500;
+            }
+            break;
+        case 500:
+            if(DoIndexAutoCleanDelay.Off())
+            {
+                for(int i=0; i<MAX_Index_Row; i++)
+                {
+                    for(int j=0; j<NEW_MAX_Index_Col; j++)
+                    {
+                        bSuckFinish[i][j]=false;                                //Steven 20110301 : 初始化，尚未完成
+                        bTestSuckUse[i][j]=false;
+                    }
+                }
+                FTestSuck.ResetAll();                                           //Steven 20160323 : 避免錯誤殘留
+                Task=600;
+            }
+            break;
+        case 600:
+            flag1=true;
+            for(int i=0; i<MAX_Index_Row; i++)                                  //換IC狀態
+            {
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                {
+                    if(FLCarryKit.Item[i][j])
+                    {
+                        if(FLCarryKit.Item[i][j]==HAS_NULL_CLEAN_IC ||
+                           bSuckFinish[i][j]==true)                             //Steven 20110301
+                        {
+                            if(FTestSuck.Item[i][j]==HAS_NULL_CLEAN_IC ||
+                               FTestSuck.Item[i][j]==NULL_IC)                   //Steven 20111202 : Retry會重取
+                                FTestSuck.Suck[i][j].Normal();                  //Steven 20111201 : 已完成不執行
+                            bSuckFinish[i][j]=true;                             //Steven 20110301
+                        }
+                        else
+                        {
+                            if(fMain->bAutoCleanTest==true && i==1 && j==2)
+                            {
+                                FTestSuck.Suck[i][j].Error=true;
+                                fMain->bAutoCleanTest=false;
+                                bSuckFinish[i][j]=true;
+                                return;
+                            }
+                            #ifdef SOFT_SIMULTE
+                            int x=atoi(fMain->edHPY->Text.c_str());
+                            int y=atoi(fMain->edHPX->Text.c_str());
+                            if(fMain->cbIndexDrop->Checked==true && i==x && j==y)
+                            {
+                                FTestSuck.Suck[i][j].Error=true;
+                                fMain->bAutoCleanTest=false;
+                                bSuckFinish[i][j]=true;
+                                continue;
+                            }
+                            #endif
+                            if(FTestSuck.Suck[i][j].Suck())
+                            {
+                                FTestSuck.MoveSuckData(FLCarryKit, i, j);
+                                bDuplicateErr[i][j]=false;                      //Steven 20100105
+                                bSuckFinish[i][j]=true;                         //Steven 20110301 : 吸嘴完成本次判定
+                            }
+                            else if(FTestSuck.Suck[i][j].Error)                 //Steven 20110301 : 本次錯誤不判定
+                            {
+                                bSuckFinish[i][j]=true;
+                            }
+                            else
+                            {
+                                flag1=false;                                    //jou 2011-08-16 只要有任何未完成就繼續
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if(FTestSuck.Item[i][j]==HAS_NULL_CLEAN_IC ||
+                           FTestSuck.Item[i][j]==NULL_IC)                       //Steven 20111202 : Retry會重取
+                            FTestSuck.Suck[i][j].Normal();                      //Steven 20111201 : 已完成不執行
+                        bSuckFinish[i][j]=true;                                 //Steven 20110301 : 沒有東西的地方要跳過
+                    }
+                }
+            }
+
+            for(int i=0; i<MAX_Index_Row; i++)
+            {
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                {
+                    if(bSuckFinish[i][j]==false)                                //只要有任何未完成就繼續
+                        flag1=false;
+                }
+            }
+
+            if(flag1==true)                                                     //Steven 20110301 : 所有吸嘴皆完成
+            {
+                for(int i=0; i<MAX_Index_Row; i++)                              //確認吸嘴狀態異常
+                {
+                    for(int j=0; j<NEW_MAX_Index_Col; j++)
+                    {
+                        if(FTestSuck.Suck[i][j].Error)
+                        {
+                            Task=650;
+                            return;
+                        }
+                    }
+                }
+
+                if(FLCarryKit.HasRealIC())
+                    break;
+
+                for(int i=0; i<MAX_Index_Row; i++)
+                {
+                    for(int j=0; j<NEW_MAX_Index_Col; j++)
+                    {
+                        if(FLCarryKit.Item[i][j])
+                        {
+                            if(FLCarryKit.Item[i][j]==HAS_NULL_CLEAN_IC)
+                            {
+                                FTestSuck.Suck[i][j].Normal();
+                                FTestSuck.MoveSuckData(FLCarryKit, i, j);
+                            }
+                        }
+                        bDuplicateErr[i][j]=false;                              //Steven 20100105
+                    }
+                }
+
+                if(FLCarryKit.UseSiteHasIC())
+                    break;
+
+                Task=700;
+            }
+            break;
+        case 650:                                                               //移動安全位置
+            if(MOT[MTestZ1].Gali_MotMove(Prod.TestZ1_Safe, iSpeed, "DoIndexAutoClean_Arm1PickArm2Test_650"))
+            {
+                Task=651;
+            }
+            break;
+        case 651:                                                               //Richard 20230418 : pickupError shutter move to left position
+            if(DoInArmMoveToWaitPosByAutoClean()==false)                        //ChungHung 20150129 add when Index Jam SCK want to Inarm move to safe postion
+                return;
+
+            ErrPart=" ";
+            bHasErr=false;
+            bHasDuplicateErr=false;
+            iPos=IsNNMode();
+            for(int i=0; i<MAX_Index_Row; i++)
+            {
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                {
+                    if(bDuplicateErr[i][j])
+                        bHasDuplicateErr=true;
+                    if(FTestSuck.Suck[i][j].Error)
+                    {
+                        bHasErr=true;
+                        ErrPart+=IndexSuckName[i+iPos][j];
+                    }
+                    else
+                    {
+                        FTestSuck.Suck[i][j].Error=false;
+                    }
+                }
+            }
+
+            if(IniConfig.bD43IndexDropErrorCanRetryandSkip==true && bHasErr==true)
+            {
+                MOT[MInShuttle1].fCanMoveM=true;
+                bAutoCleanShuttle1MoveToLeft=true;
+                bAutoCleanShuttle1HasPickErr=true;
+                Task=652;
+            }
+            else
+            {
+                Task=660;
+            }
+            break;
+        case 652:
+            if(IniConfig.bD43IndexDropErrorCanRetryandSkip &&
+               bAutoCleanShuttle1MoveToLeft)                                    //ChungHung 20131015 fix hangup
+            {
+                MOT[MInShuttle1].fCanMoveM=true;
+                if(InSHT1InLF()!=true)
+                {
+                    break;
+                }
+            }
+            MOT[MInShuttle1].fCanMoveM=false;
+            Task=660;
+        case 660:
+            ErrPart=" ";
+            bHasErr=false;
+            bHasDuplicateErr=false;
+            iPos=IsNNMode();
+            for(int i=0; i<MAX_Index_Row; i++)
+            {
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                {
+                    if(bDuplicateErr[i][j])
+                        bHasDuplicateErr=true;
+
+                    if(FTestSuck.Suck[i][j].Error)
+                    {
+                        bHasErr=true;
+                        ErrPart+=IndexSuckName[i+iPos][j];
+                    }
+                    else
+                    {
+                        FTestSuck.Suck[i][j].Error=false;
+                    }
+                }
+            }
+
+            if(bHasErr)                                                         //Shuttle上有 確認是否移動??
+            {
+                bHasErr=false;                                                  //Ifor 20160322 移動至上面
+                if(DoInArmMoveToWaitPosByAutoClean()==false)                    //JerryYang 20241118 : fix auto clean hang up    //Steven 20130613 : Index有異常時, In Arm要有先讓功能
+                {
+                    return ;
+                }
+                bIsTestSitICFallDown=true;
+                if(IniConfig.bIndexPickErrOnlySKIP==true ||                     //kevin 201701103 (Steven) index pick up error only skip
+                   IniConfig.bD64IndexPickErrOnlySKIP)                          //JerryYang 20160301 index pick-up error only skip
+                    ret=ShowErrorMessage("JAM0312", K_SKIP, MTestZ1, bHasDuplicateErr, ErrPart);            //Device Pick-Up Error  //JerryYang 20160511 JAM0301->JAM0312,將IC與Clean pad分開的alarm code分開
+                else
+                    ret=ShowErrorMessage("JAM0312", K_SKIP|K_RETRY, MTestZ1, bHasDuplicateErr, ErrPart);    //Devicr Pick-Up Error  //JerryYang 20160511 JAM0301->JAM0312,將IC與Clean pad分開的alarm code分開
+
+                if(ret==K_SKIP)
+                {
+                    for(int i=0; i<MAX_Index_Row; i++)
+                    {
+                        for(int j=0; j<NEW_MAX_Index_Col; j++)
+                        {
+                            if(FTestSuck.Suck[i][j].Error)
+                            {
+                                FTestSuck.MoveSuckData(FLCarryKit, i, j);       //JerryYang 20160223 MARK
+                                FTestSuck.SetItemData(i, j, HAS_NULL_CLEAN_IC); //Steven 20260126 : 為了記得座標,但是只能填入 HAS_NULL_CLEAN_IC
+                                FTestSuck.Suck[i][j].Normal();
+                                bTestSuckUse[i][j]=true;
+                            }
+                            bDuplicateErr[i][j]=false;
+                        }
+                    }
+                }
+                else
+                {
+                    for(int i=0; i<MAX_Index_Row; i++)
+                        for(int j=0; j<NEW_MAX_Index_Col; j++)
+                            if(FTestSuck.Suck[i][j].Error)
+                                bDuplicateErr[i][j]=true;
+                }
+                FTestSuck.ResetAll();                                           //Steven 20160323 : 避免錯誤殘留
+                bAutoCleanShuttle1MoveToLeft=false;
+                MOT[MInShuttle1].fCanMoveM=true;
+            }
+            bHasErr=false;
+            bAutoCleanShuttle1HasPickErr=false;
+            if(TestIF_File.iAutoClean_Tray==eCKPos_CleanKit)                    //Clean Kit
+            {
+                if(IniConfig.bD43IndexDropErrorCanRetryandSkip)
+                {
+                    Task=670;
+                }
+                else
+                {
+                    if(FLCarryKit.HasRealIC())
+                        Task=400;
+                    else
+                        Task=700;
+                }
+            }
+            break;
+        case 670:
+            if(InSHT1InRT())
+            {
+                MOT[MInShuttle1].fCanMoveM=false;
+                if(FLCarryKit.HasRealIC())                                      //有IC->Retry
+                    Task=400;
+                else
+                    Task=700;                                                   //無IC->Skip
+            }
+            break;
+        case 700:                                                               //Steven 20160323 : 吸嘴等一下再作動
+            DoIndexAutoCleanDelay.SetMSAndOn(500);
+            Task=710;
+        case 710:
+            if(DoIndexAutoCleanDelay.Off())
+            {
+                Task=720;
+            }
+            break;
+        case 720:
+            if(MOT[MTestZ1].Gali_MotMove(Prod.TestZ1_Safe, iSpeed, "DoIndexAutoClean_Arm1PickArm2Test_720"))
+            {
+                Task=800;
+            }
+            break;
+        case 800:
+            for(int i=0; i<MAX_Index_Row; i++)
+            {
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                {
+                    if(FTestSuck.Suck[i][j].GetStatus()==false)
+                        FTestSuck.Suck[i][j].Normal();
+                }
+            }
+            Task=900;
+            break;
+        case 900:
+            if(MOT[MTestY1].GalilTwoY_Move(Prod.TestY1_Middle, Prod.TestY2_Rear, iSpeedSY, GetMotFunc(__FUNC__,Task)))  //Isaac 20200203 : iSpeedSY,認為要AutoCleanIndex速度要一致
+            {
+                Task=1000;
+            }
+            break;
+        case 1000:
+            W906DIAC_FHOME_INITDOTESTZHOME();
+            Task=1150;
+            break;
+        case 1150:
+            if(MOT[MTestZ1].Gali_MotMove(Prod.iAutoCleanZ_Contact[0], iSpeedSZ, "DoIndexAutoClean_Arm1PickArm2Test_1150"))//kevin 20181016 add drop 高低
+            {
+                flag1=true;
+                for(int i=0; i<MAX_Index_Row; i++)
+                {
+                    for(int j=0; j<NEW_MAX_Index_Col; j++)
+                    {
+                        if(FTestSuck.Item[i][j]>0)
+                        {
+                            if(FTestSuck.Item[i][j]!=HAS_CLEAN_IC ||
+                               FTestSuck.Suck[i][j].Destroy())
+                            {
+                                TestSocket.MoveSuckData(FTestSuck, i, j);
+                            }
+                            else if(FTestSuck.Suck[i][j].Error==false)
+                            {
+                                flag1=false;
+                            }
+                        }
+                    }
+                }
+
+                if(flag1==true)
+                {
+                    bIndexCheckNoStopVaccum=false;
+                    bHasICinSocket=true;
+
+                    DoIndexAutoCleanDelay.SetSecAndOn(1.5);
+                    Task=1160;
+                }
+                break;
+                }
+                break;
+        case 1160:
+            if(DoIndexAutoCleanDelay.Off())
+            {
+                Task=1400;
+            }
+            break;
+        case 1400:
+            if(MOT[MTestZ1].Gali_Two_ZAxis_Move(Prod.TestZ1_Safe, iSpeed, GetMotFunc(__FUNC__,Task)))
+            {
+                if(CheckSocketSensor(0, "DoIndexAutoClean_Arm1PickArm2Test_1400", true, false))  //Jimmychiu 20230821 : Arm1PickArm2Test add Socket Sensor Function
+                {
+                    Task=1450;
+                }
+                else
+                {
+                    bHasICinSocket=false;
+                    Task=1500;
+                }
+            }
+            break;
+        case 1450:
+            if(DoSocketSensorAlarm(__FUNC__, Task)==true)
+            {
+                Task=1400;                                                      //Steven 20201014 : 修正防止異常後, index arm要放開
+            }
+            break;
+        case 1500:
+            if(MOT[MTestY1].Gali_MotMove(Prod.TestY1_Front, iSpeedSY, "DoIndexAutoClean_Arm1PickArm2Test_1500"))          //Isaac 20200203 : iSpeedSY,認為要AutoCleanIndex速度要一致
+            {
+                Task=2100;
+            }
+            break;
+        case 2100:
+            if(MOT[MTestZ2].Gali_Two_ZAxis_Move(Prod.TestZ2_Safe, iSpeed, GetMotFunc(__FUNC__,Task)))
+            {
+                Task=2200;
+            }
+            break;
+        case 2200:
+            W906DIAC_FHOME_INITDOTESTZHOME();
+            iContactCount=0;
+            Task=2300;
+            break;
+        case 2300:
+            if(EP_Install)
+            {
+                ADAM_WriteVoltage(TestIF.fAutoClean_AireForce);
+            }
+            bFlagY1=MOT[MTestY1].GalilTwoY_Move(Prod.TestY1_Front, Prod.TestY2_Rear, iSpeedSY, GetMotFunc(__FUNC__, Task));//kevin 20120517 iSpeed);   //Isaac 20200203 : iSpeedSY,認為要AutoCleanIndex速度要一致
+            if(bFlagY1)
+            {
+                DoIndexAutoCleanDelay.SetSecAndOn(1.5);
+                MOT[MInShuttle2].fCanMoveM=false;
+                Task=2310;
+            }
+            break;
+        case 2310:
+            if(DoIndexAutoCleanDelay.Off())
+            {
+                Task=2900;
+            }
+            break;
+        case 2900:
+            if(MOT[MTestY1].GalilTwoY_Move(Prod.TestY1_Front, Prod.TestY2_Middle, iSpeedSY, GetMotFunc(__FUNC__, Task)))//kevin 20120517 iSpeed))  //Isaac 20200203 : iSpeedSY,認為要AutoCleanIndex速度要一致
+            {
+                Task=3000;
+            }
+            break;
+        case 3000:
+            W906DIAC_FHOME_INITDOTESTZHOME();
+            if(Prod.iAutoCleanZ_Contact[1]>-1000)                               //Steven 20260130 : Add protection for Auto clean
+            {
+                Str.sprintf("iAutoCleanZ_Contact[0, 1]=[%d, %d] !!!", Prod.iAutoCleanZ_Contact[0], Prod.iAutoCleanZ_Contact[1]);
+                RecordProcess(Str);
+                SetTechDataToProd_AutoClean();
+            }
+            Task=3090;
+            break;
+        case 3090:
+            if(MOT[MTestZ2].Gali_MotMove(Prod.iAutoCleanZ_Contact[1], iSpeedSZ, "DoIndexAutoClean_Arm1PickArm2Test_3090"))
+            {
+                iContactCount++;
+                DoIndexAutoCleanDelay.Set0_1SecAndOn(Prod.iAutoClean_ContactTime);  //Sam 20230111 : Smart Auto Clean
+                Task=3100;
+            }
+            break;
+        case 3100:
+            if(DoIndexAutoCleanDelay.Off())
+            {
+                if(TestIF_File.iAutoClean_Tray==eCKPos_CleanAir)
+                    SW[SwSocketClean].Off();
+                if(iContactCount<Prod.iAutoClean_ContactCount)                  //Sam 20230111 : Smart Auto Clean
+                {
+                    Task=3130;
+                }
+                else
+                {
+                    if(TestIF_File.iAutoClean_Tray!=eCKPos_CleanAir)
+                    {
+                        Task=3150;
+
+                        for(int i=0; i<MAX_Index_Row; i++)                      //JerryYang 20260312 : fix補一併Drop error
+                        {
+                            for(int j=0; j<NEW_MAX_Index_Col; j++)
+                            {
+                                if(TestSocket.Item[i][j])
+                                {
+                                    if(TestSocket.Item[i][j]!=HAS_NULL_CLEAN_IC)
+                                        TestSocket.SetItemData(i, j, CLEAN_FINISH_IC);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Task=3200;
+                    }
+                }
+            }
+            break;
+        case 3130:
+            if(MOT[MTestZ2].Gali_MotMove(Prod.iAutoCleanZ_Shift[1], iSpeedSZ, "DoIndexAutoClean_Arm1PickArm2Test_3130"))
+            {
+                DoIndexAutoCleanDelay.SetSecAndOn(1.5);
+                iCT=0;
+                Task=3135;
+            }
+            break;
+        case 3135:
+            if(DoIndexAutoCleanDelay.Off())
+            {
+                bHasICinSocket=true;
+                if(CheckSocketSensor(1, "DoIndexAutoClean_Arm1PickArm2Test_3135", true, true))  //Jimmychiu 20230821 : Arm1PickArm2Test add Socket Sensor Function
+                {
+                    iCT++;
+                    if(iCT>=3)
+                    {
+                        iCT=0;
+                        Task=3140;
+                    }
+                    break;
+                }
+
+                if(TestIF_File.iAutoClean_Tray==eCKPos_CleanAir)
+                    SW[SwSocketClean].On();
+                bHasICinSocket=false;
+                Task=3090;
+            }
+            break;
+        case 3140:
+            if(MOT[MTestZ2].Gali_Two_ZAxis_Move(Prod.TestZ2_Safe, iSpeed, GetMotFunc(__FUNC__,Task)))
+            {
+                Task=3142;
+            }
+            break;
+        case 3142:
+            if(DoSocketSensorAlarm(__FUNC__, Task)==true)
+            {
+                Task=3130;
+            }
+            break;
+        case 3150:
+            if(MOT[MTestZ2].Gali_MotMove(Prod.iAutoCleanZ_Shift[1], iSpeedSZ, "DoIndexAutoClean_Arm1PickArm2Test_3150"))
+            {
+                if(TestIF_File.iAutoClean_Tray==eCKPos_CleanAir)
+                    SW[SwSocketClean].On();
+                DoIndexAutoCleanDelay.SetSecAndOn(1.5);
+                Task=3160;
+            }
+            break;
+        case 3160:
+            if(DoIndexAutoCleanDelay.Off())
+            {
+                Task=3400;
+            }
+            break;
+        case 3400:
+            if(MOT[MTestZ2].Gali_Two_ZAxis_Move(Prod.TestZ2_Safe, iSpeed, GetMotFunc(__FUNC__, Task)))
+            {
+                Task=3600;
+            }
+            break;
+        case 3600:
+            if(MOT[MTestY1].GalilTwoY_Move(Prod.TestY1_Middle, Prod.TestY2_Rear, iSpeedSY, GetMotFunc(__FUNC__, Task)))//kevin 20120517 iSpeed))    //Isaac 20200203 : iSpeedSY,認為要AutoCleanIndex速度要一致
+            {
+                bHasICinSocket=true;
+                if(CheckSocketSensor(0, "DoIndexAutoClean_Arm1PickArm2Test_3600", true, false))  //Jimmychiu 20230821 : Arm1PickArm2Test add Socket Sensor Function
+                {
+                    Task=3610;
+                }
+                else
+                {
+                    bHasICinSocket=false;
+                    Task=3650;
+                }
+            }
+            break;
+        case 3610:
+            if(DoSocketSensorAlarm(__FUNC__, Task)==true)
+            {
+                Task=3600;
+            }
+            break;
+        case 3650:
+            if(MOT[MTestZ1].Gali_MotMove(Prod.iAutoCleanZ_Contact[0], iSpeedSZ, "DoIndexAutoClean_Arm1PickArm2Test_3650"))//kevin 20180717 drop high
+            {
+                Task=3700;
+            }
+            break;
+        case 3700:
+            // AI(W906-DoIndexAutoClean) 20260728: golden AutoClean.cpp:7108-7139 (case 3700)
+            // opens with a ~22-line block that is ALREADY dead in golden itself -- 3 lines
+            // commented with `//` (a DoInArmMoveToWaitPosByAutoClean() early-return guard, and
+            // a bJAM0303NeedOpenChamberDoor set) plus a `/* ... */`-commented JAM0314
+            // CC_KYEC_LEE/XILINX/CHEN ShowErrorMessage block, and a trailing `//Task=1500;`.
+            // All already inert historical commentary in golden (not executed there either) --
+            // intentionally NOT carried forward as dead code here, per this wave's translation.
+            flag1=true;
+            for(int i=0; i<MAX_Index_Row; i++)
+            {
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                {
+                    if(TestSocket.Item[i][j]>0)
+                    {
+                        if(TestSocket.Item[i][j]==HAS_NULL_CLEAN_IC)            //Steven 20260126 : fixed for [D58] auto clean
+                        {
+                            FTestSuck.MoveSuckData(TestSocket, i, j);
+                        }
+                        else if(FTestSuck.Suck[i][j].Suck())
+                        {
+                            FTestSuck.MoveSuckData(TestSocket, i, j);
+                            FTestSuck.SetItemData(i, j, CLEAN_FINISH_IC);
+                        }
+                        else
+                        {
+                            flag1=false;                                        //jou 2011-08-16 只要有任何未完成就繼續
+                        }
+                    }
+                }
+            }
+
+            if(flag1==true)
+            {
+                Task=3750;
+            }
+            break;
+        case 3750:
+            if(MOT[MTestZ1].Gali_Two_ZAxis_Move(Prod.TestZ1_Safe, iSpeed, GetMotFunc(__FUNC__,Task)))
+            {
+                Task=3800;
+                flag1=false;
+                if(LastSet.iRealDummy==REALLY)
+                {
+                    iPos=IsNNMode();
+                    ErrPart=" ";                                                //Steven 20160323 : Auto Clean完成的資料
+                    for(int i=0; i<MAX_Index_Row; i++)
+                    {
+                        for(int j=0; j<NEW_MAX_Index_Col; j++)
+                        {
+                            if(FTestSuck.Suck[i][j].Enable       &&
+                               FTestSuck.Suck[i][j].SenUsing!="" &&
+                               FTestSuck.Item[i][j]!=HAS_NULL_CLEAN_IC &&
+                               FTestSuck.Item[i][j]!=NULL_IC     &&
+                               bTestSuckUse[i][j]==false)
+                            {
+                                if(FTestSuck.Suck[i][j].GetStatus()==false)
+                                {
+                                    FTestSuck.Suck[i][j].Normal();              //jou 2012-01-17 重置吸嘴狀態，避免延誤shuttle釋放，也避免要重測而Hang up
+                                    flag1=true;
+                                    ErrPart+=IndexSuckName[i+iPos][j];
+                                    bIsSuckICFallDown[i][j]=true;               //kevin 20150624
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if(flag1)
+                {
+                    MOT[MTestZ1].Gali_Command("ST", GetMotFunc(__FUNC__,Task));
+                    Task=3760;
+                }
+            }
+            break;
+        case 3760:                                                              //Sam 20221220 : 放 Index Arm1
+            if(MOT[MTestY1].GalilTwoY_Move(Prod.TestY1_Front, Prod.TestY2_Rear, iSpeed, GetMotFunc(__FUNC__,Task)))
+            {
+                Task=3770;
+            }
+            break;
+        case 3770:
+            if(DoInArmMoveToWaitPosByAutoClean()==false)                        //ChungHung 20150129 add when Index Jam SCK want to Inarm move to safe postion
+                return;
+            if(CosFunction.bJAM0303NeedOpenChamberDoor)                         //Steven : JAM0303 & JAM0403需要開啟Chamber門10秒
+                bIsTestSitICFallDown=true;                                      //kevin 20130706
+            if(CUSTOMER_CODE==CC_KYEC_LEE || CUSTOMER_CODE==CC_KYEC_XILINX || CUSTOMER_CODE==CC_KYEC_CHEN)
+                ret=ShowErrorMessage("JAM0314", K_RETRY, MTestZ1, false, ErrPart);  //Steven 20100129 : Device Drop Error   //JerryYang 20160511 JAM0303->JAM0314,將IC與Clean pad分開的alarm code分開
+            else
+                ret=ShowErrorMessage("JAM0314", K_SKIP, MTestZ1, false, ErrPart);   //Steven 20100129 : Device Drop Error    //JerryYang 20160511 JAM0303->JAM0314,將IC與Clean pad分開的alarm code分開
+
+            if(ret==K_SKIP)
+            {
+                for(int i=0; i<MAX_Index_Row; i++)
+                {
+                    for(int j=0; j<NEW_MAX_Index_Col; j++)
+                    {
+                        if(bIsSuckICFallDown[i][j])                             //kevin 20150624
+                            FTestSuck.SetItemData(i, j, HAS_NULL_CLEAN_IC);     // 掉料歸零
+                    }
+                }
+            }
+            Task=3800;
+            break;
+        case 3800:                                                              //step go to end
+            if(MOT[MTestY1].GalilTwoY_Move(Prod.TestY1_Front, Prod.TestY2_Rear, iSpeedSY, GetMotFunc(__FUNC__,Task)))    //Isaac 20200203 : iSpeedSY,認為要AutoCleanIndex速度要一致
+            {
+                if(TestIF_File.iAutoClean_Tray!=eCKPos_CleanAir)
+                    Task=3810;
+                else
+                    Task=3840;
+            }
+            break;
+        case 3810:
+            if(MOT[MTestZ1].Gali_MotMove(Prod.TestZ1_Place+TestIF_File.iAutoClean_IndexReleaseOffset, iSpeed, "DoIndexAutoClean_Arm1PickArm2Test_3810"))  //Jou 2015-08-22 Auto clean Index Release Offset
+            {
+                Task=3820;
+            }
+            break;
+        case 3820:
+            for(int i=0; i<MAX_Index_Row; i++)
+            {
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                {
+                    if(FTestSuck.Item[i][j]>0)
+                    {
+                        if(FTestSuck.Item[i][j]==HAS_NULL_CLEAN_IC ||
+                           FTestSuck.Suck[i][j].Destroy())
+                        {
+                            if(TestIF_File.iAutoClean_Tray==eCKPos_CleanKit)    //Clean Kit
+                                FLCarryKit.MoveSuckData(FTestSuck, i, j);
+                        }
+                    }
+                }
+            }
+
+            flag1=false;
+            for(int i=0; i<MAX_Index_Row; i++)
+            {
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                {
+                    if(FTestSuck.Item[i][j] && FTestSuck.Suck[i][j].Error==false)
+                    {
+                        flag1=true;
+                        break;
+                    }
+                }
+            }
+
+            if(flag1==false)
+            {
+                for(int i=0; i<MAX_Index_Row; i++)
+                {
+                    for(int j=0; j<NEW_MAX_Index_Col; j++)
+                    {
+                        if(FTestSuck.Suck[i][j].Error)
+                        {
+                            Task=3830;
+                            return;
+                        }
+                    }
+                }
+            }
+
+            if(FTestSuck.UseSiteHasIC())
+                break;
+
+            for(int i=0; i<MAX_Index_Row; i++)                                  //Steven 20100105
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                    bDuplicateErr[i][j]=false;
+            Task=3840;
+            break;
+        case 3830:                                                              //開料異常處理
+            if(DoInArmMoveToWaitPosByAutoClean()==false)                        //ChungHung 20150129 add when Index Jam SCK want to Inarm move to safe postion
+                return;
+
+            ErrPart=" ";
+            bHasErr=false;
+            bHasDuplicateErr=false;
+            for(int i=0; i<MAX_Index_Row; i++)
+            {
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                {
+                    if(bDuplicateErr[i][j])
+                        bHasDuplicateErr=true;
+
+                    if(FTestSuck.Suck[i][j].Error)
+                    {
+                        bHasErr=true;
+                        ErrPart+=IndexSuckName[i][j];
+                        FTestSuck.Suck[i][j].Error=false;                       //Steven 20101229 : 重置位置
+                        bDuplicateErr[i][j]=true;                               //Steven 20101229 : 重置位置
+                    }
+                    else
+                    {
+                        bDuplicateErr[i][j]=false;
+                    }
+                }
+            }
+
+            if(bHasErr)
+                ShowErrorMessage("JAM0327", K_RETRY, MTestZ1, bHasDuplicateErr, ErrPart);   //Vacuum sensor OFF error
+
+            bHasErr=false;
+            Task=3820;
+            break;
+        case 3840:
+            if(MOT[MTestZ1].Gali_Two_ZAxis_Move(Prod.TestZ1_Safe, iSpeed, "DoIndexAutoClean 3840"))
+            {
+                if((iInArmType==e9045_1x3_4 ||                                  //Steven 20220922 : Fixed for 1x3 auto clean
+                    iInArmType==e9045_1x3_2_14) &&
+                   TestIF_File.iAutoClean_DeveicePices%3==0)
+                {
+                    FLCarryKit.SetItemData(0, 3, NULL_IC);
+                }
+                Task=3850;
+            }
+            break;
+        case 3850:
+            MOT[MInShuttle1].fCanMoveM=true;
+            bInedxCleanFinish[0]=true;                                          //kevin 20170520 (wei) Autoclean index Arm 1完成
+            Task=3900;
+        case 3900:
+            MOT[MInShuttle2].fCanMoveM=true;
+            bInedxCleanFinish[1]=true;                                          //kevin 20170520 (wei) Autoclean index Arm 2完成
+            if(TestIF_File.iAutoClean_Tray==eCKPos_CleanAir)
+            {
+                bRunAutoClean=false;                                            //停止Auto Clean動作
+                bAutoCleanFinishOnlyUseRTC=true;                                //JerryYang 20161216 (Steven) 停止auto clean後不需要index check
+                iAutoClean_IndexContactCount=0;
+                CleanSetSpeed(false);
+            }
+            break;
+    }
+}
+//------------------------------------------------------------------------------
+void DoIndexAutoClean()
+{
+    int &Task=iDoIndexAutoCleanTask;
+    bool bFlagY1=false, bFlagS2=false, flag=false, flag1=false;
+    int iSpeed, iSpeedSZ, iIndexSpeed, iSpeedSY, iPos;                          //Isaac 20200203 : iSpeedSY,認為要AutoCleanIndex速度要一致
+    static int iContactCount;
+    AnsiString Message;
+
+    if(IniConfig.bF16CheckShuttleSensorBroken && bDoingF16)                     //Steven 20221213 : 確認shuttle 有沒有斷線
+        return;
+
+    if(TestIF_File.iAutoClean_MotorSpeed[2]>=80)
+        iIndexSpeed=TestIF_File.iAutoClean_MotorSpeed[2]-20;                    //kevin 20120919
+    else
+        iIndexSpeed=TestIF_File.iAutoClean_MotorSpeed[2];
+
+    iSpeed=MOT[MTestY1].Motor->PJogHighSpeed*iIndexSpeed/100;
+    if(iSpeed>=300000)                                                          //kevin 20120919 GAIL SPEED > 3000000 RC= -2
+       iSpeed=300000;
+    iSpeedSZ=iSpeed*2;
+    if(iSpeedSZ>=300000)
+       iSpeedSZ=300000;
+
+    int ret;
+    int iRet=0;
+    static AnsiString ErrPart="";                                               //Steven 20160323 : Auto Clean完成的資料, 加上static
+    bool bHasDuplicateErr=false;
+    bool bHasErr=false, bCheckDestroy=false, bCheckSuck=false;                  //kevin 20180716
+    static bool bDuplicateErr[MAX_SOCKET_ROW][MAX_SOCKET_COL]={{false, false, false, false, false, false, false, false},
+                                                               {false, false, false, false, false, false, false, false},
+                                                               {false, false, false, false, false, false, false, false},
+                                                               {false, false, false, false, false, false, false, false}};
+
+    static bool bSuckFinish[MAX_SOCKET_ROW][MAX_SOCKET_COL]  ={{false, false, false, false, false, false, false, false},    //Steven 20110301 : 確認吸嘴完成
+                                                               {false, false, false, false, false, false, false, false},
+                                                               {false, false, false, false, false, false, false, false},
+                                                               {false, false, false, false, false, false, false, false}};
+
+    static bool bTestSuckUse[MAX_SOCKET_ROW][MAX_SOCKET_COL]={{false,false,false,false,false,false,false,false},
+                                                              {false,false,false,false,false,false,false,false},
+                                                              {false,false,false,false,false,false,false,false},
+                                                              {false,false,false,false,false,false,false,false}};
+
+    static bool bIsSuckICFallDown[MAX_SOCKET_ROW][MAX_SOCKET_COL]={{false,false,false,false,false,false,false,false},       //kevin 20150624 重複使用
+                                                                   {false,false,false,false,false,false,false,false},
+                                                                   {false,false,false,false,false,false,false,false},
+                                                                   {false,false,false,false,false,false,false,false}};
+
+    if(bFullViewCheckFinish==false)                                             //JerryYang 20160331 等待FulL view check流程才進行,避免同時對index arm的馬達下指令
+        return;
+
+    if(CUSTOMER_CODE==CC_GIGAS)                                                 //Isaac 20200203 : iSpeedSY,認為要AutoCleanIndex速度要一致
+    {
+        iSpeedSZ=iSpeed;
+        iSpeedSY=iSpeed;
+    }
+    else
+    {
+        iSpeedSY=50000;
+    }
+
+    if(RunAutoCleanByArmPickArm2Test())                                         //Jimmychiu 20230710 : Auto Clean 用 Arm1 下料 arm2 測試
+    {
+        DoIndexAutoClean_Arm1PickArm2Test(iSpeed, iSpeedSY, iSpeedSZ, iContactCount,
+                                          bDuplicateErr, bSuckFinish,
+                                          bIsSuckICFallDown,
+                                          bTestSuckUse, ErrPart);
+        return;
+    }
+
+    if(Task>=400 && Task<=1900 && MOT[MInShuttle1].IsCanMove())
+        return;
+
+    if(Task>=2400 && Task<=3900 && MOT[MInShuttle2].IsCanMove())
+        return;
+
+    switch(Task)
+    {
+        case 1:
+            if(TestIF_File.iAutoClean_Tray==eCKPos_CleanAir)
+            {
+                InitialSet();
+            }
+            W906DIAC_FHOME_INITDOTESTZHOME();
+            bInedxCleanFinish[0]=false;                                         //kevin 20170520 (wei) Autoclean index Arm 1完成
+            bInedxCleanFinish[1]=false;                                         //kevin 20170520 (wei) Autoclean index Arm 2完成
+            Task=100;
+            break;
+        case 100:
+            if(MOT[MTestZ1].Gali_Two_ZAxis_Move(Prod.TestZ1_Safe, iSpeed, "DoIndexAutoClean 100"))
+            {
+                if(CheckAutoCleanCloseSite(0))                                  //Steven 20220929 : 判斷開放Site
+                {
+                    if(BTestSuck.HasDefineIC(HAS_CLEAN_IC))                     //Steven 20130620 : Auto Clean做完在左右鎖要有分開
+                    {
+                        Task=2650;
+                    }
+                    else if(BTestSuck.HasDefineIC(CLEAN_FINISH_IC))             //Steven 20130620 : Auto Clean做完在左右鎖要有分開
+                    {
+                        Task=3500;
+                    }
+                    else
+                    {
+                        Task=2100;
+                    }
+                }
+                else
+                {
+                    if(CheckAutoCleanCloseSite(0)==false)                       //Steven 20220929 : 判斷開放Site  //GOLDEN QUIRK preserved: redundant re-check of the SAME condition already false in this else-branch (verbatim golden :7468, not simplified away)
+                    {
+                        if(FTestSuck.HasDefineIC(HAS_CLEAN_IC))                 //Steven 20130620 : Auto Clean做完在左右鎖要有分開
+                        {
+                            Task=650;
+                        }
+                        else if(FTestSuck.HasDefineIC(CLEAN_FINISH_IC))         //Steven 20130620 : Auto Clean做完在左右鎖要有分開
+                        {
+                            Task=1500;
+                        }
+                        else
+                        {
+                            Task=200;
+                        }
+                    }
+
+                    if((CosFunction.bAutoCleanAutoSelIndexArm==false && TestIF.iAutoClean_SelectArm==1) ||
+                       (CosFunction.bAutoCleanAutoSelIndexArm==true && TestIF.bCleanIndexOtherArm==false &&
+                        TestIF_File.iShuttleMode==1 && TestIF_File.iShuttle_Sel==1))
+                    {
+                        if(BTestSuck.HasDefineIC(HAS_CLEAN_IC))                 //Steven 20130620 : Auto Clean做完在左右鎖要有分開
+                        {
+                            Task=2650;
+                        }
+                        else if(BTestSuck.HasDefineIC(CLEAN_FINISH_IC))         //Steven 20130620 : Auto Clean做完在左右鎖要有分開
+                        {
+                            Task=3500;
+                        }
+                        else
+                        {
+                            Task=2100;
+                        }
+                    }
+                }
+            }
+            break;
+        case 200:
+            //重置index狀態
+            W906DIAC_FHOME_INITDOTESTZHOME();
+            iContactCount=0;
+            Task=300;
+            break;
+        case 300:
+            if(EP_Install)
+            {
+                ADAM_WriteVoltage(TestIF.fAutoClean_AireForce);
+            }
+            bFlagY1=MOT[MTestY1].GalilTwoY_Move(Prod.TestY1_Front, Prod.TestY2_Rear, iSpeedSY, "DoIndexAutoClean 300");//kevin 20120517 iSpeed);    //Isaac 20200203 : iSpeedSY,認為要AutoCleanIndex速度要一致
+            bFlagS2=false;
+
+            if(TestIF_File.iAutoClean_Tray==eCKPos_CleanKit)                    //Clean Kit
+            {
+                if(FLCarryKit.UseSiteHasIC() && InSHT1InRT())                   //Sam 20210923 : 修正 AutoClean Index Arm 為送空盤導致 Hang up    //Steven 20220211 : HasRealIC --> HasIC
+                {
+                    MOT[MInShuttle1].fCanMoveM=false;                           //kevin 20170119 index cleanpad會限制到 shuttle的移動
+                    bFlagS2=true;
+                }
+            }
+            else if(TestIF_File.iAutoClean_Tray==eCKPos_CleanAir)
+            {
+                bFlagS2=true;
+            }
+
+            if(bFlagY1 && bFlagS2)
+            {
+                MOT[MInShuttle1].fCanMoveM=false;
+
+                if(TestIF_File.iAutoClean_Tray!=eCKPos_CleanAir)
+                    Task=400;
+                else
+                    Task=650;
+            }
+            break;
+        case 400:
+            if(MOT[MTestZ1].Gali_MotMove(Prod.TestZ1_Pick+TestIF_File.iAutoClean_IndexPickOffset, iSpeed, "DoIndexAutoClean_Arm1PickArm2Test_400"))        //wei 20150318 Auto clean Index Pick Offset
+            {
+                DoIndexAutoCleanDelay.SetMSAndOn(500);
+                Task=500;
+            }
+            break;
+        case 500:
+            if(DoIndexAutoCleanDelay.Off())
+            {
+                for(int i=0; i<MAX_Index_Row; i++)
+                {
+                    for(int j=0; j<NEW_MAX_Index_Col; j++)
+                    {
+                        bSuckFinish[i][j]=false;                                //Steven 20110301 : 初始化，尚未完成
+                        bTestSuckUse[i][j]=false;
+                    }
+                }
+                FTestSuck.ResetAll();                                           //Steven 20160323 : 避免錯誤殘留
+                Task=600;
+            }
+            break;
+        case 600:
+            flag1=true;
+            for(int i=0; i<MAX_Index_Row; i++)                                  //換IC狀態
+            {
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                {
+                    if(FLCarryKit.Item[i][j])
+                    {
+                        if(FLCarryKit.Item[i][j]==HAS_NULL_CLEAN_IC)
+                        {
+                            FTestSuck.Suck[i][j].Normal();                      //Steven 20111201 : 已完成不執行
+                            FTestSuck.MoveSuckData(FLCarryKit, i, j);
+                            bSuckFinish[i][j]=true;                             //Steven 20110301
+                        }
+                        else if(bSuckFinish[i][j]==true)
+                        {
+                            if(FTestSuck.Item[i][j]==HAS_NULL_CLEAN_IC ||
+                               FTestSuck.Item[i][j]==NULL_IC)                   //Steven 20111202 : Retry會重取
+                            {
+                                FTestSuck.Suck[i][j].Normal();                  //Steven 20111201 : 已完成不執行
+                            }
+                        }
+                        else
+                        {
+                            if(fMain->bAutoCleanTest==true && i==1 && j==2)
+                            {
+                                FTestSuck.Suck[i][j].Error=true;
+                                fMain->bAutoCleanTest=false;
+                                bSuckFinish[i][j]=true;
+                                return;
+                            }
+                            #ifdef SOFT_SIMULTE
+                            int x=atoi(fMain->edHPY->Text.c_str());
+                            int y=atoi(fMain->edHPX->Text.c_str());
+                            if(fMain->cbIndexDrop->Checked==true && i==x && j==y)
+                            {
+                                FTestSuck.Suck[i][j].Error=true;
+                                fMain->bAutoCleanTest=false;
+                                bSuckFinish[i][j]=true;
+                                continue;
+                            }
+                            #endif
+
+                            if(FTestSuck.Suck[i][j].Suck())
+                            {
+                                FTestSuck.MoveSuckData(FLCarryKit, i, j);
+                                bDuplicateErr[i][j]=false;                      //Steven 20100105
+                                bSuckFinish[i][j]=true;                         //Steven 20110301 : 吸嘴完成本次判定
+                            }
+                            else if(FTestSuck.Suck[i][j].Error)                 //Steven 20110301 : 本次錯誤不判定
+                            {
+                                bSuckFinish[i][j]=true;
+                            }
+                            else
+                            {
+                                flag1=false;                                    //jou 2011-08-16 只要有任何未完成就繼續
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if(FTestSuck.Item[i][j]==HAS_NULL_CLEAN_IC ||
+                           FTestSuck.Item[i][j]==NULL_IC)                       //Steven 20111202 : Retry會重取
+                        {
+                            FTestSuck.Suck[i][j].Normal();                      //Steven 20111201 : 已完成不執行
+                        }
+                        bSuckFinish[i][j]=true;                                 //Steven 20110301 : 沒有東西的地方要跳過
+                    }
+                }
+            }
+
+            for(int i=0; i<MAX_Index_Row; i++)
+            {
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                {
+                    if(bSuckFinish[i][j]==false)                                //只要有任何未完成就繼續
+                        flag1=false;
+                }
+            }
+
+            if(flag1==true)                                                     //Steven 20110301 : 所有吸嘴皆完成
+            {
+                for(int i=0; i<MAX_Index_Row; i++)
+                {
+                    for(int j=0; j<NEW_MAX_Index_Col; j++)
+                    {
+                        if(FTestSuck.Suck[i][j].Error)
+                        {
+                            Task=650;
+                            return;
+                        }
+                    }
+                }
+
+                if(FLCarryKit.HasRealIC())
+                    break;
+
+                for(int i=0; i<MAX_Index_Row; i++)
+                {
+                    for(int j=0; j<NEW_MAX_Index_Col; j++)
+                    {
+                        if(FTestSuck.Item[i][j]==HAS_NULL_CLEAN_IC)
+                        {
+                            FTestSuck.Suck[i][j].Normal();
+                        }
+                        bDuplicateErr[i][j]=false;
+                    }
+                }
+
+                if(FLCarryKit.UseSiteHasIC())
+                    break;
+
+                Task=700;
+            }
+            break;
+        case 650:
+            if(MOT[MTestZ1].Gali_MotMove(Prod.TestZ1_Safe, iSpeed, "DoIndexAutoClean_650"))
+            {
+                if(TestIF_File.iAutoClean_Tray!=eCKPos_CleanAir)
+                    Task=651;
+                else
+                    Task=900;
+            }
+            break;
+        case 651:                                                               //Richard 20230418 : pickupError shutter move to left position
+            if(DoInArmMoveToWaitPosByAutoClean()==false)                        //ChungHung 20150129 add when Index Jam SCK want to Inarm move to safe postion
+                return;
+
+            ErrPart=" ";
+            bHasErr=false;
+            bHasDuplicateErr=false;
+            iPos=IsNNMode();
+
+            for(int i=0; i<MAX_Index_Row; i++)
+            {
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                {
+                    if(bDuplicateErr[i][j])
+                        bHasDuplicateErr=true;
+
+                    if(FTestSuck.Suck[i][j].Error)
+                    {
+                        bHasErr=true;
+                        ErrPart+=IndexSuckName[i+iPos][j];
+                    }
+                    else
+                    {
+                        FTestSuck.Suck[i][j].Error=false;
+                    }
+                }
+            }
+
+            if(IniConfig.bD43IndexDropErrorCanRetryandSkip==true &&
+               bHasErr==true)
+            {
+                MOT[MInShuttle1].fCanMoveM=true;
+                bAutoCleanShuttle1MoveToLeft=true;
+                bAutoCleanShuttle1HasPickErr=true;
+                Task=652;
+            }
+            else
+            {
+                Task=660;
+            }
+            break;
+        case 652:
+            if(IniConfig.bD43IndexDropErrorCanRetryandSkip &&
+               bAutoCleanShuttle1MoveToLeft)                                    //ChungHung 20131015 fix hangup
+            {
+                MOT[MInShuttle1].fCanMoveM=true;
+                if(InSHT1InLF()!=true)
+                {
+                    break;
+                }
+            }
+            MOT[MInShuttle1].fCanMoveM=false;
+            Task=660;
+        case 660:
+            ErrPart=" ";
+            bHasErr=false;
+            bHasDuplicateErr=false;
+            iPos=IsNNMode();
+            for(int i=0; i<MAX_Index_Row; i++)
+            {
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                {
+                    if(bDuplicateErr[i][j])
+                        bHasDuplicateErr=true;
+
+                    if(FTestSuck.Suck[i][j].Error)
+                    {
+                        bHasErr=true;
+                        ErrPart+=IndexSuckName[i+iPos][j];
+                    }
+                    else
+                    {
+                        FTestSuck.Suck[i][j].Error=false;
+                    }
+                }
+            }
+
+            if(bHasErr)
+            {
+                bHasErr=false;
+
+                if(DoInArmMoveToWaitPosByAutoClean()==false)                    //JerryYang 20241118 : fix auto clean hang up    //Steven 20130613 : Index有異常時, In Arm要有先讓功能
+                {
+                    return ;
+                }
+                bIsTestSitICFallDown=true;
+
+                if(IniConfig.bIndexPickErrOnlySKIP==true ||                     //kevin 201701103 (Steven) index pick up error only skip
+                   IniConfig.bD64IndexPickErrOnlySKIP)                          //JerryYang 20160301 index pick-up error only skip
+                {
+                    ret=ShowErrorMessage("JAM0312", K_SKIP, MTestZ1, bHasDuplicateErr, ErrPart); //Device Pick-Up Error             //JerryYang 20160511 JAM0301->JAM0312,將IC與Clean pad分開的alarm code分開
+                }
+                else
+                {
+                    ret=ShowErrorMessage("JAM0312", K_SKIP|K_RETRY, MTestZ1, bHasDuplicateErr, ErrPart); //Devicr Pick-Up Error     //JerryYang 20160511 JAM0301->JAM0312,將IC與Clean pad分開的alarm code分開
+                }
+
+                if(ret==K_SKIP)
+                {
+                    for(int i=0; i<MAX_Index_Row; i++)
+                    {
+                        for(int j=0; j<NEW_MAX_Index_Col; j++)
+                        {
+                            if(FTestSuck.Suck[i][j].Error)
+                            {
+                                FTestSuck.MoveSuckData(FLCarryKit, i, j);
+                                FTestSuck.SetItemData(i, j, HAS_NULL_CLEAN_IC); //Steven 20250326 : fixed for auto clean
+                                FTestSuck.Suck[i][j].Normal();
+                                bTestSuckUse[i][j]=true;
+                            }
+                            bDuplicateErr[i][j]=false;
+                        }
+                    }
+                }
+                else
+                {
+                    for(int i=0; i<MAX_Index_Row; i++)
+                    {
+                        for(int j=0; j<NEW_MAX_Index_Col; j++)
+                        {
+                            if(FTestSuck.Suck[i][j].Error)
+                            {
+                                bDuplicateErr[i][j]=true;
+                            }
+                        }
+                    }
+                }
+                FTestSuck.ResetAll();                                           //Steven 20160323 : 避免錯誤殘留
+                bAutoCleanShuttle1MoveToLeft=false;
+                MOT[MInShuttle1].fCanMoveM=true;
+            }
+            bHasErr=false;
+            bAutoCleanShuttle1HasPickErr=false;
+            if(TestIF_File.iAutoClean_Tray==eCKPos_CleanKit)                    //Clean Kit
+            {
+                if(IniConfig.bD43IndexDropErrorCanRetryandSkip)
+                {
+                    Task=670;
+                }
+                else
+                {
+                    if(FLCarryKit.HasRealIC())
+                        Task=400;
+                    else
+                        Task=700;
+                }
+            }
+            break;
+        case 670:
+            if(InSHT1InRT())
+            {
+                MOT[MInShuttle1].fCanMoveM=false;
+                if(FLCarryKit.HasRealIC())
+                    Task=400;
+                else
+                    Task=700;
+            }
+            break;
+        case 700:                                                               //Steven 20160323 : 吸嘴等一下再作動
+            DoIndexAutoCleanDelay.SetMSAndOn(500);
+            Task=710;
+        case 710:
+            if(DoIndexAutoCleanDelay.Off())
+            {
+                Task=720;
+            }
+            break;
+        case 720:
+            if(MOT[MTestZ1].Gali_MotMove(Prod.TestZ1_Safe, iSpeed, "DoIndexAutoClean_720"))
+            {
+                Task=800;
+            }
+            break;
+        case 800:
+            for(int i=0; i<MAX_Index_Row; i++)
+            {
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                {
+                    if(FTestSuck.Suck[i][j].GetStatus()==false)
+                        FTestSuck.Suck[i][j].Normal();
+                }
+            }
+            Task=900;
+            break;
+        case 900:
+            if(MOT[MTestY1].GalilTwoY_Move(Prod.TestY1_Middle, Prod.TestY2_Rear, iSpeedSY, "DoIndexAutoClean 900"))//kevin 20120517 iSpeed))    //Isaac 20200203 : iSpeedSY,認為要AutoCleanIndex速度要一致
+            {
+                Task=1000;
+            }
+            break;
+        case 1000:
+            W906DIAC_FHOME_INITDOTESTZHOME();
+            Task=1050;
+            break;
+        case 1050:                                                              //kevin 20180716 drop contract 分是下高或高低
+            if(Prod.iAutoClean_ContactMode==0)                                  //Sam 20230111 : Smart Auto Clean //kevin 20180716 direction
+            {
+                Task=1150;
+            }
+            else
+            {
+                if(MOT[MTestZ1].Gali_MotMove(Prod.iAutoCleanZ_Drop[0], iSpeedSZ, "DoIndexAutoClean_1050")) //kevin 20180717 drop high
+                    Task=1055;
+            }
+            break;
+        case 1055:
+            for(int i=0; i<MAX_Index_Row; i++)
+            {
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                {
+                    if(FTestSuck.Item[i][j]==HAS_CLEAN_IC)
+                    {
+                        FTestSuck.Suck[i][j].Off();
+                    }
+                }
+            }
+            DoTestYRearDelayAC.SetSecAndOn(Prod.TestZ_Drop_Wait);               //Steven 20140909 : 延遲吸放後再作
+            Task=1060;
+        case 1060:
+            bCheckDestroy=true;
+            if(bCheckDestroy==true && DoTestYRearDelayAC.Off())
+            {
+                for(int i=0; i<MAX_Index_Row; i++)
+                {
+                    for(int j=0; j<NEW_MAX_Index_Col; j++)
+                    {
+                        if(FTestSuck.Item[i][j]==HAS_CLEAN_IC)
+                            FTestSuck.Suck[i][j].Normal();
+                    }
+                }
+                bIndexCheckNoStopVaccum=false;
+                Task=1150;
+            }
+            break;
+        case 1150:
+            if(MOT[MTestZ1].Gali_MotMove(Prod.iAutoCleanZ_Contact[0], iSpeedSZ, "DoIndexAutoClean_1150"))//kevin 20181016 add drop 高低
+            {
+                if(TestIF_File.iAutoClean_Tray==eCKPos_CleanAir)
+                    SW[SwSocketClean].Off();
+
+                if(Prod.iAutoClean_ContactMode==0)                              //Sam 20230111 : Smart Auto Clean //kevin 20180716 direction
+                {
+                    Task=1200;
+                    DoIndexAutoCleanDelay.Set0_1SecAndOn(Prod.iAutoClean_ContactTime);  //Sam 20230111 : Smart Auto Clean
+                    iContactCount++;
+                    TestIF_File.iIndexArmAutoCleanCnt++;                        //Sam 20250820 : AutoClean 在 Index Arm 下壓時作動次數++
+                }
+                else
+                {
+                    Task=1160;                                                  //KEVIN 20180724 ADD
+                }
+            }
+            break;
+        case 1160:
+            if(DeviceForm.VacuumMode==VacuumONMode)
+            {
+                for(int i=0; i<MAX_Index_Row; i++)
+                {
+                    for(int j=0; j<NEW_MAX_Index_Col; j++)
+                    {
+                        if(FTestSuck.Item[i][j]==HAS_CLEAN_IC)
+                        {
+                            FTestSuck.Suck[i][j].On();
+                            if(INDEX_SUCKER_TYPE==1)
+                            {
+                                fiosetview->bIndexSuck[0][i][j]=true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            DoTestYRearDelayAC.SetMSAndOn(100);
+            Task=1170;
+            break;
+        case 1170:
+            if(INDEX_SUCKER_TYPE==1)
+            {
+                bCheckSuck=W906DIAC_FIOSET_PISD1();
+            }
+            else
+            {
+                bCheckSuck=true;
+            }
+
+            if(bCheckSuck==true && DoTestYRearDelayAC.Off())
+            {
+                bFTestSuckDrop=false;
+                DoIndexAutoCleanDelay.Set0_1SecAndOn(Prod.iAutoClean_ContactTime);  //Sam 20230111 : Smart Auto Clean
+                iContactCount++;
+                TestIF_File.iIndexArmAutoCleanCnt++;                            //Sam 20250820 : AutoClean 在 Index Arm 下壓時作動次數++
+                Task=1200;
+            }
+            break;
+        case 1200:                                                              //在旁邊置停等
+            if(DoIndexAutoCleanDelay.Off())
+            {
+                if(iContactCount<Prod.iAutoClean_ContactCount)                  //Sam 20230111 : Smart Auto Clean
+                {
+                    Task=1300;
+                }
+                else
+                {
+                    if(TestIF_File.iAutoClean_Tray!=eCKPos_CleanAir)
+                    {
+                        for(int i=0; i<MAX_Index_Row; i++)
+                        {
+                            for(int j=0; j<NEW_MAX_Index_Col; j++)
+                            {
+                                if(FTestSuck.Item[i][j])
+                                {
+                                    if(FTestSuck.Item[i][j]!=HAS_NULL_CLEAN_IC)
+                                        FTestSuck.SetItemData(i, j, CLEAN_FINISH_IC);         //Steven 20130701
+                                }
+                            }
+                        }
+                    }
+                    Task=1350;
+                }
+            }
+            break;
+        case 1300:
+            if(MOT[MTestZ1].Gali_MotMove(Prod.iAutoCleanZ_Shift[0], iSpeedSZ, "DoIndexAutoClean_1300"))  //kevin 20181016 add drop 高低
+            {
+                flag=false;
+                if(LastSet.iRealDummy==REALLY)
+                {
+                    iPos=IsNNMode();
+                    ErrPart=" ";                                                //Steven 20160323 : Auto Clean完成的資料
+                    for(int i=0; i<MAX_Index_Row; i++)
+                    {
+                        for(int j=0; j<NEW_MAX_Index_Col; j++)
+                        {
+                            bIsSuckICFallDown[i][j]=false;                      //kevin 20150624
+                            if(FTestSuck.Suck[i][j].Enable       &&
+                               FTestSuck.Suck[i][j].SenUsing!="" &&
+                               FTestSuck.Item[i][j]!=HAS_NULL_CLEAN_IC &&
+                               FTestSuck.Item[i][j]!=NULL_IC     &&
+                               bTestSuckUse[i][j]==false)
+                            {
+                                if(FTestSuck.Suck[i][j].GetStatus()==false)
+                                {
+                                    FTestSuck.Suck[i][j].Normal();              //jou 2012-01-17 重置吸嘴狀態，避免延誤shuttle釋放，也避免要重測而Hang up
+                                    flag=true;
+                                    ErrPart+=IndexSuckName[i+iPos][j];
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if(flag)
+                {
+                    MOT[MTestZ1].Gali_Command("ST", __FUNC__+AnsiString(",case 1300"));
+
+                    if(TestIF_File.iAutoClean_Tray!=eCKPos_CleanAir)
+                    {
+                        for(int i=0; i<MAX_Index_Row; i++)
+                        {
+                            for(int j=0; j<NEW_MAX_Index_Col; j++)
+                            {
+                                if(FTestSuck.Item[i][j])
+                                {
+                                    if(FTestSuck.Item[i][j]!=HAS_NULL_CLEAN_IC)
+                                        FTestSuck.SetItemData(i, j, CLEAN_FINISH_IC);
+                                }
+                            }
+                        }
+                    }
+                    DoIndexAutoCleanDelay.SetMSAndOn(100);
+                    Task=1360;
+                    break;
+                }
+
+                if(TestIF_File.iAutoClean_Tray==eCKPos_CleanAir)
+                    SW[SwSocketClean].On();
+
+                DoIndexAutoCleanDelay.SetMSAndOn(100);
+                Task=1310;
+            }
+            break;
+        case 1310:
+            if(DoIndexAutoCleanDelay.Off())
+            {
+                Task=1050;
+            }
+            break;
+        case 1350:
+            if(MOT[MTestZ1].Gali_MotMove(Prod.iAutoCleanZ_Shift[0],iSpeedSZ, "DoIndexAutoClean_1350"))   //JerryYang 20181119 (Steven) : fix auto clean 高度異常
+            {
+                for(int i=0; i<MAX_Index_Row; i++)                              //ChungHung 20150407 add for SCK drop issue
+                {
+                    for(int j=0; j<NEW_MAX_Index_Col; j++)
+                    {
+                        bDuplicateErr[i][j]=false;
+                        bIsSuckICFallDown[i][j]=false;                          //kevin 20150624
+                    }
+                }
+                Task=1360;
+                DoIndexAutoCleanDelay.SetMSAndOn(100);
+            }
+            break;
+        case 1360:
+            if(DoIndexAutoCleanDelay.Off())
+            {
+                Task=1400;
+            }
+            break;
+        case 1400:
+            if(MOT[MTestZ1].Gali_Two_ZAxis_Move(Prod.TestZ1_Safe, iSpeed, "DoIndexAutoClean 1400"))
+            {
+                Task=1500;
+
+                flag=false;
+                if(LastSet.iRealDummy==REALLY)
+                {
+                    iPos=IsNNMode();
+                    ErrPart=" ";                                                //Steven 20160323 : Auto Clean完成的資料
+                    for(int i=0; i<MAX_Index_Row; i++)
+                    {
+                        for(int j=0; j<NEW_MAX_Index_Col; j++)
+                        {
+                            if(FTestSuck.Suck[i][j].Enable       &&
+                               FTestSuck.Suck[i][j].SenUsing!="" &&
+                               FTestSuck.Item[i][j]!=HAS_NULL_CLEAN_IC &&
+                               FTestSuck.Item[i][j]!=NULL_IC     &&
+                               bTestSuckUse[i][j]==false)
+                            {
+                                if(FTestSuck.Suck[i][j].GetStatus()==false)
+                                {
+                                    FTestSuck.Suck[i][j].Normal();              //jou 2012-01-17 重置吸嘴狀態，避免延誤shuttle釋放，也避免要重測而Hang up
+                                    flag=true;
+                                    ErrPart+=IndexSuckName[i+iPos][j];
+                                    bIsSuckICFallDown[i][j]=true;               //kevin 20150624
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if(flag)
+                {
+                    MOT[MTestZ1].Gali_Command("ST", __FUNC__+AnsiString(",case 1400"));
+                    Task=1410;
+                }
+            }
+            break;
+        case 1410:                                                              //Sam 20221220 : 放 Index Arm1
+            if(MOT[MTestY1].GalilTwoY_Move(Prod.TestY1_Front,Prod.TestY2_Rear, iSpeed, __FUNC__+AnsiString("case 1410")))
+                Task=1420;
+            break;
+        case 1420:
+            if(DoInArmMoveToWaitPosByAutoClean()==false)                        //ChungHung 20150129 add when Index Jam SCK want to Inarm move to safe postion
+                return;
+
+            if(CosFunction.bJAM0303NeedOpenChamberDoor)                         //Steven : JAM0303 & JAM0403需要開啟Chamber門10秒
+                bIsTestSitICFallDown=true;                                      //kevin 20130706
+
+            if(CUSTOMER_CODE==CC_KYEC_LEE ||
+               CUSTOMER_CODE==CC_KYEC_XILINX ||
+               CUSTOMER_CODE==CC_KYEC_CHEN)
+                iRet=ShowErrorMessage("JAM0314", K_RETRY, MTestZ1, false, ErrPart); //Steven 20100129 : Device Drop Error   //JerryYang 20160511 JAM0303->JAM0314,將IC與Clean pad分開的alarm code分開
+            else
+                iRet=ShowErrorMessage("JAM0314", K_SKIP, MTestZ1, false, ErrPart);  //Steven 20100129 : Device Drop Error    //JerryYang 20160511 JAM0303->JAM0314,將IC與Clean pad分開的alarm code分開
+
+            if(iRet==K_SKIP)
+            {
+                for(int i=0; i<MAX_Index_Row; i++)
+                {
+                    for(int j=0; j<NEW_MAX_Index_Col; j++)
+                    {
+                        if(bIsSuckICFallDown[i][j])                             //kevin 20150624
+                            FTestSuck.SetItemData(i, j, HAS_NULL_CLEAN_IC);     // 掉料歸零
+                    }
+                }
+            }
+            Task=1500;
+            break;
+        case 1500:
+            if(MOT[MTestY1].Gali_MotMove(Prod.TestY1_Front, iSpeedSY, "DoIndexAutoClean_1500"))          //Isaac 20200203 : iSpeedSY,認為要AutoCleanIndex速度要一致
+            {
+                if(TestIF_File.iAutoClean_Tray!=eCKPos_CleanAir)
+                    Task=1600;
+                else
+                    Task=1800;
+            }
+            break;
+        case 1600:
+            if(MOT[MTestZ1].Gali_MotMove(Prod.TestZ1_Place+TestIF_File.iAutoClean_IndexReleaseOffset, iSpeed, "DoIndexAutoClean_1600"))  //Jou 2015-08-22 Auto clean Index Release Offset
+            {
+                Task=1700;
+            }
+            break;
+        case 1700:
+            for(int i=0; i<MAX_Index_Row; i++)
+            {
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                {
+                    if(FTestSuck.Item[i][j])
+                    {
+                        if(FTestSuck.Item[i][j]==HAS_NULL_CLEAN_IC ||
+                           FTestSuck.Suck[i][j].Destroy())
+                        {
+                            if(TestIF_File.iAutoClean_Tray==eCKPos_CleanKit)    //Clean Kit
+                                FLCarryKit.MoveSuckData(FTestSuck, i, j);
+                        }
+                    }
+                }
+            }
+
+            flag=false;
+            for(int i=0; i<MAX_Index_Row; i++)
+            {
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                {
+                    if(FTestSuck.Item[i][j] && FTestSuck.Suck[i][j].Error==false)
+                    {
+                        flag=true;
+                        break;
+                    }
+                }
+            }
+
+            if(flag==false)
+            {
+                for(int i=0; i<MAX_Index_Row; i++)
+                {
+                    for(int j=0; j<NEW_MAX_Index_Col; j++)
+                    {
+                        if(FTestSuck.Suck[i][j].Error)
+                        {
+                            Task=1750;
+                            return;
+                        }
+                    }
+                }
+            }
+
+            if(FTestSuck.UseSiteHasIC())
+                break;
+
+            for(int i=0; i<MAX_Index_Row; i++)
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                    bDuplicateErr[i][j]=false;
+            Task=1800;
+            break;
+        case 1750:
+            if(DoInArmMoveToWaitPosByAutoClean()==false)                        //ChungHung 20150129 add when Index Jam SCK want to Inarm move to safe postion
+                return;
+
+            ErrPart=" ";
+            bHasErr=false;
+            bHasDuplicateErr=false;
+            iPos=IsNNMode();
+            for(int i=0; i<MAX_Index_Row; i++)
+            {
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                {
+                    if(bDuplicateErr[i][j])
+                        bHasDuplicateErr=true;
+
+                    if(FTestSuck.Suck[i][j].Error)
+                    {
+                        bHasErr=true;
+                        ErrPart+=IndexSuckName[i+iPos][j];
+                        FTestSuck.Suck[i][j].Error=false;                       //Steven 20101229 : 重置位置
+                        bDuplicateErr[i][j]=true;                               //Steven 20101229 : 重置位置
+                    }
+                    else
+                    {
+                        bDuplicateErr[i][j]=false;
+                    }
+                }
+            }
+
+            if(bHasErr)
+                ShowErrorMessage("JAM0327", K_RETRY, MTestZ1, bHasDuplicateErr, ErrPart);   //Vacuum sensor OFF error
+
+            bHasErr=false;
+            Task=1700;
+            break;
+        case 1800:
+            if(MOT[MTestZ1].Gali_Two_ZAxis_Move(Prod.TestZ1_Safe, iSpeed, "DoIndexAutoClean 1800"))
+            {
+                if((iInArmType==e9045_1x3_4 ||                                  //Steven 20220922 : Fixed for 1x3 auto clean
+                    iInArmType==e9045_1x3_2_14) &&
+                   TestIF_File.iAutoClean_DeveicePices%3==0)
+                {
+                    FLCarryKit.SetItemData(0, 3, NULL_IC);
+                }
+                Task=1900;
+            }
+            break;
+        case 1900:
+            MOT[MInShuttle1].fCanMoveM=true;
+            bInedxCleanFinish[0]=true;                                          //kevin 20170520 (wei) Autoclean index Arm 1完成
+
+            if((CosFunction.bAutoCleanAutoSelIndexArm==false && TestIF.iAutoClean_SelectArm==2) ||
+               (CosFunction.bAutoCleanAutoSelIndexArm==true  && TestIF.bCleanIndexOtherArm==true))
+            {
+                if(CheckAutoCleanCloseSite(1)==false)                           //Steven 20220929 : 判斷開放Site
+                {
+                    Task=2200;
+                    break;
+                }
+            }
+
+            if(TestIF_File.iAutoClean_Tray==eCKPos_CleanAir)
+            {
+                bRunAutoClean=false;
+                bAutoCleanFinishOnlyUseRTC=true;                                //JerryYang 20161216 (Steven) 停止auto clean後不需要index check
+                iAutoClean_IndexContactCount=0;
+                CleanSetSpeed(false);
+            }
+            break;
+        case 2100:
+            if(MOT[MTestZ2].Gali_Two_ZAxis_Move(Prod.TestZ2_Safe, iSpeed, "DoIndexAutoClean 2100"))
+            {
+                Task=2200;
+            }
+            break;
+        case 2200:
+            W906DIAC_FHOME_INITDOTESTZHOME();
+            iContactCount=0;
+            Task=2300;
+            break;
+        case 2300:
+            if(EP_Install)
+            {
+                ADAM_WriteVoltage(TestIF.fAutoClean_AireForce);
+            }
+
+            if(USE_INDEX_ARM_AXES==IndexArm_3_Axis)                             //JimmyChiu 20251101 : add Index Arm Axis
+            {
+                bFlagY1=MOT[MTestY1].GalilTwoY_Move(Prod.TestY1_Middle, Prod.TestY2_Rear, iSpeedSY, "DoIndexAutoClean 2300");//kevin 20120517 iSpeed);   //Isaac 20200203 : iSpeedSY,認為要AutoCleanIndex速度要一致
+            }
+            else
+            {
+                bFlagY1=MOT[MTestY1].GalilTwoY_Move(Prod.TestY1_Front, Prod.TestY2_Rear, iSpeedSY, "DoIndexAutoClean 2300");//kevin 20120517 iSpeed);   //Isaac 20200203 : iSpeedSY,認為要AutoCleanIndex速度要一致
+            }
+            bFlagS2=false;
+
+            if(TestIF_File.iAutoClean_Tray==eCKPos_CleanKit)                    //Clean Kit
+            {
+                if(BLCarryKit.UseSiteHasIC() && InSHT2InRT())
+                {
+                    MOT[MInShuttle2].fCanMoveM=false;                           //kevin 20170119 index cleanpad會限制到 shuttle的移動
+                    bFlagS2=true;
+                }
+            }
+            else if(TestIF_File.iAutoClean_Tray==eCKPos_CleanAir)
+            {
+                bFlagS2=true;
+            }
+
+            if(bFlagY1 && bFlagS2)
+            {
+                MOT[MInShuttle2].fCanMoveM=false;
+
+                if(TestIF_File.iAutoClean_Tray!=eCKPos_CleanAir)
+                    Task=2400;
+                else
+                    Task=2650;
+            }
+            break;
+        case 2400:
+            if(MOT[MTestZ2].Gali_MotMove(Prod.TestZ2_Pick+TestIF_File.iAutoClean_IndexPickOffset, iSpeed, "DoIndexAutoClean_2400"))         //wei 20150318 Auto clean Index Pick Offset
+            {
+                DoIndexAutoCleanDelay.SetMSAndOn(500);
+                Task=2500;
+            }
+            break;
+        case 2500:
+            if(DoIndexAutoCleanDelay.Off())
+            {
+                for(int i=0; i<MAX_Index_Row; i++)
+                {
+                    for(int j=0; j<NEW_MAX_Index_Col; j++)
+                    {
+                        bSuckFinish[i][j]=false;                                //Steven 20110301 : 初始化，尚未完成
+                        bTestSuckUse[i][j]=false;
+                    }
+                }
+                BTestSuck.ResetAll();                                           //Steven 20160323 : 避免錯誤殘留
+                Task=2600;
+            }
+            break;
+        case 2600:
+            flag1=true;
+            for(int i=0; i<MAX_Index_Row; i++)
+            {
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                {
+                    if(BLCarryKit.Item[i][j])
+                    {
+                        if(BLCarryKit.Item[i][j]==HAS_NULL_CLEAN_IC)
+                        {
+                            BTestSuck.Suck[i][j].Normal();                      //Steven 20111201 : 已完成不執行
+                            BTestSuck.MoveSuckData(BLCarryKit, i, j);
+                            bSuckFinish[i][j]=true;                             //Steven 20110301
+                        }
+                        else if(bSuckFinish[i][j]==true)
+                        {
+                            if(BTestSuck.Item[i][j]==HAS_NULL_CLEAN_IC ||
+                               BTestSuck.Item[i][j]==NULL_IC)                   //Steven 20111202 : Retry會重取
+                            {
+                                BTestSuck.Suck[i][j].Normal();                  //Steven 20111201 : 已完成不執行
+                            }
+                        }
+                        else
+                        {
+                            #ifdef SOFT_SIMULTE
+                            int x=atoi(fMain->edHPY->Text.c_str());
+                            int y=atoi(fMain->edHPX->Text.c_str());
+                            if(fMain->cbIndexDrop->Checked==true && i==x && j==y)
+                            {
+                                BTestSuck.Suck[i][j].Error=true;
+                                fMain->bAutoCleanTest=false;
+                                bSuckFinish[i][j]=true;
+                                continue;
+                            }
+                            #endif
+
+                            if(BTestSuck.Suck[i][j].Suck())
+                            {
+                                BTestSuck.MoveSuckData(BLCarryKit, i, j);
+                                bDuplicateErr[i][j]=false;                      //Steven 20100105
+                                bSuckFinish[i][j]=true;                         //Steven 20110301 : 吸嘴完成本次判定
+                            }
+                            else if(BTestSuck.Suck[i][j].Error)                 //Steven 20110301 : 本次錯誤不判定
+                            {
+                                bSuckFinish[i][j]=true;
+                            }
+                            else
+                            {
+                                flag1=false;                                    //jou 2011-08-16 只要有任何未完成就繼續
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if(BTestSuck.Item[i][j]==HAS_NULL_CLEAN_IC ||
+                           BTestSuck.Item[i][j]==NULL_IC)                       //Steven 20111202 : Retry會重取
+                        {
+                            BTestSuck.Suck[i][j].Normal();                      //Steven 20111201 : 已完成不執行
+                        }
+                        bSuckFinish[i][j]=true;                                 //Steven 20110301 : 沒有東西的地方要跳過
+                    }
+                }
+            }
+
+            for(int i=0; i<MAX_Index_Row; i++)
+            {
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                {
+                    if(bSuckFinish[i][j]==false)                                //只要有任何未完成就繼續
+                        flag1=false;
+                }
+            }
+
+            if(flag1==true)                                                     //Steven 20110301 : 所有吸嘴皆完成
+            {
+                for(int i=0; i<MAX_Index_Row; i++)
+                {
+                    for(int j=0; j<NEW_MAX_Index_Col; j++)
+                    {
+                        if(BTestSuck.Suck[i][j].Error)
+                        {
+                            Task=2650;
+                            return;
+                        }
+                    }
+                }
+
+                if(BLCarryKit.HasRealIC())
+                    break;
+
+                for(int i=0; i<MAX_Index_Row; i++)
+                {
+                    for(int j=0; j<NEW_MAX_Index_Col; j++)
+                    {
+                        if(BTestSuck.Item[i][j]==HAS_NULL_CLEAN_IC)
+                        {
+                            BTestSuck.Suck[i][j].Normal();
+                        }
+                        bDuplicateErr[i][j]=false;
+                    }
+                }
+
+                if(BLCarryKit.UseSiteHasIC())
+                    break;
+
+                Task=2700;
+            }
+            break;
+        case 2650:
+            if(MOT[MTestZ2].Gali_MotMove(Prod.TestZ2_Safe, iSpeed, "DoIndexAutoClean_2650"))
+            {
+                if(TestIF_File.iAutoClean_Tray!=eCKPos_CleanAir)
+                    Task=2651;
+                else
+                    Task=2900;
+            }
+            break;
+        case 2651:                                                              //Richard 20230418 : add Index Pick Error Can Retry and Start
+            if(DoInArmMoveToWaitPosByAutoClean()==false)                        //ChungHung 20150129 add when Index Jam SCK want to Inarm move to safe postion
+                return;
+
+            ErrPart=" ";
+            bHasErr=false;
+            bHasDuplicateErr=false;
+
+            for(int i=0; i<MAX_Index_Row; i++)
+            {
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                {
+                    if(bDuplicateErr[i][j])
+                        bHasDuplicateErr=true;
+
+                    if(BTestSuck.Suck[i][j].Error)
+                    {
+                        bHasErr=true;
+                        ErrPart+=IndexSuckName[i][j];
+                    }
+                    else
+                    {
+                        BTestSuck.Suck[i][j].Error=false;
+                    }
+                }
+            }
+
+            if(IniConfig.bD43IndexDropErrorCanRetryandSkip==true && bHasErr==true)
+            {
+                MOT[MInShuttle2].fCanMoveM=true;
+                bAutoCleanShuttle2MoveToLeft=true;
+                bAutoCleanShuttle2HasPickErr=true;
+                Task=2652;
+            }
+            else
+            {
+                Task=2660;
+            }
+            break;
+        case 2652:
+            if(IniConfig.bD43IndexDropErrorCanRetryandSkip &&
+               bAutoCleanShuttle2MoveToLeft)
+            {
+                MOT[MInShuttle2].fCanMoveM=true;
+                if(InSHT2InLF()!=true)
+                {
+                    break;
+                }
+            }
+            MOT[MInShuttle2].fCanMoveM=false;
+            Task=2660;
+        case 2660:
+            ErrPart=" ";
+            bHasErr=false;
+            bHasDuplicateErr=false;
+
+            for(int i=0; i<MAX_Index_Row; i++)
+            {
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                {
+                    if(bDuplicateErr[i][j])
+                        bHasDuplicateErr=true;
+
+                    if(BTestSuck.Suck[i][j].Error)
+                    {
+                        bHasErr=true;
+                        ErrPart+=IndexSuckName[i][j];
+                    }
+                    else
+                    {
+                        BTestSuck.Suck[i][j].Error=false;
+                    }
+                }
+            }
+
+            if(bHasErr)
+            {
+                bHasErr=false;
+
+                if(CosFunction.bJAM0301NeedOpenChamberDoor)                     //wei : JAM0301 & JAM0302需要開啟Chamber門10秒
+                {
+                    if(DoInArmMoveToWaitPosByAutoClean()==false)                //JerryYang 20241118 : fix auto clean hang up    //Steven 20130613 : Index有異常時, In Arm要有先讓功能
+                    {
+                        return ;
+                    }
+                    bIsTestSitICFallDown=true;
+                }
+
+                if(IniConfig.bIndexPickErrOnlySKIP==true ||                     //kevin 201701103 (Steven) index pick up error only skip
+                   IniConfig.bD64IndexPickErrOnlySKIP)                          //JerryYang 20160301 index pick-up error only skip
+                    ret=ShowErrorMessage("JAM0313", K_SKIP, MTestZ2, bHasDuplicateErr, ErrPart);            //Devicr Pick-Up Error                      //JerryYang 20160511 JAM0302->JAM0313,將IC與Clean pad分開的alarm code分開
+                else
+                    ret=ShowErrorMessage("JAM0313", K_SKIP|K_RETRY, MTestZ2, bHasDuplicateErr, ErrPart);    //Steven 20091123 : Devicr Pick-Up Error    //JerryYang 20160511 JAM0302->JAM0313,將IC與Clean pad分開的alarm code分開
+
+                if(ret==K_SKIP)
+                {
+                    for(int i=0; i<MAX_Index_Row; i++)
+                    {
+                        for(int j=0; j<NEW_MAX_Index_Col; j++)
+                        {
+                            if(BTestSuck.Suck[i][j].Error)
+                            {
+                                BTestSuck.MoveSuckData(BLCarryKit, i, j);
+                                BTestSuck.SetItemData(i, j, HAS_NULL_CLEAN_IC); //Steven 20250326 : fixed for auto clean
+                                BTestSuck.Suck[i][j].Normal();
+                                bTestSuckUse[i][j]=true;
+                            }
+                            bDuplicateErr[i][j]=false;
+                        }
+                    }
+                }
+                else
+                {
+                    for(int i=0; i<MAX_Index_Row; i++)
+                    {
+                        for(int j=0; j<NEW_MAX_Index_Col; j++)
+                        {
+                            if(BTestSuck.Suck[i][j].Error)
+                            {
+                                bDuplicateErr[i][j]=true;
+                            }
+                        }
+                    }
+                }
+                BTestSuck.ResetAll();                                           //Steven 20160323 : 避免錯誤殘留
+                bAutoCleanShuttle2MoveToLeft=false;
+                MOT[MInShuttle2].fCanMoveM=true;
+            }
+
+            bHasErr=false;
+            bAutoCleanShuttle1HasPickErr=false;
+            if(TestIF_File.iAutoClean_Tray==eCKPos_CleanKit)                    //Clean Kit
+            {
+                if(IniConfig.bD43IndexDropErrorCanRetryandSkip)
+                {
+                    Task=2670;
+                }
+                else
+                {
+                    if(BLCarryKit.HasRealIC())
+                        Task=2400;
+                    else
+                        Task=2700;
+                }
+            }
+            break;
+        case 2670:
+            if(InSHT2InRT())
+            {
+                MOT[MInShuttle2].fCanMoveM=false;
+                if(BLCarryKit.HasRealIC())                                      //有IC->Retry
+                    Task=2400;
+                else
+                    Task=2700;                                                  //無IC->Skip
+            }
+            break;
+        case 2700:                                                              //Steven 20160323 : 吸嘴等一下再作動
+            DoIndexAutoCleanDelay.SetMSAndOn(500);
+            Task=2710;
+        case 2710:
+            if(DoIndexAutoCleanDelay.Off())
+            {
+                Task=2720;
+            }
+            break;
+        case 2720:
+            if(MOT[MTestZ2].Gali_MotMove(Prod.TestZ2_Safe, iSpeed, "DoIndexAutoClean_2720"))
+            {
+                Task=2800;
+            }
+            break;
+        case 2800:
+            for(int i=0; i<MAX_Index_Row; i++)
+            {
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                {
+                    if(BTestSuck.Suck[i][j].GetStatus()==false)
+                        BTestSuck.Suck[i][j].Normal();
+                }
+            }
+            Task=2900;
+            break;
+        case 2900:
+            bFlagY1=MOT[MTestY1].GalilTwoY_Move(Prod.TestY1_Front, Prod.TestY2_Middle, iSpeedSY, "DoIndexAutoClean 2900");  //kevin 20120517 iSpeed))  //Isaac 20200203 : iSpeedSY,認為要AutoCleanIndex速度要一致
+
+            if(bFlagY1)
+            {
+                Task=3000;
+            }
+            break;
+        case 3000:
+            W906DIAC_FHOME_INITDOTESTZHOME();
+            Task=3050;
+            break;
+        case 3050:                                                              //kevin 20180716 drop contract 分是下高或高低
+            if(Prod.iAutoClean_ContactMode==0)                                  //kevin 20180716 direction  //Sam 20230111 : Smart Auto Clean
+            {
+                 Task=3090;
+            }
+            else
+            {
+                if(MOT[MTestZ2].Gali_MotMove(Prod.iAutoCleanZ_Drop[1], iSpeedSZ, "DoIndexAutoClean_3050")) //kevin 20180717 drop high //Steven 20180920 : #P180916-ATK-H9-04 , Auto Clean-Socket Position Offset does not use for Arm2
+                    Task=3055;
+            }
+            break;
+        case 3055:
+            for(int i=0; i<MAX_Index_Row; i++)
+            {
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                {
+                    if(BTestSuck.Item[i][j]==HAS_CLEAN_IC)
+                    {
+                        BTestSuck.Suck[i][j].Off();
+                    }
+                }
+            }
+            DoTestYRearDelayAC.SetSecAndOn(Prod.TestZ_Drop_Wait);               // delay 0.3 sec for ic down        //Steven 20140909 : 延遲吸放後再作
+            Task=3060;
+            break;
+        case 3060:
+            bCheckDestroy=true;
+            if(bCheckDestroy==true && DoTestYRearDelayAC.Off())
+            {
+                for(int i=0; i<MAX_Index_Row; i++)
+                {
+                    for(int j=0; j<NEW_MAX_Index_Col; j++)
+                    {
+                        if(BTestSuck.Item[i][j]==HAS_CLEAN_IC)
+                            BTestSuck.Suck[i][j].Normal();
+                    }
+                }
+                bIndexCheckNoStopVaccum=false;
+                Task=3090;
+            }
+            break;
+        case 3090:                                                              //socket pos kevin 20180630 change
+            if(MOT[MTestZ2].Gali_MotMove(Prod.iAutoCleanZ_Contact[1], iSpeedSZ, "DoIndexAutoClean_3090"))
+            {                                                                   //kevin 20180630 add clean pad - device thickness
+                if(Prod.iAutoClean_ContactMode==0)                              //Sam 20230111 : Smart Auto Clean //kevin 20180716 direction
+                {
+                    iContactCount++;
+                    TestIF_File.iIndexArmAutoCleanCnt++;                        //Sam 20250820 : AutoClean 在 Index Arm 下壓時作動次數++
+                    DoIndexAutoCleanDelay.Set0_1SecAndOn(Prod.iAutoClean_ContactTime);  //Sam 20230111 : Smart Auto Clean
+                    Task=3100;
+                }
+                else
+                {
+                    Task=3095;                                                  //drop mode
+                }
+            }
+            break;
+        case 3095:
+            if(DeviceForm.VacuumMode==VacuumONMode)
+            {
+                for(int i=0; i<MAX_Index_Row; i++)
+                {
+                    for(int j=0; j<NEW_MAX_Index_Col; j++)
+                    {
+                        if(BTestSuck.Item[i][j]==HAS_CLEAN_IC)
+                        {
+                            BTestSuck.Suck[i][j].On();
+                            if(INDEX_SUCKER_TYPE==1)                            //Steven 20111202
+                            {
+                                fiosetview->bIndexSuck[1][i][j]=true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            DoTestYRearDelayAC.SetMSAndOn(100);                                 // delay 0.3 sec for ic down
+            Task=3096;
+            break;
+        case 3096:
+            if(INDEX_SUCKER_TYPE==1)
+            {
+                bCheckSuck=W906DIAC_FIOSET_PISD2();
+            }
+            else
+            {
+                bCheckSuck=true;
+            }
+
+            if(bCheckSuck==true && DoTestYRearDelayAC.Off())
+            {
+                bFTestSuckDrop=false;
+                iContactCount++;
+                TestIF_File.iIndexArmAutoCleanCnt++;                            //Sam 20250820 : AutoClean 在 Index Arm 下壓時作動次數++
+                DoIndexAutoCleanDelay.Set0_1SecAndOn(Prod.iAutoClean_ContactTime);  //Sam 20230111 : Smart Auto Clean
+                Task=3100;
+            }
+            break;
+        case 3100:
+            if(DoIndexAutoCleanDelay.Off())
+            {
+                if(TestIF_File.iAutoClean_Tray==eCKPos_CleanAir)
+                    SW[SwSocketClean].Off();
+                if(iContactCount<Prod.iAutoClean_ContactCount)                  //Sam 20230111 : Smart Auto Clean
+                {
+                    Task=3200;
+                }
+                else
+                {
+                    if(TestIF_File.iAutoClean_Tray!=eCKPos_CleanAir)
+                    {
+                        for(int i=0; i<MAX_Index_Row; i++)
+                        {
+                            for(int j=0; j<NEW_MAX_Index_Col; j++)
+                            {
+                                if(BTestSuck.Item[i][j])
+                                {
+                                    if(BTestSuck.Item[i][j]!=HAS_NULL_CLEAN_IC)
+                                        BTestSuck.SetItemData(i, j, CLEAN_FINISH_IC);         //Steven 20130701
+                                }
+                            }
+                        }
+                    }
+                    Task=3350;
+                }
+            }
+            break;
+        case 3200:                                                              //kevin 20180716 add drop contract
+            if(MOT[MTestZ2].Gali_MotMove(Prod.iAutoCleanZ_Shift[1], iSpeedSZ, "DoIndexAutoClean_3200"))
+            {
+                flag=false;
+                if(LastSet.iRealDummy==REALLY)
+                {
+                    ErrPart=" ";                                                //Steven 20160323 : Auto Clean完成的資料
+                    for(int i=0; i<MAX_Index_Row; i++)
+                    {
+                        for(int j=0; j<NEW_MAX_Index_Col; j++)
+                        {
+                            if(BTestSuck.Suck[i][j].Enable       &&
+                               BTestSuck.Suck[i][j].SenUsing!="" &&
+                               BTestSuck.Item[i][j]!=HAS_NULL_CLEAN_IC &&
+                               BTestSuck.Item[i][j]!=NULL_IC &&
+                               bTestSuckUse[i][j]==false)
+                            {
+                                if(BTestSuck.Suck[i][j].GetStatus()==false)
+                                {
+                                    BTestSuck.Suck[i][j].Normal();              //jou 2012-01-17 重置吸嘴狀態，避免延誤shuttle釋放，也避免要重測而Hang up
+                                    flag=true;
+                                    ErrPart+=IndexSuckName[i][j];
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if(flag)
+                {
+                    MOT[MTestZ2].Gali_Command("ST", __FUNC__+AnsiString(",case 3200"));
+
+                    if(TestIF_File.iAutoClean_Tray!=eCKPos_CleanAir)
+                    {
+                        for(int i=0; i<MAX_Index_Row; i++)
+                        {
+                            for(int j=0; j<NEW_MAX_Index_Col; j++)
+                            {
+                                if(BTestSuck.Item[i][j])
+                                {
+                                    if(BTestSuck.Item[i][j]!=HAS_NULL_CLEAN_IC)
+                                        BTestSuck.SetItemData(i, j, CLEAN_FINISH_IC);         //Steven 20130701
+                                }
+                            }
+                        }
+                    }
+                    DoTestYRearDelayAC.SetMSAndOn(100);
+                    Task=3360;
+                    break;
+                }
+
+                if(TestIF_File.iAutoClean_Tray==eCKPos_CleanAir)
+                    SW[SwSocketClean].On();
+                DoTestYRearDelayAC.SetMSAndOn(100);
+                Task=3210;
+            }
+            break;
+        case 3210:
+            if(DoTestYRearDelayAC.Off())
+            {
+                Task=3050;
+            }
+            break;
+        case 3350:
+            if(MOT[MTestZ2].Gali_MotMove(Prod.iAutoCleanZ_Shift[1], iSpeedSZ, "DoIndexAutoClean_3350"))  //JerryYang 20181119 (Steven) : fix auto clean 高度異常     //kevin 20181016 add drop 高低
+            {
+                for(int i=0; i<MAX_Index_Row; i++)                              //ChungHung 20150407 add for SCK drop issue
+                {
+                    for(int j=0; j<NEW_MAX_Index_Col; j++)
+                    {
+                        bDuplicateErr[i][j]=false;
+                        bIsSuckICFallDown[i][j]=false;                          //kevin 20150624
+                    }
+                }
+                Task=3360;
+                DoTestYRearDelayAC.SetMSAndOn(100);
+            }
+            break;
+        case 3360:
+            if(DoTestYRearDelayAC.Off())
+            {
+                Task=3400;
+            }
+            break;
+        case 3400:
+            if(MOT[MTestZ2].Gali_Two_ZAxis_Move(Prod.TestZ2_Safe, iSpeed, "DoIndexAutoClean 3400"))
+            {
+                Task=3500;
+
+                flag=false;
+                if(LastSet.iRealDummy==REALLY)
+                {
+                    ErrPart=" ";                                                //Steven 20160323 : Auto Clean完成的資料
+                    for(int i=0; i<MAX_Index_Row; i++)
+                    {
+                        for(int j=0; j<NEW_MAX_Index_Col; j++)
+                        {
+                            if(BTestSuck.Suck[i][j].Enable       &&
+                               BTestSuck.Suck[i][j].SenUsing!="" &&
+                               BTestSuck.Item[i][j]!=HAS_NULL_CLEAN_IC &&
+                               BTestSuck.Item[i][j]!=NULL_IC &&
+                               bTestSuckUse[i][j]==false)
+                            {
+                                if(BTestSuck.Suck[i][j].GetStatus()==false)
+                                {
+                                    BTestSuck.Suck[i][j].Normal();              //jou 2012-01-17 重置吸嘴狀態，避免延誤shuttle釋放，也避免要重測而Hang up
+                                    flag=true;
+                                    ErrPart+=IndexSuckName[i][j];
+                                    bIsSuckICFallDown[i][j]=true;               //kevin 20150624
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if(flag)
+                {
+                    MOT[MTestZ2].Gali_Command("ST", __FUNC__+AnsiString(",case 3400"));
+                    Task=3410;
+                }
+            }
+            break;
+        case 3410:                                                              //Jimmychiu 20211022 : #R210901-ATK-H9-03 , The index Arm move on the shuttle when drop error during auto clean.
+            if(MOT[MTestY1].GalilTwoY_Move(Prod.TestY1_Front,Prod.TestY2_Rear, iSpeed, __FUNC__+AnsiString("case 3410")))
+                Task=3420;
+            break;
+        case 3420:
+            if(DoInArmMoveToWaitPosByAutoClean()==false)                        //ChungHung 20150129 add when Index Jam SCK want to Inarm move to safe postion
+                return;
+
+            if(CosFunction.bJAM0303NeedOpenChamberDoor)                         //Steven : JAM0303 & JAM0403需要開啟Chamber門10秒
+                bIsTestSitICFallDown=true;                                      //kevin 20130706
+
+            iRet=ShowErrorMessage("JAM0315", K_SKIP, MTestZ2, false, ErrPart);  //Steven 20100129 : Device Drop Error    //JerryYang 20160511 JAM0304->JAM0315,將IC與Clean pad分開的alarm code分開
+
+            if(iRet==K_SKIP)                                                    //kevin 20150624 add
+            {
+                for(int i=0; i<MAX_Index_Row; i++)
+                {
+                    for(int j=0; j<NEW_MAX_Index_Col; j++)
+                    {
+                        if(bIsSuckICFallDown[i][j])                             //kevin 20150624
+                            BTestSuck.SetItemData(i, j, HAS_NULL_CLEAN_IC);     // 掉料歸零
+                    }
+                }
+            }
+            Task=3500;
+            break;
+        case 3500:
+            if(USE_INDEX_ARM_AXES==IndexArm_3_Axis)                             //JimmyChiu 20220708 : add Index Arm Axis
+            {
+                flag=MOT[MTestY1].Gali_MotMove(Prod.TestY1_Middle, iSpeedSY, "DoIndexAutoClean_3500");   //kevin 20120517 iSpeed))
+            }
+            else
+            {
+                flag=MOT[MTestY2].Gali_MotMove(Prod.TestY2_Rear, iSpeedSY, "DoIndexAutoClean_3500");     //kevin 20120517 iSpeed))  //Isaac 20200203 : iSpeedSY,認為要AutoCleanIndex速度要一致
+            }
+
+            if(flag)
+            {
+                if(TestIF_File.iAutoClean_Tray!=eCKPos_CleanAir)
+                    Task=3600;
+                else
+                    Task=3800;
+            }
+            break;
+        case 3600:
+            if(MOT[MTestZ2].Gali_MotMove(Prod.TestZ2_Place+TestIF_File.iAutoClean_IndexReleaseOffset, iSpeed, "DoIndexAutoClean_3600"))  //Jou 2015-08-22 Auto clean Index Release Offset
+            {
+                Task=3700;
+            }
+            break;
+        case 3700:
+            for(int i=0; i<MAX_Index_Row; i++)
+            {
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                {
+                    if(BTestSuck.Item[i][j])
+                    {
+                        if(BTestSuck.Item[i][j]==HAS_NULL_CLEAN_IC ||
+                           BTestSuck.Suck[i][j].Destroy())
+                        {
+                            if(TestIF_File.iAutoClean_Tray==eCKPos_CleanKit)    //Clean Kit
+                                BLCarryKit.MoveSuckData(BTestSuck, i, j);
+                        }
+                    }
+                }
+            }
+            flag=false;
+            for(int i=0; i<MAX_Index_Row; i++)
+            {
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                {
+                    if(BTestSuck.Item[i][j] &&
+                       BTestSuck.Suck[i][j].Error==false)
+                    {
+                        flag=true;
+                        break;
+                    }
+                }
+            }
+
+            if(flag==false)
+            {
+                for(int i=0; i<MAX_Index_Row; i++)
+                {
+                    for(int j=0; j<NEW_MAX_Index_Col; j++)
+                    {
+                        if(BTestSuck.Suck[i][j].Error)
+                        {
+                            Task=3750;
+                            return;
+                        }
+                    }
+                }
+            }
+
+            if(BTestSuck.UseSiteHasIC())
+                break;
+
+            for(int i=0; i<MAX_Index_Row; i++)
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                    bDuplicateErr[i][j]=false;
+            Task=3800;
+            break;
+        case 3750:                                                              //開料異常處理
+            if(DoInArmMoveToWaitPosByAutoClean()==false)                        //ChungHung 20150129 add when Index Jam SCK want to Inarm move to safe postion
+                return;
+
+            ErrPart=" ";
+            bHasErr=false;
+            bHasDuplicateErr=false;
+            for(int i=0; i<MAX_Index_Row; i++)
+            {
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                {
+                    if(bDuplicateErr[i][j])
+                        bHasDuplicateErr=true;
+
+                    if(BTestSuck.Suck[i][j].Error)
+                    {
+                        bHasErr=true;
+                        ErrPart+=IndexSuckName[i][j];
+                        BTestSuck.Suck[i][j].Error=false;                       //Steven 20101229 : 重置位置
+                        bDuplicateErr[i][j]=true;                               //Steven 20101229 : 重置位置
+                    }
+                    else
+                    {
+                        bDuplicateErr[i][j]=false;
+                    }
+                }
+            }
+
+            if(bHasErr)
+                ShowErrorMessage("JAM0327", K_RETRY, MTestZ2, bHasDuplicateErr, ErrPart);   //Vacuum sensor OFF error
+
+            bHasErr=false;
+            Task=3700;
+            break;
+        case 3800:
+            if(MOT[MTestZ2].Gali_Two_ZAxis_Move(Prod.TestZ2_Safe, iSpeed, "DoIndexAutoClean 3800"))
+            {
+                if((iInArmType==e9045_1x3_4 ||                                  //Steven 20220922 : Fixed for 1x3 auto clean
+                    iInArmType==e9045_1x3_2_14) &&
+                   TestIF_File.iAutoClean_DeveicePices%3==0)
+                {
+                    BLCarryKit.SetItemData(0, 3, NULL_IC);
+                }
+                Task=3900;
+            }
+            break;
+        case 3900:
+            MOT[MInShuttle2].fCanMoveM=true;
+            bInedxCleanFinish[1]=true;                                          //kevin 20170520 (wei) Autoclean index Arm 2完成
+            if(TestIF_File.iAutoClean_Tray==eCKPos_CleanAir)
+            {
+                bRunAutoClean=false;
+                bAutoCleanFinishOnlyUseRTC=true;                                //JerryYang 20161216 (Steven) 停止auto clean後不需要index check
+                iAutoClean_IndexContactCount=0;
+                CleanSetSpeed(false);
+            }
+            break;
+    }
+
+    #ifdef DEBUG_AUTO_CLEAN
+    static int iOldTask=-1;
+    if(iOldTask!=Task)
+    {
+        Message.sprintf("DoIndexAutoClean, %d, Go to Task, %d", iOldTask, Task);
+        fMain->AddAutoCleanMessage(Message);
+        iOldTask=Task;
+    }
+    #endif
 }
 
 //==============================================================================

@@ -1332,6 +1332,80 @@ endif()
 add_test(NAME W7_C2_OneCycleFinish COMMAND test_w7_c2_onecycle_finish)
 
 # ===========================================================================
+#  W906-AutoSiteMapCleanOut VERIFY -- InitCleanOutFunction's AutoSiteMap
+#  branch (last remaining piece of Wave16) does REAL work
+# ===========================================================================
+# --- test_w906_autositemap_cleanout: prove the newly un-gated branch mutates
+#   the REAL globals it should (golden csystem.cpp:15751-15785), not just
+#   "compiles":
+#     O1 guard false (iRunStartMode!=rsmAutoSiteMap/temp/JCET) -> whole branch
+#        skipped, tail cursor resets still fire unconditionally.
+#     O2 bAutoSiteMapHasPickHP==true -> ONLY iResetSiteMappingStep=2; the
+#        else-branch's SiteMapData zero-out / bAutoSiteMapHotplateSave /
+#        bSiteMappingCHKOK are NOT touched.
+#     O3 bAutoSiteMapHasPickHP==false -> the else-branch fires:
+#        bSiteMappingCHKOK=true, MOT[MMPlate1/MMPlate2].Tray.SiteMapData
+#        zeroed for j<XDivision/k<YDivision on BOTH plates (seeded sentinels
+#        both in- and out-of-bounds prove the exact loop bounds, not a
+#        naive full-array wipe), bAutoSiteMapHotplateSave=false.
+#     O4 fMain->SetMainRunStartMode(...) (this wave's documented GAP no-op
+#        stub, FormsFacade.cpp) / InitInArmTask() / ShowTestHeadComp() are
+#        all reached without crashing, for both iAutoSiteMapRunStartMode
+#        selector values.
+#   Same RESCAN link group as the other W6/W7 state-machine tests (csystem.cpp
+#   / FormsFacade.cpp / cprod / Motor/mymotor.cpp all live in ht9045_sm /
+#   ht9045_motor) so the cprod<->cpublic<->cmydef ctor cross-references
+#   settle. All seeded globals are saved/restored so sibling suites are
+#   unaffected.
+add_executable(test_w906_autositemap_cleanout
+    test_w906_autositemap_cleanout.cpp
+)
+
+target_link_libraries(test_w906_autositemap_cleanout PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w906_autositemap_cleanout PRIVATE ws2_32)
+endif()
+
+add_test(NAME W906_AutoSiteMapCleanOut COMMAND test_w906_autositemap_cleanout)
+
+# ===========================================================================
+#  W906-AutoCleanCluster (20260728) VERIFY -- DoIndexAutoClean +
+#  DoIndexAutoClean_Arm1PickArm2Test (the SECOND, final AutoClean dependency
+#  cluster; replaces the TEMPORARY empty-body placeholder).
+# ===========================================================================
+# --- test_w906_doindexautoclean: prove both functions are REAL, not stubs ---
+#   O1-O3: the 3 early-return guards (F16 shuttle-sensor-broken check before
+#     the unconditional Motor-> dereference; bFullViewCheckFinish==false after
+#     it; Task-range + IsCanMove()==true) all leave Task untouched.
+#   O4: a real run through DoIndexAutoClean's OWN switch, case 1 -> 100 -> 200
+#     -> 300, asserting both Task and bInedxCleanFinish[0]/[1].
+#   O5: the RunAutoCleanByArmPickArm2Test()==true delegation branch itself
+#     (DoIndexAutoClean_Arm1PickArm2Test's own case1 runs, same Task=100 +
+#     bInedxCleanFinish-clear shape).
+#   O6: DoIndexAutoClean_Arm1PickArm2Test driven directly (now declared in
+#     AutoClean.h for testability) with its own local arrays -- its case100
+#     is a DIFFERENT branch shape than DoIndexAutoClean's own case100.
+#   Same RESCAN link group as test_AutoClean / test_w906_autositemap_cleanout
+#   (AutoClean/AutoClean.cpp lives in ht9045_sm) so the cprod<->cpublic<->
+#   cmydef ctor cross-references settle.
+add_executable(test_w906_doindexautoclean
+    test_w906_doindexautoclean.cpp
+)
+
+target_link_libraries(test_w906_doindexautoclean PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w906_doindexautoclean PRIVATE ws2_32)
+endif()
+
+add_test(NAME W906_DoIndexAutoClean COMMAND test_w906_doindexautoclean)
+
+# ===========================================================================
 #  W5 comms wave -- SECSGEM base / Interface / CCLink / CanBus / MyPLC /
 #  EtherCAT-comms (6-unit parallel translate batch, wired by the serial
 #  integrate pass, 2026-07-10)

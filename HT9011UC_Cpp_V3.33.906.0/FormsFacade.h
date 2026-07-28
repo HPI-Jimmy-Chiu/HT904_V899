@@ -248,6 +248,14 @@ public:
     bool Pause(AnsiString Func);                  // [METHOD] golden main.h:1249 -- offline never pauses -> false
     void ShowTestHeadComp(bool bRefresh);         // [METHOD] golden main.h:1296 -- empty
     void ReStartAutoSiteMapping(bool bStart);     // [METHOD] golden main.h:1331 -- empty
+    // AI(W906-AutoSiteMapCleanOut) 20260727: golden main.h:1334 __fastcall
+    // SetMainRunStartMode(int) -- documented GAP no-op stub, see FormsFacade.cpp
+    // for the full citation (golden main.cpp:28236-28308 cascades into
+    // UpdateMainOperateMode() golden main.cpp:12803-13127 + a new fBinSel VCL
+    // form, both out of scope this wave). Added so csystem.cpp's
+    // InitCleanOutFunction AutoSiteMap branch (golden csystem.cpp:15751-15785)
+    // can be un-gated without pulling in that chain.
+    void SetMainRunStartMode(int iSetMode);       // [METHOD] golden main.h:1334 -- documented GAP stub (no-op)
     TfMainSiteMapLog *slAutoSiteMapLog;           // [DATA]   golden main.h:1486 (TMyStringList*) -- new in ctor
     // -- W6.3 ADD: members the TRAY-ARM ENGINE (acatchtray.cpp) derefs ----------
     void CleanOut(AnsiString Func);               // [METHOD] golden main.h -- offline: clean-out no-op
@@ -483,6 +491,17 @@ public:
     TfLotInfoEdit *edtDevice;                      // [DATA] golden uLotInfo.h (TEdit* device-name edit)
     TfLotInfoEdit *edtSysOperatorID;                // [DATA] golden uLotInfo.h (TEdit* system operator-ID edit)
     TfLotInfoEdit *mmo2DLotInfo;                    // [DATA] golden uLotInfo.h (TMemo* 2D lot-info source -- only ->Text read)
+    // AI(W906-SaveTestSummaryTSV) 20260728: 4 new members Automation/SCK_ART_Remainder.cpp's
+    // SckArtRem_SaveTestSummaryTSV derefs (golden SCK_ART.cpp:2884/3087, only ->Text read each --
+    // reuse the existing TfLotInfoEdit {AnsiString Text;} shape, same idiom as edtCusLotID above).
+    // golden edtASECL_LotID/edInsertion/edFlowID are TEdit* (uLotInfo.h:576/1044/1046); lbledtCustomer
+    // is a TLabeledEdit* (uLotInfo.h:609, golden SckArtRem_SaveSummaryTrayFeed's own dependency) --
+    // only ->Text is ever read from it here too, so the same minimal shape applies.
+    TfLotInfoEdit *edtASECL_LotID;                  // [DATA] golden uLotInfo.h:576 (TEdit* ASE-CL lot-ID edit)
+    TfLotInfoEdit *edInsertion;                     // [DATA] golden uLotInfo.h:1044 (TEdit* insertion-code edit)
+    TfLotInfoEdit *edFlowID;                        // [DATA] golden uLotInfo.h:1046 (TEdit* flow-ID edit)
+    // AI(W906-SaveSummaryTrayFeed) 20260728: golden SCK_ART.cpp:3157 (`fLotInfo->lbledtCustomer->Text`).
+    TfLotInfoEdit *lbledtCustomer;                  // [DATA] golden uLotInfo.h:609 (TLabeledEdit* customer name edit)
     TfLotInfo();
 };
 extern TfLotInfo *fLotInfo;

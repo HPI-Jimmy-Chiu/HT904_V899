@@ -186,36 +186,43 @@ static int  W5SckArtRem_LS_iHdPickUp           = 0;           // golden LastSet.
 W5SckArtRem_LotSummaryStub W5SckArtRem_LotSummary = {};
 void W5SckArtRem_LotSummaryStub::ClearAllData()
 {
-    // golden cSocket.cpp:754-763 -- PARTIAL: only the 2 fields this wave's calc-core reads
-    // (iCountCategory/iTotalCategory) are zeroed here. Golden's real body ALSO zeroes
-    // iLastTotalCategory/iLoadTotal + 3 file-scope E1/E2/E3 error counters -- all still
-    // untranslated/unconsumed by any code in this tree (same "not added, no consumer yet" judgment
-    // call the ORIGINAL gate #5 note already made for this whole stub). iByLotLoadCount[5] is also
-    // left untouched here, matching golden's OWN ClearAllData() body, which never touches it either
-    // (golden zeroes iByLotLoadCount[] separately, element-by-element, only from ClearLotInfo :918).
+    // golden cSocket.cpp:754-763 -- PARTIAL: only the 3 fields this wave's calc-core reads
+    // (iCountCategory/iTotalCategory/iLoadTotal) are zeroed here. Golden's real body ALSO zeroes
+    // iLastTotalCategory + 3 file-scope E1/E2/E3 error counters -- still untranslated/unconsumed by any
+    // code in this tree (same "not added, no consumer yet" judgment call the ORIGINAL gate #5 note
+    // already made for this whole stub). iByLotLoadCount[5] is also left untouched here, matching
+    // golden's OWN ClearAllData() body, which never touches it either (golden zeroes iByLotLoadCount[]
+    // separately, element-by-element, only from ClearLotInfo :918).
     for(int i=0; i<MAX_SOCKET_ROW*MAX_SOCKET_COL; i++)
         for(int j=0; j<TEST_MAX_BIN; j++)
             iCountCategory[i][j]=0;
     for(int j=0; j<TEST_MAX_BIN; j++)
         iTotalCategory[j]=0;
+    // AI(W906-SaveTestSummaryTSV) 20260728: gate #5 3rd extension -- golden cSocket.cpp:759 also zeroes
+    // iLoadTotal; matched here now that SaveTestSummaryTSV is a real reader (see the header struct's own
+    // comment on this field).
+    iLoadTotal=0;
 }
 #define W5SCKARTREM_LOTSUMMARY_ITEM(i)                 W5SckArtRem_LotSummary.iByLotLoadCount[i]
 #define W5SCKARTREM_LOTSUMMARY_COUNTCATEGORY(site,bin) W5SckArtRem_LotSummary.iCountCategory[site][bin]   // golden LotSummary.iCountCategory[site][bin]
 #define W5SCKARTREM_LOTSUMMARY_TOTALCATEGORY(bin)      W5SckArtRem_LotSummary.iTotalCategory[bin]         // golden LotSummary.iTotalCategory[bin]
 #define W5SCKARTREM_LOTSUMMARY_CLEARALLDATA()          W5SckArtRem_LotSummary.ClearAllData()              // golden cSocket.cpp:754-763 -- NOW REAL (partial), see gate #5 [UPDATE] above
 #define W5SCKARTREM_LOTSUMMARY_BISRTBIN(bin)           W5SckArtRem_LotSummary.bIsRTBin[bin]                // golden LotSummary.bIsRTBin[bin] -- gate #5 [UPDATE 2], AI(W906-Save2DSortingSummary) 20260723
+#define W5SCKARTREM_LOTSUMMARY_LOADTOTAL               W5SckArtRem_LotSummary.iLoadTotal                   // golden LotSummary.iLoadTotal -- gate #5 [UPDATE 3], AI(W906-SaveTestSummaryTSV) 20260728
 
 // ---- Gate #6: fTesterTCP->ProcessOSPrint() (golden Automation/TesterTCP.h/.cpp, untranslated) -----
 #define W5SCKARTREM_FTESTERTCP_PROCESSOSPRINT()   do { } while(0)   // golden fTesterTCP->ProcessOSPrint()
 
-// ---- Gate #7: 2 of the 4 giant report-writer bodies (golden :2045-3401) -- deferred to next wave ----
-//   SaveTestSummarySECS (golden :1647-2044) and Save2DSortingSummary (golden :3402-4061) are now REAL --
-//   see SckArtRem_SaveTestSummarySECS / SckArtRem_Save2DSortingSummary below (AI(W906-SaveTestSummarySECS)
-//   20260721 / AI(W906-Save2DSortingSummary) 20260723). Both macro stand-ins are retired (removed, not
-//   just left unused) since SckArtRem_SaveTestSummary's SECS and 2D-sort branches now call the real
-//   functions directly.
-#define W5SCKARTREM_SAVETESTSUMMARYTSV(iSaveData)       do { (void)(iSaveData); } while(0)  // golden :2805-3128
-#define W5SCKARTREM_SAVESUMMARYTRAYFEED()               do { } while(0)                      // golden :3129-3401
+// ---- Gate #7: originally 4 giant report-writer bodies (golden :1647-4061) -- NOW FULLY RETIRED -------
+//   SaveTestSummarySECS (golden :1647-2044), Save2DSortingSummary (golden :3402-4061), SaveTestSummaryTSV
+//   (golden :2805-3128), and SaveSummaryTrayFeed (golden :3129-3401) are ALL now real -- see
+//   SckArtRem_SaveTestSummarySECS / SckArtRem_Save2DSortingSummary / SckArtRem_SaveTestSummaryTSV /
+//   SckArtRem_SaveSummaryTrayFeed below (AI(W906-SaveTestSummarySECS) 20260721 /
+//   AI(W906-Save2DSortingSummary) 20260723 / AI(W906-SaveTestSummaryTSV)/AI(W906-SaveSummaryTrayFeed)
+//   20260728). All 4 macro stand-ins are retired (removed, not just left unused) since
+//   SckArtRem_SaveTestSummary's dispatcher now calls all 4 real functions directly at every former macro
+//   call site. (SaveMultiLotTestSummary, golden :2045-2804, was NEVER under this gate -- see the file-head
+//   "GOLDEN LINE BOUNDARY" comment for why it is separately and deliberately deferred.)
 
 // ---- Gate #11 [NEW -- AI(W906-SaveTestSummarySECS) 20260721]: ShellExecute(NULL,NULL,path,NULL,NULL,
 //   SW_SHOW) -- golden SCK_ART.cpp:2027. See SCK_ART_Remainder.h's gate #11 doc comment for the full
@@ -265,6 +272,10 @@ static void W5SckArtRem_FTPUploadStub(AnsiString sSourcesFilePath, AnsiString sT
 #define W5SCKARTREM_WRITELASTDATAFILE()            do { } while(0)   // golden cprod.cpp:1944 (TODO(W6)-gated)
 #define W5SCKARTREM_CUSTOMERFUNCTIONSELECT()        do { } while(0)   // golden cprod.cpp:3686 (TODO(W6)-gated)
 #define W5SCKARTREM_RUNINFO_ADDALARM(code, message) do { (void)(code); (void)(message); } while(0)  // golden RUN_INFO::AddAlarm, cprod.cpp:984 (TODO(W6)-gated)
+// AI(W906-SaveSummaryTrayFeed) 20260728: gate #8 extended -- a 4th cprod.h-declared/cprod.cpp-gated-body
+// member found (RUN_INFO::SaveJamRateByLot(bool=true), cprod.h:2706/cprod.cpp:1205, same :184-4036
+// blanket gate). Called unconditionally at golden SCK_ART.cpp:3333.
+#define W5SCKARTREM_RUNINFO_SAVEJAMRATEBYLOT()      do { } while(0)   // golden RUN_INFO::SaveJamRateByLot, cprod.cpp:1205 (TODO(W6)-gated)
 
 // ---- Gate #9 [NEW -- AI(W906-DoARTLotStart) 20260721]: fMain->SetLotState(int) ---------------------
 //   golden fMain->SetLotState(int) (SCK_ART.cpp golden :4249). csystem.cpp:2320 carries an EXACT macro
@@ -281,6 +292,55 @@ static void W5SckArtRem_FTPUploadStub(AnsiString sSourcesFilePath, AnsiString sT
 //   (verified by grep) -- a genuinely brand-new gap, no prior gate/macro/FormsFacade member to reuse.
 //   TU-local no-op stand-in, same idiom as gate #9.
 #define W5SCKARTREM_FMAIN_TESDERROR_ADD(code)       do { (void)(code); } while(0)   // golden fMain->tESDError->Add(AnsiString)
+
+// ---- Gate #14 [NEW -- AI(W906-SaveTestSummaryTSV) 20260728]: fConfiguration->mmoN04_IP->Lines -------
+//   golden cConfiguration.h:768 (TMemo* mmoN04_IP), a whole untranslated VCL form. See
+//   SCK_ART_Remainder.h's gate #14 doc comment for the full rationale (Lines is a REAL TStringList*,
+//   test-seedable, not a bespoke shape).
+W5SckArtRem_ConfigMemoLines::W5SckArtRem_ConfigMemoLines() : Lines(new TStringList()) {}
+W5SckArtRem_ConfigStub::W5SckArtRem_ConfigStub() : mmoN04_IP(new W5SckArtRem_ConfigMemoLines()) {}
+W5SckArtRem_ConfigStub *fConfiguration = new W5SckArtRem_ConfigStub();
+
+// ---- Gate #15 [NEW -- AI(W906-SaveTestSummaryTSV) 20260728]: srvrscktTSV (TServerSocket*) -----------
+//   golden SCK_ART.h:182, a TfSCKART-OWNED member (own copy, same posture as `slExe` below). REAL
+//   vclcompat TServerSocket, default SIM mode (offline-safe -- see SCK_ART_Remainder.h's gate #15 doc
+//   comment for why this is genuine substrate reuse, not a no-op stand-in).
+TServerSocket *srvrscktTSV = new TServerSocket(NULL);
+
+// ---- Gate #16 [NEW -- AI(W906-SaveSummaryTrayFeed) 20260728]: TastCategory (TEST_CATEGORY) ----------
+//   golden cSocket.h:144-174/177, a whole untranslated module (cSocket.cpp). See SCK_ART_Remainder.h's
+//   gate #16 doc comment for the full "no name collision with today's gated code" rationale.
+//   `UpdataCount` is a documented no-op -- golden's real body depends on ArmDataLot/TArm (a whole
+//   separate untranslated class hierarchy, cSocket.cpp:1029-1255); this wave's own test seeds the 10
+//   fields directly instead.
+void W5SckArtRem_TastCategoryStub::UpdataCount(bool /*bCheckYield*/) { /* no-op, see gate #16 */ }
+W5SckArtRem_TastCategoryStub TastCategory = {};
+
+// ---- Gate #17 [NEW -- AI(W906-SaveSummaryTrayFeed) 20260728]: FormHS->UpDataToServerByFTP / ---------
+//   W5SckArtRem_slEventLog.sLotFileName -- golden HS_Function.h (whole untranslated TFormHS form) /
+//   golden `slEventLog->sLotFileName` (the real cmydef.h `TMyStringList *slEventLog` is an incomplete
+//   type in this tree, unusable -- see SCK_ART_Remainder.h's gate #17 doc comment for the full
+//   rationale on both halves of this gate).
+AnsiString W5SckArtRem_LastFormHSUpload_Dir     ="<unset>";
+AnsiString W5SckArtRem_LastFormHSUpload_FileName="<unset>";
+AnsiString W5SckArtRem_LastFormHSUpload_Type    ="<unset>";
+void W5SckArtRem_FormHSStub::UpDataToServerByFTP(AnsiString asDirPath, AnsiString sFileName, AnsiString asFileType, bool /*bDailyReport*/)
+{
+    W5SckArtRem_LastFormHSUpload_Dir     =asDirPath;    // golden FormHS->UpDataToServerByFTP's own 3
+    W5SckArtRem_LastFormHSUpload_FileName=sFileName;    // arguments, captured verbatim -- no real FTP
+    W5SckArtRem_LastFormHSUpload_Type    =asFileType;   // client (TFormHS is not translated, see gate #17).
+}
+W5SckArtRem_FormHSStub *FormHS = new W5SckArtRem_FormHSStub();
+W5SckArtRem_SlEventLogStub W5SckArtRem_slEventLog;   // default sLotFileName="" -- FileExists("") is false
+
+// AI(W906-SaveSummaryTrayFeed) 20260728: IncludeTrailingPathDelimiter -- BCB6 SysUtils synonym for
+// IncludeTrailingBackslash (REAL, vclcompat/SysUtils.h). Per this project's established convention
+// (cpublic.cpp:136, Interface/TesterTCP.cpp:98, SECSGEM/uHGemClass.cpp:698 all do the SAME thing
+// independently -- not yet centralized in vclcompat itself), this TU adds its own small forwarding copy.
+static inline AnsiString IncludeTrailingPathDelimiter(const AnsiString& p)
+{
+    return IncludeTrailingBackslash(p);
+}
 
 // =============================================================================
 //  1. SetSetupFilePath -- golden TfSCKART::SetSetupFilePath() (SCK_ART.cpp:183-188)
@@ -778,12 +838,17 @@ void SckArtRem_AddOutputJamCnt(SckArtRemainderState &st, int row, int col, int r
 
 // =============================================================================
 //  8. SaveTestSummary -- golden TfSCKART::SaveTestSummary(int) (SCK_ART.cpp:1619-1645)
-//     Dispatch logic verbatim; 2 of the 4 callees remain gated (see gate #7 -- deferred to next wave).
+//     Dispatch logic verbatim; ALL 4 callees are now real (gate #7 fully retired, see that gate's own
+//     [UPDATE 3] note above).
 //     AI(W906-SaveTestSummarySECS) 20260721: added the `st` parameter, and the SECS branch now calls
 //     the real SckArtRem_SaveTestSummarySECS below instead of the retired W5SCKARTREM_SAVETESTSUMMARYSECS
 //     macro -- see this function's own header doc comment for why widening the signature is safe.
 //     AI(W906-Save2DSortingSummary) 20260723: the 2D-sort branch now ALSO calls the real
 //     SckArtRem_Save2DSortingSummary below instead of the retired W5SCKARTREM_SAVE2DSORTINGSUMMARY macro.
+//     AI(W906-SaveTestSummaryTSV/SaveSummaryTrayFeed) 20260728: the TCP_IP_MODE branch and the final
+//     `else` branch now ALSO call the real SckArtRem_SaveTestSummaryTSV / SckArtRem_SaveSummaryTrayFeed
+//     below instead of the retired W5SCKARTREM_SAVETESTSUMMARYTSV / W5SCKARTREM_SAVESUMMARYTRAYFEED
+//     macros -- all 3 former macro call sites (golden :1636/:1641/:1643) are now real calls.
 // =============================================================================
 void SckArtRem_SaveTestSummary(SckArtRemainderState &st, int iSaveData)
 {
@@ -802,14 +867,14 @@ void SckArtRem_SaveTestSummary(SckArtRemainderState &st, int iSaveData)
         if(iSaveData)
             W5SCKARTREM_FTESTERTCP_PROCESSOSPRINT();                            // golden :1634 fTesterTCP->ProcessOSPrint() -- TODO(W5-TesterTCP), see gate #6
 
-        W5SCKARTREM_SAVETESTSUMMARYTSV(iSaveData);                              // golden :1636 SaveTestSummaryTSV(iSaveData) -- TODO(next wave), see gate #7
+        SckArtRem_SaveTestSummaryTSV(st, iSaveData);                            // golden :1636 SaveTestSummaryTSV(iSaveData) -- AI(W906-SaveTestSummaryTSV) 20260728: now real, see below
     }
     else //if(IniConfig.bN09_LotCountAutoFunc)                                  //Steven 20240830 : N09獨立出來 (golden's own commented-out condition, verbatim)
     {
         if(iSaveData==1)
-            W5SCKARTREM_SAVESUMMARYTRAYFEED();                                  // golden :1641 SaveSummaryTrayFeed() -- TODO(next wave), see gate #7
+            SckArtRem_SaveSummaryTrayFeed(st);                                  // golden :1641 SaveSummaryTrayFeed() -- AI(W906-SaveSummaryTrayFeed) 20260728: now real, see below
 
-        W5SCKARTREM_SAVETESTSUMMARYTSV(iSaveData);                              // golden :1643 SaveTestSummaryTSV(iSaveData) -- TODO(next wave), see gate #7
+        SckArtRem_SaveTestSummaryTSV(st, iSaveData);                            // golden :1643 SaveTestSummaryTSV(iSaveData) -- AI(W906-SaveTestSummaryTSV) 20260728: now real, see below
     }
 }
 
@@ -2028,4 +2093,665 @@ void SckArtRem_Save2DSortingSummary(SckArtRemainderState &st, int iSaveData)    
             CopyFile(Str2.c_str(), str3.c_str(), true);                         //複製至Backup資料夾
         }
     }
+}
+
+// =============================================================================
+//  12. SaveTestSummaryTSV -- golden TfSCKART::SaveTestSummaryTSV(int) (SCK_ART.cpp:2805-3128)
+//     AI(W906-SaveTestSummaryTSV) 20260728. See SCK_ART_Remainder.h's own doc comment on this
+//     declaration for the full dependency-verification writeup, the 3 golden quirks preserved
+//     verbatim, and the 2 dead golden locals dropped (tmps1/Data -- IP/mapIPList/mapIPIter are
+//     genuinely USED here, unlike the sibling functions' analogous dead-locals lists).
+// =============================================================================
+void SckArtRem_SaveTestSummaryTSV(SckArtRemainderState &st, int iSaveData)      //Steven 20190521 : ATK lot count
+{
+    AnsiString FileName, PathName, PathName2, Str, Str1, Str2, IP;
+    int iCount=0, iUnloadCount=0;
+    bool bGotIp=false;
+    std::map<AnsiString, AnsiString> mapIPList;
+    std::map<AnsiString, AnsiString>::iterator mapIPIter;
+    AnsiString asFileName;
+    int temp;
+    AnsiString sLotID1=st.sLotID;
+
+    if(sLotID1=="" && fLotInfo->edtSysLotID->Text!="")                          //Steven 20230317 : 避免lot ID是空值
+        sLotID1=fLotInfo->edtSysLotID->Text;
+    if(sLotID1=="")                                                             //Steven 20230814 : 沒有Lot ID, 就帶入日期時間
+        sLotID1.sprintf("%04d%02d%02d%02d%02d%02d", SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec);
+
+    if(CosFunction.bUseTSVFunction)                                             //Steven 20240904 : for ATK的TSV功能
+    {
+        PathName.sprintf("%s\\%04d\\%02d\\", IniConfig.sN09_HandlerFolder, SystemYear, SystemMonth);        //Steven 20230215 : 存檔路徑加上年月
+    }
+    else
+    {
+        PathName.sprintf("D:\\HT9045_Log\\TestSummary\\%04d\\%02d\\", SystemYear, SystemMonth);
+    }
+    MyForceDirectories(PathName, "TfSCKART::SaveTestSummaryTSV_1");
+
+    PathName2.sprintf("%s\\%04d\\%02d\\", asSummaryPath, SystemYear, SystemMonth);    //Steven 20230215 : 存檔路徑加上年月
+    MyForceDirectories(PathName2, "TfSCKART::SaveTestSummaryTSV_2");
+
+    if(st.sProcessCode=="")
+        st.sProcessCode="FT1";
+
+    //<Lot ID>_<Operation>_<Retest Info>_<YYYYMMDDHHMM>.txt
+    if(st.iFTRTCount==1)
+        FileName.sprintf("%s_%s_FT_%04d%02d%02d%02d%02d.txt", sLotID1, st.sProcessCode, SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin);
+    else
+        FileName.sprintf("%s_%s_RT%d_%04d%02d%02d%02d%02d.txt", sLotID1, st.sProcessCode, st.iFTRTCount-1, SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin);
+
+    for(int iBin=0; iBin<iTestBinCount; iBin++)
+    {
+        for(int i=0; i<MAX_SOCKET_ROW*MAX_SOCKET_COL; i++)
+        {
+            if(st.iNeedRT!=0 && W5SCKARTREM_LOTSUMMARY_BISRTBIN(iBin)==true)     // golden :2847 LotSummary.bIsRTBin[iBin]
+            {
+                W5SCKARTREM_LOTSUMMARY_COUNTCATEGORY(i,iBin)=0;                 // golden :2849 LotSummary.iCountCategory[i][iBin]=0
+                W5SCKARTREM_LOTSUMMARY_TOTALCATEGORY(iBin)=0;                   // golden :2850 LotSummary.iTotalCategory[iBin]=0
+            }
+        }
+    }
+
+    if(iSaveData==0)
+        return;
+
+    TStringList *sIPList=new TStringList();
+    TStringList *sList=new TStringList();
+    TStringList *sTotalList=new TStringList();
+    TStringList *sListTemp=new TStringList();
+
+//Lot_id:       0000C912X8Z.0100#
+//Handler ID:   H-xxxx
+//Handler IP:   255.255.255.255
+//DCC:          NONE
+//TEST_OPR:     FT1
+//RT_CODE:      1
+//TEMP:         25
+//Hostname:     k3tv9369
+//Total_Inqty:  86
+//
+// ========================================================================
+// =========================  Hard Bin Summary  ===========================
+// ========================================================================
+// Hard P/F  Site1 Site2 Site3 Site4 Site5 Site6 Site7 Site8 Total  Yield
+// ---- ---- ----- ----- ----- ----- ----- ----- ----- ----- ----- --------
+//    1 PASS     0     0     0     0    40    41     0     0    81  94.186%
+//    5 FAIL     0     0     0     0     0     2     0     0     2   2.326%
+//    6 FAIL     0     0     0     0     3     0     0     0     3   3.488%
+// ========================================================================
+    if(CUSTOMER_CODE==CC_ASE_CL)
+    {
+        Str.sprintf("Lot_ID:%s", fLotInfo->edtASECL_LotID->Text);
+    }
+    else
+    {
+        Str.sprintf("Lot_id:\t\t%s", sLotID1);
+    }
+    sList->Add(Str);
+    Str.sprintf("Handler ID: %s", IniConfig.sGPIBMachineID);
+    sList->Add(Str);
+
+    // AI(W906-SaveTestSummaryTSV) 20260728: GOLDEN QUIRK #1 preserved VERBATIM (golden :2894-2928, see
+    // this function's own header doc comment "Golden quirk preserved VERBATIM #1"): the `sList->Add(Str)`
+    // right after this whole `if(CosFunction.bUseTSVFunction)` block is UNCONDITIONAL -- when TSV is
+    // disabled, `Str` still holds the "Handler ID: ..." value just added above, and gets re-added a
+    // SECOND time (a real duplicate-line bug), instead of ever computing a "Handler IP:" line. NOT
+    // "fixed" to only add when a real IP line was computed.
+    if(CosFunction.bUseTSVFunction)                                             //Steven 20240904 : for ATK的TSV功能
+    {
+        sIPList->CommaText=IniConfig.sN09_7_SkipIP;
+        mapIPList.clear();
+        for(int j=0; j<sIPList->Count; j++)
+        {
+            mapIPList[sIPList->Strings[j]]=j;
+        }
+
+        for(int i=0; i<fConfiguration->mmoN04_IP->Lines->Count; i++)            // gate #14
+        {
+            Str1=fConfiguration->mmoN04_IP->Lines->Strings[i];                  // gate #14
+            Str2=Str1.SubString(1, Str1.AnsiPos(".")-1);
+            if(bGotIp==false && Str1!="172.16.8.100")
+            {
+                mapIPIter=mapIPList.find(Str2);
+                if(mapIPList.size()!=0 && mapIPIter==mapIPList.end())
+                {
+                    IP=Str1;
+                    bGotIp=true;
+                }
+            }
+        }
+
+        if(bGotIp)
+        {
+            Str.sprintf("Handler IP: %s", IP);
+        }
+        else
+        {
+            Str.sprintf("Handler IP: ");
+        }
+    }
+
+    sList->Add(Str);
+    sList->Add("DCC:\t\tNONE");
+    Str.sprintf("TEST_OPR:\t%s", st.sProcessCode);
+    sList->Add(Str);
+
+    if(st.iFTRTCount==1)
+        Str.sprintf("RT_CODE:\tFT");
+    else
+        Str.sprintf("RT_CODE:\tRT%d", st.iFTRTCount-1);
+    sList->Add(Str);
+
+    if(LastSet.iTemperature==Tempture_Ambient)
+        Str.sprintf("TEMP:\t\t25");
+    else
+        Str.sprintf("TEMP:\t\t%f", Temperature.fWorkTemperBase);
+    sList->Add(Str);
+    Str.sprintf("Hostname:\t");
+    sList->Add(Str);
+
+    if(CUSTOMER_CODE==CC_ASE_CL)
+    {
+        Str.sprintf("Load_qty:\t%d", W5SCKARTREM_LOTSUMMARY_LOADTOTAL);         //JerryYang 20240423 : fix -- golden LotSummary.iLoadTotal, gate #5 [UPDATE 3]
+    }
+    else
+    {
+        Str.sprintf("Total_Inqty:\t%d", st.iLotCount);
+    }
+    sList->Add(Str);
+
+    sList->Add("");
+    sList->Add(" ========================================================================");
+    sList->Add(" =========================  Hard Bin Summary  ===========================");
+    sList->Add(" ========================================================================");
+
+    iCount=0;
+    Str=" Hard P/F ";
+    Str2=" ---- ----";
+    for(int i=0; i<TestSocket.iShtRow; i++)
+    {
+        for(int j=0; j<TestSocket.iShtCol; j++)
+        {
+            iCount++;
+            Str1.sprintf(" Site%d", iCount);
+            Str=Str+Str1;
+            Str2=Str2+" -----";
+        }
+    }
+    Str=Str+" Total  Yield";
+    sList->Add(Str);
+    Str2=Str2+" ----- --------";
+    sList->Add(Str2);
+
+    for(int iBin=0; iBin<iTestBinCount; iBin++)
+    {
+        temp=Prod.iT6CatData[iBin];
+        if(IniConfig.bSPILFunction==true && (temp<0 || temp>=eTrayCount))
+            continue;
+
+        Str.sprintf("%d", iBin);
+        while(Str.Length()<5)
+        {
+            Str=" "+Str;
+        }
+
+        if(Prod.bIsPassBin[iBin])
+            Str=Str+" PASS";
+        else
+            Str=Str+" FAIL";
+
+        iCount=0;
+        for(int i=0; i<TestSocket.iShtRow; i++)
+        {
+            for(int j=0; j<TestSocket.iShtCol; j++)
+            {
+                Str2.sprintf("%d", W5SCKARTREM_LOTSUMMARY_COUNTCATEGORY(iCount,iBin));   // golden :3002 LotSummary.iCountCategory[iCount][iBin]
+                while(Str2.Length()<6)
+                {
+                    Str2=" "+Str2;
+                }
+                Str=Str+Str2;
+                iCount++;
+            }
+        }
+
+        if(IniConfig.bSPILFunction==true && W5SCKARTREM_LOTSUMMARY_TOTALCATEGORY(iBin)<=0)   // golden :3012 LotSummary.iTotalCategory[iBin]
+            continue;
+
+        Str2.sprintf("%d", W5SCKARTREM_LOTSUMMARY_TOTALCATEGORY(iBin));                      // golden :3015 LotSummary.iTotalCategory[iBin]
+        while(Str2.Length()<6)
+        {
+            Str2=" "+Str2;
+        }
+        Str=Str+Str2;
+
+        // AI(W906-SaveTestSummaryTSV) 20260728: GOLDEN QUIRK #2 preserved VERBATIM (golden :3022-3029,
+        // see this function's own header doc comment "Golden quirk preserved VERBATIM #2"): the local
+        // `iUnloadCount` declared at the top of this function is NEVER incremented anywhere in this
+        // body (unlike the structurally similar SaveTestSummarySECS/Save2DSortingSummary) -- so this
+        // branch always divides by a hardcoded 0. ChangeToPercentage is div-by-zero-safe (silent
+        // "0.00%"), not a crash. NOT "fixed" to accumulate iUnloadCount from LotSummary like the
+        // sibling functions do.
+        if(IniConfig.bSPILFunction==true)                                   //JerryYang 20220923 : unload數量為0不要存log
+        {
+            Str2=ChangeToPercentage(W5SCKARTREM_LOTSUMMARY_TOTALCATEGORY(iBin), iUnloadCount);   // golden :3024 LotSummary.iTotalCategory[iBin]
+        }
+        else
+        {
+            Str2=ChangeToPercentage(W5SCKARTREM_LOTSUMMARY_TOTALCATEGORY(iBin), st.iLotCount);   // golden :3028 LotSummary.iTotalCategory[iBin]
+        }
+
+        while(Str2.Length()<9)
+        {
+            Str2=" "+Str2;
+        }
+        Str=Str+Str2;
+
+        sList->Add(Str);
+    }
+
+    sList->Add(" ========================================================================");
+
+    if(CosFunction.bUseTSVFunction)                                             //Steven 20240904 : for ATK的TSV功能
+    {
+        if(srvrscktTSV->Active)                                                // gate #15 (REAL TServerSocket, SIM mode)
+            srvrscktTSV->Close();
+        srvrscktTSV->Port=IniConfig.iN09_TSV_Port;
+        srvrscktTSV->Open();
+
+        if(st.iNeedRT==0)
+        {
+            if(IniConfig.iN09_4_UploadMethod==0)
+            {
+                sList->SaveToFile(PathName2+FileName);
+                W5SCKARTREM_FTP_UPLOAD(PathName2, IniConfig.sN09_5_Path, FileName);   // golden :3054 FTP_Upload(...) -- reuses gate #13
+            }
+            else
+            {
+                sList->SaveToFile(IniConfig.sN09_HandlerFolder+"\\"+FileName);
+            }
+        }
+
+        // AI(W906-SaveTestSummaryTSV) 20260728: GOLDEN QUIRK #3 preserved VERBATIM (golden :3049-3078,
+        // see this function's own header doc comment "Golden quirk preserved VERBATIM #3"): this
+        // block's non-FTP else-arm below saves to plain `PathName+FileName`, NOT
+        // `IniConfig.sN09_HandlerFolder+"\\"+FileName` like the near-identical block just above it --
+        // a genuine asymmetry between the two blocks, re-verified directly against golden, NOT unified.
+        if(FileExists(PathName2+FileName)==false)                               //Steven 20230317 : 避免連續存兩次把資料蓋掉了
+        {
+            if(st.iNeedRT==0)
+            {
+                if(IniConfig.iN09_4_UploadMethod==0)
+                {
+                    sList->SaveToFile(PathName2+FileName);                      //Steven 20230215 : 存檔路徑加上年月
+                    W5SCKARTREM_FTP_UPLOAD(PathName2, IniConfig.sN09_5_Path, FileName);   // golden :3069 FTP_Upload(...) -- reuses gate #13
+                }
+                else
+                {
+                    sList->SaveToFile(PathName+FileName);
+                }
+            }
+            fObserver->memoLotSummary->Lines=sList;                             // golden :3076 fObserver->memoLotSummary->Lines=sList
+        }
+    }
+    else
+    {
+        sList->SaveToFile(PathName2+FileName);
+        fObserver->memoLotSummary->Lines=sList;
+    }
+
+    if(CUSTOMER_CODE==CC_ASE_CL && USE_TRAY_MAPPING==1 && TestIF_File.bEnableTrayID2 && LastSet.iTester==ON_LINE)
+    {
+        asFileName.sprintf("%s\\%s@WAFERLOT@%sXX@99@SWBIN@%s.txt", asTravelingLogPath, fLotInfo->edtASECL_LotID->Text, fLotInfo->edInsertion->Text, fLotInfo->edFlowID->Text);     //Steven 20170123 (Jou) : 修改檔案命名格式
+        sTotalList->LoadFromFile("D:\\HT9045_Log\\Summary\\"+FileName);
+        sTotalList->Add("JHT_LOG_START");
+
+        if(FileExists(asFileName))
+        {
+            sListTemp->LoadFromFile(asFileName);
+            for(int i=0; i<sListTemp->Count; i++)
+            {
+                sTotalList->Add(sListTemp->Strings[i]);
+            }
+
+            sTotalList->SaveToFile(asFileName);
+        }
+        else
+        {
+            ShowMyMessage("SaveJHTLog fail!");
+        }
+    }
+
+    sList->Clear();
+    mapIPList.clear();
+    sIPList->Clear();
+    sListTemp->Clear();
+    sTotalList->Clear();
+    delete sIPList;
+    delete sList;
+    delete sTotalList;
+    delete sListTemp;
+
+    if(CosFunction.bUseTSVFunction)                                             //Steven 20240904 : for ATK的TSV功能
+    {
+        bWaitTSV=true;
+        st.bShowTSVMsg=false;
+        st.sTSVMsg="";
+        RecordProcess("Lot end and send summary and waiting TSV reply.");       //Steven 20190722 : add TSV log
+        st.TSVdelay.SetSecAndOn(IniConfig.dN09_SearchTime);
+        W5SCKARTREM_TIMERTSV_ENABLE();                                          // golden :3124 TimerTSV->Enabled=true
+    }
+    // AI(W906-SaveTestSummaryTSV) 20260728: golden :3126 calls LotSummary.ClearAllData() UNCONDITIONALLY
+    // here (NOT gated by `if(iSaveData==1)` like the sibling SaveTestSummarySECS/Save2DSortingSummary --
+    // re-verified directly against golden; iSaveData==0 already returned early above at golden :2855-2856,
+    // so by this point iSaveData is always >=1, but golden still runs this even when iSaveData==2 or any
+    // other nonzero value, unlike the siblings' stricter ==1 check). Preserved verbatim, not tightened.
+    W5SCKARTREM_LOTSUMMARY_CLEARALLDATA();                                      // golden :3126 LotSummary.ClearAllData()
+}
+
+// =============================================================================
+//  13. SaveSummaryTrayFeed -- golden TfSCKART::SaveSummaryTrayFeed() (SCK_ART.cpp:3129-3401)
+//     AI(W906-SaveSummaryTrayFeed) 20260728. See SCK_ART_Remainder.h's own doc comment on this
+//     declaration for the full dependency-verification writeup -- this function has NO dead-local
+//     declarations to drop (every local is genuinely used).
+// =============================================================================
+void SckArtRem_SaveSummaryTrayFeed(SckArtRemainderState & /*st*/)
+{
+    int iSiteCh=0;
+    int iTotalCh=TestSocket.iShtRow*TestSocket.iShtCol;
+    int iSiteTotalCt=0;
+    int iSitePassCt=0;
+    int iSiteFailCt=0;
+    AnsiString sPassYield;
+    AnsiString sFailYield;
+    AnsiString asFileName, asFolderName;
+    AnsiString sTemp, str, s, sTotal, sTempT, sTempP, sTempF, sP, sF;
+    // AI(W906-SaveSummaryTrayFeed) 20260728: golden TfSCKART::slExe (SCK_ART.h:244) modeled as a
+    // FUNCTION-LOCAL TStringList* rather than a SckArtRemainderState field -- see this function's own
+    // header doc comment for why this is a safe, deliberate judgment call (its only reader/writer in
+    // all of golden is this one function, and every path both fully populates and fully clears it
+    // before returning).
+    TStringList *slExe=new TStringList();
+    TStringList *redtSummary=new TStringList;
+    redtSummary->Clear();
+    TastCategory.UpdataCount(false);                                            //Steven 20250514 : 統一計算數量 -- gate #16 (no-op; test seeds TastCategory's fields directly)
+
+    if(RunInfo.LotStartTime=="2020-01-01 00:00:00")
+        sPassYield.sprintf("%04d-%02d-%02d %02d:%02d:%02d", SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec);
+    else
+        sPassYield=RunInfo.LotStartTime;
+
+    if(RunInfo.LotEndTime=="")
+        sFailYield.sprintf("%04d-%02d-%02d %02d:%02d:%02d", SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec);
+    else
+        sFailYield=RunInfo.LotEndTime;
+
+    if(fLotInfo->lbledtCustomer->Text=="")
+        sTemp=" ";
+    else
+        sTemp=fLotInfo->lbledtCustomer->Text;
+
+    if(fLotInfo->edtSysOperatorID->Text=="")
+        sTotal=" ";
+    else
+        sTotal=fLotInfo->edtSysOperatorID->Text;
+
+    redtSummary->Add(str.sprintf("============================ SUMMARY REPORT ============================"));
+    redtSummary->Add(str.sprintf(" "                                     ));
+    redtSummary->Add(str.sprintf("%-34s %s",  AnsiString("Lot#:"),       RunInfo.LotNo));
+    redtSummary->Add(str.sprintf("%-34s %s",  AnsiString("Start:"),      sPassYield));
+    redtSummary->Add(str.sprintf("%-34s %s",  AnsiString("End:"),        sFailYield));
+    redtSummary->Add(str.sprintf("%-34s %s",  AnsiString("Customer:"),   sTemp));
+    redtSummary->Add(str.sprintf("%-34s %s",  AnsiString("Program:"),    fMain->cbSetupFileName->Text));
+//    SummaryHead->Add(str.sprintf("%-34s ",    AnsiString("LoadBoard ID:")));
+    redtSummary->Add(str.sprintf("%-34s %s",  AnsiString("Operator ID:"),sTotal));
+    redtSummary->Add(str.sprintf("%-34s %s",  AnsiString("Machine ID:"), IniConfig.SocketHandlerID));
+    redtSummary->Add(str.sprintf("%-34s %d",  AnsiString("Input:"),      TastCategory.iTotalSocket));
+    redtSummary->Add(str.sprintf("%-34s %d",  AnsiString("Pass:"),       TastCategory.iPassSocket));
+    redtSummary->Add(str.sprintf("%-34s %d",  AnsiString("Fail:"),       TastCategory.iFailSocket));
+    redtSummary->Add(str.sprintf("%-34s %d",  AnsiString("Reject:"),     TastCategory.iRejectCount));
+    redtSummary->Add(str.sprintf("%-34s %s",  AnsiString("Yield:"),      ChangeToPercentage(TastCategory.iPassSocket, TastCategory.iTotalSocket)));
+    redtSummary->Add(str.sprintf(" "                                     ));
+
+    redtSummary->Add(str.sprintf("============================= BY TRAY COUNT ============================"));
+    redtSummary->Add(str.sprintf(" "                                     ));
+
+    for(int i=0; i<eTrayCount; i++)
+    {
+        if(Prod.iTrayType[i]!=tNotUse)
+        {
+            sTemp.sprintf("%-34s %d", s6TrayName[i]+AnsiString(":"), TastCategory.iUnloadCnt[i]);
+            redtSummary->Add(sTemp);
+        }
+    }
+
+    redtSummary->Add(str.sprintf(" "                                     ));
+    redtSummary->Add(str.sprintf("============================= BY SITE COUNT ============================"));
+    redtSummary->Add(str.sprintf(" "                                     ));
+
+    str.sprintf("%-34s", "Total Tested DUT Count:");                            //Total Tested DUT Count: DUT1 DUT2 DUT3 DUT4 SUM
+    for(int i=0; i<iTotalCh; i++)
+    {
+        s.sprintf("DUT%d", i+1);
+        sTemp.sprintf(" %-20s", s);
+        str+=sTemp;
+    }
+    sTemp.sprintf(" %-20s", "SUM");
+    str+=sTemp;
+    redtSummary->Add(str);
+
+    TStringList *sListTotal=new TStringList();
+    TStringList *sListPass =new TStringList();
+    TStringList *sListFail =new TStringList();
+    sListTotal->Clear();
+    sListPass->Clear();
+    sListFail->Clear();
+    for(int i=0; i<TestSocket.iMaxRow; i++)
+    {
+        for(int j=0; j<TestSocket.iMaxCol; j++)
+        {
+            sListTotal->Add("0");
+            sListPass->Add("0(0.00\%)");
+            sListFail->Add("0(0.00\%)");
+        }
+    }
+
+    for(int i=0; i<TestSocket.iShtRow; i++)
+    {
+        for(int j=0; j<TestSocket.iShtCol; j++)
+        {
+            if(TestIF.iSiteMap[i][j]>0)
+            {
+                iSiteCh=TestIF.iSiteMap[i][j]-1;
+                iSiteTotalCt=TastCategory.iBySiteTotal[iSiteCh];
+                iSitePassCt =TastCategory.iBySitePass[iSiteCh];
+                iSiteFailCt =TastCategory.iBySiteFail[iSiteCh];
+
+                if(iSiteTotalCt>0)
+                {
+                    sPassYield.sprintf("%d(%s)", iSitePassCt, ChangeToPercentage(iSitePassCt, iSiteTotalCt));
+                    sFailYield.sprintf("%d(%s)", iSiteFailCt, ChangeToPercentage(iSiteFailCt, iSiteTotalCt));
+                    sListTotal->Strings[iSiteCh]=AnsiString().sprintf("%d", iSiteTotalCt);
+                    sListPass->Strings[iSiteCh] =AnsiString().sprintf("%s", sPassYield);
+                    sListFail->Strings[iSiteCh] =AnsiString().sprintf("%s", sFailYield);
+                }
+            }
+        }
+    }
+
+    sTotal.sprintf("%-34s", "Total");                                           //Total DUT1 DUT2 DUT3 DUT4 SUM
+    sPassYield.sprintf("%-34s", "PASS");                                        //PASS DUT1 DUT2 DUT3 DUT4 SUM
+    sFailYield.sprintf("%-34s", "FAIL");                                        //FAIL DUT1 DUT2 DUT3 DUT4 SUM
+
+    for(int i=0; i<iTotalCh; i++)
+    {
+        sTempT.sprintf(" %-20s", sListTotal->Strings[i]);
+        sTempP.sprintf(" %-20s", sListPass->Strings[i]);
+        sTempF.sprintf(" %-20s", sListFail->Strings[i]);
+
+        sTotal+=sTempT;
+        sPassYield+=sTempP;
+        sFailYield+=sTempF;
+    }
+
+    sP.sprintf("%d(%s)", TastCategory.iPassSocket, ChangeToPercentage(TastCategory.iPassSocket, TastCategory.iTotalSocket));
+    sF.sprintf("%d(%s)", TastCategory.iFailSocket, ChangeToPercentage(TastCategory.iFailSocket, TastCategory.iTotalSocket));
+    sTempT.sprintf(" %-20d", TastCategory.iTotalSocket);
+    sTempP.sprintf(" %-20s", sP);
+    sTempF.sprintf(" %-20s", sF);
+
+    sTotal+=sTempT;
+    sPassYield+=sTempP;
+    sFailYield+=sTempF;
+
+    redtSummary->Add(sTotal);
+    redtSummary->Add(sPassYield);
+    redtSummary->Add(sFailYield);
+    redtSummary->Add(str.sprintf(" "                                     ));
+    redtSummary->Add(str.sprintf("============================= BY BIN COUNT ============================="));
+    redtSummary->Add(str.sprintf(" "                                     ));
+
+    str.sprintf("%-34s", "HW BIN Count:");                                      //HW BIN Count: DUT1 DUT2 DUT3 DUT4 SUM
+    for(int i=0; i<iTotalCh; i++)
+    {
+        s.sprintf("DUT%d", i+1);
+        sTemp.sprintf(" %-20s", s);
+        str+=sTemp;
+    }
+    sTemp.sprintf(" %-20s", "SUM");
+    str+=sTemp;
+    redtSummary->Add(str);
+
+    for(int iCat=0; iCat<iTestBinCount; iCat++)
+    {
+        s.sprintf("BIN %d", iCat);
+        sTotal.sprintf("%-34s", s);
+        for(int iDut=0; iDut<iTotalCh; iDut++)
+        {
+            sPassYield.sprintf("%d(%s)", TastCategory.iBySiteCate[iDut][iCat], ChangeToPercentage(TastCategory.iBySiteCate[iDut][iCat], TastCategory.iTotalCategory[iCat]));
+            sTempT.sprintf(" %-20s", sPassYield);
+            sTotal+=sTempT;
+        }
+
+        sPassYield.sprintf("%d(%s)", TastCategory.iTotalCategory[iCat], ChangeToPercentage(TastCategory.iTotalCategory[iCat], TastCategory.iTotalSocket));
+        sTempT.sprintf(" %-20s", sPassYield);
+        sTotal+=sTempT;
+        redtSummary->Add(sTotal);
+    }
+
+    s.sprintf("REJECT");
+    sTotal.sprintf("%-34s", s);
+    for(int iDut=0; iDut<iTotalCh; iDut++)
+    {
+        sPassYield.sprintf("%d(%s)", TastCategory.iBySiteCate[iDut][iTestBinCount], ChangeToPercentage(TastCategory.iBySiteCate[iDut][iTestBinCount], TastCategory.iTotalCategory[iTestBinCount]));
+        sTempT.sprintf(" %-20s", sPassYield);
+        sTotal+=sTempT;
+    }
+
+    sPassYield.sprintf("%d(%s)", TastCategory.iTotalCategory[iTestBinCount], ChangeToPercentage(TastCategory.iTotalCategory[iTestBinCount], TastCategory.iTotalSocket));
+    sTempT.sprintf(" %-20s", sPassYield);
+    sTotal+=sTempT;
+    redtSummary->Add(sTotal);
+
+    asFolderName.sprintf("D:\\HT9045_Log\\Summary_Lot\\%04d%02d", SystemYear, SystemMonth);
+    MyForceDirectories(asFolderName, "ProcessOSPrint");
+
+    asFileName.sprintf("%s\\%s %04d%02d%02d-%02d%02d%02d %s Summary.txt",       asFolderName,
+                                                                                IniConfig.SocketHandlerID,
+                                                                                SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec,
+                                                                                RunInfo.LotNo);
+
+    redtSummary->SaveToFile(asFileName);
+    redtSummary->Clear();
+    delete redtSummary;
+
+    W5SCKARTREM_RUNINFO_SAVEJAMRATEBYLOT();                                     // golden :3333 RunInfo.SaveJamRateByLot() -- gate #8 extension (Steven 20200415 : SCC要By Lot Jam Rate)
+
+    if(IniConfig.bVTESTFunction==false)
+    {
+        if(IniConfig.bN10_UploadSummaryToFTP==true)                             //Steven 20230216 : 調整位置
+        {
+            if(IniConfig.iN10UploadMethod==0)
+            {
+                if(FileExists(asFileName)==true)
+                    FormHS->UpDataToServerByFTP(ExtractFilePath(asFileName), ExtractFileName(asFileName), "SLT_Report");   // gate #17
+
+                if(FileExists(W5SckArtRem_slEventLog.sLotFileName))             //Steven 20250812 : 修正上傳的檔名 -- gate #17 (slEventLog stand-in)
+                {
+                    FormHS->UpDataToServerByFTP(ExtractFilePath(W5SckArtRem_slEventLog.sLotFileName), ExtractFileName(W5SckArtRem_slEventLog.sLotFileName), "EventLog");   // gate #17
+                }
+            }
+            else
+            {
+                asFolderName.sprintf("%sSummaryByLot\\%04d", IncludeTrailingPathDelimiter(IniConfig.sN10UploadDrivePath), SystemYear);
+                if(MyForceDirectories(asFolderName, "[N10] Upload_SummaryByLot")!=1)
+                {
+                    ;
+                }
+                else
+                {
+                    str.sprintf("XCOPY /y/a/e/c/i/h/f/r \"%s\" \"%s\"", asFileName, asFolderName);
+                    slExe->Add(str);
+
+                    if(FileExists(W5SckArtRem_slEventLog.sLotFileName))         //Steven 20250812 : 修正上傳的檔名 -- gate #17
+                    {
+                        asFolderName.sprintf("%sEventLotByLot\\%04d", IncludeTrailingPathDelimiter(IniConfig.sN10UploadDrivePath), SystemYear);
+                        if(MyForceDirectories(asFolderName, "[N10] Upload_SummaryByLot")!=1)
+                        {
+                            ;
+                        }
+                        str.sprintf("XCOPY /y/a/e/c/i/h/f/r \"%s\" \"%s\"", W5SckArtRem_slEventLog.sLotFileName, asFolderName);
+                        slExe->Add(str);
+                    }
+
+                    try
+                    {
+                        slExe->SaveToFile("D:\\HT9045_Log\\SummaryByLot.bat");
+                    }
+                    catch(...)
+                    {
+                        MyDBIProcess("Exception", "SaveSummaryTrayFeed");
+                    }
+
+                    for(int i=0; i<slExe->Count; i++)
+                    {
+                        RecordProcess(slExe->Strings[i]);
+                    }
+
+                    try
+                    {
+                        ExecZipCommand("D:\\HT9045_Log\\SummaryByLot.bat", " ");
+                    }
+                    catch(...)
+                    {
+                        MyDBIProcess("Exception", "SaveSummaryTrayFeed ExecZipCommand");
+                    }
+
+                    slExe->Clear();
+                }
+            }
+        }
+    }
+
+    // AI(W906-SaveSummaryTrayFeed) 20260728: golden itself NEVER frees sListTotal/sListPass/sListFail
+    // (verified by grep across the WHOLE golden :3129-3401 body -- a real, latent per-call memory leak
+    // in golden; contrast with `redtSummary`, which golden DOES `delete` at :3331). Freeing them here
+    // has ZERO effect on any computed/observable output (the leak-vs-free choice never touches
+    // sTotal/sPassYield/sFailYield/file contents) and avoids an unbounded per-call leak in this
+    // translated function's own (looping, sanitizer-visible) test -- matching this file's general C++
+    // hygiene posture for LOCALLY-scoped heap objects elsewhere (e.g. SaveTestSummarySECS's own
+    // `delete sIPList/sList/...`). This is a deliberate divergence from golden's literal leak, NOT a
+    // silent behavioral fix -- nothing golden computes or writes depends on these 3 lists surviving
+    // past this point. `slExe` (below) is the OPPOSITE case: golden's OWN `slExe` is a persistent class
+    // member never freed per-call (freeing it here would be WRONG if it modeled golden's real object) --
+    // but since THIS translation deliberately made it function-local (see this function's own header
+    // doc comment), freeing it here is required to avoid a leak, not a fidelity deviation.
+    sListTotal->Clear();
+    sListPass->Clear();
+    sListFail->Clear();
+    delete sListTotal;
+    delete sListPass;
+    delete sListFail;
+    slExe->Clear();
+    delete slExe;
 }
