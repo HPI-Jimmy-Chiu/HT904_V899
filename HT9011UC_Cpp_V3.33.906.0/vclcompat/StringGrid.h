@@ -53,11 +53,39 @@
 #define VCLCOMPAT_STRINGGRID_H
 
 #include "vclcompat/AnsiString.h"
+#include "vclcompat/TStringList.h"   // vclcompat::TObject -- see R8 base-class note below
 #include <vector>
 
 namespace vclcompat {
 
-class TStringGrid {
+//  AI(W906-F0fix) 20260728: added `: public TObject`.  MEDIUM-2 finding: in
+//  golden every VCL class (TStringGrid included) derives from TObject, so
+//  `SetSVDataPointer(..., fMain->AutoCleanStringGrid, ...)` binds the
+//  TObject* overload (SecsSvEcRegistration.h:149).  With NO base here, the
+//  identical ported call could only reach the `void *P` overload (:133) --
+//  SILENTLY (the exact R8/SS9-R8 hazard plan SS4-V2 documents; see
+//  vclcompat/Controls.h's file-head note for the full mechanism).
+//
+//  WHY ADDING THE BASE IS SAFE -- the real argument is a language-level one,
+//  not a survey of call sites: this class was ALREADY a non-aggregate (it has
+//  private data members and a user-declared constructor), so it could never
+//  be aggregate-initialized `{...}` in the first place, and adding a base
+//  changes nothing about how it may legally be initialized. That holds
+//  regardless of how many construction sites exist or what shape they take.
+//
+//  AI(W906-F0fix2) 20260729: an earlier version of this comment instead
+//  justified the change by asserting "every construction site is
+//  `new TStringGrid(...)` through a pointer -- no by-value use exists
+//  anywhere". That claim is FALSE and is removed: by-value stack
+//  constructions do exist (tests/test_common.cpp and
+//  tests/test_uHGemEquipment.cpp both do `vclcompat::TStringGrid g(3, 2);`).
+//  They are unaffected -- a by-value object simply gains a vptr -- so the
+//  conclusion was right for the wrong reason. Kept the sound argument above
+//  and dropped the survey, which was both untrue and unnecessary.
+//
+//  tests/test_w7_f0_controls_guard.cpp static_asserts that this class binds
+//  the TObject* overload, same as the other stock-widget stand-ins.
+class TStringGrid : public TObject {
 public:
     // Real VCL TStringGrid design-time default (before any .dfm ColCount=/
     // RowCount= override) is 5x5 -- e.g. golden strGrdAlarm's .dfm sets only

@@ -1,0 +1,408 @@
+{
+ "event_count": 57,
+ "events": [
+  {
+   "control_path": "fPMAlarmInterFace",
+   "event_name": "OnCloseQuery",
+   "handler_name": "FormCloseQuery",
+   "leaf_name": "fPMAlarmInterFace",
+   "vcl_class": "TfPMAlarmInterFace"
+  },
+  {
+   "control_path": "fPMAlarmInterFace",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fPMAlarmInterFace",
+   "vcl_class": "TfPMAlarmInterFace"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction",
+   "event_name": "OnChange",
+   "handler_name": "pc_PMAlarmFuctionChange",
+   "leaf_name": "pc_PMAlarmFuction",
+   "vcl_class": "TPageControl"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemSetup.pnlPMAlarmSet.pgPMAlarmSetting",
+   "event_name": "OnChange",
+   "handler_name": "sbPMAlarmMonth_AddClick",
+   "leaf_name": "pgPMAlarmSetting",
+   "vcl_class": "TPageControl"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemSetup.pnlPMAlarmSet.pgPMAlarmSetting.tsPMAlarmMonth.sbPMAlarmMonth_Add",
+   "event_name": "OnClick",
+   "handler_name": "sbPMAlarmMonth_AddClick",
+   "leaf_name": "sbPMAlarmMonth_Add",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemSetup.pnlPMAlarmSet.pgPMAlarmSetting.tsPMAlarmMonth.sbPMAlarmMonth_Delete",
+   "event_name": "OnClick",
+   "handler_name": "sbPMAlarmMonth_DeleteClick",
+   "leaf_name": "sbPMAlarmMonth_Delete",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemSetup.pnlPMAlarmSet.pgPMAlarmSetting.tsPMAlarmMonth.sgPMAlarmMonthItem",
+   "event_name": "OnSelectCell",
+   "handler_name": "sgPMAlarmMonthItemSelectCell",
+   "leaf_name": "sgPMAlarmMonthItem",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemSetup.pnlPMAlarmSet.pgPMAlarmSetting.tsPMAlarmQuarter.sbPMAlarmQuarter_Add",
+   "event_name": "OnClick",
+   "handler_name": "sbPMAlarmMonth_AddClick",
+   "leaf_name": "sbPMAlarmQuarter_Add",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemSetup.pnlPMAlarmSet.pgPMAlarmSetting.tsPMAlarmQuarter.sbPMAlarmQuarter_Delete",
+   "event_name": "OnClick",
+   "handler_name": "sbPMAlarmMonth_DeleteClick",
+   "leaf_name": "sbPMAlarmQuarter_Delete",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemSetup.pnlPMAlarmSet.pgPMAlarmSetting.tsPMAlarmQuarter.sgPMAlarmQuarterItem",
+   "event_name": "OnSelectCell",
+   "handler_name": "sgPMAlarmMonthItemSelectCell",
+   "leaf_name": "sgPMAlarmQuarterItem",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemSetup.pnlPMAlarmSet.pgPMAlarmSetting.QuarterYear.sbPMAlarmYear_Add",
+   "event_name": "OnClick",
+   "handler_name": "sbPMAlarmMonth_AddClick",
+   "leaf_name": "sbPMAlarmYear_Add",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemSetup.pnlPMAlarmSet.pgPMAlarmSetting.QuarterYear.sbPMAlarmYear_Delete",
+   "event_name": "OnClick",
+   "handler_name": "sbPMAlarmMonth_DeleteClick",
+   "leaf_name": "sbPMAlarmYear_Delete",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemSetup.pnlPMAlarmSet.pgPMAlarmSetting.QuarterYear.sgPMAlarmYearItem",
+   "event_name": "OnSelectCell",
+   "handler_name": "sgPMAlarmMonthItemSelectCell",
+   "leaf_name": "sgPMAlarmYearItem",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemSetup.pnlPMAlarmSet.pgPMAlarmSetting.TabSheet3.sbPMAlarmTemperature_Add",
+   "event_name": "OnClick",
+   "handler_name": "sbPMAlarmTemperature_AddClick",
+   "leaf_name": "sbPMAlarmTemperature_Add",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemSetup.pnlPMAlarmSet.pgPMAlarmSetting.TabSheet3.sbPMAlarmTemperature_Delete",
+   "event_name": "OnClick",
+   "handler_name": "sbPMAlarmTemperature_DeleteClick",
+   "leaf_name": "sbPMAlarmTemperature_Delete",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemSetup.pnlPMAlarmSet.pgPMAlarmSetting.TabSheet3.sgPMAlarmTemperatureItem",
+   "event_name": "OnSelectCell",
+   "handler_name": "sgPMAlarmTemperatureItemSelectCell",
+   "leaf_name": "sgPMAlarmTemperatureItem",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemSetup.pnlPMAlarmSet.pgPMAlarmSetting.TabSheet4.sbPMAlarmESD_Add",
+   "event_name": "OnClick",
+   "handler_name": "sbPMAlarmESD_AddClick",
+   "leaf_name": "sbPMAlarmESD_Add",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemSetup.pnlPMAlarmSet.pgPMAlarmSetting.TabSheet4.sbPMAlarmESD_Delete",
+   "event_name": "OnClick",
+   "handler_name": "sbPMAlarmESD_DeleteClick",
+   "leaf_name": "sbPMAlarmESD_Delete",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemSetup.pnlPMAlarmSet.pgPMAlarmSetting.TabSheet4.sgPMAlarmESDItem",
+   "event_name": "OnSelectCell",
+   "handler_name": "sgPMAlarmESDItemSelectCell",
+   "leaf_name": "sgPMAlarmESDItem",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemSetup.pnlPMAlarmSet.pgPMAlarmSetting.TabSheet5.sbPMAlarmIonFan_Add",
+   "event_name": "OnClick",
+   "handler_name": "sbPMAlarmIonFan_AddClick",
+   "leaf_name": "sbPMAlarmIonFan_Add",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemSetup.pnlPMAlarmSet.pgPMAlarmSetting.TabSheet5.sbPMAlarmIonFan_Delete",
+   "event_name": "OnClick",
+   "handler_name": "sbPMAlarmIonFan_DeleteClick",
+   "leaf_name": "sbPMAlarmIonFan_Delete",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemSetup.pnlPMAlarmSet.pgPMAlarmSetting.TabSheet5.sgPMAlarmIonFanItem",
+   "event_name": "OnSelectCell",
+   "handler_name": "sgPMAlarmIonFanItemSelectCell",
+   "leaf_name": "sgPMAlarmIonFanItem",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemSetup.pnlPMAlarmSet.pnlPMAlarmSetting_Bottom.sbPMAlarm_Save",
+   "event_name": "OnClick",
+   "handler_name": "sbPMAlarm_SaveClick",
+   "leaf_name": "sbPMAlarm_Save",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemCheck.pnlPMAlarmCheck.pnlPMAlarmCheck_Bottom.sbPMAlarmCheck_Update",
+   "event_name": "OnClick",
+   "handler_name": "sbPMAlarmCheck_UpdateClick",
+   "leaf_name": "sbPMAlarmCheck_Update",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemCheck.pnlPMAlarmCheck.pnlPMAlarmCheck_Bottom.sbPMAlarmCheck_Check",
+   "event_name": "OnClick",
+   "handler_name": "sbPMAlarmCheck_CheckClick",
+   "leaf_name": "sbPMAlarmCheck_Check",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemCheck.pnlPMAlarmCheck.pnlPMAlarmCheck_Bottom.sbPMAlarmCheck_IsAlarm",
+   "event_name": "OnClick",
+   "handler_name": "sbPMAlarmCheck_IsAlarmClick",
+   "leaf_name": "sbPMAlarmCheck_IsAlarm",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemCheck.pnlPMAlarmCheck.pnlPMAlarmCheck_Bottom.sb_SetPmDate",
+   "event_name": "OnClick",
+   "handler_name": "sb_SetPmDateClick",
+   "leaf_name": "sb_SetPmDate",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemCheck.pnlPMAlarmCheck.pnlPMAlarmCheck_Bottom.sbPMAlarmCheck_ShowData",
+   "event_name": "OnClick",
+   "handler_name": "sbPMAlarmCheck_ShowDataClick",
+   "leaf_name": "sbPMAlarmCheck_ShowData",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemCheck.pnlPMAlarmCheck.pnlPMAlarmCheck_Bottom.gbUpdateByServer.btnDownload",
+   "event_name": "OnClick",
+   "handler_name": "btnDownloadClick",
+   "leaf_name": "btnDownload",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemCheck.pnlPMAlarmCheck.pnlPMAlarmCheck_Bottom.gbUpdateByServer.btnUpload",
+   "event_name": "OnClick",
+   "handler_name": "btnUploadClick",
+   "leaf_name": "btnUpload",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemCheck.pnlPMAlarmCheck.pc_PMItemCheck",
+   "event_name": "OnChange",
+   "handler_name": "pc_PMItemCheckChange",
+   "leaf_name": "pc_PMItemCheck",
+   "vcl_class": "TPageControl"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemCheck.pnlPMAlarmCheck.pc_PMItemCheck.ts_GerneralItemCheck.sbPMAlarmCheck_ACCClick",
+   "event_name": "OnClick",
+   "handler_name": "sbPMAlarmCheck_ACCClickClick",
+   "leaf_name": "sbPMAlarmCheck_ACCClick",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemCheck.pnlPMAlarmCheck.pc_PMItemCheck.ts_GerneralItemCheck.sbPMAlarmCheck_REJClick",
+   "event_name": "OnClick",
+   "handler_name": "sbPMAlarmCheck_ACCClickClick",
+   "leaf_name": "sbPMAlarmCheck_REJClick",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemCheck.pnlPMAlarmCheck.pc_PMItemCheck.ts_GerneralItemCheck.sb_GerneralExecutiveOwnerCheck",
+   "event_name": "OnClick",
+   "handler_name": "sb_GerneralExecutiveOwnerCheckClick",
+   "leaf_name": "sb_GerneralExecutiveOwnerCheck",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemCheck.pnlPMAlarmCheck.pc_PMItemCheck.ts_GerneralItemCheck.sb_GerneralConformOwnerCheck",
+   "event_name": "OnClick",
+   "handler_name": "sb_GerneralExecutiveOwnerCheckClick",
+   "leaf_name": "sb_GerneralConformOwnerCheck",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemCheck.pnlPMAlarmCheck.pc_PMItemCheck.ts_GerneralItemCheck.sgGerneralPMAlarmCheckItem",
+   "event_name": "OnDrawCell",
+   "handler_name": "sgGerneralPMAlarmCheckItemDrawCell",
+   "leaf_name": "sgGerneralPMAlarmCheckItem",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemCheck.pnlPMAlarmCheck.pc_PMItemCheck.ts_GerneralItemCheck.sgGerneralPMAlarmCheckItem",
+   "event_name": "OnKeyUp",
+   "handler_name": "sgGerneralPMAlarmCheckItemKeyUp",
+   "leaf_name": "sgGerneralPMAlarmCheckItem",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemCheck.pnlPMAlarmCheck.pc_PMItemCheck.ts_GerneralItemCheck.sgGerneralPMAlarmCheckItem",
+   "event_name": "OnSelectCell",
+   "handler_name": "sgGerneralPMAlarmCheckItemSelectCell",
+   "leaf_name": "sgGerneralPMAlarmCheckItem",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemCheck.pnlPMAlarmCheck.pc_PMItemCheck.ts_TemperatureCheck.sb_TemperatureExecutiveOwnerCheck",
+   "event_name": "OnClick",
+   "handler_name": "sb_TemperatureExecutiveOwnerCheckClick",
+   "leaf_name": "sb_TemperatureExecutiveOwnerCheck",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemCheck.pnlPMAlarmCheck.pc_PMItemCheck.ts_TemperatureCheck.sb_TemperatureConformOwnerCheck",
+   "event_name": "OnClick",
+   "handler_name": "sb_TemperatureExecutiveOwnerCheckClick",
+   "leaf_name": "sb_TemperatureConformOwnerCheck",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemCheck.pnlPMAlarmCheck.pc_PMItemCheck.ts_TemperatureCheck.sb_LoadTemp",
+   "event_name": "OnClick",
+   "handler_name": "sb_LoadTempClick",
+   "leaf_name": "sb_LoadTemp",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemCheck.pnlPMAlarmCheck.pc_PMItemCheck.ts_TemperatureCheck.sgTemperaturePMAlarmCheckItem",
+   "event_name": "OnKeyUp",
+   "handler_name": "sgTemperaturePMAlarmCheckItemKeyUp",
+   "leaf_name": "sgTemperaturePMAlarmCheckItem",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemCheck.pnlPMAlarmCheck.pc_PMItemCheck.ts_TemperatureCheck.sgTemperaturePMAlarmCheckItem",
+   "event_name": "OnSelectCell",
+   "handler_name": "sgTemperaturePMAlarmCheckItemSelectCell",
+   "leaf_name": "sgTemperaturePMAlarmCheckItem",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemCheck.pnlPMAlarmCheck.pc_PMItemCheck.TabSheet9.sb_ESDExecutiveOwnerCheck",
+   "event_name": "OnClick",
+   "handler_name": "sb_ESDExecutiveOwnerCheckClick",
+   "leaf_name": "sb_ESDExecutiveOwnerCheck",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemCheck.pnlPMAlarmCheck.pc_PMItemCheck.TabSheet9.sb_ESDConformOwnerCheck",
+   "event_name": "OnClick",
+   "handler_name": "sb_ESDExecutiveOwnerCheckClick",
+   "leaf_name": "sb_ESDConformOwnerCheck",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemCheck.pnlPMAlarmCheck.pc_PMItemCheck.TabSheet9.sgESDPMAlarmCheckItem",
+   "event_name": "OnKeyUp",
+   "handler_name": "sgESDPMAlarmCheckItemKeyUp",
+   "leaf_name": "sgESDPMAlarmCheckItem",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemCheck.pnlPMAlarmCheck.pc_PMItemCheck.TabSheet7.sb_IonFanExecutiveOwnerCheck",
+   "event_name": "OnClick",
+   "handler_name": "sb_IonFanExecutiveOwnerCheckClick",
+   "leaf_name": "sb_IonFanExecutiveOwnerCheck",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemCheck.pnlPMAlarmCheck.pc_PMItemCheck.TabSheet7.sb_IonFanConformOwnerCheck",
+   "event_name": "OnClick",
+   "handler_name": "sb_IonFanExecutiveOwnerCheckClick",
+   "leaf_name": "sb_IonFanConformOwnerCheck",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemCheck.pnlPMAlarmCheck.pc_PMItemCheck.TabSheet7.sgIonFanPMAlarmCheckItem",
+   "event_name": "OnKeyUp",
+   "handler_name": "sgIonFanPMAlarmCheckItemKeyUp",
+   "leaf_name": "sgIonFanPMAlarmCheckItem",
+   "vcl_class": "TStringGrid"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemCheck.pnlPMAlarmCheck.pn_SetPMDate.mc_SetPMDate",
+   "event_name": "OnClick",
+   "handler_name": "mc_SetPMDateClick",
+   "leaf_name": "mc_SetPMDate",
+   "vcl_class": "TMonthCalendar"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMItemCheck.pnlPMAlarmCheck.pn_SetPMDate.pn_SetPMDateClose",
+   "event_name": "OnClick",
+   "handler_name": "pn_SetPMDateCloseClick",
+   "leaf_name": "pn_SetPMDateClose",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMSetup.Panel16.sb_SaveSetting",
+   "event_name": "OnClick",
+   "handler_name": "sb_SaveSettingClick",
+   "leaf_name": "sb_SaveSetting",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMSetup.Panel16.bt_ResetPMDate",
+   "event_name": "OnClick",
+   "handler_name": "bt_ResetPMDateClick",
+   "leaf_name": "bt_ResetPMDate",
+   "vcl_class": "TButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMSetup.Panel16.edtPMAlarmAlarmDays",
+   "event_name": "OnMouseDown",
+   "handler_name": "edtPMAlarmAlarmDaysMouseDown",
+   "leaf_name": "edtPMAlarmAlarmDays",
+   "vcl_class": "TEdit"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_PMSetup.Panel16.Panel28",
+   "event_name": "OnDblClick",
+   "handler_name": "Panel28DblClick",
+   "leaf_name": "Panel28",
+   "vcl_class": "TPanel"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_Others.Panel30.SpeedButton9",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton9Click",
+   "leaf_name": "SpeedButton9",
+   "vcl_class": "TSpeedButton"
+  },
+  {
+   "control_path": "fPMAlarmInterFace.pnlPMAlarm.pc_PMAlarmFuction.ts_Others.Panel30.SpeedButton10",
+   "event_name": "OnClick",
+   "handler_name": "SpeedButton10Click",
+   "leaf_name": "SpeedButton10",
+   "vcl_class": "TSpeedButton"
+  }
+ ],
+ "form_name": "fPMAlarmInterFace",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "PMAlarm/PMAlarmInterFace.dfm"
+}

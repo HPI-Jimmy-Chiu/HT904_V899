@@ -9,8 +9,16 @@
 //   - Added #include "vclcompat/vcl_compat.h" for AnsiString/IntToStr.
 //   - Dropped __fastcall from function definition (BCB6-only calling convention).
 //   - GetErrorMsg(TObject*,int): faithfully translated; Sender unused
-//     (matching BCB6 lines 12-314). Big5 bytes in 8 string literals
-//     preserved verbatim (no UTF-8 re-encoding).
+//     (matching BCB6 lines 12-314). 7 string literals (lines ~60-231)
+//     carried 8 occurrences of a raw Big5 byte pair (0xA1 0x58, the
+//     Big5 em dash) copied verbatim from the golden BCB6 source; under
+//     UTF-8 that pair is an invalid/orphan byte sequence (MSVC C4828),
+//     not merely a cosmetic issue. //AI(W906-encoding) 20260728: transcoded
+//     the whole file cp950->UTF-8 (byte-exact per-line verification: every
+//     line's decoded text is identical before/after, only the on-disk byte
+//     encoding changed) so each pair now round-trips as a single valid
+//     UTF-8 EM DASH (U+2014), matching what the Big5-locale BCB6 build
+//     actually rendered.
 //   - LogClientSocketExceptionError DEFERRED: TClientSocket->Name/Address/
 //     Port fields require VCL ScktComp.hpp; MyDBIProcess requires cMyDB.
 //     (BCB6 source lines 316-327.)
@@ -57,7 +65,7 @@ AnsiString GetErrorMsg(TObject * /*Sender*/, int ErrorCode)
             asResultStr = "Socket Error (10014) Bad address. The system detected an invalid pointer address in attempting to use a pointer argument of a call. This error occurs if an application passes an invalid pointer value, or if the length of the buffer is too small. For instance, if the length of an argument, which is a sockaddr structure, is smaller than the sizeof(sockaddr).";
             break;
         case WSAEINVAL:
-            asResultStr = "Socket Error (10022) Invalid argument. Some invalid argument was supplied (for example, specifying an invalid level to the setsockopt function). In some instances, it also refers to the current state of the socket¡Xfor instance, calling accept on a socket that is not listening.";
+            asResultStr = "Socket Error (10022) Invalid argument. Some invalid argument was supplied (for example, specifying an invalid level to the setsockopt function). In some instances, it also refers to the current state of the socketâ€”for instance, calling accept on a socket that is not listening.";
             break;
         case WSAEMFILE:
             asResultStr = "Socket Error (10024) Too many open files. Too many open sockets. Each implementation may have a maximum number of socket handles available, either globally, per process, or per thread.";
@@ -66,10 +74,10 @@ AnsiString GetErrorMsg(TObject * /*Sender*/, int ErrorCode)
             asResultStr = "Socket Error (10035) Resource temporarily unavailable. This error is returned from operations on nonblocking sockets that cannot be completed immediately, for example recv when no data is queued to be read from the socket. It is a nonfatal error, and the operation should be retried later. It is normal for WSAEWOULDBLOCK to be reported as the result from calling connect on a nonblocking SOCK_STREAM socket, since some time must elapse for the connection to be established.";
             break;
         case WSAEINPROGRESS:
-            asResultStr = "Socket Error (10036) Operation now in progress. A blocking operation is currently executing. Windows Sockets only allows a single blocking operation¡Xper- task or thread¡Xto be outstanding, and if any other function call is made (whether or not it references that or any other socket) the function fails with the WSAEINPROGRESS error.";
+            asResultStr = "Socket Error (10036) Operation now in progress. A blocking operation is currently executing. Windows Sockets only allows a single blocking operationâ€”per- task or threadâ€”to be outstanding, and if any other function call is made (whether or not it references that or any other socket) the function fails with the WSAEINPROGRESS error.";
             break;
         case WSAEALREADY:
-            asResultStr = "Socket Error (10037) Operation already in progress. An operation was attempted on a nonblocking socket with an operation already in progress¡Xthat is, calling connect a second time on a nonblocking socket that is already connecting, or canceling an asynchronous request (WSAAsyncGetXbyY) that has already been canceled or completed.";
+            asResultStr = "Socket Error (10037) Operation already in progress. An operation was attempted on a nonblocking socket with an operation already in progressâ€”that is, calling connect a second time on a nonblocking socket that is already connecting, or canceling an asynchronous request (WSAAsyncGetXbyY) that has already been canceled or completed.";
             break;
         case WSAENOTSOCK:
             asResultStr = "Socket Error (10038) Socket operation on nonsocket. An operation was attempted on something that is not a socket. Either the socket handle parameter did not reference a valid socket, or for select, a member of an fd_set was not valid.";
@@ -102,7 +110,7 @@ AnsiString GetErrorMsg(TObject * /*Sender*/, int ErrorCode)
             asResultStr = "Socket Error (10047) Address family not supported by protocol family. An address incompatible with the requested protocol was used. All sockets are created with an associated address family (that is, AF_INET for Internet Protocols) and a generic protocol type (that is, SOCK_STREAM). This error is returned if an incorrect protocol is explicitly requested in the socket call, or if an address of the wrong family is used for a socket, for example, in sendto.";
             break;
         case WSAEADDRINUSE:
-            asResultStr = "Socket Error (10048) Address already in use. Typically, only one usage of each socket address (protocol/IP address/port) is permitted. This error occurs if an application attempts to bind a socket to an IP address/port that has already been used for an existing socket, or a socket that was not closed properly, or one that is still in the process of closing. For server applications that need to bind multiple sockets to the same port number, consider using setsockopt (SO_REUSEADDR). Client applications usually need not call bind at all¡Xconnect chooses an unused port automatically. When bind is called with a wildcard address (involving ADDR_ANY), a WSAEADDRINUSE error could be delayed until the specific address is committed. This could happen with a call to another function later, including connect, listen, WSAConnect, or WSAJoinLeaf.";
+            asResultStr = "Socket Error (10048) Address already in use. Typically, only one usage of each socket address (protocol/IP address/port) is permitted. This error occurs if an application attempts to bind a socket to an IP address/port that has already been used for an existing socket, or a socket that was not closed properly, or one that is still in the process of closing. For server applications that need to bind multiple sockets to the same port number, consider using setsockopt (SO_REUSEADDR). Client applications usually need not call bind at allâ€”connect chooses an unused port automatically. When bind is called with a wildcard address (involving ADDR_ANY), a WSAEADDRINUSE error could be delayed until the specific address is committed. This could happen with a call to another function later, including connect, listen, WSAConnect, or WSAJoinLeaf.";
             break;
         case WSAEADDRNOTAVAIL:
             asResultStr = "Socket Error (10049) Cannot assign requested address. The requested address is not valid in its context. This normally results from an attempt to bind to an address that is not valid for the local computer. This can also result from connect, sendto, WSAConnect, WSAJoinLeaf, or WSASendTo when the remote address or port is not valid for a remote computer (for example, address or port 0).";
@@ -129,7 +137,7 @@ AnsiString GetErrorMsg(TObject * /*Sender*/, int ErrorCode)
             asResultStr = "Socket Error (10056) Socket is already connected. A connect request was made on an already-connected socket. Some implementations also return this error if sendto is called on a connected SOCK_DGRAM socket (for SOCK_STREAM sockets, the to parameter in sendto is ignored) although other implementations treat this as a legal occurrence.";
             break;
         case WSAENOTCONN:
-            asResultStr = "Socket Error (10057) Socket is not connected. A request to send or receive data was disallowed because the socket is not connected and (when sending on a datagram socket using sendto) no address was supplied. Any other type of operation might also return this error¡Xfor example, setsockopt setting SO_KEEPALIVE if the connection has been reset.";
+            asResultStr = "Socket Error (10057) Socket is not connected. A request to send or receive data was disallowed because the socket is not connected and (when sending on a datagram socket using sendto) no address was supplied. Any other type of operation might also return this errorâ€”for example, setsockopt setting SO_KEEPALIVE if the connection has been reset.";
             break;
         case WSAESHUTDOWN:
             asResultStr = "Socket Error (10058) Cannot send after socket shutdown. A request to send or receive data was disallowed because the socket had already been shut down in that direction with a previous shutdown call. By calling shutdown a partial close of a socket is requested, which is a signal that sending or receiving, or both have been discontinued.";
@@ -141,7 +149,7 @@ AnsiString GetErrorMsg(TObject * /*Sender*/, int ErrorCode)
             asResultStr = "Socket Error (10060) Connection timed out. A connection attempt failed because the connected party did not properly respond after a period of time, or the established connection failed because the connected host has failed to respond.";
             break;
         case WSAECONNREFUSED:
-            asResultStr = "Socket Error (10061) Connection refused. No connection could be made because the target computer actively refused it. This usually results from trying to connect to a service that is inactive on the foreign host¡Xthat is, one with no server application running.";
+            asResultStr = "Socket Error (10061) Connection refused. No connection could be made because the target computer actively refused it. This usually results from trying to connect to a service that is inactive on the foreign hostâ€”that is, one with no server application running.";
             break;
         case WSAELOOP:
             asResultStr = "Socket Error (10062) Cannot translate name. Cannot translate a name.";
@@ -228,7 +236,7 @@ AnsiString GetErrorMsg(TObject * /*Sender*/, int ErrorCode)
             asResultStr = "Socket Error (11003) This is a nonrecoverable error. This indicates that some sort of nonrecoverable error occurred during a database lookup. This may be because the database files (for example, BSD-compatible HOSTS, SERVICES, or PROTOCOLS files) could not be found, or a DNS request was returned by the server with a severe error.";
             break;
         case WSANO_DATA:
-            asResultStr = "Socket Error (11004) Valid name, no data record of requested type. The requested name is valid and was found in the database, but it does not have the correct associated data being resolved for. The usual example for this is a host name-to-address translation attempt (using gethostbyname or WSAAsyncGetHostByName) which uses the DNS (Domain Name Server). An MX record is returned but no A record¡Xindicating the host itself exists, but is not directly reachable.";
+            asResultStr = "Socket Error (11004) Valid name, no data record of requested type. The requested name is valid and was found in the database, but it does not have the correct associated data being resolved for. The usual example for this is a host name-to-address translation attempt (using gethostbyname or WSAAsyncGetHostByName) which uses the DNS (Domain Name Server). An MX record is returned but no A recordâ€”indicating the host itself exists, but is not directly reachable.";
             break;
         case WSA_QOS_RECEIVERS:
             asResultStr = "Socket Error (11005) QoS receivers. At least one QoS reserve has arrived.";

@@ -1648,6 +1648,13 @@ void SckArtRem_Save2DSortingSummary(SckArtRemainderState &st, int iSaveData)    
         // passes fLotInfo->edtSysLotID (the TEdit*/TfLotInfoEdit* POINTER itself) to a %s conversion,
         // missing ->Text. See this function's own header doc comment "Golden bugs preserved VERBATIM
         // #2" for the full compile/runtime-UB analysis. NOT "fixed" to ->Text here.
+        // AI(W906-F0fix) 20260728, LOW-7 disclosure (verified, see docs/W7-UI-SKIPPED.md's
+        // "W7-F0-fix" section for the full writeup): W7-F0 changed TfLotInfoEdit from a
+        // non-polymorphic `struct { AnsiString Text; }` to vclcompat::TEdit -> ... -> TObject
+        // (polymorphic). This UB read now starts at a VPTR instead of the old AnsiString handle's
+        // bytes -- still equally undefined either way (and golden's own BCB6 behaviour here was
+        // already garbage), but the exact garbage bytes this line reads changed shape under this
+        // wave. Not fixed (golden bug preserved verbatim, per this function's own contract).
         Str.sprintf("LOT_ID:%s", fLotInfo->edtSysLotID);
         sList->Add(Str);
         Str.sprintf("ASSEMBLY SITE:%s", fObserver->labFactory->Caption);

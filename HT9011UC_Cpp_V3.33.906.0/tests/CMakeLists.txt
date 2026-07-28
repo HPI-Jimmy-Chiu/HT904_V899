@@ -288,7 +288,7 @@ add_executable(test_config_loaders
 # ws2_32 (THGem's ctor constructs TClientSocket/TServerSocket -- see
 # test_uHGemEquipment's own identical need).
 target_link_libraries(test_config_loaders PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_secsgem,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_secsgem,ht9045_forms,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 if(WIN32)
     target_link_libraries(test_config_loaders PRIVATE ws2_32)
@@ -484,7 +484,7 @@ add_executable(test_w6_1_empty_canary
 )
 
 target_link_libraries(test_w6_1_empty_canary PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -522,7 +522,7 @@ add_executable(test_w6_canary
 )
 
 target_link_libraries(test_w6_canary PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -550,7 +550,7 @@ add_executable(test_w6_2_inarm_canary
 )
 
 target_link_libraries(test_w6_2_inarm_canary PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -580,7 +580,7 @@ add_executable(test_AutoClean
 )
 
 target_link_libraries(test_AutoClean PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -611,7 +611,7 @@ add_executable(test_w6_2_inarm_search
 )
 
 target_link_libraries(test_w6_2_inarm_search PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -647,7 +647,7 @@ add_executable(test_w6_2_inarm_core
 )
 
 target_link_libraries(test_w6_2_inarm_core PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -686,7 +686,7 @@ add_executable(test_w6_2b_inarm_variants
 )
 
 target_link_libraries(test_w6_2b_inarm_variants PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -718,7 +718,7 @@ add_executable(test_w6_2c_inarm_variants
 )
 
 target_link_libraries(test_w6_2c_inarm_variants PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -750,7 +750,7 @@ add_executable(test_w6_2c_inarm_variants_batch2
 )
 
 target_link_libraries(test_w6_2c_inarm_variants_batch2 PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -784,7 +784,7 @@ add_executable(test_w6_2c_inarm_variants_batch3
 )
 
 target_link_libraries(test_w6_2c_inarm_variants_batch3 PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -813,7 +813,7 @@ add_executable(test_w6_2c_inarm_variants_batch4
 )
 
 target_link_libraries(test_w6_2c_inarm_variants_batch4 PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -842,7 +842,7 @@ add_executable(test_w6_2c_inarm_Sfamily
 )
 
 target_link_libraries(test_w6_2c_inarm_Sfamily PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -883,7 +883,7 @@ add_executable(test_w6_2_outarm_core
 )
 
 target_link_libraries(test_w6_2_outarm_core PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -908,7 +908,7 @@ add_executable(test_w6_2_outarm_variants
 )
 
 target_link_libraries(test_w6_2_outarm_variants PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -935,7 +935,7 @@ add_executable(test_w6_3_catchtray_core
 )
 
 target_link_libraries(test_w6_3_catchtray_core PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -970,7 +970,7 @@ add_executable(test_w6_3_catchtray
 )
 
 target_link_libraries(test_w6_3_catchtray PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1001,7 +1001,7 @@ add_executable(test_w6_4_tester
 )
 
 target_link_libraries(test_w6_4_tester PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1032,7 +1032,7 @@ add_executable(test_w6_4_tester_core
 )
 
 target_link_libraries(test_w6_4_tester_core PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1060,7 +1060,7 @@ add_executable(test_w6_4b_front_rear_destroy
 )
 
 target_link_libraries(test_w6_4b_front_rear_destroy PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1095,7 +1095,7 @@ add_executable(test_w6_5_shuttle
 )
 
 target_link_libraries(test_w6_5_shuttle PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1122,7 +1122,7 @@ add_executable(test_w6_6_hub
 )
 
 target_link_libraries(test_w6_6_hub PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1149,7 +1149,7 @@ add_executable(test_w6_6_csystem_cycle
 )
 
 target_link_libraries(test_w6_6_csystem_cycle PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1183,7 +1183,7 @@ add_executable(test_w7_a1_inarm_floating_latch
 )
 
 target_link_libraries(test_w7_a1_inarm_floating_latch PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1246,7 +1246,7 @@ add_executable(test_w7_grid_occupancy
 )
 
 target_link_libraries(test_w7_grid_occupancy PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1277,7 +1277,7 @@ add_executable(test_w7_hotplate_loader_vibrate
 )
 
 target_link_libraries(test_w7_hotplate_loader_vibrate PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1313,7 +1313,7 @@ add_executable(test_w7_c1_cleanout_finish
 )
 
 target_link_libraries(test_w7_c1_cleanout_finish PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1352,7 +1352,7 @@ add_executable(test_w7_c2_onecycle_finish
 )
 
 target_link_libraries(test_w7_c2_onecycle_finish PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1392,7 +1392,7 @@ add_executable(test_w906_autositemap_cleanout
 )
 
 target_link_libraries(test_w906_autositemap_cleanout PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1426,7 +1426,7 @@ add_executable(test_w906_doindexautoclean
 )
 
 target_link_libraries(test_w906_doindexautoclean PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1477,7 +1477,7 @@ add_executable(test_uHGemClass
 #   * canary_support.cpp:82-89   `void ShowMyMessage(AnsiString, AnsiString,
 #                                  AnsiString, bool, bool) { ... }`
 target_link_libraries(test_uHGemClass PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 if(WIN32)
     target_link_libraries(test_uHGemClass PRIVATE ws2_32)
@@ -1499,7 +1499,7 @@ add_executable(test_interfacesys
 )
 
 target_link_libraries(test_interfacesys PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1644,7 +1644,7 @@ add_executable(test_amr
 )
 
 target_link_libraries(test_amr PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1662,7 +1662,7 @@ add_executable(test_hana_art
 )
 
 target_link_libraries(test_hana_art PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1681,7 +1681,7 @@ add_executable(test_SCK_ART
 )
 
 target_link_libraries(test_SCK_ART PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1710,7 +1710,7 @@ add_executable(test_atester_32site
 )
 
 target_link_libraries(test_atester_32site PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1733,7 +1733,7 @@ add_executable(test_atester_front_suckic
 )
 
 target_link_libraries(test_atester_front_suckic PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1757,7 +1757,7 @@ add_executable(test_atester_rear_suckic
 )
 
 target_link_libraries(test_atester_rear_suckic PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1779,7 +1779,7 @@ add_executable(test_barcode_helpers
 )
 
 target_link_libraries(test_barcode_helpers PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1794,7 +1794,7 @@ add_executable(test_barcode_bottom2did
 )
 
 target_link_libraries(test_barcode_bottom2did PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1809,7 +1809,7 @@ add_executable(test_barcode_bottom2did8ccd
 )
 
 target_link_libraries(test_barcode_bottom2did8ccd PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1824,7 +1824,7 @@ add_executable(test_barcode_shuttle1_scan
 )
 
 target_link_libraries(test_barcode_shuttle1_scan PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1840,7 +1840,7 @@ add_executable(test_barcode_shuttle2_scan
 )
 
 target_link_libraries(test_barcode_shuttle2_scan PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1855,7 +1855,7 @@ add_executable(test_barcode_shuttle1_ccdscan
 )
 
 target_link_libraries(test_barcode_shuttle1_ccdscan PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1870,7 +1870,7 @@ add_executable(test_barcode_shuttle2_ccdscan
 )
 
 target_link_libraries(test_barcode_shuttle2_ccdscan PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1890,7 +1890,7 @@ add_executable(test_barcode_shuttle2_scanremainder1
 )
 
 target_link_libraries(test_barcode_shuttle2_scanremainder1 PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1905,7 +1905,7 @@ add_executable(test_barcode_shuttle2_scanremainder2
 )
 
 target_link_libraries(test_barcode_shuttle2_scanremainder2 PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1921,7 +1921,7 @@ add_executable(test_barcode_8ccd_glue
 )
 
 target_link_libraries(test_barcode_8ccd_glue PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -2024,7 +2024,7 @@ add_executable(test_uHGemEquipment
 # resolved (see root CMakeLists.txt's ht9045_secsgem target for the matching
 # new link dependency).
 target_link_libraries(test_uHGemEquipment PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_secsgem,ht9045_core,ht9045_globals,ht9045_public,ht9045_db,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_secsgem,ht9045_forms,ht9045_core,ht9045_globals,ht9045_public,ht9045_db,vclcompat>"
 )
 if(WIN32)
     target_link_libraries(test_uHGemEquipment PRIVATE ws2_32)
@@ -2042,7 +2042,7 @@ add_executable(test_auto9045
     test_auto9045.cpp
 )
 target_link_libraries(test_auto9045 PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 if(WIN32)
     target_link_libraries(test_auto9045 PRIVATE ws2_32)
@@ -2054,7 +2054,7 @@ add_executable(test_agv_e84
     test_agv_e84.cpp
 )
 target_link_libraries(test_agv_e84 PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 if(WIN32)
     target_link_libraries(test_agv_e84 PRIVATE ws2_32)
@@ -2067,7 +2067,7 @@ add_executable(test_agv_portscan
     test_agv_portscan.cpp
 )
 target_link_libraries(test_agv_portscan PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 if(WIN32)
     target_link_libraries(test_agv_portscan PRIVATE ws2_32)
@@ -2080,7 +2080,7 @@ add_executable(test_SCK_ART_Remainder
     test_SCK_ART_Remainder.cpp
 )
 target_link_libraries(test_SCK_ART_Remainder PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 if(WIN32)
     target_link_libraries(test_SCK_ART_Remainder PRIVATE ws2_32)
@@ -2093,7 +2093,7 @@ add_executable(test_testertcp_socket
     test_testertcp_socket.cpp
 )
 target_link_libraries(test_testertcp_socket PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 if(WIN32)
     target_link_libraries(test_testertcp_socket PRIVATE ws2_32)
@@ -2113,7 +2113,7 @@ add_executable(test_automation
     test_automation.cpp
 )
 target_link_libraries(test_automation PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 if(WIN32)
     target_link_libraries(test_automation PRIVATE ws2_32)
@@ -2140,7 +2140,7 @@ add_executable(test_TesterTCP
     test_TesterTCP.cpp
 )
 target_link_libraries(test_TesterTCP PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 if(WIN32)
     target_link_libraries(test_TesterTCP PRIVATE ws2_32)
@@ -2290,7 +2290,7 @@ add_executable(test_w7_a2_searchtray_magazine_return
 )
 
 target_link_libraries(test_w7_a2_searchtray_magazine_return PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -2500,6 +2500,27 @@ else()
                      "This environment cannot verify the tools/dfm2rc/ "
                      "pipeline gates; see docs/W7-UI-SKIPPED.md.")
 endif()
+
+# --- W7-F0-b: the SV/EC void*-overload guard + the zero-behaviour-change
+#     default-value regression for the unified widget stand-ins ---------------
+# AI(W906-W7-F0) 20260728: plan SS6-F0-b / SS4-V2 / SS9-R8.  Deliberately placed
+# ABOVE the GLOBAL TEST TIMEOUT block below, not appended after it -- that block
+# reads the directory's TESTS property with get_property(), so a test registered
+# after it would silently get NO timeout and could wedge a batch run (exactly the
+# failure mode tests/test_bootstrap.cpp exists to prevent).
+#
+# Links vclcompat only: forms/FormWidgets.h needs AnsiString / TStringList /
+# TStringGrid and nothing above the compat layer.  It deliberately does NOT
+# include any forms/fXxx.h, so it does not pull ht9045_forms in -- this target
+# tests the widget TYPE layer, and keeping its link line minimal means a link
+# failure here can only ever mean vclcompat.
+add_executable(test_w7_f0_controls_guard
+    test_w7_f0_controls_guard.cpp
+)
+
+target_link_libraries(test_w7_f0_controls_guard PRIVATE vclcompat)
+
+add_test(NAME w7_f0_controls_guard COMMAND test_w7_f0_controls_guard)
 
 # ===========================================================================
 #  GLOBAL TEST TIMEOUT -- must stay at the BOTTOM of this file

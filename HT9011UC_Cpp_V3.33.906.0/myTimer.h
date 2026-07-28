@@ -23,8 +23,8 @@ private:
 public:
     __fastcall TQPF_Timer();
     int LatchCycleTime(bool Start=false);
-    int LatchCycleTimeUS(bool Start=false);     //Steven 20180808 (wei) : TTLªº®É¶¡³æ¦ì§ï¦¨microsecond
-    int LatchCycleTimeSec(bool Start=false);    //Steven 20190724 : Â^¨ú¬í
+    int LatchCycleTimeUS(bool Start=false);     //Steven 20180808 (wei) : TTLçš„æ™‚é–“å–®ä½æ”¹æˆmicrosecond
+    int LatchCycleTimeSec(bool Start=false);    //Steven 20190724 : æ“·å–ç§’
 //    void On();
     void On();
     bool Off();

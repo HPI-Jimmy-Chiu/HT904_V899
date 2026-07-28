@@ -888,13 +888,23 @@ void SckArtRem_DoARTLotStart(SckArtRemainderState &st, AnsiString _sLotID, AnsiS
 //        tree's vclcompat, `AnsiString::sprintf` forwards to real `vsnprintf` (vclcompat/AnsiString.cpp:
 //        165-178), so this compiles (any POD pointer is a legal varargs argument) and at runtime reads
 //        raw bytes STARTING AT the `TfLotInfoEdit` object's own address as if they were a NUL-terminated
-//        C string -- undefined behavior, matching the SAME undefined behavior golden's real BCB6 build
-//        would hit passing a `TEdit*` to `%s`. Preserved verbatim (not "fixed" to `->Text`) -- but this
-//        wave's own test (PART 11) deliberately does NOT exercise this exact branch (it steers via
+//        C string -- undefined behavior, matching the SAME CLASS of undefined behavior golden's real
+//        BCB6 build would hit passing a `TEdit*` to `%s` (both read garbage bytes off a widget pointer;
+//        neither is well-defined). Preserved verbatim (not "fixed" to `->Text`) -- but this wave's own
+//        test (PART 11) deliberately does NOT exercise this exact branch (it steers via
 //        bReadLotInfoFromART==true instead, see PART 11's own comment), so as to not make an automated
 //        test's outcome depend on unspecified/undefined behavior, even though ordinary (non-ASan)
-//        execution of this exact line is expected to be harmless in practice (the pointer's own 8 raw
-//        bytes almost always contain a NUL well before running off any mapped page, on a 64-bit build).
+//        execution of this exact line is expected to be harmless in practice.
+//        AI(W906-F0fix) 20260728, LOW-7 disclosure (independent review of W7-A1/W7-F0; verified, see
+//        docs/W7-UI-SKIPPED.md's "W7-F0-fix" section): the PRECISE bytes this UB reads are NOT the same
+//        before/after W7-F0, even though both are equally undefined and this is still golden's own
+//        preserved bug either way. Before W7-F0, `TfLotInfoEdit` was a non-polymorphic
+//        `struct { AnsiString Text; }`, so this read the leading bytes of that struct's AnsiString
+//        handle. After W7-F0, `TfLotInfoEdit` is a typedef of `vclcompat::TEdit -> TCustomEdit ->
+//        TControl -> TObject`, and TObject is polymorphic (vclcompat/TStringList.h:32-35, virtual
+//        destructor) -- so the object's first bytes are now a VPTR instead. An observable shape change
+//        on a reachable branch, inside a wave contracted to zero behaviour change; disclosed rather
+//        than silently absorbed, and NOT "fixed" (this remains golden's own bug, preserved verbatim).
 //     3. (golden :3656, reusing :3646's `if(fSCKART->sLotStartTime!="")` a SECOND time for the
 //        SUMMARY_END_TIME block) and (golden :3662, whose ELSE-branch format string is literally
 //        `"SUMMARY_START_TIME:%s%s%s%s%s%s"` again -- built from `RunInfo.LotEndTime`, not

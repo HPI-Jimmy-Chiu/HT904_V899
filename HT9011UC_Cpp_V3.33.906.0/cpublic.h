@@ -6,13 +6,13 @@
 //------------------------------------------------------------------------------
 void CutSpaceAtHead(char *S);
 char *ConvertSecondToTime(long s);
-void GetEveryCode(AnsiString AnsiData);                                         //Steven 20111028 : §ï¦¨AnsiString
+void GetEveryCode(AnsiString AnsiData);                                         //Steven 20111028 : æ”¹æˆAnsiString
 int Change_Tempture_Value();
 void UT100WordWriteNoSucm(int Addr, int Command, int Value);
 void UT100WordReadNoSucm(int Addr, int Command);
-AnsiString DTK4848_LRC(AnsiString str);                                         //KaiHuang 20190821 : ·s¼W¥x¹F DTK4848·Å±±¾¹
-void DTK4848WordWriteNoSucm(int Addr,int Value);                                //KaiHuang 20190821 : ·s¼W¥x¹F DTK4848·Å±±¾¹
-void DTK4848WordReadNoSucm(int Addr);                                           //KaiHuang 20190821 : ·s¼W¥x¹F DTK4848·Å±±¾¹
+AnsiString DTK4848_LRC(AnsiString str);                                         //KaiHuang 20190821 : æ–°å¢å°é” DTK4848æº«æ§å™¨
+void DTK4848WordWriteNoSucm(int Addr,int Value);                                //KaiHuang 20190821 : æ–°å¢å°é” DTK4848æº«æ§å™¨
+void DTK4848WordReadNoSucm(int Addr);                                           //KaiHuang 20190821 : æ–°å¢å°é” DTK4848æº«æ§å™¨
 void ConvertGearValue(int *Ref, double GearRatio);
 char *GetFloatFormatString(double v, int P1, int P2);
 char *ConvertToMMType(int i);
@@ -24,9 +24,9 @@ void GetTimeInfo();
 void GetYesterdayInfo();
 bool SplitStrByDotSpaceOnly(char *str, char *dest, int Max);
 int GetScreenPos(int NowPos, int ScreenTop, int ScreenBottom, int RealTop, int RealBottom);
-AnsiString ConvertSecondToSPC(long s);                                          //Steven 20141111 : ¬íÂà¬°®É¤À¬í
-AnsiString ConvertMSecToSPC(long s);                                            //Steven 20190714 : MS®É¶¡Âà´«¦¨®É¤À¬í
-AnsiString ConvertMSecToTime(long s);                                           //Steven 20190714 : MS®É¶¡Âà´«¦¨¤é®É¤À¬í
+AnsiString ConvertSecondToSPC(long s);                                          //Steven 20141111 : ç§’è½‰ç‚ºæ™‚åˆ†ç§’
+AnsiString ConvertMSecToSPC(long s);                                            //Steven 20190714 : MSæ™‚é–“è½‰æ›æˆæ™‚åˆ†ç§’
+AnsiString ConvertMSecToTime(long s);                                           //Steven 20190714 : MSæ™‚é–“è½‰æ›æˆæ—¥æ™‚åˆ†ç§’
 bool IsDoubleEqual(const double a, const double b, const double tolerance=1e-6);
 //------------------------------------------------------------------------------
 
@@ -42,20 +42,20 @@ bool RespondASECom(AnsiString S1);                                              
 void TTLLog(AnsiString Message);                                                //Steven 20151123 : Log for TTL
 void HeaterLog(AnsiString Message, bool bOnOff);                                //Steven 20151123 : Log for Heater Relay
 void HeaterSVLog(int Addr, double dTemp);                                       //Steven 20200121 : Log for Heater SV
-void ProductionLog(AnsiString Message, bool bSaveToFile=false, AnsiString JamCode="");//JerryYang 20151225 Production Log for SPILÄ¬¦{
+void ProductionLog(AnsiString Message, bool bSaveToFile=false, AnsiString JamCode="");//JerryYang 20151225 Production Log for SPILè˜‡å·
 
-bool ExecZipCommand(AnsiString Path, AnsiString Param);                         //Steven 20160205 : ¦sÀÉ®É­Ô¤£­n¸õDOSµøµ¡
+bool ExecZipCommand(AnsiString Path, AnsiString Param);                         //Steven 20160205 : å­˜æª”æ™‚å€™ä¸è¦è·³DOSè¦–çª—
 
 AnsiString GetDateInfoByString(AnsiString asSign="");                           //ChungHung 20151125 modify for KYEC //ChungHung 20150902 add
 AnsiString GetOnlyTimeInfoByString(AnsiString asSign="");                       //ChungHung 20151125 modify for KYEC  //ChungHung 20150902 add
-void ProductionDataLog();                                                       // kevin 20160724¥Í²£¸ê®Æ
+void ProductionDataLog();                                                       // kevin 20160724ç”Ÿç”¢è³‡æ–™
 
-int CompareMD5ByFolder(AnsiString FolderName);                                  //Steven 20170927 (wei) : ¤ñ¹ï¤u§@ÀÉªºÀË¬d½X¬O§_¥¿½T -1:¨S¦³MD5,  1:Pass, 0:Fail
-void SetMD5ByFolder(AnsiString FolderName);                                     //Steven 20170927 (wei) : ±N¤u§@ÀÉ¥[¤JÀË¬d½X
-bool b_Check_Dir_Exist_And_Creak_Dir(AnsiString asDir);                         //¨ç¥Ü»¡©ú:ÀË¬d¥»¾÷¥Ø¿ı¬O§_¦s¦b¡A¨Ã¥B­«·s«Ø¥ß
-AnsiString GetSoftwareFileVersion(AnsiString sFilePaych);                       //Sam 20230328 : ¦Û°Ê§ó·s¼W¥[ª©¥»ÀË¬d
-double VC8ToKpa(int iVal);                                                      //Sam 20230210 : ·s¼W VacuumUnit ³q°T¼Ò²Õ
-int KpaToVC8(double dKpa);                                                      //Sam 20230210 : ·s¼W VacuumUnit ³q°T¼Ò²Õ
+int CompareMD5ByFolder(AnsiString FolderName);                                  //Steven 20170927 (wei) : æ¯”å°å·¥ä½œæª”çš„æª¢æŸ¥ç¢¼æ˜¯å¦æ­£ç¢º -1:æ²’æœ‰MD5,  1:Pass, 0:Fail
+void SetMD5ByFolder(AnsiString FolderName);                                     //Steven 20170927 (wei) : å°‡å·¥ä½œæª”åŠ å…¥æª¢æŸ¥ç¢¼
+bool b_Check_Dir_Exist_And_Creak_Dir(AnsiString asDir);                         //å‡½ç¤ºèªªæ˜:æª¢æŸ¥æœ¬æ©Ÿç›®éŒ„æ˜¯å¦å­˜åœ¨ï¼Œä¸¦ä¸”é‡æ–°å»ºç«‹
+AnsiString GetSoftwareFileVersion(AnsiString sFilePaych);                       //Sam 20230328 : è‡ªå‹•æ›´æ–°å¢åŠ ç‰ˆæœ¬æª¢æŸ¥
+double VC8ToKpa(int iVal);                                                      //Sam 20230210 : æ–°å¢ VacuumUnit é€šè¨Šæ¨¡çµ„
+int KpaToVC8(double dKpa);                                                      //Sam 20230210 : æ–°å¢ VacuumUnit é€šè¨Šæ¨¡çµ„
 //------------------------------------------------------------------------------
 union ByteUnionBit
 {
@@ -74,7 +74,7 @@ union ByteUnionBit
 
     //Function-----------------
     int Bit(int i);
-    int BitCount(bool bOn);                                                     //§PÂ_¦³´X­Ó¬O1
+    int BitCount(bool bOn);                                                     //åˆ¤æ–·æœ‰å¹¾å€‹æ˜¯1
     void SetBit(int i, bool Value);
     bool SetByte(int Value);
     AnsiString BitString();
@@ -82,7 +82,7 @@ union ByteUnionBit
     //Function-----------------
 };
 //------------------------------------------------------------------------------
-union IntUnionBit                                                               //Sam 20221012 : ·s¼W IntUnionBit
+union IntUnionBit                                                               //Sam 20221012 : æ–°å¢ IntUnionBit
 {
     struct Bit_dev
     {
@@ -159,7 +159,7 @@ union IntUnionBit                                                               
         else            return false;
     }
 
-    int BitCount(bool bOn)                                                      //§PÂ_¦³´X­Ó¬O1
+    int BitCount(bool bOn)                                                      //åˆ¤æ–·æœ‰å¹¾å€‹æ˜¯1
     {
         int iCount=0;
         for(int i=0; i<32; i++)
@@ -236,9 +236,9 @@ union IntUnionBit                                                               
     }
 };
 //------------------------------------------------------------------------------
-#define MAX_Q_10 500                                                            //Steven 20200825 : Task list§ï¦¨100µ§
+#define MAX_Q_10 500                                                            //Steven 20200825 : Task listæ”¹æˆ100ç­†
 #define MAX_Q_100 100
-typedef struct TMyQueue10                                                       //Steven 20180808 (wei) : ­×§ï¬ö¿ıTaskªº¤è¦¡
+typedef struct TMyQueue10                                                       //Steven 20180808 (wei) : ä¿®æ”¹ç´€éŒ„Taskçš„æ–¹å¼
 {
     AnsiString Alias;
     AnsiString DateTime[MAX_Q_10];
@@ -253,7 +253,7 @@ typedef struct TMyQueue10                                                       
     void ClearData();
     void Add(int data);
     void Add(double data);
-    bool CheckTaskChange();                                                     //¸ò³Ì·sªº¤£¤@¼Ë´N++
+    bool CheckTaskChange();                                                     //è·Ÿæœ€æ–°çš„ä¸ä¸€æ¨£å°±++
     double GetData(int i);
     double GetLastData();
     AnsiString GetDateTime(int i);
@@ -324,7 +324,7 @@ typedef struct TMyTimerQueue100
 }TMyTimerQueue100;
 //------------------------------------------------------------------------------
 extern int FindAndKillProcess(LPCTSTR lpszProcessName);                         //JerryYang 20200430 Kill Eventlogsaver
-void LogIndexMaxMinPos(AnsiString str="Unknowed");                              //Isaac 20201012 : ­pºâEncoder©Mcommandpos/Teachingªº®t­È¡A°O¿ı¨Ã¦sÀÉ
+void LogIndexMaxMinPos(AnsiString str="Unknowed");                              //Isaac 20201012 : è¨ˆç®—Encoderå’Œcommandpos/Teachingçš„å·®å€¼ï¼Œè¨˜éŒ„ä¸¦å­˜æª”
 void UDPErrorLog(AnsiString aTitle, AnsiString Command);                        //kevin 20211020 UDP error log
 void RecordErrorLog(int iSaveToFile,AnsiString FilePth, AnsiString Command);    //kevin 20211022 any error log
 void sDataTimelog(AnsiString &Msg);                                             //kevin 20211027 log + DataTime
@@ -337,25 +337,25 @@ int Round(double x);                                                            
 AnsiString GetBundleInfo(int iAuto);                                            //JerryYang 20240318 : add
 void RotationCoordinates(double px, double py, double &px1, double &py1, double RadianX, double RadianY, bool bCCD=true);    //ChungHung 20210113 add for Alignment CCD
 
-AnsiString GetErrorMessage(DWORD dwErrorMessageCode);                           //Steven 20240911 : §ì¨ú¨t²Î¿ù»~ªº°T®§
+AnsiString GetErrorMessage(DWORD dwErrorMessageCode);                           //Steven 20240911 : æŠ“å–ç³»çµ±éŒ¯èª¤çš„è¨Šæ¯
 
-class VerInfo                                                                   //Sam 20230328 : ¦Û°Ê§ó·s¼W¥[ª©¥»ÀË¬d
+class VerInfo                                                                   //Sam 20230328 : è‡ªå‹•æ›´æ–°å¢åŠ ç‰ˆæœ¬æª¢æŸ¥
 {
     public:
         VerInfo();
-        AnsiString FileName() const { return m_strFileName; } void SetFileName(AnsiString v){ m_SetFileName(v); } //AI(W0-TAIL) 20260626: __property->getter/setter   //ÀÉ®×¦WºÙ
-        AnsiString FixedFileVersion() { return m_strGetFixedFileVersion(); } //AI(W0-TAIL) 20260626: __property->getter                //ÀÉ®×ª©¥»
-        WORD LangID() const { return m_wLangID; } //AI(W0-TAIL) 20260626: __property->getter                               //»y¨t
-        WORD CharsetID() const { return m_wCharsetID; } //AI(W0-TAIL) 20260626: __property->getter                            //¦r¤¸ªí
-        AnsiString ProductName() const { return m_strProductName; } //AI(W0-TAIL) 20260626: __property->getter                        //²£«~¦WºÙ
-        AnsiString ProductVersion() const { return m_strProductVersion; } //AI(W0-TAIL) 20260626: __property->getter                     //²£«~ª©¥»
-        AnsiString OriginalFilename() const { return m_strOriginalFilename; } //AI(W0-TAIL) 20260626: __property->getter                  //­ì©lÀÉ¦W
-        AnsiString FileDescription() const { return m_strFileDescription; } //AI(W0-TAIL) 20260626: __property->getter                    //ÀÉ®×»¡©ú
-        AnsiString CompanyName() const { return m_strCompanyName; } //AI(W0-TAIL) 20260626: __property->getter                        //¤½¥q¦WºÙ
-        AnsiString LegalCopyright() const { return m_strLegalCopyright; } //AI(W0-TAIL) 20260626: __property->getter                     //µÛ§@Åv
-        AnsiString LegalTrademarks() const { return m_strLegalTrademarks; } //AI(W0-TAIL) 20260626: __property->getter                    //¦Xªk°Ó¼Ğ
-        AnsiString InternalName() const { return m_strInternalName; } //AI(W0-TAIL) 20260626: __property->getter                       //¤º³¡¦WºÙ
-        AnsiString Comments() const { return m_strComments; } //AI(W0-TAIL) 20260626: __property->getter                           //»¡©ú
+        AnsiString FileName() const { return m_strFileName; } void SetFileName(AnsiString v){ m_SetFileName(v); } //AI(W0-TAIL) 20260626: __property->getter/setter   //æª”æ¡ˆåç¨±
+        AnsiString FixedFileVersion() { return m_strGetFixedFileVersion(); } //AI(W0-TAIL) 20260626: __property->getter                //æª”æ¡ˆç‰ˆæœ¬
+        WORD LangID() const { return m_wLangID; } //AI(W0-TAIL) 20260626: __property->getter                               //èªç³»
+        WORD CharsetID() const { return m_wCharsetID; } //AI(W0-TAIL) 20260626: __property->getter                            //å­—å…ƒè¡¨
+        AnsiString ProductName() const { return m_strProductName; } //AI(W0-TAIL) 20260626: __property->getter                        //ç”¢å“åç¨±
+        AnsiString ProductVersion() const { return m_strProductVersion; } //AI(W0-TAIL) 20260626: __property->getter                     //ç”¢å“ç‰ˆæœ¬
+        AnsiString OriginalFilename() const { return m_strOriginalFilename; } //AI(W0-TAIL) 20260626: __property->getter                  //åŸå§‹æª”å
+        AnsiString FileDescription() const { return m_strFileDescription; } //AI(W0-TAIL) 20260626: __property->getter                    //æª”æ¡ˆèªªæ˜
+        AnsiString CompanyName() const { return m_strCompanyName; } //AI(W0-TAIL) 20260626: __property->getter                        //å…¬å¸åç¨±
+        AnsiString LegalCopyright() const { return m_strLegalCopyright; } //AI(W0-TAIL) 20260626: __property->getter                     //è‘—ä½œæ¬Š
+        AnsiString LegalTrademarks() const { return m_strLegalTrademarks; } //AI(W0-TAIL) 20260626: __property->getter                    //åˆæ³•å•†æ¨™
+        AnsiString InternalName() const { return m_strInternalName; } //AI(W0-TAIL) 20260626: __property->getter                       //å…§éƒ¨åç¨±
+        AnsiString Comments() const { return m_strComments; } //AI(W0-TAIL) 20260626: __property->getter                           //èªªæ˜
         void GetAppVersion(AnsiString sAppExeName, WORD& major, WORD& minor, WORD& build, WORD& revision);
         AnsiString GetSVNRev();
         AnsiString GetFileVersion();

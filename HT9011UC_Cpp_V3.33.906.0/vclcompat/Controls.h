@@ -1,7 +1,8 @@
 // ===========================================================================
 //  vclcompat/Controls.h
-//  BCB6 VCL widget compatibility STAND-INS -- SECSGEM cast-dispatch targets
-//  ONLY. This is deliberately NOT a general-purpose VCL Controls.hpp shim.
+//  BCB6 VCL **stock** widget compatibility STAND-INS -- the single, unified
+//  home for the value-holder shape of every stock VCL control the ported tree
+//  needs.  This is deliberately NOT a general-purpose VCL Controls.hpp shim.
 //
 //  AI(W906-VCW1) 20260721: created for SECSGEM's SetECValue/DataItemOutSV/
 //  DataItemOutEC/GetECDataValue dynamic_cast dispatch cascade (golden
@@ -16,29 +17,144 @@
 //  R1 gave it the `: public TObject` base the cast needs -- see that file's
 //  own note); these are the other 6.
 //
-//  SCOPE BOUNDARY -- READ BEFORE ASSUMING ANY REAL EC/SV IS NOW LIVE
-//  -------------------------------------------------------------------------
-//  Every one of the ~1740 real SetECDataPointer/SetSVDataPointer call sites
-//  (uHGemHT9045_EC.cpp/_SV.cpp, still almost entirely untranslated -- only 7
-//  of 28 real forms have ANY translated presence today) registers a widget
-//  pointer belonging to a REAL VCL form (a real fPanel->Caption, edtXxx,
-//  cbxXxx, ...). None of those forms exist in this tree yet, so NOTHING
-//  anywhere in the object graph today constructs one of these 6 stand-in
-//  types. Every dynamic_cast against them therefore, correctly and safely,
-//  returns nullptr for every currently-registered EC/SV -- exactly the same
-//  "no real instances yet" situation SecsSvEcRegistration.cpp's own
-//  GetECDataValue IsVCL==1 branch (also un-gated this wave) exercises. This
-//  header makes the
-//  CAST-DISPATCH CODE compile and dispatch correctly; it does NOT wire up any
-//  real widget-backed EC/SV, and must not be described as doing so.
+// ===========================================================================
+//  AI(W906-W7-F0) 20260728: EXPANDED from the original 6 SECS-cast-only types
+//  to the unified stock-widget set, per docs/W7_UI_ARCHITECTURE_PLAN.md
+//  SS2-D4 / SS2-D5 / SS6-F0-a.  WHY (all three reasons are measured, not
+//  aspirational):
 //
-//  MINIMAL SURFACE
+//   1. DRIFT.  Before this wave the tree carried ~13 parallel, independently
+//      drifting `{AnsiString Text;}` / `{AnsiString Caption;}` / `{bool
+//      Checked;}` value-holder types (FormsFacade.h's TfLotInfoEdit /
+//      TfMainPanel / TfSortCTPanel / TfLotInfoLabel / ..., plus TU-local
+//      W7T1_TEditSeam / W5_32S_* / W64B_* / W5FA_TextField / TesterTCPSocket_
+//      Label / TfObserverLabel / ...).  Every new wave added another.  One
+//      home stops that.
+//
+//   2. THE `void*` OVERLOAD TRAP (plan SS4-V2 / SS9-R8 -- the load-bearing
+//      reason this file exists at all).  SECSGEM/SecsSvEcRegistration.h
+//      declares SetSVDataPointer/SetECDataPointer with SAME-ARITY overloads
+//      taking `void *P` (:133 / :162) and `TObject *P` (:149 / :180).  A
+//      widget stand-in with NO `TObject` base can ONLY convert to `void*`, so
+//      it binds the raw-pointer overload SILENTLY -- registering a widget as
+//      a scalar, with no diagnostic.  With a `TObject` base, [over.ics.rank]
+//      makes derived-to-base strictly better than pointer-to-void, so the
+//      TObject* overload wins.  ~1740 SV/EC registrations are still to land;
+//      this must be right BEFORE they do.  tests/test_w7_f0_controls_guard.cpp
+//      static_asserts it per type, and carries a negative control proving the
+//      assertion is not vacuous.
+//
+//   3. `fXxx->widget->Prop` MUST STAY VERBATIM.  Members are public DATA, not
+//      accessors (plan SS2-D2: 69.3% of golden's 4,266 `fMain->` sites are
+//      data-member syntax, and C++ has no `__property`), so every existing
+//      call site compiles unchanged.
+//
+//  SCOPE BOUNDARY (1) -- READ BEFORE ASSUMING ANY REAL EC/SV IS NOW LIVE
 //  -------------------------------------------------------------------------
-//  Each class carries ONLY the exact member(s) golden's 3 cast-dispatch
-//  bodies above actually touch (verified by direct read of golden
-//  uHGemClass.cpp:2682-2882 + uHGemEquipment.cpp:2472-3112, both read in full
-//  before writing this file) -- no VCL event/paint/parent-window machinery,
-//  no unrelated properties a real TPanel/TComboBox/etc. would also have.
+//  (Carried forward VERBATIM from the W906-VCW1 original -- still true after
+//  the W7-F0 expansion.)  Every one of the ~1740 real SetECDataPointer/
+//  SetSVDataPointer call sites (uHGemHT9045_EC.cpp/_SV.cpp, still almost
+//  entirely untranslated) registers a widget pointer belonging to a REAL VCL
+//  form (a real fPanel->Caption, edtXxx, cbxXxx, ...).  None of those forms
+//  exist in this tree yet, so NOTHING anywhere in the object graph today
+//  constructs one of these types for an EC/SV.  Every dynamic_cast against
+//  them therefore, correctly and safely, returns nullptr for every currently-
+//  registered EC/SV.  This header makes the CAST-DISPATCH CODE compile and
+//  dispatch correctly; it does NOT wire up any real widget-backed EC/SV, and
+//  must not be described as doing so.
+//
+//  The W906-VCW1 original also carried a "MINIMAL SURFACE" rule (each class
+//  holds ONLY the members golden's 3 cast-dispatch bodies touch).  W7-F0
+//  DELIBERATELY SUPERSEDES that rule -- this is now the tree-wide unified home
+//  for stock widget stand-ins, so it carries the measured tree-wide property
+//  set listed below, not just the cast-dispatch subset.  It does NOT become an
+//  anything-goes dumping ground: every member below is either (a) touched by a
+//  real ported call site, or (b) named in the plan's measured top-20 property
+//  census with its reason stated.  Nothing is added "because a real TPanel
+//  would also have it".
+//
+//  SCOPE BOUNDARY (2) -- STOCK CONTROLS ONLY (plan SS2-D5 / SS5-10)
+//  -------------------------------------------------------------------------
+//  The three CUSTOM control families get their own files and are NOT here:
+//    * TTMyTray / TTMyTray256  -> vclcompat/TrayCore.*      (W7-C1)
+//    * TBtnPanel / TBtnPanelLane -> vclcompat/BtnPanelCore.* (W7-C1)
+//    * TALed / TMyLed / TMyLedLane -> vclcompat/LedCore.*    (W7-C1)
+//  So SetCellNumber / SetCellColorIndex / XItem / YItem / Value /
+//  Alias / LEDStyle deliberately do NOT appear in this header.
+//  (`Down` is NOT in that list -- TSpeedButton::Down (below, this file) IS
+//  carried here because it is a genuine stock-TSpeedButton property in
+//  golden, not a custom-control member; see that class's own note.
+//  AI(W906-F0fix) 20260728: removed from this list, was self-contradicting
+//  the code further down in this same file.)
+//
+//  REUSED, NOT REINVENTED (plan SS6-F0-a, explicit instruction)
+//  -------------------------------------------------------------------------
+//    * `Cells` (446 measured golden uses) -> vclcompat/StringGrid.h's
+//      TStringGrid, which already has real Cells[c][r]/RowCount/ColCount
+//      semantics.  No `Cells` member is invented here.
+//    * `Lines` / `Items` / `Strings` (149 / 111 / 62) -> vclcompat/
+//      TStringList.h's TStringList, which is already real.
+//
+//  MEASURED PROPERTY COVERAGE (plan SS6-F0-a top-20 nested-property census)
+//  -------------------------------------------------------------------------
+//    Text 2193, Caption 834, Checked 415, Visible 374, Enabled 192,
+//    Lines 149 (via TStringList), Items 111 (via TStringList),
+//    Color 96, Click 95, ItemIndex 94, Clear 85, Strings 62 (TStringList),
+//    Cells 446 (via TStringGrid), Add 57 (TStringList).
+//    NOT covered here, by design, each with its reason:
+//      * Glyph 173 -- a TBitmap* paint-time property.  No ported consumer
+//        touches it today, and the bitmap payload is carried by the W7-B1c
+//        layout table / extracted blob (plan SS2-D12), not by this type.
+//        Adding a member with no consumer would be inventing surface.
+//      * SetCellNumber 116 / SetCellColorIndex 77 / XItem+YItem 86 -- custom
+//        TTMyTray family, see SCOPE BOUNDARY above.
+//      * Value 72 -- the dominant `->Value` consumer is the custom TALed
+//        (387 golden uses), so it belongs to LedCore, not here.
+//      * AddTextWithDateTime 58 -- a method of cmydef's `TMyStringList`
+//        (golden main.h:1486 `TMyStringList *slAutoSiteMapLog;`, verified
+//        directly this wave), which is a cmydef type, not a stock VCL
+//        control, and is already forward-declared in cmydef.h:15.  Defining
+//        it here would both violate the stock-only boundary and risk
+//        colliding with that declaration.
+//
+//  PROVENANCE OF THE NUMBERS IN THIS FILE -- two different sources, labelled
+//  -------------------------------------------------------------------------
+//   * The `.dfm` INSTANCE COUNTS on the individual classes below (TEdit 3,717 /
+//     TLabel 4,979 / TPanel 2,991 = 1,177 containers + 1,814 leaves /
+//     TSpeedButton 1,611 / TCheckBox 1,553 / TGroupBox 1,248 / TTabSheet 691 /
+//     TButton 725 / TComboBox 372 / TLabeledEdit 198 / TPageControl 143 /
+//     TStringGrid 119 / TBitBtn 110 / TRadioButton 78 / TListBox 19, and for the
+//     custom families TMyLedLane 1,214 / TBtnPanelLane 701 / TALed 530 /
+//     TTMyTray 246 / TMyLed 96 / TBtnPanel 56) were RE-MEASURED for this wave,
+//     independently of the plan, by counting `class` over all 22,760 nodes in the
+//     133 files under tools/dfm2rc/ir_out/*.ir.json (22,760 - 133 form roots =
+//     22,627 controls, which is the figure plan SS4-V4 verified).  The plan's
+//     SS6-B1b class map agrees on every one of them except TSpeedButton, where it
+//     says 1,609 and this measurement says 1,611 -- the measured value is used
+//     here.  (An unrelated aside from the same count: the plan's TLabel 4,978 is
+//     4,979 and TMemo 156 is 157.  Not material to anything in this header;
+//     recorded so the discrepancy is not silently absorbed.)
+//   * The PROPERTY-USE COUNTS in the MEASURED PROPERTY COVERAGE block above
+//     (Text 2193, Caption 834, Cells 446, ... Glyph 173, SetCellNumber 116, ...)
+//     are the plan's SS6-F0-a top-20 nested-property census over the GOLDEN C++
+//     sources.  They were NOT re-derived this wave -- they are used only to
+//     justify which properties exist here, never as an input to behaviour.
+//
+//  DEFAULT-VALUE RULE -- WHY EVERYTHING IS false/0/"" AND NOT VCL-FAITHFUL
+//  -------------------------------------------------------------------------
+//  Real VCL defaults Visible/Enabled to TRUE.  These stand-ins default them
+//  to FALSE, on purpose: W7-F0 is a ZERO-BEHAVIOUR-CHANGE refactor, and every
+//  bespoke type it replaces already defaulted to false/0/"".  One of those
+//  defaults is genuinely READ on a live branch --
+//  ainarm_SearchPlacePlate.cpp:4811 tests `fLotInfo->cbRunMode->Visible==true`
+//  (golden RogerYang 20250312) -- so flipping TComboBox::Visible to the
+//  VCL-faithful `true` would silently take a different branch offline.  The
+//  ONE facade member that legitimately started life true/true
+//  (fLotInfo->palRemoveTray) has those values restored explicitly in
+//  TfLotInfo's constructor; see forms/fLotInfo.cpp.
+//  This costs the future MFC binder nothing: the authoritative Visible/
+//  Enabled for a real dialog comes from the W7-B1c layout table (which
+//  carries the `.dfm` value verbatim), not from a C++ member initialiser.
 // ===========================================================================
 #ifndef VCLCOMPAT_CONTROLS_H
 #define VCLCOMPAT_CONTROLS_H
@@ -48,48 +164,208 @@
 
 namespace vclcompat {
 
-// golden TPanel -- only ->Caption is touched: write in SetECValue
-// (`PanelPtr->Caption=S;`), read in DataItemOutSV/DataItemOutEC
-// (`VCLStr=PanelPtr->Caption;`).
-class TPanel : public TObject {
+// ---------------------------------------------------------------------------
+//  TFont -- golden Graphics.hpp TFont (a TPersistent, NOT a control, so it
+//  derives from TObject directly and has no hCtl binding slot).
+//  Only ->Color has a ported consumer today (fMain->pnlCleanCountFont, golden
+//  main.h TPanel->Font, set to clRed/clNavy by SearchCleanNum).  Name/Size/
+//  Charset/Style are carried because the W7-B1c layout table emits exactly
+//  those four for all 9,933 per-control font records, so the binder will need
+//  somewhere to put them; they are plain storage, read by nobody yet.
+//  `Color` is a plain `int` (not TColor) deliberately: TColor is a
+//  `typedef int` in this compat layer, and using int keeps this header's
+//  include set at AnsiString+TStringList instead of pulling the whole
+//  vcl_compat.h umbrella into SECSGEM's two cast-dispatch TUs.
+// ---------------------------------------------------------------------------
+class TFont : public TObject {
 public:
-    AnsiString Caption;
+    int        Color;
+    AnsiString Name;
+    int        Size;
+    int        Charset;
+    int        Style;
+    TFont() : Color(0), Size(0), Charset(0), Style(0) {}
+    virtual ~TFont() {}
 };
 
-// golden TCustomEdit -- only ->Text (write/read), identical shape to
-// TPanel::Caption above.
-class TCustomEdit : public TObject {
+// ---------------------------------------------------------------------------
+//  TControl -- common base for every stock widget stand-in below.
+//  Exists so the properties EVERY control has (Visible/Enabled) and the
+//  lazy HWND binding seam are declared once instead of ~18 times.
+//
+//  `hCtl` is the lazy binding slot required by plan SS6-F0-a: when the MFC
+//  layer lands (W7-U0), the binder stores the real HWND here and
+//  Pull/PushFromControl move the value between this object's data members and
+//  the live control (that is exactly what MFC's DDX does).  It is `void*`, not
+//  `HWND`, so this header stays free of <windows.h>.  Offline both methods are
+//  no-ops and hCtl stays NULL -- the PERMANENT offline implementation, not a
+//  placeholder (plan SS6-F0-e).
+//
+//  `Click()` mirrors golden TControl::Click (95 measured `->Click` uses).
+//  Offline no-op: with no window there is no handler to dispatch to.
+//
+//  NOTE for the SECSGEM cast cascade: inserting TControl between the widgets
+//  and TObject does NOT affect it.  `dynamic_cast<TPanel*>(pTObject)` still
+//  matches exactly TPanel (single, non-virtual inheritance chain), and
+//  TPanel*->TObject* is still a derived-to-base conversion, so it still beats
+//  TPanel*->void* per [over.ics.rank].
+// ---------------------------------------------------------------------------
+class TControl : public TObject {
+public:
+    bool  Visible;
+    bool  Enabled;
+    void *hCtl;                       // lazy HWND binding slot (NULL offline)
+    TControl() : Visible(false), Enabled(false), hCtl(0) {}
+    virtual ~TControl() {}
+    virtual void PullFromControl() {} // offline: nothing to read back from
+    virtual void PushToControl()   {} // offline: nothing to write out to
+    virtual void Click()           {} // golden TControl::Click -- offline no-op
+};
+
+// --- Static / label family -------------------------------------------------
+
+// golden TLabel (a TGraphicControl).  In the SECS cast cascade only ->Caption
+// is touched: `LabelPtr->Caption=S;` (SetECValue) / `VCLStr=LabelPtr->Caption;`
+// (DataItemOutSV/DataItemOutEC).
+class TLabel : public TControl {
+public:
+    AnsiString Caption;
+    int        Color;
+    virtual ~TLabel() {}
+    TLabel() : Color(0) {}
+};
+
+// golden TPanel.  In the SECS cast cascade only ->Caption is touched
+// (`PanelPtr->Caption=S;` / `VCLStr=PanelPtr->Caption;`).
+class TPanel : public TControl {
+public:
+    AnsiString Caption;
+    int        Color;
+    virtual ~TPanel() {}
+    TPanel() : Color(0) {}
+};
+
+// golden TGroupBox.  Carried because 1,248 `.dfm` instances make it one of the
+// two dominant container classes (plan SS6-B1b class map); Caption/Visible/
+// Enabled is its whole ported surface.
+class TGroupBox : public TControl {
+public:
+    AnsiString Caption;
+    virtual ~TGroupBox() {}
+};
+
+// --- Edit family -----------------------------------------------------------
+
+// golden TCustomEdit -- the base the SECS cast cascade actually names (it
+// casts to TCustomEdit, not TEdit, so a TEdit/TMemo/TLabeledEdit all match).
+// Only ->Text is touched there (write in SetECValue, read in DataItemOut*).
+class TCustomEdit : public TControl {
 public:
     AnsiString Text;
+    virtual ~TCustomEdit() {}
+    void Clear() { Text = AnsiString(""); }   // golden TCustomEdit::Clear
 };
+
+// golden TEdit : TCustomEdit (3,717 `.dfm` instances -- the single most
+// common data-entry control in the corpus).
+class TEdit : public TCustomEdit {
+public:
+    virtual ~TEdit() {}
+};
+
+// golden TLabeledEdit : TCustomEdit (198 `.dfm` instances; e.g.
+// fLotInfo->lbledtCustomer, golden uLotInfo.h:609, verified this wave).
+class TLabeledEdit : public TCustomEdit {
+public:
+    AnsiString EditLabelCaption;      // golden TLabeledEdit->EditLabel->Caption
+    virtual ~TLabeledEdit() {}
+};
+
+// golden TMemo : TCustomEdit.  ->Lines is a real TStringList (plan SS6-F0-a:
+// reuse, do not reinvent) and ->Clear() forwards to it, matching golden
+// TMemo::Clear.  Allocated in the ctor because a real VCL TMemo always owns a
+// Lines; there is no pre-existing ported behaviour to preserve here, since no
+// facade member points at THIS type yet -- see forms/FormWidgets.h's
+// TfMainMemo note for why repointing the existing memo stand-ins at this type
+// was deliberately NOT done in W7-F0.
+//
+// AI(W906-F0fix) 20260728 -- LOW-5, NAME-HIDING HAZARD (documented, not
+// "fixed": see below for why not).  TMemo::Clear() here is NON-VIRTUAL and
+// HIDES TCustomEdit::Clear() (:266), which is ALSO non-virtual.  The two do
+// different things: TCustomEdit::Clear sets Text="", TMemo::Clear calls
+// Lines->Clear() and does NOT touch Text.  Golden's SECS cast cascade
+// genuinely casts its widget pointer to `TCustomEdit*` (see that class's own
+// banner comment), so a `TMemo` object reached that way -- `TCustomEdit *p =
+// someTMemo; p->Clear();` -- would resolve at COMPILE TIME to
+// TCustomEdit::Clear (static dispatch, no vtable involved) and silently clear
+// the wrong thing (Text instead of Lines). No consumer does this today: grep
+// confirms no facade member anywhere is typed/allocated as vclcompat::TMemo
+// (only the unrelated, deferred TfMainMemo/TfMainMemoLines stand-ins point at
+// memo-shaped members -- see forms/FormWidgets.h). NOT made virtual here:
+// doing so would change TCustomEdit's vtable layout/size (adds its first
+// virtual function beyond ~TCustomEdit) for every TCustomEdit/TEdit/
+// TLabeledEdit instance tree-wide, which is exactly the kind of change this
+// file's own R8 note says must be checked for by-value/aggregate-init
+// fallout before landing -- out of scope for a comment-only disclosure pass.
+class TMemo : public TCustomEdit {
+public:
+    TStringList *Lines;
+    TMemo() { Lines = new TStringList(); }
+    virtual ~TMemo() { delete Lines; }   // AI(W906-F0fix) 20260728: LOW-6, was never freed (harmless process-lifetime leak; freed now for correctness)
+    void Clear() { if (Lines) Lines->Clear(); }   // AI(W906-F0fix) 20260728: see LOW-5 note above -- non-virtual, hides TCustomEdit::Clear
+};
+
+// --- List family -----------------------------------------------------------
 
 // golden TComboBox -- ->Text (ASCII-typed ECs) or ->ItemIndex (every other
 // type) on the write side (SetECValue: "Text=S (ASCII) else
 // ItemIndex=atoi(S)", golden :2748-2751); the same two members are read back
 // symmetrically on the DataItemOutSV/DataItemOutEC side (golden :2547-2550).
-// golden's ->Items (a TStrings*) is NEVER touched for TComboBox in any of
-// these bodies (only TRadioGroup's ->Items is, below) -- deliberately NOT
-// added here per this header's minimal-surface rule.
-class TComboBox : public TObject {
+// AI(W906-W7-F0) 20260728: ->Items added (golden TComboBox->Items is a
+// TStrings*).  The SECS cast bodies never touch TComboBox::Items (only
+// TRadioGroup's, below) -- it is carried here for the general 111-use `Items`
+// property, allocated real (a live VCL combo always owns an Items) so no
+// consumer can trip over a NULL.
+class TComboBox : public TControl {
 public:
-    AnsiString Text;
-    int ItemIndex;
-    TComboBox() : ItemIndex(0) {}
+    AnsiString   Text;
+    int          ItemIndex;
+    TStringList *Items;
+    TComboBox() : ItemIndex(0) { Items = new TStringList(); }
+    virtual ~TComboBox() { delete Items; }   // AI(W906-F0fix) 20260728: LOW-6, was never freed (harmless process-lifetime leak; freed now for correctness)
+    void Clear() { if (Items) Items->Clear(); }
 };
 
-// golden TLabel -- only ->Caption (identical shape to TPanel).
-class TLabel : public TObject {
+// golden TListBox (19 `.dfm` instances).
+class TListBox : public TControl {
 public:
-    AnsiString Caption;
+    int          ItemIndex;
+    TStringList *Items;
+    TListBox() : ItemIndex(0) { Items = new TStringList(); }
+    virtual ~TListBox() { delete Items; }   // AI(W906-F0fix) 20260728: LOW-6, was never freed (harmless process-lifetime leak; freed now for correctness)
+    void Clear() { if (Items) Items->Clear(); }
 };
 
-// golden TCheckBox -- only ->Checked (bool): write
+// --- Button / check family -------------------------------------------------
+
+// golden TCheckBox -- only ->Checked (bool) in the SECS cast cascade: write
 // `CheckBoxPtr->Checked=(S!="0");` (SetECValue), read
 // `if(CheckBoxPtr->Checked) ...` (DataItemOutSV/DataItemOutEC).
-class TCheckBox : public TObject {
+class TCheckBox : public TControl {
 public:
-    bool Checked;
+    bool       Checked;
+    AnsiString Caption;
     TCheckBox() : Checked(false) {}
+    virtual ~TCheckBox() {}
+};
+
+// golden TRadioButton (78 `.dfm` instances).
+class TRadioButton : public TControl {
+public:
+    bool       Checked;
+    AnsiString Caption;
+    TRadioButton() : Checked(false) {}
+    virtual ~TRadioButton() {}
 };
 
 // golden TRadioGroup -- ->ItemIndex (int) AND ->Items (a TStrings* in real
@@ -99,15 +375,77 @@ public:
 // :2554-2560). Modeled here as a `TStringList*` -- satisfies both ->Count
 // and ->Strings[i] (see vclcompat/TStringList.h) without inventing a new
 // abstract-TStrings-pointer shim just for this one field. Defaults to NULL:
-// with zero real TRadioGroup instances anywhere in the object graph (see
-// file-head scope note above), golden's ->Items dereference is unreachable
-// dead code today -- allocating a real (always-empty) TStringList here that
-// no code path can ever read would be pointless heap churn, not extra safety.
-class TRadioGroup : public TObject {
+// with zero real TRadioGroup instances anywhere in the object graph, golden's
+// ->Items dereference is unreachable dead code today -- allocating a real
+// (always-empty) TStringList here that no code path can ever read would be
+// pointless heap churn, not extra safety.
+// AI(W906-W7-F0) 20260728: this NULL default is KEPT VERBATIM (unlike the
+// newly-added TComboBox/TListBox::Items above, which allocate) purely because
+// W7-F0 is a zero-behaviour-change refactor and this type already existed.
+// A later wave may normalise the two; doing it here would be a change with no
+// gate able to observe it either way.
+class TRadioGroup : public TControl {
 public:
-    int ItemIndex;
+    int          ItemIndex;
     TStringList *Items;
     TRadioGroup() : ItemIndex(0), Items(0) {}
+    virtual ~TRadioGroup() {}
+};
+
+// golden TButton (725 `.dfm` instances).
+class TButton : public TControl {
+public:
+    AnsiString Caption;
+    virtual ~TButton() {}
+};
+
+// golden TBitBtn (110 `.dfm` instances).  ->Glyph deliberately absent, see
+// the file-head MEASURED PROPERTY COVERAGE note.
+class TBitBtn : public TControl {
+public:
+    AnsiString Caption;
+    virtual ~TBitBtn() {}
+};
+
+// golden TSpeedButton (1,611 `.dfm` instances; a TGraphicControl, so it has
+// GroupIndex/Down latching in real VCL).  ->Glyph deliberately absent (see
+// file head).
+// NOTE, verified directly against golden this wave: fMain->BtnOneCycle is
+// **NOT** a TSpeedButton -- golden main.h:72 declares `TBtnPanel *BtnOneCycle;`
+// (the CUSTOM control).  So the facade's ->Down stand-in belongs to
+// BtnPanelCore, not to this class; see forms/FormWidgets.h's TfMainSpeedButton
+// note.  `Down` is carried here anyway because it is a genuine TSpeedButton
+// property in golden and, per the plan's own census, 262 `.dfm` TSpeedButtons
+// carry a GroupIndex latch (that 262 is the plan's figure, NOT re-measured here
+// -- see the PROVENANCE note at the file head).
+class TSpeedButton : public TControl {
+public:
+    AnsiString Caption;
+    bool       Down;
+    int        GroupIndex;
+    TSpeedButton() : Down(false), GroupIndex(0) {}
+    virtual ~TSpeedButton() {}
+};
+
+// --- Tab / page family -----------------------------------------------------
+
+// golden TPageControl (143 `.dfm` instances).  fMain->pgMain->ActivePageIndex
+// is compared against fMain->emp7TabSheet21 by the shuttle engine.
+class TPageControl : public TControl {
+public:
+    int ActivePageIndex;
+    TPageControl() : ActivePageIndex(0) {}
+    virtual ~TPageControl() {}
+};
+
+// golden TTabSheet (691 `.dfm` instances -- note they carry NO geometry in the
+// `.dfm`; W7-B1c synthesises it from the parent TPageControl's display rect).
+class TTabSheet : public TControl {
+public:
+    AnsiString Caption;
+    bool       TabVisible;
+    TTabSheet() : TabVisible(false) {}
+    virtual ~TTabSheet() {}
 };
 
 } // namespace vclcompat
@@ -115,17 +453,38 @@ public:
 // Brought into the global namespace (matching golden's unqualified spelling,
 // and vclcompat/vcl_compat.h's own established pattern for AnsiString/
 // TStringList/TObject/...) -- explicit one-by-one `using`, not `using
-// namespace vclcompat;`, to avoid pulling in every other vclcompat symbol
-// into the 2 translation units that include this header directly
-// (SECSGEM/uHGemClass.cpp, SECSGEM/uHGemEquipment.cpp already get the full
-// umbrella via vclcompat/vcl_compat.h anyway; this header is included
-// separately per this wave's own instructions, header-only, zero CMake
-// changes needed).
-using vclcompat::TPanel;
-using vclcompat::TCustomEdit;
-using vclcompat::TComboBox;
+// namespace vclcompat;`, to avoid pulling in every other vclcompat symbol.
+//
+// AI(W906-W7-F0) 20260728: this list grew with the type set above, which also
+// grew this header's blast radius: it used to reach only 2 TUs (SECSGEM/
+// uHGemClass.cpp, SECSGEM/uHGemEquipment.cpp), and now also reaches every TU
+// that includes FormsFacade.h (~110) via forms/FormWidgets.h.  Verified before
+// making that change that NO other compiled declaration of any of these names
+// exists tree-wide (`grep -rnE "^\s*(class|struct)\s+(TControl|TFont|TLabel|
+// TPanel|...)"` -> only this file).  The two pre-existing textual hits are both
+// inside `#if 0` blocks and are NOT compiled: mycylin.cpp:726-727
+// (`dynamic_cast<TControl*>`, TODO(W7-UI)) and common.h:411-414
+// (`TSpeedButton *SButton;`, TODO(wave-ui)).  Both would, if a future wave
+// un-gates them, now resolve to these stand-ins -- which is the intent, not a
+// hazard, but is recorded here so it is not a surprise.
+using vclcompat::TFont;
+using vclcompat::TControl;
 using vclcompat::TLabel;
+using vclcompat::TPanel;
+using vclcompat::TGroupBox;
+using vclcompat::TCustomEdit;
+using vclcompat::TEdit;
+using vclcompat::TLabeledEdit;
+using vclcompat::TMemo;
+using vclcompat::TComboBox;
+using vclcompat::TListBox;
 using vclcompat::TCheckBox;
+using vclcompat::TRadioButton;
 using vclcompat::TRadioGroup;
+using vclcompat::TButton;
+using vclcompat::TBitBtn;
+using vclcompat::TSpeedButton;
+using vclcompat::TPageControl;
+using vclcompat::TTabSheet;
 
 #endif // VCLCOMPAT_CONTROLS_H

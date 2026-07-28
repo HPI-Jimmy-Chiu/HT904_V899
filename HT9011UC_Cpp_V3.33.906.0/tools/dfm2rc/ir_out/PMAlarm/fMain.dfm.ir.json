@@ -1,0 +1,222 @@
+{
+ "control_node_count": 2,
+ "encoding_used": "cp950",
+ "form_class": "TForm1",
+ "form_name": "Form1",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "Form1.Button1",
+    "Form1.Button2"
+   ],
+   "class": "TForm1",
+   "depth": 0,
+   "events": {
+    "OnShow": "FormShow"
+   },
+   "geometry": {
+    "height": 204,
+    "left": 610,
+    "top": 385,
+    "width": 414
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "Form1",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "Form1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Form1"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnFace"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 204
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 610
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnShow": {
+     "type": "SCALAR",
+     "value": "FormShow"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 385
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 414
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "Button1Click"
+   },
+   "geometry": {
+    "height": 57,
+    "left": 32,
+    "top": 24,
+    "width": 153
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 17,
+   "name": "Button1",
+   "objkind": "object",
+   "parent_path": "Form1",
+   "path": "Form1.Button1",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "Button1"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 57
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "Button1Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 153
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TButton",
+   "depth": 1,
+   "events": {
+    "OnClick": "Button2Click"
+   },
+   "geometry": {
+    "height": 57,
+    "left": 208,
+    "top": 24,
+    "width": 153
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 26,
+   "name": "Button2",
+   "objkind": "object",
+   "parent_path": "Form1",
+   "path": "Form1.Button2",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "SetMachine"
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 57
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 208
+    },
+    "OnClick": {
+     "type": "SCALAR",
+     "value": "Button2Click"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 24
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 153
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "PMAlarm/fMain.dfm",
+ "total_nodes_incl_root": 3
+}

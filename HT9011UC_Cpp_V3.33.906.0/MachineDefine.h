@@ -1,7 +1,7 @@
 #ifndef MachineDefH
 #define MachineDefH
 
-//¨t²ÎHeader-------------------------
+//ç³»çµ±Header-------------------------
 //AI(W0-TAIL) 20260626: de-VCL MachineDefine.h. Original was a pure include-hub:
 //  <vcl.h> + ~30 system/STL + ~15 driver headers + ~25 VCL app headers (defines
 //  NOTHING of its own). For the portable W0 build it reduces to the vclcompat
@@ -80,12 +80,12 @@ using namespace std;
 //#include "bsapi.h"
 #include "PComm.h"
 #include "CSmc.h"
-//#include "XLSfile.hpp"      //Steven 20140307 mark: ¥[§ÖCompiler
+//#include "XLSfile.hpp"      //Steven 20140307 mark: åŠ å¿«Compiler
 #include "Hontech_M4.h"
 #include "TasmInfo.h"
 #include "DNM100API.h"
 
-////¤½¥Îµ{¦¡-----------------
+////å…¬ç”¨ç¨‹å¼-----------------
 #include "iobyte.h"
 #include "hsensor.h"
 #include "myio.h"
@@ -96,7 +96,7 @@ using namespace std;
 //#include "HTray.h"
 //#include "HTMotor.h"
 
-//¤£·|­×§ïªºµ{¦¡½X-----------------
+//ä¸æœƒä¿®æ”¹çš„ç¨‹å¼ç¢¼-----------------
 //#include "cMyDef.h"
 //#include "mytray.h"
 //#include "MyMotor.h"

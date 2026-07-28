@@ -1,55 +1,35 @@
 // =============================================================================
-//  FormsFacade.cpp  --  definitions for the non-VCL form-pointer facade
+//  forms/fMain.cpp  --  definitions for the fMain facade
 //
-//  Translation wave: W6.0 (scaffold) ; EXTENDED W6.2 (in-arm HP geometry)
-//  Translator: AI(W6.0-SCAFFOLD) 20260626 ; AI(W6.2-INARM) 20260626
+//  AI(W906-W7-F0) 20260728: split out of FormsFacade.cpp by the W7-F0 refactor
+//  (docs/W7_UI_ARCHITECTURE_PLAN.md SS6-F0-d).  Every body below is moved
+//  VERBATIM -- these no-op / safe-default bodies are the PERMANENT OFFLINE
+//  IMPLEMENTATION of the now-virtual method surface (plan SS6-F0-e); see the
+//  contract block at the top of forms/fMain.h.
 //
-//  W6.1: fAGV->IsATK_AMR() (false offline).
-//  W6.2: fMain / fSortCT / fLotInfo / fOffSet / fSCKART -- all offline no-op /
-//        false, constructed once at load.  See FormsFacade.h for the member-by-
-//        member documentation + golden homes.
+//  NOTE ON THIS FILE'S CROSS-LIBRARY DEPENDENCIES: cprod.h / cmydef.h pull in
+//  globals that live in ht9045_globals (TestIF, asTCPIPTemperature) while this
+//  file lives in the bottom-layer ht9045_forms.  ht9045_forms therefore declares
+//  ht9045_globals as a dependency -- which is acyclic (ht9045_globals links no
+//  project library except vclcompat; its only other link entries are the
+//  psapi/version Win32 import libs).  See the ht9045_forms block in
+//  CMakeLists.txt.
 // =============================================================================
-#include "FormsFacade.h"
-#include "Automation/AGV_predicates.h"      // AI(W5-Automation-Integrate) 20260710: real AMR-mode predicates
+#include "forms/fMain.h"
 // AI(W906-TesterTCPTimer) 20260720: cprod.h (TestIF.iTestType) / cmydef.h
 // (asTCPIPTemperature, TCP_IP_MODE, MAX_SOCKET_TOTAL via cprod.h) -- needed by
-// TfMain::WritePERSITETemperature below (Interface/TesterTCP_Socket.cpp's new
+// TfMain::WritePERSITETemperature below (Interface/TesterTCP_Socket.cpp's
 // TimerProcessTCPDataTimer wave). cprod.h itself #includes MachineType.h, which
 // is where MAX_SOCKET_TOTAL is #defined -- so this one include also covers the
 // ctor's tBarCodeList->Strings[MAX_SOCKET_TOTAL-1] use below.
 #include "cprod.h"
 #include "cmydef.h"
 
-// --- W6.1 ------------------------------------------------------------------
-// -- W5-Final-AGV_E84 INTEGRATE ADD: explicit ctor (was implicit) so mmE84Log
-//    is constructed -- see FormsFacade.h TfAGV::mmE84Log.
-TfAGV::TfAGV() { mmE84Log = new TfMainMemo(); }
-TfAGV *fAGV = new TfAGV();
-
-// AI(W5-Automation-Integrate) 20260710: wired to the real, faithfully-translated
-// predicates (Automation/AGV_predicates.cpp) instead of the previous hardcoded
-// false stand-ins -- see that unit's translate report.  Behaviourally identical
-// offline TODAY (USE_COVER_TRAYID defaults tCIDNotUse / IniConfig.bA65_BundleIDList
-// defaults false, so every predicate still evaluates false on the untouched
-// baseline), but now evaluates the REAL condition once those globals are set.
-bool TfAGV::IsSPIL_AMR() { return AGV_IsSPIL_AMR(); }
-bool TfAGV::IsATK_AMR()  { return AGV_IsATK_AMR();  }
-// --- W6.3 ADD --------------------------------------------------------------
-bool TfAGV::Use_AMR()    { return AGV_Use_AMR();    }
-
-// --- W906-AutoCleanFoundation ADD: TfNote (first home, see FormsFacade.h) --
-TfNote::TfNote() : bMyServoOffInArm(false), iMyServoOffInArmPosX(0), iMyServoOffInArmPosY(0), aJamCodeFilePath("") {}
-TfNote *fNote = new TfNote();
-
-// --- W906-AutoCleanFoundation ADD: TfShowMessage (first home, see FormsFacade.h) --
-void TfShowMessage::ShowSpeed(bool /*bShow*/) {}
-TfShowMessage *fShowMessage = new TfShowMessage();
-
-// --- W6.2: TfMain ----------------------------------------------------------
-// --- W6.3 ADD: TfMainHanaART --------------------------------------------------
+// --- W6.3 ADD: TfMainHanaART ------------------------------------------------
 bool TfMainHanaART::IsHanaArtAvailable() { return false; }     // offline: no HANA link
 void TfMainHanaART::AddNewTrayHead(int /*iAuto*/) {}           // offline: no-op
-// --- W6.5 ADD: TfMainInplace ----------------------------------------------
+
+// --- W6.5 ADD: TfMainInplace ------------------------------------------------
 TfMainInplace::TfMainInplace()
 {
     iNo9ShtErrICCt[0]=0; iNo9ShtErrICCt[1]=0;
@@ -57,6 +37,8 @@ TfMainInplace::TfMainInplace()
     bNo9Action=false;   // W7-A1: golden-faithful default (floating case 9000 sets false; no offline true-set)
 }
 bool TfMainInplace::InArmPlacementEnable() { return false; }   // offline: No9 placement disabled
+
+// --- W6.2: TfMain ----------------------------------------------------------
 TfMain::TfMain()
 {
     slAutoSiteMapLog = new TfMainSiteMapLog();      // golden main.h:1486 (TMyStringList*)
@@ -66,7 +48,7 @@ TfMain::TfMain()
     mtAuto3 = new TfMainTrayPanel();
     hanaART = new TfMainHanaART();
     // -- W6.4 ADD --
-    lbCCDStatus = new TfMainTrayPanel();           // golden main.h (TLabel* lbCCDStatus)
+    lbCCDStatus = new TfMainTrayPanel();           // golden main.h:672 (TLabel* lbCCDStatus)
     // -- W6.5 ADD: shuttle-engine sub-objects --
     cbShowShuttleSensor    = new TfMainCheckBox();
     cbTestOutShuttleSensor = new TfMainCheckBox();
@@ -134,7 +116,7 @@ void TfMain::ReStartAutoSiteMapping(bool /*bStart*/) {}
 // AutoSiteMap branch (golden csystem.cpp:15751-15785) could be un-gated.
 //
 // Golden's REAL SetMainRunStartMode (main.cpp:28236-28308, ~72 lines) is NOT
-// translated here -- it is out of scope for this small wave:
+// translated here -- it is out of scope for that small wave:
 //   * it dereferences fLotInfo->cbRunMode (Visible/Text.Pos), fBinSel (an
 //     entirely new VCL form, ->cbUseMRTMode -- no facade member exists for it),
 //     and this TfMain's own edSetOpenBin/lbSetOpenBin/cbRunStartMode/
@@ -197,13 +179,10 @@ void TfMain::BackupSetupFile() {}                                           // o
 //    cycle" posture as Pause() above). Only current caller in the
 //    translated tree is auto9045.cpp's `#ifdef DEBUG_DUTONOFF` DoHomeAndStart
 //    (compiled out, DEBUG_DUTONOFF undefined) plus the still-GATED
-//    Automation/automation.cpp ProcessBuffer (golden :1522) -- added now per
-//    that front's task brief as a small additive cross-file gap ahead of
-//    ProcessBuffer's own future translation.
+//    Automation/automation.cpp ProcessBuffer (golden :1522).
 bool TfMain::Home(AnsiString /*Func*/) { return false; }
 // -- W906-AutoCleanFoundation ADD: golden AutoClean.cpp AddAutoCleanMessage
-//    sink. Next-wave real consumer (the 4 core engines); offline no-op log
-//    sink, same idiom as AddShuttleMessage/CleanOut above.
+//    sink -- offline no-op log sink, same idiom as AddShuttleMessage/CleanOut.
 void TfMain::AddAutoCleanMessage(AnsiString /*S*/) {}
 // -- W906-TesterTCPTimer ADD: golden TfMain::WritePERSITETemperature,
 //    Command.cpp:935-943 (void __fastcall) -- WRAPPER, translated faithfully.
@@ -223,94 +202,9 @@ void TfMain::WritePERSITETemperature()
 }
 // -- W906-TesterTCPTimer ADD: golden TfMain::PERSITETemperatureStrings body,
 //    Command.cpp:945-1482 (+RefreshTempData main.h:1388) -- GATED LEAF, see
-//    FormsFacade.h member comment. Independent future wave (temp/GPIB surface).
+//    forms/fMain.h member comment. Independent future wave (temp/GPIB surface).
 AnsiString TfMain::PERSITETemperatureStrings()
 {
     return W906_PERSITETemperatureStrings_Sim;
 }
 TfMain *fMain = new TfMain();
-
-// --- W6.2: TfSortCT --------------------------------------------------------
-TfSortCT::TfSortCT()
-{
-    pnlHP1 = new TfSortCTPanel();
-    pnlHP2 = new TfSortCTPanel();
-    // -- W6.3 ADD --
-    pnlLoad       = new TfSortCTPanel();
-    pnlLoadCID    = new TfSortCTPanel();
-    pnlCoverTrayD = new TfSortCTPanel();
-    for(int i=0;i<6;i++) pnlTrayCnt[i] = new TfSortCTPanel();
-}
-TfSortCT *fSortCT = new TfSortCT();
-
-// --- W6.2: TfLotInfo -------------------------------------------------------
-TfLotInfo::TfLotInfo()
-{
-    cbRunMode = new TfLotInfoRunMode();             // offline: Visible=false
-    // -- W6.3 ADD --
-    labNowLoaderTrayID = new TfLotInfoLabel();
-    edtSysLotID        = new TfLotInfoEdit();
-    // -- W5-Automation ADD --
-    cbProcess          = new TfLotInfoRunMode();
-    // -- W5-Final-TesterTCPSocket ADD --
-    labTCPIPStatus = new TfLotInfoStatusLabel();
-    mmTesterLog    = new TfMainMemo();
-    // -- W5-Automation ADD (AGV_PortScan unit, 20260713) -----------------------
-    ALedLoader    = new TfLedValue();
-    for(int i=0;i<3;i++) aLedAuto[i] = new TfLedValue();
-    palRemoveTray = new TfLotInfoPanel();
-    // -- W906-AutoCleanFoundation ADD (20260721) ------------------------------
-    for(int iW906AC=0; iW906AC<3; iW906AC++) iUnloaderTask[iW906AC] = 0;
-    // -- AI(W906-Save2DSortingSummary) 20260723 ADD: 6 new TfLotInfoEdit members --
-    edtCusLotID       = new TfLotInfoEdit();
-    edtCusDevGrp      = new TfLotInfoEdit();
-    edtCusStep        = new TfLotInfoEdit();
-    edtDevice         = new TfLotInfoEdit();
-    edtSysOperatorID  = new TfLotInfoEdit();
-    mmo2DLotInfo      = new TfLotInfoEdit();
-    // -- AI(W906-SaveTestSummaryTSV) 20260728 ADD: 3 new TfLotInfoEdit members + 1 more
-    //    (lbledtCustomer, AI(W906-SaveSummaryTrayFeed) 20260728) --
-    edtASECL_LotID    = new TfLotInfoEdit();
-    edInsertion       = new TfLotInfoEdit();
-    edFlowID          = new TfLotInfoEdit();
-    lbledtCustomer    = new TfLotInfoEdit();
-}
-// AI(W906-AutoCleanFoundation) 20260721: golden uLotInfo.cpp:16250-16253 --
-// REAL one-line body (was a total no-op stub before this wave). See
-// FormsFacade.h's iUnloaderTask/InitialUnLoaderTask member comments for the
-// behaviour-change + dormant-call-site (SOFT_SIMULTE undefined) analysis.
-void TfLotInfo::InitialUnLoaderTask(int iPos) { iUnloaderTask[iPos]=1; }
-// -- W5-Automation ADD: AMR.cpp + HANA_ART.cpp method sinks (all offline no-op) --
-void TfLotInfo::RefreshAMR() {}                                            // offline: no UI to refresh
-void TfLotInfo::SetLotID(AnsiString /*ID*/, bool /*bReadFromFile*/) {}     // offline no-op
-void TfLotInfo::SetLotStart(AnsiString /*sFunc*/, bool /*bReadFromFile*/) {} // offline no-op
-TfLotInfo *fLotInfo = new TfLotInfo();
-
-// --- W6.2: TfOffSet --------------------------------------------------------
-bool TfOffSet::UseAutoOffsetFunction(AnsiString /*sName*/) { return false; }  // no auto-offset offline
-bool TfOffSet::UseInArmSetupTeach(int /*iWhich*/)          { return false; }  // no setup-teach offline
-TfOffSet *fOffSet = new TfOffSet();
-
-// --- W6.2: TfSCKART --------------------------------------------------------
-TfSCKART::TfSCKART() : iInputJamCnt(0), iFTRTCount(0), iInputCount(0), iCurrent93KARTStep(0)
-{
-    // -- W5-Automation ADD --
-    palLotNumber   = new TfSortCTPanel();
-    palTestCnt     = new TfSortCTPanel();
-    palRTTryCnt    = new TfSortCTPanel();
-    pnlProcessCode = new TfSortCTPanel();
-    edlRTTryCnt    = new TfLotInfoEdit();
-}
-int  TfSCKART::CheckLoadingCount() { return 0; }              // W7: offline -> 0 (no ART loading mismatch)
-void TfSCKART::AddOutputJamCnt(int /*row*/, int /*col*/, int /*ret*/, int /*iBinOnCarryKit*/) {}  // W6.5: offline no-op
-// -- W5-Automation ADD: AMR.cpp + HANA_ART.cpp method sinks (all offline no-op) --
-void TfSCKART::DoARTLotStart(AnsiString /*_sLotID*/, AnsiString /*_sProcessCode*/, int /*_iLotCount*/) {}
-void TfSCKART::AccessFile(bool /*bRead*/, int /*iAccess*/) {}
-TfSCKART *fSCKART = new TfSCKART();
-
-// --- W906-AutoCleanFoundation ADD: TfCleaning -------------------------------
-TfCleaning::TfCleaning() : iDeviceCount(0), bResetCleanCount(false), b1x2SiteAbClosePutDummy(false)
-{
-    edCleaningCount = new TfLotInfoEdit();
-}
-TfCleaning *fCleaning = new TfCleaning();

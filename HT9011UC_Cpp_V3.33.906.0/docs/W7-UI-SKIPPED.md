@@ -246,3 +246,74 @@ silently decided)
   module-level constants -- calling their library functions directly
   (which all take explicit output paths as arguments) lets every B1d mode
   target an arbitrary root without touching those 3 files at all.
+
+---
+
+## W7-F0-fix (2026-07-28) -- review-track fixes for F0's false citations /
+self-contradictions / doc gaps (2 MEDIUM + 6 LOW from the independent
+review of W7-A1/W7-F0)
+
+Per plan S12.6, the two deliberate deferrals below must be recorded here,
+not only in source comments. Both were already disclosed inline by F0; this
+entry is the required doc-side pointer, not a new decision.
+
+1. **TfMainMemo / TfMainMemoLines NOT repointed onto `vclcompat::TMemo`**
+   (forms/FormWidgets.h:301-332). `vclcompat::TMemo` now exists and is the
+   correct eventual target for `fMain->meShuttle1`/`meShuttle2`,
+   `fAGV->mmE84Log`, `fLotInfo->mmTesterLog` -- but switching them is NOT a
+   pure refactor: the current stand-ins' `->Lines->Add()` is a no-op and
+   `->Lines->Count` is a permanently-0 int, whereas `vclcompat::TMemo::Lines`
+   is a REAL `TStringList`. Repointing would make reachable two
+   size-threshold flush branches that are dead today (`Automation/
+   AGV_E84.cpp` `mmE84Log->Lines->Count>=500`; `Interface/
+   TesterTCP_Socket.cpp` `mmTesterLog->Lines->Add`), which is a real
+   behaviour change with no test observing it today -- explicitly deferred
+   out of a wave whose contract is zero behaviour change. Fix = a one-line-
+   per-member follow-up (`TfMainMemo` -> `vclcompat::TMemo`, drop
+   `TfMainMemoLines`) landed as its OWN change with its own assertions on
+   the flush paths. Full analysis: forms/FormWidgets.h:301-332.
+
+2. **`vclcompat::TStringGrid` TObject-base gap -- CLOSED this pass, recorded
+   for the historical trail.** MEDIUM-2 of this review round found
+   `vclcompat::TStringGrid` (vclcompat/StringGrid.h) declared with NO base
+   class, while `fMain->AutoCleanStringGrid` is a golden `TStringGrid*`
+   (golden main.h:457) that in real VCL derives from TObject like every
+   other control -- so `SetSVDataPointer(..., AutoCleanStringGrid, ...)`
+   would have silently bound the `void*` overload instead of the `TObject*`
+   one (SecsSvEcRegistration.h:133 vs :149; the same R8/SS9-R8 hazard class
+   `vclcompat/Controls.h`'s file-head note documents for the other stock
+   widgets), with ~1,740 real SV/EC registrations still to land on top of
+   it. AI(W906-F0fix) 20260728: closed by adding `: public
+   vclcompat::TObject` to `TStringGrid` (verified safe first: every
+   construction site tree-wide is `new TStringGrid(...)` through a pointer,
+   no by-value/aggregate-init use exists) and extending
+   `tests/test_w7_f0_controls_guard.cpp`'s static_assert coverage to include
+   it, proven capable of failing by temporarily reverting the base and
+   confirming the guard's static_assert fires (then restoring it -- see
+   that test file's own note). No longer a blocking prerequisite for the
+   upcoming SV/EC registration wave.
+
+### Disclosure item (LOW-7): a preserved GOLDEN BUG whose UB shape shifted
+(not its behaviour) under this wave
+
+`Automation/SCK_ART_Remainder.cpp` (~line 1651, near golden
+`SCK_ART.cpp:3636`) carries a verbatim-preserved GOLDEN BUG:
+`Str.sprintf("LOT_ID:%s", fLotInfo->edtSysLotID);` passes a **widget
+pointer** where the format string wants a `char*` -- undefined behaviour in
+golden already (it reads whatever bytes happen to sit at the start of the
+`TEdit` object as if they were a C string). Verified this pass: before
+W7-F0, `TfLotInfoEdit` was a non-polymorphic `struct { AnsiString Text; };`,
+so this UB read the leading bytes of an `AnsiString` (itself just a
+`char*`-like handle in this codebase's AnsiString shim). After W7-F0,
+`TfLotInfoEdit` is a typedef of `vclcompat::TEdit -> TCustomEdit ->
+TControl -> TObject`, and `TObject` is polymorphic (has a virtual
+destructor, vclcompat/TStringList.h:32-35) -- so the object now has a
+vptr as its first member, and this same UB now reads a **vptr** instead.
+Both are equally undefined and equally golden's own pre-existing bug (not
+introduced or fixed by this wave); what changed is *which* garbage bytes
+get misread, which is an observable difference on a reachable branch inside
+a wave contracted to zero behaviour change. Documented at the call site
+(`Automation/SCK_ART_Remainder.cpp:1651`, comment only, code left
+untouched) and here, per plan S12.6, so the next reader finds both: that
+golden's own behaviour here was already garbage, and that the ported
+tree's flavor of garbage shifted.

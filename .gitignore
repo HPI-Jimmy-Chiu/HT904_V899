@@ -74,6 +74,21 @@ Error/
 data/
 Barcode_File/
 PMAlarm/
+# The unanchored PMAlarm/ rule above is correct for the 18 runtime alarm-data
+# directories it was written for (the repo root plus one inside every
+# HT9011UC_Code_*/HT9046LS_Code_* version tree), but it also matched three of
+# the V906 .dfm-conversion pipeline's GENERATED CANONICAL trees, because golden
+# has a form named PMAlarm*.dfm and the generators mirror golden's relative
+# paths. Effect: git tracked only 130 of 133 forms, so tools/dfm2rc's G7
+# fidelity/idempotency gates could not pass from a fresh clone or worktree --
+# regeneration produced 3 "extra" forms (PMAlarmInterFace, PMAlarmShowData,
+# fMain) and 801 G7_EXTRA_IN_REGEN diffs. Un-ignoring the three trees
+# run_b1d.py treats as canonical (IR_OUT_CANON / RC_OUT_CANON /
+# LAYOUT_OUT_CANON, run_b1d.py:78-80) rather than weakening the rule itself.
+# res_out/ stays ignored: it holds rc.exe .res build output, never tracked.
+!HT9011UC_Cpp_V3.33.906.0/tools/dfm2rc/ir_out/PMAlarm/
+!HT9011UC_Cpp_V3.33.906.0/tools/dfm2rc/rc_out/PMAlarm/
+!HT9011UC_Cpp_V3.33.906.0/tools/dfm2rc/layout_out/PMAlarm/
 dmc_data/
 SECS/GPM/
 MDB/

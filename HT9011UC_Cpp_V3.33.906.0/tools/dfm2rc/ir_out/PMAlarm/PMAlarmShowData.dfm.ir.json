@@ -1,0 +1,494 @@
+{
+ "control_node_count": 4,
+ "encoding_used": "cp950",
+ "form_class": "TfPMAlarm_ShowData",
+ "form_name": "fPMAlarm_ShowData",
+ "generator": "dfm_parse.py W7-B1a v1.0",
+ "nodes": [
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [
+    "fPMAlarm_ShowData.sg_PMAlarmShowData",
+    "fPMAlarm_ShowData.cb_PMAlarmChoiseFile",
+    "fPMAlarm_ShowData.pnlPMAlarmBeforeDays",
+    "fPMAlarm_ShowData.pnlPMAlarm_Title"
+   ],
+   "class": "TfPMAlarm_ShowData",
+   "depth": 0,
+   "events": {
+    "OnShow": "FormShow"
+   },
+   "geometry": {
+    "height": 625,
+    "left": 598,
+    "top": 208,
+    "width": 978
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "ROOT",
+   "line": 1,
+   "name": "fPMAlarm_ShowData",
+   "objkind": "object",
+   "parent_path": null,
+   "path": "fPMAlarm_ShowData",
+   "properties": {
+    "Caption": {
+     "type": "STR",
+     "value": "PM Alarm Show Data"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clBtnFace"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -11
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 625
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 598
+    },
+    "OldCreateOrder": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "OnShow": {
+     "type": "SCALAR",
+     "value": "FormShow"
+    },
+    "PixelsPerInch": {
+     "type": "SCALAR",
+     "value": 96
+    },
+    "TextHeight": {
+     "type": "SCALAR",
+     "value": 13
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 208
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 978
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": null,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TStringGrid",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 505,
+    "left": 8,
+    "top": 72,
+    "width": 945
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 17,
+   "name": "sg_PMAlarmShowData",
+   "objkind": "object",
+   "parent_path": "fPMAlarm_ShowData",
+   "path": "fPMAlarm_ShowData.sg_PMAlarmShowData",
+   "properties": {
+    "ColCount": {
+     "type": "SCALAR",
+     "value": 50
+    },
+    "ColWidths": {
+     "type": "LIST",
+     "value": [
+      80,
+      267,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80
+     ]
+    },
+    "DefaultColWidth": {
+     "type": "SCALAR",
+     "value": 80
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 505
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 8
+    },
+    "Options": {
+     "type": "SET",
+     "value": [
+      "goFixedVertLine",
+      "goFixedHorzLine",
+      "goVertLine",
+      "goHorzLine",
+      "goRangeSelect",
+      "goColSizing"
+     ]
+    },
+    "RowCount": {
+     "type": "SCALAR",
+     "value": 50
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 3
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 72
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 945
+    }
+   },
+   "sibling_index": 0,
+   "synthesized": false,
+   "tab_order": 3,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TComboBox",
+   "depth": 1,
+   "events": {
+    "OnChange": "cb_PMAlarmChoiseFileChange"
+   },
+   "geometry": {
+    "height": 28,
+    "left": 208,
+    "top": 32,
+    "width": 337
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 79,
+   "name": "cb_PMAlarmChoiseFile",
+   "objkind": "object",
+   "parent_path": "fPMAlarm_ShowData",
+   "path": "fPMAlarm_ShowData.cb_PMAlarmChoiseFile",
+   "properties": {
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "ItemHeight": {
+     "type": "SCALAR",
+     "value": 20
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 208
+    },
+    "OnChange": {
+     "type": "SCALAR",
+     "value": "cb_PMAlarmChoiseFileChange"
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 2
+    },
+    "Text": {
+     "type": "STR",
+     "value": "cb_PMAlarmChoiseFile"
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 337
+    }
+   },
+   "sibling_index": 1,
+   "synthesized": false,
+   "tab_order": 2,
+   "visible": null
+  },
+  {
+   "align": null,
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 32,
+    "top": 32,
+    "width": 169
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 95,
+   "name": "pnlPMAlarmBeforeDays",
+   "objkind": "object",
+   "parent_path": "fPMAlarm_ShowData",
+   "path": "fPMAlarm_ShowData.pnlPMAlarmBeforeDays",
+   "properties": {
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Choise Report File"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": 383181
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "DEFAULT_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWindowText"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -16
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": []
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 1
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 32
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 169
+    }
+   },
+   "sibling_index": 2,
+   "synthesized": false,
+   "tab_order": 1,
+   "visible": null
+  },
+  {
+   "align": "alTop",
+   "anchors": null,
+   "child_paths": [],
+   "class": "TPanel",
+   "depth": 1,
+   "events": {},
+   "geometry": {
+    "height": 28,
+    "left": 0,
+    "top": 0,
+    "width": 970
+   },
+   "index": null,
+   "is_graphic_control": false,
+   "kind": "LEAF",
+   "line": 111,
+   "name": "pnlPMAlarm_Title",
+   "objkind": "object",
+   "parent_path": "fPMAlarm_ShowData",
+   "path": "fPMAlarm_ShowData.pnlPMAlarm_Title",
+   "properties": {
+    "Align": {
+     "type": "SCALAR",
+     "value": "alTop"
+    },
+    "BevelOuter": {
+     "type": "SCALAR",
+     "value": "bvNone"
+    },
+    "Caption": {
+     "type": "STR",
+     "value": "Report View"
+    },
+    "Color": {
+     "type": "SCALAR",
+     "value": "clInactiveCaption"
+    },
+    "Font.Charset": {
+     "type": "SCALAR",
+     "value": "ANSI_CHARSET"
+    },
+    "Font.Color": {
+     "type": "SCALAR",
+     "value": "clWhite"
+    },
+    "Font.Height": {
+     "type": "SCALAR",
+     "value": -24
+    },
+    "Font.Name": {
+     "type": "STR",
+     "value": "MS Sans Serif"
+    },
+    "Font.Style": {
+     "type": "SET",
+     "value": [
+      "fsBold"
+     ]
+    },
+    "Height": {
+     "type": "SCALAR",
+     "value": 28
+    },
+    "Left": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "ParentFont": {
+     "type": "SCALAR",
+     "value": "False"
+    },
+    "TabOrder": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Top": {
+     "type": "SCALAR",
+     "value": 0
+    },
+    "Width": {
+     "type": "SCALAR",
+     "value": 970
+    }
+   },
+   "sibling_index": 3,
+   "synthesized": false,
+   "tab_order": 0,
+   "visible": null
+  }
+ ],
+ "parse_errors": [],
+ "schema_version": 1,
+ "source_dfm": "PMAlarm/PMAlarmShowData.dfm",
+ "total_nodes_incl_root": 5
+}

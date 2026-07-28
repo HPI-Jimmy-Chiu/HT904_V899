@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "generator": "emit_rc.py W7-B1b v1.0",
+  "source_dfm": "PMAlarm/PMAlarmShowData.dfm",
+  "formstem": "PMALARMSHOWDATA",
+  "dialog_count": 1,
+  "control_count": 4,
+  "fallback_classes_used": [],
+  "warnings": [],
+  "dialogs": [
+    {
+      "idd_symbol": "IDD_PMALARMSHOWDATA",
+      "idd_value": 8192,
+      "is_root": true,
+      "owner_path": "fPMAlarm_ShowData",
+      "owner_class": "TfPMAlarm_ShowData",
+      "controls": [
+        {
+          "symbol": "IDC_PMALARMSHOWDATA_SG_PMALARMSHOWDATA",
+          "value": 1024,
+          "win32_class": "HT9045.StringGrid",
+          "caption": null,
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fPMAlarm_ShowData.sg_PMAlarmShowData",
+          "fallback_class": false,
+          "x": 8,
+          "y": 72,
+          "cx": 945,
+          "cy": 505
+        },
+        {
+          "symbol": "IDC_PMALARMSHOWDATA_CB_PMALARMCHOISEFILE",
+          "value": 1025,
+          "win32_class": "ComboBox",
+          "caption": "cb_PMAlarmChoiseFile",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fPMAlarm_ShowData.cb_PMAlarmChoiseFile",
+          "fallback_class": false,
+          "x": 208,
+          "y": 32,
+          "cx": 337,
+          "cy": 28
+        },
+        {
+          "symbol": "IDC_PMALARMSHOWDATA_PNLPMALARMBEFOREDAYS",
+          "value": 1026,
+          "win32_class": "Static",
+          "caption": "Choise Report File",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fPMAlarm_ShowData.pnlPMAlarmBeforeDays",
+          "fallback_class": false,
+          "x": 32,
+          "y": 32,
+          "cx": 169,
+          "cy": 28
+        },
+        {
+          "symbol": "IDC_PMALARMSHOWDATA_PNLPMALARM_TITLE",
+          "value": 1027,
+          "win32_class": "Static",
+          "caption": "Report View",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "fPMAlarm_ShowData.pnlPMAlarm_Title",
+          "fallback_class": false,
+          "x": 0,
+          "y": 0,
+          "cx": 970,
+          "cy": 28
+        }
+      ]
+    }
+  ]
+}

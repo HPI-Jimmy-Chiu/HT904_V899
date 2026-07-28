@@ -76,8 +76,8 @@ public:
 #define InterfaceType_Delta_Castle      9 //Ifor 20200603 add: Delta Castle Flow
 //#define InterfaceType_Catalyst_SC       5 //2
 
-#define InterfaceType_TTL            1000       //Isaac 20200903 :TTL RS232³q°T
-#define InterfaceType_Standard          0       //Isaac 20200903 :TTL RS232³q°T
+#define InterfaceType_TTL            1000       //Isaac 20200903 :TTL RS232é€šè¨Š
+#define InterfaceType_Standard          0       //Isaac 20200903 :TTL RS232é€šè¨Š
 
 #define WM_Interface_GPIB             WM_USER+100
 //2011.09.19 Q_Q GPIBInterface end
@@ -97,24 +97,24 @@ public:
 
 #define MotionnetIO_L112  0
 #define MotionnetIO_MN200 1
-#define NewIO_MN200 2                           //Steven 20181018 : Add for new IO±Æ¦C
+#define NewIO_MN200 2                           //Steven 20181018 : Add for new IOæ’åˆ—
 #define PCI_MC88X1 3                            //Nickliu 20230306 add for 7080b
 
 #define MotionCard_SYN      0
 #define MotionCard_Contec   1
 #define PCI_P64C64          3                   //Nickliu 20230306 add for 7080b
 
-//extern int HT8080TransKIT;                    //Steven 20120822 : ¨S¥Î¨ì,°¨§J±¼
-//#define SortingBinTray_MAX_TRAY_ITEM 6          //JerryYang 20150910 Fix3 ¤£¾ã½L    //Ifor 20161123 add Fix 5->6
+//extern int HT8080TransKIT;                    //Steven 20120822 : æ²’ç”¨åˆ°,é¦¬å…‹æ‰
+//#define SortingBinTray_MAX_TRAY_ITEM 6          //JerryYang 20150910 Fix3 ä¸æ•´ç›¤    //Ifor 20161123 add Fix 5->6
 
 //ATC Index
 #define OLD_VALUES         0
 #define SAME_COUNT         1
 
 #define VERSION_INFO_KEY_ROOT TEXT("\\StringFileInfo\\")
-#define VERSION_INFO_KEY_TRANS TEXT("\\VarFileInfo\\Translation")               //Sam 20230328 : §ï¨Ï¥Î§ó·s¥]ªº²£«~ª©¥»¨Ó§P§O¬O§_§ó·s¡C
+#define VERSION_INFO_KEY_TRANS TEXT("\\VarFileInfo\\Translation")               //Sam 20230328 : æ”¹ä½¿ç”¨æ›´æ–°åŒ…çš„ç”¢å“ç‰ˆæœ¬ä¾†åˆ¤åˆ¥æ˜¯å¦æ›´æ–°ã€‚
 
-extern TMyStringList *slEventLog;                                               //Steven 20161115 : EventLog¦s¦¨¤å¦rÀÉ  //Steven 20200116 : §ï¦¨¥ş°ìÅÜ¼Æ, Á×§KfMain³Q¸Ñºc³y¦¨°O¾ĞÅé²§±`
+extern TMyStringList *slEventLog;                                               //Steven 20161115 : EventLogå­˜æˆæ–‡å­—æª”  //Steven 20200116 : æ”¹æˆå…¨åŸŸè®Šæ•¸, é¿å…fMainè¢«è§£æ§‹é€ æˆè¨˜æ†¶é«”ç•°å¸¸
 extern TMyStringList *sl2DMappingLog;                                           //JerryYang 20230322 : add 2D mapping result
 extern TStringList *slBundlID;
 extern TStringList *slDupBundlID;
@@ -126,9 +126,9 @@ extern void SaveEventLog();
 extern unsigned int MyLongMask[32];
 extern const byte MyBitMask[8];
 extern const int GaliPosOffSet;
-//extern int GaliPosYRange;  //JerryYang 20180411 (jou) : Z¶b²¾°Ê«e½T»{Y¶b¦ì¸m«OÅ@   //Isaac 20201012 : const int-> int    //Isaac 20210604 : IndexY°»´ú½d³ò¦W¤l²Î¤@¦¨IniConfig.GaliPosRange
+//extern int GaliPosYRange;  //JerryYang 20180411 (jou) : Zè»¸ç§»å‹•å‰ç¢ºèªYè»¸ä½ç½®ä¿è­·   //Isaac 20201012 : const int-> int    //Isaac 20210604 : IndexYåµæ¸¬ç¯„åœåå­çµ±ä¸€æˆIniConfig.GaliPosRange
 extern const int MotErrPos;
-extern AnsiString sOEETimeDataName[tdTotal];                                    //Steven 20231120 : ¬ö¿ı¾÷¥x½[°Ê®É¶¡
+extern AnsiString sOEETimeDataName[tdTotal];                                    //Steven 20231120 : ç´€éŒ„æ©Ÿå°ç¨¼å‹•æ™‚é–“
 
 extern AnsiString sTrayPosName[MAX_TRACK];
 extern AnsiString s06TrayName[eTrayCount];
@@ -143,15 +143,15 @@ extern long GALI_ERROR_MAX_PR2;//Chunghung 20131111 add
 extern long GALI_ERROR_MAX_PR3;//Chunghung 20131111 add
 extern long GALI_ERROR_MAX_PR4;//Chunghung 20131111 add
 
-//extern const int CY_PUSH;                 //Steven 20120822 : ¨S¥Î¨ì,°¨§J±¼
+//extern const int CY_PUSH;                 //Steven 20120822 : æ²’ç”¨åˆ°,é¦¬å…‹æ‰
 extern const int CY_POP;
 
 extern const int TC401;
 extern const int KT4H ;
 extern const int E5DC ;
 extern const int NoHeater;                  //Steven 20171227 (Wei) : Add for HT-9045L
-extern const int DTK4848;                   //KaiHuang 20190821 : ·s¼W¥x¹F DTK4848·Å±±¾¹
-extern int TC401HeaterControl;              //Steven 2014030 : ·s¼WOMRON E5DC·Å±±¾¹
+extern const int DTK4848;                   //KaiHuang 20190821 : æ–°å¢å°é” DTK4848æº«æ§å™¨
+extern int TC401HeaterControl;              //Steven 2014030 : æ–°å¢OMRON E5DCæº«æ§å™¨
 
 extern const int NULL_IC;
 extern const int HAS_TESTING_IC;
@@ -222,7 +222,7 @@ extern bool SystemStart;
 extern bool fAllMotorHome;
 extern bool SoftStart;
 extern bool SoftStop;
-extern bool bPhysicalStart;                         //Steven 20141006 : SECS GEM¨Ï¥ÎRemote Start¥\¯à
+extern bool bPhysicalStart;                         //Steven 20141006 : SECS GEMä½¿ç”¨Remote StartåŠŸèƒ½
 extern Word SystemHour, SystemMin, SystemSec, SystemMSec;
 extern Word SystemYear, SystemMonth, SystemDate;
 extern Word SystemYearYesterday, SystemMonthYesterday, SystemDateYesterday;
@@ -230,48 +230,48 @@ extern AnsiString CurrentDir;
 
 extern bool bDoOCRFunction;                         //ChungHung 20121002 add OCR Function
 extern bool bWaitTesterFinish;                      //ChungHung 20140716 add if testing not finish can not homing
-extern int  iAMRCoverTray;                                         //Eastsun 20260515 F009 ¾ã¦X: KYEC AMR Cover Tray ­p¼Æ
+extern int  iAMRCoverTray;                                         //Eastsun 20260515 F009 æ•´åˆ: KYEC AMR Cover Tray è¨ˆæ•¸
 // -----------------------------------------------------------------------------
 //extern char Com2Buffer[1024];
-extern AnsiString Com2Buffer;                       //Steven 20111028 : §ï¦¨AnsiString
-extern AnsiString ComOmronBuffer;                   //Steven 20120220 : Omron EJ1N·Å±±¾¹
+extern AnsiString Com2Buffer;                       //Steven 20111028 : æ”¹æˆAnsiString
+extern AnsiString ComOmronBuffer;                   //Steven 20120220 : Omron EJ1Næº«æ§å™¨
 extern bool  Com2ReceiveOK;
-extern bool  ComOmronReceiveOK;                     //Steven 20120220 : Omron EJ1N·Å±±¾¹
+extern bool  ComOmronReceiveOK;                     //Steven 20120220 : Omron EJ1Næº«æ§å™¨
 //jou 2012-03-13 ATC start:
-extern bool  bATCInitialFinish;                     //jou 2012-03-16 ATC Initial §¹¦¨«á¤~¯à¶}©lRead/Write·Å«×­È
+extern bool  bATCInitialFinish;                     //jou 2012-03-16 ATC Initial å®Œæˆå¾Œæ‰èƒ½é–‹å§‹Read/Writeæº«åº¦å€¼
 extern int   iATCInitialTask[tcTotalCount];         //jou 2012-03-16 ATC Initial Task
 extern int   iATCProcessTask[tcTotalCount];
 extern bool  bATCWriteCommand[tcTotalCount];        //jou 2012-03-16 ATC Write=true / Read=false
-extern bool  bATCReceiveErr[tcTotalCount];          //jou 2012-03-16 ATC ¤U«ü¥O¦^¶Ç¿ù»~´ÓErr=true
-extern bool  ComATCReceiveOK[tcTotalCount];         //jou 2012-03-16 ATC ¤U«ü¥O«áCOM PORT¦^À³Flag
-extern double fATCReadBuffer[tcTotalCount];         //jou 2012-03-16 ATC ¦^¶Çªº·Å«×­È
-extern AnsiString asATCErrorString[tcTotalCount];   //jou 2012-03-16 ATC Error Ccde¸ê°T¬ö¿ı
+extern bool  bATCReceiveErr[tcTotalCount];          //jou 2012-03-16 ATC ä¸‹æŒ‡ä»¤å›å‚³éŒ¯èª¤æ¤Err=true
+extern bool  ComATCReceiveOK[tcTotalCount];         //jou 2012-03-16 ATC ä¸‹æŒ‡ä»¤å¾ŒCOM PORTå›æ‡‰Flag
+extern double fATCReadBuffer[tcTotalCount];         //jou 2012-03-16 ATC å›å‚³çš„æº«åº¦å€¼
+extern AnsiString asATCErrorString[tcTotalCount];   //jou 2012-03-16 ATC Error Ccdeè³‡è¨Šç´€éŒ„
 //jou 2012-03-13 ATC end
 
-extern AnsiString TestSiteFileName[2][TotalTestMode];   //JerryYang 20201125 : TestSiteFileName²¾¨ìcmydef
+extern AnsiString TestSiteFileName[2][TotalTestMode];   //JerryYang 20201125 : TestSiteFileNameç§»åˆ°cmydef
 
 extern int  iOneCycle;
 
 extern int  iCleanOut;
-extern int  iFixOneCycle;                                                       //kevin 20130312 onecycle ¨â¤äarmÅı¶}ºû­×
+extern int  iFixOneCycle;                                                       //kevin 20130312 onecycle å…©æ”¯armè®“é–‹ç¶­ä¿®
 extern int  iTrayFeed;
-extern bool bAMRFullICBin;                                              //a-side cmydef.cpp L5432  //Eastsun 20260515 F011 ¾ã¦X (Phase4-F5T3 KYEC AMR FullTray flag)
-extern bool bSameSetupFileNoDownload;  //Eastsun 20260515 F011 ¾ã¦X (Phase4-F4T4 extern bSameSetupFileNoDownload)
+extern bool bAMRFullICBin;                                              //a-side cmydef.cpp L5432  //Eastsun 20260515 F011 æ•´åˆ (Phase4-F5T3 KYEC AMR FullTray flag)
+extern bool bSameSetupFileNoDownload;  //Eastsun 20260515 F011 æ•´åˆ (Phase4-F4T4 extern bSameSetupFileNoDownload)
 extern int  iHome;
 extern int  iReset;
 extern int  iAlarmReset;
 
 extern int  iCatchTrayControlManual;
 extern int  OutArmPlaceToManual;
-extern bool bAtuoTrayICDetectErr;   //Isaac 20180109 (Steven) : auto123¥i«e¶i«á°h
+extern bool bAtuoTrayICDetectErr;   //Isaac 20180109 (Steven) : auto123å¯å‰é€²å¾Œé€€
 extern bool bLoaderTrayICDetectErr;   //Sam 20200316 : Loader Detect Tray
 
 extern int  HotTime[2][50][50];
-extern int  iRowOnHotPlate[2][50][50];  //JerryYang 20180718 (wei) : ©ñ®Æ¦Ühot plate°O¿ı§l¼L¦ì¸m
+extern int  iRowOnHotPlate[2][50][50];  //JerryYang 20180718 (wei) : æ”¾æ–™è‡³hot plateè¨˜éŒ„å¸å˜´ä½ç½®
 extern bool SystemInitialOK;
 extern int  iHotLineChange;
-extern bool bOneCycle_BackUp;  //ChungHung 20141111 add for SCK junction temp issue   //JerryYang 20161129 iOneCycle_BackUp§ï¦¨bool
-extern bool bRS232Delay;       //RogerYang 20180901 add ª¿®æ´ò¤fDemo AI CCD Function
+extern bool bOneCycle_BackUp;  //ChungHung 20141111 add for SCK junction temp issue   //JerryYang 20161129 iOneCycle_BackUpæ”¹æˆbool
+extern bool bRS232Delay;       //RogerYang 20180901 add çŸ½æ ¼æ¹–å£Demo AI CCD Function
 
 extern const int  K_RETRY    ;
 extern const int  K_SKIP     ;
@@ -279,22 +279,22 @@ extern const int  K_CLEAN_OUT;
 extern const int  K_TRAY_FEED;
 extern const int  K_TRAY_END ;
 extern const int  K_RESET;
-extern const int  K_HOME;       //ChungHung HT9045 2011/12/13 //Input pickup device error®É,«ö"retry"Áä,¾÷¥x³£·|¦Û°Êhome
+extern const int  K_HOME;       //ChungHung HT9045 2011/12/13 //Input pickup device erroræ™‚,æŒ‰"retry"éµ,æ©Ÿå°éƒ½æœƒè‡ªå‹•home
 extern const int  K_TRAIN;
-extern const int  K_FIX;        //kevin 20130218 onecycle ¨â¤äarmÅı¶}ºû­×
+extern const int  K_FIX;        //kevin 20130218 onecycle å…©æ”¯armè®“é–‹ç¶­ä¿®
 extern const int  K_ONECYCLE;   //ChungHung 20140730 add ContinuousFailHaveOneCycle
-extern const int  K_PAUSE;      //Steven 20150722 : Add«öÁäType - Pause
-extern const int  K_START;      //Steven 20150722 : Add«öÁäType - Start
+extern const int  K_PAUSE;      //Steven 20150722 : AddæŒ‰éµType - Pause
+extern const int  K_START;      //Steven 20150722 : AddæŒ‰éµType - Start
 
-extern const int  N_INTEGER   ; //¥u¦³¾ã¼Æ
-extern const int  N_DOUBLE    ; //¥u¦³¯BÂI¼Æ
-extern const int  N_NO_SYMBOL ; //¨S¦³¯S®í²Å¸¹
-extern const int  N_PASSWORD  ; //±K½X¤å
-extern const int  N_NO_SPACE  ; //µLªÅ¥ÕÁä
-extern const int  N_UPPERCASE ; //¤j¼gÀu¥ı
-extern const int  N_NO_NUM_PAD; //¤£»İ­n¼Æ¦rÁä
-extern const int  N_PORT      ; //³q°T°ğ
-extern const int  N_IP_ADDR   ; //IP¦ì¸m
+extern const int  N_INTEGER   ; //åªæœ‰æ•´æ•¸
+extern const int  N_DOUBLE    ; //åªæœ‰æµ®é»æ•¸
+extern const int  N_NO_SYMBOL ; //æ²’æœ‰ç‰¹æ®Šç¬¦è™Ÿ
+extern const int  N_PASSWORD  ; //å¯†ç¢¼æ–‡
+extern const int  N_NO_SPACE  ; //ç„¡ç©ºç™½éµ
+extern const int  N_UPPERCASE ; //å¤§å¯«å„ªå…ˆ
+extern const int  N_NO_NUM_PAD; //ä¸éœ€è¦æ•¸å­—éµ
+extern const int  N_PORT      ; //é€šè¨ŠåŸ 
+extern const int  N_IP_ADDR   ; //IPä½ç½®
 extern bool CheckSystemPower;
 
 //##############################################################################
@@ -330,21 +330,21 @@ extern const int C_Empty_Middle;
 extern const int C_TrayVibration;
 extern const int C_HotplateVibration;
 extern const int C_CoolingValve;            //20111130  Dell
-extern const int C_Auto1_Up            ;    //Auto 3¤W³»¨T¬û
-extern const int C_Auto2_Up            ;    //Auto 2¤W³»¨T¬û
-extern const int C_Auto3_Up            ;    //Auto 3¤W³»¨T¬û
-extern const int C_Auto1LoaderZ_Select ;    //Auto 1¤ÀÂ÷¨T¬û
-extern const int C_Auto2LoaderZ_Select ;    //Auto 2¤ÀÂ÷¨T¬û
-extern const int C_Auto3LoaderZ_Select ;    //Auto 3¤ÀÂ÷¨T¬û
-extern const int C_Fix1LoaderZ_Select;      //Fix 1¤ÀÂ÷¨T¬û   kevin 20120718 ¥N¸¹¤£¯à§ï
-extern const int C_Fix2LoaderZ_Select;      //Fix 2¤ÀÂ÷¨T¬û
-extern const int C_Fix3LoaderZ_Select;      //Fix 3¤ÀÂ÷¨T¬û
+extern const int C_Auto1_Up            ;    //Auto 3ä¸Šé ‚æ±½ç¼¸
+extern const int C_Auto2_Up            ;    //Auto 2ä¸Šé ‚æ±½ç¼¸
+extern const int C_Auto3_Up            ;    //Auto 3ä¸Šé ‚æ±½ç¼¸
+extern const int C_Auto1LoaderZ_Select ;    //Auto 1åˆ†é›¢æ±½ç¼¸
+extern const int C_Auto2LoaderZ_Select ;    //Auto 2åˆ†é›¢æ±½ç¼¸
+extern const int C_Auto3LoaderZ_Select ;    //Auto 3åˆ†é›¢æ±½ç¼¸
+extern const int C_Fix1LoaderZ_Select;      //Fix 1åˆ†é›¢æ±½ç¼¸   kevin 20120718 ä»£è™Ÿä¸èƒ½æ”¹
+extern const int C_Fix2LoaderZ_Select;      //Fix 2åˆ†é›¢æ±½ç¼¸
+extern const int C_Fix3LoaderZ_Select;      //Fix 3åˆ†é›¢æ±½ç¼¸
 extern const int C_Auto2_Middle;            //kevin 20120725
-extern const int C_Shuttle_Knocker_1   ;    //ShuttleºVºV
-extern const int C_Shuttle_Knocker_2   ;    //ShuttleºVºV
-extern const int C_InputRotateKIT      ;    //Steven 20121001 : ±ÛÂàKit
-extern const int C_OutputRotateKIT     ;    //Steven 20121001 : ±ÛÂàKit
-extern const int C_FixTray_FullPlace   ;    //Steven 20140310 : Fix3º¡½L®ğ¬û
+extern const int C_Shuttle_Knocker_1   ;    //Shuttleæ•²æ•²
+extern const int C_Shuttle_Knocker_2   ;    //Shuttleæ•²æ•²
+extern const int C_InputRotateKIT      ;    //Steven 20121001 : æ—‹è½‰Kit
+extern const int C_OutputRotateKIT     ;    //Steven 20121001 : æ—‹è½‰Kit
+extern const int C_FixTray_FullPlace   ;    //Steven 20140310 : Fix3æ»¿ç›¤æ°£ç¼¸
 extern const int C_DockYAxisOn         ;    //Steven 20140310 : One Touch Docking
 extern const int C_DockYAxisOff        ;    //Steven 20140310 : One Touch Docking
 extern const int C_DockXAxisOn         ;    //Steven 20140310 : One Touch Docking
@@ -353,15 +353,15 @@ extern const int C_CatchTray_FixOn    ;    //ChungHung 20140624 : Auto Retest
 extern const int C_CatchTray_FixOff   ;    //ChungHung 20140624 : Auto Retest
 extern const int C_TurnTrayArm        ;    //ChungHung 20140701 : AutoRetest
 extern const int C_TurnTrayArmLock    ;    //ChungHung 20140814 : AutoRetest
-extern const int C_OCRLight_Up        ;    //wei 20150720 OCRÄ²µo
-extern const int C_OCRLight_Down      ;    //wei 20150720 OCRÄ²µo
+extern const int C_OCRLight_Up        ;    //wei 20150720 OCRè§¸ç™¼
+extern const int C_OCRLight_Down      ;    //wei 20150720 OCRè§¸ç™¼
 extern const int C_SLK1_Clamp         ;    //JerryYang 20160524
 extern const int C_SLK1_Unclamp       ;    //JerryYang 20160524
 extern const int C_SLK2_Clamp         ;    //JerryYang 20160524
 extern const int C_SLK2_Unclamp       ;    //JerryYang 20160524
 extern const int C_Socket_Clamp       ;    //JerryYang 20160524
 extern const int C_Socket_Unclamp     ;    //JerryYang 20160524
-extern const int C_LoaderUpPress      ;    //JerryYang 20181120 (Steven) : (Steven) : ¿W¥ß±±¨îloaderÀ£tray
+extern const int C_LoaderUpPress      ;    //JerryYang 20181120 (Steven) : (Steven) : ç¨ç«‹æ§åˆ¶loaderå£“tray
 extern const int C_HingeLookOn        ;    //wei 20170413
 extern const int C_HingeLookOff       ;    //wei 20170413
 
@@ -386,9 +386,9 @@ extern const int C_LoadRobotX  ;
 extern const int C_UnloadRobotX ;
 //<==
 //Sam 20190112 LM
-extern const int C_Auto1UpPress       ;    //JerryYang 20190423 ·s¼WunloaderÀ£tray
-extern const int C_Auto2UpPress       ;    //JerryYang 20190423 ·s¼WunloaderÀ£tray
-extern const int C_Auto3UpPress       ;    //JerryYang 20190423 ·s¼WunloaderÀ£tray
+extern const int C_Auto1UpPress       ;    //JerryYang 20190423 æ–°å¢unloaderå£“tray
+extern const int C_Auto2UpPress       ;    //JerryYang 20190423 æ–°å¢unloaderå£“tray
+extern const int C_Auto3UpPress       ;    //JerryYang 20190423 æ–°å¢unloaderå£“tray
 
 extern const int C_InFlipper1         ;     //Frank 20210612 : Flipper Function
 extern const int C_InFlipper1Lock     ;
@@ -415,7 +415,7 @@ extern const int C_TeachGlassUp        ;
 extern const int C_Shuttle1Precisor    ;
 extern const int C_Shuttle2Precisor    ;
 
-extern const int C_MultileEmptyY_On             ;                               //KaiChen 20200716 ¡GOHT
+extern const int C_MultileEmptyY_On             ;                               //KaiChen 20200716 ï¼šOHT
 extern const int C_MultileEmptyY_Off            ;
 extern const int C_MultileEmptyCatch_On         ;
 extern const int C_MultileEmptyCatch_Off        ;
@@ -438,7 +438,7 @@ extern const int C_InAreaAlignment              ;                               
 extern const int C_OutAreaAlignment             ;                               //ChungHung 20210113 add for Alignment CCD
 
 extern const int C_PlacementArm                 ;                               //JimmyChiu 20220908 add Pickup Error Placement
-extern const int C_TesterSidePush               ;                               //Richard 20220321 : ´ë±çSide Push
+extern const int C_TesterSidePush               ;                               //Richard 20220321 : æ¸ æ¢Side Push
 
 extern const int C_Load2CasstteLock             ;
 extern const int C_Load2_Middle                 ;
@@ -520,24 +520,24 @@ extern const int C_Auto3PushBack_Back       ;
 extern const int C_Auto4Side_Fixer             ;
 extern const int C_Auto5Side_Fixer             ;
 extern const int C_Auto6Side_Fixer             ;
-extern const int C_Auto4_Selector              ;           //Auto 4¤W³»¨T¬û ©Î ¤¤¶¡¤ÀÂ÷
-extern const int C_Auto5_Selector              ;           //Auto 5¤W³»¨T¬û ©Î ¤¤¶¡¤ÀÂ÷
-extern const int C_Auto6_Selector              ;           //Auto 6¤W³»¨T¬û ©Î ¤¤¶¡¤ÀÂ÷
+extern const int C_Auto4_Selector              ;           //Auto 4ä¸Šé ‚æ±½ç¼¸ æˆ– ä¸­é–“åˆ†é›¢
+extern const int C_Auto5_Selector              ;           //Auto 5ä¸Šé ‚æ±½ç¼¸ æˆ– ä¸­é–“åˆ†é›¢
+extern const int C_Auto6_Selector              ;           //Auto 6ä¸Šé ‚æ±½ç¼¸ æˆ– ä¸­é–“åˆ†é›¢
 extern const int C_Auto4EdgePush               ;
 extern const int C_Auto5EdgePush               ;
 extern const int C_Auto6EdgePush               ;
-extern const int C_Auto4_Up                    ;           //Auto 4¤W³»¨T¬û
-extern const int C_Auto5_Up                    ;           //Auto 5¤W³»¨T¬û
-extern const int C_Auto6_Up                    ;           //Auto 6¤W³»¨T¬û
-extern const int C_Auto4LoaderZ_Select         ;           //Auto 4¤ÀÂ÷¨T¬û
-extern const int C_Auto5LoaderZ_Select         ;           //Auto 5¤ÀÂ÷¨T¬û
-extern const int C_Auto6LoaderZ_Select         ;           //Auto 6¤ÀÂ÷¨T¬û
-extern const int C_Fix4LoaderZ_Select          ;           //Fix 4¤ÀÂ÷¨T¬û
-extern const int C_Fix5LoaderZ_Select          ;           //Fix 5¤ÀÂ÷¨T¬û
-extern const int C_Fix6LoaderZ_Select          ;           //Fix 6¤ÀÂ÷¨T¬û
-extern const int C_Auto4UpPress                ;           //Auto 4unloaderÀ£tray
-extern const int C_Auto5UpPress                ;           //Auto 5unloaderÀ£tray
-extern const int C_Auto6UpPress                ;           //Auto 6unloaderÀ£tray
+extern const int C_Auto4_Up                    ;           //Auto 4ä¸Šé ‚æ±½ç¼¸
+extern const int C_Auto5_Up                    ;           //Auto 5ä¸Šé ‚æ±½ç¼¸
+extern const int C_Auto6_Up                    ;           //Auto 6ä¸Šé ‚æ±½ç¼¸
+extern const int C_Auto4LoaderZ_Select         ;           //Auto 4åˆ†é›¢æ±½ç¼¸
+extern const int C_Auto5LoaderZ_Select         ;           //Auto 5åˆ†é›¢æ±½ç¼¸
+extern const int C_Auto6LoaderZ_Select         ;           //Auto 6åˆ†é›¢æ±½ç¼¸
+extern const int C_Fix4LoaderZ_Select          ;           //Fix 4åˆ†é›¢æ±½ç¼¸
+extern const int C_Fix5LoaderZ_Select          ;           //Fix 5åˆ†é›¢æ±½ç¼¸
+extern const int C_Fix6LoaderZ_Select          ;           //Fix 6åˆ†é›¢æ±½ç¼¸
+extern const int C_Auto4UpPress                ;           //Auto 4unloaderå£“tray
+extern const int C_Auto5UpPress                ;           //Auto 5unloaderå£“tray
+extern const int C_Auto6UpPress                ;           //Auto 6unloaderå£“tray
 extern const int C_Auto4CasstteLock            ;
 extern const int C_Auto5CasstteLock            ;
 extern const int C_Auto6CasstteLock            ;
@@ -599,17 +599,17 @@ extern const int C_Auto6SeparateFL             ;
 extern const int C_Auto6SeparateFR             ;
 extern const int C_LoadCarRFIDRotArmD          ;                                //RogerYang 20250828 add for Loader Rotate Arm
 extern const int C_LoadCarRFIDRotArmU          ;                                //RogerYang 20250828 add for Loader Rotate Arm
-extern const int C_LoadTrayDetD                ;                                //RogerYang 20250828 add for ´İ®ÆÀË®ğ¬û
-extern const int C_LoadTrayDetU                ;                                //RogerYang 20250828 add for ´İ®ÆÀË®ğ¬û
-extern const int C_LoadTrayDetF                ;                                //RogerYang 20250828 add for ´İ®ÆÀË®ğ¬û
-extern const int C_LoadTrayDetB                ;                                //RogerYang 20250828 add for ´İ®ÆÀË®ğ¬û
+extern const int C_LoadTrayDetD                ;                                //RogerYang 20250828 add for æ®˜æ–™æª¢æ°£ç¼¸
+extern const int C_LoadTrayDetU                ;                                //RogerYang 20250828 add for æ®˜æ–™æª¢æ°£ç¼¸
+extern const int C_LoadTrayDetF                ;                                //RogerYang 20250828 add for æ®˜æ–™æª¢æ°£ç¼¸
+extern const int C_LoadTrayDetB                ;                                //RogerYang 20250828 add for æ®˜æ–™æª¢æ°£ç¼¸
 
 extern const int C_LoaderCarrier               ;                                //Ifor 20251216 add:Boat Carrier
 extern const int C_Auto1Carrier                ;                                //Ifor 20251216 add:Boat Carrier
 extern const int C_Auto2Carrier                ;                                //Ifor 20251216 add:Boat Carrier
 
-#define CynForHome 74       //°O±o§ï!!
-extern int CynNeedHome[CynForHome];                                             //Steven 20240123 : §ï¥Îenable½T»{®ğ¬û¬O§_­n´_Âk
+#define CynForHome 74       //è¨˜å¾—æ”¹!!
+extern int CynNeedHome[CynForHome];                                             //Steven 20240123 : æ”¹ç”¨enableç¢ºèªæ°£ç¼¸æ˜¯å¦è¦å¾©æ­¸
 //Steven 20230907 : For HT-9011UC
 //==>
 extern int C_AutoSide_Fixer    [MAX_AUTO_TRAY];
@@ -640,7 +640,7 @@ extern AnsiString sJAM1111     [MAX_AUTO_TRAY];
 extern AnsiString sJAM1112     [MAX_AUTO_TRAY];
 extern AnsiString sJAM1113     [MAX_AUTO_TRAY];
 extern AnsiString sJAM1114     [MAX_AUTO_TRAY];
-extern AnsiString sJAM1158     [MAX_AUTO_TRAY];                                 //AI(general) 20260323 (RogerYang) : UpSafe sensor ¥¼¨ì¦ì5¬í Alarm
+extern AnsiString sJAM1158     [MAX_AUTO_TRAY];                                 //AI(general) 20260323 (RogerYang) : UpSafe sensor æœªåˆ°ä½5ç§’ Alarm
 extern AnsiString sMES1120     [MAX_AUTO_TRAY];
 extern AnsiString sMES1121     [MAX_AUTO_TRAY];
 extern AnsiString sMES1122     [MAX_AUTO_TRAY];
@@ -649,7 +649,7 @@ extern AnsiString sWAR1130     [MAX_AUTO_TRAY];
 extern AnsiString sWAR1151     [MAX_AUTO_TRAY];
 extern AnsiString sJAM1170     [MAX_AUTO_TRAY];
 extern AnsiString sMES1712     [MAX_FIX_TRAY];
-extern AnsiString sMES1713     [MAX_FIX_TRAY];                                  //RogerYang 20250626 °¶´ú¤£¥i½Æ´úbin¥\¯à
+extern AnsiString sMES1713     [MAX_FIX_TRAY];                                  //RogerYang 20250626 å‰æ¸¬ä¸å¯è¤‡æ¸¬binåŠŸèƒ½
 extern AnsiString sMES1720     [MAX_FIX_TRAY];
 extern AnsiString sMES1721     [MAX_FIX_TRAY];
 extern AnsiString sWAR1722     [MAX_FIX_TRAY];
@@ -665,7 +665,7 @@ extern int iAutoBack      [MAX_TRACK];
 extern int iAutoPush      [MAX_TRACK];
 //<==
 //Steven 20230907 : For HT-9011UC
-extern const int C_DailyCorrelation   ;     //KaiChen 20200525 ¡GDaily Correlation Function
+extern const int C_DailyCorrelation   ;     //KaiChen 20200525 ï¼šDaily Correlation Function
 //====================================================================
 extern const int SnFKPowerOff           ;
 extern const int SnFKPowerOn            ;
@@ -838,10 +838,10 @@ extern const int SnCatchTrayFix1On     ;
 extern const int SnCatchTrayFix2On     ;
 
 extern const int SnSafeLock            ;
-extern const int SnRKSafeLock          ;                                        //KenHsieh 20211228 : °Ï¤À¹êÅéIO»P³q°T­±ªO
+extern const int SnRKSafeLock          ;                                        //KenHsieh 20211228 : å€åˆ†å¯¦é«”IOèˆ‡é€šè¨Šé¢æ¿
 
 extern const int SnFPLevelOpe          ;
-extern const int SnFPLevelEng          ;                                        //Steven 20190503 : «ü¯¾¿ëÃÑÅv­­
+extern const int SnFPLevelEng          ;                                        //Steven 20190503 : æŒ‡ç´‹è¾¨è­˜æ¬Šé™
 extern const int SnFPLevelSup          ;
 extern const int SnFPLevelHon          ;
 
@@ -920,7 +920,7 @@ extern const int SnCheckTrayDirection;
 extern const int SnCheckLoadDirection;
 
 extern const int SnNegativePressureAir;
-extern const int SnNegativePressureAir2;                                        //Sam 20171110 (Steven) : ·s¼W®ğÀ£ Sensor
+extern const int SnNegativePressureAir2;                                        //Sam 20171110 (Steven) : æ–°å¢æ°£å£“ Sensor
 //jou 2010-11-23
 extern const int SnLoaderEdgePush ;
 extern const int SnAuto1EdgePush  ;
@@ -933,13 +933,13 @@ extern const int SnRTCCDTempCtrl;
 //---------------------------------------
 extern const int SnUnLoaderFloating ;
 
-extern const int SnRotateCheck;                                                 //ChungHung 20110922 : ÂàÂà½¼ÀY­nÀË¬d¦³¨S¦³ÂàÀY Check Sensor
+extern const int SnRotateCheck;                                                 //ChungHung 20110922 : è½‰è½‰è¦é ­è¦æª¢æŸ¥æœ‰æ²’æœ‰è½‰é ­ Check Sensor
 extern const int SnCheckConnectIndexArm_1;                                      //20111130  Dell
 extern const int SnCheckConnectIndexArm_2;                                      //20111130  Dell
 
-extern const int SnFixFloating1;                                                //Steven 20120131 : Fix Tray¸m°¾°»´ú
+extern const int SnFixFloating1;                                                //Steven 20120131 : Fix Trayç½®ååµæ¸¬
 extern const int SnFixFloating2;
-extern const int SnFixFloating3;                                                //Sam 20240129 : ·s¼W²Ä¤T²Õ Fix floating Sensor
+extern const int SnFixFloating3;                                                //Sam 20240129 : æ–°å¢ç¬¬ä¸‰çµ„ Fix floating Sensor
 
 extern const int SnATCAlarm1;                                                   //jou 2012-03-13 ATC Alarm 1 Sensor
 extern const int SnATCAlarm2;                                                   //jou 2012-03-13 ATC Alarm 2 Sensor
@@ -971,9 +971,9 @@ extern const int SnAutoDockingOn;                                               
 
 extern const int SnTesterDocking;                                               //jou 2012-09-13 Tester Docking
 extern const int SnTrain;                                                       //ChungHung 20120911 add
-extern const int SnFix3FullPlace;                                               //Steven 20121020 : Fix3º¡½L
+extern const int SnFix3FullPlace;                                               //Steven 20121020 : Fix3æ»¿ç›¤
 
-//Steven 20130201 : KasugaÂ÷¤l­·®°¹q·½°»´ú
+//Steven 20130201 : Kasugaé›¢å­é¢¨æ‰‡é›»æºåµæ¸¬
 extern const int SnIonFanPower01;
 extern const int SnIonFanPower02;
 extern const int SnIonFanPower03;
@@ -988,7 +988,7 @@ extern const int SnIonFanPower11;
 extern const int SnIonFanPower12;
 
 extern const int SnIonFan12Alarm;
-extern const int SnRotateRowIn1;                                                //kevin 20130524  Dell :±ÛÂà¯¸;°¨¹Fª©
+extern const int SnRotateRowIn1;                                                //kevin 20130524  Dell :æ—‹è½‰ç«™;é¦¬é”ç‰ˆ
 extern const int SnRotateRowIn2;
 extern const int SnRotateRowOut1;
 extern const int SnRotateRowOut2;
@@ -1002,7 +1002,7 @@ extern const int SnSocket6;
 extern const int SnSocket7;
 extern const int SnSocket8;
 
-extern const int SnSocket9;                                                     //Steven 20200610 : Socket sensor §ï¦¨16Áû
+extern const int SnSocket9;                                                     //Steven 20200610 : Socket sensor æ”¹æˆ16é¡†
 extern const int SnSocket10;
 extern const int SnSocket11;
 extern const int SnSocket12;
@@ -1017,7 +1017,7 @@ extern const int SnCrossSHT1S1;                                                 
 extern const int SnCrossSHT1S2;
 extern const int SnCrossSHT2S1;
 extern const int SnCrossSHT2S2;
-extern const int SnServo;                                                       //kevin 20140121 °»´úservon °T¸¹
+extern const int SnServo;                                                       //kevin 20140121 åµæ¸¬servon è¨Šè™Ÿ
 extern const int SnAutoTeach;                                                   //kevin 201400512 AUTOTEACH IN/OUT ARM SENSOR
 extern const int SnEOF1      ;                                                  //2014-03-04    Dell    for SPIL WLP Add 5S Inspection
 extern const int SnEOF2      ;
@@ -1038,8 +1038,8 @@ extern const int SnLoaderColorTrayDetect;
 extern const int SnEmptyColorTrayDetect;
 extern const int SnColorColorTrayDetect;
 
-extern const int SnGroundMan;                                                   //wei 20150424 add SnGroundMan°»´ú
-extern const int SnOCRTigger;                                                   //wei 20150720 OCRÄ²µo
+extern const int SnGroundMan;                                                   //wei 20150424 add SnGroundManåµæ¸¬
+extern const int SnOCRTigger;                                                   //wei 20150720 OCRè§¸ç™¼
 extern const int SnLowSpeed;
 extern const int SnOCRPosition;
 extern const int SnLoaderTrayHasTray_ART;                                       //wei 20151210
@@ -1051,11 +1051,11 @@ extern const int SnSocketClampPull1;
 extern const int SnSocketClampPull2;
 extern const int SnSocketHasClamp1;
 extern const int SnSocketHasClamp2;
-extern const int SnLoaderUpPress;                                               //JerryYang 20181120 (Steven) : (Steven) : ¿W¥ß±±¨îloaderÀ£tray
+extern const int SnLoaderUpPress;                                               //JerryYang 20181120 (Steven) : (Steven) : ç¨ç«‹æ§åˆ¶loaderå£“tray
 
 extern const int SnSafeMode;                                                    //jou 20231016 : CE PLC safe mode
 extern const int SnWaterLeakageChiller;                                         //jou 20231019 : Water Leakage Chiller
-extern const int SnSmokeDetect01;                                               //Sam 20240112 : ·s¼W·ÏÃú°»´ú
+extern const int SnSmokeDetect01;                                               //Sam 20240112 : æ–°å¢ç…™éœ§åµæ¸¬
 extern const int SnTopBtmAOIR180;                                               //Jimmychiu 20240322 : Top & Bottom Inspect
 extern const int SnFixedSeatTLOn;
 extern const int SnFixedSeatTLOff;
@@ -1074,7 +1074,7 @@ extern const int SnLightZINP;
 extern const int SnLightZREADY;
 extern const int SnLightZSERVO;
 //------------------------------------
-//Steven 20161011 : TTL¤ä´©8Site
+//Steven 20161011 : TTLæ”¯æ´8Site
 //------------------------------------
 extern const int SenBit20              ;
 extern const int SenBit21              ;
@@ -1097,7 +1097,7 @@ extern const int SenBit37              ;
 extern const int SenBit38              ;
 extern const int SenBit39              ;
 
-extern const int SnIndex1Connect1     ;                                         //RogerYang 20161212 : °»´úSLK¿W¥ß¥[¼ö©Î¦@¥Î¥[¼ö
+extern const int SnIndex1Connect1     ;                                         //RogerYang 20161212 : åµæ¸¬SLKç¨ç«‹åŠ ç†±æˆ–å…±ç”¨åŠ ç†±
 extern const int SnIndex1Connect2     ;
 extern const int SnIndex2Connect1     ;
 extern const int SnIndex2Connect2     ;
@@ -1212,8 +1212,8 @@ extern const int SnLoadCell6          ;    //kevin 20190307  read load cell pass
 extern const int SnLoadCell7          ;    //kevin 20190307  read load cell pass  or fail
 extern const int SnLoadCell8          ;    //kevin 20190307  read load cell pass  or fail
 
-extern const int SnHotGun1;                 //kevin 20190621  hot gun ¬y¶q²§±` ¨Ï¥Î Out 2
-extern const int SnHotGun2;                 //kevin 20190621  hot gun ¬y¶q²§±` ¨Ï¥Î Out 2
+extern const int SnHotGun1;                 //kevin 20190621  hot gun æµé‡ç•°å¸¸ ä½¿ç”¨ Out 2
+extern const int SnHotGun2;                 //kevin 20190621  hot gun æµé‡ç•°å¸¸ ä½¿ç”¨ Out 2
 
 extern const int SnGroundMan2         ;
 extern const int SnGroundMan3         ;
@@ -1221,11 +1221,11 @@ extern const int SnGroundMan4         ;
 extern const int SnAuto1UpPress       ;
 extern const int SnAuto2UpPress       ;
 extern const int SnAuto3UpPress       ;
-extern const int SnWaterLeakageUp     ;     //wei 20190617 º|¤ôÀË´ú
-extern const int SnWaterLeakageDown   ;     //wei 20190617 º|¤ôÀË´ú
-extern const int SnWaterLeakagePlate  ;     //wei 20190617 º|¤ôÀË´ú
+extern const int SnWaterLeakageUp     ;     //wei 20190617 æ¼æ°´æª¢æ¸¬
+extern const int SnWaterLeakageDown   ;     //wei 20190617 æ¼æ°´æª¢æ¸¬
+extern const int SnWaterLeakagePlate  ;     //wei 20190617 æ¼æ°´æª¢æ¸¬
 extern const int SnLoaderTrackDetect  ;     //Sam 20200316 : Loader Detect Tray
-extern const int SnAuto1Z_Select1     ;    //JerryYang 20200615 ART¤ÀÂ÷¨T¬ûsensor
+extern const int SnAuto1Z_Select1     ;    //JerryYang 20200615 ARTåˆ†é›¢æ±½ç¼¸sensor
 extern const int SnAuto1Z_Select2     ;
 extern const int SnAuto1Z_Select3     ;
 extern const int SnAuto1Z_Select4     ;
@@ -1253,14 +1253,14 @@ extern const int SnColorCasstteDetect     ;
 extern const int SnAuto1CasstteDetect     ;
 extern const int SnAuto2CasstteDetect     ;
 extern const int SnAuto3CasstteDetect     ;
-extern const int SnAuto4CasstteDetect     ;                                       //RogerYang 20250825 : ·s¼WAuto4~6
+extern const int SnAuto4CasstteDetect     ;                                       //RogerYang 20250825 : æ–°å¢Auto4~6
 extern const int SnAuto5CasstteDetect     ;
 extern const int SnAuto6CasstteDetect     ;
 extern const int SnArm1SLK                ;
 extern const int SnArm2SLK                ;
 
 extern const int SnMRAuto21     ;   //wei 20180702 MR
-//E84ÅçÃÒ¥Î
+//E84é©—è­‰ç”¨
 extern const int SnE84LREQ      ;   //wei 20180702 E84
 extern const int SnE84UREQ      ;   //wei 20180702 E84
 extern const int SnE84VA        ;   //wei 20180702 E84
@@ -1273,7 +1273,7 @@ extern const int SnE84POWER     ;   //wei 20180702 E84
 extern const int SnBufferTop    ;   //wei 20200305 MR
 extern const int SnBufferCatch  ;   //wei 20200305 MR
 extern const int SnCassetteOpen ;
-//KaiChen 20200716 ¡GOHT
+//KaiChen 20200716 ï¼šOHT
 //==>
 extern const int SnMultileEmpty_Door               ;
 extern const int SnMultileEmpty_MagazineTop        ;
@@ -1343,18 +1343,18 @@ extern const int SnMCUSensor2                 ;//Jimmychiu 20230630 : add color 
 extern const int SnMCUSensor3                 ;//Jimmychiu 20230630 : add color sensor MU-N in Loader
 extern const int SnMCUSensor4                 ;//Jimmychiu 20230630 : add color sensor MU-N in Loader
 
-extern const int SnSht1Left                   ;   //kevin 20220512 add SHUTTLE Left ¦ì¸m°¾²¾
-extern const int SnSht1Right                  ;   //kevin 20220512 add SHUTTLE Left ¦ì¸m°¾²¾
-extern const int SnSht2Left                   ;   //kevin 20220512 add SHUTTLE Left ¦ì¸m°¾²¾
-extern const int SnSht2Right                  ;   //kevin 20220512 add SHUTTLE Left ¦ì¸m°¾²¾
+extern const int SnSht1Left                   ;   //kevin 20220512 add SHUTTLE Left ä½ç½®åç§»
+extern const int SnSht1Right                  ;   //kevin 20220512 add SHUTTLE Left ä½ç½®åç§»
+extern const int SnSht2Left                   ;   //kevin 20220512 add SHUTTLE Left ä½ç½®åç§»
+extern const int SnSht2Right                  ;   //kevin 20220512 add SHUTTLE Left ä½ç½®åç§»
 extern const int SnLoaderTrayHasTray_AGV      ;   //kevin 20220520 add AGV load
 extern const int SnEmptyTrayHasTray_AGV       ;   //kevin 20220520 add AGV Empty
 extern const int SnColorTrayHasTray_AGV       ;   //kevin 20220520 add AGV Color
-extern const int SnAseTrayBufferLeft          ;   //kevin 20220709 ASEKH ¥ªÃä©ñªÅTRAY
-extern const int SnAseTrayBufferRight         ;   //kevin 20220709 ASEKH ¥kÃä©ñªÅTRAY
+extern const int SnAseTrayBufferLeft          ;   //kevin 20220709 ASEKH å·¦é‚Šæ”¾ç©ºTRAY
+extern const int SnAseTrayBufferRight         ;   //kevin 20220709 ASEKH å³é‚Šæ”¾ç©ºTRAY
 
-extern const int SnDailyCorrelation_Open  ;   //KaiChen 20200525 ¡GDaily Correlation Function
-extern const int SnDailyCorrelation_Close ;   //KaiChen 20200525 ¡GDaily Correlation Function
+extern const int SnDailyCorrelation_Open  ;   //KaiChen 20200525 ï¼šDaily Correlation Function
+extern const int SnDailyCorrelation_Close ;   //KaiChen 20200525 ï¼šDaily Correlation Function
 //KenHsieh 20210813 : add CCD AUTO ALIGNMENT
 //==>
 //ChungHung 20210113 add for Alignment CCD start
@@ -1406,8 +1406,8 @@ extern const int SnTriTempSafeDoor6Lock;
 extern const int SnTrayArmZSafePos;
 extern const int SnEnhaustAirFanAlarmDetect;//Ztex 2023.04.26 Add HT-1032 IO Exhaust Air
 extern const int SnDockingAreaOpenCheck;//Ztex 2023.05.02 Add HT-1032 IO Docking Area Open Check
-extern const int SnDewPointDetectIndexArm1 ;   //Hmy 20170603  add By ¤T·Å¾÷ ÅSÂISENSOR Arm1°»´ú
-extern const int SnDewPointDetectIndexArm2 ;   //Hmy 20170603  add By ¤T·Å¾÷ ÅSÂISENSOR Arm2°»´ú
+extern const int SnDewPointDetectIndexArm1 ;   //Hmy 20170603  add By ä¸‰æº«æ©Ÿ éœ²é»SENSOR Arm1åµæ¸¬
+extern const int SnDewPointDetectIndexArm2 ;   //Hmy 20170603  add By ä¸‰æº«æ©Ÿ éœ²é»SENSOR Arm2åµæ¸¬
 
 extern const int SnLoaderSeparateHasTray ;
 extern const int SnEmptySeparateHasTray  ;
@@ -1443,8 +1443,8 @@ extern const int SnIonBar8               ;
 extern const int SnIonBar9               ;
 
 extern const int SnTrayArmHasTray        ;
-extern const int SnInAreaAlignmentSenZ   ;                                      //KenHsieh 20211110 ¡G AutoAlignment add Auto Z
-extern const int SnOutAreaAlignmentSenZ  ;                                      //KenHsieh 20211110 ¡G AutoAlignment add Auto Z
+extern const int SnInAreaAlignmentSenZ   ;                                      //KenHsieh 20211110 ï¼š AutoAlignment add Auto Z
+extern const int SnOutAreaAlignmentSenZ  ;                                      //KenHsieh 20211110 ï¼š AutoAlignment add Auto Z
 
 extern const int SnAuto4_Tray_Car          ;                                       //Steven 20230907 : For HT-9011UC
 extern const int SnAuto4PreDete            ;
@@ -1523,12 +1523,12 @@ extern const int SnIonBar11                ;
 
 extern const int SnElectricControlBox      ;                                    //ChungHung 20230718 add for Safe plc
 extern const int SnAllSafeDoor             ;                                    //ChungHung 20230718 add for Safe plc
-extern const int SnAllEMG                  ;                                    //KenHsieh 20250212 : ·s¼WPLC Â_½u¥iÀş¶¡§PÂ_EMG¤Î¦w¥şªù
+extern const int SnAllEMG                  ;                                    //KenHsieh 20250212 : æ–°å¢PLC æ–·ç·šå¯ç¬é–“åˆ¤æ–·EMGåŠå®‰å…¨é–€
 
 extern const int SnTesterAlarm  ;
-extern const int SnDoubleLoadDetection     ;                                    //Steven 20240426 : °»´úloaderÅ|½L
+extern const int SnDoubleLoadDetection     ;                                    //Steven 20240426 : åµæ¸¬loaderç–Šç›¤
 
-extern const int SnAuto1HasCoverTray;                                           //JerryYang 20241021 : Unloader¼W¥[²Ä¤G²ÕSensorÀË¬d¬O§_¦³cover tray
+extern const int SnAuto1HasCoverTray;                                           //JerryYang 20241021 : Unloaderå¢åŠ ç¬¬äºŒçµ„Sensoræª¢æŸ¥æ˜¯å¦æœ‰cover tray
 extern const int SnAuto2HasCoverTray;
 extern const int SnAuto3HasCoverTray;
 extern const int SnAuto4HasCoverTray;
@@ -1568,15 +1568,15 @@ extern int iC_SeparateFR       [MAX_AUTO_TRAY];
 extern int SnFixColorTrayDete  [MAX_FIX_TRAY];
 extern int SnFixedTrayDetect   [MAX_FIX_TRAY];
 
-extern const int iSafeDoor[MAX_SAFE_DOOR_CNT];                                  //JerryYang 20230704 : ¾ã¦X¦w¥şªù15->MAX_SAFE_DOOR_CNT
-extern const int iSafeDoorPosition[MAX_SAFE_DOOR_CNT];                          //JerryYang 20230704 : ¾ã¦X¦w¥şªù15->MAX_SAFE_DOOR_CNT
-extern AnsiString asSafeDoorAlarm[MAX_SAFE_DOOR_CNT];                           //JerryYang 20230704 : ¾ã¦X¦w¥şªù15->MAX_SAFE_DOOR_CNT
+extern const int iSafeDoor[MAX_SAFE_DOOR_CNT];                                  //JerryYang 20230704 : æ•´åˆå®‰å…¨é–€15->MAX_SAFE_DOOR_CNT
+extern const int iSafeDoorPosition[MAX_SAFE_DOOR_CNT];                          //JerryYang 20230704 : æ•´åˆå®‰å…¨é–€15->MAX_SAFE_DOOR_CNT
+extern AnsiString asSafeDoorAlarm[MAX_SAFE_DOOR_CNT];                           //JerryYang 20230704 : æ•´åˆå®‰å…¨é–€15->MAX_SAFE_DOOR_CNT
 extern const int iSafeDoorHatchway[MAX_HATCH_DOOR_CNT];
 extern const int iHatchwaySafeDoorPosition[MAX_HATCH_DOOR_CNT];
 extern AnsiString asHatchwaySafeDoorAlarm[MAX_HATCH_DOOR_CNT];
 extern const int iIonFan[MAX_IONFAN]       ;                                    //Steven 20100226
-extern const int iHTIonBar[MAX_HTIONFAN]   ;                                    //RogerYang 20250825 : Unloader·s¼W3¤äIonBar¡A¨ú¥N4 5 8 ion fan
-extern const int iIonFanPower[MAX_IONFAN]  ;                                    //Steven 20130201 : KasugaÂ÷¤l­·®°¹q·½°»´ú
+extern const int iHTIonBar[MAX_HTIONFAN]   ;                                    //RogerYang 20250825 : Unloaderæ–°å¢3æ”¯IonBarï¼Œå–ä»£4 5 8 ion fan
+extern const int iIonFanPower[MAX_IONFAN]  ;                                    //Steven 20130201 : Kasugaé›¢å­é¢¨æ‰‡é›»æºåµæ¸¬
 extern const int iIonBar[MAX_IONBAR]       ;                                    //Ztex 2024.12.22 Add For HT1032AT IonBar
 extern const int BackSenBit0               ;
 extern const int BackSenBit1               ;
@@ -1599,7 +1599,7 @@ extern const int BackSenBit17              ;
 extern const int BackSenBit18              ;
 extern const int BackSenBit19              ;
 
-//Alick 20161011 (Steven) : TTL¤ä´©8Site
+//Alick 20161011 (Steven) : TTLæ”¯æ´8Site
 extern const int BackSenBit20              ;
 extern const int BackSenBit21              ;
 extern const int BackSenBit22              ;
@@ -1624,14 +1624,14 @@ extern const int BackSenBit39              ;
 extern const int SnMagazineSafeDoor               ; //JerryYang 20220909 : add magazine
 extern const int SnMagazineDetect                 ;
 extern const int SnMagazineTrackDetect            ;
-extern const int SnMagazineTrackDetect2           ; //Sam 20221116 : Magazine TrayArm ¦Û°Ê¸É Tray
+extern const int SnMagazineTrackDetect2           ; //Sam 20221116 : Magazine TrayArm è‡ªå‹•è£œ Tray
 extern const int SnMagazineTrackSelectDetect      ;
 extern const int SnMagazineSafeDoor2              ;
 extern const int SnMagazineSafeDoor3              ;
 extern const int SnMagazineDetectTop              ;
 extern const int SnMagazineHasTrayInside          ;
-extern const int SnEPDetect                       ; //kevin 20230608 EP ¬y¶q­p °»´ú
-//Ifor 20211005 add Tray ¸ü½L¤W¤É¤U­°«e§PÂ_¬O§_¦³²§±`
+extern const int SnEPDetect                       ; //kevin 20230608 EP æµé‡è¨ˆ åµæ¸¬
+//Ifor 20211005 add Tray è¼‰ç›¤ä¸Šå‡ä¸‹é™å‰åˆ¤æ–·æ˜¯å¦æœ‰ç•°å¸¸
 //==>
 extern const int SnLoader_Detect            ;
 extern const int SnEmpty_Detect             ;
@@ -1643,10 +1643,10 @@ extern const int SnAuto4_Detect             ;
 extern const int SnAuto5_Detect             ;
 extern const int SnAuto6_Detect             ;
 //<==
-//Ifor 20211005 add Tray ¸ü½L¤W¤É¤U­°«e§PÂ_¬O§_¦³²§±`
+//Ifor 20211005 add Tray è¼‰ç›¤ä¸Šå‡ä¸‹é™å‰åˆ¤æ–·æ˜¯å¦æœ‰ç•°å¸¸
 extern const int SnIonFanCar                ;                                   //Ifor 20220310 add: Bin Car Ion Fan Check
 extern const int SnIonFanCarPower           ;                                   //Ifor 20220816 add: Bin Car Ion Fan Power Check
-extern const int SnEPFlowmeter;                                                 //Ifor 20240326 add: EP¬y¶q­pºÊ±±
+extern const int SnEPFlowmeter;                                                 //Ifor 20240326 add: EPæµé‡è¨ˆç›£æ§
 
 extern const int SnSocket17              ;
 extern const int SnSocket18              ;
@@ -1765,7 +1765,7 @@ extern const int SwDut1                        ;
 extern const int SwDut2                        ;
 extern const int SwDut3                        ;
 extern const int SwSafeLock                    ;
-extern const int SwRKSafeLock                  ;    //KenHsieh 20211228 : °Ï¤À¹êÅéIO»P³q°T­±ªO
+extern const int SwRKSafeLock                  ;    //KenHsieh 20211228 : å€åˆ†å¯¦é«”IOèˆ‡é€šè¨Šé¢æ¿
 extern const int SwCCDLight                    ;
 extern const int SwHeaterFan                   ;
 extern const int SwSocketClean                 ;
@@ -1800,9 +1800,9 @@ extern const int SwCCDCooling                  ;    //Steven 20110705
 extern const int SwEpArm1                      ;    //Steven 20110708
 extern const int SwEpArm2                      ;    //Steven 20110708
 extern const int SwHeaterFanSpeed              ;    //Steven 20110725
-extern const int SwRotateCheckClear            ;    //ChungHung 20110922 : ÂàÂà½¼ÀY­nÀË¬d¦³¨S¦³ÂàÀY Check Sensor
+extern const int SwRotateCheckClear            ;    //ChungHung 20110922 : è½‰è½‰è¦é ­è¦æª¢æŸ¥æœ‰æ²’æœ‰è½‰é ­ Check Sensor
 
-//Dell 20111111 Start : ¥[¤JDigital E/P
+//Dell 20111111 Start : åŠ å…¥Digital E/P
 extern const int SwEP_D0;
 extern const int SwEP_D1;
 extern const int SwEP_D2;
@@ -1816,24 +1816,24 @@ extern const int SwEP_D9;
 //Dell 20111111 End
 extern const int SwCoolingFan_Blower;                                           //20111130  Dell
 extern const int SwSafeDoorLock;                                                //20111130  Dell
-extern const int SwIndexIonFan;                                                 //jou 2012-03-13 indexÂ÷¤lºj¥X­·¶}Ãö±±¨î
+extern const int SwIndexIonFan;                                                 //jou 2012-03-13 indexé›¢å­æ§å‡ºé¢¨é–‹é—œæ§åˆ¶
 
 extern const int SwIndexChangeToque1;                                           //jou 2012-06-21 Enable index I/O Change Toque
 extern const int SwIndexChangeToque2;                                           //jou 2012-06-21 Enable index I/O Change Toque
-extern const int SwACLoaderCCW;                                                 //Loader°hTray
-extern const int SwACAuto2CW;                                                   //Auto2¶iTray
-extern const int SwACAuto3CW;                                                   //Auto3¶iTray
+extern const int SwACLoaderCCW;                                                 //Loaderé€€Tray
+extern const int SwACAuto2CW;                                                   //Auto2é€²Tray
+extern const int SwACAuto3CW;                                                   //Auto3é€²Tray
 
 extern const int SwHeatGun;                                                     //ChungHung 20121107 add
-extern const int SwCDAGun;                                                      //Steven 20181012 : ¨Ï¥Î¼ö­·ºj§j§N­·
-extern const int SwVacuumPumpTogetherOn;                                        //Dell  for HT9046LS ÂùÀ°®ú¼Ò¦¡
-extern const int SwAirConditioner;                                              //Steven 20131011 : §N®ğ¾÷
+extern const int SwCDAGun;                                                      //Steven 20181012 : ä½¿ç”¨ç†±é¢¨æ§å¹å†·é¢¨
+extern const int SwVacuumPumpTogetherOn;                                        //Dell  for HT9046LS é›™å¹«æµ¦æ¨¡å¼
+extern const int SwAirConditioner;                                              //Steven 20131011 : å†·æ°£æ©Ÿ
 extern const int SwLoadCellA;                                                   //kevin 20190306  add load Cell  read 1
 extern const int SwLoadCellB;                                                   //kevin 20190306  add load Cell  read 2
 
 extern const int SwHotplateCooling;                                             //jou 2013-11-07
 extern const int SwCarRecord;                                                   //wei 2013-12-09
-extern const int SwIonFanClean;                                                 //Isaac 20210609 : IOÄ²µoIonFan²M°w
+extern const int SwIonFanClean;                                                 //Isaac 20210609 : IOè§¸ç™¼IonFanæ¸…é‡
 
 extern const int SwLoad2Bin      ;                                              //Steven 20240822 : For HT-9046AU
 extern const int SwLoad2AirClean ;
@@ -1846,14 +1846,14 @@ extern const int SwDockError;                                                   
 extern const int SwStartTest1;                                                  //2014-03-04    Dell    for SPIL WLP Add 5S Inspection
 extern const int SwStartTest2;                                                  //2014-03-04    Dell    for SPIL WLP Add 5S Inspection
 extern const int SwStartTest3;                                                  //2014-03-04    Dell    for SPIL WLP Add 5S Inspection
-extern const int SwOCRTigger;                                                   //wei 20150720 OCRÄ²µo
+extern const int SwOCRTigger;                                                   //wei 20150720 OCRè§¸ç™¼
 
 extern const int SwTesterAirCooling;                                            //jou 2016-01-07 Tester Air Cooling Switch
-extern const int SwFanDirection;                                                //wei 20160215¤j­·®°¤è¦V
-extern const int SwIonRelay;                                                    //Ifor 20190114 : add Chamber ¶}±Ò®É Ãö³¬ Ion Â÷¤lºj §j®ğ
+extern const int SwFanDirection;                                                //wei 20160215å¤§é¢¨æ‰‡æ–¹å‘
+extern const int SwIonRelay;                                                    //Ifor 20190114 : add Chamber é–‹å•Ÿæ™‚ é—œé–‰ Ion é›¢å­æ§ å¹æ°£
 
 //------------------------------------
-//Steven 20161011 : TTL¤ä´©8Site
+//Steven 20161011 : TTLæ”¯æ´8Site
 //------------------------------------
 extern const int SwClear4                      ;
 extern const int SwClear5                      ;
@@ -1869,7 +1869,7 @@ extern const int SwDut6                        ;
 extern const int SwDut7                        ;
 extern const int Sw10Bit2                      ;
 extern const int SwIonBarPower                 ;                                //kevin 20170310 (wei) Ion bar power
-extern const int SwShuttleVibration1           ;                                //JerryYang 20171006 (wei) Shuttle ¾_°Ê°¨¹F
+extern const int SwShuttleVibration1           ;                                //JerryYang 20171006 (wei) Shuttle éœ‡å‹•é¦¬é”
 extern const int SwShuttleVibration2           ;
 extern const int SwPurgeAir                    ;                                //kevin 20180928 add load board blower
 extern const int SwDieClean                    ;
@@ -1922,7 +1922,7 @@ extern const int SwMRManualMode        ;   //wei 20180702 MR
 extern const int SwMRLight             ;   //wei 20180702 MR
 extern const int SwBufferArmZ          ;   //wei 20200302 MR
 
-//KaiChen 20200716 ¡GOHT
+//KaiChen 20200716 ï¼šOHT
 //==>
 extern const int SwTrayBracket2Z       ;
 extern const int SwCaselevator2Z       ;
@@ -1971,9 +1971,9 @@ extern const int SwE84_1_POWER                   ;
 extern const int SwSafeDoorLock_LoadPort1        ;
 extern const int SwSafeDoorLock_LoadPort2        ;
 //<==
-//KaiChen 20200716 ¡GOHT
+//KaiChen 20200716 ï¼šOHT
 
-extern const int SwSocketClean2        ;   //JerryYang 20190715 Clean air arm1 arm2¤À¶}±±¨î
+extern const int SwSocketClean2        ;   //JerryYang 20190715 Clean air arm1 arm2åˆ†é–‹æ§åˆ¶
 extern const int SwTesterDryAirSwitch  ;   //Ifor 20200115 : add Tester Dry Air Control
 //Sam 20190112 LM
 //==>
@@ -1998,7 +1998,7 @@ extern const int SwTjSignal08;
 //<==
 //Ifor 20210622 add: ATC Switch TJ
 extern const int SwATCHeatGun;  //JerryYang 20220408 : add for ATC3.5
-extern const int SwLBAir;       //JerryYang 20220923 : LB§j®ğfunction
+extern const int SwLBAir;       //JerryYang 20220923 : LBå¹æ°£function
 extern const int SwDryAirSwitch ;//Ztex 2023.04.13 Add HT-1032 IO
 extern const int SwColdAirSwitch;//Ztex 2023.04.13 Add HT-1032 IO
 extern const int SwTriTempSafeDoor6Lock;//Ztex 2023.04.13 Add HT-1032 IO
@@ -2008,7 +2008,7 @@ extern const int BackSwStart0                  ;
 extern const int BackSwStart1                  ;
 extern const int BackSwStart2                  ;
 extern const int BackSwStart3                  ;
-//Alick 20161011 (Steven) : TTL¤ä´©8Site
+//Alick 20161011 (Steven) : TTLæ”¯æ´8Site
 extern const int BackSwStart4                  ;
 extern const int BackSwStart5                  ;
 extern const int BackSwStart6                  ;
@@ -2130,10 +2130,10 @@ extern const int MOutArmZF     ;
 extern const int MOutArmZG     ;
 extern const int MOutArmZH     ;
 extern const int MTrayX        ;
-extern const int MInArmPitchY  ;    //Steven 20131002 : XYÅÜ¶Z
-extern const int MInArmPitchX2 ;    //Steven 20131002 : XYÅÜ¶Z //ChungHung 20131231 alter AutoYPitch
-extern const int MOutArmPitchY ;    //Steven 20131002 : XYÅÜ¶Z //ChungHung 20131231 alter AutoYPitch
-extern const int MOutArmPitchX2;    //Steven 20131002 : XYÅÜ¶Z
+extern const int MInArmPitchY  ;    //Steven 20131002 : XYè®Šè·
+extern const int MInArmPitchX2 ;    //Steven 20131002 : XYè®Šè· //ChungHung 20131231 alter AutoYPitch
+extern const int MOutArmPitchY ;    //Steven 20131002 : XYè®Šè· //ChungHung 20131231 alter AutoYPitch
+extern const int MOutArmPitchX2;    //Steven 20131002 : XYè®Šè·
 
 extern const int MLoaderZ      ;
 extern const int MEmptyZ       ;
@@ -2141,8 +2141,8 @@ extern const int MColorZ       ;
 extern const int MAuto1Z       ;
 extern const int MAuto2Z       ;
 extern const int MAuto3Z       ;
-extern const int MInRotateKit  ;        //2013-04-12    Dell :±ÛÂà¯¸;°¨¹Fª©
-extern const int MOutRotateKit ;        //2013-04-12    Dell :±ÛÂà¯¸;°¨¹Fª©
+extern const int MInRotateKit  ;        //2013-04-12    Dell :æ—‹è½‰ç«™;é¦¬é”ç‰ˆ
+extern const int MOutRotateKit ;        //2013-04-12    Dell :æ—‹è½‰ç«™;é¦¬é”ç‰ˆ
 extern const int MAOIKit       ;        //2014-03-04    Dell    for SPIL WLP Add 5S Inspection
 
 extern const int MLoaderY      ;        //Steven 20150910 : Add for OCR
@@ -2174,7 +2174,7 @@ extern const int MOutSortAb    ;
 extern const int MOutSortSht   ;
 extern const int MLdCarRotArm  ;                                               //RogerYang 20250828 add for Loader Rotate Arm
 
-extern const int MInArmXScale  ;        //Steven 20160426 : ºÏ©Ê¤Ø
+extern const int MInArmXScale  ;        //Steven 20160426 : ç£æ€§å°º
 extern const int MInArmYScale  ;
 extern const int MOutArmXScale ;
 extern const int MOutArmYScale ;
@@ -2205,12 +2205,12 @@ extern int MOutRotate[MAX_ARM_Row][MAX_ARM_Col];
 //<==
 //Steven 20170329 (Wei) : Add individual rotate motor
 
-extern const int MPreciser     ;    //Steven 20180212 : ©w¦ì¾¹  ;
+extern const int MPreciser     ;    //Steven 20180212 : å®šä½å™¨  ;
 //extern const int MTrayRobotX   ;    //Steven 20170330 (Wei) : For HT-9046LM
 //extern const int MTrayRobotY   ;    //Steven 20170330 (Wei) : For HT-9046LM
 //extern const int MTrayRobotZ   ;    //Steven 20170330 (Wei) : For HT-9046LM
 //extern const int MNoUse82      ;
-extern const int MArmAlignment ;    //Steven 20240507 : ¥u¬O¬°¤FTeaching¦sÀÉ¤è«K
+extern const int MArmAlignment ;    //Steven 20240507 : åªæ˜¯ç‚ºäº†Teachingå­˜æª”æ–¹ä¾¿
 extern const int MLoadHingeR   ;    //Steven 20170330 (Wei) : For TSMC
 extern const int MLoadHingeZ   ;    //Steven 20170330 (Wei) : For TSMC
 
@@ -2269,8 +2269,8 @@ extern const int MMColor_Car   ;
 extern const int MMEmpty1      ;
 extern const int MMEmpty1_Car  ;
 
-extern const int MMHot1RecBuf  ;   //jou 2011-12-26 ¥[¤J°O¾Ğ©|¥¼§¹¦¨§l¨úªº¦ì¸m
-extern const int MMHot2RecBuf  ;   //jou 2011-12-26 ¥[¤J°O¾Ğ©|¥¼§¹¦¨§l¨úªº¦ì¸m
+extern const int MMHot1RecBuf  ;   //jou 2011-12-26 åŠ å…¥è¨˜æ†¶å°šæœªå®Œæˆå¸å–çš„ä½ç½®
+extern const int MMHot2RecBuf  ;   //jou 2011-12-26 åŠ å…¥è¨˜æ†¶å°šæœªå®Œæˆå¸å–çš„ä½ç½®
 
 extern const int MMAutoCleanKit;   //jou 2012-05-21 Auto Clean
 extern const int MMOCR         ;   //Steven 20120626 : OCR
@@ -2377,14 +2377,14 @@ extern const int MAuto6Y;
 extern const int MLoad2Z       ;                                                //Steven 20240822 : For HT-9046AU
 extern const int MLoad2Y       ;
 
-extern const int MInSh1LtcSenZ1;                                                //KenHsieh 20250722 : InSht sensor §ï¬°2Áû¡A¨Ã¥ÎLatch §P§OÅ|®Æ¥H¤Î­¸®Æ
+extern const int MInSh1LtcSenZ1;                                                //KenHsieh 20250722 : InSht sensor æ”¹ç‚º2é¡†ï¼Œä¸¦ç”¨Latch åˆ¤åˆ¥ç–Šæ–™ä»¥åŠé£›æ–™
 extern const int MInSh1LtcSenZ2;
 extern const int MInSh2LtcSenZ1;
 extern const int MInSh2LtcSenZ2;
 
-extern const int MMFixTray1    ;    //Steven 20100205 : ¼È¦sFix¸ê®Æ¥Î
-extern const int MMFixTray2    ;    //Steven 20100205 : ¼È¦sFix¸ê®Æ¥Î
-extern const int MMFixTray3    ;    //Steven 20100205 : ¼È¦sFix¸ê®Æ¥Î
+extern const int MMFixTray1    ;    //Steven 20100205 : æš«å­˜Fixè³‡æ–™ç”¨
+extern const int MMFixTray2    ;    //Steven 20100205 : æš«å­˜Fixè³‡æ–™ç”¨
+extern const int MMFixTray3    ;    //Steven 20100205 : æš«å­˜Fixè³‡æ–™ç”¨
 
 //KenHsieh 20210813 : add CCD AUTO ALIGNMENT
 //==>
@@ -2417,7 +2417,7 @@ extern const int MMSafeDoor9   ;
 extern const int MMSafeDoor10  ;
 extern const int MManualTrayAll;
 
-//Steven 20130205 : Â÷¤l­·®°²§±`Åã¥Ü
+//Steven 20130205 : é›¢å­é¢¨æ‰‡ç•°å¸¸é¡¯ç¤º
 extern const int MMIonFan01    ;
 extern const int MMIonFan02    ;
 extern const int MMIonFan03    ;
@@ -2430,7 +2430,7 @@ extern const int MMIonFan09    ;
 extern const int MMIonFan10    ;
 extern const int MMIonFan11    ;
 extern const int MMIonFan12    ;
-//Ifor 20160830 add ATC ²§±`¦ì¸mÅã¥Ü
+//Ifor 20160830 add ATC ç•°å¸¸ä½ç½®é¡¯ç¤º
 extern const int MMATC_Handler      ;
 extern const int MMATC_TCPIP        ;
 extern const int MMATC_NI           ;
@@ -2446,20 +2446,20 @@ extern const int MMSafeDoor13       ;
 extern const int MMSafeDoor14       ;
 extern const int MMSafeDoor15       ;
 extern const int MMSafeDoor16       ;
-extern const int MMSafeDoor17       ;   //JerryYang 20230704 : ¾ã¦X¦w¥şªù15->MAX_SAFE_DOOR_CNT
+extern const int MMSafeDoor17       ;   //JerryYang 20230704 : æ•´åˆå®‰å…¨é–€15->MAX_SAFE_DOOR_CNT
 extern const int MMSafeDoor18       ;
 extern const int MMSafeDoor19       ;
 extern const int MMSafeDoor20       ;
 extern const int MMSafeDoor21       ;
 extern const int MMSafeDoor22       ;
 
-//KaiChen 20200716 ¡GOHT
+//KaiChen 20200716 ï¼šOHT
 //==>
 extern const int MMMultileEmpty        ;
 extern const int MMMultileEmpty_Catch  ;
 extern const int MMMultileEmpty_Z      ;
 //<==
-//KaiChen 20200716 ¡GOHT
+//KaiChen 20200716 ï¼šOHT
 
 //JerryYang 20220909 : add magazine
 //==>
@@ -2536,17 +2536,17 @@ extern int MgzTrayBabk[MAX_MGZ_TRAY];
 
 extern bool  fHeaterOK;
 extern bool  fHeaterOK_Backup;                      //jou 2010-10-11
-extern bool  fHeaterStableOK;                       //JerryYang 20210122 : ASE-CL·s¼W«İ·Å¥\¯à
-extern bool bHeatOKBellowError;                     //kevin 20130226 ¥[¼öok«á ·Å«×¹L§C°»´ú    //jou 2014-06-12 ­×¥¿°¸µo©Ê¨q§C·Å²§±`
+extern bool  fHeaterStableOK;                       //JerryYang 20210122 : ASE-CLæ–°å¢å¾…æº«åŠŸèƒ½
+extern bool bHeatOKBellowError;                     //kevin 20130226 åŠ ç†±okå¾Œ æº«åº¦éä½åµæ¸¬    //jou 2014-06-12 ä¿®æ­£å¶ç™¼æ€§ç§€ä½æº«ç•°å¸¸
 extern int   iHeaterWait;
 extern int   iHeaterCooling;
 extern double UN150Read[tcTotalCount];
-extern double UN150ReadSecondpoint[tcTotalCount];   //Ifor 20160629 add ²Ä¤GÂI·Å«×¸ê®Æ
+extern double UN150ReadSecondpoint[tcTotalCount];   //Ifor 20160629 add ç¬¬äºŒé»æº«åº¦è³‡æ–™
 //extern double KT4HOutputRate[tcTotalCount];
 //extern double KT4HReadHistory[tcTotalCount];        //Steven 20110412
 extern double UN150ReadReal[tcTotalCount];
 extern double UN150ReadHotplate[2];
-extern double UN150ReadShuttle[2];                  //kevin 20150508 shuttle ¤À¬q¥[¼ö
+extern double UN150ReadShuttle[2];                  //kevin 20150508 shuttle åˆ†æ®µåŠ ç†±
 extern bool  UN150CommError[tcTotalCount];
 extern bool  FlushFlag;
 extern int   RunState;
@@ -2573,7 +2573,7 @@ extern bool bLampCoverOpenRR;
 extern bool bLampCoverOpenRL;
 extern bool bLampManualSetp;
 extern bool bLampManualStart;
-extern bool bLampFix;                               //kevin 20130322 ONECYCLE ¦X¨Ö
+extern bool bLampFix;                               //kevin 20130322 ONECYCLE åˆä½µ
 extern bool bMoveInArm1ZToPlate1Safe;
 extern bool bMoveInArm1ZToPlate2Safe;
 extern bool bMoveInArm2ZToPlate1Safe;
@@ -2623,8 +2623,8 @@ extern int iInArmPitch;
 extern int iOutArmPitch;
 extern bool bCanNotDisableOneCycle;
 
-extern bool bInArmPitchNeedHomeCheck;   //ChungHung HT9045 2011/12/13 //Input pickup device error®É,«ö"retry"Áä,¾÷¥x³£·|¦Û°Êhome
-extern bool bOutArmPitchNeedHomeCheck;  //ChungHung HT9045 2011/12/13 //Input pickup device error®É,«ö"retry"Áä,¾÷¥x³£·|¦Û°Êhome
+extern bool bInArmPitchNeedHomeCheck;   //ChungHung HT9045 2011/12/13 //Input pickup device erroræ™‚,æŒ‰"retry"éµ,æ©Ÿå°éƒ½æœƒè‡ªå‹•home
+extern bool bOutArmPitchNeedHomeCheck;  //ChungHung HT9045 2011/12/13 //Input pickup device erroræ™‚,æŒ‰"retry"éµ,æ©Ÿå°éƒ½æœƒè‡ªå‹•home
 extern bool bSortArmPitchNeedHomeCheck;                                         //RogerYang 20250512 Add for 9046AU
 extern bool bPrecisorNeedHomeCheck;
 
@@ -2632,7 +2632,7 @@ extern bool bShuttle1MoveToRight;       //ChungHung 20120717 add Index Drop Erro
 extern bool bShuttle1MoveToLeft;        //ChungHung 20120717 add Index Drop Error Can Retry and Start
 extern bool bShuttle2MoveToRight;       //ChungHung 20120717 add Index Drop Error Can Retry and Start
 extern bool bShuttle2MoveToLeft;        //ChungHung 20120717 add Index Drop Error Can Retry and Start
-extern bool bShuttle1HasPickErr;        //Steven 20220712 : Á×§KIn arm °½©ñ®Æ
+extern bool bShuttle1HasPickErr;        //Steven 20220712 : é¿å…In arm å·æ”¾æ–™
 extern bool bShuttle2HasPickErr;
 
 extern bool bShuttle3MoveToRight;                                               //RogerYang 20250509 Add for 9046AU
@@ -2644,7 +2644,7 @@ extern bool bAutoCleanShuttle2MoveToLeft;        //Richard 20230418 : add Index 
 extern bool bAutoCleanShuttle1HasPickErr;        //Richard 20230418 : add Index Pick Error Can Retry and Start
 extern bool bAutoCleanShuttle2HasPickErr;        //Richard 20230418 : add Index Pick Error Can Retry and Start
 
-extern bool bCheckNullIC1;              //JerryYang 20170623 (Steven) bCheckNullIC1§ï¦¨¥ş°ìÅÜ¼Æ
+extern bool bCheckNullIC1;              //JerryYang 20170623 (Steven) bCheckNullIC1æ”¹æˆå…¨åŸŸè®Šæ•¸
 extern bool bCheckNullIC2;
 
 extern bool bShuttleMoveToLeftforFix3;  //ChungHung 20140313 add Fix3 can Full Tray
@@ -2690,10 +2690,10 @@ extern int iReceiveAuto2Tray;           //kevin 20120718 Auto2 KYEC MFC
 extern int iReceiveAutoTray[3];         //Steven 20140331 : Auto Retest
 extern int iReceiveLoaderTray;          //Steven 20140331 : Auto Retest
 
-extern int TTL_StartData[8];            //Alick 20161011 (Steven) : TTL¤ä´©8Site
-extern int TTL_Dut[8];                  //Alick 20161011 (Steven) : TTL¤ä´©8Site
+extern int TTL_StartData[8];            //Alick 20161011 (Steven) : TTLæ”¯æ´8Site
+extern int TTL_Dut[8];                  //Alick 20161011 (Steven) : TTLæ”¯æ´8Site
 //extern int TTL_ClearData[8];
-extern int TTL_Sensor[8][5];            //Alick 20161011 (Steven) : TTL¤ä´©8Site
+extern int TTL_Sensor[8][5];            //Alick 20161011 (Steven) : TTLæ”¯æ´8Site
 extern int  iGali_VsSpeed;
 extern int  iGali_SpSpeed;
 extern bool _bHomeNeedOnecycle;
@@ -2703,10 +2703,10 @@ extern bool bCheckShuttle3Flag;                                                 
 extern bool bChangeToInitStartMode;             //ChungHung 20111230 Hot Wait Mode
 extern bool bNeedTrySuckHotPlate;               //ChungHung 20120206 Hotplate check
 extern bool bTrySuckHotPlateCleanOut;           //ChungHung 20120206 Hotplate check
-extern bool bTrySuckHotPlateOneCycle;           //Steven 20120323 : ÀË¬d§¹¦¨«á,§@OneCycle
+extern bool bTrySuckHotPlateOneCycle;           //Steven 20120323 : æª¢æŸ¥å®Œæˆå¾Œ,ä½œOneCycle
 extern bool bOneTimeHotPlateCheckAll;           //ChungHung 20120206 Hotplate check
 extern bool bTryPickFromHotPlateShowError;      //ChungHung 20120206 Hotplate check
-extern bool bHotPlateCheckNeedTrayFeed;         //Steven 20120322 : ÀË¬d§¹­n¦Û°ÊTrayFeed
+extern bool bHotPlateCheckNeedTrayFeed;         //Steven 20120322 : æª¢æŸ¥å®Œè¦è‡ªå‹•TrayFeed
 
 extern bool bScanLightPause;
 
@@ -2732,7 +2732,7 @@ extern const int Axis_Shuttle2;
 extern const int SuckActiving;
 extern const int DestroyActiving;
 extern bool bEnterOffset;
-extern bool bClearSrtart[8];           //Alick 20161011 (Steven) : TTL¤ä´©8Site
+extern bool bClearSrtart[8];           //Alick 20161011 (Steven) : TTLæ”¯æ´8Site
 extern bool bHomeByStart;
 extern int  HistroyBin[4][8][22];      //Steven 20131004 : 2 --> 4
 extern bool HistroyPassFail[4][8][22]; //Steven 20131004 : 2 --> 4
@@ -2758,7 +2758,7 @@ extern int  iSetShuttleToHasNullIC;
 extern bool bRearHeadICFallDown;
 extern const int Tempture_Ambient;
 extern const int Tempture_Hot;
-extern const int Tempture_AmbientHot;   //kevin 20140918 ±`·Å¥[¼ö «í·Å
+extern const int Tempture_AmbientHot;   //kevin 20140918 å¸¸æº«åŠ ç†± æ†æº«
 extern const int USE_FRONT_TEST_HEAD;
 extern const int USE_REAR_TEST_HEAD;
 extern const int CLEAR_FRONT_TEST_HEAD;
@@ -2767,9 +2767,9 @@ extern AnsiString sSuperVisorString;
 extern int PitchCylinderState[MAX_AUTO_TRAY];
 extern bool bReadFrontTestArmTorque;
 extern bool bReadRearTestArmTorque ;
-extern bool bInitialLaserCheck;         //Steven 20140228 : ¹p®g´ú¶Z¥\¯à
-extern bool bInitialLaserCheckPlate;    //Steven 20140228 : ¹p®g´ú¶Z¥\¯à
-extern int  iLaserShuttle;              //Steven 20140228 : ¹p®g´ú¶Z¥\¯à
+extern bool bInitialLaserCheck;         //Steven 20140228 : é›·å°„æ¸¬è·åŠŸèƒ½
+extern bool bInitialLaserCheckPlate;    //Steven 20140228 : é›·å°„æ¸¬è·åŠŸèƒ½
+extern int  iLaserShuttle;              //Steven 20140228 : é›·å°„æ¸¬è·åŠŸèƒ½
 extern bool bInitialICCheck;
 extern int iInitialICCheckTask;
 extern int iInitialCylinderCheckTask;
@@ -2783,8 +2783,8 @@ extern int iCheckShuttle1MustHasICTask;
 extern int iCheckShuttle2MustHasICTask;
 extern int iCheckShuttle1SlotTask;
 extern int iCheckShuttle2SlotTask;
-extern int iCheckShuttle1ProminentTasK;                                         //Alick 20160815 add for ¤O¦¨
-extern int iCheckShuttle2ProminentTasK;                                         //Alick 20160815 add for ¤O¦¨
+extern int iCheckShuttle1ProminentTasK;                                         //Alick 20160815 add for åŠ›æˆ
+extern int iCheckShuttle2ProminentTasK;                                         //Alick 20160815 add for åŠ›æˆ
 //Steven 20090908 End
 //kevin 20161108 Start
 extern bool bCheckShuttle1MustNoHasIC;
@@ -2799,13 +2799,13 @@ extern int iCheckShuttle2ProminentNoHasICTasK;
 extern bool bLongTimePause;
 extern int  iLongTimePauseCount;
 extern bool bIsAutoOneCycle;
-extern bool bBackupOneCycle_ByAutoClean;                                        //Sam 20230309 : Á×§KÄ²µo OneCycle «á¡AOneCycle ¥¼§¹¦¨®É¤SÄ²µo AutoClean °Ê§@¡AAutoClean °µ§¹¨Ã¤£·|´£¥Ü OneCycle Finish
-extern bool bManualOneCycle;                                                    //Sam 20230309 : Á×§KÄ²µo OneCycle «á¡AOneCycle ¥¼§¹¦¨®É¤SÄ²µo AutoClean °Ê§@¡AAutoClean °µ§¹¨Ã¤£·|´£¥Ü OneCycle Finish
-extern bool bIsAvoidIndexShiftOneCycle;                     //Isaac 20210821 : ¥ş´¼­n¨D©w®Éonecycle¦^home,start
+extern bool bBackupOneCycle_ByAutoClean;                                        //Sam 20230309 : é¿å…è§¸ç™¼ OneCycle å¾Œï¼ŒOneCycle æœªå®Œæˆæ™‚åˆè§¸ç™¼ AutoClean å‹•ä½œï¼ŒAutoClean åšå®Œä¸¦ä¸æœƒæç¤º OneCycle Finish
+extern bool bManualOneCycle;                                                    //Sam 20230309 : é¿å…è§¸ç™¼ OneCycle å¾Œï¼ŒOneCycle æœªå®Œæˆæ™‚åˆè§¸ç™¼ AutoClean å‹•ä½œï¼ŒAutoClean åšå®Œä¸¦ä¸æœƒæç¤º OneCycle Finish
+extern bool bIsAvoidIndexShiftOneCycle;                     //Isaac 20210821 : å…¨æ™ºè¦æ±‚å®šæ™‚onecycleå›home,start
 extern bool bIndexArmNoTestting;                            //ChungHung 20140730 add ContinuousFailHaveOneCycle
 extern bool bIsASMAutoOneCycle;
-extern bool bLotStartEndNeedIndexCheck;                     //Isaac 20211019 : ¥i¿ï¾Ü°µindex checkªº®É¾÷
-extern bool bIndexJamNeedIndexcheck;                        //Isaac 20211019 : ¥i¿ï¾Ü°µindex checkªº®É¾÷
+extern bool bLotStartEndNeedIndexCheck;                     //Isaac 20211019 : å¯é¸æ“‡åšindex checkçš„æ™‚æ©Ÿ
+extern bool bIndexJamNeedIndexcheck;                        //Isaac 20211019 : å¯é¸æ“‡åšindex checkçš„æ™‚æ©Ÿ
 
 extern int EP_Install;
 extern double EP_MAXKPA;
@@ -2826,8 +2826,8 @@ extern double EPDual_MINA;
 extern double EPDual_MINMPA;   //kevin 20200325 add dual force EP
 
 extern AnsiString   JamCode                             ;
-extern bool         LOAD_Z_USE_MOTOR[9]                 ; //Steven 20190813 : ¤JTray§ï¥Î¨B¶i°¨¹F
-extern bool         LOAD_Y_USE_MOTOR[9]                 ; //Jimmychiu 20240307 : Loader Tray§ï¥Î¨B¶i°¨¹F
+extern bool         LOAD_Z_USE_MOTOR[9]                 ; //Steven 20190813 : å…¥Trayæ”¹ç”¨æ­¥é€²é¦¬é”
+extern bool         LOAD_Y_USE_MOTOR[9]                 ; //Jimmychiu 20240307 : Loader Trayæ”¹ç”¨æ­¥é€²é¦¬é”
 extern bool         LOADUNLOAD_USE_CASSETTE[9]          ;
 extern int          NUMBER_PANEL_TYPE                   ;
 extern int          WEIGHT_CALIBRATION                  ; //Steven 20111108
@@ -2835,65 +2835,65 @@ extern int          ION_FAN_TYPE                        ;
 extern int          SHUTTLE_SENSOR_TYPE                 ;
 extern int          NUEC_TYPE                           ; //Sam 20230707 : EtherCAT Shuttle sensor
 extern bool         ENABLE_OUT_SHUTTLE_SENEOR           ; //Steven 20120531 : by pass out shuttle sensor
-extern bool         ENABLE_OUT_SHUTTLEY_LATCH           ; //Steven 20170518 (jou) : Out shuttle Y sensor ¨Ï¥Î LATCH
-extern bool         Use_AxisY_Sensor_2x3mode            ; //Isaac 20180402 (Steven) 2x3 mode ¥ÎY sensor °»´úOutshuttle´İ®Æ
-extern bool         Bias_Mode_Use_Y_Sensor              ; //Steven 20240805 : 1x2 Bias mode ¥ÎY sensor °»´úOutshuttle´İ®Æ
+extern bool         ENABLE_OUT_SHUTTLEY_LATCH           ; //Steven 20170518 (jou) : Out shuttle Y sensor ä½¿ç”¨ LATCH
+extern bool         Use_AxisY_Sensor_2x3mode            ; //Isaac 20180402 (Steven) 2x3 mode ç”¨Y sensor åµæ¸¬Outshuttleæ®˜æ–™
+extern bool         Bias_Mode_Use_Y_Sensor              ; //Steven 20240805 : 1x2 Bias mode ç”¨Y sensor åµæ¸¬Outshuttleæ®˜æ–™
 extern int          TEMPCTRL_TYPE                       ;
 extern int          SAFE_DOOR_AMOUNT                    ;
 extern bool         USE_NEW_TEMPCTRL_FUNCTION           ;
 extern bool         TEMPCTRL_NEED_UNDER_20A             ;
-extern bool         TEMPCTRL_HOTPLATE_TOGTHER           ; //jou 2010-08-16 start : SCC Hotplate¤£¤À¬q¥[¼ö
-extern bool         AMBIENT_TEMP_CHECK[tcTotalCount]    ; //Steven 20100831 : ±`·ÅÀË¬dªº¦ì¸m     //Steven 20111208 : °O¾ĞÅé¯}Ãa, 20->tcTotalCount
+extern bool         TEMPCTRL_HOTPLATE_TOGTHER           ; //jou 2010-08-16 start : SCC Hotplateä¸åˆ†æ®µåŠ ç†±
+extern bool         AMBIENT_TEMP_CHECK[tcTotalCount]    ; //Steven 20100831 : å¸¸æº«æª¢æŸ¥çš„ä½ç½®     //Steven 20111208 : è¨˜æ†¶é«”ç ´å£, 20->tcTotalCount
 extern double       SHUTTLE_COOLING                     ;
 extern bool         OFFLINE_ALARM                       ; //Steven 20140805
 extern double       VORTEX_COOLING                      ;
 extern double       SOCKET_OFFSET                       ;
 extern int          SYN_TEK_MOTION_MODULE               ; //Steven 20110304
 extern int          TRAY_VIBRATION                      ; //Steven 20110627 : new Tray Vibration  //JerryYang 20170531 (wei) bool->int
-extern int          USE_16_HEATER                       ; //Steven 20111011 : ¨Ï¥Î16­ÓHeater
-extern int          EJ1N_Count                          ; //Steven 20200318 : ­×¥¿EJ1NÅª¨ú²§±`ªº°İÃD
+extern int          USE_16_HEATER                       ; //Steven 20111011 : ä½¿ç”¨16å€‹Heater
+extern int          EJ1N_Count                          ; //Steven 20200318 : ä¿®æ­£EJ1Nè®€å–ç•°å¸¸çš„å•é¡Œ
 extern bool         USE_ATC_MODE                        ; //jou 2012-03-08 Enable ATC mode;
 extern bool         USE_IO_CHANGE_TOQUE                 ; //jou 2012-06-21 Enable index I/O Change Toque
 extern bool         USE_ReadIndex_TOQUE                 ; //kevin 20201027 add Read index Torque
-extern bool         bResetArm1Value                     ; //KaiHuang 20201222 : Reset ¼Ğ·Ç­È(²Ä¤@¦¸Contact And Change Speed)
-extern bool         bResetArm2Value                     ; //KaiHuang 20201222 : Reset ¼Ğ·Ç­È(²Ä¤@¦¸Contact And Change Speed)
-extern bool         bReadArm1_Torque                    ; //KaiHuang 20201222 : Åª¨ú Arm1 §á¤OFlag
-extern bool         bReadArm2_Torque                    ; //KaiHuang 20201222 : Åª¨ú Arm2 §á¤OFlag
-extern bool        bResetRecordSetArm1Value             ;          //kevin 20210118 : Reset ¼Ğ·Ç­È¤U¨Ì¦¸ cotract(²Ä¤@¦¸Contact And Change Speed)
-extern bool        bResetRecordSetArm2Value             ;          //kevin 20210118 : Reset ¼Ğ·Ç­È¤U¨Ì¦¸ cotract(²Ä¤@¦¸Contact And Change Speed)
-extern double       dSetArm1TorqueValue                 ; //KaiHuang 20201222 : Arm1 ²Ä¤@¦¸ Contact ªº­È
-extern double       dSetArm2TorqueValue                 ; //KaiHuang 20201222 : Arm2 ²Ä¤@¦¸ Contact ªº­È
-extern int          iReadTorqueError                    ; //KaiHuang 20201222 : §PÂ_Åª¨ú§á¤O¬O§_¦³²§±`(·|¾É­P§á¤OÁÍªñÃ­ºA)
+extern bool         bResetArm1Value                     ; //KaiHuang 20201222 : Reset æ¨™æº–å€¼(ç¬¬ä¸€æ¬¡Contact And Change Speed)
+extern bool         bResetArm2Value                     ; //KaiHuang 20201222 : Reset æ¨™æº–å€¼(ç¬¬ä¸€æ¬¡Contact And Change Speed)
+extern bool         bReadArm1_Torque                    ; //KaiHuang 20201222 : è®€å– Arm1 æ‰­åŠ›Flag
+extern bool         bReadArm2_Torque                    ; //KaiHuang 20201222 : è®€å– Arm2 æ‰­åŠ›Flag
+extern bool        bResetRecordSetArm1Value             ;          //kevin 20210118 : Reset æ¨™æº–å€¼ä¸‹ä¾æ¬¡ cotract(ç¬¬ä¸€æ¬¡Contact And Change Speed)
+extern bool        bResetRecordSetArm2Value             ;          //kevin 20210118 : Reset æ¨™æº–å€¼ä¸‹ä¾æ¬¡ cotract(ç¬¬ä¸€æ¬¡Contact And Change Speed)
+extern double       dSetArm1TorqueValue                 ; //KaiHuang 20201222 : Arm1 ç¬¬ä¸€æ¬¡ Contact çš„å€¼
+extern double       dSetArm2TorqueValue                 ; //KaiHuang 20201222 : Arm2 ç¬¬ä¸€æ¬¡ Contact çš„å€¼
+extern int          iReadTorqueError                    ; //KaiHuang 20201222 : åˆ¤æ–·è®€å–æ‰­åŠ›æ˜¯å¦æœ‰ç•°å¸¸(æœƒå°è‡´æ‰­åŠ›è¶¨è¿‘ç©©æ…‹)
 
-extern bool         REAL_TIME_CCD                       ; //Steven 20110705 : ¦w¸ËReal Time CCD
-extern int          RTC_TemperNumber                    ; //Isaac 20201217 : RTC CCD¼W¥[²Ä¤G²Õ·P·Å
+extern bool         REAL_TIME_CCD                       ; //Steven 20110705 : å®‰è£Real Time CCD
+extern int          RTC_TemperNumber                    ; //Isaac 20201217 : RTC CCDå¢åŠ ç¬¬äºŒçµ„æ„Ÿæº«
 extern bool         CCD2_TEMPER                         ;
-extern bool         LB_TEMP                             ; //Steven 20181023 : LB·Å«×
+extern bool         LB_TEMP                             ; //Steven 20181023 : LBæº«åº¦
 extern bool         LB_TEMP_UpDown                      ; //Frank 20241231 : add
 extern bool         Index_ESDAir                        ;         //kevin  20200207 : ESD air Temp
-//extern bool         INDEX_CCD                         ; //Ifor 20150720 : ¦w¸ËINDEX CCD //Ifor 20150728 Mark¾ã¦X©óRTC CCD¿ï¶µ
-extern const int    iXPitch60                           ; //Steven 20131002 : XYÅÜ¶Z
-extern const int    iXPitchManual635                    ; //Steven 20131002 : XYÅÜ¶Z
-extern const int    iXYPitchVariable                    ; //Steven 20131002 : XYÅÜ¶Z
+//extern bool         INDEX_CCD                         ; //Ifor 20150720 : å®‰è£INDEX CCD //Ifor 20150728 Markæ•´åˆæ–¼RTC CCDé¸é …
+extern const int    iXPitch60                           ; //Steven 20131002 : XYè®Šè·
+extern const int    iXPitchManual635                    ; //Steven 20131002 : XYè®Šè·
+extern const int    iXYPitchVariable                    ; //Steven 20131002 : XYè®Šè·
 extern const int    iXPitchManual360                    ; //Steven 20140819 : Y-Pitch 36mm
-extern const int    iXYPitchRowA                        ; //Steven 20170424 (wei) : new XYÅÜ¶Z
+extern const int    iXYPitchRowA                        ; //Steven 20170424 (wei) : new XYè®Šè·
 extern const int    iXYPitch16Picker                    ; //Steven for HT1032
 extern const int    iXYPitchBb                          ; //Steven for HT7080
 extern const int    iXYPitch16Bd_Be                     ; //Ztex 2023.12.06 Add HT-1032
 extern const int    iXYPitchIn_Bb_Out_Bc                ; //Ztex 2024.02.24 Add HT-1132
-extern const int    iXPitch40mm                         ; //Isaac 20171204 (Steven) : Xpitch40->50mm ¥i¿ï¾ÜX Pitch¾÷ºc¼Ò¦¡
-extern const int    iXPitch50mm                         ; //Isaac 20171204 (Steven) : Xpitch40->50mm ¥i¿ï¾ÜX Pitch¾÷ºc¼Ò¦¡
+extern const int    iXPitch40mm                         ; //Isaac 20171204 (Steven) : Xpitch40->50mm å¯é¸æ“‡X Pitchæ©Ÿæ§‹æ¨¡å¼
+extern const int    iXPitch50mm                         ; //Isaac 20171204 (Steven) : Xpitch40->50mm å¯é¸æ“‡X Pitchæ©Ÿæ§‹æ¨¡å¼
 extern const int    iXPitchAuto                         ; //JimmyChiu 20220708 : add Auto X pitch
 extern const int    iXPitch16Pick                       ; //Steven for HT1032
-extern int          USE_IN_OUT_ARM_Y_PITCH              ; //jou 2012-05-15 : ¿ï¾Ü Y Pitch ¾÷ºc¼Ò¦¡
+extern int          USE_IN_OUT_ARM_Y_PITCH              ; //jou 2012-05-15 : é¸æ“‡ Y Pitch æ©Ÿæ§‹æ¨¡å¼
 extern int          USE_OUT_ARM_Y_PITCH                 ;
-extern bool         USE_IN_Y_IS_AUTO_PITCH              ; //JerryYang 20251218 : IN/OUT ARM¤ä´©¤£¦P¼Ò²Õ
+extern bool         USE_IN_Y_IS_AUTO_PITCH              ; //JerryYang 20251218 : IN/OUT ARMæ”¯æ´ä¸åŒæ¨¡çµ„
 extern bool         USE_OUT_Y_IS_AUTO_PITCH             ;
 extern int          IN_OUT_ARM_Y_PITCH_MIN              ;
 extern int          IN_OUT_ARM_Y_PITCH_MAX              ;
 extern int          IN_OUT_ARM_X_PITCH_MIN              ; //JimmyChiu 20220708 : add Auto X pitch
 extern int          IN_OUT_ARM_X_PITCH_MAX              ; //JimmyChiu 20220708 : add Auto X pitch
-extern int          USE_IN_OUT_ARM_X_PITCH              ; //Isaac 20171204 (Steven) : Xpitch40->50mm ¥i¿ï¾ÜX Pitch¾÷ºc¼Ò¦¡
+extern int          USE_IN_OUT_ARM_X_PITCH              ; //Isaac 20171204 (Steven) : Xpitch40->50mm å¯é¸æ“‡X Pitchæ©Ÿæ§‹æ¨¡å¼
 
 extern const int    iOutSortX40mm                       ;
 extern int          USE_OUT_SORT_ARM                    ; //Steven 20240822 : For HT-9046AU
@@ -2903,48 +2903,48 @@ extern int          USE_LdUldCassetteMode               ; //Frank 20251217 add
 extern int          USE_OUT_SORT_X_PITCH_MIN            ;
 extern int          USE_OUT_SORT_X_PITCH_MAX            ;
 
-extern int          BASE_X_TO_HP                        ; //Steven 20230826 : °ò·Ç¶bX¨ì¥[¼ö½LÃä½tªº¶ZÂ÷
-extern int          USE_ROTATE_KIT                      ; //Steven 20121001 : ±ÛÂàKit
+extern int          BASE_X_TO_HP                        ; //Steven 20230826 : åŸºæº–è»¸Xåˆ°åŠ ç†±ç›¤é‚Šç·£çš„è·é›¢
+extern int          USE_ROTATE_KIT                      ; //Steven 20121001 : æ—‹è½‰Kit
 extern int          iRotate_In_Index                    ; // 2012.06.11 , Joye , Rotate KIT
 extern int          iRotate_Out_Tray6                   ; // 2012.06.11 , Joye , Rotate KIT
-extern int          iRotate_Type                        ; //2013-04-12    Dell :±ÛÂà¯¸;°¨¹Fª©
-extern int          USE_ROTATE                          ; //Steven 20230930 : ¾ã¦X®ğ¬ûª©±ÛÂàKitªºFlag
+extern int          iRotate_Type                        ; //2013-04-12    Dell :æ—‹è½‰ç«™;é¦¬é”ç‰ˆ
+extern int          USE_ROTATE                          ; //Steven 20230930 : æ•´åˆæ°£ç¼¸ç‰ˆæ—‹è½‰Kitçš„Flag
 extern int          iSpecialSequence                    ;
-extern int          USE_HOTPLATE_TYPE                   ; //jou 2012-05-15 : ¿ï¾Ü Hotplate Type
-extern int          USE_MAGNETIC_SCALE                  ; //Steven 20160426 : ºÏ©Ê¤Ø
+extern int          USE_HOTPLATE_TYPE                   ; //jou 2012-05-15 : é¸æ“‡ Hotplate Type
+extern int          USE_MAGNETIC_SCALE                  ; //Steven 20160426 : ç£æ€§å°º
 extern int          USE_PICKER_COUNT                    ; //Steven 20161117 : for HT-9045S
 extern int          USE_16PICKER_TYPE                   ; //Ztex 2023.12.06 Add HT-1032
 extern int          INOUT_ARM_Y_PITCH                   ; //Ztex 2023.12.06 Add HT-1032
-extern int          SHUTTLE_Z_TYPE                      ; //jou 2013-07-26 : ¿ï¾Ü Shuttle Z Sensor Type
-extern int          AUTO_EMPTY_COLOR                    ; //­y¹D 0:¤â°Ê,  1:6­y¦Û°Ê,  2:7­y¦Û°Ê,  3:8­y¦Û°Ê  //Steven 20230907 : For HT-9011UC, bool --> int
-extern int          iUnloadCnt                          ; //Steven 20230907 : µ¹out arm­pºâ­n©ñªºTrayÁ`¼Æ¶q
-extern int          iAutoCnt                            ; //Steven 20230907 : µ¹out arm­pºâ­n©ñªº¬OautoÁÙ¬Ofix
-extern int          iFixCnt                             ; //Steven 20230907 : µ¹out arm­pºâ­n©ñªºFixÁ`¼Æ¶q
-extern int          iAutoRight                          ; //Steven 20230907 : µ¹out arm­pºâ¾÷¥x¨ìAuto³Ì¥k°¼ªº¦ì¸m
-extern int          iFixMin                             ; //Steven 20230907 : µ¹out arm­pºâ­n©ñªºfix½L°_©l¦ì¸m 0=Auto 1
-extern int          iFixMax                             ; //Steven 20230907 : µ¹out arm­pºâ­n©ñªºfix½Lµ²§ô¦ì¸m 0=Auto 1
-extern int          iFixPosMin                          ; //Steven 20230907 : µ¹out arm­pºâ­n©ñªºfix½L°_©l¦ì¸m 0=no use
-extern int          iFixPosMax                          ; //Steven 20230907 : µ¹out arm­pºâ­n©ñªºfix½Lµ²§ô¦ì¸m 0=no use
-extern int          iFixPosHalf                         ; //Steven 20230907 : µ¹out arm­pºâ¾÷¥x¨ìFix³Ì¥k°¼ªº¦ì¸m(¤À¥b½L) 0=no use
-extern int          iFix3Pos                            ; //Steven 20230907 : µ¹out arm­pºâ­n©ñªºFix3ªº¦ì¸m
-extern int          iFixRight                           ; //Steven 20230907 : µ¹out arm­pºâ¾÷¥x¨ìFix³Ì¥k°¼ªº¦ì¸m
-extern int          iFixRightHalf                       ; //Steven 20230907 : µ¹out arm­pºâ¾÷¥x¨ìFix³Ì¥k°¼ªº¦ì¸m(¤À¥b½L)
-extern int          iMMAutoRight                        ; //Steven 20230919 : Auto³Ì¥k°¼ªº°}¦C¦ì¸m
-extern int          iMMBinBox                           ; //Steven 20230907 : Bin Box¦b°}¦Cªº¦ì¸m
-extern int          iMMFixRight                         ; //Steven 20230919 : Fix³Ì¥k°¼ªº°}¦C¦ì¸m
-extern int          iMMAoi                              ; //Steven 20230919 : AOIªº°}¦C¦ì¸m
-extern int          iBinBoxAtFix                        ; //Steven 20230907 : Bin Box¦bFix Trayªº¦ì¸m
-extern int          iBinBoxAtAuto                       ; //Steven 20230907 : Bin Box¦biWhichAutoªº¦ì¸m
-extern int          iBinBoxType                         ; //Steven 20230907 : Bin Box¦bTray Formªºtype
-extern int          iMagMin                             ; //Steven 20230907 : µ¹out arm­pºâ­n©ñªºMagazine¦ì¸m 0=Auto 1
-extern int          iMagMax                             ; //Steven 20230907 : µ¹out arm­pºâ­n©ñªºMagazine¦ì¸m 0=Auto 1
-extern int          iMagAtAuto                          ; //Steven 20230907 : µ¹out arm­pºâ­n©ñªºMagazine¹ïÀ³Auto¦ì¸m
+extern int          SHUTTLE_Z_TYPE                      ; //jou 2013-07-26 : é¸æ“‡ Shuttle Z Sensor Type
+extern int          AUTO_EMPTY_COLOR                    ; //è»Œé“ 0:æ‰‹å‹•,  1:6è»Œè‡ªå‹•,  2:7è»Œè‡ªå‹•,  3:8è»Œè‡ªå‹•  //Steven 20230907 : For HT-9011UC, bool --> int
+extern int          iUnloadCnt                          ; //Steven 20230907 : çµ¦out armè¨ˆç®—è¦æ”¾çš„Trayç¸½æ•¸é‡
+extern int          iAutoCnt                            ; //Steven 20230907 : çµ¦out armè¨ˆç®—è¦æ”¾çš„æ˜¯autoé‚„æ˜¯fix
+extern int          iFixCnt                             ; //Steven 20230907 : çµ¦out armè¨ˆç®—è¦æ”¾çš„Fixç¸½æ•¸é‡
+extern int          iAutoRight                          ; //Steven 20230907 : çµ¦out armè¨ˆç®—æ©Ÿå°åˆ°Autoæœ€å³å´çš„ä½ç½®
+extern int          iFixMin                             ; //Steven 20230907 : çµ¦out armè¨ˆç®—è¦æ”¾çš„fixç›¤èµ·å§‹ä½ç½® 0=Auto 1
+extern int          iFixMax                             ; //Steven 20230907 : çµ¦out armè¨ˆç®—è¦æ”¾çš„fixç›¤çµæŸä½ç½® 0=Auto 1
+extern int          iFixPosMin                          ; //Steven 20230907 : çµ¦out armè¨ˆç®—è¦æ”¾çš„fixç›¤èµ·å§‹ä½ç½® 0=no use
+extern int          iFixPosMax                          ; //Steven 20230907 : çµ¦out armè¨ˆç®—è¦æ”¾çš„fixç›¤çµæŸä½ç½® 0=no use
+extern int          iFixPosHalf                         ; //Steven 20230907 : çµ¦out armè¨ˆç®—æ©Ÿå°åˆ°Fixæœ€å³å´çš„ä½ç½®(åˆ†åŠç›¤) 0=no use
+extern int          iFix3Pos                            ; //Steven 20230907 : çµ¦out armè¨ˆç®—è¦æ”¾çš„Fix3çš„ä½ç½®
+extern int          iFixRight                           ; //Steven 20230907 : çµ¦out armè¨ˆç®—æ©Ÿå°åˆ°Fixæœ€å³å´çš„ä½ç½®
+extern int          iFixRightHalf                       ; //Steven 20230907 : çµ¦out armè¨ˆç®—æ©Ÿå°åˆ°Fixæœ€å³å´çš„ä½ç½®(åˆ†åŠç›¤)
+extern int          iMMAutoRight                        ; //Steven 20230919 : Autoæœ€å³å´çš„é™£åˆ—ä½ç½®
+extern int          iMMBinBox                           ; //Steven 20230907 : Bin Boxåœ¨é™£åˆ—çš„ä½ç½®
+extern int          iMMFixRight                         ; //Steven 20230919 : Fixæœ€å³å´çš„é™£åˆ—ä½ç½®
+extern int          iMMAoi                              ; //Steven 20230919 : AOIçš„é™£åˆ—ä½ç½®
+extern int          iBinBoxAtFix                        ; //Steven 20230907 : Bin Boxåœ¨Fix Trayçš„ä½ç½®
+extern int          iBinBoxAtAuto                       ; //Steven 20230907 : Bin Boxåœ¨iWhichAutoçš„ä½ç½®
+extern int          iBinBoxType                         ; //Steven 20230907 : Bin Boxåœ¨Tray Formçš„type
+extern int          iMagMin                             ; //Steven 20230907 : çµ¦out armè¨ˆç®—è¦æ”¾çš„Magazineä½ç½® 0=Auto 1
+extern int          iMagMax                             ; //Steven 20230907 : çµ¦out armè¨ˆç®—è¦æ”¾çš„Magazineä½ç½® 0=Auto 1
+extern int          iMagAtAuto                          ; //Steven 20230907 : çµ¦out armè¨ˆç®—è¦æ”¾çš„Magazineå°æ‡‰Autoä½ç½®
 extern bool         SUPPORT_2_EMPTY_EMPTY               ;
-extern int          INDEX_SUCKER_TYPE                   ; //jou 2010-05-19 start : ­tÀ£
+extern int          INDEX_SUCKER_TYPE                   ; //jou 2010-05-19 start : è² å£“
 extern eIndexPressType          INDEX_PRESS_TYPE        ; //Steven 20110310 : 240KG
-extern bool         bUserDefMaxContactHeight            ; //Steven 20180412 : For new HT-9045°ª«×¸û°ª
+extern bool         bUserDefMaxContactHeight            ; //Steven 20180412 : For new HT-9045é«˜åº¦è¼ƒé«˜
 extern double       dUserDefMaxContactHeight            ;
-extern bool         bUser_Define_IndexZ_SafePos         ; //Richard 20230107 : SPIL«È¤á¦Û©w¸q¾÷¥x¦w¸Ë°ª«×(200~800¶¡)
+extern bool         bUser_Define_IndexZ_SafePos         ; //Richard 20230107 : SPILå®¢æˆ¶è‡ªå®šç¾©æ©Ÿå°å®‰è£é«˜åº¦(200~800é–“)
 extern double       dUserDefineIndexZSafePos            ;
 extern bool         bContactCTOverCHK                   ;
 extern bool         bContactTimeOverStep                ;
@@ -2957,42 +2957,42 @@ extern int          BAR_CODE_INSTALL                    ; //Steven 20120921 : Ba
 extern int          BAR_CODE_USECOUNT                   ; //Ifor 20181206 :add COGNEX SYSTEM CCD Count
 extern int          BOTTOM_2DID                         ; //Steven 20190308 : Bottom 2D
 extern int          BOTTOM_2DID_CCD                     ; //KaiChen 20200513 : Bottom 2D 8CCD
-extern int          SHT_FLOATING_CHK                    ; //Steven 20160920 : IC¸m°¾ÀË¬d
-extern int          IN_SHT_LAST_SENSOR                  ; //Steven 20181203 : In Shuttle³Ì«á¤@­ÓSensor©w¸q
+extern int          SHT_FLOATING_CHK                    ; //Steven 20160920 : ICç½®åæª¢æŸ¥
+extern int          IN_SHT_LAST_SENSOR                  ; //Steven 20181203 : In Shuttleæœ€å¾Œä¸€å€‹Sensorå®šç¾©
 //extern int          BAR_CODE_MODE                     ; //Steven 20120921 : Barcode_2D
 extern bool         bGetLotIDFormTester                 ; //ChungHung 20121123
-extern int          FIX3_FULL_PLACE                     ; //Steven 20130126 : Fix3º¡½L¥\¯à
-extern int          FIX3_INSTALL                        ; //2013-07-16    Dell    9046LS²Ä¤@¥x¨SFix3;²Ä¤G¥x¥H¤WFix3¼Ğ°t
+extern int          FIX3_FULL_PLACE                     ; //Steven 20130126 : Fix3æ»¿ç›¤åŠŸèƒ½
+extern int          FIX3_INSTALL                        ; //2013-07-16    Dell    9046LSç¬¬ä¸€å°æ²’Fix3;ç¬¬äºŒå°ä»¥ä¸ŠFix3æ¨™é…
 extern int          CROSS_SENSOR_INSTALL                ; //2013-07-16    Dell    Shuttle cross sensor
-extern int          ESD_Monitor                         ; //2013-07-16     Dell    ¨Ï¥ÎESD monitor
-extern int          USE_NOVX3360                        ; //Steven 20131127 : ¨Ï¥ÎSimco ION­·®°
-extern int          USE_AutoCleanIonFan                 ; //Isaac 20210609 : IOÄ²µoIonFan²M°w
+extern int          ESD_Monitor                         ; //2013-07-16     Dell    ä½¿ç”¨ESD monitor
+extern int          USE_NOVX3360                        ; //Steven 20131127 : ä½¿ç”¨Simco IONé¢¨æ‰‡
+extern int          USE_AutoCleanIonFan                 ; //Isaac 20210609 : IOè§¸ç™¼IonFanæ¸…é‡
 extern int          USE_PULSE_TYPE                      ; //Ifor 20180316 : add Simco Use Pulse Type
 extern int          ION_PULSE_COUNT                     ; //Ifor 20180316 : add Simco Use Pulse Type
-extern int          USE_KASUGA                          ; //Ifor   20150731 : ¨Ï¥ÎKasuga ION­·®°
+extern int          USE_KASUGA                          ; //Ifor   20150731 : ä½¿ç”¨Kasuga IONé¢¨æ‰‡
 extern int          USE_OTD                             ; //Steven 20140312 : OTD
-extern int          USE_BARCODE_AS_KEYBOARD             ; //Steven 20140108 : ¥u¯à¥ÎBar Code Reader¿é¤J
-extern int          USE_46_SUCKER_DB                    ; //Steven 20131008 : HT9045¨Ï¥Î46°t®ğ
-extern int          USE_46_SENSOR_DB                    ; //Steven 20131008 : HT9045¨Ï¥Î46°t¹q
-extern int          INDEX_MOTION_CARD                   ; //Steven 20210623 : Index¨Ï¥ÎGalil
+extern int          USE_BARCODE_AS_KEYBOARD             ; //Steven 20140108 : åªèƒ½ç”¨Bar Code Readerè¼¸å…¥
+extern int          USE_46_SUCKER_DB                    ; //Steven 20131008 : HT9045ä½¿ç”¨46é…æ°£
+extern int          USE_46_SENSOR_DB                    ; //Steven 20131008 : HT9045ä½¿ç”¨46é…é›»
+extern int          INDEX_MOTION_CARD                   ; //Steven 20210623 : Indexä½¿ç”¨Galil
 extern int          GALI_PROTECT_MODE                   ; //Steven 20260504 : Index in-motion protect (0=Original, 1=ER+OE, 2=TE)
 extern int          USE_FINE_PITCH                      ; //Steven 20210624 : Fine Pitch
-extern int          USE_OUT_SHT_MOT                     ; //Steven 20210624 : Out shuttle¿W¥ß°¨¹F
-extern int          USE_AIR_CONDITIONER                 ; //Steven 20131011 : §N®ğ¾÷
-extern int          HOT_PLATE_POSITION                  ; //Steven 20140222 : Hot Plate Pinªº¦ì¸m
-extern int          HOT_PLATE_LIMITATION                ; //Steven 20151117 : Hot Plate Pinªº·¥­­¦ì¸m, ¥i¥H¶]2x2 8§l¼L
-extern int          USE_LASER_DISTANCE                  ; //Steven 20140228 : ¹p®g´ú¶Z¥\¯à
+extern int          USE_OUT_SHT_MOT                     ; //Steven 20210624 : Out shuttleç¨ç«‹é¦¬é”
+extern int          USE_AIR_CONDITIONER                 ; //Steven 20131011 : å†·æ°£æ©Ÿ
+extern int          HOT_PLATE_POSITION                  ; //Steven 20140222 : Hot Plate Pinçš„ä½ç½®
+extern int          HOT_PLATE_LIMITATION                ; //Steven 20151117 : Hot Plate Pinçš„æ¥µé™ä½ç½®, å¯ä»¥è·‘2x2 8å¸å˜´
+extern int          USE_LASER_DISTANCE                  ; //Steven 20140228 : é›·å°„æ¸¬è·åŠŸèƒ½
 extern int          USE_AUTO_RETEST                     ; //ChungHung 20140317 add Auto Retest
 extern int          UNLOADER_ART[MAX_AUTO_TRAY]         ;   //Steven 20161221 : for SCK only Auto 2 has ART
 extern int          USE_AOI_Inspection                  ;   //2014-03-04    Dell    for SPIL WLP Add 5S Inspection
-extern int          USE_VibrationCommunication          ;   //JerryYang 20230814 : add¾_°Ê°¨¹F³q°T½Õ³tª©¥»
+extern int          USE_VibrationCommunication          ;   //JerryYang 20230814 : addéœ‡å‹•é¦¬é”é€šè¨Šèª¿é€Ÿç‰ˆæœ¬
 extern int          USE_COLOR_TRAY_SENSOR               ;   //20140903 wei colcr Tray
 extern int          USE_SOCKET_SENSOR                   ;
-extern int          CANBUS_METHOD                       ;   //Sam 20210518 : ·s¼W CanBus ³nÅé°t¸m
+extern int          CANBUS_METHOD                       ;   //Sam 20210518 : æ–°å¢ CanBus è»Ÿé«”é…ç½®
 extern bool         USE_CKD_FCM_CleanAir                ;   //Ifor 20150708 : CKD FCM Clean Air
 extern int          USE_CATCH_TRAY_MODEL                ;   //wei 20150807 Catch Tray Model
-extern int          USE_FINGER_PRINT                    ;   //Steven 20190503 : «ü¯¾¿ëÃÑÅv­­
-extern int          DETECT_CURRENT                      ;   //Richard 20220928 :¹q¬y°»´ú¼Ò²Õ
+extern int          USE_FINGER_PRINT                    ;   //Steven 20190503 : æŒ‡ç´‹è¾¨è­˜æ¬Šé™
+extern int          DETECT_CURRENT                      ;   //Richard 20220928 :é›»æµåµæ¸¬æ¨¡çµ„
 extern int          USE_DEVICE_FLIPPER                  ;   //Frank 20210612 : Flipper Function
 extern int          TRAY_ARM_MODE                       ;   //Frank 20230419
 extern int          USE_2nd_LOADER                      ;   //Steven 20240822 : For HT-9046AU
@@ -3002,25 +3002,25 @@ extern int iBackUpZ2DownPosition;
 extern int iOpenNewTTLBoardStratDelayCount;
 extern bool bChangeTTLFlag;
 extern int AUTO_SENSOR_INSTALL                          ; //wei 20160914 Auto Shuttle Sensor
-extern int ShuttleVibration_INSTALL                     ; //JerryYang 20171006 (wei) Shuttle ¾_°Ê°¨¹F
+extern int ShuttleVibration_INSTALL                     ; //JerryYang 20171006 (wei) Shuttle éœ‡å‹•é¦¬é”
 extern int USE_TRAY_MAPPING                             ; //wei 20161219 Tray Mapping
 extern int USE_TRAY_ROBOT                               ; //Steven 20170330 (Wei) : For HT-9046LM
 extern int USE_LOADER_HINGE                             ; //Steven 20170330 (Wei) : For TSMC
-extern int USE_Fix_AI_CCD                               ; //RogerYang 20180901 add ª¿®æ´ò¤fDemo AI CCD Function
+extern int USE_Fix_AI_CCD                               ; //RogerYang 20180901 add çŸ½æ ¼æ¹–å£Demo AI CCD Function
 extern int USE_DIE_CLEAN                                ; //wei 20170418
 extern int USE_MR_SYSTEM                                ; //wei 20180702 MR
 extern int USE_RFID_SYSTEM                              ; //wei 20180702 MR
 extern int USE_RFID_READER                              ; //Steven 20220713 : RFID Reader for SJSEMI
 extern int USE_AUTO_ALIGNMENT                           ; //Sam 20181201 : AutoAlignment
 
-extern int USE_OHT_SYSTEM                               ;   //KaiChen 20200716 ¡GOHT
-extern int USE_Multile_Empty                            ;   //KaiChen 20200716 ¡GOHT
+extern int USE_OHT_SYSTEM                               ;   //KaiChen 20200716 ï¼šOHT
+extern int USE_Multile_Empty                            ;   //KaiChen 20200716 ï¼šOHT
 extern int USE_KEYENCE_LOADER;
 extern int USE_KEYENCE_EMPTY;
 extern int USE_MultileEmptyTrayID_Keyence;
 extern int USE_COLORSENSOR_MUN                          ; //Jimmychiu 20230630 : add color sensor MU-N in Loader
 
-extern int LoaderUnload_StepMotor                       ; //Steven 20200529 : Loader¤JTray§ï¨B¶i
+extern int LoaderUnload_StepMotor                       ; //Steven 20200529 : Loaderå…¥Trayæ”¹æ­¥é€²
 //extern AnsiString TrayStepMotor_ComPort                 ;
 extern bool bPlaceToShuttleFirst;
 extern int  USE_PRECISER                                ; //Frank 20180410 (Steven) : InArm Preciser Station
@@ -3028,34 +3028,34 @@ extern int  USE_PRECISER                                ; //Frank 20180410 (Stev
 extern int iPreciserInstallArea                         ; //Ifor 20191008 : add Preciser Install Area
 extern int  i24V_PULSE_COUNT                            ; //Ifor 20190311 : add 24V Monitor Use Pulse Type
 extern int  CHAMBER_USE_PULSE_TYPE                      ; //Ifor 20190422 : add Chamber Use Pulse Type
-extern int  USE_GROUND_MAN                              ; //Steven 20190828 : ³q°T¦¡GroundMan
+extern int  USE_GROUND_MAN                              ; //Steven 20190828 : é€šè¨Šå¼GroundMan
 extern bool USE_LOADER_VIBRATION                        ;
-extern int  Ground_Man_ScanPoint                        ; //KaiChen 20191005 ¡G³q°T¦¡GroundMan
-extern int  Ground_Man_AlarmOhm                         ; //KaiChen 20191005 ¡G³q°T¦¡GroundMan
-extern bool USE_KASUGA_Fan                              ; //KaiChen 20191225 ¡GKASUGA Fan ³q°T
-extern int  iUseHTIonBarFunction                        ;                       //RogerYang 20250825 : Unloader·s¼W3¤äIonBar¡A¨ú¥N4 5 8 ion fan
-extern bool bUseHTIonBar_PowerReset                     ;                       //RogerYang 20250825 : Unloader·s¼W3¤äIonBar¡A¨ú¥N4 5 8 ion fan
-extern int  iUseHTIonBar_PowerResetCount                ;                       //RogerYang 20250825 : Unloader·s¼W3¤äIonBar¡A¨ú¥N4 5 8 ion fan
-extern int  iUseHTIonBar_SendPowerStatus[MAX_HTIONFAN]  ;                       //RogerYang 20250825 : Unloader·s¼W3¤äIonBar¡A¨ú¥N4 5 8 ion fan
+extern int  Ground_Man_ScanPoint                        ; //KaiChen 20191005 ï¼šé€šè¨Šå¼GroundMan
+extern int  Ground_Man_AlarmOhm                         ; //KaiChen 20191005 ï¼šé€šè¨Šå¼GroundMan
+extern bool USE_KASUGA_Fan                              ; //KaiChen 20191225 ï¼šKASUGA Fan é€šè¨Š
+extern int  iUseHTIonBarFunction                        ;                       //RogerYang 20250825 : Unloaderæ–°å¢3æ”¯IonBarï¼Œå–ä»£4 5 8 ion fan
+extern bool bUseHTIonBar_PowerReset                     ;                       //RogerYang 20250825 : Unloaderæ–°å¢3æ”¯IonBarï¼Œå–ä»£4 5 8 ion fan
+extern int  iUseHTIonBar_PowerResetCount                ;                       //RogerYang 20250825 : Unloaderæ–°å¢3æ”¯IonBarï¼Œå–ä»£4 5 8 ion fan
+extern int  iUseHTIonBar_SendPowerStatus[MAX_HTIONFAN]  ;                       //RogerYang 20250825 : Unloaderæ–°å¢3æ”¯IonBarï¼Œå–ä»£4 5 8 ion fan
 extern int  SOCKET_AMP_QTY                              ;
 extern int  SOCKET_AMP_QTY_2nd                          ;
 extern int  SOCKET_AMP_QTY_3rd                          ;                       //JerryYang 20250729
 extern int  ROTATE_AMP_QTY                              ;
 extern int  COLOR_AMP_QTY                               ;
-extern int  NUDN1_QTY                                   ;   //Sam 20210518 : ·s¼W CanBus ³nÅé°t¸m
-extern int  NUDN1_MACID11_AMP_QTY                       ;   //Sam 20210518 : ·s¼W CanBus ³nÅé°t¸m
-extern int  NUDN1_MACID12_AMP_QTY                       ;   //Sam 20210518 : ·s¼W CanBus ³nÅé°t¸m
-extern int  NUDN1_MACID13_AMP_QTY                       ;   //Sam 20210518 : ·s¼W CanBus ³nÅé°t¸m
-extern int  NUDN1_MACID14_AMP_QTY                       ;   //Sam 20210518 : ·s¼W CanBus ³nÅé°t¸m
+extern int  NUDN1_QTY                                   ;   //Sam 20210518 : æ–°å¢ CanBus è»Ÿé«”é…ç½®
+extern int  NUDN1_MACID11_AMP_QTY                       ;   //Sam 20210518 : æ–°å¢ CanBus è»Ÿé«”é…ç½®
+extern int  NUDN1_MACID12_AMP_QTY                       ;   //Sam 20210518 : æ–°å¢ CanBus è»Ÿé«”é…ç½®
+extern int  NUDN1_MACID13_AMP_QTY                       ;   //Sam 20210518 : æ–°å¢ CanBus è»Ÿé«”é…ç½®
+extern int  NUDN1_MACID14_AMP_QTY                       ;   //Sam 20210518 : æ–°å¢ CanBus è»Ÿé«”é…ç½®
 extern int  AUTO3_IS_MAGAZINE                           ;   //JerryYang 20220909 : add magazine
 extern int  MAGAZINE_BIN_DISP_TYPE                      ;   //JerryYang 20220909 : add magazine
-extern int  VibrationMotorCount                         ;   //JerryYang 20230814 : add¾_°Ê°¨¹F³q°T½Õ³tª©¥»
+extern int  VibrationMotorCount                         ;   //JerryYang 20230814 : addéœ‡å‹•é¦¬é”é€šè¨Šèª¿é€Ÿç‰ˆæœ¬
 //Motion Mode----------------------------------------------------------------------
 extern int MOTION_CARD_TYPE;                    //Brian 20121015
-extern int MOTIONNET_SPEED;                     //Steven 20181122 : MNet³t«×­n¥i¥H­×§ï
+extern int MOTIONNET_SPEED;                     //Steven 20181122 : MNeté€Ÿåº¦è¦å¯ä»¥ä¿®æ”¹
 extern int IO_CARD_TYPE;                        //Brian 20121015
-extern int TTL_CARD_TYPE;                       //Steven 20121122 : ¿ï¾ÜTTL Card ¼Ò¦¡
-extern int TTL_CARD_USE_ADDRESS;                //Isaac 20210922 : ¿ï¾ÜTTLªO¤l¬O§_±a¯¸§O
+extern int TTL_CARD_TYPE;                       //Steven 20121122 : é¸æ“‡TTL Card æ¨¡å¼
+extern int TTL_CARD_USE_ADDRESS;                //Isaac 20210922 : é¸æ“‡TTLæ¿å­æ˜¯å¦å¸¶ç«™åˆ¥
 //TTL Mode----------------------------------------------------------------------
 extern const int _3Bit;
 extern const int _4Bit;
@@ -3077,20 +3077,20 @@ extern const int DUTNegLevel;
 extern const int DUTNegPluse;
 extern const int CHOneByOne;
 extern const int CHBinary;
-//extern HTimer bTTL_StartTimer[8];             //Steven 20161011 : TTL¤ä´©8Site 4 --> 8
-extern TQPF_Timer TestIntervalsTime;            //kevin 20160311 ¨ú±o´ú¸Õ¾÷¶¡¹j®É¶¡
-extern TQPF_Timer TestIntervalsBoostTime;       //JerryYang 20181122 (Steven) :  (Steven) : ±N¤£¦Pfunction­p®É¾¹¤À¶}
-extern TQPF_Timer MyTTLSOTTimer;                //Steven 20180808 (wei) : TTLªº®É¶¡³æ¦ì§ï¦¨microsecond(£gs)
-extern TQPF_Timer PauseIntervalsTime;           //kevin 20181009 ¨ú±o¾÷¥x°±¤î®É¶¡
-extern TQPF_Timer SOTPauseIntervalsTime;        //kevin 20181102 (Steven) : ¨ú±o¾÷¥x°±¤î®É¶¡
+//extern HTimer bTTL_StartTimer[8];             //Steven 20161011 : TTLæ”¯æ´8Site 4 --> 8
+extern TQPF_Timer TestIntervalsTime;            //kevin 20160311 å–å¾—æ¸¬è©¦æ©Ÿé–“éš”æ™‚é–“
+extern TQPF_Timer TestIntervalsBoostTime;       //JerryYang 20181122 (Steven) :  (Steven) : å°‡ä¸åŒfunctionè¨ˆæ™‚å™¨åˆ†é–‹
+extern TQPF_Timer MyTTLSOTTimer;                //Steven 20180808 (wei) : TTLçš„æ™‚é–“å–®ä½æ”¹æˆmicrosecond(Î¼s)
+extern TQPF_Timer PauseIntervalsTime;           //kevin 20181009 å–å¾—æ©Ÿå°åœæ­¢æ™‚é–“
+extern TQPF_Timer SOTPauseIntervalsTime;        //kevin 20181102 (Steven) : å–å¾—æ©Ÿå°åœæ­¢æ™‚é–“
 extern int iTriggerBoostFunction;               //Steven 20180817 : Boost Function
 extern int iTriggerBoostFuncBack;
 extern bool bFlagBelowTurnOfValve;
 extern bool bFlagBelowTurnOfValve1;
 extern int iBoostFuncStep;
-extern TQPF_Timer BoostCoolTime;                //Á`¦@»İ­n¦hªøªº­°·ÅTimer
-extern TQPF_Timer BoostCoolCountDown;           //­Ë¼Æ¥Îªº
-extern TQPF_Timer BoostCoolStepTimer;           //­°·Åªº¶¡¹j®É¶¡(¹w³]¬°¤@¬í)
+extern TQPF_Timer BoostCoolTime;                //ç¸½å…±éœ€è¦å¤šé•·çš„é™æº«Timer
+extern TQPF_Timer BoostCoolCountDown;           //å€’æ•¸ç”¨çš„
+extern TQPF_Timer BoostCoolStepTimer;           //é™æº«çš„é–“éš”æ™‚é–“(é è¨­ç‚ºä¸€ç§’)
 extern int iBoostCountDown;
 extern double dBoostOffset;
 extern double dBoostCoolSec;
@@ -3104,9 +3104,9 @@ extern int InArmZIndex[2][8];
 extern int OutArmZIndex[2][8];
 extern int SortArmZIndex[2];                                                    //RogerYang 20250416 for HT9046AU add Sort Arm Z
 extern bool bPlace8IC;                      //ChungHung 20110322 add
-extern bool bTestSiteNeedSetErrBin[MAX_SOCKET_ROW][MAX_SOCKET_COL]; //JerryYang 20170609 (wei) °O¿ıout shuttle lose ICªºsite
-extern bool bOutShtLoseICNeedSetErrBin;                           //JerryYang 20170609 (wei) ¦¹ºX¼Ğ¬°true»İ±Nout shuttle lose IC¹ïÀ³ªºsite³]¦¨error bin
-extern bool bIndexDropICNeedSetErrBin;  //JerryYang 20170609 (wei) ¦¹ºX¼Ğ¬°true»İ±Nout shuttle lose IC¹ïÀ³ªºsite³]¦¨error bin
+extern bool bTestSiteNeedSetErrBin[MAX_SOCKET_ROW][MAX_SOCKET_COL]; //JerryYang 20170609 (wei) è¨˜éŒ„out shuttle lose ICçš„site
+extern bool bOutShtLoseICNeedSetErrBin;                           //JerryYang 20170609 (wei) æ­¤æ——æ¨™ç‚ºtrueéœ€å°‡out shuttle lose ICå°æ‡‰çš„siteè¨­æˆerror bin
+extern bool bIndexDropICNeedSetErrBin;  //JerryYang 20170609 (wei) æ­¤æ——æ¨™ç‚ºtrueéœ€å°‡out shuttle lose ICå°æ‡‰çš„siteè¨­æˆerror bin
 
 extern int iTestRunMode;                    //0=RT
 extern int iRunStartMode;
@@ -3139,13 +3139,13 @@ extern int iForPickHPX10Step;               //ChungHung 20150127 add for ATK 10X
 
 extern int iPlaceHPOrder;
 extern int iPickHPOrder;
-extern int iRecPickHPOrder;                 //Ifor 20180521 :add §ï¥ş°ì
-extern int iPickHotPlateFinish;             //Ifor 20180521 :add §ï¥ş°ì
+extern int iRecPickHPOrder;                 //Ifor 20180521 :add æ”¹å…¨åŸŸ
+extern int iPickHotPlateFinish;             //Ifor 20180521 :add æ”¹å…¨åŸŸ
 
-extern bool OnlyRow2;                       //ChungHung 20121001 : ²¾¦Ücmydef Reset«á¦¹°Ñ¼Æ¥¼²M¬°false ¤@¼ËHangUp
+extern bool OnlyRow2;                       //ChungHung 20121001 : ç§»è‡³cmydef Resetå¾Œæ­¤åƒæ•¸æœªæ¸…ç‚ºfalse ä¸€æ¨£HangUp
 
 extern int  iInArmOrder;                    //iWhichShuttle,iInArmiWhichKit,
-extern int  iWhichSht32, iWhichKit32;       //Ifor 20180116 (Steven) : add §ï¦¨¥ş°ìÅÜ¼Æ
+extern int  iWhichSht32, iWhichKit32;       //Ifor 20180116 (Steven) : add æ”¹æˆå…¨åŸŸè®Šæ•¸
 extern int  iOutArmiWhichKit;
 extern int  iOutArmiWhichKit_Sort;                                              //RogerYang 20250710 Add for 9046AU
 extern int  iSortArmiWhichKit;                                                  //RogerYang 20250526 Add for 9046AU
@@ -3153,12 +3153,12 @@ extern int  iYHalf;
 extern int  iXHalf;
 extern bool bResetMode;
 extern bool bCheckIndex;
-extern int  iWhoTriggerPiggyBack;   //Steven 20111207 : ½ÖÄ²µo¤FPiggy Back
-extern bool bQAModeQuickCleanOut;   //Steven 20111005 : ¼Æ¶q¨ìªº®É­Ôªº§Ö³tCleanOut
-extern bool bQAModeFinishCleanOut;  //Steven 20111005 : °µ§¹QA¼Ò¦¡ªºCleanOut
-extern int  iQAModeLoaderCT;        //jou 2012-05-03 ¼W¥[QA mode¨Ï¥Î¿W¥ßªºLoader Count
-extern int  iQAModePassCT;          //JerryYang 20221004 : Maximª©¥»QA mode
-extern bool bQAModeStart;           //Ifor 20201102 add: ·s¼WQA Mode Start ºX¼Ğ Á×§KCount ³Q²M°£
+extern int  iWhoTriggerPiggyBack;   //Steven 20111207 : èª°è§¸ç™¼äº†Piggy Back
+extern bool bQAModeQuickCleanOut;   //Steven 20111005 : æ•¸é‡åˆ°çš„æ™‚å€™çš„å¿«é€ŸCleanOut
+extern bool bQAModeFinishCleanOut;  //Steven 20111005 : åšå®ŒQAæ¨¡å¼çš„CleanOut
+extern int  iQAModeLoaderCT;        //jou 2012-05-03 å¢åŠ QA modeä½¿ç”¨ç¨ç«‹çš„Loader Count
+extern int  iQAModePassCT;          //JerryYang 20221004 : Maximç‰ˆæœ¬QA mode
+extern bool bQAModeStart;           //Ifor 20201102 add: æ–°å¢QA Mode Start æ——æ¨™ é¿å…Count è¢«æ¸…é™¤
 extern bool bCalculatePauseTime;
 extern int  iUPH_LoaderCount;
 extern bool bRecordUPH;
@@ -3167,12 +3167,12 @@ extern TDateTime tUPH_PauseStartTime;
 extern TDateTime tUPH_StartTime;
 extern TDateTime tUPH_EndTime;
 extern AnsiString sAlarmTime;
-extern AnsiString sFileNameTime;                        //Steven 20190801 : ­×¥¿ÀÉ¦W¿ù»~
-extern unsigned char SENDBUFF[1024];                    //Steven 20110927 : ·|·¸¦ì,§ï¦¨1024
+extern AnsiString sFileNameTime;                        //Steven 20190801 : ä¿®æ­£æª”åéŒ¯èª¤
+extern unsigned char SENDBUFF[1024];                    //Steven 20110927 : æœƒæº¢ä½,æ”¹æˆ1024
 extern unsigned char READBUFF[1024];
-//extern char SENDBUFF_DTK[1024],READBUFF_DTK[1024];      //KaiHuang 20190821 : ·s¼W¥x¹F DTK4848·Å±±¾¹
+//extern char SENDBUFF_DTK[1024],READBUFF_DTK[1024];      //KaiHuang 20190821 : æ–°å¢å°é” DTK4848æº«æ§å™¨
 extern int  iCloseSiteState;                            //Eliot 2009_03_06
-extern int  iCloseSiteStateForPick;                     //Steven 20150924 : ÀH®É¶}ÃöSite¥\¯à
+extern int  iCloseSiteStateForPick;                     //Steven 20150924 : éš¨æ™‚é–‹é—œSiteåŠŸèƒ½
 extern int  iSH1LED;
 extern int  iSH2LED;
 extern int  iSH1States;
@@ -3189,7 +3189,7 @@ extern bool bTempComm6ReceiveOK;
 extern bool bRunOcrInsp;                                //ChungHung 20120830 add OCR Function add
 //----------------------------------------------------------------------------
 //Auto Decay Test
-extern bool bRunDecayTest;                              //Ifor 20151015 ·s¼W°õ¦æDecay Test µe­±Åã¥Ü
+extern bool bRunDecayTest;                              //Ifor 20151015 æ–°å¢åŸ·è¡ŒDecay Test ç•«é¢é¡¯ç¤º
 //Auto Cleaning
 extern bool bRunAutoClean;
 extern int iAutoClean_IndexContactCount;
@@ -3205,13 +3205,13 @@ extern int iAutoCleanPlaceToHotplateTask;       //kevin 20120217
 extern int iAutoCleanPlaceToCleanKitTask;       //jou 2012-05-24
 extern int iCheckFinish_ByAutoClean;            //pig 2011.09.01 AutoClean
 extern bool bCleanKitPitchOver12000;            //jou 2013-02-20
-extern bool bCleanKitPitchLess4000;             //jou 2015-03-24 tray x pitch¤Ó¤p¾É­PµLªk§l¨ú
+extern bool bCleanKitPitchLess4000;             //jou 2015-03-24 tray x pitchå¤ªå°å°è‡´ç„¡æ³•å¸å–
 extern bool bPlaceToShuttleByAutoClean;         //ChungHung 20150129 add when Index Jam SCK want to Inarm move to safe postion
 extern bool bPickFromShuttleByAutoClean;        //ChungHung 20150129 add when Index Jam SCK want to Inarm move to safe postion
-extern bool bPickFromKitByAutoClean;            //Steven 20210603 : ·s¼W§l©ñClean KitªºFlag
+extern bool bPickFromKitByAutoClean;            //Steven 20210603 : æ–°å¢å¸æ”¾Clean Kitçš„Flag
 extern bool bLockPlaceToShuttleByAutoClean;     //ChungHung 20150129 add when Index Jam SCK want to Inarm move to safe postion
 extern bool bLockPickFromShuttleByAutoClean;    //ChungHung 20150129 add when Index Jam SCK want to Inarm move to safe postion
-extern bool bRunATCCalibation;                  //Ifor 20160719 ·s¼W°õ¦æATC Calibation µe­±Åã¥Ü
+extern bool bRunATCCalibation;                  //Ifor 20160719 æ–°å¢åŸ·è¡ŒATC Calibation ç•«é¢é¡¯ç¤º
 
 extern const int M_INIT_START  ;
 extern const int M_INIT_RESTART;
@@ -3234,19 +3234,19 @@ extern const int DETECT_ALL_FLAG   ;
 //jou 981215 end
 
 //----------------------------------------------------------------------------
-//Steven 20091231 : ¾ã¦XAlarmCode
+//Steven 20091231 : æ•´åˆAlarmCode
 //extern AnsiString InOurArmSuckName[MAX_ARM_Row][MAX_ARM_Col];
 extern AnsiString IndexSuckName[4][8];
 //extern AnsiString IndexSuckName[16];
 extern AnsiString ShuttleSensorName[9];
-extern AnsiString StartModeName[rsmRunModeTotal];               //Steven 20120612 : Start modeÅã¥Ü­×§ï
+extern AnsiString StartModeName[rsmRunModeTotal];               //Steven 20120612 : Start modeé¡¯ç¤ºä¿®æ”¹
 extern AnsiString asRecordTestResult;
 extern bool bBin16HangUp;
 
 //Eliot 2010_05_01 start
 extern int INDEX_DRIVER_TYPE;
-extern bool TorqueUseHPComCard;                 //Steven 20210204 : ¨Ï¥ÎÂE«l¦Û»sªº³q°T¥d
-extern int MOTOR_DRIVER_TYPE;                   //Steven 20110321 : ¤À¿ë¨ä¥L¶b¨Ï¥Îªº°¨¹F¼tµP
+extern bool TorqueUseHPComCard;                 //Steven 20210204 : ä½¿ç”¨é´»å‹è‡ªè£½çš„é€šè¨Šå¡
+extern int MOTOR_DRIVER_TYPE;                   //Steven 20110321 : åˆ†è¾¨å…¶ä»–è»¸ä½¿ç”¨çš„é¦¬é”å» ç‰Œ
 extern int iPanasonicDriverType;                // 2011.08.11 , Joye , Panasonic A5 //Steven 20120629 add from 7045
 extern int CONTECT_SHUTTLE_KG;                  //jou 2011-03-15
 extern int CONTECT_SHUTTLE_KG_MITSUBISHI;       //Steven 20140530 : 4 --> 6
@@ -3254,24 +3254,24 @@ extern int CONTECT_SHUTTLE_240KG;
 extern int iTorqueCommMaxTime;
 //Eliot 2010_05_01 end
 
-//Steven 20100629 Start: ¬ö¿ı­×§ï¶µ¥Ø
+//Steven 20100629 Start: ç´€éŒ„ä¿®æ”¹é …ç›®
 extern TMyLog myLog;
 extern AnsiString asLogPath;
 extern AnsiString asUser;
 //Steven 20100629 End
-extern bool bClearJamRateCount;                 //jou 2010-08-13 ­p¼Æjam rate,§ï¬°Tray Feed¬°¤@³æ¦ì
-extern bool bLoaderNoTrayAutoCleanOut;          //jou 2010-09-01 Loader¨S¦³tray®É,Loader¤£¦A¶iTray,Tran End®É¦Û°Êclean out
-extern bool bSecondTimeLoaderCheckNoTray;       //ChungHung 20130528 SCK­n¨DAutoClean«á­n¦Û°ÊÀË´ú¬O§_Loader¦³¸ÉTray
-extern bool bNeedCheckOurArmDeviceSuck;         //jou 2010-09-07 start : ½T»{Out arm¦³½T¹ê±Ndevice§l¨«
-extern bool bReOpenGpib;                        //Steven 20101013 : ¨C¦¸OneCycle©ÎCleanOut«á¡A­n­«¶}GPIB
-extern bool bLoaderHasSkip;                     //Steven 20101019 : Loader¦³³QSkip IC¡C
-extern bool bLoaderHasSuck;                     //Steven 20101019 : Loader¦³¦¨¥\§l¨ì®Æ
-extern int  iManualRemoveTrayCnt;               //Sam 20190731 : ·í Load µo¥Í Pickup Error Skip ®É¡A·í«e³o½L°£¤F­n¤â°Ê²¾°£¡A¤U¤@½L¤]­n¤â°Ê²¾°£¡C
-extern bool bBackupCleanOut;                    //jou 2010-12-07 : ¨¾¤îindex check oncyle»Pclean out funtion½Ä¬ğ
+extern bool bClearJamRateCount;                 //jou 2010-08-13 è¨ˆæ•¸jam rate,æ”¹ç‚ºTray Feedç‚ºä¸€å–®ä½
+extern bool bLoaderNoTrayAutoCleanOut;          //jou 2010-09-01 Loaderæ²’æœ‰trayæ™‚,Loaderä¸å†é€²Tray,Tran Endæ™‚è‡ªå‹•clean out
+extern bool bSecondTimeLoaderCheckNoTray;       //ChungHung 20130528 SCKè¦æ±‚AutoCleanå¾Œè¦è‡ªå‹•æª¢æ¸¬æ˜¯å¦Loaderæœ‰è£œTray
+extern bool bNeedCheckOurArmDeviceSuck;         //jou 2010-09-07 start : ç¢ºèªOut armæœ‰ç¢ºå¯¦å°‡deviceå¸èµ°
+extern bool bReOpenGpib;                        //Steven 20101013 : æ¯æ¬¡OneCycleæˆ–CleanOutå¾Œï¼Œè¦é‡é–‹GPIB
+extern bool bLoaderHasSkip;                     //Steven 20101019 : Loaderæœ‰è¢«Skip ICã€‚
+extern bool bLoaderHasSuck;                     //Steven 20101019 : Loaderæœ‰æˆåŠŸå¸åˆ°æ–™
+extern int  iManualRemoveTrayCnt;               //Sam 20190731 : ç•¶ Load ç™¼ç”Ÿ Pickup Error Skip æ™‚ï¼Œç•¶å‰é€™ç›¤é™¤äº†è¦æ‰‹å‹•ç§»é™¤ï¼Œä¸‹ä¸€ç›¤ä¹Ÿè¦æ‰‹å‹•ç§»é™¤ã€‚
+extern bool bBackupCleanOut;                    //jou 2010-12-07 : é˜²æ­¢index check oncyleèˆ‡clean out funtionè¡çª
 extern bool bEnterTestIF; //ChungHung 20121221
 extern bool bCleanOutTrayEnd;                   //jou 2010-12-15
-extern bool bLifterPause[7];                    //jou 2011-02-21 start : magazine¨S°Ê§@·|alarm
-extern double fHotPlateExpansionCoefficient;    //Steven 20110324 : ¥[¼ö½Lªº¿±µÈ«Y¼Æ
+extern bool bLifterPause[7];                    //jou 2011-02-21 start : magazineæ²’å‹•ä½œæœƒalarm
+extern double fHotPlateExpansionCoefficient;    //Steven 20110324 : åŠ ç†±ç›¤çš„è†¨è„¹ä¿‚æ•¸
 //jou 2011-03-24 start : Auto Site Mapping
 extern bool bSiteMappingCHKOK;
 extern int  iDoSiteMappingStep;
@@ -3282,73 +3282,73 @@ extern bool bShowAutoSiteMappingError;
 extern int  iShuttleHeaterWaitTime;
 extern bool bGetOpenBin;
 //jou 2011-03-24 end
-extern bool bRefreshFunction;//kevin 20110401 ¨Ï¥ÎRefresh¥Dµe­±site¸òµÛÀÉ®×ÅÜ
+extern bool bRefreshFunction;//kevin 20110401 ä½¿ç”¨Refreshä¸»ç•«é¢siteè·Ÿè‘—æª”æ¡ˆè®Š
 extern int  MachineTypeChoice;  //0:HT9045 1:HT9046
 extern int  SubMachineType;     //0:None 1:HT9046LA                             //Steven 20190307 : Add for HT-9046LA
-extern int  MachineNumber;    //kevin  ¾÷¥x¾÷¸¹ÃÑ§O
+extern int  MachineNumber;    //kevin  æ©Ÿå°æ©Ÿè™Ÿè­˜åˆ¥
 extern int  NEW_MAX_Index_Col;
 extern bool bIndexPlaceIcCheck;
 extern unsigned int ContinuousPassBinCount[256]; //kevin 20140305 256 bin [30];         //Steven 20110502
 extern unsigned int ContinuousPassBinBySocket[MAX_SOCKET_ROW][MAX_SOCKET_COL];    //Steven 20110919
-extern int  iSpeedFast, iSpeedSlow, iSpeedY;            //Steven 20110503 : 240KG¥[³t
+extern int  iSpeedFast, iSpeedSlow, iSpeedY;            //Steven 20110503 : 240KGåŠ é€Ÿ
 extern bool bIndexEveryTimeCheckEPing;                  //Jou 20110505
-extern int  iInitSpeedSh1, iInitSpeedSh2;               //°O¿ıDATABase ³t«×¸ê®Æ kevin 20110531
-extern int  iPJogHighSpeedSh1,iPJogHighSpeedSh2;        //°O¿ıDATABase shuttle³t«×¸ê®Æ kevin 20110531
-extern bool bWantToStopChamberFan;   //Steven 20110725 : ­n¥i¥HÃö³¬¥[¼ö­·®°
+extern int  iInitSpeedSh1, iInitSpeedSh2;               //è¨˜éŒ„DATABase é€Ÿåº¦è³‡æ–™ kevin 20110531
+extern int  iPJogHighSpeedSh1,iPJogHighSpeedSh2;        //è¨˜éŒ„DATABase shuttleé€Ÿåº¦è³‡æ–™ kevin 20110531
+extern bool bWantToStopChamberFan;   //Steven 20110725 : è¦å¯ä»¥é—œé–‰åŠ ç†±é¢¨æ‰‡
 
 //extern int iTrayXPitch[6],iTrayYPitch[6];   // [0] Aut01 [1] Aut02 [2] Aut03 [3]Fix1  [4]Fix2 [5]Fix3  kevin 20110729
-//extern bool bTempOverCannotRunShowAlarmT[tcTotalCount]; //jou 2011-08-04 //Steven 20110607 : ·Å«×¹L°ª©Î¹L§C¤£¥i¥H°Ê
-extern double dCCDTemperature;                      //Steven 20110924 : ½T»{CCD·Å«×
-extern bool bUseFix3;                               //kevin 20110916 FIX3¼È®É¤£¨Ï¥Î
-enum eSynCardType{eSCTPcil112=0, eSCTPcil122};      //Steven 20111004 : ¥ı¹F¥dÁ`Ãş
+//extern bool bTempOverCannotRunShowAlarmT[tcTotalCount]; //jou 2011-08-04 //Steven 20110607 : æº«åº¦éé«˜æˆ–éä½ä¸å¯ä»¥å‹•
+extern double dCCDTemperature;                      //Steven 20110924 : ç¢ºèªCCDæº«åº¦
+extern bool bUseFix3;                               //kevin 20110916 FIX3æš«æ™‚ä¸ä½¿ç”¨
+enum eSynCardType{eSCTPcil112=0, eSCTPcil122};      //Steven 20111004 : å…ˆé”å¡ç¸½é¡
 extern int  iSynTekCardType;
-extern bool bUT150Install[tcTotalCount];            //Steven 20111012 : §ï¥Î³æ¿W«Å§i,¤£©ñ¦bLastSet¸Ì­±
-extern bool bUT150Install1To2[tcTotalCount];         //kevin 20190921 1¹ï2site
+extern bool bUT150Install[tcTotalCount];            //Steven 20111012 : æ”¹ç”¨å–®ç¨å®£å‘Š,ä¸æ”¾åœ¨LastSetè£¡é¢
+extern bool bUT150Install1To2[tcTotalCount];         //kevin 20190921 1å°2site
 extern bool OLPClientConnect;
-extern bool bInitialMaxTime;                        //jou 2011-11-09 ¼W¥[initial max time set
+extern bool bInitialMaxTime;                        //jou 2011-11-09 å¢åŠ initial max time set
 
-//jou 2011-11-14 start : ¬ö¿ıpiggyback®É¶¡
+//jou 2011-11-14 start : ç´€éŒ„piggybackæ™‚é–“
 extern bool bRecordPiggyBackStart;
 extern bool bRecordPiggyBackEnd;
 extern int iPiggyBackTime[2];
 extern AnsiString pwPath;
-extern AnsiString pwName;   //Steven 20221216 : §d¦p¬K­n§ï¦¨±qºô¸ô§ì±K½X¥»
+extern AnsiString pwName;   //Steven 20221216 : å³å¦‚æ˜¥è¦æ”¹æˆå¾ç¶²è·¯æŠ“å¯†ç¢¼æœ¬
 //jou 2011-11-14 end
 
 //ChungHung 20130910 add for SCK
 //extern int iAutoCleanOutTime[2];
 //ChungHung 20130910 add for SCK
 
-extern int  iInArmCleaniWhichKit;//kevin 20120217 //0: ²Ä¤@¦¸8SITE  1:9-16 SITE
+extern int  iInArmCleaniWhichKit;//kevin 20120217 //0: ç¬¬ä¸€æ¬¡8SITE  1:9-16 SITE
 extern int  iTestData;
-extern bool UseIndexCount;              //20120501 ¨Ï¥ÎIndex­p¼Æ¥\¯à
-extern bool MasheReCordData;            //kevin 20120616°O¿ıµ{¦¡Â÷¶}¸ê®Æ
-extern bool bChangeCleanPad;            //kevin 20120709 autoclean »İ­n¶}ªù
-extern bool bIsAutoOneCycleAutoclean;   //kevin 20120710 ¥Ø«eonecycle ¤¤·Ç³Æ autoclean
-extern int  iAutoCleanShuttle;          //kevin 20120711 Shuttle °»´ú Clean Pad¬O§_©ñ¦n
-extern bool bACInitialStart;            //kevin 20120712 Initial ¼Ò¦¡¤@¶}©l§@autoclean
-extern bool bACInterval;                //kevin 20120712 index¦¸¼Æ¨ì¦A°µautoclean
-extern int  iAutocleanInitialStart;     //kevin 20120712 initial start ³Q±Ò°Ê
-extern bool bACManual;                  //kevin 20120712 Manual ¥Dµe­±¨q autoclean button
-extern bool bAutoCleanCheckOpenDoor;    //Steven 20121015 : Auto Clean¦³Alarm­n¶}«áªù
+extern bool UseIndexCount;              //20120501 ä½¿ç”¨Indexè¨ˆæ•¸åŠŸèƒ½
+extern bool MasheReCordData;            //kevin 20120616è¨˜éŒ„ç¨‹å¼é›¢é–‹è³‡æ–™
+extern bool bChangeCleanPad;            //kevin 20120709 autoclean éœ€è¦é–‹é–€
+extern bool bIsAutoOneCycleAutoclean;   //kevin 20120710 ç›®å‰onecycle ä¸­æº–å‚™ autoclean
+extern int  iAutoCleanShuttle;          //kevin 20120711 Shuttle åµæ¸¬ Clean Padæ˜¯å¦æ”¾å¥½
+extern bool bACInitialStart;            //kevin 20120712 Initial æ¨¡å¼ä¸€é–‹å§‹ä½œautoclean
+extern bool bACInterval;                //kevin 20120712 indexæ¬¡æ•¸åˆ°å†åšautoclean
+extern int  iAutocleanInitialStart;     //kevin 20120712 initial start è¢«å•Ÿå‹•
+extern bool bACManual;                  //kevin 20120712 Manual ä¸»ç•«é¢ç§€ autoclean button
+extern bool bAutoCleanCheckOpenDoor;    //Steven 20121015 : Auto Cleanæœ‰Alarmè¦é–‹å¾Œé–€
 
-extern bool bRecIndexDropAlarm1;                    //jou 2012-01-17 ¬ö¿ıindex Drop alarm
-extern bool bRecIndexDropAlarm2;                    //jou 2012-01-17 ¬ö¿ıindex Drop alarm
-extern bool bHALTing;                               //jou 2012-01-30 ±`·Å & ¾÷¥x¨S¦b¶]ªº®É­Ôchamber­·®°¤£Âà
-extern bool bRTCArm1HalfViewError;                  //Steven 20120206 : RTC­«½Æ¿ù»~
-extern bool bRTCArm2HalfViewError;                  //Steven 20120206 : RTC­«½Æ¿ù»~
-extern bool bRTCFullViewError;                      //Steven 20120206 : RTC­«½Æ¿ù»~
-extern int  XResolution;                            //Steven 20120206 : µe­±¸ÑªR«×
-extern int  YResolution;                            //Steven 20120206 : µe­±¸ÑªR«×
-extern bool bFilterTheAgainData;                    //Steven 20120222 : ¹LÂo±¼Duplicateªº°T®§
-extern bool bCanUseHotPlateCheck;                   //Steven 20120323 : ¥i¥HÀË¬dHotPlateªº¼Ò¦¡
-extern bool bIndexCheckNoStopVaccum;                //jou 2012-05-09 Index Check®É,¦pªG¤¤³~«ö¼È°±,¤]­nÄ~Äò§âsuck()°µ§¹,Á×§K­tÀ£±¼ic
-extern bool bCleanoutStart;                         //kevin 20120921 cleanout¤w¨Ï¥Î ¦ıonecycle ¦b°µ§¹¤FÄ~Äòcleanout
+extern bool bRecIndexDropAlarm1;                    //jou 2012-01-17 ç´€éŒ„index Drop alarm
+extern bool bRecIndexDropAlarm2;                    //jou 2012-01-17 ç´€éŒ„index Drop alarm
+extern bool bHALTing;                               //jou 2012-01-30 å¸¸æº« & æ©Ÿå°æ²’åœ¨è·‘çš„æ™‚å€™chamberé¢¨æ‰‡ä¸è½‰
+extern bool bRTCArm1HalfViewError;                  //Steven 20120206 : RTCé‡è¤‡éŒ¯èª¤
+extern bool bRTCArm2HalfViewError;                  //Steven 20120206 : RTCé‡è¤‡éŒ¯èª¤
+extern bool bRTCFullViewError;                      //Steven 20120206 : RTCé‡è¤‡éŒ¯èª¤
+extern int  XResolution;                            //Steven 20120206 : ç•«é¢è§£æåº¦
+extern int  YResolution;                            //Steven 20120206 : ç•«é¢è§£æåº¦
+extern bool bFilterTheAgainData;                    //Steven 20120222 : éæ¿¾æ‰Duplicateçš„è¨Šæ¯
+extern bool bCanUseHotPlateCheck;                   //Steven 20120323 : å¯ä»¥æª¢æŸ¥HotPlateçš„æ¨¡å¼
+extern bool bIndexCheckNoStopVaccum;                //jou 2012-05-09 Index Checkæ™‚,å¦‚æœä¸­é€”æŒ‰æš«åœ,ä¹Ÿè¦ç¹¼çºŒæŠŠsuck()åšå®Œ,é¿å…è² å£“æ‰ic
+extern bool bCleanoutStart;                         //kevin 20120921 cleanoutå·²ä½¿ç”¨ ä½†onecycle åœ¨åšå®Œäº†ç¹¼çºŒcleanout
 extern double T_MODE_SPEED;                         //jou 2012-05-30 T Mode Speed
-extern bool bNeedCheckIndexToque;                   //jou 2012-06-12 §lshuttle®É¡A»İÀË´úTorque¡A¹L¤j»İalarm
-extern bool bNeedCheckIndexToque1;                  //jou 2012-06-12 §lshuttle®É¡A»İÀË´úTorque¡A¹L¤j»İalarm
-extern bool bNeedCheckIndexToque2;                  //jou 2012-06-12 §lshuttle®É¡A»İÀË´úTorque¡A¹L¤j»İalarm
-extern const int ciIndex5FSetValue;                 //jou 2012-06-12 §lshuttle®É¡A»İÀË´úTorque¡A¹L¤j»İalarm
+extern bool bNeedCheckIndexToque;                   //jou 2012-06-12 å¸shuttleæ™‚ï¼Œéœ€æª¢æ¸¬Torqueï¼Œéå¤§éœ€alarm
+extern bool bNeedCheckIndexToque1;                  //jou 2012-06-12 å¸shuttleæ™‚ï¼Œéœ€æª¢æ¸¬Torqueï¼Œéå¤§éœ€alarm
+extern bool bNeedCheckIndexToque2;                  //jou 2012-06-12 å¸shuttleæ™‚ï¼Œéœ€æª¢æ¸¬Torqueï¼Œéå¤§éœ€alarm
+extern const int ciIndex5FSetValue;                 //jou 2012-06-12 å¸shuttleæ™‚ï¼Œéœ€æª¢æ¸¬Torqueï¼Œéå¤§éœ€alarm
 //==============================================================================
 // GEM function Start
 //==============================================================================
@@ -3360,25 +3360,25 @@ extern int  ATC_SYSTEM;                         // 2011.04.15 , Joye , ATC
 extern int  ATC_MixMode;
 
 extern int  iControllerCheckDelay;              // 2012.03.26 , Joye & Pig , ATC Connect Issue
-extern bool bATCConnectError;                   //pig 2011.12.21 ATC§ï
+extern bool bATCConnectError;                   //pig 2011.12.21 ATCæ”¹
 extern int  iStopATCChillerType;                // 2012.05.07 , Joye , Chiller
 //Steven 20120410 End: Hontech ATC
 extern int INSTALL_HEAT_GUN;                    //Kevin 20120523 AirGun
 extern int INSTALL_ATC_HEAT_GUN;                //JerryYang 20220408 : add for ATC3.5
 extern int bUseCleanArm;                        //kevin 20140903
-//extern bool bChangeSiteMAP;                     //kevin 20130104 ¥i¥H§ïÅÜsitemap
+//extern bool bChangeSiteMAP;                     //kevin 20130104 å¯ä»¥æ”¹è®Šsitemap
 
-//---------------------------------kevin 20130321     Dell DUT(Socket Base)·Å±±¾¹¼W¥[¬°4Áû------------------------
-extern int  iSocketBaseTempCount;               //Steven 20140116 : Socket¼Æ¶q,§ï¥Î¼Æ¦r³]©w
-extern int  iSocketBaseAdd4TempType;            //kevin 20130812 DUT 4­Ó·Å±±¾¹¨Ï¥Î   0: pansonic  1:omron
-extern bool bChamboFanCloseTemp;                //kevin 20130407Ãö³¬chambo ·Å«×
-extern bool bIndexTimeSet;                      //kevin 20130321 ³]©windex time
-extern double fIndexTime;                       //kevin 20130321 ³]©windex time
+//---------------------------------kevin 20130321     Dell DUT(Socket Base)æº«æ§å™¨å¢åŠ ç‚º4é¡†------------------------
+extern int  iSocketBaseTempCount;               //Steven 20140116 : Socketæ•¸é‡,æ”¹ç”¨æ•¸å­—è¨­å®š
+extern int  iSocketBaseAdd4TempType;            //kevin 20130812 DUT 4å€‹æº«æ§å™¨ä½¿ç”¨   0: pansonic  1:omron
+extern bool bChamboFanCloseTemp;                //kevin 20130407é—œé–‰chambo æº«åº¦
+extern bool bIndexTimeSet;                      //kevin 20130321 è¨­å®šindex time
+extern double fIndexTime;                       //kevin 20130321 è¨­å®šindex time
 
 extern bool bIsContactforce;                    //kevin 20130418 contact force over error
-extern int iShowSocketSensor;                   //kevin 20130504 µ¥index zÅı¶}¦A¨qalarm
+extern int iShowSocketSensor;                   //kevin 20130504 ç­‰index zè®“é–‹å†ç§€alarm
 extern bool bIsSocketSensor;                    //kevin 20130504 socket sensor detect error
-extern bool bASEK15UsePW;                       //kevin 20130701  Ase°ª¶¯K15
+extern bool bASEK15UsePW;                       //kevin 20130701  Aseé«˜é›„K15
 extern AnsiString ASEK15PassWord;               //kevin 20130701
 
 //kevin 20130425   2013.01.11 Q_Q TSMC GPIB COMMAND
@@ -3388,21 +3388,21 @@ extern int iReadTIntervelArm2;                  //kevin 20130425//2013.01.26 Q_Q
 extern AnsiString asGPIBTempShow[tcTotalCount];           //kevin 20130425 //2013.01.11 Q_Q TSMC GPIB COMMAND
 extern bool bAllTemperatureIsReady;             //kevin 20130425 //2013.01.11 Q_Q TSMC GPIB COMMAND
 
-extern bool bUseAuto2Empty;                     //kevin 20120718 ¨Ê¤¸ auto2 load ªÅ TRAY
+extern bool bUseAuto2Empty;                     //kevin 20120718 äº¬å…ƒ auto2 load ç©º TRAY
 extern bool bAuto2Pause[7];                     //kevin 20120718
 
-extern int iTestTimeUpErrContinueR;             //jou 2012-08-28 µÙ¥Í­n¨D Test Time Up Error ¤§«áªº¨â¦¸´ú¸Õ, ¤£ºŞµ²ªG¦p¦ó³£±Æ¨ìR
-extern bool bASMFinishOneCycle;                 //Steven 20120830 : AutoSiteMapping, ¤â°Ê²¾°£Loader Tray
-extern int iTestBinCount;                       //Steven 20121112 : RS232¤ä´©32Bin
+extern int iTestTimeUpErrContinueR;             //jou 2012-08-28 è±ç”Ÿè¦æ±‚ Test Time Up Error ä¹‹å¾Œçš„å…©æ¬¡æ¸¬è©¦, ä¸ç®¡çµæœå¦‚ä½•éƒ½æ’åˆ°R
+extern bool bASMFinishOneCycle;                 //Steven 20120830 : AutoSiteMapping, æ‰‹å‹•ç§»é™¤Loader Tray
+extern int iTestBinCount;                       //Steven 20121112 : RS232æ”¯æ´32Bin
 
 extern bool bWakeupGPIBFile;                    //Steven 20110116
 extern bool bWakeupEventLogSaverFile;           //Frank 20140902
-extern bool bWakeupDMCCFile;                    //Alick 20160721 add Barcode File¤Á´«
-extern int iInitStartDelayTimeCT;               //jou 2012-11-30 °ª·Å°Ê§@¤U§Æ±æ¼W¥[Áû¼Æ°O¼Æ,¦b«e´XÁû¤UÀ£¨ìSocket«á,³£­nµ¥«İDelay time
+extern bool bWakeupDMCCFile;                    //Alick 20160721 add Barcode Fileåˆ‡æ›
+extern int iInitStartDelayTimeCT;               //jou 2012-11-30 é«˜æº«å‹•ä½œä¸‹å¸Œæœ›å¢åŠ é¡†æ•¸è¨˜æ•¸,åœ¨å‰å¹¾é¡†ä¸‹å£“åˆ°Socketå¾Œ,éƒ½è¦ç­‰å¾…Delay time
 
 //extern bool bCleanOutStart;                     //Kevin 20120921
 extern bool bContinusRotate;
-extern bool bResetIsPressed;                    //Steven 20130625 : ·sªºReset¤è¦¡
+extern bool bResetIsPressed;                    //Steven 20130625 : æ–°çš„Resetæ–¹å¼
 extern bool bResetShuttle;
 extern bool bResetInArm;
 extern bool bResetInArmTask;
@@ -3427,7 +3427,7 @@ extern AnsiString asArmForce2;              //2013.01.11 Q_Q TSMC GPIB COMMAND
 //extern AnsiString asGPIBTempShow[50];       //kevin 20130425 //2013.01.11 Q_Q TSMC GPIB COMMAND
 //extern bool bAllTemperatureIsReady;         //kevin 20130425 //2013.01.11 Q_Q TSMC GPIB COMMAND
 //------------------------------------------------------------------------------
-extern bool bNeedAskStartMode;              //ChungHung 20130529 add manual change start mode ¦pªG¬OInitialStart «ö¤UStart®É­n¸ß°İ
+extern bool bNeedAskStartMode;              //ChungHung 20130529 add manual change start mode å¦‚æœæ˜¯InitialStart æŒ‰ä¸‹Startæ™‚è¦è©¢å•
 extern int iInArmBlockIndex;                //2014-03-04    Dell    for SPIL WLP Add Tray Block
 extern int iOutArmBlockIndex;               //2014-03-04    Dell    for SPIL WLP Add Tray Block
 extern int iSortArmBlockIndex;                                                  //RogerYang 20250516 Add for 9046AU
@@ -3438,7 +3438,7 @@ extern double dTempMax;
 extern double dTempMin;
 extern bool bCCDOverTemp;
 //==============================================================================
-//¦U¾÷«¬DI/DO ¼Æ¶q©w¸q
+//å„æ©Ÿå‹DI/DO æ•¸é‡å®šç¾©
 extern const int DI_IP_Max_9045;
 extern const int DI_IP_Min_9045;
 extern const int DO_IP_Max_9045;
@@ -3461,22 +3461,22 @@ extern const int DO_IP_Min_9045_12Site;
 //==============================================================================
 //JerryYang 20151109
 extern const int Bit0_HandlerReBoot;            //JerryYang 20151109 bit0 PASS
-extern const int Bit1_HandlerOutputFull;        //JerryYang 20151109 bit1 µLªÅ½L¥i©ñ¦ÜAuto
-extern const int Bit2_HandlerInputEmpty;        //JerryYang 20151109 bit2 Loader tray¦³µLIC
-extern const int Bit3_ContactorCleaning;        //JerryYang 20151109 bit3 °µAutoClean
-extern const int Bit4_HandlerDiagnostics;       //JerryYang 20151109 bit4 ³]©w°Ñ¼Æ¤¤
+extern const int Bit1_HandlerOutputFull;        //JerryYang 20151109 bit1 ç„¡ç©ºç›¤å¯æ”¾è‡³Auto
+extern const int Bit2_HandlerInputEmpty;        //JerryYang 20151109 bit2 Loader trayæœ‰ç„¡IC
+extern const int Bit3_ContactorCleaning;        //JerryYang 20151109 bit3 åšAutoClean
+extern const int Bit4_HandlerDiagnostics;       //JerryYang 20151109 bit4 è¨­å®šåƒæ•¸ä¸­
 extern const int Bit5_IndexCheck;               //JerryYang 20151109 bit5 PASS
 extern const int Bit6_Reversed;                 //JerryYang 20151109 bit6 PASS
 extern const int Bit7_HandlerGuardband;         //JerryYang 20151109 bit7 PASS
-extern const int Bit8_HandlerJam;               //JerryYang 20151109 bit8 ¾÷¥xJAM
-extern const int Bit9_HandlerStop;              //JerryYang 20151109 bit9 ¾÷¥x°±¤î¤¤
-extern const int Bit10_HandlerSoak;             //JerryYang 20151109 bit10 ¾÷¥xµ¥«İ¥[¼ö§¹¦¨,°±¤î¤¤
-extern const int Bit11_HandlerDoorOpen;         //JerryYang 20151109 bit11 ªù¸T
-extern const int Bit12_HandlerEmpty;            //JerryYang 20151109 bit12 ¾÷¥x¤ºµLIC
+extern const int Bit8_HandlerJam;               //JerryYang 20151109 bit8 æ©Ÿå°JAM
+extern const int Bit9_HandlerStop;              //JerryYang 20151109 bit9 æ©Ÿå°åœæ­¢ä¸­
+extern const int Bit10_HandlerSoak;             //JerryYang 20151109 bit10 æ©Ÿå°ç­‰å¾…åŠ ç†±å®Œæˆ,åœæ­¢ä¸­
+extern const int Bit11_HandlerDoorOpen;         //JerryYang 20151109 bit11 é–€ç¦
+extern const int Bit12_HandlerEmpty;            //JerryYang 20151109 bit12 æ©Ÿå°å…§ç„¡IC
 extern const int Bit13_HandlerOk;               //JerryYang 20151109 bit13 PASS
-extern const int Bit14_Unloading;               //JerryYang 20151109 bit14 Unloading¤¤
-extern const int Bit15_Loading;                 //JerryYang 20151109 bit15 Loading¤¤
-extern const int Bit16_Reversed;               //JerryYang 20151109 bit16 IC³£¦bAuto
+extern const int Bit14_Unloading;               //JerryYang 20151109 bit14 Unloadingä¸­
+extern const int Bit15_Loading;                 //JerryYang 20151109 bit15 Loadingä¸­
+extern const int Bit16_Reversed;               //JerryYang 20151109 bit16 ICéƒ½åœ¨Auto
 //==============================================================================
 //JerryYang 20161007
 extern const int iHPNoUse8suck;
@@ -3486,42 +3486,42 @@ extern const int iHP1x2Step2;
 extern const int iHP1x2Step3;
 extern int i8PickerHPMode;
 //==============================================================================
-//JerryYang 20170531 (wei) ºVtray¤è¦¡·s¼W¾_°Ê°¨¹F
+//JerryYang 20170531 (wei) æ•²trayæ–¹å¼æ–°å¢éœ‡å‹•é¦¬é”
 extern const int NonVibration;
 extern const int VibrationCylinder;
 extern const int VibrationMotor;
 //==============================================================================
 extern bool bGail_HighSpeedMode;
 //==============================================================================
-extern bool bK12TempHeadChoiceChambo;                                           //kevin 20130507 K12  TSMC HEAD·Å«×§ï¦¨ CHAMBO·Å«×
-extern int  iIndexArm;                                                          //kevin 20130605 K12 contract mode ½T»{ ­ş¤äarm¦b¤U
-extern int  iArmEPUse;                                                          //kevin 20130611 0:¤£¥R®ğ    1:arm1 ¥R®ğ   2:arm2
+extern bool bK12TempHeadChoiceChambo;                                           //kevin 20130507 K12  TSMC HEADæº«åº¦æ”¹æˆ CHAMBOæº«åº¦
+extern int  iIndexArm;                                                          //kevin 20130605 K12 contract mode ç¢ºèª å“ªæ”¯armåœ¨ä¸‹
+extern int  iArmEPUse;                                                          //kevin 20130611 0:ä¸å……æ°£    1:arm1 å……æ°£   2:arm2
 extern bool bShuttleCooling;                                                    //jou 2010-06-09 start
 extern bool bChamboCooling;                                                     //kevin 20130109
 extern bool bHotplateCooling;                                                   //jou 2013-11-07
 
 extern int AccessLevel;
-extern bool bRefreshFunction;                                                   //kevin 20110401 ¨Ï¥ÎRefresh¥Dµe­±site¸òµÛÀÉ®×ÅÜ
+extern bool bRefreshFunction;                                                   //kevin 20110401 ä½¿ç”¨Refreshä¸»ç•«é¢siteè·Ÿè‘—æª”æ¡ˆè®Š
 extern bool bChamboCooling;                                                     //kevin 20130109
 extern bool bFirstRecordLoaderData;                                             //jou 2013-05-31 first record loader data
-extern bool bContinuoussPass;                                                   //kevin 20131009 pass IC¹L¦h¨qÄµ§i
-extern bool bContactCounOven;                                                   //kevin 20131009 CONTACT COUNT ¶W¹L¦h³]©w¦¸¼Æ¨qÄµ§i
-extern bool bMoveInArm2XYToWaitOk;                                              //Steven 20131025 : ­n¥ı°Ê¨ì¦w¥ş¦ì¸m¤~¥i¥H¦A¨ì§Oªº¦a¤è
-extern bool bInarmZOk;                                                          //kevin 20131119 Z¶b¥¿¦b§l¨ú¤£¯à³Q¤¤Â_
-extern bool bContaceTorque;                                                     //kevin 20131217 TOR-> ³æ¤@ÁûKG
-extern bool bHomeinitialCheckPushZ1;                                            //kevin 20131218 Âkhom«eÀË¬d¬O§_¦³tray©ñ¦bhotplate ³y¦¨¾÷ºc·lÃa «öz1 ½T»{
-extern bool bHomeUnlock;                                                        //kevin 20131218 home«öz1 ¸Ñ¶} ¾÷¥x¥i¥H°Ê§@
+extern bool bContinuoussPass;                                                   //kevin 20131009 pass ICéå¤šç§€è­¦å‘Š
+extern bool bContactCounOven;                                                   //kevin 20131009 CONTACT COUNT è¶…éå¤šè¨­å®šæ¬¡æ•¸ç§€è­¦å‘Š
+extern bool bMoveInArm2XYToWaitOk;                                              //Steven 20131025 : è¦å…ˆå‹•åˆ°å®‰å…¨ä½ç½®æ‰å¯ä»¥å†åˆ°åˆ¥çš„åœ°æ–¹
+extern bool bInarmZOk;                                                          //kevin 20131119 Zè»¸æ­£åœ¨å¸å–ä¸èƒ½è¢«ä¸­æ–·
+extern bool bContaceTorque;                                                     //kevin 20131217 TOR-> å–®ä¸€é¡†KG
+extern bool bHomeinitialCheckPushZ1;                                            //kevin 20131218 æ­¸homå‰æª¢æŸ¥æ˜¯å¦æœ‰trayæ”¾åœ¨hotplate é€ æˆæ©Ÿæ§‹æå£ æŒ‰z1 ç¢ºèª
+extern bool bHomeUnlock;                                                        //kevin 20131218 homeæŒ‰z1 è§£é–‹ æ©Ÿå°å¯ä»¥å‹•ä½œ
 
 extern int iWhichShuttle0000;                                                   //ChungHung 20130910 alter for SCK can close site by Index
-extern double dTestSec;                                                         //2013-11-27    Dell ´ú¸Õ®É¶¡  //jou 2014-09-24 int -> float bWhenHappenTestedTimeBelowUseInitialDelay ´ú¸Õ¬í¼Æ¤p©ó1 sec·|»~§P
-extern int iSoakTimer;                                                          //2013-11-27    Dell Index Soak time ­p¼Æ
-extern int iStableTime;                                                         //JerryYang 20210122 : ASE-CL·s¼W«İ·Å¥\¯à
-extern int iSoakTimer_Start;                                                    //2013-11-27    Dell Index Soak time ­p¼Æ
+extern double dTestSec;                                                         //2013-11-27    Dell æ¸¬è©¦æ™‚é–“  //jou 2014-09-24 int -> float bWhenHappenTestedTimeBelowUseInitialDelay æ¸¬è©¦ç§’æ•¸å°æ–¼1 secæœƒèª¤åˆ¤
+extern int iSoakTimer;                                                          //2013-11-27    Dell Index Soak time è¨ˆæ•¸
+extern int iStableTime;                                                         //JerryYang 20210122 : ASE-CLæ–°å¢å¾…æº«åŠŸèƒ½
+extern int iSoakTimer_Start;                                                    //2013-11-27    Dell Index Soak time è¨ˆæ•¸
 extern int iInitialSoakTimer;                                                   //Steven 20140827
 extern int iInitialSoakTimer_Start;                                             //Steven 20140827
 
-extern int iATCTempWaitTimer;                                                   //Ifor 20230608 add:KYEC ­n¨D·s¼W¥Dµe­±Åã¥ÜATC Temp Wait ­Ë¼Æ
-extern int iATCTempWaitTimer_Start;                                             //Ifor 20230608 add:KYEC ­n¨D·s¼W¥Dµe­±Åã¥ÜATC Temp Wait ­Ë¼Æ
+extern int iATCTempWaitTimer;                                                   //Ifor 20230608 add:KYEC è¦æ±‚æ–°å¢ä¸»ç•«é¢é¡¯ç¤ºATC Temp Wait å€’æ•¸
+extern int iATCTempWaitTimer_Start;                                             //Ifor 20230608 add:KYEC è¦æ±‚æ–°å¢ä¸»ç•«é¢é¡¯ç¤ºATC Temp Wait å€’æ•¸
 
 extern bool bNeedInitialTestDelay;                                              //ChungHung 20140425 add for TSMC Device
 extern int  iInitialCount;                                                      //ChungHung 20140801 add Korea Want to count down in main status
@@ -3529,19 +3529,19 @@ extern bool bFirstDeviceInitialTestDelayWhichOutAfterAutoClean;                 
 extern bool bDoAfterAutoCleanFunctionUseInitialDelay;                           //ChungHung 20140105 add for SCK
 extern bool bDoEveryFirstDeviceFunctionUseInitialDelay;                         //ChungHung 20140105 add for SCK
 extern bool bDoAfterShowAlarmMessageUseInitialDelay;                            //ChungHung 20140105 add for SCK
-extern bool bDoOTDOffUseInitialDelay;                                           //Steven 20160818 : OTD¥´¶}Delay
+extern bool bDoOTDOffUseInitialDelay;                                           //Steven 20160818 : OTDæ‰“é–‹Delay
 extern bool bDoAfterOpenHeatDoorUseInitialDelay;                                //ChungHung 20140105 add for SCK
 extern bool bDoWhenHappenTestedTimeBlowUseInitialDelay;                         //ChungHung 20140105 add for SCK
 extern int  iAfterTestedCount;                                                  //ChungHung 20140730 add for ATK function after tested delay time
 extern bool bDoWhenNoFullSiteUseInitialDelay;                                   //wei 20151228 No FullSite delay
-extern bool bTestFinishToNextTestOver;                                          //kevin 20160310 ´ú¸Õ§¹¦¨¨ì¤U¤@¦¸§¹¦¨¶W¹L©Ò³]®É¶¡¶·±Ò°Ê
+extern bool bTestFinishToNextTestOver;                                          //kevin 20160310 æ¸¬è©¦å®Œæˆåˆ°ä¸‹ä¸€æ¬¡å®Œæˆè¶…éæ‰€è¨­æ™‚é–“é ˆå•Ÿå‹•
 
 extern bool bButtonManualStep;                                                  //ChungHung 20150526 add for QualComm US
 extern bool bButtonManualTStart;                                                //ChungHung 20150526 add for QualComm US
 
 extern bool bDoWhenPressStopOverUseInitialDelay;                                //ChungHung 20150526 add for ATK want to even stop over will use initial delay
-extern bool bHISIInitiayDelay;                                                  //kevin 20200110 add ®ü¥q±j¦Üinitial delay
-extern bool bCancelHISIInitiayDelay;                                            //Ifor 20230201 add: ¨ú®ø®ü¥q±j¦Üinitial delay
+extern bool bHISIInitiayDelay;                                                  //kevin 20200110 add æµ·å¸å¼·è‡³initial delay
+extern bool bCancelHISIInitiayDelay;                                            //Ifor 20230201 add: å–æ¶ˆæµ·å¸å¼·è‡³initial delay
 //==============================================================================
 extern AnsiString DownloadWorkFile_NET;                                         // 2013.12.03 , Joye , KYEC FTP //20140103  wei
 extern int LastSetTemperature_NET;                                              // 2013.12.03 , Joye , KYEC FTP
@@ -3551,45 +3551,45 @@ extern bool bBarcodeReader;                                                     
 //extern bool bTempSet;                                                         //20140103 wei
 
 extern bool ReEnterBarcode[20];                                                 //20140310  wei   Barcode Reader
-//extern char PcName[255] ;                                                     //Steven 20110131 : ¹q¸£¦WºÙ
-//extern unsigned long PcNameLen;                                               //Steven 20110131 : ¹q¸£¦WºÙªø«×
+//extern char PcName[255] ;                                                     //Steven 20110131 : é›»è…¦åç¨±
+//extern unsigned long PcNameLen;                                               //Steven 20110131 : é›»è…¦åç¨±é•·åº¦
 //==============================================================================
 
-extern const int ArmMaxPitch_13Suck;                                            //¨Ï¥Î1, 3§l¼L
-extern const int ArmMaxPitch;                                                   //Steven 20140212 : For Xilinx 31x31¥Í²£8Site
+extern const int ArmMaxPitch_13Suck;                                            //ä½¿ç”¨1, 3å¸å˜´
+extern const int ArmMaxPitch;                                                   //Steven 20140212 : For Xilinx 31x31ç”Ÿç”¢8Site
 extern int iAutoSkipCT;                                                         //jou 2013-09-23 add Auto SKIP CT
 extern int iLoaderDropErrRetryCT[MAX_ARM_Row][MAX_ARM_Col];
 
 extern bool bTestingStopAllMotor;                                               //jou 2013-09-25 Testing Need Stop All Motor
 //==============================================================================
-//¦æ¨®¬ö¿ı¾¹
+//è¡Œè»Šç´€éŒ„å™¨
 extern bool bCarRecordTimeStart;                                                //wei 2013-12-09
 extern bool bCarRecordTimeEnd;                                                  //wei 2013-12-09
 extern TQPF_Timer  CarRecord;
 //==============================================================================
-extern bool bDutHasOverTemp;                                                    //Steven 20140308 : DUT·Å«×²§±`¨ì¤U¦¸Start«e¤£¥[¼ö
-extern bool bDutflag[32];                                                       //ChungHung 20140611 fix ¬ö¿ı´ú¸ÕªºDut¦ì¸m ¹ïÀ³¿ù»~
+extern bool bDutHasOverTemp;                                                    //Steven 20140308 : DUTæº«åº¦ç•°å¸¸åˆ°ä¸‹æ¬¡Startå‰ä¸åŠ ç†±
+extern bool bDutflag[32];                                                       //ChungHung 20140611 fix ç´€éŒ„æ¸¬è©¦çš„Dutä½ç½® å°æ‡‰éŒ¯èª¤
 
-//extern bool bIndexDutflag[2][4][8];             //kevin 20140318 ¬ö¿ı¥Ø«eindex¦³IC»İ´ú¸Õ
-extern bool bSkipNeedCheckVac[2][2][8];                                         //JerryYang 20170609 (wei) °O¿ıpick up error«öskipªºsite
+//extern bool bIndexDutflag[2][4][8];             //kevin 20140318 ç´€éŒ„ç›®å‰indexæœ‰ICéœ€æ¸¬è©¦
+extern bool bSkipNeedCheckVac[2][2][8];                                         //JerryYang 20170609 (wei) è¨˜éŒ„pick up erroræŒ‰skipçš„site
 extern bool bArm1PressSkipNeedDownCheckVac;
 extern bool bArm2PressSkipNeedDownCheckVac;
-extern int  iBarcodeTimeCount[bcTotal];                                         //20140310  WEI : [A09] Barcode Reader«ùÄò®É¶¡
-extern bool bOneCycleOperateChangeON_line;                                      //kevin 20140411 one cycle§¹¦pªG¬Oop¼Ò¦¡off-line »İ¤Á´« on-line ¨Ã¥BµoÄµ§i
-extern int iOff_LINE_Mode;                                                      //kevin 20140411 ¥Ø«e¾÷¥x¤u§@¼Ò¦¡¬Ooff-line
+extern int  iBarcodeTimeCount[bcTotal];                                         //20140310  WEI : [A09] Barcode ReaderæŒçºŒæ™‚é–“
+extern bool bOneCycleOperateChangeON_line;                                      //kevin 20140411 one cycleå®Œå¦‚æœæ˜¯opæ¨¡å¼off-line éœ€åˆ‡æ› on-line ä¸¦ä¸”ç™¼è­¦å‘Š
+extern int iOff_LINE_Mode;                                                      //kevin 20140411 ç›®å‰æ©Ÿå°å·¥ä½œæ¨¡å¼æ˜¯off-line
 
 extern bool bTesterDucking;                                                     //jou 2014-04-25 Tester Docking Wait delay time
 extern int  iTesterDucking;                                                     //jou 2014-04-25 Tester Docking Wait delay time
 
 extern bool bNeedTesterDuckingFinishLightYellowAndAlarmOn;  //ChungHung 20141015 add for SCK When the handler start running (finished Start count function),Yellow light blinking & alarm on (press "alarm reset" then clear)
 extern bool bTesterDuckingFinishLightYellowAndAlarmOn;      //ChungHung 20141015 add for SCK When the handler start running (finished Start count function),Yellow light blinking & alarm on (press "alarm reset" then clear)
-extern bool bRTCAutoModelVerifyFirstTime;                   //jou 2014-06-24 RTC ¦Û°Ê¶i¦æModelÅçÃÒ
+extern bool bRTCAutoModelVerifyFirstTime;                   //jou 2014-06-24 RTC è‡ªå‹•é€²è¡ŒModelé©—è­‰
 
 extern int iDefHonPrecLevel   ; //jou 2014-06-19 Security Have 5 Level
 extern int iDefSupervisorLevel; //jou 2014-06-19 Security Have 5 Level
 extern int iDefEngineerLevel  ; //jou 2014-06-19 Security Have 5 Level
 //ChungHung 20140716 modify SCK complain count never clear when change add reset count
-//©ñ¨ì¥ş°ìÅÜ¼Æ
+//æ”¾åˆ°å…¨åŸŸè®Šæ•¸
 extern unsigned int ContinuousFailSKTCount[MAX_SOCKET_ROW][MAX_SOCKET_COL];
 extern unsigned int ContinuousFailARMCount[2][MAX_SOCKET_ROW][MAX_SOCKET_COL];
  //ChungHung 20131223 add for SCK request start
@@ -3604,9 +3604,9 @@ extern unsigned int SpecialBinContinuousFailARMCount[2][MAX_SOCKET_ROW][MAX_SOCK
 extern int iAutoCleanByBinCount[TEST_MAX_BIN];                                      //Steven 20160308 : By Bin count do auto clean
 extern int iAutoCleanBySiteCount[MAX_SOCKET_ROW][MAX_SOCKET_COL][TEST_MAX_BIN];     //Steven 20160308 : By Bin pre site count do auto clean
 
-extern int iLoadPersentCT[TEST_MAX_BIN];            //Steven 20140830 : §ï¦¨¥ş°ìÅÜ¼Æ
-extern int iLoadCountCT[TEST_MAX_BIN];              //Steven 20140830 : §ï¦¨¥ş°ìÅÜ¼Æ
-extern bool bAlarmReset;                            //Steven 20140905 : ¬ö¿ı¦³³Q«ö¤UAlarm Reset
+extern int iLoadPersentCT[TEST_MAX_BIN];            //Steven 20140830 : æ”¹æˆå…¨åŸŸè®Šæ•¸
+extern int iLoadCountCT[TEST_MAX_BIN];              //Steven 20140830 : æ”¹æˆå…¨åŸŸè®Šæ•¸
+extern bool bAlarmReset;                            //Steven 20140905 : ç´€éŒ„æœ‰è¢«æŒ‰ä¸‹Alarm Reset
 
 extern bool bPiggyBackIndexCheck;                   //jou 2014-09-03 Function State Stop Firt Initital Delay Time
 extern int iContinueAutoSkipAutoTrayEnd;            //ChungHung 20141002 add for KYEC AutoRetest
@@ -3615,25 +3615,25 @@ extern AnsiString sMachinePreState;                 // 2013.11.27 , Joye , KYEC 
 extern TQPF_Timer lHandlerStopTime;                       //jou 2014-09-21 Show Handler Stop Time
 
 extern bool bTesterLowYieldOneCycle;                //jou 2014-09-23 Tester Low Yield Handler need One Cycle & Alarm
-extern bool bSwitchArm2;                            //Steven 20140922 : Arm2·í§@«ü¯¾´ú¸Õ
-extern AnsiString AseIcRecord;                      //kevin 20161228 °O¿ı¤@¤äARM IC§l¨ú ¸ê®Æ
+extern bool bSwitchArm2;                            //Steven 20140922 : Arm2ç•¶ä½œæŒ‡ç´‹æ¸¬è©¦
+extern AnsiString AseIcRecord;                      //kevin 20161228 è¨˜éŒ„ä¸€æ”¯ARM ICå¸å– è³‡æ–™
 
-extern bool bTimeOutForNoFullSite;                      //Steven 20141016 : FullSiteªºTest Time Out
-extern int ASE_InTrayNum;                               //input tray ¼Æ¶q
+extern bool bTimeOutForNoFullSite;                      //Steven 20141016 : FullSiteçš„Test Time Out
+extern int ASE_InTrayNum;                               //input tray æ•¸é‡
 extern int iLoadTrayCount;
 
-extern AnsiString ASET_FileNAME;                        //kevin 20140918  ASE°ª¶¯¦Û°Ê°O¿ıÀÉ®×ÀÉ¦W
-extern AnsiString ASET_ScheduleNAME;                    //kevin 20140918  ASE°ª¶¯¦Û°Ê°O¿ıÀÉ®×¥Í²£§å¸¹
-extern AnsiString ASET_INTQTY;                          //kevin 20140918  ASE°ª¶¯¦Û°Ê°O¿ıÀÉ®×¥Í²£¼Æ¶q
-extern AnsiString ASET_StartTimeNAME;                   //kevin 20140918  ASE°ª¶¯¦Û°Ê°O¿ıÀÉ®×¶}©l®É¶¡
+extern AnsiString ASET_FileNAME;                        //kevin 20140918  ASEé«˜é›„è‡ªå‹•è¨˜éŒ„æª”æ¡ˆæª”å
+extern AnsiString ASET_ScheduleNAME;                    //kevin 20140918  ASEé«˜é›„è‡ªå‹•è¨˜éŒ„æª”æ¡ˆç”Ÿç”¢æ‰¹è™Ÿ
+extern AnsiString ASET_INTQTY;                          //kevin 20140918  ASEé«˜é›„è‡ªå‹•è¨˜éŒ„æª”æ¡ˆç”Ÿç”¢æ•¸é‡
+extern AnsiString ASET_StartTimeNAME;                   //kevin 20140918  ASEé«˜é›„è‡ªå‹•è¨˜éŒ„æª”æ¡ˆé–‹å§‹æ™‚é–“
 extern double fRecindexCycleTim;                        //kevin 20141024 ASE index cycle time  sec
 extern AnsiString RecindexCycleTim;                     //kevin 20141024 ASE index cycle time  sec
 
-extern AnsiString aRecordAseError;                      //kevin 20141028 ¬ö¿ıµo¥Í alarm
-extern AnsiString AseSaveFilePath;                      //kevin 20150212 ¬ö¿ıµo¥Í
+extern AnsiString aRecordAseError;                      //kevin 20141028 ç´€éŒ„ç™¼ç”Ÿ alarm
+extern AnsiString AseSaveFilePath;                      //kevin 20150212 ç´€éŒ„ç™¼ç”Ÿ
 
-extern bool bStartRecordAseError;                       //kevin 20141028¶}©l¬ö¿ı alarm code
-extern bool bReceiveSchedule;                           //kevin 20141104 ¦¬¨ìase §å¸¹
+extern bool bStartRecordAseError;                       //kevin 20141028é–‹å§‹ç´€éŒ„ alarm code
+extern bool bReceiveSchedule;                           //kevin 20141104 æ”¶åˆ°ase æ‰¹è™Ÿ
 
 extern int iInArmXBase;                                 //Steven 20141029 : XY-Pitch
 extern int iInArmYBase;
@@ -3649,7 +3649,7 @@ extern int iOutArmShtYCenterPos;
 extern int iSortArmShtXCenterPos;                                               //RogerYang 20250506 Add for 9046AU
 extern int iSortArmShtYCenterPos;
 
-extern int iInitContactCount;                                                   //Steven 20141117 : °_´ú®É·Å«×­n¸ÉOffset
+extern int iInitContactCount;                                                   //Steven 20141117 : èµ·æ¸¬æ™‚æº«åº¦è¦è£œOffset
 
 extern int iRotato_In_Row;                                                      //wei 20141208 2x2 1x2  Pitch >3750
 extern int iRotato_Out_Row;                                                     //wei 20141208 2x2 1x2  Pitch >3750
@@ -3660,28 +3660,28 @@ extern bool bTempLess30degShowLightFlag;                                        
 extern bool bEnableTempHeaterOkShowLight;                                       //jou 20180529 : Temperature Heater Ok Show Light
 extern bool bTempHeaterOkShowLightFlag;                                         //jou 20180529 : Temperature Heater Ok Show Light
 
-extern int iAutoSiteMap[4][8];                                                  //kevin 20150113 °O¿ı´ú¸Õ¾÷site map
-extern int iAutoSiteMapBin[4][8];                                               //kevin 20150113 °O¿ı´ú¸Õ¾÷site map
-extern int iAutoSiteRecordIC[2];                                                //kevin 20150114 °O¿ı¦³ic¦ì¸m
-extern int iAutoSiteMapSocketPass[4][8];                                        //kevin 20160513 °O¿ı´ú¸Õ¾÷site map ¦¹socket ¬O§_pass¹L  0:¨S¨Ï¥Î 1;pass 2;fail
-extern int bTestBinDataError;                                                   //kevin 20150202 ´ú¸Õbin §O¨S³]©w©ÎÃösite ¦³bin ¸ê®Æ  0:¤£¨Ï¥Î 1; arm 1 2;arm2
-extern bool bLowYieldAutoCleanEnd;                                              //wei 20141216  LowYieldautoclean  Á×§K­«½Æ¶i¥h
+extern int iAutoSiteMap[4][8];                                                  //kevin 20150113 è¨˜éŒ„æ¸¬è©¦æ©Ÿsite map
+extern int iAutoSiteMapBin[4][8];                                               //kevin 20150113 è¨˜éŒ„æ¸¬è©¦æ©Ÿsite map
+extern int iAutoSiteRecordIC[2];                                                //kevin 20150114 è¨˜éŒ„æœ‰icä½ç½®
+extern int iAutoSiteMapSocketPass[4][8];                                        //kevin 20160513 è¨˜éŒ„æ¸¬è©¦æ©Ÿsite map æ­¤socket æ˜¯å¦passé  0:æ²’ä½¿ç”¨ 1;pass 2;fail
+extern int bTestBinDataError;                                                   //kevin 20150202 æ¸¬è©¦bin åˆ¥æ²’è¨­å®šæˆ–é—œsite æœ‰bin è³‡æ–™  0:ä¸ä½¿ç”¨ 1; arm 1 2;arm2
+extern bool bLowYieldAutoCleanEnd;                                              //wei 20141216  LowYieldautoclean  é¿å…é‡è¤‡é€²å»
 
-extern int iLowYieldSiteCount[4][8];                                            //wei 20141201 Low Yield Auto Clean    low Yield ²Î­p
-extern bool bLowYieldCleanOut;                                                  //wei 20141201 Low Yield Auto Clean    ¬O§_clean out
+extern int iLowYieldSiteCount[4][8];                                            //wei 20141201 Low Yield Auto Clean    low Yield çµ±è¨ˆ
+extern bool bLowYieldCleanOut;                                                  //wei 20141201 Low Yield Auto Clean    æ˜¯å¦clean out
 extern bool bLowYieldCloseSite[2][4][8];                                        //wei 20141201 Low Yield Auto Clean    close site
-extern int iLowYieldCloseCount;                                                 //wei 20141201 Low Yield Auto Clean    close site  ²Î­p
-extern bool bStandardYield;                                                     //wei 20141201 Low Yield Auto Clean    Yield ³]©w
+extern int iLowYieldCloseCount;                                                 //wei 20141201 Low Yield Auto Clean    close site  çµ±è¨ˆ
+extern bool bStandardYield;                                                     //wei 20141201 Low Yield Auto Clean    Yield è¨­å®š
 extern int iStandardYield[4][8];                                                //wei 20141201 Low Yield Auto Clean    StandardYield
 extern int iYield[4][8];                                                        //wei 20141201 Low Yield Auto Clean    Yield
 extern int iDifferenceYield[4][8];                                              //wei 20141201 Low Yield Auto Clean    DifferenceYield
-extern bool bSuckEnd[MAX_ARM_Row][MAX_ARM_Col];                                 //wei 20150318 suck§¹´Nµ¥©ótrue
+extern bool bSuckEnd[MAX_ARM_Row][MAX_ARM_Col];                                 //wei 20150318 suckå®Œå°±ç­‰æ–¼true
 
-extern bool bAutoSkipFlag;                                                      //jou 20150320   auto skip ¦¸¼Æ®É¶¡¾É­PHang up
-extern bool bSystemClose;                                                       //kevin 20150423 mainForm²¾¹L¨Ó
+extern bool bAutoSkipFlag;                                                      //jou 20150320   auto skip æ¬¡æ•¸æ™‚é–“å°è‡´Hang up
+extern bool bSystemClose;                                                       //kevin 20150423 mainFormç§»éä¾†
 
-extern bool bZ1PickShuttle;                                                     //Steven 20150407 : ­×¥¿[D45] Out Armµ¥Index Z¥\¯à, Á×§KAuto Homing
-extern bool bZ2PickShuttle;                                                     //Steven 20150407 : ­×¥¿[D45] Out Armµ¥Index Z¥\¯à, Á×§KAuto Homing
+extern bool bZ1PickShuttle;                                                     //Steven 20150407 : ä¿®æ­£[D45] Out Armç­‰Index ZåŠŸèƒ½, é¿å…Auto Homing
+extern bool bZ2PickShuttle;                                                     //Steven 20150407 : ä¿®æ­£[D45] Out Armç­‰Index ZåŠŸèƒ½, é¿å…Auto Homing
 extern bool bAseStart;                                                          //kevin 20150427
 extern bool bAseHome;                                                           //kevin 20150427
 extern bool bAsePause;                                                          //kevin 20150427
@@ -3696,66 +3696,66 @@ extern bool bAseTrayFeed;                                                       
 extern bool bTSTART;                                                            //kevin 20160303
 extern bool bSTEP;                                                              //kevin 20160303
 
-extern bool bUse_NewAutoCleanForm;                                              //kevin 20150507 ¨Ï¥Î·sAUTOCLEAN FORM
-extern bool bTEMPCTRL_Shuttle_TOGTHER;                                          //kevin 20150508 Shuttle¤£¤À¬q¥[¼ö
-extern bool bUseFix3CylinderActive;                                             //ChungHung 20150520 add fix Fix3 full ©M ShuttleShanke ½Ä¬ğ
+extern bool bUse_NewAutoCleanForm;                                              //kevin 20150507 ä½¿ç”¨æ–°AUTOCLEAN FORM
+extern bool bTEMPCTRL_Shuttle_TOGTHER;                                          //kevin 20150508 Shuttleä¸åˆ†æ®µåŠ ç†±
+extern bool bUseFix3CylinderActive;                                             //ChungHung 20150520 add fix Fix3 full å’Œ ShuttleShanke è¡çª
 
-extern bool bAutoReTest_ART;                                                    //kevin 20150529 ­n°õ¦æAUTO RETEST
-extern bool bFirstYieldCmp_ART;                                                 //kevin 20150529 ²Ä¤@¦¸AUTO RETEST YIELD¤ñ¹ï
-extern double fFirstYieldSet_ART;                                               //kevin 20150529 ²Ä¤@¦¸AUTO RETEST YIELD¤ñ¹ï­È³]©w   First yield >= ³]©w­È¤£¶·RT
-extern bool bOpenShortYieldCmp_ART;                                             //kevin 20150529 ²Ä¤@¦¸AUTO RETEST open Short YIELD¤ñ¹ï
-extern double  fOpenShortYieldSet_ART;                                          //kevin 20150529 ²Ä¤@¦¸AUTO RETEST open Short YIELD¤ñ¹ï­È³]©w    First yield >= ³]©w­È¤£¶·RT
-extern bool bRecoverRateYieldCmp_ART;                                           //kevin 20150529 ²Ä¤@¦¸AUTO RETEST RecoverRate YIELD¤ñ¹ï
-extern double  fRecoverRateYieldRT1Set_ART;                                     //kevin 20150529 ²Ä¤@¦¸AUTO RecoverRateYieldRT1 YIELD¤ñ¹ï­È³]©w
-extern bool bSetYielddiffCmp_ART;                                               //kevin 20150529 ²Ä¤@¦¸AUTO RETEST YIELD¤ñ¹ï  FT - FT+RT1 Pass yield
-extern double fbSetYielddiffSet_ART;                                            //kevin 20150529 ²Ä¤@¦¸AUTO RETEST YIELD¤ñ¹ï­È³]©w  FT - FT+RT1 Pass yield <= ³]©w­È«h¤£¶·RT2
-extern bool bSetSpecialBin_ART;                                                 //kevin 20150529 ²Ä¤@¦¸AUTO RETEST
-extern bool bAutoDetectBin_ART;                                                 //kevin 20150529 ²Ä¤@¦¸AUTO RETEST
-extern int iAutoRetestLimit;                                                    //kevin 20150601 °µAUTO RETEST³Ì¤j¦¸¼Æ
-extern int iTrayArmAutoRetestBuffer;                                            //kevin 20150606 °ª¶¯Âê¦í tray arm³t«×
-extern int iIonFanDleayAlarm;                                                   //kevin 20150610 °ª¶¯Â÷¤l­·®°°»´úµoalarm®É¶¡
-extern bool bRunTrayError;                                                      //kevin 20150612 run tray ¼Ò¦¡§l¨ìic µoalarm ¤â°Ê¨ú¥Xtray
-extern int iCountReceiveTray_ART;                                               //kevin 20150613 ­pºâ¦¬¦^tray
-//extern bool HighTemperatureSet150;                                              //wei 20150617 §ï¾÷³Ì°ª·Å150«×
-//extern bool HighTemperatureSet155;                                              //Sam 20240118 ·s¼W 155«× ¼Ò¦¡
-//extern bool HighTemperatureSet175;                                              //Frank 20160705 add §ï¾÷³Ì°ª·Å175«×
-//extern bool bHighTempSetCustomizeEnable;                                        //Jimmychiu 20250626 : ³Ì°ª·Å«×¦Û­q
-//extern double dHighTempSetCustomizeValue;                                       //Jimmychiu 20250626 : ³Ì°ª·Å«×¦Û­q
-extern int iTempLimitation;                                                     //Steven 20250701 : ¾ã¦X¾÷¥x·Å«×³]©w
-extern int  DewPoint_Hardware_Install;                                          //Steven 20191017 : ÅSÂI­p
+extern bool bAutoReTest_ART;                                                    //kevin 20150529 è¦åŸ·è¡ŒAUTO RETEST
+extern bool bFirstYieldCmp_ART;                                                 //kevin 20150529 ç¬¬ä¸€æ¬¡AUTO RETEST YIELDæ¯”å°
+extern double fFirstYieldSet_ART;                                               //kevin 20150529 ç¬¬ä¸€æ¬¡AUTO RETEST YIELDæ¯”å°å€¼è¨­å®š   First yield >= è¨­å®šå€¼ä¸é ˆRT
+extern bool bOpenShortYieldCmp_ART;                                             //kevin 20150529 ç¬¬ä¸€æ¬¡AUTO RETEST open Short YIELDæ¯”å°
+extern double  fOpenShortYieldSet_ART;                                          //kevin 20150529 ç¬¬ä¸€æ¬¡AUTO RETEST open Short YIELDæ¯”å°å€¼è¨­å®š    First yield >= è¨­å®šå€¼ä¸é ˆRT
+extern bool bRecoverRateYieldCmp_ART;                                           //kevin 20150529 ç¬¬ä¸€æ¬¡AUTO RETEST RecoverRate YIELDæ¯”å°
+extern double  fRecoverRateYieldRT1Set_ART;                                     //kevin 20150529 ç¬¬ä¸€æ¬¡AUTO RecoverRateYieldRT1 YIELDæ¯”å°å€¼è¨­å®š
+extern bool bSetYielddiffCmp_ART;                                               //kevin 20150529 ç¬¬ä¸€æ¬¡AUTO RETEST YIELDæ¯”å°  FT - FT+RT1 Pass yield
+extern double fbSetYielddiffSet_ART;                                            //kevin 20150529 ç¬¬ä¸€æ¬¡AUTO RETEST YIELDæ¯”å°å€¼è¨­å®š  FT - FT+RT1 Pass yield <= è¨­å®šå€¼å‰‡ä¸é ˆRT2
+extern bool bSetSpecialBin_ART;                                                 //kevin 20150529 ç¬¬ä¸€æ¬¡AUTO RETEST
+extern bool bAutoDetectBin_ART;                                                 //kevin 20150529 ç¬¬ä¸€æ¬¡AUTO RETEST
+extern int iAutoRetestLimit;                                                    //kevin 20150601 åšAUTO RETESTæœ€å¤§æ¬¡æ•¸
+extern int iTrayArmAutoRetestBuffer;                                            //kevin 20150606 é«˜é›„é–ä½ tray armé€Ÿåº¦
+extern int iIonFanDleayAlarm;                                                   //kevin 20150610 é«˜é›„é›¢å­é¢¨æ‰‡åµæ¸¬ç™¼alarmæ™‚é–“
+extern bool bRunTrayError;                                                      //kevin 20150612 run tray æ¨¡å¼å¸åˆ°ic ç™¼alarm æ‰‹å‹•å–å‡ºtray
+extern int iCountReceiveTray_ART;                                               //kevin 20150613 è¨ˆç®—æ”¶å›tray
+//extern bool HighTemperatureSet150;                                              //wei 20150617 æ”¹æ©Ÿæœ€é«˜æº«150åº¦
+//extern bool HighTemperatureSet155;                                              //Sam 20240118 æ–°å¢ 155åº¦ æ¨¡å¼
+//extern bool HighTemperatureSet175;                                              //Frank 20160705 add æ”¹æ©Ÿæœ€é«˜æº«175åº¦
+//extern bool bHighTempSetCustomizeEnable;                                        //Jimmychiu 20250626 : æœ€é«˜æº«åº¦è‡ªè¨‚
+//extern double dHighTempSetCustomizeValue;                                       //Jimmychiu 20250626 : æœ€é«˜æº«åº¦è‡ªè¨‚
+extern int iTempLimitation;                                                     //Steven 20250701 : æ•´åˆæ©Ÿå°æº«åº¦è¨­å®š
+extern int  DewPoint_Hardware_Install;                                          //Steven 20191017 : éœ²é»è¨ˆ
 extern double dAdamValue_mA;
 extern double dAdamValue_Degree;
 extern bool bDewPointalarm;
 extern bool bGpibRS232Error;                                                    //wei 20150617 Add version control
-extern int iEPControlValue;                                                     //Ifor 20150710 EP ¬y¶q±±¨î
-extern int iSendGpibTestHome;                                                   //kevin 20150626 °e¥X´ú¸Õ°T¸¹ µ¥¦¬¨ì¸ê®Æ¤~¯àÂkhome
+extern int iEPControlValue;                                                     //Ifor 20150710 EP æµé‡æ§åˆ¶
+extern int iSendGpibTestHome;                                                   //kevin 20150626 é€å‡ºæ¸¬è©¦è¨Šè™Ÿ ç­‰æ”¶åˆ°è³‡æ–™æ‰èƒ½æ­¸home
 extern bool bSecsGemCanStart;                                                   //wei 20150630  SecsGem Can Start
-extern double fTrayYield[eTrayCount];                                           //JerryYang 20220909 : 10->eTrayCount        //kevin 20150630  pass fail ²v
-extern bool bUsePassYieldTray[eTrayCount];                                      //JerryYang 20220909 : 10->eTrayCount        //kevin 20150701 fail bin ¦b¨}²v§PÂ_¸Ì­±ºâpass yield
-extern bool bUseNewCleanModeKit;                                                //kevin 20150701 ¨Ï¥Îautoclean¼Ò²Õ ®Õ¥¿¦ì¸m¦b °ò®y¤W tray pin1
-extern bool bART_needRT2;                                                       //kevin 20150717  RT §¹¦¨ÁÙ»İ­nrt2
-extern bool bART_RT2RunNoChangeMode;                                            //kevin 20150717  ¥u°hfail RT2 ¤£¯à§ó§ï´ú¸Õ¼Ò¦¡
-//extern bool bEmptyAndColorMustManualRemove;                                     //Sam 20230203 : ­×¥¿P24©ñTray²§±` Mark //Frank 20150626 : forª¿®æ Loader¦³Skip­n¨ìEmptyªº¦ì¸m°µÀË¬d
-extern bool bRotateChange;                                                      //Frank 20150626 : forª¿®æ ­n¦³IC¤è¦VÅã¥Ü
-//extern int iArmXShuttle1OffsetPos;                                              //kevin 20150720 In arm X AutoClean offset §l¨úShuttle 1 IC Offset
-//extern int iArmYShuttle1OffsetPos;                                              //kevin 20150720 In arm Y AutoClean offset §l¨úShuttle 1 IC Offset
+extern double fTrayYield[eTrayCount];                                           //JerryYang 20220909 : 10->eTrayCount        //kevin 20150630  pass fail ç‡
+extern bool bUsePassYieldTray[eTrayCount];                                      //JerryYang 20220909 : 10->eTrayCount        //kevin 20150701 fail bin åœ¨è‰¯ç‡åˆ¤æ–·è£¡é¢ç®—pass yield
+extern bool bUseNewCleanModeKit;                                                //kevin 20150701 ä½¿ç”¨autocleanæ¨¡çµ„ æ ¡æ­£ä½ç½®åœ¨ åŸºåº§ä¸Š tray pin1
+extern bool bART_needRT2;                                                       //kevin 20150717  RT å®Œæˆé‚„éœ€è¦rt2
+extern bool bART_RT2RunNoChangeMode;                                            //kevin 20150717  åªé€€fail RT2 ä¸èƒ½æ›´æ”¹æ¸¬è©¦æ¨¡å¼
+//extern bool bEmptyAndColorMustManualRemove;                                     //Sam 20230203 : ä¿®æ­£P24æ”¾Trayç•°å¸¸ Mark //Frank 20150626 : forçŸ½æ ¼ Loaderæœ‰Skipè¦åˆ°Emptyçš„ä½ç½®åšæª¢æŸ¥
+extern bool bRotateChange;                                                      //Frank 20150626 : forçŸ½æ ¼ è¦æœ‰ICæ–¹å‘é¡¯ç¤º
+//extern int iArmXShuttle1OffsetPos;                                              //kevin 20150720 In arm X AutoClean offset å¸å–Shuttle 1 IC Offset
+//extern int iArmYShuttle1OffsetPos;                                              //kevin 20150720 In arm Y AutoClean offset å¸å–Shuttle 1 IC Offset
 extern int HotplatlXOffset;                                                     //kevin 20150720 add hotplate Xpos
 extern int HotplatlYOffset;                                                     //kevin 20150720 add hotplate Ypos
 extern int HotplatlPickOffset;                                                  //kevin 20150720 add hotplate Pick
 extern int HotplatlPlaceOffset;                                                 //kevin 20150720 add hotplate place
 extern int HotplatePitchOffset;                                                 //kevin 20150720 add hotplate Pitch
 //extern int ShuttlePitchOffset;                                                  //kevin 20150720 add Shuttle Pitch
-//extern int iArmPickShuttlePos;                                                  //kevin 20120623 In out arm §l¨úShuttle IC Offset
-//extern int iArmPlaceShuttlePos;                                                 //kevin 20120623 In out arm ©ñShuttle IC Offset
-extern int iArmPickTrayPos;                                                     //kevin 20120623 In out arm §l¨úTRAY IC Offset
-extern int iArmPlaceTrayPos;                                                    //kevin 20120623 In out arm ©ñTRAY IC Offset
-extern int iIndexPickShuttlePos;                                                //kevin 20120623 Index §l¨ú Shuttle IC Offset
-extern int iIndexPlaceShuttlePos;                                               //kevin 20120623 Index ©ñ Shuttle IC Offset
+//extern int iArmPickShuttlePos;                                                  //kevin 20120623 In out arm å¸å–Shuttle IC Offset
+//extern int iArmPlaceShuttlePos;                                                 //kevin 20120623 In out arm æ”¾Shuttle IC Offset
+extern int iArmPickTrayPos;                                                     //kevin 20120623 In out arm å¸å–TRAY IC Offset
+extern int iArmPlaceTrayPos;                                                    //kevin 20120623 In out arm æ”¾TRAY IC Offset
+extern int iIndexPickShuttlePos;                                                //kevin 20120623 Index å¸å– Shuttle IC Offset
+extern int iIndexPlaceShuttlePos;                                               //kevin 20120623 Index æ”¾ Shuttle IC Offset
 extern int iIndexWorkDownPos;                                                   //kevin 20120623 Index Clean down pos
 extern int iIndexWorkUpPos;                                                     //kevin 20120623 Index Clean down pos
-extern int bCleanHotplate_ART;                                                  //kevin 20150722 ²Mhotplate ¶}Ãösite
+extern int bCleanHotplate_ART;                                                  //kevin 20150722 æ¸…hotplate é–‹é—œsite
 // for autoclean offset 20150720
-extern bool bSECSGEMAlarm;                                                      //wei 20150817 S10F3 Alarm Reset«öÁä
+extern bool bSECSGEMAlarm;                                                      //wei 20150817 S10F3 Alarm ResetæŒ‰éµ
 extern AnsiString asSECSGEMChangeName;                                          //wei 20150803
 extern AnsiString asSECSGEMChangePassword;                                      //wei 20150803
 extern bool bSECSGEMNoSendEC;                                                   //wei 20150803
@@ -3765,11 +3765,11 @@ extern AnsiString asSecsGemBarCode;                                             
 extern AnsiString asSecsGemBarCodePasswoed;                                     //Ifor 20180227 (Steven) add BarCode Password
 extern AnsiString asBarCode;                                                    //wei 20150811 SecsGem BarcodeReader
 extern bool bOTDRecord;                                                         //kevin 20150827 OTD Log
-extern bool bSECSGEMConnectionFail;                                             //wei 20150817 SECSGEM Â_½u
-extern bool bSECSGEMConnectionFailOneCycle;                                     //wei 20150824 Secs_Gem Â_½uOnecycle
+extern bool bSECSGEMConnectionFail;                                             //wei 20150817 SECSGEM æ–·ç·š
+extern bool bSECSGEMConnectionFailOneCycle;                                     //wei 20150824 Secs_Gem æ–·ç·šOnecycle
 extern AnsiString asSECSGEMPassWord;
-extern int iAutoRetestLimitFile;                                                //wei  20150825 °µAUTO RETEST³Ì¤j¦¸¼Æ
-extern double iFailYieldRate_ARTFile;                                           //wei  20150825 AUTO RETEST YIELD¤ñ¹ï
+extern int iAutoRetestLimitFile;                                                //wei  20150825 åšAUTO RETESTæœ€å¤§æ¬¡æ•¸
+extern double iFailYieldRate_ARTFile;                                           //wei  20150825 AUTO RETEST YIELDæ¯”å°
 
 extern int iAutoLeastRetestLimitFile;                                           //wei  20160204
 extern double dFailYieldRate_ARTFTFile[eTrayCount];                             //wei  20160204
@@ -3791,10 +3791,10 @@ extern bool bErrorAutoClean;
 //extern bool bEndLotAutoRetestGPIB;                                              //jou 2015-10-02 Auto Retest GPIB mode
 //extern bool bFinEndLotAutoRetestGPIB;                                           //jou 2015-10-02 Auto Retest GPIB mode
 //extern int iRetestFlagART;                                                      //jou 2015-10-02 Auto Retest GPIB mode
-//extern bool bFirstTestAutoRetestGPIB;                                           //jou 2015-10-02 Auto Retest GPIB mode        //Steven 20170314 : ARTªºÅÜ¼Æ²¾¨ìLastSet
+//extern bool bFirstTestAutoRetestGPIB;                                           //jou 2015-10-02 Auto Retest GPIB mode        //Steven 20170314 : ARTçš„è®Šæ•¸ç§»åˆ°LastSet
 
-extern int iTemperatureOk;                                                      //kevin 20150914 ¥[¼ö§¹¦¨
-extern bool iTemperatureOkFirstTime;                                            //kevin 20150914 ¥[¼ö§¹¦¨µ{¦¡¤@¶}©l
+extern int iTemperatureOk;                                                      //kevin 20150914 åŠ ç†±å®Œæˆ
+extern bool iTemperatureOkFirstTime;                                            //kevin 20150914 åŠ ç†±å®Œæˆç¨‹å¼ä¸€é–‹å§‹
 extern int iRecordIndexPosition;                                                //kevin 20150915
 
 extern int  iAseRetry;                                                          //kevin 20150925
@@ -3806,15 +3806,15 @@ extern int  iAseCleanOut;                                                       
 extern int  iAseSKIP;                                                           //kevin 20150925
 extern int  iAseHome;                                                           //kevin 20150925
 extern int  iAsePause;                                                          //kevin 20150925
-extern AnsiString ASE_ReturnState;                                              //kevin 20150925  ¦^¶Ç¥Ø«e¾÷¥xª¬ªp
-extern bool bRunManualSortMode;                                                 //Steven 20150915 : For TSMC ¤â°Ê¾ã½L¥\¯à
-extern bool bResetModeAndCleanOut;                                              //JerryYang 20151007 : ResetMode¥i¿ïOneCycle©ÎCleanOut
+extern AnsiString ASE_ReturnState;                                              //kevin 20150925  å›å‚³ç›®å‰æ©Ÿå°ç‹€æ³
+extern bool bRunManualSortMode;                                                 //Steven 20150915 : For TSMC æ‰‹å‹•æ•´ç›¤åŠŸèƒ½
+extern bool bResetModeAndCleanOut;                                              //JerryYang 20151007 : ResetModeå¯é¸OneCycleæˆ–CleanOut
 extern bool bResetModeAndCleanOutAndNoTest;                                     //Jimmychiu 20210927 Reset clean out with no tester
 
 //wei 20150922 OCR
-extern bool bBarCodeError;                                                      //wei 20150713 BarCode±½¥ş³¡
-extern int iBarCodeErrorC;                                                      //wei 20150713 BarCode±½¥ş³¡
-extern int iBarCodeErrorR;                                                      //wei 20150713 BarCode±½¥ş³¡
+extern bool bBarCodeError;                                                      //wei 20150713 BarCodeæƒå…¨éƒ¨
+extern int iBarCodeErrorC;                                                      //wei 20150713 BarCodeæƒå…¨éƒ¨
+extern int iBarCodeErrorR;                                                      //wei 20150713 BarCodeæƒå…¨éƒ¨
 extern AnsiString  asOCRBarCode;                                                //wei 20150713
 extern int iOCRCount;                                                           //wei 20150713
 extern int iNewOCRCount[10];
@@ -3832,7 +3832,7 @@ extern bool bChangeFile;
 extern bool bOCRUser;
 extern bool bOCRPassWord;
 extern bool bSignIn;
-extern bool bOCRNewFile;                                                        //wei 20161028¦^¶ÇOCRÀÉ¦W
+extern bool bOCRNewFile;                                                        //wei 20161028å›å‚³OCRæª”å
 extern bool bOCROK[15];
 extern bool bOCRError[10];
 extern bool bCheckFile;
@@ -3842,14 +3842,14 @@ extern int iOCRCheck;
 extern int iOCRLotTrayCount;
 extern bool bOCRCheck;
 extern bool bOCRCheckNG;
-extern int  iATCForHSMode;                                                      //Ifor 20151026 :§PÂ_ATC ¼Ò¦¡¬O§_²Å¦X HS ³W©w
+extern int  iATCForHSMode;                                                      //Ifor 20151026 :åˆ¤æ–·ATC æ¨¡å¼æ˜¯å¦ç¬¦åˆ HS è¦å®š
 extern int iSH1_1BarcodePosition;                                               //wei 20150912 2D
 extern int iSH1_2BarcodePosition;                                               //wei 20150912 2D
 extern int iSH2_1BarcodePosition;                                               //wei 20150912 2D
 extern int iSH2_2BarcodePosition;                                               //wei 20150912 2D
 
 extern bool bOffsetEnterBarcode;
-extern bool bHeightCalibrationFinish;                                           //JerryYang 20151028 add for Amkor,download recipe¤ñ¹ï¤£²Å«á,¬O§_°µ§¹Height Calibration
+extern bool bHeightCalibrationFinish;                                           //JerryYang 20151028 add for Amkor,download recipeæ¯”å°ä¸ç¬¦å¾Œ,æ˜¯å¦åšå®ŒHeight Calibration
 extern int iRecordIndexPosition;                                                //kevin 20150915
 
 extern int  iAseRetry;                                                          //kevin 20150925
@@ -3861,16 +3861,16 @@ extern int  iAseCleanOut;                                                       
 extern int  iAseSKIP;                                                           //kevin 20150925
 extern int  iAseHome;                                                           //kevin 20150925
 extern int  iAsePause;                                                          //kevin 20150925
-extern AnsiString ASE_ReturnState;                                              //kevin 20150925  ¦^¶Ç¥Ø«e¾÷¥xª¬ªp
-extern double dTempOffset[2][tcTotalCount];                                     //kevin 20151023 ¬ö¿ıÅª¨ú·Å«×offset 0:³Ì·s¸ê®Æ
-extern bool bSendChangeTemp;                                                    //kevin 20151023  ¥Í²£¤¤§ïÅÜ·Å«×
-extern bool bSendChangeTempError;                                               //kevin 20151023  ¥Í²£¤¤§ïÅÜ·Å«×·Å«×¶W¹L +- 10µoalarm
+extern AnsiString ASE_ReturnState;                                              //kevin 20150925  å›å‚³ç›®å‰æ©Ÿå°ç‹€æ³
+extern double dTempOffset[2][tcTotalCount];                                     //kevin 20151023 ç´€éŒ„è®€å–æº«åº¦offset 0:æœ€æ–°è³‡æ–™
+extern bool bSendChangeTemp;                                                    //kevin 20151023  ç”Ÿç”¢ä¸­æ”¹è®Šæº«åº¦
+extern bool bSendChangeTempError;                                               //kevin 20151023  ç”Ÿç”¢ä¸­æ”¹è®Šæº«åº¦æº«åº¦è¶…é +- 10ç™¼alarm
 extern int  iSendChangeTempError;
-extern bool bSendChangeTempDelayAlarm;                                          //kevin 20151023  ¥Í²£¤¤§ïÅÜ·Å«×·Å«×µoalarm®É¶¡©µªø
-extern int iTempSec;                                                            //kevin 20151023  ·Å«×µoalarm®É¶¡
+extern bool bSendChangeTempDelayAlarm;                                          //kevin 20151023  ç”Ÿç”¢ä¸­æ”¹è®Šæº«åº¦æº«åº¦ç™¼alarmæ™‚é–“å»¶é•·
+extern int iTempSec;                                                            //kevin 20151023  æº«åº¦ç™¼alarmæ™‚é–“
 //extern DWORD StartTemptim,EndTemptim, PassTemptim;                            //kevin 20151023  AutoTemp Offset time
 extern int iYeildCT[TEST_MAX_BIN];                                              //wei 20151111
-extern bool bLowYeildAlarm;                                                     //wei 20151116  Low Yield Onecycle¤¤¤£alarm
+extern bool bLowYeildAlarm;                                                     //wei 20151116  Low Yield Onecycleä¸­ä¸alarm
 //extern bool bOneCycleByAutoOffSite;
 extern bool bSPBinYieldAlarm;                                                   //Isaac 20171113 (Steven) : add ATK Special Bin Yield alarm
 
@@ -3880,26 +3880,26 @@ extern bool bRecordJamRateByTime_Clear;         // 2015.11.11 , Joye , Add Jam R
 extern bool bGPIBChangeSiteMap;                 //wei 20151127 GPIB Change Site Map
 extern bool bGPIBChangeAlarm;                   //wei 20151127 GPIB Change Site Map
 extern bool bSetByDLL;                          //JerryYang 20181126 (Steven) : support Epson DLL function
-extern bool bHeightCalibrationFinish;           //JerryYang 20151028 add for Amkor,download recipe¤ñ¹ï¤£²Å«á,¬O§_°µ§¹Height Calibration
-extern bool bUnloading;                         //JerryYang 20151109 ¥Î¨Ó§PÂ_¾÷¥x¬O§_¥¿¦bUnload
-extern bool bAutoCleaning;                      //JerryYang 20151109 ¥Î¨Ó§PÂ_¾÷¥x¬O§_¥¿¦bAutoClean
-extern bool bScanKeyNo;                         //JerryYang 20151202 Add for TSMC ÂISKIP©Î¬ORETRY³£­n¦A¸õ¤@¦¸½T»{
-extern bool bHasSaveSet;                        //Ifor 20151204 ·s¼W§PÂ_¾÷¥x¦³µL­×§ï³]©wÀÉ
+extern bool bHeightCalibrationFinish;           //JerryYang 20151028 add for Amkor,download recipeæ¯”å°ä¸ç¬¦å¾Œ,æ˜¯å¦åšå®ŒHeight Calibration
+extern bool bUnloading;                         //JerryYang 20151109 ç”¨ä¾†åˆ¤æ–·æ©Ÿå°æ˜¯å¦æ­£åœ¨Unload
+extern bool bAutoCleaning;                      //JerryYang 20151109 ç”¨ä¾†åˆ¤æ–·æ©Ÿå°æ˜¯å¦æ­£åœ¨AutoClean
+extern bool bScanKeyNo;                         //JerryYang 20151202 Add for TSMC é»SKIPæˆ–æ˜¯RETRYéƒ½è¦å†è·³ä¸€æ¬¡ç¢ºèª
+extern bool bHasSaveSet;                        //Ifor 20151204 æ–°å¢åˆ¤æ–·æ©Ÿå°æœ‰ç„¡ä¿®æ”¹è¨­å®šæª”
 extern bool bOneTimes;
-extern bool bEnableEmployeeIDCheck;             //Ifor 20180911 (Steven) : Add ±Ò°Ê Employee ID Check
+extern bool bEnableEmployeeIDCheck;             //Ifor 20180911 (Steven) : Add å•Ÿå‹• Employee ID Check
 //JerryYang 20150910 START:Auto Sorting BinTray by Out Arm when Clean Out
 extern const int SortingBinTray_NOACT;
 extern const int SortingBinTray_ACT;
 extern const int SortingBinTray_CHECKOK;
 extern const int SortingBinTray_ERR;
-extern double dAdaptiveStardardYield;           //Sam 20230914 : ¦Û¾AÀ³©Ê¨}²vºÊ±±
-extern int iAdaptiveACInterval;                 //Sam 20230914 : ¦Û¾AÀ³©Ê¨}²vºÊ±±
+extern double dAdaptiveStardardYield;           //Sam 20230914 : è‡ªé©æ‡‰æ€§è‰¯ç‡ç›£æ§
+extern int iAdaptiveACInterval;                 //Sam 20230914 : è‡ªé©æ‡‰æ€§è‰¯ç‡ç›£æ§
 extern int iAdaptiveACIntervalNor;              //Sam 20240726 : AI Clean
 extern int iAdaptiveLowYieldCntNor;
 extern int iAdaptiveLowYieldCntMin;
-extern int iAdaptiveContsLowerCnt;              //Sam 20230914 : ¦Û¾AÀ³©Ê¨}²vºÊ±±
+extern int iAdaptiveContsLowerCnt;              //Sam 20230914 : è‡ªé©æ‡‰æ€§è‰¯ç‡ç›£æ§
 extern bool bResetNotMsg;                       //Sam 20240215 : Tester time out show reset all ic
-extern bool bRestModeBackupParm;                //Sam 20250820 : [I49] ²M®Æ®É Contact Heigh ­n©Ô°ª
+extern bool bRestModeBackupParm;                //Sam 20250820 : [I49] æ¸…æ–™æ™‚ Contact Heigh è¦æ‹‰é«˜
 extern int iRestModeBackContactMode;
 extern double dRestModeBackContactHeigh1;
 extern double dRestModeBackContactHeigh2;
@@ -3918,7 +3918,7 @@ typedef struct TSortingBinTray_PAR_STRUCR
     int iICNum;
 }TSortingBinTray_PAR;
 typedef struct TSortingBinTray_SUCKDATA_STRUCR
-{   //©Ò¦³¯BÂI¼Æ¸ê®Æ¡AÂà¦¨¾ã¼Æ¡A³æ¦ì¬°um
+{   //æ‰€æœ‰æµ®é»æ•¸è³‡æ–™ï¼Œè½‰æˆæ•´æ•¸ï¼Œå–®ä½ç‚ºum
     int iXPitch;
     int iYPitch;
     int iXItem;
@@ -3929,7 +3929,7 @@ typedef struct TSortingBinTray_SUCKDATA_STRUCR
 }TSortingBinTray_SUCKDATA;
 
 typedef struct TSortingBinTray_TRAYDATA_STRUCR
-{   //©Ò¦³¯BÂI¼Æ¸ê®Æ¡AÂà¦¨¾ã¼Æ¡A³æ¦ì¬°um
+{   //æ‰€æœ‰æµ®é»æ•¸è³‡æ–™ï¼Œè½‰æˆæ•´æ•¸ï¼Œå–®ä½ç‚ºum
     int iXPitch;
     int iYPitch;
     int iXDivision;
@@ -3939,7 +3939,7 @@ typedef struct TSortingBinTray_TRAYDATA_STRUCR
 }TSortingBinTray_TRAYDATA;
 
 typedef struct TSortingBinTray_CALDATA_STRUCR
-{   //©Ò¦³¯BÂI¼Æ¸ê®Æ¡AÂà¦¨¾ã¼Æ¡A³æ¦ì¬°um
+{   //æ‰€æœ‰æµ®é»æ•¸è³‡æ–™ï¼Œè½‰æˆæ•´æ•¸ï¼Œå–®ä½ç‚ºum
     int iCalXPos;
     int iCalYPos;
     int iUseSuck[10][10];
@@ -3948,38 +3948,38 @@ typedef struct TSortingBinTray_CALDATA_STRUCR
 
 typedef struct TSortingBinTray_Data
 {
-    //X¡BY¡BZ¶bªº°¨¹F½s¸¹
+    //Xã€Yã€Zè»¸çš„é¦¬é”ç·¨è™Ÿ
     int iMotorX;
     int iMotorY;
     int iMotorZ;
-    //©T©w§l¼L¬O²Ä´X¤ä§l¼L
+    //å›ºå®šå¸å˜´æ˜¯ç¬¬å¹¾æ”¯å¸å˜´
     int iActionSucker;
 
-    //§l¼L³Ì¤jªºX¡BY¼Æ¶q
+    //å¸å˜´æœ€å¤§çš„Xã€Yæ•¸é‡
     int iMaxSuckerX;
     int iMaxSuckerY;
 
-    //Z¶bªº¦w¥ş°ª«×
+    //Zè»¸çš„å®‰å…¨é«˜åº¦
     int iSuckerSafeZPos;
-    //Z¶b¨úIC°ª«×
+    //Zè»¸å–ICé«˜åº¦
     int iSuckerPickZPos[eTrayCount];
-    //Z¶b©ñIC°ª«×
+    //Zè»¸æ”¾ICé«˜åº¦
     int iSuckerPlaceZPos[eTrayCount];
 
-    //¦¹Tray½L¬O§_¦³¨Ï¥Î
-    bool bTrayAction[eTrayCount]; //¬O§_¨Ï¥Î¦¹Tray½L
+    //æ­¤Trayç›¤æ˜¯å¦æœ‰ä½¿ç”¨
+    bool bTrayAction[eTrayCount]; //æ˜¯å¦ä½¿ç”¨æ­¤Trayç›¤
 
-    //Tray½L¥ª¤W¨¤°ò·ÇÂI¦ì
+    //Trayç›¤å·¦ä¸Šè§’åŸºæº–é»ä½
     int iXBasePos[eTrayCount];
     int iYBasePos[eTrayCount];
 
-    //Auto 1~3¡BFix 1~3ªºTray½L¸ê®Æ
-    int iTrayData[eTrayCount][MAX_X_ITEM][MAX_Y_ITEM]; //¦¹Tray½LªºIC¸ê®Æ
+    //Auto 1~3ã€Fix 1~3çš„Trayç›¤è³‡æ–™
+    int iTrayData[eTrayCount][MAX_X_ITEM][MAX_Y_ITEM]; //æ­¤Trayç›¤çš„ICè³‡æ–™
 
-    //¨ìAuto 1~3¡BFix 1~3ªºÂI¦ì¡B°¾²¾¶q
-    TRAY_TYPE_PARA TTraySpec[eTrayCount]; //¦¹Tray½LªºÂI¦ì¸ê®Æ
+    //åˆ°Auto 1~3ã€Fix 1~3çš„é»ä½ã€åç§»é‡
+    TRAY_TYPE_PARA TTraySpec[eTrayCount]; //æ­¤Trayç›¤çš„é»ä½è³‡æ–™
 
-    //Out Arm X¤è¦V³Ì¤j§l¼L¼Æ¶q
+    //Out Arm Xæ–¹å‘æœ€å¤§å¸å˜´æ•¸é‡
     int iMAXSUCK_OutArmSuckX;
 }TSortingBinTray_Data;
 
@@ -3990,8 +3990,8 @@ extern TSortingBinTray_SUCKDATA MySuckData;
 extern TSortingBinTray_TRAYDATA MyTrayData;
 extern TSortingBinTray_CALDATA MyCalData;
 
-extern bool bSortingAllBinTrayFinish; //¬O§_©Ò¦³ªºBin Tray IC³£¾ã½L§¹¦¨
-extern bool bSortingSuckMode;                   //Sam 20250415 : ­×¥¿ P27 ¾ã½L¥\¯à
+extern bool bSortingAllBinTrayFinish; //æ˜¯å¦æ‰€æœ‰çš„Bin Tray ICéƒ½æ•´ç›¤å®Œæˆ
+extern bool bSortingSuckMode;                   //Sam 20250415 : ä¿®æ­£ P27 æ•´ç›¤åŠŸèƒ½
 extern int  iMainVCL_SeverDownload_Show ;       //2013.12.11 Q_Q SPIL Main Level
 //JerryYang 20150910 End:Auto Sorting BinTray by Out Arm when Clean Out
 extern int iOldRunStartMode;                    //wei 20151207
@@ -4001,31 +4001,31 @@ extern bool bDoOverDrive           ;            //Steven 20151207 : OverDrive fo
 extern int  iReContactCount        ;            //Steven 20151207 : Recontact for TSMC
 extern int  iCurrentReContactCount ;            //Steven 20151207 : Recontact for TSMC
 extern bool bDoReContact           ;            //Steven 20151207 : Recontact for TSMC
-extern TColor tcBinColor[eTrayCount]       ;            //JerryYang 20220909 : 9->24 //Steven 20160310 : §ï¦¨¦³ÃC¦âªºfail bin
-extern int  CHECK_RANGE            ;            //2013-04-12    Dell 500->750 ¦bKYECÂÂ¾÷½Õ¤£¶i¥h //jou 2013-05-21 750 -> 500 ¥X²{Out Shuttle lose //Steven 20160108 : §ï¥hTeaching½Õ¾ã
-extern bool bForKyecBu3RunART;                  //wei 20151210 Loader¨Ï¥Î¤£¦PSensor  //wei 20161118 bRunART-->bForKyecBu3RunART
-extern bool bARTTrayArmOK;                      //wei 20151217 ART ¦^½LOK
-extern bool bRTLoaderTrayCount;                 //wei 20160112 ART R1¤£ºâªÅ½L
-extern bool bContsFailIgnoreStart;              //wei 20160115 »ÉÆr«e´XÁû¤£­pºâContsFail
-extern int  iContsFailIgnoreCount;              //wei 20160115 »ÉÆr«e´XÁû¤£­pºâContsFail
-extern bool bESDSendDataToHandle;               //kevin 20160106  °eESD¸ê®Æµ¹HANDLE
-extern bool bTempHandleToESD;                   //kevin 20160106   °eEP HANDLE¸ê®Æµ¹ «È¤á
-extern bool bEPHandleToESD;                     //kevin 20160106  °eEP HANDLE¸ê®Æµ¹ «È¤á
-extern AnsiString bEPMessage;                   //kevin 20160106   ¦s¨úEP¸ê®Æ
-extern AnsiString bTempMessage;                 //kevin 20160106   ¦s¨ú·Å«×¸ê®Æ
-extern  bool bESDSystemtype;                    //kevin 20160106 Frank 20150309 : µ{¦¡Ãö³¬«á±NESD¨t²Î°±¤î
-extern int iSiteTotal;                          //kevin 20160125 ¥Ø«e¾÷¥x¼Ò¦¡©Ò¨Ï¥ÎSITE¼Æ¶q
-extern int iRetestNoIC[3];                      //wei 20160203 ¦^½L¬°ªÅ½L¤£­p¼Æ
-extern int iATC70_Count;                        //Ifor 20160223 Add ATC 7.0 ¥¼¦¬¨ì·Å«×¦^¶Ç¦¸¼Æ
-extern bool bRemoteAutomaticDeploying;          //wei 20160223 ¦Û°Ê³¡Äİ
+extern TColor tcBinColor[eTrayCount]       ;            //JerryYang 20220909 : 9->24 //Steven 20160310 : æ”¹æˆæœ‰é¡è‰²çš„fail bin
+extern int  CHECK_RANGE            ;            //2013-04-12    Dell 500->750 åœ¨KYECèˆŠæ©Ÿèª¿ä¸é€²å» //jou 2013-05-21 750 -> 500 å‡ºç¾Out Shuttle lose //Steven 20160108 : æ”¹å»Teachingèª¿æ•´
+extern bool bForKyecBu3RunART;                  //wei 20151210 Loaderä½¿ç”¨ä¸åŒSensor  //wei 20161118 bRunART-->bForKyecBu3RunART
+extern bool bARTTrayArmOK;                      //wei 20151217 ART å›ç›¤OK
+extern bool bRTLoaderTrayCount;                 //wei 20160112 ART R1ä¸ç®—ç©ºç›¤
+extern bool bContsFailIgnoreStart;              //wei 20160115 éŠ…é‘¼å‰å¹¾é¡†ä¸è¨ˆç®—ContsFail
+extern int  iContsFailIgnoreCount;              //wei 20160115 éŠ…é‘¼å‰å¹¾é¡†ä¸è¨ˆç®—ContsFail
+extern bool bESDSendDataToHandle;               //kevin 20160106  é€ESDè³‡æ–™çµ¦HANDLE
+extern bool bTempHandleToESD;                   //kevin 20160106   é€EP HANDLEè³‡æ–™çµ¦ å®¢æˆ¶
+extern bool bEPHandleToESD;                     //kevin 20160106  é€EP HANDLEè³‡æ–™çµ¦ å®¢æˆ¶
+extern AnsiString bEPMessage;                   //kevin 20160106   å­˜å–EPè³‡æ–™
+extern AnsiString bTempMessage;                 //kevin 20160106   å­˜å–æº«åº¦è³‡æ–™
+extern  bool bESDSystemtype;                    //kevin 20160106 Frank 20150309 : ç¨‹å¼é—œé–‰å¾Œå°‡ESDç³»çµ±åœæ­¢
+extern int iSiteTotal;                          //kevin 20160125 ç›®å‰æ©Ÿå°æ¨¡å¼æ‰€ä½¿ç”¨SITEæ•¸é‡
+extern int iRetestNoIC[3];                      //wei 20160203 å›ç›¤ç‚ºç©ºç›¤ä¸è¨ˆæ•¸
+extern int iATC70_Count;                        //Ifor 20160223 Add ATC 7.0 æœªæ”¶åˆ°æº«åº¦å›å‚³æ¬¡æ•¸
+extern bool bRemoteAutomaticDeploying;          //wei 20160223 è‡ªå‹•éƒ¨å±¬
 extern bool bIsShowPMAlarmMessage;              //wei 20160225 PMAlarmFunction
-extern bool bAutoRetestJam;                     //wei 20160302 Jam Skip¿é¤JÁû¼Æ
-extern AnsiString iJamSkipIC;                   //wei 20160302 Jam Skip¿é¤JÁû¼Æ
+extern bool bAutoRetestJam;                     //wei 20160302 Jam Skipè¼¸å…¥é¡†æ•¸
+extern AnsiString iJamSkipIC;                   //wei 20160302 Jam Skipè¼¸å…¥é¡†æ•¸
 extern int iARTJamSkipICCount;                  //Frank 20160819
 extern bool bCleanSkipICCount;                  //Frank 20160819
-extern int iJamSkipICCount;                     //wei 20160302 Jam Skip¿é¤JÁû¼Æ
+extern int iJamSkipICCount;                     //wei 20160302 Jam Skipè¼¸å…¥é¡†æ•¸
 extern bool bSecsGemStatus;                     //wei 20160308
-extern bool bReadSecsGemData;                   //wei 20160308 ¬O§_Åª¨úSECSGEM¸ê®Æ
+extern bool bReadSecsGemData;                   //wei 20160308 æ˜¯å¦è®€å–SECSGEMè³‡æ–™
 extern bool bSysLotStart;                       //Ifor 20160302 KYEC Lot Start
 extern bool bEPLogStart_KYEC;                   //Ifor 20160302 KYEC EP Log Start
 extern bool bEPLogEnd_KYEC;                     //Ifor 20160302 KYEC EP Log End
@@ -4038,8 +4038,8 @@ extern AnsiString sTemperatureLogFile;          //Ifor 20160302 KYEC Temperature
 extern AnsiString sESDLogFile;                  //Ifor 20160305 KYEC ESD Log File
 extern AnsiString sGroundManLogFile;            //Ifor 20250123 KYEC FTP UP Load GroundMan Log File
 extern bool bNoUseAutoRecord;                   //wei 20160311
-extern int iGalil_Z_SafePos;                    //Ifor 20160311 Á×§KHome sensor ¤£«G
-extern const int iGalil_Z_KYEC_SafePos;         //Ifor 20170509 (wei) ·s¼WKYEC¦^Home«á³Ì¤p¤W¤É°ª«×100
+extern int iGalil_Z_SafePos;                    //Ifor 20160311 é¿å…Home sensor ä¸äº®
+extern const int iGalil_Z_KYEC_SafePos;         //Ifor 20170509 (wei) æ–°å¢KYECå›Homeå¾Œæœ€å°ä¸Šå‡é«˜åº¦100
 extern AnsiString sESDLogData;                  //Ifor 20160316 KYEC ESD Log Data
 extern bool bESDDataReady;                      //Ifor 20160316 KYEC ESD Log Data
 extern bool bATCWaterTempAlarm;                 //Ifor 20160625 ATC Water Temp Error
@@ -4056,37 +4056,37 @@ extern bool bIntervalYield_IsShowAlarm;
 //20150604 Mylin Interval Total Yield Difference }
 extern int iAlarm4ContinueType_ContinueCount_Last;      // 2015.05.05 , Joye , Alarm4 Continue Type
 extern bool bAlarm4ContinueType_NeedClearCount;         // 2015.05.05 , Joye , Alarm4 Continue Type
-extern AnsiString asBarCodeErrorSend;                   //wei 20160318 Barcode Error¨Ì«È¤á³]©w
-extern AnsiString asBarCodeErrorCheckSum;               //KaiChen 20191121 ¡G¤¤Ãc¤é¤ë¥ú 2D Check Sum
+extern AnsiString asBarCodeErrorSend;                   //wei 20160318 Barcode Errorä¾å®¢æˆ¶è¨­å®š
+extern AnsiString asBarCodeErrorCheckSum;               //KaiChen 20191121 ï¼šä¸­å£¢æ—¥æœˆå…‰ 2D Check Sum
 extern AnsiString sATCVerRead;                          //Ifor 20160321 add ATC Ver
-extern int iNeedBarcodeCount[4];                        //wei 20160325 Barcode Rate­pºâ
-extern int iBarcodeErrorCount[4];                       //wei 20160325 Barcode Rate­pºâ
-extern int iBarcodePassCount[4];                        //wei 20160325 Barcode Rate­pºâ
-extern int iBarcodeAutoRetry[4];                        //wei 20160325 Barcode Rate­pºâ
+extern int iNeedBarcodeCount[4];                        //wei 20160325 Barcode Rateè¨ˆç®—
+extern int iBarcodeErrorCount[4];                       //wei 20160325 Barcode Rateè¨ˆç®—
+extern int iBarcodePassCount[4];                        //wei 20160325 Barcode Rateè¨ˆç®—
+extern int iBarcodeAutoRetry[4];                        //wei 20160325 Barcode Rateè¨ˆç®—
 extern int iBarcodeDuplicate[4];
-extern bool bBarcodeFirstAutoRetry[4];                  //wei 20160325 Barcode Rate­pºâ
-//extern bool iBinTray[5][9];                             //kevin 20160308 ¦³³]©wBin Tray  //kevin 20170223 (wei) ¤£¨Ï¥Î
-extern bool iBinTray[eTrayCount];                       //JerryYang 20220909 : 10->eTrayCount        //kevin 20170328 (Steven) add §PÂ_TRAY ¬O§_¨Ï¥Î BIN
-extern bool bFirstTest;                                 //kevin 20160311 Clean out«á²Ä¤@¦¸´ú¸Õ®É¶¡
-extern bool bTestOverTimeTempOffsetF;                   //kevin 20160312 °_°Ê¶ZÂ÷¤W¤@¦¸´ú¸Õ®É¶¡¶W¹L©Ò³]©w®É¶¡·Å«×»İ¸ÉOFFSET
-extern void InitialMemory();                            //Steven 20160319 : ªì©l¤Æ¼Æ­È
-extern bool bAlmLowYieldDoOneCycle;                     //JerryYang 20160401 Low Yield Alarm«á­n°µOneCycle
-extern bool bAlmSiteYieldDiffDoOneCycle;                //JerryYang 20160401 Arm Site Yield Different Alarm «á­n°µOneCycle
-extern bool bAlmSiteYieldCmpDoOneCycle;                 //JerryYang 20160401 Site Yield Different Alarm «á­n°µOneCycle
-extern AnsiString asErrPart;                            //JerryYang 20160401 One cycle«áªºyield­n¯àÅã¥Üerror part
-extern AnsiString asErrPart1;                            //JerryYang 20160401 One cycle«áªºyield­n¯àÅã¥Üerror part
-extern bool bAlmBinYieldDoOneCycle;                     //JerryYang 20160407 Bin Yield Alarm «á­n°µOneCycle
+extern bool bBarcodeFirstAutoRetry[4];                  //wei 20160325 Barcode Rateè¨ˆç®—
+//extern bool iBinTray[5][9];                             //kevin 20160308 æœ‰è¨­å®šBin Tray  //kevin 20170223 (wei) ä¸ä½¿ç”¨
+extern bool iBinTray[eTrayCount];                       //JerryYang 20220909 : 10->eTrayCount        //kevin 20170328 (Steven) add åˆ¤æ–·TRAY æ˜¯å¦ä½¿ç”¨ BIN
+extern bool bFirstTest;                                 //kevin 20160311 Clean outå¾Œç¬¬ä¸€æ¬¡æ¸¬è©¦æ™‚é–“
+extern bool bTestOverTimeTempOffsetF;                   //kevin 20160312 èµ·å‹•è·é›¢ä¸Šä¸€æ¬¡æ¸¬è©¦æ™‚é–“è¶…éæ‰€è¨­å®šæ™‚é–“æº«åº¦éœ€è£œOFFSET
+extern void InitialMemory();                            //Steven 20160319 : åˆå§‹åŒ–æ•¸å€¼
+extern bool bAlmLowYieldDoOneCycle;                     //JerryYang 20160401 Low Yield Alarmå¾Œè¦åšOneCycle
+extern bool bAlmSiteYieldDiffDoOneCycle;                //JerryYang 20160401 Arm Site Yield Different Alarm å¾Œè¦åšOneCycle
+extern bool bAlmSiteYieldCmpDoOneCycle;                 //JerryYang 20160401 Site Yield Different Alarm å¾Œè¦åšOneCycle
+extern AnsiString asErrPart;                            //JerryYang 20160401 One cycleå¾Œçš„yieldè¦èƒ½é¡¯ç¤ºerror part
+extern AnsiString asErrPart1;                            //JerryYang 20160401 One cycleå¾Œçš„yieldè¦èƒ½é¡¯ç¤ºerror part
+extern bool bAlmBinYieldDoOneCycle;                     //JerryYang 20160407 Bin Yield Alarm å¾Œè¦åšOneCycle
 extern AnsiString asErrTemp;                            //JerryYang 20160407 Error message temp
-extern bool bAlmContsFailBySocketDoOneCycle;            //JerryYang 20160407 ContsFailBySocket«á­n°µOneCycle
-extern bool bAlmConsecutiveFailureDoOneCycle;           //JerryYang 20160407 Consecutive Failure«á­n°µOneCycle
+extern bool bAlmContsFailBySocketDoOneCycle;            //JerryYang 20160407 ContsFailBySocketå¾Œè¦åšOneCycle
+extern bool bAlmConsecutiveFailureDoOneCycle;           //JerryYang 20160407 Consecutive Failureå¾Œè¦åšOneCycle
 extern int iErrArmTemp;                                 //JerryYang 20160407 Error Arm Temp
-extern bool bNeedOneCycleByYieldAlm;                    //JerryYang 20160408 ¬O§_¤wÄ²µoYield ¬ÛÃöalarm
-extern bool bYieldAlarmDoOneCycle;                      //JerryYang 20160322 Yield Alarm«á­n°µOne cycleªººX¼Ğ
-extern bool bSpecailBinConsFailByArmDoOneCycle;         //JerryYang 20161006 SpecailBinConsFailByArm «á­n°µOneCycle
-extern bool bSpecialBinConsFailBySocketDoOneCycle;      //JerryYang 20161006 bSpecialBinConsFailBySocket «á­n°µOneCycle
-extern bool bBinCountOverLimitDoOneCycle;               //JerryYang 20161006 BinCountOverLimit «á­n°µOneCycle
+extern bool bNeedOneCycleByYieldAlm;                    //JerryYang 20160408 æ˜¯å¦å·²è§¸ç™¼Yield ç›¸é—œalarm
+extern bool bYieldAlarmDoOneCycle;                      //JerryYang 20160322 Yield Alarmå¾Œè¦åšOne cycleçš„æ——æ¨™
+extern bool bSpecailBinConsFailByArmDoOneCycle;         //JerryYang 20161006 SpecailBinConsFailByArm å¾Œè¦åšOneCycle
+extern bool bSpecialBinConsFailBySocketDoOneCycle;      //JerryYang 20161006 bSpecialBinConsFailBySocket å¾Œè¦åšOneCycle
+extern bool bBinCountOverLimitDoOneCycle;               //JerryYang 20161006 BinCountOverLimit å¾Œè¦åšOneCycle
 extern AnsiString sAlarmMes;                            //wei 20160407 Alarm Message
-extern bool bOpenAllDoor;                               //wei 20160407 Alarm «á»İ­n¶}ªù½T»{
+extern bool bOpenAllDoor;                               //wei 20160407 Alarm å¾Œéœ€è¦é–‹é–€ç¢ºèª
 extern bool iATCOnLine;                                 //Ifor 20160331
 extern bool bRunATC;                                    //Ifor 20160331
 //extern int  iUnloadMotorIndex[eTrayCount];
@@ -4099,26 +4099,26 @@ extern int  iSortTrayIndex[eTrayCount];
 extern int  AddBinDisp[MAX_BIN_UNIT];
 extern bool bSetTempChange;                             //Ifor 20160412 SetTemp Cheange
 extern int  iL03SocketAirCoolingCT;                     //jou 2016-04-28 Socket Air Cooling contact count trun on
-extern bool bCheckCodeError[4];                         //wei 20160505 Barcode ¤ñ¹ïLot
+extern bool bCheckCodeError[4];                         //wei 20160505 Barcode æ¯”å°Lot
 extern bool bCheckLotError[4];                          //wei 20160728
-extern int iIONFANStatus_Secs[12];                      //wei 20160506 SECS ION °»´ú
-extern int iIONFANPower_Secs[12];                       //wei 20160506 SECS ION °»´ú
-extern bool bATC_EnablesChannel[32];                    //Ifor 20160506 add Handler °eµ¹ATC ¶}ÃöSite¸ê®Æ
+extern int iIONFANStatus_Secs[12];                      //wei 20160506 SECS ION åµæ¸¬
+extern int iIONFANPower_Secs[12];                       //wei 20160506 SECS ION åµæ¸¬
+extern bool bATC_EnablesChannel[32];                    //Ifor 20160506 add Handler é€çµ¦ATC é–‹é—œSiteè³‡æ–™
 extern int  iATC_Use_Heat_Count;                        //Ifor 20160506 add ATC Use Heat Count
-extern bool bATC_SITE_2ND_CHECK[2];                     //Ifor 20160509 add ATC ²Ä¤GÂI·Å«× sensor §PÂ_
+extern bool bATC_SITE_2ND_CHECK[2];                     //Ifor 20160509 add ATC ç¬¬äºŒé»æº«åº¦ sensor åˆ¤æ–·
 extern bool bOutShuttleMissIC;                          //wei 20160509 Out Shuttle Miss IC
 extern bool bNoSendSiteOnOff;                           //wei 20160511 Send Site On Off
-extern bool bDownloadFTP;                               //wei 20160512 Á×§KDownload¥¢±Ñ¡A¤U¦¸´NµLªkDownload
-extern bool bAmbientHotPlate;                           //kevincheng 20260525 : ´ë±ç±`·Å¼Ò¦¡¨Ï¥Îhotplate
+extern bool bDownloadFTP;                               //wei 20160512 é¿å…Downloadå¤±æ•—ï¼Œä¸‹æ¬¡å°±ç„¡æ³•Download
+extern bool bAmbientHotPlate;                           //kevincheng 20260525 : æ¸ æ¢å¸¸æº«æ¨¡å¼ä½¿ç”¨hotplate
 extern int iOpenBin;                                    //kevin 20160513 AutoSite map
 extern int iBinLast;                                    //kevin 20160513 AutoSite map
 extern int iOpenBinCount;                               //kevin 20160513 AutoSite map
-extern int iBackupDutOnOff[4][8];                       //JerryYang 20160519 ³Æ¥÷¶}Ãösite
-extern int iBackupTestMode;                             //JerryYang 20160519 °O¿ı­ì¥»ªºTest mode-
-extern bool bLoadMachineRecord;                         //JerryYang 20160614 ¥Î¨Ó§PÂ_¬O§_°õ¦æ¹LLoadMachineRecord¨ç¦¡ Á×§KÁÙ¨SÅª¨ú¨ì¾÷¥x¸ê®ÆLastset´N³Q§ï±¼
-extern bool bOCRConnectOK;                              //wei 20160613 ocr³s½u´ú¸Õ
-extern bool bOCRConnectTest;                            //wei 20160613 ocr³s½u´ú¸Õ
-extern int bOCRConnectTestCount;                        //wei 20160613 ocr³s½u´ú¸Õ
+extern int iBackupDutOnOff[4][8];                       //JerryYang 20160519 å‚™ä»½é–‹é—œsite
+extern int iBackupTestMode;                             //JerryYang 20160519 è¨˜éŒ„åŸæœ¬çš„Test mode-
+extern bool bLoadMachineRecord;                         //JerryYang 20160614 ç”¨ä¾†åˆ¤æ–·æ˜¯å¦åŸ·è¡ŒéLoadMachineRecordå‡½å¼ é¿å…é‚„æ²’è®€å–åˆ°æ©Ÿå°è³‡æ–™Lastsetå°±è¢«æ”¹æ‰
+extern bool bOCRConnectOK;                              //wei 20160613 ocré€£ç·šæ¸¬è©¦
+extern bool bOCRConnectTest;                            //wei 20160613 ocré€£ç·šæ¸¬è©¦
+extern int bOCRConnectTestCount;                        //wei 20160613 ocré€£ç·šæ¸¬è©¦
 extern bool INSTALL_SOCKET_CLAMP;                       //JerryYang 20160523
 extern int INSTALL_DOUBLE_EP;                           //Ifor 20190104 : Add Double EP Control
 //AI(ht9045-v899) 20260504: INSTALL_DOUBLE_EP value constants. ADR-0004 / SPEC-V899-MultiEP-FullPort.
@@ -4128,27 +4128,27 @@ extern int INSTALL_DOUBLE_EP;                           //Ifor 20190104 : Add Do
 #define DOUBLE_EP_NORMAL     1                          // Normal (single Die Force)
 #define DOUBLE_EP_INDIVIAL   2                          // Indivial EP (independent EP per site)
 #define DOUBLE_EP_MULTI      3                          // Multi EP (Max Qual Site, SIGURD 16ch full port from V874.3)
-extern int CHECK_EP_SETTING;                            //Steven 20240701 : EPÀË¬d¥\¯à¥[¤W¶}Ãö
-extern bool bAutoTrackCanGoRear;                        //Isaac 20180109 (Steven) : auto123¥i«e¶i«á°h
+extern int CHECK_EP_SETTING;                            //Steven 20240701 : EPæª¢æŸ¥åŠŸèƒ½åŠ ä¸Šé–‹é—œ
+extern bool bAutoTrackCanGoRear;                        //Isaac 20180109 (Steven) : auto123å¯å‰é€²å¾Œé€€
 extern bool bCleanOutClosedMonitorVideo;                //JerryYang 20160621 UseMonitorVideoFunction
 extern bool bHPCleanout;                                //wei 20160624 Hotplate clean out
 extern int iHPShuttle;                                  //wei 20160624 Hotplate clean out
 extern bool bGPIBLotEndCommand;                         //wei 20160624 GPIB Lot End Command
 extern bool bGPIBLotStartCommand;                       //kevin 20190613 add lotstart GPIB Command lotstart
-extern bool bASECleanOutCloseSite;                      //kevin 20160715 ASE clean out close Site ¤£°htray
-extern bool bCancelErrorBin;                            //kevin 20160706 Error Bin ¨ú®ø
-extern int  iHWFix_BinBox;                              //kevin 20160819 error bin ­n©ñ¨ì Bin Box
-extern int  iErrorBinBoxAlarm;                          //kevin 20160819 error bin alarm ¼Æ¶q
-extern bool bBinError[2];                               //kevin 20160725 Error Bin µo¥Íarm
-extern AnsiString sArm1BinError;                        //kevin 20160725 °O¿ı Error Bin
-extern AnsiString sArm2BinError;                        //kevin 20160725 °O¿ı Error Bin
-extern bool bOpenSixDoorChk;                            //kevin 20160725 error bin µo¥Í»İ¶}¥k«áªù½T»{
-extern bool bFirstOpenPg;                               //kevin 20160725 µ{¦¡¤@¶}©l¶i¨Ó¤£©¹¤U°õ¦æ
-extern int iATC_TempIndex[4][2];                        //Ifor 20160719 ²Ä¤@ÂI·Å«×¯Á¤Ş  0:IndexÂÂ­È 1:Index ®t²§¦¸¼Æ //Ifor 20160805 add Use Site
+extern bool bASECleanOutCloseSite;                      //kevin 20160715 ASE clean out close Site ä¸é€€tray
+extern bool bCancelErrorBin;                            //kevin 20160706 Error Bin å–æ¶ˆ
+extern int  iHWFix_BinBox;                              //kevin 20160819 error bin è¦æ”¾åˆ° Bin Box
+extern int  iErrorBinBoxAlarm;                          //kevin 20160819 error bin alarm æ•¸é‡
+extern bool bBinError[2];                               //kevin 20160725 Error Bin ç™¼ç”Ÿarm
+extern AnsiString sArm1BinError;                        //kevin 20160725 è¨˜éŒ„ Error Bin
+extern AnsiString sArm2BinError;                        //kevin 20160725 è¨˜éŒ„ Error Bin
+extern bool bOpenSixDoorChk;                            //kevin 20160725 error bin ç™¼ç”Ÿéœ€é–‹å³å¾Œé–€ç¢ºèª
+extern bool bFirstOpenPg;                               //kevin 20160725 ç¨‹å¼ä¸€é–‹å§‹é€²ä¾†ä¸å¾€ä¸‹åŸ·è¡Œ
+extern int iATC_TempIndex[4][2];                        //Ifor 20160719 ç¬¬ä¸€é»æº«åº¦ç´¢å¼•  0:IndexèˆŠå€¼ 1:Index å·®ç•°æ¬¡æ•¸ //Ifor 20160805 add Use Site
 extern bool bNeedSendATCRunSelfTest;                    //Ifor 20160720 add for ATC Safe Test start
 extern bool bNeedWaitATCRunSelfTestFinish;              //Ifor 20160720 add Wait ATC slef Test Report
 extern bool bATCHasAlarmBinNeedToError;                 //Ifor 20160726 ATC Alarm Index IC Be Error
-//extern int iATCHasAlarmBinNeedToError;                  //Ifor 20181219 :add KYEC ­n¨DATC ·Å«×²§±`®ÉDevice©ñ¸mOut SH«á¤~Alarm 0:¥¼µo¥ÍATC·Å«×Alarm 1:ATC·Å«×Alarm 2:Index ¤W¤É§¹²¦ 3:Device ©ñ¸mOut SH ¤W¤è¨Ã¦^¨ì¦w¥ş¦ì¸m //Ifor 20191209 ¨ú®øATC·Å«×²§±`Index¤W¤É¥\¯à
+//extern int iATCHasAlarmBinNeedToError;                  //Ifor 20181219 :add KYEC è¦æ±‚ATC æº«åº¦ç•°å¸¸æ™‚Deviceæ”¾ç½®Out SHå¾Œæ‰Alarm 0:æœªç™¼ç”ŸATCæº«åº¦Alarm 1:ATCæº«åº¦Alarm 2:Index ä¸Šå‡å®Œç•¢ 3:Device æ”¾ç½®Out SH ä¸Šæ–¹ä¸¦å›åˆ°å®‰å…¨ä½ç½® //Ifor 20191209 å–æ¶ˆATCæº«åº¦ç•°å¸¸Indexä¸Šå‡åŠŸèƒ½
 extern bool bRunAOI;                                    //wei 20160617 Vitrox
 extern bool bAOIPassFail[2][MAX_ARM_Row][MAX_ARM_Col];                      //wei 20160617 Vitrox
 extern int iAOIBin[MAX_ARM_Row][MAX_ARM_Col];                               //wei 20160617 Vitrox
@@ -4160,49 +4160,49 @@ extern AnsiString asOCRImageName;                       //wei 20160805
 extern bool bOCRSkip;                                   //wei 20160805
 extern bool bAutoRetestMusic;                           //Frank 20160822 add AutoRetestMusic
 extern int iBarcodeReject;                              //wei 20160823  Consecutive Failure
-extern bool bBarcodePassword;                           //wei 20160823  Lot check ¿ù»~»İ¿é¤J±K½X
+extern bool bBarcodePassword;                           //wei 20160823  Lot check éŒ¯èª¤éœ€è¼¸å…¥å¯†ç¢¼
 extern bool bFixBinBoxIsFull;                           //kevin 20160822 bulk box
 extern AnsiString asVer;//kevin 20160825
-extern bool bSetupFileNotExist;                         //Ifor 20160822 add ¤u§@¾×¤£¦s¦b
-extern bool bHasEnteredPEModel;                         //Ifor 20160822 add ¶i¤J¤uµ{¼Ò¦¡
-extern bool bEnablePEModel;                             //Ifor 20160822 add ±Ò°ÊPE¤uµ{¼Ò¦¡
-extern bool bInitialATCSelfTest;                        //Ifor 20160829 add ¾÷¥xInitial Start »İ°µ ATC Self Test
-extern bool bStartATCRun;                               //Ifor 20160830 add Lot­¶­±±Ò°ÊATC
-extern bool bSpecificBin[256];                          //kevin 20170828 33->256  JerryYang 20170221 (wei) §ï¦¨¥i½Æ¿ïbin //JerryYang 20160913 (wei) ª¿«~­n¨D·í´ú¸Õµ²ªG¤¤©Ò¦³siteªºbin³£¬O©Ò³]©w¤@¼Ëªºfail bin­n¸õalarm
+extern bool bSetupFileNotExist;                         //Ifor 20160822 add å·¥ä½œæ“‹ä¸å­˜åœ¨
+extern bool bHasEnteredPEModel;                         //Ifor 20160822 add é€²å…¥å·¥ç¨‹æ¨¡å¼
+extern bool bEnablePEModel;                             //Ifor 20160822 add å•Ÿå‹•PEå·¥ç¨‹æ¨¡å¼
+extern bool bInitialATCSelfTest;                        //Ifor 20160829 add æ©Ÿå°Initial Start éœ€åš ATC Self Test
+extern bool bStartATCRun;                               //Ifor 20160830 add Loté é¢å•Ÿå‹•ATC
+extern bool bSpecificBin[256];                          //kevin 20170828 33->256  JerryYang 20170221 (wei) æ”¹æˆå¯è¤‡é¸bin //JerryYang 20160913 (wei) çŸ½å“è¦æ±‚ç•¶æ¸¬è©¦çµæœä¸­æ‰€æœ‰siteçš„binéƒ½æ˜¯æ‰€è¨­å®šä¸€æ¨£çš„fail binè¦è·³alarm
 extern AnsiString asBarcodeLotNumber;                   //wei 20160921 BarcodeLotNumber
 extern bool bBarcodeAutoSkip[4];                        //wei 20160921 BarcodeLotAutoSkip
 extern bool bBarcodeAutoSkipError[4];                   //wei 20160921 BarcodeLotAutoSkip
-extern bool bTestSiteUseEE[2][MAX_SOCKET_ROW][MAX_SOCKET_COL];//Alick 20160923 add for ²Ä¤T²Õ¤uµ{®v¥Î¶}ÃöSITE
-extern bool bSiteUseEE;                                 //Alick 20160923 add for ²Ä¤T²Õ¤uµ{®v¥Î¶}ÃöSITE
+extern bool bTestSiteUseEE[2][MAX_SOCKET_ROW][MAX_SOCKET_COL];//Alick 20160923 add for ç¬¬ä¸‰çµ„å·¥ç¨‹å¸«ç”¨é–‹é—œSITE
+extern bool bSiteUseEE;                                 //Alick 20160923 add for ç¬¬ä¸‰çµ„å·¥ç¨‹å¸«ç”¨é–‹é—œSITE
 extern bool bNeedKeyInSkipIC;                           //Frank 20161006 add
-extern bool bInitialCleanCount;                         //wei 20160923 Tray Feed«á¡A¤U¤@¦¸¶}©l»İ­nClean Count
-extern int iSECSGEMPass;                                //wei 20160923 Secs Gem ¦^¶ÇPass/FailÁû¼Æ
-extern int iSECSGEMPass_ART;                            //wei 20160923 Secs Gem ¦^¶ÇPass/FailÁû¼Æ
-extern int iSECSGEMFail;                                //wei 20160923 Secs Gem ¦^¶ÇPass/FailÁû¼Æ
-extern int iSECSGEMFail_ART;                            //wei 20160923 Secs Gem ¦^¶ÇPass/FailÁû¼Æ
+extern bool bInitialCleanCount;                         //wei 20160923 Tray Feedå¾Œï¼Œä¸‹ä¸€æ¬¡é–‹å§‹éœ€è¦Clean Count
+extern int iSECSGEMPass;                                //wei 20160923 Secs Gem å›å‚³Pass/Failé¡†æ•¸
+extern int iSECSGEMPass_ART;                            //wei 20160923 Secs Gem å›å‚³Pass/Failé¡†æ•¸
+extern int iSECSGEMFail;                                //wei 20160923 Secs Gem å›å‚³Pass/Failé¡†æ•¸
+extern int iSECSGEMFail_ART;                            //wei 20160923 Secs Gem å›å‚³Pass/Failé¡†æ•¸
 extern bool bPickErrorAutoHome;                         //wei 20161005
-extern bool bCCDcheckShuttle[2];                        //wei 20161102 IC¸m°¾ÀË¬d
+extern bool bCCDcheckShuttle[2];                        //wei 20161102 ICç½®åæª¢æŸ¥
 extern bool bClearRetryCnt[iTotalFunction];             //Sam 20200323 : Modify Tray Function//wei 20161219 Tray Mapping
 extern bool bCCDTrayDeviceCount[3];                     //Sam 20190405 : Tray Decive Count
 extern bool bNeedCCDTrayDeviceCount[3];                 //Sam 20190405 : Tray Decive Count
 extern bool bCCDTrayID[2];                              //wei 20180808 MR Tray ID 2
-extern int iRecordSiteMapOrder[4][8];                   //kevin 20161003 Site ¶¶§Ç
-extern int iCloseSiteMap[2][4][8];                      //kevin 20161003 Site ¶¶§Ç
-extern AnsiString asHandlerVersion;                     //Ifor 20161109 Handler S/W Ver Åã¥Ü
-extern AnsiString asMainVersion;                        //JerryYang 20180619 (wei) : ASE_CL ©|´¼­n¨D¥Dµe­±ª©¸¹¥i¥H¦Û¤v­×§ï
-extern AnsiString MainVersion;                          //Steven 20250903 : §ï¦¨ª½±µ§ìÀÉ®×ª©¥»
-extern bool bAutoSiteMapWaitTestResult;                 //jou 2016-11-03 JCET ­n¨DAuto Site Mapping »İµ¥«İ´ú¸Õµ²ªG¦bÄ~Äò¤J®Æ
-extern bool bAutoSiteMapWaitTestPass;                   //jou 2016-11-03 JCET ­n¨DAuto Site Mapping »İµ¥«İ´ú¸Õµ²ªG¦bÄ~Äò¤J®Æ
+extern int iRecordSiteMapOrder[4][8];                   //kevin 20161003 Site é †åº
+extern int iCloseSiteMap[2][4][8];                      //kevin 20161003 Site é †åº
+extern AnsiString asHandlerVersion;                     //Ifor 20161109 Handler S/W Ver é¡¯ç¤º
+extern AnsiString asMainVersion;                        //JerryYang 20180619 (wei) : ASE_CL å°šæ™ºè¦æ±‚ä¸»ç•«é¢ç‰ˆè™Ÿå¯ä»¥è‡ªå·±ä¿®æ”¹
+extern AnsiString MainVersion;                          //Steven 20250903 : æ”¹æˆç›´æ¥æŠ“æª”æ¡ˆç‰ˆæœ¬
+extern bool bAutoSiteMapWaitTestResult;                 //jou 2016-11-03 JCET è¦æ±‚Auto Site Mapping éœ€ç­‰å¾…æ¸¬è©¦çµæœåœ¨ç¹¼çºŒå…¥æ–™
+extern bool bAutoSiteMapWaitTestPass;                   //jou 2016-11-03 JCET è¦æ±‚Auto Site Mapping éœ€ç­‰å¾…æ¸¬è©¦çµæœåœ¨ç¹¼çºŒå…¥æ–™
 extern bool bAutoSiteMapAmbientResultCheck;             //Ifor 20190528 : add Site Mapping Ambient Check
 extern int iOldSelShuttle;                              //Ifor 20161116 add BackUp Shuttle select
 extern int iOldShuttleMode;                             //Ifor 20161116 add BackUp Shuttle Mode
 extern int iUseSuckModeBackup;                          //Ifor 20161116 add BackUp Use Suck Mode
 extern AnsiString asHandlingMode;                       //Ifor 20161117 add BackUp Handling Mode
-extern AnsiString asOCRSaveName;                        //wei 20161122 OCR ¦s¹ÏÀÉ¦W¥[¤J¿é¤J­È
-extern int iOCRMoveSRead;                               //wei 20161118 OCR S«¬Åª¨ú
+extern AnsiString asOCRSaveName;                        //wei 20161122 OCR å­˜åœ–æª”ååŠ å…¥è¼¸å…¥å€¼
+extern int iOCRMoveSRead;                               //wei 20161118 OCR Så‹è®€å–
 extern int iInArmAutoYTeachOffset;                      //kevin 20161124 auto teach Z Yoffset
 extern int iOutArmAutoYTeachOffset;                     //kevin 20161124 auto teach Z Yoffset
-extern AnsiString asOCRSaveType;                        //Alick 20170119 add OCR ¦sÀÉ®É¦h¥[¤J¦sÀÉ­ì¦]
+extern AnsiString asOCRSaveType;                        //Alick 20170119 add OCR å­˜æª”æ™‚å¤šåŠ å…¥å­˜æª”åŸå› 
 extern bool bSendATCLotStart;                           //Ifor 20161118 add Send ATC Lot Start
 extern bool bSendATCLotEnd;                             //Ifor 20161118 add Send ATC Lot End
 extern bool bReSendATCLotEven;                          //Ifor 20161118 add Resent ATC Lot Command
@@ -4214,44 +4214,44 @@ extern const int iSortingTrayFix1;                      //Ifor 20161123 add Sort
 extern const int iSortingTrayFix2;                      //Ifor 20161123 add Sorting Tray Fix2
 extern const int iSortingTrayFix3;                      //Ifor 20161123 add Sorting Tray Fix3      //QQQ
 //Sorting Tray define end
-extern bool bFix3HasNullICSet;                          //Ifor 20161124 add Fix3 ¤J®Æ®É³]©wHasNullIC
-extern bool bAutoShuttleHome;                           //wei 20161206 Auto Shuttle Sensor ¦^Home
-extern double dOldWorkTemp;                             //Ifor 20161220 KYEC ­n¨DEven Log ¬ö¿ı¤W¤@µ§Temp³]©w
-extern double dOldAmbWorkTemp;                          //Ifor 20161220 KYEC ­n¨DEven Log ¬ö¿ı¤W¤@µ§AmbTemp³]©w
-extern double dOldSockTime;                             //Ifor 20161220 KYEC ­n¨DEven Log ¬ö¿ı¤W¤@µ§Sock³]©w
-extern bool bFTPDownLoadHasTestMode;                    //Ifor 20161221 add KYEC Setup File Down Load¬O§_¦³TestMode.Data
-extern bool bAutoCleanFinishOnlyUseRTC;                 //JerryYang 20161216 °µ§¹auto clean«á¤£»İ­n°µindex check
+extern bool bFix3HasNullICSet;                          //Ifor 20161124 add Fix3 å…¥æ–™æ™‚è¨­å®šHasNullIC
+extern bool bAutoShuttleHome;                           //wei 20161206 Auto Shuttle Sensor å›Home
+extern double dOldWorkTemp;                             //Ifor 20161220 KYEC è¦æ±‚Even Log ç´€éŒ„ä¸Šä¸€ç­†Tempè¨­å®š
+extern double dOldAmbWorkTemp;                          //Ifor 20161220 KYEC è¦æ±‚Even Log ç´€éŒ„ä¸Šä¸€ç­†AmbTempè¨­å®š
+extern double dOldSockTime;                             //Ifor 20161220 KYEC è¦æ±‚Even Log ç´€éŒ„ä¸Šä¸€ç­†Sockè¨­å®š
+extern bool bFTPDownLoadHasTestMode;                    //Ifor 20161221 add KYEC Setup File Down Loadæ˜¯å¦æœ‰TestMode.Data
+extern bool bAutoCleanFinishOnlyUseRTC;                 //JerryYang 20161216 åšå®Œauto cleanå¾Œä¸éœ€è¦åšindex check
 extern bool bCanRunSCKART;                              //Steven 20170919 (wei) : Add for SCK ART
 extern int  iSCKARTLoadingStatus;                       //Steven 20161223 : For SCK ART loading count
-extern bool bSCKARTLoadCntAlarm;                        //Steven 20161223 : For SCK ART loading count : ¼Æ¶q¶W¹L,­n©ñ¤UICµM«áAlarm
-extern int  iLoadPickX;                                 //Steven 20161223 : For SCK ART loading count : ¥Ø«e§l¨ìªº¦ì¸mX
-extern int  iLoadPickY;                                 //Steven 20161223 : For SCK ART loading count : ¥Ø«e§l¨ìªº¦ì¸mY
+extern bool bSCKARTLoadCntAlarm;                        //Steven 20161223 : For SCK ART loading count : æ•¸é‡è¶…é,è¦æ”¾ä¸‹ICç„¶å¾ŒAlarm
+extern int  iLoadPickX;                                 //Steven 20161223 : For SCK ART loading count : ç›®å‰å¸åˆ°çš„ä½ç½®X
+extern int  iLoadPickY;                                 //Steven 20161223 : For SCK ART loading count : ç›®å‰å¸åˆ°çš„ä½ç½®Y
 //extern bool bARTCheckLoaderTray;                        //Steven 20170110 : For SCK ART loading count
-extern int  iD43AutoRetryWhenIndexPickErrCnt[2];        //Steven 20170105 : Index§l¨ú²§±`,­n°h¥X¨Ó¥ÎShuttle SensorÀË¬d«á, ¦A¶i¥h§l¤@¦¸
-extern bool bUseATC_SelfTestFunction;                   //Ifor 20170124 : add KYEC ­n¨DATC Self Test ¥i¥ÑGeneral.ini ¤¤¶}±Ò©ÎÃö³¬
+extern int  iD43AutoRetryWhenIndexPickErrCnt[2];        //Steven 20170105 : Indexå¸å–ç•°å¸¸,è¦é€€å‡ºä¾†ç”¨Shuttle Sensoræª¢æŸ¥å¾Œ, å†é€²å»å¸ä¸€æ¬¡
+extern bool bUseATC_SelfTestFunction;                   //Ifor 20170124 : add KYEC è¦æ±‚ATC Self Test å¯ç”±General.ini ä¸­é–‹å•Ÿæˆ–é—œé–‰
 extern AnsiString asATCEvenLotID;                       //Ifor 20170124 (Steven) : add LotID By ATC Even Log
-extern double iInitStartDelayDec;                       //kevin 20161214 ¨C¦¸»¼´î®É¶¡
-extern int iInitStartDelayTimeDetCount;                 //kevin 20161214 ¨C¦¸»¼´î­p¼Æ
-extern AnsiString Ase_SendESDTempEPData;                //kevin 20161229 ¶Ç°e¸ê®Æµ¹ASE
-extern AnsiString Ase_SendESD;                          //kevin 20161229 ¶Ç°e¸ê®Æµ¹ASE
-extern AnsiString Ase_SendTemp;                         //kevin 20161229 ¶Ç°e¸ê®Æµ¹ASE
-extern AnsiString Ase_SendEP;                           //kevin 20161229 ¶Ç°e¸ê®Æµ¹ASE
+extern double iInitStartDelayDec;                       //kevin 20161214 æ¯æ¬¡éæ¸›æ™‚é–“
+extern int iInitStartDelayTimeDetCount;                 //kevin 20161214 æ¯æ¬¡éæ¸›è¨ˆæ•¸
+extern AnsiString Ase_SendESDTempEPData;                //kevin 20161229 å‚³é€è³‡æ–™çµ¦ASE
+extern AnsiString Ase_SendESD;                          //kevin 20161229 å‚³é€è³‡æ–™çµ¦ASE
+extern AnsiString Ase_SendTemp;                         //kevin 20161229 å‚³é€è³‡æ–™çµ¦ASE
+extern AnsiString Ase_SendEP;                           //kevin 20161229 å‚³é€è³‡æ–™çµ¦ASE
 extern bool bIndexCheck1;
-extern bool bIndexCheck2;                               //kevin 20170120 autoclean index check µoALARM
-//extern int iUseArmNum;                                  //kevin 20170126 0:2¤ä    1: ARM 1   2: ARM2
+extern bool bIndexCheck2;                               //kevin 20170120 autoclean index check ç™¼ALARM
+//extern int iUseArmNum;                                  //kevin 20170126 0:2æ”¯    1: ARM 1   2: ARM2
 extern bool bOutArmPickShtHasRetry;                     //Steven 20170202 (wei): For ATJ Out Arm pickup error put to define tray
 extern bool bSortArmPickShtHasRetry;                    //RogerYang 20250516 Add for 9046AU
-extern bool bAlarmUnlockPassWord;                       //Ifor 20170214 (wei) add ¸Ñ°£Alarm »İ­n¿W¥ß±K½X
-extern AnsiString asUnlockPassword;                     //Ifor 20170214 (wei) add ¸Ñ°£Alarm ¿W¥ß±K½X
-extern bool bHT9045S_USE2x4;                            //Ifor 20170308 (wei) add HT9045S 2x4¼Ò¦¡Âê©w
-extern AnsiString dSend_ASEData[10];                    //kevin 20170210 (wei) °eASE  0:Index Time(Arm),1:Inmdex Cycle Time,2:Test Time,3:UPH
-extern bool bManualAutoClean;                           //kevin 20170215 (wei) ¤â°Ê autoclean
-extern bool bASkStart;                                  //kevin 20170224 (wei) Load Auto Skip ¶}©l¦³§l¨ú¨ìªÅ®æ
-extern bool bAutoSkipHasIC;                             //kevin 20170224 (wei) LOAD AUTO SKIP HAS IC »İ­n ALARM
+extern bool bAlarmUnlockPassWord;                       //Ifor 20170214 (wei) add è§£é™¤Alarm éœ€è¦ç¨ç«‹å¯†ç¢¼
+extern AnsiString asUnlockPassword;                     //Ifor 20170214 (wei) add è§£é™¤Alarm ç¨ç«‹å¯†ç¢¼
+extern bool bHT9045S_USE2x4;                            //Ifor 20170308 (wei) add HT9045S 2x4æ¨¡å¼é–å®š
+extern AnsiString dSend_ASEData[10];                    //kevin 20170210 (wei) é€ASE  0:Index Time(Arm),1:Inmdex Cycle Time,2:Test Time,3:UPH
+extern bool bManualAutoClean;                           //kevin 20170215 (wei) æ‰‹å‹• autoclean
+extern bool bASkStart;                                  //kevin 20170224 (wei) Load Auto Skip é–‹å§‹æœ‰å¸å–åˆ°ç©ºæ ¼
+extern bool bAutoSkipHasIC;                             //kevin 20170224 (wei) LOAD AUTO SKIP HAS IC éœ€è¦ ALARM
 extern AnsiString sAskStartDetect;                      //kevin 20170224 (wei) LOAD AUTO SKIP HAS IC data
-extern bool bSiteHasTurnOn[33];                         //Steven 20170302 (wei) : ½T»{­ş­ÓSite¦³¶}, ±q1¶}©l~32
+extern bool bSiteHasTurnOn[33];                         //Steven 20170302 (wei) : ç¢ºèªå“ªå€‹Siteæœ‰é–‹, å¾1é–‹å§‹~32
 extern bool bLoaderTrayAction;                          //wei 20161219 Tray Mapping
-extern bool bSecsGemDownloadFTP;                        //wei 20170119 (Steven) DownLoad ¨S¦³°¨¤W«ö±¼·|Time Out
+extern bool bSecsGemDownloadFTP;                        //wei 20170119 (Steven) DownLoad æ²’æœ‰é¦¬ä¸ŠæŒ‰æ‰æœƒTime Out
 extern int iATRFtRtMode;                                //wei 20170119 (jou) ATR FT/RT count
 extern int iATRPassCount[2];                            //wei 20170119 (jou) ATR FT/RT count
 extern int iATRFailCount[2];                            //wei 20170119 (jou) ATR FT/RT count
@@ -4264,36 +4264,36 @@ extern bool bTrayMapDataCheckErrorSkip;                 //wei 20170302 (Steven) 
 extern bool bCheckTrayDevice;                           //wei 20170302 (Steven) Tray map data error
 extern bool bRealCCDROICheck;                           //wei 20170308 (jou) RTC ROI Check
 extern bool bRealCCDROICheckOK;                         //wei 20170308 (jou) RTC ROI Check
-extern bool bRealCCDROICountCheck;                      //jou 20171201 (Steven) : RTC ROI ½T»{¼Æ¶q¬O§_¥¿½T
-extern bool bRealCCDROICountCheckOK;                    //jou 20171201 (Steven) : RTC ROI ½T»{¼Æ¶q¬O§_¥¿½T
-extern bool bAvoidAddDoSiteMappingStep;                 //JerryYang 20170316 (Steven) Á×§Ktester time out®ÉRetry·|­«½Æ¶i¤JDoJCETSiteMappingCHK(), ³y¦¨auto site mapping¤@¦¸¸õ¨âÁû
-extern int iAse_LoadSkipTime;                           //kevin 20170314 (Steven) Load ¶}©lSKIP ®É¶¡°O¿ı
+extern bool bRealCCDROICountCheck;                      //jou 20171201 (Steven) : RTC ROI ç¢ºèªæ•¸é‡æ˜¯å¦æ­£ç¢º
+extern bool bRealCCDROICountCheckOK;                    //jou 20171201 (Steven) : RTC ROI ç¢ºèªæ•¸é‡æ˜¯å¦æ­£ç¢º
+extern bool bAvoidAddDoSiteMappingStep;                 //JerryYang 20170316 (Steven) é¿å…tester time outæ™‚Retryæœƒé‡è¤‡é€²å…¥DoJCETSiteMappingCHK(), é€ æˆauto site mappingä¸€æ¬¡è·³å…©é¡†
+extern int iAse_LoadSkipTime;                           //kevin 20170314 (Steven) Load é–‹å§‹SKIP æ™‚é–“è¨˜éŒ„
 extern DWORD AutoTrayendStartTime[2], AutoTrayendEndTime[2], AutoTrayendPassTime[2];
-extern int iAutoTrayendhasIC;                           //kevin 20170314 (Steven) ­pºâ AUTO SKIP«á¤S§l¨ìIC¼Æ¶q
-extern int iAse_LoadTrayEndTotalTime;                   //kevin 20170320 (Steven) LOAD Auto skip °OºâÁ`®É¶¡
+extern int iAutoTrayendhasIC;                           //kevin 20170314 (Steven) è¨ˆç®— AUTO SKIPå¾Œåˆå¸åˆ°ICæ•¸é‡
+extern int iAse_LoadTrayEndTotalTime;                   //kevin 20170320 (Steven) LOAD Auto skip è¨˜ç®—ç¸½æ™‚é–“
 extern int iAutoTrayEndTotal;
-extern AnsiString EPuser;                               //kevin 20170328 (Steven) EP ±K½X¿é¤J
-extern AnsiString EPPass;                               //kevin 20170328 (Steven) EP ±K½X¿é¤J
+extern AnsiString EPuser;                               //kevin 20170328 (Steven) EP å¯†ç¢¼è¼¸å…¥
+extern AnsiString EPPass;                               //kevin 20170328 (Steven) EP å¯†ç¢¼è¼¸å…¥
 
-extern bool bInSht1LtcDetectTesterCanMove;              //Isaac 20170418 (Steven) ¥ÎY LatchÀË´úInshuttle¦³µLIC
-extern bool bInSht2LtcDetectTesterCanMove;              //Isaac 20170418 (Steven) ¥ÎY LatchÀË´úInshuttle¦³µLIC
-extern bool bReadAndCheckCPUName;                       //Isaac 20170509 (Steven) ¥dCPU¸ê°T
+extern bool bInSht1LtcDetectTesterCanMove;              //Isaac 20170418 (Steven) ç”¨Y Latchæª¢æ¸¬Inshuttleæœ‰ç„¡IC
+extern bool bInSht2LtcDetectTesterCanMove;              //Isaac 20170418 (Steven) ç”¨Y Latchæª¢æ¸¬Inshuttleæœ‰ç„¡IC
+extern bool bReadAndCheckCPUName;                       //Isaac 20170509 (Steven) å¡CPUè³‡è¨Š
 extern bool bHingeStart;                                //wei 20170413
 extern bool bHingeNeedStart;                            //wei 20170413
-extern int iReadAdamEP;                                 //jou 20170413 (Steven) : Read Adam EP ´£¤ÉUPH
+extern int iReadAdamEP;                                 //jou 20170413 (Steven) : Read Adam EP æå‡UPH
 extern bool bFTPDownLoadFilediff;                       //wei 20170518
 extern bool bFTPDownLoadFileError;                      //wei 20170518
 extern int iInArmTeachZ;                                //kevin 20170502 (wei) auto teach Z Z check pos
 extern int ioutArmTeachZ;                               //kevin 20170502 (wei) auto teach Z Z check pos
 extern bool bRTCModelNG;                                //wei 20170504 (Steven) RTC Model NG
-extern bool bFirstInput;                                //Steven 20170511 (wei) : ¨Ï¥Îinitial delay·í Soak time
-extern bool bFirstInputForIndex;                        //Steven 20170511 (wei) : ¨Ï¥Îinitial delay·í Soak time
+extern bool bFirstInput;                                //Steven 20170511 (wei) : ä½¿ç”¨initial delayç•¶ Soak time
+extern bool bFirstInputForIndex;                        //Steven 20170511 (wei) : ä½¿ç”¨initial delayç•¶ Soak time
 extern bool bOneTimeWait;
-extern bool bCheckPCI_MN200StateRun;                    //JerryYang 20170510 (Steven) §ï¦¨¥ş°ìÅÜ¼Æ
-extern bool bF18CheckShuttle1MustHasIC;                 //JerryYang 20170515 (Steven) ­×¥¿in shuttle detect²§±`«áÃö³¬F18·|hang up
-extern bool bF18CheckShuttle2MustHasIC;                 //JerryYang 20170515 (Steven) ­×¥¿in shuttle detect²§±`«áÃö³¬F18·|hang up
+extern bool bCheckPCI_MN200StateRun;                    //JerryYang 20170510 (Steven) æ”¹æˆå…¨åŸŸè®Šæ•¸
+extern bool bF18CheckShuttle1MustHasIC;                 //JerryYang 20170515 (Steven) ä¿®æ­£in shuttle detectç•°å¸¸å¾Œé—œé–‰F18æœƒhang up
+extern bool bF18CheckShuttle2MustHasIC;                 //JerryYang 20170515 (Steven) ä¿®æ­£in shuttle detectç•°å¸¸å¾Œé—œé–‰F18æœƒhang up
 extern bool bReadEpTime;                                //kevin 20170524 (wei) add ep read change time
-extern bool bNeedClearSortCount;                        //JerryYang 20170517 (wei) JCET§d¦p¬K­n¨Dtray end©Îtray feed«á«öStart­n¦Û°Ê²M°£unloader¼Æ¶q
+extern bool bNeedClearSortCount;                        //JerryYang 20170517 (wei) JCETå³å¦‚æ˜¥è¦æ±‚tray endæˆ–tray feedå¾ŒæŒ‰Startè¦è‡ªå‹•æ¸…é™¤unloaderæ•¸é‡
 extern double dFixTrayDataCleanTime;                    //Ifor 20170525 (wei) add Fix Tray Data Clean Time
 extern bool bCutDirectTemp;                             //kevin 20170529 (wei) add power off open heat door Direct Heat close heat
 extern int iIndexZ1HomeToZPhaseDistanceFirst;           //kevin 20170515 (wei) add Jeffrey 20170414 Check IndexZ Home to Z Phase Distance Range
@@ -4319,38 +4319,38 @@ extern int iIndexY2HomeToYPosSecond;
 //Isaac 20201110 : Index Y find motor phase
 
 extern int MotorTask;                                   //kevin 20170515 (wei) define
-extern bool bSECSGEM_NoteAlarm;                         //Ifor 20170616 (wei) add S10F3 «á¸õ¥XNote Alarm ºX¼Ğ
-//extern AnsiString sHandlerSummaryPath;                  //JerryYang 20170804 (Steven) ¤é¤ë·s­n¨Dtray feed®É­n¤W¶ÇSummary¨ìFTP
-//extern AnsiString sHandlerSummaryFileName;              //JerryYang 20170804 (Steven) ¤é¤ë·s­n¨Dtray feed®É­n¤W¶ÇSummary¨ìFTP
-extern bool bSECSOneCycleComm;                          //Rogeryang 20170705 (wei) add SECS/GEN OneCycle©R¥OºX¼Ğ
+extern bool bSECSGEM_NoteAlarm;                         //Ifor 20170616 (wei) add S10F3 å¾Œè·³å‡ºNote Alarm æ——æ¨™
+//extern AnsiString sHandlerSummaryPath;                  //JerryYang 20170804 (Steven) æ—¥æœˆæ–°è¦æ±‚tray feedæ™‚è¦ä¸Šå‚³Summaryåˆ°FTP
+//extern AnsiString sHandlerSummaryFileName;              //JerryYang 20170804 (Steven) æ—¥æœˆæ–°è¦æ±‚tray feedæ™‚è¦ä¸Šå‚³Summaryåˆ°FTP
+extern bool bSECSOneCycleComm;                          //Rogeryang 20170705 (wei) add SECS/GEN OneCycleå‘½ä»¤æ——æ¨™
 extern AnsiString aARMSPassWordPath;                    //Ifor 20170621 (wei) add ARMS Function
-extern bool bKitOutDiameter;                            //kevin 20170628 (Steven) Lay out Kit  ¥~®|
+extern bool bKitOutDiameter;                            //kevin 20170628 (Steven) Lay out Kit  å¤–å¾‘
 extern AnsiString sKitOutDiameter[10];                   //kevin 20170628 (Steven) add
-extern int iIndexSpeed;                                 //Steven 20170818 : ´ú¸ÕUPH¥Î
+extern int iIndexSpeed;                                 //Steven 20170818 : æ¸¬è©¦UPHç”¨
 extern int iIndexAcc;
-extern int  iMonitoringOutlierCnt;                      //Steven 20180626 (wei) : ¶W¹L³]©w­Èªº¤]­nÀË¬d
-extern bool bInArmPickErrFromLoader;                    //Steven 20170828 (wei) : ½T»{¬O§_¦³¦bLoader§l®Æ²§±`
+extern int  iMonitoringOutlierCnt;                      //Steven 20180626 (wei) : è¶…éè¨­å®šå€¼çš„ä¹Ÿè¦æª¢æŸ¥
+extern bool bInArmPickErrFromLoader;                    //Steven 20170828 (wei) : ç¢ºèªæ˜¯å¦æœ‰åœ¨Loaderå¸æ–™ç•°å¸¸
 extern bool bQAModeFlag;                                //Steven 20170830 (wei) : QA mode for ATK ART
-extern bool bHasQwertyKeyForm;                          //Ifor 20170816 (Steven) add QWERTY¤pÁä½LºX¼Ğ
-extern bool bHasPasswordForm;                           //Ifor 20170816 (Steven) add QWERTY¤pÁä½LºX¼Ğ
-extern bool bAlarmAfterPreAlarm;                        //Ifor 20170906 (Steven) add Á×§K PreAlarm -> Alarm -> SECS GEM Alarm ¦P®Éµo¥Í³y¦¨·í¾÷°İÃD
-extern bool bUseNSKitKey;                               //kevin 20170814 (Steven) §CFORCE »İ³nÅéÂê¦í
-extern bool bNeedMusicAndAlarmOn;                       //kevin 20170816 (Steven) add »İµo¥X­µ¼Ö¤Î¨q¿O
-extern bool bNeedMusicFinishLighAndAlarmOn;             //kevin 20170816 (Steven) add »İµo¥X­µ¼Ö¤Î¨q¿O §¹¦¨
-extern AnsiString ASE_Yield[4];                         //kevin 20170816 (Steven) add ¶Ç°eYIELD µ¹ASE
-extern bool bAutoTrayEndHasIC;                          //kevin 20170822 (Steven) auto tray end ¦³§l¨ìIC
-extern AnsiString sAutoTrayendStartPosBuffer;           //kevin 20170823 (Steven) auto tray end °O¿ı¤@½L¢æ¢ç¦ì¸m
+extern bool bHasQwertyKeyForm;                          //Ifor 20170816 (Steven) add QWERTYå°éµç›¤æ——æ¨™
+extern bool bHasPasswordForm;                           //Ifor 20170816 (Steven) add QWERTYå°éµç›¤æ——æ¨™
+extern bool bAlarmAfterPreAlarm;                        //Ifor 20170906 (Steven) add é¿å… PreAlarm -> Alarm -> SECS GEM Alarm åŒæ™‚ç™¼ç”Ÿé€ æˆç•¶æ©Ÿå•é¡Œ
+extern bool bUseNSKitKey;                               //kevin 20170814 (Steven) ä½FORCE éœ€è»Ÿé«”é–ä½
+extern bool bNeedMusicAndAlarmOn;                       //kevin 20170816 (Steven) add éœ€ç™¼å‡ºéŸ³æ¨‚åŠç§€ç‡ˆ
+extern bool bNeedMusicFinishLighAndAlarmOn;             //kevin 20170816 (Steven) add éœ€ç™¼å‡ºéŸ³æ¨‚åŠç§€ç‡ˆ å®Œæˆ
+extern AnsiString ASE_Yield[4];                         //kevin 20170816 (Steven) add å‚³é€YIELD çµ¦ASE
+extern bool bAutoTrayEndHasIC;                          //kevin 20170822 (Steven) auto tray end æœ‰å¸åˆ°IC
+extern AnsiString sAutoTrayendStartPosBuffer;           //kevin 20170823 (Steven) auto tray end è¨˜éŒ„ä¸€ç›¤ï¼¸ï¼¹ä½ç½®
 extern AnsiString sAutoTrayendStartPos;                 //kevin 20170823 (Steven) add
-extern AnsiString sAutoTrayendEndPosBuffer;             //kevin 20170823 (Steven) auto tray end °O¿ı¤@½L¢æ¢ç¦ì¸m
+extern AnsiString sAutoTrayendEndPosBuffer;             //kevin 20170823 (Steven) auto tray end è¨˜éŒ„ä¸€ç›¤ï¼¸ï¼¹ä½ç½®
 extern AnsiString sAutoTrayendEndPos;
-extern AnsiString sAutoTrayendabnormalBuffer;           //kevin 20170823 (Steven) auto tray end ¤¤³~¦³®Æ°O¿ı¤@½L¢æ¢ç¦ì¸m
-extern AnsiString sAutoTrayendabnormalPos;              //kevin 20170823 (Steven) auto tray end ¤¤³~¦³®Æ °O¿ı¤@½L¢æ¢ç¦ì¸m
+extern AnsiString sAutoTrayendabnormalBuffer;           //kevin 20170823 (Steven) auto tray end ä¸­é€”æœ‰æ–™è¨˜éŒ„ä¸€ç›¤ï¼¸ï¼¹ä½ç½®
+extern AnsiString sAutoTrayendabnormalPos;              //kevin 20170823 (Steven) auto tray end ä¸­é€”æœ‰æ–™ è¨˜éŒ„ä¸€ç›¤ï¼¸ï¼¹ä½ç½®
 extern bool bASEARTStart;                               //kevin 20170830 (Steven) ASE_KH ART SEND START
-extern int iArt_AutoTotal[MAX_AUTO_TRAY][2];                        //kevin 20170830 (Steven) °O¿ıART ¼Æ¶q
-extern bool bAutoSkiplog;                               //kevin 20170904 (Steven) °O¿ıSKIP TRAY X Y ¦ì¸m
-extern bool bAutoSkipStartXYlog;                        //kevin 20170904 (Steven) °O¿ıSKIP TRAY X Y ¦ì¸m
-extern bool bTrayHaveDevice;                            //wei 20170317 (steven) Device Remain ´İ®ÆÀË´ú
-extern bool bDoTrayDeviceCheck;                         //wei 20170317 (steven) Device Remain ´İ®ÆÀË´ú
+extern int iArt_AutoTotal[MAX_AUTO_TRAY][2];                        //kevin 20170830 (Steven) è¨˜éŒ„ART æ•¸é‡
+extern bool bAutoSkiplog;                               //kevin 20170904 (Steven) è¨˜éŒ„SKIP TRAY X Y ä½ç½®
+extern bool bAutoSkipStartXYlog;                        //kevin 20170904 (Steven) è¨˜éŒ„SKIP TRAY X Y ä½ç½®
+extern bool bTrayHaveDevice;                            //wei 20170317 (steven) Device Remain æ®˜æ–™æª¢æ¸¬
+extern bool bDoTrayDeviceCheck;                         //wei 20170317 (steven) Device Remain æ®˜æ–™æª¢æ¸¬
 extern bool bFTPDownLoadFilediff;                       //wei 20170518
 extern bool bFTPDownLoadFileError;                      //wei 20170518
 extern int iYeildCantactCT[3];                          //wei 20170602
@@ -4361,31 +4361,31 @@ extern bool bDownOffsetFTP;                             //wei 20170821 offset ft
 extern bool bAutoCloseSite;
 extern int iContactCountAlarm;                          //wei 20170327 add
 extern bool bSaveNeedHome;
-extern bool bTrayFeedAfterCleanOut;                     //KaiChen 20180928 ¡GbTrayFeedAfterCleanOut
+extern bool bTrayFeedAfterCleanOut;                     //KaiChen 20180928 ï¼šbTrayFeedAfterCleanOut
 extern bool bTCPIPChangeAlarm;                          //Isaac 20170613 (wei) TCP/IP
 extern AnsiString InitialStartTime;                     //Isaac 20170613 (wei) TCP/IP
 extern int iHandlerCommandServerPort;                   //Isaac 20170613 (wei) TCP/IP
 extern int iHandlerResultServerPort;                    //Isaac 20170613 (wei) TCP/IP
-extern bool bNoChangeContactHeight;                     //Frank 20170918 (Steven) add Xilinx¤£ÂĞ»\Contact Height
-extern bool bTestEPaddKg;                               //jou 20171026 (wei) : ´ú¸Õ¤¤¥[À£EP
-extern bool bAutoSiteMapHotplateReady;                  //Ifor 20170920 (Steven) : add Auto Site Mapping Hotplate ºX¼Ğ
-extern bool bHP2Inarm;                                  //Ifor 20170926 (Steven) : add Hotplate ¸ê®ÆÂà²¾¸mInARM
+extern bool bNoChangeContactHeight;                     //Frank 20170918 (Steven) add Xilinxä¸è¦†è“‹Contact Height
+extern bool bTestEPaddKg;                               //jou 20171026 (wei) : æ¸¬è©¦ä¸­åŠ å£“EP
+extern bool bAutoSiteMapHotplateReady;                  //Ifor 20170920 (Steven) : add Auto Site Mapping Hotplate æ——æ¨™
+extern bool bHP2Inarm;                                  //Ifor 20170926 (Steven) : add Hotplate è³‡æ–™è½‰ç§»ç½®InARM
 extern bool bAutoSiteMapHotplateSave;                   //Ifor 20170926 (Steven) : add Auto Site Mapping Hotplate Save
 extern int iAutoSiteMapHotplatePlateR;                  //Ifor 20170926 (Steven) : add Auto Site Mapping Hotplate PlateX
 extern int iAutoSiteMapHotplatePlateC;                  //Ifor 20170926 (Steven) : add Auto Site Mapping Hotplate PlateY
 extern int iAutoSiteMapHotplateSource;                  //Ifor 20170926 (Steven) : add Auto Site Mapping Hotplate Source
-//extern int iAutoSiteMapHotplatePlacePlate;              //Ifor 20171005 (Steven) : add Auto Site Mapping Hotplate ³Æ¥÷³Ì«á¦ì¸m
-//extern int iAutoSiteMapHotplatePlacePlateX;             //Ifor 20171005 (Steven) : add Auto Site Mapping Hotplate ³Æ¥÷³Ì«á¦ì¸m
-//extern int iAutoSiteMapHotplatePlacePlateY;             //Ifor 20171005 (Steven) : add Auto Site Mapping Hotplate ³Æ¥÷³Ì«á¦ì¸m
-//extern int iAutoSiteMapHotplatePickPlate;               //Ifor 20171005 (Steven) : add Auto Site Mapping Hotplate ³Æ¥÷³Ì«á¦ì¸m
-//extern int iAutoSiteMapHotplatePickPlateX;              //Ifor 20171005 (Steven) : add Auto Site Mapping Hotplate ³Æ¥÷³Ì«á¦ì¸m
-//extern int iAutoSiteMapHotplatePickPlateY;              //Ifor 20171005 (Steven) : add Auto Site Mapping Hotplate ³Æ¥÷³Ì«á¦ì¸m
-//extern int iStartAutoSiteMapPickPlate;                  //Ifor 20180529 :add ³Æ¥÷Auto Site Mapping ±Ò©l¦ì¸m
-//extern int iStartAutoSiteMapPickPlateX;                 //Ifor 20180529 :add ³Æ¥÷Auto Site Mapping ±Ò©l¦ì¸m
-//extern int iStartAutoSiteMapPickPlateY;                 //Ifor 20180529 :add ³Æ¥÷Auto Site Mapping ±Ò©l¦ì¸m
+//extern int iAutoSiteMapHotplatePlacePlate;              //Ifor 20171005 (Steven) : add Auto Site Mapping Hotplate å‚™ä»½æœ€å¾Œä½ç½®
+//extern int iAutoSiteMapHotplatePlacePlateX;             //Ifor 20171005 (Steven) : add Auto Site Mapping Hotplate å‚™ä»½æœ€å¾Œä½ç½®
+//extern int iAutoSiteMapHotplatePlacePlateY;             //Ifor 20171005 (Steven) : add Auto Site Mapping Hotplate å‚™ä»½æœ€å¾Œä½ç½®
+//extern int iAutoSiteMapHotplatePickPlate;               //Ifor 20171005 (Steven) : add Auto Site Mapping Hotplate å‚™ä»½æœ€å¾Œä½ç½®
+//extern int iAutoSiteMapHotplatePickPlateX;              //Ifor 20171005 (Steven) : add Auto Site Mapping Hotplate å‚™ä»½æœ€å¾Œä½ç½®
+//extern int iAutoSiteMapHotplatePickPlateY;              //Ifor 20171005 (Steven) : add Auto Site Mapping Hotplate å‚™ä»½æœ€å¾Œä½ç½®
+//extern int iStartAutoSiteMapPickPlate;                  //Ifor 20180529 :add å‚™ä»½Auto Site Mapping å•Ÿå§‹ä½ç½®
+//extern int iStartAutoSiteMapPickPlateX;                 //Ifor 20180529 :add å‚™ä»½Auto Site Mapping å•Ÿå§‹ä½ç½®
+//extern int iStartAutoSiteMapPickPlateY;                 //Ifor 20180529 :add å‚™ä»½Auto Site Mapping å•Ÿå§‹ä½ç½®
 extern int iAutoSiteMapHPToSht;                         //Ifor 20171212 (Steven) : add Auto Site Mapping Hotplate iWhichShuttle
 extern int iAutoSiteMapHPToKit;                         //Ifor 20171212 (Steven) : add Auto Site Mapping Hotplate iWhichKit
-extern bool bAutoSiteMapHotICCanPick;                   //Ifor 20171225 (Steven) : add Á×§K One Cycle «á°õ¦æSite Mapping µo¥Í Hang up
+extern bool bAutoSiteMapHotICCanPick;                   //Ifor 20171225 (Steven) : add é¿å… One Cycle å¾ŒåŸ·è¡ŒSite Mapping ç™¼ç”Ÿ Hang up
 extern int iAutoSiteMapInArmRow;                        //Steven 20220527 : for JCET Auto Site Map
 extern int iAutoSiteMapInArmCol;
 extern int iAutoSiteMapInArmCol_8;
@@ -4393,43 +4393,43 @@ extern int iAutoSiteMapHPNo;
 extern int iAutoSiteMapHPR;
 extern int iAutoSiteMapHPC;
 extern int iAutoSiteMapSiteNo;
-extern int iAutoSiteMapCount;                           //Steven 20220811 : ¬ö¿ı¥Ø«e¬O­ş­ÓShuttle
-extern int iAutoSiteCurrStep;                           //Steven 20220811 : ¬ö¿ı¥Ø«e¬O­ş­ÓShuttle
+extern int iAutoSiteMapCount;                           //Steven 20220811 : ç´€éŒ„ç›®å‰æ˜¯å“ªå€‹Shuttle
+extern int iAutoSiteCurrStep;                           //Steven 20220811 : ç´€éŒ„ç›®å‰æ˜¯å“ªå€‹Shuttle
 extern bool bAutoSiteMapHasPickHP;
-extern bool bSiteMappingNeedCheck;                      //Ifor 20190308 : add ÀH®É¶}Ãö Site Mapping
-extern bool bSiteMappingPlaceHotplate;                  //Ifor 20190308 : add ÀH®É¶}Ãö Site Mapping
-extern bool bARTSeparate;                               //kevin 20170908 (wei) add art ¤Àbin ª¬ºA¦¨¥ß
-extern bool bLoadInarmAutoHigh;                         //kevin 20170929 (wei) load initial load ¤@½L inarm ®Õ¥¿°ª«×
+extern bool bSiteMappingNeedCheck;                      //Ifor 20190308 : add éš¨æ™‚é–‹é—œ Site Mapping
+extern bool bSiteMappingPlaceHotplate;                  //Ifor 20190308 : add éš¨æ™‚é–‹é—œ Site Mapping
+extern bool bARTSeparate;                               //kevin 20170908 (wei) add art åˆ†bin ç‹€æ…‹æˆç«‹
+extern bool bLoadInarmAutoHigh;                         //kevin 20170929 (wei) load initial load ä¸€ç›¤ inarm æ ¡æ­£é«˜åº¦
 extern bool bOutArmDropICSkip;                          //kevin 20171005 (wei) add out arm drop IC open door
-extern bool bPushHomeDetect;                            //kevin 20171006 (wei) ¤â°Ê«öhome
-extern bool bManualTrayend;                             //kevin 20171026 (wei) ¤âÁa tray end
+extern bool bPushHomeDetect;                            //kevin 20171006 (wei) æ‰‹å‹•æŒ‰home
+extern bool bManualTrayend;                             //kevin 20171026 (wei) æ‰‹ç¸± tray end
 extern int  iSECSMessageCanCloseByOperator;             //Ifor 20171024 (Steven) : add KYEC SECS GEM Can Close By Operator
 extern bool bAutoCleanOut;
-extern bool bRecordData[10][5];                         //wei 20171012 ¤ñ¹ï¸ê®Æ¬ö¿ı
-extern bool bInitStartDelayTime;                        //wei 20171020 (jou) InitStartDelayTime¬í¼Æ­Ë¼Æ
-extern int  iInitStartDelayCount;                       //wei 20171020 (jou) InitStartDelayTime¬í¼Æ­Ë¼Æ
-extern bool bAutocleanDelay;                            //wei 20171020 (jou) Auto clean«á¡A¤£InitStartDelayTime
-extern bool bInitialStart1Time;                         //wei 20171020 (jou) InitialStart1 ¬í¼Æ­Ë¼Æ
-extern int  iInitialStart1Count;                        //wei 20171020 (jou) InitialStart1 ¬í¼Æ­Ë¼Æ
-extern bool bInitialTestDelayStatus[15];                //wei 20171020 (jou) ©µ¿ğª¬ºAÅã¥Ü     //Steven 20200730 : 10 --> 15
-extern int  iInitialStart2Count;                         //kevin 20180905 InitialStart2 ¬í¼Æ­Ë¼Æ
-extern bool bInitialStart2Time;                          //kevin 20180905 InitialStart2 ¬í¼Æ­Ë¼Æ
+extern bool bRecordData[10][5];                         //wei 20171012 æ¯”å°è³‡æ–™ç´€éŒ„
+extern bool bInitStartDelayTime;                        //wei 20171020 (jou) InitStartDelayTimeç§’æ•¸å€’æ•¸
+extern int  iInitStartDelayCount;                       //wei 20171020 (jou) InitStartDelayTimeç§’æ•¸å€’æ•¸
+extern bool bAutocleanDelay;                            //wei 20171020 (jou) Auto cleanå¾Œï¼Œä¸InitStartDelayTime
+extern bool bInitialStart1Time;                         //wei 20171020 (jou) InitialStart1 ç§’æ•¸å€’æ•¸
+extern int  iInitialStart1Count;                        //wei 20171020 (jou) InitialStart1 ç§’æ•¸å€’æ•¸
+extern bool bInitialTestDelayStatus[15];                //wei 20171020 (jou) å»¶é²ç‹€æ…‹é¡¯ç¤º     //Steven 20200730 : 10 --> 15
+extern int  iInitialStart2Count;                         //kevin 20180905 InitialStart2 ç§’æ•¸å€’æ•¸
+extern bool bInitialStart2Time;                          //kevin 20180905 InitialStart2 ç§’æ•¸å€’æ•¸
 extern bool bPickerMoving;
 extern bool bPauseHappen;
 extern bool bByBinPercentCompareAlarm;
 extern bool bByArmPerSiteCompareAlarm[2];
-extern bool bByBinYeildAlarm;                           //wei 20151116 Low Yield Onecycle¤¤¤£alarm
+extern bool bByBinYeildAlarm;                           //wei 20151116 Low Yield Onecycleä¸­ä¸alarm
 extern bool bLotCheckOK;
 extern bool bCloseSiteCleanout;
 extern bool bInitalStartAutoHeight;                     //wei 20171227 Inital Start Auto Height
-extern bool bPowersaving;                               //wei 20180301 Åã¥ÜPowersaving
+extern bool bPowersaving;                               //wei 20180301 é¡¯ç¤ºPowersaving
 extern bool bPowersavingStart;
 extern bool bSECSGEM_Report;                                                      //Eastsun 20260526 #026-4.A10 Ifor 20240409 add:SECS/GEM Power Report (KYEC only)
 extern bool bGPIBPause;
 extern bool bGPIBAutoClean;
 extern bool bRunSetupStep[10];                          //wei 20180614 TSMC Setup Step
 extern bool bCanSetupStep;                              //wei 20180614 TSMC Setup Step
-extern int iMRTrayCount[10];                            //wei 20180808 MR ½L¼Æ­p¼Æ
+extern int iMRTrayCount[10];                            //wei 20180808 MR ç›¤æ•¸è¨ˆæ•¸
 extern int iCassetteFeed;
 extern int iCassetteFeedTask;
 extern bool bRunQAMode;
@@ -4464,7 +4464,7 @@ extern bool bManualCatchCassetteDown[5];
 extern bool bManualCatchCassetteUp[5];
 extern bool bLampMRManualCassette[10];
 extern int bLampMRManualMove[2];
-extern bool bRTNoUseHotPlate1;                          //20181008 Continuous lot ¤£¨Ï¥ÎHP1
+extern bool bRTNoUseHotPlate1;                          //20181008 Continuous lot ä¸ä½¿ç”¨HP1
 extern bool bRTNewLot;                                  //20181008 Continuous lot NEW LOT
 extern bool bNewLotHotplate;
 extern bool bNewLotUseHotplate1;                        //20181008 New Lot Use Hot plate 1
@@ -4523,19 +4523,19 @@ extern int  iFTStartCount;
 extern AnsiString asMRLotData[3][4];
 extern int iMRLotCount;
 extern bool bFTOpenSite[4][8];
-extern bool bOutarmAutoHigh;                            //kevin 20171115 (wei) load initial load ¤@½L outarm ®Õ¥¿°ª«×Z¶b¥ı¤£­n¤U¥h§l
+extern bool bOutarmAutoHigh;                            //kevin 20171115 (wei) load initial load ä¸€ç›¤ outarm æ ¡æ­£é«˜åº¦Zè»¸å…ˆä¸è¦ä¸‹å»å¸
 extern bool bSaveNeedHome;
-extern bool bEnable_KLT_Function;                       //Ifor 20180517 : add BarCode ½s½X³W«h 0:¥Á°ê 1: ¦è¤¸   //Ifor 20180802 : add KLT bBarCodeRules -> bEnable_KLT_Function 0:KYEC 1: KLT
-extern int iXpitchMax;                                  //Isaac 20171128: X-Pitch 40mmÂX¤j¦Ü50mm
-extern int iXpitchMaxX2;                                //Isaac 20171204 (Steven) : X-Pitch 40mmÂX¤j¦Ü50mm
-extern int iXpitchMaxX3;                                //Isaac 20171204 (Steven) : X-Pitch 40mmÂX¤j¦Ü50mm
+extern bool bEnable_KLT_Function;                       //Ifor 20180517 : add BarCode ç·¨ç¢¼è¦å‰‡ 0:æ°‘åœ‹ 1: è¥¿å…ƒ   //Ifor 20180802 : add KLT bBarCodeRules -> bEnable_KLT_Function 0:KYEC 1: KLT
+extern int iXpitchMax;                                  //Isaac 20171128: X-Pitch 40mmæ“´å¤§è‡³50mm
+extern int iXpitchMaxX2;                                //Isaac 20171204 (Steven) : X-Pitch 40mmæ“´å¤§è‡³50mm
+extern int iXpitchMaxX3;                                //Isaac 20171204 (Steven) : X-Pitch 40mmæ“´å¤§è‡³50mm
 extern int iXpitchMaxX4;
 extern int iXpitchMaxX5;
 extern int iXpitchMaxX6;
 extern int iXpitchMaxX7;
-extern int iXpitchMin;                                  //Steven 20180522 : X-Pitch³Ì¤p­È
-extern int iXpitchMinX2;                                //Steven 20180522 : X-Pitch³Ì¤p­È
-extern int iXpitchMinX3;                                //Steven 20180522 : X-Pitch³Ì¤p­È
+extern int iXpitchMin;                                  //Steven 20180522 : X-Pitchæœ€å°å€¼
+extern int iXpitchMinX2;                                //Steven 20180522 : X-Pitchæœ€å°å€¼
+extern int iXpitchMinX3;                                //Steven 20180522 : X-Pitchæœ€å°å€¼
 extern int iXpitchMinX4;
 extern int iXpitchMinX5;
 extern int iXpitchMinX6;
@@ -4554,46 +4554,46 @@ extern int iXpitchMinX4_MM;
 extern int iXpitchMinX5_MM;
 extern int iXpitchMinX6_MM;
 extern int iXpitchMinX7_MM;
-extern int iPitch_Max_minus_Min;                        //Isaac 20171204 (Steven) : Xpitch40->50mm, ·s¼W150mmªºTeachingÂI¦ì¡A¤º®tªk¤½¦¡­pºâ
+extern int iPitch_Max_minus_Min;                        //Isaac 20171204 (Steven) : Xpitch40->50mm, æ–°å¢150mmçš„Teachingé»ä½ï¼Œå…§å·®æ³•å…¬å¼è¨ˆç®—
 extern int iPitchY_Max_minus_Min;                       //Jimmychiu 20221205 add y pitch minus
 //------------------------------------------------------------------------------
-extern bool bNeedWaitRTCAutoVerify;                                             //jou 2014-06-24 RTC ¦Û°Ê¶i¦æModelÅçÃÒ
-extern bool bIndexPickUpErrorWaitRetry;                                         //Ifor 20171119 (Steven) : add Á×§KIndex Pick Up Err Inarm °½¶]³y¦¨¸ê®Æ²§±`¾É­PHangup
-extern bool bIndexPickErrShtStayRight1;                                         //JerryYang 20181206 (Steven) : fix ±Ò¥ÎD43¥\¯à®É,index arm pick up error«á«öretry¥i¯àµo¥Íhang up
-extern bool bIndexPickErrShtStayRight2;                                         //JerryYang 20181206 (Steven) : fix ±Ò¥ÎD43¥\¯à®É,index arm pick up error«á«öretry¥i¯àµo¥Íhang up
-extern bool bFirstTimeEnableSocketSensor;                                       //Ifor 20171121 (Steven) : add JCET ¦p¬K­n¨D²Ä¤@¦¸±Ò°Ê®É¶·±j¨î¶}±ÒSocket Sensor ¥\¯à
-extern bool bInArmPlaceToShuttleFinish;                                         //Ifor 20171121 : add iWhichShuttle & iWhichKit ¤Á´«ºX¼Ğ Á×§K¨S¤Á´«ª¬ºA³y¦¨Hangup
-extern int iInArmPutIcToSH[2][2];                                               //Ifor 20171121 : Test ¬d¬İ²§±`¸ê®Æ
-extern AnsiString asMotorDatabaseErr;                                           //jou 20180814 (Steven) : ¼W¥[Motor database ²§±`Äµ¥Ü
+extern bool bNeedWaitRTCAutoVerify;                                             //jou 2014-06-24 RTC è‡ªå‹•é€²è¡ŒModelé©—è­‰
+extern bool bIndexPickUpErrorWaitRetry;                                         //Ifor 20171119 (Steven) : add é¿å…Index Pick Up Err Inarm å·è·‘é€ æˆè³‡æ–™ç•°å¸¸å°è‡´Hangup
+extern bool bIndexPickErrShtStayRight1;                                         //JerryYang 20181206 (Steven) : fix å•Ÿç”¨D43åŠŸèƒ½æ™‚,index arm pick up errorå¾ŒæŒ‰retryå¯èƒ½ç™¼ç”Ÿhang up
+extern bool bIndexPickErrShtStayRight2;                                         //JerryYang 20181206 (Steven) : fix å•Ÿç”¨D43åŠŸèƒ½æ™‚,index arm pick up errorå¾ŒæŒ‰retryå¯èƒ½ç™¼ç”Ÿhang up
+extern bool bFirstTimeEnableSocketSensor;                                       //Ifor 20171121 (Steven) : add JCET å¦‚æ˜¥è¦æ±‚ç¬¬ä¸€æ¬¡å•Ÿå‹•æ™‚é ˆå¼·åˆ¶é–‹å•ŸSocket Sensor åŠŸèƒ½
+extern bool bInArmPlaceToShuttleFinish;                                         //Ifor 20171121 : add iWhichShuttle & iWhichKit åˆ‡æ›æ——æ¨™ é¿å…æ²’åˆ‡æ›ç‹€æ…‹é€ æˆHangup
+extern int iInArmPutIcToSH[2][2];                                               //Ifor 20171121 : Test æŸ¥çœ‹ç•°å¸¸è³‡æ–™
+extern AnsiString asMotorDatabaseErr;                                           //jou 20180814 (Steven) : å¢åŠ Motor database ç•°å¸¸è­¦ç¤º
 extern bool bAllSameHotCountHotOK;                                              //Ifor 20171128 :add
 //------------------------------------------------------------------------------
-extern int iInArmSpeed1;        //KaiChen 20171225 (Steven)¡GAdd Speed Display
-extern int iOutArmSpeed1;       //KaiChen 20171225 (Steven)¡GAdd Speed Display
-extern int iInShuttleSpeed1;    //KaiChen 20171225 (Steven)¡GAdd Speed Display
-extern int iOutShuttleSpeed1;   //KaiChen 20171225 (Steven)¡GAdd Speed Display
-extern int iIndexSpeed1;        //KaiChen 20171225 (Steven)¡GAdd Speed Display
+extern int iInArmSpeed1;        //KaiChen 20171225 (Steven)ï¼šAdd Speed Display
+extern int iOutArmSpeed1;       //KaiChen 20171225 (Steven)ï¼šAdd Speed Display
+extern int iInShuttleSpeed1;    //KaiChen 20171225 (Steven)ï¼šAdd Speed Display
+extern int iOutShuttleSpeed1;   //KaiChen 20171225 (Steven)ï¼šAdd Speed Display
+extern int iIndexSpeed1;        //KaiChen 20171225 (Steven)ï¼šAdd Speed Display
 //------------------------------------------------------------------------------
 extern int iMagneticScalePos[16][1000];
 
-extern int iLogLightScaleCount_InArmX1;     //KaiChen 20171228 (Steven) ¡GLog Light Scale Data
-extern int iLogLightScaleCount_InArmX2;     //KaiChen 20171228 (Steven) ¡GLog Light Scale Data
-extern int iLogLightScaleCount_InArmY1;     //KaiChen 20171228 (Steven) ¡GLog Light Scale Data
-extern int iLogLightScaleCount_InArmY2;     //KaiChen 20171228 (Steven) ¡GLog Light Scale Data
-extern int iLogLightScaleCount_OutArmX1;    //KaiChen 20171228 (Steven) ¡GLog Light Scale Data
-extern int iLogLightScaleCount_OutArmX2;    //KaiChen 20171228 (Steven) ¡GLog Light Scale Data
-extern int iLogLightScaleCount_OutArmY1;    //KaiChen 20171228 (Steven) ¡GLog Light Scale Data
-extern int iLogLightScaleCount_OutArmY2;    //KaiChen 20171228 (Steven) ¡GLog Light Scale Data
-extern bool bLogLightScale_InArm;           //KaiChen 20171228 (Steven) ¡GLog Light Scale Data
-extern bool bLogLightScale_OutArm;          //KaiChen 20171228 (Steven) ¡GLog Light Scale Data
+extern int iLogLightScaleCount_InArmX1;     //KaiChen 20171228 (Steven) ï¼šLog Light Scale Data
+extern int iLogLightScaleCount_InArmX2;     //KaiChen 20171228 (Steven) ï¼šLog Light Scale Data
+extern int iLogLightScaleCount_InArmY1;     //KaiChen 20171228 (Steven) ï¼šLog Light Scale Data
+extern int iLogLightScaleCount_InArmY2;     //KaiChen 20171228 (Steven) ï¼šLog Light Scale Data
+extern int iLogLightScaleCount_OutArmX1;    //KaiChen 20171228 (Steven) ï¼šLog Light Scale Data
+extern int iLogLightScaleCount_OutArmX2;    //KaiChen 20171228 (Steven) ï¼šLog Light Scale Data
+extern int iLogLightScaleCount_OutArmY1;    //KaiChen 20171228 (Steven) ï¼šLog Light Scale Data
+extern int iLogLightScaleCount_OutArmY2;    //KaiChen 20171228 (Steven) ï¼šLog Light Scale Data
+extern bool bLogLightScale_InArm;           //KaiChen 20171228 (Steven) ï¼šLog Light Scale Data
+extern bool bLogLightScale_OutArm;          //KaiChen 20171228 (Steven) ï¼šLog Light Scale Data
 extern bool bWaitSecsGemReply;              //Ifor 20180227 (Steven) add SECS GEM Confirm the Employee ID
 extern bool bNeedAUTHORITYCheck;            //Ifor 20180227 (Steven) add SECS GEM Confirm the Employee ID
 extern int iShowAUTHORITY;                  //Ifor 20180227 (Steven) add SECS GEM Confirm the Employee ID
 extern AnsiString strShowAUTHORITY;         //Ifor 20180227 (Steven) add SECS GEM Confirm the Employee ID
 extern AnsiString strInRotateDutAngle;      //wei 20180316
 extern AnsiString strOutRotateDutAngle;     //wei 20180316
-extern int iInArmType;                      //Ifor 20180518 : add ¾ã¦XHot plate ¸ê®ÆÂà´«
+extern int iInArmType;                      //Ifor 20180518 : add æ•´åˆHot plate è³‡æ–™è½‰æ›
 extern int iInHPType;
-extern bool bRunAutoSiteMapping;            //Ifor 20180518 : add Â²¤ÆSite Mapping ºX¼Ğ
+extern bool bRunAutoSiteMapping;            //Ifor 20180518 : add ç°¡åŒ–Site Mapping æ——æ¨™
 extern AnsiString asGETPFCPARAMETER;
 extern AnsiString asALLGETPFCPARAMETER[14][20];
 extern bool bSETPFCPARAMETER;
@@ -4612,18 +4612,18 @@ extern bool bYieldTotalBinIsPass[300];      //wei 20180718 Interval Low Yield By
 extern bool bYieldTotalBin;                 //wei 20180718 Interval Low Yield By Total
 extern int iYieldTotalBinpass;              //wei 20180718 Interval Low Yield By Total
 
-extern int iAutoCleanAlarm;                 //Ifor 20180727 (wei) ¡GAuto Clean Clean Count > Alarm Count 0:¥¿±` 1: Alarm 2:Clean Count
+extern int iAutoCleanAlarm;                 //Ifor 20180727 (wei) ï¼šAuto Clean Clean Count > Alarm Count 0:æ­£å¸¸ 1: Alarm 2:Clean Count
 extern bool bStartModeComplete;             //Sam 20190429 : Add CC_PTI_NEWWORK
-extern int iHasReadeLastData;               //Ifor 20180802 : add ­«¶}µ{¦¡«áLoader¦³Tray ¥B¶}±ÒAuto SPIK ±j¨î¤â°Ê¨úTray
-//extern AnsiString strATCBackupErrCode;      //Ifor 20181219 : add KYEC ­n¨D·Å«×¬ÛÃöAlarm ´ú¸Õ¤¤»İ¥ıIndex ¤W¤É¤~Alarm    //Ifor 20191209 ¨ú®øATC·Å«×²§±`Index¤W¤É¥\¯à
-//extern AnsiString strATCBackupErrPart;      //Ifor 20181219 : add KYEC ­n¨D·Å«×¬ÛÃöAlarm ´ú¸Õ¤¤»İ¥ıIndex ¤W¤É¤~Alarm    //Ifor 20191209 ¨ú®øATC·Å«×²§±`Index¤W¤É¥\¯à
-//extern int iATCBackupErrKCode;              //Ifor 20181219 : add KYEC ­n¨D·Å«×¬ÛÃöAlarm ´ú¸Õ¤¤»İ¥ıIndex ¤W¤É¤~Alarm    //Ifor 20191209 ¨ú®øATC·Å«×²§±`Index¤W¤É¥\¯à
-//extern int iATCBackupErrPos;                //Ifor 20181219 : add KYEC ­n¨D·Å«×¬ÛÃöAlarm ´ú¸Õ¤¤»İ¥ıIndex ¤W¤É¤~Alarm    //Ifor 20191209 ¨ú®øATC·Å«×²§±`Index¤W¤É¥\¯à
-//extern bool bATCBackupDuplicateErr;         //Ifor 20181219 : add KYEC ­n¨D·Å«×¬ÛÃöAlarm ´ú¸Õ¤¤»İ¥ıIndex ¤W¤É¤~Alarm    //Ifor 20191209 ¨ú®øATC·Å«×²§±`Index¤W¤É¥\¯à
-extern bool bZ1ModifyDistanceRef;           //Ifor 20190530 : add Z Phase ¥iSKIP ¦ı»İ­«·scontact height
-extern bool bZ2ModifyDistanceRef;           //Ifor 20190530 : add Z Phase ¥iSKIP ¦ı»İ­«·scontact height
-extern int iZ1ModifyDistanceRef;            //Ifor 20190530 : add Z Phase ¥iSKIP ¦ı»İ­«·scontact height
-extern int iZ2ModifyDistanceRef;            //Ifor 20190530 : add Z Phase ¥iSKIP ¦ı»İ­«·scontact height
+extern int iHasReadeLastData;               //Ifor 20180802 : add é‡é–‹ç¨‹å¼å¾ŒLoaderæœ‰Tray ä¸”é–‹å•ŸAuto SPIK å¼·åˆ¶æ‰‹å‹•å–Tray
+//extern AnsiString strATCBackupErrCode;      //Ifor 20181219 : add KYEC è¦æ±‚æº«åº¦ç›¸é—œAlarm æ¸¬è©¦ä¸­éœ€å…ˆIndex ä¸Šå‡æ‰Alarm    //Ifor 20191209 å–æ¶ˆATCæº«åº¦ç•°å¸¸Indexä¸Šå‡åŠŸèƒ½
+//extern AnsiString strATCBackupErrPart;      //Ifor 20181219 : add KYEC è¦æ±‚æº«åº¦ç›¸é—œAlarm æ¸¬è©¦ä¸­éœ€å…ˆIndex ä¸Šå‡æ‰Alarm    //Ifor 20191209 å–æ¶ˆATCæº«åº¦ç•°å¸¸Indexä¸Šå‡åŠŸèƒ½
+//extern int iATCBackupErrKCode;              //Ifor 20181219 : add KYEC è¦æ±‚æº«åº¦ç›¸é—œAlarm æ¸¬è©¦ä¸­éœ€å…ˆIndex ä¸Šå‡æ‰Alarm    //Ifor 20191209 å–æ¶ˆATCæº«åº¦ç•°å¸¸Indexä¸Šå‡åŠŸèƒ½
+//extern int iATCBackupErrPos;                //Ifor 20181219 : add KYEC è¦æ±‚æº«åº¦ç›¸é—œAlarm æ¸¬è©¦ä¸­éœ€å…ˆIndex ä¸Šå‡æ‰Alarm    //Ifor 20191209 å–æ¶ˆATCæº«åº¦ç•°å¸¸Indexä¸Šå‡åŠŸèƒ½
+//extern bool bATCBackupDuplicateErr;         //Ifor 20181219 : add KYEC è¦æ±‚æº«åº¦ç›¸é—œAlarm æ¸¬è©¦ä¸­éœ€å…ˆIndex ä¸Šå‡æ‰Alarm    //Ifor 20191209 å–æ¶ˆATCæº«åº¦ç•°å¸¸Indexä¸Šå‡åŠŸèƒ½
+extern bool bZ1ModifyDistanceRef;           //Ifor 20190530 : add Z Phase å¯SKIP ä½†éœ€é‡æ–°contact height
+extern bool bZ2ModifyDistanceRef;           //Ifor 20190530 : add Z Phase å¯SKIP ä½†éœ€é‡æ–°contact height
+extern int iZ1ModifyDistanceRef;            //Ifor 20190530 : add Z Phase å¯SKIP ä½†éœ€é‡æ–°contact height
+extern int iZ2ModifyDistanceRef;            //Ifor 20190530 : add Z Phase å¯SKIP ä½†éœ€é‡æ–°contact height
 
 //Isaac 20201110 : Index Y find motor phase
 //=>
@@ -4634,7 +4634,7 @@ extern int iY2ModifyDistanceRef;
 //<=
 //Isaac 20201110 : Index Y find motor phase
 
-//Ifor 20190912 :add ®ü«ä V02.30 ª© Record Torque
+//Ifor 20190912 :add æµ·æ€ V02.30 ç‰ˆ Record Torque
 extern int iGPIBIndexStatus;
 //==>
 extern bool bFrontTestArmTorqueFinish;
@@ -4643,7 +4643,7 @@ extern bool bArmTestInfoEvenLogStart_KYEC;
 extern bool bArmTestInfoEvenLogEnd_KYEC;
 extern AnsiString sArmTestInfoEvenLogFile;
 //<==
-//Ifor 20190912 :add ®ü«ä V02.30 ª© Record Torque
+//Ifor 20190912 :add æµ·æ€ V02.30 ç‰ˆ Record Torque
 extern AnsiString asChangeLogByLotPath;     //Ifor 20191002 : add Change Log By Lot
 extern AnsiString sChangeEvenLogFile;       //Ifor 20191002 : add Change Log By Lot
 
@@ -4653,16 +4653,16 @@ extern AnsiString asTCPIPBarCode[32];
 //------------------------------------------------------------------------------
 extern bool bOutArmPlaceDevice[4][8];                   //kevin 20180119 (Steven) Add outarm place ic not home
 extern AnsiString sBinData[eTrayCount];                 //JerryYang 20220909 : 10->eTrayCount        //kevin 20180202 (Steven) record bin
-extern int iContractModeTest;                           //kevin 20180222 (Steven) contract mode ¤â°Ê°e´ú¸Õ°T¸¹
-extern bool bContractModeTest;                          //kevin 20180222 (Steven) contract mode ¨q¤â°Ê°e´ú¸Õ°T¸¹
-extern bool bLoadContractModeTest;                      //kevin 20180222 (Steven) contract mode Load ¤£¤Jtray
+extern int iContractModeTest;                           //kevin 20180222 (Steven) contract mode æ‰‹å‹•é€æ¸¬è©¦è¨Šè™Ÿ
+extern bool bContractModeTest;                          //kevin 20180222 (Steven) contract mode ç§€æ‰‹å‹•é€æ¸¬è©¦è¨Šè™Ÿ
+extern bool bLoadContractModeTest;                      //kevin 20180222 (Steven) contract mode Load ä¸å…¥tray
 extern int  iAddInitStartDelayCT;                       //kevin 20180307 add delay count InitStartDelayTime
-extern bool bFinishInitStartDelay;                      //kevin 20180308 add °Ê§@§¹¦¨
-extern bool bCheckInarmPlaceShuttle;                    //kevin 20180315 add inarm place shuttle ½T»{¬O§_¦³§İ°Ê±¡§Î
+extern bool bFinishInitStartDelay;                      //kevin 20180308 add å‹•ä½œå®Œæˆ
+extern bool bCheckInarmPlaceShuttle;                    //kevin 20180315 add inarm place shuttle ç¢ºèªæ˜¯å¦æœ‰æŠ–å‹•æƒ…å½¢
 extern double queue20[20];                              //Isaac 20180301 (Steven) Index Cycle Time Monitoring function
 extern bool bResetflag;                                 //Isaac 20180301 (Steven) Index Cycle Time Monitoring function
-extern bool bZ1Isdownflag;                              //Isaac 20180307 (Steven) index arm¦bshuttle©ñ¸m¦ì¤l®É¡Ashuttle§İ§İ¶·µ¥¨ìarm°_¨Ó¤~¯à§İ
-extern bool bZ2Isdownflag;                              //Isaac 20180307 (Steven) index arm¦bshuttle©ñ¸m¦ì¤l®É¡Ashuttle§İ§İ¶·µ¥¨ìarm°_¨Ó¤~¯à§İ
+extern bool bZ1Isdownflag;                              //Isaac 20180307 (Steven) index armåœ¨shuttleæ”¾ç½®ä½å­æ™‚ï¼ŒshuttleæŠ–æŠ–é ˆç­‰åˆ°armèµ·ä¾†æ‰èƒ½æŠ–
+extern bool bZ2Isdownflag;                              //Isaac 20180307 (Steven) index armåœ¨shuttleæ”¾ç½®ä½å­æ™‚ï¼ŒshuttleæŠ–æŠ–é ˆç­‰åˆ°armèµ·ä¾†æ‰èƒ½æŠ–
 extern int iLoaderNum;                                  //Frank 20181121 add iLoaderNum
 extern bool bIndexDropIC[2];                            //Frank 20171213 (Steven) : Index Pick Err In Shuttle Skip and Blow Air
 extern int iInArmAutoZHeight;                           //Frank 20171213 (Steven) : Auto get Height
@@ -4671,23 +4671,23 @@ extern AnsiString sPassWord;                            //kevin 20180411 passwor
 extern bool bShowShuttle1Device;                        //kevin 20180504 index pick up error
 extern bool bShowShuttle2Device;                        //kevin 20180504 index pick up error
 extern bool bSetDataChange;                             //kevin 20180606 (wei) add SEM GEM send ESD DATA
-extern AnsiString sVersion;                             //JerryYang 20180619 (wei) : ASE_CL ©|´¼­n¨D¥Dµe­±ª©¸¹¥i¥H¦Û¤v­×§ï
-extern AnsiString sHisiWorkName[6];                     //kevin 20180626 20170129 ®ü«ä¤u§@ÀÉ©R¦W
+extern AnsiString sVersion;                             //JerryYang 20180619 (wei) : ASE_CL å°šæ™ºè¦æ±‚ä¸»ç•«é¢ç‰ˆè™Ÿå¯ä»¥è‡ªå·±ä¿®æ”¹
+extern AnsiString sHisiWorkName[6];                     //kevin 20180626 20170129 æµ·æ€å·¥ä½œæª”å‘½å
 extern AnsiString sATCFileName;                         //kevin 20180626 add ATC FILENAME
-extern int iByBinTotal[256];                            //kevin 20180703 bin ¼Æ¶q       Bin total[0]
+extern int iByBinTotal[256];                            //kevin 20180703 bin æ•¸é‡       Bin total[0]
 extern AnsiString BinAssign[eTrayCount];                //JerryYang 20220909 : 10->eTrayCount        //kevin 20180705 Auto tray put bin
 extern AnsiString sSVBinAssign[eTrayCount];             //JerryYang 20250224 : add
 extern bool bUnloadHasBin[eTrayCount];                  //JerryYang 20220909 : 10->eTrayCount        //kevin 20180705
-extern int iTrayLastBin[eTrayCount];                    //JerryYang 20220909 : 10->eTrayCount        //kevin 20180705 ¨C¤@­ÓTRAY³Ì«á¤@­ÓBIN
+extern int iTrayLastBin[eTrayCount];                    //JerryYang 20220909 : 10->eTrayCount        //kevin 20180705 æ¯ä¸€å€‹TRAYæœ€å¾Œä¸€å€‹BIN
 extern int iRecordCatchTray;                            //kevin 20180711 display catch tray
 extern int iallSitCount;                                //kevin 20180720 add
 extern bool bSetDataChange;                             //kevin 20180606 add SEM GEM send ESD DATA
 extern AnsiString PC_NAME;                              //kevin 20180803 pc NAME
 const int qTaskCount=300;
-extern TMyQueue10 QueueTaskList[qTaskCount];            //Steven 20180808 (wei) : ­×§ï¬ö¿ıTaskªº¤è¦¡
-extern TMyStrQueue100 QueueGalilCmd;                    //Steven 20200320 : ¬ö¿ıGalil©R¥O
-extern TMyTimerQueue100 QueueTestTime;                  //Steven 20200714 : ·sªº¬ö¿ı´ú¸Õ®É¶¡¤è¦¡
-extern TMyTimerQueue100 QueueCycleTime;                 //Steven 20200714 : ·sªº¬ö¿ı´ú¸Õ®É¶¡¤è¦¡
+extern TMyQueue10 QueueTaskList[qTaskCount];            //Steven 20180808 (wei) : ä¿®æ”¹ç´€éŒ„Taskçš„æ–¹å¼
+extern TMyStrQueue100 QueueGalilCmd;                    //Steven 20200320 : ç´€éŒ„Galilå‘½ä»¤
+extern TMyTimerQueue100 QueueTestTime;                  //Steven 20200714 : æ–°çš„ç´€éŒ„æ¸¬è©¦æ™‚é–“æ–¹å¼
+extern TMyTimerQueue100 QueueCycleTime;                 //Steven 20200714 : æ–°çš„ç´€éŒ„æ¸¬è©¦æ™‚é–“æ–¹å¼
 extern TMyTimerQueue100 QueueAirOnTime1;                //Sam 20220329 : Record Index Air On Time
 extern TMyTimerQueue100 QueueAirOnTime2;                //Sam 20220329 : Record Index Air On Time
 extern TQPF_Timer tTestTimer;
@@ -4696,32 +4696,32 @@ extern AnsiString StartTestTime;
 extern AnsiString EndTestTime;
 extern AnsiString StartCycleTime;
 extern AnsiString EndCycleTime;
-extern bool bUseInitTempOffset;                         //Steven 20180820 : Â²¤Æinit temp offset§PÂ_¦¡
-extern bool bUseInitDelay;                              //Steven 20180820 : Â²¤Æinit temp offset§PÂ_¦¡
+extern bool bUseInitTempOffset;                         //Steven 20180820 : ç°¡åŒ–init temp offsetåˆ¤æ–·å¼
+extern bool bUseInitDelay;                              //Steven 20180820 : ç°¡åŒ–init temp offsetåˆ¤æ–·å¼
 extern bool bYpitchNeddHome;                            //kevin 20180823
 extern bool bUseDefineVer;                              //kevin 20180829 addUSE DEFIN VER
 extern AnsiString SUseDefineVer;                        //kevin 20180829 addUSE DEFIN VER
 extern long double iContractCount;                      //kevin 20180928 add contract count
-extern bool bEOTToLongStopBlowAir;                      //kevin 20181009 add¤W¦¸´ú¸Õ°T¸¹¤Ó¤[ »İ°±¤î§j®ğ
-extern bool bSOTToLongStopBlowAir;                         //kevin 20181009 add¤W¦¸´ú¸Õ°T¸¹¤Ó¤[ »İ°±¤î§j®ğ
-extern bool bNoAutoZSelect;                                //kevin 20181023 (Steven) : ¤£¨Ï¥Î2¬q¤Àtray®ğ¬û
-extern bool bTestStartToNextTestStartDelay;                               //kevin 20181101 SOT ¶¡¹j®É¶¡ÅX°Ê
-extern bool bIndexAlarmInArmAway;                          //kevin 20181102 (Steven) :  index±¼®Æ inarm Åı¦ì inarm¥ı¤£­n°Ê
-extern bool bTestStartToNextTestStart;                               //kevin 20181101 SOT ¶¡¹j®É¶¡ÅX°Ê
-extern AnsiString sBufferSOT;                           //wei 20181211 (Steven) : §ó´«¦ì¸mSOT
-extern AnsiString sBufferEOT;                           //wei 20181211 (Steven) : §ó´«¦ì¸mSOT
-extern bool bRTCAutoVerifyControlEP;                    //jou 2014-06-24 RTC ¦Û°Ê¶i¦æModelÅçÃÒ
-extern bool bNeedWaitRTCAutoVerify;                     //jou 2014-06-24 RTC ¦Û°Ê¶i¦æModelÅçÃÒ
-extern bool bNeedWaitContactTestAutoVerify;             //JerryYang 20210420 : contact test°õ¦æauto verifyºX¼Ğ
-extern bool bDoFRTCAutoModelVerify;                     //jou 2014-06-24 RTC ¦Û°Ê¶i¦æModelÅçÃÒ
-extern bool bDoBRTCAutoModelVerify;                     //jou 2014-06-24 RTC ¦Û°Ê¶i¦æModelÅçÃÒ
-//extern bool bResetFirstTestToErr;                       //jou 20180103 : Reset²Ä¤@­Ó´ú¸Õ§¹ªºIC­n¥á¨ìError bin
+extern bool bEOTToLongStopBlowAir;                      //kevin 20181009 addä¸Šæ¬¡æ¸¬è©¦è¨Šè™Ÿå¤ªä¹… éœ€åœæ­¢å¹æ°£
+extern bool bSOTToLongStopBlowAir;                         //kevin 20181009 addä¸Šæ¬¡æ¸¬è©¦è¨Šè™Ÿå¤ªä¹… éœ€åœæ­¢å¹æ°£
+extern bool bNoAutoZSelect;                                //kevin 20181023 (Steven) : ä¸ä½¿ç”¨2æ®µåˆ†trayæ°£ç¼¸
+extern bool bTestStartToNextTestStartDelay;                               //kevin 20181101 SOT é–“éš”æ™‚é–“é©…å‹•
+extern bool bIndexAlarmInArmAway;                          //kevin 20181102 (Steven) :  indexæ‰æ–™ inarm è®“ä½ inarmå…ˆä¸è¦å‹•
+extern bool bTestStartToNextTestStart;                               //kevin 20181101 SOT é–“éš”æ™‚é–“é©…å‹•
+extern AnsiString sBufferSOT;                           //wei 20181211 (Steven) : æ›´æ›ä½ç½®SOT
+extern AnsiString sBufferEOT;                           //wei 20181211 (Steven) : æ›´æ›ä½ç½®SOT
+extern bool bRTCAutoVerifyControlEP;                    //jou 2014-06-24 RTC è‡ªå‹•é€²è¡ŒModelé©—è­‰
+extern bool bNeedWaitRTCAutoVerify;                     //jou 2014-06-24 RTC è‡ªå‹•é€²è¡ŒModelé©—è­‰
+extern bool bNeedWaitContactTestAutoVerify;             //JerryYang 20210420 : contact teståŸ·è¡Œauto verifyæ——æ¨™
+extern bool bDoFRTCAutoModelVerify;                     //jou 2014-06-24 RTC è‡ªå‹•é€²è¡ŒModelé©—è­‰
+extern bool bDoBRTCAutoModelVerify;                     //jou 2014-06-24 RTC è‡ªå‹•é€²è¡ŒModelé©—è­‰
+//extern bool bResetFirstTestToErr;                       //jou 20180103 : Resetç¬¬ä¸€å€‹æ¸¬è©¦å®Œçš„ICè¦ä¸Ÿåˆ°Error bin
 extern bool bIndexArm1PickUpErrNeedPiggyback;           //jou 20180814 : Index pick up error need piggyback
 extern bool bIndexArm2PickUpErrNeedPiggyback;           //jou 20180814 : Index pick up error need piggyback
-extern bool bUseFTPOneCycle;                            //Sam 20200305 : ¼W¥[ FTP ÀÉ®×ÀË¬d¡AÀË¬d¨ì VIE_STOP.txt ´N°õ¦æ OneCycle
+extern bool bUseFTPOneCycle;                            //Sam 20200305 : å¢åŠ  FTP æª”æ¡ˆæª¢æŸ¥ï¼Œæª¢æŸ¥åˆ° VIE_STOP.txt å°±åŸ·è¡Œ OneCycle
 extern AnsiString sGalilData[100];                      //JerryYang 20181130 (Steven) : add galil command log
 extern AnsiString sLMData[10];                          //JerryYang 20181130 (Steven) : add galil command log
-extern int iAuto_CarCarDeviceCnt[MAX_AUTO_TRAY];        //Sam20250331 : Unloader Auto °h¥X®É¤W­±ªº IC ¼Æ¶q¡C
+extern int iAuto_CarCarDeviceCnt[MAX_AUTO_TRAY];        //Sam20250331 : Unloader Auto é€€å‡ºæ™‚ä¸Šé¢çš„ IC æ•¸é‡ã€‚
 extern int iSECS_Loader_Buffer_State;                   //Sam 20250605 : Loader buffer status change event
 typedef struct
 {
@@ -4736,13 +4736,13 @@ typedef struct
     };
 }MySiteData;
 
-extern MySiteData SiteData[TotalTestMode];              //JerryYang 20181011 (Steven) : SiteData§ï¦¨¥ş°ìÅÜ¼Æ
+extern MySiteData SiteData[TotalTestMode];              //JerryYang 20181011 (Steven) : SiteDataæ”¹æˆå…¨åŸŸè®Šæ•¸
 
 typedef struct                                                                  //Jimmychiu 20231116 : add detail MES code for Previous tray pick up error
 {
-    //²§±`¤À¤TºØ¡A1. ²Ä¤@¦¸Skip error¡F
-    //            2. ³sÄò¨â¦¸©Î¥H¤WSkip error¡F
-    //            3. ¥»¦¸µLSkip error¦ı¤W¤@¦¸¦³¡F
+    //ç•°å¸¸åˆ†ä¸‰ç¨®ï¼Œ1. ç¬¬ä¸€æ¬¡Skip errorï¼›
+    //            2. é€£çºŒå…©æ¬¡æˆ–ä»¥ä¸ŠSkip errorï¼›
+    //            3. æœ¬æ¬¡ç„¡Skip errorä½†ä¸Šä¸€æ¬¡æœ‰ï¼›
     int iManualRemoveTrayCnt;
     bool b2ndUpSkip;
     void Clear()
@@ -4785,7 +4785,7 @@ typedef struct                                                                  
 }MyNextTrayNeedManualRemoveTray;
 extern MyNextTrayNeedManualRemoveTray MaualRemoveTray3Alarm;                    //Jimmychiu 20231116 : add detail MES code for Previous tray pick up error
 
-extern bool bWaitPreciserFinish;                        //Ifor 20180703 (Steven) : : µ¥«İ Preciser §¹¦¨
+extern bool bWaitPreciserFinish;                        //Ifor 20180703 (Steven) : : ç­‰å¾… Preciser å®Œæˆ
 //Steven 20181228 : Add Index Action
 //==>
 extern int Z1DownToShuttle;                             //ChungHung 20171116 modify for Index Action
@@ -4794,13 +4794,13 @@ extern bool bZ1UpAndPlaceZ2Down;                        //ChungHung 20171116 mod
 extern bool bZ1DownZ2UpAndPlace;                        //ChungHung 20171116 modify for Index Action
 //<==
 //Steven 20181228 : Add Index Action
-extern int iAutoSiteMapRunStartMode;                    //Ifor 20190916 :add Auto Site Mapping ³Æ¥÷Start Mode
-extern int iIndexTakeDeviceChk1,iIndexTakeDeviceChk2;           //kevin 20190103 ¦^§lÀË´úª¬ºA
+extern int iAutoSiteMapRunStartMode;                    //Ifor 20190916 :add Auto Site Mapping å‚™ä»½Start Mode
+extern int iIndexTakeDeviceChk1,iIndexTakeDeviceChk2;           //kevin 20190103 å›å¸æª¢æ¸¬ç‹€æ…‹
 extern int ishuttleShake;                                       //kevin 20190107 add shuttle shake state
 extern int iIndexArmWhich;                                      //kevin 20190130 add use test arm
-extern bool bHandlerPause;                                      //Steven 20190123 : ¬ö¿ıHandler³Q¼È°±
+extern bool bHandlerPause;                                      //Steven 20190123 : ç´€éŒ„Handlerè¢«æš«åœ
 extern int iHandlerStartCount;
-//JerryYang 20190123 ·s¼W«OÅ@Á×§K¯uªÅ«ùÄòon·|³y¦¨all site±¼®Æ
+//JerryYang 20190123 æ–°å¢ä¿è­·é¿å…çœŸç©ºæŒçºŒonæœƒé€ æˆall siteæ‰æ–™
 //==>
 extern bool bArm1SuckComplete;
 extern bool bArm2SuckComplete;
@@ -4823,28 +4823,28 @@ extern TQPF_Timer DoRearTestDestroyICDelay;
 extern bool bArm1D44SuckCheck;
 extern bool bArm2D44SuckCheck;
 //<==
-//JerryYang 20190123 ·s¼W«OÅ@Á×§K¯uªÅ«ùÄòon·|³y¦¨all site±¼®Æ
+//JerryYang 20190123 æ–°å¢ä¿è­·é¿å…çœŸç©ºæŒçºŒonæœƒé€ æˆall siteæ‰æ–™
 extern int iPickerOrder;
-extern bool bIndexplaceCheck;                                //kevin 20190201 index ¦^·ËÀË´ú¤¤
+extern bool bIndexplaceCheck;                                //kevin 20190201 index å›æºªæª¢æ¸¬ä¸­
 extern bool bSkipFlagSH1;       //Isacc (Steven) 20180329 2DID All site fail recheck twice and alarm
 extern bool bSkipFlagSH2;       //Isacc (Steven) 20180329 2DID All site fail recheck twice and alarm
 extern double iTotalGf;         //Steven 20190314 : Change total gf to globe var
-extern bool bContractModeCheckPushZ1;                           //kevin 20190227 add «eÀË¬d¬O§_¦³CI©ñ¦bCOCKET ³y¦¨¾÷ºc·lÃa «öz1 ½T»{
-extern bool bContactModeNeedOpenDoor;                           //JerryYang 20231218 : G22´£¿ô¤H­û¨útray¥\¯à
+extern bool bContractModeCheckPushZ1;                           //kevin 20190227 add å‰æª¢æŸ¥æ˜¯å¦æœ‰CIæ”¾åœ¨COCKET é€ æˆæ©Ÿæ§‹æå£ æŒ‰z1 ç¢ºèª
+extern bool bContactModeNeedOpenDoor;                           //JerryYang 20231218 : G22æé†’äººå“¡å–trayåŠŸèƒ½
 extern bool AsebLoadCellTest;                                   //kevin 20190305 add one cycle run arm 1 arm 2 load cell test
 extern bool bLoadCellTest;                                      //kevin 20190305 add one cycle run arm 1 arm 2 load cell test
 extern bool bUseTwoArm32Site;                                   //kevin 20190322 add two arm tester 32SITE 16SITE(4X4)
 extern bool bQASampleCnt;                                       //Steven 20190326 : QA Sampling
 
-extern double  dATCTempAdjustmentOffset[32];            //Ifor 20190215 : add ATC ¨Ï¥Î ¤TÂI®Õ¥¿¥\¯à
-extern bool bATCTempAdjustmentOffset;                   //Ifor 20190215 : add ATC ¨Ï¥Î ¤TÂI®Õ¥¿¥\¯à
+extern double  dATCTempAdjustmentOffset[32];            //Ifor 20190215 : add ATC ä½¿ç”¨ ä¸‰é»æ ¡æ­£åŠŸèƒ½
+extern bool bATCTempAdjustmentOffset;                   //Ifor 20190215 : add ATC ä½¿ç”¨ ä¸‰é»æ ¡æ­£åŠŸèƒ½
 extern bool bTJControlMode;                             //Ifor 20190328 : add TJ Temp Over Range
 extern bool bCheckGiveWay;                              //Ifor 20190328 : add TJ Temp Over Range
 extern int iBackupTestY2_Middle;
 extern int iBackupTestZ2_Test;
 extern int iBackupTestZ2_Drop;
 extern AnsiString sATCPath;
-extern bool bIndexDropVacuumError;                              //kevin 20190418 Á×§K inarm ¨Ó¦^¶]
+extern bool bIndexDropVacuumError;                              //kevin 20190418 é¿å… inarm ä¾†å›è·‘
 //extern AnsiString asViewList[30];
 //extern AnsiString asViewListOld[30];
 //extern AnsiString asViewMessage[5];
@@ -4871,11 +4871,11 @@ extern bool bPlaceToBufferCheck;
 extern int iAutoCount[3];
 extern AnsiString TotalErrPart;                                 //kevin 20190610 add TotalErrPart
 extern bool bWaitTSV;                                           //Steven 20190521 : ATK lot count
-extern bool bUseHotGunCheck;                                    //kevin 20190621 hot gun ¬y¶q ¤£¨¬°»´ú
-extern bool bPickLoaderDuplicateErr[MAX_ARM_Row][MAX_ARM_Col];                      //Steven 20190704 : bSuckDuplicateErr¤ÀÃş¨Ã§ï¦¨¥ş°ìÅÜ¼Æ
-extern bool bPickHPDuplicateErr[MAX_ARM_Row][MAX_ARM_Col];                          //Steven 20190704 : bSuckDuplicateErr¤ÀÃş¨Ã§ï¦¨¥ş°ìÅÜ¼Æ
-extern bool bTryPickHPDuplicateErr[MAX_ARM_Row][MAX_ARM_Col];                       //Steven 20190704 : bSuckDuplicateErr¤ÀÃş¨Ã§ï¦¨¥ş°ìÅÜ¼Æ
-extern int  iLoadPitchStepY;                                                    //Steven 20190704 : pitchstepY§ï¦¨¥ş°ìÅÜ¼Æ
+extern bool bUseHotGunCheck;                                    //kevin 20190621 hot gun æµé‡ ä¸è¶³åµæ¸¬
+extern bool bPickLoaderDuplicateErr[MAX_ARM_Row][MAX_ARM_Col];                      //Steven 20190704 : bSuckDuplicateErråˆ†é¡ä¸¦æ”¹æˆå…¨åŸŸè®Šæ•¸
+extern bool bPickHPDuplicateErr[MAX_ARM_Row][MAX_ARM_Col];                          //Steven 20190704 : bSuckDuplicateErråˆ†é¡ä¸¦æ”¹æˆå…¨åŸŸè®Šæ•¸
+extern bool bTryPickHPDuplicateErr[MAX_ARM_Row][MAX_ARM_Col];                       //Steven 20190704 : bSuckDuplicateErråˆ†é¡ä¸¦æ”¹æˆå…¨åŸŸè®Šæ•¸
+extern int  iLoadPitchStepY;                                                    //Steven 20190704 : pitchstepYæ”¹æˆå…¨åŸŸè®Šæ•¸
 extern bool bAPAXConnectFileAlarm;              //ChungHung 20180912 add for APAX Alarm
 extern bool bApaxWriteFinish;
 extern bool bApaxReadFinish;
@@ -4886,69 +4886,69 @@ extern AnsiString sLoadCellReceData;           //kevin 20190906 add load cell NG
 extern bool bloadcellRece;                  //kevin 20190906 add load cell command
 extern int iloadcellRece;                  //kevin 20190906 add load cell command
 extern int iloadcellCount;                       //kevin 20190906 add load cell command
-extern bool HotGunFlowEnable;                           //KaiChen 20190729 ¡GHot Gun Flow
-extern unsigned int HotGunFlow_LineNo;                  //KaiChen 20190729 ¡GHot Gun Flow
-extern unsigned int HotGunFlow_DevNo;                   //KaiChen 20190729 ¡GHot Gun Flow
-extern unsigned int HotGunFlow_Gun1_ChannelNo;          //KaiChen 20190729 ¡GHot Gun Flow
-extern unsigned int HotGunFlow_Gun2_ChannelNo;          //KaiChen 20190729 ¡GHot Gun Flow
-extern bool bUseHotGunFlowCheck;                                //KaiChen 20190729 ¡GHot Gun Flow
-extern AnsiString sTempsite[64];                   //kevin 20190928 add ·Å«×error ¨qsite½s¸¹
+extern bool HotGunFlowEnable;                           //KaiChen 20190729 ï¼šHot Gun Flow
+extern unsigned int HotGunFlow_LineNo;                  //KaiChen 20190729 ï¼šHot Gun Flow
+extern unsigned int HotGunFlow_DevNo;                   //KaiChen 20190729 ï¼šHot Gun Flow
+extern unsigned int HotGunFlow_Gun1_ChannelNo;          //KaiChen 20190729 ï¼šHot Gun Flow
+extern unsigned int HotGunFlow_Gun2_ChannelNo;          //KaiChen 20190729 ï¼šHot Gun Flow
+extern bool bUseHotGunFlowCheck;                                //KaiChen 20190729 ï¼šHot Gun Flow
+extern AnsiString sTempsite[64];                   //kevin 20190928 add æº«åº¦error ç§€siteç·¨è™Ÿ
 extern int iOneCycleTask;                               //JerryYang 20190925 one cycle task log
 extern int iCleanOutCycleTask;                          //JerryYang 20190925 clean out task log
-extern bool bLoaderNeedVibrate;  //JerryYang 20191001 loader¾_°Ê°¨¹F
-//JerryYang 20180921 Setup Teach¥\¯à
+extern bool bLoaderNeedVibrate;  //JerryYang 20191001 loaderéœ‡å‹•é¦¬é”
+//JerryYang 20180921 Setup TeachåŠŸèƒ½
 //<==
 extern bool bInArmSetupTeach[InOfsTotal];
 extern bool bInArmStop[InOfsTotal];
 extern int  iInArmPickPlaceCnt[InOfsTotal];
 extern bool bOutArmSetupTeach[OutOfsTotal];
 extern bool bOutArmStop[OutOfsTotal];
-extern int  iOutArmPickPlaceCnt[OutOfsTotal];    //Ifor 20200825 Fix:°O¾ĞÅé¯}Ãa 8->12
+extern int  iOutArmPickPlaceCnt[OutOfsTotal];    //Ifor 20200825 Fix:è¨˜æ†¶é«”ç ´å£ 8->12
 extern int  iSortUnloadT6;
 //<==
-//JerryYang 20180921 Setup Teach¥\¯à
-extern int iShuttleLog;                 //JerryYang 20181121 (Steven) : add log,°O¿ıin shuttle device¬O³Q¾_°Ê°¨¹For·n·n¥\¯à¾É¥¿
-extern bool bDoBRTCGiveWayCheck;        //Ifor 20191120 : add ·s¼WRTC2.0 Full Check Åı¦ì
-extern AnsiString sHiLotID;             //kevin 20191016 «È¤á  LOT OSAT
-extern AnsiString sOSATLotID;           //kevin 20191016 «È¤á  LOT OSAT
-extern AnsiString sTemp;                //kevin 20191016 ¤u§@·Å«×
-extern AnsiString sHandleID;            //kevin 20191016 ¾÷¥x½s¸¹
+//JerryYang 20180921 Setup TeachåŠŸèƒ½
+extern int iShuttleLog;                 //JerryYang 20181121 (Steven) : add log,è¨˜éŒ„in shuttle deviceæ˜¯è¢«éœ‡å‹•é¦¬é”oræ–æ–åŠŸèƒ½å°æ­£
+extern bool bDoBRTCGiveWayCheck;        //Ifor 20191120 : add æ–°å¢RTC2.0 Full Check è®“ä½
+extern AnsiString sHiLotID;             //kevin 20191016 å®¢æˆ¶  LOT OSAT
+extern AnsiString sOSATLotID;           //kevin 20191016 å®¢æˆ¶  LOT OSAT
+extern AnsiString sTemp;                //kevin 20191016 å·¥ä½œæº«åº¦
+extern AnsiString sHandleID;            //kevin 20191016 æ©Ÿå°ç·¨è™Ÿ
 extern AnsiString sFlow;                //kevin 20191016 FTRT
-extern AnsiString sDeviceType;          //kevin 20191016 ²£«~¦WºÙ
+extern AnsiString sDeviceType;          //kevin 20191016 ç”¢å“åç¨±
 extern AnsiString sInsertion;           //kevin 20191016 Process  FT1 FT2.
-extern AnsiString sTestProgram;         //kevin 20191016 ´ú¸Õµ{¦¡
-extern AnsiString sOSATName;            //Ifor 20200724 add:´ú¸Õ¼t¦WºÙ
+extern AnsiString sTestProgram;         //kevin 20191016 æ¸¬è©¦ç¨‹å¼
+extern AnsiString sOSATName;            //Ifor 20200724 add:æ¸¬è©¦å» åç¨±
 extern bool bPickUpHomeFinish;
 extern bool bOneCycleInArmToLoader;
-extern int iWhichArmDown;               //JerryYang 20200316 add SVID ­ş¤äarm¤UÀ£¦b´ú°Ï
-extern bool bCheckTrayBySoftWareOpen;   //KaiChen 20191128 ¡Gª¿®æ-´ò¤f¡A³nÅé­«±Ò®ÉÀË¬d©Ò¦³Tray
-extern bool bCheckTrayBySoftWareOpen_Sen[MAX_FIX_TRAY];    //KaiChen 20191128 ¡Gª¿®æ-´ò¤f¡A³nÅé­«±Ò®ÉÀË¬d©Ò¦³Tray
-extern double dfComplianceUnit;         //kevin 20200313 add ¯B°ÊÀY¹ïÀ³¬û®|
-extern bool bCanAutoCloseSite;          //Steven 20200420 : ¾ã¦XAuto Site Off
+extern int iWhichArmDown;               //JerryYang 20200316 add SVID å“ªæ”¯armä¸‹å£“åœ¨æ¸¬å€
+extern bool bCheckTrayBySoftWareOpen;   //KaiChen 20191128 ï¼šçŸ½æ ¼-æ¹–å£ï¼Œè»Ÿé«”é‡å•Ÿæ™‚æª¢æŸ¥æ‰€æœ‰Tray
+extern bool bCheckTrayBySoftWareOpen_Sen[MAX_FIX_TRAY];    //KaiChen 20191128 ï¼šçŸ½æ ¼-æ¹–å£ï¼Œè»Ÿé«”é‡å•Ÿæ™‚æª¢æŸ¥æ‰€æœ‰Tray
+extern double dfComplianceUnit;         //kevin 20200313 add æµ®å‹•é ­å°æ‡‰ç¼¸å¾‘
+extern bool bCanAutoCloseSite;          //Steven 20200420 : æ•´åˆAuto Site Off
 extern int USE_Scanner_AOI_Inspection;          //Ifor 20190725 : add Scanner AOI
 extern int USE_Scanner_AOI_Inspection_FixLight_Z_Axis; //Eastsun 20260410 : AOI Fix Light Z Axis Mode
 extern bool bAOIBallDamageCounterFailAlarm;     //Ifor 20190725 : add Scanner AOI
 extern bool bAOIBallDamageCounterFailUnTest;    //Ifor 20190725 : add Scanner AOI
-extern bool bPickSH1Flag;                       //Ifor 20191226 ²¾¦Ü¥ş°ì
-extern bool bPickSH2Flag;                       //Ifor 20191226 ²¾¦Ü¥ş°ì
-extern int iSLT_HeadContactCount[2][16];                        //Ifor 20191218 : add KYEC ­n¨D ¦PSLT¿é¥Xªí®æ
-extern AnsiString asSLT_LotStartTime;                           //Ifor 20191218 : add KYEC ­n¨D ¦PSLT¿é¥Xªí®æ
-extern AnsiString asSLT_LotEndTime;                             //Ifor 20191218 : add KYEC ­n¨D ¦PSLT¿é¥Xªí®æ
-extern int iDBQueryDays;                                        //Ifor 20200324 : add KYEC ­n¨D·s¼WDB Qery ¤Ñ¼Æ
+extern bool bPickSH1Flag;                       //Ifor 20191226 ç§»è‡³å…¨åŸŸ
+extern bool bPickSH2Flag;                       //Ifor 20191226 ç§»è‡³å…¨åŸŸ
+extern int iSLT_HeadContactCount[2][16];                        //Ifor 20191218 : add KYEC è¦æ±‚ åŒSLTè¼¸å‡ºè¡¨æ ¼
+extern AnsiString asSLT_LotStartTime;                           //Ifor 20191218 : add KYEC è¦æ±‚ åŒSLTè¼¸å‡ºè¡¨æ ¼
+extern AnsiString asSLT_LotEndTime;                             //Ifor 20191218 : add KYEC è¦æ±‚ åŒSLTè¼¸å‡ºè¡¨æ ¼
+extern int iDBQueryDays;                                        //Ifor 20200324 : add KYEC è¦æ±‚æ–°å¢DB Qery å¤©æ•¸
 extern int iLDTrayNeedManualRemoveTray;                         //Ifor 20200331 : add Edit Loader Tray Need Manual Remove Tray 0:Normal 1:Edit Loader Tray 2:Data Change
 extern bool bNeedManualRemoveTray;                              //Ifor 20200331 : add Edit Loader Tray Need Manual Remove Tray
 extern bool bMOFileControlBinChangeAlarm;                         //Sam 20200525 : Control Bin
-extern bool bNewCatchTrayblock;                                 //kevin 20200512 §¨tray¾Bª©«dµu
-extern bool bHandlerModel;  //jou 20200601 : GPIB «¬¸¹Åª¨ú¥¢±Ñ»İAlarm,¤£À³¸Ó¦^¼g«¬¸¹
+extern bool bNewCatchTrayblock;                                 //kevin 20200512 å¤¾trayé®ç‰ˆå‰ŠçŸ­
+extern bool bHandlerModel;  //jou 20200601 : GPIB å‹è™Ÿè®€å–å¤±æ•—éœ€Alarm,ä¸æ‡‰è©²å›å¯«å‹è™Ÿ
 extern bool bHasICinSocket;
 extern AnsiString sSocketSensorErr;
-extern bool bTryPickLastRowIng; //JerryYang 20200422 Auto skip¦¸¼Æ¨ì¹F«á, ¦Û°Ê¦A¥h³Ì«á¤@±Æ§l§l¬İ
+extern bool bTryPickLastRowIng; //JerryYang 20200422 Auto skipæ¬¡æ•¸åˆ°é”å¾Œ, è‡ªå‹•å†å»æœ€å¾Œä¸€æ’å¸å¸çœ‹
 extern int iBackupLoadDir;
-extern bool bSht1LoseICErr;     //JerryYang 20200610 Out shuttle lose IC»İ¥ıÅı¦ì¦Aµo¥Xalarm
+extern bool bSht1LoseICErr;     //JerryYang 20200610 Out shuttle lose ICéœ€å…ˆè®“ä½å†ç™¼å‡ºalarm
 extern bool bSht2LoseICErr;
 extern int i3SigmaTempMonitior_NowContactCount; //Hmy 20200515 Copy//Hmy 20200510 Add Enable 3 Sigma Temp Monitor//Hmy 20200510 Add Enable 3 Sigma Temp Monitor
-extern int iReceiveATCData;                      //kevin 20200608 Åª¨úATC °Ñ¼Æ¸ê®Æ
-extern bool bD52IndexArmUp;     //JerryYang 20200804 : fix D52 & Index arm¦bshuttle°ª«×¹w¼ö¥\¯à¦P®É±Ò¥Î®É¡Aµo¥Ítester timeout®É·|»~µohandler hang up
+extern int iReceiveATCData;                      //kevin 20200608 è®€å–ATC åƒæ•¸è³‡æ–™
+extern bool bD52IndexArmUp;     //JerryYang 20200804 : fix D52 & Index armåœ¨shuttleé«˜åº¦é ç†±åŠŸèƒ½åŒæ™‚å•Ÿç”¨æ™‚ï¼Œç™¼ç”Ÿtester timeoutæ™‚æœƒèª¤ç™¼handler hang up
 extern AnsiString asEESUG_Data[7];                              //Ifor 20200529 add: SECS/GEM EESUG Offset Function
 extern bool bBTestSuckHasError;                                 //Ifor 20200622 add:Index Pick Shuttle Err Need Purge
 extern bool bBTestSuckError[MAX_ARM_Row][MAX_ARM_Col];          //Ifor 20200622 add:Index Pick Shuttle Err Need Purge
@@ -4958,12 +4958,12 @@ extern AnsiString asSetupFileCheckList;   //Ifor 20200914 add:Setup File Check L
 extern int USE_Top_Scanner_AOI_Inspection;      //Ifor 20200902 add: TFAMD Top AOI
 extern bool bArm1Delay;
 extern bool bArm2Delay;
-extern bool bArm1IsTest;  //JerryYang 20180629 (wei) : ¥Î¨Ó§PÂ_¬O§_¦b´ú¸Õ¤¤
-extern bool bArm2IsTest;  //JerryYang 20180629 (wei) : ¥Î¨Ó§PÂ_¬O§_¦b´ú¸Õ¤¤
-extern bool bIndexCheckVacum;     //kevin 20200716 add ASE_KH ¥d¿é¤J
-extern bool bUseStartSoundAlarm;                 //kevin 20201116  Start µo¥XÁn­µ ¤£°Ê 5sec
-extern bool bStartMoveSpeed;                     //kevin 20201116  motor move speed 10 % ²¾¾H10 sec ¨t²Î¼È°± «ì´_³t«×
-extern bool bStartOpenDoor;                      //kevin 20201116  ¦³¶}ªù°±¾÷
+extern bool bArm1IsTest;  //JerryYang 20180629 (wei) : ç”¨ä¾†åˆ¤æ–·æ˜¯å¦åœ¨æ¸¬è©¦ä¸­
+extern bool bArm2IsTest;  //JerryYang 20180629 (wei) : ç”¨ä¾†åˆ¤æ–·æ˜¯å¦åœ¨æ¸¬è©¦ä¸­
+extern bool bIndexCheckVacum;     //kevin 20200716 add ASE_KH å¡è¼¸å…¥
+extern bool bUseStartSoundAlarm;                 //kevin 20201116  Start ç™¼å‡ºè²éŸ³ ä¸å‹• 5sec
+extern bool bStartMoveSpeed;                     //kevin 20201116  motor move speed 10 % ç§»é„§10 sec ç³»çµ±æš«åœ æ¢å¾©é€Ÿåº¦
+extern bool bStartOpenDoor;                      //kevin 20201116  æœ‰é–‹é–€åœæ©Ÿ
 extern bool bTesterSendPause;   //Steven 20201022 : For RFMD
 extern bool bNeedReplunge_RFMD; //Steven 20201022 : For RFMD
 extern bool bTesterPauseMusic;   //Steven 20220616 : Can select "Alarm Reset" when show "Tester Pause" for QORVO.
@@ -4977,36 +4977,36 @@ extern bool bDoEmptySocketOneCycle;
 //<==
 //Steven 20201022 : For RFMD Empty Socket Check Funstion.
 
-extern int iSecsGemSwitchFTRT;      //Steven 20210202 : ³z¹LSECS/GEM¤Á´«°Ê§@ª¬ºA 0:µL°Ê§@, 1:¤Á´«¤¤, 2:¤Á´«¦¨¥\
+extern int iSecsGemSwitchFTRT;      //Steven 20210202 : é€éSECS/GEMåˆ‡æ›å‹•ä½œç‹€æ…‹ 0:ç„¡å‹•ä½œ, 1:åˆ‡æ›ä¸­, 2:åˆ‡æ›æˆåŠŸ
 extern int iAutoSiteMappingErrCT;   //jou 20200707 : VTEST auto site mapping
-//Steven 20210217 : §ï¦¨¥ş°ì
+//Steven 20210217 : æ”¹æˆå…¨åŸŸ
 //==>
 extern bool fRearNeedSuckIC, fFrontNeedSuck, fFrontNeedDestroy;
 extern bool fFrontNeedSuckIC, fRearNeedSuck, fRearNeedDestroy;
 extern bool f32SiteNeedDestroy, f32SiteNeedSuck;
 //<==
-//Steven 20210217 : §ï¦¨¥ş°ì
-extern int JCET_FOR_EVAN;                //Steven 20210304 : ªø¹qµ¹¦p¬Kªºª©¥»
-extern int SPIL_FOR_QLE;                 //Steven 20230110 : For´ë±ç
+//Steven 20210217 : æ”¹æˆå…¨åŸŸ
+extern int JCET_FOR_EVAN;                //Steven 20210304 : é•·é›»çµ¦å¦‚æ˜¥çš„ç‰ˆæœ¬
+extern int SPIL_FOR_QLE;                 //Steven 20230110 : Foræ¸ æ¢
 //AI(ht9045-v899) 20260417: add config flag to show AutoDeviceEjection panel
 extern int bAutoDeviceEjection;
-extern bool bAfterHomeShtChkLoseICNeedSlow[2];//Sam 20201020 : ¦^ Home ²Ä¤@¦¸ªº Shuttle Check IC lose »İ­nÅÜºC¡C
-extern bool bShowIndexMotorError;       //Isaac 20201012 : encoder©Mcommand/TeachingÂI¤ñ¸û¡Ashow alarmµøµ¡ÅÜ¤j
-extern int iMaxCommandY1,iMinCommandY1,iMaxCommandY2,iMinCommandY2,iMaxTeachY1F,iMinTeachY1F,iMaxTeachY1M,iMinTeachY1M,iMaxTeachY2M,iMinTeachY2M,iMaxTeachY2R,iMinTeachY2R; //Isaac 20201012 : ­pºâEncoder©Mcommandpos/Teachingªº®t­È
-extern bool bOverRangeDoTMode;          //Isaac 20201012 : index Y¶W¹L½d³ò¡A°µ¤@¦¸Tmode
-extern bool bOverRange4Indexhome;       //Isaac 20201012 : index Y¶W¹L½d³ò¡A°µ¤@¦¸Tmode
-extern bool bTriger4Indexhome;          //Isaac 20201012 : index Y¶W¹L½d³ò¡A°µ¤@¦¸Tmode
-extern int iIndexOverRangeCount;        //Isaac 20201012 : index Y¶W¹L½d³ò¡A°µ¤@¦¸Tmode
-extern int iOutShuttle1HasICErrRetryCnt; //Sam 20210409 : §ï¬°¥ş°ì
-extern int iOutShuttle2HasICErrRetryCnt; //Sam 20210409 : §ï¬°¥ş°ì
-extern bool bIn_ICRotationCompleteOnKit;   //Sam 20210623 : ­×¥¿ IC Âà§¹«á³Q Home¡A¾É­P IC Âà¦V²§±`¡C
-extern bool bOut_ICRotationCompleteOnKit;  //Sam 20210623 : ­×¥¿ IC Âà§¹«á³Q Home¡A¾É­P IC Âà¦V²§±`¡C
-extern bool bIn_XYMoveFinishOnRotationKit;   //Sam 20240726 : ­×¥¿²¾°Ê§¹ XY ·Ç³Æ©ñ IC ¨ì RotationKit ®É Home
+extern bool bAfterHomeShtChkLoseICNeedSlow[2];//Sam 20201020 : å› Home ç¬¬ä¸€æ¬¡çš„ Shuttle Check IC lose éœ€è¦è®Šæ…¢ã€‚
+extern bool bShowIndexMotorError;       //Isaac 20201012 : encoderå’Œcommand/Teachingé»æ¯”è¼ƒï¼Œshow alarmè¦–çª—è®Šå¤§
+extern int iMaxCommandY1,iMinCommandY1,iMaxCommandY2,iMinCommandY2,iMaxTeachY1F,iMinTeachY1F,iMaxTeachY1M,iMinTeachY1M,iMaxTeachY2M,iMinTeachY2M,iMaxTeachY2R,iMinTeachY2R; //Isaac 20201012 : è¨ˆç®—Encoderå’Œcommandpos/Teachingçš„å·®å€¼
+extern bool bOverRangeDoTMode;          //Isaac 20201012 : index Yè¶…éç¯„åœï¼Œåšä¸€æ¬¡Tmode
+extern bool bOverRange4Indexhome;       //Isaac 20201012 : index Yè¶…éç¯„åœï¼Œåšä¸€æ¬¡Tmode
+extern bool bTriger4Indexhome;          //Isaac 20201012 : index Yè¶…éç¯„åœï¼Œåšä¸€æ¬¡Tmode
+extern int iIndexOverRangeCount;        //Isaac 20201012 : index Yè¶…éç¯„åœï¼Œåšä¸€æ¬¡Tmode
+extern int iOutShuttle1HasICErrRetryCnt; //Sam 20210409 : æ”¹ç‚ºå…¨åŸŸ
+extern int iOutShuttle2HasICErrRetryCnt; //Sam 20210409 : æ”¹ç‚ºå…¨åŸŸ
+extern bool bIn_ICRotationCompleteOnKit;   //Sam 20210623 : ä¿®æ­£ IC è½‰å®Œå¾Œè¢« Homeï¼Œå°è‡´ IC è½‰å‘ç•°å¸¸ã€‚
+extern bool bOut_ICRotationCompleteOnKit;  //Sam 20210623 : ä¿®æ­£ IC è½‰å®Œå¾Œè¢« Homeï¼Œå°è‡´ IC è½‰å‘ç•°å¸¸ã€‚
+extern bool bIn_XYMoveFinishOnRotationKit;   //Sam 20240726 : ä¿®æ­£ç§»å‹•å®Œ XY æº–å‚™æ”¾ IC åˆ° RotationKit æ™‚ Home
 extern bool bOut_XYMoveFinishOnRotationKit;
-extern bool bLoadNewEmptyTrayToCarStart;    //Sam 20211119 : ©ñ Tray ¼W¥[«OÅ@
-extern bool bUnLoadNewEmptyToStackStart;    //Sam 20211119 : ©ñ Tray ¼W¥[«OÅ@
-extern bool bLoadNewColorTrayToCarStart;    //Sam 20211119 : ©ñ Tray ¼W¥[«OÅ@
-extern bool bUnLoadNewColorToStackStart;    //Sam 20211119 : ©ñ Tray ¼W¥[«OÅ@
+extern bool bLoadNewEmptyTrayToCarStart;    //Sam 20211119 : æ”¾ Tray å¢åŠ ä¿è­·
+extern bool bUnLoadNewEmptyToStackStart;    //Sam 20211119 : æ”¾ Tray å¢åŠ ä¿è­·
+extern bool bLoadNewColorTrayToCarStart;    //Sam 20211119 : æ”¾ Tray å¢åŠ ä¿è­·
+extern bool bUnLoadNewColorToStackStart;    //Sam 20211119 : æ”¾ Tray å¢åŠ ä¿è­·
 //Isaac 20201110 : Index Y find motor phase
 //=>
 extern int iIndexY1FindPhaseFrontPos;
@@ -5015,36 +5015,36 @@ extern int iIndexY2FindPhaseMiddlePos;
 extern int iIndexY2FindPhaseRearPos;
 //<=
 //Isaac 20201110 : Index Y find motor phase
-extern int iTempOverShowAlarmT[tcTotalCount];    //kevin 20210112 ·Å«×¹L§C¹L°ª ¹L°ª  1 ¹L§C  :2
+extern int iTempOverShowAlarmT[tcTotalCount];    //kevin 20210112 æº«åº¦éä½éé«˜ éé«˜  1 éä½  :2
 extern bool iAutoZXYMove;                        //kevin 20210223 Auto Teach X Y offset
-extern bool bLoadAutoTeachInarm;                 //kevin 20210305 add inarm Auto teach move  X Y PITCH Z ¶b¤£°Ê
+extern bool bLoadAutoTeachInarm;                 //kevin 20210305 add inarm Auto teach move  X Y PITCH Z è»¸ä¸å‹•
 extern bool bCleanOutFinish;                     //kevin 20210406 clean out finish
 extern bool beKeepCloseSite;                     //kevin 20210406 clean out open close Site
-extern bool bRetryReadToqu;                      //kevin 20210419 ­«Åª§á¤O
-extern AnsiString  sSetTorquValue[2];            //kevin 20210421 §á¤O³]©wÅª¨ú­È
-extern int iSetTorqueAlarm[2];                      //kevin 20210505 §á¤O³sÄò´X¦¸ALARM
-extern int iIndEPCnt;   //JerryYang 20210413 : ¿W¥ßEP¼Æ¶q
-//extern int  iTrayXAutoSitemapping[4][8];    //Ifor 20210524 add:mykitsuck²¾¦Ücmydef
-//extern int  iTrayYAutoSitemapping[4][8];    //Ifor 20210524 add:mykitsuck²¾¦Ücmydef
-//extern TStringList *ansiFile;  //Steven 20210506 : ¬ö¿ıNew¥X¨Óªº¤¸¥ó
+extern bool bRetryReadToqu;                      //kevin 20210419 é‡è®€æ‰­åŠ›
+extern AnsiString  sSetTorquValue[2];            //kevin 20210421 æ‰­åŠ›è¨­å®šè®€å–å€¼
+extern int iSetTorqueAlarm[2];                      //kevin 20210505 æ‰­åŠ›é€£çºŒå¹¾æ¬¡ALARM
+extern int iIndEPCnt;   //JerryYang 20210413 : ç¨ç«‹EPæ•¸é‡
+//extern int  iTrayXAutoSitemapping[4][8];    //Ifor 20210524 add:mykitsuckç§»è‡³cmydef
+//extern int  iTrayYAutoSitemapping[4][8];    //Ifor 20210524 add:mykitsuckç§»è‡³cmydef
+//extern TStringList *ansiFile;  //Steven 20210506 : ç´€éŒ„Newå‡ºä¾†çš„å…ƒä»¶
 //extern TList       *listPtr;
 extern void LogSoftwareOnTime(AnsiString Flag);
 extern void LogSoftwareOffTime(AnsiString Flag);
-extern TMyStringList *tsSoftwareExeTime;      //Steven 20210526 : ¬ö¿ı³nÅé°õ¦æ®É¶¡
+extern TMyStringList *tsSoftwareExeTime;      //Steven 20210526 : ç´€éŒ„è»Ÿé«”åŸ·è¡Œæ™‚é–“
 extern int iSoftwareExeTag;
 extern int iCheckTorqueCount;
 extern double dTorqueArray[2][2000];
 extern int iTorqueArrayCnt[2];
-extern bool bLowYeildAlarmSpecial;              //Sam 20210505 : PTI ­n¨Dªº¨â¬q Low Yeild
-extern bool bLowYeildAlarmSpecial1stPass;       //Sam 20210505 : PTI ­n¨Dªº¨â¬q Low Yeild
-extern bool bHasTrayCSV;                        //Steven 20210629 : Tray Form§ï¦¨CSV
-extern bool bHasPlateCSV;                       //Steven 20210629 : Plate Form§ï¦¨CSV
+extern bool bLowYeildAlarmSpecial;              //Sam 20210505 : PTI è¦æ±‚çš„å…©æ®µ Low Yeild
+extern bool bLowYeildAlarmSpecial1stPass;       //Sam 20210505 : PTI è¦æ±‚çš„å…©æ®µ Low Yeild
+extern bool bHasTrayCSV;                        //Steven 20210629 : Tray Formæ”¹æˆCSV
+extern bool bHasPlateCSV;                       //Steven 20210629 : Plate Formæ”¹æˆCSV
 extern int  iControlPanelMode;                  //Ken 20210702 AddPadInterface
 extern bool bContraPoisitionFlag;
 extern int iWhichIndexArm;                      //Sam 20231214 : Temp offset use ready temp range
 extern bool bNeedReCheckHeat;
 
-//KaiChen 20200716 ¡GOHT
+//KaiChen 20200716 ï¼šOHT
 //==>
 extern bool bOHTUseManual_LP1;
 extern bool bOHTUseManual_LP2;
@@ -5100,11 +5100,11 @@ extern int iLoadAutoCount;
 extern bool bBuffer7CombineTray;
 extern bool bBuffer7SeparationTray;
 
-extern int iCSTArmHasTrayCount;                 //KaiChen 20200716 ¡GOHT Cassette Arm Scan Tray Count
-extern int iRecordSenOnOff[150];                //KaiChen 20200716 ¡GOHT Cassette Arm Scan Tray Count
-extern AnsiString asCSTArmHasTrayCount;         //KaiChen 20201019 ¡GOHT Cassette Arm Scan Tray Count
-extern int iLoaderTrayCount_OHT;                       //KaiChen 20201019 ¡GOHT ¬ö¿ı Loader Tray Count
-extern AnsiString asLoaderCassetteID_OHT;       //KaiChen 20201019 ¡GOHT ¬ö¿ı Loader Cassette ID
+extern int iCSTArmHasTrayCount;                 //KaiChen 20200716 ï¼šOHT Cassette Arm Scan Tray Count
+extern int iRecordSenOnOff[150];                //KaiChen 20200716 ï¼šOHT Cassette Arm Scan Tray Count
+extern AnsiString asCSTArmHasTrayCount;         //KaiChen 20201019 ï¼šOHT Cassette Arm Scan Tray Count
+extern int iLoaderTrayCount_OHT;                       //KaiChen 20201019 ï¼šOHT ç´€éŒ„ Loader Tray Count
+extern AnsiString asLoaderCassetteID_OHT;       //KaiChen 20201019 ï¼šOHT ç´€éŒ„ Loader Cassette ID
 
 extern bool bSecsGem_SLOT_MAP;
 extern bool bSecsGem_CST_IN_BUFFER;
@@ -5131,105 +5131,105 @@ extern bool bMultileDoorIsOpen;
 extern bool bMultileDoorState_Old;
 
 extern bool bSendEven_NeedEmptyCST;
-extern bool bSendEven_NeedEmptyCST_FristScan;   //KaiChen 20201222 ¡GOHT¡AAdd
+extern bool bSendEven_NeedEmptyCST_FristScan;   //KaiChen 20201222 ï¼šOHTï¼ŒAdd
 
 extern bool bSendEven_First;
 extern bool bManualCSTOUT;
 extern bool bManualRemoveLP2CST;
 //<==
-//KaiChen 20200716 ¡GOHT
-extern bool bDoIniStartAutoIonFanClean;             //Isaac 20210609 : IOÄ²µoIonFan²M°w
-extern bool bStartAutoIonFanClean;                  //Ifor 20210720 add: IOÄ²µoIonFan²M°w¤~Åã¥Ü
+//KaiChen 20200716 ï¼šOHT
+extern bool bDoIniStartAutoIonFanClean;             //Isaac 20210609 : IOè§¸ç™¼IonFanæ¸…é‡
+extern bool bStartAutoIonFanClean;                  //Ifor 20210720 add: IOè§¸ç™¼IonFanæ¸…é‡æ‰é¡¯ç¤º
 extern bool bReadTrayID;                            //kevin 20210623 TRAY ID Read
 extern bool bReadColorTrayID;                       //kevin 20210623 TRAY ID Read
 extern AnsiString TrayID[eTrayCount][3];                                        //kevin 20210623  [6]: load empty  [2]: 0:read  1: send pick pos
-extern int iTrayTotal[3];                           //kevin 20210623  0:loader 1:Empty  2:olor  Tray ¤J­y¹D¼Æ¶q
-extern int iOneTrayPickCount[ePosTrayCount];                     //kevin 20210623  loader §l¨ú¼Æ¶q
-extern int iAutoTrayPlaceCount[ePosTrayCount];                    //kevin 20210623  Auto123 Fix 123 ©ñic¼Æ¶q
-extern bool bIsOpenDoorNeedSetErrBin;                 //JerryYang 20210901 : Microchip­n¨D¶}¦w¥şªù­n¤ÀERROR BIN
+extern int iTrayTotal[3];                           //kevin 20210623  0:loader 1:Empty  2:olor  Tray å…¥è»Œé“æ•¸é‡
+extern int iOneTrayPickCount[ePosTrayCount];                     //kevin 20210623  loader å¸å–æ•¸é‡
+extern int iAutoTrayPlaceCount[ePosTrayCount];                    //kevin 20210623  Auto123 Fix 123 æ”¾icæ•¸é‡
+extern bool bIsOpenDoorNeedSetErrBin;                 //JerryYang 20210901 : Microchipè¦æ±‚é–‹å®‰å…¨é–€è¦åˆ†ERROR BIN
 //Ifor 20210810 add:Copy 7000
 //==>
 //extern bool bOutArmPlaceToUnloaderDestroy;                        // 2012.06.14 , Joye , OutArm Place To Unloader Destroy Check
 //extern bool bOutArmPlaceToUnloaderDestroy_EMGAndPowerOff;         // 2012.06.14 , Joye , OutArm Place To Unloader Destroy Check
-//extern bool bArm1PlaceToShuttleDestroy;                           //Steven 20210818 : Index©ñ®Æ¤¤§PÂ_
-//extern bool bArm2PlaceToShuttleDestroy;                           //Steven 20210818 : Index©ñ®Æ¤¤§PÂ_
+//extern bool bArm1PlaceToShuttleDestroy;                           //Steven 20210818 : Indexæ”¾æ–™ä¸­åˆ¤æ–·
+//extern bool bArm2PlaceToShuttleDestroy;                           //Steven 20210818 : Indexæ”¾æ–™ä¸­åˆ¤æ–·
 //<==
 //Ifor 20210810 add:Copy 7000
-extern int iESD_DecayTask;      //Ifor 20220112 add:§ï¥ş°ìÅÜ¼Æ
+extern int iESD_DecayTask;      //Ifor 20220112 add:æ”¹å…¨åŸŸè®Šæ•¸
 extern bool bDecayComplete;     //Ifor 20220119 add:Auto Decay Complete Flag
 extern bool bCom1Error;                                             //kevin 20210902 Torque error
-extern AnsiString aSendSiteMapping;                                 //Ifor 20201030 add:°eSite Mapping ¸ê®Æµ¹GPIB
-extern bool bInArmAutoAlignmentClearFlag;                           //Kenhsieh 20211007 : ¸Ñ¨M¨S¦³±½´yKit°İÃD
-extern bool bOutArmAutoAlignmentClearFlag;                          //Kenhsieh 20211007 : ¸Ñ¨M¨S¦³±½´yKit°İÃD
+extern AnsiString aSendSiteMapping;                                 //Ifor 20201030 add:é€Site Mapping è³‡æ–™çµ¦GPIB
+extern bool bInArmAutoAlignmentClearFlag;                           //Kenhsieh 20211007 : è§£æ±ºæ²’æœ‰æƒæKitå•é¡Œ
+extern bool bOutArmAutoAlignmentClearFlag;                          //Kenhsieh 20211007 : è§£æ±ºæ²’æœ‰æƒæKitå•é¡Œ
 extern AnsiString sKitOutDiameter[10];                              //kevin 20210813 change  //kevin 20170628 (Steven) add
-extern int iAutoCleanRowSel;                                        //KaiChen 20200622 ¡G­×§ï 10Site2X5 AutoClean
-extern int iShuttleRowKit;                                          //KaiChen 20200622 ¡G­×§ï 10Site2X5 AutoClean
-extern int iStiCT;                                                  //kevin 20211106 add ©â´ú¼Æ¶q­p¼Æ
-extern int StipulateInputCount;                                     //kevin 20211106 ©â´ú ¼Æ ¶q
-extern bool bDoLoaderCleanOut;                                      //kevin 20211106 ©â´ú ¼Æ ¶q¨ì¹F LOAD ¦¬TRAY
-extern bool bTorueReceve;                                           //kevin 20211117 §á¤O100 µ§¸ê®Æ
-extern bool bTorueReceveSTOP;                                       //kevin 20211117 §á¤OSTOP¸ê®Æ
+extern int iAutoCleanRowSel;                                        //KaiChen 20200622 ï¼šä¿®æ”¹ 10Site2X5 AutoClean
+extern int iShuttleRowKit;                                          //KaiChen 20200622 ï¼šä¿®æ”¹ 10Site2X5 AutoClean
+extern int iStiCT;                                                  //kevin 20211106 add æŠ½æ¸¬æ•¸é‡è¨ˆæ•¸
+extern int StipulateInputCount;                                     //kevin 20211106 æŠ½æ¸¬ æ•¸ é‡
+extern bool bDoLoaderCleanOut;                                      //kevin 20211106 æŠ½æ¸¬ æ•¸ é‡åˆ°é” LOAD æ”¶TRAY
+extern bool bTorueReceve;                                           //kevin 20211117 æ‰­åŠ›100 ç­†è³‡æ–™
+extern bool bTorueReceveSTOP;                                       //kevin 20211117 æ‰­åŠ›STOPè³‡æ–™
 extern bool RPLogRecord;                                            //Sam 20201209 : Default Recipe ChangeLog
 extern bool bUse8Picker;
-extern AnsiString FTPAutomation_Down_ServerIP;          //KaiChen 20190530 ¡GSigurd FTP Automation
-extern AnsiString FTPAutomation_Down_UserID;            //KaiChen 20190530 ¡GSigurd FTP Automation
-extern AnsiString FTPAutomation_Down_Password;          //KaiChen 20190530 ¡GSigurd FTP Automation
-extern AnsiString FTPAutomation_Down_ServerPath;        //KaiChen 20190530 ¡GSigurd FTP Automation
-extern AnsiString FTPAutomation_Up_ServerIP;            //KaiChen 20190530 ¡GSigurd FTP Automation
-extern AnsiString FTPAutomation_Up_UserID;              //KaiChen 20190530 ¡GSigurd FTP Automation
-extern AnsiString FTPAutomation_Up_Password;            //KaiChen 20190530 ¡GSigurd FTP Automation
-extern AnsiString FTPAutomation_Up_ServerPath;          //KaiChen 20190530 ¡GSigurd FTP Automation
-extern AnsiString FTPAutomation_Up_ErrorCodePath;       //KaiChen 20190530 ¡GSigurd FTP Automation
-extern int iCheckList_Enable[eCL_Total];                //KaiChen 20190530 ¡GSigurd FTP Automation
-extern bool bSigurdDownload_Recipe;                     //KaiChen 20190530 ¡GSigurd FTP Automation
-extern bool bSigurdUpload_Recipe;                       //KaiChen 20190530 ¡GSigurd FTP Automation
-extern bool bSigurdUpload_Jamcode;                      //KaiChen 20190530 ¡GSigurd FTP Automation
-extern int iRecordSigurdGPIBFlag;                       //KaiChen 20200330 ¡G¬ö¿ı¡Aª¿®æ GPIB Commend Flag
-extern AnsiString CheckListValue_Check;                 //KaiChen 20200108 ¡Gª¿®æ-CheckList ¼W¥[Åã¥Ü²§±`¼Æ­È
-extern AnsiString CheckListValue_Current;               //KaiChen 20200108 ¡Gª¿®æ-CheckList ¼W¥[Åã¥Ü²§±`¼Æ­È
-extern int iOneDayLoaderCount;                          //KaiChen 20200618 ¡Gª¿®æ¡A¼W¥[Jam²Î­p­¶­±
-extern bool bOneCycleAfterSHLossIC;                     //KaiChen 20200304 ¡Gª¿®æ-´ò¤f¡A­n¨DOutShuttle Loss IC ®É¾÷¥x¤WªºIC©ñ¨ìR¹D
-extern int iIndexArmCheck_SG_Arm1;                      //KaiChen 20200826 ¡Gª¿®æ-´ò¤f¡A­n¨DIndexCheck¨Ï¥ÎContact°ª«×¤£¨Ï¥ÎOffset
-extern int iIndexArmCheck_SG_Arm2;                      //KaiChen 20200826 ¡Gª¿®æ-´ò¤f¡A­n¨DIndexCheck¨Ï¥ÎContact°ª«×¤£¨Ï¥ÎOffset
-//extern bool bLoaderHasSkip_SG;                          //KaiChen 20201125 ¡G ª¿®æ´ò¤f¡ALoader ¦³ Skip ±j¨î©ñLoader
+extern AnsiString FTPAutomation_Down_ServerIP;          //KaiChen 20190530 ï¼šSigurd FTP Automation
+extern AnsiString FTPAutomation_Down_UserID;            //KaiChen 20190530 ï¼šSigurd FTP Automation
+extern AnsiString FTPAutomation_Down_Password;          //KaiChen 20190530 ï¼šSigurd FTP Automation
+extern AnsiString FTPAutomation_Down_ServerPath;        //KaiChen 20190530 ï¼šSigurd FTP Automation
+extern AnsiString FTPAutomation_Up_ServerIP;            //KaiChen 20190530 ï¼šSigurd FTP Automation
+extern AnsiString FTPAutomation_Up_UserID;              //KaiChen 20190530 ï¼šSigurd FTP Automation
+extern AnsiString FTPAutomation_Up_Password;            //KaiChen 20190530 ï¼šSigurd FTP Automation
+extern AnsiString FTPAutomation_Up_ServerPath;          //KaiChen 20190530 ï¼šSigurd FTP Automation
+extern AnsiString FTPAutomation_Up_ErrorCodePath;       //KaiChen 20190530 ï¼šSigurd FTP Automation
+extern int iCheckList_Enable[eCL_Total];                //KaiChen 20190530 ï¼šSigurd FTP Automation
+extern bool bSigurdDownload_Recipe;                     //KaiChen 20190530 ï¼šSigurd FTP Automation
+extern bool bSigurdUpload_Recipe;                       //KaiChen 20190530 ï¼šSigurd FTP Automation
+extern bool bSigurdUpload_Jamcode;                      //KaiChen 20190530 ï¼šSigurd FTP Automation
+extern int iRecordSigurdGPIBFlag;                       //KaiChen 20200330 ï¼šç´€éŒ„ï¼ŒçŸ½æ ¼ GPIB Commend Flag
+extern AnsiString CheckListValue_Check;                 //KaiChen 20200108 ï¼šçŸ½æ ¼-CheckList å¢åŠ é¡¯ç¤ºç•°å¸¸æ•¸å€¼
+extern AnsiString CheckListValue_Current;               //KaiChen 20200108 ï¼šçŸ½æ ¼-CheckList å¢åŠ é¡¯ç¤ºç•°å¸¸æ•¸å€¼
+extern int iOneDayLoaderCount;                          //KaiChen 20200618 ï¼šçŸ½æ ¼ï¼Œå¢åŠ Jamçµ±è¨ˆé é¢
+extern bool bOneCycleAfterSHLossIC;                     //KaiChen 20200304 ï¼šçŸ½æ ¼-æ¹–å£ï¼Œè¦æ±‚OutShuttle Loss IC æ™‚æ©Ÿå°ä¸Šçš„ICæ”¾åˆ°Ré“
+extern int iIndexArmCheck_SG_Arm1;                      //KaiChen 20200826 ï¼šçŸ½æ ¼-æ¹–å£ï¼Œè¦æ±‚IndexCheckä½¿ç”¨Contacté«˜åº¦ä¸ä½¿ç”¨Offset
+extern int iIndexArmCheck_SG_Arm2;                      //KaiChen 20200826 ï¼šçŸ½æ ¼-æ¹–å£ï¼Œè¦æ±‚IndexCheckä½¿ç”¨Contacté«˜åº¦ä¸ä½¿ç”¨Offset
+//extern bool bLoaderHasSkip_SG;                          //KaiChen 20201125 ï¼š çŸ½æ ¼æ¹–å£ï¼ŒLoader æœ‰ Skip å¼·åˆ¶æ”¾Loader
 extern bool bSetBINCOUNT;                               //Sam 20210329 : Add GPIB BINCOUNT_
 extern bool bCleanKitSuckDuplicateErr[MAX_ARM_Row][MAX_ARM_Col];            //Steven 20091218 : Avoid duplicate message
-extern int iWhichAutoNeedTray;                          //Steven 20211228 : ¤è«KDebug
+extern int iWhichAutoNeedTray;                          //Steven 20211228 : æ–¹ä¾¿Debug
 extern bool USE_ATC_RS232_Check;
 extern TQPF_Timer tOEESystemCycle;                      //Jimmychiu 20220712 decrease loading
-extern bool USE_ARM_PROTECTION;                         //Steven 20220314 : In Our Arm Z Sensor«OÅ@¥[¤W¶}Ãö
-extern bool bIndex1Suck;                                //kevin 20220105 Index ¦b¤U¯uªÅ«Ø¥ß pause ¤£¯àÃö³¬
-extern bool bIndex2Suck;                                //kevin 20220105 Index ¦b¤U¯uªÅ«Ø¥ß pause ¤£¯àÃö³¬
-extern AnsiString sGigasFTPPassWord;                    //Isaac 20210128 : ¬°¤FÅıEnable FTP¤£³QÂê¦í¡Asupervisor¥H¤U»İ¿é¤J±K½X
-extern int iSECSGEMMachineState;                        //JerryYang 20220215 : MachinePreState§ï¦¨int
-extern int iSECSGEMMachinePreState;                     //Ifor 20221019 add: Machine PreS tate§ï¦¨int
-extern AnsiString sMacStatus[30];                       //JerryYang 20220215 : MachinePreState§ï¦¨int
+extern bool USE_ARM_PROTECTION;                         //Steven 20220314 : In Our Arm Z Sensorä¿è­·åŠ ä¸Šé–‹é—œ
+extern bool bIndex1Suck;                                //kevin 20220105 Index åœ¨ä¸‹çœŸç©ºå»ºç«‹ pause ä¸èƒ½é—œé–‰
+extern bool bIndex2Suck;                                //kevin 20220105 Index åœ¨ä¸‹çœŸç©ºå»ºç«‹ pause ä¸èƒ½é—œé–‰
+extern AnsiString sGigasFTPPassWord;                    //Isaac 20210128 : ç‚ºäº†è®“Enable FTPä¸è¢«é–ä½ï¼Œsupervisorä»¥ä¸‹éœ€è¼¸å…¥å¯†ç¢¼
+extern int iSECSGEMMachineState;                        //JerryYang 20220215 : MachinePreStateæ”¹æˆint
+extern int iSECSGEMMachinePreState;                     //Ifor 20221019 add: Machine PreS tateæ”¹æˆint
+extern AnsiString sMacStatus[30];                       //JerryYang 20220215 : MachinePreStateæ”¹æˆint
 extern bool bFTPDownlodFinish;
 extern bool bHalfViewVerifyNeedAboveSocket;             //JerryYang 20220215 : RTC Auto Verify half view check
 extern bool bPickUpErrReAutoVerify;                     //JerryYang 20220215 : RTC Auto Verify half view check
-extern bool bAutoSkipCntOver;                           //JerryYang 20210420 : ª¿«~Ä¬¦{­n¨Dauto skip¼Æ¶q¤p©ó³]©w­È­n¥Ñ¤uµ{®v±Æ°£
+extern bool bAutoSkipCntOver;                           //JerryYang 20210420 : çŸ½å“è˜‡å·è¦æ±‚auto skipæ•¸é‡å°æ–¼è¨­å®šå€¼è¦ç”±å·¥ç¨‹å¸«æ’é™¤
 extern double dIndexZOffset[3][15];                     //Ifor 20210114 add: Index Z Offset //Ifor 20230207 add: 10 => 11   //Ifor 20230830 add: 11 => 15
 extern bool bChangeTest_TempAlarm;                      //Ifor 20210623 add: Test Temp Change
 extern int bChangeTest_TempOffset;                      //Ifor 20210623 add: Test Temp Change
-extern bool bDoATCTempRise;                             //Ifor 20230504 add: ATC ¦^·Å¥\¯àflag
+extern bool bDoATCTempRise;                             //Ifor 20230504 add: ATC å›æº«åŠŸèƒ½flag
 extern bool bReadMCU1,bReadMCU2;                                                //kevin 20220225 read MCU DATA
 extern int iUnloaderTrayCountCal[MAX_TRACK];
 extern int iFixTrayCountCal[MAX_FIX_TRAY];
 extern int iSelectArm;                                                          //kevin 20220426 0: Arm1 Arm 2  1: Arm1  2: Arm2
 //extern bool bUseAGV;                                                            //kevin 20220518 AGV Modal
-extern AnsiString sLoadPickupErrorTrayPos[MAX_ARM_Row][MAX_ARM_Col];            //kevin 20220521 Load pick error record X, Y ®y¼Ğ
+extern AnsiString sLoadPickupErrorTrayPos[MAX_ARM_Row][MAX_ARM_Col];            //kevin 20220521 Load pick error record X, Y åº§æ¨™
 extern int USE_INDEX_ARM_AXES;                                                  //JimmyChiu 20220708 : add Index Arm Axis
 extern bool bHotPlateHasSiteMap;                                                //Stevn 20220602
 extern int  iResetSiteMappingStep;                                              //Stevn 20220602
 extern int iStackCount[MAX_TRACK];                      //kevin 20220527 add Tray Count 0:load 1:empty 2:Color 3:Auto1 4:Auto2 5:Auto3
-extern bool bResetGalilTwoYMove;                        //Ifor 20220729 add Reset Galil Two Y Move®É¶¡­p®É
+extern bool bResetGalilTwoYMove;                        //Ifor 20220729 add Reset Galil Two Y Moveæ™‚é–“è¨ˆæ™‚
 extern AnsiString sRFIDData;                            //Steven 20220713 : RFID Reader for SJSEMI
 extern int iRFIDTag;
-extern int iInShuttleJam[2][9];                         //kevin 20220819 shuttle Jam  ¬ö¿ı¦ì¸m«áÄò¡A­n°µ©ñ¨ì©U§£±í°Ê§@
-extern bool bUpdateAutomatically;                       //Sam 20220824 : FTP ¦Û°Ê¤U¸ü¦w¸Ë§ó·s¥]
-extern bool bUpdateAutomaticallyChecked;                //Sam 20220824 : FTP ¦Û°Ê¤U¸ü¦w¸Ë§ó·s¥]
-extern TMyStringList *slGroundManLog;                           //KenHsieh 20220728 : ·s¼WGroundMan Value Log
-extern bool bAutoReceTray;                      //kevin 20220908 add °h®ÆTRAY ¸ÉªÅTRAY
+extern int iInShuttleJam[2][9];                         //kevin 20220819 shuttle Jam  ç´€éŒ„ä½ç½®å¾ŒçºŒï¼Œè¦åšæ”¾åˆ°åƒåœ¾æ¡¶å‹•ä½œ
+extern bool bUpdateAutomatically;                       //Sam 20220824 : FTP è‡ªå‹•ä¸‹è¼‰å®‰è£æ›´æ–°åŒ…
+extern bool bUpdateAutomaticallyChecked;                //Sam 20220824 : FTP è‡ªå‹•ä¸‹è¼‰å®‰è£æ›´æ–°åŒ…
+extern TMyStringList *slGroundManLog;                           //KenHsieh 20220728 : æ–°å¢GroundMan Value Log
+extern bool bAutoReceTray;                      //kevin 20220908 add é€€æ–™TRAY è£œç©ºTRAY
 extern int iSensor[4][9]; //kevin 20220912 log Shuttle display
 //KenHsieh 20210813 : add CCD AUTO ALIGNMENT
 //==>
@@ -5333,11 +5333,11 @@ extern int iCCDAlignmentMotorDelay;
 extern int Teach_AutoAlignmentUnit;
 //<==
 //KenHsieh 20210813 : add CCD AUTO ALIGNMENT
-extern bool bHasOutShuttleLose;     //Ifor 20210911 add: KLT ­n¨Dout shuttle loss IC alarm¤§«á¡A«ö¤UStart­n¸õ¥X½T»{µøµ¡
-extern bool bHasNozzleEvent;        //Ifor 20211014 add:«ö¤URester¾÷¥x§l¼L¤¤¦³¥¿¦b¥á®Æªºª¬ºA
-extern int iIonAlarmState;          //Ifor 20211014 add:Start Ion Alarm ©µ¿ğ³øÄµ
-extern int bIonAlarmDelayTime;      //Ifor 20211014 add:Start Ion Alarm ©µ¿ğ³øÄµ
-extern bool bContactModeCheckOpenDoor[2];  //Ifor 20211203 add: KLT­n¨DContact¼Ò¦¡»İ¤H­û½T»{InShuttle Sensor»P¶}ªù
+extern bool bHasOutShuttleLose;     //Ifor 20210911 add: KLT è¦æ±‚out shuttle loss IC alarmä¹‹å¾Œï¼ŒæŒ‰ä¸‹Startè¦è·³å‡ºç¢ºèªè¦–çª—
+extern bool bHasNozzleEvent;        //Ifor 20211014 add:æŒ‰ä¸‹Resteræ©Ÿå°å¸å˜´ä¸­æœ‰æ­£åœ¨ä¸Ÿæ–™çš„ç‹€æ…‹
+extern int iIonAlarmState;          //Ifor 20211014 add:Start Ion Alarm å»¶é²å ±è­¦
+extern int bIonAlarmDelayTime;      //Ifor 20211014 add:Start Ion Alarm å»¶é²å ±è­¦
+extern bool bContactModeCheckOpenDoor[2];  //Ifor 20211203 add: KLTè¦æ±‚Contactæ¨¡å¼éœ€äººå“¡ç¢ºèªInShuttle Sensorèˆ‡é–‹é–€
 //KenHsieh 20210830 : add CCD AUTO ALIGNMENT for Offset
 //==>
 extern int iAOA_InArm_Loader_X;
@@ -5347,7 +5347,7 @@ extern int iAOA_InArm_Hotplate1_X;
 extern int iAOA_InArm_Hotplate2_X;
 //<==
 //KenHsieh 20210830 : add CCD AUTO ALIGNMENT for Offset
-//KenHsieh 20210918 : CCD AUTO ALIGNMENT offset·s¼W
+//KenHsieh 20210918 : CCD AUTO ALIGNMENT offsetæ–°å¢
 //==>
 extern int iAOA_InArm_Loader_Y;
 extern int iAOA_InArm_Shuttle1_Y;
@@ -5383,21 +5383,21 @@ extern int iAOA_OutArm_Shuttle1_Y;
 extern int iAOA_OutArm_Shuttle2_X;
 extern int iAOA_OutArm_Shuttle2_Y;
 //<==
-//KenHsieh 20210918 : CCD AUTO ALIGNMENT offset·s¼W
-extern bool bInArmXPitch_40mm;                                                  //KenHsieh 20211023 : ·s¼WX Pitch 40mm teach
-extern bool bOutArmXPitch_40mm;                                                 //KenHsieh 20211023 : ·s¼WX Pitch 40mm teach
-extern bool bNeedOneCycleByAutoAlignment;                                       //KenHsieh 20211202 : ­×§ï­«·s¥´¶}AOA«á¡A¥ı°µOnecycle¦A¦^Home­«°µAOA
+//KenHsieh 20210918 : CCD AUTO ALIGNMENT offsetæ–°å¢
+extern bool bInArmXPitch_40mm;                                                  //KenHsieh 20211023 : æ–°å¢X Pitch 40mm teach
+extern bool bOutArmXPitch_40mm;                                                 //KenHsieh 20211023 : æ–°å¢X Pitch 40mm teach
+extern bool bNeedOneCycleByAutoAlignment;                                       //KenHsieh 20211202 : ä¿®æ”¹é‡æ–°æ‰“é–‹AOAå¾Œï¼Œå…ˆåšOnecycleå†å›Homeé‡åšAOA
 extern const int iZMovePos;
 extern const int iXYMovePos;
 extern bool bAutoCleanPlaceToSht;                                               //Steven 20220927 : Add flag for place pad to shuttle
 extern int TRAY_MAPPING_GRAB;                                                   //KenHsieh 20220923 : add Tray Map Throw IC Function
 extern bool bS2F42_TrayMap_Receive;                                             //KenHsieh 20220923 : add Tray Map Throw IC Function
 extern bool bS2F42_TrayMap_FullTray;                                            //KenHsieh 20220923 : add Tray Map Throw IC Function
-extern bool bNeedInputEQCQty;                                                   //JerryYang 20220923 : ¤â°Ê¿é¤JEQC¼Æ¶q
+extern bool bNeedInputEQCQty;                                                   //JerryYang 20220923 : æ‰‹å‹•è¼¸å…¥EQCæ•¸é‡
 extern bool bStopART;
 extern bool bBigMyMessage;
 extern bool bInArmWaitOneCycle;
-extern double dCycleTimeArr[20];                                                //JerryYang 20220923 : Index cycle timeºÊ±±
+extern double dCycleTimeArr[20];                                                //JerryYang 20220923 : Index cycle timeç›£æ§
 //Jimmychiu 20221011 from mn200motor to mydef
 //<==
 //-------------
@@ -5406,36 +5406,36 @@ extern double dCycleTimeArr[20];                                                
 extern const int Step_Motor  ;
 extern const int Servo_Motor ;
 extern const int Rotate_Motor;                                                  //Steven 20170425 (wei) : Add rotate motor
-extern const int YASKAWA_Servo_Motor;                                           //Steven 20181111 : Yaskawa°¨¹F
+extern const int YASKAWA_Servo_Motor;                                           //Steven 20181111 : Yaskawaé¦¬é”
 //<==
 //Jimmychiu 20221011 from mn200motor to mydef
 
 extern int iByBinCnt[TEST_MAX_BIN+1];
-extern int iExceptAutoCnt[eTrayCount];                                          //JerryYang 20240927 : 2D SORT¼Ò¦¡Output arm©ñ®ÆÁ×§KªÅ¬}
-extern bool bInitNeedDownloadFTP;                                               //JerryYang 20200416 ¦ã¬ì­n¨D¤Áinitial start«östart­n±j¨îdownload recipe
-extern bool bDoingF16;                                                          //Steven 20221213 : ½T»{shuttle ¦³¨S¦³Â_½u
+extern int iExceptAutoCnt[eTrayCount];                                          //JerryYang 20240927 : 2D SORTæ¨¡å¼Output armæ”¾æ–™é¿å…ç©ºæ´
+extern bool bInitNeedDownloadFTP;                                               //JerryYang 20200416 è‰¾ç§‘è¦æ±‚åˆ‡initial startæŒ‰startè¦å¼·åˆ¶download recipe
+extern bool bDoingF16;                                                          //Steven 20221213 : ç¢ºèªshuttle æœ‰æ²’æœ‰æ–·ç·š
 extern double fIndexDownPos;
-extern int iOneCycleFinishShowMsg;                                              //Sam 20250115 : ª¿®æ´ò¤f GPIB OneCycle ­n±j¨î¤Á ASM //Sam 20221103 : OneCycle §¹«áÅã¥Ü°T®§
-extern AnsiString sOneCycleFinishShowMsg;                                       //Sam 20221103 : OneCycle §¹«áÅã¥Ü°T®§
-extern bool bInitialStartIndexCheckDone;                                        //Sam 20221214 : ·í¾÷¥x Initail Start ®É»İ­n¥ı°µ Index Check
+extern int iOneCycleFinishShowMsg;                                              //Sam 20250115 : çŸ½æ ¼æ¹–å£ GPIB OneCycle è¦å¼·åˆ¶åˆ‡ ASM //Sam 20221103 : OneCycle å®Œå¾Œé¡¯ç¤ºè¨Šæ¯
+extern AnsiString sOneCycleFinishShowMsg;                                       //Sam 20221103 : OneCycle å®Œå¾Œé¡¯ç¤ºè¨Šæ¯
+extern bool bInitialStartIndexCheckDone;                                        //Sam 20221214 : ç•¶æ©Ÿå° Initail Start æ™‚éœ€è¦å…ˆåš Index Check
 extern double TempFuseLimitType;
 extern const double TemperatureFuseLimit170;
 extern const double TemperatureFuseLimit200;
 extern const double TemperatureFuseLimit250;
 extern const double HeatGunLimit;
 extern const double ChamberTempLimit;                                           //Ifor 20230328 add: Chamber Temp Limit 165
-extern int iE1Count;                                                            //JerryYang 20230322 : Lot summary­n­pºâ¦UÃş«¬ERRªº¼Æ¶q
+extern int iE1Count;                                                            //JerryYang 20230322 : Lot summaryè¦è¨ˆç®—å„é¡å‹ERRçš„æ•¸é‡
 extern int iE2Count;
 extern int iE3Count;
 extern int iENotDefinedCount;
 
-extern int iByLotE1Count[5];                                                    //JerryYang 20230322 : Lot summary­n­pºâ¦UÃş«¬ERRªº¼Æ¶q
+extern int iByLotE1Count[5];                                                    //JerryYang 20230322 : Lot summaryè¦è¨ˆç®—å„é¡å‹ERRçš„æ•¸é‡
 extern int iByLotE2Count[5];
 extern int iByLotE3Count[5];
 extern int iByLotENotDefinedCount[5];
 //Ztex 2023.04.13 Add HT-1032 IO ==>
-extern bool bSuperHotTempNoChkHumidity;                                         //Hmy 20190625 Add¶W°ª·Å¡A¤£§PÂ_Àã«×
-extern bool bSuperHotTempChangeTemp[3];                                         //Hmy 20190625 Add¶W°ª·Å¡A¤£§PÂ_Àã«×
+extern bool bSuperHotTempNoChkHumidity;                                         //Hmy 20190625 Addè¶…é«˜æº«ï¼Œä¸åˆ¤æ–·æ¿•åº¦
+extern bool bSuperHotTempChangeTemp[3];                                         //Hmy 20190625 Addè¶…é«˜æº«ï¼Œä¸åˆ¤æ–·æ¿•åº¦
 extern int  iFixDoorOpenTime;                                                   //Hmy 20180827 Add Function,fix area frosting protection
 extern double dFixAreaDewPoint;                                                 //Hmy 20180827 Add Function,fix area frosting protection
 extern bool bDelayTimeAfterFixDoorOpen;                                         //Hmy 20180827 Add Function,fix area frosting protection
@@ -5446,18 +5446,18 @@ extern bool bCheckUse_AirStream;
 //JerryYang 20220909 : add magazine
 //==>
 extern int iYRegNum;
-extern int iAuto3MagazineIndex;                                                 //Auto3 ·í«eªº Mag Tray
+extern int iAuto3MagazineIndex;                                                 //Auto3 ç•¶å‰çš„ Mag Tray
 extern int iWhichBuff;
 extern int iPickWhichBuff;
-extern int iWhichMag;                                                           //OutArm ©ñ¨ì­ş­Ó Mag 1-14
+extern int iWhichMag;                                                           //OutArm æ”¾åˆ°å“ªå€‹ Mag 1-14
 extern int iPickWhichMag;
 extern int iMagazineFullTrayIndex;
 extern bool bMagazineTrayFeedFinish;
 extern int TRAY_MISS_CHECK_TIME;
 extern bool bMgzTrayCatcCynHomeNeedOff;                                         //pig 2016.06.29 MgzTrayCatchCynHome
-extern bool bMagazineTrayFull;                                                  //kevin 20140604 º¡TRAY»İ¶}ªù½T»{
+extern bool bMagazineTrayFull;                                                  //kevin 20140604 æ»¿TRAYéœ€é–‹é–€ç¢ºèª
 extern bool bMagNeedChangeTray;
-extern int iOutArmWhichAuto;                                                    //OutArm ©ñ¨ì­ş­Ó Auto ¡A©ñ¨ì Mag »İ­n¬O2¤~¬O©ñ¨ì Auo3
+extern int iOutArmWhichAuto;                                                    //OutArm æ”¾åˆ°å“ªå€‹ Auto ï¼Œæ”¾åˆ° Mag éœ€è¦æ˜¯2æ‰æ˜¯æ”¾åˆ° Auo3
 extern int iFixToWhichAuto;                                                     //Steven 20260202 : for ATK AMR
 extern bool bAuto3HasCover;
 extern bool bIsAuto3ReceiveCover;
@@ -5468,7 +5468,7 @@ extern bool bSetMagTopBin;
 extern bool bClearMagTopBin;
 extern int  iTopWhichBin;
 extern bool bChaneMagTrayflag;
-extern bool bMagCatchTrayfalg;                                                  //JerryYang 20221121 : AUTOI3 MagazineÁÙ¦b§¨TRAYªººX¼Ğ
+extern bool bMagCatchTrayfalg;                                                  //JerryYang 20221121 : AUTOI3 Magazineé‚„åœ¨å¤¾TRAYçš„æ——æ¨™
 extern bool bMagGetNewTrayflag;
 extern int iMagChangeStep;
 //<==
@@ -5477,17 +5477,17 @@ extern bool bQUERYTJ;
 extern bool bATCAlarm;
 //Ztex 2023.04.19 Add HT-1032 TriTemp Function
 extern bool bOverTempAlarm[8];                          //ChungHung 20151230 add
-extern bool biTriTempDefaultbyWork;                     //kevin 20150507 Tri Temp ¦s¤u§@ÀÉ
-extern bool bDefrostKeepATCTemp;                        //Hmy 20170120 ¼W¥[¤â°Ê°£Á÷¥\¯à(§PÂ_¥Î)
-extern int iATC51ThermoCount_SH1;                       //Hmy 20210414 Add ATC¨t²Î·Å±±¾¹¼Æ¶q(¹w³]¬°1ÂI¡A¥Ø«e³Ì¦h3ÂI)
-extern int iATC51ThermoCount_SH2;                       //Hmy 20210414 Add ATC¨t²Î·Å±±¾¹¼Æ¶q(¹w³]¬°1ÂI¡A¥Ø«e³Ì¦h3ÂI)
-extern int iATC51ThermoCount_HP1;                       //Hmy 20210414 Add ATC¨t²Î·Å±±¾¹¼Æ¶q(¹w³]¬°1ÂI¡A¥Ø«e³Ì¦h3ÂI)
-extern int iATC51ThermoCount_HP2;                       //Hmy 20210414 Add ATC¨t²Î·Å±±¾¹¼Æ¶q(¹w³]¬°1ÂI¡A¥Ø«e³Ì¦h3ÂI)
-extern bool bAutoDefrost_Exec;                          //Hmy 20170120 ¼W¥[¤â°Ê°£Á÷¥\¯à(§PÂ_¥Î)
-extern bool bAutoDefrost_Done;                          //Hmy 20170120 ¼W¥[¤â°Ê°£Á÷¥\¯à(§PÂ_¥Î)
-extern bool bAutoDefrost_Halt;                          //Hmy 20170120 ¼W¥[¤â°Ê°£Á÷¥\¯à(§PÂ_¥Î)
-extern bool bAutoDefrost_ByMachineProduction_Req;       //Hmy 20170120 ¼W¥[¤â°Ê°£Á÷¥\¯à(§PÂ_¥Î)
-extern bool bAutoDefrost_ByMachineProduction_Finish;    //Hmy 20170120 ¼W¥[¤â°Ê°£Á÷¥\¯à(§PÂ_¥Î)
+extern bool biTriTempDefaultbyWork;                     //kevin 20150507 Tri Temp å­˜å·¥ä½œæª”
+extern bool bDefrostKeepATCTemp;                        //Hmy 20170120 å¢åŠ æ‰‹å‹•é™¤éœœåŠŸèƒ½(åˆ¤æ–·ç”¨)
+extern int iATC51ThermoCount_SH1;                       //Hmy 20210414 Add ATCç³»çµ±æº«æ§å™¨æ•¸é‡(é è¨­ç‚º1é»ï¼Œç›®å‰æœ€å¤š3é»)
+extern int iATC51ThermoCount_SH2;                       //Hmy 20210414 Add ATCç³»çµ±æº«æ§å™¨æ•¸é‡(é è¨­ç‚º1é»ï¼Œç›®å‰æœ€å¤š3é»)
+extern int iATC51ThermoCount_HP1;                       //Hmy 20210414 Add ATCç³»çµ±æº«æ§å™¨æ•¸é‡(é è¨­ç‚º1é»ï¼Œç›®å‰æœ€å¤š3é»)
+extern int iATC51ThermoCount_HP2;                       //Hmy 20210414 Add ATCç³»çµ±æº«æ§å™¨æ•¸é‡(é è¨­ç‚º1é»ï¼Œç›®å‰æœ€å¤š3é»)
+extern bool bAutoDefrost_Exec;                          //Hmy 20170120 å¢åŠ æ‰‹å‹•é™¤éœœåŠŸèƒ½(åˆ¤æ–·ç”¨)
+extern bool bAutoDefrost_Done;                          //Hmy 20170120 å¢åŠ æ‰‹å‹•é™¤éœœåŠŸèƒ½(åˆ¤æ–·ç”¨)
+extern bool bAutoDefrost_Halt;                          //Hmy 20170120 å¢åŠ æ‰‹å‹•é™¤éœœåŠŸèƒ½(åˆ¤æ–·ç”¨)
+extern bool bAutoDefrost_ByMachineProduction_Req;       //Hmy 20170120 å¢åŠ æ‰‹å‹•é™¤éœœåŠŸèƒ½(åˆ¤æ–·ç”¨)
+extern bool bAutoDefrost_ByMachineProduction_Finish;    //Hmy 20170120 å¢åŠ æ‰‹å‹•é™¤éœœåŠŸèƒ½(åˆ¤æ–·ç”¨)
 extern bool bAutoDefrost_ByMachineProduction_Termination;
 extern bool bAutoDefrost_ByMachineProduction_Wait;
 extern bool bAutoDefrost_ByMachineProduction_Force;
@@ -5507,7 +5507,7 @@ extern AnsiString asDockingAreaOpen_Function_OpenCloseDate[3];
 extern bool bcheckSuperHotTemperatureKitTiming[5];      //Hmy 20190702 Add Check UltraHighTemperature kit
 extern bool bcheckSuperHotTemperatureKitFail;           //Hmy 20190702 Add Check UltraHighTemperature kit
 extern int iOldTemperatue;                              //Hmy 20190806 Add Check UltraHighTemperature kit
-extern int  iSuperHotKit_CheckFinish;                   //Hmy 20191107 Add ¶W°ª·ÅKit§¹¦¨§¹¦¨¡C
+extern int  iSuperHotKit_CheckFinish;                   //Hmy 20191107 Add è¶…é«˜æº«Kitå®Œæˆå®Œæˆã€‚
 extern AnsiString asBackupSystemDataCopmareDate[2];     //Hmy 20200407 Add Backup SystemData
 extern bool bIonBarAirOnEcho;                           //Jeffrey 20180821 add for Ion Bar Auto Calibration
 extern bool bIonBarAirOffEcho;                          //Jeffrey 20180821 add for Ion Bar Auto Calibration
@@ -5551,25 +5551,25 @@ extern bool bALLTempFirstReady;
 extern bool bAutoDefrost_OpenAirStream;
 extern int INDEXDOORHEATER;
 //Ztex 2023.04.19 Add HT-1032 TriTemp Function
-extern int iAutoFormSize;                               //Jimmychiu 20231130 : ¥i¶}ÃöAuto form size
+extern int iAutoFormSize;                               //Jimmychiu 20231130 : å¯é–‹é—œAuto form size
 extern int iACSmartCount;                               //Sam 20230111 : Smart Auto Clean
 extern int iACSmartCount_CTF;                           //Sam 20240726 : AI Clean
 extern int iACUseParam;
 extern int iRunACSmart;
-extern bool bRunACAdaptive;                             //Sam 20230914 : ¦Û¾AÀ³©Ê¨}²vºÊ±±
-extern AnsiString sACRecAlarmCode;                      //Sam 20250916 : Alarm«á»İ­n²M°£¸ê®Æ¤~¯àStart
+extern bool bRunACAdaptive;                             //Sam 20230914 : è‡ªé©æ‡‰æ€§è‰¯ç‡ç›£æ§
+extern AnsiString sACRecAlarmCode;                      //Sam 20250916 : Alarmå¾Œéœ€è¦æ¸…é™¤è³‡æ–™æ‰èƒ½Start
 extern AnsiString sACRecEPortCode;
-extern bool bLoadingNewICTray;                          //Sam 20240827 : ·s¼W AMR ¥\¯à
+extern bool bLoadingNewICTray;                          //Sam 20240827 : æ–°å¢ AMR åŠŸèƒ½
 extern bool bShowNoteCleanSocket;
-extern bool bBarCoderAutoLogin;                         //Sam 20221101 : ¨Ï¥Î BarCoder ¦Û°Êµn¿ı
-extern bool bBarCoderSetupFile;                         //Sam 20230320 : ¨Ï¥Î BarCodeReader ¨Ó¿é¤J¤Á´« SetupFile¡C
+extern bool bBarCoderAutoLogin;                         //Sam 20221101 : ä½¿ç”¨ BarCoder è‡ªå‹•ç™»éŒ„
+extern bool bBarCoderSetupFile;                         //Sam 20230320 : ä½¿ç”¨ BarCodeReader ä¾†è¼¸å…¥åˆ‡æ› SetupFileã€‚
 extern bool bADAM6024FWIsNew[3];
-extern bool bHandlerChangeState;                        //Sam 20230511 : ¾÷¥x¸ê®ÆÅÜ§ó«á¶·¤W¶Ç FTP
-extern int i1x2_4UseACEGPicker;                         //Steven 20230530 : 1x2_4§ï¥ÎRow A
-extern AnsiString CleanKitRecord[50][50];               //Sam 20230619 : ·s¼W Clean§l©ñ®É¶¡ Log
+extern bool bHandlerChangeState;                        //Sam 20230511 : æ©Ÿå°è³‡æ–™è®Šæ›´å¾Œé ˆä¸Šå‚³ FTP
+extern int i1x2_4UseACEGPicker;                         //Steven 20230530 : 1x2_4æ”¹ç”¨Row A
+extern AnsiString CleanKitRecord[50][50];               //Sam 20230619 : æ–°å¢ Cleanå¸æ”¾æ™‚é–“ Log
 extern bool bIdleNeedCheckSafeDoor[4][64][32][8];       //Steven 20230704 : add bypass idle check safe door
 extern bool bOutArmTrayDuplicateErr[9];
-extern bool bTJtoTCWait;                                //wei 20251002 : TJÂà¦^TCµ¥«İ
+extern bool bTJtoTCWait;                                //wei 20251002 : TJè½‰å›TCç­‰å¾…
 extern int iTotalXPitchStep;
 extern int iMaxXPitch;
 extern int iMinXPitch;
@@ -5581,17 +5581,17 @@ extern int iMaxXPitch2Pick_14;
 extern int iMinXPitch2Pick_14;
 extern int iHPXPos;
 extern int iHPYPos;
-extern bool bOutarmDropError;                                                   //jou 20241024 : out arm drop error show alarm´£¿ôÀË¬d¥XTray¬O§_Å|®Æ
+extern bool bOutarmDropError;                                                   //jou 20241024 : out arm drop error show alarmæé†’æª¢æŸ¥å‡ºTrayæ˜¯å¦ç–Šæ–™
 //Sam 20230707 : EtherCAT Shuttle sensor
 //==>
-extern bool bEtherCatMastCardError;                                             //KaiHuang 20200930 : Fix ¦]Â_½u³y¦¨¨t²Î¦º±¼
+extern bool bEtherCatMastCardError;                                             //KaiHuang 20200930 : Fix å› æ–·ç·šé€ æˆç³»çµ±æ­»æ‰
 extern unsigned int uiDevhand;
 extern const int iEtherCatRing;
 extern unsigned long m_dwDevNum;
 //<==
 //Sam 20230707 : EtherCAT Shuttle sensor
 extern bool bOCRRunTime;
-//KenHsieh 20230727 : §ó§ï¤u§@ÀÉ»P¸ê®Æ By NetFile
+//KenHsieh 20230727 : æ›´æ”¹å·¥ä½œæª”èˆ‡è³‡æ–™ By NetFile
 //==>
 extern AnsiString asLotID_ByFile;
 extern AnsiString asStation_ByFile;
@@ -5599,33 +5599,33 @@ extern AnsiString asType_ByFile;
 extern AnsiString asState_ByFile;
 extern AnsiString asProductionByFileNamePath;
 //<==
-//KenHsieh 20230727 : §ó§ï¤u§@ÀÉ»P¸ê®Æ By NetFile
+//KenHsieh 20230727 : æ›´æ”¹å·¥ä½œæª”èˆ‡è³‡æ–™ By NetFile
 extern int iDynamicThresholdNum;                                                //JimmyChiu 20240411 : Dynamic multiplier for Continual Pass Bin( Socket )
 
-extern bool Enable_PLCSafety_IO;                                                //Austin 20190531.01 ¼W¥[PLC_IO¼Ò²Õ¤Î¦w¥ş¬ÛÃöIO.
+extern bool Enable_PLCSafety_IO;                                                //Austin 20190531.01 å¢åŠ PLC_IOæ¨¡çµ„åŠå®‰å…¨ç›¸é—œIO.
 extern int iPLCSafetyVer;                                                       //joe 20220406.01 debug safe plc
-extern int iWhichShtPickFor;                                                    //Steven 20231208 : §PÂ_¦h§l¼L¼Ò¦¡ªºShuttle
+extern int iWhichShtPickFor;                                                    //Steven 20231208 : åˆ¤æ–·å¤šå¸å˜´æ¨¡å¼çš„Shuttle
 //Kevin 20231209 : for ASE KH
 //===>
 extern bool bColorFirst;                                                        //kevin 20221025 load new color tray
-extern bool bLoadBFBackTray;                                                    //KenHsieh 20230325 : CleanOut®ÉLoader BF °hTray
-extern bool bAutoUpOK[3];                                                       //kevin 20230331 Auto 1 23 ¤W¤É¤¤¤£¯à©ñtray
-extern bool bEPDetect;                                                          //kevin 20230608 index check ¬y¶q­p¬O§_º|®ğ
+extern bool bLoadBFBackTray;                                                    //KenHsieh 20230325 : CleanOutæ™‚Loader BF é€€Tray
+extern bool bAutoUpOK[3];                                                       //kevin 20230331 Auto 1 23 ä¸Šå‡ä¸­ä¸èƒ½æ”¾tray
+extern bool bEPDetect;                                                          //kevin 20230608 index check æµé‡è¨ˆæ˜¯å¦æ¼æ°£
 //extern int iLotStart;                                                           //kevin 20211105
-extern AnsiString asInarmSkipICPos;                                             //KenHsieh 20230707 : No9 pickup error«á¡A¬ö¿ıG17¥\¯à©Ò°O¿ıÂI¦ì¤§Log
-extern AnsiString asInarmSkipICSucker;                                          //KenHsieh 20230907 : G17¥\¯à©Ò°O¿ı³Ì²×ÂI¦ì¤§Log§ï¬°"all§l¼L:all Pos"
-extern AnsiString asInarmSkipICPos_No9;                                         //KenHsieh 20230707 : No9 pickup error«á¡A¬ö¿ıG17¥\¯à©Ò°O¿ıÂI¦ì¤§Log
-extern bool bContinueFailIndexUp;                                               //kevin 20230807 ¿ù»~ ARM »İ¤W¤ÉÁ×§Kµ²Á÷
-extern bool bD52ArmUp_ConsecutiveFail;                                          //KenHsieh 20230809 : µosocket³sÄò©Ê²§±`«e¡AIndexarm»İ¥ı¤W¤É
-extern bool bSoftwareStart;                                                     //kevin 20230812  ³nÅé­è¶}±Ò
-extern bool bAutoReceTray_SECS;                                                 //KenHsieh 20231016 : ASEKH_K1 & K3 ¸É¤W»\»PªÅ½L¨Æ¥ó¬yµ{
+extern AnsiString asInarmSkipICPos;                                             //KenHsieh 20230707 : No9 pickup errorå¾Œï¼Œç´€éŒ„G17åŠŸèƒ½æ‰€è¨˜éŒ„é»ä½ä¹‹Log
+extern AnsiString asInarmSkipICSucker;                                          //KenHsieh 20230907 : G17åŠŸèƒ½æ‰€è¨˜éŒ„æœ€çµ‚é»ä½ä¹‹Logæ”¹ç‚º"allå¸å˜´:all Pos"
+extern AnsiString asInarmSkipICPos_No9;                                         //KenHsieh 20230707 : No9 pickup errorå¾Œï¼Œç´€éŒ„G17åŠŸèƒ½æ‰€è¨˜éŒ„é»ä½ä¹‹Log
+extern bool bContinueFailIndexUp;                                               //kevin 20230807 éŒ¯èª¤ ARM éœ€ä¸Šå‡é¿å…çµéœœ
+extern bool bD52ArmUp_ConsecutiveFail;                                          //KenHsieh 20230809 : ç™¼socketé€£çºŒæ€§ç•°å¸¸å‰ï¼ŒIndexarméœ€å…ˆä¸Šå‡
+extern bool bSoftwareStart;                                                     //kevin 20230812  è»Ÿé«”å‰›é–‹å•Ÿ
+extern bool bAutoReceTray_SECS;                                                 //KenHsieh 20231016 : ASEKH_K1 & K3 è£œä¸Šè“‹èˆ‡ç©ºç›¤äº‹ä»¶æµç¨‹
 extern bool bCheckOpenDoor;                                                     //kevin 20231122 check door open close log
 //<==
 //Kevin 20231209 : for ASE KH
-extern bool bInitailQtyByLowYield;                                              //Sam 20230728 : µo¥Í LowYield «á­«·s Start ²M°£ Sort Count ©M contact counterKinds
-extern bool bOLPSetCategroy;                                                    //Sam 20230711 : ­×¥¿ OLP SetCategroy ²§±`
-extern AnsiString sB03RunData;                                                  //Sam 20231115 : PTI ·s¼W Tester report
-extern AnsiString sB03StartTime;                                                //Sam 20231115 : PTI ·s¼W Tester report
+extern bool bInitailQtyByLowYield;                                              //Sam 20230728 : ç™¼ç”Ÿ LowYield å¾Œé‡æ–° Start æ¸…é™¤ Sort Count å’Œ contact counterKinds
+extern bool bOLPSetCategroy;                                                    //Sam 20230711 : ä¿®æ­£ OLP SetCategroy ç•°å¸¸
+extern AnsiString sB03RunData;                                                  //Sam 20231115 : PTI æ–°å¢ Tester report
+extern AnsiString sB03StartTime;                                                //Sam 20231115 : PTI æ–°å¢ Tester report
 extern int iSourceSystemHeight;                                                 // 20230601 Joseph , Auto Form Size //
 extern int iSourceSystemWidth;                                                  // 20230601 Joseph , Auto Form Size //
 extern int iNowSystemHeight;                                                    // 20230601 Joseph , Auto Form Size //
@@ -5634,11 +5634,11 @@ extern double fNowSystemHeightScale;                                            
 extern double fNowSystemWidthScale;                                             // 20231030 Jason , Auto Form Size //
 extern int iPickFromPlateMode;
 extern int DOUBLE_BELT_MODE;                                                    //Ztex 2023.12.13 Add Double Belt Mode
-extern int iEnabledSiteCount;                                                   //Steven 20231220 : ¤û«H«O»¡­n¶}site¼Æ¶qSVID 1250
-extern bool bWaitOutArmCheckCylin;                                              //jou 20240131 : ­×¥¿out arm »P auto tray¤¬¥d½Ä¬ğhang up
+extern int iEnabledSiteCount;                                                   //Steven 20231220 : ç‰›ä¿¡ä¿èªªè¦é–‹siteæ•¸é‡SVID 1250
+extern bool bWaitOutArmCheckCylin;                                              //jou 20240131 : ä¿®æ­£out arm èˆ‡ auto trayäº’å¡è¡çªhang up
 extern int  iInZHomeCnt;
 extern int  iOutZHomeCnt;
-extern AnsiString sStackBinTemp[eTrayCount];                                    //JerryYang 20231218 : P53¨¾²V¥\¯à
+extern AnsiString sStackBinTemp[eTrayCount];                                    //JerryYang 20231218 : P53é˜²æ··åŠŸèƒ½
 extern bool bNoitceFixTray;
 
 extern int iMagazineStatus;                                                     //Ifor 20231130 add: 0: Normal 1:Full Tray 2:Manual put tray
@@ -5646,25 +5646,25 @@ extern bool bOneCycleDoInitialTemp;
 extern bool bDoAfterOpenSafeDoor3NeedDelay;                                     //Ifor 20220413 add: SafeDoor 3 Open Ovet SetTime Need Delay
 
 extern bool bSECSGEMAutoclean;                                                  //Ifor 20220414 add SECS/GEM AUTO Clean
-extern bool bBinDispAlarm;                                                      //Ifor 20220714 add:Bin Disp ²§±`³øÄµ ¨C¦¸Onecycle ÀË¬d¤@¦¸
-extern int iTrayDetectCount;                                                    //Ifor 20221117 add:Tray arm²¾°Ê³øÄµ°»´ú¦¸¼Æ
-extern bool bResetGalilTwoYMove;                                                //Ifor 20220729 add Reset Galil Two Y Move®É¶¡­p®É
+extern bool bBinDispAlarm;                                                      //Ifor 20220714 add:Bin Disp ç•°å¸¸å ±è­¦ æ¯æ¬¡Onecycle æª¢æŸ¥ä¸€æ¬¡
+extern int iTrayDetectCount;                                                    //Ifor 20221117 add:Tray armç§»å‹•å ±è­¦åµæ¸¬æ¬¡æ•¸
+extern bool bResetGalilTwoYMove;                                                //Ifor 20220729 add Reset Galil Two Y Moveæ™‚é–“è¨ˆæ™‚
 extern bool bEnableAutoMotive;                                                  //Ifor 20221024 add: KLT Auto Motive Function
-extern bool bNeedAutoHeight;                                                    //Ifor 20221208 add: KLT ­n¨D§ó´«¤u§@ÀÉ»İ­n­«·sAuto Height ¤~¥i°õ¦æContact Mode
+extern bool bNeedAutoHeight;                                                    //Ifor 20221208 add: KLT è¦æ±‚æ›´æ›å·¥ä½œæª”éœ€è¦é‡æ–°Auto Height æ‰å¯åŸ·è¡ŒContact Mode
 extern TDateTime tAlarmNoteStartTime;                                           //Ifor 20230330 add:Show Alarm Note Init Temperature offset function
 extern bool bShowAlarmNote;                                                     //Ifor 20230330 add:Show Alarm Note Init Temperature offset function
-extern bool bCheckATCTemp;                                                      //Ifor 20230410 add: «ö¤UStart½T»{ATC·Å«×¬O§_¹F¨ì³]©w
-extern bool bOneKyePowerSaving;                                                 //Ifor 20230612 :add ¤@ÁäPower Saving
-extern int iAutoHasHod[6];                                                      //Ifor 20230817 add: °hTray®É¦³HasNullIC³øÄµ´£¥Ü
-extern bool bAQL_Sorting_Finish;                                                //Ifor 20231124 add:Á×§KAQL Mode »~³øªÅ¥Ş°İÃD
+extern bool bCheckATCTemp;                                                      //Ifor 20230410 add: æŒ‰ä¸‹Startç¢ºèªATCæº«åº¦æ˜¯å¦é”åˆ°è¨­å®š
+extern bool bOneKyePowerSaving;                                                 //Ifor 20230612 :add ä¸€éµPower Saving
+extern int iAutoHasHod[6];                                                      //Ifor 20230817 add: é€€Trayæ™‚æœ‰HasNullICå ±è­¦æç¤º
+extern bool bAQL_Sorting_Finish;                                                //Ifor 20231124 add:é¿å…AQL Mode èª¤å ±ç©ºç©´å•é¡Œ
 extern AnsiString asAutoCleanEven;                                              //Ifor 20210527 add: Auto Clean Start Even
 extern int USE_STM_Function;                                                    //Ifor 20201113 add: STM Function
-extern int USE_BU5_Function;                                                    //Ifor 20210819 add:LYEC BU5 ¨Ï¥ÎBU3µ{¦¡ª©¥»
+extern int USE_BU5_Function;                                                    //Ifor 20210819 add:LYEC BU5 ä½¿ç”¨BU3ç¨‹å¼ç‰ˆæœ¬
 extern int iRTC_CCD_NG[4];                                                      //Ifor 20210203 : add CCD NG Result  //Ifor 20210422 add:RTC CCD 2 => 4
 extern bool bStartAQLSortMode;
 extern int iAQLBin;
 extern int iAQLCount;
-extern bool bStartAutoAdjustLight;                                              //Ifor 20210408 add:Barcode ¦Û°Ê½Õ¾ã¥ú·½
+extern bool bStartAutoAdjustLight;                                              //Ifor 20210408 add:Barcode è‡ªå‹•èª¿æ•´å…‰æº
 extern bool bSetAQLSortMode;                                                    //Ifor 20210513 add: SECS GEM Set AQL Count
 extern bool bBarcodeNeedAutoAdjust[4];                                          //Ifor 20210531 add: Barcode Auto Adjust Light
 extern bool bErrBinAlm;
@@ -5676,7 +5676,7 @@ extern bool bSmartSetupInOutArmSearchArea;
 extern bool bSmartSetupUseSingleZ;
 extern bool bSmartSetupSHValue;
 extern bool bMagazineGetNewTray;
-extern int iSECSGEM_ConsecutiveFailureAlarm;                                    //Ifor 20240430 add:secs gem cmd Index Yiel Fail 0:Normal 1:¦¬¨ì©R¥O 2:Index ¤W¤É
+extern int iSECSGEM_ConsecutiveFailureAlarm;                                    //Ifor 20240430 add:secs gem cmd Index Yiel Fail 0:Normal 1:æ”¶åˆ°å‘½ä»¤ 2:Index ä¸Šå‡
 extern bool bDoInitialAutoClean;                                                //Ifor 20240604 add:Auto Clean Inital Contact Count
 extern AnsiString asMagazineBinFull;                                            //Ifor 20240722 add:
 extern int iSECSGEM_ConsecutiveFailureAlarm;                                    //Ifor 20240425 add:secs gem cmd
@@ -5702,12 +5702,12 @@ extern AnsiString sFixBundleID[MAX_FIX_TRAY];
 extern int iBundleIDLength;
 extern bool bI22_NeedHomeDelay;
 extern bool bRTCAutoTuning;                                                     //Sam 20240711 : RTC Auto Tuning
-extern bool bReadLotInfoFromART;                                                //Steven 20240830 : Åª¨úlot infoªº¦ì¸m
-extern int VCCU_UNIT_TYPE;                                                      //Sam 20230210 : ·s¼W VacuumUnit ³q°T¼Ò²Õ
-extern bool bSuckingFlagZ1, bSuckingFlagZ2;                                     //Steven 20240916 : index¤U­°¨ìshuttle§l©ñ®Æ
+extern bool bReadLotInfoFromART;                                                //Steven 20240830 : è®€å–lot infoçš„ä½ç½®
+extern int VCCU_UNIT_TYPE;                                                      //Sam 20230210 : æ–°å¢ VacuumUnit é€šè¨Šæ¨¡çµ„
+extern bool bSuckingFlagZ1, bSuckingFlagZ2;                                     //Steven 20240916 : indexä¸‹é™åˆ°shuttleå¸æ”¾æ–™
 extern int iGPIBIndexStatus;
 extern double dGPIBATCOffset[32];
-extern int iTempCode[INDEX_HEAT_COUNT];                                         //Jimmychiu 20230628 : ´î¤ÖDTME¥[¼ö°j°é¦¸¼Æ
+extern int iTempCode[INDEX_HEAT_COUNT];                                         //Jimmychiu 20230628 : æ¸›å°‘DTMEåŠ ç†±è¿´åœˆæ¬¡æ•¸
 extern bool bGPIBOffsetCommand;
 extern int iMN200_ErrorCode;
 extern bool bReduceTrayExitTime;                                                //Ztex 2024.03.25 Add Reduce tray exit time
@@ -5715,17 +5715,17 @@ extern bool bReduceTrayExitTime_TrayFeed[6];                                    
 extern bool bServoOnOff;                                                        //ChungHung 20230718 add for Safe plc
 extern bool bByPassDoor;                                                        //Ztex 2024.05.13 bByPassDoor
 extern bool bTT_SetSpeed_Check;                                                 //Ztex 2024.08.11 Add Test Time Set Speed
-extern bool bWaiteKeepRespond;                                                  //kevin 20231215 µ¥«İeKeep ¦^À³
-extern bool bAutoReceTrayAGV[MAX_AUTO_TRAY];                                    //kevin 20240423 add °h®ÆTRAY call AGV
+extern bool bWaiteKeepRespond;                                                  //kevin 20231215 ç­‰å¾…eKeep å›æ‡‰
+extern bool bAutoReceTrayAGV[MAX_AUTO_TRAY];                                    //kevin 20240423 add é€€æ–™TRAY call AGV
 extern bool bReceiveProcess[MAX_AUTO_TRAY];                                     //kevin 20240514 Auto 1 2 3
 extern bool bUseSocketHeating_Wait;                                             //Ztex 2024.09.07 Add Use Socket Heating
 extern int  iUseSocketHeating_Time;                                             //Ztex 2024.09.07 Add Use Socket Heating
 extern int  iAStreamErrorCompressOnecycle;                                      //Ztex 2024.10.01 Add AStream Error Compress Onecycle
 extern bool bPickLoaderFromBack;
-extern bool bWaitRotateFinish;                                                  //Ifor 20241015 add: µ¥«İ Rotate §¹¦¨
-extern int iAMD_Function;                                                       //Ifor 20231222 add TFAMD Function 0:AMD(·s¥[©Y¡B¬ü°ê) 1:TFAMD(Ä¬¦{) 2:TFAMD(°¨¨Ó¦è¨È)
-extern bool bHasFTPDownload;                                                    //Ifor 20240422 add:FTP ¤u§@ÀÉ¤U¸ü
-extern int iChangeFileHasErr;                                                   //Ifor 20240314 add:GPIB ¤Á´«¤u§@ÀÉ®É¦³²§±`
+extern bool bWaitRotateFinish;                                                  //Ifor 20241015 add: ç­‰å¾… Rotate å®Œæˆ
+extern int iAMD_Function;                                                       //Ifor 20231222 add TFAMD Function 0:AMD(æ–°åŠ å¡ã€ç¾åœ‹) 1:TFAMD(è˜‡å·) 2:TFAMD(é¦¬ä¾†è¥¿äº)
+extern bool bHasFTPDownload;                                                    //Ifor 20240422 add:FTP å·¥ä½œæª”ä¸‹è¼‰
+extern int iChangeFileHasErr;                                                   //Ifor 20240314 add:GPIB åˆ‡æ›å·¥ä½œæª”æ™‚æœ‰ç•°å¸¸
 extern AnsiString asChangeSetupFileName;
 
 extern bool bResetMagGetTime;
@@ -5739,11 +5739,11 @@ extern bool bNeedCheckShuttleSensor;
 extern int USE_GPIBLOGBYDAY;                                                    //Ifor 20241029 add:GPIB LOG BY DAY
 extern bool bATC_EnableSiteMap[32];                                             //Ifor 20241105 add:ATC Enable Site Map
 extern bool bGPIBLOGBYDAY;                                                      //Ifor 20241029 add:GPIB LOG BY DAY
-extern bool bDoD80Function;                                                     //Ifor 20241202 add:Á×§K[D80]µL­­Index Check »P¥¼§¹¦¨Åã¥ÜOne Cycle Finish
-extern bool bInitialAutoCleanTimeOut;                                           //Ifor 20241212 add:Á×§KAuto Clean ¼È°±¹L¤[Start«á³øÄµ
+extern bool bDoD80Function;                                                     //Ifor 20241202 add:é¿å…[D80]ç„¡é™Index Check èˆ‡æœªå®Œæˆé¡¯ç¤ºOne Cycle Finish
+extern bool bInitialAutoCleanTimeOut;                                           //Ifor 20241212 add:é¿å…Auto Clean æš«åœéä¹…Startå¾Œå ±è­¦
 extern bool bCustomerForMTKVersion;                                             //yunghsin 20241130 Add MTK File Name
 extern AnsiString anSoftwareVersion;                                            //yunghsin 20241130 Add MTK File Name
-extern bool bHasOpenMagDoor;                                                    //JerryYang 20241225 : ¼È°±ª¬ºA¶}Magazine¦w¥şªù
+extern bool bHasOpenMagDoor;                                                    //JerryYang 20241225 : æš«åœç‹€æ…‹é–‹Magazineå®‰å…¨é–€
 extern AnsiString anGroundManLog;                                               //Ifor 20250123 KYEC FTP UP Load GroundMan Log File
 extern int TROLLEY_USE_IO_TYPE;                                                 //Ifor 20250211 : add TROLLEY USE IO TYPE
 extern int iRTCErrorCount;                                                      //wei 20221222 RTC ARM Error
@@ -5791,12 +5791,12 @@ extern AnsiString asGPIBAutoHeightLimit;
 extern AnsiString asGPIBAutoHeightZPos;
 extern AnsiString asGPIBAutoHeightTorque;
 extern AnsiString asControlModeGPIB;
-extern int iMagBin;                                                             //Eastsun 20260515 F011 ¾ã¦X (Magazine AMR shared)
-extern int ASE_OutTrayNum[eTrayCount];                                       //Eastsun 20260515 F011 ¾ã¦X:KYEC AMR output tray count
-//==> Eastsun 20260525 laser ¾ã¦X : LaserSensorShuttle InArm ¤¬Âê
+extern int iMagBin;                                                             //Eastsun 20260515 F011 æ•´åˆ (Magazine AMR shared)
+extern int ASE_OutTrayNum[eTrayCount];                                       //Eastsun 20260515 F011 æ•´åˆ:KYEC AMR output tray count
+//==> Eastsun 20260525 laser æ•´åˆ : LaserSensorShuttle InArm äº’é–
 extern bool bInArmLaserActionflag[2];
 extern bool bOutArmLaserActionflag[2];
-//<== Eastsun 20260525 laser ¾ã¦X
+//<== Eastsun 20260525 laser æ•´åˆ
 #endif
 //------------------------------------------------------------------------------
 //Jimmychiu 20240712 : Auto Calibrate Suck Z height
@@ -5816,28 +5816,28 @@ extern int iOutArmSearchStartZ;
 //------------------------------------------------------------------------------
 extern double GetTotalYield_double();
 extern AnsiString GetTotalYield_Str();
-extern bool bNeedOneCycleByContactAlm1;                                         //Sam 20241226 : Contact Alarm »İ­n¥ı°µ OneCycle
+extern bool bNeedOneCycleByContactAlm1;                                         //Sam 20241226 : Contact Alarm éœ€è¦å…ˆåš OneCycle
 extern bool bNeedOneCycleByContactAlm2;
 extern bool bNeedOneCycleByContactWar1;
 extern bool bNeedOneCycleByContactWar2;
-extern bool bNeedOneCycleByPickerLifeAlm;                                       //AI(ht9045-config) 20260521 (RogerYang) : SCC§l¼L¹Ø©R³øÄµOneCycleÀu¤Æ
-extern void CheckPickerLifeNeedOneCycle();                                      //AI(ht9045-config) 20260521 (RogerYang) : SCC§l¼L¹Ø©R³øÄµOneCycleÀu¤Æ
-extern bool bTriggerRTC_AutoSTD;                                                //JerryYang 20240829 : SPIL°V¥Ã ­n¨D¤â°ÊÄ²µoRTC AUTO STD
-extern AnsiString sWhiteListLotID;                                              //JerryYang 20241104 : ¤ä´©2DID¥Õ¦W³æ¥\¯à
+extern bool bNeedOneCycleByPickerLifeAlm;                                       //AI(ht9045-config) 20260521 (RogerYang) : SCCå¸å˜´å£½å‘½å ±è­¦OneCycleå„ªåŒ–
+extern void CheckPickerLifeNeedOneCycle();                                      //AI(ht9045-config) 20260521 (RogerYang) : SCCå¸å˜´å£½å‘½å ±è­¦OneCycleå„ªåŒ–
+extern bool bTriggerRTC_AutoSTD;                                                //JerryYang 20240829 : SPILè¨“æ°¸ è¦æ±‚æ‰‹å‹•è§¸ç™¼RTC AUTO STD
+extern AnsiString sWhiteListLotID;                                              //JerryYang 20241104 : æ”¯æ´2DIDç™½åå–®åŠŸèƒ½
 extern AnsiString sWhiteListProcess;
-extern int iBackupOneCycle;                                                     //JerryYang 20241015 : ­×¥¿Ä²µoOne cycle«á¤S°õ¦æauto clean, §¹¦¨«á·|Ä~Äò¶]
-extern bool bRefreshCount;                                                      //Stteve 20250219 : ²M°£¼Æ¶q«áªº­«¾ã­ndelay¤@¤U
-extern bool bRun2DCheck;                                                        //JerryYang 20250220 : 2DIDµwÅé¶¶§ÇÀË¬d¥\¯à
-extern int i2DMAPCHKSTEP;                                                       //JerryYang 20250220 : 2DIDµwÅé¶¶§ÇÀË¬d¥\¯à
+extern int iBackupOneCycle;                                                     //JerryYang 20241015 : ä¿®æ­£è§¸ç™¼One cycleå¾ŒåˆåŸ·è¡Œauto clean, å®Œæˆå¾Œæœƒç¹¼çºŒè·‘
+extern bool bRefreshCount;                                                      //Stteve 20250219 : æ¸…é™¤æ•¸é‡å¾Œçš„é‡æ•´è¦delayä¸€ä¸‹
+extern bool bRun2DCheck;                                                        //JerryYang 20250220 : 2DIDç¡¬é«”é †åºæª¢æŸ¥åŠŸèƒ½
+extern int i2DMAPCHKSTEP;                                                       //JerryYang 20250220 : 2DIDç¡¬é«”é †åºæª¢æŸ¥åŠŸèƒ½
 extern int iBundleDieQty;                                                       //JerryYang 20250224 : add
 extern bool bBindChkNG;
 extern bool bUnbindChkNG;
 extern bool bTRAYCHKNG;
 extern AnsiString sUnloadBin[MAX_UNLOAD_TRAY];
 extern bool bNeedReportBundleID[eTrayCount];
-extern bool bBackupAutoClean;                                                   //JerryYang 20250514 : fix 2DID»PAuto clean½Ä¬ğ, °µ§¹2DID Map¦A§âauto cleanºX¼Ğ¥´true
-//extern bool bVTestNoRTBin;                                                    //RogerYang 20250814 : §ï¨ìTrayAssignment¤U  //RogerYang 20250626 °¶´ú¤£¥i½Æ´úbin¥\¯à
-extern bool bNoRTBinFixFlag[3];                                                 //RogerYang 20250626 °¶´ú¤£¥i½Æ´úbin¥\¯à
+extern bool bBackupAutoClean;                                                   //JerryYang 20250514 : fix 2DIDèˆ‡Auto cleanè¡çª, åšå®Œ2DID Mapå†æŠŠauto cleanæ——æ¨™æ‰“true
+//extern bool bVTestNoRTBin;                                                    //RogerYang 20250814 : æ”¹åˆ°TrayAssignmentä¸‹  //RogerYang 20250626 å‰æ¸¬ä¸å¯è¤‡æ¸¬binåŠŸèƒ½
+extern bool bNoRTBinFixFlag[3];                                                 //RogerYang 20250626 å‰æ¸¬ä¸å¯è¤‡æ¸¬binåŠŸèƒ½
 extern bool bAskStopPort[ePortTotal];                                           //JerryYang 20250521 : For AMR
 extern bool bPortIsBusy[ePortTotal];
 extern int iThisPortNo;
@@ -5845,34 +5845,34 @@ extern int iThisPortStatus;
 extern int iPortStatus[ePortTotal];
 extern int iLastPortStatus[ePortTotal];
 extern AnsiString sBinCode_ATK[eTrayCount];
-extern bool bWaitingAMR;                                                        //RogerYang 20250617 Load¤w²MªÅ¦ıÁÙ¨Sº¡bundle¡Aµ¥®Æ¨®¨Ó
+extern bool bWaitingAMR;                                                        //RogerYang 20250617 Loadå·²æ¸…ç©ºä½†é‚„æ²’æ»¿bundleï¼Œç­‰æ–™è»Šä¾†
 extern bool bForceSendLoaderIsEmpty;
-extern bool bIsPlacingToBuffer;                                                 //JerryYang 20250828 : fix color»~°hTRAY
-extern bool bIsCatchingFromBuffer;                                              //RogerYang 20260225 : JSCC¨¾¤î§¨trayªº®É­ÔColor/Empty»~°h¡AÅçÃÒ¤¤
+extern bool bIsPlacingToBuffer;                                                 //JerryYang 20250828 : fix colorèª¤é€€TRAY
+extern bool bIsCatchingFromBuffer;                                              //RogerYang 20260225 : JSCCé˜²æ­¢å¤¾trayçš„æ™‚å€™Color/Emptyèª¤é€€ï¼Œé©—è­‰ä¸­
 extern bool bMaintanceMode;                                                     //Steven 20251007 : maintance mode for Hana
-extern int  In_Shuttle_Auto_Latch;                                              //KenHsieh 20250722 : InSht sensor §ï¬°2Áû¡A¨Ã¥ÎLatch §P§OÅ|®Æ¥H¤Î­¸®Æ
+extern int  In_Shuttle_Auto_Latch;                                              //KenHsieh 20250722 : InSht sensor æ”¹ç‚º2é¡†ï¼Œä¸¦ç”¨Latch åˆ¤åˆ¥ç–Šæ–™ä»¥åŠé£›æ–™
 extern bool bInSh1DoLtc;
 extern bool bInSh2DoLtc;
 extern bool bInSHLtcFin[2];                                                     //KenHsieh 20251106 : fix close site don't do In Sht Latch
-extern int  iInShtZRange;                                                       //KenHsieh 20251107 : Add Range for InSHZ Á×§Kªì©l°ª«×¤Ó°ª³y¦¨®Õ¥¿¤§ªùÂe­È¹L°ª
-extern bool bNeedGetSHRightLtc[2];                                              //KenHsieh 20251118 : ­×§ïOut Sht ·|­«·sGetLtc ¾É­PLose IC ²§±`
-extern bool bInSht1ZNeedHome;                                                   //KenHsieh 20250924 : Á×§KInSHZ ¦^Home®É¼È°±­«±Ò«á¥ş¾÷¦^Home
-extern bool bInSht2ZNeedHome;                                                   //KenHsieh 20250924 : Á×§KInSHZ ¦^Home®É¼È°±­«±Ò«á¥ş¾÷¦^Home
-extern bool bInSHLtcErrNo[2][10];                                               //KenHsieh 20251128 : InShtLtc ·s¼W²§±`­«½Æ§PÂ_
+extern int  iInShtZRange;                                                       //KenHsieh 20251107 : Add Range for InSHZ é¿å…åˆå§‹é«˜åº¦å¤ªé«˜é€ æˆæ ¡æ­£ä¹‹é–€æª»å€¼éé«˜
+extern bool bNeedGetSHRightLtc[2];                                              //KenHsieh 20251118 : ä¿®æ”¹Out Sht æœƒé‡æ–°GetLtc å°è‡´Lose IC ç•°å¸¸
+extern bool bInSht1ZNeedHome;                                                   //KenHsieh 20250924 : é¿å…InSHZ å›Homeæ™‚æš«åœé‡å•Ÿå¾Œå…¨æ©Ÿå›Home
+extern bool bInSht2ZNeedHome;                                                   //KenHsieh 20250924 : é¿å…InSHZ å›Homeæ™‚æš«åœé‡å•Ÿå¾Œå…¨æ©Ÿå›Home
+extern bool bInSHLtcErrNo[2][10];                                               //KenHsieh 20251128 : InShtLtc æ–°å¢ç•°å¸¸é‡è¤‡åˆ¤æ–·
 extern bool bDoRTCVerify;
-extern bool bRenesasFTCTAlarm;                                                  //RogerYang 20250923 : ·çÂÄFT-CT
-extern bool bAutoRestartAfterFTCTAlarm;                                         //RogerYang 20251016 : ·çÂÄFT-CT
-extern bool bReplyFTCTAlarm;                                                    //RogerYang 20251021 : ·çÂÄFT-CT FTCTµo°e¹Hªk«ü¥O¦^¶ÇError»İ­n³øÄµ
-extern AnsiString sFTCTAlarmStr;                                                //RogerYang 20251016 : ·çÂÄFT-CT
-extern bool bContinueMessageByReply71;                                          //RogerYang 20251107 : ·çÂÄFT-CT Add Continue Form
-extern bool bDestoryOnSht;                                                      //RogerYang 20251021 : ±qinarm2·h¹L¨Ó //Steven 20170905 (wei) : ¦bShuttle§j®ğ»P¸ê®Æ¥æ´«ªºFlag
+extern bool bRenesasFTCTAlarm;                                                  //RogerYang 20250923 : ç‘è–©FT-CT
+extern bool bAutoRestartAfterFTCTAlarm;                                         //RogerYang 20251016 : ç‘è–©FT-CT
+extern bool bReplyFTCTAlarm;                                                    //RogerYang 20251021 : ç‘è–©FT-CT FTCTç™¼é€é•æ³•æŒ‡ä»¤å›å‚³Erroréœ€è¦å ±è­¦
+extern AnsiString sFTCTAlarmStr;                                                //RogerYang 20251016 : ç‘è–©FT-CT
+extern bool bContinueMessageByReply71;                                          //RogerYang 20251107 : ç‘è–©FT-CT Add Continue Form
+extern bool bDestoryOnSht;                                                      //RogerYang 20251021 : å¾inarm2æ¬éä¾† //Steven 20170905 (wei) : åœ¨Shuttleå¹æ°£èˆ‡è³‡æ–™äº¤æ›çš„Flag
 
 extern int iTrayEnable[3];
 
 extern bool bE84LoaderActionflag[3];
 extern bool bE84UnloaderActionflag[3];
 extern bool bBoatChangeCasset[3];                                               //Ifor 20251220 add:Boat Change
-extern bool bHasTjTemp;                                                         //JerryYang 20251124 : Tj control¦Y¤£¦Pªº·Å«×range
+extern bool bHasTjTemp;                                                         //JerryYang 20251124 : Tj controlåƒä¸åŒçš„æº«åº¦range
 extern int iCheckShuttleSensor;                                                 //Ifor 20251204 add:After Home Need Check Shuttle Sensor
 extern bool bFreezeHandler;                                                     //Ifor 20260119 add:Freeze Handler
 extern int iSECSGEMMachineState;
@@ -5892,7 +5892,7 @@ extern int iSystemUpTime;
 extern TQPF_Timer tUNDER_20A_Delay;                      //Jimmychiu 20220713 for TEMPCTRL_NEED_UNDER_20A delay
 extern TQPF_Timer tUNDER_20A_SHT_Delay;                      //Jimmychiu 20220713 for TEMPCTRL_NEED_UNDER_20A delay
 extern const int iUNDER_20A_Delay_Sec;                   //Jimmychiu 20220713 for TEMPCTRL_NEED_UNDER_20A delay
-extern bool bAutoRetryFlag;                              //JerryYang 20220901 : ASE-CL pick up error®É§l¨úÅŞ¿è­n§ï§ä§l³Ì¥ª¤W¨¤ªº
+extern bool bAutoRetryFlag;                              //JerryYang 20220901 : ASE-CL pick up erroræ™‚å¸å–é‚è¼¯è¦æ”¹æ‰¾å¸æœ€å·¦ä¸Šè§’çš„
 
 extern AnsiString sSiteLayoutSiteMap;
 extern AnsiString sSiteLayoutASECL;
@@ -5934,13 +5934,13 @@ extern bool iRTCErrorSend;              //wei 20221222 RTC ARM Error
 extern bool bCheckThirdPos;             //wei 20221222 RTC ARM Error
 
 extern bool bWaitSECS;                                                           //KevinCheng 20250922 : Wait SECS
-extern bool bEject;                                                             //JerryYang 20251020 : ´ë±ç¥b²M¾÷¥\¯à
-extern bool bNeedEject[MAX_AUTO_TRAY];                                          //JerryYang 20251020 : ´ë±ç¥b²M¾÷¥\¯à
-extern bool bPurgeOutAllDevice;                                                 //JerryYang 20251020 : ´ë±ç¥b²M¾÷¥\¯à
+extern bool bEject;                                                             //JerryYang 20251020 : æ¸ æ¢åŠæ¸…æ©ŸåŠŸèƒ½
+extern bool bNeedEject[MAX_AUTO_TRAY];                                          //JerryYang 20251020 : æ¸ æ¢åŠæ¸…æ©ŸåŠŸèƒ½
+extern bool bPurgeOutAllDevice;                                                 //JerryYang 20251020 : æ¸ æ¢åŠæ¸…æ©ŸåŠŸèƒ½
 
-extern bool bNeedAMRMagazineUnload;                                             //Eastsun 20260515 : ¾ã¦X
-extern bool bAMRMagazineAutoReceive;                                            //Eastsun 20260515 : ¾ã¦X
+extern bool bNeedAMRMagazineUnload;                                             //Eastsun 20260515 : æ•´åˆ
+extern bool bAMRMagazineAutoReceive;                                            //Eastsun 20260515 : æ•´åˆ
 
-extern bool bAutoChangingWarn[3];                                               //Eastsun 20260513 :[0]=Auto1, [1]=Auto2, [2]=Auto3 ºX¼Ğ
-extern int  iAutoColorBak[3];                                                   //Eastsun 20260513 :­ìÃC¦â¥N½XÁÙ­ì³Æ¥÷ (0~4 ¹ïÀ³ ColorMap)
+extern bool bAutoChangingWarn[3];                                               //Eastsun 20260513 :[0]=Auto1, [1]=Auto2, [2]=Auto3 æ——æ¨™
+extern int  iAutoColorBak[3];                                                   //Eastsun 20260513 :åŸé¡è‰²ä»£ç¢¼é‚„åŸå‚™ä»½ (0~4 å°æ‡‰ ColorMap)
 extern int  iATC_RecipeFileTransfer;                                            //Eastsun 20260522 add: ATC Recipe FileTransfer state

@@ -2,7 +2,7 @@
 #include "vclcompat/vcl_compat.h"   //AI(W0-TAIL) 20260626: neutralize __fastcall
 #include <windows.h>                 //AI(W0-TAIL) 20260626: QueryPerformanceCounter/Frequency
 #include "MachineType.h"             //AI(W0-TAIL) 20260626: ChangeToFloatNonPcnt template
-//was-MachineDefine.h                                                      //Dell ±N.h²Î¤@,¥i¥[³tbuild
+//was-MachineDefine.h                                                      //Dell å°‡.hçµ±ä¸€,å¯åŠ é€Ÿbuild
 //AI(W0-TAIL) 20260626: dropped #pragma hdrstop
 
 #include "myTimer.h"
@@ -22,7 +22,7 @@ TLargeInteger TQPF_Timer::CalibratePerformanceCounterOverhead()
     for (int i=1; i<=1000; i++)
         QueryPerformanceCounter(&rEnd);
 
-    // ¨ú±o¨C¦¸©I¥s QueryPerformanceCounter ¨ç¦¡©Òªá¶O®É¶¡¤§¥­§¡­È
+    // å–å¾—æ¯æ¬¡å‘¼å« QueryPerformanceCounter å‡½å¼æ‰€èŠ±è²»æ™‚é–“ä¹‹å¹³å‡å€¼
     TLargeInteger r;
     r.QuadPart=rEnd.QuadPart-rStart.QuadPart;
     r.QuadPart/=1000;
@@ -31,15 +31,15 @@ TLargeInteger TQPF_Timer::CalibratePerformanceCounterOverhead()
 //---------------------------------------------------------------------------
 void TQPF_Timer::On()
 {
-    // ¶i¤J°j°é«e¨ú±o¶}©l­p¼Æ­È
+    // é€²å…¥è¿´åœˆå‰å–å¾—é–‹å§‹è¨ˆæ•¸å€¼
     QueryPerformanceCounter(&rStart);
-    QueryPerformanceCounter(&rStartDelay);                                      // ¨ú±o¥Ø«e­p¼Æ­È
+    QueryPerformanceCounter(&rStartDelay);                                      // å–å¾—ç›®å‰è¨ˆæ•¸å€¼
     rEnd.QuadPart=rSetTime.QuadPart+rStart.QuadPart-PerformanceCounterOverhead.QuadPart-PerformanceCounterOverhead.QuadPart;
 }
 //---------------------------------------------------------------------------
 bool TQPF_Timer::Off()
 {
-    QueryPerformanceCounter(&rFreq);                                            // ¨ú±o¥Ø«e­p¼Æ­È
+    QueryPerformanceCounter(&rFreq);                                            // å–å¾—ç›®å‰è¨ˆæ•¸å€¼
     return (rFreq.QuadPart>=rEnd.QuadPart);
 }
 //---------------------------------------------------------------------------
@@ -108,13 +108,13 @@ int TQPF_Timer::LatchCycleTimeSec(bool Start)
     int itmp=0;
     if(Start)
     {
-        QueryPerformanceCounter(&rStartDelay);                                  // ¨ú±o¥Ø«e­p¼Æ­È
+        QueryPerformanceCounter(&rStartDelay);                                  // å–å¾—ç›®å‰è¨ˆæ•¸å€¼
     }
     else
     {
-        QueryPerformanceCounter(&rEndDelay);                                    // ¨ú±o¥Ø«e­p¼Æ­È
+        QueryPerformanceCounter(&rEndDelay);                                    // å–å¾—ç›®å‰è¨ˆæ•¸å€¼
         QueryPerformanceFrequency(&rFreq);
-        itmp=ChangeToFloatNonPcnt((double)((rEndDelay.QuadPart-rStartDelay.QuadPart)), (double)(rFreq.QuadPart));       //Steven 20191016 : ­×¥¿
+        itmp=ChangeToFloatNonPcnt((double)((rEndDelay.QuadPart-rStartDelay.QuadPart)), (double)(rFreq.QuadPart));       //Steven 20191016 : ä¿®æ­£
     }
 
     return itmp;
@@ -125,11 +125,11 @@ int TQPF_Timer::LatchCycleTime(bool Start)
     int itmp=0;
     if(Start)
     {
-        QueryPerformanceCounter(&rStartDelay);                                  // ¨ú±o¥Ø«e­p¼Æ­È
+        QueryPerformanceCounter(&rStartDelay);                                  // å–å¾—ç›®å‰è¨ˆæ•¸å€¼
     }
     else
     {
-        QueryPerformanceCounter(&rEndDelay);                                    // ¨ú±o¥Ø«e­p¼Æ­È
+        QueryPerformanceCounter(&rEndDelay);                                    // å–å¾—ç›®å‰è¨ˆæ•¸å€¼
         QueryPerformanceFrequency(&rFreq);
         itmp=ChangeToFloatNonPcnt((double)((rEndDelay.QuadPart-rStartDelay.QuadPart)*1000), (double)(rFreq.QuadPart));
     }
@@ -137,16 +137,16 @@ int TQPF_Timer::LatchCycleTime(bool Start)
     return itmp;
 }
 //---------------------------------------------------------------------------
-int TQPF_Timer::LatchCycleTimeUS(bool Start)                                    //Steven 20180808 (wei) : TTLªº®É¶¡³æ¦ì§ï¦¨microsecond
+int TQPF_Timer::LatchCycleTimeUS(bool Start)                                    //Steven 20180808 (wei) : TTLçš„æ™‚é–“å–®ä½æ”¹æˆmicrosecond
 {
     int itmp=0;
     if(Start)
     {
-        QueryPerformanceCounter(&rStartDelay);                                  // ¨ú±o¥Ø«e­p¼Æ­È
+        QueryPerformanceCounter(&rStartDelay);                                  // å–å¾—ç›®å‰è¨ˆæ•¸å€¼
     }
     else
     {
-        QueryPerformanceCounter(&rEndDelay);                                    // ¨ú±o¥Ø«e­p¼Æ­È
+        QueryPerformanceCounter(&rEndDelay);                                    // å–å¾—ç›®å‰è¨ˆæ•¸å€¼
         QueryPerformanceFrequency(&rFreq);
         itmp=ChangeToFloatNonPcnt((double)((rEndDelay.QuadPart-rStartDelay.QuadPart)*1000000), (double)(rFreq.QuadPart));
     }

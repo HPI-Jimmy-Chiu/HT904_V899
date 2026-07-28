@@ -71,6 +71,15 @@
 
 9. **測試崩潰會彈 modal 對話框、卡死整批 ctest 並洗版使用者螢幕（2026-07-28 踩過，已加防護）**：一個 agent 用 **MSVC Debug CRT** configure+build 全樹後跑 `ctest -j4`，跑到 **94/95 就無限停住**——因為 Debug CRT 的 `assert()`／`_CrtDbg` 失敗會彈出 modal「Debug Assertion Failed!」對話框等人按確定。**致命之處在於它不寫 log**：ctest log 看起來只是「卡在最後一支」，完全看不出是在等互動，而使用者螢幕同時被彈窗洗版。這不是 MSVC 專屬——MinGW 下的硬崩潰（access violation、`STATUS_STACK_OVERFLOW`，本專案兩種都真的發生過，見 DEVLOG 2026-07-27）會彈 Windows 錯誤回報視窗，同樣會 block。**已加兩道防護（勿移除）**：(a) `tests/test_bootstrap.cpp`——透過 `tests/CMakeLists.txt` 最上方的 `ht9045_test_bootstrap` INTERFACE library 編進**每一個** test 執行檔，static init 階段呼叫 `SetErrorMode(SEM_FAILCRITICALERRORS|SEM_NOGPFAULTERRORBOX|SEM_NOOPENFILEERRORBOX)`，MSVC 另加 `_CrtSetReportMode/_CrtSetReportFile`(→stderr)、`_set_abort_behavior(0,...)`、`_set_invalid_parameter_handler`；(b) 同檔最下方對全部 95 個 test 設 `TIMEOUT 600`。**刻意用 INTERFACE library 而非 static library**——只含 static initializer 的 object 檔會被 linker 當成沒人引用而丟掉。防護**不會遮蔽失敗**：測試照樣失敗，只是改成立刻在 stderr 大聲失敗（實測 null-deref 立即 exit 139、零彈窗、沒吃到 timeout），而不是無聲阻塞。**衍生紀律**：任何在背景／平行 agent 裡執行的程式，都不可以有能彈 modal 視窗的路徑——那會綁架使用者的機器，而且從 log 上完全看不出原因。
 
+10. **在散文/註解裡引用「ported 樹」的行號會腐爛，而且是本專案審查發現的最大單一來源（2026-07-28/29 反覆踩到，已定紀律）**：連續三輪修正波次（審查 15 項 → 修完又冒 11 項 → 再修完又冒 13 項）中，**絕大多數新發現都是同一種**：某段新寫的註解／docstring 引用了 ported 樹的某個 `檔案:行號`，而那個行號是錯的、或在寫下的當下就已經被同一次編輯推移掉了。最荒謬的一例：某次修正加了 7 行揭露註解，結果**同一個 pass 自己寫進 `W7-UI-SKIPPED.md` 的 `SCK_ART_Remainder.cpp:1651` 立刻變成 stale**，因為那 7 行把目標往下推了。另一例：某 wave 在 `forms/fMain.h:157` 正確引用 `main.h:543`，卻在 5 行後的 `:162` 把同一個 `:543` 誤用給另一個成員。
+    **根因是結構性的，不是誰不小心**：`golden` 樹是**唯讀且永不改變**，所以引用 golden 的 `檔案:行號` 是穩定資產、值得寫（也是本專案翻譯保真度的核心憑據，必須繼續寫）；但 **ported 樹每一波都在動**，任何指向它的行號從寫下那一刻就開始腐爛，而且沒有任何自動機制會偵測到。
+    **紀律（go-forward）**：
+    - 引用 **golden** → 照舊寫 `檔案:起-迄`，這是必要的，golden 不會變。
+    - 引用 **ported 樹** → **寫符號名稱，不寫行號**（例如「見 `TStringGrid` 上方的 SCOPE 註解」、「見 `RenderLed` 的 flood-seed 推導」），需要更精確就寫「函式名 + 小節標題」。已經有正確示範：`Controls.h` 的 `Down` 修正就是刻意改成「by name rather than by an absolute line number, so it cannot rot」。
+    - 寫「已驗證」「verified this wave」「grepped the whole tree」這類**總括式宣稱前先想清楚它可不可證**——`FormWidgets.h` 就因為掛了一句「本波所有 golden 引用皆已 grep 驗證」，結果其中一條是錯的，整句宣稱反而變成負資產。**寧可不寫總括宣稱，只寫你真的逐條查過的那幾條。**
+    - 派修正波次時，prompt 一律加：「你寫的替代文字必須是你親自查證過的，不要用一個未驗證宣稱換掉另一個」。實測有效但**不足以**擋掉行號腐爛，所以要靠上面的「ported 樹不寫行號」從源頭消除。
+    **另一個相關的教訓（審查建議本身也可能是錯的）**：`LedRender` flood-seed 事件中，第一輪審查的「建議修法」本身誤讀了 golden（沒注意 `FloodFill` 在 `CreateLedBitmap` 內、緊接風格尺寸賦值之後），主迴圈照抄進修正指示，結果造成真迴歸（1,840 個 LED 實例中 262 個偏離，一個實例直接渲染出 0 像素）。**審查的「發現」與「建議修法」要分開對待**：發現通常可信（它是從證據來的），建議修法必須自己重新從 golden 推導一次才能派工。
+
 ## 接縫（HAL）與 64-bit 跨位元
 - 即時硬體（運動/IO/互鎖/ATC）保留 native C++（既有已驗證 wrapper），翻譯後的 C++ **同程序直接呼叫**（無 P/Invoke、無 managed 邊界）。「interface 切割」＝抽象基底 + Sim/Real 子類。
 - **64-bit 跨位元地雷**：若 64-bit Handler 與 **32-bit GPIB 橋**走 WM_COPYDATA，`MessageDef.h` 的 `MV`/`VM` 內嵌 `HWND`(行 259-260) 指標寬度會錯位 → 改 `DWORD`+`HandleToLong` 或移出；扁平 `M_V`(InterfaceSYS.h:222) 才安全。

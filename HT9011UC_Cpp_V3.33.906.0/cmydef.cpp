@@ -9,7 +9,7 @@
 
 // all type program can use
 //----------------------------------------------------------------------------
-//Steven 20091231 : ¾ã¦XAlarmCode
+//Steven 20091231 : æ•´åˆAlarmCode
 //AnsiString InOurArmSuckName[MAX_ARM_Row][MAX_ARM_Col]={{" A", " C", " E", " G"}, {" B", " D", " F", " H"}};
 AnsiString IndexSuckName[4][8]   ={{" Aa", " Ab", " Ac", " Ad", " Ae", " Af", " Ag", " Ah"},
                                    {" Ba", " Bb", " Bc", " Bd", " Be", " Bf", " Bg", " Bh"},
@@ -60,7 +60,7 @@ AnsiString s6ShortTrayName[eTrayCount]={"Auto1", "Auto2", "Auto3", "Auto4", "Aut
                                         "Mag8",   "Mag9",   "Mag10",  "Mag11",  "Mag12",  "Mag13",  "Mag14"};
 
 AnsiString StartModeName[rsmRunModeTotal]={"Continuous Start" , "Initial Start",
-                                           "Re-Test Continuous", "Re-Test Initial Start",           //Steven 20130604 : SCS»¡­n¸òNS¥Î¤@¼Ëªº¦r²´
+                                           "Re-Test Continuous", "Re-Test Initial Start",           //Steven 20130604 : SCSèªªè¦è·ŸNSç”¨ä¸€æ¨£çš„å­—çœ¼
                                            "Site Mapping Check", "QA Mode",
                                            "Continuous EQC" , "Initial EQC",
                                            "Initial_ART","ContinuStart_ART","ContinuRetest_ART",    //ChungHung 20141002 add for KYEC AutoRetest
@@ -68,7 +68,7 @@ AnsiString StartModeName[rsmRunModeTotal]={"Continuous Start" , "Initial Start",
                                            "FIFO Mode",                                             //Steven 20160303 : FIFO Mode
                                            "Initial_MRT","ContinuStart_MRT","Retest_MRT"};   //Ifor 20170316 add KYEC MRT Mode
 
-AnsiString sOEETimeDataName[tdTotal]={"PowerOn",        //0                     //Steven 20231120 : ¬ö¿ı¾÷¥x½[°Ê®É¶¡
+AnsiString sOEETimeDataName[tdTotal]={"PowerOn",        //0                     //Steven 20231120 : ç´€éŒ„æ©Ÿå°ç¨¼å‹•æ™‚é–“
                                       "PowerOff",
                                       "Start",
                                       "Pause",
@@ -86,7 +86,7 @@ AnsiString sOEETimeDataName[tdTotal]={"PowerOn",        //0                     
                                       "InitialStart",   //15
                                       "TrayFeed"};
 
-AnsiString asTempCtrl[tcTotalCount]={"Plate 1", "Plate 2", "SH 1", "SH 2",      //·Å±±¾¹­n¤@°_§ï
+AnsiString asTempCtrl[tcTotalCount]={"Plate 1", "Plate 2", "SH 1", "SH 2",      //æº«æ§å™¨è¦ä¸€èµ·æ”¹
                                      "Head 1/2", "Head 3/4", "Head 5/6", "Head 7/8",
                                      "Dut", "Chamber", "CCD",
                                      "A1", "C1", "E1", "G1",
@@ -94,8 +94,8 @@ AnsiString asTempCtrl[tcTotalCount]={"Plate 1", "Plate 2", "SH 1", "SH 2",      
                                      "A2", "C2", "E2", "G2",
                                      "B2", "D2", "F2", "H2",
                                      "Heat Gun1", "Heat Gun2",
-                                     "DUT1","DUT2","DUT3","DUT4",               //wei 20150213 : fixed·Å«×µe­±Åã¥Ü²§±`
-                                     "I1", "K1", "M1", "O1",                    //Steven 20140923 : Index¨Ï¥ÎEJ1Nª©32²Õ¥[¼ö¾¹
+                                     "DUT1","DUT2","DUT3","DUT4",               //wei 20150213 : fixedæº«åº¦ç•«é¢é¡¯ç¤ºç•°å¸¸
+                                     "I1", "K1", "M1", "O1",                    //Steven 20140923 : Indexä½¿ç”¨EJ1Nç‰ˆ32çµ„åŠ ç†±å™¨
                                      "J1", "L1", "N1", "P1",
                                      "I2", "K2", "M2", "O2",
                                      "J2", "L2", "N2", "P2",
@@ -108,7 +108,7 @@ AnsiString asTempCtrl[tcTotalCount]={"Plate 1", "Plate 2", "SH 1", "SH 2",      
                                      "L/B Top", "L/B Bottom"                    //Frank 20241231 : add
                                     };
 
-int iTempCode[INDEX_HEAT_COUNT]=                                                //Jimmychiu 20230628 : ´î¤ÖDTME¥[¼ö°j°é¦¸¼Æ
+int iTempCode[INDEX_HEAT_COUNT]=                                                //Jimmychiu 20230628 : æ¸›å°‘DTMEåŠ ç†±è¿´åœˆæ¬¡æ•¸
 {
     tcAa1, tcBa1, tcAb1, tcBb1, tcAc1, tcBc1, tcAd1, tcBd1,
     tcAa2, tcBa2, tcAb2, tcBb2, tcAc2, tcBc2, tcAd2, tcBd2,
@@ -117,7 +117,7 @@ int iTempCode[INDEX_HEAT_COUNT]=                                                
 };
 
 const byte MyBitMask[8]={0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80};
-TMyStringList *slEventLog;                                                      //Steven 20161115 : EventLog¦s¦¨¤å¦rÀÉ  //Steven 20200116 : §ï¦¨¥ş°ìÅÜ¼Æ, Á×§KfMain³Q¸Ñºc³y¦¨°O¾ĞÅé²§±`
+TMyStringList *slEventLog;                                                      //Steven 20161115 : EventLogå­˜æˆæ–‡å­—æª”  //Steven 20200116 : æ”¹æˆå…¨åŸŸè®Šæ•¸, é¿å…fMainè¢«è§£æ§‹é€ æˆè¨˜æ†¶é«”ç•°å¸¸
 TMyStringList *sl2DMappingLog;                                                  //JerryYang 20230322 : add 2D mapping result
 TStringList *slBundlID;                                                         //JerryYang 20240318 : add
 TStringList *slDupBundlID;                                                      //JerryYang 20240318 : add
@@ -127,7 +127,7 @@ TStringList *slDupUnloadBundlID;                                                
 //AI(W0-TAIL) 20260626: TODO(W3) -- SaveEventLog uses slEventLog->MySaveToFile()
 //  (TMyStringList, only fwd-declared) + RunInfo.slEventLogFile state.
 #if 0 // TODO(W3): TMyStringList body + RunInfo state
-void SaveEventLog()                                                             //Steven 20200416 : ¾ã¦XEventLog¦sÀÉ
+void SaveEventLog()                                                             //Steven 20200416 : æ•´åˆEventLogå­˜æª”
 {
     slEventLog->MySaveToFile();
     int iCount=RunInfo.slEventLogFile->Count;
@@ -147,7 +147,7 @@ void SaveEventLog()                                                             
 }
 #endif // TODO(W3) SaveEventLog
 //---------------------------------------------------------------------------
-const int CY_PUSH=1;                                                            //Steven 20120822 : ¨S¥Î¨ì,°¨§J±¼
+const int CY_PUSH=1;                                                            //Steven 20120822 : æ²’ç”¨åˆ°,é¦¬å…‹æ‰
 const int CY_POP=2;
 
 const int NULL_IC                   =0;
@@ -168,7 +168,7 @@ const int HAS_OCR_NG                =13;                                        
 const int HAS_OCR_Err               =14;                                        //ChungHung 20120830 add OCR Function
 const int HAS_BARCODEERROR_IC       =16;                                        //Steven 20121009 : Bar Code
 const int HAS_CLEAN_FINSH_IC        =17;                                        //kevin 20130226
-const int HAS_SKIP_IC               =18;                                        //Q_Q 2010.11.08 ²Î¾ã SKIP
+const int HAS_SKIP_IC               =18;                                        //Q_Q 2010.11.08 çµ±æ•´ SKIP
 const int HAS_CASSETTE_EMPTY        =19;                                        //wei 20180702 MR
 const int HAS_CASSETTE_TRAY         =20;                                        //wei 20180702 MR
 const int HAS_CASSETTE_DEVICE       =21;                                        //wei 20180702 MR
@@ -227,8 +227,8 @@ const int TC401   =0;
 const int KT4H    =1;
 const int E5DC    =2;
 const int NoHeater=3;                                                           //Steven 20171227 (Wei) : Add for HT-9045L
-const int DTK4848 =4;                                                           //KaiHuang 20190821 : ·s¼W¥x¹F DTK4848·Å±±¾¹
-int TC401HeaterControl=1;                                                       //Steven 20141030 : ·s¼WOMRON E5DC·Å±±¾¹
+const int DTK4848 =4;                                                           //KaiHuang 20190821 : æ–°å¢å°é” DTK4848æº«æ§å™¨
+int TC401HeaterControl=1;                                                       //Steven 20141030 : æ–°å¢OMRON E5DCæº«æ§å™¨
 
 const int LogicPositive=0;
 const int LogicNegative=1;
@@ -287,7 +287,7 @@ bool SystemStart=false;
 bool fAllMotorHome=false;
 bool SoftStart=false;
 bool SoftStop=false;
-bool bPhysicalStart=false;                                                      //Steven 20141006 : SECS GEM¨Ï¥ÎRemote Start¥\¯à
+bool bPhysicalStart=false;                                                      //Steven 20141006 : SECS GEMä½¿ç”¨Remote StartåŠŸèƒ½
 Word SystemHour=9999, SystemMin=9999, SystemSec=9999, SystemMSec=9999;
 Word SystemYear=9999, SystemMonth=9999, SystemDate;
 Word SystemYearYesterday=9999, SystemMonthYesterday=9999, SystemDateYesterday=9999;
@@ -295,44 +295,44 @@ AnsiString CurrentDir;
 
 bool bDoOCRFunction=false;                                                      //ChungHung 20121002 add OCR Function
 bool bWaitTesterFinish=false;                                                   //ChungHung 20140716 add if testing not finish can not homing
-int  iAMRCoverTray=0;                                                           //Eastsun 20260515 F009 ¾ã¦X: KYEC AMR Cover Tray ­p¼Æ
+int  iAMRCoverTray=0;                                                           //Eastsun 20260515 F009 æ•´åˆ: KYEC AMR Cover Tray è¨ˆæ•¸
 
-AnsiString Com2Buffer;                                                          //Steven 20111028 : §ï¦¨AnsiString
-AnsiString ComOmronBuffer;                                                      //Steven 20120220 : Omron EJ1N·Å±±¾¹
+AnsiString Com2Buffer;                                                          //Steven 20111028 : æ”¹æˆAnsiString
+AnsiString ComOmronBuffer;                                                      //Steven 20120220 : Omron EJ1Næº«æ§å™¨
 bool Com2ReceiveOK=false;
-bool ComOmronReceiveOK=false;                                                   //Steven 20120220 : Omron EJ1N·Å±±¾¹
+bool ComOmronReceiveOK=false;                                                   //Steven 20120220 : Omron EJ1Næº«æ§å™¨
 
-bool bATCInitialFinish=false;                                                   //jou 2012-03-16 ATC Initial §¹¦¨«á¤~¯à¶}©lRead/Write·Å«×­È
+bool bATCInitialFinish=false;                                                   //jou 2012-03-16 ATC Initial å®Œæˆå¾Œæ‰èƒ½é–‹å§‹Read/Writeæº«åº¦å€¼
 int  iATCInitialTask[tcTotalCount];                                             //jou 2012-03-16 ATC Initial Task
 int  iATCProcessTask[tcTotalCount];
 bool bATCWriteCommand[tcTotalCount]={0};                                        //jou 2012-03-16 ATC Write=true / Read=false
-bool bATCReceiveErr[tcTotalCount]={0};                                          //jou 2012-03-16 ATC ¤U«ü¥O¦^¶Ç¿ù»~´ÓErr=true
-bool ComATCReceiveOK[tcTotalCount]={0};                                         //jou 2012-03-16 ATC ¤U«ü¥O«áCOM PORT¦^À³Flag
-double fATCReadBuffer[tcTotalCount]={0};                                        //jou 2012-03-16 ATC ¦^¶Çªº·Å«×­È
-AnsiString asATCErrorString[tcTotalCount];                                      //jou 2012-03-16 ATC Error Ccde¸ê°T¬ö¿ı
+bool bATCReceiveErr[tcTotalCount]={0};                                          //jou 2012-03-16 ATC ä¸‹æŒ‡ä»¤å›å‚³éŒ¯èª¤æ¤Err=true
+bool ComATCReceiveOK[tcTotalCount]={0};                                         //jou 2012-03-16 ATC ä¸‹æŒ‡ä»¤å¾ŒCOM PORTå›æ‡‰Flag
+double fATCReadBuffer[tcTotalCount]={0};                                        //jou 2012-03-16 ATC å›å‚³çš„æº«åº¦å€¼
+AnsiString asATCErrorString[tcTotalCount];                                      //jou 2012-03-16 ATC Error Ccdeè³‡è¨Šç´€éŒ„
 
 int  iOneCycle  =0;
 int  iCleanOut  =0;
-int  iFixOneCycle=0;                                                            //kevin 20130312 onecycle ¨â¤äarmÅı¶}ºû­×
+int  iFixOneCycle=0;                                                            //kevin 20130312 onecycle å…©æ”¯armè®“é–‹ç¶­ä¿®
 
 int  iTrayFeed  =0;
-bool bAMRFullICBin=false;                                                       //a-side cmydef.cpp L5432  //Eastsun 20260515 F011 ¾ã¦X (Phase4-F5T3 KYEC AMR FullTray flag)
-bool bSameSetupFileNoDownload=false;                                            //Eastsun 20260515 F011 ¾ã¦X (Phase4-F4T4 def bSameSetupFileNoDownload)
-AnsiString asColorCoverTrayID="";                                               //Eastsun 20260515 F011 ¾ã¦X (Phase4-F5T2 def asColorCoverTrayID)
+bool bAMRFullICBin=false;                                                       //a-side cmydef.cpp L5432  //Eastsun 20260515 F011 æ•´åˆ (Phase4-F5T3 KYEC AMR FullTray flag)
+bool bSameSetupFileNoDownload=false;                                            //Eastsun 20260515 F011 æ•´åˆ (Phase4-F4T4 def bSameSetupFileNoDownload)
+AnsiString asColorCoverTrayID="";                                               //Eastsun 20260515 F011 æ•´åˆ (Phase4-F5T2 def asColorCoverTrayID)
 int  iHome      =1;
 int  iReset     =0;
 int  iAlarmReset=0;
 
 int  iCatchTrayControlManual=0;
 int  OutArmPlaceToManual=0;
-bool bAtuoTrayICDetectErr=false;                                                //Isaac 20180109 (Steven) : auto123¥i«e¶i«á°h
+bool bAtuoTrayICDetectErr=false;                                                //Isaac 20180109 (Steven) : auto123å¯å‰é€²å¾Œé€€
 bool bLoaderTrayICDetectErr=false;                                              //Sam 20200316 : Loader Detect Tray
 int  HotTime[2][50][50];
-int  iRowOnHotPlate[2][50][50];                                                 //JerryYang 20180718 (wei) : ©ñ®Æ¦Ühot plate°O¿ı§l¼L¦ì¸m
+int  iRowOnHotPlate[2][50][50];                                                 //JerryYang 20180718 (wei) : æ”¾æ–™è‡³hot plateè¨˜éŒ„å¸å˜´ä½ç½®
 bool SystemInitialOK=false;
 int  iHotLineChange=0;
-bool  bOneCycle_BackUp=false;                                                   //ChungHung 20141111 add for SCK junction temp issue  //JerryYang 20161129 iOneCycle_BackUp§ï¦¨bool
-bool  bRS232Delay=false;                                                        //RogerYang 20180901 add ª¿®æ´ò¤fDemo AI CCD Function
+bool  bOneCycle_BackUp=false;                                                   //ChungHung 20141111 add for SCK junction temp issue  //JerryYang 20161129 iOneCycle_BackUpæ”¹æˆbool
+bool  bRS232Delay=false;                                                        //RogerYang 20180901 add çŸ½æ ¼æ¹–å£Demo AI CCD Function
 
 const int  K_RETRY    =0x0001;
 const int  K_SKIP     =0x0002;
@@ -340,22 +340,22 @@ const int  K_CLEAN_OUT=0x0004;
 const int  K_TRAY_FEED=0x0008;
 const int  K_TRAY_END =0x0010;
 const int  K_RESET    =0x0020;
-const int  K_HOME     =0x0040;                                                  //ChungHung HT9045 2011/12/13 //Input pickup device error®É,«ö"retry"Áä,¾÷¥x³£·|¦Û°Êhome
+const int  K_HOME     =0x0040;                                                  //ChungHung HT9045 2011/12/13 //Input pickup device erroræ™‚,æŒ‰"retry"éµ,æ©Ÿå°éƒ½æœƒè‡ªå‹•home
 const int  K_TRAIN    =0x0080;
-const int  K_FIX      =0x0100;                                                  //kevin 20130218 onecycle ¨â¤äarmÅı¶}ºû­×
+const int  K_FIX      =0x0100;                                                  //kevin 20130218 onecycle å…©æ”¯armè®“é–‹ç¶­ä¿®
 const int  K_ONECYCLE =0x0200;                                                  //ChungHung 20140730 add ContinuousFailHaveOneCycle
-const int  K_PAUSE    =0x0400;                                                  //Steven 20150722 : Add«öÁäType - Pause
-const int  K_START    =0x0800;                                                  //Steven 20150722 : Add«öÁäType - Start
+const int  K_PAUSE    =0x0400;                                                  //Steven 20150722 : AddæŒ‰éµType - Pause
+const int  K_START    =0x0800;                                                  //Steven 20150722 : AddæŒ‰éµType - Start
 
-const int  N_INTEGER   =0x0001;                                                 //¥u¦³¾ã¼Æ
-const int  N_DOUBLE    =0x0002;                                                 //¥u¦³¯BÂI¼Æ
-const int  N_NO_SYMBOL =0x0004;                                                 //¨S¦³¯S®í²Å¸¹
-const int  N_PASSWORD  =0x0008;                                                 //±K½X¤å
-const int  N_NO_SPACE  =0x0010;                                                 //µLªÅ¥ÕÁä
-const int  N_UPPERCASE =0x0020;                                                 //¤j¼gÀu¥ı
-const int  N_NO_NUM_PAD=0x0040;                                                 //¤£»İ­n¼Æ¦rÁä
-const int  N_PORT      =0x0080;                                                 //³q°T°ğ
-const int  N_IP_ADDR   =0x0100;                                                 //IP¦ì¸m
+const int  N_INTEGER   =0x0001;                                                 //åªæœ‰æ•´æ•¸
+const int  N_DOUBLE    =0x0002;                                                 //åªæœ‰æµ®é»æ•¸
+const int  N_NO_SYMBOL =0x0004;                                                 //æ²’æœ‰ç‰¹æ®Šç¬¦è™Ÿ
+const int  N_PASSWORD  =0x0008;                                                 //å¯†ç¢¼æ–‡
+const int  N_NO_SPACE  =0x0010;                                                 //ç„¡ç©ºç™½éµ
+const int  N_UPPERCASE =0x0020;                                                 //å¤§å¯«å„ªå…ˆ
+const int  N_NO_NUM_PAD=0x0040;                                                 //ä¸éœ€è¦æ•¸å­—éµ
+const int  N_PORT      =0x0080;                                                 //é€šè¨ŠåŸ 
+const int  N_IP_ADDR   =0x0100;                                                 //IPä½ç½®
 
 bool CheckSystemPower=true;
 
@@ -365,9 +365,9 @@ const int C_TrayY_Fixer                 =1;
 const int C_Auto1Side_Fixer             =2;
 const int C_Auto2Side_Fixer             =3;
 const int C_Auto3Side_Fixer             =4;
-const int C_Auto1_Selector              =5;                                     //Auto 1¤W³»¨T¬û ©Î ¤¤¶¡¤ÀÂ÷
-const int C_Auto2_Selector              =6;                                     //Auto 2¤W³»¨T¬û ©Î ¤¤¶¡¤ÀÂ÷
-const int C_Auto3_Selector              =7;                                     //Auto 3¤W³»¨T¬û ©Î ¤¤¶¡¤ÀÂ÷
+const int C_Auto1_Selector              =5;                                     //Auto 1ä¸Šé ‚æ±½ç¼¸ æˆ– ä¸­é–“åˆ†é›¢
+const int C_Auto2_Selector              =6;                                     //Auto 2ä¸Šé ‚æ±½ç¼¸ æˆ– ä¸­é–“åˆ†é›¢
+const int C_Auto3_Selector              =7;                                     //Auto 3ä¸Šé ‚æ±½ç¼¸ æˆ– ä¸­é–“åˆ†é›¢
 const int C_TrayX_UpDown                =8;
 const int C_EmptyLoaderZ_Select         =9;
 const int C_ColorLoaderZ_Select         =10;
@@ -385,24 +385,24 @@ const int C_Color_Up                    =21;
 const int C_Color_Middle                =22;
 const int C_Empty_Up                    =23;
 const int C_Empty_Middle                =24;
-const int C_TrayVibration               =25;                                    //2011.01.19 Q_Q V207C ºVÀ»¥\¯àªº§ï¼g¡C
-const int C_HotplateVibration           =26;                                    //jou 2011-08-09 Hotplate¤]­nºVºVºV¡C
+const int C_TrayVibration               =25;                                    //2011.01.19 Q_Q V207C æ•²æ“ŠåŠŸèƒ½çš„æ”¹å¯«ã€‚
+const int C_HotplateVibration           =26;                                    //jou 2011-08-09 Hotplateä¹Ÿè¦æ•²æ•²æ•²ã€‚
 const int C_CoolingValve                =27;                                    //20111130  Dell
-const int C_Auto1_Up                    =28;                                    //Auto 1¤W³»¨T¬û
-const int C_Auto2_Up                    =29;                                    //Auto 2¤W³»¨T¬û
-const int C_Auto3_Up                    =30;                                    //Auto 3¤W³»¨T¬û
-const int C_Auto1LoaderZ_Select         =31;                                    //Auto 1¤ÀÂ÷¨T¬û   kevin 20120718 ¥N¸¹¤£¯à§ï
-const int C_Auto2LoaderZ_Select         =32;                                    //Auto 2¤ÀÂ÷¨T¬û
-const int C_Auto3LoaderZ_Select         =33;                                    //Auto 3¤ÀÂ÷¨T¬û
-const int C_Fix1LoaderZ_Select          =34;                                    //Fix 1¤ÀÂ÷¨T¬û   kevin 20120718 ¥N¸¹¤£¯à§ï
-const int C_Fix2LoaderZ_Select          =35;                                    //Fix 2¤ÀÂ÷¨T¬û
-const int C_Fix3LoaderZ_Select          =36;                                    //Fix 3¤ÀÂ÷¨T¬û
+const int C_Auto1_Up                    =28;                                    //Auto 1ä¸Šé ‚æ±½ç¼¸
+const int C_Auto2_Up                    =29;                                    //Auto 2ä¸Šé ‚æ±½ç¼¸
+const int C_Auto3_Up                    =30;                                    //Auto 3ä¸Šé ‚æ±½ç¼¸
+const int C_Auto1LoaderZ_Select         =31;                                    //Auto 1åˆ†é›¢æ±½ç¼¸   kevin 20120718 ä»£è™Ÿä¸èƒ½æ”¹
+const int C_Auto2LoaderZ_Select         =32;                                    //Auto 2åˆ†é›¢æ±½ç¼¸
+const int C_Auto3LoaderZ_Select         =33;                                    //Auto 3åˆ†é›¢æ±½ç¼¸
+const int C_Fix1LoaderZ_Select          =34;                                    //Fix 1åˆ†é›¢æ±½ç¼¸   kevin 20120718 ä»£è™Ÿä¸èƒ½æ”¹
+const int C_Fix2LoaderZ_Select          =35;                                    //Fix 2åˆ†é›¢æ±½ç¼¸
+const int C_Fix3LoaderZ_Select          =36;                                    //Fix 3åˆ†é›¢æ±½ç¼¸
 const int C_Auto2_Middle                =37;                                    //kevin 20120725
-const int C_Shuttle_Knocker_1           =38;                                    //ShuttleºVºV
-const int C_Shuttle_Knocker_2           =39;                                    //ShuttleºVºV
-const int C_InputRotateKIT              =40;                                    //Steven 20121001 : ±ÛÂàKit
-const int C_OutputRotateKIT             =41;                                    //Steven 20121001 : ±ÛÂàKit
-const int C_FixTray_FullPlace           =42;                                    //Steven 20140310 : Fix3º¡½L®ğ¬û
+const int C_Shuttle_Knocker_1           =38;                                    //Shuttleæ•²æ•²
+const int C_Shuttle_Knocker_2           =39;                                    //Shuttleæ•²æ•²
+const int C_InputRotateKIT              =40;                                    //Steven 20121001 : æ—‹è½‰Kit
+const int C_OutputRotateKIT             =41;                                    //Steven 20121001 : æ—‹è½‰Kit
+const int C_FixTray_FullPlace           =42;                                    //Steven 20140310 : Fix3æ»¿ç›¤æ°£ç¼¸
 const int C_DockYAxisOn                 =43;                                    //Steven 20140310 : One Touch Docking
 const int C_DockYAxisOff                =44;                                    //Steven 20140310 : One Touch Docking
 const int C_DockXAxisOn                 =45;                                    //Steven 20140310 : One Touch Docking
@@ -411,15 +411,15 @@ const int C_CatchTray_FixOn             =47;                                    
 const int C_CatchTray_FixOff            =48;                                    //ChungHUng 20140624 : Auto Retest
 const int C_TurnTrayArm                 =49;                                    //ChungHung 20140701 : AutoRetest
 const int C_TurnTrayArmLock             =50;                                    //ChungHung 20140814 : AutoRetest
-const int C_OCRLight_Up                 =51;                                    //wei 20150720 OCRÄ²µo
-const int C_OCRLight_Down               =52;                                    //wei 20150720 OCRÄ²µo
+const int C_OCRLight_Up                 =51;                                    //wei 20150720 OCRè§¸ç™¼
+const int C_OCRLight_Down               =52;                                    //wei 20150720 OCRè§¸ç™¼
 const int C_SLK1_Clamp                  =53;                                    //JerryYang 20160524
 const int C_SLK1_Unclamp                =54;                                    //JerryYang 20160524
 const int C_SLK2_Clamp                  =55;                                    //JerryYang 20160524
 const int C_SLK2_Unclamp                =56;                                    //JerryYang 20160524
 const int C_Socket_Clamp                =57;                                    //JerryYang 20160524
 const int C_Socket_Unclamp              =58;                                    //JerryYang 20160524
-const int C_LoaderUpPress               =59;                                    //JerryYang 20181120 (Steven) : (Steven) : ¿W¥ß±±¨îloaderÀ£tray
+const int C_LoaderUpPress               =59;                                    //JerryYang 20181120 (Steven) : (Steven) : ç¨ç«‹æ§åˆ¶loaderå£“tray
 
 const int C_HingeLookOn                 =60;                                    //wei 20170418 Hinge cassette
 const int C_HingeLookOff                =61;                                    //wei 20170418 Hinge cassette
@@ -448,9 +448,9 @@ const int C_StackedTrayLockOff          =75;                                    
 const int C_LoadRobotX                  =75;                                    //Sam 20190112 LM
 const int C_UnloadRobotX                =76;                                    //Sam 20190112 LM
 
-const int C_Auto1UpPress                =77;                                    //JerryYang 20190423 ·s¼WunloaderÀ£tray
-const int C_Auto2UpPress                =78;                                    //JerryYang 20190423 ·s¼WunloaderÀ£tray
-const int C_Auto3UpPress                =79;                                    //JerryYang 20190423 ·s¼WunloaderÀ£tray
+const int C_Auto1UpPress                =77;                                    //JerryYang 20190423 æ–°å¢unloaderå£“tray
+const int C_Auto2UpPress                =78;                                    //JerryYang 20190423 æ–°å¢unloaderå£“tray
+const int C_Auto3UpPress                =79;                                    //JerryYang 20190423 æ–°å¢unloaderå£“tray
 
 const int C_InFlipper1                  =80;                                    //Frank 20210612 : Flipper Function //==>
 const int C_InFlipper1Lock              =81;
@@ -476,7 +476,7 @@ const int C_TeachGlassUp                =98;
 const int C_Shuttle1Precisor            =99;
 const int C_Shuttle2Precisor            =100;
 
-const int C_MultileEmptyY_On            =101;                                   //KaiChen 20200716 ¡GOHT ==>
+const int C_MultileEmptyY_On            =101;                                   //KaiChen 20200716 ï¼šOHT ==>
 const int C_MultileEmptyY_Off           =102;
 
 const int C_MultileEmptyCatch_On        =103;
@@ -495,7 +495,7 @@ const int C_TrayBracket2UpOff           =111;
 const int C_MultileEmptyLock            =112;
 
 const int C_TrayBracketOpen2On          =113;
-const int C_TrayBracketOpen2Off         =114;                                   //KaiChen 20200716 ¡GOHT <==
+const int C_TrayBracketOpen2Off         =114;                                   //KaiChen 20200716 ï¼šOHT <==
 
 const int C_CSTHoldDown                 =115;
 const int C_CSTHoldDown2                =116;
@@ -504,7 +504,7 @@ const int C_LoaderCarEdgePush           =117;                                   
 const int C_InAreaAlignment             =118;                                   //ChungHung 20210113 add for Alignment CCD    //KenHsieh 20210813 : add CCD AUTO ALIGNMENT
 const int C_OutAreaAlignment            =119;                                   //ChungHung 20210113 add for Alignment CCD     //KenHsieh 20210813 : add CCD AUTO ALIGNMENT
 const int C_PlacementArm                =120;                                   //JimmyChiu 20220908 add Pickup Error Placement
-const int C_TesterSidePush              =121;                                   //Richard 20220321 : ´ë±çSide Push
+const int C_TesterSidePush              =121;                                   //Richard 20220321 : æ¸ æ¢Side Push
 
 const int C_Load2CasstteLock            =122;
 const int C_Load2_Middle                =123;
@@ -613,24 +613,24 @@ const int C_Auto3PushBack_Back          =203;
 const int C_Auto4Side_Fixer             =204;                                   //Steven 20230907 : For HT-9011UC //==>
 const int C_Auto5Side_Fixer             =205;
 const int C_Auto6Side_Fixer             =206;
-const int C_Auto4_Selector              =207;                                   //Auto 4¤W³»¨T¬û ©Î ¤¤¶¡¤ÀÂ÷
-const int C_Auto5_Selector              =208;                                   //Auto 5¤W³»¨T¬û ©Î ¤¤¶¡¤ÀÂ÷
-const int C_Auto6_Selector              =209;                                   //Auto 6¤W³»¨T¬û ©Î ¤¤¶¡¤ÀÂ÷
+const int C_Auto4_Selector              =207;                                   //Auto 4ä¸Šé ‚æ±½ç¼¸ æˆ– ä¸­é–“åˆ†é›¢
+const int C_Auto5_Selector              =208;                                   //Auto 5ä¸Šé ‚æ±½ç¼¸ æˆ– ä¸­é–“åˆ†é›¢
+const int C_Auto6_Selector              =209;                                   //Auto 6ä¸Šé ‚æ±½ç¼¸ æˆ– ä¸­é–“åˆ†é›¢
 const int C_Auto4EdgePush               =210;
 const int C_Auto5EdgePush               =211;
 const int C_Auto6EdgePush               =212;
-const int C_Auto4_Up                    =213;                                   //Auto 4¤W³»¨T¬û
-const int C_Auto5_Up                    =214;                                   //Auto 5¤W³»¨T¬û
-const int C_Auto6_Up                    =215;                                   //Auto 6¤W³»¨T¬û
-const int C_Auto4LoaderZ_Select         =216;                                   //Auto 4¤ÀÂ÷¨T¬û
-const int C_Auto5LoaderZ_Select         =217;                                   //Auto 5¤ÀÂ÷¨T¬û
-const int C_Auto6LoaderZ_Select         =218;                                   //Auto 6¤ÀÂ÷¨T¬û
-const int C_Fix4LoaderZ_Select          =219;                                   //Fix 4¤ÀÂ÷¨T¬û
-const int C_Fix5LoaderZ_Select          =220;                                   //Fix 5¤ÀÂ÷¨T¬û
-const int C_Fix6LoaderZ_Select          =221;                                   //Fix 6¤ÀÂ÷¨T¬û
-const int C_Auto4UpPress                =222;                                   //Auto 4unloaderÀ£tray
-const int C_Auto5UpPress                =223;                                   //Auto 5unloaderÀ£tray
-const int C_Auto6UpPress                =224;                                   //Auto 6unloaderÀ£tray
+const int C_Auto4_Up                    =213;                                   //Auto 4ä¸Šé ‚æ±½ç¼¸
+const int C_Auto5_Up                    =214;                                   //Auto 5ä¸Šé ‚æ±½ç¼¸
+const int C_Auto6_Up                    =215;                                   //Auto 6ä¸Šé ‚æ±½ç¼¸
+const int C_Auto4LoaderZ_Select         =216;                                   //Auto 4åˆ†é›¢æ±½ç¼¸
+const int C_Auto5LoaderZ_Select         =217;                                   //Auto 5åˆ†é›¢æ±½ç¼¸
+const int C_Auto6LoaderZ_Select         =218;                                   //Auto 6åˆ†é›¢æ±½ç¼¸
+const int C_Fix4LoaderZ_Select          =219;                                   //Fix 4åˆ†é›¢æ±½ç¼¸
+const int C_Fix5LoaderZ_Select          =220;                                   //Fix 5åˆ†é›¢æ±½ç¼¸
+const int C_Fix6LoaderZ_Select          =221;                                   //Fix 6åˆ†é›¢æ±½ç¼¸
+const int C_Auto4UpPress                =222;                                   //Auto 4unloaderå£“tray
+const int C_Auto5UpPress                =223;                                   //Auto 5unloaderå£“tray
+const int C_Auto6UpPress                =224;                                   //Auto 6unloaderå£“tray
 const int C_Auto4CasstteLock            =225;
 const int C_Auto5CasstteLock            =226;
 const int C_Auto6CasstteLock            =227;
@@ -689,10 +689,10 @@ const int C_OutShuttle1Floodgate        =278;                                   
 const int C_OutShuttle2Floodgate        =279;                                   //Ifor 20240620 add:Out Shuttle Floodgate
 const int C_LoadCarRFIDRotArmD          =280;                                   //RogerYang 20250828 add for Loader Rotate Arm
 const int C_LoadCarRFIDRotArmU          =281;                                   //RogerYang 20250828 add for Loader Rotate Arm
-const int C_LoadTrayDetD                =282;                                   //RogerYang 20250828 add for ´İ®ÆÀË®ğ¬û
-const int C_LoadTrayDetU                =283;                                   //RogerYang 20250828 add for ´İ®ÆÀË®ğ¬û
-const int C_LoadTrayDetF                =284;                                   //RogerYang 20250828 add for ´İ®ÆÀË®ğ¬û
-const int C_LoadTrayDetB                =285;                                   //RogerYang 20250828 add for ´İ®ÆÀË®ğ¬û
+const int C_LoadTrayDetD                =282;                                   //RogerYang 20250828 add for æ®˜æ–™æª¢æ°£ç¼¸
+const int C_LoadTrayDetU                =283;                                   //RogerYang 20250828 add for æ®˜æ–™æª¢æ°£ç¼¸
+const int C_LoadTrayDetF                =284;                                   //RogerYang 20250828 add for æ®˜æ–™æª¢æ°£ç¼¸
+const int C_LoadTrayDetB                =285;                                   //RogerYang 20250828 add for æ®˜æ–™æª¢æ°£ç¼¸
 const int C_FixedSeatTL                 =286;                                   //Jimmychiu 20240322 : Top & Bottom Inspect
 const int C_FixedSeatTR                 =287;
 const int C_FixedSeatBL                 =288;
@@ -702,11 +702,11 @@ const int C_TopBtmRotateLock            =290;
 const int C_LoaderCarrier               =291;                                   //Ifor 20251216 add:Boat Carrier
 const int C_Auto1Carrier                =292;                                   //Ifor 20251216 add:Boat Carrier
 const int C_Auto2Carrier                =293;                                   //Ifor 20251216 add:Boat Carrier
-const int C_DailyCorrelation            =294;    //KaiChen 20200525 ¡GDaily Correlation Function
+const int C_DailyCorrelation            =294;    //KaiChen 20200525 ï¼šDaily Correlation Function
 
-//#define MaxCylinderItem 295  <-- °O±o¥h§ï!!
+//#define MaxCylinderItem 295  <-- è¨˜å¾—å»æ”¹!!
 
-int CynNeedHome[CynForHome]={   C_Load_Up,          C_Load_Middle,      C_TrayZ_Selector,       C_TrayY_Fixer,       C_LoaderEdgePush,       // 0~ 4    //Steven 20240123 : §ï¥Îenable½T»{®ğ¬û¬O§_­n´_Âk
+int CynNeedHome[CynForHome]={   C_Load_Up,          C_Load_Middle,      C_TrayZ_Selector,       C_TrayY_Fixer,       C_LoaderEdgePush,       // 0~ 4    //Steven 20240123 : æ”¹ç”¨enableç¢ºèªæ°£ç¼¸æ˜¯å¦è¦å¾©æ­¸
                                 C_Empty_Up,         C_Empty_Middle,     C_EmptyLoaderZ_Select,  C_Empty_Fix,         C_EmptyEdgePush,        // 5~ 9
                                 C_Color_Up,         C_Color_Middle,     C_ColorLoaderZ_Select,  C_Color_Fix,         C_ColorEdgePush,        //10~14
                                 C_Auto1_Up,         C_Auto1_Selector,   C_Auto1LoaderZ_Select,  C_Auto1Side_Fixer,   C_Auto1EdgePush,        //15~19
@@ -722,7 +722,7 @@ int CynNeedHome[CynForHome]={   C_Load_Up,          C_Load_Middle,      C_TrayZ_
                                 C_Load2Separate,    C_EmptySeparate,    C_ColorSeparate,        C_Auto1Separate     ,C_Auto2Separate,        //65~69    //RogerYang 20250722 Add for 9046AU
                                 C_Auto3Separate,    C_Auto4Separate,    C_Auto5Separate,        C_Auto6Separate                              //70~74    //RogerYang 20250722 Add for 9046AU
                             };
-//#define CynForHome 74       <-- °O±o¥h§ï!!
+//#define CynForHome 74       <-- è¨˜å¾—å»æ”¹!!
 
 //Steven 20230907 : For HT-9011UC
 //==>
@@ -753,7 +753,7 @@ AnsiString sJAM1111     [MAX_AUTO_TRAY]={"JAM1111", "JAM1211", "JAM1311", "JAM25
 AnsiString sJAM1112     [MAX_AUTO_TRAY]={"JAM1112", "JAM1212", "JAM1312", "JAM2512", "JAM2612", "JAM2712"};
 AnsiString sJAM1113     [MAX_AUTO_TRAY]={"JAM1113", "JAM1213", "JAM1313", "JAM2513", "JAM2613", "JAM2713"};
 AnsiString sJAM1114     [MAX_AUTO_TRAY]={"JAM1114", "JAM1214", "JAM1314", "JAM2514", "JAM2614", "JAM2714"};
-AnsiString sJAM1158     [MAX_AUTO_TRAY]={"JAM1158", "JAM1258", "JAM1358", "JAM2558", "JAM2658", "JAM2758"};  //AI(general) 20260323 (RogerYang) : UpSafe sensor ¥¼¨ì¦ì5¬í Alarm
+AnsiString sJAM1158     [MAX_AUTO_TRAY]={"JAM1158", "JAM1258", "JAM1358", "JAM2558", "JAM2658", "JAM2758"};  //AI(general) 20260323 (RogerYang) : UpSafe sensor æœªåˆ°ä½5ç§’ Alarm
 AnsiString sWAR1116     [MAX_AUTO_TRAY]={"WAR1116", "WAR1216", "WAR1316", "WAR2516", "WAR2616", "WAR2716"};
 AnsiString sMES1117     [MAX_AUTO_TRAY]={"MES1117", "MES1217", "MES1317", "MES2517", "MES2617", "MES2717"};
 AnsiString sMES1120     [MAX_AUTO_TRAY]={"MES1120", "MES1220", "MES1320", "MES2520", "MES2620", "MES2720"};
@@ -774,7 +774,7 @@ int iAutoPush           [MAX_TRACK]={C_LoaderPushBack_Push, C_EmptyPushBack_Push
 
 int C_FixLoaderZ_Select [MAX_FIX_TRAY]={C_Fix1LoaderZ_Select,  C_Fix2LoaderZ_Select,  C_Fix3LoaderZ_Select,  C_Fix4LoaderZ_Select,  C_Fix5LoaderZ_Select,  C_Fix6LoaderZ_Select  };
 AnsiString sMES1712     [MAX_FIX_TRAY]={"MES1712", "MES1812", "MES1912", "MES2812", "MES2912", "MES3012"};
-AnsiString sMES1713     [MAX_FIX_TRAY]={"MES1713", "MES1813", "MES1913", "MES2813", "MES2913", "MES3013"};   //RogerYang 20250626 °¶´ú¤£¥i½Æ´úbin¥\¯à
+AnsiString sMES1713     [MAX_FIX_TRAY]={"MES1713", "MES1813", "MES1913", "MES2813", "MES2913", "MES3013"};   //RogerYang 20250626 å‰æ¸¬ä¸å¯è¤‡æ¸¬binåŠŸèƒ½
 AnsiString sMES1720     [MAX_FIX_TRAY]={"MES1720", "MES1820", "MES1920", "MES2820", "MES2920", "MES3020"};
 AnsiString sMES1721     [MAX_FIX_TRAY]={"MES1721", "MES1821", "MES1921", "MES2821", "MES2921", "MES3021"};
 AnsiString sWAR1722     [MAX_FIX_TRAY]={"WAR1722", "WAR1822", "WAR1922", "WAR2822", "WAR2922", "WAR3022"};
@@ -978,13 +978,13 @@ const int SnCatchTrayFix2On         =146;
 const int SnSafeLock                =147;
 
 const int SnFPLevelOpe              =148;
-const int SnFPLevelEng              =149;                                       //Steven 20190503 : «ü¯¾¿ëÃÑÅv­­
+const int SnFPLevelEng              =149;                                       //Steven 20190503 : æŒ‡ç´‹è¾¨è­˜æ¬Šé™
 const int SnFPLevelSup              =150;
 const int SnFPLevelHon              =151;
 
 const int SnIndexHeaterFan          =152;
 const int SnHeaterDoor2             =153;
-const int SnHeaterDoor3             =154;                                       //Steven 20191016 : For ATC3.3, ­n²Ä¤T­Ó¥[¼öªù
+const int SnHeaterDoor3             =154;                                       //Steven 20191016 : For ATC3.3, è¦ç¬¬ä¸‰å€‹åŠ ç†±é–€
 
 const int SnAuto1TrackDetect        =155;
 const int SnAuto2TrackDetect        =156;
@@ -1058,11 +1058,11 @@ const int SnRTCCDTempCtrl           =208;
 //---------------------------------------
 const int SnUnLoaderFloating        =209;
 
-const int SnRotateCheck             =210;                                       //ChungHung 20110922 : ÂàÂà½¼ÀY­nÀË¬d¦³¨S¦³ÂàÀY Check Sensor
+const int SnRotateCheck             =210;                                       //ChungHung 20110922 : è½‰è½‰è¦é ­è¦æª¢æŸ¥æœ‰æ²’æœ‰è½‰é ­ Check Sensor
 const int SnCheckConnectIndexArm_1  =210;
 const int SnCheckConnectIndexArm_2  =211;
 
-const int SnFixFloating1            =212;                                       //Steven 20120131 : Fix Tray¸m°¾°»´ú
+const int SnFixFloating1            =212;                                       //Steven 20120131 : Fix Trayç½®ååµæ¸¬
 const int SnFixFloating2            =213;
 
 const int SnATCAlarm1               =214;                                       //jou 2012-03-13 ATC Alarm 1 Sensor
@@ -1093,9 +1093,9 @@ const int SnAutoDockingOn           =235;                                       
 
 const int SnTesterDocking           =236;                                       //jou 2012-09-13 Tester Docking
 const int SnTrain                   =237;                                       //ChungHung 20120911 add
-const int SnFix3FullPlace           =238;                                       //Steven 20121020 : Fix3º¡½L
+const int SnFix3FullPlace           =238;                                       //Steven 20121020 : Fix3æ»¿ç›¤
 
-const int SnIonFanPower01           =239;                                       //Steven 20130201 : KasugaÂ÷¤l­·®°¹q·½°»´ú
+const int SnIonFanPower01           =239;                                       //Steven 20130201 : Kasugaé›¢å­é¢¨æ‰‡é›»æºåµæ¸¬
 const int SnIonFanPower02           =240;
 const int SnIonFanPower03           =241;
 const int SnIonFanPower04           =242;
@@ -1119,7 +1119,7 @@ const int SnSocket6                 =257;                                       
 const int SnSocket7                 =258;                                       //kevin 20130429  socket sensor
 const int SnSocket8                 =259;                                       //kevin 20130429  socket sensor
 
-const int SnSocket9                 =260;                                       //Steven 20200610 : Socket sensor §ï¦¨16Áû
+const int SnSocket9                 =260;                                       //Steven 20200610 : Socket sensor æ”¹æˆ16é¡†
 const int SnSocket10                =261;
 const int SnSocket11                =262;
 const int SnSocket12                =263;
@@ -1128,7 +1128,7 @@ const int SnSocket14                =265;
 const int SnSocket15                =266;
 const int SnSocket16                =267;
 
-const int SnServo                   =268;                                       //kevin 20140121 °»´úservo  on °T¸¹
+const int SnServo                   =268;                                       //kevin 20140121 åµæ¸¬servo  on è¨Šè™Ÿ
 const int SnAutoTeach               =269;                                       //kevin 201400512 AUTOTEACH IN/OUT ARM SENSOR
 const int SnEOF1                    =270;                                       //2014-03-04    Dell    for SPIL WLP Add 5S Inspection
 const int SnEOF2                    =271;                                       //2014-03-04    Dell    for SPIL WLP Add 5S Inspection
@@ -1148,10 +1148,10 @@ const int SnLoaderColorTrayDetect   =282;                                       
 const int SnEmptyColorTrayDetect    =283;                                       //20140903 wei colcr Tray
 const int SnColorColorTrayDetect    =284;                                       //20140903 wei colcr Tray
 
-const int SnGroundMan               =285;                                       //wei 20150424 add SnGroundMan°»´ú
-const int SnOCRTigger               =286;                                       //wei 20150720 OCRÄ²µo
-const int SnLowSpeed                =287;                                       //wei 20150720 OCRÄ²µo
-const int SnOCRPosition             =288;                                       //wei 20150720 OCRÄ²µo
+const int SnGroundMan               =285;                                       //wei 20150424 add SnGroundManåµæ¸¬
+const int SnOCRTigger               =286;                                       //wei 20150720 OCRè§¸ç™¼
+const int SnLowSpeed                =287;                                       //wei 20150720 OCRè§¸ç™¼
+const int SnOCRPosition             =288;                                       //wei 20150720 OCRè§¸ç™¼
 const int SnLoaderTrayHasTray_ART   =289;                                       //wei 20151210
 const int SnSLK1UnclampButton       =290;                                       //JerryYang 20160524
 const int SnSLK2UnclampButton       =291;                                       //JerryYang 20160524
@@ -1163,7 +1163,7 @@ const int SnSocketHasClamp1         =296;                                       
 const int SnSocketHasClamp2         =297;                                       //JerryYang 20160606
 
 //------------------------------------
-//Steven 20161011 : TTL¤ä´©8Site
+//Steven 20161011 : TTLæ”¯æ´8Site
 //------------------------------------
 const int SenBit20                  =298;
 const int SenBit21                  =299;
@@ -1186,7 +1186,7 @@ const int SenBit37                  =315;
 const int SenBit38                  =316;
 const int SenBit39                  =317;
 //------------------------------------
-//RogerYang 20161212 (Steven) : °»´úSLK¿W¥ß¥[¼ö©Î¦@¥Î¥[¼ö
+//RogerYang 20161212 (Steven) : åµæ¸¬SLKç¨ç«‹åŠ ç†±æˆ–å…±ç”¨åŠ ç†±
 //------------------------------------
 const int SnIndex1Connect1          =318;
 const int SnIndex1Connect2          =319;
@@ -1201,7 +1201,7 @@ const int SnAuto1IsPreAlarm         =326;                                       
 const int SnAuto2IsPreAlarm         =327;                                       //wei 20170802 Pre alarm sensor
 const int SnAuto3IsPreAlarm         =328;                                       //wei 20170802 Pre alarm sensor
 const int SnTrayArmSafePos          =329;                                       //kevin 20171006 (wei) Home tray arm must on
-const int SnNegativePressureAir2    =330;                                       //Sam 20171110 (Steven) : ·s¼W®ğÀ£ Sensor
+const int SnNegativePressureAir2    =330;                                       //Sam 20171110 (Steven) : æ–°å¢æ°£å£“ Sensor
 const int SnTJCurrent               =331;                                       //Steven 20180124 : Check ATC7.0 TJ Current
 
 const int SnHingeTopTray            =332;                                       //wei 20170418 Hinge cassette
@@ -1299,7 +1299,7 @@ const int SnSafeDoor19              =409;
 const int SnLoaderUpSafedetect      =410;
 const int SnEmptyUpSafedetect       =411;
 const int SnColorUpSafedetect       =412;
-const int SnLoaderUpPress           =413;                                       //JerryYang 20181120 (Steven) : (Steven) : ¿W¥ß±±¨îloaderÀ£tray
+const int SnLoaderUpPress           =413;                                       //JerryYang 20181120 (Steven) : (Steven) : ç¨ç«‹æ§åˆ¶loaderå£“tray
 const int SnPreciserDetect1         =414;                                       //Frank 20180410 (Steven) : InArm Preciser Station
 const int SnPreciserDetect2         =415;
 
@@ -1312,18 +1312,18 @@ const int SnLoadCell6               =421;                                       
 const int SnLoadCell7               =422;                                       //kevin 20190307  read load cell pass  or fail
 const int SnLoadCell8               =423;                                       //kevin 20190307  read load cell pass  or fail
 
-const int SnHotGun1                 =424;                                       //kevin 20190621  hot gun ¬y¶q²§±` ¨Ï¥Î Out 2
-const int SnHotGun2                 =425;                                       //kevin 20190621  hot gun ¬y¶q²§±` ¨Ï¥Î Out 2
+const int SnHotGun1                 =424;                                       //kevin 20190621  hot gun æµé‡ç•°å¸¸ ä½¿ç”¨ Out 2
+const int SnHotGun2                 =425;                                       //kevin 20190621  hot gun æµé‡ç•°å¸¸ ä½¿ç”¨ Out 2
 
 const int SnGroundMan2              =426;
 const int SnGroundMan3              =427;
 const int SnGroundMan4              =428;
-const int SnAuto1UpPress            =429;                                       //JerryYang 20190423 ·s¼WunloaderÀ£tray
+const int SnAuto1UpPress            =429;                                       //JerryYang 20190423 æ–°å¢unloaderå£“tray
 const int SnAuto2UpPress            =430;
 const int SnAuto3UpPress            =431;
-const int SnWaterLeakageUp          =432;                                       //wei 20190617 º|¤ôÀË´ú
-const int SnWaterLeakageDown        =433;                                       //wei 20190617 º|¤ôÀË´ú
-const int SnWaterLeakagePlate       =434;                                       //wei 20190617 º|¤ôÀË´ú
+const int SnWaterLeakageUp          =432;                                       //wei 20190617 æ¼æ°´æª¢æ¸¬
+const int SnWaterLeakageDown        =433;                                       //wei 20190617 æ¼æ°´æª¢æ¸¬
+const int SnWaterLeakagePlate       =434;                                       //wei 20190617 æ¼æ°´æª¢æ¸¬
 const int SnLoaderTrackDetect       =435;                                       //Sam 20200316 : Loader Detect Tray
 const int SnTesterDryAir            =436;                                       //Ifor 20200115 add: add Tester Dry Air Control //Ifor 20200420 429->436
 
@@ -1336,7 +1336,7 @@ const int SnCrossSHT1S2             =442;                                       
 const int SnCrossSHT2S1             =443;                                       //2013-07-16    Dell    Shuttle cross sensor
 const int SnCrossSHT2S2             =444;                                       //2013-07-16    Dell    Shuttle cross sensor
 
-const int SnAuto1Z_Select1          =445;                                       //JerryYang 20200615 ART¤ÀÂ÷¨T¬ûsensor
+const int SnAuto1Z_Select1          =445;                                       //JerryYang 20200615 ARTåˆ†é›¢æ±½ç¼¸sensor
 const int SnAuto2Z_Select1          =446;
 const int SnAuto3Z_Select1          =447;
 const int SnAuto1Z_Select2          =448;
@@ -1349,7 +1349,7 @@ const int SnAuto1Z_Select4          =454;
 const int SnAuto2Z_Select4          =455;
 const int SnAuto3Z_Select4          =456;
 
-const int SnHeaterDoor4             =457;                                       //wei 20200616 : For ATC3.3 MR, ­n²Ä¥|­Ó¥[¼öªù
+const int SnHeaterDoor4             =457;                                       //wei 20200616 : For ATC3.3 MR, è¦ç¬¬å››å€‹åŠ ç†±é–€
 const int SnChamberHeatDetect       =458;                                       //JerryYang 20210107 : ChamberHeatDetect
 
 //==>
@@ -1370,7 +1370,7 @@ const int SnArm1SLK                 =471;
 const int SnArm2SLK                 =472;
 
 const int SnMRAuto21                =473;                                       //wei 20180702 MR
-//E84ÅçÃÒ¥Î
+//E84é©—è­‰ç”¨
 const int SnE84LREQ                 =474;                                       //wei 20180702 E84
 const int SnE84UREQ                 =475;                                       //wei 20180702 E84
 const int SnE84VA                   =476;                                       //wei 20180702 E84
@@ -1385,7 +1385,7 @@ const int SnBufferTop               =483;                                       
 const int SnBufferCatch             =484;                                       //wei 20200305 MR
 const int SnCassetteOpen            =486;
 
-const int SnMultileEmpty_Door               =487;                               //KaiChen 20200716 ¡GOHT
+const int SnMultileEmpty_Door               =487;                               //KaiChen 20200716 ï¼šOHT
 const int SnMultileEmpty_MagazineTop        =488;
 const int SnMultileEmpty_MagazineLow        =489;
 const int SnMultileEmpty_MagazineCatch      =490;
@@ -1461,11 +1461,11 @@ const int SnBuffer10_Placement1         =547;
 const int SnStackedTrayYDetect_Loader   =548;
 const int SnStackedTrayYDetect_Elevator2=549;
 
-const int SnRKSafeLock              =550;                                       //KenHsieh 20211228 : °Ï¤À¹êÅéIO»P³q°T­±ªO
-const int SnSht1Left                =551;                                       //kevin 20220512 add SHUTTLE Left ¦ì¸m°¾²¾
-const int SnSht1Right               =552;                                       //kevin 20220512 add SHUTTLE Left ¦ì¸m°¾²¾
-const int SnSht2Left                =553;                                       //kevin 20220512 add SHUTTLE Left ¦ì¸m°¾²¾
-const int SnSht2Right               =554;                                       //kevin 20220512 add SHUTTLE Left ¦ì¸m°¾²¾
+const int SnRKSafeLock              =550;                                       //KenHsieh 20211228 : å€åˆ†å¯¦é«”IOèˆ‡é€šè¨Šé¢æ¿
+const int SnSht1Left                =551;                                       //kevin 20220512 add SHUTTLE Left ä½ç½®åç§»
+const int SnSht1Right               =552;                                       //kevin 20220512 add SHUTTLE Left ä½ç½®åç§»
+const int SnSht2Left                =553;                                       //kevin 20220512 add SHUTTLE Left ä½ç½®åç§»
+const int SnSht2Right               =554;                                       //kevin 20220512 add SHUTTLE Left ä½ç½®åç§»
 
 const int SnLoaderTrayHasTray_AGV   =555;                                       //kevin 20220520 add AGV load
 const int SnEmptyTrayHasTray_AGV    =556;                                       //kevin 20220520 add AGV Empty
@@ -1476,8 +1476,8 @@ const int SnInAreaAlignmentSenY     =559;
 const int SnOutAreaAlignmentSenX    =560;
 const int SnOutAreaAlignmentSenY    =561;
 
-const int SnAseTrayBufferLeft       =562;                                       //kevin 20220709 ASEKH ¥ªÃä©ñªÅTRAY
-const int SnAseTrayBufferRight      =563;                                       //kevin 20220709 ASEKH ¥kÃä©ñªÅTRAY
+const int SnAseTrayBufferLeft       =562;                                       //kevin 20220709 ASEKH å·¦é‚Šæ”¾ç©ºTRAY
+const int SnAseTrayBufferRight      =563;                                       //kevin 20220709 ASEKH å³é‚Šæ”¾ç©ºTRAY
 
 const int SnATC1Ready               =564;                                       //Jimmychiu 20210902 add: ATC Winway IO ready
 const int SnATC2Ready               =565;
@@ -1523,11 +1523,11 @@ const int SnMagazineSafeDoor2           =601;
 const int SnMagazineSafeDoor3           =602;
 const int SnMagazineDetectTop           =603;
 const int SnMagazineHasTrayInside       =604;
-const int SnMagazineTrackDetect2        =605;                                   //Sam 20221116 : Magazine TrayArm ¦Û°Ê¸É Tray
+const int SnMagazineTrackDetect2        =605;                                   //Sam 20221116 : Magazine TrayArm è‡ªå‹•è£œ Tray
 
 const int SnDockingAreaOpenCheck    =606;                                       //Ztex 2023.05.02 Add HT-1032 IO Docking Area Open Check
-const int SnDewPointDetectIndexArm1 =607;                                       //Hmy 20170603  add By ¤T·Å¾÷ ÅSÂISENSOR Arm1°»´ú
-const int SnDewPointDetectIndexArm2 =608;                                       //Hmy 20170603  add By ¤T·Å¾÷ ÅSÂISENSOR Arm2°»´ú
+const int SnDewPointDetectIndexArm1 =607;                                       //Hmy 20170603  add By ä¸‰æº«æ©Ÿ éœ²é»SENSOR Arm1åµæ¸¬
+const int SnDewPointDetectIndexArm2 =608;                                       //Hmy 20170603  add By ä¸‰æº«æ©Ÿ éœ²é»SENSOR Arm2åµæ¸¬
 
 const int SnLoaderSeparateHasTray   =609;
 const int SnEmptySeparateHasTray    =610;
@@ -1564,8 +1564,8 @@ const int SnIonBar9                 =636;
 
 const int SnTrayArmHasTray          =637;
 
-const int SnInAreaAlignmentSenZ     =638;                                       //KenHsieh 20211110 ¡G AutoAlignment add Auto Z
-const int SnOutAreaAlignmentSenZ    =639;                                       //KenHsieh 20211110 ¡G AutoAlignment add Auto Z
+const int SnInAreaAlignmentSenZ     =638;                                       //KenHsieh 20211110 ï¼š AutoAlignment add Auto Z
+const int SnOutAreaAlignmentSenZ    =639;                                       //KenHsieh 20211110 ï¼š AutoAlignment add Auto Z
 
 const int SnMCUSensor1              =640;                                       //Jimmychiu 20230630 : add color sensor MU-N in Loader
 const int SnMCUSensor2              =641;                                       //Jimmychiu 20230630 : add color sensor MU-N in Loader
@@ -1644,17 +1644,17 @@ const int SnTrayArmTrayDetect2      =708;
 const int SnTrayArmTrayDetect3      =709;
 const int SnTrayArmTrayDetect4      =710;
 
-const int SnEPDetect                =711;                                       //kevin 20230608 EP ¬y¶q­p °»´ú
+const int SnEPDetect                =711;                                       //kevin 20230608 EP æµé‡è¨ˆ åµæ¸¬
 const int SnSafeMode                =712;                                       //jou 20231016 : CE PLC safe mode
 const int SnWaterLeakageChiller     =713;                                       //jou 20231019 : Water Leakage Chiller
 
 const int SnIonBar10                =714;
 const int SnIonBar11                =715;
-const int SnFixFloating3            =716;                                       //Sam 20240129 : ·s¼W²Ä¤T²Õ Fix floating Sensor
+const int SnFixFloating3            =716;                                       //Sam 20240129 : æ–°å¢ç¬¬ä¸‰çµ„ Fix floating Sensor
 const int SnTesterAlarm             =717;
-const int SnDoubleLoadDetection     =718;                                       //Steven 20240426 : °»´úloaderÅ|½L
+const int SnDoubleLoadDetection     =718;                                       //Steven 20240426 : åµæ¸¬loaderç–Šç›¤
 
-const int SnLoader_Detect           =719;                                       //Ifor 20211005 add Tray ¸ü½L¤W¤É¤U­°«e§PÂ_¬O§_¦³²§±`
+const int SnLoader_Detect           =719;                                       //Ifor 20211005 add Tray è¼‰ç›¤ä¸Šå‡ä¸‹é™å‰åˆ¤æ–·æ˜¯å¦æœ‰ç•°å¸¸
 const int SnEmpty_Detect            =720;
 const int SnColor_Detect            =721;
 const int SnAuto1_Detect            =722;
@@ -1667,7 +1667,7 @@ const int SnIonFanCar               =728;                                       
 const int SnIonFanCarPower          =729;                                       //Ifor 20220816 add: Bin Car Ion Fan Power Check
 const int SnEPFlowmeter             =730;                                       //Ifor 20220816 add: Bin Car Ion Fan Power Check
 
-const int SnSmokeDetect01           =731;                                       //Sam 20240112 : ·s¼W·ÏÃú°»´ú
+const int SnSmokeDetect01           =731;                                       //Sam 20240112 : æ–°å¢ç…™éœ§åµæ¸¬
 
 const int SnLoad2TrackDetect        =732;                                       //Steven 20240822 : For HT-9046AU
 const int SnLoad2FixCyPush          =733;
@@ -1680,7 +1680,7 @@ const int SnLoad2CasstteDetect      =739;
 const int SnDoubleLoad2Detection    =740;
 const int SnLoad2UpPress            =741;
 
-const int SnAuto1HasCoverTray       =742;                                       //JerryYang 20241021 : Unloader¼W¥[²Ä¤G²ÕSensorÀË¬d¬O§_¦³cover tray
+const int SnAuto1HasCoverTray       =742;                                       //JerryYang 20241021 : Unloaderå¢åŠ ç¬¬äºŒçµ„Sensoræª¢æŸ¥æ˜¯å¦æœ‰cover tray
 const int SnAuto2HasCoverTray       =743;
 const int SnAuto3HasCoverTray       =744;
 const int SnAuto4HasCoverTray       =745;
@@ -1689,7 +1689,7 @@ const int SnAuto6HasCoverTray       =747;
 
 const int SnElectricControlBox      = 748;                                      //ChungHung 20230718 add for Safe plc
 const int SnAllSafeDoor             = 749;                                      //ChungHung 20230718 add for Safe plc
-const int SnAllEMG                  = 750;                                      //KenHsieh 20250212 : ·s¼WPLC Â_½u¥iÀş¶¡§PÂ_EMG¤Î¦w¥şªù
+const int SnAllEMG                  = 750;                                      //KenHsieh 20250212 : æ–°å¢PLC æ–·ç·šå¯ç¬é–“åˆ¤æ–·EMGåŠå®‰å…¨é–€
 
 const int SnSocket17                =751;
 const int SnSocket18                =752;
@@ -1701,7 +1701,7 @@ const int SnSocket23                =757;
 const int SnSocket24                =758;
 const int SnLoadIonGun              =759;                                       //Ifor 20230427 add:Loader Ionizer Gun
 const int SnLoadLightGat            =760;                                       //Ifor 20230427 add:LD/ULD light gate
-const int SnAuto4CasstteDetect      =761;                                       //RogerYang 20250825 : ·s¼WAuto4~6
+const int SnAuto4CasstteDetect      =761;                                       //RogerYang 20250825 : æ–°å¢Auto4~6
 const int SnAuto5CasstteDetect      =762;
 const int SnAuto6CasstteDetect      =763;
 const int SnChamberDryAir           =764;                                       //Ifor 20240919 add: Chamber Dry Air
@@ -1735,9 +1735,9 @@ const int SnAuto2Carrier2           =788;                                       
 const int SnLoaderBoatActDetect     =789;                                       //Ifor 20251216 add:Boat Carrier
 const int SnAuto1BoatActDetect      =790;                                       //Ifor 20251216 add:Boat Carrier
 const int SnAuto2BoatActDetect      =791;                                       //Ifor 20251216 add:Boat Carrier
-const int SnDailyCorrelation_Open   =792;                                       //KaiChen 20200525 ¡GDaily Correlation Function
-const int SnDailyCorrelation_Close  =793;                                       //KaiChen 20200525 ¡GDaily Correlation Function
-const int SnSocket25                =794;                                       //JerryYang 20260205 : add²Ä¤T²ÕSocket sensor(8+16+8)
+const int SnDailyCorrelation_Open   =792;                                       //KaiChen 20200525 ï¼šDaily Correlation Function
+const int SnDailyCorrelation_Close  =793;                                       //KaiChen 20200525 ï¼šDaily Correlation Function
+const int SnSocket25                =794;                                       //JerryYang 20260205 : addç¬¬ä¸‰çµ„Socket sensor(8+16+8)
 const int SnSocket26                =795;
 const int SnSocket27                =796;
 const int SnSocket28                =797;
@@ -1746,7 +1746,7 @@ const int SnSocket30                =799;
 const int SnSocket31                =800;
 const int SnSocket32                =801;
 
-//#define MAX_SENSOR_ITEM 820  <--°O±o¥h§ï!!
+//#define MAX_SENSOR_ITEM 820  <--è¨˜å¾—å»æ”¹!!
 
 int SnAutoTrayCar       [MAX_AUTO_TRAY]={SnAuto1_Tray_Car,       SnAuto2_Tray_Car,       SnAuto3_Tray_Car,       SnAuto4_Tray_Car,       SnAuto5_Tray_Car,       SnAuto6_Tray_Car};
 int SnAutoZSelect1      [MAX_AUTO_TRAY]={SnAuto1Z_Select1,       SnAuto2Z_Select1,       SnAuto3Z_Select1,       SnAuto4Z_Select1,       SnAuto5Z_Select1,       SnAuto6Z_Select1};
@@ -1791,14 +1791,14 @@ const int iSafeDoor[MAX_SAFE_DOOR_CNT]={SnSafeDoor1, SnSafeDoor2, SnSafeDoor3, S
                                         SnSafeDoor21, SnMagazineSafeDoor, SnHeaterDoor, SnHeaterDoor2, SnHeaterDoor3,
                                         SnHeaterDoor4, SnMagazineSafeDoor2, SnMagazineSafeDoor3, SnOHTIntoLoadPort, SnOHTIntoLoadPort2};
 
-AnsiString asSafeDoorAlarm[MAX_SAFE_DOOR_CNT]={"MES1611", "MES1612", "MES1613", "MES1614", "MES1615",  //JerryYang 20230704 : ¾ã¦X¦w¥şªù15->MAX_SAFE_DOOR_CNT
+AnsiString asSafeDoorAlarm[MAX_SAFE_DOOR_CNT]={"MES1611", "MES1612", "MES1613", "MES1614", "MES1615",  //JerryYang 20230704 : æ•´åˆå®‰å…¨é–€15->MAX_SAFE_DOOR_CNT
                                                "MES1616", "MES1617", "MES1618", "MES1619", "MES1620",
                                                "MES1621", "MES1622", "MES1623", "MES1624", "MES1629",
                                                "MES1657", "MES1658", "MES1659", "MES1660", "MES1661",
                                                "MES1662", "MES16429", "MES1625", "MES1626", "MES1627",
                                                "MES1628", "MES16431", "MES16432", "MES16433", "MES16434"};
 
-const int iSafeDoorPosition[MAX_SAFE_DOOR_CNT]={MMSafeDoor1,  MMSafeDoor2,  MMSafeDoor3,  MMSafeDoor4,  MMSafeDoor5,     //JerryYang 20230704 : ¾ã¦X¦w¥şªù15->MAX_SAFE_DOOR_CNT
+const int iSafeDoorPosition[MAX_SAFE_DOOR_CNT]={MMSafeDoor1,  MMSafeDoor2,  MMSafeDoor3,  MMSafeDoor4,  MMSafeDoor5,     //JerryYang 20230704 : æ•´åˆå®‰å…¨é–€15->MAX_SAFE_DOOR_CNT
                                                 MMSafeDoor6,  MMSafeDoor7,  MMSafeDoor8,  MMSafeDoor9,  MMSafeDoor10,
                                                 MMSafeDoor11, MMSafeDoor12, MMSafeDoor13, MMSafeDoor14, MMSafeDoor15,
                                                 MMSafeDoor16, MMSafeDoor17, MMSafeDoor18, MMSafeDoor19, MMSafeDoor20,
@@ -1821,12 +1821,12 @@ const int iIonFan[MAX_IONFAN]={SnIonFanAlarm, SnIonFanLevelAlarm, SnIonBarrierAl
                                SnIonBarrierConditionAlarm, SnIonFan6Alarm, SnIonFan7Alarm, SnIonFan8Alarm,
                                SnIonFan9Alarm, SnIonFan10Alarm, SnIonFan11Alarm, SnIonFan12Alarm}; //Steven 20100226
 
-const int iHTIonBar[MAX_HTIONFAN]={SnIonBarrierLevelAlarm, SnIonBarrierConditionAlarm, SnIonFan8Alarm};    //RogerYang 20250825 : Unloader·s¼W3¤äIonBar¡A¨ú¥N4 5 8 ion fan
+const int iHTIonBar[MAX_HTIONFAN]={SnIonBarrierLevelAlarm, SnIonBarrierConditionAlarm, SnIonFan8Alarm};    //RogerYang 20250825 : Unloaderæ–°å¢3æ”¯IonBarï¼Œå–ä»£4 5 8 ion fan
 
 const int iIonFanPower[MAX_IONFAN]={SnIonFanPower01, SnIonFanPower02, SnIonFanPower03, SnIonFanPower04,
                                     SnIonFanPower05, SnIonFanPower06, SnIonFanPower07, SnIonFanPower08,
                                     SnIonFanPower09, SnIonFanPower10, SnIonFanPower11 , SnIonFanPower12
-                                   };                                           //Steven 20130201 : KasugaÂ÷¤l­·®°¹q·½°»´ú
+                                   };                                           //Steven 20130201 : Kasugaé›¢å­é¢¨æ‰‡é›»æºåµæ¸¬
 
 const int iIonBar[MAX_IONBAR]={SnIonBar1, SnIonBar2, SnIonBar3, SnIonBar4, SnIonBar5,
                                SnIonBar6, SnIonBar7, SnIonBar8, SnIonBar9};                  //Ztex 2024.12.22 Add For HT1032AT IonBar
@@ -1851,7 +1851,7 @@ const int BackSenBit16              =16;
 const int BackSenBit17              =17;
 const int BackSenBit18              =18;
 const int BackSenBit19              =19;
-//Alick 20161011 (Steven) : TTL¤ä´©8Site
+//Alick 20161011 (Steven) : TTLæ”¯æ´8Site
 const int BackSenBit20              =20;
 const int BackSenBit21              =21;
 const int BackSenBit22              =22;
@@ -1873,7 +1873,7 @@ const int BackSenBit37              =37;
 const int BackSenBit38              =38;
 const int BackSenBit39              =39;
 
-//MAX_TTL_BIT 40  <--°O±o¥h§ï!!
+//MAX_TTL_BIT 40  <--è¨˜å¾—å»æ”¹!!
 
 //====================================================================
 //Switch define start
@@ -1945,8 +1945,8 @@ const int SwStart3                      =62;
 const int SwCCDAir                      =63;
 
 const int SwACAutoCW                    =64;                                    // for auto as loader use
-const int SwACAuto2CW                   =65;                                    //Auto2¶iTray
-const int SwACAuto3CW                   =66;                                    //Auto3¶iTray
+const int SwACAuto2CW                   =65;                                    //Auto2é€²Tray
+const int SwACAuto3CW                   =66;                                    //Auto3é€²Tray
 const int SwACAuto1Mode                 =67;                                    // for auto as loader use
 const int SwReadTorue                   =68;
 const int SwBigFan                      =69;
@@ -1979,14 +1979,14 @@ const int SwAuto1Bin                    =91;
 const int SwAuto2Bin                    =92;
 const int SwAuto3Bin                    =93;
 
-const int SwFix1Bin                     =94;                                    //Steven 20090917 Start : ¥[¤JFixªº¼Æ¦rÅã¥Ü¾¹
+const int SwFix1Bin                     =94;                                    //Steven 20090917 Start : åŠ å…¥Fixçš„æ•¸å­—é¡¯ç¤ºå™¨
 const int SwFix2Bin                     =95;
 const int SwFix3Bin                     =96;
 const int SwFix4Bin                     =97;
 const int SwFix5Bin                     =98;
 const int SwFix6Bin                     =99;
 
-const int SwZ1SuckMode0                 =100;                                   //Steven 20090916 Start : ¥[¤J1x2¼Ò¦¡ªºIndex¹qºÏ»Ö¶}Ãö
+const int SwZ1SuckMode0                 =100;                                   //Steven 20090916 Start : åŠ å…¥1x2æ¨¡å¼çš„Indexé›»ç£é–¥é–‹é—œ
 const int SwZ1SuckMode1                 =101;
 const int SwZ2SuckMode0                 =102;
 const int SwZ2SuckMode1                 =103;
@@ -1996,9 +1996,9 @@ const int SwCCDCooling                  =105;                                   
 const int SwEpArm1                      =106;                                   //Steven 20110708
 const int SwEpArm2                      =107;                                   //Steven 20110708
 const int SwHeaterFanSpeed              =108;                                   //Steven 20110725
-const int SwRotateCheckClear            =109;                                   //ChungHung 20110922 : ÂàÂà½¼ÀY­nÀË¬d¦³¨S¦³ÂàÀY Check Sensor
+const int SwRotateCheckClear            =109;                                   //ChungHung 20110922 : è½‰è½‰è¦é ­è¦æª¢æŸ¥æœ‰æ²’æœ‰è½‰é ­ Check Sensor
 
-const int SwEP_D0                       =110;                                   //Dell 20111111 Start : ¥[¤JDigital E/P
+const int SwEP_D0                       =110;                                   //Dell 20111111 Start : åŠ å…¥Digital E/P
 const int SwEP_D1                       =111;
 const int SwEP_D2                       =112;
 const int SwEP_D3                       =113;
@@ -2011,16 +2011,16 @@ const int SwEP_D9                       =119;
 
 const int SwCoolingFan_Blower           =120;                                   //20111130  Dell
 const int SwSafeDoorLock                =121;                                   //20111130  Dell
-const int SwIndexIonFan                 =122;                                   //jou 2012-03-13 indexÂ÷¤lºj¥X­·¶}Ãö±±¨î
+const int SwIndexIonFan                 =122;                                   //jou 2012-03-13 indexé›¢å­æ§å‡ºé¢¨é–‹é—œæ§åˆ¶
 
 const int SwIndexChangeToque1           =123;                                   //jou 2012-06-21 Enable index I/O Change Toque
 const int SwIndexChangeToque2           =124;                                   //jou 2012-06-21 Enable index I/O Change Toque
 
-const int SwACLoaderCCW                 =125;                                   //Loader°hTray
+const int SwACLoaderCCW                 =125;                                   //Loaderé€€Tray
 
 const int SwHeatGun                     =126;                                   //ChungHung 20121107 add
-const int SwVacuumPumpTogetherOn        =127;                                   //Dell  for HT9046LS ÂùÀ°®ú¼Ò¦¡
-const int SwAirConditioner              =128;                                   //Steven 20131011 : §N®ğ¾÷
+const int SwVacuumPumpTogetherOn        =127;                                   //Dell  for HT9046LS é›™å¹«æµ¦æ¨¡å¼
+const int SwAirConditioner              =128;                                   //Steven 20131011 : å†·æ°£æ©Ÿ
 const int SwHotplateCooling             =129;                                   //jou 2013-11-07
 const int SwCarRecord                   =130;                                   //wei 2013-12-09
 
@@ -2062,12 +2062,12 @@ const int SwDockError                   =164;                                   
 const int SwStartTest1                  =165;                                   //2014-03-04    Dell    for SPIL WLP Add 5S Inspection
 const int SwStartTest2                  =166;                                   //2014-03-04    Dell    for SPIL WLP Add 5S Inspection
 const int SwStartTest3                  =167;                                   //2014-03-04    Dell    for SPIL WLP Add 5S Inspection
-const int SwOCRTigger                   =168;                                   //wei 20150720 OCRÄ²µo
+const int SwOCRTigger                   =168;                                   //wei 20150720 OCRè§¸ç™¼
 const int SwTesterAirCooling            =169;                                   //jou 2016-01-07 Tester Air Cooling Switch
-const int SwFanDirection                =170;                                   //wei 20160215¤j­·®°¤è¦V
+const int SwFanDirection                =170;                                   //wei 20160215å¤§é¢¨æ‰‡æ–¹å‘
 
 //------------------------------------
-//Steven 20161011 : TTL¤ä´©8Site
+//Steven 20161011 : TTLæ”¯æ´8Site
 //------------------------------------
 const int SwClear4                      =171;                                   //Clear All
 const int SwClear5                      =172;                                   //Anti-Start Signal
@@ -2083,7 +2083,7 @@ const int SwDut6                        =181;
 const int SwDut7                        =182;
 const int Sw10Bit2                      =183;
 const int SwIonBarPower                 =184;                                   //kevin 20170310 (wei) Ion bar power
-const int SwShuttleVibration1           =185;                                   //JerryYang 20171006 (wei) Shuttle ¾_°Ê°¨¹F
+const int SwShuttleVibration1           =185;                                   //JerryYang 20171006 (wei) Shuttle éœ‡å‹•é¦¬é”
 const int SwShuttleVibration2           =186;
 
 const int SwDieClean                    =187;
@@ -2139,7 +2139,7 @@ const int SwMRLight                     =221;                                   
 
 const int SwBufferArmZ                  =222;                                   //wei 20200302 MR
 
-const int SwTrayBracket2Z               =223;                                   //KaiChen 20200716 ¡GOHT
+const int SwTrayBracket2Z               =223;                                   //KaiChen 20200716 ï¼šOHT
 const int SwCaselevator2Z               =224;
 const int SwMultileEmptyZ               =225;
 
@@ -2186,26 +2186,26 @@ const int SwE84_1_POWER                 =269;
 const int SwSafeDoorLock_LoadPort1      =270;
 const int SwSafeDoorLock_LoadPort2      =271;
 
-const int SwLoadDoorLock                =272;                                   //KaiChen 20200716 ¡GOHT
+const int SwLoadDoorLock                =272;                                   //KaiChen 20200716 ï¼šOHT
 const int SwLoadRobotZ                  =273;
 const int SwUnloadDoorLock              =274;
 const int SwUnloadRobotZ                =275;
 
 const int SwPurgeAir                    =276;                                   //kevin 20180928 add load board blower
-const int SwCDAGun                      =277;                                   //Steven 20181012 : ¨Ï¥Î¼ö­·ºj§j§N­·
+const int SwCDAGun                      =277;                                   //Steven 20181012 : ä½¿ç”¨ç†±é¢¨æ§å¹å†·é¢¨
 const int SwLoadCellA                   =278;                                   //kevin 20190306  add load Cell  read 1
 const int SwLoadCellB                   =279;                                   //kevin 20190306  add load Cell  read 2
 const int SwSafeDoorLockLM              =280;
 
-const int SwIonRelay                    =281;                                   //Ifor 20190114 : add Chamber ¶}±Ò®É Ãö³¬ Ion Â÷¤lºj §j®ğ
-const int SwSocketClean2                =282;                                   //JerryYang 20190715 Clean air arm1 arm2¤À¶}±±¨î
-const int SwLoaderVibration             =283;                                   //JerryYang 20191001 loader¾_°Ê°¨¹F
+const int SwIonRelay                    =281;                                   //Ifor 20190114 : add Chamber é–‹å•Ÿæ™‚ é—œé–‰ Ion é›¢å­æ§ å¹æ°£
+const int SwSocketClean2                =282;                                   //JerryYang 20190715 Clean air arm1 arm2åˆ†é–‹æ§åˆ¶
+const int SwLoaderVibration             =283;                                   //JerryYang 20191001 loaderéœ‡å‹•é¦¬é”
 const int SwTesterDryAirSwitch          =284;                                   //Ifor 20200115 : add Tester Dry Air Control    //Ifor 20200420 232 -> 233
 const int SwIndEpArm1                   =285;
 const int SwIndEpArm2                   =286;
-const int SwAutoCoolDown                =287;                                   //kevin 20201223 AutoCool down  Chambo °ª·ÅÂà±`·Å§Ö³t­°·Å
+const int SwAutoCoolDown                =287;                                   //kevin 20201223 AutoCool down  Chambo é«˜æº«è½‰å¸¸æº«å¿«é€Ÿé™æº«
 
-const int SwIonFanClean                 =288;                                   //Isaac 20210609 : IOÄ²µoIonFan²M°w
+const int SwIonFanClean                 =288;                                   //Isaac 20210609 : IOè§¸ç™¼IonFanæ¸…é‡
 
 const int SwTjSignal01                  =289;                                   //Ifor 20210622 add: ATC Switch TJ
 const int SwTjSignal02                  =290;
@@ -2217,9 +2217,9 @@ const int SwTjSignal07                  =295;
 const int SwTjSignal08                  =296;
 
 const int SwDieCleanSuck                =297;                                   //wei 20210326
-const int SwRKSafeLock                  =298;                                   //KenHsieh 20211228 : °Ï¤À¹êÅéIO»P³q°T­±ªO
+const int SwRKSafeLock                  =298;                                   //KenHsieh 20211228 : å€åˆ†å¯¦é«”IOèˆ‡é€šè¨Šé¢æ¿
 const int SwATCHeatGun                  =299;                                   //JerryYang 20220408 : add for ATC3.5
-const int SwLBAir                       =300;                                   //JerryYang 20220923 : LB§j®ğfunction
+const int SwLBAir                       =300;                                   //JerryYang 20220923 : LBå¹æ°£function
 
 const int SwDryAirSwitch                =301;                                   //Ztex 2023.04.13 Add HT-1032 IO
 const int SwColdAirSwitch               =302;                                   //Ztex 2023.04.13 Add HT-1032 IO
@@ -2299,7 +2299,7 @@ const int SwCassetteAuto2MotBreaker     =366;                                   
 const int SwDryAirUseHandler            =367;
 const int SwDryAirUseATCCar             =368;
 
-//MAX_SWITCH_ITEM 370  <--°O±o¥h§ï!!
+//MAX_SWITCH_ITEM 370  <--è¨˜å¾—å»æ”¹!!
 
 int SwAutoCCW[MAX_AUTO_TRAY]={SwACAuto1,   SwACAuto2,   SwACAuto3,   SwACAuto4,   SwACAuto5,   SwACAuto6};
 int SwAutoCW [MAX_AUTO_TRAY]={SwACAutoCW,  SwACAuto2CW, SwACAuto3CW, SwACAuto4CW, SwACAuto5CW, SwACAuto6CW};
@@ -2312,7 +2312,7 @@ const int BackSwStart0                  =0;
 const int BackSwStart1                  =1;
 const int BackSwStart2                  =2;
 const int BackSwStart3                  =3;
-//Alick 20161011 (Steven) : TTL¤ä´©8Site
+//Alick 20161011 (Steven) : TTLæ”¯æ´8Site
 const int BackSwStart4                  =4;
 const int BackSwStart5                  =5;
 const int BackSwStart6                  =6;
@@ -2326,7 +2326,7 @@ const int BackSwDut5                    =13;
 const int BackSwDut6                    =14;
 const int BackSwDut7                    =15;
 
-//MAX_TTL_SWITCH 16  <--°O±o¥h§ï!!
+//MAX_TTL_SWITCH 16  <--è¨˜å¾—å»æ”¹!!
 
 //====================================================================
 //Motor define start
@@ -2363,18 +2363,18 @@ const int MOutArmZF     =27;
 const int MOutArmZG     =28;
 const int MOutArmZH     =29;
 const int MTrayX        =30;
-const int MInArmPitchY  =31;                                                    //Steven 20131002 : XYÅÜ¶Z //ChungHung 20131231 alter AutoYPitch
-const int MInArmPitchX2 =32;                                                    //Steven 20131002 : XYÅÜ¶Z
-const int MOutArmPitchY =33;                                                    //Steven 20131002 : XYÅÜ¶Z //ChungHung 20131231 alter AutoYPitch
-const int MOutArmPitchX2=34;                                                    //Steven 20131002 : XYÅÜ¶Z
+const int MInArmPitchY  =31;                                                    //Steven 20131002 : XYè®Šè· //ChungHung 20131231 alter AutoYPitch
+const int MInArmPitchX2 =32;                                                    //Steven 20131002 : XYè®Šè·
+const int MOutArmPitchY =33;                                                    //Steven 20131002 : XYè®Šè· //ChungHung 20131231 alter AutoYPitch
+const int MOutArmPitchX2=34;                                                    //Steven 20131002 : XYè®Šè·
 const int MLoaderZ      =35;
 const int MEmptyZ       =36;
 const int MColorZ       =37;
 const int MAuto1Z       =38;
 const int MAuto2Z       =39;
 const int MAuto3Z       =40;
-const int MInRotateKit  =41;                                                    //2013-04-12    Dell :±ÛÂà¯¸;°¨¹Fª©
-const int MOutRotateKit =42;                                                    //2013-04-12    Dell :±ÛÂà¯¸;°¨¹Fª©
+const int MInRotateKit  =41;                                                    //2013-04-12    Dell :æ—‹è½‰ç«™;é¦¬é”ç‰ˆ
+const int MOutRotateKit =42;                                                    //2013-04-12    Dell :æ—‹è½‰ç«™;é¦¬é”ç‰ˆ
 const int MAOIKit       =43;                                                    //2014-03-04    Dell    for SPIL WLP Add 5S Inspection
 const int MLoaderY      =44;                                                    //Steven 20150910 : Add for OCR
 const int MEmptyY       =45;
@@ -2393,7 +2393,7 @@ const int MTrayZ        =56;
 //const int MTapeOutZ     =58;
 const int MOutSortAa    =57;                                                    //Steven 20240822 : For HT-9046AU
 const int MOutSortAb    =58;
-const int MInArmXScale  =59;                                                    //Steven 20160426 : ºÏ©Ê¤Ø
+const int MInArmXScale  =59;                                                    //Steven 20160426 : ç£æ€§å°º
 const int MInArmYScale  =60;
 const int MOutArmXScale =61;
 const int MOutArmYScale =62;
@@ -2422,10 +2422,10 @@ int MOutRotate[MAX_ARM_Row][MAX_ARM_Col];
 const int MInArmZAg     =80;                                                    //Steven 20230323 : For HT1032
 const int MInArmZAh     =81;
 
-const int MArmAlignment =82;                                                    //Steven 20240507 : ¥u¬O¬°¤FTeaching¦sÀÉ¤è«K
+const int MArmAlignment =82;                                                    //Steven 20240507 : åªæ˜¯ç‚ºäº†Teachingå­˜æª”æ–¹ä¾¿
 const int MLoadHingeR   =83;                                                    //Steven 20170330 (Wei) : For TSMC
 const int MLoadHingeZ   =84;                                                    //Steven 20170330 (Wei) : For TSMC
-const int MPreciser     =85;                                                    //Steven 20180212 (Wei) : ©w¦ì¾¹
+const int MPreciser     =85;                                                    //Steven 20180212 (Wei) : å®šä½å™¨
 
 const int MInArmZBe     =86;
 const int MInArmZBf     =87;
@@ -2523,11 +2523,11 @@ const int MOutSortSht   =157;
 const int MLoad2Z       =158;
 const int MLoad2Y       =159;
 
-const int MInSh1LtcSenZ1=160;                                                   //KenHsieh 20250722 : InSht sensor §ï¬°2Áû¡A¨Ã¥ÎLatch §P§OÅ|®Æ¥H¤Î­¸®Æ
+const int MInSh1LtcSenZ1=160;                                                   //KenHsieh 20250722 : InSht sensor æ”¹ç‚º2é¡†ï¼Œä¸¦ç”¨Latch åˆ¤åˆ¥ç–Šæ–™ä»¥åŠé£›æ–™
 const int MInSh1LtcSenZ2=161;
 const int MInSh2LtcSenZ1=162;
 const int MInSh2LtcSenZ2=163;
-//#define TOTAL_MOTOR 164     <--°O±o¥h§ï (³o¬O¹êÅé°¨¹F°}¦C)
+//#define TOTAL_MOTOR 164     <--è¨˜å¾—å»æ”¹ (é€™æ˜¯å¯¦é«”é¦¬é”é™£åˆ—)
 
 const int MManualTray1  =164;
 const int MManualTray2  =165;
@@ -2550,8 +2550,8 @@ const int MMEmpty_Car   =179;
 const int MMColor_Car   =180;
 const int MMEmpty1      =181;
 const int MMEmpty1_Car  =182;
-const int MMHot1RecBuf  =183;                                                   //jou 2011-12-26 ¥[¤J°O¾Ğ©|¥¼§¹¦¨§l¨úªº¦ì¸m
-const int MMHot2RecBuf  =184;                                                   //jou 2011-12-26 ¥[¤J°O¾Ğ©|¥¼§¹¦¨§l¨úªº¦ì¸m
+const int MMHot1RecBuf  =183;                                                   //jou 2011-12-26 åŠ å…¥è¨˜æ†¶å°šæœªå®Œæˆå¸å–çš„ä½ç½®
+const int MMHot2RecBuf  =184;                                                   //jou 2011-12-26 åŠ å…¥è¨˜æ†¶å°šæœªå®Œæˆå¸å–çš„ä½ç½®
 const int MMAutoCleanKit=185;                                                   //jou 2012-05-21 Auto Clean
 const int MMOCR         =186;                                                   //Steven 20120626 : OCR
 const int MMBulkboxKit  =187;                                                   //kevin 20160822
@@ -2574,9 +2574,9 @@ const int MMTrayConversion=201;                                                 
 const int MMTrayAuto1   =202;                                                   //wei 20180702 MR
 const int MMTrayAuto2   =203;                                                   //wei 20180702 MR
 const int MMTrayAuto3   =204;                                                   //wei 20180702 MR
-const int MMFixTray1    =205;                                                   //Steven 20100205 : ¼È¦sFix¸ê®Æ¥Î
-const int MMFixTray2    =206;                                                   //Steven 20100205 : ¼È¦sFix¸ê®Æ¥Î
-const int MMFixTray3    =207;                                                   //Steven 20100205 : ¼È¦sFix¸ê®Æ¥Î
+const int MMFixTray1    =205;                                                   //Steven 20100205 : æš«å­˜Fixè³‡æ–™ç”¨
+const int MMFixTray2    =206;                                                   //Steven 20100205 : æš«å­˜Fixè³‡æ–™ç”¨
+const int MMFixTray3    =207;                                                   //Steven 20100205 : æš«å­˜Fixè³‡æ–™ç”¨
 const int MMScanAOI     =208;                                                   //Ifor 20211026 add:ScanAOI Tray
 
 const int MMInArmAOATray   =209;                                                //KenHsieh 20210813 : add CCD AUTO ALIGNMENT
@@ -2639,9 +2639,9 @@ const int MMAuto6       =259;
 const int MMAuto4_Car   =260;
 const int MMAuto5_Car   =261;
 const int MMAuto6_Car   =262;
-const int MMFixTray4    =263;                                                   //Steven 20100205 : ¼È¦sFix¸ê®Æ¥Î
-const int MMFixTray5    =264;                                                   //Steven 20100205 : ¼È¦sFix¸ê®Æ¥Î
-const int MMFixTray6    =265;                                                   //Steven 20100205 : ¼È¦sFix¸ê®Æ¥Î
+const int MMFixTray4    =263;                                                   //Steven 20100205 : æš«å­˜Fixè³‡æ–™ç”¨
+const int MMFixTray5    =264;                                                   //Steven 20100205 : æš«å­˜Fixè³‡æ–™ç”¨
+const int MMFixTray6    =265;                                                   //Steven 20100205 : æš«å­˜Fixè³‡æ–™ç”¨
 
 const int MMLoadPort1   =266;                                                   //Sam 20190112 LM
 const int MMLoadPort2   =267;
@@ -2653,7 +2653,7 @@ const int MMUnloadPort3 =272;
 const int MMUnloadPort4 =273;
 const int MMDailyCorrelationKit=274; //KaiHuang 20200606 : For ASE-CL Daily Correlation
 
-//Mot©w¸q¬°MAX_TRAY_MOTOR 300 <--¶W¹Lªº¸Ü°O±o¥h§ï
+//Motå®šç¾©ç‚ºMAX_TRAY_MOTOR 300 <--è¶…éçš„è©±è¨˜å¾—å»æ”¹
 
 //Steven 20230907 : For HT-9011UC
 //==>
@@ -2688,7 +2688,7 @@ int MgzTrayBabk[MAX_MGZ_TRAY] ={MMBackupMagazineTary1, MMBackupMagazineTary2, MM
 //<==
 //Steven 20230907 : For HT-9011UC
 
-//¥H¤U¶W¹L350ªº¤£¯à¥Î¨ì MOT[]¸Ì­±,·|·¸¦ì    //Steven 20210621 : Modify from 200 to 210
+//ä»¥ä¸‹è¶…é350çš„ä¸èƒ½ç”¨åˆ° MOT[]è£¡é¢,æœƒæº¢ä½    //Steven 20210621 : Modify from 200 to 210
 const int MMSystem      =500;
 const int MMInShuttle   =501;
 const int MMOutShuttle  =502;
@@ -2714,7 +2714,7 @@ const int MMSafeDoor12  =521;
 const int MMSafeDoor13  =522;
 const int MMSafeDoor14  =523;
 const int MMSafeDoor15  =524;
-const int MMSafeDoor16  =525;                                                   //JerryYang 20230704 : ¾ã¦X¦w¥şªù15->MAX_SAFE_DOOR_CNT
+const int MMSafeDoor16  =525;                                                   //JerryYang 20230704 : æ•´åˆå®‰å…¨é–€15->MAX_SAFE_DOOR_CNT
 const int MMSafeDoor17  =526;
 const int MMSafeDoor18  =527;
 const int MMSafeDoor19  =528;
@@ -2722,7 +2722,7 @@ const int MMSafeDoor20  =529;
 const int MMSafeDoor21  =530;
 const int MMSafeDoor22  =531;
 
-//Steven 20130205 : Â÷¤l­·®°²§±`Åã¥Ü
+//Steven 20130205 : é›¢å­é¢¨æ‰‡ç•°å¸¸é¡¯ç¤º
 const int MMIonFan01    =540;
 const int MMIonFan02    =541;
 const int MMIonFan03    =542;
@@ -2735,7 +2735,7 @@ const int MMIonFan09    =548;
 const int MMIonFan10    =549;
 const int MMIonFan11    =550;
 const int MMIonFan12    =551;
-//Ifor 20160830 add ATC ²§±`¦ì¸mÅã¥Ü
+//Ifor 20160830 add ATC ç•°å¸¸ä½ç½®é¡¯ç¤º
 const int MMATC_Handler     =560;
 const int MMATC_TCPIP       =561;
 const int MMATC_NI          =562;
@@ -2747,32 +2747,32 @@ const int MMATC_PowerSupply =567;
 const int MMATC_WaterValve  =568;
 const int MManualTrayAll    =569;
 
-//KaiChen 20200716 ¡GOHT
+//KaiChen 20200716 ï¼šOHT
 //==>
 const int MMMultileEmpty        =571;
 const int MMMultileEmpty_Catch  =572;
 const int MMMultileEmpty_Z      =573;
 //<==
-//KaiChen 20200716 ¡GOHT
-//¥H¤W¶W¹L350ªº¤£¯à¥Î¨ì MOT[]¸Ì­±,·|·¸¦ì
+//KaiChen 20200716 ï¼šOHT
+//ä»¥ä¸Šè¶…é350çš„ä¸èƒ½ç”¨åˆ° MOT[]è£¡é¢,æœƒæº¢ä½
 //====================================================================
 //Motor define end
 //====================================================================
 
 bool  fHeaterOK=false;
 bool  fHeaterOK_Backup=false;                                                   //jou 2010-10-11
-bool  fHeaterStableOK=false;                                                    //JerryYang 20210122 : ASE-CL·s¼W«İ·Å¥\¯à
-bool  bHeatOKBellowError=false;                                                 //kevin 20130226 ¥[¼öok«á ·Å«×¹L§C°»´ú    //jou 2014-06-12 ­×¥¿°¸µo©Ê¨q§C·Å²§±`
+bool  fHeaterStableOK=false;                                                    //JerryYang 20210122 : ASE-CLæ–°å¢å¾…æº«åŠŸèƒ½
+bool  bHeatOKBellowError=false;                                                 //kevin 20130226 åŠ ç†±okå¾Œ æº«åº¦éä½åµæ¸¬    //jou 2014-06-12 ä¿®æ­£å¶ç™¼æ€§ç§€ä½æº«ç•°å¸¸
 int   iHeaterWait=0;
 int   iHeaterCooling=0;
 double UN150Read[tcTotalCount]={0};
-double UN150ReadSecondpoint[tcTotalCount]={0};                                  //Ifor 20160629 add ²Ä¤GÂI·Å«×¸ê®Æ
+double UN150ReadSecondpoint[tcTotalCount]={0};                                  //Ifor 20160629 add ç¬¬äºŒé»æº«åº¦è³‡æ–™
 double UN150ReadReal[tcTotalCount]={0};
 double UN150ReadHotplate[2]={0,0};
-double UN150ReadShuttle[2]={0,0};                                               //kevin 20150508 shuttle ¤À¬q¥[¼ö
+double UN150ReadShuttle[2]={0,0};                                               //kevin 20150508 shuttle åˆ†æ®µåŠ ç†±
 bool  UN150CommError[tcTotalCount]={false};
 bool  FlushFlag;
-int   RunState=LED_Pause;                                                       //Steven 20111030 : ªì©l­È§ï¦¨2
+int   RunState=LED_Pause;                                                       //Steven 20111030 : åˆå§‹å€¼æ”¹æˆ2
 bool  PauseUT150Polling=false;
 
 bool bLampPowerOff      =false;
@@ -2795,7 +2795,7 @@ bool bLampCoverOpenRR   =false;
 bool bLampCoverOpenRL   =false;
 bool bLampManualSetp    =false;
 bool bLampManualStart   =false;
-bool bLampFix           =false;                                                 //kevin 20130322 ONECYCLE ¦X¨Ö
+bool bLampFix           =false;                                                 //kevin 20130322 ONECYCLE åˆä½µ
 
 bool bMoveInArm1ZToPlate1Safe   =false;
 bool bMoveInArm1ZToPlate2Safe   =false;
@@ -2843,15 +2843,15 @@ bool bInArmZNeedHome[MAX_ARM_Row][MAX_ARM_Col]={{false,false,false,false},{false
 bool bOutArmZNeedHome[MAX_ARM_Row][MAX_ARM_Col]={{false,false,false,false},{false,false,false,false}};
 bool bSortArmZNeedHome[MAX_ARM_Row][MAX_ARM_Col]={{false,false,false,false},{false,false,false,false}};   //RogerYang 20250512 Add for 9046AU
 
-bool bInArmPitchNeedHomeCheck=true;                                             //ChungHung HT9045 2011/12/13 //Input pickup device error®É,«ö"retry"Áä,¾÷¥x³£·|¦Û°Êhome
-bool bOutArmPitchNeedHomeCheck=true;                                            //ChungHung HT9045 2011/12/13 //Input pickup device error®É,«ö"retry"Áä,¾÷¥x³£·|¦Û°Êhome
+bool bInArmPitchNeedHomeCheck=true;                                             //ChungHung HT9045 2011/12/13 //Input pickup device erroræ™‚,æŒ‰"retry"éµ,æ©Ÿå°éƒ½æœƒè‡ªå‹•home
+bool bOutArmPitchNeedHomeCheck=true;                                            //ChungHung HT9045 2011/12/13 //Input pickup device erroræ™‚,æŒ‰"retry"éµ,æ©Ÿå°éƒ½æœƒè‡ªå‹•home
 bool bSortArmPitchNeedHomeCheck=true;                                           //RogerYang 20250512 Add for 9046AU
 bool bPrecisorNeedHomeCheck=false;
 bool bShuttle1MoveToRight;                                                      //ChungHung 20120717 add Index Drop Error Can Retry and Start
 bool bShuttle1MoveToLeft;                                                       //ChungHung 20120717 add Index Drop Error Can Retry and Start
 bool bShuttle2MoveToRight;                                                      //ChungHung 20120717 add Index Drop Error Can Retry and Start
 bool bShuttle2MoveToLeft;                                                       //ChungHung 20120717 add Index Drop Error Can Retry and Start
-bool bShuttle1HasPickErr;                                                       //Steven 20220712 : Á×§KIn arm °½©ñ®Æ
+bool bShuttle1HasPickErr;                                                       //Steven 20220712 : é¿å…In arm å·æ”¾æ–™
 bool bShuttle2HasPickErr;
 
 bool bShuttle3MoveToRight;                                                      //RogerYang 20250509 Add for 9046AU
@@ -2863,7 +2863,7 @@ bool bAutoCleanShuttle2MoveToLeft=false;                                        
 bool bAutoCleanShuttle1HasPickErr=false;                                        //Richard 20230418 : add Index Pick Error Can Retry and Start
 bool bAutoCleanShuttle2HasPickErr=false;                                        //Richard 20230418 : add Index Pick Error Can Retry and Start
 
-bool bCheckNullIC1=false;                                                       //JerryYang 20170623 (Steven) bCheckNullIC1§ï¦¨¥ş°ìÅÜ¼Æ
+bool bCheckNullIC1=false;                                                       //JerryYang 20170623 (Steven) bCheckNullIC1æ”¹æˆå…¨åŸŸè®Šæ•¸
 bool bCheckNullIC2=false;
 
 bool bShuttleMoveToLeftforFix3;                                                 //ChungHung 20140313 add Fix3 can Full Tray
@@ -2898,7 +2898,7 @@ int TTL_Dut[8]={SwDut0, SwDut1, SwDut2, SwDut3, SwDut4, SwDut5, SwDut6, SwDut7};
 int TTL_Sensor[8][5]={{SenBit0,  SenBit1,  SenBit2,  SenBit3,  SenBit4},
                       {SenBit5,  SenBit6,  SenBit7,  SenBit8,  SenBit9},
                       {SenBit10, SenBit11, SenBit12, SenBit13, SenBit14},
-                      {SenBit15, SenBit16, SenBit17, SenBit18, SenBit19},       //Alick 20161011 (Steven) : TTL¤ä´©8Site
+                      {SenBit15, SenBit16, SenBit17, SenBit18, SenBit19},       //Alick 20161011 (Steven) : TTLæ”¯æ´8Site
                       {SenBit20, SenBit21, SenBit22, SenBit23, SenBit24},
                       {SenBit25, SenBit26, SenBit27, SenBit28, SenBit29},
                       {SenBit30, SenBit31, SenBit32, SenBit33, SenBit34},
@@ -2920,12 +2920,12 @@ int  iCurrentTime=0;
 
 bool bChangeToInitStartMode=false;                                              //ChungHung 20111230 Hot Wait Mode
 
-bool bNeedTrySuckHotPlate=false;                                                //ChungHung 20120206 Hotplate check : §PÂ_¬O§_­nÀË¬dHotPlate
-bool bTrySuckHotPlateCleanOut=false;                                            //ChungHung 20120206 Hotplate check : ÀË¬d§¹¦¨«á,§@CleanOut
-bool bTrySuckHotPlateOneCycle=false;                                            //Steven 20120323 : ÀË¬d§¹¦¨«á,§@OneCycle
-bool bOneTimeHotPlateCheckAll=false;                                            //ChungHung 20120206 Hotplate check : ¤@¦¸ÀË¬d¥ş³¡ªº¦ì¸m
-bool bTryPickFromHotPlateShowError=false;                                       //ChungHung 20120206 Hotplate check : ¦³IC®É,­nÅã¥ÜAlarm
-bool bHotPlateCheckNeedTrayFeed=false;                                          //Steven 20120322 : ÀË¬d§¹­n¦Û°ÊTrayFeed
+bool bNeedTrySuckHotPlate=false;                                                //ChungHung 20120206 Hotplate check : åˆ¤æ–·æ˜¯å¦è¦æª¢æŸ¥HotPlate
+bool bTrySuckHotPlateCleanOut=false;                                            //ChungHung 20120206 Hotplate check : æª¢æŸ¥å®Œæˆå¾Œ,ä½œCleanOut
+bool bTrySuckHotPlateOneCycle=false;                                            //Steven 20120323 : æª¢æŸ¥å®Œæˆå¾Œ,ä½œOneCycle
+bool bOneTimeHotPlateCheckAll=false;                                            //ChungHung 20120206 Hotplate check : ä¸€æ¬¡æª¢æŸ¥å…¨éƒ¨çš„ä½ç½®
+bool bTryPickFromHotPlateShowError=false;                                       //ChungHung 20120206 Hotplate check : æœ‰ICæ™‚,è¦é¡¯ç¤ºAlarm
+bool bHotPlateCheckNeedTrayFeed=false;                                          //Steven 20120322 : æª¢æŸ¥å®Œè¦è‡ªå‹•TrayFeed
 
 const int LED_Running=0;
 const int LED_ErrJam=1;
@@ -2943,10 +2943,10 @@ const int Axis_Shuttle2=6;
 const int SuckActiving=0;
 const int DestroyActiving=1;
 bool bEnterOffset=false;
-bool bClearSrtart[8]={false,false,false,false,false,false,false,false};         //Alick 20161011 (Steven) : TTL¤ä´©8Site
+bool bClearSrtart[8]={false,false,false,false,false,false,false,false};         //Alick 20161011 (Steven) : TTLæ”¯æ´8Site
 bool bHomeByStart=false;
-int  HistroyBin[4][8][22];                                                      //Steven 20100121   //Steven 20131004 : 2 --> 4 //Ifor 20221026 add:KYEC ­n¨D¼W¥[¤ñ¼Æ10 => 22
-bool HistroyPassFail[4][8][22];                                                 //Steven 20100121   //Steven 20131004 : 2 --> 4 //Ifor 20221026 add:KYEC ­n¨D¼W¥[¤ñ¼Æ10 => 22
+int  HistroyBin[4][8][22];                                                      //Steven 20100121   //Steven 20131004 : 2 --> 4 //Ifor 20221026 add:KYEC è¦æ±‚å¢åŠ æ¯”æ•¸10 => 22
+bool HistroyPassFail[4][8][22];                                                 //Steven 20100121   //Steven 20131004 : 2 --> 4 //Ifor 20221026 add:KYEC è¦æ±‚å¢åŠ æ¯”æ•¸10 => 22
 int  iHeaterWaitTime=0;
 bool bInArmSuckErr=false;
 bool bMustCleanAllTray=false;
@@ -2974,7 +2974,7 @@ int iSetShuttleToHasNullIC=0;
 bool bRearHeadICFallDown=false;
 const int Tempture_Ambient=0;
 const int Tempture_Hot=1;
-const int Tempture_AmbientHot=3;                                                //kevin 20160908 2->3 //kevin 20140918 ±`·Å¥[¼ö «í·Å
+const int Tempture_AmbientHot=3;                                                //kevin 20160908 2->3 //kevin 20140918 å¸¸æº«åŠ ç†± æ†æº«
 const int USE_FRONT_TEST_HEAD=0;
 const int USE_REAR_TEST_HEAD=1;
 const int USE_TWOARM_TEST_HEAD=2;
@@ -2984,9 +2984,9 @@ int PitchCylinderState[MAX_AUTO_TRAY]={0, 0, 0, 0, 0, 0};
 bool bReadFrontTestArmTorque=false;
 bool bReadRearTestArmTorque=false ;
 
-bool bInitialLaserCheck=false;                                                  //Steven 20140228 : ¹p®g´ú¶Z¥\¯à
-bool bInitialLaserCheckPlate=false;                                             //Steven 20140228 : ¹p®g´ú¶Z¥\¯à
-int  iLaserShuttle=0;                                                           //Steven 20140228 : ¹p®g´ú¶Z¥\¯à
+bool bInitialLaserCheck=false;                                                  //Steven 20140228 : é›·å°„æ¸¬è·åŠŸèƒ½
+bool bInitialLaserCheckPlate=false;                                             //Steven 20140228 : é›·å°„æ¸¬è·åŠŸèƒ½
+int  iLaserShuttle=0;                                                           //Steven 20140228 : é›·å°„æ¸¬è·åŠŸèƒ½
 bool bInitialICCheck=false;
 int iInitialICCheckTask=1;
 int iStepShuttleTask[2]={1, 1};
@@ -2998,8 +2998,8 @@ int iCheckShuttle1MustHasICTask=1;
 int iCheckShuttle2MustHasICTask=1;
 int iCheckShuttle1SlotTask=1;
 int iCheckShuttle2SlotTask=1;
-int iCheckShuttle1ProminentTasK=1;                                              //Alick 20160815 add for ¤O¦¨
-int iCheckShuttle2ProminentTasK=1;                                              //Alick 20160815 add for ¤O¦¨
+int iCheckShuttle1ProminentTasK=1;                                              //Alick 20160815 add for åŠ›æˆ
+int iCheckShuttle2ProminentTasK=1;                                              //Alick 20160815 add for åŠ›æˆ
 //Steven 20090907 End
 //kevin 20161108 Start
 bool bCheckShuttle1MustNoHasIC=true;
@@ -3008,44 +3008,44 @@ int iCheckShuttle1MustNoHasICTask=1;
 int iCheckShuttle2MustNoHasICTask=1;
 int iCheckShuttle1SlotNoHasICTask=1;
 int iCheckShuttle2SlotNoHasICTask=1;
-int iCheckShuttle1ProminentNoHasICTasK=1;                                       //Alick 20160815 add for ¤O¦¨
-int iCheckShuttle2ProminentNoHasICTasK=1;                                       //Alick 20160815 add for ¤O¦¨
+int iCheckShuttle1ProminentNoHasICTasK=1;                                       //Alick 20160815 add for åŠ›æˆ
+int iCheckShuttle2ProminentNoHasICTasK=1;                                       //Alick 20160815 add for åŠ›æˆ
 //kevin 20161108 end
 int iAuto1ZeroPos;
 
 bool bLongTimePause=true;
 int  iLongTimePauseCount=0;
 bool bIsAutoOneCycle=false;
-bool bBackupOneCycle_ByAutoClean=false;                                         //Sam 20230309 : Á×§KÄ²µo OneCycle «á¡AOneCycle ¥¼§¹¦¨®É¤SÄ²µo AutoClean °Ê§@¡AAutoClean °µ§¹¨Ã¤£·|´£¥Ü OneCycle Finish
-bool bManualOneCycle=false;                                                     //Sam 20230309 : Á×§KÄ²µo OneCycle «á¡AOneCycle ¥¼§¹¦¨®É¤SÄ²µo AutoClean °Ê§@¡AAutoClean °µ§¹¨Ã¤£·|´£¥Ü OneCycle Finish
-bool bIsAvoidIndexShiftOneCycle=false;                                          //Isaac 20210821 : ¥ş´¼­n¨D©w®Éonecycle¦^home,start
+bool bBackupOneCycle_ByAutoClean=false;                                         //Sam 20230309 : é¿å…è§¸ç™¼ OneCycle å¾Œï¼ŒOneCycle æœªå®Œæˆæ™‚åˆè§¸ç™¼ AutoClean å‹•ä½œï¼ŒAutoClean åšå®Œä¸¦ä¸æœƒæç¤º OneCycle Finish
+bool bManualOneCycle=false;                                                     //Sam 20230309 : é¿å…è§¸ç™¼ OneCycle å¾Œï¼ŒOneCycle æœªå®Œæˆæ™‚åˆè§¸ç™¼ AutoClean å‹•ä½œï¼ŒAutoClean åšå®Œä¸¦ä¸æœƒæç¤º OneCycle Finish
+bool bIsAvoidIndexShiftOneCycle=false;                                          //Isaac 20210821 : å…¨æ™ºè¦æ±‚å®šæ™‚onecycleå›home,start
 bool bIsASMAutoOneCycle=false;
 bool bIndexArmNoTestting=false;                                                 //ChungHung 20140730 add ContinuousFailHaveOneCycle
 
-bool bLotStartEndNeedIndexCheck=false;                                          //Isaac 20211019 : ¥i¿ï¾Ü°µindex checkªº®É¾÷
-bool bIndexJamNeedIndexcheck=false;                                             //Isaac 20211019 : ¥i¿ï¾Ü°µindex checkªº®É¾÷
+bool bLotStartEndNeedIndexCheck=false;                                          //Isaac 20211019 : å¯é¸æ“‡åšindex checkçš„æ™‚æ©Ÿ
+bool bIndexJamNeedIndexcheck=false;                                             //Isaac 20211019 : å¯é¸æ“‡åšindex checkçš„æ™‚æ©Ÿ
 
-int  AUTO_EMPTY_COLOR=0;                                                        //­y¹D 0:¤â°Ê,  1:6­y¦Û°Ê,  2:7­y¦Û°Ê,  3:8­y¦Û°Ê  //Steven 20230907 : For HT-9011UC, bool --> int
-int  iAutoCnt       =3;                                                         //Steven 20230907 : µ¹out arm­pºâ­n©ñªº¬OautoÁÙ¬Ofix
-int  iFixCnt        =3;                                                         //Steven 20230907 : µ¹out arm­pºâ­n©ñªºFixÁ`¼Æ¶q
-int  iAutoRight     =2;                                                         //Steven 20230907 : µ¹out arm­pºâ¾÷¥x¨ìAuto³Ì¥k°¼ªº¦ì¸m
-int  iFixMin        =3;                                                         //Steven 20230907 : µ¹out arm­pºâ­n©ñªºfix½L°_©l¦ì¸m
-int  iFixMax        =5;                                                         //Steven 20230907 : µ¹out arm­pºâ­n©ñªºfix½Lµ²§ô¦ì¸m
-int  iFixPosMin     =4;                                                         //Steven 20230907 : µ¹out arm­pºâ­n©ñªºfix½L°_©l¦ì¸m
-int  iFixPosMax     =6;                                                         //Steven 20230907 : µ¹out arm­pºâ­n©ñªºfix½Lµ²§ô¦ì¸m
-int  iFixPosHalf    =9;                                                         //Steven 20230907 : µ¹out arm­pºâ¾÷¥x¨ìFix³Ì¥k°¼ªº¦ì¸m(¤À¥b½L)
-int  iFixRight      =5;                                                         //Steven 20230907 : µ¹out arm­pºâ¾÷¥x¨ìFix³Ì¥k°¼ªº¦ì¸m
-int  iFixRightHalf  =8;                                                         //Steven 20230907 : µ¹out arm­pºâ¾÷¥x¨ìFix³Ì¥k°¼ªº¦ì¸m(¤À¥b½L)
-int  iMMAutoRight   =2;                                                         //Steven 20230919 : Auto³Ì¥k°¼ªº°}¦C¦ì¸m
-int  iMMFixRight    =2;                                                         //Steven 20230919 : Fix³Ì¥k°¼ªº°}¦C¦ì¸m
-int  iMMAoi         =1;                                                         //Steven 20230919 : AOIªº°}¦C¦ì¸m
-int  iBinBoxAtFix   =2;                                                         //Steven 20230907 : Bin Box¦bFixªº¦ì¸m
-int  iMMBinBox      =2;                                                         //Steven 20230907 : Bin Box¦b°}¦Cªº¦ì¸m
-int  iBinBoxAtAuto  =9;                                                         //Steven 20230907 : Bin Box¦biWhichAutoªº¦ì¸m
-int  iBinBoxType    =3;                                                         //Steven 20230907 : Bin Box¦bTray Formªºtype
-int  iMagMin        =10;                                                        //Steven 20230907 : µ¹out arm­pºâ­n©ñªºMagazine¦ì¸m
-int  iMagMax        =23;                                                        //Steven 20230907 : µ¹out arm­pºâ­n©ñªºMagazine¦ì¸m
-int  iMagAtAuto     =2;                                                         //Steven 20230907 : µ¹out arm­pºâ­n©ñªºMagazine¹ïÀ³Auto¦ì¸m
+int  AUTO_EMPTY_COLOR=0;                                                        //è»Œé“ 0:æ‰‹å‹•,  1:6è»Œè‡ªå‹•,  2:7è»Œè‡ªå‹•,  3:8è»Œè‡ªå‹•  //Steven 20230907 : For HT-9011UC, bool --> int
+int  iAutoCnt       =3;                                                         //Steven 20230907 : çµ¦out armè¨ˆç®—è¦æ”¾çš„æ˜¯autoé‚„æ˜¯fix
+int  iFixCnt        =3;                                                         //Steven 20230907 : çµ¦out armè¨ˆç®—è¦æ”¾çš„Fixç¸½æ•¸é‡
+int  iAutoRight     =2;                                                         //Steven 20230907 : çµ¦out armè¨ˆç®—æ©Ÿå°åˆ°Autoæœ€å³å´çš„ä½ç½®
+int  iFixMin        =3;                                                         //Steven 20230907 : çµ¦out armè¨ˆç®—è¦æ”¾çš„fixç›¤èµ·å§‹ä½ç½®
+int  iFixMax        =5;                                                         //Steven 20230907 : çµ¦out armè¨ˆç®—è¦æ”¾çš„fixç›¤çµæŸä½ç½®
+int  iFixPosMin     =4;                                                         //Steven 20230907 : çµ¦out armè¨ˆç®—è¦æ”¾çš„fixç›¤èµ·å§‹ä½ç½®
+int  iFixPosMax     =6;                                                         //Steven 20230907 : çµ¦out armè¨ˆç®—è¦æ”¾çš„fixç›¤çµæŸä½ç½®
+int  iFixPosHalf    =9;                                                         //Steven 20230907 : çµ¦out armè¨ˆç®—æ©Ÿå°åˆ°Fixæœ€å³å´çš„ä½ç½®(åˆ†åŠç›¤)
+int  iFixRight      =5;                                                         //Steven 20230907 : çµ¦out armè¨ˆç®—æ©Ÿå°åˆ°Fixæœ€å³å´çš„ä½ç½®
+int  iFixRightHalf  =8;                                                         //Steven 20230907 : çµ¦out armè¨ˆç®—æ©Ÿå°åˆ°Fixæœ€å³å´çš„ä½ç½®(åˆ†åŠç›¤)
+int  iMMAutoRight   =2;                                                         //Steven 20230919 : Autoæœ€å³å´çš„é™£åˆ—ä½ç½®
+int  iMMFixRight    =2;                                                         //Steven 20230919 : Fixæœ€å³å´çš„é™£åˆ—ä½ç½®
+int  iMMAoi         =1;                                                         //Steven 20230919 : AOIçš„é™£åˆ—ä½ç½®
+int  iBinBoxAtFix   =2;                                                         //Steven 20230907 : Bin Boxåœ¨Fixçš„ä½ç½®
+int  iMMBinBox      =2;                                                         //Steven 20230907 : Bin Boxåœ¨é™£åˆ—çš„ä½ç½®
+int  iBinBoxAtAuto  =9;                                                         //Steven 20230907 : Bin Boxåœ¨iWhichAutoçš„ä½ç½®
+int  iBinBoxType    =3;                                                         //Steven 20230907 : Bin Boxåœ¨Tray Formçš„type
+int  iMagMin        =10;                                                        //Steven 20230907 : çµ¦out armè¨ˆç®—è¦æ”¾çš„Magazineä½ç½®
+int  iMagMax        =23;                                                        //Steven 20230907 : çµ¦out armè¨ˆç®—è¦æ”¾çš„Magazineä½ç½®
+int  iMagAtAuto     =2;                                                         //Steven 20230907 : çµ¦out armè¨ˆç®—è¦æ”¾çš„Magazineå°æ‡‰Autoä½ç½®
 
 bool SUPPORT_2_EMPTY_EMPTY=false;
 int iOpenNewTTLBoardStratDelayCount=0;
@@ -3070,8 +3070,8 @@ double EPDual_MinAFB=0.0;
 double EPDual_MINA=0.0;
 double EPDual_MINMPA=0.0;                                                       //JerryYang 20171023 (wei) add PA Min
 AnsiString  JamCode;                                                            //ivy
-bool        LOAD_Z_USE_MOTOR[9];                                                //Steven 20190813 : ¤JTray§ï¥Î¨B¶i°¨¹F
-bool        LOAD_Y_USE_MOTOR[9];                            //Jimmychiu 20240307 : Loader Tray§ï¥Î¨B¶i°¨¹F
+bool        LOAD_Z_USE_MOTOR[9];                                                //Steven 20190813 : å…¥Trayæ”¹ç”¨æ­¥é€²é¦¬é”
+bool        LOAD_Y_USE_MOTOR[9];                            //Jimmychiu 20240307 : Loader Trayæ”¹ç”¨æ­¥é€²é¦¬é”
 bool        LOADUNLOAD_USE_CASSETTE[9];
 int         NUMBER_PANEL_TYPE               =0;
 int         WEIGHT_CALIBRATION              =0;                                 //Steven 20111108
@@ -3079,60 +3079,60 @@ int         ION_FAN_TYPE                    =1;                                 
 int         SHUTTLE_SENSOR_TYPE             =eSensorLine;                       //Steven 20100319
 int         NUEC_TYPE                       =eNUEC1;                            //Sam 20230707 : EtherCAT Shuttle sensor
 bool        ENABLE_OUT_SHUTTLE_SENEOR       =true;                              //Steven 20120531 : by pass out shuttle sensor
-bool        ENABLE_OUT_SHUTTLEY_LATCH       =true;                              //Steven 20170518 (jou) : Out shuttle Y sensor ¨Ï¥Î LATCH
-bool        Use_AxisY_Sensor_2x3mode        =false;                             //Isaac 20180402 (Steven) 2x3 mode ¥ÎY sensor °»´úOutshuttle´İ®Æ
-bool        Bias_Mode_Use_Y_Sensor          =false;                             //Steven 20240805 : 1x2 Bias mode ¥ÎY sensor °»´úOutshuttle´İ®Æ
+bool        ENABLE_OUT_SHUTTLEY_LATCH       =true;                              //Steven 20170518 (jou) : Out shuttle Y sensor ä½¿ç”¨ LATCH
+bool        Use_AxisY_Sensor_2x3mode        =false;                             //Isaac 20180402 (Steven) 2x3 mode ç”¨Y sensor åµæ¸¬Outshuttleæ®˜æ–™
+bool        Bias_Mode_Use_Y_Sensor          =false;                             //Steven 20240805 : 1x2 Bias mode ç”¨Y sensor åµæ¸¬Outshuttleæ®˜æ–™
 int         TEMPCTRL_TYPE                   =0;                                 //Steven20100513
 int         SAFE_DOOR_AMOUNT                =2;                                 //Steven 20100610
-int         TRAY_VIBRATION                  =0;                                 //Steven 20110627 : new Tray Vibration  //JerryYang 20170531 (wei) ºVtray¤è¦¡·s¼W¾_°Ê°¨¹F
-bool        REAL_TIME_CCD                   =false;                             //Steven 20110705 : ¦w¸ËReal Time CCD
-int         RTC_TemperNumber                 =1;                                //Isaac 20201217 : RTC CCD¼W¥[²Ä¤G²Õ·P·Å
+int         TRAY_VIBRATION                  =0;                                 //Steven 20110627 : new Tray Vibration  //JerryYang 20170531 (wei) æ•²trayæ–¹å¼æ–°å¢éœ‡å‹•é¦¬é”
+bool        REAL_TIME_CCD                   =false;                             //Steven 20110705 : å®‰è£Real Time CCD
+int         RTC_TemperNumber                 =1;                                //Isaac 20201217 : RTC CCDå¢åŠ ç¬¬äºŒçµ„æ„Ÿæº«
 bool        CCD2_TEMPER                     =false;
-bool        LB_TEMP                         =false;                             //Steven 20181023 : LB·Å«×
+bool        LB_TEMP                         =false;                             //Steven 20181023 : LBæº«åº¦
 bool        LB_TEMP_UpDown                  =false;                             //Frank 20241231 : add
 bool        Index_ESDAir                    =false;                             //kevin  20200207 : ESD air Temp
 
-//bool        INDEX_CCD                       =false;                             //Ifor 20150720 : ¦w¸ËINDEX CCD  //Ifor 20150728 Mark¾ã¦X©óRTC CCD¿ï¶µ
-int         USE_16_HEATER                   =eht4Heater;                        //Steven 20111011 : ¨Ï¥Î16­ÓHeater
-int         EJ1N_Count                      =0;                                 //Steven 20200318 : ­×¥¿EJ1NÅª¨ú²§±`ªº°İÃD
+//bool        INDEX_CCD                       =false;                             //Ifor 20150720 : å®‰è£INDEX CCD  //Ifor 20150728 Markæ•´åˆæ–¼RTC CCDé¸é …
+int         USE_16_HEATER                   =eht4Heater;                        //Steven 20111011 : ä½¿ç”¨16å€‹Heater
+int         EJ1N_Count                      =0;                                 //Steven 20200318 : ä¿®æ­£EJ1Nè®€å–ç•°å¸¸çš„å•é¡Œ
 bool        USE_IO_CHANGE_TOQUE             =false;                             //jou 2012-06-21 Enable index I/O Change Toque
 bool        USE_ReadIndex_TOQUE             =false;                             //kevin 20201027 add Read index Torque
 //==================================================================
-bool        bResetArm1Value                 =true;                              //KaiHuang 20201222 : Reset ¼Ğ·Ç­È(²Ä¤@¦¸Contact And Change Speed)
-bool        bResetArm2Value                 =true;                              //KaiHuang 20201222 : Reset ¼Ğ·Ç­È(²Ä¤@¦¸Contact And Change Speed)
+bool        bResetArm1Value                 =true;                              //KaiHuang 20201222 : Reset æ¨™æº–å€¼(ç¬¬ä¸€æ¬¡Contact And Change Speed)
+bool        bResetArm2Value                 =true;                              //KaiHuang 20201222 : Reset æ¨™æº–å€¼(ç¬¬ä¸€æ¬¡Contact And Change Speed)
 
-bool        bResetRecordSetArm1Value        =true;                              //kevin 20210118 : Reset ¼Ğ·Ç­È¤U¨Ì¦¸ cotract(²Ä¤@¦¸Contact And Change Speed)
-bool        bResetRecordSetArm2Value        =true;                              //kevin 20210118 : Reset ¼Ğ·Ç­È¤U¨Ì¦¸ cotract(²Ä¤@¦¸Contact And Change Speed)
+bool        bResetRecordSetArm1Value        =true;                              //kevin 20210118 : Reset æ¨™æº–å€¼ä¸‹ä¾æ¬¡ cotract(ç¬¬ä¸€æ¬¡Contact And Change Speed)
+bool        bResetRecordSetArm2Value        =true;                              //kevin 20210118 : Reset æ¨™æº–å€¼ä¸‹ä¾æ¬¡ cotract(ç¬¬ä¸€æ¬¡Contact And Change Speed)
 
-bool        bReadArm1_Torque                =false;                             //KaiHuang 20201222 : Åª¨ú Arm1 §á¤OFlag
-bool        bReadArm2_Torque                =false;                             //KaiHuang 20201222 : Åª¨ú Arm2 §á¤OFlag
-double      dSetArm1TorqueValue             =0.0;                               //KaiHuang 20201222 : Arm1 ²Ä¤@¦¸ Contact ªº­È
-double      dSetArm2TorqueValue             =0.0;                               //KaiHuang 20201222 : Arm2 ²Ä¤@¦¸ Contact ªº­È
-int         iReadTorqueError                =0;                                 //KaiHuang 20201222 : §PÂ_Åª¨ú§á¤O¬O§_¦³²§±`(·|¾É­P§á¤OÁÍªñÃ­ºA)
+bool        bReadArm1_Torque                =false;                             //KaiHuang 20201222 : è®€å– Arm1 æ‰­åŠ›Flag
+bool        bReadArm2_Torque                =false;                             //KaiHuang 20201222 : è®€å– Arm2 æ‰­åŠ›Flag
+double      dSetArm1TorqueValue             =0.0;                               //KaiHuang 20201222 : Arm1 ç¬¬ä¸€æ¬¡ Contact çš„å€¼
+double      dSetArm2TorqueValue             =0.0;                               //KaiHuang 20201222 : Arm2 ç¬¬ä¸€æ¬¡ Contact çš„å€¼
+int         iReadTorqueError                =0;                                 //KaiHuang 20201222 : åˆ¤æ–·è®€å–æ‰­åŠ›æ˜¯å¦æœ‰ç•°å¸¸(æœƒå°è‡´æ‰­åŠ›è¶¨è¿‘ç©©æ…‹)
 //=================================================================
 bool        USE_NEW_TEMPCTRL_FUNCTION       =false;                             //Steven20100513
-const int   iXPitch60                       =0;                                 //Steven 20131002 : XYÅÜ¶Z
-const int   iXPitchManual635                =1;                                 //Steven 20131002 : XYÅÜ¶Z
-const int   iXYPitchVariable                =2;                                 //Steven 20131002 : XYÅÜ¶Z
+const int   iXPitch60                       =0;                                 //Steven 20131002 : XYè®Šè·
+const int   iXPitchManual635                =1;                                 //Steven 20131002 : XYè®Šè·
+const int   iXYPitchVariable                =2;                                 //Steven 20131002 : XYè®Šè·
 const int   iXPitchManual360                =3;                                 //Steven 20140819 : Y-Pitch 36mm
-const int   iXYPitchRowA                    =4;                                 //Steven 20170424 (wei) : new XYÅÜ¶Z
+const int   iXYPitchRowA                    =4;                                 //Steven 20170424 (wei) : new XYè®Šè·
 const int   iXYPitch16Picker                =5;                                 //Steven for HT1032
 const int   iXYPitchBb                      =6;                                 //Steven for HT7080
 const int   iXYPitch16Bd_Be                 =7;                                 //Ztex 2023.12.06 Add HT-1032
 const int   iXYPitchIn_Bb_Out_Bc            =8;                                 //Ztex 2024.02.24 Add HT-1132
-const int   iXPitch40mm                     =0;                                 //Isaac 20171204 (Steven) : Xpitch40->50mm ¥i¿ï¾ÜX Pitch¾÷ºc¼Ò¦¡
-const int   iXPitch50mm                     =1;                                 //Isaac 20171204 (Steven) : Xpitch40->50mm ¥i¿ï¾ÜX Pitch¾÷ºc¼Ò¦¡
+const int   iXPitch40mm                     =0;                                 //Isaac 20171204 (Steven) : Xpitch40->50mm å¯é¸æ“‡X Pitchæ©Ÿæ§‹æ¨¡å¼
+const int   iXPitch50mm                     =1;                                 //Isaac 20171204 (Steven) : Xpitch40->50mm å¯é¸æ“‡X Pitchæ©Ÿæ§‹æ¨¡å¼
 const int   iXPitchAuto                     =2;                                 //JimmyChiu 20220708 : add Auto X pitch
 const int   iXPitch16Pick                   =3;                                 //Steven for HT1032
-int         USE_IN_OUT_ARM_Y_PITCH          =iXPitch60;                         //jou 2012-05-15 : ¿ï¾Ü Y Pitch ¾÷ºc¼Ò¦¡
-int         USE_OUT_ARM_Y_PITCH             =iXPitch60;                         //JerryYang 20251218 : IN/OUT ARM¤ä´©¤£¦P¼Ò²Õ
+int         USE_IN_OUT_ARM_Y_PITCH          =iXPitch60;                         //jou 2012-05-15 : é¸æ“‡ Y Pitch æ©Ÿæ§‹æ¨¡å¼
+int         USE_OUT_ARM_Y_PITCH             =iXPitch60;                         //JerryYang 20251218 : IN/OUT ARMæ”¯æ´ä¸åŒæ¨¡çµ„
 bool        USE_IN_Y_IS_AUTO_PITCH          =false;
 bool        USE_OUT_Y_IS_AUTO_PITCH         =false;
 int         IN_OUT_ARM_Y_PITCH_MIN          =1500;
 int         IN_OUT_ARM_Y_PITCH_MAX          =7500;
 int         IN_OUT_ARM_X_PITCH_MIN          =6000;                              //JimmyChiu 20220708 : add Auto X pitch
 int         IN_OUT_ARM_X_PITCH_MAX          =12000;                             //JimmyChiu 20220708 : add Auto X pitch
-int         USE_IN_OUT_ARM_X_PITCH          =iXPitch40mm;                       //Isaac 20171204 (Steven) : Xpitch40->50mm ¥i¿ï¾ÜX Pitch¾÷ºc¼Ò¦¡
+int         USE_IN_OUT_ARM_X_PITCH          =iXPitch40mm;                       //Isaac 20171204 (Steven) : Xpitch40->50mm å¯é¸æ“‡X Pitchæ©Ÿæ§‹æ¨¡å¼
 
 const int   iOutSortX40mm                   =1;
 int         USE_OUT_SORT_ARM                =eartUninstall;                     //Steven 20240822 : For HT-9046AU
@@ -3142,42 +3142,42 @@ int         USE_LdUldCassetteMode           =0;                                 
 int         USE_OUT_SORT_X_PITCH_MIN        =1333;                              //RogerYang 20250609 Add for 9046AU
 int         USE_OUT_SORT_X_PITCH_MAX        =4000;
 
-int         BASE_X_TO_HP                    =7000;                              //Steven 20230826 : °ò·Ç¶bX¨ì¥[¼ö½LÃä½tªº¶ZÂ÷  HT-9xxx: 7000, HT-7080B: 0, HT1040: 0, HT1028: 4000
-int         USE_ROTATE_KIT                  =0;                                 //Steven 20121001 : ±ÛÂàKit
+int         BASE_X_TO_HP                    =7000;                              //Steven 20230826 : åŸºæº–è»¸Xåˆ°åŠ ç†±ç›¤é‚Šç·£çš„è·é›¢  HT-9xxx: 7000, HT-7080B: 0, HT1040: 0, HT1028: 4000
+int         USE_ROTATE_KIT                  =0;                                 //Steven 20121001 : æ—‹è½‰Kit
 int         iRotate_In_Index                =0;                                 // 2012.06.11 , Joye , Rotate KIT
 int         iRotate_Out_Tray6               =1;                                 // 2012.06.11 , Joye , Rotate KIT
-int         iRotate_Type                    =eCynRotate;                        //2013-04-12    Dell :±ÛÂà¯¸;°¨¹Fª©
-int         USE_ROTATE                      =0;                                 //Steven 20230930 : ¾ã¦X®ğ¬ûª©±ÛÂàKitªºFlag
-int         iSpecialSequence                =0;                                 //2013-04-12    Dell :for KYEC ¯S®í±Æ¦C¤è¦¡ serio:29829
-int         USE_HOTPLATE_TYPE               =0;                                 //jou 2012-05-15 : ¿ï¾Ü Hotplate Type
-int         USE_MAGNETIC_SCALE              =0;                                 //Steven 20160426 : ºÏ©Ê¤Ø
+int         iRotate_Type                    =eCynRotate;                        //2013-04-12    Dell :æ—‹è½‰ç«™;é¦¬é”ç‰ˆ
+int         USE_ROTATE                      =0;                                 //Steven 20230930 : æ•´åˆæ°£ç¼¸ç‰ˆæ—‹è½‰Kitçš„Flag
+int         iSpecialSequence                =0;                                 //2013-04-12    Dell :for KYEC ç‰¹æ®Šæ’åˆ—æ–¹å¼ serio:29829
+int         USE_HOTPLATE_TYPE               =0;                                 //jou 2012-05-15 : é¸æ“‡ Hotplate Type
+int         USE_MAGNETIC_SCALE              =0;                                 //Steven 20160426 : ç£æ€§å°º
 int         USE_PICKER_COUNT                =1;                                 //Steven 20161117 : for HT-9045S
 int         USE_16PICKER_TYPE               =0;                                 //Ztex 2023.12.06 Add HT-1032
 int         INOUT_ARM_Y_PITCH               =0;                                 //Ztex 2023.12.06 Add HT-1032
-int         SHUTTLE_Z_TYPE                  =0;                                 //jou 2013-07-26 : ¿ï¾Ü Shuttle Z Sensor Type
+int         SHUTTLE_Z_TYPE                  =0;                                 //jou 2013-07-26 : é¸æ“‡ Shuttle Z Sensor Type
 int         USE_PRECISER                    =0;                                 //Frank 20180410 (Steven) : InArm Preciser Station
 //bool        PreciserInstallShuttleArea      =false;                             //Frank 20180410 (Steven) : InArm Preciser Station
 int         iPreciserInstallArea            =0;                                 //Ifor 20191008 : add Preciser Install Area
-bool        USE_LOADER_VIBRATION            =false;                             //JerryYang 20191001 loader¾_°Ê°¨¹F
+bool        USE_LOADER_VIBRATION            =false;                             //JerryYang 20191001 loaderéœ‡å‹•é¦¬é”
 
 double      SHUTTLE_COOLING                 =0.0;
 bool        OFFLINE_ALARM                   =false;                             //Steven 20140805
-double      VORTEX_COOLING                  =0.5;                               //Steven 20110922 : ´õ¬yºŞ§j®ğªº±Ò°ÊOffset
+double      VORTEX_COOLING                  =0.5;                               //Steven 20110922 : æ¸¦æµç®¡å¹æ°£çš„å•Ÿå‹•Offset
 double      SOCKET_OFFSET                   =0.0;
-int         INDEX_SUCKER_TYPE               =0;                                 //jou 2010-05-19 start : ­tÀ£
+int         INDEX_SUCKER_TYPE               =0;                                 //jou 2010-05-19 start : è² å£“
 eIndexPressType         INDEX_PRESS_TYPE    =e85KG;                             //Steven 20110310 : 240KG
-bool        bUserDefMaxContactHeight        =false;                             //Steven 20180412 : For new HT-9045°ª«×¸û°ª
+bool        bUserDefMaxContactHeight        =false;                             //Steven 20180412 : For new HT-9045é«˜åº¦è¼ƒé«˜
 double      dUserDefMaxContactHeight        =-135.0;
-bool        bUser_Define_IndexZ_SafePos     =false;                             //Richard 20230107 : SPIL«È¤á¦Û©w¸q¾÷¥x¦w¸Ë°ª«×(200~800¶¡)
+bool        bUser_Define_IndexZ_SafePos     =false;                             //Richard 20230107 : SPILå®¢æˆ¶è‡ªå®šç¾©æ©Ÿå°å®‰è£é«˜åº¦(200~800é–“)
 double      dUserDefineIndexZSafePos        =200;
 bool        TEMPCTRL_NEED_UNDER_20A         =false;                             //Steven 20100722
-bool        TEMPCTRL_HOTPLATE_TOGTHER       =false;                             //jou 2010-08-16 start : SCC Hotplate¤£¤À¬q¥[¼ö
-bool        AMBIENT_TEMP_CHECK[tcTotalCount]={0};                               //Steven 20100831 : ±`·ÅÀË¬dªº¦ì¸m  //Steven 20111208 : °O¾ĞÅé¯}Ãa, 20->tcTotalCount
+bool        TEMPCTRL_HOTPLATE_TOGTHER       =false;                             //jou 2010-08-16 start : SCC Hotplateä¸åˆ†æ®µåŠ ç†±
+bool        AMBIENT_TEMP_CHECK[tcTotalCount]={0};                               //Steven 20100831 : å¸¸æº«æª¢æŸ¥çš„ä½ç½®  //Steven 20111208 : è¨˜æ†¶é«”ç ´å£, 20->tcTotalCount
 //AI(W0-TAIL) 20260626: TODO(W6) -- G9004_M204 is a Syntek driver-header constant.
 #if 0
 int         SYN_TEK_MOTION_MODULE           =G9004_M204;
 #endif
-int         SYN_TEK_MOTION_MODULE           =0;  //AI(W0-TAIL) 20260626: placeholder until G9004_M204 (driver) lands (W6)                        //Steven 20110304 : §PÂ_¬O­ş¤@ºØ¼Ò²Õ
+int         SYN_TEK_MOTION_MODULE           =0;  //AI(W0-TAIL) 20260626: placeholder until G9004_M204 (driver) lands (W6)                        //Steven 20110304 : åˆ¤æ–·æ˜¯å“ªä¸€ç¨®æ¨¡çµ„
 bool        SAFE_DOOR_LOCK                  =false;                             //20111130  Dell
 bool        CLEAN_AIR                       =false;                             //ChungHung 20120821 : Clean Air
 int         INSTALL_OCR                     =0;                                 //Steven 20120716 : OCR
@@ -3187,98 +3187,98 @@ int         BAR_CODE_INSTALL                =0;                                 
 int         BAR_CODE_USECOUNT               =0;                                 //Ifor 20181206 :add COGNEX SYSTEM CCD Count
 int         BOTTOM_2DID                     =0;                                 //Steven 20190308 : Bottom 2D
 int         BOTTOM_2DID_CCD                 =0;                                 //KaiChen 20200513 : Bottom 2D 8CCD
-int         SHT_FLOATING_CHK                =0;                                 //Steven 20160920 : IC¸m°¾ÀË¬d
-int         IN_SHT_LAST_SENSOR              =0;                                 //Steven 20181203 : In Shuttle³Ì«á¤@­ÓSensor©w¸q
+int         SHT_FLOATING_CHK                =0;                                 //Steven 20160920 : ICç½®åæª¢æŸ¥
+int         IN_SHT_LAST_SENSOR              =0;                                 //Steven 20181203 : In Shuttleæœ€å¾Œä¸€å€‹Sensorå®šç¾©
 //int         BAR_CODE_MODE                   =0;                                 //Steven 20120921 : Barcode_2D
-int         FIX3_FULL_PLACE                 =0;                                 //Steven 20130126 : Fix3º¡½L¥\¯à
-int         FIX3_INSTALL                    =0;                                 //2013-07-16    Dell    9046LS²Ä¤@¥x¨SFix3;²Ä¤G¥x¥H¤WFix3¼Ğ°t
+int         FIX3_FULL_PLACE                 =0;                                 //Steven 20130126 : Fix3æ»¿ç›¤åŠŸèƒ½
+int         FIX3_INSTALL                    =0;                                 //2013-07-16    Dell    9046LSç¬¬ä¸€å°æ²’Fix3;ç¬¬äºŒå°ä»¥ä¸ŠFix3æ¨™é…
 int         CROSS_SENSOR_INSTALL            =0;                                 //2013-07-16    Dell    Shuttle cross sensor
-int         ESD_Monitor                     =0;                                 //2013-07-16    Dell    ¨Ï¥ÎESD monitor
-int         USE_NOVX3360                    =0;                                 //Steven 20131127 : ¨Ï¥ÎSimco ION­·®°
-int         USE_AutoCleanIonFan             =0;                                 //Isaac 20210609 : IOÄ²µoIonFan²M°w
+int         ESD_Monitor                     =0;                                 //2013-07-16    Dell    ä½¿ç”¨ESD monitor
+int         USE_NOVX3360                    =0;                                 //Steven 20131127 : ä½¿ç”¨Simco IONé¢¨æ‰‡
+int         USE_AutoCleanIonFan             =0;                                 //Isaac 20210609 : IOè§¸ç™¼IonFanæ¸…é‡
 int         USE_PULSE_TYPE                  =0;                                 //Ifor 20180316 : add Simco Use Pulse Type
 int         ION_PULSE_COUNT                 =0;                                 //Ifor 20180316 : add Simco Use Pulse Type
-int         USE_KASUGA                      =0;                                 //Ifor   20150731 : ¨Ï¥ÎKasuga ION­·®°
+int         USE_KASUGA                      =0;                                 //Ifor   20150731 : ä½¿ç”¨Kasuga IONé¢¨æ‰‡
 int         USE_OTD                         =0;                                 //Steven 20140312 : OTD
-int         USE_46_SUCKER_DB                =0;                                 //Steven 20131008 : HT9045¨Ï¥Î46°t®ğ
-int         USE_46_SENSOR_DB                =0;                                 //Steven 20131008 : HT9045¨Ï¥Î46°t¹q
-int         INDEX_MOTION_CARD               =0;                                 //Steven 20210623 : Index¨Ï¥ÎGalil
+int         USE_46_SUCKER_DB                =0;                                 //Steven 20131008 : HT9045ä½¿ç”¨46é…æ°£
+int         USE_46_SENSOR_DB                =0;                                 //Steven 20131008 : HT9045ä½¿ç”¨46é…é›»
+int         INDEX_MOTION_CARD               =0;                                 //Steven 20210623 : Indexä½¿ç”¨Galil
 int         GALI_PROTECT_MODE               =0;                                 //Steven 20260504 : Index in-motion protect (0=Original, 1=ER+OE, 2=TE)
 int         USE_FINE_PITCH                  =0;                                 //Steven 20210624 : Fine Pitch
-int         USE_OUT_SHT_MOT                 =0;                                 //Steven 20210624 : Out shuttle¿W¥ß°¨¹F
-int         USE_AIR_CONDITIONER             =0;                                 //Steven 20131011 : §N®ğ¾÷
-int         USE_BARCODE_AS_KEYBOARD         =0;                                 //Steven 20140108 : ¥u¯à¥ÎBar Code Reader¿é¤J
-int         HOT_PLATE_POSITION              =0;                                 //Steven 20140222 : Hot Plate Pinªº¦ì¸m
-int         HOT_PLATE_LIMITATION            =0;                                 //Steven 20151117 : Hot Plate Pinªº·¥­­¦ì¸m, ¥i¥H¶]2x2 8§l¼L
-int         USE_LASER_DISTANCE              =0;                                 //Steven 20140228 : ¹p®g´ú¶Z¥\¯à
+int         USE_OUT_SHT_MOT                 =0;                                 //Steven 20210624 : Out shuttleç¨ç«‹é¦¬é”
+int         USE_AIR_CONDITIONER             =0;                                 //Steven 20131011 : å†·æ°£æ©Ÿ
+int         USE_BARCODE_AS_KEYBOARD         =0;                                 //Steven 20140108 : åªèƒ½ç”¨Bar Code Readerè¼¸å…¥
+int         HOT_PLATE_POSITION              =0;                                 //Steven 20140222 : Hot Plate Pinçš„ä½ç½®
+int         HOT_PLATE_LIMITATION            =0;                                 //Steven 20151117 : Hot Plate Pinçš„æ¥µé™ä½ç½®, å¯ä»¥è·‘2x2 8å¸å˜´
+int         USE_LASER_DISTANCE              =0;                                 //Steven 20140228 : é›·å°„æ¸¬è·åŠŸèƒ½
 int         USE_AUTO_RETEST                 =eartUninstall;                     //ChungHung 20140317 add Auto Retest
 int         UNLOADER_ART[MAX_AUTO_TRAY]     ={eartUninstall, eartUninstall, eartUninstall, eartUninstall, eartUninstall, eartUninstall};   //Steven 20161221 : for SCK only Auto 2 has ART
 int         USE_AOI_Inspection              =0;                                 //2014-03-04    Dell    for SPIL WLP Add 5s Inspection
-int         USE_VibrationCommunication      =0;                                 //JerryYang 20230814 : add¾_°Ê°¨¹F³q°T½Õ³tª©¥»
+int         USE_VibrationCommunication      =0;                                 //JerryYang 20230814 : addéœ‡å‹•é¦¬é”é€šè¨Šèª¿é€Ÿç‰ˆæœ¬
 int         USE_COLOR_TRAY_SENSOR           =0;                                 //20140903 wei colcr Tray
 int         USE_SOCKET_SENSOR               =0;
-int         CANBUS_METHOD                   =0;                                 //Sam 20210518 : ·s¼W CanBus ³nÅé°t¸m
+int         CANBUS_METHOD                   =0;                                 //Sam 20210518 : æ–°å¢ CanBus è»Ÿé«”é…ç½®
 bool        USE_CKD_FCM_CleanAir            =false;                             //Ifor 20150708 : CKD FCM Clean Air
 int         USE_CATCH_TRAY_MODEL            =0;                                 //wei 20150807 Catch Tray Model
 int         AUTO_SENSOR_INSTALL             =0;                                 //wei 20160914 Auto Shuttle Sensor
 int         USE_TRAY_MAPPING                =etmUninstall;                      //wei 20161219 Tray Mapping
 int         USE_TRAY_ROBOT                  =0;                                 //Steven 20170330 (Wei) : For HT-9046LM
 int         USE_LOADER_HINGE                =0;                                 //Steven 20170330 (Wei) : For TSMC
-int         ShuttleVibration_INSTALL        =0;                                 //JerryYang 20171006 (wei) Shuttle ¾_°Ê°¨¹F
-int         USE_Fix_AI_CCD                  =0;                                 //RogerYang 20180901 add ª¿®æ´ò¤fDemo AI CCD Function
+int         ShuttleVibration_INSTALL        =0;                                 //JerryYang 20171006 (wei) Shuttle éœ‡å‹•é¦¬é”
+int         USE_Fix_AI_CCD                  =0;                                 //RogerYang 20180901 add çŸ½æ ¼æ¹–å£Demo AI CCD Function
 int         USE_DIE_CLEAN                   =0;                                 //wei 20170418
 int         USE_MR_SYSTEM                   =0;                                 //wei 20180702 MR
 int         USE_RFID_SYSTEM                 =0;                                 //wei 20180702 MR
 int         USE_RFID_READER                 =0;                                 //Steven 20220713 : RFID Reader for SJSEMI
 int         USE_AUTO_ALIGNMENT              =0;                                 //Sam 20181201 : AutoAlignment
 
-int         USE_OHT_SYSTEM                  =0;                                 //KaiChen 20200716 ¡GOHT
-int         USE_Multile_Empty               =0;                                 //KaiChen 20200716 ¡GOHT
+int         USE_OHT_SYSTEM                  =0;                                 //KaiChen 20200716 ï¼šOHT
+int         USE_Multile_Empty               =0;                                 //KaiChen 20200716 ï¼šOHT
 int         USE_KEYENCE_LOADER              =0;
 int         USE_KEYENCE_EMPTY               =0;
 int         USE_MultileEmptyTrayID_Keyence  =0;
 int         USE_COLORSENSOR_MUN             =0;                                 //Jimmychiu 20230630 : add color sensor MU-N in Loader
-int         LoaderUnload_StepMotor          =0;                                 //Steven 20200529 : Loader¤JTray§ï¨B¶i
+int         LoaderUnload_StepMotor          =0;                                 //Steven 20200529 : Loaderå…¥Trayæ”¹æ­¥é€²
 //AnsiString  TrayStepMotor_ComPort           ="COM18";
 int         i24V_PULSE_COUNT                =0;                                 //Ifor 20190311 : add 24V Monitor Use Pulse Type
-int         USE_FINGER_PRINT                =0;                                 //Steven 20190503 : «ü¯¾¿ëÃÑÅv­­
-int         DETECT_CURRENT                  =0;                                 //Richard 20220928 :¹q¬y°»´ú¼Ò²Õ
+int         USE_FINGER_PRINT                =0;                                 //Steven 20190503 : æŒ‡ç´‹è¾¨è­˜æ¬Šé™
+int         DETECT_CURRENT                  =0;                                 //Richard 20220928 :é›»æµåµæ¸¬æ¨¡çµ„
 int         USE_DEVICE_FLIPPER              =0;                                 //Frank 20210612 : Flipper Function
 int         CHAMBER_USE_PULSE_TYPE          =0;                                 //Ifor 20190422 : add Chamber Use Pulse Type
-int         USE_GROUND_MAN                  =0;                                 //Steven 20190828 : ³q°T¦¡GroundMan
-int         Ground_Man_ScanPoint            =0;                                 //KaiChen 20191005 ¡G³q°T¦¡GroundMan
-int         Ground_Man_AlarmOhm             =0;                                 //KaiChen 20191005 ¡G³q°T¦¡GroundMan
-bool        USE_KASUGA_Fan                  =0;                                 //KaiChen 20191225 ¡GKASUGA Fan ³q°T
-int         iUseHTIonBarFunction            =0;                                 //RogerYang 20250825 : Unloader·s¼W3¤äIonBar¡A¨ú¥N4 5 8 ion fan
-bool        bUseHTIonBar_PowerReset         =false;                             //RogerYang 20250825 : Unloader·s¼W3¤äIonBar¡A¨ú¥N4 5 8 ion fan
-int         iUseHTIonBar_PowerResetCount    =0;                                 //RogerYang 20250825 : Unloader·s¼W3¤äIonBar¡A¨ú¥N4 5 8 ion fan
-int         iUseHTIonBar_SendPowerStatus[MAX_HTIONFAN] = {0,0,0};               //RogerYang 20250825 : Unloader·s¼W3¤äIonBar¡A¨ú¥N4 5 8 ion fan
+int         USE_GROUND_MAN                  =0;                                 //Steven 20190828 : é€šè¨Šå¼GroundMan
+int         Ground_Man_ScanPoint            =0;                                 //KaiChen 20191005 ï¼šé€šè¨Šå¼GroundMan
+int         Ground_Man_AlarmOhm             =0;                                 //KaiChen 20191005 ï¼šé€šè¨Šå¼GroundMan
+bool        USE_KASUGA_Fan                  =0;                                 //KaiChen 20191225 ï¼šKASUGA Fan é€šè¨Š
+int         iUseHTIonBarFunction            =0;                                 //RogerYang 20250825 : Unloaderæ–°å¢3æ”¯IonBarï¼Œå–ä»£4 5 8 ion fan
+bool        bUseHTIonBar_PowerReset         =false;                             //RogerYang 20250825 : Unloaderæ–°å¢3æ”¯IonBarï¼Œå–ä»£4 5 8 ion fan
+int         iUseHTIonBar_PowerResetCount    =0;                                 //RogerYang 20250825 : Unloaderæ–°å¢3æ”¯IonBarï¼Œå–ä»£4 5 8 ion fan
+int         iUseHTIonBar_SendPowerStatus[MAX_HTIONFAN] = {0,0,0};               //RogerYang 20250825 : Unloaderæ–°å¢3æ”¯IonBarï¼Œå–ä»£4 5 8 ion fan
 int         SOCKET_AMP_QTY                  =0;
 int         SOCKET_AMP_QTY_2nd              =0;
-int         SOCKET_AMP_QTY_3rd              =0;                                 //JerryYang 20260205 : add²Ä¤T²ÕSocket sensor(8+16+8)
+int         SOCKET_AMP_QTY_3rd              =0;                                 //JerryYang 20260205 : addç¬¬ä¸‰çµ„Socket sensor(8+16+8)
 int         ROTATE_AMP_QTY                  =0;
 int         COLOR_AMP_QTY                   =0;
-int         VibrationMotorCount             =0;                                 //JerryYang 20230814 : add¾_°Ê°¨¹F³q°T½Õ³tª©¥»
+int         VibrationMotorCount             =0;                                 //JerryYang 20230814 : addéœ‡å‹•é¦¬é”é€šè¨Šèª¿é€Ÿç‰ˆæœ¬
 
-int         NUDN1_QTY                       =0;                                 //Sam 20210518 : ·s¼W CanBus ³nÅé°t¸m
-int         NUDN1_MACID11_AMP_QTY           =0;                                 //Sam 20210518 : ·s¼W CanBus ³nÅé°t¸m
-int         NUDN1_MACID12_AMP_QTY           =0;                                 //Sam 20210518 : ·s¼W CanBus ³nÅé°t¸m
-int         NUDN1_MACID13_AMP_QTY           =0;                                 //Sam 20210518 : ·s¼W CanBus ³nÅé°t¸m
-int         NUDN1_MACID14_AMP_QTY           =0;             //Sam 20210518 : ·s¼W CanBus ³nÅé°t¸m
+int         NUDN1_QTY                       =0;                                 //Sam 20210518 : æ–°å¢ CanBus è»Ÿé«”é…ç½®
+int         NUDN1_MACID11_AMP_QTY           =0;                                 //Sam 20210518 : æ–°å¢ CanBus è»Ÿé«”é…ç½®
+int         NUDN1_MACID12_AMP_QTY           =0;                                 //Sam 20210518 : æ–°å¢ CanBus è»Ÿé«”é…ç½®
+int         NUDN1_MACID13_AMP_QTY           =0;                                 //Sam 20210518 : æ–°å¢ CanBus è»Ÿé«”é…ç½®
+int         NUDN1_MACID14_AMP_QTY           =0;             //Sam 20210518 : æ–°å¢ CanBus è»Ÿé«”é…ç½®
 
 int         TRAY_ARM_MODE                   =0;                                 //Frank 20230419
 int         USE_2nd_LOADER                  =0;                                 //Steven 20240822 : For HT-9046AU
 int         AUTO3_IS_MAGAZINE               =0;                                 //JerryYang 20220909 : add magazine
 int         MAGAZINE_BIN_DISP_TYPE          =0;                                 //JerryYang 20220909 : add magazine
-int         In_Shuttle_Auto_Latch           =0;                                 //KenHsieh 20250722 : InSht sensor §ï¬°2Áû¡A¨Ã¥ÎLatch §P§OÅ|®Æ¥H¤Î­¸®Æ
+int         In_Shuttle_Auto_Latch           =0;                                 //KenHsieh 20250722 : InSht sensor æ”¹ç‚º2é¡†ï¼Œä¸¦ç”¨Latch åˆ¤åˆ¥ç–Šæ–™ä»¥åŠé£›æ–™
 bool bInSh1DoLtc=false;
 bool bInSh2DoLtc=false;
 bool bInSHLtcFin[2]={false, false};                                             //KenHsieh 20251106 : fix close site don't do In Sht Latch
-int  iInShtZRange=250;                                                          //KenHsieh 20251107 : Add Range for InSHZ Á×§Kªì©l°ª«×¤Ó°ª³y¦¨®Õ¥¿¤§ªùÂe­È¹L°ª
-bool bNeedGetSHRightLtc[2]={true, true};                                        //KenHsieh 20251118 : ­×§ïOut Sht ·|­«·sGetLtc ¾É­PLose IC ²§±`
-bool bInSht1ZNeedHome=false;                                                    //KenHsieh 20250924 : Á×§KInSHZ ¦^Home®É¼È°±­«±Ò«á¥ş¾÷¦^Home
-bool bInSht2ZNeedHome=false;                                                    //KenHsieh 20250924 : Á×§KInSHZ ¦^Home®É¼È°±­«±Ò«á¥ş¾÷¦^Home
-bool bInSHLtcErrNo[2][10]={{false}};                                            //KenHsieh 20251128 : InShtLtc ·s¼W²§±`­«½Æ§PÂ_
+int  iInShtZRange=250;                                                          //KenHsieh 20251107 : Add Range for InSHZ é¿å…åˆå§‹é«˜åº¦å¤ªé«˜é€ æˆæ ¡æ­£ä¹‹é–€æª»å€¼éé«˜
+bool bNeedGetSHRightLtc[2]={true, true};                                        //KenHsieh 20251118 : ä¿®æ”¹Out Sht æœƒé‡æ–°GetLtc å°è‡´Lose IC ç•°å¸¸
+bool bInSht1ZNeedHome=false;                                                    //KenHsieh 20250924 : é¿å…InSHZ å›Homeæ™‚æš«åœé‡å•Ÿå¾Œå…¨æ©Ÿå›Home
+bool bInSht2ZNeedHome=false;                                                    //KenHsieh 20250924 : é¿å…InSHZ å›Homeæ™‚æš«åœé‡å•Ÿå¾Œå…¨æ©Ÿå›Home
+bool bInSHLtcErrNo[2][10]={{false}};                                            //KenHsieh 20251128 : InShtLtc æ–°å¢ç•°å¸¸é‡è¤‡åˆ¤æ–·
 
 bool bContactCTOverCHK=false;
 bool bContactTimeOverStep=false;
@@ -3288,11 +3288,11 @@ int iBackUpZ1DownPosition=0;
 int iBackUpZ2DownPosition=0;
 
 bool bPlaceToShuttleFirst=false;
-TQPF_Timer MyTTLSOTTimer;                                                       //Steven 20180808 (wei) : TTLªº®É¶¡³æ¦ì§ï¦¨microsecond(£gs)
-TQPF_Timer TestIntervalsTime;                                                   //kevin 20160311 ¨ú±o´ú¸Õ¾÷¶¡¹j®É¶¡
-TQPF_Timer TestIntervalsBoostTime;                                              //JerryYang 20181122 (Steven) :  (Steven) : ±N¤£¦Pfunction­p®É¾¹¤À¶}
-TQPF_Timer PauseIntervalsTime;                                                  //kevin 20181009 ¨ú±o¾÷¥x°±¤î®É¶¡
-TQPF_Timer SOTPauseIntervalsTime;                                               //kevin 20181102 (Steven) : ¨ú±o¾÷¥x°±¤î®É¶¡
+TQPF_Timer MyTTLSOTTimer;                                                       //Steven 20180808 (wei) : TTLçš„æ™‚é–“å–®ä½æ”¹æˆmicrosecond(Î¼s)
+TQPF_Timer TestIntervalsTime;                                                   //kevin 20160311 å–å¾—æ¸¬è©¦æ©Ÿé–“éš”æ™‚é–“
+TQPF_Timer TestIntervalsBoostTime;                                              //JerryYang 20181122 (Steven) :  (Steven) : å°‡ä¸åŒfunctionè¨ˆæ™‚å™¨åˆ†é–‹
+TQPF_Timer PauseIntervalsTime;                                                  //kevin 20181009 å–å¾—æ©Ÿå°åœæ­¢æ™‚é–“
+TQPF_Timer SOTPauseIntervalsTime;                                               //kevin 20181102 (Steven) : å–å¾—æ©Ÿå°åœæ­¢æ™‚é–“
 int iTriggerBoostFunction=-1;                                                   //Steven 20180817 : Boost Function
 int iTriggerBoostFuncBack=-1;
 bool bFlagBelowTurnOfValve=false;
@@ -3315,14 +3315,14 @@ bool bTestSiteUse[2][MAX_SOCKET_ROW][MAX_SOCKET_COL]={
                             {{false,false,false,false,false,false,false,false},{false,false,false,false,false,false,false,false},
                              {false,false,false,false,false,false,false,false},{false,false,false,false,false,false,false,false}},
                            };
-bool bTestSiteUseEE[2][MAX_SOCKET_ROW][MAX_SOCKET_COL]={                        //Alick 20160923 add for ²Ä¤T²Õ¤uµ{®v¥Î¶}ÃöSITE
+bool bTestSiteUseEE[2][MAX_SOCKET_ROW][MAX_SOCKET_COL]={                        //Alick 20160923 add for ç¬¬ä¸‰çµ„å·¥ç¨‹å¸«ç”¨é–‹é—œSITE
                             {{false,false,false,false,false,false,false,false},{false,false,false,false,false,false,false,false},
                              {false,false,false,false,false,false,false,false},{false,false,false,false,false,false,false,false}},
                             {{false,false,false,false,false,false,false,false},{false,false,false,false,false,false,false,false},
                              {false,false,false,false,false,false,false,false},{false,false,false,false,false,false,false,false}},
                            };
 
-int InArmZIndex[2][8]={{MInArmZA, MInArmZC, MInArmZE, MInArmZG, MInArmZAe, MInArmZAf, MInArmZAg, MInArmZAh},                //Steven 20240601 : ­×¥¿°O¾ĞÅé·¸¦ì
+int InArmZIndex[2][8]={{MInArmZA, MInArmZC, MInArmZE, MInArmZG, MInArmZAe, MInArmZAf, MInArmZAg, MInArmZAh},                //Steven 20240601 : ä¿®æ­£è¨˜æ†¶é«”æº¢ä½
                        {MInArmZB, MInArmZD, MInArmZF, MInArmZH, MInArmZBe, MInArmZBf, MInArmZBg, MInArmZBh}};
 int OutArmZIndex[2][8]={{MOutArmZA, MOutArmZC, MOutArmZE, MOutArmZG, MOutArmZAe, MOutArmZAf, MOutArmZAg, MOutArmZAh},
                         {MOutArmZB, MOutArmZD, MOutArmZF, MOutArmZH, MOutArmZBe, MOutArmZBf, MOutArmZBg, MOutArmZBh}};
@@ -3330,10 +3330,10 @@ int OutArmZIndex[2][8]={{MOutArmZA, MOutArmZC, MOutArmZE, MOutArmZG, MOutArmZAe,
 int SortArmZIndex[2]={MOutSortAa, MOutSortAb};                                  //RogerYang 20250416 for HT9046AU add Sort Arm Z
 
 bool bPlace8IC=true; //ChungHung 20110322 add
-bool bTestSiteNeedSetErrBin[MAX_SOCKET_ROW][MAX_SOCKET_COL]={{false,false,false,false,false,false,false,false},{false,false,false,false,false,false,false,false},   //JerryYang 20170609 (wei) °O¿ıout shuttle lose ICªºsite
+bool bTestSiteNeedSetErrBin[MAX_SOCKET_ROW][MAX_SOCKET_COL]={{false,false,false,false,false,false,false,false},{false,false,false,false,false,false,false,false},   //JerryYang 20170609 (wei) è¨˜éŒ„out shuttle lose ICçš„site
                                                              {false,false,false,false,false,false,false,false},{false,false,false,false,false,false,false,false}};
-bool bOutShtLoseICNeedSetErrBin=false;                                          //JerryYang 20170609 (wei) ¦¹ºX¼Ğ¬°true»İ±Nout shuttle lose IC¹ïÀ³ªºsite³]¦¨error bin
-bool bIndexDropICNeedSetErrBin=false;                                           //JerryYang 20170609 (wei) ¦¹ºX¼Ğ¬°true»İ±Nout shuttle lose IC¹ïÀ³ªºsite³]¦¨error bin
+bool bOutShtLoseICNeedSetErrBin=false;                                          //JerryYang 20170609 (wei) æ­¤æ——æ¨™ç‚ºtrueéœ€å°‡out shuttle lose ICå°æ‡‰çš„siteè¨­æˆerror bin
+bool bIndexDropICNeedSetErrBin=false;                                           //JerryYang 20170609 (wei) æ­¤æ——æ¨™ç‚ºtrueéœ€å°‡out shuttle lose ICå°æ‡‰çš„siteè¨­æˆerror bin
 //----------------------------------------------------------------------------
 int iContactMode=0;
 int iTestRunMode=0;
@@ -3363,26 +3363,26 @@ int iForPickHPX10Step=0;                                                        
 
 int iPlaceHPOrder=0;
 int iPickHPOrder=0;
-int iRecPickHPOrder=0;                                                          //Ifor 20180521 :add §ï¥ş°ì
-int iPickHotPlateFinish=0x00;                                                   //Ifor 20180521 :add §ï¥ş°ì
+int iRecPickHPOrder=0;                                                          //Ifor 20180521 :add æ”¹å…¨åŸŸ
+int iPickHotPlateFinish=0x00;                                                   //Ifor 20180521 :add æ”¹å…¨åŸŸ
 
-bool OnlyRow2=false;                                                            //ChungHung 20121001 : ²¾¦Ücmydef Reset«á¦¹°Ñ¼Æ¥¼²M¬°false ¤@¼ËHangUp
+bool OnlyRow2=false;                                                            //ChungHung 20121001 : ç§»è‡³cmydef Resetå¾Œæ­¤åƒæ•¸æœªæ¸…ç‚ºfalse ä¸€æ¨£HangUp
 
 int  iOutArmiWhichKit=0;
 int  iOutArmiWhichKit_Sort=0;                                                   //RogerYang 20250710 Add for 9046AU
 int  iSortArmiWhichKit=0;                                                       //RogerYang 20250526 Add for 9046AU
 int  iInArmOrder=0;
-int  iWhichSht32=0, iWhichKit32=0;                                              //Ifor 20180116 (Steven) : add §ï¦¨¥ş°ìÅÜ¼Æ
+int  iWhichSht32=0, iWhichKit32=0;                                              //Ifor 20180116 (Steven) : add æ”¹æˆå…¨åŸŸè®Šæ•¸
 int  iYHalf=0;
 int  iXHalf=0;
 bool bResetMode=false;
-bool bCheckIndex=false;                                                         //Steven 20101116 : ©T©w¼Æ¶q«á­n°µIndex Check
-int  iWhoTriggerPiggyBack=0;                                                    //Steven 20111207 : ½ÖÄ²µo¤FPiggy Back
-bool bQAModeQuickCleanOut=false;                                                //Steven 20111005 : ¼Æ¶q¨ìªº®É­Ôªº§Ö³tCleanOut
-bool bQAModeFinishCleanOut=false;                                               //Steven 20111005 : °µ§¹QA¼Ò¦¡ªºCleanOut
-int  iQAModeLoaderCT=0;                                                         //jou 2012-05-03 ¼W¥[QA mode¨Ï¥Î¿W¥ßªºLoader Count
-int  iQAModePassCT=0;                                                           //JerryYang 20221004 : Maximª©¥»QA mode
-bool bQAModeStart=false;                                                        //Ifor 20201102 add: ·s¼WQA Mode Start ºX¼Ğ Á×§KCount ³Q²M°£
+bool bCheckIndex=false;                                                         //Steven 20101116 : å›ºå®šæ•¸é‡å¾Œè¦åšIndex Check
+int  iWhoTriggerPiggyBack=0;                                                    //Steven 20111207 : èª°è§¸ç™¼äº†Piggy Back
+bool bQAModeQuickCleanOut=false;                                                //Steven 20111005 : æ•¸é‡åˆ°çš„æ™‚å€™çš„å¿«é€ŸCleanOut
+bool bQAModeFinishCleanOut=false;                                               //Steven 20111005 : åšå®ŒQAæ¨¡å¼çš„CleanOut
+int  iQAModeLoaderCT=0;                                                         //jou 2012-05-03 å¢åŠ QA modeä½¿ç”¨ç¨ç«‹çš„Loader Count
+int  iQAModePassCT=0;                                                           //JerryYang 20221004 : Maximç‰ˆæœ¬QA mode
+bool bQAModeStart=false;                                                        //Ifor 20201102 add: æ–°å¢QA Mode Start æ——æ¨™ é¿å…Count è¢«æ¸…é™¤
 bool bCalculatePauseTime=false;
 int  iUPH_LoaderCount=0;
 bool bRecordUPH=false;
@@ -3391,9 +3391,9 @@ TDateTime tUPH_PauseStartTime=0;
 TDateTime tUPH_StartTime=0;
 TDateTime tUPH_EndTime=0;
 AnsiString sAlarmTime;
-AnsiString sFileNameTime;                                                       //Steven 20190801 : ­×¥¿ÀÉ¦W¿ù»~
+AnsiString sFileNameTime;                                                       //Steven 20190801 : ä¿®æ­£æª”åéŒ¯èª¤
 unsigned char SENDBUFF[1024];
-unsigned char READBUFF[1024];                                                   //Steven 20110927 : ·|·¸¦ì,§ï¦¨1024
+unsigned char READBUFF[1024];                                                   //Steven 20110927 : æœƒæº¢ä½,æ”¹æˆ1024
 bool bTakeAway=false;                                                           //kevin 20190806
 AnsiString sLoadCellReceData="";                                                //kevin 20190906 add load cell NG
 bool bloadcellRece=false;                                                       //kevin 20190906 add load cell command
@@ -3401,7 +3401,7 @@ int iloadcellRece=0;                                                            
 int iloadcellCount=0;                                                           //kevin 20190906 add load cell command
 //---------------------------------------------------------------------------
 int iCloseSiteState=0;                                                          //Eliot 2009_03_06
-int iCloseSiteStateForPick=0;                                                   //Steven 20150924 : ÀH®É¶}ÃöSite¥\¯à
+int iCloseSiteStateForPick=0;                                                   //Steven 20150924 : éš¨æ™‚é–‹é—œSiteåŠŸèƒ½
 //----------------------------------------------------------------------------
 int iSH1LED;
 int iSH2LED;
@@ -3420,7 +3420,7 @@ bool bTempComm6ReceiveOK=false;
 bool bRunOcrInsp=false;                                                         //ChungHung 20120830 add OCR Function add
 //----------------------------------------------------------------------------
 //Auto Decay Test
-bool bRunDecayTest=false;                                                       //Ifor 20151015 ·s¼W°õ¦æDecay Test µe­±Åã¥Ü
+bool bRunDecayTest=false;                                                       //Ifor 20151015 æ–°å¢åŸ·è¡ŒDecay Test ç•«é¢é¡¯ç¤º
 //Auto Cleaning
 bool bRunAutoClean=false;
 int iAutoClean_IndexContactCount=0;
@@ -3434,16 +3434,16 @@ int iAutoCleanPickFromShuttleTask=1;
 int iAutoCleanPlaceToFix3Task=1;
 int iAutoCleanPlaceToHotplateTask=1;                                            //kevin 20120217
 int iAutoCleanPlaceToCleanKitTask=1;                                            //jou 2012-05-24
-int iInArmCleaniWhichKit=0;                                                     //0: ²Ä¤@¦¸8SITE  1:9-16 SITE
+int iInArmCleaniWhichKit=0;                                                     //0: ç¬¬ä¸€æ¬¡8SITE  1:9-16 SITE
 int iCheckFinish_ByAutoClean=0;                                                 //pig 2011.09.01 AutoClean
 bool bCleanKitPitchOver12000=false;                                             //jou 2013-02-20
-bool bCleanKitPitchLess4000=false;                                              //jou 2015-03-24 tray x pitch¤Ó¤p¾É­PµLªk§l¨ú
+bool bCleanKitPitchLess4000=false;                                              //jou 2015-03-24 tray x pitchå¤ªå°å°è‡´ç„¡æ³•å¸å–
 bool bPlaceToShuttleByAutoClean=false;                                          //ChungHung 20150129 add when Index Jam SCK want to Inarm move to safe postion
 bool bPickFromShuttleByAutoClean=false;                                         //ChungHung 20150129 add when Index Jam SCK want to Inarm move to safe postion
-bool bPickFromKitByAutoClean=false;                                             //Steven 20210603 : ·s¼W§l©ñClean KitªºFlag
+bool bPickFromKitByAutoClean=false;                                             //Steven 20210603 : æ–°å¢å¸æ”¾Clean Kitçš„Flag
 bool bLockPlaceToShuttleByAutoClean=false;                                      //ChungHung 20150129 add when Index Jam SCK want to Inarm move to safe postion
 bool bLockPickFromShuttleByAutoClean=false;                                     //ChungHung 20150129 add when Index Jam SCK want to Inarm move to safe postion
-bool bRunATCCalibation=false;                                                   //Ifor 20160719 ·s¼W°õ¦æATC Calibation Test µe­±Åã¥Ü
+bool bRunATCCalibation=false;                                                   //Ifor 20160719 æ–°å¢åŸ·è¡ŒATC Calibation Test ç•«é¢é¡¯ç¤º
 const int M_INIT_START     =0x0001;
 const int M_INIT_RESTART   =0x0002;
 const int M_FINISH         =0x0004;
@@ -3456,7 +3456,7 @@ bool fFrontNeedTest=false;
 bool fTwoArmNeedTest =false;                                                    //2013-01-15    Dell    Add nn Mode
 bool fIndexNeedTest=false;
 
-int  iUnLoaderCount=0;                                                          //Steven 20091214 : ªí¥Ü¦ì¸m: Auto 1, 2, 3
+int  iUnLoaderCount=0;                                                          //Steven 20091214 : è¡¨ç¤ºä½ç½®: Auto 1, 2, 3
 //----------------------------------------------------------------------------
 const int DETECT_SENSOR_FLAG =1;                                                //jou 981215 start : InArmZSafe() & OutArmZSafe()
 const int DETECT_POS_FLAG    =2;
@@ -3466,99 +3466,99 @@ AnsiString asRecordTestResult;
 bool bBin16HangUp=false;
 
 int INDEX_DRIVER_TYPE       =Panasonic_DRIVER;                                  //Eliot 2010_04_29
-bool TorqueUseHPComCard     =false;                                             //Steven 20210204 : ¨Ï¥ÎÂE«l¦Û»sªº³q°T¥d
-int MOTOR_DRIVER_TYPE       =Panasonic_DRIVER;                                  //Steven 20110321 : ¤À¿ë¨ä¥L¶b¨Ï¥Îªº°¨¹F¼tµP
+bool TorqueUseHPComCard     =false;                                             //Steven 20210204 : ä½¿ç”¨é´»å‹è‡ªè£½çš„é€šè¨Šå¡
+int MOTOR_DRIVER_TYPE       =Panasonic_DRIVER;                                  //Steven 20110321 : åˆ†è¾¨å…¶ä»–è»¸ä½¿ç”¨çš„é¦¬é”å» ç‰Œ
 int iPanasonicDriverType    =Panasonic_DRIVER;                                  // 2011.08.11 , Joye , Panasonic A5 //Steven 20120629 add from 7045
 int CONTECT_SHUTTLE_KG      =10;                                                //jou 2011-03-15
 int CONTECT_SHUTTLE_KG_MITSUBISHI=6;                                            //Steven 20140530 : 4 --> 6
 int CONTECT_SHUTTLE_240KG   =15;
-int iTorqueCommMaxTime      =12;                                                //Time Out¬í¼Æ
+int iTorqueCommMaxTime      =12;                                                //Time Outç§’æ•¸
 
 //AI(W0-TAIL) 20260626: TODO(W7) -- 'TMyLog myLog' definition deferred (TMyLog is
 //  VCL-form-coupled, fwd-declared in cmydef.h). extern decl stays; def lands W7.
 #if 0
 TMyLog myLog;
-#endif                                                                   //Steven 20100629 : ¬ö¿ı­×§ï¶µ¥Ø
-AnsiString asLogPath="D:\\HT9045_Log\\ChangeLog";                               //Steven 20100907 : ´«¤@¤U¦ì¸m
+#endif                                                                   //Steven 20100629 : ç´€éŒ„ä¿®æ”¹é …ç›®
+AnsiString asLogPath="D:\\HT9045_Log\\ChangeLog";                               //Steven 20100907 : æ›ä¸€ä¸‹ä½ç½®
 AnsiString asUser="";
 
-bool bClearJamRateCount=false;                                                  //jou 2010-08-13 ­p¼Æjam rate,§ï¬°Tray Feed¬°¤@³æ¦ì
+bool bClearJamRateCount=false;                                                  //jou 2010-08-13 è¨ˆæ•¸jam rate,æ”¹ç‚ºTray Feedç‚ºä¸€å–®ä½
 
-bool bLoaderNoTrayAutoCleanOut=false;                                           //jou 2010-09-01 Loader¨S¦³tray®É,Loader¤£¦A¶iTray,Tran End®É¦Û°Êclean out
-bool bSecondTimeLoaderCheckNoTray=false;                                        //ChungHung 20130528 SCK­n¨DAutoClean«á­n¦Û°ÊÀË´ú¬O§_Loader¦³¸ÉTray
-bool bNeedCheckOurArmDeviceSuck=false;                                          //jou 2010-09-07 start : ½T»{Out arm¦³½T¹ê±Ndevice§l¨«
-bool bReOpenGpib=false;                                                         //Steven 20101013 : ¨C¦¸OneCycle©ÎCleanOut«á¡A­n­«¶}GPIB
-bool bLoaderHasSkip=false;                                                      //Steven 20101019 : Loader¦³³QSkip IC¡C
+bool bLoaderNoTrayAutoCleanOut=false;                                           //jou 2010-09-01 Loaderæ²’æœ‰trayæ™‚,Loaderä¸å†é€²Tray,Tran Endæ™‚è‡ªå‹•clean out
+bool bSecondTimeLoaderCheckNoTray=false;                                        //ChungHung 20130528 SCKè¦æ±‚AutoCleanå¾Œè¦è‡ªå‹•æª¢æ¸¬æ˜¯å¦Loaderæœ‰è£œTray
+bool bNeedCheckOurArmDeviceSuck=false;                                          //jou 2010-09-07 start : ç¢ºèªOut armæœ‰ç¢ºå¯¦å°‡deviceå¸èµ°
+bool bReOpenGpib=false;                                                         //Steven 20101013 : æ¯æ¬¡OneCycleæˆ–CleanOutå¾Œï¼Œè¦é‡é–‹GPIB
+bool bLoaderHasSkip=false;                                                      //Steven 20101019 : Loaderæœ‰è¢«Skip ICã€‚
 bool bLoaderHasSuck=false;
-int  iManualRemoveTrayCnt=0;                                                    //Sam 20190731 : ·í Load µo¥Í Pickup Error Skip ®É¡A·í«e³o½L°£¤F­n¤â°Ê²¾°£¡A¤U¤@½L¤]­n¤â°Ê²¾°£¡C
-bool bBackupCleanOut=false;                                                     //jou 2010-12-07 : ¨¾¤îindex check oncyle»Pclean out funtion½Ä¬ğ
+int  iManualRemoveTrayCnt=0;                                                    //Sam 20190731 : ç•¶ Load ç™¼ç”Ÿ Pickup Error Skip æ™‚ï¼Œç•¶å‰é€™ç›¤é™¤äº†è¦æ‰‹å‹•ç§»é™¤ï¼Œä¸‹ä¸€ç›¤ä¹Ÿè¦æ‰‹å‹•ç§»é™¤ã€‚
+bool bBackupCleanOut=false;                                                     //jou 2010-12-07 : é˜²æ­¢index check oncyleèˆ‡clean out funtionè¡çª
 bool bEnterTestIF=false;                                                        //ChungHung 20121221 add
 bool bCleanOutTrayEnd=false;                                                    //jou 2010-12-15
-bool bLifterPause[7]={false, false, false, false, false, false, false};         //jou 2011-02-21 start : magazine¨S°Ê§@·|alarm
-double fHotPlateExpansionCoefficient=1.0;                                       //Steven 20110324 : ¥[¼ö½Lªº¿±µÈ«Y¼Æ
+bool bLifterPause[7]={false, false, false, false, false, false, false};         //jou 2011-02-21 start : magazineæ²’å‹•ä½œæœƒalarm
+double fHotPlateExpansionCoefficient=1.0;                                       //Steven 20110324 : åŠ ç†±ç›¤çš„è†¨è„¹ä¿‚æ•¸
 
-bool bSiteMappingCHKOK=false;                                                   //¬O§_§¹¦¨Site mappingÀË¬d,¹w³]­È¬O¥¼§¹¦¨
-int  iDoSiteMappingStep=0;                                                      //¥Ø«e°µ¨ì²Ä´X­ÓSite
-int  iNowSiteCT=0;                                                              //¥Ø«e¾÷¥x°µ´X­ÓSiteCheck
+bool bSiteMappingCHKOK=false;                                                   //æ˜¯å¦å®ŒæˆSite mappingæª¢æŸ¥,é è¨­å€¼æ˜¯æœªå®Œæˆ
+int  iDoSiteMappingStep=0;                                                      //ç›®å‰åšåˆ°ç¬¬å¹¾å€‹Site
+int  iNowSiteCT=0;                                                              //ç›®å‰æ©Ÿå°åšå¹¾å€‹SiteCheck
 bool BackSiteFinish=false;
 int  iGetTestData[4][8];
 bool bShowAutoSiteMappingError=false;
 int  iShuttleHeaterWaitTime=0;
 bool bGetOpenBin=false;
 
-bool bRefreshFunction=false;                                                    //¨Ï¥ÎRefresh¥Dµe­±site¸òµÛÀÉ®×ÅÜ
+bool bRefreshFunction=false;                                                    //ä½¿ç”¨Refreshä¸»ç•«é¢siteè·Ÿè‘—æª”æ¡ˆè®Š
 int  MachineTypeChoice=Type_HT9045;
 int  SubMachineType=Type_None;                                                  //0:None 1:HT9046LA //Steven 20190307 : Add for HT-9046LA
-int  MachineNumber=0;                                                           //kevin  ¾÷¥x¾÷¸¹ÃÑ§O
+int  MachineNumber=0;                                                           //kevin  æ©Ÿå°æ©Ÿè™Ÿè­˜åˆ¥
 int  NEW_MAX_Index_Col=8;
 
-bool bIndexPlaceIcCheck=false;                                                  //kevin 20110505 ASE °ª¶¯ index©ñ§¹ic¦bshuttle ÀË¬d¬O§_´İ¯dic,¦b­tÀ£¨t²Î·|¦]µoalrm ³y¦¨­tÀ£­°¤U¨Ó¥t¤@arm ¦]¯uªÅ­È¤£¨¬Ãö³¬³y¦¨±¼®Æ
+bool bIndexPlaceIcCheck=false;                                                  //kevin 20110505 ASE é«˜é›„ indexæ”¾å®Œicåœ¨shuttle æª¢æŸ¥æ˜¯å¦æ®˜ç•™ic,åœ¨è² å£“ç³»çµ±æœƒå› ç™¼alrm é€ æˆè² å£“é™ä¸‹ä¾†å¦ä¸€arm å› çœŸç©ºå€¼ä¸è¶³é—œé–‰é€ æˆæ‰æ–™
 unsigned int ContinuousPassBinCount[256]={0};                                   //kevin 20140305 256 bin [30]={0};    //Steven 20110502
 unsigned int ContinuousPassBinBySocket[MAX_SOCKET_ROW][MAX_SOCKET_COL]={0};     //Steven 20110919
-int iSpeedFast=50000, iSpeedSlow=30000, iSpeedY=(50000*2);                      //Steven 20110503 : 240KG¥[³t //Ifor 20150703 ¥[§ÖY²¾°Ê³t«×
+int iSpeedFast=50000, iSpeedSlow=30000, iSpeedY=(50000*2);                      //Steven 20110503 : 240KGåŠ é€Ÿ //Ifor 20150703 åŠ å¿«Yç§»å‹•é€Ÿåº¦
 
 bool bIndexEveryTimeCheckEPing=false;                                           //Jou 20110505
-int iInitSpeedSh1=0, iInitSpeedSh2=0;                                           //°O¿ıDATABase ³t«×¸ê®Æ                kevin 20110531
-int iPJogHighSpeedSh1=0, iPJogHighSpeedSh2=0;                                   //°O¿ıDATABase shuttle³t«×¸ê®Æ kevin 20110531
+int iInitSpeedSh1=0, iInitSpeedSh2=0;                                           //è¨˜éŒ„DATABase é€Ÿåº¦è³‡æ–™                kevin 20110531
+int iPJogHighSpeedSh1=0, iPJogHighSpeedSh2=0;                                   //è¨˜éŒ„DATABase shuttleé€Ÿåº¦è³‡æ–™ kevin 20110531
 
 bool bRealTimeThreadDetect=false;
-bool bWantToStopChamberFan=false;                                               //Steven 20110725 : ­n¥i¥HÃö³¬¥[¼ö­·®°
+bool bWantToStopChamberFan=false;                                               //Steven 20110725 : è¦å¯ä»¥é—œé–‰åŠ ç†±é¢¨æ‰‡
 
-double dCCDTemperature=0.0;                                                     //Steven 20110924 : ½T»{CCD·Å«×
-int iTempOverShowAlarmT[tcTotalCount];                                          //kevin 20210112 ·Å«×¹L§C¹L°ª
+double dCCDTemperature=0.0;                                                     //Steven 20110924 : ç¢ºèªCCDæº«åº¦
+int iTempOverShowAlarmT[tcTotalCount];                                          //kevin 20210112 æº«åº¦éä½éé«˜
 
 int iSynTekCardType=eSCTPcil112;                                                //Steven 20111004
-bool bUT150Install[tcTotalCount]={false};                                       //Steven 20111012 : §ï¥Î³æ¿W«Å§i,¤£©ñ¦bLastSet¸Ì­±
-bool bUT150Install1To2[tcTotalCount]={false};                                   //kevin 20190921 1¹ï2site
+bool bUT150Install[tcTotalCount]={false};                                       //Steven 20111012 : æ”¹ç”¨å–®ç¨å®£å‘Š,ä¸æ”¾åœ¨LastSetè£¡é¢
+bool bUT150Install1To2[tcTotalCount]={false};                                   //kevin 20190921 1å°2site
 bool OLPClientConnect =true;
 
-bool bInitialMaxTime=true;                                                      //jou 2011-11-09 ¼W¥[initial max time set
+bool bInitialMaxTime=true;                                                      //jou 2011-11-09 å¢åŠ initial max time set
 
-bool bRecordPiggyBackStart=false;                                               //jou 2011-11-14 start : ¬ö¿ıpiggyback®É¶¡
+bool bRecordPiggyBackStart=false;                                               //jou 2011-11-14 start : ç´€éŒ„piggybackæ™‚é–“
 bool bRecordPiggyBackEnd=false;
 int iPiggyBackTime[2]={0,0};
 
 AnsiString pwPath("C:\\winnt\\system32\\tech.com");                             //2012-01-03    Dell
-AnsiString pwName="tech.com";                                                   //Steven 20221216 : §d¦p¬K­n§ï¦¨±qºô¸ô§ì±K½X¥»
+AnsiString pwName="tech.com";                                                   //Steven 20221216 : å³å¦‚æ˜¥è¦æ”¹æˆå¾ç¶²è·¯æŠ“å¯†ç¢¼æœ¬
 
-bool bRecIndexDropAlarm1=false;                                                 //jou 2012-01-17 ¬ö¿ıindex Drop alarm
-bool bRecIndexDropAlarm2=false;                                                 //jou 2012-01-17 ¬ö¿ıindex Drop alarm
-bool bHALTing=false;                                                            //jou 2012-01-30 ±`·Å & ¾÷¥x¨S¦b¶]ªº®É­Ôchamber­·®°¤£Âà
+bool bRecIndexDropAlarm1=false;                                                 //jou 2012-01-17 ç´€éŒ„index Drop alarm
+bool bRecIndexDropAlarm2=false;                                                 //jou 2012-01-17 ç´€éŒ„index Drop alarm
+bool bHALTing=false;                                                            //jou 2012-01-30 å¸¸æº« & æ©Ÿå°æ²’åœ¨è·‘çš„æ™‚å€™chamberé¢¨æ‰‡ä¸è½‰
 
-bool bRTCArm1HalfViewError=false;                                               //Steven 20120206 : RTC­«½Æ¿ù»~
-bool bRTCArm2HalfViewError=false;                                               //Steven 20120206 : RTC­«½Æ¿ù»~
-bool bRTCFullViewError=false;                                                   //Steven 20120206 : RTC­«½Æ¿ù»~
-int  XResolution=1024;                                                          //Steven 20120206 : µe­±¸ÑªR«×
-int  YResolution=768;                                                           //Steven 20120206 : µe­±¸ÑªR«×
-bool bFilterTheAgainData=false;                                                 //Steven 20120222 : ¹LÂo±¼Duplicateªº°T®§
-bool bCanUseHotPlateCheck=false;                                                //Steven 20120323 : ¥i¥HÀË¬dHotPlateªº¼Ò¦¡
+bool bRTCArm1HalfViewError=false;                                               //Steven 20120206 : RTCé‡è¤‡éŒ¯èª¤
+bool bRTCArm2HalfViewError=false;                                               //Steven 20120206 : RTCé‡è¤‡éŒ¯èª¤
+bool bRTCFullViewError=false;                                                   //Steven 20120206 : RTCé‡è¤‡éŒ¯èª¤
+int  XResolution=1024;                                                          //Steven 20120206 : ç•«é¢è§£æåº¦
+int  YResolution=768;                                                           //Steven 20120206 : ç•«é¢è§£æåº¦
+bool bFilterTheAgainData=false;                                                 //Steven 20120222 : éæ¿¾æ‰Duplicateçš„è¨Šæ¯
+bool bCanUseHotPlateCheck=false;                                                //Steven 20120323 : å¯ä»¥æª¢æŸ¥HotPlateçš„æ¨¡å¼
 
 double T_MODE_SPEED=0.9;                                                        //jou 2012-05-30 T Mode Speed
 
-bool bNeedCheckIndexToque=false;                                                //jou 2012-06-12 §lshuttle®É¡A»İÀË´úTorque¡A¹L¤j»İalarm
-bool bNeedCheckIndexToque1=false;                                               //jou 2012-06-12 §lshuttle®É¡A»İÀË´úTorque¡A¹L¤j»İalarm
-bool bNeedCheckIndexToque2=false;                                               //jou 2012-06-12 §lshuttle®É¡A»İÀË´úTorque¡A¹L¤j»İalarm
-const int ciIndex5FSetValue=80;                                                 //jou 2012-06-12 §lshuttle®É¡A»İÀË´úTorque¡A¹L¤j»İalarm
+bool bNeedCheckIndexToque=false;                                                //jou 2012-06-12 å¸shuttleæ™‚ï¼Œéœ€æª¢æ¸¬Torqueï¼Œéå¤§éœ€alarm
+bool bNeedCheckIndexToque1=false;                                               //jou 2012-06-12 å¸shuttleæ™‚ï¼Œéœ€æª¢æ¸¬Torqueï¼Œéå¤§éœ€alarm
+bool bNeedCheckIndexToque2=false;                                               //jou 2012-06-12 å¸shuttleæ™‚ï¼Œéœ€æª¢æ¸¬Torqueï¼Œéå¤§éœ€alarm
+const int ciIndex5FSetValue=80;                                                 //jou 2012-06-12 å¸shuttleæ™‚ï¼Œéœ€æª¢æ¸¬Torqueï¼Œéå¤§éœ€alarm
 //==============================================================================
 // GEM function Start
 //==============================================================================
@@ -3567,41 +3567,41 @@ bool GEM_EMGPressed=false;
 int  ATC_SYSTEM                 =0;                                             // 2011.04.15 , Joye , ATC
 int  ATC_MixMode                =0;                                             //JerryYang 20250729
 int  iControllerCheckDelay      =5;                                             // 2012.03.26 , Joye & Pig , ATC Connect Issue
-bool bATCConnectError           =false;                                         //pig 2011.12.21 ATC§ï
+bool bATCConnectError           =false;                                         //pig 2011.12.21 ATCæ”¹
 int  iStopATCChillerType        =0;                                             // 2012.05.07 , Joye , Chiller
 int  iTestData=0;
-bool MasheReCordData            =false;                                         //kevin 20120616°O¿ıµ{¦¡Â÷¶}¸ê®Æ
-bool bChangeCleanPad            =false;                                         //kevin 20120709 autoclean »İ­n¶}ªù
-bool bIsAutoOneCycleAutoclean   =false;                                         //kevin 20120710 ¥Ø«eonecycle ¤¤·Ç³Æ autoclean
-int  iAutoCleanShuttle          =0;                                             //kevin 20120711 Shuttle °»´ú Clean Pad¬O§_©ñ¦n
-bool bACInitialStart            =false;                                         //kevin 20120712 Initial ¼Ò¦¡¤@¶}©l§@autoclean
-bool bACInterval                =false;                                         //kevin 20120712 index¦¸¼Æ¨ì¦A°µautoclean
-int  iAutocleanInitialStart     =0;                                             //kevin 20120712 initial start ³Q±Ò°Ê
-bool bACManual                  =false;                                         //kevin 20120712 Manual ¥Dµe­±¨q autoclean button
-bool bAutoCleanCheckOpenDoor    =false;                                         //Steven 20121015 : Auto Clean¦³Alarm­n¶}«áªù
-int  bUseCleanArm                =1;                                            //kevin 20140903 AutoClean ¨Ï¥Î­ş¤@°¦ARM  :  1 Arm2  0 Arm1
+bool MasheReCordData            =false;                                         //kevin 20120616è¨˜éŒ„ç¨‹å¼é›¢é–‹è³‡æ–™
+bool bChangeCleanPad            =false;                                         //kevin 20120709 autoclean éœ€è¦é–‹é–€
+bool bIsAutoOneCycleAutoclean   =false;                                         //kevin 20120710 ç›®å‰onecycle ä¸­æº–å‚™ autoclean
+int  iAutoCleanShuttle          =0;                                             //kevin 20120711 Shuttle åµæ¸¬ Clean Padæ˜¯å¦æ”¾å¥½
+bool bACInitialStart            =false;                                         //kevin 20120712 Initial æ¨¡å¼ä¸€é–‹å§‹ä½œautoclean
+bool bACInterval                =false;                                         //kevin 20120712 indexæ¬¡æ•¸åˆ°å†åšautoclean
+int  iAutocleanInitialStart     =0;                                             //kevin 20120712 initial start è¢«å•Ÿå‹•
+bool bACManual                  =false;                                         //kevin 20120712 Manual ä¸»ç•«é¢ç§€ autoclean button
+bool bAutoCleanCheckOpenDoor    =false;                                         //Steven 20121015 : Auto Cleanæœ‰Alarmè¦é–‹å¾Œé–€
+int  bUseCleanArm                =1;                                            //kevin 20140903 AutoClean ä½¿ç”¨å“ªä¸€éš»ARM  :  1 Arm2  0 Arm1
 
 //-----------------------------jou-----------------------------------------------
-bool bIndexCheckNoStopVaccum    =false;                                         //jou 2012-05-09 Index Check®É,¦pªG¤¤³~«ö¼È°±,¤]­nÄ~Äò§âsuck()°µ§¹,Á×§K­tÀ£±¼ic kevin 20120831
-bool bCleanoutStart             =false;                                         //kevin 20120921 cleanout¤w¨Ï¥Î ¦ıonecycle ¦b°µ§¹¤FÄ~Äòcleanout
+bool bIndexCheckNoStopVaccum    =false;                                         //jou 2012-05-09 Index Checkæ™‚,å¦‚æœä¸­é€”æŒ‰æš«åœ,ä¹Ÿè¦ç¹¼çºŒæŠŠsuck()åšå®Œ,é¿å…è² å£“æ‰ic kevin 20120831
+bool bCleanoutStart             =false;                                         //kevin 20120921 cleanoutå·²ä½¿ç”¨ ä½†onecycle åœ¨åšå®Œäº†ç¹¼çºŒcleanout
 
-int  INSTALL_HEAT_GUN           =0;                                             //Kevin 20120523 AirGun ¼ö­·ºj¦w¸Ë
+int  INSTALL_HEAT_GUN           =0;                                             //Kevin 20120523 AirGun ç†±é¢¨æ§å®‰è£
 int  INSTALL_ATC_HEAT_GUN       =0;                                             //JerryYang 20220408 : add for ATC3.5
-//bool bChangeSiteMAP             =true;                                          //kevin 20130104 ¥i¥H§ïÅÜsitemap
+//bool bChangeSiteMAP             =true;                                          //kevin 20130104 å¯ä»¥æ”¹è®Šsitemap
 
-bool bUseAuto2Empty=false;                                                      //kevin 20120718 ¨Ê¤¸ auto2 load ªÅ TRAY  §ï¦¨¤ÀÂ÷®ğ¬û
-bool bAuto2Pause[7]={false, false, false, false, false, false, false};          //kevin 20120718   //jou 2011-02-21 start : magazine¨S°Ê§@·|alarm
+bool bUseAuto2Empty=false;                                                      //kevin 20120718 äº¬å…ƒ auto2 load ç©º TRAY  æ”¹æˆåˆ†é›¢æ°£ç¼¸
+bool bAuto2Pause[7]={false, false, false, false, false, false, false};          //kevin 20120718   //jou 2011-02-21 start : magazineæ²’å‹•ä½œæœƒalarm
 
-int  iTestTimeUpErrContinueR    =0;                                             //jou 2012-08-28 µÙ¥Í­n¨D Test Time Up Error ¤§«áªº¨â¦¸´ú¸Õ, ¤£ºŞµ²ªG¦p¦ó³£±Æ¨ìR
-bool bASMFinishOneCycle         =false;                                         //Steven 20120830 : AutoSiteMapping, ¤â°Ê²¾°£Loader Tray
+int  iTestTimeUpErrContinueR    =0;                                             //jou 2012-08-28 è±ç”Ÿè¦æ±‚ Test Time Up Error ä¹‹å¾Œçš„å…©æ¬¡æ¸¬è©¦, ä¸ç®¡çµæœå¦‚ä½•éƒ½æ’åˆ°R
+bool bASMFinishOneCycle         =false;                                         //Steven 20120830 : AutoSiteMapping, æ‰‹å‹•ç§»é™¤Loader Tray
 bool bWakeupGPIBFile            =false;                                         //Steven 20110116
 bool bWakeupEventLogSaverFile   =false;                                         //Frank 20140902
-bool bWakeupDMCCFile            =false;                                         //Alick 20160721 add Barcode File¤Á´«
-int  iInitStartDelayTimeCT      =0;                                             //jou 2012-11-30 °ª·Å°Ê§@¤U§Æ±æ¼W¥[Áû¼Æ°O¼Æ,¦b«e´XÁû¤UÀ£¨ìSocket«á,³£­nµ¥«İDelay time
-int  iTestBinCount              =16;                                            //kevin 20140308 bin0-15 15;    //Steven 20121112 : RS232¤ä´©32Bin
+bool bWakeupDMCCFile            =false;                                         //Alick 20160721 add Barcode Fileåˆ‡æ›
+int  iInitStartDelayTimeCT      =0;                                             //jou 2012-11-30 é«˜æº«å‹•ä½œä¸‹å¸Œæœ›å¢åŠ é¡†æ•¸è¨˜æ•¸,åœ¨å‰å¹¾é¡†ä¸‹å£“åˆ°Socketå¾Œ,éƒ½è¦ç­‰å¾…Delay time
+int  iTestBinCount              =16;                                            //kevin 20140308 bin0-15 15;    //Steven 20121112 : RS232æ”¯æ´32Bin
 //bool bCleanOutStart             =false;                                         //Kevin 20120921
-bool bContinusRotate            =false;                                         //2013-04-12    Dell :±ÛÂà¯¸;
-bool bResetIsPressed            =false;                                         //Steven 20130625 : ·sªºReset¤è¦¡
+bool bContinusRotate            =false;                                         //2013-04-12    Dell :æ—‹è½‰ç«™;
+bool bResetIsPressed            =false;                                         //Steven 20130625 : æ–°çš„Resetæ–¹å¼
 bool bResetShuttle              =false;
 bool bResetInArm                =false;
 bool bResetInArmTask            =false;
@@ -3614,14 +3614,14 @@ bool bResetIndexArm1Pick        =false;
 bool bResetIndexArm2Pick        =false;
 bool bResetLoadTray             =false;
 bool bResetUnLoadTray[MAX_AUTO_TRAY]={false, false, false, false, false, false};
-bool bChamboFanCloseTemp        =false;                                         //kevin 20130407Ãö³¬chambo ·Å«×
-bool bIndexTimeSet              =false;                                         //kevin 20130321 ³]©windex time
-double fIndexTime               =0.0;                                           //kevin 20130321 ³]©windex time
+bool bChamboFanCloseTemp        =false;                                         //kevin 20130407é—œé–‰chambo æº«åº¦
+bool bIndexTimeSet              =false;                                         //kevin 20130321 è¨­å®šindex time
+double fIndexTime               =0.0;                                           //kevin 20130321 è¨­å®šindex time
 bool bIsContactforce            =false;                                         //kevin 20130418 contact force over error
-int iShowSocketSensor           =0;                                             //kevin 20130504 µ¥index zÅı¶}¦A¨qalarm
+int iShowSocketSensor           =0;                                             //kevin 20130504 ç­‰index zè®“é–‹å†ç§€alarm
 bool bIsSocketSensor            =false;                                         //kevin 20130504 socket sensor detect error
-bool bASEK15UsePW               =false;                                         //kevin 20130701  Ase°ª¶¯K15
-AnsiString ASEK15PassWord       ="";                                            //kevin 20130701  Ase°ª¶¯K15
+bool bASEK15UsePW               =false;                                         //kevin 20130701  Aseé«˜é›„K15
+AnsiString ASEK15PassWord       ="";                                            //kevin 20130701  Aseé«˜é›„K15
 //------------TSMC kevin 20130425--------------------------------------------------
 //2013.01.11 Q_Q TSMC GPIB COMMAND
 bool BUFFERDATAUSEREG           =false;
@@ -3633,7 +3633,7 @@ int iReadTIntervelArm2          =0;                                             
 AnsiString asGPIBTempShow[tcTotalCount];                                        //kevin 20130425 //2013.01.11 Q_Q TSMC GPIB COMMAND
 bool bAllTemperatureIsReady=false;                                              //kevin 20130425 //2013.01.11 Q_Q TSMC GPIB COMMAND
 //------------------------------------------------------------------------------
-bool bNeedAskStartMode          =false;                                         //ChungHung 20130529 add manual change start mode ¦pªG¬OInitialStart «ö¤UStart®É­n¸ß°İ
+bool bNeedAskStartMode          =false;                                         //ChungHung 20130529 add manual change start mode å¦‚æœæ˜¯InitialStart æŒ‰ä¸‹Startæ™‚è¦è©¢å•
 int iInArmBlockIndex            =0;                                             //2014-03-04    Dell    for SPIL WLP Add Tray Block
 int iOutArmBlockIndex           =0;                                             //2014-03-04    Dell    for SPIL WLP Add Tray Block
 int iSortArmBlockIndex          =0;                                             //RogerYang 20250516 Add for 9046AU
@@ -3642,23 +3642,23 @@ bool bFirstTrayNeedAlarm        =false;                                         
 //Motion_Card_Mode==============================================================
 int MOTION_CARD_TYPE            =0;                                             //Brian 20121015
 int IO_CARD_TYPE                =0;                                             //Brian 20121015
-int TTL_CARD_TYPE               =0;                                             //Steven 20121122 : ¿ï¾ÜTTL Card ¼Ò¦¡
-int TTL_CARD_USE_ADDRESS        =0;                                             //Isaac 20210922 : ¿ï¾ÜTTLªO¤l¬O§_±a¯¸§O
-int MOTIONNET_SPEED             =3;                                             //Steven 20181122 : MNet³t«×­n¥i¥H­×§ï
+int TTL_CARD_TYPE               =0;                                             //Steven 20121122 : é¸æ“‡TTL Card æ¨¡å¼
+int TTL_CARD_USE_ADDRESS        =0;                                             //Isaac 20210922 : é¸æ“‡TTLæ¿å­æ˜¯å¦å¸¶ç«™åˆ¥
+int MOTIONNET_SPEED             =3;                                             //Steven 20181122 : MNeté€Ÿåº¦è¦å¯ä»¥ä¿®æ”¹
 //==============================================================================
-double dTempMax                 =135.0;                                         //2013-01-15   ©w¸q¥[¼ö¥i³]©w³Ì°ª·Å«×
-double dTempMin                 =20;                                            //2023-07-07   ©w¸q¥[¼ö¥i³]©w³Ì§C·Å«×
+double dTempMax                 =135.0;                                         //2013-01-15   å®šç¾©åŠ ç†±å¯è¨­å®šæœ€é«˜æº«åº¦
+double dTempMin                 =20;                                            //2023-07-07   å®šç¾©åŠ ç†±å¯è¨­å®šæœ€ä½æº«åº¦
 bool bCCDOverTemp               =false;
 //==============================================================================
-//¦U¾÷«¬DI/DO ¼Æ¶q©w¸q
+//å„æ©Ÿå‹DI/DO æ•¸é‡å®šç¾©
 const int DI_IP_Max_9045 = 19;                                                  //JerryYang 20200615 16->19      //2014-03-04    Dell    12 -> 16 for SPIL WLP Add 5S Inspection
 const int DI_IP_Min_9045 = 5;
 const int DO_IP_Max_9045 = 19;                                                  //JerryYang 20200615 16->19    //2014-03-04    Dell    12 -> 16 for SPIL WLP Add 5S Inspection
 const int DO_IP_Min_9045 = 5;
 
-const int DI_IP_Max_9046 = 19;                                                  //JerryYang 20200615 16->19    //JerryYang 20160607 for¨Ê¤¸¤ÀÂ÷¦¡¯B°ÊÀY,15->16
+const int DI_IP_Max_9046 = 19;                                                  //JerryYang 20200615 16->19    //JerryYang 20160607 foräº¬å…ƒåˆ†é›¢å¼æµ®å‹•é ­,15->16
 const int DI_IP_Min_9046 = 5;
-const int DO_IP_Max_9046 = 19;                                                  //JerryYang 20200615 16->19    //JerryYang 20160607 for¨Ê¤¸¤ÀÂ÷¦¡¯B°ÊÀY,15->17
+const int DO_IP_Max_9046 = 19;                                                  //JerryYang 20200615 16->19    //JerryYang 20160607 foräº¬å…ƒåˆ†é›¢å¼æµ®å‹•é ­,15->17
 const int DO_IP_Min_9046 = 5;
 
 const int DI_IP_Max_9046LS = 19;                                                //JerryYang 20200615 16->19   //wei 20150428 for ART   //wei 20150930
@@ -3667,30 +3667,30 @@ const int DO_IP_Max_9046LS = 19;                                                
 const int DO_IP_Min_9046LS = 5;
 
 //ChungHung 20130621 add
-const int DI_IP_Max_9045_12Site = 19;                                           //JerryYang 20200615 16->19//Steven 20131114 : 11 --> 12   //jou 2014-04-08 12 -> 13 HT9045­×§ï12site
+const int DI_IP_Max_9045_12Site = 19;                                           //JerryYang 20200615 16->19//Steven 20131114 : 11 --> 12   //jou 2014-04-08 12 -> 13 HT9045ä¿®æ”¹12site
 const int DI_IP_Min_9045_12Site = 5;
-const int DO_IP_Max_9045_12Site = 19;                                           //JerryYang 20200615 16->19//jou 2014-04-08 12 -> 13 HT9045­×§ï12site
+const int DO_IP_Max_9045_12Site = 19;                                           //JerryYang 20200615 16->19//jou 2014-04-08 12 -> 13 HT9045ä¿®æ”¹12site
 const int DO_IP_Min_9045_12Site = 5;
 
 //==============================================================================
 //JerryYang 20151109
 const int Bit0_HandlerReBoot                =0;                                 //JerryYang 20151109 bit0 PASS
-const int Bit1_HandlerOutputFull            =1;                                 //JerryYang 20151109 bit1 µLªÅ½L¥i©ñ¦ÜAuto
-const int Bit2_HandlerInputEmpty            =2;                                 //JerryYang 20151109 bit2 Loader tray¦³µLIC
-const int Bit3_ContactorCleaning            =3;                                 //JerryYang 20151109 bit3 °µAutoClean     //ATP Handler Memory Full(Gone To Retest)
-const int Bit4_HandlerDiagnostics           =4;                                 //JerryYang 20151109 bit4 ³]©w°Ñ¼Æ¤¤      //ATP Handler Diagnostic(R&M mode)
+const int Bit1_HandlerOutputFull            =1;                                 //JerryYang 20151109 bit1 ç„¡ç©ºç›¤å¯æ”¾è‡³Auto
+const int Bit2_HandlerInputEmpty            =2;                                 //JerryYang 20151109 bit2 Loader trayæœ‰ç„¡IC
+const int Bit3_ContactorCleaning            =3;                                 //JerryYang 20151109 bit3 åšAutoClean     //ATP Handler Memory Full(Gone To Retest)
+const int Bit4_HandlerDiagnostics           =4;                                 //JerryYang 20151109 bit4 è¨­å®šåƒæ•¸ä¸­      //ATP Handler Diagnostic(R&M mode)
 const int Bit5_IndexCheck                   =5;                                 //JerryYang 20151109 bit5 PASS            //ATP Handler Sort off
 const int Bit6_Reversed                     =6;                                 //JerryYang 20151109 bit6 PASS            //ATP Handler Input off
 const int Bit7_HandlerGuardband             =7;                                 //JerryYang 20151109 bit7 PASS
-const int Bit8_HandlerJam                   =8;                                 //JerryYang 20151109 bit8 ¾÷¥xJAM
-const int Bit9_HandlerStop                  =9;                                 //JerryYang 20151109 bit9 ¾÷¥x°±¤î¤¤
-const int Bit10_HandlerSoak                 =10;                                //JerryYang 20151109 bit10 ¾÷¥xµ¥«İ¥[¼ö§¹¦¨,°±¤î¤¤
-const int Bit11_HandlerDoorOpen             =11;                                //JerryYang 20151109 bit11 ªù¸T
-const int Bit12_HandlerEmpty                =12;                                //JerryYang 20151109 bit12 ¾÷¥x¤ºµLIC
+const int Bit8_HandlerJam                   =8;                                 //JerryYang 20151109 bit8 æ©Ÿå°JAM
+const int Bit9_HandlerStop                  =9;                                 //JerryYang 20151109 bit9 æ©Ÿå°åœæ­¢ä¸­
+const int Bit10_HandlerSoak                 =10;                                //JerryYang 20151109 bit10 æ©Ÿå°ç­‰å¾…åŠ ç†±å®Œæˆ,åœæ­¢ä¸­
+const int Bit11_HandlerDoorOpen             =11;                                //JerryYang 20151109 bit11 é–€ç¦
+const int Bit12_HandlerEmpty                =12;                                //JerryYang 20151109 bit12 æ©Ÿå°å…§ç„¡IC
 const int Bit13_HandlerOk                   =13;                                //JerryYang 20151109 bit13 PASS
-const int Bit14_Unloading                   =14;                                //JerryYang 20151109 bit14 Unloading¤¤
-const int Bit15_Loading                     =15;                                //JerryYang 20151109 bit15 Loading¤¤
-const int Bit16_Reversed                    =16;                                //JerryYang 20151109 bit16 IC³£¦bAuto    //ATP Contactor Cleaning
+const int Bit14_Unloading                   =14;                                //JerryYang 20151109 bit14 Unloadingä¸­
+const int Bit15_Loading                     =15;                                //JerryYang 20151109 bit15 Loadingä¸­
+const int Bit16_Reversed                    =16;                                //JerryYang 20151109 bit16 ICéƒ½åœ¨Auto    //ATP Contactor Cleaning
 
 //==============================================================================
 //JerryYang 20161007
@@ -3701,19 +3701,19 @@ const int iHP1x2Step2          =3;
 const int iHP1x2Step3          =4;
 int i8PickerHPMode=0;
 //==============================================================================
-//JerryYang 20170531 (wei) ºVtray¤è¦¡·s¼W¾_°Ê°¨¹F
-const int NonVibration      =0;                                                 //¨S¦³ºVtrat¾÷ºc
-const int VibrationCylinder =1;                                                 //ºVÀ»®ğ¬û
-const int VibrationMotor    =2;                                                 //¾_°Ê°¨¹F
+//JerryYang 20170531 (wei) æ•²trayæ–¹å¼æ–°å¢éœ‡å‹•é¦¬é”
+const int NonVibration      =0;                                                 //æ²’æœ‰æ•²tratæ©Ÿæ§‹
+const int VibrationCylinder =1;                                                 //æ•²æ“Šæ°£ç¼¸
+const int VibrationMotor    =2;                                                 //éœ‡å‹•é¦¬é”
 //==============================================================================
-bool bGail_HighSpeedMode = false;                                               //´£°ªIndex ¹B°Ê³t«×(¥Ø«eby9046LS±M¥Î)
+bool bGail_HighSpeedMode = false;                                               //æé«˜Index é‹å‹•é€Ÿåº¦(ç›®å‰by9046LSå°ˆç”¨)
 //==============================================================================
-//---------------------------------kevin 20130321 Dell DUT(Socket Base)·Å±±¾¹¼W¥[¬°4Áû------------------------
-int  iSocketBaseTempCount=eDut1ea;                                              //Steven 20140116 : Socket¼Æ¶q,§ï¥Î¼Æ¦r³]©w
-int  iSocketBaseAdd4TempType=0;                                                 //kevin 20130812  DUT 4­Ó·Å±±¾¹¨Ï¥Î   0: pansonic  1:omron
-bool bK12TempHeadChoiceChambo=false;                                            //kevin 20130507 TSMC HEAD·Å«×§ï¦¨ CHAMBO·Å«×
-int iIndexArm=0;                                                                //kevin 20130605 K12 contract mode ½T»{ ­ş¤äarm¦b¤U
-int iArmEPUse=0;                                                                //kevin 20130611 0:¤£¥R®ğ    1:arm1 ¥R®ğ   2:arm2
+//---------------------------------kevin 20130321 Dell DUT(Socket Base)æº«æ§å™¨å¢åŠ ç‚º4é¡†------------------------
+int  iSocketBaseTempCount=eDut1ea;                                              //Steven 20140116 : Socketæ•¸é‡,æ”¹ç”¨æ•¸å­—è¨­å®š
+int  iSocketBaseAdd4TempType=0;                                                 //kevin 20130812  DUT 4å€‹æº«æ§å™¨ä½¿ç”¨   0: pansonic  1:omron
+bool bK12TempHeadChoiceChambo=false;                                            //kevin 20130507 TSMC HEADæº«åº¦æ”¹æˆ CHAMBOæº«åº¦
+int iIndexArm=0;                                                                //kevin 20130605 K12 contract mode ç¢ºèª å“ªæ”¯armåœ¨ä¸‹
+int iArmEPUse=0;                                                                //kevin 20130611 0:ä¸å……æ°£    1:arm1 å……æ°£   2:arm2
 
 bool bShuttleCooling=false;                                                     //jou 2010-06-09 start
 bool bChamboCooling=false;                                                      //kevin 20130109
@@ -3721,28 +3721,28 @@ bool bHotplateCooling=false;                                                    
 
 int AccessLevel=0;
 bool bFirstRecordLoaderData=true;                                               //jou 2013-05-31 first record loader data
-bool bContinuoussPass=false;                                                    //kevin 20131009 pass IC¶W¹L¦h³]©w¦¸¼Æ¨qÄµ§i
-bool bContactCounOven=false;                                                    //kevin 20131009 CONTACT COUNT ¶W¹L¦h³]©w¦¸¼Æ¨qÄµ§i
+bool bContinuoussPass=false;                                                    //kevin 20131009 pass ICè¶…éå¤šè¨­å®šæ¬¡æ•¸ç§€è­¦å‘Š
+bool bContactCounOven=false;                                                    //kevin 20131009 CONTACT COUNT è¶…éå¤šè¨­å®šæ¬¡æ•¸ç§€è­¦å‘Š
 int iAutoSkipCT=0;                                                              //jou 2013-09-23 add Auto SKIP CT
 int iLoaderDropErrRetryCT[MAX_ARM_Row][MAX_ARM_Col]={0};                        //jou 2013-09-23 add Auto SKIP CT
-bool bMoveInArm2XYToWaitOk=true;                                                //Steven 20131025 : ­n¥ı°Ê¨ì¦w¥ş¦ì¸m¤~¥i¥H¦A¨ì§Oªº¦a¤è
-bool bInarmZOk=false;                                                           //kevin 20131119 Z¶b¥¿¦b§l¨ú¤£¯à³Q¤¤Â_
-bool bContaceTorque=false;                                                      //kevin 20131217 TOR-> ³æ¤@ÁûKG
+bool bMoveInArm2XYToWaitOk=true;                                                //Steven 20131025 : è¦å…ˆå‹•åˆ°å®‰å…¨ä½ç½®æ‰å¯ä»¥å†åˆ°åˆ¥çš„åœ°æ–¹
+bool bInarmZOk=false;                                                           //kevin 20131119 Zè»¸æ­£åœ¨å¸å–ä¸èƒ½è¢«ä¸­æ–·
+bool bContaceTorque=false;                                                      //kevin 20131217 TOR-> å–®ä¸€é¡†KG
 
-bool bHomeinitialCheckPushZ1=false;                                             //kevin 20131218 Âkhom«eÀË¬d¬O§_¦³tray©ñ¦bhotplate ³y¦¨¾÷ºc·lÃa «öz1 ½T»{
-bool bHomeUnlock=false;                                                         //kevin 20131218 home«öz1 ¸Ñ¶} ¾÷¥x¥i¥H°Ê§@
+bool bHomeinitialCheckPushZ1=false;                                             //kevin 20131218 æ­¸homå‰æª¢æŸ¥æ˜¯å¦æœ‰trayæ”¾åœ¨hotplate é€ æˆæ©Ÿæ§‹æå£ æŒ‰z1 ç¢ºèª
+bool bHomeUnlock=false;                                                         //kevin 20131218 homeæŒ‰z1 è§£é–‹ æ©Ÿå°å¯ä»¥å‹•ä½œ
 
 int iWhichShuttle0000=0;                                                        //ChungHung 20130910 alter for SCK can close site by Index
 
-double dTestSec;                                                                //2013-11-27    Dell ´ú¸Õ®É¶¡ //jou 2014-09-24 int -> float bWhenHappenTestedTimeBelowUseInitialDelay ´ú¸Õ¬í¼Æ¤p©ó1 sec·|»~§P
-int iStableTime;                                                                //JerryYang 20210122 : ASE-CL·s¼W«İ·Å¥\¯à
-int iSoakTimer;                                                                 //2013-11-27    Dell Index Soak time ­p¼Æ
-int iSoakTimer_Start;                                                           //2013-11-27    Dell Index Soak time ­p¼Æ
+double dTestSec;                                                                //2013-11-27    Dell æ¸¬è©¦æ™‚é–“ //jou 2014-09-24 int -> float bWhenHappenTestedTimeBelowUseInitialDelay æ¸¬è©¦ç§’æ•¸å°æ–¼1 secæœƒèª¤åˆ¤
+int iStableTime;                                                                //JerryYang 20210122 : ASE-CLæ–°å¢å¾…æº«åŠŸèƒ½
+int iSoakTimer;                                                                 //2013-11-27    Dell Index Soak time è¨ˆæ•¸
+int iSoakTimer_Start;                                                           //2013-11-27    Dell Index Soak time è¨ˆæ•¸
 int iInitialSoakTimer;                                                          //Steven 20140827
 int iInitialSoakTimer_Start;                                                    //Steven 20140827
 
-int iATCTempWaitTimer;                                                          //Ifor 20230608 add:KYEC ­n¨D·s¼W¥Dµe­±Åã¥ÜATC Temp Wait ­Ë¼Æ
-int iATCTempWaitTimer_Start;                                                    //Ifor 20230608 add:KYEC ­n¨D·s¼W¥Dµe­±Åã¥ÜATC Temp Wait ­Ë¼Æ
+int iATCTempWaitTimer;                                                          //Ifor 20230608 add:KYEC è¦æ±‚æ–°å¢ä¸»ç•«é¢é¡¯ç¤ºATC Temp Wait å€’æ•¸
+int iATCTempWaitTimer_Start;                                                    //Ifor 20230608 add:KYEC è¦æ±‚æ–°å¢ä¸»ç•«é¢é¡¯ç¤ºATC Temp Wait å€’æ•¸
 
 bool bNeedInitialTestDelay=false;                                               //ChungHung 20140425 add for TSMC Device
 int  iInitialCount=0;                                                           //ChungHung 20140801 add Korea Want to count down in main status
@@ -3752,15 +3752,15 @@ bool bDoEveryFirstDeviceFunctionUseInitialDelay=false;                          
 bool bDoAfterShowAlarmMessageUseInitialDelay=false;                             //ChungHung 20140105 add for SCK
 bool bDoAfterOpenHeatDoorUseInitialDelay=false;                                 //ChungHung 20140105 add for SCK
 bool bDoWhenHappenTestedTimeBlowUseInitialDelay=false;                          //ChungHung 20140105 add for SCK
-bool bDoOTDOffUseInitialDelay=false;                                            //Steven 20160818 : OTD¥´¶}Delay
+bool bDoOTDOffUseInitialDelay=false;                                            //Steven 20160818 : OTDæ‰“é–‹Delay
 
 bool bDoWhenPressStopOverUseInitialDelay=false;                                 //ChungHung 20150526 add for ATK want to even stop over will use initial delay
 bool bDoWhenNoFullSiteUseInitialDelay=false;                                    //wei 20151228 No FullSite delay
-bool bTestFinishToNextTestOver=false;                                           //kevin 20160310 ´ú¸Õ§¹¦¨¨ì¤U¤@¦¸§¹¦¨¶W¹L©Ò³]®É¶¡¶·±Ò°Ê
-bool bTestStartToNextTestStart=false;                                           //kevin 20181101 SOT ¶¡¹j®É¶¡ÅX°Ê
-bool bTestStartToNextTestStartDelay=false;                                      //kevin 20181101 SOT ¶¡¹j®É¶¡ÅX°Ê
-bool bHISIInitiayDelay=false;                                                   //kevin 20200110 add ®ü¥q±j¦Üinitial delay
-bool bCancelHISIInitiayDelay=false;                                             //Ifor 20230201 add: ¨ú®ø®ü¥q±j¦Üinitial delay
+bool bTestFinishToNextTestOver=false;                                           //kevin 20160310 æ¸¬è©¦å®Œæˆåˆ°ä¸‹ä¸€æ¬¡å®Œæˆè¶…éæ‰€è¨­æ™‚é–“é ˆå•Ÿå‹•
+bool bTestStartToNextTestStart=false;                                           //kevin 20181101 SOT é–“éš”æ™‚é–“é©…å‹•
+bool bTestStartToNextTestStartDelay=false;                                      //kevin 20181101 SOT é–“éš”æ™‚é–“é©…å‹•
+bool bHISIInitiayDelay=false;                                                   //kevin 20200110 add æµ·å¸å¼·è‡³initial delay
+bool bCancelHISIInitiayDelay=false;                                             //Ifor 20230201 add: å–æ¶ˆæµ·å¸å¼·è‡³initial delay
 
 int iAfterTestedCount;                                                          //ChungHung 20140730 add for ATK function after tested delay time
 
@@ -3779,35 +3779,35 @@ bool ReEnterBarcode[20]={false, false, false, false, false, false, false, false,
                          false, false, false, false};                           //20140310  wei   Barcode Reader
 
 //==============================================================================
-const int ArmMaxPitch_13Suck=3000;                                              //¨Ï¥Î1, 3§l¼L
-const int ArmMaxPitch=3750;                                                     //Steven 20140212 : For Xilinx 31x31¥Í²£8Site          //wei 20141205 4000-->3750
+const int ArmMaxPitch_13Suck=3000;                                              //ä½¿ç”¨1, 3å¸å˜´
+const int ArmMaxPitch=3750;                                                     //Steven 20140212 : For Xilinx 31x31ç”Ÿç”¢8Site          //wei 20141205 4000-->3750
 bool bTestingStopAllMotor=false;                                                //jou 2013-09-25 Testing Need Stop All Motorextern
 //==============================================================================
-//¦æ¨®¬ö¿ı¾¹
+//è¡Œè»Šç´€éŒ„å™¨
 bool bCarRecordTimeStart=false;                                                 //wei 2013-12-09
 bool bCarRecordTimeEnd=false;                                                   //wei 2013-12-09
 TQPF_Timer  CarRecord;
-bool bDutHasOverTemp=false;                                                     //Steven 20140308 : DUT·Å«×²§±`¨ì¤U¦¸Start«e¤£¥[¼ö
-int  iBarcodeTimeCount[bcTotal];                                                //20140310  WEI : [A09] Barcode Reader«ùÄò®É¶¡
+bool bDutHasOverTemp=false;                                                     //Steven 20140308 : DUTæº«åº¦ç•°å¸¸åˆ°ä¸‹æ¬¡Startå‰ä¸åŠ ç†±
+int  iBarcodeTimeCount[bcTotal];                                                //20140310  WEI : [A09] Barcode ReaderæŒçºŒæ™‚é–“
 //==============================================================================
 bool bDutflag[32]={false, false, false, false, false, false, false, false,
                    false, false, false, false, false, false, false, false,
                    false, false, false, false, false, false, false, false,
-                   false, false, false, false, false, false, false, false};   //ChungHung 20140611 fix ¬ö¿ı´ú¸ÕªºDut¦ì¸m ¹ïÀ³¿ù»~
-//bool bIndexDutflag[2][4][8]={{{false, false, false, false, false, false, false, false},  //kevin 20140318 ¬ö¿ı¥Ø«eindex¦³IC»İ´ú¸Õ
+                   false, false, false, false, false, false, false, false};   //ChungHung 20140611 fix ç´€éŒ„æ¸¬è©¦çš„Dutä½ç½® å°æ‡‰éŒ¯èª¤
+//bool bIndexDutflag[2][4][8]={{{false, false, false, false, false, false, false, false},  //kevin 20140318 ç´€éŒ„ç›®å‰indexæœ‰ICéœ€æ¸¬è©¦
 //                              {false, false, false, false, false, false, false, false},
 //                              {false, false, false, false, false, false, false, false},
 //                              {false, false, false, false, false, false, false, false}},
-//                              {{false, false, false, false, false, false, false, false},  //kevin 20140318 ¬ö¿ı¥Ø«eindex¦³IC»İ´ú¸Õ
+//                              {{false, false, false, false, false, false, false, false},  //kevin 20140318 ç´€éŒ„ç›®å‰indexæœ‰ICéœ€æ¸¬è©¦
 //                              {false, false, false, false, false, false, false, false},
 //                              {false, false, false, false, false, false, false, false},
 //                              {false, false, false, false, false, false, false, false}}};
-bool bSkipNeedCheckVac[2][2][8]={{{false, false, false, false, false, false, false, false},{false, false, false, false, false, false, false, false}},  //JerryYang 20170609 (wei) °O¿ıpick up error«öskipªºsite
+bool bSkipNeedCheckVac[2][2][8]={{{false, false, false, false, false, false, false, false},{false, false, false, false, false, false, false, false}},  //JerryYang 20170609 (wei) è¨˜éŒ„pick up erroræŒ‰skipçš„site
                                  {{false, false, false, false, false, false, false, false},{false, false, false, false, false, false, false, false}}};
 bool bArm1PressSkipNeedDownCheckVac=false;
 bool bArm2PressSkipNeedDownCheckVac=false;
 
-AnsiString TestSiteFileName[2][TotalTestMode]=                                  //Eliot 2009_12_23  //JerryYang 20201125 : TestSiteFileName²¾¨ìcmydef
+AnsiString TestSiteFileName[2][TotalTestMode]=                                  //Eliot 2009_12_23  //JerryYang 20201125 : TestSiteFileNameç§»åˆ°cmydef
 {
     {"Single Site",                     //SingleSite
      "2-Site",                          //DualSite
@@ -3826,7 +3826,7 @@ AnsiString TestSiteFileName[2][TotalTestMode]=                                  
      "16-Site (4X4)",                   //_16Site4X4                            //Sam 20190226 : 16Site4X4
      "32-Site N Mode",                  //_32Site4X8N
      "32-Site M Mode",                  //_32Site4X8M
-     "8-Site Pop"                       //_8Site1X4                             //ChungHung 20150528 add for ®ü«ä _8Site1x4
+     "8-Site Pop"                       //_8Site1X4                             //ChungHung 20150528 add for æµ·æ€ _8Site1x4
     },
     {"1site.bmp",                       //SingleSite
      "2site.bmp",                       //DualSite
@@ -3845,25 +3845,25 @@ AnsiString TestSiteFileName[2][TotalTestMode]=                                  
      "16Site4X4.bmp",                   //_16Site4X4                            //Sam 20190226 : 16Site4X4
      "32SiteN.bmp",                     //_32Site4X8N
      "32SiteM.bmp",                     //_32Site4X8M
-     "8-Site Pop.bmp"                   //_8Site1X4                             //ChungHung 20150528 add for ®ü«ä _8Site1x4
+     "8-Site Pop.bmp"                   //_8Site1X4                             //ChungHung 20150528 add for æµ·æ€ _8Site1x4
     }
 };
 
-bool bOneCycleOperateChangeON_line=false;                                       //kevin 20140411 one cycle§¹¦pªG¬Oop¼Ò¦¡off-line »İ¤Á´« on-line ¨Ã¥BµoÄµ§i
-int iOff_LINE_Mode=0;                                                           //kevin 20140411 ¥Ø«e¾÷¥x¤u§@¼Ò¦¡¬Ooff-line:1  on_line :2
+bool bOneCycleOperateChangeON_line=false;                                       //kevin 20140411 one cycleå®Œå¦‚æœæ˜¯opæ¨¡å¼off-line éœ€åˆ‡æ› on-line ä¸¦ä¸”ç™¼è­¦å‘Š
+int iOff_LINE_Mode=0;                                                           //kevin 20140411 ç›®å‰æ©Ÿå°å·¥ä½œæ¨¡å¼æ˜¯off-line:1  on_line :2
 bool bTesterDucking=false;                                                      //jou 2014-04-25 Tester Docking Wait delay time
 int  iTesterDucking=0;                                                          //jou 2014-04-25 Tester Docking Wait delay time
 
 bool bNeedTesterDuckingFinishLightYellowAndAlarmOn=false;                       //ChungHung 20141015 add for SCK When the handler start running (finished Start count function),Yellow light blinking & alarm on (press "alarm reset" then clear)
 bool bTesterDuckingFinishLightYellowAndAlarmOn=false;                           //ChungHung 20141015 add for SCK When the handler start running (finished Start count function),Yellow light blinking & alarm on (press "alarm reset" then clear)
 
-bool bRTCAutoModelVerifyFirstTime=false;                                        //jou 2014-06-24 RTC ¦Û°Ê¶i¦æModelÅçÃÒ
+bool bRTCAutoModelVerifyFirstTime=false;                                        //jou 2014-06-24 RTC è‡ªå‹•é€²è¡ŒModelé©—è­‰
 
 int iDefHonPrecLevel    =3;                                                     //jou 2014-06-19 Security Have 5 Level
 int iDefSupervisorLevel =2;                                                     //jou 2014-06-19 Security Have 5 Level
 int iDefEngineerLevel   =1;                                                     //jou 2014-06-19 Security Have 5 Level
 //ChungHung 20140716 modify SCK complain count never clear when change add reset count
-//©ñ¨ì¥ş°ìÅÜ¼Æ
+//æ”¾åˆ°å…¨åŸŸè®Šæ•¸
 unsigned int ContinuousFailSKTCount[MAX_SOCKET_ROW][MAX_SOCKET_COL];
 unsigned int ContinuousFailARMCount[2][MAX_SOCKET_ROW][MAX_SOCKET_COL];
 
@@ -3881,37 +3881,37 @@ int iAutoCleanBySiteCount[MAX_SOCKET_ROW][MAX_SOCKET_COL][TEST_MAX_BIN];        
 
 //ChungHung 20140730 add ContinuousFailHaveOneCycle end.
 
-int iLoadPersentCT[TEST_MAX_BIN];                                               //Steven 20140830 : §ï¦¨¥ş°ìÅÜ¼Æ
-int iLoadCountCT[TEST_MAX_BIN];                                                 //Steven 20140830 : §ï¦¨¥ş°ìÅÜ¼Æ
-bool bAlarmReset=false;                                                         //Steven 20140905 : ¬ö¿ı¦³³Q«ö¤UAlarm Reset
+int iLoadPersentCT[TEST_MAX_BIN];                                               //Steven 20140830 : æ”¹æˆå…¨åŸŸè®Šæ•¸
+int iLoadCountCT[TEST_MAX_BIN];                                                 //Steven 20140830 : æ”¹æˆå…¨åŸŸè®Šæ•¸
+bool bAlarmReset=false;                                                         //Steven 20140905 : ç´€éŒ„æœ‰è¢«æŒ‰ä¸‹Alarm Reset
 
 bool bPiggyBackIndexCheck=false;                                                //jou 2014-09-03 Function State Stop Firt Initital Delay Time
 int iContinueAutoSkipAutoTrayEnd=0;                                             //ChungHung 20141002 add for KYEC AutoRetest
 
 AnsiString sMachineState    ="NULL";                                            // 2013.09.30 , Joye , KYEC SECS/GEM
 AnsiString sMachinePreState ="NULL";                                            // 2013.11.27 , Joye , KYEC SECS/GEM
-TQPF_Timer lHandlerStopTime;                                                    //jou 2014-09-21 Show Handler Stop Time //Steven 20190716 : §ï¦¨Timer
+TQPF_Timer lHandlerStopTime;                                                    //jou 2014-09-21 Show Handler Stop Time //Steven 20190716 : æ”¹æˆTimer
 
 bool bTesterLowYieldOneCycle=false;                                             //jou 2014-09-23 Tester Low Yield Handler need One Cycle & Alarm
 
-int ASE_InTrayNum=0;                                                            //kevin 20140918 input tray ¼Æ¶q
+int ASE_InTrayNum=0;                                                            //kevin 20140918 input tray æ•¸é‡
 
 int iLoadTrayCount=0;                                                           //JerryYang 20240318
 
-AnsiString ASET_FileNAME;                                                       //kevin 20140918  ASE°ª¶¯¦Û°Ê°O¿ıÀÉ®×ÀÉ¦W
-AnsiString ASET_ScheduleNAME;                                                   //kevin 20140918  ASE°ª¶¯¦Û°Ê°O¿ıÀÉ®×¥Í²£§å¸¹
-AnsiString ASET_INTQTY;                                                         //kevin 20140918  ASE°ª¶¯¦Û°Ê°O¿ıÀÉ®×¥Í²£¼Æ¶q
-AnsiString ASET_StartTimeNAME;                                                  //kevin 20140918  ASE°ª¶¯¦Û°Ê°O¿ıÀÉ®×¶}©l®É¶¡
-bool bSwitchArm2=false;                                                         //Steven 20140922 : Arm2·í§@«ü¯¾´ú¸Õ
-AnsiString AseIcRecord="";                                                      //kevin 20161228 °O¿ı¤@¤äARM IC§l¨ú ¸ê®Æ
+AnsiString ASET_FileNAME;                                                       //kevin 20140918  ASEé«˜é›„è‡ªå‹•è¨˜éŒ„æª”æ¡ˆæª”å
+AnsiString ASET_ScheduleNAME;                                                   //kevin 20140918  ASEé«˜é›„è‡ªå‹•è¨˜éŒ„æª”æ¡ˆç”Ÿç”¢æ‰¹è™Ÿ
+AnsiString ASET_INTQTY;                                                         //kevin 20140918  ASEé«˜é›„è‡ªå‹•è¨˜éŒ„æª”æ¡ˆç”Ÿç”¢æ•¸é‡
+AnsiString ASET_StartTimeNAME;                                                  //kevin 20140918  ASEé«˜é›„è‡ªå‹•è¨˜éŒ„æª”æ¡ˆé–‹å§‹æ™‚é–“
+bool bSwitchArm2=false;                                                         //Steven 20140922 : Arm2ç•¶ä½œæŒ‡ç´‹æ¸¬è©¦
+AnsiString AseIcRecord="";                                                      //kevin 20161228 è¨˜éŒ„ä¸€æ”¯ARM ICå¸å– è³‡æ–™
 
-bool bTimeOutForNoFullSite=false;                                               //Steven 20141016 : FullSiteªºTest Time Out
+bool bTimeOutForNoFullSite=false;                                               //Steven 20141016 : FullSiteçš„Test Time Out
 double fRecindexCycleTim=0.0;                                                   //kevin 20141024 ASE index cycle time  sec
 AnsiString RecindexCycleTim="";                                                 //kevin 20141024 ASE index cycle time  sec
-bool bStartRecordAseError=false;                                                //kevin 20141028¶}©l¬ö¿ı alarm code
-AnsiString aRecordAseError="";                                                  //kevin 20141028 ¬ö¿ıµo¥Í
-bool bReceiveSchedule=false;                                                    //kevin 20141104 ¦¬¨ìase §å¸¹
-AnsiString AseSaveFilePath="";                                                  //kevin 20150212 ¬ö¿ıµo¥Í
+bool bStartRecordAseError=false;                                                //kevin 20141028é–‹å§‹ç´€éŒ„ alarm code
+AnsiString aRecordAseError="";                                                  //kevin 20141028 ç´€éŒ„ç™¼ç”Ÿ
+bool bReceiveSchedule=false;                                                    //kevin 20141104 æ”¶åˆ°ase æ‰¹è™Ÿ
+AnsiString AseSaveFilePath="";                                                  //kevin 20150212 ç´€éŒ„ç™¼ç”Ÿ
 
 int iInArmXBase=2;                                                              //Steven 20141029 : XY-Pitch
 int iInArmYBase=0;
@@ -3927,7 +3927,7 @@ int iOutArmShtYCenterPos=-3000;
 int iSortArmShtXCenterPos=-2000;                                                //RogerYang 20250506 Add for 9046AU
 int iSortArmShtYCenterPos=0;
 
-int iInitContactCount=0;                                                        //Steven 20141117 : °_´ú®É·Å«×­n¸ÉOffset
+int iInitContactCount=0;                                                        //Steven 20141117 : èµ·æ¸¬æ™‚æº«åº¦è¦è£œOffset
 
 int iRotato_In_Row=0;                                                           //wei 20141208 2x2 1x2  Pitch >3750
 int iRotato_Out_Row=0;                                                          //wei 20141208 2x2 1x2  Pitch >3750
@@ -3938,27 +3938,27 @@ bool bTempLess30degShowLightFlag=false;                                         
 bool bEnableTempHeaterOkShowLight=false;                                        //jou 20180529 : Temperature Heater Ok Show Light
 bool bTempHeaterOkShowLightFlag=false;                                          //jou 20180529 : Temperature Heater Ok Show Light
 
-int iAutoSiteMap[4][8];                                                         //kevin 20150113 °O¿ı´ú¸Õ¾÷site map
-int iAutoSiteMapBin[4][8];                                                      //kevin 20150113 °O¿ı´ú¸Õ¾÷site map
-int iAutoSiteRecordIC[2]={0, 0};                                                //kevin 20150114 °O¿ı¦³ic¦ì¸m
-int iAutoSiteMapSocketPass[4][8];                                               //kevin 20160513 °O¿ı´ú¸Õ¾÷site map ¦¹socket ¬O§_pass¹L  0:¨S¨Ï¥Î 1;pass 2;fail
-int bTestBinDataError=0;                                                        //kevin 20150202 ´ú¸Õbin §O¨S³]©w©ÎÃösite ¦³bin ¸ê®Æ
-bool bLowYieldAutoCleanEnd=false;                                               //wei 20141216  LowYieldautoclean  Á×§K­«½Æ¶i¥h
+int iAutoSiteMap[4][8];                                                         //kevin 20150113 è¨˜éŒ„æ¸¬è©¦æ©Ÿsite map
+int iAutoSiteMapBin[4][8];                                                      //kevin 20150113 è¨˜éŒ„æ¸¬è©¦æ©Ÿsite map
+int iAutoSiteRecordIC[2]={0, 0};                                                //kevin 20150114 è¨˜éŒ„æœ‰icä½ç½®
+int iAutoSiteMapSocketPass[4][8];                                               //kevin 20160513 è¨˜éŒ„æ¸¬è©¦æ©Ÿsite map æ­¤socket æ˜¯å¦passé  0:æ²’ä½¿ç”¨ 1;pass 2;fail
+int bTestBinDataError=0;                                                        //kevin 20150202 æ¸¬è©¦bin åˆ¥æ²’è¨­å®šæˆ–é—œsite æœ‰bin è³‡æ–™
+bool bLowYieldAutoCleanEnd=false;                                               //wei 20141216  LowYieldautoclean  é¿å…é‡è¤‡é€²å»
 
-int iLowYieldSiteCount[4][8]={0};                                               //wei 20141201 Low Yield Auto Clean    low Yield ²Î­p
-bool bLowYieldCleanOut=false;                                                   //wei 20141201 Low Yield Auto Clean    ¬O§_clean out
+int iLowYieldSiteCount[4][8]={0};                                               //wei 20141201 Low Yield Auto Clean    low Yield çµ±è¨ˆ
+bool bLowYieldCleanOut=false;                                                   //wei 20141201 Low Yield Auto Clean    æ˜¯å¦clean out
 bool bLowYieldCloseSite[2][4][8];                                               //wei 20141201 Low Yield Auto Clean    close site
-int iLowYieldCloseCount=0;                                                      //wei 20141201 Low Yield Auto Clean    close site ²Î­p
-bool bStandardYield=false;                                                      //wei 20141201 Low Yield Auto Clean    Yield ³]©w
+int iLowYieldCloseCount=0;                                                      //wei 20141201 Low Yield Auto Clean    close site çµ±è¨ˆ
+bool bStandardYield=false;                                                      //wei 20141201 Low Yield Auto Clean    Yield è¨­å®š
 int iStandardYield[4][8]={0};                                                   //wei 20141201 Low Yield Auto Clean    StandardYield
 int iYield[4][8]={0};                                                           //wei 20141201 Low Yield Auto Clean    Yield
 int iDifferenceYield[4][8]={0};                                                 //wei 20141201 Low Yield Auto Clean    DifferenceYield
-bool bSuckEnd[MAX_ARM_Row][MAX_ARM_Col]={{false, false, false, false}, {false, false, false, false}};                //wei 20150318 suck§¹´Nµ¥©ótrue
+bool bSuckEnd[MAX_ARM_Row][MAX_ARM_Col]={{false, false, false, false}, {false, false, false, false}};                //wei 20150318 suckå®Œå°±ç­‰æ–¼true
 
-bool bAutoSkipFlag=false;                                                       //jou 20150320   auto skip ¦¸¼Æ®É¶¡¾É­PHang up
-bool bSystemClose=false;                                                        //kevin 20150423 mainForm²¾¹L¨Ó
-bool bZ1PickShuttle=false;                                                      //Steven 20150407 : ­×¥¿[D45] Out Armµ¥Index Z¥\¯à, Á×§KAuto Homing
-bool bZ2PickShuttle=false;                                                      //Steven 20150407 : ­×¥¿[D45] Out Armµ¥Index Z¥\¯à, Á×§KAuto Homing
+bool bAutoSkipFlag=false;                                                       //jou 20150320   auto skip æ¬¡æ•¸æ™‚é–“å°è‡´Hang up
+bool bSystemClose=false;                                                        //kevin 20150423 mainFormç§»éä¾†
+bool bZ1PickShuttle=false;                                                      //Steven 20150407 : ä¿®æ­£[D45] Out Armç­‰Index ZåŠŸèƒ½, é¿å…Auto Homing
+bool bZ2PickShuttle=false;                                                      //Steven 20150407 : ä¿®æ­£[D45] Out Armç­‰Index ZåŠŸèƒ½, é¿å…Auto Homing
 
 bool bAseRetry=false;                                                           //kevin 20150427
 bool bAseTrayFeed=false;                                                        //kevin 20150427
@@ -3975,51 +3975,51 @@ bool bAseReset=false;                                                           
 bool bTSTART=false;                                                             //kevin 20160303
 bool bSTEP=false;                                                               //kevin 20160303
 
-bool bUse_NewAutoCleanForm=false;                                               //kevin 20150507 ¨Ï¥Î·sAUTOCLEAN FORM
+bool bUse_NewAutoCleanForm=false;                                               //kevin 20150507 ä½¿ç”¨æ–°AUTOCLEAN FORM
 
-bool bTEMPCTRL_Shuttle_TOGTHER=false;                                           //kevin 20150508 Shuttle ¤£¤À¬q¥[¼ö
-bool bUseFix3CylinderActive=false;                                              //ChungHung 20150520 add fix Fix3 full ©M ShuttleShanke ½Ä¬ğ
+bool bTEMPCTRL_Shuttle_TOGTHER=false;                                           //kevin 20150508 Shuttle ä¸åˆ†æ®µåŠ ç†±
+bool bUseFix3CylinderActive=false;                                              //ChungHung 20150520 add fix Fix3 full å’Œ ShuttleShanke è¡çª
 
-bool bAutoReTest_ART=false;                                                     //kevin 20150529 ­n°õ¦æAUTO RETEST
-bool bFirstYieldCmp_ART=false;                                                  //kevin 20150529 ²Ä¤@¦¸AUTO RETEST YIELD¤ñ¹ï
-double fFirstYieldSet_ART=0.0;                                                  //kevin 20150529 ²Ä¤@¦¸AUTO RETEST YIELD¤ñ¹ï­È³]©w   First yield >= ³]©w­È¤£¶·RT
-bool bOpenShortYieldCmp_ART=false;                                              //kevin 20150529 ²Ä¤@¦¸AUTO RETEST open Short YIELD¤ñ¹ï
-double fOpenShortYieldSet_ART=0.0;                                              //kevin 20150529 ²Ä¤@¦¸AUTO RETEST open Short YIELD¤ñ¹ï­È³]©w    First yield >= ³]©w­È¤£¶·RT
-bool bRecoverRateYieldCmp_ART=false;                                            //kevin 20150529 ²Ä¤@¦¸AUTO RETEST RecoverRate YIELD¤ñ¹ï
-double fRecoverRateYieldRT1Set_ART=0.0;                                         //kevin 20150529 ²Ä¤@¦¸AUTO RecoverRateYieldRT1 YIELD¤ñ¹ï­È³]©w
-bool bSetYielddiffCmp_ART=false;                                                //kevin 20150529 ²Ä¤@¦¸AUTO RETEST YIELD¤ñ¹ï  FT - FT+RT1 Pass yield
-double fbSetYielddiffSet_ART=0.0;                                               //kevin 20150529 ²Ä¤@¦¸AUTO RETEST YIELD¤ñ¹ï­È³]©w  FT - FT+RT1 Pass yield <= ³]©w­È«h¤£¶·RT2
-bool bSetSpecialBin_ART=false;                                                  //kevin 20150529 ²Ä¤@¦¸AUTO RETEST
-bool bAutoDetectBin_ART=false;                                                  //kevin 20150529 ²Ä¤@¦¸AUTO RETEST
-int iAutoRetestLimit=0;                                                         //kevin 20150601 °µAUTO RETEST³Ì¤j¦¸¼Æ
-int iTrayArmAutoRetestBuffer=0;                                                 //kevin 20150606 °ª¶¯Âê¦í tray arm³t«×
-int iIonFanDleayAlarm=1000;                                                     //kevin 20150610 °ª¶¯Â÷¤l­·®°°»´úµoalarm®É¶¡
-bool bRunTrayError=false;                                                       //kevin 20150612 run tray ¼Ò¦¡§l¨ìic µoalarm ¤â°Ê¨ú¥Xtray
-int iCountReceiveTray_ART=0;                                                    //kevin 20150613 ­pºâ¦¬¦^tray
-//bool HighTemperatureSet150=false;                                               //wei 20150617 §ï¾÷³Ì°ª·Å150«×
-//bool HighTemperatureSet155=false;                                               //Sam 20240118 ·s¼W 155«× ¼Ò¦¡
-//bool HighTemperatureSet175=false;                                               //Frank 20160705 add §ï¾÷³Ì°ª·Å175«×
-//bool bHighTempSetCustomizeEnable=false;                                         //Jimmychiu 20250626 : ³Ì°ª·Å«×¦Û­q
-//double dHighTempSetCustomizeValue=200.0;                                        //Jimmychiu 20250626 : ³Ì°ª·Å«×¦Û­q
-int iTempLimitation=0;                                                          //Steven 20250701 : ¾ã¦X¾÷¥x·Å«×³]©w
-int  DewPoint_Hardware_Install=0;                                               //Steven 20191017 : ÅSÂI­p
+bool bAutoReTest_ART=false;                                                     //kevin 20150529 è¦åŸ·è¡ŒAUTO RETEST
+bool bFirstYieldCmp_ART=false;                                                  //kevin 20150529 ç¬¬ä¸€æ¬¡AUTO RETEST YIELDæ¯”å°
+double fFirstYieldSet_ART=0.0;                                                  //kevin 20150529 ç¬¬ä¸€æ¬¡AUTO RETEST YIELDæ¯”å°å€¼è¨­å®š   First yield >= è¨­å®šå€¼ä¸é ˆRT
+bool bOpenShortYieldCmp_ART=false;                                              //kevin 20150529 ç¬¬ä¸€æ¬¡AUTO RETEST open Short YIELDæ¯”å°
+double fOpenShortYieldSet_ART=0.0;                                              //kevin 20150529 ç¬¬ä¸€æ¬¡AUTO RETEST open Short YIELDæ¯”å°å€¼è¨­å®š    First yield >= è¨­å®šå€¼ä¸é ˆRT
+bool bRecoverRateYieldCmp_ART=false;                                            //kevin 20150529 ç¬¬ä¸€æ¬¡AUTO RETEST RecoverRate YIELDæ¯”å°
+double fRecoverRateYieldRT1Set_ART=0.0;                                         //kevin 20150529 ç¬¬ä¸€æ¬¡AUTO RecoverRateYieldRT1 YIELDæ¯”å°å€¼è¨­å®š
+bool bSetYielddiffCmp_ART=false;                                                //kevin 20150529 ç¬¬ä¸€æ¬¡AUTO RETEST YIELDæ¯”å°  FT - FT+RT1 Pass yield
+double fbSetYielddiffSet_ART=0.0;                                               //kevin 20150529 ç¬¬ä¸€æ¬¡AUTO RETEST YIELDæ¯”å°å€¼è¨­å®š  FT - FT+RT1 Pass yield <= è¨­å®šå€¼å‰‡ä¸é ˆRT2
+bool bSetSpecialBin_ART=false;                                                  //kevin 20150529 ç¬¬ä¸€æ¬¡AUTO RETEST
+bool bAutoDetectBin_ART=false;                                                  //kevin 20150529 ç¬¬ä¸€æ¬¡AUTO RETEST
+int iAutoRetestLimit=0;                                                         //kevin 20150601 åšAUTO RETESTæœ€å¤§æ¬¡æ•¸
+int iTrayArmAutoRetestBuffer=0;                                                 //kevin 20150606 é«˜é›„é–ä½ tray armé€Ÿåº¦
+int iIonFanDleayAlarm=1000;                                                     //kevin 20150610 é«˜é›„é›¢å­é¢¨æ‰‡åµæ¸¬ç™¼alarmæ™‚é–“
+bool bRunTrayError=false;                                                       //kevin 20150612 run tray æ¨¡å¼å¸åˆ°ic ç™¼alarm æ‰‹å‹•å–å‡ºtray
+int iCountReceiveTray_ART=0;                                                    //kevin 20150613 è¨ˆç®—æ”¶å›tray
+//bool HighTemperatureSet150=false;                                               //wei 20150617 æ”¹æ©Ÿæœ€é«˜æº«150åº¦
+//bool HighTemperatureSet155=false;                                               //Sam 20240118 æ–°å¢ 155åº¦ æ¨¡å¼
+//bool HighTemperatureSet175=false;                                               //Frank 20160705 add æ”¹æ©Ÿæœ€é«˜æº«175åº¦
+//bool bHighTempSetCustomizeEnable=false;                                         //Jimmychiu 20250626 : æœ€é«˜æº«åº¦è‡ªè¨‚
+//double dHighTempSetCustomizeValue=200.0;                                        //Jimmychiu 20250626 : æœ€é«˜æº«åº¦è‡ªè¨‚
+int iTempLimitation=0;                                                          //Steven 20250701 : æ•´åˆæ©Ÿå°æº«åº¦è¨­å®š
+int  DewPoint_Hardware_Install=0;                                               //Steven 20191017 : éœ²é»è¨ˆ
 double dAdamValue_mA=0.0;
 double dAdamValue_Degree=0.0;
 bool bDewPointalarm=false;
 bool bGpibRS232Error=false;                                                     //wei 20150617 Add version control
-int iEPControlValue=0;                                                          //Ifor 20150710 EP ¬y¶q±±¨î
-int iSendGpibTestHome=false;                                                    //kevin 20150626 °e¥X´ú¸Õ°T¸¹ µ¥¦¬¨ì¸ê®Æ¤~¯àÂkhome
+int iEPControlValue=0;                                                          //Ifor 20150710 EP æµé‡æ§åˆ¶
+int iSendGpibTestHome=false;                                                    //kevin 20150626 é€å‡ºæ¸¬è©¦è¨Šè™Ÿ ç­‰æ”¶åˆ°è³‡æ–™æ‰èƒ½æ­¸home
 bool bSecsGemCanStart=false;                                                    //wei 20150630  SecsGem Can Start
-double fTrayYield[eTrayCount];                                                  //JerryYang 20220909 : 10->eTrayCount        //kevin 20150630  pass fail ²v
-bool bUsePassYieldTray[eTrayCount];                                             //JerryYang 20220909 : 10->eTrayCount        //kevin 20150701 fail bin ¦b¨}²v§PÂ_¸Ì­±ºâpass yield
-bool bUseNewCleanModeKit=false;                                                 //kevin 20150701 ¨Ï¥Îautoclean¼Ò²Õ ®Õ¥¿¦ì¸m¦b °ò®y¤W tray pin1
-bool bART_needRT2=false;                                                        //kevin 20150717  RT §¹¦¨ÁÙ»İ­nrt2
-bool bART_RT2RunNoChangeMode=false;                                             //kevin 20150717  ¥u°hfail RT2 ¤£¯à§ó§ï´ú¸Õ¼Ò¦¡
-//bool bEmptyAndColorMustManualRemove=false;                                    //Sam 20230203 : ­×¥¿P24©ñTray²§±` Mark //Frank 20150626 : forª¿®æ Loader¦³Skip­n¨ìEmptyªº¦ì¸m°µÀË¬d
-bool bRotateChange=false;                                                       //Frank 20150626 : forª¿®æ ­n¦³IC¤è¦VÅã¥Ü
+double fTrayYield[eTrayCount];                                                  //JerryYang 20220909 : 10->eTrayCount        //kevin 20150630  pass fail ç‡
+bool bUsePassYieldTray[eTrayCount];                                             //JerryYang 20220909 : 10->eTrayCount        //kevin 20150701 fail bin åœ¨è‰¯ç‡åˆ¤æ–·è£¡é¢ç®—pass yield
+bool bUseNewCleanModeKit=false;                                                 //kevin 20150701 ä½¿ç”¨autocleanæ¨¡çµ„ æ ¡æ­£ä½ç½®åœ¨ åŸºåº§ä¸Š tray pin1
+bool bART_needRT2=false;                                                        //kevin 20150717  RT å®Œæˆé‚„éœ€è¦rt2
+bool bART_RT2RunNoChangeMode=false;                                             //kevin 20150717  åªé€€fail RT2 ä¸èƒ½æ›´æ”¹æ¸¬è©¦æ¨¡å¼
+//bool bEmptyAndColorMustManualRemove=false;                                    //Sam 20230203 : ä¿®æ­£P24æ”¾Trayç•°å¸¸ Mark //Frank 20150626 : forçŸ½æ ¼ Loaderæœ‰Skipè¦åˆ°Emptyçš„ä½ç½®åšæª¢æŸ¥
+bool bRotateChange=false;                                                       //Frank 20150626 : forçŸ½æ ¼ è¦æœ‰ICæ–¹å‘é¡¯ç¤º
 // for autoclean offset 20150720
-//int iArmXShuttle1OffsetPos=0;                                                 //kevin 20150720 In arm X §l¨úShuttle 1 IC Offset
-//int iArmYShuttle1OffsetPos=0;                                                 //kevin 20150720 In arm Y §l¨úShuttle 1 IC Offset
+//int iArmXShuttle1OffsetPos=0;                                                 //kevin 20150720 In arm X å¸å–Shuttle 1 IC Offset
+//int iArmYShuttle1OffsetPos=0;                                                 //kevin 20150720 In arm Y å¸å–Shuttle 1 IC Offset
 int HotplatlXOffset=0;                                                          //kevin 20150720 add hotplate iXPos
 int HotplatlYOffset=0;                                                          //kevin 20150720 add hotplate iYPos
 int HotplatlPickOffset=0;                                                       //kevin 20150720 add hotplate Pick
@@ -4027,17 +4027,17 @@ int HotplatlPlaceOffset=0;                                                      
 
 int HotplatePitchOffset=0;                                                      //kevin 20150720 add hotplate Pitch
 //int ShuttlePitchOffset=0;                                                     //kevin 20150720 add Shuttle Pitch
-//int iArmPickShuttlePos;                                                       //kevin 20120623 In out arm §l¨úShuttle IC Offset
-//int iArmPlaceShuttlePos;                                                      //kevin 20120623 In out arm ©ñShuttle IC Offset
-int iArmPickTrayPos;                                                            //kevin 20120623 In out arm §l¨úTRAY IC Offset
-int iArmPlaceTrayPos;                                                           //kevin 20120623 In out arm ©ñTRAY IC Offset
-int iIndexPickShuttlePos;                                                       //kevin 20120623 Index §l¨ú Shuttle IC Offset
-int iIndexPlaceShuttlePos;                                                      //kevin 20120623 Index ©ñ Shuttle IC Offset
+//int iArmPickShuttlePos;                                                       //kevin 20120623 In out arm å¸å–Shuttle IC Offset
+//int iArmPlaceShuttlePos;                                                      //kevin 20120623 In out arm æ”¾Shuttle IC Offset
+int iArmPickTrayPos;                                                            //kevin 20120623 In out arm å¸å–TRAY IC Offset
+int iArmPlaceTrayPos;                                                           //kevin 20120623 In out arm æ”¾TRAY IC Offset
+int iIndexPickShuttlePos;                                                       //kevin 20120623 Index å¸å– Shuttle IC Offset
+int iIndexPlaceShuttlePos;                                                      //kevin 20120623 Index æ”¾ Shuttle IC Offset
 int iIndexWorkDownPos;                                                          //kevin 20120623 Index Clean down pos
 int iIndexWorkUpPos;                                                            //kevin 20120623 Index Clean down pos
-int bCleanHotplate_ART=0;                                                       //kevin 20150722 ART²Mhotplate ¶}Ãösite  ¥ı«öonecycle ¦A«öcleanout
+int bCleanHotplate_ART=0;                                                       //kevin 20150722 ARTæ¸…hotplate é–‹é—œsite  å…ˆæŒ‰onecycle å†æŒ‰cleanout
 // for autoclean offset 20150720
-bool bSECSGEMAlarm=false;                                                       //wei 20150817 S10F3 Alarm Reset«öÁä
+bool bSECSGEMAlarm=false;                                                       //wei 20150817 S10F3 Alarm ResetæŒ‰éµ
 AnsiString asSECSGEMChangeName="";                                              //wei 20150803
 AnsiString asSECSGEMChangePassword="";                                          //wei 20150803
 bool bSECSGEMNoSendEC=false;                                                    //wei 20150803
@@ -4047,11 +4047,11 @@ bool bOTDRecord=false;                                                          
 AnsiString asSecsGemBarCode="";                                                 //Frank 20170109 modify asBarCode=>asSecsGemBarCode
 AnsiString asSecsGemBarCodePasswoed="";                                         //Ifor 20180227 (Steven) add BarCode Password
 AnsiString asBarCode="";                                                        //wei 20150811 SecsGem BarcodeReader
-bool bSECSGEMConnectionFail=false;                                              //wei 20150817 SECSGEM Â_½u
-bool bSECSGEMConnectionFailOneCycle=false;                                      //wei 20150817 SECSGEM Â_½u
+bool bSECSGEMConnectionFail=false;                                              //wei 20150817 SECSGEM æ–·ç·š
+bool bSECSGEMConnectionFailOneCycle=false;                                      //wei 20150817 SECSGEM æ–·ç·š
 AnsiString asSECSGEMPassWord="";
-int iAutoRetestLimitFile=0;                                                     //wei  20150825 °µAUTO RETEST³Ì¤j¦¸¼Æ
-double iFailYieldRate_ARTFile=0.0;                                              //wei  20150825 AUTO RETEST YIELD¤ñ¹ï
+int iAutoRetestLimitFile=0;                                                     //wei  20150825 åšAUTO RETESTæœ€å¤§æ¬¡æ•¸
+double iFailYieldRate_ARTFile=0.0;                                              //wei  20150825 AUTO RETEST YIELDæ¯”å°
 
 int iAutoLeastRetestLimitFile=0;                                                //wei  20160204
 double dFailYieldRate_ARTFTFile[eTrayCount]={0.0};                              //wei  20160204
@@ -4068,8 +4068,8 @@ int iAutoTrayCount[eTrayCount]={0};                                             
 bool bIndexCheckState=false;
 bool bErrorAutoClean=false;
 
-int iTemperatureOk=0;                                                           //kevin 20150914 ¥[¼ö§¹¦¨
-bool iTemperatureOkFirstTime=false;                                             //kevin 20150914 ¥[¼ö§¹¦¨µ{¦¡¤@¶}©l
+int iTemperatureOk=0;                                                           //kevin 20150914 åŠ ç†±å®Œæˆ
+bool iTemperatureOkFirstTime=false;                                             //kevin 20150914 åŠ ç†±å®Œæˆç¨‹å¼ä¸€é–‹å§‹
 int iRecordIndexPosition=0;                                                     //kevin 20150915
 int  iAseRetry=0;                                                               //kevin 20150925
 int  iAseTrayFeed=0;                                                            //kevin 20150925
@@ -4080,11 +4080,11 @@ int  iAseCleanOut=0;                                                            
 int  iAseSKIP=0;                                                                //kevin 20150925
 int  iAseHome=0;                                                                //kevin 20150925
 int  iAsePause=0;                                                               //kevin 20150925
-AnsiString ASE_ReturnState;                                                     //kevin 20150925  ¦^¶Ç¥Ø«e¾÷¥xª¬ªp
-bool bRunManualSortMode=false;                                                  //Steven 20150915 : For TSMC ¤â°Ê¾ã½L¥\¯à
-bool bResetModeAndCleanOut=false;                                               //JerryYang 20151007 : ResetMode¥i¿ïOneCycle©ÎCleanOut
+AnsiString ASE_ReturnState;                                                     //kevin 20150925  å›å‚³ç›®å‰æ©Ÿå°ç‹€æ³
+bool bRunManualSortMode=false;                                                  //Steven 20150915 : For TSMC æ‰‹å‹•æ•´ç›¤åŠŸèƒ½
+bool bResetModeAndCleanOut=false;                                               //JerryYang 20151007 : ResetModeå¯é¸OneCycleæˆ–CleanOut
 bool bResetModeAndCleanOutAndNoTest=false;                                      //Jimmychiu 20210927 Reset clean out with no tester
-int  iATCForHSMode=0;                                                           //Ifor 20151026 :§PÂ_ATC ¼Ò¦¡¬O§_²Å¦X HS ³W©w  0:¥¼°»´úATC ª©¥» 1:²Å¦X®ü«äª©¥» 2:¤£²Å¦X®ü«äª©¥»
+int  iATCForHSMode=0;                                                           //Ifor 20151026 :åˆ¤æ–·ATC æ¨¡å¼æ˜¯å¦ç¬¦åˆ HS è¦å®š  0:æœªåµæ¸¬ATC ç‰ˆæœ¬ 1:ç¬¦åˆæµ·æ€ç‰ˆæœ¬ 2:ä¸ç¬¦åˆæµ·æ€ç‰ˆæœ¬
 
 bool bBarCodeError=false;                                                       //wei 20150713
 int  iBarCodeErrorC=0;                                                          //wei 20150713
@@ -4106,7 +4106,7 @@ bool bChangeFile=false;
 bool bOCRUser=false;
 bool bSignIn=false;
 bool bOCRPassWord=false;
-bool bOCRNewFile=false;                                                         //wei 20161028¦^¶ÇOCRÀÉ¦W
+bool bOCRNewFile=false;                                                         //wei 20161028å›å‚³OCRæª”å
 bool bOCROK[15]={false};
 bool bOCRError[10]={false};
 bool bCheckFile=false;
@@ -4122,16 +4122,16 @@ int iSH2_1BarcodePosition=0;                                                    
 int iSH2_2BarcodePosition=0;                                                    //wei 20150912 2D
 
 bool bOffsetEnterBarcode=false;
-bool bHeightCalibrationFinish=true;                                             //JerryYang 20151028 add for Amkor,download recipe¤ñ¹ï¤£²Å«á,¬O§_°µ§¹Height Calibration
-double dTempOffset[2][tcTotalCount]={0};                                        //kevin 20151023 ¬ö¿ıÅª¨ú·Å«×offset 0:³Ì·s¸ê®Æ
-bool bSendChangeTemp=false;                                                     //kevin 20151023  ¥Í²£¤¤§ïÅÜ·Å«×
-bool bSendChangeTempError=false;                                                //kevin 20151023  ¥Í²£¤¤§ïÅÜ·Å«×·Å«×¶W¹L +- 10µoalarm
+bool bHeightCalibrationFinish=true;                                             //JerryYang 20151028 add for Amkor,download recipeæ¯”å°ä¸ç¬¦å¾Œ,æ˜¯å¦åšå®ŒHeight Calibration
+double dTempOffset[2][tcTotalCount]={0};                                        //kevin 20151023 ç´€éŒ„è®€å–æº«åº¦offset 0:æœ€æ–°è³‡æ–™
+bool bSendChangeTemp=false;                                                     //kevin 20151023  ç”Ÿç”¢ä¸­æ”¹è®Šæº«åº¦
+bool bSendChangeTempError=false;                                                //kevin 20151023  ç”Ÿç”¢ä¸­æ”¹è®Šæº«åº¦æº«åº¦è¶…é +- 10ç™¼alarm
 int  iSendChangeTempError=0;
-bool bSendChangeTempDelayAlarm=false;                                           //kevin 20151023  ¥Í²£¤¤§ïÅÜ·Å«×·Å«×µoalarm®É¶¡©µªø
-int iTempSec=30;                                                                //kevin 20151023  ·Å«×µoalarm®É¶¡
+bool bSendChangeTempDelayAlarm=false;                                           //kevin 20151023  ç”Ÿç”¢ä¸­æ”¹è®Šæº«åº¦æº«åº¦ç™¼alarmæ™‚é–“å»¶é•·
+int iTempSec=30;                                                                //kevin 20151023  æº«åº¦ç™¼alarmæ™‚é–“
 //DWORD StartTemptim,EndTemptim, PassTemptim;                                   //kevin 20151023  AutoTemp Offset time
 int iYeildCT[TEST_MAX_BIN]={0};                                                 //wei 20151111
-bool bLowYeildAlarm=false;                                                      //wei 20151116 Low Yield Onecycle¤¤¤£alarm
+bool bLowYeildAlarm=false;                                                      //wei 20151116 Low Yield Onecycleä¸­ä¸alarm
 
 int iRecordJamRateByTime_LoaderCount    = 0;                                    /// 2015.11.11 , Joye , Add Jam Rate Record
 int iRecordJamRateByTime_JamCount       = 0;                                    /// 2015.11.11 , Joye , Add Jam Rate Record
@@ -4139,12 +4139,12 @@ bool bRecordJamRateByTime_Clear         = true;                                 
 bool bGPIBChangeSiteMap=false;                                                  ///wei 20151127 GPIB Change Site Map
 bool bGPIBChangeAlarm=false;                                                    ///wei 20151127 GPIB Change Site Map
 bool bSetByDLL=false;                                                           ///JerryYang 20181126 (Steven) : support Epson DLL function
-bool bUnloading=false;                                                          ///JerryYang 20151109 ¥Î¨Ó§PÂ_¾÷¥x¬O§_¥¿¦bUnload
-bool bAutoCleaning=false;                                                       ///JerryYang 20151109 ¥Î¨Ó§PÂ_¾÷¥x¬O§_¥¿¦bAutoClean
-bool bScanKeyNo=false;                                                          ///JerryYang 20151202 Add for TSMC ÂISKIP©Î¬ORETRY³£­n¦A¸õ¤@¦¸½T»{
-bool bHasSaveSet=false;                                                         ///Ifor 20151204 ·s¼W§PÂ_¾÷¥x¦³µL­×§ï³]©wÀÉ
+bool bUnloading=false;                                                          ///JerryYang 20151109 ç”¨ä¾†åˆ¤æ–·æ©Ÿå°æ˜¯å¦æ­£åœ¨Unload
+bool bAutoCleaning=false;                                                       ///JerryYang 20151109 ç”¨ä¾†åˆ¤æ–·æ©Ÿå°æ˜¯å¦æ­£åœ¨AutoClean
+bool bScanKeyNo=false;                                                          ///JerryYang 20151202 Add for TSMC é»SKIPæˆ–æ˜¯RETRYéƒ½è¦å†è·³ä¸€æ¬¡ç¢ºèª
+bool bHasSaveSet=false;                                                         ///Ifor 20151204 æ–°å¢åˆ¤æ–·æ©Ÿå°æœ‰ç„¡ä¿®æ”¹è¨­å®šæª”
 bool bOneTimes=true;
-bool bEnableEmployeeIDCheck=false;                                              ///Ifor 20180911 (Steven) : Add ±Ò°Ê Employee ID Check
+bool bEnableEmployeeIDCheck=false;                                              ///Ifor 20180911 (Steven) : Add å•Ÿå‹• Employee ID Check
 
 const int SortingBinTray_NOACT  = 0;                                            //JerryYang 20150910 START:Auto Sorting BinTray by Out Arm when Clean Out
 const int SortingBinTray_ACT    = 1;
@@ -4157,8 +4157,8 @@ TSortingBinTray_TRAYDATA MyTrayData;
 TSortingBinTray_CALDATA MyCalData;
 
 TSortingBinTray_Data SortingBinTray_Data;
-bool bSortingAllBinTrayFinish;                                                  //¬O§_©Ò¦³ªºBin Tray IC³£¾ã½L§¹¦¨
-bool bSortingSuckMode=false;                                                    //Sam 20250415 : ­×¥¿ P27 ¾ã½L¥\¯à
+bool bSortingAllBinTrayFinish;                                                  //æ˜¯å¦æ‰€æœ‰çš„Bin Tray ICéƒ½æ•´ç›¤å®Œæˆ
+bool bSortingSuckMode=false;                                                    //Sam 20250415 : ä¿®æ­£ P27 æ•´ç›¤åŠŸèƒ½
 
 int iOldRunStartMode=0;                                                         //wei 20151207
 int iArmsitecount[2]={0};                                                       //wei 20160107 No FullSite Add Offset
@@ -4173,32 +4173,32 @@ bool bDoReContact           =false;                                             
 #if 0
 TColor tcBinColor[eTrayCount]        ={clGreen, clRed, TColor(0x000080FF), clPurple, clBlue, clGray, clSilver, clBtnFace, clOlive};
 #endif
-TColor tcBinColor[eTrayCount]        ={0,0,0,0,0,0,0,0,0};  //AI(W0-TAIL) 20260626: placeholder colours (W7)  //JerryYang 20220909 : 9->eTrayCount  //Steven 20160310 : §ï¦¨¦³ÃC¦âªºfail bin
-int  CHECK_RANGE=500;                                                           //2013-04-12    Dell 500->750 ¦bKYECÂÂ¾÷½Õ¤£¶i¥h //jou 2013-05-21 750 -> 500 ¥X²{Out Shuttle lose //Steven 20160108 : §ï¥hTeaching½Õ¾ã
-bool bForKyecBu3RunART=false;                                                   //wei 20151210 Loader¨Ï¥Î¤£¦PSensor   //wei 20161118 bRunART-->bForKyecBu3RunART
-bool bARTTrayArmOK=false;                                                       //wei 20151217 ART ¦^½LOK
-bool bRTLoaderTrayCount=false;                                                  //wei 20160112 ART R1¤£ºâªÅ½L
-bool bContsFailIgnoreStart=false;                                               //wei 20160115 »ÉÆr«e´XÁû¤£­pºâContsFail
-int  iContsFailIgnoreCount=0;                                                   //wei 20160115 »ÉÆr«e´XÁû¤£­pºâContsFail
+TColor tcBinColor[eTrayCount]        ={0,0,0,0,0,0,0,0,0};  //AI(W0-TAIL) 20260626: placeholder colours (W7)  //JerryYang 20220909 : 9->eTrayCount  //Steven 20160310 : æ”¹æˆæœ‰é¡è‰²çš„fail bin
+int  CHECK_RANGE=500;                                                           //2013-04-12    Dell 500->750 åœ¨KYECèˆŠæ©Ÿèª¿ä¸é€²å» //jou 2013-05-21 750 -> 500 å‡ºç¾Out Shuttle lose //Steven 20160108 : æ”¹å»Teachingèª¿æ•´
+bool bForKyecBu3RunART=false;                                                   //wei 20151210 Loaderä½¿ç”¨ä¸åŒSensor   //wei 20161118 bRunART-->bForKyecBu3RunART
+bool bARTTrayArmOK=false;                                                       //wei 20151217 ART å›ç›¤OK
+bool bRTLoaderTrayCount=false;                                                  //wei 20160112 ART R1ä¸ç®—ç©ºç›¤
+bool bContsFailIgnoreStart=false;                                               //wei 20160115 éŠ…é‘¼å‰å¹¾é¡†ä¸è¨ˆç®—ContsFail
+int  iContsFailIgnoreCount=0;                                                   //wei 20160115 éŠ…é‘¼å‰å¹¾é¡†ä¸è¨ˆç®—ContsFail
 
-bool bESDSendDataToHandle=false;                                                //kevin 20160106  °eESD¸ê®Æµ¹HANDLE
-bool bTempHandleToESD=false;                                                    //kevin 20160106   °eTemp HANDLE¸ê®Æµ¹ «È¤á
-bool bEPHandleToESD=false;                                                      //kevin 20160106  °eEP HANDLE¸ê®Æµ¹ «È¤á
-AnsiString bEPMessage;                                                          //kevin 20160106   ¦s¨úEP¸ê®Æ
-AnsiString bTempMessage;                                                        //kevin 20160106   ¦s¨ú·Å«×¸ê®Æ
-bool bESDSystemtype=false;                                                      //kevin 20160106 Frank 20150309 : µ{¦¡Ãö³¬«á±NESD¨t²Î°±¤î
-int iSiteTotal=16;                                                              //kevin 20160125 ¥Ø«e¾÷¥x¼Ò¦¡©Ò¨Ï¥ÎSITE¼Æ¶q
-int iRetestNoIC[3]={0};                                                         //wei 20160203 ¦^½L¬°ªÅ½L¤£­p¼Æ
-int iATC70_Count=0;                                                             //Ifor 20160223 Add ATC 7.0 ¥¼¦¬¨ì·Å«×¦^¶Ç¦¸¼Æ
-bool bRemoteAutomaticDeploying=false;                                           //wei 20160223 ¦Û°Ê³¡Äİ
+bool bESDSendDataToHandle=false;                                                //kevin 20160106  é€ESDè³‡æ–™çµ¦HANDLE
+bool bTempHandleToESD=false;                                                    //kevin 20160106   é€Temp HANDLEè³‡æ–™çµ¦ å®¢æˆ¶
+bool bEPHandleToESD=false;                                                      //kevin 20160106  é€EP HANDLEè³‡æ–™çµ¦ å®¢æˆ¶
+AnsiString bEPMessage;                                                          //kevin 20160106   å­˜å–EPè³‡æ–™
+AnsiString bTempMessage;                                                        //kevin 20160106   å­˜å–æº«åº¦è³‡æ–™
+bool bESDSystemtype=false;                                                      //kevin 20160106 Frank 20150309 : ç¨‹å¼é—œé–‰å¾Œå°‡ESDç³»çµ±åœæ­¢
+int iSiteTotal=16;                                                              //kevin 20160125 ç›®å‰æ©Ÿå°æ¨¡å¼æ‰€ä½¿ç”¨SITEæ•¸é‡
+int iRetestNoIC[3]={0};                                                         //wei 20160203 å›ç›¤ç‚ºç©ºç›¤ä¸è¨ˆæ•¸
+int iATC70_Count=0;                                                             //Ifor 20160223 Add ATC 7.0 æœªæ”¶åˆ°æº«åº¦å›å‚³æ¬¡æ•¸
+bool bRemoteAutomaticDeploying=false;                                           //wei 20160223 è‡ªå‹•éƒ¨å±¬
 bool bIsShowPMAlarmMessage=false;                                               //wei 20160225 PMAlarmFunction
-bool bAutoRetestJam=false;                                                      //wei 20160302 Jam Skip¿é¤JÁû¼Æ
-AnsiString iJamSkipIC="";                                                       //wei 20160302 Jam Skip¿é¤JÁû¼Æ
+bool bAutoRetestJam=false;                                                      //wei 20160302 Jam Skipè¼¸å…¥é¡†æ•¸
+AnsiString iJamSkipIC="";                                                       //wei 20160302 Jam Skipè¼¸å…¥é¡†æ•¸
 int iARTJamSkipICCount=0;                                                       //Frank 20160819
 bool bCleanSkipICCount=false;                                                   //Frank 20160819
-int iJamSkipICCount=0;                                                          //wei 20160302 Jam Skip¿é¤JÁû¼Æ
+int iJamSkipICCount=0;                                                          //wei 20160302 Jam Skipè¼¸å…¥é¡†æ•¸
 bool bSecsGemStatus=false;                                                      //wei 20160308
-bool bReadSecsGemData=false;                                                    //wei 20160308 ¬O§_Åª¨úSECSGEM¸ê®Æ
+bool bReadSecsGemData=false;                                                    //wei 20160308 æ˜¯å¦è®€å–SECSGEMè³‡æ–™
 bool bSysLotStart = false;                                                      //Ifor 20160302 KYEC
 bool bEPLogStart_KYEC=false;                                                    //Ifor 20160302 KYEC FTP UP Load EP Log Start
 bool bEPLogEnd_KYEC=false;                                                      //Ifor 20160302 KYEC FTP UP Load EP Log End
@@ -4211,8 +4211,8 @@ AnsiString sGroundManLogFile="";                                                
 bool bESDLogStart_KYEC=false;                                                   //Ifor 20160302 KYEC FTP UP Load ESD Log Start
 bool bESDLogEnd_KYEC=false;                                                     //Ifor 20160302 KYEC FTP UP Load ESD Log End
 bool bNoUseAutoRecord=false;                                                    //wei 20160311
-int iGalil_Z_SafePos=200;                                                       //Ifor 20160311 Á×§KHome sensor ¤£«G    //jou 2016-11-18 100->200 Á×§K¦³¨Ç¾÷¥x²Õ¸Ë¤½®t³y¦¨alarm
-const int iGalil_Z_KYEC_SafePos=100;                                            //Ifor 20170509 (wei) ·s¼WKYEC¦^Home«á³Ì¤p¤W¤É°ª«×100
+int iGalil_Z_SafePos=200;                                                       //Ifor 20160311 é¿å…Home sensor ä¸äº®    //jou 2016-11-18 100->200 é¿å…æœ‰äº›æ©Ÿå°çµ„è£å…¬å·®é€ æˆalarm
+const int iGalil_Z_KYEC_SafePos=100;                                            //Ifor 20170509 (wei) æ–°å¢KYECå›Homeå¾Œæœ€å°ä¸Šå‡é«˜åº¦100
 AnsiString sESDLogData="";                                                      //Ifor 20160316 KYEC ESD Log Data
 bool bESDDataReady=false;                                                       //Ifor 20160316 KYEC ESD Log Data
 bool bATCWaterTempAlarm=false;                                                  //Ifor 20160625 ATC Water Temp Error
@@ -4228,37 +4228,37 @@ bool bIntervalYield_IsShowAlarm = false;                                        
 
 int iAlarm4ContinueType_ContinueCount_Last = 0;                                 // 2015.05.05 , Joye , Alarm4 Continue Type
 bool bAlarm4ContinueType_NeedClearCount = false;                                // 2015.05.05 , Joye , Alarm4 Continue Type
-AnsiString asBarCodeErrorSend="";                                               //wei 20160318 Barcode Error¨Ì«È¤á³]©w
-AnsiString asBarCodeErrorCheckSum="CheckSumError";                              //KaiChen 20191121 ¡G¤¤Ãc¤é¤ë¥ú 2D Check Sum
+AnsiString asBarCodeErrorSend="";                                               //wei 20160318 Barcode Errorä¾å®¢æˆ¶è¨­å®š
+AnsiString asBarCodeErrorCheckSum="CheckSumError";                              //KaiChen 20191121 ï¼šä¸­å£¢æ—¥æœˆå…‰ 2D Check Sum
 AnsiString sATCVerRead="";                                                      //Ifor 20160321 add ATC Ver
-int iNeedBarcodeCount[4];                                                       //wei 20160325 Barcode Rate­pºâ
-int iBarcodeErrorCount[4];                                                      //wei 20160325 Barcode Rate­pºâ
-int iBarcodePassCount[4];                                                       //wei 20160325 Barcode Rate­pºâ
-int iBarcodeAutoRetry[4];                                                       //wei 20160325 Barcode Rate­pºâ
+int iNeedBarcodeCount[4];                                                       //wei 20160325 Barcode Rateè¨ˆç®—
+int iBarcodeErrorCount[4];                                                      //wei 20160325 Barcode Rateè¨ˆç®—
+int iBarcodePassCount[4];                                                       //wei 20160325 Barcode Rateè¨ˆç®—
+int iBarcodeAutoRetry[4];                                                       //wei 20160325 Barcode Rateè¨ˆç®—
 int iBarcodeDuplicate[4];
-bool bBarcodeFirstAutoRetry[4]={false};                                         //wei 20160325 Barcode Rate­pºâ
+bool bBarcodeFirstAutoRetry[4]={false};                                         //wei 20160325 Barcode Rateè¨ˆç®—
 
-//bool iBinTray[5][9]={false};                                                  //kevin 20160308 ¦³³]©wBin Tray  //kevin 20170223 (wei) ¤£¨Ï¥Î
-bool iBinTray[eTrayCount]={false};                                              //JerryYang 20220909 : 10->eTrayCount        //kevin 20170328 (Steven) add §PÂ_TRAY ¬O§_¨Ï¥Î BIN
-bool bFirstTest=true;                                                           //kevin 20160311 Clean out«á²Ä¤@¦¸´ú¸Õ®É¶¡
-bool bTestOverTimeTempOffsetF=false;                                            //kevin 20160312 °_°Ê¶ZÂ÷¤W¤@¦¸´ú¸Õ®É¶¡¶W¹L©Ò³]©w®É¶¡·Å«×»İ¸ÉOFFSET
-bool bAlmLowYieldDoOneCycle=false;                                              //JerryYang 20160401 Low Yield Alarm«á­n°µOneCycle
-bool bAlmSiteYieldDiffDoOneCycle=false;                                         //JerryYang 20160401 Arm Site Yield Different Alarm «á­n°µOneCycle
-bool bAlmSiteYieldCmpDoOneCycle=false;                                          //JerryYang 20160401 Site Yield Different Alarm «á­n°µOneCycle
-AnsiString asErrPart="";                                                        //JerryYang 20160401 One cycle«áªºyield­n¯àÅã¥Üerror part
-AnsiString asErrPart1="";                                                       //JerryYang 20160401 One cycle«áªºyield­n¯àÅã¥Üerror part
-bool bAlmBinYieldDoOneCycle=false;                                              //JerryYang 20160407 Bin Yield Alarm «á­n°µOneCycle
+//bool iBinTray[5][9]={false};                                                  //kevin 20160308 æœ‰è¨­å®šBin Tray  //kevin 20170223 (wei) ä¸ä½¿ç”¨
+bool iBinTray[eTrayCount]={false};                                              //JerryYang 20220909 : 10->eTrayCount        //kevin 20170328 (Steven) add åˆ¤æ–·TRAY æ˜¯å¦ä½¿ç”¨ BIN
+bool bFirstTest=true;                                                           //kevin 20160311 Clean outå¾Œç¬¬ä¸€æ¬¡æ¸¬è©¦æ™‚é–“
+bool bTestOverTimeTempOffsetF=false;                                            //kevin 20160312 èµ·å‹•è·é›¢ä¸Šä¸€æ¬¡æ¸¬è©¦æ™‚é–“è¶…éæ‰€è¨­å®šæ™‚é–“æº«åº¦éœ€è£œOFFSET
+bool bAlmLowYieldDoOneCycle=false;                                              //JerryYang 20160401 Low Yield Alarmå¾Œè¦åšOneCycle
+bool bAlmSiteYieldDiffDoOneCycle=false;                                         //JerryYang 20160401 Arm Site Yield Different Alarm å¾Œè¦åšOneCycle
+bool bAlmSiteYieldCmpDoOneCycle=false;                                          //JerryYang 20160401 Site Yield Different Alarm å¾Œè¦åšOneCycle
+AnsiString asErrPart="";                                                        //JerryYang 20160401 One cycleå¾Œçš„yieldè¦èƒ½é¡¯ç¤ºerror part
+AnsiString asErrPart1="";                                                       //JerryYang 20160401 One cycleå¾Œçš„yieldè¦èƒ½é¡¯ç¤ºerror part
+bool bAlmBinYieldDoOneCycle=false;                                              //JerryYang 20160407 Bin Yield Alarm å¾Œè¦åšOneCycle
 AnsiString asErrTemp="";                                                        //JerryYang 20160407 Error message temp
-bool bAlmContsFailBySocketDoOneCycle=false;                                     //JerryYang 20160407 ContsFailBySocket«á­n°µOneCycle
-bool bAlmConsecutiveFailureDoOneCycle=false;                                    //JerryYang 20160407 Consecutive Failure«á­n°µOneCycle
+bool bAlmContsFailBySocketDoOneCycle=false;                                     //JerryYang 20160407 ContsFailBySocketå¾Œè¦åšOneCycle
+bool bAlmConsecutiveFailureDoOneCycle=false;                                    //JerryYang 20160407 Consecutive Failureå¾Œè¦åšOneCycle
 int iErrArmTemp=0;                                                              //JerryYang 20160407 Error Arm Temp
-bool bNeedOneCycleByYieldAlm=false;                                             //JerryYang 20160408 ¬O§_¤wÄ²µoYield ¬ÛÃöalarm
-bool bYieldAlarmDoOneCycle=false;                                               //JerryYang 20160322 Yield Alarm«á­n°µOne cycleªººX¼Ğ
-bool bSpecailBinConsFailByArmDoOneCycle=false;                                  //JerryYang 20161006 SpecailBinConsFailByArm «á­n°µOneCycle
-bool bSpecialBinConsFailBySocketDoOneCycle=false;                               //JerryYang 20161006 SpecialBinConsFailBySocket «á­n°µOneCycle
-bool bBinCountOverLimitDoOneCycle=false;                                        //JerryYang 20161006 BinCountOverLimit «á­n°µOneCycle
+bool bNeedOneCycleByYieldAlm=false;                                             //JerryYang 20160408 æ˜¯å¦å·²è§¸ç™¼Yield ç›¸é—œalarm
+bool bYieldAlarmDoOneCycle=false;                                               //JerryYang 20160322 Yield Alarmå¾Œè¦åšOne cycleçš„æ——æ¨™
+bool bSpecailBinConsFailByArmDoOneCycle=false;                                  //JerryYang 20161006 SpecailBinConsFailByArm å¾Œè¦åšOneCycle
+bool bSpecialBinConsFailBySocketDoOneCycle=false;                               //JerryYang 20161006 SpecialBinConsFailBySocket å¾Œè¦åšOneCycle
+bool bBinCountOverLimitDoOneCycle=false;                                        //JerryYang 20161006 BinCountOverLimit å¾Œè¦åšOneCycle
 AnsiString sAlarmMes="";                                                        //wei 20160407 Alarm Message
-bool bOpenAllDoor=true;                                                         //wei 20160407 Alarm «á»İ­n¶}ªù½T»{
+bool bOpenAllDoor=true;                                                         //wei 20160407 Alarm å¾Œéœ€è¦é–‹é–€ç¢ºèª
 bool iATCOnLine=false;                                                          //Ifor 20160331
 bool bRunATC=false;                                                             //Ifor 20160331
 //int  iUnloadMotorIndex[eTrayCount];
@@ -4269,61 +4269,61 @@ int  iTo6Unload[ePosTrayCount];
 int  iTo3Unload[ePosTrayCount];
 int  iSortTrayIndex[eTrayCount];
 int  AddBinDisp[MAX_BIN_UNIT];
-bool bSetTempChange=false;                                                      //Ifor 20160331 ATC±Ò°Êª¬ºA
+bool bSetTempChange=false;                                                      //Ifor 20160331 ATCå•Ÿå‹•ç‹€æ…‹
 
 int  iL03SocketAirCoolingCT=0;                                                  //jou 2016-04-28 Socket Air Cooling contact count trun on
-bool bCheckCodeError[4]={false};                                                //wei 20160505 Barcode ¤ñ¹ïLot
+bool bCheckCodeError[4]={false};                                                //wei 20160505 Barcode æ¯”å°Lot
 bool bCheckLotError[4]={false};                                                 //wei 20160728
-int iIONFANStatus_Secs[12]={-1};                                                //wei 20160506 SECS ION °»´ú
-int iIONFANPower_Secs[12]={-1};                                                 //wei 20160506 SECS ION °»´ú
-bool bATC_EnablesChannel[32];                                                   //Ifor 20160506 add Handler °eµ¹ATC ¶}ÃöSite¸ê®Æ
+int iIONFANStatus_Secs[12]={-1};                                                //wei 20160506 SECS ION åµæ¸¬
+int iIONFANPower_Secs[12]={-1};                                                 //wei 20160506 SECS ION åµæ¸¬
+bool bATC_EnablesChannel[32];                                                   //Ifor 20160506 add Handler é€çµ¦ATC é–‹é—œSiteè³‡æ–™
 int  iATC_Use_Heat_Count=0;                                                     //Ifor 20160506 add ATC Use Heat Count
-bool bATC_SITE_2ND_CHECK[2]={false,false};                                      //Ifor 20160509 add ATC ²Ä¤GÂI·Å«× sensor §PÂ_
+bool bATC_SITE_2ND_CHECK[2]={false,false};                                      //Ifor 20160509 add ATC ç¬¬äºŒé»æº«åº¦ sensor åˆ¤æ–·
 bool bOutShuttleMissIC=false;                                                   //wei 20160509 Out Shuttle Miss IC
 bool bNoSendSiteOnOff=false;                                                    //wei 20160511 Send Site On Off
-bool bDownloadFTP=false;                                                        //wei 20160512 Á×§KDownload¥¢±Ñ¡A¤U¦¸´NµLªkDownload
+bool bDownloadFTP=false;                                                        //wei 20160512 é¿å…Downloadå¤±æ•—ï¼Œä¸‹æ¬¡å°±ç„¡æ³•Download
 int iOpenBin=0;                                                                 //kevin 20160513 AutoSite map
 int iBinLast=0;                                                                 //kevin 20160513 AutoSite map
 int iOpenBinCount=0;                                                            //kevin 20160513 AutoSite map
-int iBackupDutOnOff[4][8];                                                      //JerryYang 20160519 ³Æ¥÷¶}Ãösite
-int iBackupTestMode;                                                            //JerryYang 20160519 °O¿ı­ì¥»ªºTest mode
-bool bLoadMachineRecord=false;                                                  //JerryYang 20160614 ¥Î¨Ó§PÂ_¬O§_°õ¦æ¹LLoadMachineRecord¨ç¦¡ Á×§KÁÙ¨SÅª¨ú¨ì¾÷¥x¸ê®ÆLastset´N³Q§ï±¼
-bool INSTALL_SOCKET_CLAMP=false;                                                //JerryYang 20160523 ¬O§_§ï¾÷¬°¨Ï¥ÎSLK¡BSOCKET clamp
-bool HotGunFlowEnable=false;                                                    //KaiChen 20190729 ¡GHot Gun Flow
-unsigned int HotGunFlow_LineNo=0;                                               //KaiChen 20190729 ¡GHot Gun Flow
-unsigned int HotGunFlow_DevNo=0;                                                //KaiChen 20190729 ¡GHot Gun Flow
-unsigned int HotGunFlow_Gun1_ChannelNo=0;                                       //KaiChen 20190729 ¡GHot Gun Flow
-unsigned int HotGunFlow_Gun2_ChannelNo=0;                                       //KaiChen 20190729 ¡GHot Gun Flow
+int iBackupDutOnOff[4][8];                                                      //JerryYang 20160519 å‚™ä»½é–‹é—œsite
+int iBackupTestMode;                                                            //JerryYang 20160519 è¨˜éŒ„åŸæœ¬çš„Test mode
+bool bLoadMachineRecord=false;                                                  //JerryYang 20160614 ç”¨ä¾†åˆ¤æ–·æ˜¯å¦åŸ·è¡ŒéLoadMachineRecordå‡½å¼ é¿å…é‚„æ²’è®€å–åˆ°æ©Ÿå°è³‡æ–™Lastsetå°±è¢«æ”¹æ‰
+bool INSTALL_SOCKET_CLAMP=false;                                                //JerryYang 20160523 æ˜¯å¦æ”¹æ©Ÿç‚ºä½¿ç”¨SLKã€SOCKET clamp
+bool HotGunFlowEnable=false;                                                    //KaiChen 20190729 ï¼šHot Gun Flow
+unsigned int HotGunFlow_LineNo=0;                                               //KaiChen 20190729 ï¼šHot Gun Flow
+unsigned int HotGunFlow_DevNo=0;                                                //KaiChen 20190729 ï¼šHot Gun Flow
+unsigned int HotGunFlow_Gun1_ChannelNo=0;                                       //KaiChen 20190729 ï¼šHot Gun Flow
+unsigned int HotGunFlow_Gun2_ChannelNo=0;                                       //KaiChen 20190729 ï¼šHot Gun Flow
 
 int INSTALL_DOUBLE_EP=0;                                                        //Ifor 20190104 : Add Double EP Control
-int CHECK_EP_SETTING=1;                                                         //Steven 20240701 : EPÀË¬d¥\¯à¥[¤W¶}Ãö
-bool bAutoTrackCanGoRear=false;                                                 //Isaac 20180109 (Steven) : auto123¥i«e¶i«á°h
-bool bAvoidAddDoSiteMappingStep=false;                                          //JerryYang 20170316 (Steven) Á×§Ktester time out®ÉRetry·|­«½Æ¶i¤JDoJCETSiteMappingCHK(), ³y¦¨auto site mapping¤@¦¸¸õ¨âÁû
-bool bOCRConnectOK=false;                                                       //wei 20160613 ocr³s½u´ú¸Õ
-bool bOCRConnectTest=false;                                                     //wei 20160613 ocr³s½u´ú¸Õ
-int bOCRConnectTestCount=0;                                                     //wei 20160613 ocr³s½u´ú¸Õ
+int CHECK_EP_SETTING=1;                                                         //Steven 20240701 : EPæª¢æŸ¥åŠŸèƒ½åŠ ä¸Šé–‹é—œ
+bool bAutoTrackCanGoRear=false;                                                 //Isaac 20180109 (Steven) : auto123å¯å‰é€²å¾Œé€€
+bool bAvoidAddDoSiteMappingStep=false;                                          //JerryYang 20170316 (Steven) é¿å…tester time outæ™‚Retryæœƒé‡è¤‡é€²å…¥DoJCETSiteMappingCHK(), é€ æˆauto site mappingä¸€æ¬¡è·³å…©é¡†
+bool bOCRConnectOK=false;                                                       //wei 20160613 ocré€£ç·šæ¸¬è©¦
+bool bOCRConnectTest=false;                                                     //wei 20160613 ocré€£ç·šæ¸¬è©¦
+int bOCRConnectTestCount=0;                                                     //wei 20160613 ocré€£ç·šæ¸¬è©¦
 bool bCleanOutClosedMonitorVideo=false;                                         //JerryYang 20160621 UseMonitorVideoFunction
 bool bHPCleanout=false;                                                         //wei 20160624 Hotplate clean out
-bool bAmbientHotPlate=false;                                                    //kevincheng 20260525 : ´ë±ç±`·Å¼Ò¦¡¨Ï¥Îhotplate
+bool bAmbientHotPlate=false;                                                    //kevincheng 20260525 : æ¸ æ¢å¸¸æº«æ¨¡å¼ä½¿ç”¨hotplate
 int iHPShuttle=0;                                                               //wei 20160624 Hotplate clean out
 bool bGPIBLotEndCommand=false;                                                  //wei 20160624 GPIB Lot End Command
-bool bASECleanOutCloseSite=false;                                               //kevin 20160715 ASE clean out close Site ¤£°htray
-bool bCancelErrorBin=false;                                                     //kevin 20160724 Error Bin ¨ú®ø
+bool bASECleanOutCloseSite=false;                                               //kevin 20160715 ASE clean out close Site ä¸é€€tray
+bool bCancelErrorBin=false;                                                     //kevin 20160724 Error Bin å–æ¶ˆ
 bool bGPIBLotStartCommand=true;                                                 //kevin 20190613 add lotstart GPIB Command lotstart
 
-int  iHWFix_BinBox=0;                                                           //kevin 20160819 error bin ­n©ñ¨ì Bin Box
-int  iErrorBinBoxAlarm=0;                                                       //kevin 20160819 error bin alarm ¼Æ¶q
+int  iHWFix_BinBox=0;                                                           //kevin 20160819 error bin è¦æ”¾åˆ° Bin Box
+int  iErrorBinBoxAlarm=0;                                                       //kevin 20160819 error bin alarm æ•¸é‡
 
-bool bBinError[2]={false};                                                      //kevin 20160725 Error Bin µo¥Íarm
-AnsiString sArm1BinError="";                                                    //kevin 20160725 °O¿ı Error Bin
-AnsiString sArm2BinError="";                                                    //kevin 20160725 °O¿ı Error Bin
-bool bOpenSixDoorChk=false;                                                     //kevin 20160725 error bin µo¥Í»İ¶}¥k«áªù½T»{
-bool bFirstOpenPg=true;                                                         //kevin 20160725 µ{¦¡¤@¶}©l¶i¨Ó¤£©¹¤U°õ¦æ
-int iATC_TempIndex[4][2];                                                       //Ifor 20160719 ²Ä¤@ÂI·Å«×¯Á¤Ş  0:IndexÂÂ­È 1:Index ®t²§¦¸¼Æ //Ifor 20160805 add Use Site
+bool bBinError[2]={false};                                                      //kevin 20160725 Error Bin ç™¼ç”Ÿarm
+AnsiString sArm1BinError="";                                                    //kevin 20160725 è¨˜éŒ„ Error Bin
+AnsiString sArm2BinError="";                                                    //kevin 20160725 è¨˜éŒ„ Error Bin
+bool bOpenSixDoorChk=false;                                                     //kevin 20160725 error bin ç™¼ç”Ÿéœ€é–‹å³å¾Œé–€ç¢ºèª
+bool bFirstOpenPg=true;                                                         //kevin 20160725 ç¨‹å¼ä¸€é–‹å§‹é€²ä¾†ä¸å¾€ä¸‹åŸ·è¡Œ
+int iATC_TempIndex[4][2];                                                       //Ifor 20160719 ç¬¬ä¸€é»æº«åº¦ç´¢å¼•  0:IndexèˆŠå€¼ 1:Index å·®ç•°æ¬¡æ•¸ //Ifor 20160805 add Use Site
 bool bNeedSendATCRunSelfTest=false;                                             //Ifor 20160720 add for ATC Safe Test start
 bool bNeedWaitATCRunSelfTestFinish=false;                                       //Ifor 20160720 add Wait ATC slef Test Report
 bool bATCHasAlarmBinNeedToError=false;                                          //Ifor 20160726 ATC Alarm Index IC Be Error
-int iATCHasAlarmBinNeedToError=0;                                               //Ifor 20181219 :add KYEC ­n¨DATC ·Å«×²§±`®ÉDevice©ñ¸mOut SH«á¤~Alarm 0:¥¼µo¥ÍATC·Å«×Alarm 1:ATC·Å«×Alarm 2:Index ¤W¤É§¹²¦ 3:Device ©ñ¸mOut SH ¤W¤è¨Ã¦^¨ì¦w¥ş¦ì¸m
+int iATCHasAlarmBinNeedToError=0;                                               //Ifor 20181219 :add KYEC è¦æ±‚ATC æº«åº¦ç•°å¸¸æ™‚Deviceæ”¾ç½®Out SHå¾Œæ‰Alarm 0:æœªç™¼ç”ŸATCæº«åº¦Alarm 1:ATCæº«åº¦Alarm 2:Index ä¸Šå‡å®Œç•¢ 3:Device æ”¾ç½®Out SH ä¸Šæ–¹ä¸¦å›åˆ°å®‰å…¨ä½ç½®
 bool bRunAOI=false;                                                             //wei 20160617 Vitrox
 bool bAOIPassFail[2][MAX_ARM_Row][MAX_ARM_Col]={false};                         //wei 20160617 Vitrox
 int iAOIBin[MAX_ARM_Row][MAX_ARM_Col]={0};                                      //wei 20160617 Vitrox
@@ -4335,50 +4335,50 @@ AnsiString asOCRImageName="";                                                   
 bool bOCRSkip=false;                                                            //wei 20160805
 bool bAutoRetestMusic=false;                                                    //Frank 20160822 add AutoRetestMusic
 int iBarcodeReject=0;                                                           //wei 20160823  Consecutive Failure
-bool bBarcodePassword=false;                                                    //wei 20160823  Lot check ¿ù»~»İ¿é¤J±K½X
+bool bBarcodePassword=false;                                                    //wei 20160823  Lot check éŒ¯èª¤éœ€è¼¸å…¥å¯†ç¢¼
 bool bFixBinBoxIsFull=false;                                                    //kevin 20160822 bulk box   pig 2013.04.08 FixBinBox
 AnsiString asVer;                                                               //kevin 20160825
-bool bSetupFileNotExist=false;                                                  //Ifor 20160822 add ¤u§@¾×¤£¦s¦b
-bool bHasEnteredPEModel=false;                                                  //Ifor 20160822 add ¶i¤J¤uµ{¼Ò¦¡
-bool bEnablePEModel=false;                                                      //Ifor 20160822 add ±Ò°ÊPE¤uµ{¼Ò¦¡
-bool bInitialATCSelfTest=true;                                                  //Ifor 20160829 add ¾÷¥xInitial Start »İ°µ ATC Self Test
-bool bStartATCRun=true;                                                         //Ifor 20160830 add Lot­¶­±±Ò°ÊATC ¹w³]±Ò°Ê
-bool bSpecificBin[256]={false};                                                 //kevin 20170828 (wei) 33->256  JerryYang 20170221 (wei) §ï¦¨¥i½Æ¿ïbin  //JerryYang 20160913 ª¿«~­n¨D·í´ú¸Õµ²ªG¤¤©Ò¦³siteªºbin³£¬O©Ò³]©w¤@¼Ëªºfail bin­n¸õalarm
+bool bSetupFileNotExist=false;                                                  //Ifor 20160822 add å·¥ä½œæ“‹ä¸å­˜åœ¨
+bool bHasEnteredPEModel=false;                                                  //Ifor 20160822 add é€²å…¥å·¥ç¨‹æ¨¡å¼
+bool bEnablePEModel=false;                                                      //Ifor 20160822 add å•Ÿå‹•PEå·¥ç¨‹æ¨¡å¼
+bool bInitialATCSelfTest=true;                                                  //Ifor 20160829 add æ©Ÿå°Initial Start éœ€åš ATC Self Test
+bool bStartATCRun=true;                                                         //Ifor 20160830 add Loté é¢å•Ÿå‹•ATC é è¨­å•Ÿå‹•
+bool bSpecificBin[256]={false};                                                 //kevin 20170828 (wei) 33->256  JerryYang 20170221 (wei) æ”¹æˆå¯è¤‡é¸bin  //JerryYang 20160913 çŸ½å“è¦æ±‚ç•¶æ¸¬è©¦çµæœä¸­æ‰€æœ‰siteçš„binéƒ½æ˜¯æ‰€è¨­å®šä¸€æ¨£çš„fail binè¦è·³alarm
 AnsiString asBarcodeLotNumber="";                                               //wei 20160921 BarcodeLotNumber
 bool bBarcodeAutoSkip[4]={false};                                               //wei 20160921 BarcodeLotAutoSkip
 bool bBarcodeAutoSkipError[4]={false};                                          //wei 20160921 BarcodeLotAutoSkip
-bool bSiteUseEE=false;                                                          //Alick 20160923 add for ²Ä¤T²Õ¤uµ{®v¥Î¶}ÃöSITE
+bool bSiteUseEE=false;                                                          //Alick 20160923 add for ç¬¬ä¸‰çµ„å·¥ç¨‹å¸«ç”¨é–‹é—œSITE
 bool bNeedKeyInSkipIC=false;                                                    //Frank 20161006 add
-bool bInitialCleanCount=false;                                                  //wei 20160923 Tray Feed«á¡A¤U¤@¦¸¶}©l»İ­nClean Count
-int iSECSGEMPass=0;                                                             //wei 20160923 Secs Gem ¦^¶ÇPass/FailÁû¼Æ
-int iSECSGEMPass_ART=0;                                                         //wei 20160923 Secs Gem ¦^¶ÇPass/FailÁû¼Æ
-int iSECSGEMFail=0;                                                             //wei 20160923 Secs Gem ¦^¶ÇPass/FailÁû¼Æ
-int iSECSGEMFail_ART=0;                                                         //wei 20160923 Secs Gem ¦^¶ÇPass/FailÁû¼Æ
+bool bInitialCleanCount=false;                                                  //wei 20160923 Tray Feedå¾Œï¼Œä¸‹ä¸€æ¬¡é–‹å§‹éœ€è¦Clean Count
+int iSECSGEMPass=0;                                                             //wei 20160923 Secs Gem å›å‚³Pass/Failé¡†æ•¸
+int iSECSGEMPass_ART=0;                                                         //wei 20160923 Secs Gem å›å‚³Pass/Failé¡†æ•¸
+int iSECSGEMFail=0;                                                             //wei 20160923 Secs Gem å›å‚³Pass/Failé¡†æ•¸
+int iSECSGEMFail_ART=0;                                                         //wei 20160923 Secs Gem å›å‚³Pass/Failé¡†æ•¸
 bool bPickErrorAutoHome=false;                                                  //wei 20161005
-bool bCCDcheckShuttle[2]={false};                                               //wei 20161102 IC¸m°¾ÀË¬d
+bool bCCDcheckShuttle[2]={false};                                               //wei 20161102 ICç½®åæª¢æŸ¥
 bool bClearRetryCnt[iTotalFunction]={false};                                    //Sam 20200323 : Modify Tray Function //wei 20161219 Tray Mapping
 bool bCCDTrayDeviceCount[3]={false};                                            //Sam 20190405 : Tray Decive Count
 bool bNeedCCDTrayDeviceCount[3]={false};                                        //Sam 20190405 : Tray Decive Count
 bool bCCDTrayID[2]={false};                                                     //wei 20180808 MR Tray ID 2
-int iRecordSiteMapOrder[4][8]={0};                                              //kevin 20161003 Site ¶¶§Ç
-int iCloseSiteMap[2][4][8]={0};                                                 //kevin 20161003 Site ¶¶§Ç
-AnsiString asHandlerVersion="";                                                 //Ifor 20161109 Handler S/W Ver Åã¥Ü
-AnsiString asMainVersion="";                                                    //JerryYang 20180619 (wei) : ASE_CL ©|´¼­n¨D¥Dµe­±ª©¸¹¥i¥H¦Û¤v­×§ï
-AnsiString MainVersion="";                                                      //Steven 20250903 : §ï¦¨ª½±µ§ìÀÉ®×ª©¥»
-bool bAutoSiteMapWaitTestResult=false;                                          //jou 2016-11-03 JCET ­n¨DAuto Site Mapping »İµ¥«İ´ú¸Õµ²ªG¦bÄ~Äò¤J®Æ
-bool bAutoSiteMapWaitTestPass=false;                                            //jou 2016-11-03 JCET ­n¨DAuto Site Mapping »İµ¥«İ´ú¸Õµ²ªG¦bÄ~Äò¤J®Æ
+int iRecordSiteMapOrder[4][8]={0};                                              //kevin 20161003 Site é †åº
+int iCloseSiteMap[2][4][8]={0};                                                 //kevin 20161003 Site é †åº
+AnsiString asHandlerVersion="";                                                 //Ifor 20161109 Handler S/W Ver é¡¯ç¤º
+AnsiString asMainVersion="";                                                    //JerryYang 20180619 (wei) : ASE_CL å°šæ™ºè¦æ±‚ä¸»ç•«é¢ç‰ˆè™Ÿå¯ä»¥è‡ªå·±ä¿®æ”¹
+AnsiString MainVersion="";                                                      //Steven 20250903 : æ”¹æˆç›´æ¥æŠ“æª”æ¡ˆç‰ˆæœ¬
+bool bAutoSiteMapWaitTestResult=false;                                          //jou 2016-11-03 JCET è¦æ±‚Auto Site Mapping éœ€ç­‰å¾…æ¸¬è©¦çµæœåœ¨ç¹¼çºŒå…¥æ–™
+bool bAutoSiteMapWaitTestPass=false;                                            //jou 2016-11-03 JCET è¦æ±‚Auto Site Mapping éœ€ç­‰å¾…æ¸¬è©¦çµæœåœ¨ç¹¼çºŒå…¥æ–™
 bool bAutoSiteMapAmbientResultCheck=false;                                      //Ifor 20190528 : add Site Mapping Ambient Check
 int iOldSelShuttle=0;                                                           //Ifor 20161116 add BackUp Shuttle select
 int iOldShuttleMode=0;                                                          //Ifor 20161116 add BackUp Shuttle Mode
 int iUseSuckModeBackup=0;                                                       //Ifor 20161116 add BackUp Use Suck Mode
 AnsiString asHandlingMode=0;                                                    //Ifor 20161117 add BackUp Handling Mode
-AnsiString asOCRSaveName="";                                                    //wei 20161122 OCR ¦s¹ÏÀÉ¦W¥[¤J¿é¤J­È
-int iOCRMoveSRead=0;                                                            //wei 20161118 OCR S«¬Åª¨ú
+AnsiString asOCRSaveName="";                                                    //wei 20161122 OCR å­˜åœ–æª”ååŠ å…¥è¼¸å…¥å€¼
+int iOCRMoveSRead=0;                                                            //wei 20161118 OCR Så‹è®€å–
 int iInArmAutoYTeachOffset=0;                                                   //kevin 20161124 auto teach Z Yoffset
 int iOutArmAutoYTeachOffset=0;                                                  //kevin 20161124 auto teach Z Yoffset
 int iInArmTeachZ =0;                                                            //kevin 20170502 (wei) auto teach Z Z check pos
 int ioutArmTeachZ=0;                                                            //kevin 20170502 (wei) auto teach Z Z check pos
-AnsiString asOCRSaveType="";                                                    //Alick 20170119 add OCR ¦sÀÉ®É¦h¥[¤J¦sÀÉ­ì¦]
+AnsiString asOCRSaveType="";                                                    //Alick 20170119 add OCR å­˜æª”æ™‚å¤šåŠ å…¥å­˜æª”åŸå› 
 bool bSendATCLotStart=false;                                                    //Ifor 20161118 add Send ATC Lot Start
 bool bSendATCLotEnd=false;                                                      //Ifor 20161118 add Send ATC Lot End
 bool bReSendATCLotEven=false;                                                   //Ifor 20161118 add Resent ATC Lot Command
@@ -4390,41 +4390,41 @@ const int iSortingTrayFix1  = 3;                                                
 const int iSortingTrayFix2  = 4;                                                //Ifor 20161123 add Sorting Tray Fix2
 const int iSortingTrayFix3  = 5;                                                //Ifor 20161123 add Sorting Tray Fix3
 //Sorting Tray define end
-bool bFix3HasNullICSet=true;                                                    //Ifor 20161124 add Fix3 ¤J®Æ®É³]©wHasNullIC
-bool bAutoShuttleHome=false;                                                    //wei 20161206 Auto Shuttle Sensor ¦^Home
-bool bAutoCleanFinishOnlyUseRTC=false;                                          //JerryYang 20161216 (jou) °µ§¹auto clean«á¤£»İ­n°µindex check
+bool bFix3HasNullICSet=true;                                                    //Ifor 20161124 add Fix3 å…¥æ–™æ™‚è¨­å®šHasNullIC
+bool bAutoShuttleHome=false;                                                    //wei 20161206 Auto Shuttle Sensor å›Home
+bool bAutoCleanFinishOnlyUseRTC=false;                                          //JerryYang 20161216 (jou) åšå®Œauto cleanå¾Œä¸éœ€è¦åšindex check
 bool bCanRunSCKART=false;                                                       //Steven 20170919 (wei) : Add for SCK ART
 int  iSCKARTLoadingStatus=-1;                                                   //Steven 20161223 (jou) : For SCK ART loading count
-bool bSCKARTLoadCntAlarm=false;                                                 //Steven 20161223 (jou) : For SCK ART loading count : ¼Æ¶q¶W¹L,­n©ñ¤UICµM«áAlarm
-int  iLoadPickX=0;                                                              //Steven 20161223 (jou) : For SCK ART loading count : ¥Ø«e§l¨ìªº¦ì¸mX
-int  iLoadPickY=0;                                                              //Steven 20161223 (jou) : For SCK ART loading count : ¥Ø«e§l¨ìªº¦ì¸mY
-int iD43AutoRetryWhenIndexPickErrCnt[2]={0, 0};                                 //Steven 20170105 : Index§l¨ú²§±`,­n°h¥X¨Ó¥ÎShuttle SensorÀË¬d«á, ¦A¶i¥h§l¤@¦¸
-double dOldWorkTemp=0.0;                                                        //Ifor 20161220 (Steven) KYEC ­n¨DEven Log ¬ö¿ı¤W¤@µ§Temp³]©w
-double dOldAmbWorkTemp=0.0;                                                     //Ifor 20161220 (Steven) KYEC ­n¨DEven Log ¬ö¿ı¤W¤@µ§AmbTemp³]©w
-double dOldSockTime=0.0;                                                        //Ifor 20161220 (Steven) KYEC ­n¨DEven Log ¬ö¿ı¤W¤@µ§Sock³]©w
-bool bFTPDownLoadHasTestMode=false;                                             //Ifor 20161221 (Steven) add KYEC Setup File Down Load¬O§_¦³TestMode.Data
-bool bUseATC_SelfTestFunction=false;                                            //Ifor 20170124 : add KYEC ­n¨DATC Self Test ¥i¥ÑGeneral.ini ¤¤¶}±Ò©ÎÃö³¬
+bool bSCKARTLoadCntAlarm=false;                                                 //Steven 20161223 (jou) : For SCK ART loading count : æ•¸é‡è¶…é,è¦æ”¾ä¸‹ICç„¶å¾ŒAlarm
+int  iLoadPickX=0;                                                              //Steven 20161223 (jou) : For SCK ART loading count : ç›®å‰å¸åˆ°çš„ä½ç½®X
+int  iLoadPickY=0;                                                              //Steven 20161223 (jou) : For SCK ART loading count : ç›®å‰å¸åˆ°çš„ä½ç½®Y
+int iD43AutoRetryWhenIndexPickErrCnt[2]={0, 0};                                 //Steven 20170105 : Indexå¸å–ç•°å¸¸,è¦é€€å‡ºä¾†ç”¨Shuttle Sensoræª¢æŸ¥å¾Œ, å†é€²å»å¸ä¸€æ¬¡
+double dOldWorkTemp=0.0;                                                        //Ifor 20161220 (Steven) KYEC è¦æ±‚Even Log ç´€éŒ„ä¸Šä¸€ç­†Tempè¨­å®š
+double dOldAmbWorkTemp=0.0;                                                     //Ifor 20161220 (Steven) KYEC è¦æ±‚Even Log ç´€éŒ„ä¸Šä¸€ç­†AmbTempè¨­å®š
+double dOldSockTime=0.0;                                                        //Ifor 20161220 (Steven) KYEC è¦æ±‚Even Log ç´€éŒ„ä¸Šä¸€ç­†Sockè¨­å®š
+bool bFTPDownLoadHasTestMode=false;                                             //Ifor 20161221 (Steven) add KYEC Setup File Down Loadæ˜¯å¦æœ‰TestMode.Data
+bool bUseATC_SelfTestFunction=false;                                            //Ifor 20170124 : add KYEC è¦æ±‚ATC Self Test å¯ç”±General.ini ä¸­é–‹å•Ÿæˆ–é—œé–‰
 AnsiString asATCEvenLotID="";                                                   //Ifor 20170124 (Steven) : add LotID By ATC Even Log
-double iInitStartDelayDec=0;                                                    //kevin 20161214 ¨C¦¸»¼´î®É¶¡
-int iInitStartDelayTimeDetCount=0;                                              //kevin 20161214 ¨C¦¸»¼´î­p¼Æ
-AnsiString Ase_SendESDTempEPData="";                                            //kevin 20161229 ¶Ç°e¸ê®Æµ¹ASE
-AnsiString Ase_SendESD="";                                                      //kevin 20161229 ¶Ç°e¸ê®Æµ¹ASE
-AnsiString Ase_SendTemp="";                                                     //kevin 20161229 ¶Ç°e¸ê®Æµ¹ASE
-AnsiString Ase_SendEP="";                                                       //kevin 20161229 ¶Ç°e¸ê®Æµ¹ASE
-bool bIndexCheck1=false,bIndexCheck2=false;                                     //kevin 20170120 autoclean index check µoALARM
+double iInitStartDelayDec=0;                                                    //kevin 20161214 æ¯æ¬¡éæ¸›æ™‚é–“
+int iInitStartDelayTimeDetCount=0;                                              //kevin 20161214 æ¯æ¬¡éæ¸›è¨ˆæ•¸
+AnsiString Ase_SendESDTempEPData="";                                            //kevin 20161229 å‚³é€è³‡æ–™çµ¦ASE
+AnsiString Ase_SendESD="";                                                      //kevin 20161229 å‚³é€è³‡æ–™çµ¦ASE
+AnsiString Ase_SendTemp="";                                                     //kevin 20161229 å‚³é€è³‡æ–™çµ¦ASE
+AnsiString Ase_SendEP="";                                                       //kevin 20161229 å‚³é€è³‡æ–™çµ¦ASE
+bool bIndexCheck1=false,bIndexCheck2=false;                                     //kevin 20170120 autoclean index check ç™¼ALARM
 bool bOutArmPickShtHasRetry=false;                                              //Steven 20170202 (wei): For ATJ Out Arm pickup error put to define tray
 bool bSortArmPickShtHasRetry=false;                                             //RogerYang 20250516 Add for 9046AU
-bool bAlarmUnlockPassWord=false;                                                //Ifor 20170214 (wei) add ¸Ñ°£Alarm »İ­n¿W¥ß±K½X
-AnsiString asUnlockPassword="";                                                 //Ifor 20170214 (wei) add ¸Ñ°£Alarm ¿W¥ß±K½X
-bool bHT9045S_USE2x4=false;                                                     //Ifor 20170308 (wei) add HT9045S 2x4¼Ò¦¡Âê©w
-AnsiString dSend_ASEData[10]={0};                                               //kevin 20170210 (wei) °eASE  0:Index Time(Arm),1:Index Cycle Time,2:Test Time,3:UPH
-bool bManualAutoClean=false;                                                    //kevin 20170215 (wei) ¤â°Ê autoclean
-bool bASkStart=false;                                                           //kevin 20170224 (wei) Load Auto Skip ¶}©l¦³§l¨ú¨ìªÅ®æ
-bool bAutoSkipHasIC=false;                                                      //kevin 20170224 (wei) LOAD AUTO SKIP HAS IC »İ­n ALARM
+bool bAlarmUnlockPassWord=false;                                                //Ifor 20170214 (wei) add è§£é™¤Alarm éœ€è¦ç¨ç«‹å¯†ç¢¼
+AnsiString asUnlockPassword="";                                                 //Ifor 20170214 (wei) add è§£é™¤Alarm ç¨ç«‹å¯†ç¢¼
+bool bHT9045S_USE2x4=false;                                                     //Ifor 20170308 (wei) add HT9045S 2x4æ¨¡å¼é–å®š
+AnsiString dSend_ASEData[10]={0};                                               //kevin 20170210 (wei) é€ASE  0:Index Time(Arm),1:Index Cycle Time,2:Test Time,3:UPH
+bool bManualAutoClean=false;                                                    //kevin 20170215 (wei) æ‰‹å‹• autoclean
+bool bASkStart=false;                                                           //kevin 20170224 (wei) Load Auto Skip é–‹å§‹æœ‰å¸å–åˆ°ç©ºæ ¼
+bool bAutoSkipHasIC=false;                                                      //kevin 20170224 (wei) LOAD AUTO SKIP HAS IC éœ€è¦ ALARM
 AnsiString sAskStartDetect="";                                                  //kevin 20170224 (wei) LOAD AUTO SKIP HAS IC data
-bool bSiteHasTurnOn[33];                                                        //Steven 20170302 (wei) : ½T»{­ş­ÓSite¦³¶}, ±q1¶}©l~32
+bool bSiteHasTurnOn[33];                                                        //Steven 20170302 (wei) : ç¢ºèªå“ªå€‹Siteæœ‰é–‹, å¾1é–‹å§‹~32
 bool bLoaderTrayAction=false;                                                   //wei 20161219 Tray Mapping
-bool bSecsGemDownloadFTP=false;                                                 //wei 20170119 (Steven) DownLoad ¨S¦³°¨¤W«ö±¼·|Time Out
+bool bSecsGemDownloadFTP=false;                                                 //wei 20170119 (Steven) DownLoad æ²’æœ‰é¦¬ä¸ŠæŒ‰æ‰æœƒTime Out
 int iATRFtRtMode=0;                                                             //wei 20170119 (jou) ATR FT/RT count
 int iATRPassCount[2]={0};                                                       //wei 20170119 (jou) ATR FT/RT count
 int iATRFailCount[2]={0};                                                       //wei 20170119 (jou) ATR FT/RT count
@@ -4437,31 +4437,31 @@ bool bTrayMapDataCheckError=false;                                              
 bool bCheckTrayDevice=false;                                                    //wei 20170302 (Steven) Tray map data error
 bool bRealCCDROICheck=true;                                                     //wei 20170308 (jou) RTC ROI Check
 bool bRealCCDROICheckOK=false;                                                  //wei 20170308 (jou) RTC ROI Check
-bool bRealCCDROICountCheck=true;                                                //jou 20171201 (Steven) : RTC ROI ½T»{¼Æ¶q¬O§_¥¿½T
-bool bRealCCDROICountCheckOK=false;                                             //jou 20171201 (Steven) : RTC ROI ½T»{¼Æ¶q¬O§_¥¿½T
-int iAse_LoadSkipTime=0;                                                        //kevin 20170314 (Steven) Load ¶}©lSKIP ¨ì§l¨ì¦³IC®É¶¡°O¿ı
-DWORD AutoTrayendStartTime[2]={0}, AutoTrayendEndTime[2]={0}, AutoTrayendPassTime[2]={0};   //kevin 20170314 (Steven) 0:¦³§l¨ìIC®É¶¡1:Á`¨Ï¥Î®É¶¡ °O¿ıAUTO TRAY END ªá¤F¦h¤Ö®É¶¡
-int iAutoTrayendhasIC=0;                                                        //kevin 20170314 (Steven) ­pºâ AUTO SKIP«á¤S§l¨ìIC¼Æ¶q
-int iAse_LoadTrayEndTotalTime=0;                                                //kevin 20170320 (Steven) LOAD Auto skip °OºâÁ`®É¶¡
+bool bRealCCDROICountCheck=true;                                                //jou 20171201 (Steven) : RTC ROI ç¢ºèªæ•¸é‡æ˜¯å¦æ­£ç¢º
+bool bRealCCDROICountCheckOK=false;                                             //jou 20171201 (Steven) : RTC ROI ç¢ºèªæ•¸é‡æ˜¯å¦æ­£ç¢º
+int iAse_LoadSkipTime=0;                                                        //kevin 20170314 (Steven) Load é–‹å§‹SKIP åˆ°å¸åˆ°æœ‰ICæ™‚é–“è¨˜éŒ„
+DWORD AutoTrayendStartTime[2]={0}, AutoTrayendEndTime[2]={0}, AutoTrayendPassTime[2]={0};   //kevin 20170314 (Steven) 0:æœ‰å¸åˆ°ICæ™‚é–“1:ç¸½ä½¿ç”¨æ™‚é–“ è¨˜éŒ„AUTO TRAY END èŠ±äº†å¤šå°‘æ™‚é–“
+int iAutoTrayendhasIC=0;                                                        //kevin 20170314 (Steven) è¨ˆç®— AUTO SKIPå¾Œåˆå¸åˆ°ICæ•¸é‡
+int iAse_LoadTrayEndTotalTime=0;                                                //kevin 20170320 (Steven) LOAD Auto skip è¨˜ç®—ç¸½æ™‚é–“
 int iAutoTrayEndTotal=0;
-bool bInSht1LtcDetectTesterCanMove=true;                                        //Isaac 20170418 (Steven) ¥ÎY LatchÀË´úInshuttle¦³µLIC
-bool bInSht2LtcDetectTesterCanMove=true;                                        //Isaac 20170418 (Steven) ¥ÎY LatchÀË´úInshuttle¦³µLIC
-bool bReadAndCheckCPUName=false;                                                //Isaac 20170509 (Steven) ¥dCPU¸ê°T
-AnsiString EPuser="HonPrec",EPPass="16943420";                                  //kevin 20170327 ep ¥[±K½X«OÅ@
+bool bInSht1LtcDetectTesterCanMove=true;                                        //Isaac 20170418 (Steven) ç”¨Y Latchæª¢æ¸¬Inshuttleæœ‰ç„¡IC
+bool bInSht2LtcDetectTesterCanMove=true;                                        //Isaac 20170418 (Steven) ç”¨Y Latchæª¢æ¸¬Inshuttleæœ‰ç„¡IC
+bool bReadAndCheckCPUName=false;                                                //Isaac 20170509 (Steven) å¡CPUè³‡è¨Š
+AnsiString EPuser="HonPrec",EPPass="16943420";                                  //kevin 20170327 ep åŠ å¯†ç¢¼ä¿è­·
 bool bHingeStart=false;                                                         //wei 20170413
 bool bHingeNeedStart=false;                                                     //wei 20170413
-int iReadAdamEP=0;                                                              //jou 20170413 (Steven) : Read Adam EP ´£¤ÉUPH
+int iReadAdamEP=0;                                                              //jou 20170413 (Steven) : Read Adam EP æå‡UPH
 bool bRTCModelNG=false;                                                         //wei 20170504 (Steven) RTC Model NG
-bool bFirstInput=false;                                                         //Steven 20170511 (wei) : ¨Ï¥Îinitial delay·í Soak time
-bool bFirstInputForIndex=false;                                                 //Steven 20170511 (wei) : ¨Ï¥Îinitial delay·í Soak time
+bool bFirstInput=false;                                                         //Steven 20170511 (wei) : ä½¿ç”¨initial delayç•¶ Soak time
+bool bFirstInputForIndex=false;                                                 //Steven 20170511 (wei) : ä½¿ç”¨initial delayç•¶ Soak time
 bool bOneTimeWait=true;
-bool bCheckPCI_MN200StateRun=false;                                             //JerryYang 20170510 (Steven) §ï¦¨¥ş°ìÅÜ¼Æ
-bool bF18CheckShuttle1MustHasIC=false;                                          //JerryYang 20170515 (Steven) ­×¥¿in shuttle detect²§±`«áÃö³¬F18·|hang up
-bool bF18CheckShuttle2MustHasIC=false;                                          //JerryYang 20170515 (Steven) ­×¥¿in shuttle detect²§±`«áÃö³¬F18·|hang up
+bool bCheckPCI_MN200StateRun=false;                                             //JerryYang 20170510 (Steven) æ”¹æˆå…¨åŸŸè®Šæ•¸
+bool bF18CheckShuttle1MustHasIC=false;                                          //JerryYang 20170515 (Steven) ä¿®æ­£in shuttle detectç•°å¸¸å¾Œé—œé–‰F18æœƒhang up
+bool bF18CheckShuttle2MustHasIC=false;                                          //JerryYang 20170515 (Steven) ä¿®æ­£in shuttle detectç•°å¸¸å¾Œé—œé–‰F18æœƒhang up
 bool bReadEpTime=false;                                                         //kevin 20170524 (wei) add ep read change time
-bool bNeedClearSortCount=false;                                                 //JerryYang 20170517 (wei) JCET§d¦p¬K­n¨Dtray end©Îtray feed«á«öStart­n¦Û°Ê²M°£unloader¼Æ¶q
+bool bNeedClearSortCount=false;                                                 //JerryYang 20170517 (wei) JCETå³å¦‚æ˜¥è¦æ±‚tray endæˆ–tray feedå¾ŒæŒ‰Startè¦è‡ªå‹•æ¸…é™¤unloaderæ•¸é‡
 double dFixTrayDataCleanTime=0.0;                                               //Ifor 20170525 (wei) add Fix Tray Data Clean Time
-bool bCutDirectTemp=false;                                                      //kevin 20170529 (wei) add power offÃö Direch Heat
+bool bCutDirectTemp=false;                                                      //kevin 20170529 (wei) add power offé—œ Direch Heat
 int iIndexZ1HomeToZPhaseDistanceFirst=0;                                        //kevin 20170515 (wei) add Jeffrey 20170414 Check IndexZ Home to Z Phase Distance Range
 int iIndexZ1HomeToZPhaseDistanceSecond=0;                                       //kevin 20170515 (wei) add Jeffrey 20170414 Check IndexZ Home to Z Phase Distance Range
 int iIndexZ2HomeToZPhaseDistanceFirst=0;                                        //kevin 20170515 (wei) add Jeffrey 20170414 Check IndexZ Home to Z Phase Distance Range
@@ -4481,36 +4481,36 @@ int iIndexY2HomeToYPosFirst=0;
 int iIndexY2HomeToYPosSecond=0;
 
 int MotorTask=FIRST_HOME;                                                       //kevin 20170605 (wei) define
-bool bSECSGEM_NoteAlarm=false;                                                  //Ifor 20170616 (wei) add S10F3 «á¸õ¥XNote AlarmºX¼Ğ
-bool bSECSOneCycleComm=false;                                                   //RogerYang 20170705 (wei) add SECS/GEN OneCycle©R¥OºX¼Ğ
+bool bSECSGEM_NoteAlarm=false;                                                  //Ifor 20170616 (wei) add S10F3 å¾Œè·³å‡ºNote Alarmæ——æ¨™
+bool bSECSOneCycleComm=false;                                                   //RogerYang 20170705 (wei) add SECS/GEN OneCycleå‘½ä»¤æ——æ¨™
 AnsiString aARMSPassWordPath="";                                                //Ifor 20170621 (wei) add ARMS Function
-bool bKitOutDiameter=false;                                                     //kevin 20170628 (Steven) Lay out Kit  ¥~®|
+bool bKitOutDiameter=false;                                                     //kevin 20170628 (Steven) Lay out Kit  å¤–å¾‘
 AnsiString sKitOutDiameter[10]={""};                                            //kevin 20210813 change  //kevin 20170628 (Steven) add
-int iIndexSpeed;                                                                //Steven 20170818 : ´ú¸ÕUPH¥Î
+int iIndexSpeed;                                                                //Steven 20170818 : æ¸¬è©¦UPHç”¨
 int iIndexAcc;
-int  iMonitoringOutlierCnt=0;                                                   //Steven 20180626 (wei) : ¶W¹L³]©w­Èªº¤]­nÀË¬d
-bool bInArmPickErrFromLoader=false;                                             //Steven 20170828 (wei) : ½T»{¬O§_¦³¦bLoader§l®Æ²§±`
+int  iMonitoringOutlierCnt=0;                                                   //Steven 20180626 (wei) : è¶…éè¨­å®šå€¼çš„ä¹Ÿè¦æª¢æŸ¥
+bool bInArmPickErrFromLoader=false;                                             //Steven 20170828 (wei) : ç¢ºèªæ˜¯å¦æœ‰åœ¨Loaderå¸æ–™ç•°å¸¸
 bool bQAModeFlag=false;                                                         //Steven 20170830 (wei) : QA mode for ATK ART
-bool bHasQwertyKeyForm=false;                                                   //Ifor 20170816 (Steven)add QWERTY¤pÁä½LºX¼Ğ
-bool bHasPasswordForm=false;                                                    //Ifor 20170816 (Steven)add QWERTY¤pÁä½LºX¼Ğ
-bool bAlarmAfterPreAlarm=false;                                                 //Ifor 20170906 add Á×§K PreAlarm -> Alarm -> SECS GEM Alarm ¦P®Éµo¥Í³y¦¨·í¾÷°İÃD
-bool bUseNSKitKey=false;                                                        //kevin 20170814 (Steven) §CFORCE »İ³nÅéÂê¦í
-bool bNeedMusicAndAlarmOn=false;                                                //kevin 20170816 (Steven) add »İµo¥X­µ¼Ö¤Î¨q¿O
-bool bNeedMusicFinishLighAndAlarmOn=false;                                      //kevin 20170816 (Steven) add »İµo¥X­µ¼Ö¤Î¨q¿O §¹¦¨
-AnsiString ASE_Yield[4]={"","","",""};                                          //kevin 20170816 (Steven) add ¶Ç°eYIELD µ¹ASE
-bool bAutoTrayEndHasIC=false;                                                   //kevin 20170822 (Steven) auto tray end ¦³§l¨ìIC
-AnsiString sAutoTrayendStartPosBuffer="";                                       //kevin 20170823 (Steven) auto tray start buffer °O¿ı¤@½L¢æ¢ç¦ì¸m
-AnsiString sAutoTrayendStartPos="";                                             //kevin 20170823 (Steven) auto tray start °O¿ı¤@½L¢æ¢ç¦ì¸m
-AnsiString sAutoTrayendEndPosBuffer="";                                         //kevin 20170823 (Steven) auto tray end buffer°O¿ı¤@½L¢æ¢ç¦ì¸m
-AnsiString sAutoTrayendEndPos="";                                               //kevin 20170823 (Steven) auto tray end °O¿ı¤@½L¢æ¢ç¦ì¸m
-AnsiString sAutoTrayendabnormalBuffer="";                                       //kevin 20170823 (Steven) auto tray end buffer¤¤³~¦³®Æ°O¿ı¤@½L¢æ¢ç¦ì¸m
-AnsiString sAutoTrayendabnormalPos="";                                          //kevin 20170823 (Steven) auto tray end ¤¤³~¦³®Æ °O¿ı¤@½L¢æ¢ç¦ì¸m
+bool bHasQwertyKeyForm=false;                                                   //Ifor 20170816 (Steven)add QWERTYå°éµç›¤æ——æ¨™
+bool bHasPasswordForm=false;                                                    //Ifor 20170816 (Steven)add QWERTYå°éµç›¤æ——æ¨™
+bool bAlarmAfterPreAlarm=false;                                                 //Ifor 20170906 add é¿å… PreAlarm -> Alarm -> SECS GEM Alarm åŒæ™‚ç™¼ç”Ÿé€ æˆç•¶æ©Ÿå•é¡Œ
+bool bUseNSKitKey=false;                                                        //kevin 20170814 (Steven) ä½FORCE éœ€è»Ÿé«”é–ä½
+bool bNeedMusicAndAlarmOn=false;                                                //kevin 20170816 (Steven) add éœ€ç™¼å‡ºéŸ³æ¨‚åŠç§€ç‡ˆ
+bool bNeedMusicFinishLighAndAlarmOn=false;                                      //kevin 20170816 (Steven) add éœ€ç™¼å‡ºéŸ³æ¨‚åŠç§€ç‡ˆ å®Œæˆ
+AnsiString ASE_Yield[4]={"","","",""};                                          //kevin 20170816 (Steven) add å‚³é€YIELD çµ¦ASE
+bool bAutoTrayEndHasIC=false;                                                   //kevin 20170822 (Steven) auto tray end æœ‰å¸åˆ°IC
+AnsiString sAutoTrayendStartPosBuffer="";                                       //kevin 20170823 (Steven) auto tray start buffer è¨˜éŒ„ä¸€ç›¤ï¼¸ï¼¹ä½ç½®
+AnsiString sAutoTrayendStartPos="";                                             //kevin 20170823 (Steven) auto tray start è¨˜éŒ„ä¸€ç›¤ï¼¸ï¼¹ä½ç½®
+AnsiString sAutoTrayendEndPosBuffer="";                                         //kevin 20170823 (Steven) auto tray end bufferè¨˜éŒ„ä¸€ç›¤ï¼¸ï¼¹ä½ç½®
+AnsiString sAutoTrayendEndPos="";                                               //kevin 20170823 (Steven) auto tray end è¨˜éŒ„ä¸€ç›¤ï¼¸ï¼¹ä½ç½®
+AnsiString sAutoTrayendabnormalBuffer="";                                       //kevin 20170823 (Steven) auto tray end bufferä¸­é€”æœ‰æ–™è¨˜éŒ„ä¸€ç›¤ï¼¸ï¼¹ä½ç½®
+AnsiString sAutoTrayendabnormalPos="";                                          //kevin 20170823 (Steven) auto tray end ä¸­é€”æœ‰æ–™ è¨˜éŒ„ä¸€ç›¤ï¼¸ï¼¹ä½ç½®
 bool bASEARTStart=false;                                                        //kevin 20170830 (Steven) ASE_KH ART SEND START
-int iArt_AutoTotal[MAX_AUTO_TRAY][2]={{0,0},{0,0},{0,0},{0,0},{0,0},{0,0}};     //kevin 20170830 (Steven) °O¿ıART ¼Æ¶q
-bool bAutoSkipStartXYlog=false;                                                 //kevin 20170904 (Steven) °O¿ıSKIP TRAY X Y ¦ì¸m
-bool bAutoSkiplog=false;                                                        //kevin 20170904 (Steven) °O¿ıSKIP TRAY X Y ¦ì¸m
-bool bTrayHaveDevice=false;                                                     //wei 20170317 (steven) Device Remain ´İ®ÆÀË´ú
-bool bDoTrayDeviceCheck=false;                                                  //wei 20170317 (steven) Device Remain ´İ®ÆÀË´ú
+int iArt_AutoTotal[MAX_AUTO_TRAY][2]={{0,0},{0,0},{0,0},{0,0},{0,0},{0,0}};     //kevin 20170830 (Steven) è¨˜éŒ„ART æ•¸é‡
+bool bAutoSkipStartXYlog=false;                                                 //kevin 20170904 (Steven) è¨˜éŒ„SKIP TRAY X Y ä½ç½®
+bool bAutoSkiplog=false;                                                        //kevin 20170904 (Steven) è¨˜éŒ„SKIP TRAY X Y ä½ç½®
+bool bTrayHaveDevice=false;                                                     //wei 20170317 (steven) Device Remain æ®˜æ–™æª¢æ¸¬
+bool bDoTrayDeviceCheck=false;                                                  //wei 20170317 (steven) Device Remain æ®˜æ–™æª¢æ¸¬
 bool bFTPDownLoadFilediff=false;                                                //wei 20170518
 bool bFTPDownLoadFileError=false;                                               //wei 20170518
 int iYeildCantactCT[3]={0};                                                     //wei 20170602
@@ -4521,15 +4521,15 @@ bool bDownOffsetFTP=false;                                                      
 bool bAutoCloseSite=false;
 int iContactCountAlarm=0;                                                       //wei 20170327 add
 bool bAutoCleanOut=false;
-bool bRecordData[10][5]={false};                                                //wei 20171012 ¤ñ¹ï¸ê®Æ¬ö¿ı
+bool bRecordData[10][5]={false};                                                //wei 20171012 æ¯”å°è³‡æ–™ç´€éŒ„
 bool bTCPIPChangeAlarm=false;                                                   //Isaac 20170613 (wei) TCP/IP
 AnsiString InitialStartTime;                                                    //Isaac 20170613 (wei) TCP/IP
 int iHandlerCommandServerPort;                                                  //Isaac 20170613 (wei) TCP/IP
 int iHandlerResultServerPort;                                                   //Isaac 20170613 (wei) TCP/IP
-bool bNoChangeContactHeight=false;                                              //Frank 20170918 (Steven) add Xilinx¤£ÂĞ»\Contact Height
-bool bTestEPaddKg=false;                                                        //jou 20171026 (wei) : ´ú¸Õ¤¤¥[À£EP
-bool bAutoSiteMapHotplateReady=false;                                           //Ifor 20170920 (Steven) : add Auto Site Mapping Hotplate ºX¼Ğ
-bool bHP2Inarm=false;                                                           //Ifor 20170926 (Steven) : add Hotplate ¸ê®ÆÂà²¾¸mInARM
+bool bNoChangeContactHeight=false;                                              //Frank 20170918 (Steven) add Xilinxä¸è¦†è“‹Contact Height
+bool bTestEPaddKg=false;                                                        //jou 20171026 (wei) : æ¸¬è©¦ä¸­åŠ å£“EP
+bool bAutoSiteMapHotplateReady=false;                                           //Ifor 20170920 (Steven) : add Auto Site Mapping Hotplate æ——æ¨™
+bool bHP2Inarm=false;                                                           //Ifor 20170926 (Steven) : add Hotplate è³‡æ–™è½‰ç§»ç½®InARM
 bool bAutoSiteMapHotplateSave=false;                                            //Ifor 20170926 (Steven) : add Auto Site Mapping Hotplate Save
 int iAutoSiteMapHotplatePlateR=0;                                               //Ifor 20170926 (Steven) : add Auto Site Mapping Hotplate PlateY
 int iAutoSiteMapHotplatePlateC=0;                                               //Ifor 20170926 (Steven) : add Auto Site Mapping Hotplate PlateX
@@ -4543,43 +4543,43 @@ int iAutoSiteMapHPNo=0;
 int iAutoSiteMapHPR=0;
 int iAutoSiteMapHPC=0;
 int iAutoSiteMapSiteNo=0;
-int iAutoSiteMapCount=-1;                                                       //Steven 20220811 : ¬ö¿ı¥Ø«e¬O­ş­ÓShuttle
-int iAutoSiteCurrStep=-1;                                                       //Steven 20220811 : ¬ö¿ı¥Ø«e¬O­ş­ÓShuttle
-bool bAutoSiteMapHasPickHP=false;                                               //¬ö¿ı¬O§_¦³¨ì¥[¼ö½L§l®Æ
-bool bAutoSiteMapHotICCanPick=true;                                             //Ifor 20171225 (Steven) : add Á×§K One Cycle «á°õ¦æSite Mapping µo¥Í Hang up
-bool bSiteMappingNeedCheck=true;                                                //Ifor 20190308 : add ÀH®É¶}Ãö Site Mapping
-bool bSiteMappingPlaceHotplate=false;                                           //Ifor 20190308 : add ÀH®É¶}Ãö Site Mapping
-bool bARTSeparate=false;                                                        //kevin 20170908 (wei) add art ¤Àbin ª¬ºA¦¨¥ß
-bool bLoadInarmAutoHigh=false;                                                  //kevin 20170929 (wei) load initial load ¤@½L inarm ®Õ¥¿°ª«×
+int iAutoSiteMapCount=-1;                                                       //Steven 20220811 : ç´€éŒ„ç›®å‰æ˜¯å“ªå€‹Shuttle
+int iAutoSiteCurrStep=-1;                                                       //Steven 20220811 : ç´€éŒ„ç›®å‰æ˜¯å“ªå€‹Shuttle
+bool bAutoSiteMapHasPickHP=false;                                               //ç´€éŒ„æ˜¯å¦æœ‰åˆ°åŠ ç†±ç›¤å¸æ–™
+bool bAutoSiteMapHotICCanPick=true;                                             //Ifor 20171225 (Steven) : add é¿å… One Cycle å¾ŒåŸ·è¡ŒSite Mapping ç™¼ç”Ÿ Hang up
+bool bSiteMappingNeedCheck=true;                                                //Ifor 20190308 : add éš¨æ™‚é–‹é—œ Site Mapping
+bool bSiteMappingPlaceHotplate=false;                                           //Ifor 20190308 : add éš¨æ™‚é–‹é—œ Site Mapping
+bool bARTSeparate=false;                                                        //kevin 20170908 (wei) add art åˆ†bin ç‹€æ…‹æˆç«‹
+bool bLoadInarmAutoHigh=false;                                                  //kevin 20170929 (wei) load initial load ä¸€ç›¤ inarm æ ¡æ­£é«˜åº¦
 bool bOutArmDropICSkip=false;                                                   //kevin 20171005 (wei) add out arm drop IC open door
-bool bPushHomeDetect=false;                                                     //kevin 20171006 (wei) ¤â°Ê«öhome
-bool bManualTrayend=false;                                                      //kevin 20171026 (wei) ¤â°Ê tray end
-int  iSECSMessageCanCloseByOperator=0;                                          //Ifor 20171024 : add KYEC SECS GEM Can Close By Operator 0:¤@¯ë¬yµ{ 1:ª½±µÃö³¬Alarm 2:±Ò°Ê¤u¸¹ÀË¬d¬yµ{
+bool bPushHomeDetect=false;                                                     //kevin 20171006 (wei) æ‰‹å‹•æŒ‰home
+bool bManualTrayend=false;                                                      //kevin 20171026 (wei) æ‰‹å‹• tray end
+int  iSECSMessageCanCloseByOperator=0;                                          //Ifor 20171024 : add KYEC SECS GEM Can Close By Operator 0:ä¸€èˆ¬æµç¨‹ 1:ç›´æ¥é—œé–‰Alarm 2:å•Ÿå‹•å·¥è™Ÿæª¢æŸ¥æµç¨‹
 bool bSPBinYieldAlarm=false;                                                    //Isaac 20171113 (Steven) : add ATK Special Bin Yield alarm
-bool bInitStartDelayTime=false;                                                 //wei 20171020 (jou) InitStartDelayTime¬í¼Æ­Ë¼Æ
-int  iInitStartDelayCount=0;                                                    //wei 20171020 (jou) InitStartDelayTime¬í¼Æ­Ë¼Æ
-bool bAutocleanDelay=false;                                                     //wei 20171020 (jou) Auto clean«á¡A¤£InitStartDelayTime
-bool bInitialStart1Time=false;                                                  //wei 20171020 (jou) InitialStart1 ¬í¼Æ­Ë¼Æ
-int  iInitialStart1Count=0;                                                     //wei 20171020 (jou) InitialStart1 ¬í¼Æ­Ë¼Æ
-bool  bInitialTestDelayStatus[15]={false};                                      //wei 20171020 (jou) ©µ¿ğª¬ºAÅã¥Ü
-int  iInitialStart2Count=0;                                                     //kevin 20180905 InitialStart2 ¬í¼Æ­Ë¼Æ
-bool bInitialStart2Time=false;                                                  //kevin 20180905 InitialStart2 ¬í¼Æ­Ë¼Æ
+bool bInitStartDelayTime=false;                                                 //wei 20171020 (jou) InitStartDelayTimeç§’æ•¸å€’æ•¸
+int  iInitStartDelayCount=0;                                                    //wei 20171020 (jou) InitStartDelayTimeç§’æ•¸å€’æ•¸
+bool bAutocleanDelay=false;                                                     //wei 20171020 (jou) Auto cleanå¾Œï¼Œä¸InitStartDelayTime
+bool bInitialStart1Time=false;                                                  //wei 20171020 (jou) InitialStart1 ç§’æ•¸å€’æ•¸
+int  iInitialStart1Count=0;                                                     //wei 20171020 (jou) InitialStart1 ç§’æ•¸å€’æ•¸
+bool  bInitialTestDelayStatus[15]={false};                                      //wei 20171020 (jou) å»¶é²ç‹€æ…‹é¡¯ç¤º
+int  iInitialStart2Count=0;                                                     //kevin 20180905 InitialStart2 ç§’æ•¸å€’æ•¸
+bool bInitialStart2Time=false;                                                  //kevin 20180905 InitialStart2 ç§’æ•¸å€’æ•¸
 bool bPickerMoving=false;
 bool bPauseHappen=false;
 bool bByBinPercentCompareAlarm=false;
 bool bByArmPerSiteCompareAlarm[2]={false};
-bool bByBinYeildAlarm=false;                                                    //wei 20151116 Low Yield Onecycle¤¤¤£alarm
+bool bByBinYeildAlarm=false;                                                    //wei 20151116 Low Yield Onecycleä¸­ä¸alarm
 bool bLotCheckOK=false;
 bool bCloseSiteCleanout=false;
 bool bInitalStartAutoHeight=false;                                              //wei 20171227 Inital Start Auto Height
-bool bPowersaving=false;                                                        //wei 20180301 Åã¥ÜPowersaving
+bool bPowersaving=false;                                                        //wei 20180301 é¡¯ç¤ºPowersaving
 bool bPowersavingStart=false;
 bool bSECSGEM_Report=false;                                                       //Eastsun 20260526 #026-4.A10 Ifor 20240409 add:SECS/GEM Power Report (KYEC only)
 bool bGPIBPause=false;
 bool bGPIBAutoClean=false;
 bool bRunSetupStep[10]={false};                                                 //wei 20180614 TSMC Setup Step
 bool bCanSetupStep=false;                                                       //wei 20180614 TSMC Setup Step
-int iMRTrayCount[10]={0};                                                       //wei 20180808 MR ½L¼Æ­p¼Æ
+int iMRTrayCount[10]={0};                                                       //wei 20180808 MR ç›¤æ•¸è¨ˆæ•¸
 int iCassetteFeed=0;
 int iCassetteFeedTask=1;
 bool bRunQAMode=false;
@@ -4613,7 +4613,7 @@ bool bManualCatchCassetteDown[5]={false};
 bool bManualCatchCassetteUp[5]={false};
 bool bLampMRManualCassette[10]={false};
 int bLampMRManualMove[2]={0};
-bool bRTNoUseHotPlate1=false;                                                   //20181008 Continuous lot ¤£¨Ï¥ÎHP1
+bool bRTNoUseHotPlate1=false;                                                   //20181008 Continuous lot ä¸ä½¿ç”¨HP1
 bool bRTNewLot=false;                                                           //20181008 Continuous lot NEW LOT
 bool bNewLotHotplate=false;
 bool bNewLotUseHotplate1=false;                                                 //20181008 New Lot Use Hot plate 1
@@ -4669,19 +4669,19 @@ int  iFTStartCount=0;
 AnsiString asMRLotData[3][4]={""};
 int iMRLotCount=0;
 bool bFTOpenSite[4][8]={false};
-bool bOutarmAutoHigh=false;                                                     //kevin 20171115 (wei) load initial load ¤@½L outarm ®Õ¥¿°ª«×Z¶b¥ı¤£­n¤U¥h§l
+bool bOutarmAutoHigh=false;                                                     //kevin 20171115 (wei) load initial load ä¸€ç›¤ outarm æ ¡æ­£é«˜åº¦Zè»¸å…ˆä¸è¦ä¸‹å»å¸
 bool bSaveNeedHome=false;
-bool bTrayFeedAfterCleanOut=false;                                              //KaiChen 20180928 ¡GbTrayFeedAfterCleanOut
-int iXpitchMax=4000;                                                            //Isaac 20171204 (Steven) : X-Pitch 40mmÂX¤j¦Ü50mm
-int iXpitchMaxX2=8000;                                                          //Isaac 20171204 (Steven) : X-Pitch 40mmÂX¤j¦Ü50mm
-int iXpitchMaxX3=12000;                                                         //Isaac 20171204 (Steven) : X-Pitch 40mmÂX¤j¦Ü50mm
+bool bTrayFeedAfterCleanOut=false;                                              //KaiChen 20180928 ï¼šbTrayFeedAfterCleanOut
+int iXpitchMax=4000;                                                            //Isaac 20171204 (Steven) : X-Pitch 40mmæ“´å¤§è‡³50mm
+int iXpitchMaxX2=8000;                                                          //Isaac 20171204 (Steven) : X-Pitch 40mmæ“´å¤§è‡³50mm
+int iXpitchMaxX3=12000;                                                         //Isaac 20171204 (Steven) : X-Pitch 40mmæ“´å¤§è‡³50mm
 int iXpitchMaxX4=12000;
 int iXpitchMaxX5=12000;
 int iXpitchMaxX6=12000;
 int iXpitchMaxX7=12000;
-int iXpitchMin=1333;                                                            //Steven 20180522 : X-Pitch³Ì¤p­È
-int iXpitchMinX2=2666;                                                          //Steven 20180522 : X-Pitch³Ì¤p­È
-int iXpitchMinX3=4000;                                                          //Steven 20180522 : X-Pitch³Ì¤p­È
+int iXpitchMin=1333;                                                            //Steven 20180522 : X-Pitchæœ€å°å€¼
+int iXpitchMinX2=2666;                                                          //Steven 20180522 : X-Pitchæœ€å°å€¼
+int iXpitchMinX3=4000;                                                          //Steven 20180522 : X-Pitchæœ€å°å€¼
 int iXpitchMinX4=4000;
 int iXpitchMinX5=4000;
 int iXpitchMinX6=4000;
@@ -4700,49 +4700,49 @@ int iXpitchMinX4_MM;
 int iXpitchMinX5_MM;
 int iXpitchMinX6_MM;
 int iXpitchMinX7_MM;
-int iPitch_Max_minus_Min=8000;                                                  //Isaac 20171204 (Steven) : Xpitch40->50mm, ·s¼W150mmªºTeachingÂI¦ì¡A¤º®tªk¤½¦¡­pºâ
+int iPitch_Max_minus_Min=8000;                                                  //Isaac 20171204 (Steven) : Xpitch40->50mm, æ–°å¢150mmçš„Teachingé»ä½ï¼Œå…§å·®æ³•å…¬å¼è¨ˆç®—
 int iPitchY_Max_minus_Min=4500;                                                 //Jimmychiu 20221205 add y pitch minus
-bool bIndexPickUpErrorWaitRetry=false;                                          //Ifor 20171119 (Steven) : add Á×§KIndex Pick Up Err Inarm °½¶]³y¦¨¸ê®Æ²§±`¾É­PHangup
-bool bIndexPickErrShtStayRight1=false;                                          //JerryYang 20181206 (Steven) : fix ±Ò¥ÎD43¥\¯à®É,index arm pick up error«á«öretry¥i¯àµo¥Íhang up
-bool bIndexPickErrShtStayRight2=false;                                          //JerryYang 20181206 (Steven) : fix ±Ò¥ÎD43¥\¯à®É,index arm pick up error«á«öretry¥i¯àµo¥Íhang up
-bool bInArmPlaceToShuttleFinish=false;                                          //Ifor 20171121 : add iWhichShuttle & iWhichKit ¤Á´«ºX¼Ğ Á×§K¨S¤Á´«ª¬ºA³y¦¨Hangup
-bool bFirstTimeEnableSocketSensor=true;                                         //Ifor 20171121 : add JCET ¦p¬K­n¨D²Ä¤@¦¸±Ò°Ê®É¶·±j¨î¶}±ÒSocket Sensor ¥\¯à
-int iInArmPutIcToSH[2][2];                                                      //Ifor 20171121 : Test ¬d¬İ²§±`¸ê®Æ
-AnsiString asMotorDatabaseErr="";                                               //jou 20180814 (Steven) : ¼W¥[Motor database ²§±`Äµ¥Ü
+bool bIndexPickUpErrorWaitRetry=false;                                          //Ifor 20171119 (Steven) : add é¿å…Index Pick Up Err Inarm å·è·‘é€ æˆè³‡æ–™ç•°å¸¸å°è‡´Hangup
+bool bIndexPickErrShtStayRight1=false;                                          //JerryYang 20181206 (Steven) : fix å•Ÿç”¨D43åŠŸèƒ½æ™‚,index arm pick up errorå¾ŒæŒ‰retryå¯èƒ½ç™¼ç”Ÿhang up
+bool bIndexPickErrShtStayRight2=false;                                          //JerryYang 20181206 (Steven) : fix å•Ÿç”¨D43åŠŸèƒ½æ™‚,index arm pick up errorå¾ŒæŒ‰retryå¯èƒ½ç™¼ç”Ÿhang up
+bool bInArmPlaceToShuttleFinish=false;                                          //Ifor 20171121 : add iWhichShuttle & iWhichKit åˆ‡æ›æ——æ¨™ é¿å…æ²’åˆ‡æ›ç‹€æ…‹é€ æˆHangup
+bool bFirstTimeEnableSocketSensor=true;                                         //Ifor 20171121 : add JCET å¦‚æ˜¥è¦æ±‚ç¬¬ä¸€æ¬¡å•Ÿå‹•æ™‚é ˆå¼·åˆ¶é–‹å•ŸSocket Sensor åŠŸèƒ½
+int iInArmPutIcToSH[2][2];                                                      //Ifor 20171121 : Test æŸ¥çœ‹ç•°å¸¸è³‡æ–™
+AnsiString asMotorDatabaseErr="";                                               //jou 20180814 (Steven) : å¢åŠ Motor database ç•°å¸¸è­¦ç¤º
 bool bOutArmPlaceDevice[4][8]={{false, false, false, false, false, false, false, false},    //kevin 20180119 (Steven) Add outarm place ic not home
                                {false, false, false, false, false, false, false, false},
                                {false, false, false, false, false, false, false, false},
                                {false, false, false, false, false, false, false, false}};
 AnsiString sBinData[eTrayCount]={""};                                           //JerryYang 20220909 : 10->eTrayCount        //kevin 20180202 (Steven) record bin
-int iContractModeTest=0;                                                        //kevin 20180222 (Steven) contract mode ¤â°Ê°e´ú¸Õ°T¸¹
-bool bContractModeTest=false;                                                   //kevin 20180222 (Steven) contract mode ¨q¤â°Ê°e´ú¸Õ°T¸¹
-bool bLoadContractModeTest=false;                                               //kevin 20180222 (Steven) contract mode Load ¤£¤Jtray
+int iContractModeTest=0;                                                        //kevin 20180222 (Steven) contract mode æ‰‹å‹•é€æ¸¬è©¦è¨Šè™Ÿ
+bool bContractModeTest=false;                                                   //kevin 20180222 (Steven) contract mode ç§€æ‰‹å‹•é€æ¸¬è©¦è¨Šè™Ÿ
+bool bLoadContractModeTest=false;                                               //kevin 20180222 (Steven) contract mode Load ä¸å…¥tray
 double queue20[20]={0};                                                         //Isaac 20180301 (Steven) Index Cycle Time Monitoring function
 bool bResetflag=true;                                                           //Isaac 20180301 (Steven) Index Cycle Time Monitoring function
 int  iAddInitStartDelayCT      =0;                                              //kevin 20180307 add delay count InitStartDelayTime
-bool bFinishInitStartDelay =false;                                              //kevin 20180308 add °Ê§@§¹¦¨
-bool bCheckInarmPlaceShuttle=false;                                             //kevin 20180315 add inarm place shuttle ½T»{¬O§_¦³§İ°Ê±¡§Î
-bool bZ1Isdownflag=false;                                                       //Isaac 20180307 (Steven) index arm¦bshuttle©ñ¸m¦ì¤l®É¡Ashuttle§İ§İ¶·µ¥¨ìarm°_¨Ó¤~¯à§İ
-bool bZ2Isdownflag=false;                                                       //Isaac 20180307 (Steven) index arm¦bshuttle©ñ¸m¦ì¤l®É¡Ashuttle§İ§İ¶·µ¥¨ìarm°_¨Ó¤~¯à§İ
+bool bFinishInitStartDelay =false;                                              //kevin 20180308 add å‹•ä½œå®Œæˆ
+bool bCheckInarmPlaceShuttle=false;                                             //kevin 20180315 add inarm place shuttle ç¢ºèªæ˜¯å¦æœ‰æŠ–å‹•æƒ…å½¢
+bool bZ1Isdownflag=false;                                                       //Isaac 20180307 (Steven) index armåœ¨shuttleæ”¾ç½®ä½å­æ™‚ï¼ŒshuttleæŠ–æŠ–é ˆç­‰åˆ°armèµ·ä¾†æ‰èƒ½æŠ–
+bool bZ2Isdownflag=false;                                                       //Isaac 20180307 (Steven) index armåœ¨shuttleæ”¾ç½®ä½å­æ™‚ï¼ŒshuttleæŠ–æŠ–é ˆç­‰åˆ°armèµ·ä¾†æ‰èƒ½æŠ–
 AnsiString sPassWord="";                                                        //kevin 20180411 password
 
 bool bAllSameHotCountHotOK=true;                                                //Ifor 20171128 :add
-int iInArmSpeed1=0;                                                             //KaiChen 20171225 (Steven)¡GAdd Speed Display
-int iOutArmSpeed1=0;                                                            //KaiChen 20171225 (Steven)¡GAdd Speed Display
-int iInShuttleSpeed1=0;                                                         //KaiChen 20171225 (Steven)¡GAdd Speed Display
-int iOutShuttleSpeed1=0;                                                        //KaiChen 20171225 (Steven)¡GAdd Speed Display
-int iIndexSpeed1=0;                                                             //KaiChen 20171225 (Steven)¡GAdd Speed Display
+int iInArmSpeed1=0;                                                             //KaiChen 20171225 (Steven)ï¼šAdd Speed Display
+int iOutArmSpeed1=0;                                                            //KaiChen 20171225 (Steven)ï¼šAdd Speed Display
+int iInShuttleSpeed1=0;                                                         //KaiChen 20171225 (Steven)ï¼šAdd Speed Display
+int iOutShuttleSpeed1=0;                                                        //KaiChen 20171225 (Steven)ï¼šAdd Speed Display
+int iIndexSpeed1=0;                                                             //KaiChen 20171225 (Steven)ï¼šAdd Speed Display
 int iMagneticScalePos[16][1000];
-int iLogLightScaleCount_InArmX1=0;                                              //KaiChen 20171228 (Steven) ¡GLog Light Scale Data
-int iLogLightScaleCount_InArmX2=0;                                              //KaiChen 20171228 (Steven) ¡GLog Light Scale Data
-int iLogLightScaleCount_InArmY1=0;                                              //KaiChen 20171228 (Steven) ¡GLog Light Scale Data
-int iLogLightScaleCount_InArmY2=0;                                              //KaiChen 20171228 (Steven) ¡GLog Light Scale Data
-int iLogLightScaleCount_OutArmX1=0;                                             //KaiChen 20171228 (Steven) ¡GLog Light Scale Data
-int iLogLightScaleCount_OutArmX2=0;                                             //KaiChen 20171228 (Steven) ¡GLog Light Scale Data
-int iLogLightScaleCount_OutArmY1=0;                                             //KaiChen 20171228 (Steven) ¡GLog Light Scale Data
-int iLogLightScaleCount_OutArmY2=0;                                             //KaiChen 20171228 (Steven) ¡GLog Light Scale Data
-bool bLogLightScale_InArm=false;                                                //KaiChen 20171228 (Steven) ¡GLog Light Scale Data
-bool bLogLightScale_OutArm=false;                                               //KaiChen 20171228 (Steven) ¡GLog Light Scale Data
+int iLogLightScaleCount_InArmX1=0;                                              //KaiChen 20171228 (Steven) ï¼šLog Light Scale Data
+int iLogLightScaleCount_InArmX2=0;                                              //KaiChen 20171228 (Steven) ï¼šLog Light Scale Data
+int iLogLightScaleCount_InArmY1=0;                                              //KaiChen 20171228 (Steven) ï¼šLog Light Scale Data
+int iLogLightScaleCount_InArmY2=0;                                              //KaiChen 20171228 (Steven) ï¼šLog Light Scale Data
+int iLogLightScaleCount_OutArmX1=0;                                             //KaiChen 20171228 (Steven) ï¼šLog Light Scale Data
+int iLogLightScaleCount_OutArmX2=0;                                             //KaiChen 20171228 (Steven) ï¼šLog Light Scale Data
+int iLogLightScaleCount_OutArmY1=0;                                             //KaiChen 20171228 (Steven) ï¼šLog Light Scale Data
+int iLogLightScaleCount_OutArmY2=0;                                             //KaiChen 20171228 (Steven) ï¼šLog Light Scale Data
+bool bLogLightScale_InArm=false;                                                //KaiChen 20171228 (Steven) ï¼šLog Light Scale Data
+bool bLogLightScale_OutArm=false;                                               //KaiChen 20171228 (Steven) ï¼šLog Light Scale Data
 bool bWaitSecsGemReply=false;                                                   //Ifor 20180227 (Steven) add SECS GEM Confirm the Employee ID
 bool bNeedAUTHORITYCheck=false;                                                 //Ifor 20180227 (Steven) add SECS GEM Confirm the Employee ID
 int iShowAUTHORITY=0;                                                           //Ifor 20180227 (Steven) add SECS GEM Confirm the Employee ID
@@ -4752,9 +4752,9 @@ int iInArmAutoZHeight=0;                                                        
 int iOutArmAutoZHeight=0;                                                       //Frank 20171213 (Steven) : Auto get Height
 AnsiString strInRotateDutAngle="";                                              //wei 20180316
 AnsiString strOutRotateDutAngle="";                                             //wei 20180316
-int iInArmType=0;                                                               //Ifor 20180518 : add ¾ã¦XHot plate ¸ê®ÆÂà´«
+int iInArmType=0;                                                               //Ifor 20180518 : add æ•´åˆHot plate è³‡æ–™è½‰æ›
 int iInHPType=0;
-bool bRunAutoSiteMapping=false;                                                 //Ifor 20180518 : add Â²¤ÆSite Mapping ºX¼Ğ
+bool bRunAutoSiteMapping=false;                                                 //Ifor 20180518 : add ç°¡åŒ–Site Mapping æ——æ¨™
 int iYieldSiteCount[2]={0};                                                     //wei 20180606 Interval Low Yield By Site
 bool bYieldSiteBin[2]={false};                                                  //wei 20180606 Interval Low Yield By Site
 int iYieldSiteBinpass[2][4][8]={0};                                             //wei 20180606 Interval Low Yield By Site
@@ -4764,24 +4764,24 @@ int iYieldTotalCount=0;                                                         
 bool bYieldTotalBinIsPass[300]={0};                                             //wei 20180718 Interval Low Yield By Total
 bool bYieldTotalBin=false;                                                      //wei 20180718 Interval Low Yield By Total
 int iYieldTotalBinpass=0;                                                       //wei 20180718 Interval Low Yield By Total
-bool bEnable_KLT_Function=false;                                                //Ifor 20180517 : add BarCode ½s½X³W«h 0:¥Á°ê 1: ¦è¤¸ //Ifor 20180802 : add KLT bBarCodeRules -> bEnable_KLT_Function 0:KYEC 1: KLT
+bool bEnable_KLT_Function=false;                                                //Ifor 20180517 : add BarCode ç·¨ç¢¼è¦å‰‡ 0:æ°‘åœ‹ 1: è¥¿å…ƒ //Ifor 20180802 : add KLT bBarCodeRules -> bEnable_KLT_Function 0:KYEC 1: KLT
 bool bSetDataChange=false;                                                      //kevin 20180606 (wei) add SEM GEM send ESD DATA
-int iAutoCleanAlarm=0;                                                          //Ifor 20180727 (wei) ¡GAuto Clean Clean Count > Alarm Count 0:¥¿±` 1: Alarm 2:Clean Count
-AnsiString sVersion="";                                                         //JerryYang 20180619 (wei) : ASE_CL ©|´¼­n¨D¥Dµe­±ª©¸¹¥i¥H¦Û¤v­×§ï
-AnsiString sHisiWorkName[6]={""};                                               //kevin 20180626 add kevin 20170129 ®ü«ä¤u§@ÀÉ©R¦W
+int iAutoCleanAlarm=0;                                                          //Ifor 20180727 (wei) ï¼šAuto Clean Clean Count > Alarm Count 0:æ­£å¸¸ 1: Alarm 2:Clean Count
+AnsiString sVersion="";                                                         //JerryYang 20180619 (wei) : ASE_CL å°šæ™ºè¦æ±‚ä¸»ç•«é¢ç‰ˆè™Ÿå¯ä»¥è‡ªå·±ä¿®æ”¹
+AnsiString sHisiWorkName[6]={""};                                               //kevin 20180626 add kevin 20170129 æµ·æ€å·¥ä½œæª”å‘½å
 AnsiString sATCFileName="";                                                     //kevin 20180626 add ATC FILENAME
-int iByBinTotal[256];                                                           //kevin 20180703 bin ¼Æ¶q Bin total[0]
+int iByBinTotal[256];                                                           //kevin 20180703 bin æ•¸é‡ Bin total[0]
 AnsiString BinAssign[eTrayCount];                                               //JerryYang 20220909 : 10->eTrayCount        //kevin 20180705 Auto tray put bin
 AnsiString sSVBinAssign[eTrayCount];                                            //JerryYang 20250224 : add
-bool bUnloadHasBin[eTrayCount];                                                 //JerryYang 20220909 : 10->eTrayCount        //kevin 20180705 ¦³BIN TRAY set true
-int iTrayLastBin[eTrayCount];                                                   //JerryYang 20220909 : 10->eTrayCount        //kevin 20180705 ¨C¤@­ÓTRAY³Ì«á¤@­ÓBIN
+bool bUnloadHasBin[eTrayCount];                                                 //JerryYang 20220909 : 10->eTrayCount        //kevin 20180705 æœ‰BIN TRAY set true
+int iTrayLastBin[eTrayCount];                                                   //JerryYang 20220909 : 10->eTrayCount        //kevin 20180705 æ¯ä¸€å€‹TRAYæœ€å¾Œä¸€å€‹BIN
 int iRecordCatchTray=0;                                                         //kevin 20180711 display catch tray
 int iallSitCount=0;                                                             //kevin 20180720 add
 AnsiString PC_NAME="";                                                          //kevin 20180803 pc NAME
-TMyQueue10 QueueTaskList[qTaskCount];                                           //Steven 20180808 (wei) : ­×§ï¬ö¿ıTaskªº¤è¦¡
-TMyStrQueue100 QueueGalilCmd;                                                   //Steven 20200320 : ¬ö¿ıGalil©R¥O
-TMyTimerQueue100 QueueTestTime;                                                 //Steven 20200714 : ·sªº¬ö¿ı´ú¸Õ®É¶¡¤è¦¡
-TMyTimerQueue100 QueueCycleTime;                                                //Steven 20200714 : ·sªº¬ö¿ı´ú¸Õ®É¶¡¤è¦¡
+TMyQueue10 QueueTaskList[qTaskCount];                                           //Steven 20180808 (wei) : ä¿®æ”¹ç´€éŒ„Taskçš„æ–¹å¼
+TMyStrQueue100 QueueGalilCmd;                                                   //Steven 20200320 : ç´€éŒ„Galilå‘½ä»¤
+TMyTimerQueue100 QueueTestTime;                                                 //Steven 20200714 : æ–°çš„ç´€éŒ„æ¸¬è©¦æ™‚é–“æ–¹å¼
+TMyTimerQueue100 QueueCycleTime;                                                //Steven 20200714 : æ–°çš„ç´€éŒ„æ¸¬è©¦æ™‚é–“æ–¹å¼
 TMyTimerQueue100 QueueAirOnTime1;                                               //Sam 20220329 : Record Index Air On Time
 TMyTimerQueue100 QueueAirOnTime2;                                               //Sam 20220329 : Record Index Air On Time
 TQPF_Timer tTestTimer;
@@ -4790,53 +4790,53 @@ AnsiString StartTestTime;
 AnsiString EndTestTime;
 AnsiString StartCycleTime;
 AnsiString EndCycleTime;
-bool bUseInitTempOffset=false;                                                  //Steven 20180820 : Â²¤Æinit temp offset§PÂ_¦¡
-bool bUseInitDelay=false;                                                       //Steven 20180820 : Â²¤Æinit temp offset§PÂ_¦¡
+bool bUseInitTempOffset=false;                                                  //Steven 20180820 : ç°¡åŒ–init temp offsetåˆ¤æ–·å¼
+bool bUseInitDelay=false;                                                       //Steven 20180820 : ç°¡åŒ–init temp offsetåˆ¤æ–·å¼
 
 bool bYpitchNeddHome=false;                                                     //kevin 20180823
 bool bUseDefineVer=false;                                                       //kevin 20180829 addUSE DEFIN VER
 AnsiString SUseDefineVer="";
 long double iContractCount=0;                                                   //kevin 20180928 add contract count
-bool bEOTToLongStopBlowAir=false;                                               //kevin 20181009 add¤W¦¸´ú¸Õ°T¸¹¤Ó¤[ »İ°±¤î§j®ğ
-int iHasReadeLastData=0;                                                        //Ifor 20180802 : add ­«¶}µ{¦¡«áLoader¦³Tray ¥B¶}±ÒAuto SPIK ±j¨î¤â°Ê¨úTray
+bool bEOTToLongStopBlowAir=false;                                               //kevin 20181009 addä¸Šæ¬¡æ¸¬è©¦è¨Šè™Ÿå¤ªä¹… éœ€åœæ­¢å¹æ°£
+int iHasReadeLastData=0;                                                        //Ifor 20180802 : add é‡é–‹ç¨‹å¼å¾ŒLoaderæœ‰Tray ä¸”é–‹å•ŸAuto SPIK å¼·åˆ¶æ‰‹å‹•å–Tray
 int iLoaderNum=0;                                                               //Frank 20181121 add iLoaderNum
-AnsiString strATCBackupErrCode="";                                              //Ifor 20181219 : add KYEC ­n¨D·Å«×¬ÛÃöAlarm ´ú¸Õ¤¤»İ¥ıIndex ¤W¤É¤~Alarm
-AnsiString strATCBackupErrPart="";                                              //Ifor 20181219 : add KYEC ­n¨D·Å«×¬ÛÃöAlarm ´ú¸Õ¤¤»İ¥ıIndex ¤W¤É¤~Alarm
-int iATCBackupErrKCode=0;                                                       //Ifor 20181219 : add KYEC ­n¨D·Å«×¬ÛÃöAlarm ´ú¸Õ¤¤»İ¥ıIndex ¤W¤É¤~Alarm
-int iATCBackupErrPos=0;                                                         //Ifor 20181219 : add KYEC ­n¨D·Å«×¬ÛÃöAlarm ´ú¸Õ¤¤»İ¥ıIndex ¤W¤É¤~Alarm
-bool bATCBackupDuplicateErr=false;                                              //Ifor 20181219 : add KYEC ­n¨D·Å«×¬ÛÃöAlarm ´ú¸Õ¤¤»İ¥ıIndex ¤W¤É¤~Alarm
-bool bNoAutoZSelect=false;                                                      //kevin 20181023 (Steven) : ¤£¨Ï¥Î2¬q¤Àtray®ğ¬û
-bool bIndexAlarmInArmAway=false;                                                //kevin 20181102 (Steven) :  index±¼®Æ inarm Åı¦ì inarm¥ı¤£­n°Ê
-bool bSOTToLongStopBlowAir=false;                                               //kevin 20181009 add¤W¦¸´ú¸Õ°T¸¹¤Ó¤[ »İ°±¤î§j®ğ
-AnsiString sBufferSOT="";                                                       //wei 20181211 (Steven) : §ó´«¦ì¸mSOT
-AnsiString sBufferEOT="";                                                       //wei 20181211 (Steven) : §ó´«¦ì¸mSOT
+AnsiString strATCBackupErrCode="";                                              //Ifor 20181219 : add KYEC è¦æ±‚æº«åº¦ç›¸é—œAlarm æ¸¬è©¦ä¸­éœ€å…ˆIndex ä¸Šå‡æ‰Alarm
+AnsiString strATCBackupErrPart="";                                              //Ifor 20181219 : add KYEC è¦æ±‚æº«åº¦ç›¸é—œAlarm æ¸¬è©¦ä¸­éœ€å…ˆIndex ä¸Šå‡æ‰Alarm
+int iATCBackupErrKCode=0;                                                       //Ifor 20181219 : add KYEC è¦æ±‚æº«åº¦ç›¸é—œAlarm æ¸¬è©¦ä¸­éœ€å…ˆIndex ä¸Šå‡æ‰Alarm
+int iATCBackupErrPos=0;                                                         //Ifor 20181219 : add KYEC è¦æ±‚æº«åº¦ç›¸é—œAlarm æ¸¬è©¦ä¸­éœ€å…ˆIndex ä¸Šå‡æ‰Alarm
+bool bATCBackupDuplicateErr=false;                                              //Ifor 20181219 : add KYEC è¦æ±‚æº«åº¦ç›¸é—œAlarm æ¸¬è©¦ä¸­éœ€å…ˆIndex ä¸Šå‡æ‰Alarm
+bool bNoAutoZSelect=false;                                                      //kevin 20181023 (Steven) : ä¸ä½¿ç”¨2æ®µåˆ†trayæ°£ç¼¸
+bool bIndexAlarmInArmAway=false;                                                //kevin 20181102 (Steven) :  indexæ‰æ–™ inarm è®“ä½ inarmå…ˆä¸è¦å‹•
+bool bSOTToLongStopBlowAir=false;                                               //kevin 20181009 addä¸Šæ¬¡æ¸¬è©¦è¨Šè™Ÿå¤ªä¹… éœ€åœæ­¢å¹æ°£
+AnsiString sBufferSOT="";                                                       //wei 20181211 (Steven) : æ›´æ›ä½ç½®SOT
+AnsiString sBufferEOT="";                                                       //wei 20181211 (Steven) : æ›´æ›ä½ç½®SOT
 AnsiString sGalilData[100];                                                     //JerryYang 20181130 (Steven) : add galil command log
 AnsiString sLMData[10];                                                         //JerryYang 20181130 (Steven) : add galil command log
-bool bRTCAutoVerifyControlEP=false;                                             //jou 2014-06-24 RTC ¦Û°Ê¶i¦æModelÅçÃÒ
-bool bNeedWaitRTCAutoVerify=false;                                              //jou 2014-06-24 RTC ¦Û°Ê¶i¦æModelÅçÃÒ
-bool bDoFRTCAutoModelVerify=false;                                              //jou 2014-06-24 RTC ¦Û°Ê¶i¦æModelÅçÃÒ
-bool bDoBRTCAutoModelVerify=false;                                              //jou 2014-06-24 RTC ¦Û°Ê¶i¦æModelÅçÃÒ
-bool bNeedWaitContactTestAutoVerify=false;                                      //JerryYang 20210420 : contact test°õ¦æauto verifyºX¼Ğ
+bool bRTCAutoVerifyControlEP=false;                                             //jou 2014-06-24 RTC è‡ªå‹•é€²è¡ŒModelé©—è­‰
+bool bNeedWaitRTCAutoVerify=false;                                              //jou 2014-06-24 RTC è‡ªå‹•é€²è¡ŒModelé©—è­‰
+bool bDoFRTCAutoModelVerify=false;                                              //jou 2014-06-24 RTC è‡ªå‹•é€²è¡ŒModelé©—è­‰
+bool bDoBRTCAutoModelVerify=false;                                              //jou 2014-06-24 RTC è‡ªå‹•é€²è¡ŒModelé©—è­‰
+bool bNeedWaitContactTestAutoVerify=false;                                      //JerryYang 20210420 : contact teståŸ·è¡Œauto verifyæ——æ¨™
 bool bIndexArm1PickUpErrNeedPiggyback=false;                                    //jou 20180814 : Index pick up error need piggyback
 bool bIndexArm2PickUpErrNeedPiggyback=false;                                    //jou 20180814 : Index pick up error need piggyback
-bool bUseFTPOneCycle=false;                                                     //Sam 20200305 : ¼W¥[ FTP ÀÉ®×ÀË¬d¡AÀË¬d¨ì VIE_STOP.txt ´N°õ¦æ OneCycle
-MySiteData SiteData[TotalTestMode];                                             //JerryYang 20181011 (Steven) : SiteData§ï¦¨¥ş°ìÅÜ¼Æ
+bool bUseFTPOneCycle=false;                                                     //Sam 20200305 : å¢åŠ  FTP æª”æ¡ˆæª¢æŸ¥ï¼Œæª¢æŸ¥åˆ° VIE_STOP.txt å°±åŸ·è¡Œ OneCycle
+MySiteData SiteData[TotalTestMode];                                             //JerryYang 20181011 (Steven) : SiteDataæ”¹æˆå…¨åŸŸè®Šæ•¸
 MyNextTrayNeedManualRemoveTray MaualRemoveTray3Alarm;                           //Jimmychiu 20231116 : add detail MES code for Previous tray pick up error
-bool bWaitPreciserFinish=false;                                                 //Ifor 20180703 (Steven) : : µ¥«İ Preciser §¹¦¨
+bool bWaitPreciserFinish=false;                                                 //Ifor 20180703 (Steven) : : ç­‰å¾… Preciser å®Œæˆ
 
 int Z1DownToShuttle=0;                                                          //ChungHung 20171116 modify for Index Action
 int Z2DownToShuttle=0;                                                          //ChungHung 20171116 modify for Index Action
 bool bZ1UpAndPlaceZ2Down=false;                                                 //ChungHung 20171116 modify for Index Action
 bool bZ1DownZ2UpAndPlace=false;                                                 //ChungHung 20171116 modify for Index Action
 
-int iAutoSiteMapRunStartMode=0;                                                 //Ifor 20190916 :add Auto Site Mapping ³Æ¥÷Start Mode
-int iIndexTakeDeviceChk1=0,iIndexTakeDeviceChk2=0;                              //kevin 20190103 ¦^§lÀË´úª¬ºA
+int iAutoSiteMapRunStartMode=0;                                                 //Ifor 20190916 :add Auto Site Mapping å‚™ä»½Start Mode
+int iIndexTakeDeviceChk1=0,iIndexTakeDeviceChk2=0;                              //kevin 20190103 å›å¸æª¢æ¸¬ç‹€æ…‹
 int ishuttleShake=0;                                                            //kevin 20190107 add shuttle shake state
 int iIndexArmWhich=0;                                                           //kevin 20190130 add use test arm
-bool bHandlerPause=false;                                                       //Steven 20190123 : ¬ö¿ıHandler³Q¼È°±
+bool bHandlerPause=false;                                                       //Steven 20190123 : ç´€éŒ„Handlerè¢«æš«åœ
 int iHandlerStartCount=0;
 
-bool bArm1SuckComplete=true;                                                    //JerryYang 20190123 ·s¼W«OÅ@Á×§K¯uªÅ«ùÄòon·|³y¦¨all site±¼®Æ
+bool bArm1SuckComplete=true;                                                    //JerryYang 20190123 æ–°å¢ä¿è­·é¿å…çœŸç©ºæŒçºŒonæœƒé€ æˆall siteæ‰æ–™
 bool bArm2SuckComplete=true;
 
 bool bArm1NeedSuck=false;
@@ -4880,25 +4880,25 @@ bool bArm1D44SuckCheck=false;
 bool bArm2D44SuckCheck=false;
 
 int iPickerOrder =0;                                                            //kevin 20210914 initial 0
-bool bIndexplaceCheck=false;                                                    //kevin 20190201 index ¦^·ËÀË´ú¤¤
+bool bIndexplaceCheck=false;                                                    //kevin 20190201 index å›æºªæª¢æ¸¬ä¸­
 bool bSkipFlagSH1=false;                                                        //Isacc (Steven) 20180329 2DID All site fail recheck twice and alarm        //Steven 20190311 : Change to globe var
 bool bSkipFlagSH2=false;                                                        //Isacc (Steven) 20180329 2DID All site fail recheck twice and alarm
 double iTotalGf=0.0;                                                            //Steven 20190314 : Change total gf to globe var
-bool bContractModeCheckPushZ1=false;                                            //kevin 20190227 add «eÀË¬d¬O§_¦³CI©ñ¦bCOCKET ³y¦¨¾÷ºc·lÃa «öz1 ½T»{
-bool bContactModeNeedOpenDoor=false;                                            //JerryYang 20231218 : G22´£¿ô¤H­û¨útray¥\¯à
+bool bContractModeCheckPushZ1=false;                                            //kevin 20190227 add å‰æª¢æŸ¥æ˜¯å¦æœ‰CIæ”¾åœ¨COCKET é€ æˆæ©Ÿæ§‹æå£ æŒ‰z1 ç¢ºèª
+bool bContactModeNeedOpenDoor=false;                                            //JerryYang 20231218 : G22æé†’äººå“¡å–trayåŠŸèƒ½
 bool AsebLoadCellTest=false;                                                    //kevin 20190305 add one cycle run arm 1 arm 2 load cell test
 bool bLoadCellTest=false;                                                       //kevin 20190305 add one cycle run arm 1 arm 2 load cell test
 bool bUseTwoArm32Site=false;                                                    //kevin 20190322 add two arm tester 32SITE 16SITE(4X4)
 bool bQASampleCnt=0;                                                            //Steven 20190326 : QA Sampling
-double dATCTempAdjustmentOffset[32]={0};                                        //Ifor 20190215 : add ATC ¨Ï¥Î ¤TÂI®Õ¥¿¥\¯à
-bool bATCTempAdjustmentOffset=false;                                            //Ifor 20190215 : add ATC ¨Ï¥Î ¤TÂI®Õ¥¿¥\¯à
+double dATCTempAdjustmentOffset[32]={0};                                        //Ifor 20190215 : add ATC ä½¿ç”¨ ä¸‰é»æ ¡æ­£åŠŸèƒ½
+bool bATCTempAdjustmentOffset=false;                                            //Ifor 20190215 : add ATC ä½¿ç”¨ ä¸‰é»æ ¡æ­£åŠŸèƒ½
 bool bTJControlMode=false;                                                      //Ifor 20190328 : add TJ Temp Over Range
 bool bCheckGiveWay=false;                                                       //Ifor 20190328 : add TJ Temp Over Range
 int iBackupTestY2_Middle  =0;
 int iBackupTestZ2_Test    =0;
 int iBackupTestZ2_Drop    =0;
 AnsiString sATCPath;
-bool bIndexDropVacuumError=false;                                               //kevin 20190418 Á×§K inarm ¨Ó¦^¶]
+bool bIndexDropVacuumError=false;                                               //kevin 20190418 é¿å… inarm ä¾†å›è·‘
 
 bool bViewCom=false;
 int iTeachCount=0;
@@ -4924,129 +4924,129 @@ bool bPlaceToBufferCheck=false;
 int iAutoCount[3]={0};
 AnsiString TotalErrPart="";                                                     //kevin 20190610 add TotalErrPart
 bool bWaitTSV=false;                                                            //Steven 20190521 : ATK lot count
-bool bUseHotGunCheck=false;                                                     //kevin 20190621 hot gun ¬y¶q ¤£¨¬°»´ú
+bool bUseHotGunCheck=false;                                                     //kevin 20190621 hot gun æµé‡ ä¸è¶³åµæ¸¬
 bool bStartModeComplete=true;                                                   //Sam 20190429 : Add CC_PTI_NEWWORK
-bool bPickLoaderDuplicateErr[MAX_ARM_Row][MAX_ARM_Col];                         //Steven 20190704 : bSuckDuplicateErr¤ÀÃş¨Ã§ï¦¨¥ş°ìÅÜ¼Æ
-bool bPickHPDuplicateErr[MAX_ARM_Row][MAX_ARM_Col];                             //Steven 20190704 : bSuckDuplicateErr¤ÀÃş¨Ã§ï¦¨¥ş°ìÅÜ¼Æ
-bool bTryPickHPDuplicateErr[MAX_ARM_Row][MAX_ARM_Col];                          //Steven 20190704 : bSuckDuplicateErr¤ÀÃş¨Ã§ï¦¨¥ş°ìÅÜ¼Æ
-int iLoadPitchStepY=0;                                                          //Steven 20190704 : pitchstepY§ï¦¨¥ş°ìÅÜ¼Æ
+bool bPickLoaderDuplicateErr[MAX_ARM_Row][MAX_ARM_Col];                         //Steven 20190704 : bSuckDuplicateErråˆ†é¡ä¸¦æ”¹æˆå…¨åŸŸè®Šæ•¸
+bool bPickHPDuplicateErr[MAX_ARM_Row][MAX_ARM_Col];                             //Steven 20190704 : bSuckDuplicateErråˆ†é¡ä¸¦æ”¹æˆå…¨åŸŸè®Šæ•¸
+bool bTryPickHPDuplicateErr[MAX_ARM_Row][MAX_ARM_Col];                          //Steven 20190704 : bSuckDuplicateErråˆ†é¡ä¸¦æ”¹æˆå…¨åŸŸè®Šæ•¸
+int iLoadPitchStepY=0;                                                          //Steven 20190704 : pitchstepYæ”¹æˆå…¨åŸŸè®Šæ•¸
 
-bool bZ1ModifyDistanceRef=false;                                                //Ifor 20190530 : add Z Phase ¥iSKIP ¦ı»İ­«·scontact height
-bool bZ2ModifyDistanceRef=false;                                                //Ifor 20190530 : add Z Phase ¥iSKIP ¦ı»İ­«·scontact height
-int iZ1ModifyDistanceRef=0;                                                     //Ifor 20190530 : add Z Phase ¥iSKIP ¦ı»İ­«·scontact height
-int iZ2ModifyDistanceRef=0;                                                     //Ifor 20190530 : add Z Phase ¥iSKIP ¦ı»İ­«·scontact height
+bool bZ1ModifyDistanceRef=false;                                                //Ifor 20190530 : add Z Phase å¯SKIP ä½†éœ€é‡æ–°contact height
+bool bZ2ModifyDistanceRef=false;                                                //Ifor 20190530 : add Z Phase å¯SKIP ä½†éœ€é‡æ–°contact height
+int iZ1ModifyDistanceRef=0;                                                     //Ifor 20190530 : add Z Phase å¯SKIP ä½†éœ€é‡æ–°contact height
+int iZ2ModifyDistanceRef=0;                                                     //Ifor 20190530 : add Z Phase å¯SKIP ä½†éœ€é‡æ–°contact height
 
 bool bY1ModifyDistanceRef=false;                                                //Isaac 20201110 : Index Y find motor phase
 bool bY2ModifyDistanceRef=false;
 int iY1ModifyDistanceRef=0;
 int iY2ModifyDistanceRef=0;
 
-bool bFrontTestArmTorqueFinish=true;                                            //Ifor 20190912 :add ®ü«ä V02.30 ª© Record Torque
+bool bFrontTestArmTorqueFinish=true;                                            //Ifor 20190912 :add æµ·æ€ V02.30 ç‰ˆ Record Torque
 bool bRearTestArmTorqueFinish=true;
 bool bArmTestInfoEvenLogStart_KYEC=false;
 bool bArmTestInfoEvenLogEnd_KYEC=false;
 AnsiString sArmTestInfoEvenLogFile="";
 
-bool bUseHotGunFlowCheck=false;                                                 //KaiChen 20190729 ¡GHot Gun Flow
-AnsiString sTempsite[64]={NULL};                                                //kevin 20190928 add ·Å«×error ¨qsite½s¸¹
+bool bUseHotGunFlowCheck=false;                                                 //KaiChen 20190729 ï¼šHot Gun Flow
+AnsiString sTempsite[64]={NULL};                                                //kevin 20190928 add æº«åº¦error ç§€siteç·¨è™Ÿ
 int iOneCycleTask=0;                                                            //JerryYang 20190925 one cycle task log
 int iCleanOutCycleTask=0;                                                       //JerryYang 20190925 clean out task log
-bool bLoaderNeedVibrate=false;                                                  //JerryYang 20191001 loader¾_°Ê°¨¹F
-//JerryYang 20180921 Setup Teach¥\¯à
+bool bLoaderNeedVibrate=false;                                                  //JerryYang 20191001 loaderéœ‡å‹•é¦¬é”
+//JerryYang 20180921 Setup TeachåŠŸèƒ½
 //==>
-bool bInArmSetupTeach[InOfsTotal];                                              //¤À§Oªí¥ÜInOfsLoader=0, InOfsHP1=1, InOfsHP2=2, InOfsInSh1=3, InOfsInSh2=4
-bool bInArmStop[InOfsTotal];                                                    //¤À§Oªí¥ÜInOfsLoader=0, InOfsHP1=1, InOfsHP2=2, InOfsInSh1=3, InOfsInSh2=4
-int  iInArmPickPlaceCnt[InOfsTotal];                                            //In arm¦b¦U°Ï°ìÂ\©ñªº¦¸¼Æ¡A¤j©ó10¦¸´N·í§@§¹¦¨ÂI¦ì½T»{
-bool bOutArmSetupTeach[OutOfsTotal];                                            //¤À§Oªí¥ÜOutOfsOutSh1=0, OutOfsOutSh2=1, OutOfsAuto1=2, OutOfsAuto2=3, OutOfsAuto3=4, OutOfsFix1=5, OutOfsFix2=6, OutOfsFix3=7
-bool bOutArmStop[OutOfsTotal];                                                  //¤À§Oªí¥ÜOutOfsOutSh1=0, OutOfsOutSh2=1, OutOfsAuto1=2, OutOfsAuto2=3, OutOfsAuto3=4, OutOfsFix1=5, OutOfsFix2=6, OutOfsFix3=7
-int  iOutArmPickPlaceCnt[OutOfsTotal];                                          //¥Î¨Ó­p¼ÆOut arm¦b¦U°Ï°ìÂ\©ñªº¦¸¼Æ¡A¤j©ó10¦¸´N·í§@§¹¦¨ÂI¦ì½T»{   //Ifor 20200825 Fix:°O¾ĞÅé¯}Ãa 8->12
+bool bInArmSetupTeach[InOfsTotal];                                              //åˆ†åˆ¥è¡¨ç¤ºInOfsLoader=0, InOfsHP1=1, InOfsHP2=2, InOfsInSh1=3, InOfsInSh2=4
+bool bInArmStop[InOfsTotal];                                                    //åˆ†åˆ¥è¡¨ç¤ºInOfsLoader=0, InOfsHP1=1, InOfsHP2=2, InOfsInSh1=3, InOfsInSh2=4
+int  iInArmPickPlaceCnt[InOfsTotal];                                            //In armåœ¨å„å€åŸŸæ“ºæ”¾çš„æ¬¡æ•¸ï¼Œå¤§æ–¼10æ¬¡å°±ç•¶ä½œå®Œæˆé»ä½ç¢ºèª
+bool bOutArmSetupTeach[OutOfsTotal];                                            //åˆ†åˆ¥è¡¨ç¤ºOutOfsOutSh1=0, OutOfsOutSh2=1, OutOfsAuto1=2, OutOfsAuto2=3, OutOfsAuto3=4, OutOfsFix1=5, OutOfsFix2=6, OutOfsFix3=7
+bool bOutArmStop[OutOfsTotal];                                                  //åˆ†åˆ¥è¡¨ç¤ºOutOfsOutSh1=0, OutOfsOutSh2=1, OutOfsAuto1=2, OutOfsAuto2=3, OutOfsAuto3=4, OutOfsFix1=5, OutOfsFix2=6, OutOfsFix3=7
+int  iOutArmPickPlaceCnt[OutOfsTotal];                                          //ç”¨ä¾†è¨ˆæ•¸Out armåœ¨å„å€åŸŸæ“ºæ”¾çš„æ¬¡æ•¸ï¼Œå¤§æ–¼10æ¬¡å°±ç•¶ä½œå®Œæˆé»ä½ç¢ºèª   //Ifor 20200825 Fix:è¨˜æ†¶é«”ç ´å£ 8->12
 int  iSortUnloadT6=-1;
 //<==
-//JerryYang 20180921 Setup Teach¥\¯à
+//JerryYang 20180921 Setup TeachåŠŸèƒ½
 AnsiString asChangeLogByLotPath="D:\\HT9045_Log\\ChangeLogByLot";               //Ifor 20191002 : add Change Log By Lot
 AnsiString sChangeEvenLogFile="";                                               //Ifor 20191002 : add Change Log By Lot
-int iShuttleLog=0;                                                              //JerryYang 20181121 (Steven) : add log,°O¿ıin shuttle device¬O³Q¾_°Ê°¨¹For·n·n¥\¯à¾É¥¿
-bool bAfterHomeShtChkLoseICNeedSlow[2]={false,false};                           //Sam 20201020 : ¦^ Home ²Ä¤@¦¸ªº Shuttle Check IC lose »İ­nÅÜºC¡C
+int iShuttleLog=0;                                                              //JerryYang 20181121 (Steven) : add log,è¨˜éŒ„in shuttle deviceæ˜¯è¢«éœ‡å‹•é¦¬é”oræ–æ–åŠŸèƒ½å°æ­£
+bool bAfterHomeShtChkLoseICNeedSlow[2]={false,false};                           //Sam 20201020 : å› Home ç¬¬ä¸€æ¬¡çš„ Shuttle Check IC lose éœ€è¦è®Šæ…¢ã€‚
 AnsiString asEESUG_Data[7]={""};                                                //Ifor 20200529 add: SECS/GEM EESUG Offset Function
 bool bBTestSuckHasError=false;                                                  //Ifor 20200622 add:Index Pick Shuttle Err Need Purge
 bool bBTestSuckError[2][4];                                                     //Ifor 20200622 add:Index Pick Shuttle Err Need Purge
 bool bFTestSuckHasError=false;                                                  //Ifor 20200622 add:Index Pick Shuttle Err Need Purge
 bool bFTestSuckError[2][4];                                                     //Ifor 20200622 add:Index Pick Shuttle Err Need Purge
-bool bDoBRTCGiveWayCheck=false;                                                 //Ifor 20191120 : add ·s¼WRTC2.0 Full Check Åı¦ì
-AnsiString sHiLotID="";                                                         //kevin 20191016 «È¤á  LOT OSAT
-AnsiString sOSATLotID="";                                                       //kevin 20191016 «È¤á  LOT OSAT
-AnsiString sTemp="";                                                            //kevin 20191016 ¤u§@·Å«×
-AnsiString sHandleID="";                                                        //kevin 20191016 ¾÷¥x½s¸¹
+bool bDoBRTCGiveWayCheck=false;                                                 //Ifor 20191120 : add æ–°å¢RTC2.0 Full Check è®“ä½
+AnsiString sHiLotID="";                                                         //kevin 20191016 å®¢æˆ¶  LOT OSAT
+AnsiString sOSATLotID="";                                                       //kevin 20191016 å®¢æˆ¶  LOT OSAT
+AnsiString sTemp="";                                                            //kevin 20191016 å·¥ä½œæº«åº¦
+AnsiString sHandleID="";                                                        //kevin 20191016 æ©Ÿå°ç·¨è™Ÿ
 AnsiString sFlow="";                                                            //kevin 20191016 FTRT
-AnsiString sDeviceType="";                                                      //kevin 20191016 ²£«~¦WºÙ
-AnsiString sTestProgram="";                                                     //kevin 20191016 ´ú¸Õµ{¦¡
+AnsiString sDeviceType="";                                                      //kevin 20191016 ç”¢å“åç¨±
+AnsiString sTestProgram="";                                                     //kevin 20191016 æ¸¬è©¦ç¨‹å¼
 AnsiString sInsertion ="";                                                      //kevin 20191016 Process  FT1 FT2
-AnsiString sOSATName="";                                                        //Ifor 20200724 add:´ú¸Õ¼t¦WºÙ
+AnsiString sOSATName="";                                                        //Ifor 20200724 add:æ¸¬è©¦å» åç¨±
 bool bDropRetry=false;
 bool bPickUpHomeFinish=false;
-bool bOneCycleInArmToLoader=false;                                              //JerryYang 20200206 one cycle, clean out, tray feed®Éin arm²¾°Ê¨ìloader
-int iWhichArmDown=0;                                                            //JerryYang 20200316 add SVID ­ş¤äarm¤UÀ£¦b´ú°Ï
-bool bCheckTrayBySoftWareOpen=false;                                            //KaiChen 20191128 ¡Gª¿®æ-´ò¤f¡A³nÅé­«±Ò®ÉÀË¬d©Ò¦³Tray
-bool bCheckTrayBySoftWareOpen_Sen[MAX_FIX_TRAY]        ={false, false, false, false, false, false};     //KaiChen 20191128 ¡Gª¿®æ-´ò¤f¡A³nÅé­«±Ò®ÉÀË¬d©Ò¦³Tray
-double dfComplianceUnit=1.0;                                                    //kevin 20200313 add ¯B°ÊÀY¹ïÀ³¬û®|
+bool bOneCycleInArmToLoader=false;                                              //JerryYang 20200206 one cycle, clean out, tray feedæ™‚in armç§»å‹•åˆ°loader
+int iWhichArmDown=0;                                                            //JerryYang 20200316 add SVID å“ªæ”¯armä¸‹å£“åœ¨æ¸¬å€
+bool bCheckTrayBySoftWareOpen=false;                                            //KaiChen 20191128 ï¼šçŸ½æ ¼-æ¹–å£ï¼Œè»Ÿé«”é‡å•Ÿæ™‚æª¢æŸ¥æ‰€æœ‰Tray
+bool bCheckTrayBySoftWareOpen_Sen[MAX_FIX_TRAY]        ={false, false, false, false, false, false};     //KaiChen 20191128 ï¼šçŸ½æ ¼-æ¹–å£ï¼Œè»Ÿé«”é‡å•Ÿæ™‚æª¢æŸ¥æ‰€æœ‰Tray
+double dfComplianceUnit=1.0;                                                    //kevin 20200313 add æµ®å‹•é ­å°æ‡‰ç¼¸å¾‘
 
-AnsiString FTPAutomation_Down_ServerIP="";                                      //KaiChen 20190530 ¡GSigurd FTP Automation
-AnsiString FTPAutomation_Down_UserID="";                                        //KaiChen 20190530 ¡GSigurd FTP Automation
-AnsiString FTPAutomation_Down_Password="";                                      //KaiChen 20190530 ¡GSigurd FTP Automation
-AnsiString FTPAutomation_Down_ServerPath="";                                    //KaiChen 20190530 ¡GSigurd FTP Automation
-AnsiString FTPAutomation_Up_ServerIP="";                                        //KaiChen 20190530 ¡GSigurd FTP Automation
-AnsiString FTPAutomation_Up_UserID="";                                          //KaiChen 20190530 ¡GSigurd FTP Automation
-AnsiString FTPAutomation_Up_Password="";                                        //KaiChen 20190530 ¡GSigurd FTP Automation
-AnsiString FTPAutomation_Up_ServerPath="";                                      //KaiChen 20190530 ¡GSigurd FTP Automation
-AnsiString FTPAutomation_Up_ErrorCodePath="";                                   //KaiChen 20190530 ¡GSigurd FTP Automation
-int iCheckList_Enable[eCL_Total]={0};                                           //KaiChen 20190530 ¡GSigurd FTP Automation
-bool bSigurdDownload_Recipe=false;                                              //KaiChen 20190530 ¡GSigurd FTP Automation
-bool bSigurdUpload_Recipe=false;                                                //KaiChen 20190530 ¡GSigurd FTP Automation
-bool bSigurdUpload_Jamcode=false;                                               //KaiChen 20190530 ¡GSigurd FTP Automation
-int iRecordSigurdGPIBFlag=0;                                                    //KaiChen 20200330 ¡G¬ö¿ı¡Aª¿®æ GPIB Commend Flag
-AnsiString CheckListValue_Check="";                                             //KaiChen 20200108 ¡Gª¿®æ-CheckList ¼W¥[Åã¥Ü²§±`¼Æ­È
-AnsiString CheckListValue_Current="";                                           //KaiChen 20200108 ¡Gª¿®æ-CheckList ¼W¥[Åã¥Ü²§±`¼Æ­È
-int iOneDayLoaderCount=0;                                                       //KaiChen 20200618 ¡Gª¿®æ¡A¼W¥[Jam²Î­p­¶­±
+AnsiString FTPAutomation_Down_ServerIP="";                                      //KaiChen 20190530 ï¼šSigurd FTP Automation
+AnsiString FTPAutomation_Down_UserID="";                                        //KaiChen 20190530 ï¼šSigurd FTP Automation
+AnsiString FTPAutomation_Down_Password="";                                      //KaiChen 20190530 ï¼šSigurd FTP Automation
+AnsiString FTPAutomation_Down_ServerPath="";                                    //KaiChen 20190530 ï¼šSigurd FTP Automation
+AnsiString FTPAutomation_Up_ServerIP="";                                        //KaiChen 20190530 ï¼šSigurd FTP Automation
+AnsiString FTPAutomation_Up_UserID="";                                          //KaiChen 20190530 ï¼šSigurd FTP Automation
+AnsiString FTPAutomation_Up_Password="";                                        //KaiChen 20190530 ï¼šSigurd FTP Automation
+AnsiString FTPAutomation_Up_ServerPath="";                                      //KaiChen 20190530 ï¼šSigurd FTP Automation
+AnsiString FTPAutomation_Up_ErrorCodePath="";                                   //KaiChen 20190530 ï¼šSigurd FTP Automation
+int iCheckList_Enable[eCL_Total]={0};                                           //KaiChen 20190530 ï¼šSigurd FTP Automation
+bool bSigurdDownload_Recipe=false;                                              //KaiChen 20190530 ï¼šSigurd FTP Automation
+bool bSigurdUpload_Recipe=false;                                                //KaiChen 20190530 ï¼šSigurd FTP Automation
+bool bSigurdUpload_Jamcode=false;                                               //KaiChen 20190530 ï¼šSigurd FTP Automation
+int iRecordSigurdGPIBFlag=0;                                                    //KaiChen 20200330 ï¼šç´€éŒ„ï¼ŒçŸ½æ ¼ GPIB Commend Flag
+AnsiString CheckListValue_Check="";                                             //KaiChen 20200108 ï¼šçŸ½æ ¼-CheckList å¢åŠ é¡¯ç¤ºç•°å¸¸æ•¸å€¼
+AnsiString CheckListValue_Current="";                                           //KaiChen 20200108 ï¼šçŸ½æ ¼-CheckList å¢åŠ é¡¯ç¤ºç•°å¸¸æ•¸å€¼
+int iOneDayLoaderCount=0;                                                       //KaiChen 20200618 ï¼šçŸ½æ ¼ï¼Œå¢åŠ Jamçµ±è¨ˆé é¢
 bool bSetBINCOUNT=false;                                                        //Sam 20210329 : Add GPIB BINCOUNT_
-bool bOneCycleAfterSHLossIC=false;                                              //KaiChen 20200304 ¡Gª¿®æ-´ò¤f¡A­n¨DOutShuttle Loss IC ®É¾÷¥x¤WªºIC©ñ¨ìR¹D
-int iIndexArmCheck_SG_Arm1=0;                                                   //KaiChen 20200826 ¡Gª¿®æ-´ò¤f¡A­n¨DIndexCheck¨Ï¥ÎContact°ª«×¤£¨Ï¥ÎOffset
-int iIndexArmCheck_SG_Arm2=0;                                                   //KaiChen 20200826 ¡Gª¿®æ-´ò¤f¡A­n¨DIndexCheck¨Ï¥ÎContact°ª«×¤£¨Ï¥ÎOffset
+bool bOneCycleAfterSHLossIC=false;                                              //KaiChen 20200304 ï¼šçŸ½æ ¼-æ¹–å£ï¼Œè¦æ±‚OutShuttle Loss IC æ™‚æ©Ÿå°ä¸Šçš„ICæ”¾åˆ°Ré“
+int iIndexArmCheck_SG_Arm1=0;                                                   //KaiChen 20200826 ï¼šçŸ½æ ¼-æ¹–å£ï¼Œè¦æ±‚IndexCheckä½¿ç”¨Contacté«˜åº¦ä¸ä½¿ç”¨Offset
+int iIndexArmCheck_SG_Arm2=0;                                                   //KaiChen 20200826 ï¼šçŸ½æ ¼-æ¹–å£ï¼Œè¦æ±‚IndexCheckä½¿ç”¨Contacté«˜åº¦ä¸ä½¿ç”¨Offset
 
-bool bCanAutoCloseSite=false;                                                   //Steven 20200420 : ¾ã¦XAuto Site Off
+bool bCanAutoCloseSite=false;                                                   //Steven 20200420 : æ•´åˆAuto Site Off
 int USE_Scanner_AOI_Inspection    =0;                                           //Ifor 20190725 : add Scanner AOI
 int USE_Scanner_AOI_Inspection_FixLight_Z_Axis=1;                               //Eastsun 20260410 : AOI Fix Light Z Axis Mode
 bool bAOIBallDamageCounterFailAlarm = false;                                    //Ifor 20190725 : add Scanner AOI
 bool bAOIBallDamageCounterFailUnTest = false;                                   //Ifor 20190725 : add Scanner AOI
-bool bPickSH1Flag=false;                                                        //Ifor 20191226 ²¾¦Ü¥ş°ì
-bool bPickSH2Flag=false;                                                        //Ifor 20191226 ²¾¦Ü¥ş°ì
-int iSLT_HeadContactCount[2][16];                                               //Ifor 20191218 : add KYEC ­n¨D ¦PSLT¿é¥Xªí®æ
-AnsiString asSLT_LotStartTime="";                                               //Ifor 20191218 : add KYEC ­n¨D ¦PSLT¿é¥Xªí®æ
-AnsiString asSLT_LotEndTime="";                                                 //Ifor 20191218 : add KYEC ­n¨D ¦PSLT¿é¥Xªí®æ
-int iDBQueryDays=3;                                                             //Ifor 20200324 : add KYEC ­n¨D·s¼WDB Qery ¤Ñ¼Æ
+bool bPickSH1Flag=false;                                                        //Ifor 20191226 ç§»è‡³å…¨åŸŸ
+bool bPickSH2Flag=false;                                                        //Ifor 20191226 ç§»è‡³å…¨åŸŸ
+int iSLT_HeadContactCount[2][16];                                               //Ifor 20191218 : add KYEC è¦æ±‚ åŒSLTè¼¸å‡ºè¡¨æ ¼
+AnsiString asSLT_LotStartTime="";                                               //Ifor 20191218 : add KYEC è¦æ±‚ åŒSLTè¼¸å‡ºè¡¨æ ¼
+AnsiString asSLT_LotEndTime="";                                                 //Ifor 20191218 : add KYEC è¦æ±‚ åŒSLTè¼¸å‡ºè¡¨æ ¼
+int iDBQueryDays=3;                                                             //Ifor 20200324 : add KYEC è¦æ±‚æ–°å¢DB Qery å¤©æ•¸
 int iLDTrayNeedManualRemoveTray=0;                                              //Ifor 20200331 : add Edit Loader Tray Need Manual Remove Tray 0:Normal 1:Edit Loader Tray 2:Data Change
 bool bNeedManualRemoveTray=false;                                               //Ifor 20200331 : add Edit Loader Tray Need Manual Remove Tray
 bool bMOFileControlBinChangeAlarm=false;                                        //Sam 20200525 : Control Bin
-bool bNewCatchTrayblock=false;                                                  //kevin 20200512 §¨tray¾Bª©«dµu
-bool bHandlerModel=false;                                                       //jou 20200601 : GPIB «¬¸¹Åª¨ú¥¢±Ñ»İAlarm,¤£À³¸Ó¦^¼g«¬¸¹
+bool bNewCatchTrayblock=false;                                                  //kevin 20200512 å¤¾trayé®ç‰ˆå‰ŠçŸ­
+bool bHandlerModel=false;                                                       //jou 20200601 : GPIB å‹è™Ÿè®€å–å¤±æ•—éœ€Alarm,ä¸æ‡‰è©²å›å¯«å‹è™Ÿ
 bool bHasICinSocket=false;                                                      //Steven 20200612 : for Z1 PnP, Z2 test
 AnsiString sSocketSensorErr="";
-bool bUseStartSoundAlarm=false;                                                 //kevin 20201116  Start µo¥XÁn­µ ¤£°Ê 5sec
-bool bStartMoveSpeed=false;                                                     //kevin 20201116  motor move speed 10 % ²¾¾H10 sec ¨t²Î¼È°± «ì´_³t«×
-bool bStartOpenDoor=false;                                                      //kevin 20201116  ¦³¶}ªù°±¾÷
+bool bUseStartSoundAlarm=false;                                                 //kevin 20201116  Start ç™¼å‡ºè²éŸ³ ä¸å‹• 5sec
+bool bStartMoveSpeed=false;                                                     //kevin 20201116  motor move speed 10 % ç§»é„§10 sec ç³»çµ±æš«åœ æ¢å¾©é€Ÿåº¦
+bool bStartOpenDoor=false;                                                      //kevin 20201116  æœ‰é–‹é–€åœæ©Ÿ
 
-bool bTryPickLastRowIng=false;                                                  //JerryYang 20200422 Auto skip¦¸¼Æ¨ì¹F«á, ¦Û°Ê¦A¥h³Ì«á¤@±Æ§l§l¬İ
+bool bTryPickLastRowIng=false;                                                  //JerryYang 20200422 Auto skipæ¬¡æ•¸åˆ°é”å¾Œ, è‡ªå‹•å†å»æœ€å¾Œä¸€æ’å¸å¸çœ‹
 int iBackupLoadDir=0;
-bool bSht1LoseICErr=false;                                                      //JerryYang 20200610 Out shuttle lose IC»İ¥ıÅı¦ì¦Aµo¥Xalarm
+bool bSht1LoseICErr=false;                                                      //JerryYang 20200610 Out shuttle lose ICéœ€å…ˆè®“ä½å†ç™¼å‡ºalarm
 bool bSht2LoseICErr=false;
 int i3SigmaTempMonitior_NowContactCount =0;                                     //Hmy 20200515 Copy//Hmy 20200510 Add Enable 3 Sigma Temp Monitor//Hmy 20200510 Add Enable 3 Sigma Temp Monitor
-int iReceiveATCData=0;                                                          //kevin 20200608 Åª¨úATC °Ñ¼Æ¸ê®Æ
-bool bD52IndexArmUp=false;                                                      //JerryYang 20200804 : fix D52 & Index arm¦bshuttle°ª«×¹w¼ö¥\¯à¦P®É±Ò¥Î®É¡Aµo¥Ítester timeout®É·|»~µohandler hang up
+int iReceiveATCData=0;                                                          //kevin 20200608 è®€å–ATC åƒæ•¸è³‡æ–™
+bool bD52IndexArmUp=false;                                                      //JerryYang 20200804 : fix D52 & Index armåœ¨shuttleé«˜åº¦é ç†±åŠŸèƒ½åŒæ™‚å•Ÿç”¨æ™‚ï¼Œç™¼ç”Ÿtester timeoutæ™‚æœƒèª¤ç™¼handler hang up
 AnsiString asSetupFileCheckList="";                                             //Ifor 20200914 add:Setup File Check List
 int USE_Top_Scanner_AOI_Inspection=0;                                           //Ifor 20200902 add: TFAMD Top AOI
 bool bArm1Delay=false;
 bool bArm2Delay=false;
-bool bArm1IsTest=false;                                                         //JerryYang 20180629 (wei) : ¥Î¨Ó§PÂ_¬O§_¦b´ú¸Õ¤¤
-bool bArm2IsTest=false;                                                         //JerryYang 20180629 (wei) : ¥Î¨Ó§PÂ_¬O§_¦b´ú¸Õ¤¤
+bool bArm1IsTest=false;                                                         //JerryYang 20180629 (wei) : ç”¨ä¾†åˆ¤æ–·æ˜¯å¦åœ¨æ¸¬è©¦ä¸­
+bool bArm2IsTest=false;                                                         //JerryYang 20180629 (wei) : ç”¨ä¾†åˆ¤æ–·æ˜¯å¦åœ¨æ¸¬è©¦ä¸­
 bool bTesterSendPause=false;                                                    //Steven 20201022 : For RFMD
 bool bNeedReplunge_RFMD=false;                                                  //Steven 20201022 : For RFMD
 bool bTesterPauseMusic=false;                                                   //Steven 20220616 : Can select "Alarm Reset" when show "Tester Pause" for QORVO.
@@ -5061,33 +5061,33 @@ bool bApaxWriteFinish=true;
 bool bApaxReadFinish=true;
 int iAPAXEPValue[16]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};                         //Nickliu 20180827 Add APAX Dll Connection
 int iAPAXDualEPValue[16]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};                     //Ifor 20250319 add:Mutil EP Control
-bool bIndexCheckVacum=false;                                                    //kevin 20200716 add ASE_KH ¥d¿é¤J
-int iSecsGemSwitchFTRT=0;                                                       //Steven 20210202 : ³z¹LSECS/GEM¤Á´«°Ê§@ª¬ºA 0:µL°Ê§@, 1:¤Á´«¤¤, 2:¤Á´«¦¨¥\
+bool bIndexCheckVacum=false;                                                    //kevin 20200716 add ASE_KH å¡è¼¸å…¥
+int iSecsGemSwitchFTRT=0;                                                       //Steven 20210202 : é€éSECS/GEMåˆ‡æ›å‹•ä½œç‹€æ…‹ 0:ç„¡å‹•ä½œ, 1:åˆ‡æ›ä¸­, 2:åˆ‡æ›æˆåŠŸ
 
-bool fRearNeedSuckIC=false, fFrontNeedSuck=false, fFrontNeedDestroy=false;      //Steven 20210217 : §ï¦¨¥ş°ì
+bool fRearNeedSuckIC=false, fFrontNeedSuck=false, fFrontNeedDestroy=false;      //Steven 20210217 : æ”¹æˆå…¨åŸŸ
 bool fFrontNeedSuckIC=false, fRearNeedSuck=false, fRearNeedDestroy=false;
 bool f32SiteNeedDestroy=false, f32SiteNeedSuck=false;
 
-int JCET_FOR_EVAN=0;                                                            //Steven 20210304 : ªø¹qµ¹¦p¬Kªºª©¥»
-int SPIL_FOR_QLE=0;                                                             //Steven 20230110 : For´ë±ç
+int JCET_FOR_EVAN=0;                                                            //Steven 20210304 : é•·é›»çµ¦å¦‚æ˜¥çš„ç‰ˆæœ¬
+int SPIL_FOR_QLE=0;                                                             //Steven 20230110 : Foræ¸ æ¢
 int bAutoDeviceEjection=0;                                                      //AI(ht9045-v899) 20260417: config flag for AutoDeviceEjection panel
-int iOutShuttle1HasICErrRetryCnt=0;                                             //Sam 20210409 : §ï¬°¥ş°ì
-int iOutShuttle2HasICErrRetryCnt=0;                                             //Sam 20210409 : §ï¬°¥ş°ì
-bool bIn_ICRotationCompleteOnKit=false;                                         //Sam 20210623 : ­×¥¿ IC Âà§¹«á³Q Home¡A¾É­P IC Âà¦V²§±`¡C
-bool bOut_ICRotationCompleteOnKit=false;                                        //Sam 20210623 : ­×¥¿ IC Âà§¹«á³Q Home¡A¾É­P IC Âà¦V²§±`¡C
-bool bIn_XYMoveFinishOnRotationKit=false;                                       //Sam 20240726 : ­×¥¿²¾°Ê§¹ XY ·Ç³Æ©ñ IC ¨ì RotationKit ®É Home
+int iOutShuttle1HasICErrRetryCnt=0;                                             //Sam 20210409 : æ”¹ç‚ºå…¨åŸŸ
+int iOutShuttle2HasICErrRetryCnt=0;                                             //Sam 20210409 : æ”¹ç‚ºå…¨åŸŸ
+bool bIn_ICRotationCompleteOnKit=false;                                         //Sam 20210623 : ä¿®æ­£ IC è½‰å®Œå¾Œè¢« Homeï¼Œå°è‡´ IC è½‰å‘ç•°å¸¸ã€‚
+bool bOut_ICRotationCompleteOnKit=false;                                        //Sam 20210623 : ä¿®æ­£ IC è½‰å®Œå¾Œè¢« Homeï¼Œå°è‡´ IC è½‰å‘ç•°å¸¸ã€‚
+bool bIn_XYMoveFinishOnRotationKit=false;                                       //Sam 20240726 : ä¿®æ­£ç§»å‹•å®Œ XY æº–å‚™æ”¾ IC åˆ° RotationKit æ™‚ Home
 bool bOut_XYMoveFinishOnRotationKit=false;
-bool bLoadNewEmptyTrayToCarStart=false;                                         //Sam 20211119 : ©ñ Tray ¼W¥[«OÅ@
-bool bUnLoadNewEmptyToStackStart=false;                                         //Sam 20211119 : ©ñ Tray ¼W¥[«OÅ@
-bool bLoadNewColorTrayToCarStart=false;                                         //Sam 20211119 : ©ñ Tray ¼W¥[«OÅ@
-bool bUnLoadNewColorToStackStart=false;                                         //Sam 20211119 : ©ñ Tray ¼W¥[«OÅ@
+bool bLoadNewEmptyTrayToCarStart=false;                                         //Sam 20211119 : æ”¾ Tray å¢åŠ ä¿è­·
+bool bUnLoadNewEmptyToStackStart=false;                                         //Sam 20211119 : æ”¾ Tray å¢åŠ ä¿è­·
+bool bLoadNewColorTrayToCarStart=false;                                         //Sam 20211119 : æ”¾ Tray å¢åŠ ä¿è­·
+bool bUnLoadNewColorToStackStart=false;                                         //Sam 20211119 : æ”¾ Tray å¢åŠ ä¿è­·
 
-bool bShowIndexMotorError=false;                                                //Isaac 20201012 : index Y¶W¹L½d³ò¡A°µ¤@¦¸Tmode¡Ashow alarmµøµ¡ÅÜ¤j
-int iMaxCommandY1=0,iMinCommandY1=0,iMaxCommandY2=0,iMinCommandY2=0,iMaxTeachY1F=0,iMinTeachY1F=0,iMaxTeachY1M=0,iMinTeachY1M=0,iMaxTeachY2M=0,iMinTeachY2M=0,iMaxTeachY2R=0,iMinTeachY2R=0;    //Isaac 20201012 : ­pºâEncoder©Mcommandpos/Teachingªº®t­È
-bool bOverRangeDoTMode=false;                                                   //Isaac 20201012 : index Y¶W¹L½d³ò¡A°µ¤@¦¸Tmode¡A§PÂ_¶W¥X½d³ò
-bool bOverRange4Indexhome=false;                                                //Isaac 20201012 : index Y¶W¹L½d³ò¡A°µ¤@¦¸Tmode¡A¦^home¤¤¡A¥ı¤£°µTmode
-bool bTriger4Indexhome=false;                                                   //Isaac 20201012 : index Y¶W¹L½d³ò¡A°µ¤@¦¸Tmode¡AÄ²µoºX¼Ğ
-int iIndexOverRangeCount=0;                                                     //Isaac 20201012 : index Y¶W¹L½d³ò¡A°µ¤@¦¸Tmode¡A¦Û°Ê¦^home¤T¦¸¡A²Ä¤T¦¸§¹¦¨«á³øalarm
+bool bShowIndexMotorError=false;                                                //Isaac 20201012 : index Yè¶…éç¯„åœï¼Œåšä¸€æ¬¡Tmodeï¼Œshow alarmè¦–çª—è®Šå¤§
+int iMaxCommandY1=0,iMinCommandY1=0,iMaxCommandY2=0,iMinCommandY2=0,iMaxTeachY1F=0,iMinTeachY1F=0,iMaxTeachY1M=0,iMinTeachY1M=0,iMaxTeachY2M=0,iMinTeachY2M=0,iMaxTeachY2R=0,iMinTeachY2R=0;    //Isaac 20201012 : è¨ˆç®—Encoderå’Œcommandpos/Teachingçš„å·®å€¼
+bool bOverRangeDoTMode=false;                                                   //Isaac 20201012 : index Yè¶…éç¯„åœï¼Œåšä¸€æ¬¡Tmodeï¼Œåˆ¤æ–·è¶…å‡ºç¯„åœ
+bool bOverRange4Indexhome=false;                                                //Isaac 20201012 : index Yè¶…éç¯„åœï¼Œåšä¸€æ¬¡Tmodeï¼Œå›homeä¸­ï¼Œå…ˆä¸åšTmode
+bool bTriger4Indexhome=false;                                                   //Isaac 20201012 : index Yè¶…éç¯„åœï¼Œåšä¸€æ¬¡Tmodeï¼Œè§¸ç™¼æ——æ¨™
+int iIndexOverRangeCount=0;                                                     //Isaac 20201012 : index Yè¶…éç¯„åœï¼Œåšä¸€æ¬¡Tmodeï¼Œè‡ªå‹•å›homeä¸‰æ¬¡ï¼Œç¬¬ä¸‰æ¬¡å®Œæˆå¾Œå ±alarm
 
 int iIndexY1FindPhaseFrontPos=0;                                                //Isaac 20201110 : Index Y find motor phase
 int iIndexY1FindPhaseMiddlePos=0;
@@ -5095,40 +5095,40 @@ int iIndexY2FindPhaseMiddlePos=0;
 int iIndexY2FindPhaseRearPos=0;
 
 bool iAutoZXYMove=false;                                                        //kevin 20210223 Auto Teach X Y offset
-bool bLoadAutoTeachInarm=false;                                                 //kevin 20210305 add inarm Auto teach move  X Y PITCH Z ¶b¤£°Ê
+bool bLoadAutoTeachInarm=false;                                                 //kevin 20210305 add inarm Auto teach move  X Y PITCH Z è»¸ä¸å‹•
 bool bCleanOutFinish=false;                                                     //kevin 20210406 clean out finish
 bool beKeepCloseSite=false;                                                     //kevin 20210406 clean out open close Site
-bool bRetryReadToqu=false;                                                      //kevin 20210419 ­«Åª§á¤O
-AnsiString  sSetTorquValue[2]={"0.0"};                                          //kevin 20210421 §á¤O³]©wÅª¨ú­È
-int iIndEPCnt=16;                                                               //JerryYang 20210413 : ¿W¥ßEP¼Æ¶q
-double dAdaptiveStardardYield=-0.01;                                            //Sam 20230914 : ¦Û¾AÀ³©Ê¨}²vºÊ±±
-int iAdaptiveACInterval=-1;                                                     //Sam 20230914 : ¦Û¾AÀ³©Ê¨}²vºÊ±±
+bool bRetryReadToqu=false;                                                      //kevin 20210419 é‡è®€æ‰­åŠ›
+AnsiString  sSetTorquValue[2]={"0.0"};                                          //kevin 20210421 æ‰­åŠ›è¨­å®šè®€å–å€¼
+int iIndEPCnt=16;                                                               //JerryYang 20210413 : ç¨ç«‹EPæ•¸é‡
+double dAdaptiveStardardYield=-0.01;                                            //Sam 20230914 : è‡ªé©æ‡‰æ€§è‰¯ç‡ç›£æ§
+int iAdaptiveACInterval=-1;                                                     //Sam 20230914 : è‡ªé©æ‡‰æ€§è‰¯ç‡ç›£æ§
 int iAdaptiveACIntervalNor=-1;                                                  //Sam 20240726 : AI Clean
 int iAdaptiveLowYieldCntNor=0;
 int iAdaptiveLowYieldCntMin=0;
 bool bResetNotMsg=false;                                                        //Sam 20240215 : Tester time out show reset all ic
-bool bRestModeBackupParm=false;                                                 //Sam 20250820 : [I49] ²M®Æ®É Contact Heigh ­n©Ô°ª
+bool bRestModeBackupParm=false;                                                 //Sam 20250820 : [I49] æ¸…æ–™æ™‚ Contact Heigh è¦æ‹‰é«˜
 int iRestModeBackContactMode=0;
 double dRestModeBackContactHeigh1=0.0;
 double dRestModeBackContactHeigh2=0.0;
-bool bLoadingNewICTray=false;                                                   //Sam 20240827 : ·s¼W AMR ¥\¯à
-int iSetTorqueAlarm[2]={0};                                                     //kevin 20210505 §á¤O³sÄò´X¦¸ALARM
-bool bLowYeildAlarmSpecial=false;                                               //Sam 20210505 : PTI ­n¨Dªº¨â¬q Low Yeild
-bool bLowYeildAlarmSpecial1stPass=false;                                        //Sam 20210505 : PTI ­n¨Dªº¨â¬q Low Yeild
+bool bLoadingNewICTray=false;                                                   //Sam 20240827 : æ–°å¢ AMR åŠŸèƒ½
+int iSetTorqueAlarm[2]={0};                                                     //kevin 20210505 æ‰­åŠ›é€£çºŒå¹¾æ¬¡ALARM
+bool bLowYeildAlarmSpecial=false;                                               //Sam 20210505 : PTI è¦æ±‚çš„å…©æ®µ Low Yeild
+bool bLowYeildAlarmSpecial1stPass=false;                                        //Sam 20210505 : PTI è¦æ±‚çš„å…©æ®µ Low Yeild
 int iCheckTorqueCount=100;
 double dTorqueArray[2][2000];
 int iTorqueArrayCnt[2]={0, 0};
-bool bHasTrayCSV=false;                                                         //Steven 20210629 : Tray Form§ï¦¨CSV
-bool bHasPlateCSV=false;                                                        //Steven 20210629 : Plate Form§ï¦¨CSV
+bool bHasTrayCSV=false;                                                         //Steven 20210629 : Tray Formæ”¹æˆCSV
+bool bHasPlateCSV=false;                                                        //Steven 20210629 : Plate Formæ”¹æˆCSV
 bool bContraPoisitionFlag=false;
 int  iControlPanelMode   =0;                                                    //Ken 20210702 AddPadInterface
-int  VCCU_UNIT_TYPE=0;                                                          //Sam 20230210 : ·s¼W VacuumUnit ³q°T¼Ò²Õ
+int  VCCU_UNIT_TYPE=0;                                                          //Sam 20230210 : æ–°å¢ VacuumUnit é€šè¨Šæ¨¡çµ„
 int iWhichIndexArm=0;                                                           //Sam 20231214 : Temp offset use ready temp range
 bool bNeedReCheckHeat=false;
 
 int iAutoSiteMappingErrCT=0;                                                    //jou 20200707 : VTEST auto site mapping
 
-bool bOHTUseManual_LP1=false;                                                   //KaiChen 20200716 ¡GOHT
+bool bOHTUseManual_LP1=false;                                                   //KaiChen 20200716 ï¼šOHT
 AnsiString asGETPFCPARAMETER="";
 AnsiString asALLGETPFCPARAMETER[14][20]={""};
 bool bSETPFCPARAMETER=false;
@@ -5191,11 +5191,11 @@ int iLoadAutoCount=0;
 bool bBuffer7CombineTray=false;
 bool bBuffer7SeparationTray=false;
 
-int iCSTArmHasTrayCount=0;                                                      //KaiChen 20200716 ¡GOHT Cassette Arm Scan Tray Count
-int iRecordSenOnOff[150]={0};                                                   //KaiChen 20200716 ¡GOHT Cassette Arm Scan Tray Count
-AnsiString asCSTArmHasTrayCount="";                                             //KaiChen 20201019 ¡GOHT Cassette Arm Scan Tray Count
-int iLoaderTrayCount_OHT=0;                                                     //KaiChen 20201019 ¡GOHT ¬ö¿ı Loader Tray Count
-AnsiString asLoaderCassetteID_OHT="";                                           //KaiChen 20201019 ¡GOHT ¬ö¿ı Loader Cassette ID
+int iCSTArmHasTrayCount=0;                                                      //KaiChen 20200716 ï¼šOHT Cassette Arm Scan Tray Count
+int iRecordSenOnOff[150]={0};                                                   //KaiChen 20200716 ï¼šOHT Cassette Arm Scan Tray Count
+AnsiString asCSTArmHasTrayCount="";                                             //KaiChen 20201019 ï¼šOHT Cassette Arm Scan Tray Count
+int iLoaderTrayCount_OHT=0;                                                     //KaiChen 20201019 ï¼šOHT ç´€éŒ„ Loader Tray Count
+AnsiString asLoaderCassetteID_OHT="";                                           //KaiChen 20201019 ï¼šOHT ç´€éŒ„ Loader Cassette ID
 
 bool bSecsGem_SLOT_MAP=false;
 bool bSecsGem_CST_IN_BUFFER=false;
@@ -5221,40 +5221,40 @@ bool bMultileDoorIsOpen=true;
 
 bool bMultileDoorState_Old=true;
 
-bool bSendEven_NeedEmptyCST=false;                                              //KaiChen 20201222 ¡GOHT¡AAdd
-bool bSendEven_NeedEmptyCST_FristScan=false;                                    //KaiChen 20201222 ¡GOHT¡AAdd
+bool bSendEven_NeedEmptyCST=false;                                              //KaiChen 20201222 ï¼šOHTï¼ŒAdd
+bool bSendEven_NeedEmptyCST_FristScan=false;                                    //KaiChen 20201222 ï¼šOHTï¼ŒAdd
 bool bSendEven_First=true;
 bool bManualCSTOUT=false;
 bool bManualRemoveLP2CST=false;
 
-bool bDoIniStartAutoIonFanClean=false;                                          //Isaac 20210609 : IOÄ²µoIonFan²M°w
-bool bStartAutoIonFanClean=false;                                               //Ifor 20210720 add: IOÄ²µoIonFan²M°w¤~Åã¥Ü
+bool bDoIniStartAutoIonFanClean=false;                                          //Isaac 20210609 : IOè§¸ç™¼IonFanæ¸…é‡
+bool bStartAutoIonFanClean=false;                                               //Ifor 20210720 add: IOè§¸ç™¼IonFanæ¸…é‡æ‰é¡¯ç¤º
 bool bReadTrayID=false;                                                         //kevin 20210623 TRAY ID Read
 bool bReadColorTrayID=false;                                                    //kevin 20210623 TRAY ID Read
 AnsiString TrayID[eTrayCount][3]={""};                                          //kevin 20210623  [6]: load empty COLOR [3]: 0:read  1: send MOVE TRAY PLACE                //QQQ
-int iTrayTotal[3]={0};                                                          //kevin 20210623  0:loader 1:Empty  2:olor  Tray ¤J­y¹D¼Æ¶q
-int iOneTrayPickCount[ePosTrayCount]={0};                                       //kevin 20210623  loader §l¨ú¼Æ¶q
-int iAutoTrayPlaceCount[ePosTrayCount]={0};                                     //kevin 20210623  Auto123 Fix 123 ©ñic¼Æ¶q
+int iTrayTotal[3]={0};                                                          //kevin 20210623  0:loader 1:Empty  2:olor  Tray å…¥è»Œé“æ•¸é‡
+int iOneTrayPickCount[ePosTrayCount]={0};                                       //kevin 20210623  loader å¸å–æ•¸é‡
+int iAutoTrayPlaceCount[ePosTrayCount]={0};                                     //kevin 20210623  Auto123 Fix 123 æ”¾icæ•¸é‡
 int iGPIBIndexStatus=0;
 bool bOutArmPlaceToUnloaderDestroy=false;                                       // 2012.06.14 , Joye , OutArm Place To Unloader Destroy Check
 bool bOutArmPlaceToUnloaderDestroy_EMGAndPowerOff=false;                        // 2012.06.14 , Joye , OutArm Place To Unloader Destroy Check
 
 bool bCom1Error=false;                                                          //kevin 20210902 Torque error
-AnsiString aSendSiteMapping="";                                                 //Ifor 20201030 add:°eSite Mapping ¸ê®Æµ¹GPIB
-int iESD_DecayTask=-1;                                                          //Ifor 20220112 add:§ï¥ş°ìÅÜ¼Æ
+AnsiString aSendSiteMapping="";                                                 //Ifor 20201030 add:é€Site Mapping è³‡æ–™çµ¦GPIB
+int iESD_DecayTask=-1;                                                          //Ifor 20220112 add:æ”¹å…¨åŸŸè®Šæ•¸
 bool bDecayComplete=false;                                                      //Ifor 20220119 add:Auto Decay Complete Flag
-bool bInArmAutoAlignmentClearFlag=false;                                        //Kenhsieh 20211007 : ¸Ñ¨M¨S¦³±½´yKit°İÃD
-bool bOutArmAutoAlignmentClearFlag=false;                                       //Kenhsieh 20211007 : ¸Ñ¨M¨S¦³±½´yKit°İÃD
-int iAutoCleanRowSel=0;                                                         //KaiChen 20200622 ¡G­×§ï 10Site2X5 AutoClean
-int iShuttleRowKit=0;                                                           //KaiChen 20200622 ¡G­×§ï 10Site2X5 AutoClean
-int iStiCT=0;                                                                   //kevin 20211106 add ©â´ú¼Æ¶q­p¼Æ
-int StipulateInputCount=0;                                                      //kevin 20211106 ©â´ú ¼Æ ¶q
-bool bDoLoaderCleanOut =false;                                                  //kevin 20211106 ©â´ú ¼Æ ¶q¨ì¹F LOAD ¦¬TRAY
-bool bTorueReceve=false;                                                        //kevin 20211117 §á¤O100 µ§¸ê®Æ
-bool bTorueReceveSTOP=false;                                                    //kevin 20211117 §á¤OSTOP¸ê®Æ
+bool bInArmAutoAlignmentClearFlag=false;                                        //Kenhsieh 20211007 : è§£æ±ºæ²’æœ‰æƒæKitå•é¡Œ
+bool bOutArmAutoAlignmentClearFlag=false;                                       //Kenhsieh 20211007 : è§£æ±ºæ²’æœ‰æƒæKitå•é¡Œ
+int iAutoCleanRowSel=0;                                                         //KaiChen 20200622 ï¼šä¿®æ”¹ 10Site2X5 AutoClean
+int iShuttleRowKit=0;                                                           //KaiChen 20200622 ï¼šä¿®æ”¹ 10Site2X5 AutoClean
+int iStiCT=0;                                                                   //kevin 20211106 add æŠ½æ¸¬æ•¸é‡è¨ˆæ•¸
+int StipulateInputCount=0;                                                      //kevin 20211106 æŠ½æ¸¬ æ•¸ é‡
+bool bDoLoaderCleanOut =false;                                                  //kevin 20211106 æŠ½æ¸¬ æ•¸ é‡åˆ°é” LOAD æ”¶TRAY
+bool bTorueReceve=false;                                                        //kevin 20211117 æ‰­åŠ›100 ç­†è³‡æ–™
+bool bTorueReceveSTOP=false;                                                    //kevin 20211117 æ‰­åŠ›STOPè³‡æ–™
 bool RPLogRecord=false;                                                         //Sam 20201209 : Default Recipe ChangeLog
-bool bIndex1Suck =false;                                                        //kevin 20220105 Index ¦b¤U¯uªÅ«Ø¥ß pause ¤£¯àÃö³¬
-bool bIndex2Suck =false;                                                        //kevin 20220105 Index ¦b¤U¯uªÅ«Ø¥ß pause ¤£¯àÃö³¬
+bool bIndex1Suck =false;                                                        //kevin 20220105 Index åœ¨ä¸‹çœŸç©ºå»ºç«‹ pause ä¸èƒ½é—œé–‰
+bool bIndex2Suck =false;                                                        //kevin 20220105 Index åœ¨ä¸‹çœŸç©ºå»ºç«‹ pause ä¸èƒ½é—œé–‰
 int  USE_INDEX_ARM_AXES=IndexArm_4_Axis;                                        //JimmyChiu 20220708 : add Index Arm Axis
 
 const int AutoOffset_InShuttlePlace       =0;                                   //JimmyChiu 20211020 : Auto alignment mode
@@ -5269,48 +5269,48 @@ const int AutoOffset_ShuttleSensorCheckR  =8;
 const int AutoOffset_AutoTeachFinish      =9;
 const int AutoOffset_HotPlatePick         =10;
 
-bool bUse8Picker=false;                                                         //Steven 20201014 : ¾ã¦X8§l¼Lauto clean
+bool bUse8Picker=false;                                                         //Steven 20201014 : æ•´åˆ8å¸å˜´auto clean
 bool bCleanKitSuckDuplicateErr[MAX_ARM_Row][MAX_ARM_Col];                       //Steven 20091218 : Avoid duplicate message
-int iWhichAutoNeedTray=0;                                                       //Steven 20211228 : ¤è«KDebug
+int iWhichAutoNeedTray=0;                                                       //Steven 20211228 : æ–¹ä¾¿Debug
 bool USE_ATC_RS232_Check=false;                                                 //Ifor 20211116 add: ATC RS232 Check Function
 TQPF_Timer tOEESystemCycle;                                                     //Jimmychiu 20220712 decrease loading
-bool USE_ARM_PROTECTION=true;                                                   //Steven 20220314 : In Our Arm Z Sensor«OÅ@¥[¤W¶}Ãö
-AnsiString sGigasFTPPassWord="";                                                //Isaac 20210128 : ¬°¤FÅıEnable FTP¤£³QÂê¦í¡Asupervisor¥H¤U»İ¿é¤J±K½X
+bool USE_ARM_PROTECTION=true;                                                   //Steven 20220314 : In Our Arm Z Sensorä¿è­·åŠ ä¸Šé–‹é—œ
+AnsiString sGigasFTPPassWord="";                                                //Isaac 20210128 : ç‚ºäº†è®“Enable FTPä¸è¢«é–ä½ï¼Œsupervisorä»¥ä¸‹éœ€è¼¸å…¥å¯†ç¢¼
 AnsiString asTCPIPTemperature="";
 AnsiString asTCPIPBarCode[32]={"0"};
-int iSECSGEMMachineState=0;                                                     //JerryYang 20220215 : MachinePreState§ï¦¨int
-int iSECSGEMMachinePreState=0;                                                  //Ifor 20221019 add: Machine PreS tate§ï¦¨int
+int iSECSGEMMachineState=0;                                                     //JerryYang 20220215 : MachinePreStateæ”¹æˆint
+int iSECSGEMMachinePreState=0;                                                  //Ifor 20221019 add: Machine PreS tateæ”¹æˆint
 AnsiString sMacStatus[30]={"LOCK", "EMG 1", "EMG 2", "EMG 3", "EMG 4", "Power Off", "Homing", "Auto Retest", "HP Check", "Cleaning",
                            "OCR Insp", "Reseting", "Piggy Back", "QA Mode", "Onecycle Cleaning", "No Tray", "Running", "Heater Wait", "Cooling Wait", "PAUSE",
                            "HALT", "Index Check", "RUN CHECK", "Defrosting", "ATC Self Test", "RTC Mode", "Alarm", "Decay Test", "Init", "Wait"};
 bool bFTPDownlodFinish=false;
 bool bHalfViewVerifyNeedAboveSocket=false;                                      //JerryYang 20220215 : RTC Auto Verify half view check
 bool bPickUpErrReAutoVerify=false;
-bool bAutoSkipCntOver=false;                                                    //JerryYang 20210420 : ª¿«~Ä¬¦{­n¨Dauto skip¼Æ¶q¤p©ó³]©w­È­n¥Ñ¤uµ{®v±Æ°£
+bool bAutoSkipCntOver=false;                                                    //JerryYang 20210420 : çŸ½å“è˜‡å·è¦æ±‚auto skipæ•¸é‡å°æ–¼è¨­å®šå€¼è¦ç”±å·¥ç¨‹å¸«æ’é™¤
 double dIndexZOffset[3][15]={0};                                                //Ifor 20210114 add: Index Z Offset //Ifor 20230207 add: 10 => 11
 bool bChangeTest_TempAlarm=false;                                               //Ifor 20210623 add: Test Temp Change
 int bChangeTest_TempOffset=0;                                                   //Ifor 20210623 add: Test Temp Change
-bool bDoATCTempRise=false;                                                      //Ifor 20230504 add: ATC ¦^·Å¥\¯àflag
+bool bDoATCTempRise=false;                                                      //Ifor 20230504 add: ATC å›æº«åŠŸèƒ½flag
 bool bReadMCU1=false, bReadMCU2=false;                                          //kevin 20220225 read MCU DATA
 int iSelectArm=0;                                                               //kevin 20220426 0: Arm1 Arm 2  1: Arm1  2: Arm2
 int iUnloaderTrayCountCal[MAX_TRACK]={0, 0, 0, 0, 0, 0, 0, 0, 0};               //Frank 20220322 Add
 int iFixTrayCountCal[MAX_FIX_TRAY]={0, 0, 0, 0, 0, 0};                          //JerryYang 20240318 : add
 //bool bUseAGV=false;                                                             //kevin 20220518 AGV Modal
-AnsiString sLoadPickupErrorTrayPos[MAX_ARM_Row][MAX_ARM_Col]={""};              //kevin 20220521 Load pick error record X, Y ®y¼Ğ
+AnsiString sLoadPickupErrorTrayPos[MAX_ARM_Row][MAX_ARM_Col]={""};              //kevin 20220521 Load pick error record X, Y åº§æ¨™
 bool bHotPlateHasSiteMap=false;                                                 //Stevn 20220602
-int  iResetSiteMappingStep=0;                                                   //Stevn 20220602    //0:¤w¸É¦^¥h     //1:One Cycle©ÎClean Out, auto site map§Y±N­«¸m    //2:°O¿ıauto site map­nÂà¦^continue start«e, ICÁÙ¨S¸É¦^¥[¼ö½L
+int  iResetSiteMappingStep=0;                                                   //Stevn 20220602    //0:å·²è£œå›å»     //1:One Cycleæˆ–Clean Out, auto site mapå³å°‡é‡ç½®    //2:è¨˜éŒ„auto site mapè¦è½‰å›continue startå‰, ICé‚„æ²’è£œå›åŠ ç†±ç›¤
 int iStackCount[MAX_TRACK]={0};                                                 //kevin 20220527 add Tray Count 0:load 1:empty 2:Color 3:Auto1 4:Auto2 5:Auto3
 int iPosWos=500;                                                                //kevin 20220616 add Test
-bool bResetGalilTwoYMove=false;                                                 //Ifor 20220729 add Reset Galil Two Y Move®É¶¡­p®É
+bool bResetGalilTwoYMove=false;                                                 //Ifor 20220729 add Reset Galil Two Y Moveæ™‚é–“è¨ˆæ™‚
 AnsiString sRFIDData="";                                                        //Steven 20220713 : RFID Reader for SJSEMI
 int iRFIDTag=0;
 bool bAUTORev[MAX_AUTO_TRAY]={false, false, false, false,false,false};
-int iInShuttleJam[2][9]={0};                                                    //kevin 20220819 shuttle Jam  ¬ö¿ı¦ì¸m«áÄò¡A­n°µ©ñ¨ì©U§£±í°Ê§@
-bool bIsOpenDoorNeedSetErrBin=false;                                            //JerryYang 20210901 : Microchip­n¨D¶}¦w¥şªù­n¤ÀERROR BIN
-bool bUpdateAutomatically=false;                                                //Sam 20220824 : FTP ¦Û°Ê¤U¸ü¦w¸Ë§ó·s¥]
-bool bUpdateAutomaticallyChecked=false;                                         //Sam 20220824 : FTP ¦Û°Ê¤U¸ü¦w¸Ë§ó·s¥]
-TMyStringList *slGroundManLog;                                                  //KenHsieh 20220728 : ·s¼WGroundMan Value Log
-bool bAutoReceTray=false;                                                       //kevin 20220908 add °h®ÆTRAY ¸ÉªÅTRAY
+int iInShuttleJam[2][9]={0};                                                    //kevin 20220819 shuttle Jam  ç´€éŒ„ä½ç½®å¾ŒçºŒï¼Œè¦åšæ”¾åˆ°åƒåœ¾æ¡¶å‹•ä½œ
+bool bIsOpenDoorNeedSetErrBin=false;                                            //JerryYang 20210901 : Microchipè¦æ±‚é–‹å®‰å…¨é–€è¦åˆ†ERROR BIN
+bool bUpdateAutomatically=false;                                                //Sam 20220824 : FTP è‡ªå‹•ä¸‹è¼‰å®‰è£æ›´æ–°åŒ…
+bool bUpdateAutomaticallyChecked=false;                                         //Sam 20220824 : FTP è‡ªå‹•ä¸‹è¼‰å®‰è£æ›´æ–°åŒ…
+TMyStringList *slGroundManLog;                                                  //KenHsieh 20220728 : æ–°å¢GroundMan Value Log
+bool bAutoReceTray=false;                                                       //kevin 20220908 add é€€æ–™TRAY è£œç©ºTRAY
 int iSensor[4][9];                                                              //kevin 20220912 log Shuttle display
 
 bool MACHINE_HAS_AUTO_ALIGNMENT_CCD = false;                                    //ChungHung 20210113 add for Alignment CCD
@@ -5353,11 +5353,11 @@ double fNowSystemWidthScale;                                                    
 int iCCDAlignmentMotorDelay=200;
 int Teach_AutoAlignmentUnit=0;
 
-bool bHasOutShuttleLose=false;                                                  //Ifor 20210911 add: KLT ­n¨Dout shuttle loss IC alarm¤§«á¡A«ö¤UStart­n¸õ¥X½T»{µøµ¡
-bool bHasNozzleEvent=false;                                                     //Ifor 20211014 add:«ö¤URester¾÷¥x§l¼L¤¤¦³¥¿¦b¥á®Æªºª¬ºA
-int iIonAlarmState=0;                                                           //Ifor 20211014 add:Start Ion Alarm ©µ¿ğ³øÄµ 0:ªì©l¤Æ 1:³]©w®É¶¡ 2:§¹¦¨©µ¿ğ
-int bIonAlarmDelayTime=0;                                                       //Ifor 20211014 add:Start Ion Alarm ©µ¿ğ³øÄµ
-bool bContactModeCheckOpenDoor[2];                                              //Ifor 20211203 add: KLT­n¨DContact¼Ò¦¡»İ¤H­û½T»{InShuttle Sensor»P¶}ªù
+bool bHasOutShuttleLose=false;                                                  //Ifor 20210911 add: KLT è¦æ±‚out shuttle loss IC alarmä¹‹å¾Œï¼ŒæŒ‰ä¸‹Startè¦è·³å‡ºç¢ºèªè¦–çª—
+bool bHasNozzleEvent=false;                                                     //Ifor 20211014 add:æŒ‰ä¸‹Resteræ©Ÿå°å¸å˜´ä¸­æœ‰æ­£åœ¨ä¸Ÿæ–™çš„ç‹€æ…‹
+int iIonAlarmState=0;                                                           //Ifor 20211014 add:Start Ion Alarm å»¶é²å ±è­¦ 0:åˆå§‹åŒ– 1:è¨­å®šæ™‚é–“ 2:å®Œæˆå»¶é²
+int bIonAlarmDelayTime=0;                                                       //Ifor 20211014 add:Start Ion Alarm å»¶é²å ±è­¦
+bool bContactModeCheckOpenDoor[2];                                              //Ifor 20211203 add: KLTè¦æ±‚Contactæ¨¡å¼éœ€äººå“¡ç¢ºèªInShuttle Sensorèˆ‡é–‹é–€
 
 int iAOA_InArm_Loader_X=0;                                                      //KenHsieh 20210830 : add CCD AUTO ALIGNMENT for Offset
 int iAOA_InArm_Shuttle1_X=0;
@@ -5365,7 +5365,7 @@ int iAOA_InArm_Shuttle2_X=0;
 int iAOA_InArm_Hotplate1_X=0;
 int iAOA_InArm_Hotplate2_X=0;
 
-int iAOA_InArm_Loader_Y=0;                                                      //KenHsieh 20210918 : CCD AUTO ALIGNMENT offset·s¼W
+int iAOA_InArm_Loader_Y=0;                                                      //KenHsieh 20210918 : CCD AUTO ALIGNMENT offsetæ–°å¢
 int iAOA_InArm_Shuttle1_Y=0;
 int iAOA_InArm_Shuttle2_Y=0;
 int iAOA_InArm_Hotplate1_Y=0;
@@ -5399,29 +5399,29 @@ int iAOA_OutArm_Shuttle1_Y=0;
 int iAOA_OutArm_Shuttle2_X=0;
 int iAOA_OutArm_Shuttle2_Y=0;
 
-bool bInArmXPitch_40mm=false;                                                   //KenHsieh 20211023 : ·s¼WX Pitch 40mm teach
-bool bOutArmXPitch_40mm=false;                                                  //KenHsieh 20211023 : ·s¼WX Pitch 40mm teach
-bool bNeedOneCycleByAutoAlignment=false;                                        //KenHsieh 20211202 : ­×§ï­«·s¥´¶}AOA«á¡A¥ı°µOnecycle¦A¦^Home­«°µAOA
+bool bInArmXPitch_40mm=false;                                                   //KenHsieh 20211023 : æ–°å¢X Pitch 40mm teach
+bool bOutArmXPitch_40mm=false;                                                  //KenHsieh 20211023 : æ–°å¢X Pitch 40mm teach
+bool bNeedOneCycleByAutoAlignment=false;                                        //KenHsieh 20211202 : ä¿®æ”¹é‡æ–°æ‰“é–‹AOAå¾Œï¼Œå…ˆåšOnecycleå†å›Homeé‡åšAOA
 const int iZMovePos=10;
 const int iXYMovePos=1;
 bool bAutoCleanPlaceToSht=false;                                                //Steven 20220927 : Add flag for place pad to shuttle
 int TRAY_MAPPING_GRAB=0;                                                        //KenHsieh 20220923 : add Tray Map Throw IC Function
 bool bS2F42_TrayMap_Receive=false;                                              //KenHsieh 20220923 : add Tray Map Throw IC Function
 bool bS2F42_TrayMap_FullTray=false;                                             //KenHsieh 20220923 : add Tray Map Throw IC Function
-bool bNeedInputEQCQty=false;                                                    //JerryYang 20220923 : ¤â°Ê¿é¤JEQC¼Æ¶q
+bool bNeedInputEQCQty=false;                                                    //JerryYang 20220923 : æ‰‹å‹•è¼¸å…¥EQCæ•¸é‡
 bool bStopART=false;
 bool bBigMyMessage=false;
 bool bInArmWaitOneCycle=false;
-double dCycleTimeArr[20];                                                       //JerryYang 20220923 : Index cycle timeºÊ±±
-bool bDoingF16=false;                                                           //Steven 20221213 : ½T»{shuttle ¦³¨S¦³Â_½u
+double dCycleTimeArr[20];                                                       //JerryYang 20220923 : Index cycle timeç›£æ§
+bool bDoingF16=false;                                                           //Steven 20221213 : ç¢ºèªshuttle æœ‰æ²’æœ‰æ–·ç·š
 
 int iByBinCnt[TEST_MAX_BIN+1];
-int iExceptAutoCnt[eTrayCount];                                                 //JerryYang 20240927 : 2D SORT¼Ò¦¡Output arm©ñ®ÆÁ×§KªÅ¬}
-bool bInitNeedDownloadFTP=false;                                                //JerryYang 20200416 ¦ã¬ì­n¨D¤Áinitial start«östart­n±j¨îdownload recipe
-double fIndexDownPos=-148.0;                                                    //Steven 20211109 : §ï¦¨¥ş°ìÅÜ¼Æ
-int iOneCycleFinishShowMsg;                                                     //Sam 20250115 : ª¿®æ´ò¤f GPIB OneCycle ­n±j¨î¤Á ASM
-AnsiString sOneCycleFinishShowMsg="";                                           //Sam 20221103 : OneCycle §¹«áÅã¥Ü°T®§
-bool bInitialStartIndexCheckDone=true;                                          //Sam 20221214 : ·í¾÷¥x Initail Start ®É»İ­n¥ı°µ Index Check
+int iExceptAutoCnt[eTrayCount];                                                 //JerryYang 20240927 : 2D SORTæ¨¡å¼Output armæ”¾æ–™é¿å…ç©ºæ´
+bool bInitNeedDownloadFTP=false;                                                //JerryYang 20200416 è‰¾ç§‘è¦æ±‚åˆ‡initial startæŒ‰startè¦å¼·åˆ¶download recipe
+double fIndexDownPos=-148.0;                                                    //Steven 20211109 : æ”¹æˆå…¨åŸŸè®Šæ•¸
+int iOneCycleFinishShowMsg;                                                     //Sam 20250115 : çŸ½æ ¼æ¹–å£ GPIB OneCycle è¦å¼·åˆ¶åˆ‡ ASM
+AnsiString sOneCycleFinishShowMsg="";                                           //Sam 20221103 : OneCycle å®Œå¾Œé¡¯ç¤ºè¨Šæ¯
+bool bInitialStartIndexCheckDone=true;                                          //Sam 20221214 : ç•¶æ©Ÿå° Initail Start æ™‚éœ€è¦å…ˆåš Index Check
 const double HeatGunLimit = 215;
 const double TemperatureFuseLimit170 = 165.0;
 const double TemperatureFuseLimit200 = 200.0;
@@ -5429,35 +5429,35 @@ const double TemperatureFuseLimit250 = 250.0;
 const double ChamberTempLimit = 165;                                               //Ifor 20230328 add: Chamber Temp Limit 165
 //double TempFuseLimitType=TemperatureFuseLimit170;
 double TempFuseLimitType=0.0;
-int iE1Count=0;                                                                 //JerryYang 20230322 : Lot summary­n­pºâ¦UÃş«¬ERRªº¼Æ¶q
+int iE1Count=0;                                                                 //JerryYang 20230322 : Lot summaryè¦è¨ˆç®—å„é¡å‹ERRçš„æ•¸é‡
 int iE2Count=0;
 int iE3Count=0;
 int iENotDefinedCount=0;
 
-int iByLotE1Count[5]={0, 0, 0, 0, 0};                                           //JerryYang 20230322 : Lot summary­n­pºâ¦UÃş«¬ERRªº¼Æ¶q
+int iByLotE1Count[5]={0, 0, 0, 0, 0};                                           //JerryYang 20230322 : Lot summaryè¦è¨ˆç®—å„é¡å‹ERRçš„æ•¸é‡
 int iByLotE2Count[5]={0, 0, 0, 0, 0};
 int iByLotE3Count[5]={0, 0, 0, 0, 0};
 int iByLotENotDefinedCount[5]={0, 0, 0, 0, 0};
 
-bool bSuperHotTempNoChkHumidity = true;                                         //Hmy 20190625 Add¶W°ª·Å¡A¤£§PÂ_Àã«×    //Ztex 2023.04.13 Add HT-1032 IO ==>
-bool bSuperHotTempChangeTemp[3] = {false, false, false};                        //Hmy 20190625 Add¶W°ª·Å¡A¤£§PÂ_Àã«×
+bool bSuperHotTempNoChkHumidity = true;                                         //Hmy 20190625 Addè¶…é«˜æº«ï¼Œä¸åˆ¤æ–·æ¿•åº¦    //Ztex 2023.04.13 Add HT-1032 IO ==>
+bool bSuperHotTempChangeTemp[3] = {false, false, false};                        //Hmy 20190625 Addè¶…é«˜æº«ï¼Œä¸åˆ¤æ–·æ¿•åº¦
 int  iFixDoorOpenTime=0;                                                        //Hmy 20180827 Add Function,fix area frosting protection
 double dFixAreaDewPoint=0.0;                                                    //Hmy 20180827 Add Function,fix area frosting protection
 bool bDelayTimeAfterFixDoorOpen  =false;                                        //Hmy 20180827 Add Function,fix area frosting protection
 int  iStepOfDelayAfterFixDoorOpen=-1;                                           //Hmy 20180827 Add Function,fix area frosting protection
 
 bool bOverTempAlarm[8]={false,false,false,false,false,false,false,false};       //Ztex 2023.04.19 Add HT-1032 TriTemp Function
-bool biTriTempDefaultbyWork=false;                                              //kevin 20150507 ¦s¤u§@ÀÉ
-int iATC51ThermoCount_SH1 = 1;                                                  //Hmy 20210414 Add ATC¨t²Î·Å±±¾¹¼Æ¶q(¹w³]¬°1ÂI¡A¥Ø«e³Ì¦h3ÂI)
-int iATC51ThermoCount_SH2 = 1;                                                  //Hmy 20210414 Add ATC¨t²Î·Å±±¾¹¼Æ¶q(¹w³]¬°1ÂI¡A¥Ø«e³Ì¦h3ÂI)
-int iATC51ThermoCount_HP1 = 1;                                                  //Hmy 20210414 Add ATC¨t²Î·Å±±¾¹¼Æ¶q(¹w³]¬°1ÂI¡A¥Ø«e³Ì¦h3ÂI)
-int iATC51ThermoCount_HP2 = 1;                                                  //Hmy 20210414 Add ATC¨t²Î·Å±±¾¹¼Æ¶q(¹w³]¬°1ÂI¡A¥Ø«e³Ì¦h3ÂI)
-bool bDefrostKeepATCTemp        = false;                                        //Hmy 20170120 ¼W¥[¤â°Ê°£Á÷¥\¯à(§PÂ_¥Î)
-bool bAutoDefrost_Exec          = false;                                        //Hmy 20170120 ¼W¥[¤â°Ê°£Á÷¥\¯à(§PÂ_¥Î)
-bool bAutoDefrost_Done          = false;                                        //Hmy 20170120 ¼W¥[¤â°Ê°£Á÷¥\¯à(§PÂ_¥Î)
+bool biTriTempDefaultbyWork=false;                                              //kevin 20150507 å­˜å·¥ä½œæª”
+int iATC51ThermoCount_SH1 = 1;                                                  //Hmy 20210414 Add ATCç³»çµ±æº«æ§å™¨æ•¸é‡(é è¨­ç‚º1é»ï¼Œç›®å‰æœ€å¤š3é»)
+int iATC51ThermoCount_SH2 = 1;                                                  //Hmy 20210414 Add ATCç³»çµ±æº«æ§å™¨æ•¸é‡(é è¨­ç‚º1é»ï¼Œç›®å‰æœ€å¤š3é»)
+int iATC51ThermoCount_HP1 = 1;                                                  //Hmy 20210414 Add ATCç³»çµ±æº«æ§å™¨æ•¸é‡(é è¨­ç‚º1é»ï¼Œç›®å‰æœ€å¤š3é»)
+int iATC51ThermoCount_HP2 = 1;                                                  //Hmy 20210414 Add ATCç³»çµ±æº«æ§å™¨æ•¸é‡(é è¨­ç‚º1é»ï¼Œç›®å‰æœ€å¤š3é»)
+bool bDefrostKeepATCTemp        = false;                                        //Hmy 20170120 å¢åŠ æ‰‹å‹•é™¤éœœåŠŸèƒ½(åˆ¤æ–·ç”¨)
+bool bAutoDefrost_Exec          = false;                                        //Hmy 20170120 å¢åŠ æ‰‹å‹•é™¤éœœåŠŸèƒ½(åˆ¤æ–·ç”¨)
+bool bAutoDefrost_Done          = false;                                        //Hmy 20170120 å¢åŠ æ‰‹å‹•é™¤éœœåŠŸèƒ½(åˆ¤æ–·ç”¨)
 bool bAutoDefrost_Halt          = false;
-bool bAutoDefrost_ByMachineProduction_Req   = false;                            //Hmy 20170120 ¼W¥[¤â°Ê°£Á÷¥\¯à(§PÂ_¥Î)
-bool bAutoDefrost_ByMachineProduction_Finish= false;                            //Hmy 20170120 ¼W¥[¤â°Ê°£Á÷¥\¯à(§PÂ_¥Î)
+bool bAutoDefrost_ByMachineProduction_Req   = false;                            //Hmy 20170120 å¢åŠ æ‰‹å‹•é™¤éœœåŠŸèƒ½(åˆ¤æ–·ç”¨)
+bool bAutoDefrost_ByMachineProduction_Finish= false;                            //Hmy 20170120 å¢åŠ æ‰‹å‹•é™¤éœœåŠŸèƒ½(åˆ¤æ–·ç”¨)
 bool bAutoDefrost_ByMachineProduction_Termination = false;
 bool bAutoDefrost_ByMachineProduction_Wait = false;
 bool bAutoDefrost_ByMachineProduction_Force = false;
@@ -5522,24 +5522,24 @@ bool bALLTempFirstReady=false;
 bool bAutoDefrost_OpenAirStream=false;
 int INDEXDOORHEATER=0;
 //Ztex 2023.04.19 Add HT-1032 TriTemp Function
-int iAutoFormSize=0;                                                            //Jimmychiu 20231130 : ¥i¶}ÃöAuto form size
+int iAutoFormSize=0;                                                            //Jimmychiu 20231130 : å¯é–‹é—œAuto form size
 int iACSmartCount=0;                                                            //Sam 20230111 : Smart Auto Clean
 int iACSmartCount_CTF=0;                                                        //Sam 20240726 : AI Clean
 int iACUseParam=0;
 int iRunACSmart=0;
-bool bRunACAdaptive=false;                                                      //Sam 20230914 : ¦Û¾AÀ³©Ê¨}²vºÊ±±
-int iAdaptiveContsLowerCnt=0;                                                   //Sam 20230914 : ¦Û¾AÀ³©Ê¨}²vºÊ±±
-AnsiString sACRecAlarmCode="";                                                  //Sam 20250916 : Alarm«á»İ­n²M°£¸ê®Æ¤~¯àStart
+bool bRunACAdaptive=false;                                                      //Sam 20230914 : è‡ªé©æ‡‰æ€§è‰¯ç‡ç›£æ§
+int iAdaptiveContsLowerCnt=0;                                                   //Sam 20230914 : è‡ªé©æ‡‰æ€§è‰¯ç‡ç›£æ§
+AnsiString sACRecAlarmCode="";                                                  //Sam 20250916 : Alarmå¾Œéœ€è¦æ¸…é™¤è³‡æ–™æ‰èƒ½Start
 AnsiString sACRecEPortCode="";
 bool bShowNoteCleanSocket=false;
-bool bBarCoderAutoLogin=false;                                                  //Sam 20221101 : ¨Ï¥Î BarCoder ¦Û°Êµn¿ı
-bool bBarCoderSetupFile=false;                                                  //Sam 20230320 : ¨Ï¥Î BarCodeReader ¨Ó¿é¤J¤Á´« SetupFile¡C
+bool bBarCoderAutoLogin=false;                                                  //Sam 20221101 : ä½¿ç”¨ BarCoder è‡ªå‹•ç™»éŒ„
+bool bBarCoderSetupFile=false;                                                  //Sam 20230320 : ä½¿ç”¨ BarCodeReader ä¾†è¼¸å…¥åˆ‡æ› SetupFileã€‚
 bool bADAM6024FWIsNew[3]={false, false, false};                                 //Nickliu 20230314 Add Check Adam FW Is New
-bool bHandlerChangeState=false;                                                 //Sam 20230511 : ¾÷¥x¸ê®ÆÅÜ§ó«á¶·¤W¶Ç FTP
+bool bHandlerChangeState=false;                                                 //Sam 20230511 : æ©Ÿå°è³‡æ–™è®Šæ›´å¾Œé ˆä¸Šå‚³ FTP
 //JerryYang 20220909 : add magazine
 //==>
 int iYRegNum=0;
-int iAuto3MagazineIndex=-1;                                                     //Aut3¥Ø«eÄÀ©ñ­ş­Ó Mag Tray 0-13
+int iAuto3MagazineIndex=-1;                                                     //Aut3ç›®å‰é‡‹æ”¾å“ªå€‹ Mag Tray 0-13
 int iWhichBuff=-1;
 int iPickWhichBuff=-1;
 int iWhichMag=-1;
@@ -5561,13 +5561,13 @@ bool bSetMagTopBin=false;
 bool bClearMagTopBin=false;
 int  iTopWhichBin=0;
 bool bChaneMagTrayflag=false;
-bool bMagCatchTrayfalg=false;                                                   //JerryYang 20221121 : AUTOI3 MagazineÁÙ¦b§¨TRAYªººX¼Ğ
+bool bMagCatchTrayfalg=false;                                                   //JerryYang 20221121 : AUTOI3 Magazineé‚„åœ¨å¤¾TRAYçš„æ——æ¨™
 bool bMagGetNewTrayflag=false;
 int iMagChangeStep=0;
 //<==
 //JerryYang 20220909 : add magazine
-int i1x2_4UseACEGPicker=0;                                                      //Steven 20230530 : 1x2_4§ï¥ÎRow A
-AnsiString CleanKitRecord[50][50];                                              //Sam 20230619 : ·s¼W Clean§l©ñ®É¶¡ Log
+int i1x2_4UseACEGPicker=0;                                                      //Steven 20230530 : 1x2_4æ”¹ç”¨Row A
+AnsiString CleanKitRecord[50][50];                                              //Sam 20230619 : æ–°å¢ Cleanå¸æ”¾æ™‚é–“ Log
 bool bIdleNeedCheckSafeDoor[4][64][32][8];                                      //Steven 20230704 : add bypass idle check safe door
 bool bOutArmTrayDuplicateErr[9]={false, false, false, false, false, false, false, false, false};
 int iTotalXPitchStep    =3;
@@ -5581,7 +5581,7 @@ int iMaxXPitch2Pick_14  =12000;
 int iMinXPitch2Pick_14  =4000;
 int iHPXPos=0;
 int iHPYPos=0;
-bool bOutarmDropError=false;                                                    //jou 20241024 : out arm drop error show alarm´£¿ôÀË¬d¥XTray¬O§_Å|®Æ
+bool bOutarmDropError=false;                                                    //jou 20241024 : out arm drop error show alarmæé†’æª¢æŸ¥å‡ºTrayæ˜¯å¦ç–Šæ–™
 
 const int iEtherCatRing=1;                                                      //Sam 20230707 : EtherCAT Shuttle sensor
 bool bEtherCatMastCardError=false;
@@ -5591,7 +5591,7 @@ unsigned long m_dwDevNum=0;
 bool bOCRRunTime=false;
 bool bQUERYTJ=false;
 bool bATCAlarm=false;
-AnsiString asLotID_ByFile="";                                                   //KenHsieh 20230727 : §ó§ï¤u§@ÀÉ»P¸ê®Æ By NetFile
+AnsiString asLotID_ByFile="";                                                   //KenHsieh 20230727 : æ›´æ”¹å·¥ä½œæª”èˆ‡è³‡æ–™ By NetFile
 AnsiString asStation_ByFile="";
 AnsiString asType_ByFile="";
 AnsiString asState_ByFile="";
@@ -5602,57 +5602,57 @@ int DOUBLE_BELT_MODE = 0;                                                       
 //Kevin 20231209 : for ASE KH
 //===>
 bool bColorFirst=false;                                                         //kevin 20221025 load new color tray
-bool bLoadBFBackTray=false;                                                     //KenHsieh 20230325 : CleanOut®ÉLoader BF °hTray
-bool bAutoUpOK[3];                                                              //kevin 20230331 Auto 1 23 ¤W¤É¤¤¤£¯à©ñtray
-bool bEPDetect=false;                                                           //kevin 20230608 index check ¬y¶q­p¬O§_º|®ğ
-AnsiString asInarmSkipICPos="";                                                 //KenHsieh 20230707 : No9 pickup error«á¡A¬ö¿ıG17¥\¯à©Ò°O¿ıÂI¦ì¤§Log
-AnsiString asInarmSkipICSucker="";                                              //KenHsieh 20230907 : G17¥\¯à©Ò°O¿ı³Ì²×ÂI¦ì¤§Log§ï¬°"all§l¼L:all Pos"
-AnsiString asInarmSkipICPos_No9="";                                             //KenHsieh 20230707 : No9 pickup error«á¡A¬ö¿ıG17¥\¯à©Ò°O¿ıÂI¦ì¤§Log
-bool bContinueFailIndexUp=false;                                                //kevin 20230807 ¿ù»~ ARM »İ¤W¤ÉÁ×§Kµ²Á÷
-bool bD52ArmUp_ConsecutiveFail=false;                                           //KenHsieh 20230809 : µosocket³sÄò©Ê²§±`«e¡AIndexarm»İ¥ı¤W¤É
-bool bSoftwareStart=false;                                                      //kevin 20230812  ³nÅé­è¶}±Ò
-bool bAutoReceTray_SECS=false;                                                  //KenHsieh 20231016 : ASEKH_K1 & K3 ¸É¤W»\»PªÅ½L¨Æ¥ó¬yµ{
+bool bLoadBFBackTray=false;                                                     //KenHsieh 20230325 : CleanOutæ™‚Loader BF é€€Tray
+bool bAutoUpOK[3];                                                              //kevin 20230331 Auto 1 23 ä¸Šå‡ä¸­ä¸èƒ½æ”¾tray
+bool bEPDetect=false;                                                           //kevin 20230608 index check æµé‡è¨ˆæ˜¯å¦æ¼æ°£
+AnsiString asInarmSkipICPos="";                                                 //KenHsieh 20230707 : No9 pickup errorå¾Œï¼Œç´€éŒ„G17åŠŸèƒ½æ‰€è¨˜éŒ„é»ä½ä¹‹Log
+AnsiString asInarmSkipICSucker="";                                              //KenHsieh 20230907 : G17åŠŸèƒ½æ‰€è¨˜éŒ„æœ€çµ‚é»ä½ä¹‹Logæ”¹ç‚º"allå¸å˜´:all Pos"
+AnsiString asInarmSkipICPos_No9="";                                             //KenHsieh 20230707 : No9 pickup errorå¾Œï¼Œç´€éŒ„G17åŠŸèƒ½æ‰€è¨˜éŒ„é»ä½ä¹‹Log
+bool bContinueFailIndexUp=false;                                                //kevin 20230807 éŒ¯èª¤ ARM éœ€ä¸Šå‡é¿å…çµéœœ
+bool bD52ArmUp_ConsecutiveFail=false;                                           //KenHsieh 20230809 : ç™¼socketé€£çºŒæ€§ç•°å¸¸å‰ï¼ŒIndexarméœ€å…ˆä¸Šå‡
+bool bSoftwareStart=false;                                                      //kevin 20230812  è»Ÿé«”å‰›é–‹å•Ÿ
+bool bAutoReceTray_SECS=false;                                                  //KenHsieh 20231016 : ASEKH_K1 & K3 è£œä¸Šè“‹èˆ‡ç©ºç›¤äº‹ä»¶æµç¨‹
 bool bCheckOpenDoor=true;                                                       //kevin 20231122 check door open close log
 //<==
 //Kevin 20231209 : for ASE KH
 
-bool Enable_PLCSafety_IO=false;                                                 //Austin 20190531.01 ¼W¥[PLC_IO¼Ò²Õ¤Î¦w¥ş¬ÛÃöIO.
+bool Enable_PLCSafety_IO=false;                                                 //Austin 20190531.01 å¢åŠ PLC_IOæ¨¡çµ„åŠå®‰å…¨ç›¸é—œIO.
 int iPLCSafetyVer=0;                                                            //joe 20220406.01 debug safe plc
 int iWhichShtPickFor=0;
 int iPickFromPlateMode=0;
-int iEnabledSiteCount=0;                                                        //Steven 20231220 : ¤û«H«O»¡­n¶}site¼Æ¶qSVID 1250
-bool bInitailQtyByLowYield=false;                                               //Sam 20230728 : µo¥Í LowYield «á­«·s Start ²M°£ Sort Count ©M contact counterKinds
-bool bOLPSetCategroy=false;                                                     //Sam 20230711 : ­×¥¿ OLP SetCategroy ²§±`
-AnsiString sB03RunData="";                                                      //Sam 20231115 : PTI ·s¼W Tester report
-AnsiString sB03StartTime="";                                                    //Sam 20231115 : PTI ·s¼W Tester report
-bool bWaitOutArmCheckCylin=false;                                               //jou 20240131 : ­×¥¿out arm »P auto tray¤¬¥d½Ä¬ğhang up
+int iEnabledSiteCount=0;                                                        //Steven 20231220 : ç‰›ä¿¡ä¿èªªè¦é–‹siteæ•¸é‡SVID 1250
+bool bInitailQtyByLowYield=false;                                               //Sam 20230728 : ç™¼ç”Ÿ LowYield å¾Œé‡æ–° Start æ¸…é™¤ Sort Count å’Œ contact counterKinds
+bool bOLPSetCategroy=false;                                                     //Sam 20230711 : ä¿®æ­£ OLP SetCategroy ç•°å¸¸
+AnsiString sB03RunData="";                                                      //Sam 20231115 : PTI æ–°å¢ Tester report
+AnsiString sB03StartTime="";                                                    //Sam 20231115 : PTI æ–°å¢ Tester report
+bool bWaitOutArmCheckCylin=false;                                               //jou 20240131 : ä¿®æ­£out arm èˆ‡ auto trayäº’å¡è¡çªhang up
 int  iInZHomeCnt=0;
 int  iOutZHomeCnt=0;
-AnsiString sStackBinTemp[eTrayCount];                                           //JerryYang 20231218 : P53¨¾²V¥\¯à
+AnsiString sStackBinTemp[eTrayCount];                                           //JerryYang 20231218 : P53é˜²æ··åŠŸèƒ½
 bool bNoitceFixTray=false;
 
 int iMagazineStatus=0;                                                          //Ifor 20231130 add: 0: Normal 1:Full Tray 2:Manual put tray
 bool bOneCycleDoInitialTemp=false;
 bool bDoAfterOpenSafeDoor3NeedDelay=false;                                      //Ifor 20220413 add: SafeDoor 3 Open Ovet SetTime Need Delay
 bool bSECSGEMAutoclean=false;                                                   //Ifor 20220414 add SECS/GEM AUTO Clean
-bool bBinDispAlarm=false;                                                       //Ifor 20220714 add:Bin Disp ²§±`³øÄµ ¨C¦¸Onecycle ÀË¬d¤@¦¸
-int iTrayDetectCount=0;                                                         //Ifor 20221117 add:Tray arm²¾°Ê³øÄµ°»´ú¦¸¼Æ
+bool bBinDispAlarm=false;                                                       //Ifor 20220714 add:Bin Disp ç•°å¸¸å ±è­¦ æ¯æ¬¡Onecycle æª¢æŸ¥ä¸€æ¬¡
+int iTrayDetectCount=0;                                                         //Ifor 20221117 add:Tray armç§»å‹•å ±è­¦åµæ¸¬æ¬¡æ•¸
 bool bEnableAutoMotive=false;                                                   //Ifor 20221024 add: KLT Auto Motive Function
-bool bNeedAutoHeight=false;                                                     //Ifor 20221208 add: KLT ­n¨D§ó´«¤u§@ÀÉ»İ­n­«·sAuto Height ¤~¥i°õ¦æContact Mode
+bool bNeedAutoHeight=false;                                                     //Ifor 20221208 add: KLT è¦æ±‚æ›´æ›å·¥ä½œæª”éœ€è¦é‡æ–°Auto Height æ‰å¯åŸ·è¡ŒContact Mode
 TDateTime tAlarmNoteStartTime=0;                                                //Ifor 20230330 add:Show Alarm Note Init Temperature offset function
 bool bShowAlarmNote=false;                                                      //Ifor 20230330 add:Show Alarm Note Init Temperature offset function
-bool bCheckATCTemp=false;                                                       //Ifor 20230410 add: «ö¤UStart½T»{ATC·Å«×¬O§_¹F¨ì³]©w
-bool bOneKyePowerSaving=false;                                                  //Ifor 20230612 :add ¤@ÁäPower Saving
-int iAutoHasHod[6];                                                             //Ifor 20230817 add: °hTray®É¦³HasNullIC³øÄµ´£¥Ü
-bool bAQL_Sorting_Finish=false;                                                 //Ifor 20231124 add:Á×§KAQL Mode »~³øªÅ¥Ş°İÃD
+bool bCheckATCTemp=false;                                                       //Ifor 20230410 add: æŒ‰ä¸‹Startç¢ºèªATCæº«åº¦æ˜¯å¦é”åˆ°è¨­å®š
+bool bOneKyePowerSaving=false;                                                  //Ifor 20230612 :add ä¸€éµPower Saving
+int iAutoHasHod[6];                                                             //Ifor 20230817 add: é€€Trayæ™‚æœ‰HasNullICå ±è­¦æç¤º
+bool bAQL_Sorting_Finish=false;                                                 //Ifor 20231124 add:é¿å…AQL Mode èª¤å ±ç©ºç©´å•é¡Œ
 AnsiString asAutoCleanEven="";                                                  //Ifor 20210527 add: Auto Clean Start Even
 int USE_STM_Function=0;                                                         //Ifor 20201113 add: STM Function
-int USE_BU5_Function=0;                                                         //Ifor 20210819 add:LYEC BU5 ¨Ï¥ÎBU3µ{¦¡ª©¥»
+int USE_BU5_Function=0;                                                         //Ifor 20210819 add:LYEC BU5 ä½¿ç”¨BU3ç¨‹å¼ç‰ˆæœ¬
 int iRTC_CCD_NG[4];                                                             //Ifor 20210203 : add CCD NG Result  //Ifor 20210422 add:RTC CCD 2 => 4
 bool bStartAQLSortMode=false;
 int iAQLBin=0;
 int iAQLCount=0;
-bool bStartAutoAdjustLight=false;                                               //Ifor 20210408 add:Barcode ¦Û°Ê½Õ¾ã¥ú·½
+bool bStartAutoAdjustLight=false;                                               //Ifor 20210408 add:Barcode è‡ªå‹•èª¿æ•´å…‰æº
 bool bSetAQLSortMode=false;                                                     //Ifor 20210513 add: SECS GEM Set AQL Count
 bool bBarcodeNeedAutoAdjust[4];                                                 //Ifor 20210531 add: Barcode Auto Adjust Light
 bool bErrBinAlm=false;
@@ -5664,11 +5664,11 @@ bool bSmartSetupInOutArmSearchArea=false;
 bool bSmartSetupUseSingleZ=false;
 bool bSmartSetupSHValue=false;
 bool bMagazineGetNewTray=false;
-int iSECSGEM_ConsecutiveFailureAlarm=0;                                         //Ifor 20240430 add:secs gem cmd Index Yiel Fail 0:Normal 1:¦¬¨ì©R¥O 2:Index ¤W¤É
+int iSECSGEM_ConsecutiveFailureAlarm=0;                                         //Ifor 20240430 add:secs gem cmd Index Yiel Fail 0:Normal 1:æ”¶åˆ°å‘½ä»¤ 2:Index ä¸Šå‡
 bool bDoInitialAutoClean=false;                                                 //Ifor 20240604 add:Auto Clean Inital Contact Count
 AnsiString asMagazineBinFull="";                                                //Ifor 20240722 add:
 bool bResetMagGetTime=false;
-bool bMN200Error=false;                                                         //Ifor 20240821 add:KYEC­n¨DMNet²§±`»İ²M®Æ­«¶}µ{¦¡
+bool bMN200Error=false;                                                         //Ifor 20240821 add:KYECè¦æ±‚MNetç•°å¸¸éœ€æ¸…æ–™é‡é–‹ç¨‹å¼
 bool bDoROILearning=false;                                                      //Ifor 20240919 add
 
 AnsiString asSupplementBin="";
@@ -5680,8 +5680,8 @@ bool bAMRReceiveAGVStart=false;                                                 
 bool bAMRReceiveStart=false;                                                    //Eastsun 20260515 F009 KYEC AMR 3 receive flags
 bool bAMRReceiveLoaderTotalTray=false;                                          //Eastsun 20260515 F009 KYEC AMR 3 receive flags
 int iSECSSetTrayCount=0;                                                        //Eastsun 20260515 F020 AMR LoaderAction dependency
-bool bAutoChangingWarn[3] = {false, false, false};                              //Eastsun 20260513 :[0]=Auto1, [1]=Auto2, [2]=Auto3 ºX¼Ğ
-int  iAutoColorBak[3]     = {2, 2, 2};                                          //Eastsun 20260513 :¹w³] ColorMap[2]=clGreen
+bool bAutoChangingWarn[3] = {false, false, false};                              //Eastsun 20260513 :[0]=Auto1, [1]=Auto2, [2]=Auto3 æ——æ¨™
+int  iAutoColorBak[3]     = {2, 2, 2};                                          //Eastsun 20260513 :é è¨­ ColorMap[2]=clGreen
 
 bool bLoaderSECSActionFlag[3]={false, false, false};
 bool bUnLoaderSECSActionFlag[3]={false, false, false};
@@ -5697,11 +5697,11 @@ bool bNeedCheckShuttleSensor=false;
 int USE_GPIBLOGBYDAY=0;                                                         //Ifor 20241029 add:GPIB LOG BY DAY
 bool bATC_EnableSiteMap[32];                                                    //Ifor 20241105 add:ATC Enable Site Map
 bool bGPIBLOGBYDAY=false;                                                       //Ifor 20241029 add:GPIB LOG BY DAY
-bool bDoD80Function=false;                                                      //Ifor 20241202 add:Á×§K[D80]µL­­Index Check »P¥¼§¹¦¨Åã¥ÜOne Cycle Finish
-bool bInitialAutoCleanTimeOut=false;                                            //Ifor 20241212 add:Á×§KAuto Clean ¼È°±¹L¤[Start«á³øÄµ
+bool bDoD80Function=false;                                                      //Ifor 20241202 add:é¿å…[D80]ç„¡é™Index Check èˆ‡æœªå®Œæˆé¡¯ç¤ºOne Cycle Finish
+bool bInitialAutoCleanTimeOut=false;                                            //Ifor 20241212 add:é¿å…Auto Clean æš«åœéä¹…Startå¾Œå ±è­¦
 bool bCustomerForMTKVersion=false;                                              //yunghsin 20241130 Add MTK File Name
 AnsiString anSoftwareVersion="";                                                //yunghsin 20241130 Add MTK File Name
-bool bHasOpenMagDoor=false;                                                     //JerryYang 20241225 : ¼È°±ª¬ºA¶}Magazine¦w¥şªù
+bool bHasOpenMagDoor=false;                                                     //JerryYang 20241225 : æš«åœç‹€æ…‹é–‹Magazineå®‰å…¨é–€
 AnsiString anGroundManLog="";                                                   //Ifor 20250123 KYEC FTP UP Load GroundMan Log File
 int TROLLEY_USE_IO_TYPE=0;                                                      //Ifor 20250211 : add TROLLEY USE IO TYPE
 int iRTCErrorCount=0;                                                           //wei 20221222 RTC ARM Error
@@ -5741,41 +5741,41 @@ bool bMustCoverIDTray=false;
 int iBundleIDLength=9;
 bool bI22_NeedHomeDelay=false;
 bool bRTCAutoTuning;                                                            //Sam 20240711 : RTC Auto Tuning
-bool bReadLotInfoFromART=false;                                                 //Steven 20240830 : Åª¨úlot infoªº¦ì¸m
-bool bSuckingFlagZ1=false, bSuckingFlagZ2=false;                                //Steven 20240916 : index¤U­°¨ìshuttle§l©ñ®Æ
-bool bTJtoTCWait=false;                                                         //wei 20251002 : TJÂà¦^TCµ¥«İ
+bool bReadLotInfoFromART=false;                                                 //Steven 20240830 : è®€å–lot infoçš„ä½ç½®
+bool bSuckingFlagZ1=false, bSuckingFlagZ2=false;                                //Steven 20240916 : indexä¸‹é™åˆ°shuttleå¸æ”¾æ–™
+bool bTJtoTCWait=false;                                                         //wei 20251002 : TJè½‰å›TCç­‰å¾…
 double dGPIBATCOffset[32]={0.0};
 bool bGPIBOffsetCommand=false;
-bool bNeedOneCycleByContactAlm1=false;                                          //Sam 20241226 : Contact Alarm »İ­n¥ı°µ OneCycle
+bool bNeedOneCycleByContactAlm1=false;                                          //Sam 20241226 : Contact Alarm éœ€è¦å…ˆåš OneCycle
 bool bNeedOneCycleByContactAlm2=false;
 bool bNeedOneCycleByContactWar1=false;
 bool bNeedOneCycleByContactWar2=false;
-bool bNeedOneCycleByPickerLifeAlm=false;                                        //AI(ht9045-config) 20260521 (RogerYang) : SCC§l¼L¹Ø©R³øÄµOneCycleÀu¤Æ
-bool bTriggerRTC_AutoSTD=false;                                                 //JerryYang 20240829 : SPIL°V¥Ã ­n¨D¤â°ÊÄ²µoRTC AUTO STD
-AnsiString sWhiteListLotID="";                                                  //JerryYang 20241104 : ¤ä´©2DID¥Õ¦W³æ¥\¯à
+bool bNeedOneCycleByPickerLifeAlm=false;                                        //AI(ht9045-config) 20260521 (RogerYang) : SCCå¸å˜´å£½å‘½å ±è­¦OneCycleå„ªåŒ–
+bool bTriggerRTC_AutoSTD=false;                                                 //JerryYang 20240829 : SPILè¨“æ°¸ è¦æ±‚æ‰‹å‹•è§¸ç™¼RTC AUTO STD
+AnsiString sWhiteListLotID="";                                                  //JerryYang 20241104 : æ”¯æ´2DIDç™½åå–®åŠŸèƒ½
 AnsiString sWhiteListProcess="";
-int iBackupOneCycle=0;                                                          //JerryYang 20241015 : ­×¥¿Ä²µoOne cycle«á¤S°õ¦æauto clean, §¹¦¨«á·|Ä~Äò¶]
+int iBackupOneCycle=0;                                                          //JerryYang 20241015 : ä¿®æ­£è§¸ç™¼One cycleå¾ŒåˆåŸ·è¡Œauto clean, å®Œæˆå¾Œæœƒç¹¼çºŒè·‘
 int iMN200_ErrorCode=0;
 bool bReduceTrayExitTime=false;                                                 //Ztex 2024.03.25 Add Reduce tray exit time
 bool bReduceTrayExitTime_TrayFeed[6];                                           //Ztex 2024.03.25 Add Reduce tray exit time
 bool bServoOnOff=false;                                                         //ChungHung 20230718 add for Safe plc
 bool bByPassDoor=false;                                                         //Ztex 2024.05.13 bByPassDoor
 bool bTT_SetSpeed_Check=false;                                                  //Ztex 2024.08.11 Add Test Time Set Speed
-bool bWaiteKeepRespond=false;                                                   //kevin 20231215 µ¥«İeKeep ¦^À³
-bool bAutoReceTrayAGV[MAX_AUTO_TRAY]={false};                                   //kevin 20240423 add °h®ÆTRAY call AGV
+bool bWaiteKeepRespond=false;                                                   //kevin 20231215 ç­‰å¾…eKeep å›æ‡‰
+bool bAutoReceTrayAGV[MAX_AUTO_TRAY]={false};                                   //kevin 20240423 add é€€æ–™TRAY call AGV
 bool bReceiveProcess[MAX_AUTO_TRAY];                                            //kevin 20240514 Auto 1 2 3
 bool bUseSocketHeating_Wait=false;                                              //Ztex 2024.09.07 Add Use Socket Heating
 int  iUseSocketHeating_Time=0;                                                  //Ztex 2024.09.07 Add Use Socket Heating
 int  iAStreamErrorCompressOnecycle=0;                                           //Ztex 2024.10.01 Add AStream Error Compress Onecycle
 bool bPickLoaderFromBack=false;
-bool bRefreshCount=false;                                                       //Stteve 20250219 : ²M°£¼Æ¶q«áªº­«¾ã­ndelay¤@¤U
-int iAuto_CarCarDeviceCnt[MAX_AUTO_TRAY]={0, 0, 0, 0, 0, 0};                    //Sam20250331 : Unloader Auto °h¥X®É¤W­±ªº IC ¼Æ¶q¡C
+bool bRefreshCount=false;                                                       //Stteve 20250219 : æ¸…é™¤æ•¸é‡å¾Œçš„é‡æ•´è¦delayä¸€ä¸‹
+int iAuto_CarCarDeviceCnt[MAX_AUTO_TRAY]={0, 0, 0, 0, 0, 0};                    //Sam20250331 : Unloader Auto é€€å‡ºæ™‚ä¸Šé¢çš„ IC æ•¸é‡ã€‚
 int iSECS_Loader_Buffer_State=-1;                                               //Sam 20250605 : Loader buffer status change event
-bool bWaitRotateFinish=false;                                                   //Ifor 20241015 add: µ¥«İ Rotate §¹¦¨
-int iAMD_Function=0;                                                            //Ifor 20231222 add TFAMD Function 0:AMD(·s¥[©Y¡B¬ü°ê) 1:TFAMD(Ä¬¦{) 2:TFAMD(°¨¨Ó¦è¨È)
-int iChangeFileHasErr=0;                                                        //Ifor 20240314 add:GPIB ¤Á´«¤u§@ÀÉ®É¦³²§±`
+bool bWaitRotateFinish=false;                                                   //Ifor 20241015 add: ç­‰å¾… Rotate å®Œæˆ
+int iAMD_Function=0;                                                            //Ifor 20231222 add TFAMD Function 0:AMD(æ–°åŠ å¡ã€ç¾åœ‹) 1:TFAMD(è˜‡å·) 2:TFAMD(é¦¬ä¾†è¥¿äº)
+int iChangeFileHasErr=0;                                                        //Ifor 20240314 add:GPIB åˆ‡æ›å·¥ä½œæª”æ™‚æœ‰ç•°å¸¸
 AnsiString asChangeSetupFileName="";
-bool bHasFTPDownload=false;                                                     //Ifor 20240422 add:FTP ¤u§@ÀÉ¤U¸ü
+bool bHasFTPDownload=false;                                                     //Ifor 20240422 add:FTP å·¥ä½œæª”ä¸‹è¼‰
 AnsiString asReadTCWater[ATC_HEAD_COUNT]={""};
 AnsiString asReadDynamicPID[ATC_HEAD_COUNT]={""};
 AnsiString asSetDynamicPID[ATC_HEAD_COUNT]={""};
@@ -5808,13 +5808,13 @@ bool bOutArmLaserActionflag[2]={false, false};
 // (cmydef.h:5830 extern bool bRun2DCheck;) already existed, but its definition was unreachable
 // (link error) while gated. i2DMAPCHKSTEP (the next line in the gated block) is left gated;
 // nothing in this wave needs it.
-bool bRun2DCheck;                                                               //JerryYang 20250220 : 2DIDµwÅé¶¶§ÇÀË¬d¥\¯à
+bool bRun2DCheck;                                                               //JerryYang 20250220 : 2DIDç¡¬é«”é †åºæª¢æŸ¥åŠŸèƒ½
 
 //------------------------------------------------------------------------------
 //AI(W0-TAIL) 20260626: TODO(W6) -- InitialMemory/GetTotalYield_* reach state
 //  machines + app globals + TMyStringList bodies. Gated to EOF.
 #if 0 // TODO(W6): function bodies depend on untranslated globals/state machines
-void InitialMemory()                                                            //Steven 20160319 : ªì©l¤Æ¼Æ­È
+void InitialMemory()                                                            //Steven 20160319 : åˆå§‹åŒ–æ•¸å€¼
 {
     ZeroMemory(bCleanKitSuckDuplicateErr, sizeof(bCleanKitSuckDuplicateErr));
     ZeroMemory(asGPIBTempShow, sizeof(asGPIBTempShow));
@@ -5837,13 +5837,13 @@ void InitialMemory()                                                            
     ZeroMemory(iBarcodeAutoRetry, sizeof(iBarcodeAutoRetry));
     ZeroMemory(bBarcodeFirstAutoRetry, sizeof(bBarcodeFirstAutoRetry));
     ZeroMemory(bLowYieldCloseSite, sizeof(bLowYieldCloseSite));
-    //ZeroMemory(iBinTray, sizeof(iBinTray));                                   //kevin 20170223 (wei) ¤£¨Ï¥Î
+    //ZeroMemory(iBinTray, sizeof(iBinTray));                                   //kevin 20170223 (wei) ä¸ä½¿ç”¨
     ZeroMemory(iATC_TempIndex, sizeof(iATC_TempIndex));
-    ZeroMemory(bSiteHasTurnOn, sizeof(bSiteHasTurnOn));                         //Steven 20170302 (wei) : ½T»{­ş­ÓSite¦³¶}, ±q1¶}©l~32
-    ZeroMemory(iInArmPutIcToSH, sizeof(iInArmPutIcToSH));                       //Ifor 20171121 : Test ¬d¬İ²§±`¸ê®Æ
-    ZeroMemory(iMagneticScalePos, sizeof(iMagneticScalePos));                   //Ifor 20180227 : ªì©l­ÈÂk¹s
-    ZeroMemory(dATCTempAdjustmentOffset, sizeof(dATCTempAdjustmentOffset));     //Ifor 20190215 : add ATC ¨Ï¥Î ¤TÂI®Õ¥¿¥\¯à
-    ZeroMemory(LOAD_Z_USE_MOTOR, sizeof(LOAD_Z_USE_MOTOR));                     //Steven 20190813 : ¤JTray§ï¥Î¨B¶i°¨¹F
+    ZeroMemory(bSiteHasTurnOn, sizeof(bSiteHasTurnOn));                         //Steven 20170302 (wei) : ç¢ºèªå“ªå€‹Siteæœ‰é–‹, å¾1é–‹å§‹~32
+    ZeroMemory(iInArmPutIcToSH, sizeof(iInArmPutIcToSH));                       //Ifor 20171121 : Test æŸ¥çœ‹ç•°å¸¸è³‡æ–™
+    ZeroMemory(iMagneticScalePos, sizeof(iMagneticScalePos));                   //Ifor 20180227 : åˆå§‹å€¼æ­¸é›¶
+    ZeroMemory(dATCTempAdjustmentOffset, sizeof(dATCTempAdjustmentOffset));     //Ifor 20190215 : add ATC ä½¿ç”¨ ä¸‰é»æ ¡æ­£åŠŸèƒ½
+    ZeroMemory(LOAD_Z_USE_MOTOR, sizeof(LOAD_Z_USE_MOTOR));                     //Steven 20190813 : å…¥Trayæ”¹ç”¨æ­¥é€²é¦¬é”
     ZeroMemory(LOADUNLOAD_USE_CASSETTE, sizeof(LOADUNLOAD_USE_CASSETTE));
 
     ZeroMemory(iByBinTotal, sizeof(iByBinTotal));
@@ -5854,21 +5854,21 @@ void InitialMemory()                                                            
     ZeroMemory(bTryPickHPDuplicateErr, sizeof(bTryPickHPDuplicateErr));
     ZeroMemory(dTorqueArray, sizeof(dTorqueArray));
 
-    ZeroMemory(iSLT_HeadContactCount, sizeof(iSLT_HeadContactCount));           //Ifor 20191218 : add KYEC ­n¨D ¦PSLT¿é¥Xªí®æ
-//    ZeroMemory(iTrayXAutoSitemapping, sizeof(iTrayXAutoSitemapping));         //Ifor 20210524 add:mykitsuck²¾¦Ücmydef
-//    ZeroMemory(iTrayYAutoSitemapping, sizeof(iTrayYAutoSitemapping));         //Ifor 20210524 add:mykitsuck²¾¦Ücmydef
+    ZeroMemory(iSLT_HeadContactCount, sizeof(iSLT_HeadContactCount));           //Ifor 20191218 : add KYEC è¦æ±‚ åŒSLTè¼¸å‡ºè¡¨æ ¼
+//    ZeroMemory(iTrayXAutoSitemapping, sizeof(iTrayXAutoSitemapping));         //Ifor 20210524 add:mykitsuckç§»è‡³cmydef
+//    ZeroMemory(iTrayYAutoSitemapping, sizeof(iTrayYAutoSitemapping));         //Ifor 20210524 add:mykitsuckç§»è‡³cmydef
     ZeroMemory(dIndexZOffset, sizeof(dIndexZOffset));                           //Ifor 20210114 add: Index Z Offset
     ZeroMemory(bFTestSuckError, sizeof(bFTestSuckError));                       //Ifor 20200622 add:Index Pick Shuttle Err Need Purge
     ZeroMemory(bBTestSuckError, sizeof(bBTestSuckError));                       //Ifor 20200622 add:Index Pick Shuttle Err Need Purge
     ZeroMemory(bATC_EnablesChannel, sizeof(bATC_EnablesChannel));
-//    ZeroMemory(bFIFOStep, sizeof(bFIFOStep));                                 //Steven 20180305 : ¤@¦¸¶]¤@ÁûªºFIFOª©¥»
+//    ZeroMemory(bFIFOStep, sizeof(bFIFOStep));                                 //Steven 20180305 : ä¸€æ¬¡è·‘ä¸€é¡†çš„FIFOç‰ˆæœ¬
 
 //    ZeroMemory(iBufferDataType, sizeof(iBufferDataType));
 //    ZeroMemory(asBufferCassetteID, sizeof(asBufferCassetteID));
 //    ZeroMemory(asBufferLotID, sizeof(asBufferLotID));
 //    ZeroMemory(asViewMessage, sizeof(asViewMessage));
 
-    //JerryYang 20181011 (Steven) : SiteData§ï¦¨¥ş°ìÅÜ¼Æ
+    //JerryYang 20181011 (Steven) : SiteDataæ”¹æˆå…¨åŸŸè®Šæ•¸
     SiteData[SingleSite].SetData(1, 1);
     SiteData[DualSite].SetData(2, 1);
 //    SiteData[DualSiteBS].SetData(2, 1);
@@ -5892,11 +5892,11 @@ void InitialMemory()                                                            
     lHandlerStopTime.LatchCycleTime(true);
     ZeroMemory(iRTC_CCD_NG, sizeof(iRTC_CCD_NG));                               //Ifor 20210203 : add CCD NG Result
     ZeroMemory(bBarcodeNeedAutoAdjust, sizeof(bBarcodeNeedAutoAdjust));         //Ifor 20210531 add: Barcode Auto Adjust Light
-    ZeroMemory(iAutoHasHod, sizeof(iAutoHasHod));                               //Ifor 20200803 add:§ï°}¦C³B²z
+    ZeroMemory(iAutoHasHod, sizeof(iAutoHasHod));                               //Ifor 20200803 add:æ”¹é™£åˆ—è™•ç†
 
     ZeroMemory(bIdleNeedCheckSafeDoor, sizeof(bIdleNeedCheckSafeDoor));         //Steven 20230704 : add bypass idle check safe door
-    ZeroMemory(iAutoHasHod, sizeof(iAutoHasHod));                               //Ifor 20200803 add:§ï°}¦C³B²z
-    ZeroMemory(bNowUseArmSuck, sizeof(bNowUseArmSuck));                         //Ifor 20200803 add:§ï°}¦C³B²z
+    ZeroMemory(iAutoHasHod, sizeof(iAutoHasHod));                               //Ifor 20200803 add:æ”¹é™£åˆ—è™•ç†
+    ZeroMemory(bNowUseArmSuck, sizeof(bNowUseArmSuck));                         //Ifor 20200803 add:æ”¹é™£åˆ—è™•ç†
     ZeroMemory(bATC_EnableSiteMap, sizeof(bATC_EnableSiteMap));                 //Ifor 20241105 add:ATC Enable Site Map
     ZeroMemory(RefrigeratorUserModeState, sizeof(RefrigeratorUserModeState));   //Ztex 2023.04.19 Add HT-1032 TriTemp Function
     ZeroMemory(bAlignmentChangeUnloadTray, sizeof(bAlignmentChangeUnloadTray)); //Steven 20240428 : Add for HT9011 AOA
@@ -5931,7 +5931,7 @@ AnsiString GetTotalYield_Str()
     return AnsiString().sprintf("%02.2f%",GetTotalYield_double());
 }
 //------------------------------------------------------------------------------
-int i2DMAPCHKSTEP;                                                              //JerryYang 20250220 : 2DIDµwÅé¶¶§ÇÀË¬d¥\¯à
+int i2DMAPCHKSTEP;                                                              //JerryYang 20250220 : 2DIDç¡¬é«”é †åºæª¢æŸ¥åŠŸèƒ½
 
 int iBundleDieQty=0;                                                            //JerryYang 20250224 : add
 bool bBindChkNG=false;
@@ -5940,9 +5940,9 @@ bool bTRAYCHKNG=false;
 AnsiString sUnloadBin[MAX_UNLOAD_TRAY];
 bool bNeedReportBundleID[eTrayCount];
 TMyStringList *slHanaTrayMap[eTrayCount];
-bool bBackupAutoClean=false;                                                    //JerryYang 20250514 : fix 2DID»PAuto clean½Ä¬ğ, °µ§¹2DID Map¦A§âauto cleanºX¼Ğ¥´true
-//bool bVTestNoRTBin=false;                                                     //RogerYang 20250814 : §ï¨ìTrayAssignment¤U  //RogerYang 20250626 °¶´ú¤£¥i½Æ´úbin¥\¯à
-bool bNoRTBinFixFlag[3];                                                        //RogerYang 20250626 °¶´ú¤£¥i½Æ´úbin¥\¯à
+bool bBackupAutoClean=false;                                                    //JerryYang 20250514 : fix 2DIDèˆ‡Auto cleanè¡çª, åšå®Œ2DID Mapå†æŠŠauto cleanæ——æ¨™æ‰“true
+//bool bVTestNoRTBin=false;                                                     //RogerYang 20250814 : æ”¹åˆ°TrayAssignmentä¸‹  //RogerYang 20250626 å‰æ¸¬ä¸å¯è¤‡æ¸¬binåŠŸèƒ½
+bool bNoRTBinFixFlag[3];                                                        //RogerYang 20250626 å‰æ¸¬ä¸å¯è¤‡æ¸¬binåŠŸèƒ½
 bool bAskStopPort[ePortTotal];                                                  //JerryYang 20250521 : For AMR
 bool bPortIsBusy[ePortTotal];
 int iThisPortNo;
@@ -5950,20 +5950,20 @@ int iThisPortStatus;
 int iPortStatus[ePortTotal];
 int iLastPortStatus[ePortTotal];
 AnsiString sBinCode_ATK[eTrayCount];
-bool bWaitingAMR=false;                                                         //RogerYang 20250617 Load¤w²MªÅ¦ıÁÙ¨Sº¡bundle¡Aµ¥®Æ¨®¨Ó
+bool bWaitingAMR=false;                                                         //RogerYang 20250617 Loadå·²æ¸…ç©ºä½†é‚„æ²’æ»¿bundleï¼Œç­‰æ–™è»Šä¾†
 bool bForceSendLoaderIsEmpty;                                                   //JerryYang 20250618 : add
-bool bIsPlacingToBuffer;                                                        //JerryYang 20250828 : fix color»~°hTRAY
-bool bIsCatchingFromBuffer;                                                     //RogerYang 20260225 : JSCC¨¾¤î§¨trayªº®É­ÔColor/Empty»~°h¡AÅçÃÒ¤¤
+bool bIsPlacingToBuffer;                                                        //JerryYang 20250828 : fix colorèª¤é€€TRAY
+bool bIsCatchingFromBuffer;                                                     //RogerYang 20260225 : JSCCé˜²æ­¢å¤¾trayçš„æ™‚å€™Color/Emptyèª¤é€€ï¼Œé©—è­‰ä¸­
 bool bMaintanceMode=false;                                                      //Steven 20251007 : maintance mode for Hana
 bool bDoRTCVerify=false;
-bool bRenesasFTCTAlarm=false;                                                   //RogerYang 20250923 : ·çÂÄFT-CT
-bool bAutoRestartAfterFTCTAlarm=false;                                          //RogerYang 20251016 : ·çÂÄFT-CT  ¬ö¿ı90©R¥OÃö±¼®É¬O§_­n«ì´_±Ò°Ê
-bool bReplyFTCTAlarm=false;                                                     //RogerYang 20251021 : ·çÂÄFT-CT  FTCTµo°e¹Hªk«ü¥O¦^¶ÇError»İ­n³øÄµ
-AnsiString sFTCTAlarmStr="SysErr_FTCT_Alarm_Req_Error";                         //RogerYang 20251016 : ·çÂÄFT-CT
-bool bContinueMessageByReply71=false;                                           //RogerYang 20251107 : ·çÂÄFT-CT Add Continue Form
-bool bDestoryOnSht=false;                                                       //RogerYang 20251021 : ±qinarm2·h¹L¨Ó
+bool bRenesasFTCTAlarm=false;                                                   //RogerYang 20250923 : ç‘è–©FT-CT
+bool bAutoRestartAfterFTCTAlarm=false;                                          //RogerYang 20251016 : ç‘è–©FT-CT  ç´€éŒ„90å‘½ä»¤é—œæ‰æ™‚æ˜¯å¦è¦æ¢å¾©å•Ÿå‹•
+bool bReplyFTCTAlarm=false;                                                     //RogerYang 20251021 : ç‘è–©FT-CT  FTCTç™¼é€é•æ³•æŒ‡ä»¤å›å‚³Erroréœ€è¦å ±è­¦
+AnsiString sFTCTAlarmStr="SysErr_FTCT_Alarm_Req_Error";                         //RogerYang 20251016 : ç‘è–©FT-CT
+bool bContinueMessageByReply71=false;                                           //RogerYang 20251107 : ç‘è–©FT-CT Add Continue Form
+bool bDestoryOnSht=false;                                                       //RogerYang 20251021 : å¾inarm2æ¬éä¾†
 bool bBoatChangeCasset[3]={false, false, false};                                //Ifor 20251220 add:Boat Change
-bool bHasTjTemp;                                                                //JerryYang 20251124 : Tj control¦Y¤£¦Pªº·Å«×range
+bool bHasTjTemp;                                                                //JerryYang 20251124 : Tj controlåƒä¸åŒçš„æº«åº¦range
 int iCheckShuttleSensor=0;                                                      //Ifor 20251204 add:After Home Need Check Shuttle Sensor
 bool bFreezeHandler=false;                                                      //Ifor 20260119 add:Freeze Handler
 bool bChangeModeING=false;
@@ -5981,7 +5981,7 @@ int iSystemUpTime=0;
 TQPF_Timer tUNDER_20A_Delay;                                                    //Jimmychiu 20220713 for TEMPCTRL_NEED_UNDER_20A delay
 TQPF_Timer tUNDER_20A_SHT_Delay;                                                //Jimmychiu 20220713 for TEMPCTRL_NEED_UNDER_20A delay
 const int iUNDER_20A_Delay_Sec=30;                                              //Jimmychiu 20220713 for TEMPCTRL_NEED_UNDER_20A delay
-bool bAutoRetryFlag=false;                                                      //JerryYang 20220901 : ASE-CL pick up error®É§l¨úÅŞ¿è­n§ï§ä§l³Ì¥ª¤W¨¤ªº
+bool bAutoRetryFlag=false;                                                      //JerryYang 20220901 : ASE-CL pick up erroræ™‚å¸å–é‚è¼¯è¦æ”¹æ‰¾å¸æœ€å·¦ä¸Šè§’çš„
 AnsiString sSiteLayoutSiteMap="";
 AnsiString sSiteLayoutASECL="";
 AnsiString sSiteMapASECL="";
@@ -6008,18 +6008,18 @@ int iInitialCylinderCheckTask=1;
 int iP65QAReTestCount=0;                                                        //Ifor 20260407 add: [P65] ARM QA Mode ReTest Counter
 bool bP65QAReTest=false;                                                        //Ifor 20260407 add: [P65] QA ReTest flag
 bool bWaitSECS=false;                                                           //KevinCheng 20250919 : Wait SECS
-bool bEject=false;                                                              //JerryYang 20251020 : ´ë±ç¥b²M¾÷¥\¯à
-bool bNeedEject[MAX_AUTO_TRAY];                                                 //JerryYang 20251020 : ´ë±ç¥b²M¾÷¥\¯à
-bool bPurgeOutAllDevice=false;                                                  //JerryYang 20251020 : ´ë±ç¥b²M¾÷¥\¯à
+bool bEject=false;                                                              //JerryYang 20251020 : æ¸ æ¢åŠæ¸…æ©ŸåŠŸèƒ½
+bool bNeedEject[MAX_AUTO_TRAY];                                                 //JerryYang 20251020 : æ¸ æ¢åŠæ¸…æ©ŸåŠŸèƒ½
+bool bPurgeOutAllDevice=false;                                                  //JerryYang 20251020 : æ¸ æ¢åŠæ¸…æ©ŸåŠŸèƒ½
 
-int iMagBin = 0;                                                                //Eastsun 20260515 F011 ¾ã¦X (Magazine AMR shared)
+int iMagBin = 0;                                                                //Eastsun 20260515 F011 æ•´åˆ (Magazine AMR shared)
 
-//==> Eastsun 20260515 F012 ¾ã¦X (AMR cmydef globals)
+//==> Eastsun 20260515 F012 æ•´åˆ (AMR cmydef globals)
 bool bNeedAMRMagazineUnload=false;             //a-side cmydef.cpp L5437
 bool bAMRMagazineAutoReceive=false;            //a-side cmydef.cpp L5441
 
 //<== Eastsun 20260515
 int iATC_RecipeFileTransfer=0;                                       //Eastsun 20260522 add: ATC Recipe FileTransfer state
-int ASE_OutTrayNum[eTrayCount];                                               //Eastsun 20260515 F011 ¾ã¦X:KYEC AMR output tray count
+int ASE_OutTrayNum[eTrayCount];                                               //Eastsun 20260515 F011 æ•´åˆ:KYEC AMR output tray count
 //AI(W0-TAIL) 20260626: close tail function gate
 #endif // TODO(W6)

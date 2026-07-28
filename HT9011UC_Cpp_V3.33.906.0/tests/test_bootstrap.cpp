@@ -55,6 +55,7 @@
 
 #if defined(_MSC_VER)
 #  include <crtdbg.h>
+#  include <float.h>   // _controlfp_s / _PC_64 / _MCW_PC (FP fidelity, below)
 #endif
 
 namespace {
@@ -118,6 +119,37 @@ struct HT9045_DisableModalErrorDialogs
 // Static init -- runs before main() in whichever test executable compiles
 // this TU.  Inert unless something actually fails.
 HT9045_DisableModalErrorDialogs g_ht9045_disable_modal_error_dialogs;
+
+// AI(W906-W7-A1) 20260728: MSVC/x86-only FP-precision fixup so the MSVC
+// second oracle reproduces BCB6's x87 80-bit intermediate precision instead
+// of SSE2's 64-bit double precision. Per docs/W7_UI_ARCHITECTURE_PLAN.md
+// SS4-V5 (independently re-verified there with a *runtime*, non-constant-
+// folded input -- a compile-time constant such as (int)(1.234*1000.0) gives
+// 1234 on BOTH compilers and hides the discrepancy): the root
+// CMakeLists.txt's `if(CMAKE_SIZEOF_VOID_P EQUAL 4) add_compile_options(
+// /arch:IA32) endif()` selects x87 codegen, but codegen alone is not
+// sufficient -- the CRT's runtime FP control word still defaults to 53-bit
+// (double) precision on entry, which silently narrows every intermediate
+// even with x87 instructions selected. Only widening the control word via
+// _controlfp_s(..., _PC_64, _MCW_PC) to 64-bit (extended) precision,
+// together with /arch:IA32, reproduces MinGW/BCB6's runtime result (e.g.
+// tests/test_cUnitConvert.cpp's CHECK_INT(iUnitMultiply1000(1.234), 1233) --
+// MSVC without this fixup gives 1234). Only compiled for 32-bit MSVC
+// (_M_IX86); this project's MSVC build is always 32-bit (D9/D10 + R11 in
+// the plan -- the driver layer requires 32-bit), and MinGW needs no
+// equivalent call since g++ 6.3 already reproduces the x87 result natively.
+#if defined(_MSC_VER) && defined(_M_IX86)
+struct HT9045_ControlFpX87Fidelity
+{
+    HT9045_ControlFpX87Fidelity()
+    {
+        unsigned int old_state = 0;
+        _controlfp_s(&old_state, _PC_64, _MCW_PC);
+    }
+};
+
+HT9045_ControlFpX87Fidelity g_ht9045_controlfp_x87_fidelity;
+#endif // _MSC_VER && _M_IX86
 
 } // anonymous namespace
 

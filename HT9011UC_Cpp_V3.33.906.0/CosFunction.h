@@ -3,17 +3,17 @@
 #include "vclcompat/vcl_compat.h"   //AI(W0-TAIL) 20260626: AnsiString-by-value fields (was <vcl.h> via includer)
 //-------------------------------------------------------------------------
 // HT9045_COUSTOMER_FUNCTION
-// ¥uFor«È¤á¶}±Òªº¥\¯à¿ï¶µ
+// åªForå®¢æˆ¶é–‹å•Ÿçš„åŠŸèƒ½é¸é …
 //-------------------------------------------------------------------------
 typedef struct
 {
     bool bOneCycleCanChangeArm;                                                 //ChungHung 20111108 Amb/Hot Mode OneCycle Can Change Arm
-    bool bOffLineBin;                                                           //Hung 20111110 ·s¼WOffline Bin
-    bool bFullTestBeforeContactHeight;                                          //ChungHung 20130122 add for SCK Contact Height«e°µFullView
+    bool bOffLineBin;                                                           //Hung 20111110 æ–°å¢Offline Bin
+    bool bFullTestBeforeContactHeight;                                          //ChungHung 20130122 add for SCK Contact Heightå‰åšFullView
     bool bEnable6Site;                                                          //ChungHung 20140115 add for 2x3_6
-    bool bEnableOctal_12Kit;                                                    //ChungHung 20140508 add ¨Ï¥Î12 layout kit Octal Shutle kit
-    bool bEnable12SiteUse16SLK;                                                 //Steven 20240807 : 12Site¨Ï¥Î16Site Kit
-    bool bShowLastShuttleHigh;                                                  //ChungHung 20140516 add Show ¤W¦¸Shuttle Auto Height ªº­È
+    bool bEnableOctal_12Kit;                                                    //ChungHung 20140508 add ä½¿ç”¨12 layout kit Octal Shutle kit
+    bool bEnable12SiteUse16SLK;                                                 //Steven 20240807 : 12Siteä½¿ç”¨16Site Kit
+    bool bShowLastShuttleHigh;                                                  //ChungHung 20140516 add Show ä¸Šæ¬¡Shuttle Auto Height çš„å€¼
     bool bChamberModeEvenBlowNeedWaitTime;                                      //ChungHung 20140519 add Chamber Mode Even Blow need Wait Initial Wait time in Temp_Set
     bool bLoseDeviceOutShuttleServoOff;                                         //ChungHung 20140522 add OutShuttle lose devices can servo off
     bool bEnableAfterTestedDelay;                                               //ChungHung 20140730 add for ATK function after tested delay time
@@ -24,399 +24,399 @@ typedef struct
     bool bOneCycleCanChangeContinuesFailBin;                                    //ChungHung 20150519 add Continues Failure BIN can select after "OneCycle".
     bool bAutoSetContFailAfterInitialStart;                                     //ChungHung 20150519 add Auto Set ContFail After InitialStart.
     bool bManualProcess;                                                        //ChungHung 20150526 add for QualComm US
-    bool bTopPogoPinMode;                                                       //ChungHung 20150528 add for ®ü«ä _8Site1x4
+    bool bTopPogoPinMode;                                                       //ChungHung 20150528 add for æµ·æ€ _8Site1x4
     bool bEnableSoftWareControlButton;                                          //ChungHung 20150609 add only for TSMC
-    bool bContactHaveOffset;                                                    //ChungHung 20140327 add by Customer ±j¨îContact Offset¬°0
+    bool bContactHaveOffset;                                                    //ChungHung 20140327 add by Customer å¼·åˆ¶Contact Offsetç‚º0
 
-    bool bUseLoadCellOffsetByHeater;                                            //2014-06-26    Dell    for TSMC °ª·ÅLoad cell offset
+    bool bUseLoadCellOffsetByHeater;                                            //2014-06-26    Dell    for TSMC é«˜æº«Load cell offset
 
-    bool bIndexZDownToAboveSocket;                                              //Eliot 2015-02-25 Initial Check®É¤âÁu¥u¤U­°¨ìAbove Socket Offset¦ì¸m,Á×§KÀ£ÃaSocket pogoPin
+    bool bIndexZDownToAboveSocket;                                              //Eliot 2015-02-25 Initial Checkæ™‚æ‰‹è‡‚åªä¸‹é™åˆ°Above Socket Offsetä½ç½®,é¿å…å£“å£Socket pogoPin
 
-    bool bTTLCanUse8Site;                                                       //Alick 20161011 (Steven) : TTL¤ä´©8Site
-//    bool bAutoCleanUse2RowBy46LS;                                             //Alick 20170223 (wei) add 9046LS¥i¶}±ÒÂù±Æ§l¼L°µAutoClean
+    bool bTTLCanUse8Site;                                                       //Alick 20161011 (Steven) : TTLæ”¯æ´8Site
+//    bool bAutoCleanUse2RowBy46LS;                                             //Alick 20170223 (wei) add 9046LSå¯é–‹å•Ÿé›™æ’å¸å˜´åšAutoClean
 
-    bool bJAM0301NeedOpenChamberDoor;                                           //Steven : JAM0301 & JAM0302»İ­n¶}±ÒChamberªù10¬í
-    bool bJAM0303NeedOpenChamberDoor;                                           //Steven : JAM0303 & JAM0403»İ­n¶}±ÒChamberªù10¬í
-    bool bEnableAutoSpeed;                                                      //Steven 20110526 : ¶}±ÒAuto Speed¥\¯à
-    bool bStopMustTestTimeOut;                                                  //Steven 20110920 : ¼È°±®É¤]­n­pºâTester Time Out
-    bool bLastSetInSetUpFile;                                                   //Steven 20111019 : §âLastSet¿ï¶µ¦s¦bSet Up File    //Steven 20161211 : bLastSetInSetUpFile´«¦¨CosFunction
-//    bool bEnableTimeOutCanSkip;                                               //Steven 20111220 : ´ú¸ÕTimeOut¥i¥HSkip
-    bool bAutoKTemp;                                                            //Steven 20120719 : ¦Û°ÊK·Å
-    bool bEnable12Site;                                                         //Steven 20120813 : ¤ä´©12Site¼Ò¦¡
-    bool bEnable2x1Site;                                                        //Steven 20120814 : ¤ä´©2x1Site¼Ò¦¡
-    bool bMES0101CanCleanOut;                                                   //Steven 20120830 : Loader§l¨ú²§±`¥i¥H«öCleanOut
-    bool bOnlyUseContactModeDiffSpeed;                                          //Steven 20131101 : ±j¨î¨Ï¥Î¨â¬q³tContact
-    bool bFixedDropSpeed;                                                       //Steven 20131101 : ¨Ï¥Î©T©wªºDrop³t«×
-    int  iFixedDropSpeed;                                                       //Steven 20131101 : ¨Ï¥Î©T©wªºDrop³t«×
-    bool bLimitMaxSpeed;                                                        //Steven 20131101 : ­­¨î³Ì°ª³t«×
-    int  iLimitMaxSpeed;                                                        //Steven 20131101 : ­­¨î³Ì°ª³t«×
-    bool bPiggyBackForASE;                                                      //Steven 20131101 : °ª¶¯ASE¤£­nContinual Pass Bin(Total )¸ò Continual Loader¨âºØ
-    bool bPiggyBackShowMainForm;                                                //Steven 20131101 : PiggyBack¼Æ¶q¨ì¹F®É,Åã¥Ü¦bMain Form¤W­±
-    bool bAutoCleanOnHotPlate;                                                  //Steven 20131101 : ±NClean Pad©ñ¦bHotPlate¤W,¤]´N¬O°ª¶¯ª©
-    double dLimitMinDropOffset;                                                 //Steven 20131101 : ­­¨î³Ì¤p¶ZÂ÷
-    bool bEnableOctal_16Kit;                                                    //Steven 20140312 : 8Site¨Ï¥Î16Site Kit
-    bool bContactShowOffset;                                                    //Steven 20140409 : ª¿«~­n¨DContactµe­±Åã¥ÜOffset
-    bool bShowLastContactHigh;                                                  //Steven 20140409 : Åã¥Ü¤§«eªºContact°ª«×
-    bool bHaveIndexContactDelay;                                                //Steven 20140519 : [D29] Index¤UÀ£«á¦hDelay 0.4¬í (For SPIL Low Yield)
-    bool bAfterRTChangeToInitialStart;                                          //Steven 20140521 : RT«á¦Û°Ê¤Á¦^FT
+    bool bJAM0301NeedOpenChamberDoor;                                           //Steven : JAM0301 & JAM0302éœ€è¦é–‹å•ŸChamberé–€10ç§’
+    bool bJAM0303NeedOpenChamberDoor;                                           //Steven : JAM0303 & JAM0403éœ€è¦é–‹å•ŸChamberé–€10ç§’
+    bool bEnableAutoSpeed;                                                      //Steven 20110526 : é–‹å•ŸAuto SpeedåŠŸèƒ½
+    bool bStopMustTestTimeOut;                                                  //Steven 20110920 : æš«åœæ™‚ä¹Ÿè¦è¨ˆç®—Tester Time Out
+    bool bLastSetInSetUpFile;                                                   //Steven 20111019 : æŠŠLastSeté¸é …å­˜åœ¨Set Up File    //Steven 20161211 : bLastSetInSetUpFileæ›æˆCosFunction
+//    bool bEnableTimeOutCanSkip;                                               //Steven 20111220 : æ¸¬è©¦TimeOutå¯ä»¥Skip
+    bool bAutoKTemp;                                                            //Steven 20120719 : è‡ªå‹•Kæº«
+    bool bEnable12Site;                                                         //Steven 20120813 : æ”¯æ´12Siteæ¨¡å¼
+    bool bEnable2x1Site;                                                        //Steven 20120814 : æ”¯æ´2x1Siteæ¨¡å¼
+    bool bMES0101CanCleanOut;                                                   //Steven 20120830 : Loaderå¸å–ç•°å¸¸å¯ä»¥æŒ‰CleanOut
+    bool bOnlyUseContactModeDiffSpeed;                                          //Steven 20131101 : å¼·åˆ¶ä½¿ç”¨å…©æ®µé€ŸContact
+    bool bFixedDropSpeed;                                                       //Steven 20131101 : ä½¿ç”¨å›ºå®šçš„Dropé€Ÿåº¦
+    int  iFixedDropSpeed;                                                       //Steven 20131101 : ä½¿ç”¨å›ºå®šçš„Dropé€Ÿåº¦
+    bool bLimitMaxSpeed;                                                        //Steven 20131101 : é™åˆ¶æœ€é«˜é€Ÿåº¦
+    int  iLimitMaxSpeed;                                                        //Steven 20131101 : é™åˆ¶æœ€é«˜é€Ÿåº¦
+    bool bPiggyBackForASE;                                                      //Steven 20131101 : é«˜é›„ASEä¸è¦Continual Pass Bin(Total )è·Ÿ Continual Loaderå…©ç¨®
+    bool bPiggyBackShowMainForm;                                                //Steven 20131101 : PiggyBackæ•¸é‡åˆ°é”æ™‚,é¡¯ç¤ºåœ¨Main Formä¸Šé¢
+    bool bAutoCleanOnHotPlate;                                                  //Steven 20131101 : å°‡Clean Padæ”¾åœ¨HotPlateä¸Š,ä¹Ÿå°±æ˜¯é«˜é›„ç‰ˆ
+    double dLimitMinDropOffset;                                                 //Steven 20131101 : é™åˆ¶æœ€å°è·é›¢
+    bool bEnableOctal_16Kit;                                                    //Steven 20140312 : 8Siteä½¿ç”¨16Site Kit
+    bool bContactShowOffset;                                                    //Steven 20140409 : çŸ½å“è¦æ±‚Contactç•«é¢é¡¯ç¤ºOffset
+    bool bShowLastContactHigh;                                                  //Steven 20140409 : é¡¯ç¤ºä¹‹å‰çš„Contacté«˜åº¦
+    bool bHaveIndexContactDelay;                                                //Steven 20140519 : [D29] Indexä¸‹å£“å¾Œå¤šDelay 0.4ç§’ (For SPIL Low Yield)
+    bool bAfterRTChangeToInitialStart;                                          //Steven 20140521 : RTå¾Œè‡ªå‹•åˆ‡å›FT
     bool bRTCFullViewErrorOnlyRetry;                                            //Steven 20140529
-    bool bTechComUseComboBox;                                                   //Steven 20140530 : ¨Ï¥Î±K½X¥»®É,¥Î¤U©Ô¿ï³æ¿ï¨Ï¥ÎªÌ
+    bool bTechComUseComboBox;                                                   //Steven 20140530 : ä½¿ç”¨å¯†ç¢¼æœ¬æ™‚,ç”¨ä¸‹æ‹‰é¸å–®é¸ä½¿ç”¨è€…
     bool bLockF06ByFile;                                                        //Steven 20140627 : Add for ASE-CL
     bool bLockD41ByFile;                                                        //Steven 20140627 : Add for ASE-CL
     bool bUseNew12Site;                                                         //Steven 20140716
     bool bUseLowYieldAlarmByBin;                                                //Steven 20140828 : By Bin Yield Monitor
-    bool bYieldAlarmClearAllCount;                                              //Steven 20140830 : Yield¬ÛÃöªºAlarm, ­n²M±¼¥ş³¡ªºIgnoreªºCount­«ºâ
-    bool bTemperatureMax130;                                                    //Steven 20140911 : Xilinx³Ì°ª¥u­n130«×
-    bool bArm2ForFingerPrintTest;                                               //Steven 20140922 : Arm2·í§@«ü¯¾´ú¸Õ  (Arm 1­n¥ı´ú¸Õ¤@¦¸,¤~´«Arm2´ú)
-    bool bUseIndividulTempSet;                                                  //Steven 20140924 : ¦U­Ó¥[¼ö°Ï¿W¥ß¦³¦Û¤vªº³]©w­È
-    bool bRCMDStart;                                                            //Steven 20141006 : SECS GEM¨Ï¥ÎRemote Start¥\¯à
-    bool bEnable_SECS_GEM;                                                      //Steven 20141008 : By«È¤á±Ò¥ÎSECS GEM¥\¯à
-    bool bIndexAreaOnlyCanUseSkip;                                              //Steven 20141105 : Index¤ºªº©Ò¦³²§±`³£¥u¯à¥ÎSkip
-    bool bYieldControlUseContactCount;                                          //Steven 20141212 : Yield±±¨î¨Ï¥ÎContact Count
-    bool bOLPFunction;                                                          //Steven 20141229 : OLP¥\¯à
+    bool bYieldAlarmClearAllCount;                                              //Steven 20140830 : Yieldç›¸é—œçš„Alarm, è¦æ¸…æ‰å…¨éƒ¨çš„Ignoreçš„Counté‡ç®—
+    bool bTemperatureMax130;                                                    //Steven 20140911 : Xilinxæœ€é«˜åªè¦130åº¦
+    bool bArm2ForFingerPrintTest;                                               //Steven 20140922 : Arm2ç•¶ä½œæŒ‡ç´‹æ¸¬è©¦  (Arm 1è¦å…ˆæ¸¬è©¦ä¸€æ¬¡,æ‰æ›Arm2æ¸¬)
+    bool bUseIndividulTempSet;                                                  //Steven 20140924 : å„å€‹åŠ ç†±å€ç¨ç«‹æœ‰è‡ªå·±çš„è¨­å®šå€¼
+    bool bRCMDStart;                                                            //Steven 20141006 : SECS GEMä½¿ç”¨Remote StartåŠŸèƒ½
+    bool bEnable_SECS_GEM;                                                      //Steven 20141008 : Byå®¢æˆ¶å•Ÿç”¨SECS GEMåŠŸèƒ½
+    bool bIndexAreaOnlyCanUseSkip;                                              //Steven 20141105 : Indexå…§çš„æ‰€æœ‰ç•°å¸¸éƒ½åªèƒ½ç”¨Skip
+    bool bYieldControlUseContactCount;                                          //Steven 20141212 : Yieldæ§åˆ¶ä½¿ç”¨Contact Count
+    bool bOLPFunction;                                                          //Steven 20141229 : OLPåŠŸèƒ½
     bool bOneCycleCanChangeBin;                                                 //Steven 20150304 : ATK Young Jeon keep asking the Continues Failure BIN can select after "OneCycle".
-    bool bBin1CanNotInFix;                                                      //Steven 20150427 : Bin1¤£¯à©ñ¨ìFix½L
-    bool bAmbientNoShowTemp;                                                    //Steven 20150518 : Ä¬¦{ª¿«~­n¨D±`·Å¤£Åã¥Ü·Å«×
-    bool b12SiteCloseSiteRun2x4;                                                //Steven 20150721 : 12SiteÃöSite¶]2x4 Mode
-    bool b16SiteCloseSiteRun2x4;                                                //Steven 20191124 : 16SiteÃöSite¶]2x4 Mode
+    bool bBin1CanNotInFix;                                                      //Steven 20150427 : Bin1ä¸èƒ½æ”¾åˆ°Fixç›¤
+    bool bAmbientNoShowTemp;                                                    //Steven 20150518 : è˜‡å·çŸ½å“è¦æ±‚å¸¸æº«ä¸é¡¯ç¤ºæº«åº¦
+    bool b12SiteCloseSiteRun2x4;                                                //Steven 20150721 : 12Siteé—œSiteè·‘2x4 Mode
+    bool b16SiteCloseSiteRun2x4;                                                //Steven 20191124 : 16Siteé—œSiteè·‘2x4 Mode
     bool bUseGPIB_V108Command;                                                  //Steven 20150901 : For GPIB V1.08 Command
-    bool bManualSortMode;                                                       //Steven 20150915 : For TSMC ¤â°Ê¾ã½L¥\¯à
-    bool bHiSiliconFunction;                                                    //Steven 20151029 : ®ü«ä±M¥Î¥\¯à
-    bool bOutShuttleSensorCanNotDisable;                                        //Steven 20151202 : Out Shuttle Sensor¤£¯àÃö³¬ÀË¬d
+    bool bManualSortMode;                                                       //Steven 20150915 : For TSMC æ‰‹å‹•æ•´ç›¤åŠŸèƒ½
+    bool bHiSiliconFunction;                                                    //Steven 20151029 : æµ·æ€å°ˆç”¨åŠŸèƒ½
+    bool bOutShuttleSensorCanNotDisable;                                        //Steven 20151202 : Out Shuttle Sensorä¸èƒ½é—œé–‰æª¢æŸ¥
     bool bHaveFIFOMode;                                                         //Steven 20160303 : FIFO Mode
-    bool bKnockerSetBySetupFile;                                                //Steven 20160329 : ºVÀ»¨T¬û°Ñ¼Æ½Õ¾ã¥i·f°t¤u§@ÀÉ³B²z
+    bool bKnockerSetBySetupFile;                                                //Steven 20160329 : æ•²æ“Šæ±½ç¼¸åƒæ•¸èª¿æ•´å¯æ­é…å·¥ä½œæª”è™•ç†
     bool bKnockTrayBeforeLaserCheckRemain;                                      //Jimmychiu 20231027 : Knock loader Tray before Remain IC check by laser
-    bool bUseERMS;                                                              //Steven 20160711 : ¨Ï¥Î¶i¶¥ª©RMS
+    bool bUseERMS;                                                              //Steven 20160711 : ä½¿ç”¨é€²éšç‰ˆRMS
     bool bUseSCKART;                                                            //Steven 20161201 : For SCK 93K ART
-    bool bUseLoginDatToSetLevel;                                                //Steven 20170301 (wei) : ¨Ï¥ÎLogin.dat·í±K½X¥»
-    bool bLowYieldDoOneCycle;                                                   //Steven 20170308 (wei) : ¨}²v¬ÛÃöªº³£°µOne Cycle
-    bool bUseInitialDelayAsSoakTime;                                            //Steven 20170329 (Wei) : ¨Ï¥Îinitial delay·í Soak time
+    bool bUseLoginDatToSetLevel;                                                //Steven 20170301 (wei) : ä½¿ç”¨Login.datç•¶å¯†ç¢¼æœ¬
+    bool bLowYieldDoOneCycle;                                                   //Steven 20170308 (wei) : è‰¯ç‡ç›¸é—œçš„éƒ½åšOne Cycle
+    bool bUseInitialDelayAsSoakTime;                                            //Steven 20170329 (Wei) : ä½¿ç”¨initial delayç•¶ Soak time
     bool bUse32ChanelSiteMap;                                                   //Steven 20170530 (wei) : Use 32CH site map
-    bool bUseDynamicKitDiameter;                                                //Steven 20170605 (wei) : ¥i¥H¦Û©w¸qKitª½®|
-    bool b2x4SupportCenterPitch;                                                //Steven 20170706 (wei) : 2x4¤¤¶¡ªºPitch¤£¦P for SCC
+    bool bUseDynamicKitDiameter;                                                //Steven 20170605 (wei) : å¯ä»¥è‡ªå®šç¾©Kitç›´å¾‘
+    bool b2x4SupportCenterPitch;                                                //Steven 20170706 (wei) : 2x4ä¸­é–“çš„Pitchä¸åŒ for SCC
     bool bLowYieldAutoSiteOff;                                                  //Steven 20170905 (wei) : Low Yield Auto Site Off for Ambient
     bool bAmkorFunction;                                                        //Steven 20171017 (wei) : Functions for Amkor Group
 
     bool bAutoCleanShuttleDisable;                                              //jou 2013-02-27 Auto Clean disable shuttle sensor detect
     bool bSecurityHave5Level;                                                   //jou 2014-06-19 Security Have 5 Level
-    bool bRTCAutoModelVerify;                                                   //jou 2014-06-24 RTC ¦Û°Ê¶i¦æModelÅçÃÒ
+    bool bRTCAutoModelVerify;                                                   //jou 2014-06-24 RTC è‡ªå‹•é€²è¡ŒModelé©—è­‰
     bool bSiteCmpYield;                                                         //jou 2014-08-14 Site Compare Low Yield alarm
     bool bFuncStateStopFirtDelay;                                               //jou 2014-09-03 Function State Stop Firt Initital Delay Time
     bool bConAlarmNeedKeyInPassword;                                            //jou 2014-09-04 Continuous Same Alarm N time Need KeyIn Password
-    bool bConAlarmInTimeLevelUp;                                                //Steven 20210127 : ¶h©÷­n¨D¦b³æ¦ì®É¶¡¤º¬Û¦PAlarmµo¥Í¦h¦¸,´£ª@¸Ñ°£alarmÅv­­
+    bool bConAlarmInTimeLevelUp;                                                //Steven 20210127 : é€¸æ˜Œè¦æ±‚åœ¨å–®ä½æ™‚é–“å…§ç›¸åŒAlarmç™¼ç”Ÿå¤šæ¬¡,ææ˜‡è§£é™¤alarmæ¬Šé™
     bool bShowHandlerStopTime;                                                  //jou 2014-09-21 Show Handler Stop Time
     bool bTesterLowYieldOneCycle;                                               //jou 2014-09-23 Tester Low Yield Handler need One Cycle & Alarm
-    bool bConFailFoolProofing;                                                  //jou 2014-09-28 continue fail ¨¾§b´£¿ô,Á`¶}Ãö¶}±Ò¬°On®É,BIN§O¥¼¤Ä¿ï¥ô¦ócontinue fail alarm
-    bool bQAmodeSupplyTrayDir;                                                  //jou 2014-10-24 QA mode ¼W¥[¤ä´©§lTray¤è¦V
+    bool bConFailFoolProofing;                                                  //jou 2014-09-28 continue fail é˜²å‘†æé†’,ç¸½é–‹é—œé–‹å•Ÿç‚ºOnæ™‚,BINåˆ¥æœªå‹¾é¸ä»»ä½•continue fail alarm
+    bool bQAmodeSupplyTrayDir;                                                  //jou 2014-10-24 QA mode å¢åŠ æ”¯æ´å¸Trayæ–¹å‘
     bool bTempLess30degShowLight;                                               //jou 2014-12-19 Temperature Less 30 deg. Show Light
     bool bInitTempOffsetByWorkFile;                                             //jou 2015-06-13 Initial Temperture Offset by WorkFile
     bool bAutoCleanAutoSelIndexArm;                                             //jou 2015-08-12 Auto Clean Auto Select Index Arm
     bool bAutoRetestGPIBmode;                                                   //jou 2015-10-02 Auto Retest GPIB mode
-    bool bDownloadRecipeLevelMode;                                              //jou 2016-01-06 download recipe ¼W¥[Åv­­¼Ò¦¡¿ï¾Ü
+    bool bDownloadRecipeLevelMode;                                              //jou 2016-01-06 download recipe å¢åŠ æ¬Šé™æ¨¡å¼é¸æ“‡
     bool bRTCalarmUnload;                                                       //jou 20170210 (Steven) : RTC alarm image unload
     bool bInOutArmUseBackRowSuck;                                               //jou 20161122 (Steven) In & Out arm use back row suck
 
     bool bStartESDAutoDecayFunction;                                            //Ifor 20150924 :Start ESD Auto Decay Test Function
-    bool bESDAutoDecayTeachFunction;                                            //Ifor 20151222 :·s¼WCoustomer ESD Auto Decay Teach Function
-    bool bUseLogUploadToFTPFunction;                                            //Ifor 20160304 :·s¼WLog Up to FTP Function
-    bool bUse1_16KgEPForm;                                                      //Ifor 20160712 add Use 1~16 Kg EP¹ï·Óªí¥\¯à
-    bool bUsePEModelFunction;                                                   //Ifor 20160822 Use PE Model Function (PE ¤uµ{¼Ò¦¡)
+    bool bESDAutoDecayTeachFunction;                                            //Ifor 20151222 :æ–°å¢Coustomer ESD Auto Decay Teach Function
+    bool bUseLogUploadToFTPFunction;                                            //Ifor 20160304 :æ–°å¢Log Up to FTP Function
+    bool bUse1_16KgEPForm;                                                      //Ifor 20160712 add Use 1~16 Kg EPå°ç…§è¡¨åŠŸèƒ½
+    bool bUsePEModelFunction;                                                   //Ifor 20160822 Use PE Model Function (PE å·¥ç¨‹æ¨¡å¼)
     bool bUseFixTryCheckRemainingAmount;                                        //Ifor 20160829 add Use Fix Try Check Remaining Amount
 //    bool bUseLoaderTryFeedContinueRun;                                        //Ifor 20160829 add Use Loader Try Feed Continue Run
     bool bUseMonitorView;                                                       //Ifor 20160930 add MonitorView CosFunction
-    bool bUseFix3FullTray;                                                      //Ifor 20161121 add Fix3 Full Tray ¥\¯à
-    bool bUseAlarmUnlockPassWord;                                               //Ifor 20170214 (wei) add ¸Ñ°£Alarm »İ­n¿W¥ß±K½X
-    bool bUseARTSortCount;                                                      //Ifor 20170315 (wei) add ·s¼W¨Ï¥ÎART Sort Count ­p¼Æ¥\¯à
-    bool bUseEmptyColorTrayPreAlarm;                                            //Ifor 20170315 (wei) add ·s¼WEmpty/Color Tray Pre Alarm ¥\¯à
-    bool bUseAutoTrayPreAlarm;                                                  //Ifor 20170315 (wei) add ·s¼WAuto Tray Pre Alarm ¥\¯à
+    bool bUseFix3FullTray;                                                      //Ifor 20161121 add Fix3 Full Tray åŠŸèƒ½
+    bool bUseAlarmUnlockPassWord;                                               //Ifor 20170214 (wei) add è§£é™¤Alarm éœ€è¦ç¨ç«‹å¯†ç¢¼
+    bool bUseARTSortCount;                                                      //Ifor 20170315 (wei) add æ–°å¢ä½¿ç”¨ART Sort Count è¨ˆæ•¸åŠŸèƒ½
+    bool bUseEmptyColorTrayPreAlarm;                                            //Ifor 20170315 (wei) add æ–°å¢Empty/Color Tray Pre Alarm åŠŸèƒ½
+    bool bUseAutoTrayPreAlarm;                                                  //Ifor 20170315 (wei) add æ–°å¢Auto Tray Pre Alarm åŠŸèƒ½
     bool bUseMRTMode;                                                           //Ifor 20170316 (wei) add KYEC MRT Mode
     bool bUseAutoBackUpSetupFile;                                               //Ifor 20170620 (wei) add Auto BackUp Setup File & Last Data
     bool bUseARMSFunction;                                                      //Ifor 20170621 (wei) add ARMS Function
-    bool bHisiLogUploadNetwork;                                                 //Ifor 20170913 (wei) add ®ü«ä Log ¤W¶Ç¦Üºô¸ôºÏºĞ
+    bool bHisiLogUploadNetwork;                                                 //Ifor 20170913 (wei) add æµ·æ€ Log ä¸Šå‚³è‡³ç¶²è·¯ç£ç¢Ÿ
     bool bAutoSiteMappingUseHotPlate;                                           //Ifor 20170919 (wei) : add Auto Site Mapping Hotplate Mode
     bool bUseAuto1OnlyBin1;                                                     //Ifor 20171018 (wei) : Only Bin 1 is allowed to set to Auto 1
-    bool bUseDefineAutoCleanOffset;                                             //Ifor 20181106 add ·s¼WAuto Clean Offset By ¥»¾÷
-    bool bUse12SiteAutoCleanFixedPosition;                                      //Ifor 20181222 add ·s¼WAuto Clean 12 site¨ú©ñ¦ì¸m©T©w
-    bool bUseAutoCleanCloseSiteAlsoDo;                                          //Ifor 20181222 add ·s¼WAuto Clean Close Site ¤@¼Ë°õ¦æ
-    bool bCanChangeAutoCleanCount;                                              //Ifor 20171024 (wei) : add ¥i§ó§ïAuto Clean ­p¼Æ
+    bool bUseDefineAutoCleanOffset;                                             //Ifor 20181106 add æ–°å¢Auto Clean Offset By æœ¬æ©Ÿ
+    bool bUse12SiteAutoCleanFixedPosition;                                      //Ifor 20181222 add æ–°å¢Auto Clean 12 siteå–æ”¾ä½ç½®å›ºå®š
+    bool bUseAutoCleanCloseSiteAlsoDo;                                          //Ifor 20181222 add æ–°å¢Auto Clean Close Site ä¸€æ¨£åŸ·è¡Œ
+    bool bCanChangeAutoCleanCount;                                              //Ifor 20171024 (wei) : add å¯æ›´æ”¹Auto Clean è¨ˆæ•¸
     bool bFTPDownLoadSiteBySetupFile;                                           //Ifor 20171123 (Steven) : add FTP DownLoad Site By SetupFile
     bool bAutoSiteMappingUseFailBinSetting;                                     //Ifor 20171128 (Steven) : add Auto Site Mapping Use Fail Bin Setting
-    bool bUsePassBinOnlyCanSetOneBin;                                           //Ifor 20171213 (Steven) : Auto Tray ³]©wPass®É¶È¥i³]©w¤@­ÓBin
+    bool bUsePassBinOnlyCanSetOneBin;                                           //Ifor 20171213 (Steven) : Auto Tray è¨­å®šPassæ™‚åƒ…å¯è¨­å®šä¸€å€‹Bin
     bool bUseFTPDownloadDataCheck;                                              //Ifor 20180125 (Steven) : Use FTP Download Data Check
     bool bFTPDownLoadTempModeBySetupFile;                                       //Ifor 20180212 (Steven) : add FTP DownLoad Temp Mode By SetupFile
-    bool bFTPDataTrayFeedAutoUpdata;                                            //Ifor 20181214 (Steven) : add Tray Feed «á¦Û°Ê¤W¶Ç®ü«äÀÉ®×¦ÜFTP
+    bool bFTPDataTrayFeedAutoUpdata;                                            //Ifor 20181214 (Steven) : add Tray Feed å¾Œè‡ªå‹•ä¸Šå‚³æµ·æ€æª”æ¡ˆè‡³FTP
     bool bUseOneByOneIndexCheck;                                                //Ifor 20180322 : add Use One By One Index Check
     bool bUseYieldControlFunction;                                              //Ifor 20180731 : add Use Yield Control Function
     bool bUseOpenCloseSiteMapAtAnyTime;                                         //Ifor 20190308 add Open/Close Site Mapping Function at Any Time
     bool bUseLocalRecipeOffset;                                                 //Ifor 20181211 : add Use Local Recipe Offset
     bool bATC32UseTJMode;                                                       //Ifor 20190121 : add ATC32 Use TJ Mode
-    bool bATCUseTempAdjustment;                                                 //Ifor 20190215 : add ATC ¨Ï¥Î ¤TÂI®Õ¥¿¥\¯à
-    bool bATCUsePackageOffset;                                                  //Ifor 20190215 : add ATC ¨Ï¥Î Package Offset ¥\¯à
+    bool bATCUseTempAdjustment;                                                 //Ifor 20190215 : add ATC ä½¿ç”¨ ä¸‰é»æ ¡æ­£åŠŸèƒ½
+    bool bATCUsePackageOffset;                                                  //Ifor 20190215 : add ATC ä½¿ç”¨ Package Offset åŠŸèƒ½
     bool bUseATCTJControlMode;                                                  //Ifor 20190328 : add TJ Temp Over Range
     bool bUseHandShakeCommunication;                                            //Ifor 20190225 :add Bar Code Use HandShake Communication
-    bool bSortingBinTraywhenCleanOut;                                           //JerryYang 20151001 : ¾ã½L¥\¯à
-    bool bSortingBinTrayWhenTrayFeed;                                           //JerryYang 20170911 (Steven) : ¾ã½L¥\¯à,°õ¦æ®É¾÷¥Ñclean out§ï¦Ütray feed«e
-    bool bResetModeIncludeCleanOut;                                             //JerryYang 20151007 : ResetMode¥i¿ïOneCycle©ÎCleanOut
-    bool bInitTestHeadByTestSiteUse;                                            //JerryYang 20151016 : TestSuckÀË¬d ÃöSite®É´N¤£¶}¯uªÅ°»´ú
-    bool bRecipeCheck;                                                          //JerryYang 20151028 add for Amkor ¦pªGdownloadªº¤u§@ÀÉ¤£¤@¼Ë,­n¨D°µHeight Calibration«á¤~¯àstart
-    bool bForceSetAuto3Fix3SideHasNullIC;                                       //JerryYang 20151120 add for ¨Ê¤¸Xilinx, IC ¤j©ó 40x40mm®É·|ºV¨ì,Auto3©MFix3³Ì¥kÃä­n³]¬° HasNullIC
-    bool bNotClearAllHotBuffer;                                                 //JerryYang 20151226 For ª¿®æ ¥ÑGPIB³]©w§¹·Å«×«á¡A·|°¨¤W¦A°İ¤@¦¸·Å«×¡C©Ò¥H¤£²M°£¼È¦s·Å«×
+    bool bSortingBinTraywhenCleanOut;                                           //JerryYang 20151001 : æ•´ç›¤åŠŸèƒ½
+    bool bSortingBinTrayWhenTrayFeed;                                           //JerryYang 20170911 (Steven) : æ•´ç›¤åŠŸèƒ½,åŸ·è¡Œæ™‚æ©Ÿç”±clean outæ”¹è‡³tray feedå‰
+    bool bResetModeIncludeCleanOut;                                             //JerryYang 20151007 : ResetModeå¯é¸OneCycleæˆ–CleanOut
+    bool bInitTestHeadByTestSiteUse;                                            //JerryYang 20151016 : TestSuckæª¢æŸ¥ é—œSiteæ™‚å°±ä¸é–‹çœŸç©ºåµæ¸¬
+    bool bRecipeCheck;                                                          //JerryYang 20151028 add for Amkor å¦‚æœdownloadçš„å·¥ä½œæª”ä¸ä¸€æ¨£,è¦æ±‚åšHeight Calibrationå¾Œæ‰èƒ½start
+    bool bForceSetAuto3Fix3SideHasNullIC;                                       //JerryYang 20151120 add for äº¬å…ƒXilinx, IC å¤§æ–¼ 40x40mmæ™‚æœƒæ•²åˆ°,Auto3å’ŒFix3æœ€å³é‚Šè¦è¨­ç‚º HasNullIC
+    bool bNotClearAllHotBuffer;                                                 //JerryYang 20151226 For çŸ½æ ¼ ç”±GPIBè¨­å®šå®Œæº«åº¦å¾Œï¼Œæœƒé¦¬ä¸Šå†å•ä¸€æ¬¡æº«åº¦ã€‚æ‰€ä»¥ä¸æ¸…é™¤æš«å­˜æº«åº¦
     bool bLockD42ByFile;                                                        //JerryYang 20160220 add for Amkor-Philippine
     bool bLockD43ByFile;                                                        //JerryYang 20160220 add for Amkor-Philippine
     bool bLockD44ByFile;                                                        //JerryYang 20160220 add for Amkor-Philippine
     bool bLockRTC;                                                              //JerryYang 20160220 add for Amkor-Philippine
-    bool bPickupErrorAtLoaderNeedOpenDoor;                                      //JerryYang 20160220 add for Amkor-Philippine,In ARM¦ÜLoader§l¨ú²§±`­n¶}ªù½T»{«á¤~¯àÄ~Äò
+    bool bPickupErrorAtLoaderNeedOpenDoor;                                      //JerryYang 20160220 add for Amkor-Philippine,In ARMè‡³Loaderå¸å–ç•°å¸¸è¦é–‹é–€ç¢ºèªå¾Œæ‰èƒ½ç¹¼çºŒ
     bool bLockF19AlwaysOn;                                                      //JerryYang 20160224  add for Amkor-Philippine
-    bool bOutShuttleLoseICNeedHome;                                             //JerryYang 20160224 add for Amkor-Philippine, OutShuttle lose IC­n¦^Home ¬°¤FÀË¬dindex arm¤Wªº´İ®Æ
-    bool bContactTestVacOffByCloseSite;                                         //JerryYang 20160328 Contact test¤Îauto height®É,Ãösiteªº³¡¤À¤£§l¨úIC
-    //AI(ht9045-v899) 20260421: ¥ş´¼(GIGAS)­n¨D Auto/Contact Test ¹Lµ{¥[±j IC ±¼®Æ/§l¨ú¥¢±Ñ°»´ú¡AÁ×§K¤U¤@¤M¤UÀ£À£Ãa IC »P°t¥ó
+    bool bOutShuttleLoseICNeedHome;                                             //JerryYang 20160224 add for Amkor-Philippine, OutShuttle lose ICè¦å›Home ç‚ºäº†æª¢æŸ¥index armä¸Šçš„æ®˜æ–™
+    bool bContactTestVacOffByCloseSite;                                         //JerryYang 20160328 Contact teståŠauto heightæ™‚,é—œsiteçš„éƒ¨åˆ†ä¸å¸å–IC
+    //AI(ht9045-v899) 20260421: å…¨æ™º(GIGAS)è¦æ±‚ Auto/Contact Test éç¨‹åŠ å¼· IC æ‰æ–™/å¸å–å¤±æ•—åµæ¸¬ï¼Œé¿å…ä¸‹ä¸€åˆ€ä¸‹å£“å£“å£ IC èˆ‡é…ä»¶
     bool bContactTestICDropGuard;
-    bool bFullTestBeforeAutoClean;                                              //JerryYang 20160331 Auto Clean¤§«e­n¥ı°µFull view check
-    bool bYieldAlmNeedOneCycle;                                                 //JerryYang 20160407 Yield¬ÛÃöAlarm­n¥ı°µ§¹one cycle¤~show alarm
-    bool bContinueFailNeedAlarmDirectly;                                        //Steven 20230831 : ·í¨Ï¥ÎbYieldAlmNeedOneCycle, ³sÄòFail­nª½±µAlarm
-    bool bG09NeedPasswordWhenEditSiteMap;                                       //JerryYang 20160425 ­×§ïSite map»İ­n±K½X
+    bool bFullTestBeforeAutoClean;                                              //JerryYang 20160331 Auto Cleanä¹‹å‰è¦å…ˆåšFull view check
+    bool bYieldAlmNeedOneCycle;                                                 //JerryYang 20160407 Yieldç›¸é—œAlarmè¦å…ˆåšå®Œone cycleæ‰show alarm
+    bool bContinueFailNeedAlarmDirectly;                                        //Steven 20230831 : ç•¶ä½¿ç”¨bYieldAlmNeedOneCycle, é€£çºŒFailè¦ç›´æ¥Alarm
+    bool bG09NeedPasswordWhenEditSiteMap;                                       //JerryYang 20160425 ä¿®æ”¹Site mapéœ€è¦å¯†ç¢¼
     bool bLockP24ByFile;                                                        //JerryYang 20160425 Lock P24
-    bool bYieldAlarmUseDouble;                                                  //JerryYang 20160615 Yield¬ÛÃölimit¥i¥H³]©w¨ì¤p¼ÆÂI
-    bool bRTCAlarmSetIndexToErrBin;                                             //JerryYang 20160712 for ¤O¦¨,µo¥ÍRTC Alarm®É§âIndex¤W©Ò¦³IC³]¬°Errorbin
-    bool bShowAlarmIfCCLinkConnectFail;                                         //JerryYang 20160729 for ª¿«~, CC-link³s½u²§±`­nShow alarm
-    bool bAutoFullDoNotStopImmediately;                                         //JerryYang 20160810 ·íAutoº¡tray®É,­n¥ıshow message»ï¥s¥BÄ~Äò¥Í²£,¤£­n°¨¤W°±¾÷show alrm
-    bool bIndexArmVacOffErrNeedPiggyBack;                                       //JerryYang 20160815 for ª¿«~, Index arm µo¥ÍVaccum off error­n°µpiggy back
-//    bool bRotateDetectErrNeedShake;                                           //JerryYang 20160825 Rotate sensor°»´ú²§±`,­n¥ı¸ÕµÛ±ÛÂà¤T¦¸¦A¸õalarm      //Steven 20161116 : Mark
-    bool bAllSiteSameFailBinShowAlarm;                                          //JerryYang 20160913 ª¿«~­n¨D·í´ú¸Õµ²ªG¤¤©Ò¦³siteªºbin³£¬O©Ò³]©w¤@¼Ëªºfail bin­n¸õalarm
+    bool bYieldAlarmUseDouble;                                                  //JerryYang 20160615 Yieldç›¸é—œlimitå¯ä»¥è¨­å®šåˆ°å°æ•¸é»
+    bool bRTCAlarmSetIndexToErrBin;                                             //JerryYang 20160712 for åŠ›æˆ,ç™¼ç”ŸRTC Alarmæ™‚æŠŠIndexä¸Šæ‰€æœ‰ICè¨­ç‚ºErrorbin
+    bool bShowAlarmIfCCLinkConnectFail;                                         //JerryYang 20160729 for çŸ½å“, CC-linké€£ç·šç•°å¸¸è¦Show alarm
+    bool bAutoFullDoNotStopImmediately;                                         //JerryYang 20160810 ç•¶Autoæ»¿trayæ™‚,è¦å…ˆshow messageé³´å«ä¸”ç¹¼çºŒç”Ÿç”¢,ä¸è¦é¦¬ä¸Šåœæ©Ÿshow alrm
+    bool bIndexArmVacOffErrNeedPiggyBack;                                       //JerryYang 20160815 for çŸ½å“, Index arm ç™¼ç”ŸVaccum off errorè¦åšpiggy back
+//    bool bRotateDetectErrNeedShake;                                           //JerryYang 20160825 Rotate sensoråµæ¸¬ç•°å¸¸,è¦å…ˆè©¦è‘—æ—‹è½‰ä¸‰æ¬¡å†è·³alarm      //Steven 20161116 : Mark
+    bool bAllSiteSameFailBinShowAlarm;                                          //JerryYang 20160913 çŸ½å“è¦æ±‚ç•¶æ¸¬è©¦çµæœä¸­æ‰€æœ‰siteçš„binéƒ½æ˜¯æ‰€è¨­å®šä¸€æ¨£çš„fail binè¦è·³alarm
     bool bPurgeBeforePickShuttle;                                               //JerryYang 20160906 PurgeBeforePickShuttle
-    bool bBeforeAutoCleanOnlyUseRTC;                                            //JerryYang 20161216 auto cleanªº«e«á¥u¾aRTC¨ÓÀË¬dsocket,¤£°µindex¤UÀ£¦Üsocket§l¯uªÅ
-    bool bAfterAutoCleanNoIndexCheck;                                           //Steven 20191212 : ¼B¤¯¬w»¡Auto Clean¥u­n§@¤@¦¸Index Check
-    bool bIndexCheckCanTurnOff;                                                 //Isaac 20211019 : ¥i¿ï¾Ü°µindex checkªº®É¾÷
-    bool bOPCanPressStepAndTStart;                                              //JerryYang 20170417 (wei) OPÅv­­¤]¯à«öStep¸òT.Start
-    bool bSuckDevicesDuringTest;                                                //JerryYang 20170522 drop contact§ï¬°Ãä§lÃä´ú
-    bool bFTRTDifferentDutOnOff;                                                //JerryYang 20170516 (wei) JSCC­n¨DFT RT­n¦³¤£¦Pªº¶}Ãösite
-    bool bIndexPickErrSkipNeedCheckVac;                                         //JerryYang 20170610 (wei) JSCC­n¨Dindex pick up error »İ¦AºC³t¤U­°§l¤@¦¸
-    bool bOutShtLoseICSetErrUntilOneCycle;                                      //JerryYang 20170610 (wei) JSCC­n¨DOut shuttle lose IC»İ¦Û°Êone cycle,¨Ã±N¹ïÀ³ªºsite³]¬°Error bin
+    bool bBeforeAutoCleanOnlyUseRTC;                                            //JerryYang 20161216 auto cleançš„å‰å¾Œåªé RTCä¾†æª¢æŸ¥socket,ä¸åšindexä¸‹å£“è‡³socketå¸çœŸç©º
+    bool bAfterAutoCleanNoIndexCheck;                                           //Steven 20191212 : åŠ‰ä»æ´²èªªAuto Cleanåªè¦ä½œä¸€æ¬¡Index Check
+    bool bIndexCheckCanTurnOff;                                                 //Isaac 20211019 : å¯é¸æ“‡åšindex checkçš„æ™‚æ©Ÿ
+    bool bOPCanPressStepAndTStart;                                              //JerryYang 20170417 (wei) OPæ¬Šé™ä¹Ÿèƒ½æŒ‰Stepè·ŸT.Start
+    bool bSuckDevicesDuringTest;                                                //JerryYang 20170522 drop contactæ”¹ç‚ºé‚Šå¸é‚Šæ¸¬
+    bool bFTRTDifferentDutOnOff;                                                //JerryYang 20170516 (wei) JSCCè¦æ±‚FT RTè¦æœ‰ä¸åŒçš„é–‹é—œsite
+    bool bIndexPickErrSkipNeedCheckVac;                                         //JerryYang 20170610 (wei) JSCCè¦æ±‚index pick up error éœ€å†æ…¢é€Ÿä¸‹é™å¸ä¸€æ¬¡
+    bool bOutShtLoseICSetErrUntilOneCycle;                                      //JerryYang 20170610 (wei) JSCCè¦æ±‚Out shuttle lose ICéœ€è‡ªå‹•one cycle,ä¸¦å°‡å°æ‡‰çš„siteè¨­ç‚ºError bin
     bool bBySiteByBinPercentCompare;                                            //JerryYang 20170712 (Steven) by site by bin compare percent
-    bool bNewAutoTrayDetect;                                                    //JerryYang 20170822 (Steven)§ó§ïAuto°Ï°»´útray½L®É¾÷ Á×§Kout arm§l¼L¤U­°®É³y¦¨»~§P
-//    bool bSaveAutoCleanCnt;                                                   //JerryYang 20171031 (wei) Àx¦sauto clean count­p¼Æ //Steven 20180525 : Àx¦sauto clean count­p¼Æ¥\¯à§ï¬°±j¨î¶}±Ò
-    bool bUniversalKit;                                                         //JerryYang 20171102 (wei) UniversalKit§ï¦¨«È¤á¥\¯à
-    bool bIndexProtect;                                                         //JerryYang 20180410 (jou) : ¥[¤Jindex arm²¾°Ê«e¦ì¸m«OÅ@
+    bool bNewAutoTrayDetect;                                                    //JerryYang 20170822 (Steven)æ›´æ”¹Autoå€åµæ¸¬trayç›¤æ™‚æ©Ÿ é¿å…out armå¸å˜´ä¸‹é™æ™‚é€ æˆèª¤åˆ¤
+//    bool bSaveAutoCleanCnt;                                                   //JerryYang 20171031 (wei) å„²å­˜auto clean countè¨ˆæ•¸ //Steven 20180525 : å„²å­˜auto clean countè¨ˆæ•¸åŠŸèƒ½æ”¹ç‚ºå¼·åˆ¶é–‹å•Ÿ
+    bool bUniversalKit;                                                         //JerryYang 20171102 (wei) UniversalKitæ”¹æˆå®¢æˆ¶åŠŸèƒ½
+    bool bIndexProtect;                                                         //JerryYang 20180410 (jou) : åŠ å…¥index armç§»å‹•å‰ä½ç½®ä¿è­·
     bool bPopAutoClean;                                                         //JerryYang 20190918 add pop auto clean
-    bool bSteupTeach;                                                           //JerryYang 20180921 Setup Teach¥\¯à
+    bool bSteupTeach;                                                           //JerryYang 20180921 Setup TeachåŠŸèƒ½
     bool bSortingBy2DList;                                                      //JerryYang 20190313 : 2D sorting
 //    bool bLowYieldAutoClean;                                                  //wei 20141201 Low Yield Auto Clean
-    bool bEPUseNSSLK;                                                           //wei 20150303   ¨Ê¤¸NS¯B°ÊÀY
-    bool bDisableRTBinSet;                                                      //wei 20150622 ¤£Åã¥Ü³]©wRT Bin set
+    bool bEPUseNSSLK;                                                           //wei 20150303   äº¬å…ƒNSæµ®å‹•é ­
+    bool bDisableRTBinSet;                                                      //wei 20150622 ä¸é¡¯ç¤ºè¨­å®šRT Bin set
     bool bYieldAlarmNoWait1Min;                                                 //wei 20150820  Yield Alarm No Wait 1Min
-    bool bSECS_GEM_OneCycle;                                                    //wei 20150824 Secs_Gem Â_½uOnecycle
+    bool bSECS_GEM_OneCycle;                                                    //wei 20150824 Secs_Gem æ–·ç·šOnecycle
     bool bTrayOCR;                                                              //wei 20150926 TSMC Tray Arm OCR
     bool bLowYeildByTotal;                                                      //wei 20151116 Low Yield By Total
-    bool bUseTrayUpDownSet;                                                     //wei 20160224 TSMC FIX UPDOWN      //³o­ÓÅÜ¼Æ§ïÅÜ·|¼vÅT¤ÀBIN, ¤Á´«®É­n´£¿ô«È¤áª`·N!!!
+    bool bUseTrayUpDownSet;                                                     //wei 20160224 TSMC FIX UPDOWN      //é€™å€‹è®Šæ•¸æ”¹è®Šæœƒå½±éŸ¿åˆ†BIN, åˆ‡æ›æ™‚è¦æé†’å®¢æˆ¶æ³¨æ„!!!
     bool bUsePMAlarmFunction;                                                   //wei 20160225 PMAlarmFunction
     bool bContactTestWaitSoakTime;                                              //wei 20160329 Contact Test Wait SoakTime
     bool bYieldAlarm4;                                                          //wei 20160406 Yield Alarm4
-    bool bYieldAlarm5;                                                          //Sam 20171213 (Steven) : ¶WÂ×¨}²vºÊ±±
+    bool bYieldAlarm5;                                                          //Sam 20171213 (Steven) : è¶…è±è‰¯ç‡ç›£æ§
     bool bCheckInOutArmZHomeSensor;                                             //Frank 20160612 add Check In/Out Arm Home Sensor Function
-    bool bEnableBarcodeReader;                                                  //Frank 20150909 : CC_AMKOR »İ­n¨Ï¥ÎBarcodeReaderÅª¨ú¤u§@ÀÉ //Ifor 20161213 IniConfig -> CosFunction
+    bool bEnableBarcodeReader;                                                  //Frank 20150909 : CC_AMKOR éœ€è¦ä½¿ç”¨BarcodeReaderè®€å–å·¥ä½œæª” //Ifor 20161213 IniConfig -> CosFunction
 
-    bool bCancelErrorBin;                                                       //kevin 20160706 ¨ú®ø ERROR BIN³]©w
-    bool bHWBinBox;                                                             //kevin 20160819 ²Ä7­Ó HARD WARE BIN support Bin Box
+    bool bCancelErrorBin;                                                       //kevin 20160706 å–æ¶ˆ ERROR BINè¨­å®š
+    bool bHWBinBox;                                                             //kevin 20160819 ç¬¬7å€‹ HARD WARE BIN support Bin Box
     bool bSetupStep;                                                            //wei 20180614 TSMC Setup Step
 
-//    bool bResetFirstTestToErr;                                                //jou 20180103 : Reset²Ä¤@­Ó´ú¸Õ§¹ªºIC­n¥á¨ìError bin
+//    bool bResetFirstTestToErr;                                                //jou 20180103 : Resetç¬¬ä¸€å€‹æ¸¬è©¦å®Œçš„ICè¦ä¸Ÿåˆ°Error bin
     bool bTempHeaterOkShowLight;                                                //jou 20180529 : Temperature Heater Ok Show Light
 
-    bool bUseLotIDWithoutSECS;                                                  //RogerYang 20170327 (Steven) ¶}©ñLotID¦ı¤S¤£¨Ï¥ÎSECS/GEM
+    bool bUseLotIDWithoutSECS;                                                  //RogerYang 20170327 (Steven) é–‹æ”¾LotIDä½†åˆä¸ä½¿ç”¨SECS/GEM
 
-    bool bInShuttleDetectByLatch;                                               //Isaac 201704:  //Isaac 20170418 ¥ÎY LatchÀË´úInshuttle¦³µLIC
-    bool bRecipeParameterDefault;                                               //Isaac 20170527 defalut­È¤ñ¸û¥\¯à
+    bool bInShuttleDetectByLatch;                                               //Isaac 201704:  //Isaac 20170418 ç”¨Y Latchæª¢æ¸¬Inshuttleæœ‰ç„¡IC
+    bool bRecipeParameterDefault;                                               //Isaac 20170527 defalutå€¼æ¯”è¼ƒåŠŸèƒ½
     bool bRecipeParameterDefaultLog;                                            //Sam 20201209 : Default Recipe ChangeLog
-    bool bProgramStartOnLine;                                                   //Sam 20210423 : µ{¦¡¶}±Ò®É¤Á´«¬° OnLine/Real
+    bool bProgramStartOnLine;                                                   //Sam 20210423 : ç¨‹å¼é–‹å•Ÿæ™‚åˆ‡æ›ç‚º OnLine/Real
     bool bPiggybackFunctionByHandler;                                           //Isaac 20170712 (wei) :Piggyback function By Handlder(save file to config.ini)
     bool bEnableHandlerResultServer;                                            //Isaac 20170613 (wei) TCP/IP
     int iHandlerCommandServerPort;                                              //Isaac 20170613 (wei) TCP/IP
     int iHandlerResultServerPort;                                               //Isaac 20170613 (wei) TCP/IP
-    bool bFTBin2RTBinNoYield;                                                   //jou 20170925 (wei) : FT/RT Bin³]©w¤£ÅÜ,yield control¥i³]©w.
+    bool bFTBin2RTBinNoYield;                                                   //jou 20170925 (wei) : FT/RT Binè¨­å®šä¸è®Š,yield controlå¯è¨­å®š.
     bool bSetupFileNameControlByLevel;                                          //jou 20171011 (wei) : bSetupFileName Control By Level
     bool bByBinAlarmFromYieldForm;                                              //jou 20180113 (Steven) : By Site By Bin Percent Compare From Yield form
-    bool bOEEFunction;                                                          //Steven 20180417 (Jou) : OEE¥\¯à
+    bool bOEEFunction;                                                          //Steven 20180417 (Jou) : OEEåŠŸèƒ½
     bool bRemoteLotStart;                                                       //AI(ht9045-v899) 20260331: Greatek TCP Remote Start Lot (HTSET 720)
-//    bool bSLTReportFunction;                                                  //Steven 20180420 : SLT³øªí¥\¯à
-    bool bRTC_ROICount;                                                         //jou 20171201 (Steven) : RTC ROI ½T»{¼Æ¶q¬O§_¥¿½T
-    bool bStatisticsJamCount;                                                   //jou 20171201 (Steven) : ·s¼W²Î­pjam code alarm¦¸¼Æ,¹F¨ì³]©w¼Æ¶q«á´£°ª¤@¶¥Åv­­¤~¯à¸Ñ¶}alarm
+//    bool bSLTReportFunction;                                                  //Steven 20180420 : SLTå ±è¡¨åŠŸèƒ½
+    bool bRTC_ROICount;                                                         //jou 20171201 (Steven) : RTC ROI ç¢ºèªæ•¸é‡æ˜¯å¦æ­£ç¢º
+    bool bStatisticsJamCount;                                                   //jou 20171201 (Steven) : æ–°å¢çµ±è¨ˆjam code alarmæ¬¡æ•¸,é”åˆ°è¨­å®šæ•¸é‡å¾Œæé«˜ä¸€éšæ¬Šé™æ‰èƒ½è§£é–‹alarm
 //    bool bIndexPickErrNeedPiggyBack;                                          //jou 20171211 (Steven) : After index pick up error, device go to Error bin ,follow by Index check or piggy back check
     bool bIndexPickErrSkipBlowAirTime;                                          //Frank 20171213 (Steven) : Index Pick Err In Shuttle Skip and Blow Air
     bool bInOutArmZCalibration;                                                 //Frank 20171213 (Steven) : In/OutArmZCalibration
     bool bColorSensorUseCCLink;                                                 //wei 20180409 color sensor
-    bool bRotateNoUseFix1;                                                      //Frank 20170531 (Steven) add Open Rotate¤£¯à¿ïFix1
-    bool bYieldControlUseEACount;                                               //wei 20180606 Yield±±¨î¨Ï¥ÎEA Count
+    bool bRotateNoUseFix1;                                                      //Frank 20170531 (Steven) add Open Rotateä¸èƒ½é¸Fix1
+    bool bYieldControlUseEACount;                                               //wei 20180606 Yieldæ§åˆ¶ä½¿ç”¨EA Count
     bool IntervalYieldCount;                                                    //wei 20180606 Interval Low Yield By Site
-    bool bTestTimeOutOnlyShowSkip;                                              //Steven 20180627 : Time out¹w³]¥uÅã¥ÜSKIP
+    bool bTestTimeOutOnlyShowSkip;                                              //Steven 20180627 : Time outé è¨­åªé¡¯ç¤ºSKIP
     bool bTestTimeOutShowSkipAndHome;                                           //JerryYang 20231208
-    bool bIncludeMTBA;                                                          //JerryYang 20180619 : ·s¼W¥i¦Û©w¸qJam code¬O§_¦C¤JMTBA­pºâ
-    bool bAfterInitialDelayUseOtherArm;                                         //Jerryyang 20180607 : Initail delay«á¤£ª½±µ´ú¸Õ,´«¥Î¥t¥~¤@¤äarm¤U¥h´ú,¥Î·N¬OÁ×§Kdevice·Å«×³Qsocket±a¨««áª½±µ´ú¸Õ®e©öfail
-    bool bTTLUseUSec;                                                           //Steven 20180808 (wei) : TTLªº®É¶¡³æ¦ì§ï¦¨microsecond
+    bool bIncludeMTBA;                                                          //JerryYang 20180619 : æ–°å¢å¯è‡ªå®šç¾©Jam codeæ˜¯å¦åˆ—å…¥MTBAè¨ˆç®—
+    bool bAfterInitialDelayUseOtherArm;                                         //Jerryyang 20180607 : Initail delayå¾Œä¸ç›´æ¥æ¸¬è©¦,æ›ç”¨å¦å¤–ä¸€æ”¯armä¸‹å»æ¸¬,ç”¨æ„æ˜¯é¿å…deviceæº«åº¦è¢«socketå¸¶èµ°å¾Œç›´æ¥æ¸¬è©¦å®¹æ˜“fail
+    bool bTTLUseUSec;                                                           //Steven 20180808 (wei) : TTLçš„æ™‚é–“å–®ä½æ”¹æˆmicrosecond
     bool bCCLinkValueSaveFile;                                                  //wei 20180622 (Steven) : CCLink Value Save File
-    bool bYPitchNotUseSearchLastMode;                                           //JerryYang 20181112 (Steven) : ATP­n¨D­×§ïunloaderÂ\©ñ¤è¦¡¡AºÉ¶q¤£­n¦³ªÅ®æ
+    bool bYPitchNotUseSearchLastMode;                                           //JerryYang 20181112 (Steven) : ATPè¦æ±‚ä¿®æ”¹unloaderæ“ºæ”¾æ–¹å¼ï¼Œç›¡é‡ä¸è¦æœ‰ç©ºæ ¼
     bool bDLLCommands;                                                          //JerryYang 20181126 (Steven) : support Epson DLL function
-    bool bFTPFunction;                                                          //FTP¥\¯à   //Steven 20181224 : ´«¦ì¸m
-    bool bGPIBLotEnd;                                                           //Sam 20181030 : ³z¹L GPIB °e LotEnd µ¹´ú¸Õ¾÷¡C
-    bool bSiteStopVisblieSpecialColor;                                          //Sam 20181112 : ¶}±Ò Site ¤S±N Site °±¤î®É¥H¯S§OÃC¦âÅã¥Ü¡C
-    bool bUseOldATCTempOffset;                                                  //JerryYang 20190123 ATC Offset UI¨Ï¥ÎÂÂª©
+    bool bFTPFunction;                                                          //FTPåŠŸèƒ½   //Steven 20181224 : æ›ä½ç½®
+    bool bGPIBLotEnd;                                                           //Sam 20181030 : é€é GPIB é€ LotEnd çµ¦æ¸¬è©¦æ©Ÿã€‚
+    bool bSiteStopVisblieSpecialColor;                                          //Sam 20181112 : é–‹å•Ÿ Site åˆå°‡ Site åœæ­¢æ™‚ä»¥ç‰¹åˆ¥é¡è‰²é¡¯ç¤ºã€‚
+    bool bUseOldATCTempOffset;                                                  //JerryYang 20190123 ATC Offset UIä½¿ç”¨èˆŠç‰ˆ
     bool bCanUseSearch2DIDByLot;                                                //Steven 20190508
-    bool bFTPDownloadAlwaysCover;                                               //JerryYang 20190523 KYEC download¤u§@ÀÉ¦]¬°¬Oby¾÷¥x¤W¶Ç, ©Ò¦³°Ñ¼Æalways¥Hserverªº¬°¥D
-    bool bCanUse2x2Bias;                                                        //Steven 20190724 : 2x2°¾¤ß¶}Ãö
+    bool bFTPDownloadAlwaysCover;                                               //JerryYang 20190523 KYEC downloadå·¥ä½œæª”å› ç‚ºæ˜¯byæ©Ÿå°ä¸Šå‚³, æ‰€æœ‰åƒæ•¸alwaysä»¥serverçš„ç‚ºä¸»
+    bool bCanUse2x2Bias;                                                        //Steven 20190724 : 2x2åå¿ƒé–‹é—œ
     bool bCanUse2x2NNMode;                                                      //Steven 20200722 : 2x2 NN mode
     bool bCanUse2x3NNMode;                                                      //Steven 20220425 : 2x3 NN mode
     bool bCanUse2x4NNMode;                                                      //Wei 20231211 : 2X4NN Mode
-    bool bForecePerPinKGf;                                                      //JerryYang 20180515 : ¿é¤J¨C­Ópinªº¤O¶q,³æ¦ì¥Hkgf¬°¥D,Á×§KÂà´«¦¨¤û¹y¤S´«¦^KGf·|¦³¤p¼ÆÂI¨â¦ìªº®t²§
-    bool bCanUseBias;                                                           //Steven 20190801 : SCC§õ°êºX»¡­n¨ú®øBIAS¿ï¶µ
-    bool bNextTrayNeedManualRemoveTray;                                         //Sam 20190731 : ·í Load µo¥Í Pickup Error Skip ®É¡A·í«e³o½L°£¤F­n¤â°Ê²¾°£¡A¤U¤@½L¤]­n¤â°Ê²¾°£¡C
+    bool bForecePerPinKGf;                                                      //JerryYang 20180515 : è¼¸å…¥æ¯å€‹pinçš„åŠ›é‡,å–®ä½ä»¥kgfç‚ºä¸»,é¿å…è½‰æ›æˆç‰›é “åˆæ›å›KGfæœƒæœ‰å°æ•¸é»å…©ä½çš„å·®ç•°
+    bool bCanUseBias;                                                           //Steven 20190801 : SCCæåœ‹æ——èªªè¦å–æ¶ˆBIASé¸é …
+    bool bNextTrayNeedManualRemoveTray;                                         //Sam 20190731 : ç•¶ Load ç™¼ç”Ÿ Pickup Error Skip æ™‚ï¼Œç•¶å‰é€™ç›¤é™¤äº†è¦æ‰‹å‹•ç§»é™¤ï¼Œä¸‹ä¸€ç›¤ä¹Ÿè¦æ‰‹å‹•ç§»é™¤ã€‚
     bool bAMDFunction;
-    bool bUseHeadContactCount;                                                  //Ifor 20160516 ¨Ê¤¸­n¨Dä¡¤ù Life Time ¥\¯à
-    bool bHeadContactCountByRecipe;                                             //Steven 20241030 : ä¡¤ù Life Time ¥\¯àby¤u§@ÀÉ
-    bool bDeviceMapTest;                                                        //Steven 20190910 : Qualcomm¥\¯à
-    bool bSetupTeach;                                                           //JerryYang 20180921 Setup Teach¥\¯à
+    bool bUseHeadContactCount;                                                  //Ifor 20160516 äº¬å…ƒè¦æ±‚éŠ¦ç‰‡ Life Time åŠŸèƒ½
+    bool bHeadContactCountByRecipe;                                             //Steven 20241030 : éŠ¦ç‰‡ Life Time åŠŸèƒ½byå·¥ä½œæª”
+    bool bDeviceMapTest;                                                        //Steven 20190910 : QualcommåŠŸèƒ½
+    bool bSetupTeach;                                                           //JerryYang 20180921 Setup TeachåŠŸèƒ½
     bool bBarcodeTrayRecFile;                                                   //jou 20190930 : Barcode Tray record file
     bool bBarcodeErrNoTestAndShowH;                                             //jou 20191007 : Barcode Error No Test & Show "H"
     bool bBarcodeDuplicateFileByOutArm;                                         //jou 20191008 : Barcode duplicate file by out arm
     bool bUseChangeLogByLot;                                                    //Ifor 20191002 : add Change Log By Lot
     bool bUseFFCTempOffset;                                                     //Ifor 20190730 : add FFC Temperature Offset
     bool bUseFTPDownLoadATCRecipe;                                              //Ifor 20191115 : add FTP DownLoad ATC Recipe
-    bool bUseATCFileTransfer;                                                   //Eastsun 20260522 ¾ã¦X: ATC Recipe FileTransfer (KYEC)
+    bool bUseATCFileTransfer;                                                   //Eastsun 20260522 æ•´åˆ: ATC Recipe FileTransfer (KYEC)
     bool bUseChamberBoostMode;                                                  //Steven 20191128 : Chamber Boost Function
     bool bATCUseHandlerRecipeName;                                              //Ifor 20191126 : add ATC Use Handler Recipe Name
     int  iAutoRetestTCPmode;                                                    //RogerYang 20251110 : change bool->int //Sam 20191113 : TCP ART
-    bool bUnloaderEditTrayLevelSet;                                             //Steven 20191224 : Unloader½s¿èTray§ï¥Î¥t¥~¤@²ÕÅv­­
-    bool bAutoCloseSiteWhenRT;                                                  //Steven 20200225 : ¤Á¨ìRTªº®É­Ô,­nÃö³¬Socket
+    bool bUnloaderEditTrayLevelSet;                                             //Steven 20191224 : Unloaderç·¨è¼¯Trayæ”¹ç”¨å¦å¤–ä¸€çµ„æ¬Šé™
+    bool bAutoCloseSiteWhenRT;                                                  //Steven 20200225 : åˆ‡åˆ°RTçš„æ™‚å€™,è¦é—œé–‰Socket
     bool bAutoSkipNoDropError;
-    bool bUseN07_5;                                                             //Steven 20200309 : [N07-5]§ï¦¨by«È¤á¶}±Ò
-    bool bAutoHeightSHTReleaseByFile;                                           //Sam 20200217 : K°ª«á Shuuttle Release Height offset By SetupFile
-    bool bCleanOutCanTrayEndBySetupFile;                                        //Steven 20200317 : CleanOut«á,¥i¥H¿ï¾ÜTray End, ¥B­n°hªºTray­n¦b¤u§@ÀÉ³]©w
-    bool bCanDisableQAMode;                                                     //JerryYang 20200312 EQC mode·s¼Wfunction on/off¡A¥\¯àÃö³¬®ÉµLªk¤ÁEQC mode
-    bool bEnableDual_1x4Kit;                                                    //Isaac 20200311 : 1x2Site¨Ï¥Î1x4Site Kit
-    bool bEnable_1x3Kit;                                                        //KevinCheng 20260109 : 1x2Site and 2x2 NN mode ¨Ï¥Î1x3Site Kit
-    bool bSaveProductionLogByUnloaderTray;                                      //Steven 20200330 : production log by unloader tray¦sÀÉ
-    bool bUseHandlerSetChillerTemp;                                             //Ifor 20191218 : add ATC Chiller ·Å«×¥ÑHandler³]©w
+    bool bUseN07_5;                                                             //Steven 20200309 : [N07-5]æ”¹æˆbyå®¢æˆ¶é–‹å•Ÿ
+    bool bAutoHeightSHTReleaseByFile;                                           //Sam 20200217 : Ké«˜å¾Œ Shuuttle Release Height offset By SetupFile
+    bool bCleanOutCanTrayEndBySetupFile;                                        //Steven 20200317 : CleanOutå¾Œ,å¯ä»¥é¸æ“‡Tray End, ä¸”è¦é€€çš„Trayè¦åœ¨å·¥ä½œæª”è¨­å®š
+    bool bCanDisableQAMode;                                                     //JerryYang 20200312 EQC modeæ–°å¢function on/offï¼ŒåŠŸèƒ½é—œé–‰æ™‚ç„¡æ³•åˆ‡EQC mode
+    bool bEnableDual_1x4Kit;                                                    //Isaac 20200311 : 1x2Siteä½¿ç”¨1x4Site Kit
+    bool bEnable_1x3Kit;                                                        //KevinCheng 20260109 : 1x2Site and 2x2 NN mode ä½¿ç”¨1x3Site Kit
+    bool bSaveProductionLogByUnloaderTray;                                      //Steven 20200330 : production log by unloader trayå­˜æª”
+    bool bUseHandlerSetChillerTemp;                                             //Ifor 20191218 : add ATC Chiller æº«åº¦ç”±Handlerè¨­å®š
     bool bUseEditLDTrayNeedManualRemoveTray;                                    //Ifor 20200331 : add Edit Loader Tray Need Manual Remove Tray
-    bool bKeepOnly1SetupFile;                                                   //Steven 20200511 : §ï¦¨«È¤á¥\¯à //wei 20131115 FTP¤U¸ü«á«O¯d¤U¸üÀÉ®×¡A¨ä¾lData§R°£
-    bool bContactHeightSaveToContactIni;                                        //Steven 20200616 : JSCC­n¨D§âContact Height©ñ¨ì§OªºÀÉ®×
-    bool bShakeShuttleEveryTime;                                                //Steven 20200616 : ATK­n¨D¨C¦¸©ñ®Æ³£­n·n·n½¼ÀY
+    bool bKeepOnly1SetupFile;                                                   //Steven 20200511 : æ”¹æˆå®¢æˆ¶åŠŸèƒ½ //wei 20131115 FTPä¸‹è¼‰å¾Œä¿ç•™ä¸‹è¼‰æª”æ¡ˆï¼Œå…¶é¤˜Dataåˆªé™¤
+    bool bContactHeightSaveToContactIni;                                        //Steven 20200616 : JSCCè¦æ±‚æŠŠContact Heightæ”¾åˆ°åˆ¥çš„æª”æ¡ˆ
+    bool bShakeShuttleEveryTime;                                                //Steven 20200616 : ATKè¦æ±‚æ¯æ¬¡æ”¾æ–™éƒ½è¦æ–æ–è¦é ­
     bool bAutoSiteMappingSetOpenBIN;                                            //jou 20200928 : Auto Site Mapping Set Open BIN
-    bool bECChangeEventReportCanOnOff;                                          //JerryYang 20200520 ÂÂ¹q¸£°µDoReportECDataChangeCheck¨ç¦¡·|¼vÅTUPH,§ï¦¨¥\¯à¿ï¶µ
-    bool bOutShtLoseICInArmAway;                                                //JerryYang 20200610 Out shuttle lose IC»İ¥ıÅı¦ì¦Aµo¥Xalarm
+    bool bECChangeEventReportCanOnOff;                                          //JerryYang 20200520 èˆŠé›»è…¦åšDoReportECDataChangeCheckå‡½å¼æœƒå½±éŸ¿UPH,æ”¹æˆåŠŸèƒ½é¸é …
+    bool bOutShtLoseICInArmAway;                                                //JerryYang 20200610 Out shuttle lose ICéœ€å…ˆè®“ä½å†ç™¼å‡ºalarm
     bool bNonCenterModeCanUseShtOffset;                                         //Steven 20200715 : for Tinton
-    bool bThickTrayNoNeedCover;                                                 //Steven 20200723 : ¤Ó«pªºTray¤£¯à»\»\¤l
-    bool b1x4OnlyAaUse1x1Mode;                                                  //Steven 20200720 : 1x4¥u¶}site Ac, ¶]1x1¼Ò¦¡
-    bool bQAModeFinishOfflineShowOnLinePicture;                                 //Sam 20200804 : QA ¼Ò¦¡§¹¦¨«á¤Á¦^ OffLine ®É¡A±j¨îÅã¥Ü OnLine ¹Ï¤ù¡C
+    bool bThickTrayNoNeedCover;                                                 //Steven 20200723 : å¤ªåšçš„Trayä¸èƒ½è“‹è“‹å­
+    bool b1x4OnlyAaUse1x1Mode;                                                  //Steven 20200720 : 1x4åªé–‹site Ac, è·‘1x1æ¨¡å¼
+    bool bQAModeFinishOfflineShowOnLinePicture;                                 //Sam 20200804 : QA æ¨¡å¼å®Œæˆå¾Œåˆ‡å› OffLine æ™‚ï¼Œå¼·åˆ¶é¡¯ç¤º OnLine åœ–ç‰‡ã€‚
     bool bUse2DIDAllSiteFailSetToErrBin;                                        //Steven 20200825 : 2DID all site fail
-    bool bEnableMulti2D;                                                        //Steven 20200810 : ¤@­ÓIC¨Ï¥Î¦h­Ó2DID
+    bool bEnableMulti2D;                                                        //Steven 20200810 : ä¸€å€‹ICä½¿ç”¨å¤šå€‹2DID
     bool b32SiteYOffsetMode;
     bool bShow0Xbin;                                                            //jou 20220719 : show 0X bin
     bool bTempCalByRecipe;                                                      //jou 20220725 : Temperature calibration by recipe
-//    bool bLoadPickUpErrorMES0101Record;                                         //Sam 20200922 : Pick up Error Production_Log ¤]­n°O¿ı
-    bool bAutoTrayFullAlarmCanNotSkip;                                          //Steven 20210219 : Unloaderº¡½Lalarm¤£¯àSkip
+//    bool bLoadPickUpErrorMES0101Record;                                         //Sam 20200922 : Pick up Error Production_Log ä¹Ÿè¦è¨˜éŒ„
+    bool bAutoTrayFullAlarmCanNotSkip;                                          //Steven 20210219 : Unloaderæ»¿ç›¤alarmä¸èƒ½Skip
     bool bIndexCycleTimeRecord;                                                 //Sam 20200916 : Add Index Cycle Time Record
-    bool bUseAfterHomeShtChkLoseICNeedSlow;                                     //Sam 20201020 : ¦^ Home ²Ä¤@¦¸ªº Shuttle Check IC lose »İ­nÅÜºC¡C
+    bool bUseAfterHomeShtChkLoseICNeedSlow;                                     //Sam 20201020 : å› Home ç¬¬ä¸€æ¬¡çš„ Shuttle Check IC lose éœ€è¦è®Šæ…¢ã€‚
     bool LoaderFloating;
     bool bRecordVacuumOnOffTime;                                                //Sam 20210204 : Auto Teach Loader Z Record Vacuum On off time
-    bool bI21EnableASMByRecipe;                                                 //Steven 20210518 : §d¦p¬K§Æ±æAuto site map±q¤u§@ÀÉ¶}Ãö
-    bool bUseMDB;                                                               //Steven 20210526 : ³¡¤À«È¤á¨ú®ø¨Ï¥ÎMDB
-    bool bSpecailLowYeild;                                                      //Sam 20210505 : PTI ­n¨Dªº¨â¬q Low Yeild
-    bool bTraySortCntFunc;                                                      //Steven 20210608 : Tray«ü©w¼Æ¶q°h½L¥\¯à
-    bool bIOTriggerIonFanAutoClean;                                             //Isaac 20210609 : IOÄ²µoIonFan²M°w
-    bool bUSEJCETSiteMapMode;                                                   //Ifor 20190215 : add ATC ¨Ï¥Î Package Offset ¥\¯à
-    bool bAutoCleanUseHPSetByRecipe;                                            //Steven 20210825 : Auto Clean¨Ï¥Î¥[¼ö½L­n§ï¦¨¦b¤u§@ÀÉ³]©w
+    bool bI21EnableASMByRecipe;                                                 //Steven 20210518 : å³å¦‚æ˜¥å¸Œæœ›Auto site mapå¾å·¥ä½œæª”é–‹é—œ
+    bool bUseMDB;                                                               //Steven 20210526 : éƒ¨åˆ†å®¢æˆ¶å–æ¶ˆä½¿ç”¨MDB
+    bool bSpecailLowYeild;                                                      //Sam 20210505 : PTI è¦æ±‚çš„å…©æ®µ Low Yeild
+    bool bTraySortCntFunc;                                                      //Steven 20210608 : TrayæŒ‡å®šæ•¸é‡é€€ç›¤åŠŸèƒ½
+    bool bIOTriggerIonFanAutoClean;                                             //Isaac 20210609 : IOè§¸ç™¼IonFanæ¸…é‡
+    bool bUSEJCETSiteMapMode;                                                   //Ifor 20190215 : add ATC ä½¿ç”¨ Package Offset åŠŸèƒ½
+    bool bAutoCleanUseHPSetByRecipe;                                            //Steven 20210825 : Auto Cleanä½¿ç”¨åŠ ç†±ç›¤è¦æ”¹æˆåœ¨å·¥ä½œæª”è¨­å®š
     bool b2DUseSubJobFunction;                                                  //Ifor 20200807 add:In House 2D Use Sub Job Function
     bool bFTPUseBarcodeReader;                                                  //Ifor 20210413 add:FTP Use Barcode Reader
-    bool b2DUseAnyCharFunction;                                                 //Ifor 20210723 add:2D Use Any Char ¦¬¨ì2D¸ê®Æ¤£§PÂ_
+    bool b2DUseAnyCharFunction;                                                 //Ifor 20210723 add:2D Use Any Char æ”¶åˆ°2Dè³‡æ–™ä¸åˆ¤æ–·
     bool bOpenAutoCloseSiteInNormal;                                            //JimmyChiu 20211015 : only user disabled site keep disabled and other sites change to enabled
     bool bManualSteplAutoTeach;                                                 //JimmyChiu 20211020 : Auto alignment mode
-    bool ShowLotCategoryCount;                                                  //KaiChen 20181002 ¡GCategory Count by Lot
-    bool ShowLotCount;                                                          //KaiChen 20181002 ¡G§ï¦¨CosFunction   //wei 20171130 Count By Lot
-    bool bYieldControlBinSelectUseContactCount;                                 //KaiChen 20181115 : BinSelect¸Ì­± Yield±±¨î¨Ï¥Î Contact Count
-    bool bSaveEventLogByLotID;                                                  //KaiChen 20181121 ¡Gª¿®æ-¥_¿³ Save Event Log by Lot ID
-    bool bConfigStandard;                                                       //Sam 20210324 : µ{¦¡¶}±Ò¡Aª½±µÅª¨ú config_Standard.ini
-    bool bRotateUseHT7000HPKit;                                                 //Sam 20210416 : ·s¼W¯S®í¼Ò¦¡ For Rotate Function HT7000 HP Kit
-    bool bUseJamRawData;                                                        //Sam 20210224 : Auto Upload FTP JAMRawData ¥\¯à
-    bool bUseAlarmLogXml;                                                       //Sam 20210621 : ·s¼W Event Log xml  Updata
+    bool ShowLotCategoryCount;                                                  //KaiChen 20181002 ï¼šCategory Count by Lot
+    bool ShowLotCount;                                                          //KaiChen 20181002 ï¼šæ”¹æˆCosFunction   //wei 20171130 Count By Lot
+    bool bYieldControlBinSelectUseContactCount;                                 //KaiChen 20181115 : BinSelectè£¡é¢ Yieldæ§åˆ¶ä½¿ç”¨ Contact Count
+    bool bSaveEventLogByLotID;                                                  //KaiChen 20181121 ï¼šçŸ½æ ¼-åŒ—èˆˆ Save Event Log by Lot ID
+    bool bConfigStandard;                                                       //Sam 20210324 : ç¨‹å¼é–‹å•Ÿï¼Œç›´æ¥è®€å– config_Standard.ini
+    bool bRotateUseHT7000HPKit;                                                 //Sam 20210416 : æ–°å¢ç‰¹æ®Šæ¨¡å¼ For Rotate Function HT7000 HP Kit
+    bool bUseJamRawData;                                                        //Sam 20210224 : Auto Upload FTP JAMRawData åŠŸèƒ½
+    bool bUseAlarmLogXml;                                                       //Sam 20210621 : æ–°å¢ Event Log xml  Updata
     bool bUse1CableLayoutKitByConfig;                                           //Sam 20210715 : Use 1CableLayoutKit By Config
-    bool bTempSetDisenableNotUseHeater;                                         //Sam 20210805 : TempSet ¥[¼ö°Ï¦a¤è¨S¥Î¨ìªº´N°±¥Î
-    bool bNeedToRestartGroundWhenInitialStart;                                  //Sam 20220107 : ª¿®æ¥_¿³ Initail Start ­n­«±Ò GroundMan
-    bool bOffsetContactForce;                                                   //JimmyChiu 20220114 : Index Á`À£¤O Offset¡A¥[Á`«á¼Æ­È¤£Åã¥Ü©óContact Form
+    bool bTempSetDisenableNotUseHeater;                                         //Sam 20210805 : TempSet åŠ ç†±å€åœ°æ–¹æ²’ç”¨åˆ°çš„å°±åœç”¨
+    bool bNeedToRestartGroundWhenInitialStart;                                  //Sam 20220107 : çŸ½æ ¼åŒ—èˆˆ Initail Start è¦é‡å•Ÿ GroundMan
+    bool bOffsetContactForce;                                                   //JimmyChiu 20220114 : Index ç¸½å£“åŠ› Offsetï¼ŒåŠ ç¸½å¾Œæ•¸å€¼ä¸é¡¯ç¤ºæ–¼Contact Form
     bool bRTCHalfViewAutoVerify;                                                //JerryYang 20220215 : RTC Auto Verify half view check
-    bool bCylinderOnOffTimeLog;                                                 //JerryYang 20220215 : cylinder§@°Ê¦¸¼Æ­p¼Æ
+    bool bCylinderOnOffTimeLog;                                                 //JerryYang 20220215 : cylinderä½œå‹•æ¬¡æ•¸è¨ˆæ•¸
     bool b2DUsePinInspection;                                                   //Ifor 20230207 add:In House 2D Use Pin1 Inspection Function
     bool bUseATCRecordFileBy2DIDFunction;                                       //ben 20240927 : add CCD Bar Code to ATC
-    bool bS5F1UseJamRate;                                                       //Steven 20220331 : S5F1ªºALTX¸Ì­±¥[¤WJAM Rate§PÂ_
-    bool bF18F22InshuttleDetectSaveByRecipe;                                    //JimmyChiu 20220601 : F18/F22 in shuttle A7 sensor¶i¥XÀË´ú¥\¯à¸òÀHrecipe¬O§_±Ò¥Î
-    bool bLowYieldAlarmIntervalTimeBySetting;                                   //JimmyChiu 20220601 : ­×§ïlow yield³øÄµ®É¶¡ÅŞ¿è¡A³øÄµ¶¡¹j®É¶¡©T©w1min§ï¬°¥i¥H¦Û¦æ³]©w³øÄµ¶¡¹j®É¶¡
-    bool bAlarmForIonFanCleaning;                                               //JimmyChiu 20220606 : ¼W¥[¤@­ÓÂ÷¤l­·®°²M¼ä³øÄµ¡A®É¶¡¶¡¹j¥i³]©w¡C»İ³øÄµ´£¥Ü¡A»İ¿é¤J±K½X¤~¥i®ø°£
-    bool bRecordGroundESDByTestIC;                                              //Sam 20211223 : ¨CÁû IC ´ú¸Õ§¹²¦³£­n°O¿ı·í®Éªº Ground & ESD ¼Æ­È¡C
+    bool bS5F1UseJamRate;                                                       //Steven 20220331 : S5F1çš„ALTXè£¡é¢åŠ ä¸ŠJAM Rateåˆ¤æ–·
+    bool bF18F22InshuttleDetectSaveByRecipe;                                    //JimmyChiu 20220601 : F18/F22 in shuttle A7 sensoré€²å‡ºæª¢æ¸¬åŠŸèƒ½è·Ÿéš¨recipeæ˜¯å¦å•Ÿç”¨
+    bool bLowYieldAlarmIntervalTimeBySetting;                                   //JimmyChiu 20220601 : ä¿®æ”¹low yieldå ±è­¦æ™‚é–“é‚è¼¯ï¼Œå ±è­¦é–“éš”æ™‚é–“å›ºå®š1minæ”¹ç‚ºå¯ä»¥è‡ªè¡Œè¨­å®šå ±è­¦é–“éš”æ™‚é–“
+    bool bAlarmForIonFanCleaning;                                               //JimmyChiu 20220606 : å¢åŠ ä¸€å€‹é›¢å­é¢¨æ‰‡æ¸…æ½”å ±è­¦ï¼Œæ™‚é–“é–“éš”å¯è¨­å®šã€‚éœ€å ±è­¦æç¤ºï¼Œéœ€è¼¸å…¥å¯†ç¢¼æ‰å¯æ¶ˆé™¤
+    bool bRecordGroundESDByTestIC;                                              //Sam 20211223 : æ¯é¡† IC æ¸¬è©¦å®Œç•¢éƒ½è¦è¨˜éŒ„ç•¶æ™‚çš„ Ground & ESD æ•¸å€¼ã€‚
     bool b2DCodeCheckByCoustomerLot;                                            //Sam 20220223 : 2D Code Check by Coustomer Lot
-    bool bAutoTmpeOfsByFTP;                                                     //Sam 20220406 : ·Å«×¦Û°Ê¸ÉÀv¥\¯à By FTP
-    bool bLockF26ByFile;                                                        //Sam 20220527 : Âê¦í Enable ¼u©Ê¤H­×§ï
-    bool bLockI06ByFile;                                                        //Sam 20220527 : for ª¿®æ-¥_¿³
-    bool bManuallyRemoveForceInColor;                                           //Sam 20220530 : ·í Loader µo¥Í Skip/Edit ®É¡A¦¹½L°µ§¹«á·h¨ì Empty ­y¹D«á¡A·|¦¬½L°_¨Ó¨Ã³øÄµ´£¥Ü¤H­û¦¬½L(³s¨â½L)
-    bool bUnloadTrayModeByRecipe;                                               //Steven 20220710 : ¨iª¿­n¨DUnload Tray Mode by¾÷¥x³]¸m
-    bool bFullTrayAlarmAfterUnloadEnd;                                          //Sam 20210602 : Unload °µ§¹«á¦A Alarm
-    bool PassworDownloadByFTP;                                                  //Sam 20210526 : ±q N06 DownloadPath ¤U¸ü±K½X¥»
-    bool bShowYieldMonitor;                                                     //Sam 20210916 : ·s¼W Yiled Monitor ¨ìµe­±¤W
+    bool bAutoTmpeOfsByFTP;                                                     //Sam 20220406 : æº«åº¦è‡ªå‹•è£œå„ŸåŠŸèƒ½ By FTP
+    bool bLockF26ByFile;                                                        //Sam 20220527 : é–ä½ Enable å½ˆæ€§äººä¿®æ”¹
+    bool bLockI06ByFile;                                                        //Sam 20220527 : for çŸ½æ ¼-åŒ—èˆˆ
+    bool bManuallyRemoveForceInColor;                                           //Sam 20220530 : ç•¶ Loader ç™¼ç”Ÿ Skip/Edit æ™‚ï¼Œæ­¤ç›¤åšå®Œå¾Œæ¬åˆ° Empty è»Œé“å¾Œï¼Œæœƒæ”¶ç›¤èµ·ä¾†ä¸¦å ±è­¦æç¤ºäººå“¡æ”¶ç›¤(é€£å…©ç›¤)
+    bool bUnloadTrayModeByRecipe;                                               //Steven 20220710 : ç”¬çŸ½è¦æ±‚Unload Tray Mode byæ©Ÿå°è¨­ç½®
+    bool bFullTrayAlarmAfterUnloadEnd;                                          //Sam 20210602 : Unload åšå®Œå¾Œå† Alarm
+    bool PassworDownloadByFTP;                                                  //Sam 20210526 : å¾ N06 DownloadPath ä¸‹è¼‰å¯†ç¢¼æœ¬
+    bool bShowYieldMonitor;                                                     //Sam 20210916 : æ–°å¢ Yiled Monitor åˆ°ç•«é¢ä¸Š
     bool RecordIndexAirOnTime;                                                  //Sam 20220329 : Record Index Air On Time
-    bool bUse2X4_4AutoCleanFixedPosition;                                       //Sam 20220423 : ·s¼W Auto Clean 2X4_4 ¼Ò¦¡¨ú©ñ¦ì¸m©T©w
-    bool bAutoCleanOffsetUseSingleSetting;                                      //Sam 20220720 : AutoClean Offset ¶È¨Ï¥Î Clean ³]©w Offset ¨Ó¸ÉÀv
-    bool bUseSocketContactCount;                                                //Sam 20220720 : ·s¼W¤@²Õ Socket Count
-    bool bDownloadUpdateAutomatically;                                          //Sam 20220824 : FTP ¦Û°Ê¤U¸ü¦w¸Ë§ó·s¥]
-    bool bTrayDeviceCheckFromLoader;                                            //JimmyChiu 20220219 : ´İ®ÆÀË¬d From Loader
-    bool bTrayMapFromLoader;                                                    //JimmyChiu 20220219 : ´İ®ÆÀË¬d From Loader
+    bool bUse2X4_4AutoCleanFixedPosition;                                       //Sam 20220423 : æ–°å¢ Auto Clean 2X4_4 æ¨¡å¼å–æ”¾ä½ç½®å›ºå®š
+    bool bAutoCleanOffsetUseSingleSetting;                                      //Sam 20220720 : AutoClean Offset åƒ…ä½¿ç”¨ Clean è¨­å®š Offset ä¾†è£œå„Ÿ
+    bool bUseSocketContactCount;                                                //Sam 20220720 : æ–°å¢ä¸€çµ„ Socket Count
+    bool bDownloadUpdateAutomatically;                                          //Sam 20220824 : FTP è‡ªå‹•ä¸‹è¼‰å®‰è£æ›´æ–°åŒ…
+    bool bTrayDeviceCheckFromLoader;                                            //JimmyChiu 20220219 : æ®˜æ–™æª¢æŸ¥ From Loader
+    bool bTrayMapFromLoader;                                                    //JimmyChiu 20220219 : æ®˜æ–™æª¢æŸ¥ From Loader
     bool bSaveArmSpeedByMachine;                                                //JimmyChiu 20220618 : save by machine
     bool bSaveTemperatureByMachine;                                             //JimmyChiu 20220618 : save by machine
     bool bSaveOffsetByMachine;                                                  //JimmyChiu 20220618 : save by machine
-    bool bUnloadCylinerUpRelief;                                                //Sam 20220916 : °h Tray «e Unloader ¤W¤É¨T¬û¶]´îÀ£°Ê§@¨¾¤î¾_½L¡C
-    bool bD44Once4Suck;                                                         //Sam 20220920 : D44 Index ¦^ÂHÀË¬d¤@¦¸³Ì¦h§l¥|Áû
-    bool bART_SECSGEM_93K;                                                      //JerryYang 20220923 : SECS GEMª©¥»ART
-    bool bOutArmPickUpErrBySetup;                                               //JerryYang 20220923 : E50§ï¦¨¿ï¶µ
-    bool bNonATCSupportLBFunction;                                              //JerryYang 20220923 : LB§j®ğfunction
-    bool bIndexDropICSetErrUntilOneCycle;                                       //JerryYang 20220923 : index arm drop error³]ERROR BIN
-    bool bFTRTDiffInitStartDelayTime;                                           //JerryYang 20220330 : FT RT¥i³]©w¤£¦Pªºinitial delay time
-    bool bUseTrayThickAdjustZHeight;                                            //Ifor 20221214 add: ¨Ï¥ÎTray «p«×¦Û°Ê®Õ¥¿§l¼L°ª«×
-    bool bUseShuttlePickShiftDetect;                                            //Ifor 20221220 add: Shuttle §l®Æ«á ¥ı¤W¤É³]©w°ª«×¦AÀË¬d¦³µLIC
-    bool bLowYieldUseContactCounts;                                             //Sam 20221020 : LowYield §ï¨Ï¥Î ContactCounts ªº¸ê®Æ¨Ó­pºâ
-    bool bShowHPICCount;                                                        //Steven 20221228 : ­pºâ¥[¼ö½LIC¼Æ¶q
-    bool bTesterSidePushFunction;                                               //Richard 20220321 : ´ë±çSide Push
-    bool bUserDefineIndexZSafePos;                                              //Richard 20230107 : SPIL«È¤á¦Û©w¸q¾÷¥x¦w¸Ë°ª«×(200~800¶¡)
-    bool bAutoSideFixerCheckAlarmAutoRetry;                                     //Sam 20220929 : ¼W¥[ AutoSideFixer Check Alarm Auto Retry
-    bool bAutoOpenConfigA01;                                                    //Sam 20220929 : Config A01 ¦Û°Ê¶}±Ò¡C
-    bool bVerifyMode;                                                           //Sam 20221012 : ·s¼W VerifyMode ¥\¯à
-    bool bLoginShowUserName;                                                    //Steven 20230317 : µn¤J®ÉÅã¥Ü±b¸¹¦WºÙ
+    bool bUnloadCylinerUpRelief;                                                //Sam 20220916 : é€€ Tray å‰ Unloader ä¸Šå‡æ±½ç¼¸è·‘æ¸›å£“å‹•ä½œé˜²æ­¢éœ‡ç›¤ã€‚
+    bool bD44Once4Suck;                                                         //Sam 20220920 : D44 Index å›é»æª¢æŸ¥ä¸€æ¬¡æœ€å¤šå¸å››é¡†
+    bool bART_SECSGEM_93K;                                                      //JerryYang 20220923 : SECS GEMç‰ˆæœ¬ART
+    bool bOutArmPickUpErrBySetup;                                               //JerryYang 20220923 : E50æ”¹æˆé¸é …
+    bool bNonATCSupportLBFunction;                                              //JerryYang 20220923 : LBå¹æ°£function
+    bool bIndexDropICSetErrUntilOneCycle;                                       //JerryYang 20220923 : index arm drop errorè¨­ERROR BIN
+    bool bFTRTDiffInitStartDelayTime;                                           //JerryYang 20220330 : FT RTå¯è¨­å®šä¸åŒçš„initial delay time
+    bool bUseTrayThickAdjustZHeight;                                            //Ifor 20221214 add: ä½¿ç”¨Tray åšåº¦è‡ªå‹•æ ¡æ­£å¸å˜´é«˜åº¦
+    bool bUseShuttlePickShiftDetect;                                            //Ifor 20221220 add: Shuttle å¸æ–™å¾Œ å…ˆä¸Šå‡è¨­å®šé«˜åº¦å†æª¢æŸ¥æœ‰ç„¡IC
+    bool bLowYieldUseContactCounts;                                             //Sam 20221020 : LowYield æ”¹ä½¿ç”¨ ContactCounts çš„è³‡æ–™ä¾†è¨ˆç®—
+    bool bShowHPICCount;                                                        //Steven 20221228 : è¨ˆç®—åŠ ç†±ç›¤ICæ•¸é‡
+    bool bTesterSidePushFunction;                                               //Richard 20220321 : æ¸ æ¢Side Push
+    bool bUserDefineIndexZSafePos;                                              //Richard 20230107 : SPILå®¢æˆ¶è‡ªå®šç¾©æ©Ÿå°å®‰è£é«˜åº¦(200~800é–“)
+    bool bAutoSideFixerCheckAlarmAutoRetry;                                     //Sam 20220929 : å¢åŠ  AutoSideFixer Check Alarm Auto Retry
+    bool bAutoOpenConfigA01;                                                    //Sam 20220929 : Config A01 è‡ªå‹•é–‹å•Ÿã€‚
+    bool bVerifyMode;                                                           //Sam 20221012 : æ–°å¢ VerifyMode åŠŸèƒ½
+    bool bLoginShowUserName;                                                    //Steven 20230317 : ç™»å…¥æ™‚é¡¯ç¤ºå¸³è™Ÿåç¨±
     bool bMaualRemoveTray3Alarm;                                                //Jimmychiu 20231116 : add detail MES code for Previous tray pick up error
     bool bSmartAutoClean;                                                       //Sam 20230111 : Smart Auto Clean
-    bool bAdaptiveYield;                                                        //Sam 20230914 : ¦Û¾AÀ³©Ê¨}²vºÊ±±
-    bool bAfterOneCycleShowTrayQty;                                             //Sam 202221101 : OneCycle §¹¦¨«áÅã¥Ü©Ò¦³ Tray ¦U§OªºIC¼Æ¶q
-    bool bUseBarCoderAutoLogin;                                                 //Sam 20221101 : ¨Ï¥Î BarCoder ¦Û°Êµn¿ı
-    bool bUseBarCoderChangeSetupFile;                                           //Sam 20230320 : ¨Ï¥Î BarCodeReader ¨Ó¿é¤J¤Á´« SetupFile¡C
-    bool bSpecialP24;                                                           //Sam 20230320 : ¾ã¦X P24 ¥_¿³ª©¬°¿W¥ß¥\¯à½X
-    bool bHandlerStateChangeUploadServer;                                       //Sam 20230511 : ¾÷¥x¸ê®ÆÅÜ§ó«á¶·¤W¶Ç FTP
-    bool bLimitSensorOnNeedManualMove;                                          //Sam 20230522 : InOutArm Server Off «á¡A­«·s Server On ®ÉÀË¬d CCW CW ­Y¦³ On ®É»İ­n¤â°Ê±Æ°£²§±`¡C
-    bool bQAModeUseUnloadCnt;                                                   //JerryYang 20221005 : QA mode count ¥ÎBIN1¼Æ¶q­p¼Æ
-    bool bTemp5PointKitOffset;                                                  //JerryYang 20221005 : ·s¼W·Å«×5ÂIoffset by recipeÀx¦s
-    bool bLotStartLockCriticalPara;                                             //JerryYang 20220310 : ATP­n¨DÂê©wcritical parameter
-    bool bTowerLightUseLD;                                                      //JerryYang 20230721 : LD/ULD°Ï¤À¤£¦Pªº²§±`­µ¼Ö
-    bool bThickTrayUseDiffHeight;                                               //JerryYang 20230620 : add«ptray¿ï¶µ
+    bool bAdaptiveYield;                                                        //Sam 20230914 : è‡ªé©æ‡‰æ€§è‰¯ç‡ç›£æ§
+    bool bAfterOneCycleShowTrayQty;                                             //Sam 202221101 : OneCycle å®Œæˆå¾Œé¡¯ç¤ºæ‰€æœ‰ Tray å„åˆ¥çš„ICæ•¸é‡
+    bool bUseBarCoderAutoLogin;                                                 //Sam 20221101 : ä½¿ç”¨ BarCoder è‡ªå‹•ç™»éŒ„
+    bool bUseBarCoderChangeSetupFile;                                           //Sam 20230320 : ä½¿ç”¨ BarCodeReader ä¾†è¼¸å…¥åˆ‡æ› SetupFileã€‚
+    bool bSpecialP24;                                                           //Sam 20230320 : æ•´åˆ P24 åŒ—èˆˆç‰ˆç‚ºç¨ç«‹åŠŸèƒ½ç¢¼
+    bool bHandlerStateChangeUploadServer;                                       //Sam 20230511 : æ©Ÿå°è³‡æ–™è®Šæ›´å¾Œé ˆä¸Šå‚³ FTP
+    bool bLimitSensorOnNeedManualMove;                                          //Sam 20230522 : InOutArm Server Off å¾Œï¼Œé‡æ–° Server On æ™‚æª¢æŸ¥ CCW CW è‹¥æœ‰ On æ™‚éœ€è¦æ‰‹å‹•æ’é™¤ç•°å¸¸ã€‚
+    bool bQAModeUseUnloadCnt;                                                   //JerryYang 20221005 : QA mode count ç”¨BIN1æ•¸é‡è¨ˆæ•¸
+    bool bTemp5PointKitOffset;                                                  //JerryYang 20221005 : æ–°å¢æº«åº¦5é»offset by recipeå„²å­˜
+    bool bLotStartLockCriticalPara;                                             //JerryYang 20220310 : ATPè¦æ±‚é–å®šcritical parameter
+    bool bTowerLightUseLD;                                                      //JerryYang 20230721 : LD/ULDå€åˆ†ä¸åŒçš„ç•°å¸¸éŸ³æ¨‚
+    bool bThickTrayUseDiffHeight;                                               //JerryYang 20230620 : addåštrayé¸é …
     bool bRead2DIDFromServer;                                                   //Jimmychiu 20230925 : read 2did in json file
-    bool bMakeWhite2DIDList;                                                    //RogerYang 20251202 : JCET 2D FT1¥Õ¦W³æ/FT2¤ñ¹ï¥\¯à
-    bool bATC_SlopeSaveOnHandler;                                               //JerryYang 20231016 : Add handlerºİ³]©wTJ°Ñ¼Æ(Slope¡BOffset)
-    bool bUseSecondATCTempOffset;                                               //Ifor 20241118 : ´ú¸Õ¤¤ÅÜ·Å
+    bool bMakeWhite2DIDList;                                                    //RogerYang 20251202 : JCET 2D FT1ç™½åå–®/FT2æ¯”å°åŠŸèƒ½
+    bool bATC_SlopeSaveOnHandler;                                               //JerryYang 20231016 : Add handlerç«¯è¨­å®šTJåƒæ•¸(Slopeã€Offset)
+    bool bUseSecondATCTempOffset;                                               //Ifor 20241118 : æ¸¬è©¦ä¸­è®Šæº«
     bool bPassBinNoRotate;                                                      //jou 20231020 : Pass bin no rotate
     bool bGPIB_Command_DOPAUSE;                                                 //Jimmychiu 20231102 : GPIB Command SETHANDLERDOPAUSE
     bool bRotateUseRTmode;                                                      //jou 20231122 : Rotate Use RT mode
-    bool bCategoryInfoByContactCT;                                              //Sam 20240131 : ·s¼W¤@²Õ CategoryInfo ¬ö¿ı¸ê®Æ¨Ï¥Î ContactCT
+    bool bCategoryInfoByContactCT;                                              //Sam 20240131 : æ–°å¢ä¸€çµ„ CategoryInfo ç´€éŒ„è³‡æ–™ä½¿ç”¨ ContactCT
     bool bShowCloseSiteAlarmWhenStart;                                          //Jimmychiu 20230925 : Show Close Sites Alarm When Start
-    bool bA67TriggerOneCycleWhenAlarm;                                          //JerryYang 20241028 : ª¿«~¹ü¤Æ­n¨D ¯S©wALARM­nÄ²µoONE CYCLE
-    bool bSECSGEM_UseKeyPro;                                                    //Ifor 20230721 : add SECS GEM ¨Ï¥Î KeyPro ±±ºŞ
-    bool bLockF11ByFile;                                                        //Sam 20240202 : ·s¼W F11 Lock by file ¥\¯à
-    bool bLockRTCByFile;                                                        //Sam 20240311 : ·s¼W RTC Lock by file ¥\¯à
+    bool bA67TriggerOneCycleWhenAlarm;                                          //JerryYang 20241028 : çŸ½å“å½°åŒ–è¦æ±‚ ç‰¹å®šALARMè¦è§¸ç™¼ONE CYCLE
+    bool bSECSGEM_UseKeyPro;                                                    //Ifor 20230721 : add SECS GEM ä½¿ç”¨ KeyPro æ§ç®¡
+    bool bLockF11ByFile;                                                        //Sam 20240202 : æ–°å¢ F11 Lock by file åŠŸèƒ½
+    bool bLockRTCByFile;                                                        //Sam 20240311 : æ–°å¢ RTC Lock by file åŠŸèƒ½
     bool bLockI02ByFile;                                                        //JerryYang 20260504 : for SPIL -- I02 Lock by File
     bool bLockA03ByFile;                                                        //JerryYang 20260504 : for SPIL -- A03 Lock by File
 
-    bool bRTCAutoTuning;                                                        //Sam 20230419 : ·s¼W RTC Auto Tuning ¥\¯à
-    bool bRTCStepAsideForPhoto;                                                 //Ifor 20230803 add : ·s¼W RTC Step Aside For Photo¥\¯à
+    bool bRTCAutoTuning;                                                        //Sam 20230419 : æ–°å¢ RTC Auto Tuning åŠŸèƒ½
+    bool bRTCStepAsideForPhoto;                                                 //Ifor 20230803 add : æ–°å¢ RTC Step Aside For PhotoåŠŸèƒ½
     bool bSmartSetup;
 
     bool bUseSECSGEMAutoStart;                                                  //Ifor 20200521 add: SECS/GEM Auto Start
@@ -424,46 +424,46 @@ typedef struct
     bool bUseIndexCheckHasICNeedPurge;                                          //Ifor 20200622 add:Index Check Has IC Need Purge
     bool bUseIndexPickShuttleErrNeedPurge;                                      //Ifor 20200622 add:Index Pick Shuttle Err Need Purge
     bool bUseLocalTraySpeed;                                                    //Ifor 20200825 add: Use Local Tray Speed
-    bool bUseBarcodeAutoAdjustLight;                                            //Ifor 20210408 add:Barcode ¦Û°Ê½Õ¾ã¥ú·½
-    bool bUseLoaderToEmptyColorToAuto;                                          //Ifor 20211104 add: Loader ±j¨î¨ìEmpty Auto ±j¨î¨úColor
+    bool bUseBarcodeAutoAdjustLight;                                            //Ifor 20210408 add:Barcode è‡ªå‹•èª¿æ•´å…‰æº
+    bool bUseLoaderToEmptyColorToAuto;                                          //Ifor 20211104 add: Loader å¼·åˆ¶åˆ°Empty Auto å¼·åˆ¶å–Color
     bool bUseSimcoESDGiveWayFunction;                                           //Ifor 20211108 add: SIMCO ESD Give Way Function
-    bool bContactModeNeedCheckIndexHasIC;                                       //Ifor 20221020 add: Contact Mode¨C¦¸START ÀË¬d¬O§_¦³IC¦b¤âÁu¤W¡A¦³IC»İ¤â°Ê¨ú¨«
-    bool bContactModeNeedOneByOneCheckIC;                                       //Ifor 20221104 add:Contact Mode ­tÀ£¨Ï¥ÎOne By One Check IC
+    bool bContactModeNeedCheckIndexHasIC;                                       //Ifor 20221020 add: Contact Modeæ¯æ¬¡START æª¢æŸ¥æ˜¯å¦æœ‰ICåœ¨æ‰‹è‡‚ä¸Šï¼Œæœ‰ICéœ€æ‰‹å‹•å–èµ°
+    bool bContactModeNeedOneByOneCheckIC;                                       //Ifor 20221104 add:Contact Mode è² å£“ä½¿ç”¨One By One Check IC
 
     bool bCreateManualEOCAP;                                                    //jou 20221104 : VTest CreateManualEOCAP function;
     bool bAutoSiteMappingSetPassBIN;                                            //jou 20230221 : Auto Site Mapping Set Pass BIN
 
     bool bLotIDVerify;                                                          //Steven 20240704 : Lot Verification function for ATK
-    bool bFixNameOfForcePerPinG;                                                //Steven 20240821 : ­â¤¤¤ß»¡­n­×¥¿¦sÀÉ¦WºÙ
+    bool bFixNameOfForcePerPinG;                                                //Steven 20240821 : å‡Œä¸­å¿ƒèªªè¦ä¿®æ­£å­˜æª”åç¨±
 
     bool bART_RT_NoRotate;                                                      //Sam 20240809 : ART RT No Rotate
-    bool bUseTSVFunction;                                                       //Steven 20240904 : for ATKªºTSV¥\¯à
+    bool bUseTSVFunction;                                                       //Steven 20240904 : for ATKçš„TSVåŠŸèƒ½
     bool bCheckTempDuringIndexArmTesting;                                       //Jimmychiu 20240916 : Check the temperature during index arm testing
     bool bNeedAlarmAfterUnloaderFull;                                           //Jimmychiu 20240902 : Need Alarm After Unloader Full
-    bool bRMSNoNeedToDownloadEveryTime;                                         //Steven 20240926 : RMS¤£­n¨C¦¸¤U¸ü¥]¦¨¥\¯à    //ChungHung 20130621 add SCK RMS SCK ¤£­n¨C¦¸¸ü¤JÀÉ®×   //ChungHung 20130621 add CC_SPIL_SHINCHU RMS CC_SPIL_SHINCHU ¤£­n¨C¦¸¸ü¤JÀÉ®×
-    bool bGPIBUseSECSGENData;                                                   //Sam 20240826 : GPIB ³q°T¸ê®Æ¨Ï¥Î SECSGEM Data
-    bool bEnableSocketSensorByPassIndexCheck;                                   //Ifor 20230731 add: ¶}±ÒSocket Sensor Index Check¤£¨Ï¥Î¯uªÅÀË¬d´İ®Æ
+    bool bRMSNoNeedToDownloadEveryTime;                                         //Steven 20240926 : RMSä¸è¦æ¯æ¬¡ä¸‹è¼‰åŒ…æˆåŠŸèƒ½    //ChungHung 20130621 add SCK RMS SCK ä¸è¦æ¯æ¬¡è¼‰å…¥æª”æ¡ˆ   //ChungHung 20130621 add CC_SPIL_SHINCHU RMS CC_SPIL_SHINCHU ä¸è¦æ¯æ¬¡è¼‰å…¥æª”æ¡ˆ
+    bool bGPIBUseSECSGENData;                                                   //Sam 20240826 : GPIB é€šè¨Šè³‡æ–™ä½¿ç”¨ SECSGEM Data
+    bool bEnableSocketSensorByPassIndexCheck;                                   //Ifor 20230731 add: é–‹å•ŸSocket Sensor Index Checkä¸ä½¿ç”¨çœŸç©ºæª¢æŸ¥æ®˜æ–™
     bool bFillTheTrayAfterOutArmPlace;                                          //Jimmychiu 20240726 : Fill The Tray After Out Arm Place
     bool bDisableOpenAllSiteWhenChangeShtMod;                                   //Jimmychiu 20241203 : Disable opening all sites when changing shuttle mode.
-    bool bContactAlmNeedOneCycle;                                               //Sam 20241226 : Contact Alarm »İ­n¥ı°µ OneCycle
-    bool bPickerLifeAlmNeedOneCycle;                                            //AI(ht9045-config) 20260521 (RogerYang) : SCC§l¼L¹Ø©R³øÄµOneCycleÀu¤Æ
+    bool bContactAlmNeedOneCycle;                                               //Sam 20241226 : Contact Alarm éœ€è¦å…ˆåš OneCycle
+    bool bPickerLifeAlmNeedOneCycle;                                            //AI(ht9045-config) 20260521 (RogerYang) : SCCå¸å˜´å£½å‘½å ±è­¦OneCycleå„ªåŒ–
     bool bEnableRMS;                                                            //Jimmychiu 20241213 : add coustomer func EnableRMS
     bool bContactCountSavedByRecipe;                                            //Jimmychiu 20240826 : Contact count saved by recipe
     bool bScanBarcodeAndDownloadFileInRMS;                                      //Jimmychiu 20241226 : Scan Barcode And Download File In RMS
     bool bAutoCleanTimeCT;                                                      //jou 20250102 : auto clean triger time count
-    bool bUploadLogByTypeFolder;                                                //Steven 20250217 : ®Ú¾ÚLog¤º®e§@¸ê®Æ§¨¤ÀÃş
-    bool bRunModeFollowLotInfo;                                                 //Steven 20250603 : ®Ú¾ÚLot InfoªºRun mode¶i¦æ¤Á´«
-    bool bUploadTestArmTorqueLog;                                               //Steven 20250609 : ²Î¤@¾ã²z
-    bool bCanRemoteStart;                                                       //Steven 20250712 : ¦³³q¹L­·ÀI§iª¾¥i¥H»·ºİstartªº«È¤á
+    bool bUploadLogByTypeFolder;                                                //Steven 20250217 : æ ¹æ“šLogå…§å®¹ä½œè³‡æ–™å¤¾åˆ†é¡
+    bool bRunModeFollowLotInfo;                                                 //Steven 20250603 : æ ¹æ“šLot Infoçš„Run modeé€²è¡Œåˆ‡æ›
+    bool bUploadTestArmTorqueLog;                                               //Steven 20250609 : çµ±ä¸€æ•´ç†
+    bool bCanRemoteStart;                                                       //Steven 20250712 : æœ‰é€šéé¢¨éšªå‘ŠçŸ¥å¯ä»¥é ç«¯startçš„å®¢æˆ¶
     bool bEndLotAfterTrayFeed;                                                  //Jimmychiu 20250115 : Auto End Lot After Tray Feed
-    bool bUseRenesasServer;                                                     //RogerYang 20250812 : ·çÂÄFT-CT
-    bool bReadClipCodeFromUnloader;                                             //Jimmychiu 20250818 : Read Clip Code From Unloader(Auto1-3¡BFix1-3)
-    bool bSocketSensorCheckICAtArmDown;                                         //Jimmychiu 20250826 : ¨C¦¸¤UÀ£½T»{¦³IC¦bsocket
+    bool bUseRenesasServer;                                                     //RogerYang 20250812 : ç‘è–©FT-CT
+    bool bReadClipCodeFromUnloader;                                             //Jimmychiu 20250818 : Read Clip Code From Unloader(Auto1-3ã€Fix1-3)
+    bool bSocketSensorCheckICAtArmDown;                                         //Jimmychiu 20250826 : æ¯æ¬¡ä¸‹å£“ç¢ºèªæœ‰ICåœ¨socket
     bool bOpenDoorCheckLoaderAfterTrayEnd;                                      //Jimmychiu 20250826 : Open Door Check Loader After TrayEnd
     bool bOneByOneWhenPickErrAtLoader;                                          //Jimmychiu 20250924 : Suck one by one when a pickup error occurs at the loader.
-    bool bSetContactForceToAutoClean;                                           //Steven 20250915 : ½Æ»sContact Forceµ¹Auto Clean¥Î
+    bool bSetContactForceToAutoClean;                                           //Steven 20250915 : è¤‡è£½Contact Forceçµ¦Auto Cleanç”¨
     bool bTempAlarmBinNeedToError;                                              //Steven 20251022 : Temp alarm need put to error bin
-    bool bInspectSuckICWhenSoftStart;                                           //Jimmychiu 20240217 : ¨Z«Û­n¨D²¾°£ÀË¬d
+    bool bInspectSuckICWhenSoftStart;                                           //Jimmychiu 20240217 : æ±¶å½¥è¦æ±‚ç§»é™¤æª¢æŸ¥
     bool bCheckOutSuckICFallDownOnlySkip;                                       //Jimmychiu 20240813 : Only Skip When Checking Out Suck IC Fall Down
     bool bAutoTeachOutShuttleLantch;                                            //Jimmychiu 20240923 : Auto teach in/out shuttle site kit position
     bool bMonitorLBonAmbient;                                                   //Jimmychiu 20251030 : Monitor the LB temperature under ambient temperature
@@ -477,8 +477,8 @@ typedef struct
     bool bLoaderAutoRetry;
     bool bHotModeUseDiffScale;
     bool bUseInvisibleOffset;
-    bool bSetOffsetLimitToAll;                                                  //JerryYang 20230215 : ASE-CL ©|´¼­n¨D¤@Áä³]©wOffset limit
-    bool bUseConfigSaveButton;                                                  //JerryYang 20230215 : ASE-CL ©|´¼­n¨Dfollow 7000³nÅé·s¼Wconfig¦sÀÉ«ö¶s
+    bool bSetOffsetLimitToAll;                                                  //JerryYang 20230215 : ASE-CL å°šæ™ºè¦æ±‚ä¸€éµè¨­å®šOffset limit
+    bool bUseConfigSaveButton;                                                  //JerryYang 20230215 : ASE-CL å°šæ™ºè¦æ±‚follow 7000è»Ÿé«”æ–°å¢configå­˜æª”æŒ‰éˆ•
     bool bD44Use4ea;
     bool RunCheckWhenRecPause;
     bool bConfigAddObjectName;

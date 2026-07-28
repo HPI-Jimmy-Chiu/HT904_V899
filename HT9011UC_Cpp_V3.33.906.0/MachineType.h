@@ -6,11 +6,11 @@
 #include <windows.h>                 //AI(W0-TAIL) 20260626: DEFAULT_CHARSET for SetCompomentLanguage (uninstantiated template)
 using std::vector;                   //AI(W0-TAIL) 20260626: BCB6 had 'using namespace std' via includer; restrict to vector
 
-//¾÷¥x¸ê°T-------------------------
+//æ©Ÿå°è³‡è¨Š-------------------------
 #define ALIAS "HT9045"
 #define HT9045
 #define HANDLER_CONTROL_ATC
-#define ATC_HEAD_COUNT 32                                                       //Ifor 20160514 ­×§ïATC Heat ³Ì¤j¼Æ32
+#define ATC_HEAD_COUNT 32                                                       //Ifor 20160514 ä¿®æ”¹ATC Heat æœ€å¤§æ•¸32
 #define INDEX_HEAT_COUNT 32
 //=============  Specific define  ==============================================
 //#define Carry4
@@ -21,13 +21,13 @@ using std::vector;                   //AI(W0-TAIL) 20260626: BCB6 had 'using nam
 //#define DEBUG_HANGUP_NO_HOME
 //#define DEBUG_NEW_ALARM_DESCRIPTION
 //#define DEBUG_TRY_CATCH
-//#define DEBUG_HOME                                                            //wei 20170317 §Ö³t¦^Home¶}Ãö
+//#define DEBUG_HOME                                                            //wei 20170317 å¿«é€Ÿå›Homeé–‹é—œ
 //#define DEBUG_32SITE
 //#define DEBUG_SPIL
 //#define DEBUG_HT1032
 //#define DEBUG_GALIL
 #define DEBUG_GALIL_CHECK_Y
-//#define DEBUG_INDEX_UPH                                                       //Steven 20170818 : ´ú¸ÕUPH¥Î
+//#define DEBUG_INDEX_UPH                                                       //Steven 20170818 : æ¸¬è©¦UPHç”¨
 //#define DEBUG_AUTO_CLEAN                                                      //JerryYang 20160824 Auto clean log
 //#define DEBUG_AutoHomeLog
 //#define DEBUG_ATC
@@ -38,15 +38,15 @@ using std::vector;                   //AI(W0-TAIL) 20260626: BCB6 had 'using nam
 //#define DEBUG_AutoSiteMap
 //#define DEBUG_OneCycleHotPlate
 //#define DEBUG_ShuttleCanMoveL
-//#define DEBUG_OneCycleContinous                                               //Sam 20221124 : ·s¼W³sÄò OneCycle ¥\¯à Debug
-//#define DEBUG_AutoZMotor                                                      //RogerYang 2050512 °¶´úAuto3Z¤É­°°İÃD
+//#define DEBUG_OneCycleContinous                                               //Sam 20221124 : æ–°å¢é€£çºŒ OneCycle åŠŸèƒ½ Debug
+//#define DEBUG_AutoZMotor                                                      //RogerYang 2050512 å‰æ¸¬Auto3Zå‡é™å•é¡Œ
 #define USE_CompareCommandPos
 //#define USE_EC_CHANGE
 //#define DEBUG_COLOR
-//#define BETA_VTestSummaryFile                                                 //RogerYang 20250809 °¶´úSummary¤å¥ó­×§ï
+//#define BETA_VTestSummaryFile                                                 //RogerYang 20250809 å‰æ¸¬Summaryæ–‡ä»¶ä¿®æ”¹
 //=============  USER DEFINE ===================================================
 //#define SOFT_SIMULTE
-//#define SOFT_SIMULTE_EtherCAT                                                 //Sam 20230724 : ´ú¸Õ SensorEtherCAT ¥Î
+//#define SOFT_SIMULTE_EtherCAT                                                 //Sam 20230724 : æ¸¬è©¦ SensorEtherCAT ç”¨
 //#define ASE_KaohSiung
 //#define KOREA
 //#define HiSilicon
@@ -54,34 +54,34 @@ using std::vector;                   //AI(W0-TAIL) 20260626: BCB6 had 'using nam
 //#define AMD_Version
 //RF90@HT-9045W      HT-9045W@RF90
 //#define BETA_VERSION
-//#define FOR_EVAN                                                              //§d¦p¬K­nªºª©¥»
-//#define FOR_QLE                                                               //´ë±çªºª©¥»
-//#define FOR_NVIDIA_2D_SORT                                                    //Nvidia 2D SORTªºª©¥»
-#define RTCErrorType                                                            //RogerYang 20260611 : ¶}©ñ //wei 20221222 RTC ARM Error
-//#define FOR_NVIDIA                                                            //Nvidia ªºª©¥»
-//#define FOR_ASECL_L8                                                          //ASECL L8ªºª©¥»
+//#define FOR_EVAN                                                              //å³å¦‚æ˜¥è¦çš„ç‰ˆæœ¬
+//#define FOR_QLE                                                               //æ¸ æ¢çš„ç‰ˆæœ¬
+//#define FOR_NVIDIA_2D_SORT                                                    //Nvidia 2D SORTçš„ç‰ˆæœ¬
+#define RTCErrorType                                                            //RogerYang 20260611 : é–‹æ”¾ //wei 20221222 RTC ARM Error
+//#define FOR_NVIDIA                                                            //Nvidia çš„ç‰ˆæœ¬
+//#define FOR_ASECL_L8                                                          //ASECL L8çš„ç‰ˆæœ¬
 #ifdef SOFT_SIMULTE
     #define DEBUG_ATC
 #endif
-//=============  Hisi ±M¥Îª©¥» DEFINE Start===================================================
-#define HISI_VERSION    "KL_HT9045_V02.30."                                     //®ü«ä¥Dª©¸¹
+//=============  Hisi å°ˆç”¨ç‰ˆæœ¬ DEFINE Start===================================================
+#define HISI_VERSION    "KL_HT9045_V02.30."                                     //æµ·æ€ä¸»ç‰ˆè™Ÿ
 #define HISI_FileName   "2.1"                                                   //kevin 20180626 ATC Ver
-#define HISI_KYEC       "K301"                                                  //Ifor 20161109 add ¨Ê¤¸®ü«äª©¸¹
-#define HISI_SPIL       "S016"                                                  //Ifor 20161109 add ª¿«~®ü«äª©¸¹
-#define HISI_ASE        "B015"                                                  //Ifor 20161109 add ¤é¤ë¥ú®ü«äª©¸¹
+#define HISI_KYEC       "K301"                                                  //Ifor 20161109 add äº¬å…ƒæµ·æ€ç‰ˆè™Ÿ
+#define HISI_SPIL       "S016"                                                  //Ifor 20161109 add çŸ½å“æµ·æ€ç‰ˆè™Ÿ
+#define HISI_ASE        "B015"                                                  //Ifor 20161109 add æ—¥æœˆå…‰æµ·æ€ç‰ˆè™Ÿ
 #define HISI_JCET       "J012"
-#define HISI_SCC        "C012"                                                  //Ifor 20170818 add ¦¿³±SCC®ü«äª©¸¹
+#define HISI_SCC        "C012"                                                  //Ifor 20170818 add æ±Ÿé™°SCCæµ·æ€ç‰ˆè™Ÿ
 #define HISI_SIGURD     "SG068"
 #define HISI_TFME       "T012"
 #define HISI_TFAMD      "T003"
-#define HISI_VTEST      "V011.9"                                                //jou 20201201 add VTEST°¶´ú®ü«äª©¸¹
+#define HISI_VTEST      "V011.9"                                                //jou 20201201 add VTESTå‰æ¸¬æµ·æ€ç‰ˆè™Ÿ
 
-#define HISI_ATCVER     "200"                                                   //Ifor 20180808 : add ­×§ïATCª©¸¹¦A«ü©wª©¥»¥H¤W¬Ò¥i¶]
-#define Record_Ver      "V02.31B015"                                            //kevin 20200121 ¬ö¿ıµ¹eKeep
-#define Record_VerShow  ""                                                      //kevin 20200121 ¬ö¿ıµ¹eKeep
-#define ASE_AOA         "B011Beta_AOA.V1.63"                                    //KenHsieh 20211015 : ASE­n¨Dª©¸¹·s¼WAOA
+#define HISI_ATCVER     "200"                                                   //Ifor 20180808 : add ä¿®æ”¹ATCç‰ˆè™Ÿå†æŒ‡å®šç‰ˆæœ¬ä»¥ä¸Šçš†å¯è·‘
+#define Record_Ver      "V02.31B015"                                            //kevin 20200121 ç´€éŒ„çµ¦eKeep
+#define Record_VerShow  ""                                                      //kevin 20200121 ç´€éŒ„çµ¦eKeep
+#define ASE_AOA         "B011Beta_AOA.V1.63"                                    //KenHsieh 20211015 : ASEè¦æ±‚ç‰ˆè™Ÿæ–°å¢AOA
 #define SECSGEM_Version "V1.05"
-//=============  Hisi ±M¥Îª©¥» DEFINE End  ===================================================
+//=============  Hisi å°ˆç”¨ç‰ˆæœ¬ DEFINE End  ===================================================
 #ifdef SOFT_SIMULTE
     #ifndef DEBUG_HANGUP_NO_HOME
         #define DEBUG_HANGUP_NO_HOME
@@ -107,249 +107,249 @@ using std::vector;                   //AI(W0-TAIL) 20260626: BCB6 had 'using nam
 #endif*/
 #define ATCVersion "."
 //=============  SVN Revision Source DEFINE ====================================
-//    #define SVNRevision  "868.0"                                              //JimmyChiu 20250510 : ª©¥»¸¹§ï¥ÑProject --> Version Info­×§ï
-    #define CSMCDLLRevision  "3.15.0.0"                                         //Isaac 20190606 : SMCC.dllª©¥»ÀË¬d
-    #define TemperatureDatavision  "625"                                        //Sam 20210106 : TemperatureData ·s¼Wª©¸¹¨Ó¬Û®e
+//    #define SVNRevision  "868.0"                                              //JimmyChiu 20250510 : ç‰ˆæœ¬è™Ÿæ”¹ç”±Project --> Version Infoä¿®æ”¹
+    #define CSMCDLLRevision  "3.15.0.0"                                         //Isaac 20190606 : SMCC.dllç‰ˆæœ¬æª¢æŸ¥
+    #define TemperatureDatavision  "625"                                        //Sam 20210106 : TemperatureData æ–°å¢ç‰ˆè™Ÿä¾†ç›¸å®¹
     #define ATPDLLVersion  "1.0.0.1"                                            //JerryYang 20220317 : ATP dll
 
-//ª`·N¨Æ¶µ----------------------------------------------------------------------
-//  1. Memo¸òList½Ğ¥ÎClear(); ¤£­n¥ÎDelete(i); ¦]¬°·|¦Y°O¾ĞÅé
-//  2. timeBeginPeriod(1); ¥u»İ­n¨Ï¥Î¤@¦¸,¥i¥HÅıcycle time§óºë·Ç
-//  3. §Ö³tCompilerªºªF¦è·|³y¦¨²ö¦W¨ä§®ªº¿ù»~!!
-//  4. ¨Ï¥Î°£ªk©M¶}®Ú¸¹ÁÙ¦³%®É¡A­nª`·NÅÜ¼Æ¬O¤£¬O0
-//  5. ª`·NItemIndex¤£¥i¥H¬O-1
-//  6. ª`·NPageControl->ActivePage¤£­n¥Î,·|¦³¦º¾÷ªº­·ÀI;½Ğ·R¥ÎPageControl->ActivePageIndex
+//æ³¨æ„äº‹é …----------------------------------------------------------------------
+//  1. Memoè·ŸListè«‹ç”¨Clear(); ä¸è¦ç”¨Delete(i); å› ç‚ºæœƒåƒè¨˜æ†¶é«”
+//  2. timeBeginPeriod(1); åªéœ€è¦ä½¿ç”¨ä¸€æ¬¡,å¯ä»¥è®“cycle timeæ›´ç²¾æº–
+//  3. å¿«é€ŸCompilerçš„æ±è¥¿æœƒé€ æˆè«åå…¶å¦™çš„éŒ¯èª¤!!
+//  4. ä½¿ç”¨é™¤æ³•å’Œé–‹æ ¹è™Ÿé‚„æœ‰%æ™‚ï¼Œè¦æ³¨æ„è®Šæ•¸æ˜¯ä¸æ˜¯0
+//  5. æ³¨æ„ItemIndexä¸å¯ä»¥æ˜¯-1
+//  6. æ³¨æ„PageControl->ActivePageä¸è¦ç”¨,æœƒæœ‰æ­»æ©Ÿçš„é¢¨éšª;è«‹æ„›ç”¨PageControl->ActivePageIndex
 //  7. USEOBJ("XLSfile.obj"); USEUNIT("XLSfile.pas");
-//  8. GetDC()«áªºÅÜ¼Æ¤@©w­n¥ÎReleaseDCÄÀ©ñ±¼
-//  9. ºÉ¶q¤£­n¨Ï¥ÎAnstringÂà¼Æ­Èªº¨ç¦¡¦pStrToInt ©Î .ToInt();­n¥ÎcharÂà¼Æ­Èªº¤è¦¡¦p atoi(), atof()
-// 10. ¯BÂI¼Æ³Ì¦n¤£­n¥Îfloat, ­n¥Î double, ¤£µM®e©ö·|µo¥Í¼Æ­È¹ï¤£¤Wªº°İÃD
+//  8. GetDC()å¾Œçš„è®Šæ•¸ä¸€å®šè¦ç”¨ReleaseDCé‡‹æ”¾æ‰
+//  9. ç›¡é‡ä¸è¦ä½¿ç”¨Anstringè½‰æ•¸å€¼çš„å‡½å¼å¦‚StrToInt æˆ– .ToInt();è¦ç”¨charè½‰æ•¸å€¼çš„æ–¹å¼å¦‚ atoi(), atof()
+// 10. æµ®é»æ•¸æœ€å¥½ä¸è¦ç”¨float, è¦ç”¨ double, ä¸ç„¶å®¹æ˜“æœƒç™¼ç”Ÿæ•¸å€¼å°ä¸ä¸Šçš„å•é¡Œ
 //------------------------------------------------------------------------------
 //int MachineTypeChoice;//0:HT9045 1:HT9046
 
 //============= Customer Code define ===========================================
 #define CC_HONPREC_QC             0
-#define CC_HuaTian_NNAJING      729 //µØ¤Ñ«n¨Ê
-#define CC_IFXTH_Thai           730 //IFXTH®õ°ê
-#define CC_Carsem_Thai          731 //Carsem ®õ°ê
+#define CC_HuaTian_NNAJING      729 //è¯å¤©å—äº¬
+#define CC_IFXTH_Thai           730 //IFXTHæ³°åœ‹
+#define CC_Carsem_Thai          731 //Carsem æ³°åœ‹
 
 #define CC_Ramos                740 //Ramos Technology
 #define CC_TechL_Vitenam        741 //TechL-Vitenam
 #define CC_TechL_Korea          742 //TechL-Korea
 #define CC_SFA_Semicon          743 //SFA_Semicon_Korea
 
-#define CC_GOOGLE_Israel        750 //GOOGLE ¥H¦â¦C
-#define CC_Mellanox_Israel      751 //Mellanox ¥H¦â¦C
+#define CC_GOOGLE_Israel        750 //GOOGLE ä»¥è‰²åˆ—
+#define CC_Mellanox_Israel      751 //Mellanox ä»¥è‰²åˆ—
 
-#define CC_UTAC_Indonesia       763 //Áp´ú¬ì§Ş ¦L¥§
-#define CC_Elmos_Germany        764 //Elmos¼w°ê
-#define CC_Allegro_Philippines  765 //Allegroµá«ß»«
-#define CC_Morningcore          766 //®fªä
-#define CC_Paceis               767 //¯èªä·½
-#define CC_Sigmastar            768 //¾U¤O
-#define CC_BRAVETEK             769 //³Õµo¹q¤l
+#define CC_UTAC_Indonesia       763 //è¯æ¸¬ç§‘æŠ€ å°å°¼
+#define CC_Elmos_Germany        764 //Elmoså¾·åœ‹
+#define CC_Allegro_Philippines  765 //Allegroè²å¾‹è³“
+#define CC_Morningcore          766 //å®¸èŠ¯
+#define CC_Paceis               767 //èˆªèŠ¯æº
+#define CC_Sigmastar            768 //éŠ³åŠ›
+#define CC_BRAVETEK             769 //åšç™¼é›»å­
 
-#define CC_DJI_SZ               770 //¤jÃ¦³Ğ·s ²`¦`
-#define CC_JSCC_OS              771 //ªø¹q·L¹q¤l (JSCC OS³¡ªù)
-#define CC_TYTAN                772 //¦¨³£ºA©Z
-#define CC_CAPCON               773 //¥_¨ÊµØ«Ê
+#define CC_DJI_SZ               770 //å¤§ç–†å‰µæ–° æ·±åœ³
+#define CC_JSCC_OS              771 //é•·é›»å¾®é›»å­ (JSCC OSéƒ¨é–€)
+#define CC_TYTAN                772 //æˆéƒ½æ…‹å¦
+#define CC_CAPCON               773 //åŒ—äº¬è¯å°
 
-#define CC_NXP_TJ               780 //®¦´¼®ú ¤Ñ¬z
-#define CC_XINYUN               781 //ªC¦{ªä¤ª
-#define CC_SCX                  783 //²`´úªä
+#define CC_NXP_TJ               780 //æ©æ™ºæµ¦ å¤©æ´¥
+#define CC_XINYUN               781 //æ­å·èŠ¯äº‘
+#define CC_SCX                  783 //æ·±æ¸¬èŠ¯
 
-#define CC_TAIJI_SEMI_SUZHOU    787 //¤Ó·¥¥b¾ÉÅé(Ä¬¦{)
+#define CC_TAIJI_SEMI_SUZHOU    787 //å¤ªæ¥µåŠå°é«”(è˜‡å·)
 
-#define CC_FOREHOPE_NINGBO      790 //¨iª¿ ¹çªi
-#define CC_SJ_Semiconductor     791 //²±¦X´¹·L
-#define CC_SJ_Semiconductor_OS  792 //²±¦X´¹·LOpen Short
-#define CC_30JAVEE              793 //¦¨³£¤T¹s¹Å·L¹q¤l
-#define CC_CAMBRICON            794 //¤W®ü´HªZ¬ö
-#define CC_VATE                 795 //¥ß½Ã¬ì§Ş
-#define CC_ASIAOPTICAL          796 //¨È¬w¥ú¾Ç
-#define CC_HXYSEMI              797 //®ı¦¿¯è·½ªä
-#define CC_LEADYO               798 //¼sªF§Q´­
-#define CC_DENGLIN              799 //¦¨³£µnÁ{¬ì§Ş
+#define CC_FOREHOPE_NINGBO      790 //ç”¬çŸ½ å¯§æ³¢
+#define CC_SJ_Semiconductor     791 //ç››åˆæ™¶å¾®
+#define CC_SJ_Semiconductor_OS  792 //ç››åˆæ™¶å¾®Open Short
+#define CC_30JAVEE              793 //æˆéƒ½ä¸‰é›¶å˜‰å¾®é›»å­
+#define CC_CAMBRICON            794 //ä¸Šæµ·å¯’æ­¦ç´€
+#define CC_VATE                 795 //ç«‹è¡›ç§‘æŠ€
+#define CC_ASIAOPTICAL          796 //äºæ´²å…‰å­¸
+#define CC_HXYSEMI              797 //æµ™æ±ŸèˆªæºèŠ¯
+#define CC_LEADYO               798 //å»£æ±åˆ©æš
+#define CC_DENGLIN              799 //æˆéƒ½ç™»è‡¨ç§‘æŠ€
 
 #define CC_BROADCOM_US          800 //Broadcom-US
 #define CC_Tessolve_US          801 //Tessolve-US
-#define CC_Infineon             802 //­^­¸­â
-#define CC_TERADYNE_US          803 //®õ·ç¹F Teradyne-US
-#define CC_TeraProbe            804 //TeraProbe ¤é¥»
-#define CC_TATA                 805 //¶ğ¶ğ-¦L«×
-#define CC_STM                  806 //·Nªk¥b¾ÉÅé °¨º¸¥L
-#define CC_IMEC_TAIWAN          809 //¥xÆW·R¬ü¬ì
+#define CC_Infineon             802 //è‹±é£›å‡Œ
+#define CC_TERADYNE_US          803 //æ³°ç‘é” Teradyne-US
+#define CC_TeraProbe            804 //TeraProbe æ—¥æœ¬
+#define CC_TATA                 805 //å¡”å¡”-å°åº¦
+#define CC_STM                  806 //æ„æ³•åŠå°é«” é¦¬çˆ¾ä»–
+#define CC_IMEC_TAIWAN          809 //å°ç£æ„›ç¾ç§‘
 
-#define CC_AVAGO_Korea          810 //¦wµØ°ª Áú°ê
-#define CC_PTI_3C               812 //¤O¦¨ 3C
+#define CC_AVAGO_Korea          810 //å®‰è¯é«˜ éŸ“åœ‹
+#define CC_PTI_3C               812 //åŠ›æˆ 3C
 #define CC_SFASemicon           813 //SFA Semicon
 
-#define CC_TSMC_TAINAN          820 //¥x¿n¹q ¥x«n
-#define CC_TSMC_HSINCHU         825 //¥x¿n¹q ·s¦Ë
-#define CC_ChenYuanXiang_CHINA  828 //¦è¦w ±á¤¸µ¾
+#define CC_TSMC_TAINAN          820 //å°ç©é›» å°å—
+#define CC_TSMC_HSINCHU         825 //å°ç©é›» æ–°ç«¹
+#define CC_ChenYuanXiang_CHINA  828 //è¥¿å®‰ æ™¨å…ƒç¿”
 
-#define CC_EUROFINS             829 //¼Ú³°
+#define CC_EUROFINS             829 //æ­é™¸
 
-#define CC_HTKJXA_CHINA         830 //¦è¦w ¤Ñ¤ôµØ¤Ñ
+#define CC_HTKJXA_CHINA         830 //è¥¿å®‰ å¤©æ°´è¯å¤©
 #define CC_RF360                831 //RF360
-#define CC_LBSH                 832 //¤W®ü¸S¤ñ
-#define CC_Realtek              833 //·ç¬R¥b¾ÉÅé
-#define CC_RIGGER_MICRO         834 //¾G¦{¾U³Ç·L
-#define CC_XINITECH             835 //¥_¨Êªä¤O
-#define CC_GIGA_FORCE_Zhejiang  836 //©uÂ× ®ı¦¿
-#define CC_GIGA_FORCE_Shanghai  837 //©uÂ× ¤W®ü
-#define CC_CSAMQ                838 //csamq ªø¨F¦wªª¬u
-#define CC_GONGJIN_SHANGHAI     839 //¤W®ü¦@¶i
+#define CC_LBSH                 832 //ä¸Šæµ·ç¥¿æ¯”
+#define CC_Realtek              833 //ç‘æ˜±åŠå°é«”
+#define CC_RIGGER_MICRO         834 //é„­å·éŠ³å‚‘å¾®
+#define CC_XINITECH             835 //åŒ—äº¬èŠ¯åŠ›
+#define CC_GIGA_FORCE_Zhejiang  836 //å­£è± æµ™æ±Ÿ
+#define CC_GIGA_FORCE_Shanghai  837 //å­£è± ä¸Šæµ·
+#define CC_CSAMQ                838 //csamq é•·æ²™å®‰ç‰§æ³‰
+#define CC_GONGJIN_SHANGHAI     839 //ä¸Šæµ·å…±é€²
 
-#define CC_SANDISK_CHINA        840 //SANDISK ¤W®ü
-#define CC_GONGJIN_SUZHOU       841 //Ä¬¦{¦@¶i
-#define CC_Mathilda             842 //°¨ªÙ¬ì§Ş
+#define CC_SANDISK_CHINA        840 //SANDISK ä¸Šæµ·
+#define CC_GONGJIN_SUZHOU       841 //è˜‡å·å…±é€²
+#define CC_Mathilda             842 //é¦¬èˆç§‘æŠ€
 #define CC_DoosanTesna          843 //DOOSAN TESNA
 #define CC_Renesas_M            844 //Renesas Malaysia.
-#define CC_STK                  845 //STK ¤é¥»
-#define CC_Renesas              846 //Renesas ¤é¥»
-#define CC_THINE                847 //Thine ¤é¥»
-#define CC_SINOICTECH           848 //¤W®üµØÀ­
-#define CC_ChipOn               849 //¤W®üªä©ô
+#define CC_STK                  845 //STK æ—¥æœ¬
+#define CC_Renesas              846 //Renesas æ—¥æœ¬
+#define CC_THINE                847 //Thine æ—¥æœ¬
+#define CC_SINOICTECH           848 //ä¸Šæµ·è¯å¶º
+#define CC_ChipOn               849 //ä¸Šæµ·èŠ¯æ—º
 
-#define CC_ChipMos_TAINAN       850 //«n­Z ¥x«n
-#define CC_ChipMos_ZHUBEI       851 //«n­Z ¦Ë¥_
-#define CC_ITS                  852 //³Ğ¶q¬ì§Ş
-#define CC_NEXPERIA_Guangdong   853 //¼s¦{ ¦w¥@
-#define CC_Atec_Semiconductor   854 //¤W®üÌÉ¦ã¥b¾ÉÅé.
-#define CC_JSSI_Semiconductor   855 //¦¿Ä¬ªä¼w¥b¾ÉÅé.
-#define CC_Microchip_FR         856 // Microchip ªk°ê
-#define CC_Indie_US             857 //Indie ¬ü°ê.
-#define CC_CETC                 858 //¤¤°ê¹q¤l-²Ä58¬ã¨s©Ò
-#define CC_XDXCT                859 //¶H«Ò¥ı
+#define CC_ChipMos_TAINAN       850 //å—èŒ‚ å°å—
+#define CC_ChipMos_ZHUBEI       851 //å—èŒ‚ ç«¹åŒ—
+#define CC_ITS                  852 //å‰µé‡ç§‘æŠ€
+#define CC_NEXPERIA_Guangdong   853 //å»£å· å®‰ä¸–
+#define CC_Atec_Semiconductor   854 //ä¸Šæµ·æ—»è‰¾åŠå°é«”.
+#define CC_JSSI_Semiconductor   855 //æ±Ÿè˜‡èŠ¯å¾·åŠå°é«”.
+#define CC_Microchip_FR         856 // Microchip æ³•åœ‹
+#define CC_Indie_US             857 //Indie ç¾åœ‹.
+#define CC_CETC                 858 //ä¸­åœ‹é›»å­-ç¬¬58ç ”ç©¶æ‰€
+#define CC_XDXCT                859 //è±¡å¸å…ˆ
 
-#define CC_MAXIM_THAILAND       860 //MAXIM ®õ°ê
-#define CC_Microchip_Thai       861 //Microchip ®õ°ê
-#define CC_Microchip_Phil       862 //Microchip µá«ß»«
-#define CC_Microchip_China      863 //Microchip ¤¤°ê
-#define CC_Microchip_US         864 //Microchip ¬ü°ê
+#define CC_MAXIM_THAILAND       860 //MAXIM æ³°åœ‹
+#define CC_Microchip_Thai       861 //Microchip æ³°åœ‹
+#define CC_Microchip_Phil       862 //Microchip è²å¾‹è³“
+#define CC_Microchip_China      863 //Microchip ä¸­åœ‹
+#define CC_Microchip_US         864 //Microchip ç¾åœ‹
 #define CC_HANA_MICRON          865
-#define CC_ITestInc             866 //iTest,Inc. ¬ü°ê
-#define CC_EMemory              867 //EMemory ¤O©ô¹q¤l
-#define CC_CYUEAN               868 //CYUEAN ÚÌ¦w¬ì§Ş
-#define CC_PANTHER              869 //PANTHER ÂE¨¦¬ì§Ş
+#define CC_ITestInc             866 //iTest,Inc. ç¾åœ‹
+#define CC_EMemory              867 //EMemory åŠ›æ—ºé›»å­
+#define CC_CYUEAN               868 //CYUEAN ç¡®å®‰ç§‘æŠ€
+#define CC_PANTHER              869 //PANTHER é´»è°·ç§‘æŠ€
 
-#define CC_ARDENTEC             870 //ªY¸à                                      //20160805 Mylin Modify Show Only Ambient or High for ARDENTEC
-#define CC_FULCAP               871 //¸à®e                                      //2016.06.30 ,Brian
-#define CC_AOSL                 872 //¸U¦³¥b¾ÉÅé
-#define CC_Nuvoton_Israel       873 //·s­ğ ¥H¦â¦C
-#define CC_GT                   874 //¾È¨¹¬ì§Ş
-#define CC_Novatek              875 //Ápµú¬ì§Ş
-#define CC_Sunplus              876 //­â¶§¬ì§Ş
-#define CC_Amlogic              877 //´¹±á¥b¾ÉÅé
-#define CC_Higon                878 //¦¨³£®ü¥ú
-#define CC_Kingston             879 //ª÷¤h¹y
+#define CC_ARDENTEC             870 //æ¬£è©®                                      //20160805 Mylin Modify Show Only Ambient or High for ARDENTEC
+#define CC_FULCAP               871 //è©®å®¹                                      //2016.06.30 ,Brian
+#define CC_AOSL                 872 //è¬æœ‰åŠå°é«”
+#define CC_Nuvoton_Israel       873 //æ–°å” ä»¥è‰²åˆ—
+#define CC_GT                   874 //å¯°é‚¦ç§‘æŠ€
+#define CC_Novatek              875 //è¯è© ç§‘æŠ€
+#define CC_Sunplus              876 //å‡Œé™½ç§‘æŠ€
+#define CC_Amlogic              877 //æ™¶æ™¨åŠå°é«”
+#define CC_Higon                878 //æˆéƒ½æµ·å…‰
+#define CC_Kingston             879 //é‡‘å£«é “
 
-#define CC_Spreadtrum           880 //®i°T ¤W®ü
+#define CC_Spreadtrum           880 //å±•è¨Š ä¸Šæµ·
 #define CC_Amazon               881 //Amazon
-#define CC_Murata               882 //Murata §ø¥Ğ»s§@©Ò
-#define CC_Goertek              883 //ºqº¸·L¹q¤l
-#define CC_FMSH                 884 //¤W®ü´_¥¹·L¹q¤l
-#define CC_HDSC                 885 //µØ¤j¥b¾ÉÅé
-#define CC_SANECHIPS            886 //¤¤¿³·L¹q¤l ²`¦`
+#define CC_Murata               882 //Murata æ‘ç”°è£½ä½œæ‰€
+#define CC_Goertek              883 //æ­Œçˆ¾å¾®é›»å­
+#define CC_FMSH                 884 //ä¸Šæµ·å¾©æ—¦å¾®é›»å­
+#define CC_HDSC                 885 //è¯å¤§åŠå°é«”
+#define CC_SANECHIPS            886 //ä¸­èˆˆå¾®é›»å­ æ·±åœ³
 #define CC_HABANA               887 //HABANA
-#define CC_GIS                  888 //·~ªl¬ì§Ş
-#define CC_CENTER               889 //¤¤ªä°ê»Ú
+#define CC_GIS                  888 //æ¥­æ³“ç§‘æŠ€
+#define CC_CENTER               889 //ä¸­èŠ¯åœ‹éš›
 
-#define CC_UMC                  890 //Áp¹q
-#define CC_ATEC                 891 //¦ã¬ì
-#define CC_WINSTEK              892 //¥x¬P¬ì
-#define CC_SANAN                893 //¤T¦w¥ú¹q
-#define CC_UTAC_TW              894 //Áp´ú¬ì§Ş ¥xÆW
-#define CC_BARUN                895 //¦ÊÄÖ
-#define CC_SIGURD_SUZHOU        896 //ª¿®æ Ä¬¦{
-#define CC_SILTERRA_CHINKIANG   897 //ª¿¨Î Âí¦¿
-#define CC_AMD_SUZHOU           898 //AMD  Ä¬¦{
-#define CC_YTEC                 899 //¤[¤¸
+#define CC_UMC                  890 //è¯é›»
+#define CC_ATEC                 891 //è‰¾ç§‘
+#define CC_WINSTEK              892 //å°æ˜Ÿç§‘
+#define CC_SANAN                893 //ä¸‰å®‰å…‰é›»
+#define CC_UTAC_TW              894 //è¯æ¸¬ç§‘æŠ€ å°ç£
+#define CC_BARUN                895 //ç™¾é½¡
+#define CC_SIGURD_SUZHOU        896 //çŸ½æ ¼ è˜‡å·
+#define CC_SILTERRA_CHINKIANG   897 //çŸ½ä½³ é®æ±Ÿ
+#define CC_AMD_SUZHOU           898 //AMD  è˜‡å·
+#define CC_YTEC                 899 //ä¹…å…ƒ
 
-#define CC_SPIL_CS              900 //ª¿«~ ¤¤¤s                                  //KevinCheng 20251002 add ª¿«~¤¤¤s«È¤á½X
-#define CC_ISE_US               901 //ISE ¬ü°ê
-#define CC_HYGEIA_SUZHOU        902 //®ü¨Ê Ä¬¦{
-#define CC_JSI_HAOXING          903 //²Ğ¿³ ªø¹q
-#define CC_JINGJIAWEI_CHANGSHA  904 //ªø¨F´º¹Å·L
-#define CC_ISE_SH               905 //¤W®ü¤ëªä¥b¾ÉÅé¬ì§Ş
-#define CC_INTEL_IL             906 //INTEL ¥H¦â¦C
-#define CC_IBM_CANADA           907 //IBM ¥[®³¤j
-#define CC_PGC                  908 //¥¨¦³¬ì§Ş
-#define CC_ITESTSEMI            909 //¦w´ú¥b¾ÉÅé
+#define CC_SPIL_CS              900 //çŸ½å“ ä¸­å±±                                  //KevinCheng 20251002 add çŸ½å“ä¸­å±±å®¢æˆ¶ç¢¼
+#define CC_ISE_US               901 //ISE ç¾åœ‹
+#define CC_HYGEIA_SUZHOU        902 //æµ·äº¬ è˜‡å·
+#define CC_JSI_HAOXING          903 //ç´¹èˆˆ é•·é›»
+#define CC_JINGJIAWEI_CHANGSHA  904 //é•·æ²™æ™¯å˜‰å¾®
+#define CC_ISE_SH               905 //ä¸Šæµ·æœˆèŠ¯åŠå°é«”ç§‘æŠ€
+#define CC_INTEL_IL             906 //INTEL ä»¥è‰²åˆ—
+#define CC_IBM_CANADA           907 //IBM åŠ æ‹¿å¤§
+#define CC_PGC                  908 //å·¨æœ‰ç§‘æŠ€
+#define CC_ITESTSEMI            909 //å®‰æ¸¬åŠå°é«”
 
-#define CC_SPIL_SHINCHU         910 //ª¿«~ ·s¦Ë.
-#define CC_SPIL_TAICHUNG_LOGIC  911 //ª¿«~ ¥x¤¤.
-#define CC_SPIL_CHINA_SUZHOU    912 //ª¿«~ Ä¬¦{.
-#define CC_HUAWEI               913 //µØ¬°.
-#define CC_ANST                 914 //Ä¬¦{¦w²±
-#define CC_VTEST                915 //µL¿ü°¶´ú¥b¾ÉÅé
-#define CC_TFME_CHINA           916 //³q´I·L¹q
-#define CC_JCET_5               917 //¦¿Ä¬ªø¹q ¤­¼t
-#define CC_BOJIAN               918 //Ä¬¦{ ³Õ¼C
-#define CC_VTEST_Shanghai       919 //¤W®ü°¶´ú¥b¾ÉÅé
+#define CC_SPIL_SHINCHU         910 //çŸ½å“ æ–°ç«¹.
+#define CC_SPIL_TAICHUNG_LOGIC  911 //çŸ½å“ å°ä¸­.
+#define CC_SPIL_CHINA_SUZHOU    912 //çŸ½å“ è˜‡å·.
+#define CC_HUAWEI               913 //è¯ç‚º.
+#define CC_ANST                 914 //è˜‡å·å®‰ç››
+#define CC_VTEST                915 //ç„¡éŒ«å‰æ¸¬åŠå°é«”
+#define CC_TFME_CHINA           916 //é€šå¯Œå¾®é›»
+#define CC_JCET_5               917 //æ±Ÿè˜‡é•·é›» äº”å» 
+#define CC_BOJIAN               918 //è˜‡å· åšåŠ
+#define CC_VTEST_Shanghai       919 //ä¸Šæµ·å‰æ¸¬åŠå°é«”
 
-#define CC_KYEC_CHEN            920 //¨Ê¤¸ °O¾ĞÅé.»ÉÆr¼t
-#define CC_KYEC_LEE             921 //¨Ê¤¸ ÅŞ¿è.
-#define CC_KYEC_JCTHIU          922 //¨Ê¤¸ ¬ì¶é
-#define CC_DL_TEK               923 //ªFµY.
-#define CC_KYEC_XILINX          924 //¨Ê¤¸ Xilinx
-#define CC_KYEC_STM             925 //¨Ê¤¸ STM
-#define CC_Advantest_GE         926 //Advantest ¼w°ê
-#define CC_LATTICESEMI          927 //µÜ­}«ä¥b¾ÉÅé
-#define CC_ITRI                 928 //¤u·~§Ş³N¬ã¨s°|
-#define CC_ASE_KaohSiung_K12    929 //¤é¤ë¥ú °ª¶¯K12.
+#define CC_KYEC_CHEN            920 //äº¬å…ƒ è¨˜æ†¶é«”.éŠ…é‘¼å» 
+#define CC_KYEC_LEE             921 //äº¬å…ƒ é‚è¼¯.
+#define CC_KYEC_JCTHIU          922 //äº¬å…ƒ ç§‘åœ’
+#define CC_DL_TEK               923 //æ±ç³.
+#define CC_KYEC_XILINX          924 //äº¬å…ƒ Xilinx
+#define CC_KYEC_STM             925 //äº¬å…ƒ STM
+#define CC_Advantest_GE         926 //Advantest å¾·åœ‹
+#define CC_LATTICESEMI          927 //èŠè¿ªæ€åŠå°é«”
+#define CC_ITRI                 928 //å·¥æ¥­æŠ€è¡“ç ”ç©¶é™¢
+#define CC_ASE_KaohSiung_K12    929 //æ—¥æœˆå…‰ é«˜é›„K12.
 
-#define CC_ASE_SG               930 //¤é¤ë¥ú ·s¥[©Y.
-#define CC_ASE_JP               931 //¤é¤ë¥ú ¤é¥».
-#define CC_ASE_Korea            932 //¤é¤ë¥ú Áú°ê.
-#define CC_ASE_CL               933 //¤é¤ë¥ú ¤¤Ãc.
-#define CC_ASE_SH               934 //¤é¤ë¥ú ¤W®ü.
-#define CC_ASE_N                935 //¤é¤ë¥ú NXP.
-#define CC_ASE_KaohSiung        936 //¤é¤ë¥ú °ª¶¯.
-#define CC_ASE_M                937 //¤é¤ë¥ú Malaysia.
-#define CC_ASE_KaohSiung_K3     938 //¤é¤ë¥ú °ª¶¯K3
-#define CC_ASE_KaohSiung_K11    939 //¤é¤ë¥ú °ª¶¯K11 AOSH-1000.
+#define CC_ASE_SG               930 //æ—¥æœˆå…‰ æ–°åŠ å¡.
+#define CC_ASE_JP               931 //æ—¥æœˆå…‰ æ—¥æœ¬.
+#define CC_ASE_Korea            932 //æ—¥æœˆå…‰ éŸ“åœ‹.
+#define CC_ASE_CL               933 //æ—¥æœˆå…‰ ä¸­å£¢.
+#define CC_ASE_SH               934 //æ—¥æœˆå…‰ ä¸Šæµ·.
+#define CC_ASE_N                935 //æ—¥æœˆå…‰ NXP.
+#define CC_ASE_KaohSiung        936 //æ—¥æœˆå…‰ é«˜é›„.
+#define CC_ASE_M                937 //æ—¥æœˆå…‰ Malaysia.
+#define CC_ASE_KaohSiung_K3     938 //æ—¥æœˆå…‰ é«˜é›„K3
+#define CC_ASE_KaohSiung_K11    939 //æ—¥æœˆå…‰ é«˜é›„K11 AOSH-1000.
 
 #define CC_UTAC                 940 //Only for Open/Short Handler
-#define CC_SIGURD_HUKOU         941 //ª¿®æ ´ò¤f
-#define CC_RFMD_BEIJING         942 //RFMD ¥_¨Ê.
-#define CC_SCC                  943 //JSCC ¦¿³±
-#define CC_SCS                  944 //JSCS ·s¥[©Y.
-#define CC_SIGURD_ChungXing     945 //ª¿®æ ¤¤¿³
-#define CC_SIGURD_PeiXing       946 //ª¿®æ ¥_¿³
-#define CC_SCK                  947 //¬P¬ìª÷ªB - Áú°ê
-#define CC_RFMD_USA             948 //RFMD ¬ü°ê
-#define CC_ASE_KS               949 //¤é¤ë¥ú ±X¤s.
+#define CC_SIGURD_HUKOU         941 //çŸ½æ ¼ æ¹–å£
+#define CC_RFMD_BEIJING         942 //RFMD åŒ—äº¬.
+#define CC_SCC                  943 //JSCC æ±Ÿé™°
+#define CC_SCS                  944 //JSCS æ–°åŠ å¡.
+#define CC_SIGURD_ChungXing     945 //çŸ½æ ¼ ä¸­èˆˆ
+#define CC_SIGURD_PeiXing       946 //çŸ½æ ¼ åŒ—èˆˆ
+#define CC_SCK                  947 //æ˜Ÿç§‘é‡‘æœ‹ - éŸ“åœ‹
+#define CC_RFMD_USA             948 //RFMD ç¾åœ‹
+#define CC_ASE_KS               949 //æ—¥æœˆå…‰ å´‘å±±.
 
-#define CC_APTOS                950 //¸sÂ×.
-#define CC_WINBOND              951 //µØ¨¹.
+#define CC_APTOS                950 //ç¾¤è±.
+#define CC_WINBOND              951 //è¯é‚¦.
 #define CC_G_Link               952 //G Link.
-#define CC_AMKOR                953 //¦ã§Jº¸.
+#define CC_AMKOR                953 //è‰¾å…‹çˆ¾.
 #define CC_GIGA                 954 //GIGA.
-#define CC_LINGSEN              955 //µÙ¥Í.
-#define CC_Greatek              956 //¶WÂ×.
-#define CC_PTI                  957 //¤O¦¨
-#define CC_THAILIN              958 //®õªL
-#define CC_JCET                 959 //¦¿Ä¬ªø¹q
+#define CC_LINGSEN              955 //è±ç”Ÿ.
+#define CC_Greatek              956 //è¶…è±.
+#define CC_PTI                  957 //åŠ›æˆ
+#define CC_THAILIN              958 //æ³°æ—
+#define CC_JCET                 959 //æ±Ÿè˜‡é•·é›»
 
-#define CC_OSE                  960 //µØ®õ.
-#define CC_MTI                  961 //»E¦¨.
-#define CC_NUVOTON              962 //·s­ğ
-#define CC_UPRTEK               963 //¸sÄ£.
-#define CC_Eutrend              964 //¦Ö¶Ô                                      //pig 2012.02.13 EutrendFTP
-#define CC_TICP                 965 //°ª¶¯¨å½d.                                 //pig 2012.01.06 ¨å½d
-#define CC_THEIL                966 //¦PªY¹q¤l
-#define CC_TERAPOWER            967 //´¹¥ü¦¨
-#define CC_RICHTEK              968 //¥ßÀB                                      //Alick 20161206 add ·s¼W «È¤á½X
-#define CC_TSI                  969 //¸Û»·¬ì§Ş
+#define CC_OSE                  960 //è¯æ³°.
+#define CC_MTI                  961 //èšæˆ.
+#define CC_NUVOTON              962 //æ–°å”
+#define CC_UPRTEK               963 //ç¾¤è€€.
+#define CC_Eutrend              964 //è¿å‹¤                                      //pig 2012.02.13 EutrendFTP
+#define CC_TICP                 965 //é«˜é›„å…¸ç¯„.                                 //pig 2012.01.06 å…¸ç¯„
+#define CC_THEIL                966 //åŒæ¬£é›»å­
+#define CC_TERAPOWER            967 //æ™¶å…†æˆ
+#define CC_RICHTEK              968 //ç«‹éŒ¡                                      //Alick 20161206 add æ–°å¢ å®¢æˆ¶ç¢¼
+#define CC_TSI                  969 //èª é ç§‘æŠ€
 
-#define CC_GIGAS                970 //¥ş´¼
-#define CC_AMKOR_Korea          971 //¦w¾aÁú°ê.
-#define CC_AMKOR_China          972 //¦w¾a¤W®ü.
-#define CC_AMKOR_Japan          973 //¦w¾a¤é¥».
-#define CC_AMKOR_Philippines    974 //¦w¾aµá«ß»«
-#define CC_UTAC_TH              975 //Áp´ú¬ì§Ş ®õ°ê
-#define CC_AnalogDevice_Phil    976 //Analogµá«ß»«
+#define CC_GIGAS                970 //å…¨æ™º
+#define CC_AMKOR_Korea          971 //å®‰é éŸ“åœ‹.
+#define CC_AMKOR_China          972 //å®‰é ä¸Šæµ·.
+#define CC_AMKOR_Japan          973 //å®‰é æ—¥æœ¬.
+#define CC_AMKOR_Philippines    974 //å®‰é è²å¾‹è³“
+#define CC_UTAC_TH              975 //è¯æ¸¬ç§‘æŠ€ æ³°åœ‹
+#define CC_AnalogDevice_Phil    976 //Analogè²å¾‹è³“
 #define CC_ONSEMI_CA            977 // ONSEMI_Canada
 #define CC_INTEL_US             978 //INTEL US
 #define CC_INTEL_M              979 // INTEL Malaysia
@@ -362,19 +362,19 @@ using std::vector;                   //AI(W0-TAIL) 20260626: BCB6 had 'using nam
 #define CC_MAXIM                985
 #define CC_MARVELL              986
 #define CC_ATMEL                987
-#define CC_USI                  988 //ÀôÂE¬ì§Ş
-#define CC_DYNACARD             989 //·sªF¨È·L¹q¤l
+#define CC_USI                  988 //ç’°é´»ç§‘æŠ€
+#define CC_DYNACARD             989 //æ–°æ±äºå¾®é›»å­
 
 #define CC_CYPRESS              990
-#define CC_GERADTECH_CHINA      991 // ´¼·ç¹F
+#define CC_GERADTECH_CHINA      991 // æ™ºç‘é”
 #define CC_GM_TEST              992
 #define CC_I_TECH               993
 #define CC_WIN_PAC              994
 #define CC_SILICON_LABS_SG      995
 #define CC_SILICON_LABS_SZ      996
 #define CC_Altera_USA           997
-#define CC_ETRENDTECH           998 //¶h©÷¬ì§Ş                                  //KaiHuang 20201214 Add
-#define CC_QUALCOMM             999 //°ª³q
+#define CC_ETRENDTECH           998 //é€¸æ˜Œç§‘æŠ€                                  //KaiHuang 20201214 Add
+#define CC_QUALCOMM             999 //é«˜é€š
 #define CC_HTML_Monitor         99999 //HTML_Monitor
 
 //==============================================================================
@@ -392,18 +392,18 @@ using std::vector;                   //AI(W0-TAIL) 20260626: BCB6 had 'using nam
 #define MAX_SOCKET_COL   8
 #define MAX_SOCKET_TOTAL 32
 #define MAX_SENSOR_ITEM 820                                                     //Sam 20190112 LM //Steven 20230908 : 650 --> 710
-#define MAX_TTL_BIT 40                                                          //Steven 20161011 : TTL¤ä´©8Site
+#define MAX_TTL_BIT 40                                                          //Steven 20161011 : TTLæ”¯æ´8Site
 #define MAX_IONFAN 12                                                           //2013-08-28    Dell
-#define MAX_IONBAR 9                                                            //Steven 20250610 : ­×¥¿°O¾ĞÅé·¸¦ì
-#define MAX_HTIONFAN 3                                                          //RogerYang 20250825 : Unloader·s¼W3¤äIonBar¡A¨ú¥N4 5 8 ion fan
+#define MAX_IONBAR 9                                                            //Steven 20250610 : ä¿®æ­£è¨˜æ†¶é«”æº¢ä½
+#define MAX_HTIONFAN 3                                                          //RogerYang 20250825 : Unloaderæ–°å¢3æ”¯IonBarï¼Œå–ä»£4 5 8 ion fan
 
 //#define MAX_Unloader  6
-#define MAX_AUTO_TRAY   6                                                       //¥X®Æ­y¹D¼Æ¶q
-#define MAX_TRACK       9                                                       //¤J¥X®Æ­y¹D¼Æ¶q
-#define MAX_FIX_TRAY    6                                                       //FIX½L¼Æ¶q
-#define MAX_UNLOAD_TRAY 12                                                      //¥X®Æ½L¼Æ¶q
-#define MAX_MGZ_TRAY    14                                                      //Magazine Tray½L¼Æ¶q
-#define RecordTrayCnt   20                                                      //­n¸òÂÂª©¥»¬Û®e, ¤£¥i¥H¶Ã´«¶¶§Ç
+#define MAX_AUTO_TRAY   6                                                       //å‡ºæ–™è»Œé“æ•¸é‡
+#define MAX_TRACK       9                                                       //å…¥å‡ºæ–™è»Œé“æ•¸é‡
+#define MAX_FIX_TRAY    6                                                       //FIXç›¤æ•¸é‡
+#define MAX_UNLOAD_TRAY 12                                                      //å‡ºæ–™ç›¤æ•¸é‡
+#define MAX_MGZ_TRAY    14                                                      //Magazine Trayç›¤æ•¸é‡
+#define RecordTrayCnt   20                                                      //è¦è·ŸèˆŠç‰ˆæœ¬ç›¸å®¹, ä¸å¯ä»¥äº‚æ›é †åº
 const int PITCH_COUNT=5;
 const int X_PITCH_COUNT=4;
 
@@ -418,10 +418,10 @@ const int TEST_MAX_BIN=256;                                                     
 //=============  Parameter ENUM ================================================
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //Type_HT9046LS
-//Index ÂùArm¦P®ÉÀ£32 Site (shuttle 2*8)
-//Index ³æArm¥iÀ£600kg
+//Index é›™ArmåŒæ™‚å£“32 Site (shuttle 2*8)
+//Index å–®Armå¯å£“600kg
 //Shuttle Pitch 40mm
-//¥[¼ö 150«×
+//åŠ ç†± 150åº¦
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 enum eMachineType{Type_HT9045       =100,
                   Type_HT9046       =200,
@@ -455,10 +455,10 @@ enum eTestMode{SingleSite   =0,
                _12Site2X6   =12,
                _16Site2X8   =13,
                _16Site4X4   =14,                                                //Sam 20190226 : 16Site4X4
-               _32Site4X8N  =15,                                                //ÂùArm 32 Site
-               _32Site4X8M  =16,                                                //³æArm 32 Site
-               _8Site1X4    =17,                                                //ChungHung 20150528 add for ®ü«ä _8Site1x4
-               TotalTestMode                                                    //Â\³Ì¤U­±,¤£¥iÅÜ°Ê   //¦]¬°¦³SECS GEM, «áÄòªº·s¼Ò¦¡¯à©¹«á¥[
+               _32Site4X8N  =15,                                                //é›™Arm 32 Site
+               _32Site4X8M  =16,                                                //å–®Arm 32 Site
+               _8Site1X4    =17,                                                //ChungHung 20150528 add for æµ·æ€ _8Site1x4
+               TotalTestMode                                                    //æ“ºæœ€ä¸‹é¢,ä¸å¯è®Šå‹•   //å› ç‚ºæœ‰SECS GEM, å¾ŒçºŒçš„æ–°æ¨¡å¼èƒ½å¾€å¾ŒåŠ 
                };
 
 enum eIndexPressType
@@ -506,7 +506,7 @@ enum e1DCoverTray{eNoUse1DCoverTray=0,
                   eUse1DCoverTray=1,
                   };
 
-enum eRs232Mode{eRs232Standard  =0,                                             //Steven 20121112 : RS232¤ä´©32Bin
+enum eRs232Mode{eRs232Standard  =0,                                             //Steven 20121112 : RS232æ”¯æ´32Bin
                 eRs23232Bin     =1
                };
 
@@ -518,7 +518,7 @@ enum eBarCodeType{ebctUninstall=0,                                              
                   ebctInShtIntel=2,
                   ebctUseCCDMode=3,
                   ebctEtherNetCCD=4,                                            //Ifor 20190129 : add Cognex EtherNet
-                  ebcUseOCR=5                                                   //Ifor 20210407 add: ¦Û»sOCR
+                  ebcUseOCR=5                                                   //Ifor 20210407 add: è‡ªè£½OCR
                  };
 //enum eBarCodeMode{ebcmAMDType=0, ebcmIntelType=1};                            //Steven 20120921 : Barcode_2D
 enum eContactMode{DirectContactMode             =0,
@@ -527,8 +527,8 @@ enum eContactMode{DirectContactMode             =0,
                   TMove                         =3,
                   TMoveDrop                     =4,
                   DirectContactSoftEP           =5,
-                  DropContactSoftEP             =6,                             //kevin 20130608 ADD DirectContactSoftEP & DropContactSoftEP°¨¹F¨ì´ú¸Õ°ª«×ep¦A¥R®ğ
-                  DropPlaceShiftContact         =7,                             //ChungHung 20150528 add for ®ü«ä _8Site1x4
+                  DropContactSoftEP             =6,                             //kevin 20130608 ADD DirectContactSoftEP & DropContactSoftEPé¦¬é”åˆ°æ¸¬è©¦é«˜åº¦epå†å……æ°£
+                  DropPlaceShiftContact         =7,                             //ChungHung 20150528 add for æµ·æ€ _8Site1x4
                   DropContactModeDiffentSpeed   =8,                             //Steven 20160512 : DropContactModeDiffentSpeed
                   TMoveSlowContact              =9,                             //Steven 20160130 : TMove Soft contact
                   TMoveDropSlowContact          =10,                            //Steven 20160512 : TMoveDropSlowContact
@@ -546,7 +546,7 @@ enum eClearType{ctLoadingCounts=0,
                 ctContactCountsHis=7,
                 ctBinCount=8,
                 ctIndexCount=9,
-                ctAutoRetestCount=10,                                           //kevin 20150530 add AutoRETEST ¥u²M°£·h auto tray¼Æ¶q¤Îload total¼Æ¶q
+                ctAutoRetestCount=10,                                           //kevin 20150530 add AutoRETEST åªæ¸…é™¤æ¬ auto trayæ•¸é‡åŠload totalæ•¸é‡
                 ctFailBinCount=11};
 
 enum eSystemTime{stStartTime    =0,
@@ -556,9 +556,9 @@ enum eSystemTime{stStartTime    =0,
                  stJamTime      =4,
                  stSystemNGTime =5,
                  stContactTest  =6,
-                 stHomeTime     =7};                                            //³Ì¦h´N¤K­Ó
+                 stHomeTime     =7};                                            //æœ€å¤šå°±å…«å€‹
 
-enum eTimeData{tdPowerOn        =0,                                             //Steven 20231120 : ¬ö¿ı¾÷¥x½[°Ê®É¶¡
+enum eTimeData{tdPowerOn        =0,                                             //Steven 20231120 : ç´€éŒ„æ©Ÿå°ç¨¼å‹•æ™‚é–“
                tdPowerOff       =1,
                tdPauseTime      =2,
                tdStartTime      =3,
@@ -616,17 +616,17 @@ enum eRunStartMode{rsmNull              =-1,
                    rsmInitial_MRT       =13,                                    //Ifor 20170316 (wei) add KYEC MRT Mode
                    rsmContinuStart_MRT  =14,                                    //Ifor 20170316 (wei) add KYEC MRT Mode
                    rsmRetest_MRT        =15,                                    //Ifor 20170316 (wei) add KYEC MRT Mode
-                   rsmRunModeTotal};                                            //Â\³Ì¤U­±,¤£¥iÅÜ°Ê
+                   rsmRunModeTotal};                                            //æ“ºæœ€ä¸‹é¢,ä¸å¯è®Šå‹•
 
 enum eSocketTempControll{eDut1ea=0,
                          eDut4ea=1,
                          eDut2ea=2};
 
 //---------------------------------------------------------------------------
-enum eBinType                                                                   //¨M©w­n´XºØ¤£¤@¼ËªºBin³]©w
-{   eBinRT          =0,                                                         //RT¨Ï¥ÎªºBin
-    eBinFT          =1,                                                         //FT¨Ï¥ÎªºBin
-    eBinOffLine     =2,                                                         //Off-Line¨Ï¥ÎªºBin
+enum eBinType                                                                   //æ±ºå®šè¦å¹¾ç¨®ä¸ä¸€æ¨£çš„Binè¨­å®š
+{   eBinRT          =0,                                                         //RTä½¿ç”¨çš„Bin
+    eBinFT          =1,                                                         //FTä½¿ç”¨çš„Bin
+    eBinOffLine     =2,                                                         //Off-Lineä½¿ç”¨çš„Bin
     eBinRT_ART      =3,                                                         //ChungHung 20141002 add for KYEC AutoRetest
     eBinFT_ART      =4,                                                         //ChungHung 20141002 add for KYEC AutoRetest
     eBinRT_MRT      =5,                                                         //Ifor 20170316 (wei) add KYEC MRT Mode
@@ -638,46 +638,46 @@ enum eTempControll{tcHotPlate1=0, tcHotPlate2=1, tcShuttle1=2, tcShuttle2=3,
                    tcHead1=4, tcHead2=5, tcHead3=6, tcHead4=7, tcSocket=8, tcChamber=9, tcCCD=10,
                    tcAa1=11, tcAb1=12, tcAc1=13, tcAd1=14, tcBa1=15, tcBb1=16, tcBc1=17, tcBd1=18,
                    tcAa2=19, tcAb2=20, tcAc2=21, tcAd2=22, tcBa2=23, tcBb2=24, tcBc2=25, tcBd2=26,
-                   tcHeatGun1=27, tcHeatGun2=28,                                                        //kevin 20120523 ¼W¥[¼ö­·ºj
-                   tcDUT1=29, tcDUT2=30, tcDUT3=31, tcDUT4=32,                                          //2013-01-15    Dell DUT(Socket Base)¼W¥[¬°4Áû ,only for 9046LS
+                   tcHeatGun1=27, tcHeatGun2=28,                                                        //kevin 20120523 å¢åŠ ç†±é¢¨æ§
+                   tcDUT1=29, tcDUT2=30, tcDUT3=31, tcDUT4=32,                                          //2013-01-15    Dell DUT(Socket Base)å¢åŠ ç‚º4é¡† ,only for 9046LS
                    tcAe1=33, tcAf1=34, tcAg1=35, tcAh1=36, tcBe1=37, tcBf1=38, tcBg1=39, tcBh1=40,
-                   tcAe2=41, tcAf2=42, tcAg2=43, tcAh2=44, tcBe2=45, tcBf2=46, tcBg2=47, tcBh2=48,      //Steven 20140923 : Index¨Ï¥ÎEJ1Nª©32²Õ¥[¼ö¾¹
-                   tc2D=49,                                                                             //wei 20160524 2D·Å«×
+                   tcAe2=41, tcAf2=42, tcAg2=43, tcAh2=44, tcBe2=45, tcBf2=46, tcBg2=47, tcBh2=48,      //Steven 20140923 : Indexä½¿ç”¨EJ1Nç‰ˆ32çµ„åŠ ç†±å™¨
+                   tc2D=49,                                                                             //wei 20160524 2Dæº«åº¦
                    tcLB=50, tcIndexESD=51,                                                              //kevin 20200207 add Index ESD hot air
-                   tcCCD_2=52,                                                                          //Isaac 20201217 : RTC CCD¼W¥[²Ä¤G²Õ·P·Å
+                   tcCCD_2=52,                                                                          //Isaac 20201217 : RTC CCDå¢åŠ ç¬¬äºŒçµ„æ„Ÿæº«
                    tcATCHotAir1=53, tcATCHotAir2=54,
                    tcOutSht1=55, tcOutSht2=56,
                    tcBase1=57,tcBase2=58,tcBase3=59,tcBase4=60,tcBase5=61,tcBase6=62,                   //Ztex 2023.04.19 Add HT-1032 TriTemp Function
                    tcHotPlate3=63, tcHotPlate4=64, tcShuttle3=65, tcShuttle4=66,                        //Ztex 2023.04.19 Add HT-1032 TriTemp Function
                    tcDoor1=67, tcDoor2=68,                                                              //Ztex 2023.10.23 Add Index Door Heater
                    tcLBUp=69, tcLBDown=70,                                                              //Frank 20241231 : add
-                   tcTotalCount};                                               //¦³¼W¥[½Ğ·j´M: ·Å±±¾¹­n¤@°_§ï  //¶W¹L100ªº¸Ü, Alarm Code­n­«·s³B²z
+                   tcTotalCount};                                               //æœ‰å¢åŠ è«‹æœå°‹: æº«æ§å™¨è¦ä¸€èµ·æ”¹  //è¶…é100çš„è©±, Alarm Codeè¦é‡æ–°è™•ç†
 
-enum eHeaterType{eht4Heater=0,                                                  //Index¨Ï¥Î4²Õ¥[¼ö¾¹
-                 eht16Heater=1,                                                 //Index¨Ï¥ÎKT4Hª©16²Õ¥[¼ö¾¹
-                 eht16HeaterEJ1N=2,                                             //Index¨Ï¥ÎEJ1Nª©16²Õ¥[¼ö¾¹
-                 eht32HeaterEJ1N=3,                                             //Index¨Ï¥ÎEJ1Nª©32²Õ¥[¼ö¾¹
-                 eht32HeaterKT4H=4,                                             //Index¨Ï¥ÎKY4Hª©32²Õ¥[¼ö¾¹
-                 eht16HeaterDTME08=5,                                           //Index¨Ï¥ÎDTME08ª©16²Õ¥[¼ö¾¹
-                 eht32HeaterDTME08=6};                                          //Index¨Ï¥ÎDTME08ª©32²Õ¥[¼ö¾¹
+enum eHeaterType{eht4Heater=0,                                                  //Indexä½¿ç”¨4çµ„åŠ ç†±å™¨
+                 eht16Heater=1,                                                 //Indexä½¿ç”¨KT4Hç‰ˆ16çµ„åŠ ç†±å™¨
+                 eht16HeaterEJ1N=2,                                             //Indexä½¿ç”¨EJ1Nç‰ˆ16çµ„åŠ ç†±å™¨
+                 eht32HeaterEJ1N=3,                                             //Indexä½¿ç”¨EJ1Nç‰ˆ32çµ„åŠ ç†±å™¨
+                 eht32HeaterKT4H=4,                                             //Indexä½¿ç”¨KY4Hç‰ˆ32çµ„åŠ ç†±å™¨
+                 eht16HeaterDTME08=5,                                           //Indexä½¿ç”¨DTME08ç‰ˆ16çµ„åŠ ç†±å™¨
+                 eht32HeaterDTME08=6};                                          //Indexä½¿ç”¨DTME08ç‰ˆ32çµ„åŠ ç†±å™¨
 
 enum eMyTempColor{mtcBelow=0, mtcNormal, mtcOver};
 enum eSuckerStatus{SStatusOff=0, SStatusSuck=1, SStatusDestory=2};
 enum ePiggyBackTrugger{pbtNone=0, pbtContinualPassBin=1, pbtContinualPassBinBySocket=2, pbtContinualLoader=3, pbtContinualContactCount=4,
-                       pbtHome=5, pbtOneCycle=6, pbtCleanout=7, pbtReset=8, pbtOutShuttleLose=9, pbtIndexArmVacOffErr=10, pbtIndexArmPickUpErr=11,  //Steven 20111207 : ½ÖÄ²µo¤FPiggy Back   //JerryYang 20160816 add pbtIndexArmVacOffErr
+                       pbtHome=5, pbtOneCycle=6, pbtCleanout=7, pbtReset=8, pbtOutShuttleLose=9, pbtIndexArmVacOffErr=10, pbtIndexArmPickUpErr=11,  //Steven 20111207 : èª°è§¸ç™¼äº†Piggy Back   //JerryYang 20160816 add pbtIndexArmVacOffErr
                        pbtRTCAlarm=12, pbtOneCycleRemainSht=13};
-enum eUserLanguage{eulEnglish=0,                                                //¯Â­^¤åª©
-                   eulChinese=1,                                                //ÁcÅé¤¤¤å
-                   eulChina=2,                                                  //Â²Åé¤¤¤å
-                   eulKorea=3,                                                  //Áú¤åª©
-                   eulSingapore=4,                                              //·s¥[©Yª©
-                   eulJapan};                                                   //¤é¤åª©
+enum eUserLanguage{eulEnglish=0,                                                //ç´”è‹±æ–‡ç‰ˆ
+                   eulChinese=1,                                                //ç¹é«”ä¸­æ–‡
+                   eulChina=2,                                                  //ç°¡é«”ä¸­æ–‡
+                   eulKorea=3,                                                  //éŸ“æ–‡ç‰ˆ
+                   eulSingapore=4,                                              //æ–°åŠ å¡ç‰ˆ
+                   eulJapan};                                                   //æ—¥æ–‡ç‰ˆ
 
 enum eIonFanType{e5IOforAll         =0,
                  e1IOforOne         =1,
                  eUnInstallIonFan   =2,
                  e2IoforOne         =3,
-                 eIonFanTypeTotal};                                             //Â\³Ì¤U­±,¤£¥iÅÜ°Ê
+                 eIonFanTypeTotal};                                             //æ“ºæœ€ä¸‹é¢,ä¸å¯è®Šå‹•
 
 enum eSpeedPart{InArm       =0,
                 IndexArm    =1,
@@ -787,7 +787,7 @@ enum eSECSOffset{
     OfsOutSh2RB,            //49 //Steven 20190802 : For 32 Site Out Shuttle Offset
     OfsScanAOI,             //50 //Ifor 20191229 : add
     OfsInPlacement,         //51 //JimmyChiu 20220908 add Pickup Error Placement
-    OfsBottom2DID,          //52 //KaiChen 20200414 ¡G·s¼WBottom2DID OffSet
+    OfsBottom2DID,          //52 //KaiChen 20200414 ï¼šæ–°å¢Bottom2DID OffSet
     OfsTotal
 };
 
@@ -819,7 +819,7 @@ enum eInOffset{
     InOfsAutoSh2,             //24 //wei 20160914 Auto Shuttle Sensor
     InOfsPreciser,            //25 //Frank 20180410 (Steven) : InArm Preciser Station
     InOfsPlacement,           //26 //JimmyChiu 20220908 add Pickup Error Placement
-    InOfsBottom2DID,          //27 //KaiChen 20200414 ¡G·s¼WBottom2DID OffSet
+    InOfsBottom2DID,          //27 //KaiChen 20200414 ï¼šæ–°å¢Bottom2DID OffSet
     InOfsTotal
 };
 
@@ -886,7 +886,7 @@ enum eOffsetItem
     oiArmPitchY=7,
     oiArmPick  =8,
     oiArmPlace =9,
-    oiArmPickA_X =10,                                                           //Eastsun 20251218 : ¨C¤ä§l¼L¿W¥ß°¾²¾
+    oiArmPickA_X =10,                                                           //Eastsun 20251218 : æ¯æ”¯å¸å˜´ç¨ç«‹åç§»
     oiArmPickA_Y =11,
     oiArmPickB_X =12,
     oiArmPickB_Y =13,
@@ -909,7 +909,7 @@ enum eAutoRetest{eartUninstall=0, eartInstall=1};
 
 enum eTrayMap{etmUninstall=0, etmInstall=1, etmDeviceRemain=2};
 
-enum eLaserStatus{  lsNormal    =0,                                             //Steven 20140228 : ¹p®g´ú¶Z¥\¯à
+enum eLaserStatus{  lsNormal    =0,                                             //Steven 20140228 : é›·å°„æ¸¬è·åŠŸèƒ½
                     lsChecking  =1,
                     lsNeedCheck =2,
                     lsFail      =3};
@@ -930,7 +930,7 @@ enum eBarcodeReadType{  bcUserName      =0,
                         bcSetupFile     =13,
                         bcExit          =14,
                         bcSECSGEM       =15,
-                        bcTotal                                                 //Â\¦b³Ì¤U­±
+                        bcTotal                                                 //æ“ºåœ¨æœ€ä¸‹é¢
                      };
 
 enum eEndCode{ec00=0, ec0F, ec10, ec11, ec12, ec13, ec14, ec16, ec18, ecTotal};
@@ -1009,9 +1009,9 @@ enum eMRSpeedPart{CaselevatorZ  =0,
 
 enum eFixAOI{eFix2AIBGACCD1=0,
              eFix2AIBGACCD2=1,
-             eTotalFixAOI};                                                     //Sam 20210609 : Fix AOI ³nÅé¤É¯Å
+             eTotalFixAOI};                                                     //Sam 20210609 : Fix AOI è»Ÿé«”å‡ç´š
 
-enum eInArmType {   e9045_1x1_1     =0,                                         //Ifor 20180518 : add ¾ã¦XHot plate ¸ê®ÆÂà´«
+enum eInArmType {   e9045_1x1_1     =0,                                         //Ifor 20180518 : add æ•´åˆHot plate è³‡æ–™è½‰æ›
                     e9045_1x4_1_Ac  =1,
                     e9045_1x2_2_13  =2,
                     e9045_1x2_2_14  =3,
@@ -1040,7 +1040,7 @@ enum eInArmType {   e9045_1x1_1     =0,                                         
                     e9045_2x8_8     =26,
                    };
 
-enum e2DIDFormat {  eStandard =0,                                               //JerryYang 20200422 2DID format¿ï¶µ§ï¥Î¤U©Ô¿ï³æ
+enum e2DIDFormat {  eStandard =0,                                               //JerryYang 20200422 2DID formaté¸é …æ”¹ç”¨ä¸‹æ‹‰é¸å–®
                     eAMD      =1,
                     eIntel    =2};
 
@@ -1054,20 +1054,20 @@ enum eAutoCleanMode {   eNormal             =0,
                         eSecsGem            =7,
                         eACByTime           =8};
 
-enum eFTPAutomation_CheckList{  eCL_Temperature     =0,                         //KaiChen 20190530 ¡GSigurd FTP Automation
+enum eFTPAutomation_CheckList{  eCL_Temperature     =0,                         //KaiChen 20190530 ï¼šSigurd FTP Automation
                                 eCL_Alarm           =1,
                                 eCL_FT_Yield        =2,
                                 eCL_SiteMapping     =3,
                                 eCL_Speed           =4,
                                 eCL_Contact         =5,
                                 eCL_Category        =6,
-                                eCL_BinSetting      =7,                         //KaiChen 20200527 ¡Gª¿¿³­n¨D¼W¥[
-                                eCL_TrayForm        =8,                         //KaiChen 20200527 ¡Gª¿¿³­n¨D¼W¥[
-                                eCL_HotPlate        =9,                         //KaiChen 20200527 ¡Gª¿¿³­n¨D¼W¥[
+                                eCL_BinSetting      =7,                         //KaiChen 20200527 ï¼šçŸ½èˆˆè¦æ±‚å¢åŠ 
+                                eCL_TrayForm        =8,                         //KaiChen 20200527 ï¼šçŸ½èˆˆè¦æ±‚å¢åŠ 
+                                eCL_HotPlate        =9,                         //KaiChen 20200527 ï¼šçŸ½èˆˆè¦æ±‚å¢åŠ 
                                 eCL_Total           =10};
 
-//Steven 20200825 : eTrayCount©w¸q´«¦ì¸m
-enum e6TrayName                                                                 //¨Ï¥ÎªºHarware Bin¼Æ¶q»P¦WºÙ
+//Steven 20200825 : eTrayCountå®šç¾©æ›ä½ç½®
+enum e6TrayName                                                                 //ä½¿ç”¨çš„Harware Binæ•¸é‡èˆ‡åç¨±
 {   eAuto1          =0,
     eAuto2          =1,
     eAuto3          =2,
@@ -1104,7 +1104,7 @@ enum e6TrayName                                                                 
     eTrayCount
 };
 
-enum e3TrayName                                                                 //¨Ï¥ÎªºHarware Bin¼Æ¶q»P¦WºÙ
+enum e3TrayName                                                                 //ä½¿ç”¨çš„Harware Binæ•¸é‡èˆ‡åç¨±
 {   e3Auto1          =0,
     e3Auto2          =1,
     e3Auto3          =2,
@@ -1141,7 +1141,7 @@ enum e3TrayName                                                                 
     e3TrayCount
 };
 
-enum eBinPositionName                                                           //Bin­n©ñ¦bHardware¤Wªº¦ì¸m
+enum eBinPositionName                                                           //Binè¦æ”¾åœ¨Hardwareä¸Šçš„ä½ç½®
 {   ePosNoUse       =0,
     ePosAuto1       =1,
     ePosAuto2       =2,
@@ -1179,7 +1179,7 @@ enum eBinPositionName                                                           
     ePosTrayCount
 };
 
-enum e3BinPositionName                                                          //Bin­n©ñ¦bHardware¤Wªº¦ì¸m
+enum e3BinPositionName                                                          //Binè¦æ”¾åœ¨Hardwareä¸Šçš„ä½ç½®
 {   e3PosNoUse       =0,
     e3PosAuto1       =1,
     e3PosAuto2       =2,
@@ -1217,7 +1217,7 @@ enum e3BinPositionName                                                          
     e3PosTrayCount
 };
 
-enum eTrackName                                                                 //¨Ï¥ÎªºHarware Bin¼Æ¶q»P¦WºÙ
+enum eTrackName                                                                 //ä½¿ç”¨çš„Harware Binæ•¸é‡èˆ‡åç¨±
 {
     etLoader         =0,
     etEmpty          =1,
@@ -1257,7 +1257,7 @@ enum eTrayOffset{           //Steven 20230907 : For HT-9011UC
 //JimmyChiu 20211020 : Auto alignment mode
 //==>
 enum eATActionItem
-{   eATClose            =0,         //°±¤î©Î¤¤Â_
+{   eATClose            =0,         //åœæ­¢æˆ–ä¸­æ–·
     eATHome             =1,         //Home
     eATInShuttleSensor  =2,         //InShuttle Sensor
     eATOutShuttleSensor =3,         //OutShuttle Sensor
@@ -1320,7 +1320,7 @@ enum ePickType
     eptUseMotCyn=2,
 };
 
-enum eBinDispName                                                               //JerryYang 20220909 : //¨Ï¥ÎªºBinÅã¥Ü¾¹¦WºÙ
+enum eBinDispName                                                               //JerryYang 20220909 : //ä½¿ç”¨çš„Biné¡¯ç¤ºå™¨åç¨±
 {   eBinDispLoader  =0,
     eBinDispEmpty   =1,
     eBinDispColor   =2,
@@ -1362,7 +1362,7 @@ enum eBinDispName                                                               
 };
 #define MAX_BIN_UNIT eBinDispTotal                                              //JerryYang 20230515 : 12->27
 
-enum eMagBinDispType                                                            //JerryYang 20230515 : Magazine BIN DISPª©¥»
+enum eMagBinDispType                                                            //JerryYang 20230515 : Magazine BIN DISPç‰ˆæœ¬
 {   eMagBinUninstall =0,
     eHTA18           =1,                                                        //HTA18
     eHTBT008         =2,                                                         //HT-BT008
@@ -1399,14 +1399,14 @@ enum eCylPrAlarmItem  //Sam 20230516 : Pre Alrm Cylinder
     eCylPrAlarmItemTotal,
 };
 
-enum eGroundMaster                                                              //Sam 20230906 : ·s¼W GroundMan Msg Log
+enum eGroundMaster                                                              //Sam 20230906 : æ–°å¢ GroundMan Msg Log
 {
-    eAlarmSet       =0,                                                         //0x30  µwÅéAlarm­È³]©w => ¤£»İ­n¡A¥HHandlerSys³]©w¤§Ohm°µ§PÂ_
-    eMachineOhm     =1,                                                         //0x31  ªı­È¸ß°İ
-    eAlarmGet       =2,                                                         //0x32  Äµ³ø¸ß°İ => ¤£»İ­n¡A¥HHandlerSys³]©w¤§Ohm°µ§PÂ_
-    eBoardOhm       =3,                                                         //0x33  Åª¨ú°»´úªO-¤º³¡²Õ­È
-    eBoardReset     =4,                                                         //0x34  °»´úªOReset
-    eBoardVersion   =5,                                                         //0x39  Åª¨ú°»´úªO-¶´Åéª©¸¹
+    eAlarmSet       =0,                                                         //0x30  ç¡¬é«”Alarmå€¼è¨­å®š => ä¸éœ€è¦ï¼Œä»¥HandlerSysè¨­å®šä¹‹Ohmåšåˆ¤æ–·
+    eMachineOhm     =1,                                                         //0x31  é˜»å€¼è©¢å•
+    eAlarmGet       =2,                                                         //0x32  è­¦å ±è©¢å• => ä¸éœ€è¦ï¼Œä»¥HandlerSysè¨­å®šä¹‹Ohmåšåˆ¤æ–·
+    eBoardOhm       =3,                                                         //0x33  è®€å–åµæ¸¬æ¿-å…§éƒ¨çµ„å€¼
+    eBoardReset     =4,                                                         //0x34  åµæ¸¬æ¿Reset
+    eBoardVersion   =5,                                                         //0x39  è®€å–åµæ¸¬æ¿-éŸŒé«”ç‰ˆè™Ÿ
     eGroundTotalCMD =6
 };
 
@@ -1417,7 +1417,7 @@ enum eNNMode
     NN_2Row=2
 };
 
-enum eTrayArmPos                                                                //Sam 20241206 : Tray Arm ·s¼W Teach «OÅ@
+enum eTrayArmPos                                                                //Sam 20241206 : Tray Arm æ–°å¢ Teach ä¿è­·
 {
     eTrayArmLoader  =0,
     eTrayArmEmpty   =1,
@@ -1425,7 +1425,7 @@ enum eTrayArmPos                                                                
     eTrayArmAuto    =3,
 };
 
-enum ePLCItem                                                                   //KenHsieh 20250208 : Fix PLC Â_½u
+enum ePLCItem                                                                   //KenHsieh 20250208 : Fix PLC æ–·ç·š
 {   ePLCEmpty1=0,
     ePLCEmpty2=1,
     ePLCEMG1=2,
@@ -1492,7 +1492,7 @@ enum eFixPortState           //JerryYang 20250505 : add
     eFixError                 =5
 };
 
-enum e2x8Mode                                                                   //Steven 20240430 : ¾ã¦X2x8¯S®í¼Ò¦¡
+enum e2x8Mode                                                                   //Steven 20240430 : æ•´åˆ2x8ç‰¹æ®Šæ¨¡å¼
 {
     e2x8Standard        =0,
     e2x8Step2           =1,
@@ -1510,21 +1510,21 @@ enum e2x8Mode                                                                   
     e2x8ModeTotal
 };
 
-enum eInSHSenType {eInSH8Sen=0, eInSHAutoLtc=1};                                //KenHsieh 20250722 : InSht sensor §ï¬°2Áû¡A¨Ã¥ÎLatch §P§OÅ|®Æ¥H¤Î­¸®Æ
+enum eInSHSenType {eInSH8Sen=0, eInSHAutoLtc=1};                                //KenHsieh 20250722 : InSht sensor æ”¹ç‚º2é¡†ï¼Œä¸¦ç”¨Latch åˆ¤åˆ¥ç–Šæ–™ä»¥åŠé£›æ–™
 
 enum MachineState
 {
-    STATE_STOPPED=0,  // ¥¼¶}©l©Î¤wµ²§ô
-    STATE_RUNNING,    // ¹B§@¤¤
-    STATE_PAUSED,     // ¼È°±¤¤
-    STATE_PAUSED_BEFORE_TEST,     // Start«eªº¼È°±
+    STATE_STOPPED=0,  // æœªé–‹å§‹æˆ–å·²çµæŸ
+    STATE_RUNNING,    // é‹ä½œä¸­
+    STATE_PAUSED,     // æš«åœä¸­
+    STATE_PAUSED_BEFORE_TEST,     // Startå‰çš„æš«åœ
     MachineStateTotal,
 };
 //=============  Template ======================================================
 template<class T>
 T CheckRange(const T Value, const T Maximum, const T Minimum)
 {
-    if(Maximum<Minimum)                                                         //¦pªG¤j¤p¬Û¤Ï
+    if(Maximum<Minimum)                                                         //å¦‚æœå¤§å°ç›¸å
     {
         if(Value>Minimum)
             return Minimum;
@@ -1544,7 +1544,7 @@ T CheckRange(const T Value, const T Maximum, const T Minimum)
     }
 };
 //------------------------------------------------------------------------------
-//Steven 20161208 : °w¹ï°£ªk¶i¦æ§PÂ_,¦pªG¤À¥À¬°0«h¦^¶Ç¹w³]­È;§_«h¦^¶Ç­pºâ­È
+//Steven 20161208 : é‡å°é™¤æ³•é€²è¡Œåˆ¤æ–·,å¦‚æœåˆ†æ¯ç‚º0å‰‡å›å‚³é è¨­å€¼;å¦å‰‡å›å‚³è¨ˆç®—å€¼
 //------------------------------------------------------------------------------
 /*template<class D>
 D Division(const D Numerator, const D Denominator, const T ValueForDivideByZero)
@@ -1561,7 +1561,7 @@ D Division(const D Numerator, const D Denominator, const T ValueForDivideByZero)
     return Value;
 }*/
 //------------------------------------------------------------------------------
-//Steven 20120203 : ±N¿é¤Jªº­ì¥óÂà¬°¹ïÀ³ªº»y¨t¦r¶°
+//Steven 20120203 : å°‡è¼¸å…¥çš„åŸä»¶è½‰ç‚ºå°æ‡‰çš„èªç³»å­—é›†
 //------------------------------------------------------------------------------
 template<class T>
 void SetCompomentLanguage(const T Compomen, eUserLanguage LanguageSet)
@@ -1590,7 +1590,7 @@ template <class T> AnsiString ChangeToPercentage(const T Numerator, const T Deno
     return str;
 };
 //------------------------------------------------------------------------------
-template <class T> float ChangeToFloat(const T Numerator, const T Denominator)      //kevin 20150701 ¨ú¥X  float %
+template <class T> float ChangeToFloat(const T Numerator, const T Denominator)      //kevin 20150701 å–å‡º  float %
 {
     double str=0.00;
     if(Denominator!=0)

@@ -1,0 +1,23 @@
+{
+ "event_count": 2,
+ "events": [
+  {
+   "control_path": "fPMAlarm_ShowData",
+   "event_name": "OnShow",
+   "handler_name": "FormShow",
+   "leaf_name": "fPMAlarm_ShowData",
+   "vcl_class": "TfPMAlarm_ShowData"
+  },
+  {
+   "control_path": "fPMAlarm_ShowData.cb_PMAlarmChoiseFile",
+   "event_name": "OnChange",
+   "handler_name": "cb_PMAlarmChoiseFileChange",
+   "leaf_name": "cb_PMAlarmChoiseFile",
+   "vcl_class": "TComboBox"
+  }
+ ],
+ "form_name": "fPMAlarm_ShowData",
+ "generator": "emit_layout.py W7-B1c v1.0",
+ "schema_version": 1,
+ "source_dfm": "PMAlarm/PMAlarmShowData.dfm"
+}

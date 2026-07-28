@@ -5,6 +5,99 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# =============================================================================
+# AI(W906-W7-A1) 20260728: MSVC second-oracle enablement block. MUST stay at
+# the TOP of this file (after project(), before any add_library) -- see
+# docs/W7_UI_ARCHITECTURE_PLAN.md SS6 W7-A1 / SS4-V5 / SS4-V8 for the full
+# rationale; only a compressed summary is kept here.
+#
+#   1. LINK_GROUP:RESCAN feature flags -- tests/CMakeLists.txt has exactly 66
+#      real "$<LINK_GROUP:RESCAN,...>" generator-expression sites (70 lines
+#      match the string; 4 of them are comments).  AI(W906-F0fix2) 20260729:
+#      this said "~69 real ... now more as later waves append tests", which was
+#      wrong -- the count is unchanged from the plan's SS4-V8 measurement of 66,
+#      because W7-F0 only edited existing group lines to insert ht9045_forms and
+#      added no new group.  Those exist ONLY to force GNU ld
+#      to re-scan static-archive dependency cycles at link time. CMake's
+#      LINK_GROUP feature is GNU/Clang-ld-specific and, unless MSVC is told
+#      the feature exists, CMake fails at CONFIGURE time with
+#      "Feature 'RESCAN' ... is not supported" -- before a single MSVC source
+#      file is even compiled. MSVC's link.exe already rescans archives on its
+#      own, so declaring the feature "supported" with an empty prefix/suffix
+#      makes every one of those sites a genuine no-op under MSVC. None of the
+#      66 sites needs editing for MSVC.
+#   2. /utf-8 -- translated sources contain UTF-8 non-ASCII (banner comments
+#      citing Chinese golden identifiers, etc). Without /utf-8, MSVC decodes
+#      source with the active code page (cp950 on this machine), which both
+#      warns (C4819) and can re-encode narrow string literals wrongly.
+#      /W3 matches the project's existing baseline warning level.
+#   3. _HAS_STD_BYTE=0 -- cmydef.h:127 / MyLaneIo.h:76-78,98 /
+#      Motor/HTMotor.h:92 use a bare `byte` name while `using namespace std;`
+#      is in scope (MachineDefine.h:30,67, database.h:39). Under MSVC's
+#      C++17 <cstddef>, std::byte pulled into scope makes `byte` C2872
+#      ambiguous; g++ 6.3 (MinGW) predates std::byte entirely, so MinGW never
+#      saw this. _CRT_SECURE_NO_WARNINGS -- silence MSVC's "unsafe" CRT
+#      function warnings (sprintf/strcpy/etc, already used throughout the
+#      ported BCB6-era code) so real signal isn't drowned by noise.
+#   4. FP fidelity: on 32-bit MSVC, /arch:IA32 restores x87 (rather than SSE2)
+#      floating point codegen. Per SS4-V5, /arch:IA32 ALONE is NOT enough to
+#      reproduce BCB6's x87 80-bit intermediate precision -- the runtime FP
+#      control word also has to be widened to 64-bit (extended) precision,
+#      which is done in tests/test_bootstrap.cpp via _controlfp_s. Both are
+#      required together; neither alone reproduces it.
+#
+# This whole block is a no-op for GNU/Clang (MinGW): every line is gated on
+# if(MSVC), so the primary MinGW oracle's build is byte-for-byte unaffected.
+# =============================================================================
+if(MSVC)
+    # --- 1. LINK_GROUP:RESCAN: declare the feature "supported" as a no-op ---
+    set(CMAKE_C_LINK_GROUP_USING_RESCAN_SUPPORTED TRUE)
+    set(CMAKE_C_LINK_GROUP_USING_RESCAN "" "")
+    set(CMAKE_CXX_LINK_GROUP_USING_RESCAN_SUPPORTED TRUE)
+    set(CMAKE_CXX_LINK_GROUP_USING_RESCAN "" "")
+
+    # --- 2. Source encoding ---------------------------------------------------
+    # AI(W906-W7-A1) 20260728: /wd4828 was added here after a from-scratch
+    # MSVC build produced 8,961,951 total C4828 warning lines, traced to
+    # leftover raw Big5 bytes in comments (and, in one file, in narrow string
+    # literals) across Config.h, CosFunction.h, MachineDefine.h, MachineType.h,
+    # cmydef.{h,cpp}, cprod.h, cpublic.h, myTimer.{h,cpp},
+    # Public/WinSocketErrorCode.cpp -- never converted when those files were
+    # copied out of the (Big5) golden tree.
+    # AI(W906-encoding) 20260728: fixed at the source instead of leaving the
+    # suppression permanent. All 11 files were transcoded whole-file
+    # cp950 -> UTF-8 (mechanical, not manual retranslation: each file's raw
+    # bytes decode losslessly under strict cp950 -- verified no exceptions --
+    # so decode(cp950).encode('utf-8') recovers the exact original Chinese
+    # text with only the on-disk byte encoding changed; confirmed line-by-line
+    # that decoded text is character-for-character identical before/after).
+    # Public/WinSocketErrorCode.cpp needed extra care: 8 of its bad-byte
+    # occurrences (7 string-literal assignments, lines ~60-231) are the Big5
+    # em dash (0xA1 0x58, U+2014) embedded in English MSDN-derived error text,
+    # not a comment -- under UTF-8 that raw pair is an invalid/orphan
+    # continuation byte (this IS the C4828 trigger), so leaving it raw would
+    # have been a real behaviour difference, not just noise. The same
+    # cp950->UTF-8 transcode turns it into a valid UTF-8 EM DASH, which is
+    # what a Big5-locale BCB6 build actually rendered -- so the fix recovers
+    # intended behaviour rather than changing it.
+    # All 11 files re-verified UTF-8-valid, BOM-free, and free of embedded
+    # U+FFFD after the transcode; /wd4828 is removed below because the
+    # detector's only known target is gone. g++/MinGW has no equivalent of
+    # this per-byte source-charset validation, so this class of defect is
+    # invisible to the primary (MinGW) oracle -- exactly why the MSVC second
+    # oracle (plan SS6) exists.
+    add_compile_options(/utf-8 /W3)
+
+    # --- 3. std::byte / using-namespace-std collision workaround --------------
+    add_compile_definitions(_HAS_STD_BYTE=0 _CRT_SECURE_NO_WARNINGS)
+
+    # --- 4. FP fidelity: x87-equivalent codegen on 32-bit MSVC -----------------
+    #        (paired with the _controlfp_s call in tests/test_bootstrap.cpp)
+    if(CMAKE_SIZEOF_VOID_P EQUAL 4)
+        add_compile_options(/arch:IA32)
+    endif()
+endif()
+
 # ---------------------------------------------------------------------------
 # Library: vclcompat  (W0 keystone)
 #   BCB6 / VCL compatibility layer: recreate ONLY the API surface the V906
@@ -281,6 +374,159 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     # -Werror-style flags used on freshly-written modules.
     target_compile_options(ht9045_globals PRIVATE
         -Wno-conversion-null -Wno-write-strings)
+endif()
+
+# ---------------------------------------------------------------------------
+# Library: ht9045_forms  (W7-F0 keystone -- the FormsFacade sink)
+#
+# AI(W906-W7-F0) 20260728: NEW library, created by the W7-F0 FormsFacade
+# refactor (docs/W7_UI_ARCHITECTURE_PLAN.md SS2-D6 / SS6-F0-d).
+#
+# WHAT IT IS
+#   The 9 non-VCL form-pointer stand-ins the state machines dereference
+#   (fMain / fLotInfo / fSCKART / fSortCT / fAGV / fNote / fOffSet / fCleaning /
+#   fShowMessage), previously all in a single root-level FormsFacade.cpp that
+#   was compiled into ht9045_sm.  FormsFacade.cpp is gone; FormsFacade.h is now
+#   an umbrella that just #includes forms/*.h, so all 113 existing
+#   `#include "FormsFacade.h"` lines are untouched.
+#
+# WHY IT EXISTS -- IT BREAKS A REAL CMake CYCLE ("Wall 2", plan SS4-V1/SS3-C7)
+#   Before this wave, verified directly in THIS file:
+#     * FormsFacade.cpp was in ht9045_sm's source list;
+#     * `target_link_libraries(ht9045_secsgem PUBLIC vclcompat ht9045_public
+#        ht9045_core ht9045_globals ht9045_db)` -- ht9045_secsgem does NOT link
+#        ht9045_sm;
+#     * `target_link_libraries(ht9045_sm PUBLIC ht9045_io ht9045_motor
+#        ht9045_globals vclcompat ht9045_secsgem)` -- ht9045_sm DOES link
+#        ht9045_secsgem.
+#   So SECSGEM/uHGemHT9045.cpp could never reach fMain: adding ht9045_sm to
+#   ht9045_secsgem would have created a genuine CMake target cycle.  That, not
+#   the "~19 missing FormsFacade stubs" MIGRATION_ROADMAP.md:133 blames, was the
+#   structural blocker.  Sinking the facade to a BOTTOM layer removes it:
+#   ht9045_secsgem now links ht9045_forms (see its own link line below), and
+#   ht9045_forms links nothing above itself.
+#
+#   THE EXACT MECHANISM -- AI(W906-W7-F0-fix) 20260728, measured, because the
+#   plain phrase "CMake target cycle" is NOT self-evidently an error:
+#     * A cycle between two STATIC libraries is LEGAL in CMake.  Measured with a
+#       2-target throwaway probe (A STATIC <-> B STATIC): configure exit 0,
+#       build exit 0, and the generated linkLibs.rsp reads
+#       `libA.a libB.a libA.a libB.a` -- CMake just repeats the archives.  Every
+#       library in this file is STATIC (no add_library(... SHARED), and
+#       BUILD_SHARED_LIBS is never set), so "they are all static libs, therefore
+#       a cycle is fine" would have been a reasonable and WRONG conclusion.
+#     * What makes it a hard error HERE is that the cycle runs through a
+#       $<LINK_GROUP:RESCAN,...> node, and a group is not a STATIC_LIBRARY
+#       target -- CMake's rule is "cyclic dependencies are allowed only among
+#       static libraries".  Measured on THIS project without editing it, by
+#       re-injecting the pre-F0 edge via
+#         cmake -DCMAKE_PROJECT_INCLUDE=<file containing>
+#           cmake_language(DEFER ... CALL target_link_libraries
+#                          ht9045_secsgem PUBLIC ht9045_sm)
+#       -> configure/generate FAILED (exit 1) with
+#         "The inter-target dependency graph, for the target
+#          test_config_loaders, contains the following strongly connected
+#          component (cycle): group RESCAN:{ht9045_secsgem,ht9045_forms,...}
+#          depends on ht9045_sm; ht9045_sm depends on group ..."
+#       and the same error for test_uHGemEquipment -- and ONLY those two, because
+#       they are the only two targets whose RESCAN group contains
+#       ht9045_secsgem but NOT ht9045_sm (tests/CMakeLists.txt:291 and :2027).
+#       Both groups already had that shape before this wave (verified against
+#       git HEAD), so the blocker was real pre-F0 too.
+#     * The same injection with `target_link_libraries(ht9045_forms PUBLIC
+#       ht9045_sm)` instead ALSO fails (exit 1, same two targets).  So "just
+#       declare the ht9045_forms -> ht9045_sm dependency honestly and drop the
+#       bottom-layer claim" is not an available option -- it does not configure.
+#       That is why the fix below moves the source instead.
+#
+# DEPENDENCIES -- and why they are acyclic
+#   * vclcompat       -- AnsiString / TStringList / TStringGrid / the unified
+#                        widget stand-ins in vclcompat/Controls.h.
+#   * ht9045_globals  -- forms/fMain.cpp's faithfully-translated
+#                        WritePERSITETemperature body reads TestIF.iTestType
+#                        (cprod.cpp) and writes asTCPIPTemperature (cmydef.cpp),
+#                        and the ctor uses MAX_SOCKET_TOTAL (MachineType.h via
+#                        cprod.h).  ht9045_globals itself links no project
+#                        library except vclcompat (line ~359 in this file; the
+#                        only other entries are the psapi/version Win32 import
+#                        libs at ~365), so this edge introduces no cycle.
+#   * Automation/AGV_predicates.cpp is a SOURCE of this target (not a link
+#     dependency) -- see "NO UNDECLARED BACK-EDGE" below.
+#   The plan's wording is "depends only on vclcompat"; ht9045_globals is added
+#   because it is a REAL, already-existing dependency of the moved code (it was
+#   satisfied implicitly while the facade sat inside ht9045_sm) and declaring it
+#   keeps the layering honest without touching the property that matters -- that
+#   ht9045_forms depends on nothing that depends on ht9045_secsgem or ht9045_sm.
+#
+# NO UNDECLARED BACK-EDGE -- AI(W906-W7-F0-fix) 20260728
+#   As first landed, this library had a 4th, UNDECLARED dependency: forms/
+#   fAGV.cpp's 3 predicates delegate to the free functions in
+#   Automation/AGV_predicates.cpp, which was compiled into ht9045_sm.  So
+#   libht9045_forms.a carried 3 undefined references it declared no dependency
+#   for -- measured on the built archive with
+#     nm --undefined-only libht9045_forms.a
+#   which attributed all 3 (AGV_IsSPIL_AMR / AGV_IsATK_AMR / AGV_Use_AMR) to
+#   fAGV.cpp.obj.  In archive reality ht9045_forms depended on ht9045_sm, i.e.
+#   the "bottom layer" property that justifies the ht9045_secsgem edge below did
+#   not actually hold; it only LOOKED like it held because GNU ld extracts
+#   fAGV.cpp.obj lazily, so targets that never touch fAGV (e.g.
+#   test_config_loaders, tests/CMakeLists.txt:291, which links ht9045_forms
+#   WITHOUT ht9045_sm) linked anyway.
+#   FIX: Automation/AGV_predicates.cpp is compiled HERE (and REMOVED from
+#   ht9045_sm's source list, see that target).  This is sound because:
+#     * Its only external symbols are IniConfig (cprod.cpp:50),
+#       USE_COVER_TRAYID and CUSTOMER_CODE (cmydef.cpp) -- all in
+#       ht9045_globals, which is already a declared dependency above.  It pulls
+#       in nothing upward, so no cycle.
+#     * It matches GOLDEN's own grouping: golden defines all 3 as TfAGV MEMBER
+#       functions inside the fAGV form's own unit (Automation/AGV.cpp:1315 /
+#       1327 / 1339, declared Automation/AGV.h:204-206) -- they are form code,
+#       not state-machine code.  W5 extracted them to free functions so the SMs
+#       could call them without the VCL form; the extraction chose the
+#       Automation/ directory, not a different layer.
+#     * ht9045_sm PUBLIC-links this target (see its link line), so its own
+#       consumer Automation/AGV_PortScan.cpp still resolves them.  No test target
+#       is stranded either: grep over tests/CMakeLists.txt finds ZERO
+#       $<LINK_GROUP:...> containing ht9045_sm without ht9045_forms.  (The
+#       converse DOES occur -- :291 and :2027 have ht9045_forms without
+#       ht9045_sm -- and that is exactly the direction the layering permits, and
+#       is now genuinely safe rather than accidentally safe.)
+#   ht9045_forms remains listed INSIDE the existing $<LINK_GROUP:RESCAN,...>
+#   groups because its members reference ht9045_globals, which is listed AFTER
+#   it in those groups -- GNU ld is single-pass, so the group's re-scan is what
+#   settles that.  MSVC's link.exe re-scans archives on its own, which is why
+#   the RESCAN group is a declared no-op there (see the if(MSVC) block at the
+#   top of this file).
+# ---------------------------------------------------------------------------
+add_library(ht9045_forms STATIC
+    forms/fMain.cpp
+    forms/fLotInfo.cpp
+    forms/fSCKART.cpp
+    forms/fSortCT.cpp
+    forms/fAGV.cpp
+    forms/fNote.cpp
+    forms/fOffSet.cpp
+    forms/fCleaning.cpp
+    forms/fShowMessage.cpp
+    # AI(W906-W7-F0-fix) 20260728: MOVED here from ht9045_sm -- the 3 AMR-mode
+    # predicates forms/fAGV.cpp delegates to.  See the "NO UNDECLARED BACK-EDGE"
+    # block above.  File content unchanged (zero behaviour change: same code,
+    # same callers, different archive).
+    Automation/AGV_predicates.cpp
+)
+
+target_include_directories(ht9045_forms PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+target_link_libraries(ht9045_forms PUBLIC vclcompat ht9045_globals)
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    # Same warning posture as ht9045_globals / ht9045_sm: the facade sees the
+    # BCB6 idioms inherited from the global headers (AnsiString brace-init etc.)
+    # via cprod.h / cmydef.h.
+    target_compile_options(ht9045_forms PRIVATE
+        -Wall -Wextra -Wno-conversion-null -Wno-write-strings -Wno-unused-parameter)
 endif()
 
 # ---------------------------------------------------------------------------
@@ -585,7 +831,21 @@ target_include_directories(ht9045_secsgem PUBLIC
 # invert this library's intended layering (ht9045_db is a lower layer than
 # SECS/GEM) for a dependency that is a database.cpp implementation detail, not
 # ht9045_db's own public interface.
-target_link_libraries(ht9045_secsgem PUBLIC vclcompat ht9045_public ht9045_core ht9045_globals ht9045_db)
+# AI(W906-W7-F0) 20260728: ht9045_forms ADDED -- this single edit is what
+# actually unblocks "Wall 2".  SECSGEM/uHGemHT9045.cpp touches 28 distinct fMain
+# members in golden; it could not reach ANY of them before, because the facade
+# lived in ht9045_sm and adding ht9045_sm here would have made a CMake cycle
+# (ht9045_sm already links this target -- see target_link_libraries(ht9045_sm
+# PUBLIC ...) below).  ht9045_forms is a bottom layer (vclcompat +
+# ht9045_globals only), so this edge is acyclic.
+# AI(W906-W7-F0-fix) 20260728: that acyclicity now has a POSITIVE control, not
+# just "the configure succeeded" -- re-injecting the ht9045_secsgem->ht9045_sm
+# edge into this exact tree makes configure FAIL with a strongly-connected-
+# component error on test_config_loaders and test_uHGemEquipment, while the tree
+# without it configures clean.  Both runs are recorded in the ht9045_forms block
+# above ("THE EXACT MECHANISM"), including why a cycle among STATIC libraries is
+# normally legal and why THIS one is not.
+target_link_libraries(ht9045_secsgem PUBLIC vclcompat ht9045_public ht9045_core ht9045_globals ht9045_db ht9045_forms)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(ht9045_secsgem PRIVATE ${HT9045_WARNFLAGS})
@@ -709,8 +969,13 @@ endif()
 #     csystem_predicates.cpp-- the frozen csystem.h HasIC predicate interface
 #                              (implemented over the Sim HAL; canary uses none,
 #                              but they link the contract for later sub-waves).
-#     FormsFacade.cpp       -- non-VCL fAGV satellite stub (the canary's only
-#                              form-pointer deref: fAGV->IsATK_AMR()).
+#     (FormsFacade.cpp)     -- WAS here: the non-VCL fAGV satellite stub (the
+#                              canary's only form-pointer deref,
+#                              fAGV->IsATK_AMR()).  AI(W906-W7-F0) 20260728
+#                              moved it to forms/fAGV.cpp in the new
+#                              ht9045_forms library (see its block above);
+#                              this target links ht9045_forms, so the canary is
+#                              unaffected.
 #     asendic.cpp           -- SIM bodies for CylinderUp/Middle/Lower + TrayMove*
 #                              tray-move/lifter helpers (manipulate Cylinder[]/
 #                              MOT[]; full lifter SM deferred W6.x).
@@ -728,7 +993,11 @@ endif()
 add_library(ht9045_sm STATIC
     asendic_Empty.cpp
     csystem_predicates.cpp
-    FormsFacade.cpp
+    # AI(W906-W7-F0) 20260728: FormsFacade.cpp REMOVED from this library -- the
+    # facade now compiles into the bottom-layer ht9045_forms target (see its
+    # block above for why: having it here was the actual "Wall 2" CMake cycle).
+    # ht9045_sm links ht9045_forms below, so nothing in this library loses access
+    # to fMain/fLotInfo/... .
     asendic.cpp
     canary_support.cpp
     # --- W6.2 (IN-ARM foundation): shared HotPlate pick/place geometry leaves ---
@@ -751,8 +1020,10 @@ add_library(ht9045_sm STATIC
     #     to the GPIB/Tester bridge / ESD / Auto-Update / Event-Log-Analyzer
     #     helper programs).  Lives HERE, not in ht9045_comms, per that unit's own
     #     translate report: it depends on TestSocket/LastSet (aHotPlateSubstrate.
-    #     cpp/canary_support.cpp, just above) + fMain/fBarCode (FormsFacade.cpp,
-    #     above) and in turn unblocks atester.cpp's still-gated GetTesterResult/
+    #     cpp/canary_support.cpp, just above) + fMain/fBarCode (was
+    #     FormsFacade.cpp here; AI(W906-W7-F0) 20260728 moved it to
+    #     forms/fMain.cpp in ht9045_forms, which this target links)
+    #     and in turn unblocks atester.cpp's still-gated GetTesterResult/
     #     ProcessTesterTimeOut (both also in this library) -- a standalone
     #     library here would create a circular ht9045_comms<->ht9045_sm target
     #     dependency.  See CMakeLists.txt's ht9045_comms comment block.
@@ -978,9 +1249,7 @@ add_library(ht9045_sm STATIC
     #     extern-redeclaration idiom for this exact symbol).
     Interface/TesterTCP.cpp
     # --- W5 Automation wave (Automation network unit): TeraPower AMR tray-count
-    #     bridge (TTeraPowerAMR / global `AMR`) + the 3 pure AGV AMR-mode
-    #     predicates (AGV_IsSPIL_AMR/AGV_IsATK_AMR/AGV_Use_AMR, wired into
-    #     FormsFacade's TfAGV -- see FormsFacade.cpp) + the HANA-ART SRQ protocol
+    #     bridge (TTeraPowerAMR / global `AMR`) + the HANA-ART SRQ protocol
     #     helper (uHANA_ART) + the 8-function SCK/ATK "Auto Retest" extract
     #     (Automation/SCK_ART.cpp, wired into csystem.cpp's W7C1/W7C2 SCKART
     #     seams -- see csystem.cpp).  Same footprint already carried by
@@ -988,21 +1257,34 @@ add_library(ht9045_sm STATIC
     #     NOTE: Automation/AMR.cpp's global `AMR` retires acatchtray_shims.cpp's
     #     TAMRShim/AMR stopgap (ODR: same name, different type) -- see that
     #     file's comment.
-    Automation/AGV_predicates.cpp
+    # AI(W906-W7-F0-fix) 20260728: this wave's 4th member,
+    # Automation/AGV_predicates.cpp (the 3 AGV AMR-mode predicates
+    # AGV_IsSPIL_AMR/AGV_IsATK_AMR/AGV_Use_AMR), was MOVED OUT of this library
+    # into ht9045_forms -- forms/fAGV.cpp delegates to them, and leaving them
+    # here gave libht9045_forms.a 3 undefined refs into ht9045_sm that
+    # ht9045_forms declared no dependency for, silently voiding its bottom-layer
+    # property.  See the "NO UNDECLARED BACK-EDGE" block in the ht9045_forms
+    # target above.  This library's own consumer, Automation/AGV_PortScan.cpp
+    # (below), still resolves them: ht9045_sm PUBLIC-links ht9045_forms.
     Automation/AMR.cpp
     Automation/HANA_ART.cpp
     Automation/SCK_ART.cpp
     # --- W5-Final-AGV_E84 INTEGRATE: Automation/AGV_E84.cpp -- the E84
     #     loader/unloader handshake core (DoE84Loader/DoE84Unloader, 15/15
     #     case labels each, faithful) + ShowE84Log/E84StatusLog file logging.
-    #     Same footprint as the AGV_predicates/AMR/HANA_ART/SCK_ART quartet
-    #     just above (ht9045_globals/ht9045_motor/FormsFacade.h/
-    #     canary_support.h); additionally now uses fAGV->mmE84Log (see
+    #     Same footprint as the AMR/HANA_ART/SCK_ART cluster just above
+    #     (ht9045_globals/ht9045_motor/FormsFacade.h/
+    #     canary_support.h) -- that cluster's 4th member, AGV_predicates.cpp,
+    #     moved to ht9045_forms, see the AI(W906-W7-F0-fix) note above;
+    #     additionally now uses fAGV->mmE84Log (see
     #     FormsFacade.h/.cpp TfAGV::mmE84Log, added this integrate).
     Automation/AGV_E84.cpp
     # --- W5-Automation-cont INTEGRATE: Automation/AGV_PortScan.cpp -- the
-    #     second AGV.cpp slice (after AGV_E84.cpp's E84 handshake core and
-    #     AGV_predicates.cpp's 3 AMR predicates, both above): E84 sensor-status
+    #     second AGV.cpp slice (after AGV_E84.cpp's E84 handshake core above and
+    #     AGV_predicates.cpp's 3 AMR predicates, which AI(W906-W7-F0-fix)
+    #     20260728 moved to ht9045_forms -- this file calls them and still
+    #     resolves them via ht9045_sm's PUBLIC link to that target): E84
+    #     sensor-status
     #     telemetry (NowE84Status/E84StatusChange) + the AMR/AGV port-scan
     #     dispatcher family (ScanLoadPort + 8 bScan*/bIsStackBusy free functions),
     #     13 functions total.  Same footprint as the AGV_E84.cpp/AGV_predicates.cpp
@@ -1205,7 +1487,14 @@ target_link_libraries(ht9045_sm PUBLIC
     ht9045_io ht9045_motor ht9045_globals vclcompat
     # W5-comms INTEGRATE: EventReport()/SECS_EVENT (csystem.cpp) + link-
     # completeness for Interface/InterfaceSYS.cpp (see source-list comment above).
-    ht9045_secsgem)
+    ht9045_secsgem
+    # AI(W906-W7-F0) 20260728: the ~60 TUs in this library that #include
+    # "FormsFacade.h" used to get fMain/fLotInfo/... from FormsFacade.cpp inside
+    # this same archive; it now lives in ht9045_forms.  (Strictly redundant with
+    # the transitive edge via ht9045_secsgem above, but declared explicitly
+    # because ht9045_sm's own sources are the direct consumers -- if the secsgem
+    # edge is ever narrowed, this must not silently break.)
+    ht9045_forms)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     # The SM carries BCB6 idioms inherited from the global headers (AnsiString

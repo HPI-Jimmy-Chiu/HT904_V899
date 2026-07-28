@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "generator": "emit_rc.py W7-B1b v1.0",
+  "source_dfm": "PMAlarm/fMain.dfm",
+  "formstem": "FMAIN",
+  "dialog_count": 1,
+  "control_count": 2,
+  "fallback_classes_used": [],
+  "warnings": [],
+  "dialogs": [
+    {
+      "idd_symbol": "IDD_FMAIN",
+      "idd_value": 8192,
+      "is_root": true,
+      "owner_path": "Form1",
+      "owner_class": "TForm1",
+      "controls": [
+        {
+          "symbol": "IDC_FMAIN_BUTTON1",
+          "value": 1024,
+          "win32_class": "Button",
+          "caption": "Button1",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "Form1.Button1",
+          "fallback_class": false,
+          "x": 32,
+          "y": 24,
+          "cx": 153,
+          "cy": 57
+        },
+        {
+          "symbol": "IDC_FMAIN_BUTTON2",
+          "value": 1025,
+          "win32_class": "Button",
+          "caption": "SetMachine",
+          "synthesized": false,
+          "rule": null,
+          "source_path": "Form1.Button2",
+          "fallback_class": false,
+          "x": 208,
+          "y": 24,
+          "cx": 153,
+          "cy": 57
+        }
+      ]
+    }
+  ]
+}
