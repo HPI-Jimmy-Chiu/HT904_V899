@@ -1128,3 +1128,49 @@ C 桶(`clientGemRead`/`ProcessSocketReceiveData`/`Timer1Timer`)是本檔案最�
 - **下一輪候選**：(1) `uHGemClass.cpp`最後1個`S7F20_CurrentEPPDData`需先設計`TDirectoryListBox`-equivalent vclcompat元件(真設計工作非機械式)；(2) `Automation/SCK_ART.cpp`最後1支`SaveMultiLotTestSummary`需等`csystem.cpp DoTrayFeedProcess`(golden:10862唯一呼叫端)先翻或評估孤立單元測試的價值；(3) `MainCalcCore`下一批候選待重新recon(先前recon的`ATC_Handler_Side.h`/`InterfaceSYS.h`已解鎖，可能開出新一批純算候選，需重新讀main.cpp找下一批純算葉節點)；(4) `InitCleanOutFunction`AutoSiteMap分支/`DoIndexAutoClean`叢集/SCK_ART報表函式皆已收尾，`csystem.cpp`/`AutoClean.cpp`/`Automation/SCK_ART.cpp`可視為此輪告一段落。**次選大方向**：main.cpp calc-core繼續 > uLotInfo.cpp(需先recon找純算葉，累計仍~0%) > ckernel.cpp(卡HAL pump設計決策，暫緩)。
 - **驗證基準**：ctest 91/95(同4個既有環境漂移)。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支`fix/v899.32-pti`；工作樹另有無關V899/config殘留(PTI案)勿圈入V906 commit。
 - **執行模式**：使用者指示持續有效(純翻譯/審查可平行就盡量展開；過程無真異常/疑問，未停下請示)。
+
+## 2026-07-28（同日續，範圍擴大）— 使用者定案 MFC + 「全部 cpp/h/dfm 都翻」；W7 UI 架構定案 + 首批 W7 波次落地
+
+**背景/範圍變更**：使用者本輪明確擴大範圍——(1) UI 框架**定案 MFC**；(2) 目標從「挑純算葉節點」改成**所有 .cpp/.h/.dfm 全部翻完**；(3) workflow 火力全開；(4) 不逐波停下請示，重大問題跳過並在最後條列。使用者另給兩項常設授權：**依任務性質自動切換 model/effort**（設計用 Opus/Fable xhigh、機械翻譯 Sonnet high）與**一律允許安裝/修改任何軟體**。
+
+**⚠️ 事故與修正（測試方法）**：設計 workflow 的雙工具鏈 agent 依指示實測 MSVC，用 **MSVC Debug CRT** 建置後跑 `ctest -j4`——Debug CRT 的 assert 失敗彈出 modal「Debug Assertion Failed!」對話框，(a) 整批 95 測試卡死在 94/95、(b) **log 完全無記錄**（還在等人按確定，看起來只像最後一支很慢）、(c) 洗版使用者螢幕。使用者被打斷才反映。主迴圈立即 `TaskStop` 該 workflow，並加**兩道永久防護**（commit `a9d2bc7`）：`tests/test_bootstrap.cpp`（經 `tests/CMakeLists.txt` 頂端 `ht9045_test_bootstrap` **INTERFACE** library 編進**每個** test 執行檔，static init 呼叫 `SetErrorMode`+MSVC 的 `_CrtSetReportMode`/`_set_abort_behavior`/`_set_invalid_parameter_handler`）＋全部 95 測試 `TIMEOUT 600`（原本 ctest **無任何預設 timeout**）。刻意用 INTERFACE 而非 static library——只含 static initializer 的 object 會被 linker 丟掉，防護會變成假的（已用 `nm`/import table 證實真的編進去）。實測故意 null-deref 立即 exit 139、零彈窗、沒吃到 timeout。**非 MSVC 專屬**：MinGW 硬崩潰（本專案發生過 SegFault 與 `STATUS_STACK_OVERFLOW`）一樣彈 WER 視窗。記為 KNOWLEDGE Gotcha 9，衍生紀律：**背景/平行 agent 跑的任何程式都不可有 modal 彈窗路徑**。
+
+**文件錯誤更正（實測推翻）**：`KNOWLEDGE.md`/`MIGRATION_ROADMAP.md` 皆記載「本機無 MSVC」——**錯**。實測本機有 VS 2022 BuildTools 17.14.3（`cl.exe` 14.44.35207/14.42.34433）+ VS 2019 16.11.47（14.29.30133）+ Windows SDK 10.0.18362~26100，且成功用 MSVC configure+build 全樹並跑完 95 測試。**但 MFC 元件未安裝**（`atlmfc\` 只剩 `lib\spectre\arm64` 空殼）。UAC 無法從非提權的非互動 shell 觸發（`Start-Process -Verb RunAs` 回 Access is denied），故 MFC 安裝需使用者手動執行，**已告知且不擋進度**（第 4 階段才需要）。
+
+**W7 UI 架構定案（commit `05ee3c4`，`docs/W7_UI_ARCHITECTURE_PLAN.md` 77KB）**：6-agent 設計 workflow（5 路獨立調查 + 1 路綜合並**獨立複驗**各路承重宣稱，非照抄）。12 項鎖定決策，三個最關鍵：
+
+- **D2/D3 FormsFacade 永久保留**且是「具體可綁定 facade」，**不做純虛擬介面**——實測 golden 4,266 處跨模組 `fMain->` 中 **69.3% 是資料成員語法**（NESTED 56.2%+DATA 13.1%），C++ 無 property，介面最多只能表達方法那 1/3。MFC 端由 `CDialog` **持有** `TfXxxImpl : public TfMain` 並 `fMain=&impl`（組合），**任何 `fMain->` 呼叫點都不用改**。刪 facade 亦否決：15 個 test 檔直接 deref 它，`CDialog` 在 MinGW ctest 行程建不出來，它就是 oracle。
+- **D8 真 HWND 巢狀，不扁平化**——1,201 個容器的 `Visible`/`Enabled` 被 golden 邏輯切換、遞移管轄 33,557 個後代槽位；扁平化＝手寫 1,201 份 cascade 模擬。巢狀最深 14 層，僅 3.1% 控制項是表單直屬子。（主迴圈先前告知使用者「MFC 慣例是扁平」，被實測數據推翻。）
+- **D7 `.rc` 不是幾何權威**——px→DLU→px 僅 **17.2–17.4%** 控制項像素精確，且 `DIALOGEX` 只允許**一個** `FONT` 而語料需 **9,933 組** per-control 字型。權威像素幾何改放產生的 layout table，於 `OnInitDialog` 套用。
+- 另 **D10：用 Ninja 不用 Visual Studio generator**——後者 multi-config 且預設 Debug，正是本日彈窗事故的載體。
+
+**複驗推翻的既有說法（含主迴圈自己給 agent 的 brief）**：7 個自製控制項有 **5 個在 `elec\myvcl\`** 不在 `elec\Component\`；控制項總數 **22,627**（非 regex 數出的 22,751）；**「牆②」不是缺 19 個 FormsFacade stub**（`MIGRATION_ROADMAP.md:133` 的描述會誤導）而是 **CMake 循環依賴**（`FormsFacade.cpp` 在 `ht9045_sm`，而 `ht9045_secsgem` 無法反向 link），補 stub 解不開；MinGW/MSVC 的 `(int)(1.234*1000.0)` 確實不同但**只對 runtime 值成立**（編譯期常數折疊兩邊都 1234），任何後續算術等價 probe 必須用 volatile/runtime 輸入否則得假結論。
+
+**首批 W7 波次落地（commit `c7c8663` + `7fe8739`）**：
+
+- **W7-A0**（單檔但擋整個 MFC 階段）：`vcl_compat.h` include 順序加固。原本 TU 只要先看到 `windows.h` 就編不過（undef 區塊在 `SysUtils.h` 宣告之後）。順帶發現**漏了 `GetObject`**——`TStringList.h:176` 的 `GetObject(int)` 在含 umbrella 的 TU 被改名成 `GetObjectA`，而 `TStringList.cpp` 定義的是 `GetObject`，實測連結失敗；窮盡掃描（13,281 個 windows.h 巨集 × 22 個 vclcompat header）確認碰撞集恰為 `{CopyFile,DeleteFile,GetObject,MoveFile}`。**另發現 plan 自己寫錯**：§6-W7-A0 要求無條件加 `<winsock2.h>`，但 MinGW 下那會讓 `ERROR_SHARING_VIOLATION`/`ERROR_LOCK_VIOLATION` 消失（`winsock.h:50` 設 `__WINSOCK_H_SOURCED__` 導致 `winerror.h` 的定義段被跳過），會壞 `common.cpp:2313`——實作正確地 gate 成 MSVC-only，更正記入 plan §10（不動 §6，照 append-only 慣例）。
+- **W7-A2**：`SearchTrayToPlace_Magazine` 回傳型別 ODR 違反（27 個 TU 中 14 宣告 `void`/13 宣告 `int`，定義是 `void`；golden 兩處皆 `int`）。非美觀問題：golden `aoutarm9045.cpp:1369` 真的 `return SearchTrayToPlace_Magazine();`，今日無害只因該呼叫點尚未翻，是為未來埋的陷阱；MinGW 對回傳型別不符**靜默連結**。
+- **W7-B1**：`.dfm` → IR → `.rc`+`_ids.h`+layout table 完整管線（`tools/dfm2rc/`，全新）。133 表單 / 22,627 控制項 / **22,586** 個 CONTROL / **3,637** DIALOGEX（=133 root+3,504 容器，零扁平化）/ 26,218 個 IDC_/IDD_ 符號零碰撞 / 1,978 個 golden `Alias` 全數無損 round-trip（重要：golden 靠 Alias 分派 IO 點）。**不卡 MFC**：`rc.exe` 屬 Windows SDK，每個 `.rc` 都真的編成 `.res` 再回讀二進位驗證；canonical 產物樹簽入，讓 G7 fidelity/idempotency gate 能位元比對重新產生的結果。
+- **W7-C**：3 個 framework-free 核心（`TrayCore`/`BtnPanelCore`/`LedCore`）+ HDC renderer + headless 像素測試（memory DC + DIB section，零視窗）。MFC 的 `CDC` 只是 `HDC` 包裝，故日後 MFC shell 是薄 adapter 非重寫。
+
+**兩路獨立審查抓到 15 個發現（1 HIGH / 8 MEDIUM / 6 LOW），全部處理**：
+
+- **HIGH：管線靜默丟控制項**。凡「本身是 LEAF 但有子節點」的節點，子節點全部從 `.rc` 消失（golden `cObserver.dfm` 的 `ChartYield`(TChart) 下 `SpeedButton1`/`edYieldMax`/`edYieldMin` 皆有 `OnClick`；`DynamicTemp.dfm` 的 `Chart1` 下 `edMax`/`edMin`）。**比那 5 個控制項更嚴重的是所有 gate 都回報綠燈**——gate 沒有承載力。修法要求**先寫 gate、看它在舊行為下失敗、再修 walk**。
+- **MEDIUM，且最有教育意義：第一輪 review 的「建議修法」本身是錯的，主迴圈照做造成真迴歸**。LedRender flood-fill 種子點被改成「控制項 live Width/Height」，但 golden 的 `FloodFill` 就在 `CreateLedBitmap`(`aled.pas:106-160`) 裡、緊接在 style ladder 賦值 Width/Height 之後，所以 golden 的種子點**永遠是風格尺寸**，`.dfm` 事後改尺寸它看不到（golden 不因改尺寸重跑 `CreateLedBitmap`）。改成 live 尺寸會讓 1,840 個 live LED 實例中 262 個偏離；`cContact.dfm:15895` 的 `ledOneCycle`（LEDSqLarge，`.dfm` 15x15）渲染出 **0** 個彩色像素而 golden 是 **189**。已改為從風格尺寸取種子（新增 `StyleExtents()`），並把「把迴歸當正確」的測試改成斷言正確不變量。
+- 其餘：`LedCore` 的 `SetTrueColor`/`SetFalseColor` 漏 golden 的 Width/Height snap-back 副作用而註解宣稱無副作用；layout `id_symbol` 對 3,835/22,627 列錯誤（header 卻保證它是 join key）；plan 要求的 synthesized-set checker 從未實作（無物約束 emitter 亂造）；`dfm2rc_fidelity`/`idempotent` 共用 regen root 間歇性失敗（比穩定失敗更糟，會訓練人重跑到綠）。
+- **更正未經驗證的數字/引用（每項先自己重新推導才改）**：22,581→**22,586**；3,840→**3,835**（SUBDLG 3,504+NONVISUAL 331）；幽靈規則 `SYNTH_TABSHEET_GEOM`（發出 0 次）→ 真實的 `SYNTH_LABELEDEDIT_LABEL`（198 次）；`butPa1.h:32-34`→**:37-39**；`BtnPanelLane.cpp:45-49`→**:47-52**；LED 風格分佈重數（1,357/459/23/1=1,840，`LEDSmall`/`LEDSqSmall` 為 0）；`vcl_compat.h` 多列的 `AnsiString.h`（實際不宣告那四個名字）。另把 `emit_rc.py` 兩個走訪函式對 NONVISUAL 真正對稱化（docstring 早已宣稱對稱）——corpus 0 案例故行為惰性，G7 gate 證實產出位元相同。
+- 逐位保留為 GOLDEN BUG：LED/button 家族的 write-only `Port`/`Bit`/`Type`/`Ring`/`IP`/`IsISA` 屬性（setter 從不賦值字串 backing field，故 golden 的 getter 恆回 ""）。
+
+**主迴圈自我檢討（記入避免重蹈）**：本輪兩個問題都出在「把未驗證的宣稱當前提往下派工」——(1) 彈窗事故源於 prompt 沒禁止 Debug CRT／modal 路徑；(2) LedRender 迴歸源於直接把第一輪 review 的建議寫進 fix 指示，沒要求 agent 先驗證其前提。**後續 fix 波次的 prompt 一律加上「你寫的替代文字必須是你親自查證過的，不要用一個未驗證宣稱換掉另一個」**。
+
+**驗證基準**：fresh reconfigure + full build exit 0；ctest **103/107**（測試數 95→107，12 個新測試全綠含 4 個 dfm2rc gate；失敗恰為既有 4 個環境漂移 config_db/IniFiles/ini_helpers/config_loaders）；BOM/mojibake 掃描 **0/992**（含全部產生的 133 表單產物）。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 `fix/v899.32-pti`。
+
+**4 個 commit**：`a9d2bc7`（測試防護）+`05ee3c4`（W7 設計文件）+`c7c8663`（W7-A0）+`7fe8739`（W7-A2/B1/C + 全部審查修正）。
+
+### 🔖 RESUME（最新）
+
+- **✅ W7 架構定案 + 首批波次全部落地(2026-07-28)**：`a9d2bc7`+`05ee3c4`+`c7c8663`+`7fe8739`。**寫入佇列已清空**。同日稍早的純翻譯三 commit(`ff4d720`/`70e49ef`/`d61ffab`)見上一節。
+- **⚠️ 唯一待使用者動手**：MFC 元件尚未安裝（UAC 無法從本 shell 觸發）。指令（需系統管理員）：`& "C:\Program Files (x86)\Microsoft Visual Studio\Installer\setup.exe" modify --installPath "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools" --add Microsoft.VisualStudio.Component.VC.ATLMFC --includeRecommended --passive --norestart`。**卡它的僅 `W7_UI_ARCHITECTURE_PLAN.md` §7 列的 10 項**（全是 UI 本體：`CDialog` 子類 / `OnCtlColor` 約 14,600 個顏色屬性 / `WM_SIZE` / 7,280 個 message map / 3 個 `CWnd` shell / `CWinApp` bootstrap / `build_msvc_ui`），**上游全不卡**。
+- **下一輪候選（依 plan §6 定序）**：(1) **W7-A1** MSVC 第二 oracle 啟用（Ninja+Release，A0 已完成故可開工）；(2) **██ W7-F0 FormsFacade 重構██**（`Controls.h` 統一 ~20 型且每型 `: public TObject`＋facade 別名化＋下沉成 `ht9045_forms` 底層 library＋按表單拆 `forms/fXxx.{h,cpp}`＋方法面 virtual 化）——**全樹短凍結、序列，其他寫入波必須停**，但這是解 CMake 循環依賴（牆②）與消除 FormsFacade.h 全域寫入鎖的關鍵；凍結期間仍可平行：只新增檔案的工作（B1 剩餘、C1/C2）、唯讀 recon、A2 類無重疊波；(3) F0 後 fan-out：**W7-F1**（牆② 解鎖）/**W7-F2**（TU-local seam 退場 + SckArt **4 方** state 整併，非 3 方，見 plan §3-C4）/**W7-C4**（把既有臨時替身接回真核心）/**W7-L**（邏輯長尾：asendic×7、ckernel、MainCalcCore 下一批等，與 UI 無關可持續平行）；(4) **W7-B1d** 全語料再跑；(5) MFC 到位後才做 **W7-U0→C5→U1..Un**。
+- **驗證基準**：ctest 103/107（同 4 個既有環境漂移）。工作樹另有無關 V899/config 殘留(PTI 案)與兩個前波遺留的 `*_test_scratch/` 未追蹤目錄，**勿圈入 V906 commit**。
+- **執行模式**：使用者指示持續有效——全部 cpp/h/dfm 都要翻、workflow 火力全開、不逐波停下請示、重大問題跳過並最後條列；model/effort 依任務性質自動切換；安裝軟體不必先問（但勿在 agent 正使用某工具鏈時改動它）。
