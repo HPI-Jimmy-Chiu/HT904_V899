@@ -99,6 +99,36 @@ if(MSVC)
 endif()
 
 # ---------------------------------------------------------------------------
+#  GNU/MinGW: static-link the compiler runtimes
+# ---------------------------------------------------------------------------
+# AI(W906-W7-A1fix) 20260729: link libgcc/libstdc++ statically so every
+# executable is self-contained.
+#
+# WHY, and it is not cosmetic: without this every test .exe imports
+# libgcc_s_dw2-1.dll and libstdc++-6.dll (confirmed with objdump -p) and
+# resolves them from PATH at LOAD time. Launch one from any environment whose
+# PATH lacks C:\MinGW\bin -- a plain PowerShell, a vcvarsall shell that
+# rewrote PATH, a scheduler, another tool's subprocess -- and the loader fails
+# with STATUS_DLL_INIT_FAILED (0xc0000142), which Windows reports as a MODAL
+# "application was unable to start correctly" dialog. That happened to
+# test_testertcp_socket.exe on 2026-07-29 and interrupted the user.
+#
+# This failure mode is INVISIBLE to tests/test_bootstrap.cpp's dialog guards:
+# a loader failure occurs before ANY user code -- including static
+# initializers -- has run, so SetErrorMode has not been called yet and cannot
+# suppress it. The earlier claim that the bootstrap covers batch runs was
+# therefore overstated; it covers crashes and asserts DURING execution, not
+# failures to start. Removing the external dependency is the only fix that
+# addresses the cause rather than the symptom, and it makes the exes runnable
+# from any working directory or shell.
+#
+# Cost: a few hundred KB per executable, and no behaviour change -- the same
+# libstdc++/libgcc code, bound at link time instead of load time.
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+    add_link_options(-static-libgcc -static-libstdc++)
+endif()
+
+# ---------------------------------------------------------------------------
 # Library: vclcompat  (W0 keystone)
 #   BCB6 / VCL compatibility layer: recreate ONLY the API surface the V906
 #   source actually uses (AnsiString / TStringList / TDateTime / SysUtils),
