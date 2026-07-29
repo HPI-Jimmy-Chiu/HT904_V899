@@ -1174,3 +1174,43 @@ C 桶(`clientGemRead`/`ProcessSocketReceiveData`/`Timer1Timer`)是本檔案最�
 - **下一輪候選（依 plan §6 定序）**：(1) **W7-A1** MSVC 第二 oracle 啟用（Ninja+Release，A0 已完成故可開工）；(2) **██ W7-F0 FormsFacade 重構██**（`Controls.h` 統一 ~20 型且每型 `: public TObject`＋facade 別名化＋下沉成 `ht9045_forms` 底層 library＋按表單拆 `forms/fXxx.{h,cpp}`＋方法面 virtual 化）——**全樹短凍結、序列，其他寫入波必須停**，但這是解 CMake 循環依賴（牆②）與消除 FormsFacade.h 全域寫入鎖的關鍵；凍結期間仍可平行：只新增檔案的工作（B1 剩餘、C1/C2）、唯讀 recon、A2 類無重疊波；(3) F0 後 fan-out：**W7-F1**（牆② 解鎖）/**W7-F2**（TU-local seam 退場 + SckArt **4 方** state 整併，非 3 方，見 plan §3-C4）/**W7-C4**（把既有臨時替身接回真核心）/**W7-L**（邏輯長尾：asendic×7、ckernel、MainCalcCore 下一批等，與 UI 無關可持續平行）；(4) **W7-B1d** 全語料再跑；(5) MFC 到位後才做 **W7-U0→C5→U1..Un**。
 - **驗證基準**：ctest 103/107（同 4 個既有環境漂移）。工作樹另有無關 V899/config 殘留(PTI 案)與兩個前波遺留的 `*_test_scratch/` 未追蹤目錄，**勿圈入 V906 commit**。
 - **執行模式**：使用者指示持續有效——全部 cpp/h/dfm 都要翻、workflow 火力全開、不逐波停下請示、重大問題跳過並最後條列；model/effort 依任務性質自動切換；安裝軟體不必先問（但勿在 agent 正使用某工具鏈時改動它）。
+
+## 2026-07-29 — W7 續推：A1/F0 落地、MFC 裝好、F1/F2/L1 三波完成但帶 3 個 HIGH（使用者要求暫停，交接）
+
+**設定**：主迴圈 Opus 5 + ultracode（xhigh + workflow 編排）。使用者本場次指示：走 MFC、立刻安裝、F1/F2/L 開始平行、不逐波停下請示。
+
+### 已 commit（本場次 4 個）
+
+- `1a74870` W7-A1（MSVC 第二 oracle）+ W7-F0（FormsFacade 重構，Wall-2 循環真破）+ 三輪審查修正
+- `fda5fe4` **靜態連結 MinGW runtime**——修 `0xc0000142` loader 彈窗
+- `b05598b` MFC 元件安裝並**實編驗證**通過
+
+### ⚠️ 工具鏈重大更正（兩次都是我誤判，已全部改正）
+
+1. **「本機無 MSVC」是錯的**（KNOWLEDGE/ROADMAP 原記載）：實際有 VS2022 BuildTools（`cl.exe` 14.44/14.42）+ VS2019（14.29）+ Windows SDK。
+2. **「MFC 裝不了、系統會擋」也是錯的**：日誌全程寫著 `vs.willow.isadmin : True`。三次安裝失敗全是**我指令下錯**——(a) `--quiet` → exit 5007（無互動模式拒絕自我提權）；(b) `--norestart` 單獨用 → exit 87（它必須搭配 `--quiet`/`--passive`），使用者看到的是「指令列錯誤頁」，那頁只有關閉鈕所以他關掉了；(c) 拿掉 `--norestart` 的純 GUI 模式才正確。**正確形狀**：`setup.exe modify --installPath "<含空格加引號>" --add <ComponentId>`，失敗看 `%TEMP%\dd_installer_*.log`（Big5，需 cp950 解）。
+   → **MFC 現已裝在 14.44.35207**（`afxwin.h`+`atlbase.h`、include 346 檔、x86/x64 各 31 lib），實編 `CDialog`+message map+`CWinApp`+`CString` probe 於 32-bit `/MD` 下 `CL_EXIT=0`。**W7-U 工具鏈阻塞解除**。⚠️ 編譯時有 `_WIN32_WINNT not defined` 資訊訊息，接 UI 波前應明確定義。
+
+### ⚠️ 0xc0000142 事故與防護界線更正
+
+使用者被 `test_testertcp_socket.exe - 應用程式無法正確啟動 (0xc0000142)` modal 視窗打斷。根因：每支 MinGW test exe 都 import `libgcc_s_dw2-1.dll`/`libstdc++-6.dll`，**載入期**從 PATH 解析；任何 PATH 沒有 `C:\MinGW\bin` 的環境啟動就 loader 失敗。控制實驗證實（同測試同剝空 PATH，只差連結方式）：動態版 exit 127、靜態版 80 passed exit 0。已加 `-static-libgcc -static-libstdc++`，108 支 exe **零**殘留 MinGW DLL 相依。
+**同時更正一個我講過頭的宣稱**：`tests/test_bootstrap.cpp`（`a9d2bc7`）先前被我描述成「涵蓋批次執行的彈窗」——**它涵蓋不到 loader 失敗**，因為那發生在任何使用者程式碼（含 static initializer）之前，`SetErrorMode` 還沒被呼叫。它管的是「執行期間」的崩潰與 assert，不是「起不來」。
+
+### 🔴 未 commit 的 27 個檔（F1/F2/L1 三波）— **帶 3 個 HIGH，不可直接 commit**
+
+工作樹狀態已驗證：build exit 0、共用樹 ctest **107/111**（同 4 個既有環境漂移）。但獨立審查（3 路 Opus）抓到：
+
+**HIGH-1（L1）測試是恆真式**：`tests/test_w7_l1_auto2.cpp` 的 `test_receive_chain_converges` 斷言永遠成立 → 回報 PASS 但 `DoUnLoadNewAuto2ToStack`（golden `asendic_Auto2.cpp:600-706`，該檔第二大函式）**零覆蓋**，而檔頭宣稱它被「直接驅動」。
+**HIGH-2（L1）stand-in 標示造假**：`AutoCylinderUp/Middle/Lower` 被註解成「real bodies, acatchtray.cpp」，實為 `{ return true; }` 空殼；測試宣稱 end-to-end 驗證卻**一次都沒呼叫**。
+**HIGH-3（F2）宣稱「已用 characterization test 釘住」的四個 `csystem.cpp` seam 常數，無任何測試觀察它們**。那些是**真實的 golden 行為分歧**（良率追蹤、重測計數、bin 統計），未來可被默默改掉而 111 個測試全綠。
+
+其餘實質 MEDIUM：F1 的 `BtnPauseClick` 無可觀測 seam（正是 F1 gate 要防的）、probe 檔頭的 transitive-link 宣稱被自己的 CMake 條目推翻、次要表單清單沒過濾註解碼（`fSetup` 報 17 個實際只有 4 個 live）、`CanChangeSite` 與既有 `ComputeCanChangeSite` 重複；F2 的 D2 reachability 註解錯三處（含漏掉一個會讓**移植版進入 golden 會跳過的整塊 ART 區段**的 W7C1 gate）；L1 **越界寫了 `csystem.cpp` 和根 `CMakeLists.txt`**（F2 的檔案），併行時撞壞建置。
+
+**修正 workflow 已派出但使用者要求暫停，主迴圈主動 `TaskStop` 乾淨中止——停在寫任何檔案之前，工作樹與派工前完全一致，無半寫狀態。** 殘留 ctest/test 程序已清除。
+
+### 🔖 RESUME（最新）
+
+- **可直接重派的修正 workflow**：script 在 `...\workflows\scripts\v906-w7-f1f2l1-fixes-wf_cece4a65-a74.js`，內容完整（3 條軌 + 1 路驗證），可用 `Workflow({scriptPath})` 原樣重跑。**核心要求已寫在裡面：每個測試都必須證明會失敗**（故意弄壞被涵蓋的碼、看它變紅、還原），驗證者需自己重現該證明。
+- **這條紀律的由來（重要，勿刪）**：上一輪我已明確要求「測試要真的 pump 狀態機並斷言全域變數，不要只呼叫函式看回傳」，agent 也回報照做——**做出來的仍是恆真斷言**。所以光是要求「測試要有意義」不足以保證品質，必須逼它**證明測試會紅**，並由獨立審查實際重現。建議收斂後寫進 KNOWLEDGE 成為 Gotcha 11。
+- **下一輪順序建議**：(1) 重派上述修正 workflow → (2) 驗證 + commit 這 27 個檔 → (3) W7-U 現已解除阻塞，可重新排進波次計畫（先做 plan §7 的前置：明確定義 `_WIN32_WINNT`、W7-U0 binder 基礎）→ (4) F1 已知只解鎖 8 個 HT9045Gem method 中的 5 個，兩個最大 override 仍卡 `fNote`/`fLotInfo`/`fSCKART`/`fSetup`，規劃 Buckets 1-5 前必須知道這點。
+- **驗證基準**：ctest 107/111（同 4 個既有環境漂移：config_db/IniFiles/ini_helpers/config_loaders）。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 `fix/v899.32-pti`；工作樹另有無關 V899/config 殘留（PTI 案）與數個 `*_test_scratch/` 未追蹤夾，勿圈入 V906 commit。
