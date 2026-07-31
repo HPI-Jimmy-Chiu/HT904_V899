@@ -91,6 +91,45 @@
 // ---------------------------------------------------------------------------------------------
 // WHY A SEPARATE SckArtRemainderState, NOT THE SIBLING FILE'S SckArtState (read before wiring in)
 // ---------------------------------------------------------------------------------------------
+// ** AI(W906-W7-F2) 20260729 -- SUPERSEDED IN PART; READ THIS FIRST. **  The reasoning below was
+// correct for the wave that wrote it, but its stated cause was a SCOPE constraint ("the hand-off
+// explicitly says not to touch/couple to the sibling"), not a semantic one.  W7-F2 owns both files,
+// so that constraint is gone and the duplication it created has been removed: SckArtRemainderState
+// now `: public SckArtState`, and the 9 fields the paragraph below lists as intentional duplicates
+// (dCurrYield, iFTRTCount, iNeedRT, iInputCount, iManualRejectCnt, iTesterType, sLOTSTATUS,
+// iCurrentStatus, plus iCurrent93KARTStep) are declared ONCE, in the base.  Both ctors were compared
+// field by field first: identical types, identical constructed values, so the merge changes no
+// behaviour.  See the struct's own AI(W906-W7-F2) note for the full proof and for what was
+// deliberately left unmerged (the two csystem.cpp seams and the multi-instance split of golden's
+// single fSCKART -- those cannot be merged without changing behaviour, and diffing them turned up
+// two real golden divergences that are reported rather than reconciled).
+//
+// AI(W906-W7-F2fix) 20260729 -- AND THE NUMBER IN THE HISTORICAL TEXT IS WRONG BOTH WAYS.
+// The paragraph below says the debt "now applies three ways (SckArtState /
+// SckArtRemainderState / csystem.cpp's W7C2_TfSCKARTSeam)".  Verified this pass by grepping
+// every declaration of those field names across the whole ported tree:
+//   * it UNDERCOUNTED even when written -- it omitted csystem.cpp's W7C1_TfSCKARTSeam
+//     (which declares its own iTesterType, and its own iCurrentFlexARTStep) and
+//     forms/fSCKART.h's TfSCKART (which declares iFTRTCount and iInputCount);
+//   * and it now OVERCOUNTS -- SckArtRemainderState no longer declares ANY of those 9
+//     fields; it inherits them from SckArtState, so it is not a separate copy of them.
+// THE VERIFIED COUNT, and the one every other comment in the tree has been reconciled to
+// this pass: golden has ONE fSCKART; the ported tree spreads its state over FIVE
+// declaration sites --
+//   1. forms/fSCKART.h            class TfSCKART              (the real global `fSCKART`)
+//   2. Automation/SCK_ART.h       struct SckArtState
+//   3. Automation/SCK_ART_Remainder.h struct SckArtRemainderState : public SckArtState
+//   4. csystem.cpp               struct W7C1_TfSCKARTSeam     (shadow fields + its own
+//                                                              embedded `SckArtState core`)
+//   5. csystem.cpp               struct W7C2_TfSCKARTSeam     (ditto)
+// -- of which #3 is the only one that no longer duplicates the 9 overlapping fields.  Note
+// that #4 and #5 each EMBED a SckArtState, so at runtime there are more live copies of those
+// 9 fields than there are declaration sites.  (Plan SS3-C4 and forms/fSCKART.h both said
+// "four": the plan's four omit #1, fSCKART.h's four collapse #4 and #5 into one bullet.  The
+// union is five.  fSCKART.h has been corrected; the plan is a doc this track does not own --
+// flagged in docs/W7-UI-SKIPPED.md instead.)
+// The historical text is kept below verbatim, unedited, for provenance.
+// ---------------------------------------------------------------------------------------------
 // Per hand-off instruction this is a NEW SIBLING file -- Automation/SCK_ART.h/.cpp (the already-
 // translated 8-function extract) is NOT to be edited. That sibling file already defines its own
 // `SckArtState` (a partial mirror of golden TfSCKART's data members) and free functions operating on
@@ -154,6 +193,19 @@
 //       bEndLotAutoRetestGPIB/bFirstTestAutoRetestGPIB DIRECTLY -- no new TU-local stand-in added for
 //       these 3. bUseTestSocketEE remains unconsumed by this wave (DoAutoSocketOff is still out of
 //       scope).
+//       [UPDATE -- AI(W906-W7-F2fix) 20260729]: "DoAutoSocketOff is still out of scope" no longer
+//       holds for THIS file. Closing the golden :877 fidelity gap made SckArtRem_ClearLotInfo call
+//       the sibling's `SckArt_DoAutoSocketOff(st, true)` directly (see that call site), so this file
+//       now REACHES the bUseTestSocketEE read at golden :1340-1343. Two things follow, both
+//       deliberately left as they are and recorded in docs/W7-UI-SKIPPED.md under W7-F2-fix:
+//         (a) the read goes through the SIBLING's gate #3 TU-local stand-in
+//             (Automation/SCK_ART.cpp `W5SckArt_LS_bUseTestSocketEE`), NOT the real
+//             `LastSet.bUseTestSocketEE` -- which, verified this pass, HAS existed as a real field
+//             since AI(W5-Final-Integrate) (canary_support.h:147). That stand-in is therefore stale
+//             and now shadows a real field; retiring it changes behaviour on golden's
+//             `IniConfig.bI35UseThirdSiteControlByEngineer` arm, so it is reported, not done here.
+//         (b) it is inert offline regardless: DoAutoSocketOff's entire body sits inside
+//             `if(TestIF_File.bSCKART_AutoSocketOff)` (golden :1238), false by default.
 //   #5  LotSummary (golden cSocket.h `class TLotSummary`, extern global `LotSummary`) -- cSocket.h/
 //       .cpp is not translated at all yet (same untranslated family as the sibling file's gate #4
 //       ArmData/GetPCA). ClearLotInfo only touches `LotSummary.ClearAllData()` (golden body:
@@ -385,6 +437,12 @@
 //   header.
 #include "MachineType.h"
 #include "myTimer.h"
+// AI(W906-W7-F2) 20260729: new include -- SckArtRemainderState now DERIVES from the
+// sibling file's SckArtState instead of re-declaring the 9 overlapping golden TfSCKART
+// fields.  See the "WHY A SEPARATE SckArtRemainderState" block above (now amended) and
+// the struct itself for the equality proof.  No include cycle: Automation/SCK_ART.h
+// includes only vclcompat/vcl_compat.h and does not reach back here.
+#include "Automation/SCK_ART.h"
 // AI(W906-SaveTestSummaryTSV) 20260728: new include, needed for gate #15's `srvrscktTSV` (TServerSocket*)
 // declaration below -- REAL substrate (vclcompat/ServerSocket.h), already linked into ht9045_sm via
 // SECSGEM/uHGemEquipment.cpp's own `srvGem` member; self-contained (own include guard + transitively
@@ -519,16 +577,39 @@ extern W5SckArtRem_SlEventLogStub W5SckArtRem_slEventLog;
 // to touch only fields already present: SaveTestSummaryTSV via `fSCKART->sLotID`/`fSCKART->iNeedRT`,
 // SaveSummaryTrayFeed via no bare TfSCKART member at all besides its own `slExe`, which is modeled as a
 // function-local TStringList* instead of a struct field -- see that function's own doc comment for why).
-// Field names/types verbatim from golden; see the file-head
-// "WHY A SEPARATE STATE STRUCT" note above for why this does NOT reuse the sibling file's
-// `SckArtState` (some fields, e.g. dCurrYield/iFTRTCount/iNeedRT, are INTENTIONAL duplicates -- flagged
-// there for eventual reconciliation).
+// Field names/types verbatim from golden.
+//
+// AI(W906-W7-F2) 20260729 -- PARTIAL 4-WAY MERGE LANDED HERE.  This struct now DERIVES
+// from the sibling file's `SckArtState` (Automation/SCK_ART.h) instead of re-declaring
+// the 9 golden TfSCKART fields the two had in common.  Inherited from the base and
+// therefore DELETED from the list below: sLOTSTATUS(:236), iCurrentStatus(:251),
+// iCurrent93KARTStep(:263), iTesterType(:249), iInputCount(:245), iFTRTCount(:248),
+// iManualRejectCnt(:250), iNeedRT(:285), dCurrYield(:261).  Every `st.<field>` spelling
+// in SCK_ART_Remainder.cpp and tests/test_SCK_ART_Remainder.cpp is unchanged -- public
+// inheritance keeps them reachable verbatim.
+//
+// WHY THIS IS PROVABLY A ZERO-BEHAVIOUR-CHANGE MERGE (checked field by field, both
+// ctors read side by side before the edit): for all 9 the two structs already agreed on
+// TYPE and on CONSTRUCTED VALUE -- sLOTSTATUS "NONE" both sides (golden ctor
+// SCK_ART.cpp:51), everything else 0 / 0.0 both sides.  Nothing anywhere takes
+// sizeof/offsetof/memset/memcpy of either struct (grepped), nothing copies either by
+// value, and no `SckArtState*` is ever deleted polymorphically, so adding a base is
+// invisible at runtime.  The base also brings 3 fields this file never uses
+// (bLdCntExdInputCnt / bBackUpInArmMode / bBackUpOutArmMode) -- inert storage, no reader.
+//
+// WHAT THIS MERGE DELIBERATELY DID **NOT** DO -- see the W7-F2 report: the two
+// csystem.cpp seams (W7C1_TfSCKARTSeam / W7C2_TfSCKARTSeam) each still own a private
+// `SckArtState core` plus their own shadow copies, and golden's SINGLE fSCKART object is
+// still represented by several independent instances here.  Merging THOSE is not a
+// refactor -- it would change which value each read observes -- and two genuine
+// golden-comparison divergences were found while diffing them (the iLOTSTATUS_* constants
+// and iTesterType).  Reported, not silently reconciled, per plan SS6-F2 / SS9-R9.
 // ---------------------------------------------------------------------------
-struct SckArtRemainderState
+struct SckArtRemainderState : public SckArtState
 {
     // -- setup/lot core (golden SCK_ART.h:236-251, :263-264, :288-289, :285, :261, :349, :351) --
+    //    (the 9 fields listed in the AI(W906-W7-F2) note above now come from SckArtState)
     AnsiString sSetupFilePath;     // golden :240 (computed by SckArtRem_SetSetupFilePath)
-    AnsiString sLOTSTATUS;         // golden :236
     AnsiString sLotID;             // golden :237
     AnsiString sProcessCode;       // golden :238
     AnsiString sLotStartTime;      // golden :241
@@ -536,26 +617,26 @@ struct SckArtRemainderState
     // prior 9 functions never touched -- write-only until now (SaveTestSummarySECS both writes it,
     // golden :1672, and reads it back later in the SAME function, golden :1747/:1792/:1965).
     AnsiString sLotEndTime;        // golden :242
-    int    iCurrentStatus;         // golden :251
-    // AI(W906-DoARTLotStart) 20260721: 2 more golden TfSCKART members SckArtRem_DoARTLotStart writes
-    // (golden :4213-4214) that this file's prior 8 functions never touched. Yet ANOTHER instance of the
-    // "WHY A SEPARATE STATE STRUCT" duplicate-field reconciliation debt documented above: iCurrent93KARTStep
-    // ALSO has independent copies on the sibling file's SckArtState (Automation/SCK_ART.h:107) AND on
-    // FormsFacade's real TfSCKART (FormsFacade.h -- the one AMR.cpp/HANA_ART.cpp actually read via
-    // `fSCKART->iCurrent93KARTStep`); iCurrentFlexARTStep has none yet elsewhere in this tree. Since
-    // DoARTLotStart only WRITES both fields (never reads them back within its own body), this 3rd/4th
-    // copy is write-only and self-contained -- harmless until a future unification wave.
-    int    iCurrent93KARTStep;     // golden SCK_ART.h:263
+    // AI(W906-DoARTLotStart) 20260721: golden TfSCKART member SckArtRem_DoARTLotStart writes
+    // (golden :4214). Its sibling iCurrent93KARTStep (golden :263) used to be declared here too
+    // and is now inherited from SckArtState (see the AI(W906-W7-F2) note above); iCurrentFlexARTStep
+    // is still this file's own -- the base does not carry it, and neither does forms/fSCKART.h's
+    // TfSCKART. Since DoARTLotStart only WRITES it (never reads it back within its own body), it
+    // stays write-only and self-contained.
+    // AI(W906-W7-F2fix) 20260729 -- CORRECTION: the sentence above enumerated only the two
+    // places it had checked (the SckArtState base, forms/fSCKART.h's TfSCKART) and then
+    // generalised that to uniqueness.  It is NOT unique.  csystem.cpp's W7C1_TfSCKARTSeam
+    // BOTH declares `int iCurrentFlexARTStep;` and WRITES it
+    // (`W7C1_SCKART->iCurrentFlexARTStep=6;` inside DoCleanOutFinishCheck -- golden
+    // csystem.cpp:15122 `fSCKART->iCurrentFlexARTStep=6;`, golden's only write to the field
+    // in that file), in a file the W7-F2 wave was itself editing.  So this
+    // field carries the SAME reconciliation debt as the rest: TWO declaration sites (here
+    // and W7C1_TfSCKARTSeam), one write apiece, no reader in either -- and golden has ONE
+    // fSCKART.  Whoever unifies the SckArt state must fold both, not just this one.
     int    iCurrentFlexARTStep;    // golden SCK_ART.h:264
-    int    iTesterType;            // golden :249  (0:Flex, 1:93K)
-    int    iInputCount;            // golden :245
     int    iLotCount;              // golden :246
-    int    iFTRTCount;             // golden :248
-    int    iManualRejectCnt;       // golden :250
     int    iInputJamCnt;           // golden :288
     int    iOutputJamCnt;          // golden :289
-    int    iNeedRT;                // golden :285
-    double dCurrYield;             // golden :261
     int    iManualStart;           // golden :349
     bool   bFirstFullSkip;         // golden :351
 

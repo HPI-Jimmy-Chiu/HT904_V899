@@ -259,13 +259,21 @@ static bool W5_32S_ProcessIndexSuckDestroy2(int /*iType*/=0){ return true; }   /
 //  (Checked/Text/Caption) but never consumed by any ACTIVE decision here (the
 //  torque-read cluster is reached only when IniConfig.bD01EnableReadTorque is
 //  on AND, for the ASE_KaohSiung branch, that customer macro is compiled out).
-struct W5_32S_TCheckSeam { bool Checked; W5_32S_TCheckSeam():Checked(false){} };
-struct W5_32S_TEditSeam  { AnsiString Text; };
-struct W5_32S_TLabelSeam { AnsiString Caption; };
+//  AI(W906-W7-F2) 20260729: W5_32S_TCheckSeam / W5_32S_TEditSeam / W5_32S_TLabelSeam
+//  RETIRED -- vclcompat/Controls.h now owns the unified stock-widget stand-ins
+//  (plan D4), so the three file-scope objects name those types directly.  Golden
+//  classes re-read from golden main.h for this change: chkReadTorque1/2 :464-465
+//  TCheckBox, edTorue0 :466 TEdit, lbArm0Torque :798 **TPanel** (the retired
+//  W5_32S_TLabelSeam name was misleading -- golden's lbArm0Torque is a TPanel, not a
+//  TLabel).  Zero behaviour change: same single member, same default ("" / false),
+//  and these four `static` objects are the only instances (no by-value copy, no
+//  aggregate initialisation), so the unified types' vtable disturbs nothing.
+//  W5_32S_TTimerSeam is NOT retired: it stands in for a TQPF_Timer, not a widget, and
+//  has no unified equivalent in Controls.h.
 struct W5_32S_TTimerSeam { void LatchCycleTimeSec(bool){} };                    // golden main.h TfMain->tInitSoakTimer (TQPF_Timer-shaped; only this method touched)
-static W5_32S_TCheckSeam  W5_32S_chkReadTorque1, W5_32S_chkReadTorque2;
-static W5_32S_TEditSeam   W5_32S_edTorue0;
-static W5_32S_TLabelSeam  W5_32S_lbArm0Torque;
+static TCheckBox          W5_32S_chkReadTorque1, W5_32S_chkReadTorque2;         // golden main.h:464-465 (TCheckBox*)
+static TEdit              W5_32S_edTorue0;                                      // golden main.h:466 (TEdit*)
+static TPanel             W5_32S_lbArm0Torque;                                  // golden main.h:798 (TPanel*)
 static W5_32S_TTimerSeam  W5_32S_tInitSoakTimer;
 #define W5_32S_FMAIN_CHKREADTORQUE1   (&W5_32S_chkReadTorque1)
 #define W5_32S_FMAIN_CHKREADTORQUE2   (&W5_32S_chkReadTorque2)

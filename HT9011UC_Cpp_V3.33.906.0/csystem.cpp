@@ -62,12 +62,15 @@
 //      InitBTestSuckTestICTask -> the engines / engine shims.  csystem.cpp CALLS
 //      these; it never redefines them.
 //    * DoInArm / DoOutArm / DoLoad / DoSortArm / DoAuto3Magazine /
-//      NewDoAutoTrayEdgeCylinderLoop / DoAuto2 / DoAutoEmpty1 /
+//      NewDoAutoTrayEdgeCylinderLoop / DoAutoEmpty1 /
 //      DoInArmTeachAlignmentProcess / DoOutArmTeachAlignmentProcess /
 //      DoOneCycleFinishCheck / DoCleanOutFinishCheck / InitLoadTask /
 //      InitOutArmTask / InitialDoLockUnloader / Initial_Auto_BinTray_Task /
 //      InitAutoColorTask / Initial*Magazine* / bShuttleShake / SetFixTrayMiddleDtata
 //      -> csystem_shims.cpp (ACTIVE offline stand-ins for untranslated units).
+//    * DoAuto2 -- AI(W906-W7-L1) 20260729: OWNED by asendic_Auto2.cpp (declared
+//      asendic_Auto2.h, included below); NOT a csystem_shims stand-in anymore
+//      (same "owned by its engine header" idiom as DoAutoEmpty1 just above).
 //
 //  Big5 note: the golden is cp950.  Chinese comments decode cleanly and are
 //  preserved as UTF-8.  ZERO U+FFFD is emitted.
@@ -103,6 +106,7 @@
 #include "atester.h"                 // DoTestHeadMotor + InitialTestHeadMotorTask
 #include "acatchtray.h"              // DoCatchTray + InitialCatchTrayTask
 #include "asendic_Empty.h"           // DoAutoEmpty / DoAutoColor / InitAutoEmptyTask / DoAutoEmpty1(shim)
+#include "asendic_Auto2.h"           // AI(W906-W7-L1) 20260729: DoAuto2 (real body, asendic_Auto2.cpp)
 #include "atester_shims.h"           // InitBTestSuckTestICTask
 // AI(W5-Automation-Integrate) 20260710: InitFrontTestSuckICTask is now declared
 // in aTester_Front.h for real (removed from atester_shims.h -- see that file).
@@ -1063,9 +1067,14 @@ static W7C1_TRecListSeam    W7C1_PickFromHPList;
 //  sHPPickRec : golden aHotPlateSubstrate filename -- exists, but ResetFile is the
 //  seam; keep the real sHPPickRec arg flowing into the stand-in ResetFile.
 //  fContactCT : golden TfContactCT* (rgYieldType->ItemIndex / ClearData(i,j)).
-struct W7C1_TRadioSeam   { int ItemIndex; W7C1_TRadioSeam():ItemIndex(0){} };
-struct W7C1_TfContactCTSeam { W7C1_TRadioSeam *rgYieldType; void ClearData(int,int){}
-                              W7C1_TfContactCTSeam(){ rgYieldType=new W7C1_TRadioSeam(); } };
+//  AI(W906-W7-F2) 20260729: W7C1_TRadioSeam RETIRED -- vclcompat/Controls.h's
+//  TRadioGroup is the unified stand-in (plan D4) and golden cContactCT.h:16 declares
+//  `TRadioGroup *rgYieldType;`, so the pointer below is typed with it directly.
+//  Zero behaviour change: the retired type held only ItemIndex defaulting to 0 and
+//  TRadioGroup defaults it to 0 too; the single instance is heap-allocated through a
+//  pointer, so the added vtable cannot affect any copy or aggregate initialisation.
+struct W7C1_TfContactCTSeam { TRadioGroup *rgYieldType; void ClearData(int,int){}   // golden cContactCT.h:16 (TRadioGroup*)
+                              W7C1_TfContactCTSeam(){ rgYieldType=new TRadioGroup(); } };
 static W7C1_TfContactCTSeam *W7C1_fContactCT = new W7C1_TfContactCTSeam();
 #define fContactCT             W7C1_fContactCT
 //  fCounterClear : golden TfCounterClear* (LowYieldSpecialInitail()).
@@ -1186,6 +1195,59 @@ static void W7C1_WriteIniData(AnsiString,AnsiString,AnsiString,double){}// golde
 //  8 translated functions -- stays a no-op. Both wired calls are reached only
 //  inside `if(CosFunction.bUseSCKART...)` (default false offline), so this is
 //  behavior-neutral for every currently-passing suite.
+// ===========================================================================
+//  AI(W906-W7-F2) 20260729 -- GOLDEN DIVERGENCE, DISCLOSED AND *NOT* FIXED HERE.
+//  Plan SS6-F2 says a divergence found while diffing the SckArt copies against
+//  golden must be REPORTED, not quietly reconciled.  Two were found; the first
+//  lives in this seam's ctor and the second is shared with every other copy.
+//
+//  D1 -- iLOTSTATUS_L is constructed 0 here; golden constructs it **3**.
+//    Golden's TfSCKART ctor assigns the whole status-code family explicitly:
+//    SCK_ART.cpp:43-49 -> NONE=0, W=1, T=2, L=3, R=4, F=5, A=6.  This seam (and
+//    W7C2_TfSCKARTSeam below, for iLOTSTATUS_W/_R/_A) zero-initialises them
+//    instead.  Consequence on a real machine: the two SetLotStatus calls in
+//    DoCleanOutFinishCheck pass 0 where golden passes 3, and SckArt_SetLotStatus
+//    (Automation/SCK_ART.cpp, a FAITHFUL translation of golden :639-667) then takes
+//    its `default:` arm and records sLOTSTATUS="NONE" instead of "LOTSTATUS_L",
+//    and iCurrentStatus=0 instead of 3.
+//    Not observable in the suite today: every call site is inside
+//    `if(CosFunction.bUseSCKART ...)`, false offline.
+//
+//  D2 -- iTesterType is constructed 0 here; golden's ctor leaves it 0 ONLY when
+//    CUSTOMER_CODE==CC_SCK and sets it to **1** for every other customer
+//    (SCK_ART.cpp:42 then :111-114 `else { iTesterType=1; }`).  Three ported
+//    DECLARATION sites hardcode 0 -- this seam's own `iTesterType`, W7C2's own
+//    `iTesterType`, and `SckArtState::iTesterType` (which
+//    SckArtRemainderState now INHERITS rather than re-declaring, since this
+//    wave's merge; it is no longer a fourth copy) -- and none re-derives the
+//    customer branch at construction time.  Same reporting posture.
+//    D2 IS BEHAVIOURAL, NOT COSMETIC: the `W7C1_SCKART->iTesterType==0` test in
+//    DoCleanOutFinishCheck below is a GATE, so with 0 the port ENTERS the entire
+//    Flex-ART block that golden (iTesterType==1 for every non-CC_SCK customer)
+//    SKIPS.  Full five-site + one-site re-derivation, with the golden line
+//    numbers: see the SckArtState ctor note in Automation/SCK_ART.cpp.
+//
+//  AI(W906-W7-F2fix) 20260729 -- CORRECTION TO THE TWO PARAGRAPHS ABOVE.  Both
+//    used to end "pinned by a characterization test
+//    (tests/test_w7_f2_sckart_state.cpp)".  THAT WAS FALSE when written: that
+//    test only fed literal 0/3 to SckArt_SetLotStatus on a locally-constructed
+//    SckArtState, which stays green whatever THESE ctors build, so all six
+//    divergent initialisers in this file had no observer whatsoever and a later
+//    wave could have silently "fixed" or further broken them with the whole
+//    suite green.  Now genuinely pinned: tests/test_w7_f2_sckart_state.cpp
+//    PART C reads THIS FILE's source text and asserts the value of each of the
+//    six mem-initialisers by symbol name (C1 iLOTSTATUS_L, C2 iLOTSTATUS_W,
+//    C3 iLOTSTATUS_R, C4 iLOTSTATUS_A, C5/C6 the two iTesterType shadows).
+//    A source-text pin because both structs and both instances are file-`static`
+//    here -- no test TU can name them, verified not assumed.  The residual
+//    exposure (no offline path exercises the ART branches these constants gate,
+//    so no BEHAVIOURAL test is possible today) is logged in
+//    docs/W7-UI-SKIPPED.md under W7-F2-fix per plan SS12.6.
+//
+//  NOT MERGED WITH W7C2_TfSCKARTSeam's `core` either: golden has ONE fSCKART, this
+//  tree has two independent SckArtState cores plus their shadow fields, so a merge
+//  would change which value each read observes.  See the W7-F2 report.
+// ===========================================================================
 struct W7C1_TfSCKARTSeam {
     int  iTesterType;       int iLOTSTATUS_L;        int iWaitGPIBLotR;
     int  iCurrentFlexARTStep; int iInputJamCnt;      int iOutputJamCnt;
@@ -1193,6 +1255,16 @@ struct W7C1_TfSCKARTSeam {
     void SetLotStatus(int iStatus){ SckArt_SetLotStatus(core, iStatus); }
     bool DoChkInputCntAlarm(bool bExcess){ return SckArt_DoChkInputCntAlarm(core, bExcess); }
     void SaveTestSummary(int){}
+    // GOLDEN DIVERGENCE (see block above): golden SCK_ART.cpp:46 gives iLOTSTATUS_L=3
+    // and :113 gives iTesterType=1 for every CUSTOMER_CODE except CC_SCK.  Left as-is
+    // this wave -- disclosed and reported.
+    // AI(W906-W7-F2fix) 20260729: the two initialisers below are pinned by
+    // tests/test_w7_f2_sckart_state.cpp PART C checks C1 (iLOTSTATUS_L) and C5
+    // (iTesterType), which parse THIS init-list out of csystem.cpp's source text,
+    // anchored on the string `W7C1_TfSCKARTSeam():`.  Renaming the ctor, or moving these
+    // to in-class initialisers, will make that test FAIL LOUDLY (by design) -- read it
+    // before reshaping this list, and update the expected values there in the SAME change
+    // if you are deliberately reconciling the divergence.
     W7C1_TfSCKARTSeam():iTesterType(0),iLOTSTATUS_L(0),iWaitGPIBLotR(0),
                         iCurrentFlexARTStep(0),iInputJamCnt(0),iOutputJamCnt(0){}
 };
@@ -1206,8 +1278,12 @@ static W7C1_TfSCKARTSeam    W7C1_fSCKART_ext;
 #define W7C1_FAGV_ISSPIL()   fAGV->IsSPIL_AMR()
 
 //  fLotInfo tray-count labels (golden uLotInfo.h) absent from the W6 stub.
-struct W7C1_TfLotInfoLabelSeam { AnsiString Caption; };
-static W7C1_TfLotInfoLabelSeam W7C1_labLotTrayCount, W7C1_LabDiffTrayCount, W7C1_labNowTrayCount;
+//  AI(W906-W7-F2) 20260729: W7C1_TfLotInfoLabelSeam RETIRED -- vclcompat/Controls.h's
+//  TLabel is the unified stand-in (plan D4) and golden uLotInfo.h declares all three
+//  as TLabel* (:823 labLotTrayCount, :1084 labNowTrayCount, :1086 LabDiffTrayCount).
+//  Zero behaviour change: same single Caption member, same "" default, and these
+//  three `static` objects are the only instances (no copy, no aggregate init).
+static TLabel W7C1_labLotTrayCount, W7C1_LabDiffTrayCount, W7C1_labNowTrayCount;   // golden uLotInfo.h:823/:1086/:1084 (TLabel*)
 #define W7C1_LOTINFO_LABLOTTRAY   W7C1_labLotTrayCount
 #define W7C1_LOTINFO_LABDIFFTRAY  W7C1_LabDiffTrayCount
 #define W7C1_LOTINFO_LABNOWTRAY   W7C1_labNowTrayCount
@@ -2317,7 +2393,11 @@ void DoCleanOutFinishCheck()
 //     references for absent members were routed to W7C2_SCKART; the members
 //     present on the real TfSCKART -- iInputJamCnt/iFTRTCount/iInputCount/
 //     CheckLoadingCount -- stay on fSCKART).  All methods inert / all fields 0. -
-struct W7C2_TPanelSeam { AnsiString Caption; };                 // golden TPanel* (palOutputCnt/palRejectCnt)
+// AI(W906-W7-F2) 20260729: W7C2_TPanelSeam RETIRED -- vclcompat/Controls.h's TPanel
+// is the unified stand-in (plan D4) and golden Automation/SCK_ART.h:53/:52 declares
+// `TPanel *palOutputCnt;` / `TPanel *palRejectCnt;`, so the two pointers below are
+// typed with it directly.  Zero behaviour change: same single Caption member, same
+// "" default, both instances heap-allocated through pointers.
 // AI(W5-Automation-Integrate) 20260710: SetLotStatus/CheckNeedRT/DoAutoSocketOff/
 // DoChkInputCntAlarm are now wired to the REAL Automation/SCK_ART.cpp free
 // functions over an embedded SckArtState `core` (self-contained per seam
@@ -2333,7 +2413,7 @@ struct W7C2_TfSCKARTSeam {
     int    iNeedRT;        int iLotCount;       int iTesterType;
     int    iCurrentStatus; int iLOTSTATUS_W;    int iLOTSTATUS_R;   int iLOTSTATUS_A;
     int    iWaitGPIBLotR;  int iOutputJamCnt;   double dCurrYield;
-    W7C2_TPanelSeam *palOutputCnt; W7C2_TPanelSeam *palRejectCnt;
+    TPanel *palOutputCnt; TPanel *palRejectCnt;                 // golden Automation/SCK_ART.h:53 / :52 (TPanel*)
     SckArtState core;
     void   SetLotStatus(int iStatus){ SckArt_SetLotStatus(core, iStatus); iCurrentStatus=core.iCurrentStatus; }
     void   AccessFile(bool /*bRead*/, int /*iAccess*/=-1){}
@@ -2346,9 +2426,29 @@ struct W7C2_TfSCKARTSeam {
     void   DoAutoSocketOff(bool bAllSiteOn=false){ SckArt_DoAutoSocketOff(core, bAllSiteOn); }
     void   SaveTestSummary(int /*iSaveData*/=0){}
     bool   DoChkInputCntAlarm(bool bExcess){ return SckArt_DoChkInputCntAlarm(core, bExcess); }
+    // AI(W906-W7-F2) 20260729 -- GOLDEN DIVERGENCE, DISCLOSED AND NOT FIXED HERE (full
+    // write-up on W7C1_TfSCKARTSeam above).  Golden's TfSCKART ctor assigns
+    // iLOTSTATUS_W=1 (SCK_ART.cpp:44), iLOTSTATUS_R=4 (:47), iLOTSTATUS_A=6 (:49) and
+    // iTesterType=1 for every CUSTOMER_CODE except CC_SCK (:113); all four are 0 here.
+    // That inverts two live comparisons on a real machine -- `iCurrentStatus !=
+    // iLOTSTATUS_A` starts out FALSE here (0!=0) where golden starts TRUE (0!=6), and
+    // `iCurrentStatus == iLOTSTATUS_R` starts TRUE here where golden starts FALSE --
+    // and makes SetLotStatus(iLOTSTATUS_W) record "NONE" instead of "LOTSTATUS_W".
+    // Unreachable offline (every call site is inside CosFunction.bAutoRetestGPIBmode,
+    // false by default).
+    // AI(W906-W7-F2fix) 20260729: the "pinned by tests/test_w7_f2_sckart_state.cpp"
+    // claim that used to close this note was FALSE -- nothing observed these four
+    // initialisers.  They are now pinned for real by that test's PART C: checks C2
+    // (iLOTSTATUS_W), C3 (iLOTSTATUS_R), C4 (iLOTSTATUS_A) and C6 (iTesterType) parse
+    // THIS init-list out of csystem.cpp's source text, anchored on the string
+    // `W7C2_TfSCKARTSeam():`.  Same warning as the W7C1 seam above: reshaping this list
+    // (rename, in-class initialisers) makes that test fail loudly on purpose.  NOTE that
+    // the five csystem.cpp reads of `W7C2_SCKART->iTesterType` read THIS shadow field,
+    // not `core.iTesterType` -- CheckNeedRT() above is the only thing that ever copies
+    // one into the other.
     W7C2_TfSCKARTSeam():iNeedRT(0),iLotCount(0),iTesterType(0),iCurrentStatus(0),
         iLOTSTATUS_W(0),iLOTSTATUS_R(0),iLOTSTATUS_A(0),iWaitGPIBLotR(0),iOutputJamCnt(0),
-        dCurrYield(0.0){ palOutputCnt=new W7C2_TPanelSeam(); palRejectCnt=new W7C2_TPanelSeam(); }
+        dCurrYield(0.0){ palOutputCnt=new TPanel(); palRejectCnt=new TPanel(); }
 };
 static W7C2_TfSCKARTSeam    W7C2_fSCKART_ext;
 #define W7C2_SCKART          (&W7C2_fSCKART_ext)
@@ -2426,8 +2526,20 @@ struct W7C2_TStrListSeam {
 static W7C2_TStrListSeam    W7C2_fMain_slLowYieldAlarm;
 #define W7C2_FMAIN_SLLOWYIELD   (&W7C2_fMain_slLowYieldAlarm)
 //     cbRunStartMode : golden TComboBox* (run-start-mode combo; ->Text read). ---
-struct W7C2_TComboSeam { AnsiString Text; };
-static W7C2_TComboSeam      W7C2_fMain_cbRunStartMode;
+// AI(W906-W7-F2fix) 20260729: W7C2_TComboSeam RETIRED -- it met this wave's own
+// retirement criteria (a TU-local duplicate of a type vclcompat/Controls.h already
+// unifies, plan D4) exactly as W7C1_TRadioSeam / W7C1_TfLotInfoLabelSeam /
+// W7C2_TPanelSeam did, but was left behind and was not in the documented "left alone,
+// with reasons" list either.  vclcompat/Controls.h's TComboBox is the unified stand-in
+// and golden main.h:707 declares `TComboBox *cbRunStartMode;`, so the object below is
+// typed with it directly.  Zero behaviour change: the retired type held a single
+// `AnsiString Text` defaulting to "", vclcompat::TComboBox carries the same member with
+// the same "" default, this is the only instance, and the six reads in this file are all
+// `W7C2_FMAIN_CBRUNSTARTMODE->Text` comparisons -- nothing takes sizeof/offsetof, copies
+// it, or aggregate-initialises it, so the added base + vtable is unobservable.  (The
+// extra members TComboBox brings -- ItemIndex, a heap-allocated Items -- are inert here;
+// same posture as the three retirements above.)
+static TComboBox            W7C2_fMain_cbRunStartMode;   // golden main.h:707 (TComboBox*)
 #define W7C2_FMAIN_CBRUNSTARTMODE (&W7C2_fMain_cbRunStartMode)
 //     Label12 : golden TLabel* Caption (ART retest-count display).  lvalue. -----
 static AnsiString           W7C2_fMain_Label12_Caption;

@@ -1214,3 +1214,38 @@ C 桶(`clientGemRead`/`ProcessSocketReceiveData`/`Timer1Timer`)是本檔案最�
 - **這條紀律的由來（重要，勿刪）**：上一輪我已明確要求「測試要真的 pump 狀態機並斷言全域變數，不要只呼叫函式看回傳」，agent 也回報照做——**做出來的仍是恆真斷言**。所以光是要求「測試要有意義」不足以保證品質，必須逼它**證明測試會紅**，並由獨立審查實際重現。建議收斂後寫進 KNOWLEDGE 成為 Gotcha 11。
 - **下一輪順序建議**：(1) 重派上述修正 workflow → (2) 驗證 + commit 這 27 個檔 → (3) W7-U 現已解除阻塞，可重新排進波次計畫（先做 plan §7 的前置：明確定義 `_WIN32_WINNT`、W7-U0 binder 基礎）→ (4) F1 已知只解鎖 8 個 HT9045Gem method 中的 5 個，兩個最大 override 仍卡 `fNote`/`fLotInfo`/`fSCKART`/`fSetup`，規劃 Buckets 1-5 前必須知道這點。
 - **驗證基準**：ctest 107/111（同 4 個既有環境漂移：config_db/IniFiles/ini_helpers/config_loaders）。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 `fix/v899.32-pti`；工作樹另有無關 V899/config 殘留（PTI 案）與數個 `*_test_scratch/` 未追蹤夾，勿圈入 V906 commit。
+
+## 2026-07-29（同日續）— 接續：交接記錄自我更正、baseline 實測、修正 workflow round-2
+
+**設定**：主迴圈 Opus 5 + ultracode（xhigh + workflow 編排）。使用者指示「繼續 C++ 轉移」，執行模式沿用上節（全部翻、workflow 火力全開、不逐波停下請示）。
+
+### ⚠️ 上一節交接記錄的事實錯誤（本節開頭第一件事就是推翻它）
+
+上一節寫「修正 workflow 已派出但使用者要求暫停，主迴圈主動 `TaskStop` 乾淨中止——**停在寫任何檔案之前**，工作樹與派工前完全一致，無半寫狀態」。**這句是錯的，而且是我自己沒查證就寫下的。** 實際狀態（本節開工核對 mtime + 內容親自確認）：
+
+- **F1 修正軌已經寫了 5 個檔**：`forms/fMain.cpp`(11:53)、`tests/CMakeLists.txt`(11:55)、`tests/test_w7_f1_wall2_probe.cpp`(11:56)、`docs/W7_UI_ARCHITECTURE_PLAN.md`(11:57，§10 新增第 15/16 項)、`forms/fMain.h`(11:59)，全部帶 `AI(W906-W7-F1fix) 20260729` 標記，共 12 處。
+- **L1（09:10~09:22）與 F2（09:41~09:45）確實一個字都沒動**，仍是原波次落地時的 mtime。
+- 因此上一節那句「無半寫狀態」只對 L1/F2 成立，對 F1 完全不成立。**而且那批寫入之後沒有任何人 build 或 ctest 過**——上一節記的 `ctest 107/111` 是它們之前的數字，當 baseline 用會是又一次「把未驗證宣稱當前提」。
+- **教訓（與本輪要修的 3 個 HIGH 同一個病）**：`TaskStop` 回傳成功只證明「工作被中止」，不證明「中止前沒有寫入」。**下次中止背景寫入型工作後，一律用 mtime + 內容 grep 實查工作樹，不要憑印象寫交接。**
+
+**處置**：我先照上一節 RESUME 原樣重派了那支 script（run `wf_76c51717-aae`），發現上述事實後立刻 `TaskStop`——**確認該輪一個檔都沒寫**（工作樹全部檔案 mtime 仍 ≤11:59），避免 F1 軌對「已部分修好的樹」重做並在 plan §10 疊出重複的 17/18 項。
+
+### 真實 baseline（自己實測，含那批未驗證的 F1 寫入）
+
+- 增量 build（共用 `build_resume_verify_20260727`）**exit 0**（12:48→12:56）。
+- `ctest --timeout 300 -j4` → **107 passed / 111**，失敗恰為既有 4 個環境漂移（`config_db`/`IniFiles`/`ini_helpers`/`config_loaders`）。
+- 結論：**那批未驗證的 F1 寫入編得過、也沒造成任何迴歸**。107/111 這個數字現在是「含 F1 部分修正」的實測值，不再是繼承來的宣稱。
+- 5 個 F1 觸及檔的編碼掃描：BOM 0、U+FFFD 0、全部合法 UTF-8（此專案已知失敗模式沒發生）。
+
+### 主迴圈自己獨立確認的一件事（供整合時當第二 oracle）
+
+L1 的 HIGH-1「測試是恆真式」**比審查報告講的更廣**：`tests/test_w7_l1_auto2.cpp` 除了被點名的 `[4] test_receive_chain_converges`，`[2] test_drive_auto2` 的 `CHECK(reachedDispatch || iAutoAuto2Task == 1, ...)` 與 `[3] test_load_new_auto2_converges` 的 `CHECK(done || iLoadNewAuto2TrayToCarTask != 1 || steps == 500, ...)` **在邏輯上同樣恆真**（前者：`reachedDispatch` 的設定條件就是 `!= 1`，故兩個 disjunct 互補；後者：迴圈不 break 就必然 `steps == 500`）。整合時若修正只動 `[4]`，即為未收斂。
+
+### W7-U 前置：`_WIN32_WINNT` 實情（唯讀實測，尚未落地）
+
+- **全樹（ported + golden）沒有任何地方定義 `_WIN32_WINNT`/`WINVER`**（source/CMake/`.bpr` 全掃過）。
+- MinGW 6.3 標頭**自己有預設值**：`-E -dM` 實測 `#define _WIN32_WINNT _WIN32_WINNT_WIN2K`（0x0500）、`#define WINVER _WIN32_WINNT`。所以 MinGW 這條 oracle 整棵樹是以 **Windows 2000 API 面**在編。
+- MSVC 那邊 `sdkddkver.h` 在未定義時自動選最新（這正是上節 MFC 實編看到 `_WIN32_WINNT not defined` 資訊訊息的來源）。**兩條 oracle 目前看到的 API 面不同**——這是第二 oracle 紀律的實質缺口：某個 API 在 MSVC 編得過、在 MinGW 可能根本沒宣告，反之亦然，而目前沒有任何東西會抓到。
+- 實測釘成 `-D_WIN32_WINNT=0x0601`（Windows 7）在 MinGW 下含 umbrella + `windows.h` 且保留 `ERROR_SHARING_VIOLATION`/`ERROR_LOCK_VIOLATION`（W7-A0 那個已知陷阱點）**`-Wall -Wextra` 乾淨、exit 0**，無 redefinition 警告（MinGW 用 `#ifndef` 包）。
+- **未落地原因**：要改根 `CMakeLists.txt`，而該檔目前在 round-2 的 L1 軌手上（surgical unwind），依 §8 碰撞矩陣不並行寫。待整合後補。
+- **⚠️ 未決（需使用者定案，已列入本輪回報）**：**V906 要支援哪些 Windows 版本？** 全部 V906 文件都沒記過目標 OS。VS2022 工具鏈的執行期地板是 Windows 7 SP1；若現場機台仍有 Windows XP，MFC/MSVC 產出根本跑不起來（要改用 v141_xp 等別的工具鏈），而這會在寫下 133 個表單的 MFC 程式碼**之前**就該知道。

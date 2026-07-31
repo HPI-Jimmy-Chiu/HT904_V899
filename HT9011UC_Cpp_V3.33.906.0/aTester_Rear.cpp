@@ -1012,12 +1012,16 @@ static void W64bT2_APAX_WriteData(bool bDir, int wdata, int iArm=0)
 //    cpp's own independent twin (this file's own W64bT2_ prefix) rather than
 //    reaching across translation units.  Integrate: add the real widgets
 //    (TCheckBox/TEdit) to TfMain + drop the W64bT2_FMAIN_* call-site macros.
-struct W64bT2_TCheckSeam { bool Checked; W64bT2_TCheckSeam():Checked(false){} };
-struct W64bT2_TEditSeam  { AnsiString Text; };
+//    AI(W906-W7-F2) 20260729: W64bT2_TCheckSeam / W64bT2_TEditSeam RETIRED -- the
+//    members below name vclcompat/Controls.h's unified stand-ins instead (plan D4).
+//    Golden classes re-read from golden main.h for this change: chkReadTorque1/2
+//    :464-465 TCheckBox, edTorue1 :467 TEdit.  Zero behaviour change (same single
+//    member, same default; the only instances are the members of the one file-scope
+//    object below, so no by-value copy / aggregate initialisation is affected).
 struct W64bT2_TfMainTorqueSeam
 {
-    W64bT2_TCheckSeam chkReadTorque1, chkReadTorque2;
-    W64bT2_TEditSeam  edTorue1;
+    TCheckBox chkReadTorque1, chkReadTorque2;                  // golden main.h:464-465 (TCheckBox*)
+    TEdit     edTorue1;                                        // golden main.h:467 (TEdit*)
 };
 static W64bT2_TfMainTorqueSeam W64bT2_fMainTorque;
 // golden derefs these as POINTERS (fMain->chkReadTorque1->Checked, ->edTorue1->

@@ -1043,9 +1043,13 @@ static bool W64B_ProcessIndexSuckDestroy1_V0(){ return true; }                  
 //    has no chkReadTorque1/chkReadTorque2/edTorue0 widgets.  Locally duplicated
 //    here (TU-local, internal linkage) per this batch's "duplicate seam,
 //    integrate agent dedupes" convention -- do NOT invent a different shape.
-struct W64B_TCheckSeam { bool Checked; W64B_TCheckSeam():Checked(false){} };
-struct W64B_TEditSeam  { AnsiString Text; };
-struct W64B_TfMainTorqueSeam { W64B_TCheckSeam chkReadTorque1, chkReadTorque2; W64B_TEditSeam edTorue0; };
+//    AI(W906-W7-F2) 20260729: W64B_TCheckSeam / W64B_TEditSeam RETIRED -- the members
+//    below name vclcompat/Controls.h's unified stand-ins instead (plan D4).  Golden
+//    classes re-read from golden main.h for this change: chkReadTorque1/2 :464-465
+//    TCheckBox, edTorue0 :466 TEdit.  Zero behaviour change (same single member, same
+//    default; the only instances are the members of the one file-scope object below,
+//    so no by-value copy or aggregate initialisation can be affected by the vtable).
+struct W64B_TfMainTorqueSeam { TCheckBox chkReadTorque1, chkReadTorque2; TEdit edTorue0; };
 static W64B_TfMainTorqueSeam W64B_fMainTorque;
 #define W64B_FMAIN_CHKREADTORQUE1 (&W64B_fMainTorque.chkReadTorque1)
 #define W64B_FMAIN_CHKREADTORQUE2 (&W64B_fMainTorque.chkReadTorque2)

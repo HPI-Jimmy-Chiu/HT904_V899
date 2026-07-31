@@ -92,6 +92,23 @@ public:
 //  a clickable-button stand-in (golden TButton*; engine only calls ->Click())
 class TBtnShim { public: void Click(); };
 //  a TStringList-ish stand-in for listTrayIDByLot (Clear/Add/Text)
+//
+//  AI(W906-W7-F2) 20260729 -- DELIBERATELY *NOT* RETIRED.  W7-F2 retired the TU-local
+//  duplicate widget value-holders tree-wide in favour of vclcompat/Controls.h, and this
+//  type was on that list, but it FAILS the equivalence check and aliasing it would
+//  change bytes written to disk.  It is not a stock widget (Controls.h has no
+//  counterpart); the only candidate is vclcompat::TStringList, and the two disagree on
+//  what ->Text produces:
+//    * this shim:            Add(s) appends s + "\r\n", so Text == "<id>\r\n"
+//    * vclcompat TStringList: GetText() joins items with '\n' and appends NO trailing
+//                             break, so Text would become "<id>"
+//  acatchtray.cpp's only two consumers write that value straight to a file
+//  (`WriteDataToFile(asTrayIDByLot, fTrayMapping->listTrayIDByLot->Text)`, both call
+//  sites), so swapping the type would silently change the on-disk tray-ID-by-lot
+//  record.  Noted for the record: of the two, THIS shim is the closer match to real
+//  VCL (Delphi's TStrings::GetTextStr emits sLineBreak == CRLF after EVERY line,
+//  including the last); the divergence is in vclcompat::TStringList, which is outside
+//  this wave's write scope.  Reported as a W7-F2 finding rather than "fixed" here.
 class TListTrayIDShim
 {
 public:

@@ -133,6 +133,9 @@
 #include "vclcompat/TStringList.h"    // TStringList (CommandClientReplyBuffer, Memo/MemoChar/MemoCode->Lines)
 #include "vclcompat/TList.h"          // vclcompat::TList (CommandBuffer) -- fully-qualified use only, see KNOWLEDGE.md
                                       // TList naming gotcha (aHotPlateSubstrate.h has an unrelated global class TList)
+#include "vclcompat/Controls.h"       // AI(W906-W7-F2) 20260729: TComboBox/TEdit/TCheckBox -- the unified
+                                      // stock-widget stand-ins that replaced this file's own
+                                      // TfAutomationTextField / TfAutomationCheckFlag
 
 // -----------------------------------------------------------------------
 //  MyProcessBuffer / ProcessBuffer  (golden automation.h:16-25)
@@ -187,21 +190,24 @@ struct TfAutomationEnableFlag
     TfAutomationEnableFlag() : Enabled(false) {}
 };
 
-// TComboBox/TEdit ->Text (cbbOLPCommand; edinputIP; edinputport). Default text
-// is set explicitly per-instance in the ctor (golden .dfm per-widget Text=)
-// rather than baked into this shared struct's own ctor.
-struct TfAutomationTextField
-{
-    AnsiString Text;
-};
-
-// TCheckBox ->Checked (chkViewComm). golden .dfm: no explicit Checked= line,
-// i.e. the ordinary VCL design-time default (unchecked).
-struct TfAutomationCheckFlag
-{
-    bool Checked;
-    TfAutomationCheckFlag() : Checked(false) {}
-};
+// AI(W906-W7-F2) 20260729: TfAutomationTextField and TfAutomationCheckFlag RETIRED --
+// vclcompat/Controls.h now owns the unified stock-widget stand-ins (plan D4), so the
+// three ->Text members and the one ->Checked member below name those types directly.
+// Golden classes re-read from golden Automation/automation.h for this change and they
+// are NOT all the same, which is why one shared "TextField" type was the wrong shape:
+//   :45 `TComboBox *cbbOLPCommand;`  :57 `TEdit *edinputIP;`  :58 `TEdit *edinputport;`
+//   :48 `TCheckBox *chkViewComm;`
+// Zero behaviour change: the retired types held exactly the one member used, with the
+// same defaults ("" / false) as the unified replacements, and each instance is
+// heap-allocated through a pointer (no by-value copy, no aggregate initialisation).
+// Per-instance design-time Text values are still assigned explicitly in the ctor
+// (automation.cpp), exactly as before.
+//
+// TfAutomationEnableFlag / TfAutomationVisibleFlag / TfAutomationTimer are NOT retired
+// by this wave: they are single-flag stand-ins for ->Enabled / ->Visible / a TTimer,
+// which vclcompat::TControl carries only as part of a full widget.  Folding them in
+// would mean picking a concrete widget class per member, which is a separate decision
+// (and tmrOLP is a TTimer -- not a control at all).
 
 // TTimer ->Enabled (tmrOLP). golden .dfm: Enabled=False, Interval=1 (Interval
 // is never read by any translated body -- omitted, matching ClientSocket.h/
@@ -242,13 +248,13 @@ public:
     TfAutomationVisibleFlag *gbAutomation;
     TfAutomationEnableFlag  *OnLine;
     TfAutomationEnableFlag  *OnLine2;
-    TfAutomationTextField   *cbbOLPCommand;
-    TfAutomationCheckFlag   *chkViewComm;
+    TComboBox               *cbbOLPCommand;          // golden automation.h:45 (TComboBox*)
+    TCheckBox               *chkViewComm;            // golden automation.h:48 (TCheckBox*)
     TfAutomationEnableFlag  *btnConnect;
     TfAutomationVisibleFlag *btUDPMap;
     TfAutomationVisibleFlag *btUDPTemp;
-    TfAutomationTextField   *edinputIP;
-    TfAutomationTextField   *edinputport;
+    TEdit                   *edinputIP;              // golden automation.h:57 (TEdit*)
+    TEdit                   *edinputport;            // golden automation.h:58 (TEdit*)
 
     // ---- __published event handlers (golden automation.h:59-93) -----------
     void OLPServerClientConnect(TObject *Sender, TCustomWinSocket *Socket);

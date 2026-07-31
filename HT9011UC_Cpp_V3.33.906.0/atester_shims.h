@@ -29,6 +29,7 @@
 #define atester_shimsH
 
 #include "vclcompat/vcl_compat.h"   // AnsiString
+#include "vclcompat/Controls.h"     // AI(W906-W7-F2) 20260729: TPanel -- the unified stock-widget stand-in that replaced this file's own TfObserverLabel
 #include "MachineType.h"            // MAX_SOCKET_ROW / MAX_SOCKET_COL
 #include <vector>                   // AI(W906-SaveTestSummarySECS) 20260721: TfObserverMemoLotSummaryLines::Strings
 
@@ -263,7 +264,15 @@ extern TfAutomationShim *fAutomation;            // golden automation.h:151 (PAC
 //    label/memo widgets (golden cObserver.h) -- same {AnsiString Caption;} /
 //    Count-only-memo idiom already established elsewhere in this tree
 //    (FormsFacade.h's TfSortCTPanel / TfMainMemoLines).
-struct TfObserverLabel { AnsiString Caption; };            // golden TLabel* (Caption only)
+// AI(W906-W7-F2) 20260729: TfObserverLabel RETIRED -- vclcompat/Controls.h's TPanel is
+// the unified stand-in (plan D4) and every member that used it is a golden **TPanel***,
+// not a TLabel: golden cObserver.h:374 labModel, :356 labPowerOnTime, :357
+// labRunningTime, :358 labProductTime, :359 labLoadingCount, :360 labMUBA, :361
+// labMTBA, :377 labFactory.  (The retired type's own comment claimed "golden TLabel*";
+// that was wrong -- re-read from golden for this change.)  Zero behaviour change: same
+// single Caption member, same "" default, every instance heap-allocated via `new`.
+// TfObserverMemoLines0 is NOT retired -- its `Strings0` models one indexed element of
+// a golden TMemo->Lines, which has no unified equivalent in Controls.h.
 struct TfObserverMemoLines0 { AnsiString Strings0; };      // golden TMemo*->Lines->Strings[0] (only index used)
 
 // -- AI(W906-SaveTestSummarySECS) 20260721: new sibling stand-in for a DIFFERENT golden TMemo* member
@@ -311,16 +320,17 @@ public:
     //    cObserver.h) -- ADDITIVE ONLY (see TfAutomationShim comment above for
     //    the same not-yet-retargeted rationale).
     TfObserverMemoLines0 *Memo1Lines;                                   // golden cObserver.h (TMemo* Memo1)
-    TfObserverLabel *labModel, *labPowerOnTime, *labRunningTime, *labProductTime,
-                    *labLoadingCount, *labMUBA, *labMTBA;                // golden cObserver.h (TLabel*)
+    TPanel *labModel, *labPowerOnTime, *labRunningTime, *labProductTime,
+           *labLoadingCount, *labMUBA, *labMTBA;                        // golden cObserver.h:374/:356-361 (TPanel*)
     // -- AI(W906-SaveTestSummarySECS) 20260721: new member, see TfObserverMemoLotSummary above.
     TfObserverMemoLotSummary *memoLotSummary;                           // golden cObserver.h:339 (TMyMemo* memoLotSummary)
     // -- AI(W906-Save2DSortingSummary) 20260723: new member, Automation/SCK_ART_Remainder.cpp's
     //    SckArtRem_Save2DSortingSummary derefs `fObserver->labFactory->Caption` (golden SCK_ART.cpp
     //    :3605/:3638, `Str.sprintf("ASSEMBLY SITE:%s", fObserver->labFactory->Caption)`) -- reuses the
-    //    same TfObserverLabel {AnsiString Caption;} shape as labModel/labPowerOnTime/... above (golden
-    //    cObserver.h TLabel*, only ->Caption read here).
-    TfObserverLabel *labFactory;                                        // golden cObserver.h (TLabel*)
+    //    same unified stand-in as labModel/labPowerOnTime/... above (only ->Caption read here).
+    //    AI(W906-W7-F2) 20260729: was TfObserverLabel*, now the unified TPanel*; golden
+    //    cObserver.h:377 declares `TPanel *labFactory;` (the old "TLabel*" note was wrong).
+    TPanel *labFactory;                                                 // golden cObserver.h:377 (TPanel*)
     TfObserverShim();
 };
 extern TfObserverShim *fObserver;                // golden cObserver.h

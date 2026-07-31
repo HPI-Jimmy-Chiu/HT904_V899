@@ -71,9 +71,12 @@ void InitialDoMagazineTrayFeedTask();       // golden Magazine SM
 // ---------------------------------------------------------------------------
 void DoAuto3Magazine();                                       // golden Magazine SM
 void NewDoAutoTrayEdgeCylinderLoop();                          // golden tray-vibration loop
-void DoAuto2();                                               // golden asendic -- auto2 tray feed
 // NOTE: DoAutoEmpty1() is OWNED by asendic_Empty.cpp (declared asendic_Empty.h:33);
 // csystem.cpp calls it via that header.  NOT shimmed here (avoid ODR).
+// AI(W906-W7-L1) 20260729: DoAuto2() is now OWNED by asendic_Auto2.cpp (declared
+// asendic_Auto2.h) -- csystem.cpp calls it via that header (#include added there).
+// The no-op stand-in that used to live here was REMOVED to keep a single ODR
+// definition (same retirement idiom as DoAutoEmpty1 just above).
 bool DoInArmTeachAlignmentProcess(unsigned long &lAction);    // golden AutoAlignment.h:225 -- offline: complete (true)
 bool DoOutArmTeachAlignmentProcess(unsigned long &lAction);   // golden AutoAlignment.h:252 -- offline: complete (true)
 void SetFixTrayMiddleDtata();                                 // golden aoutarm.cpp -- Fix-tray middle data (offline no-op)

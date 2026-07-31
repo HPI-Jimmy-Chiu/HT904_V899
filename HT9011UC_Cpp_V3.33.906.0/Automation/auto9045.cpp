@@ -173,15 +173,23 @@ static unsigned int  W5FA_LS_BinCT[4][256]   = {{0}};        // golden LastSet.h
 //   candidate signatures to fold into the real class.
 namespace {
 
-struct W5FA_TextField      { AnsiString Text; };                 // golden TEdit* (.Text)
-struct W5FA_PanelCaption    { AnsiString Caption; };              // golden TPanel*/TLabel* (.Caption)
-struct W5FA_ComboBox
-{
-    AnsiString   Text;
-    int          ItemIndex;
-    TStringList *Items;
-    W5FA_ComboBox() : ItemIndex(-1) { Items = new TStringList(); }
-};
+// AI(W906-W7-F2) 20260729: W5FA_TextField / W5FA_PanelCaption / W5FA_ComboBox RETIRED
+// -- vclcompat/Controls.h now owns the unified stock-widget stand-ins (plan D4), so
+// every member below is typed TEdit / TPanel / TComboBox directly.  Golden classes
+// re-read for this change, one per member (they are cited at each declaration):
+// every W5FA_TextField member is a golden TEdit*, and every W5FA_PanelCaption member
+// is a golden TPanel* -- including the fObserver labels, whose old "golden TLabel*"
+// comment was WRONG (golden cObserver.h:356-361/:374 declares labPowerOnTime/
+// labRunningTime/labProductTime/labLoadingCount/labMUBA/labMTBA/labModel as TPanel*).
+// All instances are heap-allocated through pointers -- no by-value copy, no aggregate
+// initialisation -- so the unified types' vtable disturbs nothing.
+//
+// ONE NON-DEFAULT VALUE CARRIED OVER EXPLICITLY: the retired W5FA_ComboBox defaulted
+// ItemIndex to **-1**, while vclcompat::TComboBox defaults it to 0.  That difference
+// is preserved verbatim by an explicit `cbSetupFileName->ItemIndex = -1;` in
+// W5FA_TfMainExt's constructor below (same technique the W7-F0 wave used for
+// fLotInfo->palRemoveTray, see vclcompat/Controls.h's DEFAULT-VALUE RULE note), so
+// this retirement is a zero-behaviour-change refactor and not a silent default flip.
 
 struct W5FA_TfMainExt
 {
@@ -203,22 +211,28 @@ struct W5FA_TfMainExt
         // denying every OLP/host Set* command offline (which FALSE would do).
         return true;
     }
-    W5FA_ComboBox     *cbSetupFileName;              // golden main.h (TComboBox*)
+    TComboBox *cbSetupFileName;                      // golden main.h:875 (TComboBox*)
     void ChangeSetUpFile(AnsiString /*sFileName*/) {}// golden main.h -- offline: recipe-switch UI refresh no-op
-    W5FA_TextField    *edSoakTime;                   // golden main.h (TEdit*)
-    W5FA_TextField    *edWorkTemperBase;              // golden main.h (TEdit*)
+    TEdit     *edSoakTime;                           // golden main.h:733 (TEdit*)
+    TEdit     *edWorkTemperBase;                     // golden main.h:732 (TEdit*)
     int ChangeTempMode(int /*iMode*/, bool /*bManual*/, bool /*bRefresh*/) { return 0; }   // golden main.h -- offline: 0=OK
     int ChangeTesterConnect(int /*iTester*/, bool /*bManual*/)             { return 0; }   // golden main.h -- offline: 0=OK
-    W5FA_PanelCaption *palMainStatus;                 // golden main.h (TPanel*)
+    TPanel    *palMainStatus;                        // golden main.h:669 (TPanel*)
     void ShowOLPState(int /*iState*/) {}              // golden main.h -- offline: OLP status UI no-op
     void DoFTRTClick(bool /*bRT*/, bool /*bManual*/) {} // golden main.h -- offline: FT/RT switch UI no-op
 
     W5FA_TfMainExt()
     {
-        cbSetupFileName  = new W5FA_ComboBox();
-        edSoakTime       = new W5FA_TextField();
-        edWorkTemperBase = new W5FA_TextField();
-        palMainStatus    = new W5FA_PanelCaption();
+        cbSetupFileName  = new TComboBox();
+        // AI(W906-W7-F2) 20260729: PRESERVED VERBATIM from the retired W5FA_ComboBox,
+        // whose own ctor was `: ItemIndex(-1)`.  vclcompat::TComboBox defaults
+        // ItemIndex to 0, so without this line the retirement would silently flip a
+        // live default from -1 ("nothing selected", the real VCL TComboBox value) to 0
+        // ("first item selected").  See the block comment above this struct.
+        cbSetupFileName->ItemIndex = -1;
+        edSoakTime       = new TEdit();
+        edWorkTemperBase = new TEdit();
+        palMainStatus    = new TPanel();
     }
 };
 W5FA_TfMainExt W5FA_FMain;
@@ -227,19 +241,23 @@ W5FA_TfMainExt W5FA_FMain;
 struct W5FA_MemoLines0 { AnsiString Strings0; };   // golden TMemo*->Lines->Strings[0] (only index used here)
 struct W5FA_TfObserverExt
 {
-    W5FA_MemoLines0   *Memo1Lines;                  // golden cObserver.h (TMemo* Memo1)
-    W5FA_PanelCaption *labModel, *labPowerOnTime, *labRunningTime, *labProductTime,
-                      *labLoadingCount, *labMUBA, *labMTBA;   // golden cObserver.h (TLabel*)
+    W5FA_MemoLines0   *Memo1Lines;                  // golden cObserver.h:380 (TMemo* Memo1)
+    // AI(W906-W7-F2) 20260729: golden cObserver.h declares these as **TPanel*** --
+    // :374 labModel, :356 labPowerOnTime, :357 labRunningTime, :358 labProductTime,
+    // :359 labLoadingCount, :360 labMUBA, :361 labMTBA.  The old comment here said
+    // "TLabel*", which was wrong; corrected while retiring W5FA_PanelCaption.
+    TPanel *labModel, *labPowerOnTime, *labRunningTime, *labProductTime,
+           *labLoadingCount, *labMUBA, *labMTBA;    // golden cObserver.h:374/:356-361 (TPanel*)
     W5FA_TfObserverExt()
     {
         Memo1Lines      = new W5FA_MemoLines0();
-        labModel        = new W5FA_PanelCaption();
-        labPowerOnTime  = new W5FA_PanelCaption();
-        labRunningTime  = new W5FA_PanelCaption();
-        labProductTime  = new W5FA_PanelCaption();
-        labLoadingCount = new W5FA_PanelCaption();
-        labMUBA         = new W5FA_PanelCaption();
-        labMTBA         = new W5FA_PanelCaption();
+        labModel        = new TPanel();
+        labPowerOnTime  = new TPanel();
+        labRunningTime  = new TPanel();
+        labProductTime  = new TPanel();
+        labLoadingCount = new TPanel();
+        labMUBA         = new TPanel();
+        labMTBA         = new TPanel();
     }
 };
 W5FA_TfObserverExt W5FA_FObserver;
@@ -263,10 +281,10 @@ W5FA_TfAutomationExt W5FA_FAutomation;
 // -- additional TfLotInfo (golden uLotInfo.h) surface -------------------------
 struct W5FA_TfLotInfoExt
 {
-    W5FA_TextField *edtSysOperatorID;                       // golden uLotInfo.h (TEdit*)
+    TEdit *edtSysOperatorID;                                 // golden uLotInfo.h:306 (TEdit*)
     void SetLotComponents(bool /*bClear*/) {}                // golden uLotInfo.h -- offline no-op
     void SetFirstTrayCheckOnUnloader() {}                    // golden uLotInfo.h -- offline no-op
-    W5FA_TfLotInfoExt() { edtSysOperatorID = new W5FA_TextField(); }
+    W5FA_TfLotInfoExt() { edtSysOperatorID = new TEdit(); }
 };
 W5FA_TfLotInfoExt W5FA_FLotInfo;
 
@@ -276,19 +294,22 @@ W5FA_TfLotInfoExt W5FA_FLotInfo;
 //   default "" / 0 (no Contact-form widget content available offline).
 struct W5FA_TfContactExt
 {
-    W5FA_TextField *edAirForceN, *edAirKPA, *edSetKg, *edForcePerDeviceKG,
-                   *edForcePerDeviceN, *edPinCount, *edForcePerPinG, *edForcePerPinN;
+    // golden cContact.h:72 edAirForceN, :228 edAirKPA, :208 edSetKg, :73
+    // edForcePerDeviceKG, :74 edForcePerDeviceN, :199 edPinCount, :201
+    // edForcePerPinG, :200 edForcePerPinN -- all TEdit*.
+    TEdit *edAirForceN, *edAirKPA, *edSetKg, *edForcePerDeviceKG,
+          *edForcePerDeviceN, *edPinCount, *edForcePerPinG, *edForcePerPinN;
     int rgOutKitDiameter_ItemIndex;
     W5FA_TfContactExt() : rgOutKitDiameter_ItemIndex(0)
     {
-        edAirForceN       = new W5FA_TextField();
-        edAirKPA          = new W5FA_TextField();
-        edSetKg           = new W5FA_TextField();
-        edForcePerDeviceKG= new W5FA_TextField();
-        edForcePerDeviceN = new W5FA_TextField();
-        edPinCount        = new W5FA_TextField();
-        edForcePerPinG    = new W5FA_TextField();
-        edForcePerPinN    = new W5FA_TextField();
+        edAirForceN       = new TEdit();
+        edAirKPA          = new TEdit();
+        edSetKg           = new TEdit();
+        edForcePerDeviceKG= new TEdit();
+        edForcePerDeviceN = new TEdit();
+        edPinCount        = new TEdit();
+        edForcePerPinG    = new TEdit();
+        edForcePerPinN    = new TEdit();
     }
 };
 W5FA_TfContactExt W5FA_FContact;
@@ -309,21 +330,26 @@ struct W5FA_TfShowBinSelectExt
 W5FA_TfShowBinSelectExt W5FA_FShowBinSelect;
 
 // -- fTrayAssignment (golden cTrayForm.h, TfTrayAssignment) ------------------
-struct W5FA_CheckBox { bool Checked; W5FA_CheckBox():Checked(false){} };
-struct W5FA_RadioGroup { int ItemIndex; W5FA_RadioGroup():ItemIndex(0){} };
+// AI(W906-W7-F2) 20260729: W5FA_CheckBox / W5FA_RadioGroup RETIRED in favour of
+// vclcompat/Controls.h's TCheckBox / TRadioGroup (plan D4).  Defaults match exactly
+// (Checked=false, ItemIndex=0), all instances are heap-allocated through pointers.
+// The declaring golden header is **cTrayAssignment.h**, not cTrayForm.h as the
+// surrounding comments say: :163 rgLoaderType and :179 rgFixTrayMode are TRadioGroup*,
+// :168/:173/:178 ckUseFix1/2/3 are TCheckBox*.  Comment corrected at the members only;
+// the older cTrayForm.h references around this block are left as found.
 struct W5FA_TfTrayAssignmentExt
 {
     bool fShow;                                      // golden cTrayForm.h -- offline: form not shown
-    W5FA_RadioGroup *rgLoaderType, *rgFixTrayMode;
-    W5FA_CheckBox   *ckUseFix1, *ckUseFix2, *ckUseFix3;
+    TRadioGroup *rgLoaderType, *rgFixTrayMode;       // golden cTrayAssignment.h:163 / :179 (TRadioGroup*)
+    TCheckBox   *ckUseFix1, *ckUseFix2, *ckUseFix3;  // golden cTrayAssignment.h:168/:173/:178 (TCheckBox*)
     void ReadFile() {}                                // golden cTrayForm.h -- offline no-op (re-read Tray.Data)
     W5FA_TfTrayAssignmentExt() : fShow(false)
     {
-        rgLoaderType  = new W5FA_RadioGroup();
-        rgFixTrayMode = new W5FA_RadioGroup();
-        ckUseFix1 = new W5FA_CheckBox();
-        ckUseFix2 = new W5FA_CheckBox();
-        ckUseFix3 = new W5FA_CheckBox();
+        rgLoaderType  = new TRadioGroup();
+        rgFixTrayMode = new TRadioGroup();
+        ckUseFix1 = new TCheckBox();
+        ckUseFix2 = new TCheckBox();
+        ckUseFix3 = new TCheckBox();
     }
 };
 W5FA_TfTrayAssignmentExt W5FA_FTrayAssignment;
@@ -372,8 +398,8 @@ W5FA_TfProductionInfoExt W5FA_FProductionInfo;
 // -- fTemp_Set (golden uTemp_Set.h, TfTemp_Set) ------------------------------
 struct W5FA_TfTemp_SetExt
 {
-    W5FA_TextField *edSoakTime, *edWorkTemp;
-    W5FA_TfTemp_SetExt() { edSoakTime = new W5FA_TextField(); edWorkTemp = new W5FA_TextField(); }
+    TEdit *edSoakTime, *edWorkTemp;                  // golden uTemp_Set.h:172 / :135 (TEdit*)
+    W5FA_TfTemp_SetExt() { edSoakTime = new TEdit(); edWorkTemp = new TEdit(); }
 };
 W5FA_TfTemp_SetExt W5FA_FTemp_Set;
 

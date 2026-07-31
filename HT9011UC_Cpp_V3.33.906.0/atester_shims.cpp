@@ -304,18 +304,20 @@ TfAutomationShim *fAutomation = new TfAutomationShim();
 TfObserverShim::TfObserverShim() : bTestIndexZ(false)
 {
     // -- W5-Final-Auto9045 INTEGRATE ADD: Memo1Lines + 7 label stand-ins --
+    // AI(W906-W7-F2) 20260729: TfObserverLabel retired -> unified vclcompat TPanel
+    // (see atester_shims.h).  Same "" Caption default, so no behaviour change.
     Memo1Lines      = new TfObserverMemoLines0();
-    labModel        = new TfObserverLabel();
-    labPowerOnTime  = new TfObserverLabel();
-    labRunningTime  = new TfObserverLabel();
-    labProductTime  = new TfObserverLabel();
-    labLoadingCount = new TfObserverLabel();
-    labMUBA         = new TfObserverLabel();
-    labMTBA         = new TfObserverLabel();
+    labModel        = new TPanel();
+    labPowerOnTime  = new TPanel();
+    labRunningTime  = new TPanel();
+    labProductTime  = new TPanel();
+    labLoadingCount = new TPanel();
+    labMUBA         = new TPanel();
+    labMTBA         = new TPanel();
     // -- AI(W906-SaveTestSummarySECS) 20260721: new memoLotSummary member, see atester_shims.h.
     memoLotSummary  = new TfObserverMemoLotSummary();
     // -- AI(W906-Save2DSortingSummary) 20260723: new labFactory member, see atester_shims.h.
-    labFactory      = new TfObserverLabel();
+    labFactory      = new TPanel();
 }
 void TfObserverShim::RecordInArmTime()                {}  // W6.2b1x1: OEE time bookkeeping no-op
 void TfObserverShim::AddTimeData(int /*iRow*/, double /*Time*/) {} // W6.2b1x1: OEE time bookkeeping no-op

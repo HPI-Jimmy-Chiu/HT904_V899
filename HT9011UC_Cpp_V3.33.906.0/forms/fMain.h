@@ -117,6 +117,19 @@ class TfMain
 public:
     virtual void DebugOneCycleHotPlate(AnsiString sfunc); // [METHOD] golden main.h:1565 -- debug log sink (empty)
     virtual bool Pause(AnsiString Func);                  // [METHOD] golden main.h:1249 -- offline never pauses -> false
+    // AI(W906-W7-F1fix2) 20260729: two seams on the PRE-EXISTING Pause() above,
+    //   added because Pause() is a bare `return false;` with no side effect, so
+    //   NOTHING that forwards INTO it can be observed by a test. Specifically
+    //   BtnPauseClick's `Pause("BtnPauseClick")` forward (golden main.cpp:6967)
+    //   was still unobservable after W7-F1fix added W906_BtnPauseClickCallCount:
+    //   that counter proves BtnPauseClick was CALLED, not that it FORWARDED --
+    //   deleting the forward left every assertion green (personally reproduced:
+    //   see tests/test_w7_f1_wall2_probe.cpp's BtnPauseClick block). These two
+    //   make the forward itself, AND the Func argument golden passes, testable.
+    //   Purely additive: Pause() still returns false unconditionally, so the
+    //   ~40 SM call sites that already call fMain->Pause(...) are unaffected.
+    int        W906_PauseCallCount;                       // [PORT-ONLY SEAM] call counter, default 0
+    AnsiString W906_PauseLastFunc;                        // [PORT-ONLY SEAM] last Func argument seen, default ""
     virtual void ShowTestHeadComp(bool bRefresh);         // [METHOD] golden main.h:1296 -- empty
     virtual void ReStartAutoSiteMapping(bool bStart);     // [METHOD] golden main.h:1331 -- empty
     // AI(W906-AutoSiteMapCleanOut) 20260727: golden main.h:1334 __fastcall
@@ -281,6 +294,205 @@ public:
                                                     //   RestoreCleanKitData/CheckCleaningCount read Cells[][] back via atoi(). Default-constructed
                                                     //   5x5 (vclcompat default); a future wave's SetAutoCleanICCount translation resizes it via
                                                     //   ->ColCount=/->RowCount=.
+    // AI(W906-W7-F1) 20260729: W7-F1 ADD -- members SECSGEM/uHGemHT9045.cpp's
+    //    22-override layer dereferences that the facade lacked -- plan SS6-F1
+    //    / SS4-V1 ("Wall 2"). Re-derived by grepping golden directly rather
+    //    than trusting the plan's own inventory: golden touches 28 distinct
+    //    `fMain->` spellings total, but 2 of those (PPID / bNeedClearFile,
+    //    golden SECSGEM/uHGemHT9045.cpp:5311-5312) are inside `//`-commented-
+    //    out code with no live call site, so they are NOT added here -- doing
+    //    so would be inventing a member nothing dereferences. Of the
+    //    remaining 26 live members, this wave found 3 more missing than the
+    //    plan's own named list (ChangePassword/FTClick/RTClick).
+    //    F1's OWN scope is the facade SURFACE only -- the 22 virtual
+    //    overrides that will actually call these members are translated in a
+    //    LATER wave (explicitly out of scope here per the task brief). Every
+    //    body below is therefore a documented no-op or a feedable
+    //    `W906_..._Sim`/call-count seam (per the fMain.h contract's rule 4
+    //    above), never a silent implementation of golden's real logic.
+    //
+    //    AI(W906-W7-F1fix) 20260729 -- CORRECTION, re-verified by grepping the
+    //    22 overrides' bodies directly (uHGemHT9045.cpp + uHGemHT9045_SV.cpp's
+    //    AddSV + uHGemHT9045_EC.cpp's AddEC): the "Wall 2" unlock this facade
+    //    surface provides is REAL but NARROWER than the prose above implies.
+    //    9 of the 22 overrides touch fMain at all (ReloadParameter,
+    //    LookForFile, S2F15_CheckNewEquipmentConstant,
+    //    S2F15_UpdateNewEquipmentConstant, S2F42_Host_Command_Acknowledge,
+    //    ProcessS7F23FromatReceipe, ProcessS7F25FromatReceipe, AddSV, AddEC).
+    //    Only 5 of those 9 are FULLY unblocked by this wave (they touch
+    //    ONLY fMain): ReloadParameter, LookForFile,
+    //    S2F15_CheckNewEquipmentConstant, ProcessS7F23FromatReceipe,
+    //    ProcessS7F25FromatReceipe. The other 4 ALSO dereference fLotInfo /
+    //    fSCKART / fNote / fSetup, none of which gained any member this wave,
+    //    so they remain blocked: S2F15_UpdateNewEquipmentConstant (+fLotInfo,
+    //    +fSetup), S2F42_Host_Command_Acknowledge (+fLotInfo, +fNote,
+    //    +fSCKART -- one of the two largest override bodies, golden
+    //    uHGemHT9045.cpp:1146-4189), AddSV (+fLotInfo), AddEC (+fLotInfo,
+    //    +fSCKART, +fSetup -- the other largest, all ~1912 lines of
+    //    uHGemHT9045_EC.cpp). See tests/test_w7_f1_wall2_probe.cpp's header
+    //    and docs/W7_UI_ARCHITECTURE_PLAN.md SS10 for the full re-derived
+    //    accounting (including why fSetup/fLotInfo/fSCKART/fNote member
+    //    counts reported elsewhere were inflated by uncommented-code
+    //    filtering that was never applied).
+    //
+    //    AI(W906-W7-F1fix2) 20260729 -- the block above is scoped to golden
+    //    uHGemHT9045.cpp only, and that hides one gap: AddSV lives in
+    //    uHGemHT9045_SV.cpp, which derefs THREE fMain members this facade
+    //    still does not have -- edTorue0 (golden main.h:466, TEdit*, used at
+    //    uHGemHT9045_SV.cpp:74), edTorue1 (main.h:467, TEdit*, :75),
+    //    lbEPenconder (main.h:796, TPanel*, :100). All three are passed as bare
+    //    WIDGET POINTERS into HGemPtr->SetSVDataPointer(SVID 1012/1013/1041),
+    //    i.e. straight into the plan SS9-R8 void*-overload hazard the F0-a
+    //    TObject base / F0-b static_assert exist to contain -- whoever adds
+    //    them must go through the same widget stand-in types, not raw pointers.
+    //    (Its other three, SVID1190_OSSetup/palMainStatus/tTestResult,
+    //    are already here from earlier waves; uHGemHT9045_EC.cpp needs only
+    //    cbSetupFileName + tSiteOnOff, both present.) So AddSV is blocked on
+    //    the fMain side as well as by fLotInfo, and the "26 live members" count
+    //    above is a per-file figure, not the whole SECSGEM layer: across all
+    //    three golden SECSGEM TUs it is 34 distinct / 32 live / 29 present.
+    //    These 3 are deliberately NOT added here -- adding members no
+    //    translated code dereferences yet is exactly the "inventing surface"
+    //    this wave refused to do for PPID/bNeedClearFile; they belong to
+    //    whichever wave translates AddSV.
+    virtual void cbSetupFileNameChange(void *Sender); // [METHOD] golden main.h:945 (body main.cpp:24643-24939, a 297-line
+                                    //   recipe-reload cascade -- opens with ChangeSetUpFile() but the bulk of the 297
+                                    //   lines is cbSetupFileNameChange's OWN body, both untranslated) -- offline: no-op
+                                    //   that increments the call-count seam below so a test can observe the call happened
+    int  W906_cbSetupFileNameChangeCallCount;     // [PORT-ONLY SEAM] call counter, default 0
+    virtual void Clarn_Data(int Tag, AnsiString Msg=""); // [METHOD] golden main.h:1246 (body main.cpp:14925, per-day
+                                    //   production-count file writer -- untranslated) -- offline: no-op call-count seam
+    int  W906_Clarn_DataCallCount;                // [PORT-ONLY SEAM] call counter, default 0
+    virtual void BtnPauseClick(void *Sender); // [METHOD] golden main.h:917 (body main.cpp:6965) -- TRANSLATED (partial,
+                                    //   faithful): forwards to Pause("BtnPauseClick"), same call golden itself makes
+                                    //   first. Golden's `#ifndef SOFT_SIMULTE` fProductionInfo->ClickPause() second
+                                    //   line is NOT translated (fProductionInfo has no facade home yet) -- documented
+                                    //   gap, not a silent drop.
+                                    //   AI(W906-W7-F1fix) 20260729: the pre-existing TfMain::Pause it forwards to is
+                                    //   itself a bare no-op (offline always returns false, no observable side
+                                    //   effect) -- so without a seam of its OWN, a test could delete this entire
+                                    //   forwarding call and no assertion anywhere would notice. Added the call-count
+                                    //   seam below, same idiom as every other member in this wave.
+                                    //   AI(W906-W7-F1fix2) 20260729 -- CORRECTION to the sentence this replaced,
+                                    //   which claimed the counter below made "the forward itself" observable: it
+                                    //   does NOT. W906_BtnPauseClickCallCount observes only that BtnPauseClick was
+                                    //   CALLED; deleting the `Pause("BtnPauseClick")` forward leaves it at 1.
+                                    //   Personally reproduced: compiled a fMain.cpp with ONLY that forward removed,
+                                    //   ar-replaced fMain.cpp.obj in libht9045_forms.a, relinked the probe -- the
+                                    //   check "BtnPauseClick() increments its own call-count seam" still PASSED,
+                                    //   i.e. every pre-fix2 assertion stayed green with the forward gone. The
+                                    //   forward is made
+                                    //   observable by the W906_PauseCallCount / W906_PauseLastFunc seams on Pause()
+                                    //   itself (declared next to Pause near the top of this class), which the probe
+                                    //   now asserts; those DO go red when the forward is deleted.
+    int  W906_BtnPauseClickCallCount;         // [PORT-ONLY SEAM] call counter, default 0 -- observes that
+                                    //   BtnPauseClick ran at all; the forward INTO Pause() is observed separately by
+                                    //   W906_PauseCallCount / W906_PauseLastFunc
+    virtual void LoadRunModePicture(); // [METHOD] golden main.h:1302 (body main.cpp:12382, run-mode BMP picture
+                                    //   selection UI -- untranslated) -- offline: no-op call-count seam
+    int  W906_LoadRunModePictureCallCount;        // [PORT-ONLY SEAM] call counter, default 0
+    virtual bool CanChangeSite(bool bNoIncludeHotplate=false); // [METHOD] golden main.h:1325 (body main.cpp:14350-14393) --
+                                    //   GATED LEAF: real body has FOUR false-return paths, not just HasIC() tests.
+                                    //   Three are live-IC guards (InArmSuck.HasIC() / InputShuttleHasIC() /
+                                    //   IndexHasIC() / MOT[MMPlate1/2].HasIC(), none of which have a facade path into
+                                    //   this TU). The FOURTH, in the bCanAutoCloseSite==false /
+                                    //   IniConfig.bI28_OnOffSiteOnTheFly==true sub-branch (main.cpp:14383-14390), is
+                                    //   NOT a HasIC() test at all: it returns false on
+                                    //   `bPickFromLoader==true || iPickFromLoadStageTask!=1`. Offline returns
+                                    //   W906_CanChangeSite_Sim (default true), matching golden's own fall-through
+                                    //   when every one of those four guards is false (the offline-everywhere posture
+                                    //   used tree-wide, e.g. cInplace/InArmPlacementEnable above).
+                                    //   AI(W906-W7-F1fix) 20260729: a complete, already-tested translation of this
+                                    //   SAME golden function exists as ComputeCanChangeSite (MainCalcCore.h/.cpp,
+                                    //   covering all four paths above, exercised by tests/test_MainCalcCore.cpp).
+                                    //   This facade member does NOT delegate to it: ComputeCanChangeSite is a pure
+                                    //   function that takes the live global state (bCanAutoCloseSite,
+                                    //   IniConfig.bI28_OnOffSiteOnTheFly, InArmSuck.HasIC(), InputShuttleHasIC(),
+                                    //   IndexHasIC(), MOT[MMPlate1/2].HasIC(), bPickFromLoader,
+                                    //   iPickFromLoadStageTask) as PARAMETERS, and none of those symbols are visible
+                                    //   from ht9045_forms (the bottom layer this TU compiles into) -- wiring them in
+                                    //   would require ht9045_forms to link upward into the modules that define them,
+                                    //   recreating exactly the kind of cycle W7-F0 removed. A fresh Sim-seam stand-in
+                                    //   is therefore the correct shape here, not a missed reuse opportunity; the
+                                    //   eventual TfMain::CanChangeSite override translation (once fMain gains a real
+                                    //   binder with access to those globals) should call ComputeCanChangeSite
+                                    //   instead of re-deriving the branch tree.
+    bool W906_CanChangeSite_Sim;                  // [PORT-ONLY SEAM] test-settable return, default true
+    virtual void BtnTrayEndClick(void *Sender); // [METHOD] golden main.h:925 (body main.cpp:13944 -- one line,
+                                    //   InitialTrayFeedTask("BtnTrayEndClick"), itself untranslated: golden main.h:1245
+                                    //   declares InitialTrayFeedTask as a TfMain MEMBER function, not a free function;
+                                    //   csystem.cpp's W7C2_FMAIN_INITIALTRAYFEED TU-local macro is the existing
+                                    //   stand-in for that member) -- offline: no-op call-count seam
+    int  W906_BtnTrayEndClickCallCount;           // [PORT-ONLY SEAM] call counter, default 0
+    virtual void UpdateMainOperateMode(); // [METHOD] golden main.h:1236 (body main.cpp:12803-13127, ~325-line hardware
+                                    //   relay/IO ladder -- ATC site-use relays, edWorkTemperBase/edSoakTime
+                                    //   enable-locks, WriteLastDataFile/ReadLastDataFile, ChangeATCSiteUse -- already
+                                    //   documented as out of scope by SetMainRunStartMode's own comment above) --
+                                    //   offline: no-op call-count seam
+    int  W906_UpdateMainOperateModeCallCount;     // [PORT-ONLY SEAM] call counter, default 0
+    virtual void LoadStartModePicture(); // [METHOD] golden main.h:1304 (body main.cpp:23827, start-mode BMP picture
+                                    //   selection UI -- untranslated) -- offline: no-op call-count seam
+    int  W906_LoadStartModePictureCallCount;      // [PORT-ONLY SEAM] call counter, default 0
+    virtual void LookForFile(); // [METHOD] golden main.h:1300 (body main.cpp:9016, Offset-directory filesystem
+                                    //   scan/migration -- untranslated) -- offline: no-op call-count seam
+    int  W906_LookForFileCallCount;               // [PORT-ONLY SEAM] call counter, default 0
+    virtual int ChangeTesterConnect(int Mode, bool Msg=true, bool bRemote=false); // [METHOD] golden main.h:1322
+                                    //   (body main.cpp:12064) -- GATED LEAF: real body returns 1 on SystemStart==true
+                                    //   or (offline #ifndef SOFT_SIMULTE branch) HasICUnderMachine()/HasAnyICInMachine(),
+                                    //   neither reachable from this TU, and 0 on the fall-through success path.
+                                    //   Offline returns W906_ChangeTesterConnect_Sim (default 0, the golden success
+                                    //   code -- matching the "no hardware blocks it" posture used by CanChangeSite
+                                    //   above).
+                                    //   AI(W906-W7-F1fix) 20260729 -- CORRECTION (re-verified against the ported tree,
+                                    //   not just golden): this is NOT the sole ported-tree stand-in for golden's
+                                    //   fMain->ChangeTesterConnect, and the caller does NOT discard the return value.
+                                    //   There are two independent TU-local stand-ins today, neither of which calls
+                                    //   THIS facade member: (1) Automation/auto9045.cpp's SetTesterConnect symbol
+                                    //   `return`s (does not discard) the result of its OWN TU-local
+                                    //   W5FA_TfMainExt::ChangeTesterConnect stub straight to ITS OWN caller; (2)
+                                    //   csystem.cpp's W7C2_FMAIN_CHANGETESTERCONNECT TU-local macro (a second,
+                                    //   separate gate, near the "onLine switch" call site) discards its int ARGUMENT,
+                                    //   not a return value, and does not call this member either. Nothing in the
+                                    //   ported tree calls this new facade member directly yet -- it exists so a
+                                    //   future SECSGEM override translation (golden uHGemHT9045.cpp:859) has
+                                    //   somewhere to land, per this wave's own gate probe.
+    int  W906_ChangeTesterConnect_Sim;            // [PORT-ONLY SEAM] test-settable return, default 0
+    virtual int SetTemp(bool bAsk, double fWorkTemp, double fSoakTime); // [METHOD] golden main.h:1321 (body
+                                    //   main.cpp:23890) -- GATED LEAF: real body returns 1 on SystemStart==true,
+                                    //   then walks a ShowMyMessageBox_YES_NO confirm + ChangeTempMode cascade with no
+                                    //   facade path from this TU. Offline returns W906_SetTemp_Sim (default 0, the
+                                    //   golden success code).
+    int  W906_SetTemp_Sim;                        // [PORT-ONLY SEAM] test-settable return, default 0
+    virtual void ChangePassword(); // [METHOD] golden main.h:1417 (body main.cpp:31772, SECS/GEM password-file
+                                    //   loader -- untranslated) -- offline: no-op call-count seam
+    int  W906_ChangePasswordCallCount;            // [PORT-ONLY SEAM] call counter, default 0
+    virtual int FTClick(bool bMan=false); // [METHOD] golden main.h:1567 (body main.cpp:29666) -- GATED LEAF: real
+                                    //   body returns 1 on SystemStart==true, 2/3/4/8 on assorted live-IC/level/tray
+                                    //   blocks (InArmSuck.HasIC() etc., none reachable from this TU), 0 on the
+                                    //   fall-through success path (which also calls Clarn_Data() above and
+                                    //   EventReport() -- both already-real/no-op sinks here). Offline returns
+                                    //   W906_FTClick_Sim (default 0, the golden success code).
+    int  W906_FTClick_Sim;                        // [PORT-ONLY SEAM] test-settable return, default 0
+    virtual int RTClick(bool bMan=false); // [METHOD] golden main.h:1568 (body main.cpp:29790-29954) -- sibling of
+                                    //   FTClick above (same untranslated live-IC-branch shape), but NOT the same
+                                    //   return-code shape: FTClick returns one of {0,1,2,3,4,8}; RTClick returns one
+                                    //   of {0,1,2,3,4,5,6,7,8} -- three codes (5, 6, 7) that FTClick never returns.
+                                    //   AI(W906-W7-F1fix2) 20260729, per-code attribution re-derived from golden
+                                    //   (the previous one lumped 5 and 6 together as "the MOT[MMTrayY] tray/IC
+                                    //   guard", which is only true of 6): 7 = the IniConfig.bSPILFunction &&
+                                    //   bCanRunSCKART gate at the top (main.cpp:29795-29797, no FTClick counterpart);
+                                    //   5 = the iSecsGemSwitchFTRT==0 && cbRunStartMode->Enabled==false guard
+                                    //   (:29866-29868), which FTClick numbers 3 (:29721-29723); 6 = the
+                                    //   MOT[MMTrayY]/MOT[MMTrayY_Car] tray/IC guard (:29870-29874), which FTClick
+                                    //   numbers 4 (:29725-29729). Offline returns W906_RTClick_Sim (default 0).
+    int  W906_RTClick_Sim;                        // [PORT-ONLY SEAM] test-settable return, default 0
+    TStringList *tSiteOnOff[2];                   // [DATA] golden main.h:1393 (TStringList*[2]) -- REAL concrete
+                                    //   storage, same idiom as tTestResult/tBarCodeList above: ctor prefills BOTH
+                                    //   with MAX_SOCKET_ROW*MAX_SOCKET_COL (golden main.cpp:2242-2248) "0" strings so
+                                    //   uHGemHT9045.cpp's `if(z<fMain->tSiteOnOff[0]->Count)` guard and
+                                    //   `->Strings[z]` read are satisfiable exactly as golden expects.
+    TfLotInfoEdit *edSoakTime;                    // [DATA] golden main.h:733 (TEdit*) -- reuses TfLotInfoEdit, same
+                                    //   stand-in already used for edWorkTemperBase/edHPX/edHPY (only ->Text read/written).
     TfMain();
     virtual ~TfMain() {}
 };

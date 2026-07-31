@@ -1586,15 +1586,27 @@ static bool W7T1_ProcessIndexSuckDestroy2(){ return true; }    // golden iosetvi
 //  the torque-read path is offline-inert; but the code that reads/writes these
 //  widgets must compile.  A TU-local stand-in mirrors the touched surface
 //  (Caption / Checked / Text.c_str()).  Integrate: add the real widgets to TfMain
-//  (TLabel/TCheckBox/TEdit) + SetOpenBin() + drop the W7T1_FMAIN_* call-site
-//  macros.
-struct W7T1_TLabelSeam  { AnsiString Caption; };
-struct W7T1_TCheckSeam  { bool Checked; W7T1_TCheckSeam():Checked(false){} };
-struct W7T1_TEditSeam   { AnsiString Text; };
+//  (TPanel/TLabel/TCheckBox/TEdit -- see the per-member golden citations below)
+//  + SetOpenBin() + drop the W7T1_FMAIN_* call-site macros.
+//
+//  AI(W906-W7-F2) 20260729: the three TU-local value-holder types this block used to
+//  declare -- W7T1_TLabelSeam / W7T1_TCheckSeam / W7T1_TEditSeam -- are RETIRED.
+//  vclcompat/Controls.h is now the single home for stock-widget stand-ins (plan D4),
+//  so the members below name those unified types directly.  Each member's golden
+//  widget class was re-read from golden main.h for this change rather than inherited
+//  from the old comment: lbArm0Torque main.h:798 and lbArm1Torque main.h:797 are
+//  TPanel (NOT TLabel -- they do not all collapse onto one type), labUser main.h:649
+//  is TLabel, chkReadTorque1/2 main.h:464-465 are TCheckBox, edTorue0/1 main.h:466-467
+//  are TEdit.  Zero behaviour change: each retired type held exactly the one member
+//  used here with the same default ("" / false) and the unified replacements keep
+//  those defaults; the ONLY objects of these types are the members of the single
+//  file-scope W7T1_fMainTorque below (no by-value copy, no aggregate initialisation,
+//  no sizeof/memset), so gaining a vtable disturbs nothing.
 struct W7T1_TfMainTorqueSeam {
-    W7T1_TLabelSeam lbArm0Torque, lbArm1Torque, labUser;
-    W7T1_TCheckSeam chkReadTorque1, chkReadTorque2;
-    W7T1_TEditSeam  edTorue0, edTorue1;
+    TPanel    lbArm0Torque, lbArm1Torque;                      // golden main.h:798 / :797 (TPanel*)
+    TLabel    labUser;                                         // golden main.h:649 (TLabel*)
+    TCheckBox chkReadTorque1, chkReadTorque2;                  // golden main.h:464-465 (TCheckBox*)
+    TEdit     edTorue0, edTorue1;                              // golden main.h:466-467 (TEdit*)
     void SetOpenBin(){}                                        // golden main.h -- offline: open-bin set no-op
 };
 static W7T1_TfMainTorqueSeam W7T1_fMainTorque;

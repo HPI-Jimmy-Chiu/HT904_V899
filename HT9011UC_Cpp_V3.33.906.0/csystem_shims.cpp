@@ -129,8 +129,11 @@ void InitialDoMagazineTrayFeedTask() {}   // golden Magazine SM
 // ===========================================================================
 void DoAuto3Magazine()               {}   // golden Magazine SM (only when AUTO3_IS_MAGAZINE==1)
 void NewDoAutoTrayEdgeCylinderLoop() {}   // golden tray-vibration loop
-void DoAuto2()                       {}   // golden asendic -- auto2 tray feed
 // DoAutoEmpty1() is owned by asendic_Empty.cpp (ODR) -- NOT defined here.
+// DoAuto2() : REAL faithful body now lives in asendic_Auto2.cpp (golden
+// asendic_Auto2.cpp:414-592) as of W906-W7-L1.  The no-op stub here was REMOVED
+// to keep a single ODR definition; the prototype now lives in asendic_Auto2.h.
+// AI(W906-W7-L1) 20260729.
 
 //  Alignment processes: offline they report "finished" so the HUB does NOT
 //  early-return on them (golden returns true when the alignment step completes;

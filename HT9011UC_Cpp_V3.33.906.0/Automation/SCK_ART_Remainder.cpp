@@ -52,28 +52,27 @@
 //  golden ctor line -> BCB6 zero-init" convention (same as the sibling file's SckArtState ctor).
 // =============================================================================
 SckArtRemainderState::SckArtRemainderState()
-    : sSetupFilePath(""),               // golden :40
-      sLOTSTATUS("NONE"),               // golden :51
+      // AI(W906-W7-F2) 20260729: base first.  SckArtState's own ctor (Automation/SCK_ART.cpp)
+      // now supplies the 9 formerly-duplicated fields -- sLOTSTATUS("NONE", golden :51),
+      // iCurrentStatus(0), iCurrent93KARTStep(0), iTesterType(0), iInputCount(0),
+      // iFTRTCount(0), iManualRejectCnt(0), iNeedRT(0), dCurrYield(0.0) -- with the SAME
+      // values this list used to set, which is why the merge is behaviour-neutral.  Their
+      // 9 initialisers are removed from this list because a derived ctor may not
+      // initialise base members directly.
+    : SckArtState(),
+      sSetupFilePath(""),               // golden :40
       sLotID(""),                       // golden TForm AnsiString member; zero-init (no explicit ctor line)
       sProcessCode(""),                 // golden TForm AnsiString member; zero-init (no explicit ctor line)
       sLotStartTime(""),                // golden :41
       // AI(W906-SaveTestSummarySECS) 20260721: golden TForm AnsiString member (SCK_ART.h:242); zero-init
       // (no explicit golden ctor line), same convention as sLotStartTime just above.
       sLotEndTime(""),                  // golden :242
-      iCurrentStatus(0),                // golden ctor does not set this explicitly; 0==iLOTSTATUS_NONE
-      // AI(W906-DoARTLotStart) 20260721: golden TForm int members (SCK_ART.h:263-264); zero-init (no
+      // AI(W906-DoARTLotStart) 20260721: golden TForm int member (SCK_ART.h:264); zero-init (no
       // explicit ctor line), same convention as every other "no explicit golden ctor line" field here.
-      iCurrent93KARTStep(0),            // golden SCK_ART.h:263
       iCurrentFlexARTStep(0),           // golden SCK_ART.h:264
-      iTesterType(0),                   // golden :42 (0: Flex, 1: 93K)
-      iInputCount(0),                   // golden TForm int member; zero-init (no explicit ctor line)
       iLotCount(0),                     // golden TForm int member; zero-init (no explicit ctor line)
-      iFTRTCount(0),                    // golden TForm int member; zero-init (no explicit ctor line)
-      iManualRejectCnt(0),              // golden TForm int member; zero-init (no explicit ctor line)
       iInputJamCnt(0),                  // golden :54
       iOutputJamCnt(0),                 // golden :55
-      iNeedRT(0),                       // golden TForm int member; zero-init (no explicit ctor line)
-      dCurrYield(0.0),                  // golden TForm double member; zero-init (no explicit ctor line)
       iManualStart(0),                  // golden TForm int member; zero-init (no explicit ctor line)
       bFirstFullSkip(false),            // golden TForm bool member; zero-init (no explicit ctor line)
       sInfo_Customer(""), sInfo_InnerLotID(""), sInfo_CustLotID(""), sInfo_CustDevGup(""),   // golden :60-63
@@ -109,6 +108,14 @@ SckArtRemainderState::SckArtRemainderState()
     // AccessFile's own ReadWriteIni("iTesterType",...) call (golden :204) is the real, persisted
     // source of truth once AccessFile(true,...) has run, matching how the sibling file's own
     // SckArtState ctor treats this exact field.
+    // AI(W906-W7-F2) 20260729: that last sentence is still true but understates the gap, so record
+    // it plainly -- this IS a golden divergence, not just an omission of "pure-VCL" work.  golden
+    // :113 is `iTesterType=1;`, a plain data assignment with no widget in it, and it fires for every
+    // CUSTOMER_CODE except CC_SCK; the value is only overwritten later IF AccessFile(true,...)
+    // actually runs and the recipe file already carries an [AutoRetest]/iTesterType key.  Until then
+    // this object reports Flex(0) where golden would report 93K(1).  iTesterType is now inherited
+    // from SckArtState, so the divergence is single-sourced -- see that ctor's note and
+    // tests/test_w7_f2_sckart_state.cpp.  Reported, deliberately not reconciled (plan SS6-F2).
 }
 
 // =============================================================================
@@ -744,14 +751,26 @@ void SckArtRem_ClearLotInfo(SckArtRemainderState &st, bool *outNeedAccessFileWri
 
     W5SCKARTREM_LOTSUMMARY_CLEARALLDATA();                                       // golden :875 LotSummary.ClearAllData() -- AI(W906-SaveTestSummarySECS) 20260721: now REAL (partial: iCountCategory/iTotalCategory only), see gate #5 [UPDATE]
 
-    // NOTE: golden :877 also calls `DoAutoSocketOff(true)` here. That function is ALREADY translated
-    // by the sibling file as `SckArt_DoAutoSocketOff(SckArtState&, bool)` (Automation/SCK_ART.h/.cpp).
-    // This remainder deliberately does NOT call it (it lives on a DIFFERENT state struct --
-    // SckArtState, not SckArtRemainderState -- see the "WHY A SEPARATE STATE STRUCT" cross-file note).
-    // JUDGMENT CALL, flagged for the integrate agent / human review: the caller of
-    // SckArtRem_ClearLotInfo is responsible for ALSO invoking the sibling's
-    // `SckArt_DoAutoSocketOff(siblingSt, true)` on whatever SckArtState instance is being kept in sync
-    // with this one, until the two state structs are unified onto one FormsFacade TfSCKART.
+    // AI(W906-W7-F2fix) 20260729 -- FIDELITY GAP CLOSED; the NOTE that used to sit here is
+    // superseded and is quoted in full below so the reasoning trail survives.
+    //   It said: golden :877's `DoAutoSocketOff(true)` is deliberately NOT called here because
+    //   "it lives on a DIFFERENT state struct -- SckArtState, not SckArtRemainderState", and the
+    //   CALLER was made responsible for invoking `SckArt_DoAutoSocketOff(siblingSt, true)` on
+    //   "whatever SckArtState instance is being kept in sync with this one".
+    //   THAT BLOCKER NO LONGER EXISTS, and it was this same W7-F2 wave that removed it:
+    //   `SckArtRemainderState` now `: public SckArtState`, so `st` IS a `SckArtState` and there
+    //   is no second instance to keep in sync -- the fields DoAutoSocketOff reads (iFTRTCount)
+    //   are the very same storage this function just zeroed. Re-derived from golden this pass:
+    //   golden TfSCKART::ClearLotInfo (SCK_ART.cpp:837-923) calls `DoAutoSocketOff(true)` at
+    //   :877, unconditionally, immediately after `LotSummary.ClearAllData()` at :875 -- i.e.
+    //   exactly here. Leaving the call out was a real behavioural gap parked behind a rationale
+    //   that had become false, so it is closed rather than re-documented.
+    //   SAFE OFFLINE: SckArt_DoAutoSocketOff's whole body is inside
+    //   `if(TestIF_File.bSCKART_AutoSocketOff)` (golden :1238), false by default, so this adds
+    //   nothing to any currently-passing test; with bAllSiteOn==true it can only take golden's
+    //   "Final RT 後, 全開" else-arm (golden :1329-1357), which never touches gate #4's GetPCA
+    //   stand-in. Verified by full-suite run: test_SCK_ART_Remainder assertion count unchanged.
+    SckArt_DoAutoSocketOff(st, true);                                            // golden :877 DoAutoSocketOff(true)
 
     st.sInfo_Customer="";                                                       //JerryYang 20220331 : 客戶要求不要Show NA而顯示空白
     st.sInfo_InnerLotID="";

@@ -25,7 +25,11 @@
 //      new member had to edit THIS ONE FILE, parallel waves collided on it --
 //      Automation/SCK_ART.h:34-45 records a wave that invented a whole separate
 //      `SckArtState` rather than extend TfSCKART for exactly this reason, which
-//      is part of why the SckArt state now exists in FOUR places (plan SS3-C4).
+//      is part of why the SckArt state now exists in FIVE places -- AI(W906-W7-F2fix)
+//      20260729: was "FOUR places (plan SS3-C4)"; the verified count is five and the
+//      enumeration lives in forms/fSCKART.h's RECONCILIATION DEBT banner (plan SS3-C4's
+//      four omit forms/fSCKART.h's own TfSCKART; the old fSCKART.h four collapsed
+//      csystem.cpp's two independent seam structs into one bullet).
 //      After the split a wave edits only its own forms/fXxx.h.
 //
 //  WHERE THINGS WENT

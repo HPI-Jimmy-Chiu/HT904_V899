@@ -2522,6 +2522,121 @@ target_link_libraries(test_w7_f0_controls_guard PRIVATE vclcompat)
 
 add_test(NAME w7_f0_controls_guard COMMAND test_w7_f0_controls_guard)
 
+# --- W7-F1: the "Wall 2" unlock gate ----------------------------------------
+# AI(W906-W7-F1) 20260729: plan SS6-F1 / SS4-V1. Also placed ABOVE the GLOBAL
+# TEST TIMEOUT block for the same reason as test_w7_f0_controls_guard just
+# above (a test registered after that block silently gets no timeout).
+#
+# Link map: ht9045_secsgem (mirrors test_SecsWireCodec/test_SecsSvEcRegistration's
+# minimal link intent above) -- but this TU also pulls in the FULL facade
+# (FormsFacade.h -> forms/fMain.cpp -> cprod.h/cmydef.h), which is exactly the
+# same "cmydef.cpp.obj's static queue globals need ctors from cpublic.cpp.obj
+# in the SAME archive, GNU ld's single-pass archive scan can't back-resolve
+# that" cross-archive situation test_config_loaders's own target_link_libraries
+# entry already documents just above in this file (cited by symbol name per
+# KNOWLEDGE Gotcha 10 -- ported-tree line numbers rot) -- confirmed by hitting
+# the IDENTICAL undefined-reference failure (SearchFile/md5_Folder,
+# ht9045_public symbols cpublic.cpp.obj needs) on the first real build attempt.
+# Reuses that same LINK_GROUP:RESCAN set verbatim (proven to resolve it there).
+# No THGem instantiation happens in this TU, so unlike test_config_loaders this
+# one does NOT need ws2_32.
+#
+# AI(W906-W7-F1fix) 20260729: the header comment in
+# test_w7_f1_wall2_probe.cpp originally claimed this executable "names only
+# ht9045_secsgem" and resolves fMain "purely through ht9045_secsgem's PUBLIC
+# dependency on it" -- FALSE, disproved by this very target_link_libraries
+# call listing ht9045_forms/ht9045_db/ht9045_core/ht9045_globals/ht9045_public/
+# vclcompat explicitly (required for the LINK_GROUP:RESCAN workaround above,
+# same as test_config_loaders). See that file's header for the corrected
+# claim.
+#
+# AI(W906-W7-F1fix2) 20260729: that correction is right that the list is
+# required, but its REASON is wrong in a way worth pinning down here, because
+# it invites the next reader to believe ht9045_secsgem's PUBLIC edge to
+# ht9045_forms does not work. It does. Measured, not argued:
+#   * test_SecsWireCodec's call is a bare `PRIVATE ht9045_secsgem`, yet the
+#     linkLibs response file CMake generates for it already contains
+#     libht9045_forms.a -- the PUBLIC closure puts it there with nobody naming
+#     it. Presence of ht9045_forms is NOT what the explicit list buys.
+#   * Relinking this probe's own objects against exactly that bare-form archive
+#     list produced 5 undefined references, ALL of them
+#     libht9045_globals.a(cpublic.cpp.obj) -> SearchFile()/md5_Folder(), which
+#     live in libht9045_public.a (nm --defined-only). None involve fMain.
+#   * The same bare list wrapped in -Wl,--start-group/--end-group links, exit 0.
+# So the load-bearing part is the GROUP, and the explicit library list exists
+# only because $<LINK_GROUP:RESCAN,...> wraps only what is named inside it --
+# transitively-pulled dependencies land outside the group and are back to a
+# single-pass scan. Do not "simplify" this line to `PRIVATE ht9045_secsgem`.
+add_executable(test_w7_f1_wall2_probe
+    test_w7_f1_wall2_probe.cpp
+)
+
+target_link_libraries(test_w7_f1_wall2_probe PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_secsgem,ht9045_forms,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+add_test(NAME w7_f1_wall2_probe COMMAND test_w7_f1_wall2_probe)
+
+# ===========================================================================
+#  W7-L1 -- asendic_Auto2 (Auto2-tray stack-feed) state machine
+# ===========================================================================
+# --- test_w7_l1_auto2: drive the Auto2-tray SM family over the W6 substrate --
+# AI(W906-W7-L1) 20260729: plan SS6-W7-L1. Also placed ABOVE the GLOBAL TEST
+# TIMEOUT block for the same reason as test_w7_f0_controls_guard /
+# test_w7_f1_wall2_probe just above (a test registered after that block
+# silently gets no timeout).
+#
+# Same link map as test_w6_1_empty_canary (asendic_Auto2.cpp lives in the same
+# ht9045_sm library, alongside asendic_Empty.cpp, both over the Cylinder[]/
+# MOT[]/Sen[]/SW[] Sim HAL + FormsFacade fAGV + canary_support). The RESCAN
+# link group lets GNU ld re-scan the archive set so the cprod<->cpublic<->
+# cmydef ctor cross-references settle (same idiom as the W6.1 canary test).
+add_executable(test_w7_l1_auto2
+    test_w7_l1_auto2.cpp
+)
+
+target_link_libraries(test_w7_l1_auto2 PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w7_l1_auto2 PRIVATE ws2_32)
+endif()
+
+add_test(NAME W7_L1_Auto2 COMMAND test_w7_l1_auto2)
+
+# --- test_w7_f2_sckart_state: SckArt state merge proof + golden-divergence pins
+# AI(W906-W7-F2) 20260729: plan SS3-C4 / SS6-F2 / SS9-R9. Also placed ABOVE the
+# GLOBAL TEST TIMEOUT block for the same reason as the targets just above (a
+# test registered after that block silently gets no timeout).
+#
+# Two things this target locks down:
+#   (a) the W7-F2 merge -- SckArtRemainderState now derives from SckArtState, so
+#       the 9 formerly-duplicated golden TfSCKART fields must construct
+#       identically on both types (they did before the merge; that is what made
+#       it behaviour-neutral, and this is the assertion that keeps it true);
+#   (b) two GOLDEN DIVERGENCES found while diffing the four SckArt copies, which
+#       W7-F2 reported instead of silently reconciling (iLOTSTATUS_* status
+#       codes, and iTesterType). The assertions pin the CURRENT diverging
+#       behaviour on purpose -- see the file's own header before "fixing" them.
+#
+# Same RESCAN link group as test_SCK_ART / test_SCK_ART_Remainder: both
+# SCK_ART.cpp and SCK_ART_Remainder.cpp are compiled into ht9045_sm (root
+# CMakeLists.txt), so they must NOT be added to this executable's own sources.
+add_executable(test_w7_f2_sckart_state
+    test_w7_f2_sckart_state.cpp
+)
+
+target_link_libraries(test_w7_f2_sckart_state PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w7_f2_sckart_state PRIVATE ws2_32)
+endif()
+
+add_test(NAME W7_F2_SckArtState COMMAND test_w7_f2_sckart_state)
+
 # ===========================================================================
 #  GLOBAL TEST TIMEOUT -- must stay at the BOTTOM of this file
 # ===========================================================================

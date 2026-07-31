@@ -38,7 +38,60 @@
 SckArtState::SckArtState()
     : sLOTSTATUS("NONE"),              // golden :51
       iCurrentStatus(0),               // golden ctor does not set this explicitly; 0==iLOTSTATUS_NONE
-      iTesterType(0),                  // golden :42 (0: Flex, 1: 93K)
+      // AI(W906-W7-F2) 20260729 -- GOLDEN DIVERGENCE, DISCLOSED AND NOT FIXED HERE.
+      // golden :42 does set iTesterType=0, but the ctor is not finished at :42 --
+      // golden :102-114 then runs `if(CUSTOMER_CODE==CC_SCK){ ...widgets... } else {
+      // iTesterType=1; }`, so on golden the constructed value is 1 for EVERY customer
+      // code except CC_SCK.  This "golden :42" citation (and the identical one in the
+      // sibling SckArtRemainderState ctor) therefore describes only half the golden
+      // ctor.  The 0 is kept verbatim this wave because plan SS6-F2 requires divergences
+      // found during the SckArt diff to be reported, not silently reconciled; the value
+      // of THIS field is pinned by tests/test_w7_f2_sckart_state.cpp check B11 (and B12
+      // for the derived SckArtRemainderState) so a future fix is deliberate.
+      //
+      // AI(W906-W7-F2fix) 20260729 -- REACHABILITY RE-DERIVED FROM GOLDEN.  The version
+      // of this note the wave wrote said "st.iTesterType is read by SckArt_CheckNeedRT
+      // ... and by four W7C2_SCKART call sites in csystem.cpp, all behind ART config flags
+      // that are false offline."  That was wrong on the count, wrong on which variable
+      // those sites read, and it omitted the only site where the divergence changes
+      // control flow.  Corrected, all sites re-counted by hand:
+      //
+      //   * `st.iTesterType` -- THIS struct's field -- has exactly ONE reader in the whole
+      //     tree: SckArt_CheckNeedRT below (`if(st.iTesterType==1)`, the SPIL/RT-count
+      //     branch).  Nothing else names it.
+      //   * csystem.cpp's call sites do NOT read this field.  They read the two seams'
+      //     OWN top-level `iTesterType` shadows (`W7C1_SCKART->iTesterType` /
+      //     `W7C2_SCKART->iTesterType`), which are separate storage from the
+      //     `SckArtState core` each seam embeds.  W7C2_TfSCKARTSeam::CheckNeedRT's
+      //     `core.iTesterType=iTesterType;` is the ONLY path by which any
+      //     SckArtState::iTesterType is written after construction; W7C1's seam has no
+      //     CheckNeedRT and never syncs its shadow at all.
+      //   * There are SIX such reads in the ported csystem.cpp, not four: FIVE on
+      //     `W7C2_SCKART` (all in DoART_AfterCleanOut -- golden csystem.cpp:14277, :14313,
+      //     :14362, :14398, :14489) and ONE on `W7C1_SCKART` (in DoCleanOutFinishCheck --
+      //     golden csystem.cpp:15065).  Golden csystem.cpp has EIGHT reads of
+      //     `fSCKART->iTesterType`; the two the port does not carry are golden :9173 and
+      //     :9996, both inside DoAllProcess regions this tree has not translated (:9173 is
+      //     in the elided ~300-line `DoAutoRetest()` branch; :9996 is golden's own EMPTY
+      //     `if(CosFunction.bUseSCKART && fSCKART->iTesterType==0){}` body -- a read with
+      //     no consequence even on golden).
+      //   * THE CONSEQUENTIAL ONE, omitted before: the single W7C1 read is a GATE, not a
+      //     branch inside an already-entered block --
+      //       if(USE_AUTO_RETEST==eartInstall && IniConfig.bA10_AutoReTest &&
+      //          CosFunction.bUseSCKART && W7C1_SCKART->iTesterType==0)
+      //     With the port's 0 that test is TRUE, so on any non-CC_SCK machine THE PORT
+      //     ENTERS AN ENTIRE ART BLOCK GOLDEN WOULD SKIP (golden's iTesterType is 1 there):
+      //     the two SetLotStatus(iLOTSTATUS_L) calls, CheckLoadingCount plus its
+      //     WAR0119/WAR0120/WAR0121 alarm arms, and the `iCurrentFlexARTStep=6` /
+      //     `iWaitGPIBLotR=1` writes.  The five DoART_AfterCleanOut reads invert the same
+      //     way (`==0` arms taken where golden takes `==1` arms and vice versa).  So D2 is
+      //     a BEHAVIOURAL divergence, not a cosmetic one.
+      //   * Still unreachable offline, which is why the suite stays green either way: all
+      //     six sit behind an ART config flag that is false by default
+      //     (CosFunction.bUseSCKART / CosFunction.bART_SECSGEM_93K /
+      //     IniConfig.bA10_AutoReTest).  That is exactly why the two seam shadows had to be
+      //     pinned at SOURCE level instead (test PART C, checks C5/C6).
+      iTesterType(0),                  // golden :42 + :111-114 (0: Flex, 1: 93K) -- see divergence note above
       iInputCount(0),                  // golden TForm int member; zero-init (no explicit ctor line)
       iFTRTCount(0),                   // golden TForm int member; zero-init (no explicit ctor line)
       iManualRejectCnt(0),              // golden TForm int member; zero-init (no explicit ctor line)

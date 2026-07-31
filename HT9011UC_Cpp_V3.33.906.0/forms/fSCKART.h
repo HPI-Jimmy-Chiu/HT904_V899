@@ -7,16 +7,31 @@
 //  forms/FormWidgets.h.  Facade-wide contract: see forms/fMain.h.
 //
 //  RECONCILIATION DEBT THIS FILE IS PART OF -- read before extending it.
-//  Per plan SS3-C4 (which corrects an earlier 3-way claim to 4-way), the SckArt
-//  state currently exists in FOUR places that W7-F2 must reconcile:
-//    1. this TfSCKART,
+//  AI(W906-W7-F2fix) 20260729: COUNT CORRECTED FROM FOUR TO FIVE.  This banner
+//  used to say "FOUR places ... Do NOT invent a fifth" while listing
+//  csystem.cpp's TWO independent seam structs as a single bullet; plan SS3-C4
+//  also says "four" but its four OMIT this file's TfSCKART.  Neither four is the
+//  union.  Re-derived this pass by grepping every declaration of the overlapping
+//  golden-TfSCKART field names across the whole ported tree: golden has exactly
+//  ONE fSCKART object; the ported tree spreads its state over FIVE declaration
+//  sites, and the "fifth" the old banner forbade inventing already existed when
+//  it was written.
+//    1. this TfSCKART (the real global `fSCKART`),
 //    2. Automation/SCK_ART.h's `SckArtState`,
-//    3. Automation/SCK_ART_Remainder.h's `SckArtRemainderState`,
-//    4. csystem.cpp's `W7C1_TfSCKARTSeam` AND `W7C2_TfSCKARTSeam`.
-//  Do NOT invent a fifth.  Plan SS6-F2 also warns those four may already have
+//    3. Automation/SCK_ART_Remainder.h's `SckArtRemainderState`
+//         -- since W7-F2 this one `: public SckArtState`, so it is the ONLY site
+//            that no longer duplicates the 9 overlapping fields,
+//    4. csystem.cpp's `W7C1_TfSCKARTSeam`  (shadow fields + its own embedded
+//         `SckArtState core`),
+//    5. csystem.cpp's `W7C2_TfSCKARTSeam`  (ditto).
+//  Because #4 and #5 each EMBED a SckArtState, the number of live copies of
+//  those 9 fields at runtime is higher still than five.
+//  Do NOT invent a SIXTH.  Plan SS6-F2 also warns these may already have
 //  diverged BEHAVIOURALLY, so the merge is analysis work, not mechanical
 //  aliasing -- and any divergence found must be reported, not quietly
-//  reconciled.
+//  reconciled.  Two such divergences ARE now on record and pinned: see
+//  Automation/SCK_ART_Remainder.h's "WHY A SEPARATE SckArtRemainderState" block
+//  for the full enumeration, and tests/test_w7_f2_sckart_state.cpp for the pins.
 // =============================================================================
 #ifndef FORMS_FSCKART_H
 #define FORMS_FSCKART_H

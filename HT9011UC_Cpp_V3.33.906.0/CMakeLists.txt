@@ -1022,6 +1022,13 @@ endif()
 # ---------------------------------------------------------------------------
 add_library(ht9045_sm STATIC
     asendic_Empty.cpp
+    # AI(W906-W7-L1) 20260729: asendic_Auto2.cpp -- the Auto2-tray stack-feed SM,
+    # first landing of the W7-L1 asendic_* feed-SM family (see plan SS6 W7-L1).
+    # Verified zero outgoing cross-file calls into the other 6 asendic_* siblings
+    # (Loader/Loader_RT/Scanner/Auto/Auto_RT/Color), so it is safe to land
+    # standalone in the same library asendic_Empty.cpp already occupies (same
+    # substrate: Cylinder[]/MOT[]/Sen[]/SW[]/canary_support/FormsFacade fAGV).
+    asendic_Auto2.cpp
     csystem_predicates.cpp
     # AI(W906-W7-F0) 20260728: FormsFacade.cpp REMOVED from this library -- the
     # facade now compiles into the bottom-layer ht9045_forms target (see its
@@ -1329,15 +1336,33 @@ add_library(ht9045_sm STATIC
     #     the next contiguous golden slice (SetSetupFilePath/AccessFile/
     #     SetGPIBVersion/UpdateCount/AddAlarmCode/ClearLotInfo/AddOutputJamCnt/
     #     SaveTestSummary-dispatcher) continuing the sibling SCK_ART.cpp 8-
-    #     function extract just above.  Deliberately owns its OWN
-    #     SckArtRemainderState (NOT the sibling's SckArtState) -- see the
-    #     file's own header for the 3-way reconciliation debt this creates
-    #     (sibling SckArtState / this file's SckArtRemainderState / csystem.cpp's
-    #     W7C2_TfSCKARTSeam) for dCurrYield/iFTRTCount/iNeedRT/iInputCount/
-    #     iManualRejectCnt/iTesterType/sLOTSTATUS/iCurrentStatus -- NOT resolved
-    #     by this integrate (would require touching the sibling file's
-    #     internals, out of this front's scope; flagged for a future
-    #     TfSCKART/FormsFacade unification wave).
+    #     function extract just above.
+    #     AI(W906-W7-F2) 20260729: the "flagged for a future TfSCKART/FormsFacade
+    #     unification wave" TODO that used to end this entry is REPLACED by what
+    #     that wave actually did, because it landed PARTIALLY and the difference
+    #     matters to whoever picks this up next:
+    #       DONE  -- SckArtRemainderState now `: public SckArtState`, so
+    #                dCurrYield / iFTRTCount / iNeedRT / iInputCount /
+    #                iManualRejectCnt / iTesterType / sLOTSTATUS / iCurrentStatus
+    #                (+ iCurrent93KARTStep) are declared ONCE instead of twice.
+    #                Provably behaviour-neutral: both ctors were compared field by
+    #                field and already produced identical values.  Locked by
+    #                tests/test_w7_f2_sckart_state.cpp.
+    #       NOT DONE -- forms/fSCKART.h's TfSCKART still carries its own
+    #                iInputJamCnt/iFTRTCount/iInputCount/iCurrent93KARTStep, and
+    #                csystem.cpp's W7C1_TfSCKARTSeam / W7C2_TfSCKARTSeam each still
+    #                embed a private SckArtState plus shadow fields.  Golden has
+    #                ONE fSCKART object; this tree has several, so collapsing them
+    #                CHANGES BEHAVIOUR (a write through one instance would become
+    #                visible to readers of another) -- that is a semantic decision,
+    #                not a refactor, and W7-F2 deliberately did not take it.
+    #       FOUND    -- two real golden divergences surfaced by that diff
+    #                (iLOTSTATUS_L/_W/_R/_A constructed 0 vs golden 3/1/4/6;
+    #                iTesterType constructed 0 vs golden 1 for every CUSTOMER_CODE
+    #                except CC_SCK).  Reported and pinned by test, NOT reconciled,
+    #                per plan SS6-F2 / SS9-R9.  See the divergence blocks in
+    #                csystem.cpp (W7C1_TfSCKARTSeam) and Automation/SCK_ART.cpp
+    #                (SckArtState ctor).
     Automation/SCK_ART_Remainder.cpp
     # --- W5-Final-Auto9045 INTEGRATE: Automation/auto9045.cpp -- the whole OLP/
     #     GPIB host-command config-accessor layer (148 golden free functions,
@@ -1451,9 +1476,11 @@ add_library(ht9045_sm STATIC
     #     DoOutArm->DoOutArm_9045 / DoLoad / DoSortArm / bShuttleShake +
     #     InitLoadTask / InitOutArmTask / InitialDoLockUnloader /
     #     Initial_Auto_BinTray_Task / InitAutoColorTask / Magazine inits /
-    #     DoAuto3Magazine / NewDoAutoTrayEdgeCylinderLoop / DoAuto2 / DoAutoEmpty1 /
+    #     DoAuto3Magazine / NewDoAutoTrayEdgeCylinderLoop / DoAutoEmpty1 /
     #     DoInArm/OutArmTeachAlignmentProcess / SetFixTrayMiddleDtata /
     #     DoOneCycleFinishCheck / DoCleanOutFinishCheck).
+    #     AI(W906-W7-L1) 20260729: DoAuto2 REMOVED from this list -- it is now a
+    #     real body in asendic_Auto2.cpp (added just above), not a shim here.
     csystem_shims.cpp
     # --- W5-BarCode (BarCode front, 2026-07-11): real bodies for 18 of the 20
     #     TfBarCode_Shim methods (aHotPlateSubstrate.h:623-664).  7 parallel

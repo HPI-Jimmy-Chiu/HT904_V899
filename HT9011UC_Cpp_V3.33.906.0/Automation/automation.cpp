@@ -173,15 +173,18 @@ TfAutomation::TfAutomation(TComponent * /*Owner*/)
     gbAutomation = new TfAutomationVisibleFlag();
     OnLine = new TfAutomationEnableFlag();
     OnLine2 = new TfAutomationEnableFlag();
-    cbbOLPCommand = new TfAutomationTextField();
+    // AI(W906-W7-F2) 20260729: TfAutomationTextField/TfAutomationCheckFlag retired ->
+    // unified vclcompat TComboBox/TEdit/TCheckBox (see automation.h).  Same "" / false
+    // defaults, so the explicit .dfm Text assignments below still do all the work.
+    cbbOLPCommand = new TComboBox();
     cbbOLPCommand->Text = "0001";                    // golden automation.dfm: cbbOLPCommand.Text
-    chkViewComm = new TfAutomationCheckFlag();
+    chkViewComm = new TCheckBox();
     btnConnect = new TfAutomationEnableFlag();
     btUDPMap = new TfAutomationVisibleFlag();
     btUDPTemp = new TfAutomationVisibleFlag();
-    edinputIP = new TfAutomationTextField();
+    edinputIP = new TEdit();                         // AI(W906-W7-F2) 20260729: was TfAutomationTextField (retired)
     edinputIP->Text = "192.168.120.143";             // golden automation.dfm: edinputIP.Text
-    edinputport = new TfAutomationTextField();
+    edinputport = new TEdit();                       // AI(W906-W7-F2) 20260729: was TfAutomationTextField (retired)
     edinputport->Text = "6670";                      // golden automation.dfm: edinputport.Text
 
     // ---- event wiring (golden automation.dfm) ------------------------------

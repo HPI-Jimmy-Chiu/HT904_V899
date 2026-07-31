@@ -104,10 +104,48 @@ TfMain::TfMain()
     AutoCleanStringGrid    = new TStringGrid();
     // -- W906-AutoCleanCluster ADD (20260722) ----------------------------------
     mtPlate2               = new TfMainAutoCleanGrid();
+    // AI(W906-W7-F1fix2) 20260729: Pause() observation seams (see forms/fMain.h)
+    W906_PauseCallCount    = 0;
+    W906_PauseLastFunc     = "";
+    // AI(W906-W7-F1) 20260729: W7-F1 ADD -- "Wall 2" facade members
+    //    SECSGEM/uHGemHT9045.cpp derefs (plan SS6-F1) -- see forms/fMain.h for
+    //    the full per-member citations. Call-count seams start at 0; Sim
+    //    seams default to the golden "no hardware blocks it" success/true
+    //    value (see each member's own comment for why that default is
+    //    golden-faithful).
+    W906_cbSetupFileNameChangeCallCount = 0;
+    W906_Clarn_DataCallCount            = 0;
+    W906_BtnPauseClickCallCount         = 0;  // AI(W906-W7-F1fix) 20260729: seam for the bare-no-op-forward gap
+    W906_LoadRunModePictureCallCount    = 0;
+    W906_CanChangeSite_Sim              = true;
+    W906_BtnTrayEndClickCallCount       = 0;
+    W906_UpdateMainOperateModeCallCount = 0;
+    W906_LoadStartModePictureCallCount  = 0;
+    W906_LookForFileCallCount           = 0;
+    W906_ChangeTesterConnect_Sim        = 0;
+    W906_SetTemp_Sim                    = 0;
+    W906_ChangePasswordCallCount        = 0;
+    W906_FTClick_Sim                    = 0;
+    W906_RTClick_Sim                    = 0;
+    tSiteOnOff[0] = new TStringList();            // golden main.cpp:2229
+    tSiteOnOff[1] = new TStringList();            // golden main.cpp:2230
+    for (int iW7F1 = 0; iW7F1 < MAX_SOCKET_ROW * MAX_SOCKET_COL; iW7F1++)   // golden main.cpp:2242-2248
+    {
+        tSiteOnOff[0]->Add("0");
+        tSiteOnOff[1]->Add("0");
+    }
+    edSoakTime = new TfLotInfoEdit();             // golden main.h:733 (TEdit*)
 }
 void TfMain::LightOn() {}                                       // W6.4: CCD light sink (offline no-op)
 void TfMain::DebugOneCycleHotPlate(AnsiString /*sfunc*/) {}     // debug log sink (offline no-op)
-bool TfMain::Pause(AnsiString /*Func*/) { return false; }      // offline never pauses
+// AI(W906-W7-F1fix2) 20260729: Pause() keeps its golden-faithful offline return
+// (false -- offline never pauses) but now records that it RAN and with WHAT Func.
+// Without this, every forward INTO Pause() (BtnPauseClick's
+// Pause("BtnPauseClick"), golden main.cpp:6967, plus ~40 SM call sites) is
+// completely unobservable, so no test can distinguish "forwarded" from
+// "silently dropped the call". Zero behavioural change: the return value and the
+// absence of any real pause are untouched.
+bool TfMain::Pause(AnsiString Func) { W906_PauseCallCount++; W906_PauseLastFunc = Func; return false; }
 void TfMain::ShowTestHeadComp(bool /*bRefresh*/) {}
 void TfMain::ReStartAutoSiteMapping(bool /*bStart*/) {}
 // ---------------------------------------------------------------------------
@@ -207,4 +245,26 @@ AnsiString TfMain::PERSITETemperatureStrings()
 {
     return W906_PERSITETemperatureStrings_Sim;
 }
+// -- W7-F1 ADD: "Wall 2" facade method bodies -- see forms/fMain.h for the
+//    full per-member golden citations and offline-default rationale.
+void TfMain::cbSetupFileNameChange(void * /*Sender*/) { W906_cbSetupFileNameChangeCallCount++; }
+void TfMain::Clarn_Data(int /*Tag*/, AnsiString /*Msg*/) { W906_Clarn_DataCallCount++; }
+void TfMain::BtnPauseClick(void * /*Sender*/) { W906_BtnPauseClickCallCount++; Pause("BtnPauseClick"); }   // TRANSLATED:
+                                    // golden's own first body line (main.cpp:6967, inside the function at :6965).
+                                    // Two independent seams cover this one line: W906_BtnPauseClickCallCount
+                                    // (AI(W906-W7-F1fix) 20260729) proves BtnPauseClick RAN;
+                                    // W906_PauseCallCount/W906_PauseLastFunc (AI(W906-W7-F1fix2) 20260729) prove the
+                                    // FORWARD happened and carried golden's own "BtnPauseClick" argument -- the
+                                    // call-count seam alone cannot see the forward at all.
+void TfMain::LoadRunModePicture() { W906_LoadRunModePictureCallCount++; }
+bool TfMain::CanChangeSite(bool /*bNoIncludeHotplate*/) { return W906_CanChangeSite_Sim; }
+void TfMain::BtnTrayEndClick(void * /*Sender*/) { W906_BtnTrayEndClickCallCount++; }
+void TfMain::UpdateMainOperateMode() { W906_UpdateMainOperateModeCallCount++; }
+void TfMain::LoadStartModePicture() { W906_LoadStartModePictureCallCount++; }
+void TfMain::LookForFile() { W906_LookForFileCallCount++; }
+int  TfMain::ChangeTesterConnect(int /*Mode*/, bool /*Msg*/, bool /*bRemote*/) { return W906_ChangeTesterConnect_Sim; }
+int  TfMain::SetTemp(bool /*bAsk*/, double /*fWorkTemp*/, double /*fSoakTime*/) { return W906_SetTemp_Sim; }
+void TfMain::ChangePassword() { W906_ChangePasswordCallCount++; }
+int  TfMain::FTClick(bool /*bMan*/) { return W906_FTClick_Sim; }
+int  TfMain::RTClick(bool /*bMan*/) { return W906_RTClick_Sim; }
 TfMain *fMain = new TfMain();

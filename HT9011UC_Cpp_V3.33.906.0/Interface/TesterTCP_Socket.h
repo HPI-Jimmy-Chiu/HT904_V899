@@ -141,9 +141,17 @@ struct TesterTCPSocket_Memo
 //  neither TimerProcessTCPDataTimer nor SimulateBin ever reads/writes it
 //  (verified full read); left for a real UI wave.
 //---------------------------------------------------------------------------
-struct TesterTCPSocket_Combo  { int ItemIndex; TesterTCPSocket_Combo():ItemIndex(0){} };  // golden TComboBox* ->ItemIndex
-struct TesterTCPSocket_Panel  { AnsiString Caption; };                                    // golden TPanel*    ->Caption (ctor "--")
-struct TesterTCPSocket_Label  { AnsiString Caption; };                                    // golden TLabel*    ->Caption (ctor "")
+//  AI(W906-W7-F2) 20260729: TesterTCPSocket_Combo / _Panel / _Label RETIRED --
+//  vclcompat/Controls.h (reached here via this file's existing FormsFacade.h include)
+//  now owns the unified stock-widget stand-ins (plan D4), so the three arrays below
+//  name TComboBox / TPanel / TLabel directly.  Golden classes re-read for this change:
+//  golden Interface/TesterTCP.h:248 `TComboBox *cbSimulateBin[32];`, :249 `TPanel
+//  *plSite[32];`, :251 `TLabel *labOcr[32];`.  Zero behaviour change: identical
+//  defaults (ItemIndex 0, Caption ""), and the arrays are plain member arrays of the
+//  single TesterTCPSocket object -- never copied by value (TesterTCPSocketState's copy
+//  ctor and operator= are private and undefined) and never aggregate-initialised, so
+//  the unified types' vtable is inert here.  The ctor's explicit plSite[i].Caption="--"
+//  / labOcr[i].Caption="" loop (golden TesterTCP.cpp:49-59) is unchanged.
 
 //---------------------------------------------------------------------------
 //  TesterTCPSocketState -- the (single) golden TfTesterTCP instance's data
@@ -195,9 +203,9 @@ struct TesterTCPSocketState
                                               // above); real gate lives in untranslated
                                               // cTesterIF.cpp:580-617 / main.cpp:10879/28726.
     // -- widget stand-ins (golden TfTesterTCP own arrays, h:248-251, ctor :49-59) --
-    TesterTCPSocket_Combo cbSimulateBin[32];  // golden TComboBox* ->ItemIndex (ctor 0)
-    TesterTCPSocket_Panel plSite[32];         // golden TPanel*    ->Caption  (ctor "--")
-    TesterTCPSocket_Label labOcr[32];         // golden TLabel*    ->Caption  (ctor "")
+    TComboBox cbSimulateBin[32];              // golden TesterTCP.h:248 TComboBox* ->ItemIndex (ctor 0)
+    TPanel    plSite[32];                     // golden TesterTCP.h:249 TPanel*    ->Caption  (ctor "--")
+    TLabel    labOcr[32];                     // golden TesterTCP.h:251 TLabel*    ->Caption  (ctor "")
 
     TesterTCPSocketState();
     ~TesterTCPSocketState();
