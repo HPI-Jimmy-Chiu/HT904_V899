@@ -1249,3 +1249,128 @@ L1 的 HIGH-1「測試是恆真式」**比審查報告講的更廣**：`tests/te
 - 實測釘成 `-D_WIN32_WINNT=0x0601`（Windows 7）在 MinGW 下含 umbrella + `windows.h` 且保留 `ERROR_SHARING_VIOLATION`/`ERROR_LOCK_VIOLATION`（W7-A0 那個已知陷阱點）**`-Wall -Wextra` 乾淨、exit 0**，無 redefinition 警告（MinGW 用 `#ifndef` 包）。
 - **未落地原因**：要改根 `CMakeLists.txt`，而該檔目前在 round-2 的 L1 軌手上（surgical unwind），依 §8 碰撞矩陣不並行寫。待整合後補。
 - **⚠️ 未決（需使用者定案，已列入本輪回報）**：**V906 要支援哪些 Windows 版本？** 全部 V906 文件都沒記過目標 OS。VS2022 工具鏈的執行期地板是 Windows 7 SP1；若現場機台仍有 Windows XP，MFC/MSVC 產出根本跑不起來（要改用 v141_xp 等別的工具鏈），而這會在寫下 133 個表單的 MFC 程式碼**之前**就該知道。
+
+## 2026-07-31 — 交接記錄再次自我更正、獨立驗證定案（9 blockers）、`f61e25e` checkpoint、W7-L1 剩餘 recon 全數完成
+
+**設定**：主迴圈 Opus 5 + ultracode（xhigh + workflow 編排）。使用者指示「關於C++轉移，繼續未完成，workflow，火力全開」。
+
+### ⚠️ 上一節交接記錄又一次與事實不符（開工第一件事就推翻它）
+
+上一節（2026-07-29 同日續）記載「修正 workflow round-2 已派出」但沒有結果記錄，且其 RESUME 指示「下一輪可用 `Workflow({scriptPath})` 原樣重跑那支 script」。**照做會對一棵已經被修好的樹重做一次 round-2**。實際狀態（本節開工親自核對 mtime + journal + AI 標記）：
+
+- **round-2 三條軌全部寫了檔，時間 13:15～13:37**（DEVLOG 最後一次寫入是 13:07，所以完全沒記到）。tree 裡 `W906-W7-F1fix2` / `W906-W7-F2fix` / `W906-W7-L1fix` 標記俱在，共 15 個檔。
+- `journal.jsonl` 只有 **4 筆 `started`、0 筆 completed**。第 4 個 agent 與第 2 個 agent **cache key 完全相同** → 那是 F2 軌死掉後的 retry，隨即被砍。
+- 三條軌都是死在**自己的驗證階段**，不是寫檔前：F2 卡在 `prove_partC.py` 的擾動迴圈（`[Request interrupted by user]`）、F1 卡在 full ctest（10 分鐘 timeout, exit 143）、L1 卡在 plan doc 的編碼檢查。**驗證軌從未執行。**
+- **教訓（與上一節同一個病）**：`TaskStop` 成功不代表沒寫檔；而**「workflow 有派出」也不代表「有結果」**。交接前一律讀 `journal.jsonl` 數 `started` vs `result`，並用 mtime 對照，不要憑印象。
+
+### 真實 baseline（自己實測）
+
+增量 build `build_resume_verify_20260727` **exit 0**；`ctest --timeout 300 -j4` → **107/111**，失敗恰為既有 4 個環境漂移（`config_db`/`IniFiles`/`ini_helpers`/`config_loaders`）。→ round-2 的修正編得過、無迴歸，但**沒有任何東西證明它的測試在測東西**，而那正是全部 3 個 HIGH 的內容。
+
+### 獨立驗證 workflow（`wf_bee21b45-de1`，8 agent）→ 裁決 `COMMIT_AFTER_LISTED_FIXES`，9 個 blocker
+
+架構：4 個唯讀 reviewer（F1/F2/L1 + 跨切面）**平行** → 3 個突變證明 agent **嚴格序列**（樹 226MB 無法每 agent 複製，故一次只准一個擾動）→ 1 個 judge。每個證明 agent 須以 SHA-256 證明還原。
+
+**裁決核心一句話**：**翻譯的碼是好的；寫在它旁邊的宣稱有 9 處是錯的。** 沒有任何一項需要改動已翻譯的生產行為。
+
+- **最強正面結果**：golden vs ported `asendic_Auto2.cpp` = 各 691 行程式碼，**difflib 零個 non-equal opcode**（逐字精確翻譯）。也正因 golden 只有 749 行，才證明測試裡 `golden :761/:802/:837/:853` 這四個引用**在構造上不可能**是 golden 行號。
+- **突變測試抓到三輪 review 都沒抓到的東西**：
+  1. **`tests/test_w7_l1_auto2.cpp:669` 不具承載力（HIGH）**。`CHECK(seenC.find(50) != seenC.end(), "case 300 consumed ... Task=50")` 對 case 300 毫無約束——`Task=50` 在 `DoAuto2` 有三處，其中兩處在 case 40，fixture 早在 case 300 之前許多 tick 就走過。兩個獨立突變證實：把 case 300 自己的 `Task=50` 改成 `Task=1` 仍綠 46/0；完全不進 case 300 該斷言照樣 PASS。**與已修好的 L1-HIGH-1 同一個過度宣稱類別，落在修正輪沒碰的斷言上。**
+  2. **F2 的 PART C pin 有四個靜默漏洞（HIGH）**。最嚴重的是 **ctor body 賦值**（`{ iTesterType=1; }`）看不見——而 **body 賦值正是 golden 自己的寫法**（golden `SCK_ART.cpp:42`/`:113`），所以未來某波為了收斂分歧會寫的那一個 edit，剛好就是這個 pin 唯一看不到的。其次是**註解錨點碰撞**：needle 在註解與真 ctor 各出現一次，`src.find` 取到註解，而去註解的 helper 在 substr **之後**才跑。另外檔案自己寫的「改 ctor 名字會 FAIL LOUDLY（by design）」**是假的**。
+  3. **`Automation/SCK_ART.cpp:59-61` 寫「全樹恰好一個 reader…所有位置手動重數過」——實際有五個**，多出來的四個是這一波自己的 merge 造成的（`SckArtRemainderState` 改成繼承 `SckArtState`），而其中一處**寫入 `CosFunction.bAutoRetestGPIBmode`**，正是 `csystem.cpp` 另一處註解用來論證「ART 路徑離線惰性」的那個旗標。
+  4. **`docs/W7-UI-SKIPPED.md` 完全沒有 5 個程式位置所引用的章節**（grep F2 / W7-L1 / Auto2 全為 0）。因為 round-2 沒留報告，**那 5 條註解是那些暴露面目前唯一的記錄**。
+  5. **F1 的「22 個 override 有 9 個碰 fMain、5 個完全解鎖」實際是 7 與 3**：兩個 override 的 `fMain` 位置在 `/* */` 區塊註解內（golden `uHGemHT9045.cpp:5844`/`:5961`），先前的統計只過濾了 `//`。**這個數字驅動整個 UI bucket 計畫**，所以它錯得很要緊。
+- **三處矛盾用實證解決而非取平均**，其中最關鍵：F2 reviewer 認為那支突變 harness「確實證明了 pin 具承載力，我願意信到這個程度」；證明 agent 把它跑完，**它自己的 case 8 印出 `pin is NOT load-bearing` 並 exit 1**——原始那次在到達 case 8 前就被中斷，所以沒人知道。也因此**那次的「46/46 baseline」不可引用**（exe 13:36:10 比它驅動的 source 13:37:55 還舊）。
+- **樹完整性：乾淨**。golden 未被動；三個被擾動的檔逐位正確、無突變殘留。唯一程序瑕疵：F1 證明 agent 宣稱「從未擾動共用樹、只讀」，但 `forms/fMain.cpp` 是全樹最新 mtime——內容驗證完好，所以是**方法宣稱不實**而非損壞，但正是上一節記的 mtime-blindness 再現。
+
+### ✅ `f61e25e` — 30 檔 green checkpoint（採納 judge 的風險排序）
+
+judge 建議：既然 9 個 blocker 全是註解/文件/測試斷言層級、沒有一個動到出貨行為，**先把現況 commit 成綠色檢查點**，再把修正作為第二個 commit——而不是讓 30 個無備份的檔再穿越一輪 agent。同意並執行。
+
+- **是 30 檔不是 27**（25 modified + 5 new）。上一節與 `70ff42b` 的「27」已過時：round-2 之後又動了 `FormsFacade.h` 與 `forms/fSCKART.h`。
+- commit 前重跑：build **exit 0**、ctest **107/111**（同 4 個既有漂移）——因為證明 agent 的還原留下了晚於 baseline 的 mtime，必須把「應該還成立」變成「確實成立」。
+- staged 精確 30 條路徑、**0 條落在 ported tree 之外**；用裸 `git commit`（不加尾隨 pathspec，見既有 gotcha）。
+
+### ⚠️ SOFT_SIMULTE 事件（judge 抓到，7 個 agent 全都沒看到）
+
+`HT9011UC_Code_V3.33.899.0_.../MachineType.h:42` 今天 **09:31:00** 由 `//#define SOFT_SIMULTE` 改成 `#define SOFT_SIMULTE`（全機模擬旗標），103 秒後 `EXE/HT9045.exe` 於 09:32:43 重建，隨後 config 檔陸續被寫。該路徑**不在本場次開工的 git status 快照裡**，且它是 tracked+modified，所以任何寬鬆的 `git add` / `git commit -a` 都會把模擬旗標掃進 V906 commit。
+
+- **已向使用者確認：是使用者自己改的，保留。** 未做任何還原，僅確保排除在 V906 commit 之外（`git show --name-only` 驗證 0 條 V899/config 路徑）。
+- ⚠️ **提醒仍然成立：正式出貨 build 必須把該行改回註解。**
+- 三個證明 agent 的完整性檢查都只 scope 在 V906 ported tree，所以結構上不可能看到它——**跨樹的 commit 衛生要主迴圈自己查，不能外包。**
+
+### W7-L1 剩餘 recon（`wf_7b86235b-a78`，8 agent，~9,750 golden 行）——planner 推翻了我自己的派工前提
+
+7 個唯讀 recon（golden 側，故可與驗證 workflow 併行）+ 1 個 planner。planner 不只彙整，還**抓到 recon 報告本身的錯誤**：一個會造成 duplicate symbol 的 `int iWhichAuto;` 定義請求（實際已在 `aoutarm9045.cpp:179`，同一個 library）、一個在 `forms/` 下編不過的 `MAX_AUTO_TRAY` 維度、以及五個檔用三種不同名字請求同一個 seam。
+
+- **clone 假設半錯，而錯的那半很危險**（planner 自己 brace-match + difflib 量測）：`Color` vs 已落地的 `Empty` 是真 **67.2%** clone（Color recon 獨立量到 67.0%，兩法互證）；但 **`Loader` 與 `Empty` 按名字配對到零個函式**，最佳映射函式只有 12.1%，`Loader` 是結構原創、必須從自己的 golden 翻。兩個 `_RT` 檔與各自的非 RT 版**也是零配對**——`Loader_RT` 其實是 `Empty` 的變體（函式全配對但行級只 54.6%）。**若照原本「_RT 是 RT 對應檔的變體，去 adapt」派工，agent 會無物可 adapt。** 唯一值得利用的跨檔 clone 是 `Auto_RT::DoAutoTrayToRear` vs `Auto::DoAuto123TrayToRear` = 84.3%（名字不同，故 name-based clone 偵測會漏）。
+- **`asendic_Scanner.cpp` 排除**（五個互相印證的證據：不在 `.bpr` FILELIST 也不在 `.mak` OBJFILES、golden `asendic.h` 收錄七個手足 header 但不含它、top-level 函式全樹零 caller、翻它要**捏造四個未定義識別字**，其中兩個是真實 Z 軸的馬達目標位置且全語料無值）。→ **W7-L1 是 6 檔不是 7 檔**。
+- **dispatch**：Wave 0 序列化 facade 前置寫入（55 個去重成員，含 4 個新 `forms/` 檔）→ Wave 1 兩個真平行 agent（`Color` ∥ **`Loader`+`Loader_RT` 綁成一個 agent**，因為兩者有雙向呼叫循環）→ Wave 2（`Auto` ∥ `Auto_RT`）→ Wave 3（`asendic.cpp`）。
+- **§8 碰撞矩陣漏了四個重度共用檔**（`acatchtray_shims.{h,cpp}` / `canary_support.{h,cpp}` / `asendic.{h,cpp}` / `csystem_shims.{h,cpp}`），四個 recon 獨立回報同一個缺口。`canary_support.h` 一個檔就被約 141 個檔 include。
+- **`asendic.cpp` 裁決：翻，但排在 Wave 3，不是現在**。成本不是那 627 行，而是**行為反轉 + 強制 re-baseline**：golden `AutoCylinderUp` case 100 接受「mid 汽缸 disabled 時回 true」的謂詞為成功，但 case 201 的 non-ART 守衛要求**原始** `OnStatus()`（disabled 時為 false）——所以在預設離線全 disabled 配置下，真實 SM 會 `1→50→100→200→201→1` 永遠不收斂。**退掉 stub 等於把「總是瞬間成功」換成「永遠不成功」**，每個走 Auto lifter 路徑的既有測試都會停住。另有**參數順序陷阱**：第 2、3 參數 `(CylinderName, CylinderNameMid)` 在真實 body 內不對稱，而 golden 各 caller 不一致——`asendic_Auto2.cpp` 在**全部 12 個位置都是反的**，另三處在執行期依旗標對調。**ported `asendic_Auto2.cpp` 忠實複製了這個反轉，不可以「修正」它。** stub 回 true 時這個不對稱完全不可見。
+- **順帶查出兩件影響別波的事**：`asendic.cpp` 定義 `iLifterTask[3][10]` 與 `iAutoTask[3][12]`，而 golden `main.cpp:9136-9137` 以 `[3][7]` extern 宣告它們——**row stride 不一致**，故 `main.cpp` 的 42 個 `QueueTaskList` 註冊對第 0 列以上全部指到錯的 slot。**發佈一份「正確」宣告會是偽裝成 header 清理的行為變更**，必須丟給 W7-U 的 main.cpp 波，不可在此靜默修掉。
+
+### 本輪主迴圈做的裁決（recon 提出的 9 個 open question）
+
+1. **`fFixAICCD`** → 建 `forms/fFixAICCD.{h,cpp}` 並重指 `aoutarm_shims.cpp:110-112`（明確授權跨 A2 邊界）。理由：golden `asendic_Auto2.cpp` 一帶在托盤退出主路徑上**無條件 deref 一個 null 指標**，這是崩潰不是 stub 缺口；選 TU-local macro 只會留下同一缺口的第四份拷貝。Wave 0 是單一序列寫入者，A2 的並行碰撞顧慮不適用。
+2. **`TrayMoveStatus`** → **不加 Wave 0 seam**。Wave 3 的 L1b 會用真 body 取代它，先加後刪等於寫兩次還可能留下死 override；改為把受影響的 arm 明確記入 NOT COVERED（本專案既有慣例）。**與 `ShowErrorMessage` seam 的差別是原則性的**：後者永遠不會被真 body 取代，而 `canary_support.cpp` 恆回 `K_RETRY` 使全家族約 31 個 `K_SKIP` 復原臂**不可反證**，故那個 seam 必須加。
+3. **`DoTrayIDCheck` 離線回傳** → **true**，並在宣告處寫明。false 會把兩個 Keyence 臂都導進 golden 的「操作員手動移除」死路，使整段子流程離線不可達也不可測。
+4. **`asendic_Scanner.cpp`** → 確認排除（見上）。
+5. **§8** → 補上那四個共用檔。
+6. **`csystem.cpp` 歸屬** → **一律由序列 integrator（主迴圈）寫**，永不交給翻譯 agent；且所有 recon 引用的 `csystem.cpp` / `forms/fMain.cpp` 行號**必須在寫入當時重新推導**，不可沿用。
+7. **Empty canary 的兩個過時 `#if 0` gate** → 退，但排在 Wave 1 **之後**的小 follow-up。`asendic_Empty.cpp` 是全家族在讀的參考檔，在 agent 正讀它時改它會動到參考基準。**同一個 follow-up 順便修 `tests/test_w6_1_empty_canary.cpp:197`**——它帶著 `CHECK(done || cursor != 1 || steps == 200)` 這個被禁的恆真形狀，**是已 commit 的基準線裡就有的同一個缺陷**。
+8. **恆真禁令 + 掛鐘預算** → 照 recon 建議批准：只准掛鐘界限的 spin loop 斷言裸 `done`，不准 bounded-iteration + `|| steps == BOUND`；每檔掛鐘預算；且**每個 agent 必須真的套用每一個具名突變、看到那個 CHECK 變紅、還原、回報紅色輸出**。「寫有意義的測試」在這個檔家族上已經產出兩次恆真式，所以**可反證性的證明本身才是交付物，不是意圖**。
+9. **Sensor 三態慣例** → 中央批准一次並寫進 KNOWLEDGE：`IsOn()` 與 `IsOff()` 在 disabled 時**同時**回 false，而汽缸是相反慣例（`OffSensor()` 在 disabled 時回 **true**，且看的是與 `OffStatus()` 不同的旗標）。規則：**逐字翻譯每個 IsOn/IsOff 拼法，永不把 `IsOff()==false` 正規化成 `IsOn()`**，測試用顯式 Enable/Type 驅動。七個 recon 有六個各自獨立重新發現這件事 → 這就是它該進 KNOWLEDGE 而不是留在每個波腦袋裡的訊號。
+
+### 工具鏈：`_WIN32_WINNT` 定案（使用者已定 OS = Windows 10/11）
+
+實測釘牢：MinGW oracle 是 **MinGW.org MinGW32 gcc 6.3.0**，`--target=mingw32 --with-arch=i586`，**僅 32-bit**；其 `sdkddkver.h` 有 `_WIN32_WINNT_WIN7/WIN8/WINBLUE` 但**沒有 `_WIN32_WINNT_WIN10`**，上限 `0x0603`。→ **即使執行期目標是 Win10/11，也不可能在該 oracle 上釘 `0x0A00`**（上一節 RESUME 建議「應改為對 0x0A00 重新選擇」這句因此作廢）。
+
+**決定：兩個 oracle 都釘 `0x0601`（Windows 7）作為編譯期 API 地板。** 它是 MinGW oracle 支援的最高值、上一節已實測 `-Wall -Wextra` 乾淨（含已知陷阱點 `ERROR_SHARING_VIOLATION`/`ERROR_LOCK_VIOLATION`）、MSVC 接受，而編譯期地板不約束執行期目標。釘它的真正目的是：**目前兩個 oracle 看到的 API 面不同**（MinGW 預設 `0x0500` Windows 2000，MSVC 自動選最新），所以「某 API 只在一邊有宣告」會同時躲過兩邊。要用 Win10-only API 是另一個決定（得換 mingw-w64）。另註：上一節說根 `CMakeLists.txt` 被 round-2 的 L1 軌握著所以不能改，**已證實是假的**（該檔 mtime 09:45:02，round-2 從未開它）。
+
+### 🔖 RESUME（最新）
+
+- **已 commit**：`f61e25e`（30 檔 green checkpoint，build exit 0 / ctest 107/111）。**寫入佇列在本節結束時的狀態見下一則更新**。
+- **進行中**：`wf_98a905ad-23f` 修正 workflow——4 條零檔案重疊的平行軌（L1 測試 / F2 pin+宣稱 / F1 scope+probe / docs）→ 1 個序列 re-prover（做整合檢查 + 全套件 + 親自重跑三個承載力證明 + 抽查 derived facts + 找新的過度宣稱）。**每條軌的收斂條件都寫成「必須示範突變後變紅」**。
+- **下一步（依序）**：(1) 驗收修正 workflow 並 commit 第二個 commit；(2) **Wave 0**：55 個 facade 成員一次序列寫入（含 4 個新 `forms/` 檔 `fTrayForm`/`fOCR`/`fProductionInfo`/`fFixAICCD`、`canary_support` 的 `ShowErrorMessage` seam 與 7 個 `LAST_GENERAL_SET` 欄位、`acatchtray_shims` 的 `TfTrayMapping` 補完、以及 §8 增補）——**Wave 0 必須確認沒有 agent 正在擾動樹才能開始**；(3) Wave 1（`Color` ∥ `Loader`+`Loader_RT` 綁定）；(4) Wave 2（`Auto` ∥ `Auto_RT`）；(5) Wave 3（`asendic.cpp` L1a/L1b + 強制 re-baseline）；(6) Empty canary follow-up（兩個過時 gate + `test_w6_1_empty_canary.cpp:197` 恆真式）；(7) W7-U 已解除阻塞（MFC 14.44 已裝 + OS 已定 Win10/11 v143），plan §7 的 10 項可排；先做 `_WIN32_WINNT=0x0601` 落地與 W7-U0 binder 基礎。
+- **驗證基準**：build exit 0；ctest **107/111**，失敗恆為 `config_db`/`IniFiles`/`ini_helpers`/`config_loaders` 四個既有環境漂移。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 `fix/v899.32-pti`。
+- **勿圈入 V906 commit**：`config/*`、`setup.inf`、`.pti_frames/`、repo 根的 `SCRATCH_*.txt`/`_review_*.diff`/`build_svecdataitem_review/`、ported tree 內三個 `*_test_scratch/`，以及 **`HT9011UC_Code_V3.33.899.0_.../MachineType.h`（使用者刻意開著 SOFT_SIMULTE，正式出貨前要改回註解）**。
+- **執行模式**：使用者指示持續有效——全部 cpp/h/dfm 都要翻、workflow 火力全開、不逐波停下請示、重大問題跳過並最後條列；model/effort 依任務性質自動切換；安裝軟體不必先問。
+- **交接紀律（連續兩節都在這裡出錯，第三次請照做）**：寫 RESUME 前一律 (a) 讀 workflow 的 `journal.jsonl` 數 `started` vs `result`，(b) 用 mtime 對照工作樹，(c) 不要把「workflow 已派出」寫成「工作已完成」，也不要把 `TaskStop` 成功寫成「沒寫檔」。
+
+### 🔖 RESUME 更新（2026-07-31 關機交接，**取代上一則 RESUME 的「進行中」段落**）
+
+使用者要關機，主迴圈主動 `TaskStop` 中止修正 workflow `wf_98a905ad-23f`。**依既有紀律，停止後親自查證工作樹，沒有憑印象寫「沒寫檔」**——結果是**它寫了不少**。
+
+#### 事實（親自查證，非引用 agent 回報）
+
+- `journal.jsonl`：**4 個 `started`、只有 1 個 `result`**。→ 只有一條軌正式完成，另三條在寫完檔之後、回報之前被砍。
+- 工作樹相對 `f61e25e`：**10 個檔改動，+1206 / −174**。
+- **唯一完成的是 Track 3（F1，tag `W906-W7-F1fix3`）**：blocker 6 與 8 皆 CLOSED，且**兩個突變都實測變紅再還原**（把 facade `CanChangeSite` body 換成「忽略 seam、直接回傳參數」→ probe 41/1 紅在該行；換成 literal true → 同樣 41/1）。它全程用**隔離技術**（off-tree 變異源 + `ar` 換進 `libht9045_forms.a` 的**副本** + 獨立 exe），共用樹從未被擾動，`forms/fMain.cpp` SHA-256 前後一致。這一條可信度最高。
+  - 它另外回報一個**在它檔案範圍外的更正**（給 plan doc 的擁有者）：plan §10 item 15 把 13 個死的 `fSetup` 位置解釋成「行尾說明註解」，**數字（5 個 live）對但理由錯**——那整串 `DataItemOut` 呼叫根本不是 live，全部落在 `:5961` 開啟、`:6021` 關閉的 `/* */` 區塊註解裡。**與藏住 S7F25 的 `fMain` 位置是同一個區塊註解：一個盲點造成兩個錯數字。**
+  - 另更正：第三個 `CanChangeSite` 實作的 live call site 距離是 487 行（`:684`），不是「附近」。
+- **另三條軌（L1 / F2 / docs）寫了檔但無報告**，其修正內容**完全未經驗證**：
+  - L1：`tests/test_w7_l1_auto2.cpp` (+255)。`asendic_Auto2.cpp` **未出現在 modified 清單**＝它的突變確實還原了。
+  - F2：`tests/test_w7_f2_sckart_state.cpp` (+333)、`csystem.cpp` (+72)、`Automation/SCK_ART.cpp` (+57)、`Automation/SCK_ART_Remainder.h` (+12)。
+  - docs：`docs/W7-UI-SKIPPED.md` (+263)、`docs/KNOWLEDGE.md` (+42)。**但 `W7_UI_ARCHITECTURE_PLAN.md` 沒被碰**→ blocker 9 與四個決策記錄（D1 OS / D2 `_WIN32_WINNT` / D3 Scanner 排除 / D4 §8 增補）**都還沒落地在 plan doc**（D1~D3 的完整理由已寫在本 DEVLOG 上一節，不會遺失）。
+- **突變殘留檢查（最重要的安全檢查）：`csystem.cpp` 乾淨**。六個 seam 常數全部仍是 0（`iTesterType(0)` ×2、`iLOTSTATUS_L/W/R/A(0)`），`kFlexTesterType` / `SeamRenamed` / `SeamV2` / `(99)` / `(0+1)` 等殘留字樣 grep 全為 0，大括號平衡。→ F2 軌的還原有效，那 +72 行是真的註解修正。
+- 編碼閘：7 個受影響檔全部 **valid UTF-8 / 0 BOM / 0 U+FFFD / 有結尾換行**。
+  - ⚠️ 註：`test_w7_f2_sckart_state.cpp` 與兩個 `.md` 的大括號計數不平衡（+3 / +1），**這不是截斷訊號**——那些檔把 C++ 片段當「字串資料」放在裡面，裸大括號計數對它們沒有意義。真正的判準是編譯。
+- 殘留程序：**0**（無 ctest / cmake / g++ / test exe 殘留）。
+
+#### ⚠️ 交接時的未決狀態（下一場次第一件事）
+
+關機前主迴圈跑完了針對三個測試 target 的增量 build（header 改動觸發 `ht9045_sm` 大範圍重編）：**build exit 0、編譯錯誤 0**，三支 exe 直接執行結果 **`test_w7_l1_auto2` 46/0、`test_w7_f2_sckart_state` 46/46、`test_w7_f1_wall2_probe` 42/0，全部 exit 0**。
+
+⚠️ **但「編得過且全綠」不等於「修正具承載力」——那正是本場次全部教訓的核心。** 三條無報告的軌所寫的斷言**是否真的會在對應突變下變紅，仍然完全未經驗證**；上一輪 round-2 的樹同樣是編得過、107/111 全綠，卻藏著三個 HIGH。所以：
+
+- **`f61e25e` 是已知良好的檢查點**（build exit 0 / ctest 107/111）。
+- **工作樹目前這 10 個檔的修正內容「未驗證」**——不要當成已驗證，也不要直接 commit。
+- **下一場次開工順序**：
+  1. 重跑增量 build + **完整** `ctest --timeout 300 -j4`。基準：exit 0 / **107 之外的任何失敗都是迴歸**（既有 4 個漂移＝`config_db`/`IniFiles`/`ini_helpers`/`config_loaders`）。
+  2. **重跑三個承載力證明**（不要相信任何回報，Track 3 除外且連它也值得抽查）：(a) L1——把 `asendic_Auto2.cpp` case 300 的 `Task=50` 改成 `Task=1`，修正後**必須** 45/1 且紅在 case-300 那個 CHECK（修正前是 46/0 全綠）；(b) F2——在錨點註解後面附加文字＋把真 ctor 設成 golden 值**必須**變紅，realistic rename 的行為必須符合檔案現在的說法，六個 golden 直翻仍須各自變紅，而保值 reflow（多空格／前置逗號／list 中註解）仍須保持綠；(c) F1 已由 Track 3 實測完成。
+  3. 補完 docs 軌未做的部分：plan doc 的 blocker 9（§8 ownership exception + 清理過時 §10/§6 條目 + §12 gate 4 重新界定）與 **D1/D2/D3/D4 四個決策記錄**（理由見上一節，不必重新推導）。
+  4. 順手修 Track 3 回報的 plan §10 item 15 錯誤理由（區塊註解，不是行尾註解）。
+  5. 通過後 commit 第二個 commit，再進 **Wave 0**（55 個 facade 成員一次序列寫入）→ Wave 1（`Color` ∥ `Loader`+`Loader_RT`）→ Wave 2（`Auto` ∥ `Auto_RT`）→ Wave 3（`asendic.cpp`）。
+  6. 仍未做：`_WIN32_WINNT=0x0601` 落地到根 `CMakeLists.txt`（**沒有任何 agent 持有該檔，之所以還沒改是因為交接前不想在 agent 正在 build 時強迫 reconfigure**）。
+- **可原樣重派**：`...\workflows\scripts\v906-w7-blocker-fixes-wf_98a905ad-23f.js`。⚠️ **但不要整支重跑**——Track 3 已完成且其修正在樹上，重跑會讓它對「已修好的樹」再做一次。要嘛只重派 L1/F2/docs 三軌與 re-prover，要嘛先跑上面第 1、2 步確認哪些軌其實已經做完（三軌的檔都已寫入，很可能只差驗證）。
