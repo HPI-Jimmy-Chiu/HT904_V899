@@ -1105,6 +1105,31 @@ add_library(ht9045_sm STATIC
     asendic_Color.cpp
     asendic_Loader.cpp
     asendic_Loader_RT.cpp
+    # AI(W906-W7-L1-Wave2) 20260802: the W7-L1 Wave-2 landings -- the LAST two SM
+    # files of the asendic_* family.  Same library and Sim HAL substrate as the five
+    # units above; no new link dependency.
+    #
+    #   asendic_Auto.cpp     -- the Auto-tray (automatic sort-output) stack-feed SM
+    #     for Auto1..Auto6.  2,561 golden lines, of which ONE function
+    #     (DoAutoReceiveBinTray) is 2,189 lines across 56 cases.  ORDER MATTERS: it
+    #     must follow asendic_Color.cpp, whose ForTERAPOWERCheckColorSensor it calls
+    #     (golden asendic_Auto.cpp:363/:2029/:2074).
+    #
+    #   asendic_Auto_RT.cpp  -- the Auto1..Auto6 unloader-tray ROUND-TRIP
+    #     (auto-retest) variant.  Lands standalone: zero facade members and zero shim
+    #     retirements of its own (proven with `nm -g --defined-only` over all ten
+    #     archives).  It also SUPPLIES the two definitions that asendic_Auto2.h and
+    #     asendic_Auto.h already extern-declare as "owned by asendic_Auto_RT.cpp"
+    #     (InitUnLoadNewAutoTrayTask / DoUnLoadNewAutoToStack), so those stop being
+    #     orphan declarations.
+    #
+    # LANDED ATOMICALLY WITH the Auto track's two shim-body retirements
+    # (acatchtray_shims DoAutoReceiveBinTray, csystem_shims Initial_Auto_BinTray_Task),
+    # its bool -> void declaration correction, and the TfTrayMapping::DoCoverTrayID
+    # signature fix -- see the DEBT REGISTER banners.  That last one changes a mangled
+    # name, so this landing needs a FULL rebuild, not an incremental one.
+    asendic_Auto.cpp
+    asendic_Auto_RT.cpp
     csystem_predicates.cpp
     # AI(W906-W7-F0) 20260728: FormsFacade.cpp REMOVED from this library -- the
     # facade now compiles into the bottom-layer ht9045_forms target (see its

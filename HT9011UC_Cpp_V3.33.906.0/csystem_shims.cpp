@@ -121,7 +121,8 @@ void SetFixTrayMiddleDtata() {}
 // asendic_Loader.cpp's own case 1400.
 void InitOutArmTask()                {}   // golden aoutarm.h:34 (file-local static in aoutarm9045.cpp; this global is the linkable one InitAllProcessTask calls)
 void InitialDoLockUnloader(int /*iAuto*/) {}  // golden csystem.h:258 -- unloader lock cursor reset (real body W7)
-void Initial_Auto_BinTray_Task(int /*iAuto*/) {}  // golden asendic_*.cpp -- per-auto bin-tray cursor reset
+// Initial_Auto_BinTray_Task: RETIRED BODY (W7-L1 Wave 2 "Auto") -- real body now
+// in asendic_Auto.cpp (golden asendic_Auto.h:6).  Declaration kept in the header.
 // InitAutoColorTask: RETIRED BODY (W7-L1 Wave 1 "Color") -- real body now in
 // asendic_Color.cpp (golden asendic_Color.h:15).
 void InitialAuto3MagazineTask()      {}   // golden Magazine SM

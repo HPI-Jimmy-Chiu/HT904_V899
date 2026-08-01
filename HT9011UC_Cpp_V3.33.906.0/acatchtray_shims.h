@@ -244,7 +244,13 @@ public:
     bool DoLaserScanFromLoader(int eType, bool bStart, bool bCheck=false);  // golden
     bool DoAutoSkip(int eType);                  // golden -- offline false
     bool CheckRunAutoRetry(int eType);           // golden -- offline false
-    bool DoCoverTrayID(int iPos);                // golden -- offline false
+    // AI(W906-W7-L1-Wave2) 20260802: SIGNATURE CORRECTED -- golden cTrayMapping.h:674
+    // is `bool DoCoverTrayID(int iFunction, bool bAlarm=false);`, TWO parameters.
+    // The one-parameter stand-in was a shim bug: asendic_Auto.cpp passes the second
+    // argument, so case 1415 could not compile against it.  The default keeps all
+    // four pre-existing one-argument call sites source-compatible.  NOTE the mangled
+    // name changes (...Ei -> ...Eib), so this needs a FULL rebuild, not incremental.
+    bool DoCoverTrayID(int iPos, bool bAlarm=false);  // golden cTrayMapping.h:674 -- offline false
     bool DoCoverTrayIDKeyence(int iPos);         // golden -- offline false
     bool DoTrayIDKeyence();                      // golden -- offline false (case 4200, 0-arg)
     bool DoTrayIDKeyence2(int i);                // golden -- offline false
@@ -364,7 +370,7 @@ void InitDoOutArmTeachAlignmentProcessTask();    // golden -- offline no-op
 void NewRecordProcess(AnsiString S1, AnsiString S2="", AnsiString S3="");  // golden -- log sink
 
 //  per-Auto receive-bin-tray flow (golden asendic / cSortCT) -- offline: false
-bool DoAutoReceiveBinTray(int iWhichAuto);       // golden -- offline: no receive
+void DoAutoReceiveBinTray(int iWhichAuto);       // RETIRED BODY (W7-L1 Wave 2 "Auto"): real VOID body in asendic_Auto.cpp (golden asendic_Auto.h:8)
 //  per-Auto stack cylinder up/middle/lower helpers (golden asendic auto-cylinder)
 // AI(W906-W7-L1-Wave0) 20260801: PARAMETERS 2 AND 3 ARE NOT SYMMETRIC AND CALLERS
 // DISAGREE ABOUT THEIR ORDER -- do NOT "normalise" any call site.  Golden's real

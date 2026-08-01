@@ -1588,3 +1588,59 @@ Loader 軌交出了目前最強的保真證據：把譯出檔與 **cp950 解碼�
 - **Wave 3 必讀的成本警告（不變）**：退掉 `AutoCylinder*` 三個 `{return true;}` stub 的成本不是 627 行抄寫，而是**行為反轉 + 強制 re-baseline**——golden `AutoCylinderUp` case 100 接受「mid 汽缸 disabled 時回 true」為成功，case 201 的 non-ART 守衛卻要求**原始** `OnStatus()`（disabled 時為 false），所以預設離線全 disabled 配置下真實 SM 會 `1→50→100→200→201→1` 永不收斂。**退 stub 等於把「總是瞬間成功」換成「永遠不成功」。**
 - **勿圈入 V906 commit**：`config/*`、`setup.inf`、`.pti_frames/`、repo 根的 `SCRATCH_*.txt`/`_review_*.diff`/`build_*` 產物、ported tree 內三個 `*_test_scratch/`，以及 `HT9011UC_Code_V3.33.899.0_.../CosFunction.cpp`（使用者自己的 V899 工作）。
 - **執行模式**：使用者指示持續有效——全部 cpp/h/dfm 都要翻、workflow 火力全開、不逐波停下請示、重大問題跳過並最後條列；model/effort 依任務性質自動切換；安裝軟體不必先問。
+
+## 2026-08-02 — W7-L1 **Wave 2**：`asendic_Auto` + `asendic_Auto_RT` 落地，**asendic_\* 家族 SM 全部翻完**（`wf_83142f68-28f`）
+
+golden 2561 + 1047 = **3,608 行**；譯出 6 個新檔共 **7,297 行**。兩個 agent 一樣只寫自己的檔、零 tracked 檔被改，CMake 與 shim 退役全部交由 integrator 原子套用。
+
+### 兩檔都是 **zero-diff** 保真
+
+- `asendic_Auto.cpp`：以具名錨點 `TQPF_Timer ULDStackDelay[MAX_AUTO_TRAY];` 對齊，golden 2512 / ported 2512 行，**raw diff 0**（含註解與中文）；去註解正規化後 2355 vs 2355、diff 0。錨點以上 49 行是唯一非逐字複製的部分，**逐行交代**（36 個 include、`#pragma package(smart_init)`、一個 K&R implicit-int 的 `extern SaveUnloaderInfo(...)`（ISO C++ 非法，改 TU-local stand-in）等）。
+- 那個 2189 行 / **56 個 case** 的 `DoAutoReceiveBinTray` 全數到位，golden 的 `case 950 → 955` fall-through 保留並被測試釘住。
+
+**做得到的原因和 Wave 1 相同**：沒有任何 `#if 0`，缺 ported 家的符號一律走「錨點以上的 TU-local stand-in + `#define` 轉址」，**從不修改呼叫點**。
+
+### 整合（主迴圈執行）：兩個 body 退役 + 一個回傳型別更正 + **一個 shim 簽章 bug**
+
+| 檔 | 動作 |
+|---|---|
+| `acatchtray_shims.h` | `DoAutoReceiveBinTray` 宣告 `bool` → **`void`**（golden `asendic_Auto.h:8`）。不改會出現 "ambiguating new declaration" 硬錯誤 |
+| `acatchtray_shims.cpp` | `DoAutoReceiveBinTray` body 退役 |
+| `csystem_shims.cpp` | `Initial_Auto_BinTray_Task` body 退役 |
+| `acatchtray_shims.{h,cpp}` | **`TfTrayMapping::DoCoverTrayID` 簽章 bug**：shim 只宣告一個參數，golden `cTrayMapping.h:674` 是 `bool DoCoverTrayID(int iFunction, bool bAlarm=false);`——**兩個參數**。`asendic_Auto.cpp` case 1415 傳第二個引數，不修就編不過。加上預設值後四個既有單引數呼叫端維持相容（主迴圈親自 grep 確認：`acatchtray.cpp` ×1、`asendic_Color.cpp` ×1、`asendic_Loader.cpp` ×2） |
+
+⚠️ `DoCoverTrayID` 的 **mangled name 會變**（`...Ei` → `...Eib`），所以本輪**做的是全新 from-scratch build，不是增量**。
+
+Auto 軌另外把十個兄弟測試對「退役後 + 真 Auto obj」的 archive 重建並比對 stdout：**十個全部 exit 0、diff 0 行**，無需任何 re-baseline。Auto_RT 軌則用 `nm -g --defined-only` 掃過全部十個 archive 證明**它一個 shim 都不用退**，並實際 link 驗證零 duplicate symbol。
+
+### golden 缺陷 16 項，其中五項是真實的產線風險
+
+1. **`asendic_Auto_RT.cpp:949-952` `InitTrayZAutoTrayToWaitTask()` 重置的是「別人的」游標**。它名為 TrayZAutoTrayToWait 的 Init，卻去重置 `iTrayZLoadTrayToWaitTask`——**Loader 的**游標（golden `asendic.h:14`，定義在 `asendic_Loader.cpp:51`）——而它名義上服務的 SM 綁的是 `iTrayZAutoTrayToWaitTask[Pos]`。所以它 (a) 沒有重置自己該重置的，(b) 反而清掉另一台**活著的** SM 的游標。唯一呼叫端是 `CC_ASE_KaohSiung` 分支，**所以在 ASE 機台上，每一次 Auto 末盤偵測都會靜默重置 Loader 的 tray-to-wait 游標**。已翻譯逐字保留並**用兩個斷言釘死**（含一個突變：套用「顯而易見的修法」後測試變 177/3），確保未來沒有人「順手修正」。
+2. **`asendic_Auto.cpp:1921-1926` (case 1420) 馬達索引／盤位索引混用**。該區塊讀寫 `MOT[iWhichAuto].sUnloaderAlarmMsg`，但 `iWhichAuto` 是 0..5 的**盤位**索引，`MOT[]` 是**馬達 id** 索引，而 Auto car 馬達在 `MMAuto1_Car..` 完全不同的區段。結果是清掉一顆不相干的低編號馬達的警報字串，**操作員永遠看不到被退出的那盤真正發出的訊息**。同一區塊上面三行（`:1918-1920`）用的是正確的 `iMMAuto_Car[Pos]`。
+3. **`asendic_Auto.cpp` case 1415 對未排序清單做二分搜尋**。三個位置都是 `Clear(); LoadFromFile(...); Find(...)`，中間**沒有 `Sort()`**。VCL `TStrings::Find` 是二分搜尋，只在已排序清單上有定義——所以重複 bundle ID 的防呆會**靜默 fail-open**，重複 ID 被接受並附加。這是 golden 內部的不一致，不是 VCL 細節：`asendic_Loader.cpp:1408-1412` 對同一組 API 的用法是正確的（`Clear / CommaText= / Sort / Find`）。**同時更正了主迴圈 brief**——我在 brief 裡寫「這些位置是對剛 Sort() 過的清單呼叫」（那是 Wave 0 planner 針對 Loader 的正確描述），agent 自己回 golden 重新推導後發現對 Auto **不成立**，沒有照我的話走。
+4. **`asendic_Auto_RT.cpp` `iReceiveAutoTray` 宣告 `[3]` 卻用 `Pos`（0..5）索引** → Auto4/5/6 越界寫入。測試刻意全部用 `Pos<=2`，並在 NOT-COVERED 註明「沒有 crash 不代表 bug 不在」。
+5. **`asendic_Auto.cpp:1079-1080` (case 1050) 是一個對所有輸入都為真的條件**：`if(A!=(N+1) || A!=(N*2+1))`——除 N=0 外 `N+1 != 2N+1` 恆成立，所以沒有任何 A 能同時不滿足兩者。Barcode device-info 寫入與額外的計數遞增因此**每一輪都會觸發**，完全破壞「每 N 盤一次」的原意。`&&` 幾乎確定才是原意。
+
+其餘包括：兩處 `if/else` 兩臂**逐位元組相同**（SPIL 分支形同無效，而 golden 自己的註解說 SPIL 應該只准 SKIP）、`asendic_Auto_RT.cpp:983` 的 Part 引數寫死 `1` 而汽缸是 Pos-indexed（**下一個 case 的註解正好是「1-->Pos」，同一個 bug 隔一個 case 被修掉、這個被漏掉**）、四個游標陣列只初始化 `[0]`、一個終端 case 回 true 卻不重置自己的游標、以及對馬達 id 連號的假設。**全部逐字保留、逐項記錄。**
+
+### 驗收（主迴圈親跑，且本輪做的是 §12 閘 1 要求的 fresh from-scratch）
+
+- `cmake -S . -B build_w2_fresh` 全新 configure + build：**exit 0**、`error:` **0**、`grep -ic resolving` **0**。
+- 警告 **288**，相對 Wave 0 基準 284 的 +4 **全部**是 `asendic_Loader.cpp` 那四個 golden 缺陷的忠實重現；**`asendic_Auto.cpp` 與 `asendic_Auto_RT.cpp` 各自零警告**。
+- 完整 `ctest --timeout 300 -j4` = **111/115**（測試總數 113→115），`W7_L1_Auto` 與 `W7_L1_AutoRT` 皆 Passed，失敗恰為既有 4 個環境漂移。**零迴歸。**
+
+### 🔖 RESUME（最新）
+
+- **已 commit**：round-3(`cfe4e38`)、Wave 0+CanaryFix(`fcdd92e`)、Wave 1(`8d67b46`)、Wave 2（本則）。**寫入佇列在 commit 當下已清空。**
+- **驗證基準**：fresh build exit 0 / ctest **111/115**（失敗恆為 `config_db`/`IniFiles`/`ini_helpers`/`config_loaders`）；警告基準線 **288**。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 `fix/v899.32-pti`。
+- **W7-L1 進度**：`asendic_*` 家族的 **SM 檔全部翻完**——`Empty`(W6.1)、`Auto2`(Wave 前)、`Color`、`Loader`、`Loader_RT`(Wave 1)、`Auto`、`Auto_RT`(Wave 2)；`Scanner` 已裁定排除（死碼且無法編譯）。**只剩 `asendic.cpp` 的真 body（Wave 3）。**
+- **⚠️ Wave 3 是本專案目前已知最棘手的一波，開工前必讀**：
+  1. **成本不是 627 行抄寫，是行為反轉**。golden `AutoCylinderUp` case 100 接受「mid 汽缸 disabled 時回 true」為成功，但 case 201 的 non-ART 守衛要求**原始** `OnStatus()`（disabled 時為 false）。在預設離線全 disabled 配置下真實 SM 會 `1→50→100→200→201→1` **永不收斂**。**退掉 stub 等於把「總是瞬間成功」換成「永遠不成功」**，每一個走 Auto lifter 路徑的既有測試都會停住。
+  2. **受影響的測試現在比 planner 當初估計的多**：`test_w7_l1_auto2`、`test_w7_l1_auto`、`test_w7_l1_auto_rt`（Auto_RT 一個檔就有 ~25 個 `AutoCylinder*` 呼叫點），加上 acatchtray 與 csystem 的 Auto 路徑。
+  3. **參數順序陷阱在真 body 落地那一刻才會顯形**：`(CylinderName, CylinderNameMid)` 在真 body 內不對稱，而 `asendic_Auto2.cpp` 在**全部 12 個位置都是反的**，另有**五處**執行期依 `bARTUnloaderUseTwoCylin` 對調（`asendic_Auto.cpp:788`/`:819`、`csystem.cpp:6940`/`:6956`、`asendic_Auto_RT.cpp:783`）。這些都已逐字忠實翻譯，**不可以「修正」**。
+  4. **Wave 1/2 在錨點以上留下的 TU-local stand-in + `#define` 轉址要一併退役**（`bARTUnloaderUseTwoCylin`、`DoAutoTrayEdgeCylinderLoop`、`PushUnLoaderTrayInAverageTime`、`CheckOutArmZ` 等）。它們刻意全部放在錨點以上，所以退役**不會**破壞各檔的 zero-diff 保真證據。
+  5. **`DoLoaderTrayFeed`（golden 45 行）原本因為呼叫四個 Loader 擁有的函式而暫緩——Loader 已在 Wave 1 落地，這個理由消失了**，可一併處理。
+  6. 因為 L1a 與 L1b 都寫 `asendic.cpp`／`asendic.h`，**必須同一個 agent**，不可平行拆兩軌。
+  7. **re-baseline 是最容易出事的地方**：要修的是 fixture（把汽缸 Enable 起來、給真 Sim IO 位址），**不是把斷言改弱**。需要一個獨立審查軌專門查「有沒有人用弱化斷言換綠燈」。
+- **勿圈入 V906 commit**：`config/*`、`setup.inf`、`.pti_frames/`、repo 根的 `SCRATCH_*.txt`/`_review_*.diff`/`build_*` 產物、ported tree 內三個 `*_test_scratch/`，以及 `HT9011UC_Code_V3.33.899.0_.../CosFunction.cpp`（使用者自己的 V899 工作）。
+- **執行模式**：使用者指示持續有效——全部 cpp/h/dfm 都要翻、workflow 火力全開、不逐波停下請示、重大問題跳過並最後條列；model/effort 依任務性質自動切換；安裝軟體不必先問。

@@ -2653,6 +2653,42 @@ endif()
 
 add_test(NAME W7_L1_Loader COMMAND test_w7_l1_loader)
 
+# ===========================================================================
+#  W7-L1 Wave 2 -- asendic_Auto and asendic_Auto_RT (the family's last two SMs)
+# ===========================================================================
+# AI(W906-W7-L1-Wave2) 20260802: same link map as the Wave-1 targets above -- both
+# translated units live in ht9045_sm, and the RESCAN link group lets GNU ld re-scan
+# the archive set so the cprod<->cpublic<->cmydef ctor cross-references settle.
+# Both stay ABOVE the GLOBAL TEST TIMEOUT block: a test registered after it silently
+# gets no timeout.
+add_executable(test_w7_l1_auto
+    test_w7_l1_auto.cpp
+)
+
+target_link_libraries(test_w7_l1_auto PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w7_l1_auto PRIVATE ws2_32)
+endif()
+
+add_test(NAME W7_L1_Auto COMMAND test_w7_l1_auto)
+
+add_executable(test_w7_l1_auto_rt
+    test_w7_l1_auto_rt.cpp
+)
+
+target_link_libraries(test_w7_l1_auto_rt PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w7_l1_auto_rt PRIVATE ws2_32)
+endif()
+
+add_test(NAME W7_L1_AutoRT COMMAND test_w7_l1_auto_rt)
+
 # --- test_w7_f2_sckart_state: SckArt state merge proof + golden-divergence pins
 # AI(W906-W7-F2) 20260729: plan SS3-C4 / SS6-F2 / SS9-R9. Also placed ABOVE the
 # GLOBAL TEST TIMEOUT block for the same reason as the targets just above (a

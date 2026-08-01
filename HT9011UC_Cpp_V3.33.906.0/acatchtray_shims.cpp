@@ -75,7 +75,7 @@ bool TfTrayMapping::GetTrayDeviceCheckIsRemainIC()  { return false; }
 bool TfTrayMapping::DoLaserScanFromLoader(int, bool, bool) { return false; }
 bool TfTrayMapping::DoAutoSkip(int)                 { return false; }
 bool TfTrayMapping::CheckRunAutoRetry(int)          { return false; }
-bool TfTrayMapping::DoCoverTrayID(int)              { return false; }
+bool TfTrayMapping::DoCoverTrayID(int, bool)        { return false; }   // golden cTrayMapping.h:674 -- 2 params (see header)
 bool TfTrayMapping::DoCoverTrayIDKeyence(int)       { return false; }
 bool TfTrayMapping::DoTrayIDKeyence()               { return false; }
 bool TfTrayMapping::DoTrayIDKeyence2(int)           { return false; }
@@ -147,7 +147,9 @@ int iReadCIDAction       = 0;                   // golden -- ePortTotal at rest 
 //  consolidated W7 block -- not duplicated here.
 
 // ---- W7 ADD: per-Auto receive / stack-cylinder helpers (offline-safe) ------
-bool DoAutoReceiveBinTray(int /*iWhichAuto*/)        { return false; }   // offline: no receive
+// DoAutoReceiveBinTray: RETIRED BODY (W7-L1 Wave 2 "Auto") -- real body now in
+// asendic_Auto.cpp, and it is VOID (golden asendic_Auto.h:8); this stand-in
+// wrongly returned bool.  All 4 ported call sites discard the value.
 bool AutoCylinderUp(int, int, int, bool)             { return true;  }   // offline: reached
 bool AutoCylinderMiddle(int, int, int, bool)         { return true;  }   // offline: reached
 bool AutoCylinderLower(int, int, int, bool)          { return true;  }   // offline: reached
