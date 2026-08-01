@@ -105,31 +105,104 @@
 //      FTClick, RTClick (golden uHGemHT9045.cpp:2513/2241/2266 -- all live,
 //      non-commented calls).
 //
-//  AI(W906-W7-F1fix) 20260729 -- HOW FAR THIS ACTUALLY UNLOCKS TRANSLATION
-//  (corrects an over-broad "the 22 overrides can now be translated one by
-//  one" reading of the gate above): of golden's 22 HT9045Gem overrides, 9
-//  touch fMain at all (grepped directly against each override's own body,
-//  not estimated): ReloadParameter, LookForFile,
-//  S2F15_CheckNewEquipmentConstant, S2F15_UpdateNewEquipmentConstant,
-//  S2F42_Host_Command_Acknowledge, ProcessS7F23FromatReceipe,
-//  ProcessS7F25FromatReceipe (all in uHGemHT9045.cpp), plus AddSV
-//  (uHGemHT9045_SV.cpp) and AddEC (uHGemHT9045_EC.cpp). Only 5 of those 9
-//  touch ONLY fMain and are therefore FULLY unblocked by this file's facade
-//  additions: ReloadParameter, LookForFile, S2F15_CheckNewEquipmentConstant,
-//  ProcessS7F23FromatReceipe, ProcessS7F25FromatReceipe. The remaining 4 ALSO
-//  dereference fLotInfo/fSCKART/fNote/fSetup -- none of which gained a single
-//  member this wave -- so they remain blocked exactly as before:
-//  S2F15_UpdateNewEquipmentConstant (+fLotInfo, +fSetup),
-//  S2F42_Host_Command_Acknowledge (+fLotInfo, +fNote, +fSCKART -- one of the
-//  two largest override bodies, golden uHGemHT9045.cpp:1146-4189 -- corrected
-//  from :1146-4191 by AI(W906-W7-F1fix2) after brace-matching the body: :4189
-//  is its closing brace, :4190 a separator comment, :4191 already
-//  S5F6_ListAlarmData's own signature line), AddSV
-//  (+fLotInfo), and AddEC (+fLotInfo, +fSCKART, +fSetup -- the other largest,
-//  effectively all ~1912 lines of uHGemHT9045_EC.cpp). Do not plan a later
-//  bucket assuming all 22 (or even all 9 fMain-touching) overrides are ready;
-//  see docs/W7_UI_ARCHITECTURE_PLAN.md SS10 for the corresponding
-//  comment-filtered fLotInfo/fSCKART/fNote/fSetup member inventory.
+//  AI(W906-W7-F1fix) 20260729 / AI(W906-W7-F1fix3) 20260731 -- HOW FAR THIS
+//  ACTUALLY UNLOCKS TRANSLATION (corrects an over-broad "the 22 overrides can
+//  now be translated one by one" reading of the gate above).
+//
+//  FIRST, THE FAILURE MODE THAT PRODUCED THE FIGURES THIS BLOCK REPLACES, named
+//  so it stops recurring: fix's scan recognised only `//` comments and NEVER
+//  `/* */` BLOCK comments. It reported "9 of the 22 overrides touch fMain, 5 of
+//  them touch ONLY fMain and are therefore FULLY unblocked". Two of that 9 --
+//  ProcessS7F23FromatReceipe and ProcessS7F25FromatReceipe -- have NO live
+//  fMain dereference whatsoever: their only fMain sites sit inside block
+//  comments that OPEN at golden uHGemHT9045.cpp:5844 (S7F23 --
+//  fMain->cbSetupFileName at :5850 and :5852) and :5961 (S7F25 -- the same
+//  member at :5966 and :5968; that same block comment also hides 13 dead fSetup
+//  sites, :5993-6017). Those are not small comments: `/*` at :5844 closes at
+//  :5925, i.e. 82 of ProcessS7F23FromatReceipe's 101 body lines (:5827-5927) are
+//  commented out, and `/*` at :5961 closes at :6021, 61 of
+//  ProcessS7F25FromatReceipe's 80 body lines (:5944-6023). Both overrides are
+//  mostly-empty shells. Note the blind spot bit the PER-OVERRIDE count only, not
+//  the INVENTORY NOTE above: cbSetupFileName is live elsewhere, so the "28
+//  distinct / 26 live" spelling figures survive re-derivation unchanged.
+//
+//  RE-DERIVED THIS WAVE with a character-level comment-AND-string-aware scan of
+//  the cp950-decoded golden, over the brace-matched bodies (code-level braces
+//  only) of all 22 virtuals declared at golden uHGemHT9045.h:346-365 + :367-368,
+//  the real split of the 22 is 7 / 2 / 13:
+//   (A) SEVEN overrides LIVE-DEREFERENCE fMain: ReloadParameter (golden
+//       uHGemHT9045.cpp:371), LookForFile (:466),
+//       S2F15_CheckNewEquipmentConstant (:483),
+//       S2F15_UpdateNewEquipmentConstant (:692),
+//       S2F42_Host_Command_Acknowledge (:1146, body :1146-4189 -- corrected from
+//       :1146-4191 by AI(W906-W7-F1fix2), re-confirmed here by brace-matching:
+//       :4189 is its closing brace, :4190 a separator comment, :4191 already
+//       S5F6_ListAlarmData's signature), AddSV (uHGemHT9045_SV.cpp:55) and
+//       AddEC (uHGemHT9045_EC.cpp:52).
+//   (B) THREE of those seven touch ONLY fMain, so this facade surface is their
+//       whole form-side blocker -- and every member each one needs is present in
+//       forms/fMain.h today (checked member by member):
+//         ReloadParameter  -> LoadTestModePicture, UpdateMainOperateMode,
+//                             LoadRunModePicture, LoadStartModePicture
+//         LookForFile      -> cbSetupFileName, LookForFile
+//         S2F15_CheckNewEquipmentConstant -> CanChangeSite
+//       "Unblocked" means ON THE FORM-FACADE AXIS ONLY. ReloadParameter also
+//       calls SaveAllFile(GetLastOpenFN()) under a CUSTOMER_CODE gate (:373-374)
+//       and S2F15_CheckNewEquipmentConstant walks HGemPtr/LastSet; whether those
+//       are ready is a separate question this file does not answer.
+//   (C) The other FOUR of the seven also dereference forms with no facade member
+//       for them, and the earlier "+fLotInfo/+fSetup"-style lists UNDERCOUNTED
+//       that badly. Live NON-fMain form pointers, re-derived:
+//         S2F15_UpdateNewEquipmentConstant -- 8: fBarCode, fBinSel, fBuilder,
+//             fLotInfo, fSetup, fSpeed, fTemp_Set, fTesterTCP
+//         S2F42_Host_Command_Acknowledge -- 14: fAGV, fConfiguration,
+//             fContactCT, fFTPClient, fLotInfo, fNote, fObserver, fPassword,
+//             fProductionInfo, fSCKART, fShowBinSelect, fSortCT, fTemp_Set,
+//             fYieldMonitoring
+//         AddSV -- 8: fCleaning, fContact, fGroundMan, fLotInfo, fObserver,
+//             fShowBinSelect, fSmartDiagnostic, fTrayAssignment (PLUS 3 missing
+//             fMain members of its own -- see the fix2 block below)
+//         AddEC -- 7: fBinSel, fCleaning, fContact, fLotInfo, fSCKART, fSetup,
+//             fStartCondition (effectively all ~1912 lines of
+//             uHGemHT9045_EC.cpp)
+//   (D) TWO overrides are form-blocked WITHOUT touching fMain at all -- omitted
+//       entirely from every earlier list:
+//         S7F4_ProcessProgramAcknowledge (:4478) -- fLotInfo, fOffSet, fSetup
+//             live. (Its fMain->PPID / fMain->bNeedClearFile at :5311-5312 are
+//             the `//`-dead pair the INVENTORY NOTE above already excludes.)
+//         S125F4_LevelSettingChangeAcknowledge (:6176) -- fSecurity live.
+//   (E) THIRTEEN overrides have ZERO live form dereference of any kind, so no
+//       facade work gates them at all: AddAlarmList (:382), AddCEID (:437),
+//       AddReprot (:450), S5F6_ListAlarmData (:4191),
+//       S7F2_ProcessProgramLoadGrant (:4397), BOTH S7F6_ProcessProgramData
+//       overloads (:5326, :5605), ProcessS7F23FromatReceipe (:5826),
+//       S7F24_FormattedProcessProgramSendAcknowledge (:5929),
+//       ProcessS7F25FromatReceipe (:5943),
+//       S7F26_FormattedProcessProgramData (:6025), S14F4_Get2DID_BinCode
+//       (:6042), S110F5_RequestCustomerNameList (:6155).   7 + 2 + 13 = 22.
+//
+//  THE FORM-FACADE GAP AT LARGE (what every earlier list left out): those 22
+//  bodies live-dereference 29 DISTINCT form pointers. PORTED/forms holds 9 form
+//  headers (fAGV, fCleaning, fLotInfo, fMain, fNote, fOffSet, fSCKART,
+//  fShowMessage, fSortCT). Only 8 of the 29 have a header at all -- those 9
+//  minus fShowMessage, which no override touches -- so 21 form pointers have NO
+//  facade header whatsoever: fBarCode, fBinSel, fBuilder, fConfiguration,
+//  fContact, fContactCT, fFTPClient, fGroundMan, fObserver, fPassword,
+//  fProductionInfo, fSecurity, fSetup, fShowBinSelect, fSmartDiagnostic,
+//  fSpeed, fStartCondition, fTemp_Set, fTesterTCP, fTrayAssignment,
+//  fYieldMonitoring. And a header existing is not coverage: against the members
+//  these 22 bodies need, the 8 existing headers are missing fAGV 2 of 2,
+//  fCleaning 16 of 17, fLotInfo 31 of 39, fNote 4 of 4, fOffSet 1 of 1,
+//  fSCKART 20 of 25, fSortCT 2 of 2 -- fMain is the only nearly-complete one
+//  (3 of 32 missing). Those missing counts come from a NAME-PRESENCE scan of
+//  each header's code (a name absent from the header is certainly missing; a
+//  name present might still not be a usable member), so they are LOWER bounds.
+//  Do NOT plan a later bucket assuming all 22, or even all 7 fMain-touching,
+//  overrides are ready.
+//  UNKNOWN, deliberately not guessed: whether anything OUTSIDE the form layer
+//  (HGemPtr / SaveAllFile / LastSet / the SECS wire helpers) additionally blocks
+//  the 15 overrides in (D)+(E). This scan measured form dereferences only.
+//  See docs/W7_UI_ARCHITECTURE_PLAN.md SS10 for the per-form member inventory.
 //
 //  AI(W906-W7-F1fix2) 20260729 -- ONE MORE GAP BOTH BLOCKS ABOVE MISS, and it
 //  changes the AddSV entry: the INVENTORY NOTE is scoped to uHGemHT9045.cpp
@@ -316,7 +389,25 @@ int main()
     // -------------------------------------------------------------------
     // AI(W906-W7-F1fix2) 20260729: label corrected -- this target does NOT link
     // "via ht9045_secsgem only" (see the LINK LAYER header section).
-    check("fMain resolved (non-NULL global defined in ht9045_forms, reached from a ht9045_secsgem consumer TU)",
+    // AI(W906-W7-F1fix3) 20260731 -- TWO further corrections to this one line:
+    //  (a) "reached from a ht9045_secsgem consumer TU" was OVERSTATED. Measured
+    //      with nm on this TU's own object file: it has 18 undefined symbols, and
+    //      the intersection of `nm --undefined-only` on that object with
+    //      `nm --defined-only` on libht9045_secsgem.a is EMPTY -- zero Gem/SECS
+    //      symbols of any kind. Its only non-libc/libstdc++ externals are `_fMain`
+    //      (defined in libht9045_forms.a, `nm`: `_fMain B`) and vclcompat::
+    //      StringsProxy's AnsiString conversion operator. So this TU consumes
+    //      SECSGEM/uHGemHT9045.h as a HEADER and references not one
+    //      ht9045_secsgem SYMBOL. That is exactly the INCLUDE LAYER claim (the
+    //      two headers coexist in one TU), not a symbol-level "a SECSGEM consumer
+    //      reaches fMain" claim.
+    //  (b) The RUNTIME half is a TAUTOLOGY, kept deliberately. fMain is set by a
+    //      namespace-scope dynamic initialiser (`TfMain *fMain = new TfMain();`,
+    //      forms/fMain.cpp:270), so it can only be null if operator new returned
+    //      null. The value of this check is COMPILE-TIME + LINK-TIME (the symbol
+    //      exists and resolves); do NOT read its PASS line as behavioural
+    //      evidence about anything in forms/.
+    check("fMain symbol resolves: non-NULL global defined in ht9045_forms (LINK-TIME check; the runtime non-null is a tautology, see note above)",
           fMain != 0);
 
     check("W906_cbSetupFileNameChangeCallCount starts at 0", fMain->W906_cbSetupFileNameChangeCallCount == 0);
@@ -333,12 +424,31 @@ int main()
     fMain->LoadRunModePicture();
     check("LoadRunModePicture() increments its call-count seam", fMain->W906_LoadRunModePictureCallCount == 1);
 
+    // AI(W906-W7-F1fix3) 20260731: the two CanChangeSite calls below used to vary
+    // the ARGUMENT (true, then false) at the SAME TIME as the Sim seam, so the
+    // pair pinned only "the return is not a constant" -- NOT "the body reads the
+    // seam", which is what its label claimed. MEASURED in both directions with
+    // the isolated technique (a deliberately-broken forms/fMain.cpp compiled from
+    // an off-tree copy, ar-replaced into a COPY of libht9045_forms.a, linked into
+    // a separate exe -- the shared tree was never written):
+    //   * facade body replaced by `return bNoIncludeHotplate;` (ignores the seam
+    //     entirely and just echoes its argument) -> 42 passed, 0 failed. Every
+    //     assertion green against a facade that never reads the seam.
+    //   * facade body replaced by `return true;` -> 41 passed, 1 failed.
+    // The ARGUMENT is now HELD FIXED at `true` across both calls, so the only
+    // thing that varies is the seam -- the same shape the four other Sim seams in
+    // this file already use (ChangeTesterConnect(1,false,true) twice,
+    // SetTemp(true,25.0,0.0) twice, FTClick() twice, RTClick() twice). Both
+    // mutations above now go red. Golden's own call site passes BOTH argument
+    // values (uHGemHT9045.cpp:543-544); that both spellings COMPILE is covered by
+    // mimic_temperature_site_gate in PART A, which is where an argument-shape
+    // check belongs -- it is not something this runtime pair can pin.
     check("W906_CanChangeSite_Sim defaults true (golden's own 'no IC anywhere' fall-through)",
           fMain->W906_CanChangeSite_Sim == true);
     check("CanChangeSite(true) returns the Sim seam's value (true)", fMain->CanChangeSite(true) == true);
     fMain->W906_CanChangeSite_Sim = false;
-    check("CanChangeSite is test-DRIVABLE: setting the Sim seam false flips the return value",
-          fMain->CanChangeSite(false) == false);
+    check("CanChangeSite READS the Sim seam: argument held fixed at true, seam flipped to false -> return flips",
+          fMain->CanChangeSite(true) == false);
     fMain->W906_CanChangeSite_Sim = true;   // restore
 
     check("W906_BtnTrayEndClickCallCount starts at 0", fMain->W906_BtnTrayEndClickCallCount == 0);
@@ -406,8 +516,18 @@ int main()
 
     // edSoakTime: reused TfLotInfoEdit widget, ->Text read/written exactly
     // like the sibling edWorkTemperBase already in the facade.
+    // AI(W906-W7-F1fix3) 20260731: this round-trip is a RUNTIME TAUTOLOGY and is
+    // kept for its COMPILE-TIME value only. TfLotInfoEdit is a typedef for
+    // vclcompat::TEdit (forms/FormWidgets.h:188), whose ->Text is a PLAIN
+    // AnsiString data member inherited from TCustomEdit (vclcompat/Controls.h:264)
+    // -- no accessor, no forms/ logic, nothing between the write and the read but
+    // AnsiString's own operator= / operator==. What it does buy is real: fMain HAS
+    // an edSoakTime, it is a widget carrying a ->Text, and the read/write
+    // spellings golden uses compile against it. Do NOT read its PASS line as
+    // behavioural coverage. (Contrast the tSiteOnOff checks just above, which DO
+    // observe real ctor behaviour: a prefilled Count and a default string value.)
     fMain->edSoakTime->Text = AnsiString("5.0");
-    check("edSoakTime->Text round-trips (TfLotInfoEdit stand-in)",
+    check("edSoakTime->Text round-trips through a plain data member (TfLotInfoEdit stand-in; compile-time existence check, not behavioural coverage)",
           fMain->edSoakTime->Text == AnsiString("5.0"));
 
     // BtnPauseClick: TRANSLATED (forwards to the pre-existing Pause() virtual),

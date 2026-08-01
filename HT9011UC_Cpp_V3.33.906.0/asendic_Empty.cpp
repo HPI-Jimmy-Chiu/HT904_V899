@@ -29,10 +29,29 @@
 //      cprod.h/cpublic.h/cmydef.h (Prod/IniConfig/CosFunction/TrayForm/RunInfo/
 //                         Ld_UldDelayTime/TrayID/enums) -- W0-TAIL globals
 //
-//  GATED THIS WAVE:
-//    * SECS EventReport (DoLoadNewEmptyTrayToCar case 1) -> #if 0 // TODO(W7-SECS)
-//    * MyMessageBox-> (DoAutoEmptyReceive case 300 Empty/Color pre-alarm path)
-//      -> #if 0 // TODO(W6.x): VCL MyMessageBox; ShowUnloaderTrayMessage path kept
+//  GATES RETIRED -- AI(W906-W6.1-EMPTYfix) 20260801
+//  ------------------------------------------------
+//  This file used to carry two `#if 0` gates.  Both surfaces now EXIST in the
+//  ported tree, so both gates are gone and the golden code is compiled:
+//    * SECS EventReport (DoLoadNewEmptyTrayToCar case 1, golden :83-84).
+//      Ported home: SECSGEM/SecsEventReport.h `void EventReport(unsigned)` (a
+//      Sim-first entry point with observable state: g_SimLastEventReportCeid /
+//      g_SimEventReportCount) + SECSGEM/SecsEventType.h `extern struct
+//      ETypeStruct SECS_EVENT` whose NoCoverTray_Normal CEID is 244.  Both are
+//      already linked into every consumer of this SM (ht9045_secsgem).  This is
+//      the one retirement with an OBSERVABLE behaviour delta -- the gated build
+//      silently dropped a SECS event on the Empty-stack-full path.  Covered by
+//      tests/test_w6_1_empty_canary.cpp [7] (mutation-proven: re-gating goes RED).
+//    * MyMessageBox close-before-alarm (DoAutoEmptyReceive case 300, golden
+//      :1105-1106).  Ported home: acatchtray_shims.h `TMyMessageBoxShim
+//      *MyMessageBox` (Visible/Close()), already linked via ht9045_sm and used
+//      the same way by acatchtray.cpp.  Offline Close() is a no-op, so this
+//      retirement has NO behaviour delta -- see the NOT-COVERED register in
+//      tests/test_w6_1_empty_canary.cpp.
+//
+//  NOTHING IS GATED IN THIS FILE ANY MORE.  If you are copying this file as the
+//  pattern for another asendic_* translation: check whether the surface your
+//  TODO names already exists before you write the gate.
 //
 //  SOFT_SIMULTE is NOT defined: the #ifndef SOFT_SIMULTE (real-machine) branches
 //  are compiled, the #ifdef SOFT_SIMULTE branches are not -- i.e. the REAL logic
@@ -54,8 +73,14 @@
 #include "cpublic.h"
 #include "FormsFacade.h"        // fAGV (was AGV.h / VCL TfAGV)
 #include "canary_support.h"     // LastSet, __FUNC__, ShowErrorMessage, etc.
-// BCB6 also pulled: main.h, mymessbox.h, note.h, acatchtray.h, OCR.h, OCRInsp.h,
-//                   cMyDB.h, uHGemHT9045.h  -- all swapped/gated above.
+//AI(W906-W6.1-EMPTYfix) 20260801: added the three headers below when the two #if 0
+//  gates were retired -- they are the ported homes of the two surfaces golden pulled
+//  from uHGemHT9045.h (EventReport/SECS_EVENT) and mymessbox.h (MyMessageBox).
+#include "SECSGEM/SecsEventType.h"      // SECS_EVENT      (was uHGemHT9045.h)
+#include "SECSGEM/SecsEventReport.h"    // EventReport()   (was uHGemHT9045.h)
+#include "acatchtray_shims.h"           // MyMessageBox    (was mymessbox.h)
+// BCB6 also pulled: main.h, note.h, acatchtray.h, OCR.h, OCRInsp.h, cMyDB.h
+//                   -- all swapped above.
 
 void InitUnLoadNewEmptyTrayTask();                                              //kevin 20151102
 bool DoUnLoadNewEmptyToStack();                                                 //kevin 20151102
@@ -111,12 +136,13 @@ bool DoLoadNewEmptyTrayToCar()
                 {
                     if(Sen[SnEmptyIsFull].IsOn()==true)                         //jou 2015-08-25 Tray limit sensor at Color Tray
                     {
+                        //AI(W906-W6.1-EMPTYfix) 20260801: retired the #if 0 TODO(W7-SECS)
+                        //  gate -- SECSGEM/SecsEventReport.h now supplies a real
+                        //  EventReport(unsigned) and SecsEventType.h supplies
+                        //  SECS_EVENT.NoCoverTray_Normal (=244), so the golden call
+                        //  (golden :83-84) is restored verbatim, brace-less as golden.
                         if(IniConfig.bEnable_SECS_GEM==true)                    //JerryYang 20240318 : add
-                        {
-#if 0                       // TODO(W7-SECS): EventReport (uHGemHT9045 SECS event)
                             EventReport(SECS_EVENT.NoCoverTray_Normal);
-#endif
-                        }
 
                         ShowErrorMessage("MES1020", K_RETRY, MMEmpty_Car);
                         return false;
@@ -1140,10 +1166,13 @@ void DoAutoEmptyReceive()
                     if(bHasEmptyTrayPreAlarm==false)
                     {
                         bHasEmptyTrayPreAlarm=true;
-#if 0                   // TODO(W6.x): VCL MyMessageBox close-before-alarm (mymessbox.h)
+                        //AI(W906-W6.1-EMPTYfix) 20260801: retired the #if 0 TODO(W6.x)
+                        //  gate -- acatchtray_shims.h now supplies TMyMessageBoxShim
+                        //  *MyMessageBox (Visible/Close()), the same surface golden's
+                        //  mymessbox.h TMyMessageBox* exposes here, so the golden
+                        //  close-before-alarm call (golden :1105-1106) is restored.
                         if(MyMessageBox->Visible==true)                                                                                                         //Alarm 前若form有開啟先關閉
                             MyMessageBox->Close();
-#endif
                         iUnLoaderCount=8;                                                                                                                       // 必須不為0 Handler才不停機
                         str1.sprintf("Empty Tray is full with trays, Please take it off");
                         str2.sprintf("Empty上的Tray盤已滿,請取下Tray盤");

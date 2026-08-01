@@ -127,7 +127,13 @@
 // 9 fields than there are declaration sites.  (Plan SS3-C4 and forms/fSCKART.h both said
 // "four": the plan's four omit #1, fSCKART.h's four collapse #4 and #5 into one bullet.  The
 // union is five.  fSCKART.h has been corrected; the plan is a doc this track does not own --
-// flagged in docs/W7-UI-SKIPPED.md instead.)
+// flagged in docs/W7-UI-SKIPPED.md instead.
+// AI(W906-W7-F2fix2) 20260731: that last pointer is loose, so here is where it actually stands,
+// checked today.  docs/W7-UI-SKIPPED.md now DOES have a "## W7-F2-fix (2026-07-29)" section, but
+// it records the six seam initialisers, the D2 control-flow divergence, the stale
+// bUseTestSocketEE stand-in and vclcompat::TStringList::GetText -- NOT this four-vs-five count.
+// So the count discrepancy against docs/W7_UI_ARCHITECTURE_PLAN.md SS3-C4 is flagged HERE and
+// nowhere else; a doc-owning track still has to fix the plan.)
 // The historical text is kept below verbatim, unedited, for provenance.
 // ---------------------------------------------------------------------------------------------
 // Per hand-off instruction this is a NEW SIBLING file -- Automation/SCK_ART.h/.cpp (the already-
@@ -197,7 +203,9 @@
 //       holds for THIS file. Closing the golden :877 fidelity gap made SckArtRem_ClearLotInfo call
 //       the sibling's `SckArt_DoAutoSocketOff(st, true)` directly (see that call site), so this file
 //       now REACHES the bUseTestSocketEE read at golden :1340-1343. Two things follow, both
-//       deliberately left as they are and recorded in docs/W7-UI-SKIPPED.md under W7-F2-fix:
+//       deliberately left as they are and recorded in docs/W7-UI-SKIPPED.md section
+//       "## W7-F2-fix (2026-07-29)", item 3 (AI(W906-W7-F2fix2) 20260731: heading verified to
+//       exist and to carry this item; before 20260731 the section did not exist at all):
 //         (a) the read goes through the SIBLING's gate #3 TU-local stand-in
 //             (Automation/SCK_ART.cpp `W5SckArt_LS_bUseTestSocketEE`), NOT the real
 //             `LastSet.bUseTestSocketEE` -- which, verified this pass, HAS existed as a real field

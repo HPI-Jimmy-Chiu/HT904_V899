@@ -36,6 +36,8 @@
 
 ## ⚠ 翻譯中文註解亂碼（U+FFFD）— 根因 + go-forward 規則
 - **根因**：Read 工具把 Big5(cp950) 原始碼當 UTF-8 解→中文變 U+FFFD，agent「看到的」就是亂碼，故無法忠實重現中文註解。已中招：`cprod.cpp`(283)、`cpublic.cpp`(62)（皆只在註解，編譯不受影響；golden 唯讀樹仍有原中文於同 path:line 可反查）。其餘 67 檔乾淨。
+- **AI(W906-W7-DOCfix) 20260731 全樹重掃更正**：以 `errors='strict'` UTF-8 解碼 + 計數 U+FFFD 碼位掃過整棵 ported 樹（排除 `.git`/`build*`/scratch），**中招的是 3 個檔不是 2 個**，且全部是既有 commit 帶進來的：`cprod.cpp` 283 行 / 2,443 個 U+FFFD、`cpublic.cpp` 62 行 / 520 個、以及本節原本沒記的 **`tests/test_IniFiles.cpp` 1 行 / 4 個**（該行是一段描述 Big5 位元組的英文註解，寫的人把 Big5 位元組貼成了 U+FFFD；無害但同樣違反 S12 閘 4）。全樹合計 **2,967 個 U+FFFD、346 行、3 檔**。所以 S12 閘 4「全樹 = 0」從來沒有被達成過——見 plan S12 閘 4 的重新界定。
+    - **AI(W906-W7-DOCfix2) 20260801 複驗**：本次重跑同一個掃描（UTF-8 嚴格解碼，排除 `.git`/`build*`/scratch 與二進位副檔名，掃到 1,644 個非空檔），上面每一個數字都逐字重現：`cprod.cpp` 283 行 / 2,443、`cpublic.cpp` 62 行 / 520、`tests/test_IniFiles.cpp` 1 行 / 4，合計 2,967 / 346 行 / 3 檔。**唯一被拿掉的是原本那句「這 3 檔沒有一個出現在 W7-F1/F2/L1 那批 30 個檔案裡（該 30 檔全數乾淨）」**——「那批 30 個檔案」在任何文件裡都沒有可據以重數的清單，本次無法複驗，故不保留該宣稱（三個中招檔的身分本身不受影響）。
 - **go-forward 規則（翻譯 agent 必遵）**：翻含中文註解的檔時，**以 cp950 感知方式讀 golden**（`iconv -f CP950 -t UTF-8` 或 python `open(encoding='cp950')`）取得真中文，譯出檔註解寫成**正確 UTF-8**；若不便，則以**英文 gloss + golden file:line 出處**取代該中文註解（精確中文留在唯讀 golden）。**勿用 Read 工具直接搬中文註解**。
 - 補救（低優先，已追蹤）：對 cprod.cpp/cpublic.cpp 跑一次 cp950→UTF-8 註解轉碼修復（見 ROADMAP DEFERRED）。
 
@@ -60,6 +62,32 @@
 - 純邏輯/計算 class 可獨立 CMake target + g++ 編譯 + 簡單測試框架（或自寫 assert main）驗證，無需 VCL/硬體。
 
 ## Gotcha（踩過/要注意）
+
+> ### ⚠️ Gotcha 編號登記表（**本檔是唯一發號單位**，AI(W906-W7-DOCfix) 20260731 建立）
+>
+> **背景（真的踩到）**：2026-07-31 發現三份文件各自在配 gotcha 編號 —— `W7_UI_ARCHITECTURE_PLAN.md` S10 的第 7/8/9/10 項自行預留「新增 KNOWLEDGE gotcha #10/#11/#12/#13」，而本檔的 **#10 早就是另一則**（ported 行號腐爛），`DEVLOG.md:1214` 又另外預留 **#11** 給第三個無關主題（測試可失敗性）。三份文件對 10-13 的說法互不相同。
+>
+> **裁決**：編號**只在本檔配發**，其他文件（plan / DEVLOG / 報告）一律**引用**本表的編號，不得自行造號。
+>
+> **AI(W906-W7-DOCfix2) 20260801 更正 —— 本裁決原本的最後一句是假的**：原文寫「plan S10 第 7-10 項**已改成**引用本表」。那句在 2026-07-31 寫下的當下**不成立**，而且寫它的 `AI(W906-W7-DOCfix)` 波**根本沒有寫過那份 plan**——它在自己沒碰過的檔案上宣告了完成式。以 `git show f61e25e:...W7_UI_ARCHITECTURE_PLAN.md` 核對（本次親自跑）：當時 S10 第 7-10 項仍逐字寫著「**建議新增 KNOWLEDGE gotcha #10/#11/#12/#13**」，零回指——正是本裁決宣稱已經化解的那組碰撞。
+>
+> **真正改掉它的是 2026-08-01 的另一波 `AI(W906-W7-DOCS)`**（本次親自讀過 plan S10 現況）：第 7-10 項現在各自開頭標「⛔ 編號已被取代（改用 KNOWLEDGE gotcha #13 / #14 / #15 / #16）；內容仍未寫入」，第 10 項之後另有一段掛 `AI(W906-W7-DOCS) 20260801` 的統一狀態說明，指向本表的 #13-#16 並要求「後續引用一律用 KNOWLEDGE 的 #13-#16，不要再用本檔第 7-10 項寫的 #10-#13」。**該筆 plan 變更在本行寫下時仍未提交**（工作區狀態，由文件軌道持有）。裁決本身不受影響——發號權仍只在本檔。
+>
+> | # | 主題 | 狀態 |
+> |---|------|------|
+> | 1-9 | 見下方原文 | 已寫 |
+> | 10 | 散文/註解引用 **ported 樹行號**會腐爛 | 已寫 |
+> | 11 | **證明測試會紅（proof-of-failability）才算交付** | 已寫（本次新增；即 `DEVLOG.md:1214` 預留的那一則） |
+> | 12 | **Sensor 三態陷阱 + Cylinder 用相反慣例** | 已寫（本次新增） |
+> | 13 | `rc.exe` 的 `\xHH` 在 ANSI 字面值裡逐 byte 靜默毀字；`windres` 比 `rc.exe` 寬鬆 | **保留號，未寫**。證據在 plan S9-R2 / S9-R4；本次 DOCfix 波沒有能力獨立複驗（需實跑 `rc.exe`），故不代寫 |
+> | 14 | `aled.pas` `CreateLedBitmap` 的尺寸覆寫**看起來**會丟掉 `.dfm` 幾何，實測 1,840 個裡 0 個被丟棄 | **保留號，未寫**。證據在 plan S6-B1c |
+> | 15 | FP 驗證腳本必須用 runtime/volatile 輸入（常數折疊會給假結論） | **保留號，未寫**。證據在 plan S4-V5 |
+> | 16 | `.dfm` 直方圖抓不到**動態建立**的控制項（`TTMyTray256` 0 個 `.dfm` 實例卻被 `new`） | **保留號，未寫**。證據在 plan S4-V12 |
+> | 17 | **以剖析原始碼文字為手段的 pin，其註解剝除器必須「認得字串字面值」**，否則字串裡的 `//` 會靜默吃掉被 pin 的那段碼 | 已寫（AI(W906-W7-DOCfix2) 20260801 新增，證據自跑） |
+> | 18 | **「每個呼叫點都走到了」不等於「下對了命令」**——軌跡/覆蓋型斷言完全不約束致動器的**方向與極性** | 已寫（AI(W906-W7-DOCfix2) 20260801 新增，證據自跑） |
+>
+> 13-16 標「保留號、未寫」是刻意的：把號先鎖住可以消除碰撞，但**不冒充已驗證**。要寫進來的人請自己重跑證據再補正文，並把狀態改成「已寫」。
+
 1. **AnsiString 1-based vs std::string 0-based（最高風險）**：`AnsiString.Pos()`/`.SubString()` 是 **1-based**（全專案 ~1,910 處）。直翻成 `std::string`(0-based, npos) 會 off-by-one／切錯字串且**編得過**。翻譯時逐處改 index，或先做一個 1-based 相容的 AnsiString-like 包裝（`.Length()/.Pos()/.SubString()/.UpperCase()/.sprintf()` 同名同語意）降低風險。`.UpperCase/.LowerCase/.sprintf/.Trim/.Delete` 在 std::string 無對應，需 helper。
 2. **Big5 編碼**：906 原始碼是 Big5。翻譯出的 C++ 檔若含繁中字面值，需確保編譯器以正確 code page 讀（MSVC `/source-charset`；或避免在碼裡放中文、字串走外部資源/Big5 I/O 邊界）。執行期：外部 Big5 資料在 I/O 邊界轉碼，內部統一一種表示；加 U+FFFD 檢查。勿把 Big5 原始碼整檔轉 UTF-8（見記憶 ht9045-big5-edit-corruption）。
 3. **CSV 名稱式解析**：`database.cpp`(SetMOTTableNo/SetIOTableNo) 用 **header 名稱**(AnsiPos、last-match) 解析 Mot_Table/IO_Table，**非固定位置**；**Mot_Table 實體欄序 ≠ emot* enum 序**(database.cpp:2047-2079)。翻譯時務必做名稱式解析，勿位置式（會 silently 誤對馬達/IO）。真實 header：Mot_Table 29 欄、IO_Table 15 欄。
@@ -79,6 +107,56 @@
     - 寫「已驗證」「verified this wave」「grepped the whole tree」這類**總括式宣稱前先想清楚它可不可證**——`FormWidgets.h` 就因為掛了一句「本波所有 golden 引用皆已 grep 驗證」，結果其中一條是錯的，整句宣稱反而變成負資產。**寧可不寫總括宣稱，只寫你真的逐條查過的那幾條。**
     - 派修正波次時，prompt 一律加：「你寫的替代文字必須是你親自查證過的，不要用一個未驗證宣稱換掉另一個」。實測有效但**不足以**擋掉行號腐爛，所以要靠上面的「ported 樹不寫行號」從源頭消除。
     **另一個相關的教訓（審查建議本身也可能是錯的）**：`LedRender` flood-seed 事件中，第一輪審查的「建議修法」本身誤讀了 golden（沒注意 `FloodFill` 在 `CreateLedBitmap` 內、緊接風格尺寸賦值之後），主迴圈照抄進修正指示，結果造成真迴歸（1,840 個 LED 實例中 262 個偏離，一個實例直接渲染出 0 像素）。**審查的「發現」與「建議修法」要分開對待**：發現通常可信（它是從證據來的），建議修法必須自己重新從 golden 推導一次才能派工。
+
+11. **交付物是「證明測試會紅」，不是「測試通過」（proof-of-failability；2026-07-29/31 反覆踩到，已定紀律）**：在**同一個檔案家族**上，要求 agent 寫「有意義的測試」**兩次都拿回恆真斷言**，而且 agent 兩次都相信自己照做了。第二次前主迴圈已明確加碼要求「要真的 pump 狀態機並斷言全域變數，不要只呼叫函式看回傳」，agent 也回報照做——**做出來的仍是恆真式**。
+    **所以「要求測試有意義」這個指令形狀本身無效**。唯一實測有效的形狀是把**證明**列為交付物：
+    - 指定一個具名 mutation（例：把某個 `Task=50` 改成別的值、把某個 ctor 改名、把某個 initialiser 由 0 改成 3）；
+    - 要求 agent **實際套用**它、**跑**測試、貼出**那一條具名斷言**變紅的輸出；
+    - 還原 mutation，並在回報裡同時附上 mutation 內容 + 紅的輸出 + 已還原的確認。
+    「綠色的測試套件」不是任何東西的證據；測試名稱也不是。**只有看過它紅過，才知道它在測東西。**
+    **推論（同樣重要）**：連「這個測試是 load-bearing」這種**註解**都不可信 —— 有一輪某測試檔自己寫著「把 ctor 改名會讓這個測試大聲失敗（by design）」，mutation agent 真的改了 ctor 名，測試**維持綠色**。
+    **這個缺陷已經在已 commit 的基線裡，不只是風險**：`tests/test_w6_1_empty_canary.cpp` 裡 `DoLoadNewEmptyTrayToCar` 那個 200 次上限收斂迴圈後面的第二條 `CHECK`（AI(W906-W7-DOCfix2) 20260801 把原本寫在這裡的 ported 行號 `:197` 改成符號定位，本條自己就在違反 gotcha 10；當日重讀確認該 `CHECK` 仍在），就是被禁止的形狀：
+    ```
+    for (steps = 0; steps < 200; ++steps) { if (DoLoadNewEmptyTrayToCar()) { done = true; break; } }
+    ...
+    CHECK(done || iLoadNewEmptyTrayToCarTask != 1 || steps == 200, "...");
+    ```
+    離開那個 bounded loop 只有兩條路：`break`（則 `done==true`）或迴圈跑完（則 `steps==200`）。所以 `done || steps == 200` **恆為真**，第二個 disjunct 完全不影響結果 —— 這條 `CHECK` **不可能失敗**。掃新測試時就用這個判準：**在 bounded loop 之後，把 loop 的終止條件本身寫進斷言的 disjunction，就是恆真式。**
+
+12. **Sensor 是三態、Cylinder 用相反慣例（兩者都會讓「停用」被讀成「有料」；本專案七路獨立 recon 有六路各自重新發現同一件事，故收進本檔而不是留在每一波的腦袋裡）**：
+    - **`TMySensor`（golden `mysensor.cpp`）**：`IsOn()`(:79) 與 `IsOff()`(:119) **兩者在 `Enable==false` 時都 `State=-1; return false;`**。所以一顆停用的 sensor **同時滿足** `IsOff()==false`（讀的人常當成「有料/到位」）**和** `IsOn()==false`（讀的人常當成「沒料」）。`IsOn()`/`IsOff()` **不是互補**，它是三態（on / off / disabled）被塞進 bool。
+    - **`TMyCylinder`（golden `mycylin.cpp`）用相反慣例，而且看的是不同旗標**：`OnSensor()`(:151) / `OffSensor()`(:169) 開頭是 `if(Enable==false) return true;`——停用回 **true**；而 `OnStatus()`(:123) / `OffStatus()`(:190) 是 `if(OnSenEnable){...} else return false;` / `if(OffSenEnable){...} else return false;`——停用回 **false**，**且看的是 `OnSenEnable`/`OffSenEnable` 這組不同的旗標，不是 `Enable`**。（AI(W906-W7-DOCfix2) 20260801：本行原本把它寫成 `if(OnSenEnable==false) return false;`，那個形狀在 golden 裡不存在——語意相同但**不是逐字**，已改成實際形狀；本節 golden 引用 `mysensor.cpp:79/:119`、`mycylin.cpp:123/:151/:169/:190`、`asendic.cpp:529-560/:661-662/:720` 皆已於當日重新以 cp950 解碼 golden 逐行複核。）
+    - **真的咬過人**：golden `asendic.cpp` 的 `AutoCylinderUp` 在同一支狀態機裡把兩種慣例混用——`case 100`(:661-662) 走 predicate `AutoCylinderMidIsOn`(:529-560，`Enable==false` 回 **true**)，`case 201`(:720) 卻改要 raw 的 `Cylinder[CylinderNameMid].OnStatus()`(停用回 **false**)。**結果：在預設離線全停用設定下這支 SM 會在 `1→50→100→200→201→1` 之間永遠繞圈、永不回 true。** 詳見 `W7-UI-SKIPPED.md` 的 W7-L1 段。
+    - **拘束性規則**：(a) 翻譯時把每一個 `IsOn`/`IsOff`/`OnStatus`/`OffStatus`/`OnSensor`/`OffSensor` 的**拼法逐字保留**，**絕不**把 `IsOff()==false` 正規化成 `IsOn()`（或反之）——那在 disabled 態下是不同的值；(b) 寫測試時**明確設定 enable/type**餵資料，不要依賴「預設全停用」跑出來的結果，否則斷言測到的是 disabled 分支而不是邏輯。
+
+> （13-16 依登記表為「保留號、未寫」，故下方正文由 17 接續，不是漏編。）
+
+17. **以「剖析原始碼文字」釘住值的 pin，註解剝除器必須認得字串字面值，否則字串裡的 `//` 會靜默吃掉被 pin 的那段碼（2026-08-01 本波自跑證實）**：
+    當某個常數只活在某個 TU 的 file-`static` 物件裡、任何測試 TU 都指不到它時（本專案 `csystem.cpp` 的兩個 SckArt seam 正是如此），唯一可用的守門形式就是「讀該檔的原始碼文字、按符號名找到那個初始式、比對它的值」。這種 pin 的正確性**完全等於它的詞法正確性**。
+    - **洞在哪**：只認「`//` 到行尾」的剝除器，一碰到**字串字面值裡面的 `//`**，就會連同該行後面的真程式碼一起刪掉。被刪掉的若正好是「ctor body 裡改寫該欄位」那一行，pin 就看不到改寫，於是回報「初始式仍是 0」而**維持綠色**，但物件實際建構出來的值已經變了。
+    - **實測（本波自跑，全部在 scratch 目錄內；受管檔與 `build/` 皆未被寫入）**：把 pin 測試與 `csystem.cpp` 各複製一份到 scratch，對 seam ctor 加上**兩個只差一個 `/`**、`g++ -fsyntax-only` 都 exit 0、建構值**完全相同**（兩者 `iTesterType` 都變成 1）的變異：
+      ```
+      A:  ...iOutputJamCnt(0){ core.sLOTSTATUS = "/x";  iTesterType = 1; }
+      B:  ...iOutputJamCnt(0){ core.sLOTSTATUS = "//x"; iTesterType = 1; }
+      ```
+      **字串感知**的剝除器（CODE/LINE/BLOCK/DQ/SQ 狀態機）：未變異 `PASS 46/46`、A `FAIL 1/46`、B `FAIL 1/46` —— 洞是關的。
+      同一份測試，**只把該剝除器的 DQ/SQ 兩個狀態拿掉**（其餘一字不動）：未變異 `PASS 46/46`、A `FAIL 1/46`、**B `PASS 46/46`** —— 同一個錯誤，只因為字串裡多了一個 `/`，就從紅變綠。
+    - **一般化（真正要記住的那一句）**：**任何以文字剖析當閘門的機制（pin、census、grep 清點、`.dfm`/`.rc` 產生器的 IR），只要它對字串與註解的詞法判斷不正確，就是一道剛好開在別人會踩的位置上的洞。** 這與 plan S10-20 提的「只過濾 `//` 會漏掉 `/* */` 區塊註解」是同一族缺陷的兩面：前者**少看**了註解，後者**多看**了不是註解的東西。寫這類閘門時，`//`、`/* */`、`"..."`、`'...'`、跳脫字元要一次做齊。
+
+18. **「每個呼叫點都走到了」不等於「下對了命令」——軌跡/覆蓋型斷言完全不約束致動器的方向與極性（2026-08-01 本波自跑證實；對機台控制翻譯是安全相關的盲點）**：
+    `tests/test_w7_l1_auto2.cpp`（`asendic_Auto2.cpp` 的落地測試）在 `f61e25e` 的版本有 46 條斷言（本波實跑，輸出 `RESULT: 46 passed, 0 failed`），其中代表性的一條字面寫著「trajectory covers 50,100,200,201,300,400,410,420 (all AutoCylinder\* call sites reached)」——它證明的只有「狀態機走到了那些 case」。
+    - **實測（本波自跑）**：把 `asendic_Auto2.cpp` 複製到 scratch 變異、off-tree 編譯後 `ar r` 進 `libht9045_sm.a` 的**副本**再連結出獨立 exe（`build/` 內的封存檔未被改動），對同一支 f61e25e 測試跑三個彼此獨立的變異：
+
+      | 變異 | 內容 | 結果 |
+      |---|---|---|
+      | M1 極性反轉 | 輸送帶 `SW[SwACAuto2]` / `SW[SwACAuto2CW]` 的所有 `On();` ↔ `Off();` 對調 | `46 passed, 0 failed` |
+      | M2 方向對調 | 全檔氣缸 `.Push()` ↔ `.Pop()` 對調 | `46 passed, 0 failed` |
+      | M3 動作刪除 | 刪掉全部 `MOT[...].ClearTray(__FUNC__);` 呼叫 | `46 passed, 0 failed` |
+
+    - **M3 的數量就地更正**：交派給本波的敘述說是「四個 `MOT[].ClearTray()` 呼叫」；本波實際計數是 **19 個**（`asendic_Auto2.cpp` 全檔非註解行的 `MOT[...].ClearTray(__FUNC__)` 呼叫點），**19 個全刪仍然全綠**。結論不變，證據更強。
+    - **為什麼綠得下去（本波逐條看過那 46 條）**：沒有任何一條斷言讀 `SW[...]` 或 `Cylinder[...]` 的致動器狀態，也沒有任何一條觀察 SUT 自己呼叫的 `ClearTray`——測試裡出現的 27 處 `ClearTray` 全是它自己的 fixture 清場；全檔僅有的 2 條 `.Off()` 斷言，對象都是計時器 `DoAuto2Delay`，不是輸出點（第 3 處 `.Off()` 在註解裡）。
+    - **拘束性規則**：翻譯 `asendic_*` 這一族（以及任何運動/IO 序列）時，測試至少要對**每一個被命令的輸出點**斷言「哪一個點、被設成哪一個狀態、在哪一個 case」，而不是只斷言 case 走過。**軌跡覆蓋當起點可以，當驗收不行**——照 gotcha 11 的形狀，交付前先拿「反轉一個輸出點的極性」當 mutation 跑一次；不會紅，就表示這件事根本還沒被測到。
+    - **狀態聲明（不冒充他人成果）**：上述量測是對 `f61e25e` 的**已提交**版本做的。本輪另有軌道正在補這些洞，其成果不在本條的複驗範圍內；本條記的是教訓與證據，不是完成度。
 
 ## 接縫（HAL）與 64-bit 跨位元
 - 即時硬體（運動/IO/互鎖/ATC）保留 native C++（既有已驗證 wrapper），翻譯後的 C++ **同程序直接呼叫**（無 P/Invoke、無 managed 邊界）。「interface 切割」＝抽象基底 + Sim/Real 子類。

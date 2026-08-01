@@ -317,3 +317,381 @@ a wave contracted to zero behaviour change. Documented at the call site
 untouched) and here, per plan S12.6, so the next reader finds both: that
 golden's own behaviour here was already garbage, and that the ported
 tree's flavor of garbage shifted.
+
+---
+
+## W7-F2-fix (2026-07-29)
+
+Review-track disclosures for W7-F2 (TU-local seam retirement + SckArt state
+consolidation), recorded here per plan S12.6. **Four** code/test sites cite this
+heading; until 2026-07-31 it did not exist, because the W7-F2-fix pass was
+interrupted before it wrote the doc side. **AI(W906-W7-DOCfix) 20260731**: the
+heading keeps the wave's own date; every figure below was re-derived from the
+tree and from GOLDEN on 2026-07-31, not transcribed from the wave's report.
+
+**AI(W906-W7-DOCfix2) 20260801**: the opening word was "Five"; it is four.
+Re-counted this run with a whole-tree scan of every `.c`/`.cpp`/`.h`/`.hpp` for
+the literal `W7-F2-fix`: **4 lines in 3 files** -- `csystem.cpp` x1,
+`Automation/SCK_ART_Remainder.h` x2, `tests/test_w7_f2_sckart_state.cpp` x1.
+Same count at `f61e25e` (`git grep`, 4 lines / 3 files), so this was never five.
+The sibling W7-L1 section's "One code site cites this heading" was re-counted the
+same way and is exact (`asendic_Auto2.cpp`), so it is left alone.
+
+Per this file's convention, GOLDEN is cited by `file:line` (stable, read-only);
+the ported tree is cited **by symbol name only** (KNOWLEDGE gotcha 10).
+
+### 1. Six seam initialisers in `csystem.cpp` diverge from golden, and only a source-text tripwire guards them
+
+`csystem.cpp` holds two file-`static` SckArt seam structs, `W7C1_TfSCKARTSeam`
+and `W7C2_TfSCKARTSeam`, reached only through the file-local `W7C1_SCKART` /
+`W7C2_SCKART` macros. Six of their ctor mem-initialisers construct a value
+golden does not. Both init-lists and all four golden sites were re-read this
+pass:
+
+| seam ctor | field | ported | golden | golden site |
+|---|---|---|---|---|
+| `W7C1_TfSCKARTSeam` | `iLOTSTATUS_L` | 0 | 3 | `Automation/SCK_ART.cpp:46` |
+| `W7C1_TfSCKARTSeam` | `iTesterType` | 0 | 1 for every `CUSTOMER_CODE` except `CC_SCK` | `Automation/SCK_ART.cpp:42` then `:111-114` |
+| `W7C2_TfSCKARTSeam` | `iLOTSTATUS_W` | 0 | 1 | `Automation/SCK_ART.cpp:44` |
+| `W7C2_TfSCKARTSeam` | `iLOTSTATUS_R` | 0 | 4 | `Automation/SCK_ART.cpp:47` |
+| `W7C2_TfSCKARTSeam` | `iLOTSTATUS_A` | 0 | 6 | `Automation/SCK_ART.cpp:49` |
+| `W7C2_TfSCKARTSeam` | `iTesterType` | 0 | 1 (as above) | `Automation/SCK_ART.cpp:42` then `:111-114` |
+
+Golden's `TfSCKART` ctor assigns the whole status family explicitly at
+`Automation/SCK_ART.cpp:42-49` (`iTesterType=0`, then `NONE=0 W=1 T=2 L=3 R=4
+F=5 A=6`), then at `:102` takes `if(CUSTOMER_CODE==CC_SCK)` for SCK only and
+`else { iTesterType=1; }` at `:111-114` for every other customer.
+
+**Why the guard is text-level.** Both structs and both instances
+(`W7C1_fSCKART_ext` / `W7C2_fSCKART_ext`) are `static` at file scope inside
+`csystem.cpp` and appear in no header, so no test translation unit can name
+them and no runtime observation is available. `tests/test_w7_f2_sckart_state.cpp`
+PART C therefore reads `csystem.cpp`'s own source text and asserts each of the
+six by symbol name.
+
+**RESIDUAL EXPOSURE -- the part that is NOT closed:**
+
+- It is a source-text regression pin, not a behavioural observation. It cannot
+  show the seams behave like golden; they demonstrably do not.
+- ~~The parsed region ends at the first `{` after the ctor-name anchor, so the
+  ctor **body** is never inspected. An `iTesterType=1;` statement added inside
+  the body would change the constructed value with the pin still green~~ -- and
+  body assignment is *golden's own shape*, so it is precisely the edit a future
+  reconciliation wave would write.
+  **AI(W906-W7-DOCfix2) 20260801, measured not assumed**: as of today the
+  working-tree copy of `tests/test_w7_f2_sckart_state.cpp` DOES inspect the ctor
+  body and DOES reject a body assignment. Evidence, run this pass entirely in a
+  scratch directory (no managed file and nothing under `build/` was written):
+  a snapshot of that file taken today, compiled off-tree against a scratch copy
+  of `csystem.cpp`, gives `PASS 46/46` unmutated and `FAIL 1/46` on check C5
+  ("... ctor BODY assigns `iTesterType` after the init-list ...") once
+  `{ core.sLOTSTATUS = "/x"; iTesterType = 1; }` is added to
+  `W7C1_TfSCKARTSeam`'s ctor. **The hole this bullet described is closed; the
+  bullet is struck through rather than deleted so the trail survives.** That file
+  is owned by another track this round and its edit is uncommitted, so this is an
+  observation of a snapshot, not a claim about anyone's finished work -- the
+  authority remains that test file's own header block, exactly as the caveat at
+  the end of this list already says. A different, subtler hole in the same
+  mechanism (the comment stripper must be string-literal-aware) is written up as
+  KNOWLEDGE gotcha 17.
+- No offline path exercises the ART branches these constants gate
+  (`CosFunction.bUseSCKART` and friends are false offline), so no behavioural
+  test is possible today. That is the reason this entry exists rather than a
+  test.
+- A sibling track is hardening this guard in the same round as this entry.
+  **Treat that test file's own header block as the authority on the guard's
+  final shape, not this paragraph** -- this paragraph is only guaranteed to
+  describe the state as of 2026-07-31.
+
+Do not "tidy" any of the six initialisers without changing the corresponding
+expected value in the guard in the SAME edit.
+
+### 2. Control-flow divergence: a non-`CC_SCK` machine ENTERS a block golden SKIPS
+
+Divergence D2 above is behavioural, not cosmetic. `DoCleanOutFinishCheck` in
+`csystem.cpp` gates a whole Flex-ART block on
+`... && CosFunction.bUseSCKART && W7C1_SCKART->iTesterType==0`. Golden reaches
+that test with `iTesterType==1` on every customer except `CC_SCK`
+(`Automation/SCK_ART.cpp:111-114`), so golden **skips** the block; the port
+constructs 0, so the port **enters** it. The same inversion applies to the five
+`W7C2_SCKART->iTesterType==0/==1` reads in `DoART_AfterCleanOut`.
+
+Inert offline only because `CosFunction.bUseSCKART` is false by default -- i.e.
+the divergence is masked by configuration, not by code. Reported, not
+reconciled, per plan S6-F2 / S9-R9.
+
+### 3. A TU-local stand-in still intercepts reads of a field that has become real
+
+`Automation/SCK_ART.cpp` carries a TU-local stand-in array for
+`LastSet.bUseTestSocketEE` (a gate-#3 stand-in from an earlier wave, cited to
+golden `LastSet.h:392`) plus the macro that routes reads to it. That field now
+**exists for real** on the shared `LastSet` global -- the ported
+`canary_support.h` declares `bool bUseTestSocketEE[2][4][8];` on the shared
+`LastSet` struct, cited to the same golden `LastSet.h:392`, and golden
+`MachineType.h:386-387` gives `MAX_SOCKET_ROW 4` / `MAX_SOCKET_COL 8`, so the
+two have identical extents.
+*(AI(W906-W7-DOCfix2) 20260801: this sentence previously carried two PORTED-tree
+line numbers, `canary_support.h:147` and `MachineType.h:391-392` -- forbidden by
+KNOWLEDGE gotcha 10 and by this section's own stated convention two paragraphs
+up. Both happened to still be right today, and both are now anchored by symbol
+instead. The two `MAX_SOCKET_*` defines are cited to GOLDEN, where they sit at
+`MachineType.h:386-387`; re-read from the cp950-decoded golden this run, as were
+`LastSet.h:392` and the `Automation/SCK_ART.cpp` sites below.)*
+
+W7-F2 made `SckArtRem_ClearLotInfo` call the sibling's `SckArt_DoAutoSocketOff`
+directly (closing a golden `:877` fidelity gap), which made this file **reach**
+the read golden performs at `Automation/SCK_ART.cpp:1340-1343`
+(`if(LastSet.bUseTestSocketEE[k][i][j]==true) LastSet.bUseTestSocket[k][i][j]=true;`).
+So the stand-in is now stale and shadows real storage: a write to the real
+`LastSet` field would not be seen by this read.
+
+Left as-is deliberately: retiring the stand-in changes behaviour on golden's
+`IniConfig.bI35UseThirdSiteControlByEngineer` arm. Inert offline regardless --
+golden's whole `DoAutoSocketOff` body sits inside
+`if(TestIF_File.bSCKART_AutoSocketOff)` (`Automation/SCK_ART.cpp:1238`), false
+by default.
+
+### 4. `vclcompat::TStringList::GetText()` uses a bare `\n`; real VCL uses CRLF after EVERY line
+
+Verified this pass by reading the implementation: `GetText()` joins items with a
+single `'\n'` and appends **no** trailing break. Real VCL
+`TStrings::GetTextStr` emits `sLineBreak` (CRLF on Win32) after every line,
+including the last.
+
+Consequence today: `TListTrayIDShim` in `acatchtray_shims.h` was on W7-F2's
+list of TU-local value-holders to retire onto `vclcompat`, and was
+**deliberately not retired**, because its `Add()` appends `"\r\n"` and its
+`Text` is written straight to disk by `acatchtray.cpp`'s two
+`WriteDataToFile(asTrayIDByLot, ...->Text)` call sites. Aliasing it onto
+`vclcompat::TStringList` would silently change the on-disk tray-ID-by-lot
+record bytes. Of the two, the shim is the closer match to real VCL; the
+divergence is in `vclcompat::TStringList`, which was outside W7-F2's write
+scope.
+
+**Why this is recorded here and not only at that call site.** As of 2026-07-31
+this divergence is described in exactly ONE place in the tree: the comment
+block above `TListTrayIDShim` in `acatchtray_shims.h`. Every future wave that
+translates another `->Text`/`GetText()` consumer inherits the same trap, and
+each one silently changes on-disk bytes if it aliases onto
+`vclcompat::TStringList` without noticing. Fixing `GetText()` itself is a
+`vclcompat`-wide behaviour change that needs its own wave with its own
+assertions on every existing consumer -- not a drive-by.
+
+### AI(W906-W7-DOCfix2) 20260801 -- honesty sweep of this section
+
+Everything above was written by the 2026-07-31 pass. Re-derived by hand this run,
+not taken on trust; each item states what was actually checked.
+
+- **The six seam initialisers** still read `0` today: `W7C1_TfSCKARTSeam` gives
+  `iTesterType(0)`, `iLOTSTATUS_L(0)`; `W7C2_TfSCKARTSeam` gives `iTesterType(0)`,
+  `iLOTSTATUS_W(0)`, `iLOTSTATUS_R(0)`, `iLOTSTATUS_A(0)`. All six golden
+  counterparts re-read from the cp950-decoded golden: `Automation/SCK_ART.cpp:42`
+  `iTesterType=0`, `:44` `iLOTSTATUS_W=1`, `:46` `iLOTSTATUS_L=3`, `:47`
+  `iLOTSTATUS_R=4`, `:49` `iLOTSTATUS_A=6`, and `:102` `if(CUSTOMER_CODE==CC_SCK)`
+  with `else { iTesterType=1; }` at `:111-114`. Table stands.
+- **"appear in no header"** confirmed: `W7C1_fSCKART_ext` / `W7C2_fSCKART_ext`
+  occur only in `csystem.cpp` (as `static` definitions plus a comment) and in
+  comments inside the pin test; no header declares them.
+- **Section 2's "five `W7C2_SCKART->iTesterType==0/==1` reads"** confirmed: six
+  textual occurrences in `csystem.cpp`, of which one is a comment, leaving **5**
+  live reads, all after the real `DoART_AfterCleanOut` definition.
+- **Section 3's golden citations** confirmed: `Automation/SCK_ART.cpp:877`
+  `DoAutoSocketOff(true);`, `:1238` `if(TestIF_File.bSCKART_AutoSocketOff)`,
+  `:1340-1343` the `bUseTestSocketEE`->`bUseTestSocket` copy, `LastSet.h:392`.
+- **Section 4's `GetText()` claim** confirmed by reading the implementation
+  again: `vclcompat::TStringList::GetText` joins with a single `'\n'` and appends
+  no trailing break.
+- **Not re-verified, flagged rather than restated**: the claim that
+  `TListTrayIDShim`'s divergence "is described in exactly ONE place in the tree"
+  is a whole-tree negative that this pass did not re-run; treat it as of
+  2026-07-31 only.
+
+---
+
+## W7-L1 (2026-07-29)
+
+Deferral record for W7-L1 (`asendic_Auto2.cpp`, the first landing of the
+asendic feed-SM family), per plan S12.6. One code site cites this heading.
+Created 2026-07-31 by **AI(W906-W7-DOCfix)**; the heading keeps the wave's date.
+
+### `AutoCylinderUp` / `AutoCylinderMiddle` / `AutoCylinderLower` are no-op stubs -- deferred
+
+`acatchtray_shims.cpp` defines all three as
+`bool AutoCylinderXxx(int, int, int, bool) { return true; }`. Golden defines the
+real state machines in `asendic.cpp`: `AutoCylinderUp` at `:562-765`,
+`AutoCylinderMiddle` at `:767`, `AutoCylinderLower` at `:937`. Every
+`if(AutoCylinderXxx(...))` guard in the translated `asendic_Auto2.cpp`
+therefore succeeds instantly and unconditionally. Retiring the stubs is
+deferred to a later wave.
+
+**Retiring them is NOT merely transcription.** Two independent hazards, both
+established by recon on 2026-07-31 and written down here because they are
+written down nowhere else:
+
+**(a) With the default offline all-disabled config, the real state machine
+would never converge -- "always succeeds instantly" would become "never
+succeeds".** Golden `AutoCylinderUp` mixes two opposite disabled-cylinder
+conventions:
+
+- The mid-cylinder **predicate** `AutoCylinderMidIsOn` (golden
+  `asendic.cpp:529-560`) opens with
+  `if(Cylinder[CylinderNameMid].Enable==false) bRet=true;` -- it returns TRUE
+  when the cylinder is disabled. `case 100`'s non-ART arm
+  (`asendic.cpp:661-662`) uses this predicate, so it advances to `Task=200`.
+- `case 201`'s non-ART arm (`asendic.cpp:720-724`) instead demands the **raw**
+  status: `if(Cylinder[CylinderNameMid].OnStatus()==false) { Task=1; return
+  false; }`. `TMyCylinder::OnStatus` (golden `mycylin.cpp:123-149`) returns
+  FALSE when `OnSenEnable==false`.
+
+So on the default offline config the SM would walk `1 -> 50 -> 100 -> 200 ->
+201 -> 1` forever and never return true, stalling every landed test that walks
+an Auto lifter path. Whoever retires the stubs must supply an enabled-cylinder
+fixture (or an explicit Sim convergence seam) in the SAME change -- swapping the
+stub for the real body alone will turn the suite red in a way that looks like a
+translation bug and is not one.
+
+Note the underlying trap, which is a general one: `OnSensor()`/`OffSensor()`
+(golden `mycylin.cpp:151-188`) return TRUE when disabled and key off `Enable`,
+while `OnStatus()`/`OffStatus()` (`:123`, `:190`) return FALSE when disabled and
+key off the *different* flags `OnSenEnable`/`OffSenEnable`. See KNOWLEDGE
+gotcha 12.
+
+**(b) Parameters 2 and 3 (`CylinderName`, `CylinderNameMid`) are NOT symmetric
+inside the real bodies, and golden's own call sites disagree about their
+order.** The asymmetry is plain in golden `asendic.cpp`: `case 1` does
+`Cylinder[CylinderName].On();` unconditionally but gates the mid one on
+`if(Cylinder[CylinderNameMid].Enable)` (`:584-586`); `case 100` reads
+`CylinderName` through `OnStatus()` and `CylinderNameMid` through the predicate
+(`:661-662`); `case 201` reads only `CylinderNameMid` (`:720`).
+
+Measured across every golden call site of the three functions (88 sites in 7
+`.cpp` files, classified by whether the `_Up` or the `_Selector` cylinder is
+passed second):
+
+| golden file | `(_Up, _Selector)` | `(_Selector, _Up)` |
+|---|---|---|
+| `asendic_Auto2.cpp` | 0 | **12** |
+| `asendic_Auto.cpp` | 19 | 5 |
+| `asendic_Auto_RT.cpp` | 21 | 4 |
+| `csystem.cpp` | 7 | 2 |
+| `acatchtray.cpp` | 8 | 0 |
+| `AutoRetest.cpp` | 5 | 0 |
+| `uhome.cpp` | 5 | 0 |
+
+`asendic_Auto2.cpp` is the only golden file that passes them reversed at
+**every** one of its sites, and it does so unconditionally. The other 11
+reversed sites, spread over 3 files, are all inside
+`if(bARTUnloaderUseTwoCylin(Pos)) ... else ...` pairs -- i.e. those callers
+swap the two arguments **at runtime on a flag** (e.g. golden
+`asendic_Auto.cpp:809-824`, `:784` vs `:788`).
+
+**The ported `asendic_Auto2.cpp` reproduces the reversal FAITHFULLY at all 12
+sites and must NOT be "fixed".** Re-counted this pass: 12 of 12 ported call
+sites pass `(1, C_Auto2_Selector, C_Auto2_Up)`, matching golden verbatim.
+
+While the stubs return `true` unconditionally this asymmetry is completely
+invisible and no test can observe it. Recorded so that no future agent
+"normalises" a call site to match its neighbours.
+
+**AI(W906-W7-DOCfix2) 20260801 -- both counts in this subsection re-derived, and
+one thing the assertions above do NOT cover.**
+
+- The **88-site table** reproduces exactly. Scanning every golden `.cpp` (`.svn`
+  excluded, `//` comments stripped) for calls to `AutoCylinderUp`/`Middle`/`Lower`
+  and classifying by whether the `_Up` or the `_Selector` cylinder is argument 3
+  gives 91 textual matches, of which 3 are the definitions in `asendic.cpp`,
+  leaving **88 call sites in 7 files** split exactly as tabulated:
+  `asendic_Auto2.cpp` 0/12, `asendic_Auto.cpp` 19/5, `asendic_Auto_RT.cpp` 21/4,
+  `csystem.cpp` 7/2, `acatchtray.cpp` 8/0, `AutoRetest.cpp` 5/0, `uhome.cpp` 5/0.
+  The runtime-swap example is real too: golden `asendic_Auto.cpp:782-789` and
+  `:809-824` are `if(bARTUnloaderUseTwoCylin(Pos)) ... else ...` pairs whose two
+  arms pass the pair in opposite orders.
+- The **"12 of 12"** claim reproduces: the ported `asendic_Auto2.cpp` has 12
+  non-comment call sites and all 12 pass `(1, C_Auto2_Selector, C_Auto2_Up)`.
+- **What is NOT covered, proven this run rather than argued**: the landed
+  assertions for this file observe *trajectory*, not *commanded output*. Against
+  the `f61e25e` test (46 assertions, `46 passed, 0 failed` baseline), three
+  independent mutations of `asendic_Auto2.cpp` -- inverting every conveyor
+  `SW[SwACAuto2]`/`SW[SwACAuto2CW]` `On()`/`Off()`, swapping every cylinder
+  `.Push()`/`.Pop()`, and deleting all **19** `MOT[...].ClearTray(__FUNC__)` call
+  sites -- each left the suite at `46 passed, 0 failed`. (Compiled off-tree and
+  linked against a scratch copy of `libht9045_sm.a`; nothing under `build/` and
+  no managed file was written.) Note 19, not the "four" the hand-off brief said.
+  Written up as KNOWLEDGE gotcha 18. Another track is closing this in the same
+  round; the numbers here describe the committed baseline, not that track's
+  result.
+
+---
+
+## W7-DOCfix (2026-07-31) -- W7-L family scope: `asendic_Scanner.cpp` is EXCLUDED from translation
+
+Main-loop decision (plan S2 D15). `asendic_Scanner.cpp` is **not** translated
+and is **not** a member of the W7-L1 asendic family. The family is therefore
+**6 files**, not the 7 the plan's S6 W7-L table originally listed.
+
+Evidence, each item re-derived on 2026-07-31 by **AI(W906-W7-DOCfix)**:
+
+1. **It is not in golden's build at all.** The string `Scanner` occurs **0**
+   times in `HT9045.bpr` (**87,463 bytes**) and **0** times in `HT9045.mak`
+   (**19,405 bytes**) -- so it appears in neither the `.bpr` FILELIST nor the
+   `.mak` OBJFILES. For contrast, `asendic_Auto2` occurs 3x in the `.bpr` and 1x
+   in the `.mak`, `asendic_Empty` likewise 3x / 1x.
+   - **AI(W906-W7-DOCfix2) 20260801 correction to the two sizes.** This item
+     originally gave 86,271 and 19,030 "bytes". Those are not byte counts: they
+     are newline-*normalised character* counts, i.e. what Python reports when the
+     file is opened in text mode and every CRLF collapses to one `\n`. Re-measured
+     in binary mode this run: `HT9045.bpr` = **87,463** bytes with 1,192 CRLF
+     pairs (87,463 - 1,192 = 86,271, the old figure); `HT9045.mak` = **19,405**
+     bytes with 375 CRLF pairs (19,405 - 375 = 19,030, likewise). The four
+     occurrence counts above (`Scanner` 0/0, `asendic_Auto2` 3/1,
+     `asendic_Empty` 3/1) were re-counted over the raw bytes this run and are
+     correct as written.
+2. **golden `asendic.h` omits it.** `asendic.h:6-12` includes exactly seven
+   sibling headers -- `asendic_Loader.h`, `asendic_Loader_RT.h`, `asendic_Auto.h`,
+   `asendic_Auto_RT.h`, `asendic_Auto2.h`, `asendic_Empty.h`, `asendic_Color.h`
+   -- and not `asendic_Scanner.h`.
+3. **Its top-level function has zero callers tree-wide.** `DoLoad_Scanner`
+   (golden `asendic_Scanner.cpp:223`) appears in exactly two places in the whole
+   golden corpus: its own definition and its declaration at
+   `asendic_Scanner.h:7`. The file's other three functions
+   (`DoSupplyNewICTray_Scanner:27`, `DoTrayZLoadTrayToWait_Scanner:135`,
+   `DoLoadNewICTray_Scanner:176`) are called only from inside the file itself.
+4. **It cannot compile even in golden, because it reads two `PROD_INFO_ST`
+   members that do not exist.** `asendic_Scanner.cpp:141` and `:152` call
+   `MOT[MMAuto1Z].MotorMove(Prod.Auto1Z_Up)` and `...(Prod.Auto1Z_Down)`.
+   Neither `Auto1Z_Up` nor `Auto1Z_Down` occurs anywhere else in the golden
+   corpus -- `cprod.h`'s only near-match is `int Auto1ZOffset;` at `cprod.h:313`,
+   a different member. Translating the file would mean inventing both the struct
+   fields **and** the motor target positions they carry, for a real Z axis with
+   no value anywhere in the corpus. **Inventing machine-motion values is not
+   acceptable** (plan S5-4: never invent functionality).
+
+Consequence for planning: after `asendic_Auto2.cpp` landed, the remaining
+untranslated members are the five files `asendic_Loader.cpp`,
+`asendic_Loader_RT.cpp`, `asendic_Auto.cpp`, `asendic_Auto_RT.cpp`,
+`asendic_Color.cpp`. Line totals are corrected in plan S6's W7-L table.
+
+**One figure from the brief that this pass could NOT reproduce**: the brief
+said translating the file would require fabricating *four* undefined
+identifiers. Only **two** were found -- `Prod.Auto1Z_Up` and `Prod.Auto1Z_Down`.
+The other two candidates that occur nowhere else in golden *code*
+(`"JAM1130"`, `"JAM1168"`) are string literals, not identifiers, and both DO
+exist as real alarm codes in the shared `Error/AlarmCodeList.txt`, so they are
+not fabrications. The exclusion decision does not depend on the count: two
+invented motion values are already disqualifying.
+
+**AI(W906-W7-DOCfix2) 20260801 -- items 2-4 re-derived from the cp950-decoded
+golden this run** (item 1's two sizes were wrong and are corrected in place
+above):
+
+- Item 2: golden `asendic.h:6-12` re-read; it includes exactly the seven sibling
+  headers listed and not `asendic_Scanner.h`.
+- Item 3: a whole-corpus scan of every golden `.c`/`.cpp`/`.h` finds
+  `DoLoad_Scanner` in exactly **2** places -- `asendic_Scanner.cpp:223` (its
+  definition) and `asendic_Scanner.h:7` (its declaration). Zero callers stands.
+- Item 4: `Auto1Z_Up` and `Auto1Z_Down` each occur exactly **once** in the whole
+  golden corpus, at `asendic_Scanner.cpp:141` and `:152` respectively; the only
+  near-match in `cprod.h` is `int Auto1ZOffset;` at `:313`. The two alarm strings
+  are likewise as described: `JAM1130` and `JAM1168` appear only inside
+  `asendic_Scanner.cpp` in code, and both exist in the shared
+  `Error/AlarmCodeList.txt`. `asendic_Scanner.cpp` is 372 lines.

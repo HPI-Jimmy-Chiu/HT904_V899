@@ -56,16 +56,79 @@ SckArtState::SckArtState()
       // those sites read, and it omitted the only site where the divergence changes
       // control flow.  Corrected, all sites re-counted by hand:
       //
-      //   * `st.iTesterType` -- THIS struct's field -- has exactly ONE reader in the whole
-      //     tree: SckArt_CheckNeedRT below (`if(st.iTesterType==1)`, the SPIL/RT-count
-      //     branch).  Nothing else names it.
+      //   * AI(W906-W7-F2fix2) 20260731 -- THE BULLET THAT STOOD HERE WAS ITSELF FALSE, and
+      //     it was the one labelled "all sites re-counted by hand".  It said `st.iTesterType`
+      //     "has exactly ONE reader in the whole tree: SckArt_CheckNeedRT below ... Nothing
+      //     else names it."  Two independent greps found three more.
+      //
+      //     AI(W906-W7-F2fix3) 20260801 -- TWO DEFECTS IN THE 20260731 REPLACEMENT ITSELF:
+      //     (i)  ARITHMETIC.  It said "found FOUR more" and then enumerated four items of
+      //          which item 1 was annotated "the one the old bullet had" -- i.e. not a new
+      //          find at all.  Re-counted this round by re-grepping `iTesterType` over the
+      //          whole ported tree (all .cpp/.h, build/ and .svn excluded): FOUR production
+      //          reads IN TOTAL = ONE previously known + THREE newly found.  Outside
+      //          SCK_ART.cpp / SCK_ART_Remainder.cpp / csystem.cpp / tests the name occurs
+      //          only in declarations and comments.
+      //     (ii) THREE STALE PORTED LINE NUMBERS -- it pinned reader 1, SckArt_CheckNeedRT
+      //          and the derived struct declaration to lines in SCK_ART.cpp and
+      //          SCK_ART_Remainder.h, and every one of the three had ALREADY been pushed
+      //          past that line by that same round's own insertion into the file it was
+      //          citing (the CheckNeedRT one had landed inside a different function
+      //          entirely).  Per KNOWLEDGE gotcha 10 the ported numbers are DELETED here
+      //          rather than refreshed -- no ported line number is quoted anywhere in this
+      //          note now, because they rot and symbol names do not.  GOLDEN citations keep
+      //          their numbers (golden is frozen), and every golden citation in this note
+      //          was re-derived from the cp950-decoded golden on 20260801.
+      //
+      //     The three were missed for a structural reason worth recording: THIS WAVE made
+      //     SckArtRemainderState inherit from this struct (`struct SckArtRemainderState :
+      //     public SckArtState`, Automation/SCK_ART_Remainder.h), so every `st.iTesterType`
+      //     in SCK_ART_Remainder.cpp -- unchanged text, all of it predating the merge --
+      //     became a read of THIS field on the day of the merge.  Before it, those were reads
+      //     of the remainder struct's own separate copy.  All four, in production code:
+      //       1. SckArt_CheckNeedRT, below in this file -- `if(st.iTesterType==1)`, the
+      //          SPIL/RT-count branch.  THE PREVIOUSLY KNOWN ONE, not one of the three.
+      //       2. SckArtRem_AccessFile (Automation/SCK_ART_Remainder.cpp) -- a READ AND a
+      //          WRITE in one statement: the field is the value handed to ReadWriteIni
+      //          (so it is what gets PERSISTED when bRead==false) and the destination of the
+      //          value read back (so this is the only place a recipe file can set it).
+      //       3. SckArtRem_AccessFile again, the `if(st.iTesterType==1)` on the statement
+      //          straight after #2, AND THE CONSEQUENCE THE OLD NOTE OMITTED ENTIRELY: this
+      //          site WRITES `CosFunction.bAutoRetestGPIBmode` (true in the then-arm, false in
+      //          the else).  That is the very flag three csystem.cpp comments cite to argue
+      //          the W7C2 ART paths are inert offline.  Checked, and it does NOT undermine
+      //          them: SckArtRem_AccessFile returns early when `CosFunction.bUseSCKART==false`
+      //          (the offline default), so the flag cannot flip offline unless a caller turns
+      //          bUseSCKART on first.  What it does mean is that the flag is DERIVED from this
+      //          same field rather than constant -- spelled out in csystem.cpp's W7C2 seam
+      //          block (search bAutoRetestGPIBmode there, AI(W906-W7-F2fix2)).
+      //       4. SckArtRem_DoARTLotStart (Automation/SCK_ART_Remainder.cpp) --
+      //          `if(st.iTesterType==1)` guarding the GPIB lot-start tail (iNeedRT=0, the three
+      //          LastSet.b*AutoRetestGPIB writes, fMain->SetLotState(2), MES07399).
+      //     One WRITER, not a reader, completes the picture: csystem.cpp's
+      //     W7C2_TfSCKARTSeam::CheckNeedRT does `core.iTesterType=iTesterType;`.
+      //   * BEHAVIOURAL COVERAGE ALREADY EXISTS for three of the four, which the old note's
+      //     "no BEHAVIOURAL test is possible" framing obscured: tests/test_SCK_ART_Remainder.cpp
+      //     drives sites 2 and 3 (its AccessFile PART asserts that AccessFile(true) reads
+      //     iTesterType back as 1 and asserts the bAutoRetestGPIBmode=true consequence, having
+      //     set CosFunction.bUseSCKART true first) and site 4 (its "9F: iTesterType==1 tail"
+      //     block sets iTesterType=1 and asserts the whole tail).  Site 1's `==1` arm is NOT
+      //     covered: tests/test_SCK_ART.cpp never names iTesterType, so its CheckNeedRT PART
+      //     exercises only the 0 path.
       //   * csystem.cpp's call sites do NOT read this field.  They read the two seams'
       //     OWN top-level `iTesterType` shadows (`W7C1_SCKART->iTesterType` /
       //     `W7C2_SCKART->iTesterType`), which are separate storage from the
-      //     `SckArtState core` each seam embeds.  W7C2_TfSCKARTSeam::CheckNeedRT's
-      //     `core.iTesterType=iTesterType;` is the ONLY path by which any
-      //     SckArtState::iTesterType is written after construction; W7C1's seam has no
-      //     CheckNeedRT and never syncs its shadow at all.
+      //     `SckArtState core` each seam embeds.  W7C1's seam has no CheckNeedRT and never
+      //     syncs its shadow at all.
+      //     AI(W906-W7-F2fix2) 20260731: this bullet also used to call
+      //     W7C2_TfSCKARTSeam::CheckNeedRT's `core.iTesterType=iTesterType;` "the ONLY path
+      //     by which any SckArtState::iTesterType is written after construction".  Wrong for
+      //     the same reason as the bullet above -- site 2, SckArtRem_AccessFile
+      //     (Automation/SCK_ART_Remainder.cpp), writes one too, on the now-derived
+      //     SckArtRemainderState.  Corrected: those two are the only post-construction
+      //     writers in PRODUCTION code (tests set the field directly -- see
+      //     tests/test_SCK_ART_Remainder.cpp's DoARTLotStart blocks -- which is how sites
+      //     2/3/4 get exercised), and CheckNeedRT's is the only one inside csystem.cpp.
       //   * There are SIX such reads in the ported csystem.cpp, not four: FIVE on
       //     `W7C2_SCKART` (all in DoART_AfterCleanOut -- golden csystem.cpp:14277, :14313,
       //     :14362, :14398, :14489) and ONE on `W7C1_SCKART` (in DoCleanOutFinishCheck --

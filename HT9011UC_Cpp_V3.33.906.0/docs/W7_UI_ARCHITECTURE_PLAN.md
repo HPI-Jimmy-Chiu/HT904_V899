@@ -16,8 +16,8 @@
 | PORTED（譯出樹） | `D:\HT9045\HT9011UC_Cpp_V3.33.906.0\` | 可讀寫 |
 | 元件庫 A | `D:\HT9045\elec\myvcl\` | 唯讀參考（**5 個主要自製控制項在此**） |
 | 元件庫 B | `D:\HT9045\elec\Component\` | 唯讀參考（`aled.pas`/`aled.res`/`apheadlabel.hpp`/`MyMemo.*` 在此） |
-| 主要建置目錄（MinGW） | `PORTED\build_resume_verify_20260727` | 既有 configured 目錄 |
-| 基準（baseline） | ctest **91/95**，4 個既有環境漂移失敗：`config_db`、`IniFiles`、`ini_helpers`、`config_loaders` | 任何波次不得惡化 |
+| 主要建置目錄（MinGW） | ~~`PORTED\build_resume_verify_20260727`~~ → **現為 `PORTED\build`**（AI(W906-W7-PLANfix) 20260801；舊目錄仍在但已非主要，見 §10-24(F)） | 既有 configured 目錄 |
+| 基準（baseline） | ~~ctest **91/95**~~ → **現為 ctest 107/111**（AI(W906-W7-PLANfix) 20260801 更新，見 §10-24(F)），4 個既有環境漂移失敗不變：`config_db`、`IniFiles`、`ini_helpers`、`config_loaders` | 任何波次不得惡化。**全檔其他地方寫「91/95」的閘門句子一律改讀成 107/111** |
 
 工具鏈事實（2026-07-28 實測）：
 
@@ -44,6 +44,51 @@
 | **D10** | **不用 `Visual Studio 17 2022` generator，用 `Ninja`** | VS generator 是 multi-config、預設 **Debug**——正是 2026-07-28 弄出 modal「Debug Assertion Failed!」洗版事故的載體（KNOWLEDGE Gotcha 9）。Ninja 單 config，`CMAKE_BUILD_TYPE=Release` 直接生效，且指令形狀與 MinGW 一致 |
 | **D11** | **邏輯↔widget 的唯一 join key = `.dfm` 的葉層控制項名稱** | 實測 **133 個表單內、表單內重名 = 0**，所以葉名在表單內已唯一。`fMain->cbSetupFileName`（C++ 名）與 `IDC_MAIN_CBSETUPFILENAME`（資源 ID）由同一個葉名機械推導，兩個命名空間天然對齊 |
 | **D12** | 自製控制項**照樣進 `.rc`**（`CONTROL "", id, "HT9045.MyLedLane", ...`），其 `Alias`/`LEDStyle`/IO metadata 走 **layout table**，不走 `.rc` | 保住 `.dfm`↔`.rc` 結構同構（＝checker 能做精確 isomorphism 檢查）＋保住 tab/z-order 槽位；`Alias` 的承載需求由 layout table 完全滿足 |
+
+### 已鎖定的決策（2026-08-01 補記）
+
+> AI(W906-W7-DOCS) 20260801: 補記 2026-08-01 已定案的四項決策，避免後續波次重新討論或依過時建議行動。
+>
+> **編號說明（重要）**：這四項在 2026-08-01 的決策集裡被稱作 **D1–D4**，但上方 §2 表格**已經**佔用 `D1`–`D12`。為免撞號，本節一律用 **`DA1`–`DA4`**，括號內註明其在該決策集中的原編號。引用時請寫 `DA1`（或 `§2-DA1`），**不要**寫成 `D1`——那會指到上表的「UI 框架 = MFC」。
+
+| # | 決策 | 摘要 |
+|---|------|------|
+| **DA1**（決策集 D1） | **目標 OS = Windows 10/11**（**執行期**目標） | 使用者已定案，不再討論 |
+| **DA2**（決策集 D2） | **`_WIN32_WINNT` 編譯期地板 = `0x0601`（Windows 7），兩個 oracle 都釘** | 詳見下方完整理由；**落地到根 `CMakeLists.txt` 仍未完成，由主迴圈負責** |
+| **DA3**（決策集 D3） | **`asendic_Scanner.cpp` 排除於 W7-L1 之外** → **W7-L1 是 6 檔不是 7 檔** | 五條互相佐證的理由，見下 |
+| **DA4**（決策集 D4） | **§8 碰撞矩陣增補 4 組高共用檔**，規則一律 **SERIAL** | 見 §8 新增列 |
+
+#### DA2 — `_WIN32_WINNT = 0x0601` 的完整理由（本波次已獨立複驗）
+
+- **MinGW oracle 的天花板就是 `0x0603`**。本機 oracle 是 **MinGW.org MinGW32 gcc 6.3.0**（`--target=mingw32 --with-arch=i586`，**只有 32-bit**）。其 `C:\MinGW\include\sdkddkver.h` 定義到 `_WIN32_WINNT_WIN7`(:75) `0x0601`、`_WIN32_WINNT_WIN8`(:76) `0x0602`、`_WIN32_WINNT_WINBLUE`(:77) `0x0603` 為止，**沒有 `_WIN32_WINNT_WIN10`**。
+- **所以「改釘 `0x0A00`」這個先前建議是作廢的**，即使執行期目標是 Win10/11（DA1）。
+- **本波次實測補充的精確形狀（比原敘述更準，請照這版理解）**：符號 `_WIN32_WINNT_WIN10` 確實**不存在**（`error: '_WIN32_WINNT_WIN10' was not declared in this scope`）；但**裸數值** `-D_WIN32_WINNT=0x0A00` 在 MinGW 下**不會報錯、會靜默通過**——它只是**完全無效**：該 w32api 裡根本沒有任何 Win10-only 宣告，實測 `GetSystemMetricsForDpi`（Win10 1607 API）在 `0x0A00` 下仍是 `was not declared in this scope`。**這比「編不過」更危險**：它會給人「已經釘到 Win10」的假象。故結論不變且更強——**`0x0601` 是 MinGW oracle 上唯一有意義的最高值**。
+- `0x0601` 實測 `-Wall -Wextra` **乾淨**（exit 0），含已知的地雷常數 `ERROR_SHARING_VIOLATION` / `ERROR_LOCK_VIOLATION`（它們正是 §10-12 winsock2 事件的受害者）；MSVC 也接受 `0x0601`。
+- **編譯期地板不會限制執行期目標**。釘 `0x0601` 不代表放棄 Win10/11——它只決定「標頭檔對我們揭露哪些 API」。
+- **真正要釘的理由是兩個 oracle 現在看到的 API 面不一樣**：MinGW 未指定時預設 **`0x0500`（Windows 2000）**（實測：`Show<_WIN32_WINNT>` 具現化為 `Show<1280>`，1280 = `0x0500`）；MSVC 則**自動選最新**（`MIGRATION_ROADMAP.md:8` / `KNOWLEDGE.md:60` 已記錄實際訊息 `_WIN32_WINNT not defined. Defaulting to _WIN32_WINNT_MAXVER`）。兩邊不一致 → 「這個 API 只在其中一邊有宣告」會**同時**從兩個 oracle 底下溜過去。
+- **要用 Win10-only API 是另一個未來決策**，需要換到 mingw-w64，不在本決策範圍。
+- **落地狀態**：本波次實測 `PORTED\CMakeLists.txt` **目前沒有任何 `_WIN32_WINNT` / `WINVER` / `NTDDI_VERSION` 設定**（grep 零命中），與決策前提一致。**加上去這件事仍待辦，擁有者＝主迴圈**，本波次（純文件）不動 `CMakeLists.txt`。
+
+#### DA3 — `asendic_Scanner.cpp` 排除的五條理由（本波次已逐條複驗）
+
+AI(W906-W7-DOCS) 20260801: 以下五條**全部由本波次親自對 cp950 解碼後的 golden 重新量測**，不是照抄前份報告。
+
+1. **不在 `HT9045.bpr` 的 FILELIST**：字串 `Scanner` 在整份 `HT9045.bpr` 出現 **0 次**（`grep -c -i Scanner` = 0）。該檔列出的 asendic 家族恰為 7 個：`_Auto` / `_Auto2` / `_Auto_RT` / `_Color` / `_Empty` / `_Loader` / `_Loader_RT`。
+2. **不在 `HT9045.mak` 的 OBJFILES**：同樣 7 個 `.obj`，`Scanner` 零命中。
+3. **golden `asendic.h` 不 include 它**：該檔 `:6-12` 恰好 include 上述 7 個兄弟標頭，**唯獨沒有** `asendic_Scanner.h`。全 golden 樹中唯一 `#include "asendic_Scanner.h"` 的檔案是它自己。
+4. **`DoLoad_Scanner` 零呼叫點**：全 golden 樹（708 個原始檔，已排除 `.svn`）`\bDoLoad_Scanner\b` 只有 **2** 次命中——`asendic_Scanner.cpp:223` 的定義與 `asendic_Scanner.h:7` 的宣告。**沒有任何呼叫端。**
+5. **它根本編不過**——引用了 4 個 golden 裡不存在的識別字：
+
+   | golden 位置 | 逐字內容 | 全樹狀態 |
+   |---|---|---|
+   | `asendic_Scanner.cpp:29` | `int &Task=SupplyNewIC_From_LoaderCar;` | 該裸名全樹只有 1 個其他命中，且**在字串字面值內**（`main.cpp:9904` 的 `"SupplyNewIC_From_LoaderCar"`）。真正的變數叫 `iSupplyNewIC_From_LoaderCar`（**有 `i` 前綴**，全樹 5 次） |
+   | `asendic_Scanner.cpp:179` | `int &Task=LoadNewICTrayTask;` | 同上：唯一其他命中是 `main.cpp:9786` 的**字串字面值** `"LoadNewICTrayTask"`；真變數為 `iLoadNewICTrayTask`（全樹 5 次） |
+   | `asendic_Scanner.cpp:141` | `if(MOT[MMAuto1Z].MotorMove(Prod.Auto1Z_Up))` | `\bAuto1Z_Up\b` 全樹**僅此 1 次命中**——不存在 |
+   | `asendic_Scanner.cpp:152` | `if(MOT[MMAuto1Z].MotorMove(Prod.Auto1Z_Down))` | `\bAuto1Z_Down\b` 全樹**僅此 1 次命中**——不存在 |
+
+   前兩個是 golden 作者**漏打 `i` 前綴**的筆誤；後兩個是**真實 Z 軸的馬達目標位置，整個語料裡沒有任何值**。要翻譯它就必須**發明功能**——違反 §5-4「絕不發明功能」。
+
+**結論**：**W7-L1 = 6 檔，不是 7 檔。** §6:454 的行數也要修正——但**修正後的數字不是任務簡報說的 ~10,187**，見 §10-17（本波次實測 `wc -l`：7 檔合計 **10,499** 行，扣掉 Scanner 372 → **6 檔 10,127 行**）。
 
 ---
 
@@ -467,6 +512,26 @@ golden <path>/<Form>.dfm
 
 ---
 
+### §6 波次落地狀態總表（2026-08-01 補記）
+
+> AI(W906-W7-DOCS) 20260801: 本小節是**附加**在 §6 末端的狀態帳，**上方任何原始波次條目一字未動**（§6 append-only）。條目本身若有內容性錯誤，一律記在 §10（例：§6:214 見 §10-12、§6:307 見 §10-15、§6:454 見 §10-13 與 §10-17）。
+>
+> 下表狀態由本波次**親自檢查磁碟內容**得出，不採信任何報告的自我宣稱。
+
+| 波次 | 狀態 | 本波次實測到的證據 |
+|------|------|-------------------|
+| **W7-A0** `vcl_compat.h` include-order | ✅ **已落地** | `vclcompat/vcl_compat.h:106` 有 `AI(W906-W7-A0) 20260728` 標記；`#include <windows.h>` 已在 `:191`，早於 `AnsiString.h`(:223) 與 `SysUtils.h`(:227)；錯誤句 `safe whether or not` 已消失。**與 §10-6、§10-12 一致** |
+| **W7-A1** MSVC 第二 oracle | ✅ **已落地** | 根 `CMakeLists.txt:52` `if(MSVC)`；`:54`/`:56` `CMAKE_{C,CXX}_LINK_GROUP_USING_RESCAN_SUPPORTED TRUE`；`:89` `add_compile_options(/utf-8 /W3)`；`:29-43` 完整記錄 `/utf-8`、`_HAS_STD_BYTE=0`、`/arch:IA32` 三項理由 |
+| **W7-A2** `SearchTrayToPlace_Magazine` | ✅ **已落地** | 27 個 site-variant TU 的前向宣告**全部**已是 `int`；定義 `aoutarm_shims.cpp:95` 為 `int ... { return 0; }`。字面 `void` 現在只出現在 `AI(W906-W7-A2) 20260728: was void ...` 這串**說明文字**裡，不再是任何實際宣告。另有 `AI(W906-A2-followup) 20260728` 就地更正 `return 0` 的語意註解（golden 真正的 not-found 值是 `Prod.iIfErrorT6`，非 0） |
+| **W7-F0** FormsFacade 重構 | ✅ **已落地（凍結已解除）** | `CMakeLists.txt:410` `# Library: ht9045_forms (W7-F0 keystone -- the FormsFacade sink)`；`FormsFacade.h` 已縮為 3,655 bytes 薄傘狀標頭；`forms/` 下已有 `fMain`/`fLotInfo`/`fSCKART`/`fSortCT`/`fNote`/`fAGV`/`fOffSet`/`fCleaning`/`fShowMessage` 九組 `.h/.cpp` + `FormWidgets.h` |
+| **W7-F1** 牆② 解鎖 | ✅ **已落地**（但範圍比原設想窄） | `tests/test_w7_f1_wall2_probe.cpp` 存在。**範圍修正見 §10-16 與 §10-18**：實際只有 3 個 override 被完全解鎖，不是 5 個 |
+| **W7-F2** seam 退場 + SckArt 4 方整併 | 🔄 **進行中** | `tests/test_w7_f2_sckart_state.cpp` 存在且處於未提交修改狀態；`Automation/SCK_ART.cpp`、`SCK_ART_Remainder.h`、`csystem.cpp` 同為未提交修改 |
+| **W7-L1** 7 個 `asendic_*` | 🔄 **1/6 完成，範圍已改為 6 檔** | `asendic_Auto2.cpp` 已落地（§10-14）、`tests/test_w7_l1_auto2.cpp` 存在。**`asendic_Scanner.cpp` 已排除（§2-DA3）→ 本波總量為 6 檔不是 7 檔**；剩餘 5 檔 9,378 行（§10-17） |
+| **W7-B1 / W7-C1 / W7-C2** | 🔄 **部分進行** | `tools/dfm2rc/ir_out/` 下已有 133 組 `*.dfm.ir.json`（B1a 產物），但該目錄的 404 個 `.ir.json` **全部缺結尾換行**，是 §12 gate 4 目前 411 個違規的主要來源（§10-21） |
+| **W7-U***（MFC UI 本體） | 🔓 **工具鏈阻塞已解除，尚未開工** | MFC 元件已安裝並實編驗證通過（`MIGRATION_ROADMAP.md:8`／`KNOWLEDGE.md:60` 的 2026-07-29 更正）。→ **§7 開頭「使用者必須跑 VS Installer」那句已過時**，但依 append-only 原則不改 §7 原文，狀態以本列為準。接 UI 波前請先落地 **§2-DA2**（`_WIN32_WINNT=0x0601`） |
+
+---
+
 ## §7 卡 MFC 元件的完整清單（**只有這些**）
 
 使用者必須跑 VS Installer 加「**C++ MFC for latest v143 build tools**」。在那之前，以下**且僅以下**無法進行：
@@ -505,6 +570,24 @@ golden <path>/<Form>.dfm
 | `aoutarm9045_*.cpp` ×27 | A2 獨佔 | 與所有其他波零重疊 |
 | `Automation/SCK_ART.h` / `SCK_ART_Remainder.h` / `csystem.cpp` | F2 獨佔（4 方整併） | 這是分析工作，不要跟機械別名化混在同一個 agent |
 | `MainCalcCore.{cpp,h}` | W7-L5 獨佔 | 只跟自己碰撞 |
+| `canary_support.{h,cpp}` | **SERIAL — 只由 integrator／主迴圈寫，永不派給翻譯 agent** | AI(W906-W7-DOCS) 20260801（DA4）：本波次實測 `canary_support.h` 被 **123 個**譯出樹檔案真正 `#include`（見下方量測註記），是全樹最高共用度的單一標頭。任何 agent 動它＝同時動 123 個 TU |
+| `acatchtray_shims.{h,cpp}` | **SERIAL — 只由 integrator／主迴圈寫** | AI(W906-W7-DOCS) 20260801（DA4）：實測被 **59 個**檔案 `#include` |
+| `asendic.{h,cpp}` | **SERIAL — 只由 integrator／主迴圈寫** | AI(W906-W7-DOCS) 20260801（DA4）：實測被 **7 個**檔案 `#include`；它是 asendic 家族的**總傘狀標頭**，W7-L1 每落地一個 `asendic_*` 檔就要改它一行 → 6 個平行 agent 會全部撞在同一行 |
+| `csystem_shims.{h,cpp}` | **SERIAL — 只由 integrator／主迴圈寫** | AI(W906-W7-DOCS) 20260801（DA4）：實測被 **9 個**檔案 `#include`；它是 no-op stand-in 的退場點，**每一個** L 系列波次落地時都要從這裡移除一個樁（`asendic_Auto2` 已示範，見 §10-14） |
+| `csystem.cpp` / `forms/fMain.cpp` | **SERIAL — 只由序列 integrator（主迴圈）寫** | AI(W906-W7-DOCS) 20260801（阻塞 9）：見下方「§8 擁有權例外」 |
+
+> **DA4 量測註記（AI(W906-W7-DOCS) 20260801，本波次親自重數）**：任務簡報給的是「`canary_support.h` 約 141 個檔案」。本波次實測**兩個數字都存在、意義不同**，請用前者：
+> - **123** = 真的有 `#include` 指示詞指向它的檔案數（正則 `#\s*include\s*[<"]...canary_support\.h[">]`）。**這才是碰撞面。**
+> - **141** = 檔案內**出現過 `canary_support.h` 這串字**的檔案數。多出來的 **18 個全部是註解**——其中 17 個是別的檔案在 banner／TODO 裡提到這個檔名（例如 `Automation/SCK_ART.h:69`、`common.cpp:69`、`SECSGEM/uHGemClass.cpp:563`、`tests/test_FTPClient_EventHandlers.cpp:32`），第 18 個是 `canary_support.h:2` 它自己的檔頭註解。**沒有一個是真的 `#include`。**
+>
+> 掃描範圍：譯出樹全部 `.c/.cpp/.h/.hpp`，**排除** `build*/` 與 `*test_scratch*`，共 877 個原始檔。
+
+#### §8 擁有權例外（阻塞 9-1）— `csystem.cpp` 與 `forms/fMain.cpp`
+
+AI(W906-W7-DOCS) 20260801: 補記本條，因為這兩個檔是全樹**最會被平行波次同時需要**的兩個寫入點，而 repo 已有平行干擾前科（見下方「歷史教訓」）。
+
+1. **`csystem.cpp` 與 `forms/fMain.cpp` 只由序列 integrator（主迴圈）寫入，永遠不派給翻譯 agent。** 翻譯 agent 若需要在這兩個檔裡新增 `#include`、退役一個 shim、或補一個 facade 成員，**一律把需求回報給 integrator**，由 integrator 序列落地——不要自己動手，也不要「先改了再說、之後讓 integrator 合」。
+2. **任何 recon 報告裡引用的 `csystem.cpp` / `forms/fMain.cpp` 行號，一律視為過期，必須在動筆當下重新推導，絕不可直接採信。** 這兩個檔正在被多個波次持續增修（`csystem.cpp` 是 25,483 行的 god-file，`forms/fMain.cpp` 隨每一波 facade 補洞而長），任何跨場次流傳的行號都會漂移。**引用前重新 grep，引用時附上你自己量到的行號。**
 
 **歷史教訓**：本 repo 已經因為平行波次互相干擾發生過一次**孤兒 git stash 事件**（ROADMAP `SaveTestSummarySECS` 那段）。派平行 agent 時務必：每個 agent 只被授權寫它自己的檔案清單、integrate 一律序列、**agent 自己要用 `grep`/`diff` 驗證磁碟內容而不是相信工具回報**。
 
@@ -534,32 +617,204 @@ golden <path>/<Form>.dfm
 
 以下是複驗過程中發現、應由主迴圈套用到 `MIGRATION_ROADMAP.md` / `KNOWLEDGE.md` 的更正：
 
-1. **`MIGRATION_ROADMAP.md:9` 與 `:20`**：「UI 框架（MFC/Qt/Win32）延到 W7 再定」「先定 UI 框架＝獨立大決策」**已過時**——MFC 已定案，改指向本檔。
-2. **`MIGRATION_ROADMAP.md:133`（牆②）**：現在把阻塞單獨歸給「~19 個 FormsFacade 缺口」。成員數對（golden `uHGemHT9045.cpp` 恰觸及 28 個相異 `fMain` 成員），但**真正的結構性阻塞是 CMake 循環依賴**（`FormsFacade.cpp` 在 `ht9045_sm`:731，`ht9045_secsgem`:588 不 link `ht9045_sm`，`ht9045_sm`:1208 link `ht9045_secsgem`）。**補 19 個 stub 不會解鎖任何東西。** 已複驗（§4-V1）。
-3. **`MIGRATION_ROADMAP.md:135`（`Interface/TesterTCP.cpp`）**：`CopyOSTestResult`/`PlaceOSTestResultToTray` 那句「卡 `GetSiteNo`/`GetOrderOfContact` 缺口」**已過時**——兩者自 Wave18（`f6bf156`）起已存在於 `Public/MyProductionRecord.cpp:666,671`。已複驗（§4-V10）。
-4. **`MIGRATION_ROADMAP.md:49`（`csystem.cpp` 覆蓋率）**：「~6% 方法 / ~2.6% 行」是 W6.6-spine-only 的快照。把後續 `DoCleanOutFinishCheck`(1036)+`DoOneCycleFinishCheck`(1235)+`DoART_AfterCleanOut`(663)+spine(672)+AutoSiteMap 分支(35)+Hotplate/LoaderVibrate 迴圈算進去，golden-line-equivalent 覆蓋約 **3,600-3,750 / 25,483 ≈ 14.5%**。（此項為 `remaining-cpp-recon` 的宣稱，本檔作者**未**獨立複驗，主迴圈套用前宜自行確認。）
-5. **`FormsFacade.h:385`**：`tmyAutoClean` 的 golden 型別標成 `THeatTable*` 是錯的——全樹（golden 與元件庫）無此 class。正確是 `TTMyTray*`，同它的兄弟 `mtPlate2`（`main.h:164`，`FormsFacade.h:389-395` 標對了）。純註解修正，已排入 F0-c。
-6. **`vclcompat/vcl_compat.h:127-131` 的策略註解**：「safe whether or not windows.h happened to be included earlier」**是錯的**——已親自重現反例（§4-V6）。A0 波要一併改寫這句。
-7. **建議新增 KNOWLEDGE gotcha #10**：`rc.exe` 的 `\xHH` byte-escape 陷阱 + `windres` 比 `rc.exe` 寬鬆的落差（§9-R2/R4）。
-8. **建議新增 KNOWLEDGE gotcha #11**：`aled.pas` 的 `CreateLedBitmap` 尺寸覆寫**看起來**會丟掉 `.dfm` 幾何，**實測 1,840 個裡 0 個被丟棄**；後來的 agent 若「好心修正」會改掉 262 個 LED 的尺寸（W7-B1c）。
-9. **建議新增 KNOWLEDGE gotcha #12**：FP 驗證腳本必須用 runtime/volatile 輸入——`(int)(1.234*1000.0)` 寫成編譯期常數時 MinGW 也給 1234（常數折疊），只有 runtime 值才顯出 x87 的 1233（§4-V5）。本檔作者第一次複驗就踩到這個。
-10. **建議新增 KNOWLEDGE gotcha #13**：`.dfm` 直方圖找不到**動態建立**的控制項——`TTMyTray256` 有 0 個 `.dfm` 實例卻在 `cBinSel.cpp:232-235` 被 `new`。清點自訂元件時必須同時 grep 型別指標宣告（§4-V12）。
-11. **`MIGRATION_ROADMAP.md:8` 與 `KNOWLEDGE.md:58-59` 的 MSVC 更正已經在檔內、內容正確，不需再改。** 唯一可補的是「`rc.exe` 與 `windres` 兩者都在，所以 `.rc` 閘門不等 MFC」這件事目前哪份文件都沒記。
-12. **本檔 §6 W7-A0 條目本身（:214）有誤，不是實作跟丟**：該條目指示「加 `#include <winsock2.h>`」不分編譯器一律加在 `windows.h` 之前。W7-A0 的實作沒有照做，改成 `#if defined(_MSC_VER)` 只在 MSVC 才加——這個偏離是對的，已重新獨立複驗：在 MinGW 下把 `<winsock2.h>` 無條件放在 `<windows.h>` 之前會讓一般 Win32 錯誤碼（`ERROR_SHARING_VIOLATION`、`ERROR_LOCK_VIOLATION` 等）整批不被定義（根因：`winsock2.h`→`winsock.h` 先設 `__WINSOCK_H_SOURCED__` 才 `#include <windows.h>`/`<winerror.h>`，導致 `winerror.h:36-41` 那段本來會 `#define _WINERROR_H` 並展開一般錯誤碼的區塊被跳過兩次，且該巨集要到 `winsock.h:682` 才解除，那時 `windows.h` 自己的 include guard 早已生效，後面任何 `#include <windows.h>` 都不會回頭重新處理 `winerror.h`）。實測：`#include <winsock2.h>` + `#include <windows.h>` 後 `ERROR_SHARING_VIOLATION`/`ERROR_LOCK_VIOLATION` 兩者皆 `-fsyntax-only` 報「未宣告」；只 `#include <windows.h>` 則乾淨。`common.cpp:2313`（該檔 :45 先 include 本 umbrella）確實測試這兩個常數，會被打中。**結論：§6 這條指示本身要修正為「MSVC-only 加 `<winsock2.h>`」，現有程式碼（`vcl_compat.h` 的 `#if defined(_MSC_VER)` 分流）是對的，不要「復原」成無條件版本。** 本檔 §6 原文保留不動（append-only），更正記在此處供主迴圈與後續 agent 對照。
-13. **本檔 §6 W7-L1 條目「7 個獨立檔 -> 最多 7 個平行 agent，零檔案碰撞」是錯的，已在任務簡報中修正並由本波次（W906-W7-L1）獨立複驗**。任務簡報給的 3 條邊全部成立（grep 交叉比對 7 個 golden `asendic_*.cpp` 的完整定義/呼叫集合驗證）：`asendic_Loader.cpp` 呼叫 `asendic_Loader_RT.cpp` 的 `DoUnLoadNewLoaderToStack`；`asendic_Auto_RT.cpp` 呼叫 `asendic_Auto.cpp` 的 `DoAutoReceiveBinTray`；`asendic_Scanner.cpp` 呼叫 `asendic_Loader.cpp` 的 3 個 Init 函式（`InitTrayZLoadTrayToWaitTask`/`InitSupplyNewIC_From_LoaderCarTask`/`InitLoadNewICTrayTask`）。**複驗額外抓到簡報漏掉的 2 條邊**：(a) `asendic_Loader_RT.cpp` 反向呼叫 `asendic_Loader.cpp` 的 `CheckLoaderICFloating`——這把 Loader<->Loader_RT 坐實成**真正的雙向循環**，不是簡報暗示的單向依賴；(b) `asendic_Auto.cpp` 呼叫 `asendic_Color.cpp` 的 `ForTERAPOWERCheckColorSensor`——這把 Color 也拉進 Auto 群集。**修正後的真實依賴圖**：{Loader(3312)+Loader_RT(905)雙向循環} + {Scanner(372) 單向依賴 Loader，不影響 Loader 本身} = 一個 4589 行群集；{Auto(2561) 依賴 Color(1553)} + {Auto_RT(1047) 依賴 Auto} = 一個最多 5161 行群集（但 Color 本身零外呼叫，可獨立先譯）；`Auto2.cpp`(749) **零對外呼叫**（對其餘 6 個 golden 檔逐一 grep 確認），是全語料唯一真正獨立、可單檔安全落地的成員。本波次只落地 `Auto2.cpp`（見下）；`Loader`/`Loader_RT`/`Scanner`/`Auto`/`Auto_RT`/`Color` 六檔仍是 0%，留給下一波（建議切法：先譯 `Color.cpp`（零外呼叫）解鎖 `Auto.cpp`，`Loader`+`Loader_RT` 因雙向循環必須同一 agent/同一次落地，`Scanner` 排在 `Loader` 之後）。
-14. **W906-W7-L1 落地報告**：只譯 `asendic_Auto2.cpp`/`.h`（golden 749+26 行，全部 8 個函式，含 2 個 orphan 宣告 `Initial_Auto_SendIC_Task`/`Do_Auto_SendIC`——比照 `ckernel.h` 孤兒宣告的相同模式，golden 全樹皆無定義）。退役 `csystem_shims.h/.cpp` 的 `DoAuto2()` no-op stand-in（同 `DoAutoEmpty1` 的「owned-by-engine-header」退場模式），`csystem.cpp` 新增 `#include "asendic_Auto2.h"` 並更正其 ODR-SKIPPED 註解區塊。新測試 `tests/test_w7_l1_auto2.cpp`（6 組斷言：Init 歸位、`DoAuto2()` 1000 迭代游標守恆、`DoLoadNewAuto2TrayToCar()` DUMMY 收斂、`DoAuto2Receive→DoUnLoadNewAuto2ToStack` 鏈收斂、供應閘門、`fAGV` 衛星樁）。根 `CMakeLists.txt` 的 `ht9045_sm` library 加一行 `asendic_Auto2.cpp`（沿用 `asendic_Empty.cpp` 已佔用的同一顆 library/同一顆 Sim HAL substrate）。**沒有發現獨立於既有 fallthrough 慣例（`case 1` 直落 `case 100`，與 Empty canary 相同手法）之外的 GOLDEN BUG**——已全文讀過 749 行並逐一核對本波次翻譯的每個分支，這句陳述僅涵蓋 `asendic_Auto2.cpp` 本檔，不涵蓋其餘 6 個未譯檔。
-15. **§6 W7-F1 條目（:307）`fLotInfo`(38)/`fSCKART`(31)/`fNote`(19)/`fSetup`(18) 這組數字沒有套用「排除 `//`-註解掉程式碼」的過濾**（W7-F1 波次自己對 `fMain` 26 個活成員做了這個過濾，卻沒有對這條平行支線套用同一標準）。AI(W906-W7-F1fix) 20260729 獨立重新清點（對 `SECSGEM/uHGemHT9045.cpp` + `uHGemHT9045_SV.cpp` + `uHGemHT9045_EC.cpp` 三檔逐行掃描，區分「整行 `//` 開頭」與「`//` 出現在該次 dereference 之前的同行尾註」兩種註解型態）：
+1. ⬜ **尚未套用** — **`MIGRATION_ROADMAP.md:9` 與 `:20`**：「UI 框架（MFC/Qt/Win32）延到 W7 再定」「先定 UI 框架＝獨立大決策」**已過時**——MFC 已定案，改指向本檔。
+    - AI(W906-W7-DOCS) 20260801 實測複查：`MIGRATION_ROADMAP.md:9` **仍**逐字寫著「**UI 框架（MFC/Qt/Win32）延到 W7 再定**（不擋 W0–W6）」，`:20` **仍**逐字寫著「先定 UI 框架（MFC 最近 VCL / Qt 現代 / Win32）＝**獨立大決策**」。**本項未套用，維持開放**，擁有者仍是主迴圈。
+2. ⚠️ **工程已修、ROADMAP 文字未改** — **`MIGRATION_ROADMAP.md:133`（牆②）**：現在把阻塞單獨歸給「~19 個 FormsFacade 缺口」。成員數對（golden `uHGemHT9045.cpp` 恰觸及 28 個相異 `fMain` 成員），但**真正的結構性阻塞是 CMake 循環依賴**（`FormsFacade.cpp` 在 `ht9045_sm`:731，`ht9045_secsgem`:588 不 link `ht9045_sm`，`ht9045_sm`:1208 link `ht9045_secsgem`）。**補 19 個 stub 不會解鎖任何東西。** 已複驗（§4-V1）。
+    - ⚠️ **工程已修、文件未改（AI(W906-W7-DOCS) 20260801 實測）**：**程式面**的循環依賴**已經解掉**——`PORTED\CMakeLists.txt:410` 現有 `# Library: ht9045_forms  (W7-F0 keystone -- the FormsFacade sink)`，`:437` 記「`ht9045_forms` links nothing above itself」，`:489` 記「`ht9045_forms` depends on nothing that depends on `ht9045_secsgem` or `ht9045_sm`」；`FormsFacade.h` 已縮成 3,655 bytes 的薄傘狀標頭，實體拆進 `forms/`（`fMain`/`fLotInfo`/`fSCKART`/`fSortCT`/`fNote`/`fAGV`/`fOffSet`/`fCleaning`/`fShowMessage` 九組 `.h/.cpp` + `FormWidgets.h`）。**但 `MIGRATION_ROADMAP.md:133` 的文字仍逐字寫著「牆②：~19 個 FormsFacade 缺口」**，未反映此事。→ **文件更正仍待主迴圈套用。**
+3. ⬜ **尚未套用** — **`MIGRATION_ROADMAP.md:135`（`Interface/TesterTCP.cpp`）**：`CopyOSTestResult`/`PlaceOSTestResultToTray` 那句「卡 `GetSiteNo`/`GetOrderOfContact` 缺口」**已過時**——兩者自 Wave18（`f6bf156`）起已存在於 `Public/MyProductionRecord.cpp:666,671`。已複驗（§4-V10）。
+    - AI(W906-W7-DOCS) 20260801 實測複查：`MIGRATION_ROADMAP.md:135` **仍**逐字寫著「`CopyOSTestResult`/`PlaceOSTestResultToTray`(**卡** `Public/MyProductionRecord.cpp` 的 `GetSiteNo`/`GetOrderOfContact` 缺口)」。**本項未套用，維持開放。**
+4. ⬜ **尚未套用（且本項證據等級最低，套用前務必自行複驗）** — **`MIGRATION_ROADMAP.md:49`（`csystem.cpp` 覆蓋率）**：「~6% 方法 / ~2.6% 行」是 W6.6-spine-only 的快照。把後續 `DoCleanOutFinishCheck`(1036)+`DoOneCycleFinishCheck`(1235)+`DoART_AfterCleanOut`(663)+spine(672)+AutoSiteMap 分支(35)+Hotplate/LoaderVibrate 迴圈算進去，golden-line-equivalent 覆蓋約 **3,600-3,750 / 25,483 ≈ 14.5%**。（此項為 `remaining-cpp-recon` 的宣稱，本檔作者**未**獨立複驗，主迴圈套用前宜自行確認。）
+    - AI(W906-W7-DOCS) 20260801 實測複查：`MIGRATION_ROADMAP.md:49` **仍**逐字寫著「(≈6% 方法 / ~2.6% 行)」。**本項未套用。** 另重申：`~14.5%` 這個替代數字**至今無人獨立複驗過**（本波次亦未複驗——那需要重算 golden 25,483 行的等價覆蓋，超出本波次範圍）。**主迴圈不要在未複驗的情況下把它寫進 ROADMAP。**
+5. ✅ **已套用 20260729（本波次 20260801 確認）** — **`FormsFacade.h:385`**：`tmyAutoClean` 的 golden 型別標成 `THeatTable*` 是錯的——全樹（golden 與元件庫）無此 class。正確是 `TTMyTray*`，同它的兄弟 `mtPlate2`（`main.h:164`，`FormsFacade.h:389-395` 標對了）。純註解修正，已排入 F0-c。
+    - AI(W906-W7-DOCS) 20260801 實測複查：F0-c/F0-d 已落地，該註解隨 `FormsFacade.h` 拆檔搬到 `forms/fMain.h:281`，現逐字寫著 `TfMainAutoCleanGrid *tmyAutoClean;  // [DATA] golden main.h:347 (TTMyTray* clean-kit grid -- the "THeatTable*" this comment used to ...`，並在 `forms/fMain.h:160` 與 `forms/FormWidgets.h:221,244-246` 三處留下「全樹 0 命中、golden main.h:347 實為 `TTMyTray *tmyAutoClean;`」的複驗紀錄。**已修正，本項結案。**
+6. ✅ **已套用 20260728（本波次 20260801 確認）** — **`vclcompat/vcl_compat.h:127-131` 的策略註解**：「safe whether or not windows.h happened to be included earlier」**是錯的**——已親自重現反例（§4-V6）。A0 波要一併改寫這句。
+    - AI(W906-W7-DOCS) 20260801 實測複查：字串 `safe whether or not` 在 `vclcompat/vcl_compat.h` **已完全消失**（grep 零命中）；該處現為 `:106` 起的 `AI(W906-W7-A0) 20260728: hoist winsock2+windows.h+A/W undefs above SysUtils.h so the umbrella is include-order-robust ...` 與 `:112-131` 改寫後的正確策略敘述。hoist 本身也已生效：`#include <windows.h>` 在 `:191`，而 `AnsiString.h` 在 `:223`、`SysUtils.h` 在 `:227`——`windows.h` 確實已排在兩者之前。**已修正，本項結案。**
+7. ⛔ **編號已被取代（改用 KNOWLEDGE gotcha #13）；內容仍未寫入** — **建議新增 KNOWLEDGE gotcha #10**：`rc.exe` 的 `\xHH` byte-escape 陷阱 + `windres` 比 `rc.exe` 寬鬆的落差（§9-R2/R4）。
+8. ⛔ **編號已被取代（改用 KNOWLEDGE gotcha #14）；內容仍未寫入** — **建議新增 KNOWLEDGE gotcha #11**：`aled.pas` 的 `CreateLedBitmap` 尺寸覆寫**看起來**會丟掉 `.dfm` 幾何，**實測 1,840 個裡 0 個被丟棄**；後來的 agent 若「好心修正」會改掉 262 個 LED 的尺寸（W7-B1c）。
+9. ⛔ **編號已被取代（改用 KNOWLEDGE gotcha #15）；內容仍未寫入** — **建議新增 KNOWLEDGE gotcha #12**：FP 驗證腳本必須用 runtime/volatile 輸入——`(int)(1.234*1000.0)` 寫成編譯期常數時 MinGW 也給 1234（常數折疊），只有 runtime 值才顯出 x87 的 1233（§4-V5）。本檔作者第一次複驗就踩到這個。
+10. ⛔ **編號已被取代（改用 KNOWLEDGE gotcha #16）；內容仍未寫入** — **建議新增 KNOWLEDGE gotcha #13**：`.dfm` 直方圖找不到**動態建立**的控制項——`TTMyTray256` 有 0 個 `.dfm` 實例卻在 `cBinSel.cpp:232-235` 被 `new`。清點自訂元件時必須同時 grep 型別指標宣告（§4-V12）。
+
+> **第 7–10 項的統一狀態說明（AI(W906-W7-DOCS) 20260801 實測）**：`KNOWLEDGE.md` 現已把這四條**各自佔號並留下指標**，但**編號不是**本檔原先建議的 #10–#13，而是 **#13 / #14 / #15 / #16**（`KNOWLEDGE.md:77-80`），且四條**全部標記為「保留號，未寫」**——即號碼已保留、正文尚未撰寫，並註明證據分別在本檔 `S9-R2 / S9-R4`、`S6-B1c`、`S4-V5`、`S4-V12`。
+> → **後續引用一律用 KNOWLEDGE 的 #13–#16，不要再用本檔第 7–10 項寫的 #10–#13。**
+> → 其中 KNOWLEDGE #13（`rc.exe`）已註明「本次 DOCfix 波沒有能力獨立複驗（需實跑 `rc.exe`），故不代寫」——**這是正確的自制**，補寫者必須自己實跑 `rc.exe` 後才動筆。
+> （觀察時點：`docs/KNOWLEDGE.md` 當時為**未提交**的工作區狀態，由其他軌道持有；若後續有人再動它，以該檔當下內容為準。）
+
+11. ✅ **已確認無需變更（本波次 20260801 覆核）** — **`MIGRATION_ROADMAP.md:8` 與 `KNOWLEDGE.md:58-59` 的 MSVC 更正已經在檔內、內容正確，不需再改。** 唯一可補的是「`rc.exe` 與 `windres` 兩者都在，所以 `.rc` 閘門不等 MFC」這件事目前哪份文件都沒記。
+    - AI(W906-W7-DOCS) 20260801 實測複查：`MIGRATION_ROADMAP.md:8` 與 `KNOWLEDGE.md:60` 的 MSVC 段落**內容正確且已再更新**（兩處都已加上「✅ 2026-07-29 再更正：MFC 元件已安裝並實測通過」）。**本項的「不需再改」判斷成立。**
+    - **額外收穫（與 DA2 直接相關）**：這兩處**都已經**記載了 MSVC 會印 `_WIN32_WINNT not defined. Defaulting to _WIN32_WINNT_MAXVER`，並明寫「接 UI 波前應明確定義 `_WIN32_WINNT`，避免各 TU 隱含目標版本不一致」。→ **DA2 不是新發明，而是把這兩處已記錄的待辦正式定案成 `0x0601`。**
+    - 「`rc.exe`/`windres` 兩者都在」這件事**仍然哪份文件都沒正式記**（KNOWLEDGE #13 只保留了號碼、正文未寫）。**維持開放。**
+12. ✅ **程式面已坐實（本波次 20260801 實測確認）；本項作為對 §6:214 的常設更正繼續有效** — **本檔 §6 W7-A0 條目本身（:214）有誤，不是實作跟丟**：該條目指示「加 `#include <winsock2.h>`」不分編譯器一律加在 `windows.h` 之前。W7-A0 的實作沒有照做，改成 `#if defined(_MSC_VER)` 只在 MSVC 才加——這個偏離是對的，已重新獨立複驗：在 MinGW 下把 `<winsock2.h>` 無條件放在 `<windows.h>` 之前會讓一般 Win32 錯誤碼（`ERROR_SHARING_VIOLATION`、`ERROR_LOCK_VIOLATION` 等）整批不被定義（根因：`winsock2.h`→`winsock.h` 先設 `__WINSOCK_H_SOURCED__` 才 `#include <windows.h>`/`<winerror.h>`，導致 `winerror.h:36-41` 那段本來會 `#define _WINERROR_H` 並展開一般錯誤碼的區塊被跳過兩次，且該巨集要到 `winsock.h:682` 才解除，那時 `windows.h` 自己的 include guard 早已生效，後面任何 `#include <windows.h>` 都不會回頭重新處理 `winerror.h`）。實測：`#include <winsock2.h>` + `#include <windows.h>` 後 `ERROR_SHARING_VIOLATION`/`ERROR_LOCK_VIOLATION` 兩者皆 `-fsyntax-only` 報「未宣告」；只 `#include <windows.h>` 則乾淨。`common.cpp:2313`（該檔 :45 先 include 本 umbrella）確實測試這兩個常數，會被打中。**結論：§6 這條指示本身要修正為「MSVC-only 加 `<winsock2.h>`」，現有程式碼（`vcl_compat.h` 的 `#if defined(_MSC_VER)` 分流）是對的，不要「復原」成無條件版本。** 本檔 §6 原文保留不動（append-only），更正記在此處供主迴圈與後續 agent 對照。
+13. ⚠️ **本體仍有效；但末尾「建議切法」中與 `Scanner` 有關的部分已被 §2-DA3 取代（見本項末新增註記）** — **本檔 §6 W7-L1 條目「7 個獨立檔 -> 最多 7 個平行 agent，零檔案碰撞」是錯的，已在任務簡報中修正並由本波次（W906-W7-L1）獨立複驗**。任務簡報給的 3 條邊全部成立（grep 交叉比對 7 個 golden `asendic_*.cpp` 的完整定義/呼叫集合驗證）：`asendic_Loader.cpp` 呼叫 `asendic_Loader_RT.cpp` 的 `DoUnLoadNewLoaderToStack`；`asendic_Auto_RT.cpp` 呼叫 `asendic_Auto.cpp` 的 `DoAutoReceiveBinTray`；`asendic_Scanner.cpp` 呼叫 `asendic_Loader.cpp` 的 3 個 Init 函式（`InitTrayZLoadTrayToWaitTask`/`InitSupplyNewIC_From_LoaderCarTask`/`InitLoadNewICTrayTask`）。**複驗額外抓到簡報漏掉的 2 條邊**：(a) `asendic_Loader_RT.cpp` 反向呼叫 `asendic_Loader.cpp` 的 `CheckLoaderICFloating`——這把 Loader<->Loader_RT 坐實成**真正的雙向循環**，不是簡報暗示的單向依賴；(b) `asendic_Auto.cpp` 呼叫 `asendic_Color.cpp` 的 `ForTERAPOWERCheckColorSensor`——這把 Color 也拉進 Auto 群集。**修正後的真實依賴圖**：{Loader(3312)+Loader_RT(905)雙向循環} + {Scanner(372) 單向依賴 Loader，不影響 Loader 本身} = 一個 4589 行群集；{Auto(2561) 依賴 Color(1553)} + {Auto_RT(1047) 依賴 Auto} = 一個最多 5161 行群集（但 Color 本身零外呼叫，可獨立先譯）；`Auto2.cpp`(749) **零對外呼叫**（對其餘 6 個 golden 檔逐一 grep 確認），是全語料唯一真正獨立、可單檔安全落地的成員。本波次只落地 `Auto2.cpp`（見下）；`Loader`/`Loader_RT`/`Scanner`/`Auto`/`Auto_RT`/`Color` 六檔仍是 0%，留給下一波（建議切法：先譯 `Color.cpp`（零外呼叫）解鎖 `Auto.cpp`，`Loader`+`Loader_RT` 因雙向循環必須同一 agent/同一次落地，`Scanner` 排在 `Loader` 之後）。
+    - ⛔ **「`Scanner` 排在 `Loader` 之後」已被 §2-DA3 取代（AI(W906-W7-DOCS) 20260801）**：`asendic_Scanner.cpp` **完全排除於 W7-L1 之外，永遠不譯**（五條理由見 §2-DA3，本波次已逐條複驗）。連帶影響本項的依賴圖敘述：**Scanner 那條邊不必再考慮**，`{Loader + Loader_RT}` 群集因此從 4,589 行縮為 **4,217 行**（3312+905）。其餘敘述（Loader↔Loader_RT 雙向循環、Auto→Color、Auto_RT→Auto、`Auto2` 零對外呼叫）**不受影響、仍然成立**。
+    - 修正後的 W7-L1 剩餘工作＝**5 檔**（`Auto2` 已落地、`Scanner` 排除）：`Color`(1553，零外呼叫、可先譯) → `Auto`(2561) → `Auto_RT`(1047)；以及 `Loader`(3312)+`Loader_RT`(905) 必須同一 agent 同次落地。
+14. 📄 **歷史落地紀錄，非待辦（無需標記狀態）** — **W906-W7-L1 落地報告**：只譯 `asendic_Auto2.cpp`/`.h`（golden 749+26 行，全部 8 個函式，含 2 個 orphan 宣告 `Initial_Auto_SendIC_Task`/`Do_Auto_SendIC`——比照 `ckernel.h` 孤兒宣告的相同模式，golden 全樹皆無定義）。退役 `csystem_shims.h/.cpp` 的 `DoAuto2()` no-op stand-in（同 `DoAutoEmpty1` 的「owned-by-engine-header」退場模式），`csystem.cpp` 新增 `#include "asendic_Auto2.h"` 並更正其 ODR-SKIPPED 註解區塊。新測試 `tests/test_w7_l1_auto2.cpp`（6 組斷言：Init 歸位、`DoAuto2()` 1000 迭代游標守恆、`DoLoadNewAuto2TrayToCar()` DUMMY 收斂、`DoAuto2Receive→DoUnLoadNewAuto2ToStack` 鏈收斂、供應閘門、`fAGV` 衛星樁）。根 `CMakeLists.txt` 的 `ht9045_sm` library 加一行 `asendic_Auto2.cpp`（沿用 `asendic_Empty.cpp` 已佔用的同一顆 library/同一顆 Sim HAL substrate）。**沒有發現獨立於既有 fallthrough 慣例（`case 1` 直落 `case 100`，與 Empty canary 相同手法）之外的 GOLDEN BUG**——已全文讀過 749 行並逐一核對本波次翻譯的每個分支，這句陳述僅涵蓋 `asendic_Auto2.cpp` 本檔，不涵蓋其餘 6 個未譯檔。
+15. ⚠️ **數字正確，但 `fSetup` 那格的「理由」是錯的——已於 20260801 就地更正（見該小項）** — **§6 W7-F1 條目（:307）`fLotInfo`(38)/`fSCKART`(31)/`fNote`(19)/`fSetup`(18) 這組數字沒有套用「排除 `//`-註解掉程式碼」的過濾**（W7-F1 波次自己對 `fMain` 26 個活成員做了這個過濾，卻沒有對這條平行支線套用同一標準）。AI(W906-W7-F1fix) 20260729 獨立重新清點（對 `SECSGEM/uHGemHT9045.cpp` + `uHGemHT9045_SV.cpp` + `uHGemHT9045_EC.cpp` 三檔逐行掃描，區分「整行 `//` 開頭」與「`//` 出現在該次 dereference 之前的同行尾註」兩種註解型態）：
     - `fLotInfo`：40 個相異拼寫，**39 個活**（1 個全註解、無活呼叫點：`lbledtTestBinNo`）。其中 8 個 ported tree 的 `forms/fLotInfo.h` 已有（`InitialUnLoaderTask`、`cbRunMode`、`edFlowID`、`edInsertion`、`edtASECL_LotID`、`edtDevice`、`edtSysLotID`、`edtSysOperatorID`），**真正缺的是 31 個**（不是原數字暗示的 38 個全缺）。
     - `fSCKART`：26 個相異拼寫，**25 個活**（1 個全註解：`DoARTLotStart`）。~~6 個~~ **5 個** `forms/fSCKART.h` 已有（`AccessFile`、`iCurrent93KARTStep`、`iFTRTCount`、`iInputCount`、`sLotID`），**真正缺的是 ~~19~~ 20 個**（不是 31 個）。AI(W906-W7-F1fix2) 20260729 就地更正：`iLotCount` **不是** `TfSCKART` 的成員——`forms/fSCKART.h` 全檔唯一出現 `iLotCount` 字樣的地方是 `DoARTLotStart(AnsiString, AnsiString, int _iLotCount)` 的**參數名 `_iLotCount`**（前面有底線），寬鬆 grep 會誤中；真正持有 `iLotCount` 的是另一個結構 `SckArtRemainderState`（`Automation/SCK_ART_Remainder.h`），與 fSCKART facade 無關。逐名以 `\b` 邊界比對 25 個活成員後確認 present=5 / missing=20。
     - `fNote`：4 個相異拼寫，**4 個都活**（`BtnPauseClick`、`Close`、`ReturnCode`、`fShow`），`forms/fNote.h` 目前 0 個都沒有，**真正缺的是 4 個**（跟原數字 19 差很多——原數字疑似把整份 golden 檔對 `fNote` 的其他觸及方式，或未過濾的雜訊也算了進去，這裡沒有重新推敲原數字怎麼來的，只覆核重新清點的真實結果）。
     - `fSetup`：18 個相異拼寫，但其中 13 個只出現在 `HGemPtr->DataItemOut(...)` 呼叫**同一行尾端的純文件性註解**裡（例如 `//fSetup->edMotorMoldingSpeed`，golden uHGemHT9045.cpp:5993 起一路到 :6017），從來沒有真正被 dereference 過——這正是本項發現點名的「17 個缺、只有 4 個活」現象的精確版本：**5 個活**（`DoIniDataToForm`、`ScrollBar1Change`、`sbUpdateClick`、`bFirstTime`、`tSiteMap`），ported tree 目前**連 `forms/fSetup.h` 這個檔案都不存在**，所以這 5 個現在全部都缺（不是 18 個或 17 個）。
+        - ⛔ **上一段的「理由」是錯的，AI(W906-W7-DOCS) 20260801 就地更正（數字 13 死 / 5 活 / 18 總計 完全正確，不動）**：
+          那 13 個之所以是死的，**不是**因為它們「是 `DataItemOut(...)` 呼叫同一行尾端的文件性註解」。
+          **真正的原因是：整段 `DataItemOut` 連續區塊本身就被關在一個 `/* */` 區塊註解裡**——該區塊註解在 **golden `SECSGEM/uHGemHT9045.cpp:5961`** 以單獨一行 `/*` 開啟、在 **`:6021`** 以單獨一行 `*/` 關閉（本波次已對 cp950 嚴格解碼後的 golden 逐行複驗：`:5961` 內容恰為 `/*`、`:6021` 內容恰為 `*/`，且 `:5962`–`:6020` 之間**沒有任何**其他 `/*` 或 `*/`，確為單一連續區塊；該區塊位於 `int HT9045Gem::ProcessS7F25FromatReceipe()`（`:5943`）函式體內）。
+          **差別為何重要**：原敘述暗示那些 `HGemPtr->DataItemOut(...)` 呼叫是**活的程式碼**、只是尾巴掛了說明用註解；**實情是連那些 `DataItemOut` 呼叫本身也是死的**。若照原敘述去理解，下一波會誤以為 `ProcessS7F25FromatReceipe` 裡有 13 個活的 SECS 資料輸出要翻譯——**實際上一個都沒有**。
+          **共同根因（一個盲點造成兩個錯誤數字）**：**同一個** `:5961`–`:6021` 區塊註解，也正是遮住 `S7F25` 那個 `fMain` 站點的兇手——`fMain->cbSetupFileName` 在 `:5966` 與 `:5968` 出現兩次，**兩次都在這個區塊註解裡面**。這直接使 §10-16 的「9 個 override 觸及 `fMain`」與「5 個完全解鎖」兩個數字也失準，詳見 **§10-18**。
+          → **清點 golden 的 dereference 時，只過濾 `//` 行註解是不夠的，必須同時做 `/* */` 區塊註解的狀態機。** 建議把這條併進 KNOWLEDGE（見 §10-20）。
     - 下一波清點 `fLotInfo`/`fSCKART`/`fNote`/`fSetup` 缺口時，請用這裡的 **31/20/4/5**（AI(W906-W7-F1fix2) 20260729 就地更正 fSCKART 19→20，理由見上）這組數字，不要用 §6:307 的 38/31/19/18，也不要用本項原本寫的 31/19/4/5。
     - AI(W906-W7-F1fix2) 20260729 獨立複驗結論：`fLotInfo` 40/39活/8已有/31缺、`fNote` 4/4活/0已有/4缺、`fSetup` 18/5活（13 個只是 `HGemPtr->DataItemOut(...)` 同行尾註，golden uHGemHT9045.cpp:5993-6017）/`forms/fSetup.h` 不存在/5缺——這三項與本項原文完全一致，**已坐實**；只有 fSCKART 那一格是錯的。
-16. **W7-F1 的「牆②解鎖」比表面看起來窄**：這條同時記在 `tests/test_w7_f1_wall2_probe.cpp` 檔頭（AI(W906-W7-F1fix) 20260729 的 INVENTORY NOTE 之後）。golden `uHGemHT9045.cpp` 的 22 個 override 裡，逐一 grep 各自函式本體，只有 9 個有觸及 `fMain`：`ReloadParameter`、`LookForFile`、`S2F15_CheckNewEquipmentConstant`、`S2F15_UpdateNewEquipmentConstant`、`S2F42_Host_Command_Acknowledge`、`ProcessS7F23FromatReceipe`、`ProcessS7F25FromatReceipe`（以上都在 `uHGemHT9045.cpp`），加上 `AddSV`（`uHGemHT9045_SV.cpp`）、`AddEC`（`uHGemHT9045_EC.cpp`）。這 9 個裡只有 5 個**只**碰 `fMain`，因此真正被本波次完全解鎖：`ReloadParameter`、`LookForFile`、`S2F15_CheckNewEquipmentConstant`、`ProcessS7F23FromatReceipe`、`ProcessS7F25FromatReceipe`。其餘 4 個同時也碰 `fLotInfo`/`fSCKART`/`fNote`/`fSetup`（這波完全沒補），仍卡住：`S2F15_UpdateNewEquipmentConstant`（+`fLotInfo`、+`fSetup`）、`S2F42_Host_Command_Acknowledge`（+`fLotInfo`、+`fNote`、+`fSCKART`——這是兩個最大的卡住函式之一，golden uHGemHT9045.cpp:1146-4191）、`AddSV`（+`fLotInfo`）、`AddEC`（+`fLotInfo`、+`fSCKART`、+`fSetup`——另一個最大的，幾乎整個 uHGemHT9045_EC.cpp 1912 行都是它）。另外，`tests/test_w7_f1_wall2_probe.cpp` 的 `mimic_site_on_off_decode` 那個 `tSiteOnOff` 站點，因為 `vclcompat::StringsProxy` 沒有 `c_str()`，實際上不是逐字對照 golden（golden 直接 `.Strings[z].c_str()`，ported tree 要多包一層 `AnsiString(...)`）——規劃 Bucket 1-5 前不要假設這 22 個（或 9 個 fMain-touching）override 全部就緒。
-    - AI(W906-W7-F1fix2) 20260729 就地補正三處（本項其餘內容——22 個 override、9 個碰 fMain、5 個完全解鎖的名單——已逐一以 golden 函式本體 grep 複驗，**全部正確**）：
+        - ⚠️ **AI(W906-W7-PLANfix) 20260801 就地更正**：上一行括號裡的「13 個只是 `HGemPtr->DataItemOut(...)` **同行尾註**」**沿用的正是本項上方已經作廢的舊理由**（正確理由見上一小項：那整段 `DataItemOut` 連續區塊本身就關在 golden `uHGemHT9045.cpp:5961`–`:6021` 的 `/* */` 區塊註解裡，本次已重新逐行複驗該區塊起訖）。**數字 18/5活/13死/5缺全部不動、仍然坐實；只有那句括號內的理由要照區塊註解版本理解。** 本次也確認 `forms/fSetup.h` 在譯出樹**今天仍然不存在**（`ls` 直接不存在）。
+16. ⛔ **正文的「9 個觸及 `fMain`」與「5 個完全解鎖」已作廢，正確數字是 7 與 3**——先由 §10-18 更正，再由 **§10-22**（AI(W906-W7-PLANfix) 20260801 第三次獨立重測）逐項坐實。**結論方向（牆②解鎖比表面看起來窄）仍成立，但引用時一律用 7/3，不要用本項正文的 9/5。本項正文以下保留原樣僅供追溯，不得當作現行數字來源。** — **W7-F1 的「牆②解鎖」比表面看起來窄**：這條同時記在 `tests/test_w7_f1_wall2_probe.cpp` 檔頭（AI(W906-W7-F1fix) 20260729 的 INVENTORY NOTE 之後）。golden `uHGemHT9045.cpp` 的 22 個 override 裡，逐一 grep 各自函式本體，只有 9 個有觸及 `fMain`：`ReloadParameter`、`LookForFile`、`S2F15_CheckNewEquipmentConstant`、`S2F15_UpdateNewEquipmentConstant`、`S2F42_Host_Command_Acknowledge`、`ProcessS7F23FromatReceipe`、`ProcessS7F25FromatReceipe`（以上都在 `uHGemHT9045.cpp`），加上 `AddSV`（`uHGemHT9045_SV.cpp`）、`AddEC`（`uHGemHT9045_EC.cpp`）。這 9 個裡只有 5 個**只**碰 `fMain`，因此真正被本波次完全解鎖：`ReloadParameter`、`LookForFile`、`S2F15_CheckNewEquipmentConstant`、`ProcessS7F23FromatReceipe`、`ProcessS7F25FromatReceipe`。其餘 4 個同時也碰 `fLotInfo`/`fSCKART`/`fNote`/`fSetup`（這波完全沒補），仍卡住：`S2F15_UpdateNewEquipmentConstant`（+`fLotInfo`、+`fSetup`）、`S2F42_Host_Command_Acknowledge`（+`fLotInfo`、+`fNote`、+`fSCKART`——這是兩個最大的卡住函式之一，golden uHGemHT9045.cpp:1146-4191）、`AddSV`（+`fLotInfo`）、`AddEC`（+`fLotInfo`、+`fSCKART`、+`fSetup`——另一個最大的，幾乎整個 uHGemHT9045_EC.cpp 1912 行都是它）。另外，`tests/test_w7_f1_wall2_probe.cpp` 的 `mimic_site_on_off_decode` 那個 `tSiteOnOff` 站點，因為 `vclcompat::StringsProxy` 沒有 `c_str()`，實際上不是逐字對照 golden（golden 直接 `.Strings[z].c_str()`，ported tree 要多包一層 `AnsiString(...)`）——規劃 Bucket 1-5 前不要假設這 22 個（或 9 個 fMain-touching）override 全部就緒。
+    - ⛔ **AI(W906-W7-PLANfix) 20260801：本項附帶的那句自我認證「（本項其餘內容——22 個 override、9 個碰 fMain、5 個完全解鎖的名單——已逐一以 golden 函式本體 grep 複驗，全部正確）」是錯的，在此明確撤回。**
+        - **錯在哪**：「22 個 override」這個數字**是對的**（本次重測一致）；但「9 個碰 `fMain`」與「5 個完全解鎖」**是錯的**，正確是 **7 與 3**。
+        - **為什麼那次「複驗」沒抓到**：當時那道過濾器**只剔除了 `//` 行註解，沒有剔除 `/* */` 區塊註解**。`ProcessS7F23FromatReceipe` 與 `ProcessS7F25FromatReceipe` 唯一的 `fMain` 站點全部落在區塊註解裡（golden `uHGemHT9045.cpp` `:5844`–`:5925` 與 `:5961`–`:6021`），於是被誤判成活的。
+        - **教訓（比數字本身重要）**：一道**未過濾區塊註解**的 grep，不足以支撐「已逐一複驗、全部正確」這種強度的認證。這是本專案「文字宣稱大於程式碼」失效模式的又一個實例——**認證語句本身必須說明用了什麼過濾器**，否則讀者無從判斷它涵蓋不到什麼。
+        - **下方三處補正經 §10-22 重測後仍然成立**（22 個 override、`S2F42` 本體 `:1146-4189`、`fMain` 三 TU 合計 34 相異拼寫／32 活，皆一致），**只有那句認證作廢**。
+    - AI(W906-W7-F1fix2) 20260729 就地補正三處（**其括號內的自我認證已由上一條撤回**）：
         1. **`AddSV` 那格「+`fLotInfo`」不完整，它在 fMain 這一側也還是卡的**：`AddSV` 的本體在 `uHGemHT9045_SV.cpp`，該檔另外碰 6 個 fMain 成員，其中 `edTorue0`(:74)、`edTorue1`(:75)、`lbEPenconder`(:100) **`forms/fMain.h` 沒有、本波次也沒補**（另 3 個 `SVID1190_OSSetup`/`palMainStatus`/`tTestResult` 早期波次已有）。`uHGemHT9045_EC.cpp` 的 fMain 面則是完整的（`cbSetupFileName`:64 + `tSiteOnOff`:72-73）。**把 golden 三個 SECSGEM TU 合起來算：fMain 相異拼寫 34、活 32、facade 現有 29**——W7-F1 波次自報的「28/26」只是 `uHGemHT9045.cpp` 單檔數字。
         2. `S2F42_Host_Command_Acknowledge` 的 golden 行段是 **:1146-4189**（逐字括號配對確認：:4189 是它的收尾 `}`、:4190 是分隔註解、:4191 已經是 `S5F6_ListAlarmData` 的簽名行），原文寫 :1146-4191。
         3. 那句「牆②解鎖」的連結層敘述在 probe 檔頭已被本次重寫成**實測**版本：`ht9045_secsgem` 的 PUBLIC 邊**確實**會把 `libht9045_forms.a` 帶進 link line（證據：`test_SecsWireCodec` 只寫 `PRIVATE ht9045_secsgem`，CMake 生成的 linkLibs.rsp 裡就有 `libht9045_forms.a`）；bare 形式失敗的 5 個 undefined reference **全部**是 `libht9045_globals.a(cpublic.cpp.obj)` 要 `libht9045_public.a` 的 `SearchFile()`/`md5_Folder()`，**沒有一個跟 fMain 有關**；同一組 archive 加上 `--start-group/--end-group` 就 exit 0。所以真正不可拿掉的是 RESCAN group，不是「明列 ht9045_forms」。
+    - ⛔ **AI(W906-W7-PLANfix) 20260801：本項開頭「這條同時記在 `tests/test_w7_f1_wall2_probe.cpp` 檔頭」這句互相佐證的關係已經斷了。** 該 probe 檔頭**現在記的是 7 / 2 / 13 的正確版本**（本次親自讀過該檔頭確認），不再是本項正文的 9/5。→ **不要再拿 probe 檔頭來替本項正文的 9/5 背書；反過來，probe 檔頭與 `docs/DEVLOG.md` 都已是 7/3，本項正文才是全樹唯一還留著 9/5 的地方**（正因如此本項改標 ⛔）。
+
+17. 🆕 **AI(W906-W7-DOCS) 20260801 — §6 W7-L1 條目（:454）的「~10,559 行」是算錯的，且該格的檔案數已由 §2-DA3 改為 6 檔**
+    - **行數**：本波次以 `wc -l` 對 golden 逐檔實測——`asendic_Loader.cpp` **3312**、`_Auto.cpp` **2561**、`_Color.cpp` **1553**、`_Auto_RT.cpp` **1047**、`_Loader_RT.cpp` **905**、`_Auto2.cpp` **749**、`_Scanner.cpp` **372**，**合計 10,499**。
+    - **§6:454 自己列出的每檔數字其實全部正確**（與本波次實測逐一相符），**錯的是它的總計**：那 7 個數字相加就是 **10,499**，不是條目上寫的 `~10,559`（**多了 60**，是純粹的加總失誤，不是量測差異）。
+    - **因此任務簡報所說的「~10,559 → ~10,187」也連帶不對**（它是拿錯誤的總計去減 372）。**正確數字：7 檔 10,499 → 排除 `Scanner` 後 6 檔 10,127 行。**
+    - 進一步扣掉已落地的 `Auto2`(749)：**W7-L1 實際剩餘 5 檔、9,378 行。**
+    - §6:454 原文依 append-only 保留不動，以本項為準。
+18. 🆕 **AI(W906-W7-DOCS) 20260801 — §10-16 的「9 個 override 觸及 `fMain`」與「5 個完全解鎖」要改成 7 與 3（同一個 `/* */` 盲點的第二個受害者）**
+    - 承 §10-15 的更正：本波次對 cp950 嚴格解碼後的 golden `SECSGEM/uHGemHT9045.cpp` 建立**逐行的區塊註解狀態機**，重新統計 §10-16 點名的 7 個 `uHGemHT9045.cpp` 內 override，區分「活的 `fMain->`」與「在 `/* */` 內的 `fMain->`」：
+
+      | override | golden 行段 | 活 `fMain->` | 死（區塊註解內） |
+      |---|---|---|---|
+      | `ReloadParameter` | :371-381 | 4 | 0 |
+      | `LookForFile` | :466-482 | 4 | 0 |
+      | `S2F15_CheckNewEquipmentConstant` | :483-691 | 2 | 0 |
+      | `S2F15_UpdateNewEquipmentConstant` | :692-1110 | 16 | 0 |
+      | `S2F42_Host_Command_Acknowledge` | :1146-4190 | 48 | 0 |
+      | **`ProcessS7F23FromatReceipe`** | **:5826-5928** | **0** | **2**（`:5850`、`:5852`；區塊註解 `:5844`–`:5925`） |
+      | **`ProcessS7F25FromatReceipe`** | **:5943-6024** | **0** | **2**（`:5966`、`:5968`；區塊註解 `:5961`–`:6021`） |
+
+    - **結論**：`ProcessS7F23FromatReceipe` 與 `ProcessS7F25FromatReceipe` **在活程式碼裡完全沒有碰過 `fMain`**。它們之所以被列進「觸及 `fMain`」清單，純粹是因為 grep 沒有排除 `/* */`。
+    - **修正後的數字**：22 個 override 中觸及 `fMain` 的是 **7 個**（不是 9 個）；其中「只碰 `fMain`、因此被 W7-F1 完全解鎖」的是 **3 個**——`ReloadParameter`、`LookForFile`、`S2F15_CheckNewEquipmentConstant`。
+    - **`S7F23`/`S7F25` 兩支的正確定位**：它們**從一開始就沒有被牆② 擋住**（活程式碼零 `fMain` 依賴），所以「被本波次解鎖」這個描述對它們並不成立——但**結論仍是可以動工**，只是理由不同。翻譯它們時請注意：**其函式體的絕大部分是死的區塊註解**，真正要翻的活程式碼很少。
+    - **未複驗範圍（誠實聲明）**：本波次只重新量測了上表這 7 支 `uHGemHT9045.cpp` 內的 override。§10-16 同時提到的 `AddSV`（`uHGemHT9045_SV.cpp`）與 `AddEC`（`uHGemHT9045_EC.cpp`）**本波次未重跑區塊註解過濾**，其「仍卡住」的結論未受本項影響、但也未被本項複驗。
+        - ✅ **AI(W906-W7-PLANfix) 20260801 已補上這塊**：`AddSV`／`AddEC` 兩支已用同一支字元級過濾器重跑，且 `uHGemHT9045_SV.cpp` 與 `uHGemHT9045_EC.cpp` **兩檔各自的 `/* */` 區塊註解數量都是 0**，所以區塊註解對這兩支結論零影響。兩支的 `fMain` 活站點分別為 6 與 3，「仍卡住」成立。詳見 §10-22。
+    - ⚠️ **AI(W906-W7-PLANfix) 20260801 就地更正上表兩處（結論 7/3 完全不受影響，但數字要準）**：
+        1. **`S2F42_Host_Command_Acknowledge` 那列的「活 `fMain->` = 48」偏高，正確是 43。** 該函式本體共有 **48** 個 `fMain->`，其中 **5 個是 `//` 行註解掉的死碼**（golden `uHGemHT9045.cpp:1596`、`:1601`、`:1871`、`:2341`、`:2354`），扣掉後**活的是 43**。上表「死（區塊註解內）= 0」這格**是對的**——那 5 個確實不在區塊註解裡——問題出在「活」那格**沒有同時套 `//` 過濾**，於是把 `//`-死碼算成活的。（**這正好是本輪要修的同一種病的鏡像**：§10-16 那次只濾 `//` 沒濾 `/* */`；§10-18 這一格反過來只濾 `/* */` 沒濾 `//`。**兩種都要濾，缺一不可。**）
+        2. **`ProcessS7F23FromatReceipe` 與 `ProcessS7F25FromatReceipe` 的行段各多算一行**：以括號配對重新確認，S7F23 是 **`:5826-5927`**（`:5826` 簽名、`:5827` 開括號、`:5927` 收尾 `}`、`:5928` 已是分隔註解），S7F25 是 **`:5943-6023`**（`:6024` 已是分隔註解）。上表寫的 `:5826-5928` / `:5943-6024` 各多含一行分隔註解——**與 AI(W906-W7-F1fix2) 對 `S2F42` `:1146-4191`→`:1146-4189` 修掉的是同一個 off-by-one 慣性**。
+        3. 其餘五列（`ReloadParameter` 4/0、`LookForFile` 4/0、`S2F15_Check` 2/0、`S2F15_Update` 16/0、S7F23 0/2、S7F25 0/2）**本次重測逐格相符，不動**。
+    - §10-16 原文保留不動，以本項為準。
+19. 🆕 **AI(W906-W7-DOCS) 20260801 — §8 碰撞矩陣已依 §2-DA4 增補 4 組高共用檔 + `csystem.cpp`/`forms/fMain.cpp` 擁有權例外**
+    - 新增列：`canary_support.{h,cpp}`（實測 **123** 個 `#include`）、`acatchtray_shims.{h,cpp}`（**59**）、`asendic.{h,cpp}`（**7**）、`csystem_shims.{h,cpp}`（**9**），規則一律 **SERIAL — 只由 integrator／主迴圈寫**。
+    - 另新增 §8 小節「擁有權例外（阻塞 9-1）」：`csystem.cpp` 與 `forms/fMain.cpp` 只由序列 integrator 寫入；**任何 recon 報告引用這兩檔的行號一律須在動筆當下重新推導。**
+    - **量測差異已記錄**：簡報的「約 141」是**字串出現數**，真正的 `#include` 數是 **123**，差額 18 全為註解提及。詳見 §8 的「DA4 量測註記」。
+20. 🆕 **AI(W906-W7-DOCS) 20260801 — 建議新增 KNOWLEDGE gotcha（號碼請由 KNOWLEDGE 持有者接在 #16 之後）**：清點 golden 的 dereference／呼叫點時，**只過濾 `//` 行註解會漏掉 `/* */` 區塊註解**，必須做逐行的區塊註解狀態機。
+    - 實證：golden `uHGemHT9045.cpp` 的**兩個**區塊註解（`:5844`–`:5925`、`:5961`–`:6021`）在本專案裡**已經造成三個錯誤數字**——13 個假的 `fSetup` 活成員（§10-15）、`ProcessS7F23`/`ProcessS7F25` 兩支被誤列為「觸及 `fMain`」（§10-18）。
+    - 這是**高複發風險**：整個 SECSGEM 區與 `main.cpp`/`cContact.cpp` 都有大段被 `/* */` 封存的歷史程式碼，而 W7 後續每一波都要做這類清點。
+21. 🆕 **AI(W906-W7-DOCS) 20260801 — ⚠️ §12 gate 4 目前是紅的（先前從未真正全樹跑過），並已於 §12 重新定義**
+    - 本波次把 gate 4 寫成可執行指令並**實際對譯出樹跑了一次**：掃描 1,438 個檔案，**BOM 0 個、非法 UTF-8 0 個**，但 **U+FFFD 3 個檔、共 2,967 個字元**，另有 411 個檔案缺結尾換行。
+    - **U+FFFD 三個檔（全部是既有、已提交狀態，非任何進行中波次造成）**：`cprod.cpp` **2,443** 個、`cpublic.cpp` **520** 個、`tests/test_IniFiles.cpp` **4** 個。
+    - **前兩者是真損壞**：golden 的 Big5 中文註解在早期波次被以 `errors='replace'` 之類的有損方式轉碼，中文內容**已從譯出檔中消失、不可從該檔還原**（只能回 golden 取）。例：`cprod.cpp:13` 現為 `//Ifor 20181023 add `（後面的中文沒了）、`cpublic.cpp:229` 現為一串連續的 U+FFFD（本檔刻意不貼出該字元本身，以免這份文件自己違反 gate 4）。`git show HEAD:...cprod.cpp` 確認**已提交的 blob 內同樣是 2,443 個**，最後觸及的提交是 `124aed2`(W0-tail) / `9afd872`(W4 HAL)。
+    - `tests/test_IniFiles.cpp:171` 的 4 個性質不同（是一句解釋 Big5 位元組的說明性註解本身被波及），但**同樣違反 gate 4**。
+    - **這正是 gate 4 從「口號」變成「可執行閘門」後的第一個發現**：舊寫法「全樹 mojibake / BOM 掃描 = 0」沒有定義掃描範圍、檔案類型與判定方式，所以**沒有人真的跑過全樹**，這 2,967 個字元就一直躺在那裡。
+    - **本波次不修這些檔**（不在文件軌道的寫入授權內，且 `cprod.cpp`/`cpublic.cpp` 的還原需要回 golden 逐段重譯中文註解）。**交主迴圈排一個獨立的修復小波**，並在修完之前把 gate 4 視為**已知紅、且不得再惡化**（新增檔案一律必須乾淨）。
+    - ✅ **AI(W906-W7-PLANfix) 20260801 覆核：基準未惡化。** 本軌用本節 §12 的逐字腳本重跑一次，得 `scanned 1438 file(s); 414 violation(s)`，組成也逐項相符（BOM **0**、非法 UTF-8 **0**、U+FFFD **3 檔**、缺結尾換行 **411 檔**），與上方記錄的基準完全一致。本檔（`docs/W7_UI_ARCHITECTURE_PLAN.md`）本身在該次掃描中**零違規**。
+
+22. 🆕 **AI(W906-W7-PLANfix) 20260801 — §10-16 的「9 / 5」第三次獨立重測：確認正確答案是 7 / 3；並補齊 §10-16「另外還被哪些表單擋住」的嚴重低估**
+
+    > 本項是 §10-16 的**現行取代版本**。§10-16、§10-18 與本項若有出入，以本項為準。本項**沒有**採信 §10-16、§10-18 或 `tests/test_w7_f1_wall2_probe.cpp` 檔頭任何一方的自我宣稱，全部從 golden 重量一次。
+
+    **量測方法（本次重跑，方法本身要能被檢查）**：對 **cp950 解碼**後的 golden `SECSGEM/uHGemHT9045.cpp`、`uHGemHT9045_SV.cpp`、`uHGemHT9045_EC.cpp` 三檔跑一支**字元級**過濾器，**同時**剔除 (a) `//` 行註解、(b) `/* */` 區塊註解、(c) 字串與字元字面值；再對過濾後的文字做**括號配對**取出每支 `HT9045Gem::` 定義的完整本體，只在本體內數 `f<大寫字母>…->` 形式的表單指標。**這三種過濾缺任何一種都會給錯答案**——§10-16 漏了 (b)、§10-18 漏了 (a)，兩邊各錯一次。
+
+    **① override 清冊（重數）= 22，這個數字是對的**
+    `uHGemHT9045.h:346-365` 的 20 個 + `:367-368` 的 2 個 = **22**。`:345` 是被 `//` 註解掉的 `~HT9045Gem`（不算）；`:369` 的 `CheckAndExecuteAsyncRCMD` **不是 virtual**（不算）。三個 `.cpp` 裡以括號配對實際取出的 `HT9045Gem::` 定義與這份宣告清冊**一一對上**（含 `S7F6_ProcessProgramData` 的兩個多載，分別在 `uHGemHT9045.cpp:5326` 與 `:5605`）。
+
+    **② `/* */` 區塊註解實測——`uHGemHT9045.cpp` 全檔恰好 3 段**
+    `:502`–`:513`（12 行，落在 `S2F15_CheckNewEquipmentConstant` 本體內，**不含任何 `fMain`**，故無害）、`:5844`–`:5925`（**82 行**）、`:5961`–`:6021`（**61 行**）。
+    `uHGemHT9045_SV.cpp` 與 `uHGemHT9045_EC.cpp` **各 0 段**——所以區塊註解這個盲點對 `AddSV`/`AddEC` 的結論**結構上不可能有影響**（這正是 §10-18「未複驗範圍」那條的答案）。
+    （§10-18 只點名後兩段；第一段本項一併記錄，好讓下一個人知道「3 段」才是完整答案。）
+
+    **③ 22 支的四分法——7 / 3 就是其中兩個數字**
+
+    | 分類 | 數量 | override |
+    |---|---|---|
+    | **活 `fMain->`**（牆② 真正管得到的） | **7** | `ReloadParameter`、`LookForFile`、`S2F15_CheckNewEquipmentConstant`、`S2F15_UpdateNewEquipmentConstant`、`S2F42_Host_Command_Acknowledge`、`AddSV`、`AddEC` |
+    | └ 其中**只**碰 `fMain` ＝ 表單軸上完全解鎖 | **3** | `ReloadParameter`、`LookForFile`、`S2F15_CheckNewEquipmentConstant` |
+    | 被表單擋住但**完全不碰 `fMain`** | **2** | `S7F4_ProcessProgramAcknowledge`、`S125F4_LevelSettingChangeAcknowledge` |
+    | **零**活表單 deref（表單層完全不擋） | **13** | `AddAlarmList`、`AddCEID`、`AddReprot`、`S5F6_ListAlarmData`、`S7F2_ProcessProgramLoadGrant`、`S7F6_ProcessProgramData`（兩個多載）、`ProcessS7F23FromatReceipe`、`S7F24_FormattedProcessProgramSendAcknowledge`、`ProcessS7F25FromatReceipe`、`S7F26_FormattedProcessProgramData`、`S14F4_Get2DID_BinCode`、`S110F5_RequestCustomerNameList` |
+
+    7 + 2 + 13 = **22**。與 `tests/test_w7_f1_wall2_probe.cpp` 檔頭的 7 / 2 / 13 及 `docs/DEVLOG.md` 的「實際是 7 與 3」**完全一致**——**全樹只剩 §10-16 正文還寫 9/5**，這也是本項存在的理由。
+
+    **④ §10-16 的「also blocked by」註記嚴重低估（本項的第二個修正點）**
+    §10-16 只給了 `S2F15_Update（+fLotInfo、+fSetup）`、`S2F42（+fLotInfo、+fNote、+fSCKART）`、`AddSV（+fLotInfo）`、`AddEC（+fLotInfo、+fSCKART、+fSetup）`，且**完全沒有列出任何「不碰 `fMain` 但仍被表單擋住」的 override**。實測：
+
+    | override | 定義位置（golden） | 活 `fMain->` | 活的**非** `fMain` 表單指標 |
+    |---|---|---|---|
+    | `ReloadParameter` | `uHGemHT9045.cpp:371-380` | 4 | **0** |
+    | `LookForFile` | `:466-472` | 4 | **0** |
+    | `S2F15_CheckNewEquipmentConstant` | `:483-690` | 2 | **0** |
+    | `S2F15_UpdateNewEquipmentConstant` | `:692-1104` | 16 | **8**：`fBarCode`、`fBinSel`、`fBuilder`、`fLotInfo`、`fSetup`、`fSpeed`、`fTemp_Set`、`fTesterTCP` |
+    | `S2F42_Host_Command_Acknowledge` | `:1146-4189` | 43 | **14**：`fAGV`、`fConfiguration`、`fContactCT`、`fFTPClient`、`fLotInfo`、`fNote`、`fObserver`、`fPassword`、`fProductionInfo`、`fSCKART`、`fShowBinSelect`、`fSortCT`、`fTemp_Set`、`fYieldMonitoring` |
+    | `AddSV` | `uHGemHT9045_SV.cpp:55-1012` | 6 | **8**：`fCleaning`、`fContact`、`fGroundMan`、`fLotInfo`、`fObserver`、`fShowBinSelect`、`fSmartDiagnostic`、`fTrayAssignment` |
+    | `AddEC` | `uHGemHT9045_EC.cpp:52-1911` | 3 | **7**：`fBinSel`、`fCleaning`、`fContact`、`fLotInfo`、`fSCKART`、`fSetup`、`fStartCondition` |
+    | **`S7F4_ProcessProgramAcknowledge`** | `uHGemHT9045.cpp:4478-5321` | **0** | **3**：`fLotInfo`、`fOffSet`、`fSetup` |
+    | **`S125F4_LevelSettingChangeAcknowledge`** | `:6176-6214` | **0** | **1**：`fSecurity` |
+
+    - **低估幅度**：`S2F15_Update` 2→**8**、`S2F42` 3→**14**、`AddSV` 1→**8**、`AddEC` 3→**7**。
+    - **兩支被整個漏掉**：`S7F4_ProcessProgramAcknowledge` 與 `S125F4_LevelSettingChangeAcknowledge` **從來沒出現在任何一份清單裡**，但它們**確實被表單擋住**，只是擋住它們的不是 `fMain`。（`S7F4` 的 `fMain->PPID` / `fMain->bNeedClearFile` 在 `:5311`/`:5312`，兩個都是 `//`-死碼。）
+    - **22 支本體活 deref 的表單指標聯集 = 29 個相異表單**：`fAGV`、`fBarCode`、`fBinSel`、`fBuilder`、`fCleaning`、`fConfiguration`、`fContact`、`fContactCT`、`fFTPClient`、`fGroundMan`、`fLotInfo`、`fMain`、`fNote`、`fObserver`、`fOffSet`、`fPassword`、`fProductionInfo`、`fSCKART`、`fSecurity`、`fSetup`、`fShowBinSelect`、`fSmartDiagnostic`、`fSortCT`、`fSpeed`、`fStartCondition`、`fTemp_Set`、`fTesterTCP`、`fTrayAssignment`、`fYieldMonitoring`。
+    - **`AddSV` 連 `fMain` 這一側也還沒好**：它需要的 `edTorue0`、`edTorue1`、`lbEPenconder` 三個成員，本次確認在譯出樹 `forms/fMain.h` 裡**只出現在一段說明性註解中，沒有任何一個是真的成員宣告**（§10-16 fix2 第 1 點成立）。
+    - **三個 TU 合起來的 `fMain` 面**：相異拼寫 **34**、活 **32**（本次重測與 §10-16 fix2 第 1 點的 34/32 一致）。
+
+    **⑤ 對 bucket 排序的實際意涵（這才是這串數字存在的目的）**
+    - 「W7-F1 之後可以直接動工的 override」**是 3 支不是 5 支**：`ReloadParameter`、`LookForFile`、`S2F15_CheckNewEquipmentConstant`。
+    - `ProcessS7F23FromatReceipe` / `ProcessS7F25FromatReceipe` **從一開始就不在牆② 後面**（活程式碼零 `fMain`），所以它們可以動工，但**理由不是「被 W7-F1 解鎖」**；且它們函式體的絕大部分是死的區塊註解（S7F23 括號內 `:5827`–`:5927` 共 101 行，其中 82 行是區塊註解；S7F25 括號內 `:5944`–`:6023` 共 80 行，其中 61 行是區塊註解），**真正要翻的活程式碼很少**。
+    - 另外 13 支在**表單軸上**完全不被擋——但**本項只量了表單 deref**，`HGemPtr` / `LastSet` / SECS wire helper 等其他軸是否擋住它們，**本項沒有量，也不推測**。
+    - 排 Bucket 1-5 時，**表單缺口的真實規模是 29 個表單、不是 §10-16 暗示的 4-5 個**。
+
+23. 🆕 **AI(W906-W7-PLANfix) 20260801 — §6 W7-F1 條目那句「28 個相異成員（其中 25 個是 `cbSetupFileName->Text`；18 個是方法呼叫）」的兩個括號內子數字都是錯的（§6 append-only，更正記於此）**
+
+    對象是 §6「W7-F1 — 牆② 解鎖」條目的這句：「golden 該檔**恰好觸及 28 個相異 `fMain` 成員**（其中 25 個是 `cbSetupFileName->Text`；18 個是方法呼叫）」。以 §10-22 的同一支過濾器對 golden `SECSGEM/uHGemHT9045.cpp` 單檔重量：
+
+    - ✅ **「28 個相異」是對的**（naive 28 / 活 26；`PPID` 與 `bNeedClearFile` 只出現在 `//`-死碼 `:5311-5312`，是那少掉的 2 個）。
+    - ❌ **「25 個是 `cbSetupFileName->Text`」把兩件事混為一談。** 25 是 **`fMain->cbSetupFileName` 這個成員的站點數**（naive 25 / 活 21；4 個死的在 `:5850`、`:5852`、`:5966`、`:5968`，全在區塊註解內），**不是 `->Text` 的數量**。真正寫成 `fMain->cbSetupFileName->Text` 的**只有 9 個站點，且 9 個全是活的**（golden `:468`、`:471`、`:1134`、`:2561`、`:2619`、`:2694`、`:2813`、`:3969`、`:3988`）。其餘的 `cbSetupFileName` 站點走的是 `->Items->Count` / `->Items->Strings[]` / `->ItemIndex` 等別的子屬性。→ **照 25 去估「要幾個 `Text` 綁定」會高估近 3 倍。**
+    - ❌ **「18 個是方法呼叫」低估了 4 個，正確是 22。** naive 的 28 個相異拼寫 = **22 個方法** + **6 個資料**（`PPID`、`bNeedClearFile`、`cbSetupFileName`、`edSoakTime`、`edWorkTemperBase`、`tSiteOnOff`）；活的 26 個 = **22 個方法** + **4 個資料**（扣掉 `//`-死的 `PPID`、`bNeedClearFile`）。**方法那一側活死同數，所以 22 這個數字不受任何過濾方式影響。**
+    - 補充口徑（供對帳）：該檔 `fMain->` 的**站點總數是 84**，其中活 **73**、死 **11**（`//` 7 個 + `/* */` 4 個）。
+    - **§6 原文依 append-only 保留不動；引用時一律用本項的 28 / 9 / 22。**
+
+24. 🆕 **AI(W906-W7-PLANfix) 20260801 — 一致性與誠實度巡檢結果（本項是巡檢報告，不是新待辦）**
+
+    §10-15 的理由、§10-16 的數字被修正後，本軌逐條走過 §6 / §10 / §11 / §12，找還在依賴舊值的句子。結果：
+
+    **(A) 還在依賴 9/5 的地方——只剩 §10-16 正文一處，已就地標 ⛔。** `tests/test_w7_f1_wall2_probe.cpp` 檔頭與 `docs/DEVLOG.md` **都已經是 7/3**（本次親自讀過兩份）。§6 波次落地狀態總表的 W7-F1 那列也已寫「實際只有 3 個 override 被完全解鎖，不是 5 個」，**無需更動**。
+
+    **(B) 還在依賴舊 item-15 理由（「同行尾註」）的地方——找到 1 處**：§10-15 最後那條 F1fix2 的結論小項，已就地加註（數字全部維持，只有理由改成區塊註解版本）。
+
+    **(C) 還在依賴「7 檔 / ~10,559 行」的地方——只有 §6 W7-L1 條目本身，而它已由 §10-17 取代。** 本軌用 `wc -l` 對 golden 重新實測一次：`asendic_Loader.cpp` **3312**、`_Auto.cpp` **2561**、`_Color.cpp` **1553**、`_Auto_RT.cpp` **1047**、`_Loader_RT.cpp` **905**、`_Auto2.cpp` **749**、`_Scanner.cpp` **372**，`wc -l` 自己印的 total 就是 **10499**。→ **§10-17 的 10,499 / 10,127（扣 Scanner）/ 9,378（再扣已落地的 Auto2）三個數字全部坐實，不必再改。** §6 波次落地狀態總表的 W7-L1 那列引用的也已是這組數字。
+
+    **(D) §6 W7-F1 條目的驗證閘那句要打折看**：原文寫「`uHGemHT9045` 的 22 個 override 從『無法引用 fMain』變成『可以開始逐個翻』」。照 §10-22 的四分法，這句**對 22 支整體不成立**——表單軸上真正因 W7-F1 而解鎖的是 **3 支**；另有 2 支從來就不是被 `fMain` 擋的、13 支表單層根本不擋（但可能有非表單的阻塞，未量）、其餘 4 支仍被合計 29 個表單裡的一大票擋著。§6 原文保留，此處為常設更正。
+
+    **(E) 誠實度巡檢——本軌「今天能從樹上確認」的與「不能確認的」**
+
+    | 宣稱 | 今天的狀態 | 處置 |
+    |---|---|---|
+    | §10-16 fix2「已逐一 grep 複驗，全部正確」 | **不成立**（過濾器漏 `/* */`） | **已明確撤回**（見 §10-16 該項） |
+    | §10-15 fix2「這三項……已坐實」的 `fSetup` 理由 | 數字成立、**理由不成立** | 已就地加註 |
+    | §10-18 表 `S2F42` 活 48 | **不成立**（含 5 個 `//`-死碼），正確 43 | 已就地更正 |
+    | §10-1「ROADMAP:9 / :20 仍逐字寫著……」 | ✅ **本軌今日重查，兩行仍逐字相符**，本項確實仍開放 | 維持 |
+    | §10-2「ROADMAP:133 仍寫『~19 個 FormsFacade 缺口』」 | ✅ **本軌今日重查，仍逐字相符** | 維持 |
+    | §10-3「ROADMAP:135 仍寫『卡 GetSiteNo/GetOrderOfContact』」 | ✅ **本軌今日重查，仍逐字相符** | 維持 |
+    | §10-4「ROADMAP:49 仍寫『(≈6% 方法 / ~2.6% 行)』」 | ✅ **本軌今日重查，仍逐字相符**；替代值 ~14.5% **本軌同樣未複驗** | 維持，且警語不變 |
+    | §10-5「`THeatTable` 註解已修正、本項結案」 | ✅ 本軌今日重查：`forms/fMain.h` 與 `forms/FormWidgets.h` 仍留著該複驗紀錄，與描述相符 | 維持 |
+    | §10-6「`safe whether or not` 已完全消失」 | ✅ 本軌今日重查：`vclcompat/vcl_compat.h` 對該字串 **grep 零命中** | 維持 |
+    | §10-21 gate 4 基準 414（3 檔 U+FFFD + 411 缺換行） | ✅ 本軌今日用 §12 逐字腳本重跑：**1438 檔 / 414 違規，組成逐項相符** | 維持（見 §10-21 新增的覆核小項） |
+    | §1 基準列與 §12 gate 1 的「ctest 91/95」 | ⚠️ **已過時**（測試數已成長） | 見下 (F) |
+
+    **(F) 「91/95」這個基準已經過時，全檔的閘門句子都要改讀成 107/111**
+    - 本軌**沒有**、也**不得**對共用 build 目錄跑 `cmake`/`ctest`。以下是**唯讀觀察**，來源已標明：
+      - 目前共用建置目錄是 `PORTED\build`（不是 §1 表格寫的 `build_resume_verify_20260727`——那個目錄仍在，但已不是主要目錄）。讀它生成的 `tests/CTestTestfile.cmake`，`add_test` 共 **111** 筆 → **測試總數是 111，不是 95**。
+      - 樹內最新一份 ctest log（`build_resume_0801_ctest.log`）記錄 `96% tests passed, 4 tests failed out of 111`，失敗的**正是同 4 個既有環境漂移**：`config_db`、`IniFiles`、`ini_helpers`、`config_loaders`。→ **現行基準 = 107/111，同 4 個既有失敗。**
+    - **這是本軌讀既有紀錄得到的，不是本軌自己跑出來的**——本軌只數了 `add_test` 筆數與讀了那份 log。要當交付閘門用時請自行重跑。
+    - **影響範圍**：§1 基準列、§12 gate 1、以及 §6/§11 每一處寫「91/95」「ctest 91/95」的驗證閘，**一律改讀成「107/111、同 4 個既有環境漂移失敗」**。§6 原文依 append-only 不改，§1 與 §12 已就地加註指回本項。
 
 ---
 
@@ -586,10 +841,66 @@ golden <path>/<Form>.dfm
 
 ## §12 每一波共同的收尾閘（ratchet，不可跳）
 
-1. **Fresh from-scratch** build（不是增量）+ `ctest --timeout 300`（或 600）= **91/95**、且失敗的就是那 4 個既有環境漂移（`config_db`/`IniFiles`/`ini_helpers`/`config_loaders`）。
+1. **Fresh from-scratch** build（不是增量）+ `ctest --timeout 300`（或 600）= ~~**91/95**~~ → **107/111**（AI(W906-W7-PLANfix) 20260801 更新，測試總數已由 95 成長到 111，見 §10-24(F)）、且失敗的就是那 4 個既有環境漂移（`config_db`/`IniFiles`/`ini_helpers`/`config_loaders`）。**寫閘門時請用當下實際的測試總數，不要照抄任何歷史數字。**
 2. 純重構波另加：**每個 test target 的 assertion 數 build 前後逐一 diff 必須相同**。
 3. `grep -ic resolving` build log = **0**。
-4. 全樹 **mojibake（U+FFFD）/ BOM 掃描 = 0**。
+4. **編碼閘（gate 4）** — **AI(W906-W7-DOCS) 20260801 重新定義**（原文只寫「全樹 mojibake（U+FFFD）/ BOM 掃描 = 0」，沒有定義範圍／檔案類型／判定方式，**所以從來沒有人真的跑過全樹**；實際跑起來是紅的，見 §10-21）。新定義如下：
+
+   **範圍（極重要）**
+   - **只掃譯出樹 `D:\HT9045\HT9011UC_Cpp_V3.33.906.0\`。**
+   - **GOLDEN（`D:\HT9045\HT9011UC_Code_V3.33.906.0_20260618\`）一律排除。** golden **本來就是 cp950/Big5**，那是它的正確編碼、不是缺陷。**golden 永遠不得被重新編碼**（§1「永不修改」、§5-6）。任何「把 golden 轉成 UTF-8 就能過閘」的念頭都是**破壞黃金真相**，直接否決。
+   - 譯出樹內排除：`build*/`（產物）、`.git/`、`.svn/`。
+   - **`.svn` 一律不搜尋、不修改**（專案通則）。
+
+   **檔案類型**：`.c` `.cpp` `.h` `.hpp` `.inc` `.md` `.txt` `.json` `.rc` `.py` `.cmake` `.bat` `.yml` `.yaml`，外加無副檔名的 `CMakeLists.txt`。
+   （二進位資產——`.bmp` `.ico` `.res` `.a` `.exe` 及 `.dfm` 抽出的 blob——**不在此閘範圍**。）
+
+   **每個檔案必須同時滿足 4 個條件**
+   1. **是合法 UTF-8**（`bytes.decode('utf-8')` 不拋例外）；
+   2. **沒有 BOM**（不以 `EF BB BF` 開頭）；
+   3. **不含 U+FFFD**（`\ufffd`，即 replacement character）；
+   4. **以換行結尾**（空檔案豁免）。
+
+   **判定**：任一違規即 gate 4 FAIL（腳本 exit 1）。
+
+   **確切指令**（Git Bash 或任何 shell 皆可；只讀，不寫任何檔）：
+
+   ```bash
+   python - <<'PY'
+   import os, sys
+   ROOT = r'D:/HT9045/HT9011UC_Cpp_V3.33.906.0'      # PORTED tree ONLY -- never GOLDEN
+   EXT = ('.c','.cpp','.h','.hpp','.inc','.md','.txt',
+          '.json','.rc','.py','.cmake','.bat','.yml','.yaml')
+   bad, n = [], 0
+   for root, dirs, files in os.walk(ROOT):
+       dirs[:] = [d for d in dirs
+                  if d not in ('.git', '.svn') and not d.startswith('build')]
+       for f in files:
+           if not (f.endswith(EXT) or f == 'CMakeLists.txt'):
+               continue
+           p = os.path.join(root, f)
+           rel = os.path.relpath(p, ROOT).replace(os.sep, '/')
+           n += 1
+           raw = open(p, 'rb').read()
+           if raw.startswith(b'\xef\xbb\xbf'):
+               bad.append(('BOM', rel))
+           try:
+               txt = raw.decode('utf-8')
+           except UnicodeDecodeError as e:
+               bad.append(('NOT-UTF8 (%s)' % e.reason, rel)); continue
+           if '\ufffd' in txt:
+               bad.append(('U+FFFD', rel))
+           if raw and not raw.endswith(b'\n'):
+               bad.append(('NO-TRAILING-NEWLINE', rel))
+   print('gate4: scanned %d file(s) under PORTED tree; %d violation(s)' % (n, len(bad)))
+   for k, rel in bad:
+       print('  %-22s %s' % (k, rel))
+   sys.exit(1 if bad else 0)
+   PY
+   ```
+
+   **目前基準（AI(W906-W7-DOCS) 20260801 實跑）**：`scanned 1438 file(s); 414 violation(s)` — BOM **0**、非法 UTF-8 **0**、U+FFFD **3 檔**（`cprod.cpp` 2,443 字元／`cpublic.cpp` 520／`tests/test_IniFiles.cpp` 4）、缺結尾換行 **411 檔**（其中 404 個是 `tools/dfm2rc/ir_out/*.ir.json` 產生檔，另 7 個是 `ainarm9045_*.cpp` ×6 + `myTimer.cpp`）。
+   **→ gate 4 目前為已知紅（全部是既有債，非進行中波次造成）。在主迴圈排的修復小波完成前，本閘的通過條件暫定為「不得比此基準更差」；新增或修改的檔案一律必須完全乾淨。** 詳見 §10-21。
 5. **獨立 fidelity-review agent** 逐行對 golden（不重譯），發現一律由主迴圈核實 golden 後修正。
 6. 遇到真正的阻塞：**SKIP 並記錄到 `docs/W7-UI-SKIPPED.md`**，不要停下整條線（使用者常設指示）。
 7. **不要 `git commit`**（commit 由主迴圈負責）。

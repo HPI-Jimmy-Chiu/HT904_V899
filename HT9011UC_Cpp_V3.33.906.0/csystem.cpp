@@ -1240,9 +1240,29 @@ static void W7C1_WriteIniData(AnsiString,AnsiString,AnsiString,double){}// golde
 //    C3 iLOTSTATUS_R, C4 iLOTSTATUS_A, C5/C6 the two iTesterType shadows).
 //    A source-text pin because both structs and both instances are file-`static`
 //    here -- no test TU can name them, verified not assumed.  The residual
-//    exposure (no offline path exercises the ART branches these constants gate,
-//    so no BEHAVIOURAL test is possible today) is logged in
-//    docs/W7-UI-SKIPPED.md under W7-F2-fix per plan SS12.6.
+//    exposure is logged in docs/W7-UI-SKIPPED.md section
+//    "## W7-F2-fix (2026-07-29)" per plan SS12.6.
+//
+//  AI(W906-W7-F2fix2) 20260731 -- TWO CORRECTIONS TO THE PARAGRAPH ABOVE.
+//    (1) It said "no BEHAVIOURAL test is possible today".  Too strong.  No test TU
+//        can NAME these seams, which is why the pin is source-level; but
+//        DoCleanOutFinishCheck() below is an ordinary free function (declared in
+//        csystem.h, already driven by tests/test_w7_c1_cleanout_finish.cpp) and its
+//        ART gate reads W7C1_SCKART->iTesterType at RUNTIME, so a test that forced
+//        USE_AUTO_RETEST / IniConfig.bA10_AutoReTest / CosFunction.bUseSCKART on and
+//        drove the clean-out machine to that gate could distinguish 0 from 1 by its
+//        side effects.  Not cheap (the gate sits behind ~20 sequential machine-state
+//        guards, and the distinguishing effects run through CheckLoadingCount and the
+//        WAR0119/WAR0120/WAR0121 alarm arms), and NOT attempted -- but possible, and
+//        recorded as such rather than declared impossible.
+//    (2) The pin's REACH is now measured, not assumed.  An independent mutation run
+//        (26 perturbations, 20260729) found four ways to change one of the six values
+//        and keep the suite green; the test's parser was hardened on 20260731 and
+//        those four now redden.  What a text scanner still cannot see is listed in
+//        that test's PART C block under "STILL NOT CLOSED" -- most importantly, a
+//        ctor body that changes the field WITHOUT naming it, and any write to
+//        W7C1_fSCKART_ext / W7C2_fSCKART_ext from elsewhere in this file.  If you add
+//        one, the pin will not notice.
 //
 //  NOT MERGED WITH W7C2_TfSCKARTSeam's `core` either: golden has ONE fSCKART, this
 //  tree has two independent SckArtState cores plus their shadow fields, so a merge
@@ -1260,11 +1280,36 @@ struct W7C1_TfSCKARTSeam {
     // this wave -- disclosed and reported.
     // AI(W906-W7-F2fix) 20260729: the two initialisers below are pinned by
     // tests/test_w7_f2_sckart_state.cpp PART C checks C1 (iLOTSTATUS_L) and C5
-    // (iTesterType), which parse THIS init-list out of csystem.cpp's source text,
-    // anchored on the string `W7C1_TfSCKARTSeam():`.  Renaming the ctor, or moving these
-    // to in-class initialisers, will make that test FAIL LOUDLY (by design) -- read it
-    // before reshaping this list, and update the expected values there in the SAME change
-    // if you are deliberately reconciling the divergence.
+    // (iTesterType), which parse THIS init-list out of csystem.cpp's source text.
+    // AI(W906-W7-F2fix2) 20260731 -- THE PROMISE THIS NOTE USED TO MAKE WAS NOT TRUE.
+    // It said the pin was "anchored on the string `W7C1_TfSCKARTSeam():`" and that
+    // renaming the ctor "will make that test FAIL LOUDLY (by design)".  A mutation run
+    // renamed the struct and the ctor together and the test stayed GREEN -- the old
+    // anchor also matched the very sentence you are reading, so the parser was reading
+    // this COMMENT, not the list below.  Both are fixed on the test side (comments are
+    // stripped file-wide, and the search is anchored on `struct W7C1_TfSCKARTSeam`
+    // first), and the promise is now MEASURED, not asserted.  Each of these makes that
+    // test go red, verified by mutating this file on 20260731 and re-verified case by
+    // case on 20260801: renaming the struct or the ctor; deleting the field from the list
+    // or deleting the whole ctor; moving the list to in-class initialisers; replacing the
+    // literal with an expression (`0+1` included); ASSIGNING the field in the ctor body
+    // instead (which is golden's own shape -- golden Automation/SCK_ART.cpp:38-55 has no
+    // init-list at all); and of course changing the value.  Value-preserving reflows stay
+    // green on purpose: extra spaces, leading commas, a comment inside the list, a newline
+    // after the `(`.
+    // AI(W906-W7-F2fix3) 20260801 -- THREE ADDITIONS TO THAT MEASURED LIST.  (1) A ctor-body
+    // assignment used to stay GREEN if the same line also carried a string literal
+    // containing `//` (`{ const char* s = "http://ART"; ... iTesterType = 1; }`) -- the
+    // test's comment stripper was not literal-aware, so it deleted the assignment before
+    // looking at it.  That was the ONE silent hole a 31-mutation prover run found in the
+    // 20260731 parser; it is closed, and the shape now reddens with or without the literal.
+    // (2) BOTH clang-format constructor-initializer styles are now value-preserving reflows
+    // that stay GREEN -- `Ctor() : ...` and `Ctor()` + newline + `: ...`; before, running a
+    // formatter over this file reddened the pin without changing a value.  (3) So are
+    // hex/octal/suffixed spellings of the same value (`iTesterType(0x0)`, `(0u)`); a
+    // hex/suffixed literal with a DIFFERENT value (`0x1`, `3L`) still reddens.
+    // Read that test before reshaping this list, and update the expected values there
+    // in the SAME change if you are deliberately reconciling the divergence.
     W7C1_TfSCKARTSeam():iTesterType(0),iLOTSTATUS_L(0),iWaitGPIBLotR(0),
                         iCurrentFlexARTStep(0),iInputJamCnt(0),iOutputJamCnt(0){}
 };
@@ -2409,6 +2454,23 @@ void DoCleanOutFinishCheck()
 // functions -- stay no-ops. Every call site is reached only inside
 // CosFunction.bAutoRetestGPIBmode==true (default false offline), so this is
 // behavior-neutral for every currently-passing suite.
+// AI(W906-W7-F2fix2) 20260731 -- WHO CAN FLIP THAT FLAG.  "default false offline" is
+// load-bearing here, at the top of this seam block, and in the divergence note below,
+// so it was re-derived instead of repeated: `CosFunction.bAutoRetestGPIBmode` has
+// exactly TWO writers in the ported tree, and they are the two arms of one if/else,
+// both inside SckArtRem_AccessFile (Automation/SCK_ART_Remainder.cpp), selected by
+// `if(st.iTesterType==1)` on the value that function has just read out of the recipe's
+// [AutoRetest]/iTesterType key.  That writer is itself behind an early
+// `if(CosFunction.bUseSCKART==false) return;`, false by default, so nothing offline
+// flips the flag unless a caller turns bUseSCKART on first --
+// tests/test_SCK_ART_Remainder.cpp does exactly that deliberately and then asserts the
+// flag went true.  So "default false" stands.  What it is NOT is a constant: it is
+// DERIVED from the same iTesterType the D2 divergence below is about, so on a real
+// machine with bUseSCKART on, a recipe carrying iTesterType=1 turns both on together.
+// AI(W906-W7-F2fix3) 20260801: the five PORTED line numbers the paragraph above used to
+// carry were all still correct when re-checked this round -- they are gone anyway, per
+// KNOWLEDGE gotcha 10, which is about rot rather than about being wrong today.  Every
+// claim above was re-derived from the named symbols on 20260801.
 struct W7C2_TfSCKARTSeam {
     int    iNeedRT;        int iLotCount;       int iTesterType;
     int    iCurrentStatus; int iLOTSTATUS_W;    int iLOTSTATUS_R;   int iLOTSTATUS_A;
@@ -2440,9 +2502,13 @@ struct W7C2_TfSCKARTSeam {
     // claim that used to close this note was FALSE -- nothing observed these four
     // initialisers.  They are now pinned for real by that test's PART C: checks C2
     // (iLOTSTATUS_W), C3 (iLOTSTATUS_R), C4 (iLOTSTATUS_A) and C6 (iTesterType) parse
-    // THIS init-list out of csystem.cpp's source text, anchored on the string
-    // `W7C2_TfSCKARTSeam():`.  Same warning as the W7C1 seam above: reshaping this list
-    // (rename, in-class initialisers) makes that test fail loudly on purpose.  NOTE that
+    // THIS init-list out of csystem.cpp's source text.
+    // AI(W906-W7-F2fix2) 20260731: this note carried the same two defects as the W7C1
+    // one above -- the "anchored on the string `W7C2_TfSCKARTSeam():`" anchor also
+    // matched this comment, and a struct+ctor rename left the pin green.  Fixed on the
+    // test side; the list of perturbations that DO redden it (measured, not asserted --
+    // including assigning one of these four in the ctor body) is written out in the
+    // W7C1 note above and in that test's own PART C block.  NOTE that
     // the five csystem.cpp reads of `W7C2_SCKART->iTesterType` read THIS shadow field,
     // not `core.iTesterType` -- CheckNeedRT() above is the only thing that ever copies
     // one into the other.

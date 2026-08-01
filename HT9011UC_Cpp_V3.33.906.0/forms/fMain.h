@@ -311,29 +311,51 @@ public:
     //    `W906_..._Sim`/call-count seam (per the fMain.h contract's rule 4
     //    above), never a silent implementation of golden's real logic.
     //
-    //    AI(W906-W7-F1fix) 20260729 -- CORRECTION, re-verified by grepping the
-    //    22 overrides' bodies directly (uHGemHT9045.cpp + uHGemHT9045_SV.cpp's
-    //    AddSV + uHGemHT9045_EC.cpp's AddEC): the "Wall 2" unlock this facade
-    //    surface provides is REAL but NARROWER than the prose above implies.
-    //    9 of the 22 overrides touch fMain at all (ReloadParameter,
-    //    LookForFile, S2F15_CheckNewEquipmentConstant,
-    //    S2F15_UpdateNewEquipmentConstant, S2F42_Host_Command_Acknowledge,
-    //    ProcessS7F23FromatReceipe, ProcessS7F25FromatReceipe, AddSV, AddEC).
-    //    Only 5 of those 9 are FULLY unblocked by this wave (they touch
-    //    ONLY fMain): ReloadParameter, LookForFile,
-    //    S2F15_CheckNewEquipmentConstant, ProcessS7F23FromatReceipe,
-    //    ProcessS7F25FromatReceipe. The other 4 ALSO dereference fLotInfo /
-    //    fSCKART / fNote / fSetup, none of which gained any member this wave,
-    //    so they remain blocked: S2F15_UpdateNewEquipmentConstant (+fLotInfo,
-    //    +fSetup), S2F42_Host_Command_Acknowledge (+fLotInfo, +fNote,
-    //    +fSCKART -- one of the two largest override bodies, golden
-    //    uHGemHT9045.cpp:1146-4189), AddSV (+fLotInfo), AddEC (+fLotInfo,
-    //    +fSCKART, +fSetup -- the other largest, all ~1912 lines of
-    //    uHGemHT9045_EC.cpp). See tests/test_w7_f1_wall2_probe.cpp's header
-    //    and docs/W7_UI_ARCHITECTURE_PLAN.md SS10 for the full re-derived
-    //    accounting (including why fSetup/fLotInfo/fSCKART/fNote member
-    //    counts reported elsewhere were inflated by uncommented-code
-    //    filtering that was never applied).
+    //    AI(W906-W7-F1fix) 20260729 -- CORRECTION: the "Wall 2" unlock this
+    //    facade surface provides is REAL but NARROWER than the prose above
+    //    implies.
+    //
+    //    AI(W906-W7-F1fix3) 20260731 -- THAT CORRECTION'S FIGURES WERE STILL
+    //    WRONG, and the failure mode is named here so it stops recurring: it
+    //    said "9 of the 22 overrides touch fMain, and 5 of those are FULLY
+    //    unblocked because they touch ONLY fMain". Its scan recognised only
+    //    `//` comments and NEVER `/* */` BLOCK comments. Two of that 9 --
+    //    ProcessS7F23FromatReceipe and ProcessS7F25FromatReceipe -- have NO
+    //    live fMain dereference at all: their only fMain sites sit inside block
+    //    comments that OPEN at golden uHGemHT9045.cpp:5844 (S7F23 --
+    //    fMain->cbSetupFileName at :5850/:5852) and :5961 (S7F25 -- the same
+    //    member at :5966/:5968). Re-derived this wave with a character-level
+    //    comment-AND-string-aware scan of the cp950-decoded golden over the
+    //    brace-matched bodies of all 22 virtuals (golden uHGemHT9045.h:346-365
+    //    + :367-368), the real figures are:
+    //      * SEVEN overrides live-dereference fMain: ReloadParameter,
+    //        LookForFile, S2F15_CheckNewEquipmentConstant,
+    //        S2F15_UpdateNewEquipmentConstant, S2F42_Host_Command_Acknowledge
+    //        (body golden uHGemHT9045.cpp:1146-4189), AddSV, AddEC.
+    //      * THREE of those seven touch ONLY fMain and every member they need
+    //        is present here today: ReloadParameter (LoadTestModePicture,
+    //        UpdateMainOperateMode, LoadRunModePicture, LoadStartModePicture),
+    //        LookForFile (cbSetupFileName, LookForFile) and
+    //        S2F15_CheckNewEquipmentConstant (CanChangeSite). "Unblocked" means
+    //        on the FORM-FACADE axis only -- non-form dependencies are a
+    //        separate question.
+    //      * The other FOUR are blocked on far more than the "+fLotInfo /
+    //        +fSetup / +fSCKART / +fNote" the old note listed:
+    //        S2F15_UpdateNewEquipmentConstant on 8 other live form pointers,
+    //        S2F42_Host_Command_Acknowledge on 14, AddSV on 8 (plus the 3
+    //        missing fMain widgets in the fix2 block below), AddEC on 7.
+    //      * TWO more overrides are form-blocked WITHOUT touching fMain and were
+    //        missing from every earlier list: S7F4_ProcessProgramAcknowledge
+    //        (fLotInfo/fOffSet/fSetup) and S125F4_LevelSettingChangeAcknowledge
+    //        (fSecurity). The remaining 13 have zero live form dereference.
+    //      * Across the 22 bodies, 29 distinct form pointers are live-
+    //        dereferenced; PORTED/forms holds 9 form headers, so 21 of those 29
+    //        have NO facade header at all. fMain is the only one that is nearly
+    //        complete (3 of the 32 members these bodies need are missing).
+    //    The full per-override / per-form table, with golden line citations and
+    //    the LOWER-BOUND caveat on the per-header "missing" counts, lives in
+    //    tests/test_w7_f1_wall2_probe.cpp's header; see also
+    //    docs/W7_UI_ARCHITECTURE_PLAN.md SS10.
     //
     //    AI(W906-W7-F1fix2) 20260729 -- the block above is scoped to golden
     //    uHGemHT9045.cpp only, and that hides one gap: AddSV lives in
@@ -417,6 +439,18 @@ public:
                                     //   eventual TfMain::CanChangeSite override translation (once fMain gains a real
                                     //   binder with access to those globals) should call ComputeCanChangeSite
                                     //   instead of re-deriving the branch tree.
+                                    //   AI(W906-W7-F1fix3) 20260731 -- the duplication is THREE-WAY, not two-way, so
+                                    //   do not read the note above as "resolved at two". The third live implementation
+                                    //   is Automation/auto9045.cpp:197-202, W5FA_TfMainExt::CanChangeSite() -- a
+                                    //   ZERO-argument member whose body is a literal `return true;` under a "golden
+                                    //   main.cpp body unavailable this wave" JUDGMENT CALL comment, with a LIVE call
+                                    //   site 487 lines below it at auto9045.cpp:684
+                                    //   (`if(W5FA_FMain.CanChangeSite()==false) { return 3; }`). Verified by grepping
+                                    //   the whole ported tree: those are the only three CanChangeSite bodies
+                                    //   (this member + ComputeCanChangeSite + the auto9045 stub), and the auto9045 one
+                                    //   is the only one that is NOT test-drivable -- being a literal constant it has
+                                    //   no seam, so its `return 3` path is unreachable in any test. Whoever gives
+                                    //   fMain a real binder should collapse all three onto ComputeCanChangeSite.
     bool W906_CanChangeSite_Sim;                  // [PORT-ONLY SEAM] test-settable return, default true
     virtual void BtnTrayEndClick(void *Sender); // [METHOD] golden main.h:925 (body main.cpp:13944 -- one line,
                                     //   InitialTrayFeedTask("BtnTrayEndClick"), itself untranslated: golden main.h:1245

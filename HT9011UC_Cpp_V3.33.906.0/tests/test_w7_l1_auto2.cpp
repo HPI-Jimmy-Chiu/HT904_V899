@@ -14,30 +14,77 @@
 //  Every assertion below now constrains a specific observable of the state
 //  machine and has been PROVEN capable of failing (see FAILABILITY PROOF).
 //
+//  AI(W906-W7-L1fix3) 20260801: THREE COVERAGE HOLES CLOSED + TWO OVERSTATED
+//  CLAIMS CORRECTED.  The trajectory assertions were load-bearing but read ONLY
+//  the Task cursors, so the whole actuator surface was unconstrained: inverting
+//  the conveyor commands, swapping a cylinder Push()/Pop(), or deleting every
+//  MOT[MMAuto2Z].ClearTray() each left the suite at 46 passed, 0 failed.  All
+//  three are now observed, each with its own red-then-green mutation below.  The
+//  two corrected claims are the over-broad "ANY single Task=N transition"
+//  sentence (see PROOF OBJECTIVE) and the FAILABILITY PROOF banner, which pasted
+//  `(line N)` suffixes the shipped file could not print.
+//
 //  PROOF OBJECTIVE
 //  ---------------
 //  Drive the Auto2-tray SM family over the Sim HAL (Cylinder[]/MOT[]/Sen[]/SW[])
 //  with no hardware, and assert each SM walks the SPECIFIC cursor trajectory the
-//  golden prescribes -- not merely "it did not crash".  A trajectory assertion is
-//  load-bearing: deleting or re-targeting any single `Task=N` transition drops N
-//  (and everything downstream of it) out of the observed set and the test goes red.
+//  golden prescribes -- not merely "it did not crash" -- AND that it leaves the
+//  actuators (SW[] belt outputs, Cylinder[] extend/retract, MOT[] tray flags) in
+//  the state golden prescribes at the point golden prescribes it.
+//
+//  AI(W906-W7-L1fix3) 20260801: THE TRAJECTORY CLAIM HERE WAS OVER-BROAD AND IS
+//  NOW SCOPED.  It used to read "deleting or re-targeting ANY single `Task=N`
+//  transition drops N (and everything downstream of it) out of the observed set
+//  and the test goes red" -- which the file's own NOT-COVERED register already
+//  contradicted.  Both ends of the range were re-run this session against THIS
+//  file (see mutations S1/S2 in the FAILABILITY PROOF below):
+//    * ON A DRIVEN PATH the claim holds.  Re-targeting DoAuto2 case 30's
+//      `Task=40;` (golden :469) to `Task=999;` took the suite to 52 passed,
+//      8 failed.
+//    * ON A DEAD ARM it cannot hold.  Re-targeting the `Task=50;` in DoAuto2
+//      case 40's ELSE arm (golden :490) to `Task=999;` left the suite at
+//      60 passed, 0 failed -- that arm is never entered under this fixture
+//      (Sen[SnAuto2FixCyPush] reads "unknown", so `IsOff()==false` is true and
+//      the then-arm at golden :472-478 always wins; see NOT COVERED below).
+//      Both mutations were also run against the PREVIOUS 46-assertion revision
+//      of this file, which answered 38/8 and 46/0 -- same conclusion, so the
+//      over-broad sentence was wrong when it was written, not only now.
+//  SCOPED FORM: a trajectory assertion is load-bearing for `Task=N` transitions
+//  ON THE DRIVEN PATHS enumerated under WHAT IT DRIVES.  It says nothing about
+//  the dead arms the NOT-COVERED register enumerates, and is not claimed to.
 //
 //  TWO TEST SEAMS THIS FILE INTRODUCES (both fixture-only; zero production change)
 //  ------------------------------------------------------------------------------
 //  1. VIRTUAL TIME.  TQPF_Timer (myTimer.h) calls QueryPerformanceCounter
 //     directly and has NO injection point -- unlike MyTickCount (common.cpp:1907,
-//     which atester.cpp:1515 redirects with a TU-local macro) there is no seam to
-//     override, and unlike uHGemEquipment's TimerSetMSAndOn there is no <=0
-//     shortcut inside the class.  So instead of overriding the clock we RE-ARM the
-//     pending timer with a 0 ms deadline before each SM tick: SetMS(0) leaves
-//     rSetTime==0 and On() then sets rEnd = rStart - 2*overhead, so the very next
-//     Off() is true (myTimer.cpp:40-44/94-98).  The Auto2 timers are non-static
+//     which atester.cpp:1519-1520 shadows with a TU-local stand-in + `#define`)
+//     there is no seam to override, and unlike uHGemEquipment's TimerSetMSAndOn
+//     there is no <=0 shortcut inside the class.  So instead of overriding the
+//     clock we RE-ARM the pending timer with a 0 ms deadline before each SM tick:
+//     SetMS(0) leaves rSetTime==0 and On() then sets rEnd = rStart - 2*overhead
+//     (myTimer.cpp:32-38), so the very next Off() is true (myTimer.cpp:40-44,
+//     via SetMSAndOn myTimer.cpp:94-98).  The Auto2 timers are non-static
 //     file-scope objects in asendic_Auto2.cpp, so the extern declarations below
 //     reach them without touching asendic_Auto2.h.
-//     Only the five PROGRESS timers are advanced.  The two 20 s JAM watchdogs
-//     (hAuto2TrayToFront / hAuto2TrayToRear, golden :176 / :313) are deliberately
-//     left RUNNING so that a stalled transition surfaces as a JAM alarm in the
-//     trace instead of being masked by a forced expiry.
+//
+//     AI(W906-W7-L1fix2) 20260731: THE WATCHDOG RATIONALE HERE WAS WRONG AND IS
+//     CORRECTED.  It used to claim the two 20 s watchdogs (hAuto2TrayToFront /
+//     hAuto2TrayToRear, golden :176 / :313) were "deliberately left RUNNING so
+//     that a stalled transition surfaces as a JAM alarm in the trace".  It cannot:
+//     those deadlines are real QPC wall-clock, and every loop in this file is
+//     bounded in VIRTUAL ticks (200-400 iterations of pure computation, i.e. a
+//     few ms of wall clock), so a 20 s deadline can never elapse inside the bound.
+//     A stall therefore surfaces as CHECK(done) / CHECK(reached*) FAILING on a
+//     bound-exhausted loop -- never as a JAM.  Measured this session: an
+//     instrumented run of the whole file emitted ZERO `[ShowErrorMessage]` and
+//     ZERO `[ShowMyMessage]` lines, so no alarm arm is entered at all.
+//     One nuance worth stating, because it is why [5] converges without the test
+//     touching that timer: hAuto2TrayToRear is not purely a watchdog.
+//     DoAuto2TrayToRear case 450 RE-ARMS it as the tray-arrival settle timer
+//     (golden :382, SetSecAndOn(Ld_UldDelayTime.LD_TrayArrivalDely), pinned to 0
+//     by setupDummyFeed below), and case 460 waits on that (golden :386).
+//     hAuto2TrayToFront has no such re-arm -- it is armed once at golden :191 and
+//     read only by the JAM1212 guard at golden :245, which never fires here.
 //  2. SIM SENSOR LEVELS.  Sen[] defaults to Enable==false, which makes IsOn() AND
 //     IsOff() both return false (mysensor.cpp:127-131 / :177-181) -- an "unknown"
 //     reading that is NOT the same as "off", and which is exactly what let the old
@@ -64,6 +111,39 @@
 //    * DoAuto2Receive() (golden :715-749) full chain to the unload hand-off.
 //    * The fAuto2CanSupplyNewTray gate: closed -> DoAuto2() is a no-op.
 //
+//  ACTUATOR STATE THAT IS ASSERTED (AI(W906-W7-L1fix3) 20260801: NEW)
+//  -----------------------------------------------------------------
+//  Until this revision no executable statement in this file touched SW[] or
+//  Cylinder[] at all, and MOT[MMAuto2Z] was only ever CLEARED by the fixture (in
+//  [3a] and [3b]) and never read -- so three whole classes of translation slip
+//  were invisible.  Each bullet below names the golden site, the observable, and
+//  the sub-test that reads it:
+//    * BELT OUTPUT POLARITY (SW[].OutValue -- TMySwitch::On() and TMySwitch::Off()
+//      each assign OutValue UNCONDITIONALLY, as their first statement, before the
+//      `if(Enable==false) return;` guard, so it is a faithful record of the last
+//      call even with Enable==false; TMySwitch::Status() is NOT usable here, it
+//      returns false whenever Enable==false):
+//        golden :215-216  DoAuto2TrayToFront case 100  belt ON  + CW ON   -> [4b]
+//        golden :346-347  DoAuto2TrayToRear  case 200  belt ON  + CW OFF  -> [5]
+//        golden :389      DoAuto2TrayToRear  case 460  belt OFF on arrival-> [5]
+//        golden :622-623  DoUnLoadNewAuto2ToStack case 50 both OFF        -> [6]
+//    * CYLINDER ACTUATION DIRECTION (Cylinder[].bCylinderOn -- TMyCylinder::On()
+//      and the Push() success exit set it true, TMyCylinder::Off() and the Pop()
+//      success exit set it false; offline (OnSenEnable/OffSenEnable both false,
+//      OnDelayTime/OffDelayTime both 0) BOTH Push() and Pop() return true, so the
+//      RETURN VALUE cannot distinguish them and only the state can):
+//        golden :270  case 101 edge-push EXTEND (.On())    -> [4]
+//        golden :281  case 102 side-fixer PUSH  (.Push())  -> [4]
+//        golden :291  case 103 side-fixer release (.Off()) -> [4]
+//        golden :298  case 104 edge-push retract (.Off())  -> [4]
+//    * Z-STAGE TRAY BOOKKEEPING (MOT[MMAuto2Z].fHasTray):
+//        golden :60   DoLoadNewAuto2TrayToCar case 1 short-circuit -> [3b]
+//        golden :87   DoLoadNewAuto2TrayToCar case 50              -> [3a]
+//        golden :154  DoLoadNewAuto2TrayToCar case 420 success     -> [3a]
+//      ([3a] re-arms the flag between the two so each clear is independently
+//      load-bearing.  The fourth golden site, :165, is in the JAM1213 K_SKIP arm
+//      and is dead here -- see NOT COVERED.)
+//
 //  AutoCylinderUp/Middle/Lower ARE NOT REAL BODIES IN THIS TREE.  The original
 //  header claimed this test exercised them "end-to-end"; it did not, and there is
 //  nothing to exercise: golden defines them in asendic.cpp:562/767/937 (declared
@@ -76,19 +156,280 @@
 //  trajectories).  It proves nothing about real lifter behaviour.
 //
 //  NOT COVERED (stated so nobody reads coverage into silence)
-//    * Every JAM/MES alarm arm (JAM1213/JAM1212/JAM1201/JAM1203/JAM1113/MES1024):
-//      ShowErrorMessage is a canary_support stub that always answers K_RETRY
-//      (canary_support.cpp:44-50), so the K_SKIP arms are unreachable offline.
-//    * DoAuto2 case 3's `WhichAutoNeedTray()==0` guard arm -- unreachable while
-//      LastSet.iRealDummy==DUMMY (case 3's first guard always wins).
+//  AI(W906-W7-L1fix2) 20260731: this list was too short and its silence read as
+//  coverage.  Re-derived from the fixture state + golden and, where reachability
+//  was dynamic rather than a logical consequence of a pinned constant, MEASURED
+//  with temporary printf probes in the production source (probes removed; the
+//  file was restored byte-exactly and its sha256 re-verified at the time).
+//  AI(W906-W7-L1fix3) 20260801: PROVENANCE.  Every entry below that says
+//  "MEASURED" or "instrumented run" is a 20260731 (L1fix2) measurement; this
+//  revision did NOT re-run those probes.  What it DID do is re-derive, entry by
+//  entry, whether its own fixture changes ([4b]'s SnAuto2TrayDetect exception and
+//  [3a]/[3b]/[5]/[6]'s new pre-drives) could have invalidated any of them; where
+//  the reason an arm is dead has changed, the entry now says so explicitly, and
+//  the new residual gaps this revision leaves are enumerated in their own section
+//  after this list.
+//
+//  Four fixture invariants do most of the pruning:
+//    (i)   NO SENSOR IS EVER DRIVEN "ON".  The only two seam helpers are
+//          simSensorOff (Enable+TYPE_A -> IsOff()==true, IsOn()==false) and
+//          simSensorUnknown (Enable=false -> BOTH false).  There is no
+//          simSensorOn, so `Sen[x].IsOn()` is false for every x at every tick.
+//    (ii)  Only SnAuto2PreDete and SnAuto2_Tray_Car are raised to "off".
+//          SnAuto2CWPreDetect / SnAuto2FixCyPush / SnAuto2TrayHasTray /
+//          SnAutoUpSafedetect1 stay "unknown" throughout, so their IsOff() is
+//          false too.
+//          AI(W906-W7-L1fix3) 20260801: (ii) HAS EXACTLY ONE EXCEPTION and it is
+//          no longer silent.  Sub-test [4b] raises SnAuto2TrayDetect to "off" for
+//          the single tick it needs to park DoAuto2TrayToFront inside case 100
+//          with the belt running; it restores "unknown" before returning, and
+//          every other sub-test re-runs setupDummyFeed() first, so no NOT-COVERED
+//          entry below that leans on (ii) is affected.  Where [4b] changes what
+//          an arm's deadness FOLLOWS FROM, the entry says so.
+//    (iii) LastSet.iRealDummy == DUMMY (0) always.
+//    (iv)  bHandlerPause == false and bEmptyPause == false always.
+//
+//    * EVERY JAM/MES ALARM ARM -- and the reason is stronger than the old note
+//      claimed.  The old note said ShowErrorMessage always answers K_RETRY
+//      (canary_support.cpp:44-50) so "the K_SKIP arms are unreachable".  Measured:
+//      ShowErrorMessage is never CALLED AT ALL -- an instrumented run of the whole
+//      file emitted zero `[ShowErrorMessage]` lines.  Each arm is dead for its own
+//      reason, none of which is the K_RETRY answer:
+//        - JAM1213, DoLoadNewAuto2TrayToCar case 420 (golden :159-169): the DUMMY
+//          disjunct of the preceding `if` (golden :151) always wins, so the
+//          `else if` is dead.
+//        - JAM1212, DoAuto2TrayToFront case 100 (golden :245-264): guarded by the
+//          20 s hAuto2TrayToFront deadline, which cannot elapse (see seam 1).
+//          AI(W906-W7-L1fix3) 20260801: [4b] deliberately PARKS the SM in case 100
+//          for one tick, so this arm is now evaluated on a path that does not
+//          break out early -- it is still dead, and for the same reason: one tick
+//          of pure computation cannot burn a 20 s real-QPC deadline.
+//        - JAM1212, DoAuto2TrayToFront case 101 (golden :274-278): the then-arm
+//          (golden :267-268) always holds by (ii).  AI(W906-W7-L1fix3) 20260801:
+//          case 101 is only ever ENTERED by [4] and [7], both of which leave
+//          SnAuto2TrayDetect "unknown"; [4b], the one sub-test that raises it to
+//          "off", parks in case 100 and never reaches 101.
+//        - JAM1201, DoAuto2TrayToRear case 200 (golden :363-378): the DUMMY arm at
+//          golden :354-360 breaks out first.
+//        - JAM1203, DoAuto2 case 40 (golden :479-485): the DUMMY sub-branch at
+//          golden :474-478 wins.
+//        - JAM1113, DoUnLoadNewAuto2ToStack case 402 (golden :686-695): needs BOTH
+//          stack sensors IsOn(), impossible by (i).
+//        - MES1024, DoLoadNewAuto2TrayToCar case 1 (golden :81): the guard at
+//          golden :53-54 is always true by (iii), so the whole `else` arm is dead
+//          -- INCLUDING the Cylinder[C_Auto2_Up] re-lowering block, golden :69-80.
+//        - MES1024, DoUnLoadNewAuto2ToStack case 310 (golden :662-669): the
+//          `|| DUMMY` disjunct at golden :656 always wins.
+//    * The three bHandlerPause arms, all dead by (iv): the case-420 timer-reset
+//      arm (golden :144-147), and the two abort-to-Task-1 arms in
+//      DoAuto2TrayToFront case 100 (golden :195-199) and DoAuto2TrayToRear
+//      case 200 (golden :340-344).
+//    * The bEmptyPause SPLIT-PAUSE arm, DoLoadNewAuto2TrayToCar case 201
+//      (golden :108-114), dead by (iv).  Measured: zero `[ShowMyMessage]` lines,
+//      so its ShowMyMessage call is never made either.
+//    * DoLoadNewAuto2TrayToCar case 1's fast entry `if(MOT[MMAuto2].fHasTray)`
+//      -> Task=400 (golden :46-51), which would skip 50/100/200/201/300 entirely.
+//      MEASURED with a probe: 0 hits across the whole file -- every sub-test
+//      clears MOT[MMAuto2] before driving this SM, so this entry is never taken
+//      (not even inside [8] scenario B's case-200 hand-off).
+//    * DoAuto2TrayToFront case 100's DUMMY-TIMEOUT success arm (golden :230-243).
+//      AI(W906-W7-L1fix3) 20260801: this entry used to say the arm was dead
+//      because "the block at golden :218-228 always holds by (ii) and breaks to
+//      101 first".  That is now only HALF the reason, because [4b] exists:
+//        - in [4] and [7] the hand-off at golden :218-228 does break out first
+//          (SnAuto2TrayDetect "unknown" -> `IsOff()==false` is true), exactly as
+//          before; and
+//        - in [4b] that hand-off is deliberately blocked, but the arm is still
+//          unreached because hAuto2TrayToFrontForDummy was armed to 5 s by case 1
+//          in the same tick (golden :192) and [4b] runs ONE tick without calling
+//          advanceAuto2Time(), so golden :230's `Off()` is false.
+//      Consequence: the SW[]/MOT[] writes inside this arm (golden :234-238) are
+//      still never executed.
+//    * DoAuto2TrayToRear case 200's GENUINE arrival arm
+//      `if(Sen[SnAuto2TrayDetect].IsOn())` (golden :348-352), dead by (i) -- case
+//      200 always leaves via the DUMMY-timeout arm at golden :354-360 instead.
+//    * DoAuto2 case 3's whole tail: the `else { MOT[MMAuto2].ClearTray(); }`
+//      (golden :445-448) AND the `if(MOT[MMAuto2].fHasTray==false)` block
+//      (golden :450-460) that holds the file's ONLY WhichAutoNeedTray() call site
+//      (golden :454).  By (iii) the first disjunct at golden :440 always wins and
+//      breaks to Task=20.  (The old note named only the `WhichAutoNeedTray()==0`
+//      guard arm; the dead region is the whole tail, and the call never happens.)
+//    * DoAuto2 case 40's else arm (golden :487-491) -- the "sensor genuinely reads
+//      off" path.  By (ii) SnAuto2FixCyPush is "unknown", so `IsOff()==false` is
+//      TRUE and the then-arm always runs.
+//    * DoAuto2 case 65's STALE-TRAY ClearTray arm (golden :518-524): requires
+//      LastSet.iRealDummy>=HAS_TRAY, false under DUMMY(0) by (iii).
+//    * DoAuto2 case 70's genuine tray-detect disjunct (golden :540-541), dead by
+//      (i); case 70 always takes the DUMMY/non-AMR disjunct (golden :542-544).
+//    * DoAuto2Receive case 100's NO-TRAY-ON-CAR arm (golden :733-737).  MEASURED
+//      with a probe: 0 hits.  In [7] SUPPORT_2_EMPTY_EMPTY leaves a tray on the
+//      car (golden :208), so the Task=200 arm always wins.
+//    * All four Cylinder[C_Auto2LoaderZ_Select] Push()/Pop() alternatives, each
+//      short-circuited by an `iRealDummy==DUMMY` disjunct: DoLoadNewAuto2TrayToCar
+//      case 100 (golden :94-95) and case 300 (golden :123-126),
+//      DoUnLoadNewAuto2ToStack case 100 (golden :628-629) and case 300
+//      (golden :647-648).
+//    * DoUnLoadNewAuto2ToStack case 1's three-sensor conjunction (golden :611-613),
+//      short-circuited by the `|| DUMMY` disjunct at golden :614.
 //    * The #ifdef SOFT_SIMULTE arms (not defined in this build).
 //    * Real lifter/cylinder motion -- see the AutoCylinder* note above.
 //
-//  FAILABILITY PROOF (each assertion group was seen RED before being trusted)
-//    Documented in the W7-L1fix report: `Task=201` in DoLoadNewAuto2TrayToCar
-//    case 200 was temporarily changed to `Task=400`, and `Task=310` in
-//    DoUnLoadNewAuto2ToStack case 300 to `Task=400`; both were observed to fail
-//    the corresponding trajectory assertions, then reverted and re-run green.
+//  ACTUATOR SITES THAT ARE EXECUTED BUT STILL NOT ASSERTED
+//  AI(W906-W7-L1fix3) 20260801: NEW section.  The three holes this revision
+//  closes (belt polarity, cylinder direction, MMAuto2Z bookkeeping) are closed at
+//  the sites listed under ACTUATOR STATE THAT IS ASSERTED and NOWHERE ELSE.  The
+//  sites below are on driven paths -- they DO run -- but no assertion observes
+//  them, so a polarity slip at any of them would still ship green:
+//    * SW[] writes that are overwritten inside the same tick, hence invisible at
+//      any tick boundary this harness can sample:
+//        - golden :221 / :223 (DoAuto2TrayToFront case 100 hand-off arm) undo
+//          golden :215-216 in the same tick.  [4b] observes the ON pair only by
+//          blocking that hand-off; on [4]'s own path the OFF pair is unobserved.
+//        - golden :205 / :207 (the SUPPORT_2_EMPTY_EMPTY arm taken by [7]).
+//    * golden :388, SW[SwACAuto2CW].Off() in DoAuto2TrayToRear case 460.  It runs,
+//      but case 200 (golden :347) already left that output OFF, so deleting :388
+//      changes nothing observable.  Only its sibling :389 is load-bearing, and
+//      only :389 is asserted.
+//    * Cylinder DIRECTION at every site OUTSIDE DoAuto2TrayToFront cases 101-104
+//      (golden :270, :281, :291, :298 -- those four, and only those four, are the
+//      ones asserted):
+//        - Cylinder[C_Auto2Side_Fixer]: .Off() golden :201, :463 (and :481, dead);
+//          .Pop() golden :334, :394, :468, :494.
+//        - Cylinder[C_Auto2EdgePush]:   .Off() golden :202, :331, :381, :464.
+//      Several of these feed cursor transitions this file DOES assert, but only
+//      through Push()/Pop()'s return value -- which is unconditionally true
+//      offline for BOTH -- so the transition assertions cannot see direction.
+//    * MOT[MMAuto2Z] golden :165 (the JAM1213 K_SKIP arm of case 420).  Dead here
+//      for the reason given under EVERY JAM/MES ALARM ARM; it is the one of the
+//      four golden MMAuto2Z clears that no assertion can reach.
+//
+//  FAILABILITY PROOF -- REPRODUCIBLE RECIPE, NOT A POINTER
+//  AI(W906-W7-L1fix3) 20260801: THE PREVIOUS VERSION OF THIS BANNER PASTED OUTPUT
+//  THAT THE SHIPPED FILE COULD NOT PRODUCE.  It quoted the harness's `(line 683)`
+//  / `(line 681)` suffixes, but the assertions it named printed `(line 804)` and
+//  `(line 802)` -- off by exactly the 121 lines of banner added AFTER the capture
+//  and never re-run.  That is precisely why the tables below quote the ASSERTION
+//  MESSAGE and never the `(line N)` suffix: the message is stable, the line number
+//  is pushed by every edit to this banner (KNOWLEDGE gotcha 10).
+//
+//  RECIPE.  Everything below was run in this session, in a private scratch dir --
+//  the shared `build/` tree was never written to and `asendic_Auto2.cpp` was never
+//  modified on disk (sha256 22d9e518e2cd4c09f0e1eb583ece0054c1cdf049dcf5e00330f
+//  2cb8d0a0ace9e before and after, re-checked).  Each mutation was applied to a
+//  COPY of asendic_Auto2.cpp, compiled off-tree with the flags CMake records for
+//  target ht9045_sm (`-std=c++1z -DCSYSTEM_TICK_ORACLE -I<tree> -I<tree>/SECSGEM`),
+//  `ar r`'d into a COPY of libht9045_sm.a, and linked into a private exe.
+//
+//  BASELINE (pristine asendic_Auto2.cpp):     RESULT: 60 passed, 0 failed  (exit 0)
+//
+//  WHICH MUTATIONS WERE ALSO RUN AGAINST THE PREVIOUS 46-ASSERTION REVISION.
+//  Be precise about this, because "it used to be silent" is the whole reason each
+//  probe exists.  A1, A2, B1, B2 and C0 WERE re-run against the previous revision
+//  and each left it at exactly `RESULT: 46 passed, 0 failed` -- that is a measured
+//  result, not an inference.  A3, A4, B3, B4, C1, C2 and C3 were NOT: they are
+//  finer-grained probes added alongside those five.  They could not have been
+//  caught there either -- in the previous revision's 922 lines, `SW[` and
+//  `Cylinder[` occurred ONLY inside banner comments and in no executable
+//  statement at all, and MOT[MMAuto2Z] occurred only as the two fixture
+//  ClearTray() calls in [3a] and [3b], with fHasTray never read -- but that is a
+//  reading of the old file, not a measurement, and is labelled as such.
+//
+//  --- (a) BELT OUTPUT POLARITY --------------------------------------------------
+//  (A1) golden :215-216, DoAuto2TrayToFront case 100:
+//         `SW[SwACAuto2].On(); SW[SwACAuto2CW].On();` -> `.Off(); .Off();`
+//       RESULT: 58 passed, 2 failed
+//         FAIL: case 100 drove the Auto2 belt output ON (golden :215)
+//         FAIL: case 100 drove the Auto2 CW belt output ON (golden :216)
+//  (A2) golden :346-347, DoAuto2TrayToRear case 200:
+//         `SW[SwACAuto2].On(); SW[SwACAuto2CW].Off();` -> `.Off(); .On();`
+//       RESULT: 59 passed, 1 failed
+//         FAIL: case 200 drove the belt ON with CW OFF while pulling the tray
+//               back (golden :346-347)
+//  (A3) golden :389, DoAuto2TrayToRear case 460: `SW[SwACAuto2].Off();` deleted
+//       RESULT: 59 passed, 1 failed
+//         FAIL: case 460 stopped the belt once the tray settled (golden :389)
+//  (A4) golden :622-623, DoUnLoadNewAuto2ToStack case 50: both `.Off()` -> `.On()`
+//       RESULT: 59 passed, 1 failed
+//         FAIL: case 50 stopped BOTH belt outputs before handing to 100
+//               (golden :622-623)
+//
+//  --- [4b]'s TWO PARK PRECONDITIONS --------------------------------------------
+//  A1 is only meaningful if the SM really is sitting in case 100 when SW[] is
+//  read, so the two assertions that establish that are proven as well:
+//  (P1) golden :219, the case-100 hand-off guard:
+//         `Sen[SnAuto2TrayDetect].IsOff()==false` -> `...IsOff()==true`
+//       RESULT: 53 passed, 7 failed, including
+//         FAIL: cursor parked at 100 (hand-off guard blocked, no timeout arm
+//               reachable)
+//       (The other six are [4], which needs that same guard to reach 101 at all.)
+//  (P2) golden :203: `if(SUPPORT_2_EMPTY_EMPTY)` -> `if(!SUPPORT_2_EMPTY_EMPTY)`
+//       RESULT: 48 passed, 12 failed, including
+//         FAIL: case 100 did not converge -- SM parked with the belt running
+//       (The rest are [4] and [7], which both depend on that arm's polarity.)
+//
+//  --- (b) CYLINDER ACTUATION DIRECTION ------------------------------------------
+//  (B1) golden :270, case 101: `Cylinder[C_Auto2EdgePush].On();` -> `.Off();`
+//       RESULT: 59 passed, 1 failed
+//         FAIL: case 101 EXTENDED the edge-push cylinder before handing to 102
+//               (golden :270 On(), not Off())
+//  (B2) golden :281, case 102: `Cylinder[C_Auto2Side_Fixer].Push()` -> `.Pop()`
+//       RESULT: 59 passed, 1 failed
+//         FAIL: case 102 PUSHED the side fixer before handing to 103
+//               (golden :281 Push(), not Pop())
+//       This is the mutation that matters most: BOTH Push() and Pop() return true
+//       offline, so the cursor walk is byte-identical and every trajectory
+//       assertion in this file stays green.  Only Cylinder[].bCylinderOn sees it.
+//  (B3) golden :291, case 103: `Cylinder[C_Auto2Side_Fixer].Off();` deleted
+//       RESULT: 59 passed, 1 failed
+//         FAIL: case 103 released the side fixer again (golden :291)
+//  (B4) golden :298, case 104: `Cylinder[C_Auto2EdgePush].Off();` deleted
+//       RESULT: 59 passed, 1 failed
+//         FAIL: case 104 retracted the edge-push cylinder again (golden :298)
+//
+//  --- (c) MMAuto2Z TRAY BOOKKEEPING ---------------------------------------------
+//  (C0) ALL FOUR `MOT[MMAuto2Z].ClearTray(__FUNC__);` deleted (golden :60, :87,
+//       :154, :165)
+//       RESULT: 57 passed, 3 failed
+//         FAIL: case 50 cleared the MMAuto2Z tray flag before handing to 100
+//               (golden :87)
+//         FAIL: case 420 cleared the RE-ARMED MMAuto2Z tray flag on success
+//               (golden :154)
+//         FAIL: short-circuit also cleared the MMAuto2Z tray flag (golden :60)
+//       (Three FAILs, not four: golden :165 is in the JAM1213 K_SKIP arm, which is
+//        dead here -- see NOT COVERED.  This test does NOT cover it and does not
+//        claim to.)
+//  Each live site is INDEPENDENTLY load-bearing, which is what the [3a] re-arm
+//  exists to guarantee -- deleted one at a time:
+//  (C1) golden :87  only  -> 59/1, FAIL: case 50 cleared the MMAuto2Z tray flag
+//                                        before handing to 100 (golden :87)
+//  (C2) golden :154 only  -> 59/1, FAIL: case 420 cleared the RE-ARMED MMAuto2Z
+//                                        tray flag on success (golden :154)
+//  (C3) golden :60  only  -> 59/1, FAIL: short-circuit also cleared the MMAuto2Z
+//                                        tray flag (golden :60)
+//
+//  --- SCOPE OF THE TRAJECTORY CLAIM (see PROOF OBJECTIVE) ----------------------
+//  (S1) golden :469, DoAuto2 case 30 (DRIVEN): `Task=40;` -> `Task=999;`
+//       RESULT: 52 passed, 8 failed -- 8 distinct trajectory/hand-off assertions
+//       across [8] scenarios A-D go red.
+//  (S2) golden :490, DoAuto2 case 40 ELSE arm (DEAD): `Task=50;` -> `Task=999;`
+//       RESULT: 60 passed, 0 failed -- unchanged, because the arm is never
+//       entered.  This is the counter-example that forced the scoped wording.
+//
+//  --- THE CURSOR-EDGE ASSERTION OF [8] SCENARIO C (carried over, re-run) -------
+//  (M1) golden :588, DoAuto2 case 300: `Task=50;` -> `Task=1;`
+//       RESULT: 59 passed, 1 failed
+//         FAIL: case 300 consumed DoAuto2TrayToRear()==true and the cursor
+//               stepped 300 -> 50 in ONE tick (golden :588)
+//       The same run still printed
+//         (DoAuto2 scenario C visited: 1 2 3 20 30 40 50 60 65 70 100 300)
+//       -- 50 IS in the set even with case 300's own transition destroyed, the
+//       direct demonstration that the older set-membership form of this assertion
+//       was a tautology.
+//  (M2) golden :558, DoAuto2 case 100: `Task=300;` -> `Task=1;` (300 never entered)
+//       RESULT: 58 passed, 2 failed
+//         FAIL: scenario C reached case 300 (case-100 recycle arm, golden :557-558)
+//         FAIL: case 300 consumed DoAuto2TrayToRear()==true and the cursor
+//               stepped 300 -> 50 in ONE tick (golden :588)
 //
 //  Offline: no vendor SDK, no hardware, no window.
 // =============================================================================
@@ -292,10 +633,10 @@ static void test_virtual_time_seam()
 // ---------------------------------------------------------------------------
 //  [3] DoLoadNewAuto2TrayToCar() -- BOTH branches of case 1.
 //
-//  [3a] Stack sensors "off"  -> the FULL lifter walk (golden :121-122 takes
+//  [3a] Stack sensors "off"  -> the FULL lifter walk (golden :64-65 takes
 //       Task=50), trajectory 50,100,200,201,300,400,410,420, converges with a
-//       tray latched onto MMAuto2_Car (case 420, golden :210).
-//  [3b] Stack sensors "unknown" -> the case-1 short-circuit (golden :113-120)
+//       tray latched onto MMAuto2_Car (case 420, golden :153).
+//  [3b] Stack sensors "unknown" -> the case-1 short-circuit (golden :56-63)
 //       returns true on step 0 WITHOUT ever reaching 50.  This is the branch the
 //       old test hit while claiming to exercise the lifter end-to-end; pinned
 //       here so the difference can never again be mistaken for coverage.
@@ -307,8 +648,12 @@ static void test_load_new_auto2_full_lifter_walk()
     setupDummyFeed();
     InitLoadNewAuto2TrayToCarTask();
     MOT[MMAuto2].ClearTray("test_w7_l1_auto2");
-    MOT[MMAuto2Z].ClearTray("test_w7_l1_auto2");
     MOT[MMAuto2_Car].ClearTray("test_w7_l1_auto2");
+    // AI(W906-W7-L1fix3) 20260801: MMAuto2Z now starts WITH a tray.  It used to be
+    // cleared here, which made every MOT[MMAuto2Z].ClearTray() in this SM a no-op
+    // that no assertion could distinguish from its absence -- deleting all four
+    // golden call sites (:60, :87, :154, :165) left the whole suite green.
+    MOT[MMAuto2Z].SetTray(NULL_IC, "test_w7_l1_auto2");
 
     // Both stack sensors must read a definite OFF, else case 1 short-circuits.
     simSensorOff(SnAuto2PreDete);
@@ -317,11 +662,25 @@ static void test_load_new_auto2_full_lifter_walk()
     StateSet seen;
     bool done  = false;
     int  steps = 0;
+    int  zAt100  = -1;      // MOT[MMAuto2Z].fHasTray sampled the first time the
+                            // cursor rests on 100, i.e. right after case 50 ran
+    bool rearmed = false;
     for (steps = 0; steps < 200 && !done; ++steps)
     {
         advanceAuto2Time();
+        // Re-arm the Z-stage flag ONCE, after case 50 has cleared it and before
+        // case 420 runs, so that the case-420 clear is INDEPENDENTLY load-bearing:
+        // without this, deleting golden :154 alone would still find fHasTray
+        // already false, left over from golden :87.
+        if (iLoadNewAuto2TrayToCarTask == 410 && rearmed == false)
+        {
+            MOT[MMAuto2Z].SetTray(NULL_IC, "test_w7_l1_auto2");
+            rearmed = true;
+        }
         done = DoLoadNewAuto2TrayToCar();
         seen.insert(iLoadNewAuto2TrayToCarTask);
+        if (iLoadNewAuto2TrayToCarTask == 100 && zAt100 < 0)
+            zAt100 = MOT[MMAuto2Z].fHasTray ? 1 : 0;
     }
 
     static const int want[] = {50, 100, 200, 201, 300, 400, 410, 420};
@@ -331,11 +690,16 @@ static void test_load_new_auto2_full_lifter_walk()
     CHECK(covers(seen, want, nWant),
           "trajectory covers 50,100,200,201,300,400,410,420 (all AutoCylinder* call sites reached)");
     CHECK(MOT[MMAuto2_Car].fHasTray == true,
-          "case 420 latched the tray onto MMAuto2_Car (golden :210 SetTray)");
+          "case 420 latched the tray onto MMAuto2_Car (golden :153 SetTray)");
+    CHECK(zAt100 == 0,
+          "case 50 cleared the MMAuto2Z tray flag before handing to 100 (golden :87)");
+    CHECK(rearmed && MOT[MMAuto2_Car].fHasTray && MOT[MMAuto2Z].fHasTray == false,
+          "case 420 cleared the RE-ARMED MMAuto2Z tray flag on success (golden :154)");
     CHECK(iLoadNewAuto2TrayToCarTask == 1, "cursor reset to 1 on convergence");
     printSeen("DoLoadNewAuto2TrayToCar", seen);
     if (!covers(seen, want, nWant)) printMissing("DoLoadNewAuto2TrayToCar", seen, want, nWant);
-    printf("    (converged=%d after %d steps)\n", (int)done, steps);
+    printf("    (converged=%d after %d steps, MMAuto2Z@100=%d rearmed=%d)\n",
+           (int)done, steps, zAt100, (int)rearmed);
 }
 
 static void test_load_new_auto2_case1_shortcircuit()
@@ -345,16 +709,20 @@ static void test_load_new_auto2_case1_shortcircuit()
     setupDummyFeed();                       // leaves all Auto2 sensors 'unknown'
     InitLoadNewAuto2TrayToCarTask();
     MOT[MMAuto2].ClearTray("test_w7_l1_auto2");
-    MOT[MMAuto2Z].ClearTray("test_w7_l1_auto2");
     MOT[MMAuto2_Car].ClearTray("test_w7_l1_auto2");
+    // AI(W906-W7-L1fix3) 20260801: was ClearTray -- see [3a].  The short-circuit
+    // clears MMAuto2Z too (golden :60), which is unobservable if it starts clear.
+    MOT[MMAuto2Z].SetTray(NULL_IC, "test_w7_l1_auto2");
 
     advanceAuto2Time();
     bool firstStep = DoLoadNewAuto2TrayToCar();
 
     CHECK(firstStep == true,
-          "returns true on the FIRST step (case-1 short-circuit, golden :113-120)");
+          "returns true on the FIRST step (case-1 short-circuit, golden :56-63)");
     CHECK(iLoadNewAuto2TrayToCarTask == 1, "cursor never left 1 -- case 50 NOT reached");
-    CHECK(MOT[MMAuto2_Car].fHasTray == true, "short-circuit still latches MMAuto2_Car (golden :116)");
+    CHECK(MOT[MMAuto2_Car].fHasTray == true, "short-circuit still latches MMAuto2_Car (golden :59)");
+    CHECK(MOT[MMAuto2Z].fHasTray == false,
+          "short-circuit also cleared the MMAuto2Z tray flag (golden :60)");
 }
 
 // ---------------------------------------------------------------------------
@@ -367,6 +735,16 @@ static void test_load_new_auto2_case1_shortcircuit()
 //      ticks -- after ONE call it is already 101.  Asserting exactly that is a
 //      direct test of the golden quirk: insert a `break;` after golden :193's
 //      `Task=100;` and the first tick would leave the cursor at 100 instead.
+//
+//      AI(W906-W7-L1fix3) 20260801: THIS TEST ALSO NOW READS Cylinder[] STATE.
+//      The trajectory assertions alone cannot see actuation DIRECTION: golden :281
+//      is `if(Cylinder[C_Auto2Side_Fixer].Push())` and offline Pop() returns true
+//      just as Push() does, so swapping them keeps the cursor walk identical while
+//      leaving the tray UNCLAMPED at the front-edge stop.  Proven silent before
+//      this revision: `.Push()` -> `.Pop()` at golden :281 and `.On()` -> `.Off()`
+//      at golden :270 each left the suite at 46 passed, 0 failed.  Both are now
+//      observed on Cylinder[].bCylinderOn, sampled at the cursor value golden
+//      guarantees the actuator is in that position.
 // ---------------------------------------------------------------------------
 static void test_tray_to_front_long_path()
 {
@@ -382,12 +760,21 @@ static void test_tray_to_front_long_path()
     bool done  = false;
     int  steps = 0;
     int  afterFirstTick = -1;
+    // Both cylinders are driven to their RETRACTED state by case 100 (golden
+    // :201-202) on tick 1, so each sample below observes a transition the SM made
+    // itself, not a leftover from an earlier sub-test.
+    int  edgePushAt102 = -1;    // Cylinder[C_Auto2EdgePush].bCylinderOn  @ cursor 102
+    int  fixerAt103    = -1;    // Cylinder[C_Auto2Side_Fixer].bCylinderOn @ cursor 103
     for (steps = 0; steps < 200 && !done; ++steps)
     {
         advanceAuto2Time();
         done = DoAuto2TrayToFront();
         seen.insert(iAuto2TrayToFrontTask);
         if (steps == 0) afterFirstTick = iAuto2TrayToFrontTask;
+        if (iAuto2TrayToFrontTask == 102 && edgePushAt102 < 0)
+            edgePushAt102 = Cylinder[C_Auto2EdgePush].bCylinderOn ? 1 : 0;
+        if (iAuto2TrayToFrontTask == 103 && fixerAt103 < 0)
+            fixerAt103 = Cylinder[C_Auto2Side_Fixer].bCylinderOn ? 1 : 0;
     }
 
     static const int want[] = {101, 102, 103, 104, 105};
@@ -398,9 +785,81 @@ static void test_tray_to_front_long_path()
     CHECK(done, "DoAuto2TrayToFront() returns true (converged)");
     CHECK(covers(seen, want, nWant), "trajectory covers 101,102,103,104,105");
     CHECK(MOT[MMAuto2].fHasTray == false && MOT[MMAuto2_Car].fHasTray == false,
-          "case 105 cleared BOTH MMAuto2 and MMAuto2_Car (golden :372-373)");
+          "case 105 cleared BOTH MMAuto2 and MMAuto2_Car (golden :303-304)");
+    CHECK(edgePushAt102 == 1,
+          "case 101 EXTENDED the edge-push cylinder before handing to 102 (golden :270 On(), not Off())");
+    CHECK(fixerAt103 == 1,
+          "case 102 PUSHED the side fixer before handing to 103 (golden :281 Push(), not Pop())");
+    CHECK(Cylinder[C_Auto2Side_Fixer].bCylinderOn == false,
+          "case 103 released the side fixer again (golden :291)");
+    CHECK(Cylinder[C_Auto2EdgePush].bCylinderOn == false,
+          "case 104 retracted the edge-push cylinder again (golden :298)");
     printSeen("DoAuto2TrayToFront", seen);
     if (!covers(seen, want, nWant)) printMissing("DoAuto2TrayToFront", seen, want, nWant);
+    printf("    (edgePush@102=%d sideFixer@103=%d)\n", edgePushAt102, fixerAt103);
+}
+
+// ---------------------------------------------------------------------------
+//  [4b] DoAuto2TrayToFront() case 100 -- BELT-DRIVE OUTPUT POLARITY.
+//
+//  AI(W906-W7-L1fix3) 20260801: NEW SUB-TEST.  Nothing in this file read SW[]
+//  state, so inverting the two conveyor commands at golden :215-216
+//  (`SW[SwACAuto2].On(); SW[SwACAuto2CW].On();` -> `.Off(); .Off();`) left the
+//  suite at 46 passed, 0 failed -- a translation slip that stops the Auto2 belt
+//  dead shipped invisibly.  Observed here on SW[].OutValue (see the ACTUATOR
+//  STATE block in the file banner for why OutValue and not Status()).
+//
+//  WHY THIS CANNOT LIVE INSIDE [4].  On [4]'s path the belt-ON at golden :215-216
+//  is not observable at ANY tick boundary: case 100 immediately takes the hand-off
+//  at golden :218-228, which turns both outputs back off (golden :221 / :223) in
+//  the SAME tick.  To park the SM inside case 100 with the belt still running this
+//  sub-test does two things, and both are needed:
+//    * raises SnAuto2TrayDetect to a definite "off", so the hand-off guard at
+//      golden :219 (`Sen[SnAuto2TrayDetect].IsOff()==false`) is FALSE.  This is
+//      the ONE place in the file that departs from fixture invariant (ii); it is
+//      restored to "unknown" before returning; and
+//    * runs exactly ONE tick WITHOUT advanceAuto2Time(), so
+//      hAuto2TrayToFrontForDummy still carries the 5 s deadline case 1 armed it
+//      with in that same tick (golden :192) and the DUMMY-timeout success arm at
+//      golden :230-243 cannot fire either.
+//  Case 100 has exactly four other ways out and all four are shut here: the
+//  bHandlerPause abort (golden :195) is dead by invariant (iv); the
+//  SUPPORT_2_EMPTY_EMPTY success arm (golden :203) is false because
+//  setupDummyFeed() pins that flag; and the last two are real-QPC deadlines of
+//  5 s (golden :230) and 20 s (golden :245), which a single tick of pure
+//  computation cannot reach.  So the park is deterministic, not a wall-clock race.
+// ---------------------------------------------------------------------------
+static void test_tray_to_front_belt_polarity()
+{
+    printf("\n[4b] DoAuto2TrayToFront() case 100 belt-drive polarity (SW[] state)\n");
+
+    setupDummyFeed();
+    InitAuto2TrayToFrontTask();
+    MOT[MMAuto2].SetTray(NULL_IC, "test_w7_l1_auto2");
+    MOT[MMAuto2_Car].SetTray(NULL_IC, "test_w7_l1_auto2");
+    simSensorOff(SnAuto2TrayDetect);        // blocks the golden :218-228 hand-off
+
+    // Pre-drive BOTH belt outputs to the OPPOSITE of what case 100 must write, so
+    // a DELETED call fails the same assertion an INVERTED call does.
+    SW[SwACAuto2].Off();
+    SW[SwACAuto2CW].Off();
+
+    bool converged = DoAuto2TrayToFront();  // NO advanceAuto2Time() -- see banner
+
+    CHECK(converged == false,
+          "case 100 did not converge -- SM parked with the belt running");
+    CHECK(iAuto2TrayToFrontTask == 100,
+          "cursor parked at 100 (hand-off guard blocked, no timeout arm reachable)");
+    CHECK(SW[SwACAuto2].OutValue == true,
+          "case 100 drove the Auto2 belt output ON (golden :215)");
+    CHECK(SW[SwACAuto2CW].OutValue == true,
+          "case 100 drove the Auto2 CW belt output ON (golden :216)");
+
+    // Restore the fixture: invariant (ii) holds again from here on.
+    SW[SwACAuto2].Off();
+    SW[SwACAuto2CW].Off();
+    simSensorUnknown(SnAuto2TrayDetect);
+    InitAuto2TrayToFrontTask();
 }
 
 // ---------------------------------------------------------------------------
@@ -414,6 +873,15 @@ static void test_tray_to_front_long_path()
 //      the wanted set below -- its execution is proven by the 1 -> 200 jump.
 //      (This is exactly what the first run of this rewritten test caught: an
 //      earlier draft wanted 100 in the set and went red.)
+//
+//      AI(W906-W7-L1fix3) 20260801: BELT POLARITY IS NOW ASSERTED HERE TOO.  Case
+//      200 runs the belt FORWARD with CW OFF (golden :346-347) -- an inverted pair
+//      reverses the Auto2 belt on real hardware, and it used to be invisible
+//      (`.On()/.Off()` -> `.Off()/.On()` left the suite at 46 passed, 0 failed).
+//      Unlike DoAuto2TrayToFront case 100, this pair IS observable at a tick
+//      boundary: case 200 leaves via the DUMMY-timeout arm (golden :354-360) with
+//      a plain `break`, so the outputs survive to the end of the tick that lands
+//      the cursor on 450.  Sampled exactly there.
 // ---------------------------------------------------------------------------
 static void test_tray_to_rear_path()
 {
@@ -424,16 +892,28 @@ static void test_tray_to_rear_path()
     MOT[MMAuto2].ClearTray("test_w7_l1_auto2");
     MOT[MMAuto2_Car].SetTray(NULL_IC, "test_w7_l1_auto2");
 
+    // Pre-drive both belt outputs to the OPPOSITE of what case 200 must write
+    // (golden :346 ON, :347 OFF), so an inversion AND a deletion both go red.
+    SW[SwACAuto2].Off();
+    SW[SwACAuto2CW].On();
+
     StateSet seen;
     bool done  = false;
     int  steps = 0;
     int  afterFirstTick = -1;
+    int  beltMainAt450  = -1;   // SW[SwACAuto2].OutValue   @ cursor 450
+    int  beltCWAt450    = -1;   // SW[SwACAuto2CW].OutValue @ cursor 450
     for (steps = 0; steps < 200 && !done; ++steps)
     {
         advanceAuto2Time();
         done = DoAuto2TrayToRear();
         seen.insert(iAuto2TrayToRearTask);
         if (steps == 0) afterFirstTick = iAuto2TrayToRearTask;
+        if (iAuto2TrayToRearTask == 450 && beltMainAt450 < 0)
+        {
+            beltMainAt450 = SW[SwACAuto2].OutValue   ? 1 : 0;
+            beltCWAt450   = SW[SwACAuto2CW].OutValue ? 1 : 0;
+        }
     }
 
     static const int want[] = {200, 450, 460, 500};
@@ -444,14 +924,24 @@ static void test_tray_to_rear_path()
     CHECK(done, "DoAuto2TrayToRear() returns true (converged)");
     CHECK(covers(seen, want, nWant), "trajectory covers 200,450,460,500");
     CHECK(MOT[MMAuto2].fHasTray == true && MOT[MMAuto2_Car].fHasTray == false,
-          "case 500 moved the tray MMAuto2_Car -> MMAuto2 (golden :477-478)");
+          "case 500 moved the tray MMAuto2_Car -> MMAuto2 (golden :396-397)");
+    CHECK(beltMainAt450 == 1 && beltCWAt450 == 0,
+          "case 200 drove the belt ON with CW OFF while pulling the tray back (golden :346-347)");
+    CHECK(SW[SwACAuto2].OutValue == false,
+          "case 460 stopped the belt once the tray settled (golden :389)");
     printSeen("DoAuto2TrayToRear", seen);
     if (!covers(seen, want, nWant)) printMissing("DoAuto2TrayToRear", seen, want, nWant);
+    printf("    (belt@450 main=%d cw=%d)\n", beltMainAt450, beltCWAt450);
 }
 
 // ---------------------------------------------------------------------------
 //  [6] DoUnLoadNewAuto2ToStack() (golden :600-706) driven DIRECTLY.
 //      This is the function the old test claimed to drive and never entered.
+//
+//      AI(W906-W7-L1fix3) 20260801: case 50 also STOPS BOTH BELT OUTPUTS before
+//      handing to 100 (golden :622-623) -- the third and last belt-command site in
+//      this file, and unasserted until now.  Both outputs are pre-driven ON below
+//      so the stop is a transition the SM made, not the state it inherited.
 // ---------------------------------------------------------------------------
 static void test_unload_to_stack_direct()
 {
@@ -466,14 +956,22 @@ static void test_unload_to_stack_direct()
     simSensorOff(SnAuto2_Tray_Car);
     fAuto2CanSupplyNewTray = false;          // case 402 sets it true on success
 
+    // Pre-drive both belt outputs ON -- the opposite of what case 50 must write.
+    SW[SwACAuto2].On();
+    SW[SwACAuto2CW].On();
+
     StateSet seen;
     bool done  = false;
     int  steps = 0;
+    int  beltAt100 = -1;    // both belt outputs OFF? sampled @ cursor 100
     for (steps = 0; steps < 200 && !done; ++steps)
     {
         advanceAuto2Time();
         done = DoUnLoadNewAuto2ToStack();
         seen.insert(iUnLoadNewAuto2TrayTask);
+        if (iUnLoadNewAuto2TrayTask == 100 && beltAt100 < 0)
+            beltAt100 = (SW[SwACAuto2].OutValue == false &&
+                         SW[SwACAuto2CW].OutValue == false) ? 1 : 0;
     }
 
     static const int want[] = {50, 100, 150, 200, 300, 310, 400, 401, 402};
@@ -483,12 +981,15 @@ static void test_unload_to_stack_direct()
     CHECK(covers(seen, want, nWant),
           "trajectory covers 50,100,150,200,300,310,400,401,402");
     CHECK(MOT[MMAuto2].fHasTray == false,
-          "case 310 cleared MMAuto2 (golden :761)");
+          "case 310 cleared MMAuto2 (golden :659)");
     CHECK(fAuto2CanSupplyNewTray == true,
-          "case 402 re-opened the supply gate on success (golden :802)");
+          "case 402 re-opened the supply gate on success (golden :700)");
+    CHECK(beltAt100 == 1,
+          "case 50 stopped BOTH belt outputs before handing to 100 (golden :622-623)");
     CHECK(iUnLoadNewAuto2TrayTask == 1, "cursor reset to 1 on convergence");
     printSeen("DoUnLoadNewAuto2ToStack", seen);
     if (!covers(seen, want, nWant)) printMissing("DoUnLoadNewAuto2ToStack", seen, want, nWant);
+    printf("    (bothBeltsOff@100=%d)\n", beltAt100);
 }
 
 // ---------------------------------------------------------------------------
@@ -498,10 +999,10 @@ static void test_unload_to_stack_direct()
 //      SUPPORT_2_EMPTY_EMPTY=true is REQUIRED to reach the hand-off, and this is
 //      a real property of the golden, not a test convenience: it is the ONLY
 //      DoAuto2TrayToFront exit that returns true with a tray still ON the car
-//      (golden :277 SetTray).  Every other success arm (case 105 :373, the DUMMY
-//      timeout arm :306, the JAM1212 skip arm :329) CLEARS MMAuto2_Car first, and
+//      (golden :208 SetTray).  Every other success arm (case 105 :304, the DUMMY
+//      timeout arm :237, the JAM1212 skip arm :260) CLEARS MMAuto2_Car first, and
 //      DoAuto2Receive case 100 only hands off `if(MOT[MMAuto2_Car].fHasTray)`
-//      (golden :837) -- so with SUPPORT_2_EMPTY_EMPTY==false the unload branch of
+//      (golden :728) -- so with SUPPORT_2_EMPTY_EMPTY==false the unload branch of
 //      DoAuto2Receive is unreachable, which is why the old test sat at
 //      iAuto2ReceiveTask==100 for all 1000 iterations.
 // ---------------------------------------------------------------------------
@@ -543,7 +1044,7 @@ static void test_receive_chain_converges()
     CHECK(covers(seenUnload, wantUnload, nWantUnload),
           "DoUnLoadNewAuto2ToStack walked its full trajectory INSIDE the chain");
     CHECK(cleared, "chain converged: MMAuto2_Car cleared and cursor back to 1");
-    CHECK(iReceiveAuto2Tray == 0, "receive mode exited (iReceiveAuto2Tray==0, golden :853)");
+    CHECK(iReceiveAuto2Tray == 0, "receive mode exited (iReceiveAuto2Tray==0, golden :744)");
     printSeen("DoAuto2Receive", seenRecv);
     printSeen("DoUnLoadNewAuto2ToStack (in chain)", seenUnload);
     if (!covers(seenUnload, wantUnload, nWantUnload))
@@ -556,15 +1057,15 @@ static void test_receive_chain_converges()
 //  [8] DoAuto2() dispatcher -- four scenarios.
 //
 //  Scenario A: the feed walk.  The gate is re-armed every tick because case 70
-//      deliberately closes it (golden :640) once the stage tray is latched; a
+//      deliberately closes it (golden :548) once the stage tray is latched; a
 //      real machine re-opens it from DoUnLoadNewAuto2ToStack case 402.
 //  Scenario B: at case 100, an EMPTY stage + empty car takes the feed arm
-//      (Task=200 -> DoLoadNewAuto2TrayToCar -> iReceiveAuto2Tray=1, golden :673).
+//      (Task=200 -> DoLoadNewAuto2TrayToCar -> iReceiveAuto2Tray=1, golden :581).
 //  Scenario C: at case 100, a car that HAS a tray takes the recycle arm
-//      (Task=300 -> DoAuto2TrayToRear -> Task=50, golden :680).
+//      (Task=300 -> DoAuto2TrayToRear -> Task=50, golden :588).
 //  Scenario D: at case 60, a stage that HAS a tray takes the re-check arm
 //      (Task=65) and, with MMTrayY holding an empty tray, fires the
-//      DoAuto2Receive hand-off (golden :624-625).
+//      DoAuto2Receive hand-off (golden :532-533).
 //
 //  THE THIRD GOLDEN FALL-THROUGH IS NOT PINNED HERE, ON PURPOSE.  DoAuto2 case 1
 //  also falls through (into case 2, golden :433) but -- unlike the two pinned in
@@ -623,14 +1124,14 @@ static void test_drive_auto2()
         advanceAuto2Time();
         fAuto2CanSupplyNewTray = true;
         // Model the tray being consumed off the stage: case 100 only takes its
-        // feed arm while the stage is empty (golden :656-662 guard).
+        // feed arm while the stage is empty (golden :564-570 guard).
         if (iAutoAuto2Task == 100)
             MOT[MMAuto2].ClearTray("test_w7_l1_auto2");
         DoAuto2();
         seenB.insert(iAutoAuto2Task);
         if (iAutoAuto2Task == 200) reached200 = true;
     }
-    CHECK(reached200, "scenario B reached case 200 (case-100 feed arm, golden :654-655)");
+    CHECK(reached200, "scenario B reached case 200 (case-100 feed arm, golden :562-563)");
     // Let case 200 run DoLoadNewAuto2TrayToCar to completion.
     for (int i = 0; i < 200 && iReceiveAuto2Tray == 0; ++i)
     {
@@ -640,7 +1141,7 @@ static void test_drive_auto2()
         seenB.insert(iAutoAuto2Task);
     }
     CHECK(iReceiveAuto2Tray == 1,
-          "case 200 consumed DoLoadNewAuto2TrayToCar()==true -> iReceiveAuto2Tray=1 (golden :673)");
+          "case 200 consumed DoLoadNewAuto2TrayToCar()==true -> iReceiveAuto2Tray=1 (golden :581)");
     printSeen("DoAuto2 scenario B", seenB);
 
     // ---- Scenario C: case 100 -> 300 recycle arm --------------------------
@@ -654,6 +1155,17 @@ static void test_drive_auto2()
 
     StateSet seenC;
     bool reached300 = false;
+    // AI(W906-W7-L1fix2) 20260731: OBSERVE THE TRANSITION, NOT SET MEMBERSHIP.
+    // This assertion used to be `seenC.find(50) != seenC.end()`, which was a
+    // TAUTOLOGY: `Task=50` is assigned in THREE places in DoAuto2 (ported
+    // asendic_Auto2.cpp:620 and :633, both inside case 40, plus :731 in case 300),
+    // and the fixture walks case 40 many ticks BEFORE case 300 is ever entered --
+    // so 50 was in seenC by construction.  Proven both ways this session: with
+    // case 300's own `Task=50` retargeted to `Task=1` the old assertion still
+    // PASSED.  A cursor-transition edge (300 -> 50) is what case 300 actually
+    // promises, and it is observable only by sampling the cursor on BOTH sides of
+    // the DoAuto2() call.
+    bool saw300to50 = false;
     for (int i = 0; i < 400; ++i)
     {
         advanceAuto2Time();
@@ -661,13 +1173,15 @@ static void test_drive_auto2()
         // A tray sitting on the car at case 100 selects the recycle arm.
         if (iAutoAuto2Task == 100)
             MOT[MMAuto2_Car].SetTray(NULL_IC, "test_w7_l1_auto2");
+        int prevC = iAutoAuto2Task;          // cursor BEFORE the tick
         DoAuto2();
         seenC.insert(iAutoAuto2Task);
         if (iAutoAuto2Task == 300) reached300 = true;
+        if (prevC == 300 && iAutoAuto2Task == 50) saw300to50 = true;
     }
-    CHECK(reached300, "scenario C reached case 300 (case-100 recycle arm, golden :649-650)");
-    CHECK(seenC.find(50) != seenC.end(),
-          "case 300 consumed DoAuto2TrayToRear()==true -> Task=50 (golden :680)");
+    CHECK(reached300, "scenario C reached case 300 (case-100 recycle arm, golden :557-558)");
+    CHECK(saw300to50,
+          "case 300 consumed DoAuto2TrayToRear()==true and the cursor stepped 300 -> 50 in ONE tick (golden :588)");
     printSeen("DoAuto2 scenario C", seenC);
 
     // ---- Scenario D: case 60 -> 65 re-check + receive hand-off ------------
@@ -686,8 +1200,9 @@ static void test_drive_auto2()
     {
         advanceAuto2Time();
         fAuto2CanSupplyNewTray = true;
-        // case 60 takes the re-check arm only when the stage HAS a tray, and the
-        // hand-off at 65 additionally wants a tray on the car (golden :610-626).
+        // case 60 takes the re-check arm only when the stage HAS a tray (golden
+        // :509-513), and the hand-off at 65 additionally wants a tray on the car
+        // (golden :527-533).
         if (iAutoAuto2Task == 60)
         {
             MOT[MMAuto2].SetTray(NULL_IC, "test_w7_l1_auto2");
@@ -697,14 +1212,14 @@ static void test_drive_auto2()
         seenD.insert(iAutoAuto2Task);
         if (iAutoAuto2Task == 65) reached65 = true;
     }
-    CHECK(reached65, "scenario D reached case 65 (case-60 re-check arm, golden :603-604)");
+    CHECK(reached65, "scenario D reached case 65 (case-60 re-check arm, golden :511-512)");
     // one more tick to run the case-65 body
     advanceAuto2Time();
     fAuto2CanSupplyNewTray = true;
     DoAuto2();
     seenD.insert(iAutoAuto2Task);
     CHECK(iReceiveAuto2Tray == 2 && iAuto2ReceiveTask == 200,
-          "case 65 fired the receive hand-off (iReceiveAuto2Tray=2, iAuto2ReceiveTask=200, golden :624-625)");
+          "case 65 fired the receive hand-off (iReceiveAuto2Tray=2, iAuto2ReceiveTask=200, golden :532-533)");
     printSeen("DoAuto2 scenario D", seenD);
 
     // leave the SM in a clean state for [9]
@@ -739,13 +1254,27 @@ static void test_supply_gate()
 }
 
 // ---------------------------------------------------------------------------
-//  [10] fAGV satellite stub still links (DoAuto2 case 70 derefs fAGV->IsATK_AMR())
+//  [10] fAGV satellite links and answers (DoAuto2 case 70 derefs
+//       fAGV->IsATK_AMR(), golden :543).
+//
+//  AI(W906-W7-L1fix2) 20260731: THIS WAS MISLABELLED A "STUB" AND IS NOT ONE.
+//  forms/fAGV.cpp:36 is `bool TfAGV::IsATK_AMR() { return AGV_IsATK_AMR(); }` --
+//  a one-line delegation to REAL TRANSLATED CODE in
+//  Automation/AGV_predicates.cpp:37-47, which evaluates
+//  `USE_COVER_TRAYID==tCID_NFC && IniConfig.bA65_BundleIDList && CUSTOMER_CODE==
+//  CC_AMKOR_Korea`.  It returns false here because those globals hold their
+//  untouched defaults (USE_COVER_TRAYID==tCIDNotUse, cmydef.cpp:5722;
+//  CUSTOMER_CODE==0, cmydef.cpp:3412) -- NOT because the body is hardcoded false.
+//  What IS a no-op stub in this file's dependency set is the AutoCylinder* trio;
+//  see the STAND-IN note in asendic_Auto2.cpp's banner.  The first CHECK below is
+//  a construction/link smoke check and claims no more than that.
 // ---------------------------------------------------------------------------
-static void test_fagv_stub()
+static void test_fagv_predicate()
 {
-    printf("\n[10] FormsFacade fAGV satellite stub (DoAuto2 case 70 dependency)\n");
+    printf("\n[10] FormsFacade fAGV predicate (DoAuto2 case 70 dependency)\n");
     CHECK(fAGV != 0,                 "fAGV is constructed (non-null)");
-    CHECK(fAGV->IsATK_AMR() == false, "fAGV->IsATK_AMR()==false (offline DUMMY non-AMR path)");
+    CHECK(fAGV->IsATK_AMR() == false,
+          "fAGV->IsATK_AMR()==false -- real predicate (AGV_predicates.cpp:37) on default globals");
 }
 
 int main()
@@ -759,12 +1288,13 @@ int main()
     test_load_new_auto2_full_lifter_walk();
     test_load_new_auto2_case1_shortcircuit();
     test_tray_to_front_long_path();
+    test_tray_to_front_belt_polarity();
     test_tray_to_rear_path();
     test_unload_to_stack_direct();
     test_receive_chain_converges();
     test_drive_auto2();
     test_supply_gate();
-    test_fagv_stub();
+    test_fagv_predicate();
 
     printf("\n--------------------------------------------------------------\n");
     printf(" RESULT: %d passed, %d failed\n", g_pass, g_fail);

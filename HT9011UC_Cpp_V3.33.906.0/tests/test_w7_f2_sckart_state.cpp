@@ -2,6 +2,21 @@
 //  tests/test_w7_f2_sckart_state.cpp
 //  W7-F2 -- SckArt state: merge proof + golden-divergence characterization.
 //
+//  ATTRIBUTION (added AI(W906-W7-F2fix2) 20260731 -- until now the file carried
+//  only fix-round tags, so it read as though the fix rounds had authored PARTs A
+//  and B).  Everything below landed in a single git commit (f61e25e), so this
+//  split is taken from the AI() tags, not from history:
+//    * PARTs A and B, and the file itself -- wave W7-F2, AI(W906-W7-F2) 20260729:
+//      the same wave that made SckArtRemainderState derive from SckArtState, and
+//      the tag on this target's own block in tests/CMakeLists.txt.
+//    * PART C -- AI(W906-W7-F2fix) 20260729 (review round 2).
+//    * PART C parser hardening, label softening and the claim corrections marked
+//      below -- AI(W906-W7-F2fix2) 20260731 (review round 3).
+//    * PART C parser round 2 (string-literal-aware comment stripping, clang-format
+//      anchor tolerance, hex/suffix literals, untruncated diagnostics) and the
+//      disclosure corrections that go with them -- AI(W906-W7-F2fix3) 20260801
+//      (review round 4).  No assertion was added or removed: still 46 calls.
+//
 //  Two jobs, deliberately in one target because they are two halves of the same
 //  analysis (docs/W7_UI_ARCHITECTURE_PLAN.md SS3-C4 / SS6-F2 / SS9-R9):
 //
@@ -40,12 +55,31 @@
 //    actually carry D1 and D2 had NO observer at all, so a later wave could have
 //    "fixed" or further broken a real behavioural divergence with the whole
 //    suite green.  PART C closes that: it reads csystem.cpp's own source text
-//    and asserts each of the six.  See PART C's own block for why a text-level
-//    guard is the only kind available here, and for the proof that it can fail.
+//    and asserts each of the six.  AI(W906-W7-F2fix2) 20260731: PART C's parser
+//    was hardened after a mutation run found four ways to change a seam value and
+//    keep it green; see PART C's own block for exactly which perturbations redden
+//    it, which reflows deliberately do not, and what a text scanner still cannot
+//    see (that block also withdraws the claim that no runtime observation exists
+//    -- a hard one does, it is just not cheap).
 //
 //  ALSO PINNED: SckArt_SetLotStatus's full 0..7 mapping, which IS a faithful
 //  translation of golden :639-667 and is the thing D1 corrupts by feeding it the
 //  wrong input.  Keeping both in one file makes the interaction visible.
+//
+//  HOW MANY CHECKS THIS FILE REALLY CONTRIBUTES (AI(W906-W7-F2fix2) 20260731 --
+//  the summary line at the bottom prints CHECK CALLS, and a reviewer read it as
+//  independent coverage).  Re-counted by hand this round: 46 calls (40 CHECK +
+//  6 PIN_SEAM), of which
+//    * 2 are strictly redundant: B9 re-runs SckArt_SetLotStatus(3) and B10
+//      re-runs SckArt_SetLotStatus(0), both already asserted by B3 and B7 (B3/B7
+//      also assert the combo out-param, so B9/B10 are strict subsets).  They are
+//      kept because they state the COST of D1 next to the divergence, not for
+//      coverage;
+//    * 9 assert on the DERIVED type a base initialiser its base-type twin already
+//      asserts -- A2/A4/A6/A8/A10/A12/A14/A16 and B12.  That duplication IS the
+//      merge proof (it is what would catch a derived ctor re-declaring one of the
+//      9 fields), but it constrains no additional value.
+//  So: 46 calls, 35 independent facts.  Do not quote 46 as coverage.
 //
 //  Toolchain: MinGW g++, C++14. Non-zero exit on any failure. No window, no
 //  globals mutated beyond the local state objects.  PART C reads ONE file
@@ -76,6 +110,71 @@ static void check(bool ok, const char* what, const char* file, int line)
 // ===========================================================================
 //  PART C support -- read csystem.cpp and parse a ctor initialiser out of it.
 //  AI(W906-W7-F2fix) 20260729.
+//
+//  AI(W906-W7-F2fix2) 20260731 -- HARDENED.  An independent mutation run applied
+//  26 perturbations to csystem.cpp against the 20260729 version of this parser.
+//  It reddened on all six direct golden flips and on several structural edits,
+//  but it stayed GREEN at 46/46 on four perturbations that had genuinely changed
+//  the constructed value.  All four are closed below; what is still NOT closed is
+//  disclosed in PART C's own block (search "STILL NOT CLOSED"), not papered over.
+//    H1  ctor-BODY assignment (`W7C1_TfSCKARTSeam():iTesterType(0),...{ iTesterType=1; }`).
+//        The scanned region stopped at the first `{`, so the body was invisible --
+//        and body assignment is GOLDEN's OWN SHAPE (golden Automation/SCK_ART.cpp:38-55
+//        assigns iTesterType/iLOTSTATUS_* in the ctor body, there is no mem-initialiser
+//        list at all), i.e. exactly the edit a future reconciling wave would write.
+//        CLOSED: the ctor body is now extracted by brace matching and an assignment
+//        to the pinned field there fails the pin.
+//    H2  comment-anchor collision.  `<Ctor>():` occurs TWICE per seam -- once in the
+//        explanatory comment above the ctor, once in the ctor -- and comment stripping
+//        ran AFTER the substring was cut, so it could not see the `//` that opened the
+//        comment line.  The parser therefore read the COMMENT, and the documented,
+//        invited edit (change the ctor to golden AND update the adjacent comment)
+//        stayed green.  CLOSED: comments are stripped FILE-WIDE first, and the search
+//        is anchored on the `struct` declaration before the ctor is looked for.
+//    H3  realistic rename (struct + ctor renamed together, still compiling) stayed
+//        green while the pin's prose still named a type that no longer existed.
+//        CLOSED by the struct-declaration anchor: the name is now required to exist.
+//    H4  `iTesterType(0+1)` passed -- the value parser read the first digit run and
+//        stopped.  CLOSED: the whole parenthesised expression is parsed and must be
+//        nothing but an integer literal.
+//  Also fixed, a false-alarm the same run measured: a newline between `(` and the
+//  literal used to go red on a value-preserving reflow.  Whitespace after `(` now
+//  includes newlines and carriage returns.
+//
+//  AI(W906-W7-F2fix3) 20260801 -- HARDENED AGAIN.  A second independent prover ran 31
+//  mutations against the 20260731 parser, confirmed H1-H4 stay closed and that all six
+//  seam constants are individually pinned, and found one more silent hole plus three
+//  false alarms.  All four are closed below; every one was reproduced and re-measured
+//  here before and after the fix (see each item).
+//    H5  H1 RE-OPENED BY ONE CHARACTER -- the comment stripper was not string-literal
+//        aware, so a `//` inside a STRING LITERAL on the same line as a ctor-body
+//        assignment deleted the rest of that line, assignment included, before
+//        w7f2_bodyAssignsField could see it:
+//            ...iOutputJamCnt(0){ const char* kSrv = "http://ART"; (void)kSrv; iTesterType = 1; }
+//        passed 46/46, while the same body with "http:/ART" (ONE slash, same constructed
+//        value 1) failed 1/46.  That is the H1 class -- ctor-body assignment, golden's own
+//        shape -- back again.  CLOSED: w7f2_stripComments is now a state machine that
+//        skips `"..."` and `'...'` (backslash escapes included).
+//    F1  The anchor was the hard-coded literal `<Ctor>():`, so BOTH standard
+//        clang-format constructor-initializer styles reddened the pin although neither
+//        changes a value: `Ctor() : ...` (space before colon, 2/46) and `Ctor()\n  : ...`
+//        (BreakConstructorInitializers, 2/46).  "Somebody runs a formatter over
+//        csystem.cpp" is the likeliest accidental trigger there is.  CLOSED: whitespace
+//        and newlines between `()` and `:` are skipped.
+//    F2  `iTesterType(0x0)` and `iTesterType(0u)` reddened, both value-preserving.
+//        CLOSED by ACCEPTING them: hex, octal and the u/U/l/L suffixes are now evaluated
+//        with C++'s own base rules (so `010` is 8, not 10).  Accepting is the right call
+//        rather than disclosing, because the parser still refuses everything that is not
+//        a single literal -- `0x1` and `3L` still redden on VALUE, measured -- so the
+//        pin's reach is unchanged while a whole class of false alarms disappears.
+//    F3  The failure diagnostic was built into a `char buf[512]`; C5's and C6's labels
+//        are ~470 chars, so every C5/C6 value failure was truncated mid-word and the
+//        "expected N" the maintainer needs was cut off.  CLOSED: std::ostringstream.
+//  One thing the prover reported that turned out NOT to be a hole: the disclosed item
+//  "`/* */` comments are not stripped" was harmless for the H1 shape (`/* set */
+//  iTesterType = 1;` reddens correctly, re-measured).  It is stripped now anyway --
+//  once quotes are tracked, an apostrophe inside an unstripped block comment would open
+//  a bogus char literal -- so that disclosure is retired rather than reworded.
 // ===========================================================================
 
 //  Locate the ported tree root from THIS file's own absolute path.  Verified,
@@ -107,66 +206,262 @@ static bool w7f2_readFile(const std::string &path, std::string &out)
     return !out.empty();
 }
 
-//  Strip `// ... end-of-line` comments so a future explanatory comment placed
-//  INSIDE an initialiser list cannot be mistaken for the initialiser itself.
-static std::string w7f2_stripLineComments(const std::string &s)
+static bool w7f2_isIdentChar(char ch)
 {
+    return std::isalnum(static_cast<unsigned char>(ch)) != 0 || ch == '_';
+}
+
+//  Strip comments so that nothing below can read one by accident.
+//  AI(W906-W7-F2fix2) 20260731: applied ONCE to the WHOLE file before anything is
+//  searched for (hole H2), not to an already-extracted substring -- a substring that
+//  starts inside a comment line no longer carries the `//` that opened it, so stripping
+//  afterwards is blind to it.
+//  AI(W906-W7-F2fix3) 20260801 -- REWRITTEN AS A STATE MACHINE, string-literal aware
+//  (hole H5).  The line-comment-only version treated `//` inside a string literal as a
+//  comment start, which silently deleted a ctor-body assignment on the same line and so
+//  re-opened H1; see this section's header for the two one-character-apart mutations that
+//  proved it.  `"..."` and `'...'` are skipped, backslash escapes included, and `/* */`
+//  is stripped too (necessary once quotes are tracked: an apostrophe inside an unstripped
+//  block comment would otherwise open a bogus char literal and swallow real code).
+//  Comment bodies are dropped but their newlines are kept, so `//` detection on following
+//  lines is unaffected.
+//  Not handled, and disclosed rather than papered over: C++11 raw string literals
+//  (`R"(...)"`) -- none exist in this tree (BCB6-era source).  See PART C's residual list
+//  for the two shapes that were actually tried.
+static std::string w7f2_stripComments(const std::string &s)
+{
+    enum State { CODE, LINE, BLOCK, DQ, SQ };
+    State st = CODE;
     std::string r;
     r.reserve(s.size());
-    bool inComment = false;
     for (std::string::size_type i = 0; i < s.size(); ++i) {
-        if (!inComment && s[i] == '/' && i + 1 < s.size() && s[i + 1] == '/') { inComment = true; ++i; continue; }
-        if (inComment) { if (s[i] == '\n') { inComment = false; r += '\n'; } continue; }
-        r += s[i];
+        const char ch = s[i];
+        const char nx = (i + 1 < s.size()) ? s[i + 1] : '\0';
+        if (st == LINE) {
+            if (ch == '\n') { st = CODE; r += '\n'; }
+        } else if (st == BLOCK) {
+            if (ch == '\n')                  r += '\n';
+            else if (ch == '*' && nx == '/') { st = CODE; ++i; }
+        } else if (st == DQ || st == SQ) {
+            r += ch;
+            if (ch == '\\' && i + 1 < s.size())                    { r += nx; ++i; }
+            else if ((st == DQ && ch == '"') || (st == SQ && ch == '\'')) st = CODE;
+        } else {                                                   // CODE
+            if      (ch == '/' && nx == '/') { st = LINE;  ++i; }
+            else if (ch == '/' && nx == '*') { st = BLOCK; ++i; }
+            else if (ch == '"')              { st = DQ; r += ch; }
+            //  A `'` straight after a DIGIT is a C++14 digit separator (`1'000`), not the
+            //  start of a char literal -- do not open SQ on it.  Deliberately narrower than
+            //  "after any identifier character": that wider test would also have refused to
+            //  open on the prefixed char literals `L'x'` / `u8'a'`, which are real literals.
+            else if (ch == '\'' &&
+                     !(i > 0 && std::isdigit(static_cast<unsigned char>(s[i - 1])) != 0))
+                                             { st = SQ; r += ch; }
+            else                             { r += ch; }
+        }
     }
     return r;
 }
 
-//  Return the mem-initialiser value for `field` inside `ctorName`'s init-list.
+//  Whole-identifier occurrence of `name` at `pos`? (so `iTesterType` does not match
+//  inside `core.iTesterTypeBackup`, and `iLOTSTATUS_R` not inside `iLOTSTATUS_RX`).
+static bool w7f2_isIdentAt(const std::string &s, std::string::size_type pos, const std::string &name)
+{
+    if (pos > 0 && w7f2_isIdentChar(s[pos - 1])) return false;
+    const std::string::size_type end = pos + name.size();
+    if (end < s.size() && w7f2_isIdentChar(s[end])) return false;
+    return true;
+}
+
+static std::string::size_type w7f2_skipSpace(const std::string &s, std::string::size_type p)
+{
+    //  Newlines/CRs included on purpose: a value-preserving reflow that puts the
+    //  literal on the next line must NOT redden (measured false alarm, 20260731).
+    while (p < s.size() && (s[p] == ' ' || s[p] == '\t' || s[p] == '\n' || s[p] == '\r')) ++p;
+    return p;
+}
+
+//  The WHOLE parenthesised initialiser must be an optionally-signed integer literal
+//  and nothing else (hole H4: `0+1` used to parse as 0).  `kGolden`, `0+1`, `1-1` and
+//  `iLOTSTATUS_L` all fail here, which is the intended outcome -- the pin's promise is
+//  only meaningful for a literal it can actually evaluate.
+//  AI(W906-W7-F2fix3) 20260801 (false alarm F2): hex `0x0`, octal `010` and the u/U/l/L
+//  suffixes are ACCEPTED now and evaluated with C++'s own base rules.  They used to
+//  redden although all of them are value-preserving.  Evaluating rather than merely
+//  tolerating them matters: `010` is EIGHT in C++, and a base-10 reading would have been
+//  a wrong value, not just a loud one.  `0x1` / `3L` still redden -- on value, measured.
+static bool w7f2_literalFromExpr(const std::string &expr, long &out)
+{
+    std::string t;
+    for (std::string::size_type i = 0; i < expr.size(); ++i)
+        if (expr[i] != ' ' && expr[i] != '\t' && expr[i] != '\n' && expr[i] != '\r') t += expr[i];
+    if (t.empty()) return false;
+    std::string::size_type i = 0;
+    bool neg = false;
+    if (t[0] == '+' || t[0] == '-') { neg = (t[0] == '-'); i = 1; }
+
+    //  Trailing integer-suffix: at most 3 of u/U/l/L in any order (`0u`, `3L`, `1uLL`).
+    std::string::size_type end = t.size();
+    int nSuffix = 0;
+    while (end > i && nSuffix < 3) {
+        const char c = t[end - 1];
+        if (c == 'u' || c == 'U' || c == 'l' || c == 'L') { --end; ++nSuffix; }
+        else break;
+    }
+    if (end <= i) return false;
+
+    int base = 10;
+    if (end - i > 2 && t[i] == '0' && (t[i + 1] == 'x' || t[i + 1] == 'X')) { base = 16; i += 2; }
+    else if (end - i > 1 && t[i] == '0')                                    { base = 8; }
+
+    long v = 0;
+    for (; i < end; ++i) {
+        const char c = t[i];
+        int d;
+        if      (c >= '0' && c <= '9') d = c - '0';
+        else if (c >= 'a' && c <= 'f') d = 10 + (c - 'a');
+        else if (c >= 'A' && c <= 'F') d = 10 + (c - 'A');
+        else return false;
+        if (d >= base) return false;
+        v = v * base + d;
+    }
+    out = neg ? -v : v;
+    return true;
+}
+
+//  Extract the brace-matched ctor body starting at the `{` at `open`.
+static bool w7f2_braceBody(const std::string &src, std::string::size_type open, std::string &out)
+{
+    int depth = 0;
+    for (std::string::size_type i = open; i < src.size(); ++i) {
+        if (src[i] == '{') ++depth;
+        else if (src[i] == '}') {
+            --depth;
+            if (depth == 0) { out = src.substr(open + 1, i - (open + 1)); return true; }
+        }
+    }
+    return false;
+}
+
+//  Hole H1.  Does the ctor BODY assign `field`, i.e. is the mem-initialiser value no
+//  longer the constructed value?  Assignment in the ctor body is GOLDEN's own shape,
+//  so this is the single most likely way for a future wave to change one of these six
+//  values.  Deliberately conservative: `=` (not `==`), the compound assignments, and
+//  `++`/`--`/`<<=`/`>>=` all count.  A read (`x=field;`, `field==1`) does not.
+static bool w7f2_bodyAssignsField(const std::string &body, const std::string &field)
+{
+    std::string::size_type f = body.find(field);
+    while (f != std::string::npos) {
+        if (w7f2_isIdentAt(body, f, field)) {
+            const std::string::size_type p = w7f2_skipSpace(body, f + field.size());
+            const char c0 = (p     < body.size()) ? body[p]     : '\0';
+            const char c1 = (p + 1 < body.size()) ? body[p + 1] : '\0';
+            const char c2 = (p + 2 < body.size()) ? body[p + 2] : '\0';
+            if (c0 == '=' && c1 != '=') return true;                                   // field = ...
+            if (c1 == '=' && (c0 == '+' || c0 == '-' || c0 == '*' || c0 == '/' ||
+                              c0 == '%' || c0 == '&' || c0 == '|' || c0 == '^'))
+                return true;                                                            // field += ... etc
+            if ((c0 == '+' && c1 == '+') || (c0 == '-' && c1 == '-')) return true;      // field++ / field--
+            if ((c0 == '<' && c1 == '<' && c2 == '=') ||
+                (c0 == '>' && c1 == '>' && c2 == '=')) return true;                     // field <<= / >>=
+        }
+        f = body.find(field, f + 1);
+    }
+    return false;
+}
+
+//  Return the mem-initialiser value for `field` in `ctorName`'s init-list, having
+//  first checked that the ctor body does not then re-assign it.
+//  `src` MUST already be comment-stripped (w7f2_stripComments, file-wide).
 //  Anchored BY SYMBOL NAME, never by line number (plan SS5 / KNOWLEDGE Gotcha 10:
 //  ported line numbers rot immediately).  Fails loudly -- and therefore turns the
-//  test red -- if the ctor, the init-list, the field, or a plain integer literal
-//  cannot be found, so PART C can never silently pass.
+//  test red -- if the struct, the ctor, the init-list, the field, a plain integer
+//  literal, or a body free of assignments to `field` cannot be found, so PART C can
+//  never silently pass.
 static bool w7f2_ctorInitValue(const std::string &src, const std::string &ctorName,
                                const std::string &field, long &out, std::string &why)
 {
-    const std::string needle = ctorName + "():";
-    std::string::size_type c = src.find(needle);
+    //  Anchor 1: the STRUCT DECLARATION (hole H2/H3).  Required as a whole identifier
+    //  so `struct W7C1_TfSCKARTSeamV2` does not satisfy an anchor on W7C1_TfSCKARTSeam.
+    const std::string decl = "struct " + ctorName;
+    std::string::size_type s = src.find(decl);
+    while (s != std::string::npos &&
+           s + decl.size() < src.size() && w7f2_isIdentChar(src[s + decl.size()]))
+        s = src.find(decl, s + 1);
+    if (s == std::string::npos) {
+        why = "`" + decl + "` is not declared in csystem.cpp (renamed? removed?)";
+        return false;
+    }
+
+    //  Anchor 2: the ctor's init-list, AFTER the struct declaration.
+    //  AI(W906-W7-F2fix3) 20260801 (false alarm F1): this used to be the hard-coded
+    //  literal `<Ctor>():` with no tolerance at all, so BOTH standard clang-format
+    //  constructor-initializer styles -- `Ctor() : ...` and `Ctor()\n    : ...`
+    //  (BreakConstructorInitializers) -- reddened the pin without changing any value.
+    //  Whitespace and newlines between `()` and `:` are skipped now.  A `::` is still
+    //  rejected: that is a qualified name, not a mem-initialiser list.
+    const std::string head = ctorName + "()";
+    std::string::size_type c = std::string::npos;
+    for (std::string::size_type h = src.find(head, s); h != std::string::npos;
+         h = src.find(head, h + 1)) {
+        if (!w7f2_isIdentAt(src, h, ctorName)) continue;
+        const std::string::size_type p = w7f2_skipSpace(src, h + head.size());
+        if (p < src.size() && src[p] == ':' && !(p + 1 < src.size() && src[p + 1] == ':')) {
+            c = h;
+            break;
+        }
+    }
     if (c == std::string::npos) {
-        why = "ctor init-list `" + needle + "` not found in csystem.cpp";
+        why = "no `" + ctorName + "() : ...` mem-initialiser list after the `" + decl +
+              "` declaration";
         return false;
     }
     std::string::size_type open = src.find('{', c);
     if (open == std::string::npos) {
-        why = "no ctor body `{` after `" + needle + "`";
+        why = "no ctor body `{` after `" + ctorName + "() :`";
         return false;
     }
-    const std::string region = w7f2_stripLineComments(src.substr(c, open - c));
+    const std::string region = src.substr(c, open - c);
 
     std::string::size_type f = region.find(field);
     while (f != std::string::npos) {
-        const bool leftOk = (f == 0) ||
-            !(std::isalnum(static_cast<unsigned char>(region[f - 1])) || region[f - 1] == '_');
-        std::string::size_type p = f + field.size();
-        while (p < region.size() && (region[p] == ' ' || region[p] == '\t' || region[p] == '\n' || region[p] == '\r')) ++p;
-        if (leftOk && p < region.size() && region[p] == '(') {
-            ++p;
-            while (p < region.size() && (region[p] == ' ' || region[p] == '\t')) ++p;
-            bool neg = false;
-            if (p < region.size() && (region[p] == '-' || region[p] == '+')) { neg = (region[p] == '-'); ++p; }
-            if (p >= region.size() || !std::isdigit(static_cast<unsigned char>(region[p]))) {
-                why = ctorName + "'s `" + field + "(...)` initialiser is not a plain integer literal";
+        std::string::size_type p = w7f2_skipSpace(region, f + field.size());
+        if (w7f2_isIdentAt(region, f, field) && p < region.size() && region[p] == '(') {
+            int depth = 1;
+            std::string::size_type q = p + 1;
+            for (; q < region.size(); ++q) {
+                if (region[q] == '(') ++depth;
+                else if (region[q] == ')') { --depth; if (depth == 0) break; }
+            }
+            if (depth != 0) {
+                why = ctorName + "'s `" + field + "(` initialiser has no closing `)` before the ctor body";
                 return false;
             }
+            const std::string expr = region.substr(p + 1, q - (p + 1));
             long v = 0;
-            while (p < region.size() && std::isdigit(static_cast<unsigned char>(region[p])))
-                v = v * 10 + (region[p++] - '0');
-            out = neg ? -v : v;
+            if (!w7f2_literalFromExpr(expr, v)) {
+                why = ctorName + "'s `" + field + "(" + expr + ")` initialiser is not a plain integer literal";
+                return false;
+            }
+            std::string body;
+            if (!w7f2_braceBody(src, open, body)) {
+                why = ctorName + "'s ctor body has no matching `}`";
+                return false;
+            }
+            if (w7f2_bodyAssignsField(body, field)) {
+                why = ctorName + "'s ctor BODY assigns `" + field + "` after the init-list, so the "
+                      "init-list value (" + (v == 0 ? std::string("0") : std::string("non-zero")) +
+                      ") is no longer the constructed value -- that is golden's own shape "
+                      "(golden Automation/SCK_ART.cpp:38-55 assigns these in the body), so if this is "
+                      "a deliberate reconciliation, move the pin to the assigned value";
+                return false;
+            }
+            out = v;
             return true;
         }
         f = region.find(field, f + 1);
     }
-    why = "`" + field + "` is not in " + ctorName + "'s init-list";
+    why = "`" + field + "` is not in " + ctorName + "'s mem-initialiser list";
     return false;
 }
 
@@ -185,11 +480,16 @@ static void w7f2_pinSeamInit(const std::string &src, const char *ctorName,
         return;
     }
     if (v != expectPorted) {
-        char buf[512];
-        std::snprintf(buf, sizeof(buf),
-                      "%s  -- source says %s::%s(%ld), this pin expected %ld",
-                      label, ctorName, field, v, expectPorted);
-        check(false, buf, file, line);
+        //  AI(W906-W7-F2fix3) 20260801 (false alarm F3): this was a `char buf[512]` +
+        //  snprintf.  C5's and C6's labels are ~470 characters, so every C5/C6 VALUE
+        //  failure was truncated mid-word and the `expected N` -- the one number the
+        //  maintainer actually needs -- was cut off.  Built with ostringstream now, so
+        //  the message cannot be clipped however long a label grows.
+        std::ostringstream m;
+        m << label << "  -- source says " << ctorName << "::" << field << "(" << v
+          << "), this pin expected " << expectPorted;
+        const std::string msg = m.str();
+        check(false, msg.c_str(), file, line);
         return;
     }
     check(true, label, file, line);
@@ -345,21 +645,70 @@ int main()
     //  INSIDE csystem.cpp and reached only through the file-local W7C1_SCKART /
     //  W7C2_SCKART macros.  They have no external linkage and appear in no
     //  header, so no test translation unit can name them -- checked, not assumed.
-    //  There is therefore no runtime observation available, and the six
-    //  divergent values exist in exactly one observable place: the source text
-    //  of the two ctor initialiser lists.  That is what PART C reads.
+    //  The six divergent values are therefore not directly observable, and the
+    //  one place they are written down is the source text of the two ctor
+    //  initialiser lists.  That is what PART C reads.
+    //
+    //  AI(W906-W7-F2fix2) 20260731 -- CORRECTION.  This block used to say flatly
+    //  "there is therefore no runtime observation available".  That overstates it.
+    //  What is true is that no test TU can NAME the seams.  An INDIRECT runtime
+    //  observation is not impossible: DoCleanOutFinishCheck() is an ordinary free
+    //  function (declared in csystem.h, already driven by
+    //  tests/test_w7_c1_cleanout_finish.cpp) and its ART gate reads
+    //  `W7C1_SCKART->iTesterType==0` at runtime, so a test that forced
+    //  USE_AUTO_RETEST/IniConfig.bA10_AutoReTest/CosFunction.bUseSCKART on and
+    //  drove the clean-out state machine as far as that gate could tell 0 from 1
+    //  by its side effects.  It is not CHEAP: the gate sits behind ~20 sequential
+    //  machine-state guards earlier in that function, each of which returns early,
+    //  and the effects that distinguish the two paths run through
+    //  CheckLoadingCount and the WAR0119/WAR0120/WAR0121 ShowErrorMessage arms.
+    //  NOT ATTEMPTED in this round -- recorded as a possible future behavioural
+    //  test, not as an impossibility.
     //
     //  WHAT THIS IS AND IS NOT.  It is a text-level regression guard on six
     //  specific initialisers, anchored by symbol name.  It is NOT a behavioural
     //  observation, and it does NOT prove the seams behave like golden -- they
     //  demonstrably do not, which is the whole point.  The residual exposure
-    //  (nothing offline can exercise the ART branches these constants gate) is
-    //  recorded in docs/W7-UI-SKIPPED.md under W7-F2-fix, per plan SS12.6.
+    //  (nothing offline exercises the ART branches these constants gate) is
+    //  recorded in docs/W7-UI-SKIPPED.md section "## W7-F2-fix (2026-07-29)",
+    //  per plan SS12.6.
     //
-    //  WHY IT IS LOAD-BEARING.  Perturb any one of the six initialisers in
-    //  csystem.cpp and the matching check below goes red, printing both the value
-    //  found in the source and the value expected.  Proven by doing exactly that
-    //  during this fix round -- see the W7-F2-fix report.
+    //  WHY IT IS LOAD-BEARING, AND EXACTLY HOW FAR IT REACHES.  Measured by
+    //  mutating csystem.cpp, running this exe, and restoring the bytes -- on 20260729
+    //  (26 perturbations, parser as first written), on 20260731 (hardened parser), and
+    //  again on 20260801 (31 prover mutations, then a 30-case re-measure of the parser
+    //  as it now stands).  It goes RED on: each of the six values flipped to its golden
+    //  constant; a wrong non-golden value; a non-literal initialiser (`0+1` included);
+    //  the field deleted from the list; the whole ctor deleted; conversion to an in-class
+    //  initialiser; the struct and/or the ctor renamed; the ctor body assigning the
+    //  pinned field, INCLUDING when the same line carries a string literal containing
+    //  `//` (that one was a silent hole until 20260801); a value-changing hex/suffixed
+    //  literal (`0x1`, `3L`); and csystem.cpp unreadable.  It stays GREEN on
+    //  value-preserving reflows: extra spaces, a leading comma, a comment inside the
+    //  list, a newline between `(` and the literal, BOTH clang-format
+    //  constructor-initializer styles (`Ctor() :` and `Ctor()` + newline + `: `), and
+    //  hex/octal/suffixed spellings of the same value (`0x0`, `0u`).
+    //
+    //  STILL NOT CLOSED, and it is a text scanner so some of this cannot be:
+    //    (a) a ctor body that changes the field WITHOUT naming it -- a helper call,
+    //        `memset(this,...)`, or a delegated ctor -- is invisible here;
+    //    (b) so is a write to the single instance from ANYWHERE ELSE in csystem.cpp
+    //        (e.g. `W7C1_fSCKART_ext.iTesterType=1;` in some init path).  Nothing
+    //        like that exists today: the only writes to any seam iTesterType in the
+    //        tree are W7C2_TfSCKARTSeam::CheckNeedRT's `core.iTesterType=iTesterType;`
+    //        (which writes the embedded core, not the shadow) -- grepped again
+    //        20260801 -- but this pin would not notice one being added;
+    //    (c) brace-init (`iTesterType{0}`) reddens even though it preserves the
+    //        value.  Left as a conservative false alarm rather than a silent hole;
+    //    (d) C++11 raw string literals are not understood by w7f2_stripComments.  None
+    //        exist in this tree.  Two shapes WERE tried on 20260801 -- `R"(http://x)"` and
+    //        `R"(a"b)"`, each in a ctor body that also assigns the pinned field -- and both
+    //        reddened, i.e. the mis-parse fails loudly rather than passing.  That is a
+    //        measurement on two shapes, not a proof for every raw string.
+    //  RETIRED FROM THIS LIST on 20260801: "`/* */` comments are not stripped".  It was
+    //  disclosed as a hole and it was not one for the shape that matters (`/* set */
+    //  iTesterType = 1;` in the body reddens correctly -- re-measured), and block
+    //  comments are stripped now regardless.
     //
     //  WHEN A FUTURE WAVE ACTUALLY FIXES THE SEAMS, the honest edit is to change
     //  the expected value here from the ported 0 to the golden constant in the
@@ -368,39 +717,55 @@ int main()
     {
         const std::string root = w7f2_portedRoot();
         const std::string path = root + "/csystem.cpp";
-        std::string src;
-        const bool got = w7f2_readFile(path, src);
+        std::string raw;
+        const bool got = w7f2_readFile(path, raw);
         CHECK(got, "C0  csystem.cpp is readable from this test (path derived from __FILE__); "
                    "without it the six pins below cannot run and MUST NOT be treated as passing");
 
         if (got) {
+            //  File-wide comment strip BEFORE any searching -- hole H2.
+            const std::string src = w7f2_stripComments(raw);
+
+            //  AI(W906-W7-F2fix2) 20260731 -- LABELS SOFTENED.  These six used to
+            //  say the ctor "constructs" the value.  A text pin cannot see that:
+            //  what it checks is that the mem-initialiser still READS `field(0)`
+            //  and that the ctor body does not then assign the same field.  That
+            //  is strictly less than "constructs" (see STILL NOT CLOSED (a)/(b)
+            //  above), so the labels now claim only what is checked.
+
             // --- D1: the four iLOTSTATUS_* constants ------------------------
             PIN_SEAM(src, "W7C1_TfSCKARTSeam", "iLOTSTATUS_L", 0,
-                     "C1  D1 PINNED: W7C1_TfSCKARTSeam ctor constructs iLOTSTATUS_L(0); golden "
-                     "Automation/SCK_ART.cpp:46 constructs 3");
+                     "C1  D1 PINNED IN SOURCE TEXT: W7C1_TfSCKARTSeam's mem-initialiser list still "
+                     "reads iLOTSTATUS_L(0), body does not assign it; golden Automation/SCK_ART.cpp:46 "
+                     "assigns 3");
             PIN_SEAM(src, "W7C2_TfSCKARTSeam", "iLOTSTATUS_W", 0,
-                     "C2  D1 PINNED: W7C2_TfSCKARTSeam ctor constructs iLOTSTATUS_W(0); golden "
-                     "Automation/SCK_ART.cpp:44 constructs 1");
+                     "C2  D1 PINNED IN SOURCE TEXT: W7C2_TfSCKARTSeam's mem-initialiser list still "
+                     "reads iLOTSTATUS_W(0), body does not assign it; golden Automation/SCK_ART.cpp:44 "
+                     "assigns 1");
             PIN_SEAM(src, "W7C2_TfSCKARTSeam", "iLOTSTATUS_R", 0,
-                     "C3  D1 PINNED: W7C2_TfSCKARTSeam ctor constructs iLOTSTATUS_R(0); golden "
-                     "Automation/SCK_ART.cpp:47 constructs 4");
+                     "C3  D1 PINNED IN SOURCE TEXT: W7C2_TfSCKARTSeam's mem-initialiser list still "
+                     "reads iLOTSTATUS_R(0), body does not assign it; golden Automation/SCK_ART.cpp:47 "
+                     "assigns 4");
             PIN_SEAM(src, "W7C2_TfSCKARTSeam", "iLOTSTATUS_A", 0,
-                     "C4  D1 PINNED: W7C2_TfSCKARTSeam ctor constructs iLOTSTATUS_A(0); golden "
-                     "Automation/SCK_ART.cpp:49 constructs 6");
+                     "C4  D1 PINNED IN SOURCE TEXT: W7C2_TfSCKARTSeam's mem-initialiser list still "
+                     "reads iLOTSTATUS_A(0), body does not assign it; golden Automation/SCK_ART.cpp:49 "
+                     "assigns 6");
 
             // --- D2: the two seam-local iTesterType shadows -----------------
             //   These are NOT the SckArtState field B11 pins -- each seam owns a
             //   separate top-level `iTesterType`, and it is the seam's copy (not
             //   the embedded `core`'s) that every csystem.cpp call site reads.
             PIN_SEAM(src, "W7C1_TfSCKARTSeam", "iTesterType", 0,
-                     "C5  D2 PINNED (behavioural): W7C1_TfSCKARTSeam ctor constructs iTesterType(0); "
-                     "golden Automation/SCK_ART.cpp:42 then :113 constructs 1 for every CUSTOMER_CODE "
-                     "except CC_SCK. With 0 the `W7C1_SCKART->iTesterType==0` GATE in "
+                     "C5  D2 PINNED IN SOURCE TEXT (the divergence it carries IS behavioural): "
+                     "W7C1_TfSCKARTSeam's mem-initialiser list still reads iTesterType(0), body does "
+                     "not assign it; golden Automation/SCK_ART.cpp:42 then :113 leaves 1 for every "
+                     "CUSTOMER_CODE except CC_SCK. With 0 the `W7C1_SCKART->iTesterType==0` GATE in "
                      "DoCleanOutFinishCheck is TRUE, so the port ENTERS the whole Flex-ART block that "
                      "golden SKIPS -- see Automation/SCK_ART.cpp's SckArtState ctor note");
             PIN_SEAM(src, "W7C2_TfSCKARTSeam", "iTesterType", 0,
-                     "C6  D2 PINNED (behavioural): W7C2_TfSCKARTSeam ctor constructs iTesterType(0); "
-                     "golden constructs 1 except for CC_SCK, which inverts all five "
+                     "C6  D2 PINNED IN SOURCE TEXT (the divergence it carries IS behavioural): "
+                     "W7C2_TfSCKARTSeam's mem-initialiser list still reads iTesterType(0), body does "
+                     "not assign it; golden leaves 1 except for CC_SCK, which inverts all five "
                      "`W7C2_SCKART->iTesterType==0/==1` reads in DoART_AfterCleanOut");
         }
     }
