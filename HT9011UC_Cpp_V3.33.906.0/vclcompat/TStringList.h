@@ -165,6 +165,35 @@ public:
     void       Delete(int index);                        // 0-based
     void       Clear();
     int        IndexOf(const AnsiString& s) const;       // -1 if absent
+    // AI(W906-W7-L1-Wave0) 20260801: VCL TStrings::Find -- BINARY SEARCH OVER AN
+    // ALREADY-SORTED LIST, and IndexOf is NOT a drop-in for it.  Two differences
+    // matter: Find returns bool (not the index) and it WRITES the out-parameter.
+    // Golden asendic_Loader.cpp calls it at :1412, :1585 and :1606, in every case
+    // immediately after Sort() (see :1408-1412 -- Clear / CommaText= / Sort /
+    // Find), which is the precondition VCL documents.
+    // Algorithm mirrors Delphi Classes.pas TStringList.Find verbatim, including
+    // its two easily-missed properties: (a) Index is assigned even when the item
+    // is NOT found, receiving the insertion point; (b) with the default
+    // Duplicates (dupIgnore, i.e. anything other than dupAccept) the search keeps
+    // narrowing left after a hit, so Index lands on the FIRST equal element.
+    // Comparison uses AnsiString operator< / == so it matches Sort() exactly (see
+    // Sort's own note: it orders by AnsiString operator<, i.e. byte order);
+    // using a different comparator here would silently break the binary search.
+    bool Find(const AnsiString& S, int& Index) const {
+        bool found = false;
+        int L = 0, H = static_cast<int>(items_.size()) - 1;
+        while (L <= H) {
+            int I = L + ((H - L) >> 1);
+            if (items_[static_cast<size_t>(I)] < S) {
+                L = I + 1;
+            } else {
+                H = I - 1;
+                if (items_[static_cast<size_t>(I)] == S) { found = true; L = I; }
+            }
+        }
+        Index = L;
+        return found;
+    }
     AnsiString First() const;                            // Strings[0]
     void       Sort();                                   // uses AnsiString<
 

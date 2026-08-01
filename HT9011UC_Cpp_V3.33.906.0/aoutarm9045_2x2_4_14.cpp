@@ -176,11 +176,14 @@ extern int  iMagPos;                                                           /
 extern TRAY_TYPE_PARA *OutputForm[eTrayCount];                                 // golden cprod.h:1370 -- offline: tray geometry params
 extern TRAY_TYPE_PARA *FixForm[eTrayCount];                                    // golden cprod.h:1367 -- offline: tray geometry params
 // production-info form pointer (golden ProductionInfo.h, VCL form -> offline stand-in)
-#ifndef OUTARM_2x2_4_14_FPRODINFO
-#define OUTARM_2x2_4_14_FPRODINFO
-struct TfProductionInfo_2x2_4_14_stub { void CalTrayICCount(int){} };          // golden ProductionInfo.h TfProductionInfo -- offline: no-op CalTrayICCount
-extern TfProductionInfo_2x2_4_14_stub *fProductionInfo;                        // golden ProductionInfo.h -- offline: stand-in
-#endif
+// AI(W906-W7-L1-Wave0) 20260801: TU-local stub RETIRED -- the real stand-in now
+// lives at forms/fProductionInfo.h (reached via this TU's existing FormsFacade.h
+// include), which is also the FIRST actual definition of the `fProductionInfo`
+// global anywhere in this tree: the extern retired here named a symbol nothing
+// defined, and only never surfaced as an undefined reference because no current
+// test executable pulls this object out of libht9045_sm.a.  Retiring it is
+// mandatory, not cosmetic: two differently-typed declarations of one name in a TU
+// that also sees the facade header is a conflicting-declaration error.
 // place-target index (golden aoutarm.h:18; engine defines it non-static)
 extern int  iWhichAuto;                                                        // golden aoutarm.h:18 -- offline: place-target Auto index
 // out-arm Y-pitch home timer + flag (golden file-globals)

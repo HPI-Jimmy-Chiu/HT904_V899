@@ -146,11 +146,14 @@ void InitPlaceToAutoTask();                                                    /
 //  && TestIF_File.bEnableFix2BGAAICCD), so the offline no-op is never reached
 //  unless the Integrate phase swaps in the real form.
 // -----------------------------------------------------------------------------
-#ifndef AOUTARM9045_1X3_4_FFIXAICCD_FWD
-#define AOUTARM9045_1X3_4_FFIXAICCD_FWD
-struct TfFixAICCD_OutArm1x3_4Stub { void OutArmCycleCounterUpdate() {} };       // offline stand-in for golden TfFixAICCD::OutArmCycleCounterUpdate (FixAICCD.h)
-extern TfFixAICCD_OutArm1x3_4Stub *fFixAICCD;                                   // golden FixAICCD.h:152 (TfFixAICCD *fFixAICCD)
-#endif
+// AI(W906-W7-L1-Wave0) 20260801: TU-local stub RETIRED -- the real stand-in now
+// lives at forms/fFixAICCD.h (reached via this TU's existing FormsFacade.h
+// include) and its global is a REAL object.  This one was the worst of the four
+// copies: it declared the SAME global symbol `fFixAICCD` with a DIFFERENT type
+// (TfFixAICCD_OutArm1x3_4Stub*), which links by luck because namespace-scope
+// variables are not type-mangled.  Retiring it here is mandatory, not cosmetic:
+// two differently-typed declarations of one name in a TU that also sees the
+// facade header is a conflicting-declaration error.
 
 //---------------------------------------------------------------------------
 #pragma package(smart_init)

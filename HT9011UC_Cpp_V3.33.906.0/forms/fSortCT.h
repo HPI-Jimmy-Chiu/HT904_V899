@@ -30,6 +30,16 @@ public:
     TfSortCTPanel *pnlLoadCID;                    // [DATA] golden cSortCT.h:265 (loader cover-ID panel)
     TfSortCTPanel *pnlCoverTrayD;                 // [DATA] golden cSortCT.h:280 (color cover-tray-ID panel)
     TfSortCTPanel *pnlTrayCnt[6];                 // [DATA] golden cSortCT.h:337 (per-Auto tray-count panels)
+    // AI(W906-W7-L1-Wave0) 20260801: golden cSortCT.h:338 `TPanel
+    // *pnlTrayID[MAX_AUTO_TRAY];` -- the per-Auto tray-ID caption panels.
+    // asendic_Auto.cpp:1156 reads `fSortCT->pnlTrayID[Pos]->Caption` (read-only in
+    // this family), so the ctor must allocate all 6.
+    // DIMENSION: golden's MAX_AUTO_TRAY is 6 (golden MachineType.h:396, read this
+    // pass).  Written as the literal 6 rather than the macro because forms/
+    // headers include only forms/FormWidgets.h -> vclcompat/{vcl_compat,Controls,
+    // StringGrid}.h and MAX_AUTO_TRAY is not visible there -- the same convention
+    // the sibling pnlTrayCnt[6] one line up already follows.
+    TfSortCTPanel *pnlTrayID[6];                  // [DATA] golden cSortCT.h:338 (TPanel*[MAX_AUTO_TRAY==6])
     TfSortCT();
     virtual ~TfSortCT() {}
 };

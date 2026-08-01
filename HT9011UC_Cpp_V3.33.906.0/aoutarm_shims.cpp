@@ -99,17 +99,27 @@ bool AutoTrayReCheck(int)                          { return true; }            /
 void SetOutArmHome()                               {}                          // golden aoutarm.h:97 -- offline: alarm-time Z home no-op
 
 //==============================================================================
-//  Fix-AI-CCD form stand-in (golden FixAICCD.h:152 extern PACKAGE TfFixAICCD
-//  *fFixAICCD; method OutArmCycleCounterUpdate()).  The variants that hold the
-//  pointer call ->OutArmCycleCounterUpdate() only under USE_Fix_AI_CCD &&
-//  bEnableFix2BGAAICCD (never reached offline).  Define the class method ONCE +
-//  a null global pointer.  (Some variants declare an identical `class TfFixAICCD`
-//  -> same mangled method symbol resolves here; others use a same-named extern
-//  pointer of a local stub type -> the global address resolves here.)
+//  Fix-AI-CCD form stand-in -- RETIRED FROM THIS FILE.
+//
+//  AI(W906-W7-L1-Wave0) 20260801: the TU-local `class TfFixAICCD`, its method
+//  body and the `TfFixAICCD *fFixAICCD = 0;` global that used to sit here have
+//  MOVED to forms/fFixAICCD.{h,cpp} (in ht9045_forms, which ht9045_sm PUBLIC-links
+//  -- so every caller still resolves).  Three things changed with the move and all
+//  three are deliberate:
+//    1. The global is now a REAL object, not a null pointer.  The old comment's
+//       "never derefed offline" was true only of the out-arm variants; golden
+//       asendic_Auto.cpp derefs fFixAICCD UNCONDITIONALLY on main paths (:153,
+//       :184, :248, :404, :454, :1920, :2113), so the null would have been a
+//       crash for the W7-L1 Auto translation, not a benign stub.
+//    2. The class gained golden's second method, bCheckUnloaderHasAiNG(int)
+//       (golden FixAICCD.h:147) -- which golden declares returning VOID, not bool.
+//    3. The four TU-local copies of this declaration (aoutarm9045_1x2_2.cpp,
+//       _1x2_4.cpp, _2x6_8.cpp and the differently-typed one in _1x3_4.cpp) were
+//       retired in the same pass; they had to be, because FormsFacade.h now
+//       includes forms/fFixAICCD.h and those TUs include FormsFacade.h.
+//  This file itself does NOT include FormsFacade.h and no longer mentions
+//  TfFixAICCD, so nothing further is needed here.
 //==============================================================================
-class TfFixAICCD { public: void OutArmCycleCounterUpdate(); };                 // golden FixAICCD.h form (offline single-method mirror)
-void TfFixAICCD::OutArmCycleCounterUpdate() {}                                 // golden FixAICCD.cpp -- offline: cycle-counter UI no-op
-TfFixAICCD *fFixAICCD = 0;                                                      // golden FixAICCD.h:152 -- offline: null (never derefed offline)
 
 //==============================================================================
 //  (W6.2c-OUT batch-3) 9046AU SORT-ARM/SORT-SHUTTLE engine surface (golden

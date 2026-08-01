@@ -38,6 +38,15 @@ TfMainInplace::TfMainInplace()
 }
 bool TfMainInplace::InArmPlacementEnable() { return false; }   // offline: No9 placement disabled
 
+// --- AI(W906-W7-L1-Wave0) 20260801 ADD: TfMainRENESASServer -----------------
+// Golden Automation/uRENESAS_Server.h:199 (bLoadingCountFullFlag) / :201
+// (DoNeedSupplyOrNot).  Offline there is no RENESAS FT-CT server socket, so
+// DoNeedSupplyOrNot reports "no supply demanded" (false) and golden
+// asendic_Loader.cpp:2722 / :2756 stay on their non-supply arm; the flag is
+// plain storage that :2644 clears.
+TfMainRENESASServer::TfMainRENESASServer() : bLoadingCountFullFlag(false) {}
+bool TfMainRENESASServer::DoNeedSupplyOrNot(bool /*bNotEnough*/) { return false; }
+
 // --- W6.2: TfMain ----------------------------------------------------------
 TfMain::TfMain()
 {
@@ -135,6 +144,29 @@ TfMain::TfMain()
         tSiteOnOff[1]->Add("0");
     }
     edSoakTime = new TfLotInfoEdit();             // golden main.h:733 (TEdit*)
+    // AI(W906-W7-L1-Wave0) 20260801: allocations for the 16 W7-L1 members added
+    // to forms/fMain.h this pass (the asendic_* tray-SM family's fMain surface).
+    // See that header for the per-member golden citations; the StringGrid2 size
+    // below is golden's own main.dfm value, not a guess.
+    lblLoadTrayCnt   = new TfMainTrayPanel();     // golden main.h:392 (TLabel*)
+    lblAuto1TrayCnt  = new TfMainTrayPanel();     // golden main.h:393
+    lblAuto2TrayCnt  = new TfMainTrayPanel();     // golden main.h:394
+    lblAuto3TrayCnt  = new TfMainTrayPanel();     // golden main.h:395
+    lblAuto4TrayCnt  = new TfMainTrayPanel();     // golden main.h:861
+    lblAuto5TrayCnt  = new TfMainTrayPanel();     // golden main.h:862
+    lblAuto6TrayCnt  = new TfMainTrayPanel();     // golden main.h:863
+    edtAuto1         = new TfLotInfoEdit();       // golden main.h:867 (TEdit*)
+    edtAuto2         = new TfLotInfoEdit();       // golden main.h:373
+    edtAuto3         = new TfLotInfoEdit();       // golden main.h:374
+    edtAuto4         = new TfLotInfoEdit();       // golden main.h:376
+    edtAuto5         = new TfLotInfoEdit();       // golden main.h:377
+    edtAuto6         = new TfLotInfoEdit();       // golden main.h:378
+    chkE84IDTray     = new TfMainCheckBox();      // golden main.h:887 (TCheckBox*) -- offline Checked=false
+    StringGrid2      = new TStringGrid(8, 60);    // golden main.h:490 (TStringGrid*); ColCount=8 / RowCount=60
+                                                  //   verbatim from golden main.dfm:15447 / :15451 -- the
+                                                  //   vclcompat default 5x5 would make asendic_Color.cpp:831's
+                                                  //   Cells[3][38] throw std::out_of_range
+    RENESAS_Server   = new TfMainRENESASServer(); // golden main.h:1710 (TRENESAS_Server*)
 }
 void TfMain::LightOn() {}                                       // W6.4: CCD light sink (offline no-op)
 void TfMain::DebugOneCycleHotPlate(AnsiString /*sfunc*/) {}     // debug log sink (offline no-op)

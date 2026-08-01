@@ -1446,3 +1446,69 @@ L1 證明軌在「證明測試有承載力」之餘，用突變找出三個**沒
 - **W7-U 規劃警訊（PLANFIX 實測）**：SECSGEM bucket 的 form-facade 缺口是 **29 個相異 form 指標**，不是 item 16 暗示的 4-5 個；22 個 override 裡在 form 軸上真正解鎖的只有 **3 個**。**若 bucket 排序是建立在 9/5 上，需要重排。**
 - **勿圈入 V906 commit**：`config/*`、`setup.inf`、`.pti_frames/`、repo 根的 `SCRATCH_*.txt`/`_review_*.diff`/`build_*` 產物、ported tree 內三個 `*_test_scratch/`，以及 `HT9011UC_Code_V3.33.899.0_.../CosFunction.cpp`（使用者自己的 V899 工作）。
 - **執行模式**：使用者指示持續有效——全部 cpp/h/dfm 都要翻、workflow 火力全開、不逐波停下請示、重大問題跳過並最後條列；model/effort 依任務性質自動切換；安裝軟體不必先問。
+
+## 2026-08-02 — W7-L1 **Wave 0**（facade 前置，序列單一寫入者）+ 恆真式模板第三份拷貝修復
+
+**背景**：`cfe4e38` 落地後隨即派出 `wf_75b9c031-cb4`（2 軌）。Wave 0 是 W7-L1 的序列前置——它落地的表面，四個平行翻譯 agent 會同時往上蓋，所以寫錯一次就被複製四份，這正是它必須序列的理由。
+
+### Wave 0：41/55 項落地、5 項正式否決、外加 `_WIN32_WINNT` 釘樁
+
+**主迴圈事前下的裁決，agent 全部照辦（不再重議）**：
+
+1. **不做 shim 退役**——在對應翻譯檔落地前退役 `DoAutoReceiveBinTray`／`DoLoad`／`AutoCylinder*` 等，會把可連結的樹變成 undefined symbol。planner 原本建議「在同一 pass 一起退役」，**推翻**。改為寫成 `retirementDebt` 清單並**寫進樹裡**（`acatchtray_shims.h` 與 `csystem_shims.h` 各一個「SHIM RETIREMENT DEBT REGISTER」橫幅），標明每一項的擁有波次。
+2. `fFixAICCD` 建真檔並重指 `aoutarm_shims`（明確授權跨 W7-A2 邊界）。
+3. `TrayMoveStatus` **不加 seam**（Wave 3 會用真 body 取代，先加後刪等於寫兩次還可能留死 override）；但 `ShowErrorMessage` seam **必須加**（`canary_support.cpp` 恆回 `K_RETRY`，使全家族的 `K_SKIP` 復原臂不可反證）。
+
+**因為「重新查證而不是採信」而改掉的四件事**：
+
+- **[HIGH] union 文件對 `bCheckUnloaderHasAiNG` 的回傳型別是錯的**。它要求 `virtual bool`；golden `FixAICCD.h:147` 寫的是 **`void`**（識別字開頭那個 `b` 誤導了 recon）。主迴圈以 cp950 解碼 golden 親自複核確認。若照文件寫成 `bool`，Wave 2 每個 Auto 呼叫點都會對著一個**捏造出來的回傳值**編譯過去。順帶：同項的 `OutArmCycleCounterUpdate` 引用 `:152` 也錯，真值 `:130`（`:152` 是 `extern PACKAGE TfFixAICCD *fFixAICCD;`）。
+- **[HIGH] 裁決 1 的授權範圍不足**。四個新 forms header 一旦掛上 `FormsFacade.h` 傘狀標頭，六個 out-arm 變體 TU 裡的 TU-local stub 就從「潛在 ODR 債」變成**硬編譯錯誤**（class 重定義／宣告衝突），因此被迫在同一次寫入退役六處，全都落在 W7-A2 的檔案集內。**這是必要不是選擇**，已明列給 A2。
+- **[HIGH] `fProductionInfo` 這個全域在整棵 ported 樹裡從來沒有定義**，卻有兩個 out-arm 變體用**兩種不同 stub 型別** extern 它，並在**沒有 gate 的 live 路徑**上解參考。之所以沒爆 undefined reference，只是因為目前沒有任何測試 exe 會把那些 obj 從 `libht9045_sm.a` 拉出來。`forms/fProductionInfo.cpp` 提供了第一份真定義——**這是修掉一顆潛伏的地雷**。
+- **[MEDIUM] `AutoCylinder*` 參數順序的危害比文件寫的大**。文件說 `asendic_Auto2.cpp` 12 個位置全反（正確，agent 重數確認：`:65,:85,:101,:106,:132,:137,:617,:620,:638,:643,:674,:679`）「另有三處執行期對調」——**實際是五處，橫跨三個檔**（`asendic_Auto.cpp:788`/`:819`、`csystem.cpp:6940`/`:6956`、`asendic_Auto_RT.cpp:783`）。照舊文件工作的 Wave 1/2 agent 會「順手正規化」兩個它從未被警告的位置。完整列舉已寫進 `acatchtray_shims.h` 的 `AutoCylinder*` 宣告處。
+
+**兩個原本以為是軟估計、結果完全正確且來源更硬的**：`new TStringGrid(8,60)` 不是安全邊界猜測，是 golden `main.dfm:15440` 自己的 ColCount/RowCount（`:15447`/`:15451`）；`iTesterType` 真的會反轉一個分支。
+
+**另外兩個數字被實測修正**：`canary_support.h` 的被 include 數是 **123** 不是 ~141（141 是字串 grep 命中，含 18 個純文字提及）；`~31 個不可反證的復原臂`被降級標註成「recon 估計、本波未重數」。
+
+**`_WIN32_WINNT` / `WINVER` 釘 `0x0601`（順帶項，因為 Wave 0 本來就要動根 `CMakeLists.txt`）**。落地時抓到一個比 plan §2 記載更危險的細節：在這個 MinGW 上 `-D_WIN32_WINNT=0x0A00` **會安靜地編過**（該 w32api 根本沒有 Win10-only 宣告），也就是說它會**製造出「我們釘在 Win10」的假象**，而不是像 `_WIN32_WINNT_WIN10` 符號那樣直接報錯。
+
+### CanaryFix：`tests/test_w6_canary.cpp`——同一個恆真式模板的第三份拷貝
+
+由 EMPTYFIX 軌在**自己範圍之外**撞見並回報。本軌審完整個檔，找到的**不是 3 個而是 7 個**：
+
+- 5 個確認為不可反證（含 brief 沒點名的 2 個），2 個經判斷**刻意留下**並寫明理由（一個已被相鄰的精確軌跡斷言完全涵蓋、且在使用點記錄了 golden 游標集合；一個是真的 null guard，後面緊接 4 個解參考）。
+- **兩個標籤造假也被抓到**，其中一個 brief 沒提：`CHECK(returnedToIdle && ...)` 說走的是 `1→...→100/200→1`，但 fixture 讓 `Sen` 停在 TYPE_B（預設值＝ON），實測軌跡是 `1→20→30→40→50→60→70→100→150→1`，**標籤點名的 case 200 從未進入**。
+- **決定性證據**：對 M1／M2／M5／M7 四個突變，它**另外把原版測試檔**對同一份被突變的 archive 建一次——四次都 ` RESULT: 30 passed, 0 failed`，其中 M1 是「Empty 堆疊升降機往上走、golden 是往下」。**這證明那些斷言是不可反證，而不只是弱。**
+- 修法是**把 fixture 驅動起來讓標籤變成真的**，不是把標籤改軟。30 → **54** 斷言。
+
+**技術升級（比主迴圈給的 pattern 更強，Wave 1/2 已納入 brief）**：給 `Cylinder[]`／`SW[]` 一個**真的 Sim IO 位址**（`OutISABase=eMotionNet, OutType=TYPE_A, Ring=1 IP=1 Port=2|3 Bit=n`）之後，`On()/Push()` 會真的把 bit 設起來、`Off()/Pop()` 會真的清掉，可經 `Cylinder[].GetOutBit()` / `SW[].Status()` 讀回。**這才是讓「軌跡不變、命令相反」的反轉突變變紅的東西。**
+
+**它也更正了主迴圈 brief 的一句話**：`TMyCylinder::On()/Off()` **並非**被 `.Enable` 擋住——它們無條件設 `Status`/`Change`/`bCylinderOn`；被 `.Enable` 擋的是內部的 `OnSwitch()/OffSwitch()`（IO 寫入）。真正管事的 `.Enable` 閘在上一層，`asendic.cpp` 的 `CylinderUp/Middle/Lower` 只在 `if(Cylinder[...].Enable)` 時才呼叫 `On()/Off()`。淨效果相同（fixture 仍須 Enable），但位置不同——已修正後傳給 Wave 1。
+
+### 驗收（主迴圈親跑）
+
+- 增量 build（含 `CMakeLists.txt` 改動觸發的 reconfigure）**exit 0**、`error:` **0**、`grep -ic resolving` **0**。
+- 警告 277 → **284**，`+7` 全部是 `canary_support.cpp` 既有 `LastSet = {0}` aggregate initialiser 下、本波新增 7 個 `LAST_GENERAL_SET` 欄位造成的 `-Wmissing-field-initializers`；**非** missing-field-initializer 的警告文字集合前後 byte-identical。（Wave 0 順帶更正了主迴圈 brief 裡「`-Wall -Wextra` 乾淨」這個對本樹不成立的說法——本樹從來就不是零警告。）
+- 完整 `ctest --timeout 300 -j4` = **107/111**、182.12s，失敗恰為既有 4 個環境漂移。**零迴歸**。
+- 編碼閘：Wave 0 動到的 32 檔 + canary 檔全過。Wave 0 自己寫的檔**全部純 ASCII**（不是「應該沒亂碼」而是**結構上不可能有**），golden 的中文一律以英文 gloss + golden `file:line` 取代。
+
+### 交接給 Wave 1/2 的既成事實
+
+1. `extern int iWhichAuto;` **只准 extern**，`aoutarm9045.cpp:179` 已在同一個 library 定義。
+2. `ShowErrorMessage` 現在可餵（`W906_ShowErrorMessage_SimReturn` 等），所以「K_SKIP 臂有覆蓋」**現在是可反證的**——要宣稱就要用突變證明。
+3. `TrayMoveStatus` 沒有 seam 且 Wave 3 之前不會有；JAM1012 臂與 DUMMY early-out 明列 NOT COVERED，說明就寫在 `asendic.h` 宣告正上方。
+4. **任何 `AutoCylinderUp/Middle/Lower` 呼叫點都不准正規化**，逐字照抄引數順序（含 Auto2 的全域反轉與五處執行期對調）。
+5. Loader agent 擁有 `int iTrayZLoadTrayToWaitTask=1;` 的**定義**（注意非零初值）。
+6. Loader agent 會在 **link**（不是 compile）撞上 `GetColorSensorIsMapping`——宣告在 `cprod.h`，body 卻在 `cprod.cpp` 的 `#if 0` 區塊內。
+
+### 🔖 RESUME（最新）
+
+- **已 commit**：round-3（`cfe4e38`）、Wave 0 + CanaryFix（本則）。**寫入佇列在 commit 當下已清空。**
+- **驗證基準**：build exit 0 / ctest **107/111**；警告基準線 **284**（既有債，非零警告樹）。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 `fix/v899.32-pti`。
+- **進行中**：**Wave 1**（`wf_2ba68c7c-507`，2 個真平行 agent）——`asendic_Color.cpp`(1553) ∥ `asendic_Loader.cpp`(3312)+`asendic_Loader_RT.cpp`(905) 綁定。兩者都**不准動 `CMakeLists.txt`／`tests/CMakeLists.txt`／shim／forms／`csystem.cpp`**，改為回報 `cmakeLinesNeeded`／`retirementsNeeded`／`surfaceGapsFound`，由 integrator（主迴圈）在 integrate 時原子套用；建置一律走 scratch 的 `include_override` + archive 副本。
+- **clone 假設（Wave 1 必讀，錯的那半很危險）**：`Color` vs 已落地的 `Empty` 是真 **67%** clone（兩法互證），可 adapt-and-diff；但 **`Loader` 與 `Empty` 按名字配對到零個函式**、最佳映射僅 **12.1%**——`Loader` 是**結構原創**，必須從自己的 golden 逐函式翻。`Loader_RT` 與 `Loader` 也是零配對（它其實是 `Empty` 的變體，行級 54.6%）。
+- **接下來**：Wave 2（`Auto` ∥ `Auto_RT`）→ Wave 3（`asendic.cpp` L1a/L1b + 強制 re-baseline）→ W7-U。
+- **Wave 3 必須先讀的成本警告**：退掉 `AutoCylinder*` 三個 `{return true;}` stub **不是** 627 行的抄寫成本，而是**行為反轉 + 強制 re-baseline**——golden `AutoCylinderUp` case 100 接受「mid 汽缸 disabled 時回 true」為成功，但 case 201 的 non-ART 守衛要求**原始** `OnStatus()`（disabled 時為 false），所以在預設離線全 disabled 配置下真實 SM 會 `1→50→100→200→201→1` 永不收斂。**退 stub 等於把「總是瞬間成功」換成「永遠不成功」**，每個走 Auto lifter 路徑的既有測試都會停住。
+- **W7-U 規劃警訊**：SECSGEM bucket 的 form-facade 缺口是 **29 個相異 form 指標**，22 個 override 在 form 軸上真正解鎖的只有 **3 個**。若 bucket 排序建立在舊的 9/5 上，需要重排。
+- **勿圈入 V906 commit**：`config/*`、`setup.inf`、`.pti_frames/`、repo 根的 `SCRATCH_*.txt`/`_review_*.diff`/`build_*` 產物、ported tree 內三個 `*_test_scratch/`，以及 `HT9011UC_Code_V3.33.899.0_.../CosFunction.cpp`（使用者自己的 V899 工作）。
+- **執行模式**：使用者指示持續有效——全部 cpp/h/dfm 都要翻、workflow 火力全開、不逐波停下請示、重大問題跳過並最後條列；model/effort 依任務性質自動切換；安裝軟體不必先問。

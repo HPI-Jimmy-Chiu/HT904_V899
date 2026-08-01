@@ -26,6 +26,68 @@
 //
 //  Big5: Chinese comments decoded via cp950, preserved UTF-8.  ZERO U+FFFD.
 // =============================================================================
+// =============================================================================
+//  AI(W906-W7-L1-Wave0) 20260801 -- SHIM RETIREMENT DEBT REGISTER (W7-L1)
+//
+//  Written into the TREE, not just into a report, because each entry below is a
+//  DUPLICATE-SYMBOL link failure the moment its owning translated file lands, and
+//  two of them are also return-type conflicts.  Wave 0 deliberately does NOT
+//  perform any of these retirements: retiring a shim before its owner exists
+//  turns a working link into undefined symbols.  Each retirement belongs to the
+//  INTEGRATE step of the wave named against it.  All line numbers below were
+//  re-derived by reading the files in this pass.
+//
+//  (Declarations in THIS header are given by NAME, not line number -- this banner
+//  shifts every line below it, and a stale line citation is exactly the kind of
+//  claim this project keeps having to correct.  The .cpp line numbers below were
+//  re-derived AFTER this pass's own edits to acatchtray_shims.cpp.)
+//
+//  OWNED BY THE WAVE THAT LANDS asendic_Auto.cpp (W7-L1 Wave 2, "Auto"):
+//    * acatchtray_shims.h <DoAutoReceiveBinTray decl> + acatchtray_shims.cpp:146
+//      `bool DoAutoReceiveBinTray(int)` -- golden declares it VOID
+//      (golden asendic_Auto.h:8).  Return type is not part of the mangled name,
+//      so this is a duplicate symbol AND a conflicting declaration in any TU that
+//      sees both.  All 4 ported callers discard the value, so switching to void
+//      costs nothing.
+//    * csystem_shims.h <Initial_Auto_BinTray_Task decl> + csystem_shims.cpp:120
+//      `void Initial_Auto_BinTray_Task(int)` -- signature-identical duplicate.
+//
+//  OWNED BY THE WAVE THAT LANDS asendic_Color.cpp (W7-L1 Wave 1, "Color"):
+//    * acatchtray_shims.h <DoAutoColor decl> + acatchtray_shims.cpp:125
+//      `bool DoAutoColor()` -- golden declares it VOID (golden asendic_Color.h:20);
+//      same duplicate-symbol + conflicting-declaration shape as the above.
+//    * acatchtray_shims.h <InitAutoColorReceiveTask decl> + .cpp:123
+//      `void InitAutoColorReceiveTask()` -- signature-identical duplicate.
+//    * csystem_shims.h <InitAutoColorTask decl> + csystem_shims.cpp:121
+//      `void InitAutoColorTask()` -- signature-identical duplicate.
+//
+//  OWNED BY THE WAVE THAT LANDS asendic_Loader.cpp (W7-L1 Wave 1, "Loader"
+//  bundle -- Loader + Loader_RT are ONE agent):
+//    * csystem_shims.h <DoLoad decl> + csystem_shims.cpp:104 `void DoLoad(){}`
+//      -- retire the BODY only, keep the .h declaration (csystem.cpp calls it
+//      through it).
+//    * csystem_shims.h <InitLoadTask decl> + csystem_shims.cpp:117
+//      `void InitLoadTask(){}` -- ditto.
+//      NOTE for that agent: retiring these two turns two currently-no-op hub call
+//      sites into real Loader SM invocations, which forces a re-baseline of
+//      tests/test_w6_6_csystem_cycle.cpp and tests/test_w6_6_hub.cpp.
+//
+//  OWNED BY THE WAVE THAT LANDS asendic.cpp's AutoCylinder* bodies (Wave 3 / L1a):
+//    * acatchtray_shims.h <AutoCylinderUp/Middle/Lower decls> +
+//      acatchtray_shims.cpp:147-149 -- the three `{ return true; }` no-op stubs
+//      that ARE the open HIGH finding.  Read the caller-argument-order warning
+//      attached to those declarations BEFORE retiring them.
+//
+//  NOT A RETIREMENT AND NOT WAVE 0's: the six golden asendic.cpp free functions
+//  (bARTUnloaderUseOneCylin / bARTUnloaderUseTwoCylin / PushLoaderTrayInAverageTime
+//  / PushUnLoaderTrayInAverageTime / RecordAutoCleanOutStartEnd /
+//  DoAutoTrayEdgeCylinderLoop, plus NewDoAutoTrayEdgeCylinderLoop) land as REAL
+//  translated bodies in Wave 3, never as stubs -- so no shim for them exists here
+//  to retire, and none should be added.
+//
+//  PRECEDENT for how a retirement is recorded once done: the DoAuto2 retirement
+//  note in csystem_shims.h and the matching CMakeLists.txt comment.
+// =============================================================================
 #ifndef acatchtray_shimsH
 #define acatchtray_shimsH
 
@@ -87,6 +149,18 @@ public:
     bool       bReadUID1;           // UID read done?
     AnsiString sBlockID1;           // read block-ID
     AnsiString sUID1;               // read UID
+    // AI(W906-W7-L1-Wave0) 20260801: the CHANNEL-2 quartet -- symmetric completion
+    // of the channel-1 quartet above, which only exists because acatchtray.cpp
+    // happened to need channel 1 first.  golden cTrayMapping.h:118 (bClearCmd2),
+    // :119 (bReadUID2), :108 (sUID2), :109 (sBlockID2) -- all four re-read from
+    // the cp950-decoded golden this pass.  asendic_Color.cpp drives the whole
+    // channel-2 read sequence: :423-425 / :595-597 / :1503-1505 clear them,
+    // :593 tests bClearCmd2, :1511 tests bReadUID2, :1534 tests sBlockID2!="" and
+    // :1536 tests sBlockID2.Length()!=9, :571 assigns sBlockID2 a formatted stamp.
+    bool       bClearCmd2;          // golden cTrayMapping.h:118 -- clear-cmd ack (channel 2)
+    bool       bReadUID2;           // golden cTrayMapping.h:119 -- UID read done? (channel 2)
+    AnsiString sBlockID2;           // golden cTrayMapping.h:109 -- read block-ID (channel 2)
+    AnsiString sUID2;               // golden cTrayMapping.h:108 -- read UID (channel 2)
     TLdRFIDShim();
 };
 //  a clickable-button stand-in (golden TButton*; engine only calls ->Click())
@@ -135,6 +209,29 @@ public:
     TBtnShim        *cbBarCodeSimulate;          // golden -- (referenced; sim checkbox)
     TListTrayIDShim *listTrayIDByLot;            // golden -- per-lot tray-ID list
     TYieldShim       yieldRemainIC;              // golden -- device-remain yield recorder
+    // AI(W906-W7-L1-Wave0) 20260801: the CHANNEL-2 button triad -- symmetric
+    // completion of the channel-1 triad above (which exists only because
+    // acatchtray.cpp needed channel 1).  golden types are TButton* and the SMs
+    // only ever call ->Click(), so they reuse the existing TBtnShim.  Driven by
+    // asendic_Color.cpp:426 / :598 / :1506 (btnReadUID2), :581 (btnLdRFIDClear2),
+    // :1528 (btnLdRFIDReadBlock2).
+    TBtnShim        *btnLdRFIDClear2;            // golden cTrayMapping.h:466 (TButton*)
+    TBtnShim        *btnReadUID2;                // golden cTrayMapping.h:468 (TButton*)
+    TBtnShim        *btnLdRFIDReadBlock2;        // golden cTrayMapping.h:470 (TButton*)
+    // AI(W906-W7-L1-Wave0) 20260801: Tray-Map-laser surface asendic_Loader.cpp
+    // needs.  eAOIType_TrayMapLaser is, in golden, an ENUMERATOR inside the class
+    // (golden cTrayMapping.h:699-700: eAOIType_TrayDeviceCheckLaser=0 then
+    // eAOIType_TrayMapLaser, i.e. ordinal 1) -- mirrored as a plain int here, the
+    // same shape its sibling eAOIType_TrayDeviceCheckLaser already uses a few
+    // lines up.  THE CTOR MUST SET IT TO 1: if both AOI-type ints defaulted to 0
+    // the device-remain and tray-map scans would collapse onto one value and the
+    // distinction would silently vanish (see acatchtray_shims.cpp).
+    int  eAOIType_TrayMapLaser;                  // golden cTrayMapping.h:700 (enumerator, ordinal 1)
+    // Dimensions VERBATIM from golden cTrayMapping.h:617 `int
+    // iTrayMappingDate[35][70];`.  golden asendic_Loader.cpp:1057 indexes it
+    // [j][i] == [row][col], so Tray.YItem must stay < 35 and XItem < 70; do not
+    // "tidy" the bounds or transpose the subscripts.
+    int  iTrayMappingDate[35][70];               // golden cTrayMapping.h:617
 
     void WritePickMapLog();                      // golden -- offline no-op
     bool IsRunDeviceRemainLaser();               // golden -- offline false
@@ -149,6 +246,39 @@ public:
     bool DoTrayID2CCD();                         // golden -- offline false
     bool DoTrayIDCCD();                          // golden -- offline false
     bool DoTrayMapCCD(int iMap);                 // golden -- offline false (case 5100/6030, 1-arg)
+    // AI(W906-W7-L1-Wave0) 20260801: Tray-Map-laser methods asendic_Loader.cpp
+    // needs, plus the tray-ID duplicate check asendic_Color.cpp needs.  All
+    // golden lines re-read from the cp950-decoded golden cTrayMapping.h this pass.
+    //
+    // IsRunTrayMapLaser() is the MASTER GATE for the whole Tray-Map-laser branch
+    // family -- 6 golden sites in asendic_Loader.cpp (:185, :362, :891, :903,
+    // :917, :1124).  Offline FALSE (no laser scanner), which is why
+    // GetTrayMapHasNullIC below is unreachable offline yet still has to compile.
+    bool IsRunTrayMapLaser();                    // golden cTrayMapping.h:710 -- offline: false
+    // Third parameter is a NON-CONST AnsiString& out-param and golden passes this
+    // object's OWN asErrorLaserScan member into it (asendic_Loader.cpp:187, :364,
+    // :369, :893, :905) -- so it must stay a reference, not a value or a const&.
+    bool DoSettingBeforeMotorMove(int iMode, bool bIsFirst, AnsiString &asError);   // golden cTrayMapping.h:722 -- offline: true
+    bool DoGetValueAfterMotorArrival(int iMode, bool bIsFirst, AnsiString &asError);// golden cTrayMapping.h:720 -- offline: true
+    bool GetTrayMapHasNullIC();                  // golden cTrayMapping.h:721 -- offline: false
+    // DoTrayIDCheck's offline return is a REAL SEMANTIC DECISION, not a default,
+    // and it is TRUE.  Both Keyence tray-ID arms test it as
+    // `else if(fTrayMapping->DoTrayIDCheck(asTrayIDData2)==false)`
+    // (golden asendic_Color.cpp:747 and :1073).  Returning false would steer both
+    // arms into golden's "Tray ID duplicate -- operator must remove the tray"
+    // dead end, making that whole sub-flow offline-unreachable and untestable;
+    // returning true steers them to the success path.  Offline there is no
+    // tray-ID history to collide with, so "no duplicate detected" is also the
+    // faithful reading.  Decision recorded here at the declaration on purpose --
+    // it silently determines whether two whole sub-flows are reachable offline.
+    bool DoTrayIDCheck(AnsiString Str);          // golden cTrayMapping.h:747 -- offline: TRUE (see above)
+    // AI(W906-W7-L1-Wave0) 20260801: DELIBERATELY NOT ADDED -- `TTMyTray
+    // *mtTrayMap` (golden cTrayMapping.h:388).  Its only reference in the whole
+    // W7-L1 family is golden asendic_Loader.cpp:933, which sits inside the
+    // `//`-commented-out block :929-936 (verified by reading those lines this
+    // pass).  Adding it would be inventing surface nothing dereferences -- the
+    // same rule that kept PPID / bNeedClearFile out in W7-F1.  Listed so it is not
+    // later mistaken for an omission.
     TfTrayMapping();
 };
 extern TfTrayMapping *fTrayMapping;             // golden cTrayMapping.h: extern TfTrayMapping *fTrayMapping
@@ -231,6 +361,29 @@ void NewRecordProcess(AnsiString S1, AnsiString S2="", AnsiString S3="");  // go
 //  per-Auto receive-bin-tray flow (golden asendic / cSortCT) -- offline: false
 bool DoAutoReceiveBinTray(int iWhichAuto);       // golden -- offline: no receive
 //  per-Auto stack cylinder up/middle/lower helpers (golden asendic auto-cylinder)
+// AI(W906-W7-L1-Wave0) 20260801: PARAMETERS 2 AND 3 ARE NOT SYMMETRIC AND CALLERS
+// DISAGREE ABOUT THEIR ORDER -- do NOT "normalise" any call site.  Golden's real
+// signature is `AutoCylinderUp(int Part, int CylinderName, int CylinderNameMid,
+// bool bReset=false)` (golden asendic.h:19-21) and inside the real bodies
+// CylinderName is driven unconditionally while CylinderNameMid is Enable-guarded
+// and is the sole input to AutoCylinderMidIsOn -- so the two are not
+// interchangeable.  Golden callers genuinely differ, and every site below was
+// re-derived by grepping the cp950-decoded golden IN THIS PASS rather than taken
+// from a report:
+//   * the COMMON order is (Up, Selector) -- e.g. asendic_Auto.cpp:282-284, :310,
+//     :322; asendic_Auto_RT.cpp:75, :109, :121; csystem.cpp:7175, :7196.
+//   * asendic_Auto2.cpp passes the REVERSE, (C_Auto2_Selector, C_Auto2_Up), at
+//     ALL 12 of its call sites: :65, :85, :101, :106, :132, :137, :617, :620,
+//     :638, :643, :674, :679.  (The ported asendic_Auto2.cpp reproduces that
+//     reversal faithfully -- it must NOT be "fixed".)
+//   * five further golden sites take the reversed order as the ELSE arm of a
+//     runtime bARTUnloaderUseTwoCylin test, i.e. the same call site swaps at run
+//     time: asendic_Auto.cpp:788 (vs :784) and :819 (vs :811); csystem.cpp:6940
+//     (vs :6936) and :6956 (vs :6948); asendic_Auto_RT.cpp:783 (vs :791).
+// While the stubs below return true unconditionally
+// the difference is invisible and no test can see it; the moment asendic.cpp's
+// real bodies land (Wave 3 / L1a) a "tidied" call site starts driving the opposite
+// physical cylinder.  This comment is the insurance policy for that window.
 bool AutoCylinderUp(int iAuto, int iUp, int iSel, bool bReset=false);      // golden -- offline: reached
 bool AutoCylinderMiddle(int iAuto, int iUp, int iSel, bool bReset=false);  // golden -- offline: reached
 bool AutoCylinderLower(int iAuto, int iUp, int iSel, bool bReset=false);   // golden -- offline: reached

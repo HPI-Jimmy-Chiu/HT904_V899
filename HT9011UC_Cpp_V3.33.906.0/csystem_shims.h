@@ -22,6 +22,40 @@
 //  DoOutArm_9045) so the in/out-arm engines are genuinely exercised by the
 //  main loop, not stubbed away.
 // =============================================================================
+// =============================================================================
+//  AI(W906-W7-L1-Wave0) 20260801 -- SHIM RETIREMENT DEBT owed by THIS file (W7-L1)
+//
+//  The full cross-file register lives in the matching banner at the top of
+//  acatchtray_shims.h; this is the slice that belongs here, repeated so nobody
+//  editing csystem_shims.{h,cpp} has to know to look there first.  Wave 0
+//  deliberately performs NONE of these: retiring a shim before its owning
+//  translated file exists turns a working link into undefined symbols.  Each
+//  belongs to the INTEGRATE step of the wave named against it.  Line numbers
+//  re-derived by reading csystem_shims.cpp in this pass.
+//
+//  (Declaration positions are given by NAME, not by line number: this banner
+//  itself shifts every line below it, and a stale line citation is exactly the
+//  kind of claim this project keeps having to correct.)
+//
+//    * DoLoad()       -- declared below, body csystem_shims.cpp:104.
+//      InitLoadTask() -- declared below, body csystem_shims.cpp:117.
+//      OWNER: the wave that lands asendic_Loader.cpp (W7-L1 Wave 1, the
+//      Loader + Loader_RT bundle).  Retire the BODIES only and KEEP both
+//      declarations here -- csystem.cpp calls them through this header.
+//      CONSEQUENCE that agent must plan for: these two are the hub's only
+//      loader-feed entry points and are no-ops today, so retiring them turns the
+//      per-tick main loop into a REAL Loader SM invocation and forces a
+//      re-baseline of tests/test_w6_6_csystem_cycle.cpp and
+//      tests/test_w6_6_hub.cpp (both need sane Loader global state or DoLoad will
+//      alarm-loop inside them).
+//    * Initial_Auto_BinTray_Task(int) -- declared below, body
+//      csystem_shims.cpp:120.  OWNER: the wave that lands asendic_Auto.cpp.
+//    * InitAutoColorTask()            -- declared below, body
+//      csystem_shims.cpp:121.  OWNER: the wave that lands asendic_Color.cpp.
+//
+//  Precedent for how a completed retirement is recorded: the DoAuto2 note further
+//  down this file plus its matching comment in the root CMakeLists.txt.
+// =============================================================================
 #ifndef csystem_shimsH
 #define csystem_shimsH
 

@@ -6,6 +6,43 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # =============================================================================
+# AI(W906-W7-L1-Wave0) 20260801: pin the Win32 API floor for BOTH oracles, so the
+# two of them stop seeing DIFFERENT API surfaces.  This lands decision DA2 (of
+# decision set D2) from docs/W7_UI_ARCHITECTURE_PLAN.md SS2, which was already
+# taken and recorded there but explicitly left un-landed with "owner = main loop";
+# the reasoning below is that section's, not re-derived here.
+#
+#   * The PROBLEM being fixed is oracle divergence, not a missing feature.  With
+#     nothing pinned, MinGW defaults to _WIN32_WINNT=0x0500 (Windows 2000) while
+#     MSVC auto-selects the newest (it prints "_WIN32_WINNT not defined.
+#     Defaulting to _WIN32_WINNT_MAXVER").  An API declared on only one of those
+#     two surfaces therefore slips past BOTH oracles.  Pinning one value is what
+#     makes "declared on one side only" a build error somewhere.
+#   * WHY 0x0601 (Windows 7) AND NOT 0x0A00.  The primary oracle is MinGW.org
+#     MinGW32 gcc 6.3.0, whose C:\MinGW\include\sdkddkver.h tops out at
+#     _WIN32_WINNT_WINBLUE (0x0603) and has no _WIN32_WINNT_WIN10 at all.  Worse
+#     than failing, the bare number 0x0A00 compiles SILENTLY there while being
+#     completely inert (that w32api carries no Win10-only declarations), which
+#     would manufacture a false "we are pinned to Win10" impression.  0x0601 is
+#     the highest value that means anything on this oracle.
+#   * A COMPILE-TIME FLOOR IS NOT A RUNTIME TARGET.  The shipped runtime target
+#     stays Windows 10/11; this only fixes which declarations the headers expose.
+#   * WINVER is set to the same value deliberately -- the two are independent
+#     macros in the Windows headers and leaving WINVER unpinned would reintroduce
+#     exactly the inconsistency this exists to remove.
+# VERIFIED BY REBUILDING AFTER ADDING IT, and stated precisely rather than as
+# "warning-clean" (this build is NOT warning-free and never was): a full MinGW
+# rebuild produced 277 warning lines before the pin and 284 after, and the entire
+# +7 delta is -Wmissing-field-initializers from the 7 LAST_GENERAL_SET fields this
+# same pass added to canary_support.h under its pre-existing `LastSet = {0}`
+# aggregate initialiser.  The set of NON-missing-field-initializer warning texts
+# is byte-identical before and after, i.e. the pin itself introduced ZERO new
+# warnings.  common.cpp:2313's ERROR_SHARING_VIOLATION / ERROR_LOCK_VIOLATION also
+# still resolve (they are plain winerror.h codes, not version-gated).
+# =============================================================================
+add_compile_definitions(_WIN32_WINNT=0x0601 WINVER=0x0601)
+
+# =============================================================================
 # AI(W906-W7-A1) 20260728: MSVC second-oracle enablement block. MUST stay at
 # the TOP of this file (after project(), before any add_library) -- see
 # docs/W7_UI_ARCHITECTURE_PLAN.md SS6 W7-A1 / SS4-V5 / SS4-V8 for the full
@@ -538,6 +575,18 @@ add_library(ht9045_forms STATIC
     forms/fOffSet.cpp
     forms/fCleaning.cpp
     forms/fShowMessage.cpp
+    # AI(W906-W7-L1-Wave0) 20260801: 4 new form stand-ins for the asendic_* tray SM
+    # family, landed by the W7-L1 Wave-0 serialized facade pass.  fTrayForm and
+    # fOCR are genuinely first homes; forms/fProductionInfo.cpp supplies the first
+    # DEFINITION of a global two out-arm variants only ever extern-declared; and
+    # forms/fFixAICCD.cpp takes over the fFixAICCD global that aoutarm_shims.cpp
+    # used to define as a NULL pointer (see FormsFacade.h for the exact status of
+    # each).  Same bottom-layer dependency shape as the 9 above (vclcompat +
+    # ht9045_globals only).
+    forms/fTrayForm.cpp
+    forms/fOCR.cpp
+    forms/fProductionInfo.cpp
+    forms/fFixAICCD.cpp
     # AI(W906-W7-F0-fix) 20260728: MOVED here from ht9045_sm -- the 3 AMR-mode
     # predicates forms/fAGV.cpp delegates to.  See the "NO UNDECLARED BACK-EDGE"
     # block above.  File content unchanged (zero behaviour change: same code,

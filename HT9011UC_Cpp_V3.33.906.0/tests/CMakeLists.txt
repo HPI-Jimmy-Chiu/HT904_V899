@@ -505,11 +505,22 @@ add_test(NAME W6_1_EmptyCanary COMMAND test_w6_1_empty_canary)
 #       gated-leaf baseline (all false), the LIVE InputShuttleRearHasIC /
 #       OutputShuttleRearHasIC IniConfig/TestIF_File guard branches (both ways),
 #       the composite OR-aggregation shape, and predicate PURITY (no HAL perturb).
-#     PART B -- CANARY: set iAutoEmptyTask to the ENTRY state (1), pump
-#       DoAutoEmpty() over the Sim HAL, and assert the stepper ADVANCES out of
-#       entry and CONVERGES back to the terminal/recurring state (Task==1) while
-#       staying on the documented cursor set; then drives DoLoadNewEmptyTrayToCar()
-#       to convergence (lifter + Cylinder[] HAL) and DoAutoEmpty1()/fAGV.
+#     PART B -- CANARY.  AI(W906-W6-CANARYfix) 20260802: rewritten, and this
+#       description with it.  The old text ("assert the stepper ADVANCES out of
+#       entry and CONVERGES ... while staying on the documented cursor set") is
+#       exactly what the rewrite removed: those two assertions were UNFALSIFIABLE
+#       -- the bounded loop's own termination condition sat in the disjunction, and
+#       the cursor-set predicate accepted precisely the set the SM can write.  Part
+#       B now pins an EXACT cursor TRAJECTORY per stepper and observes the real
+#       actuator wire bits (Sim IO addresses make Cylinder[]/SW[] On/Off/Push/Pop
+#       readable), so an inversion with an unchanged trajectory goes red.  The old
+#       claim of exercising the "lifter + Cylinder[] HAL" was also false: the
+#       fixture enabled SenEmptyCCWDete without setting .Type, and TYPE_B is the
+#       default, so case 1 returned true at step 0 and the lifter path ran ZERO
+#       times.  The fixture now drives those sensors explicitly OFF.  Sub-tests:
+#       [B.0] fixture contract, [B.1] DoAutoEmpty tray-PRESENT branch,
+#       [B.2] DoLoadNewEmptyTrayToCar full lifter walk, [B.3] DoAutoEmpty1,
+#       [B.4] fAGV::IsATK_AMR driven BOTH ways.
 #   Links the SAME orchestration stack as the W6.1 canary: ht9045_sm IS the W6
 #   orchestration lib (asendic_Empty + csystem_predicates + FormsFacade + the
 #   asendic/canary_support sim helpers); it links the substrate (globals/motor/

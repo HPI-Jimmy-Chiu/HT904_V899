@@ -79,6 +79,32 @@ public:
     TfLotInfoEdit *edFlowID;                        // [DATA] golden uLotInfo.h:1046 (TEdit* flow-ID edit)
     // AI(W906-SaveSummaryTrayFeed) 20260728: golden SCK_ART.cpp:3157 (`fLotInfo->lbledtCustomer->Text`).
     TfLotInfoEdit *lbledtCustomer;                  // [DATA] golden uLotInfo.h:609 (TLabeledEdit* customer name edit)
+    // AI(W906-W7-L1-Wave0) 20260801: W7-L1 Wave-0 ADD -- the 7 fLotInfo members
+    // the asendic_* tray SM family dereferences, landed in one serialized pass so
+    // the four parallel translation agents cannot collide on this header.  Every
+    // golden line was re-read from the cp950-decoded golden uLotInfo.h this pass.
+    // The first three are golden TLabel* whose Caption golden reads back through
+    // atoi() (asendic_Loader.cpp:2069-2070), so they are ordinary Caption storage.
+    //
+    // OFFLINE-DEFAULT CONSEQUENCE, RECORDED BECAUSE IT IS NOT NEUTRAL: all three
+    // Captions default to "" and atoi("")==0, which makes golden's KYEC-AMR
+    // overflow guard at asendic_Loader.cpp:2068-2070
+    //   (... atoi(LabDiffTrayCount->Caption)==0 &&
+    //        (atoi(labLoaderTrayCount->Caption)-atoi(labNowTrayCount->Caption))==0)
+    // evaluate TRUE whenever the surrounding TrayForm.bEnableAMR arm is entered.
+    // A test that turns bEnableAMR on must therefore set all three captions
+    // deliberately rather than relying on the constructed state.
+    TfLotInfoLabel *LabDiffTrayCount;               // [DATA] golden uLotInfo.h:1086 (TLabel*) -- Caption read via atoi()
+    TfLotInfoLabel *labLoaderTrayCount;             // [DATA] golden uLotInfo.h:1080 (TLabel*) -- Caption read via atoi()
+    TfLotInfoLabel *labNowTrayCount;                // [DATA] golden uLotInfo.h:1084 (TLabel*) -- Caption read via atoi()
+    TfLotInfoLabel *labNowAuto1TrayID;              // [DATA] golden uLotInfo.h:799 (TLabel*) -- Caption written (asendic_Auto.cpp:561)
+    TfLotInfoLabel *labNowAuto2TrayID;              // [DATA] golden uLotInfo.h:802 (TLabel*) -- (asendic_Auto.cpp:562)
+    TfLotInfoLabel *labNowAuto3TrayID;              // [DATA] golden uLotInfo.h:804 (TLabel*) -- (asendic_Auto.cpp:563)
+    // Golden uLotInfo.h:1026 is a TCheckBox*, read-only in this family
+    // (asendic_Auto.cpp:1994 `->Checked==true`).  Reuses the TfMainCheckBox alias
+    // (forms/FormWidgets.h:114 -> vclcompat::TCheckBox, default Checked=false) --
+    // the same alias fMain->chkE84IDTray uses, so no new widget stand-in is needed.
+    TfMainCheckBox *cbFirstTrayCheckOnUnloader;     // [DATA] golden uLotInfo.h:1026 (TCheckBox*) -- offline Checked=false
     TfLotInfo();
     virtual ~TfLotInfo() {}
 };

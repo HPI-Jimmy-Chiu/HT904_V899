@@ -57,6 +57,16 @@ TfLotInfo::TfLotInfo()
     edInsertion       = new TfLotInfoEdit();
     edFlowID          = new TfLotInfoEdit();
     lbledtCustomer    = new TfLotInfoEdit();
+    // -- AI(W906-W7-L1-Wave0) 20260801 ADD: the 7 W7-L1 fLotInfo members (see
+    //    forms/fLotInfo.h for per-member golden citations and for why the ""
+    //    Caption default is behaviourally load-bearing on the KYEC-AMR arm) --
+    LabDiffTrayCount           = new TfLotInfoLabel();   // golden uLotInfo.h:1086
+    labLoaderTrayCount         = new TfLotInfoLabel();   // golden uLotInfo.h:1080
+    labNowTrayCount            = new TfLotInfoLabel();   // golden uLotInfo.h:1084
+    labNowAuto1TrayID          = new TfLotInfoLabel();   // golden uLotInfo.h:799
+    labNowAuto2TrayID          = new TfLotInfoLabel();   // golden uLotInfo.h:802
+    labNowAuto3TrayID          = new TfLotInfoLabel();   // golden uLotInfo.h:804
+    cbFirstTrayCheckOnUnloader = new TfMainCheckBox();   // golden uLotInfo.h:1026 -- offline Checked=false
 }
 // AI(W906-AutoCleanFoundation) 20260721: golden uLotInfo.cpp:16250-16253 --
 // REAL one-line body (was a total no-op stub before that wave). See

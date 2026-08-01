@@ -32,6 +32,35 @@
 //  reconciled.  Two such divergences ARE now on record and pinned: see
 //  Automation/SCK_ART_Remainder.h's "WHY A SEPARATE SckArtRemainderState" block
 //  for the full enumeration, and tests/test_w7_f2_sckart_state.cpp for the pins.
+//
+//  AI(W906-W7-L1-Wave0) 20260801: BANNER AMENDED IN THE SAME WRITE THAT WIDENED
+//  THE OVERLAP -- recorded here rather than left for someone to re-discover.
+//  This pass adds 7 golden TfSCKART fields + 1 golden method to the class below
+//  for the asendic_* tray SM family (plus 2 PORT-ONLY observability seams, which
+//  are not golden state and are excluded from every count here).
+//  TWO of the 7 new fields are ALSO SckArtState fields,
+//  so the TfSCKART-vs-SckArtState field intersection grows.  Measured this pass
+//  by listing both field sets rather than quoting an earlier figure:
+//    * BEFORE: TfSCKART carried {iInputJamCnt, iFTRTCount, iInputCount,
+//      iCurrent93KARTStep, sLotID, sProcessCode}; SckArtState (Automation/
+//      SCK_ART.h) carries {sLOTSTATUS, iCurrentStatus, iTesterType, iInputCount,
+//      iFTRTCount, iManualRejectCnt, iNeedRT, dCurrYield, iCurrent93KARTStep,
+//      bLdCntExdInputCnt, bBackUpInArmMode, bBackUpOutArmMode}.  Intersection =
+//      3 fields (iFTRTCount, iInputCount, iCurrent93KARTStep).
+//    * AFTER this pass: + iNeedRT and + iTesterType.  Intersection = 5 fields.
+//      The remaining 6 additions (iBundleInCnt, iBundleOutCnt, sBundleList,
+//      bFirstFullSkip, iLOTSTATUS_W, and the SetLotStatus method) have no
+//      SckArtState counterpart, so they widen nothing.
+//  AND ONE NEW DELIBERATE VALUE DIVERGENCE, STATED LOUDLY: this class's
+//  iTesterType ctor reproduces golden's real two-part initialisation
+//  (SCK_ART.cpp:42 sets 0, then :102-114 sets 1 for every CUSTOMER_CODE that is
+//  not CC_SCK), whereas SckArtState's ctor deliberately keeps the bare 0 and is
+//  PINNED there by tests/test_w7_f2_sckart_state.cpp with its own disclosed-
+//  divergence note (Automation/SCK_ART.cpp:40-50).  The two therefore now differ
+//  ON PURPOSE.  Do NOT "reconcile" them by changing either side without reading
+//  both notes: SckArtState's 0 is a recorded, test-pinned divergence awaiting a
+//  deliberate fix, and this class's value is what golden actually constructs.
+//  Do NOT invent a SIXTH declaration site; extend THIS class instead.
 // =============================================================================
 #ifndef FORMS_FSCKART_H
 #define FORMS_FSCKART_H
@@ -63,6 +92,48 @@ public:
     TfSortCTPanel *palRTTryCnt;                     // [DATA] golden SCK_ART.h:75  (TPanel* RT-try-count caption)
     TfSortCTPanel *pnlProcessCode;                  // [DATA] golden SCK_ART.h:181 (TPanel* process-code caption)
     TfLotInfoEdit *edlRTTryCnt;                     // [DATA] golden SCK_ART.h:78  (TEdit* RT-try-count edit)
+    // AI(W906-W7-L1-Wave0) 20260801: W7-L1 Wave-0 ADD -- 7 golden data members +
+    // 1 golden method the asendic_* tray SM family dereferences, plus 2 port-only
+    // observability seams.  Golden lines re-read from the
+    // cp950-decoded golden Automation/SCK_ART.h this pass.  See the amended
+    // RECONCILIATION DEBT banner at the top of this file for the SckArtState
+    // overlap this widens (3 fields -> 5) and for the deliberate iTesterType
+    // value divergence it introduces.
+    int        iBundleInCnt;                        // [DATA] golden SCK_ART.h:343 -- read by asendic_Loader.cpp:835/:1384/:1386/:1453
+    int        iBundleOutCnt;                       // [DATA] golden SCK_ART.h:344 -- read at 7 asendic_Auto.cpp sites
+                                    //   (:597/:1138/:1140/:1141/:1686/:1879/:1898); offline default 0
+    AnsiString sBundleList;                         // [DATA] golden SCK_ART.h:342 -- read into a TStringList CommaText
+                                    //   (asendic_Loader.cpp:1409/:1582); offline default ""
+    bool       bFirstFullSkip;                      // [DATA] golden SCK_ART.h:351 (RogerYang 20251112) -- write-only from
+                                    //   asendic_Loader.cpp:2645; offline default false
+    int        iNeedRT;                             // [DATA] golden SCK_ART.h:285 -- read by asendic_Loader.cpp:2748.
+                                    //   ALSO an SckArtState field -- see the banner amendment above; the two are
+                                    //   separate storage and this pass does not merge them.
+    // iTesterType: THE CTOR VALUE IS LOAD-BEARING AND INVERTS A BRANCH.  golden
+    // SCK_ART.cpp:42 sets 0, then :102-114 runs `if(CUSTOMER_CODE==CC_SCK){...}
+    // else { iTesterType=1; }`, so on every non-SCK machine golden constructs 1 and
+    // `if(fSCKART->iTesterType==0)` at golden asendic_Loader_RT.cpp:808 is FALSE.
+    // A bare 0 default would invert that branch.  forms/fSCKART.cpp reproduces the
+    // conditional; see its own note for the static-initialisation caveat.
+    int        iTesterType;                         // [DATA] golden SCK_ART.h:249 (0: Flex, 1: 93K)
+    int        iLOTSTATUS_W;                        // [DATA] golden SCK_ART.h:253; golden ctor SCK_ART.cpp:44 sets 1.
+                                    //   Passed as SetLotStatus's argument at golden asendic_Loader_RT.cpp:809.
+    // SetLotStatus -- golden SCK_ART.h:269, body SCK_ART.cpp:639-667.  Its offline
+    // body is NOT a bare no-op: facade contract rule 4 forbids an unobservable
+    // sink, so it records into the two W906_ seams below.
+    // DOCUMENTED GAP (not a silent drop): golden's body also assigns the member
+    // `sLOTSTATUS` one of "LOTSTATUS_W/T/L/R/F/A"/"NONE" (:643-663), writes
+    // `iCurrentStatus=iStatus` (:665) and writes the VCL combo
+    // `cbLotStatus->ItemIndex=iStatus` (:664).  None of those three has a facade
+    // home here and nothing in the translated tree reads them off THIS object
+    // (the translated equivalents live on SckArtState via SckArt_SetLotStatus,
+    // Automation/SCK_ART.h), so adding them would be inventing surface.  Recorded
+    // instead.
+    virtual void SetLotStatus(int iStatus);         // [METHOD] golden SCK_ART.h:269 (body SCK_ART.cpp:639-667)
+    int        W906_SetLotStatus_LastArg;           // [PORT-ONLY SEAM] last iStatus passed; -1 when never called
+                                    //   (same settable/observable-seam idiom as forms/fMain.h's W906_* members)
+    int        W906_SetLotStatus_Count;             // [PORT-ONLY SEAM] call count -- distinguishes "never called"
+                                    //   from "called with 0"
     TfSCKART();
     virtual ~TfSCKART() {}
 };

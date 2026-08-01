@@ -63,5 +63,24 @@
 #include "forms/fOffSet.h"
 #include "forms/fCleaning.h"
 #include "forms/fShowMessage.h"
+// AI(W906-W7-L1-Wave0) 20260801: 4 new form stand-ins landed by the W7-L1 Wave-0
+// serialized facade pass, for the asendic_* tray SM family.  See each header's
+// own file-head for its golden provenance.  Their prior status differed and is
+// stated exactly rather than lumped together as "all new":
+//   * fTrayForm, fOCR      -- genuinely FIRST homes; grepped the whole ported tree
+//     and found no class and no global for either (fTrayForm's only prior tokens
+//     were inside cprod.cpp's `#if 0 // TODO(W6)` block :184-4036 and in generated
+//     dfm2rc layout string data; fOCR's only prior token was a csystem.cpp
+//     comment).
+//   * fProductionInfo      -- first DEFINITION of the global, but not the first
+//     mention: two out-arm variants carried their own differently-typed externs
+//     for a symbol nothing defined.  Both were retired in this same pass.
+//   * fFixAICCD            -- RETIRES the `TfFixAICCD *fFixAICCD = 0;` null global
+//     and its TU-local class from aoutarm_shims.cpp, plus three more TU-local
+//     copies in the aoutarm9045_* variants.  The global is now a real object.
+#include "forms/fTrayForm.h"
+#include "forms/fOCR.h"
+#include "forms/fProductionInfo.h"
+#include "forms/fFixAICCD.h"
 
 #endif // FormsFacadeH

@@ -175,11 +175,14 @@ bool OutArmContinuousMove(int X, int Y, int Vari, bool *ZDownSel, int *ZPos, boo
 // in-arm Y-pitch helper, golden 1-arg call-site (substrate has 2-arg only) -> add 1-arg overload
 int  GetInArmPitchY_9045(int iMovePitchY);                                     // golden ainarm9045.h:25 (variant call-site arity 1) -- offline: 0
 // production-info form pointer (golden ProductionInfo.h, VCL form -> offline stand-in)
-#ifndef OUTARM_1x4_4_Back_FPRODINFO
-#define OUTARM_1x4_4_Back_FPRODINFO
-struct TfProductionInfo_1x4_4_Back_stub { void CalTrayICCount(int){} };        // golden ProductionInfo.h TfProductionInfo -- offline: no-op CalTrayICCount
-extern TfProductionInfo_1x4_4_Back_stub *fProductionInfo;                      // golden ProductionInfo.h -- offline: stand-in
-#endif
+// AI(W906-W7-L1-Wave0) 20260801: TU-local stub RETIRED -- the real stand-in now
+// lives at forms/fProductionInfo.h (reached via this TU's existing FormsFacade.h
+// include), which is also the FIRST actual definition of the `fProductionInfo`
+// global anywhere in this tree: the extern retired here named a symbol nothing
+// defined, and only never surfaced as an undefined reference because no current
+// test executable pulls this object out of libht9045_sm.a.  Retiring it is
+// mandatory, not cosmetic: two differently-typed declarations of one name in a TU
+// that also sees the facade header is a conflicting-declaration error.
 // output / fix tray-type form pointer arrays (golden cprod.h:1367/1370 -- commented out in translated cprod.h)
 extern TRAY_TYPE_PARA *OutputForm[eTrayCount];                                 // golden cprod.h:1370 -- offline: tray geometry params
 extern TRAY_TYPE_PARA *FixForm[eTrayCount];                                    // golden cprod.h:1367 -- offline: tray geometry params

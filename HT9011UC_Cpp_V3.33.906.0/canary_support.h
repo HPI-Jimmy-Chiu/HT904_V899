@@ -153,7 +153,37 @@ struct LAST_GENERAL_SET
     // translation (per that front's task brief); not yet referenced by any
     // ACTIVE translated code this wave.
     int OLPSetBinErr[10];               // golden LastSet.h:472 -- Sam 20230921 : Bin 設定錯誤不能啟動 OLPSetBinErr[0]是CATEGORY_REQUEST設定錯誤。OLPSetBinErr[1]是BINDEFINE_REQUEST設定錯誤。OLPSetBinErr[2]是FIXTRAYDEFINE_REQUEST設定錯誤
-    // TODO(W6.x): the other ~437 LAST_GENERAL_SET fields land with the full
+    // AI(W906-W7-L1-Wave0) 20260801: 7 fields the W7-L1 asendic_* tray SM family
+    // needs (deduped -- two of the seven were requested by two different files
+    // each).  Golden field TYPES and NAMES verbatim from the cp950-decoded golden
+    // LastSet.h, re-read this pass.  All 7 verified absent from this struct before
+    // adding; note in particular that `bool bLoaderTrayCount_ART` (golden
+    // LastSet.h:370) already above is a DIFFERENT field from
+    // `int iLoaderTrayCount_ART` (:371) added here -- different name, different
+    // type -- and that iUnloaderTrayCount_ART[256] (:205) was already present and
+    // is correctly not duplicated.
+    int  iLoaderTrayCount_ART;          // golden LastSet.h:371 -- Loader ART tray count (asendic_Loader.cpp:1229/:2082/:2105/:2849/:2861)
+    int  iAutoRetestCount_ART;          // golden LastSet.h:372
+    int  iLoaderTotalTray;              // golden LastSet.h:378
+    int  iLoaderTraySimulateTime;       // golden LastSet.h:243
+    // KEEP THE [3] BOUND VERBATIM -- it is golden's, and golden itself can
+    // overrun it: golden PushUnLoaderTrayInAverageTime writes this array at index
+    // `pos` while its own companion buffer is [MAX_AUTO_TRAY][5], so pos>=3 is an
+    // out-of-bounds write IN GOLDEN.  Mirror the bound rather than widening it,
+    // and constrain tests to pos 0..2.
+    int  iUnLoaderTraySimulateTime[3];  // golden LastSet.h:244
+    int  iDevice_Info_By_Tray[256];     // golden LastSet.h:464 (jou 20190930 -- Barcode Tray record file)
+    int  RecodeTrayCount[256];          // golden LastSet.h:465 (frank 20200814 -- per-10-tray summary log)
+    // RETIREMENT DEBT created by the three fields above that already have TU-local
+    // stand-ins: csystem.cpp carries `static int W7C1_LastSet_iLoaderTotalTray`
+    // (:1342), `W7C1_LastSet_iLoaderTrayCount_ART` (:1343) and
+    // `W7C2_LastSet_iAutoRetestCount_ART` (:2561), each behind its own W7C1_LS_* /
+    // W7C2_LS_* macro.  Wave 0 does NOT retarget them: csystem.cpp is an
+    // integrator-only file that another front is also perturbing, and retargeting
+    // is a behaviour change (the seams are separate storage today).  Whoever next
+    // owns csystem.cpp should point those three macros at these real fields and
+    // delete the statics, so exactly one copy of each survives.
+    // TODO(W6.x): the other ~430 LAST_GENERAL_SET fields land with the full
     //             translated LastSet.h.
 };
 extern LAST_GENERAL_SET LastSet;    // golden: extern LAST_GENERAL_SET LastSet; (LastSet.h:514)
@@ -179,5 +209,49 @@ int  WhichAutoNeedTray();
 //  local forward-decl (S3 defaulted) so the two TUs agree.  Sim: logs (no UI).
 void ShowMyMessage(AnsiString S1, AnsiString S2="", AnsiString S3="",
                    bool Ok=false, bool bServoOff=false);
+
+// ---------------------------------------------------------------------------
+//  4. AI(W906-W7-L1-Wave0) 20260801 -- OBSERVABILITY SEAM for the two operator
+//     dialogs above.  ONE seam set, landed once, in the serialized pass.
+//
+//  WHY IT CANNOT BE DEFERRED.  canary_support.cpp's ShowErrorMessage returned
+//  K_RETRY UNCONDITIONALLY.  Every K_SKIP / K_CLEAN_OUT recovery arm reached
+//  through it is therefore structurally unreachable, so any "the skip path is
+//  covered" claim about those arms is unfalsifiable -- precisely the tautology
+//  class this project has already paid for on this file family.  With
+//  W906_ShowErrorMessage_SimReturn a test can feed K_SKIP and actually walk the
+//  arm; with the count/last-code fields it can also prove the alarm was raised at
+//  all, and with WHICH code.  (The W7-L1 recons put the affected arm count in the
+//  low tens across the asendic_* family -- that figure is THEIRS and was not
+//  re-counted in this pass, so treat it as an estimate, not a measurement.  The
+//  structural argument above does not depend on the number.)
+//
+//  WHY IT IS ONE SEAM AND NOT SIX.  Five separate recon agents each proposed
+//  their own version under three different names.  123 files in this tree carry
+//  an `#include "canary_support.h"` line (counted this pass; a looser grep for
+//  the mere string reports 141, which is why the exact figure is stated here), so
+//  six competing seams would be six collisions on one very widely included
+//  header.  Naming follows the established `W906_..._Sim` idiom named in the
+//  forms/fMain.h facade contract (rule 4).
+//
+//  HEADER COST: deliberately zero new includes.  These are `extern` declarations
+//  only; K_RETRY (cmydef.h:276, `extern const int`, value 0x0001 at cmydef.cpp:337)
+//  is applied in canary_support.cpp, which already includes cmydef.h.
+//
+//  NOTE ON THE ShowMyMessage HALF: golden's ShowMyMessage returns void, so there
+//  is no "next return" to make settable -- it gets the other three (last-argument
+//  capture, call count, reset) and nothing more.  That asymmetry is golden's, not
+//  an omission.
+// ---------------------------------------------------------------------------
+//  ShowErrorMessage seam
+extern int        W906_ShowErrorMessage_SimReturn;  // next return value; RESET VALUE IS K_RETRY (the pre-seam behaviour)
+extern AnsiString W906_ShowErrorMessage_LastCode;   // last `Code` argument seen; "" when never called
+extern int        W906_ShowErrorMessage_LastKCode;  // last `KCode` mask seen (which buttons golden offered); 0 when never called
+extern int        W906_ShowErrorMessage_Count;      // call count -- distinguishes "not called" from "called and returned K_RETRY"
+void W906_ShowErrorMessage_Reset();                 // restore SimReturn to K_RETRY, clear capture + count
+//  ShowMyMessage seam
+extern AnsiString W906_ShowMyMessage_LastS1;        // last `S1` argument seen; "" when never called
+extern int        W906_ShowMyMessage_Count;         // call count
+void W906_ShowMyMessage_Reset();                    // clear capture + count
 
 #endif // canary_supportH

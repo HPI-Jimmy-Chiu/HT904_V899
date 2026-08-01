@@ -192,11 +192,12 @@ void InitPlaceToAutoTask();
 //  二次解料 AI CCD branches compile.  Offline behavior: the real form/pointer is
 //  supplied by FormsFacade/FixAICCD once translated.  REPORTED.
 // -----------------------------------------------------------------------------
-#ifndef AOUTARM9045_FFIXAICCD_FWD
-#define AOUTARM9045_FFIXAICCD_FWD
-class TfFixAICCD { public: void OutArmCycleCounterUpdate(); };
-extern TfFixAICCD *fFixAICCD;
-#endif
+// AI(W906-W7-L1-Wave0) 20260801: TU-local forward declaration RETIRED -- the real
+// stand-in now lives at forms/fFixAICCD.h (reached via this TU's existing
+// FormsFacade.h include) and its global is a REAL object, not the null pointer
+// aoutarm_shims.cpp:112 used to define.  Retiring it here is mandatory, not
+// cosmetic: keeping a second `class TfFixAICCD` in a TU that also sees the facade
+// header is a redefinition error.
 
 //==============================================================================
 //  golden aoutarm9045_1x2_2.cpp:30  (GetNowShuttleMode_1x2_2)

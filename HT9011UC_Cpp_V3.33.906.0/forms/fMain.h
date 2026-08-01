@@ -109,6 +109,29 @@ public:
     virtual ~TfMainInplace() {}
 };
 
+// ---------------------------------------------------------------------------
+// AI(W906-W7-L1-Wave0) 20260801: TfMainRENESASServer -- stand-in for
+// fMain->RENESAS_Server, added because golden asendic_Loader.cpp derefs it on
+// the loader tray-supply path (:2644 writes bLoadingCountFullFlag=false, :2722
+// and :2756 call DoNeedSupplyOrNot(true/false)).  Golden home:
+// main.h:1710 `TRENESAS_Server *RENESAS_Server;` (Kirin 20191213), whose class
+// declares `bool bLoadingCountFullFlag;` at Automation/uRENESAS_Server.h:199
+// and `bool DoNeedSupplyOrNot(bool bNotEnough);` at :201 -- both re-read from
+// the cp950-decoded golden this wave.  Same nested-helper-class idiom as
+// TfMainHanaART / TfMainInplace above.  Offline DoNeedSupplyOrNot() returns
+// false: there is no RENESAS FT-CT server link, so "no extra supply is being
+// demanded" is the faithful quiet default and keeps the two golden call sites
+// on their non-supply arm.
+// ---------------------------------------------------------------------------
+class TfMainRENESASServer
+{
+public:
+    bool bLoadingCountFullFlag;                     // [DATA]   golden Automation/uRENESAS_Server.h:199
+    virtual bool DoNeedSupplyOrNot(bool bNotEnough);// [METHOD] golden Automation/uRENESAS_Server.h:201 -- offline: false
+    TfMainRENESASServer();
+    virtual ~TfMainRENESASServer() {}
+};
+
 // ===========================================================================
 //  TfMain -- non-VCL stub (golden main.h, TfMain:public TForm)
 // ===========================================================================
@@ -527,6 +550,61 @@ public:
                                     //   `->Strings[z]` read are satisfiable exactly as golden expects.
     TfLotInfoEdit *edSoakTime;                    // [DATA] golden main.h:733 (TEdit*) -- reuses TfLotInfoEdit, same
                                     //   stand-in already used for edWorkTemperBase/edHPX/edHPY (only ->Text read/written).
+    // AI(W906-W7-L1-Wave0) 20260801: W7-L1 Wave-0 ADD -- the 16 fMain members the
+    //    six asendic_* tray SM files (Loader / Loader_RT / Color / Auto / Auto_RT,
+    //    plus the shared asendic.cpp substrate) dereference and this facade did
+    //    not have.  Landed in ONE serialized pass ahead of the four parallel
+    //    translation agents so they cannot collide on this header.  Every golden
+    //    line below was re-read from the cp950-decoded golden main.h in THIS pass,
+    //    not taken from the recon report.
+    //
+    //    WIDGET-TYPE NOTE (this is why all 7 tray-count labels use
+    //    TfMainTrayPanel, not TfMainPanel): golden main.h:392 and :393-395 /
+    //    :861-863 are ALL `TLabel*`, one adjacent golden family.  TfMainTrayPanel
+    //    is the TLabel-backed alias (forms/FormWidgets.h:143 -> vclcompat::TLabel);
+    //    TfMainPanel is TPanel-backed (:132).  Using the TPanel alias would have
+    //    propagated into 7 new members exactly the conflation FormWidgets.h:127-130
+    //    already records as W7-U debt for AutoCleanContactCountLabel.
+    //    All 7 are Caption-write-only in golden (asendic_Loader.cpp:1229/:2082/
+    //    :2105/:2849/:2861; asendic_Auto.cpp:537-542/:612-617/:2237-2242).
+    TfMainTrayPanel *lblLoadTrayCnt;              // [DATA] golden main.h:392 (TLabel*) -- Caption written only
+    TfMainTrayPanel *lblAuto1TrayCnt;             // [DATA] golden main.h:393 (TLabel*)
+    TfMainTrayPanel *lblAuto2TrayCnt;             // [DATA] golden main.h:394 (TLabel*)
+    TfMainTrayPanel *lblAuto3TrayCnt;             // [DATA] golden main.h:395 (TLabel*)
+    TfMainTrayPanel *lblAuto4TrayCnt;             // [DATA] golden main.h:861 (TLabel*)
+    TfMainTrayPanel *lblAuto5TrayCnt;             // [DATA] golden main.h:862 (TLabel*)
+    TfMainTrayPanel *lblAuto6TrayCnt;             // [DATA] golden main.h:863 (TLabel*)
+    //    The 6 Auto edits are golden TEdit* and only ->Text is written
+    //    (asendic_Auto.cpp:545-550), so they reuse TfLotInfoEdit -- the same
+    //    cross-form alias fMain->edWorkTemperBase / edHPX / edHPY already use,
+    //    i.e. established precedent rather than a new conflation.
+    TfLotInfoEdit *edtAuto1;                      // [DATA] golden main.h:867 (TEdit*) -- Text written only
+    TfLotInfoEdit *edtAuto2;                      // [DATA] golden main.h:373 (TEdit*)
+    TfLotInfoEdit *edtAuto3;                      // [DATA] golden main.h:374 (TEdit*)
+    TfLotInfoEdit *edtAuto4;                      // [DATA] golden main.h:376 (TEdit*)
+    TfLotInfoEdit *edtAuto5;                      // [DATA] golden main.h:377 (TEdit*)
+    TfLotInfoEdit *edtAuto6;                      // [DATA] golden main.h:378 (TEdit*)
+    TfMainCheckBox *chkE84IDTray;                 // [DATA] golden main.h:887 (TCheckBox*) -- Checked read
+                                    //   (asendic_Color.cpp:436) AND written (:649); offline default false
+    //    StringGrid2 -- REAL backing store, and its SIZE is load-bearing.
+    //    vclcompat::TStringGrid stores Cells in vectors and indexes them with
+    //    vector::at, so an out-of-range Cells[][] THROWS std::out_of_range
+    //    (vclcompat/StringGrid.h:43-44) instead of silently growing.  golden
+    //    asendic_Color.cpp:831 writes Cells[3][38].  The ctor size is taken from
+    //    golden's own form resource, not guessed: main.dfm's `object StringGrid2:
+    //    TStringGrid` block sets ColCount = 8 and RowCount = 60 (main.dfm:15440,
+    //    :15447, :15451 -- read this pass), so forms/fMain.cpp constructs it
+    //    `new TStringGrid(8, 60)`, which covers [3][38] with golden's real margin.
+    TStringGrid *StringGrid2;                     // [DATA] golden main.h:490 (TStringGrid*) -- 8x60 per main.dfm:15447/:15451
+    TfMainRENESASServer *RENESAS_Server;          // [DATA] golden main.h:1710 (TRENESAS_Server*) -- see the nested class above
+    //    DELIBERATELY NOT ADDED -- `TfMainCheckBox *CheckBox1` (golden main.h:361,
+    //    TCheckBox*, verified this pass).  Its ONLY reference in the whole W7-L1
+    //    family is asendic_Loader.cpp:2942, which sits inside the
+    //    `#ifdef SOFT_SIMULTE` block at :2941-2947; SOFT_SIMULTE is undefined in
+    //    this tree, so that block is not compiled and the member would be surface
+    //    nothing dereferences.  Same rule that kept PPID / bNeedClearFile out in
+    //    W7-F1, and the same precedent this header's own `cb1` note records.
+    //    Listed so a later wave does not "discover" it as an omission.
     TfMain();
     virtual ~TfMain() {}
 };

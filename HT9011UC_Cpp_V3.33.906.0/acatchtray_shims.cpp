@@ -30,8 +30,11 @@ AnsiString BoolToStr(bool B, bool /*UseBoolStrs*/)
 // placeholder definitions (would otherwise duplicate-define both symbols).
 
 // ---- TfTrayMapping (offline: no CCD / laser / RFID) ------------------------
+// AI(W906-W7-L1-Wave0) 20260801: channel-2 quartet added to the init list --
+// same all-quiet offline posture as channel 1 (no RFID reader present).
 TLdRFIDShim::TLdRFIDShim()
-    : bCommConnect(false), bClearCmd1(false), bReadUID1(false) {}
+    : bCommConnect(false), bClearCmd1(false), bReadUID1(false),
+      bClearCmd2(false), bReadUID2(false) {}   // sBlockID2 / sUID2 default-construct to ""
 void TBtnShim::Click() {}
 void TListTrayIDShim::Clear() { Text = ""; }
 void TListTrayIDShim::Add(AnsiString s) { Text = Text + s + "\r\n"; }
@@ -50,6 +53,21 @@ TfTrayMapping::TfTrayMapping()
     btnReadUID1         = new TBtnShim();
     cbBarCodeSimulate   = new TBtnShim();
     listTrayIDByLot     = new TListTrayIDShim();
+    // AI(W906-W7-L1-Wave0) 20260801: channel-2 button triad (asendic_Color.cpp).
+    btnLdRFIDClear2     = new TBtnShim();       // golden cTrayMapping.h:466
+    btnReadUID2         = new TBtnShim();       // golden cTrayMapping.h:468
+    btnLdRFIDReadBlock2 = new TBtnShim();       // golden cTrayMapping.h:470
+    // AI(W906-W7-L1-Wave0) 20260801: eAOIType_TrayMapLaser MUST be 1, not 0.
+    // In golden it is the SECOND enumerator of the in-class AOI-type enum
+    // (golden cTrayMapping.h:699 eAOIType_TrayDeviceCheckLaser=0, :700
+    // eAOIType_TrayMapLaser), so its ordinal is 1.  Mirroring it as an int that
+    // defaulted to 0 would collapse the tray-map AOI type onto the device-remain
+    // one and the distinction would disappear with no test able to see it.
+    eAOIType_TrayMapLaser = 1;                  // golden cTrayMapping.h:700 (ordinal 1)
+    // Tray-map grid: dimensions verbatim from golden cTrayMapping.h:617 [35][70].
+    for(int iW0r=0; iW0r<35; iW0r++)
+        for(int iW0c=0; iW0c<70; iW0c++)
+            iTrayMappingDate[iW0r][iW0c] = 0;
 }
 void TfTrayMapping::WritePickMapLog() {}
 bool TfTrayMapping::IsRunDeviceRemainLaser()        { return false; }
@@ -64,6 +82,14 @@ bool TfTrayMapping::DoTrayIDKeyence2(int)           { return false; }
 bool TfTrayMapping::DoTrayID2CCD()                  { return false; }
 bool TfTrayMapping::DoTrayIDCCD()                   { return false; }
 bool TfTrayMapping::DoTrayMapCCD(int)               { return false; }
+// -- AI(W906-W7-L1-Wave0) 20260801 ADD: Tray-Map-laser + tray-ID-check surface --
+//    See acatchtray_shims.h for golden citations and, for DoTrayIDCheck, for why
+//    its offline value is a decision rather than a default.
+bool TfTrayMapping::IsRunTrayMapLaser()             { return false; }  // offline: no laser scanner installed
+bool TfTrayMapping::DoSettingBeforeMotorMove(int, bool, AnsiString&)   { return true; }   // offline: setting complete
+bool TfTrayMapping::DoGetValueAfterMotorArrival(int, bool, AnsiString&){ return true; }   // offline: value acquired
+bool TfTrayMapping::GetTrayMapHasNullIC()           { return false; }  // offline: no mapped null IC (unreachable while IsRunTrayMapLaser is false)
+bool TfTrayMapping::DoTrayIDCheck(AnsiString)       { return true;  }  // offline: no duplicate tray ID -- DELIBERATE, see header
 TfTrayMapping *fTrayMapping = new TfTrayMapping();
 
 // ---- MyMessageBox (golden mymessbox.h) -------------------------------------

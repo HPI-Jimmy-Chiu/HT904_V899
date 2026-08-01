@@ -34,19 +34,62 @@ bool bIsPlacingToBuffer   = false;      //JerryYang 20250828 (golden cmydef.cpp:
 bool bIsCatchingFromBuffer = false;     //RogerYang 20260225 (golden cmydef.cpp:5947)
 
 // ---------------------------------------------------------------------------
+//  AI(W906-W7-L1-Wave0) 20260801: OBSERVABILITY SEAM STATE for ShowErrorMessage
+//  and ShowMyMessage (see canary_support.h for the full rationale).  The default
+//  return stays K_RETRY, so this is a PURE ADDITION: every existing caller
+//  behaves exactly as before until a test sets W906_ShowErrorMessage_SimReturn.
+//
+//  STATIC-INITIALISATION NOTE: K_RETRY is `extern const int` DEFINED in
+//  cmydef.cpp:337, i.e. it is dynamically initialised, so seeding the seam with
+//  the symbol here would depend on unspecified cross-TU initialisation order.
+//  The literal 0x0001 is used instead -- K_RETRY's value verbatim from
+//  cmydef.cpp:337 -- while W906_ShowErrorMessage_Reset() below uses the real
+//  K_RETRY symbol, which is safe because a reset only ever runs from test code,
+//  long after initialisation is complete.
+// ---------------------------------------------------------------------------
+int        W906_ShowErrorMessage_SimReturn = 0x0001;  // == K_RETRY (cmydef.cpp:337); see note above
+AnsiString W906_ShowErrorMessage_LastCode;            // default-constructs to ""
+int        W906_ShowErrorMessage_LastKCode = 0;
+int        W906_ShowErrorMessage_Count     = 0;
+void W906_ShowErrorMessage_Reset()
+{
+    W906_ShowErrorMessage_SimReturn = K_RETRY;
+    W906_ShowErrorMessage_LastCode  = "";
+    W906_ShowErrorMessage_LastKCode = 0;
+    W906_ShowErrorMessage_Count     = 0;
+}
+AnsiString W906_ShowMyMessage_LastS1;                 // default-constructs to ""
+int        W906_ShowMyMessage_Count = 0;
+void W906_ShowMyMessage_Reset()
+{
+    W906_ShowMyMessage_LastS1 = "";
+    W906_ShowMyMessage_Count  = 0;
+}
+
+// ---------------------------------------------------------------------------
 //  ShowErrorMessage -- golden note.h:466.
 //  In the offline sim there is no operator to press Retry/Skip/Home, and the
 //  Empty-tray SM uses the return value to choose its recovery branch.  Returning
 //  K_RETRY keeps the SM on the "retry" arm (it re-attempts rather than skipping
 //  or homing), which is the safe, faithful default for an unattended sim.
 //  Logs the alarm so the smoke test trace shows which error path was taken.
+//  AI(W906-W7-L1-Wave0) 20260801: K_RETRY is still the DEFAULT but is no longer
+//  UNCONDITIONAL -- the return now comes from W906_ShowErrorMessage_SimReturn so
+//  a test can drive the K_SKIP / K_CLEAN_OUT arms.  See the seam block above.
 // ---------------------------------------------------------------------------
 int ShowErrorMessage(AnsiString Code, int KCode, int Pos,
                      bool /*bDuplicateErr*/, AnsiString /*errPart*/)
 {
     std::printf("  [ShowErrorMessage] Code=%s KCode=%d Pos=%d\n",
                 Code.c_str(), KCode, Pos);
-    return K_RETRY;     // TODO(W6.x): real operator-driven Retry/Skip/Home dialog
+    // AI(W906-W7-L1-Wave0) 20260801: record the call, and return the settable
+    // seam instead of a hardwired K_RETRY, so the K_SKIP / K_CLEAN_OUT recovery
+    // arms reached through this function stop being structurally unreachable
+    // (and therefore unfalsifiable).  See canary_support.h for the full note.
+    W906_ShowErrorMessage_LastCode  = Code;
+    W906_ShowErrorMessage_LastKCode = KCode;
+    W906_ShowErrorMessage_Count++;
+    return W906_ShowErrorMessage_SimReturn;   // defaults to K_RETRY (unattended-sim posture, unchanged)
 }
 
 // ---------------------------------------------------------------------------
@@ -82,6 +125,10 @@ void ShowUnloaderTrayMessage(AnsiString S1, AnsiString S2)
 void ShowMyMessage(AnsiString S1, AnsiString S2, AnsiString /*S3*/,
                    bool /*Ok*/, bool /*bServoOff*/)
 {
+    // AI(W906-W7-L1-Wave0) 20260801: observability seam -- golden's ShowMyMessage
+    // returns void, so there is nothing to make settable; capture + count only.
+    W906_ShowMyMessage_LastS1 = S1;
+    W906_ShowMyMessage_Count++;
     if(S2.Length() > 0)
         std::printf("  [ShowMyMessage] %s | %s\n", S1.c_str(), S2.c_str());
     else

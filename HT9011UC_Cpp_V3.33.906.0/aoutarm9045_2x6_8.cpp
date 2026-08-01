@@ -156,11 +156,13 @@ void InitPlaceToAutoTask();                                                    /
 //  live).  Gated at runtime behind USE_Fix_AI_CCD && TestIF_File.bEnableFix2BGAAICCD
 //  so the null pointer is never derefed offline.  REPORTED.
 // -----------------------------------------------------------------------------
-#ifndef AOUTARM9045_2X6_8_FFIXAICCD_FWD
-#define AOUTARM9045_2X6_8_FFIXAICCD_FWD
-class TfFixAICCD { public: void OutArmCycleCounterUpdate(); };                 // golden FixAICCD.h form (offline single-method mirror; def in aoutarm_shims.cpp)
-extern TfFixAICCD *fFixAICCD;                                                  // golden FixAICCD.h:152 (TfFixAICCD *fFixAICCD)
-#endif
+// AI(W906-W7-L1-Wave0) 20260801: TU-local forward declaration RETIRED -- the real
+// stand-in now lives at forms/fFixAICCD.h (reached via this TU's existing
+// FormsFacade.h include) and its global is a REAL object, not the null pointer
+// aoutarm_shims.cpp:112 used to define, so the "gated so the null pointer is never
+// derefed offline" caveat in the comment above no longer applies.  Retiring it
+// here is mandatory, not cosmetic: keeping a second `class TfFixAICCD` in a TU
+// that also sees the facade header is a redefinition error.
 
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
