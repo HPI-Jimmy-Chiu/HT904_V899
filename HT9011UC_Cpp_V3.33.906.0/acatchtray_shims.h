@@ -52,25 +52,30 @@
 //    * csystem_shims.h <Initial_Auto_BinTray_Task decl> + csystem_shims.cpp:120
 //      `void Initial_Auto_BinTray_Task(int)` -- signature-identical duplicate.
 //
-//  OWNED BY THE WAVE THAT LANDS asendic_Color.cpp (W7-L1 Wave 1, "Color"):
-//    * acatchtray_shims.h <DoAutoColor decl> + acatchtray_shims.cpp:125
-//      `bool DoAutoColor()` -- golden declares it VOID (golden asendic_Color.h:20);
-//      same duplicate-symbol + conflicting-declaration shape as the above.
-//    * acatchtray_shims.h <InitAutoColorReceiveTask decl> + .cpp:123
-//      `void InitAutoColorReceiveTask()` -- signature-identical duplicate.
-//    * csystem_shims.h <InitAutoColorTask decl> + csystem_shims.cpp:121
-//      `void InitAutoColorTask()` -- signature-identical duplicate.
+//  [DONE 20260802] OWNED BY THE WAVE THAT LANDS asendic_Color.cpp
+//  (W7-L1 Wave 1, "Color") -- ALL THREE RETIRED when asendic_Color.cpp landed:
+//    * <DoAutoColor decl> -- body retired here; the DECLARATION was also
+//      corrected `bool` -> `void`, which is golden (golden asendic_Color.h:20).
+//      All 3 ported call sites discarded the value, so void cost them nothing.
+//    * <InitAutoColorReceiveTask decl> -- body retired here.
+//    * csystem_shims.h <InitAutoColorTask decl> -- body retired there.
+//    In all three the DECLARATION IS KEPT: csystem.cpp and acatchtray.cpp bind
+//    to these symbols through the shim headers, so deleting the declarations
+//    would have required adding `#include "asendic_Color.h"` to both callers.
 //
-//  OWNED BY THE WAVE THAT LANDS asendic_Loader.cpp (W7-L1 Wave 1, "Loader"
-//  bundle -- Loader + Loader_RT are ONE agent):
-//    * csystem_shims.h <DoLoad decl> + csystem_shims.cpp:104 `void DoLoad(){}`
-//      -- retire the BODY only, keep the .h declaration (csystem.cpp calls it
-//      through it).
-//    * csystem_shims.h <InitLoadTask decl> + csystem_shims.cpp:117
-//      `void InitLoadTask(){}` -- ditto.
-//      NOTE for that agent: retiring these two turns two currently-no-op hub call
-//      sites into real Loader SM invocations, which forces a re-baseline of
-//      tests/test_w6_6_csystem_cycle.cpp and tests/test_w6_6_hub.cpp.
+//  [DONE 20260802] OWNED BY THE WAVE THAT LANDS asendic_Loader.cpp (W7-L1
+//  Wave 1, "Loader" bundle -- Loader + Loader_RT are ONE agent).  BOTH BODIES
+//  RETIRED in csystem_shims.cpp, both declarations kept:
+//    * <DoLoad decl>       -- body retired; csystem.cpp still calls it through
+//      csystem_shims.h and the two signatures are identical.
+//    * <InitLoadTask decl> -- body retired; behaviourally inert (the only
+//      ported caller is asendic_Loader.cpp's own case 1400).
+//      THE RE-BASELINE THIS NOTE PREDICTED DID NOT HAPPEN.  Measured, not
+//      assumed: W7-L1 Wave 1 built both hub tests twice -- once against the
+//      pristine archive, once with the bodies retired and the real Loader
+//      objects added -- and test_w6_6_csystem_cycle stayed 20 PASS / 0 FAIL
+//      and test_w6_6_hub stayed 9 PASS / 0 FAIL, exit 0, zero-line diff once
+//      the new log lines are filtered.  Neither test file needed an edit.
 //
 //  OWNED BY THE WAVE THAT LANDS asendic.cpp's AutoCylinder* bodies (Wave 3 / L1a):
 //    * acatchtray_shims.h <AutoCylinderUp/Middle/Lower decls> +
@@ -349,9 +354,9 @@ AnsiString AMRUnloadBin(int iBinPos);            // golden -- offline: ""
 bool DoMagazineAMRTrayFeed(int iWhichAuto);      // golden -- offline: done (true)
 void InitialDoMagazineAMRTrayFeed();             // golden -- offline no-op
 //  receive-tray task inits (golden asendic / main)
-void InitAutoColorReceiveTask();                 // golden -- offline no-op
+void InitAutoColorReceiveTask();                 // RETIRED BODY (W7-L1 Wave 1 "Color"): real body in asendic_Color.cpp
 void InitAutoEmptyReceiveTask();                 // golden -- offline no-op
-bool DoAutoColor();                              // golden asendic -- offline: idle (true)
+void DoAutoColor();                              // RETIRED BODY (W7-L1 Wave 1 "Color"): real VOID body in asendic_Color.cpp (golden asendic_Color.h:20)
 //  unloader-info / teach-alignment (golden main / cSortCT)
 void SetUnloaderInfoFile(int iUnloader);         // golden -- offline no-op  (also extern in acatchtray.cpp)
 void InitDoOutArmTeachAlignmentProcessTask();    // golden -- offline no-op

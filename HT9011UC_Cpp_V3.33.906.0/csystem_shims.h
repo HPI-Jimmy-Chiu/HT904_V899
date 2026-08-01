@@ -37,21 +37,25 @@
 //  itself shifts every line below it, and a stale line citation is exactly the
 //  kind of claim this project keeps having to correct.)
 //
-//    * DoLoad()       -- declared below, body csystem_shims.cpp:104.
-//      InitLoadTask() -- declared below, body csystem_shims.cpp:117.
-//      OWNER: the wave that lands asendic_Loader.cpp (W7-L1 Wave 1, the
-//      Loader + Loader_RT bundle).  Retire the BODIES only and KEEP both
-//      declarations here -- csystem.cpp calls them through this header.
-//      CONSEQUENCE that agent must plan for: these two are the hub's only
-//      loader-feed entry points and are no-ops today, so retiring them turns the
-//      per-tick main loop into a REAL Loader SM invocation and forces a
-//      re-baseline of tests/test_w6_6_csystem_cycle.cpp and
-//      tests/test_w6_6_hub.cpp (both need sane Loader global state or DoLoad will
-//      alarm-loop inside them).
+//    * [DONE 20260802] DoLoad() and InitLoadTask() -- BOTH BODIES RETIRED when
+//      the Loader + Loader_RT bundle landed (W7-L1 Wave 1).  Both declarations
+//      kept here, as planned -- csystem.cpp calls DoLoad() through this header.
+//      THE RE-BASELINE THIS ENTRY PREDICTED DID NOT HAPPEN, and that was
+//      MEASURED rather than assumed (W7-L1 Wave 1 built both hub tests twice --
+//      once against the pristine archive, once with the bodies retired and the
+//      real Loader objects added): test_w6_6_csystem_cycle stays 20 PASS / 0 FAIL
+//      and test_w6_6_hub stays 9 PASS / 0 FAIL, exit 0, with a zero-line diff
+//      once the new log lines are filtered.  The only delta is added stdout
+//      noise -- 36 and 33 `[ShowErrorMessage] Code=MES0920 KCode=5 Pos=168`
+//      lines, which is golden DoLoad case 800's "Loader has no tray" prompt
+//      firing because the hub fixtures leave every tray flag clear.  That IS
+//      golden behaviour for an empty Loader; neither test asserts on stdout.
+//      (Setting IniConfig.bNoTrayAutoCleanOut = true in those fixtures would
+//      silence it via golden's K_CLEAN_OUT arm -- a cosmetic choice, not taken.)
 //    * Initial_Auto_BinTray_Task(int) -- declared below, body
 //      csystem_shims.cpp:120.  OWNER: the wave that lands asendic_Auto.cpp.
-//    * InitAutoColorTask()            -- declared below, body
-//      csystem_shims.cpp:121.  OWNER: the wave that lands asendic_Color.cpp.
+//    * [DONE 20260802] InitAutoColorTask() -- BODY RETIRED when asendic_Color.cpp
+//      landed (W7-L1 Wave 1).  Declaration kept here; csystem.cpp binds to it.
 //
 //  Precedent for how a completed retirement is recorded: the DoAuto2 note further
 //  down this file plus its matching comment in the root CMakeLists.txt.
@@ -77,7 +81,7 @@ extern bool bShuttleShake;
 // ---------------------------------------------------------------------------
 void DoInArm();
 void DoOutArm();
-void DoLoad();
+void DoLoad();                              // RETIRED BODY (W7-L1 Wave 1 "Loader"): real body in asendic_Loader.cpp
 void DoSortArm();
 
 // ---------------------------------------------------------------------------
@@ -87,11 +91,11 @@ void DoSortArm();
 //   InitFrontTestSuckICTask / InitBTestSuckTestICTask.)  These remaining leaves
 //   are offline cursor/flag resets.
 // ---------------------------------------------------------------------------
-void InitLoadTask();                       // golden asendic_Loader.cpp
+void InitLoadTask();                       // RETIRED BODY (W7-L1 Wave 1 "Loader"): real body in asendic_Loader.cpp
 void InitOutArmTask();                      // golden aoutarm.h:34 (file-local static there; this is the global linkable one)
 void InitialDoLockUnloader(int iAuto);      // golden csystem.h:258 (real body deferred W7)
 void Initial_Auto_BinTray_Task(int iAuto);  // golden asendic_*.cpp
-void InitAutoColorTask();                   // golden asendic_Color.cpp
+void InitAutoColorTask();                   // RETIRED BODY (W7-L1 Wave 1 "Color"): real body in asendic_Color.cpp
 void InitialAuto3MagazineTask();            // golden Magazine SM
 void InitialCatchTrayChangeTray();          // golden Magazine SM
 void InitialCatchTrayGetNewTray();          // golden Magazine SM

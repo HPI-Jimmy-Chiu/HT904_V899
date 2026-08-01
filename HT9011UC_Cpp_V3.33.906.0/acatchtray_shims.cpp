@@ -120,9 +120,13 @@ int  SearchNeedAMRUnloadCount()                 { return 0;     }
 AnsiString AMRUnloadBin(int)                    { return "";    }
 bool DoMagazineAMRTrayFeed(int)                 { return true;  }
 void InitialDoMagazineAMRTrayFeed()             {}
-void InitAutoColorReceiveTask()                 {}
+// InitAutoColorReceiveTask: RETIRED BODY (W7-L1 Wave 1 "Color") -- real body now
+// in asendic_Color.cpp (golden asendic_Color.h:16).  Declaration kept in the
+// header because csystem.cpp / acatchtray.cpp bind to it through there.
 // InitAutoEmptyReceiveTask: REAL home asendic_Empty.cpp (W6.1 canary) -> NOT redefined here (ODR)
-bool DoAutoColor()                              { return true;  }
+// DoAutoColor: RETIRED BODY (W7-L1 Wave 1 "Color") -- real body now in
+// asendic_Color.cpp, and it is VOID (golden asendic_Color.h:20); this stand-in
+// wrongly returned bool.  All 3 ported call sites discard the value.
 void SetUnloaderInfoFile(int)                   {}
 void InitDoOutArmTeachAlignmentProcessTask()    {}
 void NewRecordProcess(AnsiString, AnsiString, AnsiString) {}

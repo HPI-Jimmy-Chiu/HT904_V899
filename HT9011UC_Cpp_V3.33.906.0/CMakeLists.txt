@@ -1078,6 +1078,33 @@ add_library(ht9045_sm STATIC
     # standalone in the same library asendic_Empty.cpp already occupies (same
     # substrate: Cylinder[]/MOT[]/Sen[]/SW[]/canary_support/FormsFacade fAGV).
     asendic_Auto2.cpp
+    # AI(W906-W7-L1-Wave1) 20260802: the W7-L1 Wave-1 landings.  All three join the
+    # same library and the same Sim HAL substrate asendic_Empty.cpp / asendic_Auto2.cpp
+    # already occupy (Cylinder[]/MOT[]/Sen[]/SW[] + canary_support + FormsFacade +
+    # acatchtray_shims); NO new link dependency was introduced by either.
+    #
+    #   asendic_Color.cpp      -- the Color-tray stack-feed SM.  Verified by two
+    #     independent recons and re-checked by its own wave: ZERO outgoing calls into
+    #     any asendic_* sibling, so it is the family's only true leaf.  It is also the
+    #     PREREQUISITE for Wave 2's asendic_Auto.cpp, which calls this file's
+    #     ForTERAPOWERCheckColorSensor (golden asendic_Auto.cpp:363/:2029/:2074).
+    #
+    #   asendic_Loader.cpp + asendic_Loader_RT.cpp -- the Loader bundle.  These two
+    #     MUST land together: they are a genuine bidirectional cycle (golden
+    #     asendic_Loader.cpp:1973/:1987 call into _RT, and _RT.cpp:190 calls back into
+    #     asendic_Loader.cpp:3167 CheckLoaderICFloating), so neither compiles as a
+    #     standalone unit of work.
+    #
+    # LANDED ATOMICALLY WITH FIVE SHIM-BODY RETIREMENTS (see the SHIM RETIREMENT DEBT
+    # REGISTER banners in acatchtray_shims.h and csystem_shims.h, where these are now
+    # marked DONE): acatchtray_shims DoAutoColor + InitAutoColorReceiveTask, and
+    # csystem_shims InitAutoColorTask + DoLoad + InitLoadTask.  Earlier would have
+    # given undefined symbols, later duplicate symbols.  DoAutoColor's DECLARATION was
+    # additionally corrected bool -> void, which is what golden says
+    # (golden asendic_Color.h:20); all ported call sites discarded the value.
+    asendic_Color.cpp
+    asendic_Loader.cpp
+    asendic_Loader_RT.cpp
     csystem_predicates.cpp
     # AI(W906-W7-F0) 20260728: FormsFacade.cpp REMOVED from this library -- the
     # facade now compiles into the bottom-layer ht9045_forms target (see its

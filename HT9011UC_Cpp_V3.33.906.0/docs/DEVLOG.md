@@ -1512,3 +1512,79 @@ L1 證明軌在「證明測試有承載力」之餘，用突變找出三個**沒
 - **W7-U 規劃警訊**：SECSGEM bucket 的 form-facade 缺口是 **29 個相異 form 指標**，22 個 override 在 form 軸上真正解鎖的只有 **3 個**。若 bucket 排序建立在舊的 9/5 上，需要重排。
 - **勿圈入 V906 commit**：`config/*`、`setup.inf`、`.pti_frames/`、repo 根的 `SCRATCH_*.txt`/`_review_*.diff`/`build_*` 產物、ported tree 內三個 `*_test_scratch/`，以及 `HT9011UC_Code_V3.33.899.0_.../CosFunction.cpp`（使用者自己的 V899 工作）。
 - **執行模式**：使用者指示持續有效——全部 cpp/h/dfm 都要翻、workflow 火力全開、不逐波停下請示、重大問題跳過並最後條列；model/effort 依任務性質自動切換；安裝軟體不必先問。
+
+## 2026-08-02 — W7-L1 **Wave 1**：`asendic_Color` + `asendic_Loader`/`_Loader_RT` 綁定落地（`wf_2ba68c7c-507`，2 個真平行 agent）
+
+**規模**：golden 1553 + 3312 + 905 = **5,770 行**一次落地；譯出 8 個新檔共 **9,667 行**（含兩支測試 1743 + 1526）。兩個 agent 全程**只寫自己的檔**，`git status` 只列出那 8 個新檔、**零個 tracked 檔被改**——CMake 與 shim 退役全部依約交給 integrator（主迴圈）在 integrate 時原子套用。
+
+### 保真證明（本輪起成為標準交付物）
+
+Loader 軌交出了目前最強的保真證據：把譯出檔與 **cp950 解碼後的 golden** 從具名錨點對齊逐行 diff——
+
+- `asendic_Loader.cpp`：golden 3273 行 / ported 3273 行，**diff 行數 0**（含註解）
+- `asendic_Loader_RT.cpp`：golden 877 / ported 876，diff 1 行（golden 的結尾空行）
+- 去註解去空白正規化後：3051 vs 3051、823 vs 823，**兩檔皆完全相同**
+
+這同時是**中文註解 cp950→UTF-8 完整往返的位元級證明**——不是「應該沒亂碼」，是 0 diff。
+
+**它之所以做得到，是因為它一個 `#if 0` 都沒用**：缺少 ported 家的符號一律改用「透明命名的 TU-local stand-in + `#define`」（11 個函式 + 1 個資料欄），每一個都在定義處寫明 golden 出處、離線值、行為代價、以及由哪一波退役。這讓 `switch(Task)` 本體**逐位元組等於 golden**。已納入 Wave 2 的 brief 作為標準做法。
+
+### Wave 0 的一個預測被實測推翻（方向對我們有利）
+
+兩份 shim header 的退役登記表都警告：退掉 `DoLoad`/`InitLoadTask` 會「強制 re-baseline `test_w6_6_csystem_cycle.cpp` 與 `test_w6_6_hub.cpp`」。Loader 軌**實測**（把兩支 hub 測試各建兩次：一次對原始 archive、一次對退役後加入真 Loader obj 的 archive，再 diff 完整 stdout）：
+
+- `test_w6_6_csystem_cycle`：20 PASS / 0 FAIL → **20 PASS / 0 FAIL**
+- `test_w6_6_hub`：9 PASS / 0 FAIL → **9 PASS / 0 FAIL**
+- 濾掉新增 log 行後 diff = **0 行**。**兩個測試檔都不用改。**
+
+唯一差異是多了 36 / 33 行 `[ShowErrorMessage] Code=MES0920 KCode=5 Pos=168`——那是 golden `DoLoad` case 800 的「Loader 沒有 tray」提示，因為 hub fixture 讓所有 tray flag 都是清空的。**那就是空 Loader 的 golden 行為**，不是迴歸；兩個測試都沒有對 stdout 做斷言。兩份登記表的過時警告**已就地更正為實測結果**，避免下一波照著錯的前提重新規劃。
+
+### 整合（主迴圈執行）
+
+**五個 shim body 退役，與三個 `.cpp` 加入 `ht9045_sm` 同一個原子步驟**（早了是 undefined symbol、晚了是 duplicate symbol）：
+
+| 檔 | 符號 | 備註 |
+|---|---|---|
+| `acatchtray_shims.cpp` | `DoAutoColor` | body 退役，**宣告同時由 `bool` 更正為 `void`**（golden `asendic_Color.h:20`）；3 個 ported 呼叫端本來就丟棄回傳值 |
+| `acatchtray_shims.cpp` | `InitAutoColorReceiveTask` | body 退役 |
+| `csystem_shims.cpp` | `InitAutoColorTask` | body 退役 |
+| `csystem_shims.cpp` | `DoLoad` | body 退役，**宣告保留**（`csystem.cpp` 透過該 header 呼叫） |
+| `csystem_shims.cpp` | `InitLoadTask` | body 退役；行為上惰性（唯一 ported 呼叫端是 `asendic_Loader.cpp` 自己的 case 1400） |
+
+全部採 **body-only 退役、保留宣告**的既有慣例——`csystem.cpp` 與 `acatchtray.cpp` 是透過 shim header 綁定這些符號的，刪掉宣告就得替兩個呼叫端加 `#include "asendic_Color.h"`。兩份登記表的對應條目已標 `[DONE 20260802]`。
+
+### 驗收（主迴圈親跑）
+
+- build **exit 0**、`error:` **0**、`grep -ic resolving` **0**。
+- 新檔警告：`asendic_Color.cpp` **0 個**；`asendic_Loader.cpp` **4 個，全部是 golden 缺陷的忠實重現**——三個 dead local（`bLoadHasDuplicateError`/`bYFix`/`bXFix`）與一個 golden 自己的 `-Wparentheses`（golden `:1838-1843` 的 `A&&B&&C&&D||(E&&F)` 無括號混用）。**沒有加澄清括號**，因為那會破壞上面那份 0-diff 保真證據。
+- 完整 `ctest --timeout 300 -j4` = **109/113**（測試總數 111→113），兩個新 target `W7_L1_Color` / `W7_L1_Loader` 皆 Passed，失敗恰為既有 4 個環境漂移。**零迴歸。**
+- 兩支新測試自身：Color 軌與 Loader 軌各自的 scratch 執行為 **112 passed / 0 failed**（Loader）等，全部經突變證明；Loader 軌跑了 **58 個突變**，並以 sha256 證明兩個譯出檔在整輪突變前後未被改動。
+
+### golden 缺陷（忠實翻譯、據實記錄，共 8 項，以下三項最值得注意）
+
+1. **⚠️ 最嚴重：`DoSupplyNewICTray` case 1290 的 JAM0929 是「無法脫離的警報迴圈」**。golden `asendic_Loader.cpp:968-990` 把 `ShowErrorMessage("JAM0929", K_RETRY|K_SKIP, ...)` 的結果指派給 `ret` 後**從來沒有讀它**，而該 case 沒有其他出口——所以 SKIP 按鈕給了操作員（在 `IniConfig.bA04LoaderTraySplitFailCanSkip` 開啟時），**按了卻完全沒有作用**：無論按哪個鍵 `Task` 都留在 1290，下一個 tick 再次警報。操作員唯一的出路是重開機。**對照組**：結構完全相同的 `DoLoadNewICTray` case 400（golden `:2277-2294`）**有**檢查 `ret` 並處理 K_SKIP。這是真實的機台現場 hang-up 模式，值得獨立開 case 追。
+2. **陣列越界讀取（全樹既有樣式，非本檔引入）**：`TrayForm.LoaderToEmptyColor[iRunStartMode]` 索引一個 `int[2]`（`cprod.h:1308`），而 `eRunStartMode` 至少到 12（`rsmFIFOMode`）。任何 run-start mode ≥ 2 都會讀出界。`acatchtray.cpp` 有約 10 個相同位置。
+3. **三塊不可達死碼**：`DoSupplyNewICTray` case 1250（全 golden 樹 `Task=1250` grep 為 0，連帶讓該檔唯一的 `LoadCCD->LoadCCDData()`、`bLoadTrayCCDMapOK` 與 WAR09103 全部死掉）、case 1248（唯一的 `Task=1248` 被 `//` 註解掉）、以及 `asendic_Loader_RT.cpp` `DoLoaderTrayToRear` 的 300/400 兩態孤島（彼此互指、外界無人設入口）。全部逐字保留。
+
+### 誠實的覆蓋缺口（Loader 軌自報，並用斷言把它變成可反證的）
+
+**整個警報表面完全沒有被進入**——19 個子測試裡 `ShowErrorMessage` 與 `ShowMyMessage` 呼叫次數皆為 **0**，而且這不是推論：子測試 [18] 用逐子測試累加器**斷言**它，並有突變（P13）證明該斷言會變紅。所以 JAM0901/0909/0912/0913/0929/1001/1003/1012、MES0920/0921/0922、WAR0119/0952/0953/0961/0962… 等約 24 個警報碼與它們把守的所有 K_SKIP / K_CLEAN_OUT 復原臂**都沒有覆蓋**。`W906_ShowErrorMessage_SimReturn` seam 可以讓這些變成可反證——這是下一個增量最明顯的目標，已寫進 Wave 2 的 brief。
+
+另有兩處在 Wave 3 之前**結構上不可達**，因為 `asendic.cpp` 的 `TrayMoveStatus()` 是硬寫 `return 0` 且依裁決不得加 seam：`DoLoaderTrackDetectICFloating` cases 400/500（每次都重新上 20 秒表，SM 永遠停在 500——子測試 [15] 直接斷言這個「停住」本身）與 `CheckLoaderICFloating` 的整個 JAM09102 區塊。
+
+### 其他值得記的
+
+- `asendic_Loader.cpp` 必須自己定義 `bool bWaitingAMR`：`cmydef.h` 宣告它、`cmydef.cpp` 的定義被 gate 掉、全樹無人定義。先例是 `acatchtray.cpp` 對 `iInArmWaitPosition` 的相同處置。**`cmydef.cpp` 解 gate 時要刪掉這一份。**
+- Color 軌保留了五處與已落地 `Empty` 兄弟檔**真實不同**的地方，沒有被「正規化成已審過的兄弟」——包括一處短路求值順序相反（golden `:62` vs Empty `:119`）、一處多了 `&& LastSet.iRealDummy!=DUMMY` 閘、以及 Color **不會**在第一次讀碼逾時重送 `"@HTColor"`（Empty 會）。這正是 67% clone 的另外 33% 會咬人的地方。
+- 兩個便宜的 Wave 0 小缺口（不擋任何事）：`acatchtray_shims.h` 有 OUT-arm 自動對位雙胞胎卻沒有 IN-arm 那一對；`iInArmWaitPosition` 定義在 `acatchtray.cpp` 卻不在任何 header 裡宣告。
+
+### 🔖 RESUME（最新）
+
+- **已 commit**：round-3（`cfe4e38`）、Wave 0 + CanaryFix（`fcdd92e`）、Wave 1（本則）。**寫入佇列在 commit 當下已清空。**
+- **驗證基準**：build exit 0 / ctest **109/113**（失敗恆為 `config_db`/`IniFiles`/`ini_helpers`/`config_loaders`）。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 `fix/v899.32-pti`。
+- **進行中**：**Wave 2**（`wf_83142f68-28f`，2 個真平行 agent）——`asendic_Auto.cpp`(2561，含一個 2189 行、56 個 case 的函式) ∥ `asendic_Auto_RT.cpp`(1047)。**這是 asendic_* 家族最後兩個 SM 檔。**
+- **Wave 2 的既定事實**：`ForTERAPOWERCheckColorSensor` 與 `TStringList::Find` 都已在樹上（所以 Auto 的 case 1415 **不必** gate，早期 recon 那個建議的前提已消失）；`fFixAICCD::bCheckUnloaderHasAiNG` 是 **`void`** 不是 `bool`；`iWhichAuto` **只准 extern**；Auto 有五處執行期參數對調中的**兩處**（golden `:788` vs `:784`、`:819` vs `:811`），Auto_RT 有**一處**（`:783` vs `:791`）且擁有全家族最多的 ~25 個 `AutoCylinder*` 呼叫點。Wave 2 要退的 shim 是 `DoAutoReceiveBinTray`（golden 是 **void**）與 `Initial_Auto_BinTray_Task`。整合順序固定 Auto → Auto_RT。
+- **接下來**：Wave 3（`asendic.cpp` L1a/L1b + 強制 re-baseline）→ W7-U。
+- **Wave 3 必讀的成本警告（不變）**：退掉 `AutoCylinder*` 三個 `{return true;}` stub 的成本不是 627 行抄寫，而是**行為反轉 + 強制 re-baseline**——golden `AutoCylinderUp` case 100 接受「mid 汽缸 disabled 時回 true」為成功，case 201 的 non-ART 守衛卻要求**原始** `OnStatus()`（disabled 時為 false），所以預設離線全 disabled 配置下真實 SM 會 `1→50→100→200→201→1` 永不收斂。**退 stub 等於把「總是瞬間成功」換成「永遠不成功」。**
+- **勿圈入 V906 commit**：`config/*`、`setup.inf`、`.pti_frames/`、repo 根的 `SCRATCH_*.txt`/`_review_*.diff`/`build_*` 產物、ported tree 內三個 `*_test_scratch/`，以及 `HT9011UC_Code_V3.33.899.0_.../CosFunction.cpp`（使用者自己的 V899 工作）。
+- **執行模式**：使用者指示持續有效——全部 cpp/h/dfm 都要翻、workflow 火力全開、不逐波停下請示、重大問題跳過並最後條列；model/effort 依任務性質自動切換；安裝軟體不必先問。

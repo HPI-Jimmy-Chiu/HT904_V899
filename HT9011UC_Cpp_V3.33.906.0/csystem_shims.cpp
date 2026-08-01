@@ -101,7 +101,9 @@ void DoOutArm()
 //  DoSortArm-- golden asortarm.cpp:349 (9046AU sort-arm).  USE_OUT_SORT_ARM
 //  defaults eartUninstall so the HUB never calls it; offline no-op.
 // ===========================================================================
-void DoLoad()    {}
+// DoLoad: RETIRED BODY (W7-L1 Wave 1 "Loader") -- real body now in
+// asendic_Loader.cpp.  Declaration kept in the header: csystem.cpp calls it
+// through csystem_shims.h and the two signatures are identical.
 void DoSortArm() {}
 
 // ===========================================================================
@@ -114,11 +116,14 @@ void SetFixTrayMiddleDtata() {}
 //  InitAllProcessTask() leaves with no translated home -- offline cursor/flag
 //  resets (the engines own the rest).
 // ===========================================================================
-void InitLoadTask()                  {}   // golden asendic_Loader.cpp
+// InitLoadTask: RETIRED BODY (W7-L1 Wave 1 "Loader") -- real body now in
+// asendic_Loader.cpp (golden).  Behaviourally inert: the only ported caller is
+// asendic_Loader.cpp's own case 1400.
 void InitOutArmTask()                {}   // golden aoutarm.h:34 (file-local static in aoutarm9045.cpp; this global is the linkable one InitAllProcessTask calls)
 void InitialDoLockUnloader(int /*iAuto*/) {}  // golden csystem.h:258 -- unloader lock cursor reset (real body W7)
 void Initial_Auto_BinTray_Task(int /*iAuto*/) {}  // golden asendic_*.cpp -- per-auto bin-tray cursor reset
-void InitAutoColorTask()             {}   // golden asendic_Color.cpp
+// InitAutoColorTask: RETIRED BODY (W7-L1 Wave 1 "Color") -- real body now in
+// asendic_Color.cpp (golden asendic_Color.h:15).
 void InitialAuto3MagazineTask()      {}   // golden Magazine SM
 void InitialCatchTrayChangeTray()    {}   // golden Magazine SM
 void InitialCatchTrayGetNewTray()    {}   // golden Magazine SM
