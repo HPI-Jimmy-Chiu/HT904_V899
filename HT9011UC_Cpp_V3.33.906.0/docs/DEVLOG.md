@@ -2460,3 +2460,75 @@ banner 寫「本樹唯一呼叫端是 `tests/test_SCK_ART_Remainder.cpp` **PART 
 - **仍未觸及**：`uHGemClass.cpp` 剩 1 個 gated（`S7F20_CurrentEPPDData`，需 `TDirectoryListBox` 等價元件）；`SECSGEM/uHGemEquipment.cpp` `DoTraceDataResponse`；`MainCalcCore` 15 個函式後續批次；閘 4 的 U+FFFD 三檔（**現在是全樹唯一擋著閘 4 轉綠的東西**，且 ported/golden **行號不對齊**，見 KNOWLEDGE）。
 - **勿圈入 V906 commit**：`config/*`、`setup.inf`、`.pti_frames/`、repo 根的 `SCRATCH_*.txt`/`_review_*.diff`/`build_*` 產物、ported tree 內三個 `*_test_scratch/`，以及 `HT9011UC_Code_V3.33.899.0_.../CosFunction.cpp`（使用者自己的 V899 工作）。
 - **執行模式**：使用者指示持續有效——全部 cpp/h/dfm 都要翻、workflow 火力全開、不逐波停下請示、重大問題跳過並最後條列；model/effort 依任務性質自動切換；安裝軟體不必先問。
+
+---
+
+## 2026-08-02 — **W7-L3 + W7-L4**：`cSiteUseManager` 整檔 + `CopyOSTestResult`，以及一次「翻譯對了、但測試是空的」的攔截
+
+兩條戰線同波（`wf_7ca42618-647`），各自獨立 build 目錄（同一顆 `ht9045_sm` 不能兩個 process 同時編）。**主迴圈先序列落 Wave-0 seam**：兩個 ctest target + 兩個刻意回報 `0 PASS / 0 FAIL` 的佔位測試檔（不是假綠），讓兩個 agent 從第一次編輯就能 build+run，**完全不必碰 `tests/CMakeLists.txt`**——那正是本 repo 出過孤兒 git stash 事件的檔案（plan §8）。測試總數 115 → 117。
+
+### W7-L3 — `cSiteUseManager` 整檔（clean）
+
+29 行 offline shim → **675 行**，**24/24 golden 成員**（主迴圈以 golden 符號表獨立比對，零遺漏）。原本的 shim 只蓋 5 個成員且全是常數/no-op——**那就是全樹一直在拿的行為**，所以「shim 也會通過的斷言」等於沒測；測試因此每一條都設計成 shim 答錯至少一個 fixture。111 條斷言、零 `||`。
+
+**譯者自行提出並釘住 10 個 golden quirk（Q1–Q10）**，其中最有價值的是 **Q5**：`WillExceedMotorLimit(int,int,int)` 三個參數全不看、恆回 `false`，golden 自己的註解寫明 20260407 因 `iPitchSpan=iXpitchMaxX3` 太保守而**刻意停用**。於是每一個讀起來像軟體極限保護的呼叫端其實都是空的——`CompactSearchPlateToPlace` 裡的 `continue` 不可達、`CanAnyNozzleReachHP` 退化成「有沒有任一試過的盤沒滿」、診斷的 motorSkip 計數器結構上恆 0、grid dump 的 `M` 字元永不出現。**譯者保留停用狀態、沒有「順手把它做完」**，並把這四個結構性後果全部寫成斷言。
+
+**它拒絕接受自己的 full-neuter 突變當充分證明**——原話是 M1 的常數恰好與某些正確答案重合，所以單靠 full neuter 不足以證明、它不會假裝足夠。於是另做 16 點定向反轉 M2。
+- baseline **111 PASS / 0 FAIL**
+- M1 全 neuter → **34 PASS / 77 FAIL**
+- M2 定向反轉 → 另一組紅
+
+**主迴圈據其 integrator request 修掉一個真 ODR 違規**：`ainarm9045_1x4_4.cpp:96-108` 自帶一個 member-less 的 `class cSiteUseManager` facade（`#ifndef cSiteUseManagerH` 包住）且從不 include 真標頭。真 class 這波長出兩個 private bool 後，兩份宣告**真的不一致**了。它今天還能連結，純粹因為那個 TU 只對 `extern SiteUseMgr` 做非虛擬呼叫、從不 size/copy/construct 它。**原作者早就在 `:93-94` 的註解裡寫好解法**（「`#ifndef` guard 會在 Integrate 加入真標頭時自動collapse」），主迴圈確認兩邊 guard 巨集同名（ported `cSiteUseManager.h:45`／golden `:3`）後補上 `#include`，並保留原 facade 文字不動以維持可追溯。實測 `W6_2_InArmCanary` / `W6_2c_InArmVariantsBatch3` / `W7_L3_SiteUseMgr` 三支全過。
+
+另修一個 LOW（獨立複驗抓到、主迴圈回 golden 複核成立）：Q10 引用 `:422/:335` 差兩行，真正的 `bool bDualPlate = (HotPlateForm.iPlateSelect == 0x03);` 在 golden `:420/:333`（`:422/:335` 是後面那兩行 `for`）。
+
+### W7-L4 — `CopyOSTestResult`：**翻譯一次就對，測試被打回重做**
+
+翻譯本體 fidelity **PASS**：golden `:660-697` 38 行逐字，兩個 golden quirk 都保留（SOFT_SIMULTE 的 FailPin 分支沿用非 FailPin 的來源檔名；兩次 `CopyFile` 寫到**同一個**目標檔名，所以第二次靜靜蓋掉第一次）。
+
+**但它的獨立複驗軌根本沒跑**——翻譯 agent 的 StructuredOutput 連續 5 次失敗、回傳 null，`pipeline` 於是把整條下游跳過。**檔案全都在磁碟上，工作流卻回報成錯誤。** 主迴圈以 `git status` 對帳發現落差後補派複驗（`wf_c8e52ff4-545`）——而那正是本波最關鍵的一步：
+
+複驗跑了三個突變，**兩個完全沒被抓到**：
+
+| 突變 | 重做前 |
+|---|---|
+| A 整支 neuter | 3 → **0 PASS / 3 FAIL** ✅ |
+| B 拿掉 golden 的 `-1`（`iTesterCh = GetSiteNo()-1` → `GetSiteNo()`） | **3 PASS / 0 FAIL，未偵測** ❌ |
+| C 拿掉存在性 guard，讓 `CopyFile` 無條件執行 | **3 PASS / 0 FAIL，未偵測** ❌ |
+
+B 是真的生產迴歸——每一個產出的 `Device<contact>_<ch>.TXT` 檔名與 tester channel 歸屬都會差一。**根因**：這台機器沒有 `Z:` 磁碟，`CheckFileExist("Z:\Device<N>.TXT")` 不管 N 對不對都是 false，`CopyFile` 永不觸發，斷言兩邊皆真。**更糟的是該測試檔自己的註解明文宣稱會抓到這兩種情況**（檔頭說每條 counted CHECK 都是「gate 關→無副作用」AND「gate 開→副作用真的發生」的合取；`:210-212` 說若 CopyFile 被無條件呼叫「這一半會自己變 false」）——被實驗直接否證。它還每跑一次就在 `D:\HT9045_Log\`（真的生產 log 樹，裡面是真機台資料夾、mtime 到 2026-07-31）建一個資料夾。
+
+**重做（`wf_8c4fa461-06f`）**：把既有 `Gated_*` 接縫改成**可觀測**，沿用本專案既有慣例（`SCK_ART_Remainder.cpp` 的 `W5SckArtRem_LastShellExecuteOpenPath`）——三個 TU-local seam 記錄每次呼叫的引數，並支援測試安裝 hook；**沒安裝 hook 時原樣呼叫真函式**。這讓測試能釘住**目標檔名字串本身**，而那正是 `iContactIndex`/`iTesterCh`（因而 golden 的 `-1`）唯一會現形的地方。3 → **21 條斷言**，四個突變全紅：
+
+| 突變 | 重做後 |
+|---|---|
+| A 整支 neuter | **8 PASS / 13 FAIL** |
+| B 拿掉 `-1` | **13 PASS / 8 FAIL**（PART4c 直接釘檔名：期望 `...Device000123_06.TXT`，突變體產出 `..._07.TXT`） |
+| C 拿掉 guard | **16 PASS / 5 FAIL** |
+| **C2**（rework agent 自己加的更難變體） | **19 PASS / 2 FAIL** |
+
+**C2 值得單獨記**：它自己發現「C 的字面刪除同時也刪掉一次 probe，所以會被 probe 計數抓到、而不是被 guard 本身抓到」，於是另做一個**保留 probe、只丟棄其回傳值**的變體，唯一差異就是那次無條件 copy——確保釘住的真的是 guard。
+
+**它也更正了自己重寫後版本的宣稱**：沒有沿用「每一條都會紅」，而是實測後寫明 PART1a/2a/3d 與五條 PART7 在 neuter 下**合理存活**（前三者是「所以什麼都沒被記錄」，對空 body 恆真；PART7 測的是 seam 不是 body），並把 21/0 對 8/13 的數字直接寫進檔頭。**四項舊的不實宣稱全部刪除而非軟化。**
+
+**主動揭露、主迴圈接受的兩個取捨**：(L5) seam 在生產路徑也會無條件記錄幾個 file-scope 變數——無 I/O、無控制流影響、生產端無人讀，但不是零差異，它拒絕假裝是；(L6) 三個 `W7L4TesterTCP_Prove*Seam` 是 test-only 匯出符號卻放在生產檔裡，是「用實驗證明 pass-through」的代價。兩者都記在檔內。
+
+它還清掉了自己前一版 baseline run 在 `D:\HT9045_Log\OSTestResult` 留下的空資料夾。**主迴圈獨立確認**：該資料夾現在不存在；`W7L4TesterTCP_` 符號全樹只出現在那 3 個檔案（無生產外洩）；`-1` 與兩個 guard 都在；零突變殘留。
+
+### 驗收（主迴圈親跑，fresh from-scratch，§12 閘 1）
+
+- configure + build **exit 0**、`error:` **0**、`grep -ic resolving` **0**、警告 **289**（基準 289，**+0**），且 `cSiteUseManager` 與 `TesterTCP` 兩個 TU **各自貢獻 0 個警告**。
+- 完整 `ctest --timeout 300 -j4` = **113/117**、882s（測試總數 115→117），失敗恰為既有 4 個環境漂移。**零迴歸。**
+- `W7_L3_SiteUseMgr` **111 PASS / 0 FAIL**；`W7_L4_CopyOSTestResult` **21 PASS / 0 FAIL**。
+- 閘 4：**scanned 1462 file(s); 3 violation(s)**——恰為既有 U+FFFD 三檔，未惡化。
+
+### 🔖 RESUME（最新）
+
+- **本場次已 commit 五顆**：`d7a3633`（gate 4 換行半部 + `.gitattributes`）、`5132856`（四路 recon）、`7e2e809`（SCK_ART `SaveMultiLotTestSummary`）、`3fcda93`（四項 ROADMAP 更正）、本波（W7-L3 + W7-L4）。
+- **驗證基準**：fresh build exit 0 / ctest **113/117** / 測試總數 **117** / 警告 **289** / 閘 4 **3 violations**（只剩 U+FFFD 三檔）。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 `fix/v899.32-pti`。
+- **⚠ 接續第一件事是 `git status`，不是讀本 RESUME。** 本場次開場就靠這個撿到 1,049 行沒人知道的在製工作。**新增第二條**：workflow 若回報某個 agent 失敗（StructuredOutput retry cap），**不代表它沒做事**——檔案可能已落地、而下游整段被跳過（本波 L4 就是這樣失去獨立複驗，補派後才抓到測試是空的）。一律用 `git status` 對帳，degenerate 回傳（例：summary 只有一個字）要算未交付。
+- **下一波：W7-L2 `ckernel.cpp`**（新檔，0%）。可落地 **1,433 行**（1,479 扣掉硬卡的 `ProcessAlarm` 29 + 軟卡的 `DoSystemMessage` 17）。**必須單一 agent**（golden 是單一檔，多 agent 會撞同一個 `ckernel.cpp`）。**開工前需主迴圈序列做兩件 integrator-owned 前置**：(1) `ckernel.cpp` 是新檔，要加進根 `CMakeLists.txt` 的 `ht9045_sm`；(2) recon 指出的 dependency item B.4 要落在 `canary_support.{h,cpp}`（note.cpp 三個自由函式、`MyDBIProcessNew`、十個 LastSet vacuum-dummy 欄位）——**該檔被 123 個 TU include，只能由 integrator 寫，且改動會觸發全樹重編**。另 `ScanSystemSensor` 在 ported `csystem.cpp` **沒有**預留呼叫點（plan 引的 `:16894` 是 golden 行號；ported 的整條 ladder 是 `:415-418` 的三行 `#if 0`），呼叫點要由 integrator **新建**而非填入。
+- **其後**：W7-U0/C5（`HT9045_UI` 未定義卻已被 `build_msvc.bat:90` 傳入，補上並預設 OFF；建議首個表單 `fShowMessage`）。
+- **仍未觸及**：`uHGemClass.cpp` 剩 1 個 gated（`S7F20_CurrentEPPDData`）；`SECSGEM/uHGemEquipment.cpp` `DoTraceDataResponse`；`MainCalcCore` 15 個函式；閘 4 的 U+FFFD 三檔（**全樹唯一擋著閘 4 轉綠的東西**，且 ported/golden 行號不對齊，見 KNOWLEDGE）；`PlaceOSTestResultToTray`（歸 W7-U，見 ROADMAP 更正）。
+- **勿圈入 V906 commit**：`config/*`、`setup.inf`、`.pti_frames/`、repo 根的 `SCRATCH_*.txt`/`_review_*.diff`/`build_*` 產物、ported tree 內三個 `*_test_scratch/`，以及 `HT9011UC_Code_V3.33.899.0_.../CosFunction.cpp`（使用者自己的 V899 工作）。
+- **執行模式**：使用者指示持續有效——全部 cpp/h/dfm 都要翻、workflow 火力全開、不逐波停下請示、重大問題跳過並最後條列；model/effort 依任務性質自動切換；安裝軟體不必先問。

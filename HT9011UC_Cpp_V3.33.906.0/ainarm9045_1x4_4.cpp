@@ -86,12 +86,28 @@
 #include "acatchtray_shims.h"        // InitProcessSingleMotorTask / MoveInArm2XYToWait / InShtInLF / InSHT1InLF / InSHT2InLF / CheckOneCycleAction
 #include "ainarm9045_2x4_16_shims.h"// InitInArmTryPickFromHotPlateTask100 / AdjustShuttlePlaceOrder_AutoSiteMapping / MyTickCount / fYieldMonitoring / iInposLed
 #include "canary_support.h"         // ShowErrorMessage / ShowMyMessage / RecordProcess / LastSet / __FUNC__ / K_RETRY / Tempture_Hot / REALLY
+// AI(W906-W7-L3-integrate) 20260802: THIS is the "when Integrate adds the real
+// cSiteUseManager.h" step the banner below was written in anticipation of, and it is
+// now load-bearing rather than cosmetic. W7-L3 replaced the 29-line offline shim with
+// the full 24-member golden translation, and the real class carries two private bool
+// members (m_bInited / m_bUseCompactSearch) that the guarded facade below does NOT --
+// so from this wave onward the two declarations of `class cSiteUseManager` genuinely
+// disagree, which is an ODR violation. It happens to link today only because this TU
+// makes non-virtual calls on the extern SiteUseMgr and never sizes, copies or
+// constructs it. Including the real header first defines cSiteUseManagerH, so the
+// facade below collapses to nothing exactly as its author intended (verified: both
+// headers use the same guard macro -- ported cSiteUseManager.h:45, golden
+// cSiteUseManager.h:3). The facade text is deliberately left in place, unmodified, so
+// the anticipation and its resolution stay legible to the next reader.
+#include "cSiteUseManager.h"        // real 24-member class + extern SiteUseMgr (W7-L3)
 
 // -----------------------------------------------------------------------------
 //  SUBSTRATE FORWARD DECLARATION (REPORTED -- see header banner): cSiteUseManager
 //  / SiteUseMgr are not yet in the target.  This guarded minimal facade lets the
 //  TU compile standalone; the #ifndef cSiteUseManagerH guard makes it collapse
 //  when Integrate adds the real cSiteUseManager.h.  AI(W6.2c-1x4_4) 20260626.
+//  AI(W906-W7-L3-integrate) 20260802: that has now happened -- see the include added
+//  directly above. Everything between the #ifndef and #endif below is dead from here on.
 // -----------------------------------------------------------------------------
 #ifndef cSiteUseManagerH
 #define cSiteUseManagerH

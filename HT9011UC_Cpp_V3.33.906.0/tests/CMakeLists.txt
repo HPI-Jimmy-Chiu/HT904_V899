@@ -2722,6 +2722,58 @@ endif()
 add_test(NAME W7_F2_SckArtState COMMAND test_w7_f2_sckart_state)
 
 # ===========================================================================
+#  W7-L3 / W7-L4 Wave 0 -- test seam landed by the serial integrator BEFORE the
+#  translation agents run
+# ===========================================================================
+# AI(W906-W7-L34-Wave0) 20260802: these two targets are created up front, against
+# placeholder test bodies, so that the two parallel translation agents can each
+# build and RUN their own suite immediately instead of having to edit this file.
+# tests/CMakeLists.txt is a MERGE-AT-INTEGRATE file (plan S8) and two agents
+# appending to it concurrently is exactly the shape that produced this repo's
+# orphaned-git-stash incident -- so the integrator lands the seam once, serially,
+# and the agents own ONLY their own .cpp.
+#
+# Neither translated unit needs a new entry in the root CMakeLists.txt: both
+# cSiteUseManager.cpp (root CMakeLists.txt:1241) and Interface/TesterTCP.cpp
+# (root CMakeLists.txt:1388) are ALREADY sources of ht9045_sm. Verified this wave
+# by grep, not inherited from a doc.
+#
+# Same RESCAN link map as test_w7_l1_auto2 above, and for the same reason: the
+# units live in ht9045_sm and GNU ld needs to re-scan the archive set so the
+# cprod<->cpublic<->cmydef ctor cross-references settle.
+#
+# Both are placed ABOVE the GLOBAL TEST TIMEOUT block -- a test registered after
+# that block silently gets no timeout, which is how a wedged run goes unnoticed.
+
+add_executable(test_w7_l3_siteusemgr
+    test_w7_l3_siteusemgr.cpp
+)
+
+target_link_libraries(test_w7_l3_siteusemgr PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w7_l3_siteusemgr PRIVATE ws2_32)
+endif()
+
+add_test(NAME W7_L3_SiteUseMgr COMMAND test_w7_l3_siteusemgr)
+
+add_executable(test_w7_l4_copyostestresult
+    test_w7_l4_copyostestresult.cpp
+)
+
+target_link_libraries(test_w7_l4_copyostestresult PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w7_l4_copyostestresult PRIVATE ws2_32)
+endif()
+
+add_test(NAME W7_L4_CopyOSTestResult COMMAND test_w7_l4_copyostestresult)
+
+# ===========================================================================
 #  GLOBAL TEST TIMEOUT -- must stay at the BOTTOM of this file
 # ===========================================================================
 # AI(W906-TestBootstrap) 20260728: second line of defence behind
