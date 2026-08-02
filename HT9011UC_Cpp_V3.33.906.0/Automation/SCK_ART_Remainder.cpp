@@ -193,13 +193,15 @@ static int  W5SckArtRem_LS_iHdPickUp           = 0;           // golden LastSet.
 W5SckArtRem_LotSummaryStub W5SckArtRem_LotSummary = {};
 void W5SckArtRem_LotSummaryStub::ClearAllData()
 {
-    // golden cSocket.cpp:754-763 -- PARTIAL: only the 3 fields this wave's calc-core reads
-    // (iCountCategory/iTotalCategory/iLoadTotal) are zeroed here. Golden's real body ALSO zeroes
-    // iLastTotalCategory + 3 file-scope E1/E2/E3 error counters -- still untranslated/unconsumed by any
-    // code in this tree (same "not added, no consumer yet" judgment call the ORIGINAL gate #5 note
-    // already made for this whole stub). iByLotLoadCount[5] is also left untouched here, matching
-    // golden's OWN ClearAllData() body, which never touches it either (golden zeroes iByLotLoadCount[]
-    // separately, element-by-element, only from ClearLotInfo :918).
+    // golden cSocket.cpp:754-763 -- PARTIAL: the 3 stub fields this wave's calc-core reads
+    // (iCountCategory/iTotalCategory/iLoadTotal) are zeroed here, plus (see below) the 3 file-scope
+    // E1/E2/E3 error counters. The ONE thing still unmatched vs golden is `iLastTotalCategory`
+    // (golden cSocket.cpp:758, `ZeroMemory(iLastTotalCategory, sizeof(iLastTotalCategory));`): the stub
+    // struct (this header) has no such member and, re-verified this wave, nothing in this tree reads or
+    // writes it -- same "not added, no consumer yet" judgment call the ORIGINAL gate #5 note made for
+    // the whole stub, now narrowed to just this one field. iByLotLoadCount[5] is also left untouched
+    // here, matching golden's OWN ClearAllData() body, which never touches it either (golden zeroes
+    // iByLotLoadCount[] separately, element-by-element, only from ClearLotInfo :918).
     for(int i=0; i<MAX_SOCKET_ROW*MAX_SOCKET_COL; i++)
         for(int j=0; j<TEST_MAX_BIN; j++)
             iCountCategory[i][j]=0;
@@ -209,6 +211,19 @@ void W5SckArtRem_LotSummaryStub::ClearAllData()
     // iLoadTotal; matched here now that SaveTestSummaryTSV is a real reader (see the header struct's own
     // comment on this field).
     iLoadTotal=0;
+    // AI(W906-SCKART-Multi) 20260802: gate #5 5th extension -- golden cSocket.cpp:760-762 also zeroes
+    // iE1Count/iE2Count/iE3Count immediately after iLoadTotal. These are NOT stub-struct members: they
+    // are the SAME real, already-translated globals declared `extern int iE1Count/iE2Count/iE3Count` at
+    // ported cmydef.h:5427-5429 and defined at ported cmydef.cpp:5432-5434 (verified this wave), already
+    // read/written directly by name elsewhere in this file (e.g. the reset block at golden :3505-3521
+    // and the gate at golden :2069, ported at this file's :2858, inside
+    // SckArtRem_SaveMultiLotTestSummary, which checks `iE1Count==0 && iE2Count==0 && iE3Count==0`).
+    // Before this wave that gate's "was this counter left over from before ClearAllData() ran"
+    // semantics diverged from golden across repeated calls in one process, because this stub's
+    // ClearAllData() left them untouched while golden's real one zeroes them every time -- now matched.
+    iE1Count=0;
+    iE2Count=0;
+    iE3Count=0;
 }
 #define W5SCKARTREM_LOTSUMMARY_ITEM(i)                 W5SckArtRem_LotSummary.iByLotLoadCount[i]
 #define W5SCKARTREM_LOTSUMMARY_COUNTCATEGORY(site,bin) W5SckArtRem_LotSummary.iCountCategory[site][bin]   // golden LotSummary.iCountCategory[site][bin]
@@ -216,6 +231,13 @@ void W5SckArtRem_LotSummaryStub::ClearAllData()
 #define W5SCKARTREM_LOTSUMMARY_CLEARALLDATA()          W5SckArtRem_LotSummary.ClearAllData()              // golden cSocket.cpp:754-763 -- NOW REAL (partial), see gate #5 [UPDATE] above
 #define W5SCKARTREM_LOTSUMMARY_BISRTBIN(bin)           W5SckArtRem_LotSummary.bIsRTBin[bin]                // golden LotSummary.bIsRTBin[bin] -- gate #5 [UPDATE 2], AI(W906-Save2DSortingSummary) 20260723
 #define W5SCKARTREM_LOTSUMMARY_LOADTOTAL               W5SckArtRem_LotSummary.iLoadTotal                   // golden LotSummary.iLoadTotal -- gate #5 [UPDATE 3], AI(W906-SaveTestSummaryTSV) 20260728
+// AI(W906-SCKART-Multi) 20260802: gate #5 4th extension -- the 2 per-lot mirrors golden
+// SaveMultiLotTestSummary reads (golden cSocket.h:139-140). Golden's OWN ClearAllData()
+// (cSocket.cpp:754-763) does NOT zero either of them, so the stub's ClearAllData() is NOT extended --
+// same reasoning gate #5 [UPDATE 2] already recorded for bIsRTBin (and the OPPOSITE of [UPDATE 3]'s
+// iLoadTotal, which golden's ClearAllData DOES zero at cSocket.cpp:759).
+#define W5SCKARTREM_LOTSUMMARY_BYLOTCOUNTCATEGORY(lot,site,bin) W5SckArtRem_LotSummary.iByLotCountCategory[lot][site][bin]   // golden LotSummary.iByLotCountCategory[lot][site][bin] -- gate #5 [UPDATE 4]
+#define W5SCKARTREM_LOTSUMMARY_BYLOTTOTALCATEGORY(lot,bin)      W5SckArtRem_LotSummary.iByLotTotalCategory[lot][bin]         // golden LotSummary.iByLotTotalCategory[lot][bin]      -- gate #5 [UPDATE 4]
 
 // ---- Gate #6: fTesterTCP->ProcessOSPrint() (golden Automation/TesterTCP.h/.cpp, untranslated) -----
 #define W5SCKARTREM_FTESTERTCP_PROCESSOSPRINT()   do { } while(0)   // golden fTesterTCP->ProcessOSPrint()
@@ -931,7 +953,8 @@ void SckArtRem_SaveTestSummarySECS(SckArtRemainderState &st, int iSaveData)     
 
     PathName2.sprintf("%s\\%04d\\%02d\\", asSummaryPath, SystemYear, SystemMonth);    //Steven 20230215 : 存檔路徑加上年月
     // AI(W906-SaveTestSummarySECS) 20260721: REAL MyForceDirectories(AnsiString,AnsiString="") (common.h
-    // :321/common.cpp:1648, un-gated by a SEPARATE same-day AI(W906-CommonWaveFile) pass) -- NOT gate
+    // :341/common.cpp:1806 -- AI(W906-SCKART-Multi) 20260802: corrected from a stale :321/common.cpp
+    // :1648, un-gated by a SEPARATE same-day AI(W906-CommonWaveFile) pass) -- NOT gate
     // #1's TU-local stand-in (which SckArtRem_SetSetupFilePath above still uses; retargeting that is out
     // of THIS wave's scope). Golden's own 2-arg call shape preserved verbatim.
     MyForceDirectories(PathName2, "TfSCKART::SaveTestSummarySECS");
@@ -2780,4 +2803,864 @@ void SckArtRem_SaveSummaryTrayFeed(SckArtRemainderState & /*st*/)
     delete sListFail;
     slExe->Clear();
     delete slExe;
+}
+
+// =============================================================================
+//  14. SaveMultiLotTestSummary -- golden TfSCKART::SaveMultiLotTestSummary(bool)
+//      (SCK_ART.cpp:2045-2803).  AI(W906-SCKART-Multi) 20260802.
+//
+//  *** ZERO PRODUCTION CALLERS IN THIS TREE -- read this before counting refs ***
+//  Golden has exactly ONE caller in the entire 906 source tree: csystem.cpp:10862,
+//  `fSCKART->SaveMultiLotTestSummary(true);`, inside `DoTrayFeedProcess()` (golden
+//  csystem.cpp:10425), behind `if(IniConfig.bVTESTFunction==false)` and then
+//  `if(fSCKART->iInfo_MultiLotCnt>1)` (golden :10858-10863; the `else` arm calls
+//  SaveTestSummary(1) instead).  Re-verified THIS wave by a byte-level grep over EVERY file in
+//  the golden tree -- not just .cpp/.h, and not inheriting the earlier "sole caller" claim:
+//  4 textual hits total, namely that call, this definition, this body's own
+//  MyForceDirectories tag string (:2082) and the SCK_ART.h:301 declaration.  Nothing else.
+//  DoTrayFeedProcess is NOT translated in this tree (grep: csystem.cpp carries the name only
+//  inside comments).  The gate that would make this function reachable is csystem.cpp's
+//  MainProc `#if 0 // TODO(W7)` block -- the golden :16730-19101 mode/SECS/AGV/temp dispatch
+//  ladder, of which DoTrayFeedProcess is one rung -- and that block is owned by wave W7.
+//  Until W7 lands it, the ONLY caller of this function anywhere in this tree is
+//  tests/test_SCK_ART_Remainder.cpp PART 14.  Do NOT wire an invented production call site to
+//  flatter the reference count: that would be the defect, not the fix.
+//
+//  See SCK_ART_Remainder.h's own doc comment on this declaration for the full dependency
+//  verification, the 10 golden bugs preserved verbatim (each also cited inline at its own site
+//  below -- AI(W906-SCKART-Multi) 20260802: corrected from a stale "9" this wave; re-counted
+//  directly from the "GOLDEN BUG #" tags below: 1, 2(a), 2(b), 3, 4, 5, 6, 7, 8, 9, 10, i.e. 10
+//  numbered bugs with #2 split into two related sub-manifestations (a)/(b) -- matches
+//  SCK_ART_Remainder.h:1287's own count, which was already correct) and the 4 dead golden locals
+//  dropped.
+// =============================================================================
+void SckArtRem_SaveMultiLotTestSummary(SckArtRemainderState &st, bool bSaveData)
+{
+    AnsiString FileName, PathName, PathName2, Str="", Str1="", Str2, strPath, strFileName="", str3="";
+    int iCount=0, iUnloadCount=0;
+    bool bResult=false;
+    // AI(W906-SCKART-Multi) 20260802: GOLDEN BUG #1 preserved VERBATIM (golden :2051-2054) --
+    // `sLotID1` is computed here (including the Steven-20230317 "avoid an empty lot ID" fallback
+    // onto fLotInfo->edtSysLotID->Text) and then NEVER READ AGAIN anywhere in the function: this
+    // report builds every file name and every header line out of st.sInfoArr_*[k] instead. The
+    // fallback is therefore INERT here, unlike in the sibling SaveTestSummaryTSV (golden :2814-2819)
+    // where the identical lines DO feed FileName.sprintf(). Kept verbatim -- these are executed
+    // statements, not a bare unused declaration, so they are NOT in this function's
+    // dropped-dead-locals list (see its header doc comment). NOT "cleaned up".
+    AnsiString sLotID1=st.sLotID;
+
+    if(sLotID1=="" && fLotInfo->edtSysLotID->Text!="")                          //Steven 20230317 : 避免lot ID是空值
+        sLotID1=fLotInfo->edtSysLotID->Text;
+
+    bool bHaveBinData=false;
+    int temp;
+    AnsiString aUnloader[eTrayCount];
+    // AI(W906-SCKART-Multi) 20260802: GOLDEN BUG #2(a) preserved VERBATIM (golden :2059-2062) -- the
+    // brace initialiser supplies 32 zeros for an eTrayCount-sized array, and eTrayCount is 33
+    // (MachineType.h e6TrayName, last enumerator eMag14=32, added JerryYang 20220909). Benign on its
+    // own (element 32 is value-initialised anyway) but it is the marker for 2(b) below: the
+    // per-iteration reset at :2074-2077 was never widened either. Initialiser left exactly as golden.
+    int iUnloadCnt[eTrayCount]={0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                0, 0};
+    GetTimeInfo();
+
+    st.sLotEndTime.sprintf("%04d%02d%02d%02d%02d%02d", SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec);
+
+    for(int k=0; k<=st.iInfo_MultiLotCnt; k++)
+    {
+        // AI(W906-SCKART-Multi) 20260802: GOLDEN BUG #3 preserved VERBATIM (golden :2069-2072) --
+        // this is `return`, not `break`. On the final (combined-summary) iteration with all four
+        // error counters at zero it abandons the WHOLE function, so the unconditional
+        // LotSummary.ClearAllData() at golden :2802 never runs and this lot's bin counts survive
+        // into the next lot. A `break` would have run it. NOT "fixed".
+        if(k==st.iInfo_MultiLotCnt && iE1Count==0 && iE2Count==0 && iE3Count==0 && iENotDefinedCount==0)
+        {
+            return;
+        }
+
+        // AI(W906-SCKART-Multi) 20260802: GOLDEN BUG #2(b) preserved VERBATIM (golden :2074-2077) --
+        // only the first 9 of eTrayCount(=33) per-tray unload counters are cleared between lots, so
+        // slots 9..32 (eFix4..eMag14) ACCUMULATE across every k iteration: with more than one lot,
+        // the Group Bin Summary printed for lot #2 reports lot#1+lot#2 for any bin routed to one of
+        // those trays. Loop bound left at the literal 9, NOT widened to eTrayCount.
+        for(int i=0; i<9; i++)
+        {
+            iUnloadCnt[i]=0;
+        }
+
+        iUnloadCount=0;
+
+        PathName2.sprintf("%s\\%04d\\%02d\\", asSummaryPath, SystemYear, SystemMonth);    //Steven 20230215 : 存檔路徑加上年月
+        MyForceDirectories(PathName2, "TfSCKART::SaveMultiLotTestSummary");
+
+        if(MachineTypeChoice==Type_HT9045 ||
+           MachineTypeChoice==Type_HT9045_12Site)                               //JerryYang 20230322 : SPIL 2D SORT summary修改
+            st.sInfo_ProgramName="HT9045";
+        else if(MachineTypeChoice==Type_HT9046)
+            st.sInfo_ProgramName="HT9046";
+        else if(MachineTypeChoice==Type_HT9046_LS)
+            st.sInfo_ProgramName="HT9046LS";
+
+        if(k==st.iInfo_MultiLotCnt)
+        {
+            Str="";
+            for(int i=0; i<st.iInfo_MultiLotCnt; i++)
+            {
+                Str+=st.sInfoArr_InnerLotID[i];
+            }
+            FileName.sprintf("%s_%04d%02d%02d%02d%02d.txt", Str, SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin);
+        }
+        else
+        {
+            FileName.sprintf("%s_%s_%s_%04d%02d%02d%02d%02d.txt", st.sInfoArr_InnerLotID[k], st.sInfoArr_CustLotID[k], st.sInfoArr_CustDevGup[k], SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin);
+        }
+
+        // AI(W906-SCKART-Multi) 20260802: GOLDEN BUG #4 preserved VERBATIM (golden :2106-2107) -- the
+        // bSaveData==false early-out sits AFTER st.sLotEndTime has been overwritten (:2065), AFTER
+        // MyForceDirectories has already created the year/month folder (:2082) and AFTER
+        // st.sInfo_ProgramName has been reassigned (:2084-2090). So "do not save" still mutates state
+        // and still touches the filesystem. It is also `return`, not `break`, so ClearAllData() at
+        // :2802 is skipped too. NOT hoisted to the top of the function.
+        if(bSaveData==false)
+            return;
+
+//        TStringList *sIPList=new TStringList();
+        TStringList *sList=new TStringList();
+
+    //Lot_id:       0000C912X8Z.0100#
+    //Handler ID:   H-xxxx
+    //Handler IP:   255.255.255.255
+    //DCC:          NONE
+    //TEST_OPR:     FT1
+    //RT_CODE:      1
+    //TEMP:         25
+    //Hostname:     k3tv9369
+    //Total_Inqty:  86
+    //
+    // ========================================================================
+    // =========================  Hard Bin Summary  ===========================
+    // ========================================================================
+    // Hard P/F  Site1 Site2 Site3 Site4 Site5 Site6 Site7 Site8 Total  Yield
+    // ---- ---- ----- ----- ----- ----- ----- ----- ----- ----- ----- --------
+    //    1 PASS     0     0     0     0    40    41     0     0    81  94.186%
+    //    5 FAIL     0     0     0     0     0     2     0     0     2   2.326%
+    //    6 FAIL     0     0     0     0     3     0     0     0     3   3.488%
+    // ========================================================================
+        if(k==st.iInfo_MultiLotCnt)
+        {
+            Str1="";
+            for(int i=0; i<st.iInfo_MultiLotCnt; i++)
+            {
+                if(i==st.iInfo_MultiLotCnt-1)
+                {
+                    Str1+=st.sInfoArr_Customer[i];
+                }
+                else
+                {
+                    Str1=Str1+st.sInfoArr_Customer[i]+"_";
+                }
+            }
+            Str.sprintf("CUSTOMER:%s", Str1);                                   //JerryYang 20230322 : SPIL 2D SORT summary修改
+            sList->Add(Str);
+            Str.sprintf("ASSEMBLY SITE:SPIL");
+            sList->Add(Str);
+
+            Str1="";
+            for(int i=0; i<st.iInfo_MultiLotCnt; i++)
+            {
+                if(i==st.iInfo_MultiLotCnt-1)
+                {
+                    Str1+=st.sInfoArr_InnerLotID[i];
+                }
+                else
+                {
+                    Str1=Str1+st.sInfoArr_InnerLotID[i]+"_";
+                }
+            }
+            Str.sprintf("INNER_LOT_ID:%s", Str1);
+            sList->Add(Str);
+
+            Str1="";
+            for(int i=0; i<st.iInfo_MultiLotCnt; i++)
+            {
+                if(i==st.iInfo_MultiLotCnt-1)
+                {
+                    Str1+=st.sInfoArr_CustLotID[i];
+                }
+                else
+                {
+                    Str1=Str1+st.sInfoArr_CustLotID[i]+"_";
+                }
+            }
+            Str.sprintf("CUST_LOT_ID:%s", Str1);                                //JerryYang 20230322 : SPIL 2D SORT summary修改
+            sList->Add(Str);
+
+            Str1="";
+            for(int i=0; i<st.iInfo_MultiLotCnt; i++)
+            {
+                if(i==st.iInfo_MultiLotCnt-1)
+                {
+                    Str1+=st.sInfoArr_CustDevGup[i];
+                }
+                else
+                {
+                    Str1=Str1+st.sInfoArr_CustDevGup[i]+"_";
+                }
+            }
+            Str.sprintf("CUSTOMER_DEVICE_GROUP:%s", Str1);
+            sList->Add(Str);
+
+            Str1="";
+            for(int i=0; i<st.iInfo_MultiLotCnt; i++)
+            {
+                if(i==st.iInfo_MultiLotCnt-1)
+                {
+                    Str1+=st.sInfoArr_DeviceName[i];
+                }
+                else
+                {
+                    Str1=Str1+st.sInfoArr_DeviceName[i]+"_";
+                }
+            }
+            Str.sprintf("DEVICE_NAME:%s", Str1);
+            sList->Add(Str);
+
+            #ifdef HiSilicon
+            Str.sprintf("PROGRAM_NAME:%s.%s", st.sInfo_ProgramName, HISI_VERSION);
+            #else
+            Str.sprintf("PROGRAM_NAME:%s.%s", st.sInfo_ProgramName, MainVersion);
+            #endif
+            sList->Add(Str);
+            Str.sprintf("HANDLER_ID:%s", IniConfig.SocketHandlerID);
+            sList->Add(Str);
+            // AI(W906-SCKART-Multi) 20260802: GOLDEN BUG #5 preserved VERBATIM (golden :2218) -- this
+            // is the k==iInfo_MultiLotCnt (combined-summary) arm, so the subscript is exactly ONE
+            // PAST the last populated per-lot slot: every other line in this arm concatenates
+            // sInfoArr_*[0 .. iInfo_MultiLotCnt-1], only OPERATOR_ID indexes [k]. Two consequences:
+            // (i) the combined summary's OPERATOR_ID line is always blank, and (ii) when
+            // iInfo_MultiLotCnt==5 (the arrays are [5], golden SCK_ART.h:325-340) it is a genuine
+            // out-of-bounds read. Subscript left as golden's `[k]`.
+            Str.sprintf("OPERATOR_ID:%s", st.sInfoArr_OperatorID[k]);
+            sList->Add(Str);
+            Str.sprintf("OPERATION:VS");
+            sList->Add(Str);
+            Str1="";
+            for(int i=0; i<st.iInfo_MultiLotCnt; i++)
+            {
+                if(i==st.iInfo_MultiLotCnt-1)
+                {
+                    Str1+=st.sInfoArr_Stage[i];
+                }
+                else
+                {
+                    Str1=Str1+st.sInfoArr_Stage[i]+"_";
+                }
+            }
+            Str.sprintf("STAGE:%s", Str1);
+            sList->Add(Str);
+        }
+        else
+        {
+            Str.sprintf("CUSTOMER:%s", st.sInfoArr_Customer[k]);                //JerryYang 20230322 : SPIL 2D SORT summary修改
+            sList->Add(Str);
+            Str.sprintf("ASSEMBLY SITE:SPIL");
+            sList->Add(Str);
+            Str.sprintf("INNER_LOT_ID:%s", st.sInfoArr_InnerLotID[k]);
+            sList->Add(Str);
+            Str.sprintf("CUST_LOT_ID:%s", st.sInfoArr_CustLotID[k]);            //JerryYang 20230322 : SPIL 2D SORT summary修改
+            sList->Add(Str);
+            Str.sprintf("CUSTOMER_DEVICE_GROUP:%s", st.sInfoArr_CustDevGup[k]);
+            sList->Add(Str);
+            Str.sprintf("DEVICE_NAME:%s", st.sInfoArr_DeviceName[k]);
+            sList->Add(Str);
+            #ifdef HiSilicon
+            Str.sprintf("PROGRAM_NAME:%s.%s", st.sInfo_ProgramName, HISI_VERSION);        //JerryYang 20230822 : 修改檔名
+            #else
+            Str.sprintf("PROGRAM_NAME:%s.%s", st.sInfo_ProgramName, MainVersion);
+            #endif
+            sList->Add(Str);
+            Str.sprintf("HANDLER_ID:%s", IniConfig.SocketHandlerID);
+            sList->Add(Str);
+            Str.sprintf("OPERATOR_ID:%s", st.sInfoArr_OperatorID[k]);
+            sList->Add(Str);
+            Str.sprintf("OPERATION:VS");
+            sList->Add(Str);
+            Str.sprintf("STAGE:%s", st.sInfoArr_Stage[k]);
+            sList->Add(Str);
+        }
+
+        if(st.sLotStartTime!="")                                                //Richard 20230111 : Fix fSCKART->sLotStartTime 為NULL。
+        {
+            Str.sprintf("SUMMARY_START_TIME:%s", st.sLotStartTime);
+        }
+        else
+        {
+            Str.sprintf("SUMMARY_START_TIME:%s%s%s%s%s%s", RunInfo.LotStartTime.SubString(1,4),RunInfo.LotStartTime.SubString(6,2),RunInfo.LotStartTime.SubString(9,2),
+                                                           RunInfo.LotStartTime.SubString(12,2),RunInfo.LotStartTime.SubString(15,2),RunInfo.LotStartTime.SubString(18,2));
+        }
+        sList->Add(Str);
+        Str.sprintf("SUMMARY_END_TIME:%s", st.sLotEndTime);
+        sList->Add(Str);
+
+        if(k==st.iInfo_MultiLotCnt)
+        {
+            for(int iBin=0; iBin<=iTestBinCount; iBin++)
+            {
+                iCount=0;
+                for(int i=0; i<TestSocket.iShtRow; i++)
+                {
+                    for(int j=0; j<TestSocket.iShtCol; j++)
+                    {
+                        iUnloadCount+=W5SCKARTREM_LOTSUMMARY_COUNTCATEGORY(iCount,iBin);
+                        iCount++;
+                    }
+                }
+            }
+        }
+        else
+        {
+            for(int iBin=0; iBin<=iTestBinCount; iBin++)
+            {
+                iCount=0;
+                for(int i=0; i<TestSocket.iShtRow; i++)
+                {
+                    for(int j=0; j<TestSocket.iShtCol; j++)
+                    {
+                        iUnloadCount+=W5SCKARTREM_LOTSUMMARY_BYLOTCOUNTCATEGORY(k,iCount,iBin);
+                        iCount++;
+                    }
+                }
+            }
+        }
+
+        for(int i=0; i<eTrayCount; i++)
+        {
+            if(Prod.iTrayType[i]!=tNotUse)
+            {
+                aUnloader[i]=s6ShortTrayName[i]+AnsiString("(");
+                bHaveBinData=false;
+                for(int j=0; j<=iTestBinCount; j++)
+                {
+                    temp=Prod.iT6PosCate[j];
+                    if(temp<=0 && j!=iTestBinCount)
+                    continue;
+                    if(i==temp-1)
+                    {
+                        if(bHaveBinData==false)
+                            aUnloader[i]+=AnsiString(j);
+                        else
+                            aUnloader[i]+=AnsiString(",")+AnsiString(j);
+                        bHaveBinData=true;
+
+                        if(k==st.iInfo_MultiLotCnt)
+                            iUnloadCnt[i]+=W5SCKARTREM_LOTSUMMARY_TOTALCATEGORY(j);
+                        else
+                            iUnloadCnt[i]+=W5SCKARTREM_LOTSUMMARY_BYLOTTOTALCATEGORY(k,j);
+                    }
+
+                    if(Prod.iIfErrorT6==i && j==iTestBinCount)
+                    {
+                        if(k==st.iInfo_MultiLotCnt)
+                            iUnloadCnt[i]+=W5SCKARTREM_LOTSUMMARY_TOTALCATEGORY(j);
+                        else
+                            iUnloadCnt[i]+=W5SCKARTREM_LOTSUMMARY_BYLOTTOTALCATEGORY(k,j);
+                    }
+                }
+
+                if(Prod.iIfErrorT6==i)
+                {
+                    aUnloader[i]+="error";
+                    bHaveBinData=true;
+                }
+                else
+                {
+                    if(bHaveBinData==false)
+                        aUnloader[i]+="Null";
+                }
+                aUnloader[i]+=")";
+            }
+        }
+
+        if(k==st.iInfo_MultiLotCnt)
+        {
+            Str.sprintf("Handler Load Qty:%d", LastSet.iSCKARTInputCT);         //JerryYang 20200319 fix summary
+        }
+        else
+        {
+            Str.sprintf("Handler Load Qty:%d", W5SCKARTREM_LOTSUMMARY_ITEM(k));  //JerryYang 20200319 fix summary
+        }
+        sList->Add(Str);
+
+        Str.sprintf("Handler Unload Qty:%d", iUnloadCount);
+        sList->Add(Str);
+        sList->Add("");
+        sList->Add(" ========================================================================");
+        sList->Add(" =========================  Group Bin Summary  ===========================");
+        sList->Add(" ========================================================================");
+
+        for(int i=0; i<eTrayCount; i++)
+        {
+            if(Prod.iTrayType[i]!=tNotUse)
+            {
+                Str.sprintf("%s:%d", aUnloader[i], iUnloadCnt[i]);
+                sList->Add(Str);
+            }
+        }
+
+        sList->Add("");
+        sList->Add(" ========================================================================");
+        sList->Add(" =========================  Hard Bin Summary  ===========================");
+        sList->Add(" ========================================================================");
+
+        iCount=0;
+        Str=" Hard P/F ";
+        Str2=" ---- ----";
+        for(int i=0; i<TestSocket.iShtRow; i++)
+        {
+            for(int j=0; j<TestSocket.iShtCol; j++)
+            {
+                iCount++;
+                Str1.sprintf(" Site%d", iCount);
+                Str=Str+Str1;
+                Str2=Str2+" -----";
+            }
+        }
+        Str=Str+" Total  Yield";
+        sList->Add(Str);
+        Str2=Str2+" ----- --------";
+        sList->Add(Str2);
+
+        for(int iBin=0; iBin<iTestBinCount+1; iBin++)
+        {
+            if(iBin==iTestBinCount)
+            {
+            }
+            else
+            {
+                // AI(W906-SCKART-Multi) 20260802: GOLDEN BUG #10 preserved VERBATIM (golden :2415-2418,
+                // and identically at :2542-2545 and :2572-2575) -- `Prod.iT6PosCate[]` is 1-BASED
+                // ("Auto1 = 1", golden cprod.h:512 -- corrected from a stale :513, which is `DBContact`'s
+                // declaration, the very next line), which the Group Bin block 100 lines above honours
+                // (`if(i==temp-1)`, golden :2322, the same shape every sibling report writer uses at
+                // golden :1820 and :3691). THESE THREE SITES DO NOT: they index `Prod.iTrayType[temp]`,
+                // one slot too high, so the "is this bin's tray actually in use?" test is asked about
+                // the WRONG tray. Two visible consequences: a bin routed to a used tray can be dropped
+                // from the Hard Bin / Yield Summary while still being counted in the Group Bin Summary,
+                // and -- because the lower bound is `temp<0`, not the Group Bin block's `temp<=0` -- an
+                // UNROUTED bin (iT6PosCate==0) is tested against tray 0 (Auto1) and gets a row whenever
+                // Auto1 is in use. Unique to this function (grepped: `iTrayType[temp]` appears nowhere
+                // else in golden SCK_ART.cpp). Index left exactly as golden.
+                temp=Prod.iT6PosCate[iBin];
+                if(temp<0 || temp>=eTrayCount ||
+                   Prod.iTrayType[temp]==tNotUse)
+                    continue;
+            }
+
+            if(iBin==iTestBinCount)
+            {
+                Str="Err";
+            }
+            else
+            {
+                Str.sprintf("%d", iBin);
+            }
+
+            while(Str.Length()<5)
+            {
+                Str=" "+Str;
+            }
+
+            if(iBin==iTestBinCount)
+            {
+                Str=Str+" FAIL";
+            }
+            else
+            {
+                if(Prod.bIsPassBin[iBin]==0)
+                    Str=Str+" PASS";
+                else
+                    Str=Str+" FAIL";
+            }
+
+            if(k==st.iInfo_MultiLotCnt)
+            {
+                iCount=0;
+                for(int i=0; i<TestSocket.iShtRow; i++)
+                {
+                    for(int j=0; j<TestSocket.iShtCol; j++)
+                    {
+                        Str2.sprintf("%d", W5SCKARTREM_LOTSUMMARY_COUNTCATEGORY(iCount,iBin));
+                        while(Str2.Length()<6)
+                        {
+                            Str2=" "+Str2;
+                        }
+                        Str=Str+Str2;
+                        iCount++;
+                    }
+                }
+
+                if(IniConfig.bSPILFunction==true && W5SCKARTREM_LOTSUMMARY_TOTALCATEGORY(iBin)<=0)
+                    continue;
+
+                Str2.sprintf("%d", W5SCKARTREM_LOTSUMMARY_TOTALCATEGORY(iBin));
+                while(Str2.Length()<6)
+                {
+                    Str2=" "+Str2;
+                }
+                Str=Str+Str2;
+                Str2=ChangeToPercentage(W5SCKARTREM_LOTSUMMARY_TOTALCATEGORY(iBin), iUnloadCount);
+
+                while(Str2.Length()<9)
+                {
+                    Str2=" "+Str2;
+                }
+                Str=Str+Str2;
+
+                sList->Add(Str);
+            }
+            else
+            {
+                iCount=0;
+                for(int i=0; i<TestSocket.iShtRow; i++)
+                {
+                    for(int j=0; j<TestSocket.iShtCol; j++)
+                    {
+                        Str2.sprintf("%d", W5SCKARTREM_LOTSUMMARY_BYLOTCOUNTCATEGORY(k,iCount,iBin));
+                        while(Str2.Length()<6)
+                        {
+                            Str2=" "+Str2;
+                        }
+                        Str=Str+Str2;
+                        iCount++;
+                    }
+                }
+
+                if(IniConfig.bSPILFunction==true && W5SCKARTREM_LOTSUMMARY_BYLOTTOTALCATEGORY(k,iBin)<=0)
+                    continue;
+
+                Str2.sprintf("%d", W5SCKARTREM_LOTSUMMARY_BYLOTTOTALCATEGORY(k,iBin));
+                while(Str2.Length()<6)
+                {
+                    Str2=" "+Str2;
+                }
+                Str=Str+Str2;
+                Str2=ChangeToPercentage(W5SCKARTREM_LOTSUMMARY_BYLOTTOTALCATEGORY(k,iBin), iUnloadCount);
+
+                while(Str2.Length()<9)
+                {
+                    Str2=" "+Str2;
+                }
+                Str=Str+Str2;
+
+                sList->Add(Str);
+            }
+        }
+
+        sList->Add("");
+        sList->Add(" ========================================================================");
+        sList->Add(" ==========================  Yield Summary  =============================");
+        sList->Add(" ========================================================================");
+
+        Str ="  P/F    Qty    Yield";
+        sList->Add(Str);
+        Str2=" ----- ------ --------";
+        sList->Add(Str2);
+
+        int iPassCount=0;
+        int iFailCount=0;
+        if(k==st.iInfo_MultiLotCnt)
+        {
+            for(int iBin=0; iBin<iTestBinCount+1; iBin++)
+            {
+                if(iBin==iTestBinCount)
+                {
+                }
+                else
+                {
+                    temp=Prod.iT6PosCate[iBin];
+                    if(temp<0 || temp>=eTrayCount ||
+                       Prod.iTrayType[temp]==tNotUse)   // GOLDEN BUG #10 again -- see the first site (golden :2415-2418) above
+                        continue;
+                }
+
+                // AI(W906-SCKART-Multi) 20260802: GOLDEN BUG #6 preserved VERBATIM (golden :2548 and,
+                // in the by-lot arm, :2578) -- `iCount` is a leftover from the Hard Bin block above;
+                // it is incremented here and never read again anywhere in the function. A pure dead
+                // increment, kept.
+                iCount++;
+
+                if(IniConfig.bSPILFunction==true && W5SCKARTREM_LOTSUMMARY_TOTALCATEGORY(iBin)<=0)
+                    continue;
+
+                if(Prod.bIsPassBin[iBin]==1 || iBin==iTestBinCount)
+                {
+                    iFailCount+=W5SCKARTREM_LOTSUMMARY_TOTALCATEGORY(iBin);
+                }
+                else
+                {
+                    iPassCount+=W5SCKARTREM_LOTSUMMARY_TOTALCATEGORY(iBin);
+                }
+            }
+        }
+        else
+        {
+            for(int iBin=0; iBin<iTestBinCount+1; iBin++)
+            {
+                if(iBin==iTestBinCount)
+                {
+                }
+                else
+                {
+                    temp=Prod.iT6PosCate[iBin];
+                    if(temp<0 || temp>=eTrayCount ||
+                       Prod.iTrayType[temp]==tNotUse)   // GOLDEN BUG #10 again -- see the first site (golden :2415-2418) above
+                        continue;
+                }
+
+                iCount++;
+
+                if(IniConfig.bSPILFunction==true &&
+                   W5SCKARTREM_LOTSUMMARY_BYLOTTOTALCATEGORY(k,iBin)<=0)
+                    continue;
+
+                if(Prod.bIsPassBin[iBin]==1 || iBin==iTestBinCount)
+                {
+                    iFailCount+=W5SCKARTREM_LOTSUMMARY_BYLOTTOTALCATEGORY(k,iBin);
+                }
+                else
+                {
+                    iPassCount+=W5SCKARTREM_LOTSUMMARY_BYLOTTOTALCATEGORY(k,iBin);
+                }
+            }
+        }
+
+        Str=" PASS";
+
+        Str2.sprintf("%d", iPassCount);
+        while(Str2.Length()<6)
+        {
+            Str2=" "+Str2;
+        }
+        Str=Str+Str2;
+
+        Str2=ChangeToPercentage(iPassCount, iUnloadCount);
+        while(Str2.Length()<9)
+        {
+            Str2=" "+Str2;
+        }
+        Str=Str+Str2;
+
+        sList->Add(Str);
+
+        Str=" FAIL";
+
+        Str2.sprintf("%d", iFailCount);
+        while(Str2.Length()<6)
+        {
+            Str2=" "+Str2;
+        }
+        Str=Str+Str2;
+
+        Str2=ChangeToPercentage(iFailCount, iUnloadCount);
+        while(Str2.Length()<9)
+        {
+            Str2=" "+Str2;
+        }
+        Str=Str+Str2;
+
+        sList->Add(Str);
+        sList->Add("");
+        sList->Add(" ========================================================================");
+        sList->Add(" ==========================  Error Bin Summary  =========================");
+        sList->Add(" 991(Barcode Read Error)");
+        sList->Add(" 992(Duplicate 2DID error)");
+        sList->Add(" 993(2DID not existed in list)");
+        sList->Add(" 994(Not defined)");
+        sList->Add(" ========================================================================");
+
+        if(k==st.iInfo_MultiLotCnt)
+        {
+            // AI(W906-SCKART-Multi) 20260802: GOLDEN BUG #7 preserved VERBATIM (golden :2641 and, in
+            // the else arm, :2654) -- a bare expression statement that reads an array element and
+            // discards it: no assignment, no call, no side effect at all. Kept as a genuine no-op
+            // (this file does not silently drop golden statements); the (void) cast only silences
+            // -Wunused-value under -Wall, exactly as SckArtRem_Save2DSortingSummary already does for
+            // the structurally identical golden :3920.
+            (void)W5SCKARTREM_LOTSUMMARY_TOTALCATEGORY(iTestBinCount);      // golden :2641 -- see the note just above
+
+            Str2.sprintf(" 991: %d", iE1Count);
+            sList->Add(Str2);
+            Str2.sprintf(" 992: %d", iE2Count);
+            sList->Add(Str2);
+            Str2.sprintf(" 993: %d", iE3Count);
+            sList->Add(Str2);
+            Str2.sprintf(" 994: %d", W5SCKARTREM_LOTSUMMARY_TOTALCATEGORY(iTestBinCount)-iE1Count-iE2Count-iE3Count);
+            sList->Add(Str2);
+        }
+        else
+        {
+            (void)W5SCKARTREM_LOTSUMMARY_BYLOTTOTALCATEGORY(k,iTestBinCount); // golden :2654 -- GOLDEN BUG #7 again, see :2641 above
+
+            Str2.sprintf(" 991: %d", 0);
+            sList->Add(Str2);
+            Str2.sprintf(" 992: %d", 0);
+            sList->Add(Str2);
+            Str2.sprintf(" 993: %d", 0);
+            sList->Add(Str2);
+            Str2.sprintf(" 994: %d", 0);
+            sList->Add(Str2);
+        }
+
+        sList->Add(" ========================================================================");
+
+        if(CosFunction.bUseTSVFunction)                                         //Steven 20240904 : for ATK的TSV功能
+        {
+            if(srvrscktTSV->Active)                                         // gate #15 (REAL vclcompat TServerSocket, SIM mode -- offline-safe)
+                srvrscktTSV->Close();
+            srvrscktTSV->Port=IniConfig.iN09_TSV_Port;
+            srvrscktTSV->Open();
+
+            if(FileExists(PathName2+FileName)==false)                           //Steven 20230317 : 避免連續存兩次把資料蓋掉了
+            {
+                if(IniConfig.bN09_LotCountAutoFunc)
+                {
+                    if(st.iNeedRT==0)
+                    {
+                        if(IniConfig.iN09_4_UploadMethod==0)
+                        {
+                            sList->SaveToFile(PathName2+FileName);              //Steven 20230215 : 存檔路徑加上年月
+                            W5SCKARTREM_FTP_UPLOAD(PathName2, IniConfig.sN09_5_Path, FileName);   // golden :2684 FTP_Upload(...) -- reuses gate #13
+                        }
+                        else
+                        {
+                            // AI(W906-SCKART-Multi) 20260802: GOLDEN BUG #8 preserved VERBATIM
+                            // (golden :2688) -- `PathName` (no "2") is DECLARED at :2047 and never
+                            // assigned anywhere in this function; only `PathName2` is (:2081). So
+                            // this arm always saves to a bare relative file name, i.e. into the
+                            // process working directory, not into any summary folder. Contrast the
+                            // sibling SaveTestSummaryTSV, whose own PathName IS computed (golden
+                            // :2823/:2827). Left reading the empty PathName exactly as golden.
+                            sList->SaveToFile(PathName+FileName);
+                        }
+                    }
+                }
+                else
+                {
+                    if(IniConfig.bSPILFunction==true)                               //JerryYang 20220923 : unload數量為0不要存log
+                    {
+                        if(iUnloadCount>0)
+                            sList->SaveToFile(PathName2+FileName);
+                    }
+                    else
+                    {
+                        sList->SaveToFile(PathName2+FileName);
+                    }
+                }
+                fObserver->memoLotSummary->Lines=sList;                     // golden :2704 (whole-list COPY)
+            }
+        }
+        else
+        {
+            if(FileExists(PathName2+FileName)==false)                           //Steven 20230317 : 避免連續存兩次把資料蓋掉了
+            {
+                if(IniConfig.bSPILFunction==true)                               //JerryYang 20220923 : unload數量為0不要存log
+                {
+                    if(iUnloadCount>0)
+                        sList->SaveToFile(PathName2+FileName);
+                }
+                else
+                {
+                    sList->SaveToFile(PathName2+FileName);
+                }
+                fObserver->memoLotSummary->Lines=sList;                     // golden :2720 (whole-list COPY)
+            }
+        }
+        sList->Clear();
+        delete sList;
+
+        if(IniConfig.bN17UploadLotSummary)                                      //JerryYang 20220923 : Upload lot summary
+        {
+            if(DirectoryExists(IniConfig.asN17LotSummaryPath))
+            {
+                if(IniConfig.bA38_SLT_Summary && st.sLotID!="NA" && st.sLotID!="" && iUnloadCount>0)
+                {
+                    strFileName=PathName2+FileName;                             //Steven 20230215 : 存檔路徑加上年月
+                    if(FileExists(strFileName))
+                    {
+                        strPath.sprintf("%s\\%s", IniConfig.asN17LotSummaryPath, FileName);
+                        bResult=CopyFile(strFileName.c_str(), strPath.c_str(), true);
+                        if(bResult==false)
+                        {
+                            ShowMyMessage("Uploaded lot summary error\r\nPlease check the path of N-17.","上傳lot summary失敗\r\n請檢查N-17路徑是否存在");
+                        }
+                        else
+                        {
+                            RecordProcess("Uploaded lot summary successfully.");//Steven 20190722 : add TSV log
+                        }
+                    }
+                }
+                else
+                {
+                    if(st.sInfo_CustLotID=="NA" || st.sInfo_CurrQty=="NA" ||
+                       st.sInfo_CustLotID=="" || st.sInfo_CurrQty=="")
+                    {
+                    }
+                    else
+                    {
+                        strFileName=PathName2+FileName;                         //Steven 20230215 : 存檔路徑加上年月
+                        if(FileExists(strFileName))
+                        {
+                            strPath.sprintf("%s\\%s", IniConfig.asN17LotSummaryPath, FileName);
+                            bResult=CopyFile(strFileName.c_str(), strPath.c_str(), true);
+                            if(bResult==false)
+                            {
+                                ShowMyMessage("Uploaded lot summary error\r\nPlease check the path of N-17.","上傳lot summary失敗\r\n請檢查N-17路徑是否存在");
+                            }
+                            else
+                            {
+                                RecordProcess("Uploaded lot summary successfully.");   //Steven 20190722 : add TSV log
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                ShowMyMessage("Uploaded lot summary error\r\nPlease check the path of N-17.","上傳lot summary失敗\r\n請檢查N-17路徑是否存在");
+            }
+        }
+
+        // AI(W906-SCKART-Multi) 20260802: GOLDEN BUG #9 preserved VERBATIM (golden :2778-2781) -- the
+        // same "opens an empty path" knot the two sibling report writers already carry: the only
+        // assignments to `strFileName` are inside the `if(IniConfig.bN17UploadLotSummary)` block just
+        // above (:2732/:2755), but this launch fires on a completely independent condition. With N-17
+        // upload off, strFileName is still its AnsiString default "" here. Reuses gate #11, which
+        // records EVERY call, empty path included -- that is the quirk's observable signature.
+        if(IniConfig.bA38_SLT_Summary && FileName!="" && iUnloadCount>0)
+        {
+            W5SCKARTREM_SHELLEXECUTE_OPEN(strFileName);                             // golden :2780 ShellExecute(NULL,NULL,strFileName.c_str(),NULL,NULL,SW_SHOW) -- gate #11
+        }
+
+        if(CosFunction.bSortingBy2DList==true &&
+           LastSet.iTester==_2D_SORT &&
+           TestIF_File.bSortingBy2DIDList==true)                                //Frank 20221122 : 2DID sorting for ATK
+        {
+            Str2.sprintf("%s\\SortBy2DID_%s.csv", "D:\\HT9045_Log\\2D_SortList", fLotInfo->edtSysLotID->Text);
+            str3.sprintf("%s\\SortBy2DID_%s.csv", asBackup2DSortListPath, fLotInfo->edtSysLotID->Text);
+            if(FileExists(Str2))                                                //Steven 20160505 : 加上保護, 不然開程式會跳Error
+            {
+                CopyFile(Str2.c_str(), str3.c_str(), true);                     //複製到Backup資料夾
+                DeleteFile(Str2);
+            }
+            Str2=PathName2+FileName;
+            str3=asBackup2DSummaryPath+FileName;
+            if(FileExists(Str2))                                                //Steven 20160505 : 加上保護, 不然開程式會跳Error
+            {
+                CopyFile(Str2.c_str(), str3.c_str(), true);                     //複製到Backup資料夾
+            }
+        }
+    }
+    W5SCKARTREM_LOTSUMMARY_CLEARALLDATA();                                  // golden :2802 LotSummary.ClearAllData() -- UNCONDITIONAL (see header doc comment)
 }

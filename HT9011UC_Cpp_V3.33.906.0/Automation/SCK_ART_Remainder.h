@@ -49,6 +49,15 @@
 //                                                    [AI(W906-SaveSummaryTrayFeed) 20260728 -- see that
 //                                                    function's own doc comment below for gates #16/#17
 //                                                    and the gate #8 extension]
+//     TfSCKART::SaveMultiLotTestSummary(bool)   -> SckArtRem_SaveMultiLotTestSummary (golden :2045-2803)
+//                                                    [AI(W906-SCKART-Multi) 20260802 -- see that
+//                                                    function's own doc comment below for gate #5's
+//                                                    [UPDATE 4] and [UPDATE 5], the 10 golden bugs
+//                                                    preserved verbatim (AI(W906-SCKART-Multi) 20260802:
+//                                                    corrected from a stale "9" -- see the .cpp's own
+//                                                    doc comment on this function for the recount),
+//                                                    and -- READ THIS -- the fact that it lands with
+//                                                    ZERO production callers in this tree]
 //
 //   SKIPPED -- PURE VCL (no calc-core; widget lifecycle/event glue only, verified by direct golden
 //   read, not silently dropped):
@@ -71,8 +80,17 @@
 //   AI(W906-SaveTestSummarySECS) above], Save2DSortingSummary :3402-4061 [DONE, see
 //   AI(W906-Save2DSortingSummary) above], and SaveTestSummaryTSV :2805-3128 / SaveSummaryTrayFeed
 //   :3129-3401 [BOTH DONE, see AI(W906-SaveTestSummaryTSV)/AI(W906-SaveSummaryTrayFeed) above];
-//   DoChkInputCntAlarm :4359-4391 already done by the sibling SCK_ART.h/.cpp):
-//   SaveMultiLotTestSummary(:2045-2804)
+//   DoChkInputCntAlarm :4359-4391 already done by the sibling SCK_ART.h/.cpp; and
+//   SaveMultiLotTestSummary :2045-2803 [NOW DONE, see AI(W906-SCKART-Multi) above]):
+//   -- AI(W906-SCKART-Multi) 20260802: the historical DEFERRAL note that stood here is kept verbatim
+//   below because its RECON is still accurate and still load-bearing; only its CONCLUSION changed.
+//   The function IS translated now, and it did land with zero production callers, exactly as the note
+//   predicted -- so the note's substance moved into the function's own banner in the .cpp and into its
+//   doc comment below, where a reader of the BODY cannot miss it. What changed is the project's view
+//   of the trade: a chartered deliverable that quietly lands as unreachable dead code, with no note
+//   saying so, reads as completed work; an audit had to find the last one with `nm -u`. So it is
+//   translated, and the unreachability is stated loudly at the body instead of used as a reason to
+//   skip. HISTORICAL NOTE, VERBATIM: "SaveMultiLotTestSummary(:2045-2804)
 //   -- DELIBERATELY DEFERRED, NOT a mechanical oversight: its ONLY golden caller is
 //   csystem.cpp:10862's DoTrayFeedProcess(), which is ITSELF not yet ported in this tree (verified by
 //   grep: csystem.cpp has no DoTrayFeedProcess symbol today) -- translating this ~760-line function now
@@ -81,7 +99,11 @@
 //   stand-in at its own SaveTestSummary-dispatcher-adjacent call site, if any -- in fact golden's
 //   SaveTestSummary dispatcher never calls it directly either; SaveMultiLotTestSummary is reached only
 //   via the separate DoTrayFeedProcess path, so THIS file's SckArtRem_SaveTestSummary dispatcher has no
-//   call site for it at all, gated or otherwise -- nothing to wire until DoTrayFeedProcess lands),
+//   call site for it at all, gated or otherwise -- nothing to wire until DoTrayFeedProcess lands)".
+//   Two corrections to that historical text, both re-derived from golden this wave: the span is
+//   :2045-2803 (:2804 is the `//---` separator that starts SaveTestSummaryTSV's block), and the
+//   dispatcher observation is right -- SckArtRem_SaveTestSummary still has no call site for it, and
+//   none was added. STILL REMAINING after this wave:
 //   srvrscktTSVClientRead/
 //   TimerTSVTimer(:4063-4102, VCL socket/timer events -- TimerTSV's own ->Enabled arm/disarm is now
 //   gate #12, see below), FTP_Upload(:4103-4180, TNMFTP VCL component),
@@ -250,6 +272,28 @@
 //       (golden cSocket.h:127) -- SaveTestSummaryTSV is its first reader (golden SCK_ART.cpp:2949,
 //       `CUSTOMER_CODE==CC_ASE_CL` branch). UNLIKE bIsRTBin, golden's OWN ClearAllData() DOES zero
 //       iLoadTotal (cSocket.cpp:759) -- so this stub's ClearAllData() is extended to match.
+//       [UPDATE 4 -- AI(W906-SCKART-Multi) 20260802]: extended a 4th time with the 2 per-lot mirrors
+//       `int iByLotCountCategory[5][MAX_SOCKET_ROW*MAX_SOCKET_COL][TEST_MAX_BIN]` and
+//       `int iByLotTotalCategory[5][TEST_MAX_BIN]` (golden cSocket.h:139-140) -- SaveMultiLotTestSummary
+//       is their first and (per a whole-golden-file grep) only reader. LIKE bIsRTBin and UNLIKE
+//       iLoadTotal, golden's OWN ClearAllData() zeroes NEITHER (re-read cSocket.cpp:754-763 this wave:
+//       it touches only iCountCategory/iTotalCategory/iLastTotalCategory/iLoadTotal/iE1..iE3), so this
+//       stub's ClearAllData() is NOT extended for them -- matching golden exactly. `iByLotLoadCount[5]`
+//       (the 3rd per-lot mirror, cSocket.h:141) was ALREADY present since the original ClearLotInfo
+//       wave and is read by this same function at golden :2365; no change needed for it.
+//       [UPDATE 5 -- AI(W906-SCKART-Multi) 20260802]: this same wave ALSO makes the file-scope
+//       `iE1Count`/`iE2Count`/`iE3Count` globals (already real, ported cmydef.h:5427-5429/
+//       cmydef.cpp:5432-5434 -- NOT stub-struct members) consumed by SaveMultiLotTestSummary's own
+//       early-return gate (golden :2069, `k==iInfo_MultiLotCnt && iE1Count==0 && iE2Count==0 &&
+//       iE3Count==0 && iENotDefinedCount==0`). That invalidates the PREVIOUS wording of this stub's
+//       ClearAllData() comment, which called these 3 counters "still untranslated/unconsumed by any
+//       code in this tree" -- no longer true once this function lands. Golden's OWN ClearAllData()
+//       DOES zero all 3 (cSocket.cpp:760-762, immediately after iLoadTotal), so the stub's
+//       ClearAllData() (SCK_ART_Remainder.cpp) is now extended to zero them too, matching golden.
+//       The ONE golden field that remains genuinely unmatched after this update is
+//       `iLastTotalCategory` (golden cSocket.cpp:758) -- the stub struct has no such member and
+//       nothing in this tree reads or writes it (re-verified this wave); it is the only field left
+//       out of the original note's "not added, no consumer yet" list that is still actually true.
 //   #6  fTesterTCP->ProcessOSPrint() -- golden Automation/TesterTCP.h/.cpp (Interface/TesterTCP is
 //       still DEFERRED per MIGRATION_ROADMAP.md's W5 "Automation 剩餘" list). No-op stand-in; only
 //       reached when TestIF_File.iTestType==TCP_IP_MODE && iSaveData!=0.
@@ -488,6 +532,21 @@ struct W5SckArtRem_LotSummaryStub
     // OWN ClearAllData() DOES zero this field (cSocket.cpp:759, `LotSummary.iLoadTotal=0;`) -- so this
     // stub's ClearAllData() body below IS extended to match (see the .cpp definition).
     int iLoadTotal;                                                    // golden TLotSummary::iLoadTotal (cSocket.h:127)
+    // AI(W906-SCKART-Multi) 20260802: gate #5 extended a 4th time -- SaveMultiLotTestSummary is the
+    // first (and, per a whole-golden-file grep, the ONLY) reader of the per-lot mirrors
+    // `iByLotCountCategory`/`iByLotTotalCategory` (golden cSocket.h:139-140), read at golden
+    // SCK_ART.cpp :2304/:2333/:2341/:2490/:2500/:2503/:2509/:2581/:2586/:2590/:2654 -- all inside the
+    // `k != iInfo_MultiLotCnt` per-lot arms. Dimensions verbatim from golden cSocket.h. LIKE bIsRTBin
+    // and UNLIKE iLoadTotal, golden's OWN ClearAllData() (cSocket.cpp:754-763) never zeroes either of
+    // these, so this stub's ClearAllData() is deliberately NOT extended for them -- matching golden.
+    // Their only golden writers are cSocket.cpp:852-853, inside `TLotSummary::AddByLotCount` (golden
+    // cSocket.cpp:806-... -- AI(W906-SCKART-Multi) 20260802: corrected from a stale "UpdataCount";
+    // no such method exists on TLotSummary, and the line numbers were already right, just attributed
+    // to the wrong enclosing symbol), still untranslated, so nothing in this tree writes them yet:
+    // they default all-zero (POD zero-init), which makes every
+    // per-lot page of the report read 0 until a test seeds them (this wave's PART 14 does exactly that).
+    int iByLotCountCategory[5][MAX_SOCKET_ROW*MAX_SOCKET_COL][TEST_MAX_BIN];  // golden TLotSummary::iByLotCountCategory[Lot][Row*Col][Category] (cSocket.h:139)
+    int iByLotTotalCategory[5][TEST_MAX_BIN];                          // golden TLotSummary::iByLotTotalCategory[Lot][Category] (cSocket.h:140)
     void ClearAllData();                                               // golden cSocket.cpp:754-763 (PARTIAL -- see gate #5's [UPDATE] notes above)
 };
 extern W5SckArtRem_LotSummaryStub W5SckArtRem_LotSummary;
@@ -767,7 +826,8 @@ void SckArtRem_SaveTestSummary(SckArtRemainderState &st, int iSaveData = 0);
 //   Dependency verification (each checked directly against the CURRENT target tree, not assumed):
 //     * fLotInfo->edtSysLotID->Text -- REAL, FormsFacade.h TfLotInfoEdit (golden uLotInfo.h).
 //     * MyForceDirectories(AnsiString,AnsiString="") -- REAL as of TODAY's separate
-//       AI(W906-CommonWaveFile) 20260721 pass (common.h:321/common.cpp:1648) -- this file's OWN gate #1
+//       AI(W906-CommonWaveFile) 20260721 pass (common.h:341/common.cpp:1806 -- AI(W906-SCKART-Multi)
+//       20260802: corrected from a stale common.h:321/common.cpp:1648) -- this file's OWN gate #1
 //       stand-in (W5SckArtRem_MyForceDirectories) is now STALE for new code (common.h no longer #if 0
 //       gates the real body) but is left untouched here since SckArtRem_SetSetupFilePath still uses it
 //       and retargeting that is out of this wave's scope. This NEW function calls the REAL
@@ -1152,5 +1212,153 @@ void SckArtRem_SaveTestSummaryTSV(SckArtRemainderState &st, int iSaveData);
 //   unused-declaration pattern like its 2 siblings above).
 // ---------------------------------------------------------------------------
 void SckArtRem_SaveSummaryTrayFeed(SckArtRemainderState &st);
+
+// ---------------------------------------------------------------------------
+// SckArtRem_SaveMultiLotTestSummary -- golden TfSCKART::SaveMultiLotTestSummary(bool)
+//   (SCK_ART.cpp:2045-2803).  AI(W906-SCKART-Multi) 20260802.
+//
+//   *** REACHABILITY: ZERO PRODUCTION CALLERS IN THIS TREE. ***
+//   Golden's only caller anywhere in the whole 906 tree is csystem.cpp:10862
+//   (`fSCKART->SaveMultiLotTestSummary(true);`) inside DoTrayFeedProcess() (golden
+//   csystem.cpp:10425), reached only when `IniConfig.bVTESTFunction==false` AND
+//   `fSCKART->iInfo_MultiLotCnt>1` (golden :10858-10863). Re-verified this wave by a BYTE-LEVEL
+//   grep over every file in the golden tree -- deliberately not inheriting the earlier "sole
+//   caller" claim, and deliberately not restricted to .cpp/.h: exactly 4 textual hits (that call,
+//   this definition, this body's own MyForceDirectories tag string at golden :2082, and the
+//   SCK_ART.h:301 declaration). DoTrayFeedProcess is not translated here (grep: csystem.cpp
+//   carries the name only in comments). The gate that would make this reachable is csystem.cpp's
+//   MainProc `#if 0 // TODO(W7)` block -- golden :16730-19101, the mode/SECS/AGV/temp dispatch
+//   ladder DoTrayFeedProcess is a rung of -- owned by wave W7. Nothing else in this tree has since
+//   made it reachable (checked, not assumed). Its only caller today is
+//   tests/test_SCK_ART_Remainder.cpp PART 14, which drives it directly. NO production call site was
+//   invented to improve the reference count.
+//
+//   Signature note: golden's `bSaveData` is a bool, and the ONE golden call site passes a literal
+//   `true`, so the `bSaveData==false` early-out (golden :2106, GOLDEN BUG #4 below) is dead in
+//   production and reachable only from a test. Kept as a real parameter, not folded away.
+//
+//   Dependency verification (each checked directly against the CURRENT target tree, not assumed):
+//     * st.sLotID / sLotEndTime / sLotStartTime / sInfo_ProgramName / sInfo_CustLotID /
+//       sInfo_CurrQty / iInfo_MultiLotCnt / iNeedRT / sInfoArr_Customer[] / sInfoArr_InnerLotID[] /
+//       sInfoArr_CustLotID[] / sInfoArr_CustDevGup[] / sInfoArr_DeviceName[] / sInfoArr_Stage[] /
+//       sInfoArr_OperatorID[] -- every bare TfSCKART member this body touches (enumerated by a
+//       whole-body grep for each golden member name, not sampled). ALL already present on
+//       SckArtRemainderState: NO new struct field was needed, and none was added.
+//     * fLotInfo->edtSysLotID->Text -- REAL, FormsFacade.h TfLotInfo (already used by the 3 sibling
+//       report writers in this file). No new FormsFacade member needed this wave -- a first for the
+//       SCK_ART report-writer family, which added 6 / 4 / 1 members in the previous three waves.
+//     * fObserver->memoLotSummary->Lines=sList -- REAL, atester_shims.h (established by
+//       SaveTestSummarySECS; whole-list COPY semantics, see TfObserverMemoLotSummaryLines).
+//     * MyForceDirectories(AnsiString,AnsiString) -- REAL (common.h:341/common.cpp:1806 --
+//       AI(W906-SCKART-Multi) 20260802: corrected from a stale common.h:321/common.cpp:1648,
+//       inherited from an earlier wave's note). Golden's
+//       own 2-arg call shape (:2082) is reproduced verbatim, tag string included. NOTE this is the
+//       REAL function, NOT this file's stale gate #1 stand-in (which SckArtRem_SetSetupFilePath
+//       still uses) -- same choice the 3 sibling report writers already made.
+//     * iE1Count / iE2Count / iE3Count -- REAL globals (cmydef.h:5427-5429), already read by
+//       Save2DSortingSummary. iENotDefinedCount -- REAL (cmydef.h:5430), and THIS is the function
+//       that finally reads it: Save2DSortingSummary's own doc comment above correctly noted it
+//       "also exists but is NOT read here"; golden :2069 reads it as the 4th term of this
+//       function's early-return guard. First reader in this tree.
+//     * MachineTypeChoice / Type_HT9045 / Type_HT9045_12Site / Type_HT9046 / Type_HT9046_LS,
+//       MainVersion + the `#ifdef HiSilicon`/HISI_VERSION split, IniConfig.SocketHandlerID /
+//       bSPILFunction / bA38_SLT_Summary / bN09_LotCountAutoFunc / iN09_4_UploadMethod /
+//       sN09_5_Path / iN09_TSV_Port / bN17UploadLotSummary / asN17LotSummaryPath,
+//       CosFunction.bUseTSVFunction / bSortingBy2DList, LastSet.iSCKARTInputCT / iTester, _2D_SORT,
+//       TestIF_File.bSortingBy2DIDList, RunInfo.LotStartTime, Prod.iTrayType[] / iT6PosCate[] /
+//       iIfErrorT6 / bIsPassBin[], TestSocket.iShtRow / iShtCol, asSummaryPath /
+//       asBackup2DSortListPath / asBackup2DSummaryPath, s6ShortTrayName[] / eTrayCount / tNotUse /
+//       iTestBinCount, GetTimeInfo() / SystemYear.. / RecordProcess() / ShowMyMessage(2-arg) /
+//       ChangeToPercentage<T> / FileExists / DirectoryExists / CopyFile / DeleteFile -- ALL REAL and
+//       ALL already used by at least one sibling function in this same file (same includes).
+//     * LotSummary.iCountCategory[][] / .iTotalCategory[] / .iByLotLoadCount[] / .ClearAllData() --
+//       gate #5's existing stub. .iByLotCountCategory[][][] / .iByLotTotalCategory[][] -- gate #5
+//       [UPDATE 4], NEW this wave (see that note above).
+//     * FTP_Upload(PathName2, IniConfig.sN09_5_Path, FileName) (golden :2684) -- REUSES gate #13's
+//       existing stand-in verbatim; no gate change needed. CORRECTION TO GATE #13's OWN TEXT, found
+//       by re-grepping golden SCK_ART.cpp this wave instead of inheriting the number: the COUNT is
+//       right (exactly 4 call sites -- :2684, :3054, :3069, :3942 -- plus the :4103 definition), but
+//       the ATTRIBUTION is wrong. Gate #13 says "the other 3 (:2684/:3054/:3069) are all inside
+//       SaveTestSummaryTSV (golden :2805-3128)". :2684 is NOT in :2805-3128 -- it is in THIS
+//       function (:2045-2803). Only :3054 and :3069 are SaveTestSummaryTSV's. So the correct split
+//       is: 1 in Save2DSortingSummary (:3942), 2 in SaveTestSummaryTSV (:3054/:3069), 1 here
+//       (:2684). Flagged rather than silently rewritten in the gate block, since gate #13's text is
+//       shared history; this is the in-scope correction.
+//     * ShellExecute(...) (golden :2780) -- REUSES gate #11's existing stand-in verbatim.
+//     * srvrscktTSV ->Active/->Close()/->Port=/->Open() (golden :2670-2673) -- REUSES gate #15's
+//       REAL vclcompat TServerSocket (SIM mode, offline-inert). No new gate.
+//     * ZERO EXPOSURE to fConfiguration (gate #14), FormHS / slEventLog (gate #17), TastCategory
+//       (gate #16), TimerTSV (gate #12), TSVdelay / bShowTSVMsg / sTSVMsg / bWaitTSV, and to
+//       RunInfo.LotEndTime -- all confirmed ABSENT from golden :2045-2803 by direct grep of the
+//       decoded span, not by assumption. In particular this function does NOT arm the TSV timer and
+//       does NOT set bWaitTSV, unlike all three of its siblings.
+//   NET: zero new gates, zero new struct fields, zero new FormsFacade/atester_shims members --
+//   only gate #5's 4th field extension.
+//
+//   Golden dead local declarations DROPPED (extract-calc-core, same convention as every other
+//   function in this file): `IP`, `tmps1`, lowercase `str2` (all from the :2047 declaration) and the
+//   whole `AnsiString Data="";` line (:2050) -- verified by a whole-body regex scan of the decoded
+//   golden span: each of those 4 identifiers occurs EXACTLY ONCE, at its own declaration, with the
+//   single exception of the token "IP" appearing inside the commented-out sample-report block at
+//   :2114 ("//Handler IP:   255.255.255.255"), which is a comment, not a use. NOT dropped, and this
+//   is the difference from the sibling functions' lists: `PathName` (see GOLDEN BUG #8) is read at
+//   :2688 even though it is never assigned, and `str3` is genuinely used (:2788-:2798).
+//   `sLotID1` is likewise NOT dropped -- see GOLDEN BUG #1: it is written by executed statements,
+//   not a bare declaration, so it fails this file's own drop criterion even though nothing reads it.
+//
+//   GOLDEN BUGS PRESERVED VERBATIM (10; each is also cited inline at its own site in the .cpp):
+//     1. (:2051-2054) `sLotID1`, including the Steven-20230317 empty-lot-ID fallback onto
+//        fLotInfo->edtSysLotID->Text, is written and then never read -- a dead store. The identical
+//        4 lines in the sibling SaveTestSummaryTSV (golden :2814-2819) DO feed FileName.sprintf();
+//        here FileName comes from st.sInfoArr_InnerLotID[] instead, so the guard is inert.
+//     2. (a) (:2059-2062) `int iUnloadCnt[eTrayCount]` is brace-initialised with 32 zeros while
+//        eTrayCount is 33 (MachineType.h e6TrayName; eMag14=32 was added JerryYang 20220909). Benign
+//        by itself. (b) (:2074-2077) the per-k reset loop only clears indices 0..8, so tray slots
+//        9..32 (eFix4..eMag14) ACCUMULATE across lots: with >1 lot, lot #2's "Group Bin Summary"
+//        double-counts any bin routed to one of those trays. Both left exactly as golden.
+//     3. (:2069-2072) the "no errors at all" early-out on the final (combined) iteration is
+//        `return`, not `break`, so the unconditional LotSummary.ClearAllData() at :2802 is skipped
+//        and the lot's counters leak into the next lot.
+//     4. (:2106-2107) the `bSaveData==false` early-out is placed AFTER st.sLotEndTime is overwritten
+//        (:2065), AFTER MyForceDirectories has created the year/month folder (:2082) and AFTER
+//        st.sInfo_ProgramName is reassigned (:2084-2090) -- so "do not save" still mutates state and
+//        still touches the filesystem; and it is again `return`, not `break`, so :2802 is skipped.
+//     5. (:2218) in the k==iInfo_MultiLotCnt (combined) arm, OPERATOR_ID is built from
+//        `sInfoArr_OperatorID[k]` -- index == iInfo_MultiLotCnt, i.e. ONE PAST the last populated
+//        slot, while every other line in that arm concatenates [0 .. iInfo_MultiLotCnt-1]. So the
+//        combined summary's OPERATOR_ID is always blank, and at iInfo_MultiLotCnt==5 (arrays are
+//        [5], golden SCK_ART.h:325-340) it is a genuine out-of-bounds read.
+//     6. (:2548 and :2578) `iCount++` in the Yield Summary loops: a leftover from the Hard Bin block
+//        above, incremented and never read again. Pure dead increment.
+//     7. (:2641 and :2654) bare expression statements -- `LotSummary.iTotalCategory[iTestBinCount];`
+//        and `LotSummary.iByLotTotalCategory[k][iTestBinCount];` -- a discarded array read with no
+//        assignment and no side effect. Kept as genuine no-ops with a `(void)` cast to silence
+//        -Wunused-value, exactly as SckArtRem_Save2DSortingSummary already does for golden :3920.
+//     8. (:2688) `sList->SaveToFile(PathName+FileName);` reads plain `PathName`, which is DECLARED
+//        at :2047 and NEVER ASSIGNED anywhere in this function (only `PathName2` is, at :2081) -- so
+//        this arm always writes to a bare relative file name, i.e. into the process working
+//        directory, not into any summary folder. The sibling SaveTestSummaryTSV's own `PathName` IS
+//        computed (golden :2823/:2827), which is what makes this one a genuine local defect rather
+//        than a shared idiom.
+//     9. (:2778-2781) the ShellExecute launch fires on `bA38_SLT_Summary && FileName!="" &&
+//        iUnloadCount>0`, a condition independent of the `bN17UploadLotSummary` block that is the
+//        only writer of `strFileName` (:2732/:2755) -- so with N-17 upload off it opens "". Same
+//        knot the two sibling report writers already carry; gate #11 records the empty call, which
+//        is what makes it assertable.
+//    10. (:2415-2418, :2542-2545, :2572-2575 -- three copies of one shape) `Prod.iT6PosCate[]` is
+//        1-BASED ("Auto1 = 1", golden cprod.h:512 -- AI(W906-SCKART-Multi) 20260802: corrected from a
+//        stale :513, which is `DBContact`'s declaration, the very next line). The Group Bin Summary
+//        block in THIS SAME function
+//        honours that (`if(i==temp-1)`, :2322), and so does every sibling report writer (golden :1820
+//        in SaveTestSummarySECS, :3691 in Save2DSortingSummary). These three sites instead test
+//        `Prod.iTrayType[temp]` -- one slot too high -- so the "is this bin's tray in use?" guard asks
+//        about the WRONG tray. Two visible consequences: (a) a bin routed to a used tray can be
+//        DROPPED from the Hard Bin and Yield Summary sections while still being counted in the Group
+//        Bin section of the very same report, and (b) because the lower bound here is `temp<0` (the
+//        Group Bin block uses `temp<=0`), an UNROUTED bin (iT6PosCate==0) is tested against tray 0 and
+//        gets a Hard Bin row whenever Auto1 happens to be in use. Verified unique to this function by
+//        grepping golden SCK_ART.cpp for `iTrayType[temp]`: 3 hits, all inside :2045-2803.
+// ---------------------------------------------------------------------------
+void SckArtRem_SaveMultiLotTestSummary(SckArtRemainderState &st, bool bSaveData);
 
 #endif // AUTOMATION_SCK_ART_REMAINDER_CORE_H

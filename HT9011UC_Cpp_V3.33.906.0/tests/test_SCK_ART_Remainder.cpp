@@ -10,6 +10,12 @@
 // AI(W906-DoARTLotStart) 20260721: added PART 9 (DoARTLotStart, golden :4191-4256).
 // AI(W906-Save2DSortingSummary) 20260723: added PART 11 (Save2DSortingSummary, golden :3402-4061);
 // also retrofitted PART 8's 2D-sort dispatch sub-case (now real, see PART 8's own updated comment).
+// AI(W906-SCKART-Multi-Test) 20260802: added PART 14 (SaveMultiLotTestSummary, golden :2045-2803) --
+// the function's ONLY caller in this tree (golden's own caller, csystem.cpp:10862's DoTrayFeedProcess,
+// is untranslated, owned by wave W7), and the first and only exercise anywhere of gate #5's per-lot
+// mirrors LotSummary.iByLotCountCategory[][][] / .iByLotTotalCategory[][]. Every one of its 37
+// assertions was verified to go RED against a neutered (immediate-return) function body; see PART 14's
+// own header for what it deliberately does NOT cover.
 //
 // LIMITATION 1 (same as test_SCK_ART.cpp/test_ContactForce.cpp): we CANNOT run the original BCB6
 // binary (no Borland compiler in this environment). Verification here is therefore: (1) the
@@ -86,6 +92,40 @@ static AnsiString ScratchDir()
     if (d.Length()==0 || d[d.Length()]!='\\')
         d = d + "\\";
     return d;
+}
+
+// AI(W906-SCKART-Multi-Test) 20260802: PART 14 content helpers. Both return FALSE for a missing or
+// unreadable file, so every POSITIVE assertion built on them automatically also asserts "the file was
+// produced at all" -- which is what makes them go red against a do-nothing body. NEGATIVE assertions
+// ("this line must NOT be present") are therefore always paired with a positive witness in the SAME
+// CHECK, never left standing alone, because "absent" is trivially true when nothing was written.
+static bool FileHasExactLine(const AnsiString& path, const AnsiString& want)
+{
+    if (!FileExists(path)) return false;
+    TStringList *sl = new TStringList();
+    sl->LoadFromFile(path);
+    bool found = false;
+    for (int i = 0; i < sl->Count; ++i)
+        if (sl->Strings[i] == want) found = true;
+    sl->Clear();
+    delete sl;
+    return found;
+}
+
+static bool FileHasLinePrefix(const AnsiString& path, const AnsiString& prefix)
+{
+    if (!FileExists(path)) return false;
+    TStringList *sl = new TStringList();
+    sl->LoadFromFile(path);
+    bool found = false;
+    for (int i = 0; i < sl->Count; ++i)
+    {
+        AnsiString line = sl->Strings[i];
+        if (line.Pos(prefix) == 1) found = true;
+    }
+    sl->Clear();
+    delete sl;
+    return found;
 }
 
 int main()
@@ -1098,6 +1138,462 @@ int main()
         IniConfig.bVTESTFunction = savedVTEST13;
         IniConfig.bN10_UploadSummaryToFTP = savedUploadToFTP13;
         IniConfig.iN10UploadMethod = savedUploadMethod13;
+    }
+
+    // =========================================================================================
+    // PART 14 -- SaveMultiLotTestSummary -- golden :2045-2803. AI(W906-SCKART-Multi-Test) 20260802.
+    //
+    //   WHY THIS PART EXISTS: three landed comments name it as the function's only caller
+    //   (SCK_ART_Remainder.cpp's PART-14 section banner, SCK_ART_Remainder.h's gate #5 note on the
+    //   iByLot* mirrors, and SCK_ART_Remainder.h's declaration doc). It is indeed the ONLY caller of
+    //   SckArtRem_SaveMultiLotTestSummary anywhere in this tree: golden's sole caller,
+    //   csystem.cpp:10862 inside DoTrayFeedProcess, is not translated yet (owned by wave W7).
+    //   This PART is also the FIRST and ONLY exercise of LotSummary.iByLotCountCategory[][][] and
+    //   .iByLotTotalCategory[][] -- gate #5's 4th extension -- which have no other reader in the tree.
+    //
+    //   PATH DISCIPLINE: asSummaryPath is redirected to a scratch dir for the WHOLE part (never the
+    //   real D:\HT9045_Log\Summary production tree) and restored at the end -- same discipline as
+    //   PART 10/11/12. CosFunction.bUseTSVFunction is deliberately FALSE, which keeps every write on
+    //   the redirectable PathName2 branch (golden :2709-2721) and away from GOLDEN BUG #8's bare
+    //   relative `PathName+FileName` save (golden :2688, reachable only through the TSV +
+    //   bN09_LotCountAutoFunc + iN09_4_UploadMethod!=0 arm, which would drop a file into the ctest
+    //   working directory). CosFunction.bSortingBy2DList is FALSE, so golden :2783-2800's hardcoded
+    //   "D:\HT9045_Log\2D_SortList" tail is never touched at all -- this PART, unlike PART 11 and
+    //   PART 13, reaches NO real production path whatsoever.
+    //
+    //   DETERMINISM (no minute-rollover flakiness): golden stamps st.sLotEndTime (:2065) and every
+    //   FileName (:2099/:2103) from the SAME GetTimeInfo() snapshot (:2063). So this PART never
+    //   guesses the wall clock -- it reads the stamp back out of st.sLotEndTime AFTER the call and
+    //   derives the exact expected folder + file names from it. The pre-call DeleteFile sweep uses a
+    //   test-side GetTimeInfo() purely to clear a same-minute leftover from a crashed earlier run.
+    //
+    //   NOT EXERCISED HERE (preserved+cited in the source, pinned elsewhere or deliberately not at
+    //   all): GOLDEN BUG #8 (needs the non-redirectable save arm, see above); GOLDEN BUG #9 (the
+    //   ShellExecute-with-empty-path launch -- bA38_SLT_Summary is FALSE here; PART 10 and PART 11
+    //   already pin that exact idiom against the two structurally identical sibling call sites);
+    //   GOLDEN BUGS #1, #6, #7 (a dead store, a dead increment and two discarded reads -- by
+    //   construction they have NO observable effect, so no assertion can distinguish them; they are
+    //   cited at their sites and covered by the fidelity audit, not by this harness); GOLDEN BUG
+    //   #2(a) (the 32-vs-33 brace initialiser -- benign, element 32 is value-initialised anyway).
+    //
+    //   FIXTURE (all restored at the end): 2 real lots + the combined roll-up
+    //   (iInfo_MultiLotCnt==2 -> k=0,1 per-lot, k=2 combined), a 2x1 site grid, iTestBinCount==4
+    //   (bins 0..3 plus the bin-4 "Err" row), and this tray map, chosen so that three separate
+    //   golden bugs become visible in the SAME report:
+    //     tray 0  (eAuto1) in use, bin 1 routed to it  -> iT6PosCate[1]=1
+    //     tray 1  (eAuto2) in use, bin 2 routed to it  -> iT6PosCate[2]=2
+    //     tray 2  (eAuto3) NOT in use                  -> makes bin 2 vanish from the Hard Bin and
+    //                                                     Yield sections (GOLDEN BUG #10(a): those
+    //                                                     three sites test iTrayType[temp], one slot
+    //                                                     too high, instead of iTrayType[temp-1])
+    //     bin 0 unrouted (iT6PosCate[0]==0)            -> still gets a Hard Bin row, because temp==0
+    //                                                     is tested against tray 0, which IS in use
+    //                                                     (GOLDEN BUG #10(b))
+    //     tray 9  (eFix4)  in use, bin 3 routed to it  -> index >= 9, i.e. OUTSIDE the `for(i<9)`
+    //                                                     per-lot reset (GOLDEN BUG #2(b)), so its
+    //                                                     Group Bin figure ACCUMULATES across lots
+    //     tray 10 (eFix5)  in use, no bin routed       -> the "(Null)" aUnloader shape
+    // =========================================================================================
+    printf("\n-- SaveMultiLotTestSummary --\n");
+    {
+        // ---- save every global this PART steers ----
+        AnsiString savedSummaryPath14 = asSummaryPath;
+        int  savedMachineType14   = MachineTypeChoice;
+        int  savedTestBinCount14  = iTestBinCount;
+        int  savedShtRow14        = TestSocket.iShtRow;
+        int  savedShtCol14        = TestSocket.iShtCol;
+        int  savedIfErrorT6_14    = Prod.iIfErrorT6;
+        int  savedInputCT14       = LastSet.iSCKARTInputCT;
+        int  savedE1_14           = iE1Count;
+        int  savedE2_14           = iE2Count;
+        int  savedE3_14           = iE3Count;
+        int  savedEnd_14          = iENotDefinedCount;
+        bool savedSPIL14          = IniConfig.bSPILFunction;
+        bool savedN17_14          = IniConfig.bN17UploadLotSummary;
+        bool savedA38_14          = IniConfig.bA38_SLT_Summary;
+        bool savedTSV14           = CosFunction.bUseTSVFunction;
+        bool savedSort2D14        = CosFunction.bSortingBy2DList;
+        int  savedTrayType14[eTrayCount];
+        int  savedPosCate14[8];
+        int  savedPassBin14[8];
+        int  i14;
+        for (i14 = 0; i14 < eTrayCount; ++i14) savedTrayType14[i14] = Prod.iTrayType[i14];
+        for (i14 = 0; i14 < 8; ++i14)
+        {
+            savedPosCate14[i14] = Prod.iT6PosCate[i14];
+            savedPassBin14[i14] = Prod.bIsPassBin[i14];
+        }
+
+        asSummaryPath                  = ScratchDir() + "W906SaveMultiLotSummaryScratch";
+        MachineTypeChoice              = Type_HT9046;   // pins the sInfo_ProgramName reassignment (golden :2087-2088)
+        IniConfig.bSPILFunction        = false;         // unconditional SaveToFile + no "skip zero-total bin" filtering
+        IniConfig.bN17UploadLotSummary = false;
+        IniConfig.bA38_SLT_Summary     = false;         // GOLDEN BUG #9's launch stays out of this PART (PART 10/11 own it)
+        CosFunction.bUseTSVFunction    = false;         // keep every write on the redirectable PathName2 branch
+        CosFunction.bSortingBy2DList   = false;         // skip golden :2783-2800's hardcoded 2D backup tail entirely
+
+        iTestBinCount      = 4;    // bins 0..3 are real bins; bin 4 == iTestBinCount == the "Err" row
+        TestSocket.iShtRow = 2;
+        TestSocket.iShtCol = 1;    // 2 sites: indices 0 and 1
+        Prod.iIfErrorT6    = -1;   // no tray is the "error" tray -> aUnloader gets "Null", never "error"
+
+        for (i14 = 0; i14 < eTrayCount; ++i14) Prod.iTrayType[i14] = tNotUse;
+        Prod.iTrayType[0]  = tTrayAuto;   // eAuto1
+        Prod.iTrayType[1]  = tTrayAuto;   // eAuto2
+        // eAuto3 (index 2) stays tNotUse ON PURPOSE -- that is what makes GOLDEN BUG #10(a) visible
+        Prod.iTrayType[9]  = tTrayFix;    // eFix4  -- index >= 9: the slot GOLDEN BUG #2(b) never resets
+        Prod.iTrayType[10] = tTrayFix;    // eFix5  -- in use, but no bin routed to it
+
+        for (i14 = 0; i14 < 8; ++i14) { Prod.iT6PosCate[i14] = 0; Prod.bIsPassBin[i14] = 0; }
+        Prod.iT6PosCate[1] = 1;    // bin 1 -> tray 0 (iT6PosCate is 1-BASED, golden cprod.h:512 "Auto1 = 1")
+        Prod.iT6PosCate[2] = 2;    // bin 2 -> tray 1
+        Prod.iT6PosCate[3] = 10;   // bin 3 -> tray 9
+        Prod.bIsPassBin[0] = 0;    // PASS
+        Prod.bIsPassBin[1] = 0;    // PASS
+        Prod.bIsPassBin[2] = 1;    // FAIL
+        Prod.bIsPassBin[3] = 1;    // FAIL
+
+        // -----------------------------------------------------------------------------------
+        // 14A -- bSaveData==false. GOLDEN BUG #4 (golden :2106-2107): the early-out sits AFTER
+        //   st.sLotEndTime is overwritten (:2065), AFTER MyForceDirectories has created the
+        //   year/month folder (:2082) and AFTER st.sInfo_ProgramName is reassigned (:2084-2090);
+        //   and it is `return`, not `break`, so :2802's unconditional ClearAllData() is skipped.
+        // -----------------------------------------------------------------------------------
+        {
+            W5SckArtRem_LotSummary.iTotalCategory[1] = 99;   // must SURVIVE the call (ClearAllData skipped)
+
+            SckArtRemainderState stF;
+            stF.iInfo_MultiLotCnt      = 2;
+            stF.sInfoArr_InnerLotID[0] = "W906P14NOSAVE";
+            stF.sInfoArr_CustLotID[0]  = "CLN";
+            stF.sInfoArr_CustDevGup[0] = "DGN";
+            stF.sLotEndTime            = "SENTINEL-NOT-OVERWRITTEN";
+            stF.sInfo_ProgramName      = "SENTINEL-NOT-OVERWRITTEN";
+
+            SckArtRem_SaveMultiLotTestSummary(stF, /*bSaveData=*/false);
+
+            CHECK(stF.sLotEndTime != "SENTINEL-NOT-OVERWRITTEN" && stF.sLotEndTime.Length() == 14,
+                  "bSaveData==false STILL overwrote st.sLotEndTime with the 14-digit YYYYMMDDhhmmss stamp before returning (golden :2065, GOLDEN BUG #4)");
+            CHECK(stF.sInfo_ProgramName == "HT9046",
+                  "bSaveData==false STILL reassigned st.sInfo_ProgramName from MachineTypeChoice==Type_HT9046 before returning (golden :2087-2088, GOLDEN BUG #4)");
+
+            AnsiString dirF  = asSummaryPath + AnsiString("\\") + stF.sLotEndTime.SubString(1,4)
+                                             + AnsiString("\\") + stF.sLotEndTime.SubString(5,2);
+            AnsiString fileF = dirF + AnsiString("\\W906P14NOSAVE_CLN_DGN_") + stF.sLotEndTime.SubString(1,12) + AnsiString(".txt");
+
+            CHECK(DirectoryExists(dirF),
+                  "bSaveData==false STILL created the year/month summary folder via MyForceDirectories before returning (golden :2081-2082, GOLDEN BUG #4)");
+            CHECK(FileExists(fileF) == false && DirectoryExists(dirF),
+                  "...but wrote NO file -- the bSaveData==false return lands after FileName is built and before the TStringList is even allocated (golden :2106-2110)");
+            CHECK(W5SckArtRem_LotSummary.iTotalCategory[1] == 99 && stF.sInfo_ProgramName == "HT9046",
+                  "bSaveData==false is `return`, NOT `break` -- golden :2802's unconditional LotSummary.ClearAllData() never runs, so the seeded iTotalCategory[1]==99 survives (GOLDEN BUG #4)");
+        }
+
+        // -----------------------------------------------------------------------------------
+        // Shared fixture for 14B..14E. Numbers are all distinct per (lot, site, bin) so that a
+        // mis-indexed read cannot accidentally produce the expected text.
+        // -----------------------------------------------------------------------------------
+        W5SckArtRem_LotSummary.ClearAllData();
+        {
+            int L, s, b;
+            for (L = 0; L < 5; ++L) W5SckArtRem_LotSummary.iByLotLoadCount[L] = 0;
+            for (L = 0; L < 5; ++L)
+                for (b = 0; b <= 4; ++b)
+                {
+                    W5SckArtRem_LotSummary.iByLotTotalCategory[L][b] = 0;
+                    for (s = 0; s < 2; ++s)
+                        W5SckArtRem_LotSummary.iByLotCountCategory[L][s][b] = 0;
+                }
+        }
+
+        // lot 0 (k==0) -- read ONLY through iByLotCountCategory[0][][] / iByLotTotalCategory[0][]
+        W5SckArtRem_LotSummary.iByLotCountCategory[0][0][1] =  11;
+        W5SckArtRem_LotSummary.iByLotCountCategory[0][1][1] =  12;
+        W5SckArtRem_LotSummary.iByLotTotalCategory[0][1]    =  23;
+        W5SckArtRem_LotSummary.iByLotCountCategory[0][0][2] =   3;
+        W5SckArtRem_LotSummary.iByLotCountCategory[0][1][2] =   4;
+        W5SckArtRem_LotSummary.iByLotTotalCategory[0][2]    =   7;
+        W5SckArtRem_LotSummary.iByLotCountCategory[0][0][3] =  40;
+        W5SckArtRem_LotSummary.iByLotCountCategory[0][1][3] =  60;
+        W5SckArtRem_LotSummary.iByLotTotalCategory[0][3]    = 100;
+        W5SckArtRem_LotSummary.iByLotLoadCount[0]           =  31;
+        // lot 1 (k==1)
+        W5SckArtRem_LotSummary.iByLotCountCategory[1][0][1] =  21;
+        W5SckArtRem_LotSummary.iByLotCountCategory[1][1][1] =  22;
+        W5SckArtRem_LotSummary.iByLotTotalCategory[1][1]    =  43;
+        W5SckArtRem_LotSummary.iByLotCountCategory[1][0][2] =   5;
+        W5SckArtRem_LotSummary.iByLotCountCategory[1][1][2] =   6;
+        W5SckArtRem_LotSummary.iByLotTotalCategory[1][2]    =  11;
+        W5SckArtRem_LotSummary.iByLotCountCategory[1][0][3] =  90;
+        W5SckArtRem_LotSummary.iByLotCountCategory[1][1][3] = 110;
+        W5SckArtRem_LotSummary.iByLotTotalCategory[1][3]    = 200;
+        W5SckArtRem_LotSummary.iByLotLoadCount[1]           =  62;
+        // combined roll-up (k==2) -- read through iCountCategory[][] / iTotalCategory[]
+        W5SckArtRem_LotSummary.iCountCategory[0][1] =  32;
+        W5SckArtRem_LotSummary.iCountCategory[1][1] =  34;
+        W5SckArtRem_LotSummary.iTotalCategory[1]    =  66;
+        W5SckArtRem_LotSummary.iCountCategory[0][2] =   8;
+        W5SckArtRem_LotSummary.iCountCategory[1][2] =  10;
+        W5SckArtRem_LotSummary.iTotalCategory[2]    =  18;
+        W5SckArtRem_LotSummary.iCountCategory[0][3] = 150;
+        W5SckArtRem_LotSummary.iCountCategory[1][3] = 250;
+        W5SckArtRem_LotSummary.iTotalCategory[3]    = 400;
+        W5SckArtRem_LotSummary.iCountCategory[0][4] =   9;   // the "Err" bin (iBin==iTestBinCount)
+        W5SckArtRem_LotSummary.iCountCategory[1][4] =  11;
+        W5SckArtRem_LotSummary.iTotalCategory[4]    =  20;
+        LastSet.iSCKARTInputCT = 90;                          // combined "Handler Load Qty" (golden :2361)
+
+        // non-zero so the k==iInfo_MultiLotCnt guard (golden :2069) does NOT fire on this first call
+        iE1Count = 2; iE2Count = 3; iE3Count = 5; iENotDefinedCount = 0;
+
+        SckArtRemainderState st14;
+        st14.iInfo_MultiLotCnt      = 2;
+        st14.sInfoArr_InnerLotID[0] = "W906P14LOTA";  st14.sInfoArr_InnerLotID[1] = "W906P14LOTB";
+        st14.sInfoArr_CustLotID[0]  = "CLA";          st14.sInfoArr_CustLotID[1]  = "CLB";
+        st14.sInfoArr_CustDevGup[0] = "DGA";          st14.sInfoArr_CustDevGup[1] = "DGB";
+        st14.sInfoArr_Customer[0]   = "CUSTA";        st14.sInfoArr_Customer[1]   = "CUSTB";
+        st14.sInfoArr_DeviceName[0] = "DEVA";         st14.sInfoArr_DeviceName[1] = "DEVB";
+        st14.sInfoArr_Stage[0]      = "FT1";          st14.sInfoArr_Stage[1]      = "FT2";
+        st14.sInfoArr_OperatorID[0] = "OPA";          st14.sInfoArr_OperatorID[1] = "OPB";
+        st14.sInfoArr_OperatorID[2] = "";             // slot [iInfo_MultiLotCnt] -- see GOLDEN BUG #5 (14E)
+        st14.sLotStartTime          = "20260802080000";
+        st14.sLotEndTime            = "SENTINEL-NOT-OVERWRITTEN";
+
+        // Clear a same-minute leftover from a crashed earlier run (test-side clock; the AUTHORITATIVE
+        // stamp is read back from st14.sLotEndTime after the call).
+        GetTimeInfo();
+        {
+            AnsiString guessDir, guessStamp;
+            guessStamp.sprintf("%04d%02d%02d%02d%02d", SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin);
+            guessDir.sprintf("%s\\%04d\\%02d\\", asSummaryPath, SystemYear, SystemMonth);
+            DeleteFile(guessDir + AnsiString("W906P14LOTA_CLA_DGA_")   + guessStamp + AnsiString(".txt"));
+            DeleteFile(guessDir + AnsiString("W906P14LOTB_CLB_DGB_")   + guessStamp + AnsiString(".txt"));
+            DeleteFile(guessDir + AnsiString("W906P14LOTAW906P14LOTB_")+ guessStamp + AnsiString(".txt"));
+            DeleteFile(guessDir + AnsiString("W906P14LOTC_CLC_DGC_")   + guessStamp + AnsiString(".txt"));
+            DeleteFile(guessDir + AnsiString("W906P14LOTD_CLD_DGD_")   + guessStamp + AnsiString(".txt"));
+            DeleteFile(guessDir + AnsiString("W906P14LOTCW906P14LOTD_")+ guessStamp + AnsiString(".txt"));
+        }
+
+        SckArtRem_SaveMultiLotTestSummary(st14, /*bSaveData=*/true);
+
+        // Authoritative, rollover-proof reconstruction of the 3 produced paths.
+        AnsiString stamp14 = st14.sLotEndTime.SubString(1,12);   // YYYYMMDDhhmm, exactly what FileName uses
+        AnsiString dir14   = asSummaryPath + AnsiString("\\") + st14.sLotEndTime.SubString(1,4)
+                                           + AnsiString("\\") + st14.sLotEndTime.SubString(5,2) + AnsiString("\\");
+        AnsiString fileLotA = dir14 + AnsiString("W906P14LOTA_CLA_DGA_")    + stamp14 + AnsiString(".txt");
+        AnsiString fileLotB = dir14 + AnsiString("W906P14LOTB_CLB_DGB_")    + stamp14 + AnsiString(".txt");
+        AnsiString fileComb = dir14 + AnsiString("W906P14LOTAW906P14LOTB_") + stamp14 + AnsiString(".txt");
+
+        // -----------------------------------------------------------------------------------
+        // 14B -- the three files exist, with the two DIFFERENT golden FileName shapes: per-lot
+        //   "%s_%s_%s_stamp.txt" (golden :2103) vs combined "%s_stamp.txt" where %s is the
+        //   SEPARATOR-LESS concatenation of sInfoArr_InnerLotID[0..cnt-1] (golden :2094-2099).
+        // -----------------------------------------------------------------------------------
+        CHECK(FileExists(fileLotA) && FileExists(fileLotB),
+              "k=0 and k=1 each wrote a per-lot summary named InnerLotID_CustLotID_CustDevGup_stamp.txt under the SCRATCH asSummaryPath (golden :2103)");
+        CHECK(FileExists(fileComb),
+              "k==iInfo_MultiLotCnt wrote the COMBINED summary named <InnerLotID[0]+InnerLotID[1]>_stamp.txt -- separator-less concatenation (golden :2094-2099)");
+
+        // -----------------------------------------------------------------------------------
+        // 14C -- THE PER-LOT MIRRORS ARE ACTUALLY READ, per lot, at the right index.
+        //   Hard Bin row layout (golden :2427-2515): 5-wide right-aligned bin no, " PASS"/" FAIL",
+        //   then one 6-wide right-aligned count per site, then the 6-wide row total. bin 1 is a
+        //   PASS bin routed to tray 0.
+        //     lot 0 -> iByLotCountCategory[0][0..1][1] == 11,12 and iByLotTotalCategory[0][1] == 23
+        //     lot 1 -> iByLotCountCategory[1][0..1][1] == 21,22 and iByLotTotalCategory[1][1] == 43
+        //     combined -> iCountCategory[0..1][1] == 32,34 and iTotalCategory[1] == 66
+        //   The trailing yield percentage is deliberately not pinned (ChangeToPercentage's exact
+        //   formatting is a separate, already-covered concern) -- prefix match only.
+        // -----------------------------------------------------------------------------------
+        CHECK(FileHasLinePrefix(fileLotA, "    1 PASS    11    12    23"),
+              "lot 0's Hard Bin row for bin 1 is built from iByLotCountCategory[0][site][1] (11,12) and iByLotTotalCategory[0][1] (23) -- golden :2490/:2503, the FIRST reader of those two arrays in this tree");
+        CHECK(FileHasLinePrefix(fileLotB, "    1 PASS    21    22    43"),
+              "lot 1's SAME row uses lot index k==1 -- iByLotCountCategory[1][site][1] (21,22) / iByLotTotalCategory[1][1] (43), proving the [k] subscript, not a fixed lot");
+        CHECK(FileHasLinePrefix(fileComb, "    1 PASS    32    34    66"),
+              "the combined arm switches to the NON-per-lot mirrors iCountCategory[site][1] (32,34) / iTotalCategory[1] (66) (golden :2454/:2467)");
+        CHECK(FileHasLinePrefix(fileLotA, "    3 FAIL    40    60   100"),
+              "lot 0's bin 3 row is a FAIL row (Prod.bIsPassBin[3]==1, golden :2441-2444) with iByLotCountCategory[0][site][3] (40,60) / iByLotTotalCategory[0][3] (100)");
+        CHECK(FileHasLinePrefix(fileComb, "  Err FAIL     9    11    20"),
+              "the iBin==iTestBinCount row is labelled \"Err\"+\" FAIL\" unconditionally and reports iCountCategory[site][4] (9,11) / iTotalCategory[4] (20) (golden :2410-2437)");
+
+        // -----------------------------------------------------------------------------------
+        // 14D -- Group Bin Summary: aUnloader text + per-tray totals, AND GOLDEN BUG #2(b).
+        //   Tray 0 and tray 1 are inside the `for(int i=0;i<9;i++) iUnloadCnt[i]=0;` per-k reset
+        //   (golden :2074-2077) so they report each lot cleanly. Tray 9 is NOT -- its counter
+        //   accumulates across every k of the SAME call:
+        //     k=0 -> 100                      (iByLotTotalCategory[0][3])
+        //     k=1 -> 100+200 = 300            (should have been 200)
+        //     k=2 -> 300+400 = 700            (should have been 400)
+        // -----------------------------------------------------------------------------------
+        {
+            AnsiString g0A, g0B, g0C, g1A, g9A, g9B, g9C, g10A;
+            g0A.sprintf("%s(1):%d",    s6ShortTrayName[0],  23);
+            g0B.sprintf("%s(1):%d",    s6ShortTrayName[0],  43);
+            g0C.sprintf("%s(1):%d",    s6ShortTrayName[0],  66);
+            g1A.sprintf("%s(2):%d",    s6ShortTrayName[1],   7);
+            g9A.sprintf("%s(3):%d",    s6ShortTrayName[9], 100);
+            g9B.sprintf("%s(3):%d",    s6ShortTrayName[9], 300);
+            g9C.sprintf("%s(3):%d",    s6ShortTrayName[9], 700);
+            g10A.sprintf("%s(Null):%d", s6ShortTrayName[10], 0);
+
+            CHECK(FileHasExactLine(fileLotA, g0A) && FileHasExactLine(fileLotB, g0B) && FileHasExactLine(fileComb, g0C),
+                  "Group Bin line for tray 0 reads \"<shortname>(1):<total>\" and reports 23 / 43 / 66 for lot0 / lot1 / combined -- tray index < 9, so the per-k reset (golden :2074-2077) DOES clear it");
+            CHECK(FileHasExactLine(fileLotA, g1A),
+                  "Group Bin line for tray 1 reads \"<shortname>(2):7\" -- bin 2 IS counted here even though 14E shows it is missing from the Hard Bin / Yield sections of the very same report");
+            CHECK(FileHasExactLine(fileLotA, g9A) && FileHasExactLine(fileLotB, g9B) && FileHasExactLine(fileComb, g9C),
+                  "GOLDEN BUG #2(b): tray 9 is OUTSIDE the `for(i<9)` per-k reset, so its Group Bin figure ACCUMULATES -- 100, then 100+200=300 (should be 200), then 300+400=700 (should be 400)");
+            CHECK(FileHasExactLine(fileLotA, g10A),
+                  "an in-use tray with no bin routed to it renders as \"<shortname>(Null):0\" (golden :2352-2355)");
+        }
+
+        // -----------------------------------------------------------------------------------
+        // 14E -- GOLDEN BUG #10 (both manifestations) + GOLDEN BUG #5 + header/roll-up lines.
+        // -----------------------------------------------------------------------------------
+        {
+            // 10(a): bin 2 is routed to tray 1, which IS in use, and its 7 units DO appear in the
+            // Group Bin section (asserted in 14D) -- yet no Hard Bin row exists for it, because the
+            // guard tests Prod.iTrayType[temp] == iTrayType[2] (eAuto3, tNotUse) instead of [temp-1].
+            bool hasBin2Row = FileHasLinePrefix(fileLotA, "    2 ");
+            CHECK(hasBin2Row == false && FileHasLinePrefix(fileLotA, "    1 PASS"),
+                  "GOLDEN BUG #10(a): bin 2 has a Group Bin figure but NO Hard Bin row -- the guard asks Prod.iTrayType[temp] (tray 2, unused) instead of [temp-1] (tray 1, in use) (golden :2415-2418)");
+            // 10(b): bin 0 is UNROUTED (iT6PosCate[0]==0) and the lower bound is `temp<0`, not
+            // `temp<=0`, so it is tested against tray 0 -- which is in use -- and gets a row.
+            CHECK(FileHasLinePrefix(fileLotA, "    0 PASS     0     0     0"),
+                  "GOLDEN BUG #10(b): the UNROUTED bin 0 still gets an all-zero Hard Bin row, because temp==0 is tested against tray 0 (in use) and the bound is `temp<0`, not the Group Bin block's `temp<=0` (golden :2415-2418)");
+            // ...and the Yield Summary inherits the same filter, so bin 2's 7 units are excluded
+            // there too: PASS==iByLotTotalCategory[0][1]==23 (bin 1 only), FAIL==100 (bin 3 only).
+            CHECK(FileHasLinePrefix(fileLotA, " PASS    23") && FileHasLinePrefix(fileLotA, " FAIL   100"),
+                  "lot 0's Yield Summary is PASS 23 / FAIL 100 -- bin 2's 7 units are silently EXCLUDED by the same GOLDEN BUG #10(a) filter (golden :2565-2592), so PASS+FAIL(123) != Handler Unload Qty(130)");
+            CHECK(FileHasLinePrefix(fileLotB, " PASS    43") && FileHasLinePrefix(fileLotB, " FAIL   200"),
+                  "lot 1's Yield Summary uses lot index k==1 -- PASS 43 / FAIL 200 from iByLotTotalCategory[1][]");
+            CHECK(FileHasLinePrefix(fileComb, " PASS    66") && FileHasLinePrefix(fileComb, " FAIL   420"),
+                  "the combined Yield Summary uses iTotalCategory[] -- PASS 66, FAIL 400(bin 3)+20(the Err bin) == 420 (golden :2535-2561)");
+        }
+
+        CHECK(FileHasExactLine(fileLotA, "OPERATOR_ID:OPA") && FileHasExactLine(fileLotB, "OPERATOR_ID:OPB"),
+              "the per-lot arm's OPERATOR_ID is sInfoArr_OperatorID[k] and is correct for both lots (golden :2259)");
+        CHECK(FileHasExactLine(fileComb, "OPERATOR_ID:") && FileHasExactLine(fileComb, "CUSTOMER:CUSTA_CUSTB"),
+              "GOLDEN BUG #5: the COMBINED arm's OPERATOR_ID also uses [k] -- i.e. index iInfo_MultiLotCnt, one past the last populated slot -- so it is BLANK, while every neighbouring line in the same arm correctly joins [0..cnt-1] (golden :2218 vs :2138-2143)");
+        CHECK(FileHasExactLine(fileComb, "INNER_LOT_ID:W906P14LOTA_W906P14LOTB")
+              && FileHasExactLine(fileComb, "CUST_LOT_ID:CLA_CLB")
+              && FileHasExactLine(fileComb, "CUSTOMER_DEVICE_GROUP:DGA_DGB")
+              && FileHasExactLine(fileComb, "DEVICE_NAME:DEVA_DEVB")
+              && FileHasExactLine(fileComb, "STAGE:FT1_FT2"),
+              "the combined arm underscore-JOINS all five sInfoArr_* fields over [0..iInfo_MultiLotCnt-1] (golden :2150-2235) -- note the joiner differs from the separator-less FileName concatenation at :2094-2099");
+        CHECK(FileHasExactLine(fileLotA, "SUMMARY_START_TIME:20260802080000")
+              && FileHasExactLine(fileLotA, AnsiString("SUMMARY_END_TIME:") + st14.sLotEndTime),
+              "SUMMARY_START_TIME comes from the non-empty st.sLotStartTime branch (golden :2267-2270) and SUMMARY_END_TIME is the stamp the function itself wrote into st.sLotEndTime (golden :2065/:2277)");
+        CHECK(FileHasExactLine(fileLotA, "Handler Load Qty:31")
+              && FileHasExactLine(fileLotB, "Handler Load Qty:62")
+              && FileHasExactLine(fileComb, "Handler Load Qty:90"),
+              "Handler Load Qty is iByLotLoadCount[k] per lot (31/62) but switches to LastSet.iSCKARTInputCT (90) for the combined arm (golden :2361-2365)");
+        CHECK(FileHasExactLine(fileLotA, "Handler Unload Qty:130")
+              && FileHasExactLine(fileLotB, "Handler Unload Qty:254")
+              && FileHasExactLine(fileComb, "Handler Unload Qty:504"),
+              "Handler Unload Qty is the bin 0..iTestBinCount x site accumulation over iByLotCountCategory[k][][] per lot (130/254) and over iCountCategory[][] combined (504) (golden :2280-2309)");
+        CHECK(FileHasExactLine(fileComb, " 991: 2") && FileHasExactLine(fileComb, " 992: 3")
+              && FileHasExactLine(fileComb, " 993: 5") && FileHasExactLine(fileComb, " 994: 10"),
+              "the combined Error Bin Summary reports the real iE1/iE2/iE3 globals (2/3/5) and computes 994 as iTotalCategory[iTestBinCount]-iE1-iE2-iE3 == 20-2-3-5 == 10 (golden :2643-2650)");
+        CHECK(FileHasExactLine(fileLotA, " 991: 0") && FileHasExactLine(fileLotA, " 994: 0"),
+              "the PER-LOT Error Bin Summary hardcodes literal zeros regardless of the real counters (golden :2656-2663)");
+        CHECK(FileHasLinePrefix(fileComb, "PROGRAM_NAME:HT9046."),
+              "PROGRAM_NAME is \"<sInfo_ProgramName>.<MainVersion>\" with sInfo_ProgramName driven by MachineTypeChoice==Type_HT9046 (golden :2087-2088/:2213)");
+
+        // -----------------------------------------------------------------------------------
+        // 14F -- the loop ran to completion, so golden :2802's UNCONDITIONAL ClearAllData() fired.
+        //   Since gate #5's stub now also zeroes iE1/iE2/iE3 (matching golden cSocket.cpp:760-762),
+        //   that is directly observable -- and it is what sets up 14G's second call.
+        // -----------------------------------------------------------------------------------
+        CHECK(iE1Count == 0 && iE2Count == 0 && iE3Count == 0,
+              "completing the k loop reached golden :2802's unconditional LotSummary.ClearAllData(), which zeroed the iE1/iE2/iE3 globals seeded to 2/3/5 (golden cSocket.cpp:760-762)");
+        CHECK(W5SckArtRem_LotSummary.iTotalCategory[1] == 0 && W5SckArtRem_LotSummary.iCountCategory[0][1] == 0,
+              "...the same ClearAllData() zeroed the combined-slot mirrors iTotalCategory[1] (was 66) and iCountCategory[0][1] (was 32)");
+        CHECK(W5SckArtRem_LotSummary.iByLotTotalCategory[0][1] == 23
+              && W5SckArtRem_LotSummary.iByLotCountCategory[0][0][1] == 11
+              && FileExists(fileComb),
+              "...but did NOT zero the PER-LOT mirrors: golden's own ClearAllData() (cSocket.cpp:754-763) never touches iByLotCountCategory/iByLotTotalCategory, and this stub matches that exactly");
+
+        // -----------------------------------------------------------------------------------
+        // 14G -- the two-call scenario. iE1/iE2/iE3 are now 0 (14F) and iENotDefinedCount is 0, so
+        //   the SECOND call's final iteration hits golden :2069's guard. GOLDEN BUG #3: that guard
+        //   is `return`, not `break` -- the per-lot files for k=0,1 were already written, but the
+        //   combined file is never produced AND :2802's ClearAllData() is skipped entirely.
+        //   Distinct lot IDs give distinct file names, so golden :2709's FileExists dedup cannot be
+        //   mistaken for the guard.
+        // -----------------------------------------------------------------------------------
+        W5SckArtRem_LotSummary.iTotalCategory[1] = 777;   // must SURVIVE -- ClearAllData() is skipped
+
+        SckArtRemainderState st14b = st14;
+        st14b.sInfoArr_InnerLotID[0] = "W906P14LOTC";  st14b.sInfoArr_InnerLotID[1] = "W906P14LOTD";
+        st14b.sInfoArr_CustLotID[0]  = "CLC";          st14b.sInfoArr_CustLotID[1]  = "CLD";
+        st14b.sInfoArr_CustDevGup[0] = "DGC";          st14b.sInfoArr_CustDevGup[1] = "DGD";
+        st14b.sLotEndTime            = "SENTINEL-NOT-OVERWRITTEN";
+
+        SckArtRem_SaveMultiLotTestSummary(st14b, /*bSaveData=*/true);
+
+        AnsiString stamp14b = st14b.sLotEndTime.SubString(1,12);
+        AnsiString dir14b   = asSummaryPath + AnsiString("\\") + st14b.sLotEndTime.SubString(1,4)
+                                            + AnsiString("\\") + st14b.sLotEndTime.SubString(5,2) + AnsiString("\\");
+        AnsiString fileLotC  = dir14b + AnsiString("W906P14LOTC_CLC_DGC_")    + stamp14b + AnsiString(".txt");
+        AnsiString fileLotD  = dir14b + AnsiString("W906P14LOTD_CLD_DGD_")    + stamp14b + AnsiString(".txt");
+        AnsiString fileCombCD= dir14b + AnsiString("W906P14LOTCW906P14LOTD_") + stamp14b + AnsiString(".txt");
+
+        CHECK(FileExists(fileLotC) && FileExists(fileLotD),
+              "second call: the k=0 and k=1 per-lot iterations still ran and wrote their files BEFORE the final-iteration guard was ever evaluated (golden :2067-2072)");
+        CHECK(FileExists(fileCombCD) == false && FileExists(fileLotD),
+              "second call: with iE1/iE2/iE3 zeroed by the first call's ClearAllData() and iENotDefinedCount==0, golden :2069's guard fires and the COMBINED summary is never produced");
+        CHECK(W5SckArtRem_LotSummary.iTotalCategory[1] == 777 && FileExists(fileLotD),
+              "GOLDEN BUG #3: that guard is `return`, not `break`, so golden :2802's unconditional ClearAllData() is SKIPPED and the seeded iTotalCategory[1]==777 leaks past the lot boundary");
+        CHECK(FileHasLinePrefix(fileLotC, "    1 PASS    11    12    23"),
+              "second call: lot C's Hard Bin row still reads 11/12/23 -- the per-lot mirrors survived the first call's ClearAllData(), matching golden (cSocket.cpp:754-763 leaves them alone)");
+
+        // ---- idempotent cleanup: remove every file/folder this PART created ----
+        if (FileExists(fileLotA))   DeleteFile(fileLotA);
+        if (FileExists(fileLotB))   DeleteFile(fileLotB);
+        if (FileExists(fileComb))   DeleteFile(fileComb);
+        if (FileExists(fileLotC))   DeleteFile(fileLotC);
+        if (FileExists(fileLotD))   DeleteFile(fileLotD);
+        if (FileExists(fileCombCD)) DeleteFile(fileCombCD);
+        RemoveDir(asSummaryPath + AnsiString("\\") + st14.sLotEndTime.SubString(1,4) + AnsiString("\\") + st14.sLotEndTime.SubString(5,2));
+        RemoveDir(asSummaryPath + AnsiString("\\") + st14b.sLotEndTime.SubString(1,4) + AnsiString("\\") + st14b.sLotEndTime.SubString(5,2));
+        RemoveDir(asSummaryPath + AnsiString("\\") + st14.sLotEndTime.SubString(1,4));
+        RemoveDir(asSummaryPath);
+
+        // ---- restore every global this PART steered, and leave LotSummary clean for re-runs ----
+        W5SckArtRem_LotSummary.ClearAllData();
+        {
+            int L, s, b;
+            for (L = 0; L < 5; ++L) W5SckArtRem_LotSummary.iByLotLoadCount[L] = 0;
+            for (L = 0; L < 5; ++L)
+                for (b = 0; b <= 4; ++b)
+                {
+                    W5SckArtRem_LotSummary.iByLotTotalCategory[L][b] = 0;
+                    for (s = 0; s < 2; ++s)
+                        W5SckArtRem_LotSummary.iByLotCountCategory[L][s][b] = 0;
+                }
+        }
+        for (i14 = 0; i14 < eTrayCount; ++i14) Prod.iTrayType[i14] = savedTrayType14[i14];
+        for (i14 = 0; i14 < 8; ++i14)
+        {
+            Prod.iT6PosCate[i14] = savedPosCate14[i14];
+            Prod.bIsPassBin[i14] = savedPassBin14[i14];
+        }
+        asSummaryPath                  = savedSummaryPath14;
+        MachineTypeChoice              = savedMachineType14;
+        iTestBinCount                  = savedTestBinCount14;
+        TestSocket.iShtRow             = savedShtRow14;
+        TestSocket.iShtCol             = savedShtCol14;
+        Prod.iIfErrorT6                = savedIfErrorT6_14;
+        LastSet.iSCKARTInputCT         = savedInputCT14;
+        iE1Count                       = savedE1_14;
+        iE2Count                       = savedE2_14;
+        iE3Count                       = savedE3_14;
+        iENotDefinedCount              = savedEnd_14;
+        IniConfig.bSPILFunction        = savedSPIL14;
+        IniConfig.bN17UploadLotSummary = savedN17_14;
+        IniConfig.bA38_SLT_Summary     = savedA38_14;
+        CosFunction.bUseTSVFunction    = savedTSV14;
+        CosFunction.bSortingBy2DList   = savedSort2D14;
     }
 
     printf("\n=== %d PASS, %d FAIL (of %d) ===\n", g_pass, g_fail, g_pass + g_fail);

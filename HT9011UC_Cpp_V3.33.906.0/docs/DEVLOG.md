@@ -2388,3 +2388,75 @@ FIRST FORM CHOICE AND JUSTIFICATION. `fShowMessage` (`uShowMessage.dfm`). Measur
     The end-to-end gate. See test_strategy for the exact assertions. MSVC-only, label `ui`, TIMEOUT 600.
 - U1-3  (report-only) B1c follow-up: layout table drops explicit TabStop | n/a -- schema gap I measured: tools/dfm2rc/layout_out/DfmLayoutTypes.h carries has_tab_order/tab_order but no tab_stop field; the IR does carry it (32 nodes corpus-wide: 20 True, 12 False). | 0 lines | blocked_by=NONE
     Do not fix it inside this front. Report it to the B1c owner. Detail in the risks field.
+
+---
+
+## 2026-08-02 — `SaveMultiLotTestSummary`：**接手一份沒人知道的在製工作**，稽核 → 修正 → 補測試 → 落地
+
+本波的起點不是規劃，是**在工作樹裡撿到東西**。上一則 RESUME 把 `SaveMultiLotTestSummary` 列在「其他仍未觸及的候選」，但 `git status` 顯示 `Automation/SCK_ART_Remainder.{cpp,h}` 有 **+1,049 行**未提交變更，檔案 mtime **12:39:50**，晚於同日 `6f1d9ec`（11:35:24）——是**上一場關機時翻到一半、沒人回報**的真翻譯。RESUME 對此完全無知。**這是第二次發生同型事件**（見 2026-07-23 條目），紀律再確認一次：**接續時第一件事永遠是 `git status`，不是讀 RESUME。**
+
+### 階段一：主迴圈先自己回答「這 1,049 行到底能不能用」
+
+翻譯軌從未回報，所以沒有任何自我宣稱可供查核，一切從磁碟推導。四道閘全部親跑：
+
+- fresh from-scratch build **exit 0**、`error:` **0**、`grep -ic resolving` **0**、警告 **289**——與 Wave 3 基準**逐字相同，+0**。862 行新程式碼沒有帶進任何一個新警告。
+- 完整 `ctest --timeout 300 -j4` = **111/115**，失敗恰為既有 4 個環境漂移。**零迴歸。**
+- 閘 4：兩個變更檔乾淨。
+- **`nm` 掃全部 archive**：`SckArtRem_SaveMultiLotTestSummary` **refs = 0**。banner 自稱「zero production callers」**屬實**——golden 唯一呼叫端是 `csystem.cpp:10862` 的 `DoTrayFeedProcess`，本樹尚未翻譯。
+
+### 階段二：主迴圈自己先抓到一個 HIGH（在派稽核之前）
+
+banner 寫「本樹唯一呼叫端是 `tests/test_SCK_ART_Remainder.cpp` **PART 14**」。該檔**存在**（76 KB、7/28，本波未動），但**零處提到這個符號、也沒有 PART 14**——翻譯 agent 被砍在寫測試之前。**函式當時連測試都沒有。** 這是本 repo **第三次**出現「引用懸空」。編號本身沒錯（既有 PART 1–13，14 確實是下一格）。
+
+### 階段三：三軌獨立稽核（`wf_90250b33-28f`）——**兩軌降級，誠實記錄**
+
+- **fidelity 軌（Opus）交出本專案目前最強的一份對拍**：把 gate 巨集正規化回 golden 形式後跑 unified diff，**全篇僅 14 行差異**——簽章 + 4 個已記載的 dead-local 移除，其餘 **759 行 golden 全部逐字重現**。另用 13 類 token 普查獨立佐證（`sList->Add` 64/64、`sprintf` 55/55、`if(` 68/68、`for(` 27/27、`while(` 11/11、`continue;` 8/8、`return;` 2/2、`.Length()` 11/11、`SubString` 6/6、`FileExists` 6/6、`CopyFile` 4/4、`ChangeToPercentage` 4/4、`SaveToFile` 6/6）。**10 個宣稱保留的 golden bug 逐一回 golden 查證：全部真實存在於所引行號，且譯出碼重現的是「錯的行為」而不是修好的行為。零 silent fix。**
+- **claims 軌回傳的 summary 只有一個字 `"test"`**——degenerate、無產出。
+- **hygiene 軌整軌失敗**（StructuredOutput 重試上限）。→ **測試覆蓋規格與 dialect/encoding 檢查沒有 agent 交付**；encoding 由主迴圈自己跑（乾淨）、dialect 由 build 本身證明、測試規格改由修正波的 Opus 軌負責。**三軌只有一軌真正交付，記在這裡以免日後把「三軌稽核」讀成三倍信心。**
+
+### 階段四：修正 + 補測試 + 獨立複驗（`wf_860cda84-158`，序列三段）
+
+**F2（MEDIUM，唯一的行為性缺陷）**：stub `W5SckArtRem_LotSummaryStub::ClearAllData()` 沒有歸零 `iE1Count/iE2Count/iE3Count`，而 golden `cSocket.cpp:760-762` 有。它的註解自稱理由是「這三個計數器在本樹尚未被翻譯/尚未被消費」——**這個理由被它同一波推翻了**：新函式 `:2858` 的閘正是 `iE1Count==0 && iE2Count==0 && iE3Count==0 && iENotDefinedCount==0`，而 golden `:2802` 在尾端無條件呼叫 `ClearAllData()`。→ 同一個 process 內連續呼叫兩次，ported 與 golden **會分歧**。已補三行歸零並改寫該註解；剩餘唯一未對齊的是 `iLastTotalCategory`（本樹零消費者，依本檔既有「無消費者不加欄位」慣例保留，並如實寫明）。修正軌**拒絕**了兩件它認為不該做的事（加無人讀的 `iLastTotalCategory` 欄位、回頭改寫歷史 `[UPDATE]` 原文），理由充分，予以採納。
+
+**HIGH 的裁決是「把宣稱做成真的」而不是刪掉宣稱**：新增 PART 14，**37 條 CHECK、0 條使用 `||`**。
+
+**LOW ×2**：golden bug 數三處 9/9/10 自相矛盾 → 實際數為 10，三處統一；三處引用錯誤更正（`cprod.h:513→512`、`TLotSummary::UpdataCount`→實為 `AddByLotCount`（golden `cSocket.cpp:806`）、`MyForceDirectories` `common.h:321/common.cpp:1648`→`341/1806`，且修正軌自己多找到**第三處**同樣錯誤的引用在 `.cpp` 裡並一併修掉）。
+
+**兩次獨立突變證明（不同突變，這是本波最重要的驗收）**：
+
+| 誰 | 突變 | 結果 |
+|---|---|---|
+| 測試軌 | 整支函式改成立即 `return` | **179 PASS/0 FAIL → 142 PASS/37 FAIL**。37 條全紅、142 條既有斷言**一條沒動**（37+142=179 剛好，證明 PART 14 沒有向 PART 1-13 借過分數）。復原後 md5 相同 |
+| 複驗軌 | **不同**突變：把 golden bug #3 的 early-return 閘反轉成 `if(!(...))` | PART 14 **36 FAIL / 1 PASS** |
+
+**獨立複驗軌 8 項檢查 7 PASS**，唯一的 FAIL 是它抓到工作樹裡混了一份不相干的 607 行 recon DEVLOG 增修，要求**不得掃進本波 commit**——採納，該增修已單獨落為 `5132856`。
+
+### 主迴圈補做複驗軌拿不到的那一項
+
+本波 workflow 腳本有一個 template literal 失誤（`""" + JSON.stringify(x) + """` 在 template literal 裡不是插值），導致**複驗 agent 沒有收到上游兩軌的報告**。這在獨立性上反而更強，但**失去了「自報 X 卻做了 Y」這一項檢查**。主迴圈補做：
+
+- 對現在的磁碟狀態**重跑 fidelity 稽核的 13 類 token 普查 → 13/13 全部一致**。這同時證明兩件事：修正軌沒有動到翻譯本體（稽核結論仍然適用），以及兩個 agent 的突變都真的復原乾淨。
+- 全樹 grep `NEUTER` / `MUTATION-TEST` **零命中**；`:2878` 的閘確認是 golden 原形而非被反轉的版本。
+- 自數 PART 14：**37 條 CHECK、0 條含 `||`**；`[UPDATE 1]`–`[UPDATE 5]` 鏈完整、歷史條目未被改寫。
+
+### 驗收（主迴圈親跑，fresh from-scratch，§12 閘 1）
+
+- configure + build **exit 0**、`error:` **0**、`grep -ic resolving` **0**、警告 **289**（Wave 3 基準 289，**+0**）。
+- 完整 `ctest --timeout 300 -j4` = **111/115**、247.54s，失敗恰為既有 4 個環境漂移。**零迴歸。**（測試總數仍是 115——PART 14 加在既有 `SCK_ART_Remainder` target 內，沒有新增 ctest target。）
+- `test_SCK_ART_Remainder` 自報 **179 PASS, 0 FAIL (of 179)**（142 既有 + 37 新）。
+- 閘 4：**scanned 1460 file(s); 3 violation(s)**——恰為既有 U+FFFD 三檔，未惡化。
+
+### 🔖 RESUME（最新）
+
+- **本場次已 commit 三顆**：`d7a3633`（gate 4 換行半部 + `.gitattributes` CRLF 修復）、`5132856`（四路 recon 存檔）、本波（SCK_ART `SaveMultiLotTestSummary`）。**寫入佇列在 commit 當下已清空。**
+- **驗證基準**：fresh build exit 0 / ctest **111/115** / 警告 **289** / 閘 4 **3 violations**（只剩 U+FFFD 三檔）。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 `fix/v899.32-pti`。
+- **⚠ 接續第一件事是 `git status`，不是讀本 RESUME。** 本場次開場就是靠這個撿到 1,049 行沒人知道的在製工作；同型事件已發生兩次。
+- **下一波（四路 recon 已完成，可直接施工，全文見上方 2026-08-02 recon 條目）**：
+  - **W7-L3** `cSiteUseManager` 整檔（golden 556+72 行）——**一個 agent 一次做完**；`cSiteUseManager.cpp` 已在 `CMakeLists.txt:1241`（`ht9045_sm`），不需新增 CMake 來源項。唯一行為變化：`ShadowLogBeforeSearch`/`ValidateSearchResult` 會從 no-op 變成真的寫 `RecordErrorLog`。
+  - **W7-L4** 只翻 `CopyOSTestResult`（golden `:660-697`，38 行）。`Interface/TesterTCP.cpp` 已在 `CMakeLists.txt:1388`。**`PlaceOSTestResultToTray` 不翻**——有第二個未記載的阻塞（兩個真的螢幕 VCL 元件 + ported `TesterTCP.h` 沒有 `TfTesterTCP` facade），屬 UI 軸、併入 W7-U。
+  - **W7-L2** `ckernel.cpp`（新檔，0%）——**1,433 行可落地**（1,479 扣掉硬卡的 `ProcessAlarm` 29 + 軟卡的 `DoSystemMessage` 17）。**必須單一 agent**（golden 是單一檔，多 agent 會撞同一個 `ckernel.cpp`）。**`ckernel.cpp` 是新檔，需要 integrator 序列加進根 `CMakeLists.txt`。**
+  - **W7-U0/C5**：`HT9045_UI` 在根 `CMakeLists.txt` 根本沒定義，但 `scripts/build_msvc.bat:90` 已在傳 `-DHT9045_UI=OFF`；開工第一件事補上且**預設 OFF**（MFC 只有 MSVC 看得到，本專案唯一綠燈 oracle 是 MinGW）。建議首個表單 `fShowMessage`。
+- **DEFERRED 新增**：`ProcessAlarm`——`PopUpAlarm()`/`ClearAllAlarm()` 在整棵 golden（887 檔窮舉）零宣告零定義，需要 integrator 設計的 alarm-queue 接縫才能忠實翻譯。
+- **仍未觸及**：`uHGemClass.cpp` 剩 1 個 gated（`S7F20_CurrentEPPDData`，需 `TDirectoryListBox` 等價元件）；`SECSGEM/uHGemEquipment.cpp` `DoTraceDataResponse`；`MainCalcCore` 15 個函式後續批次；閘 4 的 U+FFFD 三檔（**現在是全樹唯一擋著閘 4 轉綠的東西**，且 ported/golden **行號不對齊**，見 KNOWLEDGE）。
+- **勿圈入 V906 commit**：`config/*`、`setup.inf`、`.pti_frames/`、repo 根的 `SCRATCH_*.txt`/`_review_*.diff`/`build_*` 產物、ported tree 內三個 `*_test_scratch/`，以及 `HT9011UC_Code_V3.33.899.0_.../CosFunction.cpp`（使用者自己的 V899 工作）。
+- **執行模式**：使用者指示持續有效——全部 cpp/h/dfm 都要翻、workflow 火力全開、不逐波停下請示、重大問題跳過並最後條列；model/effort 依任務性質自動切換；安裝軟體不必先問。
