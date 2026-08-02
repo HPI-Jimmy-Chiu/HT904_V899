@@ -106,6 +106,17 @@
 #include "atester.h"                 // DoTestHeadMotor + InitialTestHeadMotorTask
 #include "acatchtray.h"              // DoCatchTray + InitialCatchTrayTask
 #include "asendic_Empty.h"           // DoAutoEmpty / DoAutoColor / InitAutoEmptyTask / DoAutoEmpty1(shim)
+//AI(W906-W7-L1-W3fixA) 20260802: added so this TU reaches the REAL golden bodies of
+// DoLoaderTrayFeed (golden asendic.cpp:1520) and RecordAutoCleanOutStartEnd (golden
+// asendic.cpp:61), whose two TU-local stand-ins below are retired in this pass.  This
+// is the same header golden csystem.cpp reaches them through (golden asendic.h:23,
+// :34-35).  Verified collision-free before adding: of everything asendic.h declares,
+// csystem.cpp names only NewDoAutoTrayEdgeCylinderLoop (csystem.cpp's tail vibration
+// loop), which asendic.cpp already defines and this TU never #defined; asendic.h's own
+// #include of asendic_Empty.h is the header immediately above, so nothing new is
+// dragged in.  Placed with the other engine headers, i.e. ABOVE every `#define X
+// W7C1_X` / `W7C2_X` redirect in this file, so no declaration can be macro-mangled.
+#include "asendic.h"                 // DoLoaderTrayFeed / InitDoLoaderTrayFeedTask / RecordAutoCleanOutStartEnd (golden asendic.h)
 #include "asendic_Auto2.h"           // AI(W906-W7-L1) 20260729: DoAuto2 (real body, asendic_Auto2.cpp)
 #include "atester_shims.h"           // InitBTestSuckTestICTask
 // AI(W5-Automation-Integrate) 20260710: InitFrontTestSuckICTask is now declared
@@ -1127,8 +1138,24 @@ static void W7C1_VerifyNeedDoAlignment(int /*a*/, int /*b*/){}          // golde
 #define VerifyNeedDoAlignment  W7C1_VerifyNeedDoAlignment
 static void W7C1_ResetHotPlateSearchParameter(){}                      // golden -- HP search param reset
 #define ResetHotPlateSearchParameter  W7C1_ResetHotPlateSearchParameter
-static void W7C1_RecordAutoCleanOutStartEnd(bool /*b*/){}              // golden -- SCK auto-clean-out record
-#define RecordAutoCleanOutStartEnd    W7C1_RecordAutoCleanOutStartEnd
+//AI(W906-W7-L1-W3fixA) 20260802: RETIRED -- the `static void
+// W7C1_RecordAutoCleanOutStartEnd(bool){}` stand-in and its `#define` are DELETED,
+// because leaving them here left golden's START/END pair HALF-WIRED.  Golden calls
+// this function from exactly two places tree-wide: asendic_Loader.cpp:1763 with
+// `true` (START -- latches tAutoCleanTimer) and csystem.cpp:15653 with `false`
+// (END -- reads the timer and emits the elapsed-time RecordProcess line).  Wave 3
+// retired the START stand-in in asendic_Loader.cpp but not this one, so the timer
+// latched and nothing ever read it.  This TU's call (the END half, golden :15653)
+// now binds to the real body via `#include "asendic.h"` above.
+// BEHAVIOUR DELTA, measured not assumed: the real body's FIRST statement is
+// `if(IniConfig.bA08LastLoaderAutoCleanOutAndCheckAgain==false) return;` (golden
+// asendic.cpp:63-64), and this TU's only call site is itself already inside an
+// `if(IniConfig.bA08LastLoaderAutoCleanOutAndCheckAgain && ...)` guard, so the two
+// agree: with bA08 false (the default in every offline fixture) the call is not
+// even reached, and with bA08 true the body's sole effect is one RecordProcess()
+// log line -- no SM cursor, flag or motion is touched.  The `bLoaderNoTrayAutoCleanOut
+// =false;` assignment inside golden's END branch is a self-assignment: the call site
+// sets that same global false three lines earlier.
 //  ReadTestMode (golden cprod.cpp:3479): recipe-file TestMode reader.  The real
 //  cprod.cpp body is gated #if 0 // TODO(W6); it is called ONLY inside the
 //  if(bASECleanOutCloseSite) branch (false offline -> no ASE close-site).  TU-
@@ -2679,8 +2706,27 @@ static bool W7C2_InArmSuckState(){ return false; }        // golden -- any in-ar
 #define InArmSuckState         W7C2_InArmSuckState
 static bool W7C2_OutArmSuckState(){ return false; }       // golden -- any out-arm picker vacuum on? offline none
 #define OutArmSuckState        W7C2_OutArmSuckState
-static bool W7C2_DoLoaderTrayFeed(){ return true; }       // golden -- loader clean-out tray feed; offline: done (true)
-#define DoLoaderTrayFeed       W7C2_DoLoaderTrayFeed
+//AI(W906-W7-L1-W3fixA) 20260802: RETIRED -- the `static bool W7C2_DoLoaderTrayFeed()
+// { return true; }` stand-in and its `#define` are DELETED.  Wave 3 translated
+// golden's real DoLoaderTrayFeed + InitDoLoaderTrayFeedTask into asendic.cpp
+// (golden asendic.cpp:1514-1537), but this redirect survived; since csystem.cpp is
+// golden's ONLY caller of either symbol, the newly landed bodies were UNREACHABLE
+// (`nm -u` over all 14 production archives plus the test archives: refs=0 for both,
+// against refs=8 for TrayMoveStatus and refs=5 for AutoCylinderUp).  Both call sites
+// below now bind to the real body via `#include "asendic.h"` above.
+// BEHAVIOUR DELTA, measured not assumed: golden's case 1 returns true only when the
+// loader has NO tray -- `MOT[MMTrayY_Car].fHasTray || Sen[SnLoaderCarHasTray].IsOn()`
+// and `MOT[MMTrayY].fHasTray || Sen[SnLoaderSureTray].IsOn()` both false.  On a
+// default Sim state that holds (fHasTray defaults false; TMySensor::IsOn() returns
+// false whenever Enable==false, mysensor.cpp), so the real body returns true on the
+// first call exactly like the stub did.  The delta only appears once a fixture seeds
+// a tray, and it is then FAITHFUL: golden returns false and re-enters until the
+// tray is fed away.  Independently, both call sites sit behind `if(bDoLoaderCleanOut
+// ...)` (cmydef.cpp:5252 -- initialised false), so no current suite reaches them.
+// InitDoLoaderTrayFeedTask stays uncalled here and that is golden: its only golden
+// call site is csystem.cpp:7814, inside the DoTrayFeedProcess mode ladder that this
+// tree still gates `#if 0 // TODO(W7)`.  It is reachable-by-declaration now, and the
+// W7-U wave that un-gates that ladder will supply the call.
 static void W7C2_DoInArm_SuckerMap(){}                    // golden -- rebuild in-arm sucker map after site mapping
 #define DoInArm_SuckerMap      W7C2_DoInArm_SuckerMap
 static bool W7C2_CheckNeedToRT(){ return false; }         // golden -- need auto-retest? offline: no

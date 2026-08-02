@@ -108,29 +108,52 @@
 //
 //  A. THE WHOLE ALARM SURFACE IS UNENTERED, and the reason is stronger than
 //     "ShowErrorMessage answers K_RETRY".  Sub-test [18] asserts the harness's
-//     own measurement: across the entire suite ShowErrorMessage is called ZERO
-//     times.  Every JAM/MES/WAR arm in both files is therefore NOT COVERED:
-//     JAM0901, JAM0909, JAM0912, JAM0913, JAM0929, JAM1001, JAM1003, JAM1012,
-//     JAM09102, JAM09200, MES0920, MES0921, MES0922, WAR0119, WAR0952, WAR0953,
+//     own measurement: across every sub-test UP TO AND INCLUDING [17],
+//     ShowErrorMessage is called ZERO times.  (AI(W906-W7-L1-Wave3) 20260802:
+//     [19] runs AFTER [18] and deliberately raises exactly two alarms -- see
+//     section B -- so [18]'s zero-claim is left intact rather than relaxed.)  Every
+//     JAM/MES/WAR arm in both files is therefore NOT COVERED BY [1]..[17]:
+//     JAM0901, JAM0909, JAM0912, JAM0913, JAM0929, JAM1001, JAM1003,
+//     JAM09200, MES0920, MES0921, MES0922, WAR0119, WAR0952, WAR0953,
 //     WAR0961, WAR0962, WAR09103, WAR09106, WAR09200, WAR16122, WAR16336,
-//     WAR0612.  So are every K_SKIP and K_CLEAN_OUT recovery arm they gate --
+//     WAR0612.
+//     AI(W906-W7-L1-W3fixB) 20260802: JAM1012 and JAM09102 REMOVED from that list
+//     and the heading scoped to "[1]..[17]".  They were still listed as NOT COVERED
+//     while section B twelve lines below, and sub-test [19] in this same binary,
+//     both state that [19] raises them and asserts code + button mask.  A register
+//     that contradicts the file it registers is worse than no register.
+//     So are every K_SKIP and K_CLEAN_OUT recovery arm they gate --
 //     the W906_ShowErrorMessage_SimReturn seam exists and would make them
 //     falsifiable, but this suite does NOT use it and does NOT claim them.
-//  B. TWO ARMS ARE STRUCTURALLY UNREACHABLE UNTIL WAVE 3, because
-//     asendic.cpp's TrayMoveStatus() is a hardwired `return 0` with no seam (see
-//     the note above its declaration in asendic.h):
-//       * DoLoaderTrackDetectICFloating cases 400 and 500 both re-arm
-//         DetectLoaderTime to 20 s on EVERY pass (golden :3093-3094 / :3126-3127)
-//         because `TrayMoveStatus(...)==0` is always true, so their JAM1012 /
-//         JAM0901 arms can never fire and the SM parks at 500 forever.
-//         Sub-test [15] asserts exactly that -- the park is the observation, not
-//         a failure.
-//       * CheckLoaderICFloating's `bDir` is `TrayMoveStatus(...)==1` (or ==2),
-//         never true, so its whole JAM09102 "IC floating detected" block
-//         (golden :3181-3199) is dead; and inside the latched branch the
-//         htDetectTrayRetryDelay re-arm (golden :3203-3204) fires every call, so
-//         the JAM0912 / JAM0901 retry-timeout arm (golden :3220-3227) is dead
-//         too.  Sub-test [16] covers only the two live exits.
+//  B. [WAVE-3 UPDATE, AI(W906-W7-L1-Wave3) 20260802 -- THE BLOCKER IS GONE.]
+//     This section used to read "TWO ARMS ARE STRUCTURALLY UNREACHABLE UNTIL
+//     WAVE 3, because asendic.cpp's TrayMoveStatus() is a hardwired `return 0`".
+//     Wave 3 landed golden's real TrayMoveStatus (golden asendic.cpp:1449-1510):
+//     it reads SW[iInSwitch[iAxis]] / SW[iOutSwitch[iAxis]] -- for the Loader
+//     track, SW[SwACTrayY] and SW[SwACLoaderCCW] -- and returns 1 (moving in),
+//     2 (moving out) or 0 (stopped).  Both arms are now REACHABLE, and NEW
+//     SUB-TEST [19] REACHES THEM:
+//       * DoLoaderTrackDetectICFloating case 400's JAM1012.  Golden :3086 already
+//         calls TrayMoveOut(true, 0, ...) at case 300, and golden's real
+//         TrayMoveOut drives BOTH belt outputs on for iAxis<3, so once the two
+//         switches are Enabled and wired, TrayMoveStatus(0) answers 2 and golden
+//         :3093's `==0` re-arm STOPS firing.  The 20 s watchdog can then expire
+//         and JAM1012/K_SKIP|K_RETRY is raised.  [19] asserts the status value,
+//         the code and the button mask.
+//       * CheckLoaderICFloating's JAM09102 block (golden :3181-3199).  With
+//         TrayMoveStatus(0)==2 the iDir==1 `bDir` is true, so with
+//         Sen[SnLoaderTrackDetect] reading ON the block runs and raises
+//         JAM09102/K_RETRY and returns false.  [19] asserts all three.
+//     SUB-TESTS [15] AND [16] ARE UNCHANGED AND STILL PASS: they leave the two
+//     belt switches Enable==false, which is a legitimate machine configuration
+//     (an un-wired IO table) and makes TrayMoveStatus answer 0 for a REAL reason
+//     now rather than because the function was a stub.  What [15] documents is
+//     therefore no longer "structurally unreachable" but "not reached under this
+//     fixture", and [19] is the fixture that does reach it.
+//     STILL NOT COVERED in this family: the JAM0901 arm of case 500, and the
+//     JAM0912 / JAM0901 retry-timeout arm inside CheckLoaderICFloating's latched
+//     branch (golden :3220-3227) -- the latter needs USE_AUTO_RETEST==eartInstall
+//     to set the bLoaderTrayICDetectErr latch in the first place (golden :3187).
 //  C. GOLDEN'S OCR SUB-FLOWS ARE NOT ENTERED (INSTALL_OCR==eocrUninstal by (ii)):
 //     DoSupplyNewICTray cases 2000/2100/2200/2250/2300 and DoLoadNewICTray cases
 //     1900/1901/1910/2000/2100/2200/2250/2300.  This also means the two
@@ -342,6 +365,11 @@
 #include "canary_support.h"     // LastSet, ShowErrorMessage seam, ShowMyMessage seam
 #include "FormsFacade.h"        // fMain / fAGV / fTrayForm
 #include "acatchtray_shims.h"   // fTrayMapping
+// AI(W906-W7-L1-Wave3) 20260802: CylinderUp/Middle/Lower are golden's real
+// closed-loop lifter SMs now (asendic.cpp), not Sim bodies that returned true on
+// the first call.  This header is the physical Loader tray-group stack that
+// answers their position sensors.
+#include "w3_cylinder_plant.h"
 #include <cstdio>
 #include <vector>
 
@@ -373,8 +401,12 @@ extern TQPF_Timer hLoaderTrayToRearForDummy;        // golden asendic_Loader_RT.
 extern TQPF_Timer hLoaderTrayToFront;               // golden asendic_Loader_RT.cpp:169
 extern TQPF_Timer hLoaderTrayToRear;                // golden asendic_Loader_RT.cpp:337
 extern TQPF_Timer LoaderDelay;                      // golden asendic_Loader_RT.cpp:31
-//  PURE JAM WATCHDOGS -- declared for documentation, DELIBERATELY NEVER ADVANCED:
-//    extern TQPF_Timer DetectLoaderTime;      // asendic_Loader.cpp:41 -- JAM0901 (20 s)
+//  PURE JAM WATCHDOGS -- DELIBERATELY NEVER ADVANCED by advanceTime():
+// AI(W906-W7-L1-Wave3) 20260802: DetectLoaderTime is now really declared, because
+// sub-test [19] -- and ONLY sub-test [19], which runs last, after the register
+// self-check -- expires it deliberately to reach the JAM1012 arm that Wave 3 has
+// just made reachable.  advanceTime() still never touches it.
+extern TQPF_Timer DetectLoaderTime;                 // golden asendic_Loader.cpp:41 -- JAM1012/JAM0901 (20 s)
 //    extern TQPF_Timer htCylinLowerDelay;     // asendic_Loader.cpp:45 -- JAM0913 (2 s)
 //    extern TQPF_Timer htDetectTrayRetryDelay;// asendic_Loader.cpp:47 -- JAM0912/JAM0901 retry
 //    extern TQPF_Timer LoadReadTrayID;        // asendic_Loader.cpp:48 -- WAR16122/WAR16336
@@ -393,6 +425,12 @@ static void advanceTime()
     DoUnLoadNewLoaderToStackDelay.SetMSAndOn(0);
     hLoaderTrayToFrontForDummy.SetMSAndOn(0);
     hLoaderTrayToRearForDummy.SetMSAndOn(0);
+    // AI(W906-W7-L1-Wave3) 20260802: one tick of the Loader tray-group lifter
+    // plant, folded into the existing per-tick hook so every drive loop in this
+    // file gets it without changing shape.  Expires LifterTime[][] (the
+    // CylinderUp/Middle/Lower motion+alarm timers) and recomputes C_Load_Up /
+    // C_Load_Middle's position sensors from the commanded outputs.
+    w3::Tick();
 }
 // Dual-role pins -- each fires only where the timer's PROGRESS role is live.
 static void advanceFrontSettle() { if (iLoaderTrayToFrontTask      == 200) hLoaderTrayToFront.SetMSAndOn(0); }
@@ -474,9 +512,19 @@ static void setupLoaderFixture()
 
     MOT[MTrayX].MotorMove(5000);            // clear the case-105 tray-arm guard
 
-    // Lifter pair driven by CylinderUp/Middle/Lower (asendic.cpp gates on Enable)
-    Cylinder[C_Load_Up].Enable        = true;
-    Cylinder[C_Load_Middle].Enable    = true;
+    // Lifter pair driven by CylinderUp/Middle/Lower.
+    // AI(W906-W7-L1-Wave3) 20260802: `Enable = true` alone is no longer enough.
+    // asendic.cpp used to hold Sim bodies that commanded the pair and returned
+    // true; it now holds golden's real closed loops, which WAIT on
+    // Cylinder[].OnStatus()/OffStatus().  w3::WireLifter gives the pair the full
+    // realistic wiring -- output bit, ON sensor, OFF sensor, non-zero alarm
+    // windows -- and w3::Tick() (inside advanceTime()) plays the physical stack.
+    w3::Forget();
+    w3::WireLifter(C_Load_Up, C_Load_Middle, 11);
+    w3::ResetCursors();
+    Ld_UldDelayTime.LD_BeforeDownDelay    = 0;
+    Ld_UldDelayTime.LD_StackMiddLockDelay = 0;
+    Ld_UldDelayTime.LD_LiftDownDelay      = 0;
     // Golden call sites guarded by `if(Cylinder[X].Enable)`
     Cylinder[C_TrayZ_Selector].Enable = true;
     Cylinder[C_TrayY_Fixer].Enable    = true;
@@ -699,8 +747,16 @@ static void test_load_new_ic_tray()
 
     CHECK(done, "DoLoadNewICTray() returns true (converged, not bound-exhausted)");
     CHECK(trajEq(traj, want, nWant), "EXACT ordered trajectory 100,300,400,500,1");
-    CHECK(ticksAt100 == 7,
-          "case 100 pumped the NESTED DoTrayZLoadTrayToWait for its full 7-tick walk (golden :2141)");
+    // AI(W906-W7-L1-Wave3) 20260802: the CONSTANT moved 7 -> 14, the CLAIM did not.
+    // This is the number of ticks the nested DoTrayZLoadTrayToWait needs, and it
+    // doubled for one reason: its case 55 calls CylinderUp, which used to be a Sim
+    // body that returned true on its first call and is now golden's real
+    // 1-50-60-100-200 closed loop.  The value is DERIVED, not fitted: sub-test [3]
+    // drives the very same nested SM standalone and prints `steps=14` for the
+    // identical trajectory 50,55,100,200,300,400,1.  Still an EXACT equality, so a
+    // pump that stops early or spins an extra tick still fails.
+    CHECK(ticksAt100 == 14,
+          "case 100 pumped the NESTED DoTrayZLoadTrayToWait for its full 14-tick walk (golden :2141; same 14 ticks [3] measures standalone)");
     CHECK(MOT[MMTrayY_Car].fHasTray == true,
           "case 500 latched the tray onto MMTrayY_Car (golden :2317)");
     CHECK(MOT[MMTrayY_Car].iIsCoverTray == HAS_IC,
@@ -1007,10 +1063,20 @@ static void test_unload_new_loader_to_stack()
 
     CHECK(done, "DoUnLoadNewLoaderToStack() returns true (converged, not bound-exhausted)");
     CHECK(trajEq(traj, want, nWant), "EXACT ordered trajectory 50,100,150,200,300,400,1");
-    CHECK(midAt100 == 1,
-          "case 50 CylinderMiddle raised C_Load_Middle (golden :742)");
-    CHECK(upAt100 == 0,
-          "case 50 CylinderMiddle did NOT raise C_Load_Up -- Middle != Up (golden asendic.cpp CylinderMiddle)");
+    // AI(W906-W7-L1-Wave3) 20260802: BOTH ASSERTIONS CHANGED, and both were wrong
+    // before -- they described the RETIRED Sim CylinderMiddle, which raised the
+    // MIDDLE cylinder and left the UP cylinder alone.  Golden's real
+    // CylinderMiddle (asendic.cpp, case 1 and case 100) does the OPPOSITE:
+    //     Cylinder[CylinderName].On();          // C_Load_Up   -> RAISED
+    //     Cylinder[CylinderName+1].Off();       // C_Load_Middle -> DROPPED
+    // i.e. the stack is held up by the Up cylinder while the middle LOCK is
+    // released, which is what "go to the middle height" physically means.  The
+    // pair below is the same two-sided claim with the sides corrected: an
+    // inverted CylinderMiddle still fails on both halves, so no strength is lost.
+    CHECK(midAt100 == 0,
+          "case 50 CylinderMiddle DROPPED C_Load_Middle (golden asendic.cpp CylinderMiddle: Cylinder[CylinderName+1].Off())");
+    CHECK(upAt100 == 1,
+          "case 50 CylinderMiddle RAISED C_Load_Up -- Middle != Lower (golden asendic.cpp CylinderMiddle: Cylinder[CylinderName].On())");
     CHECK(zAt100 == 1,
           "case 1/50 marked the MMTrayZ stage as carrying the returned tray (golden :703/:741)");
     CHECK(upAt300 == 1,
@@ -1164,28 +1230,56 @@ static void test_auto_loader_dispatch()
     MOT[MMTrayY_Car].ClearTray("test_w7_l1_loader");
     MOT[MMTrayZ].ClearTray("test_w7_l1_loader");
     Traj traj;
-    for (int i = 0; i < 12; ++i)
+    // AI(W906-W7-L1-Wave3) 20260802: the LOOP SHAPE changed, the assertion did not.
+    // It used to be a fixed 12-tick budget whose count was tuned to stop exactly on
+    // cursor 300.  Case 200 pumps DoLoadNewLoaderTrayToCar, whose lifter leg now
+    // runs golden's real CylinderUp/Middle/Lower instead of Sim bodies that
+    // returned true on their first call, so the walk needs more ticks -- and any
+    // NEW fixed count would go on being a tuned magic number that silently rots the
+    // next time a nested SM's tick cost changes.  So the loop now runs to the
+    // documented TERMINAL of this walk (cursor 300) under a generous bound instead.
+    // This is NOT a weakening: the assertion below is still the identical EXACT
+    // ordered match, and if the dispatcher never reaches 300 the bound is exhausted
+    // and the recorded trajectory is short -- which fails that same assertion.
+    //
+    // AI(W906-W7-L1-W3fixB) 20260802: ...but an IMPLICIT CONSTRAINT WAS STILL LOST.
+    // The old fixed 12-tick budget also pinned the walk's TICK COST; a terminal-driven
+    // loop bounded at 120 passes at anything up to 120.  Sub-test [4] in this same
+    // file already shows the better pattern (`ticksAt100 == 14`, a DERIVED constant
+    // with a stated reason), so it is applied here: record the tick on which cursor
+    // 300 is first reached and assert it exactly.  The bound stays generous so a
+    // regression reports the real number instead of silently truncating.
+    int  ticksTo300 = -1;
+    int  spent      = 0;
+    for (int i = 0; i < 120 && ticksTo300 < 0; ++i)
     {
         advanceTime();
         advanceRTCarSettle();
         DoAutoLoader();
         trajPush(traj, iAutoLoaderTask);
+        ++spent;
+        if (iAutoLoaderTask == 300) ticksTo300 = spent;
     }
-    // 12 ticks is enough to walk the dispatcher twice round its first two
-    // decisions, and the walk is fully determined by the fixture:
-    //   t1     case 1   -- no tray anywhere            -> 100        (golden :506-508)
-    //   t2     case 100 -- car empty, so load a new one-> 200        (golden :647-648)
-    //   t3-t9  case 200 -- pumps DoLoadNewLoaderTrayToCar's own 8-tick
-    //                      split walk ([10a])          -> stays 200  (golden :664)
-    //   t10    case 200 -- that SM returned true       -> 1          (golden :666-667)
-    //   t11    case 1   -- car NOW has the split tray  -> 100        (golden :506-508)
-    //   t12    case 100 -- car has a tray, tray-arm not parked at Empty
+    // The walk is fully determined by the fixture:
+    //   case 1   -- no tray anywhere                   -> 100        (golden :506-508)
+    //   case 100 -- car empty, so load a new one       -> 200        (golden :647-648)
+    //   case 200 -- pumps DoLoadNewLoaderTrayToCar's own split walk ([10a])
+    //                                                  -> stays 200  (golden :664)
+    //   case 200 -- that SM returned true              -> 1          (golden :666-667)
+    //   case 1   -- car NOW has the split tray         -> 100        (golden :506-508)
+    //   case 100 -- car has a tray, tray-arm not parked at Empty
     //                      -> InitLoaderTrayToRearTask -> 300        (golden :641-642)
     static const int want[] = {100, 200, 1, 100, 300};
     const int nWant = (int)(sizeof(want)/sizeof(want[0]));
     CHECK(trajEq(traj, want, nWant),
           "EXACT ordered trajectory 100,200,1,100,300 (feed a tray to the car, then route it to the rear)");
+    CHECK(ticksTo300 == 22,
+          "the walk reaches cursor 300 on EXACTLY dispatcher tick 22 -- the tick-cost constraint "
+          "the old fixed 12-tick budget carried implicitly, restored as an explicit equality "
+          "(12 -> 22 because case 200's nested DoLoadNewLoaderTrayToCar now pumps golden's real "
+          "CylinderUp/Middle/Lower closed loops instead of Sim bodies that returned true at once)");
     trajPrint("DoAutoLoader", traj, want, nWant);
+    printf("    (ticksTo300=%d)\n", ticksTo300);
 }
 
 // ---------------------------------------------------------------------------
@@ -1324,25 +1418,49 @@ static void test_knock_before_remain_ic_check()
 }
 
 // ---------------------------------------------------------------------------
-//  [15] DoLoaderTrackDetectICFloating (golden :3060-3164) -- DOCUMENTED WAVE-3
-//       BLOCKER, asserted rather than hidden.
-//       The SM walks 100,200,300,400,500 and then PARKS ON 500 FOREVER, because
-//       both case 400 and case 500 open with
-//       `if(TrayMoveStatus(0,__FUNC__)==0) DetectLoaderTime.SetSecAndOn(20.0);`
-//       and this tree's TrayMoveStatus is a hardwired `return 0` (asendic.cpp).
-//       The 20 s JAM watchdog is therefore re-armed on every pass and its
-//       JAM1012 (case 400) / JAM0901 (case 500) arms are STRUCTURALLY
-//       UNREACHABLE until Wave 3 lands the real belt bodies.  Asserting the park
-//       -- and asserting that nothing alarmed -- is the honest observation; the
-//       alternative would be to claim coverage this fixture cannot have.
+//  [15] DoLoaderTrackDetectICFloating (golden :3060-3164) -- THE SM WALKS
+//       100,200,300,400,500 AND THEN PARKS ON 500 UNDER *THIS FIXTURE*.
+//
+//  AI(W906-W7-L1-W3fixB) 20260802: THIS BANNER USED TO BE A WAVE-3 BLOCKER NOTE
+//  and it outlived the blocker.  It said this tree's TrayMoveStatus "is a hardwired
+//  `return 0` (asendic.cpp)" and that the JAM1012 (case 400) / JAM0901 (case 500)
+//  arms are "STRUCTURALLY UNREACHABLE until Wave 3 lands the real belt bodies".
+//  Wave 3 landed them.  The file-level banner was updated; this local one and [15]'s
+//  own CHECK message were missed, and sub-test [19] IN THIS SAME BINARY now prints
+//  the real TrayMoveStatus answering 2 and raises JAM1012 sixty lines further down.
+//  THE ARMS ARE REACHABLE.  What is still true, and is all this sub-test claims:
+//    * asendic.cpp's TrayMoveStatus is golden's real body (golden :1449-1510).  It
+//      reads SW[iInSwitch[0]] / SW[iOutSwitch[0]] -- SwACTrayY / SwACLoaderCCW.
+//    * setupLoaderFixture() does not enable those two switches, and TMySwitch::
+//      Status() returns false outright when Enable==false (myswitch.cpp).  Both
+//      inputs therefore read false, which is golden's `bInSwitch==false &&
+//      bOutSwitch==false` -> `return 0` (stopped) arm.  Not a stub: an HONEST 0
+//      from a real body reading an unconfigured track.
+//    * With 0 answered, both case 400 and case 500 keep re-arming the 20 s watchdog
+//      (`if(TrayMoveStatus(0,__FUNC__)==0) DetectLoaderTime.SetSecAndOn(20.0);`), so
+//      under THIS fixture the walk parks and nothing alarms.  [19] is the fixture
+//      that wires the two switches and reaches the alarm arms.
 //         golden :3077 case 200 Cylinder[C_TrayY_Fixer].Pop() IS reachable and
 //         is asserted.
 // ---------------------------------------------------------------------------
 static void test_track_detect_ic_floating_parks()
 {
-    printf("\n[15] DoLoaderTrackDetectICFloating() walks 100..500 then PARKS (Wave-3 blocker)\n");
+    printf("\n[15] DoLoaderTrackDetectICFloating() walks 100..500 then PARKS (unwired track)\n");
 
     setupLoaderFixture();                   // banks + resets the alarm seam
+    // AI(W906-W7-L1-W3fixB) 20260802: make the reason for the park EXECUTABLE
+    // instead of only asserting the park.  The old banner explained it with a
+    // hardwired `return 0` that no longer exists; the real reason is this fixture,
+    // and a fixture claim belongs in an assertion.  If a future edit enables the two
+    // belt switches earlier in the file, this goes red HERE rather than silently
+    // turning the rest of the sub-test into a different experiment.
+    CHECK(SW[SwACTrayY].Enable == false && SW[SwACLoaderCCW].Enable == false,
+          "[15] the Loader track's two belt outputs are UNCONFIGURED in this fixture "
+          "(SwACTrayY/SwACLoaderCCW Enable==false)");
+    CHECK(TrayMoveStatus(0, "test[15]") == 0,
+          "[15] ...so golden's REAL TrayMoveStatus (asendic.cpp, golden :1449-1510) answers 0 -- "
+          "an honest 'stopped' from a real body reading an unconfigured track, NOT the hardwired "
+          "`return 0` this tree used to carry");
     InitLoaderTrackDetectICFloatingTask();
     Cylinder[C_TrayY_Fixer].On();           // opposite of the case-200 Pop
 
@@ -1369,8 +1487,16 @@ static void test_track_detect_ic_floating_parks()
           "EXACT ordered trajectory 100,200,300,400,500 before the park");
     CHECK(fixerAt300 == 0,
           "case 200 RETRACTED the tray-Y fixer before the detect sweep (golden :3077 Pop())");
+    // AI(W906-W7-L1-W3fixB) 20260802: the PREDICATE is unchanged and correct; only
+    // the message was wrong.  It used to end "...the JAM1012/JAM0901 arms are
+    // structurally unreachable", which Wave 3 falsified and [19] disproves in this
+    // same binary.
     CHECK(W906_ShowErrorMessage_Count == 0,
-          "no alarm is raised while parked -- the JAM1012/JAM0901 arms are structurally unreachable");
+          "no alarm is raised while parked -- this fixture leaves SwACTrayY/SwACLoaderCCW "
+          "Enable==false, so the REAL TrayMoveStatus honestly answers 0 and both case 400 and "
+          "case 500 keep re-arming the 20 s watchdog.  The JAM1012/JAM0901 arms are REACHABLE "
+          "(sub-test [19] wires the two switches and reaches them); they are simply not reached "
+          "from HERE");
     trajPrint("DoLoaderTrackDetectICFloating", traj, want, nWant);
 }
 
@@ -1483,16 +1609,145 @@ static void test_check_contin_manual_remove_tray()
 // ---------------------------------------------------------------------------
 static void test_not_covered_register_is_true()
 {
-    printf("\n[18] NOT-COVERED register self-check (no alarm arm was entered)\n");
+    printf("\n[18] NOT-COVERED register self-check (no alarm arm entered by [1]..[17])\n");
     const int alarms  = g_alarmsBanked  + W906_ShowErrorMessage_Count;
     const int dialogs = g_dialogsBanked + W906_ShowMyMessage_Count;
+    // AI(W906-W7-L1-Wave3) 20260802: still `== 0`, deliberately NOT relaxed to a
+    // count.  [19] -- the sub-test that DOES raise alarms, now that Wave 3 has
+    // made two arms reachable -- runs after this one, so this claim keeps its
+    // full strength for every sub-test that precedes it.
     CHECK(alarms == 0,
-          "ShowErrorMessage was never called by ANY sub-test (banner section A holds)");
+          "ShowErrorMessage was never called by sub-tests [1]..[17] (banner section A holds)");
     CHECK(dialogs == 0,
-          "ShowMyMessage was never called by ANY sub-test either (no operator dialog is reached)");
+          "ShowMyMessage was never called by sub-tests [1]..[17] either (no operator dialog is reached)");
     printf("    (banked+current: ShowErrorMessage=%d last=\"%s\"; ShowMyMessage=%d last=\"%s\")\n",
            alarms, W906_ShowErrorMessage_LastCode.c_str(),
            dialogs, W906_ShowMyMessage_LastS1.c_str());
+}
+
+// ---------------------------------------------------------------------------
+//  [19] AI(W906-W7-L1-Wave3) 20260802 -- THE TWO ARMS WAVE 3 UNBLOCKED.
+//
+//  Until Wave 3, asendic.cpp's TrayMoveStatus() was a hardwired `return 0`, and
+//  banner section B recorded two arms as STRUCTURALLY UNREACHABLE because of it.
+//  Wave 3 landed golden's real body (golden asendic.cpp:1449-1510), which reads
+//  the two belt output switches, so both arms are reachable and are covered here:
+//    (a) DoLoaderTrackDetectICFloating case 400's JAM1012 (golden :3107-3122).
+//    (b) CheckLoaderICFloating's JAM09102 block (golden :3181-3199).
+//
+//  WHY THE FIXTURE IS WHAT IT IS -- nothing here is a poke at the SM:
+//    * SW[SwACTrayY] / SW[SwACLoaderCCW] are iInSwitch[0] / iOutSwitch[0]
+//      (cmydef.cpp:2661-2662).  Enabling them and giving them Sim IO addresses is
+//      exactly what a configured Loader track looks like; the SM then drives them
+//      ITSELF, at golden :3086's TrayMoveOut(true, 0, ...), because golden's real
+//      TrayMoveOut turns BOTH outputs on for iAxis<3 (golden asendic.cpp:1415-1419).
+//      That is what makes TrayMoveStatus(0) answer 2 -- the test never writes the
+//      switches by hand.
+//    * Sen[SnLoaderCarHasTray] must read a DEFINITE OFF, or golden :3100 hands the
+//      cursor to 500 and case 400's watchdog is never consulted.
+//    * DetectLoaderTime is expired EXPLICITLY, once, and only here.  That is the
+//      arm under test: with TrayMoveStatus answering 2, golden :3093 stops
+//      re-arming it, so a real machine would reach the same place after 20 s.
+//
+//  RUNS AFTER [18] ON PURPOSE, so [18]'s "zero alarms across [1]..[17]" claim
+//  keeps its full strength instead of being relaxed into a count.
+// ---------------------------------------------------------------------------
+static void test_wave3_unblocked_jam1012_and_jam09102()
+{
+    printf("\n[19] Wave-3 unblocked: real TrayMoveStatus -> JAM1012 + JAM09102\n");
+
+    setupLoaderFixture();
+    TRAY_ARM_MODE          = 0;             // not eUnderCoveyor (no floodgate gate)
+    LoaderUnload_StepMotor = 0;             // the plain two-output belt wiring
+    LOAD_Y_USE_MOTOR[0]    = false;         // not the stepper variant of TrayMoveStatus
+    bLoaderTrayICDetectErr = false;
+
+    // The Loader track's two belt outputs, wired to the Sim IO backend.
+    const int kSw[2] = { SwACTrayY, SwACLoaderCCW };
+    for (int k = 0; k < 2; ++k)
+    {
+        SW[kSw[k]].Enable  = true;
+        SW[kSw[k]].Type    = TYPE_A;
+        SW[kSw[k]].ISABase = eMotionNet;
+        SW[kSw[k]].Ring    = 0;
+        SW[kSw[k]].IP      = 31;
+        SW[kSw[k]].Port    = 0;
+        SW[kSw[k]].Bit     = k;
+        SW[kSw[k]].Off();
+    }
+    CHECK(TrayMoveStatus(0, "test[19]") == 0,
+          "[19] with both belt outputs OFF the REAL TrayMoveStatus answers 0 (stopped)");
+
+    InitLoaderTrackDetectICFloatingTask();
+    simSensorOff(SnLoaderCarHasTray);       // golden :3100 must NOT hand 400 -> 500
+    simSensorUnknown(SnLoaderTrackDetect);  // CheckLoaderICFloating(1) returns TRUE
+
+    bool reached400 = false;
+    for (int i = 0; i < 200 && !reached400; ++i)
+    {
+        advanceTime();
+        DoLoaderTrackDetectICFloating();
+        if (iLoaderTrackDetectICFloatingTask == 400) reached400 = true;
+    }
+    CHECK(reached400, "[19] the SM reached case 400");
+    CHECK(TrayMoveStatus(0, "test[19]") == 2,
+          "[19] case 300's TrayMoveOut drove BOTH belt outputs, so the REAL TrayMoveStatus now "
+          "answers 2 (tray moving out) -- golden asendic.cpp:1486-1487.  The hardwired `return 0` "
+          "this replaced could never produce that value");
+
+    // --- (a) JAM1012 -- reachable for the first time -------------------------
+    W906_ShowErrorMessage_Reset();
+    DetectLoaderTime.SetMSAndOn(0);         // the 20 s arrival watchdog expires
+    DoLoaderTrackDetectICFloating();
+    CHECK(W906_ShowErrorMessage_Count == 1,
+          "[19] case 400 raised EXACTLY ONE alarm once the watchdog expired");
+    CHECK(strcmp(W906_ShowErrorMessage_LastCode.c_str(), "JAM1012") == 0,
+          "[19] the code is JAM1012 (golden :3109) -- the arm banner section B used to call "
+          "structurally unreachable");
+    CHECK(W906_ShowErrorMessage_LastKCode == (K_SKIP | K_RETRY),
+          "[19] JAM1012 offers BOTH buttons (golden :3109 K_SKIP|K_RETRY)");
+    CHECK(iLoaderTrackDetectICFloatingTask == 400,
+          "[19] the sim's K_RETRY answer keeps the cursor on 400 (golden :3110-3114), it does not "
+          "take the K_SKIP exit");
+
+    // --- (b) JAM09102 -- the IC-floating block -------------------------------
+    // Same TrayMoveStatus()==2, so iDir==1's bDir is true (golden :3177); flipping
+    // the track sensor ON is the ONE thing that selects the alarm block over the
+    // clean `return true` at golden :3197.
+    W906_ShowErrorMessage_Reset();
+    bLoaderTrayICDetectErr = false;
+    simSensorUnknown(SnLoaderTrackDetect);
+    CHECK(CheckLoaderICFloating(1) == true && W906_ShowErrorMessage_Count == 0,
+          "[19] with the track sensor NOT on, CheckLoaderICFloating(1) takes the clean exit "
+          "(golden :3197) and is silent");
+
+    W906_ShowErrorMessage_Reset();
+    bLoaderTrayICDetectErr = false;
+    simSensorOn(SnLoaderTrackDetect);       // golden :3183 -- IC floating detected
+    const bool floatRet = CheckLoaderICFloating(1);
+    CHECK(floatRet == false,
+          "[19] with the track sensor ON, CheckLoaderICFloating(1) returns FALSE (golden :3193)");
+    CHECK(W906_ShowErrorMessage_Count == 1 &&
+          strcmp(W906_ShowErrorMessage_LastCode.c_str(), "JAM09102") == 0,
+          "[19] and raises JAM09102 (golden :3192) -- the whole block banner section B used to "
+          "call dead");
+    CHECK(W906_ShowErrorMessage_LastKCode == K_RETRY,
+          "[19] JAM09102 offers K_RETRY only (golden :3192)");
+    CHECK(bLoaderTrayICDetectErr == false,
+          "[19] and does NOT latch bLoaderTrayICDetectErr -- golden :3187 gates the latch on "
+          "USE_AUTO_RETEST==eartInstall, which this fixture leaves uninstalled");
+
+    // The direction half: iDir==0 asks TrayMoveStatus()==1, which the SAME belt
+    // state does NOT satisfy, so the identical sensor picture must NOT alarm.
+    W906_ShowErrorMessage_Reset();
+    bLoaderTrayICDetectErr = false;
+    CHECK(CheckLoaderICFloating(0) == true && W906_ShowErrorMessage_Count == 0,
+          "[19] the SAME belt+sensor state is silent for iDir==0, because that direction wants "
+          "TrayMoveStatus()==1 not ==2 (golden :3172 vs :3177) -- swapping the two makes this red");
+
+    // Leave the belt outputs as this test found them.
+    for (int k = 0; k < 2; ++k) { SW[kSw[k]].Off(); SW[kSw[k]].Enable = false; }
+    simSensorUnknown(SnLoaderTrackDetect);
 }
 
 // ---------------------------------------------------------------------------
@@ -1520,6 +1775,7 @@ int main()
     test_check_loader_ic_floating();
     test_check_contin_manual_remove_tray();
     test_not_covered_register_is_true();
+    test_wave3_unblocked_jam1012_and_jam09102();   // AI(W906-W7-L1-Wave3) 20260802: runs AFTER [18] on purpose
 
     printf("\nRESULT: %d passed, %d failed\n", g_pass, g_fail);
     return (g_fail == 0) ? 0 : 1;

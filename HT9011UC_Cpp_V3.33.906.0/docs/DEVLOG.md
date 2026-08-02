@@ -1681,3 +1681,62 @@ Auto 軌另外把十個兄弟測試對「退役後 + 真 Auto obj」的 archive 
 - **已 commit 且各自親自驗證過**：`cfe4e38`（round-3）、`fcdd92e`（Wave 0 + CanaryFix）、`8d67b46`（Wave 1）、`ce54c4a`（Wave 2）。
 - **build 目錄**：`build_w2_fresh` 是目前唯一與 `ce54c4a` 一致的綠色 build（fresh、111/115）；根目錄的 `build/` 已經**過時**（缺 Wave 2 的來源）。
 - **勿圈入 V906 commit**：`config/*`、`setup.inf`、`.pti_frames/`、repo 根的 `SCRATCH_*.txt`/`_review_*.diff`/`build_*` 產物、ported tree 內三個 `*_test_scratch/`，以及 `HT9011UC_Code_V3.33.899.0_.../CosFunction.cpp`（使用者自己的 V899 工作）。
+
+## 2026-08-02 — W7-L1 **Wave 3**：`asendic.cpp` 真 body 落地 + 三個 `AutoCylinder*` stub 退役 → **W7-L1 完成**
+
+本波經歷「翻譯軌被中斷 → 主迴圈自行驗證 → 雙軌獨立稽核 → 雙軌修正」四個階段，是本專案目前流程最完整的一波。
+
+### 階段一：翻譯軌被中斷（`wf_9cf3c244-22a`）
+
+使用者要求暫停，主迴圈主動 `TaskStop`。`journal.jsonl`：**1 個 `started`、0 個 `result`**——翻譯軌寫完 16 個檔、還沒回報就被砍，**序列的第二段（稽核軌）根本沒啟動**。已於 `a559d01` 誠實記錄為「未編譯、未測試、未驗證」。
+
+### 階段二：主迴圈自己跑（回答「那 16 個檔到底能不能用」）
+
+fresh from-scratch build **exit 0**、`error:` 0、`resolving` 0、ctest **111/115**。行為反轉沒有炸掉任何東西。**+1 警告追到底**：`asendic.cpp` 的 `-Wparentheses`——golden 自己在一處寫了括號、另一處沒寫，譯出檔逐字複製了沒括號的那個版本（連中文註解都正確往返），**是 golden 自身不一致的忠實重現**。
+
+另外自查三件 agent 沒機會回報的事：`AutoCylinderUp/Middle/Lower/MidIsOn` **各恰好一個定義**且全在 `asendic.cpp`；`iLifterTask[3][10]` / `iAutoTask[3][MAX_UNLOAD_TRAY]` **照 golden 定義原樣、沒有被和 `main.cpp` 的 `[3][7]` extern「調和」**（那會是偽裝成 header 清理的行為變更）；參數順序 pin 存在。
+
+### 階段三：雙軌獨立稽核（`wf_f541e59f-687`）——**沒有斷言被弱化**
+
+稽核者手上**沒有任何自我宣稱**可參考（翻譯軌從未回報），一切從 diff 自己推導。
+
+- **主問題答案是「沒有」**：七支被 re-baseline 的測試裡每個變動/消失的斷言逐條分類 → **5 個 `LEGITIMATE_FIXTURE_FIX`、1 個 `STRENGTHENED`、1 個 `AMBIGUOUS`、0 個 `WEAKENED`**。兩處看似「把 `==1` 改成 `==0`」的地方，回 golden 查證後確認**舊斷言才是錯的**（舊 Sim body 讓 `CylinderMiddle` 抬起中間汽缸，golden 是 `Cylinder[CylinderName].On(); Cylinder[CylinderName+1].Off();`，恰好相反；舊值只因 stub 才成立）。那個 `STRENGTHENED` 處，Wave 3 還**主動刪掉一行會讓斷言變成恆真的預清除**。
+- **恆真式掃描 CLEAN**：27 個新增斷言裡**連一個 `||` 都沒有**。沒有第四次。
+- **參數順序 pin 實測會紅**：稽核者自己套用單點對調突變，`69 passed/0 failed` → **`62 passed/7 failed`**。它連 `[12c]` 自陳的弱點都插探針量了（`swappedMiddleReturned=1 swappedLowerReturned=1`），確認「對調後仍會回 true」屬實——所以那條斷言的是**汽缸身分**而非收斂。**一個主動聲明自己覆蓋比看起來弱、而且說對了的測試檔，正是我派它去找的失敗模式的反面。**
+- **`tests/w3_cylinder_plant.h` 判定為誠實的物理模型**，用結構論證而非印象：三條定律各自是「被下達的兩個輸出」的純函數，無法探詢游標或被問的是哪個 guard，枚舉四種輸出狀態後三者的收斂狀態互斥——**不存在「對什麼都說 yes」的位置**。
+
+### 階段四：修正（`wf_35a6be1b-27b`）——17 個發現，兩個 HIGH
+
+**HIGH-1（引用懸空）**：四處散文引用 `tests/test_w7_l1_wave3_argorder.cpp` 與 `..._traymove.cpp`，**兩個檔都不存在**，全樹唯一提到它們的就是那四行引用。⚠️ **但 fidelity 軌據此下的結論「覆蓋根本沒寫、和 stub 時代一樣不可反證」是錯的，主迴圈駁回**——覆蓋確實存在，只是在別的檔（`test_w7_l1_auto2.cpp` 的 `[12] test_argument_order_pin()`、`test_w7_l1_loader.cpp` 的 `[19]`），而另一軌已實測它會紅。**又一次印證「發現可信、建議修法必須自己重推」**（KNOWLEDGE gotcha 10 一帶的既有教訓）。修法是把四處引用重指到真正的 sub-test，**不是造新檔、也不是刪掉覆蓋宣稱**。
+
+**HIGH-2（真陷阱）**：`tests/w3_cylinder_plant.h` **從未 `git add`**，而**七個 TU include 它**。任何漏加這條路徑的 commit 會產出一棵在別人機器上完全編不過的樹，而 commit 的人本機看到的是綠的。本次 commit 已明確納入。
+
+**兩個半接線（實質，不是註解）**：
+
+1. **`DoLoaderTrayFeed` 真 body 落地卻不可達**——`csystem.cpp` 的 `#define` 轉址沒退，而 csystem 是 golden 唯一呼叫端。`nm -u` 掃全部 14 個 archive：**refs = 0**（對照 `TrayMoveStatus` refs=8）。等於交付了一台沒有東西能執行的狀態機。已退役並補上 `#include "asendic.h"`，refs 0→1。
+2. **`RecordAutoCleanOutStartEnd` 半接線**——START 端已通真 body、END 端仍是 `{}` no-op → **計時器上鎖但沒人讀**；而那段退役註解仔細分析了 START 的行為變化卻**完全沒提搭檔還是 stub**。已對稱退役，refs 1→2。
+
+**WIRING 軌推翻了自己被交付的預測**（本專案第二次）：brief 警告「golden 的 body 在有盤時回 false、stub 回 true，這是真實行為變更，會動到 hub 測試」。它實測後證明**在這棵樹上什麼都沒動**，並給出兩個獨立理由：(1) 預設 Sim 狀態下 loader 是空的（`fHasTray` 預設 false，`IsOn()` 在 `Enable==false` 時回 false），真 body 第一次呼叫就回 true，與 stub 相同；(2) 兩個呼叫點都在 `if(bDoLoaderCleanOut ...)` 之後，而 `cmydef.cpp` 把它初始化為 false，現有測試根本到不了。四支測試（含它**不擁有**、但真正會走 `DoOneCycleFinishCheck` 的兩支 W7-C）的完整 stdout **前後逐位元組相同**。**沒有改任何 fixture、沒有 re-baseline 任何斷言——因為不需要。**
+
+**它還補上了讓這個缺陷當初能被抓到的東西**：`refs=0` 之所以能活過一整波，正是因為**沒有任何測試看得見它**（所有套件都在 `bDoLoaderCleanOut==false` 下跑，stub 與真 body 在那裡一致）。新增的 O5 WIRING PIN 把 `DoOneCycleFinishCheck` 驅進兩者**會分歧**的唯一狀態：O5a 讓 loader 有盤（golden 回 false，旗標必須存活；`return true` 的 stub 會清掉它），O5b 是負控制（loader 空，golden 回 true，旗標必須被清）——**沒有任何常數函式能同時滿足兩者**。
+
+**CLAIMS 軌也更正了我 brief 的一個前提**：我說三個 `asendic_Auto*.cpp` 都持有 zero-diff，**實際只有兩個**——`asendic_Auto2.cpp` 是更早的波次，body 區帶著 63 行譯者註解，從來就不是 zero-diff（翻譯本身沒問題：零 golden 行遺失、零 golden 程式行被改）。它不願回報一個會讓人誤解的數字。
+
+### 驗收（主迴圈親跑，fresh from-scratch，§12 閘 1）
+
+- configure + build **exit 0**、`error:` **0**、`grep -ic resolving` **0**、警告 **289**（Wave 2 基準 288，+1 為上述 golden 忠實重現）。
+- 完整 `ctest --timeout 300 -j4` = **111/115**、226s，失敗恰為既有 4 個環境漂移。**零迴歸。**
+- 逐支測試：`auto2` 70、`auto` 81、`auto_rt` 180、`color` 165、`loader` 128、`empty_canary` 48、`canary` 54、`csystem_cycle` **22**（+2 為新的 O5 wiring pin）、`hub` 9——全部 0 failed。
+- 19 個檔編碼閘全過。
+
+### 🔖 RESUME（最新）
+
+- **已 commit**：`cfe4e38`（round-3）、`fcdd92e`（Wave 0 + CanaryFix）、`8d67b46`（Wave 1）、`ce54c4a`（Wave 2）、`a559d01`（暫停交接）、Wave 3（本則）。**寫入佇列在 commit 當下已清空。**
+- **驗證基準**：fresh build exit 0 / ctest **111/115**；警告基準線 **289**。golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 `fix/v899.32-pti`。
+- **✅ W7-L1 完成**：`asendic_*` 家族 SM 全部翻完（`Empty`/`Auto2`/`Color`/`Loader`/`Loader_RT`/`Auto`/`Auto_RT`），`Scanner` 裁定排除（死碼且無法編譯），`asendic.cpp` 真 body 已落地、三個 `AutoCylinder*` no-op stub 已退役。**本 sub-project 開著的那個 HIGH finding 已關閉。**
+- **接下來**：**W7-U（MFC UI 本體）**。MFC 14.44 已裝並實編驗證、OS 已定 Windows 10/11 v143、`_WIN32_WINNT=0x0601` 已釘。plan §7 的 10 項可排。
+  ⚠️ **開工前必讀 W7-U 規劃警訊**：SECSGEM bucket 的 form-facade 缺口是 **29 個相異 form 指標**，22 個 override 在 form 軸上真正解鎖的只有 **3 個**（不是舊 §10 item 16 說的 9/5）。**若 bucket 排序建立在 9/5 上，需要重排。**
+- **其他仍未觸及的候選**：`uHGemClass.cpp` 剩 1 個 gated（`S7F20_CurrentEPPDData`，需 `TDirectoryListBox` 等價 vclcompat 元件，是真設計工作）；`SECSGEM/uHGemEquipment.cpp` `DoTraceDataResponse`；`Automation/SCK_ART.cpp` 剩 `SaveMultiLotTestSummary`（唯一呼叫端 `csystem.cpp DoTrayFeedProcess` 仍在 `#if 0`）；`MainCalcCore` 15 個函式後續批次。
+- **本波留下的兩個小尾巴**：`InitDoLoaderTrayFeedTask` 生產端 refs 仍為 0，**這是正確的**——golden 的兩個呼叫端在 `DoTrayFeedProcess` 模式階梯裡，那整塊還在 `#if 0 // TODO(W7)`；已在刪除點與 banner 註明，避免後人「補一個呼叫去美化 refs 數字」。另 `asendic_Auto2.cpp` 從來不是 zero-diff（見上），別把它當基準。
+- **勿圈入 V906 commit**：`config/*`、`setup.inf`、`.pti_frames/`、repo 根的 `SCRATCH_*.txt`/`_review_*.diff`/`build_*` 產物、ported tree 內三個 `*_test_scratch/`，以及 `HT9011UC_Code_V3.33.899.0_.../CosFunction.cpp`（使用者自己的 V899 工作）。
+- **執行模式**：使用者指示持續有效——全部 cpp/h/dfm 都要翻、workflow 火力全開、不逐波停下請示、重大問題跳過並最後條列；model/effort 依任務性質自動切換；安裝軟體不必先問。

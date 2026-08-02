@@ -150,9 +150,19 @@ int iReadCIDAction       = 0;                   // golden -- ePortTotal at rest 
 // DoAutoReceiveBinTray: RETIRED BODY (W7-L1 Wave 2 "Auto") -- real body now in
 // asendic_Auto.cpp, and it is VOID (golden asendic_Auto.h:8); this stand-in
 // wrongly returned bool.  All 4 ported call sites discard the value.
-bool AutoCylinderUp(int, int, int, bool)             { return true;  }   // offline: reached
-bool AutoCylinderMiddle(int, int, int, bool)         { return true;  }   // offline: reached
-bool AutoCylinderLower(int, int, int, bool)          { return true;  }   // offline: reached
+// AutoCylinderUp / AutoCylinderMiddle / AutoCylinderLower: RETIRED BODIES
+// (W7-L1 Wave 3 / L1a) -- the three `{ return true; }` no-op stubs that were
+// THE open HIGH finding of this sub-project are gone.  The real golden state
+// machines now live in asendic.cpp (golden asendic.cpp:562-765, :767-933,
+// :937-1160) and the DECLARATIONS moved to asendic.h, which is where golden
+// declares them (golden asendic.h:19-21).  Unlike the Color / Loader / Auto
+// retirements above, the declarations are NOT kept here: golden carries default
+// arguments on parameter 4, and every TU that calls these already includes
+// asendic.h, so keeping a second defaulted declaration in this header would give
+// parameter 4 two default arguments in the many TUs that include both.
+// Verified in this pass -- all four production callers include asendic.h:
+// acatchtray.cpp:90, asendic_Auto.cpp:122, asendic_Auto2.cpp:100,
+// asendic_Auto_RT.cpp:201.
 void SetMotorScaleSpeed(int, int)                    {}                  // offline: no-op
 void SetMotorAccelSpeed(int, int)                    {}                  // AI(W906-AutoCleanFoundation) 20260721: golden cinitial.h:51 sibling -- offline no-op
 void ClearAutoChangingWarn(int)                      {}                  // offline: BinDisp warn-clear no-op

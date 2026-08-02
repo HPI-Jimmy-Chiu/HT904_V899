@@ -134,7 +134,14 @@ void InitialDoMagazineTrayFeedTask() {}   // golden Magazine SM
 //  Tail Auto-tray / alignment / vibration loops the HUB calls every tick.
 // ===========================================================================
 void DoAuto3Magazine()               {}   // golden Magazine SM (only when AUTO3_IS_MAGAZINE==1)
-void NewDoAutoTrayEdgeCylinderLoop() {}   // golden tray-vibration loop
+// NewDoAutoTrayEdgeCylinderLoop: RETIRED BODY (W7-L1 Wave 3 / L1b) -- the real
+// golden body now lives in asendic.cpp (golden asendic.cpp:1206-1233, the
+// "2011.10.19 Q_Q V207C new Tray Vibration" loop with its NewLoopEdgeDelay /
+// NewLoopEdgeOnDelay pair and the IniConfig.iVibratorUnloader accumulator), so
+// keeping this no-op would be a duplicate symbol at link.  The DECLARATION in
+// csystem_shims.h is KEPT, exactly like DoLoad / InitLoadTask: csystem.cpp binds
+// to the symbol through that header and does not include asendic.h.
+// AI(W906-W7-L1-Wave3) 20260802.
 // DoAutoEmpty1() is owned by asendic_Empty.cpp (ODR) -- NOT defined here.
 // DoAuto2() : REAL faithful body now lives in asendic_Auto2.cpp (golden
 // asendic_Auto2.cpp:414-592) as of W906-W7-L1.  The no-op stub here was REMOVED

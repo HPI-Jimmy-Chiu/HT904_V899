@@ -98,6 +98,12 @@
 #include "cmydef.h"
 #include "canary_support.h"     // LastSet, ShowErrorMessage/ShowMyMessage seams
 #include "FormsFacade.h"        // fMain / fSortCT / fAGV
+// AI(W906-W7-L1-Wave3) 20260802: CylinderUp/Middle/Lower are golden's real
+// closed-loop lifter SMs now (asendic.cpp), not Sim bodies that returned true on
+// their first call.  This header is the physical Color tray-group stack that
+// answers their position sensors; w3::Tick() at the top of every drive loop below
+// moves it and expires LifterTime[][].
+#include "w3_cylinder_plant.h"
 #include <cstdio>
 #include <set>
 
@@ -248,6 +254,20 @@ static void setupColorFixture()
     CosFunction.bSpecialP24                           = false;
     TrayForm.bEnableAMR   = false;
     TrayForm.bColorTray   = false;
+
+    // AI(W906-W7-L1-Wave3) 20260802: wire the Color tray-group lifter the way a
+    // real machine wires it (Enable + distinct Sim IO addresses for the output
+    // bit and the two position sensors + non-zero alarm windows), and reset the
+    // lifter cursors the way golden main.cpp:9159-9160 does at FormShow.  Golden's
+    // real CylinderUp/Middle/Lower are closed loops on those sensors; with the
+    // default all-false wiring they can never report arrival and every SM that
+    // calls them parks.
+    w3::Forget();
+    w3::WireLifter(C_Color_Up, C_Color_Middle, 13);
+    w3::ResetCursors();
+    Ld_UldDelayTime.LD_BeforeDownDelay    = 0;
+    Ld_UldDelayTime.LD_StackMiddLockDelay = 0;
+    Ld_UldDelayTime.LD_LiftDownDelay      = 0;
     TestIF_File.bEnableTrayID2 = false;
 
     Ld_UldDelayTime.ULD_LiftDownDelay  = 0;
@@ -417,6 +437,7 @@ static void test_load_new_color_dummy_walk()
     bool armedForCase60 = false, rearmedForCase420 = false;
     for (steps = 0; steps < 200 && !done; ++steps)
     {
+        w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: lifter plant tick
         // ColorDelay is DUAL-ROLE: advance it ONLY at cursor 400, where its
         // progress role is live (golden :224).  At 420 it is the JAM1413 watchdog.
         if (iLoadNewColorTrayToCarTask == 400) ColorDelay.SetMSAndOn(0);
@@ -551,6 +572,18 @@ static void test_load_new_color_else_arm_and_jam1406()
     // assertion an INVERTED one does.
     Cylinder[C_Color_Up].On();
     Cylinder[C_Color_Middle].On();
+    // AI(W906-W7-L1-Wave3) 20260802: settle the plant on that pre-drive.  Golden
+    // :96-97 gates this whole arm on `Cylinder[C_Color_Middle].OffStatus()==false
+    // && Enable==true` -- "the separation cylinder is still up".  Before Wave 3
+    // the fixture left OffSenEnable false, so OffStatus() answered false for the
+    // WRONG reason (no sensor at all) and the gate opened by accident.  Now the
+    // cylinder really has an OFF sensor, so the fixture has to actually put the
+    // stack UP for the gate to open -- one plant tick on the pre-drive does that
+    // (both commanded ON -> position `top` -> Middle's OFF sensor not made).
+    // Deliberately the ONLY tick in this block: the two DoLoadNewColorTrayToCar()
+    // calls below must see the stack still UP, which is the condition case 20 is
+    // protecting against.
+    w3::Tick();
 
     DoLoadNewColorTrayToCar();
     CHECK(iLoadNewColorTrayToCarTask == 20,
@@ -604,6 +637,7 @@ static void test_load_new_color_ase_read()
     bool fedTrayID = false, flippedCar = false;
     for (int i = 0; i < 200 && !done; ++i)
     {
+        w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: lifter plant tick
         if (iLoadNewColorTrayToCarTask == 400) ColorDelay.SetMSAndOn(0);
         // The RFID/ASE reader answers once the SM is parked on 53.
         if (iLoadNewColorTrayToCarTask == 53 && !fedTrayID)
@@ -730,6 +764,7 @@ static void test_tray_to_front_car_arm()
     int  steps = 0;
     for (steps = 0; steps < 50 && !done; ++steps)
     {
+        w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: lifter plant tick
         done = DoColorTrayToFront();
         if (steps == 0)
         {
@@ -821,6 +856,7 @@ static void test_tray_to_rear_plain()
     int  afterFirstTick = -1, fixAfterFirstTick = -1, gateAt500 = -1;
     for (int i = 0; i < 100 && !done; ++i)
     {
+        w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: lifter plant tick
         done = DoColorTrayToRear();
         seen.insert(iColorTrayToRearTask);
         if (i == 0)
@@ -882,7 +918,10 @@ static void test_tray_to_rear_keyence_handoff()
     bool done = false;
     int  steps = 0;
     for (steps = 0; steps < 60 && !done && iColorTrayToRearTask != 520; ++steps)
+    {
+        w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: lifter plant tick
         done = DoColorTrayToRear();
+    }
 
     CHECK(iColorTrayToRearTask == 520 && done == false,
           "case 510 took the Keyence branch and handed to 520 (golden :716-726)");
@@ -890,7 +929,7 @@ static void test_tray_to_rear_keyence_handoff()
           "the Keyence branch has NOT yet handed the tray over (golden :730 is after the break)");
 
     // Offline DoTrayIDKeyence2 never answers, so 520 parks...
-    for (int i = 0; i < 20; ++i) DoColorTrayToRear();
+    for (int i = 0; i < 20; ++i) { w3::Tick(); /* AI(W906-W7-L1-Wave3) 20260802: lifter plant tick */ DoColorTrayToRear(); }
     CHECK(iColorTrayToRearTask == 520,
           "520 PARKS while DoTrayIDKeyence2() is offline-false (no fabricated progress)");
 
@@ -955,6 +994,7 @@ static void driveAmrRear(StateSet &seen, const char *sBlockID, int maxSteps,
     g_lockAt455 = -99;
     for (int i = 0; i < maxSteps; ++i)
     {
+        w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: lifter plant tick
         if (iColorTrayToRearTask == 455)
             fTrayMapping->ldRFID->bClearCmd2 = true;       // reader acked the clear
         if (iColorTrayToRearTask == 460)
@@ -1159,6 +1199,7 @@ static void test_unload_to_stack()
     bool wipedForCase50 = false;
     for (int i = 0; i < 200 && !done; ++i)
     {
+        w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: lifter plant tick
         if (iUnLoadNewColorTrayTask == 150 || iUnLoadNewColorTrayTask == 500 ||
             iUnLoadNewColorTrayTask == 20)
             DoUnLoadNewColorToStackDelay.SetMSAndOn(0);
@@ -1208,6 +1249,7 @@ static void test_unload_to_stack()
     StateSet seenR;
     for (int i = 0; i < 12; ++i)
     {
+        w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: lifter plant tick
         if (iUnLoadNewColorTrayTask == 20) DoUnLoadNewColorToStackDelay.SetMSAndOn(0);
         DoUnLoadNewColorToStack();
         seenR.insert(iUnLoadNewColorTrayTask);
@@ -1254,6 +1296,7 @@ static void test_receive_chain()
     bool leftOne = false, backToOne = false;
     for (int i = 0; i < 600 && !backToOne; ++i)
     {
+        w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: lifter plant tick
         if (iUnLoadNewColorTrayTask == 150 || iUnLoadNewColorTrayTask == 500 ||
             iUnLoadNewColorTrayTask == 20)
             DoUnLoadNewColorToStackDelay.SetMSAndOn(0);
@@ -1319,6 +1362,7 @@ static void test_receive_chain()
     iReceiveColorTray     = 2;
     for (int i = 0; i < 200 && iAutoColorReceiveTask != 300; ++i)
     {
+        w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: lifter plant tick
         if (iUnLoadNewColorTrayTask == 150 || iUnLoadNewColorTrayTask == 500 ||
             iUnLoadNewColorTrayTask == 20)
             DoUnLoadNewColorToStackDelay.SetMSAndOn(0);
@@ -1374,6 +1418,7 @@ static void test_drive_auto_color()
     bool sawStaleClear = false;
     for (int i = 0; i < 60; ++i)
     {
+        w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: lifter plant tick
         if (iAutoColorTask == 65) CheckColorTrayDelay.SetMSAndOn(0);
         if (iAutoColorTask == 70 || iAutoColorTask == 150) DoAutoColorDelay.SetMSAndOn(0);
         DoAutoColor();
@@ -1403,6 +1448,7 @@ static void test_drive_auto_color()
     simSensorOn(SenColorCCWDete);
     for (int i = 0; i < 40 && iAutoColorReceiveTask != 200; ++i)
     {
+        w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: lifter plant tick
         if (iAutoColorTask == 65) CheckColorTrayDelay.SetMSAndOn(0);
         DoAutoColor();
     }
@@ -1440,6 +1486,7 @@ static void test_drive_auto_color()
     bool saw300to1 = false;
     for (int i = 0; i < 100; ++i)
     {
+        w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: lifter plant tick
         int prev = iAutoColorTask;
         DoAutoColor();
         if (prev == 300 && iAutoColorTask == 1) saw300to1 = true;
@@ -1464,7 +1511,7 @@ static void test_gates_and_log()
     InitAutoColorTask();
     fColorCanSupplyNewTray = false;
     int before = iAutoColorTask;
-    for (int i = 0; i < 20; ++i) DoAutoColor();
+    for (int i = 0; i < 20; ++i) { w3::Tick(); /* AI(W906-W7-L1-Wave3) 20260802: lifter plant tick */ DoAutoColor(); }
     CHECK(iAutoColorTask == before,
           "DoAutoColor no-ops while fColorCanSupplyNewTray==false (golden :845-846)");
 
@@ -1483,7 +1530,7 @@ static void test_gates_and_log()
     InitAutoColorTask();
     IniConfig.bP04ColorIsEmptyUnloader = true;
     before = iAutoColorTask;
-    for (int i = 0; i < 10; ++i) DoAutoColor();
+    for (int i = 0; i < 10; ++i) { w3::Tick(); /* AI(W906-W7-L1-Wave3) 20260802: lifter plant tick */ DoAutoColor(); }
     CHECK(iAutoColorTask == before, "DoAutoColor no-ops while bP04ColorIsEmptyUnloader (golden :848-849)");
 
     // the P24/P25 no-supply gate
@@ -1493,7 +1540,7 @@ static void test_gates_and_log()
     IniConfig.bP24SkipEventNeedRemoveEmptyAndColorTray = true;
     IniConfig.bP25EmptyColorNoSuppleAutoNoLoadEmpty    = true;
     before = iAutoColorTask;
-    for (int i = 0; i < 10; ++i) DoAutoColor();
+    for (int i = 0; i < 10; ++i) { w3::Tick(); /* AI(W906-W7-L1-Wave3) 20260802: lifter plant tick */ DoAutoColor(); }
     CHECK(iAutoColorTask == before, "DoAutoColor no-ops under P24+P25 no-supply (golden :853-857)");
 
     // the JSCC buffer-catch guard: receive mode + CC_SCC + catching -> re-init only

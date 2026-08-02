@@ -56,14 +56,21 @@
 //    mysensor.h / myswitch.h (Sen[] / SW[])                -- W4-IO HAL
 //    mytray.h             (TMyTray -- Tray.HasIC/FullIC/HowManyBinICInTray)
 //    csystem.h            (ReadWriteTrayID / CheckAllAutoTrayEjectFinsh)
-//    asendic.h            (TrayMoveIn/Out + TrayCylinMoveIn/Out + TrayMoveStatus)
+//    asendic.h            (TrayMoveIn/Out + TrayCylinMoveIn/Out + TrayMoveStatus,
+//                          and -- AI(W906-W7-L1-W3fixB) 20260802 -- AutoCylinderUp/
+//                          Middle/Lower, which golden also declares here
+//                          (asendic.h:19-21).  Wave 3 moved those three
+//                          declarations out of acatchtray_shims.h to match golden.)
 //    asendic_Color.h      (ForTERAPOWERCheckColorSensor -- golden reaches it via
 //                          asendic.h's god-include, which this tree's asendic.h
 //                          subset does not reproduce; golden call sites :363,
 //                          :2029, :2074)
 //    acatchtray.h         (InitialCoverTrayIDTask)
-//    acatchtray_shims.h   (AutoCylinderUp/Middle/Lower, fTrayMapping,
-//                          AMRUnloadBin, NewRecordProcess)
+//    acatchtray_shims.h   (fTrayMapping, AMRUnloadBin, NewRecordProcess).
+//                          AI(W906-W7-L1-W3fixB) 20260802: AutoCylinderUp/Middle/
+//                          Lower REMOVED from this list -- Wave 3 deleted both the
+//                          `{ return true; }` bodies and the declarations from the
+//                          acatchtray_shims pair; they now come from asendic.h.
 //    FormsFacade.h        (fMain / fLotInfo / fSortCT / fSCKART / fAGV /
 //                          fFixAICCD / fProductionInfo)     -- non-VCL satellites
 //    canary_support.h     (LastSet, __FUNC__, ShowErrorMessage, ShowMyMessage,
@@ -127,7 +134,9 @@
 #include "mytray.h"
 #include "myTimer.h"
 #include "acatchtray.h"                 // InitialCoverTrayIDTask
-#include "acatchtray_shims.h"           // AutoCylinder* / fTrayMapping / AMRUnloadBin / NewRecordProcess
+// AI(W906-W7-L1-W3fixB) 20260802: dropped "AutoCylinder*" from this comment --
+// Wave 3 moved those three declarations to asendic.h (included above).
+#include "acatchtray_shims.h"           // fTrayMapping / AMRUnloadBin / NewRecordProcess
 #include "asendic_Color.h"              // ForTERAPOWERCheckColorSensor (golden :363/:2029/:2074)
 #include "aHotPlateSubstrate.h"          // OutArmSuck (golden MyKitSuck.h:366) -- needed by
                                         // stand-in #4 CheckOutArmZ.  Included BEFORE the
@@ -344,94 +353,20 @@ static AnsiString W7L1A_GetBundleInfo(int /*iAuto*/)                    { return
 static void       W7L1A_CheckAllAutoTrayEjectFinsh()                    {}
 static bool       W7L1A_bNeedEject[MAX_AUTO_TRAY]={false, false, false, false, false, false};
 
-// --- #1 bARTUnloaderUseTwoCylin -- VERBATIM golden asendic.cpp:139-148 ------
-static bool W7L1A_bARTUnloaderUseTwoCylin(int Part)                             //Sam 20220916 : 整合 ART Unload 上升汽缸判斷式
-{
-    if(USE_AUTO_RETEST==eartInstall &&
-        UNLOADER_ART[Part]==eartInstall &&
-        bNoAutoZSelect==false &&
-        USE_LdUldCassetteMode!=1)                                               //RogerYang 20260207 : Add fot 9046 CR
-        return true;
-    else
-        return false;
-}
-
-// --- #2 DoAutoTrayEdgeCylinderLoop -- VERBATIM golden asendic.cpp:1163-1200 --
-//     LoopEdgeDelay is golden asendic.cpp file-scope (no ported home); TU-local
-//     here because this file is its only golden caller (see the block above).
-static TQPF_Timer W7L1A_LoopEdgeDelay[MAX_AUTO_TRAY];
-static bool W7L1A_DoAutoTrayEdgeCylinderLoop(int iAuto)
-{
-    static bool EdgePushLoop[MAX_AUTO_TRAY]={false, false, false, false, false, false};
-    static bool bFirst=true;
-
-    if(IniConfig.bP13EnableAutoTrayEdgePushCylinderLoop==false)                 //wei 20160309 LastSet-->IniConfig
-        return false;
-
-    if(bWaitOutArmCheckCylin==true)                                             //jou 20240131 : 修正out arm 與 auto tray防呆衝突hang up
-        return true;
-
-    if(bFirst==true)
-    {
-        for(int i=eAuto1; i<=iAutoRight; i++)
-        {
-            int iA=iAutoIndex[i];
-            W7L1A_LoopEdgeDelay[iA].Set0_1SecAndOn(IniConfig.iP13EdgePushCylinderLoopDelay);
-        }
-        bFirst=false;
-    }
-
-    if(MOT[iMMAuto[iAuto]].fHasTray &&
-       MOT[iMMAuto[iAuto]].Tray.HasIC() &&
-       MOT[iMMAuto[iAuto]].FullIC()==false)
-    {
-        if(W7L1A_LoopEdgeDelay[iAuto].Off())
-        {
-            W7L1A_LoopEdgeDelay[iAuto].Set0_1SecAndOn(IniConfig.iP13EdgePushCylinderLoopDelay);
-            EdgePushLoop[iAuto]=!EdgePushLoop[iAuto];
-
-            if(EdgePushLoop[iAuto]==true)
-                Cylinder[C_AutoEdgePush[iAuto]].On();
-            else
-                Cylinder[C_AutoEdgePush[iAuto]].Off();
-        }
-    }
-
-    return true;
-}
-
-// --- #3 PushUnLoaderTrayInAverageTime -- VERBATIM golden asendic.cpp:1236-1268
-static void W7L1A_PushUnLoaderTrayInAverageTime(DWORD st, int pos)
-{
-    static DWORD Buffer[MAX_AUTO_TRAY][5]={{9999,9999,9999,9999,9999},
-                                           {9999,9999,9999,9999,9999},
-                                           {9999,9999,9999,9999,9999},
-                                           {9999,9999,9999,9999,9999},
-                                           {9999,9999,9999,9999,9999},
-                                           {9999,9999,9999,9999,9999}};
-
-    DWORD sum=0;
-    int ct=0;
-    for(int i=0; i<4; i++)
-        Buffer[pos][i]=Buffer[pos][i+1];
-    Buffer[pos][4]=st;
-    if(st<500 || st>8000)
-        return;
-
-    for(int i=0; i<5; i++)
-    {
-        if(Buffer[pos][i]!=9999)
-        {
-            ct++;
-            sum+=Buffer[pos][i];
-        }
-    }
-
-    if(ct!=0)
-    {
-        LastSet.iUnLoaderTraySimulateTime[pos]=sum/ct;
-    }
-}
+// --- #1 / #2 / #3 -- STAND-INS RETIRED (W7-L1 Wave 3) -----------------------
+// AI(W906-W7-L1-Wave3) 20260802: the TU-local W7L1A_bARTUnloaderUseTwoCylin,
+// W7L1A_DoAutoTrayEdgeCylinderLoop (+ its W7L1A_LoopEdgeDelay[] timer array) and
+// W7L1A_PushUnLoaderTrayInAverageTime bodies, and the three `#define`s that
+// redirected this file's golden call sites onto them, are DELETED.  Wave 3
+// landed golden asendic.cpp in full, so all three now have REAL definitions
+// (golden asendic.cpp:139-148, :1162-1201, :1236-1266) reachable through
+// `#include "asendic.h"` above.  The stand-ins were faithful line-for-line
+// copies, so retiring them changes nothing about WHAT runs -- except that
+// LoopEdgeDelay[] and PushUnLoaderTrayInAverageTime's static 5-deep ring buffer
+// are no longer private to this TU; they are now the single shared instances
+// golden has, which is what golden means.
+// The retirement was placed here, ABOVE the golden-body anchor, precisely so the
+// zero-diff fidelity of the body below is untouched.
 
 // --- #4 CheckOutArmZ -- VERBATIM golden aoutarm.cpp:95-116 ------------------
 static bool W7L1A_CheckOutArmZ(bool bMessage)
@@ -463,9 +398,6 @@ static bool W7L1A_CheckOutArmZ(bool bMessage)
 #define fMesSystem                      W7L1A_fMesSystem
 #define iAutoTrayData                   W7L1A_iAutoTrayData
 #define bOldAutoHasTray                 W7L1A_bOldAutoHasTray
-#define bARTUnloaderUseTwoCylin         W7L1A_bARTUnloaderUseTwoCylin
-#define DoAutoTrayEdgeCylinderLoop      W7L1A_DoAutoTrayEdgeCylinderLoop
-#define PushUnLoaderTrayInAverageTime   W7L1A_PushUnLoaderTrayInAverageTime
 #define CheckOutArmZ                    W7L1A_CheckOutArmZ
 #define GetBundleInfo                   W7L1A_GetBundleInfo
 #define CheckAllAutoTrayEjectFinsh      W7L1A_CheckAllAutoTrayEjectFinsh

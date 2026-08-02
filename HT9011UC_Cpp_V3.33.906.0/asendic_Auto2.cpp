@@ -50,10 +50,13 @@
 //      mycylin.h         (Cylinder[])           -- W6.0 HAL gap
 //      mysensor.h        (Sen[])                -- W4-IO HAL
 //      myswitch.h        (SW[])                 -- W4-IO HAL
-//      asendic.h          (golden declares AutoCylinderUp/Middle/Lower here at
-//                          asendic.h:19-21; in THIS tree those three decls were
-//                          relocated to acatchtray_shims.h, so this header is
-//                          included only for the sibling include chain golden uses)
+//      asendic.h          (AutoCylinderUp/Middle/Lower -- golden asendic.h:19-21,
+//                          and AI(W906-W7-L1-W3fixB) 20260802: THIS TREE DECLARES
+//                          THEM THERE TOO.  The line here used to say the three
+//                          decls "were relocated to acatchtray_shims.h"; W7-L1
+//                          Wave 3 moved them back to asendic.h where golden has
+//                          them, so this include is now a real dependency of this
+//                          file's 12 call sites, not just the sibling chain)
 //      acatchtray.h        (WhichAutoNeedTray only -- golden acatchtray.h:8)
 //      FormsFacade.h       (fAGV->IsATK_AMR())    -- non-VCL satellite stub
 //      canary_support.h    (LastSet shim, ShowErrorMessage/ShowMyMessage)
@@ -69,27 +72,34 @@
 //  pair (both arms already present in golden; SOFT_SIMULTE is not defined in
 //  this build, matching the Empty canary's posture, so the #ifndef arm compiles).
 //
-//  STAND-IN THIS FILE DEPENDS ON -- AutoCylinderUp / AutoCylinderMiddle /
-//  AutoCylinderLower ARE NO-OP STUBS, NOT REAL BODIES.
-//  AI(W906-W7-L1fix) 20260729: the include line below used to claim "real bodies,
-//  acatchtray.cpp".  Both halves of that were wrong and are corrected here:
+//  AutoCylinderUp / AutoCylinderMiddle / AutoCylinderLower ARE REAL GOLDEN BODIES
+//  ------------------------------------------------------------------------------
+//  AI(W906-W7-L1-W3fixB) 20260802: THIS BLOCK IS REWRITTEN BECAUSE IT WAS FALSE.
+//  It used to be headed "STAND-IN THIS FILE DEPENDS ON -- ... ARE NO-OP STUBS, NOT
+//  REAL BODIES" and to state that every `if(AutoCylinderXxx(...))` guard in this
+//  file is "unconditionally true offline".  W7-L1 Wave 3 retired those stubs; the
+//  sentence survived the wave and was the single most misleading line in this
+//  file, because it is exactly what a future debugger would read to conclude that
+//  the Auto2 cylinder path cannot stall.  IT CAN.
 //    * WHERE GOLDEN DEFINES THEM: asendic.cpp:562 / :767 / :937 (NOT acatchtray.cpp
 //      -- acatchtray.cpp only CALLS them, e.g. golden acatchtray.cpp's Auto lifter
 //      block).  They are the Auto1..Auto6 lifter state machines, siblings of the
 //      CylinderUp/Middle/Lower trio for Load/Empty/Color.
-//    * WHAT THIS TREE ACTUALLY LINKS: acatchtray_shims.cpp's
-//      `bool AutoCylinderUp(int,int,int,bool) { return true; }` (and Middle/Lower,
-//      identical).  This tree's asendic.cpp is a declared SIM-SHAPE partial that
-//      carries only the non-Auto CylinderUp/Middle/Lower; the Auto* lifter SMs are
-//      NOT translated (they need iLifterTask[][]/LifterTime[][]/iTrayZMotor[]/
-//      LOAD_Z_USE_MOTOR[]/Prod.TrayZ_Up[], same god-stack asendic.cpp's own banner
-//      defers).
-//  CONSEQUENCE FOR THIS FILE: every `if(AutoCylinderXxx(...))` guard here is
-//  unconditionally true offline, so the lifter waits at cases 50/201/410 (feed)
-//  and 50/200/401 (unload) complete in one tick and no lifter timing/alarm
-//  behaviour is exercised.  tests/test_w7_l1_auto2.cpp asserts only that these
-//  call sites are REACHED, and says so explicitly.  Replacing the stubs with the
-//  real golden bodies is a separate wave (see docs/W7-UI-SKIPPED.md, W7-L1).
+//    * WHAT THIS TREE NOW LINKS: those same golden bodies, translated into this
+//      tree's asendic.cpp and declared in asendic.h (golden asendic.h:19-21).
+//      acatchtray_shims.cpp's three `{ return true; }` stubs are DELETED, and so
+//      are their declarations in acatchtray_shims.h.
+//  CONSEQUENCE FOR THIS FILE: the guards are CLOSED LOOPS.  They command
+//  Cylinder[].On()/Off() and then wait on Cylinder[].OnStatus()/OffStatus(), with a
+//  case-100 "Lifter Up error" arm and a case-201 CylinderAlarmTime watchdog, so the
+//  lifter waits at cases 50/201/410 (feed) and 50/200/401 (unload) take real time
+//  and CAN alarm.  A test therefore has to model the physical stack:
+//  tests/test_w7_l1_auto2.cpp does that with tests/w3_cylinder_plant.h and now
+//  asserts convergence, not just reachability.
+//  PARAMETERS 2 AND 3 ARE NOT SYMMETRIC and this file is the extreme case -- all 12
+//  of its sites pass the REVERSE of the common order (C_Auto2_Selector,
+//  C_Auto2_Up).  Do not "normalise" them; sub-test [12] of
+//  tests/test_w7_l1_auto2.cpp is the alarm on exactly that edit.
 //
 //  Big5: every Chinese comment decoded cleanly via cp950 and is preserved as
 //  UTF-8.  NO U+FFFD is emitted.
@@ -103,11 +113,18 @@
 #include "mysensor.h"
 #include "myswitch.h"
 #include "acatchtray.h"         // WhichAutoNeedTray (golden acatchtray.h:8)
-// AI(W906-W7-L1fix) 20260729: corrected attribution -- these are OFFLINE NO-OP
-// STUBS (acatchtray_shims.cpp: `return true;`), not real bodies.  Golden defines
-// them in asendic.cpp:562/767/937, declared golden asendic.h:19-21.  See the
-// STAND-IN block in the banner above for what that costs this file's coverage.
-#include "acatchtray_shims.h"   // AutoCylinderUp/Middle/Lower -- no-op stubs
+// AI(W906-W7-L1-W3fixB) 20260802: this comment used to read "these are OFFLINE
+// NO-OP STUBS (acatchtray_shims.cpp: `return true;`), not real bodies" and the
+// include line below used to be tagged "AutoCylinderUp/Middle/Lower -- no-op
+// stubs".  BOTH ARE NOW FALSE and are deleted: Wave 3 landed golden's real bodies
+// in asendic.cpp and moved the declarations to asendic.h (included above), so this
+// header no longer supplies AutoCylinder* at all.  MEASURED IN THIS PASS: with the
+// declarations gone this TU compiles clean with the include commented out
+// (`g++ -fsyntax-only`), i.e. the include is now VESTIGIAL for this file.  It is
+// left in place because deleting an include is a structural change, not the
+// comment correction this pass is scoped to; retiring it belongs to whoever next
+// touches this file's include list.
+#include "acatchtray_shims.h"   // VESTIGIAL since Wave 3 -- see the note above
 #include "cprod.h"
 #include "cmydef.h"
 #include "cpublic.h"

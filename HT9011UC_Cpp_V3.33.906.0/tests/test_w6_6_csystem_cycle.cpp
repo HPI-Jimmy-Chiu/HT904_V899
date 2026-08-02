@@ -60,6 +60,9 @@
 #include "csystem.h"                // MainProc / InitAllProcessTask / GetMainProcCallCount / IsMainProcAlive / GetMainProcLastEnterTimeString
 #include "csystem_shims.h"          // bShuttleShake
 #include "FormsFacade.h"            // fMain
+//AI(W906-W7-L1-W3fixA) 20260802: for the O5 WIRING PIN below.
+#include "asendic.h"                // DoLoaderTrayFeed / InitDoLoaderTrayFeedTask (golden asendic.h:34-35)
+#include "Motor/mymotor.h"          // MOT[] / TTrayMotor::fHasTray (the tray the pin seeds)
 #include <cstdio>
 #include <vector>
 
@@ -337,6 +340,73 @@ int main()
               "O2b IsMainProcAlive(60)==true immediately after MainProc() (golden :16703-16708)");
         CHECK(GetMainProcLastEnterTimeString() != AnsiString("N/A"),
               "O2c GetMainProcLastEnterTimeString()!=\"N/A\" after MainProc() (golden :16687-16692)");
+    }
+
+    // =========================================================================
+    //  O5 -- WIRING PIN (AI(W906-W7-L1-W3fixA) 20260802).
+    //
+    //  WHY THIS EXISTS.  Wave 3 landed golden's real DoLoaderTrayFeed
+    //  (golden asendic.cpp:1520-1537) but csystem.cpp kept
+    //  `#define DoLoaderTrayFeed W7C2_DoLoaderTrayFeed`, a `{ return true; }`
+    //  stand-in.  csystem.cpp is golden's ONLY caller, so the landed body was
+    //  unreachable -- and NOTHING in the suite could tell, because every test
+    //  ran with bDoLoaderCleanOut==false, where the two bodies agree.  This
+    //  block closes that window: it drives DoOneCycleFinishCheck's
+    //  `else if(iCleanOut==1)` branch (golden csystem.cpp:14016-14031) into the
+    //  ONE state where stub and real body DISAGREE, so re-introducing the
+    //  redirect turns this red instead of staying silently green.
+    //
+    //  THE DISCRIMINATOR.  In that branch golden reads:
+    //      if(DoLoaderTrayFeed()==false) return;
+    //      else { bDoLoaderCleanOut=false; bLoadBFBackTray=false; }
+    //  Golden's case 1 returns TRUE only when the loader is empty, and returns
+    //  FALSE (after arming a feed sub-task) when a tray is present.  So:
+    //      tray present  ->  real body false -> flag SURVIVES ; stub -> cleared
+    //      loader empty  ->  real body true  -> flag CLEARED   ; stub -> cleared
+    //  O5a and O5b assert both halves.  O5b is the negative control that keeps
+    //  O5a honest -- a body that simply always returned false would pass O5a and
+    //  fail O5b, so the pair cannot be satisfied by any constant function.
+    // =========================================================================
+    printf("[O5] WIRING PIN: DoOneCycleFinishCheck reaches the REAL DoLoaderTrayFeed (golden :14016-14031)\n");
+    {
+        // --- save every global this pin touches ------------------------------
+        const int  saveOneCycle   = iOneCycle;
+        const int  saveCleanOut   = iCleanOut;
+        const bool saveDoLdClean  = bDoLoaderCleanOut;
+        const bool saveBFBack     = bLoadBFBackTray;
+        const bool saveHasTray    = MOT[MMTrayY].fHasTray;
+
+        // iOneCycle==0 skips the big if(iOneCycle) block (golden :12820) so the
+        // else-if branch below is the ONLY code that runs.
+        iOneCycle        = 0;
+        iCleanOut        = 1;
+        bLoadBFBackTray  = false;
+
+        // --- O5a: tray present -> real body returns false -> flag survives ----
+        InitDoLoaderTrayFeedTask();          // cursor -> 1 (golden asendic.cpp:1515)
+        bDoLoaderCleanOut     = true;
+        MOT[MMTrayY].fHasTray = true;        // "Has Tray" (golden asendic.cpp:1542)
+        DoOneCycleFinishCheck();
+        CHECK(bDoLoaderCleanOut == true,
+              "O5a tray present -> DoLoaderTrayFeed()==false -> bDoLoaderCleanOut SURVIVES "
+              "(the `return true` stand-in would have cleared it; golden :14021-14029)");
+
+        // --- O5b: loader empty -> real body returns true -> flag cleared ------
+        InitDoLoaderTrayFeedTask();          // re-arm; O5a left the cursor at 2000
+        bDoLoaderCleanOut     = true;
+        MOT[MMTrayY].fHasTray = false;       // loader empty -> golden's case 1 `return true`
+        DoOneCycleFinishCheck();
+        CHECK(bDoLoaderCleanOut == false,
+              "O5b loader empty -> DoLoaderTrayFeed()==true -> bDoLoaderCleanOut CLEARED "
+              "(negative control: the body is not a constant false)");
+
+        // --- restore ----------------------------------------------------------
+        InitDoLoaderTrayFeedTask();
+        MOT[MMTrayY].fHasTray = saveHasTray;
+        bLoadBFBackTray       = saveBFBack;
+        bDoLoaderCleanOut     = saveDoLdClean;
+        iCleanOut             = saveCleanOut;
+        iOneCycle             = saveOneCycle;
     }
 
     printf("\n==== W6.6 csystem CYCLE verify summary: %d PASS, %d FAIL ====\n", g_pass, g_fail);

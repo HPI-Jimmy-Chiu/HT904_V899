@@ -58,9 +58,13 @@
 //    mysensor.h           Sen[]
 //    myswitch.h           SW[]
 //    asendic.h            TrayMoveIn / TrayMoveOut / TrayMoveStatus
-//    acatchtray_shims.h   AutoCylinderUp/Middle/Lower  (golden declares these in
-//                         asendic.h:19-21; this tree relocated the three decls
-//                         there -- see that header's Wave-0 banner)
+//    asendic.h            AutoCylinderUp/Middle/Lower  (golden declares these at
+//                         asendic.h:19-21).  AI(W906-W7-L1-W3fixB) 20260802: this
+//                         line used to attribute them to acatchtray_shims.h.  Wave 3
+//                         deleted both the stub bodies and their declarations from
+//                         the acatchtray_shims pair and put the declarations back in
+//                         asendic.h where golden has them, so THIS FILE'S 25 CALL
+//                         SITES now bind through the `#include "asendic.h"` above.
 //    cprod.h              Ld_UldDelayTime (LD_TrayArrivalDely / ULD_TrayBackDelay)
 //    cmydef.h             the Auto index tables, alarm-code tables, NULL_IC /
 //                         HAS_IC / DUMMY / K_RETRY / K_SKIP, iReceiveAutoTray,
@@ -91,6 +95,13 @@
 //
 //  TU-LOCAL STAND-INS + `#define` REDIRECTS -- READ THIS BEFORE EDITING
 //  --------------------------------------------------------------------
+//  AI(W906-W7-L1-W3fixB) 20260802: BOTH OF THE TWO BELOW ARE ALREADY RETIRED.
+//  The entry's own "RETIRED BY: Wave 3" line came true; the retirement note sits
+//  below the #includes.  The two paragraphs are kept as the historical record of
+//  WHY the stand-ins were written the way they were (a constant would have made
+//  one of the two AutoCylinder argument orders untestable), but nothing in this
+//  file stands anything in any more.  Read them in the past tense.
+//
 //  TWO free functions this file calls have no linkable home in the ported tree.
 //  Rather than gate their nine call sites (which would destroy the verbatim
 //  switch(Task) bodies this translation exists to preserve), each is redirected
@@ -122,11 +133,16 @@
 //      `#define`s then, and add `#include "asendic.h"`-reachable real decls;
 //      the bodies below are byte-equivalent so no behaviour changes.
 //
-//  AutoCylinderUp / AutoCylinderMiddle / AutoCylinderLower ARE STILL NO-OP STUBS
-//  ----------------------------------------------------------------------------
-//  acatchtray_shims.cpp defines all three as `{ return true; }`.  Their real
-//  golden bodies (asendic.cpp:562 / :767 / :937) are Wave 3.  This file has 25
-//  call sites (counted in this pass: 6 in DoLoadNewEmptyTrayToCar_RT, 13 in
+//  AutoCylinderUp / AutoCylinderMiddle / AutoCylinderLower ARE REAL GOLDEN BODIES
+//  ------------------------------------------------------------------------------
+//  AI(W906-W7-L1-W3fixB) 20260802: this block was headed "...ARE STILL NO-OP STUBS"
+//  and opened "acatchtray_shims.cpp defines all three as `{ return true; }`.  Their
+//  real golden bodies (asendic.cpp:562 / :767 / :937) are Wave 3."  Wave 3 HAPPENED:
+//  those bodies are translated in this tree's asendic.cpp, the stubs and their
+//  declarations are deleted, and the guards below are closed loops that wait on
+//  Cylinder[].OnStatus()/OffStatus() and can alarm.  Everything after this
+//  paragraph was re-derived from the cp950-decoded golden in THIS pass.
+//  This file has 25 call sites (6 in DoLoadNewEmptyTrayToCar_RT, 13 in
 //  DoUnLoadNewAutoToStack, 6 in DoTrayZAutoTrayToWait) and PARAMETERS 2 AND 3 ARE
 //  NOT SYMMETRIC -- `(Part, CylinderName, CylinderNameMid, bReset)`.  Every site
 //  reproduces golden's argument order EXACTLY and MUST NOT be "normalised":
@@ -135,8 +151,18 @@
 //      all inside DoUnLoadNewAutoToStack and all as the bARTUnloaderUseOneCylin
 //      arm of a RUNTIME swap against the bARTUnloaderUseTwoCylin arm right above
 //      it: golden :783 (vs :791), :816 (vs :814/:818), :856 (vs :854/:858),
-//      :872 (vs :870/:874).  golden :783-vs-:791 is one of the five runtime swaps
-//      catalogued in acatchtray_shims.h's AutoCylinder* banner.
+//      :872 (vs :870/:874).
+//      COUNT CORRECTED: this used to say golden :783-vs-:791 is "one of the FIVE
+//      runtime swaps catalogued in acatchtray_shims.h's AutoCylinder* banner".
+//      Both halves were stale -- that banner no longer exists (Wave 3 moved it to
+//      asendic.h), and the tree-wide total is ELEVEN, not five.  RE-DERIVED HERE by
+//      parsing every AutoCylinder* call in the decoded golden and reading back
+//      parameters 2 and 3: asendic_Auto.cpp :788 (vs :784), :819 (vs :811),
+//      :1363 (vs :1350), :1547 (vs :1539), :1631 (vs :1623); asendic_Auto_RT.cpp
+//      :783, :816, :856, :872 (this file's four above); csystem.cpp :6940 (vs
+//      :6936), :6956 (vs :6948).  5+4+2 = 11, which matches asendic.h's recount.
+//      asendic_Auto2.cpp's twelve reversed sites are NOT runtime swaps -- that
+//      whole file is statically reversed -- and are counted separately there.
 //    * ONE site is a golden BUG, translated faithfully: golden :983 passes the
 //      literal `1` as Part instead of `Pos` -- see GOLDEN DEFECTS below.
 //
@@ -203,7 +229,13 @@
 #include "mycylin.h"            // Cylinder[]   (also pulls myTimer.h -> TQPF_Timer)
 #include "mysensor.h"           // Sen[]
 #include "myswitch.h"           // SW[]
-#include "acatchtray_shims.h"   // AutoCylinderUp / AutoCylinderMiddle / AutoCylinderLower
+// AI(W906-W7-L1-W3fixB) 20260802: this include was tagged "AutoCylinderUp /
+// AutoCylinderMiddle / AutoCylinderLower".  Wave 3 deleted those declarations from
+// acatchtray_shims.h; they now arrive via asendic.h above.  MEASURED IN THIS PASS:
+// this TU compiles clean with the include commented out (`g++ -fsyntax-only`), so
+// it is VESTIGIAL.  Left in place because deleting an include is a structural
+// change, not the comment correction this pass is scoped to.
+#include "acatchtray_shims.h"   // VESTIGIAL since Wave 3 -- see the note above
 #include "cprod.h"              // Ld_UldDelayTime
 #include "cmydef.h"             // Auto index tables / alarm tables / run-mode globals
 #include "MachineType.h"        // MAX_AUTO_TRAY / CC_ASE_KaohSiung / eartInstall
@@ -212,28 +244,16 @@
 #include "canary_support.h"     // LastSet, __FUNC__, ShowErrorMessage, ShowMyMessage
 
 // =============================================================================
-//  TU-LOCAL STAND-INS FOR SYMBOLS WITH NO PORTED HOME  (see banner, items 1-2)
-//  Bodies transcribed LINE FOR LINE from golden asendic.cpp:131-148.
+//  TU-LOCAL STAND-INS (banner items 1-2) -- BOTH RETIRED (W7-L1 Wave 3)
+//  AI(W906-W7-L1-Wave3) 20260802: W7L1ART_bARTUnloaderUseOneCylin /
+//  W7L1ART_bARTUnloaderUseTwoCylin and their two `#define` redirects are DELETED.
+//  Wave 3 landed golden asendic.cpp in full, so both now have REAL definitions
+//  (golden asendic.cpp:131-137 and :139-148) reachable through the
+//  `#include "asendic.h"` above.  The stand-ins were line-for-line copies of
+//  those same golden bodies and neither holds state, so retiring them is
+//  behaviour-identical.  Placed above the golden-body anchor so the zero-diff
+//  fidelity of the body below is untouched.
 // =============================================================================
-static bool W7L1ART_bARTUnloaderUseOneCylin(int Part)                           //Sam 20220916 : 整合 ART Unload 上升汽缸判斷式
-{
-    if(USE_AUTO_RETEST==eartInstall && UNLOADER_ART[Part]==eartInstall && bNoAutoZSelect)
-        return true;
-    else
-        return false;
-}
-static bool W7L1ART_bARTUnloaderUseTwoCylin(int Part)                           //Sam 20220916 : 整合 ART Unload 上升汽缸判斷式
-{
-    if(USE_AUTO_RETEST==eartInstall &&
-        UNLOADER_ART[Part]==eartInstall &&
-        bNoAutoZSelect==false &&
-        USE_LdUldCassetteMode!=1)                                               //RogerYang 20260207 : Add fot 9046 CR
-        return true;
-    else
-        return false;
-}
-#define bARTUnloaderUseOneCylin             W7L1ART_bARTUnloaderUseOneCylin
-#define bARTUnloaderUseTwoCylin             W7L1ART_bARTUnloaderUseTwoCylin
 
 // =============================================================================
 //  Everything below this line is golden asendic_Auto_RT.cpp:27-1047, VERBATIM.

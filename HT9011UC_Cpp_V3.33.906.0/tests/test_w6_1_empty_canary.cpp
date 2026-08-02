@@ -166,6 +166,12 @@
 #include "SECSGEM/SecsEventType.h"      // SECS_EVENT      (retired gate [7])
 #include "SECSGEM/SecsEventReport.h"    // EventReport sim observables
 #include "acatchtray_shims.h"           // MyMessageBox    (retired gate [8])
+// AI(W906-W7-L1-Wave3) 20260802: CylinderUp/Middle/Lower are no longer Sim bodies
+// that return true -- asendic.cpp now carries golden's real closed-loop lifter
+// state machines, which wait on Cylinder[].OnStatus()/OffStatus().  This header
+// supplies the physical stack that answers them.  See its banner for the sensor
+// law and for why no static fixture can replace it.
+#include "w3_cylinder_plant.h"
 #include <cstdio>
 #include <set>
 
@@ -348,6 +354,20 @@ static void emptyFixture()
     Ld_UldDelayTime.LD_TrayArrivalDely = 0;
     Ld_UldDelayTime.ULD_LiftDownDelay  = 0;
     Ld_UldDelayTime.ULD_TrayBackDelay  = 0;
+    // AI(W906-W7-L1-Wave3) 20260802: the three delays golden's real
+    // CylinderUp/Middle/Lower read (asendic.cpp :424, :344/:375, :475/:504).
+    Ld_UldDelayTime.LD_BeforeDownDelay    = 0;
+    Ld_UldDelayTime.LD_StackMiddLockDelay = 0;
+    Ld_UldDelayTime.LD_LiftDownDelay      = 0;
+
+    // AI(W906-W7-L1-Wave3) 20260802: wire the Empty tray-group lifter as a real
+    // machine wires it (Enable + distinct Sim IO addresses for the output and the
+    // two position sensors + non-zero alarm windows) and reset the lifter cursors
+    // the way golden main.cpp:9159-9160 does at FormShow.  Without this the real
+    // CylinderUp can never see C_Empty_Up's top sensor make and the SM parks.
+    w3::Forget();
+    w3::WireLifter(C_Empty_Up, C_Empty_Middle, 12);
+    w3::ResetCursors();
 
     AUTO_EMPTY_COLOR      = 1;      // 6-lane auto track
     SUPPORT_2_EMPTY_EMPTY = false;
@@ -411,6 +431,11 @@ static void test_drive_auto_empty()
         seen.insert(iAutoEmptyTask);
         rearSeen.insert(iEmptyTrayToRearTask);
         advanceEmptyTime();
+        w3::Tick();                 // AI(W906-W7-L1-Wave3) 20260802: DoAutoEmpty
+                                    // reaches the real CylinderUp/Middle/Lower
+                                    // through DoEmptyTrayToRear; without the
+                                    // plant the lifter never reports arrival and
+                                    // the rear sub-SM parks short of 500/510.
         DoAutoEmpty();
         if (!autoEmptyCursorSane(iAutoEmptyTask))
             cursorAlwaysSane = false;
@@ -531,10 +556,12 @@ static void test_load_new_empty_converges()
     emptyFixture();
     InitLoadNewEmptyTrayToCarTask();
 
-    Cylinder[C_Empty_Up].Enable     = true;
-    Cylinder[C_Empty_Middle].Enable = true;
-    Cylinder[C_Empty_Up].Off();
-    Cylinder[C_Empty_Middle].Off();
+    // AI(W906-W7-L1-Wave3) 20260802: emptyFixture() now does the full realistic
+    // wiring (Enable + Sim IO addresses + sensor types + alarm windows) through
+    // w3::WireLifter, which also leaves both cylinders retracted -- so the two
+    // bare `Enable = true` / `Off()` lines that used to stand here are redundant.
+    // They were sufficient while CylinderUp/Middle/Lower were Sim bodies that
+    // returned true; they are not sufficient for the real closed-loop bodies.
 
     TrayID[1][0] = "W6.1-TID";      // golden :256-257 hand it over to slot [1][1]
     TrayID[1][1] = "";
@@ -545,10 +572,17 @@ static void test_load_new_empty_converges()
     bool liftUpSeen = false, liftMidSeen = false;
     int  steps = 0;
 
-    for (steps = 0; steps < 64; ++steps)
+    // AI(W906-W7-L1-Wave3) 20260802: the bound went 64 -> 128 because the real
+    // lifter is a multi-tick closed loop (CylinderUp alone walks 1-50-60-100-200
+    // with a one-tick sensor lag at each arrival) where the Sim body returned
+    // true on its first call.  This is a BOUND change, not an assertion change:
+    // `done` is still asserted bare, and the walk measured below settles well
+    // inside the new bound.
+    for (steps = 0; steps < 128; ++steps)
     {
         seen.insert(iLoadNewEmptyTrayToCarTask);
         advanceEmptyTime();
+        w3::Tick();                 // move the lifter metal + expire LifterTime[][]
         if (DoLoadNewEmptyTrayToCar())
         {
             done = true;

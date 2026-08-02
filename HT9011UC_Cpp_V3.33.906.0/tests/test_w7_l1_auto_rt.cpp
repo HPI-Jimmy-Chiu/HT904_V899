@@ -460,6 +460,11 @@
 #include "Config.h"
 #include "CosFunction.h"
 #include "canary_support.h"     // LastSet, ShowErrorMessage seam, ShowMyMessage seam
+// AI(W906-W7-L1-Wave3) 20260802: AutoCylinderUp/Middle/Lower are no longer the
+// `{ return true; }` stubs in acatchtray_shims.cpp -- asendic.cpp now carries
+// golden's real closed-loop bodies.  This header supplies the physical Auto stack
+// that answers their position sensors.
+#include "w3_cylinder_plant.h"
 #include <cstdio>
 #include <cstring>
 #include <vector>
@@ -615,6 +620,27 @@ static void setupAutoRTFixture(int pos)
 
     if (P < 3) iReceiveAutoTray[P] = 0;          // golden dims it [3] -- see GOLDEN DEFECT D
 
+    // AI(W906-W7-L1-Wave3) 20260802: simWire() above gives each cylinder a real
+    // OUTPUT bit but no position sensors, which was enough while
+    // AutoCylinderUp/Middle/Lower were `{ return true; }` stubs and is not enough
+    // now that asendic.cpp carries golden's real closed loops.  Register the
+    // lift/selector pair with the plant, IN CALL-SITE ORDER.
+    //
+    // ORDER, and why the NON-ART order is the right one here: this fixture pins
+    // USE_AUTO_RETEST=eartUninstall and UNLOADER_ART[]=eartUninstall above, so
+    // bARTUnloaderUseOneCylin and bARTUnloaderUseTwoCylin are BOTH false and every
+    // three-way call site in asendic_Auto_RT.cpp takes its plain `else` arm --
+    // golden :818, :858, :874, :791 -- all of which pass
+    // (C_Auto_Up[Pos], C_Auto_Selector[Pos]).  The REVERSED spellings in this file
+    // (:783, :816, :856, :872) are the bARTUnloaderUseOneCylin arms and are not
+    // reached under this fixture; they must not be "normalised" either.
+    w3::Forget();
+    w3::WireAutoStack(C_Auto_Up[P], C_Auto_Selector[P], 21 + P);
+    w3::ResetCursors();
+    Ld_UldDelayTime.LD_BeforeDownDelay    = 0;
+    Ld_UldDelayTime.LD_StackMiddLockDelay = 0;
+    Ld_UldDelayTime.LD_LiftDownDelay      = 0;
+
     W906_ShowErrorMessage_Reset();
     W906_ShowMyMessage_Reset();
 }
@@ -730,6 +756,7 @@ int main()
         Traj tr; int ret = 0; bool converged = false;
         for (int i = 0; i < 30; ++i)
         {
+            w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: Auto-stack plant tick
             advCarSettle();
             ret = DoLoadNewEmptyTrayToCar_RT(P);
             trajPush(tr, iLoadNewAutoTrayToCarTask[P]);
@@ -757,8 +784,13 @@ int main()
         MOT[iAutoZMot[P]].SetTray(NULL_IC, "pre");
 
         Traj tr; int ret = 0; bool converged = false;
-        for (int i = 0; i < 20; ++i)
+        // AI(W906-W7-L1-Wave3) 20260802: BOUND 20 -> 60.  Bound only -- the EXACT
+        // trajectory asserted below is unchanged.  Cases 51/200 now pump golden's
+        // real AutoCylinderUp/AutoCylinderMiddle instead of stubs that returned
+        // true on their first call, so the same walk costs more ticks.
+        for (int i = 0; i < 60; ++i)
         {
+            w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: Auto-stack plant tick
             advCarSettle();
             ret = DoLoadNewEmptyTrayToCar_RT(P);
             trajPush(tr, iLoadNewAutoTrayToCarTask[P]);
@@ -808,6 +840,15 @@ int main()
         simSensorOff(SnAutoPreDete[P]);
         Cylinder[C_Auto_Up[P]].On();                      // pre-drive OPPOSITE
         Cylinder[C_Auto_Selector[P]].On();
+        // AI(W906-W7-L1-Wave3) 20260802: settle the plant on that pre-drive.
+        // Golden :81 gates this limb on `Cylinder[C_Auto_Selector[Pos]].OffStatus()
+        // ==false` -- "the selector is still up".  Before Wave 3 the fixture left
+        // OffSenEnable false, so OffStatus() answered false for the WRONG reason
+        // (no sensor at all) and the gate opened by accident.  The selector now has
+        // a real OFF sensor, so the fixture has to actually hold it UP: one plant
+        // tick on the pre-drive does that.  Deliberately the only tick here -- this
+        // sub-test calls the SM exactly once.
+        w3::Tick();
 
         int ret = DoLoadNewEmptyTrayToCar_RT(P);
         CHECK(ret == 0 && iLoadNewAutoTrayToCarTask[P] == 1, "[6a] else-arm keeps the cursor on 1");
@@ -844,8 +885,13 @@ int main()
         bEmptyPause = true;
 
         Traj tr; int ret = 0; bool converged = false;
-        for (int i = 0; i < 20; ++i)
+        // AI(W906-W7-L1-Wave3) 20260802: BOUND 20 -> 60.  Bound only -- the EXACT
+        // trajectory asserted below is unchanged.  Cases 51/200 now pump golden's
+        // real AutoCylinderUp/AutoCylinderMiddle instead of stubs that returned
+        // true on their first call, so the same walk costs more ticks.
+        for (int i = 0; i < 60; ++i)
         {
+            w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: Auto-stack plant tick
             advCarSettle();
             ret = DoLoadNewEmptyTrayToCar_RT(P);
             trajPush(tr, iLoadNewAutoTrayToCarTask[P]);
@@ -876,6 +922,7 @@ int main()
         Traj outer, inner; int ret = 0; bool converged = false;
         for (int i = 0; i < 30; ++i)
         {
+            w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: Auto-stack plant tick
             advTrayZ();
             advCarSettle();
             ret = DoLoadNewEmptyTrayToCar_RT(P);
@@ -913,6 +960,7 @@ int main()
         int bitAt1100 = -1;
         for (int i = 0; i < 30; ++i)
         {
+            w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: Auto-stack plant tick
             advTrayZ();
             bool wasOn1100 = (iTrayZAutoTrayToWaitTask[P] == 1100);
             ret = DoTrayZAutoTrayToWait(P);
@@ -946,8 +994,14 @@ int main()
 
         Traj tr; int ret = 0;
         int bitAt100 = -1, bitAt300 = -1;
-        for (int i = 0; i < 12; ++i)                      // bounded: we EXPECT no convergence
+        // AI(W906-W7-L1-Wave3) 20260802: BOUND 12 -> 40.  Bound only -- the EXACT
+        // trajectory asserted below is unchanged, and "we EXPECT no convergence"
+        // is still what is asserted (the SM must PARK on 400 while SwACTrayY is
+        // on).  The walk simply costs more ticks now that its lifter legs run
+        // golden's real AutoCylinder* instead of stubs that returned true at once.
+        for (int i = 0; i < 40; ++i)                      // bounded: we EXPECT no convergence
         {
+            w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: Auto-stack plant tick
             advTrayZ();
             bool was100 = (iTrayZAutoTrayToWaitTask[P] == 100);
             bool was300 = (iTrayZAutoTrayToWaitTask[P] == 300);
@@ -991,6 +1045,7 @@ int main()
         Traj tr;
         for (int i = 0; i < 12; ++i)
         {
+            w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: Auto-stack plant tick
             advTrayZ();
             DoTrayZAutoTrayToWait(P);
             trajPush(tr, iTrayZAutoTrayToWaitTask[P]);
@@ -1024,6 +1079,7 @@ int main()
         int edgeAfter100 = -1, pressAfter100 = -1;
         for (int i = 0; i < 30; ++i)
         {
+            w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: Auto-stack plant tick
             advFrontSettle();
             int before = iAutoTrayToFrontTask[P];
             done = DoAutoTrayToFront(P);
@@ -1065,6 +1121,7 @@ int main()
         Traj tr; bool done = false, converged = false;
         for (int i = 0; i < 12; ++i)
         {
+            w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: Auto-stack plant tick
             if (iAutoTrayToFrontTask[P] == 100) hAutoTrayToFrontForDummy[P].SetMSAndOn(0);
             done = DoAutoTrayToFront(P);
             trajPush(tr, iAutoTrayToFrontTask[P]);
@@ -1097,6 +1154,7 @@ int main()
         bool done = false, converged = false;
         for (int i = 0; i < 8; ++i)
         {
+            w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: Auto-stack plant tick
             if (iAutoTrayToFrontTask[P] == 100)
             {
                 hAutoTrayToFront[P].SetMSAndOn(0);        // fire the 20 s JAM1112 watchdog ON PURPOSE
@@ -1126,6 +1184,7 @@ int main()
         bool anyTrue = false;
         for (int i = 0; i < 2; ++i)                       // exactly one alarm, then stop
         {
+            w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: Auto-stack plant tick
             if (iAutoTrayToFrontTask[P] == 100) hAutoTrayToFront[P].SetMSAndOn(0);
             if (DoAutoTrayToFront(P)) anyTrue = true;
             if (W906_ShowErrorMessage_Count > 0) break;
@@ -1153,6 +1212,7 @@ int main()
         int fixAt100 = -1, fixAt500 = -1, fixAt600 = -1, edgeAfter1 = -1, pressAfter1 = -1;
         for (int i = 0; i < 30; ++i)
         {
+            w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: Auto-stack plant tick
             advRearSettle();
             int before = iAutoTrayToRearTask[P];
             done = DoAutoTrayToRear(P);
@@ -1195,6 +1255,7 @@ int main()
         Traj tr; bool done = false, converged = false;
         for (int i = 0; i < 10; ++i)
         {
+            w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: Auto-stack plant tick
             advRearSettle();
             done = DoAutoTrayToRear(P);
             trajPush(tr, iAutoTrayToRearTask[P]);
@@ -1224,6 +1285,7 @@ int main()
         bool done = false, converged = false;
         for (int i = 0; i < 8; ++i)
         {
+            w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: Auto-stack plant tick
             advRearSettle();
             if (iAutoTrayToRearTask[P] == 200)
             {
@@ -1251,6 +1313,7 @@ int main()
         bool anyTrue = false;
         for (int i = 0; i < 3; ++i)
         {
+            w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: Auto-stack plant tick
             advRearSettle();
             if (iAutoTrayToRearTask[P] == 200) hAutoTrayToRear[P].SetMSAndOn(0);
             if (DoAutoTrayToRear(P)) anyTrue = true;
@@ -1277,6 +1340,7 @@ int main()
         int fixAt300 = -1;
         for (int i = 0; i < 20; ++i)
         {
+            w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: Auto-stack plant tick
             advRearSettle();
             int before = iAutoTrayToRearTask[P];
             done = DoAutoTrayToRear(P);
@@ -1302,6 +1366,7 @@ int main()
         int fixAt400 = -1;
         for (int i = 0; i < 3; ++i)
         {
+            w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: Auto-stack plant tick
             int before = iAutoTrayToRearTask[P];
             DoAutoTrayToRear(P);
             if (before == 400) fixAt400 = bit(C_AutoSide_Fixer[P]);
@@ -1345,16 +1410,25 @@ int main()
         InitUnLoadNewAutoTrayTask(P);
         MOT[iMMAuto[P]].SetTray(NULL_IC, "pre");          // pre-drive OPPOSITE of case 350's ClearTray
         Cylinder[C_AutoZ_Select[P]].On();                 // pre-drive OPPOSITE of case 300's Pop
-        Cylinder[C_Auto_Selector[P]].On();                // must stay ON: the non-ART path never
-                                                          // touches the selector directly
+        // AI(W906-W7-L1-Wave3) 20260802: pre-drive OFF, exactly as [20] does, so the
+        // two sub-tests are mirror images of the same predicate: [20] pre-drives
+        // OFF and requires case 1 to have EXTENDED the selector (golden :742, the
+        // bARTUnloaderUseTwoCylin limb); [19] pre-drives OFF and requires case 1 to
+        // have left it alone.  The old pre-drive was ON with "must stay ON: the
+        // non-ART path never touches the selector directly", which stopped being a
+        // usable observable once golden's real AutoCylinder* bodies started driving
+        // parameter 3 later in the same walk.
+        Cylinder[C_Auto_Selector[P]].Off();
 
         Traj tr; bool done = false, converged = false;
-        int zAt300 = -1;
+        int zAt300 = -1, selAfterCase1 = -1;
         for (int i = 0; i < 40; ++i)
         {
+            w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: Auto-stack plant tick
             advUnload();
             int before = iUnLoadNewAutoTrayTask[P];
             done = DoUnLoadNewAutoToStack(P);
+            if (before == 1)   selAfterCase1 = bit(C_Auto_Selector[P]);
             if (before == 300) zAt300 = bit(C_AutoZ_Select[P]);
             trajPush(tr, iUnLoadNewAutoTrayTask[P]);
             if (done) { converged = true; break; }
@@ -1367,8 +1441,22 @@ int main()
               "(its TrayMoveStatus guard is DUMMY-gated, golden :756-757)");
         CHECK(zAt300 == 0, "[19] case 300 RETRACTED C_AutoZ_Select (wire cleared, golden :826)");
         CHECK(MOT[iMMAuto[P]].fHasTray == false, "[19] case 350 cleared the Auto motor (golden :838)");
-        CHECK(bit(C_Auto_Selector[P]) == 1,
-              "[19] the NON-ART path never commands C_Auto_Selector directly (still raised)");
+        // AI(W906-W7-L1-Wave3) 20260802: ASSERTION CHANGED -- the old form
+        // (`bit(C_Auto_Selector[P]) == 1`, "never commanded, still raised") was only
+        // ever true because AutoCylinderUp/Middle/Lower were `{ return true; }`
+        // stubs that touched nothing.  Golden's real bodies DO drive parameter 3
+        // (AutoCylinderUp case 1 `if(Cylinder[CylinderNameMid].Enable)
+        // Cylinder[CylinderNameMid].On();`, AutoCylinderMiddle case 1 `.Off()`,
+        // AutoCylinderLower case 50 `.Off()`), so the end-of-walk wire level can no
+        // longer distinguish "the SM commanded it" from "the lifter did".
+        // The claim this assertion actually exists to make is the CONTRAST with
+        // [20]: on the ART path case 1 extends the selector DIRECTLY (golden :742)
+        // and on the non-ART path it does not.  That is now asserted in the same
+        // shape [20] uses -- sampled right after case 1, before any AutoCylinder*
+        // call has happened -- so the two sub-tests pin the two arms of the same
+        // predicate against each other.  Same count, sharper claim.
+        CHECK(selAfterCase1 == 0,
+              "[19] case 1's NON-ART limb did NOT command C_Auto_Selector (the mirror of [20]'s golden :742)");
         CHECK(W906_ShowErrorMessage_Count == 0, "[19] no alarm on the DUMMY walk");
     }
 
@@ -1384,7 +1472,18 @@ int main()
         USE_AUTO_RETEST  = eartInstall;                   // golden asendic.cpp:141
         UNLOADER_ART[P]  = eartInstall;
         bNoAutoZSelect   = false;                         // -> TwoCylin true, OneCylin false
+        // AI(W906-W7-L1-Wave3) 20260802: re-register the pair under the ART sensor
+        // law.  The fixture registers the NON-ART law (it pins eartUninstall); this
+        // sub-test flips the predicate on, and golden's AutoCylinder* ART arms read
+        // the OPPOSITE sensor pattern from the non-ART arms -- AutoCylinderMiddle
+        // case 100 ART wants CylinderNameMid.OnStatus()==true where the non-ART arm
+        // wants it false.  Without this the SM parks on cursor 50 repeating
+        // "Lifter Middle error" (MEASURED).  Call-site order is unchanged:
+        // golden :791 / :814 / :854 / :870 all pass (C_Auto_Up, C_Auto_Selector).
+        w3::Forget();
+        w3::WireAutoStackART(C_Auto_Up[P], C_Auto_Selector[P], 21 + P);
         MOT[iMMAuto[P]].SetTray(NULL_IC, "pre");
+        Cylinder[C_Auto_Up[P]].Off();
         Cylinder[C_Auto_Selector[P]].Off();               // pre-drive OPPOSITE of case 1's On
 
         Traj tr; bool done = false, converged = false;
@@ -1392,6 +1491,7 @@ int main()
         int seen50 = 0;
         for (int i = 0; i < 40; ++i)
         {
+            w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: Auto-stack plant tick
             advUnload();
             int before = iUnLoadNewAutoTrayTask[P];
             done = DoUnLoadNewAutoToStack(P);
@@ -1414,6 +1514,7 @@ int main()
         CHECK(W906_ShowErrorMessage_Count == 0, "[20] no alarm on the ART walk");
         UNLOADER_ART[P] = eartUninstall;
         USE_AUTO_RETEST = eartUninstall;
+        w3::Forget();       // AI(W906-W7-L1-Wave3) 20260802: drop the ART pair
     }
 
     // -----------------------------------------------------------------------
@@ -1466,6 +1567,7 @@ int main()
         Traj tr; bool anyTrue = false;
         for (int i = 0; i < 10; ++i)
         {
+            w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: Auto-stack plant tick
             advUnload();
             if (DoUnLoadNewAutoToStack(P)) anyTrue = true;
             trajPush(tr, iUnLoadNewAutoTrayTask[P]);
@@ -1490,6 +1592,7 @@ int main()
         bool done = false, skipped = false;
         for (int i = 0; i < 40; ++i)
         {
+            w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: Auto-stack plant tick
             if (iUnLoadNewAutoTrayTask[P] == 402)
             {
                 simSensorOn(SnAutoPreDete[P]);            // golden :889 -> the tray never left
@@ -1554,6 +1657,7 @@ int main()
         Traj tr; bool sawReceive2 = false; bool converged = false;
         for (int i = 0; i < 60; ++i)
         {
+            w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: Auto-stack plant tick
             if (iAutoTrayToFrontTask[P] == 100) hAutoTrayToFrontForDummy[P].SetMSAndOn(0);
             advUnload();
             DoAutoTrayReceive(P);
@@ -1586,6 +1690,7 @@ int main()
         Traj tr; bool converged = false;
         for (int i = 0; i < 30; ++i)
         {
+            w3::Tick();     // AI(W906-W7-L1-Wave3) 20260802: Auto-stack plant tick
             advFrontSettle();
             DoAutoTrayReceive(P);
             trajPush(tr, iAutoTrayReceiveTask[P]);

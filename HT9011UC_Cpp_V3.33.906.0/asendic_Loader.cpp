@@ -247,10 +247,30 @@ extern int iInArmWaitPosition;                                                  
 // delete THIS definition then, not the cmydef.cpp one.
 bool bWaitingAMR=false;                                                         // golden cmydef.cpp:5953 //RogerYang 20250617
 
+// AI(W906-W7-L1-Wave3) 20260802: the W7L1L_PushLoaderTrayInAverageTime and
+// W7L1L_RecordAutoCleanOutStartEnd stand-ins (both empty no-ops) and their two
+// `#define` redirects are DELETED -- Wave 3 landed golden asendic.cpp in full, so
+// this file's golden call sites now reach the REAL bodies (golden
+// asendic.cpp:88-109 and :61-84) through the `#include "asendic.h"` above.
+// UNLIKE the sibling retirements in asendic_Auto*.cpp, this one IS a behaviour
+// change and is meant to be: the stand-ins did nothing, whereas
+// PushLoaderTrayInAverageTime now writes LastSet.iLoaderTraySimulateTime (only
+// for 500 <= st <= 8000) and RecordAutoCleanOutStartEnd now emits a
+// RecordProcess() line -- but only when IniConfig
+// .bA08LastLoaderAutoCleanOutAndCheckAgain is set, which it is not by default,
+// so the second one still early-returns in the default fixture.
+//AI(W906-W7-L1-W3fixA) 20260802: CORRECTION to the paragraph above, which read as
+// though retiring the stand-in HERE completed the wiring for (3).  It did not.
+// RecordAutoCleanOutStartEnd is a MATCHED PAIR and those are its only two call
+// sites in the whole golden tree: this file's :1763 passes true (START -- latches
+// tAutoCleanTimer) and csystem.cpp:15653 passes false (END -- reads that timer and
+// emits the elapsed-time line).  Wave 3 retired only the START stand-in; csystem.cpp
+// kept `#define RecordAutoCleanOutStartEnd W7C1_RecordAutoCleanOutStartEnd`, so for
+// one round the timer latched here and NOTHING ever read it.  The END stand-in is
+// now retired too (csystem.cpp, same pass), so the pair is symmetric and the wiring
+// really is complete.  Do not re-stub either half alone.
 static bool W7L1L_GetColorSensorIsMapping(AnsiString & /*sErrorMsg*/)  { return true; }
 static void W7L1L_LogIndexMaxMinPos(AnsiString /*str*/)                {}
-static void W7L1L_PushLoaderTrayInAverageTime(DWORD /*st*/)            {}
-static void W7L1L_RecordAutoCleanOutStartEnd(bool /*bStart*/)          {}
 static bool W7L1L_CheckInArmAutoAlignmentTrayModeBeUse(unsigned long /*iMode*/,
                                                        bool /*bSet*/ = false) { return false; }
 static void W7L1L_InitDoInArmTeachAlignmentProcessTask()               {}
@@ -281,8 +301,6 @@ static W7L1L_TECH_LoaderShim W7L1L_Tech;
 #define Tech                                W7L1L_Tech
 #define GetColorSensorIsMapping             W7L1L_GetColorSensorIsMapping
 #define LogIndexMaxMinPos                   W7L1L_LogIndexMaxMinPos
-#define PushLoaderTrayInAverageTime         W7L1L_PushLoaderTrayInAverageTime
-#define RecordAutoCleanOutStartEnd          W7L1L_RecordAutoCleanOutStartEnd
 #define CheckInArmAutoAlignmentTrayModeBeUse W7L1L_CheckInArmAutoAlignmentTrayModeBeUse
 #define InitDoInArmTeachAlignmentProcessTask W7L1L_InitDoInArmTeachAlignmentProcessTask
 #define InitOCRFlow                         W7L1L_InitOCRFlow

@@ -130,6 +130,10 @@
 #include "FormsFacade.h"        // fAGV
 #include <cstdio>
 #include <windows.h>            // Sleep / GetTickCount -- pump past the SM's QPF wait timers
+// AI(W906-W7-L1-Wave3) 20260802: CylinderUp/Middle/Lower are golden's real
+// closed-loop lifter SMs now (asendic.cpp), not Sim bodies that return true.
+// This header is the physical stack that answers their position sensors.
+#include "w3_cylinder_plant.h"
 
 // File-scope (external-linkage) init not exported by the mirrored header; the
 // golden calls it cross-module via an implicit decl, so we forward-declare it
@@ -487,6 +491,11 @@ static void test_autoempty_tray_present_branch()
 //    case 60  CylinderUp(C_Empty_Up) + MOT[MMEmptyZ].ClearTray()       -> 100
 //    case 100 DUMMY                                                    -> 200
 //    case 200 CylinderMiddle(C_Empty_Up), bEmptyPause false            -> 300
+//             (golden CylinderMiddle drives the UP cylinder ON and the MIDDLE
+//              cylinder OFF -- asendic.cpp case 1 `Cylinder[CylinderName].On();
+//              Cylinder[CylinderName+1].Off();` and case 100 the same pair.  The
+//              retired Sim body did the OPPOSITE, and B.2's midWireAt300
+//              assertion below was written against the Sim body.)
 //    case 300 DUMMY, arm EmptyDelay(1s)                                -> 400
 //    case 400 EmptyDelay.Off()                                         -> 410
 //    case 410 CylinderLower(C_Empty_Up), re-arm EmptyDelay(1s)         -> 420
@@ -496,7 +505,13 @@ static void test_autoempty_tray_present_branch()
 //
 //  asendic.cpp's CylinderUp/Middle/Lower gate every command on Cylinder[].Enable
 //  and BOTH lifter cylinders must therefore be Enabled AND wired, else the whole
-//  lifter chain is silently a no-op that still returns true.
+//  lifter chain is silently a no-op.
+//
+//  AI(W906-W7-L1-Wave3) 20260802: "...that still returns true" is no longer true
+//  either.  The real bodies WAIT for Cylinder[].OnStatus()/OffStatus(), so the
+//  fixture must also give both cylinders position sensors and a physical law
+//  relating them to the commanded outputs -- w3::WireLifter + w3::Tick, see
+//  tests/w3_cylinder_plant.h.  Enable alone now buys nothing.
 // ===========================================================================
 static void test_loadnewemptytray_lifter_path()
 {
@@ -518,11 +533,17 @@ static void test_loadnewemptytray_lifter_path()
                                        // the ONLY term keeping case 1 out of the MES1021 arm
 
     // Lifter cylinders on the wire, pre-driven to the OPPOSITE (LOW) of what
-    // case 60 / case 200 command.
-    WireCylinder(C_Empty_Up,     1, 1, 2, 1);
-    WireCylinder(C_Empty_Middle, 1, 1, 2, 2);
-    Cylinder[C_Empty_Up].Off();
-    Cylinder[C_Empty_Middle].Off();
+    // case 60 commands.  AI(W906-W7-L1-Wave3) 20260802: WireCylinder() left both
+    // sensor-enables FALSE, which was fine for the Sim bodies and is fatal for
+    // the real ones (OnStatus()/OffStatus() would both answer false forever).
+    // w3::WireLifter does the full realistic wiring -- output bit, ON sensor,
+    // OFF sensor, non-zero alarm windows -- and leaves both retracted.
+    w3::Forget();
+    w3::WireLifter(C_Empty_Up, C_Empty_Middle, 12);
+    w3::ResetCursors();
+    Ld_UldDelayTime.LD_BeforeDownDelay    = 0;
+    Ld_UldDelayTime.LD_StackMiddLockDelay = 0;
+    Ld_UldDelayTime.LD_LiftDownDelay      = 0;
 
     TrayID[1][0] = "CANARY-EMPTY-ID";      // case 420 rotates [0] -> [1] and blanks [0]
     TrayID[1][1] = "";
@@ -533,11 +554,12 @@ static void test_loadnewemptytray_lifter_path()
     int  prev       = iLoadNewEmptyTrayToCarTask;
     int  steps      = 0;
     int  upWireAt100  = -1, midWireAt100 = -1, zHasTrayAt100 = -1;
-    int  midWireAt300 = -1;
+    int  midWireAt300 = -1, upWireAt300 = -1;
     int  upWireAt420  = -1, midWireAt420 = -1;
 
     for (steps = 0; steps < 400; ++steps)
     {
+        w3::Tick();                 // move the lifter metal + expire LifterTime[][]
         const bool ret = DoLoadNewEmptyTrayToCar();
         if (iLoadNewEmptyTrayToCarTask != prev)
         {
@@ -549,10 +571,14 @@ static void test_loadnewemptytray_lifter_path()
             if (prev == 100) { upWireAt100  = Cylinder[C_Empty_Up].GetOutBit();
                                midWireAt100 = Cylinder[C_Empty_Middle].GetOutBit();
                                zHasTrayAt100= MOT[MMEmptyZ].fHasTray; }
-            // Re-arm: case 60's CylinderUp already raised C_Empty_Middle, which
-            // would mask case 200's CylinderMiddle.  Drop it before case 200 runs.
-            if (prev == 200) Cylinder[C_Empty_Middle].Off();
-            if (prev == 300) midWireAt300 = Cylinder[C_Empty_Middle].GetOutBit();
+            // Re-arm: case 60's CylinderUp leaves C_Empty_Middle RAISED, and
+            // golden's CylinderMiddle is precisely the transition that drops it,
+            // so pre-clearing it here would MASK the very thing case 200 does.
+            // AI(W906-W7-L1-Wave3) 20260802: the pre-clear is REMOVED -- with the
+            // real body the observable is "case 200 lowered Middle while holding
+            // Up", which needs Middle to still be HIGH when case 200 starts.
+            if (prev == 300) { midWireAt300 = Cylinder[C_Empty_Middle].GetOutBit();
+                               upWireAt300  = Cylinder[C_Empty_Up].GetOutBit(); }
             if (prev == 420) { upWireAt420  = Cylinder[C_Empty_Up].GetOutBit();
                                midWireAt420 = Cylinder[C_Empty_Middle].GetOutBit(); }
         }
@@ -579,8 +605,18 @@ static void test_loadnewemptytray_lifter_path()
           "case 60 CylinderUp(C_Empty_Up) drove BOTH lifter cylinder wires HIGH (both started LOW)");
     CHECK(zHasTrayAt100 == 0,
           "case 60 MOT[MMEmptyZ].ClearTray() ran (flag re-armed SET at cursor 50)");
-    CHECK(midWireAt300 == 1,
-          "case 200 CylinderMiddle(C_Empty_Up) drove C_Empty_Middle HIGH (re-armed LOW at cursor 200)");
+    // AI(W906-W7-L1-Wave3) 20260802: ASSERTION CHANGED, and deliberately -- the
+    // OLD claim ("CylinderMiddle drove C_Empty_Middle HIGH") described the
+    // RETIRED Sim body, which raised the middle cylinder.  Golden's real
+    // CylinderMiddle does the opposite: `Cylinder[CylinderName].On();
+    // Cylinder[CylinderName+1].Off();` at case 1 and `Cylinder[CylinderName]
+    // .On(); Cylinder[CylinderMidd].Off();` at case 100 -- the UP cylinder is
+    // held and the MIDDLE lock is DROPPED, which is what puts the stack at the
+    // middle height.  The replacement pins BOTH wires instead of one, so it is
+    // strictly stronger than what it replaces: an inverted CylinderMiddle now
+    // fails on either half.
+    CHECK(upWireAt300 == 1 && midWireAt300 == 0,
+          "case 200 CylinderMiddle(C_Empty_Up) HELD C_Empty_Up HIGH and drove C_Empty_Middle LOW (golden asendic.cpp CylinderMiddle case 1/100)");
     CHECK(upWireAt420 == 0 && midWireAt420 == 0,
           "case 410 CylinderLower(C_Empty_Up) drove BOTH lifter cylinder wires LOW (both were HIGH)");
     CHECK(MOT[MMEmpty_Car].fHasTray == true,

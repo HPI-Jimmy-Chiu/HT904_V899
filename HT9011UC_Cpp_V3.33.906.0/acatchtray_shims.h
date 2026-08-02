@@ -77,11 +77,29 @@
 //      and test_w6_6_hub stayed 9 PASS / 0 FAIL, exit 0, zero-line diff once
 //      the new log lines are filtered.  Neither test file needed an edit.
 //
-//  OWNED BY THE WAVE THAT LANDS asendic.cpp's AutoCylinder* bodies (Wave 3 / L1a):
-//    * acatchtray_shims.h <AutoCylinderUp/Middle/Lower decls> +
-//      acatchtray_shims.cpp:147-149 -- the three `{ return true; }` no-op stubs
-//      that ARE the open HIGH finding.  Read the caller-argument-order warning
-//      attached to those declarations BEFORE retiring them.
+//  [DONE 20260802] OWNED BY THE WAVE THAT LANDS asendic.cpp's AutoCylinder*
+//  bodies (W7-L1 Wave 3 / L1a) -- RETIRED, and this one behaves differently from
+//  the three above: BOTH the bodies AND the declarations are gone from this pair
+//  of files.  The three `{ return true; }` no-op stubs that ARE the open HIGH
+//  finding are replaced by golden's real state machines in asendic.cpp
+//  (golden asendic.cpp:562-765 / :767-933 / :937-1160), and the declarations moved
+//  to asendic.h where golden declares them (golden asendic.h:19-21).  The
+//  declarations could NOT be kept here the way DoAutoColor's was, because golden
+//  gives parameter 4 a default argument and the many TUs that include BOTH headers
+//  would then see it twice.  The caller-argument-order warning that used to be
+//  attached to those declarations moved with them, and is now also pinned by an
+//  executable test.  AI(W906-W7-L1-W3fixB) 20260802: that test was cited here as
+//  `tests/test_w7_l1_wave3_argorder.cpp`, which has never existed in this tree.
+//  The real pin is tests/test_w7_l1_auto2.cpp SUB-TEST [12]
+//  (`test_argument_order_pin`); swapping parameters 2 and 3 at golden
+//  asendic_Auto2.cpp:85 takes that suite from 69/0 to 62 passed / 7 failed
+//  (measured in this pass).
+//
+//  ALSO RETIRED BY WAVE 3, outside this file: csystem_shims.cpp's
+//  `void NewDoAutoTrayEdgeCylinderLoop() {}` body (its declaration in
+//  csystem_shims.h is kept, exactly like DoLoad / InitLoadTask above), because
+//  asendic.cpp now carries golden's real body (golden asendic.cpp:1206-1233) and
+//  the two definitions would otherwise be a duplicate symbol at link.
 //
 //  NOT A RETIREMENT AND NOT WAVE 0's: the six golden asendic.cpp free functions
 //  (bARTUnloaderUseOneCylin / bARTUnloaderUseTwoCylin / PushLoaderTrayInAverageTime
@@ -371,33 +389,24 @@ void NewRecordProcess(AnsiString S1, AnsiString S2="", AnsiString S3="");  // go
 
 //  per-Auto receive-bin-tray flow (golden asendic / cSortCT) -- offline: false
 void DoAutoReceiveBinTray(int iWhichAuto);       // RETIRED BODY (W7-L1 Wave 2 "Auto"): real VOID body in asendic_Auto.cpp (golden asendic_Auto.h:8)
-//  per-Auto stack cylinder up/middle/lower helpers (golden asendic auto-cylinder)
-// AI(W906-W7-L1-Wave0) 20260801: PARAMETERS 2 AND 3 ARE NOT SYMMETRIC AND CALLERS
-// DISAGREE ABOUT THEIR ORDER -- do NOT "normalise" any call site.  Golden's real
-// signature is `AutoCylinderUp(int Part, int CylinderName, int CylinderNameMid,
-// bool bReset=false)` (golden asendic.h:19-21) and inside the real bodies
-// CylinderName is driven unconditionally while CylinderNameMid is Enable-guarded
-// and is the sole input to AutoCylinderMidIsOn -- so the two are not
-// interchangeable.  Golden callers genuinely differ, and every site below was
-// re-derived by grepping the cp950-decoded golden IN THIS PASS rather than taken
-// from a report:
-//   * the COMMON order is (Up, Selector) -- e.g. asendic_Auto.cpp:282-284, :310,
-//     :322; asendic_Auto_RT.cpp:75, :109, :121; csystem.cpp:7175, :7196.
-//   * asendic_Auto2.cpp passes the REVERSE, (C_Auto2_Selector, C_Auto2_Up), at
-//     ALL 12 of its call sites: :65, :85, :101, :106, :132, :137, :617, :620,
-//     :638, :643, :674, :679.  (The ported asendic_Auto2.cpp reproduces that
-//     reversal faithfully -- it must NOT be "fixed".)
-//   * five further golden sites take the reversed order as the ELSE arm of a
-//     runtime bARTUnloaderUseTwoCylin test, i.e. the same call site swaps at run
-//     time: asendic_Auto.cpp:788 (vs :784) and :819 (vs :811); csystem.cpp:6940
-//     (vs :6936) and :6956 (vs :6948); asendic_Auto_RT.cpp:783 (vs :791).
-// While the stubs below return true unconditionally
-// the difference is invisible and no test can see it; the moment asendic.cpp's
-// real bodies land (Wave 3 / L1a) a "tidied" call site starts driving the opposite
-// physical cylinder.  This comment is the insurance policy for that window.
-bool AutoCylinderUp(int iAuto, int iUp, int iSel, bool bReset=false);      // golden -- offline: reached
-bool AutoCylinderMiddle(int iAuto, int iUp, int iSel, bool bReset=false);  // golden -- offline: reached
-bool AutoCylinderLower(int iAuto, int iUp, int iSel, bool bReset=false);   // golden -- offline: reached
+//  per-Auto stack cylinder up/middle/lower helpers -- DECLARATIONS RETIRED
+// AI(W906-W7-L1-Wave3) 20260802: the three AutoCylinderUp/Middle/Lower
+// declarations that used to sit here (and the long caller-argument-order
+// warning attached to them) have MOVED to asendic.h, together with the real
+// golden bodies which now live in asendic.cpp -- the `{ return true; }` stubs
+// in acatchtray_shims.cpp are retired.  They are not merely deleted from here:
+// golden declares them in asendic.h (golden asendic.h:19-21) WITH default
+// arguments on parameter 4, and every TU that calls them also includes
+// asendic.h (acatchtray.cpp:90, asendic_Auto.cpp:122, asendic_Auto2.cpp:100,
+// asendic_Auto_RT.cpp:201 -- all four re-verified in this pass), so a second
+// defaulted declaration here would be a hard error ("default argument given for
+// parameter 4 after previous specification") in each of those TUs.
+// THE ARGUMENT-ORDER WARNING IS NOT LOST -- it is now in asendic.h next to the
+// declarations, and tests/test_w7_l1_auto2.cpp SUB-TEST [12]
+// (`test_argument_order_pin`) turns it into an executable assertion.
+// AI(W906-W7-L1-W3fixB) 20260802: corrected -- this line used to cite
+// `tests/test_w7_l1_wave3_argorder.cpp`, a file that does not exist anywhere in
+// the tree.  The coverage does exist; only the pointer was wrong.
 //  motor scale-speed setter + BinDisp warn-clear (golden main / MyBinDisp) -- no-op
 void SetMotorScaleSpeed(int iMot, int iSp);      // golden -- no-op
 // AI(W906-AutoCleanFoundation) 20260721: golden cinitial.h:51 sibling of

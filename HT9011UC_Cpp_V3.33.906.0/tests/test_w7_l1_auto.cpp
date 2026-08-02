@@ -414,6 +414,11 @@
 #include "cmydef.h"
 #include "canary_support.h"     // LastSet, ShowErrorMessage seam, ShowMyMessage seam
 #include "FormsFacade.h"        // fMain / fAGV / fSCKART / fFixAICCD / fProductionInfo
+// AI(W906-W7-L1-Wave3) 20260802: AutoCylinderUp/Middle/Lower are no longer the
+// `{ return true; }` stubs in acatchtray_shims.cpp -- asendic.cpp now carries
+// golden's real closed-loop bodies.  This header supplies the physical Auto stack
+// that answers their position sensors.
+#include "w3_cylinder_plant.h"
 #include <cstdio>
 #include <vector>
 
@@ -461,6 +466,11 @@ static void advanceAuto(int P)
         BinTrayTask[P] == 1210 || BinTrayTask[P] == 1220)
         DetectAutoTime[P].SetMSAndOn(0);
     if (BinTrayTask[P] == 1550) AutoReceiveBinTrayDelay[P].SetMSAndOn(0);
+    // AI(W906-W7-L1-Wave3) 20260802: one tick of the Auto-stack plant.  When no
+    // pair is registered (the non-ART sub-tests, which reach AutoCylinderLower
+    // only, and converge on unwired cylinders exactly as golden does) this just
+    // expires AutoTime[][] -- the same virtual-time idiom as the lines above.
+    w3::Tick();
 }
 //  DoAuto123TrayToRear: hAuto123TrayToRear is the 20 s JAM1101 watchdog at
 //  cursor 200 (golden :2354) but the LD_TrayArrivalDely settle timer armed by
@@ -605,6 +615,21 @@ static void setupAutoFixture(int P)
 
     W906_ShowErrorMessage_Reset();
     W906_ShowMyMessage_Reset();
+
+    // AI(W906-W7-L1-Wave3) 20260802: no Auto-stack pair is registered by default.
+    // MEASURED, not assumed: the non-ART cycle reaches only AutoCylinderLower --
+    // at golden :819, `AutoCylinderLower(Pos, C_Auto_Selector[Pos], C_Auto_Up[Pos])`,
+    // the REVERSED order -- and golden's real AutoCylinderLower converges on
+    // unwired cylinders, because its case 100 reads the Ifor-20200506
+    // bOffStatus/bMidOnStatus pair (asendic.cpp :954-970) which substitutes
+    // true/false when the sensors are disabled.  Every other non-ART lifter call
+    // site in this SM is `Cylinder[C_Auto_Selector[Pos]].Push()` (golden :1391),
+    // not AutoCylinder*.  The ART sub-test [6] registers the pair itself.
+    w3::Forget();
+    w3::ResetCursors();
+    Ld_UldDelayTime.LD_BeforeDownDelay    = 0;
+    Ld_UldDelayTime.LD_StackMiddLockDelay = 0;
+    Ld_UldDelayTime.LD_LiftDownDelay      = 0;
 }
 
 //  Give the Auto tray a FULL 1x1 tray.  TTrayMotor::SetTray() only fills the
@@ -859,12 +884,28 @@ static void test_cycle_art()
     UNLOADER_ART[P]  = eartInstall;         // + bNoAutoZSelect==false, USE_LdUldCassetteMode!=1
 
     setupAutoFixture(P);
+    // AI(W906-W7-L1-Wave3) 20260802: the ART cycle DOES reach AutoCylinderLower's
+    // and AutoCylinderMiddle's ART arms (golden :811 and :1350), and those arms
+    // read real position sensors -- with the pair unwired they can never close and
+    // the cycle parks on cursor 960 forever (MEASURED before this line was added).
+    // Register the pair under the ART sensor law, IN CALL-SITE ORDER: golden :811
+    // and :1350 both pass (C_Auto_Up[Pos], C_Auto_Selector[Pos]) on the ART side --
+    // note that golden :819, the NON-ART twin of :811, passes them REVERSED.
+    // AI(W906-W7-L1-W3fixB) 20260802: that sentence used to end "...which is exactly
+    // the asymmetry [13] pins".  [13] IN THIS FILE is DoAutoCassetteTrayFeed and
+    // touches no AutoCylinder* parameter order at all.  The asymmetry is pinned by
+    // tests/test_w7_l1_auto2.cpp SUB-TEST [12] (`test_argument_order_pin`).
+    w3::WireAutoStackART(C_Auto_Up[P], C_Auto_Selector[P], 21 + P);
+    // WireOne leaves both cylinders retracted; restore the two pre-drives the
+    // fixture relies on for its "OFF at cursor N" observables.
+    Cylinder[C_Auto_Selector[P]].Off();
+    Cylinder[C_Auto_Up[P]].Off();
     giveFullTray(iMMAuto[P]);
     giveNoTray(iMMAuto_Car[P]);
     Initial_Auto_BinTray_Task(P);
 
     CycleObs o;
-    runCycle(P, 200, o);
+    runCycle(P, 400, o);
 
     static const int want[] = { 1, 100, 200, 500, 800, 850, 900, 950, 960, 970,
                                 1000, 1010, 1020, 1021, 1050, 1100, 1200, 1210,
@@ -889,6 +930,15 @@ static void test_cycle_art()
 
     USE_AUTO_RETEST = savedRetest;
     UNLOADER_ART[P] = savedUld;
+    // AI(W906-W7-L1-Wave3) 20260802: un-register the ART pair so later sub-tests
+    // see the default (unwired) machine again.
+    // AI(W906-W7-L1-W3fixB) 20260802: that sentence was ASPIRATIONAL until now --
+    // Forget() only cleared the registration list, so the pair stayed Enable==true
+    // with its Sim sensor bits frozen at this walk's last state, and the four
+    // later sub-tests that drive the SM ([8]..[11], [13]) ran on it by accident.
+    // Forget() now really un-wires (w3_cylinder_plant.h, Unwire), so the sentence
+    // is true as written.
+    w3::Forget();
 }
 
 // ===========================================================================

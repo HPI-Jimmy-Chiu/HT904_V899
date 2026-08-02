@@ -447,6 +447,19 @@
 #include "cmydef.h"
 #include "canary_support.h"     // LastSet, ShowErrorMessage, WhichAutoNeedTray
 #include "FormsFacade.h"        // fAGV
+// AI(W906-W7-L1-Wave3) 20260802: AutoCylinderUp/Middle/Lower are no longer the
+// `{ return true; }` stubs in acatchtray_shims.cpp -- asendic.cpp now carries
+// golden's real closed-loop bodies, which wait on Cylinder[].OnStatus()/
+// OffStatus().  This header is the physical Auto stack that answers them.
+#include "w3_cylinder_plant.h"
+
+// AI(W906-W7-L1-Wave3) 20260802: golden declares AutoCylinderMidIsOn in NO header
+// (asendic.cpp:529 defines it with external linkage and only asendic.cpp calls
+// it), so asendic.h deliberately does not publish it either.  Sub-test [12c]
+// needs it, so it is declared locally here -- the same shape golden main.cpp:9138
+// and golden Magazine.cpp:33 use for the other asendic.cpp free functions they
+// reach.
+extern bool AutoCylinderMidIsOn(int Part, int CylinderNameMid);   // golden asendic.cpp:529
 #include <cstdio>
 #include <set>
 
@@ -483,6 +496,14 @@ static void advanceAuto2Time()
     CheckAuto2TrayDelay.SetMSAndOn(0);
     hAuto2TrayToFrontForDummy.SetMSAndOn(0);
     hAuto2TrayToRearForDummy.SetMSAndOn(0);
+    // AI(W906-W7-L1-Wave3) 20260802: one tick of the Auto-stack plant, folded
+    // into the existing per-tick hook so every drive loop in this file gets it
+    // without changing its shape.  w3::Tick() expires AutoTime[][] (the
+    // AutoCylinder* motion/alarm timers -- the same virtual-time idiom as the
+    // five lines above) and recomputes the stack's position sensors from the
+    // commanded outputs.  It deliberately does NOT expire CylinderAlarmTime[],
+    // the case-201 10-second watchdog.
+    w3::Tick();
 }
 
 // ---------------------------------------------------------------------------
@@ -571,6 +592,27 @@ static void setupDummyFeed()
     simSensorUnknown(SnAuto2FixCyPush);
     simSensorUnknown(SnAuto2TrayHasTray);
     simSensorUnknown(SnAutoUpSafedetect1);
+
+    // AI(W906-W7-L1-Wave3) 20260802: wire the Auto2 stack the way a real machine
+    // wires it -- Enable, distinct Sim IO addresses for the output bit and the
+    // two position sensors, non-zero alarm windows -- so golden's real
+    // AutoCylinderUp/Middle/Lower can actually close their loops.
+    //
+    // NOTE THE ARGUMENT ORDER, IT IS NOT A TYPO.  asendic_Auto2.cpp calls
+    // `AutoCylinderXxx(1, C_Auto2_Selector, C_Auto2_Up)` at ALL TWELVE of its
+    // sites (golden asendic_Auto2.cpp :65, :85, :101, :106, :132, :137, :617,
+    // :620, :638, :643, :674, :679) -- the REVERSE of what asendic_Auto.cpp /
+    // _Auto_RT.cpp / csystem.cpp / acatchtray.cpp pass.  Parameters 2 and 3 are
+    // not interchangeable in the real bodies, so the fixture must be wired in
+    // the SAME order the SM passes them.  This line is therefore a PIN: if
+    // anyone "normalises" Auto2's twelve call sites to (Up, Selector), the SM
+    // stops converging against this fixture and [3a]/[6]/[7]/[8] go red.
+    w3::Forget();
+    w3::WireAutoStack(C_Auto2_Selector, C_Auto2_Up, 22);
+    w3::ResetCursors();
+    Ld_UldDelayTime.LD_BeforeDownDelay    = 0;
+    Ld_UldDelayTime.LD_StackMiddLockDelay = 0;
+    Ld_UldDelayTime.LD_LiftDownDelay      = 0;
 }
 
 // ---------------------------------------------------------------------------
@@ -1277,6 +1319,160 @@ static void test_fagv_predicate()
           "fAGV->IsATK_AMR()==false -- real predicate (AGV_predicates.cpp:37) on default globals");
 }
 
+// ---------------------------------------------------------------------------
+//  [12] THE ARGUMENT-ORDER PIN -- AI(W906-W7-L1-Wave3) 20260802.
+//
+//  AutoCylinderUp / AutoCylinderMiddle / AutoCylinderLower take
+//      (int Part, int CylinderName, int CylinderNameMid, bool bReset=false)
+//  and parameters 2 and 3 are NOT symmetric in golden's real bodies
+//  (asendic.cpp):
+//    * CylinderName    (param 2) is commanded UNCONDITIONALLY at case 1 / case 50.
+//    * CylinderNameMid (param 3) is Enable-guarded, and is the SOLE input to
+//      AutoCylinderMidIsOn -- the "arrived at the top" witness that case 100 and
+//      case 201 consult.
+//  Golden callers DISAGREE about which physical cylinder goes in which slot, and
+//  none of that may be "normalised" (see the warning above the declarations in
+//  asendic.h).  THIS FILE is the extreme case: asendic_Auto2.cpp passes
+//  (C_Auto2_Selector, C_Auto2_Up) -- the REVERSE of asendic_Auto.cpp /
+//  asendic_Auto_RT.cpp / csystem.cpp / acatchtray.cpp -- at ALL TWELVE of its
+//  sites (golden :65, :85, :101, :106, :132, :137, :617, :620, :638, :643, :674,
+//  :679).
+//
+//  WHY THIS PIN EXISTS.  Until Wave 3 the three functions were
+//  `{ return true; }` stubs in acatchtray_shims.cpp.  Under a stub the argument
+//  order is INVISIBLE: every call succeeds instantly whatever you pass, so no
+//  test in this repository could tell a correct call site from a swapped one, and
+//  a well-meaning "consistency" edit to those twelve lines would have shipped
+//  silently and driven the OPPOSITE PHYSICAL CYLINDER on a real machine.  The
+//  real bodies close that window; this sub-test is the alarm on it.
+//
+//  WHAT IT ASSERTS, and what it deliberately does NOT.  One physical stack is
+//  wired (the plant in tests/w3_cylinder_plant.h, registered by setupDummyFeed()
+//  in the SAME order asendic_Auto2.cpp calls with), and then:
+//    [12a] all three functions converge in the golden order;
+//    [12b] AutoCylinderUp does NOT converge when the two arguments trade places,
+//          and raises the "Lifter Up error" operator dialog that the correct order
+//          never raises;
+//    [12c] AutoCylinderMiddle drives the OPPOSITE PHYSICAL CYLINDER when the
+//          arguments trade places.  This is the sharpest form of the claim and the
+//          one that matters on real metal: golden's CylinderName is driven ON and
+//          CylinderNameMid OFF, so a swapped site extends the lock and retracts
+//          the lift instead of the other way round;
+//    [12d] AutoCylinderMidIsOn answers about its OWN argument -- the mechanical
+//          root of [12b] and [12c].
+//  MEASURED AND NOT CLAIMED: with the arguments swapped, AutoCylinderMiddle and
+//  AutoCylinderLower still RETURN TRUE under this stack's sensor law.  Their
+//  non-ART guards happen to be satisfiable from both sides; only the CYLINDER
+//  IDENTITY distinguishes them, which is exactly why [12c] asserts identity
+//  rather than convergence.  Stating this is the point -- "the swapped call also
+//  converges" is precisely the property that makes a swapped site dangerous.
+//
+//  MUTATION-PROVEN: swapping the arguments at golden call site
+//  asendic_Auto2.cpp:85 (DoLoadNewAuto2TrayToCar case 50's AutoCylinderUp) makes
+//  sub-test [3a] go red as well, because the fixture wiring and the call site then
+//  disagree.
+// ---------------------------------------------------------------------------
+static bool pinDrive(int which, int Part, int p2, int p3, int budget, int *ticksOut)
+{
+    //  which: 0 = Up, 1 = Middle, 2 = Lower
+    bool ok = false;
+    int  t  = 0;
+    for (; t < budget && !ok; ++t)
+    {
+        advanceAuto2Time();                 // plant tick + AutoTime[][] expiry
+        if      (which == 0) ok = AutoCylinderUp    (Part, p2, p3);
+        else if (which == 1) ok = AutoCylinderMiddle(Part, p2, p3);
+        else                 ok = AutoCylinderLower (Part, p2, p3);
+    }
+    if (ticksOut) *ticksOut = t;
+    return ok;
+}
+
+static void test_argument_order_pin()
+{
+    printf("\n[12] ARGUMENT-ORDER PIN: AutoCylinderUp/Middle/Lower params 2 and 3\n");
+
+    const int  Part  = 1;                   // Auto2's Part, golden asendic_Auto2.cpp
+    const int  kName = C_Auto2_Selector;    // parameter 2, AS ASENDIC_AUTO2.CPP PASSES IT
+    const int  kMid  = C_Auto2_Up;          // parameter 3, AS ASENDIC_AUTO2.CPP PASSES IT
+    const int  kBudget = 80;                // ~16x the measured requirement
+    int ticks = 0;
+
+    // --- [12a] the golden order converges, for all three --------------------
+    setupDummyFeed();  initAutoTask();  W906_ShowMyMessage_Reset();
+    const bool upOk       = pinDrive(0, Part, kName, kMid, kBudget, &ticks);
+    const int  dlgsGolden = W906_ShowMyMessage_Count;
+    CHECK(upOk, "[12a] AutoCylinderUp(Part, C_Auto2_Selector, C_Auto2_Up) -- asendic_Auto2.cpp's OWN "
+                "argument order -- CONVERGES");
+    printf("    (golden order: AutoCylinderUp converged in %d ticks, %d dialogs)\n", ticks, dlgsGolden);
+
+    setupDummyFeed();  initAutoTask();
+    CHECK(pinDrive(1, Part, kName, kMid, kBudget, 0),
+          "[12a] AutoCylinderMiddle in the same order CONVERGES");
+
+    setupDummyFeed();  initAutoTask();
+    CHECK(pinDrive(2, Part, kName, kMid, kBudget, 0),
+          "[12a] AutoCylinderLower in the same order CONVERGES");
+
+    // --- [12b] AutoCylinderUp: the swapped order cannot succeed -------------
+    //  Same machine, same wiring, same budget -- only the two arguments trade
+    //  places, exactly as a "tidy these call sites" edit would do.
+    setupDummyFeed();  initAutoTask();  W906_ShowMyMessage_Reset();
+    const bool upSwapped   = pinDrive(0, Part, kMid, kName, kBudget, 0);
+    const int  dlgsSwapped = W906_ShowMyMessage_Count;
+    CHECK(upSwapped == false,
+          "[12b] SWAPPING parameters 2 and 3 makes AutoCylinderUp NEVER return true -- the two are "
+          "NOT interchangeable");
+    CHECK(dlgsSwapped > 0 && dlgsGolden == 0,
+          "[12b] ...and the swapped run raises golden's \"Lifter Up error\" (asendic.cpp case 100) "
+          "which the CORRECT order never raises -- 0 dialogs vs many, on identical hardware");
+    CHECK(iAutoTask[0][Part] == 1,
+          "[12b] the swapped run is left parked back on cursor 1 (case 100's alarm arm resets it, "
+          "golden asendic.cpp:669-671)");
+
+    // --- [12c] AutoCylinderMiddle drives the OPPOSITE cylinder --------------
+    //  golden asendic.cpp CylinderMiddle-for-Auto: case 1 does
+    //      Cylinder[CylinderName].On();
+    //      if(Cylinder[CylinderNameMid].Enable) Cylinder[CylinderNameMid].Off();
+    //  so which cylinder EXTENDS and which RETRACTS is decided purely by the
+    //  argument order.  Both runs below converge; only the metal differs.
+    setupDummyFeed();  initAutoTask();
+    pinDrive(1, Part, kName, kMid, kBudget, 0);
+    CHECK(Cylinder[kName].bCylinderOn == true && Cylinder[kMid].bCylinderOn == false,
+          "[12c] golden order: AutoCylinderMiddle EXTENDED C_Auto2_Selector (param 2) and RETRACTED "
+          "C_Auto2_Up (param 3)");
+
+    setupDummyFeed();  initAutoTask();
+    pinDrive(1, Part, kMid, kName, kBudget, 0);
+    CHECK(Cylinder[kMid].bCylinderOn == true && Cylinder[kName].bCylinderOn == false,
+          "[12c] SWAPPED: the SAME call drove the OPPOSITE pair -- C_Auto2_Up extended, "
+          "C_Auto2_Selector retracted.  On a real machine that is the wrong metal moving, and it "
+          "still returns true, so nothing downstream notices");
+
+    // --- [12d] the mechanical root: AutoCylinderMidIsOn reads its argument --
+    //  golden asendic.cpp:529-560.  Drive the stack to "lift extended, selector
+    //  retracted" and ask the predicate about each cylinder in turn.
+    setupDummyFeed();  initAutoTask();
+    Cylinder[kMid].On();                    // C_Auto2_Up       commanded ON
+    Cylinder[kName].Off();                  // C_Auto2_Selector commanded OFF
+    w3::Tick();                             // let the plant answer
+    // AI(W906-W7-L1-W3fixB) 20260802: STRENGTHENED.  This was one assertion,
+    // `AutoCylinderMidIsOn(Part, kMid) != AutoCylinderMidIsOn(Part, kName)`, which
+    // pins only that the two answers DIFFER -- a defect that inverted BOTH would
+    // have kept it green, in the sub-test whose whole job is to be the alarm on a
+    // silent swap.  Split into two one-sided `==` assertions: strictly stronger,
+    // same fixture, no extra cost.  Each is mutation-proven independently.
+    CHECK(AutoCylinderMidIsOn(Part, kMid) == true,
+          "[12d] AutoCylinderMidIsOn(Part, C_Auto2_Up) is TRUE -- C_Auto2_Up is the cylinder that "
+          "was commanded ON, and the predicate reads ITS OnStatus (golden asendic.cpp:529-560)");
+    CHECK(AutoCylinderMidIsOn(Part, kName) == false,
+          "[12d] AutoCylinderMidIsOn(Part, C_Auto2_Selector) is FALSE in the SAME state -- so which "
+          "cylinder lands in parameter 3 decides what 'arrived at the top' means, and an inversion "
+          "of BOTH answers (which the old `!=` form would have accepted) goes red here");
+
+    setupDummyFeed();  initAutoTask();
+}
+
 int main()
 {
     printf("==============================================================\n");
@@ -1295,6 +1491,7 @@ int main()
     test_drive_auto2();
     test_supply_gate();
     test_fagv_predicate();
+    test_argument_order_pin();      // AI(W906-W7-L1-Wave3) 20260802
 
     printf("\n--------------------------------------------------------------\n");
     printf(" RESULT: %d passed, %d failed\n", g_pass, g_fail);
