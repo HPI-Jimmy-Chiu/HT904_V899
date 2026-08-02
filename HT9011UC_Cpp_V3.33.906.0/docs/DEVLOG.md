@@ -1644,3 +1644,40 @@ Auto 軌另外把十個兄弟測試對「退役後 + 真 Auto obj」的 archive 
   7. **re-baseline 是最容易出事的地方**：要修的是 fixture（把汽缸 Enable 起來、給真 Sim IO 位址），**不是把斷言改弱**。需要一個獨立審查軌專門查「有沒有人用弱化斷言換綠燈」。
 - **勿圈入 V906 commit**：`config/*`、`setup.inf`、`.pti_frames/`、repo 根的 `SCRATCH_*.txt`/`_review_*.diff`/`build_*` 產物、ported tree 內三個 `*_test_scratch/`，以及 `HT9011UC_Code_V3.33.899.0_.../CosFunction.cpp`（使用者自己的 V899 工作）。
 - **執行模式**：使用者指示持續有效——全部 cpp/h/dfm 都要翻、workflow 火力全開、不逐波停下請示、重大問題跳過並最後條列；model/effort 依任務性質自動切換；安裝軟體不必先問。
+
+### 🔖 RESUME 更新（2026-08-02 暫停交接，**取代上一則 RESUME 的「進行中」段落**）
+
+使用者要求暫停，主迴圈主動 `TaskStop` 中止 Wave 3 workflow `wf_9cf3c244-22a`。**依既有紀律，停止後親自查證工作樹，沒有憑印象寫「沒寫檔」——結果是它寫了很多。**
+
+#### 事實（親自查證，非引用 agent 回報）
+
+- `journal.jsonl`：**1 個 `started`、0 個 `result`**。翻譯軌在寫完一批檔之後、回報之前被砍；**稽核軌從未啟動**（它是序列的第二段）。
+- 工作樹相對 `ce54c4a`：**15 個 tracked 檔改動 + 1 個新 untracked 檔**，**+2561 / −328**。
+  - `asendic.cpp` **+1755**（真 body 的主體，這是本波的核心）、`asendic.h` +97、`acatchtray_shims.h` +65、`acatchtray_shims.cpp` +16、`csystem_shims.cpp` +9。
+  - 七支測試被 re-baseline：`test_w7_l1_loader.cpp` +283、`test_w7_l1_auto2.cpp` +188、`test_w7_l1_auto_rt.cpp` +121、`test_w6_canary.cpp` +62、`test_w7_l1_color.cpp` +55、`test_w6_1_empty_canary.cpp` +44、`test_w7_l1_auto.cpp` +43。
+  - 三個 sibling 的錨點以上區域被動過以退役 `#define` 轉址：`asendic_Auto.cpp` +105、`asendic_Auto_RT.cpp` +30、`asendic_Loader.cpp` +16。
+  - 新檔：`tests/w3_cylinder_plant.h`（未 commit，看名字是共用的汽缸模型 fixture）。
+- **一處超出授權清單的寫入，但內容正確**：`csystem_shims.cpp` 不在該 agent 的檔案清單裡，它退役了 `NewDoAutoTrayEdgeCylinderLoop` 的 body。主迴圈讀過該 diff——**理由成立且必要**（真 body 落在 `asendic.cpp`，不退就是 link 期 duplicate symbol），寫法也遵循既有慣例（退 body、保留 `csystem_shims.h` 的宣告，因為 `csystem.cpp` 透過該 header 綁定且不 include `asendic.h`）。與 Wave 0 被迫退役六個 aoutarm stub 同一類。
+- 殘留程序：**0**（無 cmake / ctest / g++ / make 殘留）。
+
+#### ⚠️ 這 16 個檔的狀態是「**未編譯、未測試、未驗證**」
+
+**沒有跑過任何 build，沒有跑過任何 ctest，翻譯軌沒有交出任何報告，獨立稽核軌完全沒有執行。** 這一波恰好是全專案風險最高的一波（行為反轉：退掉 `AutoCylinder*` stub 會把「總是瞬間成功」換成「永遠不成功」），而**檢查它有沒有被用「弱化斷言」換綠燈的那個稽核軌，正是沒跑到的那一段**。
+
+- **`ce54c4a` 是已知良好的檢查點**（fresh build exit 0 / ctest 111/115 / 警告 288）。
+- **工作樹目前這 16 個檔不要當成已驗證，也不要直接 commit。**
+
+#### 下一場次開工順序
+
+1. `git status` 核對是否仍是這 16 個檔（本節記錄的清單即為基準）。
+2. **先自己跑一次 fresh from-scratch build + 完整 ctest**，看它到底編不編得過、停在哪裡。基準：exit 0 / **111/115**，其他任何失敗都是這一波造成的。**預期會有一批測試因為行為反轉而停住或變紅——那是這一波的本質，不是意外。**
+3. **不論 build 結果如何，都要派獨立稽核軌**（`wfF_wave3.js` 的第二段，prompt 已寫好）。它的主要問題只有一個：**有沒有任何斷言是被弱化來換綠燈，而不是把 fixture 修對？** 要逐條對 `ce54c4a` diff 每個被改動/刪除的斷言，分類 `LEGITIMATE_FIXTURE_FIX` / `WEAKENED` / `AMBIGUOUS`，且不准採信翻譯軌說法（本場次它根本沒說法）。七支被 re-baseline 的測試全部在稽核範圍內。
+4. 另外要親自確認的三件事（翻譯軌沒機會回報）：(a) `AutoCylinderUp/Middle/Lower` 是否恰好各剩一個定義、且 `acatchtray_shims.cpp` 裡已無殘留；(b) `iLifterTask[3][10]` / `iAutoTask[3][12]` 是否**照 golden 定義原樣**、**沒有**被「和 `main.cpp` 的 `[3][7]` extern 調和」（那會是偽裝成 header 清理的行為變更，必須留給 W7-U 的 main.cpp 波）；(c) 三個 sibling 的 zero-diff 保真是否仍然成立（`#define` 轉址刻意放在錨點以上就是為了這件事，但要實測不是假設）。
+5. **參數順序 pin 是本波真正的價值所在**（stub 時代它不可見）：要驗證那個「把第 2、3 引數對調就變紅」的測試真的存在且真的會紅。若不存在或不會紅，**這一波的主要理由就沒有兌現**。
+6. **可原樣重派**：`...\scratchpad\wfF_wave3.js`（run `wf_9cf3c244-22a`）。⚠️ **但不要整支重跑**——翻譯軌已經寫了 16 個檔在樹上，整支重跑會讓它對「已經改過的樹」再做一次。要嘛先照上面第 2、3 步確認現況再決定，要嘛用 `resumeFromRunId` 讓已完成的 agent 走 cache（本例翻譯軌**沒有**完成，所以不會有 cache 可用——這代表重派等同重做，務必先評估現有 16 檔是否堪用）。
+
+#### 其餘不變
+
+- **已 commit 且各自親自驗證過**：`cfe4e38`（round-3）、`fcdd92e`（Wave 0 + CanaryFix）、`8d67b46`（Wave 1）、`ce54c4a`（Wave 2）。
+- **build 目錄**：`build_w2_fresh` 是目前唯一與 `ce54c4a` 一致的綠色 build（fresh、111/115）；根目錄的 `build/` 已經**過時**（缺 Wave 2 的來源）。
+- **勿圈入 V906 commit**：`config/*`、`setup.inf`、`.pti_frames/`、repo 根的 `SCRATCH_*.txt`/`_review_*.diff`/`build_*` 產物、ported tree 內三個 `*_test_scratch/`，以及 `HT9011UC_Code_V3.33.899.0_.../CosFunction.cpp`（使用者自己的 V899 工作）。
