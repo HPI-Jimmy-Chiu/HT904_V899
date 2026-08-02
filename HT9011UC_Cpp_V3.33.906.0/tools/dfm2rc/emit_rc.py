@@ -743,6 +743,8 @@ def emit_from_ir_file(ir_path, out_rc_path, out_ids_path, out_meta_path):
         f.write(ids_text)
     with open(out_meta_path, 'w', encoding='utf-8', newline='\n') as f:
         json.dump(meta, f, ensure_ascii=False, indent=2)
+        # AI(W906-Gate4) 20260802: json.dump leaves no trailing newline, which put every generated .json in violation of plan S12 gate 4; emit one so a fresh regen is gate-clean at birth (the checked-in corpora were swept to match in the same commit, keeping gate G7 byte-identical).
+        f.write('\n')
     return fe, meta
 
 

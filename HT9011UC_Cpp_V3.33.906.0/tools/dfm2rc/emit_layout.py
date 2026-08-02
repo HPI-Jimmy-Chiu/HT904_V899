@@ -523,5 +523,7 @@ def emit_form(ir_path, ir, out_root):
         fh.write(emit_source(form_stem, ir, rows, h_name))
     with open(json_path, 'w', encoding='utf-8', newline='\n') as fh:
         json.dump(emit_events_json(form_stem, ir, events), fh, ensure_ascii=False, indent=1, sort_keys=True)
+        # AI(W906-Gate4) 20260802: json.dump leaves no trailing newline, which put every generated .json in violation of plan S12 gate 4; emit one so a fresh regen is gate-clean at birth (the checked-in corpora were swept to match in the same commit, keeping gate G7 byte-identical).
+        fh.write('\n')
 
     return form_stem, rows, events, anomalies, {'h': h_path, 'cpp': cpp_path, 'json': json_path}

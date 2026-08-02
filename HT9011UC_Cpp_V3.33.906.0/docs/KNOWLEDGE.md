@@ -40,6 +40,8 @@
     - **AI(W906-W7-DOCfix2) 20260801 複驗**：本次重跑同一個掃描（UTF-8 嚴格解碼，排除 `.git`/`build*`/scratch 與二進位副檔名，掃到 1,644 個非空檔），上面每一個數字都逐字重現：`cprod.cpp` 283 行 / 2,443、`cpublic.cpp` 62 行 / 520、`tests/test_IniFiles.cpp` 1 行 / 4，合計 2,967 / 346 行 / 3 檔。**唯一被拿掉的是原本那句「這 3 檔沒有一個出現在 W7-F1/F2/L1 那批 30 個檔案裡（該 30 檔全數乾淨）」**——「那批 30 個檔案」在任何文件裡都沒有可據以重數的清單，本次無法複驗，故不保留該宣稱（三個中招檔的身分本身不受影響）。
 - **go-forward 規則（翻譯 agent 必遵）**：翻含中文註解的檔時，**以 cp950 感知方式讀 golden**（`iconv -f CP950 -t UTF-8` 或 python `open(encoding='cp950')`）取得真中文，譯出檔註解寫成**正確 UTF-8**；若不便，則以**英文 gloss + golden file:line 出處**取代該中文註解（精確中文留在唯讀 golden）。**勿用 Read 工具直接搬中文註解**。
 - 補救（低優先，已追蹤）：對 cprod.cpp/cpublic.cpp 跑一次 cp950→UTF-8 註解轉碼修復（見 ROADMAP DEFERRED）。
+- **AI(W906-Gate4) 20260802 現況更新（閘 4 的另外那一半已經清掉了）**：plan S12 閘 4 長期紅著的 **414** 個違規，其中 **411 個「缺結尾換行」已全部修復**（產生器 8 個 `json.dump()` 呼叫點 + 一次性掃描，見本檔 gotcha #19；四支 dfm2rc 閘測試全過含逐位元組的 G7）。**閘 4 現在是 `scanned 1460 file(s); 3 violation(s)`，剩下的 3 個就是本節這三個 U+FFFD 檔**——它們現在是全樹唯一擋著閘 4 轉綠的東西，優先級因此不再是「低」。
+- **⚠ 修復這三檔時的關鍵事實（本次實測，動手前必讀）**：**ported 與 golden 的行號不對齊**，不能用「同 path 同 line」去取原文。實測 `cprod.cpp` golden **4001** 行 vs ported **4037** 行（差 36），抽查偏移非定值：ported `:13` 對到的內容在 golden 完全不同位置，ported `:67`(`class ARM_OFFSET *InArmOffSet[...]`) 與 golden `:97`(`class ARM_OFFSET *InArmOffSet_File[...]`) 也只是相鄰兄弟而非同一行。→ **正確作法是以「`//` 前的程式碼文字 + 註解的作者/日期前綴」在 golden 內做唯一比對**，比對不唯一的個案要單獨列出人工裁決，不可猜。
 
 ## 已翻譯模組 + 領域發現
 - **Public/HTMD5（W0）**：`class MD5` + `md5()/md5_File()/md5_Folder()`（回 AnsiString）+ SearchFile/SearchFolder。翻譯時：VCL `TMask` 萬用字元比對→重建簡易 matcher；`std::auto_ptr`→`unique_ptr`；`MyDBIProcess` log→stub；`FindFirstFile` 用 MinGW windows.h（可攜）；保留 Ifor 20200826 buffer-overflow fix。MD5 演算法 bit-exact（命中 RFC1321 向量）。
@@ -85,6 +87,7 @@
 > | 16 | `.dfm` 直方圖抓不到**動態建立**的控制項（`TTMyTray256` 0 個 `.dfm` 實例卻被 `new`） | **保留號，未寫**。證據在 plan S4-V12 |
 > | 17 | **以剖析原始碼文字為手段的 pin，其註解剝除器必須「認得字串字面值」**，否則字串裡的 `//` 會靜默吃掉被 pin 的那段碼 | 已寫（AI(W906-W7-DOCfix2) 20260801 新增，證據自跑） |
 > | 18 | **「每個呼叫點都走到了」不等於「下對了命令」**——軌跡/覆蓋型斷言完全不約束致動器的**方向與極性** | 已寫（AI(W906-W7-DOCfix2) 20260801 新增，證據自跑） |
+> | 19 | **`tools/dfm2rc/` 三組產生語料的行尾慣例不一致（`ir_out`/`reports` = CRLF，`layout_out`/`rc_out` = LF），而閘 G7 逐位元組比對**——補結尾換行時補錯 EOL 會把 G7 弄紅 | 已寫（AI(W906-Gate4) 20260802 新增，證據自跑） |
 >
 > 13-16 標「保留號、未寫」是刻意的：把號先鎖住可以消除碰撞，但**不冒充已驗證**。要寫進來的人請自己重跑證據再補正文，並把狀態改成「已寫」。
 
@@ -157,6 +160,19 @@
     - **為什麼綠得下去（本波逐條看過那 46 條）**：沒有任何一條斷言讀 `SW[...]` 或 `Cylinder[...]` 的致動器狀態，也沒有任何一條觀察 SUT 自己呼叫的 `ClearTray`——測試裡出現的 27 處 `ClearTray` 全是它自己的 fixture 清場；全檔僅有的 2 條 `.Off()` 斷言，對象都是計時器 `DoAuto2Delay`，不是輸出點（第 3 處 `.Off()` 在註解裡）。
     - **拘束性規則**：翻譯 `asendic_*` 這一族（以及任何運動/IO 序列）時，測試至少要對**每一個被命令的輸出點**斷言「哪一個點、被設成哪一個狀態、在哪一個 case」，而不是只斷言 case 走過。**軌跡覆蓋當起點可以，當驗收不行**——照 gotcha 11 的形狀，交付前先拿「反轉一個輸出點的極性」當 mutation 跑一次；不會紅，就表示這件事根本還沒被測到。
     - **狀態聲明（不冒充他人成果）**：上述量測是對 `f61e25e` 的**已提交**版本做的。本輪另有軌道正在補這些洞，其成果不在本條的複驗範圍內；本條記的是教訓與證據，不是完成度。
+
+19. **`tools/dfm2rc/` 產生的三組語料「行尾慣例不一致」，而閘 G7 是逐位元組比對——補結尾換行時補錯 EOL 會把 G7 弄紅（2026-08-02 主迴圈修 gate 4 時實測，差一步就踩下去）**：
+    - **背景**：plan S12 閘 4 要求每個檔以換行結尾，全樹長期紅著 **414** 個違規。根因單一且明確：**`json.dump()` 不寫結尾換行**。
+    - **文件原本的歸因是錯的**：plan S12（`:902`）寫「其中 **404** 個是 `tools/dfm2rc/ir_out/*.ir.json` 產生檔」。實測分佈是 **`ir_out` 133 + `layout_out` 133 + `rc_out` 133 + `reports` 5 + 手寫 7 = 411**——是**三組**語料各 133，不是 `ir_out` 一組 404。**只修一個 emitter 會讓三分之二繼續紅**。真正的呼叫點有 **8 個**：`run_b1a.py`(2)、`run_b1d.py`(2)、`emit_layout.py`、`emit_rc.py`、`run_b1b.py`、`run_b1c.py` 各 1。
+    - **⚠ 真陷阱**：這三組語料的行尾慣例**不一樣**，因為寫檔時 `open()` 的 `newline=` 參數不同——
+      | 語料 | 寫檔方式 | 實際行尾 |
+      |---|---|---|
+      | `ir_out/*.dfm.ir.json`、`reports/*.json` | `open(p,'w',encoding='utf-8')`（預設 newline=None → Windows 換行轉譯） | **CRLF** |
+      | `layout_out/*_events.gen.json`、`rc_out/*.rcmeta.json` | `open(p,'w',encoding='utf-8',newline='\n')`（關掉轉譯） | **LF** |
+    - **為什麼會咬人**：`dfm2rc_idempotent`（閘 G7）會把 golden 重新跑一遍整條管線、和簽入的語料**逐位元組 diff**。若一律 append `b'\n'`，CRLF 那批的最後一行會變成孤零零的 LF，而修好的產生器重跑時寫的是 CRLF → **G7 立刻紅**，而且症狀（133 個檔全部 byte diff）看起來像產生器壞了，不像補換行補錯。
+    - **正確作法（本次採用，已驗證）**：產生器一律加 `fh.write('\n')`（在預設 newline 下自然變成 CRLF、在 `newline='\n'` 下維持 LF，各自吻合該檔既有慣例）；一次性掃描既有檔時**逐檔判斷主導行尾**（比較 `raw.count(b'\r\n')` 與 `raw.count(b'\n') - raw.count(b'\r\n')`）再 append 對應的終止符。
+    - **驗收**：閘 4 由 **414 → 3**（只剩 U+FFFD 三檔，見本檔上方「翻譯中文註解亂碼」一節）；四支 dfm2rc 閘測試全過，其中 `dfm2rc_idempotent` **Passed 23.36s**，其自產報告 `tools/dfm2rc/reports/b1d_idempotent_report.json` 內 `{"files": 133, "g7_diff_count": 0}`——**用報告內容證明它真的比對了 133 個檔、不是空跑**（該報告本身現在也以換行結尾，反過來證明被 patch 的產生器程式碼確實執行到了）。
+    - **通則**：任何對「產生出來的語料」做的整批機械修改，都要先問「有沒有一支測試在對它做 byte-diff」，以及「這批檔的行尾/編碼慣例是不是一致的」。本專案兩個答案分別是「有（G7）」和「不是」。
 
 ## 接縫（HAL）與 64-bit 跨位元
 - 即時硬體（運動/IO/互鎖/ATC）保留 native C++（既有已驗證 wrapper），翻譯後的 C++ **同程序直接呼叫**（無 P/Invoke、無 managed 邊界）。「interface 切割」＝抽象基底 + Sim/Real 子類。

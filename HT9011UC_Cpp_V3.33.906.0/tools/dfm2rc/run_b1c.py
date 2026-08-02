@@ -199,6 +199,8 @@ def main(argv):
     report_path = os.path.join(REPORTS_DIR, 'b1c_gate_report.json')
     with open(report_path, 'w', encoding='utf-8') as fh:
         json.dump(report, fh, ensure_ascii=False, indent=1, sort_keys=True)
+        # AI(W906-Gate4) 20260802: json.dump leaves no trailing newline, which put every generated .json in violation of plan S12 gate 4; emit one so a fresh regen is gate-clean at birth (the checked-in corpora were swept to match in the same commit, keeping gate G7 byte-identical).
+        fh.write('\n')
 
     print(json.dumps(summary, ensure_ascii=False, indent=2))
     print('Full report: %s' % report_path)

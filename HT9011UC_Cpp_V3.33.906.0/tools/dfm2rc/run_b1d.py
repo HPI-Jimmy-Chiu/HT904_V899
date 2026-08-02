@@ -193,6 +193,8 @@ def regenerate_all(out_root, rc_exe, windres, gxx, inc_dirs, env, do_compile):
         os.makedirs(os.path.dirname(ir_path), exist_ok=True)
         with open(ir_path, 'w', encoding='utf-8') as fh:
             json.dump(ir, fh, ensure_ascii=False, indent=1, sort_keys=True)
+            # AI(W906-Gate4) 20260802: json.dump leaves no trailing newline, which put every generated .json in violation of plan S12 gate 4; emit one so a fresh regen is gate-clean at birth (the checked-in corpora were swept to match in the same commit, keeping gate G7 byte-identical).
+            fh.write('\n')
 
         # --- B1b: .rc/_ids.h/.rcmeta.json emit (+ compile + G6) ---
         rel_stem = ir['source_dfm'].rsplit('.', 1)[0]
@@ -586,6 +588,8 @@ def _write_report(name, summary, per_form):
         os.makedirs(REPORTS_DIR)
     with open(os.path.join(REPORTS_DIR, name), 'w', encoding='utf-8') as fh:
         json.dump({'summary': summary, 'per_form': per_form}, fh, ensure_ascii=False, indent=1, sort_keys=True)
+        # AI(W906-Gate4) 20260802: json.dump leaves no trailing newline, which put every generated .json in violation of plan S12 gate 4; emit one so a fresh regen is gate-clean at birth (the checked-in corpora were swept to match in the same commit, keeping gate G7 byte-identical).
+        fh.write('\n')
 
 
 def main(argv):

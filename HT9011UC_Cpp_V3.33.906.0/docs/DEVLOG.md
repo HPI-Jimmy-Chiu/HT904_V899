@@ -1740,3 +1740,47 @@ fresh from-scratch build **exit 0**、`error:` 0、`resolving` 0、ctest **111/1
 - **本波留下的兩個小尾巴**：`InitDoLoaderTrayFeedTask` 生產端 refs 仍為 0，**這是正確的**——golden 的兩個呼叫端在 `DoTrayFeedProcess` 模式階梯裡，那整塊還在 `#if 0 // TODO(W7)`；已在刪除點與 banner 註明，避免後人「補一個呼叫去美化 refs 數字」。另 `asendic_Auto2.cpp` 從來不是 zero-diff（見上），別把它當基準。
 - **勿圈入 V906 commit**：`config/*`、`setup.inf`、`.pti_frames/`、repo 根的 `SCRATCH_*.txt`/`_review_*.diff`/`build_*` 產物、ported tree 內三個 `*_test_scratch/`，以及 `HT9011UC_Code_V3.33.899.0_.../CosFunction.cpp`（使用者自己的 V899 工作）。
 - **執行模式**：使用者指示持續有效——全部 cpp/h/dfm 都要翻、workflow 火力全開、不逐波停下請示、重大問題跳過並最後條列；model/effort 依任務性質自動切換；安裝軟體不必先問。
+
+---
+
+## 2026-08-02 — **Gate 4 修復波（下半）**：411 個「缺結尾換行」全部清除，閘 4 由 414 → 3
+
+plan §10-21 早就把這件事「交主迴圈排一個獨立的修復小波」，一直沒人做。本波做掉其中可機械化的那一半；剩下的 3 個 U+FFFD 檔需要回 golden 重取中文，另案。
+
+### 文件原本的歸因是錯的（先更正，否則只會修好三分之一）
+
+plan §12（`:902`）記「411 個缺結尾換行，**其中 404 個是 `tools/dfm2rc/ir_out/*.ir.json` 產生檔**，另 7 個是 `ainarm9045_*.cpp` ×6 + `myTimer.cpp`」。加總對，**歸因錯**。本波實測分佈：
+
+| 來源 | 檔數 |
+|---|---|
+| `tools/dfm2rc/ir_out/*.dfm.ir.json` | 133 |
+| `tools/dfm2rc/layout_out/*_events.gen.json` | 133 |
+| `tools/dfm2rc/rc_out/*.rcmeta.json` | 133 |
+| `tools/dfm2rc/reports/*.json` | 5 |
+| 手寫原始碼（`ainarm9045_*.cpp` ×6 + `myTimer.cpp`） | 7 |
+| **合計** | **411** |
+
+是**三組**語料各 133，不是 `ir_out` 一組 404。**只修一個 emitter 會讓三分之二繼續紅。**
+
+### 根因：`json.dump()` 不寫結尾換行 —— 8 個呼叫點
+
+`run_b1a.py`(:87 的 `.ir.json`、:150 的 b1a 報告)、`run_b1d.py`(:195、:588)、`emit_layout.py`(:525)、`emit_rc.py`(:745)、`run_b1b.py`(:256)、`run_b1c.py`(:201)。八處全部加上 `fh.write('\n')` + `AI(W906-Gate4) 20260802` 說明，`py_compile` 全過。
+
+### ⚠ 差一步就踩下去的真陷阱：三組語料的行尾慣例**不一樣**
+
+`ir_out` / `reports` 是 **CRLF**（`open(p,'w',encoding='utf-8')`，預設換行轉譯），`layout_out` / `rc_out` 是 **LF**（`newline='\n'` 關掉轉譯）。而 `dfm2rc_idempotent`（閘 G7）會把 golden 重跑整條管線、與簽入語料**逐位元組 diff**。若一律 append `b'\n'`，CRLF 那批的最後一行會變孤兒 LF、和修好的產生器重跑結果不合 → **G7 立刻紅，而且症狀（133 檔全 byte diff）看起來像產生器壞了**。實作改成**逐檔判斷主導行尾**再補對應終止符（142 檔補 CRLF、269 檔補 LF）。詳見 KNOWLEDGE gotcha #19。
+
+### 驗收（主迴圈親跑）
+
+- 閘 4：`scanned 1460 file(s)` → **414 → 3 violations**；剩下 3 個恰為既有 U+FFFD 檔（`cprod.cpp` 2,443 個 / `cpublic.cpp` 520 / `tests/test_IniFiles.cpp` 4）。
+- 四支 dfm2rc 閘測試 **4/4 Passed**：`dfm2rc_idempotent` 23.36s、`dfm2rc_layout_full` 72.94s、`dfm2rc_rc_compiles` 134.03s、`dfm2rc_fidelity` 199.88s。
+- **不只看綠燈，看它有沒有真的做事**：`tools/dfm2rc/reports/b1d_idempotent_report.json` 的 summary 是 `{"files": 133, "g7_diff_count": 0, "regen_problem_count": 0}`——證明 G7 真的比對了 133 個檔而不是空跑；`b1d_fidelity_report.json` 為 `files 133 / fail_form_count 0 / layout_compile_ok_count 133 / mojibake_bom_hits []`。兩份報告**現在自己也以換行結尾**，反過來證明被 patch 的產生器程式碼確實執行到了。
+- 測試跑完後**再掃一次閘 4**，仍是 3——確認 ctest 重產語料沒有把違規帶回來（這是唯一能證明「產生器真的修好」的檢查，只掃一次會被 stale 檔騙過去）。
+
+### 給 U+FFFD 那一半的前置事實（動手前必讀）
+
+**ported 與 golden 行號不對齊**，不能用「同 path 同 line」取原文：`cprod.cpp` golden **4001** 行 vs ported **4037** 行，且偏移非定值（抽查 ported `:67` 與 golden `:97` 只是相鄰兄弟宣告，不是同一行）。必須以「`//` 前的程式碼文字 + 註解的作者/日期前綴」在 golden 內做唯一比對，不唯一者單獨列出人工裁決。
+
+### 本波不含
+
+`cprod.cpp` / `cpublic.cpp` / `tests/test_IniFiles.cpp` 的 U+FFFD（346 行）未動——那需要回 golden 逐段重取中文，是翻譯工作不是掃描工作。閘 4 在那之前仍視為**已知紅、且不得再惡化**（新增檔案一律必須乾淨）。

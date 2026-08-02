@@ -1,0 +1,23 @@
+# AI(W906-Gate4) 20260802: pin the two LF-native generated corpora so a fresh checkout reproduces them
+# byte-for-byte. WHY THIS FILE EXISTS:
+#
+#   emit_layout.py and emit_rc.py write layout_out/ and rc_out/ through
+#   open(..., encoding='utf-8', newline='\n'), i.e. LF on every platform.
+#   This repo has core.autocrlf=true and (before this file) no .gitattributes anywhere, so a fresh
+#   checkout on Windows rewrote all 799 of those files to CRLF while the generators kept emitting LF.
+#   dfm2rc_idempotent -- gate G7 -- byte-diffs a fresh regeneration against these checked-in corpora,
+#   so on any clone other than the one they were generated in it would report a diff on EVERY file and
+#   look exactly like generator corruption. Proven on 2026-08-02 with
+#       git checkout-index --prefix=<tmp>/ -- <path>
+#   which produced crlf=1759/lf=0 for layout_out/main_events.gen.json whose worktree copy is crlf=0/lf=1759.
+#
+#   ir_out/ and reports/ are DELIBERATELY NOT LISTED. run_b1a.py / run_b1b.py / run_b1c.py / run_b1d.py
+#   write those through Python's default newline translation, so they are platform-native (CRLF on this
+#   machine) and autocrlf already round-trips them correctly. Pinning those to LF would break them --
+#   the two corpora genuinely differ, which is the whole trap (see KNOWLEDGE.md gotcha #19).
+#
+#   The generators are the source of truth. If either emitter's newline= argument ever changes, change
+#   the matching line here in the same commit.
+
+layout_out/** text eol=lf
+rc_out/**     text eol=lf
