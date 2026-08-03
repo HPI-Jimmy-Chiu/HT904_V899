@@ -2833,7 +2833,7 @@ mutation 都已還原（`"Fisrt"` 仍在、`CheckThermo` 迴圈仍是純 `contin
      `ShowRunLabel`，消費端 `csystem.cpp:20534` 閘住 chamber 快速冷卻硬體路徑 → stub 在位期間
      該分支不可達；另失 12 個 `SW[]` 實體輸出 + 7 個狀態寫入。
 - **下一步（已有可執行 brief，不需再 recon）**，建議順序：
-  1. **落地三個 substrate 符號到 ported `csystem.cpp`**（golden `csystem.cpp:4856-4857`、
+  1. ~~**落地三個 substrate 符號到 ported `csystem.cpp`**~~ **✅ 已完成（見下方 substrate 區段）**（golden `csystem.cpp:4856-4857`、
      `:4858-4862`、`:16458`、`:16461-16508`，全部依賴已確認在樹內）。**必須與測試同批改**：
      落地後 `tests/test_w7_l2_ckernel.cpp` 的 SUBSTRATE FILL 會 duplicate symbol，
      要刪掉 fill 並把 D7a/D7b 改成驅動 `Sen[SnRKCoverOpen]`/`Sen[SnRKSafeLock]`/
@@ -2858,6 +2858,117 @@ mutation 都已還原（`"Fisrt"` 仍在、`CheckThermo` 迴圈仍是純 `contin
   W7-U0/C5（`HT9045_UI` 未在根 `CMakeLists.txt` 定義卻已被 `build_msvc.bat:90` 傳入，須補且預設 OFF）；
   `OutArmTask` initialiser 偏差（golden `aoutarm.cpp:42` `=1` vs ported `aoutarm_shims.cpp:31` `=0`，
   反轉 golden `:1576` 的 `!=1` 判斷；因 `ShowRunLabel` 仍 deferred 故目前無活體影響，W7-U 解 gate 前必須處理）。
+- **勿圈入 V906 commit**：`config/*`、`setup.inf`、`.pti_frames/`、repo 根的 `SCRATCH_*.txt`/
+  `_review_*.diff`/`build_*` 產物、ported tree 內三個 `*_test_scratch/`，以及
+  `HT9011UC_Code_V3.33.899.0_.../CosFunction.cpp`。
+- **執行模式**：使用者指示持續有效——全部 cpp/h/dfm 都要翻、workflow 火力全開、不逐波停下請示、
+  重大問題跳過並最後條列；model/effort 依任務性質自動切換；安裝軟體不必先問。
+
+---
+
+## 2026-08-03（續）W7-L2 substrate：三個未解析符號落地，測試從「假 stub」升級成驅動 golden 真本體
+
+接 `ab9d6d6`。目標不是新功能，而是**讓 `ckernel.cpp` 真的能連進執行檔**，並把測試裡那個
+`IsSafeLockCheck` 的假替身換成 golden 真邏輯。
+
+### 落地內容（僅動 2 檔；`csystem.h` 不需改，:94/:119 宣告本來就在且與定義相符）
+
+| golden | ported 落點 |
+|--------|-------------|
+| `csystem.cpp:4857` `int iAllArmZHomeCount=0;`（含中文尾註） | `csystem.cpp:178` |
+| `csystem.cpp:4858-4862` `InitDoArmZHome()` **真的兩行賦值本體** | `csystem.cpp:179-183` |
+| `csystem.cpp:16458` `int AccelateTask=1;`（含 :16454-16456 段落標題） | `csystem.cpp:402` |
+| `csystem.cpp:16461-16508` `IsSafeLockCheck()` | `csystem.cpp:433-484`（`:16498-16499` → ported **:470-471**） |
+
+**開工先查現況，撿到一個半落地的**：ported `csystem.cpp:151` 早就有 `int iAllArmZHomeTask = 1;`，
+但 banner 引用寫成「golden cmydef」——**錯的，它其實是 golden `csystem.cpp:4856`**。
+因此**沒有重新定義**（會 link error），只修引用並在旁邊補上真正缺的兩塊，重建 golden
+:4856/:4857/:4858 的連續鄰域。另補 `#include "mysensor.h"`（:101）——`Sen[]` 在該 TU
+原本不可達（先前出現處全在註解裡）。
+
+### 唯一無法逐字照搬的地方（誠實記錄）
+
+golden `:16502-16506` 呼叫 **`IsTriSafeDoor6LockCheck()`**，本體在 golden
+`TempCtrl/TriTemp.cpp:469`，而**ported 樹根本沒有 `TempCtrl` 目錄**——照搬只會把三個未解析
+符號換成第四個，正好違背本波目的。已用本樹既有慣例 gate 成 `#if 0 // TODO(W7-TriTemp)`
+並把 golden 本體逐字引在裡面。**行為中性是驗證過的不是假設的**：`Tri_Temp_Machine` 為 0
+（`cmydef.cpp:5506`），且窮舉掃描顯示**ported 樹沒有任何一處對它賦值**，全部都是讀取，
+故該 arm 本來就不可達；nm 也確認沒有 `TriSafeDoor` 符號洩漏。記入 DEFERRED。
+
+### 測試：66 → **72 PASS / 0 FAIL**，假替身退場
+
+刪掉 `LINK-TIME SUBSTRATE FILL`（三個定義），PART A2/D7a/D7b 改為驅動**真輸入**
+（`Sen[SnRKCoverOpen]`、`Sen[SnRKSafeLock]`、`iControlPanelMode`），另新增 6 條斷言。
+**每個期望值都從 golden :16461-16508 推導，不是跑 port 記錄輸出。**
+觀測量選 `SW[i].OutValue`——因為 `myswitch.cpp:76/:126` 是在 `Enable==false` 早退**之前**
+就無條件寫入，所以在 golden 不動某 switch 的情形下先把它預設為 true 並要求它存活，
+才能把「寫入 false」與「從未碰過」區分開來。
+
+`D7c`/`D7d` 是**同一組 sensor、只差 `iControlPanelMode`** 的兩面對照，用來 pin golden
+:16466-16469；`D7g` 則 pin `:16471` 的 `Enable` 閘**壓過** com flag。
+**PART J 不是刪掉而是重新推導**：舊版量的是已刪除的 stub，新版改成種下
+`iAllArmZHomeCount` sentinel（全 ported 樹**唯一**寫入者就是真的 `InitDoArmZHome`；
+刻意避開 `iAllArmZHomeTask`，因為 `InitAllProcessTask` 也會寫它）並斷言 sentinel 存活
+——比原本更強，因為它觀測的是真本體，且能抓到 linked image 裡任何地方的呼叫。
+
+**失敗性同樣是量測的**：拿掉 golden `:16498-16499` → **只有 D7g 紅**（71/1）
+——**這正是先前複驗警告過的陷阱，舊的假替身沒有副作用、會靜默通過**；
+把 `:16481` 指到錯的 switch → D7a2 + D7d 紅（70/2）。兩次 mutation 皆已還原。
+
+### 驗證（全新 `build_0803_substrate`）
+
+build **exit 0 / 0 error / 0 warning**；ctest **114/118**，4 個失敗仍是既有
+`config_db`/`IniFiles`/`ini_helpers`/`config_loaders` 設定檔漂移；
+`W7_L2_CKernel` **72/72**。主迴圈另行親自覆核：只有 2 檔 modified、測試 exe 跑出 72/0 exit 0、
+兩檔皆 0 U+FFFD / 0 CRLF、三個符號現在確實由 `csystem.cpp` 定義且測試已無本地定義。
+
+**⚠ 修正本波 brief 自己的一個錯誤要求（值得記下來）**：brief 要求證明
+「`nm --undefined-only` on `ckernel.cpp.obj` 不再列出這三個」。**這個要求本身是錯的，
+任何正確修法都達不到**——那份清單是「`ckernel.cpp` 這個 TU 自己留下的未解析符號」，
+在**別的** TU 定義符號不可能改變它。翻譯 agent 正確地指出這點並改用對的證據：
+跨 14 個 archive 對差後**殘餘未解析集合只剩 `_Unwind_Resume`/`__gxx_personality_v0`/
+`atexit`/`std::basic_string`/`ios_base::Init`，零個專案層符號**；`csystem.cpp.obj` 提供
+`T InitDoArmZHome()` / `T IsSafeLockCheck()` / `D AccelateTask`（在 `D` section，
+證明 `=1` initialiser 有落地而非進 BSS）/ `B iAllArmZHomeCount`。
+最強的證據是行為面：**`test_w7_l2_ckernel.exe` 現在完全不靠 fill 就能連結**，這在之前不可能。
+**教訓：連結性的證據要看「整個 link 閉包的殘餘未解析集合」，不是看單一 .obj 的 undefined 清單。**
+
+同批把 `tests/CMakeLists.txt:2787-2793` 那則已過期的 tripwire 註記改寫為「已觸發並已解決」
+（翻譯 agent 依 brief 的「只准動 3 檔」限制沒動它，正確地把它回報出來）。
+
+### 🔖 RESUME（最新）
+
+- **本場次已 commit（兩顆）**：`ab9d6d6` W7-L2 完成波（翻譯 + 66 斷言測試 + 稽核修正）、
+  本則 W7-L2 substrate 波（三個符號落地 + 測試升級成驅動 golden 真本體，測試 66→**72**）。
+- **驗證基準**：全新 `build_0803_substrate`，build **exit 0 / 0 error / 0 warning**；
+  ctest **114/118**（4 個失敗永遠是 `config_db`/`IniFiles`/`ini_helpers`/`config_loaders`
+  設定檔漂移，與程式無關）；`W7_L2_CKernel` **72/72**。分支 `fix/v899.32-pti`。
+- **⚠ 接續第一件事仍是 `git status`，不是讀本 RESUME**（本場次開場第三次靠它撿到在製工作）。
+- **`ckernel.cpp` 現在真的可連結**：`AccelateTask`/`InitDoArmZHome`/`IsSafeLockCheck` 已由
+  ported `csystem.cpp`（:402 / :178-183 / :433-484）提供，測試的 SUBSTRATE FILL 已刪。
+  **新增經驗（第七條）：連結性的證據要看「整個 link 閉包的殘餘未解析集合」，
+  不是看單一 `.obj` 的 undefined 清單**——後者在別的 TU 定義符號後也不會變，本場次 brief
+  曾據此下錯要求，被翻譯 agent 正確推翻。
+- **仍未觸及 / 下一步（皆已有可執行 brief，不需再 recon）**，建議順序：
+  1. **閘 4 修復**——純機械、零裁決，資料已完整（`cpublic.cpp` 62 列、`cprod.cpp` 283 列，
+     以 `ported行|golden行|cp950 真文字` 對映）。完成即閘 4 轉綠。**346 行 U+FFFD 全在 `//` 之後，
+     零字串常量、零功能暴露。**
+  2. **`DoTraceDataResponse`**（golden `SECSGEM/uHGemEquipment.cpp:4190-4242`）——零阻塞。
+     現址是活的 no-op stub（ported :4583-4586），caller 已活（ported :4548-4549），
+     8 個 golden 怪癖須逐位保留（`:4204-4207` 故意的 switch fall-through、`:4214` UINT_2 截斷、
+     `:4232-4237` 冗餘賦值、`:4196-4200` 透過陣列而非 alias 重設）。順手修 ported :4577 錯引用。
+  3. **MainCalcCore Tier A 2 支**：`CheckAutoOnlySetOneBin`（golden main.cpp:32523-32553）、
+     `CheckAuto1OnlyBin1`（:32502-32521），用同檔既有 `bool` + `AnsiString&` out-param 前例。
+  4. **`SystemNG` 中止路徑是死碼（安全性，建議優先於上面三項）**——golden 唯一生產者
+     `UpdateSystemNG()`（`elec/Component/HAlarm.cpp:136`）未翻，故 ported ckernel.cpp:1207-1210
+     的 `StopAllMotor()`+`SystemStart=false` **永遠不會觸發**。
+  5. `DoInArm_SuckerMap()` 仍被 `#if 0`（golden :523 是活呼叫，本體有 2 個全域寫入）；
+     新增 `IsTriSafeDoor6LockCheck()` 亦 gated（golden `TempCtrl/TriTemp.cpp:469`，
+     ported 無 `TempCtrl` 目錄；已驗證 `Tri_Temp_Machine` 全樹無賦值故該 arm 本不可達）。
+  6. `uHGemClass.cpp` 剩 1 個真硬阻塞 `S7F20_CurrentEPPDData`；`PlaceOSTestResultToTray`（W7-U）；
+     W7-U0/C5（`HT9045_UI` 未在根 CMakeLists 定義卻已被 `build_msvc.bat:90` 傳入，須補且預設 OFF）；
+     `OutArmTask` initialiser 偏差（golden `aoutarm.cpp:42` `=1` vs ported `aoutarm_shims.cpp:31` `=0`）；
+     `ShowRunLed`/`ShowRunLabel` 的真 blast radius（`bHALTing` → chamber 快速冷卻分支不可達）。
 - **勿圈入 V906 commit**：`config/*`、`setup.inf`、`.pti_frames/`、repo 根的 `SCRATCH_*.txt`/
   `_review_*.diff`/`build_*` 產物、ported tree 內三個 `*_test_scratch/`，以及
   `HT9011UC_Code_V3.33.899.0_.../CosFunction.cpp`。

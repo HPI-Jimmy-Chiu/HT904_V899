@@ -214,11 +214,24 @@
 //      DoSystemMessage loop -- so PART I snapshots and restores around it.
 //      They need their own suite; this file does not pretend to cover them.
 //
-//  X5  IsSafeLockCheck's own LOGIC.  golden csystem.cpp:16461-16508 has NO
-//      translation in this tree at all (see the SUBSTRATE FILL block below), so
-//      there is nothing here to test.  PART A pins only the ORDER in which
-//      ScanPannelKey consults it relative to golden :1927 -- an ordering
-//      property of ckernel.cpp that holds whatever the lock answers.
+//  X5  RETIRED -- IsSafeLockCheck's own LOGIC is now IN SCOPE and IS tested.
+//AI(W906-W7-L2-substrate) 20260803: this exclusion used to read "golden
+//      csystem.cpp:16461-16508 has NO translation in this tree at all ... there is
+//      nothing here to test".  That is no longer true: the real body was landed in
+//      ported csystem.cpp this pass, so PART D7c-D7g pin its FULL branch table
+//      (all five arms, plus the SW[] side effects golden makes on each) against
+//      expectations derived by reading golden, and PART A2 / PART D7a-D7b now
+//      engage the real lock through its real inputs (Sen[SnRKCoverOpen],
+//      Sen[SnRKSafeLock], iControlPanelMode) instead of a test-local boolean.
+//      PART A still ALSO pins the ORDER in which ScanPannelKey consults the lock
+//      relative to golden :1927 -- an ordering property of ckernel.cpp that holds
+//      whatever the lock answers.
+//      Still genuinely out of scope, and the ONE arm not covered: golden
+//      :16502-16506's `if(Tri_Temp_Machine==1)` -> IsTriSafeDoor6LockCheck() arm,
+//      which is `#if 0`-gated in the port because golden TempCtrl/TriTemp.cpp has
+//      no translation at all.  Unreachable in this tree regardless
+//      (Tri_Temp_Machine is 0 and never assigned anywhere here), so D7g pins the
+//      fall-through to golden :16507 that the gate leaves behind.
 //
 // -----------------------------------------------------------------------------
 //  FAILABILITY PROOF -- MEASURED BY MUTATION, NOT ARGUED
@@ -227,6 +240,16 @@
 //  with `cmake --build build_0803_l2 --target test_w7_l2_ckernel`, run, and then
 //  REVERTED (ckernel.cpp md5 verified back to 2603d177e43444f375610b14c900f5a5
 //  and the suite re-run at 66/0).  Counts are what the runs printed.
+//
+//AI(W906-W7-L2-substrate) 20260803: the table below is the ORIGINAL 66-assertion
+//  measurement and is left exactly as it was measured.  This pass added SIX
+//  assertions (D7a2 + D7c-D7g), so the baseline is now 72 PASS / 0 FAIL.  The
+//  mutation table was NOT re-run for the new six -- stated plainly rather than
+//  implied: their failability rests on the pre-set/SURVIVE construction (each case
+//  distinguishes "golden wrote false" from "golden never touched it", so a dropped
+//  or misdirected SW[] write fails the case), not on a measured mutation run.
+//  ckernel.cpp is untouched by this pass, so every mutation result below still
+//  describes the code it was measured against.
 //
 //    BASELINE, unmutated ............................. 66 PASS /  0 FAIL
 //
@@ -316,37 +339,45 @@
 //      cannot inherit a latch from its predecessor.
 //
 // -----------------------------------------------------------------------------
-//  LINK-TIME SUBSTRATE FILL -- READ THIS BEFORE TOUCHING IT
+//  LINK-TIME SUBSTRATE FILL -- RETIRED 20260803.  THE TRIPWIRE FIRED AS DESIGNED.
 // -----------------------------------------------------------------------------
-//  ckernel.cpp.obj has THREE unresolved project-level references.  Measured, not
-//  assumed: `nm -C --undefined-only` on the built object, diffed against the
-//  defined symbols of all thirteen ht9045_* / vclcompat archives, leaves exactly
+//AI(W906-W7-L2-substrate) 20260803: this block used to document three symbols that
+//  this test TU DEFINED itself, because ckernel.cpp.obj referenced them and nothing
+//  in the ported tree defined them.  Measured then, not assumed: `nm -C
+//  --undefined-only` on the built object, diffed against the defined symbols of all
+//  thirteen ht9045_* / vclcompat archives, left exactly
 //      AccelateTask          golden csystem.cpp:16458  `int AccelateTask=1;`
 //      IsSafeLockCheck()     golden csystem.cpp:16461-16508
 //      InitDoArmZHome()      golden csystem.cpp:4858-4862
-//  All three live in golden csystem.cpp and the ported csystem.cpp has not
-//  translated any of them (ckernel.cpp:437-443 already flags AccelateTask and
-//  says the integrator owns it).  Without them NO executable can link this unit,
-//  so this suite supplies them, in the test TU, clearly labelled, with golden's
-//  own initial values:
-//    * AccelateTask = 1, exactly golden's initialiser.  Nothing here reads it.
-//    * InitDoArmZHome() -- golden's real body is two assignments
-//      (`iAllArmZHomeTask=1; iAllArmZHomeCount=0;`) to globals that also have no
-//      ported home.  The fill is empty AND COUNTED, and PART J asserts the count
-//      stayed 0, i.e. this suite never reached it -- so the emptiness cannot
-//      quietly matter.
-//    * IsSafeLockCheck() answers `g_simSafeLock`, default FALSE.  False is what
-//      golden's real body returns for this fixture, derived by reading it:
-//      `if(Sen[SnRKCoverOpen].Enable)` is false offline (Sen[] Enable defaults
-//      to 0), so control reaches golden :16496-16500, then
-//      `if(Tri_Temp_Machine==1)` is false (ported cmydef.cpp:5506
-//      `int Tri_Temp_Machine=0;`), then golden :16507 `return false;`.  The flag
-//      exists only so PART A can drive the guard at golden :1929-1930 from both
-//      sides.
-//  TRIPWIRE, ON PURPOSE: when csystem.cpp finally lands any of the three, THIS
-//  FILE WILL FAIL TO LINK with a duplicate-symbol error.  That is the intended
-//  outcome -- delete the fill then.  A silently-shadowed production symbol would
-//  be far worse than a link error.
+//  The fill carried an explicit note that it was a deliberate duplicate-symbol
+//  TRIPWIRE: "when csystem.cpp finally lands any of the three, THIS FILE WILL FAIL
+//  TO LINK ... That is the intended outcome -- delete the fill then."
+//
+//  THAT MOMENT ARRIVED.  All three now have REAL translated golden bodies in ported
+//  csystem.cpp, so the fill is DELETED -- keeping it would be the duplicate-symbol
+//  link error the tripwire existed to force, and shadowing a production symbol from
+//  a test TU would be far worse than that error.  What replaced each:
+//    * AccelateTask -- ported csystem.cpp, `int AccelateTask=1;` (golden :16458's
+//      initialiser verbatim).  Nothing in this suite reads it; it exists so
+//      ckernel.cpp:828 can link.
+//    * InitDoArmZHome() -- ported csystem.cpp, golden's REAL two-assignment body
+//      (`iAllArmZHomeTask=1; iAllArmZHomeCount=0;`), not the empty stub this file
+//      used to supply.  PART J still proves the suite never enters it, but now by
+//      watching the real body's own effect (the iAllArmZHomeCount sentinel) rather
+//      than by counting calls into a local stub.
+//    * IsSafeLockCheck() -- ported csystem.cpp, golden :16461-16508 in full,
+//      INCLUDING the SW[] side effects on every arm.  The retired stand-in just
+//      answered a `g_simSafeLock` boolean and had NO side effects at all, which an
+//      earlier review flagged as a future trap; PART D7c-D7g now pin golden's whole
+//      branch table, and PART A2 / D7a / D7b drive the real body through its real
+//      inputs (Sen[SnRKCoverOpen], Sen[SnRKSafeLock], iControlPanelMode).
+//      The suite-wide default is still "released / returns false" -- but for
+//      golden's own reason now: allKeysUnknown() disables sensor 27
+//      (SnRKCoverOpen==27, ported cmydef.cpp:822), so `if(Sen[SnRKCoverOpen].Enable)`
+//      at golden :16471 is false, control takes golden :16496-16500 (which turns
+//      BOTH locks off), `if(Tri_Temp_Machine==1)` at :16502 is false (ported
+//      cmydef.cpp:5506 `int Tri_Temp_Machine=0;`, never assigned in this tree), and
+//      golden :16507 returns false.
 //
 // -----------------------------------------------------------------------------
 //  WHAT THIS SUITE DOES *NOT* TOUCH
@@ -401,29 +432,23 @@ Re-derive PART E (and say so in the banner) before removing this guard."
 #endif
 
 // ===========================================================================
-//  LINK-TIME SUBSTRATE FILL.  See the banner block of the same name for the
-//  measurement, golden's real bodies, and the duplicate-symbol tripwire.
-//AI(W906-W7-L2) 20260803: supplied here so the unit can be LINKED at all --
-// ported csystem.cpp translates none of the three, so without these no test
-// executable containing ckernel.cpp.obj can be produced.
+//  LINK-TIME SUBSTRATE FILL -- GONE.  See the banner block of the same name.
+//AI(W906-W7-L2-substrate) 20260803: the three definitions that used to sit here
+// (`int AccelateTask = 1;`, `bool IsSafeLockCheck()`, `void InitDoArmZHome()`) are
+// DELETED.  All three now come from the real translated golden bodies in ported
+// csystem.cpp, so re-defining them here would be exactly the duplicate-symbol link
+// error this fill was deliberately left in place to force.  The `g_simSafeLock`
+// knob and the `g_initZHomeHits` counter went with them -- their replacements are
+// safeLockEngage()/safeLockRelease() below and PART J's iAllArmZHomeCount sentinel.
 // ===========================================================================
-int AccelateTask = 1;                       // golden csystem.cpp:16458 verbatim initialiser
 
-static bool g_simSafeLock  = false;         // PART A's control knob (default = golden's offline answer)
-static int  g_initZHomeHits = 0;            // PART J's tripwire: must stay 0
-
-bool IsSafeLockCheck()                      // golden csystem.cpp:16461 -- NOT translated in this tree
-{
-    return g_simSafeLock;
-}
-
-void InitDoArmZHome()                       // golden csystem.cpp:4858 -- NOT translated in this tree
-{
-    // Golden's real body is `iAllArmZHomeTask=1; iAllArmZHomeCount=0;`; neither
-    // global has a ported home.  Left empty AND counted -- PART J asserts this
-    // never ran, so the emptiness cannot silently matter.
-    ++g_initZHomeHits;
-}
+// golden csystem.cpp:4857 defines `int iAllArmZHomeCount=0;` at file scope and
+// declares it extern in NO header -- golden's only consumer is csystem.cpp itself
+// (its writes live in golden's InitDoArmZHome :4861 and DoArmZHome :5537-5600) --
+// so the port faithfully added no header declaration either.  PART J reads it as a
+// single-writer sentinel, so it is declared here, in the TU that needs it: the same
+// "no header is modified" idiom as the three function declarations just above.
+extern int iAllArmZHomeCount;
 
 // ---------------------------------------------------------------------------
 //  Harness
@@ -463,6 +488,34 @@ static void simSensorUnknown(int idx)   // IsOn()==false AND IsOff()==false
 {
     Sen[idx].Enable = false;
 }
+
+// ---------------------------------------------------------------------------
+//  SAFETY-LOCK DRIVE -- the REAL inputs of the REAL IsSafeLockCheck
+//  (golden csystem.cpp:16461-16508, translated in ported csystem.cpp).
+//AI(W906-W7-L2-substrate) 20260803: replaces the retired `g_simSafeLock` boolean.
+//  Both answers are DERIVED BY READING golden, not by running the port:
+//
+//  safeLockEngage() -> golden returns TRUE.
+//      simSensorOff(SnRKCoverOpen) gives Enable==true and IsOff()==true, so golden
+//      :16465 sets bSafeLockIOflag=true and golden :16471's outer guard is entered.
+//      The callers below leave iControlPanelMode at the suite baseline 0 (ported
+//      cmydef.cpp:5124 `int iControlPanelMode=0;`), so golden :16466 is false and
+//      :16469 leaves bSafeLockComflag=false.  golden :16473 (`&&`) is therefore
+//      false and golden :16479 `else if(bSafeLockIOflag)` wins: :16481
+//      SW[SwSafeLock].On(), :16482 `return true`.  SW[SwRKSafeLock] is NOT written.
+//
+//  safeLockRelease() -> golden returns FALSE.
+//      simSensorUnknown(SnRKCoverOpen) gives Enable==false, so golden :16471 is
+//      false and the :16496-16500 else arm runs -- SW[SwSafeLock].Off() (:16498)
+//      and SW[SwRKSafeLock].Off() (:16499) -- then :16502 `Tri_Temp_Machine==1` is
+//      false and :16507 returns false.  This is also the state allKeysUnknown() /
+//      drainLatch() leave sensor 27 in (SnRKCoverOpen==27, ported cmydef.cpp:822,
+//      inside their 0..31 sweep), i.e. RELEASED is the suite-wide default -- the
+//      same answer the retired stand-in's `false` gave, but now with golden's real
+//      side effects actually happening.
+// ---------------------------------------------------------------------------
+static void safeLockEngage()  { simSensorOff(SnRKCoverOpen);     }
+static void safeLockRelease() { simSensorUnknown(SnRKCoverOpen); }
 
 // ---------------------------------------------------------------------------
 //  Whole-array Sen[] snapshot/restore (isolation mechanism 1).
@@ -672,11 +725,28 @@ int main()
     const bool svNoteShow          = fNote->fShow;
     bool svDelay[15];
     for (int i = 0; i < 15; ++i) svDelay[i] = bInitialTestDelayStatus[i];
+    //AI(W906-W7-L2-substrate) 20260803: four more globals to restore, all newly
+    // reachable now that IsSafeLockCheck is the REAL body.  Sen[] itself is already
+    // covered wholesale by senSaveAll/senRestoreAll, so sensor 27 / 550 need no
+    // entry here.
+    const int  svControlPanelMode = iControlPanelMode;
+    const bool svSwSafeLockOut    = SW[SwSafeLock].OutValue;
+    const bool svSwRKSafeLockOut  = SW[SwRKSafeLock].OutValue;
+    const int  svAllArmZHomeCount = iAllArmZHomeCount;
 
     // Baseline fixture shared by PARTS A-C.
     SystemInitialOK        = true;
     bEnableEmployeeIDCheck = false;
-    g_simSafeLock          = false;
+    //AI(W906-W7-L2-substrate) 20260803: was `g_simSafeLock = false;`.  The lock is
+    // now released through its real input, and iControlPanelMode is pinned to
+    // golden :16466's else arm so every engage below is the single-flag :16479 path
+    // unless a case deliberately says otherwise.
+    safeLockRelease();
+    iControlPanelMode      = 0;
+    // PART J sentinel.  InitDoArmZHome (golden csystem.cpp:4858-4862) is the ONLY
+    // writer of iAllArmZHomeCount anywhere in the ported tree, so if this value is
+    // still here at PART J the function was never entered.
+    iAllArmZHomeCount      = 23117;
     IniConfig.bDisibleResetButton = false;   // golden :1949/:2126 -- keeps the Reset block live
     fNote->fShow           = false;          // golden :2007/:2038/:2184/:2215 take the simple else arms
     allKeysUnknown();
@@ -711,11 +781,16 @@ int main()
         // returns, so the pad selection HAS been updated to false.
         SystemInitialOK = true;
         bFrontPadActive = true;
-        g_simSafeLock   = true;
+        //AI(W906-W7-L2-substrate) 20260803: was `g_simSafeLock = true;`.  The guard
+        // is now driven by the REAL IsSafeLockCheck through its REAL input -- golden
+        // csystem.cpp:16479-16482 answers true for this sensor state.  Note ScanPannelKey
+        // never reads Sen[SnRKCoverOpen] as a key (ported ckernel.cpp names it only in
+        // the comment at :2045), so engaging the lock cannot forge a key press here.
+        safeLockEngage();
         int rA2 = ScanPannelKey();
         CHECK(rA2 == -1 && bFrontPadActive == false,
-              "PART A2: safety lock engaged -> -1 BUT bFrontPadActive already updated to false -- golden :1927 runs BEFORE the guard at golden :1929-1930");
-        g_simSafeLock = false;
+              "PART A2: safety lock engaged -> -1 BUT bFrontPadActive already updated to false -- golden :1927 runs BEFORE the guard at golden :1929-1930 (the lock is the REAL golden body now, engaged via Sen[SnRKCoverOpen])");
+        safeLockRelease();
 
         // A3: the employee-ID lockout, golden :1932-1933.
         bEnableEmployeeIDCheck = true;
@@ -983,22 +1058,158 @@ int main()
         // -- D7: golden's post-consumption safety swallow, WaitManualStepKey only.
         //    golden :74-92 clears bButtonManualStep (:76) and bSetupStep (:77)
         //    BEFORE testing IsSafeLockCheck() (:85), so a rejected press is GONE.
-        //    NOTE: this exercises ORDER inside ckernel.cpp; the lock's own answer
-        //    comes from this file's substrate fill (see EXCLUSION X5).
+        //AI(W906-W7-L2-substrate) 20260803: the lock is no longer a fiction.  This
+        //    used to say "the lock's own answer comes from this file's substrate
+        //    fill"; the fill is retired and the lock is the REAL translated golden
+        //    body (ported csystem.cpp; golden csystem.cpp:16461-16508), engaged
+        //    through its REAL input Sen[SnRKCoverOpen] via safeLockEngage().  The
+        //    retired stand-in had NO side effects, so D7a/D7b could not see the SW[]
+        //    writes golden actually makes -- D7a2 asserts them here, and D7c-D7g
+        //    below cover the whole branch table.
         //    Its twin WaitManualStartKey has NO safety gate at all -- golden
         //    :96-131 never calls IsSafeLockCheck -- which D7b pins.
         bButtonManualStep   = true;
         bButtonManualTStart = true;
-        g_simSafeLock       = true;
+        SW[SwSafeLock].OutValue   = false;   // golden :16481 must turn this ON
+        SW[SwRKSafeLock].OutValue = true;    // golden writes this on NO arm of the :16479 path -- must SURVIVE
+        safeLockEngage();
         bool d7Step  = WaitManualStepKey();
         CHECK(d7Step == false && bButtonManualStep == false,
               "PART D7a: safety lock engaged -> WaitManualStepKey() returns false but the press is ALREADY CONSUMED (bButtonManualStep cleared) -- golden :76 runs before golden :85, so the press is swallowed, not deferred");
+        CHECK(SW[SwSafeLock].OutValue == true && SW[SwRKSafeLock].OutValue == true,
+              "PART D7a2: the REAL IsSafeLockCheck ran and took golden csystem.cpp:16479-16482 -- SW[SwSafeLock].On() fired (:16481) while SW[SwRKSafeLock] was left ALONE (the pre-set true survives), proving neither :16475 nor :16492 ran. The retired stand-in had no side effects and could not have caught this");
         bool d7Start = WaitManualStartKey();
         CHECK(d7Start == true,
               "PART D7b: the SAME safety lock does NOT gate WaitManualStartKey -- it still returns true, because golden :96-131 contains no IsSafeLockCheck call at all");
-        g_simSafeLock       = false;
+        safeLockRelease();
         bButtonManualStep   = false;
         bButtonManualTStart = false;
+
+        // -- D7c..D7g: IsSafeLockCheck's OWN branch table, exhaustively.
+        //AI(W906-W7-L2-substrate) 20260803: NEW this pass, and the point of this
+        //    wave.  Now that golden csystem.cpp:16461-16508 has a real translated
+        //    body, the suite pins golden's ACTUAL logic rather than a stand-in.
+        //    Every expected value below was DERIVED BY READING golden :16461-16508
+        //    (the deciding line is cited in each case), NOT by running the port and
+        //    recording what it did.
+        //
+        //    THE OBSERVABLE.  Ported myswitch.cpp:76 (`On()`) and :126 (`Off()`)
+        //    both write OutValue UNCONDITIONALLY, ahead of the `Enable==false` early
+        //    return at :86 / :136 -- so SW[i].OutValue is an exact record of which
+        //    call golden made, with no switch needing to be wired to anything.  Each
+        //    case pre-sets BOTH OutValue fields so that "golden wrote false" and
+        //    "golden never touched it" stay distinguishable: wherever golden leaves a
+        //    switch alone the pre-set is TRUE and must SURVIVE.
+        //
+        //    THE INPUTS (sim seam re-read this pass -- note the polarity):
+        //      simSensorOff(x)     -> Enable==true , IsOff()==true , IsOn()==false
+        //      simSensorOn(x)      -> Enable==true , IsOff()==false, IsOn()==true
+        //      simSensorUnknown(x) -> Enable==false, and BOTH IsOff() and IsOn()
+        //                             answer false (ported mysensor.cpp:127-131 /
+        //                             :177-181 -- the tri-state).
+        {   // D7c -- golden :16473-16478.  BOTH flags true.
+            //   :16465 bSafeLockIOflag  = Sen[SnRKCoverOpen].IsOff() -> true
+            //   :16466 iControlPanelMode==1 -> :16467
+            //          bSafeLockComflag = Sen[SnRKSafeLock].IsOff()  -> true
+            //   :16471 Sen[SnRKCoverOpen].Enable -> true, enter the outer if
+            //   :16473 true && true    -> :16475 SW[SwRKSafeLock].On()
+            //                             :16476 SW[SwSafeLock].On()
+            //                             :16477 return true
+            iControlPanelMode = 1;
+            simSensorOff(SnRKCoverOpen);
+            simSensorOff(SnRKSafeLock);
+            SW[SwSafeLock].OutValue   = false;
+            SW[SwRKSafeLock].OutValue = false;
+            bool r7c = IsSafeLockCheck();
+            CHECK(r7c == true &&
+                  SW[SwRKSafeLock].OutValue == true &&
+                  SW[SwSafeLock].OutValue   == true,
+                  "PART D7c: cover-open IsOff AND (panel mode 1) safe-lock IsOff -> golden :16473 wins: BOTH SW[SwRKSafeLock].On() (:16475) and SW[SwSafeLock].On() (:16476) fire, return true (:16477)");
+        }
+        {   // D7d -- golden :16479-16483.  IO flag ONLY.  Sensors are IDENTICAL to
+            //   D7c and ONLY iControlPanelMode differs, which makes this pair a
+            //   two-sided proof of golden :16466-16469.
+            //   :16466 iControlPanelMode!=1 -> :16469 bSafeLockComflag=false
+            //   :16473 true && false   -> false
+            //   :16479 else if(true)   -> :16481 SW[SwSafeLock].On()
+            //                             :16482 return true
+            //   golden writes NOTHING to SW[SwRKSafeLock] on this path.
+            iControlPanelMode = 0;
+            simSensorOff(SnRKCoverOpen);
+            simSensorOff(SnRKSafeLock);         // left as D7c had it, ON PURPOSE
+            SW[SwSafeLock].OutValue   = false;
+            SW[SwRKSafeLock].OutValue = true;   // must SURVIVE
+            bool r7d = IsSafeLockCheck();
+            CHECK(r7d == true &&
+                  SW[SwSafeLock].OutValue   == true &&
+                  SW[SwRKSafeLock].OutValue == true,
+                  "PART D7d: sensors IDENTICAL to D7c but iControlPanelMode==0 -> golden :16469 kills bSafeLockComflag and :16479 wins instead: ONLY SW[SwSafeLock].On() (:16481), SW[SwRKSafeLock] untouched, return true (:16482)");
+        }
+        {   // D7e -- golden :16484-16488.  COM flag ONLY.  Needs bSafeLockIOflag
+            //   false while Sen[SnRKCoverOpen].Enable stays TRUE -- which is exactly
+            //   what simSensorOn gives (Enable true, IsOff() false).  simSensorUnknown
+            //   would NOT do: it would also clear Enable and take the :16496 else arm.
+            //   :16465 bSafeLockIOflag=false ; :16467 bSafeLockComflag=true
+            //   :16471 Enable true -> :16473 false -> :16479 false
+            //   :16484 else if(true)   -> :16486 SW[SwRKSafeLock].On()
+            //                             :16487 return true
+            //   golden writes NOTHING to SW[SwSafeLock] on this path.
+            iControlPanelMode = 1;
+            simSensorOn(SnRKCoverOpen);
+            simSensorOff(SnRKSafeLock);
+            SW[SwSafeLock].OutValue   = true;   // must SURVIVE
+            SW[SwRKSafeLock].OutValue = false;
+            bool r7e = IsSafeLockCheck();
+            CHECK(r7e == true &&
+                  SW[SwRKSafeLock].OutValue == true &&
+                  SW[SwSafeLock].OutValue   == true,
+                  "PART D7e: cover-open NOT IsOff but (panel mode 1) safe-lock IsOff -> golden :16484 wins: ONLY SW[SwRKSafeLock].On() (:16486), SW[SwSafeLock] untouched, return true (:16487)");
+        }
+        {   // D7f -- golden :16489-16494.  NEITHER flag, Enable still TRUE.
+            //   :16471 Enable true, :16473/:16479/:16484 all false
+            //   :16489 else -> :16491 SW[SwSafeLock].Off()
+            //                  :16492 SW[SwRKSafeLock].Off()
+            //                  :16493 return false
+            iControlPanelMode = 0;
+            simSensorOn(SnRKCoverOpen);
+            SW[SwSafeLock].OutValue   = true;
+            SW[SwRKSafeLock].OutValue = true;
+            bool r7f = IsSafeLockCheck();
+            CHECK(r7f == false &&
+                  SW[SwSafeLock].OutValue   == false &&
+                  SW[SwRKSafeLock].OutValue == false,
+                  "PART D7f: cover-open ENABLED but neither flag set -> golden :16489 else: BOTH SW[SwSafeLock].Off() (:16491) and SW[SwRKSafeLock].Off() (:16492) fire, return false (:16493)");
+        }
+        {   // D7g -- golden :16496-16500, THE arm the retired stand-in silently got
+            //   wrong: it answered false with NO side effects, but golden turns BOTH
+            //   locks OFF here.  This is also this suite's own default state
+            //   (allKeysUnknown() disables sensor 27), so it is the arm that runs on
+            //   nearly every ScanPannelKey call in this file.
+            //   iControlPanelMode is deliberately left at 1 WITH the safe-lock sensor
+            //   IsOff, so bSafeLockComflag is TRUE going in -- which proves golden
+            //   :16471's Enable gate DOMINATES the com flag rather than being OR-ed
+            //   with it (that mattered: golden's own :16471 guard was added by
+            //   "Sam 20250603 : 修正 SafeLock 失效問題").
+            //   :16471 Sen[SnRKCoverOpen].Enable==false -> :16496 else
+            //   :16498 SW[SwSafeLock].Off() ; :16499 SW[SwRKSafeLock].Off()
+            //   :16502 Tri_Temp_Machine==1 is false (ported cmydef.cpp:5506, and
+            //          nothing in this tree ever assigns it; that arm is #if 0-gated
+            //          in the port because golden TempCtrl/TriTemp.cpp is untranslated)
+            //   :16507 return false
+            iControlPanelMode = 1;
+            simSensorUnknown(SnRKCoverOpen);
+            simSensorOff(SnRKSafeLock);
+            SW[SwSafeLock].OutValue   = true;
+            SW[SwRKSafeLock].OutValue = true;
+            bool r7g = IsSafeLockCheck();
+            CHECK(r7g == false &&
+                  SW[SwSafeLock].OutValue   == false &&
+                  SW[SwRKSafeLock].OutValue == false,
+                  "PART D7g: Sen[SnRKCoverOpen].Enable==false -> golden :16496 else arm runs EVEN WITH bSafeLockComflag true: SW[SwSafeLock].Off() (:16498) and SW[SwRKSafeLock].Off() (:16499) both fire, then :16507 returns false -- these are the side effects the retired stand-in silently dropped");
+        }
+
+        iControlPanelMode = 0;              // back to the suite baseline (golden :16466 else arm)
+        safeLockRelease();
     }
 
     // =================================================================
@@ -1293,11 +1504,23 @@ int main()
     }
 
     // =================================================================
-    //  PART J -- the substrate-fill tripwire.
+    //  PART J -- InitDoArmZHome is still never reached by this suite.
+    //AI(W906-W7-L2-substrate) 20260803: RE-DERIVED, not deleted.  The old form
+    //  counted calls into this file's own empty fill; that fill is retired, so the
+    //  assertion now watches the REAL body's own effect instead.  golden
+    //  csystem.cpp:4858-4862 sets iAllArmZHomeTask=1 AND iAllArmZHomeCount=0, and
+    //  InitDoArmZHome is the ONLY writer of iAllArmZHomeCount anywhere in the ported
+    //  tree (golden's other writers all live in DoArmZHome, golden :5537-5600, still
+    //  untranslated), so a surviving sentinel is proof the function was never
+    //  entered.  Strictly stronger than the retired counter: it observes the real
+    //  golden body, and it would also catch a call made from anywhere else in the
+    //  linked image rather than only from this TU.  iAllArmZHomeTask is deliberately
+    //  NOT used as the sentinel -- InitAllProcessTask (ported csystem.cpp) also
+    //  writes it, so it has more than one writer.
     // =================================================================
-    std::printf("\n-- PART J: substrate-fill tripwire --\n");
-    CHECK(g_initZHomeHits == 0,
-          "PART J: this suite never reached the InitDoArmZHome() link-time fill, so its empty body cannot silently matter (golden csystem.cpp:4858-4862 has a two-assignment body with no ported home)");
+    std::printf("\n-- PART J: InitDoArmZHome (golden csystem.cpp:4858-4862) is never reached --\n");
+    CHECK(iAllArmZHomeCount == 23117,
+          "PART J: the iAllArmZHomeCount sentinel survived the whole suite, so InitDoArmZHome() -- now the REAL two-assignment golden body in csystem.cpp, no longer this file's empty fill -- was never entered, and its behaviour therefore cannot silently affect any assertion above");
 
     // -----------------------------------------------------------------
     //  RESTORE everything.
@@ -1340,7 +1563,14 @@ int main()
     for (int i = 0; i < 15; ++i) bInitialTestDelayStatus[i] = svDelay[i];
     clearAseFlags();
     W906_TMySucker_OffDestroy_ResetAll();
-    g_simSafeLock = false;
+    //AI(W906-W7-L2-substrate) 20260803: was `g_simSafeLock = false;`.  Sen[] (both
+    // SnRKCoverOpen and SnRKSafeLock) is already restored wholesale by the
+    // senRestoreAll() above, so nothing here may touch Sen[] again -- these are the
+    // non-sensor globals the real IsSafeLockCheck path reaches.
+    iControlPanelMode         = svControlPanelMode;
+    SW[SwSafeLock].OutValue   = svSwSafeLockOut;
+    SW[SwRKSafeLock].OutValue = svSwRKSafeLockOut;
+    iAllArmZHomeCount         = svAllArmZHomeCount;
 
     std::printf("\n=== %d PASS, %d FAIL (of %d) ===\n", g_pass, g_fail, g_pass + g_fail);
     return (g_fail == 0) ? 0 : 1;

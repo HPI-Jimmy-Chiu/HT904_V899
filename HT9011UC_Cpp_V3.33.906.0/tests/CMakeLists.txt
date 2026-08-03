@@ -2784,13 +2784,19 @@ add_test(NAME W7_L4_CopyOSTestResult COMMAND test_w7_l4_copyostestresult)
 # must re-scan the archive set so the cprod<->cpublic<->cmydef constructor
 # cross-references settle.
 #
-# NOTE for whoever lands golden csystem.cpp's IsSafeLockCheck() /
-# InitDoArmZHome() / AccelateTask: this test TU currently DEFINES all three,
-# because ckernel.cpp.obj references them and nothing in the ported tree defines
-# them (measured with nm this pass). When csystem.cpp gains any of them this
-# target will fail to link with a duplicate symbol -- that is a deliberate
-# tripwire, documented in the test file's "LINK-TIME SUBSTRATE FILL" banner.
-# Delete the fill from the test, do not weaken it.
+# AI(W906-W7-L2-substrate) 20260803: THE TRIPWIRE FIRED AS DESIGNED -- note updated.
+# This block used to say the test TU DEFINES IsSafeLockCheck() / InitDoArmZHome() /
+# AccelateTask itself, because ckernel.cpp.obj referenced them and nothing in the
+# ported tree defined them, and that landing them in csystem.cpp would break this
+# target with a duplicate symbol. That has now happened and been resolved:
+# ported csystem.cpp defines all three from golden (csystem.cpp:178-183 the real
+# two-assignment InitDoArmZHome + iAllArmZHomeCount, :402 AccelateTask=1,
+# :433 IsSafeLockCheck), the test's "LINK-TIME SUBSTRATE FILL" is DELETED, and this
+# target links with no fill at all -- which was impossible before.
+# PART D7a/D7b/D7c-D7g now drive the REAL IsSafeLockCheck through its real inputs
+# (Sen[SnRKCoverOpen], Sen[SnRKSafeLock], iControlPanelMode) instead of a boolean
+# stand-in, so the suite pins golden's actual logic including its SW[] side effects.
+# Do NOT re-add a local definition of any of the three.
 #
 # Placed ABOVE the GLOBAL TEST TIMEOUT block -- a test registered after that
 # block silently gets no timeout, which is how a wedged run goes unnoticed.

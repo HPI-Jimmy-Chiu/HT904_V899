@@ -93,6 +93,12 @@
 #include "CosFunction.h"             // CosFunction (parity)
 #include "Motor/mymotor.h"           // MOT[] (CheckMotorHome: HomeFlag / TOTAL_MOTOR)
 #include "myswitch.h"                // SW[]  (SwSocketClean.Off in the gated ladder)
+//AI(W906-W7-L2-substrate) 20260803: added for IsSafeLockCheck (golden
+// csystem.cpp:16461-16508), which reads Sen[SnRKCoverOpen] / Sen[SnRKSafeLock].
+// Before this pass csystem.cpp named Sen[] only inside comments, so the array was
+// not actually reachable in this TU.  mycylin.h documents mysensor but does not
+// include it (mycylin.h:40-41), so the include is genuinely new, not redundant.
+#include "mysensor.h"                // Sen[] (IsSafeLockCheck: SnRKCoverOpen / SnRKSafeLock)
 #include "mycylin.h"                 // Cylinder[] (tail vibration loop enables)
 #include "aHotPlateSubstrate.h"      // InArmSuck / carry kits (parity with engines)
 
@@ -144,11 +150,37 @@
 void DoAllProcess();
 
 // ---------------------------------------------------------------------------
-//  iAllArmZHomeTask -- golden cmydef (set by InitAllProcessTask :5718).  No
-//  translated home yet; the HUB owns it (the Arm-Z-home FSM that consumes it is
-//  DoArmZHome, gated/untranslated this wave).
+//  iAllArmZHomeTask -- golden csystem.cpp:4856 (set by InitAllProcessTask
+//  :5718).  The Arm-Z-home FSM that consumes it, DoArmZHome (golden :4865), is
+//  still gated/untranslated, so the HUB owns the cursor.
+//AI(W906-W7-L2-substrate) 20260803: citation corrected -- this banner used to say
+// "golden cmydef", but the definition is golden csystem.cpp:4856, right here in
+// this file's own golden.  The definition itself is unchanged (it already existed
+// in this TU, so it is NOT re-defined below -- a second definition would be a
+// link error).
 // ---------------------------------------------------------------------------
 int iAllArmZHomeTask = 1;
+//AI(W906-W7-L2-substrate) 20260803: golden csystem.cpp:4857 + :4858-4862 landed
+// here, in golden's own neighbourhood -- golden has iAllArmZHomeTask (:4856),
+// iAllArmZHomeCount (:4857) and InitDoArmZHome (:4858-4862) as three consecutive
+// lines, and iAllArmZHomeTask was already translated at exactly this spot.
+// WHY: ckernel.cpp.obj calls InitDoArmZHome() (ported ckernel.cpp:896) and NOTHING
+// in the ported tree defined it -- measured with `nm -C --undefined-only` on
+// ckernel.cpp.obj, diffed against the defined symbols of all 13
+// ht9045_*/vclcompat archives.  ckernel.cpp therefore could not link into any
+// executable; the full build was exit 0 only because ckernel.cpp lands in a STATIC
+// ARCHIVE, where an unreferenced member's undefined symbols are never resolved.
+// The REAL two-assignment body is ported, NOT an empty stub: an empty stub would
+// silently leave iAllArmZHomeTask / iAllArmZHomeCount un-armed on a bNeedArmZHome
+// START edge.  iAllArmZHomeCount is file-scope non-static exactly as golden has it
+// (golden declares it extern nowhere; its only other uses are golden's own
+// DoArmZHome at :5537-5600), so no header declaration is added.
+int iAllArmZHomeCount=0;                                                        //Steven 20220819 : 針對吸嘴歸零異常做Alarm
+void InitDoArmZHome()
+{
+    iAllArmZHomeTask=1;
+    iAllArmZHomeCount=0;                                                        //Steven 20220819 : 針對吸嘴歸零異常做Alarm
+}
 
 // =============================================================================
 //  TICK-SEQUENCE ORACLE hook (test-only; compiles OUT of production).
@@ -347,6 +379,108 @@ void InitTrayEndFunction()
     iReset=0;
     iTrayFeed=0;
 }
+
+//==============================================================================
+// 系統主程序
+//==============================================================================
+// ===========================================================================
+//  AccelateTask  --  golden csystem.cpp:16458.  The DEFINITION.
+//AI(W906-W7-L2-substrate) 20260803: landed here because ckernel.cpp.obj
+// references it (ported ckernel.cpp:444 `extern int AccelateTask;`, assigned at
+// ported ckernel.cpp:828) and NOTHING in the ported tree defined it -- measured
+// with `nm -C --undefined-only` on ckernel.cpp.obj, diffed against the defined
+// symbols of all 13 ht9045_*/vclcompat archives; AccelateTask, IsSafeLockCheck
+// and InitDoArmZHome were the only three left unresolved.  Golden's initialiser
+// (=1) is verbatim.  Placed in golden's own order/neighbourhood: golden has it at
+// :16458, i.e. after InitTrayEndFunction (:15824, immediately above) and before
+// the MainProc alive-instrumentation (:16673, immediately below), which is the
+// order this file already follows in this region.
+// NOT ported: golden :16457 `void TestPanasonicMotor();`.  It forward-declares a
+// function with no translated home that this TU never calls, so porting it would
+// add dead noise, not faithfulness.
+// ===========================================================================
+int AccelateTask=1;
+//extern bool bTesterPause;
+//------------------------------------------------------------------------------
+// ===========================================================================
+//  IsSafeLockCheck  --  golden csystem.cpp:16461-16508.  The REAL body.
+//AI(W906-W7-L2-substrate) 20260803: third of the three symbols ckernel.cpp
+// referenced with no definition anywhere in the ported tree (same nm measurement
+// as AccelateTask above).  Declared in the frozen csystem.h:119; called at ported
+// ckernel.cpp:280 (WaitManualStepKey's post-consumption safety swallow) and
+// ported ckernel.cpp:2065 (ScanPannelKey's second entry guard).
+// Translated VERBATIM, and that specifically INCLUDES the two Off() side effects
+// on the `Sen[SnRKCoverOpen].Enable == false` else path (golden :16498-16499).
+// The test-local stand-in this replaces returned a bare bool with NO side effects
+// at all, which an earlier review flagged as a future trap; the W7-L2 suite now
+// drives this body through Sen[SnRKCoverOpen] / Sen[SnRKSafeLock] /
+// iControlPanelMode and asserts the SW[] writes.
+//
+// ONE GATE, and only one: golden :16502-16506's `if(Tri_Temp_Machine==1)` arm
+// calls IsTriSafeDoor6LockCheck(), which lives in golden TempCtrl/TriTemp.cpp:469
+// (declared golden TempCtrl/TriTemp.h:17).  The ported tree has NO TempCtrl
+// directory at all, so that function has neither a definition nor a declaration
+// here, and calling it would merely trade these three undefined symbols for a
+// fourth -- i.e. it would not fix the link failure this wave exists to fix.
+// Gated `#if 0 // TODO(W7-TriTemp)` with golden's body quoted verbatim inside.
+// BEHAVIOUR-NEUTRAL in this tree, verified rather than assumed: ported
+// cmydef.cpp:5506 defines `int Tri_Temp_Machine=0;` and an exhaustive scan of the
+// ported tree finds NO assignment to it anywhere (every use is a read, e.g.
+// cprod.cpp:1881), so the gated arm is unreachable today and the gated and
+// un-gated forms both fall through to golden :16507 `return false;`.  Un-gate it
+// in the same wave that translates TempCtrl/TriTemp.cpp.
+// ===========================================================================
+bool IsSafeLockCheck()
+{
+    bool bSafeLockIOflag=false, bSafeLockComflag=false;                         //KenHsieh 20220105 : 修改SafeLock判斷方式
+
+    bSafeLockIOflag=Sen[SnRKCoverOpen].IsOff();
+    if(iControlPanelMode==1)                                                    //KenHsieh 20220105 : 修改SafeLock判斷方式
+        bSafeLockComflag=Sen[SnRKSafeLock].IsOff();                             //KenHsieh 20211228 : 區分實體IO與通訊面板
+    else
+        bSafeLockComflag=false;
+
+    if(Sen[SnRKCoverOpen].Enable)                                               //Sam 20250603 : 修正 SafeLock 失效問題
+    {
+        if(bSafeLockIOflag && bSafeLockComflag)                                 //KenHsieh 20220105 : 修改SafeLock判斷方式
+        {
+            SW[SwRKSafeLock].On();                                              //KenHsieh 20211228 : 區分實體IO與通訊面板
+            SW[SwSafeLock].On();
+            return true;
+        }
+        else if(bSafeLockIOflag)
+        {
+            SW[SwSafeLock].On();
+            return true;
+        }
+        else if(bSafeLockComflag)
+        {
+            SW[SwRKSafeLock].On();                                              //KenHsieh 20211228 : 區分實體IO與通訊面板
+            return true;
+        }
+        else
+        {
+            SW[SwSafeLock].Off();
+            SW[SwRKSafeLock].Off();                                             //KenHsieh 20211228 : 區分實體IO與通訊面板
+            return false;
+        }
+    }
+    else
+    {
+        SW[SwSafeLock].Off();
+        SW[SwRKSafeLock].Off();                                                 //KenHsieh 20211228 : 區分實體IO與通訊面板
+    }
+
+#if 0   // TODO(W7-TriTemp): golden csystem.cpp:16502-16506. IsTriSafeDoor6LockCheck() lives in golden TempCtrl/TriTemp.cpp:469 (decl TempCtrl/TriTemp.h:17); the ported tree has no TempCtrl directory, so the symbol does not exist here. Unreachable today anyway -- Tri_Temp_Machine is 0 (ported cmydef.cpp:5506) and is never assigned anywhere in the ported tree -- so gating it changes nothing observable. Un-gate with TriTemp.cpp.
+    if(Tri_Temp_Machine==1)                                                     //Ztex 2023.04.19 Add HT-1032 TriTemp Function
+    {
+        if(IsTriSafeDoor6LockCheck())                                           //檢查SafeDoor 6
+            return true;
+    }
+#endif
+    return false;
+}
+//------------------------------------------------------------------------------
 
 // ===========================================================================
 //  MainProc alive-instrumentation  -- golden csystem.cpp:16673-16709.  VERBATIM.
