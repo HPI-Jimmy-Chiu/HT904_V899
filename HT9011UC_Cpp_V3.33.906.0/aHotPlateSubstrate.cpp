@@ -45,6 +45,34 @@
 //    now delivered by 2 separate hand-off translate units, completing 20/20.
 #include "BarCode/BarCode_Shuttle2_ScanRemainder1.h" // BarCode_Sh2_DoBarcodeScanInShuttle_2
 #include "BarCode/BarCode_Shuttle2_ScanRemainder2.h" // BarCode_Sh2_DoShuttleFloatCheck_2
+//AI(W906-W7-L2) 20260803: TMySucker::Suck() below reads LastSet.iRealDummy to
+// reproduce golden's DUMMY early-out (MyKitSuck.cpp:2167).  LastSet already
+// arrives in this TU transitively -- BarCode/BarCode_Shuttle1_Scan.h (included
+// at :39) includes canary_support.h at its own line 85 -- so this line is a
+// literal preprocessing no-op today (guard canary_supportH is already defined).
+// It is added only so the dependency survives someone dropping that BarCode
+// include, and placed AFTER the BarCode block so include ORDER is unchanged.
+#include "canary_support.h"                   // LAST_GENERAL_SET LastSet (.iRealDummy)
+
+//==============================================================================
+// AI(W906-W7-L2) 20260803: grid-wide half of the TMySucker::OffDestroy()
+// observability seam (declared aHotPlateSubstrate.h, "OBSERVABILITY SEAM"
+// block).  Defined BEFORE the KitSuck grid objects below on purpose: both
+// initialisers are constant expressions, so these two are CONSTANT-initialised
+// and are therefore already live when the grids' dynamic initialisation (the
+// TMySucker ctor, which stamps itself with the epoch) runs -- no static
+// initialisation-order hazard, regardless of link order.
+//==============================================================================
+unsigned long W906_TMySucker_OffDestroyEpoch = 1;   // 0 is reserved for "never stamped"
+long          W906_TMySucker_OffDestroyTotal = 0;
+
+void W906_TMySucker_OffDestroy_ResetAll()
+{
+    // Bump, never re-zero: a nozzle whose stamp lags the epoch reads as 0, so one
+    // increment retires every per-nozzle count in the tree in O(1).
+    ++W906_TMySucker_OffDestroyEpoch;
+    W906_TMySucker_OffDestroyTotal = 0;
+}
 
 //==============================================================================
 //  (a) KitSuck grid objects (golden MyKitSuck.h:357-366) -- offline instances
@@ -67,24 +95,246 @@ TMyKitSuck BTestSuck;
 // ---- TMySucker bodies -------------------------------------------------------
 //  Offline: no real vacuum line.  Suck() never reports "finished" (the leaves
 //  treat that as "still building vacuum"); On()/Off() are no-ops.
-bool TMySucker::Suck()    { return false; }
-bool TMySucker::Destroy() { return false; }   // W6.2b: offline destroy never "finished" -> SM holds
-void TMySucker::On()      {}
-void TMySucker::Off()     {}
+//AI(W906-W7-L2) 20260803: the "On()/Off() are no-ops" and (below) the
+// "OnSuck/OnDestroy/OffDestroy/Normal are solenoid no-ops" / "Reset() ... no-op"
+// claims in the two pre-existing banners are SUPERSEDED by this wave and kept
+// only as history.  Still true: nothing here touches hardware.  Now also true:
+// the vacuum-ON line is modelled by an in-object latch (W906_SimVacuumOnBit) so
+// GetOnBit() can answer, Normal() composes the way golden composes it
+// (MyKitSuck.cpp:2143-2149), Reset() carries golden's real body
+// (MyKitSuck.cpp:1855-1860), and OffDestroy() keeps a call count so
+// StopAllDestroy (golden ckernel.cpp:189-209) stops being untestable.
+//AI(W906-W7-L2) 20260803: Suck() now MAINTAINS the vacuum-ON latch, because it
+// and Destroy() are the DOMINANT drivers of that output bit -- measured in this
+// tree: `Suck[i][j].Suck()` 123 call sites, `.Destroy()` 140, versus `.On()` 31
+// and `.Off()` 25.  Leaving these two latch-blind made GetOnBit() answer false
+// on the paths that matter and silently flipped the ckernel "vacuum solenoid
+// still ON but the site holds no IC" guard onto its no-residual-vacuum arm.
+// RETURN VALUE DELIBERATELY UNCHANGED: offline GetStatus() is hard-false, so
+// golden could not reach its own `return true` arms (:2200/:2324/:2341/:2359)
+// either -- only the latch write is added.
+// GOLDEN, READ THIS PASS (MyKitSuck.cpp:2161-2360):
+//   :2167-2169 `if(LastSet.iRealDummy==DUMMY || LastSet.iRealDummy==HAS_TRAY ||
+//              (LastSet.iRealDummy==HAS_TRAY && SuckerName.AnsiCompare(
+//              "CatchSuck")!=0))` -- the third disjunct is a strict SUBSET of the
+//              second, so the whole test reduces to `iRealDummy != REALLY` and is
+//              SuckerName-FREE.  That is why this early-out IS exactly
+//              reproducible here even though the shim has no SuckerName.
+//   :2171-2205 the dummy branch.  Its only IO call is DoOffIO(false) (:2183) --
+//              the DESTROY line.  It NEVER writes the vacuum-ON bit.
+//   :2207      `if(OnTask!=200)`  -- reproduced; OnTask is a real member here.
+//   :2210      `DoOnIO(true);` (//開啟真空) -- the latch SET this repair adds.
+//   :2230/:2283 `Normal();` on the retry-exhausted arms -> OffSuck() (:2145) ->
+//              DoOnIO(false) (:2102): those two arms CLEAR the bit.
+// NOT REPRODUCED -- a real hole, not a tidy one: this body returns false
+// unconditionally and never advances OnTask, so it can never reach :2230/:2283.
+// After a retry-exhausted suck golden leaves the bit CLEAR while this shim
+// leaves it SET; a test that needs that arm must call Normal() itself.
+// SIM-DEFAULT WARNING: canary_support.cpp:26 is `LAST_GENERAL_SET LastSet = {0}`
+// and DUMMY==0 (cmydef.cpp:267), so out of the box iRealDummy==DUMMY and this
+// function takes the early-out -- which is exactly what golden does.  A test
+// that wants the bit SET must first set LastSet.iRealDummy=REALLY (==2).
+bool TMySucker::Suck()
+{
+    //AI(W906-W7-L2) 20260803: golden MyKitSuck.cpp:2166 `Error=false;` -- an
+    // UNCONDITIONAL clear that sits BEFORE the dummy gate at :2167, so it runs on
+    // every call including the dummy early-out.  Restored after an independent
+    // re-audit found the first landing had dropped it: without it the tree's
+    // dominant caller idiom `if(Suck() || Error)` turns from self-clearing into
+    // sticky, and a nozzle that errored once would report error forever.
+    Error = false;
+    if(LastSet.iRealDummy == DUMMY || LastSet.iRealDummy == HAS_TRAY)
+        return false;                   // golden MyKitSuck.cpp:2167-2205
+    if(OnTask != 200)
+        W906_SimVacuumOnBit = true;     // golden MyKitSuck.cpp:2207-2210
+    return false;                       // UNCHANGED: offline suck never "finished"
+}
+//AI(W906-W7-L2) 20260803: golden Destroy() (MyKitSuck.cpp:2362-2440+) writes the
+// vacuum-ON bit on four paths and EVERY ONE OF THEM CLEARS IT -- :2395 (dummy
+// branch, `DoOnIO(false)`), :2436 (mainline `DoOnIO(false)`, under the :2434
+// `if(OffTask!=300)` guard), plus :2507 `Normal()` and :2535/:2581 `OffSuck()`,
+// which reach DoOnIO(false) through :2145/:2102.  One guarded clear therefore
+// matches golden on every path this body can reach, and that is also why NO
+// dummy early-out is attempted: golden's is `iRealDummy==DUMMY ||
+// (iRealDummy==HAS_TRAY && SuckerName.AnsiCompare("CatchSuck")!=0)`
+// (:2381-2382), and the clear INSIDE it (:2392-2396) is gated on SuckerName
+// containing "InArmSuck"/"OutArmSuck" -- so returning early on DUMMY would
+// WRONGLY skip the clear for exactly the arm nozzles that are the bulk of this
+// tree's callers.  KNOWN GAP: for a non-arm nozzle in DUMMY/HAS_TRAY golden
+// leaves the bit alone and this clears it.  Reaching that divergence needs the
+// bit already set, which needs an earlier REALLY-mode Suck()/On() -- a mixed-
+// mode sequence.  Recorded rather than silently absorbed.
+// SECOND, SMALLER DUMMY-MODE DIVERGENCE, disclosed after re-audit: golden's
+// dummy-branch clear is reached only on `case 1` of `switch(OffTask)`
+// (:2384-2398); :2399 case 2 and :2412 case 50 write no ON bit at all.  This
+// body clears on every call with OffTask!=300, with no case discrimination.
+// Inert in this tree today because the offline OffTask never advances off 1,
+// but it is a divergence, not an equivalence.
+bool TMySucker::Destroy()
+{
+    //AI(W906-W7-L2) 20260803: golden MyKitSuck.cpp:2367 `Error=false;` -- same
+    // unconditional pre-gate clear as Suck() (:2166), same restoration reason.
+    Error = false;
+    if(OffTask != 300)
+        W906_SimVacuumOnBit = false;    // golden MyKitSuck.cpp:2434-2436
+    return false;   // W6.2b: offline destroy never "finished" -> SM holds
+}
+//AI(W906-W7-L2) 20260803: On()/Off() latch the LOGICAL vacuum-ON solenoid state
+// so GetOnBit() has something real to read back, mirroring golden's
+// DoOnIO(true)/DoOnIO(false) at MyKitSuck.cpp:2129/2137.
+// KNOWN GAP -- AND THE REASON GIVEN FOR IT EARLIER TODAY WAS WRONG, corrected
+// here in place.  Golden On() early-outs on `LastSet.iRealDummy==DUMMY`
+// (:2121-2122) and on `bLoadInarmAutoHigh==false && HAS_TRAY &&
+// SuckerName.AnsiCompare("CatchSuck")!=0` (:2124-2125); golden OnSuck() early-
+// outs on the same pair (:2091-2094); golden Off() additionally sets
+// Status=false (:2136) and drives the destroy line ON (:2138).  The earlier
+// revision of this comment blamed the missing DUMMY gate on LastSet "living in
+// canary_support.h, owned by another agent this wave".  That is NOT the reason:
+// LastSet is in scope in this TU and Suck() above now uses it.  The real reason
+// is CHARTER -- this repair pass was scoped to Suck()/Destroy(), so On()/OnSuck()
+// are left as they are and the mismatch is reported rather than fixed blind.
+// CONSEQUENCE, STATED PLAINLY: under the sim default iRealDummy==DUMMY, Suck()
+// leaves the bit clear (faithful) while On()/OnSuck() set it (unfaithful).  The
+// fix is the same one-line `if(LastSet.iRealDummy==DUMMY) return;` guard and
+// belongs to whoever lands the real MyKitSuck.  Status and a destroy-line model
+// remain genuinely absent from this shim's surface.
+void TMySucker::On()      { W906_SimVacuumOnBit = true;  }   //AI(W906-W7-L2) 20260803: golden MyKitSuck.cpp:2129 DoOnIO(true)
+void TMySucker::Off()     { W906_SimVacuumOnBit = false; }   //AI(W906-W7-L2) 20260803: golden MyKitSuck.cpp:2137 DoOnIO(false)
 // -- W6.2c ADD: out-arm-touched TMySucker surface (golden MyKitSuck.h) ---------
 //    Offline: no real vacuum line.  OnSuck/OnDestroy/OffDestroy/Normal are
 //    solenoid no-ops; GetStatus() reports "no IC held" (false) so the out-arm
 //    destroy-confirm SM (CheckOutArmDestroyActive case 300) takes its
 //    "destroy finished" branch deterministically.
-void TMySucker::OnSuck()     {}
+void TMySucker::OnSuck()     { W906_SimVacuumOnBit = true; } //AI(W906-W7-L2) 20260803: golden MyKitSuck.cpp:2096 DoOnIO(true)
 void TMySucker::OnDestroy()  {}
-void TMySucker::OffDestroy() {}
-void TMySucker::Normal()     {}
+//AI(W906-W7-L2) 20260803: OffDestroy is StopAllDestroy's ENTIRE payload (golden
+// ckernel.cpp:189-209 calls this and nothing else), and offline it drives no
+// solenoid -- so without a counter a no-op StopAllDestroy and a faithful one are
+// indistinguishable and any test over it is tautological.  The count is the
+// observable.  Epoch-stamped so W906_TMySucker_OffDestroy_ResetAll() isolates
+// tests in O(1) (see the header block for the design note).
+void TMySucker::OffDestroy()
+{
+    if(W906_OffDestroyStamp != W906_TMySucker_OffDestroyEpoch)
+    {
+        W906_OffDestroyStamp = W906_TMySucker_OffDestroyEpoch;
+        W906_OffDestroyRaw   = 0;
+    }
+    ++W906_OffDestroyRaw;
+    ++W906_TMySucker_OffDestroyTotal;
+}
+//AI(W906-W7-L2) 20260803: Normal() is COMPOSED exactly as golden composes it --
+// golden MyKitSuck.cpp:2143-2149 is `OffSuck(); OffDestroy(); bSuckOK=true;
+// bDestroyOK=true;`.  OffSuck's effect is DoOnIO(false) (MyKitSuck.cpp:2102), so
+// it is inlined here as the latch clear (OffSuck itself is not part of the shim's
+// declared surface).  IMPORTANT for anyone reading the counter: because golden's
+// Normal() really does call OffDestroy(), so does this one -- ScanSystemSensor's
+// Normal() calls (golden ckernel.cpp:555, 557, 580, 587, 599, 606, 637, 644, 656,
+// 663) legitimately bump the count too.  StopAllDestroy never calls Normal(), so
+// a StopAllDestroy-only test is unaffected.
+void TMySucker::Normal()
+{
+    W906_SimVacuumOnBit = false;   // == golden OffSuck() -> DoOnIO(false), MyKitSuck.cpp:2102
+    OffDestroy();                  // golden MyKitSuck.cpp:2146
+}
 bool TMySucker::GetStatus()  { return false; }   // offline: vacuum sensor reads "no IC"
 // -- W6.3 ADD: tray-arm-touched TMySucker surface (golden MyKitSuck.h) ----------
 //    Offline: Reset() clears the suck/destroy task (no-op over the Sim HAL).
 //    Enable/OnAlarmTime are plain data members (default-init below by the object).
-void TMySucker::Reset()      {}
+//AI(W906-W7-L2) 20260803: Reset() is now golden's REAL body (MyKitSuck.cpp:1855-
+// 1860) instead of an empty one -- it was only empty because ReStart() did not
+// exist in the shim yet.  golden also clears iNozzleEvent (:1859); that member is
+// not part of this shim's surface, so that one line is the only omission.
+// SCOPE: THIS IS AN EXPANSION BEYOND THE W7-L2 RECON CHARTER.  That charter
+// covered four members (VacuumOnTime/VacuumOffTime/ReStart/GetOnBit + the
+// OffDestroy seam); rewriting Reset() from `{}` to golden's body was NOT in it
+// and was taken on this front's own judgement.  It is disclosed, not smuggled:
+// the justification is the Error-latch argument below, and the thing that
+// actually VALIDATES it is the integrator's full ctest run over the whole wave,
+// not any reasoning written here.  If that run is red, start at this function.
+// WHY IT STANDS -- CORRECTED 20260803 AFTER RE-AUDIT.  An earlier revision of
+// this comment defended the change with a bug-FIX argument: that engines latch
+// `...Suck[i][j].Error=true` (it cited ainarm9045_2x4_16.cpp:1348,
+// ainarm_SearchPickPlate.cpp:272/339, aoutarm9045_1x1_1.cpp:535) and that an
+// empty Reset() left the latch permanently unclearable.  THAT ARGUMENT WAS
+// FALSE and is retracted here rather than stacked over: all four cited sites
+// sit inside `#ifdef SOFT_SIMULTE`, which this build does not define, so they
+// are dead code; and the tree already contains many live `Error=false` clears,
+// so the latch was never unclearable.
+// The change stands on FIDELITY alone, which needs no argument: golden's whole
+// Reset() body is three statements (MyKitSuck.cpp:1855-1860, read cp950 this
+// pass) -- `ReStart();` :1857, `Error=false;` :1858, `iNozzleEvent=0;` :1859.
+// Two of the three are reproduced below.  The third is NOT: `iNozzleEvent` has
+// no member on this offline TMySucker (golden MyKitSuck.h; the shim's member
+// list is aHotPlateSubstrate.h:106-313), so it is an honest omission, not an
+// oversight.  Adding it would mean adding a field nothing offline reads.
+// Callers affected -- ALL EIGHT were OPENED AND READ during this repair pass,
+// and each is a bare `....Reset();` statement whose behaviour this change alters:
+//   acatchtray.cpp:3347            `CatchTraySuck.Suck[0][0].Reset();`
+//   atester_32Site.cpp:3886/3887   `FTestSuck...` / `BTestSuck.Suck[i][j].Reset();`
+//   aTester_Front.cpp:972, :1413   `FTestSuck.Suck[i][j].Reset();`
+//   aTester_Rear.cpp:1052, :1461   `BTestSuck.Suck[i][j].Reset();`
+//   AutoClean/AutoClean.cpp:4229   `InArmSuck.Suck[i][j].Reset();`
+// If a suite run shows fallout, deleting ONLY the
+// `Error = false;` line below restores the previous (unfaithful) behaviour while
+// keeping ReStart() -- but the correct resolution is to fix the test.
+void TMySucker::Reset()
+{
+    ReStart();          // golden MyKitSuck.cpp:1857
+    Error = false;      // golden MyKitSuck.cpp:1858
+}
+
+//AI(W906-W7-L2) 20260803: golden MyKitSuck.cpp:1849-1853 VERBATIM -- golden's own
+// body touches no hardware, only the two task cursors, so this is a faithful
+// translation rather than an offline approximation.  Consumed by golden
+// ckernel.cpp:552-553 (In/OutArmSuck) and :570-571 (F/BTestSuck).
+void TMySucker::ReStart()
+{
+    OnTask  = 1;
+    OffTask = 1;
+}
+
+//AI(W906-W7-L2) 20260803: golden MyKitSuck.cpp:1862-1888 collapsed onto the
+// offline latch.  Golden's two IO-family branches (:1867-1877) both compute the
+// SAME logical answer -- the raw output bit -- and :1879-1882 then de-inverts it
+// by OnType; since DoOnIO applied that same inversion when the bit was written
+// (:1957 vs :1988), the logical value round-trips OnType-free.  The `OnEnable`
+// gate is golden's own (:1884-1887) and is reproduced exactly: an unwired vacuum
+// line answers false without consulting anything.
+bool TMySucker::GetOnBit()
+{
+    if(OnEnable == false)
+        return false;              // golden MyKitSuck.cpp:1884-1887
+    return W906_SimVacuumOnBit;    // golden MyKitSuck.cpp:1870/1876 readback, :1879-1882 de-inverted
+}
+
+//AI(W906-W7-L2) 20260803: epoch-aware reader -- a count stamped with a retired
+// generation reads as 0, which is what makes ResetAll O(1) and leak-proof.
+int TMySucker::W906_GetOffDestroyCount() const
+{
+    if(W906_OffDestroyStamp != W906_TMySucker_OffDestroyEpoch)
+        return 0;
+    return W906_OffDestroyRaw;
+}
+
+//AI(W906-W7-L2) 20260803: per-nozzle isolation (the grid-wide form is
+// W906_TMySucker_OffDestroy_ResetAll).  Note it does NOT touch the tree-wide
+// total, because the total is only meaningful across a whole ResetAll epoch.
+void TMySucker::W906_ResetOffDestroyCount()
+{
+    W906_OffDestroyStamp = W906_TMySucker_OffDestroyEpoch;
+    W906_OffDestroyRaw   = 0;
+}
+
+//AI(W906-W7-L2) 20260803: the offline TMySucker ctor USED TO LIVE HERE and was
+// moved INLINE into aHotPlateSubstrate.h during this same wave.  Reason, kept at
+// the old site so nobody moves it back: TMySucker had no user-declared ctor
+// before this wave, so a TU could instantiate one without linking this .cpp.
+// An out-of-line ctor made this .cpp a link requirement for every such TU, and
+// the wave's first full build failed on exactly that -- tests/
+// test_MyProductionRecord.cpp -> `undefined reference to TMySucker::TMySucker()`.
+// See the header for the body and for why the stamp seeds with 0 rather than
+// with W906_TMySucker_OffDestroyEpoch (which is defined in THIS file).
 
 // ---- W6.4 ADD: TMyKitSuck ctor (homes the tester decode grid) ----------------
 //  Offline-safe init.  The golden TMyKitSuck has many more members; we only home

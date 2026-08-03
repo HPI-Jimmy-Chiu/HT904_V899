@@ -587,6 +587,22 @@ add_library(ht9045_forms STATIC
     forms/fOCR.cpp
     forms/fProductionInfo.cpp
     forms/fFixAICCD.cpp
+    # AI(W906-W7-L2) 20260803: 5 new form stand-ins landed by the W7-L2 substrate
+    # pass, in front of the golden ckernel.cpp translation.  All five are FIRST
+    # homes -- none of these form types existed anywhere in this tree before.
+    #   fShuttleMove -- WaitManualRetryKey (golden ckernel.cpp:133-149) only.
+    #   fHome / fSetup / fRotate / fAOI -- ScanSystemSensor (golden :359-691),
+    #   which derefs 7 distinct form globals across 15 live sites.  fAOI's global
+    #   is deliberately initialised to NULL: golden null-checks it at
+    #   ckernel.cpp:502 (`if(FrmAOI!=NULL)`), so a null pointer IS the faithful
+    #   offline state and the class exists only so the guarded block compiles.
+    # Same layer as their siblings above (plain-data facades over ht9045_globals,
+    # no upward edge), so no new link dependency is introduced.
+    forms/fShuttleMove.cpp
+    forms/fHome.cpp
+    forms/fSetup.cpp
+    forms/fRotate.cpp
+    forms/fAOI.cpp
     # AI(W906-W7-F0-fix) 20260728: MOVED here from ht9045_sm -- the 3 AMR-mode
     # predicates forms/fAGV.cpp delegates to.  See the "NO UNDECLARED BACK-EDGE"
     # block above.  File content unchanged (zero behaviour change: same code,
@@ -1635,6 +1651,16 @@ add_library(ht9045_sm STATIC
     BarCode/BarCode_Shuttle2_ScanRemainder1.cpp
     BarCode/BarCode_Shuttle2_ScanRemainder2.cpp
     BarCode/BarCode_8CCD_Glue.cpp
+    # --- W7-L2 substrate (2026-08-03): free-function seams that golden's
+    #     ScanSystemSensor (ckernel.cpp:359-691) calls and that have NO ported
+    #     home of their own -- SetWorkParameter (called golden ckernel.cpp:371,
+    #     declared golden cinitial.h:17) and SetSuckRetryCount (called :496).
+    #     Correct target: ckernel's substrate (Sen[]/SW[]/MOT[]/Cylinder[]/
+    #     canary_support/FormsFacade/csystem.h) is exactly what ht9045_sm
+    #     already carries, so no new link dependency is introduced.
+    #     ckernel.cpp ITSELF is NOT here yet -- it lands in the W7-L2
+    #     translation wave that follows this substrate pass.
+    ckernel_shims.cpp
 )
 
 target_include_directories(ht9045_sm PUBLIC

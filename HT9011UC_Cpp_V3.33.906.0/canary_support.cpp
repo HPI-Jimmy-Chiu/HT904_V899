@@ -13,6 +13,10 @@
 #include "cmydef.h"     // K_RETRY (extern const int)
 #include "cpublic.h"    // RespondASECom decl (gated body in cpublic.cpp)
 #include <cstdio>
+//AI(W906-W7-L2) 20260803: <vector> backs the alarm FIFO at the bottom of this
+// file.  .cpp-only cost on purpose -- canary_support.h is included by 123 TUs
+// and stays free of new includes.
+#include <vector>
 
 // ---------------------------------------------------------------------------
 //  LastSet  (MINIMAL shim)
@@ -162,4 +166,413 @@ bool RespondASECom(AnsiString /*S1*/)
     }
 #endif
     return false;   // offline / non-ASE-Kaohsiung: faithful false path
+}
+
+// =============================================================================
+//  AI(W906-W7-L2) 20260803: SECTION 5 -- golden note.h free functions.
+//  Rationale and per-function route (REAL vs RECORDING SIM) in canary_support.h
+//  section 5.  note.cpp is not ported; these had no home anywhere in the tree.
+// =============================================================================
+
+// ---------------------------------------------------------------------------
+//  MotorIndexToJamCode -- golden note.h:468, body golden note.cpp:4291-4296.
+//  REAL TRANSLATION, verbatim: the golden body is exactly these three
+//  statements, VCL-free and side-effect-free.
+//  Yields e.g. MotNo=4 -> "WAR240004", which is the code the motor CCW/sensor
+//  alarm family is known by.
+// ---------------------------------------------------------------------------
+AnsiString MotorIndexToJamCode(int MotNo)
+{
+    AnsiString S;
+    S.sprintf("WAR24%03d", MotNo);
+    return S;
+}
+
+// ---------------------------------------------------------------------------
+//  CylinderIndexToJamCode -- golden note.h:470, body golden note.cpp:4156-4284.
+//  //Steven 20231127 : 氣缸Alarm改成自動生成, 分類31
+//  REAL TRANSLATION of the mapper.  All 20 branches, the C_*/MM* constants and
+//  the final `S.sprintf("JAM%d", Code)` are golden's verbatim.
+//
+//  ONE DOCUMENTED OMISSION -- golden note.cpp:4161-4162 opens with
+//      for(int i=0; i<6; i++)
+//          fNote->Select[i]=false;
+//  The ported TfNote (forms/fNote.h) carries no `Select[]` member and this front
+//  does not own that file.  The field is the note DIALOG's button pre-clear
+//  (golden note.h:396 `bool Select[10];`) -- note golden's own loop bound is 6
+//  while the array is 10.  Nothing in the caller reads it: golden ProcessAlarm
+//  (ckernel.cpp:2522-2523) consumes ONLY the returned string and *Pos, and both
+//  are faithful here.  Re-add the loop in one line if forms/fNote.h ever gains
+//  Select[]; see this front's report.
+//
+//  *Pos is unconditionally written -- golden's terminal else (:4277-4280,
+//  //ChungHung 20140731 add fix Cylinder make UnknowMessage) defaults it to
+//  MMSystem -- so callers may pass the address of an uninitialised int, as
+//  golden ckernel.cpp:2505/2522 does.
+// ---------------------------------------------------------------------------
+AnsiString CylinderIndexToJamCode(int Code, int *Pos)
+{
+    int CylinderIndex=Code-31000;
+    AnsiString S;
+
+    if(CylinderIndex==C_TrayX_UpDown        ||
+       CylinderIndex==C_CatchTray_FixOn     ||                                  //ChungHung 20140624 add AutoRetest catch Tray use 2 Output
+       CylinderIndex==C_TurnTrayArm         ||                                  //ChungHung 20140701 add AutoRetest Turn Tray Arm
+       CylinderIndex==C_CatchTray_FixOff    ||
+       CylinderIndex==C_CatchTray_Fix)
+    {
+        *Pos=MTrayX;
+    }
+    else if(CylinderIndex==C_TrayY_Fixer    ||
+            CylinderIndex==C_LoaderEdgePush)
+    {
+        *Pos=MMTrayY;
+    }
+    else if(CylinderIndex==C_Load_Up        ||
+            CylinderIndex==C_Load_Middle    ||
+            CylinderIndex==C_TrayZ_Selector)
+    {
+        *Pos=MMTrayY_Car;
+    }
+    else if(CylinderIndex==C_Empty_Fix)
+    {
+        *Pos=MMEmpty;
+    }
+    else if(CylinderIndex==C_Empty_Up           ||
+            CylinderIndex==C_Empty_Middle       ||
+            CylinderIndex==C_EmptyLoaderZ_Select)
+    {
+        *Pos=MMEmpty_Car;
+    }
+    else if(CylinderIndex==C_Auto1EdgePush  ||
+            CylinderIndex==C_Auto1Side_Fixer)
+    {
+        *Pos=MMAuto1;
+    }
+    else if(CylinderIndex==C_Auto1_Selector     ||
+            CylinderIndex==C_Auto1_Up           ||                              //Steven 20140409 : Auto Retest
+            CylinderIndex==C_Auto1LoaderZ_Select)                               //Steven 20140409 : Auto Retest
+    {
+        *Pos=MMAuto1_Car;
+    }
+    else if(CylinderIndex==C_Auto2Side_Fixer    ||
+            CylinderIndex==C_Auto2EdgePush      )
+    {
+        *Pos=MMAuto2;
+    }
+    else if(CylinderIndex==C_Auto2_Selector     ||
+            CylinderIndex==C_Auto2_Up           ||                              //Steven 20140409 : Auto Retest
+            CylinderIndex==C_Auto2LoaderZ_Select)                               //Steven 20140409 : Auto Retest
+    {
+        *Pos=MMAuto2_Car;
+    }
+    else if(CylinderIndex==C_Auto3Side_Fixer    ||
+            CylinderIndex==C_Auto3EdgePush      )
+    {
+        *Pos=MMAuto3;
+    }
+    else if(CylinderIndex==C_Auto3_Selector     ||
+            CylinderIndex==C_Auto3_Up           ||                              //Steven 20140409 : Auto Retest
+            CylinderIndex==C_Auto3LoaderZ_Select)                               //Steven 20140409 : Auto Retest
+    {
+        *Pos=MMAuto3_Car;
+    }
+    else if(CylinderIndex==C_Auto4EdgePush  ||
+            CylinderIndex==C_Auto4Side_Fixer)
+    {
+        *Pos=MMAuto4;
+    }
+    else if(CylinderIndex==C_Auto4_Selector     ||
+            CylinderIndex==C_Auto4_Up           ||
+            CylinderIndex==C_Auto4LoaderZ_Select)
+    {
+        *Pos=MMAuto4_Car;
+    }
+    else if(CylinderIndex==C_Auto5EdgePush  ||
+            CylinderIndex==C_Auto5Side_Fixer)
+    {
+        *Pos=MMAuto5;
+    }
+    else if(CylinderIndex==C_Auto5_Selector     ||
+            CylinderIndex==C_Auto5_Up           ||
+            CylinderIndex==C_Auto5LoaderZ_Select)
+    {
+        *Pos=MMAuto5_Car;
+    }
+    else if(CylinderIndex==C_Auto6EdgePush  ||
+            CylinderIndex==C_Auto6Side_Fixer)
+    {
+        *Pos=MMAuto6;
+    }
+    else if(CylinderIndex==C_Auto6_Selector     ||
+            CylinderIndex==C_Auto6_Up           ||
+            CylinderIndex==C_Auto6LoaderZ_Select)
+    {
+        *Pos=MMAuto6_Car;
+    }
+    else if(CylinderIndex==C_Color_Fix)
+    {
+        *Pos=MMColor;
+    }
+    else if(CylinderIndex==C_Color_Up           ||
+            CylinderIndex==C_Color_Middle       ||
+            CylinderIndex==C_ColorLoaderZ_Select)
+    {
+        *Pos=MMColor_Car;
+    }
+    else if(CylinderIndex==C_TesterSidePush)                                    //Richard 20220321 : 測試Side Push
+    {
+        *Pos=MMSystem;
+    }
+    else if(CylinderIndex==C_FixTray_FullPlace)
+    {
+        *Pos=MManualTray3;
+    }
+    else                                                                        //ChungHung 20140731 add fix Cylinder make UnknowMessage
+    {
+        *Pos=MMSystem;
+    }
+
+    S.sprintf("JAM%d", Code);
+    return S;
+}
+
+// ---------------------------------------------------------------------------
+//  ShowMotorErrorMessage recorder state (golden note.h:467).
+// ---------------------------------------------------------------------------
+AnsiString W906_ShowMotorErrorMessage_LastCode;         // default-constructs to ""
+int        W906_ShowMotorErrorMessage_LastMotorAlarmNo = 0;
+AnsiString W906_ShowMotorErrorMessage_LastErrPart;      // default-constructs to ""
+int        W906_ShowMotorErrorMessage_Count            = 0;
+void W906_ShowMotorErrorMessage_Reset()
+{
+    W906_ShowMotorErrorMessage_LastCode         = "";
+    W906_ShowMotorErrorMessage_LastMotorAlarmNo = 0;
+    W906_ShowMotorErrorMessage_LastErrPart      = "";
+    W906_ShowMotorErrorMessage_Count            = 0;
+}
+
+// ---------------------------------------------------------------------------
+//  ShowMotorErrorMessage -- golden note.h:467, body golden note.cpp:1052+.
+//  RECORDING SIM, but NOT a bare no-op.  Three things are reproduced faithfully
+//  because they are cheap globals this tree already has (all four declared in
+//  cmydef.h, which this file already includes):
+//
+//    * SoftStop=false     -- golden note.cpp:1054
+//    * SoftStart=false    -- golden note.cpp:1055
+//    * fAllMotorHome=false-- golden note.cpp:1059
+//
+//  These MATTER and dropping them would have been a real divergence: golden's
+//  own caller sets SoftStop=true immediately before calling (golden
+//  ckernel.cpp:2476), and it is THIS function that clears it again, so a no-op
+//  sim would have left SoftStop stuck true for every downstream SM in the test.
+//
+//  NOT reproduced (the hardware/VCL half -- this is why it is a sim):
+//    * StopAllMotor()                        golden note.cpp:1056
+//    * MOT[MTestY1].Gali_Command("ST", ...)  golden note.cpp:1057
+//    * IndexMotorBreakerOFF()                golden note.cpp:1058
+//    * everything from golden note.cpp:1073 on -- MyDBIEvent, fNote->sJamArea /
+//      sJamCode / ErrShowToForm / KeyCode, ProductionLog, ShowErrorUnit,
+//      fAutomation->DoCommandBuffer, fFTPClient->SaveJamCodeFile, TStringList.
+//
+//  CONTROL FLOW IS FAITHFUL for the two early-return arms:
+//
+//    1. `if(InitialOK==false)` -- golden note.cpp:1061, //Steven 20250310 : Add
+//       protection.  OFFLINE THIS ARM IS TAKEN: InitialOK is defined false at
+//       cmydef.cpp:285 and nothing in an offline facade sets it.  That is the
+//       correct selection, not a convenient one -- golden added the guard for
+//       exactly the "machine has not finished initialising" state, which is what
+//       an offline facade permanently is.  Consequence a test must know: while
+//       InitialOK is false this function NEVER reaches arm 2, so it never calls
+//       ShowErrorMessage.  Set InitialOK=true to exercise arm 2.
+//       Golden's body for this arm is MyDBIProcess("Exception", Code,
+//       AnsiString(MotorAlarmNo)) (:1063).  NOT forwarded: golden's MyDBIProcess
+//       takes three parameters (golden cMyDB.h:20) but the only MyDBIProcess in
+//       this tree takes two (aHotPlateSubstrate.h:727) and its body is an empty
+//       stub (aHotPlateSubstrate.cpp:772), so forwarding would buy nothing
+//       observable while adding a link edge.  The row is recorded and traced
+//       instead.
+//
+//    2. `if(Code=="WAR")` -- golden note.cpp:1067, //Steven 20100830.  Raises
+//       WAR16101 ("Motor error !!") through ShowErrorMessage and returns.
+//       Reachable only once InitialOK is true.  Note ckernel never triggers it:
+//       ckernel passes MotorIndexToJamCode's "WAR24nnn" (golden
+//       ckernel.cpp:2470/2490), never the bare "WAR".
+// ---------------------------------------------------------------------------
+void ShowMotorErrorMessage(AnsiString Code, int MotorAlarmNo, AnsiString errPart)
+{
+    //AI(W906-W7-L2) 20260803: record first, so the W7-L2 ckernel test can assert
+    // "fired exactly once with this JamCode" regardless of which arm runs below.
+    W906_ShowMotorErrorMessage_LastCode         = Code;
+    W906_ShowMotorErrorMessage_LastMotorAlarmNo = MotorAlarmNo;
+    W906_ShowMotorErrorMessage_LastErrPart      = errPart;
+    W906_ShowMotorErrorMessage_Count++;
+    std::printf("  [ShowMotorErrorMessage] Code=%s MotorAlarmNo=%d errPart=%s\n",
+                Code.c_str(), MotorAlarmNo, errPart.c_str());
+
+    SoftStop=false;                                                             //golden note.cpp:1054
+    SoftStart=false;                                                            //golden note.cpp:1055
+    //  golden note.cpp:1056-1058 (StopAllMotor / Galil "ST" / IndexMotorBreakerOFF)
+    //  omitted -- hardware, see the header block above.
+    fAllMotorHome=false;                                                        //golden note.cpp:1059
+
+    if(InitialOK==false)                                                        //golden note.cpp:1061 //Steven 20250310 : Add protection
+    {
+        //  golden note.cpp:1063 MyDBIProcess("Exception", Code, AnsiString(MotorAlarmNo))
+        //  -- arity divergence, recorded not forwarded (see header block).
+        std::printf("  [ShowMotorErrorMessage] (InitialOK==false) Exception | %s | %d\n",
+                    Code.c_str(), MotorAlarmNo);
+        return;
+    }
+
+    if(Code=="WAR")                                                             //golden note.cpp:1067 //Steven 20100830
+    {
+        ShowErrorMessage("WAR16101", 0, MMSystem, false, AnsiString(MotorAlarmNo));   //golden note.cpp:1069  Motor error !!
+        return;
+    }
+
+    //  golden note.cpp:1073 onward -- note-form / EventLog DB / FTP / OLP
+    //  display half.  Not reproducible offline; the recorder above is the
+    //  observable substitute.
+}
+
+// =============================================================================
+//  AI(W906-W7-L2) 20260803: SECTION 6 -- MyDBIProcessNew (golden cMyDB.h:21).
+//  Collision analysis vs atester_32Site.cpp's TU-local macro is in the header.
+//  Sim: record + log, in the same idiom as RecordProcess above (no DB write --
+//  cMyDB.cpp is W3/vendor-sqlite deferred and has no compiled body in the tree).
+// =============================================================================
+AnsiString W906_MyDBIProcessNew_LastAlarmCode;      // default-constructs to ""
+int        W906_MyDBIProcessNew_Count = 0;
+void W906_MyDBIProcessNew_Reset()
+{
+    W906_MyDBIProcessNew_LastAlarmCode = "";
+    W906_MyDBIProcessNew_Count         = 0;
+}
+
+void MyDBIProcessNew(AnsiString asTable, AnsiString AlarmCode, AnsiString S1, AnsiString S2)
+{
+    W906_MyDBIProcessNew_LastAlarmCode = AlarmCode;
+    W906_MyDBIProcessNew_Count++;
+    std::printf("  [MyDBIProcessNew] %s | %s | %s | %s\n",
+                asTable.c_str(), AlarmCode.c_str(), S1.c_str(), S2.c_str());
+}
+
+// =============================================================================
+//  AI(W906-W7-L2) 20260803: SECTION 7 -- THE ALARM-QUEUE SEAM.
+//  Translated from the sibling BCB6 component package
+//  D:\HT9045\elec\Component\HAlarm.cpp (:234 ClearAllAlarm, :264 PopUpAlarm),
+//  declared at D:\HT9045\elec\Component\halarm.h:36-37 -- NOT invented.  The
+//  full provenance, the TComponent*->HTMotor* retarget and the offline-default
+//  branch analysis are in canary_support.h section 7.
+// =============================================================================
+
+//AI(W906-W7-L2) 20260803: SystemNG is golden's system-fault flag; golden
+// ClearAllAlarm sets it false at HAlarm.cpp:241.  Declared locally rather than
+// by including acarry_shims.h so canary_support.h gains no include; the
+// definition is acarry_shims.cpp:159 and both objects live in the same static
+// library (ht9045_sm), so this resolves at link time.  A redundant identical
+// `extern bool SystemNG;` is legal if another header in this TU also declares it.
+extern bool SystemNG;
+
+// ---------------------------------------------------------------------------
+//  The FIFO.  Golden holds `ERR_MSG { TComponent *ObjPtr; int iErrCode; }`
+//  (HAlarm.cpp:16-19) in a TList called ShowAlarmList (:22, // 顯示錯誤串列).
+//  A std::vector used strictly front-out reproduces that ordering exactly:
+//  golden pops index 0 via ShowAlarmList->Delete(0) (:275), i.e. FIFO, and is
+//  likewise O(n) on the pop.  Kept file-static: the queue is not part of the
+//  published surface, only Push/Pop/Depth/Reset are.
+// ---------------------------------------------------------------------------
+namespace {
+struct W906_AlarmEntry            // golden ERR_MSG (HAlarm.cpp:16-19)
+{
+    HTMotor *ObjPtr;              // golden `TComponent *ObjPtr;` -- retargeted, see header
+    int      iErrCode;            // golden `int iErrCode;`
+};
+std::vector<W906_AlarmEntry> W906_ShowAlarmList;   // golden ShowAlarmList (HAlarm.cpp:22)
+} // namespace
+
+int W906_PopUpAlarm_Count    = 0;
+int W906_PopUpAlarm_LastCode = 0;
+int W906_ClearAllAlarm_Count = 0;
+
+// ---------------------------------------------------------------------------
+//  W906_PopUpAlarm_Push -- offline stand-in for golden HAlarm::Set
+//  (HAlarm.cpp:110-130), whose ShowAlarmList->Add(Msg) at :127 is the ONLY
+//  producer for the queue PopUpAlarm drains.  Does NOT deduplicate; golden's
+//  `if(GetStat(iCode)) return;` (:112) is per-HAlarm-object state this facade
+//  has no equivalent of.  See the header note.
+// ---------------------------------------------------------------------------
+void W906_PopUpAlarm_Push(HTMotor *pComp, int iCode)
+{
+    W906_AlarmEntry e;
+    e.ObjPtr   = pComp;                 // golden HAlarm.cpp:125 Msg->ObjPtr = Parent
+    e.iErrCode = iCode;                 // golden HAlarm.cpp:126 Msg->iErrCode = iCode
+    W906_ShowAlarmList.push_back(e);    // golden HAlarm.cpp:127 ShowAlarmList->Add(Msg)
+}
+
+int W906_Alarm_QueueDepth()
+{
+    return static_cast<int>(W906_ShowAlarmList.size());
+}
+
+void W906_Alarm_Reset()
+{
+    W906_ShowAlarmList.clear();
+    W906_PopUpAlarm_Count    = 0;
+    W906_PopUpAlarm_LastCode = 0;
+    W906_ClearAllAlarm_Count = 0;
+}
+
+// ---------------------------------------------------------------------------
+//  PopUpAlarm -- golden halarm.h:37 / HAlarm.cpp:264-283.
+//  // 取出要顯示的錯誤訊息
+//  Golden's mutex/HALBusy spin (HAlarm.cpp:268-270,277-278) is deliberately NOT
+//  reproduced: it guards a real multi-threaded VCL app, whereas this facade is
+//  single-threaded test substrate, and a busy-wait on a never-cleared flag would
+//  be a hang risk for no benefit.  Everything observable is verbatim.
+//
+//  EMPTY-QUEUE CONTRACT: returns false and leaves BOTH out-params untouched --
+//  golden writes them only inside the Count>0 branch (:273-274) and its `return
+//  false` (:282) touches neither.  Golden ProcessAlarm relies on this: its
+//  `TComponent *Comp; int iCode;` (ckernel.cpp:2503-2504) are uninitialised, and
+//  reading them after a false return would be UB in golden too.
+// ---------------------------------------------------------------------------
+bool PopUpAlarm(HTMotor **ppComp, int &iCode)
+{
+    if(W906_ShowAlarmList.size() > 0)                       // golden HAlarm.cpp:266
+    {
+        W906_AlarmEntry P = W906_ShowAlarmList[0];          // golden :271 Items[0]
+        *ppComp = P.ObjPtr;                                 // golden :273 // 指向錯誤物件
+        iCode   = P.iErrCode;                               // golden :274 // 傳回錯誤碼
+        W906_ShowAlarmList.erase(W906_ShowAlarmList.begin());   // golden :275 Delete(0)
+        //  golden :276 `delete P` -- no heap entry to free, the vector owns it.
+        W906_PopUpAlarm_Count++;
+        W906_PopUpAlarm_LastCode = iCode;
+        return true;                                        // golden :279
+    }
+
+    return false;                                           // golden :282
+}
+
+// ---------------------------------------------------------------------------
+//  ClearAllAlarm -- golden halarm.h:36 / HAlarm.cpp:234-242.
+//  // 清除所有物件的錯誤碼
+//  Golden walks HAlarmList and calls P->Clear() on each registered HAlarm
+//  (:236-240), then sets SystemNG=false (:241).  Offline there are no HAlarm
+//  objects -- HAlarmList is only ever appended to by the HAlarm ctor
+//  (HAlarm.cpp:49) and this facade constructs none -- so the loop's entire
+//  observable effect reduces to "no outstanding error codes remain".  Emptying
+//  the pending-display FIFO expresses exactly that, and SystemNG=false is
+//  carried over verbatim.
+//
+//  Note this is NOT redundant at both golden call sites: at golden
+//  ckernel.cpp:377 the preceding line (:376) already sets SystemNG=false, but at
+//  ckernel.cpp:2526 (the tail of ProcessAlarm) this is the only thing clearing it.
+// ---------------------------------------------------------------------------
+void ClearAllAlarm()
+{
+    W906_ShowAlarmList.clear();     // golden HAlarm.cpp:236-240 (P->Clear() over every HAlarm)
+    SystemNG=false;                 // golden HAlarm.cpp:241
+    W906_ClearAllAlarm_Count++;
 }

@@ -159,7 +159,204 @@ public:
     void SetNeedSuck(bool Value) { bNeedSuck = Value; }    // golden MyKitSuck.h:121
     bool GetNeedSuckStatus()     { return bNeedSuck; }     // golden MyKitSuck.h:123
 #endif
+
+    // ========================================================================
+    // AI(W906-W7-L2) 20260803: the golden TMySucker surface ckernel.cpp needs,
+    // plus the ONE observability seam that makes StopAllDestroy falsifiable.
+    // Guarded so a parallel sibling wave editing this header cannot
+    // double-declare the block.
+    //
+    // VERIFIED CONSUMERS (every line below was read in golden ckernel.cpp):
+    //   * ScanSystemSensor's PAUSE (SoftStop) branch snapshots each nozzle's
+    //     learned vacuum on/off time into LastSet and then ReStart()s the
+    //     nozzle -- golden ckernel.cpp:547-553 (In/OutArmSuck),
+    //     :565-571 (F/BTestSuck), :613-614 (CatchTraySuck).
+    //   * The index "vacuum solenoid still ON but the site holds no IC" guard
+    //     reads GetOnBit() -- golden ckernel.cpp:578, :585, :597, :604 (PAUSE
+    //     branch) and :635, :642, :654, :661 (the SystemStart==false sweep).
+    //   * StopAllDestroy calls OffDestroy() and nothing else --
+    //     golden ckernel.cpp:189-209.
+    // ========================================================================
+#ifndef HT9045_SUCKER_W7L2_ADDED
+#define HT9045_SUCKER_W7L2_ADDED
+    // ---- (a1) learned vacuum durations -------------------------------------
+    // golden MyKitSuck.h:42-43.  These are NOT static config: golden
+    // PushOnTime/PushOffTime (MyKitSuck.cpp:1805-1847) rolls a 20-sample average
+    // into them at runtime, and Suck()/Destroy() arm the TOn/TOff timers from
+    // them (MyKitSuck.cpp:2177 / :2389, each with its own runaway clamp).
+    //
+    // OFFLINE DEFAULT 120 / 70 -- deliberately NOT zero.  These are golden's own
+    // ctor values (MyKitSuck.cpp:1779-1780).  Zero would make the PAUSE snapshot
+    // loop at golden ckernel.cpp:547-550 copy 0 into an already-zeroed LastSet
+    // grid, i.e. "the snapshot ran" and "the snapshot never ran" would produce
+    // identical state -- the same unfalsifiable shape the OffDestroy seam below
+    // exists to close.  With 120/70 the loop transfers a distinctive value and a
+    // test can prove it executed.  DWORD comes from myTimer.h -> <windows.h>
+    // (already included by this header).
+    DWORD VacuumOnTime;         // golden MyKitSuck.h:42 (ctor 120, MyKitSuck.cpp:1779)
+    DWORD VacuumOffTime;        // golden MyKitSuck.h:43 (ctor  70, MyKitSuck.cpp:1780)
+
+    // ---- (a2) ReStart ------------------------------------------------------
+    // golden MyKitSuck.h:102; body MyKitSuck.cpp:1849-1853 is literally
+    // `OnTask=1; OffTask=1;` -- it rewinds the suck/destroy micro state machines
+    // to step 1 and touches NO hardware.  The offline body is therefore the
+    // golden body VERBATIM (FAITHFUL, not a stub).
+    void ReStart();             // golden MyKitSuck.h:102
+    // golden MyKitSuck.h:17-18.  PRIVATE in golden; public here because the shim
+    // is uniformly public AND because these two ints are ReStart's ONLY effect --
+    // hiding them would leave ReStart with no observable at all.
+    // OFFLINE DEFAULT 1 for both = golden's ctor value (MyKitSuck.cpp:1741-1742),
+    // i.e. "suck/destroy state machine parked at step 1, nothing in flight".
+    // BRANCH NOTE: 1 is also ReStart's own result, so from a virgin grid ReStart
+    // is a no-change; a test proves the golden ckernel.cpp:552-553 / :570-571
+    // calls actually ran by parking a non-1 sentinel in OnTask/OffTask first.
+    int  OnTask;                // golden MyKitSuck.h:17
+    int  OffTask;               // golden MyKitSuck.h:18
+
+    // ---- (a3) GetOnBit -----------------------------------------------------
+    // golden MyKitSuck.h:105; body MyKitSuck.cpp:1862-1888.  Golden reads the
+    // vacuum-ON solenoid's OUTPUT bit back off the IO card (:1870 MotionNet/
+    // PCI1203, :1876 ISA/PCI1735U/PLC), de-inverts it by OnType
+    // (:1879-1882 `OnType==TYPE_A ? ret : !ret`), and returns FALSE outright when
+    // the line is not wired (:1884-1887).
+    // OFFLINE: there is no IO card, so the readback is served from the latch
+    // below, which the solenoid writers keep.  CORRECTED 20260803: an earlier
+    // revision of this sentence said the latch reproduces "exactly the round
+    // trip golden performs" through DoOnIO().  It does not, and the true census
+    // is on the latch member itself below -- golden drives that bit from EIGHT
+    // member functions, most of which this shim reproduces only partially and
+    // one of which (CheckIsFallDown) it does not declare at all.  DoOnIO() is
+    // faithfully summarised: MyKitSuck.cpp:1951-2018, `DoOnIO(true)` energises
+    // (:1955 `if(bOn==true)` -> :1968 IOBitOn for TYPE_A) and `DoOnIO(false)`
+    // de-energises (:1986 else -> :1999 IOBitOff), with the A/B sense inverted
+    // in the else-arms (:2007/:2013).  OnType is
+    // deliberately NOT mirrored: DoOnIO applies the A/B inversion on the way out
+    // (:1957 vs :1988) and GetOnBit removes it on the way back in, so the LOGICAL
+    // value is OnType-independent -- a mirrored OnType could provably never
+    // change an answer, and a field that cannot change an answer is noise.
+    bool GetOnBit();            // golden MyKitSuck.h:105
+    // golden MyKitSuck.h:70 -- "is the vacuum-ON line wired at all".
+    // OFFLINE DEFAULT false = golden's own ctor value (MyKitSuck.cpp:1756), and
+    // it is a BRANCH SELECTION, not neutrality: with OnEnable=false GetOnBit()
+    // returns false, so `FTestSuck.Item[i][j]==NULL_IC &&
+    // FTestSuck.Suck[i][j].GetOnBit()` at golden ckernel.cpp:597-598 (and its 7
+    // siblings :578, :585, :604, :635, :642, :654, :661) short-circuits FALSE.
+    // ScanSystemSensor therefore does NOT call Suck[i][j].Normal() and does NOT
+    // clear CloseSuckok, so the `if(CloseSuckok==false && INDEX_SUCKER_TYPE==1)`
+    // arm at golden ckernel.cpp:672-675 is NOT taken and bIndexPlaceIcCheck stays
+    // as-is (the index place-IC alarm stays armed).  A test that wants the OTHER
+    // arm sets OnEnable=true and energises the nozzle -- On()/OnSuck() suffice,
+    // but Suck() ALSO needs LastSet.iRealDummy=REALLY, because Suck() reproduces
+    // golden's dummy early-out (MyKitSuck.cpp:2167) and the sim default is
+    // DUMMY (canary_support.cpp:26 `LastSet = {0}`, DUMMY==0 cmydef.cpp:267).
+    bool OnEnable;              // golden MyKitSuck.h:70
+    // Offline stand-in for the vacuum-ON output bit GetOnBit reads back.  Holds
+    // the LOGICAL solenoid state (post-de-inversion, see the OnType note above).
+    //
+    // CORRECTED 20260803.  An earlier revision of this comment claimed the
+    // writers were On()/OnSuck()/Off()/Normal() and that golden's DoOnIO census
+    // was complete at four sites (2096/2102/2129/2137).  IT IS NOT.  Every line
+    // of golden MyKitSuck.cpp (all 2894) was scanned this pass; the vacuum-ON
+    // bit is driven from FOURTEEN sites in EIGHT member functions (OnSuck,
+    // OffSuck, On, Off, Normal, Suck, Destroy, CheckIsFallDown):
+    //   DIRECT DoOnIO():
+    //     :2096 OnSuck()          SET     -- shim: reproduced (no DUMMY gate)
+    //     :2102 OffSuck()         CLEAR   -- shim: inlined into Normal()
+    //     :2129 On()              SET     -- shim: reproduced (no DUMMY gate)
+    //     :2137 Off()             CLEAR   -- shim: reproduced
+    //     :2210 Suck()            SET     -- shim: reproduced, WITH golden's
+    //                                        :2167 dummy gate and :2207 OnTask
+    //                                        guard
+    //     :2395 Destroy()         CLEAR   -- dummy branch, SuckerName-gated
+    //     :2436 Destroy()         CLEAR   -- mainline, :2434 OffTask!=300 guard
+    //     :2694 CheckIsFallDown() CLEAR   -- NOT on this shim's surface at all
+    //   INDIRECT, via Normal() -> OffSuck() -> :2102:
+    //     :2145 Normal()   :2230 Suck()   :2283 Suck()   :2507 Destroy()
+    //   INDIRECT, via a direct OffSuck() call:
+    //     :2535 Destroy()  :2581 Destroy()
+    // The two Suck() clears (:2230/:2283) and the three Destroy() clears
+    // (:2507/:2535/:2581) sit on retry-exhausted arms that the offline bodies
+    // -- which return false unconditionally and never advance OnTask/OffTask --
+    // cannot reach.  Those are documented holes, not silent ones; see the two
+    // bodies in aHotPlateSubstrate.cpp.
+    // Default false = "nothing energised yet".
+    bool W906_SimVacuumOnBit;
+
+    // ---- (b) OBSERVABILITY SEAM: per-nozzle OffDestroy() call counter -------
+    // golden StopAllDestroy (ckernel.cpp:189-209) does NOTHING except call
+    // OffDestroy() over a fixed nozzle set.  Offline there is no destroy
+    // solenoid, so OffDestroy() previously had NO effect whatsoever -- meaning a
+    // no-op stub of StopAllDestroy and a faithful translation of it produce
+    // byte-identical state, and any test written against it is tautological.
+    // This counter is the seam that makes it falsifiable.  Same class of seam as
+    // canary_support.h's W906_ShowErrorMessage_Count (canary_support.h:250);
+    // implemented HERE, on the class, because it must be PER NOZZLE -- the
+    // interesting property of StopAllDestroy is WHICH nozzles it reaches (the
+    // golden iMaxRow/iMaxRow bound below reaches a strict subset of the grid),
+    // not merely how many calls happened in total.
+    //
+    // RESETTABLE IN O(1) VIA AN EPOCH: W906_TMySucker_OffDestroy_ResetAll()
+    // (declared after this class) bumps a global generation number; any nozzle
+    // whose stamp is stale reads as 0.  No per-instance registry is needed, so
+    // nozzle grids added by later waves are covered automatically and no test can
+    // leak a count into the next test.
+    int  W906_GetOffDestroyCount() const;  // this nozzle's count since the last reset
+    void W906_ResetOffDestroyCount();      // isolate ONE nozzle
+    unsigned long W906_OffDestroyStamp;    // generation the raw count belongs to
+    int           W906_OffDestroyRaw;      // raw count -- read via W906_GetOffDestroyCount()
+
+    // Offline ctor.  Only the members declared in THIS W7-L2 block are set.
+    //
+    // WHY THE OTHER SHIM MEMBERS ARE LEFT ALONE (deliberate, not an oversight):
+    // every TMySucker in this tree lives inside a namespace-scope TMyKitSuck, so
+    // it is zero-initialised before any constructor runs, and the already-landed
+    // waves were written against those zeros.  Adopting golden's ctor values for
+    // them -- e.g. golden OnAlarmTime=100 (MyKitSuck.cpp:1745), OnDelayTime=0
+    // (:1747), Enable=false (:1739) -- would change behaviour under code this wave
+    // has not read (acatchtray reads CatchTraySuck.Suck[0][0].Enable /
+    // .OnAlarmTime).  That audit belongs to whoever lands the real MyKitSuck.
+    //
+    //AI(W906-W7-L2) 20260803 DEFINED INLINE, ON PURPOSE -- do not move it back to
+    // the .cpp.  TMySucker previously had NO user-declared constructor, so a TU
+    // could instantiate one with no link edge at all.  Giving it an out-of-line
+    // ctor silently added `aHotPlateSubstrate.cpp` as a link requirement to every
+    // such TU, and the first full build of this wave proved it: tests/
+    // test_MyProductionRecord.cpp constructs a TMySucker directly and died with
+    // `undefined reference to TMySucker::TMySucker()`.  Inline here restores the
+    // header-only property.  It also dictates the ONE deviation below: the stamp
+    // is seeded with the reserved 0 rather than with W906_TMySucker_OffDestroyEpoch
+    // (declared 10 lines further down, and DEFINED in the .cpp -- reading it here
+    // would just re-create the same link edge under a different symbol name).
+    // 0 is exactly equivalent: the epoch starts at 1, so a 0 stamp reads as STALE,
+    // and stale means "count 0" -- which is what a freshly constructed nozzle is.
+    TMySucker()
+    {
+        VacuumOnTime  = 120;    // golden MyKitSuck.cpp:1779
+        VacuumOffTime = 70;     // golden MyKitSuck.cpp:1780
+        OnTask        = 1;      // golden MyKitSuck.cpp:1741
+        OffTask       = 1;      // golden MyKitSuck.cpp:1742
+        OnEnable      = false;  // golden MyKitSuck.cpp:1756
+        // offline-only: no solenoid has been energised yet, so the readback latch
+        // is clear.  (golden has no counterpart -- it reads the real IO card.)
+        W906_SimVacuumOnBit  = false;
+        W906_OffDestroyStamp = 0;   // reserved "never stamped" -- see the note above
+        W906_OffDestroyRaw   = 0;
+    }
+#endif // HT9045_SUCKER_W7L2_ADDED
 };
+
+// AI(W906-W7-L2) 20260803: grid-wide half of the OffDestroy seam above.
+// The epoch is bumped (never re-zeroed) by ResetAll, so every per-nozzle count
+// in the whole tree -- InArmSuck / OutArmSuck / F,BTestSuck / CatchTraySuck and
+// any grid a later wave adds -- goes stale in one O(1) step.  The total is the
+// cheap assertion for "StopAllDestroy touched exactly N nozzles"; the per-nozzle
+// counts are the assertion for "and they were THESE nozzles".
+#ifndef HT9045_SUCKER_W7L2_SEAM_GLOBALS
+#define HT9045_SUCKER_W7L2_SEAM_GLOBALS
+extern unsigned long W906_TMySucker_OffDestroyEpoch;  // current generation (starts at 1)
+extern long          W906_TMySucker_OffDestroyTotal;  // OffDestroy() calls tree-wide since the last reset
+void W906_TMySucker_OffDestroy_ResetAll();            // bump the epoch + clear the total
+#endif // HT9045_SUCKER_W7L2_SEAM_GLOBALS
 
 // ---- TMyKitSuck (golden MyKitSuck.h:151) -- MINIMAL mirror ------------------
 //  PordRec[][] is TMyProductionRecord (Public/MyProductionRecord.h); the leaves

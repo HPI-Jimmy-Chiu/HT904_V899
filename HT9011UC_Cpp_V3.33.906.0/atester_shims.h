@@ -155,6 +155,72 @@ class TfContactShim
 {
 public:
     bool fShow;                                 // golden cContact.h -- form visible? (offline false)
+    // -----------------------------------------------------------------------
+    //  AI(W906-W7-L2) 20260803: FIVE members added for golden ckernel.cpp's
+    //  manual-key trio -- WaitManualStepKey (golden ckernel.cpp:54-94),
+    //  WaitManualStartKey (:96-131) and WaitManualRetryKey (:133-149; that third
+    //  one derefs fShuttleMove, NOT fContact, so it needs nothing from here).
+    //  All five golden declarations were read directly from golden cContact.h
+    //  this wave (cp950); the two widgets reuse the unified stand-ins from
+    //  vclcompat/Controls.h (already included above and already hoisted into the
+    //  global namespace by Controls.h:481/:484), per forms/FormWidgets.h's own
+    //  banner rule "if a wave thinks it needs a new widget type here, the answer
+    //  is almost always an existing vclcompat/Controls.h type".  forms/
+    //  FormWidgets.h itself needs NO change for this wave.
+    //
+    //  GOLDEN ODDITY TO PRESERVE, NOT TO "FIX" (verified by reading both bodies):
+    //  the Step and Start early-outs test a STRUCTURALLY IDENTICAL condition --
+    //      :56-57  if(fContact->fShow && fContact->cbOneTouchAutoContactHight->Checked==true) return TRUE;
+    //      :98-99  if(fContact->fShow && fContact->cbOneTouchAutoContactHight->Checked==true) return FALSE;
+    //  -- and return OPPOSITE signs.  THE ASYMMETRY IS A VERIFIED FACT (both
+    //  bodies read from golden this wave); the WHY below is my INFERENCE and is
+    //  labelled as such -- golden's own comment on both lines says only
+    //  "//Ifor 20220803 add 一鍵完成Auto Contact Hight" (one-key-completes Auto
+    //  Contact Height) and gives no rationale.  Plausible reading: under one-key
+    //  mode the operator presses nothing, so STEP is auto-granted (true) while
+    //  START is auto-denied (false), leaving the contact-height SM single-stepping
+    //  under its own control instead of free-running.  Whatever the reason, the
+    //  ckernel translation MUST reproduce both signs verbatim -- do not "align"
+    //  them.
+    // -----------------------------------------------------------------------
+    // Offline default Checked=false (vclcompat::TCheckBox ctor, Controls.h:358).
+    // That default CLOSES the one-touch early-out at BOTH golden ckernel.cpp:56-57
+    // and :98-99, so WaitManualStepKey falls through to its real manual-step
+    // polling body (golden :59-93) and WaitManualStartKey to its own (:101-130).
+    // Today the `fContact->fShow &&` left conjunct (offline false) already
+    // short-circuits both tests, so this default is currently masked -- it becomes
+    // load-bearing the moment the contact form is ever shown, and false is the
+    // value that keeps the manual-key path alive rather than auto-answering it.
+    TCheckBox *cbOneTouchAutoContactHight;      // golden cContact.h:305 (TCheckBox* cbOneTouchAutoContactHight)
+    // Offline default Caption="" (AnsiString).  Honest statement: this default
+    // selects NO branch -- ->Caption is WRITE-ONLY across the whole golden tree.
+    // Exhaustive grep of golden *.cpp/*.h for `btnTStep->`/`btnTStart->` this wave
+    // returns 11 hits and NOT ONE is a read: the four Caption ASSIGNMENTS in
+    // ckernel.cpp (:62/:64 "T.Step"/"", :104/:106 "T.Start"/"", which merely blink
+    // the on-screen key label in step with bLampManualSetp/bLampManualStart), four
+    // ->Visible writes on THIS form (cContact.cpp:1603/1604, :1637/1638), and three
+    // ->Visible writes on a DIFFERENT form's same-named member (ShuttleMove.cpp
+    // :2075/:2077/:2090 -- TfShuttleMove has its own btnTStep; do not conflate).
+    // So the ckernel translation writes into a display sink, and "" vs anything
+    // else cannot change control flow.
+    TButton   *btnTStep;                        // golden cContact.h:79 (TButton* btnTStep)
+    TButton   *btnTStart;                       // golden cContact.h:78 (TButton* btnTStart)
+    // Offline default false -- and this one is NOT an offline invention: golden's
+    // own TfContact constructor assigns exactly `bSetupStart=false;` (golden
+    // cContact.cpp:238) and `bSetupStep=false;` (:239), right beside the
+    // `fShow=false;` this shim already mirrors (:237).  They are the click-latches
+    // for the two on-screen keys (golden cContact.cpp:2251-2254 btnTStartClick sets
+    // bSetupStart=true; :2256-2259 btnTStepClick sets bSetupStep=true).
+    // Branch selected: false makes the FIRST disjunct of golden's 3-way OR false at
+    // ckernel.cpp:74 (bSetupStep || SnRKManualStep || bButtonManualStep) and :116
+    // (bSetupStart || SnRKManualTStart || bButtonManualTStart), so with no real
+    // key/sensor event both functions reach `return false` (:93 / :130) -- i.e. the
+    // SM KEEPS WAITING for a genuine manual key.  Deliberately NOT this file's
+    // "report OK so the gated SM advances" idiom: auto-firing a manual STEP/START
+    // would make the handler self-advance through an operator-gated contact
+    // sequence, which is the opposite of golden.
+    bool bSetupStart;                           // golden cContact.h:546
+    bool bSetupStep;                            // golden cContact.h:553
     bool Do_ROILearning();                      // golden -- RTC ROI learning (offline: done=true)
     // -- W6.2b1x1 ADD: in-arm 1x1_1 place SM (DoInArmPlaceToShuttle_9045_1x1_1)
     //    reads fContact->IsRun2DCheck() (golden cContact.h:627).  Offline: not
@@ -356,6 +422,40 @@ class TCOM2Shim
 public:
     bool bCCDDummyRum;                           // golden rs232.h:157 -- offline true (no real RTC dummy run)
     void DoReleaseAndInspEnd();                  // golden rs232.h:160 -- offline no-op
+    // -----------------------------------------------------------------------
+    //  AI(W906-W7-L2) 20260803: ATCAlarmSenCheck -- needed by golden ckernel.cpp
+    //  :445 inside ScanSystemSensor.  NOT a stub: the real golden body (rs232.cpp
+    //  :4262-4275) is a pure bUT150Install[] x Sen[].IsOff() scan with NO
+    //  untranslated dependency left, so it is TRANSLATED FAITHFULLY in
+    //  atester_shims.cpp (every symbol it touches already exists in the ported
+    //  tree: bUT150Install cmydef.h:3305/cmydef.cpp:3531, SnATCAlarm1
+    //  cmydef.h:944/cmydef.cpp:1068 =214, tcAa1/tcAb1/tcAa2/tcAb2
+    //  MachineType.h:639-640, Sen[] mysensor.h:48/mysensor.cpp:34,
+    //  TMySensor::IsOff mysensor.cpp:163).
+    //
+    //  WHICH BRANCH THE RETURN VALUE SELECTS AT THE CALL SITE (read, not assumed):
+    //      golden ckernel.cpp:445  if(bATCInitialFinish==false || COM2->ATCAlarmSenCheck()==false)
+    //      golden ckernel.cpp:447      ShowMyMessage("ATC Alarm Sensor Off,...");
+    //      golden ckernel.cpp:448      return false;      // ScanSystemSensor REJECTS the start
+    //  so at this site "OK" means TRUE.  Returning true takes the fall-through arm
+    //  (ScanSystemSensor continues past :450); returning false raises the ATC alarm
+    //  dialog and aborts.  The faithful body evaluates to TRUE offline, because
+    //  bUT150Install[] is all-false (cmydef.cpp:3531 `={false}` and nothing in the
+    //  ported tree assigns it yet -- MainCalcCore.h:78/:89 records the golden writer
+    //  as still-untranslated), so the loop body never runs.
+    //
+    //  BUT DO NOT READ THAT AS "the ATC gate passes offline" -- two things above it
+    //  dominate, and both were checked this wave:
+    //    (1) the OR short-circuits on `bATCInitialFinish==false` FIRST, and that is
+    //        false offline (cmydef.cpp:305), so if the block were ever reached the
+    //        alarm arm would be taken NO MATTER what this function returns;
+    //    (2) the block is unreachable offline anyway -- its enclosing guard
+    //        (golden ckernel.cpp:442) requires ATC_SYSTEM==eATCSiliconType, and
+    //        ATC_SYSTEM is 0/eATCUninstall (cmydef.cpp:3567) while eATCSiliconType
+    //        is 3 (MachineType.h:693).
+    //  Same call shape at golden aTester_Front.cpp:6070 / aTester_Rear.cpp:6329.
+    // -----------------------------------------------------------------------
+    bool ATCAlarmSenCheck();                     // golden rs232.h:171 (body rs232.cpp:4262-4275) -- faithful translation
     TCOM2Shim();
 };
 extern TCOM2Shim *COM2;                          // golden rs232.h:203 (PACKAGE TCOM2* COM2)

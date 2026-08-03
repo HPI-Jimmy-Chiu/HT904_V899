@@ -605,6 +605,96 @@ public:
     //    nothing dereferences.  Same rule that kept PPID / bNeedClearFile out in
     //    W7-F1, and the same precedent this header's own `cb1` note records.
     //    Listed so a later wave does not "discover" it as an omission.
+    // AI(W906-W7-L2) 20260803: W7-L2 ADD -- the three fMain members golden
+    //    ckernel.cpp dereferences and this facade did not have.  Every golden
+    //    line cited below was re-read from the cp950-decoded golden in THIS
+    //    pass (main.h / main.cpp / main.dfm / ckernel.cpp / elec\myvcl\butPa1.h).
+    //
+    // (a) MainFormChange -- golden main.h:1261 `void __fastcall MainFormChange();`
+    //     Sole golden caller in this front: ckernel.cpp:367, inside
+    //     ScanSystemSensor's one-shot `if(SoftStart==true)` startup block
+    //     (ckernel.cpp:365-533 -- an earlier comment in this same wave gave the
+    //     end as :379, which is wrong by 154 lines; brace-matched this pass with
+    //     comments and string literals masked: `if` at :365, body `{` at :366,
+    //     closing `}` at :533, and the `else if(SoftStop==true)` arm opens at
+    //     :534.  :379 is only the mid-block `SoftStop=false;`), immediately
+    //     before AccelateTask=1 (:369) / ChangeUseSuckMode() (:370) /
+    //     SetWorkParameter() (:371).
+    //     Golden's REAL body is main.cpp:3883-4096 (214 lines) and it is PURE
+    //     FORM REPAINT -- all 214 lines were read this pass, and its ONLY
+    //     assignments are:
+    //       1. `Ptr[i][j]->Visible=false` over a 16x8 LOCAL array of the form's
+    //          own TALed members (array built main.cpp:3890-3914, hide pass
+    //          :3922-3924);
+    //       2. `PtrSort[i][j]->Visible=false` over the 2x8 9046AU sort-shuttle
+    //          TALed array (built :3916-3920, hide pass :3926-3932);
+    //       3. the re-show pass that turns back on only the rows/columns
+    //          matching TestIF_File.iTestMode (:3934-4034, via the locals
+    //          SingleRow/iCol), plus the IsNNMode()==NN_1Row (:4036-4055) and
+    //          ==NN_2Row (:4057-4066) corrections;
+    //       4. `labFailAlarmCnt->Visible` / `->Caption`, composed from
+    //          IniConfig.bG04ShowFailAlarmCount + Prod.bContsFailBySocket /
+    //          Prod.bContsFailByHead and their two counters (:4068-4094).
+    //     It writes NO global, NO Prod/TestIF field, and drives no motor/IO:
+    //     every write target is a TfMain-owned VCL widget with no facade home
+    //     (e.g. golden main.h:313 `TALed *led_BLCarryKit_0;`, :889
+    //     `TALed *led_SortShtKit_0;`, :673 `TLabel *labFailAlarmCnt;`).
+    //     So the behaviour ELIDED offline is exactly "the site-map LED matrix
+    //     and the fail-alarm-count label are not repainted to match the current
+    //     iTestMode" -- unobservable to any headless caller.  That is why a
+    //     no-op is faithful here rather than a silent drop, and it is the same
+    //     shape as ProcessSensorScan (:210) / ChangeLevelAttr (:216) above.
+    //     OBSERVABILITY GAP, stated rather than hidden (the lesson recorded in
+    //     the W906-W7-F1fix2 block above): like those two neighbours this body
+    //     has NO seam, so a test cannot tell "ckernel called MainFormChange"
+    //     from "ckernel dropped the call".  Deliberate -- the brief for this
+    //     wave was to copy the neighbours' shape exactly.  If the ckernel test
+    //     plan needs to assert the call, the fix is the established one-liner:
+    //     add `int W906_MainFormChangeCallCount;` here, init 0 in the ctor, and
+    //     increment it in the body (same idiom as W906_LookForFileCallCount).
+    virtual void MainFormChange();                // [METHOD] golden main.h:1261 (body main.cpp:3883-4096) -- offline: LED/label repaint no-op
+    // (b) BtnSTEP / BtnT_Start -- golden main.h:102 `TBtnPanel *BtnSTEP;` and
+    //     main.h:103 `TBtnPanel *BtnT_Start;`.  golden ckernel.cpp touches ONE
+    //     property on each, ->Color, at exactly four sites (grep of ckernel.cpp
+    //     for both names returns these four and nothing else), all inside the
+    //     `if(CosFunction.bEnableSoftWareControlButton)` TSMC-only block
+    //     (ChungHung 20150609, ckernel.cpp:66 / :108):
+    //       WaitManualStepKey  (ckernel.cpp:54-94)
+    //         :69  fMain->BtnSTEP->Color=clYellow;               // lamp ON
+    //         :71  fMain->BtnSTEP->Color=(TColor)0x00804000;     // lamp OFF
+    //       WaitManualStartKey (ckernel.cpp:96-131)
+    //         :111 fMain->BtnT_Start->Color=clYellow;            // lamp ON
+    //         :113 fMain->BtnT_Start->Color=(TColor)0x00804000;  // lamp OFF
+    //     driven by bLampManualSetp / bLampManualStart = FlushFlag (:59 / :101).
+    //     Write-only in golden: neither member is ever READ, there or anywhere
+    //     in this ported tree (both names are new here).
+    //
+    //     WIDGET TYPE -- why TfMainPanel and NOT TfMainSpeedButton.  The tree's
+    //     existing TBtnPanel stand-in IS TfMainSpeedButton (forms/FormWidgets.h
+    //     :293-299, carrying fMain->BtnOneCycle, golden main.h:72), but it holds
+    //     ONLY `bool Down` -- it has no Color, so it cannot store what these four
+    //     sites write, and forms/FormWidgets.h is out of this wave's write scope.
+    //     Of the stand-ins that DO expose a settable Color, TfMainPanel is the
+    //     exact right one and not a fudge: golden's TBtnPanel is literally
+    //     `class PACKAGE TBtnPanel : public TPanel` (golden elec\myvcl\butPa1.h:12,
+    //     read this pass), so the `->Color` these sites write is the INHERITED
+    //     stock TPanel::Color property -- and TfMainPanel is exactly
+    //     vclcompat::TPanel (forms/FormWidgets.h:132 -> vclcompat/Controls.h:240-246,
+    //     `int Color`).  That makes this conflation strictly tighter than the one
+    //     forms/FormWidgets.h:136-141 already records and accepts for
+    //     mtAuto1/mtAuto2/mtAuto3 (golden TTMyTray*, ->Color-only, aliased onto
+    //     vclcompat::TLabel).  Per contract rule 3 no new widget TYPE is invented.
+    //     REPORTED, NOT DONE (needs files this wave does not own): the right end
+    //     state is ONE TBtnPanel stand-in carrying both Down and Color -- either
+    //     give TfMainSpeedButton a `Color` member in forms/FormWidgets.h, or do
+    //     the W7-C4 repoint of the whole family onto vclcompat::BtnPanelCore,
+    //     which already models golden TBtnPanel faithfully (`TColor Color`,
+    //     vclcompat/BtnPanelCore.h:79) but whose .cpp is NOT in the root
+    //     CMakeLists `vclcompat` library today (only in two tests/ targets), so
+    //     using it from here would break the link for every ht9045_forms consumer
+    //     until that line is added.
+    TfMainPanel *BtnSTEP;                         // [DATA] golden main.h:102 (TBtnPanel*) -- ->Color only; ctor seeds 0x00804000, see forms/fMain.cpp
+    TfMainPanel *BtnT_Start;                      // [DATA] golden main.h:103 (TBtnPanel*) -- ->Color only; ctor seeds 0x00804000, see forms/fMain.cpp
     TfMain();
     virtual ~TfMain() {}
 };

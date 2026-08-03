@@ -167,6 +167,49 @@ TfMain::TfMain()
                                                   //   vclcompat default 5x5 would make asendic_Color.cpp:831's
                                                   //   Cells[3][38] throw std::out_of_range
     RENESAS_Server   = new TfMainRENESASServer(); // golden main.h:1710 (TRENESAS_Server*)
+    // AI(W906-W7-L2) 20260803: allocations for the two W7-L2 widget members
+    // (golden main.h:102/:103 `TBtnPanel *BtnSTEP; TBtnPanel *BtnT_Start;`) that
+    // golden ckernel.cpp's WaitManualStepKey/WaitManualStartKey write ->Color on.
+    // See forms/fMain.h for the per-member citations and the TfMainPanel
+    // type choice.
+    //
+    // THE INITIAL Color IS GOLDEN'S OWN, NOT A GUESS -- and it is set here
+    // explicitly because vclcompat::TPanel defaults Color to 0 (clBlack,
+    // vclcompat/Controls.h:245), which is a value neither button ever holds in
+    // golden.  Golden's design-time value comes from the form resource, read
+    // this pass: main.dfm:10812 `object BtnSTEP: TBtnPanel` carries
+    // `Color = 8404992` at :10819, and main.dfm:10834 `object BtnT_Start:
+    // TBtnPanel` carries the same `Color = 8404992` at :10841.
+    // 8404992 == 0x00804000 -- byte-identical to the literal ckernel.cpp:71 /
+    // :113 write, i.e. golden ships both lamps already at their OFF colour.
+    // (Both .dfm blocks also set `TrueColor = clYellow` / `FalseColor = 8404992`
+    // -- :10829-10830 and :10851-10852 -- so the TBtnPanel's own Down-latch
+    // state machine agrees with what ckernel writes by hand.  Independently
+    // corroborated by this tree's extracted layout table,
+    // tools/dfm2rc/layout_out/main_layout.gen.cpp:603-604, which records
+    // Color 8404992 / TrueColor 65535 (clYellow) / FalseColor 8404992 for both.)
+    // Golden's TBtnPanel CONSTRUCTOR leaves Color at clBtnFace
+    // (elec\myvcl\butPa1.cpp:33, via the shadow-local bug documented in
+    // vclcompat/BtnPanelCore.h:101-122), but .dfm streaming overwrites that
+    // before the form is ever shown, so 0x00804000 -- not clBtnFace -- is the
+    // value a running Handler observes before ckernel first writes it.
+    // Setting a non-default in the ctor follows the precedent already set for
+    // fLotInfo->palRemoveTray (forms/fLotInfo.cpp restores its true/true).
+    //
+    // BRANCH SELECTION: this default selects NOTHING.  Both members are
+    // write-only in golden (the four ckernel sites are all assignments; nothing
+    // in golden or in this tree reads BtnSTEP->Color or BtnT_Start->Color), so
+    // no arm of ckernel's logic turns on it -- unlike, say, cInplace's
+    // InArmPlacementEnable()==false.  It matters only to the test plan, which
+    // asserts on the colour.  CAVEAT for whoever writes those assertions: because
+    // golden's initial value and golden's lamp-OFF write are the SAME number
+    // (0x00804000), asserting `Color==0x00804000` cannot distinguish "never
+    // written" from "written OFF"; only the clYellow (lamp-ON) transition is a
+    // sharp assertion.
+    BtnSTEP    = new TfMainPanel();               // golden main.h:102 (TBtnPanel*)
+    BtnT_Start = new TfMainPanel();               // golden main.h:103 (TBtnPanel*)
+    BtnSTEP->Color    = 0x00804000;               // golden main.dfm:10819 (8404992)
+    BtnT_Start->Color = 0x00804000;               // golden main.dfm:10841 (8404992)
 }
 void TfMain::LightOn() {}                                       // W6.4: CCD light sink (offline no-op)
 void TfMain::DebugOneCycleHotPlate(AnsiString /*sfunc*/) {}     // debug log sink (offline no-op)
@@ -299,4 +342,39 @@ int  TfMain::SetTemp(bool /*bAsk*/, double /*fWorkTemp*/, double /*fSoakTime*/) 
 void TfMain::ChangePassword() { W906_ChangePasswordCallCount++; }
 int  TfMain::FTClick(bool /*bMan*/) { return W906_FTClick_Sim; }
 int  TfMain::RTClick(bool /*bMan*/) { return W906_RTClick_Sim; }
+// ---------------------------------------------------------------------------
+// AI(W906-W7-L2) 20260803: TfMain::MainFormChange -- golden main.h:1261
+// (`void __fastcall MainFormChange();`), body golden main.cpp:3883-4096.
+// Offline no-op, same shape as ProcessSensorScan (this file :272) /
+// ChangeLevelAttr (:275) above.
+//
+// WHAT THE REAL BODY DOES, AND THEREFORE WHAT IS ELIDED HERE (all 214 golden
+// lines read this pass, not summarised from a recon): it repaints the form's
+// site-map LED matrix for the current TestIF_File.iTestMode and nothing else.
+// It hides all 16x8 TALed pointers in a local Ptr[][] array (built golden
+// main.cpp:3890-3914, cleared :3922-3924) plus the 2x8 9046AU sort-shuttle
+// PtrSort[][] array (:3916-3920, cleared :3926-3932); derives SingleRow/iCol
+// from iTestMode across a 16-arm else-if ladder (:3934-4002); re-shows the
+// matching subset (:4004-4034); applies the IsNNMode()==NN_1Row (:4036-4055)
+// and ==NN_2Row (:4057-4066) corrections; and finally sets
+// labFailAlarmCnt->Visible / ->Caption from IniConfig.bG04ShowFailAlarmCount
+// with Prod.bContsFailBySocket / Prod.bContsFailByHead and their counters
+// (:4068-4094).
+//
+// Every one of those writes targets a TfMain-owned VCL widget that has no
+// facade home: the 144 distinct TALed members the two arrays name (16x8 + 2x8;
+// e.g. golden main.h:313 `TALed *led_BLCarryKit_0;`, :889
+// `TALed *led_SortShtKit_0;`) plus main.h:673 `TLabel *labFailAlarmCnt;`.
+// The body writes no global and no Prod/TestIF field, and touches
+// no motor/IO -- so offline the elided effect is purely cosmetic: the LED
+// matrix and the fail-alarm-count label are not redrawn.  Golden's only caller
+// on this front, ckernel.cpp:367, sits in ScanSystemSensor's one-shot
+// `if(SoftStart==true)` startup block (:365-533 -- brace-matched this pass with
+// comments and string literals masked: `if` at :365, body `{` at :366, closing
+// `}` at :533, `else if(SoftStop==true)` at :534; an earlier comment in this
+// same wave gave the end as :379, wrong by 154 lines -- :379 is only the
+// mid-block `SoftStop=false;`) and ignores any result (the function returns
+// void), so nothing downstream of that call site changes.
+// ---------------------------------------------------------------------------
+void TfMain::MainFormChange() {}                               // W7-L2: offline LED/label repaint no-op
 TfMain *fMain = new TfMain();

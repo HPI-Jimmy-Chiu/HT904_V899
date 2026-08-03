@@ -26,6 +26,12 @@
 // AI(W906-cContactLeaf) 20260721: ComputeIsRun2DCheck (real TfContact::IsRun2DCheck body,
 // translated as a free function) for the TfContactShim::IsRun2DCheck() wire-up below.
 #include "cContact.h"
+// AI(W906-W7-L2) 20260803: substrate for the FAITHFUL TCOM2Shim::ATCAlarmSenCheck
+// translation below -- cmydef.h gives bUT150Install[] (:3305) + SnATCAlarm1 (:944),
+// mysensor.h gives Sen[]/TMySensor::IsOff (:48/:43).  tcAa1/tcAb1/tcAa2/tcAb2 come
+// from MachineType.h:639-640, already pulled in by atester_shims.h.
+#include "cmydef.h"
+#include "mysensor.h"
 
 // ===========================================================================
 //  csystem.h cross-module predicates referenced ONLY by the tester/index engine
@@ -236,7 +242,19 @@ bool BTestSeparateSLK(bool /*bReset*/)      { return true;  }
 bool DoBRTCAutoModelVerify(bool /*bInitial*/){ return true; }
 
 // ---- fContact (offline contact-mode form) ----------------------------------
-TfContactShim::TfContactShim() : fShow(false) {}
+// AI(W906-W7-L2) 20260803: bSetupStart/bSetupStep added to the init list and the two
+// key widgets allocated -- these mirror golden TfContact's OWN constructor, which sets
+// `fShow=false; bSetupStart=false; bSetupStep=false;` on three consecutive lines
+// (golden cContact.cpp:237-239), so the shim's ctor is now a faithful echo of golden's
+// rather than an offline guess.  Widget defaults come straight from the unified
+// stand-ins (TCheckBox::Checked=false Controls.h:358; TButton::Caption="" via
+// AnsiString) -- see atester_shims.h for the per-member branch justification.
+TfContactShim::TfContactShim() : fShow(false), bSetupStart(false), bSetupStep(false)
+{
+    cbOneTouchAutoContactHight = new TCheckBox();   // golden cContact.h:305
+    btnTStep                   = new TButton();     // golden cContact.h:79
+    btnTStart                  = new TButton();     // golden cContact.h:78
+}
 bool TfContactShim::Do_ROILearning() { return true; }   // offline: ROI learning "done"
 // AI(W906-cContactLeaf) 20260721: was a hardcoded `return false;` stub (W6.2b1x1 note, now
 // superseded).  Swapped in the real golden predicate (TfContact::IsRun2DCheck, cContact.cpp:
@@ -330,4 +348,29 @@ TfiosetviewShim *fiosetview = new TfiosetviewShim();
 // ---- COM2 (offline DTK RTC/CCD serial-comm module, W5) ---------------------
 TCOM2Shim::TCOM2Shim() : bCCDDummyRum(true) {}   // offline: dummy-run true so RTC/CCD branches short-circuit
 void TCOM2Shim::DoReleaseAndInspEnd() {}
+// AI(W906-W7-L2) 20260803: FAITHFUL translation of golden TCOM2::ATCAlarmSenCheck
+// (golden rs232.cpp:4262-4275, declared rs232.h:171), needed by golden ckernel.cpp:445.
+// Transcribed statement-for-statement, INCLUDING golden's own misspelled local
+// `bRetrun` and its `==true` comparisons -- this is a translation, not a rewrite.
+// Semantics: report ATC-alarm-sensors-OK (true) unless some INSTALLED UT150 ATC site
+// has its alarm sensor Off.  Note golden indexes bUT150Install[] by iATCSite[i] but
+// Sen[] by the plain loop counter (SnATCAlarm1+i) -- that asymmetry is golden's and is
+// preserved verbatim.  See atester_shims.h for the full call-site branch analysis
+// (short version: at ckernel.cpp:445 "OK" == true, and offline this returns true
+// because bUT150Install[] is all-false, but the enclosing ATC_SYSTEM gate at :442 makes
+// the whole block unreachable offline regardless).
+bool TCOM2Shim::ATCAlarmSenCheck()                                              // golden rs232.cpp:4262
+{
+    bool bRetrun=true;
+    int iATCSite[4]={tcAa1, tcAb1, tcAa2, tcAb2};
+
+    for(int i=0; i<4; i++)
+    {
+        if(bUT150Install[iATCSite[i]]==true && Sen[SnATCAlarm1+i].IsOff()==true)
+        {
+            bRetrun=false;
+        }
+    }
+    return bRetrun;
+}
 TCOM2Shim *COM2 = new TCOM2Shim();
