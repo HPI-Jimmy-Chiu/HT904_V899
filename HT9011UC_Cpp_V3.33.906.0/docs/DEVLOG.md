@@ -2657,3 +2657,209 @@ golden `ckernel.cpp` 編得過的路徑是 `:1` 的 `#include "MachineDefine.h"`
   `build_*` 產物、ported tree 內三個 `*_test_scratch/`，以及 `HT9011UC_Code_V3.33.899.0_.../CosFunction.cpp`。
 - **執行模式**：使用者指示持續有效——全部 cpp/h/dfm 都要翻、workflow 火力全開、不逐波停下請示、
   重大問題跳過並最後條列；model/effort 依任務性質自動切換；安裝軟體不必先問。
+
+---
+
+## 2026-08-03（續）W7-L2 收尾：撿到已組裝的 `ckernel.cpp`、六路稽核 + 對抗複驗、補上它自己承諾的測試
+
+**開場即第三次「在製工作沒人回報」。** 照交接紀律先 `git status` 再讀 RESUME——上一則 RESUME 明說
+「**若接手時 `ckernel.cpp` 不存在但 scratchpad 有 fragment，就是停在組裝前一步**」，但工作樹裡
+`ckernel.cpp`（2,958 行，golden 2,588 行）**與 `ckernel.h` 都已落地，而且已經接進 `ht9045_sm`**
+（根 `CMakeLists.txt` 列尾）。同型事件累計三次，紀律再確認：**接續第一件事永遠是 `git status`。**
+
+順手修掉一件無人記錄的污染：`tools/dfm2rc/reports/b1b_gate_report.json` 被單檔 dfm2rc 執行蓋掉
+（`files` 133 → 1，−1,207 行），DEVLOG/ROADMAP 皆無記載，已 `git checkout` 還原成 133 檔版本。
+
+### 主迴圈親自量測（不採信任何 agent 回報）
+
+| 項目 | 結果 |
+|------|------|
+| 全新 configure + full build（含 `ckernel.cpp`） | **exit 0 / 0 error** |
+| 函式清冊 vs golden | **17/17 全在，且照 golden 順序** |
+| `ckernel.cpp` 新增警告 | **1 個**——golden 自己的死變數 `static int iCount`（golden :2434 宣告、:2459/:2464 賦值、**從不讀取**）。**忠實複製，非缺陷**；warning baseline 289 → 290 合理 |
+| U+FFFD（`ckernel.cpp` / `ckernel.h`） | **0 / 0** |
+| 中文註解往返 | golden 118 個 CJK run，78 個未出現在譯出檔——**全部 78 個都落在 chartered deferred span :704-1726 之內，span 外 0 個**。即已翻譯的每一行中文都正確往返 |
+
+**逐位保留的 golden bug，用 golden 原始碼核實（不採信 brief 的數字）**：`epn_SnRKPowerOff=14`、
+`epn_SnRKManualStep=28`（golden `uPadInterface.h:172`/`:175`），故 golden :2383 的 `p+=SnRKPowerOff`
+確實讓 `14+14=28` 撞上 SnRKManualStep，而 :2395-2404 的釋放掃描用的是**未加偏移**的 `Sen[i]`。
+譯出檔逐字保留，並且**自己多記了兩個 brief 沒提到的怪癖**（`return ret` 短路掉釋放掃描；
+`bK[64]` 只掃到 31）。
+
+**另外更正上一則交接的兩處描述（都比原本更糟）**：
+- `CheckThermo` 不只是「回不了 false 的迴圈」——golden :161-183 的迴圈**本體只有 `continue`**，
+  不計算、無副作用、不可能 return；唯一的 false 路徑是 `iHeaterCooling!=0`，也就是**溫度互鎖
+  永遠不會回報「尚未到溫」**。
+- `StopAllDestroy` 是**兩個**缺陷不是一個：golden :193 內圈用 `iMaxRow` 當界，且 :196 用
+  **InArmSuck 的維度去索引 OutArmSuck**。
+
+### 六路稽核 + 對抗複驗：程式碼乾淨，論證才是壞的
+
+派 6 個 range finder（`ckernel.h`+prologue、:54-357、:359-703、:704-1727、:1728-1918、:1919-2431、
+:2432-2589），每個都由**另一個** agent 逐條打開引用的 golden/ported 行對字面複驗。
+**兩個 agent 死於 API stall**（`audit:r2` 是 ScanSystemSensor 的 finder，pipeline 因此整段跳過；
+`verify:r3` 是 deferred stub 的複驗）——**已重新派工補齊**（r2 拆成兩半各自複驗）。
+
+**結論：翻譯本體幾乎完美。**
+- r2b：golden :531-703 → ported :1018-1242 **146 對 146 完全對齊，零 insert/delete/replace**。
+- r2a：golden :359-533 兩側消耗至零剩餘，唯一 insert 是那個**已揭露**的 `#if 0`。
+- 測試 agent 的機械 statement diff：受測 9 個函式**全部 IDENTICAL**（`ScanPannelKey` 452 個 statement）。
+- 每個硬體索引**字面與數值都相同**；golden :502 `if(FrmAOI!=NULL)` 極性保留。
+- `r4`（DoPanelLamp/DoSystemMessage）與 `r6`（GetMotorAlarmCode/ProcessAlarm/InitialTestDelayStatus）
+  **各回報 0 findings**，複驗階段依設計跳過——**零 findings 是正確結果，不是偷懶**。
+
+**確認的 findings 幾乎全是註解/引用錯誤**（與既有經驗一致：agent 的程式碼多半對，論證最脆弱）：
+`2589 行`應為 2588（4 處）、`ckernel.h` `28 行`應為 27（皆為 `split('\n')` vs `splitlines()` 的尾端空元素）、
+`SystemNG` 引用 `:523/:908` 實為 golden `:376/:679`、`InitProcessSingleMotorTask` 引用 `ckernel.cpp:522`
+實為 golden `:375`、include 統計「4 ADDED」實為 6、`[G2]-[G9] and [G11]-[G14]` 應為 `[G2]-[G14]`、
+`forms/fAOI.cpp` 的「whole CreateForm list :166-245: 80 calls」實為 `:166-283: 118 calls`。**全部已修。**
+
+### 四個真實缺口（非註解），已在碼內揭露並記入 DEFERRED
+
+1. **`SystemNG` 中止路徑是死碼（HIGH，複驗 agent 自行掃出，finder 漏掉）。** golden :677-684 的
+   `if(SystemNG){ StopAllMotor(); SystemStart=false; }` 譯得逐位忠實（ported :1207-1210），但
+   golden 的 `SystemNG` 是**從警報清單推導**的、住在樹外套件（`elec/Component/halarm.h:31`，
+   storage `HAlarm.cpp:14`），而**唯一把它設為 true 的生產者**是 `HAlarm::Set` 裡的
+   `UpdateSystemNG()`（`elec/Component/HAlarm.cpp:136`）——**本樹沒有對應翻譯**，譯出檔只會清它
+   （:823）。**後果：實機會 StopAllMotor 並掉 SystemStart，本樹會靜默繼續——這是缺失的安全中止，
+   不是外觀問題。**
+2. **`DoInArm_SuckerMap()` 被 `#if 0` 編譯掉（MEDIUM/dropped-code）。** golden :523 是活的呼叫，
+   本體 `ainarm2.cpp:965-972` 有四個 statement、其中兩個是全域寫入（`iCloseSiteState`、
+   `iCloseSiteStateForPick`）。譯出檔因無 ported 定義而 gate 掉並附 TODO。**這是全檔唯一
+   非 chartered 的編譯掉 golden statement**（掃描確認全檔只有 3 個 `#if 0`：本處 + 兩個 chartered stub）。
+   本波**不改行為**，記 DEFERRED。
+3. **三個未解析符號使 `ckernel.cpp` 無法連進任何執行檔。** `nm -C --undefined-only` 對
+   `ckernel.cpp.obj` 與全部 13 個 `ht9045_*`/`vclcompat` archive 對差，只剩
+   `AccelateTask`（golden `csystem.cpp:16458`）、`IsSafeLockCheck()`（`:16461-16508`）、
+   `InitDoArmZHome()`（`:4858-4862`）。**full build 之所以 exit 0，是因為 `ckernel.cpp` 只進靜態
+   archive，未被引用的符號不需解析**。測試 TU 以顯著標示的 `LINK-TIME SUBSTRATE FILL` 暫時補上，
+   並**故意留下 duplicate-symbol 絆線**：`csystem.cpp` 一落地就會連結失敗，屆時刪掉 fill 即可。
+   `ckernel.cpp:437-443` 原本只標了 `AccelateTask`，另兩個無人標記——`InitDoArmZHome` 呼叫點
+   （ported :871）已補上完整 marker。
+4. **`ShowRunLed`/`ShowRunLabel` 的延後**「**ZERO state-machine behaviour**」**宣稱為偽（MEDIUM）。**
+   主迴圈親自核實：`bHALTing` 的**全樹唯一寫入者**就是 golden `ShowRunLabel`
+   （:1533/:1608/:1621/:1627，storage `cmydef.cpp:3534`），消費端是 `csystem.cpp:20534`，
+   閘住 chamber **快速冷卻**硬體路徑（:20536-20538 `fAirCon->PowerUp(5.5)` /
+   `SW[SwCoolingFan_Blower].On()` / `Cylinder[C_CoolingValve].Off()`）。**stub 在位期間該硬體分支
+   永遠不可達。** 另有 12 個 `SW[]` 實體輸出與 7 個狀態寫入一併遺失，已在碼內列成 W7-U 的真實
+   blast radius。（同一 finder 複核「181 次 `fMain->` deref」**正確**：31 + 150。）
+
+### W7-L2 回歸測試：66 個斷言，失敗性是「量測」出來的
+
+`tests/test_w7_l2_ckernel.cpp`（1,347 行）——本檔原本**零測試**。**66 PASS / 0 FAIL，exit 0**，
+主迴圈親自跑過。P1-P8 全部 pinned、零排除，另有 5 條標示清楚的 DELIBERATE EXCLUSION。
+註冊在 `tests/CMakeLists.txt:2810`，**位於 GLOBAL TEST TIMEOUT 區塊之上**（:2813），
+`ctest --show-only` 確認 TIMEOUT=600 有生效。
+
+**關鍵：pin 是「差分」而非「斷言」。** 例：PART C2 去按住**無關的** `Sen[SnRKManualStep]`(28)，
+rear Power-Off 的重觸發就被抑制（`14,-1,-1,-1`），與 C1 的 `14,-1,14,-1,14` 合起來**把誤閂槽位
+唯一指認為 `bK[28]`**；PART F3 用 `iMaxRow=3, iMaxCol=1`，因為 `iMaxCol` 為界的內圈**只可能碰到
+第 0 欄**，所以這一條在構造上就能區分兩種界。**測試 agent 還自己找到我沒發現的第二個同型 bug**：
+rear Power-**ON**(15)+14=29=`SnRKManualTStart`，在 `bK[29]` 同樣誤閂（C5/C6）。
+
+**失敗性用 mutation 實測而非論證**：6 輪 mutation + 一次 FULL NEUTER（8 個本體全清空 + 拔掉兩個
+stub 計數器）→ **17/66**，殺掉 49 條。M1「修掉」headline bug → 64/2；M2 `j<iMaxRow`→`j<iMaxCol`
+→ 62/4。存活的 17 條逐條點名並說明都是 negative/identity 斷言，另誠實記錄兩個「看似該殺卻沒殺」
+的例外（C2/C6 不被 M1 殺；B3 不被 M6 殺）。**`SOFT_SIMULTE` 未定義**（`MachineType.h:48` 被註解掉），
+故 golden 的 `#else` 實機臂是活的，也正是 PART E 量測的對象，並加了 `#error` 護欄防未來翻轉。
+
+兩路獨立複驗（非空洞性 / golden-oracle）**皆 ACCEPT**，golden-oracle 明確認定
+**zero wrong expected values**；唯一 MEDIUM 是 PART C0 斷言訊息裡的出處行號寫錯
+（ported `:813`/golden `:809` 其實是 `SnRKStart`），主迴圈已核實正確值為
+ported `808/809/823/824`、golden `804/805/819/820` 並修正。
+
+**踩到一次併發風險並記錄**：非空洞性複驗 agent 被允許做暫時 mutation，期間 `ckernel.cpp` 大小在
+2958→2964→2959 行之間跳動；另一個 agent 因此取到不可重現的 md5。主迴圈的作法：**編輯前先存
+snapshot + 記 md5**，事後以 `164934 bytes / 2958 lines / md5 2603d177…` 對帳，並實際回頭確認
+mutation 都已還原（`"Fisrt"` 仍在、`CheckThermo` 迴圈仍是純 `continue`）。
+**教訓：允許 mutation 的 agent 與主迴圈編輯同一檔案不可並行。**
+
+### 後續 backlog 兩處實質更正（read-only recon）
+
+1. **「`MainCalcCore` 15 個函式未翻」是讀錯文件，那 15 個早就翻完了。** 主迴圈核實
+   `MainCalcCore.cpp` 恰有 **15 個定義**，且 `DEVLOG.md:1120` 記著「`MainCalcCore` 11→**15**函式」
+   （commit `70e49ef`）。錯誤來源：`DEVLOG.md:2460` 原文是「`MainCalcCore` 15 個函式**後續批次**」，
+   到 `:2532`/`:2654` 兩次轉述時**把「後續批次」漏掉**，就變成裸的「15 個函式」被當成待辦繼承。
+   真正剩餘池另有 15 支（純屬巧合，已標明），其中 Tier A 2 支（`CheckAutoOnlySetOneBin`
+   main.cpp:32523-32553、`CheckAuto1OnlyBin1` :32502-32521）**現在就能翻**，且
+   `MainCalcCore.h:32-36` 說的「violation-code 回傳慣例尚未設計」其實**同檔已有前例**
+   （`ComputeCheckSiteMapState` 用 `bool` + `AnsiString&`）。更重要的結論：對全部 373 個 `TfMain::`
+   本體套用 zero-UI ∧ zero-HW ∧ zero-file-IO ∧ non-void ∧ ≤70 行，**只剩 1 個命中且無計算內容**
+   ——**main.cpp 的 MainCalcCore 式純抽取已到 end-of-seam**，A1+A2 之後剩下的是 wrapper/HAL/UI 工作。
+   **與既有「ROADMAP 兩處記錄會漂移」同型：範圍限定詞在轉述中掉了，然後被當事實繼承。**
+2. **閘 4 三檔的 U+FFFD 零功能暴露。** 346 行全部的第一個 U+FFFD 都在同行 `//` 之後
+   （三檔各自 `not-after-// = 0`），**零字串常量、零 block-comment-only**。修復資料已完整產出
+   （`cpublic.cpp` 全 62 列、`cprod.cpp` 全 283 列，以 `ported行|golden行|cp950 真文字` 形式，
+   用整行 lossy-transform 相等性證明對映），**純機械、無需裁決**。順帶更正 ROADMAP 自己的抽查：
+   ported `cprod.cpp:67` 對到 golden **`:95`** 而非 `:97`（診斷正確、實例配對差一個宣告）。
+3. `SECSGEM/uHGemEquipment.cpp` `DoTraceDataResponse` 經查**零阻塞、可直接翻**（golden :4190-4242，
+   caller 已是活的，8 個必須逐位保留的 golden 怪癖已列表，含 :4204-4207 故意的 switch fall-through
+   與 :4214 的 UINT_2 截斷）；`uHGemClass.cpp` 的 `S7F20_CurrentEPPDData` **仍是真硬阻塞**
+   （缺函式 + 缺 widget，另有「該 gate 永遠打不開」的第二層阻塞）。
+
+### 🔖 RESUME（最新）
+
+- **本場次已 commit**：W7-L2 完成波（翻譯本體 + 66 斷言回歸測試 + 稽核修正），前一顆是 `b928a43`（W7-L2 substrate）。
+- **驗證基準**：全新 build dir `build_0803_final`，`cmake --build` **exit 0 / 0 error**；ctest **114/118**（808s，4 個失敗與基線同一批：`config_db`/`IniFiles`/`ini_helpers`/`config_loaders`，皆為既有共用設定檔漂移，與本波無關）；新測試 `#118 W7_L2_CKernel` **Passed 1.58s**——**+1 測試 +1 通過、零回歸**（上一波基線 113/117）。總警告 300，其中**恰 1 個**歸因 `ckernel.cpp`；**不宣稱對 `6f1d9ec` 的 289 的差值**，因中間夾了 `5bd0a88`/`b928a43` 兩顆而未分別量測。
+  `ckernel.cpp` 只新增 **1 個警告**（golden 自己的死變數 `iCount`，忠實複製）。
+  golden=`HT9011UC_Code_V3.33.906.0_20260618`；分支 `fix/v899.32-pti`。
+- **⚠ 接續第一件事仍是 `git status`，不是讀本 RESUME**——本場次開場又靠它撿到已組裝好的
+  `ckernel.cpp`+`ckernel.h`（上一則 RESUME 明說它們「應該還不存在」），**同型事件累計三次**。
+- **新增第五條經驗：允許做 mutation 的複驗 agent，不可與主迴圈編輯同一個檔案並行。** 本場次
+  非空洞性複驗期間 `ckernel.cpp` 在 2958→2964→2959 行之間跳動，另一 agent 因此取到不可重現的 md5。
+  作法：編輯前存 snapshot + 記 md5（本檔 pristine = `164934 bytes / 2958 lines /
+  md5 2603d177e43444f375610b14c900f5a5`），事後回頭確認 mutation 已還原（檢查 `"Fisrt"` 仍在、
+  `CheckThermo` 迴圈仍是純 `continue`），不要只信 agent 說「我已還原」。
+- **新增第六條經驗：`build_*` 目錄會被並發 build 弄壞。** `build_0803_l2` 後來出現
+  `undefined reference to LastSet / ShowMyMessage`（來自 `AMR.cpp.obj`），而全新 dir 同 target
+  exit 0。**任何交付數字都要在全新 build dir 上量**，不要沿用被多個 agent 併發寫過的目錄。
+- **W7-L2 現況：翻譯本體已驗證幾乎完美，不需要再重譯。** 六路稽核 + 對抗複驗結論：
+  golden :531-703 → ported :1018-1242 **146 對 146 零差異**；:359-533 兩側零剩餘；受測 9 個函式
+  statement diff **全部 IDENTICAL**；硬體索引字面與數值皆同。**確認的 findings 幾乎全是註解/引用
+  錯誤，已全部修掉**（4 處 `2589`→2588、`28`→27、`SystemNG :523/:908`→golden `:376/:679`、
+  `InitProcessSingleMotorTask :522`→golden `:375`、「4 ADDED」→6、`[G2]-[G14]`、
+  `fAOI` CreateForm `:166-283: 118 calls`、測試 C0 出處行號）。
+- **四個真實缺口（已在碼內揭露，接手者必讀）**：
+  1. **`SystemNG` 中止路徑是死碼**——golden 唯一生產者 `UpdateSystemNG()`
+     （`elec/Component/HAlarm.cpp:136`）未翻，故 ported :1207-1210 的 `StopAllMotor()` +
+     `SystemStart=false` **永遠不會觸發**。**這是缺失的安全中止。**
+  2. **三個未解析符號使 `ckernel.cpp` 無法連進執行檔**：`AccelateTask`（golden
+     `csystem.cpp:16458`）、`IsSafeLockCheck()`（`:16461-16508`）、`InitDoArmZHome()`
+     （`:4858-4862`）。full build 過關只因它在靜態 archive 裡。測試 TU 暫以
+     `LINK-TIME SUBSTRATE FILL` 補上並**故意留 duplicate-symbol 絆線**。
+  3. **`DoInArm_SuckerMap()` 被 `#if 0` 編譯掉**（golden :523 是活的呼叫，本體有 2 個全域寫入）
+     ——全檔唯一非 chartered 的編譯掉 statement。
+  4. **`ShowRunLed`/`ShowRunLabel` 延後的真 blast radius**：`bHALTing` 全樹唯一寫入者在
+     `ShowRunLabel`，消費端 `csystem.cpp:20534` 閘住 chamber 快速冷卻硬體路徑 → stub 在位期間
+     該分支不可達；另失 12 個 `SW[]` 實體輸出 + 7 個狀態寫入。
+- **下一步（已有可執行 brief，不需再 recon）**，建議順序：
+  1. **落地三個 substrate 符號到 ported `csystem.cpp`**（golden `csystem.cpp:4856-4857`、
+     `:4858-4862`、`:16458`、`:16461-16508`，全部依賴已確認在樹內）。**必須與測試同批改**：
+     落地後 `tests/test_w7_l2_ckernel.cpp` 的 SUBSTRATE FILL 會 duplicate symbol，
+     要刪掉 fill 並把 D7a/D7b 改成驅動 `Sen[SnRKCoverOpen]`/`Sen[SnRKSafeLock]`/
+     `iControlPanelMode` 的**真本體**（比現在的 stand-in 更有價值）。注意 golden `:16498-16499`
+     的 `SW[SwSafeLock].Off(); SW[SwRKSafeLock].Off();` 副作用不可漏。
+  2. **閘 4 修復**——純機械、零裁決，修復資料已完整（`cpublic.cpp` 62 列、`cprod.cpp` 283 列，
+     見本場次 recon）。完成即閘 4 轉綠。
+  3. **`DoTraceDataResponse`**（golden `SECSGEM/uHGemEquipment.cpp:4190-4242`）——零阻塞，
+     現址是活的 no-op stub（ported `:4583-4586`），caller 已活（ported `:4548-4549`），
+     8 個 golden 怪癖須逐位保留（含 `:4204-4207` 故意的 switch fall-through、`:4214` 的
+     `UINT_2` 截斷、`:4232-4237` 的冗餘賦值）。順手修 ported `:4577` 的錯引用（`:4190-4589`→`:4190-4242`）。
+  4. **MainCalcCore Tier A 2 支**：`CheckAutoOnlySetOneBin`（golden main.cpp:32523-32553）、
+     `CheckAuto1OnlyBin1`（`:32502-32521`），用同檔既有的 `bool` + `AnsiString&` out-param 前例。
+- **backlog 兩處已更正，勿再繼承舊說法**：
+  - **「`MainCalcCore` 15 個函式未翻」是假的**——那 15 個已翻完（`MainCalcCore.cpp` 恰 15 個定義，
+    `DEVLOG.md:1120` 記 11→15）。錯誤來源是 `DEVLOG.md:2460` 的「**後續批次**」在 `:2532`/`:2654`
+    轉述時被漏掉。真正剩餘池另有 15 支，且 **main.cpp 純抽取已到 end-of-seam**（373 個本體套完
+    篩選只剩 1 個且無計算內容）。
+  - **閘 4 的 U+FFFD 零功能暴露**（346 行全在 `//` 之後，零字串常量）。
+- **仍未觸及**：`uHGemClass.cpp` 剩 1 個真硬阻塞（`S7F20_CurrentEPPDData`，缺函式+缺 widget，
+  另有「gate 永遠打不開」第二層阻塞）；`PlaceOSTestResultToTray`（歸 W7-U）；
+  W7-U0/C5（`HT9045_UI` 未在根 `CMakeLists.txt` 定義卻已被 `build_msvc.bat:90` 傳入，須補且預設 OFF）；
+  `OutArmTask` initialiser 偏差（golden `aoutarm.cpp:42` `=1` vs ported `aoutarm_shims.cpp:31` `=0`，
+  反轉 golden `:1576` 的 `!=1` 判斷；因 `ShowRunLabel` 仍 deferred 故目前無活體影響，W7-U 解 gate 前必須處理）。
+- **勿圈入 V906 commit**：`config/*`、`setup.inf`、`.pti_frames/`、repo 根的 `SCRATCH_*.txt`/
+  `_review_*.diff`/`build_*` 產物、ported tree 內三個 `*_test_scratch/`，以及
+  `HT9011UC_Code_V3.33.899.0_.../CosFunction.cpp`。
+- **執行模式**：使用者指示持續有效——全部 cpp/h/dfm 都要翻、workflow 火力全開、不逐波停下請示、
+  重大問題跳過並最後條列；model/effort 依任務性質自動切換；安裝軟體不必先問。

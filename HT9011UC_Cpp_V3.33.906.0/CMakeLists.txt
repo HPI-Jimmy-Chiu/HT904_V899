@@ -592,10 +592,13 @@ add_library(ht9045_forms STATIC
     # homes -- none of these form types existed anywhere in this tree before.
     #   fShuttleMove -- WaitManualRetryKey (golden ckernel.cpp:133-149) only.
     #   fHome / fSetup / fRotate / fAOI -- ScanSystemSensor (golden :359-691),
-    #   which derefs 7 distinct form globals across 15 live sites.  fAOI's global
-    #   is deliberately initialised to NULL: golden null-checks it at
-    #   ckernel.cpp:502 (`if(FrmAOI!=NULL)`), so a null pointer IS the faithful
-    #   offline state and the class exists only so the guarded block compiles.
+    #   which derefs 7 distinct form globals across 15 live sites.
+    #   AI(W906-W7-L2) 20260803 CORRECTED: this comment first said fAOI's global is
+    #   deliberately NULL.  It is not.  forms/fAOI.cpp:35 allocates a live instance
+    #   at static init, deliberately and against the wave brief, because golden
+    #   HT9045.cpp:233 creates the form at application start -- so golden's guard
+    #   at ckernel.cpp:502 (`if(FrmAOI!=NULL)`) is TRUE on a real machine and the
+    #   faithful offline state is a live object.  See forms/fAOI.cpp:19-24.
     # Same layer as their siblings above (plain-data facades over ht9045_globals,
     # no upward edge), so no new link dependency is introduced.
     forms/fShuttleMove.cpp
@@ -1658,9 +1661,26 @@ add_library(ht9045_sm STATIC
     #     Correct target: ckernel's substrate (Sen[]/SW[]/MOT[]/Cylinder[]/
     #     canary_support/FormsFacade/csystem.h) is exactly what ht9045_sm
     #     already carries, so no new link dependency is introduced.
-    #     ckernel.cpp ITSELF is NOT here yet -- it lands in the W7-L2
-    #     translation wave that follows this substrate pass.
     ckernel_shims.cpp
+    # --- W7-L2 (2026-08-03): golden ckernel.cpp in full -- the system-sensor /
+    #     panel-key / panel-lamp / motor-alarm layer.  15 of golden's 17
+    #     functions are real bodies; ShowRunLed (golden :704-932) and
+    #     ShowRunLabel (:935-1726) are explicitly-labelled DEFERRED stubs with
+    #     call counters, because between them they make 181 fMain-> widget
+    #     dereferences and belong to W7-U, not here.  One ported file per golden
+    #     file per KNOWLEDGE.md:14, so this is assembled from six translation
+    #     fragments in golden line order rather than split by function.
+    #     ScanSystemSensor -- CORRECTED 20260803 BY INDEPENDENT AUDIT.  This comment
+    #     used to claim it "has NO live caller yet" and that csystem.cpp:16894 was
+    #     golden's only call site.  Both were false.  Golden has TWO call sites
+    #     (exhaustive scan of 786 files over the golden tree AND the out-of-tree
+    #     package D:\HT9045\elec\Component): csystem.cpp:16894, whose ported MainProc
+    #     ladder really is still the three-line `#if 0` at ported csystem.cpp:415-418
+    #     and so really is dormant here; and golden ckernel.cpp:2511 inside
+    #     ProcessAlarm, which THIS wave translates and which calls it live at ported
+    #     ckernel.cpp:2852.  Wiring the MainProc one would still be an ordering
+    #     deviation, so csystem.cpp is untouched -- but the function is NOT uncalled.
+    ckernel.cpp
 )
 
 target_include_directories(ht9045_sm PUBLIC

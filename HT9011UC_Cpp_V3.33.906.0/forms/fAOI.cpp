@@ -19,7 +19,7 @@ TFrmAOI::TFrmAOI() : bSimulateTopBtm(false) {}
 //  A LIVE INSTANCE, NOT NULL -- deliberate, and contrary to the W7-L2 brief.
 //  Golden HT9045.cpp:233 `Application->CreateForm(__classid(TFrmAOI), &FrmAOI);`
 //  is unconditional (verified by reading the whole CreateForm list,
-//  HT9045.cpp:166-245: 80 calls, zero guards).  FrmAOI is therefore non-NULL on
+//  HT9045.cpp:166-283: 118 calls, zero guards).  FrmAOI is therefore non-NULL on
 //  every real machine by the time SoftStart can be set, so golden ckernel.cpp
 //  :502's `if(FrmAOI!=NULL)` is TRUE and :504 runs.  A NULL here would have made
 //  the ported :504 permanently unreachable while the translation claimed

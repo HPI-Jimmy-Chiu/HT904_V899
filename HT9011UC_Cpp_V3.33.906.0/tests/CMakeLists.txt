@@ -2773,6 +2773,42 @@ endif()
 
 add_test(NAME W7_L4_CopyOSTestResult COMMAND test_w7_l4_copyostestresult)
 
+# ---------------------------------------------------------------------------
+# AI(W906-W7-L2) 20260803: W7-L2 regression suite for the ported ckernel.cpp
+# (root CMakeLists.txt already lists ckernel.cpp as a source of ht9045_sm, next
+# to ckernel_shims.cpp -- verified by grep this pass, not inherited from a doc,
+# so NO root CMakeLists.txt change is needed).
+#
+# Same RESCAN link map as test_w7_l3_siteusemgr / test_w7_l4_copyostestresult
+# above, and REQUIRED for the same reason: the unit lives in ht9045_sm and GNU ld
+# must re-scan the archive set so the cprod<->cpublic<->cmydef constructor
+# cross-references settle.
+#
+# NOTE for whoever lands golden csystem.cpp's IsSafeLockCheck() /
+# InitDoArmZHome() / AccelateTask: this test TU currently DEFINES all three,
+# because ckernel.cpp.obj references them and nothing in the ported tree defines
+# them (measured with nm this pass). When csystem.cpp gains any of them this
+# target will fail to link with a duplicate symbol -- that is a deliberate
+# tripwire, documented in the test file's "LINK-TIME SUBSTRATE FILL" banner.
+# Delete the fill from the test, do not weaken it.
+#
+# Placed ABOVE the GLOBAL TEST TIMEOUT block -- a test registered after that
+# block silently gets no timeout, which is how a wedged run goes unnoticed.
+# ---------------------------------------------------------------------------
+add_executable(test_w7_l2_ckernel
+    test_w7_l2_ckernel.cpp
+)
+
+target_link_libraries(test_w7_l2_ckernel PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w7_l2_ckernel PRIVATE ws2_32)
+endif()
+
+add_test(NAME W7_L2_CKernel COMMAND test_w7_l2_ckernel)
+
 # ===========================================================================
 #  GLOBAL TEST TIMEOUT -- must stay at the BOTTOM of this file
 # ===========================================================================
