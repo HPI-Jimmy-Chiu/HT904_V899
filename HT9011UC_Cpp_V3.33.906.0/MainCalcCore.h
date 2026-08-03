@@ -1,5 +1,5 @@
 // MainCalcCore.h
-// Standard C++ translation of 15 pure calc-core functions from BCB6 main.cpp
+// Standard C++ translation of 17 pure calc-core functions from BCB6 main.cpp
 // (V3.33.906.0_20260618) -- CALC CORE ONLY.
 // Source of truth: HT9011UC_Code_V3.33.906.0_20260618/main.cpp (bodies) and
 //                   HT9011UC_Code_V3.33.906.0_20260618/main.h (TfMain declarations).
@@ -29,11 +29,18 @@
 // the golden body actually reads (bAutoRetest[eTrayCount], iCatDataT3Pos[]) are taken as
 // explicit array parameters, per this file's usual "resolve at the call boundary" convention.
 //
-// OUT OF SCOPE this wave (deferred, NOT attempted -- explicitly excluded by the task, they need
-// a new "violation-code" return convention not yet designed):
-//   * TfMain::CheckAuto1OnlyBin1()
-//   * TfMain::CheckAutoOnlySetOneBin()
-//   * TfMain::CheckSLKSensor()
+// OUT OF SCOPE this wave (deferred, NOT attempted -- explicitly excluded by the task):
+//   * TfMain::CheckAuto1OnlyBin1()      -- RESOLVED in batch 5, see below
+//   * TfMain::CheckAutoOnlySetOneBin()  -- RESOLVED in batch 5, see below
+//   * TfMain::CheckSLKSensor()          -- still out of scope, but NOT for the reason
+//                                          originally given here; see batch 5 note below
+// AI(W906-calccore) 20260804: the original wording of the 3 bullets above claimed the blocker
+// was "a new 'violation-code' return convention not yet designed". That claim was STALE/WRONG
+// even when written: the needed convention is plain `bool` + OUT-param AnsiString, and it was
+// already established IN THIS FILE by ComputeCheckSiteMapState (declared below -- `bool` return
+// plus `AnsiString &ErrPart`, added in batch 2, i.e. the SAME wave that wrote this banner).
+// Both Check* functions are extracted in batch 5 below using exactly that convention. The real
+// blocker for CheckSLKSensor is different and unrelated to any return convention -- see batch 5.
 // Also explicitly OUT OF SCOPE: TfMain::CheckSiteMapState(bool bDelete) -- the file-I/O overload
 // at main.cpp:31176-31183 (reads AuToSitMap.txt via ReadIniData) -- only the NO-ARG overload
 // (main.cpp:31148-31172) is translated below as ComputeCheckSiteMapState.
@@ -88,6 +95,27 @@
 // heater-configuration state function that reads ATC_InterfaceForm (VCL), CUSTOMER_CODE,
 // TestIF_File, DeviceForm_File, LastSet, etc. and writes bUT150Install/HasUse throughout --
 // far outside "pure calc-core" by any reading.
+//
+// AI(W906-calccore) 20260804: batch 5 -- the two remaining cheap pure-calc Check* functions from
+// golden main.cpp, clearing the stale OUT-OF-SCOPE bullets corrected at the top of this banner:
+//   * TfMain::CheckAutoOnlySetOneBin() (main.cpp:32523-32553) -> ComputeCheckAutoOnlySetOneBin
+//   * TfMain::CheckAuto1OnlyBin1()     (main.cpp:32502-32521) -> ComputeCheckAuto1OnlyBin1
+// Both are `bool`-returning TfMain members whose ONLY side effect is a ShowMyMessage() dialog
+// (mymessbox.h:58, `void ShowMyMessage(AnsiString S1, AnsiString S2="", AnsiString S3=NULL,
+// bool Ok=false, bool bServoOff=false)`) fired immediately before the decision is returned. So
+// each is split the same way ComputeCheckSiteMapState already splits CheckSiteMapState: the pure
+// decision stays here as the `bool` return, the dialog TEXT becomes an OUT-param AnsiString
+// (golden builds it into its own fresh locals, no widget/file/global writes), and the actual
+// ShowMyMessage() call is left to a future ht9045_sm-layer wrapper. Unlike
+// ComputeCheckSiteMapState, the return POLARITY here needs no inversion -- both of these return
+// their raw decision directly in golden too (true == violation found).
+//   STILL OUT OF SCOPE, and the earlier "return convention" excuse for it was wrong:
+//     * TfMain::CheckSLKSensor() (main.cpp:32424-32500) -- it reads Cylinder[C_SLK1_Clamp] /
+//       [C_SLK1_Unclamp] / [C_SLK2_Clamp] / [C_SLK2_Unclamp] .OnSensor() (main.cpp:32434,32442,
+//       32451,32456,32469,32477,32486,32491), i.e. the global Cylinder[] hardware array, which is
+//       ht9045_sm substrate -- it must NOT be homed in this UI-free/globals-free TU at all. Its
+//       return shape (bool + 2 message strings) is in fact identical to the two extracted below;
+//       substrate ownership, not the return convention, is what keeps it out.
 //
 // Toolchain: MinGW g++ 6.3+, C++14 or later.
 
@@ -580,5 +608,132 @@ int ComputeSetESDTriTempCommand(int iUSE_NOVX3360,
                                  int iTriTempMachine,
                                  double fWorkTemperBase,
                                  int iTemperature);
+
+// ---------------------------------------------------------------------------
+// ComputeCheckAutoOnlySetOneBin
+//   Portable replacement for TfMain::CheckAutoOnlySetOneBin() (golden main.h:1510,
+//   `bool CheckAutoOnlySetOneBin();`).
+//   BCB6 source: main.cpp:32523-32553 (V3.27R.560 Ifor 20171213 (Steven) : Auto Tray
+//   設定Pass時僅可設定一個Bin)
+//
+//   Parameters:
+//     bUsePassBinOnlyCanSetOneBin -- global CosFunction.bUsePassBinOnlyCanSetOneBin
+//                                     (CosFunction.h:144, bool)
+//     iIsPassT6      -- global Prod.iIsPassT6[eTrayCount] (cprod.h:1068, int; the golden
+//                        body's own comment records the Steven 20240105 rename
+//                        Prod.bIsPass --> Prod.iIsFailT6). Indices [0,eTrayCount) are read.
+//     iT6CatData     -- global Prod.iT6CatData[TEST_MAX_BIN] (cprod.h:512, int, "Auto1 = 0");
+//                        only [0,iTestBinCount) is read, so this param is left UNSIZED, same
+//                        runtime-bounded-array convention as ComputeCheckARTSetupFile's
+//                        iCatDataT3Pos above (contrast the compile-time-sized
+//                        ComputeCheckOLPErrorHasErr(const int OLPSetBinErr[10])).
+//     iTestBinCount  -- global iTestBinCount (cmydef.h:3396, extern int) -- the inner loop-j
+//                        bound (runtime lot-dependent, independent of TEST_MAX_BIN capacity)
+//     s6TrayName     -- global s6TrayName[eTrayCount] (cmydef.h:138, `extern AnsiString
+//                        s6TrayName[eTrayCount]`) -- an extern-linkage array, so it is taken as
+//                        an explicit param rather than referenced directly, exactly like
+//                        ComputeCheckSiteMapState's IndexSuckName above.
+//     Msg1, Msg2     -- OUT params, == golden's own two fresh locals `AnsiString str1, str2`
+//                        (main.cpp:32527) as passed to ShowMyMessage(str1, str2) at
+//                        main.cpp:32544, i.e. Msg1 is the English S1 argument and Msg2 the
+//                        Chinese S2 argument of mymessbox.h:58's ShowMyMessage. Building them
+//                        is a pure by-product (two AnsiString::sprintf calls into locals, no
+//                        widget/file/global writes), so they are extracted alongside the
+//                        decision; the ShowMyMessage() call itself is OUT OF SCOPE (belongs in
+//                        the future ht9045_sm-layer wrapper).
+//                        CONTRACT: both are assigned ONLY on the `return true` path. On either
+//                        `return false` path golden fires no dialog at all and its str1/str2 stay
+//                        at their "" initialisers, so this function leaves the caller's objects
+//                        UNTOUCHED there -- read Msg1/Msg2 only when the return is true. (This is
+//                        neither ComputeCheckSiteMapState's append-only nor
+//                        ComputeJamRateRecordStrings' unconditional-overwrite contract; it is
+//                        assign-on-true, which is what golden's control flow actually does.)
+//
+//   eTrayCount (MachineType.h:1104, last enumerator of e6TrayName, ==33 -- eMag14==32 at
+//   MachineType.h:1103) is the outer loop bound and is read directly: header-only, already
+//   visible via this file's own MachineType.h include, same treatment as eAuto3 in
+//   ComputeCheckARTSetupFile above (no local inlining needed, unlike TOTAL_MOTOR/ATC_TYPE_*).
+//
+//   RETURN VALUE: golden's raw decision, NO polarity inversion (contrast
+//   ComputeCheckSiteMapState): true == a violation was found (some Pass-marked tray has 2+ bins
+//   mapped to it) == golden's own `return true` at main.cpp:32545; false == OK.
+//
+//   Faithfully preserves: the `iBinCount=0` re-initialisation at the TOP of each iIsPassT6[i]==1
+//   tray (main.cpp:32534) rather than per-bin; the dead `int iBinCount=0` initialiser at
+//   main.cpp:32525 (always overwritten by :32534 before any read -- kept, not cleaned up); the
+//   `iBinCount>1` threshold, i.e. the violation fires on the SECOND matching bin, not the first;
+//   and the immediate return on that second match, so ONLY the first offending tray in
+//   ascending-i order ever produces a message.
+// ---------------------------------------------------------------------------
+bool ComputeCheckAutoOnlySetOneBin(bool bUsePassBinOnlyCanSetOneBin,
+                                    const int iIsPassT6[eTrayCount],
+                                    const int iT6CatData[],
+                                    int iTestBinCount,
+                                    const AnsiString s6TrayName[eTrayCount],
+                                    AnsiString &Msg1,
+                                    AnsiString &Msg2);
+
+// ---------------------------------------------------------------------------
+// ComputeCheckAuto1OnlyBin1
+//   Portable replacement for TfMain::CheckAuto1OnlyBin1() (golden main.h:1195,
+//   `bool CheckAuto1OnlyBin1();`).
+//   BCB6 source: main.cpp:32502-32521 (Alick 20160802 add for SCC Auto1 Only Bin1 Function)
+//
+//   Parameters:
+//     iCUSTOMER_CODE -- global CUSTOMER_CODE (cmydef.h:3181, `extern int CUSTOMER_CODE`);
+//                        extern-linkage int, so an explicit param, compared inside the body
+//                        against CC_UNISEM_M -- same raw-int idiom as iATC_SYSTEM /
+//                        iUSE_AUTO_RETEST / iUSE_NOVX3360 above
+//     iTester        -- global LastSet.iTester (golden LastSet.h:52, int), compared against
+//                        OFF_LINE. NOTE: LastSet.h does NOT exist in this ported tree yet
+//                        (verified: `find . -iname LastSet.h` returns nothing outside build
+//                        dirs), which is a further reason this read is a plain int param
+//                        rather than a struct access -- same treatment ComputeCheckOLPErrorHasErr
+//                        above already gives LastSet.OLPSetBinErr[].
+//     iT6PosCate     -- global Prod.iT6PosCate[TEST_MAX_BIN] (cprod.h:513, int, "Auto1 = 1" --
+//                        note this array is 1-BASED on the position enum, unlike iT6CatData's
+//                        0-based "Auto1 = 0" at cprod.h:512, which is why it is ePosAuto1 and
+//                        not eAuto1 that is compared here). Only [0,iTestBinCount) is read, so
+//                        UNSIZED, same convention as iT6CatData above.
+//     iTestBinCount  -- global iTestBinCount (cmydef.h:3396, extern int) -- the loop bound
+//     Msg            -- OUT param == the single S1 argument golden passes to ShowMyMessage
+//                        (main.cpp:32511 / 32516); mymessbox.h:58 defaults S2 to "", and golden
+//                        uses the ONE-argument form here (both literals embed their own "\n"
+//                        between the Chinese and English halves), which is why this function has
+//                        ONE message OUT param where ComputeCheckAutoOnlySetOneBin above has two.
+//                        Only one of the two literals can ever be produced per call (each branch
+//                        returns immediately), so one param is sufficient AND faithful.
+//                        CONTRACT: assign-on-true only, exactly as for Msg1/Msg2 above -- both
+//                        `return false` paths fire no dialog and leave the caller's object
+//                        untouched.
+//
+//   CC_UNISEM_M (MachineType.h:358, `#define CC_UNISEM_M 981 // Unisem Malaysia`) and ePosAuto1
+//   (MachineType.h:1146, eBinPositionName enum, ==1) are both read directly -- header-only,
+//   already visible via this file's own MachineType.h include. OFF_LINE, by contrast, is
+//   `#define OFF_LINE 0` in cmydef.h:85, a header this file deliberately does NOT include, so it
+//   is inlined as a local named constant in the .cpp body with a citation comment -- same
+//   treatment as ATC_TYPE_33/35/61 and TOTAL_MOTOR above.
+//
+//   RETURN VALUE: golden's raw decision, no inversion: true == a Bin1/Auto1 violation was found
+//   (main.cpp:32512, 32517); false == OK, OR the UNISEM_M offline bypass.
+//
+//   ORDERING IS LOAD-BEARING -- preserved bit-for-bit, do NOT "tidy" any of this:
+//     1) The CUSTOMER_CODE==CC_UNISEM_M && iTester==OFF_LINE early return (main.cpp:32504-32505,
+//        Ifor 20171213 (Steven): UNISEM_M asked that Offline not be blocked by Auto1-Only-Bin1)
+//        returns FALSE, i.e. "no violation" -- it is a BYPASS, not a violation report, and it
+//        runs before the loop is ever entered.
+//     2) Branch 1 (main.cpp:32509) is `iT6PosCate[i]!=ePosAuto1 && i==1` -- the `i==1` conjunct
+//        means this branch can fire on ONLY ONE iteration (i==1, the second bin), whereas
+//        branch 2 (main.cpp:32514, `iT6PosCate[i]==ePosAuto1 && i!=1`) can fire on ANY other
+//        iteration. Because both branches return immediately, i==0 is tested against branch 2
+//        BEFORE i==1 is ever tested against branch 1: a bin-0 mapped to Auto1 therefore reports
+//        the "only Bin 1 may be Auto1" message and the `i==1` check never runs at all. Kept
+//        verbatim (the asymmetric `i==1` / `i!=1` conjuncts are golden's, quirk and all).
+// ---------------------------------------------------------------------------
+bool ComputeCheckAuto1OnlyBin1(int iCUSTOMER_CODE,
+                                int iTester,
+                                const int iT6PosCate[],
+                                int iTestBinCount,
+                                AnsiString &Msg);
 
 #endif // MAINCALCCORE_H

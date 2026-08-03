@@ -168,7 +168,7 @@ int main() {
     //  C) Big5 value bytes preserved verbatim through write/read.
     // =====================================================================
     {
-        // Big5 bytes for the Chinese for "test" (����): A4 A4 A4 E5 -> use a
+        // Big5 bytes for the Chinese for "test" (中文): A4 A4 A4 E5 -> use a
         // simple known Big5 pair; we only assert byte-exact round-trip.
         const char big5[] = { (char)0xA4, (char)0xA4, (char)0xA4, (char)0xE5, 0 };
         AnsiString val(big5);

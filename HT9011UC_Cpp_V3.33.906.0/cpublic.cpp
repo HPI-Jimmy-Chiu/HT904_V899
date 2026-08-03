@@ -161,7 +161,7 @@ Spcomm::TComm* g_pDTKComm = nullptr;
 
 //AI(ht9045-v899) 20260626: ungated -- pure arithmetic, no external deps
 //------------------------------------------------------------------------------
-AnsiString ConvertSecondToSPC(long s)                                           //Steven 20141111 : ���ର�ɤ���
+AnsiString ConvertSecondToSPC(long s)                                           //Steven 20141111 : 秒轉為時分秒
 {
     AnsiString str;
     long secs, mins, hours;
@@ -174,7 +174,7 @@ AnsiString ConvertSecondToSPC(long s)                                           
     return str;
 }
 //------------------------------------------------------------------------------
-AnsiString ConvertMSecToSPC(long s)                                             //Steven 20190714 : MS�ɶ��ഫ���ɤ���
+AnsiString ConvertMSecToSPC(long s)                                             //Steven 20190714 : MS時間轉換成時分秒
 {
     AnsiString str;
     long MS, secs, mins, hours;
@@ -189,7 +189,7 @@ AnsiString ConvertMSecToSPC(long s)                                             
     return str;
 }
 //------------------------------------------------------------------------------
-AnsiString ConvertMSecToTime(long s)                                            //Steven 20190714 : MS�ɶ��ഫ����ɤ���
+AnsiString ConvertMSecToTime(long s)                                            //Steven 20190714 : MS時間轉換成日時分秒
 {
     AnsiString str;
     long MS, secs, mins, hours, days;
@@ -226,7 +226,7 @@ void CutSpaceAtHead(char *S)
         pos++;
         i++;
     }
-    strcpy(S, str2);                                                            //���Ф���ϥ� strncpy
+    strcpy(S, str2);                                                            //指標不能使用 strncpy
 }
 //------------------------------------------------------------------------------
 char *ConvertSecondToTime(long s)
@@ -259,27 +259,27 @@ typedef struct
 TEMP_CONTROL Temp_Control;
 //------------------------------------------------------------------------------
 //AI(ht9045-v899) 20260626: ungated -- pure HexStrToInt/IntToHex, no I/O
-// �p��LRC (�ˬd�X)
+// 計算LRC (檢查碼)
 //------------------------------------------------------------------------------
-AnsiString DTK4848_LRC(AnsiString str)                                          //KaiHuang 20190821 : �s�W�x�F DTK4848�ű���
+AnsiString DTK4848_LRC(AnsiString str)                                          //KaiHuang 20190821 : 新增台達 DTK4848溫控器
 {
     AnsiString str2="";
-    str=str.SubString(2, 12);                                                   //�����Ĥ@��:
+    str=str.SubString(2, 12);                                                   //移除第一個:
     int LRC=0;
     for(int i=1; i<str.Length(); i+=2)
     {
-        str2=str.SubString(i, 2);                                               //���o��Ӧr��
-        LRC+=HexStrToInt(str2.c_str());                                         //�p���Ӧr����16�i����10�i��
+        str2=str.SubString(i, 2);                                               //取得兩個字元
+        LRC+=HexStrToInt(str2.c_str());                                         //計算兩個字元的16進位轉10進位
     }
 
-    LRC=0xFF-LRC+1;                                                             //�p��2�ɼ�
+    LRC=0xFF-LRC+1;                                                             //計算2補數
     str=IntToHex(LRC, 2);
     str=str.SubString(str.Length()-1, 2) ;
     return str;
 }
 #if 0 // TODO(W5: GetEveryCode/Change_Tempture_Value need T_ASXII2HEX table; UT100 needs A_Create_LCR/T_HEX2ASCII_Mac + COM2)
 //------------------------------------------------------------------------------
-void GetEveryCode(AnsiString AnsiData)                                          //Steven 20111028 : �令AnsiString
+void GetEveryCode(AnsiString AnsiData)                                          //Steven 20111028 : 改成AnsiString
 {
     sprintf(Temp_Control.cHeader   , "%s", AnsiData.SubString(1, 1));
     sprintf(Temp_Control.cAddress  , "%s", AnsiData.SubString(2, 2));
@@ -300,7 +300,7 @@ int Change_Tempture_Value()
         iData[3]=T_ASXII2HEX[Temp_Control.cData[3]-'0'];
         return iData[1]*256 + iData[2]*16 + iData[3];
     }
-    else                                                                        //�p�G����F���ܭt��
+    else                                                                        //如果等於F表示負值
     {
         iData[1]=T_ASXII2HEX[Temp_Control.cData[1]-'0'];
         iData[2]=T_ASXII2HEX[Temp_Control.cData[2]-'0'];
@@ -337,7 +337,7 @@ void UT100WordReadNoSucm(int Addr, int Command)
 #endif // TODO(W5)
 //AI(ht9045-v899) 20260626: ungated DTK4848WordWriteNoSucm -- COM2->Comm2 rerouted to g_pDTKComm seam
 //------------------------------------------------------------------------------
-//KaiHuang 20190821 : �s�W�x�F DTK4848�ű���
+//KaiHuang 20190821 : 新增台達 DTK4848溫控器
 //------------------------------------------------------------------------------
 void DTK4848WordWriteNoSucm(int Addr, int Value)
 {
@@ -607,12 +607,12 @@ void E5DCReadTemp(int Addr)
     int BCC = 0;
     AnsiString Command, Str;
     Command.sprintf("%02d0000101C00000000002", Addr+1);
-                  // %02d000 : �椸�s��+SID
-                  // 0101    : Ū���h�ӳs��Ѽ�
-                  // C0      : ����
-                  // 0000    : 0000->PV��       // 0001    : ���A
-                  // 00      : �쪺��m
-                  // 0002    : �����ƶq, 2��
+                  // %02d000 : 單元編號+SID
+                  // 0101    : 讀取多個連續參數
+                  // C0      : 類型
+                  // 0000    : 0000->PV值       // 0001    : 狀態
+                  // 00      : 位的位置
+                  // 0002    : 元素數量, 2個
 
     BCC=SetBCC(Command);
     Str.sprintf("%c%s%c%c\r\n", STX, Command, ETX, BCC);
@@ -631,7 +631,7 @@ void E5DCWriteTemp(int Addr, int Temp)
 #endif // TODO(W5)
 #if 0 // TODO(W6: TTLLog/HeaterLog/HeaterSVLog/OutShuttleLog/HomeLog/RespondASECom/ProductionLog need fMain UI + TestIF/SW[])
 //------------------------------------------------------------------------------
-void TTLLog(AnsiString Message)                                                 //Steven 20161115 : TTL Log��s���s��
+void TTLLog(AnsiString Message)                                                 //Steven 20161115 : TTL Log改新版存檔
 {
     AnsiString Str;
 
@@ -702,7 +702,7 @@ void OutShuttleLog(bool bFlag)                                                  
     }
 }
 //------------------------------------------------------------------------------
-// ����Home���y�{���
+// 紀錄Home的流程資料
 //------------------------------------------------------------------------------
 void HomeLog(AnsiString Message)                                                //Kevin  20110525
 {
@@ -724,28 +724,28 @@ void HomeLog(AnsiString Message)                                                
     }
 }
 //------------------------------------------------------------------------------
-// kevin 20150415 �^�� ase ���p
+// kevin 20150415 回應 ase 狀況
 //------------------------------------------------------------------------------
 bool RespondASECom(AnsiString S1)
 {
     if(CUSTOMER_CODE==CC_ASE_KaohSiung)
     {
-        ASESendMessage->SendToASEData(S1);                                      //kevin 20150415 �^�� ase Reset finish
+        ASESendMessage->SendToASEData(S1);                                      //kevin 20150415 回應 ase Reset finish
         return true;
     }
     return false;
 }
 //------------------------------------------------------------------------------
-void ProductionLog(AnsiString Message, bool bSaveToFile, AnsiString JamCode)    //JerryYang 20151225 Production log for SPIL Ĭ�{
+void ProductionLog(AnsiString Message, bool bSaveToFile, AnsiString JamCode)    //JerryYang 20151225 Production log for SPIL 蘇州
 {
     AnsiString sFileName;
     AnsiString Str;
-    if(IniConfig.bO06SaveLogTimePeriod==false)                                  //JerryYang 20160217 �S�}�ҴN���OLog
+    if(IniConfig.bO06SaveLogTimePeriod==false)                                  //JerryYang 20160217 沒開啟就不記Log
         return;
     GetTimeInfo();
 
     sFileName.sprintf("%s\\%s_%04d%02d%02d.logs", asProductionLogPath, IniConfig.SocketHandlerID, SystemYear, SystemMonth, SystemDate);
-    if(FileExists(sFileName)==false)                                            //JerryYang 20160120 ���ɤ����ưO��,���M��Memo���e
+    if(FileExists(sFileName)==false)                                            //JerryYang 20160120 跨日時不重複記錄,先清掉Memo內容
     {
         fMain->MemoProductionLog->Clear();
     }
@@ -755,11 +755,11 @@ void ProductionLog(AnsiString Message, bool bSaveToFile, AnsiString JamCode)    
     else
         Str.sprintf("%04d-%02d-%02d %02d:%02d:%02d.%d %s --> %s", SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec, SystemMSec, JamCode, Message);
     fMain->MemoProductionLog->Lines->Add(Str);
-    if(fMain->MemoProductionLog->Lines->Count>32768 ||                          //JerryYang 20160303 �@�Ѧs�@��log�ɡA1024->32768��
+    if(fMain->MemoProductionLog->Lines->Count>32768 ||                          //JerryYang 20160303 一天存一個log檔，1024->32768行
        Message=="Close" || bSaveToFile)
     {
         fMain->MemoProductionLog->Lines->SaveToFile(sFileName);
-        if(fMain->MemoProductionLog->Lines->Count>32768)                        //JerryYang 20160303 �@�Ѧs�@��log�ɡA1024->32768��
+        if(fMain->MemoProductionLog->Lines->Count>32768)                        //JerryYang 20160303 一天存一個log檔，1024->32768行
         {
             fMain->MemoProductionLog->Clear();
         }
@@ -768,7 +768,7 @@ void ProductionLog(AnsiString Message, bool bSaveToFile, AnsiString JamCode)    
 #endif // TODO(W6)
 //AI(ht9045-v899) 20260626: ungated ExecZipCommand -- Win32 CreateProcess only
 //------------------------------------------------------------------------------
-bool ExecZipCommand(AnsiString Path, AnsiString Param)                          //Steven 20160205 : �s�ɮɭԤ��n��DOS����
+bool ExecZipCommand(AnsiString Path, AnsiString Param)                          //Steven 20160205 : 存檔時候不要跳DOS視窗
 {
     STARTUPINFO  FStartupInfo;
     PROCESS_INFORMATION  FProcessInformation;
@@ -825,7 +825,7 @@ AnsiString GetDateInfoByString(AnsiString asSign)                               
 }
 #if 0 // TODO(W6: ProductionDataLog needs fSCKART/fLotInfo/LastSet + MyForceDirectories (gated))
 //------------------------------------------------------------------------------
-// kevin 20160724 �Ͳ����
+// kevin 20160724 生產資料
 //------------------------------------------------------------------------------
 void ProductionDataLog()
 {
@@ -846,10 +846,10 @@ void ProductionDataLog()
         tmps1="RT";
     }
 
-    if(fSCKART->bShow==true && fSCKART->palLotNumber->Caption!="")              //Steven 20210517 : �ɤWART��Lot No.
+    if(fSCKART->bShow==true && fSCKART->palLotNumber->Caption!="")              //Steven 20210517 : 補上ART的Lot No.
         str1.sprintf("%s_%s_%s_%s_%s.ini", IniConfig.SocketHandlerID, fSCKART->palLotNumber->Caption, tmps1, GetDateInfoByString(), GetOnlyTimeInfoByString());
     else
-        str1.sprintf("%s_%s_%s_%s_%s.ini", IniConfig.SocketHandlerID, fLotInfo->edtSysLotID->Text, tmps1, GetDateInfoByString(), GetOnlyTimeInfoByString());    //Steven 20210517 : �ɦW�[�W�ɶ��W�O
+        str1.sprintf("%s_%s_%s_%s_%s.ini", IniConfig.SocketHandlerID, fLotInfo->edtSysLotID->Text, tmps1, GetDateInfoByString(), GetOnlyTimeInfoByString());    //Steven 20210517 : 檔名加上時間戳記
 
     MyForceDirectories(asPath);
 
@@ -889,7 +889,7 @@ void ProductionDataLog()
             fputs(tmps.c_str(), pFile);
         }
 
-        if(CUSTOMER_CODE==CC_PTI)                                               //Jimmychiu 20251208 : PTI ����n�DBin Summary�����[�JError bin
+        if(CUSTOMER_CODE==CC_PTI)                                               //Jimmychiu 20251208 : PTI 其明要求Bin Summary報表加入Error bin
         {
             tmps.sprintf("Error Bin=%d\n", LastSet.iBinData32[0][iTestBinCount]);
             fputs(tmps.c_str(), pFile);
@@ -900,7 +900,7 @@ void ProductionDataLog()
 #endif // TODO(W6)
 //AI(ht9045-v899) 20260626: ungated CompareMD5ByFolder/SetMD5ByFolder -- HTMD5 (md5_Folder/SearchFile) active
 //------------------------------------------------------------------------------
-//V3.27N.546 Steven 20170927 (wei) : ���u�@�ɪ��ˬd�X�O�_���T -1:�S��MD5,  1:Pass, 0:Fail
+//V3.27N.546 Steven 20170927 (wei) : 比對工作檔的檢查碼是否正確 -1:沒有MD5,  1:Pass, 0:Fail
 //------------------------------------------------------------------------------
 int CompareMD5ByFolder(AnsiString FolderName)
 {
@@ -938,7 +938,7 @@ int CompareMD5ByFolder(AnsiString FolderName)
     return bResult;
 }
 //------------------------------------------------------------------------------
-//V3.27N.546 Steven 20170927 (wei) : �N�u�@�ɥ[�J�ˬd�X
+//V3.27N.546 Steven 20170927 (wei) : 將工作檔加入檢查碼
 //------------------------------------------------------------------------------
 void SetMD5ByFolder(AnsiString FolderName)
 {
@@ -962,7 +962,7 @@ void SetMD5ByFolder(AnsiString FolderName)
     delete tsFileName;
 }
 //------------------------------------------------------------------------------
-//union��Byte�PBit����
+//union的Byte與Bit互換
 //AI(ht9045-v899) 20260626: ungated ByteUnionBit methods -- pure bit ops + IntToHex
 //------------------------------------------------------------------------------
 int ByteUnionBit::Bit(int i)
@@ -1073,7 +1073,7 @@ void TMyQueue10::Add(int data)
     }
 
     iIndex++;
-    if(iIndex>=MAX_Q_10 || iIndex<0)                                            //Steven 20200826 : �s�W�O�@,�קK����
+    if(iIndex>=MAX_Q_10 || iIndex<0)                                            //Steven 20200826 : 新增保護,避免溢位
         iIndex=0;
     iData[iIndex]=data;
     DateTime[iIndex].sprintf("%02d:%02d:%02d.%03d", SystemHour, SystemMin, SystemSec, SystemMSec);
@@ -1089,7 +1089,7 @@ void TMyQueue10::Add(double data)
     }
 
     iIndex++;
-    if(iIndex>=MAX_Q_10 || iIndex<0)                                            //Steven 20200826 : �s�W�O�@,�קK����
+    if(iIndex>=MAX_Q_10 || iIndex<0)                                            //Steven 20200826 : 新增保護,避免溢位
         iIndex=0;
     dData[iIndex]=data;
     DateTime[iIndex].sprintf("%02d:%02d:%02d.%03d", SystemHour, SystemMin, SystemSec, SystemMSec);
@@ -1111,7 +1111,7 @@ bool TMyQueue10::CheckTaskChange()
         }
         else
         {
-            if(iIndex>=0 && iIndex<MAX_Q_10)                                    //Steven 20200826 : �s�W�O�@,�קK����
+            if(iIndex>=0 && iIndex<MAX_Q_10)                                    //Steven 20200826 : 新增保護,避免溢位
             {
                 if(*iTask!=iData[iIndex])
                 {
@@ -1132,7 +1132,7 @@ double TMyQueue10::GetData(int i)
 {
     if(i<=iCount)
     {
-        if(iCount<MAX_Q_10)                                                     //Steven 20200730 : �ץ�Task List��������
+        if(iCount<MAX_Q_10)                                                     //Steven 20200730 : 修正Task List紀錄順序
         {
             if(i>=0)
             {
@@ -1148,7 +1148,7 @@ double TMyQueue10::GetData(int i)
         }
         else
         {
-            if(((iIndex+i)%MAX_Q_10)<MAX_Q_10 || ((iIndex+i)%MAX_Q_10)>=0)      //Steven 20200826 : �s�W�O�@,�קK����
+            if(((iIndex+i)%MAX_Q_10)<MAX_Q_10 || ((iIndex+i)%MAX_Q_10)>=0)      //Steven 20200826 : 新增保護,避免溢位
             {
                 if(bInt)
                     return iData[((iIndex+i)%MAX_Q_10)];
@@ -1165,7 +1165,7 @@ AnsiString TMyQueue10::GetDateTime(int i)
     AnsiString Str="";
     int flag=((iIndex+i)%MAX_Q_10);
 
-    if(i<=iCount)                                                               //Steven 20200730 : �ץ�Task List��������
+    if(i<=iCount)                                                               //Steven 20200730 : 修正Task List紀錄順序
     {
         if(iCount<MAX_Q_10)
         {
@@ -1183,7 +1183,7 @@ AnsiString TMyQueue10::GetDateTime(int i)
         }
         else
         {
-            if(flag>=0)                                                         //Steven 20200826 : �s�W�O�@,�קK����
+            if(flag>=0)                                                         //Steven 20200826 : 新增保護,避免溢位
             {
                 if(bInt)
                     Str.sprintf("%s, %d",  DateTime[flag], iData[flag]);
@@ -1207,7 +1207,7 @@ double TMyQueue10::GetLastData()
 AnsiString TMyQueue10::ShowCommaText(bool bWithDateTime)
 {
     AnsiString Str=Alias+",", Str2;
-    for(int i=0; i<=iCount; i++)                                                //Steven 20200730 : �ץ�Task List��������
+    for(int i=0; i<=iCount; i++)                                                //Steven 20200730 : 修正Task List紀錄順序
     {
         if(bWithDateTime)
         {
@@ -1775,7 +1775,7 @@ int FindAndKillProcess(LPCTSTR lpszProcessName)                                 
 }
 #if 0 // TODO(W6: LogIndexMaxMinPos needs fMain->slIndexYMaxMinShift + iMax/MinCommandY* globals + InitialMaxMinValue)
 //------------------------------------------------------------------------------
-void LogIndexMaxMinPos(AnsiString str)                                          //Isaac 20201012 : �p��Encoder�Mcommandpos/Teaching���t�ȡA�O���æs�ɡA�@�Ltray�O���@��
+void LogIndexMaxMinPos(AnsiString str)                                          //Isaac 20201012 : 計算Encoder和commandpos/Teaching的差值，記錄並存檔，一盤tray記錄一次
 {
     AnsiString Message="", StrPosRecord="";
 
@@ -1791,7 +1791,7 @@ void LogIndexMaxMinPos(AnsiString str)                                          
 
     fMain->slIndexYMaxMinShift->MySaveToFile();
 
-    InitialMaxMinValue(str);                                                    //Isaac 20201012 : �p��Encoder�Mcommandpos/Teaching���t�ȡA�k�s
+    InitialMaxMinValue(str);                                                    //Isaac 20201012 : 計算Encoder和commandpos/Teaching的差值，歸零
 }
 #endif // TODO(W6)
 //AI(ht9045-v899) 20260626: ungated Round(double,double), Round(double), RotationCoordinates -- pure math
@@ -1906,16 +1906,16 @@ void sDataTimelog(AnsiString &Msg)                                              
 }
 //AI(ht9045-v899) 20260626: ungated b_Check_Dir_Exist_And_Creak_Dir -- local shims for ExtractFileDir/IncludeTrailingPathDelimiter at file top
 //==============================================================================
-//��ܻ���:�ˬd�����ؿ��O�_�s�b�A�åB���s�إ�
-//V1.0 :Kirin 20170206 (han) �H�e�N�� 20170206 ���s�ק�C
-//V1.1 :Kirin 20170210 (han) �W�[�ɤW�T�{�����C
+//函示說明:檢查本機目錄是否存在，並且重新建立
+//V1.0 :Kirin 20170206 (han) 以前就有 20170206 重新修改。
+//V1.1 :Kirin 20170210 (han) 增加補上確認結尾。
 //==============================================================================
 bool b_Check_Dir_Exist_And_Creak_Dir(AnsiString asDir)
-{                                                                               //�إ߻P�ˬd�ؿ��O�_�s�b.
+{                                                                               //建立與檢查目錄是否存在.
     AnsiString asStr;
     asStr.sprintf("Cannot create %s.", asDir);
 
-    AnsiString asDir1=ExtractFileDir(IncludeTrailingPathDelimiter(asDir));      //Kirin 20170210.12 (han) �W�[�ɤW�T�{����
+    AnsiString asDir1=ExtractFileDir(IncludeTrailingPathDelimiter(asDir));      //Kirin 20170210.12 (han) 增加補上確認結尾
     if(asDir1.Length()>0)
     {
         if(DirectoryExists(asDir1)==false)
@@ -1995,9 +1995,9 @@ void ShuttleLog()                                                               
 #endif // TODO(W6)
 //AI(ht9045-v899) 20260626: ungated GetSoftwareFileVersion -- uses VerInfo (Win32 version API)
 //------------------------------------------------------------------------------
-//Sam 20230328 : �۰ʧ�s�W�[�����ˬd
+//Sam 20230328 : 自動更新增加版本檢查
 //==>
-AnsiString GetSoftwareFileVersion(AnsiString sFilePatch)                        //���~����
+AnsiString GetSoftwareFileVersion(AnsiString sFilePatch)                        //產品版本
 {
     AnsiString sFileVer="";
     VerInfo *myVerInfo=new VerInfo();
@@ -2111,7 +2111,7 @@ AnsiString VerInfo::GetMainVersion()
     AnsiString strFilePath=Application->ExeName;
     VerInfo().GetAppVersion(strFilePath, iFileVerMajor, iFileVerMinor, iFileVerRelease, iFileVerBuild);
 
-    if(IniConfig.bSPILFunction==true)       //JeryYang 20260611 : SPIL��ܧ��㪩����
+    if(IniConfig.bSPILFunction==true)       //JeryYang 20260611 : SPIL顯示完整版本號
     {
         sret=AnsiString().sprintf("V%d.%d.%d.%d", iFileVerMajor, iFileVerMinor, iFileVerRelease, iFileVerBuild);
     }
@@ -2248,7 +2248,7 @@ void VerInfo::m_GetVerInfo(void)
 }
 #if 0 // TODO(W7: GetBundleInfo needs cJSON + TestSocket/LotSummary/Prod/fSCKART/fNote + asBundleTrayID/bUnloading)
 //<==
-//Sam 20230328 : �۰ʧ�s�W�[�����ˬd
+//Sam 20230328 : 自動更新增加版本檢查
 //------------------------------------------------------------------------------
 AnsiString GetBundleInfo(int iAuto)                                             //JerryYang 20240318 : add
 {
@@ -2418,7 +2418,7 @@ AnsiString GetBundleInfo(int iAuto)                                             
 #endif // TODO(W7)
 //AI(ht9045-v899) 20260626: ungated GetErrorMessage -- Win32 FormatMessage only
 //------------------------------------------------------------------------------
-AnsiString GetErrorMessage(DWORD dwErrorMessageCode)                            //Steven 20240911 : ����t�ο��~���T��
+AnsiString GetErrorMessage(DWORD dwErrorMessageCode)                            //Steven 20240911 : 抓取系統錯誤的訊息
 {
     AnsiString strMsg;
     LPVOID lpMsgBuf;
@@ -2426,7 +2426,7 @@ AnsiString GetErrorMessage(DWORD dwErrorMessageCode)                            
     FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
                    NULL,
                    dwErrorMessageCode,
-                   MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),                   // �w�]�y��
+                   MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),                   // 預設語言
                    (LPTSTR) &lpMsgBuf,
                    0,
                    NULL);
@@ -2434,18 +2434,18 @@ AnsiString GetErrorMessage(DWORD dwErrorMessageCode)                            
     strMsg.sprintf(("Error Code : 0x%02X ==> Error Message : %s "), dwErrorMessageCode, lpMsgBuf);
     { AnsiString t; for(int i=1;i<=strMsg.Length();i++){char c=strMsg[i];if(c!='\r'&&c!='\n')t+=c;} strMsg=t; } //AI(ht9045-v899) 20260626: StringReplace(rfReplaceAll)->manual CR/LF strip (vclcompat has no TReplaceFlags)
     // (CR and LF both stripped in loop above)
-    LocalFree(lpMsgBuf);                                                        // �O�ofree���Ŷ��A�i���n�ߺD
+    LocalFree(lpMsgBuf);                                                        // 記得free掉空間，養成好習慣
     return strMsg;
 }
 //AI(ht9045-v899) 20260626: ungated VC8ToKpa/KpaToVC8/IsDoubleEqual -- pure math
 //------------------------------------------------------------------------------
-double VC8ToKpa(int iVal) //intput 0~32767         output -116.0~148.0 Kpa      //Sam 20230210 : �s�W VacuumUnit �q�T�Ҳ�
+double VC8ToKpa(int iVal) //intput 0~32767         output -116.0~148.0 Kpa      //Sam 20230210 : 新增 VacuumUnit 通訊模組
 {
     double dKpa=0.0;
     double dValue=0.0;
     dValue=(double)iVal;
 
-    dKpa=((3.3*(dValue/32767.0))-1.45)/0.0125;                                  //�l�洣�Ѫ�����
+    dKpa=((3.3*(dValue/32767.0))-1.45)/0.0125;                                  //泓格提供的公式
 
     if(dKpa>148)
         dKpa=148.0;
@@ -2454,11 +2454,11 @@ double VC8ToKpa(int iVal) //intput 0~32767         output -116.0~148.0 Kpa      
     return dKpa;
 }
 //------------------------------------------------------------------------------
-int KpaToVC8(double dKpa) //intput -116.0~148.0 Kpa    output 0~32767           //Sam 20230210 : �s�W VacuumUnit �q�T�Ҳ�
+int KpaToVC8(double dKpa) //intput -116.0~148.0 Kpa    output 0~32767           //Sam 20230210 : 新增 VacuumUnit 通訊模組
 {
     int iVal=0;
 
-    iVal=32767.0*(((0.0125*dKpa)+1.45)/3.3);                                    //�l�洣�Ѫ�����
+    iVal=32767.0*(((0.0125*dKpa)+1.45)/3.3);                                    //泓格提供的公式
 
     if(iVal>32767)
         iVal=32767.0;

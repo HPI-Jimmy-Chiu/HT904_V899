@@ -160,8 +160,10 @@
 //  rationale and the two-codec-instance boundary note it flags).
 //  Still explicitly OUT OF SCOPE: FormCreate's SV/EC registration (a future
 //  dedicated wave, brings SecsSvEcRegistration along), DoSpool/
-//  DoTraceDataResponse/DoUploadFileToHost/DoDownLoadRemoteFile (gated no-op
-//  stubs, same idiom as EnableDisableEventReportAcknowledgeError), and the
+//  DoUploadFileToHost/DoDownLoadRemoteFile (gated no-op stubs, same idiom as
+//  EnableDisableEventReportAcknowledgeError).  AI(W906-trace) 20260804:
+//  DoTraceDataResponse REMOVED from this list -- golden's REAL body now lives at
+//  .cpp:4640-4693 and its caller was already live.  And the
 //  ProcessReceiceData data-message tail above.
 //
 //  AI(W906-SysModWire) 20260720: FIFTH wave -- SystemModularInitial wiring.
@@ -1086,8 +1088,10 @@ public:
     // golden :810-990). DESIGNED to also satisfy THGem's own
     // DoTraceDataResponse (uHGemEquipment.cpp:4190-4242, the S6F1 Trace Data
     // Send retry state machine that shares this SAME member cluster) -- that
-    // method stays its own separate gated stub (see "Bucket C" section below,
-    // DoTraceDataResponse's own comment) because un-gating IT is explicitly
+    // AI(W906-trace) 20260804: SUPERSEDED for DoTraceDataResponse -- no longer a
+    // gated stub, golden's real body landed at .cpp:4640-4693.  The rest of this note
+    // still applies to the OTHER methods named.  (Formerly: "that
+    // method stays its own separate gated stub".)  Un-gating IT was explicitly
     // NOT part of THIS wave's assigned scope (S2F24Sub, uHGemClass.cpp); this
     // member set is simply shaped so a future wave can un-gate it
     // mechanically, citing this same golden line range, rather than inventing
@@ -1553,7 +1557,7 @@ public:
 
     int  DoConnect();                          // golden :3536-3599
     void __fastcall DoProcessSFNoResponse();   // golden :4604-4694
-    void DoLocalAllProcessLoop();              // golden :4699-4741 (shell; 4 callees gated, see .cpp)
+    void DoLocalAllProcessLoop();              // golden :4699-4741 (shell; AI(W906-trace) 20260804: was "4 callees gated" -- DoTraceDataResponse is now REAL, so at most 2 remain)
 
     // AI(W906-SysModWire) 20260720: SetMachineTypeAndSoftwarseVer/
     // CheckSFFormatOnlyHead -- both prerequisites for un-gating uHGemClass.cpp's
@@ -1648,7 +1652,12 @@ public:
     // through an ActiveWire-style indirection -- confirm the exact call
     // shape against THIS file's OWN established convention, not uHGemClass.cpp's,
     // before assuming a 1:1 copy).
-    void DoTraceDataResponse(int TR);  // golden :4190-4242
+    // AI(W906-trace) 20260804: NO LONGER A BUCKET-C STUB -- golden's real body is
+    // translated at .cpp:4640-4693, byte-exact bar one `// fallthrough` comment.
+    // Left in place rather than physically moved so declaration order stays stable;
+    // the Bucket C banner above no longer applies to this one.  The .cpp names the
+    // param `iIndex` per golden; golden's own .h:275 leaves it unnamed.
+    void DoTraceDataResponse(int TR);  // golden :4190-4242 -- REAL BODY, see .cpp:4640
 
     // AI(W906-DoDownLoadRemoteFile) 20260721: UN-GATED (was a stub in this
     // same cluster) -- real body added, see .cpp. golden :6746-6807. Pure

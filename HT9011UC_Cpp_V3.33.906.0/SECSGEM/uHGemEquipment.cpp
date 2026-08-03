@@ -4573,16 +4573,129 @@ void THGem::DoLocalAllProcessLoop()
 // unconditional call to DoSpool() immediately above is UNCHANGED.
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
-// AI(W906-uHGemEquipment-BucketC) 20260717: GATED STUB (golden
-// uHGemEquipment.cpp:4190-4589, called once per index 0..9 from
-// DoLocalAllProcessLoop's own `for` loop). Real body manages the S6F1 Trace
-// Data Send retry state machine (TraceData[]/TraceDataResponseTask[]/
-// bTraceData[]/TraceDataResponseDelay[]/iTRID[]/...), none of which is part
-// of this wave's scope.
+// V 1.0
+// 對 Trace Data resopne
 //---------------------------------------------------------------------------
-void THGem::DoTraceDataResponse(int TR)
+// AI(W906-trace) 20260804: UN-GATED for real this wave -- replaces the live
+// no-op stub `void THGem::DoTraceDataResponse(int TR) { (void)TR; }` that used
+// to sit here. Body is a verbatim translation of golden
+// uHGemEquipment.cpp:4190-4242 (S6F1 Trace Data Send, one report per poll per
+// trace index). The banner comment two lines above is golden's own
+// (uHGemEquipment.cpp:4186-4189) INCLUDING its typo "resopne" -- not corrected.
+//
+// CITATION FIX: the stub's own comment cited golden as ":4190-4589". Wrong --
+// golden's function ends at :4242; :4243-4248 is the next banner and :4249
+// starts THGem::DoUploadFileToHost_ForSingleFile. The header decl
+// (uHGemEquipment.h:1651) already carried the correct ":4190-4242".
+//
+// Every member and callee this body touches was already real before this wave
+// (TraceDataResponseTask[]/bTraceData[]/TraceDataResponseDelay[]/DSPER[]/
+// iTRID[]/iTOTSMP[]/iREPGSZ[]/iTOTSMP_Count[]/TraceData[] -- .h:1102/1106/
+// 1115-1120/1128.  CORRECTED 20260804 BY INDEPENDENT REVIEW: an earlier draft said
+// all NINE are "ctor-initialised at .cpp:717-728".  That loop initialises EIGHT and
+// does NOT touch TraceDataResponseDelay[], which relies on GemTimer's own default
+// ctor -- exactly as .h:1125-1128 already says.  iTimeFormat .h:696;
+// SystemYear..SystemMSec .h:729-730; InitLocalHead/DataItemOut x2/
+// SendLocalData .cpp:5859/5864/5875/5882 -- CORRECTED 20260804: the draft cited
+// 5752/5757/5768/5775, which were the PRE-EDIT positions; this wave's own
+// +107-line insertion moved all four (each re-opened and verified);
+// GetTimeInfo .cpp:3527;
+// DataItemOutSV .cpp:1286), so NO member was added and NO header change was
+// needed -- exactly what .h:1633-1650's own refreshed TODO predicted. THGem
+// calls the wire forwarders as BARE members here (this file's own convention),
+// NOT through uHGemClass.cpp's `ActiveWire->` idiom.
+//
+// The caller was ALREADY live -- DoLocalAllProcessLoop, this file :4548-4549
+// (`for (int i = 0; i < 10; i++) DoTraceDataResponse(i);`) -- so this
+// un-gating changes runtime behaviour immediately; no wiring was added.
+//
+// EIGHT GOLDEN QUIRKS, ALL PRESERVED, NONE FIXED:
+// (1) DELIBERATE SWITCH FALL-THROUGH (golden :4204-4207): `case 1:` arms the
+//     delay timer and sets Task=100 with NO `break`, so `case 100:` executes
+//     in the SAME tick. No `break` inserted; only a `// fallthrough` marker.
+// (2) `int &Task=TraceDataResponseTask[iIndex];` (golden :4195) -- golden's
+//     reference-alias idiom, same as the sibling
+//     DoUploadFileToHost_ForSingleFile immediately below in this file.
+// (3) The `bTraceData[iIndex]==false` early exit writes
+//     `TraceDataResponseTask[iIndex]=1;` THROUGH THE ARRAY (golden :4198), not
+//     through the `Task` alias bound three lines earlier. Same object; kept
+//     letter-for-letter as golden wrote it.
+// (4) WIRE TYPE MISMATCH (golden :4214): `&iTOTSMP_Count[iIndex]` is an
+//     `unsigned` (4 bytes, .h:1119) but is sent as HType.UINT_2_TYPE. This
+//     port's encoder does `unsigned short *ptr` / `ptr = (unsigned short *)P;`
+//     / `j = ptr[i];` (SecsWireCodec.cpp:549-553) and len==1, so it reads
+//     element 0 only -- truncating to the low 16 bits on little-endian. NOT
+//     "fixed" to UINT_4_TYPE.
+// (5) REDUNDANT/DEAD ASSIGNMENT (golden :4232-4237): the overflow `if` body
+//     already sets `Task=1;`, and golden then sets `Task=1;` again
+//     UNCONDITIONALLY on the next line. BOTH kept.
+// (6) LOOKS OFF-BY-ONE, IS GOLDEN: `iTOTSMP_Count[iIndex]++` happens AFTER the
+//     value has been handed to DataItemOut (golden :4214-4215), and the
+//     overflow test at :4232 compares the ALREADY-INCREMENTED counter against
+//     iTOTSMP[iIndex]. Not reordered.
+// (7) `itrid=atoi(iTRID[iIndex].c_str());` into a LOCAL `unsigned itrid`
+//     (golden :4212-4213), then sent as UINT_4_TYPE -- atoi returns int into
+//     an unsigned local; golden's own narrowing, kept.
+// (8) The 4-way `iTimeFormat` timestamp ladder (golden :4218-4225) is a
+//     SECOND, INDEPENDENT copy of the ladder inside GetTimeInfo (golden
+//     :324-331, ported :3536-3543). This copy writes the LOCAL `str`, NOT
+//     GemClock. Deliberately NOT refactored to reuse GemClock even though the
+//     GetTimeInfo() call on the line above has just filled GemClock with the
+//     same string for iTimeFormat 1/2/3.
+//---------------------------------------------------------------------------
+void THGem::DoTraceDataResponse(int iIndex)
 {
-    (void)TR;
+    AnsiString str;
+    unsigned itrid;
+
+    int &Task=TraceDataResponseTask[iIndex];
+    if(bTraceData[iIndex]==false)
+    {
+        TraceDataResponseTask[iIndex]=1;
+        return;
+    }
+
+    switch(Task)
+    {
+        case 1:
+            TraceDataResponseDelay[iIndex].TimerSetMSAndOn(DSPER[iIndex]);
+            Task=100;
+            // fallthrough -- golden :4206-4207 has NO break here (quirk 1)
+        case 100:
+            if(TraceDataResponseDelay[iIndex].TimerOff())
+            {
+                InitLocalHead(6, 1, 0);
+                DataItemOut(4, HType.LIST_TYPE, NULL);
+                itrid=atoi(iTRID[iIndex].c_str());
+                DataItemOut(1, HType.UINT_4_TYPE, &itrid);
+                DataItemOut(1, HType.UINT_2_TYPE, &iTOTSMP_Count[iIndex]);
+                iTOTSMP_Count[iIndex]++;
+
+                GetTimeInfo();
+                if(iTimeFormat==1)                                              //16 byte
+                    str.sprintf("%04d%02d%02d%02d%02d%02d%02d", SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec, SystemMSec/10);
+                else if(iTimeFormat==2)                                         //14 byte
+                    str.sprintf("%04d%02d%02d%02d%02d%02d", SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec);
+                else if(iTimeFormat==3)                                         //19 byte
+                    str.sprintf("%04d-%02d-%02dT%02d:%02d:%02d", SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec);
+                else
+                    str.sprintf("%02d%02d%02d%02d%02d%02d", SystemYear%100, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec);
+                DataItemOut(HType.ASCII_TYPE, str);
+
+                DataItemOut(iREPGSZ[iIndex], HType.LIST_TYPE, NULL);
+                for(unsigned i=0; i<iREPGSZ[iIndex]; i++)
+                    DataItemOutSV(TraceData[iIndex]->Strings[i]);
+                SendLocalData();
+                if(iTOTSMP_Count[iIndex]>iTOTSMP[iIndex])
+                {
+                    bTraceData[iIndex]=false;
+                    Task=1;
+                }
+                Task=1;
+                break;
+            }
+            break;
+    }
 }
 //---------------------------------------------------------------------------
 // AI(W906-UploadFamily) 20260723: THGem::DoUploadFileToHost_ForSingleFile --

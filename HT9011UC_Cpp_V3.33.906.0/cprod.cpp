@@ -10,7 +10,7 @@
 PROD_INFO_ST     Prod;
 SYSTEM_DEVICE_FORM DeviceForm;
 SYSTEM_DEVICE_FORM DeviceForm_File;
-SYSTEM_DEVICE_FORM DeviceForm_NET;                                              //Ifor 20181023 add SCC�n�DFTP��ƥd���[�JContact�������
+SYSTEM_DEVICE_FORM DeviceForm_NET;                                              //Ifor 20181023 add SCC要求FTP資料卡控加入Contact相關資料
 SYSTEM_TRAY_FORM TrayForm;
 TRAY_TYPE_PARA HotPlateForm;
 TRAY_TYPE_PARA HotPlateForm_File;
@@ -64,9 +64,9 @@ RUN_OFFSET Offset_File;
 RUN_INFO RunInfo;
 INVISIBLE_OFFSET InvisibleOffset;
 //RUN_INFO RunInfo2;
-class ARM_OFFSET *InArmOffSet[InOfsTotal];                                      //Steven 20140425 : ����Offset
+class ARM_OFFSET *InArmOffSet[InOfsTotal];                                      //Steven 20140425 : 重整Offset
 class ARM_OFFSET *OutArmOffSet[OutOfsTotal];
-class ARM_OFFSET *InArmOffSet_File[InOfsTotal];                                 //Steven 20140425 : ����Offset
+class ARM_OFFSET *InArmOffSet_File[InOfsTotal];                                 //Steven 20140425 : 重整Offset
 class ARM_OFFSET *OutArmOffSet_File[OutOfsTotal];
 class ARM_OFFSET *SortArmOffSet[SortOfsTotal];                                  //RogerYang 20250417 for HT9046AU add
 class ARM_OFFSET *SortArmOffSet_File[SortOfsTotal];                             //RogerYang 20250417 for HT9046AU add
@@ -94,16 +94,16 @@ const int OnLine=1;
 
 bool bInstallRotate=false;
 const int IFaceErr=555;
-RESERVE_EMPTY_POINT ReserverEmptyPoint[1000];                                   //ChungHung 20111215 ���ձNFix3��
+RESERVE_EMPTY_POINT ReserverEmptyPoint[1000];                                   //ChungHung 20111215 嘗試將Fix3放滿
 RESERVE_EMPTY_POINT ReserverEmptyPointAutoClean[20];
-SHUTTLE_THREAD SThreadPara;                                                     //Steven 20110407 : Shuttle Thread���ܼ�
+SHUTTLE_THREAD SThreadPara;                                                     //Steven 20110407 : Shuttle Thread的變數
 
 const bool bReadFile=true;
 const bool bWriteFile=false;
 SYSTEM_SCANNER_AOI_IF ScannerAOIIF;                                             // 2012.12.10 , Joye , AMD HT-7046M
-const AnsiString asFileNameConfigByRecipe=AnsiString("configByRecipe.ini");     //JimmyChiu 20220601 : config�x�s���Hrecipe
+const AnsiString asFileNameConfigByRecipe=AnsiString("configByRecipe.ini");     //JimmyChiu 20220601 : config儲存跟隨recipe
 
-AnsiString asNoRTBinFix[3]={"", "", ""};                                        //RogerYang 20250604 �������i�ƴ�bin�\��
+AnsiString asNoRTBinFix[3]={"", "", ""};                                        //RogerYang 20250604 偉測不可複測bin功能
 
 //KenHsieh 20210813 : add CCD AUTO ALIGNMENT
 //==>
@@ -207,9 +207,9 @@ _fastcall ARM_OFFSET::~ARM_OFFSET()
 {
     try
     {
-        tArmOffset->Clear();                                                    //Ifor 20170603 (wei) TStringList �R���e�� Clean
-        tArmPickOffset->Clear();                                                //Ifor 20170603 (wei) TStringList �R���e�� Clean
-        tArmPlaceOffset->Clear();                                               //Ifor 20170603 (wei) TStringList �R���e�� Clean
+        tArmOffset->Clear();                                                    //Ifor 20170603 (wei) TStringList 刪除前先 Clean
+        tArmPickOffset->Clear();                                                //Ifor 20170603 (wei) TStringList 刪除前先 Clean
+        tArmPlaceOffset->Clear();                                               //Ifor 20170603 (wei) TStringList 刪除前先 Clean
         delete SingleOffSet;
         delete tArmOffset;
         delete tArmPickOffset;
@@ -274,21 +274,21 @@ void ARM_OFFSET::SetVariable2(double Pos)
     dArmVariable2=Pos;
     dXPitch[1]=Pos;
     tArmOffset->Strings[ofsArmPitch2]=AnsiString(Pos);                          //Steven 20140510 : Secs Gem
-}                                                                               //Steven 20131002 : XY�ܶZ
+}                                                                               //Steven 20131002 : XY變距
 //------------------------------------------------------------------------------
 void ARM_OFFSET::SetVariable3(double Pos)
 {
     dArmVariable3=Pos;
     dXPitch[2]=Pos;
     tArmOffset->Strings[ofsArmPitch3]=AnsiString(Pos);                          //Steven 20140510 : Secs Gem
-}                                                                               //Steven 20131002 : XY�ܶZ
+}                                                                               //Steven 20131002 : XY變距
 //------------------------------------------------------------------------------
 void ARM_OFFSET::SetVariable4(double Pos)
 {
     dArmVariable4=Pos;
     dXPitch[3]=Pos;
     tArmOffset->Strings[ofsArmPitch4]=AnsiString(Pos);                          //Steven 20140510 : Secs Gem
-}                                                                               //Steven 20131002 : XY�ܶZ
+}                                                                               //Steven 20131002 : XY變距
 //------------------------------------------------------------------------------
 void ARM_OFFSET::SetPickUp(double Pos)
 {
@@ -321,7 +321,7 @@ int GetSiteCount(bool IncludeCloseSite)
             iSiteCount=3;
         }
         else if(TestIF_File.iTestMode==QualSite1X4 ||
-                TestIF_File.iTestMode==_8Site1X4)                               //ChungHung 20150528 add for ���� _8Site1x4 //1x4
+                TestIF_File.iTestMode==_8Site1X4)                               //ChungHung 20150528 add for 海思 _8Site1x4 //1x4
         {
             iSiteCount=4;
         }
@@ -358,7 +358,7 @@ int GetSiteCount(bool IncludeCloseSite)
             iSiteCount=16;
         }
         else if(TestIF_File.iTestMode==_32Site4X8M ||
-                TestIF_File.iTestMode==_32Site4X8N)                             //4x8   //ChungHung 20130627 alter TestIF--->TestIF_File �ץ��L�k�]32Site
+                TestIF_File.iTestMode==_32Site4X8N)                             //4x8   //ChungHung 20130627 alter TestIF--->TestIF_File 修正無法跑32Site
         {
             iSiteCount=32;
         }
@@ -369,7 +369,7 @@ int GetSiteCount(bool IncludeCloseSite)
         {
             for(int j=0; j<MAX_SOCKET_COL; j++)
             {
-                if(TestIF_File.iSiteMap[i][j]>0)                                //Steven 20170302 (wei) : �T�{����Site���}, �q1�}�l~32
+                if(TestIF_File.iSiteMap[i][j]>0)                                //Steven 20170302 (wei) : 確認哪個Site有開, 從1開始~32
                     iSiteCount++;
             }
         }
@@ -378,7 +378,7 @@ int GetSiteCount(bool IncludeCloseSite)
     return iSiteCount;
 }
 //------------------------------------------------------------------------------
-//Steven 20170901 (wei) : For ATK�n�s�W�u�@�ɤ��Ϊ��ɮ�
+//Steven 20170901 (wei) : For ATK要新增工作檔比對用的檔案
 //------------------------------------------------------------------------------
 ATK_RECIPE_INFO *ATKRecipeInfo;
 ATK_RECIPE_INFO::ATK_RECIPE_INFO()
@@ -531,7 +531,7 @@ void ATK_RECIPE_INFO::SaveFile()
     int iSitemap=0,iRow=0,iCol=0;
     GetSiteNumberString(iSitemap, iRow, iCol);
     int iDir=SiteMapDirection();
-    AnsiString sSmartBin=AMR.GetNormalFailBin();                                //Spencerlin 20260202 : ���X�D AutoRetest �� CateR �� Fail Bin �� SmartBin
+    AnsiString sSmartBin=AMR.GetNormalFailBin();                                //Spencerlin 20260202 : 取出非 AutoRetest 或 CateR 之 Fail Bin 為 SmartBin
     AnsiString sUsedSitesNumber=GetUsedSitesNumber(iDir);
     sSitemap="Sitemap=";
     sSitemap+=GetParameterFormat("s", IntToStr(iSitemap));
@@ -548,9 +548,9 @@ void ATK_RECIPE_INFO::SaveFile()
     SL->Add("Binprofile="+slBinPassFail->CommaText);
     SL->Add(sSortgate);
     SL->Add(sSitemap);                                                          //Jimmychiu 20230807 : #R230804-ATK-H9-01 , V3.21.792.1 ,Add the Sitemap items in information.txt
-    SL->Add("Smartbin="+sSmartBin);                                             //RogerYang 20260407: ��j�p�g //Spencerlin 20260202 : ���X�D AutoRetest �� CateR �� Fail Bin �� SmartBin
+    SL->Add("Smartbin="+sSmartBin);                                             //RogerYang 20260407: 改大小寫 //Spencerlin 20260202 : 取出非 AutoRetest 或 CateR 之 Fail Bin 為 SmartBin
     SL->SaveToFile(FileName);
-    SL->SaveToFile(FileName2);                                                  //Steven 20200317 : ATK���n�s���
+    SL->SaveToFile(FileName2);                                                  //Steven 20200317 : ATK說要存兩份
 }
 //------------------------------------------------------------------------------
 void ATK_RECIPE_INFO::GetSiteNumberString(int &iSitemap, int &iRow, int &iCol)  //Jimmychiu 20230807 : #R230804-ATK-H9-01 , V3.21.792.1 ,Add the Sitemap items in information.txt
@@ -677,10 +677,10 @@ AnsiString ATK_RECIPE_INFO::GetUsedSitesNumber(int iDir)                        
 //------------------------------------------------------------------------------
 int ATK_RECIPE_INFO::SiteMapDirection()                                         //Jimmychiu 20230807 : #R230804-ATK-H9-01 , V3.21.792.1 ,Add the Sitemap items in information.txt
 {
-    //��C�ѥ���k�O1�A���ѤW��U�O2�A��C�ѥk�쥪�O3�A���ѤU��W�O4�A�ѤW��U�B�ѥ���k�O5�A�ѥk�쥪�B�ѤU��W�O6�A�ѤW��U�B�ѥ���k�O7�A�ѤU��W�B�ѥk�쥪�O8�A�ѥk�쥪�B�ѤW��U�O9�A�ѥ���k�B�ѤU��W�O10�A�ѤW��U�B�ѥk�쥪�O11�A�ѤU��W�B�ѥ���k�O12
+    //單列由左到右是1，單行由上到下是2，單列由右到左是3，單行由下到上是4，由上到下且由左到右是5，由右到左且由下到上是6，由上到下且由左到右是7，由下到上且由右到左是8，由右到左且由上到下是9，由左到右且由下到上是10，由上到下且由右到左是11，由下到上且由左到右是12
     int order=0, iExpectedValue=1;
     bool bCompliant=false;
-    //�P�_�O�_��Site�A������0
+    //判斷是否關Site，有關為0
     for(int i=0; i<TestSocket.iShtRow; i++)
     {
         for(int j=0; j<TestSocket.iShtCol; j++)
@@ -692,9 +692,9 @@ int ATK_RECIPE_INFO::SiteMapDirection()                                         
         }
     }
 
-    if(TestSocket.iShtRow==1)                                                   //��C
+    if(TestSocket.iShtRow==1)                                                   //單列
     {
-        //��C�ѥ���k�O1
+        //單列由左到右是1
         iExpectedValue=1;
         bCompliant=true;
         for(int i=0; i<TestSocket.iShtCol; i++)
@@ -709,7 +709,7 @@ int ATK_RECIPE_INFO::SiteMapDirection()                                         
 
         if(bCompliant==true)
             return 1;
-        //��C�ѥk�쥪�O3
+        //單列由右到左是3
         iExpectedValue=1;
         bCompliant=true;
         for(int i=TestSocket.iShtCol-1; i>=0; i--)
@@ -725,9 +725,9 @@ int ATK_RECIPE_INFO::SiteMapDirection()                                         
         if(bCompliant==true)
             return 3;
     }
-    else if(TestSocket.iShtCol==1)                                              //���
+    else if(TestSocket.iShtCol==1)                                              //單行
     {
-        //���ѤW��U�O2
+        //單行由上到下是2
         iExpectedValue=1;
         bCompliant=true;
         for(int i=0; i<TestSocket.iShtRow; i++)
@@ -742,7 +742,7 @@ int ATK_RECIPE_INFO::SiteMapDirection()                                         
 
         if(bCompliant==true)
             return 2;
-        //���ѤU��W�O4
+        //單行由下到上是4
         iExpectedValue=1;
         bCompliant=true;
         for(int i=TestSocket.iShtRow-1; i>=0; i--)
@@ -760,7 +760,7 @@ int ATK_RECIPE_INFO::SiteMapDirection()                                         
     }
     else
     {
-        //�ѤW��U�B�ѥ���k�O5
+        //由上到下且由左到右是5
         iExpectedValue=1;
         bCompliant=true;
         for(int i=0; i<TestSocket.iShtRow; i++)
@@ -778,7 +778,7 @@ int ATK_RECIPE_INFO::SiteMapDirection()                                         
 
         if(bCompliant==true)
             return 5;
-        //�ѥk�쥪�B�ѤU��W�O6
+        //由右到左且由下到上是6
         iExpectedValue=1;
         bCompliant=true;
         for(int i=TestSocket.iShtRow-1; i>=0; i--)
@@ -796,7 +796,7 @@ int ATK_RECIPE_INFO::SiteMapDirection()                                         
 
         if(bCompliant==true)
             return 6;
-        //�ѤW��U�B�ѥ���k�O7
+        //由上到下且由左到右是7
         iExpectedValue=1;
         bCompliant=true;
         for(int j=0; j<TestSocket.iShtCol; j++)
@@ -814,7 +814,7 @@ int ATK_RECIPE_INFO::SiteMapDirection()                                         
 
         if(bCompliant==true)
             return 7;
-        //�ѤU��W�B�ѥk�쥪�O8
+        //由下到上且由右到左是8
         iExpectedValue=1;
         bCompliant=true;
         for(int j=TestSocket.iShtCol-1; j>=0; j--)
@@ -832,7 +832,7 @@ int ATK_RECIPE_INFO::SiteMapDirection()                                         
 
         if(bCompliant==true)
             return 8;
-        //�ѥk�쥪�B�ѤW��U�O9
+        //由右到左且由上到下是9
         iExpectedValue=1;
         bCompliant=true;
         for(int i=0; i<TestSocket.iShtRow; i++)
@@ -850,7 +850,7 @@ int ATK_RECIPE_INFO::SiteMapDirection()                                         
 
         if(bCompliant==true)
             return 9;
-        //�ѥ���k�B�ѤU��W�O10
+        //由左到右且由下到上是10
         iExpectedValue=1;
         bCompliant=true;
         for(int i=TestSocket.iShtRow-1; i>=0; i--)
@@ -868,7 +868,7 @@ int ATK_RECIPE_INFO::SiteMapDirection()                                         
 
         if(bCompliant==true)
             return 10;
-        //�ѤW��U�B�ѥk�쥪�O11
+        //由上到下且由右到左是11
         iExpectedValue=1;
         bCompliant=true;
         for(int j=TestSocket.iShtCol-1; j>=0; j--)
@@ -886,7 +886,7 @@ int ATK_RECIPE_INFO::SiteMapDirection()                                         
 
         if(bCompliant==true)
             return 11;
-        //�ѤU��W�B�ѥ���k�O12
+        //由下到上且由左到右是12
         iExpectedValue=1;
         bCompliant=true;
         for(int i=0; i<TestSocket.iShtRow; i++)
@@ -1036,7 +1036,7 @@ void RUN_INFO::SaveJamRateByDay(bool bUpload)                                   
     MyForceDirectories(sDailyJamPath);
 
     sFileName.sprintf("%s_%s_%s_DailyJamRate.txt", IniConfig.sMachineType, IniConfig.SocketHandlerID, sToday);
-    DailyJamFileName=FileInfo().PathCombin(sDailyJamPath, sFileName);           //Steven 20250812 : �ץ��W���ɦW
+    DailyJamFileName=FileInfo().PathCombin(sDailyJamPath, sFileName);           //Steven 20250812 : 修正上傳檔名
 
     str.sprintf("Date: %s", sToday);
     slReport->Add(str);
@@ -1091,7 +1091,7 @@ void RUN_INFO::SaveJamRateByDay(bool bUpload)                                   
     delete slReport;
 
     if(bUpload==true &&
-       IniConfig.bN10_DailyUploadProdData==true)                                //Steven 20250527 : �W��Jam Rate
+       IniConfig.bN10_DailyUploadProdData==true)                                //Steven 20250527 : 上傳Jam Rate
     {
         if(FileExists(DailyJamFileName)==true)
         {
@@ -1152,7 +1152,7 @@ void RUN_INFO::ReadJamRateByDay()                                               
     MyForceDirectories(sDailyJamPath);
 
     sFileName.sprintf("%s_%s_%s_DailyJamRate.txt", IniConfig.sMachineType, IniConfig.SocketHandlerID, sToday);
-    DailyJamFileName=FileInfo().PathCombin(sDailyJamPath, sFileName);           //Steven 20250812 : �ץ��W���ɦW
+    DailyJamFileName=FileInfo().PathCombin(sDailyJamPath, sFileName);           //Steven 20250812 : 修正上傳檔名
 
     if(FileExists(DailyJamFileName)==false)
         return;
@@ -1202,7 +1202,7 @@ void RUN_INFO::ReadJamRateByDay()                                               
     delete sList;
 }
 //------------------------------------------------------------------------------
-void RUN_INFO::SaveJamRateByLot(bool bUpload)                                   //Steven 20200415 : SCC�nBy Lot Jam Rate
+void RUN_INFO::SaveJamRateByLot(bool bUpload)                                   //Steven 20200415 : SCC要By Lot Jam Rate
 {
     AnsiString str, sFileName, sPath;
     int iJamCount=0, iTag;
@@ -1211,7 +1211,7 @@ void RUN_INFO::SaveJamRateByLot(bool bUpload)                                   
     if(bLotStart==false || LotNo=="")
         return ;
 
-    if(IniConfig.bVTESTFunction==true)                                          //jou 20241015 : by lot jamstat���i�n�D
+    if(IniConfig.bVTESTFunction==true)                                          //jou 20241015 : by lot jamstat報告要求
     {
         sJamRatePath="D:\\PnPh\\report\\LotAlarm";
         sFileName.sprintf("%s-%s-%s-%s-%s-%s-%04d%02d%02d%02d%02d%02d.txt",     IniConfig.SocketHandlerID,
@@ -1224,7 +1224,7 @@ void RUN_INFO::SaveJamRateByLot(bool bUpload)                                   
     }
     else
     {
-        sFileName.sprintf("%s_%s_%04d%02d%02d-%02d%02d%02d_%s_%s_%s_JamRateByLot.txt",                                  //Steven 20250812 : �ץ��W���ɦW
+        sFileName.sprintf("%s_%s_%04d%02d%02d-%02d%02d%02d_%s_%s_%s_JamRateByLot.txt",                                  //Steven 20250812 : 修正上傳檔名
                                                                                 IniConfig.sMachineType,
                                                                                 IniConfig.SocketHandlerID,
                                                                                 SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec,
@@ -1415,7 +1415,7 @@ void ReadPassword()
     }
     else
     {
-        memset(&USER.RecordCT, 0, sizeof(PASS_WORD));                           //Steven 20200514 : USER.ID[0][0] --> USER.RecordCT �Ѱ��O����}�a
+        memset(&USER.RecordCT, 0, sizeof(PASS_WORD));                           //Steven 20200514 : USER.ID[0][0] --> USER.RecordCT 解除記憶體破壞
     }
 }
 //------------------------------------------------------------------------------
@@ -1443,7 +1443,7 @@ bool CheckFileCanAccess(char *cFName)
 //------------------------------------------------------------------------------
 void InitialReserveEmptyPoint()
 {
-    for(int j=0; j<1000; j++)                                                   //ChungHung 20111215 ���ձNFix3��
+    for(int j=0; j<1000; j++)                                                   //ChungHung 20111215 嘗試將Fix3放滿
     {
         ReserverEmptyPoint[j].bHasData=false;
     }
@@ -1464,10 +1464,10 @@ void ReserveEmptyPoint(int iAutoTray, int iXpos, int iYpos)
     if((EnableFix3UseCylinder()) && iAutoTray==MManualTray3)                    //ChungHung 20140722 add for HT9046LA
         return;
 
-    if(iAutoTray==MMAuto1 ||iAutoTray==iAutoRight ||                            //jou 20170719 (wei) : �ץ�outarm ��m�� Auto3 �ɷ|�Ů沧�`
+    if(iAutoTray==MMAuto1 ||iAutoTray==iAutoRight ||                            //jou 20170719 (wei) : 修正outarm 放置到 Auto3 時會空格異常
        iAutoTray==iFixRight || iFixRightHalf)
     {
-        for(int i=0; i<1000; i++)                                               //ChungHung 20111215 ���ձNFix3��
+        for(int i=0; i<1000; i++)                                               //ChungHung 20111215 嘗試將Fix3放滿
         {
             if(ReserverEmptyPoint[i].bHasData==false)
             {
@@ -1487,10 +1487,10 @@ void ReversionEmptyPoint()
 
     if(MOT[MMAuto1].Tray.FullIC())
     {
-        for(int i=0; i<1000; i++)                                               //ChungHung 20111215 ���ձNFix3��
+        for(int i=0; i<1000; i++)                                               //ChungHung 20111215 嘗試將Fix3放滿
         {
             if(ReserverEmptyPoint[i].bHasData &&
-               ReserverEmptyPoint[i].iWhichAuto==MMAuto1)                       //ChungHung 20111215 ���ձNFix3��
+               ReserverEmptyPoint[i].iWhichAuto==MMAuto1)                       //ChungHung 20111215 嘗試將Fix3放滿
             {
                 ReserverEmptyPoint[i].bHasData=false;
             }
@@ -1498,7 +1498,7 @@ void ReversionEmptyPoint()
         return;
     }
 
-    for(int i=0; i<1000; i++)                                                   //ChungHung 20111215 ���ձNFix3��
+    for(int i=0; i<1000; i++)                                                   //ChungHung 20111215 嘗試將Fix3放滿
     {
         if(ReserverEmptyPoint[i].bHasData)
         {
@@ -1597,8 +1597,8 @@ void TestModeDutOnOffToLastSetUseTestSocket()                                   
 //---------------------------------------------------------------------------
 void LastSetUseTestSocketToTestModeDutOnOff()                                   //Steven 20231018 : fixed for bLastSetInSetUpFile
 {
-    if(HasICUnderMachine() ||                                                   //Steven 20160518 : ���x�����ƪ���, �����ܧ󪬺A
-       HasAnyICInMachine())                                                     //kevin 20160818 ���x�Ͳ����������
+    if(HasICUnderMachine() ||                                                   //Steven 20160518 : 機台內有料的話, 不能變更狀態
+       HasAnyICInMachine())                                                     //kevin 20160818 機台生產中不能改資料
     {
         TestMode.iTemperatureMode   =LastSet.iTemperature;
         TestMode.iRunMode           =LastSet.iRealDummy;
@@ -1641,15 +1641,15 @@ bool ReadLastDataFile()
     DWORD rdfz;
     HANDLE Fp;
 
-    ReadTestMode();                                                             //Ifor 20161116 Fix �}��Site Even �������`  //Steven 20231018 : move up
-    LastSet.bD41TestSocketICCheckSkip=false;                                    //Steven 20160328 : [D41]�j��false, �N�O������Lindex check
+    ReadTestMode();                                                             //Ifor 20161116 Fix 開關Site Even 紀錄異常  //Steven 20231018 : move up
+    LastSet.bD41TestSocketICCheckSkip=false;                                    //Steven 20160328 : [D41]強制false, 就是不能跳過index check
     //ChungHung 20120829 add
     iSize1 = GetFileLength("D:\\HT9045\\system\\lastdata.dat");
     iSize2 = GetFileLength("d:\\HT9045\\system\\lastdata_backup.dat");
     FILE *Fp3;
     if(iSize1==0 && iSize2==0)
     {
-        //Ū���ƥ������
+        //讀取備份的資料
         Fp3=std::fopen("D:\\HT9045\\system\\lastdata_backup2.dat", "rb");
         if(Fp3!=NULL)
         {
@@ -1725,7 +1725,7 @@ bool ReadLastDataFile()
 
     if(CosFunction.bLastSetInSetUpFile)                                         //Steven 20111019
     {
-        //Ifor 20161229add �}��Last Set In SetUp File �\���,Setup File ���LTestMode��ƾɭP���`���D
+        //Ifor 20161229add 開啟Last Set In SetUp File 功能時,Setup File 中無TestMode資料導致異常問題
         //==>
         AnsiString szDir=GetRecipeFileName("TestMode.Data");
         if(FileExists(szDir)==true)
@@ -1733,21 +1733,21 @@ bool ReadLastDataFile()
             if(CosFunction.bProgramStartOnLine &&
                SystemInitialOK==false &&
                LastSet.iTester!=ON_LINE &&
-               LastSet.iRealDummy!=REALLY)                                      //Sam 20210423 : �{���}�Үɤ����� OnLine/Real
+               LastSet.iRealDummy!=REALLY)                                      //Sam 20210423 : 程式開啟時切換為 OnLine/Real
             {
                 LastSet.iTester=ON_LINE;
                 LastSet.iRealDummy=REALLY;
             }
 
             LastSetUseTestSocketToTestModeDutOnOff();                           //Steven 20231018 : fixed for bLastSetInSetUpFile
-            if(bLoadMachineRecord)                                              //JerryYang 20160614 �ΨӧP�_�O�_����LLoadMachineRecord�禡 �קK�٨SŪ������x���Lastset�N�Q�ﱼ
+            if(bLoadMachineRecord)                                              //JerryYang 20160614 用來判斷是否執行過LoadMachineRecord函式 避免還沒讀取到機台資料Lastset就被改掉
             {
-                if(LastSet.iTester!=TestMode.iTestConnection)                   //Steven 20211103 : �s�WLog,�קKŪ�ɧ窱�A�S������
+                if(LastSet.iTester!=TestMode.iTestConnection)                   //Steven 20211103 : 新增Log,避免讀檔改狀態沒有紀錄
                 {
                     if(TestMode.iTestConnection==OFF_LINE)                      //Steven 20140815
                     {
                         if(IniConfig.bI27_ManualSortMode &&
-                           bRunManualSortMode==true)                            //Steven 20150915 : For TSMC ��ʾ�L�\��
+                           bRunManualSortMode==true)                            //Steven 20150915 : For TSMC 手動整盤功能
                             NewRecordProcess("MES2145", "XXXX  Tester MANUAL MODE  XXXX");
                         else
                             NewRecordProcess("MES2146", "XXXX  Tester OFF-Line  XXXX");
@@ -1774,7 +1774,7 @@ bool ReadLastDataFile()
                     {
                         NewRecordProcess("MES2151", "Change Hot Mode");
                     }
-                    else if(TestMode.iTemperatureMode==Tempture_AmbientHot)     //kevin 20140918 �`�ť[�� ���ű���
+                    else if(TestMode.iTemperatureMode==Tempture_AmbientHot)     //kevin 20140918 常溫加熱 恆溫控制
                     {
                         NewRecordProcess("MES2152", "Change Ambient Hot Mode");
                     }
@@ -1784,7 +1784,7 @@ bool ReadLastDataFile()
                     }
                 }
 
-//                bLoadMachineRecord=false;   //jou 20170926    //Steven 20200703 : mark, �令false�|�ɭP�᭱������s
+//                bLoadMachineRecord=false;   //jou 20170926    //Steven 20200703 : mark, 改成false會導致後面都不更新
                 LastSet.iTemperature    =TestMode.iTemperatureMode;
                 LastSet.iRealDummy      =TestMode.iRunMode;
                 LastSet.iTester         =TestMode.iTestConnection;
@@ -1792,19 +1792,19 @@ bool ReadLastDataFile()
             TestModeDutOnOffToLastSetUseTestSocket();                           //Steven 20231018 : fixed for bLastSetInSetUpFile
         }
         //<==
-        //Ifor 20161229 (Steven) add �}��Last Set In SetUp File �\���,Setup File ���LTestMode��ƾɭP���`���D
+        //Ifor 20161229 (Steven) add 開啟Last Set In SetUp File 功能時,Setup File 中無TestMode資料導致異常問題
     }
 
-    if(LastSet.iRunStartMode==rsmQAMode && bQAModeFinishCleanOut==true)         //Steven 20141023 : QA�����᪺Bin
+    if(LastSet.iRunStartMode==rsmQAMode && bQAModeFinishCleanOut==true)         //Steven 20141023 : QA做完後的Bin
     {
         if(fMain!=NULL &&
-           CUSTOMER_CODE!=CC_KYEC_LEE)                                          //Ifor 20201027 add:KYEC QA Mode ����Offline �Ҧ�
+           CUSTOMER_CODE!=CC_KYEC_LEE)                                          //Ifor 20201027 add:KYEC QA Mode 不切Offline 模式
         {
-            fMain->ModifyTester(OFF_LINE);                                      //Steven 20191218 : ��X�ק�LastSet.iTester
+            fMain->ModifyTester(OFF_LINE);                                      //Steven 20191218 : 整合修改LastSet.iTester
         }
     }
 
-    if(LastSet.__bBinData32==false)                                             //Steven 20121112 : RS232�䴩32Bin �ΨӱN�ª�������s��
+    if(LastSet.__bBinData32==false)                                             //Steven 20121112 : RS232支援32Bin 用來將舊的資料轉到新的
     {
         for(int i=0; i<4; i++)
         {
@@ -1813,11 +1813,11 @@ bool ReadLastDataFile()
                 LastSet.iBinData32[i][j]=LastSet.iBinData[i][j];
             }
         }
-        LastSet.__bBinData32=true;                                              //Steven 20140403 : 256Bin �ΨӱN�ª�������s��
-        LastSet.bBinData32=true;                                                //Steven 20140403 : 256Bin �ΨӱN�ª�������s��
+        LastSet.__bBinData32=true;                                              //Steven 20140403 : 256Bin 用來將舊的資料轉到新的
+        LastSet.bBinData32=true;                                                //Steven 20140403 : 256Bin 用來將舊的資料轉到新的
     }
 
-    if(LastSet.bBinData32==false)                                               //Steven 20140403 : 256Bin �ΨӱN�ª�������s��
+    if(LastSet.bBinData32==false)                                               //Steven 20140403 : 256Bin 用來將舊的資料轉到新的
     {
         for(int i=0; i<4; i++)
         {
@@ -1830,8 +1830,8 @@ bool ReadLastDataFile()
         LastSet.bBinData32=true;
     }
 
-    if(CUSTOMER_CODE==CC_SCS ||                                                 //Steven 20130610 : SCS�n�D�j��}��
-       CUSTOMER_CODE==CC_ASE_M)                                                 //Ifor 20190926 : add ASEM�j��}��[A03]
+    if(CUSTOMER_CODE==CC_SCS ||                                                 //Steven 20130610 : SCS要求強制開啟
+       CUSTOMER_CODE==CC_ASE_M)                                                 //Ifor 20190926 : add ASEM強制開啟[A03]
     {
         IniConfig.bA03UseAfterHomeCarryAndSuckIcToRBin=true;
     }
@@ -1841,7 +1841,7 @@ bool ReadLastDataFile()
         LastSet.SoftSpeed[i]=(LastSet.SoftSpeed[i]<=1000)?10000:LastSet.SoftSpeed[i];                                   //Steven 20161211 : provide initial soft speed as 10000
     #endif
 
-    if(IniConfig.bSPILFunction==true)                                           //JerryYang 20170328 (Jou) ���~�Ȥ�X�Τ@��SPILFunction
+    if(IniConfig.bSPILFunction==true)                                           //JerryYang 20170328 (Jou) 矽品客戶碼統一用SPILFunction
     {                                                                           //jou 2014-03-28 SPIL Handler  On-line & Offline Switch Flow
         LastSet.MusicSelect[6]=3;
         LastSet.MessageLight[6][0]=0;
@@ -1849,7 +1849,7 @@ bool ReadLastDataFile()
         LastSet.MessageLight[6][2]=2;
     }
 
-    bool bflag=false;                                                           //ChungHung 20140401 add fix LastSet �}��Site �Ӧ���HangUp �]���P�ɧ��LastSet�ҷӦ�
+    bool bflag=false;                                                           //ChungHung 20140401 add fix LastSet 開關Site 照成的HangUp 因為同時改到LastSet所照成
     for(int i=0; i<2; i++)
     {
         for(int j=0; j<4; j++)
@@ -1875,9 +1875,9 @@ bool ReadLastDataFile()
         }
 
         if(fMain!=NULL)
-            fMain->ShowTestHeadComp(false);                                     //jou 2015-06-02 ���ק�}��Site�ݭn��ø�e��
+            fMain->ShowTestHeadComp(false);                                     //jou 2015-06-02 有修改開關Site需要重繪畫面
     }
-    LastSet.bD41TestSocketICCheckSkip=false;                                    //Steven 20160328 : [D41]�j��false, �N�O������Lindex check
+    LastSet.bD41TestSocketICCheckSkip=false;                                    //Steven 20160328 : [D41]強制false, 就是不能跳過index check
     if(Tri_Temp_Machine==1)                                                     //Ztex 2024.02.19 Add Temp Pos Shift For Shuttle
     {
         LastSet.TempPosShift_Shuttle[0][0]=15;
@@ -1885,7 +1885,7 @@ bool ReadLastDataFile()
         LastSet.TempPosShift_Shuttle[1][0]=15;
         LastSet.TempPosShift_Shuttle[1][1]=-40;
     }
-    else if(FIX3_FULL_PLACE==Fix3K_ShortShuttle)                                //wei 20160328 �ק�@�}�l�NŪ�����
+    else if(FIX3_FULL_PLACE==Fix3K_ShortShuttle)                                //wei 20160328 修改一開始就讀取資料
     {
         LastSet.TempPosShift_Shuttle[0][0]=15;
         LastSet.TempPosShift_Shuttle[0][1]=90;
@@ -1925,7 +1925,7 @@ bool ReadLastDataFile()
         }
     }
 
-    if(CUSTOMER_CODE==CC_KYEC_LEE)                                              //Ifor 20210112 add: KYEC �n�DStart Mode ��Ƽg�����i�ק�
+    if(CUSTOMER_CODE==CC_KYEC_LEE)                                              //Ifor 20210112 add: KYEC 要求Start Mode 資料寫死不可修改
     {
         LastSet.iStartMode=2;
         LastSet.bCTClear[0][0]=true;
@@ -1945,7 +1945,7 @@ bool WriteLastDataFile(bool BackUp2, bool bNotContact)
 {
     bool flag=true;
 
-    LastSet.bBinData32=true;                                                    //Steven 20121112 : RS232�䴩32Bin �ΨӱN�ª�������s��
+    LastSet.bBinData32=true;                                                    //Steven 20121112 : RS232支援32Bin 用來將舊的資料轉到新的
 
     DWORD wtfz;
     HANDLE Fp;
@@ -1970,7 +1970,7 @@ bool WriteLastDataFile(bool BackUp2, bool bNotContact)
     {
         Fp=CreateFile("D:\\HT9045\\system\\lastdata.dat", FILE_SHARE_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
     }
-    try                                                                         //JerryYang 20220923 : add �ҥ~�B�z
+    try                                                                         //JerryYang 20220923 : add 例外處理
     {
         if(Fp!=INVALID_HANDLE_VALUE)
         {
@@ -2016,7 +2016,7 @@ bool WriteLastDataFile(bool BackUp2, bool bNotContact)
 
     if(bNotContact==false)
     {
-        AnsiString sRecipePath="";                                              //AI(ht9045-config) 20260508 (RogerYang) : VTEST䡤���Ƹ��HRecipe
+        AnsiString sRecipePath="";                                              //AI(ht9045-config) 20260508 (RogerYang) : VTEST銦片資料跟隨Recipe
         if(IniConfig.bVTESTFunction && CosFunction.bUseHeadContactCount)
             sRecipePath=GetRecipeFileName("HandlerCondition.Data");
 
@@ -2028,8 +2028,8 @@ bool WriteLastDataFile(bool BackUp2, bool bNotContact)
                 str2.sprintf("HeadContactCount%d_%d", i, j);
                 str3.sprintf("HeadContactCountHistory%d_%d", i, j);
 
-                //Steven 20211215 : �令���sChange Log
-                if(sRecipePath!="")                                             //AI(ht9045-config) 20260508 (RogerYang) : VTEST x=0䡤��g�JRecipe
+                //Steven 20211215 : 改成不存Change Log
+                if(sRecipePath!="")                                             //AI(ht9045-config) 20260508 (RogerYang) : VTEST x=0銦片寫入Recipe
                 {
                     WriteIniDataNoLog(sRecipePath, "O_Count", "O_14"+AnsiString(str1), IniConfig.ContactSet[0][i][j]              );
                     WriteIniDataNoLog(sRecipePath, "O_Count", "O_14"+AnsiString(str2), IniConfig.HeadContactCount[0][i][j]        );
@@ -2051,7 +2051,7 @@ bool WriteLastDataFile(bool BackUp2, bool bNotContact)
         }
     }
 
-    if(IniConfig.iVibratorHP1>100000000)                                        //JerryYang 20200612 ���ʰ��F�@�ʮɶ��֭p
+    if(IniConfig.iVibratorHP1>100000000)                                        //JerryYang 20200612 振動馬達作動時間累計
     {
         IniConfig.iVibratorHP1=0;
         RecordProcess("Clear HP vibrator time");
@@ -2075,13 +2075,13 @@ bool WriteLastDataFile(bool BackUp2, bool bNotContact)
         RecordProcess("Clear Unloader vibrator time");
     }
 
-    //Steven 20211215 : �令���sChange Log
+    //Steven 20211215 : 改成不存Change Log
     WriteIniDataNoLog(sPath, "Vibrate_Time", "iVibratorHP1",        IniConfig.iVibratorHP1     );
     WriteIniDataNoLog(sPath, "Vibrate_Time", "iVibratorSht1",       IniConfig.iVibratorSht1    );
     WriteIniDataNoLog(sPath, "Vibrate_Time", "iVibratorSht2",       IniConfig.iVibratorSht2    );
     WriteIniDataNoLog(sPath, "Vibrate_Time", "iVibratorUnloader",   IniConfig.iVibratorUnloader);
 
-    if(CosFunction.bUseSocketContactCount)                                      //Sam 20220720 : �s�W�@�� Socket Count
+    if(CosFunction.bUseSocketContactCount)                                      //Sam 20220720 : 新增一組 Socket Count
     {
         for(int i=0; i<TestSocket.iShtRow; i++)
         {
@@ -2111,7 +2111,7 @@ bool WriteLastDataFile(bool BackUp2, bool bNotContact)
     return flag;
 }
 //---------------------------------------------------------------------------
-//  �H�U�OSteven�N�쥻�� lastdata.dat�令 LastSet.ini 20100811
+//  以下是Steven將原本的 lastdata.dat改成 LastSet.ini 20100811
 //---------------------------------------------------------------------------
 void ProcessLastSetIni_RMS(bool bRead)
 {
@@ -2124,24 +2124,24 @@ void ProcessLastSetIni_RMS(bool bRead)
     {
         if(IniConfig.bShowLotInfo)
         {
-            if(CUSTOMER_CODE==CC_KYEC_LEE)                                      //Ifor 20161229 (Steven) dd KYEC �촼�n�D ����N05�\��ﶵ
+            if(CUSTOMER_CODE==CC_KYEC_LEE)                                      //Ifor 20161229 (Steven) dd KYEC 喬智要求 關閉N05功能選項
             {
-                IniConfig.bEnableRms  = false;                                  //Ifor 20161229 KYEC �촼�n�D�j������ Enable RMS �\��
-                IniConfig.bCheckFile  = false;                                  //Ifor 20161229 KYEC �촼�n�D�j������ Enable check file �\��
-                IniConfig.bEnableRmsCheckSetupFile=false;                       //Ifor 20230516 add: TFAMD �n�D�u�@������
+                IniConfig.bEnableRms  = false;                                  //Ifor 20161229 KYEC 喬智要求強制關閉 Enable RMS 功能
+                IniConfig.bCheckFile  = false;                                  //Ifor 20161229 KYEC 喬智要求強制關閉 Enable check file 功能
+                IniConfig.bEnableRmsCheckSetupFile=false;                       //Ifor 20230516 add: TFAMD 要求工作檔驗證
             }
             else
             {
                 IniConfig.bEnableRms  =CheckAndReadIniData(sPath, str, str+" Enable",       false);
                 IniConfig.bCheckFile  =CheckAndReadIniData(sPath, str, "Enable Check File", false);                     //Steven 20101208
-                IniConfig.bEnableRmsCheckSetupFile  =CheckAndReadIniData(sPath, str, "Enable Check Setup File", false);                                         //Ifor 20230516 add: TFAMD �n�D�u�@������
+                IniConfig.bEnableRmsCheckSetupFile  =CheckAndReadIniData(sPath, str, "Enable Check Setup File", false);                                         //Ifor 20230516 add: TFAMD 要求工作檔驗證
             }
 
             IniConfig.sRmsPath    =CheckAndReadIniData(sPath, str, str+" Path",         AnsiString("D:\\RMS"));
             IniConfig.fAmbientTemp=CheckAndReadIniData(sPath, str, "Ambient Temp",      40.0);                          //Steven 20101208
             if(CosFunction.bUseERMS)
             {
-                IniConfig.bEnableErms =CheckAndReadIniData(sPath, str, "ERMS Enable",   false);                         //Steven 20160711 : �ϥζi����RMS
+                IniConfig.bEnableErms =CheckAndReadIniData(sPath, str, "ERMS Enable",   false);                         //Steven 20160711 : 使用進階版RMS
                 IniConfig.sErmsPath   =CheckAndReadIniData(sPath, str, "ERMS Path",     AnsiString("D:\\RMS"));
                 if(IniConfig.bEnableErms)
                     IniConfig.bEnableRms=false;
@@ -2170,9 +2170,9 @@ void ProcessLastSetIni_RMS(bool bRead)
 
             if(CUSTOMER_CODE==CC_SCC ||
                CUSTOMER_CODE==CC_SCK ||
-               CUSTOMER_CODE==CC_ETRENDTECH ||                                  //Steven 20230302 : add for �h��
+               CUSTOMER_CODE==CC_ETRENDTECH ||                                  //Steven 20230302 : add for 逸昌
                CUSTOMER_CODE==CC_AMD_M ||                                       //Ifor 20200915 add: TF_AMD download recipe
-               CosFunction.bDownloadRecipeLevelMode)                            //jou 2016-01-06 download recipe �W�[�v���Ҧ����
+               CosFunction.bDownloadRecipeLevelMode)                            //jou 2016-01-06 download recipe 增加權限模式選擇
             {
                 IniConfig.sRmsDownPath=CheckAndReadIniData(sPath, str, str+" Download Path", AnsiString("D:\\HT9045"));
                 iLength=IniConfig.sRmsDownPath.Length();
@@ -2181,7 +2181,7 @@ void ProcessLastSetIni_RMS(bool bRead)
                     IniConfig.sRmsDownPath=IniConfig.sRmsDownPath.SubString(1, iLength-1);
                 }
             }
-            else if(IniConfig.bSPILFunction==true)                              //JerryYang 20170328 (Jou) ���~�Ȥ�X�Τ@��SPILFunction
+            else if(IniConfig.bSPILFunction==true)                              //JerryYang 20170328 (Jou) 矽品客戶碼統一用SPILFunction
             {
                 if(IniConfig.bEnableRms)
                 {
@@ -2207,8 +2207,8 @@ void ProcessLastSetIni_RMS(bool bRead)
                 IniConfig.asMesSyACodePath  =CheckAndReadIniData(sPath, str, "asMesSyACodePath",    AnsiString("123"));
                 IniConfig.asMesSyActionPath =CheckAndReadIniData(sPath, str, "asMesSyActionPath",   AnsiString("456"));
 
-//                #ifdef BETA_VTestSummaryFile                                            //RogerYang 20250809 ����Summary���ק�
-                IniConfig.asSummaryReportPath =AnsiString("D:\\HandlerSummary");                                        //RogerYang 20251011 : �����Ů�
+//                #ifdef BETA_VTestSummaryFile                                            //RogerYang 20250809 偉測Summary文件修改
+                IniConfig.asSummaryReportPath =AnsiString("D:\\HandlerSummary");                                        //RogerYang 20251011 : 取消空格
 //                #else
 //                    IniConfig.asSummaryReportPath =CheckAndReadIniData(sPath, str, "asSummaryReportPath",  IniConfig.sN10UploadDrivePath );
 //                #endif
@@ -2221,7 +2221,7 @@ void ProcessLastSetIni_RMS(bool bRead)
                 IniConfig.asCreateManualEOCAP_URL =CheckAndReadIniData(sPath, str, "asCreateManualEOCAP_URL", AnsiString("http://192.168.10.216/vt_mes/MesWebService.asmx"));
                 IniConfig.asQueryEocapStatusURL   =CheckAndReadIniData(sPath, str, "asQueryEocapStatusURL", AnsiString("http://192.168.115.133:9014/api/mes/queryEocapStatus"));
 
-                //jou 20230621 : VTEST Handler�Y�ɺʱ� GetRcsCheckingResult
+                //jou 20230621 : VTEST Handler即時監控 GetRcsCheckingResult
                 IniConfig.asGetRcsCheckingResultUrl      =CheckAndReadIniData(sPath, str, "asGetRcsCheckingResultUrl",     AnsiString("http://192.168.10.216/vt_mes/ajaxprocess.aspx?"));
                 IniConfig.asGetRcsCheckingResultACode    =CheckAndReadIniData(sPath, str, "asGetRcsCheckingResultACode",   AnsiString("65195845153489435181"));
                 IniConfig.asGetRcsCheckingResultAction   =CheckAndReadIniData(sPath, str, "asGetRcsCheckingResultAction",  AnsiString("GetRcsCheckingResult"));
@@ -2235,7 +2235,7 @@ void ProcessLastSetIni_RMS(bool bRead)
         {
             if(CosFunction.bUseERMS)
             {
-                WriteIniData(sPath, str, "ERMS Enable",       IniConfig.bEnableErms);                                   //Steven 20160711 : �ϥζi����RMS
+                WriteIniData(sPath, str, "ERMS Enable",       IniConfig.bEnableErms);                                   //Steven 20160711 : 使用進階版RMS
                 WriteIniData(sPath, str, "ERMS Path",         IniConfig.sErmsPath);
                 if(IniConfig.bEnableErms)
                     IniConfig.bEnableRms=false;
@@ -2247,18 +2247,18 @@ void ProcessLastSetIni_RMS(bool bRead)
                 WriteIniData(sPath, str, "RTC alarm unload Path",   IniConfig.asN05_RTCalarmUnload);
             }
 
-            if(IniConfig.sRmsPath=="")                                          //Steven 20110528 : �w�����|����
+            if(IniConfig.sRmsPath=="")                                          //Steven 20110528 : 預防路徑消失
                 IniConfig.sRmsPath=CheckAndReadIniData(sPath, str, str+" Path", AnsiString("D:\\HT9045"));
             else
                 WriteIniData(sPath, str, str+" Path", IniConfig.sRmsPath);
 
             if(CUSTOMER_CODE==CC_SCC ||
                CUSTOMER_CODE==CC_SCK ||
-               CUSTOMER_CODE==CC_ETRENDTECH ||                                  //Steven 20230302 : add for �h��
+               CUSTOMER_CODE==CC_ETRENDTECH ||                                  //Steven 20230302 : add for 逸昌
                CUSTOMER_CODE==CC_AMD_M ||                                       //Ifor 20200915 add: TF_AMD download recipe
-               CosFunction.bDownloadRecipeLevelMode)                            //jou 2016-01-06 download recipe �W�[�v���Ҧ����
+               CosFunction.bDownloadRecipeLevelMode)                            //jou 2016-01-06 download recipe 增加權限模式選擇
             {
-                if(IniConfig.sRmsDownPath=="")                                  //Steven 20110528 : �w�����|����
+                if(IniConfig.sRmsDownPath=="")                                  //Steven 20110528 : 預防路徑消失
                     IniConfig.sRmsDownPath=CheckAndReadIniData(sPath, str, str+" Download Path", AnsiString("D:\\HT9045"));
                 else
                     WriteIniData(sPath, str, str+" Download Path", IniConfig.sRmsDownPath);
@@ -2266,10 +2266,10 @@ void ProcessLastSetIni_RMS(bool bRead)
 
             WriteIniData(sPath, str, "Ambient Temp", IniConfig.fAmbientTemp);   //Steven 20110421
 
-            if(CUSTOMER_CODE==CC_KYEC_LEE)                                      //Ifor 20161229 (Steven) add KYEC �촼�n�D ����N05�\��ﶵ
+            if(CUSTOMER_CODE==CC_KYEC_LEE)                                      //Ifor 20161229 (Steven) add KYEC 喬智要求 關閉N05功能選項
             {
-                WriteIniData(sPath, str, str+" Enable"      , false);           //Ifor 20161229 KYEC �촼�n�D�j������ Enable RMS �\��
-                WriteIniData(sPath, str, "Enable Check File", false);           //Ifor 20161229 KYEC �촼�n�D�j������ Enable check file �\��
+                WriteIniData(sPath, str, str+" Enable"      , false);           //Ifor 20161229 KYEC 喬智要求強制關閉 Enable RMS 功能
+                WriteIniData(sPath, str, "Enable Check File", false);           //Ifor 20161229 KYEC 喬智要求強制關閉 Enable check file 功能
                 WriteIniData(sPath, str, "Enable Check Setup File", false);
             }
             else
@@ -2284,7 +2284,7 @@ void ProcessLastSetIni_RMS(bool bRead)
     if(IniConfig.bSPILFunction==true ||
        CUSTOMER_CODE==CC_HANA_MICRON ||
        CUSTOMER_CODE==CC_SCK)
-        IniConfig.bClearLotInfoWhenTrayFeed=CheckAndReadIniData(sPath, str, "ClearLotInfoWhenTrayFeed", false);         //Steven 20240916 : Tray Feed����, �n���n�M��Device Name
+        IniConfig.bClearLotInfoWhenTrayFeed=CheckAndReadIniData(sPath, str, "ClearLotInfoWhenTrayFeed", false);         //Steven 20240916 : Tray Feed之後, 要不要清除Device Name
     else
         IniConfig.bClearLotInfoWhenTrayFeed=CheckAndReadIniData(sPath, str, "ClearLotInfoWhenTrayFeed", true);
 }
@@ -2311,12 +2311,12 @@ void ProcessLastSetIni_FTP(bool bRead)
         IniConfig.FtpUplaodPath     =ReadWriteIni(sPath, "FTP", "FTP Upload Path",   IniConfig.FtpUplaodPath,   "/",                                                bRead);
         IniConfig.iHDEnable         =ReadWriteIni(sPath, "FTP", "FTP HD Enable",     IniConfig.iHDEnable,       1,                                                  bRead);
         IniConfig.iServerEnable     =ReadWriteIni(sPath, "FTP", "FTP Server Enable", IniConfig.iServerEnable,   0,                                                  bRead);
-        IniConfig.N06_FtpPort       =ReadWriteIni(sPath, "FTP", "FTP Port",          IniConfig.N06_FtpPort,     "21",                                               bRead);  //Ifor 20201015 add:�ϥΪ̦۩w�q FTP Port
+        IniConfig.N06_FtpPort       =ReadWriteIni(sPath, "FTP", "FTP Port",          IniConfig.N06_FtpPort,     "21",                                               bRead);  //Ifor 20201015 add:使用者自定義 FTP Port
 
         if(IniConfig.bVTESTFunction==true)
-            IniConfig.FtpTransMode      =ReadWriteIni(sPath, "FTP", "FTP Transfer Mode", IniConfig.FtpTransMode,    2,                                              bRead);  //Steven 20230719 : �[�JFTP�ǿ�Ҧ�
+            IniConfig.FtpTransMode      =ReadWriteIni(sPath, "FTP", "FTP Transfer Mode", IniConfig.FtpTransMode,    2,                                              bRead);  //Steven 20230719 : 加入FTP傳輸模式
         else
-            IniConfig.FtpTransMode      =ReadWriteIni(sPath, "FTP", "FTP Transfer Mode", IniConfig.FtpTransMode,    0,                                              bRead);  //Steven 20230719 : �[�JFTP�ǿ�Ҧ�
+            IniConfig.FtpTransMode      =ReadWriteIni(sPath, "FTP", "FTP Transfer Mode", IniConfig.FtpTransMode,    0,                                              bRead);  //Steven 20230719 : 加入FTP傳輸模式
 
         //Landam 20110704
         if(IniConfig.FtpDownloadPath!="/")
@@ -2331,7 +2331,7 @@ void ProcessLastSetIni_FTP(bool bRead)
                 IniConfig.FtpUplaodPath=IniConfig.FtpUplaodPath + "/";
         }
 
-        //Sam 20210526 : �q N06 DownloadPath �U���K�X��
+        //Sam 20210526 : 從 N06 DownloadPath 下載密碼本
         IniConfig.bFtpPasswordDownload      =ReadWriteIni(sPath, "FTP", "Enable FTP Password Download",  IniConfig.bFtpPasswordDownload,    false,  bRead);
         IniConfig.FtpPasswordDownloadPath   =ReadWriteIni(sPath, "FTP", "FTP Password Download Path",    IniConfig.FtpPasswordDownloadPath, "/",    bRead);
         if(IniConfig.FtpPasswordDownloadPath!="/")
@@ -2344,15 +2344,15 @@ void ProcessLastSetIni_FTP(bool bRead)
     if(fLotInfo!=NULL)                                                          //Steven 20181224 : For ASE-CL
     {
         fLotInfo->tsASECLEventLog->TabVisible=IniConfig.bN22Enable_EventLog;
-        fLotInfo->ts2DSort->TabVisible=(CosFunction.bSortingBy2DList &&         //JerryYang 20230322 : 2D sort lot info UI�ק�
+        fLotInfo->ts2DSort->TabVisible=(CosFunction.bSortingBy2DList &&         //JerryYang 20230322 : 2D sort lot info UI修改
                                         (IniConfig.iN23DownloadMethod==3 ||
-                                         IniConfig.bN23UseLotInfoFile==true));  //Steven 20240830 : 2D sort ��ʿ��ɮפ覡
+                                         IniConfig.bN23UseLotInfoFile==true));  //Steven 20240830 : 2D sort 手動選檔案方式
 
         fLotInfo->grpManualSet2D->Visible=(IniConfig.iN23DownloadMethod==3);
         fLotInfo->grp2DLotInfo->Visible=(IniConfig.bN23UseLotInfoFile==true);
     }
 
-    if(CUSTOMER_CODE==CC_Murata)                                                //Steven 20200409 : Murata 2DID���\��
+    if(CUSTOMER_CODE==CC_Murata)                                                //Steven 20200409 : Murata 2DID比對功能
     {
         if(fLotInfo!=NULL)
         {
@@ -2362,7 +2362,7 @@ void ProcessLastSetIni_FTP(bool bRead)
         }
     }
 
-//    IniConfig.sN23_4_URL        =ReadWriteIni(sPath, "2DID Search Function", "sN23_4_URL",              IniConfig.sN23_4_URL,               AnsiString("D:\\RMS\\"), bRead);  //JerryYang 20241104 : �䴩2DID�զW��\��  //JerryYang 20250521 : Mark��
+//    IniConfig.sN23_4_URL        =ReadWriteIni(sPath, "2DID Search Function", "sN23_4_URL",              IniConfig.sN23_4_URL,               AnsiString("D:\\RMS\\"), bRead);  //JerryYang 20241104 : 支援2DID白名單功能  //JerryYang 20250521 : Mark掉
 //    IniConfig.sN23_5_UploadPath =ReadWriteIni(sPath, "2DID White list", "sN23_5_UploadPath",            IniConfig.sN23_5_UploadPath,        AnsiString("D:\\RMS\\"), bRead);
     if(bRead)
     {
@@ -2422,15 +2422,15 @@ void ProcessLastSetIni_EventLog(bool bRead)
         for(int i=0; i<7; i++)
         {
             str.sprintf("bAutoSaveLogWeek[%d]", i);                             //Steven 20140902 : Fixed
-            IniConfig.bAutoSaveLogWeek[i]=ReadWriteIni(sPath, "Event Log", str, IniConfig.bAutoSaveLogWeek[i], true, bRead);                                    //jou 2012-10-15 Auto Save Log �䴩 Week ���
+            IniConfig.bAutoSaveLogWeek[i]=ReadWriteIni(sPath, "Event Log", str, IniConfig.bAutoSaveLogWeek[i], true, bRead);                                    //jou 2012-10-15 Auto Save Log 支援 Week 選擇
         }
-        IniConfig.iO15_SaveFilePeriod = ReadWriteIni(sPath, "Event Log", "iO15_SaveFilePeriod", IniConfig.iO15_SaveFilePeriod, 0, bRead);                       //StevenHong 20260128 : �Ȥ�TESNA��Eventlog�]�w���@�Ӥ�
+        IniConfig.iO15_SaveFilePeriod = ReadWriteIni(sPath, "Event Log", "iO15_SaveFilePeriod", IniConfig.iO15_SaveFilePeriod, 0, bRead);                       //StevenHong 20260128 : 客戶TESNA把Eventlog設定成一個月
         IniConfig.bO10UseEventLogSaver=IniConfig.bO06_EventLogAutoSave;
     }
 
     if(fMain!=NULL)
     {
-        if(IniConfig.bN10_DailyUploadProdData)                                  //Steven 20180514 : JCET�d�p�K�n�D�C��W��Event Log, Jam�έp��, MTBF, MUBF���
+        if(IniConfig.bN10_DailyUploadProdData)                                  //Steven 20180514 : JCET吳如春要求每日上傳Event Log, Jam統計表, MTBF, MUBF資料
             str.sprintf("%s_%s_EventLogTxt", IniConfig.sMachineType, IniConfig.SocketHandlerID);
         else if(IniConfig.bO15_EventLogFileNameWithMachineID)
             str.sprintf("EventLogTxt_%s", IniConfig.SocketHandlerID);
@@ -2463,27 +2463,27 @@ void ProcessLastSetIni_EventLog(bool bRead)
                 slEventLog->SaveType=TBy8Hour;
             else if(IniConfig.iO15_SaveFilePeriod==5)
                 slEventLog->SaveType=TBy12Hour;
-            else if(IniConfig.iO15_SaveFilePeriod==8)                           //StevenHong 20260128 : �Ȥ�TESNA��Eventlog�]�w���@�Ӥ�
+            else if(IniConfig.iO15_SaveFilePeriod==8)                           //StevenHong 20260128 : 客戶TESNA把Eventlog設定成一個月
                 slEventLog->SaveType=TByMonth;
-//            else if(IniConfig.iO15_SaveFilePeriod==7)                         //Steven 20250520 : �[�JBy Lot�s��
+//            else if(IniConfig.iO15_SaveFilePeriod==7)                         //Steven 20250520 : 加入By Lot存檔
 //                slEventLog->SaveType=TByLot;
-            else                                                                //if(IniConfig.iO15_SaveFilePeriod==6)                         //Steven 20230705 : Event log���i�Hby����s��, �ɮפӤj�|�����}
+            else                                                                //if(IniConfig.iO15_SaveFilePeriod==6)                         //Steven 20230705 : Event log不可以by月份存檔, 檔案太大會打不開
                 slEventLog->SaveType=TByDay;
         }
 
-        slEventLog->SaveSameFolder=IniConfig.bO15_EventLogSaveSameFolder;       //KaiChen 20180322 �G����-��f �s�W �N Event Log ��b�P�Ӹ�Ƨ�
+        slEventLog->SaveSameFolder=IniConfig.bO15_EventLogSaveSameFolder;       //KaiChen 20180322 ：矽格-湖口 新增 將 Event Log 放在同個資料夾
         slEventLog->SaveByLotID=(CosFunction.bHiSiliconFunction ||
-                                 CosFunction.bSaveEventLogByLotID ||            //KaiChen 20181121 �G����-�_�� Save Event Log by Lot ID
+                                 CosFunction.bSaveEventLogByLotID ||            //KaiChen 20181121 ：矽格-北興 Save Event Log by Lot ID
                                  IniConfig.iO15_SaveFilePeriod==7);
     }
 
-    if(IniConfig.iO15_SaveFilePeriod==8)                                        //Stevenhong 20260318 : TESNA ��Eventlog report summarize by month
+    if(IniConfig.iO15_SaveFilePeriod==8)                                        //Stevenhong 20260318 : TESNA 把Eventlog report summarize by month
     {
         TAlarm1 helper;
         helper.SummarizeJAMreportbymonth();
     }
     //<==
-    //Steven 20170829 (wei) : Event Log�ɮצs�ɳ]�w
+    //Steven 20170829 (wei) : Event Log檔案存檔設定
 }
 //---------------------------------------------------------------------------
 void ProcessLastSetIni_Count(bool bRead)
@@ -2496,7 +2496,7 @@ void ProcessLastSetIni_Count(bool bRead)
     AnsiString str2;
     AnsiString str3;
 
-    AnsiString sRecipePath="";                                                  //AI(ht9045-config) 20260508 (RogerYang) : VTEST䡤���Ƹ��HRecipe
+    AnsiString sRecipePath="";                                                  //AI(ht9045-config) 20260508 (RogerYang) : VTEST銦片資料跟隨Recipe
     if(IniConfig.bVTESTFunction && CosFunction.bUseHeadContactCount)
         sRecipePath=GetRecipeFileName("HandlerCondition.Data");
 
@@ -2508,7 +2508,7 @@ void ProcessLastSetIni_Count(bool bRead)
             str2.sprintf("HeadContactCount%d_%d", i, j);
             str3.sprintf("HeadContactCountHistory%d_%d", i, j);
 
-            if(sRecipePath!="")                                                 //AI(ht9045-config) 20260508 (RogerYang) : VTEST x=0䡤���Recipe
+            if(sRecipePath!="")                                                 //AI(ht9045-config) 20260508 (RogerYang) : VTEST x=0銦片跟Recipe
             {
                 IniConfig.ContactSet[0][i][j]               = ReadWriteIni(sRecipePath, "O_Count","O_14"+AnsiString(str1), IniConfig.ContactSet[0][i][j],              6000, bRead);
                 IniConfig.HeadContactCount[0][i][j]         = ReadWriteIni(sRecipePath, "O_Count","O_14"+AnsiString(str2), IniConfig.HeadContactCount[0][i][j],           0, bRead);
@@ -2531,12 +2531,12 @@ void ProcessLastSetIni_Count(bool bRead)
         }
     }
 
-    IniConfig.iVibratorHP1      =ReadWriteIni(sPath, "Vibrate_Time", "iVibratorHP1",        IniConfig.iVibratorHP1,      0, bRead);                             //JerryYang 20200612 ���ʰ��F�@�ʮɶ��֭p
+    IniConfig.iVibratorHP1      =ReadWriteIni(sPath, "Vibrate_Time", "iVibratorHP1",        IniConfig.iVibratorHP1,      0, bRead);                             //JerryYang 20200612 振動馬達作動時間累計
     IniConfig.iVibratorSht1     =ReadWriteIni(sPath, "Vibrate_Time", "iVibratorSht1",       IniConfig.iVibratorSht1,     0, bRead);
     IniConfig.iVibratorSht2     =ReadWriteIni(sPath, "Vibrate_Time", "iVibratorSht2",       IniConfig.iVibratorSht2,     0, bRead);
     IniConfig.iVibratorUnloader =ReadWriteIni(sPath, "Vibrate_Time", "iVibratorUnloader",   IniConfig.iVibratorUnloader, 0, bRead);
 
-    for(int i=0; i<4; i++)                                                      //Sam 20220720 : �s�W�@�� Socket Count
+    for(int i=0; i<4; i++)                                                      //Sam 20220720 : 新增一組 Socket Count
     {
         for(int j=0; j<8; j++)
         {
@@ -2556,7 +2556,7 @@ void ProcessLastSetIni_Tester(bool bRead)
     AnsiString sPath=AuthPath+"config.ini";
 
     if(IniConfig.bI36TestTimeOut)
-        IniConfig.bD52InterFaceErrHeadNeedUp=true;                              //kevin 20161108 test timer out ARM �W�� ���u�{�v��ʨ��UIC
+        IniConfig.bD52InterFaceErrHeadNeedUp=true;                              //kevin 20161108 test timer out ARM 上升 讓工程師手動取下IC
 
     if(CosFunction.bHaveFIFOMode)                                               //Steven 20170302 (wei) : FIFO MODE
     {
@@ -2583,10 +2583,10 @@ void ProcessLastSetIni_Index(bool bRead)
 {
     AnsiString sPath=AuthPath+"config.ini";
 
-    IniConfig.iLotIDLength                              =ReadWriteIni(sPath, "Configuration", "Lot ID Length",  IniConfig.iLotIDLength,      10, true, true, 1, 10);  //Frank 20170531 (Steven) add LotID 7�X
+    IniConfig.iLotIDLength                              =ReadWriteIni(sPath, "Configuration", "Lot ID Length",  IniConfig.iLotIDLength,      10, true, true, 1, 10);  //Frank 20170531 (Steven) add LotID 7碼
 
-    IniConfig.iD36_RTCAutoVerifyReleaseHeight           =ReadWriteIni(sPath, "Index", "iD36_RTCAutoVerifyReleaseHeight",            IniConfig.iD36_RTCAutoVerifyReleaseHeight,              0,      bRead);  //jou 2014-06-24 RTC �۰ʶi��Model����
-    IniConfig.iD36_RTCAutoVerifyPickHeight              =ReadWriteIni(sPath, "Index", "iD36_RTCAutoVerifyPickHeight",               IniConfig.iD36_RTCAutoVerifyPickHeight,                 0,      bRead);  //jou 2014-06-24 RTC �۰ʶi��Model����
+    IniConfig.iD36_RTCAutoVerifyReleaseHeight           =ReadWriteIni(sPath, "Index", "iD36_RTCAutoVerifyReleaseHeight",            IniConfig.iD36_RTCAutoVerifyReleaseHeight,              0,      bRead);  //jou 2014-06-24 RTC 自動進行Model驗證
+    IniConfig.iD36_RTCAutoVerifyPickHeight              =ReadWriteIni(sPath, "Index", "iD36_RTCAutoVerifyPickHeight",               IniConfig.iD36_RTCAutoVerifyPickHeight,                 0,      bRead);  //jou 2014-06-24 RTC 自動進行Model驗證
     IniConfig.iD36_RTCAutoVerifyReleaseHeight           =CheckRange(IniConfig.iD36_RTCAutoVerifyReleaseHeight, 30, -30);
     IniConfig.iD36_RTCAutoVerifyPickHeight              =CheckRange(IniConfig.iD36_RTCAutoVerifyPickHeight, 30, 0);
 
@@ -2601,38 +2601,38 @@ void ProcessLastSetIni_Index(bool bRead)
     {
         IniConfig.iD44TestHeadCheckVacuumTime               =ReadWriteIni(sPath, "Index", "iD44TestHeadCheckVacuumTime",                IniConfig.iD44TestHeadCheckVacuumTime,             (int)LastSet.iTestHeadCheckVacuumTime,  bRead, true, 100000, 100);
     }
-    IniConfig.bIndexAddPressEP                          =ReadWriteIni(sPath, "Index", "bIndexAddPressEP",                           IniConfig.bIndexAddPressEP,                                 false,  true);  //jou 20171026 (wei) : ���դ��[��EP
-    IniConfig.iIndexAddPressEP_Time                     =ReadWriteIni(sPath, "Index", "iIndexAddPressEP_Time",                      IniConfig.iIndexAddPressEP_Time,                            3,      true,true, 1, 10);  //jou 20171026 (wei) : ���դ��[��EP
-    IniConfig.dIndexAddPressEP_Kg                       =ReadWriteIni(sPath, "Index", "dIndexAddPressEP_Kg",                        IniConfig.dIndexAddPressEP_Kg,                              1.0,    true,true, 0.1, 3.0);  //jou 20171026 (wei) : ���դ��[��EP
-    IniConfig.dIndexVibrateEP_Kg                        =ReadWriteIni(sPath, "Index", "dIndexVibrateEP_Kg",                         IniConfig.dIndexVibrateEP_Kg,                               0.2,    true,true, 0.1, 2.0);  //jou 20171026 (wei) : ���դ��[��EP
+    IniConfig.bIndexAddPressEP                          =ReadWriteIni(sPath, "Index", "bIndexAddPressEP",                           IniConfig.bIndexAddPressEP,                                 false,  true);  //jou 20171026 (wei) : 測試中加壓EP
+    IniConfig.iIndexAddPressEP_Time                     =ReadWriteIni(sPath, "Index", "iIndexAddPressEP_Time",                      IniConfig.iIndexAddPressEP_Time,                            3,      true,true, 1, 10);  //jou 20171026 (wei) : 測試中加壓EP
+    IniConfig.dIndexAddPressEP_Kg                       =ReadWriteIni(sPath, "Index", "dIndexAddPressEP_Kg",                        IniConfig.dIndexAddPressEP_Kg,                              1.0,    true,true, 0.1, 3.0);  //jou 20171026 (wei) : 測試中加壓EP
+    IniConfig.dIndexVibrateEP_Kg                        =ReadWriteIni(sPath, "Index", "dIndexVibrateEP_Kg",                         IniConfig.dIndexVibrateEP_Kg,                               0.2,    true,true, 0.1, 2.0);  //jou 20171026 (wei) : 測試中加壓EP
 
     IniConfig.iGalilSpeedAcc                            =ReadWriteIni(sPath, "Index", "iGalilSpeedAcc",                             IniConfig.iGalilSpeedAcc,                             45000000,     true,true, 45000000, 900000000);
     IniConfig.iGalilSpeedDec                            =ReadWriteIni(sPath, "Index", "iGalilSpeedDec",                             IniConfig.iGalilSpeedDec,                             45000000,     true,true, 45000000, 900000000);
 
-    if(CUSTOMER_CODE==CC_GIGAS)                                                 //Isaac 20210604 : IndexY�����d��W�l�Τ@��IniConfig.GaliPosRange
+    if(CUSTOMER_CODE==CC_GIGAS)                                                 //Isaac 20210604 : IndexY偵測範圍名子統一成IniConfig.GaliPosRange
     {
-        IniConfig.GaliPosRange        =ReadWriteIni(sPath, "Index", "GaliPosRange",             IniConfig.GaliPosRange,                10,    bRead,true, 5, 100);  //Isaac 20201012 : index Y�W�L�d��A���@��Tmode
+        IniConfig.GaliPosRange        =ReadWriteIni(sPath, "Index", "GaliPosRange",             IniConfig.GaliPosRange,                10,    bRead,true, 5, 100);  //Isaac 20201012 : index Y超過範圍，做一次Tmode
     }
     else
     {
-        IniConfig.GaliPosRange        =ReadWriteIni(sPath, "Index", "GaliPosRange",             IniConfig.GaliPosRange,                50,    bRead,true, 50, 100);  //Isaac 20201012 : index Y�W�L�d��A���@��Tmode
+        IniConfig.GaliPosRange        =ReadWriteIni(sPath, "Index", "GaliPosRange",             IniConfig.GaliPosRange,                50,    bRead,true, 50, 100);  //Isaac 20201012 : index Y超過範圍，做一次Tmode
     }
 
     if(LastSet.bUpdateIndexLoadRateToLastSet==false)
     {
-        //Steven 20160329 : ��Load Rate�নLastSet, �e���O 0: HT, 1: NS, 2: Offset; �᭱�O 0:60, 1:56, 2:40, 3:30
+        //Steven 20160329 : 把Load Rate轉成LastSet, 前面是 0: HT, 1: NS, 2: Offset; 後面是 0:60, 1:56, 2:40, 3:30
         LastSet.dIndexLoadRate[0][0]                        =ReadWriteIni(sPath, "Index", "Index60mmLoadRate",                          IniConfig.dIndex60mmLoadRate,                           1.03,   bRead, true, 1.5, 0.5);  //jou 2011-06-10
         LastSet.dIndexLoadRate[0][1]                        =ReadWriteIni(sPath, "Index", "Index56mmLoadRate",                          IniConfig.dIndex56mmLoadRate,                           0.90,   bRead, true, 1.5, 0.5);  //wei 20151005 add 56mm
         LastSet.dIndexLoadRate[0][2]                        =ReadWriteIni(sPath, "Index", "Index40mmLoadRate",                          IniConfig.dIndex40mmLoadRate,                           1.03,   bRead, true, 1.5, 0.5);  //Steven 20110704
         LastSet.dIndexLoadRate[0][3]                        =ReadWriteIni(sPath, "Index", "Index30mmLoadRate",                          IniConfig.dIndex30mmLoadRate,                           0.90,   bRead, true, 1.5, 0.5);  //jou 2011-06-10
-        LastSet.dIndexLoadRate[1][0]                        =ReadWriteIni(sPath, "Index", "Index60mmLoadRate_NS",                       IniConfig.dIndex60mmLoadRate_NS,                        1.03,   bRead, true, 1.5, 0.5);  //wei 20150303   �ʤ�NS�B���Y
+        LastSet.dIndexLoadRate[1][0]                        =ReadWriteIni(sPath, "Index", "Index60mmLoadRate_NS",                       IniConfig.dIndex60mmLoadRate_NS,                        1.03,   bRead, true, 1.5, 0.5);  //wei 20150303   京元NS浮動頭
         LastSet.dIndexLoadRate[1][1]                        =ReadWriteIni(sPath, "Index", "Index56mmLoadRate_NS",                       IniConfig.dIndex56mmLoadRate_NS,                        0.90,   bRead, true, 1.5, 0.5);  //wei 20151005 add 56mm
-        LastSet.dIndexLoadRate[1][2]                        =ReadWriteIni(sPath, "Index", "Index40mmLoadRate_NS",                       IniConfig.dIndex40mmLoadRate_NS,                        1.03,   bRead, true, 1.5, 0.5);  //wei 20150303   �ʤ�NS�B���Y
-        LastSet.dIndexLoadRate[1][3]                        =ReadWriteIni(sPath, "Index", "Index30mmLoadRate_NS",                       IniConfig.dIndex30mmLoadRate_NS,                        0.90,   bRead, true, 1.5, 0.5);  //wei 20150303   �ʤ�NS�B���Y
-        LastSet.dIndexLoadRate[2][0]                        =ReadWriteIni(sPath, "Index", "Index60mmLoadRate_Offset",                   IniConfig.dIndex60mmLoadRate_Offset,                    0.0,    bRead, true, 0.5, -0.5);  //2014-06-26    Dell    for TSMC ����Load cell offset
+        LastSet.dIndexLoadRate[1][2]                        =ReadWriteIni(sPath, "Index", "Index40mmLoadRate_NS",                       IniConfig.dIndex40mmLoadRate_NS,                        1.03,   bRead, true, 1.5, 0.5);  //wei 20150303   京元NS浮動頭
+        LastSet.dIndexLoadRate[1][3]                        =ReadWriteIni(sPath, "Index", "Index30mmLoadRate_NS",                       IniConfig.dIndex30mmLoadRate_NS,                        0.90,   bRead, true, 1.5, 0.5);  //wei 20150303   京元NS浮動頭
+        LastSet.dIndexLoadRate[2][0]                        =ReadWriteIni(sPath, "Index", "Index60mmLoadRate_Offset",                   IniConfig.dIndex60mmLoadRate_Offset,                    0.0,    bRead, true, 0.5, -0.5);  //2014-06-26    Dell    for TSMC 高溫Load cell offset
         LastSet.dIndexLoadRate[2][1]                        =ReadWriteIni(sPath, "Index", "Index56mmLoadRate_Offset",                   IniConfig.dIndex56mmLoadRate_Offset,                    0.0,    bRead, true, 0.5, -0.5);  //wei 20151005 add 56mm
-        LastSet.dIndexLoadRate[2][2]                        =ReadWriteIni(sPath, "Index", "Index40mmLoadRate_Offset",                   IniConfig.dIndex40mmLoadRate_Offset,                    0.0,    bRead, true, 0.5, -0.5);  //2014-06-26    Dell    for TSMC ����Load cell offset
-        LastSet.dIndexLoadRate[2][3]                        =ReadWriteIni(sPath, "Index", "Index30mmLoadRate_Offset",                   IniConfig.dIndex30mmLoadRate_Offset,                    0.0,    bRead, true, 0.5, -0.5);  //2014-06-26    Dell    for TSMC ����Load cell offset
+        LastSet.dIndexLoadRate[2][2]                        =ReadWriteIni(sPath, "Index", "Index40mmLoadRate_Offset",                   IniConfig.dIndex40mmLoadRate_Offset,                    0.0,    bRead, true, 0.5, -0.5);  //2014-06-26    Dell    for TSMC 高溫Load cell offset
+        LastSet.dIndexLoadRate[2][3]                        =ReadWriteIni(sPath, "Index", "Index30mmLoadRate_Offset",                   IniConfig.dIndex30mmLoadRate_Offset,                    0.0,    bRead, true, 0.5, -0.5);  //2014-06-26    Dell    for TSMC 高溫Load cell offset
         LastSet.bUpdateIndexLoadRateToLastSet=true;
         WriteLastDataFile();
     }
@@ -2640,7 +2640,7 @@ void ProcessLastSetIni_Index(bool bRead)
     if(CUSTOMER_CODE==CC_ASE_KaohSiung)
         IniConfig.bL09HotTempShuttleNoAddPos=true;                              //JerryYang 20230204 : L23 -> L09   //kevin 20200812 no use shuttle offset
 
-//    IniConfig.bL09HotTempShuttleNoAddPos                    =ReadWriteIni(sPath, "Tempture", "bL23HotTempShuttlenoAddPos",              IniConfig.bL09HotTempShuttleNoAddPos,                   0.0,     false,true, 0.0, 0.0);  //JerryYang 20230204 : �h�l��, Mark��     //kevin 20200812 add
+//    IniConfig.bL09HotTempShuttleNoAddPos                    =ReadWriteIni(sPath, "Tempture", "bL23HotTempShuttlenoAddPos",              IniConfig.bL09HotTempShuttleNoAddPos,                   0.0,     false,true, 0.0, 0.0);  //JerryYang 20230204 : 多餘的, Mark掉     //kevin 20200812 add
 }
 //---------------------------------------------------------------------------
 void ProcessLastSetIni_InOutArm(bool bRead)
@@ -2648,7 +2648,7 @@ void ProcessLastSetIni_InOutArm(bool bRead)
     AnsiString sPath=AuthPath+"config.ini";
     AnsiString szDir="", szDir1="";
 
-    if(CUSTOMER_CODE==CC_KYEC_LEE)                                              //wei 20151022 �j��ϥΥ�����Offset
+    if(CUSTOMER_CODE==CC_KYEC_LEE)                                              //wei 20151022 強制使用本機的Offset
     {
         szDir.sprintf("%sDefineOffset", DefaultPath);
         szDir1.sprintf("%s%s", OffsetPath, GetLastOpenFN());
@@ -2664,8 +2664,8 @@ void ProcessLastSetIni_InOutArm(bool bRead)
 
     //Ifor 20161121 add Use Fix3 Full Tray By CosFunction
     //==>
-    if(FIX3_FULL_PLACE!=Fix3K_Uninstall)                                        //Ifor 20161209 �p�G���w�� Fix3 Full Place �j������ Fix3 Full Tray �\��
-        CosFunction.bUseFix3FullTray=false;                                     //Steven 20250911 : Mark for �w�� fix3 full �i�H����
+    if(FIX3_FULL_PLACE!=Fix3K_Uninstall)                                        //Ifor 20161209 如果有安裝 Fix3 Full Place 強制關閉 Fix3 Full Tray 功能
+        CosFunction.bUseFix3FullTray=false;                                     //Steven 20250911 : Mark for 硬體 fix3 full 可以關閉
 }
 //---------------------------------------------------------------------------
 void ProcessLastSetIni_QA_Mode(bool bRead)
@@ -2688,7 +2688,7 @@ void ProcessLastSetIni_SingleTempLimit(bool bRead)
 
     for(int i=tcHotPlate1; i<tcTotalCount; i++)                                 //Steven 20111013
     {
-        if(IniConfig.bVTESTFunction==true)                                      //jou 20231101 : �Ȥ�n�D temp���� Single Limit ���ϥ�
+        if(IniConfig.bVTESTFunction==true)                                      //jou 20231101 : 客戶要求 temp頁面 Single Limit 不使用
         {
             IniConfig.dSingleTempLimit[i]=0;
         }
@@ -2704,14 +2704,14 @@ void ProcessLastSetIni_Contact_Force(bool bRead)
 {
     AnsiString sPath=AuthPath+"config.ini";
 
-    IniConfig.iContactForceMap[0][0]    =ReadWriteIni(sPath, "Contact Force", "30MM_10KG", IniConfig.iContactForceMap[0][0], 196, bRead, true, 0,                                 4095);  //Steven 20111107 : Contact Force������
-    IniConfig.iContactForceMap[0][1]    =ReadWriteIni(sPath, "Contact Force", "30MM_60KG", IniConfig.iContactForceMap[0][1], 933, bRead, true, IniConfig.iContactForceMap[0][0],  4095);  //Steven 20111107 : Contact Force������
-    IniConfig.iContactForceMap[1][0]    =ReadWriteIni(sPath, "Contact Force", "40MM_10KG", IniConfig.iContactForceMap[1][0], 163, bRead, true, 0,                                 4095);  //Steven 20111107 : Contact Force������
-    IniConfig.iContactForceMap[1][1]    =ReadWriteIni(sPath, "Contact Force", "40MM_60KG", IniConfig.iContactForceMap[1][1], 873, bRead, true, IniConfig.iContactForceMap[1][0],  4095);  //Steven 20111107 : Contact Force������
-    IniConfig.iContactForceMap[2][0]    =ReadWriteIni(sPath, "Contact Force", "60MM_10KG", IniConfig.iContactForceMap[2][0], 130, bRead, true, 0,                                 4095);  //Steven 20111107 : Contact Force������
-    IniConfig.iContactForceMap[2][1]    =ReadWriteIni(sPath, "Contact Force", "60MM_60KG", IniConfig.iContactForceMap[2][1], 813, bRead, true, IniConfig.iContactForceMap[2][0],  4095);  //Steven 20111107 : Contact Force������
-    IniConfig.iContactForceMap[3][0]    =ReadWriteIni(sPath, "Contact Force", "56MM_10KG", IniConfig.iContactForceMap[3][0], 130, bRead, true, 0,                                 4095);  //Steven 20111107 : Contact Force������    //wei 20151005 add 56mm
-    IniConfig.iContactForceMap[3][1]    =ReadWriteIni(sPath, "Contact Force", "56MM_60KG", IniConfig.iContactForceMap[3][1], 813, bRead, true, IniConfig.iContactForceMap[3][0],  4095);  //Steven 20111107 : Contact Force������    //wei 20151005 add 56mm
+    IniConfig.iContactForceMap[0][0]    =ReadWriteIni(sPath, "Contact Force", "30MM_10KG", IniConfig.iContactForceMap[0][0], 196, bRead, true, 0,                                 4095);  //Steven 20111107 : Contact Force的公式
+    IniConfig.iContactForceMap[0][1]    =ReadWriteIni(sPath, "Contact Force", "30MM_60KG", IniConfig.iContactForceMap[0][1], 933, bRead, true, IniConfig.iContactForceMap[0][0],  4095);  //Steven 20111107 : Contact Force的公式
+    IniConfig.iContactForceMap[1][0]    =ReadWriteIni(sPath, "Contact Force", "40MM_10KG", IniConfig.iContactForceMap[1][0], 163, bRead, true, 0,                                 4095);  //Steven 20111107 : Contact Force的公式
+    IniConfig.iContactForceMap[1][1]    =ReadWriteIni(sPath, "Contact Force", "40MM_60KG", IniConfig.iContactForceMap[1][1], 873, bRead, true, IniConfig.iContactForceMap[1][0],  4095);  //Steven 20111107 : Contact Force的公式
+    IniConfig.iContactForceMap[2][0]    =ReadWriteIni(sPath, "Contact Force", "60MM_10KG", IniConfig.iContactForceMap[2][0], 130, bRead, true, 0,                                 4095);  //Steven 20111107 : Contact Force的公式
+    IniConfig.iContactForceMap[2][1]    =ReadWriteIni(sPath, "Contact Force", "60MM_60KG", IniConfig.iContactForceMap[2][1], 813, bRead, true, IniConfig.iContactForceMap[2][0],  4095);  //Steven 20111107 : Contact Force的公式
+    IniConfig.iContactForceMap[3][0]    =ReadWriteIni(sPath, "Contact Force", "56MM_10KG", IniConfig.iContactForceMap[3][0], 130, bRead, true, 0,                                 4095);  //Steven 20111107 : Contact Force的公式    //wei 20151005 add 56mm
+    IniConfig.iContactForceMap[3][1]    =ReadWriteIni(sPath, "Contact Force", "56MM_60KG", IniConfig.iContactForceMap[3][1], 813, bRead, true, IniConfig.iContactForceMap[3][0],  4095);  //Steven 20111107 : Contact Force的公式    //wei 20151005 add 56mm
 //    IniConfig.bD04MinForceByFile        =ReadWriteIni(sPath, "Contact Force", "bD04MinForceByFile", IniConfig.bD04MinForceByFile, 0, bRead, false);                                             //Steven 20190314 : Min force is read from file
 //    IniConfig.dD04MinForceByFile        =ReadWriteIni(sPath, "Contact Force", "dD04MinForceByFile", IniConfig.dD04MinForceByFile, 1.0, bRead, true, 1.0, 120.0);
 
@@ -2758,7 +2758,7 @@ void ProcessLastSetIni_Auto_Clean(bool bRead)
         {
             if(CUSTOMER_CODE==CC_KYEC_LEE       ||
                CosFunction.bHiSiliconFunction   ||
-               CUSTOMER_CODE==CC_KYEC_XILINX    )                               //wei 20160308 Auto clean �j��}��shuttle sensor����
+               CUSTOMER_CODE==CC_KYEC_XILINX    )                               //wei 20160308 Auto clean 強制開啟shuttle sensor偵測
                 IniConfig.bAutoCleanShuttleDisable=false;
             else
                 IniConfig.bAutoCleanShuttleDisable=ReadWriteIni(sPath, "Auto Clean", "bAutoCleanShuttleDisable", IniConfig.bAutoCleanShuttleDisable, true, bRead);  //jou 2013-02-27 Auto Clean disable shuttle sensor detect
@@ -2773,7 +2773,7 @@ void ProcessLastSetIni_Barcode_Reader(bool bRead)
     if(CUSTOMER_CODE==CC_KYEC_LEE ||
        CUSTOMER_CODE==CC_KYEC_XILINX)
     {
-        IniConfig.iA11BarcodeTime  =180;                                        //wei 20150909 �j��]�w180s
+        IniConfig.iA11BarcodeTime  =180;                                        //wei 20150909 強制設定180s
         IniConfig.bA11BarcodeTime  =true;
     }
 }
@@ -2781,25 +2781,25 @@ void ProcessLastSetIni_Barcode_Reader(bool bRead)
 void ProcessLastSetIni_Specific(bool bRead)
 {
     AnsiString sPath=AuthPath+"config.ini";
-    //Sam 20221018 : �ץ� LockByFile ���D Mark
-    //IniConfig.bF06_Active       =ReadWriteIni(sPath, "Specific", "F06_Active",      IniConfig.bF06_Active,      true,   bRead);                     //Steven 20140627 : Add for ASE-CL -- F06 ����
+    //Sam 20221018 : 修正 LockByFile 問題 Mark
+    //IniConfig.bF06_Active       =ReadWriteIni(sPath, "Specific", "F06_Active",      IniConfig.bF06_Active,      true,   bRead);                     //Steven 20140627 : Add for ASE-CL -- F06 打勾
     //IniConfig.bF06_Enable       =ReadWriteIni(sPath, "Specific", "F06_Enabled",     IniConfig.bF06_Enable,      false,  bRead);                     //Steven 20140627 : Add for ASE-CL -- F06 Enable
-    IniConfig.bD41_Active       =ReadWriteIni(sPath, "Specific", "D41_Active",      IniConfig.bD41_Active,      false,  bRead);                                 //Steven 20140627 : Add for ASE-CL -- D41 ����  //jou 2015-10-19 bD41_Active true->false
+    IniConfig.bD41_Active       =ReadWriteIni(sPath, "Specific", "D41_Active",      IniConfig.bD41_Active,      false,  bRead);                                 //Steven 20140627 : Add for ASE-CL -- D41 打勾  //jou 2015-10-19 bD41_Active true->false
     IniConfig.bD41_Enable       =ReadWriteIni(sPath, "Specific", "D41_Enabled",     IniConfig.bD41_Enable,      false,  bRead);                                 //Steven 20140627 : Add for ASE-CL -- D41 Enable
     IniConfig.iD41_Position     =ReadWriteIni(sPath, "Specific", "D41_Position",    IniConfig.iD41_Position,    1,      bRead, true, 0,   1);                   //Steven 20140627 : Add for ASE-CL -- D41 Inside/Above
-    IniConfig.dD41_Offset       =ReadWriteIni(sPath, "Specific", "D41_Offset",      IniConfig.dD41_Offset,      2.0,    bRead, true, 0.0, 10.0);                //Steven 20140627 : Add for ASE-CL -- D41 ����
-    IniConfig.bD42_Active       =ReadWriteIni(sPath, "Specific", "D42_Active",      IniConfig.bD42_Active,      true,   bRead);                                 //JerryYang 20160220 add for Amkor-Philipine -- D42 ����
+    IniConfig.dD41_Offset       =ReadWriteIni(sPath, "Specific", "D41_Offset",      IniConfig.dD41_Offset,      2.0,    bRead, true, 0.0, 10.0);                //Steven 20140627 : Add for ASE-CL -- D41 高度
+    IniConfig.bD42_Active       =ReadWriteIni(sPath, "Specific", "D42_Active",      IniConfig.bD42_Active,      true,   bRead);                                 //JerryYang 20160220 add for Amkor-Philipine -- D42 打勾
     IniConfig.bD42_Enable       =ReadWriteIni(sPath, "Specific", "D42_Enabled",     IniConfig.bD42_Enable,      false,  bRead);                                 //JerryYang 20160220 add for Amkor-Philipine -- D42 Enable
-    IniConfig.bD44_Active       =ReadWriteIni(sPath, "Specific", "D44_Active",      IniConfig.bD44_Active,      true,   bRead);                                 //JerryYang 20160220 add for Amkor-Philipine -- D44 ����
+    IniConfig.bD44_Active       =ReadWriteIni(sPath, "Specific", "D44_Active",      IniConfig.bD44_Active,      true,   bRead);                                 //JerryYang 20160220 add for Amkor-Philipine -- D44 打勾
     IniConfig.bD44_Enable       =ReadWriteIni(sPath, "Specific", "D44_Enabled",     IniConfig.bD44_Enable,      false,  bRead);                                 //JerryYang 20160220 add for Amkor-Philipine -- D44 Enable
-    //Sam 20221018 : �ץ� LockByFile ���D Mark
-    //IniConfig.bP24_Active       =ReadWriteIni(sPath, "Specific", "P24_Active",      IniConfig.bP24_Active,      true,   bRead);                     //JerryYang 20160220 add for ����_�� -- P24 ����
-    //IniConfig.bP24_Enable       =ReadWriteIni(sPath, "Specific", "P24_Enabled",     IniConfig.bP24_Enable,      false,  bRead);                     //JerryYang 20160220 add for ����_�� -- P24 Enable
+    //Sam 20221018 : 修正 LockByFile 問題 Mark
+    //IniConfig.bP24_Active       =ReadWriteIni(sPath, "Specific", "P24_Active",      IniConfig.bP24_Active,      true,   bRead);                     //JerryYang 20160220 add for 矽格北興 -- P24 打勾
+    //IniConfig.bP24_Enable       =ReadWriteIni(sPath, "Specific", "P24_Enabled",     IniConfig.bP24_Enable,      false,  bRead);                     //JerryYang 20160220 add for 矽格北興 -- P24 Enable
 
-    IniConfig.bF26_Enable       =ReadWriteIni(sPath, "Specific", "F26_Enabled",     IniConfig.bF26_Enable,      false,  bRead);                                 //Sam 20220527 : for �����f -- F26 Enable
-    //Sam 20221018 : �ץ� LockByFile ���D Mark
-    //IniConfig.bI06_Active       =ReadWriteIni(sPath, "Specific", "I06_Active",      IniConfig.bI06_Active,      true,   bRead);                     //Sam 20220527 : for ����_�� -- I06 ����
-    //IniConfig.bI06_Enable       =ReadWriteIni(sPath, "Specific", "I06_Enabled",     IniConfig.bI06_Enable,      false,  bRead);                     //Sam 20220527 : for ����_�� -- I06 Enable
+    IniConfig.bF26_Enable       =ReadWriteIni(sPath, "Specific", "F26_Enabled",     IniConfig.bF26_Enable,      false,  bRead);                                 //Sam 20220527 : for 矽格湖口 -- F26 Enable
+    //Sam 20221018 : 修正 LockByFile 問題 Mark
+    //IniConfig.bI06_Active       =ReadWriteIni(sPath, "Specific", "I06_Active",      IniConfig.bI06_Active,      true,   bRead);                     //Sam 20220527 : for 矽格北興 -- I06 打勾
+    //IniConfig.bI06_Enable       =ReadWriteIni(sPath, "Specific", "I06_Enabled",     IniConfig.bI06_Enable,      false,  bRead);                     //Sam 20220527 : for 矽格北興 -- I06 Enable
     if(CUSTOMER_CODE==CC_TSMC_TAINAN ||                                         //kevin 20180214 add
        CUSTOMER_CODE==CC_ASE_KaohSiung)                                         //wei 20160726 TSMC GPIB Lot End
     {
@@ -2820,17 +2820,17 @@ void ProcessLastSetIni_Specific(bool bRead)
         IniConfig.bI31_2GPIBLotStart =false;                                    //kevin 20190613 add
     }
 
-    if(IniConfig.bSPILFunction==true)                                           //JerryYang 20170328 (Jou) ���~�Ȥ�X�Τ@��SPILFunction
+    if(IniConfig.bSPILFunction==true)                                           //JerryYang 20170328 (Jou) 矽品客戶碼統一用SPILFunction
         IniConfig.bD41_Active=false;
     else
-        IniConfig.bD41_Active       =ReadWriteIni(sPath, "Specific", "D41_Active",      IniConfig.bD41_Active,      false,  bRead);                             //Steven 20140627 : Add for ASE-CL -- D41 ����  //jou 2015-10-19 bD41_Active true->false
+        IniConfig.bD41_Active       =ReadWriteIni(sPath, "Specific", "D41_Active",      IniConfig.bD41_Active,      false,  bRead);                             //Steven 20140627 : Add for ASE-CL -- D41 打勾  //jou 2015-10-19 bD41_Active true->false
 
     if(CosFunction.bLockD41ByFile)                                              //Steven 20140627 : Add for ASE-CL
     {
         IniConfig.iD41SocketInitialICCheckPosition        =IniConfig.iD41_Position;
         IniConfig.dD41SocketInitialCheckOffset            =IniConfig.dD41_Offset;
     }
-    //Sam 20221018 : �ץ� LockByFile ���D Mark
+    //Sam 20221018 : 修正 LockByFile 問題 Mark
 }
 //---------------------------------------------------------------------------
 void SetCustomerLimitationForConfig()
@@ -2850,7 +2850,7 @@ void SetCustomerLimitationForConfig()
     if(elConfig!=NULL)
     {
         elConfig->ReadEditTextFromFile(AuthPath, "config.ini");
-        ADAM_Rang(IniConfig.iD26EPEncoderRange);                                //Steven 20250113 : �ץ��S�ǤJAdam range�]�w��
+        ADAM_Rang(IniConfig.iD26EPEncoderRange);                                //Steven 20250113 : 修正沒傳入Adam range設定值
 
         #ifdef SOFT_SIMULTE
         IniConfig.bM01EnableMonitorFunction=false;
@@ -2876,7 +2876,7 @@ void SetCustomerLimitationForConfig()
         }
 
         if(IniConfig.bA09_ByArmCloseSite &&
-           IniConfig.bA09_1_AutoCloseArm)                                       //Steven 20220819 : ��Arm Site������, �N��Arm���F
+           IniConfig.bA09_1_AutoCloseArm)                                       //Steven 20220819 : 單Arm Site全關時, 就把Arm關了
         {
             IniConfig.bD30EnableSiteModeSelect=true;
         }
@@ -2889,26 +2889,26 @@ void SetCustomerLimitationForConfig()
             if(IniConfig.iA01ChangeOpTime<=60)
                 IniConfig.iA01ChangeOpTime=60;                                  //kevin 20171024 add
         }
-        else if(CUSTOMER_CODE==CC_KYEC_LEE)                                     //wei 20150903 ��wA01
+        else if(CUSTOMER_CODE==CC_KYEC_LEE)                                     //wei 20150903 鎖定A01
         {
-            IniConfig.iA01ChangeOpTime=600;                                     //Ifor 20170808 (wei) KYEC �촼�n�D 360 => 600
+            IniConfig.iA01ChangeOpTime=600;                                     //Ifor 20170808 (wei) KYEC 喬智要求 360 => 600
         }
 
-        if(CUSTOMER_CODE==CC_TSMC_TAINAN)                                       //wei 20170216 (Steven) TSMC ATR �u���@��RT
+        if(CUSTOMER_CODE==CC_TSMC_TAINAN)                                       //wei 20170216 (Steven) TSMC ATR 只做一次RT
             IniConfig.iAutoRetestLimit=1;
 
         if(CUSTOMER_CODE==CC_KYEC_LEE ||
            CUSTOMER_CODE==CC_KYEC_XILINX)
         {
-            IniConfig.iA11BarcodeTime=180;                                      //wei 20150909 �j��]�w180s
+            IniConfig.iA11BarcodeTime=180;                                      //wei 20150909 強制設定180s
         }
 
         if(Temperature.fWorkTemperBase+IniConfig.iSocketTemptureRangeOver+10>=TempFuseLimitType)
-        {                                                                       //Steven 20170711 (Wei) : �ץ��Q�s�ѻ��@��Alarm socket�ūײ��`�����D
+        {                                                                       //Steven 20170711 (Wei) : 修正烏龍麵說一直Alarm socket溫度異常的問題
             IniConfig.iSocketTemptureRangeOver=TempFuseLimitType-Temperature.fWorkTemperBase-11;
         }
 
-        if(IniConfig.bL11_8ATCUseTemperatureCompare==true &&                    //Ifor 20151029 �L�}��[L11_5]�\�ण�i�}��[L11_8]�\��
+        if(IniConfig.bL11_8ATCUseTemperatureCompare==true &&                    //Ifor 20151029 無開啟[L11_5]功能不可開啟[L11_8]功能
            Temperature.bUseReferTempSensor==false)
         {
             IniConfig.bL11_8ATCUseTemperatureCompare=false;
@@ -2926,7 +2926,7 @@ void SetCustomerLimitationForConfig()
                 IniConfig.asN12_FtpUplaodPath=IniConfig.asN12_FtpUplaodPath + "/";
         }
 
-        if(CosFunction.bTestTimeOutShowSkipAndHome)                             //JerryYang 20231208 SPIL test timeout�u���SKIP�άOHOME
+        if(CosFunction.bTestTimeOutShowSkipAndHome)                             //JerryYang 20231208 SPIL test timeout只能選SKIP或是HOME
         {
             if(IniConfig.iI22TestTimeOutOption==1 || IniConfig.iI22TestTimeOutOption==2)
             {
@@ -2945,15 +2945,15 @@ void SetCustomerLimitationForConfig()
             }
         }
     }
-    ReadConfigByRecipe();                                                       //JimmyChiu 20220601 : config�x�s���Hrecipe
+    ReadConfigByRecipe();                                                       //JimmyChiu 20220601 : config儲存跟隨recipe
     if(fMain!=NULL)                                                             //Steven 20240124 : Add protection
-        fMain->ShowFunctions();                                                 //Steven 20240123 : ��ܥ\��C��
+        fMain->ShowFunctions();                                                 //Steven 20240123 : 顯示功能列表
 }
 //---------------------------------------------------------------------------
-void ReadConfigByRecipe()                                                       //JimmyChiu 20220601 : config�x�s���Hrecipe
+void ReadConfigByRecipe()                                                       //JimmyChiu 20220601 : config儲存跟隨recipe
 {
     AnsiString szDir=GetRecipePath();
-    if(elConfig_byRecipe!=NULL)                                                 //JimmyChiu 20220601 : config�x�s���Hrecipe
+    if(elConfig_byRecipe!=NULL)                                                 //JimmyChiu 20220601 : config儲存跟隨recipe
     {
         elConfig_byRecipe->ReadEditTextFromFile(szDir, asFileNameConfigByRecipe);
         elConfig_byRecipe->InitialDataToEdit();
@@ -2972,7 +2972,7 @@ int GetColorSensorOnLoaderByMUN()                                               
 bool GetColorSensorIsMapping(AnsiString &sErrorMsg)                             //Jimmychiu 20230630 : add color sensor MU-N in Loader
 {
     int iColorSenNum=GetColorSensorOnLoaderByMUN();
-    bool bReturn=true;                                                          //�D�H�W�Ҧ����P�_�B��ĵ��
+    bool bReturn=true;                                                          //非以上模式不判斷且不警報
     if(iTestRunMode==FT)
     {
         bReturn=fTrayForm->GetColorSensor("ColorSensor_FT")->IsColorEable(iColorSenNum,sErrorMsg);
@@ -2994,9 +2994,9 @@ void ReadLastSetIni()
     AnsiString sPath=AuthPath+"config.ini";                                     //JerryYang 20160603
 
     if(fConfiguration!=NULL)
-        fConfiguration->ChangeCBListProperty();                                 //Steven 20190813 : �������ק��v���~��ק����
+        fConfiguration->ChangeCBListProperty();                                 //Steven 20190813 : 必須先修改權限才能修改顯示
 
-    CustomerFunctionSelect();                                                   //  �Ȥ�\���ܰ�
+    CustomerFunctionSelect();                                                   //  客戶功能選擇區
     ReadLastDataFile();
 
     IniConfig.sMachineType                                  =CheckAndReadIniDataGeneral("Version",          "Model",        AnsiString("HT-9046"));             //kevin 20130425  //Steven 20140606 : For Secs Gem
@@ -3007,8 +3007,8 @@ void ReadLastSetIni()
     AnsiString szDir=GetRecipePath();
     if(CUSTOMER_CODE==CC_ASE_CL)
     {
-        char PcName[255] ;                                                      //Steven 20110131 : �q���W��
-        unsigned long PcNameLen=255;                                            //Steven 20110131 : �q���W�٪���
+        char PcName[255] ;                                                      //Steven 20110131 : 電腦名稱
+        unsigned long PcNameLen=255;                                            //Steven 20110131 : 電腦名稱長度
         GetComputerName(PcName, &PcNameLen);                                    //Steven 20110131
         IniConfig.SocketHandlerID=AnsiString(PcName);
     }
@@ -3016,7 +3016,7 @@ void ReadLastSetIni()
     if(!DirectoryExists(szDir))
     {
         MyForceDirectories(szDir);
-        bSetupFileNotExist=true;                                                //Ifor 20160822 add �Ұʧ䤣��]�w����Setup File�ɮ�Alarm ĵ��
+        bSetupFileNotExist=true;                                                //Ifor 20160822 add 啟動找不到設定中的Setup File檔案Alarm 警示
     }
 
     szDir=GetRecipeFileName("HotPlate.Data");
@@ -3027,7 +3027,7 @@ void ReadLastSetIni()
         WriteIniData(szDir, "Hotplate Form", "Using Flag", HotPlateForm.iPlateSelect);
     }
 
-    if(IniConfig.bRecordSkipPosition==true)                                     //JerryYang 20160603 �j��}��bRecordSkipPosition��n���s�ɦAŪ��,�קKini���S�ҥήɦ��\��|����
+    if(IniConfig.bRecordSkipPosition==true)                                     //JerryYang 20160603 強制開啟bRecordSkipPosition後要先存檔再讀取,避免ini中沒啟用時此功能會失效
     {
         WriteIniData(sPath, "Tray", "bRecordSkipPosition", IniConfig.bRecordSkipPosition);                              //jou 2013-05-30 Record Skip
     }
@@ -3035,7 +3035,7 @@ void ReadLastSetIni()
     if(HSys.MyGem!=NULL)
         HSys.MyGem->UpdateDataPath("D:\\HT9045\\IniData\\Data\\");              //Steven 20140902 : SECS GEM
 
-    if(IniConfig.bA09_ByArmCloseSite==true)                                     //ChungHung 20130910 alter for SCK can close site by Index ��Ӧ��Ĭ�
+    if(IniConfig.bA09_ByArmCloseSite==true)                                     //ChungHung 20130910 alter for SCK can close site by Index 兩個有衝突
         CosFunction.bOneCycleCanChangeArm=false;                                //ChungHung 20140505 alter ==--->=
 
     if(CUSTOMER_CODE==CC_ASE_KaohSiung)                                         //kevin 20180918 add
@@ -3045,7 +3045,7 @@ void ReadLastSetIni()
 
     if(InitialOK==true && fMain!=NULL)
     {
-        fMain->pnlUnitSpeedDisplay->Visible=IniConfig.bA26MotorSpeedSortDisplay;                                        //Ifor 20171228 (Steven) : add �P�_�O�_��� Motor Speed Display
+        fMain->pnlUnitSpeedDisplay->Visible=IniConfig.bA26MotorSpeedSortDisplay;                                        //Ifor 20171228 (Steven) : add 判斷是否顯示 Motor Speed Display
     }
 
     ProcessLastSetIni_RMS               (bReadFile);
@@ -3066,7 +3066,7 @@ void ReadLastSetIni()
     ProcessLastSetIni_Specific          (bReadFile);
     SetCustomerLimitationForConfig();
 
-    if(USE_SOCKET_SENSOR==999)                                                  //JerryYang 20200408 socket sensor�אּ�w��ﶵ,�w�]�Ȩϥ��ª� Config C08�\��
+    if(USE_SOCKET_SENSOR==999)                                                  //JerryYang 20200408 socket sensor改為硬體選項,預設值使用舊版 Config C08功能
     {
         WriteIniDataGeneral("System", "USE_SOCKET_SENSOR", IniConfig.bC08_SocketSensor);
         USE_SOCKET_SENSOR=CheckAndReadIniDataGeneral("System",   "USE_SOCKET_SENSOR", 0);
@@ -3076,7 +3076,7 @@ void ReadLastSetIni()
         }
         else
         {
-            if(USE_COLOR_TRAY_SENSOR)                                           //��Color sensor�w�]4 ea
+            if(USE_COLOR_TRAY_SENSOR)                                           //裝Color sensor預設4 ea
             {
                 SOCKET_AMP_QTY=CheckRange(CheckAndReadIniDataGeneral("System",   "SocketSenAmpQty",  4), 0, iSnSocketCnt);
             }
@@ -3088,7 +3088,7 @@ void ReadLastSetIni()
     }
 
     if(Cylinder[C_Shuttle_Knocker_1].Enable==false &&
-       Cylinder[C_Shuttle_Knocker_2].Enable==false)                             //Steven 20160509 : ����S�˴N���n�ҥΥ\��
+       Cylinder[C_Shuttle_Knocker_2].Enable==false)                             //Steven 20160509 : 氣缸沒裝就不要啟用功能
     {
         IniConfig.bF14KnockShuttle=false;
         IniConfig.bF14_1KnockShuttleFirst=false;
@@ -3127,9 +3127,9 @@ void SaveLastSetIni()
     ProcessLastSetIni_Auto_Clean        (bWriteFile);
     ProcessLastSetIni_Barcode_Reader    (bWriteFile);
     ProcessLastSetIni_Specific          (bWriteFile);
-//    if(IniConfig.bEnable_SECS_GEM==true)                                      //JerryYang 20170215 (Steven) Mark for �ק�Run checkĲ�o����
+//    if(IniConfig.bEnable_SECS_GEM==true)                                      //JerryYang 20170215 (Steven) Mark for 修改Run check觸發條件
 //    {
-//        bHasSaveSet=true;                                                     //Ifor 20151204 �s�W�P�_���x���L�ק�]�w��
+//        bHasSaveSet=true;                                                     //Ifor 20151204 新增判斷機台有無修改設定檔
 //    }
 
     if(cbLastSet!=NULL)
@@ -3144,7 +3144,7 @@ void SaveLastSetIni()
 
     if(elConfig!=NULL)
     {
-        if(IniConfig.bSPILFunction==true &&                                     //JerryYang 20250423 : SPIL���H�n�D, ������Run check�Q�����n��alarm
+        if(IniConfig.bSPILFunction==true &&                                     //JerryYang 20250423 : SPIL順信要求, 偵測到Run check被關閉要跳alarm
             fConfiguration->cbN07_EnableHostStart->Checked==false &&
             IniConfig.bRCMDStart==true)
         {
@@ -3156,7 +3156,7 @@ void SaveLastSetIni()
     }
 
     AnsiString szDir=GetRecipePath();
-    if(elConfig_byRecipe!=NULL)                                                 //Sam 20220921 : config�x�s���Hrecipe
+    if(elConfig_byRecipe!=NULL)                                                 //Sam 20220921 : config儲存跟隨recipe
     {
         elConfig_byRecipe->SaveEditTextToFile(szDir, asFileNameConfigByRecipe);
     }
@@ -3195,7 +3195,7 @@ void SaveEventLogAutoSaveInfo()                                                 
     if(IniConfig.bEventLogAutoSaveFunction)
     {
         WriteIniData(sPath, "Event Log", "EventLogRecordDate", IniConfig.dtEventLogLastRecordDate);
-        IniConfig.sEvenLogDataTime=IniConfig.dtEventLogLastRecordDate.FormatString("yyyy/mm/dd hh:mm:ss");              //Ifor 20160621 �s�WEven Log Record Date Time �r��榡 �קK���P�t�β��Ͳ��`���D
+        IniConfig.sEvenLogDataTime=IniConfig.dtEventLogLastRecordDate.FormatString("yyyy/mm/dd hh:mm:ss");              //Ifor 20160621 新增Even Log Record Date Time 字串格式 避免不同系統產生異常問題
         WriteIniData(sPath, "Event Log", "sEvenLogDataTime", IniConfig.sEvenLogDataTime);
     }
 }
@@ -3209,7 +3209,7 @@ void ReadEventLogAutoSaveInfo()                                                 
     {
         try
         {
-            IniConfig.sEvenLogDataTime=CheckAndReadIniData(sPath, "Event Log", "sEvenLogDataTime", SDate);              //�u���S����ƪ��ܴN�l��1�� //Ifor 20160621 EventLogRecordDate �ק�� sEvenLogDataTime �r���ഫ���t�ήɶ��A�קK���P�t��&�ɶ��榡���P�o�Ͳ��`
+            IniConfig.sEvenLogDataTime=CheckAndReadIniData(sPath, "Event Log", "sEvenLogDataTime", SDate);              //真的沒有資料的話就追朔1天 //Ifor 20160621 EventLogRecordDate 修改由 sEvenLogDataTime 字串轉換成系統時間，避免不同系統&時間格式不同發生異常
         }
         catch(...)
         {
@@ -3218,21 +3218,21 @@ void ReadEventLogAutoSaveInfo()                                                 
         }
 
         if(IniConfig.sEvenLogDataTime=="" ||
-           IniConfig.sEvenLogDataTime=="NULL")                                  //Ifor 20160621 sEvenLogDataTime�r��ɶ��Y�L��Ʃ��e�l��1��
+           IniConfig.sEvenLogDataTime=="NULL")                                  //Ifor 20160621 sEvenLogDataTime字串時間若無資料往前追朔1天
             IniConfig.sEvenLogDataTime=SDate;
 
         try
         {
-            SYSTEMTIME SysTime;                                                 //Ifor 20160621 EvenLog Recode Data �ק�T�w�榡 yyyy/mm/dd hh:mm:ss
-            GetLocalTime(&SysTime);                                             //Ifor 20160829 add �L����l�Ʒ|���t�ƥX�{�ɭP���`
+            SYSTEMTIME SysTime;                                                 //Ifor 20160621 EvenLog Recode Data 修改固定格式 yyyy/mm/dd hh:mm:ss
+            GetLocalTime(&SysTime);                                             //Ifor 20160829 add 無給初始化會有負數出現導致異常
             SysTime.wYear   = atoi(IniConfig.sEvenLogDataTime.SubString(1, 4).c_str());
             SysTime.wMonth  = atoi(IniConfig.sEvenLogDataTime.SubString(6, 2).c_str());
             SysTime.wDay    = atoi(IniConfig.sEvenLogDataTime.SubString(9, 2).c_str());
             SysTime.wHour   = atoi(IniConfig.sEvenLogDataTime.SubString(12,2).c_str());
             SysTime.wMinute = atoi(IniConfig.sEvenLogDataTime.SubString(15,2).c_str());
             SysTime.wSecond = atoi(IniConfig.sEvenLogDataTime.SubString(18,2).c_str());
-            IniConfig.dtEventLogLastRecordDate=SystemTimeToDateTime(SysTime);   //Ifor 20160621 �r��ɶ���ثe�t�ήɶ��榡
-            IniConfig.sEventLogLastRecordDate=IniConfig.dtEventLogLastRecordDate.FormatString("yyyy/mm/dd hh:mm:ss");   //Ifor 20160621 �ק�Secs Gem �ɶ��榡�T�w yyyy/mm/dd hh:mm:ss
+            IniConfig.dtEventLogLastRecordDate=SystemTimeToDateTime(SysTime);   //Ifor 20160621 字串時間轉目前系統時間格式
+            IniConfig.sEventLogLastRecordDate=IniConfig.dtEventLogLastRecordDate.FormatString("yyyy/mm/dd hh:mm:ss");   //Ifor 20160621 修改Secs Gem 時間格式固定 yyyy/mm/dd hh:mm:ss
         }
         catch(...)
         {
@@ -3246,13 +3246,13 @@ void SaveTasterInfo()                                                           
     AnsiString sPath=AuthPath+"config.ini", str="";
     if(CosFunction.bFTPFunction)
     {
-        WriteIniData(sPath, "Taster", "Taster Map File",        IniConfig.N06_TasterListMap);                           //Steven 20121018 : Handler�P���վ��s�u��IP
+        WriteIniData(sPath, "Taster", "Taster Map File",        IniConfig.N06_TasterListMap);                           //Steven 20121018 : Handler與測試機連線的IP
         WriteIniData(sPath, "Taster", "Taster List File",       IniConfig.N06_TasterListFile);
         WriteIniData(sPath, "Taster", "N06 Taster Recipe Path", IniConfig.asN06_TesterPath);
-        WriteIniData(sPath, "Taster", "Taster Input Method",    IniConfig.TasterInputMethod);                           //Steven 20110311 : Taster��J��k
-        WriteIniData(sPath, "Taster", "Taster Type",            IniConfig.TasterType);                                  //Steven 20110305 : Taster����
-        WriteIniData(sPath, "Taster", "Taster No",              IniConfig.TasterNo);                                    //Steven 20110305 : Taster���X
-        WriteIniData(sPath, "Taster", "Taster Name",            IniConfig.TasterName);                                  //Steven 20110311 : Taster�W��
+        WriteIniData(sPath, "Taster", "Taster Input Method",    IniConfig.TasterInputMethod);                           //Steven 20110311 : Taster輸入方法
+        WriteIniData(sPath, "Taster", "Taster Type",            IniConfig.TasterType);                                  //Steven 20110305 : Taster型號
+        WriteIniData(sPath, "Taster", "Taster No",              IniConfig.TasterNo);                                    //Steven 20110305 : Taster號碼
+        WriteIniData(sPath, "Taster", "Taster Name",            IniConfig.TasterName);                                  //Steven 20110311 : Taster名稱
     }
 }
 //---------------------------------------------------------------------------
@@ -3266,7 +3266,7 @@ void ReadTasterInfo()                                                           
             IniConfig.N06_TasterListMap     ="";
             IniConfig.N06_TasterListFile    ="";
         }
-        else if(CUSTOMER_CODE==CC_JSCC_OS)                                      //���q�L�q�l (JSCC OS����)
+        else if(CUSTOMER_CODE==CC_JSCC_OS)                                      //長電微電子 (JSCC OS部門)
         {
             IniConfig.asN06_TesterPath      =CheckAndReadIniData(sPath, "Taster", "N06 Taster Recipe Path",  AnsiString("Z:\\"));
             IniConfig.N06_TasterListFile    ="";
@@ -3274,13 +3274,13 @@ void ReadTasterInfo()                                                           
         }
         else
         {
-            IniConfig.N06_TasterListMap     =CheckAndReadIniData(sPath, "Taster", "Taster Map File",  AnsiString("D:\\KyecData\\Mapping\\TestMap.txt"));        //Steven 20121018 : Handler�P���վ��s�u��IP
+            IniConfig.N06_TasterListMap     =CheckAndReadIniData(sPath, "Taster", "Taster Map File",  AnsiString("D:\\KyecData\\Mapping\\TestMap.txt"));        //Steven 20121018 : Handler與測試機連線的IP
             IniConfig.N06_TasterListFile    =CheckAndReadIniData(sPath, "Taster", "Taster List File", AnsiString("D:\\RMS\\tester list.txt"));
         }
-        IniConfig.TasterInputMethod =CheckAndReadIniData(sPath, "Taster", "Taster Input Method",  0);                   //Steven 20110311 : Taster��J��k
-        IniConfig.TasterType        =CheckAndReadIniData(sPath, "Taster", "Taster Type", AnsiString(""));               //Steven 20110305 : Taster����
-        IniConfig.TasterNo          =CheckAndReadIniData(sPath, "Taster", "Taster No",   AnsiString(""));               //Steven 20110305 : Taster���X
-        IniConfig.TasterName        =CheckAndReadIniData(sPath, "Taster", "Taster Name", AnsiString(""));               //Steven 20110311 : Taster�W��
+        IniConfig.TasterInputMethod =CheckAndReadIniData(sPath, "Taster", "Taster Input Method",  0);                   //Steven 20110311 : Taster輸入方法
+        IniConfig.TasterType        =CheckAndReadIniData(sPath, "Taster", "Taster Type", AnsiString(""));               //Steven 20110305 : Taster型號
+        IniConfig.TasterNo          =CheckAndReadIniData(sPath, "Taster", "Taster No",   AnsiString(""));               //Steven 20110305 : Taster號碼
+        IniConfig.TasterName        =CheckAndReadIniData(sPath, "Taster", "Taster Name", AnsiString(""));               //Steven 20110311 : Taster名稱
     }
 }
 //---------------------------------------------------------------------------
@@ -3292,7 +3292,7 @@ void ReadRmsPath()                                                              
     str=(CUSTOMER_CODE==CC_SCC || CUSTOMER_CODE==CC_SCK)?"RMS":"Server";        //ChungHung 20130621 add SCK RMS
     if(IniConfig.bShowLotInfo)
     {
-        if(CosFunction.bDownloadRecipeLevelMode)                                //jou 2016-01-06 download recipe �W�[�v���Ҧ����
+        if(CosFunction.bDownloadRecipeLevelMode)                                //jou 2016-01-06 download recipe 增加權限模式選擇
         {
             if(fLotInfo->coLevelMode->Text!="Normal")
                 IniConfig.sRmsPath=CheckAndReadIniData(sPath, str, str+" Download Path",    AnsiString("D:\\RMS"));
@@ -3312,7 +3312,7 @@ void ReadRmsPath()                                                              
 
         if(CUSTOMER_CODE==CC_SCC ||
            CUSTOMER_CODE==CC_SCK ||                                             //ChungHung 20130621 add SCK RMS
-           CUSTOMER_CODE==CC_AMD_M)                                             //Ifor 20200915 add: TF_AMD KL�� �s�W RMS
+           CUSTOMER_CODE==CC_AMD_M)                                             //Ifor 20200915 add: TF_AMD KL版 新增 RMS
         {
             IniConfig.sRmsDownPath=CheckAndReadIniData(sPath, str, str+" Download Path", AnsiString("D:\\HT9045"));
             iLength=IniConfig.sRmsDownPath.Length();
@@ -3324,12 +3324,12 @@ void ReadRmsPath()                                                              
     }
 }
 //---------------------------------------------------------------------------
-//�`�N!! �}��Site�Ҧ��A�ק�ɭn�p��
+//注意!! 開關Site模式，修改時要小心
 //---------------------------------------------------------------------------
 void SaveTestMode()                                                             //Steven 20111019
 {
     AnsiString S;
-    if(InitialOK==false)                                                        //jou 20171019 (wei) : �ץ�uTemp_set��Ū���N�i�J��function
+    if(InitialOK==false)                                                        //jou 20171019 (wei) : 修正uTemp_set未讀取就進入此function
         return;
 
     if(CosFunction.bLastSetInSetUpFile==false)                                  //Steven 20161211 Add
@@ -3351,7 +3351,7 @@ void SaveTestMode()                                                             
         for(int j=0; j<TestSocket.iMaxCol; j++)
         {
             S.sprintf("Dut %s2", IndexSuckName[0][j]);
-            if(CosFunction.bFTRTDifferentDutOnOff==true)                        //JerryYang 20170516 (wei) JSCC�n�DFT RT�n�����P���}��site
+            if(CosFunction.bFTRTDifferentDutOnOff==true)                        //JerryYang 20170516 (wei) JSCC要求FT RT要有不同的開關site
             {
                 if(iRunStartMode==FT)
                     WriteIniData(szDir, "DutOnOff", S, TestMode.iDutOnOff[1][0][j]);
@@ -3377,7 +3377,7 @@ void SaveTestMode()                                                             
         for(int j=0; j<TestSocket.iMaxCol; j++)
         {
             S.sprintf("Dut %s", IndexSuckName[1][j]);
-            if(CosFunction.bFTRTDifferentDutOnOff==true)                        //JerryYang 20170516 (wei) JSCC�n�DFT RT�n�����P���}��site
+            if(CosFunction.bFTRTDifferentDutOnOff==true)                        //JerryYang 20170516 (wei) JSCC要求FT RT要有不同的開關site
             {
                 if(iRunStartMode==FT)
                     WriteIniData(szDir, "DutOnOff", S, TestMode.iDutOnOff[0][0][j]);
@@ -3402,7 +3402,7 @@ void SaveTestMode()                                                             
     }
     else
     {
-        if(TestIF.iShuttleMode==1 && TestIF.iShuttle_Sel==1)                    //Steven 20170111 : �S�Ψ쪺Arm���s�����
+        if(TestIF.iShuttleMode==1 && TestIF.iShuttle_Sel==1)                    //Steven 20170111 : 沒用到的Arm不存取資料
         {
         }
         else
@@ -3412,7 +3412,7 @@ void SaveTestMode()                                                             
                 for(int j=0; j<TestSocket.iMaxCol; j++)
                 {
                     S.sprintf("Dut %s", IndexSuckName[i][j]);
-                    if(CosFunction.bFTRTDifferentDutOnOff==true)                //JerryYang 20170516 (wei) JSCC�n�DFT RT�n�����P���}��site
+                    if(CosFunction.bFTRTDifferentDutOnOff==true)                //JerryYang 20170516 (wei) JSCC要求FT RT要有不同的開關site
                     {
                         if(iRunStartMode==FT)
                             WriteIniData(szDir, "DutOnOff", S, TestMode.iDutOnOff[0][i][j]);
@@ -3437,7 +3437,7 @@ void SaveTestMode()                                                             
             }
         }
 
-        if(TestIF.iShuttleMode==1 && TestIF.iShuttle_Sel==0)                    //Steven 20170111 : �S�Ψ쪺Arm���s�����
+        if(TestIF.iShuttleMode==1 && TestIF.iShuttle_Sel==0)                    //Steven 20170111 : 沒用到的Arm不存取資料
         {
         }
         else                                                                    //ChungHung 20130910 alter for SCK can close site by Index
@@ -3447,7 +3447,7 @@ void SaveTestMode()                                                             
                 for(int j=0; j<TestSocket.iMaxCol; j++)
                 {
                     S.sprintf("Dut %s2", IndexSuckName[i][j]);
-                    if(CosFunction.bFTRTDifferentDutOnOff==true)                //JerryYang 20170516 (wei) JSCC�n�DFT RT�n�����P���}��site
+                    if(CosFunction.bFTRTDifferentDutOnOff==true)                //JerryYang 20170516 (wei) JSCC要求FT RT要有不同的開關site
                     {
                         if(iRunStartMode==FT)
                             WriteIniData(szDir, "DutOnOff", S, TestMode.iDutOnOff[1][i][j]);
@@ -3474,7 +3474,7 @@ void SaveTestMode()                                                             
     }
 }
 //---------------------------------------------------------------------------
-//�`�N!! �}��Site�Ҧ��A�ק�ɭn�p��
+//注意!! 開關Site模式，修改時要小心
 //---------------------------------------------------------------------------
 void ReadTestMode()                                                             //Steven 20111019
 {
@@ -3484,8 +3484,8 @@ void ReadTestMode()                                                             
         {
             for(int j=0; j<MAX_SOCKET_COL; j++)
             {
-                iCloseSiteMap[0][i][j]=LastSet.bUseTestSocket[0][i][j];         //kevin 20161003 Site ����
-                iCloseSiteMap[1][i][j]=LastSet.bUseTestSocket[1][i][j];         //kevin 20161003 Site ����
+                iCloseSiteMap[0][i][j]=LastSet.bUseTestSocket[0][i][j];         //kevin 20161003 Site 順序
+                iCloseSiteMap[1][i][j]=LastSet.bUseTestSocket[1][i][j];         //kevin 20161003 Site 順序
             }
         }
         return;
@@ -3494,13 +3494,13 @@ void ReadTestMode()                                                             
     AnsiString S, S2="", szDir=GetRecipeFileName("TestMode.Data");
 
     TestMode.iTestConnection    =ReadIniData(szDir, "TestMode", "Tester Connection", ON_LINE);
-    TestMode.iTemperatureMode   =ReadIniData(szDir, "TestMode", "Temperature Mode", Tempture_Hot);                      //kevin 20141202 �y���L �k������
+    TestMode.iTemperatureMode   =ReadIniData(szDir, "TestMode", "Temperature Mode", Tempture_Hot);                      //kevin 20141202 造成無 法切恆溫
     TestMode.iRunMode           =ReadIniData(szDir, "TestMode", "Running Mode", REALLY);
 
     if(CosFunction.bProgramStartOnLine &&
        SystemInitialOK==false &&
        TestMode.iTestConnection!=ON_LINE &&
-       TestMode.iRunMode!=REALLY)                                               //Sam 20210423 : �{���}�Үɤ����� OnLine/Real
+       TestMode.iRunMode!=REALLY)                                               //Sam 20210423 : 程式開啟時切換為 OnLine/Real
     {
         TestMode.iTestConnection=ON_LINE;
         TestMode.iRunMode=REALLY;
@@ -3513,7 +3513,7 @@ void ReadTestMode()                                                             
         for(int j=0; j<MAX_SOCKET_COL; j++)
         {
             S2.sprintf("Dut %s2", IndexSuckName[0][j]);
-            if(CosFunction.bFTRTDifferentDutOnOff==true)                        //JerryYang 20170516 (wei) JSCC�n�DFT RT�n�����P���}��site
+            if(CosFunction.bFTRTDifferentDutOnOff==true)                        //JerryYang 20170516 (wei) JSCC要求FT RT要有不同的開關site
             {
                 if(iRunStartMode==FT)
                     TestMode.iDutOnOff[1][0][j] =ReadIniData(szDir, "DutOnOff", S2, LastSet.bUseTestSocket[1][0][j]);
@@ -3536,7 +3536,7 @@ void ReadTestMode()                                                             
             }
 
             S.sprintf("Dut %s", IndexSuckName[1][j]);
-            if(CosFunction.bFTRTDifferentDutOnOff==true)                        //JerryYang 20170516 (wei) JSCC�n�DFT RT�n�����P���}��site
+            if(CosFunction.bFTRTDifferentDutOnOff==true)                        //JerryYang 20170516 (wei) JSCC要求FT RT要有不同的開關site
             {
                 if(iRunStartMode==FT)
                     TestMode.iDutOnOff[0][0][j]=ReadIniData(szDir, "DutOnOff", S, LastSet.bUseTestSocket[0][0][j]);
@@ -3563,8 +3563,8 @@ void ReadTestMode()                                                             
             LastSet.bUseTestSocketEE[1][0][j]=TestMode.iDutOnOffEE[1][0][j];    //Steven 20241220 : add
             LastSet.bUseTestSocketEE[0][0][j]=TestMode.iDutOnOffEE[0][0][j];
 
-            iCloseSiteMap[0][0][j]=TestMode.iDutOnOff[0][0][j];                 //kevin 20161003 Site ����
-            iCloseSiteMap[1][0][j]=TestMode.iDutOnOff[1][0][j];                 //kevin 20161003 Site ����
+            iCloseSiteMap[0][0][j]=TestMode.iDutOnOff[0][0][j];                 //kevin 20161003 Site 順序
+            iCloseSiteMap[1][0][j]=TestMode.iDutOnOff[1][0][j];                 //kevin 20161003 Site 順序
         }
     }
     else
@@ -3573,11 +3573,11 @@ void ReadTestMode()                                                             
         {
             for(int j=0; j<MAX_SOCKET_COL; j++)
             {
-                if(TestIF_File.iShuttleMode==1 && TestIF_File.iShuttle_Sel==1)  //Sam 20170515 (wei) TestIF �אּ TestIF_File �ץ������u�@�ɶ}�� Sit �����D //Steven 20170111 : �S�Ψ쪺Arm���s�����
+                if(TestIF_File.iShuttleMode==1 && TestIF_File.iShuttle_Sel==1)  //Sam 20170515 (wei) TestIF 改為 TestIF_File 修正切換工作檔開關 Sit 的問題 //Steven 20170111 : 沒用到的Arm不存取資料
                 {
-                    if(CUSTOMER_CODE==CC_KYEC_LEE ||                            //Ifor 20170608 (wei) add �}��ARM �|�y���۰���Site���D
-                       CUSTOMER_CODE==CC_SIGURD_PeiXing ||                      //KaiChen 20190123 �GFix �}�� ARM �|�y���۰��� Site ���D
-                       TestIF_File.bArm1PickPlaceArm2Test==true)                //JerryYang 20290901 : �ץ��@��@��ATC ARM2�S���ūת����D
+                    if(CUSTOMER_CODE==CC_KYEC_LEE ||                            //Ifor 20170608 (wei) add 開關ARM 會造成自動關Site問題
+                       CUSTOMER_CODE==CC_SIGURD_PeiXing ||                      //KaiChen 20190123 ：Fix 開關 ARM 會造成自動關 Site 問題
+                       TestIF_File.bArm1PickPlaceArm2Test==true)                //JerryYang 20290901 : 修正一丟一測ATC ARM2沒有溫度的問題
                     {
                     }
                     else
@@ -3589,7 +3589,7 @@ void ReadTestMode()                                                             
                 else
                 {
                     S.sprintf("Dut %s", IndexSuckName[i][j]);
-                    if(CosFunction.bFTRTDifferentDutOnOff==true)                //JerryYang 20170516 (wei) JSCC�n�DFT RT�n�����P���}��site
+                    if(CosFunction.bFTRTDifferentDutOnOff==true)                //JerryYang 20170516 (wei) JSCC要求FT RT要有不同的開關site
                     {
                         if(iRunStartMode==FT)
                             TestMode.iDutOnOff[0][i][j]=ReadIniData(szDir, "DutOnOff", S, LastSet.bUseTestSocket[0][i][j]);
@@ -3612,15 +3612,15 @@ void ReadTestMode()                                                             
                     }
                 }
 
-                if(TestIF_File.iShuttleMode==1 && TestIF_File.iShuttle_Sel==0)  //Sam 20170515 (wei) TestIF �אּ TestIF_File �ץ������u�@�ɶ}�� Sit �����D //Steven 20170111 : �S�Ψ쪺Arm���s�����
+                if(TestIF_File.iShuttleMode==1 && TestIF_File.iShuttle_Sel==0)  //Sam 20170515 (wei) TestIF 改為 TestIF_File 修正切換工作檔開關 Sit 的問題 //Steven 20170111 : 沒用到的Arm不存取資料
                 {
-                    TestMode.iDutOnOff[1][i][j]=false;                          //JerryYang 20251017 : ��ARM2 ATC���ӭn��SITE
+                    TestMode.iDutOnOff[1][i][j]=false;                          //JerryYang 20251017 : 關ARM2 ATC應該要關SITE
                     TestMode.iDutOnOffEE[1][i][j]=false;
                 }
                 else
                 {
                     S2.sprintf("Dut %s2", IndexSuckName[i][j]);
-                    if(CosFunction.bFTRTDifferentDutOnOff==true)                //JerryYang 20170516 (wei) JSCC�n�DFT RT�n�����P���}��site
+                    if(CosFunction.bFTRTDifferentDutOnOff==true)                //JerryYang 20170516 (wei) JSCC要求FT RT要有不同的開關site
                     {
                         if(iRunStartMode==FT)
                             TestMode.iDutOnOff[1][i][j] =ReadIniData(szDir, "DutOnOff", S2, LastSet.bUseTestSocket[1][i][j]);
@@ -3648,8 +3648,8 @@ void ReadTestMode()                                                             
                 LastSet.bUseTestSocketEE[1][i][j]=TestMode.iDutOnOffEE[1][i][j];                                        //Steven 20241220 : add
                 LastSet.bUseTestSocketEE[0][i][j]=TestMode.iDutOnOffEE[0][i][j];
 
-                iCloseSiteMap[0][i][j]=TestMode.iDutOnOff[0][i][j];             //kevin 20161003 Site ����
-                iCloseSiteMap[1][i][j]=TestMode.iDutOnOff[1][i][j];             //kevin 20161003 Site ����
+                iCloseSiteMap[0][i][j]=TestMode.iDutOnOff[0][i][j];             //kevin 20161003 Site 順序
+                iCloseSiteMap[1][i][j]=TestMode.iDutOnOff[1][i][j];             //kevin 20161003 Site 順序
             }
         }
     }
@@ -3681,21 +3681,21 @@ void SaveTempModeByDLL()                                                        
     WriteIniData(szDir, "Mode",       "Mode", Temperature.iMachineTempMode);
 }
 //------------------------------------------------------------------------------
-//  �Ȥ�\���ܰ�
+//  客戶功能選擇區
 //------------------------------------------------------------------------------
 void CustomerFunctionSelect()
 {
-    InitialCosFunction();                                                       //Steven 20240926 : ���s��z�Ȥ�\��
+    InitialCosFunction();                                                       //Steven 20240926 : 重新整理客戶功能
 
     if(USE_AUTO_RETEST==eartInstall)                                            //ChungHung 20141002 add for KYEC AutoRetest
         CosFunction.bOffLineBin=true;
 
-    if(IniConfig.bIndexArm2SupplyLight==true ||                                 //jou 2012-10-19 Index Arm 2 �������� for CMOS
-       TestIF_File.bForEgisTecTest==true     ||                                 //Steven 20140922 : Arm2���@��������
-       (IniConfig.bD58UseArm1PickPlaceArm2Test==true &&                         //kevin 20150127 Arm1 �U�� arm2 ����
-        TestIF_File.bArm1PickPlaceArm2Test==true))                              //Ifor 20200811 Fix: Arm1 Pick Place Arm2Test �ݥd��ӱ���
+    if(IniConfig.bIndexArm2SupplyLight==true ||                                 //jou 2012-10-19 Index Arm 2 供應光源 for CMOS
+       TestIF_File.bForEgisTecTest==true     ||                                 //Steven 20140922 : Arm2當作指紋測試
+       (IniConfig.bD58UseArm1PickPlaceArm2Test==true &&                         //kevin 20150127 Arm1 下壓 arm2 測試
+        TestIF_File.bArm1PickPlaceArm2Test==true))                              //Ifor 20200811 Fix: Arm1 Pick Place Arm2Test 需卡兩個條件
     {
-        IniConfig.bShuttleMode50=false;                                         //�P IniConfig.bIndexArm2SupplyLight �\�ब��
+        IniConfig.bShuttleMode50=false;                                         //與 IniConfig.bIndexArm2SupplyLight 功能互斥
     }
 
     if(IniConfig.bKoreaFunction==true)
@@ -3708,24 +3708,24 @@ void CustomerFunctionSelect()
         VTEST_Funtion();
     }
 
-    if(IniConfig.bSingaporeFunction)                                            //Steven 20120910 : �s�[�Y�N�z�Ӫ��ݨD
+    if(IniConfig.bSingaporeFunction)                                            //Steven 20120910 : 新加坡代理商的需求
     {
         SingaporeFunction();
     }
 
-    if(IniConfig.bSPILFunction==true)                                           //JerryYang 20170328 (Jou) ���~�Ȥ�X�Τ@��SPILFunction
+    if(IniConfig.bSPILFunction==true)                                           //JerryYang 20170328 (Jou) 矽品客戶碼統一用SPILFunction
     {
         SPILFunction();
-        if(CUSTOMER_CODE==CC_XINYUN)                                            //Steven 20230222 : �n�i�H�԰�
+        if(CUSTOMER_CODE==CC_XINYUN)                                            //Steven 20230222 : 要可以拉動
             IniConfig.bShowFormByInitPos=false;
     }
 
-    if(IniConfig.bMaximFunction==true)                                          //JerryYang 20190522 Maxim�Τ@�n��\��
+    if(IniConfig.bMaximFunction==true)                                          //JerryYang 20190522 Maxim統一軟體功能
     {
         MaximFunction();
     }
 
-    if(IniConfig.bSIGURDFunction==true)                                         //KaiChen 20200506 �G����Τ@�n��\��
+    if(IniConfig.bSIGURDFunction==true)                                         //KaiChen 20200506 ：矽格統一軟體功能
     {
         SIGURDFunction();
     }
@@ -3733,27 +3733,27 @@ void CustomerFunctionSelect()
     if(USE_ROTATE_KIT)                                                          //kevin rotate motor     //Steven 20131202
         IniConfig.bHaveRotateShuttle=false;
 
-    if(USE_IN_Y_IS_AUTO_PITCH==true)                                            //Steven 20170424 (wei) : new XY�ܶZ  //JerryYang 20251218 : IN/OUT ARM�䴩���P�Ҳ�
+    if(USE_IN_Y_IS_AUTO_PITCH==true)                                            //Steven 20170424 (wei) : new XY變距  //JerryYang 20251218 : IN/OUT ARM支援不同模組
         IniConfig.bDisableSelectSearchLast=true;
 
-    if(CosFunction.bHiSiliconFunction ||                                        //Ifor 20160516 �ʤ��n�D䡤� Life Time �\��
-       (IniConfig.bVTESTFunction && ATC_SYSTEM > eATCUninstall))                //AI(ht9045-config) 20260507 (RogerYang) : VTEST䡤�LifeTime�\��
+    if(CosFunction.bHiSiliconFunction ||                                        //Ifor 20160516 京元要求銦片 Life Time 功能
+       (IniConfig.bVTESTFunction && ATC_SYSTEM > eATCUninstall))                //AI(ht9045-config) 20260507 (RogerYang) : VTEST銦片LifeTime功能
     {
         CosFunction.bUseHeadContactCount=true;
-//        CosFunction.bHeadContactCountByRecipe=true;                             //Steven 20241030 : 䡤� Life Time �\��by�u�@��  //RogerYang 20260515 : dead flag, ���Q�����޿�Ū��
+//        CosFunction.bHeadContactCountByRecipe=true;                             //Steven 20241030 : 銦片 Life Time 功能by工作檔  //RogerYang 20260515 : dead flag, 未被任何邏輯讀取
     }
 
-    if(AUTO3_IS_MAGAZINE==1)                                                    //JerryYang 20230515 : P27��Magazine�Ĭ�A�����ϥ�
+    if(AUTO3_IS_MAGAZINE==1)                                                    //JerryYang 20230515 : P27跟Magazine衝突，先不使用
     {
         CosFunction.bSortingBinTraywhenCleanOut=false;
         CosFunction.bSortingBinTrayWhenTrayFeed=false;
     }
 
-    if(REAL_TIME_CCD==true)                                                     //Steven 20110705 : �ϥ�Real CCD�n�j�������ت�
-    {                                                                           //Ifor 20150720 :��b�̤U��
+    if(REAL_TIME_CCD==true)                                                     //Steven 20110705 : 使用Real CCD要強制關內建的
+    {                                                                           //Ifor 20150720 :放在最下面
         IniConfig.bEnableCCDUSETCPIP=false;
-        if(!COM2->bCCDDummyRum)                                                 //Steven 20230109 : RTC�S�}Index�N���n��
-            IniConfig.bShuttleMode50=true;                                      //�Ȯɥ����}�A��RTC��Arm�\���n
+        if(!COM2->bCCDDummyRum)                                                 //Steven 20230109 : RTC沒開Index就不要動
+            IniConfig.bShuttleMode50=true;                                      //暫時先打開，等RTC關Arm功能改好
         else
             IniConfig.bShuttleMode50=false;
     }
@@ -3771,7 +3771,7 @@ void CustomerFunctionSelect()
 
     if(IniConfig.bShowLotInfo ||
        CosFunction.bFTPFunction ||
-       USE_AUTO_RETEST==eartInstall)                                            //kevin 20150819 add ART�e���w��
+       USE_AUTO_RETEST==eartInstall)                                            //kevin 20150819 add ART畫面定位
     {
         IniConfig.bShowLotInfo=true;
     }
@@ -3804,19 +3804,19 @@ void CustomerFunctionSelect()
         IniConfig.bShowLotInfo=true;
     }
 
-    if(IniConfig.bI28_OnOffSiteOnTheFly ||                                      //Steven 20150924 : �H�ɶ}��Site�\��
+    if(IniConfig.bI28_OnOffSiteOnTheFly ||                                      //Steven 20150924 : 隨時開關Site功能
        (CosFunction.bLowYieldAutoSiteOff && iRunStartMode==FT &&
         (TestIF_File.bLowYieldAutoSiteOff ||                                    //Steven 20170905 (wei) : Low Yield Auto Site Off for Ambient
          TestIF_File.bLowYieldAutoSiteOffByContiFail)))                         //Steven 20200420 : Continue fail, auto site off
     {
-        bCanAutoCloseSite=true;                                                 //Steven 20200420 : ��XAuto Site Off
+        bCanAutoCloseSite=true;                                                 //Steven 20200420 : 整合Auto Site Off
     }
     else
     {
         bCanAutoCloseSite=false;
     }
 
-    if(fTemp_Set!=NULL)                                                         //Steven 20240206 : �w���M�wIndex Heat Mode�O�_�n���
+    if(fTemp_Set!=NULL)                                                         //Steven 20240206 : 預先決定Index Heat Mode是否要顯示
     {
         bool bOldStatus=fTemp_Set->rgIndexHeatMode->Enabled;
         fTemp_Set->rgIndexHeatMode->Enabled=true;
@@ -3824,7 +3824,7 @@ void CustomerFunctionSelect()
         fTemp_Set->rgIndexHeatMode->Controls[ChamberOnly       ]->Visible=(ATC_SYSTEM==eATCUninstall);
         fTemp_Set->rgIndexHeatMode->Controls[HeadChamber       ]->Visible=(ATC_SYSTEM==eATCUninstall && IniConfig.bNoHeadaddChamberOption==false);
         fTemp_Set->rgIndexHeatMode->Controls[SocketChamber     ]->Visible=(ATC_SYSTEM==eATCUninstall);
-        fTemp_Set->rgIndexHeatMode->Controls[HeadSocket        ]->Visible=(IniConfig.bHeadSocketMode);                  //jou 2012-05-30 �W�[ Head + Socket Mode
+        fTemp_Set->rgIndexHeatMode->Controls[HeadSocket        ]->Visible=(IniConfig.bHeadSocketMode);                  //jou 2012-05-30 增加 Head + Socket Mode
         fTemp_Set->rgIndexHeatMode->Controls[HeadChamberSocket ]->Visible=(ATC_SYSTEM==eATCUninstall && IniConfig.bHeadChamberSocketMode);                      //2013-11-20    Dell    for TSMC Add Chamber + Head +Socket
         fTemp_Set->rgIndexHeatMode->Enabled=bOldStatus;
     }
@@ -3844,7 +3844,7 @@ AnsiString asInArmAOAFileName_Cal[TotalInArmAOAType]={"D:\\HT9045\\System\\AutoT
                                                       "D:\\HT9045\\System\\AutoTeach_Shuttle2_Cal.dat",
                                                       "D:\\HT9045\\System\\AutoTeach_AutoClean_Cal.dat"};
 //------------------------------------------------------------------------------
-bool ReadAutoTeachTable_InArm()                                                 //KenHsieh 20211208 : In/Out Arm���}Ū�ɡA�קKInArm���������g�J�ɭPOutArm�I����~
+bool ReadAutoTeachTable_InArm()                                                 //KenHsieh 20211208 : In/Out Arm分開讀檔，避免InArm做完直接寫入導致OutArm點位錯誤
 {
     for(int i=0; i<TotalInArmAOAType; i++)                                      //JerryYang 20241119 : fix AOA
     {
@@ -3889,7 +3889,7 @@ AnsiString asOutArmAOAFileName_Cal[TotalOutArmAOAType]={"D:\\HT9045\\System\\Aut
                                                         "D:\\HT9045\\System\\AutoTeach_OutShuttle1_Cal.dat",
                                                         "D:\\HT9045\\System\\AutoTeach_OutShuttle2_Cal.dat"};
 //------------------------------------------------------------------------------
-bool ReadAutoTeachTable_OutArm()                                                //KenHsieh 20211208 : In/Out Arm���}Ū�ɡA�קKInArm���������g�J�ɭPOutArm�I����~
+bool ReadAutoTeachTable_OutArm()                                                //KenHsieh 20211208 : In/Out Arm分開讀檔，避免InArm做完直接寫入導致OutArm點位錯誤
 {
     for(int i=0; i<TotalOutArmAOAType; i++)
     {
@@ -3985,7 +3985,7 @@ bool MyIndexArmRec::GetSuckTempErr(int iSuckRow, int iSuckCol)
     return bSuckTempErr[iSuckRow][iSuckCol];
 }
 //------------------------------------------------------------------------------
-void __fastcall TAlarm1::SummarizeJAMreportbymonth()                            //Stevenhong 20260318 : TESNA ��Eventlog report summarize by month
+void __fastcall TAlarm1::SummarizeJAMreportbymonth()                            //Stevenhong 20260318 : TESNA 把Eventlog report summarize by month
 {
     Word y, m, d;
     DecodeDate(Now(), y, m, d);

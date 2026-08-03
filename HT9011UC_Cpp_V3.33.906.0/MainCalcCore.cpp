@@ -1,5 +1,5 @@
 // MainCalcCore.cpp
-// Standard C++ translation of 15 pure calc-core functions from BCB6 main.cpp
+// Standard C++ translation of 17 pure calc-core functions from BCB6 main.cpp
 // (V3.33.906.0_20260618) -- CALC CORE ONLY.
 // Source of truth: HT9011UC_Code_V3.33.906.0_20260618/main.cpp
 //
@@ -18,6 +18,14 @@
 // ComputeSetESDTriTempCommand) -- see MainCalcCore.h's updated banner for the TriTemp_Ch/
 // ESD_Temperature header archaeology and the 2 rejected candidates (Tri_Temp_Set_Site,
 // Tri_Temp_ChangeATCSiteUse -- both write shared extern globals and/or VCL, not pure).
+//
+// AI(W906-calccore) 20260804: batch 5 appended below (2 more functions:
+// ComputeCheckAutoOnlySetOneBin / ComputeCheckAuto1OnlyBin1) -- the two remaining cheap
+// pure-calc Check* functions from golden main.cpp. Each keeps its pure bool decision here and
+// hands the ShowMyMessage() dialog TEXT back through OUT-param AnsiString(s), the same split
+// ComputeCheckSiteMapState already uses; the dialog call belongs to a future ht9045_sm wrapper.
+// CheckSLKSensor is deliberately still NOT here -- it reads the global Cylinder[] hardware
+// array (ht9045_sm substrate). See MainCalcCore.h's corrected banner for both points.
 //
 // Toolchain: MinGW g++ 6.3+, C++14 or later.
 
@@ -533,4 +541,131 @@ int ComputeSetESDTriTempCommand(int iUSE_NOVX3360,
         }
     }
     return kNoESDTriTempCommand;
+}
+
+// ---------------------------------------------------------------------------
+// ComputeCheckAutoOnlySetOneBin
+//   BCB6 source: main.cpp:32523-32553 (TfMain::CheckAutoOnlySetOneBin, V3.27R.560
+//   Ifor 20171213 (Steven))
+//
+//   Returns golden's RAW decision (true == violation found), no polarity inversion. Msg1/Msg2
+//   are OUT params carrying the two arguments golden hands to ShowMyMessage(str1, str2) at
+//   main.cpp:32544; that dialog call is OUT OF SCOPE (see header). Both are assigned ONLY on
+//   the return-true path, matching golden's control flow.
+// ---------------------------------------------------------------------------
+bool ComputeCheckAutoOnlySetOneBin(bool bUsePassBinOnlyCanSetOneBin,
+                                    const int iIsPassT6[eTrayCount],
+                                    const int iT6CatData[],
+                                    int iTestBinCount,
+                                    const AnsiString s6TrayName[eTrayCount],
+                                    AnsiString &Msg1,
+                                    AnsiString &Msg2)
+{
+    // BCB6 :32525  golden's own dead initialiser -- always overwritten at :32534 before any
+    // read. Kept verbatim, NOT cleaned up (faithfulness mandate).
+    int iBinCount = 0;
+
+    // BCB6 :32527  golden declares two fresh locals `AnsiString str1, str2;` here; they are
+    // extracted as the Msg1/Msg2 OUT params instead (see header contract).
+
+    // BCB6 :32528  CosFunction.bUsePassBinOnlyCanSetOneBin (CosFunction.h:144) as explicit param
+    if (bUsePassBinOnlyCanSetOneBin == true)
+    {
+        // BCB6 :32530  eTrayCount -- MachineType.h:1104, last enumerator of e6TrayName (==33,
+        // eMag14==32 at MachineType.h:1103); header-only, read directly (see header comment).
+        for (int i = 0; i < eTrayCount; i++)
+        {
+            // BCB6 :32532  Prod.iIsPassT6[i] (cprod.h:1068) as explicit param
+            if (iIsPassT6[i] == 1)                                             //Steven 20240105 : Prod.bIsPass --> Prod.iIsFailT6
+            {
+                // BCB6 :32534  re-init once per Pass-marked TRAY, not per bin
+                iBinCount = 0;
+                // BCB6 :32535  iTestBinCount (cmydef.h:3396) bounds the scan, NOT TEST_MAX_BIN
+                for (int j = 0; j < iTestBinCount; j++)
+                {
+                    // BCB6 :32537  Prod.iT6CatData[j] (cprod.h:512, "Auto1 = 0" 0-based)
+                    if (iT6CatData[j] == i)
+                    {
+                        iBinCount++;
+                        // BCB6 :32540  violation fires on the SECOND matching bin, not the first
+                        if (iBinCount > 1)
+                        {
+                            // BCB6 :32542-32543  the raw-AnsiString-to-%s BCB6 idiom is
+                            // preserved verbatim (NO .c_str() added): vclcompat's
+                            // AnsiString::sprintf is a variadic template whose private conv()
+                            // overload turns an AnsiString arg into const char*
+                            // (vclcompat/AnsiString.h:141-145 and :177; see that file's own
+                            // banner at :33-37, which calls out this exact idiom).
+                            Msg1.sprintf("%s Pass Bin Only Can Set One Bin.", s6TrayName[i]);
+                            Msg2.sprintf("%s Pass Bin 僅可設定一個Bin", s6TrayName[i]);
+                            // BCB6 :32544  ShowMyMessage(str1, str2) -- OUT OF SCOPE (header)
+                            // BCB6 :32545
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    // BCB6 :32552
+    return false;
+}
+
+// ---------------------------------------------------------------------------
+// ComputeCheckAuto1OnlyBin1
+//   BCB6 source: main.cpp:32502-32521 (TfMain::CheckAuto1OnlyBin1, Alick 20160802 add for
+//   SCC Auto1 Only Bin1 Function)
+//
+//   Returns golden's RAW decision (true == violation found), no polarity inversion. Msg is the
+//   single S1 argument of golden's one-argument ShowMyMessage calls (main.cpp:32511/32516;
+//   mymessbox.h:58 defaults S2 to ""), assigned ONLY on a return-true path. The dialog call
+//   itself is OUT OF SCOPE (see header).
+//
+//   The EARLY-RETURN ORDERING below is LOAD-BEARING and preserved bit-for-bit -- see the header
+//   comment for the full analysis of the asymmetric `i==1` / `i!=1` conjuncts.
+// ---------------------------------------------------------------------------
+bool ComputeCheckAuto1OnlyBin1(int iCUSTOMER_CODE,
+                                int iTester,
+                                const int iT6PosCate[],
+                                int iTestBinCount,
+                                AnsiString &Msg)
+{
+    // BCB6 :32504  OFF_LINE -- `#define OFF_LINE  0`, cmydef.h:85, a header this TU does NOT
+    // include (see MainCalcCore.h banner: avoids the ht9045_globals link surface). Inlined
+    // locally, same treatment as ATC_TYPE_33/35/61 / TOTAL_MOTOR / Tempture_Hot above.
+    const int OFF_LINE = 0;
+
+    // BCB6 :32504-32505  Ifor 20171213 (Steven) : add UNISEM_M 要求Offline 不卡 Auto1 Only Bin1 功能
+    // CC_UNISEM_M -- MachineType.h:358 (#define ==981), header-only, read directly. This is a
+    // BYPASS returning FALSE ("no violation") BEFORE the loop is ever entered -- it is NOT a
+    // violation report, and its position ahead of the loop is part of the preserved ordering.
+    if (iCUSTOMER_CODE == CC_UNISEM_M && iTester == OFF_LINE)
+        return false;
+
+    // BCB6 :32507  iTestBinCount (cmydef.h:3396) bounds the scan, NOT TEST_MAX_BIN
+    for (int i = 0; i < iTestBinCount; i++)
+    {
+        // BCB6 :32509  the `&& i == 1` conjunct is GOLDEN'S: this branch can fire on exactly
+        // ONE iteration (i==1), while the branch below fires for ANY i!=1. Because both return
+        // immediately, i==0 is tested against the SECOND branch before i==1 is ever reached.
+        // Preserved verbatim -- ePosAuto1 is MachineType.h:1146 (eBinPositionName, ==1), and
+        // iT6PosCate (cprod.h:513) is the 1-BASED "Auto1 = 1" array, not iT6CatData's 0-based one.
+        if (iT6PosCate[i] != ePosAuto1 && i == 1)
+        {
+            // BCB6 :32511  ShowMyMessage(<this literal>) -- call OUT OF SCOPE, text kept
+            Msg = "Bin1未被設定在Auto1 !! 請確認 !!\n Bin1 is not set to Auto1 !! Please Check !!";
+            // BCB6 :32512
+            return true;
+        }
+        // BCB6 :32514
+        else if (iT6PosCate[i] == ePosAuto1 && i != 1)
+        {
+            // BCB6 :32516  ShowMyMessage(<this literal>) -- call OUT OF SCOPE, text kept
+            Msg = "只有Bin 1被允許設為 Auto1 !! 請確認 !!\n Only Bin 1 is allowed to set to Auto 1!!! Please check !!";
+            // BCB6 :32517
+            return true;
+        }
+    }
+    // BCB6 :32520
+    return false;
 }

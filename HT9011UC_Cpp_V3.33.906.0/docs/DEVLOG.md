@@ -2974,3 +2974,139 @@ build **exit 0 / 0 error / 0 warning**；ctest **114/118**，4 個失敗仍是�
   `HT9011UC_Code_V3.33.899.0_.../CosFunction.cpp`。
 - **執行模式**：使用者指示持續有效——全部 cpp/h/dfm 都要翻、workflow 火力全開、不逐波停下請示、
   重大問題跳過並最後條列；model/effort 依任務性質自動切換；安裝軟體不必先問。
+
+---
+
+## 2026-08-04 三前線同波（檔案互斥、各自獨立 build dir）：閘 4 轉綠、`DoTraceDataResponse` 真本體、MainCalcCore Tier A
+
+三個前線互不相干（各自檔案集互斥），故真平行；每個 agent 用**自己專屬的 build dir**
+（本場次已學到教訓：併發 build 會弄壞共用目錄）。每前線各配一名獨立複驗。
+
+### 前線 1：閘 4 修復 —— **閘 4 已轉綠**
+
+`cpublic.cpp` / `cprod.cpp` / `tests/test_IniFiles.cpp` 三檔的 U+FFFD 全部還原成 golden 真 Big5 字元。
+
+| 量測（複驗自行重跑） | 值 |
+|---|---|
+| 修復前 U+FFFD | cpublic **520**、cprod **2443**、test_IniFiles **4** = **2967** 個 |
+| 受損行數 | 62 / 283 / 1 = **346** 行 |
+| 修復後 U+FFFD | **0 / 0 / 0** |
+| 受損行集合 == 變更行集合 | **True**（三檔皆是，證明沒有動到其他任何東西） |
+| `//` 之前的程式碼前綴 修復前後相同 | **346 行零例外** |
+| 閘 4 檢查器（`docs/W7_UI_ARCHITECTURE_PLAN.md:869-899` 的腳本） | **掃 1478 檔、0 violation、exit 0** |
+
+**零功能暴露是用 lexer 證明的，不是假設**：複驗自寫一個 CODE/STRING/CHAR/LINECOMMENT/
+BLOCKCOMMENT 狀態機（含 backslash-escape 處理），對**修復前**的文本跑，2967 個 U+FFFD
+**全部落在 LINECOMMENT，STRING/CHAR/BLOCKCOMMENT 各 0 個**。
+**對映是複驗用「不同方法」獨立重導的**（difflib `SequenceMatcher` 對去掉非 ASCII 的骨架做
+比對，不用 anchor、不用原方法的 transform）：54 行樣本**全部**與 golden cp950 解碼逐字元相同、
+且**re-encode 回 cp950 位元組完全一致**；345 條有 golden 依據的行，還原文字**345/345 在 golden 中逐字找到**。
+多候選清單也對帳成功（34 行，集合相等、候選內含所宣稱的 golden 行號，零造假引用）。
+
+**順帶更正 ROADMAP 自己的抽查（本檔 `:132`，不是先前寫的 `:131`）**：ported `cprod.cpp:67`
+對到 golden **`:95`**（`class ARM_OFFSET *InArmOffSet[InOfsTotal];`）而非 `:97`；
+實測 `ported67==golden95: True`、`ported67==golden97: **False**`；golden `:97` 是
+ported `:69` 的孿生（`InArmOffSet_File`）。診斷（行號不對齊）正確，實例配對差一個宣告。
+
+**⚠ 更正主迴圈自己下的錯指示（值得記住）**：本波 brief 寫「ported 原始碼都是 bare-LF，請保持」——**錯**。
+`core.autocrlf=true`、無 `.gitattributes`，**工作樹是真的混合**：`cpublic.cpp`/`cprod.cpp`/
+`uHGemEquipment.cpp` 在磁碟上是 **CRLF**，`tests/test_IniFiles.cpp` 是 bare-LF，而三者的
+**git blob 都是 bare-LF**（checkout 正常化的結果）。前 40 個根目錄 `.cpp` 裡 5 個純 CRLF、
+30 個純 LF、5 個混合。**正確做法是「保持每個檔案原有的 EOL」**；硬改成 LF 會產生約 6500 行假 churn。
+主迴圈後來自己改註解時也踩到同一點——`assert` 沒中而炸掉，改成逐檔偵測 EOL 才成功
+（**幸好是 assert 失敗而不是靜默寫壞**）。
+
+### 前線 2：`DoTraceDataResponse` —— 程式碼 byte-exact
+
+golden `SECSGEM/uHGemEquipment.cpp:4190-4242` → ported `.cpp:4640-4693`。
+複驗以 **cp950 strict** 解碼、只去 `\r\n`、**保留行尾空白**做逐字元 diff：
+golden 53 行 vs ported 54 行，**唯一差異是插入的一行 `// fallthrough` 註解**；
+連 golden 緊湊的 `if(` 間距與 `//16 byte`/`//14 byte`/`//19 byte` 的註解欄位都一致。
+**8 個 golden 怪癖逐條確認**，其中兩個複驗還額外做了實證：
+- **`UINT_2` 截斷是真的**：`iTOTSMP_Count[10]` 是 `unsigned`（`.h:1119`），
+  `SecsWireCodec.cpp:549-550` 轉成 `unsigned short*` 讀 element 0，`:434-435` 只吐 2 bytes
+  → 高 16 bits 真的被丟掉。**保留，不修**。
+- **故意的 switch fall-through**（golden :4206-4207 無 `break`）保留，GCC 6.3.0 不出警告
+  （build log `grep -ci fallthrough` = 0）。
+
+**複驗判 NEEDS-WORK，但全在 prose，程式碼一個字都不准動**——主迴圈逐條核實後修掉：
+1. `.cpp:4596` 的 `.cpp:5752/5757/5768/5775` 是**修改前**的位置，被本波自己的 **+107 行**插入
+   全部推移；主迴圈實際開行確認正確值為 **5859/5864/5875/5882**（`5752` 現在是一行註解）。
+2. `.cpp:4592-4594` 宣稱九個成員「全部在 `.cpp:717-728` ctor 初始化」——**該迴圈只初始化八個**，
+   沒碰 `TraceDataResponseDelay`（它靠 `GemTimer` 自己的 default ctor，正如它自己引用的
+   `.h:1125-1128` 就寫著）。主迴圈實測 `'TraceDataResponseDelay' in 717-728` → **False**。
+3. **同型三處漂移再現**：`.h:163`/`:1089-1090`/`:1556`/`:1630-1650` 仍把它歸類為
+   "gated no-op stub"、`docs/MIGRATION_ROADMAP.md` 4 行 8 處仍寫成 gated/未翻。
+   header 四處已改；ROADMAP 因那 8 處都嵌在長篇歷史敘述句中，依本檔既有慣例（見 `:132`）
+   **加一列明確撤銷列並點名 `:19`/`:61`/`:135`/`:136` 為過期敘述**，而非動刀改 8 處。
+
+**⚠ 本前線的真風險（複驗明確點出，記錄在此）**：caller 本來就是活的（ported `.cpp:4548-4549`），
+所以**這一波一落地就改變生產行為，而且目前零測試覆蓋**。下一波應補測試，
+複驗建議的起點是 `iTOTSMP_Count[0]=0x1CAFE` → 線上只出 2 bytes `0xCAFE` 的截斷測試。
+
+### 前線 3：MainCalcCore Tier A 兩支
+
+`CheckAutoOnlySetOneBin`（golden main.cpp:32523-32553）→ ported `MainCalcCore.cpp:556-612`；
+`CheckAuto1OnlyBin1`（:32502-32521）→ ported `:627-671`。照同檔既有前例
+（`ComputeCheckSiteMapState`，`bool` + out-`AnsiString&`）抽成 UI-free 純算函式，
+`ShowMyMessage` 留給未來 `ht9045_sm` 層 wrapper。
+
+**複驗做了本場次最強的驗證**：把 golden 兩個本體**逐字轉寫**成 reference function，
+期望字串從 golden 自己的 cp950 位元組轉碼產生（**全程沒有手打任何中文**），
+然後對 ported 符號跑差分——`ComputeCheckAuto1OnlyBin1` **窮舉 1,456 案**
+（`iT6PosCate[k]` 三值 × n=0..5 × 兩個客戶碼 × 兩個 tester 狀態）、
+`ComputeCheckAutoOnlySetOneBin` **隨機 200,000 案**，
+**TOTAL MISMATCHES = 0**（判定、訊息位元組、以及「只在 true 時才寫 out-param」的契約全部一致）。
+逐位保留 golden 的死變數 `int iBinCount=0;`(:32525)、冗餘的 `==true`(:32528，**沒有**被整理成 `if(x)`)、
+每盤重新初始化(:32534)、兩個 `sprintf` 直接吃 `AnsiString` 不加 `.c_str()`(:32542-32543)。
+另修掉 `MainCalcCore.h:32-36` 那個已過期的「violation-code 回傳慣例尚未設計」宣稱。
+
+### 整合驗證（主迴圈自己跑，全新 `build_0804_integrate`）
+
+build **exit 0 / 0 error**；ctest **114/118**，4 個失敗仍是既有
+`config_db`/`IniFiles`/`ini_helpers`/`config_loaders` 設定檔漂移——**零回歸**。
+主迴圈另行獨立跑閘 4 掃描：**917 個原始檔、U+FFFD 總數 0、VERDICT GREEN**。
+
+### 🔖 RESUME（最新）
+
+- **本場次已 commit（三顆）**：`ab9d6d6` W7-L2 完成波、`e6319ea` W7-L2 substrate 波、
+  本則三前線同波（閘 4 轉綠 + `DoTraceDataResponse` + MainCalcCore Tier A）。
+- **驗證基準**：全新 `build_0804_integrate`，build **exit 0 / 0 error**；ctest **114/118**
+  （4 個失敗永遠是 `config_db`/`IniFiles`/`ini_helpers`/`config_loaders` 設定檔漂移，非程式問題）；
+  `W7_L2_CKernel` **72/72**；**閘 4 GREEN**（主迴圈獨立掃 917 檔，U+FFFD 0）。分支 `fix/v899.32-pti`。
+- **⚠ 接續第一件事仍是 `git status`，不是讀本 RESUME。**
+- **本場次新增經驗（累計到第九條）**：
+  5. 允許做 mutation 的複驗 agent 不可與主迴圈並行編輯同一檔案；編輯前存 snapshot + 記 md5 對帳。
+  6. 併發 build 會弄壞 `build_*` 目錄（會冒出假的 `undefined reference`）；**交付數字只在全新 dir 量**，
+     且每個平行 agent 要有自己專屬的 build dir。
+  7. **連結性的證據要看「整個 link 閉包的殘餘未解析集合」，不是看單一 `.obj` 的 undefined 清單**
+     ——後者在別的 TU 定義符號後也不會變。本場次 brief 曾據此下錯要求，被 agent 正確推翻。
+  8. **本樹的 EOL 是真的混合**（`core.autocrlf=true`、無 `.gitattributes`；磁碟上有純 CRLF、純 LF、
+     甚至混合的檔案，但 git blob 一律 bare-LF）。**規則是「保持每個檔案原有的 EOL」**，
+     不是「一律 bare-LF」——本場次 brief 寫錯過一次，改註解時自己也踩到。
+  9. **對映/引用類的驗證要求「用不同方法獨立重導」**：閘 4 複驗換用 difflib 骨架比對（不用原方法的
+     transform），才有意義地確認了 345 行還原正確；calccore 複驗把 golden 本體逐字轉寫成 reference
+     function 跑 201,456 案差分。**這比「再讀一遍」強得多。**
+- **仍未觸及 / 下一步**，建議順序：
+  1. **`DoTraceDataResponse` 補測試（新增，優先）**——它的 caller 本來就活，**已改變生產行為但零覆蓋**。
+     起點：`iTOTSMP_Count[0]=0x1CAFE` → 線上只出 2 bytes `0xCAFE` 的截斷測試；
+     precedent 是 `tests/test_uHGemEquipment.cpp`（直接戳 THGem 成員）。
+  2. **`SystemNG` 中止路徑是死碼（安全性）**——golden 唯一生產者 `UpdateSystemNG()`
+     （`elec/Component/HAlarm.cpp:136`）未翻，ported `ckernel.cpp` 的 `StopAllMotor()`+
+     `SystemStart=false` 永遠不觸發。
+  3. `DoInArm_SuckerMap()` 仍 `#if 0`（golden `ckernel.cpp:523` 是活呼叫，本體 `ainarm2.cpp:965-972`
+     有 2 個全域寫入）；`IsTriSafeDoor6LockCheck()` 亦 gated（需先評估是否翻整個 `TempCtrl/`）。
+  4. **MainCalcCore 已 end-of-seam**：Tier A 兩支做完後，對 373 個 `TfMain::` 本體套
+     zero-UI ∧ zero-HW ∧ zero-file-IO ∧ non-void ∧ ≤70 行只剩 1 個命中且無計算內容。
+     剩下的是 wrapper/HAL/UI 工作，不是翻譯。`CheckSLKSensor` 讀 `Cylinder[]`
+     故**不可**放在 `MainCalcCore.cpp`（需 `ht9045_sm` 層）。
+  5. `uHGemClass.cpp` 剩 1 個真硬阻塞 `S7F20_CurrentEPPDData`（缺函式 + 缺 widget，
+     另有「gate 永遠打不開」第二層阻塞）；`PlaceOSTestResultToTray`（W7-U）；
+     W7-U0/C5（`HT9045_UI` 未在根 CMakeLists 定義卻已被 `build_msvc.bat:90` 傳入，須補且預設 OFF）；
+     `OutArmTask` initialiser 偏差；`ShowRunLed`/`ShowRunLabel` 真 blast radius
+     （`bHALTing` → chamber 快速冷卻分支不可達）。
+- **勿圈入 V906 commit**：`config/*`、`setup.inf`、`.pti_frames/`、repo 根的 `SCRATCH_*.txt`/
+  `_review_*.diff`/`build_*` 產物、ported tree 內三個 `*_test_scratch/`，以及
+  `HT9011UC_Code_V3.33.899.0_.../CosFunction.cpp`。
+- **執行模式**：使用者指示持續有效——全部 cpp/h/dfm 都要翻、workflow 火力全開、不逐波停下請示、
+  重大問題跳過並最後條列；model/effort 依任務性質自動切換；安裝軟體不必先問。
