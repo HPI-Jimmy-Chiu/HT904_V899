@@ -2871,6 +2871,58 @@ add_executable(test_ga1_lastset
 target_link_libraries(test_ga1_lastset PRIVATE vclcompat)
 add_test(NAME GA1_LastSet COMMAND test_ga1_lastset)
 
+# ---------------------------------------------------------------------------
+#  GA-1 B5: language.cpp (TfLan CSV language pack -- load/query core)
+# ---------------------------------------------------------------------------
+# AI(W906-GA1-B5) 20260804: language.cpp is compiled directly into the test
+# (it is not yet a member of any library); the RESCAN group supplies the real
+# LastSet / MyDBIProcess / LogSoftwareOffTime definitions the TU references.
+add_executable(test_ga1_language
+    test_ga1_language.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../language.cpp
+)
+target_link_libraries(test_ga1_language PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+if(WIN32)
+    target_link_libraries(test_ga1_language PRIVATE ws2_32)
+endif()
+add_test(NAME GA1_Language COMMAND test_ga1_language)
+
+# ---------------------------------------------------------------------------
+#  GA-1 B6: SYSTEM_MODULAR::ReadGeneralIni() (golden database.cpp:301-1537)
+# ---------------------------------------------------------------------------
+# AI(W906-GA1-B6) 20260804: same link shape as test_config_loaders (same
+# database.cpp TU). Runs against a scratch COPY of system/Gerneral.ini --
+# never writes the real config (the three write-back callers are #if 0 gated).
+add_executable(test_ga1_readgeneralini
+    test_ga1_readgeneralini.cpp
+)
+target_link_libraries(test_ga1_readgeneralini PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_secsgem,ht9045_forms,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+if(WIN32)
+    target_link_libraries(test_ga1_readgeneralini PRIVATE ws2_32)
+endif()
+add_test(NAME GA1_ReadGeneralIni COMMAND test_ga1_readgeneralini)
+
+# ---------------------------------------------------------------------------
+#  GA-1 B4: cMyDB.cpp (sqlite3 wrapper) -- real Handler.DB3 oracle + round-trip
+# ---------------------------------------------------------------------------
+# AI(W906-GA1-B4) 20260804: self-contained convention (like test_config_loaders):
+# cMyDB.cpp compiles directly into the test and the TU's own god-stack-free
+# stand-ins satisfy the extern surface. Deliberately NOT an ht9045_cmydb
+# library yet -- no production consumer until GA-3 wires MyDBOpenDB; creating
+# the library with its real forms/sm dependencies would collide with the
+# test's stand-ins (see _ga1_b4_report.md).
+add_executable(test_ga1_cmydb
+    test_ga1_cmydb.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../cMyDB.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../myTimer.cpp
+)
+target_link_libraries(test_ga1_cmydb PRIVATE vclcompat sqlite3)
+add_test(NAME GA1_cMyDB COMMAND test_ga1_cmydb)
+
 # ===========================================================================
 #  GLOBAL TEST TIMEOUT -- must stay at the BOTTOM of this file
 # ===========================================================================
