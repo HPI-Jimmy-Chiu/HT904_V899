@@ -3148,3 +3148,75 @@ ROADMAP 進度區已加指標列。**⚠ 工作樹在製工作（第四次同型
 - 驗證基準不變：fresh MinGW dir ctest **114/118**、mojibake 0、EOL 逐檔保持。分支 `fix/v899.32-pti`。
 - **執行模式**：使用者既有指示持續有效（連續推進、不逐波請示、model/effort 依 Gate A 計畫 §5
   自動切換並於每波開工時一句話回報）。
+
+---
+
+## 2026-08-04（深夜）— GA-0 完成：第一個 HT9045.exe 誕生（Gate A 波次 1/6）
+
+**開場照紀律 `git status`**：撿到第四次「在製工作沒人回報」——`tests/test_w906_trace.cpp`
+（1,293 行/95 斷言）+ `tests/CMakeLists.txt` target 塊，即上一 RESUME 下一步 #1 的
+DoTraceDataResponse 補測試。照復原 SOP 驗證（fresh `build_0804_ga0_baseline`：ctest
+**115/119**、W906_Trace PASS 1.83s、關鍵斷言 PART C 截斷 0x1CAFE→0xCAFE 對 golden :4214 U2
+編碼/:1040 `unsigned short*` cast 抽查屬實）→ 獨立 commit `fd218cf`。**基準自此 114/118 →
+115/119。**
+
+**GA-0 本體（全部落地）**：
+1. **DA2 發現早已落地**（根 CMakeLists:43，2026-08-01 W7-L1-Wave0）——W7 plan §2-DA2 與
+   Gate A 計畫初版的「未完成」皆過時，已修正；教訓＝跨文件轉抄的宣稱動筆當下要重新 grep。
+2. **W7-U0**：`option(HT9045_UI OFF)` 終於定義（build_msvc.bat:90 傳了一週的未定義 -D 收口）
+   + `ht9045_app` target（`if(HT9045_UI)` 內、非 MSVC FATAL_ERROR、`CMAKE_MFC_FLAG 2`+
+   `_AFXDLL`、OUTPUT_NAME=HT9045）。**MinGW 無擾動實證**：reconfigure+null-build 0 個重編譯。
+3. **app 骨架**：`ui/HT9045App.{h,cpp}`（golden WinMain :127-301 語意；mutex/BootLog/路徑檢查
+   忠實；[DEV-1]~[DEV-5] 偏離 ledger；`--smoke`/`--devpath`）+ `ui/GateAPlaceholderDlg.{h,cpp}`
+   + `ui/app.rc`+`resource.h`（可拋棄佔位窗，GA-4 換真 fMain）+ `scripts/build_msvc_ui.bat`。
+   途中吃到兩個真實教訓：(a) `rc.exe` 權威閘立刻抓 `IDC_STATIC` 未定義（windows.h 沒有、
+   afxres.h 才有——W7 plan R2 預言成真）；(b) MFC dialog app 的 process exit code 會漏
+   最後一則 modal 訊息的 wParam（實測 smoke WM_TIMER id=1 → exit 1），golden WinMain
+   每條路徑 `return 0`，已覆寫 `ExitInstance` 恢復 golden 契約。
+4. **四項設計決策收口**（`docs/DESIGN_GateA.md`）：D-A0-1 WinMain 偏離 ledger、
+   D-A0-2 FormRegistry（見下 recon）、D-A0-3 pump=UI-thread timer 等價替代（golden
+   `Synchronize` 本來就在 UI thread 跑 MainProc，等價性論證入檔）、D-A0-4 link-graph
+   採局部 RESCAN 升級（實測 9 個 targets 沒連 core，方案 B blast radius 小一個數量級）。
+5. **兩路 recon 落檔**：`docs/RECON_GateA_FormShow.md`（FormShow 2,227 行分類：TRANSLATE
+   61%/SEAM 27%/SKIP 12%；`SetAliasAndTask`×281=診斷登記非 IO 綁定；SOFT_SIMULTE 關閉故
+   real-arm 分支會編譯；blast radius 13 項清單）＋`docs/RECON_GateA_FormRegistry.md`
+   （**CreateForm 實為 118 次非 120**、115 唯一、3 組 golden 重複建構；FACADE 18/SHIM 16/
+   **SHIM-NULL 2**［HGem 恆 NULL、DataModule1 ctor 在 #if 0］/TU-stub 9/ABSENT 70；
+   SIDE-EFFECT 48/115；18 facade 是 static-init 建構非 golden 序）。承重宣稱主迴圈皆已
+   獨立重導驗證（118/115/3 用不同 regex 重數吻合；SetAliasAndTask/SOFT_SIMULTE 開檔對字面）。
+6. **MSVC 第二 oracle 意外收穫**：null-check 曝露 `aoutarm9045_1x2_2/1x2_4` 兩檔宣告回傳
+   型別寫反（`IsCatchTrayReadySupplyNewTray` void→應 bool、`SetFixTrayFullIC` bool→應 void，
+   golden `aoutarm.h:64/:73`+定義 `aoutarm.cpp:522/:809` 為證；其餘 25 個變體檔全對，唯獨
+   這兩檔互換）——**W7-A2 同型**：Itanium mangling 不含回傳型別故 MinGW 靜默連過，MSVC
+   mangled name 含之故 LNK2019 整排。call sites 全裸語句零行為影響，4 行宣告修正後
+   **MSVC build 0 error、95/95 targets 全連結**（先前一整排 LNK1120 清空）。
+
+**驗證基準（全新 `build_0804_ga0_final`，所有編輯完成後重啟量測）**：build exit 0/0 error、
+`resolving`=0、ctest **115/119**（同 4 個 config 環境漂移）、W906_Trace PASS；smoke
+`HT9045.exe --devpath --smoke 800` exit 0 + BootLog 完整檢查點序列；mojibake 0/EOL 逐檔
+符合/結尾換行全齊（touched 16 檔掃描）。
+
+**Gate A 里程碑：本專案第一個可執行檔 `build_msvc_ui\HT9045.exe` 誕生並通過 smoke。**
+
+### 🔖 RESUME（最新）
+
+- **本場次已 commit**：`ac9d2b2`（Gate A 波次計畫）、`fd218cf`（trace 測試復原落地）、
+  本則後兩顆（1x2_2/1x2_4 宣告修正；GA-0 skeleton+docs）。分支 `fix/v899.32-pti`。
+- **驗證基準**：fresh `build_0804_ga0_final` ctest **115/119**（4 個永遠的 config 漂移：
+  config_db/IniFiles/ini_helpers/config_loaders）；MSVC `build_msvc` 0 error 95/95 連結；
+  `build_msvc_ui\HT9045.exe` smoke exit 0。
+- **⚠ 接續第一件事仍是 `git status`，不是讀本 RESUME。**
+- **Gate A 進度：GA-0 ✅**（docs/GATE_A_FIRST_LIGHT_PLAN.md 波次 1/6；四決策見
+  docs/DESIGN_GateA.md；recon 材料 docs/RECON_GateA_FormShow.md + RECON_GateA_FormRegistry.md）。
+- **下一步（依 Gate A 計畫，可平行展開）**：
+  1. **GA-1 substrate 六批平行**（B1 LastSet 全量→canary_support shim 退場[SERIAL 主迴圈]/
+     B2 cprod ungate/B3 cpublic queue+9 targets RESCAN 升級[D-A0-4 清單]/B4 sqlite3 vendor+
+     cMyDB[MyDBIProcess 遷回]/B5 language/B6 ReadGeneralIni）——翻譯 Sonnet high、
+     複驗 B2/B3 xhigh 其餘 high。
+  2. **GA-2 cinitial 15,242 行切 5 塊**（單檔序列！塊界見計畫 §4-GA2）——複驗 xhigh 固定。
+  3. **GA-4 MFC 首燈本體**可與 GA-1/2 平行（全新檔零碰撞；Fable/Opus xhigh，不可降級）。
+  4. GA-3 等 GA-1 B1/B2+GA-2；brief 材料=兩份 RECON（動筆前先核 FormShow recon 的
+     UNCERTAIN 清單）。
+- **模型切換提醒**（Gate A 計畫 §5）：GA-1/GA-2 主迴圈可降 Opus high；GA-3/4/5 回 Fable xhigh。
+- **勿圈入 V906 commit**：`config/*`、`setup.inf`、V899 樹、repo 根 SCRATCH/_review_*、
+  `build_*` 產物與 `*.log`、三個 `*_test_scratch/`、`.pti_frames/`。

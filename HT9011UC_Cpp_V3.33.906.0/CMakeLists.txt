@@ -1793,6 +1793,46 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         -Wall -Wextra -Wno-conversion-null -Wno-write-strings -Wno-unused-parameter)
 endif()
 
+# =============================================================================
+# AI(W906-GateA-0) 20260804: W7-U0 -- the MFC UI executable, opt-in, MSVC-only.
+# docs/GATE_A_FIRST_LIGHT_PLAN.md GA-0 / docs/DESIGN_GateA.md D-A0-1.
+#
+#   * option() default OFF is LOAD-BEARING: MFC exists only under MSVC, and this
+#     project's primary oracle is MinGW -- a default-ON UI target would kill that
+#     oracle (MIGRATION_ROADMAP.md:22 flagged exactly this). scripts/
+#     build_msvc.bat:90 has been passing -DHT9045_UI=OFF since W7-A1 against an
+#     option that did not exist (CMake only warns on an undefined -D); this
+#     block finally defines it.
+#   * MSVC-only guard is FATAL_ERROR, not a silent skip: asking for the UI on
+#     MinGW is a wrong-toolchain mistake and must say so loudly.
+#   * CMAKE_MFC_FLAG=2 (shared MFC DLL) + explicit _AFXDLL: the 2026-07-29 MFC
+#     probe validated exactly this shape (Release /MD + /D_AFXDLL, vcvarsall
+#     x86 -vcvars_ver=14.44). Debug CRT is prohibited tree-wide (KNOWLEDGE.md
+#     Gotcha 9). _AFXDLL is defined explicitly because CMAKE_MFC_FLAG's
+#     define-injection is generator-dependent; doubling it is harmless.
+#   * OUTPUT_NAME HT9045: golden's exe name (HT9045.bpr PROJECT value), so the
+#     faithful exe-path check in ui/HT9045App.cpp compares like golden.
+#   * links ht9045_public only (cBootLog); the SM/engine libraries join in
+#     GA-3 when the FormRegistry starts constructing real facade objects.
+# =============================================================================
+option(HT9045_UI "Build the MFC UI executable ht9045_app (MSVC only)" OFF)
+if(HT9045_UI)
+    if(NOT MSVC)
+        message(FATAL_ERROR "HT9045_UI=ON requires MSVC+MFC. Use scripts/build_msvc_ui.bat; the MinGW oracle never builds UI.")
+    endif()
+    enable_language(RC)
+    set(CMAKE_MFC_FLAG 2)
+    add_executable(ht9045_app WIN32
+        ui/HT9045App.cpp
+        ui/GateAPlaceholderDlg.cpp
+        ui/app.rc
+    )
+    target_compile_definitions(ht9045_app PRIVATE _AFXDLL)
+    target_include_directories(ht9045_app PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/ui)
+    set_target_properties(ht9045_app PROPERTIES OUTPUT_NAME "HT9045")
+    target_link_libraries(ht9045_app PRIVATE ht9045_public)
+endif()
+
 # ---------------------------------------------------------------------------
 # Tests
 # ---------------------------------------------------------------------------

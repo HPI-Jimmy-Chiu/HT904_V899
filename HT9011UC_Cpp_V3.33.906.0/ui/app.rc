@@ -1,0 +1,19 @@
+// =============================================================================
+//  ui/app.rc -- Gate A skeleton resources (W7-U0)
+//  AI(W906-GateA-0) 20260804: NEW FILE, disposable. One placeholder DIALOGEX
+//  so the exe has a window before GA-4 swaps in the generated fMain dialog
+//  (tools/dfm2rc/rc_out/main.rc). rc.exe is the authoritative gate for this
+//  file (W7 plan SS9-R2) -- no WC_* class macros, literal strings only.
+// =============================================================================
+#include <windows.h>
+#include "resource.h"
+
+IDD_GATEA_PLACEHOLDER DIALOGEX 0, 0, 260, 80
+STYLE DS_SETFONT | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "HT9045 V906 -- Gate A skeleton"
+FONT 9, "Segoe UI", 400, 0, 0x0
+BEGIN
+    LTEXT "HT9045 C++ migration -- Gate A first-light skeleton.", IDC_GATEA_BANNER, 12, 12, 236, 10
+    LTEXT "This placeholder window is replaced by the generated fMain dialog in GA-4.", IDC_STATIC, 12, 26, 236, 18
+    DEFPUSHBUTTON "Close", IDOK, 104, 54, 52, 15
+END

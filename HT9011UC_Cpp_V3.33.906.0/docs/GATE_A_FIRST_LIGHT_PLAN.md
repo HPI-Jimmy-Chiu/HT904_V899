@@ -28,7 +28,7 @@
 
 | 環節 | golden 位置 | 行數 | 現況 |
 |---|---|---|---|
-| WinMain | `HT9045.cpp:127-301` | 303（全檔） | 0% 翻。內容：taskkill OSK + 4 個 OSK reg、`CreateMutex("MyMutexName")`+`GetLastError` 單實例檢查、exe 路徑必須含 `D:\HT9045\EXE\`、BootLog 三檢查點、**120 個 `Application->CreateForm`**（fMain 第一、dmTrayMotor 第二）、`Application->Run()`、雙 catch |
+| WinMain | `HT9045.cpp:127-301` | 303（全檔） | 0% 翻。內容：taskkill OSK + 4 個 OSK reg、`CreateMutex("MyMutexName")`+`GetLastError` 單實例檢查、exe 路徑必須含 `D:\HT9045\EXE\`、BootLog 三檢查點、**118 個 `Application->CreateForm`**（初版誤記 120——:284/:285 是 log 字串；115 唯一指標+3 組 golden 重複建構，GA-0 recon 已實測，見 `RECON_GateA_FormRegistry.md`）（fMain 第一、dmTrayMotor 第二）、`Application->Run()`、雙 catch |
 | TfMain ctor | `main.cpp:1340-2266` | 926 | 0%。主要呼叫：`CheckAndReadIniDataGeneral`×25、`WriteIniDataGeneral`×14、`TMyStringList`×27、`SetColorMap`×11、`TArm`×4、`RegisterHotKey`×5、`MyDBOpenDB`×1（→需 cMyDB+sqlite3）、`uPlateInfo`/`cInArmPlacement` 建構 |
 | FormCreate | `main.cpp:26686-26707` | 21 | 0%。只有 CheckWindowsIsXP/DirectoryExists/MoveFile——便宜 |
 | FormShow | `main.cpp:9141-11367` | 2,226 | 0%。`SetAliasAndTask`×281、`MyForceDirectories`×70（已翻）、`InitialHandler`（→cinitial）、`ReadTechData`/`DoReadLastData`/`ReadLastSetIni`（→cinitial+LastSet）、`SetRunStartMode`×5、CCD `SendCommToVision`×5、`UpdateForm`×10；**`InitialOK=true` 在 :10464**——它是 Timer1 與 MainProc 的總閘 |
@@ -87,12 +87,12 @@ GA-0 (SERIAL, 架構定案+app骨架)
 ### GA-0 — 架構定案 + app 骨架【SERIAL，第一個做】
 
 **範圍**：
-1. 落地 **DA2**：根 `CMakeLists.txt` 釘 `_WIN32_WINNT=0x0601`（兩個 oracle 都釘；W7 plan 明定主迴圈負責、至今未做，grep 已確認仍為零命中）。
+1. ~~落地 **DA2**：根 `CMakeLists.txt` 釘 `_WIN32_WINNT=0x0601`~~ **✅ AI(W906-GateA-0) 20260804 更正：DA2 早已於 2026-08-01（`W7-L1-Wave0`）落地**——根 `CMakeLists.txt:43` `add_compile_definitions(_WIN32_WINNT=0x0601 WINVER=0x0601)`，含前後警告 diff 驗證（277→284 行，+7 全是同批 LastSet 欄位的 -Wmissing-field-initializers）。本檔 2026-08-04 初版寫「grep 零命中」是照抄 W7 plan §2-DA2 的 2026-08-01 快照、未重新查證，違反了自家「行號引用動筆當下重新推導」紀律，特此記錄。
 2. **W7-U0**：補 `option(HT9045_UI "Build the MFC UI executable (MSVC only)" OFF)`——`scripts/build_msvc.bat:90` 已在傳這個未定義的 `-D`；`ht9045_app` target 包在 `if(HT9045_UI AND MSVC)`，**預設 OFF 保住 MinGW oracle**（ROADMAP :22）。
 3. 建 `build_msvc_ui`（**Ninja** generator，D10——絕不用 VS multi-config，那是 2026-07-28 modal assert 洗版事故的載體）。
 4. 空殼 app：`ui/HT9045App.{h,cpp}`（CWinApp）+ WinMain 語意翻譯——mutex 單實例、BootLog 檢查點接已翻的 `cBootLog`、exe 路徑檢查（**決策：參數化或保留 golden 字面 `D:\HT9045\EXE\`**）、OSK taskkill/reg（**建議 Gate A skip + 揭露性註記**，它是機台 kiosk 行為非啟動必要）。里程碑：**空視窗 exe 能開能關**。
 5. 四個設計決策寫成 `docs/DESIGN_GateA.md`：
-   - **決策 1（FormRegistry）**：golden 120 個 CreateForm → Gate A 只有 fMain 拿真 HWND（D3：`CDialog` 持有 `TfMainImpl : public TfMain`，`fMain=&impl`）；其餘 119 個照 golden CreateForm **順序**建構既有 facade 物件（無 HWND）——有些 ctor 有真副作用（例：`THGem` FormCreate SV 註冊已翻），順序不可亂。
+   - **決策 1（FormRegistry）**：golden 118 個 CreateForm（115 唯一）→ Gate A 只有 fMain 拿真 HWND（D3：`CDialog` 持有 `TfMainImpl : public TfMain`，`fMain=&impl`）；其餘照 golden CreateForm **順序**建構既有 facade 物件（無 HWND）——有些 ctor 有真副作用（例：`THGem` FormCreate SV 註冊已翻），順序不可亂。✅ 已裁決，見 `DESIGN_GateA.md` D-A0-2。
    - **決策 2（pump）**：golden `TRunControl::Execute` 的 `Synchronize(ThreadProcess)` 使 MainProc 實際全跑在 UI thread → Gate A 建議直接用 UI thread 高頻 timer（`SetTimer` 1ms + 重入 guard）等價替代，**不開真 worker thread**（等價性論證寫進 DESIGN；真 thread 版留給 Gate B）。
    - **決策 3（link graph）**：裁決 `ht9045_globals` → link `ht9045_core`（解 cpublic.cpp 3 處 + TempChangeLog 的既有阻塞，ROADMAP DEFERRED 表 common.cpp 列）——需先盤點受影響 test target 清單。
    - **決策 4（FormShow gating 清單）**：逐段判 FormShow 2,226 行哪些 Gate A 真翻、哪些掛 seam（CCD `SendCommToVision`→seam；SECS 開通→維持既有 offline；`uHeaterThread`/`ScanBtnThread`→**不啟動**，掛計數器 stub）。
@@ -205,7 +205,7 @@ GA-0 (SERIAL, 架構定案+app骨架)
 | G2 | FormShow 的 281 處 `SetAliasAndTask` 等大量 widget 觸碰 → binder 覆蓋面被迫擴大 | GA-0 決策 4 逐段裁 gating；binder 只做切片實際觸碰集 |
 | G3 | cprod ungate 拉出未翻依賴鏈 | B2 範圍條款「ungate what links, document rest」，不硬翻 |
 | G4 | z-order 極性 / CJK 字型——headless 無法解 | 既有設計（§9-R1）：`--zorder` 產生器開關一次翻轉；首燈目視時裁決 |
-| G5 | 120 CreateForm 順序性副作用（facade ctor 有真邏輯） | FormRegistry 照 golden 序建構；GA-0 決策 1 內含逐一 recon 有副作用的 ctor 清單 |
+| G5 | 118 CreateForm 順序性副作用（facade ctor 有真邏輯；SIDE-EFFECT 48/115） | FormRegistry 照 golden 序建構；副作用 ctor 清單已 recon 完成（`RECON_GateA_FormRegistry.md`） |
 | G6 | 開場工作樹在製工作（trace 測試半成品）與 GA-0 混雜 | GA-0 開場條款：先照復原 SOP 處理再動工 |
 
 ---
