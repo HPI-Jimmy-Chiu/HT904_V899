@@ -72,6 +72,26 @@ if errorlevel 1 (
     exit /b 1
 )
 
+REM AI(W906-GateA-4-C5) 20260804: W7-C5 headless control probe. Own exe, own
+REM build+run step. It creates the three custom controls under an HWND_MESSAGE
+REM parent and paints them into a memory DC, so like the smoke run it cannot
+REM wedge on a window. Exit code 0 == every check passed.
+echo [build_msvc_ui] Building ht9045_ctrl_probe...
+cmake --build "%BUILD_DIR%" --target ht9045_ctrl_probe
+if errorlevel 1 (
+    echo [build_msvc_ui] FATAL: ht9045_ctrl_probe build failed.
+    exit /b 1
+)
+
+echo [build_msvc_ui] Headless custom-control probe...
+"%REPO_ROOT%\%BUILD_DIR%\ht9045_ctrl_probe.exe"
+set "PROBE_RC=%ERRORLEVEL%"
+echo [build_msvc_ui] probe exit code: %PROBE_RC%
+if not "%PROBE_RC%"=="0" (
+    echo [build_msvc_ui] FATAL: headless control probe reported failures.
+    exit /b %PROBE_RC%
+)
+
 echo [build_msvc_ui] Smoke run (--devpath --smoke 800)...
 "%REPO_ROOT%\%BUILD_DIR%\HT9045.exe" --devpath --smoke 800
 set "SMOKE_RC=%ERRORLEVEL%"

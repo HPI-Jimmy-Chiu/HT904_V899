@@ -1823,15 +1823,57 @@ if(HT9045_UI)
     endif()
     enable_language(RC)
     set(CMAKE_MFC_FLAG 2)
+
+    # AI(W906-GateA-4-C5) 20260804: W7-C5 -- the three custom-control CWnd
+    # shells + the single global window-class registration (plan S7-6/7,
+    # S3-C1), together with the W7-C1 cores and W7-C2 renderers they drive.
+    #
+    #   * the vclcompat/*Core.cpp + vclcompat/render/*.cpp files are listed
+    #     here rather than linked from a library ON PURPOSE: they are NOT part
+    #     of the `vclcompat` target (grep -- only tests/CMakeLists.txt:2332-2412
+    #     compiles them today, once per test target), and adding them to that
+    #     library would change the MinGW oracle's link graph from inside a
+    #     UI-only wave. Compiling them into the UI targets keeps the change
+    #     confined to `if(HT9045_UI)`.
+    #   * shared between ht9045_app and the headless probe below so the two
+    #     never drift apart.
+    set(HT9045_UI_CTRL_SOURCES
+        ui/RegisterCustomClasses.cpp
+        ui/CLedCtrl.cpp
+        ui/CBtnPanelCtrl.cpp
+        ui/CTrayCtrl.cpp
+        vclcompat/LedCore.cpp
+        vclcompat/BtnPanelCore.cpp
+        vclcompat/TrayCore.cpp
+        vclcompat/render/RenderCommon.cpp
+        vclcompat/render/LedRender.cpp
+        vclcompat/render/BtnPanelRender.cpp
+        vclcompat/render/TrayRender.cpp
+    )
+
     add_executable(ht9045_app WIN32
         ui/HT9045App.cpp
         ui/GateAPlaceholderDlg.cpp
+        ${HT9045_UI_CTRL_SOURCES}
         ui/app.rc
     )
     target_compile_definitions(ht9045_app PRIVATE _AFXDLL)
     target_include_directories(ht9045_app PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/ui)
     set_target_properties(ht9045_app PROPERTIES OUTPUT_NAME "HT9045")
     target_link_libraries(ht9045_app PRIVATE ht9045_public)
+
+    # AI(W906-GateA-4-C5) 20260804: headless verification exe for the shells.
+    # Console subsystem (its own main() + AfxWinInit), creates the three
+    # controls under an HWND_MESSAGE parent and paints them into a memory DC,
+    # so it is structurally incapable of showing a window (plan S5-11 / S7).
+    # Run by scripts/build_msvc_ui.bat; exit code 0 == every check passed.
+    add_executable(ht9045_ctrl_probe
+        ui/tests_headless/headless_ctrl_probe.cpp
+        ${HT9045_UI_CTRL_SOURCES}
+    )
+    target_compile_definitions(ht9045_ctrl_probe PRIVATE _AFXDLL)
+    target_include_directories(ht9045_ctrl_probe PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/ui)
+    target_link_libraries(ht9045_ctrl_probe PRIVATE ht9045_public)
 endif()
 
 # ---------------------------------------------------------------------------

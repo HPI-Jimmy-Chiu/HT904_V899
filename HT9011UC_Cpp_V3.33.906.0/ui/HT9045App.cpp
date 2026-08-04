@@ -35,6 +35,7 @@
 // =============================================================================
 #include "HT9045App.h"
 #include "GateAPlaceholderDlg.h"
+#include "RegisterCustomClasses.h"   // AI(W906-GateA-4-C5) 20260804: HT9045_RegisterAllCustomClasses
 
 #include "Public/cBootLog.h"    // RotateBootLogIfNeeded / WriteBootLog (ported W1)
 
@@ -98,6 +99,17 @@ BOOL CHT9045App::InitInstance()
         {
             WriteBootLog("WinMain ExePath OK");          // golden :161
         }
+
+        // AI(W906-GateA-4-C5) 20260804: register ALL 16 custom window classes
+        // ONCE, before any dialog is created (W7 plan SS3-C1 ruling). An
+        // unregistered class in a DIALOGEX template fails the whole
+        // CreateDialog, so this must precede the first generated form.
+        if (!HT9045_RegisterAllCustomClasses())
+        {
+            WriteBootLog("WinMain RegisterAllCustomClasses FAILED");
+            return FALSE;
+        }
+        WriteBootLog("Custom classes registered");
 
         // [DEV-3] FormRegistry lands in GA-3; placeholder dialog only for now.
         WriteBootLog("Application Initialize Done");     // golden :164 checkpoint kept
