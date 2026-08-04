@@ -3281,3 +3281,69 @@ mojibake 0/EOL 合規/結尾換行全齊。`_ga1_b*_report.md`×4 留樹根未 t
   4. B4 homecoming swap 小波（4 符號遷回 cMyDB.cpp+MyDBIProcessNew fastcall 修正，
      步驟在 `_ga1_b4_report.md`）。
 - **模型**：GA-1 續批翻譯 Sonnet high；GA-2 複驗 xhigh 固定；GA-3/4/5 主迴圈 Fable xhigh。
+
+---
+
+## 2026-08-04（深夜 II）— GA-1 全六批完成 + GA-2 C1 + GA-4 C5 + link-graph 整併戰
+
+**GA-1 B2+B3（平行）**：B2 把 cprod.cpp live 5%→95%（73 支全解/11 窄 gate/2 全 gate；
+`ReadEventLogAutoSaveInfo` 零 gate 解出、`ReadLastSetIni` 大半解出）；B3 解 cpublic
+SafeData×2+UDPErrorLog、定位 test_config_loaders:130 的 stub ctor 隱患。兩者各自 29/29、
+53/53 自跑通過。**integrate 時照 ungate-what-LINKS 紀律收回兩支越界解閘**：
+CustomerFunctionSelect 的 7 支 CosFunction 客戶函式呼叫（全樹零定義）逐一窄 gate；
+ShuttleLog 重新 gate（UseCanBusOrEtherCAT@ht9045_comms 不在標準閉包）。
+
+**link-graph 整併戰（本日最大工程副產物）**：cprod 解閘使 ht9045_globals 的物件表面永久
+擴大（Prod 定義在 cprod.obj → 幾乎所有靶都拉它 → fMain/InArmSuck/TestSocket/AMR/... 全要
+解析）。-k 枚舉 69 失敗靶 → 收斂到 0：16 靶升級擴充 RESCAN 群組（標準 10 庫 + automation
++ comms——cprod.obj→fAGV.obj→AMR@automation 的引用鏈是新發現）；退場 10+ 歷史 stand-in
+（GetSiteCount@atester_shims［其 banner 的 TODO(W6) 原話兌現］、MySleep/Ex@MyPLC+
+test_MyCCLink、bPLC 對@MyPLC 降 extern［**揭露性偏離**：golden 家在 MyPLC :86-87，但
+ported 連結拓撲下 MyLaneIo(io) 人人都連，定義留 io 零 churn］、TMyKitSuck 組@
+test_MyProductionRecord、間諜 stub×5 測試 TU）；**新增 `W906_MyDBIProcess_*` 觀測 seam**
+（aHotPlateSubstrate 真 sink 掛計數/捕參，test_FTPClient_EventHandlers 的間諜斷言改接
+seam——「間諜 stub → 真身 seam」是 stub 退場時代的新慣例，後續照辦）。
+**教訓**：我第一次把 9 靶補 core 的 regex 補丁在 `$<LINK_GROUP>` 生成式內用了空白分隔
+（要逗號），CMake 循環偵測直接炸——生成式內外的分隔符不同，往後補丁要分兩型處理。
+
+**GA-2 C1（cinitial :77-3060）**：翻譯 agent 交付 9/9 函式後，**獨立對抗複驗（Opus）抓到
+1 HIGH**：InitSucker 掉了 golden :369 的 `InitialSuckerName();` 唯一呼叫點（宣告塊搬進
+gate 時把相鄰呼叫一起帶走——複驗用 probe 實證 TestSocket/CarryKit .sName 全空）。已修+
+測試涵蓋。M-1（OnEnable 其實存在，4 gate 拆開解閘）、M-2（兩個 gate 內含裸 else 的搬移
+宣告，翻閘即 parse error——已掛警告註記）、LOW 引用/計數修正一併落地。cinitial.cpp 進
+ht9045_sm。**複驗還證明測試可跑**（65/65，翻譯 agent 誤以為必須樹級 build 而沒跑）+
+揪出 `build/` 舊 archive ABI 漂移陷阱（stale libht9045_db.a vs 新 database.h → HSys
+size 錯亂 bad_alloc——連舊 archive 前必須重編 database.cpp）。
+
+**GA-4 C5**：三個 CWnd 殼（訊息路由到既有 core/renderer 零邏輯重複）+
+`HT9045_RegisterAllCustomClasses()`（**全 16 個** class：9 個無殼類註冊成惰性佔位，
+否則 DIALOGEX 含未註冊 class 會整窗建立失敗）+ headless probe（HWND_MESSAGE+WM_PRINT
+→DIB 讀像素，29/29，斷言可失敗性用真失敗證明過）。**修正 W7 plan §7-7 措辭**：是
+`AfxRegisterClass` 不是 `AfxRegisterWndClass`（後者合成名稱、做不出 `HT9045.MyLedLane`
+點名）。主迴圈把註冊呼叫接進 InitInstance（agent 無權寫 ui/HT9045App.cpp），BootLog 新
+檢查點 `Custom classes registered`，全管線 exit 0。
+
+**驗證基準（全新 `build_0804_ga1_close`）**：build 0 error、resolving=0、ctest
+**122/126**（4 個失敗恆為 config_db/IniFiles/ini_helpers/config_loaders 環境漂移）。
+MSVC 軌：build_msvc_ui probe+smoke exit 0。
+
+### 🔖 RESUME（最新）
+
+- **本場次 commit（12 顆）**：`ac9d2b2` 計畫→`fd218cf` trace→`6e1e907` 宣告修→`5ea1375`
+  GA-0→`4f7a92b` B1→`4dbabb0` B5→`85b25f2` B6→`d8361a3` B4→`6d15306` DEVLOG→`464d734`
+  GA-4 C5→`7ecc9dc` B2+B3+GA2C1+link 整併→本則 DEVLOG。分支 `fix/v899.32-pti`。
+- **驗證基準**：fresh `build_0804_ga1_close` ctest **122/126**；`build_msvc_ui`
+  probe 29/29+smoke exit 0；第一個 `HT9045.exe` 開窗/註冊 16 class/正常退出。
+- **⚠ 接續第一件事仍是 `git status`。**
+- **Gate A 進度：GA-0 ✅／GA-1 全六批 ✅／GA-2 1/5 塊／GA-4 C5 ✅**（計畫
+  docs/GATE_A_FIRST_LIGHT_PLAN.md、決策 docs/DESIGN_GateA.md、recon×2）。
+- **下一步候選（依 Gate A 計畫）**：
+  1. **GA-2 C2**（cinitial :3061-5613 Motor/Cylinder 參數+速度家族；C1 復盤：brief 要加
+     「宣告搬移不得帶走相鄰語句」+「測試必須真跑」；複驗 xhigh 固定）。
+  2. **GA-4 續**（泛用 ApplyLayout 引擎吃 layout_out 像素表 + child DIALOGEX 巢狀引擎；
+     Fable/Opus xhigh 不可降級）。
+  3. **GA-3 前置齊備度再驗**（LastSet✅/cprod✅/cinitial C1✅——ctor 的 MyDBOpenDB 有了
+     cMyDB；FormShow 材料在 RECON_GateA_FormShow.md，動筆前核 UNCERTAIN 清單）。
+  4. B4 homecoming swap 小波（`_ga1_b4_report.md` 步驟）；`_ga1_b*/_ga2_c1/_ga4_c5`
+     報告×7 留樹根未 track（scratch 慣例）。
+- **執行模式**：使用者指示持續有效（連續推進、不逐波請示、model/effort 照計畫 §5 動態切換）。
