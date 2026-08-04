@@ -2,32 +2,46 @@
 //  database.h  -- PARTIAL translation (W3-cont2: config-table loaders batch)
 //  Golden ref: D:\HT9045\HT9011UC_Code_V3.33.906.0_20260618\database.h
 //
-//  WHAT IS TRANSLATED (this batch):
+//  WHAT IS TRANSLATED (cumulative through GA-1-B6):
 //    TIODATA        struct + ctor         (database.h:17-38)
 //    TIOTABLENO     struct + methods      (database.h:40-61)
 //    TMOTDATA       struct + ctor         (database.h:63-98)
 //    TMOTNO         struct + methods      (database.h:100-135)
-//    SYSTEM_MODULAR class (loader members only; all other members gated)
-//                                         (database.h:193-287)
-//    extern SYSTEM_MODULAR HSys           (database.h:288)
+//    SYSTEM_MODULAR class -- FULL member surface now active (com-ports, CCD/
+//      RFID/ATC/Laser/Barcode/GroundMan arrays, dNumberPanelDelay,
+//      bUseSocketTemp, ReadGeneralIni()) as of GA-1-B6, since ReadGeneralIni
+//      assigns every one of them.  (database.h:193-292)
+//    extern SYSTEM_MODULAR HSys           (database.h:293)
 //
-//  WHAT IS GATED (#if 0 // TODO(wave)):
-//    TDataModule1 class + extern DataModule1
-//      -> BDE TTable / TDataModule / VCL form; needs DBTables.hpp. (database.h:139-187)
-//    TMyBinDispCtrl *BinDisCtrl member of SYSTEM_MODULAR
-//      -> UI wave; forward-declared opaque. (database.h:204)
-//    ReadGeneralIni() method declaration
-//      -> ~1240-line cmydef/cprod globals surface; deferred. (database.h:268)
-//    All SYSTEM_MODULAR members not needed by the loader batch
-//      (com-ports, CCD/RFID arrays, etc.) (database.h:209-249 / 252-286)
+//  WHAT IS STILL GATED (#if 0 // TODO(wave)) elsewhere in this pair:
+//    TDataModule1 class + extern DataModule1  (database.cpp)
+//      -> BDE TTable / TDataModule / VCL form; needs DBTables.hpp.
+//    SYSTEM_MODULAR explicit ctor/dtor + InstallColorBinDisplay (database.cpp)
+//      -> ctor calls ReadGeneralIni+SystemModularInitial; dtor deletes
+//         BinDisCtrl/ATKRecipeInfo; InstallColorBinDisplay needs TMyBinDispHT9046.
 //    ATKRecipeInfo pointer + ATK_RECIPE_INFO include
 //
 //  AI(W906-SysModWire) 20260720: HTGem *MyGem member of SYSTEM_MODULAR is NO
 //  LONGER gated -- wired for real by SystemModularInitial (database.cpp),
-//  see that member's own comment below (database.h:~233).
+//  see that member's own comment below.
+//
+//  AI(ht9045-v899/W906-GA1-B6) 20260804: un-gated the SYSTEM_MODULAR member
+//  surface (private dNumberPanelDelay/bUseSocketTemp; public com-port/CCD/
+//  RFID/ATC/Laser/Barcode/GroundMan scalars+arrays; ReadGeneralIni() decl) to
+//  land the real ReadGeneralIni translation in database.cpp.  These are all
+//  members of THIS class (not the shared cmydef.h/cpublic.h/cprod.h/Config.h/
+//  CosFunction.h/canary_support.h headers), so un-gating them is in-scope for
+//  the GA-1-B6 "database.cpp/database.h, existing files, this batch exclusive"
+//  write authorization -- it is not "adding a field to a shared header".
+//  Added #include "MachineType.h" (for the iTotalFunction enum used by the
+//  asCCDTrayIP/asCCDTrayPort array sizes) since database.cpp includes this
+//  header before MachineType.h -- database.h must be self-contained.
 //
 //  ENCODING NOTE: original is Big5; this translation is UTF-8.  Chinese
-//  comments in the golden are replaced with their semantic equivalents in ASCII.
+//  comments in the golden are replaced with their semantic equivalents in ASCII
+//  (matches this file's own established convention -- see database.cpp, which
+//  is 100% ASCII-comment despite AGENTS.md's general cp950->UTF-8 preference
+//  for the wider ported tree).
 // ===========================================================================
 #ifndef DATABASEH
 #define DATABASEH
@@ -36,6 +50,10 @@
 #include <map>
 #include <vector>
 #include "myTimer.h"                // TQPF_Timer (database.h:12)
+#include "MachineType.h"            // iTotalFunction (eFunction enum) -- GA-1-B6: needed by
+                                    // asCCDTrayIP[iTotalFunction]/asCCDTrayPort[iTotalFunction]
+                                    // members below; database.h must be self-contained since
+                                    // database.cpp includes this header BEFORE MachineType.h.
 using namespace std;
 
 // ---------------------------------------------------------------------------
@@ -199,11 +217,11 @@ typedef struct TMOTNO
 class SYSTEM_MODULAR
 {
     private:
-        // (database.h:197-198) -- gated: dNumberPanelDelay, bUseSocketTemp
-#if 0 // TODO(wave): private members used only by ReadGeneralIni / InstallColorBinDisplay
-        double dNumberPanelDelay;   // Sam 20240604
-        bool   bUseSocketTemp;
-#endif
+        // (database.h:197-198) -- ACTIVE as of GA-1-B6 (ReadGeneralIni assigns both:
+        // golden database.cpp:214/127 -- dNumberPanelDelay from [NUMBER_PANEL]
+        // NUMBER_PANEL_DELAY, bUseSocketTemp from [TempCtrl] Socket).
+        double dNumberPanelDelay;   // Sam 20240604: display polling period as double
+        bool   bUseSocketTemp;      // 9th-axis (Socket) heater enable
 
     protected:
 #if 0 // TODO(wave-UI): InstallColorBinDisplay -- TMyBinDispHT9046 / BDE
@@ -222,15 +240,53 @@ class SYSTEM_MODULAR
 
         TQPF_Timer SysTimer;    // (database.h:207)
 
-#if 0 // TODO(wave): com-port / CCD / RFID / ATC / Laser / Barcode / GroundMan
-      // members (database.h:209-249 / 252-286) -- all pulled in by ReadGeneralIni
-        AnsiString sNumberPanelComPort;
-        // ... (full list in golden database.h:209-249, 252-286) ...
-        AnsiString asLASER_COM[4];
+        // -----------------------------------------------------------------------
+        //  Com-port / CCD / RFID / ATC / Laser / Barcode / GroundMan members
+        //  (golden database.h:209-249) -- ACTIVE as of GA-1-B6 (ReadGeneralIni
+        //  assigns every one of these).  Order/types match golden exactly.
+        // -----------------------------------------------------------------------
+        AnsiString sNumberPanelComPort;   // Steven 20120217: Com Port made configurable
+        AnsiString sNumberPanelComPort2;
+        AnsiString sTempComPort;
+        AnsiString sTempOmronComPort;
+        AnsiString sTempDynamicComPort;
+        AnsiString sRTCComPort;
+        AnsiString sTorqueComPort;
+        AnsiString asATC1ComPort;
+        AnsiString asATC2ComPort;
+        AnsiString asATC3ComPort;
+        AnsiString asATC4ComPort;
+        AnsiString TrayStepMotor_ComPort;
+        AnsiString sFinePitchComPort;
+        AnsiString sFinePitchAdjustmentComPort;
+        AnsiString asVisionLightPort;     // RogerYang 20180901: Fix AI CCD demo
+
+        AnsiString asATCSYSTEMIP;
+        int asATCSYSTEMPORT;
+        int asATCSYSTEMUSEHEAT;           // Ifor 20160506: new ATC interface use-heat count
+
+        AnsiString asLASER_COM[4];        // Eastsun 20260525: +OutArm COM (was [3])
         AnsiString asBarCodeComPort[4];
+        int BarcodeBaudRate;
+        int InBarcodeBaudRate;
+        int BarcodeByteSize;
+        int BarcodeStopBit;
+        AnsiString BarcodeParity;
+
         AnsiString asRFIDCom;
-        // ...
-#endif
+        int  iRFIDBaudRate;               // Steven 20220713: RFID reader for SJSEMI
+        int  iRFIDByteSize;
+        int  iRFIDStopBit;
+        AnsiString sRFIDParity;
+
+        AnsiString asOCRComPort;
+        AnsiString sTempOmronCom4Port;    // kevin 20130520: 4-Dut temp ctrl (unused by
+                                          // ReadGeneralIni; kept for class-layout parity)
+        AnsiString asOCRwithTesterComPort;
+        AnsiString asAirConPort;
+        AnsiString asGroundManComPort;    // Steven 20190828: communication-based Ground Man
+        int iGroundManScanPoint;          // KaiChen 20191005
+        int iGroundManAlarmOhm;           // KaiChen 20191005
 
         // AI(W906-SysModWire) 20260720: wired for real -- SystemModularInitial
         // (database.cpp) now assigns this (golden database.h:250). NULL via
@@ -266,29 +322,32 @@ class SYSTEM_MODULAR
         map<AnsiString, AnsiString>::iterator mapMotTableIter;
 
         // -----------------------------------------------------------------------
-        //  Deferred methods (database.h:268)
+        //  ReadGeneralIni (golden database.h:268, database.cpp:301-1537)
+        //  ACTIVE as of GA-1-B6 -- see database.cpp for the full translation and
+        //  its own per-field range-clause notes (gated sub-blocks for the handful
+        //  of fields not yet present anywhere in the ported tree).
         // -----------------------------------------------------------------------
-#if 0 // TODO(wave): ReadGeneralIni -- ~1240 lines, needs full cmydef/cprod surface
         void ReadGeneralIni();
-#endif
         void SystemModularInitial();    // real as of W906-SysModWire (wires MyGem) -- see database.cpp
 
-#if 0 // TODO(wave): array members dependent on iTotalFunction / CCD / RFID
-      // (database.h:270-286)
-        AnsiString asCCDTrayIP[iTotalFunction];
-        AnsiString asCCDTrayPort[iTotalFunction];
-        AnsiString asFix2BGAAICCDIP[2];
+        // -----------------------------------------------------------------------
+        //  Array members dependent on iTotalFunction / CCD / RFID
+        //  (golden database.h:270-286) -- ACTIVE as of GA-1-B6 (ReadGeneralIni
+        //  assigns every one of these).
+        // -----------------------------------------------------------------------
+        AnsiString asCCDTrayIP[iTotalFunction];      // wei 20161219: Tray Mapping
+        AnsiString asCCDTrayPort[iTotalFunction];    // wei 20161219: Tray Mapping
+        AnsiString asFix2BGAAICCDIP[2];              // RogerYang 20180901: Fix AI CCD demo
         AnsiString asFix2BGAAICCDPort[2];
-        AnsiString asRFIDComPort[2];
+        AnsiString asRFIDComPort[2];                 // wei 20180726: RFID
         int RFIDBaudRate;
         int RFIDByteSize;
         int RFIDStopBit;
         AnsiString RFIDParity;
-        AnsiString asCCDAlignIP[4];
+        AnsiString asCCDAlignIP[4];                  // Sam 20181201: Auto Alignment
         AnsiString asCCDAlignPort[4];
-        AnsiString asCCDBarCodeIP[4];
+        AnsiString asCCDBarCodeIP[4];                // Ifor 20151224
         AnsiString asCCDBarCodePort[4];
-#endif
 };
 
 // Global SYSTEM_MODULAR instance (database.cpp:27 / database.h:288)

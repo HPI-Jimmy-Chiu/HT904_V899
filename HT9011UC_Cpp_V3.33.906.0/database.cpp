@@ -20,25 +20,40 @@
 //      HT9045Gem class (permanent home as of W906-uHGemHT9045-Bucket0,
 //      20260721; zero of golden's 22 overrides declared yet); NUMBER_PANEL_TYPE
 //      branch stays gated, see below)
+//    SYSTEM_MODULAR::ReadGeneralIni()      (database.cpp:301-1537, ~1240 lines,
+//      real as of GA-1-B6, 20260804) -- reads Gerneral.ini into the full
+//      SYSTEM_MODULAR member surface + cmydef.h globals.  A handful of
+//      sub-blocks stay #if 0-gated (TTLRS232VerCheck / COMMSPEED_20M /
+//      Application->MessageBox / CustomerFunctionSelect+ReadLastSetIni+
+//      ReadEventLogAutoSaveInfo call-sites) -- see that function's own
+//      file-head note and _ga1_b6_report.md for the full reconciliation.
 //
-//  WHAT IS GATED (#if 0 // TODO(wave)):
+//  WHAT IS GATED (#if 0 // TODO(wave) / TODO(GA1-B6)):
 //    TDataModule1 ctor / DataModule1 global (database.cpp:24, 33-41)
 //      -> BDE TTable / TDataModule; deferred to BDE wave.
 //    SYSTEM_MODULAR ctor/dtor + InstallColorBinDisplay
 //      (database.cpp:43-288, 1684-1729, 1731-1754)
-//      -> ctor calls ReadGeneralIni + SystemModularInitial (the latter now
-//         real, but the ctor ITSELF that would call it stays gated -- tests
-//         invoke SystemModularInitial directly); InstallColorBinDisplay needs
-//         TMyBinDispHT9046/TMyBinDispCtrl (W7-UI); deferred.
-//    ReadGeneralIni (database.cpp:301-1537) -> cmydef/cprod full surface; deferred.
+//      -> ctor calls ReadGeneralIni + SystemModularInitial (both now real,
+//         but the ctor ITSELF that would call them stays gated -- tests
+//         invoke ReadGeneralIni/SystemModularInitial directly);
+//         InstallColorBinDisplay needs TMyBinDispHT9046/TMyBinDispCtrl (W7-UI); deferred.
 //    LogSoftwareOnTime / SoftwareExeTimer globals (database.cpp:28-31, 2876-2917)
 //      -> #ifdef DEBUG_SOFTWARE_EXEC_TIME, effectively no-op; stub provided.
+//    Inside ReadGeneralIni (GA-1-B6, see that function's own comment):
+//      CustomerFunctionSelect()/ReadLastSetIni()/ReadEventLogAutoSaveInfo() call-sites
+//      (bodies gated in cprod.cpp's own TODO(W6)); TTLRS232VerCheck (MessageDef.h/.cpp
+//      untranslated); MOTIONNET_SPEED default COMMSPEED_20M (Motor/mn200.h untranslated);
+//      Application->MessageBox interactive prompt (no vclcompat TApplication surface).
 //
 //  CROSS-HEADER DEPENDENCIES (active in this batch):
 //    MachineType.h  -> enum eIOType {eMotionNet=0, eISABase=1, ePCI1735U=2,
-//                      ePCI1203=3, ePLCbase=4}  (MachineType.h:717-722)
+//                      ePCI1203=3, ePLCbase=4}  (MachineType.h:717-722); also
+//                      pulled in directly by database.h now (iTotalFunction).
 //    common.h:67-68 -> extern AnsiString IoTablePath; MotTablePath;
-//    cmydef.h:2977  -> extern int INDEX_MOTION_CARD;
+//    common.h       -> asGeneralPath / CheckAndReadIniData / CheckAndReadIniDataGeneral /
+//                      WriteIniDataGeneral / CheckIniData / MyForceDirectories (ReadGeneralIni)
+//    cmydef.h:2977  -> extern int INDEX_MOTION_CARD; (plus the ~280 other
+//                      System/TempCtrl/ATC/... globals ReadGeneralIni assigns)
 //    cMyDB.h:20     -> void __fastcall MyDBIProcess(AnsiString,AnsiString,AnsiString="")
 //    mymessbox.h:58 -> void ShowMyMessage(AnsiString,AnsiString="",...)
 //    vclcompat       -> HexStrToInt(char*) and HexStrToInt(AnsiString) overloads
@@ -182,21 +197,1313 @@ void SYSTEM_MODULAR::SystemModularInitial()
 }
 
 // ---------------------------------------------------------------------------
-//  #if 0: ReadGeneralIni  (database.cpp:301-1537, ~1240 lines)
-//  Deferred: pulls ~hundreds of cmydef/cprod globals via CheckAndReadIniDataGeneral.
-//  Also calls LoadIoData() at database.cpp:1091 (gated internally behind IO_CARD_TYPE).
-//  The LoadIoData/LoadMotData functions themselves are active in this batch;
-//  only their ReadGeneralIni call-site is deferred.
+//  SYSTEM_MODULAR::ReadGeneralIni()  (golden database.cpp:301-1537, 1237 lines)
+//
+//  ACTIVE as of GA-1-B6.  Faithful 1:1 translation: every key name, group
+//  name, default value and read order is preserved verbatim; only the
+//  Chinese prose in comments is translated to English (matches this file's
+//  own established convention -- see file-head banner).
+//
+//  GATED SUB-BLOCKS (range-clause: do not add fields to shared headers;
+//  gate instead, report to the main loop):
+//    1. CustomerFunctionSelect() / ReadLastSetIni() / ReadEventLogAutoSaveInfo()
+//       call-sites -- all three are DECLARED in cprod.h (active) but their
+//       BODIES sit inside cprod.cpp's own file-wide
+//       "#if 0 // TODO(W6): function bodies depend on untranslated state
+//       machines + globals" gate (cprod.cpp:184-4036).  Calling them here
+//       would compile but fail to LINK.  Golden's call order preserved as
+//       gated statements (not deleted) so a future wave can un-gate by
+//       simply removing the #if 0/#endif once cprod.cpp's W6 wave lands.
+//    2. TTLRS232VerCheck (golden database.cpp:1097) -- declared in golden's
+//       MessageDef.h/.cpp, which has NO ported counterpart at all yet (the
+//       whole module is untranslated, not merely gated inside an existing
+//       ported file).  Not a "shared header" per the range clause (Config.h/
+//       cmydef.h/cpublic.h/cprod.h/CosFunction.h/canary_support.h) -- it is
+//       simply missing.  Gated; TTLRS232VerCheck stays whatever it already
+//       is (uninitialized until MessageDef wave lands elsewhere).
+//    3. MOTIONNET_SPEED's default value COMMSPEED_20M (golden database.cpp:1083)
+//       -- #define lives in golden's Motor/mn200.h, a driver header on the
+//       AGENTS.md read-only "definition file" list that has NOT been ported
+//       into this tree at all (no Motor/mn200.h here yet).  Gated rather than
+//       hardcoding the literal 3 (which would silently desync from golden if
+//       mn200.h's value ever changed) or adding a new file (out of this
+//       batch's write authorization: database.cpp/h + tests only).
+//    4. The interactive Application->MessageBox(...) Yes/No prompt inside the
+//       AUTO_EMPTY_COLOR missing-key seeding block (golden database.cpp:439) --
+//       vclcompat has no TApplication/MB_YESNO/IDYES Win32-dialog surface.
+//       Gated; the surrounding iTemp=1 fallback (matches golden's own
+//       pre-prompt value) is preserved so the missing-key seed path still
+//       produces a defined (if not user-confirmed) AUTO_EMPTY_COLOR.
+//
+//  All other identifiers (globals in cmydef.h; enums/#defines in MachineType.h,
+//  both already included by this TU) were verified present before writing this
+//  translation -- see _ga1_b6_report.md for the full key/field reconciliation.
 // ---------------------------------------------------------------------------
-#if 0 // TODO(wave): ReadGeneralIni -- database.cpp:301-1537
-void SYSTEM_MODULAR::ReadGeneralIni()
+void SYSTEM_MODULAR::ReadGeneralIni()                                           // Steven 20190320: Handler config read split into its own function
 {
-    // ~1240 lines of CheckAndReadIniDataGeneral assignments
-    // ...
-    // LoadIoData();   // database.cpp:1091 (inside IO_CARD_TYPE check)
-    // LoadMotData();  // called after LoadIoData
+    AnsiString str="", MachName, sIndEPCnt;
+    MyForceDirectories("D:\\GPIB9045\\system");
+    str="D:\\GPIB9045\\system\\general.ini";
+    MachName=CheckAndReadIniData(str, "Version", "Model", AnsiString("ModelNG"));                                       //jou 20200601: GPIB model read failure should alarm, must not write back model
+    if(MachName=="9045GPIB" ||
+       MachName=="9046GPIB" ||
+       MachName=="9046_32GPIB" ||                                               //Steven 20120505: if not 9045/9046, fall back to default 9045
+       MachName=="9045GPIB_12Site" ||
+       MachName=="502GPIB" ||                                                   //ChungHung 20130507: HT9045 12-site 517 update
+       MachName=="1032GPIB" ||
+       MachName=="7080GPIB")
+    {
+        bHandlerModel=true;
+    }
+    else
+    {
+//        WriteIniData(str, "Version", "Model", "9046_32GPIB");                 //jou 20200601: GPIB model read failure should alarm, must not write back model (disabled in golden)
+        bHandlerModel=false;
+        return;
+    }
+    #ifdef ASE_KaohSiung                                                        //kevin 20141222
+        WriteIniDataGeneral("System", "CUSTOMER_CODE", CC_ASE_KaohSiung);
+    #endif
+
+    CUSTOMER_CODE=CheckAndReadIniDataGeneral("System", "CUSTOMER_CODE", 0);
+    #ifdef ASE_KaohSiung                                                        //Steven 20110520: ASE-KH cross-alarm requirement
+        if(CUSTOMER_CODE!=CC_HONPREC_QC && CUSTOMER_CODE!=CC_ASE_KaohSiung_K12)                                         //Steven 20131101: add ASE-K12
+            CUSTOMER_CODE=CC_ASE_KaohSiung;
+    #else
+        if(CUSTOMER_CODE==CC_ASE_KaohSiung)
+            CUSTOMER_CODE=CC_HONPREC_QC;
+    #endif
+
+    // AI(W906-GA1-B6) 20260804: gated -- CustomerFunctionSelect/ReadLastSetIni/
+    // ReadEventLogAutoSaveInfo are declared (active) in cprod.h but their
+    // bodies are inside cprod.cpp's own file-wide TODO(W6) gate; calling them
+    // would not link.  See file-head note above.
+#if 0 // TODO(GA1-B6): CustomerFunctionSelect() -- body gated in cprod.cpp (TODO(W6)), not yet linkable
+    CustomerFunctionSelect();                                                   //customer function selection area
+#endif
+#if 0 // TODO(GA1-B6): ReadLastSetIni() -- body gated in cprod.cpp (TODO(W6)), not yet linkable
+    ReadLastSetIni();
+#endif
+#if 0 // TODO(GA1-B6): ReadEventLogAutoSaveInfo() -- body gated in cprod.cpp (TODO(W6)), not yet linkable
+    ReadEventLogAutoSaveInfo();                                                 //Steven 20110603
+#endif
+    //Temperature related-----------------------------
+    USE_NEW_TEMPCTRL_FUNCTION   =false;                                         //Steven 20100707: force old architecture for now
+
+    TEMPCTRL_NEED_UNDER_20A     =CheckAndReadIniDataGeneral("TempCtrl", "TEMPCTRL_NEED_UNDER_20A", false);              //default: HotPlate staged heating
+    bUseHotGunCheck             =CheckAndReadIniDataGeneral("TempCtrl", "UseHotGunCheck", false);                       //kevin 20190621: hot gun flow shortage detection
+    bUseHotGunFlowCheck         =CheckAndReadIniDataGeneral("TempCtrl", "UseHotGunFlowCheck", false);                   //KaiChen 20190729: Hot Gun Flow
+
+    //Caption=MachName;
+    if(MachName=="9045GPIB")
+    {
+        TEMPCTRL_HOTPLATE_TOGTHER=CheckAndReadIniDataGeneral("TempCtrl", "TEMPCTRL_HOTPLATE_TOGTHER", false);           //jou 2010-08-16: SCC Hotplate non-staged heating
+        MachineTypeChoice=Type_HT9045;
+        NEW_MAX_Index_Col =8;
+
+        WriteIniDataGeneral("TempCtrl", "bTEMPCTRL_Shuttle_TOGTHER", true);     //Steven 20150909: cancel shrimp-head staged heating
+        bTEMPCTRL_Shuttle_TOGTHER=true;
+    }
+    else if(MachName=="9045GPIB_12Site")                                        //ChungHung 20130507: HT9045 12-site 517 Index Col define
+    {
+        TEMPCTRL_HOTPLATE_TOGTHER=false;
+        MachineTypeChoice=Type_HT9045_12Site;
+        NEW_MAX_Index_Col =6;
+
+        WriteIniDataGeneral("TempCtrl", "bTEMPCTRL_Shuttle_TOGTHER", true);     //Steven 20150909: cancel shrimp-head staged heating
+        bTEMPCTRL_Shuttle_TOGTHER=true;
+    }
+    else if(MachName=="9046GPIB")
+    {
+        //TEMPCTRL_HOTPLATE_TOGTHER=false;
+        TEMPCTRL_HOTPLATE_TOGTHER=CheckAndReadIniDataGeneral("TempCtrl", "TEMPCTRL_HOTPLATE_TOGTHER", false);           //kevin 20150508 add //jou 2010-08-16: SCC Hotplate non-staged heating
+        MachineTypeChoice=Type_HT9046;
+        NEW_MAX_Index_Col=8;
+
+        WriteIniDataGeneral("TempCtrl", "bTEMPCTRL_Shuttle_TOGTHER", true);     //Steven 20150909: cancel shrimp-head staged heating
+        bTEMPCTRL_Shuttle_TOGTHER=true;
+    }
+    else if(MachName=="9046_32GPIB")
+    {
+        bTEMPCTRL_Shuttle_TOGTHER=CheckAndReadIniDataGeneral("TempCtrl", "bTEMPCTRL_Shuttle_TOGTHER", true);            //kevin 20150508 non-staged heating //Steven 20150909: cancel shrimp-head staged heating
+        TEMPCTRL_HOTPLATE_TOGTHER=false;
+        MachineTypeChoice=Type_HT9046_LS;
+        NEW_MAX_Index_Col=8;
+    }
+    else if(MachName=="502GPIB")
+    {
+        //TEMPCTRL_HOTPLATE_TOGTHER=false;
+        TEMPCTRL_HOTPLATE_TOGTHER=CheckAndReadIniDataGeneral("TempCtrl", "TEMPCTRL_HOTPLATE_TOGTHER", false);           //kevin 20150508 add //jou 2010-08-16: SCC Hotplate non-staged heating
+        MachineTypeChoice=Type_HT502;
+        NEW_MAX_Index_Col=4;
+
+        WriteIniDataGeneral("TempCtrl", "bTEMPCTRL_Shuttle_TOGTHER", true);     //Steven 20150909: cancel shrimp-head staged heating
+        bTEMPCTRL_Shuttle_TOGTHER=true;
+    }
+    else if(MachName=="7080GPIB")
+    {
+        //TEMPCTRL_HOTPLATE_TOGTHER=false;
+        TEMPCTRL_HOTPLATE_TOGTHER=CheckAndReadIniDataGeneral("TempCtrl", "TEMPCTRL_HOTPLATE_TOGTHER", false);           //kevin 20150508 add //jou 2010-08-16: SCC Hotplate non-staged heating
+        MachineTypeChoice=Type_HT7080;
+        NEW_MAX_Index_Col=4;
+
+        WriteIniDataGeneral("TempCtrl", "bTEMPCTRL_Shuttle_TOGTHER", true);     //Steven 20150909: cancel shrimp-head staged heating
+        bTEMPCTRL_Shuttle_TOGTHER=true;
+    }
+    else if(MachName=="1032GPIB")
+    {
+        //TEMPCTRL_HOTPLATE_TOGTHER=false;
+        TEMPCTRL_HOTPLATE_TOGTHER=CheckAndReadIniDataGeneral("TempCtrl", "TEMPCTRL_HOTPLATE_TOGTHER", false);           //kevin 20150508 add //jou 2010-08-16: SCC Hotplate non-staged heating
+        MachineTypeChoice=Type_HT1032;
+        NEW_MAX_Index_Col=8;
+
+        WriteIniDataGeneral("TempCtrl", "bTEMPCTRL_Shuttle_TOGTHER", true);     //Steven 20150909: cancel shrimp-head staged heating
+        bTEMPCTRL_Shuttle_TOGTHER=true;
+    }
+
+    HotGunFlowEnable            =CheckAndReadIniDataGeneral("System",       "HotGunFlowEnable", 0);                     //KaiChen 20190729: Hot Gun Flow
+    HotGunFlow_LineNo           =CheckAndReadIniDataGeneral("System",       "HotGunFlow_LineNo", 0);                    //KaiChen 20190729: Hot Gun Flow
+    HotGunFlow_DevNo            =CheckAndReadIniDataGeneral("System",       "HotGunFlow_DevNo", 0);                     //KaiChen 20190729: Hot Gun Flow
+    HotGunFlow_Gun1_ChannelNo   =CheckAndReadIniDataGeneral("System",       "HotGunFlow_Gun1_ChannelNo", 0);            //KaiChen 20190729: Hot Gun Flow
+    HotGunFlow_Gun2_ChannelNo   =CheckAndReadIniDataGeneral("System",       "HotGunFlow_Gun2_ChannelNo", 0);            //KaiChen 20190729: Hot Gun Flow
+
+    if(MachineTypeChoice==Type_HT9045 ||
+       MachineTypeChoice==Type_HT502)                                           //Steven 20190307: add for HT-9046LA
+        SubMachineType=Type_None;
+    else
+        SubMachineType=CheckAndReadIniDataGeneral("Version", "SubModel", Type_None);
+
+    SHUTTLE_COOLING     =CheckAndReadIniDataGeneral("TempCtrl", "SHUTTLE_COOLING", 0.0);                                //cold-air vortex tube offset
+    VORTEX_COOLING      =CheckAndReadIniDataGeneral("TempCtrl", "VORTEX_COOLING",  0.5);                                //cold-air vortex tube start offset
+    SOCKET_OFFSET       =CheckAndReadIniDataGeneral("TempCtrl", "SOCKET_OFFSET",  10.0);                                //Socket offset
+    bUseSocketTemp      =CheckAndReadIniDataGeneral("TempCtrl", "Socket",            0);                                //9th-axis heater enable
+    bUseAuto2Empty      =CheckAndReadIniDataGeneral("System",   "bUseAuto2Empty",    0);                                //kevin 20120718: Auto2 has a splittable cylinder to feed material in
+    SHUTTLE_COOLING     =CheckRange(SHUTTLE_COOLING, 10.0, 0.0);
+    VORTEX_COOLING      =CheckRange(VORTEX_COOLING,  10.0, 0.0);
+    SOCKET_OFFSET       =CheckRange(SOCKET_OFFSET,   30.0, 0.0);
+    TC401HeaterControl  =CheckAndReadIniDataGeneral("TempCtrl", "HEATER_CTRL_TYPE", KT4H);                              //Steven 20141030: add OMRON E5DC temp controller
+    OFFLINE_ALARM       =CheckAndReadIniDataGeneral("System",   "OFFLINE_ALARM",    1);                                 //Steven 20140805
+
+    USE_AUTO_RETEST     =CheckAndReadIniDataGeneral("System", "USE_AUTO_RETEST",     (int)eartUninstall);               //ChungHung 20140317: add Auto Retest
+
+    //RogerYang 20250823: executes earlier here, moved to this spot
+    SUPPORT_2_EMPTY_EMPTY  =CheckAndReadIniDataGeneral("System", "SUPPORT_2_EMPTY_EMPTY", 0);                           //Steven 20230907: For HT-9011UC
+    int iTemp;
+    if(CheckIniData(asGeneralPath, "System", "AUTO_EMPTY_COLOR")==false)
+    {
+        if(SUPPORT_2_EMPTY_EMPTY==true)                                         //Steven 20230907: For HT-9011UC
+        {
+            iTemp=2;
+        }
+        else
+        {
+            iTemp=1;
+            // AI(W906-GA1-B6) 20260804: gated -- vclcompat has no TApplication/
+            // MB_YESNO/IDYES Win32-dialog surface.  golden prompts the operator
+            // "Machine Empty load and Color load is Auto?" and downgrades
+            // iTemp to 0 on any answer other than Yes; without the prompt we
+            // keep golden's own pre-prompt value (iTemp=1) so the missing-key
+            // seed path still writes a defined value.  See _ga1_b6_report.md.
+#if 0 // TODO(GA1-B6): Application->MessageBox(...) interactive Yes/No prompt -- no TApplication/MB_YESNO/IDYES in vclcompat
+            if(Application->MessageBox("Machine Empty load and Color load is Auto?", NULL, MB_YESNO | MB_TOPMOST) != IDYES)
+                iTemp=0;
+#endif
+        }
+        WriteIniDataGeneral("System","AUTO_EMPTY_COLOR", iTemp);
+        AUTO_EMPTY_COLOR=iTemp;
+    }
+    else
+    {
+        AUTO_EMPTY_COLOR=CheckAndReadIniDataGeneral("System", "AUTO_EMPTY_COLOR", 0);
+    }
+
+    if(USE_AUTO_RETEST==eartInstall)
+    {
+        UNLOADER_ART[eAuto1] =CheckAndReadIniDataGeneral("System", "UNLOADER_AUTO1_ART",     (int)eartInstall);         //Steven 20161221 (jou): for SCK only Auto 2 has ART
+        UNLOADER_ART[eAuto2] =CheckAndReadIniDataGeneral("System", "UNLOADER_AUTO2_ART",     (int)eartInstall);         //Steven 20161221 (jou): for SCK only Auto 2 has ART
+        UNLOADER_ART[eAuto3] =CheckAndReadIniDataGeneral("System", "UNLOADER_AUTO3_ART",     (int)eartInstall);         //Steven 20161221 (jou): for SCK only Auto 2 has ART
+
+        if(AUTO_EMPTY_COLOR>=3)                                                 //Steven 20230907: For HT-9011UC
+        {
+            UNLOADER_ART[eAuto4]    =CheckAndReadIniDataGeneral("System", "UNLOADER_AUTO4_ART",     (int)eartInstall);
+            UNLOADER_ART[eAuto5]    =CheckAndReadIniDataGeneral("System", "UNLOADER_AUTO5_ART",     (int)eartInstall);
+            if(AUTO_EMPTY_COLOR>=4)
+                UNLOADER_ART[eAuto6]=CheckAndReadIniDataGeneral("System", "UNLOADER_AUTO6_ART",     (int)eartInstall);
+            else
+                UNLOADER_ART[eAuto6]=(int)eartUninstall;
+        }
+        else
+        {
+            UNLOADER_ART[eAuto4]    =(int)eartUninstall;
+            UNLOADER_ART[eAuto5]    =(int)eartUninstall;
+            UNLOADER_ART[eAuto6]    =(int)eartUninstall;
+        }
+    }
+    else
+    {
+        UNLOADER_ART[eAuto1] =(int)eartUninstall;
+        UNLOADER_ART[eAuto2] =(int)eartUninstall;
+        UNLOADER_ART[eAuto3] =(int)eartUninstall;
+        UNLOADER_ART[eAuto4] =(int)eartUninstall;
+        UNLOADER_ART[eAuto5] =(int)eartUninstall;
+        UNLOADER_ART[eAuto6] =(int)eartUninstall;
+    }
+
+    if(CUSTOMER_CODE==CC_ASE_KaohSiung)
+        bNewCatchTrayblock = CheckAndReadIniDataGeneral("System" , "UseCatchTrayBlock"   , 1);                          //kevin 20200512: catch-tray shield trimmed short
+    else
+        bNewCatchTrayblock = CheckAndReadIniDataGeneral("System" , "UseCatchTrayBlock"   , 0);                          //kevin 20200512: catch-tray shield trimmed short
+
+    MOTOR_DRIVER_TYPE   =CheckAndReadIniDataGeneral("MotorDriver", "Type", Panasonic_DRIVER);                           //Steven 20110321: distinguish other-axis motor brand
+    USE_COLOR_TRAY_SENSOR=CheckAndReadIniDataGeneral("System",   "USE_COLOR_TRAY_SENSOR", 0);                           //20140903 wei: color Tray
+    USE_SOCKET_SENSOR=CheckAndReadIniDataGeneral("System",   "USE_SOCKET_SENSOR", 999);                                 //JerryYang 20200327: Socket sensor switched to hardware-option decision
+
+    CANBUS_METHOD=CheckAndReadIniDataGeneral("System",   "Canbus_Method", 0);   //Sam 20210518: new CanBus software configuration
+
+    for(int i=0; i<tcTotalCount; i++)                                           //Steven 20100831: ambient-check position
+    {
+        str.sprintf("AMBIENT_TEMP_CHECK%02d", i+1);
+        if(i<2)                                                                 //HotPlate default: no check
+            AMBIENT_TEMP_CHECK[i]=CheckAndReadIniDataGeneral("TempCtrl", str, false);
+        else
+            AMBIENT_TEMP_CHECK[i]=CheckAndReadIniDataGeneral("TempCtrl", str, true);
+    }
+
+    //Number display----------------------------------------------
+    NUMBER_PANEL_TYPE   =CheckAndReadIniDataGeneral("System",          "NUMBER_PANEL_TYPE",    2);
+    dNumberPanelDelay   =CheckAndReadIniDataGeneral("NUMBER_PANEL",    "NUMBER_PANEL_DELAY",   1.0);                    //Sam 20240604: display polling period changed to double
+    //Steven 20120217: Com Port made configurable
+    sNumberPanelComPort =CheckAndReadIniDataGeneral("NUMBER_PANEL",    "COM_PORT",         AnsiString("COM4"));
+    sNumberPanelComPort2=CheckAndReadIniDataGeneral("NUMBER_PANEL2",    "COM_PORT",        AnsiString("COM4"));
+
+    sTorqueComPort      =CheckAndReadIniDataGeneral("IndexDriver",     "COM_PORT",         AnsiString("COM1"));
+    sTempComPort        =CheckAndReadIniDataGeneral("TempCtrl",        "COM_PORT",         AnsiString("COM2"));
+    sTempOmronComPort   =CheckAndReadIniDataGeneral("TempCtrl",        "COM_PORT_OMRON",   AnsiString("COM7"));
+    TrayStepMotor_ComPort=CheckAndReadIniDataGeneral("TrayY", "COM PORT",  AnsiString("COM18"));
+    sTempDynamicComPort =CheckAndReadIniDataGeneral("TempCtrl",        "COM_PORT_DYNAMIC", AnsiString("COM6"));
+    sRTCComPort         =CheckAndReadIniDataGeneral("RealTimeCCD",     "Port",             AnsiString("COM3"));
+
+    asLASER_COM[0]      =CheckAndReadIniDataGeneral("Laser",        "COM_Laser_1",     AnsiString("COM16"));            //Steven 20140228: laser distance-measurement function
+    asLASER_COM[1]      =CheckAndReadIniDataGeneral("Laser",        "COM_Laser_2",     AnsiString("COM17"));            //Steven 20140228: laser distance-measurement function
+    asLASER_COM[2]      =CheckAndReadIniDataGeneral("Laser",        "COM_Laser_InArm", AnsiString("COM18"));            //Steven 20140228: laser distance-measurement function
+    asLASER_COM[3]      =CheckAndReadIniDataGeneral("Laser",        "COM_Laser_OutArm",AnsiString("COM19"));            //==> Eastsun 20260525 laser integration MissF-4: +asLASER_COM[3] COM_Laser_OutArm
+
+    sFinePitchComPort   =CheckAndReadIniDataGeneral("FinePitch",       "COM_PORT",           AnsiString("COM3"));
+    sFinePitchAdjustmentComPort =CheckAndReadIniDataGeneral("FinePitch",       "COM_PORT_Adjustment",   AnsiString("COM3"));
+
+    if(sNumberPanelComPort!="" && sNumberPanelComPort.Pos("COM")!=1)
+    {
+        sNumberPanelComPort="COM"+sNumberPanelComPort;
+    }
+
+    if(sNumberPanelComPort2!="" && sNumberPanelComPort2.Pos("COM")!=1)
+    {
+        sNumberPanelComPort2="COM"+sNumberPanelComPort2;
+    }
+
+    if(sTorqueComPort!="" && sTorqueComPort.Pos("COM")!=1)
+    {
+        sTorqueComPort="COM"+sTorqueComPort;
+    }
+
+    if(sTempComPort!="" && sTempComPort.Pos("COM")!=1)
+    {
+        sTempComPort="COM"+sTempComPort;
+    }
+
+    if(sTempOmronComPort!="" && sTempOmronComPort.Pos("COM")!=1)
+    {
+        sTempOmronComPort="COM"+sTempOmronComPort;
+    }
+
+    if(sRTCComPort!="" && sRTCComPort.Pos("COM")!=1)
+    {
+        sRTCComPort="COM"+sRTCComPort;
+    }
+
+    if(sTempDynamicComPort!="" && sTempDynamicComPort.Pos("COM")!=1)
+    {
+        sTempDynamicComPort="COM"+sTempDynamicComPort;
+    }
+
+    WEIGHT_CALIBRATION  =CheckAndReadIniDataGeneral("System",    "WEIGHT_CALIBRATION",      0);                         //Steven 20111108
+    //Shuttle Sensor-----------------------------
+    SHUTTLE_SENSOR_TYPE=CheckAndReadIniDataGeneral("System", "SHUTTLE_SENSOR_TYPE", 0);
+    NUEC_TYPE=CheckAndReadIniDataGeneral("System", "NUEC_TYPE", 0);             //Sam 20230707: EtherCAT Shuttle sensor
+    ENABLE_OUT_SHUTTLE_SENEOR=CheckAndReadIniDataGeneral("System", "ENABLE_OUT_SHUTTLE_SENEOR", true);                  //Steven 20120531: bypass out shuttle sensor
+    ENABLE_OUT_SHUTTLEY_LATCH=CheckAndReadIniDataGeneral("System", "ENABLE_OUT_SHUTTLEY_LATCH", false);                 //Steven 20170518 (jou): Out shuttle Y sensor uses LATCH
+    Use_AxisY_Sensor_2x3mode =CheckAndReadIniDataGeneral("System", "Use_AxisY_Sensor_2x3mode", false);                  //Isaac 20180402 (Steven): 2x3 mode uses Y sensor to detect Outshuttle residual
+    Bias_Mode_Use_Y_Sensor   =CheckAndReadIniDataGeneral("System", "Bias_Mode_Use_Y_Sensor", false);                    //Steven 20240805: 1x2 Bias mode uses Y sensor to detect Outshuttle residual
+
+    if(MachineTypeChoice==Type_HT9046 ||
+       MachineTypeChoice==Type_HT9046_LS ||
+       MachineTypeChoice==Type_HT1032)
+    {
+        ENABLE_OUT_SHUTTLE_SENEOR=false;
+    }
+
+    if(MachineTypeChoice==Type_HT9046_LS ||                                     //Steven 20170518 (jou): Out shuttle Y sensor uses LATCH
+       MachineTypeChoice==Type_HT1032)
+    {
+        ENABLE_OUT_SHUTTLEY_LATCH=true;
+    }
+    USE_RFID_READER=CheckAndReadIniDataGeneral("System", "USE_RFID_READER", 0);                                         //Steven 20220713: RFID Reader for SJSEMI
+
+    //Safety door----------------------------------
+    SAFE_DOOR_AMOUNT=CheckAndReadIniDataGeneral("System", "SAFE_DOOR_AMOUNT", 2);
+
+    //Tray knock--------------------------------
+    TRAY_VIBRATION=CheckAndReadIniDataGeneral("System", "TRAY_VIBRATION", 0);   //JerryYang 20170531 (wei) bool->int
+    TRAY_ARM_MODE =CheckAndReadIniDataGeneral("System", "TRAY_ARM_MODE", 0);    //Frank 20230419
+
+    USE_LOADER_VIBRATION=CheckAndReadIniDataGeneral("System", "LOADER_VIBRATION", false);                               //JerryYang 20191001: loader vibration motor
+
+    USE_TRAY_ROBOT=CheckAndReadIniDataGeneral("System", "USE_TRAY_ROBOT", 0);   //Steven 20170330 (Wei): For HT-9046LM
+    USE_LOADER_HINGE=CheckAndReadIniDataGeneral("System", "USE_LOADER_HINGE",   0);                                     //Steven 20170330 (Wei): For TSMC
+
+    //Ifor 20150708: CKD FCM Clean Air--------------------------------
+    USE_CKD_FCM_CleanAir=CheckAndReadIniDataGeneral("System", "USE_CKD_FCM_CleanAir", false);
+
+    if(USE_AUTO_RETEST==eartInstall)                                            //wei 20150807 Catch Tray Model
+    {
+        USE_CATCH_TRAY_MODEL=CheckAndReadIniDataGeneral("System", "USE_CATCH_TRAY_MODEL", 2);
+    }
+    else
+    {
+        USE_CATCH_TRAY_MODEL=CheckAndReadIniDataGeneral("System", "USE_CATCH_TRAY_MODEL", 0);
+    }
+
+    if(CUSTOMER_CODE==CC_ASE_KaohSiung)
+        bNewCatchTrayblock = CheckAndReadIniDataGeneral("System" , "UseCatchTrayBlock"   , 1);                          //kevin 20200512: catch-tray shield trimmed short
+    else
+        bNewCatchTrayblock = CheckAndReadIniDataGeneral("System" , "UseCatchTrayBlock"   , 0);                          //kevin 20200512: catch-tray shield trimmed short
+
+    USE_16_HEATER=CheckAndReadIniDataGeneral("System", "USE_16_HEATER", eht4Heater);                                    //Steven 20111011: use 16 heaters
+    if(USE_16_HEATER==eht16HeaterEJ1N)                                          //Steven 20200318: fix EJ1N read-abnormal issue
+        EJ1N_Count=4;
+    else if(USE_16_HEATER==eht32HeaterEJ1N)
+        EJ1N_Count=8;
+    else
+        EJ1N_Count=0;
+
+    //Real Time CCD--------------------------------
+    REAL_TIME_CCD   =CheckAndReadIniDataGeneral("System", "REAL_TIME_CCD", false);
+    RTC_TemperNumber=CheckAndReadIniDataGeneral("System", "RTC_TemperNumber", 1);                                       //Isaac 20201217: RTC CCD adds a second temp-sense group
+    CCD2_TEMPER     =CheckAndReadIniDataGeneral("System", "CCD2_TEMPER", false);
+    LB_TEMP         =CheckAndReadIniDataGeneral("System", "LB_TEMP", false);    //Steven 20181023: LB temperature
+    LB_TEMP_UpDown  =CheckAndReadIniDataGeneral("System", "LB_TEMP_UpDown", false);                                     //Frank 20241231: add
+    Index_ESDAir    =CheckAndReadIniDataGeneral("System", "Index_ESDAir", false);                                       //kevin 20200207: add index ESD temp
+
+    //OCR------------------------------------------
+    INSTALL_OCR=CheckAndReadIniDataGeneral("System", "INSTALL_OCR",  eocrUninstal);                                     //Steven 20120716: OCR
+    asOCRComPort=CheckAndReadIniDataGeneral("OCR",   "OCR_COM_PORT", AnsiString("COM18"));
+    asOCRwithTesterComPort=CheckAndReadIniDataGeneral("OCR",   "OCRwithTester_COM_PORT", AnsiString("COM19"));
+
+    INSTALL_OCR_YMot=CheckAndReadIniDataGeneral("System", "INSTALL_OCR_YMot",  eocrYMotUninstal);                       //Frank 20250214 add
+
+    SAFE_DOOR_LOCK  =CheckAndReadIniDataGeneral("System", "SAFE_DOOR_LOCK", false);
+    CLEAN_AIR       =CheckAndReadIniDataGeneral("IndexDriver", "CLEAN_AIR", false);                                     //ChungHung 20120821: Clean Air
+//    HighTemperatureSet150=CheckAndReadIniDataGeneral("System",  "HighTemperatureSet150", false); //wei 20150617: retrofit max temp 150C
+//    HighTemperatureSet155=CheckAndReadIniDataGeneral("System",  "HighTemperatureSet155", false); //Sam 20240118: new 155C mode
+//    HighTemperatureSet175=CheckAndReadIniDataGeneral("System",  "HighTemperatureSet175", false); //JerryYang 20160810: retrofit max temp 175C
+
+    int iTemp175=CheckAndReadIniDataGeneral("System", "HighTemperatureSet175", 0);                                      //Frank 20160705 add: retrofit max temp 175C
+    int iTemp155=CheckAndReadIniDataGeneral("System", "HighTemperatureSet155", 0);                                      //Sam 20240118: new 155C mode
+    int iTemp150=CheckAndReadIniDataGeneral("System", "HighTemperatureSet150", 0);                                      //wei 20150617: retrofit max temp 150C
+
+    if(iTemp175!=0)                                                             //Steven 20250701: unify machine temperature setting
+    {
+        iTempLimitation=CheckAndReadIniDataGeneral("System", "HighTempLimit", tTemp175);
+        iTempLimitation=tTemp175;
+    }
+    else if(iTemp155!=0)
+    {
+        iTempLimitation=CheckAndReadIniDataGeneral("System", "HighTempLimit", tTemp155);
+        iTempLimitation=tTemp155;
+    }
+    else if(iTemp150!=0)
+    {
+        iTempLimitation=CheckAndReadIniDataGeneral("System", "HighTempLimit", tTemp150);
+        iTempLimitation=tTemp150;
+    }
+    else
+    {
+        iTempLimitation=CheckAndReadIniDataGeneral("System", "HighTempLimit", tTemp130);
+    }
+
+    DewPoint_Hardware_Install=CheckAndReadIniDataGeneral("System", "DewPoint_Hardware_Install", 0);                     //Steven 20191017: dew-point meter
+//    USE_FINGER_PRINT     =CheckAndReadIniDataGeneral("System",  "USE_FINGER_PRINT", 0);//Steven 20190503: fingerprint auth
+    USE_FINGER_PRINT=0;                                                         //Steven 20240920: fingerprint auth removed
+    MAGAZINE_BIN_DISP_TYPE=CheckAndReadIniDataGeneral("System", "MAGAZINE_BIN_DISP_TYPE", 0);                           //JerryYang 20220909: add magazine
+
+    //ATC
+    ATC_SYSTEM                  =CheckAndReadIniDataGeneral("ATC", "USE_ATC_MODE",  eATCUninstall);                     //jou 2012-03-08: Enable ATC mode
+    asATC1ComPort               =CheckAndReadIniDataGeneral("ATC", "ATC1_COM_PORT", AnsiString("COM15"));
+    asATC2ComPort               =CheckAndReadIniDataGeneral("ATC", "ATC2_COM_PORT", AnsiString("COM16"));
+    asATC3ComPort               =CheckAndReadIniDataGeneral("ATC", "ATC3_COM_PORT", AnsiString("COM17"));
+    asATC4ComPort               =CheckAndReadIniDataGeneral("ATC", "ATC4_COM_PORT", AnsiString("COM18"));
+    asATCSYSTEMIP               =CheckAndReadIniDataGeneral("ATC", "ATC_SYSTEM_IP", AnsiString("172.16.8.90"));
+    asATCSYSTEMPORT             =CheckAndReadIniDataGeneral("ATC", "ATC_SYSTEM_PORT", 1234);
+    asATCSYSTEMUSEHEAT          =CheckAndReadIniDataGeneral("ATC", "ATC_SYSTEM_USEHEAT", 4);                            //Ifor 20160506: add New ATC Interface Use Heat Count
+
+    ATC_MixMode                 =CheckAndReadIniDataGeneral("ATC", "ATC_Mix_Mode",  eATCUninstall);                     //jou 2012-03-08: Enable ATC mode
+
+    if(ATC_SYSTEM==eATCHonPrecType)
+        iATC_Use_Heat_Count     =4;
+    else
+        iATC_Use_Heat_Count     =asATCSYSTEMUSEHEAT;                            //Ifor 20160506 add ATC Heat Count
+    bUseATC_SelfTestFunction    =CheckAndReadIniDataGeneral("ATC", "USE_ATC_SELFTEST", 0);                              //Ifor 20170120 (Steven): Add ATC Self Test Function Switch (General.ini only)
+    INDEX_PRESS_TYPE            =(eIndexPressType)CheckAndReadIniDataGeneral("System",       "INDEX_PRESS_TYPE",         0);                                    //Steven 20110310: 240KG
+    USE_IN_OUT_ARM_Y_PITCH      =CheckAndReadIniDataGeneral("System", "USE_IN_OUT_ARM_Y_PITCH", iXPitch60);             //jou 2012-05-15: choose Y Pitch mechanism mode
+    USE_OUT_ARM_Y_PITCH         =CheckAndReadIniDataGeneral("System", "USE_OUT_ARM_Y_PITCH", USE_IN_OUT_ARM_Y_PITCH);   //JerryYang 20251218: IN/OUT ARM support different modules
+
+    IN_OUT_ARM_Y_PITCH_MIN      =CheckAndReadIniDataGeneral("System", "IN_OUT_ARM_Y_PITCH_MIN", 1500);
+    IN_OUT_ARM_Y_PITCH_MAX      =CheckAndReadIniDataGeneral("System", "IN_OUT_ARM_Y_PITCH_MAX", 7500);
+    BASE_X_TO_HP                =CheckAndReadIniDataGeneral("System", "BASE_X_TO_HP",           6800);                  //Steven 20230826: reference-axis X to HotPlate edge distance
+    bUserDefMaxContactHeight    =CheckAndReadIniDataGeneral("Index", "EnableUserDefMaxContactHeight",   false);         //Steven 20180412: For new HT-9045 taller variant
+    dUserDefMaxContactHeight    =CheckAndReadIniDataGeneral("Index", "UserDefMaxContactHeight",   -135.0);              //Steven 20180412: For new HT-9045 taller variant
+
+    USE_OUT_SORT_ARM            =CheckAndReadIniDataGeneral("OutSortArm", "USE_OUT_SORT_ARM", eartUninstall);           //Steven 20240822: For HT-9046AU
+    USE_OUT_SORT_X_PITCH_MIN    =CheckAndReadIniDataGeneral("OutSortArm", "USE_OUT_SORT_X_PITCH_MIN", 1333);            //RogerYang 20250609: Add for 9046AU
+    USE_OUT_SORT_X_PITCH_MAX    =CheckAndReadIniDataGeneral("OutSortArm", "USE_OUT_SORT_X_PITCH_MAX", 4000);
+    USE_2nd_LOADER              =CheckAndReadIniDataGeneral("System",     "USE_2nd_LOADER",     0);                     //RogerYang 20250401: For HT-9046AU
+
+    USE_IN_Y_IS_AUTO_PITCH      =(USE_IN_OUT_ARM_Y_PITCH==iXYPitchVariable ||   //Steven 20230602: unify the Y-variable-pitch flag  //JerryYang 20251218: IN/OUT ARM support different modules
+                                  USE_IN_OUT_ARM_Y_PITCH==iXYPitch16Picker ||
+                                  USE_IN_OUT_ARM_Y_PITCH==iXYPitchBb       ||
+                                  USE_IN_OUT_ARM_Y_PITCH==iXYPitch16Bd_Be  ||   //Steven for HT7080 //Ztex 2023.12.06 Add HT-1032
+                                  USE_IN_OUT_ARM_Y_PITCH==iXYPitchIn_Bb_Out_Bc);                                        //Ztex 2024.02.24 Add HT-1132
+
+    USE_OUT_Y_IS_AUTO_PITCH     =(USE_OUT_ARM_Y_PITCH==iXYPitchVariable ||      //Steven 20230602: unify the Y-variable-pitch flag  //JerryYang 20251218: IN/OUT ARM support different modules
+                                  USE_OUT_ARM_Y_PITCH==iXYPitch16Picker ||
+                                  USE_OUT_ARM_Y_PITCH==iXYPitchBb       ||
+                                  USE_OUT_ARM_Y_PITCH==iXYPitch16Bd_Be  ||      //Steven for HT7080 //Ztex 2023.12.06 Add HT-1032
+                                  USE_OUT_ARM_Y_PITCH==iXYPitchIn_Bb_Out_Bc);   //Ztex 2024.02.24 Add HT-1132
+
+    USE_16PICKER_TYPE           =(USE_PICKER_COUNT==ep16Picker ||
+                                  USE_IN_OUT_ARM_Y_PITCH==iXYPitch16Bd_Be)?1:0;                                         //Ztex 2023.12.06 Add HT-1032
+
+    #ifdef FOR_QLE
+        if(CUSTOMER_CODE==CC_SPIL_CHINA_SUZHOU)
+        {
+            SPIL_FOR_QLE=1;
+            WriteIniDataGeneral("System", "SPIL_FOR_QLE",  SPIL_FOR_QLE);       //Steven 20230110: For Qu Liang
+        }
+    #else
+        if(CUSTOMER_CODE==CC_SPIL_CHINA_SUZHOU)
+            SPIL_FOR_QLE        =CheckAndReadIniDataGeneral("System", "SPIL_FOR_QLE", 0);
+        else
+            SPIL_FOR_QLE        =0;
+    #endif
+
+    //AI(ht9045-v899) 20260417: read AutoDeviceEjection flag from Gerneral.ini
+    bAutoDeviceEjection=CheckAndReadIniDataGeneral("System", "bAutoDeviceEjection", 0);
+
+    if(SPIL_FOR_QLE==1 && ATC_SYSTEM==eATCUninstall && MachName=="9045GPIB")    //Steven 20230110: Index safe-height default-enabled for QuLiang's Chamber-equipped 9045
+    {
+        bUser_Define_IndexZ_SafePos =CheckAndReadIniDataGeneral("Index", "EnableUser_Define_IndexZ_SafePos",   1);      //Richard 20230107: SPIL customer-defined install height (200~800)
+        dUserDefineIndexZSafePos    =CheckAndReadIniDataGeneral("Index", "UserDefineIndexZSafePos",   800);             //Richard 20230107: SPIL customer-defined install height (200~800)
+    }
+    else
+    {
+        bUser_Define_IndexZ_SafePos =CheckAndReadIniDataGeneral("Index", "EnableUser_Define_IndexZ_SafePos",   false);  //Richard 20230107: SPIL customer-defined install height (200~800)
+        dUserDefineIndexZSafePos    =CheckAndReadIniDataGeneral("Index", "UserDefineIndexZSafePos",   200);             //Richard 20230107: SPIL customer-defined install height (200~800)
+    }
+
+    if(dUserDefineIndexZSafePos<200)
+        dUserDefineIndexZSafePos=200;
+    else if(dUserDefineIndexZSafePos>800)
+        dUserDefineIndexZSafePos=800;
+
+    USE_PICKER_COUNT            =CheckAndReadIniDataGeneral("System",       "USE_PICKER_COUNT",     1);                 //Steven 20161117: for HT-9045S
+
+    LOAD_Z_USE_MOTOR[0]=CheckAndReadIniDataGeneral("TrayZ", "LOAD_Z_USE_MOTOR", false);                                 //Steven 20190813: switch loader Tray to stepper motor
+    LOAD_Z_USE_MOTOR[1]=CheckAndReadIniDataGeneral("TrayZ", "EMPTY_Z_USE_MOTOR", false);
+    LOAD_Z_USE_MOTOR[2]=CheckAndReadIniDataGeneral("TrayZ", "COLOR_Z_USE_MOTOR", false);
+    LOAD_Z_USE_MOTOR[3]=CheckAndReadIniDataGeneral("TrayZ", "AUTO1_Z_USE_MOTOR", false);
+    LOAD_Z_USE_MOTOR[4]=CheckAndReadIniDataGeneral("TrayZ", "AUTO2_Z_USE_MOTOR", false);
+    LOAD_Z_USE_MOTOR[5]=CheckAndReadIniDataGeneral("TrayZ", "AUTO3_Z_USE_MOTOR", false);
+    LOAD_Z_USE_MOTOR[6]=CheckAndReadIniDataGeneral("TrayZ", "AUTO4_Z_USE_MOTOR", false);                                //Steven 20230907: For HT-9011UC
+    LOAD_Z_USE_MOTOR[7]=CheckAndReadIniDataGeneral("TrayZ", "AUTO5_Z_USE_MOTOR", false);
+    LOAD_Z_USE_MOTOR[8]=CheckAndReadIniDataGeneral("TrayZ", "AUTO6_Z_USE_MOTOR", false);
+    LOAD_Y_USE_MOTOR[0]=(CheckAndReadIniDataGeneral("TrayY", "LOAD_Y_USE_MOTOR", false) || (INSTALL_OCR>eocrUninstal));         //Jimmychiu 20240307: switch Loader Tray to stepper motor
+    LOAD_Y_USE_MOTOR[1]=CheckAndReadIniDataGeneral("TrayY", "EMPTY_Y_USE_MOTOR", false); //AI(ht9045-v899) 20260423: enable empty y stepper
+    LOAD_Y_USE_MOTOR[2]=CheckAndReadIniDataGeneral("TrayY", "COLOR_Y_USE_MOTOR", false); //AI(ht9045-v899) 20260423: enable color y stepper
+    LOAD_Y_USE_MOTOR[3]=CheckAndReadIniDataGeneral("TrayY", "AUTO1_Y_USE_MOTOR", false); //AI(ht9045-v899) 20260423: enable auto1 y stepper
+    LOAD_Y_USE_MOTOR[4]=CheckAndReadIniDataGeneral("TrayY", "AUTO2_Y_USE_MOTOR", false); //AI(ht9045-v899) 20260423: enable auto2 y stepper
+    LOAD_Y_USE_MOTOR[5]=CheckAndReadIniDataGeneral("TrayY", "AUTO3_Y_USE_MOTOR", false); //AI(ht9045-v899) 20260423: enable auto3 y stepper
+
+    LOADUNLOAD_USE_CASSETTE[0]=CheckAndReadIniDataGeneral("TrayCassette", "LOAD_USE_Cassette",  false);
+    LOADUNLOAD_USE_CASSETTE[1]=CheckAndReadIniDataGeneral("TrayCassette", "EMPTY_USE_Cassette", false);
+    LOADUNLOAD_USE_CASSETTE[2]=CheckAndReadIniDataGeneral("TrayCassette", "COLOR_USE_Cassette", false);
+    LOADUNLOAD_USE_CASSETTE[3]=CheckAndReadIniDataGeneral("TrayCassette", "AUTO1_USE_Cassette", false);
+    LOADUNLOAD_USE_CASSETTE[4]=CheckAndReadIniDataGeneral("TrayCassette", "AUTO2_USE_Cassette", false);
+    LOADUNLOAD_USE_CASSETTE[5]=CheckAndReadIniDataGeneral("TrayCassette", "AUTO3_USE_Cassette", false);
+    LOADUNLOAD_USE_CASSETTE[6]=CheckAndReadIniDataGeneral("TrayCassette", "AUTO4_USE_Cassette", false);                 //Steven 20230907: For HT-9011UC
+    LOADUNLOAD_USE_CASSETTE[7]=CheckAndReadIniDataGeneral("TrayCassette", "AUTO5_USE_Cassette", false);
+    LOADUNLOAD_USE_CASSETTE[8]=CheckAndReadIniDataGeneral("TrayCassette", "AUTO6_USE_Cassette", false);
+
+    sIndEPCnt=CheckAndReadIniDataGeneral("System", "Individual_EP_COUNT", AnsiString("16"));
+
+    if(sIndEPCnt=="16")
+    {
+        iIndEPCnt=16;
+    }
+    else if(sIndEPCnt=="8")
+    {
+        iIndEPCnt=8;                                                            //RogerYang 20260603: Add 8EP
+    }
+    else
+    {
+        iIndEPCnt=4;                                                            //JerryYang 20210413: Add 4-independent-EP variant
+    }
+
+    if(USE_PICKER_COUNT==ep1Picker)
+    {
+        iInArmXBase=2;
+        iInArmYBase=0;
+        iOutArmXBase=2;
+        iOutArmYBase=0;
+
+        IN_OUT_ARM_Y_PITCH_MIN=1500;
+        IN_OUT_ARM_Y_PITCH_MAX=7500;
+
+        iPitchY_Max_minus_Min=IN_OUT_ARM_Y_PITCH_MAX-IN_OUT_ARM_Y_PITCH_MIN;
+
+        iInArmShtXCenterPos=-2000;
+        iInArmShtYCenterPos=-3000;
+        iOutArmShtXCenterPos=-2000;
+        iOutArmShtYCenterPos=-3000;
+    }
+    else if(USE_IN_OUT_ARM_Y_PITCH==iXYPitchVariable)                           //Steven 20141029: XY-Pitch
+    {
+        iInArmXBase=2;
+        iInArmYBase=1;
+        iOutArmXBase=1;
+        iOutArmYBase=1;
+        if(IN_OUT_ARM_Y_PITCH_MIN>IN_OUT_ARM_Y_PITCH_MAX ||
+           IN_OUT_ARM_Y_PITCH_MIN<1500 ||
+           IN_OUT_ARM_Y_PITCH_MIN>5000)
+            IN_OUT_ARM_Y_PITCH_MIN=1500;
+
+        if(IN_OUT_ARM_Y_PITCH_MAX<IN_OUT_ARM_Y_PITCH_MIN ||
+           IN_OUT_ARM_Y_PITCH_MAX>8000 ||
+           IN_OUT_ARM_Y_PITCH_MAX<5000)
+            IN_OUT_ARM_Y_PITCH_MAX=8000;                                        //kevin 20190322 change
+        iPitchY_Max_minus_Min=IN_OUT_ARM_Y_PITCH_MAX-IN_OUT_ARM_Y_PITCH_MIN;    //Jimmychiu 20221205 add y pitch minus
+        iInArmShtXCenterPos=-2000;
+        iInArmShtYCenterPos=3000;
+        iOutArmShtXCenterPos=2000;
+        iOutArmShtYCenterPos=3000;
+    }
+    else if(USE_IN_OUT_ARM_Y_PITCH==iXYPitchRowA)                               //Steven 20170424 (wei): new XY-variable-pitch
+    {
+        iInArmXBase=2;
+        iInArmYBase=0;
+        iOutArmXBase=1;
+        iOutArmYBase=0;
+
+        iInArmShtXCenterPos=-2000;
+        iInArmShtYCenterPos=3000;
+        iOutArmShtXCenterPos=2000;
+        iOutArmShtYCenterPos=3000;
+    }
+    else if(USE_IN_OUT_ARM_Y_PITCH==iXYPitch16Picker)
+    {
+        if(IN_OUT_ARM_Y_PITCH_MIN>IN_OUT_ARM_Y_PITCH_MAX ||
+           IN_OUT_ARM_Y_PITCH_MIN<2500 ||
+           IN_OUT_ARM_Y_PITCH_MIN>5000)
+            IN_OUT_ARM_Y_PITCH_MIN=2500;
+
+        if(IN_OUT_ARM_Y_PITCH_MAX<IN_OUT_ARM_Y_PITCH_MIN ||
+           IN_OUT_ARM_Y_PITCH_MAX>6500 ||
+           IN_OUT_ARM_Y_PITCH_MAX<5000)
+            IN_OUT_ARM_Y_PITCH_MAX=6500;
+
+        iPitchY_Max_minus_Min=IN_OUT_ARM_Y_PITCH_MAX-IN_OUT_ARM_Y_PITCH_MIN;    //Jimmychiu 20221205 add y pitch minus
+
+        iInArmXBase=3;
+        iInArmYBase=1;
+        iOutArmXBase=3;
+        iOutArmYBase=1;
+        iInArmShtXCenterPos =1100;
+        iInArmShtYCenterPos =3000;
+        iOutArmShtXCenterPos=1100;
+        iOutArmShtYCenterPos=3000;
+    }
+    else if(USE_IN_OUT_ARM_Y_PITCH==iXYPitchBb)                                 //Steven for HT7080
+    {
+        if(IN_OUT_ARM_Y_PITCH_MIN>IN_OUT_ARM_Y_PITCH_MAX ||
+           IN_OUT_ARM_Y_PITCH_MIN<1900 ||
+           IN_OUT_ARM_Y_PITCH_MIN>5000)
+            IN_OUT_ARM_Y_PITCH_MIN=2000;
+
+        if(IN_OUT_ARM_Y_PITCH_MAX<IN_OUT_ARM_Y_PITCH_MIN ||
+           IN_OUT_ARM_Y_PITCH_MAX>6500 ||
+           IN_OUT_ARM_Y_PITCH_MAX<5000)
+            IN_OUT_ARM_Y_PITCH_MAX=6000;
+
+        iPitchY_Max_minus_Min=IN_OUT_ARM_Y_PITCH_MAX-IN_OUT_ARM_Y_PITCH_MIN;    //Jimmychiu 20221205 add y pitch minus
+
+        iInArmXBase=1;
+        iInArmYBase=1;
+        iOutArmXBase=2;
+        iOutArmYBase=1;
+        iInArmShtXCenterPos =2000;
+        iInArmShtYCenterPos =3000;
+        iOutArmShtXCenterPos=-2000;
+        iOutArmShtYCenterPos=3000;
+    }
+    else if(USE_IN_OUT_ARM_Y_PITCH==iXYPitch16Bd_Be)                            //Ztex 2023.12.06 Add HT-1032
+    {
+        if(IN_OUT_ARM_Y_PITCH_MIN>IN_OUT_ARM_Y_PITCH_MAX ||
+           IN_OUT_ARM_Y_PITCH_MIN<2500 ||
+           IN_OUT_ARM_Y_PITCH_MIN>5000)
+            IN_OUT_ARM_Y_PITCH_MIN=2500;
+
+        if(IN_OUT_ARM_Y_PITCH_MAX<IN_OUT_ARM_Y_PITCH_MIN ||
+           IN_OUT_ARM_Y_PITCH_MAX>6500 ||
+           IN_OUT_ARM_Y_PITCH_MAX<5000)
+            IN_OUT_ARM_Y_PITCH_MAX=6500;
+
+        iPitchY_Max_minus_Min=IN_OUT_ARM_Y_PITCH_MAX-IN_OUT_ARM_Y_PITCH_MIN;    //Jimmychiu 20221205 add y pitch minus
+
+        iInArmXBase=3;
+        iInArmYBase=1;
+        iOutArmXBase=3;
+        iOutArmYBase=1;
+        iInArmShtXCenterPos =1100;
+        iInArmShtYCenterPos =3000;
+        iOutArmShtXCenterPos=1100;
+        iOutArmShtYCenterPos=3000;
+    }
+    else if(USE_IN_OUT_ARM_Y_PITCH==iXYPitchIn_Bb_Out_Bc)                       //Ztex 2024.02.24 Add HT-1132
+    {
+        if(IN_OUT_ARM_Y_PITCH_MIN>IN_OUT_ARM_Y_PITCH_MAX ||
+           IN_OUT_ARM_Y_PITCH_MIN<2500 ||
+           IN_OUT_ARM_Y_PITCH_MIN>5000)
+            IN_OUT_ARM_Y_PITCH_MIN=2500;
+
+        if(IN_OUT_ARM_Y_PITCH_MAX<IN_OUT_ARM_Y_PITCH_MIN ||
+           IN_OUT_ARM_Y_PITCH_MAX>6500 ||
+           IN_OUT_ARM_Y_PITCH_MAX<5000)
+            IN_OUT_ARM_Y_PITCH_MAX=6500;
+
+        iPitchY_Max_minus_Min=IN_OUT_ARM_Y_PITCH_MAX-IN_OUT_ARM_Y_PITCH_MIN;    //Jimmychiu 20221205 add y pitch minus
+
+        iInArmXBase=1;
+        iInArmYBase=1;
+        iOutArmXBase=2;
+        iOutArmYBase=1;
+        iInArmShtXCenterPos =1100;
+        iInArmShtYCenterPos =3250;
+        iOutArmShtXCenterPos=1100;
+        iOutArmShtYCenterPos=3250;
+    }
+    else
+    {
+        IN_OUT_ARM_Y_PITCH_MIN=0;
+    }
+
+    if(USE_OUT_ARM_Y_PITCH==iXPitch60 || USE_OUT_ARM_Y_PITCH==iXPitchManual635)                                         //JerryYang 20251218: IN/OUT ARM support different modules
+    {
+        iOutArmXBase=2;
+        iOutArmYBase=0;
+
+        iOutArmShtXCenterPos=-2000;
+        iOutArmShtYCenterPos=-3000;
+    }
+
+    if(USE_IN_OUT_ARM_Y_PITCH==iXYPitch16Picker ||
+       USE_IN_OUT_ARM_Y_PITCH==iXYPitch16Bd_Be  ||                              //Ztex 2023.12.06 Add HT-1032
+       iInArmXBase==2)
+    {
+        if(BASE_X_TO_HP<6800)                                                   //Steven 20230826: reference-axis X to HotPlate edge distance
+            BASE_X_TO_HP=6800;                                                  // >7000 : HT-9xxx, HT-1032AT
+    }
+    else
+    {
+        if(BASE_X_TO_HP>4000)                                                   // <0    : HT1040, HT-7080B
+            BASE_X_TO_HP=4000;                                                  // <4000 : HT1028
+    }
+
+    //Isaac 20171204 (Steven): Xpitch40->50mm selectable X Pitch mechanism mode
+    //==>
+    USE_IN_OUT_ARM_X_PITCH      =CheckAndReadIniDataGeneral("System", "USE_IN_OUT_ARM_X_PITCH", iXPitch40mm);
+    if(USE_IN_OUT_ARM_X_PITCH==iXPitch40mm)
+    {
+        IN_OUT_ARM_X_PITCH_MIN=CheckAndReadIniDataGeneral("System", "IN_OUT_ARM_X_PITCH_MIN", 4000);
+        IN_OUT_ARM_X_PITCH_MAX=CheckAndReadIniDataGeneral("System", "IN_OUT_ARM_X_PITCH_MAX", 12000);
+        iXpitchMin          =1333;                                              //Steven 20180522: X-Pitch minimum
+        iXpitchMinX2        =2666;
+        iXpitchMinX3        =4000;
+        iXpitchMax          =4000;
+        iXpitchMaxX2        =8000;
+        iXpitchMaxX3        =12000;
+        iPitch_Max_minus_Min=iXpitchMaxX3-iXpitchMinX3;
+    }
+    else if(USE_IN_OUT_ARM_X_PITCH==iXPitch50mm)
+    {
+        IN_OUT_ARM_X_PITCH_MIN=CheckAndReadIniDataGeneral("System", "IN_OUT_ARM_X_PITCH_MIN", 4000);
+        IN_OUT_ARM_X_PITCH_MAX=CheckAndReadIniDataGeneral("System", "IN_OUT_ARM_X_PITCH_MAX", 15000);
+        iXpitchMin          =1333;                                              //Steven 20180522: X-Pitch minimum
+        iXpitchMinX2        =2666;
+        iXpitchMinX3        =4000;
+        iXpitchMax          =5000;
+        iXpitchMaxX2        =10000;
+        iXpitchMaxX3        =15000;
+        iPitch_Max_minus_Min=iXpitchMaxX3-iXpitchMinX3;
+    }
+    else if(USE_IN_OUT_ARM_X_PITCH==iXPitch16Pick)
+    {
+        IN_OUT_ARM_X_PITCH_MIN=CheckAndReadIniDataGeneral("System", "IN_OUT_ARM_X_PITCH_MIN", 7700);
+        IN_OUT_ARM_X_PITCH_MAX=CheckAndReadIniDataGeneral("System", "IN_OUT_ARM_X_PITCH_MAX", 15400);
+        iXpitchMin          =1100;                                              //Steven 20180522: X-Pitch minimum
+        iXpitchMinX2        =2200;
+        iXpitchMinX3        =3300;
+        iXpitchMinX4        =4400;
+        iXpitchMinX5        =5500;
+        iXpitchMinX6        =6600;
+        iXpitchMinX7        =7700;
+        iXpitchMax          =2200;
+        iXpitchMaxX2        =4400;
+        iXpitchMaxX3        =6600;
+        iXpitchMaxX4        =8800;
+        iXpitchMaxX5        =11000;
+        iXpitchMaxX6        =13200;
+        iXpitchMaxX7        =15400;
+        iPitch_Max_minus_Min=iXpitchMaxX7-iXpitchMinX7;
+    }
+    else                                                                        //JimmyChiu 20220708: add Auto X pitch
+    {
+        IN_OUT_ARM_X_PITCH_MIN=CheckAndReadIniDataGeneral("System", "IN_OUT_ARM_X_PITCH_MIN", 6000);                    //JimmyChiu 20220708: add Auto X pitch
+        IN_OUT_ARM_X_PITCH_MAX=CheckAndReadIniDataGeneral("System", "IN_OUT_ARM_X_PITCH_MAX", 12000);                   //JimmyChiu 20220708: add Auto X pitch
+        if(IN_OUT_ARM_X_PITCH_MIN>IN_OUT_ARM_X_PITCH_MAX)
+        {
+            int itemp=IN_OUT_ARM_X_PITCH_MIN;
+            IN_OUT_ARM_X_PITCH_MIN=IN_OUT_ARM_X_PITCH_MAX;
+            IN_OUT_ARM_X_PITCH_MAX=itemp;
+        }
+        iXpitchMin          =IN_OUT_ARM_X_PITCH_MIN/3;                          //Steven 20180522: X-Pitch minimum
+        iXpitchMinX2        =double(IN_OUT_ARM_X_PITCH_MIN)/3.0*2.0;
+        iXpitchMinX3        =IN_OUT_ARM_X_PITCH_MIN;
+        iXpitchMax          =IN_OUT_ARM_X_PITCH_MAX/3;
+        iXpitchMaxX2        =double(IN_OUT_ARM_X_PITCH_MAX)/3.0*2.0;
+        iXpitchMaxX3        =IN_OUT_ARM_X_PITCH_MAX;
+        iPitch_Max_minus_Min=iXpitchMaxX3-iXpitchMinX3;
+    }
+
+    iXpitchMaxX1_MM=iXpitchMax/100.0;
+    iXpitchMaxX2_MM=iXpitchMaxX2/100.0;
+    iXpitchMaxX3_MM=iXpitchMaxX3/100.0;
+    iXpitchMaxX4_MM=iXpitchMaxX4/100.0;
+    iXpitchMaxX5_MM=iXpitchMaxX5/100.0;
+    iXpitchMaxX6_MM=iXpitchMaxX6/100.0;
+    iXpitchMaxX7_MM=iXpitchMaxX7/100.0;
+    iXpitchMinX1_MM=iXpitchMin/100.0;
+    iXpitchMinX2_MM=iXpitchMinX2/100.0;
+    iXpitchMinX3_MM=iXpitchMinX3/100.0;
+    iXpitchMinX4_MM=iXpitchMinX4/100.0;
+    iXpitchMinX5_MM=iXpitchMinX5/100.0;
+    iXpitchMinX6_MM=iXpitchMinX6/100.0;
+    iXpitchMinX7_MM=iXpitchMinX7/100.0;
+    //<==
+    //Isaac 20171204 (Steven): Xpitch40->50mm selectable X Pitch mechanism mode
+
+    AnsiString sVer=CheckAndReadIniDataGeneral("Version", "Ver", AnsiString(""));
+
+    #ifdef ASE_KaohSiung
+    if(CUSTOMER_CODE==CC_ASE_KaohSiung)                                         //kevin 20191225 (wei): version record fetchable remotely by customer
+    {
+        #ifdef HiSilicon
+            if(MACHINE_HAS_AUTO_ALIGNMENT_CCD &&
+               TestIF.bEnableAutoAlignment==true)                               //KenHsieh 20211015: ASE requires AOA appended to version string
+                sVer=AnsiString(HISI_VERSION)+AnsiString(ASE_AOA);
+            else
+                sVer=AnsiString(HISI_VERSION)+AnsiString(HISI_ASE);             //kevin 20180514
+        #else                                                                   //kevin 20190820: drop HT9046 version number
+             if(MACHINE_HAS_AUTO_ALIGNMENT_CCD &&
+                TestIF.bEnableAutoAlignment==true)                              //KenHsieh 20211015: ASE requires AOA appended to version string
+                sVer=AnsiString(MainVersion)+AnsiString(ASE_AOA);
+            else
+                sVer=AnsiString(MainVersion)+AnsiString(HISI_ASE);
+        #endif
+        WriteIniDataGeneral("Version", "Ver",       sVer);                      //2014-05-30 Dell: for ATC6.0
+        WriteIniDataGeneral("Version", "DefineVer", AnsiString(Record_Ver));    //2014-05-30 Dell: for ATC6.0
+    }
+    #endif
+
+    //------------------------------------------
+    INSTALL_HEAT_GUN        =CheckAndReadIniDataGeneral("System",       "INSTALL_HEAT_GUN",     0);                     //kevin 20120523: choose AirGUN mechanism mode
+    INSTALL_ATC_HEAT_GUN    =CheckAndReadIniDataGeneral("System",       "INSTALL_ATC_HEAT_GUN", 0);                     //JerryYang 20220408: add for ATC3.5
+    USE_HOTPLATE_TYPE       =CheckAndReadIniDataGeneral("System",       "USE_HOTPLATE_TYPE",    0);                     //jou 2012-05-15: choose Hotplate Type
+    USE_MAGNETIC_SCALE      =CheckAndReadIniDataGeneral("System",       "USE_MAGNETIC_SCALE",   0);                     //Steven 20160426: magnetic scale
+    USE_IO_CHANGE_TOQUE     =CheckAndReadIniDataGeneral("IndexDriver",  "USE_IO_CHANGE_TOQUE",  0);                     //jou 2012-06-21: Enable index I/O Change Toque
+    MOTION_CARD_TYPE        =CheckAndReadIniDataGeneral("System",       "MOTION_CARD_TYPE",     0);                     //Brian 20121015: choose Motion Card mode
+    // AI(W906-GA1-B6) 20260804: gated -- COMMSPEED_20M (#define, golden's
+    // Motor/mn200.h) has no ported header at all yet.  See file-head note.
+#if 0 // TODO(GA1-B6): MOTIONNET_SPEED default COMMSPEED_20M -- not yet in any ported header (Motor/mn200.h untranslated driver header)
+    MOTIONNET_SPEED         =CheckAndReadIniDataGeneral("System",       "MOTIONNET_SPEED",      COMMSPEED_20M);         //Steven 20181122: MNet speed needs to be editable
+#endif
+    IO_CARD_TYPE            =CheckAndReadIniDataGeneral("System",       "IO_CARD_TYPE",         0);                     //Brian 20121015: choose I/O Card mode
+    USE_ReadIndex_TOQUE     =CheckAndReadIniDataGeneral("IndexDriver",  "USE_ReadIndex_TOQUE",  0);                     //kevin 20201027
+    USE_INDEX_ARM_AXES      =CheckAndReadIniDataGeneral("IndexDriver",  "USE_INDEX_ARM_AXES",   0);                     //JimmyChiu 20220708: add Index Arm Axis
+
+    if(IO_CARD_TYPE==NewIO_MN200 ||
+       IO_CARD_TYPE==PCI_P64C64 )                                               //Steven 20231218 HT7080B
+    {
+        LoadIoData();
+    }
+
+    TTL_CARD_TYPE           =CheckAndReadIniDataGeneral("System",       "TTL_CARD_TYPE",        0);                     //Steven 20121122: choose TTL Card mode
+    if(TTL_CARD_TYPE==2)                                                        //Isaac 20210511: TTLRS232 board version check, 1 board
+    {
+        // AI(W906-GA1-B6) 20260804: gated -- TTLRS232VerCheck is declared/defined
+        // in golden's MessageDef.h/.cpp, which has NO ported file at all yet
+        // (not merely a gate inside an existing ported file). See file-head note.
+#if 0 // TODO(GA1-B6): TTLRS232VerCheck -- not yet in any ported header (MessageDef.h/.cpp untranslated)
+        TTLRS232VerCheck=7071601;                                               //07071601
+#endif
+    }
+    TTL_CARD_USE_ADDRESS    =CheckAndReadIniDataGeneral("System",       "TTL_CARD_USE_ADDRESS",        0);              //Isaac 20210922: choose whether TTL board carries site number
+
+    INSTALL_SOCKET_CLAMP    =CheckAndReadIniDataGeneral("System",       "INSTALL_SOCKET_CLAMP", 0);                     //JerryYang 20160523: retrofit to split type
+    INSTALL_DOUBLE_EP       =CheckAndReadIniDataGeneral("System",       "INSTALL_DOUBLE_EP", 0);                        //Ifor 20190104: Add Double EP Control
+    CHECK_EP_SETTING        =CheckAndReadIniDataGeneral("System",       "CHECK_EP_SETTING", 1);                         //Steven 20240701: EP-check feature gets an on/off switch
+    bAutoTrackCanGoRear     =CheckAndReadIniDataGeneral("System",       "bAutoTrackCanGoRear",   0);                    //Isaac 20180109 (Steven): auto123 can go forward/back
+    bNoAutoZSelect          =CheckAndReadIniDataGeneral("System",       "bAutoZNoUseART",   0);                         //kevin 20181023 add ART Auto 1 2 3: use single-stage cylinder k21 false use 2-stage cylinder
+    IN_SHT_LAST_SENSOR      =CheckAndReadIniDataGeneral("System",       "IN_SHT_LAST_SENSOR",   0);                     //Steven 20181203: In Shuttle last-sensor definition
+    USE_PRECISER            =CheckAndReadIniDataGeneral("System",       "USE_PRECISER",         0);                     //Frank 20180410 (Steven): InArm Preciser Station
+    USE_InPlacement         =CheckAndReadIniDataGeneral("System",       "USE_InPlacement", eartUninstall);              //JimmyChiu 20220908 add Pickup Error Placement
+    iPreciserInstallArea    =CheckAndReadIniDataGeneral("System", "iPreciserInstallArea", 0);                           //Ifor 20191008: add Preciser Install Area
+    //Barcode_2D
+    BOTTOM_2DID             =CheckAndReadIniDataGeneral("2D_BarCode", "BOTTOM_2DID",       ebctUninstall);              //Steven 20190308: Bottom 2D
+    if(BOTTOM_2DID==1)
+        BAR_CODE_INSTALL    =ebctUseCCDMode;
+    else
+        BAR_CODE_INSTALL    =CheckRange(CheckAndReadIniDataGeneral("2D_BarCode", "BAR_CODE_INSTALL", ebctUninstall), (int)ebctUninstall, (int)ebcUseOCR);       //Steven 20120921: Barcode_2D //Ifor 20190129: add Cognex EtherNet comm
+    SHT_FLOATING_CHK        =CheckAndReadIniDataGeneral("2D_BarCode", "SHT_FLOATING_CHK",  ebctUninstall);              //Steven 20160920: IC displacement check
+    BOTTOM_2DID_CCD         =CheckAndReadIniDataGeneral("2D_BarCode", "BOTTOM_2DID_CCD",   ebctUninstall);              //KaiChen 20200513: Bottom 2D 8CCD
+    asBarCodeComPort[0]     =CheckAndReadIniDataGeneral("2D_BarCode",   "BarCode1_COM_PORT"     , AnsiString("COM15"));
+    asBarCodeComPort[1]     =CheckAndReadIniDataGeneral("2D_BarCode",   "BarCode2_COM_PORT"     , AnsiString("COM16"));
+    asBarCodeComPort[2]     =CheckAndReadIniDataGeneral("2D_BarCode",   "BarCode3_COM_PORT"     , AnsiString("COM17"));
+    asBarCodeComPort[3]     =CheckAndReadIniDataGeneral("2D_BarCode",   "BarCode4_COM_PORT"     , AnsiString("COM18"));
+
+//----------------------------------
+    MACHINE_HAS_AUTO_ALIGNMENT_CCD  =CheckAndReadIniDataGeneral("System", "MACHINE_HAS_AUTO_ALIGNMENT_CCD", 0);         //ChungHung 20210113 add for Alignment CCD //KenHsieh 20210813: add CCD AUTO ALIGNMENT
+//----------------------------------
+
+    BAR_CODE_USECOUNT       =CheckRange(CheckAndReadIniDataGeneral("2D_BarCode", "BAR_CODE_USECOUNT", 4), 2, 4);        //Ifor 20190129: add COGNEX SYSTEM CCD Count //Steven 20190904: default changed to 4
+    if(BAR_CODE_INSTALL==ebctEtherNetCCD)                                       //Ifor 20180104: add Cognex EtherNet comm
+    {
+        asCCDBarCodeIP[0]       =CheckAndReadIniDataGeneral("2D_BarCode",   "Use_CCDShuttle_1A_IP"     , AnsiString("172.16.8.210"));                           //Ifor 20151224 CCD 2D
+        asCCDBarCodeIP[1]       =CheckAndReadIniDataGeneral("2D_BarCode",   "Use_CCDShuttle_1B_IP"     , AnsiString("172.16.8.211"));                           //Ifor 20151224 CCD 2D
+        asCCDBarCodeIP[2]       =CheckAndReadIniDataGeneral("2D_BarCode",   "Use_CCDShuttle_2A_IP"     , AnsiString("172.16.8.212"));                           //Ifor 20151224 CCD 2D
+        asCCDBarCodeIP[3]       =CheckAndReadIniDataGeneral("2D_BarCode",   "Use_CCDShuttle_2B_IP"     , AnsiString("172.16.8.213"));                           //Ifor 20151224 CCD 2D
+
+        asCCDBarCodePort[0]     =CheckAndReadIniDataGeneral("2D_BarCode",   "Use_CCDShuttle_1A_Port"   , AnsiString("5001"));                                   //Ifor 20151224 CCD 2D
+        asCCDBarCodePort[1]     =CheckAndReadIniDataGeneral("2D_BarCode",   "Use_CCDShuttle_1B_Port"   , AnsiString("5001"));                                   //Ifor 20151224 CCD 2D
+        asCCDBarCodePort[2]     =CheckAndReadIniDataGeneral("2D_BarCode",   "Use_CCDShuttle_2A_Port"   , AnsiString("5001"));                                   //Ifor 20151224 CCD 2D
+        asCCDBarCodePort[3]     =CheckAndReadIniDataGeneral("2D_BarCode",   "Use_CCDShuttle_2B_Port"   , AnsiString("5001"));                                   //Ifor 20151224 CCD 2D
+    }
+    else
+    {
+        if(BAR_CODE_INSTALL==ebcUseOCR)                                         //Ifor 20210407 add: self-made OCR
+        {
+            asCCDBarCodeIP[0]   =CheckAndReadIniDataGeneral("2D_BarCode",   "Use_CCDShuttle_1A_IP"     , AnsiString("172.16.8.70"));                            //Ifor 20210407 add: self-made OCR
+            asCCDBarCodeIP[1]   =CheckAndReadIniDataGeneral("2D_BarCode",   "Use_CCDShuttle_1B_IP"     , AnsiString("172.16.8.70"));                            //Ifor 20210407 add: self-made OCR
+            asCCDBarCodeIP[2]   =CheckAndReadIniDataGeneral("2D_BarCode",   "Use_CCDShuttle_2A_IP"     , AnsiString("172.16.8.70"));                            //Ifor 20210407 add: self-made OCR
+            asCCDBarCodeIP[3]   =CheckAndReadIniDataGeneral("2D_BarCode",   "Use_CCDShuttle_2B_IP"     , AnsiString("172.16.8.70"));                            //Ifor 20210407 add: self-made OCR
+        }
+        else
+        {
+            asCCDBarCodeIP[0]   =CheckAndReadIniDataGeneral("2D_BarCode",   "Use_CCDShuttle_1A_IP"     , AnsiString("172.16.8.200"));                           //Ifor 20151224 CCD 2D
+            asCCDBarCodeIP[1]   =CheckAndReadIniDataGeneral("2D_BarCode",   "Use_CCDShuttle_1B_IP"     , AnsiString("172.16.8.200"));                           //Ifor 20151224 CCD 2D
+            asCCDBarCodeIP[2]   =CheckAndReadIniDataGeneral("2D_BarCode",   "Use_CCDShuttle_2A_IP"     , AnsiString("172.16.8.200"));                           //Ifor 20151224 CCD 2D
+            asCCDBarCodeIP[3]   =CheckAndReadIniDataGeneral("2D_BarCode",   "Use_CCDShuttle_2B_IP"     , AnsiString("172.16.8.200"));                           //Ifor 20151224 CCD 2D
+        }
+        asCCDBarCodePort[0]     =CheckAndReadIniDataGeneral("2D_BarCode",   "Use_CCDShuttle_1A_Port"   , AnsiString("5001"));                                   //Ifor 20151224 CCD 2D
+        asCCDBarCodePort[1]     =CheckAndReadIniDataGeneral("2D_BarCode",   "Use_CCDShuttle_1B_Port"   , AnsiString("5002"));                                   //Ifor 20151224 CCD 2D
+        asCCDBarCodePort[2]     =CheckAndReadIniDataGeneral("2D_BarCode",   "Use_CCDShuttle_2A_Port"   , AnsiString("5003"));                                   //Ifor 20151224 CCD 2D
+        asCCDBarCodePort[3]     =CheckAndReadIniDataGeneral("2D_BarCode",   "Use_CCDShuttle_2B_Port"   , AnsiString("5004"));                                   //Ifor 20151224 CCD 2D
+    }
+    //RogerYang 20180901 add Sun-Chip HuKou Demo AI CCD Function
+    //==>
+    asFix2BGAAICCDIP[0]     =CheckAndReadIniDataGeneral("Fix_AI_CCD",    "Fix_BGA_AI_CCD_IP"           , AnsiString("172.16.8.210"));
+    asFix2BGAAICCDPort[0]   =CheckAndReadIniDataGeneral("Fix_AI_CCD",    "Fix_BGA_AI_CCD_Port"         , AnsiString("8000"));
+    asFix2BGAAICCDIP[1]     =CheckAndReadIniDataGeneral("Fix_AI_CCD",    "Fix_BGA_AI_CCD_IP2"          , AnsiString("172.16.8.210"));
+    asFix2BGAAICCDPort[1]   =CheckAndReadIniDataGeneral("Fix_AI_CCD",    "Fix_BGA_AI_CCD_Port2"        , AnsiString("8001"));
+    asVisionLightPort       =CheckAndReadIniDataGeneral("Fix_AI_CCD",    "Vision_Light_PORT"           , AnsiString("COM8"));
+    //<==
+    //RogerYang 20180901 add Sun-Chip HuKou Demo AI CCD Function
+
+    BarcodeBaudRate         =CheckAndReadIniDataGeneral("2D_BarCode",   "BaudRate"              , 9600);
+    InBarcodeBaudRate       =CheckAndReadIniDataGeneral("2D_BarCode",   "InBaudRate"            , 9600);
+    BarcodeByteSize         =CheckAndReadIniDataGeneral("2D_BarCode",   "ByteSize"              , 8);
+    BarcodeStopBit          =CheckAndReadIniDataGeneral("2D_BarCode",   "StopBit"               , 1);
+    BarcodeParity           =CheckAndReadIniDataGeneral("2D_BarCode",   "Parity"                , AnsiString("None"));
+
+    asRFIDCom               =CheckAndReadIniDataGeneral("RFID",   "RFIDReader_PORT"       , AnsiString("COM15"));
+    iRFIDBaudRate           =CheckAndReadIniDataGeneral("RFID",   "BaudRate"              , 9600);                      //Steven 20220713: RFID Reader for SJSEMI
+    iRFIDByteSize           =CheckAndReadIniDataGeneral("RFID",   "ByteSize"              , 8);
+    iRFIDStopBit            =CheckAndReadIniDataGeneral("RFID",   "StopBit"               , 1);
+    sRFIDParity             =CheckAndReadIniDataGeneral("RFID",   "Parity"                , AnsiString("None"));
+
+    asCCDTrayIP[0]          =CheckAndReadIniDataGeneral("Tray_Mapping",    "Use_Tray_ID_IP"           , AnsiString("172.16.8.200"));                            //wei 20161219 Tray Mapping
+    asCCDTrayIP[1]          =CheckAndReadIniDataGeneral("Tray_Mapping",    "Use_Tray_Map_IP"          , AnsiString("172.16.8.200"));                            //wei 20161219 Tray Mapping
+    asCCDTrayIP[4]          =CheckAndReadIniDataGeneral("Tray_Mapping",    "Use_Tray_DeciveCnt1_IP"   , AnsiString("172.16.8.201"));                            //Sam 20190405: Tray Decive Count
+    asCCDTrayIP[5]          =CheckAndReadIniDataGeneral("Tray_Mapping",    "Use_Tray_DeciveCnt2_IP"   , AnsiString("172.16.8.201"));                            //Sam 20190405: Tray Decive Count
+    asCCDTrayIP[6]          =CheckAndReadIniDataGeneral("Tray_Mapping",    "Use_Tray_DeciveCnt3_IP"   , AnsiString("172.16.8.201"));                            //Sam 20190405: Tray Decive Count
+
+    asCCDTrayIP[7]          =CheckAndReadIniDataGeneral("Tray_Mapping",    "Use_CoverTray_ID_LoaderCarIP"   , AnsiString("172.16.8.151"));                      //JerryYang 20250220: change default IP
+    asCCDTrayIP[8]          =CheckAndReadIniDataGeneral("Tray_Mapping",    "Use_CoverTray_ID_Loader"        , AnsiString("172.16.8.150"));
+    asCCDTrayIP[9]          =CheckAndReadIniDataGeneral("Tray_Mapping",    "Use_CoverTray_ID_AUTO1Car_IP"   , AnsiString("172.16.8.152"));
+    asCCDTrayIP[10]         =CheckAndReadIniDataGeneral("Tray_Mapping",    "Use_CoverTray_ID_AUTO2Car_IP"   , AnsiString("172.16.8.153"));
+    asCCDTrayIP[11]         =CheckAndReadIniDataGeneral("Tray_Mapping",    "Use_CoverTray_ID_AUTO3Car_IP"   , AnsiString("172.16.8.154"));
+
+    asCCDTrayPort[0]        =CheckAndReadIniDataGeneral("Tray_Mapping",    "Use_Tray_ID_Port"         , AnsiString("5101"));                                    //wei 20161219 Tray Mapping
+    asCCDTrayPort[1]        =CheckAndReadIniDataGeneral("Tray_Mapping",    "Use_Tray_Map_Port"        , AnsiString("5102"));                                    //wei 20161219 Tray Mapping
+    asCCDTrayPort[4]        =CheckAndReadIniDataGeneral("Tray_Mapping",    "Use_Tray_DeciveCnt1_Port" , AnsiString("5104"));                                    //Sam 20190405: Tray Decive Count
+    asCCDTrayPort[5]        =CheckAndReadIniDataGeneral("Tray_Mapping",    "Use_Tray_DeciveCnt2_Port" , AnsiString("5105"));                                    //Sam 20190405: Tray Decive Count
+    asCCDTrayPort[6]        =CheckAndReadIniDataGeneral("Tray_Mapping",    "Use_Tray_DeciveCnt3_Port" , AnsiString("5106"));                                    //Sam 20190405: Tray Decive Count
+    asCCDTrayPort[7]        =CheckAndReadIniDataGeneral("Tray_Mapping",    "Use_CoverTray_ID_LoaderCar_Port"  , AnsiString("23"));
+    asCCDTrayPort[8]        =CheckAndReadIniDataGeneral("Tray_Mapping",    "Use_CoverTray_ID_Loader_Port"     , AnsiString("23"));
+    asCCDTrayPort[9]        =CheckAndReadIniDataGeneral("Tray_Mapping",    "Use_CoverTray_ID_AUTO1Car_Port"   , AnsiString("23"));
+    asCCDTrayPort[10]       =CheckAndReadIniDataGeneral("Tray_Mapping",    "Use_CoverTray_ID_AUTO2Car_Port"   , AnsiString("23"));
+    asCCDTrayPort[11]       =CheckAndReadIniDataGeneral("Tray_Mapping",    "Use_CoverTray_ID_AUTO3Car_Port"   , AnsiString("23"));
+
+    //Sam 20181201: AutoAlignment
+    //==>
+    asCCDAlignIP[0]          =CheckAndReadIniDataGeneral("Auto_Alignment",    "Use_AutoAlign_InTop_IP"              , AnsiString("172.16.110.201"));
+    asCCDAlignIP[1]          =CheckAndReadIniDataGeneral("Auto_Alignment",    "Use_AutoAlign_InBottom_IP"           , AnsiString("172.16.110.201"));
+    asCCDAlignIP[2]          =CheckAndReadIniDataGeneral("Auto_Alignment",    "Use_AutoAlign_OutTop_IP"             , AnsiString("172.16.110.201"));
+    asCCDAlignIP[3]          =CheckAndReadIniDataGeneral("Auto_Alignment",    "Use_AutoAlign_OutBottom_IP"          , AnsiString("172.16.110.201"));
+    asCCDAlignPort[0]        =CheckAndReadIniDataGeneral("Auto_Alignment",    "Use_AutoAlign_InTop_Port"            , AnsiString("5110"));
+    asCCDAlignPort[1]        =CheckAndReadIniDataGeneral("Auto_Alignment",    "Use_AutoAlign_InBottom_Port"         , AnsiString("5111"));
+    asCCDAlignPort[2]        =CheckAndReadIniDataGeneral("Auto_Alignment",    "Use_AutoAlign_OutTop_Port"           , AnsiString("5112"));
+    asCCDAlignPort[3]        =CheckAndReadIniDataGeneral("Auto_Alignment",    "Use_AutoAlign_OutBottom_Port"        , AnsiString("5113"));
+    //<==
+    //Sam 20181201: AutoAlignment
+
+    USE_TRAY_MAPPING        =CheckRange(CheckAndReadIniDataGeneral("System",   "USE_TRAY_MAPPING",  etmUninstall), (int)etmUninstall, (int)etmDeviceRemain);    //RogerYang 20250906 range max 1->2   //wei 20161219 Tray Mapping
+    USE_DIE_CLEAN           =CheckRange(CheckAndReadIniDataGeneral("System",   "USE_DIE_CLEAN",  0), 0, 1);             //wei 20170418
+
+    USE_LOADER_HINGE        =CheckRange(CheckAndReadIniDataGeneral("System",   "USE_LOADER_HINGE",  0), 0, 1);          //wei 20170418
+    USE_MR_SYSTEM           =CheckRange(CheckAndReadIniDataGeneral("System",   "USE_MR_SYSTEM",  0), 0, 2);             ////Sam 20190112 LM //wei 20180702 MR
+    USE_RFID_SYSTEM         =CheckRange(CheckAndReadIniDataGeneral("System",   "USE_RFID_SYSTEM",  0), 0, 1);           //wei 20180702 MR
+    USE_AUTO_ALIGNMENT      =CheckAndReadIniDataGeneral("System", "USE_AUTO_ALIGNMENT",    0);                          //Sam 20181201: AutoAlignment
+    USE_COLORSENSOR_MUN     =CheckAndReadIniDataGeneral("System", "USE_COLORSENSOR_MUN",   eCSMUN_Uninstall);           //Jimmychiu 20230630: add color sensor MU-N in Loader
+    LoaderUnload_StepMotor  =CheckAndReadIniDataGeneral("TrayY", "LoaderUnload_StepMotor", 0);                          //Steven 20200529: Loader Tray-in switched to stepper
+
+    asRFIDComPort[0]        =CheckAndReadIniDataGeneral("RFID",   "RFID1_COM_PORT"        , AnsiString("COM15"));       //wei 20180726 RFID
+    asRFIDComPort[1]        =CheckAndReadIniDataGeneral("RFID",   "RFID2_COM_PORT"        , AnsiString("COM16"));       //wei 20180726 RFID
+    RFIDBaudRate            =CheckAndReadIniDataGeneral("RFID",   "BaudRate"              , 9600);                      //wei 20180726 RFID
+    RFIDByteSize            =CheckAndReadIniDataGeneral("RFID",   "ByteSize"              , 8);                         //wei 20180726 RFID
+    RFIDStopBit             =CheckAndReadIniDataGeneral("RFID",   "StopBit"               , 1);                         //wei 20180726 RFID
+    RFIDParity              =CheckAndReadIniDataGeneral("RFID",   "Parity"                , AnsiString("None"));        //wei 20180726 RFID
+
+    HOT_PLATE_POSITION      =CheckAndReadIniDataGeneral("System",       "HOT_PLATE_POSITION"    , 0);                   //Steven 20140222: HotPlate Pin position
+    HOT_PLATE_LIMITATION    =CheckAndReadIniDataGeneral("System",       "HOT_PLATE_LIMITATION"  , 0);                   //Steven 20151117: HotPlate Pin limit position, can run 2x2 8-sucker
+    USE_LASER_DISTANCE      =CheckAndReadIniDataGeneral("System",       "USE_LASER_DISTANCE"    , 0);                   //Steven 20140228: laser distance-measurement function
+    USE_DEVICE_FLIPPER      =CheckAndReadIniDataGeneral("System",       "USE_DEVICE_FLIPPER"    , 0);                   //Frank 20210612: Flipper Function
+
+    ION_PULSE_COUNT         =CheckRange(CheckAndReadIniDataGeneral("System",       "ION_PULSE_COUNT", 3000), 3000, 100000);                                     //Steven 20220107: alarm should fire sooner for ESD     //Steven 20230322: ION_PULSE_COUNT min raised to 3000
+    FIX3_FULL_PLACE         =CheckRange(CheckAndReadIniDataGeneral("System",       "FIX3_FULL_PLACE",  0), 0, 5);       //Steven 20130126: Fix3 full-tray feature  //ChungHung 20140722 add for HT9046LA 2--->3 //JimmyChiu 20220927 4->5
+    USE_ROTATE_KIT          =CheckRange(CheckAndReadIniDataGeneral("ROTATE_KIT",   "USE_ROTATE_KIT",           0), 0, 1);                                       //Steven 20121001: rotate kit
+    iRotate_In_Index        =CheckRange(CheckAndReadIniDataGeneral("ROTATE_KIT",   "iRotate_In_Index",         0), -1, 1);                                      //Steven 20121001: rotate kit
+    iRotate_Out_Tray6       =CheckRange(CheckAndReadIniDataGeneral("ROTATE_KIT",   "iRotate_Out_Index",        2), 0, 2);                                       //Fix tray must not be placed!
+    iRotate_Type            =CheckRange(CheckAndReadIniDataGeneral("ROTATE_KIT",   "RotateKit_Type",           e1MotRotate), 0, eRotateTypeTotal-1);            //2013-04-12 Dell: rotate station; motor version //Frank 20180512 (Steven): modify 1 Dut 1 Motor 3 -> 5
+    iSpecialSequence        =CheckRange(CheckAndReadIniDataGeneral("ROTATE_KIT",   "SpecialSequence",          0), 0, 1);                                       //2013-04-12 Dell: rotate station; motor version
+    FIX3_INSTALL            =CheckRange(CheckAndReadIniDataGeneral("System",   "FIX3_INSTALL",  1), 0, 1);              //2013-07-16 Dell: 9046LS first unit has no Fix3; 2nd+ Fix3 is standard
+    CROSS_SENSOR_INSTALL    =CheckRange(CheckAndReadIniDataGeneral("System",   "CROSS_SENSOR_INSTALL",  0), 0, 1);      //2013-07-16 Dell: Shuttle cross sensor
+    AUTO_SENSOR_INSTALL     =CheckRange(CheckAndReadIniDataGeneral("System",   "AUTO_SENSOR_INSTALL",  0), 0, 1);       //wei 20160914 Auto Shuttle Sensor
+    ShuttleVibration_INSTALL=CheckRange(CheckAndReadIniDataGeneral("System",   "ShuttleVibration",  0), 0, 1);          //JerryYang 20171006 (wei) Shuttle vibration motor
+    //already loaded above:  USE_TRAY_MAPPING        =CheckRange(CheckAndReadIniDataGeneral("System",   "USE_TRAY_MAPPING",  0), 0, 2);         //wei 20161219 Tray Mapping
+    ESD_Monitor             =CheckRange(CheckAndReadIniDataGeneral("System",   "USE_ESD_Monior",  0), 0, 1);            //2013-07-16 Dell: use ESD monitor
+    USE_NOVX3360            =CheckRange(CheckAndReadIniDataGeneral("System",   "USE_NOVX3360",    0), 0, 1);            //Steven 20131127: use Simco ION fan
+    USE_AutoCleanIonFan     =CheckRange(CheckAndReadIniDataGeneral("System",   "USE_AutoCleanIonFan",    0), 0, 1);     //Isaac 20210609: IO-triggered IonFan needle-clean
+    USE_KASUGA              =CheckRange(CheckAndReadIniDataGeneral("System",   "USE_KASUGA",    0), 0, 1);              //Ifor 20150731: use Kasuga ION fan
+    USE_OTD                 =CheckRange(CheckAndReadIniDataGeneral("System",   "USE_OTD",  0), 0, 2);                   //Steven 20140312: OTD  //ChungHung 20140709 add 1--->2 distinguish software vs external control
+    USE_PULSE_TYPE          =CheckRange(CheckAndReadIniDataGeneral("System",   "USE_PULSE_TYPE",  0), 0, 1);            //Ifor 20180316: add Simco Use Pulse Type
+    bHT9045S_USE2x4         =CheckRange(CheckAndReadIniDataGeneral("System",   "bHT9045S_USE2x4",    0), 0, 1);         //Ifor 20170308 (wei) add HT9045S 2x4-mode lock
+    bEnable_KLT_Function    =CheckRange(CheckAndReadIniDataGeneral("System",   "bBarCodeRules",    0), 0, 1);           //Ifor 20180517: add BarCode encoding rule 0:ROC 1:CE
+    i24V_PULSE_COUNT        =CheckRange(CheckAndReadIniDataGeneral("System",   "I24V_PULSE_COUNT", 500), 500, 1000);    //JerryYang 20190813 count minimum protection to avoid false alarm //Ifor 20190311: add 24V Monitor Use Pulse Type
+    CHAMBER_USE_PULSE_TYPE  =CheckRange(CheckAndReadIniDataGeneral("System",   "CHAMBER_USE_PULSE_TYPE",  0), 0, 1);    //Ifor 20190422: add Chamber Use Pulse Type
+
+    USE_DIE_CLEAN           =CheckRange(CheckAndReadIniDataGeneral("System",   "USE_DIE_CLEAN",  0), 0, 1);             //wei 20170418
+    if(CUSTOMER_CODE==CC_AMD_M)
+    {
+        #ifdef TFAMD_SUZHOU
+            iAMD_Function       =CheckRange(CheckAndReadIniDataGeneral("System",   "iEnable_Function",    1), 0, 2);    //Ifor 20231222 add TFAMD Function 0:AMD(Singapore/US) 1:TFAMD(Suzhou) 2:TFAMD(Malaysia)
+        #else
+            #ifdef TFAMD_MALAYSIA
+            iAMD_Function       =CheckRange(CheckAndReadIniDataGeneral("System",   "iEnable_Function",    2), 0, 2);    //Ifor 20231222 add TFAMD Function 0:AMD(Singapore/US) 1:TFAMD(Suzhou) 2:TFAMD(Malaysia)
+            #else
+            iAMD_Function       =CheckRange(CheckAndReadIniDataGeneral("System",   "iEnable_Function",    0), 0, 2);    //Ifor 20231222 add TFAMD Function 0:AMD(Singapore/US) 1:TFAMD(Suzhou) 2:TFAMD(Malaysia)
+            #endif
+        #endif
+    }
+    else
+    {
+        iAMD_Function=-1;
+    }
+
+    if(USE_SOCKET_SENSOR==0)                                                    //JerryYang 20200327: reorganize the 3rd comm module
+    {
+        SOCKET_AMP_QTY=0;
+    }
+    else
+    {
+        if(USE_COLOR_TRAY_SENSOR)
+        {
+            SOCKET_AMP_QTY=CheckRange(CheckAndReadIniDataGeneral("System",   "SocketSenAmpQty",  4), 0, iSnSocketCnt);  //Color sensor installed defaults to 4 ea
+        }
+        else
+        {
+            if(CUSTOMER_CODE==CC_ASE_KaohSiung)
+                SOCKET_AMP_QTY=CheckRange(CheckAndReadIniDataGeneral("System",   "SocketSenAmpQty",  4), 0, iSnSocketCnt);                                      //kevin 20210907 default: Socket sensor switched to count
+            else
+                SOCKET_AMP_QTY=CheckRange(CheckAndReadIniDataGeneral("System",   "SocketSenAmpQty",  8), 0, iSnSocketCnt);                                      //Steven 20200610: Socket sensor switched to 16
+        }
+    }
+
+    if(USE_ROTATE_KIT)
+    {
+        ROTATE_AMP_QTY=CheckRange(CheckAndReadIniDataGeneral("System",   "RotateSenAmpQty",  4), 0, 4);
+    }
+    else
+    {
+        ROTATE_AMP_QTY=0;
+    }
+
+    SOCKET_AMP_QTY_2nd=CheckRange(CheckAndReadIniDataGeneral("System",   "SocketSenAmpQty2nd",  0), 0, 16);
+    SOCKET_AMP_QTY_3rd=CheckRange(CheckAndReadIniDataGeneral("System",   "SocketSenAmpQty3rd",  0), 0, 16);
+
+    VibrationMotorCount=CheckRange(CheckAndReadIniDataGeneral("System",   "VibrationCardQty",  2), 0, 2);               //JerryYang 20230814: add vibration-motor comm speed-adjust version
+
+    COLOR_AMP_QTY=CheckRange(CheckAndReadIniDataGeneral("System",   "ColorSenAmpQty",  6), 0, 8);                       //JerryYang 20200812: color sensor max count raised to 8
+    //Sam 20210518: new CanBus software configuration
+    //==>>
+    NUDN1_QTY             =CheckRange(CheckAndReadIniDataGeneral("System",   "CanBusNudn1Qty",    2), 0, 4);
+    NUDN1_MACID11_AMP_QTY =CheckRange(CheckAndReadIniDataGeneral("System",   "Nudn1Macid11Qty",  16), 0, 16);
+    NUDN1_MACID12_AMP_QTY =CheckRange(CheckAndReadIniDataGeneral("System",   "Nudn1Macid12Qty",   4), 0, 16);
+    NUDN1_MACID13_AMP_QTY =CheckRange(CheckAndReadIniDataGeneral("System",   "Nudn1Macid13Qty",   0), 0, 16);
+    NUDN1_MACID14_AMP_QTY =CheckRange(CheckAndReadIniDataGeneral("System",   "Nudn1Macid14Qty",   0), 0, 16);
+    //<==
+    //Sam 20210518: new CanBus software configuration
+
+    USE_OHT_SYSTEM          =CheckRange(CheckAndReadIniDataGeneral("System",   "USE_OHT_SYSTEM",  0), 0, 1);            //KaiChen 20200716: OHT
+    USE_Multile_Empty       =CheckRange(CheckAndReadIniDataGeneral("System",   "USE_Multile_Empty",  0), 0, 1);         //KaiChen 20200716: OHT
+
+    USE_KEYENCE_LOADER      =CheckRange(CheckAndReadIniDataGeneral("System",   "USE_KEYENCE_LOADER",  0), 0, 1);        //wei 20161219 Tray Mapping
+    USE_KEYENCE_EMPTY       =CheckRange(CheckAndReadIniDataGeneral("System",   "USE_KEYENCE_EMPTY",   0), 0, 2);        //wei 20161219 Tray Mapping
+    USE_MultileEmptyTrayID_Keyence=CheckRange(CheckAndReadIniDataGeneral("System",   "USE_MultileEmptyTrayID_Keyence",   0), 0, 1);
+
+    if(CheckIniData(asGeneralPath, "System", "OTDRecord")==false)               //kevin 20150827 OTD ON_OFF RECORD
+    {
+        WriteIniDataGeneral("System", "OTDRecord", 0);
+        bOTDRecord=false;
+    }
+    else
+    {
+        bOTDRecord            =CheckAndReadIniDataGeneral("System",   "OTDRecord",  0);                                 //kevin 20150827 OTD ON_OFF RECORD
+    }
+    USE_BARCODE_AS_KEYBOARD =CheckAndReadIniDataGeneral("System",  "USE_BARCODE_AS_KEYBOARD" , 0);                      //Steven 20140108: input only via Bar Code Reader
+    USE_46_SUCKER_DB        =CheckAndReadIniDataGeneral("System",  "USE_46_SUCKER_DB",      0);                         //Steven 20131008: HT9045 uses 46-way pneumatics
+    USE_46_SENSOR_DB        =CheckAndReadIniDataGeneral("System",  "USE_46_SENSOR_DB",      0);                         //Steven 20131008: HT9045 uses 46-way electrical distribution
+    INDEX_MOTION_CARD       =CheckAndReadIniDataGeneral("System",  "INDEX_MOTION_CARD",     0);                         //Steven 20210623: Index uses Galil
+    GALI_PROTECT_MODE       =CheckRange(CheckAndReadIniDataGeneral("Index", "GALI_PROTECT_MODE", 0), 0, 2);             //Steven 20260504: Index in-motion protect (0=Original, 2=TE)
+    USE_FINE_PITCH          =CheckAndReadIniDataGeneral("System",  "USE_FINE_PITCH",        0);                         //Steven 20210624: Fine Pitch
+    USE_OUT_SHT_MOT         =CheckAndReadIniDataGeneral("System",  "USE_OUT_SHT_MOT",       0);                         //Steven 20210624: Out shuttle independent motor
+    USE_AIR_CONDITIONER     =CheckAndReadIniDataGeneral("AIR_CON", "USE_AIR_CONDITIONER",   0);                         //Steven 20131011: air conditioner
+    asAirConPort            =CheckAndReadIniDataGeneral("AIR_CON", "AIR_CON_PORT",  AnsiString("COM15"));               //Steven 20131011: air conditioner
+    USE_AOI_Inspection      =CheckRange(CheckAndReadIniDataGeneral("System", "AOI", 0), 0, 1);                          //2014-03-04 Dell: for SPIL WLP Add 5S Inspection
+    USE_VibrationCommunication      =CheckRange(CheckAndReadIniDataGeneral("Vibration",   "VibrationCommunication",  0), 0, 1);                                 //JerryYang 20230814: add vibration-motor comm speed-adjust version
+
+    USE_Scanner_AOI_Inspection =CheckRange(CheckAndReadIniDataGeneral("System",   "Scanner_AOI",  eBtnAOI_Uninstall), (int)eBtnAOI_Uninstall, (int)eBtnAOI_TopBottomInstall);     //Ifor 20190725: add Scanner AOI
+    USE_Scanner_AOI_Inspection_FixLight_Z_Axis =CheckRange(CheckAndReadIniDataGeneral("System",   "Scanner_AOI_FixLight_Z_Axis",  0), 0, 1);  //Eastsun 20260410: AOI Fix Light Z Axis Mode
+    USE_Fix_AI_CCD          =CheckRange(CheckAndReadIniDataGeneral("System",   "Fix_AI_CCD",  0), 0, 1);                //RogerYang 20180901 add Sun-Chip HuKou Demo AI CCD Function
+    USE_Top_Scanner_AOI_Inspection =CheckRange(CheckAndReadIniDataGeneral("System",   "Top_Scanner_AOI",  0), 0, 1);    //Ifor 20200902 add: TFAMD Top AOI
+    if(CUSTOMER_CODE==CC_KYEC_LEE)                                              //Ifor 20180305 (wei): add KYEC/Qiaozhi forced-on requirement
+    {
+        USE_BARCODE_AS_KEYBOARD=1;
+    }
+
+    if(iRotate_Type!=eCynRotate)                                                //kevin 20130528 Rotate uses motor version
+    {
+        iRotate_In_Index=-1;                                                    //must be contended for
+        iRotate_Out_Tray6=-1;
+    }
+
+    if(USE_ROTATE_KIT==1)
+    {
+        if(iRotate_Type==eCynRotate)
+            USE_ROTATE=eCynRot;                                                 //Steven 20230930: unify the cylinder-version rotate-kit flag
+        else
+            USE_ROTATE=eMotRot;
+    }
+    else
+    {
+        USE_ROTATE=eNonRot;
+    }
+
+    T_MODE_SPEED            =CheckRange(CheckAndReadIniDataGeneral("System", "T_MODE_SPEED", 0.9), 0.5, 1.0);           //jou 2012-05-30 T Mode Speed
+    SHUTTLE_Z_TYPE          =CheckAndReadIniDataGeneral("System", "SHUTTLE_Z_TYPE", 0);                                 //jou 2013-07-26: choose Shuttle Z Sensor Type
+    if(CUSTOMER_CODE==CC_ASE_KaohSiung &&
+       MachineTypeChoice==Type_HT9046_LS)                                       //kevin 20210616
+    {
+        SHUTTLE_Z_TYPE=1;
+    }
+
+    dFixTrayDataCleanTime   =CheckRange(CheckAndReadIniDataGeneral("System", "FixTrayDataCleanTime", 1.5), 0.5, 3.0);   //Ifor 20170525 (wei) add Fix Tray Data Clean Time
+    iSocketBaseTempCount    =CheckAndReadIniDataGeneral("System", "SocketBasedAdd4Temp", 0);
+    bHasEnteredPEModel      =CheckAndReadIniDataGeneral("System", "bHasEnteredPEModel", false);                         //Ifor 20160825 add entered-PE-mode-before flag
+    if(MachineTypeChoice==Type_HT9046_LS &&
+       (SubMachineType==Type_None ||                                            //Steven 20190307: Add for HT-9046LA
+        SubMachineType==Type_HT9046AU ||                                        //Steven 20240822: For HT-9046AU
+        SubMachineType==Type_HT9046CR))                                         //Steven 20241001: For HT-9046CR
+    {
+        iSocketBaseTempCount=eDut4ea;
+    }
+
+    if(MachineTypeChoice==Type_HT9046 ||
+       MachineTypeChoice==Type_HT9046_LS ||
+       MachineTypeChoice==Type_HT1032)
+    {
+        USE_46_SUCKER_DB=0;
+        WriteIniDataGeneral("System", "USE_46_SUCKER_DB",      0);
+        USE_46_SENSOR_DB=0;
+        WriteIniDataGeneral("System", "USE_46_SENSOR_DB",      0);
+    }
+
+    iInArmAutoYTeachOffset   =CheckAndReadIniDataGeneral("AutoTeach",    "iInArmAutoYTeachOffset",      0);             //kevin 20161124 AutoTeach offset Y
+    iOutArmAutoYTeachOffset  =CheckAndReadIniDataGeneral("AutoTeach",    "iOutArmAutoYTeachOffset",     0);             //kevin 20161124 AutoTeach offset Y
+
+    iInArmTeachZ   =CheckAndReadIniDataGeneral("AutoTeach",    "iInArmTeachZ",      -1500);                             //kevin 20170502 (wei) auto teach Z check pos
+    ioutArmTeachZ  =CheckAndReadIniDataGeneral("AutoTeach",    "ioutArmTeachZ",     -1500);                             //kevin 20170502 (wei) auto teach Z check pos
+
+    USE_GROUND_MAN          =CheckRange(CheckAndReadIniDataGeneral("Ground_Man",   "USE_GROUND_MAN",  0), 0, 1);        //Steven 20190828: communication-based GroundMan
+    asGroundManComPort      =CheckAndReadIniDataGeneral("Ground_Man", "Ground_Man_COM_PORT", AnsiString("COM18"));
+    iGroundManScanPoint     =CheckRange(CheckAndReadIniDataGeneral("Ground_Man",   "Ground_Man_ScanPoint",  0), 0, 2);  //KaiChen 20191005: communication-based GroundMan //JerryYang 20210428: Add 28-point ground detection
+    iGroundManAlarmOhm      =CheckRange(CheckAndReadIniDataGeneral("Ground_Man",   "Ground_Man_AlarmOhm",  0), 10, 1);  //KaiChen 20191005: communication-based GroundMan
+    USE_KASUGA_Fan          =CheckRange(CheckAndReadIniDataGeneral("System",   "USE_KASUGA_Fan",  0), 0, 1);            //KaiChen 20191225: KASUGA Fan communication
+    iUseHTIonBarFunction    =CheckRange(CheckAndReadIniDataGeneral("System",   "HTIonBarFunction", 0), 0, 3);           //RogerYang 20250825: Unloader adds 3 IonBars, replacing 4/5/8 ion fans
+    iDBQueryDays            =CheckAndReadIniDataGeneral("System", "iDBQueryDays", 3);                                   //Ifor 20200324: add KYEC-requested DB Query day count
+
+    AUTO3_IS_MAGAZINE        =CheckRange(CheckAndReadIniDataGeneral("System",   "AUTO3_IS_MAGAZINE",  0), 0, 1);        //JerryYang 20220909: add magazine
+    iMagazineCheckZPos       =CheckRange(CheckAndReadIniDataGeneral("System",   "iMagazineCheckZPos",    400), 100, 1000);
+    #ifdef FOR_EVAN                                                             //Steven 20210304: JCET's "Ru Chun" variant (customer codename)
+        if(CUSTOMER_CODE==CC_JCET)
+        {
+            JCET_FOR_EVAN           =1;
+            USE_BARCODE_AS_KEYBOARD =1;
+            WriteIniDataGeneral("System", "USE_BARCODE_AS_KEYBOARD",  USE_BARCODE_AS_KEYBOARD);
+            WriteIniDataGeneral("System", "JCET_FOR_EVAN",  JCET_FOR_EVAN);
+        }
+        else
+        {
+            JCET_FOR_EVAN           =0;
+        }
+    #else
+        if(CUSTOMER_CODE==CC_JCET)
+            JCET_FOR_EVAN           =CheckAndReadIniDataGeneral("System", "JCET_FOR_EVAN", 0);                          //Steven 20210304: JCET's "Ru Chun" variant (customer codename)
+        else
+            JCET_FOR_EVAN           =0;
+    #endif
+
+    //KenHsieh 20210830: add CCD AUTO ALIGNMENT for Offset
+    //==>
+    iAOA_InArm_Loader_X         =CheckAndReadIniDataGeneral("System", "AOA_InArm_Loader_X", 0);
+    iAOA_InArm_Loader_Y         =CheckAndReadIniDataGeneral("System", "AOA_InArm_Loader_Y", 0);
+    iAOA_InArm_Shuttle1_X       =CheckAndReadIniDataGeneral("System", "AOA_InArm_Shuttle1_X", 0);
+    iAOA_InArm_Shuttle1_Y       =CheckAndReadIniDataGeneral("System", "AOA_InArm_Shuttle1_Y", 0);
+    iAOA_InArm_Shuttle2_X       =CheckAndReadIniDataGeneral("System", "AOA_InArm_Shuttle2_X", 0);
+    iAOA_InArm_Shuttle2_Y       =CheckAndReadIniDataGeneral("System", "AOA_InArm_Shuttle2_Y", 0);
+    iAOA_InArm_Hotplate1_X      =CheckAndReadIniDataGeneral("System", "AOA_InArm_Hotplate1_X", 0);
+    iAOA_InArm_Hotplate1_Y      =CheckAndReadIniDataGeneral("System", "AOA_InArm_Hotplate1_Y", 0);
+    iAOA_InArm_Hotplate2_X      =CheckAndReadIniDataGeneral("System", "AOA_InArm_Hotplate2_X", 0);
+    iAOA_InArm_Hotplate2_Y      =CheckAndReadIniDataGeneral("System", "AOA_InArm_Hotplate2_Y", 0);
+    //<==
+    //KenHsieh 20210830: add CCD AUTO ALIGNMENT for Offset
+    //KenHsieh 20210918: CCD AUTO ALIGNMENT offset additions
+    //==>
+    iAOA_OutArm_Auto1_X         =CheckAndReadIniDataGeneral("System", "AOA_OutArm_Auto1_X", 0);
+    iAOA_OutArm_Auto1_Y         =CheckAndReadIniDataGeneral("System", "AOA_OutArm_Auto1_Y", 0);
+    iAOA_OutArm_Auto2_X         =CheckAndReadIniDataGeneral("System", "AOA_OutArm_Auto2_X", 0);
+    iAOA_OutArm_Auto2_Y         =CheckAndReadIniDataGeneral("System", "AOA_OutArm_Auto2_Y", 0);
+    iAOA_OutArm_Auto3_X         =CheckAndReadIniDataGeneral("System", "AOA_OutArm_Auto3_X", 0);
+    iAOA_OutArm_Auto3_Y         =CheckAndReadIniDataGeneral("System", "AOA_OutArm_Auto3_Y", 0);
+    if(AUTO_EMPTY_COLOR>=3)                                                     //Steven 20240428: Add for HT9011 AOA
+    {
+        iAOA_OutArm_Auto4_X     =CheckAndReadIniDataGeneral("System", "AOA_OutArm_Auto4_X", 0);
+        iAOA_OutArm_Auto4_Y     =CheckAndReadIniDataGeneral("System", "AOA_OutArm_Auto4_Y", 0);
+        iAOA_OutArm_Auto5_X     =CheckAndReadIniDataGeneral("System", "AOA_OutArm_Auto5_X", 0);
+        iAOA_OutArm_Auto5_Y     =CheckAndReadIniDataGeneral("System", "AOA_OutArm_Auto5_Y", 0);
+        iAOA_OutArm_Auto6_X     =CheckAndReadIniDataGeneral("System", "AOA_OutArm_Auto6_X", 0);
+        iAOA_OutArm_Auto6_Y     =CheckAndReadIniDataGeneral("System", "AOA_OutArm_Auto6_Y", 0);
+    }
+    iAOA_OutArm_Fix1_X          =CheckAndReadIniDataGeneral("System", "AOA_OutArm_Fix1_X", 0);
+    iAOA_OutArm_Fix1_Y          =CheckAndReadIniDataGeneral("System", "AOA_OutArm_Fix1_Y", 0);
+    iAOA_OutArm_Fix2_X          =CheckAndReadIniDataGeneral("System", "AOA_OutArm_Fix2_X", 0);
+    iAOA_OutArm_Fix2_Y          =CheckAndReadIniDataGeneral("System", "AOA_OutArm_Fix2_Y", 0);
+    iAOA_OutArm_Fix3_X          =CheckAndReadIniDataGeneral("System", "AOA_OutArm_Fix3_X", 0);
+    iAOA_OutArm_Fix3_Y          =CheckAndReadIniDataGeneral("System", "AOA_OutArm_Fix3_Y", 0);
+    if(AUTO_EMPTY_COLOR>=3)                                                     //Steven 20240428: Add for HT9011 AOA
+    {
+        iAOA_OutArm_Fix4_X      =CheckAndReadIniDataGeneral("System", "AOA_OutArm_Fix4_X", 0);
+        iAOA_OutArm_Fix4_Y      =CheckAndReadIniDataGeneral("System", "AOA_OutArm_Fix4_Y", 0);
+        iAOA_OutArm_Fix5_X      =CheckAndReadIniDataGeneral("System", "AOA_OutArm_Fix5_X", 0);
+        iAOA_OutArm_Fix5_Y      =CheckAndReadIniDataGeneral("System", "AOA_OutArm_Fix5_Y", 0);
+        iAOA_OutArm_Fix6_X      =CheckAndReadIniDataGeneral("System", "AOA_OutArm_Fix6_X", 0);
+        iAOA_OutArm_Fix6_Y      =CheckAndReadIniDataGeneral("System", "AOA_OutArm_Fix6_Y", 0);
+    }
+    iAOA_OutArm_Shuttle1_X      =CheckAndReadIniDataGeneral("System", "AOA_OutArm_Shuttle1_X", 0);
+    iAOA_OutArm_Shuttle1_Y      =CheckAndReadIniDataGeneral("System", "AOA_OutArm_Shuttle1_Y", 0);
+    iAOA_OutArm_Shuttle2_X      =CheckAndReadIniDataGeneral("System", "AOA_OutArm_Shuttle2_X", 0);
+    iAOA_OutArm_Shuttle2_Y      =CheckAndReadIniDataGeneral("System", "AOA_OutArm_Shuttle2_Y", 0);
+    //<==
+    //KenHsieh 20210918: CCD AUTO ALIGNMENT offset additions
+
+    iControlPanelMode           =CheckAndReadIniDataGeneral("System", "ControlPanelMode", 0);                           //Ken 20210702 AddPadInterface
+    VCCU_UNIT_TYPE              =CheckAndReadIniDataGeneral("System", "VacuUnitType", 0);                               //Sam 20230210: new VacuumUnit comm module
+    USE_ATC_RS232_Check         =CheckRange(CheckAndReadIniDataGeneral("System", "USE_ATC_RS232_Check", 1), 0, 1);      //Ifor 20211116 add: ATC RS232 Check Function
+    TRAY_MAPPING_GRAB           =CheckAndReadIniDataGeneral("System", "TRAY_MAPPING_GRAB", 0);                          //KenHsieh 20220923: add Tray Map Throw IC Function
+    if(CUSTOMER_CODE ==CC_ASE_KaohSiung || CUSTOMER_CODE ==CC_AMD_M)            //kevin 20220901 ASE_KH close //Ifor 20240603 add
+        USE_ARM_PROTECTION      =CheckAndReadIniDataGeneral("System", "USE_ARM_PROTECTION", false);                     //Steven 20220314: In/Out Arm Z Sensor protection gets a switch
+    else
+        USE_ARM_PROTECTION      =CheckAndReadIniDataGeneral("System", "USE_ARM_PROTECTION", true);                      //Steven 20220314: In/Out Arm Z Sensor protection gets a switch
+
+    //Ztex 2023.04.19 Add HT-1032 TriTemp Function ==>
+    BASE_HEATER                 =CheckAndReadIniDataGeneral("System", "BASE_HEATER_COUNT",              0);
+    SHUTTLE_FLOODGATE           =CheckAndReadIniDataGeneral("System", "SHUTTLE_FLOODGATE",              0);
+    Tri_Temp_Machine            =CheckAndReadIniDataGeneral("System", "Tri_Temp_Machine",               0);
+    AirStream_Select            =CheckAndReadIniDataGeneral("System", "AirStream_Select",               0);
+    TriTemperature_TotalChannel =CheckAndReadIniDataGeneral("System", "TriTemperature_TotalChannel",    0);
+    Tri_Temperature_MaxDegree   =CheckAndReadIniDataGeneral("System", "Tri_Temperature_MaxDegree",      175);
+    Tri_Temperature_MinDegree   =CheckAndReadIniDataGeneral("System", "Tri_Temperature_MinDegree",      -55);
+    SetHeaterTemp_MaxOutSht     =CheckAndReadIniDataGeneral("System", "SetHeaterTemp_MaxOutSht",        60);
+    SetHeaterTemp_MaxIndex      =CheckAndReadIniDataGeneral("System", "SetHeaterTemp_MaxIndex",         60);
+    SetHeaterTemp_MaxBase       =CheckAndReadIniDataGeneral("System", "SetHeaterTemp_MaxBase",          60);
+    Total_Compressor            =CheckAndReadIniDataGeneral("System", "Total_Compressor",                3);
+    INDEXDOORHEATER             =CheckAndReadIniDataGeneral("System", "IndexDoorHeater",                0);
+    //Ztex 2023.04.19 Add HT-1032 TriTemp Function <==
+    iAutoFormSize               =CheckAndReadIniDataGeneral("System", "iAutoFormSize",      0);                         //Jimmychiu 20231130: switch to allow Auto form size
+    Enable_PLCSafety_IO         =CheckAndReadIniDataGeneral("System",  "SafePlcIO",         0);                         //Jason 20230619 add PLC_IO module + safety-related IO
+    DOUBLE_BELT_MODE            =CheckAndReadIniDataGeneral("System",  "DOUBLE_BELT_MODE",  0);                         //Ztex 2023.12.13 Add Double Belt Mode
+    USE_COVER_TRAYID            =CheckAndReadIniDataGeneral("System",  "USE_COVER_TRAYID",  tCIDNotUse);
+    USE_LD_Rot_Arm              =CheckAndReadIniDataGeneral("System", "USE_LD_Rot_Arm",     0);                         //RogerYang 20250828: add for Loader Rotate Arm
+    USE_E84_Sensor              =CheckAndReadIniDataGeneral("System", "AGVModal",     0);                               //Frank 20251204 add E84
+
+    USE_LdUldCassetteMode       =CheckAndReadIniDataGeneral("System", "USE_LdUldCassetteMode",     0);                  //Frank 20251217 add
+    if(Tri_Temp_Machine==1)                                                     //Ztex 2024.09.14 Add Tri_Temp_Machine Do't Check
+    {
+        for(int i=0; i<tcTotalCount; i++)
+        {
+            AMBIENT_TEMP_CHECK[i]=false;
+        }
+    }
+    In_Shuttle_Auto_Latch      =CheckRange(CheckAndReadIniDataGeneral("System",   "In_Shuttle_Auto_Latch",  0), 0, 1);  //KenHsieh 20250722: InSht sensor changed to 2, using Latch to distinguish stacked vs airborne material
 }
-#endif // TODO(wave)
 
 // ---------------------------------------------------------------------------
 //  #if 0: InstallColorBinDisplay  (database.cpp:1684-1729)
