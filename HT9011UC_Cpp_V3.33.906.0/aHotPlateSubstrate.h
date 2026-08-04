@@ -922,6 +922,10 @@ extern int  GetInArmPitchY_9045(int iMovePitchY, int iOffsetPos);               
 #endif
 extern void StopAllMotor();
 extern void MyDBIProcess(AnsiString S1, AnsiString S2);
+extern int        W906_MyDBIProcess_Count;   // AI(W906-GA1-B2-integrate) 20260804: observation seam
+extern AnsiString W906_MyDBIProcess_LastS1;
+extern AnsiString W906_MyDBIProcess_LastS2;
+void W906_MyDBIProcess_Reset();
 
 // ============================================================================
 //  (A) [W6.2b] in-arm ENGINE cursors owned by not-yet-translated ainarm2.cpp.

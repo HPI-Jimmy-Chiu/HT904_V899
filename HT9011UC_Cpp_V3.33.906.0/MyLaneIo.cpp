@@ -93,6 +93,11 @@ static bool fiosetview_fShow() { return false; }  // TODO(W7)
 #ifndef HAVE_PLC_IO
 // Offline stub definitions (default ON; set HAVE_PLC_IO=1 when MyPLC_IO_Modbus.cpp
 // is included in the build to prevent duplicate definitions).
+// AI(W906-GA1-B2-integrate) 20260804: DISCLOSED DEVIATION -- golden defines these
+// two in MyPLC/MyPLC_IO_Modbus.cpp:86-87, but in the ported link topology
+// ht9045_io (this file) is in every RESCAN closure while ht9045_comms is not;
+// keeping the definitions here (and demoting MyPLC's to extern) preserves
+// identical storage/behaviour with zero link churn.
 bool bPLCInData[INPUT_MAX_Slave][INPUT_MAX_REGISTER][8] = {};
 bool bPLCIO[2048][8] = {};
 #else

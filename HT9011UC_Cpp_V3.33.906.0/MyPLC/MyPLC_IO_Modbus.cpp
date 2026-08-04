@@ -58,7 +58,10 @@ typedef TQPF_Timer HTimer;
 // HAVE_PLC_IO guard, see above).
 // ---------------------------------------------------------------------------
 #ifndef HAVE_MYSLEEPEX
-DWORD MySleepEx(DWORD /*dwMilliseconds*/, bool /*bAlertable*/) { return 0; }  // golden common.h:260 -- offline: 0
+// AI(W906-GA1-B2-integrate) 20260804: MySleepEx offline fallback RETIRED -- real
+// common.cpp (wave17) body now reachable; keeping this collided when a target
+// links ht9045_comms together with ht9045_core.
+DWORD MySleepEx(DWORD dwMilliseconds, bool bAlertable);  // real body: common.cpp (declaration here because common.h's is still gated)
 #else
 extern DWORD MySleepEx(DWORD dwMilliseconds, bool bAlertable);
 #endif
@@ -80,8 +83,11 @@ int iPLCStatusTask=-1;                                                          
 
 bool bOSSDData[INPUT_MAX_Slave][2][8];
 bool bScanSlave[INPUT_MAX_Slave];
-bool bPLCInData[INPUT_MAX_Slave][INPUT_MAX_REGISTER][8];
-bool bPLCIO[2048][8];                                                           //for 舊架構 (for the legacy architecture)
+// AI(W906-GA1-B2-integrate) 20260804: demoted to extern -- definitions live in
+// MyLaneIo.cpp (ht9045_io, in every closure); golden home was here (:86-87),
+// deviation disclosed there. Zero behaviour change (same storage).
+extern bool bPLCInData[INPUT_MAX_Slave][INPUT_MAX_REGISTER][8];
+extern bool bPLCIO[2048][8];                                                    //for 舊架構 (for the legacy architecture)
 bool bPLCIOEffect=false;
 bool bIOPowered=false;
 bool bSafePLCThread=false;                                                      //ben 20230913 add

@@ -176,7 +176,7 @@ extern bool bSECSGEM_DoSeparate;
 //  needs SOME definition to link against (same pattern as
 //  tests/test_FTPClient_EventHandlers.cpp / test_uHGemClass.cpp).
 // ---------------------------------------------------------------------------
-void MyDBIProcess(AnsiString /*S1*/, AnsiString /*S2*/) {}
+// AI(W906-GA1-B2-integrate) 20260804: local MyDBIProcess stub RETIRED (real body now in link group)
 
 // ---------------------------------------------------------------------------
 //  AI(W906-uHGemEquipment-BucketC) 20260717: ShowMyMessage -- as of this
@@ -202,7 +202,7 @@ void MyDBIProcess(AnsiString /*S1*/, AnsiString /*S2*/) {}
 //  The removed stub's body was a pure no-op (no capture/counter), so no test
 //  coverage is lost by this removal.
 // ---------------------------------------------------------------------------
-void ShowMyMessage(AnsiString /*S1*/, AnsiString /*S2*/, AnsiString /*S3*/, bool /*Ok*/, bool /*bServoOff*/) {}
+// AI(W906-GA1-B2-integrate) 20260804: local ShowMyMessage stub RETIRED (real body now in link group)
 
 // ---------------------------------------------------------------------------
 //  AI(W906-uHGemClass-Unlock3) 20260723: HasICUnderMachine / HasAnyICInMachine
@@ -222,8 +222,8 @@ void ShowMyMessage(AnsiString /*S1*/, AnsiString /*S2*/, AnsiString /*S3*/, bool
 //  (wired) TMyKitSuck grid objects. `false` is simply the correct answer for
 //  THIS unlinked stub, which has no grid state to query at all -- not a
 //  behavioral fork from the real body, just a link-time stand-in.
-bool HasICUnderMachine() { return false; }
-bool HasAnyICInMachine() { return false; }
+// AI(W906-GA1-B2-integrate) 20260804: local HasICUnderMachine stub RETIRED (real body now in link group)
+// AI(W906-GA1-B2-integrate) 20260804: local HasAnyICInMachine stub RETIRED (real body now in link group)
 
 // ---------------------------------------------------------------------------
 //  Tiny PASS / FAIL harness (same style as tests/test_serversocket.cpp).

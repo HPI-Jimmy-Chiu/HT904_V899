@@ -130,6 +130,60 @@ TQPF_Timer tP62MachineStopTimer;                                                
 // =============================================================================
 #include "cmydef.h"     // AI(W4) 20260626: tcTotalCount, SystemDate etc. used in InitialData
 
+// =============================================================================
+//  AI(GA1-B2) 20260804: ungate pass -- headers now real/linkable in this tree that
+//  were not when W0-TAIL gated this whole file.  See _ga1_b2_report.md for the
+//  full function-by-function reconciliation (ungated / narrow-gated / whole-
+//  function-gated, with exact blocking symbols for everything still gated).
+// =============================================================================
+#include "common.h"             // AuthPath/DataPath/OffsetPath/DefaultPath; ReadWriteIni/ReadIniData/
+                                 // CheckAndReadIniData(+General)/WriteIniData(+NoLog/General);
+                                 // GetRecipeFileName/GetRecipePath; MyForceDirectories/MySleep; WriteDataToFile
+#include "database.h"           // HSys (SYSTEM_MODULAR) -- .MyGem is HTGem* (fwd-decl only, see narrow gates)
+#include "csystem.h"            // HasICUnderMachine/HasAnyICInMachine
+#include "mycylin.h"            // Cylinder[]
+#include "mysensor.h"           // Sen[]
+#include "Motor/mymotor.h"      // MOT[]
+#include "Automation/AMR.h"     // AMR (TTeraPowerAMR)
+#include "aHotPlateSubstrate.h" // InArmSuck/FTestSuck/TestSocket (TMyKitSuck) + MyDBIProcess(2-arg)
+#include "canary_support.h"     // LastSet (LAST_GENERAL_SET)/ShowErrorMessage/RecordProcess
+#include "acatchtray_shims.h"   // NewRecordProcess
+#include "forms/fMain.h"        // fMain
+#include "forms/fLotInfo.h"     // fLotInfo
+#include "forms/fAGV.h"         // fAGV
+#include "forms/fTrayForm.h"    // fTrayForm
+#include "atester_shims.h"      // IsNNMode/ADAM_Rang/COM2
+#include "Automation/SCK_ART_Remainder.h"  // TastCategory / fConfiguration
+#include "Interface/InterfaceSYS.h"        // EL_UPDATE_PARAMETER/SendCommand_EventLog
+#include <algorithm>            // std::sort
+#include <io.h>                 // open/close/access -- bare MinGW names, no wrapper needed
+                                 // (same verified convention as SECSGEM/uHGemEquipment.cpp:47-52)
+#include <fcntl.h>              // O_RDONLY/O_RDWR
+
+// ---------------------------------------------------------------------------
+//  AI(GA1-B2) 20260804: local SysUtils-synonym shims, same established
+//  per-TU convention already used by cpublic.cpp/Automation/SCK_ART_Remainder.cpp/
+//  Interface/TesterTCP.cpp/SECSGEM/uHGemEquipment.cpp/SECSGEM/uHGemClass.cpp
+//  (grep confirms all five carry an identical local copy -- centralizing was not
+//  this task's call to make, so this file gets its own copy too).
+// ---------------------------------------------------------------------------
+// IncludeTrailingPathDelimiter -- BCB6 synonym for IncludeTrailingBackslash.
+static inline AnsiString IncludeTrailingPathDelimiter(const AnsiString& p)
+{
+    return IncludeTrailingBackslash(p);
+}
+
+// SystemTimeToDateTime -- golden Delphi SysUtils function (SYSTEMTIME -> TDateTime),
+// not yet in vclcompat. Built from the two real primitives vclcompat/TDateTime.h
+// already provides (EncodeDate/EncodeTime); TDateTime's value_ is whole-day-count +
+// day-fraction, so date+time addition is the correct composition (same idiom
+// vclcompat's own TDateTime::Now() uses internally, TDateTime.cpp:72-75).
+static inline TDateTime SystemTimeToDateTime(const SYSTEMTIME &st)
+{
+    return EncodeDate((Word)st.wYear, (Word)st.wMonth, (Word)st.wDay) +
+           EncodeTime((Word)st.wHour, (Word)st.wMinute, (Word)st.wSecond, (Word)st.wMilliseconds);
+}
+
 RUN_INFO::RUN_INFO()
 {
     slEventLogFile = new TStringList();
@@ -177,12 +231,19 @@ void RUN_INFO::InitialData()
 }
 
 //------------------------------------------------------------------------------
-//AI(W0-TAIL) 20260626: ==== begin gated function bodies (TODO W6) ====
-//  All defs below pull untranslated app headers/globals (mymotor/common/csystem/
-//  main/cmydef/database/InArmSuck/MyDBIProcess/...). The '_fastcall'/'__fastcall'
-//  ctor-dtor typos are preserved inside the gate; faithful fix lands with W6.
-#if 0 // TODO(W6): function bodies depend on untranslated state machines + globals
-_fastcall ARM_OFFSET::ARM_OFFSET()                                              //Steven 20140510 Start: Secs Gem
+//AI(GA1-B2) 20260804: ==== W0-TAIL's single big gate retired; see report ====
+//  Ungated everything below whose golden dependencies now have a real declared+
+//  defined home in this tree (LastSet/common.h/database.h/csystem.h/mycylin.h/
+//  mysensor.h/Motor/mymotor.h/Automation/AMR.h/aHotPlateSubstrate.h/
+//  canary_support.h/acatchtray_shims.h/forms facades/atester_shims.h/
+//  Automation/SCK_ART_Remainder.h/Interface/InterfaceSYS.h -- all #included
+//  above). What is STILL gated is narrow (a specific block or, in two cases,
+//  a whole function) and carries a precise 'TODO(GA1-B2): blocked by <symbol>@
+//  <location>' comment at the gate site -- see _ga1_b2_report.md for the full
+//  function-by-function table.  The '_fastcall' (BCB single-underscore typo)
+//  ARM_OFFSET ctor/dtor below is fixed to plain 'ARM_OFFSET::' here, matching
+//  cprod.h:178-179's own note that this was always the intended faithful form.
+ARM_OFFSET::ARM_OFFSET()                                                        //Steven 20140510 Start: Secs Gem
 {
     SingleOffSet= new ARM_SINGLE_PARAM();
 
@@ -203,7 +264,7 @@ _fastcall ARM_OFFSET::ARM_OFFSET()                                              
     }
 }
 //------------------------------------------------------------------------------
-_fastcall ARM_OFFSET::~ARM_OFFSET()
+ARM_OFFSET::~ARM_OFFSET()                                                       //AI(GA1-B2) 20260804: _fastcall typo fixed, matches cprod.h:179
 {
     try
     {
@@ -913,53 +974,12 @@ AnsiString ATK_RECIPE_INFO::GetParameterFormat(AnsiString sName, AnsiString sVal
     return AnsiString().sprintf("%s:%s%s", sName, sValue, GetForwardSlash());
 }
 //------------------------------------------------------------------------------
-RUN_INFO::RUN_INFO()
-{
-    slEventLogFile=new TStringList();
-    slExe=new TStringList();
-    InitialData();
-}
-//------------------------------------------------------------------------------
-RUN_INFO::~RUN_INFO()
-{
-    slEventLogFile->Clear();
-    slExe->Clear();
-    delete slEventLogFile;
-    delete slExe;
-}
-//------------------------------------------------------------------------------
-void RUN_INFO::InitialData()
-{
-    iUPH=0;
-    iAvgUPH="0";
-    iUnloadCount=0;
-    for(int i=0; i<eTrayCount; i++)
-        sT6AutoYield[i]="";
-    SystemTime="";
-    MTBA="";
-    MUBA="";
-    SoftwareDate="";
-    Factory="";
-    MachineDefine="";
-    SoftwareVersion="";
-    for(int i=0; i<tcTotalCount; i++)
-        ShowTempComp[i]="";
-    LotStartTime="2020-01-01 00:00:00";
-    LotStartYear=2020;                                                          //Sam 20240426 : Add BarCoder Inspection Report
-    LotStartMonth=1;
-    LotStartDate=1;
-    LotStartHour=0;
-    LotStartMin=0;
-    LotStartSec=0;
-    LotEndTime="";
-    LotNo="";
-    SECSGEMVersion="";
-    slEventLogFile->Clear();
-
-    vByLotJam.clear();
-    JamRateFileName="";
-}
-//------------------------------------------------------------------------------
+//AI(GA1-B2) 20260804: RUN_INFO::RUN_INFO()/~RUN_INFO()/InitialData() deleted from
+//  here -- dead duplicates of the ALREADY-LIVE copies at this file's top (W4 wave,
+//  lines ~133-178), which compiled and ran as the static-init path since that
+//  wave landed. Leaving both would be a redefinition (hard compile error), and
+//  the two bodies are textually identical (byte-diffed this pass) -- nothing was
+//  lost by removing this copy.
 void RUN_INFO::InitialDailyData()                                               //Steven 20250528 : By Day Jam Rate
 {
     iDailyCount=0;
@@ -1028,6 +1048,13 @@ bool struct_cmp_by_count(JAM_COUNT a, JAM_COUNT b)
 //------------------------------------------------------------------------------
 void RUN_INFO::SaveJamRateByDay(bool bUpload)                                   //Steven 20250528 : By Day Jam Rate
 {
+#if 0 // TODO(GA1-B2): blocked by FileInfo@ProductionInfo/FileInfo.h+.cpp (golden class,
+      // NOT ported anywhere in this tree) -- FileInfo().PathCombin(sDailyJamPath,sFileName)
+      // computes DailyJamFileName below, which every subsequent line reads or writes;
+      // partial-ungating just that one line would leave DailyJamFileName stale/empty and
+      // silently wrong for the rest of the function, so the whole body stays gated
+      // together. Also depends on FormHS (golden HS_Function.h, not ported) for the
+      // upload branch. InitialDailyData() at the tail is independent and stays live.
     AnsiString str, sFileName, sPath;
     int iJamCount=0, iTag;
 
@@ -1139,6 +1166,7 @@ void RUN_INFO::SaveJamRateByDay(bool bUpload)                                   
             }
         }
     }
+#endif // TODO(GA1-B2): FileInfo (see banner above)
 
     InitialDailyData();
 }
@@ -1149,6 +1177,11 @@ void RUN_INFO::ReadJamRateByDay()                                               
     int iPos;
     InitialDailyData();
 
+#if 0 // TODO(GA1-B2): blocked by FileInfo@ProductionInfo/FileInfo.h+.cpp (golden class,
+      // NOT ported anywhere in this tree) -- same DailyJamFileName-spine reasoning as
+      // SaveJamRateByDay above: FileInfo().PathCombin(...) below feeds every subsequent
+      // line (LoadFromFile/parse), so the whole body (after the top InitialDailyData()
+      // reset, which stays live) is gated together.
     MyForceDirectories(sDailyJamPath);
 
     sFileName.sprintf("%s_%s_%s_DailyJamRate.txt", IniConfig.sMachineType, IniConfig.SocketHandlerID, sToday);
@@ -1200,6 +1233,7 @@ void RUN_INFO::ReadJamRateByDay()                                               
     slReport->Clear();
     delete slReport;
     delete sList;
+#endif // TODO(GA1-B2): FileInfo (see banner above)
 }
 //------------------------------------------------------------------------------
 void RUN_INFO::SaveJamRateByLot(bool bUpload)                                   //Steven 20200415 : SCC要By Lot Jam Rate
@@ -1213,6 +1247,11 @@ void RUN_INFO::SaveJamRateByLot(bool bUpload)                                   
 
     if(IniConfig.bVTESTFunction==true)                                          //jou 20241015 : by lot jamstat報告要求
     {
+#if 0 // TODO(GA1-B2): blocked by fMesSystem@not declared anywhere in ported tree (golden
+      // TfMesSystem form, no forms/fMesSystem.h port exists) -- VTEST-mode jam-rate
+      // filename branch. Narrow gap: only affects customers with IniConfig.bVTESTFunction
+      // true (VTEST is a minority config); sJamRatePath/sFileName keep their prior value
+      // when this flag is set, instead of the fMesSystem-derived name.
         sJamRatePath="D:\\PnPh\\report\\LotAlarm";
         sFileName.sprintf("%s-%s-%s-%s-%s-%s-%04d%02d%02d%02d%02d%02d.txt",     IniConfig.SocketHandlerID,
                                                                                 fMesSystem->lbledtCustLotNum->Text,
@@ -1221,6 +1260,7 @@ void RUN_INFO::SaveJamRateByLot(bool bUpload)                                   
                                                                                 fLotInfo->cbRunMode->Text,
                                                                                 fLotInfo->cbProcess->Text,
                                                                                 SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec);
+#endif // TODO(GA1-B2): fMesSystem
     }
     else
     {
@@ -1307,7 +1347,10 @@ void RUN_INFO::SaveJamRateByLot(bool bUpload)                                   
         {
             if(IniConfig.iN10UploadMethod==0)
             {
+#if 0 // TODO(GA1-B2): blocked by FormHS@HS_Function.h (golden TFormHS form, not ported
+      // anywhere in this tree) -- the iN10UploadMethod==0 (direct-FTP) upload branch only.
                 FormHS->UpDataToServerByFTP(IncludeTrailingPathDelimiter(sJamRatePath), sFileName, "JamRateByLot");
+#endif // TODO(GA1-B2): FormHS
             }
             else
             {
@@ -1421,12 +1464,14 @@ void ReadPassword()
 //------------------------------------------------------------------------------
 bool CheckFileExist(AnsiString cFName)                                          //Ken 20210702 AddPadInterface
 {
+    //AI(GA1-B2) 20260804: _rtl_open/_rtl_close (BCB6 RTL internals) -> open/close;
+    //  bare names, no wrapper, same verified convention as SECSGEM/uHGemEquipment.cpp:47-52.
     if(access(cFName.c_str(), 0)==0)
     {
         int fhandle;
-        if((fhandle=_rtl_open(cFName.c_str(), O_RDONLY))==-1)
+        if((fhandle=open(cFName.c_str(), O_RDONLY))==-1)
             return false;
-        _rtl_close(fhandle);
+        close(fhandle);
         return true;
     }
     return false;
@@ -1435,9 +1480,9 @@ bool CheckFileExist(AnsiString cFName)                                          
 bool CheckFileCanAccess(char *cFName)
 {
     int fhandle;
-    if((fhandle=_rtl_open(cFName, O_RDWR))==-1)
+    if((fhandle=open(cFName, O_RDWR))==-1)
         return false;
-    _rtl_close(fhandle);
+    close(fhandle);
     return true;
 }
 //------------------------------------------------------------------------------
@@ -1683,7 +1728,10 @@ bool ReadLastDataFile()
         sFileName2="d:\\HT9045\\system\\lastdata_backup.dat";
         if(FileExists(sFileName2))
         {
-            if(FileDataCompare(sFileName1.c_str(),sFileName2.c_str())==false)
+            //AI(GA1-B2) 20260804: const_cast -- FileDataCompare's cprod.h decl takes char*
+            //  (non-const, BCB6 looseness; body never writes through either pointer), and
+            //  cprod.h is read-only, so the fix is at this call site.
+            if(FileDataCompare(const_cast<char*>(sFileName1.c_str()),const_cast<char*>(sFileName2.c_str()))==false)
             {
                 Fp=CreateFile("D:\\HT9045\\system\\lastdata_backup.dat", GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY, NULL);
                 if(Fp!=INVALID_HANDLE_VALUE)
@@ -2189,15 +2237,19 @@ void ProcessLastSetIni_RMS(bool bRead)
                     DataPath="D:\\HT9045\\IniData\\Data\\Active\\";
                     if(DirectoryExists(DataPath)==false)
                     {
-                        SetCurrentDirectory(_T("D://"));
+                        SetCurrentDirectory("D://");   //AI(GA1-B2) 20260804: _T() neutralized (ANSI build, _T(x)==x), same convention as Automation/auto9045.cpp:2233/:2307
                         MyForceDirectories(DataPath);
                         Str1.sprintf("XCOPY /y/a/e/c/i/h/f/r \"%s\" \"%s\"", Backup+GetLastOpenFN(), DataPath+GetLastOpenFN());
                         system(Str1.c_str());
                         MySleep(50);
                     }
 
+#if 0 // TODO(GA1-B2): blocked by HTGem@database.h:62 (forward-declared only; complete type
+      // only in SECSGEM/uHGemClass.h, which ht9045_globals cannot include without creating
+      // the same CMake target cycle root CMakeLists.txt:470 already documents avoiding)
                     if(HSys.MyGem!=NULL)
                         HSys.MyGem->UpdateDataPath(DataPath);                   //Steven 20140902 : SECS GEM
+#endif // TODO(GA1-B2): HTGem
                 }
             }
 
@@ -2341,6 +2393,9 @@ void ProcessLastSetIni_FTP(bool bRead)
         }
     }
 
+#if 0 // TODO(GA1-B2): blocked by TfLotInfo@forms/fLotInfo.h missing members tsASECLEventLog/
+      // ts2DSort/grpManualSet2D/grp2DLotInfo (golden uLotInfo.h TTabSheet/TGroupBox controls,
+      // not present on the ported facade)
     if(fLotInfo!=NULL)                                                          //Steven 20181224 : For ASE-CL
     {
         fLotInfo->tsASECLEventLog->TabVisible=IniConfig.bN22Enable_EventLog;
@@ -2351,7 +2406,11 @@ void ProcessLastSetIni_FTP(bool bRead)
         fLotInfo->grpManualSet2D->Visible=(IniConfig.iN23DownloadMethod==3);
         fLotInfo->grp2DLotInfo->Visible=(IniConfig.bN23UseLotInfoFile==true);
     }
+#endif // TODO(GA1-B2): TfLotInfo tsASECLEventLog/ts2DSort/grpManualSet2D/grp2DLotInfo
 
+#if 0 // TODO(GA1-B2): blocked by TfLotInfo@forms/fLotInfo.h missing members edtLine/
+      // edtProcessName/edtProduct (golden uLotInfo.h TEdit controls, Murata 2DID compare
+      // feature, not present on the ported facade)
     if(CUSTOMER_CODE==CC_Murata)                                                //Steven 20200409 : Murata 2DID比對功能
     {
         if(fLotInfo!=NULL)
@@ -2361,6 +2420,7 @@ void ProcessLastSetIni_FTP(bool bRead)
             fLotInfo->edtProduct->Text=IniConfig.sN23_2_Product;
         }
     }
+#endif // TODO(GA1-B2): TfLotInfo edtLine/edtProcessName/edtProduct
 
 //    IniConfig.sN23_4_URL        =ReadWriteIni(sPath, "2DID Search Function", "sN23_4_URL",              IniConfig.sN23_4_URL,               AnsiString("D:\\RMS\\"), bRead);  //JerryYang 20241104 : 支援2DID白名單功能  //JerryYang 20250521 : Mark掉
 //    IniConfig.sN23_5_UploadPath =ReadWriteIni(sPath, "2DID White list", "sN23_5_UploadPath",            IniConfig.sN23_5_UploadPath,        AnsiString("D:\\RMS\\"), bRead);
@@ -2383,7 +2443,7 @@ void ProcessLastSetIni_FTP(bool bRead)
 
             if(DirectoryExists(DataPath)==false)
             {
-                SetCurrentDirectory(_T("D://"));
+                SetCurrentDirectory("D://");   //AI(GA1-B2) 20260804: _T() neutralized (ANSI build, _T(x)==x), same convention as Automation/auto9045.cpp:2233/:2307
                 MyForceDirectories(DataPath);
                 MySleep(50);
             }
@@ -2395,8 +2455,12 @@ void ProcessLastSetIni_FTP(bool bRead)
                 MySleep(50);
             }
 
+#if 0 // TODO(GA1-B2): blocked by HTGem@database.h:62 (forward-declared only; complete type
+      // only in SECSGEM/uHGemClass.h, which ht9045_globals cannot include without creating
+      // the same CMake target cycle root CMakeLists.txt:470 already documents avoiding)
             if(HSys.MyGem!=NULL)
                 HSys.MyGem->UpdateDataPath(DataPath);                           //Steven 20140902 : SECS GEM
+#endif // TODO(GA1-B2): HTGem
         }
     }
     else
@@ -2428,6 +2492,12 @@ void ProcessLastSetIni_EventLog(bool bRead)
         IniConfig.bO10UseEventLogSaver=IniConfig.bO06_EventLogAutoSave;
     }
 
+#if 0 // TODO(GA1-B2): blocked by TMyStringList@cmydef.h:15 (opaque forward declaration
+      // tree-wide, zero members defined anywhere -- confirmed also by GA-1-B4's cMyDB.cpp
+      // pass) -- slEventLog->FileName/SaveType/SaveSameFolder/SaveByLotID all need a
+      // complete type. TByDay/TBy12Hour/TByHour/TBy2Hour/TBy4Hour/TBy6Hour/TBy8Hour/
+      // TByMonth (the enum values assigned to ->SaveType) are likewise only meaningful
+      // once that type lands.
     if(fMain!=NULL)
     {
         if(IniConfig.bN10_DailyUploadProdData)                                  //Steven 20180514 : JCET吳如春要求每日上傳Event Log, Jam統計表, MTBF, MUBF資料
@@ -2476,6 +2546,7 @@ void ProcessLastSetIni_EventLog(bool bRead)
                                  CosFunction.bSaveEventLogByLotID ||            //KaiChen 20181121 ：矽格-北興 Save Event Log by Lot ID
                                  IniConfig.iO15_SaveFilePeriod==7);
     }
+#endif // TODO(GA1-B2): TMyStringList (slEventLog)
 
     if(IniConfig.iO15_SaveFilePeriod==8)                                        //Stevenhong 20260318 : TESNA 把Eventlog report summarize by month
     {
@@ -2573,10 +2644,13 @@ void ProcessLastSetIni_Tray(bool bRead)
     if(CUSTOMER_CODE==CC_ASE_CL)
         IniConfig.bRecordSkipPosition                       =ReadWriteIni(sPath, "Tray", "bRecordSkipPosition",                      IniConfig.bRecordSkipPosition,                         false,  bRead);  //jou 2013-05-30 Record Skip position
 
+#if 0 // TODO(GA1-B2): blocked by fSpeed@not declared anywhere in ported tree (golden form,
+      // no forms/fSpeed.h port exists)
     if(LoaderUnload_StepMotor)                                                  //Sam 20201221 : Tray y step motor by machine
     {
         fSpeed->ReadFile();
     }
+#endif // TODO(GA1-B2): fSpeed
 }
 //---------------------------------------------------------------------------
 void ProcessLastSetIni_Index(bool bRead)
@@ -2835,11 +2909,14 @@ void ProcessLastSetIni_Specific(bool bRead)
 //---------------------------------------------------------------------------
 void SetCustomerLimitationForConfig()
 {
+#if 0 // TODO(GA1-B2): blocked by cbLastSet@not declared anywhere in ported tree (golden
+      // THTEditList component, golden HTEditList.h has no port anywhere in this tree)
     if(cbLastSet!=NULL)
     {
         cbLastSet->ReadEditTextFromFile(AuthPath, "LastSet.ini");
         cbLastSet->InitialDataToEdit();
     }
+#endif // TODO(GA1-B2): cbLastSet
 
 //    if(cbTest!=NULL)
 //    {
@@ -2847,6 +2924,13 @@ void SetCustomerLimitationForConfig()
 //        cbTest->InitialDataToEdit();
 //    }
 
+#if 0 // TODO(GA1-B2): blocked by elConfig@not declared anywhere in ported tree (same
+      // THTEditList/HTEditList.h gap as cbLastSet above). This one #if 0 also carries
+      // ADAM_Rang (now real, atester_shims.h) and fMain->pnlPowerSaving/
+      // cbDisableSiteMappingCheck + fLotInfo->tsRFMD/btnESCFunction + fMain->slTestLog
+      // (all missing facade members) purely because they are NESTED inside the
+      // elConfig!=NULL guard golden itself wrote them in -- none of those would be
+      // reachable even if they existed, since elConfig itself does not.
     if(elConfig!=NULL)
     {
         elConfig->ReadEditTextFromFile(AuthPath, "config.ini");
@@ -2945,19 +3029,28 @@ void SetCustomerLimitationForConfig()
             }
         }
     }
+#endif // TODO(GA1-B2): elConfig (+ its nested TfMain/TfLotInfo facade gaps)
     ReadConfigByRecipe();                                                       //JimmyChiu 20220601 : config儲存跟隨recipe
+#if 0 // TODO(GA1-B2): blocked by TfMain@forms/fMain.h missing member ShowFunctions
+      // (golden main.h method, not present on the ported facade)
     if(fMain!=NULL)                                                             //Steven 20240124 : Add protection
         fMain->ShowFunctions();                                                 //Steven 20240123 : 顯示功能列表
+#endif // TODO(GA1-B2): TfMain::ShowFunctions
 }
 //---------------------------------------------------------------------------
 void ReadConfigByRecipe()                                                       //JimmyChiu 20220601 : config儲存跟隨recipe
 {
     AnsiString szDir=GetRecipePath();
+#if 0 // TODO(GA1-B2): blocked by elConfig_byRecipe@not declared anywhere in ported tree
+      // (same THTEditList/HTEditList.h gap as cbLastSet/elConfig in
+      // SetCustomerLimitationForConfig)
     if(elConfig_byRecipe!=NULL)                                                 //JimmyChiu 20220601 : config儲存跟隨recipe
     {
         elConfig_byRecipe->ReadEditTextFromFile(szDir, asFileNameConfigByRecipe);
         elConfig_byRecipe->InitialDataToEdit();
     }
+#endif // TODO(GA1-B2): elConfig_byRecipe
+    (void)szDir; //AI(GA1-B2) 20260804: only consumer is gated above; keep computed (matches golden) without an unused-variable warning
 }
 //------------------------------------------------------------------------------
 int GetColorSensorOnLoaderByMUN()                                               //Jimmychiu 20230630 : add color sensor MU-N in Loader
@@ -2973,6 +3066,12 @@ bool GetColorSensorIsMapping(AnsiString &sErrorMsg)                             
 {
     int iColorSenNum=GetColorSensorOnLoaderByMUN();
     bool bReturn=true;                                                          //非以上模式不判斷且不警報
+#if 0 // TODO(GA1-B2): blocked by TfTrayForm@forms/fTrayForm.h missing method GetColorSensor
+      // (golden asendic_Loader.cpp's real color-sensor lookup; forms/fTrayForm.h's own file
+      // head already flags this exact call site as a known gap). RISK NOTE for the
+      // integrator: with this gated, bReturn stays at its "true" default for FT/RT modes
+      // too (not just the "neither mode" default it was meant for), i.e. fail-OPEN on the
+      // color-sensor-mapping check rather than fail-closed -- flagged, not silently chosen.
     if(iTestRunMode==FT)
     {
         bReturn=fTrayForm->GetColorSensor("ColorSensor_FT")->IsColorEable(iColorSenNum,sErrorMsg);
@@ -2983,6 +3082,7 @@ bool GetColorSensorIsMapping(AnsiString &sErrorMsg)                             
         bReturn=fTrayForm->GetColorSensor("ColorSensor_RT")->IsColorEable(iColorSenNum,sErrorMsg);
         sErrorMsg+="(RT)";
     }
+#endif // TODO(GA1-B2): TfTrayForm::GetColorSensor
     #ifdef SOFT_SIMULTE
     bReturn=true;
     #endif
@@ -2993,8 +3093,12 @@ void ReadLastSetIni()
 {
     AnsiString sPath=AuthPath+"config.ini";                                     //JerryYang 20160603
 
+#if 0 // TODO(GA1-B2): blocked by W5SckArtRem_ConfigStub@Automation/SCK_ART_Remainder.h
+      // missing method ChangeCBListProperty (fConfiguration's stand-in type only exposes
+      // what the SCK_ART_Remainder wave itself needed, per its own file-head note)
     if(fConfiguration!=NULL)
         fConfiguration->ChangeCBListProperty();                                 //Steven 20190813 : 必須先修改權限才能修改顯示
+#endif // TODO(GA1-B2): W5SckArtRem_ConfigStub::ChangeCBListProperty
 
     CustomerFunctionSelect();                                                   //  客戶功能選擇區
     ReadLastDataFile();
@@ -3032,8 +3136,12 @@ void ReadLastSetIni()
         WriteIniData(sPath, "Tray", "bRecordSkipPosition", IniConfig.bRecordSkipPosition);                              //jou 2013-05-30 Record Skip
     }
 
+#if 0 // TODO(GA1-B2): blocked by HTGem@database.h:62 (forward-declared only; complete type
+      // only in SECSGEM/uHGemClass.h, which ht9045_globals cannot include without creating
+      // the same CMake target cycle root CMakeLists.txt:470 already documents avoiding)
     if(HSys.MyGem!=NULL)
         HSys.MyGem->UpdateDataPath("D:\\HT9045\\IniData\\Data\\");              //Steven 20140902 : SECS GEM
+#endif // TODO(GA1-B2): HTGem
 
     if(IniConfig.bA09_ByArmCloseSite==true)                                     //ChungHung 20130910 alter for SCK can close site by Index 兩個有衝突
         CosFunction.bOneCycleCanChangeArm=false;                                //ChungHung 20140505 alter ==--->=
@@ -3043,10 +3151,13 @@ void ReadLastSetIni()
         IniConfig.iA01ChangeOpTime=60;
     }
 
+#if 0 // TODO(GA1-B2): blocked by TfMain@forms/fMain.h missing member pnlUnitSpeedDisplay
+      // (golden main.h TPanel, not present on the ported facade)
     if(InitialOK==true && fMain!=NULL)
     {
         fMain->pnlUnitSpeedDisplay->Visible=IniConfig.bA26MotorSpeedSortDisplay;                                        //Ifor 20171228 (Steven) : add 判斷是否顯示 Motor Speed Display
     }
+#endif // TODO(GA1-B2): TfMain::pnlUnitSpeedDisplay
 
     ProcessLastSetIni_RMS               (bReadFile);
     ProcessLastSetIni_FTP               (bReadFile);
@@ -3094,6 +3205,9 @@ void ReadLastSetIni()
         IniConfig.bF14_1KnockShuttleFirst=false;
     }
 
+#if 0 // TODO(GA1-B2): blocked by TfMainHanaART@forms/fMain.h missing method
+      // SetHandlerWaitingData (golden main.h HANA ART helper, not present on the ported
+      // TfMainHanaART stand-in)
     if(IniConfig.bA10_6_HANA_ART_TestMode_Enable==true)                         //JimmyChiu 20241023 HANA ART Function
     {
         int iHD_Mode=IniConfig.iA10_6_HANA_ART_TestMode;
@@ -3102,6 +3216,7 @@ void ReadLastSetIni()
                                               IniConfig.sMachineType,
                                               iHD_Mode);
     }
+#endif // TODO(GA1-B2): TfMainHanaART::SetHandlerWaitingData
 }
 //---------------------------------------------------------------------------
 void SaveLastSetIni()
@@ -3132,16 +3247,23 @@ void SaveLastSetIni()
 //        bHasSaveSet=true;                                                     //Ifor 20151204 新增判斷機台有無修改設定檔
 //    }
 
+#if 0 // TODO(GA1-B2): blocked by cbLastSet@not declared anywhere in ported tree (golden
+      // THTEditList component, golden HTEditList.h has no port anywhere in this tree)
     if(cbLastSet!=NULL)
     {
         cbLastSet->SaveEditTextToFile(AuthPath, "LastSet.ini");
     }
+#endif // TODO(GA1-B2): cbLastSet
 
 //    if(cbTest!=NULL)
 //    {
 //        cbTest->SaveEditTextToFile(AuthPath, "LastSet.ini");
 //    }
 
+#if 0 // TODO(GA1-B2): blocked by elConfig@not declared anywhere in ported tree (same
+      // THTEditList/HTEditList.h gap as cbLastSet above). fConfiguration->
+      // cbN07_EnableHostStart (W5SckArtRem_ConfigStub missing member) is nested inside
+      // and moot for the same reason.
     if(elConfig!=NULL)
     {
         if(IniConfig.bSPILFunction==true &&                                     //JerryYang 20250423 : SPIL順信要求, 偵測到Run check被關閉要跳alarm
@@ -3154,12 +3276,17 @@ void SaveLastSetIni()
         elConfig->SaveEditTextToFile(AuthPath, "config.ini");
         SendCommand_EventLog(EL_UPDATE_PARAMETER, "1");
     }
+#endif // TODO(GA1-B2): elConfig
 
     AnsiString szDir=GetRecipePath();
+#if 0 // TODO(GA1-B2): blocked by elConfig_byRecipe@not declared anywhere in ported tree
+      // (same THTEditList/HTEditList.h gap)
     if(elConfig_byRecipe!=NULL)                                                 //Sam 20220921 : config儲存跟隨recipe
     {
         elConfig_byRecipe->SaveEditTextToFile(szDir, asFileNameConfigByRecipe);
     }
+#endif // TODO(GA1-B2): elConfig_byRecipe
+    (void)szDir; //AI(GA1-B2) 20260804: only consumer is gated above
 }
 //---------------------------------------------------------------------------
 void SaveRmsInfo(AnsiString Name, AnsiString Temp)                              //Steven 20110527
@@ -3195,7 +3322,11 @@ void SaveEventLogAutoSaveInfo()                                                 
     if(IniConfig.bEventLogAutoSaveFunction)
     {
         WriteIniData(sPath, "Event Log", "EventLogRecordDate", IniConfig.dtEventLogLastRecordDate);
-        IniConfig.sEvenLogDataTime=IniConfig.dtEventLogLastRecordDate.FormatString("yyyy/mm/dd hh:mm:ss");              //Ifor 20160621 新增Even Log Record Date Time 字串格式 避免不同系統產生異常問題
+        //AI(GA1-B2) 20260804: .FormatString(fmt) -> FormatDateTime(fmt,dt) -- vclcompat has
+        //  no TDateTime::FormatString member; FormatDateTime is the real free-function
+        //  equivalent (vclcompat/TDateTime.h:67), same established mechanical translation
+        //  as GA-1-B4 (cMyDB.cpp) already applied.
+        IniConfig.sEvenLogDataTime=FormatDateTime("yyyy/mm/dd hh:mm:ss", IniConfig.dtEventLogLastRecordDate);              //Ifor 20160621 新增Even Log Record Date Time 字串格式 避免不同系統產生異常問題
         WriteIniData(sPath, "Event Log", "sEvenLogDataTime", IniConfig.sEvenLogDataTime);
     }
 }
@@ -3204,7 +3335,12 @@ void ReadEventLogAutoSaveInfo()                                                 
 {
     AnsiString sPath=AuthPath+"config.ini", str="";
     AnsiString SDate;
-    SDate=(Now()-1).FormatString("yyyy/mm/dd hh:mm:ss");
+    //AI(GA1-B2) 20260804: (Now()-1) is ambiguous under vclcompat::TDateTime -- it has
+    //  BOTH operator-(const TDateTime&) (taking int 1 via the converting TDateTime(double)
+    //  ctor) AND operator double() (letting built-in double subtraction compete), so GCC
+    //  cannot pick one. Made explicit via .Val() (same idiom GA-1-B4 used for cMyDB.cpp's
+    //  TDateTime+double ambiguity). .FormatString(fmt) -> FormatDateTime(fmt,dt), same as above.
+    SDate=FormatDateTime("yyyy/mm/dd hh:mm:ss", TDateTime(Now().Val()-1.0));
     if(IniConfig.bEventLogAutoSaveFunction)
     {
         try
@@ -3232,7 +3368,7 @@ void ReadEventLogAutoSaveInfo()                                                 
             SysTime.wMinute = atoi(IniConfig.sEvenLogDataTime.SubString(15,2).c_str());
             SysTime.wSecond = atoi(IniConfig.sEvenLogDataTime.SubString(18,2).c_str());
             IniConfig.dtEventLogLastRecordDate=SystemTimeToDateTime(SysTime);   //Ifor 20160621 字串時間轉目前系統時間格式
-            IniConfig.sEventLogLastRecordDate=IniConfig.dtEventLogLastRecordDate.FormatString("yyyy/mm/dd hh:mm:ss");   //Ifor 20160621 修改Secs Gem 時間格式固定 yyyy/mm/dd hh:mm:ss
+            IniConfig.sEventLogLastRecordDate=FormatDateTime("yyyy/mm/dd hh:mm:ss", IniConfig.dtEventLogLastRecordDate);   //Ifor 20160621 修改Secs Gem 時間格式固定 yyyy/mm/dd hh:mm:ss
         }
         catch(...)
         {
@@ -3294,10 +3430,16 @@ void ReadRmsPath()                                                              
     {
         if(CosFunction.bDownloadRecipeLevelMode)                                //jou 2016-01-06 download recipe 增加權限模式選擇
         {
+#if 0 // TODO(GA1-B2): blocked by TfLotInfo@forms/fLotInfo.h missing member coLevelMode
+      // (golden uLotInfo.h TComboBox, not present on the ported facade). Narrow gap:
+      // only reached when CosFunction.bDownloadRecipeLevelMode is set (a narrow
+      // customer feature); IniConfig.sRmsPath keeps its prior value in that case
+      // instead of being (re)computed from this branch.
             if(fLotInfo->coLevelMode->Text!="Normal")
                 IniConfig.sRmsPath=CheckAndReadIniData(sPath, str, str+" Download Path",    AnsiString("D:\\RMS"));
             else
                 IniConfig.sRmsPath=CheckAndReadIniData(sPath, str, str+" Path",             AnsiString("D:\\RMS"));
+#endif // TODO(GA1-B2): TfLotInfo::coLevelMode
         }
         else
         {
@@ -3685,7 +3827,11 @@ void SaveTempModeByDLL()                                                        
 //------------------------------------------------------------------------------
 void CustomerFunctionSelect()
 {
+#if 0 // AI(W906-GA1-B2-integrate) 20260804: re-gated -- InitialCosFunction() has ZERO bodies tree-wide
+      // (CosFunction customer-function wave untranslated). Range clause is
+      // ungate-what-LINKS; this call does not link, so it stays gated.
     InitialCosFunction();                                                       //Steven 20240926 : 重新整理客戶功能
+#endif
 
     if(USE_AUTO_RETEST==eartInstall)                                            //ChungHung 20141002 add for KYEC AutoRetest
         CosFunction.bOffLineBin=true;
@@ -3698,37 +3844,61 @@ void CustomerFunctionSelect()
         IniConfig.bShuttleMode50=false;                                         //與 IniConfig.bIndexArm2SupplyLight 功能互斥
     }
 
+#if 0 // AI(W906-GA1-B2-integrate) 20260804: re-gated -- KoreaFunction() has ZERO bodies tree-wide
+      // (CosFunction customer-function wave untranslated). Range clause is
+      // ungate-what-LINKS; this call does not link, so it stays gated.
     if(IniConfig.bKoreaFunction==true)
     {
         KoreaFunction();
     }
+#endif
 
+#if 0 // AI(W906-GA1-B2-integrate) 20260804: re-gated -- VTEST_Funtion() has ZERO bodies tree-wide
+      // (CosFunction customer-function wave untranslated). Range clause is
+      // ungate-what-LINKS; this call does not link, so it stays gated.
     if(IniConfig.bVTESTFunction==true)
     {
         VTEST_Funtion();
     }
+#endif
 
+#if 0 // AI(W906-GA1-B2-integrate) 20260804: re-gated -- SingaporeFunction() has ZERO bodies tree-wide
+      // (CosFunction customer-function wave untranslated). Range clause is
+      // ungate-what-LINKS; this call does not link, so it stays gated.
     if(IniConfig.bSingaporeFunction)                                            //Steven 20120910 : 新加坡代理商的需求
     {
         SingaporeFunction();
     }
+#endif
 
+#if 0 // AI(W906-GA1-B2-integrate) 20260804: re-gated -- SPILFunction() has ZERO bodies tree-wide
+      // (CosFunction customer-function wave untranslated). Range clause is
+      // ungate-what-LINKS; this call does not link, so it stays gated.
     if(IniConfig.bSPILFunction==true)                                           //JerryYang 20170328 (Jou) 矽品客戶碼統一用SPILFunction
     {
         SPILFunction();
         if(CUSTOMER_CODE==CC_XINYUN)                                            //Steven 20230222 : 要可以拉動
             IniConfig.bShowFormByInitPos=false;
     }
+#endif
 
+#if 0 // AI(W906-GA1-B2-integrate) 20260804: re-gated -- MaximFunction() has ZERO bodies tree-wide
+      // (CosFunction customer-function wave untranslated). Range clause is
+      // ungate-what-LINKS; this call does not link, so it stays gated.
     if(IniConfig.bMaximFunction==true)                                          //JerryYang 20190522 Maxim統一軟體功能
     {
         MaximFunction();
     }
+#endif
 
+#if 0 // AI(W906-GA1-B2-integrate) 20260804: re-gated -- SIGURDFunction() has ZERO bodies tree-wide
+      // (CosFunction customer-function wave untranslated). Range clause is
+      // ungate-what-LINKS; this call does not link, so it stays gated.
     if(IniConfig.bSIGURDFunction==true)                                         //KaiChen 20200506 ：矽格統一軟體功能
     {
         SIGURDFunction();
     }
+#endif
 
     if(USE_ROTATE_KIT)                                                          //kevin rotate motor     //Steven 20131202
         IniConfig.bHaveRotateShuttle=false;
@@ -3816,6 +3986,8 @@ void CustomerFunctionSelect()
         bCanAutoCloseSite=false;
     }
 
+#if 0 // TODO(GA1-B2): blocked by fTemp_Set@not declared anywhere in ported tree (golden
+      // form, no forms/fTemp_Set.h port exists)
     if(fTemp_Set!=NULL)                                                         //Steven 20240206 : 預先決定Index Heat Mode是否要顯示
     {
         bool bOldStatus=fTemp_Set->rgIndexHeatMode->Enabled;
@@ -3828,6 +4000,7 @@ void CustomerFunctionSelect()
         fTemp_Set->rgIndexHeatMode->Controls[HeadChamberSocket ]->Visible=(ATC_SYSTEM==eATCUninstall && IniConfig.bHeadChamberSocketMode);                      //2013-11-20    Dell    for TSMC Add Chamber + Head +Socket
         fTemp_Set->rgIndexHeatMode->Enabled=bOldStatus;
     }
+#endif // TODO(GA1-B2): fTemp_Set
 }
 //------------------------------------------------------------------------------
 AnsiString asInArmAOAFileName[TotalInArmAOAType]={"D:\\HT9045\\System\\AutoTeach_Loader.dat",
@@ -3848,12 +4021,14 @@ bool ReadAutoTeachTable_InArm()                                                 
 {
     for(int i=0; i<TotalInArmAOAType; i++)                                      //JerryYang 20241119 : fix AOA
     {
-        ReadAutoTeachTable(asInArmAOAFileName[i].c_str(), &InputAtuoTeachTable[i]);
+        //AI(GA1-B2) 20260804: const_cast -- ReadAutoTeachTable's cprod.h decl takes
+        //  char* (non-const); cprod.h is read-only, so the fix is at the call site.
+        ReadAutoTeachTable(const_cast<char*>(asInArmAOAFileName[i].c_str()), &InputAtuoTeachTable[i]);
     }
 
     for(int i=0; i<TotalInArmAOAType; i++)
     {
-        ReadAutoTeachTable(asInArmAOAFileName_Cal[i].c_str(), &InputAtuoTeachTableCal[i]);
+        ReadAutoTeachTable(const_cast<char*>(asInArmAOAFileName_Cal[i].c_str()), &InputAtuoTeachTableCal[i]);
     }
 
     return true;
@@ -3893,12 +4068,13 @@ bool ReadAutoTeachTable_OutArm()                                                
 {
     for(int i=0; i<TotalOutArmAOAType; i++)
     {
-        ReadAutoTeachTable(asOutArmAOAFileName[i].c_str(), &OutputAtuoTeachTable[i]);
+        //AI(GA1-B2) 20260804: const_cast, same reasoning as ReadAutoTeachTable_InArm above.
+        ReadAutoTeachTable(const_cast<char*>(asOutArmAOAFileName[i].c_str()), &OutputAtuoTeachTable[i]);
     }
 
     for(int i=0; i<TotalOutArmAOAType; i++)
     {
-        ReadAutoTeachTable(asOutArmAOAFileName_Cal[i].c_str(), &OutputAtuoTeachTableCal[i]);
+        ReadAutoTeachTable(const_cast<char*>(asOutArmAOAFileName_Cal[i].c_str()), &OutputAtuoTeachTableCal[i]);
     }
     return true;
 }
@@ -4007,7 +4183,11 @@ void __fastcall TAlarm1::SummarizeJAMreportbymonth()                            
         rowDetail->CommaText = fileData->Strings[i];
         if (rowDetail->Count > 3)
         {
-            if (rowDetail->Strings[3].Pos("JAM") == 1)
+            //AI(GA1-B2) 20260804: AnsiString(...) wrap -- vclcompat::StringsProxy (the
+            //  Strings[] indexer's return type) has no .Pos() of its own; it does carry
+            //  operator AnsiString() (vclcompat/TStringList.h:93), so an explicit
+            //  construction gets a real AnsiString to call .Pos() on (AnsiString.h:104-106).
+            if (AnsiString(rowDetail->Strings[3]).Pos("JAM") == 1)
             {
                 TAlarm1 rowData;
                 rowData.FullRow = fileData->Strings[i];
@@ -4032,5 +4212,5 @@ void __fastcall TAlarm1::SummarizeJAMreportbymonth()                            
     delete fileData;
 }
 //------------------------------------------------------------------------------
-//AI(W0-TAIL) 20260626: close gated function-body region
-#endif // TODO(W6)
+//AI(GA1-B2) 20260804: (was the close of W0-TAIL's single big gate; retired --
+//  see the matching banner at this file's ARM_OFFSET ctor for the new scheme)

@@ -31,18 +31,21 @@
 //  shapes were chosen (2-arg MyDBIProcess overload; ShowMyMessage matching
 //  canary_support.h's declaration).
 // ---------------------------------------------------------------------------
-static std::vector<AnsiString> g_TestDbiLog;
-void MyDBIProcess(AnsiString S1, AnsiString S2)
-{
-    g_TestDbiLog.push_back(S1 + "|" + S2);
-}
+// AI(W906-GA1-B2-integrate) 20260804: seam-based spies (matching this file's
+// local-extern convention) -- real bodies: aHotPlateSubstrate.cpp (MyDBIProcess
+// sink) and canary_support.cpp (ShowMyMessage).
+extern int        W906_MyDBIProcess_Count;
+extern AnsiString W906_MyDBIProcess_LastS1;
+extern AnsiString W906_MyDBIProcess_LastS2;
+void W906_MyDBIProcess_Reset();
+extern int        W906_ShowMyMessage_Count;
+void W906_ShowMyMessage_Reset();
+
+static std::vector<AnsiString> g_TestDbiLog;   // legacy spy log, no longer fed
+// AI(W906-GA1-B2-integrate) 20260804: local MyDBIProcess stub RETIRED (real body now in link group)
 
 static int g_TestShowMyMessageCalls = 0;
-void ShowMyMessage(AnsiString /*S1*/, AnsiString /*S2*/, AnsiString /*S3*/,
-                   bool /*Ok*/, bool /*bServoOff*/)
-{
-    ++g_TestShowMyMessageCalls;
-}
+// AI(W906-GA1-B2-integrate) 20260804: local ShowMyMessage stub RETIRED (real body now in link group)
 
 static int g_pass = 0, g_fail = 0;
 
@@ -57,6 +60,8 @@ static void ResetAll()
     FTPClientEvt_ResetStateForTest();
     g_TestDbiLog.clear();
     g_TestShowMyMessageCalls = 0;
+    W906_MyDBIProcess_Reset();       // AI(W906-GA1-B2-integrate) 20260804: seam-based spies
+    W906_ShowMyMessage_Reset();
 }
 
 // =============================================================================
@@ -74,7 +79,7 @@ static void test_success()
           "cmdChangeDir -> exact golden message text logged to memoFTP");
     CHECK(bListOk == false, "cmdChangeDir -> bListOk NOT set (golden only sets it for List/NList)");
     CHECK(bError == false, "cmdChangeDir -> bError cleared to false");
-    CHECK(g_TestDbiLog.size() == 1 && g_TestDbiLog.back() == AnsiString("Exception|Success -- ChangeDir successful"),
+    CHECK(W906_MyDBIProcess_Count == 1 && W906_MyDBIProcess_LastS1 == AnsiString("Exception") && W906_MyDBIProcess_LastS2 == AnsiString("Success -- ChangeDir successful"),
           "cmdChangeDir -> MyDBIProcess(\"Exception\", Str) called with the same Str");
 
     ResetAll();
@@ -111,7 +116,7 @@ static void test_failure()
     CHECK(bError == true, "NMFTP1Failure -> bError forced true (golden :2033)");
     CHECK(bListOk == false, "NMFTP1Failure -> bListOk NEVER touched by this handler (golden has no bListOk line in it at all)");
     CHECK(handled == false, "Handled left untouched by the handler (QUIRK #3) -- caller's initial false survives");
-    CHECK(g_TestDbiLog.size() == 1 && g_TestDbiLog.back() == AnsiString("Exception|Failure -- Download failed"),
+    CHECK(W906_MyDBIProcess_Count == 1 && W906_MyDBIProcess_LastS1 == AnsiString("Exception") && W906_MyDBIProcess_LastS2 == AnsiString("Failure -- Download failed"),
           "MyDBIProcess(\"Exception\", Str) called");
 
     ResetAll();
@@ -196,10 +201,10 @@ static void test_error_and_status()
     ResetAll();
 
     FTPClientEvt_NMFTP1Error(NULL, 500, "connection reset");
-    CHECK(g_TestShowMyMessageCalls == 1, "NMFTP1Error calls ShowMyMessage exactly once");
+    CHECK(W906_ShowMyMessage_Count == 1, "NMFTP1Error calls ShowMyMessage exactly once");
 
     FTPClientEvt_NMFTP1Status(NULL, "227 Entering Passive Mode");
-    CHECK(g_TestShowMyMessageCalls == 2, "NMFTP1Status calls ShowMyMessage exactly once more");
+    CHECK(W906_ShowMyMessage_Count == 2, "NMFTP1Status calls ShowMyMessage exactly once more");
 }
 
 // =============================================================================

@@ -80,13 +80,11 @@ static void check(bool cond, const char* expr, const char* file, int line) {
 //  own header note for why exactly these two (and not the 3-arg __fastcall
 //  MyDBIProcess, which ht9045_secsgem now supplies for real).
 // ---------------------------------------------------------------------------
-void ShowMyMessage(AnsiString S1, AnsiString /*S2*/, AnsiString /*S3*/,
-                   bool /*Ok*/, bool /*bServoOff*/)
-{
-    std::printf("  [ShowMyMessage] %s\n", S1.c_str());
-}
+// AI(W906-GA1-B2-integrate) 20260804: local ShowMyMessage stub RETIRED -- the full
+// RESCAN group now supplies the real definition (was a duplicate).
 
-void MyDBIProcess(AnsiString /*S1*/, AnsiString /*S2*/) {}
+// AI(W906-GA1-B2-integrate) 20260804: local MyDBIProcess stub RETIRED -- the full
+// RESCAN group now supplies the real definition (was a duplicate).
 
 // ---------------------------------------------------------------------------
 //  HasICUnderMachine / HasAnyICInMachine link-satisfying stubs -- SAME
@@ -98,8 +96,8 @@ void MyDBIProcess(AnsiString /*S1*/, AnsiString /*S2*/) {}
 //  through ReadGeneralIni, so `false` is a correct link-time stand-in, not a
 //  behavioral fork.
 // ---------------------------------------------------------------------------
-bool HasICUnderMachine() { return false; }
-bool HasAnyICInMachine() { return false; }
+// AI(W906-GA1-B2-integrate) 20260804: local HasICUnderMachine stub RETIRED (real body in group)
+// AI(W906-GA1-B2-integrate) 20260804: local HasAnyICInMachine stub RETIRED (real body in group)
 
 // Scratch path under TEMP/TMP (falls back to cwd) -- same helper shape as
 // tests/test_ini_helpers.cpp.

@@ -139,8 +139,10 @@ bool DoPickFromShuttle_9045_2x8_8(int);
 //      so they are NOT in ht9045_globals.  DEFINE offline-safe stubs here matching
 //      the cprod.h prototype, faithful to the golden offline end-state.  When
 //      cprod.cpp later ungates them, remove these two (will become duplicates).
-bool EnableFix3UseCylinder()                       { return false; }  // golden cprod.cpp:1452 -- offline: Fix3 cylinder modes not configured -> false
-void ReversionEmptyPoint()                         {}                 // golden cprod.cpp:1484 -- offline: reserved-empty-point arrays empty + MOT[].Tray.FullIC() false -> no-op
+// AI(W906-GA1-B2-integrate) 20260804: the two offline stand-ins that lived here
+// (EnableFix3UseCylinder / ReversionEmptyPoint) are RETIRED -- cprod.cpp's real
+// bodies were ungated by GA-1-B2, exactly the removal this file's own
+// CORRECTION note anticipated. Declarations still come from cprod.h.
 bool CheckOutArmSuckICFallDown()                   { return false; }  // golden csystem.h:84 -- offline: no fall-down
 bool CheckOutSuckICFallDown(bool)                  { return false; }  // golden aoutarm.h:90 -- offline: no IC fall-down (separate from the csystem.h void wrapper)
 bool DetectAutoTray(int,int*)                      { return true;  }  // golden csystem.h:232 -- offline: tray detected

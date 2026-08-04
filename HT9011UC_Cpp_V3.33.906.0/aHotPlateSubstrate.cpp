@@ -1019,7 +1019,20 @@ void SetInArmHome() {}
 void InArmSubSpeed() {}
 void InArmAddSpeed() {}
 void StopAllMotor() {}
-void MyDBIProcess(AnsiString, AnsiString) {}
+// AI(W906-GA1-B2-integrate) 20260804: still a behavioural no-op (golden writes a
+// DB row; offline sink drops it) but now carries the tree's established W906_*
+// observation seam so tests that used to spy on their own local stub (e.g.
+// test_FTPClient_EventHandlers) keep their instrumentation after stub retirement.
+int        W906_MyDBIProcess_Count = 0;
+AnsiString W906_MyDBIProcess_LastS1;
+AnsiString W906_MyDBIProcess_LastS2;
+void W906_MyDBIProcess_Reset() { W906_MyDBIProcess_Count=0; W906_MyDBIProcess_LastS1=""; W906_MyDBIProcess_LastS2=""; }
+void MyDBIProcess(AnsiString S1, AnsiString S2)
+{
+    W906_MyDBIProcess_Count++;
+    W906_MyDBIProcess_LastS1=S1;
+    W906_MyDBIProcess_LastS2=S2;
+}
 
 //==============================================================================
 //  (E) [W6.2b1x1] ainarm2.h engine shims the in-arm per-site VARIANT SMs call.

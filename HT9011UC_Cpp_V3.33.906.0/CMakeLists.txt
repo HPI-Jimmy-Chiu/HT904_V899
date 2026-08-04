@@ -420,6 +420,9 @@ add_library(ht9045_globals STATIC
     cprod.cpp
     cpublic.cpp
     cmydef.cpp
+    LastSet.cpp    # AI(W906-GA1-B2-integrate) 20260804: moved here from ht9045_sm -- the
+                   # ungated cprod.cpp (same archive) references LastSet directly, and
+                   # globals is the lowest common archive every consumer already links.
 )
 
 target_include_directories(ht9045_globals PUBLIC
@@ -1157,7 +1160,7 @@ add_library(ht9045_sm STATIC
     # to fMain/fLotInfo/... .
     asendic.cpp
     canary_support.cpp
-    LastSet.cpp           # AI(W906-GA1-B1) 20260804: golden LastSet.cpp -- LastSet/Tech/CmdData/AlignTeach definitions (shim retired from canary_support)
+    cinitial.cpp          # AI(W906-GA2-C1) 20260804: block 1 (golden :77-3060) -- Sucker/Switch/Sensor names+init
     # --- W6.2 (IN-ARM foundation): shared HotPlate pick/place geometry leaves ---
     #   ainarm_SearchPickPlate.cpp  -- HP-pick geometry + DoInArmPickFromHotPlate_9045 SM
     #   ainarm_SearchPlacePlate.cpp -- HP-place geometry + search-planner + data-swap leaves

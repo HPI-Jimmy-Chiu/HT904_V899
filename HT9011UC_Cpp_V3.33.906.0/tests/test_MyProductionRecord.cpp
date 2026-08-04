@@ -60,11 +60,9 @@
 // ============================================================================
 //  Local stand-ins (see file banner) -- NOT the real aHotPlateSubstrate.cpp.
 // ============================================================================
-TMyKitSuck::TMyKitSuck() {}   // trivial: only .Suck[][].sName/.iShtRow/.iShtCol are touched below
-
-TMyKitSuck InArmSuck;
-TMyKitSuck OutArmSuck;
-TMyKitSuck TestSocket;
+// AI(W906-GA1-B2-integrate) 20260804: the local TMyKitSuck ctor + 3 global
+// stand-ins are RETIRED -- the full RESCAN group now supplies the real
+// aHotPlateSubstrate.cpp bodies/objects (was a duplicate-definition set).
 
 // ============================================================================
 //  Helpers

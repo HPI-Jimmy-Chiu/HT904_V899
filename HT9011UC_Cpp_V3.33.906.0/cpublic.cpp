@@ -125,6 +125,7 @@ void TMyTimerQueue100::ClearData()
 #include "common.h"           // asGalilCmdPath, IniConfig, cUnitConvert via include chain
 #include "Public/HTMD5.h"     // md5_Folder, SearchFile
 #include "cUnitConvert.h"     // ChangeToFloatNonPcnt
+#include "CCLink/MyCCLinkSensor_predicates.h" // AI(GA1-B3) 20260804: UseCanBusOrEtherCAT (ShuttleLog) -- tiny VCL-free predicate pair, no HAL coupling
 #include <psapi.h>            // EnumProcesses / GetModuleBaseName
 #include <stdexcept>          // std::runtime_error (substitute for BCB6 Exception)
 #include <cmath>              // fabs, pow, cos, sin
@@ -277,7 +278,18 @@ AnsiString DTK4848_LRC(AnsiString str)                                          
     str=str.SubString(str.Length()-1, 2) ;
     return str;
 }
-#if 0 // TODO(W5: GetEveryCode/Change_Tempture_Value need T_ASXII2HEX table; UT100 needs A_Create_LCR/T_HEX2ASCII_Mac + COM2)
+// AI(GA1-B3) 20260804: re-surveyed -- still blocked, tightened citation.
+// T_ASXII2HEX[23]/T_HEX2ASCII_Mac/A_Create_LCR are golden EJ1N/TextProcess.h
+// declarations (definitions in EJ1N/TextProcess.cpp:325+) for the Panasonic
+// KT4H comm module; EJ1N/ has NO port anywhere in this tree (no EJ1N/
+// directory at all -- confirmed by a whole-tree find). CCLink/MyCCLink.cpp
+// re-declares the SAME 4 externs (golden's own "avoid #include cpublic.h"
+// banner) but has zero definitions either (see that file's own
+// AI(W5-CCLink-Translate) note) -- not a substitute home. UT100WordWriteNoSucm/
+// ReadNoSucm additionally need COM2->Comm2: golden rs232.h's real TCOM2 is
+// unported; the only offline stand-in, atester_shims.h::TCOM2Shim, has no
+// Comm2 member.
+#if 0 // TODO(GA1-B3): blocked by EJ1N/TextProcess.{h,cpp} (whole module unported) + COM2->Comm2 (real TCOM2 unported)
 //------------------------------------------------------------------------------
 void GetEveryCode(AnsiString AnsiData)                                          //Steven 20111028 : 改成AnsiString
 {
@@ -560,7 +572,13 @@ unsigned int CRC_Check(unsigned char *ary, unsigned int len)
     return (crc);
 }
 //------------------------------------------------------------------------------
-#if 0 // TODO(W5: TMC401WriteTemp/ReadTemp/E5DCReadTemp/WriteTemp need COM2->Comm2)
+// AI(GA1-B3) 20260804: re-surveyed -- still blocked. golden rs232.h's real
+// TCOM2 (member `TComm *Comm2`) is unported; the only offline stand-in,
+// atester_shims.h::TCOM2Shim, deliberately carries just bCCDDummyRum/
+// DoReleaseAndInspEnd()/ATCAlarmSenCheck() (the tester-engine's 3 needs) and
+// has no Comm2 member -- pulling it in would not satisfy this call shape
+// anyway (it is also the tester engine's shim, not cpublic.cpp's layer).
+#if 0 // TODO(GA1-B3): blocked by COM2->Comm2 (golden rs232.h TCOM2 unported; TCOM2Shim has no Comm2 member)
 void TMC401WriteTemp(int Addr, int CH, int Temp)
 {
     unsigned char CRCL,CRCH;
@@ -629,7 +647,24 @@ void E5DCWriteTemp(int Addr, int Temp)
     COM2->Comm2->WriteCommData(Str.c_str(), Str.Length());
 }
 #endif // TODO(W5)
-#if 0 // TODO(W6: TTLLog/HeaterLog/HeaterSVLog/OutShuttleLog/HomeLog/RespondASECom/ProductionLog need fMain UI + TestIF/SW[])
+// AI(GA1-B3) 20260804: re-surveyed all 7 -- TestIF (cprod.h:2576) and SW[]
+// (myswitch.h:43) are now BOTH real, so this block's own original citation is
+// stale, but each function still has its own real blocker (per-function,
+// not shared):
+//   * TTLLog        -- fMain->slTTLLog (no such facade member; only hits
+//                       anywhere in the tree are this gated block + golden
+//                       dfm2rc layout data)
+//   * HeaterLog/HeaterSVLog -- fMain->slHeaterLog (same: no facade member)
+//   * OutShuttleLog -- fMain->cbShowShuttleSensor/meShuttle1/meShuttle2 ARE
+//                       real (forms/fMain.h), but ->Lines->SaveToFile is NOT:
+//                       forms/FormWidgets.h's TfMainMemoLines only has
+//                       Count/Add, no SaveToFile -- narrowest blocker of the 7
+//   * HomeLog       -- fMain->MemoHome (no facade member)
+//   * RespondASECom -- ASESendMessage (golden "ASE_K Socket"/aseTest.h whole
+//                       VCL form/global) has no port anywhere; no "ASE_K
+//                       Socket" directory exists in this tree at all
+//   * ProductionLog -- fMain->MemoProductionLog (no facade member)
+#if 0 // TODO(GA1-B3): each of the 7 blocked by its own missing fMain member (or ASESendMessage) -- see banner above for the per-function breakdown
 //------------------------------------------------------------------------------
 void TTLLog(AnsiString Message)                                                 //Steven 20161115 : TTL Log改新版存檔
 {
@@ -823,7 +858,18 @@ AnsiString GetDateInfoByString(AnsiString asSign)                               
         Str.sprintf("%04d%s%02d%s%02d", SystemYear, asSign, SystemMonth, asSign, SystemDate);
     return Str;
 }
-#if 0 // TODO(W6: ProductionDataLog needs fSCKART/fLotInfo/LastSet + MyForceDirectories (gated))
+// AI(GA1-B3) 20260804: re-surveyed -- almost everything this function needs is
+// now real: fSCKART/fLotInfo (FormsFacade.h), fSCKART->palLotNumber->Caption /
+// fLotInfo->edtSysLotID->Text (both TEdit/TPanel-typed real members),
+// MyForceDirectories (common.h), LastSet.SendCT[4]/BinCT[4][256]/
+// iBinData32[4][260] (LastSet.h, landed whole-volume this same day by
+// GA-1-B1), GetDateInfoByString/GetOnlyTimeInfoByString/asProductDataPath/
+// iRunStartMode/FT/iTestBinCount/CUSTOMER_CODE/CC_PTI (all already declared,
+// several already used elsewhere in THIS file's active code). Sole remaining
+// blocker: `fSCKART->bShow` (golden Automation/SCK_ART.h:276 `bool bShow;`)
+// has no member on forms/fSCKART.h's TfSCKART (grepped that header directly --
+// not present).
+#if 0 // TODO(GA1-B3): blocked by fSCKART->bShow (missing facade member; every other symbol is real)
 //------------------------------------------------------------------------------
 // kevin 20160724 生產資料
 //------------------------------------------------------------------------------
@@ -1433,26 +1479,17 @@ AnsiString TMyStrQueue100::ShowCommaText(bool bWithDateTime)
     }
     return Str;
 }
-// AI(W906-CommonWaveFile) 20260721: ATTEMPTED un-gate -- MyForceDirectories
-// (its sole cited blocker) is real as of this wave and every other symbol
-// this function uses was already active in this TU, so the function itself
-// compiles clean. RE-GATED after a real build: cpublic.cpp compiles into
-// ht9045_globals, which several test executables link WITHOUT ht9045_core
-// (transitively via ht9045_comms/ht9045_motor/ht9045_io, e.g. test_MyCCLink,
-// test_myplc_modbus, test_MyNUEC1 -- confirmed by a full build attempt, not
-// merely inferred). Un-gating this pulls a new undefined reference to
-// MyForceDirectories (common.cpp / ht9045_core) into cpublic.cpp.o, breaking
-// every one of those targets' final link. Fixing it properly means either
-// patching every such test target's link_libraries individually (unbounded,
-// easy to miss one) or making ht9045_globals PUBLIC-link ht9045_core at the
-// library level (a bigger architectural change than this wave's brief scoped,
-// and reverses a deliberate documented independence between the two
-// libraries -- see this file's own CMakeLists.txt banner). Left gated per
-// the wave brief's own instruction: "if any turns out to have additional
-// unrelated blockers you discover while trying, leave it gated and just note
-// that finding -- don't force it."
-#if 0 // TODO(W5-safe: TMyStrQueue100::SafeData needs MyForceDirectories (gated in common.cpp TODO(wave-file)))
-//------------------------------------------------------------------------------
+// AI(GA1-B3) 20260804: UN-GATED for real this time. Prior wave's finding
+// (MyForceDirectories real, but cpublic.cpp.o also lives in ht9045_globals,
+// which test_MyCCLink/test_myplc_modbus/test_MyNUEC1/... link WITHOUT
+// ht9045_core, so this pulls a new undefined MyForceDirectories reference
+// into their final link) is still factually true, but is now a resolved
+// planning decision, not an open blocker: the main loop has decided the
+// integrator will add ht9045_core to those ~9 test targets' link_libraries
+// at integrate time (see this batch's own report, _ga1_b3_report.md, for the
+// exact target list). Body below re-verified byte-for-byte against golden
+// cpublic.cpp (RogerYang 20260505 FixGalilLog revision, incl. the retained
+// commented-out pre-fix draft) -- no changes from the prior gated copy.
 void TMyStrQueue100::SafeData()
 {
 //    AnsiString asFileName, asPath, Str="";
@@ -1526,7 +1563,6 @@ void TMyStrQueue100::SafeData()
     ClearData();
     delete List;
 }
-#endif // TODO(W5-safe)
 #if 0 // TODO(W3-dup: TMyTimerQueue100 ctor/ClearData already ungated at file top (L90-108))
 //------------------------------------------------------------------------------
 TMyTimerQueue100::TMyTimerQueue100()
@@ -1669,15 +1705,9 @@ AnsiString TMyTimerQueue100::ShowCommaText(bool bWithDateTime)
     }
     return Str;
 }
-// AI(W906-CommonWaveFile) 20260721: ATTEMPTED un-gate, RE-GATED -- same
-// finding as TMyStrQueue100::SafeData above (see that function's banner):
-// MyForceDirectories is real, but cpublic.cpp's object file is shared with
-// several test executables that link ht9045_globals without ht9045_core
-// (transitively via ht9045_comms/ht9045_motor/ht9045_io), and a full build
-// confirmed un-gating this breaks their final link. Left gated per the wave
-// brief's "don't force it" guardrail.
-#if 0 // TODO(W5-safe: TMyTimerQueue100::SafeData needs MyForceDirectories (gated))
-//------------------------------------------------------------------------------
+// AI(GA1-B3) 20260804: UN-GATED -- same disposition as TMyStrQueue100::SafeData
+// above (same function, see that banner for the full link-graph story). Body
+// re-verified byte-for-byte against golden cpublic.cpp; no changes.
 void TMyTimerQueue100::SafeData()
 {
     AnsiString asFileName, asPath, Str="";
@@ -1709,7 +1739,6 @@ void TMyTimerQueue100::SafeData()
     ClearData();
     delete List;
 }
-#endif // TODO(W5-safe)
 //AI(ht9045-v899) 20260626: ungated StartTestTimeStamp/EndTestTimeStamp -- System* + QueueCycleTime/QueueTestTime + tXxxTimer
 //------------------------------------------------------------------------------
 void StartTestTimeStamp(bool bAdd)
@@ -1773,7 +1802,14 @@ int FindAndKillProcess(LPCTSTR lpszProcessName)                                 
     }
     return x;
 }
-#if 0 // TODO(W6: LogIndexMaxMinPos needs fMain->slIndexYMaxMinShift + iMax/MinCommandY* globals + InitialMaxMinValue)
+// AI(GA1-B3) 20260804: re-surveyed -- iMaxCommandY1/iMinCommandY1/iMaxTeachY1F/
+// iMinTeachY1F/iMaxTeachY1M/iMinTeachY1M/iMaxCommandY2/... (cmydef.h:4995) and
+// InitialMaxMinValue (Motor/mymotor.h:464) are ALL real now. Sole remaining
+// blocker: `fMain->slIndexYMaxMinShift` (golden main.h TMyStringList*, method
+// AddTextWithDateTime/MySaveToFile) and `fMain->AddIndexPosLog` (golden
+// main.h method) -- neither member exists on forms/fMain.h's TfMain (grepped
+// whole tree, only hit is this gated block + golden dfm2rc layout data).
+#if 0 // TODO(GA1-B3): blocked by fMain->slIndexYMaxMinShift + fMain->AddIndexPosLog (missing facade members)
 //------------------------------------------------------------------------------
 void LogIndexMaxMinPos(AnsiString str)                                          //Isaac 20201012 : 計算Encoder和commandpos/Teaching的差值，記錄並存檔，一盤tray記錄一次
 {
@@ -1833,16 +1869,13 @@ void RotationCoordinates(double px, double py, double &px1, double &py1, double 
         //py1 = py;
     }
 }
-// AI(W906-CommonWaveFile) 20260721: ATTEMPTED un-gate, RE-GATED -- both cited
-// blockers (MyForceDirectories, WriteDataToFile) are real as of this wave, and
-// asUDPLogPath/GetTimeInfo() were already active in this TU. However a full
-// build confirmed the same cpublic.cpp.o / ht9045_globals-without-ht9045_core
-// linkage hazard documented on TMyStrQueue100::SafeData above applies here
-// too (zero current callers of UDPErrorLog itself does NOT help -- the whole
-// translation unit's object file is what a static-library link pulls in, not
-// per-function). Left gated per the wave brief's "don't force it" guardrail.
-#if 0 // TODO(W6: UDPErrorLog needs asUDPLogPath + MyForceDirectories (gated) + WriteDataToFile (gated))
-//------------------------------------------------------------------------------
+// AI(GA1-B3) 20260804: UN-GATED -- same "resolved planning decision" posture
+// as the two SafeData functions above: both cited blockers (MyForceDirectories,
+// WriteDataToFile) are real, asUDPLogPath/GetTimeInfo() were already active in
+// this TU, and the ht9045_globals-without-ht9045_core link hazard the prior
+// wave found is now the integrator's job to fix at ~9 named test targets (see
+// _ga1_b3_report.md), not a reason to keep this gated. Body unchanged from the
+// prior gated copy (re-verified byte-for-byte against golden).
 void UDPErrorLog(AnsiString aTitle, AnsiString Command)                         //kevin 20211020 UDP error log
 {
     AnsiString sFileName="", sMegTime="", asLog;
@@ -1854,8 +1887,17 @@ void UDPErrorLog(AnsiString aTitle, AnsiString Command)                         
     asLog.sprintf("%s,   %s, %s", sMegTime, aTitle, Command);
     WriteDataToFile(sFileName.c_str(), asLog.c_str());
 }
-#endif // TODO(W6)
-#if 0 // TODO(W6: RecordErrorLog case 1 needs fMain->ListBox14; WriteDataToFile (gated))
+// AI(GA1-B3) 20260804: re-surveyed RecordErrorLog's golden real body (below) --
+// case 0 (WriteDataToFile) is now symbol-ready, but un-gating verbatim would be
+// a DUPLICATE DEFINITION: an active offline substitute of the identical name
+// and signature already exists a few lines down (AI(W6.2c-INARM-batch3)
+// 20260626, stdout-mirror instead of real file I/O, already in production use
+// by ainarm9045_1x4_4.cpp's SiteUseMgr). Swapping case 0 to the real body is
+// an integrator decision (delete the substitute, un-gate this), not a plain
+// symbol-availability ungate. Case 1 is separately still blocked:
+// `fMain->ListBox14` (golden main.h TListBox*) has no facade member (grepped
+// whole tree, only hit is this gated block + golden dfm2rc layout data).
+#if 0 // TODO(GA1-B3): case 0 ready but redefinition-blocked by the active substitute below; case 1 blocked by fMain->ListBox14 (missing)
 //==============================================================================
 void RecordErrorLog(int iSaveToFile,AnsiString FilePth, AnsiString Command)     //kevin 20211022 any error log
 {
@@ -1944,8 +1986,19 @@ void SetSocketHandlerID(AnsiString strID)                                       
         strID=AnsiString(" ");
     IniConfig.SocketHandlerID=strID;
 }
-#if 0 // TODO(W6: ShuttleLog needs iSensor[][]/ UseCanBusOrEtherCAT (HAL) + WriteDataToFile (gated) + asShtSenLogPath)
+// AI(GA1-B3) 20260804: UN-GATED -- all 4 cited blockers are now real:
+// iSensor[4][9] (cmydef.h:5233), UseCanBusOrEtherCAT() (new #include below --
+// CCLink/MyCCLinkSensor_predicates.h, a tiny VCL-free predicate pair, no HAL
+// coupling), WriteDataToFile/MyForceDirectories (common.h), asShtSenLogPath
+// (common.h:166). Same ht9045_globals-without-ht9045_core link-graph decision
+// as the two SafeData functions / UDPErrorLog above applies to WriteDataToFile
+// -- integrator's job at the ~9 named test targets, not a reason to gate.
 //==============================================================================
+#if 0 // AI(W906-GA1-B3-integrate) 20260804: re-gated -- blocked by link graph:
+      // UseCanBusOrEtherCAT lives in ht9045_comms (CCLink/MyCCLinkSensor_predicates.cpp),
+      // which is NOT in the standard RESCAN closure most consumers link. Ungating this
+      // one function would force ht9045_comms into ~66 link groups. Revisit when the
+      // link-graph is consolidated or ShuttleLog gains a real consumer.
 void ShuttleLog()                                                               //kevin 20220912 add shuttle sensor record
 {
     AnsiString sFileName, Sbuffer0="", Sbuffer1="", str2="";
@@ -1992,7 +2045,7 @@ void ShuttleLog()                                                               
     Sbuffer1.sprintf("End",SystemHour, SystemMin, SystemSec);
     WriteDataToFile(Sbuffer0.c_str(), Sbuffer1.c_str());
 }
-#endif // TODO(W6)
+#endif
 //AI(ht9045-v899) 20260626: ungated GetSoftwareFileVersion -- uses VerInfo (Win32 version API)
 //------------------------------------------------------------------------------
 //Sam 20230328 : 自動更新增加版本檢查
@@ -2082,7 +2135,16 @@ void VerInfo::GetAppVersion(AnsiString sAppExeName, WORD& major, WORD& minor, WO
     revision=LOWORD(fileInfo->dwFileVersionLS);
     free(data);
 }
-#if 0 // TODO(W5: GetSVNRev/GetFileVersion/GetMainVersion need Application->ExeName (VCL singleton, no stub in foundation))
+// AI(GA1-B3) 20260804: re-surveyed -- still blocked, cross-confirmed by an
+// independent, same-day finding: `Application` (golden VCL `TApplication`
+// singleton, `->ExeName`) has NO port anywhere in this tree -- grepped for
+// TApplication/g_pApplication/ApplicationShim tree-wide, zero hits besides
+// this gate itself and database.cpp's OWN independent gate for the same
+// missing surface ("AI(W906-GA1-B6) 20260804: gated -- vclcompat has no
+// TApplication/MB_YESNO/IDYES", database.cpp:401). GetAppVersion (the Win32
+// GetFileVersionInfo leaf these 3 wrap) is already ungated and tested above --
+// only the `Application->ExeName` self-path lookup is missing.
+#if 0 // TODO(GA1-B3): blocked by Application->ExeName (TApplication VCL singleton unported; cross-confirmed by database.cpp's independent GA1-B6 finding)
 //------------------------------------------------------------------------------
 AnsiString VerInfo::GetSVNRev()
 {
@@ -2246,7 +2308,20 @@ void VerInfo::m_GetVerInfo(void)
 
     m_dwLastError = GetLastError();
 }
-#if 0 // TODO(W7: GetBundleInfo needs cJSON + TestSocket/LotSummary/Prod/fSCKART/fNote + asBundleTrayID/bUnloading)
+// AI(GA1-B3) 20260804: re-surveyed -- most of this function's surface is now
+// real: cJSON (Public/cJSON.h), TestSocket (aHotPlateSubstrate.h:635, real
+// TMyKitSuck), Prod (cprod.h:1138, real PROD_INFO_ST), fSCKART/fNote
+// (FormsFacade.h), asBundleTrayID (cmydef.h:5684)/bUnloading (cmydef.h:3884).
+// TWO blockers remain, both facade/class gaps rather than plain missing
+// externs:
+//   * `LotSummary` -- golden cSocket.h `class TLotSummary` (extern global
+//     `LotSummary`) has NO port anywhere in this tree; the only stand-in,
+//     Automation/SCK_ART_Remainder.h's `W5SckArtRem_LotSummaryStub`, is a
+//     DIFFERENT, TU-local type (not the real class, not externally the
+//     `LotSummary` name) -- pulling it in would not satisfy this call shape.
+//   * `fNote->edBundleID` -- golden note.h:317 `TEdit *edBundleID;` has no
+//     member on forms/fNote.h (grepped directly -- not present).
+#if 0 // TODO(GA1-B3): blocked by LotSummary (class TLotSummary unported) + fNote->edBundleID (missing facade member)
 //<==
 //Sam 20230328 : 自動更新增加版本檢查
 //------------------------------------------------------------------------------

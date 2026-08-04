@@ -68,9 +68,9 @@ public:
 // test_config_loaders.cpp pattern (local stub definitions for gated
 // externals) so this test links WITHOUT pulling in ht9045_sm.
 // ---------------------------------------------------------------------------
-DWORD MySleepEx(DWORD /*dwMilliseconds*/, bool /*bAlertable*/) { return 0; }
-void  MySleep(DWORD /*dwMilliseconds*/) {}
-void  MyDBIProcess(AnsiString /*S1*/, AnsiString /*S2*/) {}
+// AI(W906-GA1-B2-integrate) 20260804: MySleepEx stub RETIRED (real common.cpp body now in closure)
+// AI(W906-GA1-B2-integrate) 20260804: MySleep stub RETIRED (same)
+// AI(W906-GA1-B2-integrate) 20260804: local MyDBIProcess stub RETIRED (real body now in link group)
 
 int main()
 {

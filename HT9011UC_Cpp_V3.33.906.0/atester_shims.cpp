@@ -105,57 +105,9 @@ unsigned int iBin[4][8];
 // are ALSO real csystem.cpp bodies shimmed here for the identical reason).
 // TODO(W6): delete this duplicate once cprod.cpp's #if 0 gate lifts (would
 // otherwise ODR-conflict with the real definition).
-int GetSiteCount(bool IncludeCloseSite)                             // golden cprod.cpp:305
-{
-    int iSiteCount=0;
-
-    if(IncludeCloseSite==true)
-    {
-        if(TestIF_File.iTestMode==SingleSite)
-            iSiteCount=1;
-        else if(TestIF_File.iTestMode==DualSite)
-            iSiteCount=2;
-        else if(TestIF_File.iTestMode==TriSite1X3)
-            iSiteCount=3;
-        else if(TestIF_File.iTestMode==QualSite1X4 ||
-                TestIF_File.iTestMode==_8Site1X4)
-            iSiteCount=4;
-        else if(TestIF_File.iTestMode==QualSite2X2 ||
-                TestIF_File.iTestMode==QualSite2X2N)
-            iSiteCount=4;
-        else if(TestIF_File.iTestMode==DualSite2x1)
-            iSiteCount=2;
-        else if(TestIF_File.iTestMode==_6Site2X3 ||
-                TestIF_File.iTestMode==_6Site2X3N)
-            iSiteCount=6;
-        else if(TestIF_File.iTestMode==_8Site2X4 ||
-                TestIF_File.iTestMode==_8Site2X4N)
-            iSiteCount=8;
-        else if(TestIF_File.iTestMode==_10Site2X5)
-            iSiteCount=10;
-        else if(TestIF_File.iTestMode==_12Site2X6)
-            iSiteCount=12;
-        else if(TestIF_File.iTestMode==_16Site2X8 ||
-                TestIF_File.iTestMode==_16Site4X4)
-            iSiteCount=16;
-        else if(TestIF_File.iTestMode==_32Site4X8M ||
-                TestIF_File.iTestMode==_32Site4X8N)
-            iSiteCount=32;
-    }
-    else
-    {
-        for(int i=0; i<MAX_SOCKET_ROW; i++)
-        {
-            for(int j=0; j<MAX_SOCKET_COL; j++)
-            {
-                if(TestIF_File.iSiteMap[i][j]>0)
-                    iSiteCount++;
-            }
-        }
-    }
-
-    return iSiteCount;
-}
+// AI(W906-GA1-B2-integrate) 20260804: GetSiteCount duplicate RETIRED exactly as
+// this banner's own TODO(W6) anticipated -- cprod.cpp's gate lifted (GA-1-B2), the
+// real golden body now compiles into libht9045_globals.a.
 
 // ---- atester_32Site: AI(W5-Automation-Integrate) 20260710: ALL bodies that
 // used to live here are now REAL (atester_32Site.cpp) -- REMOVED (would

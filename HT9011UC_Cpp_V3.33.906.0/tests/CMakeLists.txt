@@ -163,7 +163,7 @@ add_executable(test_w0tail_headers
 
 target_link_libraries(test_w0tail_headers PRIVATE vclcompat)
 # myTimer.cpp lives in ht9045_globals; pull just its TQPF_Timer ctor via the lib.
-target_link_libraries(test_w0tail_headers PRIVATE ht9045_globals)
+target_link_libraries(test_w0tail_headers PRIVATE ht9045_globals ht9045_core)
 
 add_test(NAME w0tail_headers COMMAND test_w0tail_headers)
 
@@ -176,7 +176,7 @@ add_executable(test_globals
     test_globals.cpp
 )
 
-target_link_libraries(test_globals PRIVATE vclcompat ht9045_globals)
+target_link_libraries(test_globals PRIVATE vclcompat ht9045_globals ht9045_core)
 
 add_test(NAME globals COMMAND test_globals)
 
@@ -288,7 +288,7 @@ add_executable(test_config_loaders
 # ws2_32 (THGem's ctor constructs TClientSocket/TServerSocket -- see
 # test_uHGemEquipment's own identical need).
 target_link_libraries(test_config_loaders PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_secsgem,ht9045_forms,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_automation,ht9045_comms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 if(WIN32)
     target_link_libraries(test_config_loaders PRIVATE ws2_32)
@@ -317,7 +317,11 @@ add_executable(test_motor_w4
 # and ht9045_core. The RESCAN group ensures intra-globals cross-references
 # (cprod <-> cpublic <-> cmydef) are resolved across archive re-scans.
 target_link_libraries(test_motor_w4 PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    
+    # AI(W906-GA1-B2-integrate) 20260804: upgraded to the full RESCAN group --
+    # cprod.cpp/cpublic.cpp ungate widened ht9045_globals objects' extern surface
+    # (fMain/fAGV/InArmSuck/... now referenced), the lightweight link no longer closes.
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -341,7 +345,7 @@ add_executable(test_sim_motor
 )
 
 target_link_libraries(test_sim_motor PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_automation,ht9045_comms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -370,7 +374,7 @@ add_executable(test_lane_io_sim
 )
 
 target_link_libraries(test_lane_io_sim PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_automation,ht9045_comms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -397,7 +401,7 @@ add_executable(test_sim_io
 )
 
 target_link_libraries(test_sim_io PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_automation,ht9045_comms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -458,7 +462,15 @@ add_executable(test_cpublic_foundation
     test_cpublic_foundation.cpp
 )
 
-target_link_libraries(test_cpublic_foundation PRIVATE ht9045_globals ht9045_public vclcompat)
+target_link_libraries(test_cpublic_foundation PRIVATE 
+    # AI(W906-GA1-B2-integrate) 20260804: upgraded to the full RESCAN group --
+    # cprod.cpp/cpublic.cpp ungate widened ht9045_globals objects' extern surface
+    # (fMain/fAGV/InArmSuck/... now referenced), the lightweight link no longer closes.
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_automation,ht9045_comms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+if(WIN32)
+    target_link_libraries(test_cpublic_foundation PRIVATE ws2_32)  # AI(W906-GA1-B2-integrate) 20260804: full group pulls vclcompat sockets
+endif()
 
 add_test(NAME CpublicFoundation COMMAND test_cpublic_foundation)
 
@@ -1220,7 +1232,7 @@ add_executable(test_w7_s0_motor_convergence
 )
 
 target_link_libraries(test_w7_s0_motor_convergence PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_automation,ht9045_comms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1530,7 +1542,7 @@ add_executable(test_MyCCLink
 )
 
 target_link_libraries(test_MyCCLink PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_comms,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_automation,ht9045_comms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1548,7 +1560,7 @@ add_executable(test_cMyNUDN1
 )
 
 target_link_libraries(test_cMyNUDN1 PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_comms,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_comms,ht9045_globals,ht9045_core,ht9045_public,vclcompat>"
 )
 
 add_test(NAME CanBus_cMyNUDN1 COMMAND test_cMyNUDN1)
@@ -1568,7 +1580,7 @@ add_executable(test_myplc_modbus
 )
 
 target_link_libraries(test_myplc_modbus PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_comms,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_automation,ht9045_comms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 
 if(WIN32)
@@ -1634,8 +1646,11 @@ add_executable(test_MyNUEC1
 )
 
 target_link_libraries(test_MyNUEC1 PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_comms,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_automation,ht9045_comms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
+if(WIN32)
+    target_link_libraries(test_MyNUEC1 PRIVATE ws2_32)
+endif()
 
 add_test(NAME MyNUEC1 COMMAND test_MyNUEC1)
 
@@ -2035,7 +2050,7 @@ add_executable(test_uHGemEquipment
 # resolved (see root CMakeLists.txt's ht9045_secsgem target for the matching
 # new link dependency).
 target_link_libraries(test_uHGemEquipment PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_secsgem,ht9045_forms,ht9045_core,ht9045_globals,ht9045_public,ht9045_db,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_automation,ht9045_comms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 if(WIN32)
     target_link_libraries(test_uHGemEquipment PRIVATE ws2_32)
@@ -2204,7 +2219,9 @@ add_executable(test_FTPClient_EventHandlers
     ../KYECFTP/MiniFtpEngine.cpp
     ../KYECFTP/FTPClient_EventHandlers.cpp
 )
-target_link_libraries(test_FTPClient_EventHandlers PRIVATE ht9045_globals ht9045_public vclcompat)
+target_link_libraries(test_FTPClient_EventHandlers PRIVATE 
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_automation,ht9045_comms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
 if(WIN32)
     target_link_libraries(test_FTPClient_EventHandlers PRIVATE ws2_32)
 endif()
@@ -2265,7 +2282,12 @@ add_executable(test_MyProductionRecord
     test_MyProductionRecord.cpp
     ../Public/MyProductionRecord.cpp
 )
-target_link_libraries(test_MyProductionRecord PRIVATE ht9045_globals ht9045_public vclcompat)
+target_link_libraries(test_MyProductionRecord PRIVATE 
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_automation,ht9045_comms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+if(WIN32)
+    target_link_libraries(test_MyProductionRecord PRIVATE ws2_32)
+endif()
 add_test(NAME MyProductionRecord COMMAND test_MyProductionRecord)
 
 # ===========================================================================
@@ -2583,8 +2605,11 @@ add_executable(test_w7_f1_wall2_probe
 )
 
 target_link_libraries(test_w7_f1_wall2_probe PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_secsgem,ht9045_forms,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_automation,ht9045_comms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
+if(WIN32)
+    target_link_libraries(test_w7_f1_wall2_probe PRIVATE ws2_32)  # AI(W906-GA1-B2-integrate) 20260804: full group pulls vclcompat sockets
+endif()
 
 add_test(NAME w7_f1_wall2_probe COMMAND test_w7_f1_wall2_probe)
 
@@ -2899,7 +2924,7 @@ add_executable(test_ga1_readgeneralini
     test_ga1_readgeneralini.cpp
 )
 target_link_libraries(test_ga1_readgeneralini PRIVATE
-    "$<LINK_GROUP:RESCAN,ht9045_secsgem,ht9045_forms,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_automation,ht9045_comms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 if(WIN32)
     target_link_libraries(test_ga1_readgeneralini PRIVATE ws2_32)
@@ -2922,6 +2947,62 @@ add_executable(test_ga1_cmydb
 )
 target_link_libraries(test_ga1_cmydb PRIVATE vclcompat sqlite3)
 add_test(NAME GA1_cMyDB COMMAND test_ga1_cmydb)
+
+# ---------------------------------------------------------------------------
+#  GA-1 B3: cpublic.cpp newly-ungated SafeData x2 / UDPErrorLog / ShuttleLog
+# ---------------------------------------------------------------------------
+# AI(W906-GA1-B3) 20260804: file I/O redirected to %TEMP% inside the test;
+# ht9045_core listed explicitly (ht9045_globals deliberately does not
+# PUBLIC-link it -- D-A0-4 ruling).
+add_executable(test_ga1_cpublic
+    test_ga1_cpublic.cpp
+)
+target_link_libraries(test_ga1_cpublic PRIVATE
+    
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_automation,ht9045_comms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+if(WIN32)
+    target_link_libraries(test_ga1_cpublic PRIVATE ws2_32)
+endif()
+add_test(NAME GA1_cpublic COMMAND test_ga1_cpublic)
+
+# ---------------------------------------------------------------------------
+#  GA-1 B2: cprod.cpp ungate acceptance (5 representative ungated functions)
+# ---------------------------------------------------------------------------
+# AI(W906-GA1-B2) 20260804: self-contained convention (compiles the real
+# cprod.cpp/common.cpp/LastSet.cpp/canary_support.cpp/mycylin.cpp/mysensor.cpp
+# plus TU-local stand-ins) -- see _ga1_b2_report.md.
+add_executable(test_ga1_cprod
+    test_ga1_cprod.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../cprod.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../cmydef.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../cpublic.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../myTimer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../common.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../LastSet.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../canary_support.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../mycylin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../mysensor.cpp
+)
+target_link_libraries(test_ga1_cprod PRIVATE vclcompat)
+if(WIN32)
+    target_link_libraries(test_ga1_cprod PRIVATE psapi version)
+endif()
+add_test(NAME GA1_cprod COMMAND test_ga1_cprod)
+
+# ---------------------------------------------------------------------------
+#  GA-2 C1: cinitial.cpp block 1 (Sucker/Switch/Sensor names + init)
+# ---------------------------------------------------------------------------
+add_executable(test_ga2_c1_cinitial
+    test_ga2_c1_cinitial.cpp
+)
+target_link_libraries(test_ga2_c1_cinitial PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_automation,ht9045_comms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+if(WIN32)
+    target_link_libraries(test_ga2_c1_cinitial PRIVATE ws2_32)
+endif()
+add_test(NAME GA2_C1_cinitial COMMAND test_ga2_c1_cinitial)
 
 # ===========================================================================
 #  GLOBAL TEST TIMEOUT -- must stay at the BOTTOM of this file

@@ -66,12 +66,8 @@
 // ---------------------------------------------------------------------------
 static int g_msgCalls = 0;   // counts ShowMyMessage hits (NULL-cell / error paths)
 
-void ShowMyMessage(AnsiString S1, AnsiString /*S2*/, AnsiString /*S3*/,
-                   bool /*Ok*/, bool /*bServoOff*/)
-{
-    ++g_msgCalls;
-    std::printf("  [ShowMyMessage] %s\n", S1.c_str());
-}
+// AI(W906-GA1-B2-integrate) 20260804: local ShowMyMessage stub RETIRED -- the full
+// RESCAN group now supplies the real definition (was a duplicate).
 
 // AI(W906-SysModWire) 20260720: a THIRD gated external, needed as of this
 // wave -- database.cpp's SystemModularInitial is now real (`new
@@ -84,7 +80,8 @@ void ShowMyMessage(AnsiString S1, AnsiString /*S2*/, AnsiString /*S3*/,
 // defines at file scope, see AI(W906-FastcallFix) 20260720 note above) needs
 // a definition too. Same no-op shape as tests/test_uHGemEquipment.cpp's own
 // (:173).
-void MyDBIProcess(AnsiString /*S1*/, AnsiString /*S2*/) {}
+// AI(W906-GA1-B2-integrate) 20260804: local MyDBIProcess stub RETIRED -- the full
+// RESCAN group now supplies the real definition (was a duplicate).
 
 // ---------------------------------------------------------------------------
 //  AI(W906-uHGemClass-Unlock3) 20260723: HasICUnderMachine / HasAnyICInMachine
@@ -108,8 +105,7 @@ void MyDBIProcess(AnsiString /*S1*/, AnsiString /*S2*/) {}
 //  answer for THIS unlinked stub, which has no grid state to query at all --
 //  not a behavioral fork from the real body, just a link-time stand-in for a
 //  value this test would get anyway (no IC seeded => false either way).
-bool HasICUnderMachine() { return false; }
-bool HasAnyICInMachine() { return false; }
+// AI(W906-GA1-B2-integrate) 20260804: HasICUnderMachine/HasAnyICInMachine local stubs RETIRED (real csystem_predicates bodies now in group)
 
 // ---------------------------------------------------------------------------
 //  Link-satisfying stub ctors for the W6/W7-DEFERRED queue classes.
@@ -127,9 +123,10 @@ bool HasAnyICInMachine() { return false; }
 //    objects, so trivial (no-op) construction is sufficient and correct for
 //    this test.  Replace with the real cpublic.cpp ctors when W6/W7 lands.
 // ---------------------------------------------------------------------------
-TMyQueue10::TMyQueue10()        {}
-TMyStrQueue100::TMyStrQueue100(){}
-TMyTimerQueue100::TMyTimerQueue100(){}
+// AI(W906-GA1-B3-integrate) 20260804: the three no-op stub ctors that lived
+// here are RETIRED -- cpublic.cpp's real ctors have been active since
+// 2026-06-26 and this target links ht9045_globals, so the stubs were a
+// latent duplicate-definition trap (found by the GA-1-B3 sweep).
 
 // ---------------------------------------------------------------------------
 //  Tiny check harness (same style as the sibling tests).
