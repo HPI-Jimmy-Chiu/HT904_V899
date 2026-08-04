@@ -3220,3 +3220,64 @@ DoTraceDataResponse 補測試。照復原 SOP 驗證（fresh `build_0804_ga0_bas
 - **模型切換提醒**（Gate A 計畫 §5）：GA-1/GA-2 主迴圈可降 Opus high；GA-3/4/5 回 Fable xhigh。
 - **勿圈入 V906 commit**：`config/*`、`setup.inf`、V899 樹、repo 根 SCRATCH/_review_*、
   `build_*` 產物與 `*.log`、三個 `*_test_scratch/`、`.pti_frames/`。
+
+---
+
+## 2026-08-04（続）— GA-1 substrate 六批之四完成（B1/B4/B5/B6 + sqlite vendor）
+
+四路平行翻譯（Sonnet 5 high，寫入邊界各自隔離、共用標頭/SERIAL 檔全鎖、CMake 片段走報告
+由主迴圈 integrate）＋主迴圈逐批承重宣稱獨立複驗後分 commit 落地：
+
+- **B1 LastSet（`4f7a92b`）**：855 欄/6 struct 全量，主迴圈以獨立 token-stream diff 複驗
+  **3,607=3,607 完全一致**；canary_support 66 欄 shim 與 acarry_shims 6 欄 TECH shim 雙雙
+  退場（退場前逐欄驗證 name+type 精確吻合）；`LastSet.cpp` 進 `ht9045_sm`（與原 shim 全域
+  同 archive，`ht9045_kyecftp` 的 sm+core 雙連結維持單一定義——agent 主動抓到的碰撞路徑）。
+- **B5 language（`4dbabb0`）**：8/14 核心忠實+6 UI-glue gated；**發現 vclcompat 真 bug**：
+  `TStringList::Strings[i]` 的 StringsProxy 直接餵 `AnsiString::sprintf` 變參模板會靜默選錯
+  多載損毀資料（`-Wall -Wextra -Wpedantic` 全靜默；probe 實證 `[d?A_(null)]` vs
+  `[hello_world]`），5 處呼叫點顯式 `(AnsiString)` cast，revert-test 證明 load-bearing。
+  **此 bug 類別要進未來翻譯 brief 的注意清單**（任何 Strings[i]→sprintf 的樣式）。
+- **B6 ReadGeneralIni（`85b25f2`）**：golden database.cpp:301-1537 全譯；420/420
+  CheckAndReadIniDataGeneral、16/16 WriteIniDataGeneral、72/72 CheckRange（主迴圈 grep
+  複驗同數）；~330 識別字預掃零缺欄（共用標頭早已備齊）；6 個 `#if 0` gate=僅存真缺口
+  （cprod W6-gated callee×3/MessageBox/TTLRS232VerCheck/COMMSPEED_20M@mn200.h）。
+- **B4 cMyDB+sqlite（`d8361a3`）**：36 函式（4 個 homecoming-gated：MyDBIProcess/
+  MyDBIProcessNew/RecordProcess/NewRecordProcess——agent 查出比 brief 多 3 個已在別處
+  落地的暫居定義，並標記 MyDBIProcessNew 的潛在 `__fastcall` 不配對）；**vendored
+  sqlite 3.7.7.1 amalgamation 與 golden sqlite3.h 精確同版**（sqlite.org 舊 URL 格式
+  `/sqlite-amalgamation-3070701.zip`，2013 前無年份目錄）；**brief 的 oracle 錯誤被 agent
+  糾正**：`system/*.DB` 是 BDE/Paradox 非 SQLite，真 sqlite 檔是 `MDB/Handler.DB3`
+  （9.5MB/19 表），測試唯讀跑真檔+:memory: round-trip 22/22。
+- 三個新測試 target 進 `tests/CMakeLists.txt`（GA1_LastSet/GA1_Language/GA1_ReadGeneralIni/
+  GA1_cMyDB——B5 integrate 時照報告刪其 3 個 stand-in 改連 RESCAN 群組；B4 依報告採
+  self-contained 慣例雙 TU+myTimer.cpp，**刻意不建 ht9045_cmydb library**［無生產消費端，
+  建了反而與測試 stand-in 相撞］）。
+
+**本波新教訓（記入紀律）**：integrate 的樹級 build 必須等「擁有任何 library 成員檔」的
+agent 全部完成——B6 在製中間態的 database.cpp 被主迴圈樹級 build 撿到（`COMMSPEED_20M`
+尚未 gate 的時刻），假失敗一次。與既有「mutation agent 不可與主迴圈並行改同檔」是同族，
+但這次撞的是**間接編譯面**（RESCAN 群組拉進 ht9045_db）非直接同檔。
+
+**驗證基準（全新 `build_0804_ga1_wave`）**：build 0 error、`resolving`=0、ctest **119/123**
+（4 個失敗仍為 config_db/IniFiles/ini_helpers/config_loaders 環境漂移）；touched 檔
+mojibake 0/EOL 合規/結尾換行全齊。`_ga1_b*_report.md`×4 留樹根未 tracked（scratch 慣例）。
+
+### 🔖 RESUME（最新）
+
+- **本場次已 commit（八顆）**：`ac9d2b2` 計畫/`fd218cf` trace 復原/`6e1e907` 宣告修正/
+  `5ea1375` GA-0/`4f7a92b` B1/`4dbabb0` B5/`85b25f2` B6/`d8361a3` B4。分支 `fix/v899.32-pti`。
+- **驗證基準**：fresh `build_0804_ga1_wave` ctest **119/123**（同 4 環境漂移）；MSVC
+  `build_msvc` 95/95 連結 0 error；`build_msvc_ui\HT9045.exe` smoke exit 0。
+- **⚠ 接續第一件事仍是 `git status`。**
+- **Gate A 進度：GA-0 ✅、GA-1 4/6 批 ✅**（計畫=docs/GATE_A_FIRST_LIGHT_PLAN.md；
+  決策=docs/DESIGN_GateA.md；recon=docs/RECON_GateA_FormShow.md+RECON_GateA_FormRegistry.md）。
+- **下一步**：
+  1. **GA-1 B2**（cprod.cpp ungate 3,845 gated 行——B1 LastSet 已落地故解鎖；範圍條款
+     ungate-what-links；複驗 xhigh）＋**B3**（cpublic queue ungate 818 行+D-A0-4 的
+     9-target RESCAN 升級清單在 DESIGN_GateA.md）。B2/B3 檔案不相撞可平行，但**兩者都在
+     ht9045_globals——integrate build 等兩者皆完成**（本波教訓）。
+  2. **GA-2 cinitial 15,242 行**切 5 塊（塊界在計畫 §4-GA2；單檔序列）。
+  3. **GA-4 MFC 首燈本體**（Fable/Opus xhigh 不可降級；全新檔零碰撞可隨時平行）。
+  4. B4 homecoming swap 小波（4 符號遷回 cMyDB.cpp+MyDBIProcessNew fastcall 修正，
+     步驟在 `_ga1_b4_report.md`）。
+- **模型**：GA-1 續批翻譯 Sonnet high；GA-2 複驗 xhigh 固定；GA-3/4/5 主迴圈 Fable xhigh。
