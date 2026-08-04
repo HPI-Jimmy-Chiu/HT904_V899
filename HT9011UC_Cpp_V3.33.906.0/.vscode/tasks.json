@@ -11,15 +11,52 @@
   //  WHICH TASK MAKES THE .exe?  "V906: Build UI exe (MSVC/MFC)" -- and only
   //  that one. The MinGW tasks build libraries + 126 tests; MinGW cannot build
   //  the UI at all because MFC ships with MSVC only.
-  // ==========================================================================
+  //
+  //  ------------------------------------------------------------------------
+  //  WHY THE COMMANDS ARE ABSOLUTE PATHS AND THE SHELL IS PINNED TO cmd.exe
+  //  AI(W906-GateA-fix) 20260804: every task in this file used to be
+  //  "command": "build.bat <mode>" with a cwd, and every single one failed
+  //  instantly with:
+  //      build.bat : The term 'build.bat' is not recognized ...
+  //      CategoryInfo : ObjectNotFound: (build.bat:String) []
+  //  Two independent reasons, both fixed below:
+  //
+  //   1. THE SHELL WAS PowerShell, NOT cmd.exe. PowerShell deliberately never
+  //      resolves a bare command name from the current directory (it has no
+  //      "." in its lookup), so a cwd does not help -- only ".\build.bat" or
+  //      an absolute path runs. This folder's settings.json does ask for the
+  //      "Command Prompt" profile, but "terminal.integrated.defaultProfile.
+  //      windows" is a WINDOW-scoped setting, and window-scoped settings in a
+  //      FOLDER's settings.json are silently ignored inside a multi-root
+  //      workspace (HT9045.code-workspace). So the port's tasks inherited the
+  //      repo root's PowerShell profile. Pinning options.shell here does not
+  //      depend on any profile resolution at all.
+  //   2. Even under cmd.exe, current-directory command resolution is not
+  //      guaranteed: if NoDefaultCurrentDirectoryInExePath is set in the
+  //      environment, cmd.exe refuses to run "build.bat" from the cwd too.
+  //      An absolute ${workspaceFolder} path is immune to both.
+  //
+  //  cmd.exe is also the shell build.bat itself documents ("run it from
+  //  cmd.exe, not PowerShell") and the one whose exit code propagates cleanly,
+  //  which matters because launch.json gates F5 on the UI task succeeding.
+  //  ------------------------------------------------------------------------
   "version": "2.0.0",
+
+  // Inherited by every task below; a task may still override it.
+  "options": {
+    "cwd": "${workspaceFolder}",
+    "shell": {
+      "executable": "cmd.exe",
+      "args": ["/d", "/c"]
+    }
+  },
+
   "tasks": [
     {
       "label": "V906: Build (MinGW, quick)",
       "detail": "Incremental libs+tests. NO exe. This is the default build task (Ctrl+Shift+B).",
       "type": "shell",
-      "command": "build.bat",
-      "options": { "cwd": "${workspaceFolder}" },
+      "command": "${workspaceFolder}\\build.bat",
       "group": { "kind": "build", "isDefault": true },
       "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
       // g++ emits absolute paths here (verified), so anchor the matcher to them.
@@ -36,8 +73,8 @@
       "label": "V906: Gate (MinGW build + ctest)",
       "detail": "The reportable gate. Baseline 2026-08-04: 122/126 pass; the 4 failures (config_db/IniFiles/ini_helpers/config_loaders) are environment drift, not regressions.",
       "type": "shell",
-      "command": "build.bat gate",
-      "options": { "cwd": "${workspaceFolder}" },
+      "command": "${workspaceFolder}\\build.bat",
+      "args": ["gate"],
       "group": "test",
       "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
       "problemMatcher": {
@@ -52,8 +89,8 @@
     {
       "label": "V906: ctest only",
       "type": "shell",
-      "command": "build.bat test",
-      "options": { "cwd": "${workspaceFolder}" },
+      "command": "${workspaceFolder}\\build.bat",
+      "args": ["test"],
       "group": "test",
       "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
       "problemMatcher": []
@@ -62,8 +99,8 @@
       "label": "V906: Build UI exe (MSVC/MFC)",
       "detail": "Builds build_msvc_ui\\HT9045.exe, runs the headless control probe, then the smoke check. THIS is the task that produces an exe.",
       "type": "shell",
-      "command": "build.bat ui",
-      "options": { "cwd": "${workspaceFolder}" },
+      "command": "${workspaceFolder}\\build.bat",
+      "args": ["ui"],
       "group": "build",
       "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
       "problemMatcher": "$msCompile"
@@ -72,8 +109,8 @@
       "label": "V906: Run HT9045.exe",
       "detail": "Launch the Gate A skeleton with the --devpath that golden's path check requires. Builds the exe first if it is missing.",
       "type": "shell",
-      "command": "build.bat run",
-      "options": { "cwd": "${workspaceFolder}" },
+      "command": "${workspaceFolder}\\build.bat",
+      "args": ["run"],
       "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
       "problemMatcher": []
     },
@@ -81,16 +118,16 @@
       "label": "V906: MSVC second oracle (no UI)",
       "detail": "scripts\\build_msvc.bat -- MSVC-only failures are advisory until W7-A3 triages them.",
       "type": "shell",
-      "command": "build.bat msvc",
-      "options": { "cwd": "${workspaceFolder}" },
+      "command": "${workspaceFolder}\\build.bat",
+      "args": ["msvc"],
       "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
       "problemMatcher": "$msCompile"
     },
     {
       "label": "V906: Clean (MinGW build dir only)",
       "type": "shell",
-      "command": "build.bat clean",
-      "options": { "cwd": "${workspaceFolder}" },
+      "command": "${workspaceFolder}\\build.bat",
+      "args": ["clean"],
       "presentation": { "reveal": "always", "panel": "dedicated" },
       "problemMatcher": []
     }

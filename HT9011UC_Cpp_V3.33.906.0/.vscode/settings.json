@@ -67,5 +67,14 @@
 
   "editor.minimap.enabled": false,
   "editor.largeFileOptimizations": true,
+
+  //  Applies only when this FOLDER is opened directly. When the tree is opened
+  //  through HT9045.code-workspace, this line is silently ignored: profile
+  //  selection is window-scoped, and window-scoped keys in a folder's
+  //  settings.json have no effect in a multi-root workspace -- so terminals and
+  //  tasks here inherit the repo root's PowerShell profile instead.
+  //  AI(W906-GateA-fix) 20260804: that is what broke every build task
+  //  ("build.bat is not recognized"); tasks.json now pins cmd.exe itself and
+  //  no longer relies on this setting. Kept for the open-folder-directly case.
   "terminal.integrated.defaultProfile.windows": "Command Prompt"
 }
