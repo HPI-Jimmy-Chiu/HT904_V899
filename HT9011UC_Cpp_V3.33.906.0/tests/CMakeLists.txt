@@ -2815,6 +2815,47 @@ endif()
 
 add_test(NAME W7_L2_CKernel COMMAND test_w7_l2_ckernel)
 
+# ---------------------------------------------------------------------------
+#  W906 trace: THGem::DoTraceDataResponse  (SECSGEM/uHGemEquipment.cpp:4640-4693)
+# ---------------------------------------------------------------------------
+# AI(W906-trace-test) 20260804: NEW target -- closes a live-code coverage gap.
+# DoTraceDataResponse's caller was already wired before the translation landed
+# (uHGemEquipment.cpp:4548-4549, the 10-slot sweep inside DoLocalAllProcessLoop,
+# reached from :6740), so swapping the old no-op stub for golden's real body
+# changed production behaviour immediately with zero tests on it.
+#
+# Same RESCAN link group as test_w7_l2_ckernel / test_w7_l3_siteusemgr above,
+# and required for the same reason: the unit lives in ht9045_secsgem but drags
+# in ht9045_db (HSys), ht9045_core/ht9045_globals (CUSTOMER_CODE / CosFunction /
+# cprod<->cpublic<->cmydef constructor cross-references) and ht9045_sm (the real
+# MyDBIProcess / ShowMyMessage / csystem predicates that uHGemEquipment.cpp and
+# uHGemClass.cpp reference), so GNU ld must re-scan the archive set for the
+# cross-references to settle.  With the full group linked, this test TU needs NO
+# local link-time stubs at all -- do not add any.
+#
+# The suite needs no network: THGem's srvGem stays in vclcompat SIM mode
+# (ServerSocket.h:144) and the wire bytes are captured from
+# TCustomWinSocket::SimTxBuffer(), the same seam test_uHGemEquipment.cpp's
+# [T6]/[T7] already use.  ws2_32 is still linked because ClientSocket.cpp /
+# ServerSocket.cpp reference it unconditionally.
+#
+# Placed ABOVE the GLOBAL TEST TIMEOUT block -- a test registered after that
+# block silently gets no timeout, which is how a wedged run goes unnoticed.
+# ---------------------------------------------------------------------------
+add_executable(test_w906_trace
+    test_w906_trace.cpp
+)
+
+target_link_libraries(test_w906_trace PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+
+if(WIN32)
+    target_link_libraries(test_w906_trace PRIVATE ws2_32)
+endif()
+
+add_test(NAME W906_Trace COMMAND test_w906_trace)
+
 # ===========================================================================
 #  GLOBAL TEST TIMEOUT -- must stay at the BOTTOM of this file
 # ===========================================================================
