@@ -158,7 +158,7 @@ extern TMyKitSuck *ptrOutSHT;
 #endif
 #ifndef AOUTARM9045_XMODULE_FWD
 #define AOUTARM9045_XMODULE_FWD
-void IsCatchTrayReadySupplyNewTray();
+bool IsCatchTrayReadySupplyNewTray();                                          // AI(W906-GateA-0) 20260804: was `void` -- golden aoutarm.h:64 is `bool`; MinGW mangling hides return type so it linked, MSVC LNK2019'd (same class as W7-A2)
 bool CheckRotateOutNotFinish();                                                //kevin 20130524 發出alarm inarm到等待點
 bool MoveOutArmXY_ToFix_Tray_Full(bool bOpenOutArm=false);                      //Ifor 20250926 add:Fix Tray 全滿時移開Out Arm
 int  CheckOutArmCleanOut();
@@ -167,7 +167,7 @@ bool CheckOutArmToTask50(int iWhichShuttle);
 bool CheckShuttleICPos(int iSht);
 void InitPickFromShuttle1Task();
 void InitPickFromShuttle2Task();
-bool SetFixTrayFullIC();
+void SetFixTrayFullIC();                                                       // AI(W906-GateA-0) 20260804: was `bool` -- golden aoutarm.h:73 is `void`; see IsCatchTrayReadySupplyNewTray note above
 bool DoFixTrayFullAlarm();                                                      //Steven 20181113 : 修正Fix Link Alarm的問題
 int  VerifyTrayStatus();
 bool CheckPlaceToMagazineTray(int iWhichMag);                                   //JerryYang 20220909 : add magazine
