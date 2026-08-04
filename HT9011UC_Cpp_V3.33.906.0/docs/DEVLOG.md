@@ -3110,3 +3110,41 @@ build **exit 0 / 0 error**；ctest **114/118**，4 個失敗仍是既有
   `HT9011UC_Code_V3.33.899.0_.../CosFunction.cpp`。
 - **執行模式**：使用者指示持續有效——全部 cpp/h/dfm 都要翻、workflow 火力全開、不逐波停下請示、
   重大問題跳過並最後條列；model/effort 依任務性質自動切換；安裝軟體不必先問。
+
+---
+
+## 2026-08-04（晚）— Gate A「首次點亮」波次計畫定案（純規劃場次，零程式碼變更）
+
+使用者問「還有多少開發量才能開啟軟體」→ 主迴圈親自量測（非轉述文件）：
+- 以 `HT9045.bpr` FILELIST 為母體：288 個 .cpp / 735,867 行，**已翻活碼 226,515 行（30.8%）**、
+  176 檔完全無譯出檔（394,286 行）、6,261 行已譯但 `#if 0`。
+- **根 `CMakeLists.txt` 的 `add_executable` 出現 0 次**——「開啟軟體」的真阻塞不是翻譯進度，
+  是 exe 路徑一步未踏。
+- 啟動鏈解剖（golden 親讀）：`HT9045.cpp` WinMain（mutex/路徑檢查/**120×CreateForm**/Run）→
+  `TfMain` ctor :1340-2266（926 行）→ FormCreate :26686（21 行）→ FormShow :9141-11367
+  （2,226 行，`InitialOK=true` 在 :10464）→ `uruncontrol.cpp`（86 行）`Synchronize(ThreadProcess)`
+  → `MainProc()`——**golden 的 MainProc 本來就全跑在 UI thread**。
+- 資產盤點：`tools/dfm2rc/rc_out/main.rc` 已真實存在（1,420 行、91 DIALOGEX、~946 控制項）+
+  `layout_out/main_layout.gen.cpp`；自製控制項 core+renderer 在；fMain HWND 預算 ~1,040 遠低於配額。
+
+**產出：`docs/GATE_A_FIRST_LIGHT_PLAN.md`**——GA-0（架構定案×4+app 骨架，含 DA2 `_WIN32_WINNT`
+落地與 W7-U0）→ GA-1（substrate 六批：LastSet 全量/cprod ungate/cpublic queue+link-graph 決策/
+sqlite3 vendor+cMyDB/language/ReadGeneralIni）→ GA-2（cinitial 15,242 行切 5 塊）→ GA-3
+（main.cpp 啟動鏈垂直切片 ~6k 行，SERIAL integrate）→ GA-4（MFC 首燈本體 ~2-3k 新寫，與前三波
+平行，無 golden oracle、唯一不可降級波）→ GA-5（link 閉包+首燈目視+Sim 冒煙）。關鍵路徑估
+7–10 工作日。**§5 是使用者點名要的：每波 model/effort 預設表 + 升降級觸發規則（U1-U4/D-a~c/
+不可降級清單），開工報告制度化。**
+
+ROADMAP 進度區已加指標列。**⚠ 工作樹在製工作（第四次同型）**：`tests/test_w906_trace.cpp` +
+`tests/CMakeLists.txt` 修改 = 上一 RESUME 下一步 #1（DoTraceDataResponse 補測試）的半成品，
+本場次未動，已寫進 Gate A 計畫 GA-0 開場條款——**下一場次先照復原 SOP 處理它再開 GA-0**。
+
+### 🔖 RESUME（最新）
+
+- **本場次零程式碼變更**，只新增 `docs/GATE_A_FIRST_LIGHT_PLAN.md` + ROADMAP 一列 + 本節。
+- **⚠ 接續第一件事仍是 `git status`**：已知在製 = trace 測試半成品（見上），先復原 SOP 再開工。
+- **下一步 = Gate A 計畫 GA-0**（主迴圈 Fable 5 + xhigh）：處理 trace 半成品 → DA2/_WIN32_WINNT
+  → HT9045_UI option + ht9045_app 空殼 → 四決策 DESIGN_GateA.md。之後 GA-1×6 批與 GA-4 可平行展開。
+- 驗證基準不變：fresh MinGW dir ctest **114/118**、mojibake 0、EOL 逐檔保持。分支 `fix/v899.32-pti`。
+- **執行模式**：使用者既有指示持續有效（連續推進、不逐波請示、model/effort 依 Gate A 計畫 §5
+  自動切換並於每波開工時一句話回報）。
