@@ -89,8 +89,22 @@ BOOL CHT9045App::InitInstance()
         {
             if (!m_bDevPathBypass)
             {
-                ::MessageBoxA(0, "Please copy HT9045.EXE to D:\\HT9045\\EXE",
-                              "EXE Path Error", MB_OK);  // golden :153 verbatim
+                // AI(W906-GateA-fix) 20260804: two additions after a real
+                // diagnosis -- a plain launch from the build dir (no --devpath)
+                // produced golden's "EXE Path Error" box while leaving NO
+                // BootLog line at all, so it read as a silent death.
+                //   (a) log the rejection: golden logs nothing here either, but
+                //       BootLog is Gate A diagnostics, not behaviour -- adding a
+                //       line changes no golden semantics.
+                //   (b) suppress the modal in headless mode: the project's hard
+                //       rule is that a batch/smoke run must never block on a
+                //       dialog, and until now that held only by convention on
+                //       this path. Now it is structural.
+                // Golden's message/caption stay byte-verbatim (golden :153).
+                WriteBootLog("WinMain ExePath REJECTED -- needs D:\\HT9045\\EXE\\ or --devpath", asDir);
+                if (m_iSmokeCloseMs == 0)
+                    ::MessageBoxA(0, "Please copy HT9045.EXE to D:\\HT9045\\EXE",
+                                  "EXE Path Error", MB_OK);  // golden :153 verbatim
                 return FALSE;
             }
             WriteBootLog("WinMain ExePath BYPASSED (--devpath)", asDir);
