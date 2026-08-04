@@ -1,0 +1,83 @@
+{
+  // ==========================================================================
+  //  V906 debug/run configurations. AI(W906-GateA-vscode) 20260804.
+  //
+  //  TWO DEBUGGERS, because this project has two toolchains:
+  //    * the MFC exe is built by MSVC  -> cppvsdbg (Visual Studio debugger)
+  //    * the 126 ctest binaries are built by MinGW g++ -> gdb
+  //  Mixing them does not work: cppvsdbg cannot read DWARF, and gdb cannot
+  //  read PDB. Pick the configuration that matches what you are launching.
+  //
+  //  The exe is a RELEASE build with /Zi (root CMakeLists, ht9045_app target),
+  //  so breakpoints work but locals may be optimised away. We do NOT offer a
+  //  Debug-CRT build: its asserts raise modal dialogs (KNOWLEDGE.md Gotcha 9).
+  // ==========================================================================
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run/Debug HT9045.exe (MFC UI)",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build_msvc_ui/HT9045.exe",
+      // --devpath is REQUIRED from the build dir: golden's WinMain
+      // (HT9045.cpp:151-155) rejects any path outside D:\HT9045\EXE\, and that
+      // check is faithfully translated. Without it you get the EXE Path Error
+      // box (and, in --smoke mode, a BootLog line instead).
+      "args": ["--devpath"],
+      "cwd": "${workspaceFolder}/build_msvc_ui",
+      "console": "integratedTerminal",
+      "preLaunchTask": "V906: Build UI exe (MSVC/MFC)",
+      "symbolSearchPath": "${workspaceFolder}/build_msvc_ui"
+    },
+    {
+      "name": "Run HT9045.exe headless (smoke, 800ms)",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build_msvc_ui/HT9045.exe",
+      // Auto-closes and suppresses WER fault dialogs -- safe to run unattended.
+      "args": ["--devpath", "--smoke", "800"],
+      "cwd": "${workspaceFolder}/build_msvc_ui",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Debug one ctest binary (MinGW/gdb)",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/tests/${input:testExe}.exe",
+      "args": [],
+      "stopAtEntry": false,
+      // Several suites read real config/DB files with paths relative to the
+      // tree root, so run from there rather than from build/tests.
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "miDebuggerPath": "C:/MinGW/bin/gdb.exe",
+      "preLaunchTask": "V906: Build (MinGW, quick)",
+      "setupCommands": [
+        {
+          "description": "Pretty-print STL containers",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    },
+    {
+      "name": "Debug the headless control probe (MSVC)",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build_msvc_ui/ht9045_ctrl_probe.exe",
+      "args": [],
+      "cwd": "${workspaceFolder}/build_msvc_ui",
+      "console": "integratedTerminal"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "testExe",
+      "type": "promptString",
+      "description": "ctest binary name, WITHOUT .exe (e.g. test_ga2_c1_cinitial, test_w7_l2_ckernel, test_ga1_lastset)",
+      "default": "test_ga2_c1_cinitial"
+    }
+  ]
+}

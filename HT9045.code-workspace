@@ -1,0 +1,52 @@
+{
+  // ==========================================================================
+  //  HT9045 multi-root workspace. AI(W906-GateA-vscode) 20260804.
+  //
+  //  WHY THIS FILE EXISTS -- it is not cosmetic. The two trees have DIFFERENT
+  //  source encodings:
+  //
+  //    D:\HT9045                       (BCB6 golden, V899, config)  = Big5
+  //    HT9011UC_Cpp_V3.33.906.0        (the C++ port)               = UTF-8
+  //
+  //  A single-root window can only hold one "files.encoding". Whichever one it
+  //  is, half the tree opens as mojibake -- and SAVING re-encodes the file,
+  //  which silently corrupts Chinese comments. Multi-root fixes it: each
+  //  folder keeps its own .vscode/settings.json, so encoding follows the file.
+  //
+  //  OPEN THIS FILE (File > Open Workspace from File...) rather than opening
+  //  D:\HT9045 as a plain folder.
+  //
+  //  If you only ever work on the port, opening HT9011UC_Cpp_V3.33.906.0
+  //  directly is equally safe -- its folder settings pin UTF-8 on their own.
+  // ==========================================================================
+  "folders": [
+    {
+      "name": "HT9045 (root: BCB6 golden / V899 / config -- Big5)",
+      "path": "."
+    },
+    {
+      "name": "V906 C++ port (UTF-8)",
+      "path": "HT9011UC_Cpp_V3.33.906.0"
+    }
+  ],
+  "settings": {
+    // Workspace-level fallback only. The real encoding decision lives in each
+    // folder's .vscode/settings.json -- root = big5, port = utf8 -- and folder
+    // settings win for files inside that folder.
+    "files.autoGuessEncoding": true,
+    "search.useIgnoreFiles": true,
+    // The port tree is listed as its own folder above, so exclude it from the
+    // root folder's view to avoid every file appearing twice in search results.
+    "search.exclude": {
+      "HT9011UC_Cpp_V3.33.906.0": true,
+      "**/.svn": true,
+      "**/Obj": true,
+      "**/EXE": true
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-vscode.cpptools-extension-pack"
+    ]
+  }
+}

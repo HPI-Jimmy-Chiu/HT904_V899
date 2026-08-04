@@ -1,0 +1,71 @@
+{
+  // ==========================================================================
+  //  V906 C++ port -- VS Code folder settings.
+  //  AI(W906-GateA-vscode) 20260804.
+  //
+  //  OPEN THIS FOLDER (HT9011UC_Cpp_V3.33.906.0) DIRECTLY, or use the
+  //  HT9045.code-workspace at the repo root. Do NOT work on this tree from a
+  //  window rooted at D:\HT9045 alone -- see the encoding note below.
+  // ==========================================================================
+
+  // --- THE MOST IMPORTANT SETTING IN THIS FILE -----------------------------
+  //  This ported tree is 100% UTF-8 (verified: 946 .cpp/.h files, zero
+  //  non-UTF-8). The repo root's .vscode/settings.json sets
+  //  "files.encoding": "big5" -- correct for the BCB6 golden and V899 trees,
+  //  which really are Big5 -- but if that setting reaches a file HERE, opening
+  //  a Chinese comment shows mojibake and SAVING RE-ENCODES THE FILE TO BIG5,
+  //  silently corrupting it. This folder setting overrides it for this tree.
+  "files.encoding": "utf8",
+  "files.autoGuessEncoding": true,
+
+  // --- performance: this tree carries ~100 build_* directories -------------
+  //  Without these, search/watch walk millions of object files.
+  "files.exclude": {
+    "**/build": true,
+    "**/build_*": true,
+    "**/*_test_scratch": true,
+    "**/*.log": true,
+    "**/.svn": true
+  },
+  "search.exclude": {
+    "**/build": true,
+    "**/build_*": true,
+    "**/*_test_scratch": true,
+    "**/*.log": true,
+    "**/third_party/sqlite3/sqlite3.c": true
+  },
+  "files.watcherExclude": {
+    "**/build/**": true,
+    "**/build_*/**": true,
+    "**/*_test_scratch/**": true
+  },
+
+  "files.associations": {
+    "*.h": "cpp",
+    "*.cpp": "cpp",
+    "*.rc": "rc",
+    "*.dfm": "plaintext"
+  },
+  "files.trimTrailingWhitespace": false,
+  "files.insertFinalNewline": true,
+  "files.eol": "\n",
+
+  // --- CMake Tools: present but deliberately NOT the driver ----------------
+  //  Builds go through build.bat / scripts\build_msvc*.bat, which pin the
+  //  exact toolchain contract this project depends on (MinGW 6.3 as the x87
+  //  arithmetic oracle; MSVC x86 14.44 + Release CRT for MFC). Letting CMake
+  //  Tools auto-configure with whatever kit it picks would produce a build
+  //  that is not either oracle -- and could clobber the "build" directory.
+  "cmake.configureOnOpen": false,
+  "cmake.automaticReconfigure": false,
+  "cmake.buildDirectory": "${workspaceFolder}/build",
+
+  "C_Cpp.default.cppStandard": "c++17",
+  "C_Cpp.default.cStandard": "c11",
+  // The tree has ~50k lines of generated layout tables; keep IntelliSense sane.
+  "C_Cpp.intelliSenseCacheSize": 2048,
+
+  "editor.minimap.enabled": false,
+  "editor.largeFileOptimizations": true,
+  "terminal.integrated.defaultProfile.windows": "Command Prompt"
+}

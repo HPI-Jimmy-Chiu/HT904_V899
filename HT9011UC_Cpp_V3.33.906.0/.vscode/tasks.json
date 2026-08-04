@@ -1,0 +1,98 @@
+{
+  // ==========================================================================
+  //  V906 build tasks. AI(W906-GateA-vscode) 20260804.
+  //
+  //  Every task delegates to build.bat -- there is exactly ONE definition of
+  //  each toolchain's rules, and it is not duplicated here. The value this
+  //  file adds is the problemMatcher: compiler errors land in the Problems
+  //  panel as clickable file:line entries instead of scrolling past in a
+  //  parallel build's output.
+  //
+  //  WHICH TASK MAKES THE .exe?  "V906: Build UI exe (MSVC/MFC)" -- and only
+  //  that one. The MinGW tasks build libraries + 126 tests; MinGW cannot build
+  //  the UI at all because MFC ships with MSVC only.
+  // ==========================================================================
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "V906: Build (MinGW, quick)",
+      "detail": "Incremental libs+tests. NO exe. This is the default build task (Ctrl+Shift+B).",
+      "type": "shell",
+      "command": "build.bat",
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
+      // g++ emits absolute paths here (verified), so anchor the matcher to them.
+      "problemMatcher": {
+        "owner": "cpp",
+        "fileLocation": "absolute",
+        "pattern": {
+          "regexp": "^(.*?):(\\d+):(\\d+):\\s+(warning|error|note|fatal error):\\s+(.*)$",
+          "file": 1, "line": 2, "column": 3, "severity": 4, "message": 5
+        }
+      }
+    },
+    {
+      "label": "V906: Gate (MinGW build + ctest)",
+      "detail": "The reportable gate. Baseline 2026-08-04: 122/126 pass; the 4 failures (config_db/IniFiles/ini_helpers/config_loaders) are environment drift, not regressions.",
+      "type": "shell",
+      "command": "build.bat gate",
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": "test",
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
+      "problemMatcher": {
+        "owner": "cpp",
+        "fileLocation": "absolute",
+        "pattern": {
+          "regexp": "^(.*?):(\\d+):(\\d+):\\s+(warning|error|note|fatal error):\\s+(.*)$",
+          "file": 1, "line": 2, "column": 3, "severity": 4, "message": 5
+        }
+      }
+    },
+    {
+      "label": "V906: ctest only",
+      "type": "shell",
+      "command": "build.bat test",
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": "test",
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "V906: Build UI exe (MSVC/MFC)",
+      "detail": "Builds build_msvc_ui\\HT9045.exe, runs the headless control probe, then the smoke check. THIS is the task that produces an exe.",
+      "type": "shell",
+      "command": "build.bat ui",
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "V906: Run HT9045.exe",
+      "detail": "Launch the Gate A skeleton with the --devpath that golden's path check requires. Builds the exe first if it is missing.",
+      "type": "shell",
+      "command": "build.bat run",
+      "options": { "cwd": "${workspaceFolder}" },
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "V906: MSVC second oracle (no UI)",
+      "detail": "scripts\\build_msvc.bat -- MSVC-only failures are advisory until W7-A3 triages them.",
+      "type": "shell",
+      "command": "build.bat msvc",
+      "options": { "cwd": "${workspaceFolder}" },
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "V906: Clean (MinGW build dir only)",
+      "type": "shell",
+      "command": "build.bat clean",
+      "options": { "cwd": "${workspaceFolder}" },
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "problemMatcher": []
+    }
+  ]
+}

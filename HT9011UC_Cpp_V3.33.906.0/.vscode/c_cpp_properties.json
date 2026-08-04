@@ -1,0 +1,84 @@
+{
+  // ==========================================================================
+  //  IntelliSense for the V906 port. AI(W906-GateA-vscode) 20260804.
+  //
+  //  TWO CONFIGURATIONS, matching the two real oracles. Switch with the
+  //  language-status item in the status bar (click the {} / "C/C++
+  //  Configuration" indicator), or Ctrl+Shift+P -> "C/C++: Select a
+  //  Configuration".
+  //
+  //    "V906 port (MinGW)"  -- use for everything under the tree root:
+  //                            engines, vclcompat, tests. This mirrors the
+  //                            PRIMARY oracle, so what IntelliSense accepts is
+  //                            what the reportable build accepts.
+  //    "V906 UI (MSVC/MFC)" -- use only for ui/*.cpp. MFC headers exist solely
+  //                            in the MSVC toolchain; under the MinGW config
+  //                            afxwin.h will show as not found, which is
+  //                            CORRECT, not a misconfiguration.
+  //
+  //  The defines below are not guesses -- they are the ones the root
+  //  CMakeLists.txt actually applies (line 43 pins _WIN32_WINNT/WINVER for
+  //  both oracles; the if(MSVC) block adds _HAS_STD_BYTE=0 and
+  //  _CRT_SECURE_NO_WARNINGS). Keep them in sync with that file, or
+  //  IntelliSense will disagree with the compiler.
+  // ==========================================================================
+  "version": 4,
+  "configurations": [
+    {
+      "name": "V906 port (MinGW)",
+      "compilerPath": "C:/MinGW/bin/g++.exe",
+      "compilerArgs": ["-std=c++17"],
+      "cStandard": "c11",
+      "cppStandard": "c++17",
+      "intelliSenseMode": "windows-gcc-x86",
+      "includePath": [
+        "${workspaceFolder}",
+        "${workspaceFolder}/vclcompat",
+        "${workspaceFolder}/third_party/sqlite3",
+        "${workspaceFolder}/Common/PickPlanner",
+        "${workspaceFolder}/Public",
+        "${workspaceFolder}/Motor",
+        "${workspaceFolder}/SECSGEM",
+        "${workspaceFolder}/Automation",
+        "${workspaceFolder}/Interface",
+        "${workspaceFolder}/tests"
+      ],
+      "defines": [
+        "_WIN32_WINNT=0x0601",
+        "WINVER=0x0601",
+        "WIN32",
+        "_WIN32"
+      ],
+      "browse": {
+        "path": ["${workspaceFolder}"],
+        "limitSymbolsToIncludedHeaders": true
+      }
+    },
+    {
+      "name": "V906 UI (MSVC/MFC)",
+      "compilerPath": "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx86/x86/cl.exe",
+      "cStandard": "c11",
+      "cppStandard": "c++17",
+      "intelliSenseMode": "windows-msvc-x86",
+      "includePath": [
+        "${workspaceFolder}",
+        "${workspaceFolder}/ui",
+        "${workspaceFolder}/vclcompat",
+        "${workspaceFolder}/Public",
+        // atlmfc is NOT on cl.exe's default INCLUDE outside a vcvars shell,
+        // so IntelliSense needs it spelled out or afxwin.h resolves nowhere.
+        "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/atlmfc/include"
+      ],
+      "defines": [
+        "_WIN32_WINNT=0x0601",
+        "WINVER=0x0601",
+        "_AFXDLL",
+        "_HAS_STD_BYTE=0",
+        "_CRT_SECURE_NO_WARNINGS",
+        "WIN32",
+        "_WIN32",
+        "NDEBUG"
+      ]
+    }
+  ]
+}

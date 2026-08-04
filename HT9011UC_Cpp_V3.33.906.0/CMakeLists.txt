@@ -1861,6 +1861,16 @@ if(HT9045_UI)
         ui/app.rc
     )
     target_compile_definitions(ht9045_app PRIVATE _AFXDLL)
+    # AI(W906-GateA-vscode) 20260804: emit debug info for the RELEASE exe so
+    # VS Code (F5 / cppvsdbg) can do source-level debugging. This deliberately
+    # does NOT switch to a Debug configuration: the Debug CRT is prohibited
+    # tree-wide (KNOWLEDGE.md Gotcha 9 -- its asserts raise MODAL dialogs that
+    # wedged a whole ctest run). /Zi only ADDS a .pdb; optimisation flags and
+    # therefore codegen are unchanged, so the binary the smoke test validates
+    # stays the binary we ship. /FS is required because Ninja compiles this
+    # target's TUs in parallel into one compiler PDB.
+    target_compile_options(ht9045_app PRIVATE /Zi /FS)
+    target_link_options(ht9045_app PRIVATE /DEBUG)
     target_include_directories(ht9045_app PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/ui)
     set_target_properties(ht9045_app PROPERTIES OUTPUT_NAME "HT9045")
     target_link_libraries(ht9045_app PRIVATE ht9045_public)
