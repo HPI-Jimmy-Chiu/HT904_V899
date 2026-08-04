@@ -2856,6 +2856,21 @@ endif()
 
 add_test(NAME W906_Trace COMMAND test_w906_trace)
 
+# ---------------------------------------------------------------------------
+#  GA-1 B1: LastSet full translation (LastSet.h 855 fields + LastSet.cpp globals)
+# ---------------------------------------------------------------------------
+# AI(W906-GA1-B1) 20260804: standalone data-layout suite -- compiles LastSet.cpp
+# directly (single TU + the unit under test) instead of pulling a link group;
+# the same LastSet.cpp also lives in ht9045_sm for production consumers, but
+# linking the archive here would drag the whole sm dependency closure for a
+# pure offsetof/read-write suite that needs none of it.
+add_executable(test_ga1_lastset
+    test_ga1_lastset.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../LastSet.cpp
+)
+target_link_libraries(test_ga1_lastset PRIVATE vclcompat)
+add_test(NAME GA1_LastSet COMMAND test_ga1_lastset)
+
 # ===========================================================================
 #  GLOBAL TEST TIMEOUT -- must stay at the BOTTOM of this file
 # ===========================================================================

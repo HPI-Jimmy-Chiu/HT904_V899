@@ -58,23 +58,12 @@ typedef void*          LPVOID;          // golden windows.h
 #endif // HT9045_ACARRY_WIN32_TOKENS
 
 // ===========================================================================
-//  TECH `Tech`  -- golden LastSet.h:1068 (extern TECH Tech).  The shuttle engine
-//  reads ONLY these 6 int detect-position fields (golden LastSet.h:670-681).
-//  MINIMAL mirror: int, default 0 offline -> the Shuttle-Pos residual checks
-//  early-return false (CheckShuttleOutputHasICError / CheckShuttlePos*_M204), the
-//  safe no-detect path.  TODO(W7): replace with the real translated TECH (LastSet.h).
+//  TECH `Tech` -- AI(W906-GA1-B1) 20260804: MINIMAL 6-field mirror RETIRED.
+//  The real translated TECH (427 fields) + extern Tech now come from
+//  LastSet.h/LastSet.cpp; all 6 shim fields matched golden name+type exactly.
+//  Offline default-0 semantics preserved (static-storage zero-init).
 // ===========================================================================
-struct TECH_AcarryShim
-{
-    int OutSH1ZDetectPos;          // golden LastSet.h:670
-    int OutSH2ZDetectPos;          // golden LastSet.h:671
-    int iInSH1Sen7DetectPos;       // golden LastSet.h:675
-    int iInSH2Sen7DetectPos;       // golden LastSet.h:676
-    int OutSH1ZOneRowDetectPos;    // golden LastSet.h:680
-    int OutSH2ZOneRowDetectPos;    // golden LastSet.h:681
-    TECH_AcarryShim();
-};
-extern TECH_AcarryShim Tech;       // golden LastSet.h:1068 (extern TECH Tech)
+#include "LastSet.h"
 
 // ===========================================================================
 //  fLtcSensor (TfLtcSensor*)  -- golden LtcSensor.h.  The shuttle Y-Latch

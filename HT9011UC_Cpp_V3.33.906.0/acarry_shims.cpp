@@ -17,13 +17,9 @@
 #include <cstring>
 
 // ---------------------------------------------------------------------------
-//  TECH Tech  -- golden LastSet.h:1068.  6 detect-position ints default 0 offline.
+//  TECH Tech -- AI(W906-GA1-B1) 20260804: shim ctor+definition RETIRED; the
+//  real definition lives in LastSet.cpp (golden LastSet.cpp).
 // ---------------------------------------------------------------------------
-TECH_AcarryShim::TECH_AcarryShim()
-    : OutSH1ZDetectPos(0), OutSH2ZDetectPos(0),
-      iInSH1Sen7DetectPos(0), iInSH2Sen7DetectPos(0),
-      OutSH1ZOneRowDetectPos(0), OutSH2ZOneRowDetectPos(0) {}
-TECH_AcarryShim Tech;                                   // golden LastSet.h:1068
 
 // ---------------------------------------------------------------------------
 //  fLtcSensor (TfLtcSensor)  -- golden LtcSensor.h.  All latch counts = 0 offline.

@@ -1157,6 +1157,7 @@ add_library(ht9045_sm STATIC
     # to fMain/fLotInfo/... .
     asendic.cpp
     canary_support.cpp
+    LastSet.cpp           # AI(W906-GA1-B1) 20260804: golden LastSet.cpp -- LastSet/Tech/CmdData/AlignTeach definitions (shim retired from canary_support)
     # --- W6.2 (IN-ARM foundation): shared HotPlate pick/place geometry leaves ---
     #   ainarm_SearchPickPlate.cpp  -- HP-pick geometry + DoInArmPickFromHotPlate_9045 SM
     #   ainarm_SearchPlacePlate.cpp -- HP-place geometry + search-planner + data-swap leaves

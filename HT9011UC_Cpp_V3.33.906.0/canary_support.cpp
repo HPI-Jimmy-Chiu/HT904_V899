@@ -23,7 +23,8 @@
 //  Zero-initialised -> iRealDummy == 0 == DUMMY.  The smoke test sets it
 //  explicitly (DUMMY for the dummy-feed path); production LastSet lands W6.x.
 // ---------------------------------------------------------------------------
-LAST_GENERAL_SET LastSet = {0};
+// AI(W906-GA1-B1) 20260804: shim global RETIRED -- the real definition
+// (plus Tech/CmdData/AlignTeach) now lives in LastSet.cpp (golden LastSet.cpp).
 
 // ---------------------------------------------------------------------------
 //  bIsCatchingFromBuffer / bIsPlacingToBuffer
