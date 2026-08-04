@@ -37,6 +37,7 @@ setlocal enabledelayedexpansion
 
 set "MINGW_BIN=C:\MinGW\bin"
 set "BUILD_DIR=build"
+set "UI_DIR=build_msvc_ui"
 set "SCRIPT_DIR=%~dp0"
 cd /d "%SCRIPT_DIR%"
 
@@ -46,6 +47,7 @@ if "%MODE%"=="" set "MODE=quick"
 if /i "%MODE%"=="help"  goto :help
 if /i "%MODE%"=="clean" goto :clean
 if /i "%MODE%"=="ui"    goto :ui
+if /i "%MODE%"=="run"   goto :run
 if /i "%MODE%"=="msvc"  goto :msvc
 if /i "%MODE%"=="test"  goto :testonly
 if /i "%MODE%"=="gate"  goto :mingw
@@ -113,6 +115,7 @@ echo [build] Build OK.
 
 if /i "%MODE%"=="quick" (
     echo [build] Skipping ctest ^(use "build.bat gate" to run it^).
+    call :exenote
     endlocal & exit /b 0
 )
 
@@ -130,7 +133,28 @@ echo [build] REMINDER: 4 failures ^(config_db/IniFiles/ini_helpers/config_loader
 echo [build] are the known environment drift, not regressions. Compare the
 echo [build] failing-test LIST, never just the exit code.
 if /i "%MODE%"=="all" goto :ui
+call :exenote
 endlocal & exit /b %CTEST_RC%
+
+REM ---------------------------------------------------------------------------
+REM  AI(W906-GateA-fix) 20260804: added after a real confusion -- the user ran
+REM  "build.bat", then went looking for HT9045.exe and found none. The MinGW
+REM  path CANNOT produce one: MFC is MSVC-only, so the exe lives entirely in
+REM  the "ui" mode. Say so instead of ending on a silent success.
+:exenote
+echo.
+echo [build] NOTE: this mode builds LIBRARIES + TESTS only -- it does NOT make
+echo [build] an .exe. MinGW cannot: the UI is MFC, which is MSVC-only.
+echo [build]   to get the exe : build.bat ui
+echo [build]   then run it    : build.bat run
+if exist "%SCRIPT_DIR%%UI_DIR%\HT9045.exe" (
+    echo [build]   existing exe   : %SCRIPT_DIR%%UI_DIR%\HT9045.exe
+) else (
+    echo [build]   ^(no exe built yet^)
+)
+echo [build] The exe is NOT copied to D:\HT9045\EXE\ -- that directory belongs
+echo [build] to the BCB6 production build, and this port must never overwrite it.
+goto :eof
 
 REM ---------------------------------------------------------------------------
 REM  Compact failure report. -j builds interleave output, so the real error is
@@ -162,13 +186,35 @@ call "%SCRIPT_DIR%scripts\build_msvc_ui.bat"
 set "UI_RC=%ERRORLEVEL%"
 echo [build] UI pipeline exit code: %UI_RC%
 if "%UI_RC%"=="0" (
-    echo [build] HT9045.exe: %SCRIPT_DIR%%BUILD_DIR%_msvc_ui\HT9045.exe
-    echo [build]   interactive : HT9045.exe --devpath
+    echo [build] HT9045.exe: %SCRIPT_DIR%%UI_DIR%\HT9045.exe
+    echo [build]   open it     : build.bat run
     echo [build]   headless    : HT9045.exe --devpath --smoke 800
     echo [build] NOTE: run it from cmd.exe, not PowerShell -- PowerShell does
     echo [build] not wait on GUI-subsystem exes and reports no exit code.
 )
 endlocal & exit /b %UI_RC%
+
+REM ---------------------------------------------------------------------------
+REM  Launch the built exe interactively. --devpath is REQUIRED from the build
+REM  dir: golden's WinMain (HT9045.cpp:151-155) rejects any path outside
+REM  D:\HT9045\EXE\, faithfully translated. We do NOT copy the exe there --
+REM  see :exenote.
+:run
+if not exist "%SCRIPT_DIR%%UI_DIR%\HT9045.exe" (
+    echo [build] No exe yet -- building it first ^("build.bat ui"^)...
+    call "%SCRIPT_DIR%scripts\build_msvc_ui.bat"
+    if errorlevel 1 (
+        echo [build] FATAL: UI build failed; nothing to run.
+        exit /b 1
+    )
+)
+echo [build] Launching: %UI_DIR%\HT9045.exe --devpath
+echo [build] ^(Gate A skeleton: a placeholder window. The real fMain screen
+echo [build]  needs GA-3 + GA-4 -- see docs\GATE_A_FIRST_LIGHT_PLAN.md.^)
+"%SCRIPT_DIR%%UI_DIR%\HT9045.exe" --devpath
+set "RUN_RC=%ERRORLEVEL%"
+echo [build] exit code: %RUN_RC%   ^(BootLog: D:\HT9045\Error\BootLog.txt^)
+endlocal & exit /b %RUN_RC%
 
 REM ---------------------------------------------------------------------------
 :msvc
@@ -193,13 +239,18 @@ endlocal & exit /b 0
 REM ---------------------------------------------------------------------------
 :help
 echo.
-echo   build.bat            fast incremental MinGW build
-echo   build.bat gate       MinGW configure + build + ctest   ^(the reportable gate^)
+echo   build.bat            fast incremental MinGW build   ^(libs+tests, NO exe^)
+echo   build.bat gate       MinGW configure + build + ctest ^(the reportable gate^)
 echo   build.bat test       ctest only
-echo   build.bat ui         MSVC MFC UI exe + probe + smoke
+echo   build.bat ui         MSVC MFC UI exe + probe + smoke ^(THIS makes the exe^)
+echo   build.bat run        open the exe ^(builds it first if missing^)
 echo   build.bat msvc       MSVC second oracle
 echo   build.bat all        gate + ui
 echo   build.bat clean      delete the MinGW build dir
+echo.
+echo   WHERE IS THE EXE?  %UI_DIR%\HT9045.exe -- produced ONLY by "ui".
+echo   MinGW cannot build it ^(MFC is MSVC-only^), and it is never copied into
+echo   D:\HT9045\EXE\ ^(that dir is the BCB6 production build's output^).
 echo.
 echo   ctest baseline 2026-08-04: 122/126 pass; the 4 failures
 echo   ^(config_db/IniFiles/ini_helpers/config_loaders^) are environment drift.
