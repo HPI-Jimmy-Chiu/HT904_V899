@@ -322,6 +322,33 @@ endif()
 # Compile cJSON.c as C (it must not see C++ name mangling on its own symbols).
 set_source_files_properties(Public/cJSON.c PROPERTIES LANGUAGE C)
 
+#  AI(W906-WebBridge) 20260805: cJSON.c was briefly extracted into its own
+#  target (so ht9045_webbridge could reach cJSON without inheriting this
+#  target's PUBLIC vclcompat dependency) and then put back, because two tests
+#  started failing at the same time and the extraction was the obvious suspect.
+#
+#  IT WAS NOT THE CAUSE, and the real cause is worth knowing:
+#      MyPLCModbus        passes unoptimised, FAILS under -O3
+#                         ("client3 starts disconnected")
+#      BarCodeBottom2DID  passes unoptimised, SEGFAULTS under -O3 before
+#                         main() prints anything
+#  Proven by building the same source both ways: build_nobt (no
+#  CMAKE_BUILD_TYPE) passes both; a -DCMAKE_BUILD_TYPE=Release build fails
+#  both, with or without the extraction.
+#
+#  The reason nobody had seen this: every recorded baseline in this tree
+#  (including the 122/126 of 20260804) was measured with CMAKE_BUILD_TYPE
+#  EMPTY -- i.e. no -O3, no -DNDEBUG. These are two real latent defects, not
+#  build-system damage, and they are the kind that only ever show up in the
+#  build that ships.
+#
+#  The extraction itself is therefore harmless and could be redone. It is left
+#  undone only because the simpler structure works and the link-level
+#  independence it buys is worth less than the source-level independence
+#  WebBridge already has. If it is wanted, the cleaner route is to drop
+#  WebBridge's cJSON dependency entirely -- it uses cJSON in exactly one
+#  function (WebBridgeServer.cpp's inbound-command parser, 21 references, a
+#  flat object with five known keys).
 add_library(ht9045_public
     Public/cJSON.c
     Public/HTMD5.cpp
@@ -1887,6 +1914,61 @@ if(HT9045_UI)
     target_compile_definitions(ht9045_ctrl_probe PRIVATE _AFXDLL)
     target_include_directories(ht9045_ctrl_probe PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/ui)
     target_link_libraries(ht9045_ctrl_probe PRIVATE ht9045_public)
+endif()
+
+# ---------------------------------------------------------------------------
+# Library: ht9045_webbridge
+#   AI(W906-WebBridge) 20260805: the C++ side of the browser HMI seam --
+#   D:\HT9045\web talks to the handler through this. Design and wire protocol:
+#   D:\HT9045\web\docs\ARCHITECTURE.md (option A, sections 4 and 5).
+#
+#   WHY IT LINKS ALMOST NOTHING
+#   This layer is deliberately independent of vclcompat, of the state machines,
+#   and of every machine header. It knows exactly two things about the machine:
+#   a TagSnapshot the UI thread publishes into, and a CommandQueue the UI thread
+#   drains. That is the whole seam. Keeping the dependency list this short is
+#   what lets the socket thread be reasoned about in isolation -- and the socket
+#   thread must never block the UI thread, because the SECS/GEM layer on that
+#   thread has a reply budget (ARCHITECTURE.md section 5).
+#
+#   It DOES link ht9045_public (for the vendored cJSON its inbound-command
+#   parser uses), which transitively brings in vclcompat. That is a link-level
+#   dependency only -- no WebBridge source includes a vclcompat or machine
+#   header, and that source-level independence is the property that matters for
+#   the migration. See the note at ht9045_public above for why cJSON was not
+#   split out to remove even the link-level dependency.
+#
+#   Threading note: this tree's MinGW oracle is thread model win32, which has no
+#   working <mutex>/<thread>. WebBridge/Sync.h supplies CRITICAL_SECTION-based
+#   equivalents. std::atomic IS available and is used directly.
+# ---------------------------------------------------------------------------
+add_library(ht9045_webbridge
+    WebBridge/Sha1.cpp
+    WebBridge/Base64.cpp
+    WebBridge/JsonWriter.cpp
+    WebBridge/TagValue.cpp
+    WebBridge/TagSnapshot.cpp
+    WebBridge/CommandQueue.cpp
+    WebBridge/WsHandshake.cpp
+    WebBridge/WsFrame.cpp
+    WebBridge/HttpStatic.cpp
+    WebBridge/WebBridgeServer.cpp
+)
+
+target_include_directories(ht9045_webbridge PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+target_link_libraries(ht9045_webbridge PUBLIC ht9045_public)
+
+if(WIN32)
+    target_link_libraries(ht9045_webbridge PUBLIC ws2_32)
+endif()
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    # Full strictness: this is new-build code with no BCB6 idiom to accommodate,
+    # so unlike the translated targets it gets no relaxations.
+    target_compile_options(ht9045_webbridge PRIVATE -Wall -Wextra)
 endif()
 
 # ---------------------------------------------------------------------------

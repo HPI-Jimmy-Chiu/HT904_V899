@@ -3005,6 +3005,60 @@ endif()
 add_test(NAME GA2_C1_cinitial COMMAND test_ga2_c1_cinitial)
 
 # ===========================================================================
+#  WB-0 web bridge substrate (AI(W906-WebBridge) 20260805)
+# ===========================================================================
+#  The C++ side of the browser HMI seam. All three link ht9045_webbridge only --
+#  no vclcompat, no state machines, no machine headers (see that target's own
+#  comment in the root CMakeLists.txt for why that isolation is load-bearing).
+#
+#  Registered ABOVE the GLOBAL TEST TIMEOUT block below, per that block's own
+#  instruction: a test added after it silently gets no timeout.
+#
+#  Measured 20260805 under MinGW (g++ 6.3.0, thread model win32):
+#    WB_Crypto   915 checks     -- RFC 3174 SHA-1 + RFC 4648 base64 vectors,
+#                                  JSON null-vs-"" and the nan/inf mapping
+#    WB_State    264 checks     -- includes REAL concurrency: 1 publisher +
+#                                  4 readers over 2,000 generations, and
+#                                  4 producers x 2,000 pushes with one drainer
+#    WB_WsProto  10,526 checks  -- RFC 6455 section 1.3 accept-key vector,
+#                                  section 5.7 example frames, byte-at-a-time
+#                                  incremental decode equivalence
+#
+#  Failability was PROVEN by mutation, not assumed: breaking the RFC 6455 GUID,
+#  masking server->client frames, serialising null as "", and moving the
+#  snapshot generation bump outside its critical section each make the suite
+#  fail. Worth recording that the LAST one is only caught when the race window
+#  is widened -- so WB_State is a reliable regression detector for that
+#  invariant, not a reliable race finder. Do not read a green WB_State as proof
+#  that a newly introduced 2-instruction race is absent.
+#    WB_Server   71 checks     -- a REAL server on an ephemeral loopback port:
+#                                  static files (incl. .js as text/javascript,
+#                                  which decides whether the UI loads at all),
+#                                  10 path-traversal attacks all refused, a real
+#                                  RFC 6455 handshake, the connect-time snapshot
+#                                  frame, and command refusal while read-only
+add_executable(test_wb_crypto  test_wb_crypto.cpp)
+add_executable(test_wb_state   test_wb_state.cpp)
+add_executable(test_wb_wsproto test_wb_wsproto.cpp)
+add_executable(test_wb_server  test_wb_server.cpp)
+
+target_link_libraries(test_wb_crypto  PRIVATE ht9045_webbridge)
+target_link_libraries(test_wb_state   PRIVATE ht9045_webbridge)
+target_link_libraries(test_wb_wsproto PRIVATE ht9045_webbridge)
+target_link_libraries(test_wb_server  PRIVATE ht9045_webbridge)
+
+add_test(NAME WB_Crypto  COMMAND test_wb_crypto)
+add_test(NAME WB_State   COMMAND test_wb_state)
+add_test(NAME WB_WsProto COMMAND test_wb_wsproto)
+add_test(NAME WB_Server  COMMAND test_wb_server)
+
+# WB_State spawns real threads and runs 2,000 publish generations, and WB_Server
+# opens real sockets; 300s is far above their measured runtimes (under 2s each)
+# and only trips if one genuinely wedges. WB_Server's own client puts a 5s
+# deadline on every blocking read for the same reason.
+set_tests_properties(WB_Crypto WB_State WB_WsProto WB_Server PROPERTIES TIMEOUT 300)
+
+# ===========================================================================
 #  GLOBAL TEST TIMEOUT -- must stay at the BOTTOM of this file
 # ===========================================================================
 # AI(W906-TestBootstrap) 20260728: second line of defence behind
