@@ -3037,6 +3037,19 @@ add_test(NAME GA2_C1_cinitial COMMAND test_ga2_c1_cinitial)
 #                                  10 path-traversal attacks all refused, a real
 #                                  RFC 6455 handshake, the connect-time snapshot
 #                                  frame, and command refusal while read-only
+# WB_DataLayer is the odd one out: it is the only WB test that links the machine
+# god-stack, because the thing it checks IS the machine data layer. Same
+# LINK_GROUP:RESCAN set as test_ga1_readgeneralini, for the same single-pass
+# archive-scan reason documented there.
+add_executable(test_wb_datalayer test_wb_datalayer.cpp)
+target_link_libraries(test_wb_datalayer PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_automation,ht9045_comms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+if(WIN32)
+    target_link_libraries(test_wb_datalayer PRIVATE ws2_32)
+endif()
+add_test(NAME WB_DataLayer COMMAND test_wb_datalayer)
+
 add_executable(test_wb_crypto  test_wb_crypto.cpp)
 add_executable(test_wb_state   test_wb_state.cpp)
 add_executable(test_wb_wsproto test_wb_wsproto.cpp)

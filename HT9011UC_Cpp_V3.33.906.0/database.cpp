@@ -274,17 +274,45 @@ void SYSTEM_MODULAR::ReadGeneralIni()                                           
             CUSTOMER_CODE=CC_HONPREC_QC;
     #endif
 
-    // AI(W906-GA1-B6) 20260804: gated -- CustomerFunctionSelect/ReadLastSetIni/
-    // ReadEventLogAutoSaveInfo are declared (active) in cprod.h but their
-    // bodies are inside cprod.cpp's own file-wide TODO(W6) gate; calling them
-    // would not link.  See file-head note above.
-#if 0 // TODO(GA1-B6): CustomerFunctionSelect() -- body gated in cprod.cpp (TODO(W6)), not yet linkable
+    // AI(W906-WebBridge) 20260805: STILL GATED, but the ORIGINAL REASON BELOW IS
+    // WRONG and the real one is worse. Read this before trying to ungate again.
+    //
+    // The GA-1-B6 reason -- "bodies are inside cprod.cpp's own file-wide TODO(W6)
+    // gate; calling them would not link" -- stopped being true later the SAME DAY
+    // it was written: commit 7ecc9dc (GA-1 B2+B3, cprod/cpublic ungate) removed
+    // that gate. All four functions in the chain are now at preprocessor
+    // gate-depth 0 and are DEFINED (nm type T) in ht9045_globals/cprod.cpp.obj:
+    //     CustomerFunctionSelect()   cprod.cpp:3828
+    //     ReadLastSetIni()           cprod.cpp:3092
+    //     ReadEventLogAutoSaveInfo()
+    //     ReadLastDataFile()         cprod.cpp:1682  (called by ReadLastSetIni)
+    //
+    // So they link. They just CRASH. Ungating all three was tried on 20260805:
+    // the tree built clean and the full suite stayed at exactly its previous
+    // 124/130 with an unchanged failure set -- and HSys.ReadGeneralIni() then
+    // SEGFAULTED the moment anything called it against the real config paths.
+    // The suite missed it because its only caller, tests/test_ga1_readgeneralini
+    // .cpp, repoints the global asGeneralPath at a scratch COPY before calling,
+    // so it never walks the path that faults.
+    //
+    // WHY IT IS WORTH FIXING PROPERLY. Every machine-state global in this tree is
+    // DEFINED but never POPULATED -- measured, see tests/test_wb_datalayer.cpp:
+    // CUSTOMER_CODE 0, IniConfig.sMachineType "", LastSet.iRunStartMode 0.
+    // ReadLastSetIni() is the single call that would fill the data layer: it
+    // reads config.ini into IniConfig, calls CustomerFunctionSelect() (the
+    // CosFunction customer-profile flags -- 140 distinct flags read at 1,091
+    // sites, nothing sets them), and calls ReadLastDataFile() (LastSet).
+    // Until it lands, anything reading those globals cannot tell "not loaded"
+    // from a real zero, which for a UI means a screen that lies.
+    //
+    // NEXT STEP for whoever picks this up: find the fault inside the chain first
+    // (ReadLastSetIni also calls MyForceDirectories(GetRecipePath()), so it has
+    // filesystem side effects), and note the DO-NOT-MODIFY-REAL-CONFIG
+    // discipline in tests/test_ga1_readgeneralini.cpp's file head --
+    // ReadGeneralIni WRITES to asGeneralPath.
+#if 0 // TODO(W906-WebBridge): links fine, but the chain segfaults -- see above
     CustomerFunctionSelect();                                                   //customer function selection area
-#endif
-#if 0 // TODO(GA1-B6): ReadLastSetIni() -- body gated in cprod.cpp (TODO(W6)), not yet linkable
     ReadLastSetIni();
-#endif
-#if 0 // TODO(GA1-B6): ReadEventLogAutoSaveInfo() -- body gated in cprod.cpp (TODO(W6)), not yet linkable
     ReadEventLogAutoSaveInfo();                                                 //Steven 20110603
 #endif
     //Temperature related-----------------------------
