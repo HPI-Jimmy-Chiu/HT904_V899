@@ -353,4 +353,40 @@ class SYSTEM_MODULAR
 // Global SYSTEM_MODULAR instance (database.cpp:27 / database.h:288)
 extern SYSTEM_MODULAR HSys;
 
+// ---------------------------------------------------------------------------
+//  LoadMachineConfig  --  AI(W906-WebBridge) 20260806.  NOT in golden.
+//
+//  The one call the application should make to bring the machine data layer up.
+//  It exists because getting this sequence wrong does not misbehave, it
+//  SEGFAULTS, and the trap is completely invisible at the call site:
+//
+//    CheckAndReadIniDataGeneral() dereferences the global INIFileGeneral with no
+//    NULL check (common.cpp, faithful BCB6 behaviour, documented there).
+//    INIFileGeneral is set ONLY by OpenGeneralIniFile().  So every caller of
+//    ReadGeneralIni() must have opened the ini first -- and in golden the thing
+//    that did was the SYSTEM_MODULAR constructor, which is #if 0 in this port.
+//
+//  Golden performs this work from that constructor, i.e. during static
+//  initialisation.  This port deliberately does NOT: `asGeneralPath` is a global
+//  in a different translation unit (common.cpp), and standard C++ gives no
+//  ordering guarantee between translation units.  BCB6 got away with it via
+//  `#pragma package(smart_init)`; reproducing that here would be a latent
+//  order-of-initialisation fault, which is a bad trade for matching a shape.
+//  So the sequence is explicit and callable, and the caller decides when.
+//
+//  Call it once, from the application's own init path, BEFORE anything reads
+//  IniConfig / CosFunction / LastSet / HSys.
+//
+//  SIDE EFFECTS, because they are not optional:
+//    * ReadGeneralIni SEEDS missing keys, i.e. it WRITES to asGeneralPath.
+//      Tests must point asGeneralPath at a scratch copy first -- see
+//      tests/test_ga1_readgeneralini.cpp and tests/test_wb_datalayer.cpp.
+//    * the ungated ReadLastSetIni() chain creates directories
+//      (MyForceDirectories(GetRecipePath())).
+//
+//  Returns false only if the ini could not be opened.  A missing KEY is not a
+//  failure -- that is what the seeding is for.
+// ---------------------------------------------------------------------------
+bool LoadMachineConfig();
+
 #endif // DATABASEH

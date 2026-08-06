@@ -318,11 +318,9 @@ void SYSTEM_MODULAR::ReadGeneralIni()                                           
     // ReadLastDataFile() for LastSet.  A reader that cannot tell "not loaded"
     // from a real zero is, for a UI, a screen that lies.
     //
-    // STILL OPEN, and deliberately not fixed here: (1) nothing in the
-    // application calls OpenGeneralIniFile(), because the ctor that would is
-    // gated -- that is the real remaining blocker; (2) LastSet stays zero even
-    // with the open, so ReadLastDataFile() runs without populating -- separate
-    // investigation.
+    // STILL OPEN: nothing in the APPLICATION calls LoadMachineConfig() yet --
+    // ht9045_app links only ht9045_public, so HSys is not even reachable from
+    // it until GA-3 lands the god-stack in the exe. That is the last blocker.
     CustomerFunctionSelect();                                                   //customer function selection area
     ReadLastSetIni();
     ReadEventLogAutoSaveInfo();                                                 //Steven 20110603
@@ -2990,4 +2988,34 @@ TMOTDATA::TMOTDATA(AnsiString Str)
         iSimulateSpeed  =10000;
     }
     delete SL;
+}
+
+// ===========================================================================
+//  LoadMachineConfig  --  AI(W906-WebBridge) 20260806.  NOT in golden.
+//  Contract, and the reason this is not done from a constructor, are in
+//  database.h at the declaration. Read that before changing anything here.
+// ===========================================================================
+bool LoadMachineConfig()
+{
+    // OpenGeneralIniFile() unconditionally closes first, so calling this twice
+    // is safe; it is not, however, cheap -- it reparses the whole ini.
+    OpenGeneralIniFile();
+
+    if (INIFileGeneral == 0)
+    {
+        // Nothing below can run: every CheckAndReadIniDataGeneral would
+        // dereference this. Fail loudly at the one place that can still
+        // report it, rather than faulting deep inside ReadGeneralIni.
+        return false;
+    }
+
+    // Fills HSys's own members from Gerneral.ini, sets CUSTOMER_CODE, and --
+    // since the 20260806 ungate -- runs CustomerFunctionSelect() /
+    // ReadLastSetIni() / ReadEventLogAutoSaveInfo(), which is what populates
+    // IniConfig, the CosFunction profile flags, and LastSet (ReadLastDataFile
+    // reads system\lastdata.dat as a raw struct blob -- verified working:
+    // 12,358 non-zero bytes land in LastSet; see tests/test_wb_datalayer.cpp).
+    HSys.ReadGeneralIni();
+
+    return true;
 }
