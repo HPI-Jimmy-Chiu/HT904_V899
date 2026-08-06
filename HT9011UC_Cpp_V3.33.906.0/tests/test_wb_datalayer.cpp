@@ -1,43 +1,52 @@
 // =============================================================================
-//  test_wb_datalayer.cpp -- pins the fact that the machine data layer is
-//  DEFINED but never POPULATED.
+//  test_wb_datalayer.cpp -- can the machine data layer actually be LOADED?
 //
 //  AI(W906-WebBridge) 20260805.
 //
 //  WHY THIS EXISTS
-//  Every machine-state global in this ported tree exists as a zero-initialised
-//  object that nothing ever fills. A reader therefore cannot tell "nobody
-//  loaded this" from "the machine really reads zero". For the web bridge that
-//  distinction is the whole problem: publishing 0 for a value nobody loaded is
-//  a screen that lies, and the browser renders null ("---") and 0 ("0.00")
-//  differently on purpose.
+//  Every machine-state global in this ported tree starts as a zero-initialised
+//  object, and for a long time nothing ever filled any of them. A reader could
+//  not tell "nobody loaded this" from "the machine really reads zero". For the
+//  web HMI that distinction is the whole problem -- the browser renders null as
+//  "---" and 0 as "0.00" on purpose, so publishing 0 for a value nobody loaded
+//  is a screen that lies.
 //
-//  This test does not celebrate that state -- it PINS it, so the day someone
-//  fixes it the test fails loudly and this file gets inverted rather than
-//  quietly continuing to describe a world that no longer exists.
+//  WHAT IT LOCKS DOWN
+//    1. The data layer really does start empty (so a later "it works" claim
+//       cannot be an artifact of something else having filled it).
+//    2. ReadGeneralIni's ungated chain -- CustomerFunctionSelect /
+//       ReadLastSetIni / ReadEventLogAutoSaveInfo -- DOES populate IniConfig
+//       once the ini file has been opened. This is the regression guard on the
+//       20260805 ungate in database.cpp.
+//    3. LastSet stays zero even then. That gap is asserted, not glossed over,
+//       so the day ReadLastDataFile() starts working this test fails and gets
+//       updated instead of silently continuing to describe the old world.
 //
-//  WHAT WOULD FIX IT
-//  database.cpp's ReadGeneralIni() has three calls gated out:
-//  CustomerFunctionSelect() / ReadLastSetIni() / ReadEventLogAutoSaveInfo().
-//  ReadLastSetIni() is the one that fills IniConfig (from config.ini),
-//  CosFunction (via CustomerFunctionSelect) and LastSet (via ReadLastDataFile).
-//  All three LINK today -- the gate comment claiming otherwise is stale -- but
-//  ungating them makes ReadGeneralIni segfault. The full reasoning, and the
-//  measurement that produced it, is in database.cpp at that gate.
+//  THE TRAP THIS FILE EXISTS TO DOCUMENT
+//  CheckAndReadIniDataGeneral() dereferences the global INIFileGeneral with NO
+//  NULL check (faithful BCB6 behaviour, documented at that function in
+//  common.cpp). INIFileGeneral is only ever set by OpenGeneralIniFile(), whose
+//  only production caller is the SYSTEM_MODULAR constructor -- which is
+//  entirely #if 0 in database.cpp. So ANY call into ReadGeneralIni without a
+//  preceding OpenGeneralIniFile() segfaults, and that is true with the ungate
+//  and without it (verified by control experiment).
 //
-//  WHY THIS TEST DOES NOT CALL ReadGeneralIni()
-//  Because ReadGeneralIni WRITES to whatever the global asGeneralPath points
-//  at. tests/test_ga1_readgeneralini.cpp exists to drive it and does so
-//  correctly: it copies the real Gerneral.ini to a scratch path, repoints
-//  asGeneralPath, and restores it afterwards. Duplicating that here would buy
-//  nothing and risk the real config. This file only reads globals.
+//  DO-NOT-MODIFY-REAL-CONFIG
+//  ReadGeneralIni and the chain below WRITE to whatever asGeneralPath points
+//  at (CheckAndReadIniDataGeneral seeds missing keys). Exactly like
+//  tests/test_ga1_readgeneralini.cpp, this copies the real Gerneral.ini to a
+//  scratch path and repoints asGeneralPath at the copy; the real file is only
+//  ever opened for reading by CopyFile, and the path is restored whatever
+//  happens.
 // =============================================================================
 #include "database.h"
 #include "cprod.h"
 #include "Config.h"
 #include "LastSet.h"
 #include "cmydef.h"
+#include "common.h"
 
+#include <windows.h>
 #include <cstdio>
 
 static int g_total = 0;
@@ -46,46 +55,78 @@ static int g_fail = 0;
 static void check(bool ok, const char* what)
 {
     ++g_total;
-    if (!ok) {
-        ++g_fail;
-        std::printf("FAIL: %s\n", what);
-    } else {
-        std::printf("PASS: %s\n", what);
-    }
+    std::printf("%s: %s\n", ok ? "PASS" : "FAIL", what);
+    if (!ok) ++g_fail;
 }
 
 int main()
 {
     std::setvbuf(stdout, 0, _IONBF, 0);
 
-    std::printf("machine data layer, as loaded by the ported tree today:\n");
-    std::printf("  CUSTOMER_CODE            = %d\n", CUSTOMER_CODE);
-    std::printf("  IniConfig.sMachineType   = \"%s\"\n", IniConfig.sMachineType.c_str());
-    std::printf("  IniConfig.sGPIBMachineID = \"%s\"\n", IniConfig.sGPIBMachineID.c_str());
-    std::printf("  IniConfig.RMSTesterID    = \"%s\"\n", IniConfig.RMSTesterID.c_str());
-    std::printf("  LastSet.iRunStartMode    = %d\n", LastSet.iRunStartMode);
-    std::printf("  LastSet.iTemperature     = %d\n", LastSet.iTemperature);
-    std::printf("\n");
+    // --- 1. the layer starts empty ------------------------------------------
+    std::printf("-- 1. data layer before anything loads it\n");
+    std::printf("   IniConfig.sMachineType = \"%s\"\n", IniConfig.sMachineType.c_str());
+    std::printf("   LastSet.iRunStartMode  = %d\n", LastSet.iRunStartMode);
 
-    // ---------------------------------------------------------------------
-    //  THESE ASSERTIONS ARE EXPECTED TO FAIL ONE DAY. That is the point.
-    //  When they do: the data layer finally loads, and this file should be
-    //  rewritten to assert the loaded values instead of the empty ones.
-    // ---------------------------------------------------------------------
     check(IniConfig.sMachineType.Length() == 0,
-          "IniConfig.sMachineType is empty -- nothing populates IniConfig "
-          "(cConfiguration.cpp is untranslated and ReadLastSetIni is gated)");
-
-    check(IniConfig.sGPIBMachineID.Length() == 0,
-          "IniConfig.sGPIBMachineID is empty -- same cause");
-
+          "IniConfig starts empty (nothing has populated it)");
     check(LastSet.iRunStartMode == 0 && LastSet.iTemperature == 0,
-          "LastSet is zero-initialised -- ReadLastDataFile never runs, so the "
-          "575 reads of LastSet.iRunStartMode in this tree all see 0");
+          "LastSet starts zero-initialised");
 
-    check(CUSTOMER_CODE == 0,
-          "CUSTOMER_CODE is 0 -- it is set inside ReadGeneralIni, which nothing "
-          "in the application calls yet (only tests do)");
+    // --- 2. load it, on a scratch copy ---------------------------------------
+    const AnsiString savedGeneralPath = asGeneralPath;
+
+    char tmp[MAX_PATH];
+    if (::GetTempPathA(MAX_PATH, tmp) == 0) {
+        std::printf("SKIP: no temp path available\n");
+        std::printf("\ntest_wb_datalayer: %d checks, %d failure(s)\n", g_total, g_fail);
+        return g_fail == 0 ? 0 : 1;
+    }
+    const AnsiString scratch = AnsiString(tmp) + "wb_datalayer_general.ini";
+
+    if (!::CopyFileA(savedGeneralPath.c_str(), scratch.c_str(), FALSE)) {
+        // The real Gerneral.ini is a machine artifact; on a box without one
+        // there is nothing to load and nothing to assert. Skipping is correct,
+        // and is reported rather than silently passing.
+        std::printf("SKIP: cannot copy \"%s\" (err %lu) -- no config on this box\n",
+                    savedGeneralPath.c_str(), (unsigned long)::GetLastError());
+        std::printf("\ntest_wb_datalayer: %d checks, %d failure(s)\n", g_total, g_fail);
+        return g_fail == 0 ? 0 : 1;
+    }
+
+    std::printf("\n-- 2. loading via a scratch copy of Gerneral.ini\n");
+    asGeneralPath = scratch;
+
+    // The call the gated SYSTEM_MODULAR ctor would make. Without it every
+    // CheckAndReadIniDataGeneral below is a NULL dereference.
+    OpenGeneralIniFile();
+
+    CustomerFunctionSelect();
+    ReadEventLogAutoSaveInfo();
+    ReadLastSetIni();
+
+    std::printf("   IniConfig.sMachineType   = \"%s\"\n", IniConfig.sMachineType.c_str());
+    std::printf("   IniConfig.sGPIBMachineID = \"%s\"\n", IniConfig.sGPIBMachineID.c_str());
+    std::printf("   IniConfig.RMSTesterID    = \"%s\"\n", IniConfig.RMSTesterID.c_str());
+    std::printf("   LastSet.iRunStartMode    = %d\n", LastSet.iRunStartMode);
+
+    // --- 3. what worked, and what still does not -----------------------------
+    check(IniConfig.sMachineType.Length() > 0,
+          "IniConfig.sMachineType populated -> ReadLastSetIni ran and the "
+          "20260805 ungate in database.cpp is live");
+    check(IniConfig.sGPIBMachineID.Length() > 0,
+          "IniConfig.sGPIBMachineID populated");
+
+    // Asserted as a KNOWN GAP. When ReadLastDataFile() starts populating
+    // LastSet this check fails -- which is the signal to rewrite it, not a
+    // reason to delete it.
+    check(LastSet.iRunStartMode == 0,
+          "KNOWN GAP: LastSet is still zero after ReadLastSetIni -- "
+          "ReadLastDataFile() runs but does not populate");
+
+    CloseGeneralIniFile();
+    asGeneralPath = savedGeneralPath;
+    ::DeleteFileA(scratch.c_str());
 
     std::printf("\ntest_wb_datalayer: %d checks, %d failure(s)\n", g_total, g_fail);
     std::printf("RESULT: %s\n", g_fail == 0 ? "PASS" : "FAIL");

@@ -274,47 +274,58 @@ void SYSTEM_MODULAR::ReadGeneralIni()                                           
             CUSTOMER_CODE=CC_HONPREC_QC;
     #endif
 
-    // AI(W906-WebBridge) 20260805: STILL GATED, but the ORIGINAL REASON BELOW IS
-    // WRONG and the real one is worse. Read this before trying to ungate again.
-    //
-    // The GA-1-B6 reason -- "bodies are inside cprod.cpp's own file-wide TODO(W6)
-    // gate; calling them would not link" -- stopped being true later the SAME DAY
-    // it was written: commit 7ecc9dc (GA-1 B2+B3, cprod/cpublic ungate) removed
-    // that gate. All four functions in the chain are now at preprocessor
-    // gate-depth 0 and are DEFINED (nm type T) in ht9045_globals/cprod.cpp.obj:
+    // AI(W906-WebBridge) 20260805: UNGATED.  The GA-1-B6 reason -- "bodies are
+    // inside cprod.cpp's own file-wide TODO(W6) gate; calling them would not
+    // link" -- stopped being true later the SAME DAY it was written: commit
+    // 7ecc9dc (GA-1 B2+B3, cprod/cpublic ungate) removed that gate.  All four
+    // functions in the chain are at preprocessor gate-depth 0 and DEFINED
+    // (nm type T) in ht9045_globals/cprod.cpp.obj:
     //     CustomerFunctionSelect()   cprod.cpp:3828
     //     ReadLastSetIni()           cprod.cpp:3092
     //     ReadEventLogAutoSaveInfo()
     //     ReadLastDataFile()         cprod.cpp:1682  (called by ReadLastSetIni)
     //
-    // So they link. They just CRASH. Ungating all three was tried on 20260805:
-    // the tree built clean and the full suite stayed at exactly its previous
-    // 124/130 with an unchanged failure set -- and HSys.ReadGeneralIni() then
-    // SEGFAULTED the moment anything called it against the real config paths.
-    // The suite missed it because its only caller, tests/test_ga1_readgeneralini
-    // .cpp, repoints the global asGeneralPath at a scratch COPY before calling,
-    // so it never walks the path that faults.
+    // MEASURED, WITH THE ISOLATION EXPERIMENT THAT PRODUCED IT.  Ungating these
+    // was first blamed for a segfault; that attribution was WRONG, and the real
+    // finding is more useful:
     //
-    // WHY IT IS WORTH FIXING PROPERLY. Every machine-state global in this tree is
-    // DEFINED but never POPULATED -- measured, see tests/test_wb_datalayer.cpp:
-    // CUSTOMER_CODE 0, IniConfig.sMachineType "", LastSet.iRunStartMode 0.
-    // ReadLastSetIni() is the single call that would fill the data layer: it
-    // reads config.ini into IniConfig, calls CustomerFunctionSelect() (the
-    // CosFunction customer-profile flags -- 140 distinct flags read at 1,091
-    // sites, nothing sets them), and calls ReadLastDataFile() (LastSet).
-    // Until it lands, anything reading those globals cannot tell "not loaded"
-    // from a real zero, which for a UI means a screen that lies.
+    //   * Calling ReadLastSetIni() standalone segfaults -- gdb puts the fault in
+    //     TIniStore::findSection, reached from CheckAndReadIniDataGeneral, which
+    //     dereferences the global INIFileGeneral with NO NULL check (common.cpp,
+    //     faithful BCB6 behaviour, documented at that function).
+    //   * INIFileGeneral is only ever set by OpenGeneralIniFile(), whose only
+    //     production caller is the SYSTEM_MODULAR constructor -- and that ctor is
+    //     entirely #if 0 in this same file (see "TODO(wave): SYSTEM_MODULAR ctor"
+    //     above).  So in the ported tree that pointer is permanently NULL.
+    //   * CONTROL EXPERIMENT: with these three calls STILL GATED,
+    //     HSys.ReadGeneralIni() segfaults exactly the same way when called
+    //     without an open.  ReadGeneralIni's own body calls
+    //     CheckAndReadIniDataGeneral at :292.  So the ungate adds NO new hazard;
+    //     the function was already unusable without an open.
+    //   * WITH OpenGeneralIniFile() called first (against a scratch copy, per the
+    //     DO-NOT-MODIFY-REAL-CONFIG discipline in
+    //     tests/test_ga1_readgeneralini.cpp -- ReadGeneralIni WRITES to
+    //     asGeneralPath), the whole ungated chain runs and FILLS the data layer:
+    //         IniConfig.sMachineType   = "HT-9046LS"
+    //         IniConfig.sGPIBMachineID = "GLY320"
+    //         IniConfig.RMSTesterID    = "HT9046"
     //
-    // NEXT STEP for whoever picks this up: find the fault inside the chain first
-    // (ReadLastSetIni also calls MyForceDirectories(GetRecipePath()), so it has
-    // filesystem side effects), and note the DO-NOT-MODIFY-REAL-CONFIG
-    // discipline in tests/test_ga1_readgeneralini.cpp's file head --
-    // ReadGeneralIni WRITES to asGeneralPath.
-#if 0 // TODO(W906-WebBridge): links fine, but the chain segfaults -- see above
+    // WHY THIS MATTERS.  Every machine-state global in this tree is DEFINED but
+    // never POPULATED (measured in tests/test_wb_datalayer.cpp).  ReadLastSetIni()
+    // is the single call that fills it: config.ini into IniConfig,
+    // CustomerFunctionSelect() for the CosFunction customer-profile flags (140
+    // distinct flags read at 1,091 sites, nothing sets them), and
+    // ReadLastDataFile() for LastSet.  A reader that cannot tell "not loaded"
+    // from a real zero is, for a UI, a screen that lies.
+    //
+    // STILL OPEN, and deliberately not fixed here: (1) nothing in the
+    // application calls OpenGeneralIniFile(), because the ctor that would is
+    // gated -- that is the real remaining blocker; (2) LastSet stays zero even
+    // with the open, so ReadLastDataFile() runs without populating -- separate
+    // investigation.
     CustomerFunctionSelect();                                                   //customer function selection area
     ReadLastSetIni();
     ReadEventLogAutoSaveInfo();                                                 //Steven 20110603
-#endif
     //Temperature related-----------------------------
     USE_NEW_TEMPCTRL_FUNCTION   =false;                                         //Steven 20100707: force old architecture for now
 
