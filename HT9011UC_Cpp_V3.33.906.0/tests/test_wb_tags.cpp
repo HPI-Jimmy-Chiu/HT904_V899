@@ -1,0 +1,156 @@
+// =============================================================================
+//  test_wb_tags.cpp -- WebBridgeTags: does the browser get the truth?
+//
+//  AI(W906-WebBridge) 20260806.
+//
+//  The single property under test is the one the whole design exists for:
+//
+//      a tag whose source is loaded carries a REAL value;
+//      a tag whose source is NOT loaded carries NULL, never 0.
+//
+//  The browser renders null as "---" and 0 as "0.00", so getting this backwards
+//  puts a measurement on an operator's screen that was never taken. On a
+//  machine that runs at 130 C that is not a cosmetic bug.
+//
+//  DO-NOT-MODIFY-REAL-CONFIG: LoadMachineConfig() seeds missing keys, i.e. it
+//  WRITES to asGeneralPath. As in tests/test_wb_datalayer.cpp, this repoints
+//  asGeneralPath at a scratch copy first and restores it afterwards.
+// =============================================================================
+#include "WebBridgeTags.h"
+
+#include "database.h"
+#include "cprod.h"
+#include "Config.h"
+#include "LastSet.h"
+#include "cmydef.h"
+#include "common.h"
+
+#include "WebBridge/TagSnapshot.h"
+#include "WebBridge/TagValue.h"
+
+#include <windows.h>
+#include <cstdio>
+
+static int g_total = 0;
+static int g_fail = 0;
+
+static void check(bool ok, const char* what)
+{
+    ++g_total;
+    std::printf("%s: %s\n", ok ? "PASS" : "FAIL", what);
+    if (!ok) ++g_fail;
+}
+
+int main()
+{
+    std::setvbuf(stdout, 0, _IONBF, 0);
+
+    using webbridge::TagSnapshot;
+    using webbridge::TagSnapshotView;
+    using webbridge::TagValue;
+
+    // --- 1. before loading, EVERYTHING must be null --------------------------
+    // This is the control. If a tag carried a value here, the "live" checks
+    // below would prove nothing -- they could be reading a leftover.
+    {
+        TagSnapshot snap;
+        ht9045::PublishHandlerTags(snap);
+        const TagSnapshotView v = snap.read();
+
+        std::size_t nonNull = 0;
+        for (webbridge::TagMap::const_iterator it = v.tags.begin();
+             it != v.tags.end(); ++it) {
+            if (!it->second.isNull()) ++nonNull;
+        }
+        std::printf("-- 1. before LoadMachineConfig: %u tags, %u non-null\n",
+                    (unsigned)v.tags.size(), (unsigned)nonNull);
+        check(v.tags.size() > 0, "PublishHandlerTags stages a non-empty snapshot");
+        check(nonNull == 0,
+              "every tag is null before the data layer is loaded "
+              "(nothing is inventing values)");
+
+        const ht9045::TagCoverage c = ht9045::HandlerTagCoverage();
+        std::printf("   coverage: %u live / %u total\n",
+                    (unsigned)c.live, (unsigned)c.total);
+        check(c.live == 0, "coverage reports 0 live before loading");
+    }
+
+    // --- 2. load the data layer, on a scratch copy ---------------------------
+    const AnsiString savedGeneralPath = asGeneralPath;
+
+    char tmp[MAX_PATH];
+    if (::GetTempPathA(MAX_PATH, tmp) == 0) {
+        std::printf("SKIP: no temp path\n");
+        std::printf("\ntest_wb_tags: %d checks, %d failure(s)\n", g_total, g_fail);
+        return g_fail == 0 ? 0 : 1;
+    }
+    const AnsiString scratch = AnsiString(tmp) + "wb_tags_general.ini";
+
+    if (!::CopyFileA(savedGeneralPath.c_str(), scratch.c_str(), FALSE)) {
+        std::printf("SKIP: no Gerneral.ini on this box (err %lu)\n",
+                    (unsigned long)::GetLastError());
+        std::printf("\ntest_wb_tags: %d checks, %d failure(s)\n", g_total, g_fail);
+        return g_fail == 0 ? 0 : 1;
+    }
+
+    asGeneralPath = scratch;
+    const bool loaded = LoadMachineConfig();
+    check(loaded, "LoadMachineConfig() succeeded");
+
+    // --- 3. after loading ----------------------------------------------------
+    {
+        TagSnapshot snap;
+        const std::size_t staged = ht9045::PublishHandlerTags(snap);
+        const TagSnapshotView v = snap.read();
+
+        std::printf("\n-- 3. after LoadMachineConfig: %u tags staged\n",
+                    (unsigned)staged);
+
+        const TagValue& type = v.tags.find("machine.id.type")->second;
+        const TagValue& cust = v.tags.find("machine.customerCode")->second;
+        std::printf("   machine.id.type      = %s\n", type.debugString().c_str());
+        std::printf("   machine.customerCode = %s\n", cust.debugString().c_str());
+
+        check(type.isString() && type.asString().size() > 0,
+              "machine.id.type carries a REAL value once IniConfig strings load");
+        check(cust.isInt() && cust.asInt() != 0,
+              "machine.customerCode carries a REAL value");
+
+        // The load-bearing negative. Temperature.* and UN150Read[] are both
+        // measurably unwritten in this port, so these MUST be null. If this ever
+        // reports 0 instead, the browser will draw "0.00" for a heater zone
+        // nobody read.
+        const char* mustBeNull[] = {
+            "temp.pv", "temp.sv", "temp.soak", "temp.mode",
+            "zone.hotplate.1", "zone.shuttle.1", "zone.heatgun.1",
+            "tower.red", "tester.name", "status.uph"
+        };
+        bool allNull = true;
+        for (std::size_t i = 0; i < sizeof(mustBeNull) / sizeof(mustBeNull[0]); ++i) {
+            webbridge::TagMap::const_iterator it = v.tags.find(mustBeNull[i]);
+            if (it == v.tags.end() || !it->second.isNull()) {
+                std::printf("   NOT NULL: %s = %s\n", mustBeNull[i],
+                            it == v.tags.end() ? "(absent)"
+                                               : it->second.debugString().c_str());
+                allNull = false;
+            }
+        }
+        check(allNull,
+              "every tag with an unloaded source is NULL, not 0 "
+              "(null renders \"---\", 0 renders \"0.00\")");
+
+        const ht9045::TagCoverage c = ht9045::HandlerTagCoverage();
+        std::printf("   coverage: %u live / %u total\n",
+                    (unsigned)c.live, (unsigned)c.total);
+        check(c.live > 0 && c.live < c.total,
+              "coverage is partial and honest about it");
+    }
+
+    CloseGeneralIniFile();
+    asGeneralPath = savedGeneralPath;
+    ::DeleteFileA(scratch.c_str());
+
+    std::printf("\ntest_wb_tags: %d checks, %d failure(s)\n", g_total, g_fail);
+    std::printf("RESULT: %s\n", g_fail == 0 ? "PASS" : "FAIL");
+    return g_fail == 0 ? 0 : 1;
+}

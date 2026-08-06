@@ -3050,6 +3050,20 @@ if(WIN32)
 endif()
 add_test(NAME WB_DataLayer COMMAND test_wb_datalayer)
 
+# WB_Tags: the seam itself -- machine globals -> webbridge::TagSnapshot. Links
+# BOTH the god-stack (it reads machine globals) and ht9045_webbridge (it stages
+# into a TagSnapshot); WebBridgeTags.cpp is the one translation unit allowed to
+# mix the two, which is why it lives at the tree root and not under WebBridge/.
+add_executable(test_wb_tags test_wb_tags.cpp ../WebBridgeTags.cpp)
+target_link_libraries(test_wb_tags PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_automation,ht9045_comms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    ht9045_webbridge
+)
+if(WIN32)
+    target_link_libraries(test_wb_tags PRIVATE ws2_32)
+endif()
+add_test(NAME WB_Tags COMMAND test_wb_tags)
+
 add_executable(test_wb_crypto  test_wb_crypto.cpp)
 add_executable(test_wb_state   test_wb_state.cpp)
 add_executable(test_wb_wsproto test_wb_wsproto.cpp)
