@@ -1972,6 +1972,31 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 endif()
 
 # ---------------------------------------------------------------------------
+# Tool: wb_serve
+#   AI(W906-WebBridge) 20260806: runs the browser HMI against the REAL machine
+#   data layer -- LoadMachineConfig() + WebBridgeTags + the bridge, serving
+#   D:\HT9045\web. This is the WB-2 milestone made runnable; the handler itself
+#   will own the server once GA-3 puts the god-stack in HT9045.exe.
+#
+#   It links BOTH the god-stack (via WebBridgeTags.cpp, the one TU allowed to
+#   mix the two worlds) and ht9045_webbridge. LINK_GROUP:RESCAN for the same
+#   single-pass archive-scan reason the god-stack tests use.
+# ---------------------------------------------------------------------------
+add_executable(wb_serve
+    tools/wb_serve.cpp
+    WebBridgeTags.cpp
+)
+
+target_link_libraries(wb_serve PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_automation,ht9045_comms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    ht9045_webbridge
+)
+
+if(WIN32)
+    target_link_libraries(wb_serve PRIVATE ws2_32)
+endif()
+
+# ---------------------------------------------------------------------------
 # Tests
 # ---------------------------------------------------------------------------
 enable_testing()
