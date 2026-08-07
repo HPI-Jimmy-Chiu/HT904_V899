@@ -124,12 +124,16 @@ golden .cpp 全部            339 檔   643,130 行
 
 1. 未最佳化 build：`cmake --build` exit 0（**目前已達成**）。
 2. ctest 失敗集合不擴大（目前基準見 DEVLOG 各波記錄）。
-3. **Release（-O3 + NDEBUG）build 綠**——**尚未達成**，兩個已知缺陷：
-   - `MyPLCModbus`：-O3 編不過。
-   - `BarCodeBottom2DID`：-O3 下在 `main()` 印出任何東西前就 segfault。
-   兩者都與 WB 波無關，是「只在出貨 build 現形」那一類。20260807 已做到最小重現
-   （`build_o3_repro` / `build_bc_o3g`，並產出過一份 `BarCode_Bottom2DID_FIXED.cpp`
-   候選），**修正尚未落樹**。
+3. **Release（-O3 + NDEBUG）build 綠**——**20260807 達成**。全新 `build_0807_rel`：
+   build exit 0、0 compile error、ctest 128/134，**失敗集合與未最佳化 build 逐位元相同**。
+   先前兩個缺陷都已修，且兩個都證實是 **golden 自己的潛伏缺陷**、不是移植產生的：
+   - `BarCodeBottom2DID`：golden `BarCode.cpp:7150` 宣告 `sSimuCode[4]`，golden
+     `:7203-7217` 的迴圈卻寫到 `BAR_CODE_COUNT`(=8)。golden `:9954` 的姊妹拷貝是 `[8]`
+     ——`4-->8` 改動漏掉這一份。真機上每次掃碼都在越界寫。
+   - `MyPLCModbus`：golden `MyPLC/ModbusTCPClient.cpp:10-20` 的 ctor 沒初始化
+     `bConnected`／`iIP`／`iPort`。
+   **往後每波交付要同時量 unoptimised 與 Release 兩組數字**——這兩個缺陷是靠
+   「同一份 source、兩種建法對照」才現形的，單一建法的綠燈涵蓋不到這一類。
 4. MSVC 第二 oracle（`build.bat msvc`）不退步。
 
 ---

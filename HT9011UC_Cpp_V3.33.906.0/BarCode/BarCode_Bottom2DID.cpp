@@ -449,7 +449,24 @@ bool BarCode_DoBottom2DIDScan()
     static bool bNeesScanCode[2][4];                  // golden quirk: set once via ZeroMemory
                                                        // below, never read again afterwards --
                                                        // preserved verbatim (dead-but-harmless).
-    static AnsiString sErrorPart="", sSimuCode[4];
+    //AI(W906-O3) 20260807: DELIBERATE DEVIATION FROM GOLDEN -- the golden
+    //  declaration is `sSimuCode[4]` (BarCode.cpp:7150) but the loop 53 lines
+    //  below it (golden :7203-7217, port :529-546) writes sSimuCode[i] for
+    //  i in [0, BAR_CODE_COUNT) and BAR_CODE_COUNT is 8 (golden BarCode.h:30,
+    //  "KaiChen 20200513 : 4-->8").  Golden therefore writes FOUR AnsiStrings
+    //  past the end of the array every time a bottom-2DID scan starts.
+    //  This is a golden defect, not a translation slip, and golden itself
+    //  proves it: the sibling copy of this same function at BarCode.cpp:9954
+    //  declares `sSimuCode[8]`.  The 4-->8 change was applied to that copy and
+    //  missed here.
+    //  In BCB6 an AnsiString is one pointer into zeroed adjacent statics, so
+    //  assigning through the overrun is survivable by luck.  Here AnsiString is
+    //  a real object: at -O0 the neighbouring bytes were also zero and it
+    //  survived, but under -DCMAKE_BUILD_TYPE=Release the layout changes and
+    //  test_barcode_bottom2did segfaults before main() prints its first line.
+    //  Sized to BAR_CODE_COUNT, matching golden's own corrected copy.
+    //  This should be reported upstream against the BCB6 tree as well.
+    static AnsiString sErrorPart="", sSimuCode[BAR_CODE_COUNT];
     AnsiString cLastString, sCCDCommand;
     AnsiString Log;
     AnsiString Str, Str1, Str2, Str3;

@@ -3562,3 +3562,47 @@ ungate `aArmHeader.h:23-98` 的 `#include "SortingBinTray.h"`，那會拉進整�
 ——留給 W7 決定，本波刻意不動。另：`Public/MyStringList.cpp` 讓 `TMyStringList` 變成
 完整型別，解開了五處既有 gate（cprod.cpp:2496、cMyDB.cpp:344/400/448/745、
 cmydef.cpp:129、HANA_ART.cpp:1006），這些退役同樣是**另一步**，不在本 commit。
+
+---
+
+## 2026-08-07（續）— 兩個只在 -O3 現形的缺陷，兩個都是 golden 自己的；Release 首次轉綠
+
+20260805 WB-0 那波發現「本樹從來沒有最佳化建過」，並浮出兩個與 WB 無關的缺陷，當時記為
+「至今仍未修」。本則把它們修完，並更正一件事：**兩個都不是移植產生的，是 golden BCB6
+原始碼裡的潛伏缺陷**，只是未最佳化 build 一路用零記憶體幫它們遮著。
+
+**（1）`BarCode_Bottom2DID` -O3 下在 main() 印出第一行之前就 segfault。**
+根因不是 -O3，是**越界寫**。golden `BarCode.cpp:7150` 宣告 `sSimuCode[4]`，而 53 行之後
+的迴圈（golden :7203-7217）用 `for(int i=0; i<BAR_CODE_COUNT; i++)` 寫 `sSimuCode[i]`，
+`BAR_CODE_COUNT` 是 **8**（golden `BarCode.h:30`，註解就寫著「KaiChen 20200513 : 4-->8」）。
+也就是**每一次 bottom-2DID 掃描啟動都寫掉陣列尾巴後面四個 AnsiString**。
+**golden 自己就是證據**：同一支函式在 `BarCode.cpp:9954` 的另一份拷貝宣告的是
+`sSimuCode[8]`——`4-->8` 那次改動套用到那一份、漏掉了這一份。
+在 BCB6 裡 AnsiString 是單一指標、踩進去的是零初始化的相鄰 static，所以靠運氣活著；
+在本 port 它是真物件，-O0 時相鄰位元組也剛好是零而倖存，-O3 換了佈局就致命。
+port 端改成 `sSimuCode[BAR_CODE_COUNT]`，與 golden 自己已修正的那份拷貝一致。
+
+**（2）`MyPLCModbus` -O3 下 51 passed / 1 failed，`test_myplc_modbus.cpp:250`
+「client3 starts disconnected」。** 同樣不是 -O3 的錯：golden
+`MyPLC/ModbusTCPClient.cpp:10-20` 的 ctor **一個 scalar 成員都沒初始化**
+（`ModbusTCPClient.h:23` 的 `bool bConnected;` 與兩個 int），所以剛建出來的 client
+`IsConnected()` 回傳的是配置到什麼就是什麼。port 的 ctor 是逐行照抄的，洞一模一樣。
+之所以從沒被看見：本 port 每一個未最佳化 build，以及 BCB6 產品裡每一個活在零初始化
+static 的實例，剛好都拿到零。port 端補 `iIP=0; iPort=0; bConnected=false;`
+——這三個值是 golden 其餘部分唯一自洽的選擇（`bConnected` 只由 SocketConnect 回呼
+設 true、由 SocketDisConnect/SocketError 設 false；iIP/iPort 在 SetTCPInfo 跑之前無意義）。
+
+**兩處都在原地標記為 DELIBERATE DEVIATION FROM GOLDEN**，理由寫在程式裡而不是註解在別處：
+**忠實重現未定義行為並不是忠實重現行為**。兩個都建議回報給 BCB6 樹——第一個在真機上
+是每次掃碼都在踩記憶體。
+
+**驗證（首次達成）**：全新 `build_0807_rel`，`-DCMAKE_BUILD_TYPE=Release`（-O3 -DNDEBUG）。
+**build exit 0、0 個 compile error、ctest 128/134**，而且**失敗集合與未最佳化 build 逐位元
+相同**（config_db／IniFiles／ini_helpers／config_loaders 四個環境漂移＋dfm2rc_idempotent
+＋GA1_ReadGeneralIni）。`MyPLCModbus` 與 `BarCodeBottom2DID` 兩支都 Passed。
+這是本 port **第一次在出貨用的建法下綠燈**——先前每一個記錄在案的數字都是
+`CMAKE_BUILD_TYPE` 空值量的。`PT_CAMPAIGN_PLAN.md` §5 第 3 條由「尚未達成」改為達成。
+
+**方法論註記**：這兩個缺陷是「同一份 source、兩種建法對照」抓出來的。單一建法的綠燈
+無法涵蓋這一類——它們不是回歸，是**本來就在那裡、只是被建置設定遮住**的東西。
+往後每一波交付前應同時量 unoptimised 與 Release 兩組數字，而不是只量一組。

@@ -26,6 +26,28 @@
 //------------------------------------------------------------------------------
 __fastcall ModbusTCPClient::ModbusTCPClient()
 {
+    //AI(W906-O3) 20260807: DELIBERATE DEVIATION FROM GOLDEN -- golden
+    //  MyPLC/ModbusTCPClient.cpp:10-20 initialises NONE of the three scalar
+    //  members (ModbusTCPClient.h:23 `bool bConnected;` and the two ints), so a
+    //  freshly constructed client answers IsConnected() from whatever the
+    //  allocation happened to contain.  It is not a port artefact: the golden
+    //  ctor is reproduced above line for line and it has the same hole.  It
+    //  stayed invisible because every unoptimised build this port ever made --
+    //  and, in the BCB6 product, every instance that lives in a zero-initialised
+    //  static -- happened to hand out zeroed memory.
+    //  Under -DCMAKE_BUILD_TYPE=Release the memory is no longer zero and
+    //  tests/test_myplc_modbus.cpp:250 fails: "client3 starts disconnected"
+    //  (51 passed / 1 failed at -O3, 52/0 at -O0, same source).
+    //  Reproducing undefined behaviour faithfully is not reproducing behaviour,
+    //  so this is fixed rather than mirrored.  false/0/0 are the only values
+    //  consistent with the rest of golden: bConnected is set true ONLY by the
+    //  SocketConnect callback (:187) and false by SocketDisConnect (:192) and
+    //  SocketError (:199), and iIP/iPort are meaningless until SetTCPInfo runs.
+    //  This should be reported upstream against the BCB6 tree as well.
+    iIP=0;
+    iPort=0;
+    bConnected=false;
+
     pClinetSocket=new TClientSocket(NULL);
 
     //AI(W5-MyPLC-Translate) 20260710: BCB6 __closure event assignment implicitly
