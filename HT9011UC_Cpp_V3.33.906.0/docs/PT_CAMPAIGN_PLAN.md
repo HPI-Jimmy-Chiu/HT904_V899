@@ -148,6 +148,24 @@ golden .cpp 全部            339 檔   643,130 行
 - 交付數字**只在全新 build dir 量**；併發 build 會弄出假的 undefined reference。
 - 稽核 agent **唯讀**。它們最常見的錯不是漏看程式碼，是**引用造假**——每條 finding
   都要有真的 golden 行號與 port 行號，主迴圈要抽驗。
+- **absence-claim 會在同一波內過期（PT-W2 一次中三個，務必當常態防範）**。
+  翻譯 agent 開工時 grep 全樹得到「X 不存在」，據此開 gate 並寫進 GATE REGISTER；
+  但兄弟 group 會在那之後才把 X 落地，於是 gate 帶著假前提上樹。
+  - `Monitor/MonitorTCPIP.cpp` 說 `class TCPIP` 全樹沒有 → 同一波早 11 分鐘落地的
+    `ATC/TCPData.h:74` 就是。後果：9 個 call site 被寫死成 `IsConnect()=false`／
+    `SendCommand()=-1`／`AdapterData()=0`——真機在跑，畫面說沒連上。
+  - `EJ1N/MyOmronPanel.h` 說 golden 全樹零消費者 → 實際 7 個檔，`fDTME08.cpp:112`
+    與 `OmronEJ1N.cpp:97` 都真的 `new TMyOmronPanel`。這個是 grep 自己漏。
+  - `Public/HTEditList.cpp` 說 `class FileInfo` 不存在 → 同一波的
+    `ProductionInfo/FileInfo.h:129` 就是。
+  **規則**：(1) GATE REGISTER 的 absence-claim 要附**量測指令與時間**；
+  (2) 單元**收工時重跑一次** grep，不是開工跑一次就算；
+  (3) 主迴圈整併時把每個新 gate 的 absence-claim 當預設可疑、逐條複驗；
+  (4) 「降級值剛好等價」不算沒事——缺陷是假前提本身。
+- **`-fsyntax-only` 抓不到連結錯誤**。PT-W2 每個檔都 syntax-clean，整併後仍冒出
+  `RecordChangeLogProcess` 未定義——真因是 `cMyDB.cpp` 早就翻好卻**從來沒被註冊進任何
+  archive**。波次自檢要加一句：新單元呼叫的每個外部符號，確認它的 body 所在的 .cpp
+  **有在 CMakeLists 裡**，不是只存在於樹上。
 - 檔案編碼：golden cp950 → port UTF-8 + LF，U+FFFD 出現即為缺陷。
 
 ---
@@ -195,3 +213,63 @@ canonical 樹卻有 → G7 判缺件。**乾淨的 repo 不會有這個失敗。
 regen 的」檔用的，`*_uimap.gen.*` 是**產生出來的**，排除等於默默解除對一個產物的覆蓋。
 正解是 GA-4 決定 emit_uimap 要對 133 個表單全跑還是只跑 main，然後接進 `regenerate_all()`
 並把產物一起 commit。**這是 GA-4 的未結項，不在 PT 戰役範圍內。**
+
+---
+
+## §8 `main.cpp` 建構缺口 —— 18 個全域指標目前是 NULL（20260807 普查）
+
+**怎麼發現的**：PT-W2 整併時退役了 `aHotPlateSubstrate.cpp` 裡 `uPlateInfo` 的 stub
+（真本體隨 `Public/HTEditList.cpp` 落地了），結果三個原本綠的測試變成 **SEGFAULT**
+（AutoClean／W6_2_InArmCanary／W6_2_InArmSearch）。追下去不是退役做錯，是**stub 一直在
+遮一個真的洞**：
+
+- golden `Public/HTEditList.cpp:56/:59` 只宣告裸指標 `uPlateInfo *PickFromHPList;`，
+- 真正 `new` 它的是 **`main.cpp:2149-2150`**，
+- 而 `main.cpp` 是 163 個完全沒開始的單元之一。
+
+port 忠實翻了 `:56/:59`，所以兩個指標是 NULL；ported 的 `ainarm9045_*` 家族每一句
+`PickFromHPList->...` 都是等著發生的 NULL 解參考，只是被 stub 指向自己的 file-static
+物件掩蓋住。
+
+**這不是單一個案**。掃 golden `main.cpp` 全部 67 個 `X = new T;` 站點、比對 port 中
+以裸指標定義同名全域的檔案，得到 24 個，其中 **18 個在 port 裡從來沒有人 new 過**：
+
+| 全域 | 型別 | golden main.cpp | port 定義處 |
+|---|---|---:|---|
+| `HeaterThread` | `THeaterThread` | 22481 | `uHeaterThread.cpp` |
+| `MyThread` | `TRunControl` | 22475 | `uruncontrol.cpp` |
+| `elConfig` | `HTEditList` | 1484 | `Public/HTEditList.cpp` |
+| `elConfig_byRecipe` | `HTEditList` | 1489 | 同上 |
+| `elContact` | `HTEditList` | 1485 | 同上 |
+| `elLaser` | `HTEditList` | 1483 | 同上 |
+| `elTeach` | `HTEditList` | 1488 | 同上 |
+| `elTrayForm` | `HTEditList` | 1487 | 同上 |
+| `elUdUld` | `HTEditList` | 1486 | 同上 |
+| `elVacuumUnit` | `HTEditList` | 1493 | 同上 |
+| `cbLastSet` | `HTEditList` | 1492 | 同上 |
+| `slEventLog` | `TMyStringList` | 1503/1509 | `cmydef.cpp` |
+| `sl2DMappingLog` | `TMyStringList` | 1513 | `cmydef.cpp` |
+| `slGroundManLog` | `TMyStringList` | 1671 | `cmydef.cpp` |
+| `slBundlID` | `TStringList` | 1562 | `cmydef.cpp` |
+| `slDupBundlID` | `TStringList` | 1564 | `cmydef.cpp` |
+| `slDupUnloadBundlID` | `TStringList` | 1568 | `cmydef.cpp` |
+
+（腳本 `nullsweep.py`，可重跑。`PickFromHPList`／`PlaceToCleanList` 已於本波補上，
+`sList` 是函式內區域變數、誤入清單，不算。）
+
+**本波只補了擋路的那兩個**，做法是 `aHotPlateSubstrate.cpp` 一個 static-init 物件，
+照抄 golden `main.cpp:2149-2150`，並在原地寫明它是 unported 單元的 stand-in、
+以及為什麼 static-init 在這兩個身上是安全的（只被 runtime 函式讀，不被別的 TU 的
+static initialiser 讀——**查過，不是假設**）。
+
+**其餘 16 個刻意不一起補**，理由是這不是機械填空：
+- `HeaterThread`／`MyThread` 是**執行緒**，在 static-init 期建構等於在 `main()` 之前
+  起執行緒，絕不可盲目照抄。
+- 那批 `HTEditList` 實例（`elConfig`/`elTeach`/…）在 golden 裡 `new` 完緊接著就
+  `LoadFile()` 讀設定檔，順序和路徑都有意義。
+- 跨 TU static-init 順序標準零保證（`5bad9aa` 的 `LoadMachineConfig()` 已經為同一個
+  理由**刻意不重現** golden 的 static-init 形狀）。
+
+**歸屬**：這整塊是 **GA-3（main.cpp 啟動鏈垂直切片）** 的工作，不是 PT 戰役的。
+在 GA-3 落地之前，**任何一波只要讓上表其中一個全域第一次有呼叫者，就會 segfault**——
+這不是回歸，是本來就在那裡。波次驗證看到新的 SEGFAULT 時，第一個要查的就是這張表。

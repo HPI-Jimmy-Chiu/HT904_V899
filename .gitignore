@@ -89,6 +89,14 @@ PMAlarm/
 !HT9011UC_Cpp_V3.33.906.0/tools/dfm2rc/ir_out/PMAlarm/
 !HT9011UC_Cpp_V3.33.906.0/tools/dfm2rc/rc_out/PMAlarm/
 !HT9011UC_Cpp_V3.33.906.0/tools/dfm2rc/layout_out/PMAlarm/
+# AI(W906-PT-W2) 20260807: the same unanchored-rule collision, third occurrence --
+# this time on the V906 PORT SOURCE directory. Translation wave PT-W2 landed
+# PMAlarm/PMAlarmSystem.{cpp,h} and PMAlarm/uTimeTool.{cpp,h}; `git add` refused
+# them and would have committed a CMakeLists.txt referencing sources that are not
+# in the repo -- i.e. a tree that builds here and nowhere else. Same remedy as the
+# three lines above: un-ignore the specific path rather than weaken a rule that is
+# correct for the 18 runtime alarm-data directories it was written for.
+!HT9011UC_Cpp_V3.33.906.0/PMAlarm/
 dmc_data/
 SECS/GPM/
 MDB/

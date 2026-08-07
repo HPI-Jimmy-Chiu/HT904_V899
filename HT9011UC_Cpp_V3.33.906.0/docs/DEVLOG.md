@@ -3606,3 +3606,80 @@ static 的實例，剛好都拿到零。port 端補 `iIP=0; iPort=0; bConnected=
 **方法論註記**：這兩個缺陷是「同一份 source、兩種建法對照」抓出來的。單一建法的綠燈
 無法涵蓋這一類——它們不是回歸，是**本來就在那裡、只是被建置設定遮住**的東西。
 往後每一波交付前應同時量 unoptimised 與 Release 兩組數字，而不是只量一組。
+
+---
+
+## 2026-08-07（續二）— PT-W2：非表單 deps≤1 整層清光（28 單元），與整併時照出的五個洞
+
+**PT-W2 範圍**：把「非表單、且還沒翻的相依單元 ≤1 個」那一整層一次清掉——27 個指派單元
+＋1 個（`Public/HTEdit.cpp`，與 HTEditList 共用契約，順手一起）。分十組平行翻譯，
+每組再由一個**唯讀對抗性稽核 agent** 複驗（20 個 agent，0 個失敗）。
+
+**主迴圈自己的獨立比對**（不看 agent 回報）：28 個單元 **0 個 golden 函式缺席、
+0 個 mojibake、全部 LF**。兩個被腳本標紅的都查證是誤報——一個是大括號換行造成的 regex
+假象，一個（`EJ1N/MyOmronPanel` 的三個滑鼠事件）有正式登記 GATE，且**連帶的 handler
+指派也在同一個 `#if 0` 內**，一致。
+
+### 稽核抓到的：三個「假前提 gate」，同一種病
+
+翻譯 agent 在**開工時** grep 全樹得到「X 不存在」，據此開 gate 並把降級值寫進
+GATE REGISTER；但**同一波的兄弟 group 是在那之後才落地的**，grep 在單元寫完時就過期了。
+
+1. **`Monitor/MonitorTCPIP.cpp`（最嚴重）**：宣稱 `class TCPIP` 全樹沒有 port。實際
+   `ATC/TCPData.h:74-99` 就是，而且是同一波 group "atc" **早 11 分鐘**寫到磁碟的。
+   後果：9 個 call site 被寫死成 `IsConnect()=false`／`SendCommand()=-1`／
+   `AdapterData()=0`——真機在正常連線，畫面會說「從未連上、每次送出都失敗、什麼都沒
+   收到」，而檔案自己的 banner 把這認證為忠實。**已全部解閘接回真物件**，8 個站點
+   逐一與 golden 對過字面（golden :47/:59/:71/:77/:83/:97/:105/:113），
+   `MonitorTCPIP.h` 那份 `class TCPIP;` 前向宣告＋自行複製的 `DATA`/`TD_*` 也換成
+   `#include "ATC/TCPData.h"`。
+2. **`EJ1N/MyOmronPanel.h`**：宣稱 golden 全樹「ZERO CONSUMERS」。實際 7 個檔，
+   `fDTME08.cpp:112` 與 `OmronEJ1N.cpp:97` 都真的 `new TMyOmronPanel` 並呼叫那些被
+   no-op 掉的方法，三個檔都在 `HT9045.bpr` 的編譯清單裡。這個是 grep 自己漏看。
+   gate 本身仍成立（`TMouseButton`/`TShiftState` 確實無 port），**但「零風險」的認證
+   是假的**——已改寫成真實的行為差異：等 fDTME08/OmronEJ1N 一翻，溫控格顯示不出數字、
+   拖不動、鍵盤叫不出來。
+3. **`Public/HTEditList.cpp`**：宣稱 `class FileInfo` 不存在。實際同一波
+   `ProductionInfo/FileInfo.h:129` 就是。**已還原成 golden 原本的
+   `FileInfo().IsFilePathExist(...)`**。降級值剛好等價，但缺陷是假前提本身。
+
+### 整併時另外照出的兩個洞
+
+4. **`cMyDB.cpp` 翻好了卻從來沒被註冊進任何 archive**。它躺在樹上為誰也不編。
+   PT-W2 的 `HTEditList` 是第一個呼叫 `RecordChangeLogProcess` 的單元，三支測試
+   link-fail 才把它照出來（`cMyDB.h:59` 自己還寫著這個符號「NO existing stand-in
+   ... translated ACTIVELY」——說得沒錯，而它還是連不起來）。已註冊進 `ht9045_db`
+   並補上 `sqlite3` 連結邊（在這之前 ht9045_db 沒有任何一個符號用到 sqlite3，
+   所以那條邊是缺、不是錯）。
+   **教訓**：`-fsyntax-only` 抓不到連結錯誤。波次自檢要加一句：新單元呼叫的每個外部
+   符號，確認它 body 所在的 .cpp **有在 CMakeLists 裡**，不是只存在於樹上。
+5. **`uPlateInfo`/`uPoint2D` 重複定義 → 退役 stub → 三個 SEGFAULT → 一個真的洞**。
+   `aHotPlateSubstrate.cpp` 有一份 15 個成員全是 `return false;` 的 `uPlateInfo`
+   stub；真本體隨 `Public/HTEditList.cpp` 落地（32 個成員，嚴格超集），兩份一起在
+   `libht9045_sm.a` 裡就 multiple definition。退役 stub 之後 AutoClean／
+   W6_2_InArmCanary／W6_2_InArmSearch 變 SEGFAULT——**不是退役做錯，是 stub 一直在
+   遮真的洞**：golden `HTEditList.cpp:56/:59` 只宣告裸指標，真正 `new` 它的是
+   `main.cpp:2149-2150`，而 main.cpp 完全沒翻。已照 golden 那兩行補一個 static-init
+   stand-in（並在原地寫明為什麼 static-init 對這兩個是安全的——**查過只被 runtime
+   函式讀，不是假設**）。
+   （過程中我自己也錯了一次：退役註解先寫「uPoint2D 留著，golden 定義在 .h」，
+   連結器立刻打臉——golden 宣告在 .h、**body 在 `HTEditList.cpp:3118-3134`**。已更正。）
+
+**由 5 延伸出的普查——這是本則最該記住的東西**：掃 golden `main.cpp` 全部 67 個
+`X = new T;`，比對 port 中以裸指標定義同名全域者，**18 個在 port 裡從來沒有人 new 過**
+（`HeaterThread`／`MyThread`／8 個 `HTEditList` 設定實例／`slEventLog`／
+`sl2DMappingLog`／`slGroundManLog`／`slBundlID` 族）。**在 GA-3 落地之前，任何一波
+只要讓其中一個第一次有呼叫者就會 segfault**，那不是回歸。完整清單附 golden 行號在
+`PT_CAMPAIGN_PLAN.md` §8；其餘 16 個刻意不補（執行緒不能在 `main()` 之前起、
+`HTEditList` 實例 new 完緊接著 `LoadFile()` 順序有意義、跨 TU static-init 標準零保證），
+歸 GA-3。
+
+**驗證**：`build_0807_w2` build exit 0、**ctest 128/134**，失敗集合與當日 baseline
+**逐位元相同**（4 個設定快照漂移＋dfm2rc_idempotent＋GA1_ReadGeneralIni，成因見
+`PT_CAMPAIGN_PLAN.md` §7）。三個 SEGFAULT 已消。
+
+**archive 落點**：純資料/葉子（Config、MessageDef、SgdToXLS、PMAlarm/uTimeTool）→
+`ht9045_globals`；馬達驅動＋MyEtherCAT → `ht9045_motor`（並把 `Motor/vendor`、
+`EtherCAT/vendor` 兩個唯讀 vendor 目錄放上 include path，好讓 port 的 `#include` 行
+與 golden **逐字相同**）；`myio.cpp` → `ht9045_io`；現場匯流排/協定 → `ht9045_comms`；
+其餘 → `ht9045_sm`。

@@ -458,6 +458,20 @@ add_library(ht9045_globals STATIC
     # CCLink/MyCCLink.cpp:80-83 (ht9045_comms, which already PUBLIC-links globals at
     # :1073).  Substrate is vclcompat + CRT + kernel32 only -- no new link edge.
     EJ1N/TextProcess.cpp
+    # AI(W906-PT-W2) 20260807: pure-data / pure-leaf units from translation wave
+    # PT-W2.  All four are the same class as EJ1N/TextProcess.cpp above: they
+    # define constants and globals or compute over nothing but the CRT, so they
+    # belong in the lowest archive every consumer already links.
+    #   Config.cpp       -- struct HT9045_CONFIG + the `IniConfig` global whose
+    #                       header (Config.h) was already ported and included
+    #                       tree-wide; the .cpp was the missing definition.
+    #   MessageDef.cpp   -- message-id constants only, zero functions.
+    #   SgdToXLS.cpp     -- one free function.
+    #   PMAlarm/uTimeTool.cpp -- 10 date/time helpers over vclcompat TDateTime.
+    Config.cpp
+    MessageDef.cpp
+    SgdToXLS.cpp
+    PMAlarm/uTimeTool.cpp
 )
 
 target_include_directories(ht9045_globals PUBLIC
@@ -698,6 +712,20 @@ message(STATUS "sqlite3 resolution: ${SQLITE3_RESOLUTION}")
 # ---------------------------------------------------------------------------
 add_library(ht9045_db
     database.cpp
+    # AI(W906-PT-W2-integrate) 20260807: cMyDB.cpp was translated in an earlier
+    # wave and then NEVER REGISTERED IN ANY ARCHIVE -- it has been sitting in the
+    # tree compiling for nobody.  Found because PT-W2's Public/HTEditList.cpp is
+    # the first ported unit to call RecordChangeLogProcess(AnsiString,AnsiString),
+    # whose only body in the tree is cMyDB.cpp:1850, and three test executables
+    # link-failed on it.  (cMyDB.h:59 and cMyDB.cpp:1841 both state that symbol
+    # "has NO existing stand-in anywhere in the tree, so it is translated
+    # ACTIVELY" -- correct, and it still could not be linked.)
+    # Verified before adding: `g++ -std=c++17 -fsyntax-only` on cMyDB.cpp is clean.
+    # This is deliberately NOT solved by gating the call in HTEditList.cpp: a gate
+    # is for a symbol with no body, and this one has a real body -- gating it
+    # would have written a false claim into a GATE REGISTER, which is the exact
+    # defect class this wave's audit caught twice elsewhere.
+    cMyDB.cpp
 )
 
 target_include_directories(ht9045_db PUBLIC
@@ -705,6 +733,13 @@ target_include_directories(ht9045_db PUBLIC
 )
 
 target_link_libraries(ht9045_db PUBLIC vclcompat ht9045_globals)
+
+# AI(W906-PT-W2-integrate) 20260807: cMyDB.cpp (added to this archive just above)
+# is the SQLite wrapper, so this archive now genuinely needs the sqlite3 target
+# that CMakeLists.txt:692 already builds.  Until cMyDB.cpp was registered, nothing
+# in ht9045_db referenced a single sqlite3 symbol, which is why the edge was
+# missing rather than wrong.
+target_link_libraries(ht9045_db PUBLIC sqlite3)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     # database.cpp carries the original BCB6 idioms inherited from the global
@@ -741,10 +776,32 @@ add_library(ht9045_motor STATIC
     Motor/mySimMotor.cpp
     Motor/mymotor.cpp
     mytray.cpp          # TMyTray: required by TTrayMotor in mymotor.cpp (W4 partial)
+    # AI(W906-PT-W2) 20260807: three more motor-family drivers from wave PT-W2.
+    # They join the archive their abstract base already lives in (HTMotor.cpp),
+    # alongside mymotor.cpp, and they reach nothing above it.  Hontech_M4 and
+    # mySMCmotor both include a FORBIDDEN-TO-MODIFY vendor header out of
+    # Motor/vendor/ (CMNet/CMNETError and CSmc respectively) -- included, never
+    # edited, and the real vendor calls stay behind the tree's existing
+    # #if HAVE_xxx posture so the Sim path still links with no SDK present.
+    Motor/Hontech_M4.cpp
+    Motor/mySMCmotor.cpp
+    EtherCAT/MyEtherCAT.cpp   # reaches MOT[]/TTrayMotor/TOTAL_MOTOR -- motor, not comms
 )
 
 target_include_directories(ht9045_motor PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
+    # AI(W906-PT-W2) 20260807: the read-only vendor SDK headers.  This tree keeps
+    # them in a vendor/ subdirectory rather than loose next to the ported sources
+    # (golden has them loose in Motor/ and EtherCAT/) so that "never modify this"
+    # is visible from the path alone -- AGENTS.md lists every one of these files
+    # as forbidden-to-modify.  Putting the two directories on the include path is
+    # what lets the ported sources keep golden's include lines BYTE-IDENTICAL
+    # (`#include "CSmc.h"`, `#include "AdvMotApi.h"`) instead of carrying a
+    # vendor/ prefix that golden does not have.
+    # PUBLIC, not PRIVATE: Motor/Hontech_M4.h and Motor/mySMCmotor.h are public
+    # headers of this archive and they are the ones doing the including.
+    ${CMAKE_CURRENT_SOURCE_DIR}/Motor/vendor
+    ${CMAKE_CURRENT_SOURCE_DIR}/EtherCAT/vendor
 )
 
 target_link_libraries(ht9045_motor PUBLIC vclcompat ht9045_globals)
@@ -805,6 +862,13 @@ add_library(ht9045_io STATIC
     #   the Sim IO HAL (MyLaneIO) exactly like myswitch/mysensor; the alarm /
     #   SmartDiagnostic / VCL-widget god-stack is stubbed/gated in mycylin.cpp.
     mycylin.cpp
+    # AI(W906-PT-W2) 20260807: golden myio.cpp -- the low-level port read/write
+    # layer, translated whole in wave PT-W2.  It is NOT a duplicate of
+    # MyLaneIo.cpp in this same list: MyLaneIo is TLaneIO (the multi-ring/IP/port
+    # class), myio.cpp is the 12 free functions + globals that sit under it and
+    # read TTL_CARD_TYPE / MyBitMask / bPLCIO directly.  See the myio.cpp banner
+    # for how the two relate.
+    myio.cpp
 )
 
 target_include_directories(ht9045_io PUBLIC
@@ -1072,6 +1136,22 @@ add_library(ht9045_comms STATIC
     MyPLC/ModbusTCPClient.cpp
     MyPLC/MyPLC_IO_Modbus.cpp
     EtherCAT/MyNUEC1.cpp
+    # AI(W906-PT-W2) 20260807: wave PT-W2's protocol/fieldbus units.  Each one
+    # talks to a device over a wire and reaches nothing above this archive.
+    #   CanBus/cMyDNM100UD.cpp  -- 泓格 DNM100UD CAN SDK wrapper; joins its
+    #       sibling CanBus/cMyNUDN1.cpp already in this list.
+    #   ATC/TCPData.cpp, ATC/ATC_WinWay.cpp -- ATC handler-side wire structs.
+    #       Member order and sizes are protocol-bearing, kept exactly as golden.
+    #   EJ1N/* -- the Omron EJ1N temperature-controller family.  They build on
+    #       EJ1N/TextProcess.cpp, which landed in ht9045_globals last wave and
+    #       which this archive already PUBLIC-links.
+    CanBus/cMyDNM100UD.cpp
+    ATC/TCPData.cpp
+    ATC/ATC_WinWay.cpp
+    EJ1N/uSocketServerClient.cpp
+    EJ1N/uModbusCommand.cpp
+    EJ1N/uDTME08Control.cpp
+    EJ1N/MyOmronPanel.cpp
 )
 
 target_include_directories(ht9045_comms PUBLIC
@@ -1762,6 +1842,45 @@ add_library(ht9045_sm STATIC
     SortingBinTray/SortingBinTray.cpp
     uHeaterThread.cpp
     Public/MyStringList.cpp
+    # =========================================================================
+    # AI(W906-PT-W2) 20260807: PURE-TRANSLATION CAMPAIGN, WAVE 2 (the remainder).
+    # Wave PT-W2 cleared the whole "non-form unit whose unported dependencies
+    # number 0 or 1" tier -- 28 golden units.  The pure leaves went to
+    # ht9045_globals, the motor drivers to ht9045_motor, myio.cpp to ht9045_io
+    # and the fieldbus/protocol units to ht9045_comms (all above); these are the
+    # ones that reach the machine globals, the Sim HAL or the forms facade, so
+    # they land here for the same reason every other unit in this list does.
+    #
+    #   cSocket.cpp        -- TMySocket/TArm/TLotSummary + 8 globals.  Note the
+    #       test-complete counter array at golden cSocket.cpp:108 is NOT the
+    #       ProductData counter and is kept exactly where golden has it.
+    #   cAuthority.cpp     -- access-level / authority gating.
+    #   uruncontrol.cpp    -- calls MainProc() (csystem.cpp, THIS archive), so it
+    #       cannot sit lower however leaf-like it looks.
+    #   HThreadCtrl/HThreadCtrl.cpp -- thread-control helper.  MinGW here is the
+    #       win32 thread model with no std::thread; follows WebBridge/Sync.h.
+    #   PMAlarm/PMAlarmSystem.cpp   -- PM alarm system (its uTimeTool sibling is
+    #       a pure leaf and went to ht9045_globals).
+    #   ProductionInfo/{TfFTP,FileInfo,uSetUpConfiguration}.cpp
+    #   Automation/{SCK_TUTS,MesWebService}.cpp
+    #   Public/{HTEditList,HTEdit}.cpp -- HTEdit was not in the wave's original
+    #       28-unit assignment (it sits one dependency tier up); it was
+    #       translated alongside HTEditList because the two share a contract.
+    #   Monitor/MonitorTCPIP.cpp -- reaches MyDBIProcess, so sm rather than comms.
+    # =========================================================================
+    cSocket.cpp
+    cAuthority.cpp
+    uruncontrol.cpp
+    HThreadCtrl/HThreadCtrl.cpp
+    PMAlarm/PMAlarmSystem.cpp
+    ProductionInfo/TfFTP.cpp
+    ProductionInfo/FileInfo.cpp
+    ProductionInfo/uSetUpConfiguration.cpp
+    Automation/SCK_TUTS.cpp
+    Automation/MesWebService.cpp
+    Public/HTEditList.cpp
+    Public/HTEdit.cpp
+    Monitor/MonitorTCPIP.cpp
 )
 
 target_include_directories(ht9045_sm PUBLIC

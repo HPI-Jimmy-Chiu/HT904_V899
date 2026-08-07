@@ -790,57 +790,77 @@ bool IsBLCarrKitAllHasIC() { return false; }                       //ChungHung 2
 //==============================================================================
 //  (b) uPoint2D + uPlateInfo (PickFromHPList) -- empty offline team list
 //==============================================================================
-uPoint2D::uPoint2D()              : X(0), Y(0) {}
-uPoint2D::uPoint2D(int x, int y)  : X(x), Y(y) {}
-void uPoint2D::Clear()            { X=0; Y=0; }
-
-uPlateInfo::uPlateInfo()  {}
-uPlateInfo::~uPlateInfo() {}
-
-// Offline: the HP team list is empty.  Every "get first team" returns false so
-// the geometry SMs/leaves take the deterministic "no team to pick/place" path.
-bool uPlateInfo::GetHPFirstTeam(int *iP, int (*)[MAX_ARM_Col],
-                                int (*)[MAX_ARM_Col], bool (*)[MAX_ARM_Col])
+//==============================================================================
+//  AI(W906-PT-W2-integrate) 20260807: THE uPlateInfo STAND-IN IS RETIRED HERE.
+//
+//  What stood in this space was an offline stub of uPlateInfo -- 15 members, all
+//  `return false;` / no-op, plus the four globals PickFromHPList /
+//  PlaceToCleanList / sHPPickRec / sHPPickRecException.  It existed because
+//  uPlateInfo's real golden home, Public/HTEditList.cpp, had no port.
+//
+//  It does now: wave PT-W2 translated Public/HTEditList.cpp, which defines all
+//  32 uPlateInfo members -- a strict SUPERSET of the 15 stubbed here -- and the
+//  same four globals.  Keeping both produced exactly what you would expect:
+//  `multiple definition of uPlateInfo::...` from the linker, in every executable
+//  that pulls both objects out of libht9045_sm.a.
+//
+//  The stub is deleted rather than the real one because this is the direction
+//  the whole port moves in: a SATISFIED-BY-SUBSTRATE entry is a placeholder that
+//  retires the moment the golden unit lands.  (aoutarm9045.cpp:175 carries the
+//  same note for its five SortingBinTray statics, still pending.)
+//
+//  BEHAVIOUR DELTA, STATED PLAINLY: every caller that used to get the offline
+//  "team list is always empty" answer -- GetHPFirstTeam* -> false, ExtractFirstTeam
+//  -> NULL, the Set/Add/Update/Save/Clear family -> no-op -- now runs golden's
+//  real list logic against a genuinely empty list at startup.  That is the
+//  intended direction (real code, real data), but it is a real change: any test
+//  that was pinned to the stub's unconditional false is now pinned to golden's
+//  behaviour instead.
+//
+//  uPoint2D's three bodies are retired with it.  (An earlier draft of this note
+//  claimed uPoint2D "stays here" because golden declares it in HTEditList.h --
+//  wrong: golden puts the DECLARATION in the .h and the BODIES in
+//  HTEditList.cpp:3118-3134, which the port translates faithfully at
+//  Public/HTEditList.cpp:2712-2724.  The linker said so before this note did.)
+//
+//  WHAT THE STUB WAS ALSO SILENTLY DOING -- AND WHY THIS BLOCK EXISTS.
+//  Retiring the stub bodies turned three green tests (AutoClean,
+//  W6_2_InArmCanary, W6_2_InArmSearch) into SEGFAULTs, which is the useful part:
+//  the stub had been hiding a real hole.  Golden declares both globals as bare
+//  uninitialised pointers -- Public/HTEditList.cpp:56 `uPlateInfo *PickFromHPList;`
+//  and :59 `uPlateInfo *PlaceToCleanList;` -- and CONSTRUCTS them somewhere else
+//  entirely: main.cpp:2149-2150, `PickFromHPList = new uPlateInfo();` /
+//  `PlaceToCleanList = new uPlateInfo();`.  The port translates :56/:59
+//  faithfully (Public/HTEditList.cpp:204/:207), so both are NULL -- and main.cpp
+//  is one of the 163 golden units with no port at all yet, so nothing ever runs
+//  those two lines.  Every `PickFromHPList->...` in the ported ainarm9045_*
+//  family was therefore a NULL dereference waiting to happen; the old stub
+//  concealed it by pointing the names at its own file-static objects.
+//
+//  This block does what golden main.cpp:2149-2150 does, and nothing more.  It
+//  is a stand-in for an unported unit, marked as such, and it retires the moment
+//  main.cpp lands -- exactly like LoadMachineConfig() in database.cpp, which
+//  stands in for golden's SYSTEM_MODULAR ctor for the same reason.
+//
+//  ON STATIC-INITIALISATION ORDER: standard C++ gives no cross-TU ordering
+//  guarantee, so this is only safe because both pointers are read from ordinary
+//  runtime functions (the arm state machines), never from another TU's static
+//  initialiser -- checked, not assumed.  Doing it here rather than by
+//  initialising the pointers at their definition keeps golden's own :56/:59
+//  declarations byte-identical.
+//==============================================================================
+namespace {
+struct HPListBootstrap
 {
-    if(iP) *iP=0;
-    return false;
+    HPListBootstrap()
+    {
+        if(PickFromHPList  == NULL) PickFromHPList  = new uPlateInfo();     // golden main.cpp:2149
+        if(PlaceToCleanList== NULL) PlaceToCleanList= new uPlateInfo();     // golden main.cpp:2150
+    }
+};
+HPListBootstrap g_hpListBootstrap;
 }
-bool uPlateInfo::GetHPFirstTeamPlate(int &iP, int &iR, int &iC, int &iSht, int &iKit)
-{
-    iP=0; iR=0; iC=0; iSht=0; iKit=0;
-    return false;
-}
-bool uPlateInfo::GetHPFirstTeamSuckUse(bool [MAX_ARM_Row][MAX_ARM_Col]) { return false; }
-bool uPlateInfo::GetHPFirstTeamMotUse(bool [MAX_ARM_Row][MAX_ARM_Col])  { return false; }
-bool uPlateInfo::GetHPFirstTeamToList(int *iP, TList *) { if(iP) *iP=0; return false; }
-bool uPlateInfo::DataForwardAndNextTeam() { return false; }
-bool uPlateInfo::SetPlateSuck(int, int, int, bool) { return false; }
-void uPlateInfo::SetArrPlateXY(int, int, int, int, int, int) {}
-void uPlateInfo::AddHPSuckGroup() {}                                        // W6.2b1x1: golden HTEditList.h:202 -- offline list no-op
-void uPlateInfo::UpdateHPSuckGroup(int, int, int, int, int) {}             // W6.2b1x1: golden HTEditList.h:204 -- offline list no-op
-void uPlateInfo::SaveFile(AnsiString) {}
-// AI(W906-AutoCleanFoundation) 20260721: golden HTEditList.h:233 -- matches the
-// "team list is empty" determinism every sibling GetHPFirstTeam* method above
-// already documents/implements offline.
-uHPSuckTeam* uPlateInfo::ExtractFirstTeam() { return NULL; }
-// AI(W906-AutoCleanCluster) 20260722: golden HTEditList.h -- same offline list
-// no-op idiom as AddHPSuckGroup/UpdateHPSuckGroup above (the team list is
-// always empty offline, so there is nothing to actually clear).
-void uPlateInfo::ClearGroupList() {}
-
-uPlateInfo  g_PickFromHPList;
-uPlateInfo *PickFromHPList = &g_PickFromHPList;
-
-// AI(W906-AutoCleanFoundation) 20260721: golden HTEditList.h:247 -- PlaceToCleanList
-// is a SEPARATE uPlateInfo instance from PickFromHPList (golden main.cpp:2150
-// `new`s each independently); AutoClean's shuttle-place/pick geometry needs its
-// own (offline-empty) team list. See aHotPlateSubstrate.h's extern comment for
-// why this does not collide with csystem.cpp's unrelated same-named TU-local macro.
-uPlateInfo  g_PlaceToCleanList;
-uPlateInfo *PlaceToCleanList = &g_PlaceToCleanList;
-
-AnsiString sHPPickRec          = "";
-AnsiString sHPPickRecException = "";
+//==============================================================================
 
 //==============================================================================
 //  (c) ainarm2.h cursors / arrays (golden ainarm2.h) -- definitions
