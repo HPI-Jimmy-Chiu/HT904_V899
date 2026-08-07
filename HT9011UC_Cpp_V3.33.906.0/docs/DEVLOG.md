@@ -3347,3 +3347,204 @@ MSVC 軌：build_msvc_ui probe+smoke exit 0。
   4. B4 homecoming swap 小波（`_ga1_b4_report.md` 步驟）；`_ga1_b*/_ga2_c1/_ga4_c5`
      報告×7 留樹根未 track（scratch 慣例）。
 - **執行模式**：使用者指示持續有效（連續推進、不逐波請示、model/effort 照計畫 §5 動態切換）。
+
+---
+
+## 2026-08-04（傍晚，補記）— 編輯器軌道：七個 VS Code task 從未執行過
+
+四顆 commit（`bba4d13`→`5dbe107`→`7a797ed`→`c39a5c5`），本則為事後補記（當時未寫 DEVLOG）。
+
+**`bba4d13` Gate A exe-path 拒絕改成會留痕**：實機跑出來的症狀——不帶 `--devpath` 啟動
+會撞 golden 的 `D:\HT9045\EXE\` 路徑檢查（HT9045.cpp:151-155），彈 MessageBox 但
+**BootLog 一行都沒寫**，看起來就是無聲暴斃（BootLog 只剩孤零零一句 `WinMain Enter`）。
+現在拒絕會連同違規路徑一起記錄，且 `--smoke` 模式抑制 modal——把「批次不得有 modal」
+從慣例變成這條路徑上的**結構性保證**（記憶教訓 windows-batch-runs-must-not-popup-modal-dialogs
+的同族）。golden 的訊息與 caption 保持逐字不動。
+
+**`c39a5c5` 七個 V906 task 從來沒跑起來過**：全部瞬間失敗於
+`build.bat : The term 'build.bat' is not recognized`，**包含守住 F5 的 preLaunchTask**。
+兩個獨立成因：(1) shell 是 PowerShell，而 PowerShell 刻意不從 cwd 解析裸命令名——只有
+`.\build.bat` 或絕對路徑才跑得動；port 資料夾的 settings.json 確實要求 "Command Prompt"
+profile，但**那個 key 是 window-scoped，而 folder settings.json 裡的 window-scoped key
+在多根 workspace（HT9045.code-workspace）中會被靜默忽略**，於是繼承了 repo 根的
+PowerShell。(2) 就算換成 cmd.exe 也不保證：設了 `NoDefaultCurrentDirectoryInExePath`
+時 cmd.exe 同樣拒絕從 cwd 執行。修法＝tasks.json 在**檔案層級**釘死
+`options.shell = cmd.exe /d /c`（所有 task 繼承、不經 profile 解析），每個 task 一律
+呼叫絕對路徑 `${workspaceFolder}\build.bat`，兩個成因都免疫。
+
+---
+
+## 2026-08-05 ~ 08-06 — WB 波次：瀏覽器 HMI 接縫，與「本樹從來沒有最佳化建過」
+
+六顆 commit（`2eaee45` WB-0 → `4ae2d4a` → `a9cc3ba` → `5bad9aa` → `d7b627e` WB-1 →
+`d0585b8` WB-2），本則為事後補記。
+
+**WB-0（`2eaee45`）substrate**：`WebBridge/` 十一個 TU（Sha1/Base64/JsonWriter/WsFrame/
+WsHandshake/HttpStatic/TagSnapshot/CommandQueue/Sync/TagValue/WebBridgeServer）。設計上
+**刻意不依賴 vclcompat、不依賴狀態機、不依賴任何機台標頭**——它只知道兩件事：UI thread
+publish 進來的 TagSnapshot，以及 UI thread 抽乾的 CommandQueue。socket thread 永不呼叫
+機台邏輯（SECS/GEM 共用那條 UI thread 且有 reply budget）。全新 build dir、`-Wall
+-Wextra`、0 error 0 warning，**11,776 個檢查 0 失敗**（WB_Crypto 915／WB_State 264／
+WB_WsProto 10,526／WB_Server 71，最後一個是真的在 ephemeral loopback port 上跑起一台
+server）。**可失敗性是用 mutation 證明的、不是假設的**：破壞 RFC 6455 GUID、對
+server→client frame 上 mask、把 null 序列化成 ""、把 snapshot generation 的遞增移出
+critical section，四種各自都能讓套件紅。最後一種只有在把 race window 撐大後才抓得到——
+所以 WB_State 是那條不變量的**可靠回歸偵測器，但不是可靠的 race 發現器**，這個區別寫進
+tests/CMakeLists.txt，免得未來看到綠燈就過度解讀。整併平行寫成的四支時抓到四個缺陷（兩位
+作者一個用 `namespace WebBridge` 一個用 `webbridge`；WebBridgeServer.cpp 是照**四個臆測
+的**兄弟 API 寫的、全錯，真正的 WsDecoder 是有狀態的所以 frame loop 現在每條連線各持一個；
+本樹 MinGW 是 win32 thread model、**沒有 std::mutex/std::thread**，Sync.h 補
+CRITICAL_SECTION 等價物；WsHandshake 的 header parser 註解宣稱做 RFC 7230 field-name
+驗證、實際只看冒號前一個字元，`"Bad Name: v"` 會被收）。
+
+**本樹從來沒有最佳化建過（WB-0 的最大發現）**：包含 20260804 那個 122/126 在內，**每一個
+記錄在案的數字都是 `CMAKE_BUILD_TYPE` 空值量的**——沒有 -O3、沒有 -DNDEBUG。加上
+`-DCMAKE_BUILD_TYPE=Release` 就浮出兩個與 WB 完全無關的真缺陷：`MyPLCModbus` 未最佳化過、
+-O3 失敗；`BarCodeBottom2DID` 未最佳化過、**-O3 下在 main() 印出任何東西之前就 segfault**。
+同一份 source 兩種建法對照證實。這是「只在出貨的那個 build 現形」的那類缺陷，**至今仍未修**。
+
+**資料層三顆（`4ae2d4a`/`a9cc3ba`/`5bad9aa`）——一次錯誤歸因與它的更正**：
+`4ae2d4a` 把 database.cpp 三支陳舊 gate（CustomerFunctionSelect/ReadLastSetIni/
+ReadEventLogAutoSaveInfo，理由寫「body 在 cprod.cpp 全檔 gate 內、呼叫不會 link」）解閘後
+遇到 segfault，於是回退並歸因於解閘。`a9cc3ba` 證明**那個歸因是錯的**：gdb 指向
+`TIniStore::findSection`，來自 `CheckAndReadIniDataGeneral()` 無 NULL 檢查地解參考全域
+`INIFileGeneral`（忠實 BCB6 行為），而 `INIFileGeneral` 只由 `OpenGeneralIniFile()` 設定、
+其唯一生產呼叫者是 database.cpp 裡整段 `#if 0` 的 SYSTEM_MODULAR ctor。**控制實驗**：三支
+仍然 gate 住的情況下，`HSys.ReadGeneralIni()` 在沒有 open 的前提下一樣同樣方式 segfault
+——解閘沒有新增任何風險，這個函式本來就不能沒 open 就用。補上 open 之後整條鏈第一次
+在本 port 把資料層填起來（sMachineType="HT-9046LS"、sGPIBMachineID="GLY320"、
+RMSTesterID="HT9046"）。**方法論教訓（值得長期記住）**：第一次解閘 build 全綠、ctest
+失敗集合逐位元相同（124/130），但東西根本是壞的——**綠燈證明的是「沒有新失敗」，不是
+「這個改動可用」，兩者要分開驗**。
+
+`5bad9aa` 收尾成一個進入點 `LoadMachineConfig()`（database.h/.cpp，**golden 沒有這個函式**）
+＝OpenGeneralIniFile()+ReadGeneralIni() 照順序、外加 read helper 自己沒有的 NULL 檢查。
+**刻意不重現 golden 的 static-init 形狀**：golden 從 SYSTEM_MODULAR ctor 在靜態初始化期做，
+`asGeneralPath` 是 common.cpp 的全域，標準 C++ 對跨 TU 順序零保證，BCB6 只是靠
+`#pragma package(smart_init)` 僥倖——照抄等於買一個潛伏的初始化順序故障。同顆並**收回上一顆
+的一句斷言**：「LastSet 讀不進來」是錯的。LastSet 是**整塊二進位 blob** 從
+system\lastdata.dat 覆蓋上去的，改用**數位元組**而非取樣欄位：LastSet 非零 12,358/178,896、
+lastdata.dat 非零 12,328/178,096（檔案的 6.9%）——它有載入，`iRunStartMode`/`iTemperature`
+是**檔案裡本來就是 0**（照量到的 offset 1568/31400 直接讀檔證實）。另外 sizeof 178,896 對
+178,096 的 800 位元組差是**尾端差**、屬設計（LastSet.h 自己的標頭就禁止在底部以外插欄位，
+舊檔就是短的、尾巴讀回 0）——這要是被誤判成 struct layout 分歧，會看起來像整個遷移的
+LastSet 欄位全是垃圾。測試改成用位元組數斷言（程式的性質），而非用欄位值（某台機器存檔的性質）。
+
+**WB-1（`d7b627e`）tag 接縫，與一份把自己要實作的計畫推翻掉的普查**：
+`WebBridgeTags.{h,cpp}` 放在**樹根而非 WebBridge/ 底下**——它是唯一被允許同時 include
+兩個世界（機台標頭＋snapshot 型別）的 TU；放進 WebBridge/ 會靜默終結那一層對 vclcompat
+與狀態機的獨立性，而那個性質正是「socket thread 可以被單獨推理」的來源。
+**規則寫進程式而非寫在註解裡**：一個 tag 只有在來源**可量測地已載入**時才帶真值，否則帶
+NULL、絕不帶 0；每個來源有**自己的 liveness predicate**，與 value getter 分開放（一個
+兼管 liveness 的 getter 太容易回 0 然後自稱是讀數）。瀏覽器把 null 畫成 "---"、把 0 畫成
+"0.00"——在一台跑 130°C 的機器上這兩者不可互換。**普查推翻原計畫**：原本要接
+temp.sv→Temperature.fWorkTemperBase、temp.mode→LastSet.iTemperature、zone.*→UN150Read[]，
+但在完整 LoadMachineConfig() 之後**實測**得到 LIVE 只有 CUSTOMER_CODE=957／sMachineType／
+sGPIBMachineID／RMSTesterID／LastSet.*；DEAD 的是 Temperature.* 全 0（沒有東西寫它）、
+IniConfig 數值/布林旗標全 0（**只有 ReadLastSetIni 設的那幾個字串欄位是活的，數百個功能
+旗標來自未翻譯的 cConfiguration.cpp**）、CosFunction 488 位元組全 0、UN150Read 71 個 zone
+全 0。照原計畫接下去，會在操作畫面每一個加熱區和設定點上畫出 "0.00"。
+量測結果：載入前 43 tags/0 non-null，載入後 coverage **8/43**。「載入前」那組是**控制組不是
+湊數**——沒有它，「帶真值」的斷言可能只是讀到別處殘留。
+
+**WB-2（`d0585b8`）真值進瀏覽器**：`wb_serve.exe` 把整條路徑合起來
+（system\Gerneral.ini → LoadMachineConfig → 機台全域 → WebBridgeTags → TagSnapshot →
+WebBridgeServer → WebSocket → client），**沒有一段是 stub**。驗證用的是**手寫的 raw
+WebSocket client、不是函式庫也不是 mock**——跟瀏覽器同一套握手：HTTP/1.1 101、accept key
+獨立重算符合 RFC 6455、frame opcode 0x1／921 bytes／43 tags／8 個真值。靜態服務同一輪一起
+驗（index.html 200、js/main.js 200 且 Content-Type text/javascript——這個 header 決定 ES
+module 到底載不載得起來）。**畫面會長什麼樣、以及為什麼那才是對的**：大部分是 "---"。
+43 個 tag 裡只有 8 個有本 port 今天載得進來的來源；把另外 35 個發成 null 而不是 0，正是
+讓畫面誠實的原因——它顯示的是**剩餘遷移的規模**，而不是拿貌似合理的零把它蓋掉。
+安全性是**繼承而非重新決定**：loopback only + read-only，直接沿用 WebBridgeConfig 的預設，
+因為這個端點終究可能下達機台動作命令；wb_serve 不放寬任何一項，但它在自己的檔頭明講
+**正常跑會把缺少的 key 種進真正的 system\Gerneral.ini**（與啟動 handler 同一類行為），
+並提供 `--dry`。上述驗證跑用的就是 `--dry`，事後確認 system/ 乾淨。
+
+**WB 全波驗證基準**：fresh `build_nobt`（未最佳化，與先前每一個 baseline 同條件）
+126/132，失敗集合不變（config_db／IniFiles／ini_helpers／config_loaders 四個環境漂移＋
+dfm2rc_idempotent〔GA-4 未 track 的 main_uimap.gen.* 產物〕＋GA1_ReadGeneralIni〔磁碟上
+的 Gerneral.ini 是另一台機器的快照：CUSTOMER_CODE 957 非 970、COM15 非 COM7，用改動前的
+binary 跑得到相同失敗確認〕）。
+
+**未結**：wb_serve 不是產品——GA-3 把 god-stack 落進 HT9045.exe 之後，server 由 handler
+自己在 UI thread 上持有；wb_serve 的存在只是讓這條路徑在那之前就能被跑、被看。
+另：**應用程式仍然沒有任何地方呼叫 LoadMachineConfig()**（ht9045_app 只連 ht9045_public，
+HSys 在 exe 裡構不著），這是資料層唯一剩下的阻塞點，且在連結圖允許之後只是一行。
+
+---
+
+## 2026-08-07 — PT-W1：十個淨新單元落地，兩個 vclcompat 根因修正，以及一份把剩餘工作量從 55% 修正到 61% 的普查
+
+**PT-W1（純翻譯完成戰役第一波）**：十個 golden 單元第一次有 port 本體——
+`RotateKit/aRotateKIT{,_In,_Out}.cpp`、`TempCtrl/TriTemp.cpp`、`bthermo.cpp`、
+`AutoRetest.cpp`、`OCRInsp.cpp`、`SortingBinTray/SortingBinTray.cpp`、
+`uHeaterThread.cpp`、`Public/MyStringList.cpp`，外加 `EJ1N/TextProcess.cpp`
+（EJ1N/ 目錄第一個落地的檔，進 `ht9045_globals` 而非 `ht9045_sm`，因為它跟
+cpublic.cpp/cmydef.cpp 同一類葉子，真正的消費端在 cpublic.cpp:307-346 與
+CCLink/MyCCLink.cpp:80-83——不新增任何 link edge）。落地前量測：**0 個 golden 函式缺席、
+18,525/18,692 golden body 行活著（99.1%）、mojibake 0、十個檔各自 `g++ -std=c++17
+-fsyntax-only` 獨立通過**。
+
+**兩個 vclcompat 根因修正——都是「先發現下游要繞路，才回頭看上游本來就錯了」**：
+
+1. `AnsiString::ToInt/ToIntDef` **只吃十進位**。BCB6 的 StrToInt/StrToIntDef 走 Val()，
+   同時吃 Pascal 的 `$` 與 C 的 `0x` 十六進位前綴。這件事會咬人的地方很具體：golden
+   `EJ1N/TextProcess.cpp:347-356` 的 HexStrToInt 就是**在字串前面接 "0x" 然後呼叫
+   StrToIntDef(S,-1)**——對上舊 shim，這個 body 對**任何**輸入都回 -1，連 `"FF"` 都是。
+   原本 TextProcess.h 的 gate register 開的處方是「退役 vclcompat::HexStrToInt、改用
+   golden 這個 body」，照做的話會把每一個 IO_Table / Mot_Table 的 hex Port 欄位、
+   每一個 CCLink LRC 位元組**全部變成 -1**。改成從根修，不是繞過去寫註解。
+   同一份正確的解析其實早就存在於 `vclcompat/IniFiles.cpp:23`（parseIntDef，
+   TIniFile::ReadInteger 用的），兩邊現在一致了。
+
+2. `TStringList::GetText()` **少了最後一行的結尾符**，而且是用裸 `
+` 接的。原註解寫
+   「Good enough for the read/parse uses here」——它在**有人拿它當 writer** 的那一刻就
+   不夠了：`Public/MyStringList.cpp` 把 `MyList->Text` 直接餵進 raw `::WriteFile`
+   （golden MyStringList.cpp:305→:322，port :562→:579），所以每次 flush 的**第一行會黏在
+   上一次最後一行的尾巴上**——每個接縫融掉一筆記錄，也就是每 MaxLineCount 行一次，
+   發生在每一個 TMyStringList log（EventLog、生產 CSV、slEventLog、sl2DMappingLog、
+   slGroundManLog、tsSoftwareExeTime）。這不是推論出來的：
+   `tests/test_ptw1_mystringlist.cpp` 拿 golden 的磁碟位元組當斷言，8 條就是掛在這上面。
+   BCB6 的 TStrings::GetTextStr 在**每一個**字串後面（含最後一個）都接 sLineBreak=CRLF。
+
+**驗證**：全新 `build_0807_ptw1_final`（未最佳化，與先前每個 baseline 同條件）
+build exit 0、**ctest 128/134**，失敗集合與當日 baseline **逐位元相同**
+（config_db／IniFiles／ini_helpers／config_loaders 四個環境漂移 ＋ dfm2rc_idempotent
+＋ GA1_ReadGeneralIni）。過程中 `build_0807_w1` 一度多出 `dfm2rc_fidelity`，已在
+`build_0807_w1fix` 修掉並確認回到 baseline 集合。兩支新測試 PTW1_TextProcess／
+PTW1_MyStringList 皆綠。
+
+**`build.bat prune`**：本樹被發現坐在 38.7 GB 上，其中 38.58 GB 是 137 個歷史 build 目錄
+（10,508 個 test .exe，每個約 50 MB，因為每個 gtest target 都靜態連 libht9045_sm.a
+帶完整除錯符號）。分波建各自的 build dir 是**故意的**（併發共用同一個 dir 會生出假的
+undefined reference），但從來沒有人刪。prune 是缺掉的另一半，預設 dry run。
+
+**一份把數字改小的普查（重要，取代先前記錄的「不含 dfm 54.8%」）**：
+以 `HT9045.bpr` FILELIST 為範圍、以「去空行去註解的 code line」為單位、且**對只翻了骨架的
+檔按缺席函式的 golden span 扣行**之後：
+
+```
+在範圍內          289 檔  598,367 行
+已翻                      233,586 行 = 39.0%
+剩餘                      364,781 行 = 61.0%
+  ├ 完全沒開始 163 檔     288,917 行（VCL 表單單元 110 檔 221,682 行 ← 大宗）
+  └ 翻一半的    26 檔      75,864 行
+```
+
+舊的 54.8% 是**檔名普查**，沒把「port 檔存在但只有骨架」的 26 個檔扣掉——`cContact.cpp`
+一個檔就差 20,713 行（port 544 行只有 extract-calc-core），`csystem.cpp` 差 8,169 行
+（port 只有 MainProc/DoAllProcess spine，其餘 `#if 0 // TODO(W7)`）。這兩個最大的缺口
+都**人工抽驗過是真的**，不是 regex 假象。完整波次計畫見同資料夾
+`PT_CAMPAIGN_PLAN.md`。
+
+**同時釐清的目標界線**：「不含 dfm」指的是 `.dfm` 資源檔本身（走 dfm2rc 產生器），
+**不包含 110 個表單單元的 `.cpp` 實作**——那 221,682 行仍然要翻，而且是剩餘工作的大宗。
+
+**未結**：`aoutarm9045.cpp` 裡五個 file-local static 仍然遮蔽剛落地的
+`SortingBinTray/SortingBinTray.cpp`，所以那個 TU 目前**零呼叫者**；退役它們要同時
+ungate `aArmHeader.h:23-98` 的 `#include "SortingBinTray.h"`，那會拉進整個 arm god-header
+——留給 W7 決定，本波刻意不動。另：`Public/MyStringList.cpp` 讓 `TMyStringList` 變成
+完整型別，解開了五處既有 gate（cprod.cpp:2496、cMyDB.cpp:344/400/448/745、
+cmydef.cpp:129、HANA_ART.cpp:1006），這些退役同樣是**另一步**，不在本 commit。

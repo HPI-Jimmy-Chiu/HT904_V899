@@ -450,6 +450,14 @@ add_library(ht9045_globals STATIC
     LastSet.cpp    # AI(W906-GA1-B2-integrate) 20260804: moved here from ht9045_sm -- the
                    # ungated cprod.cpp (same archive) references LastSet directly, and
                    # globals is the lowest common archive every consumer already links.
+    # AI(W906-PT-W1) 20260807: EJ1N/TextProcess.cpp -- FIRST file of golden EJ1N/ to
+    # land.  Leaf text/protocol conversions (ASCII<->dec, hex<->binary text, BCC/LRC
+    # checksums, Omron analogue scaling, COM-port probe).  Placed in globals, not
+    # ht9045_sm, because it is the same class of leaf as cpublic.cpp/cmydef.cpp and
+    # its real consumers are cpublic.cpp:307-346 (THIS archive) and
+    # CCLink/MyCCLink.cpp:80-83 (ht9045_comms, which already PUBLIC-links globals at
+    # :1073).  Substrate is vclcompat + CRT + kernel32 only -- no new link edge.
+    EJ1N/TextProcess.cpp
 )
 
 target_include_directories(ht9045_globals PUBLIC
@@ -1712,6 +1720,48 @@ add_library(ht9045_sm STATIC
     #     ckernel.cpp:2852.  Wiring the MainProc one would still be an ordering
     #     deviation, so csystem.cpp is untouched -- but the function is NOT uncalled.
     ckernel.cpp
+    # =========================================================================
+    # AI(W906-PT-W1) 20260807: PURE-TRANSLATION CAMPAIGN, WAVE 1.
+    # Ten net-new golden units, none of which had ANY port file before this wave.
+    # Measured before landing: 0 missing golden functions, 18,525/18,692 golden
+    # body lines live (99.1%), mojibake 0, and all ten pass `g++ -std=c++17
+    # -fsyntax-only` standalone.  They join ht9045_sm because every one of them
+    # pumps the same Sim HAL substrate this list already carries (Cylinder[]/MOT[]/
+    # Sen[]/SW[] + canary_support + FormsFacade + aHotPlateSubstrate) -- no new
+    # link edge is introduced by any of them.
+    #
+    #   RotateKit/aRotateKIT.cpp      -- shared rotate-kit helpers.  MUST precede
+    #     nothing (order-free) but its InitialInArmRotateKIT gate is retired by
+    #     aRotateKIT_In.cpp landing in the same commit.
+    #   RotateKit/aRotateKIT_In.cpp   -- in-side rotate-kit motion SM.
+    #   RotateKit/aRotateKIT_Out.cpp  -- out-side mirror (translated from the Out
+    #     golden file, NOT copied from In -- the two genuinely differ).
+    #   TempCtrl/TriTemp.cpp          -- tri-temperature control SM.
+    #   bthermo.cpp                   -- thermo/chamber control (largest of the ten).
+    #   AutoRetest.cpp                -- auto-retest flow.
+    #   OCRInsp.cpp                   -- OCR inspection SM.
+    #   SortingBinTray/SortingBinTray.cpp -- unloader bin-tray sorting.
+    #   uHeaterThread.cpp             -- heater supervisor; the VCL TThread subclass
+    #     becomes the same OFFLINE-INERT standalone driver idiom acarry.cpp:7006-7290
+    #     already uses for uShuttleThread.
+    #   Public/MyStringList.cpp       -- TMyStringList, the type behind cmydef.h:15's
+    #     tree-wide opaque forward declaration.  NOT ht9045_public: that archive
+    #     links vclcompat only (:382) and this TU reads cprod/cmydef/Config/LastSet,
+    #     fSCKART/fLotInfo and MyDBIProcess.  Landing it makes TMyStringList a
+    #     COMPLETE type, which unblocks five existing gates elsewhere (cprod.cpp:2496,
+    #     cMyDB.cpp:344/400/448/745, cmydef.cpp:129, HANA_ART.cpp:1006) -- those
+    #     retirements are deliberately a SEPARATE step, not this commit.
+    # =========================================================================
+    RotateKit/aRotateKIT.cpp
+    RotateKit/aRotateKIT_In.cpp
+    RotateKit/aRotateKIT_Out.cpp
+    TempCtrl/TriTemp.cpp
+    bthermo.cpp
+    AutoRetest.cpp
+    OCRInsp.cpp
+    SortingBinTray/SortingBinTray.cpp
+    uHeaterThread.cpp
+    Public/MyStringList.cpp
 )
 
 target_include_directories(ht9045_sm PUBLIC

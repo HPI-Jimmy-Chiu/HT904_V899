@@ -172,6 +172,13 @@ static bool DoFix3FullTray()                       { return true;  }  // golden 
 static void SetOutArmHome()                        {}                 // golden aoutarm.h:97 -- alarm-time Z home no-op
 static bool CheckUseFixBinBoxFunction()            { return false; }  // golden aoutarm.h:120 -- offline: fix bin-box off
 static void InitialDoPickFromMagazineBuffer()      {}                 // golden Magazine.h -- no magazine present
+//AI(W906-PT-W1-integrate) 20260807: TODO(W7) -- the REAL engine behind the next
+//  five stubs now exists: SortingBinTray/SortingBinTray.cpp landed in wave PT-W1
+//  and is compiled into ht9045_sm.  These file-local statics still shadow it, so
+//  that unit currently has zero callers.  Retiring them means deleting these five
+//  lines AND ungating aArmHeader.h:23-98's `#include "SortingBinTray.h"`, which
+//  pulls the whole arm god-header -- a W7 decision, deliberately not taken in the
+//  wave's integrate step.  The same note is in SortingBinTray.cpp's banner.
 static void DoSortingBinTray(int)                  {}                 // golden cSortCT.h -- nothing to sort
 static bool DoSortingBinTray()                     { return true;  }  // golden cSortCT.h -- sort done
 static void SortingBinTray_SetMotorPosData()       {}                 // golden cSortCT.h

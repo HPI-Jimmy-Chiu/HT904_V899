@@ -125,26 +125,51 @@ AnsiString AnsiString::TrimLeft() const {
 // ---------------------------------------------------------------------------
 //  Numeric conversions
 // ---------------------------------------------------------------------------
-int AnsiString::ToInt() const {
-    // BCB6 StrToInt: leading/trailing space tolerated; full string must be a
-    // valid integer or it raises EConvertError. We throw std::runtime_error.
-    AnsiString t = Trim();
-    if (t.IsEmpty()) throw std::runtime_error("AnsiString::ToInt: empty");
+// AI(W906-PT-W1-integrate) 20260807: BCB6's StrToInt / StrToIntDef parse through
+//   Val(), which accepts the Pascal '$' and the C '0x' hex prefixes as well as
+//   decimal.  Both functions here were decimal-ONLY, which is where it bit:
+//   golden EJ1N/TextProcess.cpp:347-356 implements HexStrToInt by PREPENDING
+//   "0x" and calling StrToIntDef(S,-1) -- against this shim that body returns -1
+//   for every input, including a plain "FF".  EJ1N/TextProcess.h's gate register
+//   prescribed retiring vclcompat::HexStrToInt in favour of exactly that body,
+//   which would have zeroed every IO_Table / Mot_Table hex Port column and every
+//   CCLink LRC byte to -1.  Fixed at the root instead of documented around.
+//   The identical parse already existed, correct, at vclcompat/IniFiles.cpp:23
+//   (parseIntDef) for TIniFile::ReadInteger -- the two are now consistent.
+static bool vc_parseIntBCB6(const AnsiString& in, long& out) {
+    AnsiString t = in.Trim();
+    if (t.IsEmpty()) return false;
     const char* p = t.c_str();
     char* end = 0;
-    long v = std::strtol(p, &end, 10);
-    if (end == p || *end != '\0')
+    const std::string& s = t.str();
+    if (s[0] == '$') {                                          // Pascal hex
+        if (s.size() < 2) return false;
+        out = std::strtol(p + 1, &end, 16);
+        return !(end == p + 1 || *end != '\0');
+    }
+    if (s.size() >= 2 && s[0] == '0' && (s[1] == 'x' || s[1] == 'X')) {   // C hex
+        out = std::strtol(p, &end, 16);
+        return !(end == p || *end != '\0');
+    }
+    out = std::strtol(p, &end, 10);                             // decimal
+    return !(end == p || *end != '\0');
+}
+
+int AnsiString::ToInt() const {
+    // BCB6 StrToInt: leading/trailing space tolerated; full string must be a
+    // valid integer (decimal, '$'hex or '0x'hex) or it raises EConvertError.
+    // We throw std::runtime_error.
+    long v = 0;
+    if (!vc_parseIntBCB6(*this, v)) {
+        if (Trim().IsEmpty()) throw std::runtime_error("AnsiString::ToInt: empty");
         throw std::runtime_error("AnsiString::ToInt: not an integer");
+    }
     return static_cast<int>(v);
 }
 
 int AnsiString::ToIntDef(int def) const {
-    AnsiString t = Trim();
-    if (t.IsEmpty()) return def;
-    const char* p = t.c_str();
-    char* end = 0;
-    long v = std::strtol(p, &end, 10);
-    if (end == p || *end != '\0') return def;
+    long v = 0;
+    if (!vc_parseIntBCB6(*this, v)) return def;
     return static_cast<int>(v);
 }
 

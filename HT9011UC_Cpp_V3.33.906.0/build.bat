@@ -21,6 +21,9 @@ REM                         control probe, then the --smoke window check.
 REM    build.bat msvc       MSVC second oracle (non-UI libs + tests).
 REM    build.bat all        gate + ui.
 REM    build.bat clean      Delete the default MinGW build dir.
+REM    build.bat prune      List stale build_* dirs left over from past waves
+REM                         (dry run). "prune -y" deletes them; "prune 7" keeps
+REM                         anything touched in the last 7 days.
 REM    build.bat help       This text.
 REM
 REM  EXPECTED ctest BASELINE (2026-08-04): 122 passed / 4 failed of 126.
@@ -46,6 +49,7 @@ if "%MODE%"=="" set "MODE=quick"
 
 if /i "%MODE%"=="help"  goto :help
 if /i "%MODE%"=="clean" goto :clean
+if /i "%MODE%"=="prune" goto :prune
 if /i "%MODE%"=="ui"    goto :ui
 if /i "%MODE%"=="run"   goto :run
 if /i "%MODE%"=="msvc"  goto :msvc
@@ -237,6 +241,69 @@ echo [build] delete those by hand if you really mean to.^)
 endlocal & exit /b 0
 
 REM ---------------------------------------------------------------------------
+REM  AI(W906-GateA) 20260804: added after the V906 tree was found sitting at
+REM  38.7 GB -- of which 38.58 GB was 137 leftover build dirs (10,508 test .exe
+REM  files, ~50 MB each because every gtest target statically links
+REM  libht9045_sm.a with full debug symbols). The waves create build_<topic>_
+REM  {wave,review,verify,final} dirs on purpose -- concurrent builds corrupt a
+REM  shared build dir and invent fake "undefined reference" errors (see
+REM  :buildfailed) -- but nothing ever deleted them afterwards. This mode is the
+REM  missing other half. Everything it removes is .gitignore'd and rebuildable.
+REM
+REM    build.bat prune        dry run: list what would go (default: all stale)
+REM    build.bat prune -y     actually delete them
+REM    build.bat prune 7      dry run, keeping anything touched in last 7 days
+REM    build.bat prune 7 -y   delete all but the last 7 days
+:prune
+set "PRUNE_DAYS="
+set "PRUNE_GO="
+if /i "%~2"=="-y" (set "PRUNE_GO=1") else (if not "%~2"=="" set "PRUNE_DAYS=%~2")
+if /i "%~3"=="-y" set "PRUNE_GO=1"
+
+REM The three dirs build.bat itself drives are never candidates. Note "build"
+REM cannot match build_* anyway; it is listed for the reader's benefit.
+set "PRUNE_KEEP=[build][%UI_DIR%][build_msvc]"
+
+set "PRUNE_LIST=%TEMP%\ht9045_prune_%RANDOM%.txt"
+if exist "%PRUNE_LIST%" del /q "%PRUNE_LIST%"
+if defined PRUNE_DAYS (
+    echo [build] Stale build dirs NOT touched in the last %PRUNE_DAYS% day^(s^):
+    REM forfiles /D -N selects entries last modified on or before N days ago.
+    forfiles /P "%SCRIPT_DIR%." /M build_* /D -%PRUNE_DAYS% /C "cmd /c if @isdir==TRUE echo @file" > "%PRUNE_LIST%" 2>nul
+) else (
+    echo [build] All stale build dirs ^(everything except build / %UI_DIR% / build_msvc^):
+    for /d %%D in ("%SCRIPT_DIR%build_*") do echo "%%~nxD">> "%PRUNE_LIST%"
+)
+if not exist "%PRUNE_LIST%" echo [build] Nothing to prune. & endlocal & exit /b 0
+
+set /a PRUNE_N=0
+for /f "usebackq delims=" %%D in ("%PRUNE_LIST%") do (
+    set "CAND=%%~D"
+    echo !PRUNE_KEEP! | findstr /I /C:"[!CAND!]" >nul
+    if errorlevel 1 (
+        set /a PRUNE_N+=1
+        if defined PRUNE_GO (
+            rmdir /s /q "%SCRIPT_DIR%!CAND!" 2>nul
+            if exist "%SCRIPT_DIR%!CAND!" (echo   FAILED  !CAND!) else (echo   removed !CAND!)
+        ) else (
+            echo   !CAND!
+        )
+    )
+)
+del /q "%PRUNE_LIST%" 2>nul
+
+echo.
+if not defined PRUNE_GO (
+    echo [build] DRY RUN -- %PRUNE_N% dir^(s^) would be deleted. Nothing was touched.
+    echo [build] Re-run with -y to delete: build.bat prune %PRUNE_DAYS% -y
+    endlocal & exit /b 0
+)
+echo [build] Pruned %PRUNE_N% dir^(s^).
+for /f "tokens=3" %%F in ('dir /-c "%SCRIPT_DIR%" ^| findstr /C:"bytes free"') do echo [build] Free on this drive now: %%F bytes
+echo [build] WARNING: never prune while a build or ctest is running.
+endlocal & exit /b 0
+
+REM ---------------------------------------------------------------------------
 :help
 echo.
 echo   build.bat            fast incremental MinGW build   ^(libs+tests, NO exe^)
@@ -247,6 +314,9 @@ echo   build.bat run        open the exe ^(builds it first if missing^)
 echo   build.bat msvc       MSVC second oracle
 echo   build.bat all        gate + ui
 echo   build.bat clean      delete the MinGW build dir
+echo   build.bat prune      list leftover build_*_{wave,review,verify} dirs
+echo                        ^(dry run^); "prune -y" deletes, "prune 7 -y" keeps
+echo                        anything touched in the last 7 days
 echo.
 echo   WHERE IS THE EXE?  %UI_DIR%\HT9045.exe -- produced ONLY by "ui".
 echo   MinGW cannot build it ^(MFC is MSVC-only^), and it is never copied into

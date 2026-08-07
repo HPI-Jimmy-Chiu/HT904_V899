@@ -1,0 +1,133 @@
+# 純翻譯完成戰役計畫（PT CAMPAIGN）— 「翻完（不含 .dfm）且編得起來」
+
+> AI(W906-PT-plan) 20260807: 本檔把「完成翻譯」從一句口號變成**可量測的剩餘量**與
+> 波次清單。所有數字都是量出來的，量法附在下面，任何人都能重跑。
+
+---
+
+## §1 目標定義（與使用者 20260807 確認）
+
+1. **把 golden 的 C/C++ 全部翻完**——`.dfm` 不手翻，走 `tools/dfm2rc` 產生器（閘 G1–G7）。
+   **注意界線**：「不含 dfm」指的是**資源檔本身**，**不包含表單的 `.cpp` 實作**。
+   110 個 VCL 表單單元的 `.cpp`（221,682 行）仍然要翻，那是剩餘工作的**大宗**。
+2. **編譯要成功**。目前未最佳化 build 已綠；驗收要**連 Release（-O3）一起綠**，因為
+   出貨 build 是 Release，而 20260805 已量到兩個只在 -O3 現形的真缺陷（見 §5）。
+
+---
+
+## §2 量法（可重跑）
+
+範圍 = `HT9045.bpr` 的 `FILELIST`（權威建置集合；MR/ 那種死目錄不會灌水）。
+單位 = **code line**（去空行、去註解的實體行）。
+
+- 檔案層：golden `.cpp` 是否有同相對路徑的 port 鏡射檔。
+- 函式層：golden 頂層函式定義名 vs port 同名定義；缺的函式**按 golden span 加總行數**，
+  所以「port 檔存在但只翻了 10%」不會被算成翻完。
+
+腳本：`census.py` / `classify.py` / `remaining.py`（本次留在 session scratchpad；
+數字如下，重跑請照本節重建，勿信任何未附量法的百分比）。
+
+**已知失真**：函式名比對是 regex，對 `extract-calc-core` 這種「改名抽核心」的檔會
+**高估缺口**。已人工抽驗兩個最大的：`cContact.cpp`（port 544 行僅 calc core，golden
+20,819 行）與 `csystem.cpp`（port 4,849 行僅 spine，其餘 `#if 0 // TODO(W7)`）——
+兩個缺口都是**真的**，不是 regex 假象。
+
+---
+
+## §3 現況（20260807 量測）
+
+```
+golden .cpp 全部            339 檔   643,130 行
+  在 HT9045.bpr 範圍內      289 檔   598,367 行   ← 分母
+  範圍外                     50 檔    44,763 行   （不列入）
+
+已翻                                 233,586 行   = 39.0%
+剩餘                                 364,781 行   = 61.0%
+  ├ 完全沒開始   163 檔            288,917 行
+  │    ├ VCL 表單單元 110 檔       221,682 行  ← 大宗
+  │    └ 非表單單元    53 檔        67,235 行
+  └ 翻一半的      26 檔             75,864 行（這 26 檔共 110,459 行）
+```
+
+> **這個數字取代先前記錄的「不含 dfm 54.8%」**。舊數字是檔名普查，沒有把
+> 「port 檔存在但只翻了骨架」的 26 個檔按行扣掉；`cContact.cpp` 一個檔就差 20,713 行。
+
+### 翻一半的 26 檔（缺口由大到小）
+
+| 缺口行數 | 缺函式 | 檔案 | 備註 |
+|---:|---:|---|---|
+| 20,713 | 138 | `cContact.cpp` | port 只有 extract-calc-core |
+| 8,169 | 142 | `csystem.cpp` | port 只有 MainProc/DoAllProcess spine，其餘 `#if 0 TODO(W7)` |
+| 7,141 | 17 | `aTester_Rear.cpp` | |
+| 5,984 | 16 | `aTester_Front.cpp` | |
+| 5,315 | 84 | `ainarm9045.cpp` | |
+| 5,018 | 20 | `SECSGEM/uHGemHT9045.cpp` | |
+| 3,876 | 54 | `Automation/SCK_ART.cpp` | |
+| 3,445 | 82 | `ainarm2.cpp` | |
+| 2,847 | 50 | `Motor/mymotor.cpp` | 安全關鍵 |
+| 2,796 | 76 | `SECSGEM/uHGemEquipment.cpp` | |
+| 2,699 | 40 | `aoutarm9045.cpp` | |
+| 1,749 | 10 | `cinitial.cpp` | |
+| 1,352 | 29 | `ContactForce.cpp` | |
+| 947 | 23 | `Interface/TesterTCP.cpp` | |
+| 943 | 25 | `cMyDB.cpp` | |
+| 899 | 20 | `SECSGEM/uHGemClass.cpp` | |
+| 777 | 7 | `atester_ProcessCount.cpp` | |
+| 557 | 12 | `Public/MyProductionRecord.cpp` | |
+| 208 | 7 | `cUnitConvert.cpp` | |
+| 115 | 4 | `Public/ExternFunction.cpp` | |
+| 106 | 11 | `mytray.cpp` | |
+| 102 | 7 | `Automation/automation.cpp` | |
+| 63 | 5 | `common.cpp` | |
+| 28 | 2 | `database.cpp` | |
+| 11 | 1 | `Public/WinSocketErrorCode.cpp` | |
+| 4 | 1 | `Public/HTMD5.cpp` | |
+
+---
+
+## §4 波次計畫
+
+排序原則：**先清掉相依最少的層**，讓後面的波不必再開 gate。
+「deps」＝這個 golden 單元 `#include` 到、但**還沒翻**的其他 golden 單元數。
+
+| 波次 | 內容 | 檔數 | 行數 | 狀態 |
+|---|---|---:|---:|---|
+| **PT-W1** | RotateKit×3、TriTemp、bthermo、AutoRetest、OCRInsp、SortingBinTray、uHeaterThread、MyStringList、EJ1N/TextProcess | 11 | ~18.5k | ✅ 完成（本檔同批 commit） |
+| **PT-W2** | 非表單 deps≤1 整層一次清光 | 27 | ~11.4k | 🔄 進行中 |
+| **PT-W3** | 非表單 deps 2–6（CosFunction、mykitsuck、ATCSystem、myEthercatmotor、myMN200motor、uRENESAS_Server…） | ~14 | ~15k | 待排 |
+| **PT-W4** | 非表單 deps≥8（BarCode_Sh1/Sh2、myGALILmotor、asortarm、aoutarm、Command.cpp、uHGemHT9045_SV/EC） | ~12 | ~40k | 待排 |
+| **PT-W5..** | 26 個翻一半的補完（`cContact` / `csystem` / `aTester_*` 為最大三塊） | 26 | ~75.9k | 待排 |
+| **PT-F1..** | 110 個 VCL 表單單元，經 `forms/` facade | 110 | ~221.7k | 待排；需先定 facade 覆蓋策略 |
+
+**表單波的前置決策（尚未做）**：`forms/` 目前是**手寫 facade**（fMain/fLotInfo/fAOI…），
+而 golden 表單單元有 110 個。要嘛把 facade 補到 110 個（工作量大但形狀已知），
+要嘛讓 `dfm2rc` 的 `emit_uimap` 產物承接 widget 綁定。**這是整個戰役最大的單一未決項**，
+在 PT-F1 開波前必須先定案，否則 110 個檔會各自發明自己的 widget 存取方式。
+
+---
+
+## §5 「編譯成功」的驗收條件
+
+1. 未最佳化 build：`cmake --build` exit 0（**目前已達成**）。
+2. ctest 失敗集合不擴大（目前基準見 DEVLOG 各波記錄）。
+3. **Release（-O3 + NDEBUG）build 綠**——**尚未達成**，兩個已知缺陷：
+   - `MyPLCModbus`：-O3 編不過。
+   - `BarCodeBottom2DID`：-O3 下在 `main()` 印出任何東西前就 segfault。
+   兩者都與 WB 波無關，是「只在出貨 build 現形」那一類。20260807 已做到最小重現
+   （`build_o3_repro` / `build_bc_o3g`，並產出過一份 `BarCode_Bottom2DID_FIXED.cpp`
+   候選），**修正尚未落樹**。
+4. MSVC 第二 oracle（`build.bat msvc`）不退步。
+
+---
+
+## §6 波次作業規則（沿用，勿再重新發明）
+
+- 翻譯 agent **只准新增自己那幾個鏡射檔**；`CMakeLists.txt` 與既有檔的整併**一律主迴圈序列做**。
+- 每個新檔要有 aRotateKIT.cpp 式的 banner：ROLE / WAVE SCOPE（ACTIVE vs
+  SATISFIED-BY-SUBSTRATE，附 golden 行號）/ **GATE REGISTER**（每個 gate 要寫
+  為什麼那個 default 是忠實的、以及真機上的行為差異）。
+- 落地前每檔各自 `g++ -std=c++17 -fsyntax-only` 要乾淨。
+- 交付數字**只在全新 build dir 量**；併發 build 會弄出假的 undefined reference。
+- 稽核 agent **唯讀**。它們最常見的錯不是漏看程式碼，是**引用造假**——每條 finding
+  都要有真的 golden 行號與 port 行號，主迴圈要抽驗。
+- 檔案編碼：golden cp950 → port UTF-8 + LF，U+FFFD 出現即為缺陷。

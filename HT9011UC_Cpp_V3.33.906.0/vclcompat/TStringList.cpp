@@ -94,15 +94,28 @@ void TStringList::SetObject(int i, TObject* o) {
 }
 
 // ---------------------------------------------------------------------------
-//  Text (lines joined by '\n'); BCB6 actually appends CRLF per line + trailing.
-//  We use '\n' join with NO trailing newline for the getter (round-trips with
-//  SetText which splits on CR/LF). Good enough for the read/parse uses here.
+//  Text.  BCB6 TStrings::GetTextStr appends sLineBreak (CRLF on Windows) after
+//  EVERY string, INCLUDING the last one.
+//
+//  AI(W906-PT-W1-integrate) 20260807: this used to join with a bare '\n' and emit
+//  no terminator after the final line, with the note "Good enough for the
+//  read/parse uses here".  It stopped being good enough the moment a WRITER used
+//  it: Public/MyStringList.cpp feeds `MyList->Text` straight into a raw
+//  ::WriteFile (golden MyStringList.cpp:305 -> :322, port :562 -> :579), so the
+//  missing terminator made the FIRST line of each flush concatenate onto the LAST
+//  line of the previous one -- one fused record per append seam, i.e. once every
+//  MaxLineCount lines, in every TMyStringList log (EventLog, production CSVs,
+//  slEventLog, sl2DMappingLog, slGroundManLog, tsSoftwareExeTime).  Measured, not
+//  argued: tests/test_ptw1_mystringlist.cpp asserted golden's disk bytes and 8 of
+//  its assertions failed on exactly this.
+//  SetText is unaffected -- it does not create a trailing empty item for a final
+//  line break (see the final `if` in SetText below), so Text round-trips.
 // ---------------------------------------------------------------------------
 AnsiString TStringList::GetText() const {
     std::string out;
     for (size_t i = 0; i < items_.size(); ++i) {
         out += items_[i].str();
-        if (i + 1 < items_.size()) out += '\n';
+        out += "\r\n";
     }
     return AnsiString(out);
 }

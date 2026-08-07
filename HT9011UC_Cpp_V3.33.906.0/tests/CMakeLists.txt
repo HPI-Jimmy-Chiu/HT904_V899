@@ -3086,6 +3086,49 @@ add_test(NAME WB_Server  COMMAND test_wb_server)
 set_tests_properties(WB_Crypto WB_State WB_WsProto WB_Server PROPERTIES TIMEOUT 300)
 
 # ===========================================================================
+#  PT-W1 leaf coverage (AI(W906-PT-W1-Tests) 20260807)
+# ===========================================================================
+#  The two deterministic leaves that landed in translation wave PT-W1 with no
+#  tests at all.  Both are golden-oracle tests: every expected value is derived
+#  by hand from the golden 899 source and cited by golden line number at the
+#  assertion, never read back off the port.
+#
+#  Registered ABOVE the GLOBAL TEST TIMEOUT block below, per that block's own
+#  instruction: a test added after it silently gets no timeout.
+
+# --- EJ1N/TextProcess.cpp: 16 free functions + the 2 nibble tables ----------
+#   TextProcess.cpp is compiled into ht9045_globals (root CMakeLists.txt:460).
+#   That archive PUBLIC-links what its objects need; this TU calls nothing but
+#   TextProcess's own free functions and AnsiString, so it takes the same simple
+#   shape as test_globals above rather than the god-stack LINK_GROUP.  Note the
+#   unit's own banner: with GCC both catch(...) handlers are dropped, so it adds
+#   no MyDBIProcess link edge.  GetCOMPortStatus is declared but never called by
+#   the test -- it opens a real COM port.
+add_executable(test_ptw1_textprocess
+    test_ptw1_textprocess.cpp
+)
+target_link_libraries(test_ptw1_textprocess PRIVATE ht9045_globals ht9045_core vclcompat)
+add_test(NAME PTW1_TextProcess COMMAND test_ptw1_textprocess)
+
+# --- Public/MyStringList.cpp: TMyStringList --------------------------------
+#   MyStringList.cpp is compiled into ht9045_sm (root CMakeLists.txt:1764) and
+#   reaches fSCKART / fLotInfo / IniConfig / LastSet / MyDBIProcess, so it needs
+#   the same single-pass LINK_GROUP:RESCAN god-stack as test_ga2_c1_cinitial
+#   above, for the same archive-scan-order reason documented there.
+#   The test writes ONLY into <build dir>/_ptw1_msl_scratch -- never
+#   D:/HT9045/system, /config or /CFG.
+add_executable(test_ptw1_mystringlist
+    test_ptw1_mystringlist.cpp
+)
+target_link_libraries(test_ptw1_mystringlist PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_automation,ht9045_comms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+if(WIN32)
+    target_link_libraries(test_ptw1_mystringlist PRIVATE ws2_32)
+endif()
+add_test(NAME PTW1_MyStringList COMMAND test_ptw1_mystringlist)
+
+# ===========================================================================
 #  GLOBAL TEST TIMEOUT -- must stay at the BOTTOM of this file
 # ===========================================================================
 # AI(W906-TestBootstrap) 20260728: second line of defence behind
