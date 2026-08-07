@@ -149,3 +149,49 @@ golden .cpp 全部            339 檔   643,130 行
 - 稽核 agent **唯讀**。它們最常見的錯不是漏看程式碼，是**引用造假**——每條 finding
   都要有真的 golden 行號與 port 行號，主迴圈要抽驗。
 - 檔案編碼：golden cp950 → port UTF-8 + LF，U+FFFD 出現即為缺陷。
+
+---
+
+## §7 目前那 6 個常駐 ctest 失敗，各自到底是什麼（20260807 逐條查證）
+
+「失敗集合不變」被當成健康指標很多波了，但沒人逐條查過它們是什麼。查完的結論：
+**這 6 個沒有一個是 port 的程式缺陷。** 5 個是測試把某一台機器的設定值寫死當斷言，
+1 個是 GA-4 未完成的工作污染了 canonical 輸出樹。
+
+### （A）5 個「設定快照不符」— `config_db`／`IniFiles`／`ini_helpers`／`config_loaders`／`GA1_ReadGeneralIni`
+
+這些測試直接讀**活的** `D:/HT9045/system` 與 `D:/HT9045/config`，並斷言某一台機器的值。
+磁碟上現在放的是**另一台機器的快照**，所以它們紅：
+
+| 測試斷言 | 磁碟實際值 |
+|---|---|
+| `IO_CARD_TYPE == 2` | `1` |
+| `TTL_CARD_TYPE == 2` | `0` |
+| `HEATER_CTRL_TYPE == 4` | `1` |
+| `CUSTOMER_CODE == 970` | `957` |
+| IO_Table 資料列 `== 668` | `IO_Table.csv` 共 772 行 |
+| Mot_Table 資料列 `== 45` | `Mot_Table.csv` 共 45 行（含標頭） |
+
+用改動前的 binary 跑會得到相同失敗，所以不是任何一次修改造成的。
+
+**這是設計缺陷，不只是環境問題**：本 repo 的日常作業就包含「把客戶快照倒進 `system/`
+來查異常」（而且 `system/` 沒進 git），所以這些測試會隨著有沒有人在查客戶案子而
+紅綠跳動。**修法**：改成讀**與測試一起版控的 fixture 設定**，而不是活的 `system/`；
+真的要驗活樹的測試應該獨立成一組、且預設 skip。在那之前，「失敗集合不變」這個指標
+只能證明「沒有人動壞東西」，不能證明資料層是對的。
+（附帶一提：磁碟這份 `IO_CARD_TYPE=1`，依 `cinitial.cpp` 的分派根本不會去讀
+`IO_Table.csv`——卡型 1 走 `cylinder_AutoRetest.DB` + `Sensor_<機型>.DB`。
+也就是說有兩個斷言連讀的來源都跟真實流程不一致。）
+
+### （B）1 個工作樹污染 — `dfm2rc_idempotent`
+
+`G7_MISSING_IN_REGEN: rc_out/main_uimap.gen.h`。成因：GA-4 的 `tools/dfm2rc/emit_uimap.py`
+**還沒接進 `run_b1d.py` 的 `regenerate_all()`**，但有人手動跑過它、把
+`rc_out/main_uimap.gen.{h,cpp}` 留在 canonical 輸出樹裡（兩個檔目前都**未 track**，
+`ui/forms/FMainFirstLightDlg.cpp` 也未 track 且 include 它）。於是 regen 產不出這個檔、
+canonical 樹卻有 → G7 判缺件。**乾淨的 repo 不會有這個失敗。**
+
+**不要用 `_STATIC_NONGENERATED_FILES` 把它排除掉**——那個名單是給「手寫的、本來就不該被
+regen 的」檔用的，`*_uimap.gen.*` 是**產生出來的**，排除等於默默解除對一個產物的覆蓋。
+正解是 GA-4 決定 emit_uimap 要對 133 個表單全跑還是只跑 main，然後接進 `regenerate_all()`
+並把產物一起 commit。**這是 GA-4 的未結項，不在 PT 戰役範圍內。**
