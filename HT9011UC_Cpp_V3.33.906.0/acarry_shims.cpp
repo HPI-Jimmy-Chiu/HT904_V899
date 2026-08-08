@@ -75,11 +75,25 @@ TATC_DataShim::TATC_DataShim() : dChillerSetTemp(0.0) {}
 TATC_DataShim ATC_Data;
 
 // ---------------------------------------------------------------------------
-//  Shuttle-floating detectors (golden LaserSensorShuttle.h / csystem.cpp).
+//  Shuttle-floating detectors (golden LaserSensorShuttle.h:16-18).
+//  AI(W906-PT-W3-integrate) 20260808: the three offline stubs that lived here are
+//  RETIRED -- the real bodies landed with OmronLaser/LaserSensorShuttle.cpp in
+//  PT-W3 (:656 / :1070 / :1368).  See acarry_shims.h for the full account,
+//  including why only ONE of the three announced itself as a link error and how
+//  the other two had been quietly winning over the real engine.
+//  BEHAVIOUR CHANGE, and it is a real one -- stated as what it IS, not as a
+//  reassurance: acarry.cpp's floating checks used to return `false` immediately,
+//  unconditionally.  They now enter golden's real multi-step state machine
+//  (LaserSensorShuttle.cpp:656 -- `iShtLaserCheckTask` cases that command
+//  MOT[MInShuttle1+iSht].MotorMove(...) and read the laser between steps), so a
+//  caller no longer gets an answer on the first tick.  Its offline outcome is
+//  whatever the Sim HAL's motor + laser stand-ins produce and this wave does NOT
+//  pin that down; the ctest set is the measurement.  Note also that the second
+//  argument means RESET in golden (`bReset`), not "alarm" as the old shim's
+//  parameter name claimed -- acarry.cpp:4335/:6161 pass true, which golden treats
+//  as "repaint every cell NeedCheck, zero the retry count, restart at Task 1".
+//  The shim ignored it entirely.
 // ---------------------------------------------------------------------------
-bool CheckShtFloating(int /*iSht*/, bool /*bAlarm*/)            { return false; }   // no floating offline
-bool UseInArmCheckShtFloating(int /*iSht*/, bool /*bAlarm*/)    { return false; }
-bool UseOutArmCheckShtFloating(int /*iSht*/, bool /*bAlarm*/)   { return false; }
 
 // ---------------------------------------------------------------------------
 //  In-shuttle LF/RT (int) overloads (golden csystem.cpp) -- route to the real

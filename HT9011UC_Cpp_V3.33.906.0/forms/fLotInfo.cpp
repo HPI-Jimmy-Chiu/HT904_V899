@@ -67,6 +67,10 @@ TfLotInfo::TfLotInfo()
     labNowAuto2TrayID          = new TfLotInfoLabel();   // golden uLotInfo.h:802
     labNowAuto3TrayID          = new TfLotInfoLabel();   // golden uLotInfo.h:804
     cbFirstTrayCheckOnUnloader = new TfMainCheckBox();   // golden uLotInfo.h:1026 -- offline Checked=false
+    // AI(W906-PT-W3-integrate) 20260808: golden uLotInfo.h:266 -- only ->Click() is
+    // touched, and that is an inherited offline no-op; see forms/fLotInfo.h for why
+    // golden's OnClick chain cannot run here.
+    btClearBarcodeList         = new vclcompat::TButton();  // golden uLotInfo.h:266
 }
 // AI(W906-AutoCleanFoundation) 20260721: golden uLotInfo.cpp:16250-16253 --
 // REAL one-line body (was a total no-op stub before that wave). See

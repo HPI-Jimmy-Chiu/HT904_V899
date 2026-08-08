@@ -127,10 +127,33 @@ extern TATC_DataShim ATC_Data;     // golden ATC_Handler_Side.h
 //  ACTIVE offline shims; offline-default values match the proven canary posture
 //  (no floating, no HTTP, no sort-arm, shuttle empty -> "nothing to do").
 // ===========================================================================
-//  shuttle-floating detectors (golden LaserSensorShuttle.h / csystem.cpp)
-bool CheckShtFloating(int iSht, bool bAlarm=false);                 // golden -- offline: false (no floating)
-bool UseInArmCheckShtFloating(int iSht, bool bAlarm=false);         // golden -- offline: false
-bool UseOutArmCheckShtFloating(int iSht, bool bAlarm=false);        // golden -- offline: false
+//  shuttle-floating detectors (golden LaserSensorShuttle.h:16-18)
+//  AI(W906-PT-W3-integrate) 20260808: SHIMS RETIRED -- these three now declare the
+//  REAL bodies that landed with OmronLaser/LaserSensorShuttle.cpp in PT-W3
+//  (CheckShtFloating :656 / UseInArmCheckShtFloating :1070 /
+//  UseOutArmCheckShtFloating :1368; golden :455 / :942 / :1240).  The bodies that
+//  used to live in acarry_shims.cpp:80-82 are gone.
+//    Two separate things were wrong with the old shim block, and only the first
+//  one announced itself:
+//    (1) CheckShtFloating had the SAME signature as the real body, so the link
+//        broke loudly (`multiple definition of CheckShtFloating(int, bool)`).
+//    (2) The two Use* shims declared only TWO parameters where golden declares
+//        THREE (`bool bSetGold=false`, golden LaserSensorShuttle.h:17-18).  That
+//        is not a collision, it is a DIFFERENT OVERLOAD -- so it linked silently
+//        and acarry.cpp's five call sites (:4601/:4606/:4941/:4946/:6718) bound
+//        to a stub that always returned false while the real 294-line engine sat
+//        unused next to it.  Restoring the third parameter is what actually fixes
+//        that; it was never going to show up as a link error.
+//  Signatures below are byte-for-byte golden LaserSensorShuttle.h:16-18, so the
+//  existing call sites keep compiling unchanged and now reach the real bodies
+//  with bSetGold defaulting to false -- which is golden's own default.
+//  NOTE: the defaults are given here AND in OmronLaser/LaserSensorShuttle.h.  C++
+//  forbids repeating a default argument in one scope, so no TU may include both.
+//  Checked this pass: no OmronLaser/*.cpp includes acarry_shims.h and
+//  aHotPlateSubstrate.h does not pull it in, so nothing does today.
+bool CheckShtFloating(int iSht, bool bReset=false);                         // golden LaserSensorShuttle.h:16
+bool UseInArmCheckShtFloating(int iSht, bool bReset=false, bool bSetGold=false);   // golden :17
+bool UseOutArmCheckShtFloating(int iSht, bool bReset=false, bool bSetGold=false);  // golden :18
 
 //  In-shuttle left/right position predicates -- (int) overloads (golden csystem.cpp).
 //  The (void) variants InSHT1InLF/InSHT2InLF/InSHT1InRT/InSHT2InRT already live in

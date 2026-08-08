@@ -1047,10 +1047,48 @@ int main()
         IniConfig.bN10_UploadSummaryToFTP = true;
         IniConfig.iN10UploadMethod = 0;   // routes through FormHS (gate #17), NOT the XCOPY/ExecZipCommand branch
 
-        TastCategory.iTotalSocket  = 100;
-        TastCategory.iPassSocket   = 80;
-        TastCategory.iFailSocket   = 20;
-        TastCategory.iRejectCount  = 5;
+        // AI(W906-PT-W3-integrate) 20260808: these four fields used to be SEEDED DIRECTLY,
+        //   which only worked because gate #16's TastCategory stub had a NO-OP UpdataCount.
+        //   The stub is retired (cSocket.cpp defines the real TEST_CATEGORY), and
+        //   SckArtRem_SaveSummaryTrayFeed's first act is `TastCategory.UpdataCount(false)`
+        //   (SCK_ART_Remainder.cpp:2526, golden :3140), whose real body (cSocket.cpp:1203)
+        //   calls ClearCount() and then RECOMPUTES every field from ArmDataLot[].
+        //   So we now seed golden's REAL inputs and let golden's own arithmetic produce
+        //   the same 100/80/20 -- a strictly stronger test: it exercises the whole
+        //   ArmDataLot -> TEST_CATEGORY recompute that was previously stubbed out.
+        //   Path taken: bCheckYield==false + IsNNMode()==None_NN (atester_shims.cpp:242
+        //   returns 0 offline) -> cSocket.cpp:1305-1336, the ArmDataLot branch.
+        TArm *savedArmLot0_13 = ArmDataLot[0];
+        TArm *savedArmLot1_13 = ArmDataLot[1];
+        int savedShtRow13 = TestSocket.iShtRow, savedShtCol13 = TestSocket.iShtCol;
+        int savedSiteMap13 = TestIF.iSiteMap[0][0];
+
+        ArmDataLot[0] = new TArm("W906TESTPART13ARM0-DO-NOT-USE");   // ctor is allocation-only,
+        ArmDataLot[1] = new TArm("W906TESTPART13ARM1-DO-NOT-USE");   // no file I/O (cSocket.cpp:1029)
+        TestSocket.iShtRow = 1;            // one shuttle site, so exactly one (iRow,iCol) is visited
+        TestSocket.iShtCol = 1;
+        TestIF.iSiteMap[0][0] = 1;         // >0 -> site is live; iDut = 1-1 = 0
+        // AI(W906-PT-W3-integrate) 20260808 CORRECTION (2nd pass): seeding `Total`
+        //   was wrong and this PART stayed red because of it (177/179 -- "Input:"
+        //   and "Fail:" failed while "Pass:" passed, which is the signature of
+        //   exactly this mistake).  `TMySocket::GetTotal()` does NOT read the
+        //   `Total` field -- it returns `Pass+Fail` (cSocket.cpp:328-331, golden
+        //   :173).  Seeding Total=60/40 therefore fed GetTotal() nothing and it
+        //   answered 48/32, i.e. iTotalSocket==80==iPassSocket and iFailSocket==0.
+        //   Seed Pass AND Fail so golden's own accessor produces the intended
+        //   60/40, and keep Total consistent with it (unread on this path, but
+        //   GetPCA() at cSocket.cpp:333 does divide by it, so leaving it at 0
+        //   would plant a stale zero for the next reader).
+        ArmDataLot[0]->ArmSKET[0][0]->Pass = 48;    ArmDataLot[0]->ArmSKET[0][0]->Fail = 12;   // GetTotal()==60
+        ArmDataLot[1]->ArmSKET[0][0]->Pass = 32;    ArmDataLot[1]->ArmSKET[0][0]->Fail =  8;   // GetTotal()==40
+        ArmDataLot[0]->ArmSKET[0][0]->Total = 60;   ArmDataLot[1]->ArmSKET[0][0]->Total = 40;
+        //   => iTotalSocket = 60+40 = 100, iPassSocket = 48+32 = 80,
+        //      iFailSocket  = iTotalSocket-iPassSocket = 20 (cSocket.cpp:1399, golden :1225).
+        //   iRejectCount stays 0: grepping the WHOLE GOLDEN tree, the ONLY write to
+        //   TEST_CATEGORY::iRejectCount is `iRejectCount=0;` in ClearCount (golden
+        //   cSocket.cpp:1024). Nothing anywhere ever sets it non-zero, so golden's own
+        //   summary always prints "Reject: 0" -- the old "== 5" assertion was an artefact
+        //   of the stub, not a property of golden. 13B asserts 0 accordingly.
 
         W5SckArtRem_slEventLog.sLotFileName = "";   // default -- FileExists("") is false (gate #17)
         W5SckArtRem_LastFormHSUpload_Dir      = "<unset>";
@@ -1086,17 +1124,17 @@ int main()
             if (line.Pos("Input:") == 1 && line.Pos("100") > 0) foundInput = true;
             if (line.Pos("Pass:") == 1 && line.Pos("80") > 0) foundPass = true;
             if (line.Pos("Fail:") == 1 && line.Pos("20") > 0) foundFail = true;
-            if (line.Pos("Reject:") == 1 && line.Pos("5") > 0) foundReject = true;
+            if (line.Pos("Reject:") == 1 && line.Pos("0") > 0) foundReject = true;
         }
         check13->Clear();
         delete check13;
         CHECK(foundLot, "\"Lot#:\" line reflects RunInfo.LotNo (golden :3166)");
         CHECK(foundCustomer, "\"Customer:\" line reflects fLotInfo->lbledtCustomer->Text (golden :3169/:3154-3157)");
         CHECK(foundProgram, "\"Program:\" line reflects fMain->cbSetupFileName->Text (golden :3170)");
-        CHECK(foundInput, "\"Input:\" line reflects TastCategory.iTotalSocket==100 (golden :3174, gate #16)");
-        CHECK(foundPass, "\"Pass:\" line reflects TastCategory.iPassSocket==80 (golden :3175, gate #16)");
-        CHECK(foundFail, "\"Fail:\" line reflects TastCategory.iFailSocket==20 (golden :3176, gate #16)");
-        CHECK(foundReject, "\"Reject:\" line reflects TastCategory.iRejectCount==5 (golden :3177, gate #16)");
+        CHECK(foundInput, "\"Input:\" line == 100 -- golden's REAL UpdataCount summed ArmDataLot[0..1]->ArmSKET[0][0]->GetTotal() (60+40) (golden :3174, cSocket.cpp:1329)");
+        CHECK(foundPass, "\"Pass:\" line == 80 -- golden's REAL UpdataCount summed GetPassCT() (48+32) (golden :3175, cSocket.cpp:1333)");
+        CHECK(foundFail, "\"Fail:\" line == 20 -- golden derives iFailSocket=iTotalSocket-iPassSocket (golden :3176, cSocket.cpp:1399)");
+        CHECK(foundReject, "\"Reject:\" line == 0 -- golden NEVER writes iRejectCount non-zero anywhere in its tree (only ClearCount's =0, golden cSocket.cpp:1024) (golden :3177)");
 
         // ---- 13C: gate #17's FormHS SLT_Report upload -- REACHED (file just written -> FileExists==true) ----
         CHECK(W5SckArtRem_LastFormHSUpload_FileName != "<unset>", "FormHS->UpDataToServerByFTP(\"SLT_Report\") gate #17 was REACHED once the summary file existed (golden :3341-3342)");
@@ -1138,6 +1176,15 @@ int main()
         IniConfig.bVTESTFunction = savedVTEST13;
         IniConfig.bN10_UploadSummaryToFTP = savedUploadToFTP13;
         IniConfig.iN10UploadMethod = savedUploadMethod13;
+        // AI(W906-PT-W3-integrate) 20260808: restore the REAL UpdataCount inputs this PART
+        //   seeded (see its note above).  Deliberately NOT deleting the two TArm objects:
+        //   ~TArm's reach was not audited by this wave and this PART only ever runs once,
+        //   so a bounded 2-object leak at test scope is preferred over an unverified dtor.
+        ArmDataLot[0] = savedArmLot0_13;
+        ArmDataLot[1] = savedArmLot1_13;
+        TestSocket.iShtRow = savedShtRow13;
+        TestSocket.iShtCol = savedShtCol13;
+        TestIF.iSiteMap[0][0] = savedSiteMap13;
     }
 
     // =========================================================================================

@@ -36,6 +36,22 @@
 
 ## §3 現況（20260807 量測）
 
+> **⚠ 20260808 註記：下面整張表是 20260807 的快照，PT-W2（27 檔）與 PT-W3（18 檔）落地之後
+> 就已經過期，「39.0% / 66.3% / 4.0%」都不可以再當成現況引用。**
+> 沒有直接把數字改掉是刻意的：§2 的 `census.py` / `classify.py` / `remaining.py` 當初留在
+> 上一場次的 scratchpad，**已經不存在**，而本表的分母是「函式層、去空行去註解的 code line」——
+> 拿檔案層的行數硬加上去就是把兩種單位混在一起，正是本節下面那段警告在講的事。
+> 目前能負責的增量只有這個（20260808 用同一單位、同一份權威 golden
+> `HT9011UC_Code_V3.33.906.0_20260618` 量的）：
+>
+> | 波次 | 檔數 | golden raw 行 | golden code 行（去空行/註解） |
+> |---|---:|---:|---:|
+> | PT-W3 已鏡射落地 | 18 | 27,689 | 23,006 |
+>
+> 這 23,006 是**上界**，不是「已翻」的增量：檔案存在不等於函式全到（`myMN200motor.cpp` 等
+> 單元有整段 `#if 0` gate），要按 §2 的函式層規則扣。**下一個接手的人第一件事應該是把
+> census 三支腳本重寫並簽進 repo**（不要再留在 scratchpad），然後重跑整張表。
+
 ```
 golden .cpp 全部            339 檔   643,130 行
   在 HT9045.bpr 範圍內      289 檔   598,367 行   ← 分母
@@ -107,8 +123,8 @@ golden .cpp 全部            339 檔   643,130 行
 | 波次 | 內容 | 檔數 | 行數 | 狀態 |
 |---|---|---:|---:|---|
 | **PT-W1** | RotateKit×3、TriTemp、bthermo、AutoRetest、OCRInsp、SortingBinTray、uHeaterThread、MyStringList、EJ1N/TextProcess | 11 | ~18.5k | ✅ 完成（本檔同批 commit） |
-| **PT-W2** | 非表單 deps≤1 整層一次清光 | 27 | ~11.4k | 🔄 進行中 |
-| **PT-W3** | 非表單 deps 2–6（CosFunction、mykitsuck、ATCSystem、myEthercatmotor、myMN200motor、uRENESAS_Server…） | ~14 | ~15k | 待排 |
+| **PT-W2** | 非表單 deps≤1 整層一次清光 | 27 | ~11.4k | ✅ 完成（commit `8c5e3fb`；但它記的 128/134 是整併前量的，實際 HEAD 是紅的，見 PT-W3 開場） |
+| **PT-W3** | 非表單 deps 2–6（CosFunction、mykitsuck、ATCSystem、ATCInterface、myMN200motor、mySYNTEKmotor、myEthercatmotor、uRENESAS_Server、OmronLaser×3、VacuumUnit×2、MyTempPanel、ScanBtnThread、TfAOILaserScan、cInArmPlacement、handlerlog） | **18**（實際；估 ~14） | **27,689 raw / 23,006 code**（實際；估 ~15k） | ✅ 完成 20260808 |
 | **PT-W4** | 非表單 deps≥8（BarCode_Sh1/Sh2、myGALILmotor、asortarm、aoutarm、Command.cpp、uHGemHT9045_SV/EC） | ~12 | ~40k | 待排 |
 | **PT-W5..** | 26 個翻一半的補完（`cContact` / `csystem` / `aTester_*` 為最大三塊） | 26 | ~75.9k | 待排 |
 | **PT-F1..** | 110 個 VCL 表單單元，經 `forms/` facade | 110 | ~221.7k | 待排；需先定 facade 覆蓋策略 |
@@ -167,6 +183,26 @@ golden .cpp 全部            339 檔   643,130 行
   archive**。波次自檢要加一句：新單元呼叫的每個外部符號，確認它的 body 所在的 .cpp
   **有在 CMakeLists 裡**，不是只存在於樹上。
 - 檔案編碼：golden cp950 → port UTF-8 + LF，U+FFFD 出現即為缺陷。
+- **交付數字必須在「最後一次整併之後」、於全新 build dir 量**（PT-W2 血案：`build_0807_w2`
+  的 exe 時間戳 20:39、commit 20:52，那份 128/134 涵蓋不到自己最後一次 CMakeLists 整併，
+  HEAD 實際是紅的）。「build dir 是全新的」≠「量的是最終樹」。
+- **「一直都連得起來」可能只是沒人把那個 object 抽出來過**（20260808 PT-W3）。static archive
+  的成員只有在解析某個還未定義的符號時才會被抽出，所以 `Motor/Hontech_M4.cpp`（`_mnet_m4_*`）
+  和 `EtherCAT/MyEtherCAT.cpp` 帶著未解析的廠商符號在樹上待了好幾波都沒事——直到 PT-W3
+  退役 `mymotor.cpp` 的 `MNetLog` stub，第一次有人引用 `myMN200motor.cpp` 的符號，
+  173 個廠商進入點一次全部現形。**自檢方式**：`nm --undefined-only lib*.a`，不要只看
+  「build 有沒有綠」。（現由 `Motor/vendor_offline_motionnet.cpp` 承接，見該檔 banner。）
+- **廠商標頭可能把同一組 API 宣告好幾次，而且簽章不一致**（同上）。`Motor/vendor/mn200.h`
+  鏡射三份，`mn_fix_move` 分別吃 `SPEED_PAR*` / `double*,BYTE*` / `SPEED_PAR` 值傳遞。
+  比對兩個區塊時**要比參數列，不能只比函式名集合**——只比名字會得到「86 個完全一樣」的
+  假結論，然後選錯區塊、10 個 compile error。
+- **靜態初始化期的 ctor 不可以碰 §8 那 18 個 NULL 全域**（同上，代價最大的一條）。
+  `OmronLaser/LaserSensor.cpp:206` 用本樹既有慣例 `fLaserSensor = new TfLaserSensor();`，
+  但它是**真的翻譯單元**，ctor 尾端照 golden 呼叫 `InitLaserEdtList()`，而該函式每一行都是
+  `elLaser->Add(...)`——`elLaser` 是 golden `main.cpp:1483` 才 new 的。結果 **134 個 ctest
+  裡 88 個 SEGFAULT**，全部同一條 backtrace。**facade 的 ctor 只塞欄位所以安全，翻譯單元的
+  ctor 不是**；而且 stand-in 也救不了（golden 的順序是 main() 先 new、CreateForm 後建，
+  跨 TU 動態初始化無順序保證）。現行解法＝在呼叫點加 `if(elLaser)` 並留 GA-3 hand-off。
 
 ---
 
@@ -175,6 +211,14 @@ golden .cpp 全部            339 檔   643,130 行
 「失敗集合不變」被當成健康指標很多波了，但沒人逐條查過它們是什麼。查完的結論：
 **這 6 個沒有一個是 port 的程式缺陷。** 5 個是測試把某一台機器的設定值寫死當斷言，
 1 個是 GA-4 未完成的工作污染了 canonical 輸出樹。
+
+> **20260808 更新（PT-W3 收尾）**：這 6 個仍然是這 6 個，一個不多。PT-W3 開場時多出來的
+> 第 7 個 `SCK_ART_Remainder` 已經**回綠**（179 PASS / 0 FAIL）——它是 gate #16
+> `TastCategory` stub 退役後，測試原本「直接塞欄位」的前提消失所致；改成餵 golden 真正的
+> 輸入（`ArmDataLot[]` + `TestSocket.iShtRow/iShtCol` + `TestIF.iSiteMap`）由 golden 自己
+> 重算。**收尾時踩到的坑**：第一次改寫餵了 `ArmSKET[]->Total`，但
+> `TMySocket::GetTotal()` 回的是 `Pass+Fail`（`cSocket.cpp:328-331`），不是 `Total` 欄位，
+> 所以 Pass 對、Input/Fail 錯（177/179）。要餵 `Pass` 與 `Fail`。
 
 ### （A）5 個「設定快照不符」— `config_db`／`IniFiles`／`ini_helpers`／`config_loaders`／`GA1_ReadGeneralIni`
 
@@ -273,3 +317,33 @@ static initialiser 讀——**查過，不是假設**）。
 **歸屬**：這整塊是 **GA-3（main.cpp 啟動鏈垂直切片）** 的工作，不是 PT 戰役的。
 在 GA-3 落地之前，**任何一波只要讓上表其中一個全域第一次有呼叫者，就會 segfault**——
 這不是回歸，是本來就在那裡。波次驗證看到新的 SEGFAULT 時，第一個要查的就是這張表。
+
+### 20260808：上面那句話當天就兌現了，而且是最壞的形狀（88/134 SEGFAULT）
+
+PT-W3 把 `OmronLaser/LaserSensor.cpp` 註冊進 build，它照本樹既有慣例寫了
+`TfLaserSensor *fLaserSensor = new TfLaserSensor();`（`:206`）。這是**翻譯單元**，不是
+facade——ctor 尾端照 golden `:196` 呼叫 `InitLaserEdtList()`，而該函式 17 行全是
+`elLaser->Add(...)`。`elLaser` 正是上表 `HTEditList` 那一族（golden `main.cpp:1483`）。
+於是 **134 個 ctest 有 88 個 SEGFAULT，同一條 backtrace**：
+
+```
+_GLOBAL__sub_I_fLaserSensor -> TfLaserSensor::TfLaserSensor()
+   -> TfLaserSensor::InitLaserEdtList() -> HTEditList::Add(...)   <-- SIGSEGV
+```
+
+**比「有呼叫者」更嚴重的是「呼叫者是 static initializer」**：本節上面對 `uPlateInfo`
+用的那套 stand-in 論證（「只被 runtime 函式讀」）在這裡完全不成立，而且補一個
+`elLaser = new HTEditList` 到別的 TU 也救不了——golden 的順序是 `main()` 先 new、
+`CreateForm` 後建，本樹卻在 static-init 期就把 form 建掉，跨 TU 動態初始化無順序保證。
+
+**現行處置**（`OmronLaser/LaserSensor.cpp` 呼叫點，有完整註解）：`if(elLaser)` 才呼叫。
+條件寫的是指標本身而不是 build flag，所以指標一存在就自動生效。
+**GA-3 必須接的一件事**：static init 看不到 `main()` 期的配置，所以 GA-3 建好 `elLaser`
+之後**要在 golden 自己的位置補呼叫 `fLaserSensor->InitLaserEdtList()`**。在那之前的
+行為差異：Laser 設定頁的 edit 綁定沒註冊（三個消費者 `sbUpdateClick`／`ReadFile`／
+`DoIniDataToForm` 本身也都 deref `elLaser`，本來就跑不了）。
+
+**同型風險清單（本波查過的）**：PT-W3 的 18 檔裡只有兩個在 static-init 期 `new` 物件——
+`fLaserSensor`（上述）與 `ATC/ATCInterface.cpp:207` 的 `ATCInterfaceForm`（ctor 只配置
+自己的 `TTimer`，不碰上表任何一個，ctest 已證）。`VacuumUnit.cpp` 有 9 處
+`elVacuumUnit->`，但全在 runtime 函式裡，不在 ctor。

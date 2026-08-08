@@ -3683,3 +3683,349 @@ GATE REGISTER；但**同一波的兄弟 group 是在那之後才落地的**，gr
 `EtherCAT/vendor` 兩個唯讀 vendor 目錄放上 include path，好讓 port 的 `#include` 行
 與 golden **逐字相同**）；`myio.cpp` → `ht9045_io`；現場匯流排/協定 → `ht9045_comms`；
 其餘 → `ht9045_sm`。
+
+---
+
+## 2026-08-08 — PT-W3 整併（進行中，**未驗證即暫停**）：HEAD 原本是紅的，以及一個「連得起來但每個欄位讀錯偏移」的 ODR 陷阱
+
+> **狀態：本節所有變更都還沒有 build 過。** 使用者要關機，收在一致的編輯狀態並記錄。
+> 接續者請直接從下面「🔖 RESUME」的第 1 步開始（跑全新 build），**不要**假設任何一項已驗證。
+
+### 開場：`git status` 第四次撿到在製工作
+
+18 個 PT-W3 翻譯單元躺在樹上未 track，落地時間 **20260807 20:18–20:50**，而 PT-W2 的 commit
+`8c5e3fb` 是 **20:52** —— 它們被整批漏掉。golden 合計 ~28,188 行（計畫書 §4 對 PT-W3 的
+估計是「~14 檔 ~15k 行」，實際 18 檔、兩倍）。**17/18 沒有註冊進任何 CMakeLists**，
+就是 PT-W2 才剛記取的 `cMyDB.cpp` 教訓的同型狀況。
+
+（過程中我自己錯了一次並更正：第一次比對誤用 `HT9011UC_Code_V3.33.899.0_...` 當 golden，
+`LaserSensorShuttle` 看起來 621→1632 像灌水。權威 golden 是
+`HT9011UC_Code_V3.33.906.0_20260618`，DEVLOG 全檔引用它 40 次。）
+
+### **HEAD 本身是紅的** —— 而且記錄在案的 128/134 涵蓋不到它
+
+全新 `build_0808_base` 直接失敗：`multiple definition of 'TastCategory'`
+（`cSocket.cpp:174` 的真本體 vs `Automation/SCK_ART_Remainder.cpp` 的 gate #16 stub），
+打掉 `wb_serve` + 4 個測試。
+
+**這不是我造成的，也不是新回歸——是 PT-W2 自己寫下卻沒執行的承諾。**
+`cSocket.h:43-60` 白紙黑字寫著「cSocket.cpp 一旦進 build 就要退役這個 stub」；PT-W2 把
+cSocket.cpp 註冊進 `ht9045_sm` 了，退役沒做。
+
+**為什麼 PT-W2 的綠燈沒抓到**：`build_0807_w2/` 裡的 `.exe` 時間戳是 **20:39**，
+commit 是 **20:52**——那個 128/134 是在它自己最後一次 CMakeLists 整併**之前**量的。
+> **規則（新增到波次作業規則）**：交付數字必須在**最後一次整併之後**、於全新 build dir 量。
+> 「build dir 是全新的」不等於「量的是最終樹」。
+
+**修法**＝照 `cSocket.h` 自己的指示退役。真 `TEST_CATEGORY` 是 stub 十個欄位的**嚴格超集**，
+名稱與維度逐字相同，`UpdataCount(bool=false)` 簽章不變，所以是乾淨替換。
+`tests/test_ga1_cprod.cpp:169` 也有一份自己的同型 stand-in，一併換成真型別。
+
+**修完的新基準（`build_0808_base`，全新 dir）：build exit 0、ctest 127/134。**
+7 個失敗 = 計畫書 §7 的 6 個常駐 + `SCK_ART_Remainder`，而第 7 個正是這次退役造成的：
+stub 的 `UpdataCount` 是 no-op，真本體（`cSocket.cpp:1203`）第一件事就是 `ClearCount()`
+再從 `ArmDataLot[]` 重算，所以測試「直接塞欄位」的前提消失（175 PASS / 4 FAIL of 179）。
+
+**修測試的方向刻意選了比較難的那條**：不是把斷言改成 0，而是**餵 golden 真正的輸入**——
+`ArmDataLot[0..1] = new TArm(...)`（ctor 純配置、無檔案 I/O，`cSocket.cpp:1029`）、
+`TestSocket.iShtRow/iShtCol=1`、`TestIF.iSiteMap[0][0]=1`、兩隻手臂的 socket 各餵
+Total 60/40、Pass 48/32 → golden 自己算出 **iTotalSocket=100 / iPassSocket=80 /
+iFailSocket=20**，原本的三個數字一字不改，卻改由真正的重算路徑產生。**測試因此變強了**。
+唯一真的改掉的是 `Reject:` —— 掃過**整棵 golden**，`TEST_CATEGORY::iRejectCount` 的唯一
+寫入點是 `ClearCount()` 裡的 `iRejectCount=0`（golden `cSocket.cpp:1024`），**golden 從來
+不會把它寫成非零**，所以 golden 自己的 summary 永遠印 `Reject: 0`。原本斷言的 `== 5`
+是 stub 的產物，不是 golden 的性質。
+
+### 忠實度稽核：20 個 agent、66 confirmed / 2 refuted
+
+10 組唯讀稽核 + 每組一個對抗性 refuter（預設 refuted=true，須自行重讀 golden 才推翻）。
+**66/68 存活率高得可疑**（refuter 很可能有橡皮圖章成分），所以 blocking 那批我全部自己複驗，
+以下四個逐一坐實：
+
+| 症狀 | 真相 |
+|---|---|
+| `OpenPCI132Card(bool)` 重複定義 | `Motor/mymotor.cpp:1378` 空 stub vs `Motor/myMN200motor.cpp:1154` 真本體（golden :855） |
+| `myLine[]` 只有宣告沒有定義 | `myMN200motor.h:181` 宣告、`.cpp:1208/1209/2449/2451/2453` 讀寫；golden 定義在 `Motor/mymotor.cpp:43`，本樹的部分翻譯沒翻到那段 |
+| `CheckInArmFloating(bool)` 重複定義 | `aHotPlateSubstrate.cpp:1526` stub vs `OmronLaser/LaserSensorInArm.cpp:400` 真本體 |
+| `ATCInterface.cpp:1243` gate 前提是假的 | 宣稱「LogSoftwareOffTime 全樹沒有 port」；實際 `cmydef.h:5032` 宣告、`acarry_shims.cpp:176` 有本體、`CMakeLists.txt:1689` 有註冊，**六個已 commit 的單元 + 本波自己的 `OmronLaser/LaserSensor.cpp:1852` 都在呼叫它**。已還原成 golden `:958` 的原句 |
+
+（順帶查證兩個**不是**缺陷的：`VacuumUnit.cpp` 的 `//LogSoftwareOffTime(...)` 是 golden
+`:348` 自己就註解掉的；`LaserSensorShuttle` 的 `GetRowCol` GATE 宣稱 `atester.cpp` 有真本體
+——`atester.cpp:191` 確實有，`CMakeLists.txt:1642` 也確實註冊了。）
+
+### 最該記住的一條：`mykitsuck.cpp` 不是「多註冊一個檔」，是 substrate 回家
+
+`mykitsuck.h:274` 定義 `class TMyKitSuck`，而 `aHotPlateSubstrate.h:365` **也**定義
+`class TMyKitSuck`，**佈局完全不同**（substrate 開頭是 `TMySucker Suck[][]`；golden 開頭是
+`TALed *pLed[][]` + `bool bLed[][]`）。兩個標頭還宣告同一批 extern 全域，
+`mykitsuck.cpp:205-234` 定義 24 個、`aHotPlateSubstrate.cpp:80-93/:1067-1070` 定義 14 個，
+**14 個正面對撞**。而 `aHotPlateSubstrate.h` 被 **177 個 TU** include。
+→ **本波刻意不註冊 `mykitsuck.cpp`**，另立一波（mykitsuck.h 自己的 banner 早就寫了
+「NOT #included by anything yet, and NOT added to CMakeLists.txt」——那個判斷今天仍然對）。
+
+**由此照出一個更陰險的**：`OmronLaser/LaserSensorShuttle.cpp:173` 原本
+`#include "mykitsuck.h"`，但它實際連到的 `FLCarryKit/BLCarryKit/FRCarryKit/BRCarryKit/
+ptrInSHT` 是 `aHotPlateSubstrate.cpp` 的物件。**它會乾乾淨淨地連起來，然後每一個欄位存取
+都讀錯偏移**——沒有任何 link error，也沒有任何不碰 shuttle laser 路徑的測試會發現。
+已改接 `aHotPlateSubstrate.h`；改之前先量過：這個檔在 kit 物件上**只用到 `.Item[][]`**，
+substrate 的 TMyKitSuck 有（`:369`）。`ptrOutSHT` substrate 標頭沒宣告，真定義在
+`acarry.cpp:99`（外部連結，`:2110/:2112` 指向 &FRCarryKit/&BRCarryKit），就地 extern 宣告。
+> **規則（新增）**：兩個標頭同名同 class 時，「編得過」與「連得起來」都不能當證據。
+> 新單元 include 哪個標頭，要對照**它實際連到的那個定義在哪個 .cpp**。
+
+### 本次 CMakeLists 落點（17 檔）
+
+| archive | 單元 |
+|---|---|
+| `ht9045_globals` | `CosFunction.cpp` |
+| `ht9045_motor` | `Motor/myMN200motor.cpp`、`Motor/mySYNTEKmotor.cpp`、`Motor/myEthercatmotor.cpp` |
+| `ht9045_comms` | `ATC/ATCSystem.cpp`（歸隊到 `ATC/TCPData.cpp`＋`ATC_WinWay.cpp` 同族） |
+| `ht9045_sm` | `cInArmPlacement`、`handlerlog`、`MyTempPanel`、`ScanBtnThread`、`TfAOILaserScan`、`ATC/ATCInterface`、`OmronLaser/{LaserSensor,LaserSensorInArm,LaserSensorShuttle}`、`VacuumUnit/{VacuumUnit,MyVacuumPanel}`、`Automation/uRENESAS_Server` |
+| **不註冊** | `mykitsuck.cpp`（見上） |
+
+### 🔖 RESUME（最新）
+
+- **⚠ 接續第一件事仍是 `git status`。** 本場次開場又是靠它撿到在製工作（**同型第四次**）。
+- **⚠ 本節所有變更未經任何 build 驗證。** 已知**唯一**驗證過的數字是
+  `build_0808_base` 的 **ctest 127/134**，那是「HEAD + TastCategory 退役」的狀態，
+  **不含** CMakeLists 註冊 17 檔、不含 SCK_ART_Remainder 測試改寫之後的重驗。
+- **本場次尚未 commit 任何東西。** 工作樹改動：
+  `Automation/SCK_ART_Remainder.{h,cpp}`（gate #16 退役）、`tests/test_ga1_cprod.cpp`、
+  `tests/test_SCK_ART_Remainder.cpp`、`CMakeLists.txt`、`Motor/mymotor.cpp`、
+  `aHotPlateSubstrate.cpp`、`ATC/ATCInterface.cpp`、`OmronLaser/LaserSensorShuttle.cpp`
+  ＋ 18 個仍未 track 的 PT-W3 單元。
+- **下一步（照順序）**：
+  1. **全新 build dir**（例：`build_0808_w3`）configure + build。預期會有**未收斂的 link
+     錯誤**——本波只預先處理了稽核指名的四個，其餘要靠連結器照出來。**每修一個都要問
+     PT-W2 的那句自檢**：這個外部符號的 body 所在 `.cpp` 有沒有在 CMakeLists 裡。
+  2. ctest。**驗收線 = 失敗集合不超過計畫書 §7 那 6 個**（`SCK_ART_Remainder`
+     應該要因為本次測試改寫而回綠——沒回綠就是改寫沒對）。
+  3. Release（`-DCMAKE_BUILD_TYPE=Release`）再量一次，兩組數字一起交（計畫書 §5.3）。
+  4. commit + 更新 `PT_CAMPAIGN_PLAN.md` §3/§4（PT-W3 實際是 18 檔 ~28.2k 行，不是 ~14 檔 ~15k）。
+- **接著（本場次已查證、但刻意沒做的）**：
+  - **CosFunction 家族解閘**：`cprod.cpp` 的 7 個 `#if 0` gate（`:3830` InitialCosFunction、
+    `:3847` KoreaFunction、`:3856` VTEST_Funtion、`:3865` SingaporeFunction、
+    `:3874` SPILFunction、`:3885` MaximFunction、`:3894` SIGURDFunction）前提都寫著
+    「ZERO bodies tree-wide」，**在 CosFunction.cpp 落地後全部變成假的**。解閘會讓整個
+    客戶碼設定層第一次真的生效（WB-1 量到的「IniConfig 數百個功能旗標全 0」的根因）。
+    **這是行為變更，要單獨一顆 commit 單獨量**，不要混進本波。
+  - **mykitsuck substrate 回家波**（見上，177 個 TU）。
+  - 稽核其餘 55 條（多為 cosmetic：偽造行號引用、Big5 中文註解被「重新編寫」而非轉錄）。
+    完整清單在 session scratch 的 workflow 輸出；**行號引用類要逐條複驗再改**，
+    因為 refuter 的通過率本身可疑。
+- **執行模式**：使用者 20260808 指示——(1) 優先純翻譯、(2) `.dfm`／UI 相關先不處理、
+  (3) 目標是編得起來並能用 console 驅動開啟。
+
+---
+
+## 2026-08-08（續）— PT-W3 收尾：一道廠商牆、一個 88/134 的 SEGFAULT，以及兩個「連得起來所以沒人發現」的洞
+
+> 接續上一節（同日，未驗證即暫停）。**本節的數字全部在最終樹、全新 build dir 上量**，
+> 照 PT-W2 留下的那條規則辦。
+
+### 收斂順序（每一步都是連結器逼出來的，不是預先猜的）
+
+| # | 症狀 | 真因 | 處置 |
+|---|---|---|---|
+| 1 | `mymotor.cpp:59` ambiguating new declaration | 本地 `static void MNetLog(AnsiString)` stub vs `myMN200motor.h:192` 的 `extern bool MNetLog(AnsiString)`（上一節剛把該標頭 include 進來） | 退役 stub；真本體 `myMN200motor.cpp:2494`（golden :2146-2156，整段 gated、回 true，與 stub 的 no-op 等價） |
+| 2 | `ainarm9045.h:133/134` default argument given twice | `aHotPlateSubstrate.h:856-861` 用 `#ifndef ainarm9045H` 守著同兩個宣告，**但守衛只在 ainarm9045.h 先被 include 時才有效**；上一節的 include swap 把 substrate 排到前面 | `LaserSensorShuttle.cpp` 把 `ainarm9045.h` 移到 substrate **之前**，並在原地寫明順序是承重的 |
+| 3 | `TfLotInfo` 沒有 `btClearBarcodeList`／`TfSortCT` 沒有 `ShowLoadingIC`/`ShowSortIC` | `uRENESAS_Server.cpp` 的 "FACADE ADDITIONS NEEDED" 清單（:105-108）只做了 fSCKART 與 fMain 兩組，fLotInfo／fSortCT 漏做 | 補上（`vclcompat::TButton*` + 兩個 virtual no-op）；**ShowLoadingIC/ShowSortIC 的行為差異不是中性的**，見下 |
+| 4 | `vclcompat::TrayCore::*` 全部 undefined | `TrayCore.cpp` 只被編進 UI 目標，不在 `vclcompat` 這個 library 裡——而 PT-W3 的 OmronLaser 三檔（在 ht9045_sm）現在需要它 | 把 `vclcompat/TrayCore.cpp` 加進 `vclcompat` library（那條「刻意不放進 library」的註解理由是**範圍**不是原則，它等的情況現在到了） |
+| 5 | `TMyNUEC1::*` 8 個成員 undefined | `EtherCAT/MyNUEC1.cpp` 在 ht9045_comms，唯一消費者 `MyEtherCAT.cpp` 在 ht9045_motor，兩者沒有邊 | 把 `MyNUEC1.cpp` 移到 ht9045_motor（照 `MyEtherCAT.cpp` 自己當初被移過去的同一先例，不新開 motor→comms 邊） |
+| 6 | 173 個 MN200/MotionNet/PCI-L1xx 廠商符號 undefined | **見下，本節最該記住的第一件事** | 新增 `Motor/vendor_offline_motionnet.cpp` + 全域 `MN200DLL_EXPORTS` |
+| 7 | `multiple definition of 'LaserCheckPos'` | golden 的家在 `OmronLaser/LaserSensorInArm.cpp:32`，PT-W3 讓它落地；`aHotPlateSubstrate.cpp:909` 那份是 stand-in | 退役 substrate 那份定義（宣告留著，~30 個 ainarm* 葉子靠它）。**留下一筆 ODR 債，已寫在原地** |
+| 8 | `multiple definition of 'CheckShtFloating(int, bool)'` | `acarry_shims.cpp:80-82` 的三個 stub vs `LaserSensorShuttle.cpp` 的真本體 | 退役三個 stub。**其中兩個根本不是碰撞，是不同 overload——見下** |
+
+### 最該記住的第一件事：「一直都連得起來」可能只是沒人抽出那個 object
+
+static archive 的成員**只有在解析某個仍未定義的符號時才會被抽出**。`Motor/Hontech_M4.cpp`
+（`_mnet_m4_*`／`_mnet_m204_*`）和 `EtherCAT/MyEtherCAT.cpp` 帶著未解析的廠商符號在樹上
+待了好幾波，沒有任何 build 抱怨過——因為從來沒有人引用它們的符號。
+
+第 1 步退役 `MNetLog` stub 之後，`mymotor.cpp` 的三個 golden 呼叫點（:1199/:1222/:1244，
+golden :1200/:1447/:1477）第一次引用了 `myMN200motor.cpp` 的符號，那個 object 被抽出，
+連帶 124 個 `mn_*` 呼叫一起現形。用 `nm --undefined-only` 掃過全部 archive，**任何已註冊
+TU 會引用到的廠商進入點恰好 173 個**（mn200.h 30、CMNet.h 140、PCI_L112.h 1、PCI_L122.H 2）。
+
+用 `nm --defined-only` 反查也確認了一件事：`myMN200motor.cpp` 定義 334 個符號，
+**其他 object 需要的只有一個**——就是 `MNetLog`。所以這道牆是被一個診斷用 log 函式撬開的。
+
+（`Acm_*` 那一族不在集合裡，不需要任何東西：全樹每個 `Acm_` 呼叫都在 `#ifdef SOFT_SIMULTE`
+內，本 build 不定義它——例如 `MyEtherCAT.cpp:455` 落在 `:411` 開的那個 `#ifdef` 裡。
+這是查證，不是推測。）
+
+**處置**＝`Motor/vendor_offline_motionnet.cpp`，173 個 offline 進入點。三件事寫在它 banner：
+- **回傳語意**用各家標頭自己的失敗碼（`ERROR_NO_CARD_FOUND` -100／`ERR_Invalid_Hardware` -4／
+  `ERR_NoCardFound` -1），**刻意不是 SUCCESS**。回 SUCCESS 等於告訴移植好的驅動「卡在、健康」，
+  它接著就會相信不存在的位置與 motion-done 讀值。回失敗則讓它們走 golden 在 bring-up 失敗的
+  機器上本來就會走、且本來就處理得好的路徑。
+- **out-param 一律不動**（不歸零）。歸零看起來安全其實不然：`mn_linen_move` 的 `SPEED_PAR*`／
+  `long DevPos[]`、`mn_set_group` 的 `BYTE bDevNo[]`、`*_load_motion_file` 的 `char *FilePath`
+  都是**輸入**，memset 會毀掉呼叫端資料。
+- **簽章不是手打的**：每個定義的參數列逐字取自唯讀廠商標頭，所以 173 個簽章由**編譯器**驗、
+  173 個 stdcall `@N` 修飾由**連結器**驗。
+
+### 第二件事：廠商標頭鏡射三份，而且簽章不一致（我第一次選錯了）
+
+`mn200.h` 把同一組 API 宣告三次。`mn_fix_move` 一個函式就有三種樣子：
+
+```
+:307  extern short __stdcall mn_fix_move(BYTE, BYTE, SPEED_PAR *pSpeedPar, long, BYTE=...)      // #ifdef MN200DLL_VB
+:426  extern short __stdcall mn_fix_move(BYTE, BYTE, double* dSpeedPar, BYTE* dSpeedPar_Opt, ...) // 第二變體
+:545  extern MOTIONNETDLL_API short __stdcall mn_fix_move(BYTE, BYTE, SPEED_PAR SpeedPar, ...)   // 值傳遞
+```
+
+我先用了 `MN200DLL_VB`（它確實能把宣告從 `__declspec(dllimport)` 換成純宣告，這正是靜態
+定義需要的），理由是「兩個區塊 diff 過，86 個名字完全相同」。**只比名字集合不夠**——
+參數列不同，`myMN200motor.cpp:696` 起冒出 10 個 `cannot convert SPEED_PAR to SPEED_PAR*`，
+證明 golden 是照 `:545` 那份寫的。
+
+正解是 `MN200DLL_EXPORTS`：`mn200.h:1-5` 讀它把 `MOTIONNETDLL_API` 從 dllimport 翻成
+dllexport，**不改變哪個宣告區塊生效**。dllexport 讓呼叫端直接引用 `_mn_open_all@4`，
+而不是只有真 import library 才能滿足的 `_imp__mn_open_all@4` thunk。採用前先做過探針：
+同一份標頭下，呼叫端 `nm` 顯示 `U _mn_open_all@4`，stub 側顯示 `T _mn_open_all@4`。
+
+### 第三件事，代價最大：88/134 SEGFAULT，全部同一條 backtrace
+
+連結全綠之後第一次跑 ctest：**134 個裡 88 個 SEGFAULT**。不是 88 個問題，是一個：
+
+```
+_GLOBAL__sub_I_fLaserSensor -> TfLaserSensor::TfLaserSensor()
+   -> TfLaserSensor::InitLaserEdtList() -> HTEditList::Add(...)   <-- SIGSEGV
+```
+
+`OmronLaser/LaserSensor.cpp:206` 照本樹既有慣例寫 `TfLaserSensor *fLaserSensor = new TfLaserSensor();`。
+差別在於**它是真的翻譯單元，不是 facade**：facade 的 ctor 只塞欄位，這個 ctor 尾端照 golden :196
+呼叫 `InitLaserEdtList()`，而該函式 17 行全是 `elLaser->Add(...)`。`elLaser` 就是計畫書 §8
+那 18 個 NULL 全域裡的 `HTEditList` 那一族（golden `main.cpp:1483` 才 new）。
+
+§8 早就寫了「任何一波只要讓其中一個第一次有呼叫者就會 segfault」——當天兌現，而且是最壞的
+形狀：**呼叫者本身是 static initializer**，所以 §8 對 `uPlateInfo` 用過的 stand-in 論證
+（「只被 runtime 函式讀」）在這裡完全不成立，補一個 `elLaser = new HTEditList` 到別的 TU
+也救不了（golden 是 `main()` 先 new、`CreateForm` 後建；跨 TU 動態初始化無順序保證）。
+
+處置：呼叫點加 `if(elLaser)`，條件寫指標本身而非 build flag，**指標一存在就自動生效**；
+並在原地留 GA-3 hand-off（GA-3 建好 `elLaser` 後要在 golden 自己的位置補呼叫
+`fLaserSensor->InitLaserEdtList()`，因為 static init 看不到 main() 期的配置）。
+同型風險已普查：PT-W3 的 18 檔只有兩個在 static-init 期 `new`，另一個
+`ATC/ATCInterface.cpp:207` 的 ctor 只配置自己的 `TTimer`。
+
+### 第四件事：兩個「不是碰撞、所以沒有 link error」的 overload
+
+`acarry_shims.h` 的三個 shuttle-floating 宣告裡，只有 `CheckShtFloating` 跟真本體同簽章，
+所以它**大聲**壞掉（multiple definition）。另兩個是安靜的缺陷：
+
+```
+shim :   bool UseInArmCheckShtFloating(int iSht, bool bAlarm=false);                       // 2 參數
+golden:  bool UseInArmCheckShtFloating(int iSht, bool bReset=false, bool bSetGold=false);  // 3 參數
+```
+
+參數個數不同 → 那是**不同的 overload，不是重複定義**。於是 `acarry.cpp` 的五個呼叫點
+（:4601/:4606/:4941/:4946/:6718）一直綁在「永遠回 false」的 stub 上，而真正 294 行的引擎
+就躺在旁邊沒人用，**而且這永遠不會以 link error 的形式出現**。補回第三個參數才是真正的修正。
+
+順帶：第二個參數在 golden 叫 `bReset` 不是 `bAlarm`——`acarry.cpp:4335/:6161` 傳 true，
+golden 的意思是「所有格子重畫成 NeedCheck、retry 歸零、回到 Task 1」，stub 完全忽略它。
+**行為變更是真的**：這些檢查以前第一個 tick 就回 false，現在會進 golden 真正的多步狀態機
+（`LaserSensorShuttle.cpp:656`，會下 `MOT[MInShuttle1+iSht].MotorMove(...)` 並在步間讀 laser）。
+它 offline 的結果由 Sim HAL 的馬達／laser stand-in 決定，本波不預先斷言，ctest 就是量測。
+
+### 忠實度稽核的 33 條 absence-claim：逐條複驗，2 條是假的
+
+上一節指出 refuter 的通過率可疑。這次把 17 個新單元裡所有「X 全樹沒有 port」類的斷言
+（33 行、去重後 16 個不同符號）逐條 grep 過：
+
+- **14 條真**：`fQwertyKey`/`ShowQwertyKey`、`fLotInfo->aldATCPower`/`aldATC7Status`、
+  `fMain->slMNetLog`/`mmoMNet`、`TTreeView`/`TTreeNode`/`FullExpand`、`vec_clr`、`myld1`、
+  `fNote`/`fiosetview` 的 `tvMNet`、`AnsiCompareIC`、`ainarm2.h`、`rs232.h`、
+  全域 `ShowMessage`、`TCustomWinSocket::Lock/Unlock`、`TControl::Tag`、`ClientType`。
+- **`MyMessageBox` 假**。`myMN200motor.cpp` GATE (d) 寫「canary_support.h 說沒宣告，而且掃全樹
+  也沒有別的宣告」——前半句真，後半句錯：`canary_support.h:33` 那句是**只講它自己**，而
+  `TMyMessageBoxShim *MyMessageBox` 就在 `acatchtray_shims.h:327` / `.cpp:98`，已註冊進
+  ht9045_sm，還帶著這個 gate 要的 `bool Visible`。**gate 仍然保留，但換成真正的理由**：
+  那份 port 在 ht9045_sm，而 ht9045_sm 連結 ht9045_motor，為一個 bool 反轉相依不值得。
+  而且這次把 default 值**證明**成精確等價，不只是合理：全樹 grep 過對
+  `MyMessageBox->Visible`／`->fShow` 的**寫入為零**（只有讀 + `Close()`，而 `Close()` 是 no-op），
+  所以 Visible 永遠 false，golden 的 `Visible==false` 永遠 true，正是 gate 代入的值。
+- **`FormatFloat` 假**。`ATCInterface.cpp:582` 以「golden 的 real-VCL `FormatFloat` 沒有 port」
+  為由改寫成 `AnsiString().sprintf("%0.1f", fTemp)`。`FormatFloat` 是真的，而且早就是：
+  宣告 `vclcompat/SysUtils.h:41`、Delphi picture-string 實作 `vclcompat/SysUtils.cpp:125`、
+  由 `vcl_compat.h:279` 拉進全域，`Automation/auto9045.cpp:1721-1722` 與 `cUnitConvert.cpp:49`
+  一直原樣在用。**已還原成 golden `ATCInterface.cpp:313` 的原句**（兩種寫法輸出一致，
+  是純忠實度還原；但這個 adaptation 本來就不該做）。
+
+### SCK_ART_Remainder 回綠，以及改寫時踩的坑
+
+上一節把 gate #16 的 `TastCategory` stub 退役、並把測試改成「餵 golden 真正的輸入」。
+第一版還是紅的（**177 PASS / 2 FAIL**），失敗的是 `Input:` 與 `Fail:`，而 `Pass:` 過——
+這個組合本身就是病徵：餵的是 `ArmSKET[]->Total`，但 **`TMySocket::GetTotal()` 回的是
+`Pass+Fail`（`cSocket.cpp:328-331`，golden :173），不是 `Total` 欄位**。
+改成餵 `Pass`／`Fail`（48/12 與 32/8）之後，golden 自己算出 60+40=100、48+32=80、
+100-80=20，**三個原始斷言一字未改**，`Reject: 0` 也維持（全 golden 只有 `ClearCount()` 的
+`iRejectCount=0` 一處寫入）。→ **179 PASS / 0 FAIL**。
+
+### 驗證（最終樹、全新 build dir、Debug 與 Release 各一份）
+
+| build dir（全新） | 建法 | build | ctest | 失敗集合 |
+|---|---|---|---|---|
+| `build_0808_w3_final` | 未最佳化（預設） | exit 0、0 compile error | **128 / 134** | 計畫書 §7 那 6 個，一個不多 |
+| `build_0808_w3_rel` | Release（`-DCMAKE_BUILD_TYPE=Release`，-O3 + NDEBUG） | exit 0、0 compile error | **128 / 134** | **與上列逐項相同** |
+
+那 6 個是 `config_db`／`IniFiles`／`ini_helpers`／`config_loaders`／`dfm2rc_idempotent`／
+`GA1_ReadGeneralIni`——前 5 個是測試把某一台機器的 `system/`＋`config/` 值寫死當斷言、
+第 6 個是 GA-4 未結項污染 canonical 輸出樹，逐條查證見計畫書 §7。
+**PT-W3 開場時的第 7 個 `SCK_ART_Remainder` 已回綠**，所以驗收線（「失敗集合不超過那 6 個」）
+是達到而不是打平。
+
+兩組數字都是**在最後一次整併之後**、於全新 dir 量的——這正是 PT-W2 那次 128/134 沒做到的事。
+（順帶一提：兩種建法的失敗集合逐項相同，也就是計畫書 §5.3 要求的那個對照這次沒有照出
+新的 -O3 缺陷。）
+
+編碼衛生：PT-W3 的 36 個 .cpp/.h（含新的 vendor 層）全部 UTF-8、**零 U+FFFD**、純 LF；
+`build.bat` 維持純 CRLF 無 BOM。
+
+### 本波 CMakeLists 的四筆結構性變更（不只是加檔）
+
+1. `vclcompat/TrayCore.cpp` 加入 `vclcompat` library（重複的直接編譯刻意留著：archive 成員
+   只在還有未定義符號時才被抽出，直接編進 target 的 object 永遠優先且不會碰撞）。
+2. `EtherCAT/MyNUEC1.cpp`：ht9045_comms → ht9045_motor。
+3. 全域 `add_compile_definitions(MN200DLL_EXPORTS)`。
+4. `Motor/vendor_offline_motionnet.cpp` 註冊進 ht9045_motor。
+   另外更正了一句上一節自己寫錯的話：PT-W3 三個 motor driver「real vendor calls 都在
+   `#if HAVE_xxx` 之後」——對 `myMN200motor.cpp` 是**假的**，它的 124 個 `mn_*` 呼叫是 ACTIVE。
+
+### 🔖 RESUME（最新）
+
+- **⚠ 接續第一件事仍是 `git status`，不是讀本 RESUME**（同型事件已累計四次）。
+- **PT-W3 已完成並已驗證。** 交付數字：全新 dir、最終樹、Debug 與 Release 各
+  **128/134**，失敗集合＝計畫書 §7 那 6 個常駐項，兩種建法逐項相同。
+- **本場次落地內容**：18 個 PT-W3 翻譯單元（17 註冊進 build，`mykitsuck.cpp` 刻意停牌）
+  ＋ 新增 `Motor/vendor_offline_motionnet.cpp`（173 個 offline 廠商進入點）
+  ＋ 4 筆 CMakeLists 結構變更（TrayCore 進 vclcompat／MyNUEC1 移到 motor／
+  全域 `MN200DLL_EXPORTS`／vendor 層註冊）＋ 5 個 stub 退役
+  （`MNetLog`／`TastCategory`／`LaserCheckPos`／`CheckShtFloating` 三兄弟）
+  ＋ 3 個 facade 補件（fLotInfo `btClearBarcodeList`、fSortCT `ShowLoadingIC`/`ShowSortIC`）
+  ＋ 2 個假 absence-claim 修正（`MyMessageBox`、`FormatFloat`）。
+- **下一步（照優先序，都還沒開始）**：
+  1. **CosFunction 家族解閘**：`cprod.cpp` 的 7 個 `#if 0`（`:3830`/`:3847`/`:3856`/`:3865`/
+     `:3874`/`:3885`/`:3894`）前提都寫「ZERO bodies tree-wide」，在 `CosFunction.cpp` 落地後
+     全部變成假的。解閘會讓整個客戶碼設定層第一次真的生效（WB-1 量到「IniConfig 數百個
+     功能旗標全 0」的根因）。**這是行為變更，單獨一顆 commit、單獨量。**
+  2. **mykitsuck substrate 回家波**：`mykitsuck.h:274` 與 `aHotPlateSubstrate.h:365` 各有一個
+     `class TMyKitSuck`，佈局不同、14 個全域對撞，而 substrate 標頭被 **177 個 TU** include。
+  3. **`TInLaserCheck` ODR 債**（本波新記）：`aHotPlateSubstrate.h:836-844`（iP/iPlateC/iPlateR）
+     vs `OmronLaser/LaserSensorInArm.h:34-46`（iPlate/iX/iY）。今天不會出錯（都是三個 int、
+     同順序、語意對齊，已逐欄查過），但它**連得起來**，屬於加一個成員就爆的那類。
+     和 (2) 是同一種工作，可以併成一波（~30 個 ainarm* 葉子改吃真標頭）。
+  4. **census 三支腳本重寫並簽進 repo**（`census.py`/`classify.py`/`remaining.py` 原本留在
+     上一場次 scratchpad，已不存在）。在那之前，計畫書 §3 的 39.0%/66.3%/4.0% 一律**不可**
+     當現況引用——已在 §3 開頭加上封鎖註記。
+  5. 稽核其餘 55 條 cosmetic findings（偽造行號引用、Big5 中文註解被「重寫」而非轉錄）。
+     行號引用類要逐條複驗再改。
+- **PT-W4 之前要先知道的**：本波暴露的三個結構性事實都會在 PT-W4 重演——
+  (a) `nm --undefined-only` 才看得到「沒人抽出來所以沒事」的廠商洞；
+  (b) 廠商標頭的鏡射區塊要比參數列不能只比名字；
+  (c) 翻譯單元在 static-init 期 `new` 出來的物件，其 ctor 不可以碰計畫書 §8 那 18 個 NULL 全域。
+  三條都已寫進計畫書 §6。
+- **執行模式**：使用者 20260808 指示——(1) 優先純翻譯、(2) `.dfm`／UI 相關先不處理、
+  (3) 目標是編得起來並能用 console 驅動開啟。

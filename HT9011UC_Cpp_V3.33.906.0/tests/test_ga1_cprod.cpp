@@ -162,11 +162,17 @@ AnsiString TTeraPowerAMR::GetNormalFailBin() { return ""; }
 TTeraPowerAMR AMR;
 
 // ---------------------------------------------------------------------------
-//  Stand-in: TastCategory -- this test's OWN instance of the exact stub type
-//  Automation/SCK_ART_Remainder.h already declares (W5SckArtRem_TastCategoryStub),
-//  not linking the real (195KB) Automation/SCK_ART_Remainder.cpp.
+//  Stand-in: TastCategory -- this test's OWN instance, not linking the real
+//  (195KB) Automation/SCK_ART_Remainder.cpp.
+//  AI(W906-PT-W3-integrate) 20260808: was `W5SckArtRem_TastCategoryStub`, the
+//  TU-local stub type SCK_ART_Remainder.h used to declare.  That stub is retired
+//  (SCK_ART_Remainder.h gate #16) now that cSocket.cpp defines the real
+//  `TEST_CATEGORY TastCategory` -- so this stand-in switches to golden's real
+//  type (cSocket.h:144-174).  It is STORAGE ONLY: cprod.cpp's paths under test
+//  read fields, never call ClearCount/UpdataCount/UpdataYield, so no cSocket.cpp
+//  link edge is needed here (verified: no such call on this test's 5 call paths).
 // ---------------------------------------------------------------------------
-W5SckArtRem_TastCategoryStub TastCategory = {};
+TEST_CATEGORY TastCategory = {};
 
 // ---------------------------------------------------------------------------
 //  fMain/fLotInfo/fAGV -- NULL. Every LIVE (ungated) dereference in cprod.cpp

@@ -20,4 +20,11 @@ TfSortCT::TfSortCT()
     // (MAX_AUTO_TRAY==6, golden MachineType.h:396) -- read by asendic_Auto.cpp:1156.
     for(int iW0=0;iW0<6;iW0++) pnlTrayID[iW0] = new TfSortCTPanel();
 }
+// AI(W906-PT-W3-integrate) 20260808: uRENESAS_Server facade sinks.  Offline
+// no-ops; the real bodies (golden cSortCT.cpp:210-279 / :345+) belong to the
+// unported cSortCT.cpp wave.  See forms/fSortCT.h for the full behaviour delta
+// -- these two are NOT UI-only in golden, so that note is worth reading before
+// relying on unload counts or piggy-back triggers in an offline test.
+void TfSortCT::ShowLoadingIC() {}
+void TfSortCT::ShowSortIC()    {}
 TfSortCT *fSortCT = new TfSortCT();

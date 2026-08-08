@@ -906,7 +906,29 @@ tRotateShim tRotate = { false };
 
 TInLaserCheck::TInLaserCheck(int _iP, int _iPlateC, int _iPlateR)
     : iP(_iP), iPlateC(_iPlateC), iPlateR(_iPlateR) {}
-std::vector<TInLaserCheck*> LaserCheckPos;
+// AI(W906-PT-W3-integrate) 20260808: the stand-in DEFINITION of LaserCheckPos that
+//   used to sit here (`std::vector<TInLaserCheck*> LaserCheckPos;`) is RETIRED.
+//   golden defines it in OmronLaser/LaserSensorInArm.cpp:32 and that unit landed in
+//   PT-W3 (port :111), so both definitions were in libht9045_sm.a and every
+//   executable linking it failed with `multiple definition of 'LaserCheckPos'`.
+//   The declaration in aHotPlateSubstrate.h:845 STAYS: ~30 ainarm* leaves reach
+//   LaserCheckPos through this header alone and none of them may be edited here.
+//
+//   ⚠ ODR DEBT, DELIBERATELY LEFT AND WRITTEN DOWN -- this is the same shape as
+//   the TMyKitSuck trap this wave recorded, and it needs its own wave to close.
+//   `class TInLaserCheck` is defined TWICE with DIFFERENT MEMBER NAMES:
+//     aHotPlateSubstrate.h:836-844   iP / iPlateC / iPlateR   (out-of-line ctor, above)
+//     OmronLaser/LaserSensorInArm.h:34-46  iPlate / iX / iY   (inline ctor)
+//   Why it is not silently wrong TODAY (checked field by field, not assumed):
+//   both are exactly three `int`s in the same declaration order, and the producers
+//   and consumer agree semantically -- the ainarm leaves push
+//   `new TInLaserCheck(plate, col, row)` and LaserSensorInArm.cpp reads
+//   `iPlate / iX / iY`, and in this codebase X is the column and Y the row.  So the
+//   layouts coincide and the fields line up.  It is still an ODR violation that
+//   LINKS CLEANLY, i.e. exactly the class of defect that stays invisible until a
+//   member is added to one copy.  Closing it means the ~30 leaves taking
+//   OmronLaser/LaserSensorInArm.h instead -- a substrate-homecoming wave, sibling
+//   to the mykitsuck.cpp one (see CMakeLists.txt's PT-W3 note).
 
 //==============================================================================
 //  per-site close-site-mode selectors (golden ainarm9045_2x6_8.h / _2x8_8.h)
@@ -1523,7 +1545,14 @@ void TransferInShuttleRatio(int /*iSht*/, int * /*iXPos*/, int * /*iYPos*/, int 
 
 // CheckInArmFloating (golden OmronLaser/LaserSensorInArm.h:30): laser float check.
 // Offline: no laser -> report "finished/ok" (true) so the place SM advances.
-bool CheckInArmFloating(bool /*bReset*/) { return true; }
+// AI(W906-PT-W3-integrate) 20260808: `bool CheckInArmFloating(bool) { return true; }`
+//   RETIRED.  OmronLaser/LaserSensorInArm.cpp landed in wave PT-W3 with golden's real
+//   body (port :400, golden OmronLaser/LaserSensorInArm.cpp:321) and both are in
+//   ht9045_sm, so keeping this stub produced `multiple definition`.  BEHAVIOUR CHANGE,
+//   and it is the faithful direction: the stub answered "not floating" unconditionally;
+//   the real body walks the in-arm laser readings per position.  aHotPlateSubstrate.h:1069
+//   keeps the `extern bool CheckInArmFloating(bool bReset=false);` declaration -- the
+//   default argument lives there, matching golden LaserSensorInArm.h:30.
 
 // SetShuttlefCanMoveL (golden ainarm2.cpp:3910): set per-shuttle can-move-left
 // interlock flag.  Offline: write the engine-visible MOT[] flag faithfully so the

@@ -40,6 +40,36 @@ public:
     // StringGrid}.h and MAX_AUTO_TRAY is not visible there -- the same convention
     // the sibling pnlTrayCnt[6] one line up already follows.
     TfSortCTPanel *pnlTrayID[6];                  // [DATA] golden cSortCT.h:338 (TPanel*[MAX_AUTO_TRAY==6])
+    // -- AI(W906-PT-W3-integrate) 20260808 ADD: the 2 methods the PT-W3 unit
+    //    Automation/uRENESAS_Server.cpp calls exactly as golden does (its own
+    //    "FACADE ADDITIONS NEEDED" banner, uRENESAS_Server.cpp:106-108, is the
+    //    measurement).  golden cSortCT.cpp is UNPORTED as a whole -- there is no
+    //    cSortCT.cpp in this tree -- so both bodies belong to that future wave and
+    //    are offline no-ops here (forms/fSortCT.cpp).
+    //
+    //    BEHAVIOUR DELTA, STATED BECAUSE IT IS NOT NEUTRAL (unlike most facade
+    //    sinks in this family, these two golden bodies are NOT UI-only):
+    //      * ShowLoadingIC (golden cSortCT.cpp:210-279) resets LastSet.SendCT[2]
+    //        (and SendCT_ART[2]) on Auto-Site-Map runs, and on the
+    //        TestIF.bContinuousLoader / bContinuousLoader_RT arms either raises
+    //        WAR07324 or fires ProcessPiggyBackFunction() with
+    //        iWhoTriggerPiggyBack=pbtContinualLoader.  Offline: the piggy-back
+    //        trigger and that alarm do not happen.
+    //      * ShowSortIC (golden cSortCT.cpp:345+) aggregates LastSet.BinCT[0][]
+    //        into RunInfo.iUnloadCount / iUnloadCount_ART, and sets iSECSGEMPass /
+    //        iSECSGEMFail / iATRPassCount / iATRFailCount / iATRTotalCount.
+    //        Offline: those counters keep whatever value they already held, so a
+    //        test that expects unload counts to move after a sort must drive them
+    //        directly rather than via this call.
+    //    NOTE for whoever lands that wave: csystem.cpp:2820-2821 gates these same
+    //    two golden calls behind its own TU-local W7C2_FSORTCT_SHOWLOADING() /
+    //    W7C2_FSORTCT_SHOWSORT() macros, whose stated premise ("these specific
+    //    members are absent") stops being true with this ADD.  Behaviour there is
+    //    unchanged either way today (both routes are no-ops), so nothing is
+    //    silently wrong -- but those two macros are now retirable and should go
+    //    when the real bodies land, or they will hide them.
+    virtual void ShowLoadingIC();                 // [METHOD] golden cSortCT.h:326 (body cSortCT.cpp:210-279)
+    virtual void ShowSortIC();                    // [METHOD] golden cSortCT.h:327 (body cSortCT.cpp:345+)
     TfSortCT();
     virtual ~TfSortCT() {}
 };

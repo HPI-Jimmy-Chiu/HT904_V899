@@ -116,6 +116,7 @@ TfMain::TfMain()
     // AI(W906-W7-F1fix2) 20260729: Pause() observation seams (see forms/fMain.h)
     W906_PauseCallCount    = 0;
     W906_PauseLastFunc     = "";
+    iHasChangeFile         = 0;  // AI(W906-PT-W3-integrate) 20260808: golden main.h:1701, VCL zero-init (no golden ctor assignment)
     // AI(W906-W7-F1) 20260729: W7-F1 ADD -- "Wall 2" facade members
     //    SECSGEM/uHGemHT9045.cpp derefs (plan SS6-F1) -- see forms/fMain.h for
     //    the full per-member citations. Call-count seams start at 0; Sim
@@ -377,4 +378,8 @@ int  TfMain::RTClick(bool /*bMan*/) { return W906_RTClick_Sim; }
 // void), so nothing downstream of that call site changes.
 // ---------------------------------------------------------------------------
 void TfMain::MainFormChange() {}                               // W7-L2: offline LED/label repaint no-op
+// AI(W906-PT-W3-integrate) 20260808: uRENESAS_Server facade sinks -- see the
+// per-member notes in forms/fMain.h for why each no-op is behaviourally honest.
+void TfMain::EnabledSetupFile(bool /*bEnabled*/) {}            // golden main.cpp:28310-28360 (UI-enable policy)
+void TfMain::SetLotState(int /*iState*/) {}                    // golden main.cpp:15160-15250 (TCP/GPIB lot-state push)
 TfMain *fMain = new TfMain();

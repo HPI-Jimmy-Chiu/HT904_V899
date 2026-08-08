@@ -423,29 +423,29 @@
 //       `new TServerSocket(NULL)` (matching `uHGemEquipment.cpp:588`'s own construction shape verbatim),
 //       declared/defined in THIS file exactly like gate #14's `fConfiguration` (verified: no existing
 //       `srvrscktTSV` symbol anywhere in this tree).
-//   #16 [NEW -- AI(W906-SaveSummaryTrayFeed) 20260728] TastCategory (TEST_CATEGORY, golden cSocket.h
-//       :144-174, `extern TEST_CATEGORY TastCategory;` at cSocket.h:177) -- cSocket.cpp is a whole
-//       future ~1300-line module (same untranslated family as gate #5's LotSummary, from the SAME
-//       header). `.UpdataCount(bool)` (golden cSocket.cpp:1029-1255) itself depends on `ArmDataLot`
-//       (a `TArm*[3]`, golden cSocket.h:181) -- yet ANOTHER whole untranslated class hierarchy -- so a
-//       for-real UpdataCount is out of reach until cSocket.cpp lands. Verified by grep: `TastCategory`
-//       has NO ungated definition anywhere in this tree today -- every existing mention is textually
-//       excluded, either inside cprod.cpp's OWN :184-4036 blanket gate (cprod.cpp:1244/1258/1262/1265)
-//       or inside atester_ProcessCount.cpp's OWN dedicated `#if 0 // TODO(cSocket-module)` gates
-//       (:644-649, :827-1001) -- so introducing a real, linkable `TastCategory` global here has NO name
-//       collision with any code that actually compiles today. TU-local minimal stand-in (own struct
-//       type, global instance named `TastCategory` verbatim matching golden) exposing ONLY the 10
-//       fields/1 method SckArtRem_SaveSummaryTrayFeed actually reads (iTotalSocket/iPassSocket/
-//       iFailSocket/iRejectCount/iUnloadCnt[eTrayCount]/iBySiteTotal/iBySitePass/iBySiteFail
-//       [MAX_SOCKET_ROW*MAX_SOCKET_COL]/iBySiteCate[MAX_SOCKET_ROW*MAX_SOCKET_COL][TEST_MAX_BIN]/
-//       iTotalCategory[TEST_MAX_BIN], all POD-zero-initialized, test-seedable directly) --
-//       `UpdataCount(bool)` is a no-op (does NOT recompute from ArmDataLot; the test seeds the 10
-//       fields directly instead, since ArmDataLot/TArm are out of reach). FLAGGED for eventual
-//       reconciliation: when cSocket.cpp is for-real translated, this stand-in AND
-//       atester_ProcessCount.cpp's own (currently-dormant, still-gated) `TastCategory.iCountCategory/
-//       iCountSocketTotal/iCountHeadTotal` references must be reconciled onto the SAME real
-//       `TEST_CATEGORY` definition -- same 3-way-duplication caution already flagged for LotSummary/
-//       gate #5 and the SckArtState/SckArtRemainderState LastSet fields.
+//   #16 [RETIRED -- AI(W906-PT-W3-integrate) 20260808] TastCategory (TEST_CATEGORY, golden cSocket.h
+//       :144-174, `extern TEST_CATEGORY TastCategory;` at golden cSocket.h:177).  This gate opened on
+//       20260728 with a TU-local `W5SckArtRem_TastCategoryStub` because cSocket.cpp was an untranslated
+//       module.  **cSocket.cpp landed in PT-W2 (commit 8c5e3fb) and defines the real
+//       `TEST_CATEGORY TastCategory;` at cSocket.cpp:174** -- at which point BOTH definitions were in
+//       `libht9045_sm.a` and every executable that links it died with
+//       `multiple definition of 'TastCategory'`.  (PT-W2's recorded "build exit 0 / ctest 128/134" was
+//       measured at 20:39, BEFORE its own final CMakeLists integration at 20:52 -- so the collision was
+//       never in that number.  Same shape as PT-W2's own `uPlateInfo` stub retirement.)
+//       The retirement is a clean swap, not an approximation: golden's real `TEST_CATEGORY` is a strict
+//       superset of the ten stub fields with byte-identical names and dimensions (iTotalSocket /
+//       iPassSocket / iFailSocket / iRejectCount / iUnloadCnt[eTrayCount] / iBySiteTotal / iBySitePass /
+//       iBySiteFail [MAX_SOCKET_ROW*MAX_SOCKET_COL] / iBySiteCate[...][TEST_MAX_BIN] /
+//       iTotalCategory[TEST_MAX_BIN]), and `UpdataCount(bool=false)` keeps the same signature.
+//       **BEHAVIOUR CHANGE, deliberate and faithful**: the stub's `UpdataCount` was a no-op; the real
+//       one (cSocket.cpp:1203-1428) calls `ClearCount()` and recomputes every field from
+//       `ArmDataLot[]`/`ArmData[]`, exactly as golden does.  Callers that used to observe directly-seeded
+//       field values now observe golden's recomputed values -- see this wave's note in
+//       tests/test_SCK_ART_Remainder.cpp PART 13.
+//       Still open from the original gate text: atester_ProcessCount.cpp's `TastCategory.iCountCategory/
+//       iCountSocketTotal/iCountHeadTotal` references are STILL inside their own
+//       `#if 0 // TODO(cSocket-module)` gates (:644-649, :827-1001) and can now be un-gated onto this
+//       same real definition -- deliberately NOT done here (separate unit, separate verification).
 //   #17 [NEW -- AI(W906-SaveSummaryTrayFeed) 20260728] FormHS->UpDataToServerByFTP(AnsiString,
 //       AnsiString,AnsiString,bool=false) -- golden HS_Function.h:93 (`TFormHS *FormHS;` declared
 //       HS_Function.h:148), a whole untranslated VCL form (HS_Function.h/.cpp, thousands of lines).
@@ -594,26 +594,14 @@ extern W5SckArtRem_ConfigStub *fConfiguration;
 extern TServerSocket *srvrscktTSV;
 
 // ---------------------------------------------------------------------------
-// Gate #16 -- TastCategory (TU-local minimal stand-in for golden cSocket.h's `class TEST_CATEGORY`,
-// extern global `TastCategory`). ONLY the 10 fields SckArtRem_SaveSummaryTrayFeed reads; `UpdataCount`
-// is a no-op (ArmDataLot/TArm, its real golden dependency, is a whole separate untranslated hierarchy).
-// See gate #16's full doc comment above for the "no name collision with today's gated code" rationale.
+// Gate #16 -- RETIRED 20260808.  The TU-local `W5SckArtRem_TastCategoryStub` that used to live here is
+// gone: golden's real `class TEST_CATEGORY` / `extern TEST_CATEGORY TastCategory;` are translated and
+// linked (cSocket.h:250, definition cSocket.cpp:174).  Keeping both produced
+// `multiple definition of 'TastCategory'` in libht9045_sm.a.  See gate #16's doc comment above for the
+// full rationale and for the one deliberate behaviour change (real `UpdataCount` recomputes; the stub's
+// did not).
 // ---------------------------------------------------------------------------
-struct W5SckArtRem_TastCategoryStub
-{
-    int iTotalSocket;                                             // golden TEST_CATEGORY::iTotalSocket
-    int iPassSocket;                                              // golden TEST_CATEGORY::iPassSocket
-    int iFailSocket;                                               // golden TEST_CATEGORY::iFailSocket
-    int iRejectCount;                                              // golden TEST_CATEGORY::iRejectCount
-    int iUnloadCnt[eTrayCount];                                    // golden TEST_CATEGORY::iUnloadCnt[eTrayCount]
-    int iBySiteTotal[MAX_SOCKET_ROW*MAX_SOCKET_COL];               // golden TEST_CATEGORY::iBySiteTotal[SiteMap]
-    int iBySitePass[MAX_SOCKET_ROW*MAX_SOCKET_COL];                // golden TEST_CATEGORY::iBySitePass[SiteMap]
-    int iBySiteFail[MAX_SOCKET_ROW*MAX_SOCKET_COL];                // golden TEST_CATEGORY::iBySiteFail[SiteMap]
-    int iBySiteCate[MAX_SOCKET_ROW*MAX_SOCKET_COL][TEST_MAX_BIN];  // golden TEST_CATEGORY::iBySiteCate[SiteMap][Category]
-    int iTotalCategory[TEST_MAX_BIN];                              // golden TEST_CATEGORY::iTotalCategory[Category]
-    void UpdataCount(bool bCheckYield=false);                      // golden cSocket.cpp:1029-1255 -- NO-OP (see gate #16)
-};
-extern W5SckArtRem_TastCategoryStub TastCategory;
+#include "cSocket.h"   // TEST_CATEGORY + `extern TEST_CATEGORY TastCategory;` (golden cSocket.h:144-177)
 
 // ---------------------------------------------------------------------------
 // Gate #17 -- FormHS (TU-local minimal stand-in for golden HS_Function.h's whole TFormHS form) and

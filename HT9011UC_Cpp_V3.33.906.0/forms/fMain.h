@@ -695,6 +695,21 @@ public:
     //     until that line is added.
     TfMainPanel *BtnSTEP;                         // [DATA] golden main.h:102 (TBtnPanel*) -- ->Color only; ctor seeds 0x00804000, see forms/fMain.cpp
     TfMainPanel *BtnT_Start;                      // [DATA] golden main.h:103 (TBtnPanel*) -- ->Color only; ctor seeds 0x00804000, see forms/fMain.cpp
+    // -- AI(W906-PT-W3-integrate) 20260808 ADD: 2 methods + 1 field the PT-W3
+    //    unit Automation/uRENESAS_Server.cpp derefs (its "FACADE ADDITIONS
+    //    NEEDED" banner is the measurement; golden lines re-read this pass). --
+    virtual void EnabledSetupFile(bool bEnabled); // [METHOD] golden main.h:1340 (body main.cpp:28310-28360: gates
+                                    //   cbSetupFileName->Enabled by IC-in-machine / CUSTOMER_CODE / AccessLevel /
+                                    //   RMS level rules) -- offline no-op: pure UI-enable policy, every input it
+                                    //   reads (HasICUnderMachine/AccessLevel/LevelSet) is level-gating for a
+                                    //   combobox this facade renders nowhere
+    int  iHasChangeFile;                          // [DATA] golden main.h:1701 -- no golden ctor assignment (VCL
+                                    //   zero-init; golden's own `==0` read at main.cpp:24887 means "never set");
+                                    //   uRENESAS_Server writes 9 then polls ==1 (its case 30000)
+    virtual void SetLotState(int iState);         // [METHOD] golden main.h:1327 (body main.cpp:15160-15250: pushes
+                                    //   LOTNUMBER/LOTEND over TesterTCP when iTestType==TCP_IP_MODE, else GPIB
+                                    //   MSG_CMD path; early-returns otherwise) -- offline no-op is behaviourally
+                                    //   identical whenever iTestType is neither TCP_IP_MODE nor GPIB_MODE
     TfMain();
     virtual ~TfMain() {}
 };

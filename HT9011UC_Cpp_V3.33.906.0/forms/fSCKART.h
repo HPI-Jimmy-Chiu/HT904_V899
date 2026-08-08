@@ -134,6 +134,43 @@ public:
                                     //   (same settable/observable-seam idiom as forms/fMain.h's W906_* members)
     int        W906_SetLotStatus_Count;             // [PORT-ONLY SEAM] call count -- distinguishes "never called"
                                     //   from "called with 0"
+    // AI(W906-PT-W3-integrate) 20260808: 9 golden members + 1 golden field the
+    // PT-W3 unit Automation/uRENESAS_Server.cpp dereferences (its own
+    // "FACADE ADDITIONS NEEDED" banner, uRENESAS_Server.cpp:63-109, is the
+    // measurement; every golden line below re-read from the cp950-decoded
+    // golden Automation/SCK_ART.{h,cpp} this pass).  This extends declaration
+    // site #1 per the RECONCILIATION DEBT banner above -- NOT a sixth site.
+    // Overlap bookkeeping: iLotCount / iManualStart / iCurrentFlexARTStep /
+    // bLdCntExdInputCnt are ALSO SckArtState or SckArtRemainderState fields,
+    // so the TfSCKART-vs-SckArtState intersection grows 5 -> 8 (adding
+    // iCurrentFlexARTStep, bLdCntExdInputCnt to the SckArtState overlap;
+    // iLotCount/iManualStart overlap SckArtRemainderState).  Separate storage,
+    // deliberately NOT merged -- same posture as iNeedRT above.
+    int        iLotCount;                           // [DATA] golden SCK_ART.h:246 -- lot qty; golden relies on VCL
+                                    //   zero-init (no ctor assignment); read/written by uRENESAS_Server case 20000/30000
+    int        iManualStart;                        // [DATA] golden SCK_ART.h:349 (RogerYang 20250918 FT-CT) -- VCL zero-init
+    AnsiString sLotStartTime;                       // [DATA] golden SCK_ART.h:241; golden ctor SCK_ART.cpp:41 sets ""
+    int        iCurrentFlexARTStep;                 // [DATA] golden SCK_ART.h:264 -- VCL zero-init
+    int        iWaitGPIBLotR;                       // [DATA] golden SCK_ART.h:259; golden ctor SCK_ART.cpp:53 sets 0
+    int        iOutputJamCnt;                       // [DATA] golden SCK_ART.h:289; golden ctor SCK_ART.cpp:55 sets 0
+                                    //   (pairs with the already-real iInputJamCnt above)
+    bool       bLdCntExdInputCnt;                   // [DATA] golden SCK_ART.h:350 (RogerYang 20250918 FT-CT) -- VCL zero-init
+    int        iLOTSTATUS_NONE;                     // [DATA] golden SCK_ART.h:252; golden ctor SCK_ART.cpp:43 sets 0.
+                                    //   Passed to SetLotStatus by ClearLotInfo (golden SCK_ART.cpp:853)
+    // ClearLotInfo -- golden SCK_ART.h:274, body SCK_ART.cpp:837-923.  Offline
+    // body is a FAITHFUL SUBSET: it performs every golden assignment whose
+    // target exists on this facade or on the real LastSet/LotSummary globals,
+    // and records each skipped golden statement in the .cpp at the exact spot
+    // it would run (facade contract rule 4: no unobservable divergence).
+    virtual void ClearLotInfo();                    // [METHOD] golden SCK_ART.h:274 (body SCK_ART.cpp:837-923)
+    // CheckNeedRT -- golden SCK_ART.h:291, body SCK_ART.cpp:1072-1230: the full
+    // RT-decision engine (reads dCurrYield / iManualRejectCnt / fMain->hanaART /
+    // ArmSpeed backups -- none of which live on this facade).  Offline: no-op
+    // that leaves iNeedRT UNCHANGED, stated loudly here because golden always
+    // rewrites iNeedRT to 0/1/2.  The engine belongs to the SCK_ART.cpp
+    // completion wave (PT-W5, campaign plan section 3: 3,876 missing lines) --
+    // porting it piecemeal onto the facade would fork it.
+    virtual void CheckNeedRT();                     // [METHOD] golden SCK_ART.h:291 (body SCK_ART.cpp:1072-1230)
     TfSCKART();
     virtual ~TfSCKART() {}
 };

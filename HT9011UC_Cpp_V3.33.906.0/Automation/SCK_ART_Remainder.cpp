@@ -336,14 +336,13 @@ W5SckArtRem_ConfigStub *fConfiguration = new W5SckArtRem_ConfigStub();
 //   comment for why this is genuine substrate reuse, not a no-op stand-in).
 TServerSocket *srvrscktTSV = new TServerSocket(NULL);
 
-// ---- Gate #16 [NEW -- AI(W906-SaveSummaryTrayFeed) 20260728]: TastCategory (TEST_CATEGORY) ----------
-//   golden cSocket.h:144-174/177, a whole untranslated module (cSocket.cpp). See SCK_ART_Remainder.h's
-//   gate #16 doc comment for the full "no name collision with today's gated code" rationale.
-//   `UpdataCount` is a documented no-op -- golden's real body depends on ArmDataLot/TArm (a whole
-//   separate untranslated class hierarchy, cSocket.cpp:1029-1255); this wave's own test seeds the 10
-//   fields directly instead.
-void W5SckArtRem_TastCategoryStub::UpdataCount(bool /*bCheckYield*/) { /* no-op, see gate #16 */ }
-W5SckArtRem_TastCategoryStub TastCategory = {};
+// ---- Gate #16 [RETIRED -- AI(W906-PT-W3-integrate) 20260808]: TastCategory (TEST_CATEGORY) ----------
+//   The stub definition that used to live here (`W5SckArtRem_TastCategoryStub TastCategory = {};` plus
+//   its no-op `UpdataCount`) is gone.  cSocket.cpp landed in PT-W2 and defines the REAL
+//   `TEST_CATEGORY TastCategory;` at cSocket.cpp:174, with the real `UpdataCount` at cSocket.cpp:1203;
+//   both definitions in libht9045_sm.a meant every executable linking it failed with
+//   `multiple definition of 'TastCategory'`.  This TU now consumes the real global via
+//   SCK_ART_Remainder.h's `#include "cSocket.h"`.  Full rationale: SCK_ART_Remainder.h gate #16.
 
 // ---- Gate #17 [NEW -- AI(W906-SaveSummaryTrayFeed) 20260728]: FormHS->UpDataToServerByFTP / ---------
 //   W5SckArtRem_slEventLog.sLotFileName -- golden HS_Function.h (whole untranslated TFormHS form) /

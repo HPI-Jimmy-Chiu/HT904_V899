@@ -105,6 +105,26 @@ public:
     // (forms/FormWidgets.h:114 -> vclcompat::TCheckBox, default Checked=false) --
     // the same alias fMain->chkE84IDTray uses, so no new widget stand-in is needed.
     TfMainCheckBox *cbFirstTrayCheckOnUnloader;     // [DATA] golden uLotInfo.h:1026 (TCheckBox*) -- offline Checked=false
+    // AI(W906-PT-W3-integrate) 20260808: the 1 member the PT-W3 unit
+    // Automation/uRENESAS_Server.cpp derefs (its "FACADE ADDITIONS NEEDED" banner,
+    // uRENESAS_Server.cpp:105, is the measurement).  Only ->Click() is ever touched
+    // (uRENESAS_Server.cpp:917/:1028, golden uLotInfo.cpp:1864 / :8231).
+    // SHAPE: spelled `vclcompat::TButton*` rather than adding a TfLotInfoButton
+    // alias, so forms/FormWidgets.h is NOT edited for a single member -- the same
+    // decision forms/fShuttleMove.h:104 already took for its btRetry.  Confirmed a
+    // real TButton in golden (uLotInfo.h:266 `TButton *btClearBarcodeList;`).
+    // BEHAVIOUR: vclcompat::TControl::Click() (vclcompat/Controls.h:222) is an
+    // offline no-op, so golden's OnClick handler -- btClearBarcodeListClick,
+    // golden uLotInfo.cpp:10005-10014: zeroes iBarcodeReject, clears
+    // fBarCode->map2DList / list2DByLot, re-sends the CCD "2DID by lot list"
+    // command, RecordProcess, SaveToFile(asBarCodeLot), then chains
+    // btClearBarcodeCount->Click() -- does NOT run.  That whole chain is
+    // fBarCode-owned and unported, so a real body here would have nothing to call.
+    // NOTE: csystem.cpp:2817 gates this identical golden call behind its TU-local
+    // W7C2_FLOTINFO_CLEARBARCODE() macro (4 sites), whose stated premise ("member
+    // absent") stops being true with this ADD.  Behaviour is unchanged either way
+    // today (both are no-ops), but that macro is now retirable.
+    vclcompat::TButton *btClearBarcodeList;         // [WIDGET] golden uLotInfo.h:266 (TButton*) -- ->Click() only
     TfLotInfo();
     virtual ~TfLotInfo() {}
 };

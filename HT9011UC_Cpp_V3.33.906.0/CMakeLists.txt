@@ -43,6 +43,34 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_compile_definitions(_WIN32_WINNT=0x0601 WINVER=0x0601)
 
 # =============================================================================
+# AI(W906-PT-W3-integrate) 20260808: MN200DLL_EXPORTS -- a LINKAGE switch, not a
+# behaviour switch, and it must be GLOBAL for the same reason _WIN32_WINNT above
+# is: every TU that sees Motor/vendor/mn200.h has to agree on the decorated name.
+#
+# WHY IT IS NEEDED: mn200.h:1-5 makes MOTIONNETDLL_API `__declspec(dllimport)`
+# unless MN200DLL_EXPORTS is defined, so every mn_* call site emits an
+# `_imp__mn_xxx@N` thunk reference that only a real vendor import library can
+# satisfy -- and there is none for MinGW (the shipped MN200DLL.lib is 32-bit OMF).
+# Defining MN200DLL_EXPORTS makes it `__declspec(dllexport)` instead: callers then
+# emit a plain `_mn_xxx@N` reference, which Motor/vendor_offline_motionnet.cpp
+# satisfies statically.  It touches linkage only; no declaration changes shape.
+#
+# NOT MN200DLL_VB, which was tried first and is WRONG: mn200.h mirrors its API
+# three times with DIFFERENT signatures (mn_fix_move takes `SPEED_PAR*` at :307,
+# `double*,BYTE*` at :426, and `SPEED_PAR` BY VALUE at :545), and golden targets
+# the :545 MOTIONNETDLL_API block.  MN200DLL_VB switches the active block and so
+# breaks 4 signatures -- 10 compile errors in myMN200motor.cpp.  See that file's
+# banner in Motor/vendor_offline_motionnet.cpp for the full account.
+#
+# Scoped globally rather than per-target ON PURPOSE: if one target saw dllexport
+# and another dllimport, the same function would be referenced under two
+# different symbol names and the link would break for a reason invisible at the
+# call site.  mn200.h is the ONLY file tree-wide that reads either macro
+# (grepped), so there is no other blast radius.
+# =============================================================================
+add_compile_definitions(MN200DLL_EXPORTS)
+
+# =============================================================================
 # AI(W906-W7-A1) 20260728: MSVC second-oracle enablement block. MUST stay at
 # the TOP of this file (after project(), before any add_library) -- see
 # docs/W7_UI_ARCHITECTURE_PLAN.md SS6 W7-A1 / SS4-V5 / SS4-V8 for the full
@@ -245,6 +273,33 @@ add_library(vclcompat
     #   vclcompat::TFileListBox;` -- same established precedent as
     #   vclcompat::TStringGrid above).
     vclcompat/FileListBox.cpp
+    # AI(W906-PT-W3-integrate) 20260808: TrayCore JOINS THE LIBRARY -- and this
+    #   reverses a decision recorded further down this file (see the
+    #   HT9045_UI_CTRL_SOURCES note, "the vclcompat/*Core.cpp files are listed
+    #   here rather than linked from a library ON PURPOSE ... adding them to that
+    #   library would change the MinGW oracle's link graph from inside a UI-only
+    #   wave").  That reasoning was about SCOPE, not principle, and the case it
+    #   was waiting for has now arrived: OmronLaser/LaserSensor.h declares
+    #   mtPlate1/mtPlate2/mtPlate1_Golden/mtPlate2_Golden as
+    #   `vclcompat::TrayCore*` (the tree's registered stand-in for golden's
+    #   TTMyTray, elec\myvcl\HTray), and three PT-W3 units in ht9045_sm --
+    #   OmronLaser/{LaserSensor,LaserSensorInArm,LaserSensorShuttle}.cpp -- call
+    #   its methods.  A NON-UI archive now needs the body, so "compiled into the
+    #   UI targets only" no longer covers the tree.
+    #   SAFE because TrayCore.cpp is zero-dependency by design (it includes only
+    #   vclcompat/TrayCore.h and <cstdio> -- verified this pass), so vclcompat's
+    #   own dependency graph does not widen by one edge.
+    #   LedCore.cpp / BtnPanelCore.cpp / render/*.cpp are deliberately NOT moved:
+    #   nothing outside the UI targets references them, and LedCore/BtnPanelCore
+    #   are what the W7-C1 note is really about.
+    #   The duplicate direct compiles (HT9045_UI_CTRL_SOURCES, tests/
+    #   CMakeLists.txt's test_traycore + test_trayrender) are left alone ON
+    #   PURPOSE: a static archive member is only extracted to resolve a symbol
+    #   that is still undefined, so an object compiled straight into a target
+    #   always wins and never collides with the archive copy.  Those three
+    #   targets keep the "self-contained, links only vclcompat" property their
+    #   own comments claim.
+    vclcompat/TrayCore.cpp
 )
 
 target_include_directories(vclcompat PUBLIC
@@ -472,6 +527,15 @@ add_library(ht9045_globals STATIC
     MessageDef.cpp
     SgdToXLS.cpp
     PMAlarm/uTimeTool.cpp
+    # AI(W906-PT-W3-integrate) 20260808: CosFunction.cpp -- the customer-code
+    # configuration layer (176 bodies: DoCustomerFunction + InitialCosFunction +
+    # ~90 per-customer CC_* appliers).  Same class as Config.cpp above: it defines the
+    # `CosFunction` global whose header was already ported and included tree-wide, and
+    # computes over nothing but other globals.  Its only caller, cprod.cpp's
+    # CustomerFunctionSelect(), is in THIS archive.
+    #   Until this landed, `CosFunction` was 488 bytes of BSS zero at runtime -- the
+    #   measured cause of "the whole config layer reads zero" recorded in WB-1.
+    CosFunction.cpp
 )
 
 target_include_directories(ht9045_globals PUBLIC
@@ -786,6 +850,43 @@ add_library(ht9045_motor STATIC
     Motor/Hontech_M4.cpp
     Motor/mySMCmotor.cpp
     EtherCAT/MyEtherCAT.cpp   # reaches MOT[]/TTrayMotor/TOTAL_MOTOR -- motor, not comms
+    # AI(W906-PT-W3-integrate) 20260808: MOVED HERE from ht9045_comms.  It was
+    #   never wrong to have it there while nothing pulled it; PT-W3's
+    #   Motor/myEthercatmotor.cpp is what made MyEtherCAT.cpp.obj get extracted,
+    #   and MyEtherCAT.cpp:190 does `new TMyNUEC1(...)` plus 7 more members, so
+    #   the definitions have to be reachable from THIS archive.  Consumers of
+    #   TMyNUEC1 tree-wide: EtherCAT/MyEtherCAT.{h,cpp} and tests/test_MyNUEC1.cpp
+    #   (whose LINK_GROUP lists both archives, so the move is invisible to it).
+    #   CanBus/cMyDNM100UD.h only NAMES it in prose -- checked, not a consumer.
+    #   Following the MyEtherCAT.cpp precedent one line up rather than adding a
+    #   ht9045_motor -> ht9045_comms edge for a single class.
+    EtherCAT/MyNUEC1.cpp
+    # AI(W906-PT-W3-integrate) 20260808: wave PT-W3's three remaining motor drivers.
+    # Same placement rationale as the PT-W2 three above (concrete HTMotor subclasses,
+    # vendor headers under Motor/vendor/ included-never-edited).
+    #   CORRECTION, 20260808 second pass: an earlier version of this comment also
+    #   claimed "real vendor calls behind the tree's #if HAVE_xxx posture", copied
+    #   from the PT-W2 three.  That is FALSE for myMN200motor.cpp -- its 124 mn_*
+    #   calls are ACTIVE, and the link proved it the moment mymotor.cpp's MNetLog
+    #   stub retirement caused the object to be extracted.  That is what
+    #   Motor/vendor_offline_motionnet.cpp below exists for.
+    # Two stub retirements were forced by these landing -- see Motor/mymotor.cpp:
+    #   * `OpenPCI132Card(bool)` had an empty stub at Motor/mymotor.cpp:1378; the real
+    #     295-line body is Motor/myMN200motor.cpp:1154 (golden myMN200motor.cpp:855).
+    #   * `MyMNetLine myLine[MAXRing]` is DECLARED by Motor/myMN200motor.h and read/written
+    #     at myMN200motor.cpp:1208/1209/2449/2451/2453, but golden defines it in
+    #     Motor/mymotor.cpp:43 -- a region this tree's partial mymotor.cpp had not reached.
+    Motor/myMN200motor.cpp
+    Motor/mySYNTEKmotor.cpp
+    Motor/myEthercatmotor.cpp
+    # AI(W906-PT-W3-integrate) 20260808: the offline vendor LINK layer -- 173
+    # MotionNet/MN200/PCI-L1xx entry points, every one of them the exact set some
+    # registered TU in this build references (measured with nm --undefined-only,
+    # not guessed).  NOT a translation of any golden unit; read its file banner
+    # for the return-value semantics ("no card found", never SUCCESS) and for why
+    # this only surfaced now.  Requires the global MN200DLL_VB defined at the top
+    # of this file.  Delete this entry when a real MotionNet SDK is linked.
+    Motor/vendor_offline_motionnet.cpp
 )
 
 target_include_directories(ht9045_motor PUBLIC
@@ -1135,7 +1236,12 @@ add_library(ht9045_comms STATIC
     CanBus/cMyNUDN1.cpp
     MyPLC/ModbusTCPClient.cpp
     MyPLC/MyPLC_IO_Modbus.cpp
-    EtherCAT/MyNUEC1.cpp
+    # AI(W906-PT-W3-integrate) 20260808: EtherCAT/MyNUEC1.cpp MOVED OUT of this
+    #   archive to ht9045_motor -- see the note beside it there.  Short version:
+    #   its only consumer tree-wide is EtherCAT/MyEtherCAT.cpp, which already
+    #   sits in ht9045_motor for exactly this reason, and ht9045_motor has no
+    #   link edge to ht9045_comms (nor should it gain one -- ht9045_sm links
+    #   both, so the edge would only exist to reach one class).
     # AI(W906-PT-W2) 20260807: wave PT-W2's protocol/fieldbus units.  Each one
     # talks to a device over a wire and reaches nothing above this archive.
     #   CanBus/cMyDNM100UD.cpp  -- 泓格 DNM100UD CAN SDK wrapper; joins its
@@ -1152,6 +1258,13 @@ add_library(ht9045_comms STATIC
     EJ1N/uModbusCommand.cpp
     EJ1N/uDTME08Control.cpp
     EJ1N/MyOmronPanel.cpp
+    # AI(W906-PT-W3-integrate) 20260808: ATC/ATCSystem.cpp joins its own family --
+    # ATC/TCPData.cpp (the wire structs it sends) and ATC/ATC_WinWay.cpp are already
+    # in this list.  It is the ATC 3.0/6.0 TCP protocol engine (command assembly,
+    # reply dispatch, per-channel timeout ladder); it talks to a device over a wire
+    # and reaches nothing above this archive.  The ATC UI form that DRIVES it
+    # (ATC/ATCInterface.cpp) does reach higher and lands in ht9045_sm instead.
+    ATC/ATCSystem.cpp
 )
 
 target_include_directories(ht9045_comms PUBLIC
@@ -1881,6 +1994,47 @@ add_library(ht9045_sm STATIC
     Public/HTEditList.cpp
     Public/HTEdit.cpp
     Monitor/MonitorTCPIP.cpp
+    # -----------------------------------------------------------------------
+    # AI(W906-PT-W3-integrate) 20260808: wave PT-W3.  These 13 units all reach
+    # ABOVE the narrow archives (cprod/cmydef globals, MOT[]/Cylinder[]/SW[]/Sen[],
+    # FormsFacade, database.h's HSys, SCK_ART_Remainder's SckArt* state), so they
+    # land here rather than widening ht9045_io / ht9045_automation / ht9045_comms
+    # link surfaces for one file each.  PT-W3's three motor drivers went to
+    # ht9045_motor and CosFunction.cpp to ht9045_globals -- see those blocks.
+    #
+    # Two stub retirements were FORCED by this batch (same shape as PT-W2's
+    # uPlateInfo: a stub was hiding a real hole, and the real body arriving turns
+    # it into a `multiple definition`):
+    #   * Motor/mymotor.cpp OpenPCI132Card       -> Motor/myMN200motor.cpp:1154
+    #   * aHotPlateSubstrate.cpp CheckInArmFloating -> OmronLaser/LaserSensorInArm.cpp
+    #
+    # *** DELIBERATELY NOT REGISTERED IN THIS WAVE: mykitsuck.cpp ***
+    # It is translated, on disk, and syntax-clean -- but registering it is a
+    # SUBSTRATE HOMECOMING, not a file addition, and it is scheduled as its own wave:
+    #   * mykitsuck.h:274 defines `class TMyKitSuck` and aHotPlateSubstrate.h:365
+    #     ALSO defines `class TMyKitSuck`, with a DIFFERENT layout (substrate starts
+    #     `TMySucker Suck[][]`; golden starts `TALed *pLed[][]` + `bool bLed[][]`).
+    #   * Both headers declare the same extern globals, and mykitsuck.cpp:205-234
+    #     defines 24 of them against aHotPlateSubstrate.cpp:80-93/:1067-1070's 14.
+    #     Fourteen collide outright (InArmSuck / FLCarryKit / BLCarryKit / OutArmSuck /
+    #     OutArm2Suck / FRCarryKit / BRCarryKit / CatchTraySuck / TestSocket /
+    #     FTestSuck / BTestSuck / ptrInSHT / ptrInSHTBackup / OutArmSuckBackup).
+    #   * aHotPlateSubstrate.h is #included by 177 TUs, so retiring its TMyKitSuck is
+    #     a tree-wide change that must be measured on its own.
+    # mykitsuck.h's own banner already said this pair "is NOT #included by anything
+    # yet, and NOT added to CMakeLists.txt" -- that is still the right call today.
+    cInArmPlacement.cpp
+    handlerlog.cpp
+    MyTempPanel.cpp
+    ScanBtnThread.cpp
+    TfAOILaserScan.cpp
+    ATC/ATCInterface.cpp
+    OmronLaser/LaserSensor.cpp
+    OmronLaser/LaserSensorInArm.cpp
+    OmronLaser/LaserSensorShuttle.cpp
+    VacuumUnit/VacuumUnit.cpp
+    VacuumUnit/MyVacuumPanel.cpp
+    Automation/uRENESAS_Server.cpp
 )
 
 target_include_directories(ht9045_sm PUBLIC

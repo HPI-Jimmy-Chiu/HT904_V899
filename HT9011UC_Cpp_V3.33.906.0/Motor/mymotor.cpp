@@ -36,9 +36,11 @@
 //    - GetRealPos Contec direction branch (uses MotionCard_Contec).
 //    - MyMNetLine myLine[] (requires MyMNet/mn_open_all; MN200 band).
 //
-//  NOTE on MNetLog: forward-declared as a no-op stub below so TTrayMotor
-//  InitNewTray/ClearTray calls compile.  Real MNetLog is in the communications
-//  layer (TODO W5).
+//  AI(W906-PT-W3-integrate) 20260808: the old "NOTE on MNetLog" that stood here
+//  is now obsolete and has been removed with the stub it described -- the real
+//  `bool MNetLog(AnsiString)` landed with Motor/myMN200motor.cpp (:2494, golden
+//  :2146-2156) in PT-W3 and is declared by myMN200motor.h:192, which this file
+//  now includes.  Same declaration golden itself sees here.
 // =============================================================================
 
 #include "MachineDefine.h"
@@ -46,12 +48,27 @@
 #include "MachineType.h"    // ChangeToFloatNonPcnt, MOTION_CARD_TYPE constants, etc.
 #include "cpublic.h"
 #include "cmydef.h"         // sIC_Type[], iYRegNum, bTestSiteUse[], etc.
+// AI(W906-PT-W3-integrate) 20260808: golden mymotor.cpp:27 `#include "myMN200motor.h"`
+//   -- restored, needed for MyMNetLine/MAXRing so golden's `myLine[MAXRing]` definition
+//   below (golden :43) can live where golden puts it.  Same relative order as golden
+//   (after cmydef.h, golden :19).
+#include "Motor/myMN200motor.h"   // MyMNetLine, MAXRing (golden myMN200motor.h:78-92 / :96)
 
 // ---------------------------------------------------------------------------
-//  Stub for MNetLog -- real implementation is in communications layer (W5).
-//  TTrayMotor calls it with AnsiString on tray events.
+//  AI(W906-PT-W3-integrate) 20260808: RETIRED the local
+//  `static void MNetLog(AnsiString) {}` stub that used to sit here.  It had to
+//  go: myMN200motor.h:192 declares `extern bool MNetLog(AnsiString)` (golden
+//  :192 verbatim), so once this file started including that header the two
+//  declarations differ only in return type -- an ambiguating redeclaration, a
+//  hard compile error, not a silent shadow.  The real body is
+//  Motor/myMN200motor.cpp:2494 (golden :2146-2156), registered in ht9045_motor.
+//  Behaviour note: that body is itself GATED (golden writes fMain->slMNetLog,
+//  which has no port) so it does nothing and returns true unconditionally --
+//  which is what every golden code path returns too (golden :2155).  The three
+//  call sites in this file (:1199/:1222/:1244, golden :1200/:1447/:1477)
+//  discard the result, so both the no-op behaviour and the void->bool signature
+//  change are non-events for them.
 // ---------------------------------------------------------------------------
-static void MNetLog(AnsiString /*msg*/) {}  // TODO(W5): replace with real MNetLog
 
 // ---------------------------------------------------------------------------
 //  Module-level constants / globals
@@ -63,6 +80,17 @@ static void MNetLog(AnsiString /*msg*/) {}  // TODO(W5): replace with real MNetL
 
 int ZSafePos  =  20;        // Steven 20220207: In/Out Arm Z safe position
 int ZlimitPos = -3200;      // Ifor 20221026:   In/Out Arm limit position
+// AI(W906-PT-W3-integrate) 20260808: golden Motor/mymotor.cpp:43
+//   `MyMNetLine myLine[MAXRing];  //Isaac 20181212 (Steven) : Baud Rate防呆功能`
+//   -- restored, and the file-head DEFERRED list above amended accordingly.  It was
+//   deferred as "requires MyMNet/mn_open_all", but that is wrong about the DEFINITION:
+//   the array is plain storage, and it is Motor/myMN200motor.cpp (landed in PT-W3) that
+//   needs the vendor SDK, not this line.  myMN200motor.h:181 declares it and
+//   myMN200motor.cpp reads/writes it at :1208/:1209/:2449/:2451/:2453, so without this
+//   definition that unit does not link.  Golden keeps it here, in exactly this position
+//   (between ZlimitPos and the `extern bool CheckOutSuckICFallDown` declaration), so the
+//   port keeps it here too rather than inventing a new home.
+MyMNetLine myLine[MAXRing];                                                     //Isaac 20181212 (Steven) : Baud Rate防呆功能
 
 bool bPauseInMotor   = false;
 bool bPauseOutMotor  = false;
@@ -1375,7 +1403,13 @@ bool SortArmZMoveDown(bool[][MAX_ARM_Col],int[][MAX_ARM_Col],bool,bool) { return
 bool SortArmZMoveUp(int, bool)         { return false; }
 
 bool CatchMgzTrayMove(int)             { return false; }
-void OpenPCI132Card(bool)              {}
+// AI(W906-PT-W3-integrate) 20260808: `void OpenPCI132Card(bool) {}` RETIRED from this
+//   stub block.  Motor/myMN200motor.cpp landed in wave PT-W3 with golden's real 295-line
+//   body (port :1154, golden Motor/myMN200motor.cpp:855) and both are in ht9045_motor, so
+//   keeping this one produced `multiple definition of OpenPCI132Card(bool)`.  Same shape
+//   as PT-W2's uPlateInfo retirement: the stub was standing in for an unported unit, and
+//   the unit arrived.  NOTE this is a real behaviour change on the MN200 ring path --
+//   ring bring-up now actually runs instead of returning immediately.
 void ServoOnAllMOT()                   {}
 int  OutArmZSafe(int)                  { return -1; }
 int  InArmZSafe(int)                   { return -1; }
