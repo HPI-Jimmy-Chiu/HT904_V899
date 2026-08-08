@@ -28,19 +28,25 @@
 //  GetSiteCount/EnableFix3UseCylinder/ReadEventLogAutoSaveInfo/
 //  SaveEventLogAutoSaveInfo/CheckFileExist/CheckFileCanAccess/RUN_INFO::
 //  AddAlarm touch NONE of MOT[]/InArmSuck/FTestSuck/TestSocket/AMR/COM2/
-//  TastCategory/fMain/fLotInfo/fAGV/the 7 customer functions), or (b) a value
+//  TastCategory/fMain/fLotInfo/fAGV), or (b) a value
 //  that does not change this test's assertions (fMain/fLotInfo/fAGV as NULL,
 //  guarded by != NULL checks at every LIVE call site -- see cprod.cpp; the one
 //  exception, CustomerFunctionSelect's unconditional fAGV->IsSPIL_AMR(), is why
 //  this test does not call CustomerFunctionSelect()).
 //
-//  NOT RE-VERIFIED HERE: the 7 customer-function stand-ins (InitialCosFunction/
-//  KoreaFunction/VTEST_Funtion/SingaporeFunction/SPILFunction/MaximFunction/
-//  SIGURDFunction) are declared in CosFunction.h/cprod.h but have ZERO bodies
-//  anywhere in the ported tree (golden CosFunction.cpp has no port yet, a
-//  future wave's work) -- see _ga1_b2_report.md. This test's stand-ins let
-//  cprod.o LINK; they do not make CustomerFunctionSelect's customer-specific
-//  business logic real, and this test does not call it.
+//  AI(W906-PT-W3-ungate) 20260808 -- THE PARAGRAPH THAT USED TO STAND HERE IS
+//  OBSOLETE AND HAS BEEN REPLACED.  It read "the 7 customer-function stand-ins
+//  ... have ZERO bodies anywhere in the ported tree (golden CosFunction.cpp has
+//  no port yet)".  CosFunction.cpp landed in PT-W3, cprod.cpp's
+//  CustomerFunctionSelect() no longer gates the 7 calls, and this target now
+//  compiles the REAL CosFunction.cpp into its own link set (tests/CMakeLists.txt).
+//  The 7 empty TU-local stand-ins are gone; see the note where they used to be
+//  for why leaving them would have been a silent defect rather than a stale
+//  comment.  What is still true: this test does not CALL
+//  CustomerFunctionSelect() (the unconditional fAGV->IsSPIL_AMR() is why), so it
+//  covers the link, not the customer-profile business logic.  That logic is
+//  covered instead by tests/test_wb_datalayer.cpp, which drives the production
+//  entry point LoadMachineConfig() and asserts CosFunction stops being all-zero.
 //
 //  Reproduce (no CMake changes made; standalone manual build, MinGW g++ 6.3.0):
 //    cd D:\HT9045\HT9011UC_Cpp_V3.33.906.0
@@ -73,6 +79,7 @@
 #include "forms/fMain.h"
 #include "forms/fLotInfo.h"
 #include "forms/fAGV.h"
+#include "forms/fSCKART.h"   // AI(W906-PT-W3-ungate) 20260808: TfSCKART, for the NULL stand-in below
 #include "atester_shims.h"
 #include "Automation/SCK_ART_Remainder.h"
 
@@ -183,23 +190,31 @@ TEST_CATEGORY TastCategory = {};
 TfMain *fMain = NULL;
 TfLotInfo *fLotInfo = NULL;
 TfAGV *fAGV = NULL;
+// AI(W906-PT-W3-ungate) 20260808: fSCKART joins the NULL group, needed because
+// CosFunction.cpp now links into this target (see the retired stand-ins below).
+// SAFE, and not by the "this test never reaches it" argument used above -- by a
+// stronger one: EVERY use of fSCKART in CosFunction.cpp is guarded, all 10 of them
+// written as `if(fSCKART!=NULL && fSCKART->iTesterType==1)` (:237/:1467/:2133/
+// :2218/:2237/:2316/:3273/:3769/:3835 and the sibling in the same idiom).  Grepped,
+// not assumed: there is no unguarded dereference in that file.
+TfSCKART *fSCKART = NULL;
 
 // HasICUnderMachine/HasAnyICInMachine (csystem.h) -- not linking real
 // csystem.cpp (267KB); not on any of this test's 5 call paths.
 bool HasICUnderMachine() { return false; }
 bool HasAnyICInMachine() { return false; }
 
-// Customer-function group (CosFunction.h) -- golden CosFunction.cpp has NO
-// port anywhere in this tree (a future wave's work; see _ga1_b2_report.md).
-// Stand-ins here ONLY so cprod.o links; this test does not call
-// CustomerFunctionSelect() (the one live caller of these 7).
-void InitialCosFunction() {}
-void KoreaFunction() {}
-void VTEST_Funtion() {}
-void SingaporeFunction() {}
-void SPILFunction() {}
-void MaximFunction() {}
-void SIGURDFunction() {}
+// Customer-function group (CosFunction.h) -- AI(W906-PT-W3-ungate) 20260808:
+// THE SEVEN TU-LOCAL STAND-INS THAT USED TO SIT HERE ARE RETIRED.  Their stated
+// premise ("golden CosFunction.cpp has NO port anywhere in this tree") died when
+// CosFunction.cpp landed in PT-W3, and leaving them would have been worse than a
+// stale comment: they are 7 EMPTY bodies for functions that now have real ones
+// (InitialCosFunction :4063 alone is 517 flag assignments), and nothing would
+// have complained.  A static archive member is extracted only to resolve a
+// still-undefined symbol, so with these stubs present CosFunction.cpp.obj is
+// simply never pulled -- no multiple-definition, no warning, just a test quietly
+// measuring empty functions while the real ones sit unused in the archive.
+// This test now links the real bodies out of ht9045_globals.
 
 // SearchFile/md5_Folder (Public/HTMD5.h) -- needed transitively by cpublic.o's
 // own (unrelated) checksum feature, not by anything this test calls.

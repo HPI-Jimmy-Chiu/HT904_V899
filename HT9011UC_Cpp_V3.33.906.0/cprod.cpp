@@ -3825,13 +3825,47 @@ void SaveTempModeByDLL()                                                        
 //------------------------------------------------------------------------------
 //  客戶功能選擇區
 //------------------------------------------------------------------------------
+// AI(W906-PT-W3-ungate) 20260808: ALL SEVEN `#if 0` GATES IN THIS FUNCTION ARE GONE.
+//   Every one of them said "XXX() has ZERO bodies tree-wide (CosFunction
+//   customer-function wave untranslated)".  That premise died when
+//   `CosFunction.cpp` landed in PT-W3: the seven bodies are
+//     InitialCosFunction   CosFunction.cpp:4063     KoreaFunction      :2854
+//     VTEST_Funtion        CosFunction.cpp:2484     SingaporeFunction  :2927
+//     SPILFunction         CosFunction.cpp:3172     MaximFunction      :3314
+//     SIGURDFunction       CosFunction.cpp:3635
+//   and `CosFunction.cpp` is registered in ht9045_globals -- the SAME archive as
+//   this file (CMakeLists.txt), so there is no link-order question either.
+//   Declarations were already visible with no new include: `cprod.h:7` includes
+//   `CosFunction.h` (which declares six of the seven at :489-494) and
+//   `cprod.h:3282` declares `SingaporeFunction()` itself -- exactly the shape
+//   golden has, where cprod.cpp also does NOT include CosFunction.h directly.
+//
+//   ⚠ THIS IS A BEHAVIOUR CHANGE, AND A WIDE ONE.  It is the root cause WB-1
+//   measured as "IniConfig's hundreds of feature flags are all 0"
+//   (see database.cpp:316's note: 140 distinct flags read at 1,091 sites, nothing
+//   setting them).  `InitialCosFunction()` is not a small helper -- it is the
+//   several-hundred-assignment function that establishes every flag's DOCUMENTED
+//   DEFAULT, and those defaults are NOT all false.  Ones that become true/non-zero
+//   the moment this runs include `IniConfig.bEventLogAutoSaveFunction`,
+//   `bIndexJamInArmAway`, `bChangeTempAutoSetDown`, `bAlarmNeedServoOff`,
+//   `bUseFix3`, `bLastLoaderAutoCleanOut`, `bEnableInOutArmPlaceSkipSuckDetect`,
+//   `bAbnormalStartCheck`, `CosFunction.bUseTrayUpDownSet`,
+//   `CosFunction.bLastSetInSetUpFile`, and `iTempeAlarmSecond_Over=30` /
+//   `iTempeAlarmSecond_Below=40`.  Until now every one of those read as 0/false.
+//
+//   ORDERING, OBSERVED NOT ASSUMED (and left exactly as golden has it): this
+//   function runs BEFORE config.ini is read.  `database.cpp:324` calls
+//   `CustomerFunctionSelect()` and then `ReadLastSetIni()`, and `ReadLastSetIni()`
+//   (this file, :3092) calls it AGAIN at :3103 before `ReadLastDataFile()` and
+//   before the `CheckAndReadIniDataGeneral` block at :3106+.  So on both passes
+//   `InitialCosFunction()` has just reset `IniConfig.bKoreaFunction` and friends to
+//   false, which means the six customer-profile branches below cannot fire from a
+//   config.ini value on that pass.  That is golden's own sequence -- NOT repaired
+//   here, and deliberately not "improved": the customer profile that does fire in
+//   golden comes from CUSTOMER_CODE inside these bodies, not from these six flags.
 void CustomerFunctionSelect()
 {
-#if 0 // AI(W906-GA1-B2-integrate) 20260804: re-gated -- InitialCosFunction() has ZERO bodies tree-wide
-      // (CosFunction customer-function wave untranslated). Range clause is
-      // ungate-what-LINKS; this call does not link, so it stays gated.
     InitialCosFunction();                                                       //Steven 20240926 : 重新整理客戶功能
-#endif
 
     if(USE_AUTO_RETEST==eartInstall)                                            //ChungHung 20141002 add for KYEC AutoRetest
         CosFunction.bOffLineBin=true;
@@ -3844,61 +3878,37 @@ void CustomerFunctionSelect()
         IniConfig.bShuttleMode50=false;                                         //與 IniConfig.bIndexArm2SupplyLight 功能互斥
     }
 
-#if 0 // AI(W906-GA1-B2-integrate) 20260804: re-gated -- KoreaFunction() has ZERO bodies tree-wide
-      // (CosFunction customer-function wave untranslated). Range clause is
-      // ungate-what-LINKS; this call does not link, so it stays gated.
     if(IniConfig.bKoreaFunction==true)
     {
         KoreaFunction();
     }
-#endif
 
-#if 0 // AI(W906-GA1-B2-integrate) 20260804: re-gated -- VTEST_Funtion() has ZERO bodies tree-wide
-      // (CosFunction customer-function wave untranslated). Range clause is
-      // ungate-what-LINKS; this call does not link, so it stays gated.
     if(IniConfig.bVTESTFunction==true)
     {
         VTEST_Funtion();
     }
-#endif
 
-#if 0 // AI(W906-GA1-B2-integrate) 20260804: re-gated -- SingaporeFunction() has ZERO bodies tree-wide
-      // (CosFunction customer-function wave untranslated). Range clause is
-      // ungate-what-LINKS; this call does not link, so it stays gated.
     if(IniConfig.bSingaporeFunction)                                            //Steven 20120910 : 新加坡代理商的需求
     {
         SingaporeFunction();
     }
-#endif
 
-#if 0 // AI(W906-GA1-B2-integrate) 20260804: re-gated -- SPILFunction() has ZERO bodies tree-wide
-      // (CosFunction customer-function wave untranslated). Range clause is
-      // ungate-what-LINKS; this call does not link, so it stays gated.
     if(IniConfig.bSPILFunction==true)                                           //JerryYang 20170328 (Jou) 矽品客戶碼統一用SPILFunction
     {
         SPILFunction();
         if(CUSTOMER_CODE==CC_XINYUN)                                            //Steven 20230222 : 要可以拉動
             IniConfig.bShowFormByInitPos=false;
     }
-#endif
 
-#if 0 // AI(W906-GA1-B2-integrate) 20260804: re-gated -- MaximFunction() has ZERO bodies tree-wide
-      // (CosFunction customer-function wave untranslated). Range clause is
-      // ungate-what-LINKS; this call does not link, so it stays gated.
     if(IniConfig.bMaximFunction==true)                                          //JerryYang 20190522 Maxim統一軟體功能
     {
         MaximFunction();
     }
-#endif
 
-#if 0 // AI(W906-GA1-B2-integrate) 20260804: re-gated -- SIGURDFunction() has ZERO bodies tree-wide
-      // (CosFunction customer-function wave untranslated). Range clause is
-      // ungate-what-LINKS; this call does not link, so it stays gated.
     if(IniConfig.bSIGURDFunction==true)                                         //KaiChen 20200506 ：矽格統一軟體功能
     {
         SIGURDFunction();
     }
-#endif
 
     if(USE_ROTATE_KIT)                                                          //kevin rotate motor     //Steven 20131202
         IniConfig.bHaveRotateShuttle=false;

@@ -4029,3 +4029,130 @@ golden 的意思是「所有格子重畫成 NeedCheck、retry 歸零、回到 Ta
   三條都已寫進計畫書 §6。
 - **執行模式**：使用者 20260808 指示——(1) 優先純翻譯、(2) `.dfm`／UI 相關先不處理、
   (3) 目標是編得起來並能用 console 驅動開啟。
+
+---
+
+## 2026-08-08（續）— CosFunction 解閘：一個 `switch(CUSTOMER_CODE)` 讓 163 個客戶設定檔第一次生效
+
+> PT-W3 收尾後的下一步，照 RESUME 的指示**單獨一顆 commit、單獨量**。
+
+### 解閘的 7 個 gate，前提在 PT-W3 當天就死了
+
+`cprod.cpp` 的 `CustomerFunctionSelect()` 裡有 7 個 `#if 0`，每一個都寫著
+「XXX() has ZERO bodies tree-wide (CosFunction customer-function wave untranslated)」。
+`CosFunction.cpp` 在 PT-W3 落地，7 個本體全部存在：
+
+| 函式 | 本體 | 行數 | 旗標設定行 |
+|---|---|---:|---:|
+| `InitialCosFunction` | CosFunction.cpp:4063 | 575 | **517** |
+| `SPILFunction` | :3172 | 141 | 112 |
+| `VTEST_Funtion` | :2484 | 75 | 52 |
+| `KoreaFunction` | :2854 | 72 | 56 |
+| `MaximFunction` | :3314 | 40 | 35 |
+| `SIGURDFunction` | :3635 | 35 | 29 |
+| `SingaporeFunction` | :2927 | 25 | 19 |
+
+不需要新增任何 include：`cprod.h:7` 本來就 include `CosFunction.h`（宣告其中 6 個，:489-494），
+第 7 個 `SingaporeFunction()` 由 `cprod.h:3282` 自己宣告——**和 golden 同形**（golden 的
+cprod.cpp 也沒有直接 include CosFunction.h）。`CosFunction.cpp` 與 `cprod.cpp` 同在
+`ht9045_globals`，連結順序也沒有問題。
+
+### 真正的規模：`InitialCosFunction` 尾端是 `DoCustomerFunction()`
+
+這不是「7 個函式開始執行」而已。`InitialCosFunction` 的最後一件事（CosFunction.cpp:4624，
+golden 註解寫著「整合並保持在最下面」）是呼叫 `DoCustomerFunction()`——一個
+`switch(CUSTOMER_CODE)`，**163 個 case，各自跳進一支 `FUNC_CC_*()` 客戶設定檔**
+（CosFunction.cpp:3886-）。所以這一顆 commit 打開的是**整個客戶碼設定層**，
+正是 WB-1 量到「IniConfig 數百個功能旗標全 0」的根因（database.cpp:316 記的
+「140 個旗標被 1,091 處讀取，沒有任何地方設定它們」）。
+
+本機目前的 `system/` 快照是 `CUSTOMER_CODE=957`＝`CC_PTI`（力成，MachineType.h:331），
+所以實際跑起來的是 `case CC_PTI: FUNC_CC_PTI();`（:3939 → 本體 :1652），它會打開
+`IniConfig.bShowFTandRTButton`／`bEnableAutoCleanFunction`／`bHeadSocketMode`／
+`CosFunction.bFTPFunction`／`bOLPFunction`／`bRTCAlarmSetIndexToErrBin` 等一整批真功能。
+
+`InitialCosFunction` 本身也不是「全部設 false」——它建立的是**文件化的預設值**，其中變成
+true／非零的包括 `IniConfig.bEventLogAutoSaveFunction`、`bIndexJamInArmAway`、
+`bChangeTempAutoSetDown`、`bAlarmNeedServoOff`、`bUseFix3`、`bLastLoaderAutoCleanOut`、
+`bEnableInOutArmPlaceSkipSuckDetect`、`bAbnormalStartCheck`、
+`CosFunction.bUseTrayUpDownSet`、`CosFunction.bLastSetInSetUpFile`，以及
+`iTempeAlarmSecond_Over=30`／`iTempeAlarmSecond_Below=40`。在此之前全部讀作 0／false。
+
+### 順序：照 golden 留著，不「順手修好」
+
+`database.cpp:324` 先 `CustomerFunctionSelect()` 再 `ReadLastSetIni()`，而
+`ReadLastSetIni()`（cprod.cpp:3092）在 :3103 又呼叫一次，然後才 `ReadLastDataFile()` 與
+`CheckAndReadIniDataGeneral` 那一大段。也就是說兩次都是「`InitialCosFunction` 剛把
+`IniConfig.bKoreaFunction` 之類重設為 false」之後才走到那 6 個客戶分支，所以那 6 個
+**不會**因為 config.ini 的值而觸發。這是 golden 自己的序列，**沒有在這裡修**——真正會生效的
+客戶設定檔是由 `DoCustomerFunction()` 依 `CUSTOMER_CODE` 選的，不是靠那 6 個旗標。
+
+### 順帶抓到的：測試自己的 stand-in 在遮真本體，而且沒有任何診斷
+
+`tests/test_ga1_cprod.cpp` 定義了 7 個空的 TU-local stand-in，前提同樣是那句已死的
+「golden CosFunction.cpp 全樹沒有 port」。**不會有 multiple definition**：archive 成員只在
+還有未定義符號時才被抽出，測試自己的 object 先滿足了那 7 個，於是 `CosFunction.cpp.obj`
+永遠不被抽出——測試安靜地量著 7 個空函式。已退役那 7 個 stand-in，把
+`CosFunction.cpp` 加進該 target 的 minimal link set（它不 link `ht9045_globals`，是刻意的），
+並補一個 `TfSCKART *fSCKART = NULL;`——安全的理由不是「這個測試不會走到」，而是更強的：
+`CosFunction.cpp` 裡**每一處** `fSCKART` 都寫成 `if(fSCKART!=NULL && fSCKART->iTesterType==1)`，
+10 處逐一 grep 過，沒有裸 deref。該測試現在 29/29 通過，而且是對著真本體。
+
+> **新規則（已寫進計畫書 §6）**：每退役一個 tree 上的 stub，要一併 grep `tests/` 有沒有
+> 同名的 TU-local 版本。
+
+### 證據不是「沒有測試變紅」，而是「這一層真的填進去了」
+
+「134 個測試失敗集合不變」對一個 517 行旗標設定的行為變更來說是**空的綠燈**——所以補了
+一組正向斷言到 `tests/test_wb_datalayer.cpp`（它本來就驅動 production 入口
+`LoadMachineConfig()`）。形狀刻意抄該檔自己對 LastSet 的做法：**不斷言任何單一旗標**
+（哪個 profile 生效取決於這台機器的 CUSTOMER_CODE，斷言旗標＝斷言一台機器的身分），
+只斷言「這個結構從全零變成不是全零」：
+
+```
+   CosFunction non-zero bytes = 0 / 488          <- 載入前
+   CosFunction non-zero bytes = 54 / 488 (was 0) <- LoadMachineConfig() 之後
+PASS: CustomerFunctionSelect() populated CosFunction -> the 20260808 ungate is live
+```
+
+`test_wb_datalayer` 8/8 通過。
+
+### 驗證（全新 dir、Debug 與 Release）
+
+| build dir（全新） | 建法 | build | ctest | 失敗集合 |
+|---|---|---|---|---|
+| `build_0808_cos` | 未最佳化 | exit 0、0 compile error | **128 / 134** | 計畫書 §7 那 6 個 |
+| `build_0808_cos_rel` | Release（-O3 + NDEBUG） | exit 0、0 compile error | **128 / 134** | **與上列逐項相同** |
+
+和 PT-W3 收尾那一顆的數字**完全一樣**——這是刻意要看的東西：一個 517 行旗標設定＋163 個
+客戶設定檔 case 的行為變更，**沒有動到任何一個測試**。上面那組正向斷言就是為了不讓這種
+綠燈被當成「有覆蓋」。
+
+### 下一個同型待辦（已查證，刻意不併進本 commit）
+
+`Automation/SCK_ART_Remainder.cpp` 的 **gate #8** 前提也死了。它寫著
+「cprod.cpp 從 184 到 4036 的所有函式本體都被一個 blanket `#if 0 // TODO(W6)` 包住」——
+現在沒有那個 blanket gate 了，`nm --defined-only libht9045_globals.a` 三個符號都在：
+`WriteLastDataFile` / `CustomerFunctionSelect` / `RUN_INFO::AddAlarm`。
+但 `W5SCKARTREM_WRITELASTDATAFILE()`／`W5SCKARTREM_CUSTOMERFUNCTIONSELECT()`／
+`W5SCKARTREM_RUNINFO_ADDALARM()`（:301-303，用在 :569/:570/:723）仍然是 no-op。
+退役它們是 SCK_ART 路徑的行為變更，**要單獨一顆 commit 單獨量**。
+
+### 🔖 RESUME（最新）
+
+- **⚠ 接續第一件事仍是 `git status`，不是讀本 RESUME。**
+- **本場次已完成兩顆 commit**：PT-W3 收尾（`3c49b7b`）＋ CosFunction 解閘（本節）。
+  兩顆都是全新 dir、Debug 與 Release 各 **128/134**、失敗集合＝計畫書 §7 那 6 個。
+- **下一步（照優先序，都還沒開始）**：
+  1. **SCK_ART gate #8 退役**（本節末已查證）：`W5SCKARTREM_WRITELASTDATAFILE`／
+     `_CUSTOMERFUNCTIONSELECT`／`_RUNINFO_ADDALARM`（`Automation/SCK_ART_Remainder.cpp:301-303`，
+     用在 :569/:570/:723）仍是 no-op，但三個真符號都已在 `libht9045_globals.a` 裡。
+     行為變更，單獨一顆 commit 單獨量。
+  2. **mykitsuck substrate 回家波** ＋ 併 **`TInLaserCheck` ODR 債**
+     （`aHotPlateSubstrate.h:836-844` vs `OmronLaser/LaserSensorInArm.h:34-46`），
+     ~30 個 ainarm* 葉子改吃真標頭；substrate 標頭被 177 個 TU include。
+  3. **census 三支腳本重寫並簽進 repo**；在那之前計畫書 §3 的百分比一律不可引用。
+  4. 稽核其餘 55 條 cosmetic findings（行號引用類要逐條複驗再改）。
+  5. **PT-W4**（非表單 deps≥8，~12 檔 ~40k 行）。開波前先讀計畫書 §6 這兩天新增的五條規則。
+- **執行模式**：使用者 20260808 指示——(1) 優先純翻譯、(2) `.dfm`／UI 相關先不處理、
+  (3) 目標是編得起來並能用 console 驅動開啟。

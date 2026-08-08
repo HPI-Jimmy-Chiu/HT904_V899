@@ -196,6 +196,13 @@ golden .cpp 全部            339 檔   643,130 行
   鏡射三份，`mn_fix_move` 分別吃 `SPEED_PAR*` / `double*,BYTE*` / `SPEED_PAR` 值傳遞。
   比對兩個區塊時**要比參數列，不能只比函式名集合**——只比名字會得到「86 個完全一樣」的
   假結論，然後選錯區塊、10 個 compile error。
+- **`tests/` 裡的 TU-local stand-in 會遮住真本體，而且完全沒有診斷**（20260808，CosFunction
+  解閘時抓到）。`tests/test_ga1_cprod.cpp` 自己定義了 7 個空的
+  `void InitialCosFunction() {}` 之類的 stand-in，前提寫「golden CosFunction.cpp 全樹沒有 port」。
+  `CosFunction.cpp` 落地後那個前提死了，但**不會有 multiple definition**：archive 成員只在
+  還有未定義符號時才被抽出，測試自己的 object 先滿足了那 7 個，於是 `CosFunction.cpp.obj`
+  永遠不被抽出——測試安靜地量著 7 個空函式，而 517 行真的旗標設定就躺在 archive 裡沒人用。
+  **規則**：每退役一個 tree 上的 stub，要一併 grep `tests/` 有沒有同名的 TU-local 版本。
 - **靜態初始化期的 ctor 不可以碰 §8 那 18 個 NULL 全域**（同上，代價最大的一條）。
   `OmronLaser/LaserSensor.cpp:206` 用本樹既有慣例 `fLaserSensor = new TfLaserSensor();`，
   但它是**真的翻譯單元**，ctor 尾端照 golden 呼叫 `InitLaserEdtList()`，而該函式每一行都是

@@ -2975,6 +2975,16 @@ add_test(NAME GA1_cpublic COMMAND test_ga1_cpublic)
 add_executable(test_ga1_cprod
     test_ga1_cprod.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../cprod.cpp
+    # AI(W906-PT-W3-ungate) 20260808: CosFunction.cpp joins this target's minimal
+    #   standalone link set.  It has to: cprod.cpp's CustomerFunctionSelect() no
+    #   longer has its 7 customer-function calls behind `#if 0`, so the bodies must
+    #   be reachable.  This target does NOT link ht9045_globals (it compiles its
+    #   handful of sources directly, on purpose -- see the test's own banner), so
+    #   the archive copy cannot serve it.  The alternative was to keep the 7 empty
+    #   TU-local stand-ins that used to live in test_ga1_cprod.cpp, which is worse:
+    #   they would silently shadow 517 real flag assignments and no diagnostic
+    #   would ever fire.
+    ${CMAKE_CURRENT_SOURCE_DIR}/../CosFunction.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../cmydef.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../cpublic.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../myTimer.cpp

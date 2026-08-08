@@ -73,6 +73,26 @@ int main()
     check(LastSet.iRunStartMode == 0 && LastSet.iTemperature == 0,
           "LastSet starts zero-initialised");
 
+    // AI(W906-PT-W3-ungate) 20260808: the customer-profile layer, same
+    // did-the-mechanism-run shape as the LastSet blob check below rather than an
+    // assertion about one machine's flags.  This is the regression guard on the
+    // 20260808 ungate of the SEVEN `#if 0` gates in cprod.cpp's
+    // CustomerFunctionSelect() -- InitialCosFunction() (CosFunction.cpp:4063,
+    // 517 flag assignments) plus the six per-customer profile functions.  Before
+    // that ungate this struct stayed all-zero no matter what was loaded, which is
+    // precisely the "hundreds of feature flags all 0" this file's own banner and
+    // database.cpp:316 describe.
+    size_t cosNonZeroBefore = 0;
+    {
+        const unsigned char* raw = reinterpret_cast<const unsigned char*>(&CosFunction);
+        for (size_t i = 0; i < sizeof(HT9045_COUSTOMER_FUNCTION); ++i)
+            if (raw[i] != 0) ++cosNonZeroBefore;
+        std::printf("   CosFunction non-zero bytes = %u / %u\n",
+                    (unsigned)cosNonZeroBefore, (unsigned)sizeof(HT9045_COUSTOMER_FUNCTION));
+    }
+    check(cosNonZeroBefore == 0,
+          "CosFunction starts all-zero (the customer-profile layer has not run)");
+
     // --- 2. load it, on a scratch copy ---------------------------------------
     const AnsiString savedGeneralPath = asGeneralPath;
 
@@ -115,6 +135,24 @@ int main()
           "20260805 ungate in database.cpp is live");
     check(IniConfig.sGPIBMachineID.Length() > 0,
           "IniConfig.sGPIBMachineID populated");
+
+    // AI(W906-PT-W3-ungate) 20260808: the other half of the pair above.  Deliberately
+    // NOT an assertion on any particular flag: which profile applies depends on this
+    // box's CUSTOMER_CODE, so naming a flag would be asserting one machine's identity
+    // (the same mistake this file's LastSet note calls out).  "It stopped being all
+    // zero" is the property that belongs to the CODE.
+    {
+        const unsigned char* raw = reinterpret_cast<const unsigned char*>(&CosFunction);
+        size_t cosNonZeroAfter = 0;
+        for (size_t i = 0; i < sizeof(HT9045_COUSTOMER_FUNCTION); ++i)
+            if (raw[i] != 0) ++cosNonZeroAfter;
+        std::printf("   CosFunction non-zero bytes = %u / %u (was %u)\n",
+                    (unsigned)cosNonZeroAfter, (unsigned)sizeof(HT9045_COUSTOMER_FUNCTION),
+                    (unsigned)cosNonZeroBefore);
+        check(cosNonZeroAfter > cosNonZeroBefore,
+              "CustomerFunctionSelect() populated CosFunction -> the 20260808 ungate "
+              "of the 7 customer-function gates is live");
+    }
 
     // LastSet is loaded by ReadLastDataFile() as a RAW BINARY BLOB: it reads
     // sizeof(LAST_GENERAL_SET) bytes straight over the struct from
