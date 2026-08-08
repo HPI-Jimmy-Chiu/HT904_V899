@@ -4220,3 +4220,158 @@ macro 定義處與 `SCK_ART_Remainder.h` 的 gate 清單都改寫成這個真理
 **外加一項針對這個決定本身的驗證**：跑 ctest 前後對 `D:\HT9045\system\lastdata.dat`
 做 md5 對帳——`cbc15b39aa0c462fd3f63f1d226a092a`，跑完 **未變**（mtime 仍是 2026-06-29 18:48），
 證明留著那個 no-op 是對的、而且測試真的會走到那條路。
+
+---
+
+## 2026-08-09 — PT-W4（**進行中，未驗證即暫停**）：7 個單元落地、連結轉綠，但那個綠是假的
+
+> **狀態：本節所有變更都還沒跑過 ctest，也還沒 commit。** 使用者接近運算限制要求暫停，
+> 收在一致的編輯狀態並記錄。接續者請從下面「🔖 RESUME」第 1 步開始，**不要**假設任何一項
+> 已驗證——特別是**不要**把「build rc=0」讀成「整併完成」，下面第 3 節就是為什麼。
+
+### 先把範圍量對：PT-W4 不是 12 檔 40k，是 7 檔 16.3k（另有 3 檔查清後排除）
+
+用 golden `HT9045.bpr` 的 `<OBJFILES>` 當範圍（289 個 obj，全部解析成功，`ExternFunction`
+是唯一同名雙檔、取最淺路徑），逐檔比對 port 有沒有同相對路徑鏡射檔：
+
+| 分群 | 檔數 | 已鏡射 | 缺 | code 行（缺） |
+|---|---:|---:|---:|---:|
+| 非表單 | 171 | 161 | **10** | 36,107 |
+| 表單（有同名 .dfm） | 118 | 11 | 107 | 217,876 |
+
+那 10 個非表單缺檔裡，**3 個查清後不屬於 PT-W4**：
+
+- `Command.cpp`（9,445 code）——**164 個 `TfMain::` 方法**，它就是 TfMain 的方法本體檔。
+  機械上「沒有同名 .dfm」所以被分到非表單，語意上是表單碼（計畫書 §3 早就警告過這個切法
+  「機械上準、語意上錯」）。使用者本場次指示「`.dfm`／UI 相關先不處理」→ 歸表單波。
+- `BarCode/BarCode_Sh1.cpp`＋`_Sh2.cpp`（合計 10,348 code）——**根本不是「缺檔」**。
+  Sh1 的 10 個 `TfBarCode::` 方法有 **7 個已經翻好**，以 extract-calc-core 慣例改名散在
+  `BarCode/BarCode_Shuttle1_Scan.cpp` / `_CCDScan.cpp` 裡（逐個 grep 過）。真正的缺口只有
+  `InitialSFCAutoTune1` / `DoSFCAutoTune_1` / `Do2DIDCheckSh1` 三個函式 → 屬 PT-W5 補完。
+
+**所以 PT-W4 = 7 檔 / 16,314 golden code 行**：`Motor/myGALILmotor.cpp` 4,694、
+`aoutarm.cpp` 3,619、`asortarm.cpp` 3,361、`SECSGEM/uHGemHT9045_EC.cpp` 1,792、
+`ProductionInfo/uPAT_Function.cpp` 1,540、`SECSGEM/uHGemHT9045_SV.cpp` 935、
+`PowerSavingMode.cpp` 373。
+
+### 落地狀況：7 個翻譯 agent ＋ 7 個對抗性稽核 agent，全部完成
+
+用 workflow 跑（14 agents，0 error，~4.2M subagent tokens）。翻譯階段平行 7 個、
+**中間下 barrier**再跑稽核——barrier 是刻意的：absence-claim 會被兄弟 group 後落地的檔弄過期
+（計畫書 §6，PT-W2 一次中三個），稽核必須對**最終樹**做。
+
+我自己獨立複驗過的部分：7 個檔全部 UTF-8、**零 U+FFFD**、零 CRLF，
+且 7 個檔各自 `-fsyntax-only` 乾淨（我自己跑，不採信 agent 的宣稱）。
+`PowerSavingMode.cpp` 港/金 行數比 2.17× 看起來像過度 gating，實際查是 banner 重量：
+真正的 `#if 0` 只有 4 個，而且它還記了「為什麼有一項刻意不 gate」。
+
+完整的 7 份翻譯報告＋7 份稽核報告（243,929 bytes）在
+`C:\Users\JIMMYC~1\AppData\Local\Temp\claude\D--HT9045\ed3c2b55-0c54-4338-9435-73fbf939c5d2\tasks\w7ajx1dws.output`
+（同一份也在 workflow 的 `journal.jsonl`）。**接續者一定要讀**——下面只摘了三條最要緊的。
+
+### 已完成的整併（在工作樹上，未 commit）
+
+1. `Motor/vendor_offline_galil.cpp`（新檔）——7 個 Galil DMC32 進入點的 offline 層。
+   set 是量出來的（grep 該單元 + 對照它 banner :382-388），回 `DMCERROR_CONTROLLER`
+   (DMCCOM.H:134 == -3) 而不是 `DMCNOERROR`。**不需要巨集槓桿**：DMCCOM.H 用
+   `extern "C"` + `GALILCALL`==純 `__stdcall`、無 dllimport，所以呼叫端本來就發直接引用
+   （寫檔前先驗過）。這點和 MN200 需要 `MN200DLL_EXPORTS` 不同。
+2. CMakeLists：`Motor/myGALILmotor.cpp` + 那個 vendor 層 → `ht9045_motor`；
+   `aoutarm.cpp`/`asortarm.cpp`/`ProductionInfo/uPAT_Function.cpp`/`PowerSavingMode.cpp`
+   → `ht9045_sm`；`SECSGEM/uHGemHT9045_SV.cpp`/`_EC.cpp` → `ht9045_secsgem`
+   （**這一項是錯的，見下面第 2 條**）。
+3. **60 個 stand-in 退役**，全部由連結器指名（一個修飾名碰撞不可能發生在簽章不同時，
+   所以碰撞本身就是簽章相同的證明）：
+   - 52 個「非 static」碰撞：`aoutarm_shims.cpp` 32、`acarry_shims.cpp` 5、
+     `aHotPlateSubstrate.cpp` 3、`csystem_shims.cpp` 3（含一個**多行**的 `DoOutArm` 包裝
+     ——它不是 no-op，是 golden :1195 的**部分**渲染，跳過了 :1197-1209 的 kit-prep，
+     所以這裡的行為差異是「部分變完整」而不是「no-op 變真的」）、
+     `acatchtray_shims.cpp` 1、`aoutarm9045.cpp` 8。
+     退役腳本對每一行做「符號必須出現在該行」的 assert 才動手，並**逐檔偵測 EOL**
+     （`acatchtray_shims.cpp` 與 `csystem_shims.cpp` 是 CRLF，其餘 bare-LF——混合是這棵樹
+     的既有事實，硬統一會造出上千行假 churn）。
+   - `aoutarm9045.cpp` 追加 `#include "aoutarm.h"`：那 8 個被退役的定義同時**也是這個 TU 的
+     宣告**，拿掉之後呼叫點沒有宣告可用。golden 是透過 `aArmHeader.h:61` 拿到它，但本樹那行
+     在 `:23` 開的 `#if 0` 裡（同一個塊還拉 ~40 個 per-site arm 標頭，解閘是 W7 的決定）。
+   - 再 9 個 `static` 影子退役——**這 9 個是編譯器逼出來的，不是我判斷的**：`static` 給了
+     它們內部連結，所以在真本體缺席時它們乾淨連結**並靜默遮蔽**同名符號；一旦這個 TU 開始
+     include `aoutarm.h`，每一個都變成 `declared 'extern' and later 'static'` 硬錯誤，外加一個
+     `MoveOutArmXY_ToFix_Tray_Full()` 歧義。留下的 4 個（`MoveOutArmZToPlateSafe` /
+     `DoOutArmPlaceToAuto` / `DoFix3FullTray` / `InitialDoPickFromMagazineBuffer`）是逐名查過
+     `aoutarm.h` 沒宣告、沒有真本體可接。
+
+**結果**：`cmake --build` **rc=0，0 個 error、0 個 multiple definition、0 個 undefined reference**
+（log `build_0809_w4_build4.log`）。
+
+### 3. 那個綠是假的 —— 同一個陷阱，兩天內第三次
+
+`Motor/mymotor.cpp:944-994` 與 `:1043-1045` 仍然放著 **48 個 ACTIVE（不是 `#if 0`）的
+`TMyMotor::Gali_*` stub**（`Gali_GetMOT` 回 ""、`Gali_MotMove` 回 false…）。稽核 agent 把它列為
+BLOCKING，而我的 build 是綠的——**agent 對，linker「對」但無關**。量出來的真相：
+
+```
+ar t libht9045_motor.a            -> myGALILmotor.cpp.obj 在裡面（有編譯）
+myGALILmotor.cpp.obj 定義 521 個符號，其中 14 個被其他 object 需要
+   __ZN8TMyMotor12Gali_CommandE... / Gali_MotMove / Gali_ReadPos / GalilTwoY_Move /
+   Gali_MotMoveNoWait / Gali_ScanMotStatus / Gali_ReadEncoderPos / Gali_Two_ZAxis_Move /
+   Gali_nnMode_Z1Z2_Up / _Down / Gali_ReadEncoderInRandge / ...
+```
+
+那 14 個需求**已經被 `mymotor.cpp` 的 ACTIVE stub 滿足了**，所以連結器從來不需要去抽
+`myGALILmotor.cpp.obj`，48 路碰撞因此從未觸發。整個 4,694 行的 Galil 驅動編譯了、
+躺在 archive 裡、**沒有任何呼叫者**。這正是 PT-W3 那條規則講的事（「一直都連得起來可能只是
+沒人把那個 object 抽出來過」），只是這次的形狀是「stub 先滿足需求 → 真本體永遠不被抽出」。
+**`nm --undefined-only` 這次不夠**，要問的是「我的新 object 定義的符號，有沒有別人需要，
+而那個需要是不是已經被某個 stub 吃掉了」。
+
+### 4. 我自己在整併時犯的錯：SV/EC 註冊到錯的 target，而該檔 banner 事先就警告過
+
+`SECSGEM/uHGemHT9045_SV.cpp:333-345` 標題就寫「**CMakeLists PLACEMENT -- READ BEFORE
+REGISTERING THIS FILE. It must go in `ht9045_sm`, NOT in `ht9045_secsgem`**」，理由是它 ACTIVE
+的 body 取三個 `ht9045_sm` 成員所定義物件的位址（`cSocket.cpp` 的 ArmData/ArmHistory 218 次、
+`Automation/AGV_PortScan.cpp` 的 iLoadStateATK/sOutputBinCode、`acatchtray_shims.cpp:189` 的
+iPortStatus 15 次），而 `ht9045_secsgem` **刻意不**連結 `ht9045_sm`（那條邊就是文件化的
+CMake cycle，CMakeLists:579-616）。我把它們放進 `ht9045_secsgem` 了。它會 configure、會編、
+`-fsyntax-only` 也過，然後**靜默**——又是 archive-extraction 陷阱。稽核 agent 抓到了。
+
+### 5. 另一條稽核抓到的真缺陷（不是本波造成，但本波讓它變得可觸及）
+
+`IndexZCanMove[2]`：golden `Motor/myGALILmotor.cpp:50` 是全 golden 樹**唯一**定義，值
+`{true,true}`；本樹的 `ainarm9045_w7_shims.cpp:47` 初始化成 `{false,false}`。而
+`Gali_MotMove` / `_MotMove2` / `_MotMoveNoWait` 開頭就是 `if(IndexZCanMove[0]==false) return false;`
+（port :971/:774/:1166）→ 第一次 index-Z 移動會被拒絕，直到 ainarm/AutoClean 把它推成 true。
+**先前就存在，本波只是讓它第一次有機會被執行到。**
+
+### 🔖 RESUME（最新）
+
+- **⚠ 接續第一件事仍是 `git status`，不是讀本 RESUME。**
+- **本場次已 commit 三顆**（都經全新 dir、Debug 與 Release 各 **128/134**、失敗集合＝計畫書 §7
+  那 6 個）：
+  1. `3c49b7b` PT-W3 收尾（18 檔、173 個 offline 廠商進入點、88/134 SEGFAULT 的 static-init 洞）
+  2. `ac7ca9a` CosFunction 解閘（7 個 gate → `DoCustomerFunction` 的 163 個客戶 profile）
+  3. `9fee881` SCK_ART gate #8（3 個過期 macro 退役 2、第三個刻意留著）
+- **PT-W4 在工作樹上、未 commit、未跑 ctest。** 7 個翻譯單元＋
+  `Motor/vendor_offline_galil.cpp`＋CMakeLists 註冊＋**60 個 stand-in 退役**已完成，
+  `cmake --build` rc=0 / 0 error / 0 multiple-def / 0 undefined
+  （`build_0809_w4_build4.log`）。**但那個綠不算整併完成，見本節第 3 條。**
+- **下一步（照順序，全部未執行）**：
+  1. **修 SV/EC 的 target**：把 `SECSGEM/uHGemHT9045_SV.cpp` 與 `_EC.cpp` 從
+     `ht9045_secsgem` 移到 `ht9045_sm`（該檔 banner :333-345 事先寫明理由）。
+  2. **退役 `Motor/mymotor.cpp:944-994` + `:1043-1045` 的 48 個 ACTIVE `TMyMotor::Gali_*`
+     stub**，否則 4,694 行的 `myGALILmotor.cpp` 永遠沒有呼叫者（本節第 3 條）。
+     **`:963 Gali_MotHome_HighSpeed` 要保留**——稽核查過 golden 的 myGALILmotor.cpp 與
+     mymotor.cpp 都沒有它，沒有替代本體。退役後預期會冒出新的連結錯誤（golden 的真本體
+     unguarded deref `MOT[i].Motor`，而 offline 那是 NULL——稽核列了行號：golden :941/:1138/
+     :1305/:1401/:1770/:2128/:2331/:2698/:2750/:2809/:2921/:2943），**這會讓 motor 測試崩**，
+     要當一個獨立決策處理，不要硬塞進同一顆 commit。
+  3. **逐條複驗那 14 份報告**（路徑見本節第 2 節末）。已知稽核指出約 30 處引用行號錯誤
+     ——**引用類要逐條開 golden 對字面再改**（計畫書 §6 / memory：agent 的論證比程式碼更常錯）。
+     其中兩條我已自己坐實：SV/EC target（本節第 4 條）、`IndexZCanMove` 初始值反轉（第 5 條）。
+     另有 `PowerSavingMode.cpp:913` 的 `HeaterLog` 被稽核列為 BLOCKING undefined，但我的 build
+     0 undefined——**先量再信**，很可能是同一個 archive-extraction 幻覺。
+  4. ctest → 全新 dir Debug + Release 各量一次 → commit。
+- **仍在計畫上、未動**：mykitsuck substrate 回家波（併 `TInLaserCheck` ODR 債，~30 個 ainarm*
+  葉子）、census 三支腳本重寫並簽進 repo（在那之前 §3 的百分比一律不可引用）、
+  稽核其餘 cosmetic findings、表單波（107 檔 217,876 code 行，**這才是真正的大山**）。
+- **執行模式**：使用者 20260808 指示——(1) 優先純翻譯、(2) `.dfm`／UI 相關先不處理、
+  (3) 目標是編得起來並能用 console 驅動開啟。20260809 追加：接近運算限制時暫停並記錄。
